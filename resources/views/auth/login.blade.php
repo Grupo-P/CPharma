@@ -1,13 +1,13 @@
-@extends('layouts.app')
+@extends('layouts.basic')
 
 @section('content')
-<div class="container">
+<div class="container p-5">
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header">{{ __('Inicio de Sesión') }}</div>
+                <div class="card-header border border-success bg-success text-white">{{ __('Inicio de Sesión') }}</div>
 
-                <div class="card-body">
+                <div class="card-body border border-success">
                     <form method="POST" action="{{ route('login') }}">
                         @csrf
 
@@ -51,12 +51,11 @@
                             </div>
                         </div>
 
-                        <div class="form-group row mb-0">
-                            <div class="col-md-8 offset-md-4">
-                                <button type="submit" class="btn btn-primary">
+                        <div class="form-group row mb-2">
+                            <div class="col-md-8 offset-md-5">
+                                <button type="submit" class="btn btn-success">
                                     {{ __('Entrar') }}
                                 </button>
-
                                 <!-- <a class="btn btn-link" href="{{ route('password.request') }}">
                                     {{ __('Forgot Your Password?') }}
                                 </a> -->

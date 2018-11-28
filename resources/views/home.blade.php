@@ -10,11 +10,11 @@
                 <div class="card-body">
                     @if (session('status'))
                         <div class="alert alert-success" role="alert">
-                            {{ session('status') }}
+                            {{ session('status') }}layout
                         </div>
                     @endif
 
-                    Has iniciado sesión!
+                    Has iniciado sesión en app prueba de layout!
                 </div>
             </div>
         </div>
