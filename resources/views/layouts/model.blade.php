@@ -7,7 +7,7 @@
 
   <body>
     <header>
-      @include('includes.header')
+      @include('includes.header_in')
     </header>
 
     <div class="container-fluid">
@@ -21,7 +21,7 @@
         </nav>
 
         <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
-          @include('pages.dashboard')
+          @yield('content')
         </main>
       </div>
     </div>

@@ -23,20 +23,44 @@
 </style>
 
 <li class="nav-item">
-  <a class="nav-link active" href="#">
+  <a class="nav-link active" href="{{ url('dashboard') }}">
     <span data-feather="home"></span>
+    <i class="fas fa-chart-pie"></i>
     Dashboard <span class="sr-only">(current)</span>
   </a>
 </li>
 <li class="nav-item">
-  <a class="nav-link active" href="#">
+  <a class="nav-link active" href="{{ url('orders') }}">
     <span data-feather="home"></span>
-    Orders <span class="sr-only">(current)</span>
+    <i class="fas fa-boxes"></i>
+    Articulos<span class="sr-only">(current)</span>
+  </a>
+</li>
+<li class="nav-item">
+  <a class="nav-link active" href="{{ url('orders') }}">
+    <span data-feather="home"></span>
+    <i class="fas fa-dolly"></i>
+    Proveedores<span class="sr-only">(current)</span>
   </a>
 </li>
 <li class="nav-item">
   <a class="nav-link active" href="#">
     <span data-feather="home"></span>
-    Products <span class="sr-only">(current)</span>
+    <i class="fas fa-shopping-cart"></i>
+    Compras<span class="sr-only">(current)</span>
+  </a>
+</li>
+<li class="nav-item">
+  <a class="nav-link active" href="#">
+    <span data-feather="home"></span>
+    <i class="fas fa-money-bill-wave"></i>
+    Ventas<span class="sr-only">(current)</span>
+  </a>
+</li>
+<li class="nav-item">
+  <a class="nav-link active" href="#">
+    <span data-feather="home"></span>
+    <i class="fas fa-cog"></i>
+    Configuracion<span class="sr-only">(current)</span>
   </a>
 </li>

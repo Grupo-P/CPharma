@@ -1,9 +1,7 @@
 @extends('layouts.model')
 
 @section('content')
-<h1 class="h3">
-<i class="fas fa-chart-pie"></i>
-Dashboard</h1>
+<h1 class="h3">Orders</h1>
           <div class="table-responsive">
             <table class="table table-striped table-sm">
               <thead>
@@ -71,21 +69,7 @@ Dashboard</h1>
                   <td>ipsum</td>
                   <td>Praesent</td>
                   <td>mauris</td>
-                </tr>
-                <tr>
-                  <td>1,008</td>
-                  <td>Fusce</td>
-                  <td>nec</td>
-                  <td>tellus</td>
-                  <td>sed</td>
-                </tr>
-                <tr>
-                  <td>1,009</td>
-                  <td>augue</td>
-                  <td>semper</td>
-                  <td>porta</td>
-                  <td>Mauris</td>
-                </tr>                        
+                </tr>                       
               </tbody>
             </table>
           </div>
