@@ -6,7 +6,7 @@
 
 <link rel="icon" type="image/png" href="/img/icono.png" />
 
-<title>{{ config('name', 'CPharma') }}</title>
+<title>CPharma - @yield('title')</title>
 
 <!-- Scripts -->
 <!-- Scritps Originales -->

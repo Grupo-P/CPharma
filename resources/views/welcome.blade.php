@@ -23,6 +23,10 @@
     }
 </style>
 
+@section('title')
+    Bienvenido
+@endsection
+
 @section('content')
     <main role="main" class="content flex-center position-ref full-height">
         <h1 class="title m-b-md">

@@ -1,5 +1,9 @@
 @extends('layouts.model')
 
+@section('title')
+    Dashboard
+@endsection
+
 @section('content')
 <h1 class="h3">
 <i class="fas fa-chart-pie"></i>

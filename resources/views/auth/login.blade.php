@@ -1,5 +1,9 @@
 @extends('layouts.basic')
 
+@section('title')
+    Login 
+@endsection
+
 @section('content')
 <div class="container p-5">
     <div class="row justify-content-center">
