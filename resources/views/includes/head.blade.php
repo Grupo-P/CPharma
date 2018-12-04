@@ -4,7 +4,9 @@
 <!-- CSRF Token -->
 <meta name="csrf-token" content="{{ csrf_token() }}">
 
-<title>{{ config('name', 'Sistema de Compras') }}</title>
+<link rel="icon" type="image/png" href="/img/icono.png" />
+
+<title>{{ config('name', 'CPharma') }}</title>
 
 <!-- Scripts -->
 <!-- Scritps Originales -->
