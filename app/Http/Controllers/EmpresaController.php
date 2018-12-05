@@ -3,6 +3,8 @@
 namespace compras\Http\Controllers;
 
 use Illuminate\Http\Request;
+use compras\Empresa;
+use compras\User;
 
 class EmpresaController extends Controller
 {
@@ -44,7 +46,15 @@ class EmpresaController extends Controller
      */
     public function store(Request $request)
     {
-        return $request->all();
+        $empresa = new Empresa();
+        $empresa->nombre = $request->input('nombre');
+        $empresa->rif = $request->input('rif');
+        $empresa->telefono = $request->input('telefono');
+        $empresa->direccion = $request->input('direccion');
+        $empresa->Estatus = 'ACTIVA';
+        $empresa->user = auth()->user()->name;
+        $empresa->save();
+        return ('Guardado');
     }
 
     /**
