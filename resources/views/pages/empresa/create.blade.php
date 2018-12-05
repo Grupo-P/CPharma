@@ -6,40 +6,40 @@
 
 @section('sub-content')
 	<h1 class="h5 text-info">
-		<i class="fas fa-industry"></i>
-        Empresa > Agregar
+		<i class="fas fa-plus"></i>
+        Agregar empresa
 	</h1>
-	<hr class="row align-items-start col-8">
-	<br>
+	<hr class="row align-items-start col-12">
 
-	<div class="container">
-    <div class="row">
-        <div class="col-md-12">
-            <div class="well well-sm">
+	<div class="card border-success" style="max-width: 40rem;">
+        <div class="card-body">
                 <form class="form-group" method="POST" action="/empresa">
                 	@csrf
-
                     <fieldset>
                         <div class="form-group">                            
-                            <div class="col-md-8">
-                                <input id="nombre" name="nombre" type="text" placeholder="Nombre" class="form-control">
+                            <div class="col-md-10">
+                                <label>Nombre:</label>
+                                <input id="nombre" name="nombre" type="text" placeholder="Farmacia Tierra Negra C.A." class="form-control" autofocus>
                             </div>
                         </div>
                         <div class="form-group">                            
-                            <div class="col-md-8">
-                                <input id="rif" name="rif" type="text" placeholder="RIF" class="form-control">
+                            <div class="col-md-10">
+                                <label>RIF:</label>
+                                <input id="rif" name="rif" type="text" placeholder="J-400145717" class="form-control">
                             </div>
                         </div>
                 
                         <div class="form-group">                            
-                            <div class="col-md-8">
-                                <input id="telefono" name="telefono" type="text" placeholder="Telefono" class="form-control">
+                            <div class="col-md-10">
+                                <label>Telefono:</label>
+                                <input id="telefono" name="telefono" type="text" placeholder="0261-7988326" class="form-control">
                             </div>
                         </div>
 
                         <div class="form-group">                            
-                            <div class="col-md-8">
-                                <textarea class="form-control" id="direccion" name="direccion" placeholder="Direccion" rows="5"></textarea>
+                            <div class="col-md-10">
+                                <label>Direccion:</label>
+                                <textarea class="form-control" id="direccion" name="direccion" placeholder="CALLE 72 ESQUINA AV 14A LOCAL NRO 13A-99 SECTOR TIERRA NEGRA MARACAIBO ZULIA ZONA POSTAL 4002" rows="2"></textarea>
                             </div>
                         </div>
 
@@ -52,6 +52,5 @@
                 </form>
             </div>
         </div>
-    </div>
 </div>
 @endsection

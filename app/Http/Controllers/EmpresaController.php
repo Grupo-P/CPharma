@@ -24,8 +24,9 @@ class EmpresaController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {
-        return view('pages.empresa.list');
+    {   
+        $empresas =  Empresa::all();
+        return view('pages.empresa.index', compact('empresas'));
     }
 
     /**
@@ -65,7 +66,8 @@ class EmpresaController extends Controller
      */
     public function show($id)
     {
-        //
+        $empresa = Empresa::find($id);        
+        return view('pages.empresa.show', compact('empresa'));
     }
 
     /**

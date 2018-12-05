@@ -47,9 +47,16 @@
   </a>
 </li>
 
-<!-- Inicio Empresa -->
+<li class="nav-item">
+  <a class="nav-link active" href="{{ url('/empresa') }}">
+    <span data-feather="home"></span>
+    <i class="fas fa-industry"></i>
+    Empresa <span class="sr-only">(current)</span>
+  </a>
+</li>
 
-<li class="dropright">
+<!-- Inicio Empresa -->
+{{-- <li class="dropright">
   <a class="nav-link active dropdown-toggle" data-toggle="dropdown" href="#">
     <span data-feather="home"></span>
     <i class="fas fa-industry"></i>
@@ -66,24 +73,11 @@
 
       <a class="nav-link active" href="{{ url('/empresa/create') }}">
         <span data-feather="home"></span>
-        <i class="fas fa-file"></i>
+        <i class="fas fa-plus"></i>
         Agregar <span class="sr-only">(current)</span>
       </a>
-
-      <a class="nav-link active" href="#">
-        <span data-feather="home"></span>
-        <i class="fas fa-file-alt"></i>
-        Modificar <span class="sr-only">(current)</span>
-      </a>
-
-      <a class="nav-link active" href="#">
-        <span data-feather="home"></span>
-        <i class="fas fa-trash"></i>
-        Eliminar <span class="sr-only">(current)</span>
-      </a>
   </ul>
-</li>
-
+</li> --}}
 <!-- Cierre Empresa -->
 
 <li class="nav-item">
