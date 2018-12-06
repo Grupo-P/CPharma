@@ -44,14 +44,10 @@
 			      		<i class="far fa-eye"></i>			      		
 			      	</a>
 
-		      		<a href="#" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
+		      		<a href="/empresa/{{$empresa->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
 			      		<i class="fas fa-edit"></i>			      		
 			      	</a>
-
-			      	<a href="#" role="button" class="btn btn-outline-secondary btn-sm" data-toggle="tooltip" data-placement="top" title="Desactivar">
-			      		<i class="fas fa-ban"></i>			      		
-			      	</a>
-
+			   
 		      		<a href="#" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Eliminar">
 		      			<i class="fas fa-trash"></i>	      			
 		      		</a>

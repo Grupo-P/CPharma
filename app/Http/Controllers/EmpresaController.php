@@ -25,7 +25,7 @@ class EmpresaController extends Controller
      */
     public function index()
     {   
-        $empresas =  Empresa::all();
+        $empresas =  Empresa::where('estatus','=','ACTIVO')->get();
         return view('pages.empresa.index', compact('empresas'));
     }
 
@@ -52,7 +52,7 @@ class EmpresaController extends Controller
         $empresa->rif = $request->input('rif');
         $empresa->telefono = $request->input('telefono');
         $empresa->direccion = $request->input('direccion');
-        $empresa->Estatus = 'ACTIVA';
+        $empresa->Estatus = 'ACTIVO';
         $empresa->user = auth()->user()->name;
         $empresa->save();
         return ('Guardado');
@@ -77,8 +77,9 @@ class EmpresaController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
-    {
-        //
+    {   
+        $empresa = Empresa::find($id);
+        return view('pages.empresa.edit', compact('empresa'));
     }
 
     /**
@@ -90,7 +91,11 @@ class EmpresaController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $empresa = Empresa::find($id);
+        $empresa->fill($request->all());
+        $empresa->user = auth()->user()->name;
+        $empresa->save();
+        return ('Actualizado');
     }
 
     /**
@@ -101,6 +106,10 @@ class EmpresaController extends Controller
      */
     public function destroy($id)
     {
-        //
+        // $empresa = Empresa::find($id);
+        // $empresa->Estatus = 'INACTIVO';
+        // $empresa->user = auth()->user()->name;
+        // $empresa->save();
+        // return ('Eliminado');
     }
 }

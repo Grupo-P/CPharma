@@ -11,7 +11,7 @@
         <div class="container">
             <!-- Cabecera: Inicio de la pagina -->
             <header>
-                @include('includes.header')
+                @include('includes.header_in')
             </header>
 
             <!-- Cuerpo: Donde se edita y cambia todo el contenido -->

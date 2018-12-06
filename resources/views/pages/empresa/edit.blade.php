@@ -6,13 +6,13 @@
 
 @section('content')
 	<h1 class="h5 text-info">
-		<i class="fas fa-plus"></i>
-        Agregar empresa
+		<i class="fas fa-edit"></i>
+        Modificar empresa
 	</h1>
 	<hr class="row align-items-start col-12">
 	<div class="card border-success" style="max-width: 40rem;">
         <div class="card-body">
-            {!! Form::open(['route' => 'empresa.store', 'method' => 'POST']) !!}
+            {!! Form::model($empresa, ['route' => ['empresa.update', $empresa], 'method' => 'PUT']) !!}
                 <fieldset>
                     <div class="form-group">
                         <div class="col-md-10">
