@@ -40,7 +40,7 @@
                     </div>
                     <div class="form-group">
                         <div class="col-md-10">
-                            {!! Form::submit('Guardar', ['class' => 'btn btn-success btn-md']) !!}
+                            {!! Form::submit('Guardar', ['class' => 'btn btn-success btn-md', 'data-toggle' =>'modal', 'data-target' => 'exampleModalCenter']) !!}
                         </div>
                     </div>
                 </fieldset>

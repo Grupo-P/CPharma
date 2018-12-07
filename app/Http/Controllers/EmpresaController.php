@@ -25,7 +25,8 @@ class EmpresaController extends Controller
      */
     public function index()
     {   
-        $empresas =  Empresa::where('estatus','=','ACTIVO')->get();
+        //$empresas =  Empresa::where('estatus','=','ACTIVO')->get();
+        $empresas =  Empresa::all();
         return view('pages.empresa.index', compact('empresas'));
     }
 
@@ -55,7 +56,7 @@ class EmpresaController extends Controller
         $empresa->Estatus = 'ACTIVO';
         $empresa->user = auth()->user()->name;
         $empresa->save();
-        return ('Guardado');
+        return redirect()->route('empresa.index')->with('Saved', ' Informacion');
     }
 
     /**
@@ -95,7 +96,7 @@ class EmpresaController extends Controller
         $empresa->fill($request->all());
         $empresa->user = auth()->user()->name;
         $empresa->save();
-        return ('Actualizado');
+        return redirect()->route('empresa.index')->with('Updated', ' Informacion');
     }
 
     /**
@@ -106,10 +107,17 @@ class EmpresaController extends Controller
      */
     public function destroy($id)
     {
-        // $empresa = Empresa::find($id);
-        // $empresa->Estatus = 'INACTIVO';
-        // $empresa->user = auth()->user()->name;
-        // $empresa->save();
-         return ('Llegue aqui');
+         $empresa = Empresa::find($id);
+
+         if($empresa->estatus == 'ACTIVO'){
+            $empresa->estatus = 'INACTIVO';
+         }
+         else if($empresa->estatus == 'INACTIVO'){
+            $empresa->estatus = 'ACTIVO';
+         }
+
+         $empresa->user = auth()->user()->name;        
+         $empresa->save();
+         return redirect()->route('empresa.index')->with('Deleted', ' Informacion');
     }
 }
