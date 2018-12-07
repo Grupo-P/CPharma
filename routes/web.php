@@ -20,11 +20,3 @@ Auth::routes();
 Route::get('home', 'HomeController@index')->name('home');
 
 Route::resource('empresa', 'EmpresaController');
-
-Route::get('dashboard', function () {
-    return view('pages.dashboard');
-})->name('dashboard');
-
-Route::get('/orders', function () {
-    return view('pages.orders');
-})->name('orders');

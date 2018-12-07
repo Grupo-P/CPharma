@@ -47,10 +47,12 @@
 		      		<a href="/empresa/{{$empresa->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
 			      		<i class="fas fa-edit"></i>			      		
 			      	</a>
-			   
-		      		<a href="#" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Eliminar">
-		      			<i class="fas fa-trash"></i>	      			
-		      		</a>
+			 					  
+			      	<form action="/empresa/{{$empresa->id}}" method="POST" style="display: inline;">
+					    @method('DELETE')
+					    @csrf					    
+					    <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top"><i class="fa fa-trash"></i></button>
+					</form>	
 		      </td>
 		    </tr>
 		@endforeach

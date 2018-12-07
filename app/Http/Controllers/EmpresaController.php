@@ -110,6 +110,6 @@ class EmpresaController extends Controller
         // $empresa->Estatus = 'INACTIVO';
         // $empresa->user = auth()->user()->name;
         // $empresa->save();
-        // return ('Eliminado');
+         return ('Llegue aqui');
     }
 }
