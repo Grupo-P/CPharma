@@ -1,3 +1,4 @@
+<!-- Correccion Orotografica: Parcial -->
 @extends('layouts.model')
 
 @section('title')
@@ -93,8 +94,8 @@
 		      	<th scope="col">#</th>
 			      <th scope="col">Nombre</th>
 			      <th scope="col">RIF</th>
-			      <th scope="col">Telefono</th>
-			      <th scope="col">Direccion</th>
+			      <th scope="col">Teléfono</th>
+			      <th scope="col">Dirección</th>
 			      <th scope="col">Estatus</th>
 			      <th scope="col">Acciones</th>
 		    </tr>

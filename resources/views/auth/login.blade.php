@@ -1,3 +1,4 @@
+<!-- Correccion Orotografica: Completa 12/12/2018 -->
 @extends('layouts.basic')
 
 @section('title')
@@ -51,7 +52,7 @@
                                     <input class="form-check-input" type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
 
                                     <label class="form-check-label" for="remember">
-                                        {{ __('Recuerdame') }}
+                                        {{ __('Recuérdame') }}
                                     </label>
                                 </div>
                             </div>
