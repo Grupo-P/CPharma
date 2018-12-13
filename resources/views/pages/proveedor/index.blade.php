@@ -2,7 +2,7 @@
 @extends('layouts.model')
 
 @section('title')
-    Empresa
+    Proveedor
 @endsection
 
 @section('content')
@@ -19,7 +19,7 @@
 		        </button>
 		      </div>
 		      <div class="modal-body">
-		        <h4 class="h6">Empresa almacenada con exito</h4>
+		        <h4 class="h6">Proveedor almacenado con exito</h4>
 		      </div>
 		      <div class="modal-footer">
 		        <button type="button" class="btn btn-outline-success" data-dismiss="modal">Aceptar</button>
@@ -41,7 +41,7 @@
 		        </button>
 		      </div>
 		      <div class="modal-body">
-		        <h4 class="h6">Empresa modificada con exito</h4>
+		        <h4 class="h6">Proveedor modificado con exito</h4>
 		      </div>
 		      <div class="modal-footer">
 		        <button type="button" class="btn btn-outline-success" data-dismiss="modal">Aceptar</button>
@@ -63,7 +63,7 @@
 		        </button>
 		      </div>
 		      <div class="modal-body">
-		        <h4 class="h6">Empresa actualizada con exito</h4>
+		        <h4 class="h6">Proveedor actualizado con exito</h4>
 		      </div>
 		      <div class="modal-footer">
 		        <button type="button" class="btn btn-outline-success" data-dismiss="modal">Aceptar</button>	
@@ -74,13 +74,13 @@
 	@endif
 
 	<h1 class="h5 text-info">
-		<i class="fas fa-industry"></i>
-		Empresa
+		<i class="fas fa-dolly"></i>
+		Proveedor
 	</h1>
 	<hr class="row align-items-start col-12">
 	
 	<div>
-		<a href="{{ url('/empresa/create') }}" role="button" class="btn btn-outline-info btn-sm" 
+		<a href="{{ url('/proveedor/create') }}" role="button" class="btn btn-outline-info btn-sm" 
 		style="display: inline; text-align: left;">
       		<i class="fa fa-plus"></i>
       		Agregar		      		
@@ -94,22 +94,20 @@
 		    <tr>
 		      	<th scope="col">#</th>
 		      	<th scope="col">Nombre</th>
-		      	<th scope="col">RIF</th>
-		      	<th scope="col">Teléfono</th>
-		      	{{-- <th scope="col">Dirección</th> --}}
-		      	<th scope="col">Estatus</th>
+		      	<th scope="col">Apellido</th>
+		      	<th scope="col">Teléfono</th>		      	
+		      	<th scope="col">Correo</th>
 		      	<th scope="col">Acciones</th>
 		    </tr>
 	  	</thead>
 	  	<tbody>
-		@foreach($empresas as $empresa)
+		@foreach($proveedores as $proveedor)
 		    <tr>
-		      <th>{{$empresa->id}}</th>
-		      <td>{{$empresa->nombre}}</td>
-		      <td>{{$empresa->rif}}</td>
-		      <td>{{$empresa->telefono}}</td>
-		      {{-- <td>{{$empresa->direccion}}</td> --}}
-		      <td>{{$empresa->estatus}}</td>
+		      <th>{{$proveedor->id}}</th>
+		      <td>{{$proveedor->nombre}}</td>
+		      <td>{{$proveedor->apellido}}</td>
+		      <td>{{$proveedor->telefono}}</td>		      
+		      <td>{{$proveedor->correo}}</td>
 		      
 		    <!-- Inicio Validacion de ROLES -->
 		      <td>
@@ -119,26 +117,26 @@
 				?>
 
 					<?php
-					if($empresa->estatus == 'ACTIVO'){
+					if($proveedor->estatus == 'ACTIVO'){
 					?>
-						<a href="/empresa/{{$empresa->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
+						<a href="/proveedor/{{$proveedor->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
 			      			<i class="far fa-eye"></i>			      		
 			      		</a>
 
-			      		<a href="/empresa/{{$empresa->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
+			      		<a href="/proveedor/{{$proveedor->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
 			      			<i class="fas fa-edit"></i>			      		
 				      	</a>
 				 					  
-				      	<form action="/empresa/{{$empresa->id}}" method="POST" style="display: inline;">
+				      	<form action="/proveedor/{{$proveedor->id}}" method="POST" style="display: inline;">
 						    @method('DELETE')
 						    @csrf					    
 						    <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Desincorporar"><i class="fa fa-reply"></i></button>
 						</form>
 					<?php
 					}
-					else if($empresa->estatus == 'INACTIVO'){
+					else if($proveedor->estatus == 'INACTIVO'){
 					?>		
-			      	<form action="/empresa/{{$empresa->id}}" method="POST" style="display: inline;">
+			      	<form action="/proveedor/{{$proveedor->id}}" method="POST" style="display: inline;">
 					    @method('DELETE')
 					    @csrf					    
 					    <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Reincorporar"><i class="fa fa-share"></i></button>
@@ -149,17 +147,17 @@
 				<?php	
 				} else if(Auth::user()->role == 'SUPERVISOR'){
 				?>
-					<a href="/empresa/{{$empresa->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
+					<a href="/proveedor/{{$proveedor->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
 		      			<i class="far fa-eye"></i>			      		
 		      		</a>
 
-		      		<a href="/empresa/{{$empresa->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
+		      		<a href="/proveedor/{{$proveedor->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
 		      			<i class="fas fa-edit"></i>
 	      			</a>
 				<?php
 				} else if(Auth::user()->role == 'USUARIO'){
 				?>
-					<a href="/empresa/{{$empresa->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
+					<a href="/proveedor/{{$proveedor->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
 		      			<i class="far fa-eye"></i>			      		
 		      		</a>		
 				<?php

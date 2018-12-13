@@ -2,7 +2,7 @@
 @extends('layouts.model')
 
 @section('title')
-    Empresa
+    Proveedor
 @endsection
 
 @section('content')

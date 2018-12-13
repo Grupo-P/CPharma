@@ -56,6 +56,14 @@
   </a>
 </li>
 
+<li class="nav-item">
+  <a class="nav-link active" href="{{ url('/proveedor') }}">
+    <span data-feather="home"></span>
+    <i class="fas fa-dolly"></i>
+    Proveedor <span class="sr-only">(current)</span>
+  </a>
+</li>
+
 <!-- Inicio Empresa -->
 {{-- <li class="dropright">
   <a class="nav-link active dropdown-toggle" data-toggle="dropdown" href="#">

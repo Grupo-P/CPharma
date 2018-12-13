@@ -25,7 +25,6 @@ class EmpresaController extends Controller
      */
     public function index()
     {   
-        //$empresas =  Empresa::where('estatus','=','ACTIVO')->get();
         $empresas =  Empresa::all();
         return view('pages.empresa.index', compact('empresas'));
     }
