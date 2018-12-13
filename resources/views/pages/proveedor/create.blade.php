@@ -50,7 +50,7 @@
             </tr>
             <tr>
                 <th scope="row">{!! Form::label('cargo', 'Cargo') !!}</th>
-                <td>{!! Form::text('cargo', null, [ 'class' => 'form-control', 'placeholder' => 'proveedor']) !!}</td>
+                <td>{!! Form::text('cargo', null, [ 'class' => 'form-control', 'placeholder' => 'Proveedor']) !!}</td>
             </tr>
             <tr>
                 <th scope="row">{!! Form::label('empresa', 'Empresa') !!}</th>

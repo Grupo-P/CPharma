@@ -97,6 +97,7 @@
 		      	<th scope="col">Apellido</th>
 		      	<th scope="col">Teléfono</th>		      	
 		      	<th scope="col">Correo</th>
+		      	<th scope="col">Estatus</th>
 		      	<th scope="col">Acciones</th>
 		    </tr>
 	  	</thead>
@@ -108,7 +109,7 @@
 		      <td>{{$proveedor->apellido}}</td>
 		      <td>{{$proveedor->telefono}}</td>		      
 		      <td>{{$proveedor->correo}}</td>
-		      
+		      <td>{{$proveedor->estatus}}</td>
 		    <!-- Inicio Validacion de ROLES -->
 		      <td>
 				
