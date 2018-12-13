@@ -6,55 +6,53 @@
 @endsection
 
 @section('content')
-	{{-- <h1 class="h5 text-info">
+ 	<h1 class="h5 text-info">
 		<i class="far fa-eye"></i>
 		Detalle de empresa
 	</h1>
+
 	<hr class="row align-items-start col-12">
-	<div class="card border-success mb-3" style="max-width: 50rem;">
-	  <div class="card-header bg-transparent border-success text-info">{{$empresa->nombre}}</div>
-		 <div class="card-body">
-		  	<p class="card-text">RIF: {{$empresa->rif}}</p>
-		    <p class="card-text">Telefono: {{$empresa->telefono}}</p>
-		    <p class="card-text">Direccion: {{$empresa->direccion}}</p>
-		    <p class="card-text">Estatus: {{$empresa->estatus}}</p>
-		    <p class="card-text">Creada: {{$empresa->created_at}}</p>
-		  	<p class="card-text">Ultima Actualizacion: {{$empresa->updated_at}}</p>
-		 </div>
-	</div> --}}
 
-	<!-- Modal -->
-	<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-	  <div class="modal-dialog modal-dialog-centered" role="document">
-	    <div class="modal-content">
-	      <div class="modal-header">
-	        <h5 class="modal-title text-info" id="exampleModalCenterTitle"><i class="far fa-eye"></i>&nbsp;Detalle de empresa</h5>
-	        {{-- <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-	          <span aria-hidden="true">&times;</span>
-	        </button> --}}   
-	      </div>
-	      <div class="modal-body">
-	  		<p class="card-text">Nombre: {{$empresa->nombre}}</p>
-	    	<p class="card-text">RIF: {{$empresa->rif}}</p>
-		    <p class="card-text">Teléfono: {{$empresa->telefono}}</p>
-		    <p class="card-text">Dirección: {{$empresa->direccion}}</p>
-		    <p class="card-text">Estatus: {{$empresa->estatus}}</p>
-		    <p class="card-text">Creada: {{$empresa->created_at}}</p>
-		  	<p class="card-text">Ultima Actualización: {{$empresa->updated_at}}</p>
-	      </div>
-	      <div class="modal-footer">
-	      	{!! Form::open(['route' => 'empresa.index', 'method' => 'GET']) !!}
-	      		{!! Form::submit('Aceptar', ['class' => 'btn btn-outline-success btn-md']) !!}
-			{!! Form::close()!!}		
-	      </div>
-	    </div>
-	  </div>
-	</div>
+	<form action="/empresa/" method="POST" style="display: inline;">  
+	    @csrf					    
+	    <button type="submit" name="Regresar" role="button" class="btn btn-outline-info btn-sm"data-placement="top"><i class="fa fa-reply">&nbsp;Regresar</i></button>
+	</form>
 
-	<script>
-		$(document).ready(function(){
-		    $('[data-toggle="tooltip"]').tooltip();   
-		});
-		$('#exampleModalCenter').modal('show')
-	</script>
+	<br>
+	<br>
+
+	<table class="table table-borderless table-striped">
+		<thead class="thead-dark">
+		    <tr>
+	      		<th scope="row">{{$empresa->nombre}}</th>
+	      		<th scope="row"></th>
+		    </tr>
+	  	</thead>
+	  	<tbody>
+		    <tr>
+		      	<th scope="row">RIF</th>
+	    	  	<td>{{$empresa->rif}}</td>
+		    </tr>
+		    <tr>
+		      	<th scope="row">Teléfono</th>
+	    	  	<td>{{$empresa->telefono}}</td>
+		    </tr>
+		    <tr>
+		      	<th scope="row">Dirección</th>
+	    	  	<td>{{$empresa->direccion}}</td>
+		    </tr>
+		    <tr>
+		      	<th scope="row">Estatus</th>
+	    	  	<td>{{$empresa->estatus}}</td>
+		    </tr>
+		    <tr>
+		      	<th scope="row">Creada</th>
+	    	  	<td>{{$empresa->created_at}}</td>
+		    </tr>
+		    <tr>
+		      	<th scope="row">Ultima Actualización</th>
+	    	  	<td>{{$empresa->updated_at}}</td>
+		    </tr>
+	  	</tbody>
+	</table>
 @endsection

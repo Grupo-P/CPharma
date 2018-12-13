@@ -19,7 +19,7 @@
 		        </button>
 		      </div>
 		      <div class="modal-body">
-		        <h4 class="h6">Empresa guardada con exito</h4>
+		        <h4 class="h6">Empresa almacenada con exito</h4>
 		      </div>
 		      <div class="modal-footer">
 		        <button type="button" class="btn btn-outline-success" data-dismiss="modal">Aceptar</button>
@@ -74,43 +74,43 @@
 	@endif
 
 	<h1 class="h5 text-info">
-		<i class="fas fa-list"></i>
-		Lista de empresas
+		<i class="fas fa-industry"></i>
+		Empresa
 	</h1>
 	<hr class="row align-items-start col-12">
 	
 	<div>
-		<a href="{{ url('/empresa/create') }}" role="button" class="btn btn-outline-success btn-sm" 
+		<a href="{{ url('/empresa/create') }}" role="button" class="btn btn-outline-info btn-sm" 
 		style="display: inline; text-align: left;">
-      		<i class="fas fa-plus"></i>	
+      		<i class="fa fa-plus"></i>
       		Agregar		      		
       	</a>
 	</div>
+	
 	<br>
 
-	<table class="table table-striped col-12">
+	<table class="table table-striped table-borderless col-12">
 	  	<thead class="thead-dark">
 		    <tr>
 		      	<th scope="col">#</th>
-			      <th scope="col">Nombre</th>
-			      <th scope="col">RIF</th>
-			      <th scope="col">Teléfono</th>
-			      <th scope="col">Dirección</th>
-			      <th scope="col">Estatus</th>
-			      <th scope="col">Acciones</th>
+		      	<th scope="col">Nombre</th>
+		      	<th scope="col">RIF</th>
+		      	<th scope="col">Teléfono</th>
+		      	<th scope="col">Dirección</th>
+		      	<th scope="col">Estatus</th>
+		      	<th scope="col">Acciones</th>
 		    </tr>
 	  	</thead>
 	  	<tbody>
 		@foreach($empresas as $empresa)
 		    <tr>
-		      <th scope="row">{{$empresa->id}}</th>
+		      <th>{{$empresa->id}}</th>
 		      <td>{{$empresa->nombre}}</td>
 		      <td>{{$empresa->rif}}</td>
 		      <td>{{$empresa->telefono}}</td>
 		      <td>{{$empresa->direccion}}</td>
 		      <td>{{$empresa->estatus}}</td>
 		      <td>
-				
 				<?php
 					if($empresa->estatus == 'ACTIVO'){
 				?>
