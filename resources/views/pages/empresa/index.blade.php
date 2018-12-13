@@ -110,36 +110,65 @@
 		      <td>{{$empresa->telefono}}</td>
 		      <td>{{$empresa->direccion}}</td>
 		      <td>{{$empresa->estatus}}</td>
+		      
+		    <!-- Inicio Validacion de ROLES -->
 		      <td>
+				
 				<?php
-					if($empresa->estatus == 'ACTIVO'){
+				if(Auth::user()->role == 'MASTER'){
 				?>
-					<a href="/empresa/{{$empresa->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
-			      		<i class="far fa-eye"></i>			      		
-			      	</a>
 
-		      		<a href="/empresa/{{$empresa->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
-			      		<i class="fas fa-edit"></i>			      		
-			      	</a>
-			 					  
-			      	<form action="/empresa/{{$empresa->id}}" method="POST" style="display: inline;">
-					    @method('DELETE')
-					    @csrf					    
-					    <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Desincorporar"><i class="fa fa-reply"></i></button>
-					</form>	
-				<?php
+					<?php
+					if($empresa->estatus == 'ACTIVO'){
+					?>
+						<a href="/empresa/{{$empresa->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
+			      			<i class="far fa-eye"></i>			      		
+			      		</a>
+
+			      		<a href="/empresa/{{$empresa->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
+			      			<i class="fas fa-edit"></i>			      		
+				      	</a>
+				 					  
+				      	<form action="/empresa/{{$empresa->id}}" method="POST" style="display: inline;">
+						    @method('DELETE')
+						    @csrf					    
+						    <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Desincorporar"><i class="fa fa-reply"></i></button>
+						</form>
+					<?php
 					}
 					else if($empresa->estatus == 'INACTIVO'){
-				?>		
+					?>		
 			      	<form action="/empresa/{{$empresa->id}}" method="POST" style="display: inline;">
 					    @method('DELETE')
 					    @csrf					    
 					    <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Reincorporar"><i class="fa fa-share"></i></button>
 					</form>
-				<?php
+					<?php
 					}					
+					?>
+				<?php	
+				} else if(Auth::user()->role == 'SUPERVISOR'){
 				?>
+					<a href="/empresa/{{$empresa->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
+		      			<i class="far fa-eye"></i>			      		
+		      		</a>
+
+		      		<a href="/empresa/{{$empresa->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
+		      			<i class="fas fa-edit"></i>
+	      			</a>
+				<?php
+				} else if(Auth::user()->role == 'USUARIO'){
+				?>
+					<a href="/empresa/{{$empresa->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
+		      			<i class="far fa-eye"></i>			      		
+		      		</a>		
+				<?php
+				}
+				?>
+										
 		      </td>
+		    <!-- Fin Validacion de ROLES -->
+
 		    </tr>
 		@endforeach
 		</tbody>
