@@ -64,6 +64,20 @@
   </a>
 </li>
 
+<?php
+  if(Auth::user()->role == 'MASTER'){
+  ?>
+    <li class="nav-item">
+      <a class="nav-link" href="{{ url('/test') }}">
+        <span data-feather="home"></span>
+        <i class="fas fa-box"></i>
+        Test<span class="sr-only">(current)</span>
+      </a>
+    </li>  
+<?php
+}
+?>
+
 <!-- Inicio Empresa -->
 {{-- <li class="dropright">
   <a class="nav-link active dropdown-toggle" data-toggle="dropdown" href="#">
