@@ -3,6 +3,7 @@
 namespace compras\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use compras\User;
 
 class UserController extends Controller
@@ -25,7 +26,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        //
+        return view('pages.usuario.create');
     }
 
     /**
@@ -36,7 +37,14 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $usuario = new User();
+        $usuario->name = $request->input('name');
+        $usuario->email = $request->input('email');
+        $usuario->role = $request->input('role');
+        $usuario->password = Hash::make($request->input('password'));
+        $usuario->estatus = 'ACTIVO';
+        $usuario->save();
+        return redirect()->route('usuario.index')->with('Saved', ' Informacion');
     }
 
     /**
