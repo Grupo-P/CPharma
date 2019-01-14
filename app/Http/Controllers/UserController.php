@@ -9,6 +9,15 @@ use compras\User;
 class UserController extends Controller
 {
     /**
+     * Create a new controller instance with auth.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
@@ -67,7 +76,8 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        //
+        $usuario = User::find($id);
+        return view('pages.usuario.edit', compact('usuario'));
     }
 
     /**
@@ -79,7 +89,11 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $usuario = User::find($id);
+        $usuario->fill($request->all());
+        $usuario->password = Hash::make($request->input('password'));
+        $usuario->save();
+        return redirect()->route('usuario.index')->with('Updated', ' Informacion');
     }
 
     /**
@@ -90,6 +104,15 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $usuario = User::find($id);
+
+         if($usuario->estatus == 'ACTIVO'){
+            $usuario->estatus = 'INACTIVO';
+         }
+         else if($usuario->estatus == 'INACTIVO'){
+            $usuario->estatus = 'ACTIVO';
+         }       
+         $usuario->save();
+         return redirect()->route('usuario.index')->with('Deleted', ' Informacion');
     }
 }

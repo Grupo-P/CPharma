@@ -7,8 +7,8 @@
 
 @section('content')
     <h1 class="h5 text-info">
-        <i class="fas fa-plus"></i>
-        Agregar usuario
+        <i class="fas fa-edit"></i>
+        Modificar usuario
     </h1>
 
     <hr class="row align-items-start col-12">
@@ -21,7 +21,7 @@
     <br>
     <br>
 
-    {!! Form::open(['route' => 'usuario.store', 'method' => 'POST']) !!}
+    {!! Form::model($usuario, ['route' => ['usuario.update', $usuario], 'method' => 'PUT']) !!}
     <fieldset>
 
         <table class="table table-borderless table-striped">
