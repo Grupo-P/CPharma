@@ -46,7 +46,7 @@
             </tr>
             <tr>
                 <th scope="row">{!! Form::label('direccion', 'Direccion') !!}</th>
-                <td>{!! Form::textarea('direccion', null, [ 'class' => 'form-control', 'placeholder' => 'Calle 72 esquina av. 14A local nro. 13a-99 sector tierra negra Maracaibo Zulia zona postal 4002', 'rows' => '2']) !!}</td>
+                <td>{!! Form::textarea('direccion', null, [ 'class' => 'form-control', 'placeholder' => 'Calle 72 esquina av. 14A, local nro. 13a-99 sector tierra negra Maracaibo Zulia zona postal 4002', 'rows' => '2']) !!}</td>
             </tr>
         </tbody>
         </table>

@@ -42,7 +42,7 @@
             </tr>
             <tr>
                 <th scope="row">{!! Form::label('telefono', 'Telefono') !!}</th>
-                <td>{!! Form::text('telefono', null, [ 'class' => 'form-control', 'placeholder' => '04XX-7988326']) !!}</td>
+                <td>{!! Form::text('telefono', null, [ 'class' => 'form-control', 'placeholder' => '04XX-1234567']) !!}</td>
             </tr>
             <tr>
                 <th scope="row">{!! Form::label('correo', 'Correo') !!}</th>
@@ -54,7 +54,7 @@
             </tr>
             <tr>
                 <th scope="row">{!! Form::label('empresa', 'Empresa') !!}</th>
-                <td>{!! Form::text('empresa', null, [ 'class' => 'form-control', 'placeholder' => 'La Empresa C.A']) !!}</td>
+                <td>{!! Form::text('empresa', null, [ 'class' => 'form-control', 'placeholder' => 'Empresa C.A']) !!}</td>
             </tr>
         </tbody>
         </table>

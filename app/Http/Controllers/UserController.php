@@ -90,8 +90,14 @@ class UserController extends Controller
     public function update(Request $request, $id)
     {
         $usuario = User::find($id);
+        $contrasena = $usuario->password;
+
         $usuario->fill($request->all());
-        $usuario->password = Hash::make($request->input('password'));
+
+        if($usuario->password != $contrasena){
+            $usuario->password = Hash::make($request->input('password'));
+        }
+        
         $usuario->save();
         return redirect()->route('usuario.index')->with('Updated', ' Informacion');
     }
