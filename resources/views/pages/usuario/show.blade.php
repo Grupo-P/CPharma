@@ -42,7 +42,7 @@
 	    	  	<td>{{$usuario->estatus}}</td>
 		    </tr>
 		    <tr>
-		      	<th scope="row">Creada</th>
+		      	<th scope="row">Creado</th>
 	    	  	<td>{{$usuario->created_at}}</td>
 		    </tr>
 		    <tr>
