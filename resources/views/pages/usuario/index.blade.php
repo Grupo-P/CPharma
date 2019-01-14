@@ -2,7 +2,7 @@
 @extends('layouts.model')
 
 @section('title')
-    Empresa
+    Usuario
 @endsection
 
 @section('content')
@@ -74,7 +74,7 @@
 	@endif
 
 	<h1 class="h5 text-info">
-		<i class="fas fa-User"></i>
+		<i class="fas fa-user"></i>
 		Usuario
 	</h1>
 	<hr class="row align-items-start col-12">
@@ -94,9 +94,9 @@
 		    <tr>
 		      	<th scope="col">#</th>
 		      	<th scope="col">Nombre</th>
-		      	<th scope="col">Email</th>
+		      	<th scope="col">Correo</th>
 		      	<th scope="col">Rol</th>
-		      	{{-- <th scope="col">Estatus</th>--}}
+		      	<th scope="col">Estatus</th>
 		      	<th scope="col">Acciones</th> 
 		    </tr>
 	  	</thead>
@@ -107,7 +107,7 @@
 		      <td>{{$usuario->name}}</td>
 		      <td>{{$usuario->email}}</td>
 		      <td>{{$usuario->role}}</td> 
-		      {{-- <td>{{$empresa->estatus}}</td> --}}
+		      <td>{{$usuario->estatus}}</td>
 		      
 		    <!-- Inicio Validacion de ROLES -->
 		      <td>

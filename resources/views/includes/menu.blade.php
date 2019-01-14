@@ -68,7 +68,7 @@
   if(Auth::user()->role == 'MASTER'){
   ?>
     <li class="nav-item">
-      <a class="nav-link" href="{{ url('/test') }}">
+      <a class="nav-link" href="{{ url('/usuario') }}">
         <span data-feather="home"></span>
         <i class="fas fa-user"></i>
         Usuario<span class="sr-only">(current)</span>

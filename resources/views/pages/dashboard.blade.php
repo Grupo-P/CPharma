@@ -37,7 +37,7 @@
 	    		<p class="card-text text-white">Usuarios registrados!</p>
 	  		</div>
 			  	<div class="card-footer bg-transparent border-danger text-right">
-			  		<a href="#" class="btn btn-outline-danger btn-sm">Visualizar</a>
+			  		<a href="/usuario/" class="btn btn-outline-danger btn-sm">Visualizar</a>
 			  	</div>
 		</div>
 		<?php
