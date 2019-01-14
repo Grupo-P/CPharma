@@ -5,6 +5,7 @@ namespace compras\Http\Controllers;
 use Illuminate\Http\Request;
 use compras\Proveedor;
 use compras\User;
+use compras\Empresa;
 
 class ProveedorController extends Controller
 {
@@ -36,7 +37,8 @@ class ProveedorController extends Controller
      */
     public function create()
     {
-        return view('pages.proveedor.create');
+        $empresa = Empresa::pluck('nombre','id');
+        return view('pages.proveedor.create', compact('empresa'));
     }
 
     /**
@@ -68,7 +70,9 @@ class ProveedorController extends Controller
      */
     public function show($id)
     {
-        $proveedor = Proveedor::find($id);        
+        $proveedor = Proveedor::find($id);
+        $empresa = Empresa::find($proveedor->empresa);
+        $proveedor->empresa = $empresa->nombre;       
         return view('pages.proveedor.show', compact('proveedor'));
     }
 
