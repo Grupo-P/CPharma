@@ -70,6 +70,13 @@
     <li class="nav-item">
       <a class="nav-link" href="{{ url('/test') }}">
         <span data-feather="home"></span>
+        <i class="fas fa-user"></i>
+        Usuario<span class="sr-only">(current)</span>
+      </a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="{{ url('/test') }}">
+        <span data-feather="home"></span>
         <i class="fas fa-box"></i>
         Test<span class="sr-only">(current)</span>
       </a>

@@ -20,7 +20,10 @@
 
 	<hr class="row align-items-start col-12"> 
 	<div class="card-deck">
-
+		
+		<?php
+		  if(Auth::user()->role == 'MASTER'){
+		 ?>
 		<!-- Usuario -->
 		<div class="card border-danger mb-3" style="width: 14rem;">	  	
 	  		<div class="card-body text-left bg-danger">
@@ -33,11 +36,13 @@
 	    		</h2>
 	    		<p class="card-text text-white">Usuarios registrados!</p>
 	  		</div>
-		  	<div class="card-footer bg-transparent border-danger text-right">
-		  		<a href="#" class="btn btn-outline-danger btn-sm">Visualizar</a>
-		  	</div>
+			  	<div class="card-footer bg-transparent border-danger text-right">
+			  		<a href="#" class="btn btn-outline-danger btn-sm">Visualizar</a>
+			  	</div>
 		</div>
-
+		<?php
+			}
+		?>
 		<!-- Empresas -->
 	 	<div class="card border-success mb-3" style="width: 14rem;">	  	
 	  		<div class="card-body text-left bg-success">
