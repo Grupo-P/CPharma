@@ -51,4 +51,41 @@ function ComFactura(){
   	}
 }
 
+function Prueba(){
+	$conn = conectarDB();
+	$cont = 0;
+	$tempId=0;
+
+	//El Mejor de todos
+	/*
+	$sql = "SELECT ComProveedor.Id, GenPersona.Nombre, CONVERT(VARCHAR,ComFactura.FechaRegistro, 20) AS FechaRegistro 
+		FROM ComProveedor
+		INNER JOIN GenPersona ON ComProveedor.GenPersonaId=GenPersona.Id
+		INNER JOIN ComFactura ON ComFactura.ComProveedorId=ComProveedor.Id
+		ORDER BY ComProveedor.Id,ComFactura.FechaRegistro DESC";
+	*/
+//Este es el correcto
+	$sql = "SELECT ComProveedor.Id, GenPersona.Nombre, CONVERT(VARCHAR,ComFactura.FechaRegistro, 20) AS FechaRegistro 
+		FROM ComProveedor
+		INNER JOIN GenPersona ON ComProveedor.GenPersonaId=GenPersona.Id
+		INNER JOIN ComFactura ON ComFactura.ComProveedorId=ComProveedor.Id
+		ORDER BY ComProveedor.Id,ComFactura.FechaRegistro DESC";
+
+	$result = sqlsrv_query($conn,$sql);
+
+	while( $row = sqlsrv_fetch_array( $result, SQLSRV_FETCH_ASSOC) ) {
+		if($tempId == 0){
+			echo $row['Id'].", ".$row['Nombre'].", ".$row['FechaRegistro']."<br />";
+			$tempId = $row['Id'];
+			$cont++;
+		}
+		if ($tempId != $row['Id']){
+			echo $row['Id'].", ".$row['Nombre'].", ".$row['FechaRegistro']."<br />";
+			$tempId = $row['Id'];
+			$cont++;
+		}
+  	}
+  	echo 'La cantidad de registros es: '.$cont;
+}
+
 ?>
