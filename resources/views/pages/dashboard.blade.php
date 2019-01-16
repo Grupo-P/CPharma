@@ -79,4 +79,22 @@
 
 	</div>
    
+   	<div class="card-deck">
+   		<!-- Provedores -->
+		<div class="card border-dark mb-3" style="width: 14rem;">	  	
+	  		<div class="card-body text-left bg-dark">
+	    		<h3 class="card-title">
+		    		<span class="card-text text-white">
+		    			<?php
+							echo 'Reporte:';
+						?>
+		    		</span>
+	    		</h3>
+	    	    <p class="card-text text-white">Cantidad de dias sin recibir facturas</p>
+	  		</div>
+		  	<div class="card-footer bg-transparent border-dark text-right">
+		  		<a href="{{ url('/reporte1') }}" class="btn btn-outline-dark btn-sm">Visualizar</a>
+		  	</div>
+		</div>
+   	</div>
 @endsection

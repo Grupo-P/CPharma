@@ -21,6 +21,10 @@ Route::get('/test', function () {
     return view('test');
 });
 
+Route::get('/reporte1', function () {
+    return view('pages.reporte.reporte1');
+});
+
 Route::get('home', 'HomeController@index')->name('home');
 
 Route::resource('empresa', 'EmpresaController');

@@ -1,91 +1,113 @@
 <?php
-//Conectar DB
+/*
+	Nombre: conectarDB
+	Funcion: Establecer la conexion con la base de datos
+ */
 function conectarDB(){
 	$connectionInfo = array(
 		"Database"=>nameDB,
 		"UID"=>userDB,
 		"PWD"=>passDB
 	);
-
 	$conn = sqlsrv_connect( serverDB, $connectionInfo);
-
-	if( $conn ) {
-	     echo "Conexión establecida.<br />";
-	}else{
-	     echo "Conexión no se pudo establecer.<br />";
-	     die( print_r( sqlsrv_errors(), true));
-	}
+	// if( $conn ) {
+	//      echo "Conexión establecida.<br />";
+	// }else{
+	//      echo "Conexión no se pudo establecer.<br />";
+	//      die( print_r( sqlsrv_errors(), true));
+	// }
 	return $conn;
 }
-
-function GenPersona(){
-	$conn = conectarDB();
-
-	$sql = "SELECT Id, Nombre FROM GenPersona where TipoPersona = '2' ORDER BY 'Id' ASC";
-	$result = sqlsrv_query($conn,$sql);
-
-	while( $row = sqlsrv_fetch_array( $result, SQLSRV_FETCH_ASSOC) ) {
-      echo $row['Id'].", ".$row['Nombre']."<br />";
-  	}
+/*
+	Nombre: QueryDiasProveedores
+	Reporte1: Dias de Activacion de Proveedores
+	Funcion: Query para la base de datos del Reporte1
+ */
+function QueryDiasProveedores(){
+	$sql = "SELECT ComProveedor.Id, GenPersona.Nombre, CONVERT(VARCHAR,ComFactura.FechaRegistro, 20) AS FechaRegistro 
+		FROM ComProveedor
+		INNER JOIN GenPersona ON ComProveedor.GenPersonaId=GenPersona.Id
+		INNER JOIN ComFactura ON ComFactura.ComProveedorId=ComProveedor.Id
+		ORDER BY ComProveedor.Id,ComFactura.FechaRegistro DESC";
+		return $sql;
 }
-
-function ComProveedor(){
+/*
+	Nombre: ReporteDiasProveedores
+	Reporte1: Dias de Activacion de Proveedores
+	Funcion: Armado del Reporte1
+ */
+function ReporteDiasProveedores(){
 	$conn = conectarDB();
-
-	$sql = "SELECT Id, GenPersonaId, CodigoProveedor FROM ComProveedor ORDER BY 'Id' ASC";
-	$result = sqlsrv_query($conn,$sql);
-
-	while( $row = sqlsrv_fetch_array( $result, SQLSRV_FETCH_ASSOC) ) {
-      echo $row['Id'].", ".$row['GenPersonaId'].", ".$row['CodigoProveedor']."<br />";
-  	}
-}
-
-function ComFactura(){
-	$conn = conectarDB();
-
-	$sql = "SELECT Id, ComProveedorId, CONVERT(VARCHAR, FechaRegistro, 20) AS FechaRegistro FROM ComFactura ORDER BY 'Id' ASC";
-	$result = sqlsrv_query($conn,$sql);
-
-	while( $row = sqlsrv_fetch_array( $result, SQLSRV_FETCH_ASSOC) ) {
-      echo $row['Id'].", ".$row['ComProveedorId'].", ".$row['FechaRegistro']."<br />";
-  	}
-}
-
-function Prueba(){
-	$conn = conectarDB();
-	$cont = 0;
 	$tempId=0;
+	//$cont=0;
+	$FechaActual = date('Y-m-d');
 
-	//El Mejor de todos
-	/*
-	$sql = "SELECT ComProveedor.Id, GenPersona.Nombre, CONVERT(VARCHAR,ComFactura.FechaRegistro, 20) AS FechaRegistro 
-		FROM ComProveedor
-		INNER JOIN GenPersona ON ComProveedor.GenPersonaId=GenPersona.Id
-		INNER JOIN ComFactura ON ComFactura.ComProveedorId=ComProveedor.Id
-		ORDER BY ComProveedor.Id,ComFactura.FechaRegistro DESC";
-	*/
-//Este es el correcto
-	$sql = "SELECT ComProveedor.Id, GenPersona.Nombre, CONVERT(VARCHAR,ComFactura.FechaRegistro, 20) AS FechaRegistro 
-		FROM ComProveedor
-		INNER JOIN GenPersona ON ComProveedor.GenPersonaId=GenPersona.Id
-		INNER JOIN ComFactura ON ComFactura.ComProveedorId=ComProveedor.Id
-		ORDER BY ComProveedor.Id,ComFactura.FechaRegistro DESC";
-
+	$sql = QueryDiasProveedores();
 	$result = sqlsrv_query($conn,$sql);
+
+	echo '
+	<table class="table table-striped table-borderless col-12">
+	  	<thead class="thead-dark">
+		    <tr>
+		      	<th scope="col">Proveedor</th>		      	
+		      	<th scope="col">Ultima Facturacion</th>
+		      	<th scope="col">Dias sin recibir facturas</th>
+		    </tr>
+	  	</thead>
+	  	<tbody>
+	';
 
 	while( $row = sqlsrv_fetch_array( $result, SQLSRV_FETCH_ASSOC) ) {
 		if($tempId == 0){
-			echo $row['Id'].", ".$row['Nombre'].", ".$row['FechaRegistro']."<br />";
+			echo '<tr>';
+			//echo '<th>'.$row['Id'].'</th>';	
+			echo '<td>'.$row['Nombre'].'</td>';
+			echo '<td>'.($row['FechaRegistro']).'</td>';
+
+			$FechaReg = date('Y-m-d',strtotime($row['FechaRegistro']));
+			
+		    $fecha1 = new DateTime($FechaReg);
+		    $fecha2 = new DateTime($FechaActual);
+		    $DifFecha = $fecha1->diff($fecha2);
+
+			echo '<td>'.$DifFecha->format('%a días').'</td>';
+			echo '</tr>';
 			$tempId = $row['Id'];
-			$cont++;
+			//$cont++;
 		}
 		if ($tempId != $row['Id']){
-			echo $row['Id'].", ".$row['Nombre'].", ".$row['FechaRegistro']."<br />";
+			echo '<tr>';
+			//echo '<th>'.$row['Id'].'</th>';	
+			echo '<td>'.$row['Nombre'].'</td>';
+			echo '<td>'.($row['FechaRegistro']).'</td>';
+
+			$FechaReg = date('Y-m-d',strtotime($row['FechaRegistro']));
+			
+		    $fecha1 = new DateTime($FechaReg);
+		    $fecha2 = new DateTime($FechaActual);
+		    $DifFecha = $fecha1->diff($fecha2);
+
+			echo '<td>'.$DifFecha->format('%a días').'</td>';
+			echo '</tr>';
 			$tempId = $row['Id'];
-			$cont++;
+			//$cont++;
 		}
   	}
-  	echo 'La cantidad de registros es: '.$cont;
+  	echo '
+  		</tbody>
+	</table>';
+	//echo 'la cantidad de registros es: '.$cont;
 }
 
+
+/*
+function QueryDiasProveedores(){
+	$sql = "SELECT ComProveedor.Id, GenPersona.Nombre, CONVERT(VARCHAR,ComFactura.FechaRegistro, 20) AS FechaRegistro 
+		FROM ComProveedor
+		INNER JOIN GenPersona ON ComProveedor.GenPersonaId=GenPersona.Id
+		INNER JOIN ComFactura ON ComFactura.ComProveedorId=ComProveedor.Id
+		ORDER BY ComProveedor.Id,ComFactura.FechaRegistro DESC";
+		return $sql;
+}
+ */
 ?>
