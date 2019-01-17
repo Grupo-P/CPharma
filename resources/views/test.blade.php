@@ -14,6 +14,12 @@
   <?php	
 	include(app_path().'\functions\config.php');
 	include(app_path().'\functions\Functions.php');
-	ReporteDiasProveedores();
+	
+	$sql = QueryDiasProveedores();
+	$arr = array();
+
+
+	$arr = ConsultaDB($sql);
+	print_r($arr);
 ?>
 @endsection

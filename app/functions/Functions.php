@@ -110,4 +110,37 @@ function QueryDiasProveedores(){
 		return $sql;
 }
  */
+
+function ConsultaDB ( $sql ) {
+	$iso_sql = utf8_decode($sql);
+	$conn = conectarDB();
+				 
+				if( $conn ) {					
+					$stmt = sqlsrv_query( $conn, $iso_sql);
+					if( $stmt === false) {
+						die( print_r( sqlsrv_errors(), true) );
+					}
+					$i = 0;
+					$final[$i] = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_ASSOC);
+					$i++;
+					if (  $final[0] != NULL ) {	
+						while( $result = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_ASSOC) ) {
+								$final[$i] = $result;
+								$i++;
+						}
+					sqlsrv_free_stmt( $stmt);			
+					sqlsrv_close( $conn );
+					return $final;	
+					} else {
+						sqlsrv_free_stmt( $stmt);			
+						sqlsrv_close( $conn );
+						return NULL;
+					}
+					
+					
+				}else{
+					die( print_r( sqlsrv_errors(), true));
+				}
+	
+}
 ?>
