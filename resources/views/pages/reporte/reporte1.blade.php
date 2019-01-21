@@ -21,8 +21,10 @@
 @section('scriptsHead')
     <script src="{{ asset('assets/js/sortTable.js') }}">	
     </script>
+    <script src="{{ asset('assets/js/filter.js') }}">	
+    </script>
 @endsection
 
 @section('scriptsFoot')
-    sorttable.makeSortable(newTableObject);
+    {{-- sorttable.makeSortable(newTableObject); --}}
 @endsection
