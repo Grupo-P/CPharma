@@ -46,7 +46,7 @@ function ReporteDiasProveedores(){
 	$result = sqlsrv_query($conn,$sql);
 
 	echo '
-	<table class="table table-striped table-borderless col-12">
+	<table class="table table-striped table-borderless col-12 sortable">
 	  	<thead class="thead-dark">
 		    <tr>
 		      	<th scope="col">Proveedor</th>		      	
@@ -70,7 +70,7 @@ function ReporteDiasProveedores(){
 		    $fecha2 = new DateTime($FechaActual);
 		    $DifFecha = $fecha1->diff($fecha2);
 
-			echo '<td>'.$DifFecha->format('%a días').'</td>';
+			echo '<td>'.$DifFecha->format('%a').'</td>';
 			echo '</tr>';
 			$tempId = $row['Id'];
 			//$cont++;
@@ -87,7 +87,7 @@ function ReporteDiasProveedores(){
 		    $fecha2 = new DateTime($FechaActual);
 		    $DifFecha = $fecha1->diff($fecha2);
 
-			echo '<td>'.$DifFecha->format('%a días').'</td>';
+			echo '<td>'.$DifFecha->format('%a').'</td>';
 			echo '</tr>';
 			$tempId = $row['Id'];
 			//$cont++;
@@ -96,6 +96,7 @@ function ReporteDiasProveedores(){
   	echo '
   		</tbody>
 	</table>';
+	sqlsrv_close( $conn );
 	//echo 'la cantidad de registros es: '.$cont;
 }
 
@@ -115,32 +116,29 @@ function ConsultaDB ( $sql ) {
 	$iso_sql = utf8_decode($sql);
 	$conn = conectarDB();
 				 
-				if( $conn ) {					
-					$stmt = sqlsrv_query( $conn, $iso_sql);
-					if( $stmt === false) {
-						die( print_r( sqlsrv_errors(), true) );
-					}
-					$i = 0;
-					$final[$i] = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_ASSOC);
-					$i++;
-					if (  $final[0] != NULL ) {	
-						while( $result = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_ASSOC) ) {
-								$final[$i] = $result;
-								$i++;
-						}
+	if( $conn ) {					
+		$stmt = sqlsrv_query( $conn, $iso_sql);
+			if( $stmt === false) {
+				die( print_r( sqlsrv_errors(), true) );
+			}
+			$i = 0;
+			$final[$i] = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_ASSOC);
+			$i++;
+				if (  $final[0] != NULL ) {	
+					while( $result = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_ASSOC) ) {
+							$final[$i] = $result;
+							$i++;
+					}	
+			sqlsrv_free_stmt( $stmt);			
+			sqlsrv_close( $conn );
+			return $final;	
+				} else {
 					sqlsrv_free_stmt( $stmt);			
 					sqlsrv_close( $conn );
-					return $final;	
-					} else {
-						sqlsrv_free_stmt( $stmt);			
-						sqlsrv_close( $conn );
-						return NULL;
-					}
-					
-					
-				}else{
-					die( print_r( sqlsrv_errors(), true));
+					return NULL;
 				}
-	
+	}else{
+		die( print_r( sqlsrv_errors(), true));
+	}
 }
 ?>

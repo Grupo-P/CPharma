@@ -17,3 +17,12 @@
 	ReporteDiasProveedores();
 ?>
 @endsection
+
+@section('scriptsHead')
+    <script src="{{ asset('assets/js/sortTable.js') }}">	
+    </script>
+@endsection
+
+@section('scriptsFoot')
+    sorttable.makeSortable(newTableObject);
+@endsection

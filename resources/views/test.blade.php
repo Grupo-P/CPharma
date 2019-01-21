@@ -18,7 +18,6 @@
 	$sql = QueryDiasProveedores();
 	$arr = array();
 
-
 	$arr = ConsultaDB($sql);
 	print_r($arr);
 ?>

@@ -8,6 +8,7 @@
   <body>
     <header>
       @include('includes.header_in')
+      @yield('scriptsHead')
     </header>
 
     <div class="container-fluid">
@@ -30,5 +31,6 @@
     <footer>
         @include('includes.footer')
     </footer>
+        @yield('scriptsFoot')
   </body>
 </html>
