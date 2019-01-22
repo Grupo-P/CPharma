@@ -7,7 +7,7 @@
 @section('content')
 	<h1 class="h5 text-info">
 		<i class="fas fa-file-invoice"></i>
-		Cantidad de dias sin recibir facturas
+		Activacion de proveedores
 	</h1>
 	<hr class="row align-items-start col-12">
 
