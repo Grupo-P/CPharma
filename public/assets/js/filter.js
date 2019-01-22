@@ -11,7 +11,7 @@ function FilterAllTable() {
   tr = table.getElementsByTagName("tr");
 
   
-  for (i = 0; i < tr.length; i++) {
+  for (i = 1; i < tr.length; i++) {
     visible = false;
     td = tr[i].getElementsByTagName("td");
     /*Filtrado Por Todos los Campos*/
@@ -25,6 +25,11 @@ function FilterAllTable() {
      /*Filtrado Por Un Campo Especifico*/
     if (td[0] && td[0].innerHTML.toUpperCase().indexOf(filter) > -1) {
          visible = true;
+    }
+
+    /*Mantener el encabezado de la tabla*/
+    if (!tr[0]) {
+      tr[0].style.display = "";
     }
 
     if (visible === true) {
