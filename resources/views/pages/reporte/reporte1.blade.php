@@ -24,7 +24,3 @@
     <script src="{{ asset('assets/js/filter.js') }}">	
     </script>
 @endsection
-
-@section('scriptsFoot')
-    {{-- sorttable.makeSortable(newTableObject); --}}
-@endsection

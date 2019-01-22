@@ -10,12 +10,6 @@ function conectarDB(){
 		"PWD"=>passDB
 	);
 	$conn = sqlsrv_connect( serverDB, $connectionInfo);
-	// if( $conn ) {
-	//      echo "Conexión establecida.<br />";
-	// }else{
-	//      echo "Conexión no se pudo establecer.<br />";
-	//      die( print_r( sqlsrv_errors(), true));
-	// }
 	return $conn;
 }
 /*
@@ -39,7 +33,6 @@ function QueryDiasProveedores(){
 function ReporteDiasProveedores(){
 	$conn = conectarDB();
 	$tempId=0;
-	//$cont=0;
 	$FechaActual = date('Y-m-d');
 
 	$sql = QueryDiasProveedores();
@@ -51,7 +44,7 @@ function ReporteDiasProveedores(){
 	    <span class="input-group-text purple lighten-3" id="basic-text1"><i class="fas fa-search text-white"
 	        aria-hidden="true"></i></span>
 	  </div>
-	  <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="myFunction()">
+	  <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterAllTable()">
 	</div>
 	<br/>
 	<table class="table table-striped table-borderless col-12 sortable" id="myTable">
@@ -81,7 +74,6 @@ function ReporteDiasProveedores(){
 			echo '<td>'.$DifFecha->format('%a').'</td>';
 			echo '</tr>';
 			$tempId = $row['Id'];
-			//$cont++;
 		}
 		if ($tempId != $row['Id']){
 			echo '<tr>';
@@ -98,30 +90,17 @@ function ReporteDiasProveedores(){
 			echo '<td>'.$DifFecha->format('%a').'</td>';
 			echo '</tr>';
 			$tempId = $row['Id'];
-			//$cont++;
 		}
   	}
   	echo '
   		</tbody>
 	</table>';
 	sqlsrv_close( $conn );
-	//echo 'la cantidad de registros es: '.$cont;
 }
-
-
 /*
-function QueryDiasProveedores(){
-	$sql = "SELECT ComProveedor.Id, GenPersona.Nombre, CONVERT(VARCHAR,ComFactura.FechaRegistro, 20) AS FechaRegistro 
-		FROM ComProveedor
-		INNER JOIN GenPersona ON ComProveedor.GenPersonaId=GenPersona.Id
-		INNER JOIN ComFactura ON ComFactura.ComProveedorId=ComProveedor.Id
-		ORDER BY ComProveedor.Id,ComFactura.FechaRegistro DESC";
-		return $sql;
-}
-
-<input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for names..">
+	Nombre: ConsultaDB
+	Funcion: Consultar y armar el array de datos
  */
-
 function ConsultaDB ( $sql ) {
 	$iso_sql = utf8_decode($sql);
 	$conn = conectarDB();
