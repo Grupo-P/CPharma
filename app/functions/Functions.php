@@ -190,7 +190,7 @@ function ReporteHistoricoArticulos(){
 			echo '</tr>';
 
 			/*Limite para acelerar el test quitar al final*/
-			if($cont == 7240){
+			if($cont == 15){
 				break;
 			}
   	}
@@ -217,8 +217,35 @@ SELECT ComFacturaDetalle.ComFacturaId,ComFacturaDetalle.CantidadRecibidaFactura,
 
 select ComFactura.Id,ComFactura.ComProveedorId,ComFactura.FechaRegistro  from ComFactura where ComFactura.Id = 11701;
 
-select ComProveedor.Id,ComProveedor.GenPersonaId from ComProveedor where ComProveedor.Id = 23;
+select ComProveedor.Id,ComProveedor.GenPersonaId from ComProveedor where ComProveedor.Id = 2;
 
-select GenPersona.Id,GenPersona.Nombre from GenPersona where GenPersona.Id = 138539;
+select GenPersona.Id,GenPersona.Nombre from GenPersona where GenPersona.Id = 46429;
+
+
+
+///////// Query Final del reporte 2 ///////
+select 
+InvArticulo.Id,
+InvArticulo.CodigoArticulo,
+InvArticulo.Descripcion,
+ComFacturaDetalle.ComFacturaId,
+ComFacturaDetalle.CantidadRecibidaFactura,
+ComFacturaDetalle.M_PrecioCompraBruto,
+ComFacturaDetalle.InvArticuloId,
+ComFactura.Id,
+ComFactura.ComProveedorId,
+ComFactura.FechaRegistro,
+ComProveedor.Id,
+ComProveedor.GenPersonaId,
+GenPersona.Id,
+GenPersona.Nombre
+from InvArticulo
+inner join ComFacturaDetalle on InvArticulo.Id = ComFacturaDetalle.InvArticuloId
+inner join ComFactura on ComFactura.Id = ComFacturaDetalle.ComFacturaId
+inner join ComProveedor on ComProveedor.Id = ComFactura.ComProveedorId
+inner join GenPersona on GenPersona.Id = ComProveedor.GenPersonaId
+where InvArticulo.Id = 7231
+order by InvArticulo.Id asc;
+
  */
 ?>
