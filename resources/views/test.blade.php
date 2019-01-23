@@ -7,7 +7,7 @@
 @section('content')
 	<h1 class="h5 text-info">
 		<i class="fas fa-file-invoice"></i>
-		Historico de Articulos TEST
+		Historico de Articulos
 	</h1>
 	<hr class="row align-items-start col-12">
 
@@ -17,12 +17,14 @@
 	
 	if (isset($_GET['Historico'])  )
 	{
-	  echo '<br>El IdArticulo es: '.$_GET['IdArticulo'];
-	  echo '<br>El CodigoArticulo es: '.$_GET['CodigoArticulo'];
-	  echo '<br>La DescripcionArticulo es: '.$_GET['DescripcionArticulo'];
+	  TableHistoricoArticulos(
+	  	$_GET['IdArticulo'],
+	  	$_GET['CodigoArticulo'],
+	  	$_GET['DescripcionArticulo']
+	  );
 	} 
 	else{
-		ReporteHistoricoArticulos();
+		TableArticulos();
 	} 
 ?>
 @endsection

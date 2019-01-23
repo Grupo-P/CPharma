@@ -12,41 +12,6 @@ function conectarDB(){
 	$conn = sqlsrv_connect( serverDB, $connectionInfo);
 	return $conn;
 }
-/*
-	Nombre: ConsultaDB
-	Funcion: Consultar y armar el array de datos
-*/
-/*
-function ConsultaDB ( $sql ) {
-	$iso_sql = utf8_decode($sql);
-	$conn = conectarDB();
-				 
-	if( $conn ) {					
-		$stmt = sqlsrv_query( $conn, $iso_sql);
-			if( $stmt === false) {
-				die( print_r( sqlsrv_errors(), true) );
-			}
-			$i = 0;
-			$final[$i] = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_ASSOC);
-			$i++;
-				if (  $final[0] != NULL ) {	
-					while( $result = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_ASSOC) ) {
-							$final[$i] = $result;
-							$i++;
-					}	
-			sqlsrv_free_stmt( $stmt);			
-			sqlsrv_close( $conn );
-			return $final;	
-				} else {
-					sqlsrv_free_stmt( $stmt);			
-					sqlsrv_close( $conn );
-					return NULL;
-				}
-	}else{
-		die( print_r( sqlsrv_errors(), true));
-	}
-}
-*/
 /************REPORTE 1 Activacion de proveedores***********/
 /*
 	Nombre: QueryDiasProveedores
@@ -54,12 +19,15 @@ function ConsultaDB ( $sql ) {
 	Funcion: Query para la base de datos del Reporte1
  */
 function QueryDiasProveedores(){
-	$sql = "SELECT ComProveedor.Id, GenPersona.Nombre, CONVERT(VARCHAR,ComFactura.FechaRegistro, 20) AS FechaRegistro 
+	$sql = "SELECT 
+		ComProveedor.Id, 
+		GenPersona.Nombre, 
+		CONVERT(VARCHAR,ComFactura.FechaRegistro, 20) AS FechaRegistro 
 		FROM ComProveedor
 		INNER JOIN GenPersona ON ComProveedor.GenPersonaId=GenPersona.Id
 		INNER JOIN ComFactura ON ComFactura.ComProveedorId=ComProveedor.Id
 		ORDER BY ComProveedor.Id,ComFactura.FechaRegistro DESC";
-		return $sql;
+	return $sql;
 }
 /*
 	Nombre: ReporteDiasProveedores
@@ -133,20 +101,27 @@ function ReporteDiasProveedores(){
 	</table>';
 	sqlsrv_close( $conn );
 }
-
 /**************REPORTE 2 Historico de Articulos***********/
-function QueryHistoricoArticulos(){
-	$sql = "SELECT InvArticulo.Id,InvArticulo.CodigoArticulo, InvArticulo.Descripcion 
+/*
+	Nombre: QueryArticulos
+	Funcion: Query que devuelve todos los articulos de la base de datos
+ */
+function QueryArticulos(){
+	$sql = "SELECT 
+		InvArticulo.Id,
+		InvArticulo.CodigoArticulo, 
+		InvArticulo.Descripcion 
 		FROM InvArticulo";
-		return $sql;
+	return $sql;
 }
-
-
-
-function ReporteHistoricoArticulos(){
+/*
+	Nombre: TableArticulos
+	Funcion: Arma los articulos en tabla
+ */
+function TableArticulos(){
 	$conn = conectarDB();
 	
-	$sql = QueryHistoricoArticulos();
+	$sql = QueryArticulos();
 	$result = sqlsrv_query($conn,$sql);
 	
 	echo '
@@ -161,7 +136,6 @@ function ReporteHistoricoArticulos(){
 	<table class="table table-striped table-borderless col-12 sortable" id="myTable">
 	  	<thead class="thead-dark">
 		    <tr>
-		    	<th scope="col">Id</th>
 		      	<th scope="col">CodigoArticulo</th>
 		      	<th scope="col">Descripcion</th>
 		      	<th scope="col">Accion</th>
@@ -170,12 +144,11 @@ function ReporteHistoricoArticulos(){
 	  	<tbody>
 	';
 	$cont = 0;
-	$FechaAntes = date('Y-m-d h:m:s');
 
 	while( $row = sqlsrv_fetch_array( $result, SQLSRV_FETCH_ASSOC)) {
 	$cont++;
 			echo '<tr>';
-			echo '<td>'.$row["Id"].'</td>';	
+			// echo '<td>'.$row["Id"].'</td>';
 			echo '<td>'.$row["CodigoArticulo"].'</td>';
 			echo '<td>'.($row['Descripcion']).'</td>';
 			echo' <td>
@@ -198,54 +171,84 @@ function ReporteHistoricoArticulos(){
   		</tbody>
 	</table>';
 	sqlsrv_close( $conn );
-
-	$FechaDespues = date('Y-m-d h:m:s');
-	echo '<br/>cantidad de registros: '.$cont;
-	echo '<br/>Fecha Antes: '.$FechaAntes;
-	echo '<br/>Fecha Despues: '.$FechaDespues;
-
-	$fecha1 = new DateTime($FechaDespues);
-    $fecha2 = new DateTime($FechaAntes);
-    $DifFecha = $fecha1->diff($fecha2);
-	echo '<br/>Tardo: '.$DifFecha->format("%H:%I:%S");
 }
-
 /*
-select * from InvArticulo where InvArticulo.Id = 7231;
-
-SELECT ComFacturaDetalle.ComFacturaId,ComFacturaDetalle.CantidadRecibidaFactura,ComFacturaDetalle.M_PrecioCompraBruto,ComFacturaDetalle.InvArticuloId  from ComFacturaDetalle where ComFacturaDetalle.InvArticuloId = '7231';
-
-select ComFactura.Id,ComFactura.ComProveedorId,ComFactura.FechaRegistro  from ComFactura where ComFactura.Id = 11701;
-
-select ComProveedor.Id,ComProveedor.GenPersonaId from ComProveedor where ComProveedor.Id = 2;
-
-select GenPersona.Id,GenPersona.Nombre from GenPersona where GenPersona.Id = 46429;
-
-
-
-///////// Query Final del reporte 2 ///////
-select 
-InvArticulo.Id,
-InvArticulo.CodigoArticulo,
-InvArticulo.Descripcion,
-ComFacturaDetalle.ComFacturaId,
-ComFacturaDetalle.CantidadRecibidaFactura,
-ComFacturaDetalle.M_PrecioCompraBruto,
-ComFacturaDetalle.InvArticuloId,
-ComFactura.Id,
-ComFactura.ComProveedorId,
-ComFactura.FechaRegistro,
-ComProveedor.Id,
-ComProveedor.GenPersonaId,
-GenPersona.Id,
-GenPersona.Nombre
-from InvArticulo
-inner join ComFacturaDetalle on InvArticulo.Id = ComFacturaDetalle.InvArticuloId
-inner join ComFactura on ComFactura.Id = ComFacturaDetalle.ComFacturaId
-inner join ComProveedor on ComProveedor.Id = ComFactura.ComProveedorId
-inner join GenPersona on GenPersona.Id = ComProveedor.GenPersonaId
-where InvArticulo.Id = 7231
-order by InvArticulo.Id asc;
-
+	Nombre: QueryHistoricoArticulos
+	Funcion: Query que devuelve el historico del articulo seleccionado
  */
+function QueryHistoricoArticulos($IdArticuloQ){
+	$sql = "SELECT 
+		GenPersona.Nombre,
+		ComFactura.FechaRegistro,
+		ComFacturaDetalle.M_PrecioCompraBruto,
+		ComFacturaDetalle.CantidadRecibidaFactura
+		FROM InvArticulo
+		inner join ComFacturaDetalle ON InvArticulo.Id = ComFacturaDetalle.InvArticuloId
+		inner join ComFactura ON ComFactura.Id = ComFacturaDetalle.ComFacturaId
+		inner join ComProveedor ON ComProveedor.Id = ComFactura.ComProveedorId
+		inner join GenPersona ON GenPersona.Id = ComProveedor.GenPersonaId
+		WHERE InvArticulo.Id = '$IdArticuloQ'
+		ORDER BY ComFactura.FechaRegistro DESC";
+	return $sql;
+}
+/*
+	Nombre: TableHistoricoArticulos
+	Funcion: Arma el historico del articulo selecionado
+ */
+function TableHistoricoArticulos($IdArticuloQ,$CodigoArticuloQ,$DescripcionArticuloQ){
+	$conn = conectarDB();
+	
+	$sql = QueryHistoricoArticulos($IdArticuloQ);
+	$result = sqlsrv_query($conn,$sql);
+	
+	echo '
+	<div class="input-group md-form form-sm form-1 pl-0">
+	  <div class="input-group-prepend">
+	    <span class="input-group-text purple lighten-3" id="basic-text1"><i class="fas fa-search text-white"
+	        aria-hidden="true"></i></span>
+	  </div>
+	  <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterAllTable()">
+	</div>
+	<br/>
+
+	<table class="table table-striped table-borderless col-12 sortable">
+		<thead class="thead-dark">
+		    <tr>
+		    	<th scope="col">Codigo</th>
+		      	<th scope="col">Descripcion</td>
+		    </tr>
+	  	</thead>
+	  	<tbody>
+	  		<tr>
+		    	<td scope="col">'.$CodigoArticuloQ.'</th>
+		      	<td scope="col">'.$DescripcionArticuloQ.'</td>
+		    </tr>	
+	  	</tbody>	
+	</table>
+
+	<table class="table table-striped table-borderless col-12 sortable" id="myTable">
+	  	<thead class="thead-dark">
+		    <tr>
+		    	<th scope="col">Proveedor</th>
+		      	<th scope="col">Fecha de Registo</th>
+		      	<th scope="col">Costo Bruto</th>
+		      	<th scope="col">Cantidad Recibida</th>
+		    </tr>
+	  	</thead>
+	  	<tbody>
+	';
+	
+	while( $row = sqlsrv_fetch_array( $result, SQLSRV_FETCH_ASSOC)) {
+			echo '<tr>';
+			echo '<td>'.$row["Nombre"].'</td>';	
+			echo '<td>'.$row["FechaRegistro"]->format('Y-m-d h:m:s').'</td>';
+			echo '<td>'.$row["M_PrecioCompraBruto"].'</td>';
+			echo '<td>'.($row['CantidadRecibidaFactura']).'</td>';
+			echo '</tr>';		
+  	}
+  	echo '
+  		</tbody>
+	</table>';
+	sqlsrv_close( $conn );
+}
 ?>
