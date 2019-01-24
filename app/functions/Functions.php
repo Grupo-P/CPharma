@@ -251,4 +251,53 @@ function TableHistoricoArticulos($IdArticuloQ,$CodigoArticuloQ,$DescripcionArtic
 	</table>';
 	sqlsrv_close( $conn );
 }
+/*
+	Nombre: ConsultaDB
+	Funcion: Consulta en la base de datos y regresa un Json
+ */
+function ConsultaDB ( $sql ){
+	 $conn = conectarDB(); 
+	if( $conn ) {					
+		$stmt = sqlsrv_query( $conn , $sql );
+		if( $stmt === false) {
+			die( print_r( sqlsrv_errors(), true) );
+		}
+		$i = 0;
+		$final[$i] = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_NUMERIC);
+		$i++;
+		if (  $final[0] != NULL ) {	
+			while( $result = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_NUMERIC) ) {
+					$final[$i] = $result;
+					$i++;
+			}
+		sqlsrv_free_stmt( $stmt);			
+		sqlsrv_close( $conn );
+		return $final;	
+		} else {
+			sqlsrv_free_stmt( $stmt);			
+			sqlsrv_close( $conn );
+			return NULL;
+		}	
+	}else{
+		die( print_r( sqlsrv_errors(), true));
+	}	
+}
+/*
+	Nombre: array_flatten_recursive
+	Funcion: Decodifica el arreglo a UTF8
+ */
+function array_flatten_recursive($array) { 
+   if (!is_array($array)) {
+	   return false;
+   }
+   $flat = array();
+   $RII = new RecursiveIteratorIterator(new RecursiveArrayIterator($array));
+   $i = 0;
+   foreach ($RII as $key => $value) {
+	   $flat[$i] = utf8_encode($value);
+	   $i++;
+   }
+   return $flat;
+}
+
 ?>
