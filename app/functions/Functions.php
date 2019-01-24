@@ -103,15 +103,25 @@ function ReporteDiasProveedores(){
 }
 /**************REPORTE 2 Historico de Articulos***********/
 /*
-	Nombre: QueryArticulos
+	Nombre: QueryArticulosDesc
 	Funcion: Query que devuelve todos los articulos de la base de datos
  */
-function QueryArticulos(){
-	$sql = "SELECT 
-		InvArticulo.Id,
-		InvArticulo.CodigoArticulo, 
+function QueryArticulosDesc(){
+	$sql = "SELECT  
 		InvArticulo.Descripcion 
 		FROM InvArticulo";
+	return $sql;
+}
+/*
+	Nombre: QueryArticulos
+	Funcion: Devuelve el articulo segun la descripcion
+ */
+function QueryArticulos($descrip){
+	$sql = "SELECT  
+		InvArticulo.Id 
+		FROM InvArticulo
+		WHERE InvArticulo.Descripcion 
+		LIKE '%$descrip%'";
 	return $sql;
 }
 /*
@@ -176,7 +186,8 @@ function TableArticulos(){
 	Nombre: QueryHistoricoArticulos
 	Funcion: Query que devuelve el historico del articulo seleccionado
  */
-function QueryHistoricoArticulos($IdArticuloQ){
+function QueryHistoricoArticulos($descrip){
+
 	$sql = "SELECT 
 		GenPersona.Nombre,
 		ComFactura.FechaRegistro,
@@ -299,5 +310,13 @@ function array_flatten_recursive($array) {
    }
    return $flat;
 }
-
+/*
+	Nombre: armarJson
+	Funcion: recibe un sql y regrsa el array JsonAramado
+ */
+function armarJson($sql){
+	$result = ConsultaDB ($sql);
+    $arrayJson = array_flatten_recursive($result);
+    return json_encode($arrayJson);
+}
 ?>

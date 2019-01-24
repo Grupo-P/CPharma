@@ -15,27 +15,21 @@
 	include(app_path().'\functions\config.php');
 	include(app_path().'\functions\Functions.php');
 
-	$sql_01 = 'Select InvArticulo.Descripcion from InvArticulo';
-    $articulos = ConsultaDB ( $sql_01 );
-    $temp_art = array_flatten_recursive($articulos);
-    $ArtJson = json_encode($temp_art);
+	$sql = QueryArticulosDesc();
+    $ArtJson = armarJson($sql);
 	
 	if (isset($_GET['Historico'])  )
 	{
-	  TableHistoricoArticulos(
-	  	$_GET['IdArticulo'],
-	  	$_GET['CodigoArticulo'],
-	  	$_GET['DescripcionArticulo']
-	  );
+	 	echo 'Aticulo: '.$_GET['Historico'];
+  		//TableHistoricoArticulos($_GET['Historico']);
 	} 
 	else{
-		//TableArticulos();
 		echo '
-		<form autocomplete="off" action="/action_page.php">
-		    <div class="autocomplete" style="width:300px;">
-		      <input id="myInput" type="text" name="Articulo" placeholder="Ingrese el nombre del articulo " onkeyup="conteo()">
+		<form autocomplete="off" action="">
+		    <div class="autocomplete" style="width:90%;">
+		      <input id="myInput" type="text" name="Historico" placeholder="Ingrese el nombre del articulo " onkeyup="conteo()">
 		    </div>
-		    <input type="submit">
+		    <input type="submit" value="Buscar" class="btn btn-outline-success">
 	  	</form>
 	  	';
 	} 
@@ -57,10 +51,6 @@
       box-sizing: border-box;
     }
 
-    body {
-      font: 16px Arial;  
-    }
-
     /*the container must be positioned relative:*/
     .autocomplete {
       position: relative;
@@ -70,6 +60,7 @@
     input {
       border: 1px solid transparent;
       background-color: #f1f1f1;
+      border-radius: 5px;
       padding: 10px;
       font-size: 16px;
     }
@@ -77,12 +68,6 @@
     input[type=text] {
       background-color: #f1f1f1;
       width: 100%;
-    }
-
-    input[type=submit] {
-      background-color: DodgerBlue;
-      color: #fff;
-      cursor: pointer;
     }
 
     .autocomplete-items {
@@ -119,8 +104,8 @@
 
 @section('scriptsFoot')
 	<script type="text/javascript">
-		var ArrJs = eval(<?php echo $ArtJson ?>);
-		autocomplete(document.getElementById("myInput"), ArrJs); 
+	var ArrJs = eval(<?php echo $ArtJson ?>);
+	autocomplete(document.getElementById("myInput"), ArrJs); 
 	</script> 	
 @endsection
 
