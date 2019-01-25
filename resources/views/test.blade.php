@@ -16,18 +16,20 @@
 	include(app_path().'\functions\Functions.php');
 
 	$sql = QueryArticulosDesc();
-    $ArtJson = armarJson($sql);
+  $ArtJson = armarJson($sql);
 	
-	if (isset($_GET['Historico'])  )
+	if (isset($_GET['Id'])  )
 	{
-	 	echo 'Aticulo: '.$_GET['Historico'];
-  		//TableHistoricoArticulos($_GET['Historico']);
+	 	echo 'Aticulo: '.$_GET['Descrip'];
+    echo '<br/>Id: '.$_GET['Id'];
+  	TableHistoricoArticulos($_GET['Id'],$_GET['Descrip']);
 	} 
 	else{
 		echo '
 		<form autocomplete="off" action="">
 		    <div class="autocomplete" style="width:90%;">
-		      <input id="myInput" type="text" name="Historico" placeholder="Ingrese el nombre del articulo " onkeyup="conteo()">
+		      <input id="myInput" type="text" name="Descrip" placeholder="Ingrese el nombre del articulo " onkeyup="conteo()">
+		      <input id="myId" name="Id" type="hidden">
 		    </div>
 		    <input type="submit" value="Buscar" class="btn btn-outline-success">
 	  	</form>
@@ -43,7 +45,7 @@
     </script>
     <script type="text/javascript" src="{{ asset('assets/js/functions.js') }}">	
     </script>
-    <script type="text/javascript" src="{{ asset('assets/jquery/jquery-2.2.2.min.j') }}"></script>
+    <script type="text/javascript" src="{{ asset('assets/jquery/jquery-2.2.2.min.js') }}"></script>
   	<script type="text/javascript" src="{{ asset('assets/jquery/jquery-ui.min.js') }}" ></script>
 
   	<style>
@@ -105,7 +107,7 @@
 @section('scriptsFoot')
 	<script type="text/javascript">
 	var ArrJs = eval(<?php echo $ArtJson ?>);
-	autocomplete(document.getElementById("myInput"), ArrJs); 
+	autocomplete(document.getElementById("myInput"),document.getElementById("myId"), ArrJs); 
 	</script> 	
 @endsection
 

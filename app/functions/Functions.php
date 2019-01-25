@@ -107,8 +107,9 @@ function ReporteDiasProveedores(){
 	Funcion: Query que devuelve todos los articulos de la base de datos
  */
 function QueryArticulosDesc(){
-	$sql = "SELECT  
-		InvArticulo.Descripcion 
+	$sql = "SELECT
+		InvArticulo.Descripcion, 
+		InvArticulo.Id 
 		FROM InvArticulo";
 	return $sql;
 }
@@ -186,9 +187,9 @@ function TableArticulos(){
 	Nombre: QueryHistoricoArticulos
 	Funcion: Query que devuelve el historico del articulo seleccionado
  */
-function QueryHistoricoArticulos($descrip){
+function QueryHistoricoArticulos($IdArticuloQ){
 
-	$sql = "SELECT 
+	$sql = "SELECT
 		GenPersona.Nombre,
 		ComFactura.FechaRegistro,
 		ComFacturaDetalle.M_PrecioCompraBruto,
@@ -206,11 +207,21 @@ function QueryHistoricoArticulos($descrip){
 	Nombre: TableHistoricoArticulos
 	Funcion: Arma el historico del articulo selecionado
  */
-function TableHistoricoArticulos($IdArticuloQ,$CodigoArticuloQ,$DescripcionArticuloQ){
+function TableHistoricoArticulos($IdArticuloQ,$DescripcionArticuloQ){
 	$conn = conectarDB();
+	$CodigoArticuloQ;
 	
+	$sql1 = "SELECT InvArticulo.CodigoArticulo 
+			FROM InvArticulo
+			WHERE InvArticulo.Id = '$IdArticuloQ'";
+	$result1 = sqlsrv_query($conn,$sql1);
+
 	$sql = QueryHistoricoArticulos($IdArticuloQ);
 	$result = sqlsrv_query($conn,$sql);
+
+	while( $row1 = sqlsrv_fetch_array( $result1, SQLSRV_FETCH_ASSOC)) {
+		$CodigoArticuloQ = $row1["CodigoArticulo"];
+	}
 	
 	echo '
 	<div class="input-group md-form form-sm form-1 pl-0">
@@ -317,6 +328,7 @@ function array_flatten_recursive($array) {
 function armarJson($sql){
 	$result = ConsultaDB ($sql);
     $arrayJson = array_flatten_recursive($result);
+    print_r($arrayJson);
     return json_encode($arrayJson);
 }
 ?>
