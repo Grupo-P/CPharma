@@ -10,7 +10,7 @@
 	<?php
 		$usuarios = DB::table('users')->count();
 		$empresas = DB::table('empresas')->count();
-		$proveedores = DB::table('proveedors')->count();		
+		$proveedores = DB::table('proveedors')->count();
 	?>
 
 	<h1 class="h5 text-info">

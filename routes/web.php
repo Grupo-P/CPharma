@@ -21,8 +21,16 @@ Route::get('/test', function () {
     return view('test');
 });
 
+Route::get('/reporte', function () {
+    return view('pages.reportes');
+});
+
 Route::get('/reporte1', function () {
     return view('pages.reporte.reporte1');
+});
+
+Route::get('/reporte2', function () {
+    return view('pages.reporte.reporte2');
 });
 
 Route::get('home', 'HomeController@index')->name('home');
