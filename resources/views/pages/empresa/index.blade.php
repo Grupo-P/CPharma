@@ -5,6 +5,13 @@
     Empresa
 @endsection
 
+@section('scriptsHead')
+    <script src="{{ asset('assets/js/sortTable.js') }}">	
+    </script>
+    <script src="{{ asset('assets/js/filter.js') }}">	
+    </script>
+@endsection
+
 @section('content')
 
 	<!-- Modal Guardar -->
@@ -86,10 +93,16 @@
       		Agregar		      		
       	</a>
 	</div>
-	
 	<br>
-
-	<table class="table table-striped table-borderless col-12">
+	<div class="input-group md-form form-sm form-1 pl-0">
+	  <div class="input-group-prepend">
+	    <span class="input-group-text purple lighten-3" id="basic-text1"><i class="fas fa-search text-white"
+	        aria-hidden="true"></i></span>
+	  </div>
+	  <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterFirsTable()">
+	</div>
+	<br/>
+	<table class="table table-striped table-borderless col-12 sortable" id="myTable">
 	  	<thead class="thead-dark">
 		    <tr>
 		      	<th scope="col">#</th>

@@ -53,6 +53,7 @@ class EmpresaController extends Controller
         $empresa->telefono = $request->input('telefono');
         $empresa->direccion = $request->input('direccion');
         $empresa->estatus = 'ACTIVO';
+        $empresa->observacion = $request->input('observacion');
         $empresa->user = auth()->user()->name;
         $empresa->save();
         return redirect()->route('empresa.index')->with('Saved', ' Informacion');

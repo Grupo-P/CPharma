@@ -12,6 +12,6 @@ class Empresa extends Model
      * @var array
      */
     protected $fillable = [
-        'nombre', 'rif', 'telefono','direccion','estatus','user'
+        'nombre', 'rif', 'telefono','direccion','estatus','user','observacion'
     ];
 }

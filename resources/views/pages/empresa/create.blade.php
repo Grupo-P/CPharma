@@ -42,11 +42,15 @@
             </tr>
             <tr>
                 <th scope="row">{!! Form::label('telefono', 'Telefono') !!}</th>
-                <td>{!! Form::text('telefono', null, [ 'class' => 'form-control', 'placeholder' => '0261-7988326']) !!}</td>
+                <td>{!! Form::text('telefono', null, [ 'class' => 'form-control', 'placeholder' => '0261-9876543, 0212-1234567']) !!}</td>
             </tr>
             <tr>
                 <th scope="row">{!! Form::label('direccion', 'Direccion') !!}</th>
                 <td>{!! Form::textarea('direccion', null, [ 'class' => 'form-control', 'placeholder' => 'Calle 72 esquina av. 14A, local nro. 13a-99 sector tierra negra Maracaibo Zulia zona postal 4002', 'rows' => '2']) !!}</td>
+            </tr>
+            <tr>
+                <th scope="row">{!! Form::label('observacion', 'Observaciones') !!}</th>
+                <td>{!! Form::textarea('observacion', null, [ 'class' => 'form-control', 'placeholder' => 'Detalles importantes de la empresa', 'rows' => '3']) !!}</td>
             </tr>
         </tbody>
         </table>
