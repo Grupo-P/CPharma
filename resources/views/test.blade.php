@@ -15,16 +15,16 @@
 	include(app_path().'\functions\config.php');
 	include(app_path().'\functions\Functions.php');
 
-	$sql = QueryArticulosDesc();
-  $ArtJson = armarJson($sql);
+  $ArtJson = "";
 	
 	if (isset($_GET['Id'])  )
 	{
-	 	echo 'Aticulo: '.$_GET['Descrip'];
-    echo '<br/>Id: '.$_GET['Id'];
   	TableHistoricoArticulos($_GET['Id'],$_GET['Descrip']);
 	} 
 	else{
+    $sql = QueryArticulosDesc();
+    $ArtJson = armarJson($sql);
+
 		echo '
 		<form autocomplete="off" action="">
 		    <div class="autocomplete" style="width:90%;">
@@ -105,9 +105,15 @@
 @endsection
 
 @section('scriptsFoot')
-	<script type="text/javascript">
-	var ArrJs = eval(<?php echo $ArtJson ?>);
-	autocomplete(document.getElementById("myInput"),document.getElementById("myId"), ArrJs); 
-	</script> 	
+<?php
+  if($ArtJson!=""){
+?>
+    <script type="text/javascript">
+      ArrJs = eval(<?php echo $ArtJson ?>);
+      autocomplete(document.getElementById("myInput"),document.getElementById("myId"), ArrJs);
+    </script> 
+<?php
+  }
+?>	
 @endsection
 

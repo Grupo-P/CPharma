@@ -328,7 +328,6 @@ function array_flatten_recursive($array) {
 function armarJson($sql){
 	$result = ConsultaDB ($sql);
     $arrayJson = array_flatten_recursive($result);
-    print_r($arrayJson);
     return json_encode($arrayJson);
 }
 ?>

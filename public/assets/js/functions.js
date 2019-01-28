@@ -43,7 +43,12 @@ function autocomplete(inp, inpId, arr) {
                 /*insert the value for the autocomplete text field:*/
                 //PROBAR AQUI EL HIDEN
                 inp.value = this.getElementsByTagName("input")[0].value;
-                inpId.value = arr[i+1];
+
+                for (i = 0; i < arr.length; i++) {
+                  if ((arr[i]).toUpperCase() == (inp.value).toUpperCase()) {
+                    inpId.value = arr[i+1];
+                  }
+                }
                 /*close the list of autocompleted values,
                 (or any other open lists of autocompleted values:*/
                 closeAllLists();
