@@ -52,14 +52,19 @@
                 <th scope="row">{!! Form::label('cargo', 'Cargo') !!}</th>
                 <td>{!! Form::text('cargo', null, [ 'class' => 'form-control', 'placeholder' => 'Proveedor']) !!}</td>
             </tr>
-            {{-- <tr>
-                <th scope="row">{!! Form::label('empresa', 'Empresa') !!}</th>
-                <td>{!! Form::text('empresa', null, [ 'class' => 'form-control', 'placeholder' => 'Empresa C.A']) !!}</td>
-            </tr> --}}
-            <tr>    
-                <th scope="row">{!! Form::label('empresa', 'Empresa') !!}</th>
+            <tr>
+                <th scope="row">{!! Form::label('empresa', 'Empresa') !!}
+                </th>
                 <td>
-                    {!! Form::select('empresa', $empresa, [ 'class' => 'form-control' ]) !!}
+                    <select name="empresa" class="form-control">
+                        <?php
+                        foreach($empresa as $emp){
+                        ?>
+                        <option value="<?php echo $emp; ?>"><?php echo $emp; ?></option>
+                        <?php
+                        }
+                        ?>
+                    </select>
                 </td>
             </tr>
             <tr>

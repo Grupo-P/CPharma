@@ -42,7 +42,13 @@
             </tr>
             <tr>
                 <th scope="row">{!! Form::label('role', 'Rol') !!}</th>
-                <td>{!! Form::text('role', null, [ 'class' => 'form-control', 'placeholder' => 'ROL']) !!}</td>
+                <td>
+                    <select name="role" class="form-control">
+                        <option>USUARIO</option>
+                        <option>SUPERVISOR</option>
+                        <option>MASTER</option>
+                    </select>
+                </td>
             </tr>
             <tr>
                 <th scope="row">{!! Form::label('password', 'Contraseña') !!}</th>
