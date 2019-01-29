@@ -46,6 +46,10 @@
 	    	  	<td>{{$proveedor->empresa}}</td>
 		    </tr>
 		    <tr>
+		      	<th scope="row">Observaciones</th>
+	    	  	<td>{{$proveedor->observacion}}</td>
+		    </tr>
+		    <tr>
 		      	<th scope="row">Estatus</th>
 	    	  	<td>{{$proveedor->estatus}}</td>
 		    </tr>

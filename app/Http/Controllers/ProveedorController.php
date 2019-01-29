@@ -27,6 +27,11 @@ class ProveedorController extends Controller
     public function index()
     {
         $proveedores =  Proveedor::all();
+
+        foreach ($proveedores as $proveedor) {
+            $empresa = Empresa::find($proveedor->empresa);
+            $proveedor->empresa = $empresa->nombre;
+        }
         return view('pages.proveedor.index', compact('proveedores'));
     }
 
@@ -57,6 +62,7 @@ class ProveedorController extends Controller
         $proveedor->cargo = $request->input('cargo');
         $proveedor->empresa = $request->input('empresa');
         $proveedor->Estatus = 'ACTIVO';
+        $proveedor->observacion = $request->input('observacion');
         $proveedor->user = auth()->user()->name;
         $proveedor->save();
         return redirect()->route('proveedor.index')->with('Saved', ' Informacion');
@@ -84,8 +90,12 @@ class ProveedorController extends Controller
      */
     public function edit($id)
     {
-        $proveedor = Proveedor::find($id);        
-        return view('pages.proveedor.edit', compact('proveedor'));
+        $proveedor = Proveedor::find($id); 
+        $empresa = Empresa::find($proveedor->empresa);
+        $proveedor->empresa = $empresa->nombre;
+
+        $empresas = Empresa::pluck('nombre','id');      
+        return view('pages.proveedor.edit', compact('proveedor','empresas'));
     }
 
     /**

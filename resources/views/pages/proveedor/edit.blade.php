@@ -51,9 +51,19 @@
                 <th scope="row">{!! Form::label('cargo', 'Cargo') !!}</th>
                 <td>{!! Form::text('cargo', null, [ 'class' => 'form-control', 'placeholder' => 'Proveedor']) !!}</td>
             </tr>
-            <tr>
+            {{-- <tr>
                 <th scope="row">{!! Form::label('empresa', 'Empresa') !!}</th>
-                <td>{!! Form::text('empresa', null, [ 'class' => 'form-control', 'placeholder' => 'La Empresa C.A']) !!}</td>
+                <td>{!! Form::text('empresa', null, [ 'class' => 'form-control', 'placeholder' => 'La Empresa C.A', 'disabled']) !!}</td>
+            </tr> --}}
+            <tr>    
+                <th scope="row">{!! Form::label('empresa', 'Empresa') !!}</th>
+                <td>
+                    {!! Form::select('empresa', $empresas, [ 'class' => 'form-control' ]) !!}
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">{!! Form::label('observacion', 'Observaciones') !!}</th>
+                <td>{!! Form::textarea('observacion', null, [ 'class' => 'form-control', 'placeholder' => 'Detalles importantes de la empresa', 'rows' => '3']) !!}</td>
             </tr>
         </tbody>
         </table>

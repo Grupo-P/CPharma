@@ -5,6 +5,13 @@
     Proveedor
 @endsection
 
+@section('scriptsHead')
+    <script src="{{ asset('assets/js/sortTable.js') }}">	
+    </script>
+    <script src="{{ asset('assets/js/filter.js') }}">	
+    </script>
+@endsection
+
 @section('content')
 
 	<!-- Modal Guardar -->
@@ -86,17 +93,24 @@
       		Agregar		      		
       	</a>
 	</div>
-	
 	<br>
-
-	<table class="table table-striped table-borderless col-12">
+	<div class="input-group md-form form-sm form-1 pl-0">
+	  <div class="input-group-prepend">
+	    <span class="input-group-text purple lighten-3" id="basic-text1"><i class="fas fa-search text-white"
+	        aria-hidden="true"></i></span>
+	  </div>
+	  <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterAllTable()">
+	</div>
+	<br/>
+	<table class="table table-striped table-borderless col-12 sortable" id="myTable">
 	  	<thead class="thead-dark">
 		    <tr>
 		      	<th scope="col">#</th>
 		      	<th scope="col">Nombre</th>
-		      	<th scope="col">Apellido</th>
-		      	<th scope="col">Teléfono</th>		      	
+		      	<th scope="col">Teléfono</th>		      
 		      	<th scope="col">Correo</th>
+		      	<th scope="col">Cargo</th>
+		      	<th scope="col">Empresa</th>
 		      	<th scope="col">Estatus</th>
 		      	<th scope="col">Acciones</th>
 		    </tr>
@@ -105,10 +119,11 @@
 		@foreach($proveedores as $proveedor)
 		    <tr>
 		      <th>{{$proveedor->id}}</th>
-		      <td>{{$proveedor->nombre}}</td>
-		      <td>{{$proveedor->apellido}}</td>
+		      <td>{{$proveedor->nombre}} {{$proveedor->apellido}}</td>
 		      <td>{{$proveedor->telefono}}</td>		      
 		      <td>{{$proveedor->correo}}</td>
+		      <td>{{$proveedor->cargo}}</td>
+		      <td>{{$proveedor->empresa}}</td>
 		      <td>{{$proveedor->estatus}}</td>
 		    <!-- Inicio Validacion de ROLES -->
 		      <td>

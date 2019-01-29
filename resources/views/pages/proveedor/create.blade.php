@@ -62,6 +62,10 @@
                     {!! Form::select('empresa', $empresa, [ 'class' => 'form-control' ]) !!}
                 </td>
             </tr>
+            <tr>
+                <th scope="row">{!! Form::label('observacion', 'Observaciones') !!}</th>
+                <td>{!! Form::textarea('observacion', null, [ 'class' => 'form-control', 'placeholder' => 'Detalles importantes de la empresa', 'rows' => '3']) !!}</td>
+            </tr>
         </tbody>
         </table>
         {!! Form::submit('Guardar', ['class' => 'btn btn-outline-success btn-md']) !!}

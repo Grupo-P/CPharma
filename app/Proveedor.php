@@ -12,6 +12,6 @@ class Proveedor extends Model
      * @var array
      */
     protected $fillable = [
-        'nombre', 'apellido', 'telefono','correo','cargo','empresa','estatus','user'
+        'nombre', 'apellido', 'telefono','correo','cargo','empresa','estatus','user','observacion'
     ];
 }
