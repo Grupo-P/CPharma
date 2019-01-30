@@ -34,19 +34,19 @@
         <tbody>
             <tr>
                 <th scope="row">{!! Form::label('nombre', 'Nombre') !!}</th>
-                <td>{!! Form::text('nombre', null, [ 'class' => 'form-control', 'placeholder' => 'Farmacia Tierra Negra C.A.', 'autofocus']) !!}</td>
+                <td>{!! Form::text('nombre', null, [ 'class' => 'form-control', 'placeholder' => 'Farmacia Tierra Negra C.A.', 'autofocus', 'required']) !!}</td>
             </tr>
             <tr>
                 <th scope="row">{!! Form::label('rif', 'RIF') !!}</th>
-                <td>{!! Form::text('rif', null, [ 'class' => 'form-control', 'placeholder' => 'J-400145717']) !!}</td>
+                <td>{!! Form::text('rif', null, [ 'class' => 'form-control', 'placeholder' => 'J-400145717' , 'required', 'pattern' => '^[A-Za-z]-\d{9}$']) !!}</td>
             </tr>
             <tr>
                 <th scope="row">{!! Form::label('telefono', 'Telefono') !!}</th>
-                <td>{!! Form::text('telefono', null, [ 'class' => 'form-control', 'placeholder' => '0261-9876543, 0212-1234567']) !!}</td>
+                <td>{!! Form::text('telefono', null, [ 'class' => 'form-control', 'placeholder' => '0261-9876543,0212-1234567', 'required', 'pattern' => '[0-9_,-]*']) !!}</td>
             </tr>
             <tr>
                 <th scope="row">{!! Form::label('direccion', 'Direccion') !!}</th>
-                <td>{!! Form::textarea('direccion', null, [ 'class' => 'form-control', 'placeholder' => 'Calle 72 esquina av. 14A, local nro. 13a-99 sector tierra negra Maracaibo Zulia zona postal 4002', 'rows' => '2']) !!}</td>
+                <td>{!! Form::textarea('direccion', null, [ 'class' => 'form-control', 'placeholder' => 'Calle 72 esquina av. 14A, local nro. 13a-99 sector tierra negra Maracaibo Zulia zona postal 4002', 'rows' => '2', 'required']) !!}</td>
             </tr>
             <tr>
                 <th scope="row">{!! Form::label('observacion', 'Observaciones') !!}</th>
