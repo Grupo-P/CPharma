@@ -330,4 +330,56 @@ function armarJson($sql){
     $arrayJson = array_flatten_recursive($result);
     return json_encode($arrayJson);
 }
+/* El casi definitivo
+drop table TablaTemp
+drop table TablaTemp1
+drop table TablaTemp2
+
+select
+InvArticulo.CodigoArticulo,
+InvArticulo.Descripcion,
+VenFacturaDetalle.Cantidad
+into TablaTemp
+from VenFacturaDetalle
+inner join InvArticulo ON InvArticulo.Id = VenFacturaDetalle.InvArticuloId
+inner join VenFactura ON VenFactura.Id = VenFacturaDetalle.VenFacturaId
+where
+(VenFactura.FechaDocumento > '2017-12-26' and VenFactura.FechaDocumento < '2017-12-29')
+
+select TOP 20 
+CodigoArticulo, 
+Descripcion , 
+count(*) As VecesFacturado, 
+SUM(Cantidad) AS UnidadesVendidas 
+into TablaTemp1
+from TablaTemp
+GROUP BY CodigoArticulo, Descripcion
+ORDER BY UnidadesVendidas desc
+drop table TablaTemp
+
+select 
+TablaTemp1.CodigoArticulo,
+TablaTemp1.Descripcion,
+TablaTemp1.VecesFacturado,
+UnidadesVendidas,
+InvLoteAlmacen.Existencia
+into TablaTemp2
+from TablaTemp1
+inner join InvArticulo ON InvArticulo.CodigoArticulo = TablaTemp1.CodigoArticulo
+inner join InvLoteAlmacen ON InvLoteAlmacen.InvArticuloId = InvArticulo.Id
+where (InvLoteAlmacen.InvAlmacenId = 1 or InvLoteAlmacen.InvAlmacenId = 2)
+drop table TablaTemp1
+
+select 
+CodigoArticulo, 
+Descripcion, 
+VecesFacturado, 
+UnidadesVendidas, 
+SUM(Existencia) AS Existencia,
+datediff(day,'2017-12-26','2017-12-29') As RangoDias
+from TablaTemp2
+GROUP BY CodigoArticulo, Descripcion, VecesFacturado, UnidadesVendidas
+ORDER BY UnidadesVendidas DESC
+drop table TablaTemp2
+ */
 ?>
