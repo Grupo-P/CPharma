@@ -334,6 +334,7 @@ function armarJson($sql){
 drop table TablaTemp
 drop table TablaTemp1
 drop table TablaTemp2
+drop table TablaTemp3
 
 select
 InvArticulo.CodigoArticulo,
@@ -346,7 +347,7 @@ inner join VenFactura ON VenFactura.Id = VenFacturaDetalle.VenFacturaId
 where
 (VenFactura.FechaDocumento > '2017-12-26' and VenFactura.FechaDocumento < '2017-12-29')
 
-select TOP 20 
+select TOP 30 
 CodigoArticulo, 
 Descripcion , 
 count(*) As VecesFacturado, 
@@ -377,9 +378,20 @@ VecesFacturado,
 UnidadesVendidas, 
 SUM(Existencia) AS Existencia,
 datediff(day,'2017-12-26','2017-12-29') As RangoDias
+into TablaTemp3
 from TablaTemp2
 GROUP BY CodigoArticulo, Descripcion, VecesFacturado, UnidadesVendidas
 ORDER BY UnidadesVendidas DESC
 drop table TablaTemp2
+
+select 
+CodigoArticulo, 
+Descripcion, 
+VecesFacturado, 
+UnidadesVendidas,
+Existencia,
+(UnidadesVendidas/RangoDias) As VentaDiaria,
+(Existencia/(UnidadesVendidas/RangoDias)) As DiasRestantes
+from TablaTemp3
  */
 ?>
