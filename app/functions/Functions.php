@@ -12,6 +12,63 @@ function conectarDB(){
 	$conn = sqlsrv_connect( serverDB, $connectionInfo);
 	return $conn;
 }
+/*
+	Nombre: ConsultaDB
+	Funcion: Consulta en la base de datos y regresa un Json
+ */
+function ConsultaDB ( $sql ){
+	 $conn = conectarDB(); 
+	if( $conn ) {					
+		$stmt = sqlsrv_query( $conn , $sql );
+		if( $stmt === false) {
+			die( print_r( sqlsrv_errors(), true) );
+		}
+		$i = 0;
+		$final[$i] = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_NUMERIC);
+		$i++;
+		if (  $final[0] != NULL ) {	
+			while( $result = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_NUMERIC) ) {
+					$final[$i] = $result;
+					$i++;
+			}
+		sqlsrv_free_stmt( $stmt);			
+		sqlsrv_close( $conn );
+		return $final;	
+		} else {
+			sqlsrv_free_stmt( $stmt);			
+			sqlsrv_close( $conn );
+			return NULL;
+		}	
+	}else{
+		die( print_r( sqlsrv_errors(), true));
+	}	
+}
+/*
+	Nombre: array_flatten_recursive
+	Funcion: Decodifica el arreglo a UTF8
+ */
+function array_flatten_recursive($array) { 
+   if (!is_array($array)) {
+	   return false;
+   }
+   $flat = array();
+   $RII = new RecursiveIteratorIterator(new RecursiveArrayIterator($array));
+   $i = 0;
+   foreach ($RII as $key => $value) {
+	   $flat[$i] = utf8_encode($value);
+	   $i++;
+   }
+   return $flat;
+}
+/*
+	Nombre: armarJson
+	Funcion: recibe un sql y regrsa el array JsonAramado
+ */
+function armarJson($sql){
+	$result = ConsultaDB ($sql);
+    $arrayJson = array_flatten_recursive($result);
+    return json_encode($arrayJson);
+}
 /************REPORTE 1 Activacion de proveedores***********/
 /*
 	Nombre: QueryDiasProveedores
@@ -273,70 +330,52 @@ function TableHistoricoArticulos($IdArticuloQ,$DescripcionArticuloQ){
 	</table>';
 	sqlsrv_close( $conn );
 }
+/************REPORTE 3 Articulos mas vendidos***********/
 /*
-	Nombre: ConsultaDB
-	Funcion: Consulta en la base de datos y regresa un Json
+	Nombre: QueryArticulosMasVendidos
+	Reporte3: Articulos mas vendidos
+	Funcion: Query para la base de datos del Reporte3
  */
-function ConsultaDB ( $sql ){
-	 $conn = conectarDB(); 
-	if( $conn ) {					
-		$stmt = sqlsrv_query( $conn , $sql );
-		if( $stmt === false) {
-			die( print_r( sqlsrv_errors(), true) );
-		}
-		$i = 0;
-		$final[$i] = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_NUMERIC);
-		$i++;
-		if (  $final[0] != NULL ) {	
-			while( $result = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_NUMERIC) ) {
-					$final[$i] = $result;
-					$i++;
-			}
-		sqlsrv_free_stmt( $stmt);			
-		sqlsrv_close( $conn );
-		return $final;	
-		} else {
-			sqlsrv_free_stmt( $stmt);			
-			sqlsrv_close( $conn );
-			return NULL;
-		}	
-	}else{
-		die( print_r( sqlsrv_errors(), true));
-	}	
-}
-/*
-	Nombre: array_flatten_recursive
-	Funcion: Decodifica el arreglo a UTF8
- */
-function array_flatten_recursive($array) { 
-   if (!is_array($array)) {
-	   return false;
-   }
-   $flat = array();
-   $RII = new RecursiveIteratorIterator(new RecursiveArrayIterator($array));
-   $i = 0;
-   foreach ($RII as $key => $value) {
-	   $flat[$i] = utf8_encode($value);
-	   $i++;
-   }
-   return $flat;
-}
-/*
-	Nombre: armarJson
-	Funcion: recibe un sql y regrsa el array JsonAramado
- */
-function armarJson($sql){
-	$result = ConsultaDB ($sql);
-    $arrayJson = array_flatten_recursive($result);
-    return json_encode($arrayJson);
+function QueryArticulosMasVendidos($Top,$FechaInicial,$FechaFinal){
+
+	$sql = "SELECT
+		GenPersona.Nombre,
+		ComFactura.FechaRegistro,
+		ComFacturaDetalle.M_PrecioCompraBruto,
+		ComFacturaDetalle.CantidadRecibidaFactura
+		FROM InvArticulo
+		inner join ComFacturaDetalle ON InvArticulo.Id = ComFacturaDetalle.InvArticuloId
+		inner join ComFactura ON ComFactura.Id = ComFacturaDetalle.ComFacturaId
+		inner join ComProveedor ON ComProveedor.Id = ComFactura.ComProveedorId
+		inner join GenPersona ON GenPersona.Id = ComProveedor.GenPersonaId
+		WHERE InvArticulo.Id = '$IdArticuloQ'
+		ORDER BY ComFactura.FechaRegistro DESC";
+	return $sql;
+
+	$sql = "SELECT
+		GenPersona.Nombre,
+		ComFactura.FechaRegistro,
+		ComFacturaDetalle.M_PrecioCompraBruto,
+		ComFacturaDetalle.CantidadRecibidaFactura
+		FROM InvArticulo
+		inner join ComFacturaDetalle ON InvArticulo.Id = ComFacturaDetalle.InvArticuloId
+		inner join ComFactura ON ComFactura.Id = ComFacturaDetalle.ComFacturaId
+		inner join ComProveedor ON ComProveedor.Id = ComFactura.ComProveedorId
+		inner join GenPersona ON GenPersona.Id = ComProveedor.GenPersonaId
+		WHERE InvArticulo.Id = '$IdArticuloQ'
+		ORDER BY ComFactura.FechaRegistro DESC";
+	return $sql;
 }
 /* El casi definitivo
 drop table TablaTemp
 drop table TablaTemp1
 drop table TablaTemp2
 drop table TablaTemp3
+drop table TablaTemp4
+drop table TablaTemp5
 
 select
+InvArticulo.Id,
 InvArticulo.CodigoArticulo,
 InvArticulo.Descripcion,
 VenFacturaDetalle.Cantidad
@@ -347,18 +386,20 @@ inner join VenFactura ON VenFactura.Id = VenFacturaDetalle.VenFacturaId
 where
 (VenFactura.FechaDocumento > '2017-12-26' and VenFactura.FechaDocumento < '2017-12-29')
 
-select TOP 30 
-CodigoArticulo, 
-Descripcion , 
+select TOP 20
+TablaTemp.Id, 
+TablaTemp.CodigoArticulo, 
+TablaTemp.Descripcion, 
 count(*) As VecesFacturado, 
 SUM(Cantidad) AS UnidadesVendidas 
 into TablaTemp1
 from TablaTemp
-GROUP BY CodigoArticulo, Descripcion
+GROUP BY Id,CodigoArticulo, Descripcion
 ORDER BY UnidadesVendidas desc
 drop table TablaTemp
 
-select 
+select
+TablaTemp1.Id, 
 TablaTemp1.CodigoArticulo,
 TablaTemp1.Descripcion,
 TablaTemp1.VecesFacturado,
@@ -371,7 +412,8 @@ inner join InvLoteAlmacen ON InvLoteAlmacen.InvArticuloId = InvArticulo.Id
 where (InvLoteAlmacen.InvAlmacenId = 1 or InvLoteAlmacen.InvAlmacenId = 2)
 drop table TablaTemp1
 
-select 
+select
+Id, 
 CodigoArticulo, 
 Descripcion, 
 VecesFacturado, 
@@ -380,11 +422,12 @@ SUM(Existencia) AS Existencia,
 datediff(day,'2017-12-26','2017-12-29') As RangoDias
 into TablaTemp3
 from TablaTemp2
-GROUP BY CodigoArticulo, Descripcion, VecesFacturado, UnidadesVendidas
+GROUP BY Id,CodigoArticulo, Descripcion, VecesFacturado, UnidadesVendidas
 ORDER BY UnidadesVendidas DESC
 drop table TablaTemp2
 
-select 
+select
+Id, 
 CodigoArticulo, 
 Descripcion, 
 VecesFacturado, 
@@ -392,6 +435,33 @@ UnidadesVendidas,
 Existencia,
 (UnidadesVendidas/RangoDias) As VentaDiaria,
 (Existencia/(UnidadesVendidas/RangoDias)) As DiasRestantes
+into TablaTemp4
 from TablaTemp3
+drop table TablaTemp3
+
+select
+TablaTemp4.Id,
+TablaTemp4.Descripcion, 
+SUM(ComFacturaDetalle.CantidadFacturada) As CantidadFacturada
+into TablaTemp5
+from ComFactura
+inner join ComFacturaDetalle ON ComFacturaDetalle.ComFacturaId = ComFactura.Id
+inner join TablaTemp4 ON TablaTemp4.Id = ComFacturaDetalle.InvArticuloId
+where
+(ComFactura.FechaDocumento > '2017-12-26' and ComFactura.FechaDocumento < '2017-12-29')
+GROUP BY TablaTemp4.Id,TablaTemp4.Descripcion
+order by TablaTemp4.Id desc
+
+select
+TablaTemp4.CodigoArticulo, 
+TablaTemp4.Descripcion, 
+TablaTemp4.VecesFacturado, 
+TablaTemp4.UnidadesVendidas,
+TablaTemp4.Existencia,
+TablaTemp4.VentaDiaria,
+TablaTemp4.DiasRestantes,
+TablaTemp5.CantidadFacturada
+from TablaTemp4
+left join TablaTemp5 ON TablaTemp5.Id = TablaTemp4.Id
  */
 ?>
