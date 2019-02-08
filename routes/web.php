@@ -33,6 +33,14 @@ Route::get('/reporte2', function () {
     return view('pages.reporte.reporte2');
 });
 
+Route::get('/reporte3', function () {
+    return view('pages.reporte.reporte3');
+});
+
+Route::get('/reporte4', function () {
+    return view('pages.reporte.reporte4');
+});
+
 Route::get('home', 'HomeController@index')->name('home');
 
 Route::resource('empresa', 'EmpresaController');

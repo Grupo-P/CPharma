@@ -7,7 +7,7 @@
 @section('content')
 	<h1 class="h5 text-info">
 		<i class="fas fa-file-invoice"></i>
-		Top de Articulos Menos Vendidos
+		TOP Articulos Mas Vendidos
 	</h1>
 	<hr class="row align-items-start col-12">
 
@@ -19,7 +19,7 @@
 	
 	if (isset($_GET['top']))
 	{
-  	TableArticulosMenosVendidos($_GET['top'],$_GET['fechaInicio'],$_GET['fechaFin']);
+  	TableArticulosMasVendidos($_GET['top'],$_GET['fechaInicio'],$_GET['fechaFin']);
 	} 
 	else{
 		echo '
