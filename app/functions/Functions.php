@@ -368,7 +368,7 @@ function TableArticulosMasVendidos($Top,$FInicial,$FFinal){
 	INNER JOIN InvArticulo ON InvArticulo.Id = VenFacturaDetalle.InvArticuloId
 	INNER JOIN VenFactura ON VenFactura.Id = VenFacturaDetalle.VenFacturaId
 	WHERE
-	(VenFactura.FechaDocumento > '$FInicial' AND VenFactura.FechaDocumento < '$FFinal')
+	(VenFactura.FechaDocumento >= '$FInicial' AND VenFactura.FechaDocumento <= '$FFinal')
 	";
 
 	$sql2="
@@ -442,7 +442,7 @@ function TableArticulosMasVendidos($Top,$FInicial,$FFinal){
 	INNER JOIN ComFacturaDetalle ON ComFacturaDetalle.ComFacturaId = ComFactura.Id
 	INNER JOIN TablaTemp4 ON TablaTemp4.Id = ComFacturaDetalle.InvArticuloId
 	WHERE
-	(ComFactura.FechaDocumento > '$FInicial' AND ComFactura.FechaDocumento < '$FFinal')
+	(ComFactura.FechaDocumento >= '$FInicial' AND ComFactura.FechaDocumento <= '$FFinal')
 	GROUP BY TablaTemp4.Id,TablaTemp4.Descripcion
 	ORDER BY TablaTemp4.Id DESC
 	";
@@ -562,7 +562,7 @@ function TableArticulosMenosVendidos($Top,$FInicial,$FFinal){
 	INNER JOIN InvArticulo ON InvArticulo.Id = VenFacturaDetalle.InvArticuloId
 	INNER JOIN VenFactura ON VenFactura.Id = VenFacturaDetalle.VenFacturaId
 	WHERE
-	(VenFactura.FechaDocumento > '$FInicial' AND VenFactura.FechaDocumento < '$FFinal')
+	(VenFactura.FechaDocumento >= '$FInicial' AND VenFactura.FechaDocumento <= '$FFinal')
 	";
 
 	$sql2="
@@ -636,7 +636,7 @@ function TableArticulosMenosVendidos($Top,$FInicial,$FFinal){
 	INNER JOIN ComFacturaDetalle ON ComFacturaDetalle.ComFacturaId = ComFactura.Id
 	INNER JOIN TablaTemp4 ON TablaTemp4.Id = ComFacturaDetalle.InvArticuloId
 	WHERE
-	(ComFactura.FechaDocumento > '$FInicial' AND ComFactura.FechaDocumento < '$FFinal')
+	(ComFactura.FechaDocumento >= '$FInicial' AND ComFactura.FechaDocumento <= '$FFinal')
 	GROUP BY TablaTemp4.Id,TablaTemp4.Descripcion
 	ORDER BY TablaTemp4.Id DESC
 	";
@@ -744,7 +744,7 @@ FROM VenFacturaDetalle
 INNER JOIN InvArticulo ON InvArticulo.Id = VenFacturaDetalle.InvArticuloId
 INNER JOIN VenFactura ON VenFactura.Id = VenFacturaDetalle.VenFacturaId
 WHERE
-(VenFactura.FechaDocumento > '2018-12-26' AND VenFactura.FechaDocumento < '2018-12-29')
+(VenFactura.FechaDocumento >= '2018-12-26' AND VenFactura.FechaDocumento <= '2018-12-29')
 
 SELECT TOP 5
 TablaTemp.Id, 
@@ -808,7 +808,7 @@ FROM ComFactura
 INNER JOIN ComFacturaDetalle ON ComFacturaDetalle.ComFacturaId = ComFactura.Id
 INNER JOIN TablaTemp4 ON TablaTemp4.Id = ComFacturaDetalle.InvArticuloId
 WHERE
-(ComFactura.FechaDocumento > '2018-12-26' AND ComFactura.FechaDocumento < '2018-12-29')
+(ComFactura.FechaDocumento >= '2018-12-26' AND ComFactura.FechaDocumento <= '2018-12-29')
 GROUP BY TablaTemp4.Id,TablaTemp4.Descripcion
 ORDER BY TablaTemp4.Id DESC
 
