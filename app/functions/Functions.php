@@ -368,7 +368,7 @@ function TableArticulosMasVendidos($Top,$FInicial,$FFinal){
 	INNER JOIN InvArticulo ON InvArticulo.Id = VenFacturaDetalle.InvArticuloId
 	INNER JOIN VenFactura ON VenFactura.Id = VenFacturaDetalle.VenFacturaId
 	WHERE
-	(VenFactura.FechaDocumento >= '$FInicial' AND VenFactura.FechaDocumento <= '$FFinal')
+	(VenFactura.FechaDocumento > '$FInicial' AND VenFactura.FechaDocumento < '$FFinal')
 	";
 
 	$sql2="
@@ -442,7 +442,7 @@ function TableArticulosMasVendidos($Top,$FInicial,$FFinal){
 	INNER JOIN ComFacturaDetalle ON ComFacturaDetalle.ComFacturaId = ComFactura.Id
 	INNER JOIN TablaTemp4 ON TablaTemp4.Id = ComFacturaDetalle.InvArticuloId
 	WHERE
-	(ComFactura.FechaDocumento >= '$FInicial' AND ComFactura.FechaDocumento <= '$FFinal')
+	(ComFactura.FechaDocumento > '$FInicial' AND ComFactura.FechaDocumento < '$FFinal')
 	GROUP BY TablaTemp4.Id,TablaTemp4.Descripcion
 	ORDER BY TablaTemp4.Id DESC
 	";
@@ -828,5 +828,31 @@ DROP TABLE TablaTemp4
 DROP TABLE TablaTemp5
 
 SELECT * FROM TablaTemp6
+ */
+
+/* A considerar para las devoluciones de articulos
+SELECT
+InvArticulo.Id,
+InvArticulo.CodigoArticulo,
+InvArticulo.Descripcion,
+VenFacturaDetalle.Cantidad
+FROM VenFacturaDetalle
+INNER JOIN InvArticulo ON InvArticulo.Id = VenFacturaDetalle.InvArticuloId
+INNER JOIN VenFactura ON VenFactura.Id = VenFacturaDetalle.VenFacturaId
+WHERE
+(VenFactura.FechaDocumento > '2018-12-26' AND VenFactura.FechaDocumento < '2018-12-29')
+order by Descripcion desc
+
+SELECT
+InvArticulo.Id,
+InvArticulo.CodigoArticulo,
+InvArticulo.Descripcion,
+VenDevolucionDetalle.Cantidad
+FROM VenDevolucionDetalle
+INNER JOIN InvArticulo ON InvArticulo.Id = VenDevolucionDetalle.InvArticuloId
+INNER JOIN VenDevolucion ON VenDevolucion.Id = VenDevolucionDetalle.VenDevolucionId
+WHERE
+(VenDevolucion.FechaDocumento > '2018-12-26' AND VenDevolucion.FechaDocumento < '2018-12-27')
+order by Descripcion desc
  */
 ?>

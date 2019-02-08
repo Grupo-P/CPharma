@@ -69,7 +69,7 @@
 	    		<h3 class="card-title">
 		    		<span class="card-text text-white">
 		    			<?php
-							echo 'Reporte 3:';
+							echo 'Reporte 4:';
 						?>
 		    		</span>
 	    		</h3>
