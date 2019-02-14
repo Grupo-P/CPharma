@@ -266,20 +266,41 @@ function QueryHistoricoArticulos($IdArticuloQ){
  */
 function TableHistoricoArticulos($IdArticuloQ,$DescripcionArticuloQ){
 	$conn = conectarDB();
-	$CodigoArticuloQ;
 	
-	$sql1 = "SELECT InvArticulo.CodigoArticulo 
-			FROM InvArticulo
-			WHERE InvArticulo.Id = '$IdArticuloQ'";
-	$result1 = sqlsrv_query($conn,$sql1);
-
 	$sql = QueryHistoricoArticulos($IdArticuloQ);
 	$result = sqlsrv_query($conn,$sql);
 
-	while( $row1 = sqlsrv_fetch_array( $result1, SQLSRV_FETCH_ASSOC)) {
-		$CodigoArticuloQ = $row1["CodigoArticulo"];
-	}
+	$sql1="
+	IF OBJECT_ID ('TablaTemp', 'U') IS NOT NULL
+    	DROP TABLE TablaTemp;
+	";
+
+	$sql2="
+	SELECT
+	InvArticulo.Id, 
+	InvArticulo.CodigoArticulo,
+	InvArticulo.Descripcion
+	INTO TablaTemp
+	FROM InvArticulo
+	where InvArticulo.Id = '$IdArticuloQ'
+	";
+
+	$sql3="
+	SELECT
+	TablaTemp.Id, 
+	TablaTemp.CodigoArticulo,
+	TablaTemp.Descripcion,
+	SUM (InvLoteAlmacen.Existencia) As Existencia
+	FROM TablaTemp
+	INNER JOIN InvLoteAlmacen ON InvLoteAlmacen.InvArticuloId = TablaTemp.Id
+	WHERE (InvLoteAlmacen.InvAlmacenId = 1 or InvLoteAlmacen.InvAlmacenId = 2)
+	GROUP BY TablaTemp.Id, TablaTemp.CodigoArticulo,TablaTemp.Descripcion
+	";
 	
+	sqlsrv_query($conn,$sql1);
+	sqlsrv_query($conn,$sql2);
+	$result1 = sqlsrv_query($conn,$sql3);
+
 	echo '
 	<div class="input-group md-form form-sm form-1 pl-0">
 	  <div class="input-group-prepend">
@@ -295,13 +316,20 @@ function TableHistoricoArticulos($IdArticuloQ,$DescripcionArticuloQ){
 		    <tr>
 		    	<th scope="col">Codigo</th>
 		      	<th scope="col">Descripcion</td>
+		      	<th scope="col">Existencia</td>
+		      	<th scope="col">Precio</td>
 		    </tr>
 	  	</thead>
 	  	<tbody>
-	  		<tr>
-		    	<td scope="col">'.$CodigoArticuloQ.'</th>
-		      	<td scope="col">'.$DescripcionArticuloQ.'</td>
-		    </tr>	
+	  		';
+		while( $row1 = sqlsrv_fetch_array( $result1, SQLSRV_FETCH_ASSOC)) {
+		echo '<tr>';
+		echo '<td align="left">'.$row1["CodigoArticulo"].'</td>';
+		echo '<td align="left">'.$row1["Descripcion"].'</td>';
+		echo '<td align="center">'.intval($row1["Existencia"]).'</td>';
+		echo '<td align="center">'.'</td>';
+  		}
+	  	echo'	
 	  	</tbody>	
 	</table>
 
@@ -764,5 +792,29 @@ left join TablaTemp7 ON TablaTemp7.Id = TablaTemp6.Id
 left join TablaTemp8 ON TablaTemp8.Id = TablaTemp6.Id
 
 select * from TablaTemp9
+ */
+
+
+/*
+IF OBJECT_ID ('TablaTemp', 'U') IS NOT NULL
+    DROP TABLE TablaTemp;
+
+SELECT
+InvArticulo.Id, 
+InvArticulo.CodigoArticulo,
+InvArticulo.Descripcion
+INTO TablaTemp
+FROM InvArticulo
+where InvArticulo.CodigoArticulo = '90300'
+
+SELECT
+TablaTemp.Id, 
+TablaTemp.CodigoArticulo,
+TablaTemp.Descripcion,
+SUM (InvLoteAlmacen.Existencia) As Existencia
+FROM TablaTemp
+INNER JOIN InvLoteAlmacen ON InvLoteAlmacen.InvArticuloId = TablaTemp.Id
+WHERE (InvLoteAlmacen.InvAlmacenId = 1 or InvLoteAlmacen.InvAlmacenId = 2)
+GROUP BY TablaTemp.Id, TablaTemp.CodigoArticulo,TablaTemp.Descripcion
  */
 ?>
