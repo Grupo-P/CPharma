@@ -338,6 +338,14 @@ function TableHistoricoArticulos($IdArticuloQ,$DescripcionArticuloQ){
  */
 function TableArticulosMasVendidos($Top,$FInicial,$FFinal){
 
+	$FFinalRango = $FFinal;
+	$FFinal = date("Y-m-d",strtotime($FFinal."+ 1 days"));
+	echo 'FechaInicio: '.$FInicial; 
+	echo '<br>';
+	echo 'FechaFinRango: '.$FFinalRango; 
+	echo '<br>';
+	echo 'FechaFinal: '.$FFinal;
+
 	$sql = "
 	IF OBJECT_ID ('TablaTemp', 'U') IS NOT NULL
     	DROP TABLE TablaTemp;
@@ -374,7 +382,7 @@ function TableArticulosMasVendidos($Top,$FInicial,$FFinal){
 	INNER JOIN InvArticulo ON InvArticulo.Id = VenFacturaDetalle.InvArticuloId
 	INNER JOIN VenFactura ON VenFactura.Id = VenFacturaDetalle.VenFacturaId
 	WHERE
-	(VenFactura.FechaDocumento >= '$FInicial' AND VenFactura.FechaDocumento <= '$FFinal')
+	(VenFactura.FechaDocumento > '$FInicial' AND VenFactura.FechaDocumento < '$FFinal')
 	";
 
 	$sql2="
@@ -415,7 +423,7 @@ function TableArticulosMasVendidos($Top,$FInicial,$FFinal){
 	TablaTemp2.VecesFacturado, 
 	TablaTemp2.UnidadesVendidas, 
 	SUM(TablaTemp2.Existencia) AS Existencia,
-	DATEDIFF(day,'$FInicial','$FFinal') As RangoDias
+	DATEDIFF(day,'$FInicial','$FFinalRango') As RangoDias
 	INTO TablaTemp3
 	FROM TablaTemp2
 	GROUP BY Id,CodigoArticulo, Descripcion, VecesFacturado, UnidadesVendidas
@@ -448,7 +456,7 @@ function TableArticulosMasVendidos($Top,$FInicial,$FFinal){
 	INNER JOIN ComFacturaDetalle ON ComFacturaDetalle.ComFacturaId = ComFactura.Id
 	INNER JOIN TablaTemp4 ON TablaTemp4.Id = ComFacturaDetalle.InvArticuloId
 	WHERE
-	(ComFactura.FechaDocumento >= '$FInicial' AND ComFactura.FechaDocumento <= '$FFinal')
+	(ComFactura.FechaDocumento > '$FInicial' AND ComFactura.FechaDocumento < '$FFinal')
 	GROUP BY TablaTemp4.Id,TablaTemp4.Descripcion
 	ORDER BY TablaTemp4.Id DESC
 	";
