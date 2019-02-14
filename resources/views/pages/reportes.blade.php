@@ -21,7 +21,7 @@
 	    		<h3 class="card-title">
 		    		<span class="card-text text-white">
 		    			<?php
-							echo 'Reporte 1:';
+							echo 'Reporte:';
 						?>
 		    		</span>
 	    		</h3>
@@ -37,11 +37,11 @@
 	    		<h3 class="card-title">
 		    		<span class="card-text text-white">
 		    			<?php
-							echo 'Reporte 2:';
+							echo 'Reporte:';
 						?>
 		    		</span>
 	    		</h3>
-	    	    <p class="card-text text-white">Historico de Articulos</p>
+	    	    <p class="card-text text-white">Historico de articulos</p>
 	  		</div>
 		  	<div class="card-footer bg-transparent border-dark text-right">
 		  		<a href="{{ url('/reporte2') }}" class="btn btn-outline-dark btn-sm">Visualizar</a>
@@ -53,11 +53,11 @@
 	    		<h3 class="card-title">
 		    		<span class="card-text text-white">
 		    			<?php
-							echo 'Reporte 3:';
+							echo 'Reporte:';
 						?>
 		    		</span>
 	    		</h3>
-	    	    <p class="card-text text-white">Top de Articulos Mas Vendidos</p>
+	    	    <p class="card-text text-white">Articulos mas vendidos</p>
 	  		</div>
 		  	<div class="card-footer bg-transparent border-success text-right">
 		  		<a href="{{ url('/reporte3') }}" class="btn btn-outline-success btn-sm">Visualizar</a>
@@ -69,11 +69,11 @@
 	    		<h3 class="card-title">
 		    		<span class="card-text text-white">
 		    			<?php
-							echo 'Reporte 4:';
+							echo 'Reporte:';
 						?>
 		    		</span>
 	    		</h3>
-	    	    <p class="card-text text-white">Top de Articulos Menos Vendidos</p>
+	    	    <p class="card-text text-white">Articulos menos vendidos</p>
 	  		</div>
 		  	<div class="card-footer bg-transparent border-danger text-right">
 		  		<a href="{{ url('/reporte4') }}" class="btn btn-outline-danger btn-sm">Visualizar</a>

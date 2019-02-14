@@ -7,7 +7,7 @@
 @section('content')
 	<h1 class="h5 text-info">
 		<i class="fas fa-file-invoice"></i>
-		TOP Articulos Mas Vendidos
+		Articulos mas vendidos
 	</h1>
 	<hr class="row align-items-start col-12">
 

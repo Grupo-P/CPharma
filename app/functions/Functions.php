@@ -108,11 +108,11 @@ function ReporteDiasProveedores(){
 	  <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterFirsTable()">
 	</div>
 	<br/>
-	<table class="table table-striped table-borderless col-12 sortable" id="myTable">
+	<table class="table table-striped table-bordered col-12 sortable" id="myTable">
 	  	<thead class="thead-dark">
 		    <tr>
 		      	<th scope="col">Proveedor</th>		      	
-		      	<th scope="col">Ultima Facturacion</th>
+		      	<th scope="col">Ultima facturacion</th>
 		      	<th scope="col">Dias sin recibir facturas</th>
 		    </tr>
 	  	</thead>
@@ -124,7 +124,7 @@ function ReporteDiasProveedores(){
 			echo '<tr>';
 			//echo '<th>'.$row['Id'].'</th>';	
 			echo '<td>'.$row['Nombre'].'</td>';
-			echo '<td>'.($row['FechaRegistro']).'</td>';
+			echo '<td align="center">'.($row['FechaRegistro']).'</td>';
 
 			$FechaReg = date('Y-m-d',strtotime($row['FechaRegistro']));
 			
@@ -132,7 +132,7 @@ function ReporteDiasProveedores(){
 		    $fecha2 = new DateTime($FechaActual);
 		    $DifFecha = $fecha1->diff($fecha2);
 
-			echo '<td>'.$DifFecha->format('%a').'</td>';
+			echo '<td align="center">'.$DifFecha->format('%a').'</td>';
 			echo '</tr>';
 			$tempId = $row['Id'];
 		}
@@ -140,7 +140,7 @@ function ReporteDiasProveedores(){
 			echo '<tr>';
 			//echo '<th>'.$row['Id'].'</th>';	
 			echo '<td>'.$row['Nombre'].'</td>';
-			echo '<td>'.($row['FechaRegistro']).'</td>';
+			echo '<td align="center">'.($row['FechaRegistro']).'</td>';
 
 			$FechaReg = date('Y-m-d',strtotime($row['FechaRegistro']));
 			
@@ -148,7 +148,7 @@ function ReporteDiasProveedores(){
 		    $fecha2 = new DateTime($FechaActual);
 		    $DifFecha = $fecha1->diff($fecha2);
 
-			echo '<td>'.$DifFecha->format('%a').'</td>';
+			echo '<td align="center">'.$DifFecha->format('%a').'</td>';
 			echo '</tr>';
 			$tempId = $row['Id'];
 		}
@@ -201,7 +201,7 @@ function TableArticulos(){
 	  <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterAllTable()">
 	</div>
 	<br/>
-	<table class="table table-striped table-borderless col-12 sortable" id="myTable">
+	<table class="table table-striped table-bordered col-12 sortable" id="myTable">
 	  	<thead class="thead-dark">
 		    <tr>
 		      	<th scope="col">CodigoArticulo</th>
@@ -290,7 +290,7 @@ function TableHistoricoArticulos($IdArticuloQ,$DescripcionArticuloQ){
 	</div>
 	<br/>
 
-	<table class="table table-striped table-borderless col-12 sortable">
+	<table class="table table-striped table-bordered col-12 sortable">
 		<thead class="thead-dark">
 		    <tr>
 		    	<th scope="col">Codigo</th>
@@ -305,7 +305,7 @@ function TableHistoricoArticulos($IdArticuloQ,$DescripcionArticuloQ){
 	  	</tbody>	
 	</table>
 
-	<table class="table table-striped table-borderless col-12 sortable" id="myTable">
+	<table class="table table-striped table-bordered col-12 sortable" id="myTable">
 	  	<thead class="thead-dark">
 		    <tr>
 		    	<th scope="col">Proveedor</th>
@@ -320,9 +320,9 @@ function TableHistoricoArticulos($IdArticuloQ,$DescripcionArticuloQ){
 	while( $row = sqlsrv_fetch_array( $result, SQLSRV_FETCH_ASSOC)) {
 			echo '<tr>';
 			echo '<td>'.$row["Nombre"].'</td>';	
-			echo '<td>'.$row["FechaRegistro"]->format('Y-m-d h:m:s').'</td>';
-			echo '<td>'.$row["M_PrecioCompraBruto"].'</td>';
-			echo '<td>'.($row['CantidadRecibidaFactura']).'</td>';
+			echo '<td align="center">'.$row["FechaRegistro"]->format('Y-m-d h:m:s').'</td>';
+			echo '<td align="center">'.round($row["M_PrecioCompraBruto"],2).'</td>';
+			echo '<td align="center">'.intval($row['CantidadRecibidaFactura']).'</td>';
 			echo '</tr>';		
   	}
   	echo '
@@ -340,11 +340,6 @@ function TableArticulosMasVendidos($Top,$FInicial,$FFinal){
 
 	$FFinalRango = $FFinal;
 	$FFinal = date("Y-m-d",strtotime($FFinal."+ 1 days"));
-	echo 'FechaInicio: '.$FInicial; 
-	echo '<br>';
-	echo 'FechaFinRango: '.$FFinalRango; 
-	echo '<br>';
-	echo 'FechaFinal: '.$FFinal;
 
 	$sql = "
 	IF OBJECT_ID ('TablaTemp', 'U') IS NOT NULL
@@ -561,18 +556,22 @@ function TableArticulosMasVendidos($Top,$FInicial,$FFinal){
 	  <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterAllTable()">
 	</div>
 	<br/>
+	';
 
-	<table class="table table-striped table-borderless col-12 sortable" id="myTable">
+	echo'<h6 align="center">Periodo desde el '.$FInicial.' al '.$FFinalRango.' </h6>';
+
+	echo'
+	<table class="table table-striped table-bordered col-12 sortable" id="myTable">
 	  	<thead class="thead-dark">
 		    <tr>
 		    	<th scope="col">Codigo</th>
 		      	<th scope="col">Descripcion</th>
-		      	<th scope="col">Veces Facturado</th>
+		      	<th align="center" scope="col">Cant. veces Facturado</th>
 		      	<th scope="col">Unidades Vendidas</th>
 		      	<th scope="col">Existencia</th>
 		      	<th scope="col">Venta Diaria</th>
 		      	<th scope="col">Dias Restantes</th>
-		      	<th scope="col">Comprado a Proveedor</th>
+		      	<th scope="col">Cant. comprado Proveedor</th>
 		    </tr>
 	  	</thead>
 	  	<tbody>
@@ -580,14 +579,14 @@ function TableArticulosMasVendidos($Top,$FInicial,$FFinal){
 	
 	while( $row = sqlsrv_fetch_array( $result, SQLSRV_FETCH_ASSOC)) {
 			echo '<tr>';
-			echo '<td>'.$row["CodigoArticulo"].'</td>';	
-			echo '<td>'.$row["Descripcion"].'</td>';
-			echo '<td>'.($row["VecesFacturado"]-$row["VecesDevueltaCliente"]).'</td>';
-			echo '<td>'.($row["UnidadesVendidas"]-$row["CantidadDevueltaCliente"]).'</td>';
-			echo '<td>'.$row["Existencia"].'</td>';
-			echo '<td>'.$row["VentaDiaria"].'</td>';
-			echo '<td>'.$row["DiasRestantes"].'</td>';
-			echo '<td>'.($row["CantidadFacturada"]-$row["CantidadReclamoProveedor"]).'</td>';
+			echo '<td align="left">'.$row["CodigoArticulo"].'</td>';	
+			echo '<td align="left">'.$row["Descripcion"].'</td>';
+			echo '<td align="center">'.intval($row["VecesFacturado"]-$row["VecesDevueltaCliente"]).'</td>';
+			echo '<td align="center">'.intval($row["UnidadesVendidas"]-$row["CantidadDevueltaCliente"]).'</td>';
+			echo '<td align="center">'.intval($row["Existencia"]).'</td>';
+			echo '<td align="center">'.round($row["VentaDiaria"],2).'</td>';
+			echo '<td align="center">'.round($row["DiasRestantes"],2).'</td>';
+			echo '<td align="center">'.intval($row["CantidadFacturada"]-$row["CantidadReclamoProveedor"]).'</td>';
 			echo '</tr>';		
   	}
   	echo '
