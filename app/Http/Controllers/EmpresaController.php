@@ -97,6 +97,7 @@ class EmpresaController extends Controller
      */
     public function update(Request $request, $id)
     {
+        try{
         $empresa = Empresa::find($id);
         $empresa->fill($request->all());
         $empresa->user = auth()->user()->name;
@@ -108,6 +109,10 @@ class EmpresaController extends Controller
         }
         $empresa->save();
         return redirect()->route('empresa.index')->with('Updated', ' Informacion');
+        }
+        catch(\Illuminate\Database\QueryException $e){
+            return back()->with('Error', ' Error');
+        }
     }
 
     /**

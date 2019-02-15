@@ -57,7 +57,7 @@ class DolarController extends Controller
             return redirect()->route('dolar.index')->with('Saved', ' Informacion');
         }
         catch(\Illuminate\Database\QueryException $e){
-            return back()->withInput();
+            return back()->with('Error', ' Error');
         }
     }
 
