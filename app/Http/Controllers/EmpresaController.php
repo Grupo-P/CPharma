@@ -47,6 +47,7 @@ class EmpresaController extends Controller
      */
     public function store(Request $request)
     {
+        try{
         $empresa = new Empresa();
         $empresa->nombre = $request->input('nombre');
         $empresa->rif = $request->input('rif');
@@ -62,6 +63,10 @@ class EmpresaController extends Controller
         $empresa->user = auth()->user()->name;
         $empresa->save();
         return redirect()->route('empresa.index')->with('Saved', ' Informacion');
+        }
+        catch(\Illuminate\Database\QueryException $e){
+            return back()->with('Error', ' Error');
+        }
     }
 
     /**

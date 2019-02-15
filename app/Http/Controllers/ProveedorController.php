@@ -49,6 +49,7 @@ class ProveedorController extends Controller
      */
     public function store(Request $request)
     {
+        try{
         $proveedor = new Proveedor();
         $proveedor->nombre = $request->input('nombre');
         $proveedor->apellido = $request->input('apellido');
@@ -59,8 +60,15 @@ class ProveedorController extends Controller
         $proveedor->Estatus = 'ACTIVO';
         $proveedor->observacion = $request->input('observacion');
         $proveedor->user = auth()->user()->name;
+        if($proveedor->correo ==""){
+            $proveedor->correo=''.$proveedor->nombre.''.$proveedor->apellido.'@noposee.com';
+        }
         $proveedor->save();
         return redirect()->route('proveedor.index')->with('Saved', ' Informacion');
+        }
+        catch(\Illuminate\Database\QueryException $e){
+            return back()->with('Error', ' Error');
+        }
     }
 
     /**
@@ -97,11 +105,19 @@ class ProveedorController extends Controller
      */
     public function update(Request $request, $id)
     {
+        try{
         $proveedor = Proveedor::find($id);
         $proveedor->fill($request->all());
+        if($proveedor->correo ==""){
+            $proveedor->correo=''.$proveedor->nombre.''.$proveedor->apellido.'@noposee.com';
+        }
         $proveedor->user = auth()->user()->name;
         $proveedor->save();
         return redirect()->route('proveedor.index')->with('Updated', ' Informacion');
+        }
+        catch(\Illuminate\Database\QueryException $e){
+            return back()->with('Error', ' Error');
+        }
     }
 
     /**

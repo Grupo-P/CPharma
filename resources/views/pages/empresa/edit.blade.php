@@ -18,7 +18,7 @@
                 </button>
               </div>
               <div class="modal-body">
-                <h4 class="h6">El registro no pudo ser almacenado, la fecha ya esta registrada</h4>
+                <h4 class="h6">La empresa no fue almacenada, el RIF ya esta registrado</h4>
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-outline-success" data-dismiss="modal">Aceptar</button>

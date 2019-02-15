@@ -46,6 +46,7 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
+        try{
         $usuario = new User();
         $usuario->name = $request->input('name');
         $usuario->email = $request->input('email');
@@ -54,6 +55,10 @@ class UserController extends Controller
         $usuario->estatus = 'ACTIVO';
         $usuario->save();
         return redirect()->route('usuario.index')->with('Saved', ' Informacion');
+        }
+        catch(\Illuminate\Database\QueryException $e){
+            return back()->with('Error', ' Error');
+        }
     }
 
     /**
@@ -89,6 +94,7 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
+        try{
         $usuario = User::find($id);
         $contrasena = $usuario->password;
 
@@ -100,6 +106,10 @@ class UserController extends Controller
         
         $usuario->save();
         return redirect()->route('usuario.index')->with('Updated', ' Informacion');
+        }
+        catch(\Illuminate\Database\QueryException $e){
+            return back()->with('Error', ' Error');
+        }
     }
 
     /**
