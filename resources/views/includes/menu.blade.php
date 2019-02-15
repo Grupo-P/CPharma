@@ -76,6 +76,13 @@
   ?>
     <hr class="row align-items-center">
     <li class="nav-item">
+      <a class="nav-link" href="{{ url('/dolar') }}">
+        <span data-feather="home"></span>
+        <i class="fas fa-money-bill-alt"></i>
+        Dolar<span class="sr-only">(current)</span>
+      </a>
+    </li>
+    <li class="nav-item">
       <a class="nav-link" href="{{ url('/usuario') }}">
         <span data-feather="home"></span>
         <i class="fas fa-user"></i>
