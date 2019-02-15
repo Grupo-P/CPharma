@@ -69,7 +69,8 @@ class DolarController extends Controller
      */
     public function show($id)
     {
-        //
+        $dolar = Dolar::find($id);        
+        return view('pages.dolar.show', compact('dolar'));
     }
 
     /**
@@ -80,7 +81,8 @@ class DolarController extends Controller
      */
     public function edit($id)
     {
-        //
+        $dolar = Dolar::find($id);
+        return view('pages.dolar.edit', compact('dolar'));
     }
 
     /**
@@ -92,7 +94,16 @@ class DolarController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        try{
+            $dolar = Dolar::find($id);
+            $dolar->fill($request->all());
+            $dolar->user = auth()->user()->name;
+            $dolar->save();
+            return redirect()->route('dolar.index')->with('Updated', ' Informacion');
+        }
+        catch(\Illuminate\Database\QueryException $e){
+            return back()->with('Error', ' Error');
+        }
     }
 
     /**
@@ -103,6 +114,17 @@ class DolarController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $dolar = Dolar::find($id);
+
+         if($dolar->estatus == 'ACTIVO'){
+            $dolar->estatus = 'INACTIVO';
+         }
+         else if($dolar->estatus == 'INACTIVO'){
+            $dolar->estatus = 'ACTIVO';
+         }
+
+         $dolar->user = auth()->user()->name;        
+         $dolar->save();
+         return redirect()->route('dolar.index')->with('Deleted', ' Informacion');
     }
 }
