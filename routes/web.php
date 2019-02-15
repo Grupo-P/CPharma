@@ -43,6 +43,8 @@ Route::get('/reporte4', function () {
 
 Route::get('home', 'HomeController@index')->name('home');
 
+Route::resource('dolar', 'DolarController');
+
 Route::resource('empresa', 'EmpresaController');
 
 Route::resource('proveedor', 'ProveedorController');
