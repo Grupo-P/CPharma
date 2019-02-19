@@ -41,6 +41,10 @@ Route::get('/reporte4', function () {
     return view('pages.reporte.reporte4');
 });
 
+Route::get('/reporte5', function () {
+    return view('pages.reporte.reporte5');
+});
+
 Route::get('home', 'HomeController@index')->name('home');
 
 Route::resource('dolar', 'DolarController');

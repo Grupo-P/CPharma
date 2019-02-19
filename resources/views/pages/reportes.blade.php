@@ -64,7 +64,10 @@
 		  	</div>
 		</div>
 
-		<div class="card border-danger mb-3" style="width: 14rem;">	  	
+   	</div>
+
+   	<div class="card-deck">
+   		<div class="card border-danger mb-3" style="width: 14rem;">	  	
 	  		<div class="card-body text-left bg-danger">
 	    		<h3 class="card-title">
 		    		<span class="card-text text-white">
@@ -77,6 +80,22 @@
 	  		</div>
 		  	<div class="card-footer bg-transparent border-danger text-right">
 		  		<a href="{{ url('/reporte4') }}" class="btn btn-outline-danger btn-sm">Visualizar</a>
+		  	</div>
+		</div>
+		
+   		<div class="card border-info mb-3" style="width: 14rem;">	  	
+	  		<div class="card-body text-left bg-info">
+	    		<h3 class="card-title">
+		    		<span class="card-text text-white">
+		    			<?php
+							echo 'Reporte:';
+						?>
+		    		</span>
+	    		</h3>
+	    	    <p class="card-text text-white">Productos en falla</p>
+	  		</div>
+		  	<div class="card-footer bg-transparent border-info text-right">
+		  		<a href="{{ url('/reporte5') }}" class="btn btn-outline-info btn-sm">Visualizar</a>
 		  	</div>
 		</div>
    	</div>

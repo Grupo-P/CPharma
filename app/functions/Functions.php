@@ -1039,8 +1039,13 @@ function TableArticulosMenosVendidos($Top,$FInicial,$FFinal){
 
 	sqlsrv_close( $conn );
 }
-
-function TableProductosFalla($Top,$FInicial,$FFinal){
+/************REPORTE 5 Prouctos en falla***********/
+/*
+	Nombre: QueryArticulosMenosVendidos
+	Reporte3: Articulos mas vendidos
+	Funcion: Query para la base de datos del Reporte3
+ */
+function TableProductosFalla($FInicial,$FFinal){
 
 	$FFinalRango = $FFinal;
 	$FFinal = date("Y-m-d",strtotime($FFinal."+ 1 days"));
