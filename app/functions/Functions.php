@@ -1,5 +1,14 @@
 <?php
 /*
+	Nombre: conectarXampp
+	Funcion: Establecer la conexion con la base de datos cpharma
+ */
+function conectarXampp(){
+	$conexion = mysqli_connect(serverCP,userCP,passCP);
+	mysqli_select_db($conexion,nameCP);
+    return $conexion;
+}
+/*
 	Nombre: conectarDB
 	Funcion: Establecer la conexion con la base de datos
  */
@@ -241,6 +250,16 @@ function TableArticulos(){
 	sqlsrv_close( $conn );
 }
 /*
+	Nombre: QueryTasa
+	Funcion: Devuelve el valor de la tasa segun la fecha especificada
+ */
+function QueryTasa($QFecha){
+	$conCP = conectarXampp();
+	$consulta = "SELECT tasa FROM dolars where fecha='$QFecha'";
+	$resultado = mysqli_query($conCP,$consulta);
+	return $resultado;
+}
+/*
 	Nombre: QueryHistoricoArticulos
 	Funcion: Query que devuelve el historico del articulo seleccionado
  */
@@ -338,8 +357,10 @@ function TableHistoricoArticulos($IdArticuloQ,$DescripcionArticuloQ){
 		    <tr>
 		    	<th scope="col">Proveedor</th>
 		      	<th scope="col">Fecha de Registo</th>
-		      	<th scope="col">Costo Bruto</th>
 		      	<th scope="col">Cantidad Recibida</th>
+		      	<th scope="col">Costo Bruto</th>		 
+		      	<th scope="col">Tasa</th>
+				<th scope="col">Costo Divisa</th>
 		    </tr>
 	  	</thead>
 	  	<tbody>
@@ -349,8 +370,20 @@ function TableHistoricoArticulos($IdArticuloQ,$DescripcionArticuloQ){
 			echo '<tr>';
 			echo '<td>'.$row["Nombre"].'</td>';	
 			echo '<td align="center">'.$row["FechaRegistro"]->format('Y-m-d h:m:s').'</td>';
-			echo '<td align="center">'.round($row["M_PrecioCompraBruto"],2).'</td>';
 			echo '<td align="center">'.intval($row['CantidadRecibidaFactura']).'</td>';
+			echo '<td align="center">'.SigVe." ".round($row["M_PrecioCompraBruto"],2).'</td>';
+
+			$FechaR = $row["FechaRegistro"]->format('Y-m-d');
+			$resultTasa = QueryTasa($FechaR);
+			$flag;
+
+			while( $rowTasa = mysqli_fetch_assoc($resultTasa)) {
+				echo '<td align="center">'.SigDolar." ".$rowTasa['tasa'].'</td>';
+				$flag=$rowTasa['tasa'];
+			}
+			if($flag!=0){
+				echo '<td align="center">'.SigDolar." ".round($row["M_PrecioCompraBruto"]/$flag,2).'</td>';
+			
 			echo '</tr>';		
   	}
   	echo '

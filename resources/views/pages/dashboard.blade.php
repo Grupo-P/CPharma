@@ -80,8 +80,8 @@
 
 	<div class="card-deck">
 	{{-- NEWS --}}
-	<div class="card border-info mb-3" style="width: 14rem;">	  	
-	  		<div class="card-body text-left bg-info">
+	{{--<div class="card border-info mb-3" style="width: 14rem;">	  	
+	  		 <div class="card-body text-left bg-info">
 	    		<h2 class="card-title">
 		    		<span class="card-text text-white">
 		    			Novedades
@@ -94,11 +94,12 @@
 	    				</li>
 	    			</ul>
 	    		</p>
-	  		</div>
+	  		</div> --}}
+	  		
 		  	{{-- <div class="card-footer bg-transparent border-info text-right">
 		  		<a href="/proveedor/" class="btn btn-outline-info btn-sm">Visualizar</a>
-		  	</div> --}}
-		</div>
+		  	</div> 
+		</div>--}}
 		{{-- <div class="card border-success mb-3" style="width: 14rem;">	  	
 	  		<div class="card-body text-left bg-success">
 	    		<h2 class="card-title">
