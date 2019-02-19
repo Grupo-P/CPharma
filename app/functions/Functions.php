@@ -185,7 +185,8 @@ function QueryArticulosDesc(){
  */
 function QueryArticulos($descrip){
 	$sql = "SELECT  
-		InvArticulo.Id 
+		InvArticulo.Id
+		InvArticulo.FinConceptoImptoIdCompra
 		FROM InvArticulo
 		WHERE InvArticulo.Descripcion 
 		LIKE '%$descrip%'";
@@ -298,7 +299,8 @@ function TableHistoricoArticulos($IdArticuloQ,$DescripcionArticuloQ){
 	SELECT
 	InvArticulo.Id, 
 	InvArticulo.CodigoArticulo,
-	InvArticulo.Descripcion
+	InvArticulo.Descripcion,
+	InvArticulo.FinConceptoImptoIdCompra
 	INTO TablaTemp
 	FROM InvArticulo
 	where InvArticulo.Id = '$IdArticuloQ'
@@ -309,11 +311,12 @@ function TableHistoricoArticulos($IdArticuloQ,$DescripcionArticuloQ){
 	TablaTemp.Id, 
 	TablaTemp.CodigoArticulo,
 	TablaTemp.Descripcion,
+	TablaTemp.FinConceptoImptoIdCompra,
 	SUM (InvLoteAlmacen.Existencia) As Existencia
 	FROM TablaTemp
 	INNER JOIN InvLoteAlmacen ON InvLoteAlmacen.InvArticuloId = TablaTemp.Id
 	WHERE (InvLoteAlmacen.InvAlmacenId = 1 or InvLoteAlmacen.InvAlmacenId = 2)
-	GROUP BY TablaTemp.Id, TablaTemp.CodigoArticulo,TablaTemp.Descripcion
+	GROUP BY TablaTemp.Id, TablaTemp.CodigoArticulo,TablaTemp.Descripcion,TablaTemp.FinConceptoImptoIdCompra
 	";
 	
 	sqlsrv_query($conn,$sql1);
@@ -344,15 +347,107 @@ function TableHistoricoArticulos($IdArticuloQ,$DescripcionArticuloQ){
 	  	<tbody>
 	  		';
 		while( $row1 = sqlsrv_fetch_array( $result1, SQLSRV_FETCH_ASSOC)) {
+
 		echo '<tr>';
+		$IdQPT = $row1["Id"];
+		$ConcepIVA = $row1["FinConceptoImptoIdCompra"];
 		echo '<td align="left">'.$row1["CodigoArticulo"].'</td>';
 		echo '<td align="left">'.$row1["Descripcion"].'</td>';
 		echo '<td align="center">'.intval($row1["Existencia"]).'</td>';
+/*Inicio de calculos de precios*/
+	$QPT = "
+	IF OBJECT_ID ('TablaTemp', 'U') IS NOT NULL
+    	DROP TABLE TablaTemp;
+	IF OBJECT_ID ('TablaTemp1', 'U') IS NOT NULL
+    	DROP TABLE TablaTemp1;
+	";
+	$QPT1 = "SELECT
+	InvLoteAlmacen.InvLoteId
+	into TablaTemp
+	FROM InvLoteAlmacen 
+	WHERE (InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2) 
+	AND (InvLoteAlmacen.InvArticuloId = '$IdQPT')
+	AND (InvLoteAlmacen.Existencia>0)
+	";
+	$QPT2 = "SELECT
+	InvLote.Id,
+	invlote.M_PrecioCompraBruto,
+	invlote.M_PrecioTroquelado
+	into TablaTemp1
+	from InvLote
+	inner join TablaTemp on TablaTemp.InvLoteId = InvLote.Id
+	order by invlote.M_PrecioTroquelado, invlote.M_PrecioCompraBruto desc
+	";
+	$QPT3 = "SELECT top 1
+	TablaTemp1.Id,
+	TablaTemp1.M_PrecioCompraBruto,
+	TablaTemp1.M_PrecioTroquelado 
+	from TablaTemp1
+	";
 
-		echo '<td align="center"></td>';
-			
-			//$resultTasaG = QueryTasa(date('Y-m-d'));
-			$resultTasaG = QueryTasa('2018-12-22');
+	sqlsrv_query($conn,$QPT);
+	sqlsrv_query($conn,$QPT1);
+	sqlsrv_query($conn,$QPT2);
+	$resultAQPT = sqlsrv_query($conn,$QPT3);
+	$FlagPrecio = 0;
+
+	while( $rowQPT = sqlsrv_fetch_array( $resultAQPT, SQLSRV_FETCH_ASSOC)){
+		$FlagPrecio = $rowQPT['M_PrecioTroquelado'];
+	}
+
+	if($FlagPrecio){
+		echo '<td align="center">'.SigVe." ".round($FlagPrecio,2).'</td>';
+	}
+	else{
+		$QPB="
+		IF OBJECT_ID ('TablaTemp', 'U') IS NOT NULL
+    	DROP TABLE TablaTemp;
+		IF OBJECT_ID ('TablaTemp1', 'U') IS NOT NULL
+    	DROP TABLE TablaTemp1;
+		";
+		$QPB1="SELECT *
+		into TablaTemp
+		from InvLoteAlmacen 
+		where(InvLoteAlmacen.InvArticuloId = '$IdQPT')
+		and (InvLoteAlmacen.Existencia>0)
+		";
+		$QPB2="SELECT
+		InvLote.Id,
+		invlote.M_PrecioCompraBruto,
+		invlote.M_PrecioTroquelado
+		into TablaTemp1
+		from InvLote
+		inner join TablaTemp on TablaTemp.InvLoteId = InvLote.Id
+		order by invlote.M_PrecioTroquelado, invlote.M_PrecioCompraBruto desc
+		";
+		$QPB3="SELECT top 1
+		TablaTemp1.Id,
+		TablaTemp1.M_PrecioCompraBruto,
+		TablaTemp1.M_PrecioTroquelado 
+		from TablaTemp1
+		";
+
+		sqlsrv_query($conn,$QPB);
+		sqlsrv_query($conn,$QPB1);
+		sqlsrv_query($conn,$QPB2);
+		$resultAQPB = sqlsrv_query($conn,$QPB3);
+		$FlagPrecio = 0;
+
+		while( $rowQPB = sqlsrv_fetch_array( $resultAQPB, SQLSRV_FETCH_ASSOC)){
+			$FlagPrecio = $rowQPB['M_PrecioCompraBruto'];
+		}
+
+		if($ConcepIVA==1){
+			$FlagPrecio = ($FlagPrecio/Utilidad)*Impuesto;
+			echo '<td align="center">'.SigVe." ".round($FlagPrecio,2).'</td>';
+		}
+		else{
+			$FlagPrecio = ($FlagPrecio/Utilidad);
+			echo '<td align="center">'.SigVe." ".round($FlagPrecio,2).'</td>';
+		}
+	}
+/*Fin de calculos de precios*/
+			$resultTasaG = QueryTasa(date('Y-m-d'));
 			$flaG = 0;
 			
 			while( $rowTasaG = mysqli_fetch_assoc($resultTasaG)) {
@@ -360,8 +455,7 @@ function TableHistoricoArticulos($IdArticuloQ,$DescripcionArticuloQ){
 			}
 			if($flaG!=0){
 				echo '<td align="center">'.SigDolar." ".$flaG.'</td>';
-				//echo '<td align="center">'.SigDolar." ".round($row["M_PrecioCompraBruto"]/$flaG,2).'</td>';
-				echo '<td align="center"></td>';
+				echo '<td align="center">'.SigDolar." ".round(($FlagPrecio/$flaG),2).'</td>';
 			}
 			else{
 				echo '<td align="center">'.SigDolar.' 0.00</td>';
@@ -405,7 +499,8 @@ function TableHistoricoArticulos($IdArticuloQ,$DescripcionArticuloQ){
 				echo '<td align="center">'.SigDolar." ".round($row["M_PrecioCompraBruto"]/$flag,2).'</td>';
 			}
 			else{
-				echo '<td align="center"></td>';
+				echo '<td align="center">'.SigDolar.' 0.00</td>';
+				echo '<td align="center">'.SigDolar.' 0.00</td>';
 			}
 			echo '</tr>';		
   	}
@@ -872,5 +967,64 @@ FROM TablaTemp
 INNER JOIN InvLoteAlmacen ON InvLoteAlmacen.InvArticuloId = TablaTemp.Id
 WHERE (InvLoteAlmacen.InvAlmacenId = 1 or InvLoteAlmacen.InvAlmacenId = 2)
 GROUP BY TablaTemp.Id, TablaTemp.CodigoArticulo,TablaTemp.Descripcion
+ */
+
+/*Script Precio desde el troquel
+IF OBJECT_ID ('TablaTemp', 'U') IS NOT NULL
+    	DROP TABLE TablaTemp;
+IF OBJECT_ID ('TablaTemp1', 'U') IS NOT NULL
+    	DROP TABLE TablaTemp1;
+
+select
+InvLoteAlmacen.InvLoteId
+into TablaTemp
+from InvLoteAlmacen 
+where (InvLoteAlmacen.InvAlmacenId = 1 or InvLoteAlmacen.InvAlmacenId = 2) 
+and (InvLoteAlmacen.InvArticuloId = '12855')
+and (InvLoteAlmacen.Existencia>0)
+
+select
+InvLote.Id,
+invlote.M_PrecioCompraBruto,
+invlote.M_PrecioTroquelado
+into TablaTemp1
+from InvLote
+inner join TablaTemp on TablaTemp.InvLoteId = InvLote.Id
+order by invlote.M_PrecioTroquelado, invlote.M_PrecioCompraBruto desc
+
+select top 1
+TablaTemp1.Id,
+TablaTemp1.M_PrecioCompraBruto,
+TablaTemp1.M_PrecioTroquelado 
+from TablaTemp1
+ */
+
+/*scrip precio desde costo bruto
+IF OBJECT_ID ('TablaTemp', 'U') IS NOT NULL
+    	DROP TABLE TablaTemp;
+IF OBJECT_ID ('TablaTemp1', 'U') IS NOT NULL
+    	DROP TABLE TablaTemp1;
+
+select *
+into TablaTemp
+from InvLoteAlmacen 
+where(InvLoteAlmacen.InvArticuloId = '18963')
+and (InvLoteAlmacen.Existencia>0)
+
+select
+InvLote.Id,
+invlote.M_PrecioCompraBruto,
+invlote.M_PrecioTroquelado
+into TablaTemp1
+from InvLote
+inner join TablaTemp on TablaTemp.InvLoteId = InvLote.Id
+order by invlote.M_PrecioTroquelado, invlote.M_PrecioCompraBruto desc
+
+select top 1
+TablaTemp1.Id,
+TablaTemp1.M_PrecioCompraBruto,
+TablaTemp1.M_PrecioTroquelado 
+from TablaTemp1
+
  */
 ?>
