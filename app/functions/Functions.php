@@ -337,6 +337,8 @@ function TableHistoricoArticulos($IdArticuloQ,$DescripcionArticuloQ){
 		      	<th scope="col">Descripcion</td>
 		      	<th scope="col">Existencia</td>
 		      	<th scope="col">Precio</td>
+		      	<th scope="col">Tasa Actual</td>
+		      	<th scope="col">Costo Divisa</td>
 		    </tr>
 	  	</thead>
 	  	<tbody>
@@ -346,7 +348,25 @@ function TableHistoricoArticulos($IdArticuloQ,$DescripcionArticuloQ){
 		echo '<td align="left">'.$row1["CodigoArticulo"].'</td>';
 		echo '<td align="left">'.$row1["Descripcion"].'</td>';
 		echo '<td align="center">'.intval($row1["Existencia"]).'</td>';
-		echo '<td align="center">'.'</td>';
+
+		echo '<td align="center"></td>';
+			
+			//$resultTasaG = QueryTasa(date('Y-m-d'));
+			$resultTasaG = QueryTasa('2018-12-22');
+			$flaG = 0;
+			
+			while( $rowTasaG = mysqli_fetch_assoc($resultTasaG)) {
+				$flaG=$rowTasaG['tasa'];
+			}
+			if($flaG!=0){
+				echo '<td align="center">'.SigDolar." ".$flaG.'</td>';
+				//echo '<td align="center">'.SigDolar." ".round($row["M_PrecioCompraBruto"]/$flaG,2).'</td>';
+				echo '<td align="center"></td>';
+			}
+			else{
+				echo '<td align="center">'.SigDolar.' 0.00</td>';
+				echo '<td align="center">'.SigDolar.' 0.00</td>';
+			}
   		}
 	  	echo'	
 	  	</tbody>	
@@ -375,7 +395,7 @@ function TableHistoricoArticulos($IdArticuloQ,$DescripcionArticuloQ){
 
 			$FechaR = $row["FechaRegistro"]->format('Y-m-d');
 			$resultTasa = QueryTasa($FechaR);
-			$flag;
+			$flag = 0;
 
 			while( $rowTasa = mysqli_fetch_assoc($resultTasa)) {
 				echo '<td align="center">'.SigDolar." ".$rowTasa['tasa'].'</td>';
@@ -383,7 +403,10 @@ function TableHistoricoArticulos($IdArticuloQ,$DescripcionArticuloQ){
 			}
 			if($flag!=0){
 				echo '<td align="center">'.SigDolar." ".round($row["M_PrecioCompraBruto"]/$flag,2).'</td>';
-			
+			}
+			else{
+				echo '<td align="center"></td>';
+			}
 			echo '</tr>';		
   	}
   	echo '
