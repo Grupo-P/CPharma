@@ -10,7 +10,7 @@ function conectarXampp(){
 }
 /*
 	Nombre: conectarDB
-	Funcion: Establecer la conexion con la base de datos
+	Funcion: Establecer la conexion con la base de datos smartpharma
  */
 function conectarDB(){
 	$connectionInfo = array(
@@ -82,7 +82,7 @@ function armarJson($sql){
 /*
 	Nombre: QueryDiasProveedores
 	Reporte1: Dias de Activacion de Proveedores
-	Funcion: Query para la base de datos del Reporte1
+	Funcion: Query que retorna todos los proveedores y las fechas de sus despachos
  */
 function QueryDiasProveedores(){
 	$sql = "SELECT 
@@ -133,7 +133,7 @@ function ReporteDiasProveedores(){
 			echo '<tr>';
 			//echo '<th>'.$row['Id'].'</th>';	
 			echo '<td>'.$row['Nombre'].'</td>';
-			echo '<td align="center">'.($row['FechaRegistro']).'</td>';
+			echo '<td align="center">'.date('Y-m-d',strtotime($row['FechaRegistro'])).'</td>';
 
 			$FechaReg = date('Y-m-d',strtotime($row['FechaRegistro']));
 			
@@ -149,7 +149,7 @@ function ReporteDiasProveedores(){
 			echo '<tr>';
 			//echo '<th>'.$row['Id'].'</th>';	
 			echo '<td>'.$row['Nombre'].'</td>';
-			echo '<td align="center">'.($row['FechaRegistro']).'</td>';
+			echo '<td align="center">'.date('Y-m-d',strtotime($row['FechaRegistro'])).'</td>';
 
 			$FechaReg = date('Y-m-d',strtotime($row['FechaRegistro']));
 			
@@ -178,77 +178,6 @@ function QueryArticulosDesc(){
 		InvArticulo.Id 
 		FROM InvArticulo";
 	return $sql;
-}
-/*
-	Nombre: QueryArticulos
-	Funcion: Devuelve el articulo segun la descripcion
- */
-function QueryArticulos($descrip){
-	$sql = "SELECT  
-		InvArticulo.Id
-		InvArticulo.FinConceptoImptoIdCompra
-		FROM InvArticulo
-		WHERE InvArticulo.Descripcion 
-		LIKE '%$descrip%'";
-	return $sql;
-}
-/*
-	Nombre: TableArticulos
-	Funcion: Arma los articulos en tabla
- */
-function TableArticulos(){
-	$conn = conectarDB();
-	
-	$sql = QueryArticulos();
-	$result = sqlsrv_query($conn,$sql);
-	
-	echo '
-	<div class="input-group md-form form-sm form-1 pl-0">
-	  <div class="input-group-prepend">
-	    <span class="input-group-text purple lighten-3" id="basic-text1"><i class="fas fa-search text-white"
-	        aria-hidden="true"></i></span>
-	  </div>
-	  <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterAllTable()">
-	</div>
-	<br/>
-	<table class="table table-striped table-bordered col-12 sortable" id="myTable">
-	  	<thead class="thead-dark">
-		    <tr>
-		      	<th scope="col">CodigoArticulo</th>
-		      	<th scope="col">Descripcion</th>
-		      	<th scope="col">Accion</th>
-		    </tr>
-	  	</thead>
-	  	<tbody>
-	';
-	$cont = 0;
-
-	while( $row = sqlsrv_fetch_array( $result, SQLSRV_FETCH_ASSOC)) {
-	$cont++;
-			echo '<tr>';
-			// echo '<td>'.$row["Id"].'</td>';
-			echo '<td>'.$row["CodigoArticulo"].'</td>';
-			echo '<td>'.($row['Descripcion']).'</td>';
-			echo' <td>
-			<form action="" method="GET" style="display: inline;">   
-		        <button type="submit" name="Historico" role="button" class="btn btn-outline-info btn-sm"data-placement="top"><i class="fa fa-eye">&nbsp;Ver Historico</i>
-		        </button>
-		        <input id="IdArticulo" name="IdArticulo" type="hidden" value="'.$row["Id"].'">
-		     	<input id="CodigoArticulo" name="CodigoArticulo" type="hidden" value="'.$row["CodigoArticulo"].'">
-		     	<input id="DescripcionArticulo" name="DescripcionArticulo" type="hidden" value="'.$row["Descripcion"].'">   
-		    </form>
-      		</td>';
-			echo '</tr>';
-
-			/*Limite para acelerar el test quitar al final*/
-			if($cont == 15){
-				break;
-			}
-  	}
-  	echo '
-  		</tbody>
-	</table>';
-	sqlsrv_close( $conn );
 }
 /*
 	Nombre: QueryTasa
@@ -284,7 +213,7 @@ function QueryHistoricoArticulos($IdArticuloQ){
 	Nombre: TableHistoricoArticulos
 	Funcion: Arma el historico del articulo selecionado
  */
-function TableHistoricoArticulos($IdArticuloQ,$DescripcionArticuloQ){
+function TableHistoricoArticulos($IdArticuloQ){
 	$conn = conectarDB();
 	
 	$sql = QueryHistoricoArticulos($IdArticuloQ);
@@ -355,6 +284,8 @@ function TableHistoricoArticulos($IdArticuloQ,$DescripcionArticuloQ){
 		echo '<td align="left">'.$row1["Descripcion"].'</td>';
 		echo '<td align="center">'.intval($row1["Existencia"]).'</td>';
 /*Inicio de calculos de precios*/
+/*QPT: Query Precio Troquelado*/
+/*QPB: Query Precio Bruto*/
 	$QPT = "
 	IF OBJECT_ID ('TablaTemp', 'U') IS NOT NULL
     	DROP TABLE TablaTemp;
@@ -483,7 +414,7 @@ function TableHistoricoArticulos($IdArticuloQ,$DescripcionArticuloQ){
 	while( $row = sqlsrv_fetch_array( $result, SQLSRV_FETCH_ASSOC)) {
 			echo '<tr>';
 			echo '<td>'.$row["Nombre"].'</td>';	
-			echo '<td align="center">'.$row["FechaRegistro"]->format('Y-m-d h:m:s').'</td>';
+			echo '<td align="center">'.$row["FechaRegistro"]->format('Y-m-d').'</td>';
 			echo '<td align="center">'.intval($row['CantidadRecibidaFactura']).'</td>';
 			echo '<td align="center">'.SigVe." ".round($row["M_PrecioCompraBruto"],2).'</td>';
 
@@ -777,8 +708,8 @@ function TableArticulosMasVendidos($Top,$FInicial,$FFinal){
 /************REPORTE 4 Articulos menos vendidos***********/
 /*
 	Nombre: QueryArticulosMenosVendidos
-	Reporte3: Articulos mas vendidos
-	Funcion: Query para la base de datos del Reporte3
+	Reporte4: Articulos menos vendidos
+	Funcion: Query para la base de datos del Reporte4
  */
 function TableArticulosMenosVendidos($Top,$FInicial,$FFinal){
 
@@ -1041,9 +972,9 @@ function TableArticulosMenosVendidos($Top,$FInicial,$FFinal){
 }
 /************REPORTE 5 Prouctos en falla***********/
 /*
-	Nombre: QueryArticulosMenosVendidos
-	Reporte3: Articulos mas vendidos
-	Funcion: Query para la base de datos del Reporte3
+	Nombre: TableProductosFalla
+	Reporte5: Prouctos en falla
+	Funcion: Arma la tabla de los Prouctos en falla
  */
 function TableProductosFalla($FInicial,$FFinal){
 
@@ -1172,86 +1103,4 @@ function TableProductosFalla($FInicial,$FFinal){
 
 	sqlsrv_close( $conn );
 }
-/* Asi vamos Productos en Falla
-	IF OBJECT_ID ('TablaTemp', 'U') IS NOT NULL
-    	DROP TABLE TablaTemp;
-	IF OBJECT_ID ('TablaTemp1', 'U') IS NOT NULL
-	    DROP TABLE TablaTemp1;
-	IF OBJECT_ID ('TablaTemp2', 'U') IS NOT NULL
-	    DROP TABLE TablaTemp2;
-	IF OBJECT_ID ('TablaTemp3', 'U') IS NOT NULL
-	    DROP TABLE TablaTemp3;
-		IF OBJECT_ID ('TablaTemp4', 'U') IS NOT NULL
-	    DROP TABLE TablaTemp4;
-	
-	SELECT
-	InvArticulo.Id,
-	InvArticulo.CodigoArticulo,
-	InvArticulo.Descripcion,
-	VenFacturaDetalle.Cantidad
-	INTO TablaTemp
-	FROM VenFacturaDetalle
-	INNER JOIN InvArticulo ON InvArticulo.Id = VenFacturaDetalle.InvArticuloId
-	INNER JOIN VenFactura ON VenFactura.Id = VenFacturaDetalle.VenFacturaId
-	WHERE
-	(VenFactura.FechaDocumento > '2018-11-10' AND VenFactura.FechaDocumento < '2018-12-20')
-	
-	SELECT
-	TablaTemp.Id, 
-	TablaTemp.CodigoArticulo, 
-	TablaTemp.Descripcion, 
-	COUNT(*) AS VecesFacturado, 
-	SUM(TablaTemp.Cantidad) AS UnidadesVendidas 
-	INTO TablaTemp1
-	FROM TablaTemp
-	GROUP BY Id,CodigoArticulo, Descripcion
-	ORDER BY UnidadesVendidas ASC
-	DROP TABLE TablaTemp
-	
-	SELECT
-	TablaTemp1.Id, 
-	TablaTemp1.CodigoArticulo,
-	TablaTemp1.Descripcion,
-	TablaTemp1.VecesFacturado,
-	UnidadesVendidas,
-	InvLoteAlmacen.Existencia
-	INTO TablaTemp2
-	FROM TablaTemp1
-	INNER JOIN InvArticulo ON InvArticulo.CodigoArticulo = TablaTemp1.CodigoArticulo
-	INNER JOIN InvLoteAlmacen ON InvLoteAlmacen.InvArticuloId = InvArticulo.Id
-	WHERE (InvLoteAlmacen.InvAlmacenId = 1 or InvLoteAlmacen.InvAlmacenId = 2)
-	DROP TABLE TablaTemp1
-	
-	SELECT
-	TablaTemp2.Id, 
-	TablaTemp2.CodigoArticulo, 
-	TablaTemp2.Descripcion, 
-	TablaTemp2.VecesFacturado, 
-	TablaTemp2.UnidadesVendidas, 
-	SUM(TablaTemp2.Existencia) AS Existencia
-	INTO TablaTemp3
-	FROM TablaTemp2
-	GROUP BY Id,CodigoArticulo, Descripcion, VecesFacturado, UnidadesVendidas
-	ORDER BY UnidadesVendidas DESC
-	DROP TABLE TablaTemp2
-	
-	SELECT * from TablaTemp3 where TablaTemp3.Existencia = 0
-
-	SELECT
-	TablaTemp3.Id,
-	TablaTemp3.CodigoArticulo,
-	TablaTemp3.Descripcion,
-	COUNT(*) AS VecesDevueltaCliente,
-	SUM(VenDevolucionDetalle.Cantidad) AS CantidadDevueltaCliente
-	INTO TablaTemp4
-	FROM VenDevolucionDetalle
-	INNER JOIN TablaTemp3 ON TablaTemp3.Id = VenDevolucionDetalle.InvArticuloId
-	INNER JOIN VenDevolucion ON VenDevolucion.Id = VenDevolucionDetalle.VenDevolucionId
-	WHERE
-	(VenDevolucion.FechaDocumento > '2018-12-10' AND VenDevolucion.FechaDocumento < '2018-12-20')
-	GROUP BY TablaTemp3.Id,TablaTemp3.CodigoArticulo,TablaTemp3.Descripcion
-	ORDER BY TablaTemp3.Descripcion DESC
-
-	select * from TablaTemp4
- */
 ?>

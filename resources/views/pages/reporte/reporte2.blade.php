@@ -19,7 +19,7 @@
 	
 	if (isset($_GET['Id'])  )
 	{
-  	TableHistoricoArticulos($_GET['Id'],$_GET['Descrip']);
+  	TableHistoricoArticulos($_GET['Id']);
 	} 
 	else{
     $sql = QueryArticulosDesc();
