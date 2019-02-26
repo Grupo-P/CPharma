@@ -60,9 +60,6 @@ class ProveedorController extends Controller
         $proveedor->Estatus = 'ACTIVO';
         $proveedor->observacion = $request->input('observacion');
         $proveedor->user = auth()->user()->name;
-        if($proveedor->correo ==""){
-            $proveedor->correo=''.$proveedor->nombre.''.$proveedor->apellido.'@noposee.com';
-        }
         $proveedor->save();
         return redirect()->route('proveedor.index')->with('Saved', ' Informacion');
         }
@@ -108,9 +105,6 @@ class ProveedorController extends Controller
         try{
         $proveedor = Proveedor::find($id);
         $proveedor->fill($request->all());
-        if($proveedor->correo ==""){
-            $proveedor->correo=''.$proveedor->nombre.''.$proveedor->apellido.'@noposee.com';
-        }
         $proveedor->user = auth()->user()->name;
         $proveedor->save();
         return redirect()->route('proveedor.index')->with('Updated', ' Informacion');

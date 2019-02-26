@@ -54,12 +54,7 @@ class EmpresaController extends Controller
         $empresa->telefono = $request->input('telefono');
         $empresa->direccion = $request->input('direccion');
         $empresa->estatus = 'ACTIVO';
-        if($empresa->observacion == null){
-            $empresa->observacion = "";
-        }
-        else{
-            $empresa->observacion = $request->input('observacion');
-        }
+        $empresa->observacion = $request->input('observacion');
         $empresa->user = auth()->user()->name;
         $empresa->save();
         return redirect()->route('empresa.index')->with('Saved', ' Informacion');
@@ -106,12 +101,7 @@ class EmpresaController extends Controller
         $empresa = Empresa::find($id);
         $empresa->fill($request->all());
         $empresa->user = auth()->user()->name;
-        if($empresa->observacion == null){
-            $empresa->observacion = "";
-        }
-        else{
-            $empresa->observacion = $request->input('observacion');
-        }
+        $empresa->observacion = $request->input('observacion');
         $empresa->save();
         return redirect()->route('empresa.index')->with('Updated', ' Informacion');
         }
