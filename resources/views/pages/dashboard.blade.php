@@ -80,26 +80,28 @@
 
 	<div class="card-deck">
 	{{-- NEWS --}}
-	{{--<div class="card border-info mb-3" style="width: 14rem;">	  	
-	  		 <div class="card-body text-left bg-info">
+	<div class="card border-secondary mb-3" style="width: 14rem;">	  	
+	  		 <div class="card-body text-left bg-secondary">
 	    		<h2 class="card-title">
 		    		<span class="card-text text-white">
 		    			Novedades
 		    		</span>
 	    		</h2>
-	    		<p class="card-text text-white">
+	    		<p class="card-text text-secondary">
 	    			<ul>
 	    				<li class="card-text text-white">
-	    					El campo de correo puede quedar en blanco
+	    					Al agregar un proveedor puedes dejar el correo en blanco.
+	    				</li>
+	    				<li class="card-text text-white">
+	    					Al agregar un proveedor puedes dejar la observacion en blanco.
+	    				</li>
+	    				<li class="card-text text-white">
+	    					Al agregar una empresa puedes dejar la observacion en blanco.
 	    				</li>
 	    			</ul>
 	    		</p>
-	  		</div> --}}
-	  		
-		  	{{-- <div class="card-footer bg-transparent border-info text-right">
-		  		<a href="/proveedor/" class="btn btn-outline-info btn-sm">Visualizar</a>
-		  	</div> 
-		</div>--}}
+	  		</div>  
+		</div>
 		{{-- <div class="card border-success mb-3" style="width: 14rem;">	  	
 	  		<div class="card-body text-left bg-success">
 	    		<h2 class="card-title">
