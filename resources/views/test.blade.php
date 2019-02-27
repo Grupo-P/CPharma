@@ -19,14 +19,8 @@
   
   if (isset($_GET['Descrip'])  )
   {
-    echo 'La cadena a buscar es: '.$_GET['Descrip'];
-    echo '<br>';
-    echo 'Resultqado: '.TablaReportePedido($_GET['Descrip']);
-
-    $sql1 = QueryArticulosDescLike($_GET['Descrip']);
-    $ArtJson1 = armarJson($sql1);
-    print_r($ArtJson1);
-  } 
+    TablaReportePedido($_GET['Descrip'],$_GET['fechaInicio'],$_GET['fechaFin']);
+  }
   else{
     $sql = QueryArticulosDescId();
     $ArtJson = armarJson($sql);
@@ -52,7 +46,6 @@
             <td colspan="4">
               <div class="autocomplete" style="width:90%;">
                 <input id="myInput" type="text" name="Descrip" placeholder="Ingrese el nombre del articulo " onkeyup="conteo()" required>
-                <input id="myId" name="Id" type="hidden">
               </div>
             <input type="submit" value="Buscar" class="btn btn-outline-success" style="width:9%;">
             </td>

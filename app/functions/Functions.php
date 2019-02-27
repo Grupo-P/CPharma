@@ -1115,14 +1115,53 @@ function QueryArticulosDescLike($VarLike){
 		FROM
 		InvArticulo
 		WHERE 
-		InvArticulo.Descripcion LIKE '%$VarLike%'";
+		InvArticulo.Descripcion LIKE '%$VarLike%'
+		order by InvArticulo.CodigoArticulo desc";
 	return $sql;
 }
 
-function TablaReportePedido($VarLike){
+function TablaReportePedido($VarLike,$FInicial,$FFinal){
 	$conn = conectarDB();
 	$sql = QueryArticulosDescLike($VarLike);
 	$result = sqlsrv_query($conn,$sql);
-	return $result;
+
+	$FFinalRango = $FFinal;
+	$FFinal = date("Y-m-d",strtotime($FFinal."+ 1 days"));
+
+	echo '
+	<div class="input-group md-form form-sm form-1 pl-0">
+	  <div class="input-group-prepend">
+	    <span class="input-group-text purple lighten-3" id="basic-text1"><i class="fas fa-search text-white"
+	        aria-hidden="true"></i></span>
+	  </div>
+	  <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterAllTable()">
+	</div>
+	<br/>
+	';
+
+	echo'<h6 align="center">Periodo desde el '.$FInicial.' al '.$FFinalRango.' </h6>';
+
+	echo'
+	<table class="table table-striped table-bordered col-12 sortable" id="myTable">
+	  	<thead class="thead-dark">
+		    <tr>
+		    	<th scope="col">Codigo</th>
+		      	<th scope="col">Descripcion</th>
+		    </tr>
+	  	</thead>
+	  	<tbody>
+	';
+	
+	while( $row = sqlsrv_fetch_array( $result, SQLSRV_FETCH_ASSOC)) {
+			echo '<tr>';
+			echo '<td align="left">'.$row["CodigoArticulo"].'</td>';	
+			echo '<td align="left">'.$row["Descripcion"].'</td>';
+			echo '</tr>';		
+  	}
+  	echo '
+  		</tbody>
+	</table>';
+
+	sqlsrv_close( $conn );
 }
 ?>
