@@ -17,16 +17,16 @@
 
   $ArtJson = "";
   
-  if (isset($_GET['Id'])  )
+  if (isset($_GET['Descrip'])  )
   {
-    TableHistoricoArticulos($_GET['Id']);
+    echo 'La cadena a buscar es: '.$_GET['Descrip'];
   } 
   else{
-    $sql = QueryArticulosDescripcion();
+    $sql = QueryArticulosDescId();
     $ArtJson = armarJson($sql);
 
     echo '
-    <form autocomplete="off" action="">
+    <form id="form" autocomplete="off" action="">
         <div class="autocomplete" style="width:90%;">
           <input id="myInput" type="text" name="Descrip" placeholder="Ingrese el nombre del articulo " onkeyup="conteo()">
           <input id="myId" name="Id" type="hidden">
@@ -36,61 +36,16 @@
       ';
   } 
 ?>
-
 <script type="text/javascript">
 jQuery(document).on('ready',function(){
-
-  var ArtJson = eval(<?php echo $ArtJson ?>);
-  llenarAutoComplete();
-  
-  /*Autocomplete para Reporte Para Pedidos*/
-  function llenarAutoComplete() {
-    jQuery( "#myInput" ).autocomplete({
-      source: ArtJson,
-      delay: 150,
-      minLength: 3,
-      open: function(e, ui) {
-        //using the 'open' event to capture the originally typed text
-        var self = $(this),
-        val = self.val();
-        //saving original search term in 'data'.
-        self.data('searchTerm', val);
-      },
-      focus: function(e, ui) {
-        return false;
-      },
-      select: function( e, ui ) {
-        var self = $(this),
-          keyPressed = e.keyCode,
-          keyWasEnter = e.keyCode === 13,
-          useSelection = false,
-          val = self.data('searchTerm');
-        if (keyPressed) {
-          if (keyWasEnter) {
-            e.preventDefault();
-          }
-        }
-        return useSelection;
-      }
-    });
-    $("#myInput").autocomplete( "enable" );
-  }
-
   //Presionar Enter dentro de la barra de busqueda
   $('#myInput').keyup(function(e) {
-        //cuando el modo de busqueda hace referencia al nombre de productos
-        // if(e.keyCode == 13) {
-        //   if ( $('#input_busq').val() != "" ) {         
-        //     consultaAjax( "op="+$('#input_busq').val() , "lib/busquedaM.php", 1 , '.contApp' );
-        //   }
-        // }
         if(e.keyCode == 13) {
           if ( $('#myInput').val() != "" ) {
-            console.log('Hola');
+            $('#form').submit();
           }   
         }
   });
-
 });
 </script>
 @endsection
@@ -103,9 +58,9 @@ jQuery(document).on('ready',function(){
     <script type="text/javascript" src="{{ asset('assets/js/functions.js') }}">	
     </script>
     <script type="text/javascript" src="{{ asset('assets/jquery/jquery-2.2.2.min.js') }}"></script>
-  	<script type="text/javascript" src="{{ asset('assets/jquery/jquery-ui.min.js') }}" ></script>
+    <script type="text/javascript" src="{{ asset('assets/jquery/jquery-ui.min.js') }}" ></script>
 
-  	<style>
+    <style>
     * {
       box-sizing: border-box;
     }
@@ -159,4 +114,17 @@ jQuery(document).on('ready',function(){
       color: #ffffff; 
     }
     </style>
+@endsection
+
+@section('scriptsFoot')
+<?php
+  if($ArtJson!=""){
+?>
+    <script type="text/javascript">
+      ArrJs = eval(<?php echo $ArtJson ?>);
+      autocompletado(document.getElementById("myInput"),document.getElementById("myId"), ArrJs);
+    </script> 
+<?php
+  }
+?>  
 @endsection

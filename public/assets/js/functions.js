@@ -56,7 +56,7 @@ function autocompletado(inp, inpId, arr) {
             });
             a.appendChild(b);
           }
-          console.log(i);
+          //console.log(i);
         }
       }
       }

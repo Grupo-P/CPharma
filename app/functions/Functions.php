@@ -180,16 +180,6 @@ function QueryArticulosDescId(){
 	return $sql;
 }
 /*
-	Nombre: QueryArticulosDesc
-	Funcion: Query que devuelve todos los articulos de la base de datos
- */
-function QueryArticulosDescripcion(){
-	$sql = "SELECT
-		InvArticulo.Descripcion 
-		FROM InvArticulo";
-	return $sql;
-}
-/*
 	Nombre: QueryTasa
 	Funcion: Devuelve el valor de la tasa segun la fecha especificada
  */
