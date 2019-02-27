@@ -169,7 +169,7 @@ function ReporteDiasProveedores(){
 }
 /**************REPORTE 2 Historico de Articulos***********/
 /*
-	Nombre: QueryArticulosDesc
+	Nombre: QueryArticulosDescId
 	Funcion: Query que devuelve todos los articulos de la base de datos
  */
 function QueryArticulosDescId(){
@@ -215,7 +215,6 @@ function QueryHistoricoArticulos($IdArticuloQ){
  */
 function TableHistoricoArticulos($IdArticuloQ){
 	$conn = conectarDB();
-	
 	$sql = QueryHistoricoArticulos($IdArticuloQ);
 	$result = sqlsrv_query($conn,$sql);
 
@@ -1102,5 +1101,28 @@ function TableProductosFalla($FInicial,$FFinal){
 	</table>';
 
 	sqlsrv_close( $conn );
+}
+/**********REPORTE 6 Reporte para pedidos***********/
+/*
+	Nombre: QueryArticulosDescId
+	Funcion: Query que devuelve todos los articulos de la base de datos
+ */
+function QueryArticulosDescLike($VarLike){
+	$sql = "SELECT 
+		InvArticulo.Id,
+		InvArticulo.CodigoArticulo,
+		InvArticulo.Descripcion
+		FROM
+		InvArticulo
+		WHERE 
+		InvArticulo.Descripcion LIKE '%$VarLike%'";
+	return $sql;
+}
+
+function TablaReportePedido($VarLike){
+	$conn = conectarDB();
+	$sql = QueryArticulosDescLike($VarLike);
+	$result = sqlsrv_query($conn,$sql);
+	return $result;
 }
 ?>

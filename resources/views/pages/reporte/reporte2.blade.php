@@ -28,7 +28,7 @@
 		echo '
 		<form autocomplete="off" action="">
 		    <div class="autocomplete" style="width:90%;">
-		      <input id="myInput" type="text" name="Descrip" placeholder="Ingrese el nombre del articulo " onkeyup="conteo()">
+		      <input id="myInput" type="text" name="Descrip" placeholder="Ingrese el nombre del articulo " onkeyup="conteo()" required>
 		      <input id="myId" name="Id" type="hidden">
 		    </div>
 		    <input type="submit" value="Buscar" class="btn btn-outline-success">

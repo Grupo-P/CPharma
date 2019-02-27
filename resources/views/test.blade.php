@@ -20,6 +20,12 @@
   if (isset($_GET['Descrip'])  )
   {
     echo 'La cadena a buscar es: '.$_GET['Descrip'];
+    echo '<br>';
+    echo 'Resultqado: '.TablaReportePedido($_GET['Descrip']);
+
+    $sql1 = QueryArticulosDescLike($_GET['Descrip']);
+    $ArtJson1 = armarJson($sql1);
+    print_r($ArtJson1);
   } 
   else{
     $sql = QueryArticulosDescId();
@@ -27,11 +33,31 @@
 
     echo '
     <form id="form" autocomplete="off" action="">
-        <div class="autocomplete" style="width:90%;">
-          <input id="myInput" type="text" name="Descrip" placeholder="Ingrese el nombre del articulo " onkeyup="conteo()">
-          <input id="myId" name="Id" type="hidden">
-        </div>
-        <input type="submit" value="Buscar" class="btn btn-outline-success">
+        <table style="width:100%;">
+          <tr>
+            <td align="center">
+              Fecha Inicio:
+            </td>
+            <td>
+              <input id="fechaInicio" type="date" name="fechaInicio" required style="width:100%;">
+            </td>
+            <td align="center">
+              Fecha Fin:
+            </td>
+            <td align="right">
+              <input id="fechaFin" name="fechaFin" type="date" required style="width:100%;">
+            </td>
+            </tr>
+            <tr>
+            <td colspan="4">
+              <div class="autocomplete" style="width:90%;">
+                <input id="myInput" type="text" name="Descrip" placeholder="Ingrese el nombre del articulo " onkeyup="conteo()" required>
+                <input id="myId" name="Id" type="hidden">
+              </div>
+            <input type="submit" value="Buscar" class="btn btn-outline-success" style="width:9%;">
+            </td>
+          </tr>
+        </table>
       </form>
       ';
   } 
@@ -61,6 +87,11 @@ jQuery(document).on('ready',function(){
     <script type="text/javascript" src="{{ asset('assets/jquery/jquery-ui.min.js') }}" ></script>
 
     <style>
+    table, th, td, tr {
+      /*border: 1px solid black;*/
+      padding-bottom: 10px;
+    }
+
     * {
       box-sizing: border-box;
     }
