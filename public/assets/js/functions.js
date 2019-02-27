@@ -1,10 +1,11 @@
+/*Autocompletado para el repote historico de articulo*/
 function conteo(){
 	var busqueda = document.getElementById("myInput");
 	var palabra = busqueda.value;
   return palabra.length;
 }
 
-function autocomplete(inp, inpId, arr) {
+function autocompletado(inp, inpId, arr) {
   /*the autocomplete function takes two arguments,
   the text field element and an array of possible autocompleted values:*/
   var currentFocus;

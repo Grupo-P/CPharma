@@ -22,7 +22,7 @@
   	TableHistoricoArticulos($_GET['Id']);
 	} 
 	else{
-    $sql = QueryArticulosDesc();
+    $sql = QueryArticulosDescId();
     $ArtJson = armarJson($sql);
 
 		echo '
@@ -110,7 +110,7 @@
 ?>
     <script type="text/javascript">
       ArrJs = eval(<?php echo $ArtJson ?>);
-      autocomplete(document.getElementById("myInput"),document.getElementById("myId"), ArrJs);
+      autocompletado(document.getElementById("myInput"),document.getElementById("myId"), ArrJs);
     </script> 
 <?php
   }

@@ -11,40 +11,88 @@
 	</h1>
 	<hr class="row align-items-start col-12">
 	
-	<?php	
-	include(app_path().'\functions\config.php');
-	include(app_path().'\functions\Functions.php');
+<?php 
+  include(app_path().'\functions\config.php');
+  include(app_path().'\functions\Functions.php');
 
-  	if (isset($_GET['fechaInicio']))
-	{
-  	TableProductosFalla($_GET['fechaInicio'],$_GET['fechaFin']);
-	} 
-	else{
-		echo '
-		<form autocomplete="off" action="">
-        <table style="width:100%;">
-          <tr>
-            <td align="center">
-              Fecha Inicio:
-            </td>
-            <td>
-              <input id="fechaInicio" type="date" name="fechaInicio" required style="width:100%;">
-            </td>
-            <td align="center">
-              Fecha Fin:
-            </td>
-            <td align="right">
-              <input id="fechaFin" name="fechaFin" type="date" required style="width:100%;">
-            </td>
-            <td align="right">
-              <input type="submit" value="Buscar" class="btn btn-outline-success">
-            </td>
-          </tr>
-		    </table>
-	  	</form>
-	  	';
-	} 
+  $ArtJson = "";
+  
+  if (isset($_GET['Id'])  )
+  {
+    TableHistoricoArticulos($_GET['Id']);
+  } 
+  else{
+    $sql = QueryArticulosDescripcion();
+    $ArtJson = armarJson($sql);
+
+    echo '
+    <form autocomplete="off" action="">
+        <div class="autocomplete" style="width:90%;">
+          <input id="myInput" type="text" name="Descrip" placeholder="Ingrese el nombre del articulo " onkeyup="conteo()">
+          <input id="myId" name="Id" type="hidden">
+        </div>
+        <input type="submit" value="Buscar" class="btn btn-outline-success">
+      </form>
+      ';
+  } 
 ?>
+
+<script type="text/javascript">
+jQuery(document).on('ready',function(){
+
+  var ArtJson = eval(<?php echo $ArtJson ?>);
+  llenarAutoComplete();
+  
+  /*Autocomplete para Reporte Para Pedidos*/
+  function llenarAutoComplete() {
+    jQuery( "#myInput" ).autocomplete({
+      source: ArtJson,
+      delay: 150,
+      minLength: 3,
+      open: function(e, ui) {
+        //using the 'open' event to capture the originally typed text
+        var self = $(this),
+        val = self.val();
+        //saving original search term in 'data'.
+        self.data('searchTerm', val);
+      },
+      focus: function(e, ui) {
+        return false;
+      },
+      select: function( e, ui ) {
+        var self = $(this),
+          keyPressed = e.keyCode,
+          keyWasEnter = e.keyCode === 13,
+          useSelection = false,
+          val = self.data('searchTerm');
+        if (keyPressed) {
+          if (keyWasEnter) {
+            e.preventDefault();
+          }
+        }
+        return useSelection;
+      }
+    });
+    $("#myInput").autocomplete( "enable" );
+  }
+
+  //Presionar Enter dentro de la barra de busqueda
+  $('#myInput').keyup(function(e) {
+        //cuando el modo de busqueda hace referencia al nombre de productos
+        // if(e.keyCode == 13) {
+        //   if ( $('#input_busq').val() != "" ) {         
+        //     consultaAjax( "op="+$('#input_busq').val() , "lib/busquedaM.php", 1 , '.contApp' );
+        //   }
+        // }
+        if(e.keyCode == 13) {
+          if ( $('#myInput').val() != "" ) {
+            console.log('Hola');
+          }   
+        }
+  });
+
+});
+</script>
 @endsection
 
 @section('scriptsHead')
