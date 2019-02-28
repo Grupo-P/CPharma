@@ -101,6 +101,8 @@ function QueryDiasProveedores(){
 	Funcion: Armado del Reporte1
  */
 function ReporteDiasProveedores(){
+	$InicioCarga = new DateTime("now");
+
 	$conn = conectarDB();
 	$sql = QueryDiasProveedores();
 	$result = sqlsrv_query($conn,$sql);
@@ -163,6 +165,12 @@ function ReporteDiasProveedores(){
   	echo '
   		</tbody>
 	</table>';
+
+	$FinCarga = new DateTime("now");
+	$IntervalCarga = $InicioCarga->diff($FinCarga);
+
+	echo'Tiempo de carga: '.$IntervalCarga->format("%Y-%M-%D %H:%I:%S");
+
 	sqlsrv_close( $conn );
 }
 /**************REPORTE 2 Historico de Articulos***********/
