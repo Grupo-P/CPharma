@@ -102,11 +102,11 @@ function QueryDiasProveedores(){
  */
 function ReporteDiasProveedores(){
 	$conn = conectarDB();
-	$tempId=0;
-	$FechaActual = date('Y-m-d');
-
 	$sql = QueryDiasProveedores();
 	$result = sqlsrv_query($conn,$sql);
+
+	$IdTemp=0;
+	$FechaActual = date('Y-m-d');
 
 	echo '
 	<div class="input-group md-form form-sm form-1 pl-0">
@@ -129,9 +129,8 @@ function ReporteDiasProveedores(){
 	';
 
 	while( $row = sqlsrv_fetch_array( $result, SQLSRV_FETCH_ASSOC) ) {
-		if($tempId == 0){
+		if($IdTemp == 0){
 			echo '<tr>';
-			//echo '<th>'.$row['Id'].'</th>';	
 			echo '<td>'.$row['Nombre'].'</td>';
 			echo '<td align="center">'.date('Y-m-d',strtotime($row['FechaRegistro'])).'</td>';
 
@@ -143,11 +142,10 @@ function ReporteDiasProveedores(){
 
 			echo '<td align="center">'.$DifFecha->format('%a').'</td>';
 			echo '</tr>';
-			$tempId = $row['Id'];
+			$IdTemp = $row['Id'];
 		}
-		if ($tempId != $row['Id']){
-			echo '<tr>';
-			//echo '<th>'.$row['Id'].'</th>';	
+		if ($IdTemp != $row['Id']){
+			echo '<tr>';	
 			echo '<td>'.$row['Nombre'].'</td>';
 			echo '<td align="center">'.date('Y-m-d',strtotime($row['FechaRegistro'])).'</td>';
 
@@ -159,7 +157,7 @@ function ReporteDiasProveedores(){
 
 			echo '<td align="center">'.$DifFecha->format('%a').'</td>';
 			echo '</tr>';
-			$tempId = $row['Id'];
+			$IdTemp = $row['Id'];
 		}
   	}
   	echo '
@@ -1116,7 +1114,7 @@ function QueryArticulosDescLike($VarLike){
 		InvArticulo
 		WHERE 
 		InvArticulo.Descripcion LIKE '%$VarLike%'
-		order by InvArticulo.CodigoArticulo desc";
+		order by InvArticulo.Descripcion ASC";
 	return $sql;
 }
 
@@ -1164,4 +1162,88 @@ function TablaReportePedido($VarLike,$FInicial,$FFinal){
 
 	sqlsrv_close( $conn );
 }
+/** Reporte pedido */
+/*
+IF OBJECT_ID ('TablaRango', 'U') IS NOT NULL
+    DROP TABLE TablaRango;
+IF OBJECT_ID ('TablaTemp', 'U') IS NOT NULL
+    DROP TABLE TablaTemp;
+IF OBJECT_ID ('TablaTemp1', 'U') IS NOT NULL
+    DROP TABLE TablaTemp1;
+IF OBJECT_ID ('TablaTemp2', 'U') IS NOT NULL
+    DROP TABLE TablaTemp2;
+IF OBJECT_ID ('TablaTemp3', 'U') IS NOT NULL
+    DROP TABLE TablaTemp3;
+IF OBJECT_ID ('TablaTemp4', 'U') IS NOT NULL
+    DROP TABLE TablaTemp4;
+
+SELECT
+DATEDIFF(day,'2018-12-01','2018-12-31') As RangoDias
+INTO TablaRango
+
+SELECT 
+InvArticulo.Id,
+InvArticulo.CodigoArticulo,
+InvArticulo.Descripcion
+INTO TablaTemp
+FROM
+InvArticulo
+WHERE 
+InvArticulo.Descripcion LIKE '%torondoy%'
+--InvArticulo.CodigoArticulo = '90300'
+ORDER by InvArticulo.Descripcion ASC
+
+SELECT
+TablaTemp.Id,
+TablaTemp.CodigoArticulo,
+TablaTemp.Descripcion,
+SUM(InvLoteAlmacen.Existencia) AS Existencia
+INTO TablaTemp1
+FROM InvLoteAlmacen
+RIGHT JOIN TablaTemp ON TablaTemp.Id = InvLoteAlmacen.InvArticuloId
+WHERE (InvLoteAlmacen.InvAlmacenId = 1 or InvLoteAlmacen.InvAlmacenId = 2)
+GROUP BY TablaTemp.Id,TablaTemp.CodigoArticulo,TablaTemp.Descripcion
+
+SELECT
+TablaTemp.Id,
+TablaTemp.CodigoArticulo,
+TablaTemp.Descripcion,
+TablaTemp1.Existencia
+INTO TablaTemp2
+FROM TablaTemp
+LEFT JOIN TablaTemp1 ON TablaTemp1.Id = TablaTemp.Id
+
+SELECT
+TablaTemp2.Id,
+TablaTemp2.CodigoArticulo,
+TablaTemp2.Descripcion,
+COUNT(*) AS VecesVendida,
+SUM(VenFacturaDetalle.Cantidad) AS UnidadesVendidas
+INTO TablaTemp3
+FROM VenFacturaDetalle
+INNER JOIN TablaTemp2 ON TablaTemp2.Id = VenFacturaDetalle.InvArticuloId
+INNER JOIN VenFactura ON VenFactura.Id = VenFacturaDetalle.VenFacturaId
+WHERE (VenFactura.FechaDocumento > '2018-12-01' AND VenFactura.FechaDocumento < '2018-12-31')
+GROUP BY TablaTemp2.Id,TablaTemp2.CodigoArticulo,TablaTemp2.Descripcion
+ORDER BY UnidadesVendidas DESC
+
+SELECT
+TablaTemp2.Id,
+TablaTemp2.CodigoArticulo,
+TablaTemp2.Descripcion,
+TablaTemp2.Existencia,
+TablaTemp3.VecesVendida,
+TablaTemp3.UnidadesVendidas
+INTO TablaTemp4
+FROM TablaTemp2
+LEFT JOIN TablaTemp3 ON TablaTemp3.Id = TablaTemp2.Id
+
+
+
+
+SELECT * FROM TablaRango
+SELECT * FROM TablaTemp2
+SELECT * FROM TablaTemp3
+SELECT * FROM TablaTemp4
+ */
 ?>
