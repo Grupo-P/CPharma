@@ -1,4 +1,5 @@
 <?php
+/*OPTIMIZADO*/
 /*
 	Nombre: conectarXampp
 	Funcion: Establecer la conexion con la base de datos cpharma
@@ -8,6 +9,7 @@ function conectarXampp(){
 	mysqli_select_db($conexion,nameCP);
     return $conexion;
 }
+/*OPTIMIZADO*/
 /*
 	Nombre: conectarDB
 	Funcion: Establecer la conexion con la base de datos smartpharma
@@ -21,9 +23,10 @@ function conectarDB(){
 	$conn = sqlsrv_connect( serverDB, $connectionInfo);
 	return $conn;
 }
+/*OPTIMIZADO*/
 /*
 	Nombre: ConsultaDB
-	Funcion: Consulta en la base de datos y regresa un Json
+	Funcion: Consulta en la base de datos smartpharma y regresa un Json
  */
 function ConsultaDB ( $sql ){
 	$conn = conectarDB(); 
@@ -52,6 +55,7 @@ function ConsultaDB ( $sql ){
 		die( print_r( sqlsrv_errors(), true));
 	}	
 }
+/*OPTIMIZADO*/
 /*
 	Nombre: array_flatten_recursive
 	Funcion: Decodifica el arreglo a UTF8
@@ -69,9 +73,10 @@ function array_flatten_recursive($array) {
    }
    return $flat;
 }
+/*OPTIMIZADO*/
 /*
 	Nombre: armarJson
-	Funcion: recibe un sql y regrsa el array JsonAramado
+	Funcion: recibe un sql, lo consulta en smartpharma y regrsa un array Json Aramado
  */
 function armarJson($sql){
 	$result = ConsultaDB ($sql);
@@ -79,12 +84,13 @@ function armarJson($sql){
     return json_encode($arrayJson);
 }
 /************REPORTE 1 Activacion de proveedores***********/
+/*OPTIMIZADO*/
 /*
 	Nombre: QueryDiasProveedores
 	Reporte1: Dias de Activacion de Proveedores
 	Funcion: Query que retorna todos los proveedores y las fechas de sus despachos
  */
-function QueryDiasProveedores(){
+function QueryActivacionProveedores(){
 	$sql = "SELECT 
 		ComProveedor.Id, 
 		GenPersona.Nombre, 
@@ -95,16 +101,17 @@ function QueryDiasProveedores(){
 		ORDER BY ComProveedor.Id,ComFactura.FechaRegistro DESC";
 	return $sql;
 }
+/*OPTIMIZADO*/
 /*
 	Nombre: ReporteDiasProveedores
 	Reporte1: Dias de Activacion de Proveedores
 	Funcion: Armado del Reporte1
  */
-function ReporteDiasProveedores(){
+function ReporteActivacionProveedores(){
 	$InicioCarga = new DateTime("now");
 
 	$conn = conectarDB();
-	$sql = QueryDiasProveedores();
+	$sql = QueryActivacionProveedores();
 	$result = sqlsrv_query($conn,$sql);
 
 	$IdTemp=0;
