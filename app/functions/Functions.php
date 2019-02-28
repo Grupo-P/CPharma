@@ -181,6 +181,7 @@ function ReporteActivacionProveedores(){
 	sqlsrv_close( $conn );
 }
 /**************REPORTE 2 Historico de Articulos***********/
+/*OPTIMIZADO*/
 /*
 	Nombre: QueryArticulosDescId
 	Funcion: Query que devuelve todos los articulos de la base de datos
@@ -192,6 +193,7 @@ function QueryArticulosDescId(){
 		FROM InvArticulo";
 	return $sql;
 }
+/*OPTIMIZADO*/
 /*
 	Nombre: QueryTasa
 	Funcion: Devuelve el valor de la tasa segun la fecha especificada
@@ -1179,8 +1181,6 @@ function TablaReportePedido($VarLike,$FInicial,$FFinal){
 }
 /** Reporte pedido */
 /*
-IF OBJECT_ID ('TablaRango', 'U') IS NOT NULL
-    DROP TABLE TablaRango;
 IF OBJECT_ID ('TablaTemp', 'U') IS NOT NULL
     DROP TABLE TablaTemp;
 IF OBJECT_ID ('TablaTemp1', 'U') IS NOT NULL
@@ -1189,76 +1189,106 @@ IF OBJECT_ID ('TablaTemp2', 'U') IS NOT NULL
     DROP TABLE TablaTemp2;
 IF OBJECT_ID ('TablaTemp3', 'U') IS NOT NULL
     DROP TABLE TablaTemp3;
-IF OBJECT_ID ('TablaTemp4', 'U') IS NOT NULL
-    DROP TABLE TablaTemp4;
 
+--Datos Basicos del Producto
 SELECT
-DATEDIFF(day,'2018-12-01','2018-12-31') As RangoDias
-INTO TablaRango
-
-SELECT 
-InvArticulo.Id,
+InvArticulo.Id, 
 InvArticulo.CodigoArticulo,
-InvArticulo.Descripcion
+InvArticulo.Descripcion,
+InvArticulo.FinConceptoImptoIdCompra AS ConceptoImpuesto
 INTO TablaTemp
-FROM
-InvArticulo
-WHERE 
-InvArticulo.Descripcion LIKE '%torondoy%'
---InvArticulo.CodigoArticulo = '90300'
-ORDER by InvArticulo.Descripcion ASC
+FROM InvArticulo
+WHERE InvArticulo.Id = '25531'
 
+SELECT * FROM TablaTemp
+
+--Buequeda de Exitencia en Inventario
 SELECT
-TablaTemp.Id,
+TablaTemp.Id, 
 TablaTemp.CodigoArticulo,
 TablaTemp.Descripcion,
-SUM(InvLoteAlmacen.Existencia) AS Existencia
-INTO TablaTemp1
+TablaTemp.ConceptoImpuesto,
+SUM (InvLoteAlmacen.Existencia) As Existencia
 FROM InvLoteAlmacen
-RIGHT JOIN TablaTemp ON TablaTemp.Id = InvLoteAlmacen.InvArticuloId
+RIGHT JOIN TablaTemp ON  TablaTemp.Id =InvLoteAlmacen.InvArticuloId
 WHERE (InvLoteAlmacen.InvAlmacenId = 1 or InvLoteAlmacen.InvAlmacenId = 2)
-GROUP BY TablaTemp.Id,TablaTemp.CodigoArticulo,TablaTemp.Descripcion
+GROUP BY TablaTemp.Id, TablaTemp.CodigoArticulo,TablaTemp.Descripcion,TablaTemp.ConceptoImpuesto
+ */
+
+/*
+IF OBJECT_ID ('TablaTemp', 'U') IS NOT NULL
+    DROP TABLE TablaTemp;
+IF OBJECT_ID ('TablaTemp1', 'U') IS NOT NULL
+    DROP TABLE TablaTemp1;
+IF OBJECT_ID ('TablaTemp2', 'U') IS NOT NULL
+    DROP TABLE TablaTemp2;
+IF OBJECT_ID ('TablaTemp3', 'U') IS NOT NULL
+    DROP TABLE TablaTemp3;
+
+--Datos Basicos del Producto
+SELECT
+InvArticulo.Id, 
+InvArticulo.CodigoArticulo,
+InvArticulo.Descripcion,
+InvArticulo.FinConceptoImptoIdCompra AS ConceptoImpuesto
+FROM InvArticulo
+WHERE InvArticulo.Id = '2597'
+
+--Buequeda de Exitencia en Inventario
+SELECT
+InvArticulo.Id, 
+InvArticulo.CodigoArticulo,
+InvArticulo.Descripcion,
+InvArticulo.FinConceptoImptoIdCompra AS ConceptoImpuesto,
+SUM (InvLoteAlmacen.Existencia) As Existencia
+INTO TablaTemp
+FROM InvArticulo
+INNER JOIN InvLoteAlmacen ON InvLoteAlmacen.InvArticuloId = InvArticulo.Id
+WHERE (InvLoteAlmacen.InvAlmacenId = 1 or InvLoteAlmacen.InvAlmacenId = 2)
+AND InvArticulo.Id = '2597'
+GROUP BY InvArticulo.Id, InvArticulo.CodigoArticulo,InvArticulo.Descripcion,InvArticulo.FinConceptoImptoIdCompra
+
+SELECT * FROM TablaTemp
+
+--Inicio del calculo del precio
+--Caso precio troquelado
+SELECT
+InvLoteAlmacen.InvLoteId
+INTO TablaTemp1
+FROM InvLoteAlmacen 
+WHERE (InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2) 
+AND (InvLoteAlmacen.InvArticuloId = '2597')
+AND (InvLoteAlmacen.Existencia>0)
+
+SELECT * FROM TablaTemp1
 
 SELECT
-TablaTemp.Id,
-TablaTemp.CodigoArticulo,
-TablaTemp.Descripcion,
-TablaTemp1.Existencia
+InvLote.Id,
+invlote.M_PrecioCompraBruto,
+invlote.M_PrecioTroquelado
 INTO TablaTemp2
-FROM TablaTemp
-LEFT JOIN TablaTemp1 ON TablaTemp1.Id = TablaTemp.Id
+FROM InvLote
+inner join TablaTemp1 ON TablaTemp1.InvLoteId = InvLote.Id
+ORDER BY invlote.M_PrecioTroquelado, invlote.M_PrecioCompraBruto DESC
 
-SELECT
-TablaTemp2.Id,
-TablaTemp2.CodigoArticulo,
-TablaTemp2.Descripcion,
-COUNT(*) AS VecesVendida,
-SUM(VenFacturaDetalle.Cantidad) AS UnidadesVendidas
-INTO TablaTemp3
-FROM VenFacturaDetalle
-INNER JOIN TablaTemp2 ON TablaTemp2.Id = VenFacturaDetalle.InvArticuloId
-INNER JOIN VenFactura ON VenFactura.Id = VenFacturaDetalle.VenFacturaId
-WHERE (VenFactura.FechaDocumento > '2018-12-01' AND VenFactura.FechaDocumento < '2018-12-31')
-GROUP BY TablaTemp2.Id,TablaTemp2.CodigoArticulo,TablaTemp2.Descripcion
-ORDER BY UnidadesVendidas DESC
-
-SELECT
-TablaTemp2.Id,
-TablaTemp2.CodigoArticulo,
-TablaTemp2.Descripcion,
-TablaTemp2.Existencia,
-TablaTemp3.VecesVendida,
-TablaTemp3.UnidadesVendidas
-INTO TablaTemp4
-FROM TablaTemp2
-LEFT JOIN TablaTemp3 ON TablaTemp3.Id = TablaTemp2.Id
-
-
-
-
-SELECT * FROM TablaRango
 SELECT * FROM TablaTemp2
+
+SELECT TOP 1
+TablaTemp2.Id,
+TablaTemp2.M_PrecioCompraBruto,
+TablaTemp2.M_PrecioTroquelado 
+FROM TablaTemp2
+
+
+SELECT  TOP 1
+InvLote.Id,
+invlote.M_PrecioCompraBruto,
+invlote.M_PrecioTroquelado
+INTO TablaTemp3
+FROM InvLote
+inner join TablaTemp1 ON TablaTemp1.InvLoteId = InvLote.Id
+ORDER BY invlote.M_PrecioTroquelado, invlote.M_PrecioCompraBruto DESC
+
 SELECT * FROM TablaTemp3
-SELECT * FROM TablaTemp4
  */
 ?>
