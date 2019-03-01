@@ -19,21 +19,34 @@
 	
 	if (isset($_GET['Id'])  )
 	{
-  	TableHistoricoArticulos($_GET['Id']);
+    $InicioCarga = new DateTime("now");
+
+  	//TableHistoricoArticulos($_GET['Id']);
+    ReporteHistoricoArticulo($_GET['Id']);
+
+    $FinCarga = new DateTime("now");
+    $IntervalCarga = $InicioCarga->diff($FinCarga);
+    echo'Tiempo de carga: '.$IntervalCarga->format("%Y-%M-%D %H:%I:%S");
 	} 
 	else{
+    $InicioCarga = new DateTime("now");
+
     $sql = QueryArticulosDescId();
     $ArtJson = armarJson($sql);
 
 		echo '
 		<form autocomplete="off" action="">
-		    <div class="autocomplete" style="width:90%;">
-		      <input id="myInput" type="text" name="Descrip" placeholder="Ingrese el nombre del articulo " onkeyup="conteo()" required>
-		      <input id="myId" name="Id" type="hidden">
-		    </div>
-		    <input type="submit" value="Buscar" class="btn btn-outline-success">
-	  	</form>
-	  	';
+	    <div class="autocomplete" style="width:90%;">
+	      <input id="myInput" type="text" name="Descrip" placeholder="Ingrese el nombre del articulo " onkeyup="conteo()" required>
+	      <input id="myId" name="Id" type="hidden">
+	    </div>
+	    <input type="submit" value="Buscar" class="btn btn-outline-success">
+  	</form>
+  	';
+
+    $FinCarga = new DateTime("now");
+    $IntervalCarga = $InicioCarga->diff($FinCarga);
+    echo'Tiempo de carga: '.$IntervalCarga->format("%Y-%M-%D %H:%I:%S");
 	} 
 ?>
 @endsection

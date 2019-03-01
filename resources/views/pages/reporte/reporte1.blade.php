@@ -11,10 +11,17 @@
 	</h1>
 	<hr class="row align-items-start col-12">
 
-  <?php	
+<?php	
 	include(app_path().'\functions\config.php');
 	include(app_path().'\functions\Functions.php');
+
+	$InicioCarga = new DateTime("now");
+
 	ReporteActivacionProveedores();
+	
+	$FinCarga = new DateTime("now");
+    $IntervalCarga = $InicioCarga->diff($FinCarga);
+    echo'Tiempo de carga: '.$IntervalCarga->format("%Y-%M-%D %H:%I:%S");
 ?>
 @endsection
 
