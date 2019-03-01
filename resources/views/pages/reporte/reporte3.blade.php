@@ -19,7 +19,7 @@
 	{
     $InicioCarga = new DateTime("now");
 
-  	TableArticulosMasVendidos($_GET['top'],$_GET['fechaInicio'],$_GET['fechaFin']);
+    ReporteArticulosMasVendidos($_GET['top'],$_GET['fechaInicio'],$_GET['fechaFin']);
 
     $FinCarga = new DateTime("now");
     $IntervalCarga = $InicioCarga->diff($FinCarga);
