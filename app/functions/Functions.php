@@ -103,8 +103,8 @@ function ReporteActivacionProveedores(){
 	  	<thead class="thead-dark">
 		    <tr>
 		      	<th scope="col">Proveedor</th>		      	
-		      	<th scope="col">Ultima facturacion</th>
-		      	<th scope="col">Dias sin recibir facturas</th>
+		      	<th scope="col">Fecha de ultima factura</th>
+		      	<th scope="col">Dias sin recibir factura</th>
 		    </tr>
 	  	</thead>
 	  	<tbody>
