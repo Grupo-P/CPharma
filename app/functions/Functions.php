@@ -166,67 +166,150 @@ function QueryTasa($QFecha){
 	$resultado = mysqli_query($conCP,$consulta);
 	return $resultado;
 }
-/*
-	Nombre: QueryHistoricoArticulos
-	Funcion: Query que devuelve el historico del articulo seleccionado
- */
-function QueryHistoricoArticulos($IdArticuloQ){
-
-	$sql = "SELECT
-		GenPersona.Nombre,
-		ComFactura.FechaRegistro,
-		ComFacturaDetalle.M_PrecioCompraBruto,
-		ComFacturaDetalle.CantidadRecibidaFactura
-		FROM InvArticulo
-		inner join ComFacturaDetalle ON InvArticulo.Id = ComFacturaDetalle.InvArticuloId
-		inner join ComFactura ON ComFactura.Id = ComFacturaDetalle.ComFacturaId
-		inner join ComProveedor ON ComProveedor.Id = ComFactura.ComProveedorId
-		inner join GenPersona ON GenPersona.Id = ComProveedor.GenPersonaId
-		WHERE InvArticulo.Id = '$IdArticuloQ'
-		ORDER BY ComFactura.FechaRegistro DESC";
-	return $sql;
-}
-/*
-	Nombre: TableHistoricoArticulos
-	Funcion: Arma el historico del articulo selecionado
- */
-function TableHistoricoArticulos($IdArticuloQ){
+/*OPTIMIZADO*/
+//REPORTE HISTORICO DE ARTICULO
+function ReporteHistoricoArticulo($IdArticuloQ){
 	$conn = conectarDB();
-	$sql = QueryHistoricoArticulos($IdArticuloQ);
-	$result = sqlsrv_query($conn,$sql);
 
-	$sql1="
+	$sql="
 	IF OBJECT_ID ('TablaTemp', 'U') IS NOT NULL
-    	DROP TABLE TablaTemp;
+	    DROP TABLE TablaTemp;
+	IF OBJECT_ID ('TablaTemp1', 'U') IS NOT NULL
+	    DROP TABLE TablaTemp1;
+	IF OBJECT_ID ('TablaTemp2', 'U') IS NOT NULL
+	    DROP TABLE TablaTemp2;
+	IF OBJECT_ID ('TablaTemp3', 'U') IS NOT NULL
+	    DROP TABLE TablaTemp3;
+	IF OBJECT_ID ('TablaTemp4', 'U') IS NOT NULL
+	    DROP TABLE TablaTemp4;
+	IF OBJECT_ID ('TablaTemp5', 'U') IS NOT NULL
+	    DROP TABLE TablaTemp5;
+	IF OBJECT_ID ('TablaTemp6', 'U') IS NOT NULL
+	    DROP TABLE TablaTemp6;
+	IF OBJECT_ID ('TablaTemp7', 'U') IS NOT NULL
+		DROP TABLE TablaTemp7;
+	IF OBJECT_ID ('TablaTemp8', 'U') IS NOT NULL
+		DROP TABLE TablaTemp8;
 	";
 
-	$sql2="
+	//DATOS DEL PRODUCTO
+	$sql1="
 	SELECT
 	InvArticulo.Id, 
 	InvArticulo.CodigoArticulo,
 	InvArticulo.Descripcion,
-	InvArticulo.FinConceptoImptoIdCompra
+	InvArticulo.FinConceptoImptoIdCompra AS ConceptoImpuesto
 	INTO TablaTemp
 	FROM InvArticulo
-	where InvArticulo.Id = '$IdArticuloQ'
+	WHERE InvArticulo.Id = '$IdArticuloQ'
 	";
 
+	$sql2="SELECT * FROM TablaTemp";
+
+	//BUSQUEDA DE EXISTENCIA
 	$sql3="
 	SELECT
-	TablaTemp.Id, 
-	TablaTemp.CodigoArticulo,
-	TablaTemp.Descripcion,
-	TablaTemp.FinConceptoImptoIdCompra,
 	SUM (InvLoteAlmacen.Existencia) As Existencia
-	FROM TablaTemp
-	INNER JOIN InvLoteAlmacen ON InvLoteAlmacen.InvArticuloId = TablaTemp.Id
-	WHERE (InvLoteAlmacen.InvAlmacenId = 1 or InvLoteAlmacen.InvAlmacenId = 2)
-	GROUP BY TablaTemp.Id, TablaTemp.CodigoArticulo,TablaTemp.Descripcion,TablaTemp.FinConceptoImptoIdCompra
+	INTO TablaTemp1
+	FROM InvLoteAlmacen
+	INNER JOIN TablaTemp ON  TablaTemp.Id =InvLoteAlmacen.InvArticuloId
+	WHERE (InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
+	GROUP BY TablaTemp.Id, TablaTemp.CodigoArticulo,TablaTemp.Descripcion,TablaTemp.ConceptoImpuesto
 	";
+
+	$sql4="SELECT * FROM TablaTemp1";
+
+	//CASO PRECIO TROQUELADO INICIO
+	$sql5="
+	SELECT
+	InvLoteAlmacen.InvLoteId
+	into TablaTemp2
+	FROM InvLoteAlmacen 
+	WHERE (InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2) 
+	AND (InvLoteAlmacen.InvArticuloId = '$IdArticuloQ')
+	AND (InvLoteAlmacen.Existencia>0)
+	";
+
+	$sql6="
+	SELECT
+	InvLote.Id,
+	invlote.M_PrecioCompraBruto,
+	invlote.M_PrecioTroquelado
+	INTO TablaTemp3
+	FROM InvLote
+	INNER JOIN TablaTemp2 ON TablaTemp2.InvLoteId = InvLote.Id
+	ORDER BY invlote.M_PrecioTroquelado, invlote.M_PrecioCompraBruto DESC
+	";
+
+	$sql7="
+	SELECT TOP 1
+	TablaTemp3.M_PrecioTroquelado
+	INTO TablaTemp4
+	FROM TablaTemp3
+	";
+
+	$sql8="SELECT * FROM TablaTemp4";
+	//FIN PRECIO TROQUELADO
 	
+	//CASO PRECIOS CALCULADO INICIO
+	$sql9="
+	SELECT
+	InvLoteAlmacen.InvLoteId
+	INTO TablaTemp5
+	FROM InvLoteAlmacen 
+	WHERE(InvLoteAlmacen.InvArticuloId = '$IdArticuloQ')
+	AND (InvLoteAlmacen.Existencia>0)
+	";
+
+	$sql10="
+	SELECT
+	InvLote.Id,
+	invlote.M_PrecioCompraBruto,
+	invlote.M_PrecioTroquelado
+	INTO TablaTemp6
+	from InvLote
+	INNER JOIN TablaTemp5 ON TablaTemp5.InvLoteId = InvLote.Id
+	ORDER BY invlote.M_PrecioTroquelado, invlote.M_PrecioCompraBruto DESC
+	";
+
+	$sql11="
+	SELECT TOP 1
+	TablaTemp6.M_PrecioCompraBruto
+	INTO TablaTemp7 
+	FROM TablaTemp6
+	";
+
+	$sql12="SELECT * FROM TablaTemp7";
+	//FIN PRECIO CALCULADO
+
+	//INCIO CUERPO TABLA
+	$sql13="
+	SELECT
+	GenPersona.Nombre,
+	CONVERT(date,ComFactura.FechaRegistro) As FechaRegistro,
+	ComFacturaDetalle.CantidadRecibidaFactura,
+	ComFacturaDetalle.M_PrecioCompraBruto
+	INTO TablaTemp8
+	FROM InvArticulo
+	inner join ComFacturaDetalle ON InvArticulo.Id = ComFacturaDetalle.InvArticuloId
+	inner join ComFactura ON ComFactura.Id = ComFacturaDetalle.ComFacturaId
+	inner join ComProveedor ON ComProveedor.Id = ComFactura.ComProveedorId
+	inner join GenPersona ON GenPersona.Id = ComProveedor.GenPersonaId
+	WHERE InvArticulo.Id = '$IdArticuloQ'
+	ORDER BY ComFactura.FechaRegistro DESC
+	";
+
+	$sql14="SELECT * FROM TablaTemp8";
+	//FIN CUERPO TABLA
+
+
+	sqlsrv_query($conn,$sql);
 	sqlsrv_query($conn,$sql1);
-	sqlsrv_query($conn,$sql2);
-	$result1 = sqlsrv_query($conn,$sql3);
+	//Datos de producto
+	$resultDP = sqlsrv_query($conn,$sql2);
+	sqlsrv_query($conn,$sql3);
+	//Existencia
+	$result1E = sqlsrv_query($conn,$sql4);
 
 	echo '
 	<div class="input-group md-form form-sm form-1 pl-0">
@@ -245,131 +328,87 @@ function TableHistoricoArticulos($IdArticuloQ){
 		      	<th scope="col">Descripcion</td>
 		      	<th scope="col">Existencia</td>
 		      	<th scope="col">Precio</td>
-		      	<th scope="col">Tasa Actual</td>
-		      	<th scope="col">Costo Divisa</td>
+		      	<th scope="col">Tasa actual</td>
+		      	<th scope="col">Costo en divisa</td>
 		    </tr>
 	  	</thead>
 	  	<tbody>
-	  		';
-		while( $row1 = sqlsrv_fetch_array( $result1, SQLSRV_FETCH_ASSOC)) {
-
+  	';
+	//INICIO ARMADO DE ENCABEZADO
+ 	while( $rowDP = sqlsrv_fetch_array( $resultDP, SQLSRV_FETCH_ASSOC)) {
+ 	//DATOS
 		echo '<tr>';
-		$IdQPT = $row1["Id"];
-		$ConcepIVA = $row1["FinConceptoImptoIdCompra"];
-		echo '<td align="left">'.$row1["CodigoArticulo"].'</td>';
-		echo '<td align="left">'.$row1["Descripcion"].'</td>';
-		echo '<td align="center">'.intval($row1["Existencia"]).'</td>';
-/*Inicio de calculos de precios*/
-/*QPT: Query Precio Troquelado*/
-/*QPB: Query Precio Bruto*/
-	$QPT = "
-	IF OBJECT_ID ('TablaTemp', 'U') IS NOT NULL
-    	DROP TABLE TablaTemp;
-	IF OBJECT_ID ('TablaTemp1', 'U') IS NOT NULL
-    	DROP TABLE TablaTemp1;
-	";
-	$QPT1 = "SELECT
-	InvLoteAlmacen.InvLoteId
-	into TablaTemp
-	FROM InvLoteAlmacen 
-	WHERE (InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2) 
-	AND (InvLoteAlmacen.InvArticuloId = '$IdQPT')
-	AND (InvLoteAlmacen.Existencia>0)
-	";
-	$QPT2 = "SELECT
-	InvLote.Id,
-	invlote.M_PrecioCompraBruto,
-	invlote.M_PrecioTroquelado
-	into TablaTemp1
-	from InvLote
-	inner join TablaTemp on TablaTemp.InvLoteId = InvLote.Id
-	order by invlote.M_PrecioTroquelado, invlote.M_PrecioCompraBruto desc
-	";
-	$QPT3 = "SELECT top 1
-	TablaTemp1.Id,
-	TablaTemp1.M_PrecioCompraBruto,
-	TablaTemp1.M_PrecioTroquelado 
-	from TablaTemp1
-	";
-
-	sqlsrv_query($conn,$QPT);
-	sqlsrv_query($conn,$QPT1);
-	sqlsrv_query($conn,$QPT2);
-	$resultAQPT = sqlsrv_query($conn,$QPT3);
-	$FlagPrecio = 0;
-
-	while( $rowQPT = sqlsrv_fetch_array( $resultAQPT, SQLSRV_FETCH_ASSOC)){
-		$FlagPrecio = $rowQPT['M_PrecioTroquelado'];
-	}
-
-	if($FlagPrecio){
-		echo '<td align="center">'.SigVe." ".round($FlagPrecio,2).'</td>';
-	}
-	else{
-		$QPB="
-		IF OBJECT_ID ('TablaTemp', 'U') IS NOT NULL
-    	DROP TABLE TablaTemp;
-		IF OBJECT_ID ('TablaTemp1', 'U') IS NOT NULL
-    	DROP TABLE TablaTemp1;
-		";
-		$QPB1="SELECT *
-		into TablaTemp
-		from InvLoteAlmacen 
-		where(InvLoteAlmacen.InvArticuloId = '$IdQPT')
-		and (InvLoteAlmacen.Existencia>0)
-		";
-		$QPB2="SELECT
-		InvLote.Id,
-		invlote.M_PrecioCompraBruto,
-		invlote.M_PrecioTroquelado
-		into TablaTemp1
-		from InvLote
-		inner join TablaTemp on TablaTemp.InvLoteId = InvLote.Id
-		order by invlote.M_PrecioTroquelado, invlote.M_PrecioCompraBruto desc
-		";
-		$QPB3="SELECT top 1
-		TablaTemp1.Id,
-		TablaTemp1.M_PrecioCompraBruto,
-		TablaTemp1.M_PrecioTroquelado 
-		from TablaTemp1
-		";
-
-		sqlsrv_query($conn,$QPB);
-		sqlsrv_query($conn,$QPB1);
-		sqlsrv_query($conn,$QPB2);
-		$resultAQPB = sqlsrv_query($conn,$QPB3);
-		$FlagPrecio = 0;
-
-		while( $rowQPB = sqlsrv_fetch_array( $resultAQPB, SQLSRV_FETCH_ASSOC)){
-			$FlagPrecio = $rowQPB['M_PrecioCompraBruto'];
-		}
-
-		if($ConcepIVA==1){
-			$FlagPrecio = ($FlagPrecio/Utilidad)*Impuesto;
-			echo '<td align="center">'.SigVe." ".round($FlagPrecio,2).'</td>';
+		echo '<td>'.$rowDP["CodigoArticulo"].'</td>';	
+		echo '<td>'.$rowDP["Descripcion"].'</td>';
+		$ConceptoImpuesto = $rowDP["ConceptoImpuesto"];
+	//EXISTENCIA
+		$rowE = sqlsrv_fetch_array( $result1E, SQLSRV_FETCH_ASSOC);
+		if($rowE){
+			echo '<td align="center">'.intval($rowE["Existencia"]).'</td>';
 		}
 		else{
-			$FlagPrecio = ($FlagPrecio/Utilidad);
-			echo '<td align="center">'.SigVe." ".round($FlagPrecio,2).'</td>';
+			echo '<td align="center">'.intval('0').'</td>';
+		}			
+	//INICIO PRECIO
+		sqlsrv_query($conn,$sql5);
+		sqlsrv_query($conn,$sql6);
+		sqlsrv_query($conn,$sql7);
+	//PRECIO TROQUELADO
+		$resultPT = sqlsrv_query($conn,$sql8);
+		$rowPT = sqlsrv_fetch_array( $resultPT, SQLSRV_FETCH_ASSOC);
+		$Precio = $rowPT["M_PrecioTroquelado"];
+
+		if($Precio){
+			echo '<td align="center">'.SigVe." ".round($Precio,2).'</td>';
 		}
-	}
-/*Fin de calculos de precios*/
-			$resultTasaG = QueryTasa(date('Y-m-d'));
-			$flaG = 0;
-			
-			while( $rowTasaG = mysqli_fetch_assoc($resultTasaG)) {
-				$flaG=$rowTasaG['tasa'];
-			}
-			if($flaG!=0){
-				echo '<td align="center">'.SigDolar." ".$flaG.'</td>';
-				echo '<td align="center">'.SigDolar." ".round(($FlagPrecio/$flaG),2).'</td>';
+		else{
+			sqlsrv_query($conn,$sql9);
+			sqlsrv_query($conn,$sql10);
+			sqlsrv_query($conn,$sql11);
+	//PRECIO CALCULADO
+			$resultPC = sqlsrv_query($conn,$sql12);
+			$rowPC = sqlsrv_fetch_array( $resultPC, SQLSRV_FETCH_ASSOC);
+			$Precio = $rowPC["M_PrecioCompraBruto"];
+
+			if($ConceptoImpuesto==1){
+				$Precio = ($Precio/Utilidad)*Impuesto;
+				echo '<td align="center">'.SigVe." ".round($Precio,2).'</td>';
 			}
 			else{
-				echo '<td align="center">'.SigDolar.' 0.00</td>';
-				echo '<td align="center">'.SigDolar.' 0.00</td>';
+				$Precio = ($Precio/Utilidad);
+				echo '<td align="center">'.SigVe." ".round($Precio,2).'</td>';
 			}
-  		}
-	  	echo'	
+		}
+	//FIN PRECIO
+	
+	//INICIO TASA ACTUAL Y COSTO DIVISA 
+		$resultTasa = QueryTasa(date('Y-m-d'));
+
+		$resultTasa = mysqli_fetch_assoc($resultTasa);
+		$Tasa=$resultTasa['tasa'];
+		
+		if($Tasa!=0){
+			echo '<td align="center">'.SigDolar." ".$Tasa.'</td>';
+			echo '<td align="center">'.SigDolar." ".round(($Precio/$Tasa),2).'</td>';
+		}
+		else{
+			echo '<td align="center">'.SigDolar.' 0.00</td>';
+			echo '<td align="center">'.SigDolar.' 0.00</td>';
+		}
+	//FIN TASA ACTUAL Y COSTO DIVISA 
+	//FIN ARMADO DE ENCABEZADO
+	//FIN TABLA
+			echo '</tr>';		
+  	}
+  	echo '
+  		</tbody>
+	</table>';
+	//INICIO ARMADO DE CUERPO
+	sqlsrv_query($conn,$sql13);
+	//CUERPO TABLA
+	$resultCT = sqlsrv_query($conn,$sql14);
+
+	echo'	
 	  	</tbody>	
 	</table>
 
@@ -377,17 +416,17 @@ function TableHistoricoArticulos($IdArticuloQ){
 	  	<thead class="thead-dark">
 		    <tr>
 		    	<th scope="col">Proveedor</th>
-		      	<th scope="col">Fecha de Registo</th>
-		      	<th scope="col">Cantidad Recibida</th>
-		      	<th scope="col">Costo Bruto</th>		 
-		      	<th scope="col">Tasa</th>
-				<th scope="col">Costo Divisa</th>
+		      	<th scope="col">Fecha de registo</th>
+		      	<th scope="col">Cantidad recibida</th>
+		      	<th scope="col">Costo bruto</th>		 
+		      	<th scope="col">Tasa en historico</th>
+				<th scope="col">Costo en divisa</th>
 		    </tr>
 	  	</thead>
 	  	<tbody>
 	';
-	
-	while( $row = sqlsrv_fetch_array( $result, SQLSRV_FETCH_ASSOC)) {
+
+	while( $row = sqlsrv_fetch_array( $resultCT, SQLSRV_FETCH_ASSOC)) {
 			echo '<tr>';
 			echo '<td>'.$row["Nombre"].'</td>';	
 			echo '<td align="center">'.$row["FechaRegistro"]->format('Y-m-d').'</td>';
@@ -414,6 +453,7 @@ function TableHistoricoArticulos($IdArticuloQ){
   	echo '
   		</tbody>
 	</table>';
+	//FIN ARMADO DE CUERPO
 	sqlsrv_close( $conn );
 }
 /************REPORTE 3 Articulos mas vendidos***********/
@@ -1139,324 +1179,6 @@ function TablaReportePedido($VarLike,$FInicial,$FFinal){
   		</tbody>
 	</table>';
 
-	sqlsrv_close( $conn );
-}
-/**EN ESTE VAMOS BIEN
- IF OBJECT_ID ('TablaTemp', 'U') IS NOT NULL
-    DROP TABLE TablaTemp;
-IF OBJECT_ID ('TablaTemp1', 'U') IS NOT NULL
-    DROP TABLE TablaTemp1;
-IF OBJECT_ID ('TablaTemp2', 'U') IS NOT NULL
-    DROP TABLE TablaTemp2;
-IF OBJECT_ID ('TablaTemp3', 'U') IS NOT NULL
-    DROP TABLE TablaTemp3;
-IF OBJECT_ID ('TablaTemp4', 'U') IS NOT NULL
-    DROP TABLE TablaTemp4;
-IF OBJECT_ID ('TablaTemp5', 'U') IS NOT NULL
-    DROP TABLE TablaTemp5;
-IF OBJECT_ID ('TablaTemp6', 'U') IS NOT NULL
-    DROP TABLE TablaTemp6;
-IF OBJECT_ID ('TablaTemp7', 'U') IS NOT NULL
-	DROP TABLE TablaTemp7;
-IF OBJECT_ID ('TablaTemp8', 'U') IS NOT NULL
-	DROP TABLE TablaTemp8;
-		
---DATOS DEL PRODUCTO
-SELECT
-InvArticulo.Id, 
-InvArticulo.CodigoArticulo,
-InvArticulo.Descripcion,
-InvArticulo.FinConceptoImptoIdCompra AS ConceptoImpuesto
-INTO TablaTemp
-FROM InvArticulo
-WHERE InvArticulo.Id = '25531'
-
---BUSQUEDA DE EXISTENCIA
-SELECT
-SUM (InvLoteAlmacen.Existencia) As Existencia
-INTO TablaTemp1
-FROM InvLoteAlmacen
-INNER JOIN TablaTemp ON  TablaTemp.Id =InvLoteAlmacen.InvArticuloId
-WHERE (InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
-GROUP BY TablaTemp.Id, TablaTemp.CodigoArticulo,TablaTemp.Descripcion,TablaTemp.ConceptoImpuesto
-
---CASO PRECIO TROQUELADO INICIO
-SELECT
-InvLoteAlmacen.InvLoteId
-into TablaTemp2
-FROM InvLoteAlmacen 
-WHERE (InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2) 
-AND (InvLoteAlmacen.InvArticuloId = '25531')
-AND (InvLoteAlmacen.Existencia>0)
-
-SELECT
-InvLote.Id,
-invlote.M_PrecioCompraBruto,
-invlote.M_PrecioTroquelado
-INTO TablaTemp3
-FROM InvLote
-INNER JOIN TablaTemp2 ON TablaTemp2.InvLoteId = InvLote.Id
-ORDER BY invlote.M_PrecioTroquelado, invlote.M_PrecioCompraBruto DESC
-
-SELECT TOP 1
-TablaTemp3.Id,
-TablaTemp3.M_PrecioCompraBruto,
-TablaTemp3.M_PrecioTroquelado
-INTO TablaTemp4
-FROM TablaTemp3
--- FIN PRECIO TROQUELADO
-
---CASO PRECIOS CALCULADO INICIO
-SELECT
-InvLoteAlmacen.InvLoteId
-INTO TablaTemp5
-FROM InvLoteAlmacen 
-WHERE(InvLoteAlmacen.InvArticuloId = '25531')
-AND (InvLoteAlmacen.Existencia>0)
-
-SELECT
-InvLote.Id,
-invlote.M_PrecioCompraBruto,
-invlote.M_PrecioTroquelado
-INTO TablaTemp6
-from InvLote
-INNER JOIN TablaTemp5 ON TablaTemp5.InvLoteId = InvLote.Id
-ORDER BY invlote.M_PrecioTroquelado, invlote.M_PrecioCompraBruto DESC
-
-SELECT TOP 1
-TablaTemp6.Id,
-TablaTemp6.M_PrecioCompraBruto,
-TablaTemp6.M_PrecioTroquelado
-INTO TablaTemp7 
-FROM TablaTemp6
--- FIN PRECIO CALCULADO
-
---CUERPO DEL REPORTE INICIO
-SELECT
-GenPersona.Nombre,
-CONVERT(date,ComFactura.FechaRegistro) As FechaRegistro,
-ComFacturaDetalle.CantidadRecibidaFactura,
-ComFacturaDetalle.M_PrecioCompraBruto
-INTO TablaTemp8
-FROM InvArticulo
-inner join ComFacturaDetalle ON InvArticulo.Id = ComFacturaDetalle.InvArticuloId
-inner join ComFactura ON ComFactura.Id = ComFacturaDetalle.ComFacturaId
-inner join ComProveedor ON ComProveedor.Id = ComFactura.ComProveedorId
-inner join GenPersona ON GenPersona.Id = ComProveedor.GenPersonaId
-WHERE InvArticulo.Id = '25531'
-ORDER BY ComFactura.FechaRegistro DESC
--- FIN CUERPO REPORTE
-
---TABLAS
-SELECT * FROM TablaTemp
-SELECT * FROM TablaTemp1
-SELECT * FROM TablaTemp2
-SELECT * FROM TablaTemp3
-SELECT * FROM TablaTemp4
-SELECT * FROM TablaTemp5
-SELECT * FROM TablaTemp6
-SELECT * FROM TablaTemp7
-SELECT * FROM TablaTemp8
- */
-function ReporteHistoricoArticulo($IdArticuloQ){
-	$conn = conectarDB();
-
-	$sql="
-	IF OBJECT_ID ('TablaTemp', 'U') IS NOT NULL
-	    DROP TABLE TablaTemp;
-	IF OBJECT_ID ('TablaTemp1', 'U') IS NOT NULL
-	    DROP TABLE TablaTemp1;
-	IF OBJECT_ID ('TablaTemp2', 'U') IS NOT NULL
-	    DROP TABLE TablaTemp2;
-	IF OBJECT_ID ('TablaTemp3', 'U') IS NOT NULL
-	    DROP TABLE TablaTemp3;
-	IF OBJECT_ID ('TablaTemp4', 'U') IS NOT NULL
-	    DROP TABLE TablaTemp4;
-	IF OBJECT_ID ('TablaTemp5', 'U') IS NOT NULL
-	    DROP TABLE TablaTemp5;
-	IF OBJECT_ID ('TablaTemp6', 'U') IS NOT NULL
-	    DROP TABLE TablaTemp6;
-	IF OBJECT_ID ('TablaTemp7', 'U') IS NOT NULL
-		DROP TABLE TablaTemp7;
-	IF OBJECT_ID ('TablaTemp8', 'U') IS NOT NULL
-		DROP TABLE TablaTemp8;
-	";
-
-	//DATOS DEL PRODUCTO
-	$sql1="
-	SELECT
-	InvArticulo.Id, 
-	InvArticulo.CodigoArticulo,
-	InvArticulo.Descripcion,
-	InvArticulo.FinConceptoImptoIdCompra AS ConceptoImpuesto
-	INTO TablaTemp
-	FROM InvArticulo
-	WHERE InvArticulo.Id = '$IdArticuloQ'
-	";
-
-	$sql2="SELECT * FROM TablaTemp";
-
-	//BUSQUEDA DE EXISTENCIA
-	$sql3="
-	SELECT
-	SUM (InvLoteAlmacen.Existencia) As Existencia
-	INTO TablaTemp1
-	FROM InvLoteAlmacen
-	INNER JOIN TablaTemp ON  TablaTemp.Id =InvLoteAlmacen.InvArticuloId
-	WHERE (InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
-	GROUP BY TablaTemp.Id, TablaTemp.CodigoArticulo,TablaTemp.Descripcion,TablaTemp.ConceptoImpuesto
-	";
-
-	$sql4="SELECT * FROM TablaTemp1";
-
-	//CASO PRECIO TROQUELADO INICIO
-	$sql5="
-	SELECT
-	InvLoteAlmacen.InvLoteId
-	into TablaTemp2
-	FROM InvLoteAlmacen 
-	WHERE (InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2) 
-	AND (InvLoteAlmacen.InvArticuloId = '$IdArticuloQ')
-	AND (InvLoteAlmacen.Existencia>0)
-	";
-
-	$sql6="
-	SELECT
-	InvLote.Id,
-	invlote.M_PrecioCompraBruto,
-	invlote.M_PrecioTroquelado
-	INTO TablaTemp3
-	FROM InvLote
-	INNER JOIN TablaTemp2 ON TablaTemp2.InvLoteId = InvLote.Id
-	ORDER BY invlote.M_PrecioTroquelado, invlote.M_PrecioCompraBruto DESC
-	";
-
-	$sql7="
-	SELECT TOP 1
-	TablaTemp3.M_PrecioTroquelado
-	INTO TablaTemp4
-	FROM TablaTemp3
-	";
-
-	$sql8="SELECT * FROM TablaTemp4";
-	//FIN PRECIO TROQUELADO
-	
-	//CASO PRECIOS CALCULADO INICIO
-	$sql9="
-	SELECT
-	InvLoteAlmacen.InvLoteId
-	INTO TablaTemp5
-	FROM InvLoteAlmacen 
-	WHERE(InvLoteAlmacen.InvArticuloId = '$IdArticuloQ')
-	AND (InvLoteAlmacen.Existencia>0)
-	";
-
-	$sql10="
-	SELECT
-	InvLote.Id,
-	invlote.M_PrecioCompraBruto,
-	invlote.M_PrecioTroquelado
-	INTO TablaTemp6
-	from InvLote
-	INNER JOIN TablaTemp5 ON TablaTemp5.InvLoteId = InvLote.Id
-	ORDER BY invlote.M_PrecioTroquelado, invlote.M_PrecioCompraBruto DESC
-	";
-
-	$sql11="
-	SELECT TOP 1
-	TablaTemp6.M_PrecioCompraBruto
-	INTO TablaTemp7 
-	FROM TablaTemp6
-	";
-
-	$sql12="SELECT * FROM TablaTemp7";
-	//FIN PRECIO CALCULADO
-
-	sqlsrv_query($conn,$sql);
-	sqlsrv_query($conn,$sql1);
-	//Datos de producto
-	$resultDP = sqlsrv_query($conn,$sql2);
-	sqlsrv_query($conn,$sql3);
-	//Existencia
-	$result1E = sqlsrv_query($conn,$sql4);
-
-	echo '
-	<div class="input-group md-form form-sm form-1 pl-0">
-	  <div class="input-group-prepend">
-	    <span class="input-group-text purple lighten-3" id="basic-text1"><i class="fas fa-search text-white"
-	        aria-hidden="true"></i></span>
-	  </div>
-	  <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterAllTable()">
-	</div>
-	<br/>
-
-	<table class="table table-striped table-bordered col-12 sortable">
-		<thead class="thead-dark">
-		    <tr>
-		    	<th scope="col">Codigo</th>
-		      	<th scope="col">Descripcion</td>
-		      	<th scope="col">Existencia</td>
-		      	<th scope="col">Precio</td>
-		      	<th scope="col">Tasa Actual</td>
-		      	<th scope="col">Costo Divisa</td>
-		    </tr>
-	  	</thead>
-	  	<tbody>
-  	';
-	//ARMADO DE ENCABEZADO
- 	while( $rowDP = sqlsrv_fetch_array( $resultDP, SQLSRV_FETCH_ASSOC)) {
- 	//DATOS
-		echo '<tr>';
-		echo '<td>'.$rowDP["CodigoArticulo"].'</td>';	
-		echo '<td>'.$rowDP["Descripcion"].'</td>';
-		$ConceptoImpuesto = $rowDP["ConceptoImpuesto"];
-	//EXISTENCIA
-		$rowE = sqlsrv_fetch_array( $result1E, SQLSRV_FETCH_ASSOC);
-		if($rowE){
-			echo '<td align="center">'.intval($rowE["Existencia"]).'</td>';
-		}
-		else{
-			echo '<td align="center">'.intval('0').'</td>';
-		}			
-	//PRECIO
-		sqlsrv_query($conn,$sql5);
-		sqlsrv_query($conn,$sql6);
-		sqlsrv_query($conn,$sql7);
-	//PRECIO TROQUELADO
-		$resultPT = sqlsrv_query($conn,$sql8);
-		$rowPT = sqlsrv_fetch_array( $resultPT, SQLSRV_FETCH_ASSOC);
-		$Precio = $rowPT["M_PrecioTroquelado"];
-
-		if($Precio){
-			echo '<td align="center">'.SigVe." ".round($Precio,2).'</td>';
-		}
-		else{
-			sqlsrv_query($conn,$sql9);
-			sqlsrv_query($conn,$sql10);
-			sqlsrv_query($conn,$sql11);
-		//PRECIO CALCULADO
-			$resultPC = sqlsrv_query($conn,$sql12);
-			$rowPC = sqlsrv_fetch_array( $resultPC, SQLSRV_FETCH_ASSOC);
-			$Precio = $rowPC["M_PrecioCompraBruto"];
-
-			if($ConceptoImpuesto==1){
-				$Precio = ($Precio/Utilidad)*Impuesto;
-				echo '<td align="center">'.SigVe." ".round($Precio,2).'</td>';
-			}
-			else{
-				$Precio = ($Precio/Utilidad);
-				echo '<td align="center">'.SigVe." ".round($Precio,2).'</td>';
-			}
-		}
-
-
-
-	//Fin Tabla
-			echo '</tr>';		
-  	}
-  	echo '
-  		</tbody>
-	</table>';
 	sqlsrv_close( $conn );
 }
 ?>

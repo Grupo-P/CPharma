@@ -17,11 +17,10 @@
 
   $ArtJson = "";
 	
-	if (isset($_GET['Id'])  )
+	if (isset($_GET['Id']))
 	{
     $InicioCarga = new DateTime("now");
 
-  	//TableHistoricoArticulos($_GET['Id']);
     ReporteHistoricoArticulo($_GET['Id']);
 
     $FinCarga = new DateTime("now");
