@@ -19,7 +19,13 @@
 	
 	if (isset($_GET['top']))
 	{
+    $InicioCarga = new DateTime("now");
+
   	ReporteArticulosMenosVendidos($_GET['top'],$_GET['fechaInicio'],$_GET['fechaFin']);
+
+    $FinCarga = new DateTime("now");
+    $IntervalCarga = $InicioCarga->diff($FinCarga);
+    echo'Tiempo de carga: '.$IntervalCarga->format("%Y-%M-%D %H:%I:%S");
 	} 
 	else{
 		echo '
