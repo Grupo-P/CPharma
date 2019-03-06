@@ -19,7 +19,7 @@
 	
 	if (isset($_GET['top']))
 	{
-  	TableArticulosMenosVendidos($_GET['top'],$_GET['fechaInicio'],$_GET['fechaFin']);
+  	ReporteArticulosMenosVendidos($_GET['top'],$_GET['fechaInicio'],$_GET['fechaFin']);
 	} 
 	else{
 		echo '

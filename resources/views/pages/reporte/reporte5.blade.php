@@ -17,7 +17,13 @@
 
   	if (isset($_GET['fechaInicio']))
 	{
-  	TableProductosFalla($_GET['fechaInicio'],$_GET['fechaFin']);
+    $InicioCarga = new DateTime("now");
+
+    ReporteProductosFalla($_GET['fechaInicio'],$_GET['fechaFin']);
+
+    $FinCarga = new DateTime("now");
+    $IntervalCarga = $InicioCarga->diff($FinCarga);
+    echo'Tiempo de carga: '.$IntervalCarga->format("%Y-%M-%D %H:%I:%S");
 	} 
 	else{
 		echo '
