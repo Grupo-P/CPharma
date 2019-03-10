@@ -1206,7 +1206,7 @@ function ReportePedido($VarLike,$FInicial,$FFinal){
 		$ConceptoImpuesto = $row["ConceptoImpuesto"];
 		$Existencia = $row["Existencia"];
 
-	if($Existencia){
+	if($Existencia != 0){
 	//INICIO PRECIO
 	//INICIO PRECIO TROQUELADO
 		$sql9="
