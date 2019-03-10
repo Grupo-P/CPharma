@@ -876,7 +876,7 @@ function ReporteArticulosMenosVendidos($Top,$FInicial,$FFinal){
 /************REPORTE 5 Prouctos en falla***********/
 /*OPTIMIZADO*/
 /*
-	Nombre: TableProductosFalla
+	Nombre: ReporteProductosFalla
 	Reporte5: Prouctos en falla
 	Funcion: Arma la tabla de los Prouctos en falla
  */
@@ -983,24 +983,191 @@ function ReporteProductosFalla($FInicial,$FFinal){
  */
 function QueryArticulosDescLike($VarLike){
 	$sql = "SELECT 
-		InvArticulo.Id,
-		InvArticulo.CodigoArticulo,
-		InvArticulo.Descripcion
-		FROM
-		InvArticulo
-		WHERE 
-		InvArticulo.Descripcion LIKE '%$VarLike%'
-		order by InvArticulo.Descripcion ASC";
+	InvArticulo.Id,
+	InvArticulo.CodigoArticulo,
+	InvArticulo.Descripcion
+	FROM
+	InvArticulo
+	WHERE 
+	InvArticulo.Descripcion LIKE '%$VarLike%'
+	order by InvArticulo.Descripcion ASC";
 	return $sql;
 }
 
-function TablaReportePedido($VarLike,$FInicial,$FFinal){
-	$conn = conectarDB();
-	$sql = QueryArticulosDescLike($VarLike);
-	$result = sqlsrv_query($conn,$sql);
-
+function ReportePedido($VarLike,$FInicial,$FFinal){
+	
 	$FFinalRango = $FFinal;
 	$FFinal = date("Y-m-d",strtotime($FFinal."+ 1 days"));
+
+	$sql="
+	IF OBJECT_ID ('TablaTemp', 'U') IS NOT NULL
+		DROP TABLE TablaTemp;
+	IF OBJECT_ID ('TablaTemp1', 'U') IS NOT NULL
+		DROP TABLE TablaTemp1;
+	IF OBJECT_ID ('TablaTemp2', 'U') IS NOT NULL
+		DROP TABLE TablaTemp2;
+	IF OBJECT_ID ('TablaTemp3', 'U') IS NOT NULL
+		DROP TABLE TablaTemp3;
+	IF OBJECT_ID ('TablaTemp4', 'U') IS NOT NULL
+		DROP TABLE TablaTemp4;
+	IF OBJECT_ID ('TablaTemp5', 'U') IS NOT NULL
+		DROP TABLE TablaTemp5;
+	IF OBJECT_ID ('TablaTemp6', 'U') IS NOT NULL
+		DROP TABLE TablaTemp6;
+	IF OBJECT_ID ('TablaTemp7', 'U') IS NOT NULL
+		DROP TABLE TablaTemp7;
+	IF OBJECT_ID ('TablaTemp8', 'U') IS NOT NULL
+		DROP TABLE TablaTemp8;
+	IF OBJECT_ID ('TablaTemp9', 'U') IS NOT NULL
+		DROP TABLE TablaTemp9;
+	IF OBJECT_ID ('TablaTemp10', 'U') IS NOT NULL
+		DROP TABLE TablaTemp10;
+	IF OBJECT_ID ('TablaTemp11', 'U') IS NOT NULL
+		DROP TABLE TablaTemp11;
+	IF OBJECT_ID ('TablaTemp12', 'U') IS NOT NULL
+		DROP TABLE TablaTemp12;
+	";
+
+	//BUSQUEDA DE PROUCTOS POR DESCRIPCION
+	$sql1="
+	SELECT 
+	InvArticulo.Id, 
+	InvArticulo.CodigoArticulo,
+	InvArticulo.Descripcion,
+	InvArticulo.FinConceptoImptoIdCompra AS ConceptoImpuesto
+	INTO TablaTemp
+	FROM InvArticulo
+	WHERE 
+	InvArticulo.Descripcion LIKE '%$VarLike%'
+	ORDER BY InvArticulo.Descripcion ASC
+	";
+
+	//UNIDADES VENDIDAS Y VECES FACTURADO
+	$sql2="
+	SELECT
+	TablaTemp.Id,
+	TablaTemp.CodigoArticulo,
+	TablaTemp.Descripcion, 
+	COUNT(*) AS VecesFacturadoCliente, 
+	SUM(VenFacturaDetalle.Cantidad) AS UnidadesVendidasCliente 
+	INTO TablaTemp1
+	FROM VenFacturaDetalle
+	INNER JOIN TablaTemp ON TablaTemp.Id = VenFacturaDetalle.InvArticuloId
+	INNER JOIN VenFactura ON VenFactura.Id = VenFacturaDetalle.VenFacturaId
+	WHERE
+	(VenFactura.FechaDocumento > '$FInicial' AND VenFactura.FechaDocumento < '$FFinal')
+	GROUP BY TablaTemp.Id,TablaTemp.CodigoArticulo,TablaTemp.Descripcion
+	ORDER BY TablaTemp.Descripcion ASC
+	";
+
+	//UNIDADES DEVULTAS POR CLIENTES Y VECES DEVUELTAS
+	$sql3="
+	SELECT
+	TablaTemp.Id,
+	TablaTemp.CodigoArticulo,
+	TablaTemp.Descripcion,
+	COUNT(*) AS VecesDevueltaCliente,
+	SUM(VenDevolucionDetalle.Cantidad) AS UnidadesDevueltaCliente
+	INTO TablaTemp2
+	FROM VenDevolucionDetalle
+	INNER JOIN TablaTemp ON TablaTemp.Id = VenDevolucionDetalle.InvArticuloId
+	INNER JOIN VenDevolucion ON VenDevolucion.Id = VenDevolucionDetalle.VenDevolucionId
+	WHERE
+	(VenDevolucion.FechaDocumento > '$FInicial' AND VenDevolucion.FechaDocumento < '$FFinal')
+	GROUP BY TablaTemp.Id,TablaTemp.CodigoArticulo,TablaTemp.Descripcion
+	ORDER BY TablaTemp.Descripcion ASC
+	";
+
+	//CANTIDAD COMPRADA A PROVEEDORES
+	$sql4="
+	SELECT
+	TablaTemp.Id,
+	TablaTemp.CodigoArticulo,
+	TablaTemp.Descripcion, 
+	COUNT(*) AS VecesFacturadaProveedor,
+	SUM(ComFacturaDetalle.CantidadFacturada) AS CantidadFacturadaProveedor
+	INTO TablaTemp3
+	FROM ComFactura
+	INNER JOIN ComFacturaDetalle ON ComFacturaDetalle.ComFacturaId = ComFactura.Id
+	INNER JOIN TablaTemp ON TablaTemp.Id = ComFacturaDetalle.InvArticuloId
+	WHERE
+	(ComFactura.FechaDocumento > '$FInicial' AND ComFactura.FechaDocumento < '$FFinal')
+	GROUP BY TablaTemp.Id,TablaTemp.CodigoArticulo,TablaTemp.Descripcion
+	ORDER BY TablaTemp.Descripcion ASC
+	";
+
+	//CANTIDAD DEVUELTA PROVEEDOR
+	$sql5="
+	SELECT
+	TablaTemp.Id,
+	TablaTemp.CodigoArticulo,
+	TablaTemp.Descripcion,
+	COUNT(*) AS VecesReclamoProveedor,
+	SUM(ComReclamoDetalle.Cantidad) AS CantidadReclamoProveedor
+	INTO TablaTemp4
+	FROM ComReclamoDetalle
+	INNER JOIN TablaTemp ON TablaTemp.Id = ComReclamoDetalle.InvArticuloId
+	INNER JOIN ComReclamo ON ComReclamo.Id = ComReclamoDetalle.ComReclamoId
+	WHERE
+	(ComReclamo.FechaRegistro > '$FInicial' AND ComReclamo.FechaRegistro < '$FFinal')
+	GROUP BY TablaTemp.Id,TablaTemp.CodigoArticulo,TablaTemp.Descripcion
+	ORDER BY TablaTemp.Descripcion ASC
+	";
+
+	//EXIETENCIA Y RANGO DIAS
+	$sql6="
+	SELECT
+	TablaTemp.Id, 
+	TablaTemp.CodigoArticulo, 
+	TablaTemp.Descripcion,  
+	SUM(InvLoteAlmacen.Existencia) AS Existencia,
+	DATEDIFF(day,'$FInicial','$FFinalRango') As RangoDias
+	INTO TablaTemp5
+	FROM TablaTemp
+	INNER JOIN InvArticulo ON InvArticulo.CodigoArticulo = TablaTemp.CodigoArticulo
+	INNER JOIN InvLoteAlmacen ON InvLoteAlmacen.InvArticuloId = InvArticulo.Id
+	WHERE (InvLoteAlmacen.InvAlmacenId = 1 or InvLoteAlmacen.InvAlmacenId = 2)
+	GROUP BY TablaTemp.Id,TablaTemp.CodigoArticulo, TablaTemp.Descripcion
+	";
+
+	//INTEGRACION DE TABLAS
+	$sql7="
+	SELECT 
+	TablaTemp.Id,
+	TablaTemp.CodigoArticulo,
+	TablaTemp.Descripcion,
+	TablaTemp.ConceptoImpuesto,
+	TablaTemp5.Existencia,
+	TablaTemp5.RangoDias,
+	TablaTemp1.VecesFacturadoCliente,
+	TablaTemp1.UnidadesVendidasCliente,
+	TablaTemp2.VecesDevueltaCliente,
+	TablaTemp2.UnidadesDevueltaCliente,
+	TablaTemp3.VecesFacturadaProveedor,
+	TablaTemp3.CantidadFacturadaProveedor,
+	TablaTemp4.VecesReclamoProveedor,
+	TablaTemp4.CantidadReclamoProveedor
+	INTO TablaTemp6
+	FROM TablaTemp
+	LEFT JOIN TablaTemp1 ON TablaTemp1.Id = TablaTemp.Id
+	LEFT JOIN TablaTemp2 ON TablaTemp2.Id = TablaTemp.Id
+	LEFT JOIN TablaTemp3 ON TablaTemp3.Id = TablaTemp.Id
+	LEFT JOIN TablaTemp4 ON TablaTemp4.Id = TablaTemp.Id
+	LEFT JOIN TablaTemp5 ON TablaTemp5.Id = TablaTemp.Id
+	";
+
+	$sql8="SELECT * FROM TablaTemp6";
+
+	$conn = conectarDB();
+	sqlsrv_query($conn,$sql);
+	sqlsrv_query($conn,$sql1);
+	sqlsrv_query($conn,$sql2);
+	sqlsrv_query($conn,$sql3);
+	sqlsrv_query($conn,$sql4);
+	sqlsrv_query($conn,$sql5);
+	sqlsrv_query($conn,$sql6);
+	sqlsrv_query($conn,$sql7);
+	$result = sqlsrv_query($conn,$sql8);
 
 	echo '
 	<div class="input-group md-form form-sm form-1 pl-0">
@@ -1021,16 +1188,165 @@ function TablaReportePedido($VarLike,$FInicial,$FFinal){
 		    <tr>
 		    	<th scope="col">Codigo</th>
 		      	<th scope="col">Descripcion</th>
+		      	<th scope="col">Existencia</th>
+		      	<th scope="col">Unidades vendidas</th>
+		      	<th scope="col">Unidades compradas</th>
+		      	<th scope="col">Precio</th>
+		      	<th scope="col">Ultimo Lote</th>
 		    </tr>
 	  	</thead>
 	  	<tbody>
 	';
 	
 	while( $row = sqlsrv_fetch_array( $result, SQLSRV_FETCH_ASSOC)) {
-			echo '<tr>';
-			echo '<td align="left">'.$row["CodigoArticulo"].'</td>';	
-			echo '<td align="left">'.$row["Descripcion"].'</td>';
-			echo '</tr>';		
+		echo '<tr>';
+		echo '<td align="left">'.$row["CodigoArticulo"].'</td>';	
+		echo '<td align="left">'.$row["Descripcion"].'</td>';
+		echo '<td align="center">'.intval($row["Existencia"]).'</td>';
+		$UnidadesVendidasCliente = $row["UnidadesVendidasCliente"]-$row["UnidadesDevueltaCliente"];
+		echo '<td align="center">'.($UnidadesVendidasCliente).'</td>';
+		$CantidadFacturadaProveedor = $row["CantidadFacturadaProveedor"]-$row["CantidadReclamoProveedor"];
+		echo '<td align="center">'.($CantidadFacturadaProveedor).'</td>';
+		
+	//DATOS GLOBALES
+		$IdArticuloD = $row["Id"];
+		$ConceptoImpuesto = $row["ConceptoImpuesto"];
+	//INICIO PRECIO
+	//INICIO PRECIO TROQUELADO
+		$sql9="
+		SELECT
+		InvLoteAlmacen.InvLoteId
+		into TablaTemp7
+		FROM InvLoteAlmacen 
+		WHERE (InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2) 
+		AND (InvLoteAlmacen.InvArticuloId = '$IdArticuloD')
+		AND (InvLoteAlmacen.Existencia>0)
+		";
+
+		$sql10="
+		SELECT
+		InvLote.Id,
+		invlote.M_PrecioCompraBruto,
+		invlote.M_PrecioTroquelado,
+		invlote.FechaEntrada
+		INTO TablaTemp8
+		FROM InvLote
+		INNER JOIN TablaTemp7 ON TablaTemp7.InvLoteId = InvLote.Id
+		ORDER BY invlote.M_PrecioTroquelado, invlote.M_PrecioCompraBruto DESC
+		";
+
+		$sql11="
+		SELECT TOP 1
+		TablaTemp8.M_PrecioTroquelado
+		INTO TablaTemp9
+		FROM TablaTemp8
+		";
+
+		$sql12="SELECT * FROM TablaTemp9";
+	
+		sqlsrv_query($conn,$sql9);
+		sqlsrv_query($conn,$sql10);
+		sqlsrv_query($conn,$sql11);
+
+		$resultPT = sqlsrv_query($conn,$sql12);
+		$rowPT = sqlsrv_fetch_array( $resultPT, SQLSRV_FETCH_ASSOC);
+		$Precio = $rowPT["M_PrecioTroquelado"];
+
+		if($Precio){
+			echo '<td align="center">'.SigVe." ".round($Precio,2).'</td>';
+
+			$sql17="
+			SELECT TOP 1 
+			CONVERT(DATE,TablaTemp8.FechaEntrada) AS UltimoLote 
+			FROM TablaTemp8 
+			ORDER BY TablaTemp8.FechaEntrada DESC
+			";
+
+			$resultUL = sqlsrv_query($conn,$sql17);
+			$rowUL = sqlsrv_fetch_array( $resultUL, SQLSRV_FETCH_ASSOC);
+			$UltimoLote = $rowUL["UltimoLote"];
+
+		//ULTIMO LOTE
+			if($UltimoLote){
+				echo '<td align="center">'.$UltimoLote->format('Y-m-d').'</td>';
+			}
+			else{
+				echo '<td align="center"> - </td>';
+			}
+			
+		}
+	//FIN PRECIO TROQUELADO
+	//INICIO PRECIO CALCULADO
+		else{
+			$sql13="
+			SELECT
+			InvLoteAlmacen.InvLoteId
+			INTO TablaTemp10
+			FROM InvLoteAlmacen 
+			WHERE(InvLoteAlmacen.InvArticuloId = '$IdArticuloD')
+			AND (InvLoteAlmacen.Existencia>0)
+			";
+
+			$sql14="
+			SELECT
+			InvLote.Id,
+			invlote.M_PrecioCompraBruto,
+			invlote.M_PrecioTroquelado,
+			invlote.FechaEntrada
+			INTO TablaTemp11
+			from InvLote
+			INNER JOIN TablaTemp10 ON TablaTemp10.InvLoteId = InvLote.Id
+			ORDER BY invlote.M_PrecioTroquelado, invlote.M_PrecioCompraBruto DESC
+			";
+
+			$sql15="
+			SELECT TOP 1
+			TablaTemp11.M_PrecioCompraBruto
+			INTO TablaTemp12 
+			FROM TablaTemp11
+			";
+
+			$sql16="SELECT * FROM TablaTemp12";
+
+			sqlsrv_query($conn,$sql13);
+			sqlsrv_query($conn,$sql14);
+			sqlsrv_query($conn,$sql15);
+	
+			$resultPC = sqlsrv_query($conn,$sql16);
+			$rowPC = sqlsrv_fetch_array( $resultPC, SQLSRV_FETCH_ASSOC);
+			$Precio = $rowPC["M_PrecioCompraBruto"];
+
+			if($ConceptoImpuesto==1){
+				$Precio = ($Precio/Utilidad)*Impuesto;
+				echo '<td align="center">'.SigVe." ".round($Precio,2).'</td>';
+			}
+			else{
+				$Precio = ($Precio/Utilidad);
+				echo '<td align="center">'.SigVe." ".round($Precio,2).'</td>';
+			}
+
+		//ULTIMO LOTE
+			$sql18="
+			SELECT TOP 1 
+			CONVERT(DATE,TablaTemp11.FechaEntrada) AS UltimoLote 
+			FROM TablaTemp11 
+			ORDER BY TablaTemp11.FechaEntrada DESC
+			";
+
+			$resultUL = sqlsrv_query($conn,$sql18);
+			$rowUL = sqlsrv_fetch_array( $resultUL, SQLSRV_FETCH_ASSOC);
+			$UltimoLote = $rowUL["UltimoLote"];
+
+			if($UltimoLote){
+				echo '<td align="center">'.$UltimoLote->format('Y-m-d').'</td>';
+			}
+			else{
+				echo '<td align="center"> - </td>';
+			}
+		}
+	//FIN PRECIO CALCULADO
+	//FIN PRECIO
+	echo '</tr>';		
   	}
   	echo '
   		</tbody>

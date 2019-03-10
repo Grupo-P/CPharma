@@ -20,7 +20,7 @@ define("Impuesto",1.16);
  define ("serverDB" , "SERGIO-PC\CSERVER");	
  define ("userDB" , "admin");
  define ("passDB" , "soporte123");
- define ("nameDB" , "SMART");	
+ define ("nameDB" , "SMART");
 
 //Cadena de conexion con el servidor remoto (produccion)
 /*

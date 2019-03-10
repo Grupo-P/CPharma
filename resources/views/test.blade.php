@@ -19,7 +19,13 @@
   
   if (isset($_GET['Descrip'])  )
   {
-    TablaReportePedido($_GET['Descrip'],$_GET['fechaInicio'],$_GET['fechaFin']);
+    $InicioCarga = new DateTime("now");
+
+    ReportePedido($_GET['Descrip'],$_GET['fechaInicio'],$_GET['fechaFin']);
+
+    $FinCarga = new DateTime("now");
+    $IntervalCarga = $InicioCarga->diff($FinCarga);
+    echo'Tiempo de carga: '.$IntervalCarga->format("%Y-%M-%D %H:%I:%S");
   }
   else{
     $sql = QueryArticulosDescId();
