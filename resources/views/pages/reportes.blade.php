@@ -98,5 +98,21 @@
 		  		<a href="{{ url('/reporte5') }}" class="btn btn-outline-secondary btn-sm">Visualizar</a>
 		  	</div>
 		</div>
+
+		<div class="card border-success mb-3" style="width: 14rem;">	  	
+	  		<div class="card-body text-left bg-success">
+	    		<h3 class="card-title">
+		    		<span class="card-text text-white">
+		    			<?php
+							echo 'Reporte:';
+						?>
+		    		</span>
+	    		</h3>
+	    	    <p class="card-text text-white">Pedido de productos</p>
+	  		</div>
+		  	<div class="card-footer bg-transparent border-success text-right">
+		  		<a href="{{ url('/reporte6') }}" class="btn btn-outline-success btn-sm">Visualizar</a>
+		  	</div>
+		</div>
    	</div>
 @endsection
