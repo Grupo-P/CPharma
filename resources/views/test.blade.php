@@ -5,92 +5,62 @@
 @endsection
 
 @section('content')
-	<h1 class="h5 text-info">
-		<i class="fas fa-file-invoice"></i>
-		TEST
-	</h1>
-	<hr class="row align-items-start col-12">
-	
-<?php 
+  <h1 class="h5 text-info">
+    <i class="fas fa-file-invoice"></i>
+    TEST
+  </h1>
+  <hr class="row align-items-start col-12">
+
+  <?php 
   include(app_path().'\functions\config.php');
   include(app_path().'\functions\Functions.php');
 
   $ArtJson = "";
   
-  if (isset($_GET['Descrip'])  )
+  if (isset($_GET['Id']))
   {
     $InicioCarga = new DateTime("now");
-
-    ReportePedido($_GET['Descrip'],$_GET['fechaInicio'],$_GET['fechaFin']);
+    
+    ReporteProductoProveedor($_GET['Id'],$_GET['Nombre']);
 
     $FinCarga = new DateTime("now");
     $IntervalCarga = $InicioCarga->diff($FinCarga);
     echo'Tiempo de carga: '.$IntervalCarga->format("%Y-%M-%D %H:%I:%S");
-  }
+  } 
   else{
-    $sql = QueryArticulosDescId();
+    $InicioCarga = new DateTime("now");
+
+    $sql = QueryProveedorDescId();
     $ArtJson = armarJson($sql);
 
     echo '
-    <form id="form" autocomplete="off" action="">
-        <table style="width:100%;">
-          <tr>
-            <td align="center">
-              Fecha Inicio:
-            </td>
-            <td>
-              <input id="fechaInicio" type="date" name="fechaInicio" required style="width:100%;">
-            </td>
-            <td align="center">
-              Fecha Fin:
-            </td>
-            <td align="right">
-              <input id="fechaFin" name="fechaFin" type="date" required style="width:100%;">
-            </td>
-            </tr>
-            <tr>
-            <td colspan="4">
-              <div class="autocomplete" style="width:90%;">
-                <input id="myInput" type="text" name="Descrip" placeholder="Ingrese el nombre del articulo " onkeyup="conteo()" required>
-              </div>
-            <input type="submit" value="Buscar" class="btn btn-outline-success" style="width:9%;">
-            </td>
-          </tr>
-        </table>
-      </form>
-      ';
+    <form autocomplete="off" action="">
+      <div class="autocomplete" style="width:90%;">
+        <input id="myInput" type="text" name="Nombre" placeholder="Ingrese el nombre del proveedor " onkeyup="conteo()" required>
+        <input id="myId" name="Id" type="hidden">
+      </div>
+      <input type="submit" value="Buscar" class="btn btn-outline-success">
+    </form>
+    ';
+
+    $FinCarga = new DateTime("now");
+    $IntervalCarga = $InicioCarga->diff($FinCarga);
+    echo'Tiempo de carga: '.$IntervalCarga->format("%Y-%M-%D %H:%I:%S");
   } 
 ?>
-<script type="text/javascript">
-jQuery(document).on('ready',function(){
-  //Presionar Enter dentro de la barra de busqueda
-  $('#myInput').keyup(function(e) {
-        if(e.keyCode == 13) {
-          if ( $('#myInput').val() != "" ) {
-            $('#form').submit();
-          }   
-        }
-  });
-});
-</script>
 @endsection
 
 @section('scriptsHead')
     <script type="text/javascript" src="{{ asset('assets/js/sortTable.js') }}">
     </script>
-    <script type="text/javascript" src="{{ asset('assets/js/filter.js') }}">	
+    <script type="text/javascript" src="{{ asset('assets/js/filter.js') }}">  
     </script>
-    <script type="text/javascript" src="{{ asset('assets/js/functions.js') }}">	
+    <script type="text/javascript" src="{{ asset('assets/js/functions.js') }}"> 
     </script>
     <script type="text/javascript" src="{{ asset('assets/jquery/jquery-2.2.2.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('assets/jquery/jquery-ui.min.js') }}" ></script>
 
     <style>
-    table, th, td, tr {
-      /*border: 1px solid black;*/
-      padding-bottom: 10px;
-    }
-
     * {
       box-sizing: border-box;
     }
@@ -158,3 +128,4 @@ jQuery(document).on('ready',function(){
   }
 ?>  
 @endsection
+

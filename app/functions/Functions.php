@@ -982,7 +982,7 @@ function ReporteProductosFalla($FInicial,$FFinal){
 	sqlsrv_close( $conn );
 }
 /**********REPORTE 6 Reporte para pedidos***********/
-/*AQUI VOY*/
+/*OPTIMIZADO*/
 /*
 	Nombre: QueryArticulosDescId
 	Funcion: Query que devuelve todos los articulos de la base de datos
@@ -1368,6 +1368,122 @@ function ReportePedido($VarLike,$FInicial,$FFinal){
 		//FIN PRECIO
 
 	echo '</tr>';		
+  	}
+  	echo '
+  		</tbody>
+	</table>';
+
+	sqlsrv_close( $conn );
+}
+/**********REPORTE 7 PRODUCTOS POR PROVEEDOR***********/
+/*AQUI VOY*/
+/*
+	Nombre: ReporteProductoProveedor
+ */
+function QueryProveedorDescId(){
+	$sql = "
+	SELECT 
+	GenPersona.Nombre,
+	ComProveedor.Id
+	FROM ComProveedor
+	INNER JOIN GenPersona ON ComProveedor.GenPersonaId=GenPersona.Id
+	INNER JOIN ComFactura ON ComFactura.ComProveedorId=ComProveedor.Id
+	GROUP by ComProveedor.Id, GenPersona.Nombre
+	ORDER BY ComProveedor.Id ASC
+	";
+	return $sql;
+}
+/*
+	Nombre: ReporteProductoProveedor
+ */
+function ReporteProductoProveedor($IdProveedor,$DescripcionP){
+
+	$sql="
+	IF OBJECT_ID ('TablaTemp', 'U') IS NOT NULL
+		DROP TABLE TablaTemp;
+	IF OBJECT_ID ('TablaTemp1', 'U') IS NOT NULL
+		DROP TABLE TablaTemp1;
+	IF OBJECT_ID ('TablaTemp2', 'U') IS NOT NULL
+		DROP TABLE TablaTemp2;
+	";
+
+	//APARICION DEL PROVEDOR EN FACTURAS
+	$sql1="
+	SELECT
+	ComFactura.Id 
+	INTO TablaTemp
+	FROM ComFactura
+	WHERE ComFactura.ComProveedorId = '$IdProveedor'
+	";
+
+	//SELECCION DE ARTICULOS POR PROVEEDOR
+	$sql2="
+	SELECT 
+	ComFacturaDetalle.InvArticuloId 
+	INTO TablaTemp1
+	FROM ComFacturaDetalle
+	INNER JOIN TablaTemp ON TablaTemp.Id = ComFacturaDetalle.ComFacturaId
+	";
+
+	//BUSQUEDA DE DATOS DE ARTICULOS 
+	$sql3="
+	SELECT * 
+	INTO TablaTemp2
+	FROM InvArticulo
+	INNER JOIN TablaTemp1 ON TablaTemp1.InvArticuloId = InvArticulo.Id
+	";
+
+	//DATOS DE ARTICULOS
+	$sql4="SELECT * FROM TablaTemp2	ORDER BY TablaTemp2.Descripcion ASC";
+
+	echo '
+	<div class="input-group md-form form-sm form-1 pl-0">
+	  <div class="input-group-prepend">
+	    <span class="input-group-text purple lighten-3" id="basic-text1"><i class="fas fa-search text-white"
+	        aria-hidden="true"></i></span>
+	  </div>
+	  <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterAllTable()">
+	</div>
+	<br/>
+
+	<table class="table table-striped table-bordered col-12 sortable">
+		<thead class="thead-dark">
+		    <tr>
+		    	<th scope="col">Proveedor</th>	  
+		    </tr>
+	  	</thead>
+	  	<tbody>
+	  	<tr>
+  	';
+	echo '<td>'.$DescripcionP.'</td>';	
+  	echo '
+  		</tr>
+  		</tbody>
+	</table>';
+
+	$conn = conectarDB();
+	sqlsrv_query($conn,$sql);
+	sqlsrv_query($conn,$sql1);
+	sqlsrv_query($conn,$sql2);
+	sqlsrv_query($conn,$sql3);
+	$result = sqlsrv_query($conn,$sql4);
+
+	echo'
+	<table class="table table-striped table-bordered col-12 sortable" id="myTable">
+	  	<thead class="thead-dark">
+		    <tr>
+		    	<th scope="col">Codigo</th>
+		      	<th scope="col">Descripcion</th>		 
+		    </tr>
+	  	</thead>
+	  	<tbody>
+	';
+	
+	while( $row = sqlsrv_fetch_array( $result, SQLSRV_FETCH_ASSOC)) {
+			echo '<tr>';
+			echo '<td align="left">'.$row["CodigoArticulo"].'</td>';
+			echo '<td align="left">'.$row["Descripcion"].'</td>';
+			echo '</tr>';		
   	}
   	echo '
   		</tbody>
