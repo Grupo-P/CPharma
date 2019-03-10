@@ -890,7 +890,7 @@ function ReporteProductosFalla($FInicial,$FFinal){
 
 	$sql = "
 	IF OBJECT_ID ('TablaTemp', 'U') IS NOT NULL
-	    DROP TABLE TablaTemp;
+		DROP TABLE TablaTemp;
 	IF OBJECT_ID ('TablaTemp1', 'U') IS NOT NULL
 		DROP TABLE TablaTemp1;
 	";
@@ -899,9 +899,9 @@ function ReporteProductosFalla($FInicial,$FFinal){
 	SELECT
 	InvArticulo.Id,
 	InvArticulo.CodigoArticulo,
-	InvArticulo.Descripcion,
-	COUNT(*) AS VecesFacturado, 
-	SUM(VenFacturaDetalle.Cantidad) AS UnidadesVendidas
+	InvArticulo.Descripcion, 
+	COUNT(*) AS VecesFacturadoCliente, 
+	SUM(VenFacturaDetalle.Cantidad) AS UnidadesVendidasCliente 
 	INTO TablaTemp
 	FROM VenFacturaDetalle
 	INNER JOIN InvArticulo ON InvArticulo.Id = VenFacturaDetalle.InvArticuloId
@@ -909,27 +909,30 @@ function ReporteProductosFalla($FInicial,$FFinal){
 	WHERE
 	(VenFactura.FechaDocumento > '$FInicial' AND VenFactura.FechaDocumento < '$FFinal')
 	GROUP BY InvArticulo.Id,InvArticulo.CodigoArticulo,InvArticulo.Descripcion
-	ORDER BY InvArticulo.CodigoArticulo ASC
+	ORDER BY UnidadesVendidasCliente DESC
 	";
 
 	$sql2="
 	SELECT
 	TablaTemp.Id, 
-	TablaTemp.CodigoArticulo,
+	TablaTemp.CodigoArticulo, 
 	TablaTemp.Descripcion,
-	TablaTemp.VecesFacturado,
-	TablaTemp.UnidadesVendidas
+	TablaTemp.VecesFacturadoCliente,
+	TablaTemp.UnidadesVendidasCliente,  
+	SUM(InvLoteAlmacen.Existencia) AS Existencia
 	INTO TablaTemp1
 	FROM TablaTemp
 	INNER JOIN InvArticulo ON InvArticulo.CodigoArticulo = TablaTemp.CodigoArticulo
 	INNER JOIN InvLoteAlmacen ON InvLoteAlmacen.InvArticuloId = InvArticulo.Id
-	WHERE (InvLoteAlmacen.InvAlmacenId = 1 or InvLoteAlmacen.InvAlmacenId = 2) AND InvLoteAlmacen.Existencia = 0
-	GROUP BY TablaTemp.Id,TablaTemp.CodigoArticulo,TablaTemp.Descripcion, TablaTemp.VecesFacturado, TablaTemp.UnidadesVendidas
-	ORDER BY TablaTemp.UnidadesVendidas DESC
+	WHERE (InvLoteAlmacen.InvAlmacenId = 1 or InvLoteAlmacen.InvAlmacenId = 2)
+	GROUP BY TablaTemp.Id,TablaTemp.CodigoArticulo, TablaTemp.Descripcion, TablaTemp.UnidadesVendidasCliente, TablaTemp.VecesFacturadoCliente
+	ORDER BY TablaTemp.UnidadesVendidasCliente DESC
 	";
 
 	$sql3="
-	SELECT * FROM TablaTemp1
+	SELECT * from TablaTemp1 
+	WHERE TablaTemp1.Existencia = 0 
+	ORDER BY TablaTemp1.UnidadesVendidasCliente DESC
 	";
 
 	$conn = conectarDB();
@@ -968,7 +971,7 @@ function ReporteProductosFalla($FInicial,$FFinal){
 			echo '<tr>';
 			echo '<td align="left">'.$row["CodigoArticulo"].'</td>';	
 			echo '<td align="left">'.$row["Descripcion"].'</td>';
-			echo '<td align="center">'.intval($row["UnidadesVendidas"]).'</td>';
+			echo '<td align="center">'.intval($row["UnidadesVendidasCliente"]).'</td>';
 			echo '<td align="center"> 0 </td>';
 			echo '</tr>';		
   	}

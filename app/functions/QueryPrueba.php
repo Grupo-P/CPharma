@@ -225,4 +225,45 @@ CONVERT(DATE,TablaTemp11.FechaEntrada) AS UltimoLote
 FROM TablaTemp11 
 ORDER BY TablaTemp11.FechaEntrada DESC
  */
+
+/**PRODUCTOS EN FALLA
+IF OBJECT_ID ('TablaTemp', 'U') IS NOT NULL
+	DROP TABLE TablaTemp;
+IF OBJECT_ID ('TablaTemp1', 'U') IS NOT NULL
+	DROP TABLE TablaTemp1;
+
+SELECT
+InvArticulo.Id,
+InvArticulo.CodigoArticulo,
+InvArticulo.Descripcion, 
+COUNT(*) AS VecesFacturadoCliente, 
+SUM(VenFacturaDetalle.Cantidad) AS UnidadesVendidasCliente 
+INTO TablaTemp
+FROM VenFacturaDetalle
+INNER JOIN InvArticulo ON InvArticulo.Id = VenFacturaDetalle.InvArticuloId
+INNER JOIN VenFactura ON VenFactura.Id = VenFacturaDetalle.VenFacturaId
+WHERE
+(VenFactura.FechaDocumento > '2019-03-03' AND VenFactura.FechaDocumento < '2019-03-10')
+GROUP BY InvArticulo.Id,InvArticulo.CodigoArticulo,InvArticulo.Descripcion
+ORDER BY UnidadesVendidasCliente DESC
+
+SELECT
+TablaTemp.Id, 
+TablaTemp.CodigoArticulo, 
+TablaTemp.Descripcion,
+TablaTemp.VecesFacturadoCliente,
+TablaTemp.UnidadesVendidasCliente,  
+SUM(InvLoteAlmacen.Existencia) AS Existencia
+INTO TablaTemp1
+FROM TablaTemp
+INNER JOIN InvArticulo ON InvArticulo.CodigoArticulo = TablaTemp.CodigoArticulo
+INNER JOIN InvLoteAlmacen ON InvLoteAlmacen.InvArticuloId = InvArticulo.Id
+WHERE (InvLoteAlmacen.InvAlmacenId = 1 or InvLoteAlmacen.InvAlmacenId = 2)
+GROUP BY TablaTemp.Id,TablaTemp.CodigoArticulo, TablaTemp.Descripcion, TablaTemp.UnidadesVendidasCliente, TablaTemp.VecesFacturadoCliente
+ORDER BY TablaTemp.UnidadesVendidasCliente DESC
+
+select * from TablaTemp
+select * from TablaTemp1
+select * from TablaTemp1 WHERE TablaTemp1.Existencia = 0 ORDER BY TablaTemp1.UnidadesVendidasCliente DESC
+ */
 ?>
