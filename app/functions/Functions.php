@@ -346,41 +346,44 @@ function ReporteHistoricoArticulo($IdArticuloQ){
 		$rowE = sqlsrv_fetch_array( $result1E, SQLSRV_FETCH_ASSOC);
 		if($rowE){
 			echo '<td align="center">'.intval($rowE["Existencia"]).'</td>';
-		}
-		else{
-			echo '<td align="center">'.intval('0').'</td>';
-		}			
-	//INICIO PRECIO
-		sqlsrv_query($conn,$sql5);
-		sqlsrv_query($conn,$sql6);
-		sqlsrv_query($conn,$sql7);
-	//PRECIO TROQUELADO
-		$resultPT = sqlsrv_query($conn,$sql8);
-		$rowPT = sqlsrv_fetch_array( $resultPT, SQLSRV_FETCH_ASSOC);
-		$Precio = $rowPT["M_PrecioTroquelado"];
 
-		if($Precio){
-			echo '<td align="center">'.SigVe." ".round($Precio,2).'</td>';
-		}
-		else{
-			sqlsrv_query($conn,$sql9);
-			sqlsrv_query($conn,$sql10);
-			sqlsrv_query($conn,$sql11);
-	//PRECIO CALCULADO
-			$resultPC = sqlsrv_query($conn,$sql12);
-			$rowPC = sqlsrv_fetch_array( $resultPC, SQLSRV_FETCH_ASSOC);
-			$Precio = $rowPC["M_PrecioCompraBruto"];
-
-			if($ConceptoImpuesto==1){
-				$Precio = ($Precio/Utilidad)*Impuesto;
+		//INICIO PRECIO
+			sqlsrv_query($conn,$sql5);
+			sqlsrv_query($conn,$sql6);
+			sqlsrv_query($conn,$sql7);
+		//PRECIO TROQUELADO
+			$resultPT = sqlsrv_query($conn,$sql8);
+			$rowPT = sqlsrv_fetch_array( $resultPT, SQLSRV_FETCH_ASSOC);
+			$Precio = $rowPT["M_PrecioTroquelado"];
+			
+			if($Precio){
 				echo '<td align="center">'.SigVe." ".round($Precio,2).'</td>';
 			}
 			else{
-				$Precio = ($Precio/Utilidad);
-				echo '<td align="center">'.SigVe." ".round($Precio,2).'</td>';
+				sqlsrv_query($conn,$sql9);
+				sqlsrv_query($conn,$sql10);
+				sqlsrv_query($conn,$sql11);
+		//PRECIO CALCULADO
+				$resultPC = sqlsrv_query($conn,$sql12);
+				$rowPC = sqlsrv_fetch_array( $resultPC, SQLSRV_FETCH_ASSOC);
+				$Precio = $rowPC["M_PrecioCompraBruto"];
+				
+				if($ConceptoImpuesto==1){
+					$Precio = ($Precio/Utilidad)*Impuesto;
+					echo '<td align="center">'.SigVe." ".round($Precio,2).'</td>';
+				}
+				else{
+					$Precio = ($Precio/Utilidad);
+					echo '<td align="center">'.SigVe." ".round($Precio,2).'</td>';
+				}
 			}
+		//FIN PRECIO
 		}
-	//FIN PRECIO
+		else{
+			echo '<td align="center">'.intval('0').'</td>';
+			echo '<td align="center">'.SigVe.' 0 </td>';
+		}			
+
 	
 	//INICIO TASA ACTUAL Y COSTO DIVISA 
 		$resultTasa = QueryTasa(date('Y-m-d'));
@@ -993,7 +996,9 @@ function QueryArticulosDescLike($VarLike){
 	order by InvArticulo.Descripcion ASC";
 	return $sql;
 }
-
+/*
+	Nombre: ReportePedido
+ */
 function ReportePedido($VarLike,$FInicial,$FFinal){
 	
 	$FFinalRango = $FFinal;
@@ -1014,18 +1019,6 @@ function ReportePedido($VarLike,$FInicial,$FFinal){
 		DROP TABLE TablaTemp5;
 	IF OBJECT_ID ('TablaTemp6', 'U') IS NOT NULL
 		DROP TABLE TablaTemp6;
-	IF OBJECT_ID ('TablaTemp7', 'U') IS NOT NULL
-		DROP TABLE TablaTemp7;
-	IF OBJECT_ID ('TablaTemp8', 'U') IS NOT NULL
-		DROP TABLE TablaTemp8;
-	IF OBJECT_ID ('TablaTemp9', 'U') IS NOT NULL
-		DROP TABLE TablaTemp9;
-	IF OBJECT_ID ('TablaTemp10', 'U') IS NOT NULL
-		DROP TABLE TablaTemp10;
-	IF OBJECT_ID ('TablaTemp11', 'U') IS NOT NULL
-		DROP TABLE TablaTemp11;
-	IF OBJECT_ID ('TablaTemp12', 'U') IS NOT NULL
-		DROP TABLE TablaTemp12;
 	";
 
 	//BUSQUEDA DE PROUCTOS POR DESCRIPCION
@@ -1211,6 +1204,9 @@ function ReportePedido($VarLike,$FInicial,$FFinal){
 	//DATOS GLOBALES
 		$IdArticuloD = $row["Id"];
 		$ConceptoImpuesto = $row["ConceptoImpuesto"];
+		$Existencia = $row["Existencia"];
+
+	if($Existencia){
 	//INICIO PRECIO
 	//INICIO PRECIO TROQUELADO
 		$sql9="
@@ -1243,7 +1239,23 @@ function ReportePedido($VarLike,$FInicial,$FFinal){
 		";
 
 		$sql12="SELECT * FROM TablaTemp9";
-	
+
+		$sql13="
+		IF OBJECT_ID ('TablaTemp7', 'U') IS NOT NULL
+			DROP TABLE TablaTemp7;
+		IF OBJECT_ID ('TablaTemp8', 'U') IS NOT NULL
+			DROP TABLE TablaTemp8;
+		IF OBJECT_ID ('TablaTemp9', 'U') IS NOT NULL
+			DROP TABLE TablaTemp9;
+		IF OBJECT_ID ('TablaTemp10', 'U') IS NOT NULL
+			DROP TABLE TablaTemp10;
+		IF OBJECT_ID ('TablaTemp11', 'U') IS NOT NULL
+			DROP TABLE TablaTemp11;
+		IF OBJECT_ID ('TablaTemp12', 'U') IS NOT NULL
+			DROP TABLE TablaTemp12;
+		";
+
+		sqlsrv_query($conn,$sql13);
 		sqlsrv_query($conn,$sql9);
 		sqlsrv_query($conn,$sql10);
 		sqlsrv_query($conn,$sql11);
@@ -1344,8 +1356,14 @@ function ReportePedido($VarLike,$FInicial,$FFinal){
 				echo '<td align="center"> - </td>';
 			}
 		}
-	//FIN PRECIO CALCULADO
-	//FIN PRECIO
+	}
+	else{
+		echo '<td align="center">'.SigVe.'0 </td>';
+		echo '<td align="center"> - </td>';
+	}
+		//FIN PRECIO CALCULADO
+		//FIN PRECIO
+
 	echo '</tr>';		
   	}
   	echo '
