@@ -21,7 +21,7 @@
 	    		<h3 class="card-title">
 		    		<span class="card-text text-white">
 		    			<?php
-							echo 'Reporte:';
+							echo 'Reporte';
 						?>
 		    		</span>
 	    		</h3>
@@ -37,7 +37,7 @@
 	    		<h3 class="card-title">
 		    		<span class="card-text text-white">
 		    			<?php
-							echo 'Reporte:';
+							echo 'Reporte';
 						?>
 		    		</span>
 	    		</h3>
@@ -53,7 +53,7 @@
 	    		<h3 class="card-title">
 		    		<span class="card-text text-white">
 		    			<?php
-							echo 'Reporte:';
+							echo 'Reporte';
 						?>
 		    		</span>
 	    		</h3>
@@ -72,7 +72,7 @@
 	    		<h3 class="card-title">
 		    		<span class="card-text text-white">
 		    			<?php
-							echo 'Reporte:';
+							echo 'Reporte';
 						?>
 		    		</span>
 	    		</h3>
@@ -88,7 +88,7 @@
 	    		<h3 class="card-title">
 		    		<span class="card-text text-white">
 		    			<?php
-							echo 'Reporte:';
+							echo 'Reporte';
 						?>
 		    		</span>
 	    		</h3>
@@ -104,7 +104,7 @@
 	    		<h3 class="card-title">
 		    		<span class="card-text text-white">
 		    			<?php
-							echo 'Reporte:';
+							echo 'Reporte';
 						?>
 		    		</span>
 	    		</h3>

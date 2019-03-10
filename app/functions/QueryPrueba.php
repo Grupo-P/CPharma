@@ -24,7 +24,7 @@ InvArticulo.FinConceptoImptoIdCompra AS ConceptoImpuesto
 INTO TablaTemp
 FROM InvArticulo
 WHERE 
-InvArticulo.Descripcion LIKE '%atamel%'
+InvArticulo.Descripcion LIKE '%ATAMEL PLUS 500 MG TAB X 12%'
 ORDER BY InvArticulo.Descripcion ASC
 
 --UNIDADES VENDIDAS Y VECES FACTURADO
@@ -159,7 +159,7 @@ InvLoteAlmacen.InvLoteId
 into TablaTemp7
 FROM InvLoteAlmacen 
 WHERE (InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2) 
-AND (InvLoteAlmacen.InvArticuloId = '25531')
+AND (InvLoteAlmacen.InvArticuloId = '2598')
 AND (InvLoteAlmacen.Existencia>0)
 
 SELECT
@@ -188,7 +188,7 @@ SELECT
 InvLoteAlmacen.InvLoteId
 INTO TablaTemp10
 FROM InvLoteAlmacen 
-WHERE(InvLoteAlmacen.InvArticuloId = '25531')
+WHERE(InvLoteAlmacen.InvArticuloId = '2598')
 AND (InvLoteAlmacen.Existencia>0)
 
 SELECT
