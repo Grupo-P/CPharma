@@ -17,17 +17,57 @@
 
   $ArtJson = "";
   
-  if (isset($_GET['Id']))
-  {
+  if (isset($_GET['Id'])){
+  //CASO 1: CARGA AL HABER SELECCIONADO UN PROVEEDOR 
     $InicioCarga = new DateTime("now");
     
-    ReporteProductoProveedor($_GET['Id'],$_GET['Nombre']);
+    echo '
+    <form autocomplete="off" action="">
+        <table style="width:100%;">
+          <tr>
+            <td align="center">
+              Pedido cant. dias
+            </td>
+            <td align="right" style="width:20%;">
+              <input id="pedido" type="text" name="pedido" required style="width:100%;">
+            </td>
+            <td align="center">
+              Fecha Inicio:
+            </td>
+            <td>
+              <input id="fechaInicio" type="date" name="fechaInicio" required style="width:100%;">
+            </td>
+            <td align="center">
+              Fecha Fin:
+            </td>
+            <td align="right">
+              <input id="fechaFin" name="fechaFin" type="date" required style="width:100%;">
+            </td>
+            <td align="right">
+              <input type="submit" value="Buscar" class="btn btn-outline-success">
+            </td>
+          </tr>
+        </table>
+      </form>
+      <br>
+    ';
+
+    CatalogoProveedor($_GET['Id'],$_GET['Nombre']);
 
     $FinCarga = new DateTime("now");
     $IntervalCarga = $InicioCarga->diff($FinCarga);
     echo'Tiempo de carga: '.$IntervalCarga->format("%Y-%M-%D %H:%I:%S");
   } 
+  else if(isset($_GET['pedido'])){
+  //CASO 2: CARGA AL HABER SELECCIONADO UN PEDIDO EN BASE A DIAS Y EL RANGO
+    echo"Pedido: ".$_GET['pedido'];
+    echo"<br>";
+    echo"Pedido: ".$_GET['fechaInicio'];
+    echo"<br>";
+    echo"Pedido: ".$_GET['fechaFin'];
+  }
   else{
+  //CASO 3: AL CARGAR EL REPORTE DESDE EL MENU
     $InicioCarga = new DateTime("now");
 
     $sql = QueryProveedorDescId();

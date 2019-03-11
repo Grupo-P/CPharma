@@ -19,9 +19,6 @@ INNER JOIN ComFactura ON ComFactura.ComProveedorId=ComProveedor.Id
 GROUP by ComProveedor.Id, GenPersona.Nombre
 ORDER BY GenPersona.Nombre ASC
 
-
-
-
 ******* SCRIPT 2 *****
 IF OBJECT_ID ('TablaTemp', 'U') IS NOT NULL
 	DROP TABLE TablaTemp;
@@ -70,8 +67,6 @@ ORDER BY InvArticulo.Descripcion ASC
 
 SELECT * FROM TablaTemp2
 
-
-
 ******* SCRIPT 3 *****
 IF OBJECT_ID ('TablaTemp', 'U') IS NOT NULL
 	DROP TABLE TablaTemp;
@@ -96,16 +91,4 @@ GROUP BY ComFactura.ComProveedorId
 
 SELECT * FROM TablaTemp1
  */
-
-
-$resultRD = sqlsrv_query($conn,$sqlRD);
-		$rowRD = sqlsrv_fetch_array( $resultRD, SQLSRV_FETCH_ASSOC);
-		echo '<td align="center">'.($CantidadFacturadaProveedor).'</td>';
-		$UnidadesDia = $UnidadesVendidasCliente/$rowRD["RangoDias"];
-		echo '<td align="center">'.round($UnidadesDia,2).'</td>';
-		$DiasRestantes = $UnidadesDia/intval($row["Existencia"]);
-		echo '<td align="center">'.round($DiasRestantes,2).'</td>';
-
-		//$RangoDias = $FInicial->diff($FFinal);
-		//echo '<td align="center">'.$DifFecha->format('%a').'</td>';
 ?>

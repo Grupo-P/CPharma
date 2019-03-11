@@ -1219,13 +1219,10 @@ function ReportePedido($VarLike,$FInicial,$FFinal){
 		else{
 			echo '<td align="center"> 0 </td>';
 		}
-		
-
-
 	//DATOS GLOBALES
-		$IdArticuloD = $row["Id"];
-		$ConceptoImpuesto = $row["ConceptoImpuesto"];
-		$Existencia = $row["Existencia"];
+	$IdArticuloD = $row["Id"];
+	$ConceptoImpuesto = $row["ConceptoImpuesto"];
+	$Existencia = $row["Existencia"];
 
 	if($Existencia != 0){
 	//INICIO PRECIO
@@ -1412,10 +1409,11 @@ function QueryProveedorDescId(){
 	return $sql;
 }
 /*
-	Nombre: ReporteProductoProveedor
+	Nombre: CatalogoProveedor
  */
-function ReporteProductoProveedor($IdProveedor,$DescripcionP){
+function CatalogoProveedor($IdProveedor,$DescripcionP){
 
+	//LIMPIEZA DE TABLAS
 	$sql="
 	IF OBJECT_ID ('TablaTemp', 'U') IS NOT NULL
 		DROP TABLE TablaTemp;
@@ -1423,36 +1421,50 @@ function ReporteProductoProveedor($IdProveedor,$DescripcionP){
 		DROP TABLE TablaTemp1;
 	IF OBJECT_ID ('TablaTemp2', 'U') IS NOT NULL
 		DROP TABLE TablaTemp2;
+	IF OBJECT_ID ('TablaTemp3', 'U') IS NOT NULL
+		DROP TABLE TablaTemp3;
+	IF OBJECT_ID ('TablaTemp4', 'U') IS NOT NULL
+		DROP TABLE TablaTemp4;
+	IF OBJECT_ID ('TablaTemp5', 'U') IS NOT NULL
+		DROP TABLE TablaTemp5;
 	";
 
-	//APARICION DEL PROVEDOR EN FACTURAS
+	//FACTURAS DONDE APARECE EL PROVEEDOR
 	$sql1="
 	SELECT
-	ComFactura.Id 
+	ComFactura.Id AS FacturaId,
+	ComFactura.ComProveedorId AS FacturaProveedorId
 	INTO TablaTemp
 	FROM ComFactura
-	WHERE ComFactura.ComProveedorId = '$IdProveedor'
+	WHERE ComFactura.ComProveedorId = 33
+	ORDER BY FacturaId ASC
 	";
 
-	//SELECCION DE ARTICULOS POR PROVEEDOR
+	//DETALLES DE FACTURAS DONDE APARECE EL PROVEEDOR
 	$sql2="
 	SELECT 
-	ComFacturaDetalle.InvArticuloId 
+	ComFacturaDetalle.ComFacturaId AS FacturaIdDetalle,
+	ComFacturaDetalle.InvArticuloId AS ArtiuloId
 	INTO TablaTemp1
 	FROM ComFacturaDetalle
-	INNER JOIN TablaTemp ON TablaTemp.Id = ComFacturaDetalle.ComFacturaId
+	INNER JOIN TablaTemp ON TablaTemp.FacturaId = ComFacturaDetalle.ComFacturaId
+	ORDER BY FacturaIdDetalle ASC
 	";
 
-	//BUSQUEDA DE DATOS DE ARTICULOS 
+	//CATALOGO DE PRODUCTOS
 	$sql3="
-	SELECT * 
+	SELECT
+	InvArticulo.Id AS ArticuloIdPro,
+	InvArticulo.CodigoArticulo,
+	InvArticulo.Descripcion 
 	INTO TablaTemp2
 	FROM InvArticulo
-	INNER JOIN TablaTemp1 ON TablaTemp1.InvArticuloId = InvArticulo.Id
+	INNER JOIN TablaTemp1 ON TablaTemp1.ArtiuloId = InvArticulo.Id
+	GROUP BY InvArticulo.Id,InvArticulo.Descripcion,InvArticulo.CodigoArticulo
+	ORDER BY InvArticulo.Descripcion ASC
 	";
 
-	//DATOS DE ARTICULOS
-	$sql4="SELECT * FROM TablaTemp2	ORDER BY TablaTemp2.Descripcion ASC";
+	$sql4="SELECT * FROM TablaTemp2";
 
 	echo '
 	<div class="input-group md-form form-sm form-1 pl-0">
