@@ -1116,8 +1116,7 @@ function ReportePedido($VarLike,$FInicial,$FFinal){
 	TablaTemp.Id, 
 	TablaTemp.CodigoArticulo, 
 	TablaTemp.Descripcion,  
-	SUM(InvLoteAlmacen.Existencia) AS Existencia,
-	DATEDIFF(day,'$FInicial','$FFinalRango') As RangoDias
+	SUM(InvLoteAlmacen.Existencia) AS Existencia
 	INTO TablaTemp5
 	FROM TablaTemp
 	INNER JOIN InvArticulo ON InvArticulo.CodigoArticulo = TablaTemp.CodigoArticulo
@@ -1134,7 +1133,6 @@ function ReportePedido($VarLike,$FInicial,$FFinal){
 	TablaTemp.Descripcion,
 	TablaTemp.ConceptoImpuesto,
 	TablaTemp5.Existencia,
-	TablaTemp5.RangoDias,
 	TablaTemp1.VecesFacturadoCliente,
 	TablaTemp1.UnidadesVendidasCliente,
 	TablaTemp2.VecesDevueltaCliente,
@@ -1187,6 +1185,8 @@ function ReportePedido($VarLike,$FInicial,$FFinal){
 		      	<th scope="col">Existencia</th>
 		      	<th scope="col">Unidades vendidas</th>
 		      	<th scope="col">Unidades compradas</th>
+		      	<th scope="col">Unidades por dia</th>
+				<th scope="col">Dias restantes</th>
 		      	<th scope="col">Precio</th>
 		      	<th scope="col">Ultimo Lote</th>
 		    </tr>
@@ -1194,6 +1194,11 @@ function ReportePedido($VarLike,$FInicial,$FFinal){
 	  	<tbody>
 	';
 	
+	$fecha1 = new DateTime($FInicial);
+	$fecha2 = new DateTime($FFinalRango);
+	$RangoDias = $fecha1->diff($fecha2);
+	$RangoDias = $RangoDias->format('%a');
+
 	while( $row = sqlsrv_fetch_array( $result, SQLSRV_FETCH_ASSOC)) {
 		echo '<tr>';
 		echo '<td align="left">'.$row["CodigoArticulo"].'</td>';	
@@ -1203,7 +1208,20 @@ function ReportePedido($VarLike,$FInicial,$FFinal){
 		echo '<td align="center">'.($UnidadesVendidasCliente).'</td>';
 		$CantidadFacturadaProveedor = $row["CantidadFacturadaProveedor"]-$row["CantidadReclamoProveedor"];
 		echo '<td align="center">'.($CantidadFacturadaProveedor).'</td>';
+
+		$UnidadesDia = $UnidadesVendidasCliente/$RangoDias;
+		echo '<td align="center">'.round($UnidadesDia,2).'</td>';
+
+		if($UnidadesDia!=0){
+			$DiasRestantes = $row["Existencia"]/$UnidadesDia;
+			echo '<td align="center">'.round($DiasRestantes,2).'</td>';
+		}
+		else{
+			echo '<td align="center"> 0 </td>';
+		}
 		
+
+
 	//DATOS GLOBALES
 		$IdArticuloD = $row["Id"];
 		$ConceptoImpuesto = $row["ConceptoImpuesto"];
@@ -1304,7 +1322,7 @@ function ReportePedido($VarLike,$FInicial,$FFinal){
 
 			$sql14="
 			SELECT
-			InvLote.Id,
+			invLote.Id,
 			invlote.M_PrecioCompraBruto,
 			invlote.M_PrecioTroquelado,
 			invlote.FechaEntrada
