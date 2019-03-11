@@ -48,6 +48,8 @@
             </td>
           </tr>
         </table>
+        <input id="IdProv" name="IdProv" type="hidden" value="'.$_GET['Id'].'">
+        <input id="NombreProv" name="NombreProv" type="hidden" value="'.$_GET['Nombre'].'">
       </form>
       <br>
     ';
@@ -65,6 +67,10 @@
     echo"Pedido: ".$_GET['fechaInicio'];
     echo"<br>";
     echo"Pedido: ".$_GET['fechaFin'];
+    echo"<br>";
+    echo"Pedido: ".$_GET['IdProv'];
+    echo"<br>";
+    echo"Pedido: ".$_GET['NombreProv'];
   }
   else{
   //CASO 3: AL CARGAR EL REPORTE DESDE EL MENU
