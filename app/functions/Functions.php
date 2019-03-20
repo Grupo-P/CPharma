@@ -1390,7 +1390,7 @@ function ReportePedido($VarLike,$FInicial,$FFinal){
 
 	sqlsrv_close( $conn );
 }
-/**********REPORTE 7 PRODUCTOS POR PROVEEDOR***********/
+/**********REPORTE 7 CATALOGO DE PROVEEDORES***********/
 /*AQUI VOY*/
 /*
 	Nombre: ReporteProductoProveedor
