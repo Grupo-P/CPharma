@@ -10,7 +10,7 @@ define("Impuesto",1.16);
 
 //Cadena de conexion con la base de datos CPharma (desarrollo)
 
- define ("serverCP","localhost:3366");	
+ define ("serverCP","localhost:3306");	
  define ("userCP","root");
  define ("passCP","");
  define ("nameCP","cpharma");
