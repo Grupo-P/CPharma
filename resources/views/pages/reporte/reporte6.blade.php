@@ -15,10 +15,8 @@
   include(app_path().'\functions\config.php');
   include(app_path().'\functions\Functions.php');
 
-  $ArtJson = "";
-  
-  if (isset($_GET['Descrip'])  )
-  {
+  if (isset($_GET['Descrip'])  ){
+    $ArtJson = "";
     $InicioCarga = new DateTime("now");
 
     ReportePedido($_GET['Descrip'],$_GET['fechaInicio'],$_GET['fechaFin']);
@@ -27,10 +25,48 @@
     $IntervalCarga = $InicioCarga->diff($FinCarga);
     echo'Tiempo de carga: '.$IntervalCarga->format("%Y-%M-%D %H:%I:%S");
   }
-  else{
+  else if (isset($_GET['fechaInicio'])  ){
+    $InicioCarga = new DateTime("now");
+    $ver = "Hola";
+
+    $ArtJson = "";
     $sql = QueryArticulosDescId();
     $ArtJson = armarJson($sql);
 
+    echo'<h6 align="center">Periodo desde el '.$_GET['fechaInicio'].' al '.$_GET['fechaFin'].' </h6>';
+
+    echo '
+    <form id="form" autocomplete="off" action="" target="blank">
+
+    <input id="fechaInicio" name="fechaInicio" type="hidden" 
+    value="';
+    echo $_GET['fechaInicio'];
+    echo '
+    ">
+    <input id="fechaFin" name="fechaFin" type="hidden" 
+    value="';
+    echo $_GET['fechaFin'];
+    echo '
+    ">
+        <table style="width:100%;">
+            <tr>
+            <td colspan="4">
+              <div class="autocomplete" style="width:90%;">
+                <input id="myInput" type="text" name="Descrip" placeholder="Ingrese el nombre del articulo " onkeyup="conteo()" required>
+              </div>
+            <input type="submit" value="Buscar" class="btn btn-outline-success" style="width:9%;">
+            </td>
+          </tr>
+        </table>
+      </form>
+      ';
+
+    $FinCarga = new DateTime("now");
+    $IntervalCarga = $InicioCarga->diff($FinCarga);
+    echo'Tiempo de carga: '.$IntervalCarga->format("%Y-%M-%D %H:%I:%S");
+  }
+  else{
+    $ArtJson = "";
     echo '
     <form id="form" autocomplete="off" action="">
         <table style="width:100%;">
@@ -47,13 +83,8 @@
             <td align="right">
               <input id="fechaFin" name="fechaFin" type="date" required style="width:100%;">
             </td>
-            </tr>
-            <tr>
             <td colspan="4">
-              <div class="autocomplete" style="width:90%;">
-                <input id="myInput" type="text" name="Descrip" placeholder="Ingrese el nombre del articulo " onkeyup="conteo()" required>
-              </div>
-            <input type="submit" value="Buscar" class="btn btn-outline-success" style="width:9%;">
+            <input type="submit" value="Buscar" class="btn btn-outline-success" style="width:90%;">
             </td>
           </tr>
         </table>
