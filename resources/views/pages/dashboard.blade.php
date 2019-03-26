@@ -80,16 +80,19 @@
 
 	<div class="card-deck">
 	{{-- NEWS --}}
-	<div class="card border-secondary mb-3" style="width: 14rem;">	  	
-	  		 <div class="card-body text-left bg-secondary">
+	<div class="card border-primary  mb-3" style="width: 14rem;">	  	
+	  		 <div class="card-body text-left bg-primary">
 	    		<h2 class="card-title">
 		    		<span class="card-text text-white">
 		    			Novedades
 		    		</span>
 	    		</h2>
-	    		<p class="card-text text-secondary">
+	    		<p class="card-text text-white">
 	    			<ul>
-	    				<li class="card-text text-white">
+	    				<li class="card-text text-white ">
+	    					Se actualizo el reporte pedido de productos, ya puedes hacer tus busquedas de manera mas sencilla.
+	    				</li>
+	    				{{-- <li class="card-text text-white">
 	    					Al agregar un proveedor puedes dejar el correo en blanco.
 	    				</li>
 	    				<li class="card-text text-white">
@@ -97,7 +100,7 @@
 	    				</li>
 	    				<li class="card-text text-white">
 	    					Al agregar una empresa puedes dejar la observacion en blanco.
-	    				</li>
+	    				</li> --}}
 	    			</ul>
 	    		</p>
 	  		</div>  

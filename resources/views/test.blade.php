@@ -64,13 +64,13 @@
   //CASO 2: CARGA AL HABER SELECCIONADO UN PEDIDO EN BASE A DIAS Y EL RANGO
     echo"Pedido: ".$_GET['pedido'];
     echo"<br>";
-    echo"Pedido: ".$_GET['fechaInicio'];
+    echo"fechaInicio: ".$_GET['fechaInicio'];
     echo"<br>";
-    echo"Pedido: ".$_GET['fechaFin'];
+    echo"fechaFin: ".$_GET['fechaFin'];
     echo"<br>";
-    echo"Pedido: ".$_GET['IdProv'];
+    echo"IdProv: ".$_GET['IdProv'];
     echo"<br>";
-    echo"Pedido: ".$_GET['NombreProv'];
+    echo"NombreProv: ".$_GET['NombreProv'];
   }
   else{
   //CASO 3: AL CARGAR EL REPORTE DESDE EL MENU
