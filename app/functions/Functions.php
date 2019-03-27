@@ -1195,7 +1195,7 @@ function ReportePedido($VarLike,$FInicial,$FFinal){
 	';
 	
 	$fecha1 = new DateTime($FInicial);
-	$fecha2 = new DateTime($FFinalRango);
+	$fecha2 = new DateTime($FFinal);
 	$RangoDias = $fecha1->diff($fecha2);
 	$RangoDias = $RangoDias->format('%a');
 
