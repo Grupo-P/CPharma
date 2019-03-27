@@ -562,7 +562,7 @@ function ReporteArticulosMasVendidos($Top,$FInicial,$FFinal){
 	TablaTemp.CodigoArticulo, 
 	TablaTemp.Descripcion,  
 	SUM(InvLoteAlmacen.Existencia) AS Existencia,
-	DATEDIFF(day,'$FInicial','$FFinalRango') As RangoDias
+	DATEDIFF(day,'$FInicial','$FFinal') As RangoDias
 	INTO TablaTemp4
 	FROM TablaTemp
 	INNER JOIN InvArticulo ON InvArticulo.CodigoArticulo = TablaTemp.CodigoArticulo
