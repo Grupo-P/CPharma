@@ -19,8 +19,6 @@
   if (isset($_GET['Descrip'])  ){
     $InicioCarga = new DateTime("now");
 
-    echo'<h6 align="center">Periodo desde el '.$_GET['fechaInicio'].' al '.$_GET['fechaFin'].' </h6>';
-
     ReportePedido($_GET['Descrip'],$_GET['fechaInicio'],$_GET['fechaFin']);
 
     $FinCarga = new DateTime("now");
