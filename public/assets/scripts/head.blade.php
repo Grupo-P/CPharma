@@ -4,7 +4,7 @@
 <!-- CSRF Token -->
 <meta name="csrf-token" content="{{ csrf_token() }}">
 
-<link rel="icon" type="image/png" href="{{ asset('assets/img/icono.png') }}" />
+<link rel="icon" type="image/png" href="/img/icono.png" />
 
 <title>CPharma - @yield('title')</title>
 
