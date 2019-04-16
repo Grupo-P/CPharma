@@ -125,7 +125,7 @@
 		      <td>{{$proveedor->empresa}}</td>
 		      <td>{{$proveedor->estatus}}</td>
 		    <!-- Inicio Validacion de ROLES -->
-		      <td>
+		      <td style="width:140px;">
 				
 				<?php
 				if(Auth::user()->role == 'MASTER'){
