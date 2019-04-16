@@ -1,4 +1,3 @@
-<!-- Correccion Orotografica: Completa 12/12/2018 -->
 <style>
     a{
       text-decoration: none;

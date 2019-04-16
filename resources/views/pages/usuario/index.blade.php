@@ -1,4 +1,3 @@
-<!-- Correccion Orotografica: Parcial -->
 @extends('layouts.model')
 
 @section('title')
