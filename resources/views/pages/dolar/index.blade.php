@@ -83,24 +83,30 @@
 		<i class="fas fa-money-bill-alt"></i>
 		Dolar
 	</h1>
-	<hr class="row align-items-start col-12">
 	
-	<div>
-		<a href="{{ url('/dolar/create') }}" role="button" class="btn btn-outline-info btn-sm" 
-		style="display: inline; text-align: left;">
-      		<i class="fa fa-plus"></i>
-      		Agregar		      		
-      	</a>
-	</div>
-	<br>
-	<div class="input-group md-form form-sm form-1 pl-0">
-	  <div class="input-group-prepend">
-	    <span class="input-group-text purple lighten-3" id="basic-text1"><i class="fas fa-search text-white"
-	        aria-hidden="true"></i></span>
-	  </div>
-	  <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterFirsTable()">
-	</div>
+	<hr class="row align-items-start col-12">
+	<table style="width:100%;">
+	    <tr>
+	        <td style="width:10%;" align="center">	
+				<a href="{{ url('/dolar/create') }}" role="button" class="btn btn-outline-info btn-sm" 
+				style="display: inline; text-align: left;">
+				<i class="fa fa-plus"></i>
+					Agregar		      		
+				</a>
+	        </td>
+	        <td style="width:90%;">
+	        	<div class="input-group md-form form-sm form-1 pl-0">
+				  <div class="input-group-prepend">
+				    <span class="input-group-text purple lighten-3" id="basic-text1"><i class="fas fa-search text-white"
+				        aria-hidden="true"></i></span>
+				  </div>
+				  <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterFirsTable()">
+				</div>
+	        </td>
+	    </tr>
+	</table>
 	<br/>
+	
 	<table class="table table-striped table-borderless col-12 sortable" id="myTable">
 	  	<thead class="thead-dark">
 		    <tr>
