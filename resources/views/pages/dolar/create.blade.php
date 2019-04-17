@@ -1,7 +1,7 @@
 @extends('layouts.model')
 
 @section('title')
-    Dolar
+    Tasa
 @endsection
 
 @section('content')

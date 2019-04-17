@@ -1,7 +1,7 @@
 @extends('layouts.model')
 
 @section('title')
-    Dolar
+    Tasa
 @endsection
 
 @section('content')
@@ -28,8 +28,8 @@
     @endif
 
     <h1 class="h5 text-info">
-        <i class="fas fa-plus"></i>
-        Agregar tasa
+        <i class="fas fa-edit"></i>
+        Modificar tasa
     </h1>
 
     <hr class="row align-items-start col-12">

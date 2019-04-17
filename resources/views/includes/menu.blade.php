@@ -78,7 +78,7 @@
       <a class="nav-link" href="{{ url('/dolar') }}">
         <span data-feather="home"></span>
         <i class="fas fa-money-bill-alt"></i>
-        Dolar<span class="sr-only">(current)</span>
+        Tasa<span class="sr-only">(current)</span>
       </a>
     </li>
     <li class="nav-item">
