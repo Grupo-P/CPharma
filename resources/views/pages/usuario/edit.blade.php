@@ -68,6 +68,7 @@
                         <option>SUPERVISOR</option>
                         <option>ADMINISTRADOR</option>
                         <option>MASTER</option>
+                        <option>DEVELOPER</option>
                     </select>
                 </td>
             </tr>

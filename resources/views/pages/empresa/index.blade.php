@@ -133,7 +133,7 @@
 		      <td style="width:140px;">
 				
 				<?php
-				if(Auth::user()->role == 'MASTER'){
+				if(Auth::user()->role == 'MASTER' || Auth::user()->role == 'DEVELOPER'){
 				?>
 
 					<?php

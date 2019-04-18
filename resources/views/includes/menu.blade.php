@@ -103,6 +103,28 @@
         Usuario<span class="sr-only">(current)</span>
       </a>
     </li>
+<?php
+}
+?>
+
+<?php
+  if(Auth::user()->role == 'DEVELOPER'){
+?>
+    <hr class="row align-items-center">
+    <li class="nav-item">
+      <a class="nav-link" href="{{ url('/dolar') }}">
+        <span data-feather="home"></span>
+        <i class="fas fa-money-bill-alt"></i>
+        Tasa<span class="sr-only">(current)</span>
+      </a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="{{ url('/usuario') }}">
+        <span data-feather="home"></span>
+        <i class="fas fa-user"></i>
+        Usuario<span class="sr-only">(current)</span>
+      </a>
+    </li>
     <li class="nav-item">
       <a class="nav-link" href="{{ url('/test') }}">
         <span data-feather="home"></span>

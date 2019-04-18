@@ -23,10 +23,10 @@ define ("nameFTN" , "SMART");
 /*
 	Cadena de conexion con la base de datos de Smartpharma FLL
 */
-define ("serverFLL" , "SERVER-FLL\SMARTPHARMA");
+define ("serverFLL" , "192.168.7.34\SMARTPHARMA");
 define ("userFLL" , "sa");
-define ("passFLL" , "smartpharma123");
-define ("nameFLL" , "smartlago");
+define ("passFLL" , "Soporte123");
+define ("nameFLL" , "SMART");
 /*
 	Cadena de conexion con la base de datos de Smartpharma FAU
 */

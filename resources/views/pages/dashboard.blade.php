@@ -22,7 +22,7 @@
 	<div class="card-deck">
 		
 		<?php
-		  if(Auth::user()->role == 'MASTER'){
+		  if(Auth::user()->role == 'MASTER' || Auth::user()->role == 'DEVELOPER'){
 		 ?>
 		<!-- Usuario -->
 		<div class="card border-info mb-3" style="width: 14rem;">	  	
