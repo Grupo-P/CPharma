@@ -10,11 +10,11 @@ function conectarXampp(){
 //CONEXION CON SMARPHARMA
 function conectarDB(){
 	$connectionInfo = array(
-		"Database"=>nameDB,
-		"UID"=>userDB,
-		"PWD"=>passDB
+		"Database"=>nameFTN,
+		"UID"=>userFTN,
+		"PWD"=>passFTN
 	);
-	$conn = sqlsrv_connect( serverDB, $connectionInfo);
+	$conn = sqlsrv_connect( serverFTN, $connectionInfo);
 	return $conn;
 }
 /*OPTIMIZADO*/
