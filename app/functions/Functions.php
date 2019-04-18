@@ -48,7 +48,7 @@ function ConsultaDB ( $sql ){
 }
 /*OPTIMIZADO*/
 //ARREGLO RECURSIVO: CONSULTA ESPECIAL SMARTPHARMA
-function array_flatten_recursive($array) { 
+function array_flatten_recursive1($array) { 
    if (!is_array($array)) {
 	   return false;
    }
@@ -63,7 +63,7 @@ function array_flatten_recursive($array) {
 }
 /*OPTIMIZADO*/
 //ARMADO DE JSON DE CONSULTA ESPECIAL
-function armarJson($sql){
+function armarJson1($sql){
 	$result = ConsultaDB ($sql);
     $arrayJson = array_flatten_recursive($result);
     return json_encode($arrayJson);
