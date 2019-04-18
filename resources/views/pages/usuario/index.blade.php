@@ -131,11 +131,10 @@
 		      <td style="width:140px;">
 				
 				<?php
-				if(Auth::user()->role == 'MASTER'){
+					if(Auth::user()->role == 'MASTER'){
 				?>
-
 					<?php
-					if($usuario->estatus == 'ACTIVO'){
+						if($usuario->estatus == 'ACTIVO'){
 					?>
 						<a href="/usuario/{{$usuario->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
 			      			<i class="far fa-eye"></i>			      		
@@ -152,7 +151,7 @@
 						</form>
 					<?php
 					}
-					else if($usuario->estatus == 'INACTIVO'){
+						else if($usuario->estatus == 'INACTIVO'){
 					?>		
 			      	<form action="/usuario/{{$usuario->id}}" method="POST" style="display: inline;">
 					    @method('DELETE')
@@ -163,7 +162,7 @@
 					}					
 					?>
 				<?php	
-				} else if(Auth::user()->role == 'SUPERVISOR'){
+				} else if(Auth::user()->role == 'SUPERVISOR' || Auth::user()->role == 'ADMINISTRADOR'){
 				?>
 					<a href="/usuario/{{$usuario->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
 		      			<i class="far fa-eye"></i>			      		
