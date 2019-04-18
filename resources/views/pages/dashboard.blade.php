@@ -28,11 +28,11 @@
 		<div class="card border-info mb-3" style="width: 14rem;">	  	
 	  		<div class="card-body text-left bg-info">
 	    		<h2 class="card-title">
-		    		<span class="card-text text-white">		    			
+		    		<span class="card-text text-white">	
+		    		<i class="fas fa-user"></i>	    			
 		    			<?php
 							echo ''.$usuarios;
-						?>
-						<i class="fas fa-user"></i>
+						?>						
 		    		</span>
 	    		</h2>
 	    		<p class="card-text text-white">Usuarios registrados</p>
@@ -46,10 +46,10 @@
 	  		<div class="card-body text-left bg-success">
 	    		<h2 class="card-title">
 		    		<span class="card-text text-white">
+		    			<i class="fas fa-money-bill-alt"></i>
 		    			<?php
 							echo ''.$dolar;
-						?>
-						<i class="fas fa-money-bill-alt"></i>
+						?>						
 		    		</span>
 	    		</h2>
 	    		<p class="card-text text-white">Tasas registradas</p>
@@ -68,10 +68,10 @@
 	  		<div class="card-body text-left bg-danger">
 	    		<h2 class="card-title">
 		    		<span class="card-text text-white">
+		    			<i class="fas fa-industry"></i>
 		    			<?php
 							echo ''.$empresas;
-						?>
-						<i class="fas fa-industry"></i>
+						?>						
 		    		</span>
 	    		</h2>
 	    		<p class="card-text text-white">Empresas registradas</p>
@@ -85,10 +85,10 @@
 	  		<div class="card-body text-left bg-dark">
 	    		<h2 class="card-title">
 		    		<span class="card-text text-white">
+		    			<i class="fas fa-dolly"></i>
 		    			<?php
 							echo ''.$proveedores;
-						?>
-						<i class="fas fa-dolly"></i>
+						?>						
 		    		</span>
 	    		</h2>
 	    		<p class="card-text text-white">Proveedores registrados</p>
@@ -101,11 +101,12 @@
 		<div class="card border-secondary mb-3" style="width: 14rem;">	  	
 	  		<div class="card-body text-left bg-secondary">
 	    		<h2 class="card-title">
-		    		<span class="card-text text-white">	
-		    			<i class="fas fa-file-invoice"></i>	    			
-		    			Reportes		    		
+		    		<span class="card-text text-white">
+		    			<i class="fas fa-file-invoice"></i>
+		    			06		    			
 		    		</span>
 	    		</h2>
+	    		<p class="card-text text-white">Reportes disponibles</p>
 	  		</div>
 		  	<div class="card-footer bg-transparent border-secondary text-right">
 		  		<a href="/reporte/" class="btn btn-outline-secondary btn-sm">Visualizar</a>
