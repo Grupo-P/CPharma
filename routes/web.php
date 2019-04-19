@@ -21,6 +21,10 @@ Route::get('/test', function () {
     return view('test');
 });
 
+Route::get('/sede', function () {
+    return view('pages.sedes');
+});
+
 Route::get('/reporte', function () {
     return view('pages.reportes');
 });

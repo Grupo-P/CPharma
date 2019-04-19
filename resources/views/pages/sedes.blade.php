@@ -6,6 +6,8 @@
 
 @section('content')
 
+	<?php include(app_path().'\functions\config.php'); ?>
+
 	<h1 class="h5 text-info">
 		<i class="fas fa-file-invoice"></i>
 		Reportes
@@ -19,12 +21,12 @@
 	  		<div class="card-body text-left bg-danger">
 	    		<h5 class="card-title">
 		    		<span class="card-text text-white">
-		    			Activacion de proveedores
+		    			<?php echo "".SedeFTN; ?>
 		    		</span>
 	    		</h5>	    	    
 	  		</div>
 		  	<div class="card-footer bg-transparent border-danger text-right">
-		  		<a href="{{ url('/reporte1') }}" class="btn btn-outline-danger btn-sm">Visualizar</a>
+		  		<a href="{{ url('/reporte') }}" class="btn btn-outline-danger btn-sm">Ver reportes</a>
 		  	</div>
 		</div>
 
@@ -32,12 +34,12 @@
 	  		<div class="card-body text-left bg-success">
 	    		<h5 class="card-title">
 		    		<span class="card-text text-white">
-		    			Historico de productos
+		    			<?php echo "".SedeFLL; ?>
 		    		</span>
 	    		</h5>	    	    
 	  		</div>
 		  	<div class="card-footer bg-transparent border-success text-right">
-		  		<a href="{{ url('/reporte2') }}" class="btn btn-outline-success btn-sm">Visualizar</a>
+		  		<a href="{{ url('/reporte') }}" class="btn btn-outline-success btn-sm">Ver reportes</a>
 		  	</div>
 		</div>
 
@@ -45,55 +47,36 @@
 	  		<div class="card-body text-left bg-info">
 	    		<h5 class="card-title">
 		    		<span class="card-text text-white">
-		    			Productos mas vendidos
+		    			<?php echo "".SedeFAU; ?>
 		    		</span>
 	    		</h5>	    	    
 	  		</div>
 		  	<div class="card-footer bg-transparent border-info text-right">
-		  		<a href="{{ url('/reporte3') }}" class="btn btn-outline-info btn-sm">Visualizar</a>
+		  		<a href="#" class="btn btn-outline-info btn-sm">Proximamente</a>
 		  	</div>
 		</div>
-
    	</div>
+
+   	<?php
+	  if(Auth::user()->role == 'DEVELOPER'){
+	 ?>
 
    	<div class="card-deck">
    		<div class="card border-warning mb-3" style="width: 14rem;">	  	
 	  		<div class="card-body text-left bg-warning">
 	    		<h5 class="card-title">
 		    		<span class="card-text text-white">
-		    			Productos menos vendidos
+		    			<?php echo "".SedeDB; ?>
 		    		</span>
 	    		</h5>	    	    
 	  		</div>
 		  	<div class="card-footer bg-transparent border-warning text-right">
-		  		<a href="{{ url('/reporte4') }}" class="btn btn-outline-warning btn-sm">Visualizar</a>
+		  		<a href="{{ url('/reporte') }}" class="btn btn-outline-warning btn-sm">Ver reportes</a>
 		  	</div>
-		</div>
-		
-   		<div class="card border-secondary mb-3" style="width: 14rem;">	  	
-	  		<div class="card-body text-left bg-secondary">
-	    		<h5 class="card-title">
-		    		<span class="card-text text-white">
-		    			Productos en falla
-		    		</span>
-	    		</h5>	    	    
-	  		</div>
-		  	<div class="card-footer bg-transparent border-secondary text-right">
-		  		<a href="{{ url('/reporte5') }}" class="btn btn-outline-secondary btn-sm">Visualizar</a>
-		  	</div>
-		</div>
-
-		<div class="card border-dark mb-3" style="width: 14rem;">	  	
-	  		<div class="card-body text-left bg-dark">
-	    		<h5 class="card-title">
-		    		<span class="card-text text-white">
-		    			Pedido de productos
-		    		</span>
-	    		</h5>	    	    
-	  		</div>
-		  	<div class="card-footer bg-transparent border-dark text-right">
-		  		<a href="{{ url('/reporte6') }}" class="btn btn-outline-dark btn-sm">Visualizar</a>
-		  	</div>
-		</div>
+		</div>		
    	</div>
+
+   	<?php
+		}
+	?>
 @endsection
