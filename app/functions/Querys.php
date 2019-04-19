@@ -1,7 +1,31 @@
 <?php
 /*
+	TITULO: QTablaTemp
+	PARAMETROS: [$Cant] Cantidad de tablas temporales a preparar
+	FUNCION: Borra el contenido de las tablas temporales si estan en uso
+	RETORNO: Tablas temporales vacias
+ */
+function QTablaTemp($Cant){
+	for($i = 0; $i<$Cant; $i++){
+		if($i == 0){
+			$sql = "
+				IF OBJECT_ID ('TablaTemp', 'U') IS NOT NULL
+					DROP TABLE TablaTemp;
+			";
+		}
+		else {
+			$flag = "
+				IF OBJECT_ID ('TablaTemp".$i."', 'U') IS NOT NULL
+					DROP TABLE TablaTemp".$i.";
+			";
+			$sql = $sql.$flag;
+		}
+	}
+	return $sql;
+}
+/*
 	TITULO: QListaProveedores
-	PARAMETROS : No aplica
+	PARAMETROS: No aplica
 	FUNCION: Armar una lista de proveedores
 	RETORNO: Lista de proveedores
  */
@@ -20,24 +44,56 @@ function QListaProveedores(){
 }
 /*
 	TITULO: QFRegProveedor
-	PARAMETROS : [$IdProveedor] Id del proveedor para la busqueda
-	FUNCION: Buscar la ultima fecha de registro y la diferencia en dias
-	RETORNO: Ultima fecha de registro y diferencia en dias con el dia actual
+	PARAMETROS: No aplica
+	FUNCION: Armar una lista de provedores con su ultima fecha de registro
+	RETORNO: Lista de proveedores con su ultima fecha de registro
  */
-function QFRegProveedor($IdProveedor){
+function QFRegProveedor(){
 	$sql = "
-		SELECT TOP 1
-		CONVERT(DATE,ComFactura.FechaRegistro) AS FechaRegistro,
-		DATEDIFF(DAY,CONVERT(DATE,ComFactura.FechaRegistro),GETDATE()) As RangoDias 
-		FROM ComFactura
-		WHERE ComFactura.ComProveedorId = 5
-		ORDER BY FechaRegistro DESC
+		SELECT
+		ComProveedor.Id,
+		GenPersona.Nombre,
+			(SELECT TOP 1
+			CONVERT(DATE,ComFactura.FechaRegistro) 
+			FROM ComFactura
+			WHERE ComFactura.ComProveedorId= ComProveedor.Id
+			ORDER BY FechaRegistro DESC) AS FechaRegistro
+		INTO TablaTemp 
+		FROM ComProveedor
+		INNER JOIN GenPersona ON ComProveedor.GenPersonaId=GenPersona.Id
+		INNER JOIN ComFactura ON ComFactura.ComProveedorId=ComProveedor.Id
+		GROUP by ComProveedor.Id, GenPersona.Nombre
+		ORDER BY ComProveedor.Id ASC
 	";
 	return $sql;
 }
 /*
-	TITULO: QListaProveedores
-	PARAMETROS : NO APLICA
+	TITULO: QFRegRangoProveedor
+	PARAMETROS: Funciona en conjunto con QFRegProveedor(Ejecutar primero QFRegProveedor)
+	FUNCION: Toma el resultado de QFRegProveedor y le anexa el campo de rango de dia, 
+	RETORNO: Regresa una lista de proveedores con la ultima fecha de registro y la diferencia en dias
+ */
+function QFRegRangoProveedor(){
+	$sql = "
+		SELECT
+		TablaTemp.Id,
+		TablaTemp.Nombre,
+		TablaTemp.FechaRegistro,
+		DATEDIFF(DAY,CONVERT(DATE,TablaTemp.FechaRegistro),GETDATE()) As RangoDias
+		FROM TablaTemp
+		ORDER BY RangoDias ASC
+	";
+	return $sql;
+}
+
+
+
+
+
+
+/*
+	TITULO: 
+	PARAMETROS: 
 	FUNCION:
 	RETORNO:
  */

@@ -19,8 +19,8 @@
 
 	$InicioCarga = new DateTime("now");
 
-	ReporteActivacionProveedores1();
-	
+	ReporteActivacionProveedores('DB');
+
 	$FinCarga = new DateTime("now");
     $IntervalCarga = $InicioCarga->diff($FinCarga);
     echo'Tiempo de carga: '.$IntervalCarga->format("%Y-%M-%D %H:%I:%S");
