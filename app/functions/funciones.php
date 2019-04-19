@@ -124,4 +124,33 @@ function armarJson($sql,$SedeConnection){
     $arrayJson = array_flatten_recursive($result);
     return json_encode($arrayJson);
 }
+/*
+	TITULO: NombreSede
+	PARAMETROS: [$SedeConnection] Siglas de la sede para la conexion
+	FUNCION: Retornar el nombre de la sede con la que se esta conectando
+	RETORNO: Nombre de la sede conectada
+ */
+function NombreSede($SedeConnection){
+	switch ($SedeConnection) {
+		case 'FTN':
+			$sede = SedeFTN;
+			return $sede;
+		break;
+
+		case 'FLL':
+			$sede = SedeFLL;
+			return $sede;
+		break;
+
+		case 'FAU':
+			$sede = SedeFAU;
+			return $sede;
+		break;	
+
+		case 'DB':
+			$sede = SedeDB;
+			return $sede;
+		break;	
+	}
+}
 ?>

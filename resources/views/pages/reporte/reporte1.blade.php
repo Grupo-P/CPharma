@@ -19,6 +19,8 @@
 
 	$InicioCarga = new DateTime("now");
 
+	echo '<h1 class="h6 text-danger"  align="left"> <i class="fas fa-bell"></i> '.NombreSede('DB').'</h1>';
+
 	ReporteActivacionProveedores('DB');
 
 	$FinCarga = new DateTime("now");

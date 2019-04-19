@@ -6,6 +6,10 @@ define("SigDolar","$");
 define("SigVe","Bs.S");
 define("Utilidad",0.77);
 define("Impuesto",1.16);
+define ("SedeFTN","Farmacia Tierra Negra");
+define ("SedeFLL","Farmacia La Lago");
+define ("SedeFAU","Farmacia Avenida Universidad");
+define ("SedeDB","Servidor de Desarrollo");
 /*
 	Cadena de conexion con la base de datos de CPharma
 */
