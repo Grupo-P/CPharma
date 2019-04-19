@@ -1,7 +1,46 @@
 <?php
-/**/
-
-
+/*
+	TITULO: QListaProveedores
+	PARAMETROS : No aplica
+	FUNCION: Armar una lista de proveedores
+	RETORNO: Lista de proveedores
+ */
+function QListaProveedores(){
+	$sql = "
+		SELECT
+		ComProveedor.Id,
+		GenPersona.Nombre
+		FROM ComProveedor
+		INNER JOIN GenPersona ON ComProveedor.GenPersonaId=GenPersona.Id
+		INNER JOIN ComFactura ON ComFactura.ComProveedorId=ComProveedor.Id
+		GROUP by ComProveedor.Id, GenPersona.Nombre
+		ORDER BY ComProveedor.Id ASC
+	";
+	return $sql;
+}
+/*
+	TITULO: QFRegProveedor
+	PARAMETROS : [$IdProveedor] Id del proveedor para la busqueda
+	FUNCION: Buscar la ultima fecha de registro y la diferencia en dias
+	RETORNO: Ultima fecha de registro y diferencia en dias con el dia actual
+ */
+function QFRegProveedor($IdProveedor){
+	$sql = "
+		SELECT TOP 1
+		CONVERT(DATE,ComFactura.FechaRegistro) AS FechaRegistro,
+		DATEDIFF(DAY,CONVERT(DATE,ComFactura.FechaRegistro),GETDATE()) As RangoDias 
+		FROM ComFactura
+		WHERE ComFactura.ComProveedorId = 5
+		ORDER BY FechaRegistro DESC
+	";
+	return $sql;
+}
+/*
+	TITULO: QListaProveedores
+	PARAMETROS : NO APLICA
+	FUNCION:
+	RETORNO:
+ */
 
 
 /*Productos por proveedor

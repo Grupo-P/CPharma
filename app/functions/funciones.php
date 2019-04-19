@@ -1,11 +1,21 @@
 <?php
-//CONEXION CON XAMPP
+/*
+	TITULO: ConectarXampp
+	PARAMETROS: No Aplica
+	FUNCION: Conexion con servidor de XAMPP
+	RETORNO: Conexion a XAMPP
+*/
 function ConectarXampp(){
 	$conexion = mysqli_connect(serverCP,userCP,passCP);
 	mysqli_select_db($conexion,nameCP);
     return $conexion;
 }
-//CONEXION CON SMARPHARMA SEGUN LA SEDE
+/*
+	TITULO: ConectarSmartpharma
+	PARAMETROS: [$SedeConnection] Siglas de la sede para la conexion
+	FUNCION: Conectar el sistema con la sede que se desea
+	RETORNO: Conexion a Smartpharma
+ */
 function ConectarSmartpharma($SedeConnection){
 	switch ($SedeConnection) {
 		case 'FTN':
@@ -49,7 +59,13 @@ function ConectarSmartpharma($SedeConnection){
 		break;	
 	}
 }
-//CONSULTA ESPECIAL A SMARTPHARMA
+/*
+	TITULO: ConsultaEspecialSmartpharma
+	PARAMETROS: [$sql] Cadena de sql a ejecutar, 
+				[$SedeConnection] Siglas de la sede para la conexion
+	FUNCION: Hacer una consulta a smartpharma
+	RETORNO: Arreglo de datos
+ */
 function ConsultaEspecialSmartpharma ($sql,$SedeConnection){
 	$conn = ConectarSmartpharma($SedeConnection);
 	if( $conn ) {					
@@ -77,7 +93,12 @@ function ConsultaEspecialSmartpharma ($sql,$SedeConnection){
 		die( print_r( sqlsrv_errors(), true));
 	}	
 }
-//ARREGLO RECURSIVO: CONSULTA ESPECIAL SMARTPHARMA
+/*
+	TITULO: array_flatten_recursive
+	PARAMETROS: [$array] Arreglo para aplicar la recursividad
+	FUNCION: Iterar en el arreglo para la busqueda de variables
+	RETORNO: Palabra clave buscada
+ */
 function array_flatten_recursive($array) { 
    if (!is_array($array)) {
 	   return false;
@@ -91,7 +112,13 @@ function array_flatten_recursive($array) {
    }
    return $flat;
 }
-//ARMADO DE JSON DE CONSULTA ESPECIAL
+/*
+	TITULO: armarJson
+	PARAMETROS: [$sql] Cadena de sql a ejecutar, 
+				[$SedeConnection] Siglas de la sede para la conexion
+	FUNCION: Armar un arreglo Json con las palabras claves encontradas
+	RETORNO: Arreglo Json
+ */
 function armarJson($sql,$SedeConnection){
 	$result = ConsultaEspecialSmartpharma ($sql,$SedeConnection);
     $arrayJson = array_flatten_recursive($result);
