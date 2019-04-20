@@ -24,6 +24,18 @@ function QTablaTemp($Cant){
 	return $sql;
 }
 /*
+	TITULO: QTasa
+	PARAMETROS: [$QFecha] Fecha de la que se quiere la tasa
+	FUNCION: Buscar el valor de la tasa en un dia especifico
+	RETORNO: Valor de la tasa al dia que se solicito
+ */
+function QTasa($Fecha){
+	$conCP = ConectarXampp();
+	$consulta = "SELECT tasa FROM dolars where fecha='$Fecha'";
+	$resultado = mysqli_query($conCP,$consulta);
+	return $resultado;
+}
+/*
 	TITULO: QListaProveedores
 	PARAMETROS: No aplica
 	FUNCION: Armar una lista de proveedores
@@ -85,10 +97,133 @@ function QFRegRangoProveedor(){
 	";
 	return $sql;
 }
-
-
-
-
+/*
+	TITULO: QDescIdArticulos
+	PARAMETROS: No aplica
+	FUNCION: Armar una lista de articulos
+	RETORNO: Lista de articulos
+ */
+function QListaArticulos(){
+	$sql = "
+		SELECT
+		InvArticulo.Descripcion, 
+		InvArticulo.Id 
+		FROM InvArticulo
+		ORDER BY InvArticulo.Descripcion ASC
+	";
+	return $sql;
+}
+/*
+	TITULO: QArticulo
+	PARAMETROS: [$IdArticulo] Id del articulo que se va a buscar
+	FUNCION: Buscar informacion del articulo
+	RETORNO: Datos del articulo
+ */
+function QArticulo($IdArticulo){
+	$sql = "
+		SELECT
+		InvArticulo.Id, 
+		InvArticulo.CodigoArticulo,
+		InvArticulo.Descripcion,
+		InvArticulo.FinConceptoImptoIdCompra AS ConceptoImpuesto
+		FROM InvArticulo
+		WHERE InvArticulo.Id = '$IdArticulo'
+	";
+	return $sql;
+}
+/*
+	TITULO: QExistenciaArticulo
+	PARAMETROS: [$IdArticulo] Id del articulo que se va a buscar
+	FUNCION: Buscar la existencia de del articulos
+	RETORNO: Existencia
+ */
+function QExistenciaArticulo($IdArticulo){
+	$sql = "
+		SELECT
+		SUM (InvLoteAlmacen.Existencia) As Existencia
+		FROM InvLoteAlmacen
+		WHERE (InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2) 
+		AND (InvLoteAlmacen.InvArticuloId = '$IdArticulo')
+	";
+	return $sql;
+}
+/*
+	TITULO: QLoteArticulo
+	PARAMETROS: [$IdArticulo] Id del articulo
+				[$CantAlmacen] determina el los almacenes donde se buscara el lote
+				0: para los almacenes [1,2]
+				1: para todos los almacenes
+	FUNCION: Busca el lote correspondiente al articulo especificado
+	RETORNO: Regresa el Id del lote correspondiente
+ */
+function QLoteArticulo($IdArticulo,$CantAlmacen){
+	switch ($CantAlmacen) {
+		case '0':
+		$sql = "
+			SELECT
+			InvLoteAlmacen.InvLoteId
+			FROM InvLoteAlmacen 
+			WHERE (InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2) 
+			AND (InvLoteAlmacen.InvArticuloId = '$IdArticulo')
+			AND (InvLoteAlmacen.Existencia>0)
+		";
+		return $sql;
+		break;
+		
+		case '1':
+		$sql = "
+			SELECT
+			InvLoteAlmacen.InvLoteId
+			FROM InvLoteAlmacen 
+			WHERE(InvLoteAlmacen.InvArticuloId = '$IdArticulo')
+			AND (InvLoteAlmacen.Existencia>0)
+		";
+		return $sql;
+		break;
+	}	
+}
+/*
+	TITULO: QLote
+	PARAMETROS: [$IdLote] Id del lote que se desea buscar 
+	FUNCION: Busca el precio de compra bruto y el precio troquelado
+	RETORNO: Retorna el precio de compra bruto y el precio troquelado
+ */
+function QLote($IdLote){
+	$sql = "
+		SELECT TOP 1
+		InvLote.Id,
+		invlote.M_PrecioCompraBruto,
+		invlote.M_PrecioTroquelado
+		FROM InvLote
+		WHERE InvLote.Id = '$IdLote'
+		ORDER BY invlote.M_PrecioTroquelado, invlote.M_PrecioCompraBruto DESC
+	";
+	return $sql;
+}
+/*
+	TITULO: QHistoricoArticulo QUEDE AQUI
+	PARAMETROS: 
+	FUNCION:
+	RETORNO:
+ */
+function QHistoricoArticulo($IdArticuloQ){
+	$sql = "
+		SELECT
+		GenPersona.Nombre,
+		CONVERT(date,ComFactura.FechaRegistro) As FechaRegistro,
+		ComFacturaDetalle.CantidadRecibidaFactura,
+		ComFacturaDetalle.M_PrecioCompraBruto
+		INTO TablaTemp8
+		FROM InvArticulo
+		inner join ComFacturaDetalle ON InvArticulo.Id = ComFacturaDetalle.InvArticuloId
+		inner join ComFactura ON ComFactura.Id = ComFacturaDetalle.ComFacturaId
+		inner join ComProveedor ON ComProveedor.Id = ComFactura.ComProveedorId
+		inner join GenPersona ON GenPersona.Id = ComProveedor.GenPersonaId
+		WHERE InvArticulo.Id = '$IdArticuloQ'
+		ORDER BY ComFactura.FechaRegistro DESC
+	";
+	return $sql;
+}
 
 
 /*
@@ -97,7 +232,6 @@ function QFRegRangoProveedor(){
 	FUNCION:
 	RETORNO:
  */
-
 
 /*Productos por proveedor
 ******* SCRIPT 1 *****

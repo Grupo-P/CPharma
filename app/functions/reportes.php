@@ -1,4 +1,5 @@
 <?php
+/************************************************************************************/
 /************************ REPORTE 1 ACTIVACION DE PROVEEDORES ***********************/
 /*
 	TITULO: ReporteActivacionProveedores
@@ -49,5 +50,12 @@ function ReporteActivacionProveedores($SedeConnection){
 	</table>';
 	sqlsrv_close( $conn );
 }
-/***********************************************************************************/
+/************************************************************************************/
+/************************ REPORTE 2 HISTORICO DE ARTICULO ***************************/
+/*
+	TITULO:
+	PARAMETROS : [$SedeConnection] Siglas de la sede para la conexion
+	FUNCION:
+	RETORNO:
+ */
 ?>

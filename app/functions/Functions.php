@@ -48,7 +48,7 @@ function ConsultaDB ( $sql ){
 }
 /*OPTIMIZADO*/
 //ARREGLO RECURSIVO: CONSULTA ESPECIAL SMARTPHARMA
-function array_flatten_recursive1($array) { 
+function array_flatten_recursive($array) { 
    if (!is_array($array)) {
 	   return false;
    }
@@ -63,7 +63,7 @@ function array_flatten_recursive1($array) {
 }
 /*OPTIMIZADO*/
 //ARMADO DE JSON DE CONSULTA ESPECIAL
-function armarJson1($sql){
+function armarJson($sql){
 	$result = ConsultaDB ($sql);
     $arrayJson = array_flatten_recursive($result);
     return json_encode($arrayJson);
@@ -219,7 +219,7 @@ function ReporteHistoricoArticulo($IdArticuloQ){
 	";
 
 	$sql4="SELECT * FROM TablaTemp1";
-
+////////////
 	//CASO PRECIO TROQUELADO INICIO
 	$sql5="
 	SELECT
@@ -232,7 +232,7 @@ function ReporteHistoricoArticulo($IdArticuloQ){
 	";
 
 	$sql6="
-	SELECT
+	SELECT TOP 1
 	InvLote.Id,
 	invlote.M_PrecioCompraBruto,
 	invlote.M_PrecioTroquelado
@@ -241,7 +241,7 @@ function ReporteHistoricoArticulo($IdArticuloQ){
 	INNER JOIN TablaTemp2 ON TablaTemp2.InvLoteId = InvLote.Id
 	ORDER BY invlote.M_PrecioTroquelado, invlote.M_PrecioCompraBruto DESC
 	";
-
+////////////
 	$sql7="
 	SELECT TOP 1
 	TablaTemp3.M_PrecioTroquelado
@@ -283,7 +283,7 @@ function ReporteHistoricoArticulo($IdArticuloQ){
 	$sql12="SELECT * FROM TablaTemp7";
 	//FIN PRECIO CALCULADO
 
-	//INCIO CUERPO TABLA
+	//INCIO CUERPO TABLA QUEDE AQUI
 	$sql13="
 	SELECT
 	GenPersona.Nombre,
