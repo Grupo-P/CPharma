@@ -63,7 +63,7 @@ function array_flatten_recursive($array) {
 }
 /*OPTIMIZADO*/
 //ARMADO DE JSON DE CONSULTA ESPECIAL
-function armarJson($sql){
+function armarJson1($sql){
 	$result = ConsultaDB ($sql);
     $arrayJson = array_flatten_recursive($result);
     return json_encode($arrayJson);
@@ -169,7 +169,7 @@ function QueryTasa($QFecha){
 }
 /*OPTIMIZADO*/
 //REPORTE HISTORICO DE ARTICULO
-function ReporteHistoricoArticulo($IdArticuloQ){
+function ReporteHistoricoArticulo1($IdArticuloQ){
 	$conn = conectarDB();
 
 	$sql="

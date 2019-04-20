@@ -17,14 +17,12 @@
   include(app_path().'\functions\funciones.php');
   include(app_path().'\functions\reportes.php');
 
-	//include(app_path().'\functions\Functions.php');
-
   $ArtJson = "";
 	
 	if (isset($_GET['Id']))
 	{
     $InicioCarga = new DateTime("now");
-
+    
     if (isset($_GET['SEDE'])){      
       echo '<h1 class="h5 text-success"  align="left"> <i class="fas fa-prescription"></i> '.NombreSede($_GET['SEDE']).'</h1>';
     }
@@ -39,8 +37,6 @@
 	else{
     $InicioCarga = new DateTime("now");
 
-    //$sql = QueryArticulosDescId();
-    
     if (isset($_GET['SEDE'])){      
       echo '<h1 class="h5 text-success"  align="left"> <i class="fas fa-prescription"></i> '.NombreSede($_GET['SEDE']).'</h1>';
     }
@@ -54,9 +50,7 @@
 	    <div class="autocomplete" style="width:90%;">
 	      <input id="myInput" type="text" name="Descrip" placeholder="Ingrese el nombre del articulo " onkeyup="conteo()" required>
 	      <input id="myId" name="Id" type="hidden">
-        <input id="SEDE" name="SEDE" type="hidden" value="';
-          print_r($_GET['SEDE']);
-          echo'">
+        <input id="SEDE" name="SEDE" type="hidden" value="DB">
 	    </div>
 	    <input type="submit" value="Buscar" class="btn btn-outline-success">
   	</form>
