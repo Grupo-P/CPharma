@@ -26,7 +26,11 @@
 	    		</h5>	    	    
 	  		</div>
 		  	<div class="card-footer bg-transparent border-danger text-right">
-		  		<a href="{{ url('/reporte') }}" class="btn btn-outline-danger btn-sm">Ver reportes</a>
+		  		<form action="/reporte/" style="display: inline;">
+				    @csrf
+				    <input id="SEDE" name="SEDE" type="hidden" value="FTN">  
+				    <button type="submit" name="Reporte" role="button" class="btn btn-outline-danger btn-sm"></i>Ver reportes</button>
+				</form>
 		  	</div>
 		</div>
 
@@ -39,7 +43,11 @@
 	    		</h5>	    	    
 	  		</div>
 		  	<div class="card-footer bg-transparent border-success text-right">
-		  		<a href="{{ url('/reporte') }}" class="btn btn-outline-success btn-sm">Ver reportes</a>
+		  		<form action="/reporte/" style="display: inline;">
+				    @csrf
+				    <input id="SEDE" name="SEDE" type="hidden" value="FLL">  
+				    <button type="submit" name="Reporte" role="button" class="btn btn-outline-success btn-sm"></i>Ver reportes</button>
+				</form>
 		  	</div>
 		</div>
 
@@ -52,7 +60,11 @@
 	    		</h5>	    	    
 	  		</div>
 		  	<div class="card-footer bg-transparent border-info text-right">
-		  		<a href="#" class="btn btn-outline-info btn-sm">Proximamente</a>
+		  		<form action="/reporte/" style="display: inline;">
+				    @csrf
+				    <input id="SEDE" name="SEDE" type="hidden" value="FAU">  
+				    <button type="submit" name="Reporte" role="button" class="btn btn-outline-info btn-sm"></i>Ver reportes</button>
+				</form>
 		  	</div>
 		</div>
    	</div>
@@ -70,8 +82,12 @@
 		    		</span>
 	    		</h5>	    	    
 	  		</div>
-		  	<div class="card-footer bg-transparent border-warning text-right">
-		  		<a href="{{ url('/reporte') }}" class="btn btn-outline-warning btn-sm">Ver reportes</a>
+		  	<div class="card-footer bg-transparent border-warning text-right">	  		
+		  		<form action="/reporte/" style="display: inline;">
+				    @csrf
+				    <input id="SEDE" name="SEDE" type="hidden" value="DB">  
+				    <button type="submit" name="Reporte" role="button" class="btn btn-outline-warning btn-sm"></i>Ver reportes</button>
+				</form>
 		  	</div>
 		</div>		
    	</div>

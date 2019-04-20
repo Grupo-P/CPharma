@@ -10,9 +10,18 @@
 		<i class="fas fa-file-invoice"></i>
 		Reportes
 	</h1>
+	<hr class="row align-items-start col-12">
 
-	<hr class="row align-items-start col-12"> 
-	
+	<?php
+		include(app_path().'\functions\config.php'); 
+		include(app_path().'\functions\funciones.php');
+
+		if (isset($_GET['SEDE'])){						
+			echo '<h1 class="h5 text-success"  align="left"> <i class="fas fa-prescription"></i> '.NombreSede($_GET['SEDE']).'</h1>';
+		}		
+	?>
+
+	<hr class="row align-items-start col-12">
    	<div class="card-deck">
    		<!-- Reportes -->
 		<div class="card border-danger mb-3" style="width: 14rem;">	  	
@@ -24,7 +33,11 @@
 	    		</h5>	    	    
 	  		</div>
 		  	<div class="card-footer bg-transparent border-danger text-right">
-		  		<a href="{{ url('/reporte1') }}" class="btn btn-outline-danger btn-sm">Visualizar</a>
+		  		<form action="/reporte1/" style="display: inline;">
+				    @csrf
+				    <input id="SEDE" name="SEDE" type="hidden" value="<?php print_r($_GET['SEDE']); ?>">				   
+				    <button type="submit" name="Reporte" role="button" class="btn btn-outline-danger btn-sm"></i>Ver reportes</button>
+				</form>
 		  	</div>
 		</div>
 

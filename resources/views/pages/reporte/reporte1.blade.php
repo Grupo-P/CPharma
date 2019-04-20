@@ -18,10 +18,13 @@
 	include(app_path().'\functions\reportes.php');
 
 	$InicioCarga = new DateTime("now");
-
-	echo '<h1 class="h6 text-danger"  align="left"> <i class="fas fa-bell"></i> '.NombreSede('DB').'</h1>';
-
-	ReporteActivacionProveedores('DB');
+	
+	if (isset($_GET['SEDE'])){			
+		echo '<h1 class="h5 text-success"  align="left"> <i class="fas fa-prescription"></i> '.NombreSede($_GET['SEDE']).'</h1>';
+	}
+	echo '<hr class="row align-items-start col-12">';
+	
+	ReporteActivacionProveedores($_GET['SEDE']);
 
 	$FinCarga = new DateTime("now");
     $IntervalCarga = $InicioCarga->diff($FinCarga);
