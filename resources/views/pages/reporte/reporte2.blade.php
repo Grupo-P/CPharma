@@ -13,7 +13,11 @@
 
   <?php	
 	include(app_path().'\functions\config.php');
-	include(app_path().'\functions\Functions.php');
+  include(app_path().'\functions\querys.php');
+  include(app_path().'\functions\funciones.php');
+  include(app_path().'\functions\reportes.php');
+
+	//include(app_path().'\functions\Functions.php');
 
   $ArtJson = "";
 	
@@ -21,7 +25,12 @@
 	{
     $InicioCarga = new DateTime("now");
 
-    ReporteHistoricoArticulo($_GET['Id']);
+    if (isset($_GET['SEDE'])){      
+      echo '<h1 class="h5 text-success"  align="left"> <i class="fas fa-prescription"></i> '.NombreSede($_GET['SEDE']).'</h1>';
+    }
+    echo '<hr class="row align-items-start col-12">';
+
+    ReporteHistoricoArticulo($_GET['SEDE'],$_GET['Id']);
 
     $FinCarga = new DateTime("now");
     $IntervalCarga = $InicioCarga->diff($FinCarga);
@@ -30,14 +39,24 @@
 	else{
     $InicioCarga = new DateTime("now");
 
-    $sql = QueryArticulosDescId();
-    $ArtJson = armarJson($sql);
+    //$sql = QueryArticulosDescId();
+    
+    if (isset($_GET['SEDE'])){      
+      echo '<h1 class="h5 text-success"  align="left"> <i class="fas fa-prescription"></i> '.NombreSede($_GET['SEDE']).'</h1>';
+    }
+    echo '<hr class="row align-items-start col-12">';
+    
+    $sql = QListaArticulos();
+    $ArtJson = armarJson($sql,$_GET['SEDE']);
 
 		echo '
 		<form autocomplete="off" action="">
 	    <div class="autocomplete" style="width:90%;">
 	      <input id="myInput" type="text" name="Descrip" placeholder="Ingrese el nombre del articulo " onkeyup="conteo()" required>
 	      <input id="myId" name="Id" type="hidden">
+        <input id="SEDE" name="SEDE" type="hidden" value="';
+          print_r($_GET['SEDE']);
+          echo'">
 	    </div>
 	    <input type="submit" value="Buscar" class="btn btn-outline-success">
   	</form>

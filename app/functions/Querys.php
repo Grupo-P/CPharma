@@ -134,18 +134,35 @@ function QArticulo($IdArticulo){
 /*
 	TITULO: QExistenciaArticulo
 	PARAMETROS: [$IdArticulo] Id del articulo que se va a buscar
+				[$CantAlmacen] determina el los almacenes donde se buscara el lote
+				0: para los almacenes [1,2]
+				1: para todos los almacenes
 	FUNCION: Buscar la existencia de del articulos
 	RETORNO: Existencia
  */
-function QExistenciaArticulo($IdArticulo){
-	$sql = "
-		SELECT
-		SUM (InvLoteAlmacen.Existencia) As Existencia
-		FROM InvLoteAlmacen
-		WHERE (InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2) 
-		AND (InvLoteAlmacen.InvArticuloId = '$IdArticulo')
-	";
-	return $sql;
+function QExistenciaArticulo($IdArticulo,$CantAlmacen){
+	switch ($CantAlmacen) {
+		case '0':
+			$sql = "
+			SELECT
+			SUM (InvLoteAlmacen.Existencia) As Existencia
+			FROM InvLoteAlmacen
+			WHERE (InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2) 
+			AND (InvLoteAlmacen.InvArticuloId = '$IdArticulo')
+		";
+		return $sql;
+		break;
+		
+		case '1':
+		$sql = "
+			SELECT
+			SUM (InvLoteAlmacen.Existencia) As Existencia
+			FROM InvLoteAlmacen
+			WHERE (InvLoteAlmacen.InvArticuloId = '$IdArticulo')
+		";
+		return $sql;
+		break;
+	}	
 }
 /*
 	TITULO: QLoteArticulo
@@ -201,10 +218,10 @@ function QLote($IdLote){
 	return $sql;
 }
 /*
-	TITULO: QHistoricoArticulo QUEDE AQUI
-	PARAMETROS: 
-	FUNCION:
-	RETORNO:
+	TITULO: QHistoricoArticulo
+	PARAMETROS: [$IdArticuloQ] Id del articulo
+	FUNCION: Armar la tabla del historico de articulos
+	RETORNO: La tabla de historico del articulo
  */
 function QHistoricoArticulo($IdArticuloQ){
 	$sql = "

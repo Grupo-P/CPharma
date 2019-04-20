@@ -283,7 +283,7 @@ function ReporteHistoricoArticulo($IdArticuloQ){
 	$sql12="SELECT * FROM TablaTemp7";
 	//FIN PRECIO CALCULADO
 
-	//INCIO CUERPO TABLA QUEDE AQUI
+	//INCIO CUERPO TABLA
 	$sql13="
 	SELECT
 	GenPersona.Nombre,

@@ -53,9 +53,47 @@ function ReporteActivacionProveedores($SedeConnection){
 /************************************************************************************/
 /************************ REPORTE 2 HISTORICO DE ARTICULO ***************************/
 /*
-	TITULO:
+	TITULO: ReporteHistoricoArticulo
 	PARAMETROS : [$SedeConnection] Siglas de la sede para la conexion
-	FUNCION:
-	RETORNO:
+				 [$IdArticuloQ] Id del articulo a buscar
+	FUNCION: Armar una tabla de historico de compra del articulo
+	RETORNO: No aplica
  */
+function ReporteHistoricoArticulo($SedeConnection,$IdArticulo){
+	
+	$conn = ConectarSmartpharma($SedeConnection);
+
+	$sql = QArticulo($IdArticulo);
+	sqlsrv_query($conn,$sql);
+	$result = sqlsrv_query($conn,$sql1);
+
+	$sql1 = QExistenciaArticulo($IdArticulo,0);
+	sqlsrv_query($conn,$sql);
+	$result1 = sqlsrv_query($conn,$sql1);
+
+	echo '
+	<div class="input-group md-form form-sm form-1 pl-0">
+	  <div class="input-group-prepend">
+	    <span class="input-group-text purple lighten-3" id="basic-text1"><i class="fas fa-search text-white"
+	        aria-hidden="true"></i></span>
+	  </div>
+	  <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterAllTable()">
+	</div>
+	<br/>
+
+	<table class="table table-striped table-bordered col-12 sortable">
+		<thead class="thead-dark">
+		    <tr>
+		    	<th scope="col">Codigo</th>
+		      	<th scope="col">Descripcion</td>
+		      	<th scope="col">Existencia</td>
+		      	<th scope="col">Precio</td>
+		      	<th scope="col">Tasa actual</td>
+		      	<th scope="col">Costo en divisa</td>
+		    </tr>
+	  	</thead>
+	  	<tbody>
+  	';
+	sqlsrv_close( $conn );
+}
 ?>
