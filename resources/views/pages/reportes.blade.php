@@ -36,7 +36,7 @@
 		  		<form action="/reporte1/" style="display: inline;">
 				    @csrf
 				    <input id="SEDE" name="SEDE" type="hidden" value="<?php print_r($_GET['SEDE']); ?>">				   
-				    <button type="submit" name="Reporte" role="button" class="btn btn-outline-danger btn-sm"></i>Ver reportes</button>
+				    <button type="submit" name="Reporte" role="button" class="btn btn-outline-danger btn-sm"></i>Visualizar</button>
 				</form>
 		  	</div>
 		</div>
@@ -50,7 +50,11 @@
 	    		</h5>	    	    
 	  		</div>
 		  	<div class="card-footer bg-transparent border-success text-right">
-		  		<a href="{{ url('/reporte2') }}" class="btn btn-outline-success btn-sm">Visualizar</a>
+		  		<form action="/reporte2/" style="display: inline;">
+				    @csrf
+				    <input id="SEDE" name="SEDE" type="hidden" value="<?php print_r($_GET['SEDE']); ?>">				   
+				    <button type="submit" name="Reporte" role="button" class="btn btn-outline-success btn-sm"></i>Visualizar</button>
+				</form>
 		  	</div>
 		</div>
 
@@ -63,7 +67,11 @@
 	    		</h5>	    	    
 	  		</div>
 		  	<div class="card-footer bg-transparent border-info text-right">
-		  		<a href="{{ url('/reporte3') }}" class="btn btn-outline-info btn-sm">Visualizar</a>
+		  		<form action="/reporte3/" style="display: inline;">
+				    @csrf
+				    <input id="SEDE" name="SEDE" type="hidden" value="<?php print_r($_GET['SEDE']); ?>">				   
+				    <button type="submit" name="Reporte" role="button" class="btn btn-outline-info btn-sm"></i>Visualizar</button>
+				</form>
 		  	</div>
 		</div>
 
@@ -79,7 +87,11 @@
 	    		</h5>	    	    
 	  		</div>
 		  	<div class="card-footer bg-transparent border-warning text-right">
-		  		<a href="{{ url('/reporte4') }}" class="btn btn-outline-warning btn-sm">Visualizar</a>
+		  		<form action="/reporte4/" style="display: inline;">
+				    @csrf
+				    <input id="SEDE" name="SEDE" type="hidden" value="<?php print_r($_GET['SEDE']); ?>">				   
+				    <button type="submit" name="Reporte" role="button" class="btn btn-outline-warning btn-sm"></i>Visualizar</button>
+				</form>
 		  	</div>
 		</div>
 		
@@ -92,7 +104,11 @@
 	    		</h5>	    	    
 	  		</div>
 		  	<div class="card-footer bg-transparent border-secondary text-right">
-		  		<a href="{{ url('/reporte5') }}" class="btn btn-outline-secondary btn-sm">Visualizar</a>
+		  		<form action="/reporte5/" style="display: inline;">
+				    @csrf
+				    <input id="SEDE" name="SEDE" type="hidden" value="<?php print_r($_GET['SEDE']); ?>">				   
+				    <button type="submit" name="Reporte" role="button" class="btn btn-outline-secondary btn-sm"></i>Visualizar</button>
+				</form>
 		  	</div>
 		</div>
 
@@ -105,7 +121,11 @@
 	    		</h5>	    	    
 	  		</div>
 		  	<div class="card-footer bg-transparent border-dark text-right">
-		  		<a href="{{ url('/reporte6') }}" class="btn btn-outline-dark btn-sm">Visualizar</a>
+		  		<form action="/reporte6/" style="display: inline;">
+				    @csrf
+				    <input id="SEDE" name="SEDE" type="hidden" value="<?php print_r($_GET['SEDE']); ?>">				   
+				    <button type="submit" name="Reporte" role="button" class="btn btn-outline-dark btn-sm"></i>Visualizar</button>
+				</form>
 		  	</div>
 		</div>
    	</div>
