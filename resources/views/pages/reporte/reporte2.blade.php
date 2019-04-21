@@ -16,8 +16,6 @@
   include(app_path().'\functions\querys.php');
   include(app_path().'\functions\funciones.php');
   include(app_path().'\functions\reportes.php');
-/**/
-  include(app_path().'\functions\Functions.php');
 
   $ArtJson = "";
 	
@@ -31,8 +29,6 @@
     echo '<hr class="row align-items-start col-12">';
 
     ReporteHistoricoArticulo($_GET['SEDE'],$_GET['Id']);
-/**/
-    ReporteHistoricoArticulo1($_GET['Id']);
 
     $FinCarga = new DateTime("now");
     $IntervalCarga = $InicioCarga->diff($FinCarga);

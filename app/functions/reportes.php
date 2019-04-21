@@ -69,13 +69,15 @@ function ReporteHistoricoArticulo($SedeConnection,$IdArticulo){
 	$row = sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC);
 
 	$sql1 = QExistenciaArticulo($IdArticulo,0);
-	sqlsrv_query($conn,$sql);
 	$result1 = sqlsrv_query($conn,$sql1);
 	$row1 = sqlsrv_fetch_array($result1,SQLSRV_FETCH_ASSOC);
-	$Existencia = $row1["Existencia"];
 
 	$IsIVA = $row["ConceptoImpuesto"];
+	$Existencia = $row1["Existencia"];
+
 	$Precio = CalculoPrecio($conn,$IdArticulo,$IsIVA,$Existencia);
+
+	$TasaActual = TasaFecha(date('Y-m-d'));
 
 	echo '
 	<div class="input-group md-form form-sm form-1 pl-0">
@@ -105,10 +107,61 @@ function ReporteHistoricoArticulo($SedeConnection,$IdArticulo){
 	echo '<td>'.$row["Descripcion"].'</td>';
 	echo '<td align="center">'.intval($Existencia).'</td>';
 	echo '<td align="center">'." ".round($Precio,2)." ".SigVe.'</td>';
-	echo '</tr>';
+
+	if($TasaActual!=0){
+		echo '<td align="center">'." ".$TasaActual." ".SigVe.'</td>';
+		echo '<td align="center">'." ".round(($Precio/$TasaActual),2)." ".SigDolar.'</td>';
+	}
+	else{
+		echo '<td align="center">0.00 '.SigVe.'</td>';
+		echo '<td align="center">0.00 '.SigDolar.'</td>';
+	}
 	echo '
+			</tr>
   		</tbody>
 	</table>';
+
+	$sql2 = QHistoricoArticulo($IdArticulo);
+	$result2 = sqlsrv_query($conn,$sql2);
+
+	echo'
+	<table class="table table-striped table-bordered col-12 sortable" id="myTable">
+	  	<thead class="thead-dark">
+		    <tr>
+		    	<th scope="col">Proveedor</th>
+		      	<th scope="col">Fecha de registo</th>
+		      	<th scope="col">Cantidad recibida</th>
+		      	<th scope="col">Costo bruto</th>		 
+		      	<th scope="col">Tasa en historico</th>
+				<th scope="col">Costo en divisa</th>
+		    </tr>
+	  	</thead>
+	  	<tbody>
+	';
+
+	while($row2 = sqlsrv_fetch_array($result2, SQLSRV_FETCH_ASSOC)) {
+			echo '<tr>';
+			echo '<td>'.$row2["Nombre"].'</td>';	
+			echo '<td align="center">'.$row2["FechaRegistro"]->format('Y-m-d').'</td>';
+			echo '<td align="center">'.intval($row2['CantidadRecibidaFactura']).'</td>';
+			echo '<td align="center">'." ".round($row2["M_PrecioCompraBruto"],2)." ".SigVe.'</td>';
+
+			$FechaR = $row2["FechaRegistro"]->format('Y-m-d');
+			$Tasa = TasaFecha($FechaR);
+			
+			if($Tasa != 0){
+				echo '<td align="center">'." ".$Tasa." ".SigVe.'</td>';
+				echo '<td align="center">'." ".round(($row2["M_PrecioCompraBruto"]/$Tasa),2)." ".SigDolar.'</td>';
+			}
+			else{
+				echo '<td align="center">0.00 '.SigVe.'</td>';
+				echo '<td align="center">0.00 '.SigDolar.'</td>';
+			}	
+  	}
+  	echo '</tr>
+  		</tbody>
+	</table>';
+
 	sqlsrv_close( $conn );
 }
 ?>

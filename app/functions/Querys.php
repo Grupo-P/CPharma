@@ -226,20 +226,19 @@ function QLote(){
 	FUNCION: Armar la tabla del historico de articulos
 	RETORNO: La tabla de historico del articulo
  */
-function QHistoricoArticulo($IdArticuloQ){
+function QHistoricoArticulo($IdArticulo){
 	$sql = "
 		SELECT
 		GenPersona.Nombre,
 		CONVERT(date,ComFactura.FechaRegistro) As FechaRegistro,
 		ComFacturaDetalle.CantidadRecibidaFactura,
 		ComFacturaDetalle.M_PrecioCompraBruto
-		INTO TablaTemp8
 		FROM InvArticulo
 		inner join ComFacturaDetalle ON InvArticulo.Id = ComFacturaDetalle.InvArticuloId
 		inner join ComFactura ON ComFactura.Id = ComFacturaDetalle.ComFacturaId
 		inner join ComProveedor ON ComProveedor.Id = ComFactura.ComProveedorId
 		inner join GenPersona ON GenPersona.Id = ComProveedor.GenPersonaId
-		WHERE InvArticulo.Id = '$IdArticuloQ'
+		WHERE InvArticulo.Id = '$IdArticulo'
 		ORDER BY ComFactura.FechaRegistro DESC
 	";
 	return $sql;

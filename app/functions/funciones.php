@@ -209,4 +209,16 @@ function CalculoPrecio($conn,$IdArticulo,$IsIVA,$Existencia){
 	}
 	return $Precio;
 }
+/*
+	TITULO: TasaFecha
+	PARAMETROS: [$Fecha] Fecha de la que se buscara la tasa				
+	FUNCION: Buscar el valor de la tasa
+	RETORNO: Valor de la tasa
+ */
+function TasaFecha($Fecha){
+	$resultTasa = QTasa($Fecha);
+	$resultTasa = mysqli_fetch_assoc($resultTasa);
+	$Tasa = $resultTasa['tasa'];
+	return $Tasa;
+}
 ?>
