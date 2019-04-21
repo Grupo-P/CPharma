@@ -16,6 +16,8 @@
   include(app_path().'\functions\querys.php');
   include(app_path().'\functions\funciones.php');
   include(app_path().'\functions\reportes.php');
+/**/
+  include(app_path().'\functions\Functions.php');
 
   $ArtJson = "";
 	
@@ -29,6 +31,8 @@
     echo '<hr class="row align-items-start col-12">';
 
     ReporteHistoricoArticulo($_GET['SEDE'],$_GET['Id']);
+/**/
+    ReporteHistoricoArticulo1($_GET['Id']);
 
     $FinCarga = new DateTime("now");
     $IntervalCarga = $InicioCarga->diff($FinCarga);
@@ -50,7 +54,9 @@
 	    <div class="autocomplete" style="width:90%;">
 	      <input id="myInput" type="text" name="Descrip" placeholder="Ingrese el nombre del articulo " onkeyup="conteo()" required>
 	      <input id="myId" name="Id" type="hidden">
-        <input id="SEDE" name="SEDE" type="hidden" value="DB">
+        <input id="SEDE" name="SEDE" type="hidden" value="';
+        print_r($_GET['SEDE']);
+        echo'">
 	    </div>
 	    <input type="submit" value="Buscar" class="btn btn-outline-success">
   	</form>

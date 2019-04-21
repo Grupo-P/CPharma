@@ -72,9 +72,10 @@ function ReporteHistoricoArticulo($SedeConnection,$IdArticulo){
 	sqlsrv_query($conn,$sql);
 	$result1 = sqlsrv_query($conn,$sql1);
 	$row1 = sqlsrv_fetch_array($result1,SQLSRV_FETCH_ASSOC);
+	$Existencia = $row1["Existencia"];
 
 	$IsIVA = $row["ConceptoImpuesto"];
-	$Precio = CalculoPrecio($conn,$IdArticulo,$IsIVA);
+	$Precio = CalculoPrecio($conn,$IdArticulo,$IsIVA,$Existencia);
 
 	echo '
 	<div class="input-group md-form form-sm form-1 pl-0">
@@ -102,10 +103,12 @@ function ReporteHistoricoArticulo($SedeConnection,$IdArticulo){
 	echo '<tr>';
 	echo '<td>'.$row["CodigoArticulo"].'</td>';	
 	echo '<td>'.$row["Descripcion"].'</td>';
-	echo '<td>'.$row1["Existencia"].'</td>';
-	echo '<td>'.$Precio.'</td>';
+	echo '<td align="center">'.intval($Existencia).'</td>';
+	echo '<td align="center">'." ".round($Precio,2)." ".SigVe.'</td>';
 	echo '</tr>';
-
+	echo '
+  		</tbody>
+	</table>';
 	sqlsrv_close( $conn );
 }
 ?>

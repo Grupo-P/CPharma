@@ -157,46 +157,54 @@ function NombreSede($SedeConnection){
 	TITULO: CalculoPrecio
 	PARAMETROS: [$conn] Cadena de conexion para la base de datos
 				[$IdArticulo] Id del articulo
-				[$IsIVA] Si aplica o no impuesto
+				[$IsIVA] Si aplica o no
 	FUNCION: Calcular el precio del articulo
 	RETORNO: Precio del articulo
  */
-function CalculoPrecio($conn,$IdArticulo,$IsIVA){
+function CalculoPrecio($conn,$IdArticulo,$IsIVA,$Existencia){
 
 	$Precio = 0;
-/*PRECIO TROQUELADO*/
-	$sql = QLoteArticulo($IdArticulo,0);		
-	$result = sqlsrv_query($conn,$sql);
-	$row = sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC);
-	$IdLote = $row["InvLoteId"];	
-	
-	$sql1 = QLote($IdLote);
-	$result1 = sqlsrv_query($conn,$sql1);
-	$row1 = sqlsrv_fetch_array($result1,SQLSRV_FETCH_ASSOC);
-	$PrecioTroquelado = $row1["M_PrecioTroquelado"];
 
-	if($PrecioTroquelado){
-		$Precio = $PrecioTroquelado;
+	if($Existencia == 0){
+		$Precio = 0;
 	}
-/*PRECIO CALCULADO*/
-	else{
-		$sql2 = QLoteArticulo($IdArticulo,1);		
-		$result2 = sqlsrv_query($conn,$sql2);
-		$row2 = sqlsrv_fetch_array($result2,SQLSRV_FETCH_ASSOC);
-		$IdLote = $row2["InvLoteId"];	
-		
-		$sql3 = QLote($IdLote);
-		$result3 = sqlsrv_query($conn,$sql3);
-		$row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
-		$PrecioBruto = $row3["M_PrecioCompraBruto"];
+	else{		
+	/*PRECIO TROQUELADO*/
+		$sql0 = QTablaTemp(1);
+		sqlsrv_query($conn,$sql0);
 
-		if($IsIVA == 1){
-			$PrecioCalculado = ($PrecioBruto/Utilidad)*Impuesto;
-			$Precio = $PrecioCalculado;				
+		$sql = QLoteArticulo($IdArticulo,0);		
+		sqlsrv_query($conn,$sql);
+		
+		$sql1 = QLote();
+		$result1 = sqlsrv_query($conn,$sql1);
+		$row1 = sqlsrv_fetch_array($result1,SQLSRV_FETCH_ASSOC);
+		$PrecioTroquelado = $row1["M_PrecioTroquelado"];
+		
+		if($PrecioTroquelado!=NULL){
+			$Precio = $PrecioTroquelado;
 		}
+	/*PRECIO CALCULADO*/
 		else{
-			$PrecioCalculado = ($PrecioBruto/Utilidad);
-			$Precio = $PrecioCalculado;
+			$sql0 = QTablaTemp(1);
+			sqlsrv_query($conn,$sql0);
+
+			$sql2 = QLoteArticulo($IdArticulo,1);		
+			sqlsrv_query($conn,$sql2);	
+			
+			$sql3 = QLote();
+			$result3 = sqlsrv_query($conn,$sql3);
+			$row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
+			$PrecioBruto = $row3["M_PrecioCompraBruto"];
+
+			if($IsIVA == 1){
+				$PrecioCalculado = ($PrecioBruto/Utilidad)*Impuesto;
+				$Precio = $PrecioCalculado;				
+			}
+			else{
+				$PrecioCalculado = ($PrecioBruto/Utilidad);
+				$Precio = $PrecioCalculado;
+			}
 		}
 	}
 	return $Precio;

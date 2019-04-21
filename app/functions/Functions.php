@@ -1,7 +1,7 @@
 <?php
 /*OPTIMIZADO*/
 //CONEXION CON XAMPP
-function conectarXampp(){
+function conectarXamppF(){
 	$conexion = mysqli_connect(serverCP,userCP,passCP);
 	mysqli_select_db($conexion,nameCP);
     return $conexion;
@@ -48,7 +48,7 @@ function ConsultaDB ( $sql ){
 }
 /*OPTIMIZADO*/
 //ARREGLO RECURSIVO: CONSULTA ESPECIAL SMARTPHARMA
-function array_flatten_recursive($array) { 
+function array_flatten_recursiveF($array) { 
    if (!is_array($array)) {
 	   return false;
    }
@@ -63,15 +63,15 @@ function array_flatten_recursive($array) {
 }
 /*OPTIMIZADO*/
 //ARMADO DE JSON DE CONSULTA ESPECIAL
-function armarJson1($sql){
+function armarJsonF($sql){
 	$result = ConsultaDB ($sql);
-    $arrayJson = array_flatten_recursive($result);
+    $arrayJson = array_flatten_recursiveF($result);
     return json_encode($arrayJson);
 }
 /************REPORTE 1 ACTIVACION DE PROVEEDORES***********/
 /*OPTIMIZADO*/
 //REPORTE ACTIVACION DE PROVEEDORES
-function ReporteActivacionProveedores(){
+function ReporteActivacionProveedoresF(){
 	$conn = conectarDB();
 
 	//DATOS DE PROVEEDORES Y DIAS DE ACTIVACION

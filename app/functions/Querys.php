@@ -179,6 +179,7 @@ function QLoteArticulo($IdArticulo,$CantAlmacen){
 		$sql = "
 			SELECT
 			InvLoteAlmacen.InvLoteId
+			INTO TablaTemp
 			FROM InvLoteAlmacen 
 			WHERE (InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2) 
 			AND (InvLoteAlmacen.InvArticuloId = '$IdArticulo')
@@ -191,6 +192,7 @@ function QLoteArticulo($IdArticulo,$CantAlmacen){
 		$sql = "
 			SELECT
 			InvLoteAlmacen.InvLoteId
+			INTO TablaTemp
 			FROM InvLoteAlmacen 
 			WHERE(InvLoteAlmacen.InvArticuloId = '$IdArticulo')
 			AND (InvLoteAlmacen.Existencia>0)
@@ -201,18 +203,19 @@ function QLoteArticulo($IdArticulo,$CantAlmacen){
 }
 /*
 	TITULO: QLote
-	PARAMETROS: [$IdLote] Id del lote que se desea buscar 
+	PARAMETROS: 
 	FUNCION: Busca el precio de compra bruto y el precio troquelado
+			 (Funciona en conjunto con QLoteArticulo)
 	RETORNO: Retorna el precio de compra bruto y el precio troquelado
  */
-function QLote($IdLote){
+function QLote(){
 	$sql = "
 		SELECT TOP 1
 		InvLote.Id,
 		invlote.M_PrecioCompraBruto,
 		invlote.M_PrecioTroquelado
 		FROM InvLote
-		WHERE InvLote.Id = '$IdLote'
+		INNER JOIN TablaTemp ON TablaTemp.InvLoteId = InvLote.Id
 		ORDER BY invlote.M_PrecioTroquelado, invlote.M_PrecioCompraBruto DESC
 	";
 	return $sql;
@@ -467,5 +470,56 @@ LEFT JOIN TablaTemp5 ON TablaTemp5.Id = TablaTemp.Id
 
 SELECT * FROM TablaTemp6
 
+ */
+
+
+//QUEDE AQUI
+/*
+IF OBJECT_ID ('TablaTemp', 'U') IS NOT NULL
+	DROP TABLE TablaTemp;
+IF OBJECT_ID ('TablaTemp1', 'U') IS NOT NULL
+	DROP TABLE TablaTemp1;
+
+SELECT
+InvArticulo.Id, 
+InvArticulo.CodigoArticulo,
+InvArticulo.Descripcion,
+InvArticulo.FinConceptoImptoIdCompra AS ConceptoImpuesto
+FROM InvArticulo
+WHERE InvArticulo.CodigoArticulo = '5185'
+
+SELECT
+InvLoteAlmacen.InvLoteId
+INTO TablaTemp
+FROM InvLoteAlmacen
+WHERE (InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2) 
+AND (InvLoteAlmacen.InvArticuloId = '13199')
+AND (InvLoteAlmacen.Existencia>0)
+
+SELECT
+InvLoteAlmacen.InvLoteId
+INTO TablaTemp1
+FROM InvLoteAlmacen
+WHERE (InvLoteAlmacen.InvArticuloId = '13199')
+AND (InvLoteAlmacen.Existencia>0)
+
+select * from TablaTemp
+select * from TablaTemp1
+
+SELECT
+InvLote.Id,
+invlote.M_PrecioCompraBruto,
+invlote.M_PrecioTroquelado
+FROM InvLote
+INNER JOIN TablaTemp ON TablaTemp.InvLoteId = InvLote.Id
+ORDER BY invlote.M_PrecioTroquelado, invlote.M_PrecioCompraBruto DESC
+
+SELECT
+InvLote.Id,
+invlote.M_PrecioCompraBruto,
+invlote.M_PrecioTroquelado
+FROM InvLote
+INNER JOIN TablaTemp1 ON TablaTemp1.InvLoteId = InvLote.Id
+ORDER BY invlote.M_PrecioTroquelado, invlote.M_PrecioCompraBruto DESC
  */
 ?>
