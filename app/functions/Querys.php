@@ -243,6 +243,192 @@ function QHistoricoArticulo($IdArticulo){
 	";
 	return $sql;
 }
+/*
+	TITULO: QUnidadesVendidasCliente
+	PARAMETROS: [$FInicial] Fecha inicial del rango a consultar
+				[$FFinal] Fecha final del rango a consutar
+	FUNCION: Consulta las Veces vendidas a clientes y las unidades vendidas de un producto
+	RETORNO: Tabla con los articulos, las veces vendidas y las unidades vendidas
+ */
+function QUnidadesVendidasCliente($FInicial,$FFinal){
+	$sql = "
+		SELECT
+		InvArticulo.Id,
+		InvArticulo.CodigoArticulo,
+		InvArticulo.Descripcion, 
+		COUNT(*) AS VecesVendidasCliente, 
+		SUM(VenFacturaDetalle.Cantidad) AS UnidadesVendidasCliente
+		INTO TablaTemp 
+		FROM VenFacturaDetalle
+		INNER JOIN InvArticulo ON InvArticulo.Id = VenFacturaDetalle.InvArticuloId
+		INNER JOIN VenFactura ON VenFactura.Id = VenFacturaDetalle.VenFacturaId
+		WHERE
+		(VenFactura.FechaDocumento > '$FInicial' AND VenFactura.FechaDocumento < '$FFinal')
+		GROUP BY InvArticulo.Id,InvArticulo.CodigoArticulo,InvArticulo.Descripcion
+		ORDER BY UnidadesVendidasCliente DESC
+	";
+}
+/*
+	TITULO: QUnidadesDevueltaCliente
+	PARAMETROS: [$FInicial] Fecha inicial del rango a consultar
+				[$FFinal] Fecha final del rango a consutar
+	FUNCION: Consulta las Veces devuelta a clientes y las unidades devuelta de un producto
+	RETORNO: Tabla con los articulos, las veces devuelta y las unidades devuelta
+ */
+function QUnidadesDevueltaCliente($FInicial,$FFinal){
+	$sql = "
+		SELECT
+		InvArticulo.Id,
+		InvArticulo.CodigoArticulo,
+		InvArticulo.Descripcion,
+		COUNT(*) AS VecesDevueltaCliente,
+		SUM(VenDevolucionDetalle.Cantidad) AS UnidadesDevueltaCliente
+		INTO TablaTemp1
+		FROM VenDevolucionDetalle
+		INNER JOIN InvArticulo ON InvArticulo.Id = VenDevolucionDetalle.InvArticuloId
+		INNER JOIN VenDevolucion ON VenDevolucion.Id = VenDevolucionDetalle.VenDevolucionId
+		WHERE
+		(VenDevolucion.FechaDocumento > '$FInicial' AND VenDevolucion.FechaDocumento < '$FFinal')
+		GROUP BY InvArticulo.Id,InvArticulo.CodigoArticulo,InvArticulo.Descripcion
+		ORDER BY UnidadesDevueltaCliente DESC
+	";
+}
+/*
+	TITULO: QUnidadesCompradasProveedor
+	PARAMETROS: [$FInicial] Fecha inicial del rango a consultar
+				[$FFinal] Fecha final del rango a consutar
+	FUNCION: Consulta las Veces Compradas a proveedores y las unidades compradas
+	RETORNO: Tabla con los articulos, las veces compradas y las unidades compradas
+ */
+function QUnidadesCompradasProveedor($FInicial,$FFinal){
+	$sql = "
+		SELECT
+		InvArticulo.Id,
+		InvArticulo.CodigoArticulo,
+		InvArticulo.Descripcion,
+		COUNT(*) AS VecesCompradasProveedor,
+		SUM(ComFacturaDetalle.CantidadFacturada) AS UnidadesCompradasProveedor
+		INTO TablaTemp2
+		FROM ComFacturaDetalle
+		INNER JOIN InvArticulo ON InvArticulo.Id = ComFacturaDetalle.InvArticuloId
+		INNER JOIN ComFactura ON  ComFactura.Id = ComFacturaDetalle.ComFacturaId
+		WHERE
+		(ComFactura.FechaDocumento > '$FInicial' AND ComFactura.FechaDocumento < '$FFinal')
+		GROUP BY InvArticulo.Id,InvArticulo.CodigoArticulo,InvArticulo.Descripcion
+		ORDER BY UnidadesCompradasProveedor DESC
+	";
+}
+/*
+	TITULO: QUnidadesReclamoProveedor
+	PARAMETROS: [$FInicial] Fecha inicial del rango a consultar
+				[$FFinal] Fecha final del rango a consutar
+	FUNCION: Consulta las Veces reclamo a proveedores y las unidades reclamo
+	RETORNO: Tabla con los articulos, las veces reclamo y las unidades reclamo
+ */
+function QUnidadesReclamoProveedor($FInicial,$FFinal){
+	$sql = "
+		SELECT
+		InvArticulo.Id,
+		InvArticulo.CodigoArticulo,
+		InvArticulo.Descripcion,
+		COUNT(*) AS VecesReclamoProveedor,
+		SUM(ComReclamoDetalle.Cantidad) AS UnidadesReclamoProveedor
+		INTO TablaTemp3
+		FROM ComReclamoDetalle
+		INNER JOIN InvArticulo ON InvArticulo.Id = ComReclamoDetalle.InvArticuloId
+		INNER JOIN ComReclamo ON ComReclamo.Id = ComReclamoDetalle.ComReclamoId
+		WHERE
+		(ComReclamo.FechaRegistro > '$FInicial' AND ComReclamo.FechaRegistro < '$FFinal')
+		GROUP BY InvArticulo.Id,InvArticulo.CodigoArticulo,InvArticulo.Descripcion
+		ORDER BY UnidadesReclamoProveedor DESC
+	";
+}
+/*
+	TITULO: QIntegracionProductosVendidos
+	PARAMETROS: No aplica
+	FUNCION: Integrar la informacion de las consultas
+			[QUnidadesVendidasCliente,QUnidadesDevueltaCliente,QUnidadesCompradasProveedor,QUnidadesReclamoProveedor]
+	RETORNO: Tabla con datos integrados con valores 0 para campos NULL
+ */
+function QIntegracionProductosVendidos(){
+	$sql = "
+		SELECT 
+		TablaTemp.Id,
+		TablaTemp.CodigoArticulo,
+		TablaTemp.Descripcion,
+		ISNULL(TablaTemp.VecesVendidasCliente,CAST(0 AS INT)) AS VecesVendidasCliente,
+		ISNULL(TablaTemp1.VecesDevueltaCliente,CAST(0 AS INT)) AS VecesDevueltaCliente,
+		ISNULL(TablaTemp.UnidadesVendidasCliente,CAST(0 AS INT)) AS UnidadesVendidasCliente,
+		ISNULL(TablaTemp1.UnidadesDevueltaCliente,CAST(0 AS INT)) AS UnidadesDevueltaCliente,
+		ISNULL(TablaTemp2.VecesCompradasProveedor,CAST(0 AS INT)) AS VecesCompradasProveedor,
+		ISNULL(TablaTemp3.VecesReclamoProveedor,CAST(0 AS INT)) AS VecesReclamoProveedor,
+		ISNULL(TablaTemp2.UnidadesCompradasProveedor,CAST(0 AS INT)) AS UnidadesCompradasProveedor,
+		ISNULL(TablaTemp3.UnidadesReclamoProveedor,CAST(0 AS INT)) AS UnidadesReclamoProveedor
+		INTO TablaTemp4
+		FROM TablaTemp
+		LEFT JOIN TablaTemp1 ON TablaTemp1.Id = TablaTemp.Id
+		LEFT JOIN TablaTemp2 ON TablaTemp2.Id = TablaTemp.Id
+		LEFT JOIN TablaTemp3 ON TablaTemp3.Id = TablaTemp.Id
+		ORDER BY UnidadesVendidasCliente DESC
+	";
+}
+/*
+	TITULO: QProductoMasVendido
+	PARAMETROS: [$Top] Varaible para indicar el top a buscar
+	FUNCION: Ubicar el top de productos mas vendidos
+	RETORNO: Lista de productos mas vendidos
+ */
+function QProductoMasVendido($Top){
+	$sql = "
+		SELECT TOP $Top
+		TablaTemp4.Id,
+		TablaTemp4.CodigoArticulo,
+		TablaTemp4.Descripcion,
+		TablaTemp4.VecesVendidasCliente,
+		TablaTemp4.VecesDevueltaCliente,
+		ISNULL((VecesVendidasCliente-VecesDevueltaCliente),0) AS TotalVecesVendidasCliente,
+		TablaTemp4.UnidadesVendidasCliente,
+		TablaTemp4.UnidadesDevueltaCliente,
+		ISNULL((UnidadesVendidasCliente-UnidadesDevueltaCliente),0) AS TotalUnidadesVendidasCliente,
+		TablaTemp4.VecesCompradasProveedor,
+		TablaTemp4.VecesReclamoProveedor,
+		ISNULL((VecesCompradasProveedor-VecesReclamoProveedor),0) AS TotalVecesCompradasProveedor,
+		TablaTemp4.UnidadesCompradasProveedor,
+		TablaTemp4.UnidadesReclamoProveedor,
+		ISNULL((UnidadesCompradasProveedor-UnidadesReclamoProveedor),0) AS TotalUnidadesCompradasProveedor
+		FROM TablaTemp4
+		ORDER BY TotalUnidadesVendidasCliente DESC
+	";
+}
+/*
+	TITULO: QProductoMenosVendido
+	PARAMETROS: [$Top] Varaible para indicar el top a buscar
+	FUNCION: Ubicar el top de productos menos vendidos
+	RETORNO: Lista de productos menos vendidos
+ */
+function QProductoMenosVendido($Top){
+	$sql = "
+		SELECT TOP $Top
+		TablaTemp4.Id,
+		TablaTemp4.CodigoArticulo,
+		TablaTemp4.Descripcion,
+		TablaTemp4.VecesVendidasCliente,
+		TablaTemp4.VecesDevueltaCliente,
+		ISNULL((VecesVendidasCliente-VecesDevueltaCliente),0) AS TotalVecesVendidasCliente,
+		TablaTemp4.UnidadesVendidasCliente,
+		TablaTemp4.UnidadesDevueltaCliente,
+		ISNULL((UnidadesVendidasCliente-UnidadesDevueltaCliente),0) AS TotalUnidadesVendidasCliente,
+		TablaTemp4.VecesCompradasProveedor,
+		TablaTemp4.VecesReclamoProveedor,
+		ISNULL((VecesCompradasProveedor-VecesReclamoProveedor),0) AS TotalVecesCompradasProveedor,
+		TablaTemp4.UnidadesCompradasProveedor,
+		TablaTemp4.UnidadesReclamoProveedor,
+		ISNULL((UnidadesCompradasProveedor-UnidadesReclamoProveedor),0) AS TotalUnidadesCompradasProveedor
+		FROM TablaTemp4
+		ORDER BY TotalUnidadesVendidasCliente ASC
+	";
+}
+
 
 
 /*

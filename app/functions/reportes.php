@@ -164,4 +164,12 @@ function ReporteHistoricoArticulo($SedeConnection,$IdArticulo){
 
 	sqlsrv_close( $conn );
 }
+/************************************************************************************/
+/************************ REPORTE 3 PRODUCTOS MAS VENDIDOS **************************/
+/*
+	TITULO: 
+	PARAMETROS : 
+	FUNCION: 
+	RETORNO: 
+ */
 ?>
