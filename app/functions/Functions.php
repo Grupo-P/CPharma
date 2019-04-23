@@ -883,7 +883,7 @@ function ReporteArticulosMenosVendidos($Top,$FInicial,$FFinal){
 	Reporte5: Prouctos en falla
 	Funcion: Arma la tabla de los Prouctos en falla
  */
-function ReporteProductosFalla($FInicial,$FFinal){
+function ReporteProductosFalla1($FInicial,$FFinal){
 
 	$FFinalRango = $FFinal;
 	$FFinal = date("Y-m-d",strtotime($FFinal."+ 1 days"));

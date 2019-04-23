@@ -435,7 +435,56 @@ function QProductoMenosVendido($Top){
 	";
 	return $sql;
 }
-
+/*
+	TITULO: QIntegracionProductosFalla
+	PARAMETROS: No aplica
+	FUNCION: Integrar la informacion de las consultas
+			[QUnidadesVendidasCliente,QUnidadesDevueltaCliente,QUnidadesCompradasProveedor,QUnidadesReclamoProveedor]
+	RETORNO: Tabla con datos integrados con valores 0 para campos NULL
+ */
+function QIntegracionProductosFalla(){
+	$sql="
+		SELECT
+		TablaTemp4.Id,
+		TablaTemp4.CodigoArticulo,
+		TablaTemp4.Descripcion,
+		TablaTemp4.VecesVendidasCliente,
+		TablaTemp4.VecesDevueltaCliente,
+		ISNULL((VecesVendidasCliente-VecesDevueltaCliente),0) AS TotalVecesVendidasCliente,
+		TablaTemp4.UnidadesVendidasCliente,
+		TablaTemp4.UnidadesDevueltaCliente,
+		ISNULL((UnidadesVendidasCliente-UnidadesDevueltaCliente),0) AS TotalUnidadesVendidasCliente,
+		SUM(InvLoteAlmacen.Existencia) AS Existencia
+		INTO TablaTemp5
+		FROM TablaTemp4
+		INNER JOIN InvLoteAlmacen ON InvLoteAlmacen.InvArticuloId = TablaTemp4.Id
+		WHERE (InvLoteAlmacen.InvAlmacenId = 1 or InvLoteAlmacen.InvAlmacenId = 2)
+		GROUP BY 
+		TablaTemp4.Id,
+		TablaTemp4.CodigoArticulo, 
+		TablaTemp4.Descripcion,
+		TablaTemp4.VecesVendidasCliente,
+		TablaTemp4.VecesDevueltaCliente,
+		TablaTemp4.UnidadesVendidasCliente,
+		TablaTemp4.UnidadesDevueltaCliente
+		ORDER BY TablaTemp4.UnidadesVendidasCliente DESC
+	";
+	return $sql;
+}
+/*
+	TITULO: QProductosFalla
+	PARAMETROS: Funciona en conjunto con QIntegracionProductosFalla
+	FUNCION: Arma una lista de productos vendido con existencia en 0
+	RETORNO: Lista de productos mas vendidos con existencia en 0
+ */
+function QProductosFalla(){
+	$sql = "
+		SELECT * FROM TablaTemp5 
+		WHERE TablaTemp5.Existencia = 0 
+		ORDER BY TablaTemp5.TotalUnidadesVendidasCliente DESC
+	";
+	return $sql;
+}
 
 
 /*
