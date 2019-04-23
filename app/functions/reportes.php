@@ -59,7 +59,7 @@ function ReporteActivacionProveedores($SedeConnection){
 	FUNCION: Armar una tabla de historico de compra del articulo
 	RETORNO: No aplica
  */
-function ReporteHistoricoArticulo($SedeConnection,$IdArticulo){
+function ReporteHistoricoProducto($SedeConnection,$IdArticulo){
 	
 	$conn = ConectarSmartpharma($SedeConnection);
 
@@ -166,6 +166,19 @@ function ReporteHistoricoArticulo($SedeConnection,$IdArticulo){
 }
 /************************************************************************************/
 /************************ REPORTE 3 PRODUCTOS MAS VENDIDOS **************************/
+/*
+	TITULO: 
+	PARAMETROS : 
+	FUNCION: 
+	RETORNO: 
+ */
+function ReporteProductosMasVendidos($Top,$FInicial,$FFinal){
+	$RangoDias = RangoDias($FInicial,$FFinal);
+	$VentaDiaria = VentaDiaria(641,$RangoDias);
+	$DiasRestantes = DiasRestantes(69,$VentaDiaria);
+	return $DiasRestantes;
+}
+
 /*
 	TITULO: 
 	PARAMETROS : 

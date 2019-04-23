@@ -221,4 +221,48 @@ function TasaFecha($Fecha){
 	$Tasa = $resultTasa['tasa'];
 	return $Tasa;
 }
+/*
+	TITULO: RangoDias
+	PARAMETROS: [$FInicial] Fecha donde inicia el rango
+				[$FFinal] Fecha donde termina el rango			
+	FUNCION: Calcular el rango de diferencia de dias entre el las fechas
+	RETORNO: rango de dias
+ */
+function RangoDias($FInicial,$FFinal){
+	$FechaI = new DateTime($FInicial);
+    $FechaF = new DateTime($FFinal);
+    $Rango = $FechaI->diff($FechaF);
+    $Rango = $Rango->format('%a');
+    return $Rango;
+}
+/*
+	TITULO: VentaDiaria
+	PARAMETROS: [$Venta] Venta
+				[$RangoDias] Rango de dias entre dos fechas			
+	FUNCION: Calcular la venta al diaria promedio en base al rango de dias
+	RETORNO: Venta diaria promedio
+ */
+function VentaDiaria($Venta,$RangoDias){
+	$VentaDiaria = 0;
+	if($RangoDias != 0){
+		$VentaDiaria = $Venta/$RangoDias;
+	}
+	$VentaDiaria = round($VentaDiaria,2);
+	return $VentaDiaria;
+}
+/*
+	TITULO: DiasRestantes
+	PARAMETROS: [$Existencia] Existencia de un producto
+				[$VentaDiaria] Venta diaria promedio del prodcuto			
+	FUNCION: Calcular los dias restantes de inventario promedio
+	RETORNO: Dias restantes promedio
+ */
+function DiasRestantes($Existencia,$VentaDiaria){
+	$DiasRestantes = 0;
+	if($VentaDiaria != 0){
+		$DiasRestantes = $Existencia/$VentaDiaria;
+	}
+	$DiasRestantes = round($DiasRestantes,2);
+	return $DiasRestantes;
+}
 ?>

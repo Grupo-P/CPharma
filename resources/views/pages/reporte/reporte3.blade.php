@@ -15,6 +15,12 @@
 	include(app_path().'\functions\config.php');
 	include(app_path().'\functions\Functions.php');
 
+  include(app_path().'\functions\funciones.php');
+  include(app_path().'\functions\reportes.php');
+
+  $var = ReporteProductosMasVendidos(5,'2019-02-01','2019-02-16');
+  echo ''.$var;
+
 	if (isset($_GET['top']))
 	{
     $InicioCarga = new DateTime("now");
