@@ -258,7 +258,7 @@ function QUnidadesVendidasCliente($FInicial,$FFinal){
 		InvArticulo.Descripcion, 
 		COUNT(*) AS VecesVendidasCliente, 
 		SUM(VenFacturaDetalle.Cantidad) AS UnidadesVendidasCliente
-		INTO TablaTemp 
+		INTO TablaTemp
 		FROM VenFacturaDetalle
 		INNER JOIN InvArticulo ON InvArticulo.Id = VenFacturaDetalle.InvArticuloId
 		INNER JOIN VenFactura ON VenFactura.Id = VenFacturaDetalle.VenFacturaId
@@ -267,6 +267,7 @@ function QUnidadesVendidasCliente($FInicial,$FFinal){
 		GROUP BY InvArticulo.Id,InvArticulo.CodigoArticulo,InvArticulo.Descripcion
 		ORDER BY UnidadesVendidasCliente DESC
 	";
+	return $sql;
 }
 /*
 	TITULO: QUnidadesDevueltaCliente
@@ -292,6 +293,7 @@ function QUnidadesDevueltaCliente($FInicial,$FFinal){
 		GROUP BY InvArticulo.Id,InvArticulo.CodigoArticulo,InvArticulo.Descripcion
 		ORDER BY UnidadesDevueltaCliente DESC
 	";
+	return $sql;
 }
 /*
 	TITULO: QUnidadesCompradasProveedor
@@ -317,6 +319,7 @@ function QUnidadesCompradasProveedor($FInicial,$FFinal){
 		GROUP BY InvArticulo.Id,InvArticulo.CodigoArticulo,InvArticulo.Descripcion
 		ORDER BY UnidadesCompradasProveedor DESC
 	";
+	return $sql;
 }
 /*
 	TITULO: QUnidadesReclamoProveedor
@@ -342,6 +345,7 @@ function QUnidadesReclamoProveedor($FInicial,$FFinal){
 		GROUP BY InvArticulo.Id,InvArticulo.CodigoArticulo,InvArticulo.Descripcion
 		ORDER BY UnidadesReclamoProveedor DESC
 	";
+	return $sql;
 }
 /*
 	TITULO: QIntegracionProductosVendidos
@@ -371,6 +375,7 @@ function QIntegracionProductosVendidos(){
 		LEFT JOIN TablaTemp3 ON TablaTemp3.Id = TablaTemp.Id
 		ORDER BY UnidadesVendidasCliente DESC
 	";
+	return $sql;
 }
 /*
 	TITULO: QProductoMasVendido
@@ -395,10 +400,11 @@ function QProductoMasVendido($Top){
 		ISNULL((VecesCompradasProveedor-VecesReclamoProveedor),0) AS TotalVecesCompradasProveedor,
 		TablaTemp4.UnidadesCompradasProveedor,
 		TablaTemp4.UnidadesReclamoProveedor,
-		ISNULL((UnidadesCompradasProveedor-UnidadesReclamoProveedor),0) AS TotalUnidadesCompradasProveedor
+		ISNULL((UnidadesCompradasProveedor-UnidadesReclamoProveedor),0) AS TotalUnidadesCompradasProveedor		
 		FROM TablaTemp4
 		ORDER BY TotalUnidadesVendidasCliente DESC
 	";
+	return $sql;
 }
 /*
 	TITULO: QProductoMenosVendido
@@ -423,10 +429,11 @@ function QProductoMenosVendido($Top){
 		ISNULL((VecesCompradasProveedor-VecesReclamoProveedor),0) AS TotalVecesCompradasProveedor,
 		TablaTemp4.UnidadesCompradasProveedor,
 		TablaTemp4.UnidadesReclamoProveedor,
-		ISNULL((UnidadesCompradasProveedor-UnidadesReclamoProveedor),0) AS TotalUnidadesCompradasProveedor
+		ISNULL((UnidadesCompradasProveedor-UnidadesReclamoProveedor),0) AS TotalUnidadesCompradasProveedor		
 		FROM TablaTemp4
 		ORDER BY TotalUnidadesVendidasCliente ASC
 	";
+	return $sql;
 }
 
 

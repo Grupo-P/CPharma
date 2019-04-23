@@ -7,31 +7,37 @@
 @section('content')
 	<h1 class="h5 text-info">
 		<i class="fas fa-file-invoice"></i>
-		Articulos mas vendidos
+		Productos mas vendidos
 	</h1>
 	<hr class="row align-items-start col-12">
 
   <?php	
-	include(app_path().'\functions\config.php');
-	include(app_path().'\functions\Functions.php');
-
+  include(app_path().'\functions\config.php');
+  include(app_path().'\functions\querys.php');
   include(app_path().'\functions\funciones.php');
   include(app_path().'\functions\reportes.php');
-
-  $var = ReporteProductosMasVendidos(5,'2019-02-01','2019-02-16');
-  echo ''.$var;
 
 	if (isset($_GET['top']))
 	{
     $InicioCarga = new DateTime("now");
 
-    ReporteArticulosMasVendidos($_GET['top'],$_GET['fechaInicio'],$_GET['fechaFin']);
+    if (isset($_GET['SEDE'])){      
+      echo '<h1 class="h5 text-success"  align="left"> <i class="fas fa-prescription"></i> '.NombreSede($_GET['SEDE']).'</h1>';
+    }
+    echo '<hr class="row align-items-start col-12">';
 
+    ReporteProductosMasVendidos($_GET['SEDE'],$_GET['top'],$_GET['fechaInicio'],$_GET['fechaFin']);
+    
     $FinCarga = new DateTime("now");
     $IntervalCarga = $InicioCarga->diff($FinCarga);
     echo'Tiempo de carga: '.$IntervalCarga->format("%Y-%M-%D %H:%I:%S");
 	} 
 	else{
+    if (isset($_GET['SEDE'])){      
+      echo '<h1 class="h5 text-success"  align="left"> <i class="fas fa-prescription"></i> '.NombreSede($_GET['SEDE']).'</h1>';
+    }
+    echo '<hr class="row align-items-start col-12">';
+
 		echo '
 		<form autocomplete="off" action="">
         <table style="width:100%;">
@@ -47,6 +53,9 @@
                 <option>20</option>
                 <option>50</option>
                 <option>100</option>
+                <option>200</option>
+                <option>500</option>
+                <option>1000</option>
               </select>
             </td>
             <td align="center">
@@ -61,6 +70,9 @@
             <td align="right">
               <input id="fechaFin" name="fechaFin" type="date" required style="width:100%;">
             </td>
+            <input id="SEDE" name="SEDE" type="hidden" value="';
+            print_r($_GET['SEDE']);
+            echo'">
             <td align="right">
               <input type="submit" value="Buscar" class="btn btn-outline-success">
             </td>
