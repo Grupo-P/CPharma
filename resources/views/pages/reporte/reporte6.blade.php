@@ -46,7 +46,7 @@
     $ArtJson = armarJson($sql,$_GET['SEDE']);
 
     echo '
-    <form id="form" autocomplete="off" action="" target="blank">
+    <form id="form" autocomplete="off" action="" target="_blank">
         <table style="width:100%;">
           <tr>
             <td align="center">
