@@ -95,9 +95,9 @@ function ReporteHistoricoProducto($SedeConnection,$IdArticulo){
 		    	<th scope="col">Codigo</th>
 		      	<th scope="col">Descripcion</td>
 		      	<th scope="col">Existencia</td>
-		      	<th scope="col">Precio</td>
+		      	<th scope="col">Precio (Con IVA)</td>
 		      	<th scope="col">Tasa actual</td>
-		      	<th scope="col">Costo en divisa</td>
+		      	<th scope="col">Costo en divisa (Con IVA)</td>
 		    </tr>
 	  	</thead>
 	  	<tbody>
@@ -130,11 +130,11 @@ function ReporteHistoricoProducto($SedeConnection,$IdArticulo){
 	  	<thead class="thead-dark">
 		    <tr>
 		    	<th scope="col">Proveedor</th>
-		      	<th scope="col">Fecha de registo</th>
+		      	<th scope="col">Fecha de documento</th>
 		      	<th scope="col">Cantidad recibida</th>
-		      	<th scope="col">Costo bruto</th>		 
+		      	<th scope="col">Costo bruto (Sin IVA)</th>		 
 		      	<th scope="col">Tasa en historico</th>
-				<th scope="col">Costo en divisa</th>
+				<th scope="col">Costo en divisa (Sin IVA)</th>
 		    </tr>
 	  	</thead>
 	  	<tbody>
@@ -143,12 +143,12 @@ function ReporteHistoricoProducto($SedeConnection,$IdArticulo){
 	while($row2 = sqlsrv_fetch_array($result2, SQLSRV_FETCH_ASSOC)) {
 			echo '<tr>';
 			echo '<td>'.$row2["Nombre"].'</td>';	
-			echo '<td align="center">'.$row2["FechaRegistro"]->format('Y-m-d').'</td>';
+			echo '<td align="center">'.$row2["FechaDocumento"]->format('Y-m-d').'</td>';
 			echo '<td align="center">'.intval($row2['CantidadRecibidaFactura']).'</td>';
 			echo '<td align="center">'." ".round($row2["M_PrecioCompraBruto"],2)." ".SigVe.'</td>';
 
-			$FechaR = $row2["FechaRegistro"]->format('Y-m-d');
-			$Tasa = TasaFecha($FechaR);
+			$FechaD = $row2["FechaDocumento"]->format('Y-m-d');
+			$Tasa = TasaFecha($FechaD);
 			
 			if($Tasa != 0){
 				echo '<td align="center">'." ".$Tasa." ".SigVe.'</td>';
@@ -225,9 +225,9 @@ function ReporteProductosMasVendidos($SedeConnection,$Top,$FInicial,$FFinal){
 		      	<th scope="col">Existencia</th>
 		      	<th scope="col">Veces Facturado</th>
 		      	<th scope="col">Unidades vendidas</th>
+		      	<th scope="col">Unidades Compradas</th>
 		      	<th scope="col">Venta diaria</th>
 		      	<th scope="col">Dias restantes</th>
-		      	<th scope="col">Veces Comprado</th>
 		    </tr>
 	  	</thead>
 	  	<tbody>
@@ -252,9 +252,9 @@ function ReporteProductosMasVendidos($SedeConnection,$Top,$FInicial,$FFinal){
 		$DiasRestantes = DiasRestantes($Existencia,$VentaDiaria);
 
 		echo '<td align="center">'.$Venta.'</td>';
+		echo '<td align="center">'.intval($row["TotalUnidadesCompradasProveedor"]).'</td>';
 		echo '<td align="center">'.round($VentaDiaria,2).'</td>';
 		echo '<td align="center">'.round($DiasRestantes,2).'</td>';
-		echo '<td align="center">'.intval($row["TotalUnidadesCompradasProveedor"]).'</td>';
 		echo '</tr>';		
   	}
   	echo '
@@ -321,9 +321,9 @@ function ReporteProductosMenosVendidos($SedeConnection,$Top,$FInicial,$FFinal){
 		      	<th scope="col">Existencia</th>
 		      	<th scope="col">Veces Facturado</th>
 		      	<th scope="col">Unidades vendidas</th>
+		      	<th scope="col">Unidades Compradas</th>
 		      	<th scope="col">Venta diaria</th>
-		      	<th scope="col">Dias restantes</th>
-		      	<th scope="col">Veces Comprado</th>
+		      	<th scope="col">Dias restantes</th>		      	
 		    </tr>
 	  	</thead>
 	  	<tbody>
@@ -348,9 +348,9 @@ function ReporteProductosMenosVendidos($SedeConnection,$Top,$FInicial,$FFinal){
 		$DiasRestantes = DiasRestantes($Existencia,$VentaDiaria);
 
 		echo '<td align="center">'.$Venta.'</td>';
+		echo '<td align="center">'.intval($row["TotalUnidadesCompradasProveedor"]).'</td>';
 		echo '<td align="center">'.round($VentaDiaria,2).'</td>';
 		echo '<td align="center">'.round($DiasRestantes,2).'</td>';
-		echo '<td align="center">'.intval($row["TotalUnidadesCompradasProveedor"]).'</td>';
 		echo '</tr>';		
   	}
   	echo '
@@ -506,9 +506,9 @@ function ReportePedidoProductos($SedeConnection,$Descripcion,$FInicial,$FFinal){
 		      	<th scope="col">Existencia</th>
 		      	<th scope="col">Unidades vendidas</th>
 		      	<th scope="col">Unidades compradas</th>
-		      	<th scope="col">Unidades por dia</th>
+		      	<th scope="col">Venta diaria</th>
 				<th scope="col">Dias restantes</th>
-		      	<th scope="col">Precio</th>
+		      	<th scope="col">Precio (Con IVA)</th>
 		      	<th scope="col">Ultimo Lote</th>
 		    </tr>
 	  	</thead>
@@ -541,9 +541,9 @@ function ReportePedidoProductos($SedeConnection,$Descripcion,$FInicial,$FFinal){
 		$UltimoLote = $row2["UltimoLote"];		
 
 		echo '<td align="center">'.$Venta.'</td>';
+		echo '<td align="center">'.intval($row["TotalUnidadesCompradasProveedor"]).'</td>';
 		echo '<td align="center">'.round($VentaDiaria,2).'</td>';
 		echo '<td align="center">'.round($DiasRestantes,2).'</td>';
-		echo '<td align="center">'.intval($row["TotalUnidadesCompradasProveedor"]).'</td>';
 		echo '<td align="center">'." ".round($Precio,2)." ".SigVe.'</td>';
 		
 		if(($UltimoLote) && ($Existencia!=0)){

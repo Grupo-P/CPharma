@@ -46,7 +46,7 @@
 		  		<form action="/reporte/" style="display: inline;">
 				    @csrf
 				    <input id="SEDE" name="SEDE" type="hidden" value="FLL">  
-				    <button type="submit" name="Reporte" role="button" class="btn btn-outline-success btn-sm"></i>Ver reportes</button>
+				    <button type="submit" name="Reporte" role="button" class="btn btn-outline-success btn-sm" disabled="disabled"></i>Proximamente</button>
 				</form>
 		  	</div>
 		</div>
@@ -63,7 +63,7 @@
 		  		<form action="/reporte/" style="display: inline;">
 				    @csrf
 				    <input id="SEDE" name="SEDE" type="hidden" value="FAU">  
-				    <button type="submit" name="Reporte" role="button" class="btn btn-outline-info btn-sm"></i>Ver reportes</button>
+				    <button type="submit" name="Reporte" role="button" class="btn btn-outline-info btn-sm" disabled="disabled"></i>Proximamente</button>
 				</form>
 		  	</div>
 		</div>

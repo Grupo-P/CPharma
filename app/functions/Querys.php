@@ -231,6 +231,7 @@ function QHistoricoArticulo($IdArticulo){
 		SELECT
 		GenPersona.Nombre,
 		CONVERT(date,ComFactura.FechaRegistro) As FechaRegistro,
+		CONVERT(date,ComFactura.FechaDocumento) As FechaDocumento,
 		ComFacturaDetalle.CantidadRecibidaFactura,
 		ComFacturaDetalle.M_PrecioCompraBruto
 		FROM InvArticulo
@@ -239,7 +240,7 @@ function QHistoricoArticulo($IdArticulo){
 		inner join ComProveedor ON ComProveedor.Id = ComFactura.ComProveedorId
 		inner join GenPersona ON GenPersona.Id = ComProveedor.GenPersonaId
 		WHERE InvArticulo.Id = '$IdArticulo'
-		ORDER BY ComFactura.FechaRegistro DESC
+		ORDER BY ComFactura.FechaDocumento DESC
 	";
 	return $sql;
 }
@@ -315,7 +316,7 @@ function QUnidadesCompradasProveedor($FInicial,$FFinal){
 		INNER JOIN InvArticulo ON InvArticulo.Id = ComFacturaDetalle.InvArticuloId
 		INNER JOIN ComFactura ON  ComFactura.Id = ComFacturaDetalle.ComFacturaId
 		WHERE
-		(ComFactura.FechaDocumento > '$FInicial' AND ComFactura.FechaDocumento < '$FFinal')
+		(ComFactura.FechaRegistro > '$FInicial' AND ComFactura.FechaRegistro < '$FFinal')
 		GROUP BY InvArticulo.Id,InvArticulo.CodigoArticulo,InvArticulo.Descripcion
 		ORDER BY UnidadesCompradasProveedor DESC
 	";
