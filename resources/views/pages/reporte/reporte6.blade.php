@@ -13,22 +13,38 @@
 	
 <?php 
   include(app_path().'\functions\config.php');
-  include(app_path().'\functions\Functions.php');
+  include(app_path().'\functions\querys.php');
+  include(app_path().'\functions\funciones.php');
+  include(app_path().'\functions\reportes.php');
+
   $ArtJson = "";
 
-  if (isset($_GET['Descrip'])  ){
+  if (isset($_GET['Descrip'])){
+
     $InicioCarga = new DateTime("now");
 
-    ReportePedido($_GET['Descrip'],$_GET['fechaInicio'],$_GET['fechaFin']);
+    if (isset($_GET['SEDE'])){      
+      echo '<h1 class="h5 text-success"  align="left"> <i class="fas fa-prescription"></i> '.NombreSede($_GET['SEDE']).'</h1>';
+    }
+    echo '<hr class="row align-items-start col-12">';
+
+    ReportePedidoProductos($_GET['SEDE'],$_GET['Descrip'],$_GET['fechaInicio'],$_GET['fechaFin']);
 
     $FinCarga = new DateTime("now");
     $IntervalCarga = $InicioCarga->diff($FinCarga);
     echo'Tiempo de carga: '.$IntervalCarga->format("%Y-%M-%D %H:%I:%S");
   }
   else{
+    if (isset($_GET['SEDE'])){      
+      echo '<h1 class="h5 text-success"  align="left"> <i class="fas fa-prescription"></i> '.NombreSede($_GET['SEDE']).'</h1>';
+    }
+    echo '<hr class="row align-items-start col-12">';
+
     $InicioCarga = new DateTime("now");
-    $sql = QueryArticulosDescId();
-    $ArtJson = armarJson($sql);
+
+    $sql = QListaArticulos();
+    $ArtJson = armarJson($sql,$_GET['SEDE']);
+
     echo '
     <form id="form" autocomplete="off" action="" target="blank">
         <table style="width:100%;">
@@ -44,6 +60,11 @@
             </td>
             <td align="right">
               <input id="fechaFin" name="fechaFin" type="date" required style="width:100%;">
+            </td>
+            <td>
+            <input id="SEDE" name="SEDE" type="hidden" value="';
+            print_r($_GET['SEDE']);
+            echo'">
             </td>
           </tr>
           <tr>

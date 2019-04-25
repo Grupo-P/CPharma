@@ -454,6 +454,12 @@ function QIntegracionProductosFalla(){
 		TablaTemp4.UnidadesVendidasCliente,
 		TablaTemp4.UnidadesDevueltaCliente,
 		ISNULL((UnidadesVendidasCliente-UnidadesDevueltaCliente),0) AS TotalUnidadesVendidasCliente,
+		TablaTemp4.VecesCompradasProveedor,
+		TablaTemp4.VecesReclamoProveedor,
+		ISNULL((VecesCompradasProveedor-VecesReclamoProveedor),0) AS TotalVecesCompradasProveedor,
+		TablaTemp4.UnidadesCompradasProveedor,
+		TablaTemp4.UnidadesReclamoProveedor,
+		ISNULL((UnidadesCompradasProveedor-UnidadesReclamoProveedor),0) AS TotalUnidadesCompradasProveedor,
 		SUM(InvLoteAlmacen.Existencia) AS Existencia
 		INTO TablaTemp5
 		FROM TablaTemp4
@@ -466,7 +472,11 @@ function QIntegracionProductosFalla(){
 		TablaTemp4.VecesVendidasCliente,
 		TablaTemp4.VecesDevueltaCliente,
 		TablaTemp4.UnidadesVendidasCliente,
-		TablaTemp4.UnidadesDevueltaCliente
+		TablaTemp4.UnidadesDevueltaCliente,
+		TablaTemp4.VecesCompradasProveedor,
+		TablaTemp4.VecesReclamoProveedor,
+		TablaTemp4.UnidadesCompradasProveedor,
+		TablaTemp4.UnidadesReclamoProveedor
 		ORDER BY TablaTemp4.UnidadesVendidasCliente DESC
 	";
 	return $sql;
@@ -485,6 +495,88 @@ function QProductosFalla(){
 	";
 	return $sql;
 }
+/*
+	TITULO: QArticuloDescLike
+	PARAMETROS: [$DescripLike] Descripcion para buscar
+				[$TablaTemp] Variable para indicar si la busqueda sera almacenada en una tabla temporal
+	FUNCION: Buscar un articulo segun su descripcion
+	RETORNO: Caracteristicas del articulo
+ */
+function QArticuloDescLike($DescripLike,$TablaTemp){
+	switch ($TablaTemp) {
+		case '0':
+		$sql = "
+			SELECT 
+			InvArticulo.Id,
+			InvArticulo.CodigoArticulo,
+			InvArticulo.Descripcion,
+			InvArticulo.FinConceptoImptoIdCompra AS ConceptoImpuesto
+			INTO TablaTemp6
+			FROM InvArticulo
+			WHERE InvArticulo.Descripcion LIKE '%$DescripLike%'
+			order by InvArticulo.Descripcion ASC
+		";
+		return $sql;
+		break;
+		
+		case '1':
+		$sql = "
+			SELECT 
+			InvArticulo.Id,
+			InvArticulo.CodigoArticulo,
+			InvArticulo.Descripcion,
+			InvArticulo.FinConceptoImptoIdCompra AS ConceptoImpuesto
+			FROM InvArticulo
+			WHERE InvArticulo.Descripcion LIKE '%$DescripLike%'
+			order by InvArticulo.Descripcion ASC
+		";
+		return $sql;
+		break;
+	}	
+}
+/*
+	TITULO: QUltimoLote
+	PARAMETROS: [$IdArticulo] Id del articulo a buscar
+	FUNCION: Buscar la fecha del ultimo lote del articulo en cuestion
+	RETORNO: La fecha del ultimo lote
+ */
+function QUltimoLote($IdArticulo){
+	$sql="
+		SELECT TOP 1
+		InvLote.Id,
+		invlote.M_PrecioCompraBruto,
+		invlote.M_PrecioTroquelado,
+		CONVERT(DATE,invlote.FechaEntrada) AS UltimoLote
+		FROM InvLote
+		WHERE InvLote.InvArticuloId  = '$IdArticulo'
+		ORDER BY UltimoLote DESC
+	";
+	return $sql;
+}
+/*
+	TITULO: QPedidoProductos
+	PARAMETROS: 
+	FUNCION: Arma la lista de pedido de productos
+	RETORNO: Lista prodcutos para pedir
+ */
+function QPedidoProductos(){
+	$sql="
+		SELECT 
+		TablaTemp6.Id,
+		TablaTemp6.CodigoArticulo,
+		TablaTemp6.Descripcion,
+		TablaTemp6.ConceptoImpuesto,
+		ISNULL((TablaTemp5.TotalVecesVendidasCliente),0) AS TotalVecesVendidasCliente,
+		ISNULL((TablaTemp5.TotalUnidadesVendidasCliente),0) AS TotalUnidadesVendidasCliente,
+		ISNULL((TablaTemp5.TotalVecesCompradasProveedor),0) AS TotalVecesCompradasProveedor,
+		ISNULL((TablaTemp5.TotalUnidadesCompradasProveedor),0) AS TotalUnidadesCompradasProveedor
+		FROM TablaTemp6
+		LEFT JOIN TablaTemp5 ON TablaTemp5.Id = TablaTemp6.Id
+		ORDER BY TablaTemp6.Descripcion ASC
+	";
+	return $sql;
+}
+
 
 
 /*
