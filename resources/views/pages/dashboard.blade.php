@@ -71,52 +71,7 @@
 		  	</div>
 		</div>
 	</div>
-
-	<div class="card-deck">
-		{{-- NEWS --}}
-		<div class="card border-warning  mb-3" style="width: 14rem;">	  	
-	  		<div class="card-body text-left bg-warning">
-	    		<h2 class="card-title">
-		    		<span class="card-text text-white">
-		    			<i class="fas fa-bell"></i>
-		    			Actualizaciones
-		    		</span>
-	    		</h2>
-	    		<p class="card-text text-white">
-	    			<ul>
-	    				<li class="card-text text-white ">
-	    					En el reporte <b>pedido de productos</b>, ya puedes hacer tus busquedas de manera mas sencilla
-	    				</li>
-	    			</ul>
-	    		</p>
-	  		</div>  
-		</div>
-		{{-- CONTACTO --}}
-		<div class="card border-secondary  mb-3" style="width: 14rem;">	  	
-	  		<div class="card-body text-left bg-secondary">
-	    		<h2 class="card-title">	    			
-		    		<span class="card-text text-white">
-		    			<i class="fas fa-info"></i>
-		    			Tienes una idea.?
-		    		</span>
-	    		</h2>
-	    		<p class="card-text text-white">
-	    			<ol>
-	    				<li class="card-text text-white ">
-	    					Sintetiza tu idea
-	    				</li>
-	    				<li class="card-text text-white ">
-	    					Envia tu idea al correo scova@farmacia72.com.ve
-	    				</li>
-	    				<li class="card-text text-white ">
-	    					Espera nuestro contacto para hablar de tu idea
-	    				</li>
-	    			</ol>
-	    		</p>
-	  		</div>  
-		</div>
-	</div>
-
+	
 	<div class="card-deck">		
 		<?php
 		  if(Auth::user()->role == 'MASTER' || Auth::user()->role == 'DEVELOPER'){
@@ -139,8 +94,8 @@
 		  	</div>
 		</div>
 		<!-- Dolar -->
-		<div class="card border-success mb-3" style="width: 14rem;">	  	
-	  		<div class="card-body text-left bg-success">
+		<div class="card border-secondary mb-3" style="width: 14rem;">	  	
+	  		<div class="card-body text-left bg-secondary">
 	    		<h2 class="card-title">
 		    		<span class="card-text text-white">
 		    			<i class="fas fa-money-bill-alt"></i>
@@ -151,12 +106,57 @@
 	    		</h2>
 	    		<p class="card-text text-white">Tasas registradas</p>
 	  		</div>
-		  	<div class="card-footer bg-transparent border-success text-right">
-		  		<a href="/dolar/" class="btn btn-outline-success btn-sm">Visualizar</a>
+		  	<div class="card-footer bg-transparent border-secondary text-right">
+		  		<a href="/dolar/" class="btn btn-outline-secondary btn-sm">Visualizar</a>
 		  	</div>
 		</div>
 		<?php
 			}
 		?>
+	</div>
+
+	<div class="card-deck">
+		{{-- NEWS --}}
+		<div class="card border-warning  mb-3" style="width: 14rem;">	  	
+	  		<div class="card-body text-left bg-warning">
+	    		<h2 class="card-title">
+		    		<span class="card-text text-white">
+		    			<i class="fas fa-bell"></i>
+		    			Actualizaciones
+		    		</span>
+	    		</h2>
+	    		<p class="card-text text-white">
+	    			<ul>
+	    				<li class="card-text text-white ">
+	    					En el reporte <b>pedido de productos</b>, ya puedes hacer tus busquedas de manera mas sencilla
+	    				</li>
+	    			</ul>
+	    		</p>
+	  		</div>  
+		</div>
+		{{-- CONTACTO --}}
+		<div class="card border-primary  mb-3" style="width: 14rem;">	  	
+	  		<div class="card-body text-left bg-primary">
+	    		<h2 class="card-title">	    			
+		    		<span class="card-text text-white">
+		    			<i class="fas fa-info"></i>
+		    			Tienes una idea.?
+		    		</span>
+	    		</h2>
+	    		<p class="card-text text-white">
+	    			<ol>
+	    				<li class="card-text text-white ">
+	    					Sintetiza tu idea
+	    				</li>
+	    				<li class="card-text text-white ">
+	    					Envia tu idea al correo scova@farmacia72.com.ve
+	    				</li>
+	    				<li class="card-text text-white ">
+	    					Espera nuestro contacto para hablar de tu idea
+	    				</li>
+	    			</ol>
+	    		</p>
+	  		</div>  
+		</div>
 	</div>
 @endsection

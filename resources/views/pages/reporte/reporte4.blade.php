@@ -41,7 +41,7 @@
     echo '<hr class="row align-items-start col-12">';
 
 		echo '
-		<form autocomplete="off" action="">
+		<form autocomplete="off" action="" target="_blank">
         <table style="width:100%;">
           <tr>
             <td align="center">
@@ -55,6 +55,9 @@
                 <option>20</option>
                 <option>50</option>
                 <option>100</option>
+                <option>200</option>
+                <option>500</option>
+                <option>1000</option>
               </select>
             </td>
             <td align="center">

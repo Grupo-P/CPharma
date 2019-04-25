@@ -46,7 +46,7 @@
     $ArtJson = armarJson($sql,$_GET['SEDE']);
 
 		echo '
-		<form autocomplete="off" action="">
+		<form autocomplete="off" action="" target="_blank">
 	    <div class="autocomplete" style="width:90%;">
 	      <input id="myInput" type="text" name="Descrip" placeholder="Ingrese el nombre del articulo " onkeyup="conteo()" required>
 	      <input id="myId" name="Id" type="hidden">

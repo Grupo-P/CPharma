@@ -39,7 +39,7 @@
     echo '<hr class="row align-items-start col-12">';
 
 		echo '
-		<form autocomplete="off" action="">
+		<form autocomplete="off" action="" target="_blank">
         <table style="width:100%;">
           <tr>
             <td align="center">
