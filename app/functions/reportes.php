@@ -510,6 +510,7 @@ function ReportePedidoProductos($SedeConnection,$Descripcion,$FInicial,$FFinal){
 				<th scope="col">Dias restantes</th>
 		      	<th scope="col">Precio (Con IVA)</th>
 		      	<th scope="col">Ultimo Lote</th>
+		      	<th scope="col">Ultima Venta</th>
 		    </tr>
 	  	</thead>
 	  	<tbody>
@@ -538,7 +539,12 @@ function ReportePedidoProductos($SedeConnection,$Descripcion,$FInicial,$FFinal){
 		$sql9 = QUltimoLote($IdArticulo);
 		$result2 = sqlsrv_query($conn,$sql9);
 		$row2 = sqlsrv_fetch_array($result2,SQLSRV_FETCH_ASSOC);
-		$UltimoLote = $row2["UltimoLote"];		
+		$UltimoLote = $row2["UltimoLote"];	
+
+		$sql10 = QUltimaVenta($IdArticulo,$FInicial,$FFinal);
+		$result3 = sqlsrv_query($conn,$sql10);
+		$row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
+		$UltimaVenta = $row3["UltimaVenta"];		
 
 		echo '<td align="center">'.$Venta.'</td>';
 		echo '<td align="center">'.intval($row["TotalUnidadesCompradasProveedor"]).'</td>';
@@ -546,8 +552,15 @@ function ReportePedidoProductos($SedeConnection,$Descripcion,$FInicial,$FFinal){
 		echo '<td align="center">'.round($DiasRestantes,2).'</td>';
 		echo '<td align="center">'." ".round($Precio,2)." ".SigVe.'</td>';
 		
-		if(($UltimoLote) && ($Existencia!=0)){
+		if(($UltimoLote)){
 			echo '<td align="center">'.$UltimoLote->format('Y-m-d').'</td>';
+		}
+		else{
+			echo '<td align="center"> - </td>';
+		}
+
+		if(($UltimaVenta)){
+			echo '<td align="center">'.$UltimaVenta->format('Y-m-d').'</td>';
 		}
 		else{
 			echo '<td align="center"> - </td>';
