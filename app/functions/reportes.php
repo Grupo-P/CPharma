@@ -510,7 +510,7 @@ function ReportePedidoProductos($SedeConnection,$Descripcion,$FInicial,$FFinal){
 				<th scope="col">Dias restantes</th>
 		      	<th scope="col">Precio (Con IVA)</th>
 		      	<th scope="col">Ultimo Lote</th>
-		      	<th scope="col">Ultima Venta</th>
+		      	<th scope="col">Ultima Venta (En rango)</th>
 		    </tr>
 	  	</thead>
 	  	<tbody>
@@ -574,6 +574,77 @@ function ReportePedidoProductos($SedeConnection,$Descripcion,$FInicial,$FFinal){
 
 	sqlsrv_close( $conn );
 }
+/***********************************************************************************/
+/************************ REPORTE 7 CATALOGO PROVEEDOR ****************************/
+/*
+	TITULO: 
+	PARAMETROS: 
+	FUNCION: 
+	RETORNO: 
+ */
+function ReporteCatalogoProveedor($SedeConnection,$IdProveedor,$NombreProveedor){
+
+	$conn = ConectarSmartpharma($SedeConnection);
+
+	$sql = QTablaTemp(2);
+	$sql1 = QfacturaProveedor($IdProveedor);
+	$sql2 = QDetalleFactura();
+	$sql3 = QCatalogoProductosProveedor();
+
+	sqlsrv_query($conn,$sql);
+	sqlsrv_query($conn,$sql1);
+	sqlsrv_query($conn,$sql2);
+	$result = sqlsrv_query($conn,$sql3);
+
+	echo '
+	<div class="input-group md-form form-sm form-1 pl-0">
+	  <div class="input-group-prepend">
+	    <span class="input-group-text purple lighten-3" id="basic-text1"><i class="fas fa-search text-white"
+	        aria-hidden="true"></i></span>
+	  </div>
+	  <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterAllTable()">
+	</div>
+	<br/>
+
+	<table class="table table-striped table-bordered col-12 sortable">
+		<thead class="thead-dark">
+		    <tr>
+		    	<th scope="col">Proveedor</th>	  
+		    </tr>
+	  	</thead>
+	  	<tbody>
+	  	<tr>
+  	';
+	echo '<td>'.$NombreProveedor.'</td>';	
+  	echo '
+  		</tr>
+  		</tbody>
+	</table>';
+
+	echo'
+	<table class="table table-striped table-bordered col-12 sortable" id="myTable">
+	  	<thead class="thead-dark">
+		    <tr>
+		    	<th scope="col">Codigo</th>
+		      	<th scope="col">Descripcion</th>		 
+		    </tr>
+	  	</thead>
+	  	<tbody>
+	';
+	
+	while( $row = sqlsrv_fetch_array( $result, SQLSRV_FETCH_ASSOC)) {
+			echo '<tr>';
+			echo '<td align="left">'.$row["CodigoArticulo"].'</td>';
+			echo '<td align="left">'.$row["Descripcion"].'</td>';
+			echo '</tr>';		
+  	}
+  	echo '
+  		</tbody>
+	</table>';
+
+	sqlsrv_close( $conn );
+}
+
 
 
 

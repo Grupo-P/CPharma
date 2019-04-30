@@ -13,12 +13,21 @@
 
   <?php 
   include(app_path().'\functions\config.php');
+  include(app_path().'\functions\querys.php');
+  include(app_path().'\functions\funciones.php');
+  include(app_path().'\functions\reportes.php');
+
   include(app_path().'\functions\Functions.php');
 
   $ArtJson = "";
   
   if (isset($_GET['Id'])){
-  //CASO 1: CARGA AL HABER SELECCIONADO UN PROVEEDOR 
+  //CASO 2: CARGA AL HABER SELECCIONADO UN PROVEEDOR 
+    if (isset($_GET['SEDE'])){      
+      echo '<h1 class="h5 text-success"  align="left"> <i class="fas fa-prescription"></i> '.NombreSede($_GET['SEDE']).'</h1>';
+    }
+    echo '<hr class="row align-items-start col-12">';
+
     $InicioCarga = new DateTime("now");
     
     echo '
@@ -29,7 +38,7 @@
               Pedido cant. dias
             </td>
             <td align="right" style="width:20%;">
-              <input id="pedido" type="text" name="pedido" required style="width:100%;">
+              <input id="pedido" type="text" name="pedido" required style="width:100%;" autofocus>
             </td>
             <td align="center">
               Fecha Inicio:
@@ -43,6 +52,11 @@
             <td align="right">
               <input id="fechaFin" name="fechaFin" type="date" required style="width:100%;">
             </td>
+            <td>
+            <input id="SEDE" name="SEDE" type="hidden" value="';
+            print_r($_GET['SEDE']);
+            echo'">
+            </td>
             <td align="right">
               <input type="submit" value="Buscar" class="btn btn-outline-success">
             </td>
@@ -54,14 +68,21 @@
       <br>
     ';
 
-    CatalogoProveedor($_GET['Id'],$_GET['Nombre']);
-
+    ReporteCatalogoProveedor($_GET['SEDE'],$_GET['Id'],$_GET['Nombre']);
+    
     $FinCarga = new DateTime("now");
     $IntervalCarga = $InicioCarga->diff($FinCarga);
     echo'Tiempo de carga: '.$IntervalCarga->format("%Y-%M-%D %H:%I:%S");
   } 
   else if(isset($_GET['pedido'])){
-  //CASO 2: CARGA AL HABER SELECCIONADO UN PEDIDO EN BASE A DIAS Y EL RANGO
+  //CASO 3: CARGA AL HABER SELECCIONADO UN PEDIDO EN BASE A DIAS Y EL RANGO
+    if (isset($_GET['SEDE'])){      
+      echo '<h1 class="h5 text-success"  align="left"> <i class="fas fa-prescription"></i> '.NombreSede($_GET['SEDE']).'</h1>';
+    }
+    echo '<hr class="row align-items-start col-12">';
+
+    $InicioCarga = new DateTime("now");
+
     echo"Pedido: ".$_GET['pedido'];
     echo"<br>";
     echo"fechaInicio: ".$_GET['fechaInicio'];
@@ -71,19 +92,35 @@
     echo"IdProv: ".$_GET['IdProv'];
     echo"<br>";
     echo"NombreProv: ".$_GET['NombreProv'];
+
+    $FinCarga = new DateTime("now");
+    $IntervalCarga = $InicioCarga->diff($FinCarga);
+    echo'Tiempo de carga: '.$IntervalCarga->format("%Y-%M-%D %H:%I:%S");
   }
   else{
-  //CASO 3: AL CARGAR EL REPORTE DESDE EL MENU
+  //CASO 1: AL CARGAR EL REPORTE DESDE EL MENU
+  $_GET['SEDE']='DB';
+
+    if (isset($_GET['SEDE'])){      
+      echo '<h1 class="h5 text-success"  align="left"> <i class="fas fa-prescription"></i> '.NombreSede($_GET['SEDE']).'</h1>';
+    }
+    echo '<hr class="row align-items-start col-12">';
+
     $InicioCarga = new DateTime("now");
 
-    $sql = QueryProveedorDescId();
-    $ArtJson = armarJson($sql);
+    $sql = QListaProveedores();
+    $ArtJson = armarJson($sql,$_GET['SEDE']);
 
     echo '
     <form autocomplete="off" action="">
       <div class="autocomplete" style="width:90%;">
         <input id="myInput" type="text" name="Nombre" placeholder="Ingrese el nombre del proveedor " onkeyup="conteo()" required>
         <input id="myId" name="Id" type="hidden">
+        <td>
+        <input id="SEDE" name="SEDE" type="hidden" value="';
+        print_r($_GET['SEDE']);
+        echo'">
+        </td>
       </div>
       <input type="submit" value="Buscar" class="btn btn-outline-success">
     </form>
