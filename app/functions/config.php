@@ -41,8 +41,8 @@ define ("nameFAU" , "");
 /*
 	Cadena de conexion con la base de datos del servidor de Desarrollo
 */
- define ("serverDB" , "SERGIO-PC\CSERVER");	
- define ("userDB" , "admin");
+ define ("serverDB" , "SERGIO-PC\CSERVER");
+ define ("userDB" , "sa");
  define ("passDB" , "soporte123");
  define ("nameDB" , "SMART");
 ?>
