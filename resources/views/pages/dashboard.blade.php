@@ -128,7 +128,7 @@
 	    		<p class="card-text text-white">
 	    			<ul>
 	    				<li class="card-text text-white ">
-	    					En el reporte <b>pedido de productos</b>, ya puedes hacer tus busquedas de manera mas sencilla
+	    					Ya puedes ver los reportes para <b>Farmacia Tierra Negra</b> y <b>Farmacia La Lago</b>
 	    				</li>
 	    			</ul>
 	    		</p>

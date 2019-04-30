@@ -46,7 +46,7 @@
 		  		<form action="/reporte/" style="display: inline;">
 				    @csrf
 				    <input id="SEDE" name="SEDE" type="hidden" value="FLL">  
-				    <button type="submit" name="Reporte" role="button" class="btn btn-outline-success btn-sm" disabled="disabled"></i>Proximamente</button>
+				    <button type="submit" name="Reporte" role="button" class="btn btn-outline-success btn-sm"></i>Ver reportes</button>
 				</form>
 		  	</div>
 		</div>

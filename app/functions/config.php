@@ -30,7 +30,7 @@ define ("nameFTN" , "SMART");
 define ("serverFLL" , "192.168.7.34\SMARTPHARMA");
 define ("userFLL" , "sa");
 define ("passFLL" , "Soporte123");
-define ("nameFLL" , "SMART");
+define ("nameFLL" , "smartlalago");
 /*
 	Cadena de conexion con la base de datos de Smartpharma FAU
 */
