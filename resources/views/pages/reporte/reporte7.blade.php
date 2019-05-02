@@ -29,7 +29,7 @@
     $InicioCarga = new DateTime("now");
     
     echo '
-    <form autocomplete="off" action="">
+    <form autocomplete="off" action="" target="_blank">
         <table style="width:100%;">
           <tr>
             <td align="center">
@@ -100,7 +100,7 @@
     $ArtJson = armarJson($sql,$_GET['SEDE']);
 
     echo '
-    <form autocomplete="off" action="">
+    <form autocomplete="off" action="" target="_blank">
       <div class="autocomplete" style="width:90%;">
         <input id="myInput" type="text" name="Nombre" placeholder="Ingrese el nombre del proveedor " onkeyup="conteo()" required>
         <input id="myId" name="Id" type="hidden">
