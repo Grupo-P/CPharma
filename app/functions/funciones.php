@@ -265,4 +265,49 @@ function DiasRestantes($Existencia,$VentaDiaria){
 	$DiasRestantes = round($DiasRestantes,2);
 	return $DiasRestantes;
 }
+/*
+	TITULO: ProductoUnico
+	PARAMETROS: [$conn,$IdArticulo,$IdProveedor] conecion, id del articulo, id del provedor
+	FUNCION: determinar si un prducto es unico
+	RETORNO: SI o NO segun sea el caso
+ */
+function ProductoUnico($conn,$IdArticulo,$IdProveedor){
+
+	$Unico = '';
+
+	$sql0 = QTablaTempR(2,4);
+	$sql1 = QFacturasProducto($IdArticulo);
+	$sql2 = QProvedorUnico($IdProveedor);
+	$sql3 = QProvedorUnicoLista();
+
+	sqlsrv_query($conn,$sql0);
+	sqlsrv_query($conn,$sql1);
+	sqlsrv_query($conn,$sql2);
+
+	$params = array();
+	$options =  array( "Scrollable" => SQLSRV_CURSOR_KEYSET );
+	$result = sqlsrv_query($conn,$sql3,$params,$options);
+
+	$row_count = sqlsrv_num_rows( $result );
+	
+		if($row_count == 0){
+			$Unico = 'SI';
+		}
+		else{
+			$Unico = 'NO';
+		}	
+  	return $Unico;
+}
+/*
+	TITULO: CantidadPedido
+	PARAMETROS: [$Existencia] Existencia de un producto
+				[$VentaDiaria] Venta diaria promedio del prodcuto
+				[$DiasPedido] Dias para el pedido
+	FUNCION: calcular la cantidad a pedir
+	RETORNO: cantidad a pedir
+ */
+function CantidadPedido($VentaDiaria,$DiasPedido,$Existencia){
+	$CantidadPedido = (($VentaDiaria * $DiasPedido)-$Existencia);
+	return $CantidadPedido;
+}
 ?>

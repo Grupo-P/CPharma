@@ -577,10 +577,12 @@ function ReportePedidoProductos($SedeConnection,$Descripcion,$FInicial,$FFinal){
 /***********************************************************************************/
 /************************ REPORTE 7 CATALOGO PROVEEDOR ****************************/
 /*
-	TITULO: 
-	PARAMETROS: 
-	FUNCION: 
-	RETORNO: 
+	TITULO: ReporteCatalogoProveedor
+	PARAMETROS: [$SedeConnection] sede donde se hara la conexion
+				[$IdProveedor] ID del proveedor a buscar
+				[$NombreProveedor] Nombre del proveedor a buscar
+	FUNCION: Armar el reporte catalogo de proveedor
+	RETORNO: No aplica
  */
 function ReporteCatalogoProveedor($SedeConnection,$IdProveedor,$NombreProveedor){
 
@@ -644,14 +646,141 @@ function ReporteCatalogoProveedor($SedeConnection,$IdProveedor,$NombreProveedor)
 
 	sqlsrv_close( $conn );
 }
-
-
-
-
 /*
-	TITULO: 
-	PARAMETROS: 
-	FUNCION: 
-	RETORNO: 
+	TITULO: ReporteCatalogoProveedor
+	PARAMETROS: [$SedeConnection] sede donde se hara la conexion
+				[$IdProveedor] ID del proveedor a buscar
+				[$NombreProveedor] Nombre del proveedor a buscar
+	FUNCION: Armar el reporte catalogo de proveedor
+	RETORNO: No aplica
  */
+function ReporteCatalogoProveedorR($SedeConnection,$IdProveedor,$NombreProveedor,$FInicial,$FFinal,$DiasPedido){
+
+	$FFinalImpresion= $FFinal;
+	$FFinal = date("Y-m-d",strtotime($FFinal."+ 1 days"));
+
+	$conn = ConectarSmartpharma($SedeConnection);
+
+	$sql = QTablaTemp(2);
+	$sql1 = QfacturaProveedor($IdProveedor);
+	$sql2 = QDetalleFactura();
+	$sql3 = QCatalogoProductosProveedor();
+
+	sqlsrv_query($conn,$sql);
+	sqlsrv_query($conn,$sql1);
+	sqlsrv_query($conn,$sql2);
+	$result = sqlsrv_query($conn,$sql3);
+
+	$RangoDias = RangoDias($FInicial,$FFinal);
+
+	echo '
+	<div class="input-group md-form form-sm form-1 pl-0">
+	  <div class="input-group-prepend">
+	    <span class="input-group-text purple lighten-3" id="basic-text1"><i class="fas fa-search text-white"
+	        aria-hidden="true"></i></span>
+	  </div>
+	  <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterAllTable()">
+	</div>
+	<br/>
+	';
+
+	echo'<h6 align="center">Pedido en base a: '.$DiasPedido.' dias </h6>';
+
+	echo'<h6 align="center">Periodo desde el '.$FInicial.' al '.$FFinalImpresion.' </h6>';
+
+	echo '
+	<table class="table table-striped table-bordered col-12 sortable">
+		<thead class="thead-dark">
+		    <tr>
+		    	<th scope="col">Proveedor</th>	  
+		    </tr>
+	  	</thead>
+	  	<tbody>
+	  	<tr>
+  	';
+	echo '<td>'.$NombreProveedor.'</td>';	
+  	echo '
+  		</tr>
+  		</tbody>
+	</table>';
+
+	echo'
+	<table class="table table-striped table-bordered col-12 sortable" id="myTable">
+	  	<thead class="thead-dark">
+		    <tr>
+		    	<th scope="col">Codigo</th>
+		      	<th scope="col">Descripcion</th>
+		      	<th scope="col">Producto Unico</th>
+		      	<th scope="col">Precio (Con IVA)</th>	
+		      	<th scope="col">Existencia</th>
+		      	<th scope="col">Unidades vendidas</th>
+		      	<th scope="col">Unidades compradas</th>	 
+		      	<th scope="col">Venta diaria</th>	
+		      	<th scope="col">Dias restantes</th>
+		      	<th scope="col">Pedir</th>
+		    </tr>
+	  	</thead>
+	  	<tbody>
+	';
+
+	while( $row = sqlsrv_fetch_array( $result, SQLSRV_FETCH_ASSOC)) {
+		$IdArticulo = $row["Id"];
+		$IsIVA = $row["ConceptoImpuesto"];
+
+		$sql4 = QExistenciaArticulo($IdArticulo,0);
+		$result1 = sqlsrv_query($conn,$sql4);
+		$row1 = sqlsrv_fetch_array($result1,SQLSRV_FETCH_ASSOC);
+		$Existencia = $row1["Existencia"];
+
+			echo '<tr>';
+			echo '<td align="left">'.$row["CodigoArticulo"].'</td>';
+			echo '<td align="left">'.$row["Descripcion"].'</td>';
+			
+		$Unico = ProductoUnico($conn,$IdArticulo,$IdProveedor);
+			echo '<td align="center">'.$Unico.'</td>';
+
+		$Precio = CalculoPrecio($conn,$IdArticulo,$IsIVA,$Existencia);
+			echo '<td align="center">'." ".round($Precio,2)." ".SigVe.'</td>';
+			echo '<td align="center">'.intval($Existencia).'</td>';
+
+		$sql5 = QTablaTemp(5);
+		$sql6 = QUnidadesVendidasClienteId($FInicial,$FFinal,$IdArticulo);
+		$sql7 = QUnidadesDevueltaClienteId($FInicial,$FFinal,$IdArticulo);
+		$sql8 = QUnidadesCompradasProveedorId($FInicial,$FFinal,$IdArticulo);
+		$sql9 = QUnidadesReclamoProveedorId($FInicial,$FFinal,$IdArticulo);
+		$sql10 = QIntegracionProductosVendidos();
+
+		sqlsrv_query($conn,$sql5);
+		sqlsrv_query($conn,$sql6);
+		sqlsrv_query($conn,$sql7);
+		sqlsrv_query($conn,$sql8);
+		sqlsrv_query($conn,$sql9);
+		sqlsrv_query($conn,$sql10);
+
+		$result2 = sqlsrv_query($conn,'SELECT * FROM TablaTemp4');
+		$row2 = sqlsrv_fetch_array($result2,SQLSRV_FETCH_ASSOC);
+		$TotalUnidadesVendidasCliente = ($row2["UnidadesVendidasCliente"]-$row2["UnidadesDevueltaCliente"]);
+		$TotalUnidadesCompradasProveedor = ($row2["UnidadesCompradasProveedor"]-$row2["UnidadesReclamoProveedor"]);
+
+			echo '<td align="center">'.intval($TotalUnidadesVendidasCliente).'</td>';
+			echo '<td align="center">'.intval($TotalUnidadesCompradasProveedor).'</td>';
+
+		$VentaDiaria = VentaDiaria($TotalUnidadesVendidasCliente,$RangoDias);
+		$DiasRestantes = DiasRestantes($Existencia,$VentaDiaria);
+
+			echo '<td align="center">'.round($VentaDiaria,2).'</td>';
+			echo '<td align="center">'.round($DiasRestantes,2).'</td>';
+
+		$CantidadPedido = CantidadPedido($VentaDiaria,$DiasPedido,$Existencia);
+
+			echo '<td align="center">'.intval($CantidadPedido).'</td>';
+
+		echo '</tr>';	
+  	}
+  	echo '
+  		</tbody>
+	</table>';
+
+	sqlsrv_close( $conn );
+}
 ?>

@@ -24,6 +24,31 @@ function QTablaTemp($Cant){
 	return $sql;
 }
 /*
+	TITULO: QTablaTemp
+	PARAMETROS: [$inicio,$fin] inicio y fin del rango a preparar
+	FUNCION: Borra el contenido de las tablas temporales si estan en uso
+	RETORNO: Tablas temporales vacias
+ */
+function QTablaTempR($inicio,$fin){
+	$sql='';
+	for($i = $inicio; $i<$fin; $i++){
+		if($i == 0){
+			$sql = "
+				IF OBJECT_ID ('TablaTemp', 'U') IS NOT NULL
+					DROP TABLE TablaTemp;
+			";
+		}
+		else {
+			$flag = "
+				IF OBJECT_ID ('TablaTemp".$i."', 'U') IS NOT NULL
+					DROP TABLE TablaTemp".$i.";
+			";
+			$sql = $sql.$flag;
+		}
+	}
+	return $sql;
+}
+/*
 	TITULO: QTasa
 	PARAMETROS: [$QFecha] Fecha de la que se quiere la tasa
 	FUNCION: Buscar el valor de la tasa en un dia especifico
@@ -642,16 +667,174 @@ function QCatalogoProductosProveedor(){
 	SELECT
 	InvArticulo.Id,
 	InvArticulo.CodigoArticulo,
-	InvArticulo.Descripcion 
+	InvArticulo.Descripcion,
+	InvArticulo.FinConceptoImptoIdCompra AS ConceptoImpuesto 
 	FROM InvArticulo
 	INNER JOIN TablaTemp1 ON TablaTemp1.ArtiuloId = InvArticulo.Id
-	GROUP BY InvArticulo.Id,InvArticulo.Descripcion,InvArticulo.CodigoArticulo
+	GROUP BY InvArticulo.Id,InvArticulo.Descripcion,InvArticulo.CodigoArticulo,InvArticulo.FinConceptoImptoIdCompra
 	ORDER BY InvArticulo.Descripcion ASC
 	';
 	return $sql;
 }
-
-
+/*
+	TITULO: QFacturasProducto
+	PARAMETROS: [$IdArticulo] Id del articulo a buscar las facturas
+	FUNCION: Buscar las facturas donde interviene el articulo
+	RETORNO: Lista de las facturas donde aparece el articulo
+ */
+function QFacturasProducto($IdArticulo){
+	$sql = "
+	SELECT
+	ComFacturaDetalle.ComFacturaId AS FacturaId
+	INTO TablaTemp2
+	FROM ComFacturaDetalle
+	WHERE ComFacturaDetalle.InvArticuloId = '$IdArticulo'
+	";
+	return $sql;
+}
+/*
+	TITULO: QProvedorUnico
+	PARAMETROS: [$IdProveedor] Id del proveedor a buscar
+	FUNCION: Buscar en las facturas si hay otro proveedor que surta el producto
+	RETORNO: Lista de proveedores que surten el producto 
+	[Funciona en conjunto con QFacturasProducto]
+ */
+function QProvedorUnico($IdProveedor){
+	$sql = "
+	SELECT
+	ComFactura.ComProveedorId
+	INTO TablaTemp3
+	FROM TablaTemp2 
+	INNER JOIN ComFactura ON ComFactura.Id = TablaTemp2.FacturaId
+	WHERE ComFactura.ComProveedorId <> '$IdProveedor'
+	GROUP BY ComFactura.ComProveedorId
+	";
+	return $sql;
+}
+/*
+	TITULO: QProvedorUnicoLista
+	PARAMETROS: No aplica [Funciona en conunto con QProvedorUnico]
+	FUNCION: Armar la lista de los proveedores que dispensan el articulo
+	RETORNO: Lista de proveedores que dispensan el articulo
+ */
+function QProvedorUnicoLista(){
+	$sql = "
+	SELECT
+	ComProveedor.Id,
+	GenPersona.Nombre
+	FROM ComProveedor
+	INNER JOIN GenPersona ON ComProveedor.GenPersonaId=GenPersona.Id
+	INNER JOIN ComFactura ON ComFactura.ComProveedorId=ComProveedor.Id
+	INNER JOIN TablaTemp3 ON TablaTemp3.ComProveedorId=ComProveedor.Id
+	GROUP by ComProveedor.Id, GenPersona.Nombre
+	ORDER BY ComProveedor.Id ASC
+	";
+	return $sql;
+}
+/*
+	TITULO: QUnidadesVendidasClienteId
+	PARAMETROS: [$FInicial,$FFinal,$Id] Fecha inicial y final del rango y id del articulo
+	FUNCION: bucar las unidades vendidas en el rango del articulo determindo
+	RETORNO: unidades vendidas del articulo
+ */
+function QUnidadesVendidasClienteId($FInicial,$FFinal,$Id){
+	$sql = "
+		SELECT
+		InvArticulo.Id,
+		InvArticulo.CodigoArticulo,
+		InvArticulo.Descripcion, 
+		COUNT(*) AS VecesVendidasCliente, 
+		SUM(VenFacturaDetalle.Cantidad) AS UnidadesVendidasCliente
+		INTO TablaTemp
+		FROM VenFacturaDetalle
+		INNER JOIN InvArticulo ON InvArticulo.Id = VenFacturaDetalle.InvArticuloId
+		INNER JOIN VenFactura ON VenFactura.Id = VenFacturaDetalle.VenFacturaId
+		WHERE
+		(VenFactura.FechaDocumento > '$FInicial' AND VenFactura.FechaDocumento < '$FFinal')
+		AND (InvArticulo.Id = '$Id')
+		GROUP BY InvArticulo.Id,InvArticulo.CodigoArticulo,InvArticulo.Descripcion
+		ORDER BY InvArticulo.Id DESC
+	";
+	return $sql;
+}
+/*
+	TITULO: QUnidadesDevueltaClienteId
+	PARAMETROS: [$FInicial,$FFinal,$Id] Fecha inicial y final del rango y id del articulo
+	FUNCION: buscar las unidades devueltas por los clientes
+	RETORNO: unidades devueltas
+ */
+function QUnidadesDevueltaClienteId($FInicial,$FFinal,$Id){
+	$sql = "
+		SELECT
+		InvArticulo.Id,
+		InvArticulo.CodigoArticulo,
+		InvArticulo.Descripcion,
+		COUNT(*) AS VecesDevueltaCliente,
+		SUM(VenDevolucionDetalle.Cantidad) AS UnidadesDevueltaCliente
+		INTO TablaTemp1
+		FROM VenDevolucionDetalle
+		INNER JOIN InvArticulo ON InvArticulo.Id = VenDevolucionDetalle.InvArticuloId
+		INNER JOIN VenDevolucion ON VenDevolucion.Id = VenDevolucionDetalle.VenDevolucionId
+		WHERE
+		(VenDevolucion.FechaDocumento > '$FInicial' AND VenDevolucion.FechaDocumento < '$FFinal')
+		AND (InvArticulo.Id = '$Id')
+		GROUP BY InvArticulo.Id,InvArticulo.CodigoArticulo,InvArticulo.Descripcion
+		ORDER BY UnidadesDevueltaCliente DESC
+	";
+	return $sql;
+}
+/*
+	TITULO: QUnidadesCompradasProveedorId
+	PARAMETROS: [$FInicial,$FFinal,$Id] Fecha inicial y final del rango y id del articulo
+	FUNCION: buscar las unidades compradas a los proveedores
+	RETORNO: unidades compradas
+ */
+function QUnidadesCompradasProveedorId($FInicial,$FFinal,$Id){
+	$sql = "
+		SELECT
+		InvArticulo.Id,
+		InvArticulo.CodigoArticulo,
+		InvArticulo.Descripcion,
+		COUNT(*) AS VecesCompradasProveedor,
+		SUM(ComFacturaDetalle.CantidadFacturada) AS UnidadesCompradasProveedor
+		INTO TablaTemp2
+		FROM ComFacturaDetalle
+		INNER JOIN InvArticulo ON InvArticulo.Id = ComFacturaDetalle.InvArticuloId
+		INNER JOIN ComFactura ON  ComFactura.Id = ComFacturaDetalle.ComFacturaId
+		WHERE
+		(ComFactura.FechaRegistro > '$FInicial' AND ComFactura.FechaRegistro < '$FFinal')
+		AND (InvArticulo.Id = '$Id')
+		GROUP BY InvArticulo.Id,InvArticulo.CodigoArticulo,InvArticulo.Descripcion
+		ORDER BY UnidadesCompradasProveedor DESC
+	";
+	return $sql;
+}
+/*
+	TITULO: QUnidadesReclamoProveedorId
+	PARAMETROS: [$FInicial,$FFinal,$Id] Fecha inicial y final del rango y id del articulo
+	FUNCION: buscar las unidades reclamadas a proveedores
+	RETORNO: unidades reclamadas
+ */
+function QUnidadesReclamoProveedorId($FInicial,$FFinal,$Id){
+	$sql = "
+		SELECT
+		InvArticulo.Id,
+		InvArticulo.CodigoArticulo,
+		InvArticulo.Descripcion,
+		COUNT(*) AS VecesReclamoProveedor,
+		SUM(ComReclamoDetalle.Cantidad) AS UnidadesReclamoProveedor
+		INTO TablaTemp3
+		FROM ComReclamoDetalle
+		INNER JOIN InvArticulo ON InvArticulo.Id = ComReclamoDetalle.InvArticuloId
+		INNER JOIN ComReclamo ON ComReclamo.Id = ComReclamoDetalle.ComReclamoId
+		WHERE
+		(ComReclamo.FechaRegistro > '$FInicial' AND ComReclamo.FechaRegistro < '$FFinal')
+		AND (InvArticulo.Id = '$Id')
+		GROUP BY InvArticulo.Id,InvArticulo.CodigoArticulo,InvArticulo.Descripcion
+		ORDER BY UnidadesReclamoProveedor DESC
+	";
+	return $sql;
+}
 
 
 /*
@@ -661,44 +844,8 @@ function QCatalogoProductosProveedor(){
 	RETORNO:
  */
 function QModelo(){
-	$sql = '
-	';
+	$sql = "
+	";
 	return $sql;
 }
-
-
-/*
-IF OBJECT_ID ('TablaTemp', 'U') IS NOT NULL
-	DROP TABLE TablaTemp;
-IF OBJECT_ID ('TablaTemp1', 'U') IS NOT NULL
-	DROP TABLE TablaTemp1;
-
-SELECT
-ComFacturaDetalle.ComFacturaId AS FacturaId
-INTO TablaTemp
-FROM ComFacturaDetalle
-WHERE ComFacturaDetalle.InvArticuloId = 2736 --13141
-
-SELECT * FROM TablaTemp
-
-SELECT
-ComFactura.ComProveedorId
-INTO TablaTemp1
-FROM TablaTemp 
-INNER JOIN ComFactura ON ComFactura.Id = TablaTemp.FacturaId
-WHERE ComFactura.ComProveedorId <> 2 --10
-GROUP BY ComFactura.ComProveedorId
-
-SELECT * FROM TablaTemp1
-
-SELECT
-GenPersona.Nombre,
-ComProveedor.Id
-FROM ComProveedor
-INNER JOIN GenPersona ON ComProveedor.GenPersonaId=GenPersona.Id
-INNER JOIN ComFactura ON ComFactura.ComProveedorId=ComProveedor.Id
-INNER JOIN TablaTemp1 ON TablaTemp1.ComProveedorId=ComProveedor.Id
-GROUP by ComProveedor.Id, GenPersona.Nombre
-ORDER BY ComProveedor.Id ASC
- */
 ?>
