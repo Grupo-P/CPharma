@@ -1030,7 +1030,7 @@ function ReporteArticuloTroquel($SedeConnection,$IdProveedor,$NombreProveedor,$I
 		echo '<tr>';
 		echo '<td align="center">'.$row["CodigoArticulo"].'</td>';		
 		echo '<td align="center">'.$row["Descripcion"].'</td>';
-		echo '<td align="center">'.round($row2["M_PrecioTroquelado"],2).'</td>';
+		echo '<td align="center">'.round($row2["M_PrecioTroquelado"],2).' '.SigVe.'</td>';
 
 		echo '
 			<form autocomplete="off" action="">
@@ -1128,7 +1128,7 @@ function ReporteTroquel($SedeConnection,$IdProveedor,$NombreProveedor,$IdFatura,
 		echo '<tr>';
 		echo '<td align="center">'.$row["CodigoArticulo"].'</td>';		
 		echo '<td align="center">'.$row["Descripcion"].'</td>';
-		echo '<td align="center">'.round($row3["M_PrecioTroquelado"],2).'</td>';
+		echo '<td align="center">'.round($row3["M_PrecioTroquelado"],2).' '.SigVe.'</td>';
 		echo '</tr>';
 	}
   	echo '
