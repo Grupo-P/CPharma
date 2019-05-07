@@ -57,6 +57,10 @@ Route::get('/reporte7', function () {
     return view('pages.reporte.reporte7');
 });
 
+Route::get('/reporte8', function () {
+    return view('pages.reporte.reporte8');
+});
+
 Route::get('home', 'HomeController@index')->name('home');
 
 Route::resource('dolar', 'DolarController');

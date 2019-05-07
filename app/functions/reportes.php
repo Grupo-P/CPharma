@@ -796,4 +796,345 @@ function ReporteCatalogoProveedorR($SedeConnection,$IdProveedor,$NombreProveedor
 
 	sqlsrv_close( $conn );
 }
+/***********************************************************************************/
+/************************ REPORTE 8 ACTUALIZAR TROQUEL ******************************/
+/*
+	TITULO: 
+	PARAMETROS: 
+	FUNCION:
+	RETORNO:
+ */
+function ReporteProveedorFactura($SedeConnection,$IdProveedor,$NombreProveedor){
+	
+	$conn = ConectarSmartpharma($SedeConnection);
+
+	$sql1 = QfacturaProveedorToquel($IdProveedor);	
+	$result = sqlsrv_query($conn,$sql1);
+
+	echo '
+	<div class="input-group md-form form-sm form-1 pl-0">
+	  <div class="input-group-prepend">
+	    <span class="input-group-text purple lighten-3" id="basic-text1"><i class="fas fa-search text-white"
+	        aria-hidden="true"></i></span>
+	  </div>
+	  <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterAllTable()">
+	</div>
+	<br/>
+	';
+
+	echo '
+	<table class="table table-striped table-bordered col-12 sortable">
+		<thead class="thead-dark">
+		    <tr>
+		    	<th scope="col">Proveedor</th>	  
+		    </tr>
+	  	</thead>
+	  	<tbody>
+	  	<tr>
+  	';
+	echo '<td>'.$NombreProveedor.'</td>';	
+  	echo '
+  		</tr>
+  		</tbody>
+	</table>';
+
+	echo'
+	<table class="table table-striped table-bordered col-12 sortable" id="myTable">
+	  	<thead class="thead-dark">
+		    <tr>
+		    	<th scope="col">Numero de Factura</th>
+		    	<th scope="col">Fecha Documento</th>
+		    	<th scope="col">Usuario Auditor</th>
+		    	<th scope="col">Seleccion</th>		    
+		    </tr>
+	  	</thead>
+	  	<tbody>
+	 ';
+
+	while( $row = sqlsrv_fetch_array( $result, SQLSRV_FETCH_ASSOC)) {
+		
+		echo '<tr>';
+		echo '<td align="center">'.$row["FacturaId"].'</td>';
+		echo '<td align="center">'.$row["FechaDocumento"]->format('Y-m-d').'</td>';
+		echo '<td align="center">'.$row["Auditoria_Usuario"].'</td>';
+		echo '
+		<td align="center">
+	    <form autocomplete="off" action="">
+	        <input id="SEDE" name="SEDE" type="hidden" value="';
+	            print_r($SedeConnection);
+	            echo'">
+           
+          	<input type="submit" value="Selecionar" class="btn btn-outline-success">
+            
+            <input id="IdFact" name="IdFact" type="hidden" value="'.$row["FacturaId"].'">
+	        <input id="IdProv" name="IdProv" type="hidden" value="'.$IdProveedor.'">
+	        <input id="NombreProv" name="NombreProv" type="hidden" value="'.$NombreProveedor.'">
+	      </form>
+	      <br>
+	    ';
+
+		echo '</tr>';
+	}
+  	echo '
+  		</tbody>
+	</table>';
+
+	sqlsrv_close( $conn );
+}
+/*
+	TITULO: 
+	PARAMETROS: 
+	FUNCION:
+	RETORNO:
+ */
+function ReporteFacturaArticulo($SedeConnection,$IdProveedor,$NombreProveedor,$IdFatura){
+	
+	$conn = ConectarSmartpharma($SedeConnection);
+
+	$sql1 = QFacturaArticulo($IdFatura);	
+	$result = sqlsrv_query($conn,$sql1);
+
+	echo '
+	<div class="input-group md-form form-sm form-1 pl-0">
+	  <div class="input-group-prepend">
+	    <span class="input-group-text purple lighten-3" id="basic-text1"><i class="fas fa-search text-white"
+	        aria-hidden="true"></i></span>
+	  </div>
+	  <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterAllTable()">
+	</div>
+	<br/>
+	';
+
+	echo '
+	<table class="table table-striped table-bordered col-12 sortable">
+		<thead class="thead-dark">
+		    <tr>
+		    	<th scope="col">Numero de Factura</th>  
+		    	<th scope="col">Proveedor</th>	
+		    </tr>
+	  	</thead>
+	  	<tbody>
+	  	<tr>
+  	';
+  	echo '<td>'.$IdFatura.'</td>';
+	echo '<td>'.$NombreProveedor.'</td>';	
+  	echo '
+  		</tr>
+  		</tbody>
+	</table>';
+
+	echo'
+	<table class="table table-striped table-bordered col-12 sortable" id="myTable">
+	  	<thead class="thead-dark">
+		    <tr>
+		    	<th scope="col">Codigo</th>
+		    	<th scope="col">Descripcion</th>		  
+		    	<th scope="col">Seleccion</th>		    
+		    </tr>
+	  	</thead>
+	  	<tbody>
+	 ';
+
+	while( $row = sqlsrv_fetch_array( $result, SQLSRV_FETCH_ASSOC)) {
+		
+		echo '<tr>';
+		echo '<td align="center">'.$row["CodigoArticulo"].'</td>';		
+		echo '<td align="center">'.$row["Descripcion"].'</td>';
+		echo '
+		<td align="center">
+	    <form autocomplete="off" action="">
+	        <input id="SEDE" name="SEDE" type="hidden" value="';
+	            print_r($SedeConnection);
+	            echo'">
+           
+          	<input type="submit" value="Selecionar" class="btn btn-outline-success">
+            
+            <input id="IdArt" name="IdArt" type="hidden" value="'.$row["Id"].'">
+            <input id="IdFact" name="IdFact" type="hidden" value="'.$IdFatura.'">
+	        <input id="IdProv" name="IdProv" type="hidden" value="'.$IdProveedor.'">
+	        <input id="NombreProv" name="NombreProv" type="hidden" value="'.$NombreProveedor.'">
+	      </form>
+	      <br>
+	    ';
+
+		echo '</tr>';
+	}
+  	echo '
+  		</tbody>
+	</table>';
+
+	sqlsrv_close( $conn );
+}
+/*
+	TITULO: 
+	PARAMETROS: 
+	FUNCION:
+	RETORNO:
+ */
+function ReporteArticuloTroquel($SedeConnection,$IdProveedor,$NombreProveedor,$IdFatura,$IdArticulo){
+	
+	$conn = ConectarSmartpharma($SedeConnection);
+
+	$sql1 = QArticulo($IdArticulo);	
+	$result = sqlsrv_query($conn,$sql1);
+
+	$sql2 = QTroquelArticuloFactura($IdFatura,$IdArticulo);
+	$result2 = sqlsrv_query($conn,$sql2);
+	$row2 = sqlsrv_fetch_array( $result2, SQLSRV_FETCH_ASSOC);
+
+	echo '
+	<div class="input-group md-form form-sm form-1 pl-0">
+	  <div class="input-group-prepend">
+	    <span class="input-group-text purple lighten-3" id="basic-text1"><i class="fas fa-search text-white"
+	        aria-hidden="true"></i></span>
+	  </div>
+	  <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterAllTable()">
+	</div>
+	<br/>
+	';
+
+	echo '
+	<table class="table table-striped table-bordered col-12 sortable">
+		<thead class="thead-dark">
+		    <tr>
+		    	<th scope="col">Numero de Factura</th>  
+		    	<th scope="col">Proveedor</th>	
+		    </tr>
+	  	</thead>
+	  	<tbody>
+	  	<tr>
+  	';
+  	echo '<td>'.$IdFatura.'</td>';
+	echo '<td>'.$NombreProveedor.'</td>';	
+  	echo '
+  		</tr>
+  		</tbody>
+	</table>';
+
+	echo'
+	<table class="table table-striped table-bordered col-12 sortable" id="myTable">
+	  	<thead class="thead-dark">
+		    <tr>
+		    	<th scope="col">Codigo</th>
+		    	<th scope="col">Descripcion</th>		    			  
+		    	<th scope="col">Precio Troquelado Actual</th>
+		    	<th scope="col">Precio Troquelado Nuevo</th>
+		    	<th scope="col">Seleccion</th>			    
+		    </tr>
+	  	</thead>
+	  	<tbody>
+	 ';
+
+	while( $row = sqlsrv_fetch_array( $result, SQLSRV_FETCH_ASSOC)) {
+		
+		echo '<tr>';
+		echo '<td align="center">'.$row["CodigoArticulo"].'</td>';		
+		echo '<td align="center">'.$row["Descripcion"].'</td>';
+		echo '<td align="center">'.round($row2["M_PrecioTroquelado"],2).'</td>';
+
+		echo '
+			<form autocomplete="off" action="">
+			<td align="center">
+				<input id="TroquelN" type="text" name="TroquelN" placeholder="Ingrese el nuevo precio troquelado" required autofocus>
+			</td>';
+
+		echo '
+		<td align="center">	    
+	        <input id="SEDE" name="SEDE" type="hidden" value="';
+            print_r($SedeConnection);
+            echo'">
+           
+          	<input type="submit" value="Selecionar" class="btn btn-outline-success">
+            
+            <input id="IdArt" name="IdArt" type="hidden" value="'.$row["Id"].'">
+            <input id="IdFact" name="IdFact" type="hidden" value="'.$IdFatura.'">
+	        <input id="IdProv" name="IdProv" type="hidden" value="'.$IdProveedor.'">
+	        <input id="NombreProv" name="NombreProv" type="hidden" value="'.$NombreProveedor.'">
+	      </form>
+	      <br>
+	    ';
+
+		echo '</tr>';
+	}
+  	echo '
+  		</tbody>
+	</table>';
+
+	sqlsrv_close( $conn );
+}
+/*
+	TITULO: 
+	PARAMETROS: 
+	FUNCION:
+	RETORNO:
+ */
+function ReporteTroquel($SedeConnection,$IdProveedor,$NombreProveedor,$IdFatura,$IdArticulo,$PrecioTroquel){
+	
+	$conn = ConectarSmartpharma($SedeConnection);
+
+	$sql2 = QActualizarTroquel($IdFatura,$IdArticulo,$PrecioTroquel);
+	sqlsrv_query($conn,$sql2);
+	
+	$sql1 = QArticulo($IdArticulo);	
+	$result = sqlsrv_query($conn,$sql1);
+
+	$sql3 = QTroquelArticuloFactura($IdFatura,$IdArticulo);
+	$result3 = sqlsrv_query($conn,$sql3);
+	$row3 = sqlsrv_fetch_array( $result3, SQLSRV_FETCH_ASSOC);
+
+	echo '
+	<div class="input-group md-form form-sm form-1 pl-0">
+	  <div class="input-group-prepend">
+	    <span class="input-group-text purple lighten-3" id="basic-text1"><i class="fas fa-search text-white"
+	        aria-hidden="true"></i></span>
+	  </div>
+	  <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterAllTable()">
+	</div>
+	<br/>
+	';
+
+	echo '
+	<table class="table table-striped table-bordered col-12 sortable">
+		<thead class="thead-dark">
+		    <tr>
+		    	<th scope="col">Numero de Factura</th>  
+		    	<th scope="col">Proveedor</th>	
+		    </tr>
+	  	</thead>
+	  	<tbody>
+	  	<tr>
+  	';
+  	echo '<td>'.$IdFatura.'</td>';
+	echo '<td>'.$NombreProveedor.'</td>';	
+  	echo '
+  		</tr>
+  		</tbody>
+	</table>';
+
+	echo'
+	<table class="table table-striped table-bordered col-12 sortable" id="myTable">
+	  	<thead class="thead-dark">
+		    <tr>
+		    	<th scope="col">Codigo</th>
+		    	<th scope="col">Descripcion</th>		    			  
+		    	<th scope="col">Precio Troquelado</th>		    				   
+		    </tr>
+	  	</thead>
+	  	<tbody>
+	 ';
+
+	while( $row = sqlsrv_fetch_array( $result, SQLSRV_FETCH_ASSOC)) {
+		
+		echo '<tr>';
+		echo '<td align="center">'.$row["CodigoArticulo"].'</td>';		
+		echo '<td align="center">'.$row["Descripcion"].'</td>';
+		echo '<td align="center">'.round($row3["M_PrecioTroquelado"],2).'</td>';
+		echo '</tr>';
+	}
+  	echo '
+  		</tbody>
+	</table>';
+
+	sqlsrv_close( $conn );
+}
 ?>

@@ -7,7 +7,7 @@
 @section('content')
   <h1 class="h5 text-info">
     <i class="fas fa-file-invoice"></i>
-    TEST
+    Actualizar Troquel
   </h1>
   <hr class="row align-items-start col-12">
 
@@ -86,8 +86,6 @@
   else{
   //CASO 1: AL CARGAR EL REPORTE DESDE EL MENU
   //Se pasa a la seleccion del proveedor
-  $_GET['SEDE'] = 'DB';
-  
     if (isset($_GET['SEDE'])){      
       echo '<h1 class="h5 text-success"  align="left"> <i class="fas fa-prescription"></i> '.NombreSede($_GET['SEDE']).'</h1>';
     }

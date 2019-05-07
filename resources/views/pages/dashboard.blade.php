@@ -61,7 +61,7 @@
 	    		<h2 class="card-title">
 		    		<span class="card-text text-white">
 		    			<i class="fas fa-file-invoice"></i>
-		    			06		    			
+		    			08		    			
 		    		</span>
 	    		</h2>
 	    		<p class="card-text text-white">Reportes disponibles</p>

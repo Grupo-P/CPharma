@@ -835,6 +835,78 @@ function QUnidadesReclamoProveedorId($FInicial,$FFinal,$Id){
 	";
 	return $sql;
 }
+/*
+	TITULO: QfacturaProveedorToquel
+	PARAMETROS: [$IdProveedor] Id del proveedor a buscar
+	FUNCION: Buscar la lista de facturas donde interviene el proveedor
+	RETORNO: lista de facturas
+ */
+function QfacturaProveedorToquel($IdProveedor){
+	$sql = "
+	SELECT
+	ComFactura.Id AS FacturaId,
+	CONVERT(DATE,ComFactura.FechaDocumento) AS FechaDocumento,
+	ComFactura.Auditoria_Usuario
+	FROM ComFactura
+	WHERE ComFactura.ComProveedorId = '$IdProveedor'
+	ORDER BY FacturaId ASC
+	";
+	return $sql;
+}
+/*
+	TITULO: 
+	PARAMETROS: 
+	FUNCION: 
+	RETORNO: 
+ */
+function QFacturaArticulo($IdFatura){
+	$sql = "
+	SELECT 
+	ComFacturaDetalle.ComFacturaId AS FacturaId,
+	InvArticulo.Id,
+	InvArticulo.CodigoArticulo,
+	InvArticulo.Descripcion,
+	InvArticulo.FinConceptoImptoIdCompra AS ConceptoImpuesto
+	FROM ComFacturaDetalle
+	INNER JOIN InvArticulo ON InvArticulo.Id = ComFacturaDetalle.InvArticuloId
+	WHERE ComFacturaDetalle.ComFacturaId = '$IdFatura'
+	ORDER BY FacturaId,InvArticulo.Id ASC
+	";
+	return $sql;
+}
+/*
+	TITULO: 
+	PARAMETROS: 
+	FUNCION:
+	RETORNO:
+ */
+function QTroquelArticuloFactura($IdFatura,$IdArticulo){
+	$sql = "
+	SELECT
+	ComFacturaDetalle.ComFacturaId,
+	ComFacturaDetalle.InvArticuloId,
+	ISNULL(ComFacturaDetalle.M_PrecioTroquelado,CAST(0 AS INT)) AS M_PrecioTroquelado
+	FROM ComFacturaDetalle
+	WHERE ComFacturaDetalle.ComFacturaId = '$IdFatura' and ComFacturaDetalle.InvArticuloId = '$IdArticulo'
+	";
+	return $sql;
+}
+/*
+	TITULO: 
+	PARAMETROS: 
+	FUNCION:
+	RETORNO:
+ */
+function QActualizarTroquel($IdFatura,$IdArticulo,$PrecioTroquel){
+	$sql = "
+	UPDATE ComFacturaDetalle 
+	SET M_PrecioTroquelado = '$PrecioTroquel'
+	FROM ComFacturaDetalle 
+	WHERE ComFacturaDetalle.ComFacturaId = '$IdFatura' 
+	AND ComFacturaDetalle.InvArticuloId = '$IdArticulo'
+	";
+	return $sql;
+}
 
 
 /*
