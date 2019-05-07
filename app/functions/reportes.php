@@ -717,6 +717,7 @@ function ReporteCatalogoProveedorR($SedeConnection,$IdProveedor,$NombreProveedor
 		      	<th scope="col">Unidades compradas</th>	 
 		      	<th scope="col">Venta diaria</th>	
 		      	<th scope="col">Dias restantes</th>
+		      	<th scope="col">Ultima Venta (En rango)</th>
 		      	<th scope="col">Pedir</th>
 		    </tr>
 	  	</thead>
@@ -770,6 +771,18 @@ function ReporteCatalogoProveedorR($SedeConnection,$IdProveedor,$NombreProveedor
 
 			echo '<td align="center">'.round($VentaDiaria,2).'</td>';
 			echo '<td align="center">'.round($DiasRestantes,2).'</td>';
+
+		$sql11 = QUltimaVenta($IdArticulo,$FInicial,$FFinal);
+		$result3 = sqlsrv_query($conn,$sql11);
+		$row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
+		$UltimaVenta = $row3["UltimaVenta"];
+
+		if(($UltimaVenta)){
+			echo '<td align="center">'.$UltimaVenta->format('Y-m-d').'</td>';
+		}
+		else{
+			echo '<td align="center"> - </td>';
+		}
 
 		$CantidadPedido = CantidadPedido($VentaDiaria,$DiasPedido,$Existencia);
 
