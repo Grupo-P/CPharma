@@ -848,4 +848,52 @@ function QModelo(){
 	";
 	return $sql;
 }
+
+/*
+SELECT
+GenPersona.Nombre,
+ComProveedor.Id
+FROM ComProveedor
+INNER JOIN GenPersona ON ComProveedor.GenPersonaId=GenPersona.Id
+INNER JOIN ComFactura ON ComFactura.ComProveedorId=ComProveedor.Id
+WHERE ComProveedor.Id = 10
+GROUP by ComProveedor.Id, GenPersona.Nombre
+ORDER BY ComProveedor.Id ASC
+
+SELECT
+ComFactura.Id AS FacturaId
+FROM ComFactura
+WHERE ComFactura.ComProveedorId = 10
+ORDER BY FacturaId ASC
+
+SELECT 
+ComFacturaDetalle.ComFacturaId AS FacturaId,
+InvArticulo.Id,
+InvArticulo.CodigoArticulo,
+InvArticulo.Descripcion,
+InvArticulo.FinConceptoImptoIdCompra AS ConceptoImpuesto
+FROM ComFacturaDetalle
+INNER JOIN InvArticulo ON InvArticulo.Id = ComFacturaDetalle.InvArticuloId
+WHERE ComFacturaDetalle.ComFacturaId = 29950
+ORDER BY FacturaId,InvArticulo.Id ASC
+
+SELECT
+ComFacturaDetalle.ComFacturaId,
+ComFacturaDetalle.InvArticuloId,
+ComFacturaDetalle.M_PrecioTroquelado 
+FROM ComFacturaDetalle
+WHERE ComFacturaDetalle.ComFacturaId = 29950 and ComFacturaDetalle.InvArticuloId = 741
+
+UPDATE ComFacturaDetalle 
+SET M_PrecioTroquelado = 0
+FROM ComFacturaDetalle 
+WHERE ComFacturaDetalle.ComFacturaId = 29950 and ComFacturaDetalle.InvArticuloId = 741
+
+SELECT
+ComFacturaDetalle.ComFacturaId,
+ComFacturaDetalle.InvArticuloId,
+ComFacturaDetalle.M_PrecioTroquelado 
+FROM ComFacturaDetalle
+WHERE ComFacturaDetalle.ComFacturaId = 29950 and ComFacturaDetalle.InvArticuloId = 741
+ */
 ?>
