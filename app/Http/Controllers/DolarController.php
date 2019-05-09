@@ -25,7 +25,7 @@ class DolarController extends Controller
      */
     public function index()
     {
-        $dolars =  Dolar::all();
+        $dolars =  Dolar::orderBy('fecha', 'desc')->get();
         return view('pages.dolar.index', compact('dolars'));
     }
 
