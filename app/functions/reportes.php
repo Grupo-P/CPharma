@@ -97,7 +97,7 @@ function ReporteHistoricoProducto($SedeConnection,$IdArticulo){
 		      	<th scope="col">Existencia</td>
 		      	<th scope="col">Precio (Con IVA)</td>
 		      	<th scope="col">Tasa actual</td>
-		      	<th scope="col">Costo en divisa (Con IVA)</td>
+		      	<th scope="col">Precio en divisa (Con IVA)</td>
 		    </tr>
 	  	</thead>
 	  	<tbody>
