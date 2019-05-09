@@ -10,12 +10,14 @@
 function ReporteActivacionProveedores($SedeConnection){
 
 	$conn = ConectarSmartpharma($SedeConnection);
-	$sql = QTablaTemp(1);
-	$sql1 = QFRegProveedor();
-	$sql2 = QFRegRangoProveedor();
 
+	$sql = QTablaTemp(ClenTable);
 	sqlsrv_query($conn,$sql);
+
+	$sql1 = QFRegProveedor();
 	sqlsrv_query($conn,$sql1);
+
+	$sql2 = QFRegRangoProveedor();
 	$result = sqlsrv_query($conn,$sql2);
 
 	echo '
@@ -48,6 +50,10 @@ function ReporteActivacionProveedores($SedeConnection){
   	echo '
   		</tbody>
 	</table>';
+
+	$sql = QTablaTemp(ClenTable);
+	sqlsrv_query($conn,$sql);
+
 	sqlsrv_close( $conn );
 }
 /***********************************************************************************/
@@ -62,6 +68,9 @@ function ReporteActivacionProveedores($SedeConnection){
 function ReporteHistoricoProducto($SedeConnection,$IdArticulo){
 	
 	$conn = ConectarSmartpharma($SedeConnection);
+
+	$sql = QTablaTemp(ClenTable);
+	sqlsrv_query($conn,$sql);
 
 	$sql = QArticulo($IdArticulo);
 	sqlsrv_query($conn,$sql);
@@ -165,6 +174,9 @@ function ReporteHistoricoProducto($SedeConnection,$IdArticulo){
   		</tbody>
 	</table>';
 
+	$sql = QTablaTemp(ClenTable);
+	sqlsrv_query($conn,$sql);
+
 	sqlsrv_close( $conn );
 }
 /***********************************************************************************/
@@ -185,7 +197,9 @@ function ReporteProductosMasVendidos($SedeConnection,$Top,$FInicial,$FFinal){
 	$FFinalImpresion= $FFinal;
 	$FFinal = date("Y-m-d",strtotime($FFinal."+ 1 days"));
 
-	$sql = QTablaTemp(5);
+	$sql = QTablaTemp(ClenTable);
+	sqlsrv_query($conn,$sql);
+
 	$sql1 = QUnidadesVendidasCliente($FInicial,$FFinal);
 	$sql2 = QUnidadesDevueltaCliente($FInicial,$FFinal);
 	$sql3 = QUnidadesCompradasProveedor($FInicial,$FFinal);
@@ -193,7 +207,6 @@ function ReporteProductosMasVendidos($SedeConnection,$Top,$FInicial,$FFinal){
 	$sql5 = QIntegracionProductosVendidos();
 	$sql6 = QProductoMasVendido($Top);
 	
-	sqlsrv_query($conn,$sql);
 	sqlsrv_query($conn,$sql1);
 	sqlsrv_query($conn,$sql2);
 	sqlsrv_query($conn,$sql3);
@@ -261,6 +274,9 @@ function ReporteProductosMasVendidos($SedeConnection,$Top,$FInicial,$FFinal){
   		</tbody>
 	</table>';
 	
+	$sql = QTablaTemp(ClenTable);
+	sqlsrv_query($conn,$sql);
+
 	sqlsrv_close( $conn );
 }
 /***********************************************************************************/
@@ -281,7 +297,9 @@ function ReporteProductosMenosVendidos($SedeConnection,$Top,$FInicial,$FFinal){
 	$FFinalImpresion= $FFinal;
 	$FFinal = date("Y-m-d",strtotime($FFinal."+ 1 days"));
 
-	$sql = QTablaTemp(5);
+	$sql = QTablaTemp(ClenTable);
+	sqlsrv_query($conn,$sql);
+
 	$sql1 = QUnidadesVendidasCliente($FInicial,$FFinal);
 	$sql2 = QUnidadesDevueltaCliente($FInicial,$FFinal);
 	$sql3 = QUnidadesCompradasProveedor($FInicial,$FFinal);
@@ -289,7 +307,6 @@ function ReporteProductosMenosVendidos($SedeConnection,$Top,$FInicial,$FFinal){
 	$sql5 = QIntegracionProductosVendidos();
 	$sql6 = QProductoMenosVendido($Top);
 	
-	sqlsrv_query($conn,$sql);
 	sqlsrv_query($conn,$sql1);
 	sqlsrv_query($conn,$sql2);
 	sqlsrv_query($conn,$sql3);
@@ -357,6 +374,9 @@ function ReporteProductosMenosVendidos($SedeConnection,$Top,$FInicial,$FFinal){
   		</tbody>
 	</table>';
 	
+	$sql = QTablaTemp(ClenTable);
+	sqlsrv_query($conn,$sql);
+
 	sqlsrv_close( $conn );
 }
 /***********************************************************************************/
@@ -376,7 +396,9 @@ function ReporteProductosFalla($SedeConnection,$FInicial,$FFinal){
 	$FFinalImpresion= $FFinal;
 	$FFinal = date("Y-m-d",strtotime($FFinal."+ 1 days"));
 
-	$sql = QTablaTemp(6);
+	$sql = QTablaTemp(ClenTable);
+	sqlsrv_query($conn,$sql);
+
 	$sql1 = QUnidadesVendidasCliente($FInicial,$FFinal);
 	$sql2 = QUnidadesDevueltaCliente($FInicial,$FFinal);
 	$sql3 = QUnidadesCompradasProveedor($FInicial,$FFinal);
@@ -385,7 +407,6 @@ function ReporteProductosFalla($SedeConnection,$FInicial,$FFinal){
 	$sql6 = QIntegracionProductosFalla();
 	$sql7 = QProductosFalla();
 	
-	sqlsrv_query($conn,$sql);
 	sqlsrv_query($conn,$sql1);
 	sqlsrv_query($conn,$sql2);
 	sqlsrv_query($conn,$sql3);
@@ -442,6 +463,9 @@ function ReporteProductosFalla($SedeConnection,$FInicial,$FFinal){
   		</tbody>
 	</table>';
 	
+	$sql = QTablaTemp(ClenTable);
+	sqlsrv_query($conn,$sql);
+
 	sqlsrv_close( $conn );
 }
 /***********************************************************************************/
@@ -462,7 +486,9 @@ function ReportePedidoProductos($SedeConnection,$Descripcion,$FInicial,$FFinal){
 	$FFinalImpresion= $FFinal;
 	$FFinal = date("Y-m-d",strtotime($FFinal."+ 1 days"));
 
-	$sql = QTablaTemp(7);
+	$sql = QTablaTemp(ClenTable);
+	sqlsrv_query($conn,$sql);
+
 	$sql1 = QUnidadesVendidasCliente($FInicial,$FFinal);
 	$sql2 = QUnidadesDevueltaCliente($FInicial,$FFinal);
 	$sql3 = QUnidadesCompradasProveedor($FInicial,$FFinal);
@@ -471,8 +497,7 @@ function ReportePedidoProductos($SedeConnection,$Descripcion,$FInicial,$FFinal){
 	$sql6 = QIntegracionProductosFalla();
 	$sql61 = QArticuloDescLike($Descripcion,0);
 	$sql7 = QPedidoProductos();
-
-	sqlsrv_query($conn,$sql);
+	
 	sqlsrv_query($conn,$sql1);
 	sqlsrv_query($conn,$sql2);
 	sqlsrv_query($conn,$sql3);
@@ -572,6 +597,9 @@ function ReportePedidoProductos($SedeConnection,$Descripcion,$FInicial,$FFinal){
   		</tbody>
 	</table>';
 
+	$sql = QTablaTemp(ClenTable);
+	sqlsrv_query($conn,$sql);
+
 	sqlsrv_close( $conn );
 }
 /***********************************************************************************/
@@ -588,12 +616,13 @@ function ReporteCatalogoProveedor($SedeConnection,$IdProveedor,$NombreProveedor)
 
 	$conn = ConectarSmartpharma($SedeConnection);
 
-	$sql = QTablaTemp(2);
+	$sql = QTablaTemp(ClenTable);
+	sqlsrv_query($conn,$sql);
+
 	$sql1 = QfacturaProveedor($IdProveedor);
 	$sql2 = QDetalleFactura();
 	$sql3 = QCatalogoProductosProveedor();
 
-	sqlsrv_query($conn,$sql);
 	sqlsrv_query($conn,$sql1);
 	sqlsrv_query($conn,$sql2);
 	$result = sqlsrv_query($conn,$sql3);
@@ -644,6 +673,9 @@ function ReporteCatalogoProveedor($SedeConnection,$IdProveedor,$NombreProveedor)
   		</tbody>
 	</table>';
 
+	$sql = QTablaTemp(ClenTable);
+	sqlsrv_query($conn,$sql);
+
 	sqlsrv_close( $conn );
 }
 /*
@@ -661,12 +693,13 @@ function ReporteCatalogoProveedorR($SedeConnection,$IdProveedor,$NombreProveedor
 
 	$conn = ConectarSmartpharma($SedeConnection);
 
-	$sql = QTablaTemp(2);
+	$sql = QTablaTemp(ClenTable);
+	sqlsrv_query($conn,$sql);
+
 	$sql1 = QfacturaProveedor($IdProveedor);
 	$sql2 = QDetalleFactura();
 	$sql3 = QCatalogoProductosProveedor();
 
-	sqlsrv_query($conn,$sql);
 	sqlsrv_query($conn,$sql1);
 	sqlsrv_query($conn,$sql2);
 	$result = sqlsrv_query($conn,$sql3);
@@ -794,6 +827,9 @@ function ReporteCatalogoProveedorR($SedeConnection,$IdProveedor,$NombreProveedor
   		</tbody>
 	</table>';
 
+	$sql = QTablaTemp(ClenTable);
+	sqlsrv_query($conn,$sql);
+
 	sqlsrv_close( $conn );
 }
 /***********************************************************************************/
@@ -807,6 +843,9 @@ function ReporteCatalogoProveedorR($SedeConnection,$IdProveedor,$NombreProveedor
 function ReporteProveedorFactura($SedeConnection,$IdProveedor,$NombreProveedor){
 	
 	$conn = ConectarSmartpharma($SedeConnection);
+
+	$sql = QTablaTemp(ClenTable);
+	sqlsrv_query($conn,$sql);
 
 	$sql1 = QfacturaProveedorToquel($IdProveedor);	
 	$result = sqlsrv_query($conn,$sql1);
@@ -879,6 +918,9 @@ function ReporteProveedorFactura($SedeConnection,$IdProveedor,$NombreProveedor){
   		</tbody>
 	</table>';
 
+	$sql = QTablaTemp(ClenTable);
+	sqlsrv_query($conn,$sql);
+
 	sqlsrv_close( $conn );
 }
 /*
@@ -890,6 +932,9 @@ function ReporteProveedorFactura($SedeConnection,$IdProveedor,$NombreProveedor){
 function ReporteFacturaArticulo($SedeConnection,$IdProveedor,$NombreProveedor,$IdFatura){
 	
 	$conn = ConectarSmartpharma($SedeConnection);
+
+	$sql = QTablaTemp(ClenTable);
+	sqlsrv_query($conn,$sql);
 
 	$sql1 = QFacturaArticulo($IdFatura);	
 	$result = sqlsrv_query($conn,$sql1);
@@ -963,6 +1008,9 @@ function ReporteFacturaArticulo($SedeConnection,$IdProveedor,$NombreProveedor,$I
   		</tbody>
 	</table>';
 
+	$sql = QTablaTemp(ClenTable);
+	sqlsrv_query($conn,$sql);
+
 	sqlsrv_close( $conn );
 }
 /*
@@ -974,6 +1022,9 @@ function ReporteFacturaArticulo($SedeConnection,$IdProveedor,$NombreProveedor,$I
 function ReporteArticuloTroquel($SedeConnection,$IdProveedor,$NombreProveedor,$IdFatura,$IdArticulo){
 	
 	$conn = ConectarSmartpharma($SedeConnection);
+
+	$sql = QTablaTemp(ClenTable);
+	sqlsrv_query($conn,$sql);
 
 	$sql1 = QArticulo($IdArticulo);	
 	$result = sqlsrv_query($conn,$sql1);
@@ -1060,6 +1111,9 @@ function ReporteArticuloTroquel($SedeConnection,$IdProveedor,$NombreProveedor,$I
   		</tbody>
 	</table>';
 
+	$sql = QTablaTemp(ClenTable);
+	sqlsrv_query($conn,$sql);
+
 	sqlsrv_close( $conn );
 }
 /*
@@ -1071,6 +1125,9 @@ function ReporteArticuloTroquel($SedeConnection,$IdProveedor,$NombreProveedor,$I
 function ReporteTroquel($SedeConnection,$IdProveedor,$NombreProveedor,$IdFatura,$IdArticulo,$PrecioTroquel){
 	
 	$conn = ConectarSmartpharma($SedeConnection);
+
+	$sql = QTablaTemp(ClenTable);
+	sqlsrv_query($conn,$sql);
 
 	$sql2 = QActualizarTroquel($IdFatura,$IdArticulo,$PrecioTroquel);
 	sqlsrv_query($conn,$sql2);
@@ -1135,6 +1192,9 @@ function ReporteTroquel($SedeConnection,$IdProveedor,$NombreProveedor,$IdFatura,
   		</tbody>
 	</table>';
 
+	$sql = QTablaTemp(ClenTable);
+	sqlsrv_query($conn,$sql);
+	
 	sqlsrv_close( $conn );
 }
 ?>
