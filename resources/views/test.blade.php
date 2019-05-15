@@ -19,95 +19,45 @@
 
   $ArtJson = "";
   
-  if (isset($_GET['Id'])){
-  //CASO 2: CARGA AL HABER SELECCIONADO UN PROVEEDOR
-  //se pasa a la carga de las facturas del proveedor 
-    if (isset($_GET['SEDE'])){      
-      echo '<h1 class="h5 text-success"  align="left"> <i class="fas fa-prescription"></i> '.NombreSede($_GET['SEDE']).'</h1>';
-    }
-    echo '<hr class="row align-items-start col-12">';
-
+  if (isset($_GET['Id']))
+  {
     $InicioCarga = new DateTime("now");
     
-    ReporteProveedorFactura($_GET['SEDE'],$_GET['Id'],$_GET['Nombre']);
-    
-    $FinCarga = new DateTime("now");
-    $IntervalCarga = $InicioCarga->diff($FinCarga);
-    echo'Tiempo de carga: '.$IntervalCarga->format("%Y-%M-%D %H:%I:%S");
-  }
-  else if(isset($_GET['TroquelN'])){
-  //CASO 5: ACTUALIZAR EL TROQUEL
-  //se pasa a mostrar el resultado de actualizar el troquel
     if (isset($_GET['SEDE'])){      
       echo '<h1 class="h5 text-success"  align="left"> <i class="fas fa-prescription"></i> '.NombreSede($_GET['SEDE']).'</h1>';
     }
     echo '<hr class="row align-items-start col-12">';
 
-    $InicioCarga = new DateTime("now");
+    echo"Sede: ".$_GET['SEDE'];
+    echo'ID articulo: '.$_GET['Id'];
 
-    ReporteTroquel($_GET['SEDE'],$_GET['IdProv'],$_GET['NombreProv'],$_GET['IdFact'],$_GET['IdArt'],$_GET['TroquelN']);
-
-    $FinCarga = new DateTime("now");
-    $IntervalCarga = $InicioCarga->diff($FinCarga);
-    echo'Tiempo de carga: '.$IntervalCarga->format("%Y-%M-%D %H:%I:%S");
-  }
-  else if(isset($_GET['IdArt'])){
-  //CASO 4: CARGA AL HABER SELECCIONADO UNA ARTICULO
-  //se pasa a la actualizacion del troquel
-    if (isset($_GET['SEDE'])){      
-      echo '<h1 class="h5 text-success"  align="left"> <i class="fas fa-prescription"></i> '.NombreSede($_GET['SEDE']).'</h1>';
-    }
-    echo '<hr class="row align-items-start col-12">';
-
-    $InicioCarga = new DateTime("now");
-
-    ReporteArticuloTroquel($_GET['SEDE'],$_GET['IdProv'],$_GET['NombreProv'],$_GET['IdFact'],$_GET['IdArt']);
+    //ReporteHistoricoProducto($_GET['SEDE'],$_GET['Id']);
 
     $FinCarga = new DateTime("now");
     $IntervalCarga = $InicioCarga->diff($FinCarga);
     echo'Tiempo de carga: '.$IntervalCarga->format("%Y-%M-%D %H:%I:%S");
-  }
-  else if(isset($_GET['IdFact'])){
-  //CASO 3: CARGA AL HABER SELECCIONADO UNA FACTURA
-  //se pasa a la seleccion del articulo
-    if (isset($_GET['SEDE'])){      
-      echo '<h1 class="h5 text-success"  align="left"> <i class="fas fa-prescription"></i> '.NombreSede($_GET['SEDE']).'</h1>';
-    }
-    echo '<hr class="row align-items-start col-12">';
-
-    $InicioCarga = new DateTime("now");
-
-    ReporteFacturaArticulo($_GET['SEDE'],$_GET['IdProv'],$_GET['NombreProv'],$_GET['IdFact']);
-
-    $FinCarga = new DateTime("now");
-    $IntervalCarga = $InicioCarga->diff($FinCarga);
-    echo'Tiempo de carga: '.$IntervalCarga->format("%Y-%M-%D %H:%I:%S");
-  }
+  } 
   else{
-  //CASO 1: AL CARGAR EL REPORTE DESDE EL MENU
-  //Se pasa a la seleccion del proveedor
-  $_GET['SEDE'] = 'DB';
-  
+    $InicioCarga = new DateTime("now");
+    /**/
+    $_GET['SEDE'] = 'DB';
+
     if (isset($_GET['SEDE'])){      
       echo '<h1 class="h5 text-success"  align="left"> <i class="fas fa-prescription"></i> '.NombreSede($_GET['SEDE']).'</h1>';
     }
     echo '<hr class="row align-items-start col-12">';
-
-    $InicioCarga = new DateTime("now");
-
-    $sql = QListaProveedores();
+    
+    $sql = QListaArticulos();
     $ArtJson = armarJson($sql,$_GET['SEDE']);
 
     echo '
-    <form autocomplete="off" action="">
+    <form autocomplete="off" action="" target="_blank">
       <div class="autocomplete" style="width:90%;">
-        <input id="myInput" type="text" name="Nombre" placeholder="Ingrese el nombre del proveedor " onkeyup="conteo()" required>
+        <input id="myInput" type="text" name="Descrip" placeholder="Ingrese el nombre del articulo " onkeyup="conteo()" required>
         <input id="myId" name="Id" type="hidden">
-        <td>
         <input id="SEDE" name="SEDE" type="hidden" value="';
         print_r($_GET['SEDE']);
         echo'">
-        </td>
       </div>
       <input type="submit" value="Buscar" class="btn btn-outline-success">
     </form>
