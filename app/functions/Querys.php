@@ -30,6 +30,8 @@ function QTablaTemp($Cant){
 	RETORNO: Tablas temporales vacias
  */
 function QTablaTempR($inicio,$fin){
+	QTablaTemp(ClenTable);
+
 	$sql='';
 	for($i = $inicio; $i<$fin; $i++){
 		if($i == 0){
