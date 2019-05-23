@@ -145,7 +145,7 @@ function ReporteHistoricoProducto($SedeConnection,$IdArticulo){
 		      	<th scope="col">Tasa en historico</th>
 				<th scope="col">Costo en divisa (Sin IVA)</th>
 		    </tr>
-	  	</thead>
+	  	</thead> 
 	  	<tbody>
 	';
 
