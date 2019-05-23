@@ -336,11 +336,12 @@ function ReporteProductosMenosVendidos($SedeConnection,$Top,$FInicial,$FFinal){
 		    	<th scope="col">Codigo</th>
 		      	<th scope="col">Descripcion</th>
 		      	<th scope="col">Existencia</th>
+		      	<th scope="col">Precio (Con IVA)</th>
 		      	<th scope="col">Veces Facturado</th>
 		      	<th scope="col">Unidades vendidas</th>
 		      	<th scope="col">Unidades Compradas</th>
 		      	<th scope="col">Venta diaria</th>
-		      	<th scope="col">Dias restantes</th>		      	
+		      	<th scope="col">Dias restantes</th>
 		    </tr>
 	  	</thead>
 	  	<tbody>
@@ -354,10 +355,19 @@ function ReporteProductosMenosVendidos($SedeConnection,$Top,$FInicial,$FFinal){
 		$row1 = sqlsrv_fetch_array($result1,SQLSRV_FETCH_ASSOC);
 		$Existencia = $row1["Existencia"];
 
+		$sql8 = QArticulo($IdArticulo);
+		sqlsrv_query($conn,$sql8);
+		$result2 = sqlsrv_query($conn,$sql8);
+		$row3 = sqlsrv_fetch_array($result2,SQLSRV_FETCH_ASSOC);
+
+		$IsIVA = $row3["ConceptoImpuesto"];
+		$Precio = CalculoPrecio($conn,$IdArticulo,$IsIVA,$Existencia);
+
 		echo '<tr>';
 		echo '<td align="left">'.$row["CodigoArticulo"].'</td>';
 		echo '<td align="left">'.$row["Descripcion"].'</td>';
 		echo '<td align="center">'.intval($Existencia).'</td>';
+		echo '<td align="center">'." ".round($Precio,2)." ".SigVe.'</td>';
 		echo '<td align="center">'.intval($row["TotalVecesVendidasCliente"]).'</td>';
 
 		$Venta = intval($row["TotalUnidadesVendidasCliente"]);
