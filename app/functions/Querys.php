@@ -6,6 +6,7 @@
 	RETORNO: Tablas temporales vacias
  */
 function QTablaTemp($Cant){
+	$sql='';
 	for($i = 0; $i<$Cant; $i++){
 		if($i == 0){
 			$sql = "
