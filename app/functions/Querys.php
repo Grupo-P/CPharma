@@ -924,6 +924,22 @@ function QModelo(){
 	return $sql;
 }
 
+function QTiempoEnTienda($IdArticulo) {
+	$sql = "
+	SELECT TOP 1
+	CONVERT(DATE,InvLoteAlmacen.Auditoria_FechaCreacion) AS FechaTienda,
+	DATEDIFF(DAY,CONVERT(DATE,InvLoteAlmacen.Auditoria_FechaCreacion),GETDATE()) 
+	AS TiempoTienda
+	FROM InvLoteAlmacen
+	WHERE
+	InvLoteAlmacen.InvArticuloId = '$IdArticulo' AND
+	(InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2) AND
+	(InvLoteAlmacen.Existencia > 0)
+	ORDER BY InvLoteAlmacen.Auditoria_FechaCreacion DESC
+	";
+	return $sql;
+}
+
 /*
 SELECT
 GenPersona.Nombre,
