@@ -1299,8 +1299,7 @@ function ReporteProductosParaSurtir($SedeConnection,$FInicial,$FFinal) {
 			echo '<td align="left">'.$row["CodigoArticulo"].'</td>';
 			echo '<td align="left">'.$row["Descripcion"].'</td>';
 			echo '<td align="center">'.intval($Existencia).'</td>';
-			echo '<td align="center">-</td>';
-			//echo '<td align="center">'.$row1["FechaTienda"].'</td>';
+			echo '<td align="center">'.($row1["FechaTienda"])->format("Y-m-d").'</td>';
 			echo '<td align="center">'.$row1["TiempoTienda"].'</td>';
 			echo '</tr>';
 		}
