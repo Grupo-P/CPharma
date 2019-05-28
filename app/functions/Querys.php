@@ -848,11 +848,26 @@ function QfacturaProveedorToquel($IdProveedor){
 	$sql = "
 	SELECT
 	ComFactura.Id AS FacturaId,
+	ComFactura.NumeroFactura,
 	CONVERT(DATE,ComFactura.FechaDocumento) AS FechaDocumento,
 	ComFactura.Auditoria_Usuario
 	FROM ComFactura
 	WHERE ComFactura.ComProveedorId = '$IdProveedor'
 	ORDER BY FacturaId ASC
+	";
+	return $sql;
+}
+/*
+	TITULO: 
+	PARAMETROS: 
+	FUNCION:
+	RETORNO:
+ */
+function QNumeroFactura($IdFactura){
+	$sql = "
+		SELECT ComFactura.NumeroFactura AS NumeroFactura
+		FROM ComFactura 
+		WHERE ComFactura.Id = '$IdFactura'
 	";
 	return $sql;
 }

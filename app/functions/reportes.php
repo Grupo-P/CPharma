@@ -919,7 +919,7 @@ function ReporteProveedorFactura($SedeConnection,$IdProveedor,$NombreProveedor){
 	while( $row = sqlsrv_fetch_array( $result, SQLSRV_FETCH_ASSOC)) {
 		
 		echo '<tr>';
-		echo '<td align="center">'.$row["FacturaId"].'</td>';
+		echo '<td align="center">'.$row["NumeroFactura"].'</td>';
 		echo '<td align="center">'.$row["FechaDocumento"]->format('Y-m-d').'</td>';
 		echo '<td align="center">'.$row["Auditoria_Usuario"].'</td>';
 		echo '
@@ -968,6 +968,11 @@ function ReporteFacturaArticulo($SedeConnection,$IdProveedor,$NombreProveedor,$I
 	$sql1 = QFacturaArticulo($IdFatura);	
 	$result = sqlsrv_query($conn,$sql1);
 
+	$sqlNFact = QNumeroFactura($IdFatura);
+	$resultNFact = sqlsrv_query($conn,$sqlNFact);
+	$rowNFact = sqlsrv_fetch_array($resultNFact,SQLSRV_FETCH_ASSOC);
+	$NumeroFactura = $rowNFact["NumeroFactura"];
+
 	echo '
 	<div class="input-group md-form form-sm form-1 pl-0">
 	  <div class="input-group-prepend">
@@ -990,7 +995,7 @@ function ReporteFacturaArticulo($SedeConnection,$IdProveedor,$NombreProveedor,$I
 	  	<tbody>
 	  	<tr>
   	';
-  	echo '<td>'.$IdFatura.'</td>';
+  	echo '<td>'.$NumeroFactura.'</td>';
 	echo '<td>'.$NombreProveedor.'</td>';	
   	echo '
   		</tr>
@@ -1066,6 +1071,11 @@ function ReporteArticuloTroquel($SedeConnection,$IdProveedor,$NombreProveedor,$I
 	$result2 = sqlsrv_query($conn,$sql2);
 	$row2 = sqlsrv_fetch_array( $result2, SQLSRV_FETCH_ASSOC);
 
+	$sqlNFact = QNumeroFactura($IdFatura);
+	$resultNFact = sqlsrv_query($conn,$sqlNFact);
+	$rowNFact = sqlsrv_fetch_array($resultNFact,SQLSRV_FETCH_ASSOC);
+	$NumeroFactura = $rowNFact["NumeroFactura"];
+
 	echo '
 	<div class="input-group md-form form-sm form-1 pl-0">
 	  <div class="input-group-prepend">
@@ -1088,7 +1098,7 @@ function ReporteArticuloTroquel($SedeConnection,$IdProveedor,$NombreProveedor,$I
 	  	<tbody>
 	  	<tr>
   	';
-  	echo '<td>'.$IdFatura.'</td>';
+  	echo '<td>'.$NumeroFactura.'</td>';
 	echo '<td>'.$NombreProveedor.'</td>';	
   	echo '
   		</tr>
@@ -1177,6 +1187,11 @@ function ReporteTroquel($SedeConnection,$IdProveedor,$NombreProveedor,$IdFatura,
 	$result3 = sqlsrv_query($conn,$sql3);
 	$row3 = sqlsrv_fetch_array( $result3, SQLSRV_FETCH_ASSOC);
 
+	$sqlNFact = QNumeroFactura($IdFatura);
+	$resultNFact = sqlsrv_query($conn,$sqlNFact);
+	$rowNFact = sqlsrv_fetch_array($resultNFact,SQLSRV_FETCH_ASSOC);
+	$NumeroFactura = $rowNFact["NumeroFactura"];
+
 	echo '
 	<div class="input-group md-form form-sm form-1 pl-0">
 	  <div class="input-group-prepend">
@@ -1199,7 +1214,7 @@ function ReporteTroquel($SedeConnection,$IdProveedor,$NombreProveedor,$IdFatura,
 	  	<tbody>
 	  	<tr>
   	';
-  	echo '<td>'.$IdFatura.'</td>';
+  	echo '<td>'.$NumeroFactura.'</td>';
 	echo '<td>'.$NombreProveedor.'</td>';	
   	echo '
   		</tr>
