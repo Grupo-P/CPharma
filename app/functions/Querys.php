@@ -911,19 +911,12 @@ function QActualizarTroquel($IdFatura,$IdArticulo,$PrecioTroquel){
 	return $sql;
 }
 
-
 /*
-	TITULO: 
-	PARAMETROS: 
-	FUNCION:
-	RETORNO:
+	TITULO: QTiempoEnTienda
+	PARAMETROS: [$IdArticulo] Id del articulo actual
+	FUNCION: Construir la consulta para saber la fecha en dias
+	RETORNO: Un String con el query
  */
-function QModelo(){
-	$sql = "
-	";
-	return $sql;
-}
-
 function QTiempoEnTienda($IdArticulo) {
 	$sql = "
 	SELECT TOP 1
@@ -936,6 +929,18 @@ function QTiempoEnTienda($IdArticulo) {
 	(InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2) AND
 	(InvLoteAlmacen.Existencia > 0)
 	ORDER BY InvLoteAlmacen.Auditoria_FechaCreacion DESC
+	";
+	return $sql;
+}
+
+/*
+	TITULO: 
+	PARAMETROS: 
+	FUNCION:
+	RETORNO:
+ */
+function QModelo(){
+	$sql = "
 	";
 	return $sql;
 }
