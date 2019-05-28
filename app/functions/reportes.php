@@ -859,10 +859,12 @@ function ReporteCatalogoProveedorR($SedeConnection,$IdProveedor,$NombreProveedor
 /***********************************************************************************/
 /************************ REPORTE 8 ACTUALIZAR TROQUEL ******************************/
 /*
-	TITULO: 
-	PARAMETROS: 
-	FUNCION:
-	RETORNO:
+	TITULO: ReporteProveedorFactura
+	PARAMETROS: [$SedeConnection] sede donde se hara la conexion
+				[$IdProveedor] ID del proveedor a buscar
+				[$NombreProveedor] Nombre del proveedor a buscar
+	FUNCION:  Arma la lista de factura por proveedores
+	RETORNO: no aplica
  */
 function ReporteProveedorFactura($SedeConnection,$IdProveedor,$NombreProveedor){
 	
@@ -948,10 +950,13 @@ function ReporteProveedorFactura($SedeConnection,$IdProveedor,$NombreProveedor){
 	sqlsrv_close( $conn );
 }
 /*
-	TITULO: 
-	PARAMETROS: 
-	FUNCION:
-	RETORNO:
+	TITULO: ReporteFacturaArticulo
+	PARAMETROS: [$SedeConnection] sede donde se hara la conexion
+				[$IdProveedor] ID del proveedor a buscar
+				[$NombreProveedor] Nombre del proveedor a buscar
+				[$IdFatura] id de la factura a buscar
+	FUNCION: arma la lista de articulos por factura
+	RETORNO: no aplica
  */
 function ReporteFacturaArticulo($SedeConnection,$IdProveedor,$NombreProveedor,$IdFatura){
 	
@@ -1038,10 +1043,14 @@ function ReporteFacturaArticulo($SedeConnection,$IdProveedor,$NombreProveedor,$I
 	sqlsrv_close( $conn );
 }
 /*
-	TITULO: 
-	PARAMETROS: 
-	FUNCION:
-	RETORNO:
+	TITULO: ReporteArticuloTroquel
+	PARAMETROS: [$SedeConnection] sede donde se hara la conexion
+				[$IdProveedor] ID del proveedor a buscar
+				[$NombreProveedor] Nombre del proveedor a buscar
+				[$IdFatura] id de la factura
+				[$IdArticulo] ide del articulo
+	FUNCION: arma la lista del troquel segun el articulo
+	RETORNO: no aplica
  */
 function ReporteArticuloTroquel($SedeConnection,$IdProveedor,$NombreProveedor,$IdFatura,$IdArticulo){
 	
@@ -1141,10 +1150,15 @@ function ReporteArticuloTroquel($SedeConnection,$IdProveedor,$NombreProveedor,$I
 	sqlsrv_close( $conn );
 }
 /*
-	TITULO: 
-	PARAMETROS: 
-	FUNCION:
-	RETORNO:
+	TITULO: ReporteTroquel
+	PARAMETROS: [$SedeConnection] sede donde se hara la conexion
+				[$IdProveedor] ID del proveedor a buscar
+				[$NombreProveedor] Nombre del proveedor a buscar
+				[$IdFatura] id de la factura
+				[$IdArticulo] ide del articulo
+				[$PrecioTroquel] precio del troquel del articulo
+	FUNCION: arma la lista definitiva con el troquel actualizado
+	RETORNO: no aplica
  */
 function ReporteTroquel($SedeConnection,$IdProveedor,$NombreProveedor,$IdFatura,$IdArticulo,$PrecioTroquel){
 	

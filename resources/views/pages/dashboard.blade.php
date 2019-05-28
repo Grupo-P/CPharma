@@ -61,7 +61,7 @@
 	    		<h2 class="card-title">
 		    		<span class="card-text text-white">
 		    			<i class="fas fa-file-invoice"></i>
-		    			08		    			
+		    			09	    			
 		    		</span>
 	    		</h2>
 	    		<p class="card-text text-white">Reportes disponibles</p>
@@ -128,8 +128,8 @@
 	    		<p class="card-text text-white">
 	    			<ul>
 	    				<li class="card-text text-white ">
-	    					Ya puedes ver los reportes para <b>Farmacia Tierra Negra</b> y <b>Farmacia La Lago</b>
-	    				</li>
+	    					Ya puedes ver el reporte <b>Productos para surtir</b> te ayudara a saber que productos llegaron dentro de un rango de fechas
+	    				</li>		
 	    			</ul>
 	    		</p>
 	  		</div>  

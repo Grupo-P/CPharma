@@ -857,10 +857,10 @@ function QfacturaProveedorToquel($IdProveedor){
 	return $sql;
 }
 /*
-	TITULO: 
-	PARAMETROS: 
-	FUNCION: 
-	RETORNO: 
+	TITULO: QFacturaArticulo
+	PARAMETROS:[$IdFatura] Id de la factura a buscar
+	FUNCION: busca los articulos que intervienen en una factura
+	RETORNO: lista de articulos
  */
 function QFacturaArticulo($IdFatura){
 	$sql = "
@@ -878,10 +878,11 @@ function QFacturaArticulo($IdFatura){
 	return $sql;
 }
 /*
-	TITULO: 
-	PARAMETROS: 
-	FUNCION:
-	RETORNO:
+	TITULO: QTroquelArticuloFactura
+	PARAMETROS: [$IdFatura] id de la factura
+				[$IdArticulo] id del articulo
+	FUNCION: busca el troquel del articulo de la factura
+	RETORNO: retora en valor del troquel del articulo
  */
 function QTroquelArticuloFactura($IdFatura,$IdArticulo){
 	$sql = "
@@ -895,10 +896,12 @@ function QTroquelArticuloFactura($IdFatura,$IdArticulo){
 	return $sql;
 }
 /*
-	TITULO: 
-	PARAMETROS: 
-	FUNCION:
-	RETORNO:
+	TITULO: QActualizarTroquel
+	PARAMETROS: [$IdFatura] id de la factura
+				[$IdArticulo] id del articulo
+				[$PrecioTroquel] precio troquelado del aticulo
+	FUNCION: actualiza el precio del troquel del articulo
+	RETORNO: precio actualizado del troquel
  */
 function QActualizarTroquel($IdFatura,$IdArticulo,$PrecioTroquel){
 	$sql = "
