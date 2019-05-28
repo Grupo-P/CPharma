@@ -1253,7 +1253,12 @@ function ReporteProductosParaSurtir($SedeConnection,$FInicial,$FFinal) {
 	sqlsrv_query($conn,$sql4);
 	sqlsrv_query($conn,$sql5);
 	sqlsrv_query($conn,$sql6);
-	$result = sqlsrv_query($conn,"SELECT * FROM TablaTemp5 ORDER BY Existencia DESC");
+	$result = sqlsrv_query($conn,"
+		SELECT * 
+		FROM TablaTemp5 
+		WHERE Existencia > 0 
+		ORDER BY Existencia DESC
+	");
 
 	echo '
 		<div class="input-group md-form form-sm form-1 pl-0">
@@ -1294,15 +1299,13 @@ function ReporteProductosParaSurtir($SedeConnection,$FInicial,$FFinal) {
 		$result1=sqlsrv_query($conn,$sql7);
 		$row1=sqlsrv_fetch_array($result1,SQLSRV_FETCH_ASSOC);
 
-		if($Existencia>0){
-			echo '<tr>';
-			echo '<td align="left">'.$row["CodigoArticulo"].'</td>';
-			echo '<td align="left">'.$row["Descripcion"].'</td>';
-			echo '<td align="center">'.intval($Existencia).'</td>';
-			echo '<td align="center">'.($row1["FechaTienda"])->format("Y-m-d").'</td>';
-			echo '<td align="center">'.$row1["TiempoTienda"].'</td>';
-			echo '</tr>';
-		}
+		echo '<tr>';
+		echo '<td align="left">'.$row["CodigoArticulo"].'</td>';
+		echo '<td align="left">'.$row["Descripcion"].'</td>';
+		echo '<td align="center">'.intval($Existencia).'</td>';
+		echo '<td align="center">'.($row1["FechaTienda"])->format("Y-m-d").'</td>';
+		echo '<td align="center">'.$row1["TiempoTienda"].'</td>';
+		echo '</tr>';
   	}
   	echo '
   		</tbody>
