@@ -1301,7 +1301,7 @@ function ReporteProductosParaSurtir($SedeConnection,$FInicial,$FFinal) {
 			      	<th scope="col">Tiempo en Tienda (Dias)</th>		      
 			    </tr>
 	  		</thead>
-	  	<tbody>
+	  		<tbody>
 	';
 
 	while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
@@ -1313,17 +1313,17 @@ function ReporteProductosParaSurtir($SedeConnection,$FInicial,$FFinal) {
 		$result1=sqlsrv_query($conn,$sql7);
 		$row1=sqlsrv_fetch_array($result1,SQLSRV_FETCH_ASSOC);
 
-		echo '<tr>';
-		echo '<td align="left">'.$row["CodigoArticulo"].'</td>';
-		echo '<td align="left">'.$row["Descripcion"].'</td>';
-		echo '<td align="center">'.intval($Existencia).'</td>';
-		echo '<td align="center">'.($row1["FechaTienda"])->format("Y-m-d").'</td>';
-		echo '<td align="center">'.$row1["TiempoTienda"].'</td>';
-		echo '</tr>';
+			echo '<tr>';
+				echo '<td align="left">'.$row["CodigoArticulo"].'</td>';
+				echo '<td align="left">'.$row["Descripcion"].'</td>';
+				echo '<td align="center">'.intval($Existencia).'</td>';
+				echo '<td align="center">'.($row1["FechaTienda"])->format("Y-m-d").'</td>';
+				echo '<td align="center">'.$row1["TiempoTienda"].'</td>';
+			echo '</tr>';
   	}
   	echo '
-  		</tbody>
-	</table>';
+	  		</tbody>
+		</table>';
 	
 	$sql = QTablaTemp(ClenTable);
 	sqlsrv_query($conn,$sql);
