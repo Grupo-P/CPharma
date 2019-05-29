@@ -338,14 +338,15 @@ function QUnidadesCompradasProveedor($FInicial,$FFinal){
 		InvArticulo.CodigoArticulo,
 		InvArticulo.Descripcion,
 		COUNT(*) AS VecesCompradasProveedor,
-		SUM(ComFacturaDetalle.CantidadFacturada) AS UnidadesCompradasProveedor
+		SUM(ComFacturaDetalle.CantidadFacturada) AS UnidadesCompradasProveedor,
+		CONVERT(DATE,ComFactura.FechaRegistro) AS FechaRegistro
 		INTO TablaTemp2
 		FROM ComFacturaDetalle
 		INNER JOIN InvArticulo ON InvArticulo.Id = ComFacturaDetalle.InvArticuloId
 		INNER JOIN ComFactura ON  ComFactura.Id = ComFacturaDetalle.ComFacturaId
 		WHERE
 		(ComFactura.FechaRegistro > '$FInicial' AND ComFactura.FechaRegistro < '$FFinal')
-		GROUP BY InvArticulo.Id,InvArticulo.CodigoArticulo,InvArticulo.Descripcion
+		GROUP BY InvArticulo.Id,InvArticulo.CodigoArticulo,InvArticulo.Descripcion,FechaRegistro
 		ORDER BY UnidadesCompradasProveedor DESC
 	";
 	return $sql;

@@ -1269,25 +1269,10 @@ function ReporteProductosParaSurtir($SedeConnection,$FInicial,$FFinal) {
 	$sql = QTablaTemp(ClenTable);
 	sqlsrv_query($conn,$sql);
 
-	$sql1 = QUnidadesVendidasCliente($FInicial,$FFinal);
-	$sql2 = QUnidadesDevueltaCliente($FInicial,$FFinal);
-	$sql3 = QUnidadesCompradasProveedor($FInicial,$FFinal);
-	$sql4 = QUnidadesReclamoProveedor($FInicial,$FFinal);
-	$sql5 = QIntegracionProductosVendidos();
-	$sql6 = QIntegracionProductosFalla();
+	$sql1 = QUnidadesCompradasProveedor($FInicial,$FFinal);
+	sqlsrv_query($conn, $sql1);
 	
-	sqlsrv_query($conn,$sql1);
-	sqlsrv_query($conn,$sql2);
-	sqlsrv_query($conn,$sql3);
-	sqlsrv_query($conn,$sql4);
-	sqlsrv_query($conn,$sql5);
-	sqlsrv_query($conn,$sql6);
-	$result = sqlsrv_query($conn,"
-		SELECT * 
-		FROM TablaTemp5 
-		WHERE Existencia > 0 
-		ORDER BY Existencia DESC
-	");
+	$result = sqlsrv_query($conn,"SELECT * FROM TablaTemp2 ORDER BY FechaRegistro DESC");	
 
 	echo '
 		<div class="input-group md-form form-sm form-1 pl-0">
@@ -1312,29 +1297,35 @@ function ReporteProductosParaSurtir($SedeConnection,$FInicial,$FFinal) {
 			    	<th scope="col">Codigo</th>
 			      	<th scope="col">Descripcion</th>
 			      	<th scope="col">Existencia</th>
-			      	<th scope="col">Ultimo Lote</th>
+			      	<th scope="col">Ultimo Lote (En Rango)</th>
 			      	<th scope="col">Tiempo en Tienda (Dias)</th>		      
 			    </tr>
 	  		</thead>
 	  	<tbody>
 	';
-
 	while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
 		$IdArticulo = $row["Id"];
-		$Existencia = $row["Existencia"];
+		$FechaRegistro = $row["FechaRegistro"];
+		
+		$sql2 = QExistenciaArticulo($IdArticulo,0);
+		$result2 = sqlsrv_query($conn,$sql2);
+		$row2 = sqlsrv_fetch_array($result2,SQLSRV_FETCH_ASSOC);
+		$Existencia = $row2["Existencia"];
 
-		$sql7 = QTiempoEnTienda($IdArticulo);
-		sqlsrv_query($conn,$sql7);
-		$result1=sqlsrv_query($conn,$sql7);
-		$row1=sqlsrv_fetch_array($result1,SQLSRV_FETCH_ASSOC);
+		$sql3 = QTiempoEnTienda($IdArticulo);
+		$result3 = sqlsrv_query($conn,$sql3);
+		$row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
+		$TiempoTienda = $row3["TiempoTienda"];
 
-		echo '<tr>';
-		echo '<td align="left">'.$row["CodigoArticulo"].'</td>';
-		echo '<td align="left">'.$row["Descripcion"].'</td>';
-		echo '<td align="center">'.intval($Existencia).'</td>';
-		echo '<td align="center">'.($row1["FechaTienda"])->format("Y-m-d").'</td>';
-		echo '<td align="center">'.$row1["TiempoTienda"].'</td>';
-		echo '</tr>';
+		if($Existencia > 0){
+			echo '<tr>';
+			echo '<td align="left">'.$row["CodigoArticulo"].'</td>';
+			echo '<td align="left">'.$row["Descripcion"].'</td>';
+			echo '<td align="center">'.intval($Existencia).'</td>';
+			echo '<td align="center">'.($FechaRegistro)->format("Y-m-d").'</td>';
+			echo '<td align="center">'.$TiempoTienda.'</td>';
+			echo '</tr>';
+		}	
   	}
   	echo '
   		</tbody>
