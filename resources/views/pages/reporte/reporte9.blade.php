@@ -46,24 +46,24 @@
 								Fecha Inicio:
 							</td>
 							<td>
-				            	<input id="fechaInicio" type="date" name="fechaInicio" required style="width:100%;">
-				            </td>
-				            <td align="center">
-				            	Fecha Fin:
-				            </td>
-				            <td align="right">
-				            	<input id="fechaFin" name="fechaFin" type="date" required style="width:100%;">
-				            </td>
-		            		<input id="SEDE" name="SEDE" type="hidden" value="';
-				            print_r($_GET['SEDE']);
-				            echo'">
-				            <td align="right">
-				            	<input type="submit" value="Buscar" class="btn btn-outline-success">
-				            </td>
-			            </tr>
-			    	</table>
-		  		</form>
-		  	';
+            	<input id="fechaInicio" type="date" name="fechaInicio" required style="width:100%;">
+	            </td>
+	            <td align="center">
+	            	Fecha Fin:
+	            </td>
+	            <td align="right">
+	            	<input id="fechaFin" name="fechaFin" type="date" required style="width:100%;">
+	            </td>
+          		<input id="SEDE" name="SEDE" type="hidden" value="';
+	            print_r($_GET['SEDE']);
+	            echo'">
+	            <td align="right">
+	            	<input type="submit" value="Buscar" class="btn btn-outline-success">
+	            </td>
+            </tr>
+		    	</table>
+	  		</form>
+	  	';
 		}
 	?>
 @endsection

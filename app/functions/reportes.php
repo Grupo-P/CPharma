@@ -919,7 +919,7 @@ function ReporteProveedorFactura($SedeConnection,$IdProveedor,$NombreProveedor){
 	while( $row = sqlsrv_fetch_array( $result, SQLSRV_FETCH_ASSOC)) {
 		
 		echo '<tr>';
-		echo '<td align="center">'.$row["FacturaId"].'</td>';
+		echo '<td align="center">'.$row["NumeroFactura"].'</td>';
 		echo '<td align="center">'.$row["FechaDocumento"]->format('Y-m-d').'</td>';
 		echo '<td align="center">'.$row["Auditoria_Usuario"].'</td>';
 		echo '
@@ -968,6 +968,11 @@ function ReporteFacturaArticulo($SedeConnection,$IdProveedor,$NombreProveedor,$I
 	$sql1 = QFacturaArticulo($IdFatura);	
 	$result = sqlsrv_query($conn,$sql1);
 
+	$sqlNFact = QNumeroFactura($IdFatura);
+	$resultNFact = sqlsrv_query($conn,$sqlNFact);
+	$rowNFact = sqlsrv_fetch_array($resultNFact,SQLSRV_FETCH_ASSOC);
+	$NumeroFactura = $rowNFact["NumeroFactura"];
+
 	echo '
 	<div class="input-group md-form form-sm form-1 pl-0">
 	  <div class="input-group-prepend">
@@ -990,7 +995,7 @@ function ReporteFacturaArticulo($SedeConnection,$IdProveedor,$NombreProveedor,$I
 	  	<tbody>
 	  	<tr>
   	';
-  	echo '<td>'.$IdFatura.'</td>';
+  	echo '<td>'.$NumeroFactura.'</td>';
 	echo '<td>'.$NombreProveedor.'</td>';	
   	echo '
   		</tr>
@@ -1066,6 +1071,11 @@ function ReporteArticuloTroquel($SedeConnection,$IdProveedor,$NombreProveedor,$I
 	$result2 = sqlsrv_query($conn,$sql2);
 	$row2 = sqlsrv_fetch_array( $result2, SQLSRV_FETCH_ASSOC);
 
+	$sqlNFact = QNumeroFactura($IdFatura);
+	$resultNFact = sqlsrv_query($conn,$sqlNFact);
+	$rowNFact = sqlsrv_fetch_array($resultNFact,SQLSRV_FETCH_ASSOC);
+	$NumeroFactura = $rowNFact["NumeroFactura"];
+
 	echo '
 	<div class="input-group md-form form-sm form-1 pl-0">
 	  <div class="input-group-prepend">
@@ -1088,7 +1098,7 @@ function ReporteArticuloTroquel($SedeConnection,$IdProveedor,$NombreProveedor,$I
 	  	<tbody>
 	  	<tr>
   	';
-  	echo '<td>'.$IdFatura.'</td>';
+  	echo '<td>'.$NumeroFactura.'</td>';
 	echo '<td>'.$NombreProveedor.'</td>';	
   	echo '
   		</tr>
@@ -1177,6 +1187,11 @@ function ReporteTroquel($SedeConnection,$IdProveedor,$NombreProveedor,$IdFatura,
 	$result3 = sqlsrv_query($conn,$sql3);
 	$row3 = sqlsrv_fetch_array( $result3, SQLSRV_FETCH_ASSOC);
 
+	$sqlNFact = QNumeroFactura($IdFatura);
+	$resultNFact = sqlsrv_query($conn,$sqlNFact);
+	$rowNFact = sqlsrv_fetch_array($resultNFact,SQLSRV_FETCH_ASSOC);
+	$NumeroFactura = $rowNFact["NumeroFactura"];
+
 	echo '
 	<div class="input-group md-form form-sm form-1 pl-0">
 	  <div class="input-group-prepend">
@@ -1199,7 +1214,7 @@ function ReporteTroquel($SedeConnection,$IdProveedor,$NombreProveedor,$IdFatura,
 	  	<tbody>
 	  	<tr>
   	';
-  	echo '<td>'.$IdFatura.'</td>';
+  	echo '<td>'.$NumeroFactura.'</td>';
 	echo '<td>'.$NombreProveedor.'</td>';	
   	echo '
   		</tr>
@@ -1254,25 +1269,10 @@ function ReporteProductosParaSurtir($SedeConnection,$FInicial,$FFinal) {
 	$sql = QTablaTemp(ClenTable);
 	sqlsrv_query($conn,$sql);
 
-	$sql1 = QUnidadesVendidasCliente($FInicial,$FFinal);
-	$sql2 = QUnidadesDevueltaCliente($FInicial,$FFinal);
-	$sql3 = QUnidadesCompradasProveedor($FInicial,$FFinal);
-	$sql4 = QUnidadesReclamoProveedor($FInicial,$FFinal);
-	$sql5 = QIntegracionProductosVendidos();
-	$sql6 = QIntegracionProductosFalla();
+	$sql1 = QUnidadesCompradasProveedor($FInicial,$FFinal);
+	sqlsrv_query($conn, $sql1);
 	
-	sqlsrv_query($conn,$sql1);
-	sqlsrv_query($conn,$sql2);
-	sqlsrv_query($conn,$sql3);
-	sqlsrv_query($conn,$sql4);
-	sqlsrv_query($conn,$sql5);
-	sqlsrv_query($conn,$sql6);
-	$result = sqlsrv_query($conn,"
-		SELECT * 
-		FROM TablaTemp5 
-		WHERE Existencia > 0 
-		ORDER BY Existencia DESC
-	");
+	$result = sqlsrv_query($conn,"SELECT * FROM TablaTemp2 ORDER BY FechaRegistro DESC");	
 
 	echo '
 		<div class="input-group md-form form-sm form-1 pl-0">
@@ -1297,85 +1297,35 @@ function ReporteProductosParaSurtir($SedeConnection,$FInicial,$FFinal) {
 			    	<th scope="col">Codigo</th>
 			      	<th scope="col">Descripcion</th>
 			      	<th scope="col">Existencia</th>
-			      	<th scope="col">Ultimo Lote</th>
+			      	<th scope="col">Ultimo Lote (En Rango)</th>
 			      	<th scope="col">Tiempo en Tienda (Dias)</th>		      
 			    </tr>
 	  		</thead>
 	  		<tbody>
 	';
-
 	while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
 		$IdArticulo = $row["Id"];
-		$Existencia = $row["Existencia"];
+		$FechaRegistro = $row["FechaRegistro"];
+		
+		$sql2 = QExistenciaArticulo($IdArticulo,0);
+		$result2 = sqlsrv_query($conn,$sql2);
+		$row2 = sqlsrv_fetch_array($result2,SQLSRV_FETCH_ASSOC);
+		$Existencia = $row2["Existencia"];
 
-		$sql7 = QTiempoEnTienda($IdArticulo);
-		sqlsrv_query($conn,$sql7);
-		$result1=sqlsrv_query($conn,$sql7);
-		$row1=sqlsrv_fetch_array($result1,SQLSRV_FETCH_ASSOC);
+		$sql3 = QTiempoEnTienda($IdArticulo);
+		$result3 = sqlsrv_query($conn,$sql3);
+		$row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
+		$TiempoTienda = $row3["TiempoTienda"];
 
+		if($Existencia > 0){
 			echo '<tr>';
-				echo '<td align="left">'.$row["CodigoArticulo"].'</td>';
-				echo '<td align="left">'.$row["Descripcion"].'</td>';
-				echo '<td align="center">'.intval($Existencia).'</td>';
-				echo '<td align="center">'.($row1["FechaTienda"])->format("Y-m-d").'</td>';
-				echo '<td align="center">'.$row1["TiempoTienda"].'</td>';
+			echo '<td align="left">'.$row["CodigoArticulo"].'</td>';
+			echo '<td align="left">'.$row["Descripcion"].'</td>';
+			echo '<td align="center">'.intval($Existencia).'</td>';
+			echo '<td align="center">'.($FechaRegistro)->format("Y-m-d").'</td>';
+			echo '<td align="center">'.$TiempoTienda.'</td>';
 			echo '</tr>';
-  	}
-  	echo '
-	  		</tbody>
-		</table>';
-	
-	$sql = QTablaTemp(ClenTable);
-	sqlsrv_query($conn,$sql);
-	sqlsrv_close($conn);
-}
-/***********************************************************************************/
-/************************ REPORTE 10  **********************/
-/*
-	TITULO: 
-	PARAMETROS : [$SedeConnection] Siglas de la sede para la conexion
-	FUNCION: 
-	RETORNO: No aplica
- */
-function ReporteAnalitico($SedeConnection){
-
-	$conn = ConectarSmartpharma($SedeConnection);
-
-	$sql = QTablaTemp(ClenTable);
-	sqlsrv_query($conn,$sql);
-
-	$sql1 = QFRegProveedor();
-	sqlsrv_query($conn,$sql1);
-
-	$sql2 = QFRegRangoProveedor();
-	$result = sqlsrv_query($conn,$sql2);
-
-	echo '
-	<div class="input-group md-form form-sm form-1 pl-0">
-	  <div class="input-group-prepend">
-	    <span class="input-group-text purple lighten-3" id="basic-text1"><i class="fas fa-search text-white"
-	        aria-hidden="true"></i></span>
-	  </div>
-	  <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterFirsTable()">
-	</div>
-	<br/>
-	<table class="table table-striped table-bordered col-12 sortable" id="myTable">
-	  	<thead class="thead-dark">
-		    <tr>
-		      	<th scope="col">Proveedor</th>		      	
-		      	<th scope="col">Ultimo registro</th>
-		      	<th scope="col">Dias sin facturar</th>
-		    </tr>
-	  	</thead>
-	  	<tbody>
-	';
-	
-	while( $row = sqlsrv_fetch_array( $result, SQLSRV_FETCH_ASSOC) ) {
-		echo '<tr>';	
-		echo '<td>'.$row['Nombre'].'</td>'; 
-		echo '<td align="center">'.($row['FechaRegistro'])->format('Y-m-d').'</td>';
-		echo '<td align="center">'.$row['RangoDias'].'</td>';
-		echo '</tr>';
+		}	
   	}
   	echo '
   		</tbody>
