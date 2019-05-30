@@ -17,8 +17,12 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/test', function () {
-    return view('test');
+Route::get('/testS', function () {
+    return view('testS');
+});
+
+Route::get('/testM', function () {
+    return view('testM');
 });
 
 Route::get('/sede', function () {

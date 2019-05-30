@@ -48,15 +48,25 @@ function ConectarSmartpharma($SedeConnection){
 			return $conn;
 		break;	
 
-		case 'DB':
+		case 'DBs':
 			$connectionInfo = array(
-				"Database"=>nameDB,
-				"UID"=>userDB,
-				"PWD"=>passDB
+				"Database"=>nameDBs,
+				"UID"=>userDBs,
+				"PWD"=>passDBs
 			);
-			$conn = sqlsrv_connect( serverDB, $connectionInfo);
+			$conn = sqlsrv_connect( serverDBs, $connectionInfo);
 			return $conn;
 		break;	
+
+		case 'DBm':
+			$connectionInfo = array(
+				"Database"=>nameDBm,
+				"UID"=>userDBm,
+				"PWD"=>passDBm
+			);
+			$conn = sqlsrv_connect( serverDBm, $connectionInfo);
+			return $conn;
+		break;
 	}
 }
 /*
@@ -147,10 +157,15 @@ function NombreSede($SedeConnection){
 			return $sede;
 		break;	
 
-		case 'DB':
-			$sede = SedeDB;
+		case 'DBs':
+			$sede = SedeDBs;
 			return $sede;
-		break;	
+		break;
+
+		case 'DBm':
+			$sede = SedeDBm;
+			return $sede;
+		break;		
 	}
 }
 /*
