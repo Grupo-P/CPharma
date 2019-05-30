@@ -78,14 +78,33 @@
 	  		<div class="card-body text-left bg-warning">
 	    		<h5 class="card-title">
 		    		<span class="card-text text-white">
-		    			<?php echo "".SedeDB; ?>
+		    			<?php echo "".SedeDBs; ?>
 		    		</span>
 	    		</h5>	    	    
 	  		</div>
 		  	<div class="card-footer bg-transparent border-warning text-right">	  		
 		  		<form action="/reporte/" style="display: inline;">
 				    @csrf
-				    <input id="SEDE" name="SEDE" type="hidden" value="DB">  
+				    <input id="SEDE" name="SEDE" type="hidden" value="DBs">  
+				    <button type="submit" name="Reporte" role="button" class="btn btn-outline-warning btn-sm"></i>Ver reportes</button>
+				</form>
+		  	</div>
+		</div>		
+   	</div>
+	
+	<div class="card-deck">
+   		<div class="card border-warning mb-3" style="width: 14rem;">	  	
+	  		<div class="card-body text-left bg-warning">
+	    		<h5 class="card-title">
+		    		<span class="card-text text-white">
+		    			<?php echo "".SedeDBm; ?>
+		    		</span>
+	    		</h5>	    	    
+	  		</div>
+		  	<div class="card-footer bg-transparent border-warning text-right">	  		
+		  		<form action="/reporte/" style="display: inline;">
+				    @csrf
+				    <input id="SEDE" name="SEDE" type="hidden" value="DBm">  
 				    <button type="submit" name="Reporte" role="button" class="btn btn-outline-warning btn-sm"></i>Ver reportes</button>
 				</form>
 		  	</div>

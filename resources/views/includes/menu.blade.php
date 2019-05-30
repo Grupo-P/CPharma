@@ -126,12 +126,19 @@
       </a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" href="{{ url('/test') }}">
+      <a class="nav-link" href="{{ url('/testS') }}">
         <span data-feather="home"></span>
         <i class="fas fa-box"></i>
-        Test<span class="sr-only">(current)</span>
+        Test Sergio<span class="sr-only">(current)</span>
       </a>
-    </li>  
+    </li> 
+    <li class="nav-item">
+      <a class="nav-link" href="{{ url('/testM') }}">
+        <span data-feather="home"></span>
+        <i class="fas fa-box"></i>
+        Test Manuel<span class="sr-only">(current)</span>
+      </a>
+    </li> 
 <?php
 }
 ?>

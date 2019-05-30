@@ -40,7 +40,7 @@
   else{
     $InicioCarga = new DateTime("now");
     /**/
-    $_GET['SEDE'] = 'DB';
+    $_GET['SEDE'] = 'DBs';
 
     if (isset($_GET['SEDE'])){      
       echo '<h1 class="h5 text-success"  align="left"> <i class="fas fa-prescription"></i> '.NombreSede($_GET['SEDE']).'</h1>';

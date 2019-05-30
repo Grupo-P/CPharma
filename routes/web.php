@@ -17,8 +17,12 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/test', function () {
-    return view('test');
+Route::get('/testS', function () {
+    return view('testS');
+});
+
+Route::get('/testM', function () {
+    return view('testM');
 });
 
 Route::get('/sede', function () {
@@ -63,6 +67,10 @@ Route::get('/reporte8', function () {
 
 Route::get('/reporte9', function () {
     return view('pages.reporte.reporte9');
+});
+
+Route::get('/reporte10', function() {
+    return view('pages.reporte.reporte10');
 });
 
 Route::get('home', 'HomeController@index')->name('home');

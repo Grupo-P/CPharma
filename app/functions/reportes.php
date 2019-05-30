@@ -1301,7 +1301,7 @@ function ReporteProductosParaSurtir($SedeConnection,$FInicial,$FFinal) {
 			      	<th scope="col">Tiempo en Tienda (Dias)</th>		      
 			    </tr>
 	  		</thead>
-	  	<tbody>
+	  		<tbody>
 	';
 	while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
 		$IdArticulo = $row["Id"];
@@ -1330,9 +1330,10 @@ function ReporteProductosParaSurtir($SedeConnection,$FInicial,$FFinal) {
   	echo '
   		</tbody>
 	</table>';
-	
+
 	$sql = QTablaTemp(ClenTable);
 	sqlsrv_query($conn,$sql);
-	sqlsrv_close($conn);
+
+	sqlsrv_close( $conn );
 }
 ?>

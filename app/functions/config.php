@@ -10,7 +10,8 @@ define("ClenTable",10);
 define ("SedeFTN","Farmacia Tierra Negra");
 define ("SedeFLL","Farmacia La Lago");
 define ("SedeFAU","Farmacia Avenida Universidad");
-define ("SedeDB","Servidor de Desarrollo");
+define ("SedeDBs","Servidor de Desarrollo Sergio");
+define ("SedeDBm","Servidor de Desarrollo Manuel");
 /*
 	Cadena de conexion con la base de datos de CPharma
 */
@@ -40,10 +41,17 @@ define ("userFAU" , "");
 define ("passFAU" , "");
 define ("nameFAU" , "");
 /*
-	Cadena de conexion con la base de datos del servidor de Desarrollo.
+	Cadena de conexion con la base de datos del servidor de Desarrollo Sergio.
 */
- define ("serverDB" , "SERGIO-PC");
- define ("userDB" , "sa");
- define ("passDB" , "soporte123");
- define ("nameDB" , "SMART");
+ define ("serverDBs" , "SERGIO-PC");
+ define ("userDBs" , "sa");
+ define ("passDBs" , "soporte123");
+ define ("nameDBs" , "SMART");
+ /*
+	Cadena de conexion con la base de datos del servidor de Desarrollo Manuel.
+*/
+ define ("serverDBm" , "DESKTOP-AGKHTEB");
+ define ("userDBm" , "sa");
+ define ("passDBm" , "soporte123");
+ define ("nameDBm" , "SMART");
 ?>
