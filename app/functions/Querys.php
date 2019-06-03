@@ -227,6 +227,17 @@ function QLoteArticulo($IdArticulo,$CantAlmacen){
 		";
 		return $sql;
 		break;
+
+		case '2':
+		$sql = "
+			SELECT
+			InvLoteAlmacen.InvLoteId
+			INTO TablaTemp
+			FROM InvLoteAlmacen 
+			WHERE(InvLoteAlmacen.InvArticuloId = '$IdArticulo')
+		";
+		return $sql;
+		break;
 	}	
 }
 /*
