@@ -34,7 +34,7 @@
 		    }
 		    echo '<hr class="row align-items-start col-12">';
 
-		    ReporteAnalitico($_GET['SEDE'],$_GET['Id']);
+		    ReporteAnaliticoDePrecios($_GET['SEDE'],$_GET['Id']);
 
 		    $FinCarga = new DateTime("now");
 		    $IntervalCarga = $InicioCarga->diff($FinCarga);

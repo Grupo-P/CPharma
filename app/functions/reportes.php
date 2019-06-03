@@ -59,7 +59,7 @@
 		sqlsrv_close($conn);
 	}
 	/*****************************************************************************/
-	/************************ REPORTE 2 HISTORICO DE ARTICULO ********************/
+	/************************ REPORTE 2 HISTORICO DE PRODUCTOS *******************/
 	/*
 		TITULO: ReporteHistoricoArticulo
 		PARAMETROS : [$SedeConnection] Siglas de la sede para la conexion
@@ -124,14 +124,13 @@
 		if($TasaActual!=0){
 			echo '<td align="center">'." ".$TasaActual." ".SigVe.'</td>';
 			echo '<td align="center">'." ".round(($Precio/$TasaActual),2)." ".SigDolar.'</td>';
-			echo '</tr>';
 		}
 		else{
 			echo '<td align="center">0.00 '.SigVe.'</td>';
 			echo '<td align="center">0.00 '.SigDolar.'</td>';
-			echo '</tr>';
 		}
 		echo '
+				</tr>
 	  		</tbody>
 		</table>';
 
@@ -166,13 +165,12 @@
 				if($Tasa != 0){
 					echo '<td align="center">'." ".$Tasa." ".SigVe.'</td>';
 					echo '<td align="center">'." ".round(($row2["M_PrecioCompraBruto"]/$Tasa),2)." ".SigDolar.'</td>';
-					echo '</tr>';
 				}
 				else{
 					echo '<td align="center">0.00 '.SigVe.'</td>';
 					echo '<td align="center">0.00 '.SigDolar.'</td>';
-					echo '</tr>';
 				}
+				echo '</tr>';
 	  	}
 	  	echo '
 	  		</tbody>
@@ -1356,4 +1354,126 @@
 
 		sqlsrv_close($conn);
 	}
+
+	/*****************************************************************************/
+	/************************ REPORTE 10 ANALITICO DE PRECIOS *******************/
+	/*
+		TITULO: ReporteAnaliticoDePrecios
+		PARAMETROS : [$SedeConnection] Siglas de la sede para la conexion
+					 [$IdArticuloQ] Id del articulo a buscar
+		FUNCION: Armar una tabla de historico de compra del articulo
+		RETORNO: No aplica
+	 */
+	function ReporteAnaliticoDePrecios($SedeConnection,$IdArticulo){
+		$conn = ConectarSmartpharma($SedeConnection);
+
+		$sql = QTablaTemp(ClenTable);
+		sqlsrv_query($conn,$sql);
+
+		$sql = QArticulo($IdArticulo);
+		sqlsrv_query($conn,$sql);
+		$result = sqlsrv_query($conn,$sql);
+		$row = sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC);
+
+		$sql1 = QExistenciaArticulo($IdArticulo,0);
+		$result1 = sqlsrv_query($conn,$sql1);
+		$row1 = sqlsrv_fetch_array($result1,SQLSRV_FETCH_ASSOC);
+
+		$IsIVA = $row["ConceptoImpuesto"];
+		$Existencia = $row1["Existencia"];
+
+		$Precio = CalculoPrecio($conn,$IdArticulo,$IsIVA,$Existencia);
+
+		$TasaActual = TasaFecha(date('Y-m-d'));
+
+		echo '
+		<div class="input-group md-form form-sm form-1 pl-0">
+		  <div class="input-group-prepend">
+		    <span class="input-group-text purple lighten-3" id="basic-text1">
+		    	<i class="fas fa-search text-white"
+		        aria-hidden="true"></i>
+		    </span>
+		  </div>
+		  <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterAllTable()">
+		</div>
+		<br/>
+
+		<table class="table table-striped table-bordered col-12 sortable">
+			<thead class="thead-dark">
+			    <tr>
+			    	<th scope="col">Codigo</th>
+			      	<th scope="col">Descripcion</td>
+			      	<th scope="col">Existencia</td>
+			      	<th scope="col">Precio (Con IVA)</td>
+			      	<th scope="col">Tasa actual</td>
+			      	<th scope="col">Precio en divisa (Con IVA)</td>
+			    </tr>
+		  	</thead>
+		  	<tbody>
+	  	';
+		echo '<tr>';
+		echo '<td>'.$row["CodigoArticulo"].'</td>';
+		echo '<td>'.$row["Descripcion"].'</td>';
+		echo '<td align="center">'.intval($Existencia).'</td>';
+		echo '<td align="center">'." ".round($Precio,2)." ".SigVe.'</td>';
+
+		if($TasaActual!=0){
+			echo '<td align="center">'." ".$TasaActual." ".SigVe.'</td>';
+			echo '<td align="center">'." ".round(($Precio/$TasaActual),2)." ".SigDolar.'</td>';
+		}
+		else{
+			echo '<td align="center">0.00 '.SigVe.'</td>';
+			echo '<td align="center">0.00 '.SigDolar.'</td>';
+		}
+		echo '
+				</tr>
+	  		</tbody>
+		</table>';
+
+		$sql2 = QHistoricoArticulo($IdArticulo);
+		$result2 = sqlsrv_query($conn,$sql2);
+
+		echo'
+		<table class="table table-striped table-bordered col-12 sortable" id="myTable">
+		  	<thead class="thead-dark">
+			    <tr>
+			    	<th scope="col">Origen</th>
+			    	<th scope="col">Detalles</th>
+			      	<th scope="col">Fecha de documento</th>
+			      	<th scope="col">Almacen</th>
+			      	<th scope="col">Existencia</th>
+			      	<th scope="col">Costo bruto (Sin IVA)</th>
+			      	<th scope="col">Tasa en historico</th>
+					<th scope="col">Costo en divisa (Sin IVA)</th>
+					<th scope="col">Precio troquel</th>
+			    	<th scope="col">Responsable</th>
+			    </tr>
+		  	</thead>
+		  	<tbody>
+		';
+
+		while($row2 = sqlsrv_fetch_array($result2, SQLSRV_FETCH_ASSOC)) {
+				echo '<tr>';
+				echo '<td align="center">-</td>';
+				echo '<td align="center">-</td>';
+				echo '<td align="center">-</td>';
+				echo '<td align="center">-</td>';
+				echo '<td align="center">-</td>';
+				echo '<td align="center">-</td>';
+				echo '<td align="center">-</td>';
+				echo '<td align="center">-</td>';
+				echo '<td align="center">-</td>';
+				echo '<td align="center">-</td>';
+				echo '</tr>';
+	  	}
+	  	echo '
+	  		</tbody>
+		</table>';
+
+		$sql = QTablaTemp(ClenTable);
+		sqlsrv_query($conn,$sql);
+
+		sqlsrv_close($conn);
+	}
+
 ?>
