@@ -1456,12 +1456,22 @@
 				echo '<tr>';
 				echo '<td align="center">-</td>';
 				echo '<td align="center">-</td>';
+				echo '<td align="center">'.$row2["FechaDocumento"]->format('Y-m-d').'</td>';
 				echo '<td align="center">-</td>';
 				echo '<td align="center">-</td>';
-				echo '<td align="center">-</td>';
-				echo '<td align="center">-</td>';
-				echo '<td align="center">-</td>';
-				echo '<td align="center">-</td>';
+				echo '<td align="center">'." ".round($row2["M_PrecioCompraBruto"],2)." ".SigVe.'</td>';
+
+				$FechaD = $row2["FechaDocumento"]->format('Y-m-d');
+				$Tasa = TasaFecha($FechaD);
+				
+				if($Tasa != 0){
+					echo '<td align="center">'." ".$Tasa." ".SigVe.'</td>';
+					echo '<td align="center">'." ".round(($row2["M_PrecioCompraBruto"]/$Tasa),2)." ".SigDolar.'</td>';
+				}
+				else{
+					echo '<td align="center">0.00 '.SigVe.'</td>';
+					echo '<td align="center">0.00 '.SigDolar.'</td>';
+				}
 				echo '<td align="center">-</td>';
 				echo '<td align="center">-</td>';
 				echo '</tr>';
