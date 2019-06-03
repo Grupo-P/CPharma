@@ -1440,6 +1440,7 @@
 			    	<th scope="col">Origen</th>
 			    	<th scope="col">Detalles</th>
 			      	<th scope="col">Fecha de documento</th>
+			      	<th scope="col">Cantidad recibida</th>
 			      	<th scope="col">Almacen</th>
 			      	<th scope="col">Existencia</th>
 			      	<th scope="col">Costo bruto (Sin IVA)</th>
@@ -1453,28 +1454,29 @@
 		';
 
 		while($row2 = sqlsrv_fetch_array($result2, SQLSRV_FETCH_ASSOC)) {
-				echo '<tr>';
-				echo '<td align="center">-</td>';
-				echo '<td align="center">-</td>';
-				echo '<td align="center">'.$row2["FechaDocumento"]->format('Y-m-d').'</td>';
-				echo '<td align="center">-</td>';
-				echo '<td align="center">-</td>';
-				echo '<td align="center">'." ".round($row2["M_PrecioCompraBruto"],2)." ".SigVe.'</td>';
+			echo '<tr>';
+			echo '<td align="center">-</td>';
+			echo '<td align="center">-</td>';
+			echo '<td align="center">'.$row2["FechaDocumento"]->format('Y-m-d').'</td>';
+			echo '<td align="center">'.intval($row2['CantidadRecibidaFactura']).'</td>';
+			echo '<td align="center">-</td>';
+			echo '<td align="center">-</td>';
+			echo '<td align="center">'." ".round($row2["M_PrecioCompraBruto"],2)." ".SigVe.'</td>';
 
-				$FechaD = $row2["FechaDocumento"]->format('Y-m-d');
-				$Tasa = TasaFecha($FechaD);
-				
-				if($Tasa != 0){
-					echo '<td align="center">'." ".$Tasa." ".SigVe.'</td>';
-					echo '<td align="center">'." ".round(($row2["M_PrecioCompraBruto"]/$Tasa),2)." ".SigDolar.'</td>';
-				}
-				else{
-					echo '<td align="center">0.00 '.SigVe.'</td>';
-					echo '<td align="center">0.00 '.SigDolar.'</td>';
-				}
-				echo '<td align="center">-</td>';
-				echo '<td align="center">-</td>';
-				echo '</tr>';
+			$FechaD = $row2["FechaDocumento"]->format('Y-m-d');
+			$Tasa = TasaFecha($FechaD);
+			
+			if($Tasa != 0){
+				echo '<td align="center">'." ".$Tasa." ".SigVe.'</td>';
+				echo '<td align="center">'." ".round(($row2["M_PrecioCompraBruto"]/$Tasa),2)." ".SigDolar.'</td>';
+			}
+			else{
+				echo '<td align="center">0.00 '.SigVe.'</td>';
+				echo '<td align="center">0.00 '.SigDolar.'</td>';
+			}
+			echo '<td align="center">-</td>';
+			echo '<td align="center">-</td>';
+			echo '</tr>';
 	  	}
 	  	echo '
 	  		</tbody>
