@@ -1430,7 +1430,7 @@
 	  		</tbody>
 		</table>';
 
-		$sql2 = QHistoricoArticulo($IdArticulo);
+		$sql2 = QloteAlmacenAnalitico($IdArticulo);
 		$result2 = sqlsrv_query($conn,$sql2);
 
 		echo'
@@ -1452,32 +1452,26 @@
 		  	</thead>
 		  	<tbody>
 		';
-
-		while($row2 = sqlsrv_fetch_array($result2, SQLSRV_FETCH_ASSOC)) {
-			echo '<tr>';
-			echo '<td align="center">-</td>';
-			echo '<td align="center">-</td>';
-			echo '<td align="center">'.$row2["FechaDocumento"]->format('Y-m-d').'</td>';
-			echo '<td align="center">'.intval($row2['CantidadRecibidaFactura']).'</td>';
-			echo '<td align="center">-</td>';
-			echo '<td align="center">-</td>';
-			echo '<td align="center">'." ".round($row2["M_PrecioCompraBruto"],2)." ".SigVe.'</td>';
-
-			$FechaD = $row2["FechaDocumento"]->format('Y-m-d');
-			$Tasa = TasaFecha($FechaD);
+		
+		while($row2=sqlsrv_fetch_array($result2,SQLSRV_FETCH_ASSOC)){
 			
-			if($Tasa != 0){
-				echo '<td align="center">'." ".$Tasa." ".SigVe.'</td>';
-				echo '<td align="center">'." ".round(($row2["M_PrecioCompraBruto"]/$Tasa),2)." ".SigDolar.'</td>';
-			}
-			else{
-				echo '<td align="center">0.00 '.SigVe.'</td>';
-				echo '<td align="center">0.00 '.SigDolar.'</td>';
-			}
-			echo '<td align="center">-</td>';
-			echo '<td align="center">-</td>';
+			$Fecha=$row2["FechaLote"]->format("Y-m-d");
+
+			echo '<tr>';
+				echo '<td align="center">-</td>';
+				echo '<td align="center">-</td>';
+				echo '<td align="center">'.$Fecha.'</td>';
+				echo '<td align="center">-</td>';
+				echo '<td align="center">'.$row2["CodigoAlmacen"].'</td>';
+				echo '<td align="center">'.intval($row2["Existencia"]).'</td>';
+				echo '<td align="center">-</td>';
+				echo '<td align="center">-</td>';
+				echo '<td align="center">-</td>';
+				echo '<td align="center">-</td>';
+				echo '<td align="center">'.$row2["Responsable"].'</td>';
 			echo '</tr>';
-	  	}
+		}
+
 	  	echo '
 	  		</tbody>
 		</table>';

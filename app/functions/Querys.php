@@ -964,6 +964,28 @@ function QTiempoEnTienda($IdArticulo) {
 }
 
 /*
+	TITULO: QloteAlmacenAnalitico
+	PARAMETROS: [$IdArticulo] Id del articulo actual
+	FUNCION: Construir la consulta para el despliegue del reporte AnaliticoDePrecio
+	RETORNO: Un String con las instrucciones de la consulta
+ */
+function QloteAlmacenAnalitico($IdArticulo) {
+	$sql = "
+		SELECT
+		InvLoteAlmacen.InvLoteId,
+		CONVERT(DATE,InvLoteAlmacen.Auditoria_FechaCreacion) AS FechaLote,
+		InvLoteAlmacen.Existencia,
+		InvAlmacen.CodigoAlmacen,
+		InvLoteAlmacen.Auditoria_Usuario AS Responsable
+		FROM InvLoteAlmacen
+		INNER JOIN InvAlmacen 
+		ON InvAlmacen.Id=InvLoteAlmacen.InvAlmacenId
+		WHERE(InvLoteAlmacen.InvArticuloId='$IdArticulo' AND InvLoteAlmacen.Existencia>0)
+	";
+	return $sql;
+}
+
+/*
 	TITULO: 
 	PARAMETROS: 
 	FUNCION:
@@ -975,51 +997,25 @@ function QModelo(){
 	return $sql;
 }
 
-/*
-SELECT
-GenPersona.Nombre,
-ComProveedor.Id
-FROM ComProveedor
-INNER JOIN GenPersona ON ComProveedor.GenPersonaId=GenPersona.Id
-INNER JOIN ComFactura ON ComFactura.ComProveedorId=ComProveedor.Id
-WHERE ComProveedor.Id = 10
-GROUP by ComProveedor.Id, GenPersona.Nombre
-ORDER BY ComProveedor.Id ASC
+/* 
+Querys Manuel
 
-SELECT
-ComFactura.Id AS FacturaId
-FROM ComFactura
-WHERE ComFactura.ComProveedorId = 10
-ORDER BY FacturaId ASC
+function QloteAlmacenAnalitico($IdArticulo) {
+	$sql = "
+		SELECT
+		InvLoteAlmacen.InvLoteId,
+		CONVERT(DATE,InvLoteAlmacen.Auditoria_FechaCreacion) AS FechaLote,
+		InvLoteAlmacen.Existencia,
+		InvAlmacen.CodigoAlmacen,
+		InvLoteAlmacen.Auditoria_Usuario AS Responsable
+		--INTO TablaTemp
+		FROM InvLoteAlmacen
+		INNER JOIN InvAlmacen 
+		ON InvAlmacen.Id=InvLoteAlmacen.InvAlmacenId
+		WHERE(InvLoteAlmacen.InvArticuloId = '2736' AND InvLoteAlmacen.Existencia>0)
+	";
+	return $sql;
+}
 
-SELECT 
-ComFacturaDetalle.ComFacturaId AS FacturaId,
-InvArticulo.Id,
-InvArticulo.CodigoArticulo,
-InvArticulo.Descripcion,
-InvArticulo.FinConceptoImptoIdCompra AS ConceptoImpuesto
-FROM ComFacturaDetalle
-INNER JOIN InvArticulo ON InvArticulo.Id = ComFacturaDetalle.InvArticuloId
-WHERE ComFacturaDetalle.ComFacturaId = 29950
-ORDER BY FacturaId,InvArticulo.Id ASC
-
-SELECT
-ComFacturaDetalle.ComFacturaId,
-ComFacturaDetalle.InvArticuloId,
-ComFacturaDetalle.M_PrecioTroquelado 
-FROM ComFacturaDetalle
-WHERE ComFacturaDetalle.ComFacturaId = 29950 and ComFacturaDetalle.InvArticuloId = 741
-
-UPDATE ComFacturaDetalle 
-SET M_PrecioTroquelado = 0
-FROM ComFacturaDetalle 
-WHERE ComFacturaDetalle.ComFacturaId = 29950 and ComFacturaDetalle.InvArticuloId = 741
-
-SELECT
-ComFacturaDetalle.ComFacturaId,
-ComFacturaDetalle.InvArticuloId,
-ComFacturaDetalle.M_PrecioTroquelado 
-FROM ComFacturaDetalle
-WHERE ComFacturaDetalle.ComFacturaId = 29950 and ComFacturaDetalle.InvArticuloId = 741
  */
 ?>
