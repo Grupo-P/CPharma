@@ -1453,21 +1453,18 @@
 		  	<tbody>
 		';
 		
-		while($row2=sqlsrv_fetch_array($result2,SQLSRV_FETCH_ASSOC)){
-			
-			$Fecha=$row2["FechaLote"]->format("Y-m-d");
-
+		while($row2=sqlsrv_fetch_array($result2,SQLSRV_FETCH_ASSOC)) {
 			echo '<tr>';
 				echo '<td align="center">-</td>';
 				echo '<td align="center">-</td>';
-				echo '<td align="center">'.$Fecha.'</td>';
+				echo '<td align="center">'.$row2["FechaLote"]->format("Y-m-d").'</td>';
 				echo '<td align="center">-</td>';
 				echo '<td align="center">'.$row2["CodigoAlmacen"].'</td>';
 				echo '<td align="center">'.intval($row2["Existencia"]).'</td>';
+				echo '<td align="center">'.round($row2["M_PrecioCompraBruto"],2)." ".SigVe.'</td>';
 				echo '<td align="center">-</td>';
 				echo '<td align="center">-</td>';
-				echo '<td align="center">-</td>';
-				echo '<td align="center">-</td>';
+				echo '<td align="center">'.round($row2["M_PrecioTroquelado"],2)." ".SigVe.'</td>';
 				echo '<td align="center">'.$row2["Responsable"].'</td>';
 			echo '</tr>';
 		}

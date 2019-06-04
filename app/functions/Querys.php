@@ -976,11 +976,18 @@
 			CONVERT(DATE,InvLoteAlmacen.Auditoria_FechaCreacion) AS FechaLote,
 			InvLoteAlmacen.Existencia,
 			InvAlmacen.CodigoAlmacen,
-			InvLoteAlmacen.Auditoria_Usuario AS Responsable
+			InvLoteAlmacen.Auditoria_Usuario AS Responsable,
+			InvLote.M_PrecioCompraBruto,
+			InvLote.M_PrecioTroquelado
 			FROM InvLoteAlmacen
 			INNER JOIN InvAlmacen
 			ON InvAlmacen.Id=InvLoteAlmacen.InvAlmacenId
-			WHERE(InvLoteAlmacen.InvArticuloId='$IdArticulo' AND InvLoteAlmacen.Existencia>0)
+			INNER JOIN InvLote 
+			ON InvLote.Id=InvLoteAlmacen.InvLoteId
+			WHERE(
+				InvLoteAlmacen.InvArticuloId='$IdArticulo' AND 
+				InvLoteAlmacen.Existencia>0
+			)
 		";
 		return $sql;
 	}
