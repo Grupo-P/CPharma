@@ -269,8 +269,8 @@
 		$sql = "
 			SELECT
 			GenPersona.Nombre,
-			CONVERT(date,ComFactura.FechaRegistro) As FechaRegistro,
-			CONVERT(date,ComFactura.FechaDocumento) As FechaDocumento,
+			CONVERT(DATE,ComFactura.FechaRegistro) As FechaRegistro,
+			CONVERT(DATE,ComFactura.FechaDocumento) As FechaDocumento,
 			ComFacturaDetalle.CantidadRecibidaFactura,
 			ComFacturaDetalle.M_PrecioCompraBruto
 			FROM InvArticulo

@@ -1446,7 +1446,6 @@
 			      	<th scope="col">Costo bruto (Sin IVA)</th>
 			      	<th scope="col">Tasa en historico</th>
 					<th scope="col">Costo en divisa (Sin IVA)</th>
-					<th scope="col">Precio troquel</th>
 			    	<th scope="col">Responsable</th>
 			    </tr>
 		  	</thead>
@@ -1464,7 +1463,6 @@
 				echo '<td align="center">'.round($row2["M_PrecioCompraBruto"],2)." ".SigVe.'</td>';
 				echo '<td align="center">-</td>';
 				echo '<td align="center">-</td>';
-				echo '<td align="center">'.round($row2["M_PrecioTroquelado"],2)." ".SigVe.'</td>';
 				echo '<td align="center">'.$row2["Responsable"].'</td>';
 			echo '</tr>';
 		}
