@@ -1430,7 +1430,7 @@
 	  		</tbody>
 		</table>';
 
-		$sql2 = QloteAlmacenAnalitico($IdArticulo);
+		$sql2 = QLoteAlmacenAnalitico($IdArticulo);
 		$result2 = sqlsrv_query($conn,$sql2);
 
 		echo'
