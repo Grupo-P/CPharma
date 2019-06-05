@@ -1365,26 +1365,26 @@
 		RETORNO: No aplica
 	 */
 	function ReporteAnaliticoDePrecios($SedeConnection,$IdArticulo){
-		$conn = ConectarSmartpharma($SedeConnection);
+		$conn=ConectarSmartpharma($SedeConnection);
 
-		$sql = QTablaTemp(ClenTable);
+		$sql=QTablaTemp(ClenTable);
 		sqlsrv_query($conn,$sql);
 
-		$sql = QArticulo($IdArticulo);
+		$sql=QArticulo($IdArticulo);
 		sqlsrv_query($conn,$sql);
-		$result = sqlsrv_query($conn,$sql);
-		$row = sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC);
+		$result=sqlsrv_query($conn,$sql);
+		$row=sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC);
 
-		$sql1 = QExistenciaArticulo($IdArticulo,0);
-		$result1 = sqlsrv_query($conn,$sql1);
-		$row1 = sqlsrv_fetch_array($result1,SQLSRV_FETCH_ASSOC);
+		$sql1=QExistenciaArticulo($IdArticulo,0);
+		$result1=sqlsrv_query($conn,$sql1);
+		$row1=sqlsrv_fetch_array($result1,SQLSRV_FETCH_ASSOC);
 
-		$IsIVA = $row["ConceptoImpuesto"];
-		$Existencia = $row1["Existencia"];
+		$IsIVA=$row["ConceptoImpuesto"];
+		$Existencia=$row1["Existencia"];
 
-		$Precio = CalculoPrecio($conn,$IdArticulo,$IsIVA,$Existencia);
+		$Precio=CalculoPrecio($conn,$IdArticulo,$IsIVA,$Existencia);
 
-		$TasaActual = TasaFecha(date('Y-m-d'));
+		$TasaActual=TasaFecha(date('Y-m-d'));
 
 		echo '
 		<div class="input-group md-form form-sm form-1 pl-0">
@@ -1419,7 +1419,10 @@
 
 		if($TasaActual!=0){
 			echo '<td align="center">'." ".$TasaActual." ".SigVe.'</td>';
-			echo '<td align="center">'." ".round(($Precio/$TasaActual),2)." ".SigDolar.'</td>';
+			echo '<td align="center">'.
+					round(($Precio/$TasaActual),2).
+					" ".SigDolar.
+				 '</td>';
 		}
 		else{
 			echo '<td align="center">0.00 '.SigVe.'</td>';
@@ -1430,8 +1433,8 @@
 	  		</tbody>
 		</table>';
 
-		$sql2 = QLoteAlmacenAnalitico($IdArticulo);
-		$result2 = sqlsrv_query($conn,$sql2);
+		$sql2=QLoteAlmacenAnalitico($IdArticulo);
+		$result2=sqlsrv_query($conn,$sql2);
 
 		echo'
 		<table class="table table-striped table-bordered col-12 sortable" id="myTable">
@@ -1451,18 +1454,39 @@
 		  	</thead>
 		  	<tbody>
 		';
-		
+
 		while($row2=sqlsrv_fetch_array($result2,SQLSRV_FETCH_ASSOC)) {
+			$FechaVariable=$row2["FechaLote"]->format("Y-m-d");
+			$PrecioBruto=$row2["M_PrecioCompraBruto"];
 			echo '<tr>';
-				echo '<td align="center">-</td>';
-				echo '<td align="center">-</td>';
-				echo '<td align="center">'.$row2["FechaLote"]->format("Y-m-d").'</td>';
+				if($row2["InvCausaId"]==1) {
+					echo '<td align="center">Compra</td>';
+					echo '<td align="center">-</td>';
+				}
+				else {
+					echo '<td align="center">Inventario</td>';
+					echo '<td align="center">'.$row2["Descripcion"].'</td>';
+				}
+				echo '<td align="center">'.$FechaVariable.'</td>';
 				echo '<td align="center">-</td>';
 				echo '<td align="center">'.$row2["CodigoAlmacen"].'</td>';
 				echo '<td align="center">'.intval($row2["Existencia"]).'</td>';
-				echo '<td align="center">'.round($row2["M_PrecioCompraBruto"],2)." ".SigVe.'</td>';
-				echo '<td align="center">-</td>';
-				echo '<td align="center">-</td>';
+				echo '<td align="center">'.
+						round($PrecioBruto,2)." ".SigVe.
+					 '</td>';
+
+				$TasaVariable=TasaFecha($FechaVariable);
+				if($TasaVariable!=0){
+					echo '<td align="center">'.$TasaVariable." ".SigVe.'</td>';
+					echo '<td align="center">'.
+							round(($PrecioBruto/$TasaVariable),2).
+							" ".SigDolar.
+						 '</td>';
+				}
+				else{
+					echo '<td align="center">0.00 '.SigVe.'</td>';
+					echo '<td align="center">0.00 '.SigDolar.'</td>';
+				}
 				echo '<td align="center">'.$row2["Responsable"].'</td>';
 			echo '</tr>';
 		}
