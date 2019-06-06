@@ -1442,7 +1442,7 @@
 			    <tr>
 			    	<th scope="col">Origen</th>
 			    	<th scope="col">Detalles</th>
-			      	<th scope="col">Fecha de documento</th>
+			      	<th scope="col">Fecha creacion de lote</th>
 			      	<th scope="col">Cantidad recibida</th>
 			      	<th scope="col">Almacen</th>
 			      	<th scope="col">Existencia</th>
@@ -1459,16 +1459,29 @@
 			$FechaVariable=$row2["FechaLote"]->format("Y-m-d");
 			$PrecioBruto=$row2["M_PrecioCompraBruto"];
 			echo '<tr>';
+			//VALIDACION PARA CASO DE COMPRA
 				if($row2["InvCausaId"]==1) {
 					echo '<td align="center">Compra</td>';
-					echo '<td align="center">-</td>';
+
+					$sql3=QProveedorYCantidadComprada($IdArticulo,$FechaVariable);
+					$result3=sqlsrv_query($conn,$sql3);
+					$row3=sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
+
+					echo '<td align="center">'.$row3["Nombre"].'</td>';
+					echo '<td align="center">'.$FechaVariable.'</td>';
+					echo '<td align="center">'.intval($row3["CantidadRecibidaFactura"]).'</td>';
 				}
 				else {
 					echo '<td align="center">Inventario</td>';
 					echo '<td align="center">'.$row2["Descripcion"].'</td>';
+					echo '<td align="center">'.$FechaVariable.'</td>';
+
+					$sql3=QProveedorYCantidadComprada($IdArticulo,$FechaVariable);
+					$result3=sqlsrv_query($conn,$sql3);
+					$row3=sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
+
+					echo '<td align="center">'.intval($row3["CantidadRecibidaFactura"]).'</td>';
 				}
-				echo '<td align="center">'.$FechaVariable.'</td>';
-				echo '<td align="center">-</td>';
 				echo '<td align="center">'.$row2["CodigoAlmacen"].'</td>';
 				echo '<td align="center">'.intval($row2["Existencia"]).'</td>';
 				echo '<td align="center">'.

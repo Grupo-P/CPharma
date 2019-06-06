@@ -986,12 +986,37 @@
 			INNER JOIN InvMovimiento ON InvMovimiento.InvLoteId=InvLoteAlmacen.InvLoteId
 			INNER JOIN InvCausa ON InvMovimiento.InvCausaId=InvCausa.Id
 			WHERE(
-				(InvLoteAlmacen.InvArticuloId='$IdArticulo') AND 
-				(InvLoteAlmacen.Existencia>0) AND
-				(CONVERT(DATE,InvMovimiento.Auditoria_FechaCreacion)=CONVERT(DATE,InvLoteAlmacen.Auditoria_FechaCreacion)) AND
-				(InvMovimiento.InvCausaId<>8 and InvMovimiento.InvCausaId<>6)
+				(InvLoteAlmacen.InvArticuloId='$IdArticulo') 
+				AND (InvLoteAlmacen.Existencia>0) 
+				AND (CONVERT(DATE,InvMovimiento.Auditoria_FechaCreacion)=CONVERT(DATE,InvLoteAlmacen.Auditoria_FechaCreacion)) 
+				AND (InvMovimiento.InvCausaId<>8 and InvMovimiento.InvCausaId<>6)
 			)
-			ORDER BY InvLoteAlmacen.InvLoteId ASC
+			ORDER BY FechaLote DESC
+		";
+		return $sql;
+	}
+
+	/*
+		TITULO: QProveedorYCantidadComprada
+		PARAMETROS: [$IdArticulo] Id del articulo actual, [$FechaLote] fecha de creacion del lote
+		FUNCION: Arma las filas correspondientes a los proveedores y el despacho
+		RETORNO: Un String con las instrucciones de la query
+	 */
+	function QProveedorYCantidadComprada($IdArticulo,$FechaLote) {
+		$sql = "
+			SELECT
+				GenPersona.Nombre,
+				ComFacturaDetalle.CantidadRecibidaFactura
+			FROM InvArticulo
+			INNER JOIN ComFacturaDetalle ON InvArticulo.Id=ComFacturaDetalle.InvArticuloId
+			INNER JOIN ComFactura ON ComFactura.Id=ComFacturaDetalle.ComFacturaId
+			INNER JOIN ComProveedor ON ComProveedor.Id=ComFactura.ComProveedorId
+			INNER JOIN GenPersona ON GenPersona.Id=ComProveedor.GenPersonaId
+			WHERE(
+				(InvArticulo.Id = '$IdArticulo') 
+				AND (CONVERT(DATE,ComFactura.FechaRegistro)='$FechaLote')
+			)
+			ORDER BY ComFactura.FechaRegistro DESC
 		";
 		return $sql;
 	}
@@ -1008,21 +1033,4 @@
 		return $sql;
 	}
 
-/*
-SELECT
-	InvLoteAlmacen.InvLoteId,
-	CONVERT(DATE,InvLoteAlmacen.Auditoria_FechaCreacion) AS FechaLote,
-	InvLoteAlmacen.Existencia,
-	InvAlmacen.CodigoAlmacen,
-	InvLoteAlmacen.Auditoria_Usuario AS Responsable,
-	InvLote.M_PrecioCompraBruto
-FROM InvLoteAlmacen
-INNER JOIN InvAlmacen ON InvAlmacen.Id=InvLoteAlmacen.InvAlmacenId
-INNER JOIN InvLote ON InvLote.Id=InvLoteAlmacen.InvLoteId
-WHERE(
-	(InvLoteAlmacen.InvArticuloId='2736') AND 
-	(InvLoteAlmacen.Existencia>0)
-)
-ORDER BY InvLoteAlmacen.InvLoteId ASC
- */
 ?>
