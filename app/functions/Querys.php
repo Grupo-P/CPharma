@@ -976,7 +976,7 @@
 				CONVERT(DATE,InvLoteAlmacen.Auditoria_FechaCreacion) AS FechaLote,
 				InvLoteAlmacen.Existencia,
 				InvAlmacen.CodigoAlmacen,
-				InvLoteAlmacen.Auditoria_Usuario AS Responsable,
+				InvLote.Auditoria_Usuario AS Responsable,
 				InvLote.M_PrecioCompraBruto,
 				InvMovimiento.InvCausaId,
 				InvCausa.Descripcion
@@ -989,7 +989,12 @@
 				(InvLoteAlmacen.InvArticuloId='$IdArticulo') 
 				AND (InvLoteAlmacen.Existencia>0) 
 				AND (CONVERT(DATE,InvMovimiento.Auditoria_FechaCreacion)=CONVERT(DATE,InvLoteAlmacen.Auditoria_FechaCreacion)) 
-				AND (InvMovimiento.InvCausaId<>8 and InvMovimiento.InvCausaId<>6)
+				AND (InvMovimiento.InvCausaId=1 
+					OR InvMovimiento.InvCausaId=5
+					OR InvMovimiento.InvCausaId=7
+					OR InvMovimiento.InvCausaId=9
+					OR InvMovimiento.InvCausaId=11
+					OR InvMovimiento.InvCausaId=14)
 			)
 			ORDER BY FechaLote DESC
 		";
