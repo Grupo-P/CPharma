@@ -61,7 +61,7 @@
 	    		<h2 class="card-title">
 		    		<span class="card-text text-white">
 		    			<i class="fas fa-file-invoice"></i>
-		    			09	    			
+		    			10	    			
 		    		</span>
 	    		</h2>
 	    		<p class="card-text text-white">Reportes disponibles</p>
@@ -128,7 +128,7 @@
 	    		<p class="card-text text-white">
 	    			<ul>
 	    				<li class="card-text text-white ">
-	    					Ya puedes ver el reporte <b>Productos para surtir</b> te ayudara a saber que productos llegaron dentro de un rango de fechas
+	    					Ya puedes ver el reporte <b>Analitico de precios</b>
 	    				</li>		
 	    			</ul>
 	    		</p>
