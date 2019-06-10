@@ -83,4 +83,4 @@ Route::resource('proveedor', 'ProveedorController');
 
 Route::resource('usuario', 'UserController');
 
-Route::resource('tasa','TasaVentaController');
+Route::resource('tasaVenta','TasaVentaController');

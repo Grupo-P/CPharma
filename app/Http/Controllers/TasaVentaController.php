@@ -20,7 +20,8 @@ class TasaVentaController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function index() {
-        return 'En construccion';
+        //$tasaVenta =  TasaVenta::orderBy('fecha', 'desc')->get();
+        return view('pages.tasaVenta.index', compact('tasaVenta'));
     }
 
     /**
@@ -39,7 +40,20 @@ class TasaVentaController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request) {
-        //
+        /*try{
+            $tasaVenta = new TasaVenta();
+            $tasaVenta->tasa = $request->input('tasa');
+            $tasaVenta->moneda = $request->input('moneda');
+            $tasaVenta->fecha = $request->input('fecha');
+            $tasaVenta->fecha = date('Y-m-d',strtotime($tasaVenta->fecha));
+            $tasaVenta->estatus = 'ACTIVO';
+            $tasaVenta->user = auth()->user()->name;
+            $tasaVenta->save();
+            return redirect()->route('tasaVenta.index')->with('Saved', ' Informacion');
+        }
+        catch(\Illuminate\Database\QueryException $e){
+            return back()->with('Error', ' Error');
+        }*/
     }
 
     /**
@@ -80,6 +94,17 @@ class TasaVentaController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function destroy($id) {
-        //
+        /*$tasaVenta = Dolar::find($id);
+
+         if($tasaVenta->estatus == 'ACTIVO'){
+            $tasaVenta->estatus = 'INACTIVO';
+         }
+         else if($tasaVenta->estatus == 'INACTIVO'){
+            $tasaVenta->estatus = 'ACTIVO';
+         }
+
+         $tasaVenta->user = auth()->user()->name;        
+         $tasaVenta->save();
+         return redirect()->route('tasaVenta.index')->with('Deleted', ' Informacion');*/
     }
 }
