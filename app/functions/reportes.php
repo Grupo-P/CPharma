@@ -71,9 +71,6 @@
 		
 		$conn = ConectarSmartpharma($SedeConnection);
 
-		$sql = QTablaTemp(ClenTable);
-		sqlsrv_query($conn,$sql);
-
 		$sql = QArticulo($IdArticulo);
 		sqlsrv_query($conn,$sql);
 		$result = sqlsrv_query($conn,$sql);
@@ -175,9 +172,6 @@
 	  	echo '
 	  		</tbody>
 		</table>';
-
-		$sql = QTablaTemp(ClenTable);
-		sqlsrv_query($conn,$sql);
 
 		sqlsrv_close($conn);
 	}

@@ -1,5 +1,8 @@
 <?php
-/*
+	/*
+		Tipadado para tablas: CP_NombreQuery
+	 */
+	/*
 		TITULO: QCleanTable
 		PARAMETROS: [$NombreTabla] Nombre de la tabla para preparar
 		FUNCION: Prepara la tabla para su uso
@@ -220,7 +223,7 @@
 			$sql = "
 				SELECT
 				InvLoteAlmacen.InvLoteId
-				INTO TablaTemp
+				INTO CP_QLoteArticulo
 				FROM InvLoteAlmacen
 				WHERE(InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
 				AND (InvLoteAlmacen.InvArticuloId = '$IdArticulo')
@@ -233,7 +236,7 @@
 			$sql = "
 				SELECT
 				InvLoteAlmacen.InvLoteId
-				INTO TablaTemp
+				INTO CP_QLoteArticulo
 				FROM InvLoteAlmacen
 				WHERE(InvLoteAlmacen.InvArticuloId = '$IdArticulo')
 				AND (InvLoteAlmacen.Existencia>0)
@@ -245,7 +248,7 @@
 			$sql = "
 				SELECT
 				InvLoteAlmacen.InvLoteId
-				INTO TablaTemp
+				INTO CP_QLoteArticulo
 				FROM InvLoteAlmacen
 				WHERE(InvLoteAlmacen.InvArticuloId = '$IdArticulo')
 			";
@@ -255,7 +258,7 @@
 	}
 	/*
 		TITULO: QLote
-		PARAMETROS:
+		PARAMETROS: Funciona en conjunto con QLoteArticulo
 		FUNCION: Busca el precio de compra bruto y el precio troquelado
 				 (Funciona en conjunto con QLoteArticulo)
 		RETORNO: Retorna el precio de compra bruto y el precio troquelado
@@ -264,10 +267,10 @@
 		$sql = "
 			SELECT TOP 1
 			InvLote.Id,
-			invlote.M_PrecioCompraBruto,
-			invlote.M_PrecioTroquelado
+			InvLote.M_PrecioCompraBruto,
+			InvLote.M_PrecioTroquelado
 			FROM InvLote
-			INNER JOIN TablaTemp ON TablaTemp.InvLoteId = InvLote.Id
+			INNER JOIN CP_QLoteArticulo ON CP_QLoteArticulo.InvLoteId = InvLote.Id
 			ORDER BY invlote.M_PrecioTroquelado, invlote.M_PrecioCompraBruto DESC
 		";
 		return $sql;

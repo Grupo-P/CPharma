@@ -186,7 +186,7 @@
 		}
 		else {
 		/*PRECIO TROQUELADO*/
-			$sql0 = QTablaTemp(1);
+			$sql0 = QCleanTable('CP_QLoteArticulo');
 			sqlsrv_query($conn,$sql0);
 
 			$sql = QLoteArticulo($IdArticulo,0);
@@ -202,7 +202,7 @@
 			}
 		/*PRECIO CALCULADO*/
 			else {
-				$sql0 = QTablaTemp(1);
+				$sql0 = QCleanTable('CP_QLoteArticulo');
 				sqlsrv_query($conn,$sql0);
 
 				$sql2 = QLoteArticulo($IdArticulo,1);
@@ -223,6 +223,9 @@
 				}
 			}
 		}
+		$sql0 = QCleanTable('CP_QLoteArticulo');
+		sqlsrv_query($conn,$sql0);
+
 		return $Precio;
 	}
 	/*
