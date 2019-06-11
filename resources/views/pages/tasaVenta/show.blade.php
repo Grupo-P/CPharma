@@ -43,6 +43,10 @@
 	    	  	<td>{{$tasaVenta->estatus}}</td>
 		    </tr>
 		    <tr>
+		      	<th scope="row">Usuario</th>
+	    	  	<td>{{$tasaVenta->user}}</td>
+		    </tr>
+		    <tr>
 		      	<th scope="row">Creada</th>
 	    	  	<td>{{$tasaVenta->created_at}}</td>
 		    </tr>

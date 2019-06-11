@@ -41,6 +41,10 @@
 	    	  	<td>{{$dolar->estatus}}</td>
 		    </tr>
 		    <tr>
+		      	<th scope="row">Usuario</th>
+	    	  	<td>{{$dolar->user}}</td>
+		    </tr>
+		    <tr>
 		      	<th scope="row">Creada</th>
 	    	  	<td>{{$dolar->created_at}}</td>
 		    </tr>
