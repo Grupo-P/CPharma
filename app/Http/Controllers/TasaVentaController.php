@@ -88,7 +88,17 @@ class TasaVentaController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id) {
-        //
+        try{
+            $tasaVenta = TasaVenta::find($id);
+            $tasaVenta->fill($request->all());
+            $tasaVenta->fecha = date('Y-m-d',strtotime($tasaVenta->fecha));
+            $tasaVenta->user = auth()->user()->name;
+            $tasaVenta->save();
+            return redirect()->route('tasaVenta.index')->with('Updated', ' Informacion');
+        }
+        catch(\Illuminate\Database\QueryException $e){
+            return back()->with('Error', ' Error');
+        }
     }
 
     /**
