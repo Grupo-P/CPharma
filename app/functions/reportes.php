@@ -11,8 +11,8 @@
 
 		$conn = ConectarSmartpharma($SedeConnection);
 
-		$sql = QTablaTemp(ClenTable);
-		sqlsrv_query($conn,$sql);
+		$sql = QCleanTable('CP_QFRegProveedor');
+		sqlsrv_query($conn,$sql);		
 
 		$sql1 = QFRegProveedor();
 		sqlsrv_query($conn,$sql1);
@@ -53,9 +53,9 @@
 	  		</tbody>
 		</table>';
 
-		$sql = QTablaTemp(ClenTable);
-		sqlsrv_query($conn,$sql);
-
+		$sql3 = QCleanTable('CP_QFRegProveedor');
+		sqlsrv_query($conn,$sql3);
+		
 		sqlsrv_close($conn);
 	}
 	/*****************************************************************************/

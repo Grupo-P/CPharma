@@ -1,4 +1,17 @@
 <?php
+/*
+		TITULO: QCleanTable
+		PARAMETROS: [$NombreTabla] Nombre de la tabla para preparar
+		FUNCION: Prepara la tabla para su uso
+		RETORNO: Tabla preparada para usar
+	 */
+	function QCleanTable($NombreTabla) {		
+		$sql = "
+			IF OBJECT_ID ('".$NombreTabla."', 'U') IS NOT NULL
+				DROP TABLE ".$NombreTabla.";
+		";					
+		return $sql;
+	}
 	/*
 		TITULO: QTablaTemp
 		PARAMETROS: [$Cant] Cantidad de tablas temporales a preparar
@@ -98,7 +111,7 @@
 				FROM ComFactura
 				WHERE ComFactura.ComProveedorId= ComProveedor.Id
 				ORDER BY FechaRegistro DESC) AS FechaRegistro
-			INTO TablaTemp
+			INTO CP_QFRegProveedor
 			FROM ComProveedor
 			INNER JOIN GenPersona ON ComProveedor.GenPersonaId=GenPersona.Id
 			INNER JOIN ComFactura ON ComFactura.ComProveedorId=ComProveedor.Id
@@ -116,11 +129,11 @@
 	function QFRegRangoProveedor() {
 		$sql = "
 			SELECT
-			TablaTemp.Id,
-			TablaTemp.Nombre,
-			TablaTemp.FechaRegistro,
-			DATEDIFF(DAY,CONVERT(DATE,TablaTemp.FechaRegistro),GETDATE()) As RangoDias
-			FROM TablaTemp
+			CP_QFRegProveedor.Id,
+			CP_QFRegProveedor.Nombre,
+			CP_QFRegProveedor.FechaRegistro,
+			DATEDIFF(DAY,CONVERT(DATE,CP_QFRegProveedor.FechaRegistro),GETDATE()) As RangoDias
+			FROM CP_QFRegProveedor
 			ORDER BY RangoDias ASC
 		";
 		return $sql;
