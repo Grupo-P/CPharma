@@ -86,7 +86,7 @@
     <li class="nav-item">
       <a class="nav-link" href="{{ url('/tasaVenta') }}">
         <span data-feather="home"></span>
-        <i class="fas fa-money-bill-alt"></i>
+        <i class="fas fa-credit-card"></i>
         Tasa de venta<span class="sr-only">(current)</span>
       </a>
     </li>
@@ -109,7 +109,7 @@
     <li class="nav-item">
       <a class="nav-link" href="{{ url('/tasaVenta') }}">
         <span data-feather="home"></span>
-        <i class="fas fa-money-bill-alt"></i>
+        <i class="fas fa-credit-card"></i>
         Tasa de venta<span class="sr-only">(current)</span>
       </a>
     </li>
@@ -140,7 +140,7 @@
     <li class="nav-item">
       <a class="nav-link" href="{{ url('/tasaVenta') }}">
         <span data-feather="home"></span>
-        <i class="fas fa-money-bill-alt"></i>
+        <i class="fas fa-credit-card"></i>
         Tasa de venta<span class="sr-only">(current)</span>
       </a>
     </li>
