@@ -108,17 +108,17 @@ class TasaVentaController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function destroy($id) {
-        /*$tasaVenta = Dolar::find($id);
+        $tasaVenta = TasaVenta::find($id);
 
-         if($tasaVenta->estatus == 'ACTIVO'){
+        if($tasaVenta->estatus == 'ACTIVO'){
             $tasaVenta->estatus = 'INACTIVO';
-         }
-         else if($tasaVenta->estatus == 'INACTIVO'){
+        }
+        else if($tasaVenta->estatus == 'INACTIVO'){
             $tasaVenta->estatus = 'ACTIVO';
-         }
+        }
 
-         $tasaVenta->user = auth()->user()->name;        
-         $tasaVenta->save();
-         return redirect()->route('tasaVenta.index')->with('Deleted', ' Informacion');*/
+        $tasaVenta->user = auth()->user()->name;
+        $tasaVenta->save();
+        return redirect()->route('tasaVenta.index')->with('Deleted', ' Informacion');
     }
 }

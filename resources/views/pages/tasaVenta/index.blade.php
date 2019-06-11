@@ -143,10 +143,12 @@
 				      			<i class="fas fa-edit"></i>			      		
 					      	</a>
 					 					  
-					      	<form action="/tasaVenta/{{$tasaV->id}}" method="POST" style="display: inline;">
+					      	<form action="/tasaVenta/{{$tasaV->id}}" method="POST" style="display:inline;">
 							    @method('DELETE')
 							    @csrf					    
-							    <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Desincorporar"><i class="fa fa-reply"></i></button>
+							    <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Desincorporar">
+							    	<i class="fa fa-reply"></i>
+							    </button>
 							</form>
 						<?php
 						}
@@ -155,7 +157,9 @@
 				      	<form action="/tasaVenta/{{$tasaV->id}}" method="POST" style="display: inline;">
 						    @method('DELETE')
 						    @csrf					    
-						    <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Reincorporar"><i class="fa fa-share"></i></button>
+						    <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Reincorporar">
+						    	<i class="fa fa-share"></i>
+						    </button>
 						</form>
 						<?php
 						}					

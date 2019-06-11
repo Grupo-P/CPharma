@@ -62,7 +62,14 @@
               </tr>
               <tr>
                 <th>Moneda</th>
-                <td><input type="text" value="{{$tasaVenta->moneda}}" class="form-control" style="width:100%;" disabled></td>
+                <td>
+                  <select name="moneda" id="moneda" class="form-control" style="width:100%;" required>
+                    <option>Bs.S.</option>
+                    <option>USD $.</option>
+                    <option>COP $.</option>
+                    <option>€.</option>
+                  </select>
+                </td>
               </tr>
               <tr>
                   <th>
