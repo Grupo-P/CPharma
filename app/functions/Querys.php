@@ -314,7 +314,7 @@
 			InvArticulo.Descripcion,
 			COUNT(*) AS VecesVendidasCliente,
 			SUM(VenFacturaDetalle.Cantidad) AS UnidadesVendidasCliente
-			INTO TablaTemp
+			INTO CP_QUnidadesVendidasCliente 
 			FROM VenFacturaDetalle
 			INNER JOIN InvArticulo ON InvArticulo.Id = VenFacturaDetalle.InvArticuloId
 			INNER JOIN VenFactura ON VenFactura.Id = VenFacturaDetalle.VenFacturaId
@@ -340,7 +340,7 @@
 			InvArticulo.Descripcion,
 			COUNT(*) AS VecesDevueltaCliente,
 			SUM(VenDevolucionDetalle.Cantidad) AS UnidadesDevueltaCliente
-			INTO TablaTemp1
+			INTO CP_QUnidadesDevueltaCliente
 			FROM VenDevolucionDetalle
 			INNER JOIN InvArticulo ON InvArticulo.Id = VenDevolucionDetalle.InvArticuloId
 			INNER JOIN VenDevolucion ON VenDevolucion.Id = VenDevolucionDetalle.VenDevolucionId
@@ -367,7 +367,7 @@
 			COUNT(*) AS VecesCompradasProveedor,
 			SUM(ComFacturaDetalle.CantidadFacturada) AS UnidadesCompradasProveedor,
 			CONVERT(DATE,ComFactura.FechaRegistro) AS FechaRegistro
-			INTO TablaTemp2
+			INTO CP_QUnidadesCompradasProveedor
 			FROM ComFacturaDetalle
 			INNER JOIN InvArticulo ON InvArticulo.Id = ComFacturaDetalle.InvArticuloId
 			INNER JOIN ComFactura ON  ComFactura.Id = ComFacturaDetalle.ComFacturaId
@@ -393,7 +393,7 @@
 			InvArticulo.Descripcion,
 			COUNT(*) AS VecesReclamoProveedor,
 			SUM(ComReclamoDetalle.Cantidad) AS UnidadesReclamoProveedor
-			INTO TablaTemp3
+			INTO CP_QUnidadesReclamoProveedor
 			FROM ComReclamoDetalle
 			INNER JOIN InvArticulo ON InvArticulo.Id = ComReclamoDetalle.InvArticuloId
 			INNER JOIN ComReclamo ON ComReclamo.Id = ComReclamoDetalle.ComReclamoId
@@ -412,24 +412,24 @@
 		RETORNO: Tabla con datos integrados con valores 0 para campos NULL
 	 */
 	function QIntegracionProductosVendidos() {
-		$sql = "
+		$sql = " 
 			SELECT
-			TablaTemp.Id,
-			TablaTemp.CodigoArticulo,
-			TablaTemp.Descripcion,
-			ISNULL(TablaTemp.VecesVendidasCliente,CAST(0 AS INT)) AS VecesVendidasCliente,
-			ISNULL(TablaTemp1.VecesDevueltaCliente,CAST(0 AS INT)) AS VecesDevueltaCliente,
-			ISNULL(TablaTemp.UnidadesVendidasCliente,CAST(0 AS INT)) AS UnidadesVendidasCliente,
-			ISNULL(TablaTemp1.UnidadesDevueltaCliente,CAST(0 AS INT)) AS UnidadesDevueltaCliente,
-			ISNULL(TablaTemp2.VecesCompradasProveedor,CAST(0 AS INT)) AS VecesCompradasProveedor,
-			ISNULL(TablaTemp3.VecesReclamoProveedor,CAST(0 AS INT)) AS VecesReclamoProveedor,
-			ISNULL(TablaTemp2.UnidadesCompradasProveedor,CAST(0 AS INT)) AS UnidadesCompradasProveedor,
-			ISNULL(TablaTemp3.UnidadesReclamoProveedor,CAST(0 AS INT)) AS UnidadesReclamoProveedor
-			INTO TablaTemp4
-			FROM TablaTemp
-			LEFT JOIN TablaTemp1 ON TablaTemp1.Id = TablaTemp.Id
-			LEFT JOIN TablaTemp2 ON TablaTemp2.Id = TablaTemp.Id
-			LEFT JOIN TablaTemp3 ON TablaTemp3.Id = TablaTemp.Id
+			CP_QUnidadesVendidasCliente.Id,
+			CP_QUnidadesVendidasCliente.CodigoArticulo,
+			CP_QUnidadesVendidasCliente.Descripcion,
+			ISNULL(CP_QUnidadesVendidasCliente.VecesVendidasCliente,CAST(0 AS INT)) AS VecesVendidasCliente,
+			ISNULL(CP_QUnidadesDevueltaCliente.VecesDevueltaCliente,CAST(0 AS INT)) AS VecesDevueltaCliente,
+			ISNULL(CP_QUnidadesVendidasCliente.UnidadesVendidasCliente,CAST(0 AS INT)) AS UnidadesVendidasCliente,
+			ISNULL(CP_QUnidadesDevueltaCliente.UnidadesDevueltaCliente,CAST(0 AS INT)) AS UnidadesDevueltaCliente,
+			ISNULL(CP_QUnidadesCompradasProveedor.VecesCompradasProveedor,CAST(0 AS INT)) AS VecesCompradasProveedor,
+			ISNULL(CP_QUnidadesReclamoProveedor.VecesReclamoProveedor,CAST(0 AS INT)) AS VecesReclamoProveedor,
+			ISNULL(CP_QUnidadesCompradasProveedor.UnidadesCompradasProveedor,CAST(0 AS INT)) AS UnidadesCompradasProveedor,
+			ISNULL(CP_QUnidadesReclamoProveedor.UnidadesReclamoProveedor,CAST(0 AS INT)) AS UnidadesReclamoProveedor
+			INTO CP_QIntegracionProductosVendidos
+			FROM CP_QUnidadesVendidasCliente
+			LEFT JOIN CP_QUnidadesDevueltaCliente ON CP_QUnidadesDevueltaCliente.Id = CP_QUnidadesVendidasCliente.Id
+			LEFT JOIN CP_QUnidadesCompradasProveedor ON CP_QUnidadesCompradasProveedor.Id = CP_QUnidadesVendidasCliente.Id
+			LEFT JOIN CP_QUnidadesReclamoProveedor ON CP_QUnidadesReclamoProveedor.Id = CP_QUnidadesVendidasCliente.Id
 			ORDER BY UnidadesVendidasCliente DESC
 		";
 		return $sql;
@@ -443,22 +443,22 @@
 	function QProductoMasVendido($Top) {
 		$sql = "
 			SELECT TOP $Top
-			TablaTemp4.Id,
-			TablaTemp4.CodigoArticulo,
-			TablaTemp4.Descripcion,
-			TablaTemp4.VecesVendidasCliente,
-			TablaTemp4.VecesDevueltaCliente,
+			CP_QIntegracionProductosVendidos.Id,
+			CP_QIntegracionProductosVendidos.CodigoArticulo,
+			CP_QIntegracionProductosVendidos.Descripcion,
+			CP_QIntegracionProductosVendidos.VecesVendidasCliente,
+			CP_QIntegracionProductosVendidos.VecesDevueltaCliente,
 			ISNULL((VecesVendidasCliente-VecesDevueltaCliente),0) AS TotalVecesVendidasCliente,
-			TablaTemp4.UnidadesVendidasCliente,
-			TablaTemp4.UnidadesDevueltaCliente,
+			CP_QIntegracionProductosVendidos.UnidadesVendidasCliente,
+			CP_QIntegracionProductosVendidos.UnidadesDevueltaCliente,
 			ISNULL((UnidadesVendidasCliente-UnidadesDevueltaCliente),0) AS TotalUnidadesVendidasCliente,
-			TablaTemp4.VecesCompradasProveedor,
-			TablaTemp4.VecesReclamoProveedor,
+			CP_QIntegracionProductosVendidos.VecesCompradasProveedor,
+			CP_QIntegracionProductosVendidos.VecesReclamoProveedor,
 			ISNULL((VecesCompradasProveedor-VecesReclamoProveedor),0) AS TotalVecesCompradasProveedor,
-			TablaTemp4.UnidadesCompradasProveedor,
-			TablaTemp4.UnidadesReclamoProveedor,
+			CP_QIntegracionProductosVendidos.UnidadesCompradasProveedor,
+			CP_QIntegracionProductosVendidos.UnidadesReclamoProveedor,
 			ISNULL((UnidadesCompradasProveedor-UnidadesReclamoProveedor),0) AS TotalUnidadesCompradasProveedor
-			FROM TablaTemp4
+			FROM CP_QIntegracionProductosVendidos
 			ORDER BY TotalUnidadesVendidasCliente DESC
 		";
 		return $sql;
