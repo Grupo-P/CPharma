@@ -3,6 +3,8 @@
 namespace compras\Http\Controllers;
 
 use Illuminate\Http\Request;
+use compras\TasaVenta;
+use compras\User;
 
 class TasaVentaController extends Controller {
     /**
@@ -20,7 +22,7 @@ class TasaVentaController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function index() {
-        //$tasaVenta =  TasaVenta::orderBy('fecha', 'desc')->get();
+        $tasaVenta = TasaVenta::orderBy('fecha', 'desc')->get();
         return view('pages.tasaVenta.index', compact('tasaVenta'));
     }
 
@@ -30,7 +32,7 @@ class TasaVentaController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function create() {
-        //
+        return view('pages.tasaVenta.create');
     }
 
     /**
@@ -40,7 +42,7 @@ class TasaVentaController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request) {
-        /*try{
+        try{
             $tasaVenta = new TasaVenta();
             $tasaVenta->tasa = $request->input('tasa');
             $tasaVenta->moneda = $request->input('moneda');
@@ -53,7 +55,7 @@ class TasaVentaController extends Controller {
         }
         catch(\Illuminate\Database\QueryException $e){
             return back()->with('Error', ' Error');
-        }*/
+        }
     }
 
     /**
@@ -63,7 +65,8 @@ class TasaVentaController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function show($id) {
-        //
+        $tasaVenta = TasaVenta::find($id);
+        return view('pages.tasaVenta.show', compact('tasaVenta'));
     }
 
     /**
@@ -73,7 +76,8 @@ class TasaVentaController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function edit($id) {
-        //
+        $tasaVenta = TasaVenta::find($id);
+        return view('pages.tasaVenta.edit', compact('tasaVenta'));
     }
 
     /**

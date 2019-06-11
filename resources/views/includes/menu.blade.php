@@ -62,6 +62,7 @@
     Proveedor <span class="sr-only">(current)</span>
   </a>
 </li>
+
 <li class="nav-item">
   <a class="nav-link" href="{{ url('/sede') }}">
     <span data-feather="home"></span>
@@ -78,11 +79,19 @@
       <a class="nav-link" href="{{ url('/dolar') }}">
         <span data-feather="home"></span>
         <i class="fas fa-money-bill-alt"></i>
-        Tasa<span class="sr-only">(current)</span>
+        Tasa de mercado<span class="sr-only">(current)</span>
       </a>
-    </li> 
+    </li>
+
+    <li class="nav-item">
+      <a class="nav-link" href="{{ url('/tasaVenta') }}">
+        <span data-feather="home"></span>
+        <i class="fas fa-money-bill-alt"></i>
+        Tasa de venta<span class="sr-only">(current)</span>
+      </a>
+    </li>
 <?php
-}
+  }
 ?>
 
 <?php
@@ -93,9 +102,18 @@
       <a class="nav-link" href="{{ url('/dolar') }}">
         <span data-feather="home"></span>
         <i class="fas fa-money-bill-alt"></i>
-        Tasa<span class="sr-only">(current)</span>
+        Tasa de mercado<span class="sr-only">(current)</span>
       </a>
     </li>
+
+    <li class="nav-item">
+      <a class="nav-link" href="{{ url('/tasaVenta') }}">
+        <span data-feather="home"></span>
+        <i class="fas fa-money-bill-alt"></i>
+        Tasa de venta<span class="sr-only">(current)</span>
+      </a>
+    </li>
+
     <li class="nav-item">
       <a class="nav-link" href="{{ url('/usuario') }}">
         <span data-feather="home"></span>
@@ -104,7 +122,7 @@
       </a>
     </li>
 <?php
-}
+  }
 ?>
 
 <?php
@@ -115,9 +133,18 @@
       <a class="nav-link" href="{{ url('/dolar') }}">
         <span data-feather="home"></span>
         <i class="fas fa-money-bill-alt"></i>
-        Tasa<span class="sr-only">(current)</span>
+        Tasa de mercado<span class="sr-only">(current)</span>
       </a>
     </li>
+
+    <li class="nav-item">
+      <a class="nav-link" href="{{ url('/tasaVenta') }}">
+        <span data-feather="home"></span>
+        <i class="fas fa-money-bill-alt"></i>
+        Tasa de venta<span class="sr-only">(current)</span>
+      </a>
+    </li>
+
     <li class="nav-item">
       <a class="nav-link" href="{{ url('/usuario') }}">
         <span data-feather="home"></span>
@@ -125,13 +152,15 @@
         Usuario<span class="sr-only">(current)</span>
       </a>
     </li>
+
     <li class="nav-item">
       <a class="nav-link" href="{{ url('/testS') }}">
         <span data-feather="home"></span>
         <i class="fas fa-box"></i>
         Test Sergio<span class="sr-only">(current)</span>
       </a>
-    </li> 
+    </li>
+
     <li class="nav-item">
       <a class="nav-link" href="{{ url('/testM') }}">
         <span data-feather="home"></span>
@@ -140,5 +169,5 @@
       </a>
     </li> 
 <?php
-}
+  }
 ?>

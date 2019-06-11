@@ -1,7 +1,7 @@
 @extends('layouts.model')
 
 @section('title')
-    Tasa
+    Tasa Mercado
 @endsection
 
 @section('scriptsHead')
@@ -81,7 +81,7 @@
 
 	<h1 class="h5 text-info">
 		<i class="fas fa-money-bill-alt"></i>
-		Tasa
+		Tasa de mercado
 	</h1>
 	
 	<hr class="row align-items-start col-12">
