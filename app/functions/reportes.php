@@ -311,7 +311,15 @@
 		$FFinalImpresion= $FFinal;
 		$FFinal = date("Y-m-d",strtotime($FFinal."+ 1 days"));
 
-		$sql = QTablaTemp(ClenTable);
+		$sql = QCleanTable('CP_QUnidadesVendidasCliente');
+		sqlsrv_query($conn,$sql);
+		$sql = QCleanTable('CP_QUnidadesDevueltaCliente');
+		sqlsrv_query($conn,$sql);
+		$sql = QCleanTable('CP_QUnidadesCompradasProveedor');
+		sqlsrv_query($conn,$sql);
+		$sql = QCleanTable('CP_QUnidadesReclamoProveedor');
+		sqlsrv_query($conn,$sql);
+		$sql = QCleanTable('CP_QIntegracionProductosVendidos');
 		sqlsrv_query($conn,$sql);
 
 		$sql1 = QUnidadesVendidasCliente($FInicial,$FFinal);
@@ -414,7 +422,15 @@
 	  		</tbody>
 		</table>';
 		
-		$sql = QTablaTemp(ClenTable);
+		$sql = QCleanTable('CP_QUnidadesVendidasCliente');
+		sqlsrv_query($conn,$sql);
+		$sql = QCleanTable('CP_QUnidadesDevueltaCliente');
+		sqlsrv_query($conn,$sql);
+		$sql = QCleanTable('CP_QUnidadesCompradasProveedor');
+		sqlsrv_query($conn,$sql);
+		$sql = QCleanTable('CP_QUnidadesReclamoProveedor');
+		sqlsrv_query($conn,$sql);
+		$sql = QCleanTable('CP_QIntegracionProductosVendidos');
 		sqlsrv_query($conn,$sql);
 
 		sqlsrv_close($conn);

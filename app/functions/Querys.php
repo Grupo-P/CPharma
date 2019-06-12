@@ -472,22 +472,22 @@
 	function QProductoMenosVendido($Top) {
 		$sql = "
 			SELECT TOP $Top
-			TablaTemp4.Id,
-			TablaTemp4.CodigoArticulo,
-			TablaTemp4.Descripcion,
-			TablaTemp4.VecesVendidasCliente,
-			TablaTemp4.VecesDevueltaCliente,
+			CP_QIntegracionProductosVendidos.Id,
+			CP_QIntegracionProductosVendidos.CodigoArticulo,
+			CP_QIntegracionProductosVendidos.Descripcion,
+			CP_QIntegracionProductosVendidos.VecesVendidasCliente,
+			CP_QIntegracionProductosVendidos.VecesDevueltaCliente,
 			ISNULL((VecesVendidasCliente-VecesDevueltaCliente),0) AS TotalVecesVendidasCliente,
-			TablaTemp4.UnidadesVendidasCliente,
-			TablaTemp4.UnidadesDevueltaCliente,
+			CP_QIntegracionProductosVendidos.UnidadesVendidasCliente,
+			CP_QIntegracionProductosVendidos.UnidadesDevueltaCliente,
 			ISNULL((UnidadesVendidasCliente-UnidadesDevueltaCliente),0) AS TotalUnidadesVendidasCliente,
-			TablaTemp4.VecesCompradasProveedor,
-			TablaTemp4.VecesReclamoProveedor,
+			CP_QIntegracionProductosVendidos.VecesCompradasProveedor,
+			CP_QIntegracionProductosVendidos.VecesReclamoProveedor,
 			ISNULL((VecesCompradasProveedor-VecesReclamoProveedor),0) AS TotalVecesCompradasProveedor,
-			TablaTemp4.UnidadesCompradasProveedor,
-			TablaTemp4.UnidadesReclamoProveedor,
+			CP_QIntegracionProductosVendidos.UnidadesCompradasProveedor,
+			CP_QIntegracionProductosVendidos.UnidadesReclamoProveedor,
 			ISNULL((UnidadesCompradasProveedor-UnidadesReclamoProveedor),0) AS TotalUnidadesCompradasProveedor
-			FROM TablaTemp4
+			FROM CP_QIntegracionProductosVendidos
 			ORDER BY TotalUnidadesVendidasCliente ASC
 		";
 		return $sql;
