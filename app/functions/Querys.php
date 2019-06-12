@@ -983,19 +983,22 @@
 			FROM InvLoteAlmacen
 			INNER JOIN InvAlmacen ON InvAlmacen.Id=InvLoteAlmacen.InvAlmacenId
 			INNER JOIN InvLote ON InvLote.Id=InvLoteAlmacen.InvLoteId
-			INNER JOIN InvMovimiento ON InvMovimiento.InvLoteId=InvLoteAlmacen.InvLoteId
+			INNER JOIN InvMovimiento ON InvMovimiento.InvLoteId = InvLoteAlmacen.InvLoteId
 			INNER JOIN InvCausa ON InvMovimiento.InvCausaId=InvCausa.Id
 			WHERE(
-				(InvLoteAlmacen.InvArticuloId='$IdArticulo') 
-				AND (InvLoteAlmacen.Existencia>0) 
+				(InvLoteAlmacen.InvArticuloId='$IdArticulo')
+				AND (InvLoteAlmacen.Existencia>0)
 				AND (CONVERT(DATE,InvMovimiento.Auditoria_FechaCreacion)=CONVERT(DATE,InvLoteAlmacen.Auditoria_FechaCreacion)) 
-				AND (InvMovimiento.InvCausaId=1 
+				AND (
+					InvMovimiento.InvCausaId=1 
 					OR InvMovimiento.InvCausaId=5
 					OR InvMovimiento.InvCausaId=7
 					OR InvMovimiento.InvCausaId=9
 					OR InvMovimiento.InvCausaId=11
-					OR InvMovimiento.InvCausaId=14)
+					OR InvMovimiento.InvCausaId=14
+				)
 			)
+			GROUP BY InvLoteAlmacen.InvLoteId,InvLoteAlmacen.Auditoria_FechaCreacion,Existencia,CodigoAlmacen,InvLote.Auditoria_Usuario,M_PrecioCompraBruto,InvMovimiento.InvCausaId,InvCausa.Descripcion
 			ORDER BY FechaLote DESC
 		";
 		return $sql;
