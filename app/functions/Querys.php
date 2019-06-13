@@ -502,39 +502,39 @@
 	function QIntegracionProductosFalla() {
 		$sql="
 			SELECT
-			TablaTemp4.Id,
-			TablaTemp4.CodigoArticulo,
-			TablaTemp4.Descripcion,
-			TablaTemp4.VecesVendidasCliente,
-			TablaTemp4.VecesDevueltaCliente,
+			CP_QIntegracionProductosVendidos.Id,
+			CP_QIntegracionProductosVendidos.CodigoArticulo,
+			CP_QIntegracionProductosVendidos.Descripcion,
+			CP_QIntegracionProductosVendidos.VecesVendidasCliente,
+			CP_QIntegracionProductosVendidos.VecesDevueltaCliente,
 			ISNULL((VecesVendidasCliente-VecesDevueltaCliente),0) AS TotalVecesVendidasCliente,
-			TablaTemp4.UnidadesVendidasCliente,
-			TablaTemp4.UnidadesDevueltaCliente,
+			CP_QIntegracionProductosVendidos.UnidadesVendidasCliente,
+			CP_QIntegracionProductosVendidos.UnidadesDevueltaCliente,
 			ISNULL((UnidadesVendidasCliente-UnidadesDevueltaCliente),0) AS TotalUnidadesVendidasCliente,
-			TablaTemp4.VecesCompradasProveedor,
-			TablaTemp4.VecesReclamoProveedor,
+			CP_QIntegracionProductosVendidos.VecesCompradasProveedor,
+			CP_QIntegracionProductosVendidos.VecesReclamoProveedor,
 			ISNULL((VecesCompradasProveedor-VecesReclamoProveedor),0) AS TotalVecesCompradasProveedor,
-			TablaTemp4.UnidadesCompradasProveedor,
-			TablaTemp4.UnidadesReclamoProveedor,
+			CP_QIntegracionProductosVendidos.UnidadesCompradasProveedor,
+			CP_QIntegracionProductosVendidos.UnidadesReclamoProveedor,
 			ISNULL((UnidadesCompradasProveedor-UnidadesReclamoProveedor),0) AS TotalUnidadesCompradasProveedor,
 			SUM(InvLoteAlmacen.Existencia) AS Existencia
-			INTO TablaTemp5
-			FROM TablaTemp4
-			INNER JOIN InvLoteAlmacen ON InvLoteAlmacen.InvArticuloId = TablaTemp4.Id
+			INTO CP_QIntegracionProductosFalla			
+			FROM CP_QIntegracionProductosVendidos
+			INNER JOIN InvLoteAlmacen ON InvLoteAlmacen.InvArticuloId = CP_QIntegracionProductosVendidos.Id
 			WHERE(InvLoteAlmacen.InvAlmacenId = 1 or InvLoteAlmacen.InvAlmacenId = 2)
 			GROUP BY
-			TablaTemp4.Id,
-			TablaTemp4.CodigoArticulo,
-			TablaTemp4.Descripcion,
-			TablaTemp4.VecesVendidasCliente,
-			TablaTemp4.VecesDevueltaCliente,
-			TablaTemp4.UnidadesVendidasCliente,
-			TablaTemp4.UnidadesDevueltaCliente,
-			TablaTemp4.VecesCompradasProveedor,
-			TablaTemp4.VecesReclamoProveedor,
-			TablaTemp4.UnidadesCompradasProveedor,
-			TablaTemp4.UnidadesReclamoProveedor
-			ORDER BY TablaTemp4.UnidadesVendidasCliente DESC
+			CP_QIntegracionProductosVendidos.Id,
+			CP_QIntegracionProductosVendidos.CodigoArticulo,
+			CP_QIntegracionProductosVendidos.Descripcion,
+			CP_QIntegracionProductosVendidos.VecesVendidasCliente,
+			CP_QIntegracionProductosVendidos.VecesDevueltaCliente,
+			CP_QIntegracionProductosVendidos.UnidadesVendidasCliente,
+			CP_QIntegracionProductosVendidos.UnidadesDevueltaCliente,
+			CP_QIntegracionProductosVendidos.VecesCompradasProveedor,
+			CP_QIntegracionProductosVendidos.VecesReclamoProveedor,
+			CP_QIntegracionProductosVendidos.UnidadesCompradasProveedor,
+			CP_QIntegracionProductosVendidos.UnidadesReclamoProveedor
+			ORDER BY CP_QIntegracionProductosVendidos.UnidadesVendidasCliente DESC
 		";
 		return $sql;
 	}
@@ -546,9 +546,9 @@
 	 */
 	function QProductosFalla() {
 		$sql = "
-			SELECT * FROM TablaTemp5
-			WHERE TablaTemp5.Existencia = 0
-			ORDER BY TablaTemp5.TotalUnidadesVendidasCliente DESC
+			SELECT * FROM CP_QIntegracionProductosFalla
+			WHERE CP_QIntegracionProductosFalla.Existencia = 0
+			ORDER BY CP_QIntegracionProductosFalla.TotalUnidadesVendidasCliente DESC
 		";
 		return $sql;
 	}
@@ -956,7 +956,6 @@
 		";
 		return $sql;
 	}
-
 	/*
 		TITULO: QTiempoEnTienda
 		PARAMETROS: [$IdArticulo] Id del articulo actual
