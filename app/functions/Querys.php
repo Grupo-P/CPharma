@@ -314,7 +314,8 @@
 			InvArticulo.Descripcion,
 			COUNT(*) AS VecesVendidasCliente,
 			SUM(VenFacturaDetalle.Cantidad) AS UnidadesVendidasCliente
-			INTO CP_QUnidadesVendidasCliente 
+			INTO CP_QUnidadesVendidasCliente
+			--TablaTemp
 			FROM VenFacturaDetalle
 			INNER JOIN InvArticulo ON InvArticulo.Id = VenFacturaDetalle.InvArticuloId
 			INNER JOIN VenFactura ON VenFactura.Id = VenFacturaDetalle.VenFacturaId
@@ -341,6 +342,7 @@
 			COUNT(*) AS VecesDevueltaCliente,
 			SUM(VenDevolucionDetalle.Cantidad) AS UnidadesDevueltaCliente
 			INTO CP_QUnidadesDevueltaCliente
+			--TablaTemp1
 			FROM VenDevolucionDetalle
 			INNER JOIN InvArticulo ON InvArticulo.Id = VenDevolucionDetalle.InvArticuloId
 			INNER JOIN VenDevolucion ON VenDevolucion.Id = VenDevolucionDetalle.VenDevolucionId
@@ -368,6 +370,7 @@
 			SUM(ComFacturaDetalle.CantidadFacturada) AS UnidadesCompradasProveedor,
 			CONVERT(DATE,ComFactura.FechaRegistro) AS FechaRegistro
 			INTO CP_QUnidadesCompradasProveedor
+			--TablaTemp2
 			FROM ComFacturaDetalle
 			INNER JOIN InvArticulo ON InvArticulo.Id = ComFacturaDetalle.InvArticuloId
 			INNER JOIN ComFactura ON  ComFactura.Id = ComFacturaDetalle.ComFacturaId
@@ -394,6 +397,7 @@
 			COUNT(*) AS VecesReclamoProveedor,
 			SUM(ComReclamoDetalle.Cantidad) AS UnidadesReclamoProveedor
 			INTO CP_QUnidadesReclamoProveedor
+			--TablaTemp3
 			FROM ComReclamoDetalle
 			INNER JOIN InvArticulo ON InvArticulo.Id = ComReclamoDetalle.InvArticuloId
 			INNER JOIN ComReclamo ON ComReclamo.Id = ComReclamoDetalle.ComReclamoId
@@ -426,6 +430,7 @@
 			ISNULL(CP_QUnidadesCompradasProveedor.UnidadesCompradasProveedor,CAST(0 AS INT)) AS UnidadesCompradasProveedor,
 			ISNULL(CP_QUnidadesReclamoProveedor.UnidadesReclamoProveedor,CAST(0 AS INT)) AS UnidadesReclamoProveedor
 			INTO CP_QIntegracionProductosVendidos
+			--TablaTemp4
 			FROM CP_QUnidadesVendidasCliente
 			LEFT JOIN CP_QUnidadesDevueltaCliente ON CP_QUnidadesDevueltaCliente.Id = CP_QUnidadesVendidasCliente.Id
 			LEFT JOIN CP_QUnidadesCompradasProveedor ON CP_QUnidadesCompradasProveedor.Id = CP_QUnidadesVendidasCliente.Id
@@ -518,7 +523,8 @@
 			CP_QIntegracionProductosVendidos.UnidadesReclamoProveedor,
 			ISNULL((UnidadesCompradasProveedor-UnidadesReclamoProveedor),0) AS TotalUnidadesCompradasProveedor,
 			SUM(InvLoteAlmacen.Existencia) AS Existencia
-			INTO CP_QIntegracionProductosFalla			
+			INTO CP_QIntegracionProductosFalla
+			--TablaTemp5		
 			FROM CP_QIntegracionProductosVendidos
 			INNER JOIN InvLoteAlmacen ON InvLoteAlmacen.InvArticuloId = CP_QIntegracionProductosVendidos.Id
 			WHERE(InvLoteAlmacen.InvAlmacenId = 1 or InvLoteAlmacen.InvAlmacenId = 2)
@@ -559,8 +565,8 @@
 		FUNCION: Buscar un articulo segun su descripcion
 		RETORNO: Caracteristicas del articulo
 	 */
-	function QArticuloDescLike($DescripLike,$TablaTemp) {
-		switch($TablaTemp) {
+	function QArticuloDescLike($DescripLike,$IntoTabla) {
+		switch($IntoTabla) {
 			case '0':
 			$sql = "
 				SELECT
@@ -568,7 +574,8 @@
 				InvArticulo.CodigoArticulo,
 				InvArticulo.Descripcion,
 				InvArticulo.FinConceptoImptoIdCompra AS ConceptoImpuesto
-				INTO TablaTemp6
+				INTO CP_QArticuloDescLike
+				--TablaTemp6
 				FROM InvArticulo
 				WHERE InvArticulo.Descripcion LIKE '%$DescripLike%'
 				ORDER BY InvArticulo.Descripcion ASC
@@ -601,9 +608,9 @@
 		$sql="
 			SELECT TOP 1
 			InvLote.Id,
-			invlote.M_PrecioCompraBruto,
-			invlote.M_PrecioTroquelado,
-			CONVERT(DATE,invlote.FechaEntrada) AS UltimoLote
+			InvLote.M_PrecioCompraBruto,
+			InvLote.M_PrecioTroquelado,
+			CONVERT(DATE,InvLote.FechaEntrada) AS UltimoLote
 			FROM InvLote
 			WHERE InvLote.InvArticuloId  = '$IdArticulo'
 			ORDER BY UltimoLote DESC
@@ -638,17 +645,17 @@
 	function QPedidoProductos() {
 		$sql="
 			SELECT
-			TablaTemp6.Id,
-			TablaTemp6.CodigoArticulo,
-			TablaTemp6.Descripcion,
-			TablaTemp6.ConceptoImpuesto,
-			ISNULL((TablaTemp5.TotalVecesVendidasCliente),0) AS TotalVecesVendidasCliente,
-			ISNULL((TablaTemp5.TotalUnidadesVendidasCliente),0) AS TotalUnidadesVendidasCliente,
-			ISNULL((TablaTemp5.TotalVecesCompradasProveedor),0) AS TotalVecesCompradasProveedor,
-			ISNULL((TablaTemp5.TotalUnidadesCompradasProveedor),0) AS TotalUnidadesCompradasProveedor
-			FROM TablaTemp6
-			LEFT JOIN TablaTemp5 ON TablaTemp5.Id = TablaTemp6.Id
-			ORDER BY TablaTemp6.Descripcion ASC
+			CP_QArticuloDescLike.Id,
+			CP_QArticuloDescLike.CodigoArticulo,
+			CP_QArticuloDescLike.Descripcion,
+			CP_QArticuloDescLike.ConceptoImpuesto,
+			ISNULL((CP_QIntegracionProductosFalla.TotalVecesVendidasCliente),0) AS TotalVecesVendidasCliente,
+			ISNULL((CP_QIntegracionProductosFalla.TotalUnidadesVendidasCliente),0) AS TotalUnidadesVendidasCliente,
+			ISNULL((CP_QIntegracionProductosFalla.TotalVecesCompradasProveedor),0) AS TotalVecesCompradasProveedor,
+			ISNULL((CP_QIntegracionProductosFalla.TotalUnidadesCompradasProveedor),0) AS TotalUnidadesCompradasProveedor
+			FROM CP_QArticuloDescLike
+			LEFT JOIN CP_QIntegracionProductosFalla ON CP_QIntegracionProductosFalla.Id = CP_QArticuloDescLike.Id
+			ORDER BY CP_QArticuloDescLike.Descripcion ASC
 		";
 		return $sql;
 	}
