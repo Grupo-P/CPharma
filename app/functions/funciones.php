@@ -292,13 +292,16 @@
 	 */
 	function ProductoUnico($conn,$IdArticulo,$IdProveedor) {
 		$Unico = '';
-
-		$sql0 = QTablaTempR(2,4);
+		
+		$sql = QCleanTable('QFacturasProducto');
+		sqlsrv_query($conn,$sql);
+		$sql = QCleanTable('CP_QProvedorUnico');
+		sqlsrv_query($conn,$sql);			
+		
 		$sql1 = QFacturasProducto($IdArticulo);
 		$sql2 = QProvedorUnico($IdProveedor);
 		$sql3 = QProvedorUnicoLista();
-
-		sqlsrv_query($conn,$sql0);
+		
 		sqlsrv_query($conn,$sql1);
 		sqlsrv_query($conn,$sql2);
 
@@ -314,6 +317,12 @@
 		else {
 			$Unico = 'NO';
 		}
+
+		$sql = QCleanTable('QFacturasProducto');
+		sqlsrv_query($conn,$sql);
+		$sql = QCleanTable('CP_QProvedorUnico');
+		sqlsrv_query($conn,$sql);
+
 	  	return $Unico;
 	}
 	/*
