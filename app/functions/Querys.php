@@ -1029,6 +1029,27 @@
 		return $sql;
 	}
 
+	function QProveedorYCantidadComprada2($IdArticulo,$FechaLote,$PrecioBruto) {
+		$sql = "
+			SELECT
+				GenPersona.Nombre,
+				ComFacturaDetalle.CantidadRecibidaFactura,
+				ComFacturaDetalle.M_PrecioCompraBruto
+			FROM InvArticulo
+			INNER JOIN ComFacturaDetalle ON InvArticulo.Id=ComFacturaDetalle.InvArticuloId
+			INNER JOIN ComFactura ON ComFactura.Id=ComFacturaDetalle.ComFacturaId
+			INNER JOIN ComProveedor ON ComProveedor.Id=ComFactura.ComProveedorId
+			INNER JOIN GenPersona ON GenPersona.Id=ComProveedor.GenPersonaId
+			WHERE(
+				(InvArticulo.Id = '$IdArticulo') 
+				AND (CONVERT(DATE,ComFactura.FechaRegistro)='$FechaLote')
+				AND ComFacturaDetalle.M_PrecioCompraBruto=$PrecioBruto
+			)
+			ORDER BY ComFactura.FechaRegistro DESC
+		";
+		return $sql;
+	}
+
 	/*
 		TITULO: 
 		PARAMETROS: 
