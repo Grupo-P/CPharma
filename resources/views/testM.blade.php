@@ -5,12 +5,68 @@
 @endsection
 
 @section('content')
+<hr class="row align-items-start col-12">
+
   <h1 class="h5 text-info">
     <i class="fas fa-money-bill-alt"></i>
     Interfaz de venta
   </h1>
 
   <hr class="row align-items-start col-12">
+
+  
+  <table class="table table-striped table-bordered col-12 sortable">
+
+    <thead class="thead-dark">
+      <tr>
+          <th scope="col" colspan="2">Cuadre</th>
+          <th scope="col" colspan="2">Informaci&oacute;n</th>
+      </tr>
+
+    </thead>
+
+    <tbody>
+
+      <tr>
+        <td scope="col">
+          <label for="">Total Factura Bs (Con IVA) #1:</label>
+          </br></br>
+        </td>
+        <td>
+          <label for="">Total</label>
+        </td>
+
+        <td>
+          <label for="">vol1</label>
+        </td>
+        <td>
+          <label for="">vol2</label>
+        </td>
+      </tr>
+
+      <tr>
+        <td>
+          <label for="">Total Factura Bs () #1:</label>  
+        </td>
+        <td>
+          <label for="">a Bs () #1:</label>  
+        </td>
+
+        <td>
+          <label for="">vol1</label>
+        </td>
+        <td>
+          <label for="">vol2</label>
+        </td>
+
+      </tr>
+
+    </tbody>
+  </table>
+
+
+   </br></br></br></br></br>
+
 
   <table class="table table-striped table-bordered col-6 sortable">
     <thead class="thead-dark">
@@ -22,19 +78,19 @@
       <tr>
         <td>
           <label for="">Total Factura Bs (Con IVA) #1:</label>
-          <input type="text" style="width:60%;">
+          <input type="text" style="width:50%;">
         </td>
       </tr>
       <tr>
         <td>
           <label for="">Total Factura Bs (Con IVA) #2:</label>
-          <input type="text" style="width:60%;">
+          <input type="text" style="width:50%;">
         </td>
       </tr>
       <tr>
         <td>
           <label for="">Total Factura Bs (Con IVA) #3:</label>
-          <input type="text" style="width:60%;">
+          <input type="text" style="width:50%;">
         </td>
       </tr>
     </tbody>

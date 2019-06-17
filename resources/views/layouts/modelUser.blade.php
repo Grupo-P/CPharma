@@ -1,27 +1,29 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-  <!-- Cabecera: inclusion de librerias -->
-  <head>    
-      @include('includes.head')
-  </head>
+    <!-- Cabecera: inclusion de librerias -->
+    <head>    
+        @include('includes.head')
+    </head>
 
-  <body>
-    <header>
-      <h4 style="display:block; font-size:30px; margin:16px; cursor:default;" class="text-info">
-        <b><i class="fas fa-syringe text-success"></i>CPharma</b>
-      </h4>
-    </header>
+    <!-- Cuerpo: Contenido de la pagina -->    
+    <body>
+        <!-- Contenedor inicial para el cuerpo de la pagina -->
+        <div class="container">
+            <!-- Cabecera: Inicio de la pagina -->
+            <header>
+                @include('includes.header')
+            </header>
 
-    <div class="container">
-      <div class="row">
-        @yield('content')
-      </div>
-    </div>
-    
-    <!-- Pie: Final de la pagina  class="fixed-bottom"-->
-    <footer>
-        @include('includes.footer')
-    </footer>
-        @yield('scriptsFoot')
-  </body>
+            <!-- Cuerpo: Donde se edita y cambia todo el contenido -->
+            <article class="mx-auto my-auto">
+                @yield('content')
+            </article> 
+
+            <!-- Pie: Final de la pagina -->
+            <footer class="fixed-bottom">
+                @include('includes.footer')
+            </footer>
+
+        </div>
+    </body>
 </html>
