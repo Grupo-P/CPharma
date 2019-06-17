@@ -1463,7 +1463,7 @@
 				if($row2["InvCausaId"]==1) {
 					echo '<td align="center">Compra</td>';
 
-					$sql3=QProveedorYCantidadComprada($IdArticulo,$FechaVariable);
+					$sql3=QProveedorYCantidadComprada2($IdArticulo,$FechaVariable,$PrecioBruto);
 					$result3=sqlsrv_query($conn,$sql3);
 					$row3=sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
 
