@@ -7,23 +7,20 @@
 
     <!-- Cuerpo: Contenido de la pagina -->    
     <body>
+        <!-- Cabecera: Inicio de la pagina -->
+        <header>
+            @include('includes.header')
+        </header>
+
         <!-- Contenedor inicial para el cuerpo de la pagina -->
         <div class="container">
-            <!-- Cabecera: Inicio de la pagina -->
-            <header>
-                @include('includes.header')
-            </header>
-
             <!-- Cuerpo: Donde se edita y cambia todo el contenido -->
-            <article class="mx-auto my-auto">
-                @yield('content')
-            </article> 
-
-            <!-- Pie: Final de la pagina -->
-            <footer class="fixed-bottom">
-                @include('includes.footer')
-            </footer>
-
+            @yield('content')
         </div>
+
+        <!-- Pie: Final de la pagina -->
+        <footer>
+            @include('includes.footer')
+        </footer>
     </body>
 </html>
