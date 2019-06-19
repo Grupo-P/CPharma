@@ -6,7 +6,14 @@
 
 <style>
   .derecha {text-align:right;}
+  .amarillo {background-color:#FCE80F !important;}
 </style>
+
+<script>
+  var inputs=document.getElementsByClassName('form-control');
+
+  window.onload=escribir;
+</script>
 
 @section('content')
   <hr class="row align-items-start col-12">
@@ -16,7 +23,7 @@
   </h5>
   <hr class="row align-items-start col-12">
 
-  <form name="cuadre" action="" method="POST" class="form-group text-center" enctype="multipart/form-data">
+  <form name="cuadre" action="#" class="form-group text-center">
     @csrf
     <table class="table table-borderless table-hover">
       <thead>
@@ -35,7 +42,7 @@
             Total Factura Bs (Con IVA) #1:
           </td>
           <td>
-            <input type="text" class="form-control">
+            <input type="number" step="0.01" min="0" class="form-control amarillo">
           </td>
           <td colspan="2">* Cuando el cliente aun deba algo se marcara el saldo en color rojo!</td>
         </tr>
@@ -45,7 +52,7 @@
             Total Factura Bs (Con IVA) #2:
           </td>
           <td>
-            <input type="text" class="form-control">
+            <input type="number" step="0.01" min="0" class="form-control amarillo">
           </td>
           <td colspan="2">* Pendiente con el monto de la tasa, asegurarse de actualizarla cada dia.</td>
         </tr>
@@ -55,7 +62,7 @@
             Total Factura Bs (Con IVA) #3:
           </td>
           <td>
-            <input type="text" class="form-control">
+            <input type="number" step="0.01" min="0" class="form-control amarillo">
           </td>
           <td colspan="2">* El campo decimales solo acepta numeros entre 0 y 2.</td>
         </tr>
@@ -65,7 +72,7 @@
             Total Facturas Bs (Con IVA):
           </td>
           <td>
-            <input type="text" class="form-control">
+            <input type="text" class="form-control" disabled>
           </td>
           <td colspan="2">* El campo Tasa de Cambio Acepta numeros mayores a Bs 4500<br> y menores a Bs 10000.</td>
         </tr>
@@ -75,7 +82,7 @@
             Total Factura $:
           </td>
           <td>
-            <input type="text" class="form-control">
+            <input type="text" class="form-control" disabled>
           </td>
           <td colspan="2">* El campo de Abonos en $ acepta montos mayores o iguales a 0 y menores<br>a 2000$.</td>
         </tr>
@@ -90,17 +97,17 @@
             Abono #1 en $:
           </td>
           <td>
-            <input type="text" class="form-control">
+            <input type="number" step="0.01" min="0" class="form-control amarillo" >
           </td>
           <td colspan="2">* Importante en Saldo restante en $ NO se le debe cobrar al cliente,<br>sino lo reflejado en el recuadro final.</td>
         </tr>
 
         <tr>
           <td class="derecha">
-            Abono #2 en $:
+            Abono #2 en Bs.S:
           </td>
           <td>
-            <input type="text" class="form-control">
+            <input type="number" step="0.01" min="0" class="form-control amarillo">
           </td>
           <td colspan="2">* Todos los pagos del cliente se debe relacionar en los abonos y buscar<br>el saldo quede en 0 o cercano a 0.</td>
         </tr>
@@ -110,7 +117,7 @@
             Conversion Abono #1 en Bs:
           </td>
           <td>
-            <input type="text" class="form-control">
+            <input type="text" class="form-control" disabled>
           </td>
           <td colspan="2">* La tolerancia del vuelto lo que valida es el monto minimo para generar<br>un vuelto al cliente.</td>
         </tr>
@@ -120,7 +127,7 @@
             Total Abonos Bs:
           </td>
           <td>
-            <input type="text" class="form-control">
+            <input type="text" class="form-control" disabled>
           </td>
           <td colspan="2">* El campo Fecha Tasa debe ser de hoy de lo contrario la hoja no permite<br> ser usada.</td>
         </tr>
@@ -135,13 +142,13 @@
             Saldo Restante en Bs:
           </td>
           <td>
-            <input type="text" class="form-control">
+            <input type="text" class="form-control" disabled>
           </td>
           <td class="derecha">
             Tasa de Cambio:
           </td>
           <td>
-            <input type="text" class="form-control">
+            <input type="text" class="form-control amarillo">
           </td>
         </tr>
 
@@ -150,13 +157,13 @@
             Saldo Restante en $:
           </td>
           <td>
-            <input type="text" class="form-control">
+            <input type="text" class="form-control" disabled>
           </td>
           <td class="derecha">
             Fecha Tasa de Cambio:
           </td>
           <td>
-            <input type="text" class="form-control">
+            <input type="text" class="form-control amarillo">
           </td>
         </tr>
 
@@ -166,7 +173,7 @@
             Cantidad Decimales:
           </td>
           <td>
-            <input type="text" class="form-control">
+            <input type="text" class="form-control amarillo">
           </td>
         </tr>
 
@@ -178,12 +185,12 @@
             Tolerancia Vuelto en Bs:
           </td>
           <td>
-            <input type="text" class="form-control">
+            <input type="text" class="form-control amarillo">
           </td>
         </tr>
       </tbody>
     </table>
 
-    <button type="submit" class="btn btn-danger">Borrar y empezar de nuevo</button>
+    <button type="reset" class="btn btn-danger">Borrar y empezar de nuevo</button>
   </form>
 @endsection
