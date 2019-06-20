@@ -6,12 +6,19 @@
 
 <script>
   function calcularFactura() {
-    var fac1=0,fac2=0,fac3=0,totalFacBs=0,totalFacDs=0,tasa=0;
+    var fac1=0,
+        fac2=0,
+        fac3=0,
+        totalFacBs=0,
+        totalFacDs=0,
+        tasa=0,
+        decimales=0;
 
     fac1=parseFloat(document.getElementById('fac1').value);
     fac2=parseFloat(document.getElementById('fac2').value);
     fac3=parseFloat(document.getElementById('fac3').value);
     tasa = parseFloat(document.getElementById('tasa').value);
+    decimales = parseInt(document.getElementById('decimales').value);
 
     if(fac1<0 || fac2<0 || fac3<0) {
       alert("No se admiten valores negativos.");
@@ -66,10 +73,10 @@
       totalFacBs = fac1 + fac2 + fac3;
     }
 
-    totalFacDs = parseFloat(totalFacBs).toFixed(2) / tasa;
+    totalFacDs = parseFloat(totalFacBs).toFixed(decimales) / tasa;
 
-    document.getElementById('totalFacBs').value = parseFloat(totalFacBs).toFixed(2);
-    document.getElementById('totalFacDs').value = parseFloat(totalFacDs).toFixed(2);
+    document.getElementById('totalFacBs').value = parseFloat(totalFacBs).toFixed(decimales);
+    document.getElementById('totalFacDs').value = parseFloat(totalFacDs).toFixed(decimales);
   }
 </script>
 
@@ -231,7 +238,7 @@
             Cantidad Decimales:
           </td>
           <td>
-            <input type="number" min="0" max="2" placeholder="0" id="decimales" class="form-control text-center bg-warning">
+            <input type="number" min="0" max="2" placeholder="0" value="2" id="decimales" class="form-control text-center bg-warning">
           </td>
         </tr>
 
