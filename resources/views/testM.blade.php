@@ -6,13 +6,7 @@
 
 <script>
   function calcularFactura() {
-    var fac1=0,
-        fac2=0,
-        fac3=0,
-        totalFacBs=0,
-        totalFacDs=0,
-        tasa=0,
-        decimales=0;
+    var fac1=0,fac2=0,fac3=0,totalFacBs=0,totalFacDs=0,tasa=0,decimales=0;
 
     fac1=parseFloat(document.getElementById('fac1').value);
     fac2=parseFloat(document.getElementById('fac2').value);
@@ -77,6 +71,46 @@
 
     document.getElementById('totalFacBs').value = parseFloat(totalFacBs).toFixed(decimales);
     document.getElementById('totalFacDs').value = parseFloat(totalFacDs).toFixed(decimales);
+  }
+
+  function calcularAbono() {
+    var abono1=0,abono2=0,convAbono1=0,totalAbonos=0,tasa=0,decimales=0;
+
+    abono1 = parseFloat(document.getElementById('abono1').value);
+    abono2 = parseFloat(document.getElementById('abono2').value);
+    tasa = parseFloat(document.getElementById('tasa').value);
+    decimales = parseInt(document.getElementById('decimales').value);
+
+    if(abono1<0 || abono2<0) {
+      alert("No se admiten valores negativos.");
+      if(abono1<0) {
+        document.getElementById('abono1').value=0;
+        abono1=0;
+      }
+
+      if(abono2<0) {
+        document.getElementById('abono2').value=0;
+        abono2=0;
+      }
+    }
+
+    if(!isNaN(convAbono1)) {
+      convAbono1 = abono1*tasa;
+      totalAbonos=convAbono1;
+      if(!isNaN(abono2)) {
+        totalAbonos = convAbono1+abono2;
+      }
+    }
+
+    if(!isNaN(abono2)) {
+      totalAbonos=abono2;
+      if(!isNaN(convAbono1)) {
+        totalAbonos = convAbono1+abono2;
+      }
+    }
+
+    document.getElementById('convAbono1').value = parseFloat(convAbono1).toFixed(decimales);
+    document.getElementById('totalAbonos').value = parseFloat(totalAbonos).toFixed(decimales);
   }
 </script>
 
@@ -162,7 +196,7 @@
             Abono #1 en $:
           </td>
           <td>
-            <input type="number" step="0.01" min="0" placeholder="0,00" class="form-control text-center bg-warning" >
+            <input type="number" step="0.01" min="0" placeholder="0,00" id="abono1" class="form-control text-center bg-warning" onblur="calcularAbono();">
           </td>
           <td colspan="2">* Importante en Saldo restante en $ NO se le debe cobrar al cliente,<br>sino lo reflejado en el recuadro final.</td>
         </tr>
@@ -172,7 +206,7 @@
             Abono #2 en Bs:
           </td>
           <td>
-            <input type="number" step="0.01" min="0" placeholder="0,00" class="form-control text-center bg-warning">
+            <input type="number" step="0.01" min="0" placeholder="0,00" id="abono2" class="form-control text-center bg-warning" onblur="calcularAbono();">
           </td>
           <td colspan="2">* Todos los pagos del cliente se debe relacionar en los abonos y buscar<br>el saldo quede en 0 o cercano a 0.</td>
         </tr>
@@ -182,7 +216,7 @@
             Conversion Abono #1 en Bs:
           </td>
           <td>
-            <input type="number" step="0.01" min="0" placeholder="0,00" class="form-control text-center" disabled>
+            <input type="number" step="0.01" min="0" placeholder="0,00" id="convAbono1" class="form-control text-center" disabled>
           </td>
           <td colspan="2">* La tolerancia del vuelto lo que valida es el monto minimo para generar<br>un vuelto al cliente.</td>
         </tr>
@@ -192,7 +226,7 @@
             Total Abonos Bs:
           </td>
           <td>
-            <input type="number" step="0.01" min="0" placeholder="0,00" class="form-control text-center" disabled>
+            <input type="number" step="0.01" min="0" placeholder="0,00" id="totalAbonos" class="form-control text-center" disabled>
           </td>
           <td colspan="2">* El campo Fecha Tasa debe ser de hoy de lo contrario la hoja no permite<br> ser usada.</td>
         </tr>
