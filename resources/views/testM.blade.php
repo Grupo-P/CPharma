@@ -109,8 +109,29 @@
       }
     }
 
+    var totalFacBs=0,saldoRestanteBs=0,saldoRestanteDs=0,resultado='';
+
+    totalFacBs=parseFloat(document.getElementById('totalFacBs').value);
+
+    saldoRestanteBs = totalFacBs-totalAbonos;
+    saldoRestanteDs = saldoRestanteBs/tasa;
+
     document.getElementById('convAbono1').value = parseFloat(convAbono1).toFixed(decimales);
     document.getElementById('totalAbonos').value = parseFloat(totalAbonos).toFixed(decimales);
+    document.getElementById('saldoRestanteBs').value = parseFloat(saldoRestanteBs).toFixed(decimales);
+    document.getElementById('saldoRestanteDs').value = parseFloat(saldoRestanteDs).toFixed(decimales);
+
+    var tolerancia=parseFloat(document.getElementById('tolerancia').value);
+
+    if(saldoRestanteBs>0) {
+      document.getElementById('resultado').value = "El cliente debe: Bs. "+saldoRestanteBs;
+    }
+    else if(saldoRestanteBs<((-1)*tolerancia)) {
+      document.getElementById('resultado').value = "Hay un vuelto pendiente de: Bs. "+saldoRestanteBs;
+    }
+    else {
+      document.getElementById('resultado').value = "-";
+    }
   }
 </script>
 
@@ -241,13 +262,13 @@
             Saldo Restante en Bs:
           </td>
           <td>
-            <input type="number" step="0.01" min="0" placeholder="0,00" class="form-control text-center" disabled>
+            <input type="number" step="0.01" min="0" placeholder="0,00" id="saldoRestanteBs" class="form-control text-center" disabled>
           </td>
           <td class="text-right">
             Tasa de Cambio:
           </td>
           <td>
-            <input type="number" step="0.01" min="0" placeholder="0,00" value="7200" id="tasa" class="form-control text-center bg-warning">
+            <input type="number" step="0.01" min="0" placeholder="0,00" value="7200" id="tasa" class="form-control text-center bg-warning" disabled>
           </td>
         </tr>
 
@@ -256,13 +277,13 @@
             Saldo Restante en $:
           </td>
           <td>
-            <input type="number" step="0.01" min="0" placeholder="0,00" class="form-control text-center" disabled>
+            <input type="number" step="0.01" min="0" placeholder="0,00" id="saldoRestanteDs" class="form-control text-center" disabled>
           </td>
           <td class="text-right">
             Fecha Tasa de Cambio:
           </td>
           <td>
-            <input type="date" id="fecha" class="form-control text-center bg-warning">
+            <input type="date" value="2019-06-20" id="fecha" class="form-control text-center bg-warning" disabled>
           </td>
         </tr>
 
@@ -272,19 +293,19 @@
             Cantidad Decimales:
           </td>
           <td>
-            <input type="number" min="0" max="2" placeholder="0" value="2" id="decimales" class="form-control text-center bg-warning">
+            <input type="number" min="0" max="2" placeholder="0" value="2" id="decimales" class="form-control text-center bg-warning" disabled>
           </td>
         </tr>
 
         <tr>
           <td colspan="2">
-            <input type="number" step="0.01" min="0" placeholder="0,00" class="form-control text-center" disabled>
+            <input type="text" placeholder="-" class="form-control text-center" id="resultado" disabled>
           </td>
           <td class="text-right">
             Tolerancia Vuelto en Bs:
           </td>
           <td>
-            <input type="number" step="0.01" min="0" placeholder="0,00" id="tolerancia" class="form-control text-center bg-warning">
+            <input type="number" step="0.01" min="0" placeholder="0,00" value="200" id="tolerancia" class="form-control text-center bg-warning" disabled>
           </td>
         </tr>
       </tbody>
