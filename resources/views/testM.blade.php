@@ -5,12 +5,13 @@
 @endsection
 
 <script>
-  function calcular() {
-    var fac1=0,fac2=0,fac3=0,totalFacBs=0,totalFacDs=0;
+  function calcularFactura() {
+    var fac1=0,fac2=0,fac3=0,totalFacBs=0,totalFacDs=0,tasa=0;
 
     fac1=parseFloat(document.getElementById('fac1').value);
     fac2=parseFloat(document.getElementById('fac2').value);
     fac3=parseFloat(document.getElementById('fac3').value);
+    tasa = parseFloat(document.getElementById('tasa').value);
 
     if(fac1<0 || fac2<0 || fac3<0) {
       alert("No se admiten valores negativos.");
@@ -65,7 +66,10 @@
       totalFacBs = fac1 + fac2 + fac3;
     }
 
-    document.getElementById('totalFacBs').value = parseFloat(totalFacBs.toFixed(2));
+    totalFacDs = parseFloat(totalFacBs).toFixed(2) / tasa;
+
+    document.getElementById('totalFacBs').value = parseFloat(totalFacBs).toFixed(2);
+    document.getElementById('totalFacDs').value = parseFloat(totalFacDs).toFixed(2);
   }
 </script>
 
@@ -96,7 +100,7 @@
             Total Factura Bs (Con IVA) #1:
           </td>
           <td>
-            <input type="number" step="0.01" min="0" placeholder="0,00" id="fac1" class="form-control text-center bg-warning" autofocus onblur="calcular();">
+            <input type="number" step="0.01" min="0" placeholder="0,00" id="fac1" class="form-control text-center bg-warning" autofocus onblur="calcularFactura();">
           </td>
           <td colspan="2">* Cuando el cliente aun deba algo se marcara el saldo en color rojo!</td>
         </tr>
@@ -106,7 +110,7 @@
             Total Factura Bs (Con IVA) #2:
           </td>
           <td>
-            <input type="number" step="0.01" min="0" placeholder="0,00" id="fac2" class="form-control text-center bg-warning" onblur="calcular();">
+            <input type="number" step="0.01" min="0" placeholder="0,00" id="fac2" class="form-control text-center bg-warning" onblur="calcularFactura();">
           </td>
           <td colspan="2">* Pendiente con el monto de la tasa, asegurarse de actualizarla cada dia.</td>
         </tr>
@@ -116,7 +120,7 @@
             Total Factura Bs (Con IVA) #3:
           </td>
           <td>
-            <input type="number" step="0.01" min="0" placeholder="0,00" id="fac3" class="form-control text-center bg-warning" onblur="calcular();">
+            <input type="number" step="0.01" min="0" placeholder="0,00" id="fac3" class="form-control text-center bg-warning" onblur="calcularFactura();">
           </td>
           <td colspan="2">* El campo decimales solo acepta numeros entre 0 y 2.</td>
         </tr>
@@ -202,7 +206,7 @@
             Tasa de Cambio:
           </td>
           <td>
-            <input type="number" step="0.01" min="0" placeholder="0,00" id="tasa" class="form-control text-center bg-warning">
+            <input type="number" step="0.01" min="0" placeholder="0,00" value="7200" id="tasa" class="form-control text-center bg-warning">
           </td>
         </tr>
 
