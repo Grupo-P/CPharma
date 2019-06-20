@@ -122,15 +122,19 @@
     document.getElementById('saldoRestanteDs').value = parseFloat(saldoRestanteDs).toFixed(decimales);
 
     var tolerancia=parseFloat(document.getElementById('tolerancia').value);
+    var resultado=document.getElementById('resultado');
 
     if(saldoRestanteBs>0) {
-      document.getElementById('resultado').value = "El cliente debe: Bs. "+saldoRestanteBs;
+      document.getElementById('resultado').value = "El cliente debe: Bs. "+saldoRestanteBs.toFixed(decimales);
+      resultado.className += " bg-danger";
     }
     else if(saldoRestanteBs<((-1)*tolerancia)) {
-      document.getElementById('resultado').value = "Hay un vuelto pendiente de: Bs. "+saldoRestanteBs;
+      document.getElementById('resultado').value = "Hay un vuelto pendiente de: Bs. "+saldoRestanteBs.toFixed(decimales);
+      resultado.classList.remove("bg-danger");
     }
     else {
       document.getElementById('resultado').value = "-";
+      resultado.classList.remove("bg-danger");
     }
   }
 </script>
