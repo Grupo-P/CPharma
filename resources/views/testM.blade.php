@@ -194,7 +194,8 @@
     Cuadre de conversiones de facturas y pagos
   </h5>
   <hr class="row align-items-start col-12">
-
+  
+  <a name="calculo-conversiones"></a>
   <form name="cuadre" class="form-group">
     <table class="table table-borderless table-hover">
       <thead class="thead-dark">
@@ -360,9 +361,9 @@
           </td>
 
           <td class="text-center">
-            <button type="button" class="btn btn-primary">
+            <a href="#ver-manual" title="Ir al manual de usuario" class="btn btn-primary">
               Ver manual de usuario
-            </button>
+            </a>
           </td>
         </tr>
       </tbody>
@@ -370,7 +371,8 @@
   </form>
 
   <br><br><br><br>
-
+  
+  <a name="ver-manual"></a>
   <table class="table table-bordered table-striped">
     <thead class="thead-dark">
       <th scope="col">
@@ -442,6 +444,12 @@
       </tr>
     </tbody>
   </table>
+
+  <div class="text-center">
+    <a href="#calculo-conversiones" title="Volver al inicio" class="btn btn-primary">
+      Volver al inicio
+    </a>
+  </div>
 @endsection
 
 @section('scriptsHead')
