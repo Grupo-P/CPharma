@@ -27,7 +27,8 @@
    */
   
   function limpiarClases() {
-    document.getElementById('resultado').value = "-";
+    var resultado=document.getElementById('resultado');
+    resultado.value = "-";
     resultado.classList.remove("bg-danger", "text-white");
   }
 
