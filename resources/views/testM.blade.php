@@ -25,6 +25,11 @@
     return numero;
   }
    */
+  
+  function limpiarClases() {
+    document.getElementById('resultado').value = "-";
+    resultado.classList.remove("bg-danger", "text-white");
+  }
 
   function calcularFactura() {
     var fac1=0,fac2=0,fac3=0,totalFacBs=0,totalFacDs=0,tasa=0,decimales=0;
@@ -358,7 +363,7 @@
     </table>
 
     <div class="text-center">
-      <button type="reset" class="btn btn-danger">
+      <button type="reset" class="btn btn-danger" onclick="limpiarClases();">
         Borrar y empezar de nuevo
       </button>
     </div>
