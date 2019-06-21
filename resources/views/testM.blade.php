@@ -92,6 +92,27 @@
 
     document.getElementById('totalFacBs').value = parseFloat(totalFacBs).toFixed(decimales);
     document.getElementById('totalFacDs').value = parseFloat(totalFacDs).toFixed(decimales);
+
+    var tolerancia=parseFloat(document.getElementById('tolerancia').value);
+    var resultado=document.getElementById('resultado');
+    var saldoRestanteBs=parseFloat(totalFacBs).toFixed(decimales);
+    var saldoRestanteDs=parseFloat(totalFacDs).toFixed(decimales);
+
+    document.getElementById('saldoRestanteBs').value = saldoRestanteBs;
+    document.getElementById('saldoRestanteDs').value = saldoRestanteDs;
+
+    if(saldoRestanteBs>0) {
+      document.getElementById('resultado').value = "El cliente debe: Bs. "+saldoRestanteBs;
+      resultado.classList.add("bg-danger", "text-white");
+    }
+    else if(saldoRestanteBs<((-1)*tolerancia)) {
+      document.getElementById('resultado').value = "Hay un vuelto pendiente de: Bs. "+saldoRestanteBs;
+      resultado.classList.remove("bg-danger", "text-white");
+    }
+    else {
+      document.getElementById('resultado').value = "-";
+      resultado.classList.remove("bg-danger", "text-white");
+    }
   }
 
   function calcularAbono() {
@@ -115,7 +136,7 @@
       }
     }
 
-    if(!isNaN(convAbono1)) {
+    if(!isNaN(abono1)) {
       convAbono1 = abono1*tasa;
       totalAbonos=convAbono1;
       if(!isNaN(abono2)) {
