@@ -5,6 +5,27 @@
 @endsection
 
 <script>
+  /*
+  function redondear(numero,decimales) {
+    var parteEntera=0,parteDecimal=0;
+
+    parteEntera=parseInt(numero);
+    parteDecimal=numero-parteEntera;
+
+    switch(decimales) {
+      case 1: parteDecimal*=10; break;
+      case 2: parteDecimal*=100; break;
+    }
+    
+    parteDecimal=Math.ceil(parteDecimal);
+
+    var nuevoDecimal=parteDecimal/100;
+    numero=parteEntera+nuevoDecimal;
+
+    return numero;
+  }
+   */
+
   function calcularFactura() {
     var fac1=0,fac2=0,fac3=0,totalFacBs=0,totalFacDs=0,tasa=0,decimales=0;
 
@@ -126,15 +147,15 @@
 
     if(saldoRestanteBs>0) {
       document.getElementById('resultado').value = "El cliente debe: Bs. "+saldoRestanteBs.toFixed(decimales);
-      resultado.className += " bg-danger";
+      resultado.classList.add("bg-danger", "text-white");
     }
     else if(saldoRestanteBs<((-1)*tolerancia)) {
       document.getElementById('resultado').value = "Hay un vuelto pendiente de: Bs. "+saldoRestanteBs.toFixed(decimales);
-      resultado.classList.remove("bg-danger");
+      resultado.classList.remove("bg-danger", "text-white");
     }
     else {
       document.getElementById('resultado').value = "-";
-      resultado.classList.remove("bg-danger");
+      resultado.classList.remove("bg-danger", "text-white");
     }
   }
 </script>
@@ -272,7 +293,7 @@
             Tasa de Cambio:
           </td>
           <td>
-            <input type="number" step="0.01" min="0" placeholder="0,00" value="7200" id="tasa" class="form-control text-center bg-warning" disabled>
+            <input type="number" step="0.01" min="0" placeholder="0,00" value="7400" id="tasa" class="form-control text-center bg-warning" disabled>
           </td>
         </tr>
 
@@ -287,7 +308,7 @@
             Fecha Tasa de Cambio:
           </td>
           <td>
-            <input type="date" value="2019-06-20" id="fecha" class="form-control text-center bg-warning" disabled>
+            <input type="date" value="2019-06-21" id="fecha" class="form-control text-center bg-warning" disabled>
           </td>
         </tr>
 
