@@ -191,15 +191,15 @@
   <hr class="row align-items-start col-12">
   <h5 class="text-info">
     <i class="fas fa-money-bill-alt"></i>
-    Interfaz de venta
+    Cuadre de conversiones de facturas y pagos
   </h5>
   <hr class="row align-items-start col-12">
 
   <form name="cuadre" class="form-group">
     <table class="table table-bordered table-hover">
-      <thead>
-        <th scope="col" colspan="2" class="text-center bg-success">
-          <b>Cuadre de Conversiones de Facturas y Pagos</b></th>
+      <thead class="thead-dark">
+        <th scope="col" colspan="2">
+          <b>C&Aacute;LCULO DE CONVERSIONES</b></th>
         <th scope="col" colspan="2"><b>INFORMACI&Oacute;N</b></th>
       </thead>
     
