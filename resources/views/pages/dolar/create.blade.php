@@ -1,7 +1,7 @@
 @extends('layouts.model')
 
 @section('title')
-    Tasa
+    Tasa mercado
 @endsection
 
 @section('content')
@@ -29,7 +29,7 @@
 
     <h1 class="h5 text-info">
         <i class="fas fa-plus"></i>
-        Agregar tasa
+        Agregar tasa de mercado
     </h1>
 
     <hr class="row align-items-start col-12">
@@ -62,7 +62,7 @@
                   Fecha
                 </th>
                 <td>
-                  <input id="fecha" type="date" name="fecha" required style="width:100%; class="form-control">
+                  <input id="fecha" type="date" name="fecha" required style="width:100%;" class="form-control">
                 </td>
             </tr>
         </tbody>

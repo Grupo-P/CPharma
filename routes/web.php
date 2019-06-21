@@ -11,61 +11,61 @@
 |
 */
 
-Route::get('/', function () {
+Route::get('/', function() {
     return view('welcome');
 });
 
 Auth::routes();
 
-Route::get('/testS', function () {
+Route::get('/testS', function() {
     return view('testS');
 });
 
-Route::get('/testM', function () {
+Route::get('/testM', function() {
     return view('testM');
 });
 
-Route::get('/sede', function () {
+Route::get('/sede', function() {
     return view('pages.sedes');
 });
 
-Route::get('/reporte', function () {
+Route::get('/reporte', function() {
     return view('pages.reportes');
 });
 
-Route::get('/reporte1', function () {
+Route::get('/reporte1', function() {
     return view('pages.reporte.reporte1');
 });
 
-Route::get('/reporte2', function () {
+Route::get('/reporte2', function() {
     return view('pages.reporte.reporte2');
 });
 
-Route::get('/reporte3', function () {
+Route::get('/reporte3', function() {
     return view('pages.reporte.reporte3');
 });
 
-Route::get('/reporte4', function () {
+Route::get('/reporte4', function() {
     return view('pages.reporte.reporte4');
 });
 
-Route::get('/reporte5', function () {
+Route::get('/reporte5', function() {
     return view('pages.reporte.reporte5');
 });
 
-Route::get('/reporte6', function () {
+Route::get('/reporte6', function() {
     return view('pages.reporte.reporte6');
 });
 
-Route::get('/reporte7', function () {
+Route::get('/reporte7', function() {
     return view('pages.reporte.reporte7');
 });
 
-Route::get('/reporte8', function () {
+Route::get('/reporte8', function() {
     return view('pages.reporte.reporte8');
 });
 
-Route::get('/reporte9', function () {
+Route::get('/reporte9', function() {
     return view('pages.reporte.reporte9');
 });
 
@@ -82,3 +82,5 @@ Route::resource('empresa', 'EmpresaController');
 Route::resource('proveedor', 'ProveedorController');
 
 Route::resource('usuario', 'UserController');
+
+Route::resource('tasaVenta','TasaVentaController');

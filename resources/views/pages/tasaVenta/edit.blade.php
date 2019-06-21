@@ -1,17 +1,19 @@
 @extends('layouts.model')
 
 @section('title')
-    Tasa mercado
+    Tasa venta
 @endsection
 
 @section('content')
 <!-- Modal Guardar -->
-    @if (session('Error'))
+    @if(session('Error'))
         <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
           <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
               <div class="modal-header">
-                <h5 class="modal-title text-danger" id="exampleModalCenterTitle"><i class="fas fa-exclamation-triangle text-danger"></i>{{ session('Error') }}</h5>
+                <h5 class="modal-title text-danger" id="exampleModalCenterTitle">
+                  <i class="fas fa-exclamation-triangle text-danger"></i>{{ session('Error') }}
+                </h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
                 </button>
@@ -29,43 +31,55 @@
 
     <h1 class="h5 text-info">
         <i class="fas fa-edit"></i>
-        Modificar tasa de mercado
+        Modificar tasa de venta
     </h1>
 
     <hr class="row align-items-start col-12">
 
-    <form action="/dolar/" method="POST" style="display: inline;">  
+    <form action="/tasaVenta/" method="POST" style="display:inline;">  
         @csrf                       
-        <button type="submit" name="Regresar" role="button" class="btn btn-outline-info btn-sm"data-placement="top"><i class="fa fa-reply">&nbsp;Regresar</i></button>
+        <button type="submit" name="Regresar" role="button" class="btn btn-outline-info btn-sm"data-placement="top">
+          <i class="fa fa-reply">&nbsp;Regresar</i>
+        </button>
     </form>
 
     <br>
     <br>
 
-    {!! Form::model($dolar, ['route' => ['dolar.update', $dolar], 'method' => 'PUT']) !!}
+    {!! Form::model($tasaVenta, ['route' => ['tasaVenta.update', $tasaVenta], 'method' => 'PUT']) !!}
     <fieldset>
-
         <table class="table table-borderless table-striped">
-        <thead class="thead-dark">
-            <tr>
-                <th scope="row"></th>
-                <th scope="row"></th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <th scope="row">{!! Form::label('tasa', 'Tasa') !!}</th>
-                <td>{!! Form::text('tasa', null, [ 'class' => 'form-control', 'placeholder' => 'xx.xx', 'autofocus', 'required']) !!}</td>
-            </tr>
-            <tr>
-                <th>
-                  Fecha
-                </th>
+          <thead class="thead-dark">
+              <tr>
+                  <th scope="row"></th>
+                  <th scope="row"></th>
+              </tr>
+          </thead>
+          <tbody>
+              <tr>
+                  <th scope="row">{!! Form::label('tasa', 'Tasa') !!}</th>
+                  <td>{!! Form::text('tasa', null, [ 'class' => 'form-control', 'placeholder' => 'xx.xx', 'autofocus', 'required']) !!}</td>
+              </tr>
+              <tr>
+                <th>Moneda</th>
                 <td>
-                  <input id="fecha" type="date" name="fecha" required style="width:100%;" class="form-control">
+                  <select name="moneda" id="moneda" class="form-control" style="width:100%;" required>
+                    <option>Bs.S.</option>
+                    <option>USD $.</option>
+                    <option>COP $.</option>
+                    <option>€.</option>
+                  </select>
                 </td>
-            </tr>
-        </tbody>
+              </tr>
+              <tr>
+                  <th>
+                    Fecha
+                  </th>
+                  <td>
+                    <input id="fecha" type="date" name="fecha" class="form-control" style="width:100%;" required>
+                  </td>
+              </tr>
+          </tbody>
         </table>
         {!! Form::submit('Guardar', ['class' => 'btn btn-outline-success btn-md']) !!}
     </fieldset>

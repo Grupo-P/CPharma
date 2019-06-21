@@ -1,7 +1,7 @@
 @extends('layouts.model')
 
 @section('title')
-    Tasa Mercado
+    Tasa Venta
 @endsection
 
 @section('scriptsHead')
@@ -80,20 +80,21 @@
 	@endif
 
 	<h1 class="h5 text-info">
-		<i class="fas fa-money-bill-alt"></i>
-		Tasa de mercado
+		<i class="fas fa-credit-card"></i>
+		Tasa de venta
 	</h1>
 	
 	<hr class="row align-items-start col-12">
 	<table style="width:100%;">
 	    <tr>
-	        <td style="width:10%;" align="center">	
-				<a href="{{ url('/dolar/create') }}" role="button" class="btn btn-outline-info btn-sm" 
+	    	{{--SOLO PARA CASOS DONDE SE NECESITE AGREGAR UNA NUEVA MONEDA--}}
+	        {{-- <td style="width:10%;" align="center">	
+				<a href="{{ url('/tasaVenta/create') }}" role="button" class="btn btn-outline-info btn-sm" 
 				style="display: inline; text-align: left;">
 				<i class="fa fa-plus"></i>
 					Agregar		      		
 				</a>
-	        </td>
+	        </td> --}}
 	        <td style="width:90%;">
 	        	<div class="input-group md-form form-sm form-1 pl-0">
 				  <div class="input-group-prepend">
@@ -113,78 +114,82 @@
 		      	<th scope="col">#</th>
 		      	<th scope="col">Fecha</th>
 		      	<th scope="col">Tasa</th>
+		      	<th scope="col">Moneda</th>
 		      	<th scope="col">Estatus</th>
 		      	<th scope="col">Acciones</th>
 		    </tr>
 	  	</thead>
 	  	<tbody>
-		@foreach($dolars as $dolar)
-		    <tr>
-		      <th>{{$dolar->id}}</th>
-		      {{-- <td>{{$dolar->fecha}}</td> --}}
-		      <td>{{date('Y-m-d',strtotime($dolar->fecha))}}</td>
-		      <td>{{$dolar->tasa}}</td>
-		      <td>{{$dolar->estatus}}</td>
-		    <!-- Inicio Validacion de ROLES -->
-		      <td style="width:140px;">
-				
-				<?php
-				if(Auth::user()->role == 'MASTER' || Auth::user()->role == 'DEVELOPER'){
-				?>
-
+	  		@foreach($tasaVenta as $tasaV)
+			    <tr>
+			      <th>{{$tasaV->id}}</th>
+			      <td>{{date('Y-m-d',strtotime($tasaV->fecha))}}</td>
+			      <td>{{$tasaV->tasa}}</td>
+			      <td>{{$tasaV->moneda}}</td>
+			      <td>{{$tasaV->estatus}}</td>
+			    <!-- Inicio Validacion de ROLES -->
+			      <td style="width:140px;">
 					<?php
-					if($dolar->estatus == 'ACTIVO'){
+						if(Auth::user()->role == 'MASTER' || Auth::user()->role == 'DEVELOPER'){
 					?>
-						<a href="/dolar/{{$dolar->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
+
+						<?php
+							if($tasaV->estatus == 'ACTIVO'){
+						?>
+							<a href="/tasaVenta/{{$tasaV->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
+				      			<i class="far fa-eye"></i>			      		
+				      		</a>
+
+				      		<a href="/tasaVenta/{{$tasaV->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
+				      			<i class="fas fa-edit"></i>			      		
+					      	</a>
+					 					  
+					      	<form action="/tasaVenta/{{$tasaV->id}}" method="POST" style="display:inline;">
+							    @method('DELETE')
+							    @csrf					    
+							    <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Desincorporar">
+							    	<i class="fa fa-reply"></i>
+							    </button>
+							</form>
+						<?php
+						}
+						else if($tasaV->estatus == 'INACTIVO'){
+						?>		
+				      	<form action="/tasaVenta/{{$tasaV->id}}" method="POST" style="display: inline;">
+						    @method('DELETE')
+						    @csrf					    
+						    <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Reincorporar">
+						    	<i class="fa fa-share"></i>
+						    </button>
+						</form>
+						<?php
+						}					
+						?>
+					<?php	
+					} 
+					else if(Auth::user()->role == 'SUPERVISOR' || Auth::user()->role == 'ADMINISTRADOR'){
+					?>
+						<a href="/tasaVenta/{{$tasaV->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
 			      			<i class="far fa-eye"></i>			      		
 			      		</a>
 
-			      		<a href="/dolar/{{$dolar->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
-			      			<i class="fas fa-edit"></i>			      		
-				      	</a>
-				 					  
-				      	<form action="/dolar/{{$dolar->id}}" method="POST" style="display: inline;">
-						    @method('DELETE')
-						    @csrf					    
-						    <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Desincorporar"><i class="fa fa-reply"></i></button>
-						</form>
+			      		<a href="/tasaVenta/{{$tasaV->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
+			      			<i class="fas fa-edit"></i>
+		      			</a>
+					<?php
+					} 
+					else if(Auth::user()->role == 'USUARIO'){
+					?>
+						<a href="/tasaVenta/{{$tasaV->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
+			      			<i class="far fa-eye"></i>			      		
+			      		</a>		
 					<?php
 					}
-					else if($dolar->estatus == 'INACTIVO'){
-					?>		
-			      	<form action="/dolar/{{$dolar->id}}" method="POST" style="display: inline;">
-					    @method('DELETE')
-					    @csrf					    
-					    <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Reincorporar"><i class="fa fa-share"></i></button>
-					</form>
-					<?php
-					}					
-					?>
-				<?php	
-				} else if(Auth::user()->role == 'SUPERVISOR' || Auth::user()->role == 'ADMINISTRADOR'){
-				?>
-					<a href="/dolar/{{$dolar->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
-		      			<i class="far fa-eye"></i>			      		
-		      		</a>
-
-		      		<a href="/dolar/{{$dolar->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
-		      			<i class="fas fa-edit"></i>
-	      			</a>
-				<?php
-				} else if(Auth::user()->role == 'USUARIO'){
-				?>
-					<a href="/dolar/{{$dolar->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
-		      			<i class="far fa-eye"></i>			      		
-		      		</a>		
-				<?php
-				}
-				?>
-										
-		      </td>
-		    <!-- Fin Validacion de ROLES -->
-
-		    </tr>
-		@endforeach
+					?>						
+			      </td>
+			    <!-- Fin Validacion de ROLES -->
+			    </tr>
+			@endforeach
 		</tbody>
 	</table>
 
