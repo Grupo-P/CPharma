@@ -226,6 +226,18 @@
 		return $Precio;
 	}
 	/*
+		TITULO: TasaFechaConversion
+		PARAMETROS: [$Fecha] Fecha de la que se buscara la tasa
+		FUNCION: Buscar el valor de la tasa
+		RETORNO: Valor de la tasa
+	 */
+	function TasaFechaConversion($Fecha,$Moneda) {
+		$resultTasaConversion = QTasaConversion($Fecha,$Moneda);
+		$resultTasaConversion = mysqli_fetch_assoc($resultTasaConversion);
+		$Tasa = $resultTasaConversion['tasa'];
+		return $Tasa;
+	}
+	/*
 		TITULO: TasaFecha
 		PARAMETROS: [$Fecha] Fecha de la que se buscara la tasa
 		FUNCION: Buscar el valor de la tasa

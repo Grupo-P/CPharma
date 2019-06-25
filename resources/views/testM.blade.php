@@ -5,27 +5,6 @@
 @endsection
 
 <script>
-  /*
-  function redondear(numero,decimales) {
-    var parteEntera=0,parteDecimal=0;
-
-    parteEntera=parseInt(numero);
-    parteDecimal=numero-parteEntera;
-
-    switch(decimales) {
-      case 1: parteDecimal*=10; break;
-      case 2: parteDecimal*=100; break;
-    }
-    
-    parteDecimal=Math.ceil(parteDecimal);
-
-    var nuevoDecimal=parteDecimal/100;
-    numero=parteEntera+nuevoDecimal;
-
-    return numero;
-  }
-   */
-  
   function limpiarClases() {
     var resultado=document.getElementById('resultado');
     resultado.value = "-";
@@ -187,6 +166,17 @@
   }
 </script>
 
+<?php 
+  include(app_path().'\functions\config.php');
+  include(app_path().'\functions\querys.php');
+  include(app_path().'\functions\funciones.php');
+  include(app_path().'\functions\reportes.php');
+
+  $FechaActual = new DateTime("now");
+  $FechaActual = $FechaActual->format("Y-m-d");
+  $TasaActual = TasaFechaConversion($FechaActual,'USD $.');
+?>
+
 @section('content')
   <hr class="row align-items-start col-12">
   <h5 class="text-info">
@@ -223,7 +213,7 @@
           </td>
 
           <td>
-            <input type="number" step="0.01" min="0" placeholder="0,00" value="7400" id="tasa" class="form-control text-center bg-success text-white" disabled>
+            <input type="number" step="0.01" min="0" placeholder="0,00" value="{{$TasaActual}}" id="tasa" class="form-control text-center bg-success text-white" disabled>
           </td>
         </tr>
 
@@ -241,7 +231,7 @@
           </td>
 
           <td>
-            <input type="date" value="2019-06-21" id="fecha" class="form-control text-center bg-success text-white" disabled>
+            <input type="text" value="{{$FechaActual}}" id="fecha" class="form-control text-center bg-success text-white" disabled>
           </td>
         </tr>
 
