@@ -67,6 +67,19 @@
 		}
 		return $sql;
 	}
+	/*SELECT tasa FROM tasa_ventas where fecha='2019-06-25' AND moneda='USD$'
+		TITULO: QTasaConversion
+		PARAMETROS: [$QFecha] Fecha de la que se quiere la tasa
+		FUNCION: Buscar el valor de la tasa en un dia especifico
+		RETORNO: Valor de la tasa al dia que se solicito
+	 */
+	function QTasaConversion($Fecha,$Moneda) {
+		$conCP = ConectarXampp();
+		$consulta = "SELECT tasa FROM tasa_ventas where fecha='$Fecha' 
+						AND moneda='$Moneda'";
+		$resultado = mysqli_query($conCP,$consulta);
+		return $resultado;
+	}
 	/*
 		TITULO: QTasa
 		PARAMETROS: [$QFecha] Fecha de la que se quiere la tasa
