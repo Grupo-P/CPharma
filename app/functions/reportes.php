@@ -720,6 +720,8 @@
 
 		$conn = ConectarSmartpharma($SedeConnection);
 
+		$sql = QCleanTable('QFacturasProducto');
+    	sqlsrv_query($conn,$sql);
 		$sql = QCleanTable('CP_QfacturaProveedor');
 		sqlsrv_query($conn,$sql);
 		$sql = QCleanTable('CP_QDetalleFactura');
@@ -803,6 +805,8 @@
 
 		$conn = ConectarSmartpharma($SedeConnection);
 
+		$sql = QCleanTable('QFacturasProducto');
+		sqlsrv_query($conn,$sql);
 		$sql = QCleanTable('CP_QfacturaProveedor');
 		sqlsrv_query($conn,$sql);
 		$sql = QCleanTable('CP_QDetalleFactura');
@@ -1358,14 +1362,14 @@
 
 		$FFinalImpresion = $FFinal;
 		$FFinal = date("Y-m-d",strtotime($FFinal."+ 1 days"));
-
-		$sql = QTablaTemp(ClenTable);
+		
+		$sql = QCleanTable('CP_QUnidadesCompradasProveedor');
 		sqlsrv_query($conn,$sql);
 
 		$sql1 = QUnidadesCompradasProveedor($FInicial,$FFinal);
 		sqlsrv_query($conn, $sql1);
 		
-		$result = sqlsrv_query($conn,"SELECT * FROM TablaTemp2 ORDER BY FechaRegistro DESC");
+		$result = sqlsrv_query($conn,"SELECT * FROM CP_QUnidadesCompradasProveedor ORDER BY FechaRegistro DESC");
 
 		echo '
 			<div class="input-group md-form form-sm form-1 pl-0">
@@ -1424,7 +1428,7 @@
 	  		</tbody>
 		</table>';
 
-		$sql = QTablaTemp(ClenTable);
+		$sql = QCleanTable('CP_QUnidadesCompradasProveedor');
 		sqlsrv_query($conn,$sql);
 
 		sqlsrv_close($conn);
@@ -1441,9 +1445,6 @@
 	 */
 	function ReporteAnaliticoDePrecios($SedeConnection,$IdArticulo){
 		$conn=ConectarSmartpharma($SedeConnection);
-
-		$sql=QTablaTemp(ClenTable);
-		sqlsrv_query($conn,$sql);
 
 		$sql=QArticulo($IdArticulo);
 		sqlsrv_query($conn,$sql);
@@ -1582,9 +1583,6 @@
 	  	echo '
 	  		</tbody>
 		</table>';
-
-		$sql = QTablaTemp(ClenTable);
-		sqlsrv_query($conn,$sql);
 
 		sqlsrv_close($conn);
 	}
