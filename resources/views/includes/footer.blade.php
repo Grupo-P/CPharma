@@ -15,5 +15,7 @@
 	<span>CPharma v.2.0 © 2018 - <?php echo''.date('Y'); ?> Copyright Grupo P</span>
 	<br>
 	<a href="https://api.whatsapp.com/send?phone=584246254496&text=&source=&data=" target="blank">Developed by Sergio Cova</a>
+  and
+  <a href="https://api.whatsapp.com/send?phone=584246827377&text=&source=&data=" target="blank">Manuel Henriquez</a>
 </div>
 <!-- Copyright -->

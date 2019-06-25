@@ -186,7 +186,7 @@
 		}
 		else {
 		/*PRECIO TROQUELADO*/
-			$sql0 = QTablaTemp(1);
+			$sql0 = QCleanTable('CP_QLoteArticulo');
 			sqlsrv_query($conn,$sql0);
 
 			$sql = QLoteArticulo($IdArticulo,0);
@@ -202,7 +202,7 @@
 			}
 		/*PRECIO CALCULADO*/
 			else {
-				$sql0 = QTablaTemp(1);
+				$sql0 = QCleanTable('CP_QLoteArticulo');
 				sqlsrv_query($conn,$sql0);
 
 				$sql2 = QLoteArticulo($IdArticulo,1);
@@ -223,6 +223,9 @@
 				}
 			}
 		}
+		$sql0 = QCleanTable('CP_QLoteArticulo');
+		sqlsrv_query($conn,$sql0);
+
 		return $Precio;
 	}
 	/*
@@ -289,13 +292,16 @@
 	 */
 	function ProductoUnico($conn,$IdArticulo,$IdProveedor) {
 		$Unico = '';
-
-		$sql0 = QTablaTempR(2,4);
+		
+		$sql = QCleanTable('QFacturasProducto');
+		sqlsrv_query($conn,$sql);
+		$sql = QCleanTable('CP_QProvedorUnico');
+		sqlsrv_query($conn,$sql);			
+		
 		$sql1 = QFacturasProducto($IdArticulo);
 		$sql2 = QProvedorUnico($IdProveedor);
 		$sql3 = QProvedorUnicoLista();
-
-		sqlsrv_query($conn,$sql0);
+		
 		sqlsrv_query($conn,$sql1);
 		sqlsrv_query($conn,$sql2);
 
@@ -311,6 +317,12 @@
 		else {
 			$Unico = 'NO';
 		}
+
+		$sql = QCleanTable('QFacturasProducto');
+		sqlsrv_query($conn,$sql);
+		$sql = QCleanTable('CP_QProvedorUnico');
+		sqlsrv_query($conn,$sql);
+
 	  	return $Unico;
 	}
 	/*
