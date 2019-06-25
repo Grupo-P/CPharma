@@ -720,6 +720,8 @@
 
 		$conn = ConectarSmartpharma($SedeConnection);
 
+		$sql = QCleanTable('QFacturasProducto');
+    	sqlsrv_query($conn,$sql);
 		$sql = QCleanTable('CP_QfacturaProveedor');
 		sqlsrv_query($conn,$sql);
 		$sql = QCleanTable('CP_QDetalleFactura');
@@ -803,6 +805,8 @@
 
 		$conn = ConectarSmartpharma($SedeConnection);
 
+		$sql = QCleanTable('QFacturasProducto');
+		sqlsrv_query($conn,$sql);
 		$sql = QCleanTable('CP_QfacturaProveedor');
 		sqlsrv_query($conn,$sql);
 		$sql = QCleanTable('CP_QDetalleFactura');
@@ -1442,9 +1446,6 @@
 	function ReporteAnaliticoDePrecios($SedeConnection,$IdArticulo){
 		$conn=ConectarSmartpharma($SedeConnection);
 
-		$sql=QTablaTemp(ClenTable);
-		sqlsrv_query($conn,$sql);
-
 		$sql=QArticulo($IdArticulo);
 		sqlsrv_query($conn,$sql);
 		$result=sqlsrv_query($conn,$sql);
@@ -1582,9 +1583,6 @@
 	  	echo '
 	  		</tbody>
 		</table>';
-
-		$sql = QTablaTemp(ClenTable);
-		sqlsrv_query($conn,$sql);
 
 		sqlsrv_close($conn);
 	}
