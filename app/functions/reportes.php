@@ -981,9 +981,6 @@
 		
 		$conn = ConectarSmartpharma($SedeConnection);
 
-		$sql = QTablaTemp(ClenTable);
-		sqlsrv_query($conn,$sql);
-
 		$sql1 = QfacturaProveedorToquel($IdProveedor);
 		$result = sqlsrv_query($conn,$sql1);
 
@@ -1057,9 +1054,6 @@
 	  		</tbody>
 		</table>';
 
-		$sql = QTablaTemp(ClenTable);
-		sqlsrv_query($conn,$sql);
-
 		sqlsrv_close($conn);
 	}
 	/*
@@ -1074,9 +1068,6 @@
 	function ReporteFacturaArticulo($SedeConnection,$IdProveedor,$NombreProveedor,$IdFatura){
 		
 		$conn = ConectarSmartpharma($SedeConnection);
-
-		$sql = QTablaTemp(ClenTable);
-		sqlsrv_query($conn,$sql);
 
 		$sql1 = QFacturaArticulo($IdFatura);
 		$result = sqlsrv_query($conn,$sql1);
@@ -1157,9 +1148,6 @@
 	  		</tbody>
 		</table>';
 
-		$sql = QTablaTemp(ClenTable);
-		sqlsrv_query($conn,$sql);
-
 		sqlsrv_close($conn);
 	}
 	/*
@@ -1175,9 +1163,6 @@
 	function ReporteArticuloTroquel($SedeConnection,$IdProveedor,$NombreProveedor,$IdFatura,$IdArticulo){
 		
 		$conn = ConectarSmartpharma($SedeConnection);
-
-		$sql = QTablaTemp(ClenTable);
-		sqlsrv_query($conn,$sql);
 
 		$sql1 = QArticulo($IdArticulo);
 		$result = sqlsrv_query($conn,$sql1);
@@ -1272,9 +1257,6 @@
 	  		</tbody>
 		</table>';
 
-		$sql = QTablaTemp(ClenTable);
-		sqlsrv_query($conn,$sql);
-
 		sqlsrv_close($conn);
 	}
 	/*
@@ -1291,9 +1273,6 @@
 	function ReporteTroquel($SedeConnection,$IdProveedor,$NombreProveedor,$IdFatura,$IdArticulo,$PrecioTroquel){
 		
 		$conn = ConectarSmartpharma($SedeConnection);
-
-		$sql = QTablaTemp(ClenTable);
-		sqlsrv_query($conn,$sql);
 
 		$sql2 = QActualizarTroquel($IdFatura,$IdArticulo,$PrecioTroquel);
 		sqlsrv_query($conn,$sql2);
@@ -1361,9 +1340,6 @@
 	  	echo '
 	  		</tbody>
 		</table>';
-
-		$sql = QTablaTemp(ClenTable);
-		sqlsrv_query($conn,$sql);
 		
 		sqlsrv_close($conn);
 	}
