@@ -4,6 +4,8 @@
   Tasas de venta
 @endsection
 
+<script type="text/javascript" src="{{ asset('assets/jquery/jquery-2.2.2.min.js') }}"></script>
+<script type="text/javascript" src="{{ asset('assets/jquery/jquery-ui.min.js') }}" ></script>
 <script>
   function limpiarClases() {
     var resultado=document.getElementById('resultado');
@@ -440,9 +442,4 @@
       Volver al inicio
     </a>
   </div>
-@endsection
-
-@section('scriptsHead')
-    <script type="text/javascript" src="{{ asset('assets/jquery/jquery-2.2.2.min.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('assets/jquery/jquery-ui.min.js') }}" ></script>
 @endsection
