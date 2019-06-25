@@ -948,9 +948,21 @@
 	  		</tbody>
 		</table>';
 
+		$sql = QCleanTable('QFacturasProducto');
+		sqlsrv_query($conn,$sql);
 		$sql = QCleanTable('CP_QfacturaProveedor');
 		sqlsrv_query($conn,$sql);
 		$sql = QCleanTable('CP_QDetalleFactura');
+		sqlsrv_query($conn,$sql);
+		$sql = QCleanTable('CP_QUnidadesVendidasClienteId');
+		sqlsrv_query($conn,$sql);
+		$sql = QCleanTable('CP_QUnidadesDevueltaClienteId');
+		sqlsrv_query($conn,$sql);
+		$sql = QCleanTable('CP_QUnidadesCompradasProveedorId');
+		sqlsrv_query($conn,$sql);
+		$sql = QCleanTable('CP_QUnidadesReclamoProveedorId');
+		sqlsrv_query($conn,$sql);
+		$sql = QCleanTable('CP_QIntegracionProductosVendidosId');
 		sqlsrv_query($conn,$sql);
 
 		sqlsrv_close($conn);
