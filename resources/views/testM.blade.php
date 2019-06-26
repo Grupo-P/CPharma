@@ -194,19 +194,18 @@
   <h5 class="text-info">
     <i class="fas fa-eye-dropper"></i>
     C&Aacute;LCULO DE DOSIFICACIONES
+    <a href="#ver-manual" tabindex="15" class="btn btn-primary">
+      Ver instrucciones
+    </a>
   </h5>
   <hr class="row align-items-start col-12">
   
-  <a name="calculo-conversiones"></a>
+  <a name="dosificaciones-jarabes"></a>
   <form name="jarabes" class="form-group">
     <table class="table table-borderless table-hover">
       <thead class="thead-dark" align="center">
-        <th scope="col" colspan="2">
+        <th scope="col" colspan="4">
           <b>DOSIFICACIONES PARA JARABES</b>
-        </th>
-
-        <th scope="col" colspan="2">
-          <b>DOSIFICACIONES PARA TABLETAS</b>
         </th>
       </thead>
     
@@ -217,15 +216,15 @@
           </td>
 
           <td>
-            <input type="number" step="0.01" min="0" placeholder="0,00" id="cantDJ" class="form-control text-center bg-warning" autofocus onblur="">
+            <input type="number" step="0.01" min="0" tabindex="1" placeholder="0,00" id="cantDJ" class="form-control text-center bg-warning" onblur="" autofocus>
           </td>
 
           <td class="text-right">
-            Cantidad MG por Dosis Recetada:
+            Cantidad de ML del medicamento:
           </td>
 
           <td>
-            <input type="number" step="0.01" min="0" placeholder="0,00" id="cantDT" class="form-control text-center bg-warning" autofocus onblur="">
+            <input type="number" step="0.01" min="0" tabindex="4" placeholder="0,00" id="medicamentoJ" class="form-control text-center bg-warning" onblur="">
           </td>
         </tr>
 
@@ -235,15 +234,15 @@
           </td>
 
           <td>
-            <input type="number" step="0.01" min="0" placeholder="0,00" id="itervHJ" class="form-control text-center bg-warning" autofocus onblur="">
+            <input type="number" step="0.01" min="0" tabindex="2" placeholder="0,00" id="itervHJ" class="form-control text-center bg-warning" onblur="">
           </td>
 
           <td class="text-right">
-            Cuantas veces al dia la Dosis:
+            Unidades Requeridas a Comprar:
           </td>
 
           <td>
-            <input type="number" step="0.01" min="0" placeholder="0,00" id="itervHT" class="form-control text-center bg-warning" autofocus onblur="">
+            <input type="text" placeholder="-" id="resultadoJ2" class="form-control text-center" disabled>
           </td>
         </tr>
 
@@ -253,15 +252,15 @@
           </td>
 
           <td>
-            <input type="number" step="0.01" min="0" placeholder="0,00" id="diasJ" class="form-control text-center bg-warning" autofocus onblur="">
+            <input type="number" step="0.01" min="0" tabindex="3" placeholder="0,00" id="diasJ" class="form-control text-center bg-warning" onblur="">
           </td>
-
+          
           <td class="text-right">
-            Cantidad de dias del Tratamiento:
+            Unidades Redondeadas:
           </td>
 
           <td>
-            <input type="number" step="0.01" min="0" placeholder="0,00" id="diasT" class="form-control text-center bg-warning" autofocus onblur="">
+            <input type="text" placeholder="-" id="resultadoJ3" class="form-control text-center" disabled>
           </td>
         </tr>
 
@@ -271,117 +270,30 @@
           </td>
 
           <td>
-            <input type="text" placeholder="-" id="resultadoJ" class="form-control text-center" disabled>
+            <input type="text" placeholder="-" id="resultadoJ1" class="form-control text-center" disabled>
           </td>
-
-          <td class="text-right">
-            Cantidad de Dosis Requeridas:
-          </td>
-
-          <td>
-            <input type="text" placeholder="-" id="resultadoT" class="form-control text-center" disabled>
-          </td>
-        </tr>
-
-        <tr>
-          <td class="text-right">
-            Cantidad de ML del medicamento:
-          </td>
-
-          <td>
-            <input type="number" step="0.01" min="0" placeholder="0,00" id="medicamentoJ" class="form-control text-center bg-warning" onblur="">
-          </td>
-
-          <td class="text-right">
-            Concentracion del medicamento (MG):
-          </td>
-
-          <td>
-            <input type="number" step="0.01" min="0" placeholder="0,00" id="concentracion" class="form-control text-center bg-warning" onblur="">
-          </td>
-        </tr>
-
-        <tr>
-          <td colspan="2"></td>
-
-          <td class="text-right">
-            Cantidad de Pastillas del medicamento:
-          </td>
-
-          <td>
-            <input type="number" step="0.01" min="0" placeholder="0,00" id="medicamentoT" class="form-control text-center bg-warning" onblur="">
-          </td>
-        </tr>
-
-        <tr>
-          <td class="text-right">
-            Unidades Requeridas a Comprar:
-          </td>
-
-          <td>
-            <input type="text" placeholder="-" id="resultado1J" class="form-control text-center" disabled>
-          </td>
-
-          <td class="text-right">
-            Unidades Requeridas a Comprar:
-          </td>
-
-          <td>
-            <input type="text" placeholder="-" id="resultado1T" class="form-control text-center" disabled>
-          </td>
-        </tr>
-
-        <tr>
-          <td class="text-right">
-            Unidades Redondeadas:
-          </td>
-
-          <td>
-            <input type="text" placeholder="-" id="resultado2J" class="form-control text-center" disabled>
-          </td>
-
-          <td class="text-right">
-            Unidades Redondeadas:
-          </td>
-
-          <td>
-            <input type="text" placeholder="-" id="resultado2T" class="form-control text-center" disabled>
-          </td>
-        </tr>
-
-        <tr>
+          
           <td class="text-center">
-            <button type="reset" class="btn btn-success">
-              Borrardo dosificacion de jarabes
+            <button type="reset" tabindex="5" class="btn btn-success">
+              Borrado dosificacion de jarabes
             </button>
           </td>
 
-          <td class="text-center" colspan="2">
-            <a href="#ver-manual" title="Ir al manual de usuario" class="btn btn-primary">
-              Ver instrucciones
+          <td class="text-center">
+            <a href="#dosificaciones-tabletas" tabindex="6" class="btn btn-primary">
+              Ir a dosificaciones para tabletas
             </a>
-          </td>
-
-          <td class="text-center">
-            <button type="reset" class="btn btn-success">
-              Borrardo dosificacion de tabletas
-            </button>
           </td>
         </tr>
       </tbody>
     </table>
   </form>
-
-  <br><br>
-
+  
+  <a name="dosificaciones-tabletas"></a>
   <form name="tabletas" class="form-group">
     <table class="table table-borderless table-hover">
       <thead class="thead-dark" align="center">
-        <th scope="col" colspan="2">
-          <b>DOSIFICACIONES PARA JARABES</b>
-        </th>
-
-        <th scope="col" colspan="2">
+        <th scope="col" colspan="4">
           <b>DOSIFICACIONES PARA TABLETAS</b>
         </th>
       </thead>
@@ -389,83 +301,11 @@
       <tbody>
         <tr>
           <td class="text-right">
-            Cantidad CC por Dosis:
-          </td>
-
-          <td>
-            <input type="number" step="0.01" min="0" placeholder="0,00" id="cantDJ" class="form-control text-center bg-warning" autofocus onblur="">
-          </td>
-
-          <td class="text-right">
             Cantidad MG por Dosis Recetada:
           </td>
 
           <td>
-            <input type="number" step="0.01" min="0" placeholder="0,00" id="cantDT" class="form-control text-center bg-warning" autofocus onblur="">
-          </td>
-        </tr>
-
-        <tr>
-          <td class="text-right">
-            Cada cuantas horas la Dosis:
-          </td>
-
-          <td>
-            <input type="number" step="0.01" min="0" placeholder="0,00" id="itervHJ" class="form-control text-center bg-warning" autofocus onblur="">
-          </td>
-
-          <td class="text-right">
-            Cuantas veces al dia la Dosis:
-          </td>
-
-          <td>
-            <input type="number" step="0.01" min="0" placeholder="0,00" id="itervHT" class="form-control text-center bg-warning" autofocus onblur="">
-          </td>
-        </tr>
-
-        <tr>
-          <td class="text-right">
-            Cantidad de dias del Tratamiento:
-          </td>
-
-          <td>
-            <input type="number" step="0.01" min="0" placeholder="0,00" id="diasJ" class="form-control text-center bg-warning" autofocus onblur="">
-          </td>
-
-          <td class="text-right">
-            Cantidad de dias del Tratamiento:
-          </td>
-
-          <td>
-            <input type="number" step="0.01" min="0" placeholder="0,00" id="diasT" class="form-control text-center bg-warning" autofocus onblur="">
-          </td>
-        </tr>
-
-        <tr>
-          <td class="text-right">
-            Cantidad de ML Requeridos:
-          </td>
-
-          <td>
-            <input type="text" placeholder="-" id="resultadoJ" class="form-control text-center" disabled>
-          </td>
-
-          <td class="text-right">
-            Cantidad de Dosis Requeridas:
-          </td>
-
-          <td>
-            <input type="text" placeholder="-" id="resultadoT" class="form-control text-center" disabled>
-          </td>
-        </tr>
-
-        <tr>
-          <td class="text-right">
-            Cantidad de ML del medicamento:
-          </td>
-
-          <td>
-            <input type="number" step="0.01" min="0" placeholder="0,00" id="medicamentoJ" class="form-control text-center bg-warning" onblur="">
+            <input type="number" step="0.01" min="0" tabindex="7" placeholder="0,00" id="cantDT" class="form-control text-center bg-warning" onblur="">
           </td>
 
           <td class="text-right">
@@ -473,47 +313,53 @@
           </td>
 
           <td>
-            <input type="number" step="0.01" min="0" placeholder="0,00" id="concentracion" class="form-control text-center bg-warning" onblur="">
+            <input type="number" step="0.01" min="0" tabindex="10" placeholder="0,00" id="concentracion" class="form-control text-center bg-warning" onblur="">
           </td>
         </tr>
 
         <tr>
-          <td colspan="2"></td>
+          <td class="text-right">
+            Cuantas veces al dia la Dosis:
+          </td>
+
+          <td>
+            <input type="number" step="0.01" min="0" tabindex="8" placeholder="0,00" id="itervHT" class="form-control text-center bg-warning" onblur="">
+          </td>
 
           <td class="text-right">
             Cantidad de Pastillas del medicamento:
           </td>
 
           <td>
-            <input type="number" step="0.01" min="0" placeholder="0,00" id="medicamentoT" class="form-control text-center bg-warning" onblur="">
+            <input type="number" step="0.01" min="0" tabindex="11" placeholder="0,00" id="medicamentoT" class="form-control text-center bg-warning" onblur="">
           </td>
         </tr>
 
         <tr>
+          <td class="text-right">
+            Cantidad de dias del Tratamiento:
+          </td>
+
+          <td>
+            <input type="number" step="0.01" min="0" tabindex="9" placeholder="0,00" id="diasT" class="form-control text-center bg-warning" onblur="">
+          </td>
+
           <td class="text-right">
             Unidades Requeridas a Comprar:
           </td>
 
           <td>
-            <input type="text" placeholder="-" id="resultado1J" class="form-control text-center" disabled>
-          </td>
-
-          <td class="text-right">
-            Unidades Requeridas a Comprar:
-          </td>
-
-          <td>
-            <input type="text" placeholder="-" id="resultado1T" class="form-control text-center" disabled>
+            <input type="text" placeholder="-" id="resultadoT2" class="form-control text-center" disabled>
           </td>
         </tr>
 
         <tr>
           <td class="text-right">
-            Unidades Redondeadas:
+            Cantidad de Dosis Requeridas:
           </td>
 
           <td>
-            <input type="text" placeholder="-" id="resultado2J" class="form-control text-center" disabled>
+            <input type="text" placeholder="-" id="resultadoT1" class="form-control text-center" disabled>
           </td>
 
           <td class="text-right">
@@ -521,34 +367,26 @@
           </td>
 
           <td>
-            <input type="text" placeholder="-" id="resultado2T" class="form-control text-center" disabled>
+            <input type="text" placeholder="-" id="resultadoT3" class="form-control text-center" disabled>
           </td>
         </tr>
 
         <tr>
-          <td class="text-center">
-            <button type="reset" class="btn btn-success">
-              Borrardo dosificacion de jarabes
+          <td class="text-center" colspan="2">
+            <button type="reset" tabindex="12" class="btn btn-success">
+              Borrado dosificacion de tabletas
             </button>
           </td>
 
           <td class="text-center" colspan="2">
-            <a href="#ver-manual" title="Ir al manual de usuario" class="btn btn-primary">
-              Ver instrucciones
+            <a href="#dosificaciones-jarabes" tabindex="13" class="btn btn-primary">
+              Ir a dosificaciones para jarabes
             </a>
-          </td>
-
-          <td class="text-center">
-            <button type="reset" class="btn btn-success">
-              Borrardo dosificacion de tabletas
-            </button>
           </td>
         </tr>
       </tbody>
     </table>
   </form>
-
-  <br><br>
 
   <a name="ver-manual"></a>
   <table class="table table-bordered table-striped">
@@ -603,7 +441,7 @@
   </table>
 
   <div class="text-center">
-    <a href="#calculo-conversiones" title="Volver al inicio" class="btn btn-primary">
+    <a href="#dosificaciones-jarabes" tabindex="14" title="Volver al inicio" class="btn btn-primary">
       Volver al inicio
     </a>
   </div>
