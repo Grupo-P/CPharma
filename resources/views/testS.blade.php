@@ -10,25 +10,25 @@
   include(app_path().'\functions\funciones.php');
   include(app_path().'\functions\reportes.php');
 
-  function ValidarFecha($FechaActual){
+  function ValidarFecha($FechaTasaDolar,$Moneda){
     $arrayValidaciones = array(2);
-    $FechaActual = date("Y-m-d",strtotime($FechaActual."- 1 days"));
-    $TasaActual = TasaFechaConversion($FechaActual,'USD $.');
-    $arrayValidaciones[0] = $FechaActual;
-    $arrayValidaciones[1] = $TasaActual;
+    $FechaTasaDolar = date("Y-m-d",strtotime($FechaTasaDolar."- 1 days"));
+    $TasaDolar = TasaFechaConversion($FechaTasaDolar,$Moneda);
+    $arrayValidaciones[0] = $FechaTasaDolar;
+    $arrayValidaciones[1] = $TasaDolar;
     return $arrayValidaciones;
   }
 
-  $hoy = new DateTime("now");
-  $hoy = $hoy->format("Y-m-d");
-  $FechaActual = new DateTime("now");
-  $FechaActual = $FechaActual->format("Y-m-d");
-  $TasaActual = TasaFechaConversion($FechaActual,'USD $.');
+  $Moneda = 'USD $.';
 
-  while(is_null($TasaActual)) {
-    $arrayResult =  ValidarFecha($FechaActual);
-    $FechaActual = $arrayResult[0];
-    $TasaActual = $arrayResult[1];
+  $FechaTasaDolar = new DateTime("now");
+  $FechaActual = $FechaTasaDolar = $FechaTasaDolar->format("Y-m-d");
+  $TasaDolar = TasaFechaConversion($FechaTasaDolar,$Moneda);
+
+  while(is_null($TasaDolar)) {
+    $arrayResult =  ValidarFecha($FechaTasaDolar,$Moneda);
+    $FechaTasaDolar = $arrayResult[0];
+    $TasaDolar = $arrayResult[1];
   }
 ?>
 
@@ -51,7 +51,7 @@
     decimales = parseInt(document.getElementById('decimales').value);
 
     if(fac1<0 || fac2<0 || fac3<0) {
-      alert("No se admiten valores negativos.");
+      //alert("No se admiten valores negativos.");
       if(fac1<0) {
         document.getElementById('fac1').value=0;
         fac1=0;
@@ -139,7 +139,7 @@
     decimales = parseInt(document.getElementById('decimales').value);
 
     if(abono1<0 || abono2<0) {
-      alert("No se admiten valores negativos.");
+      //alert("No se admiten valores negativos.");
       if(abono1<0) {
         document.getElementById('abono1').value=0;
         abono1=0;
@@ -152,7 +152,7 @@
     }
 
     if(!isNaN(abono1) && abono1>2000) {
-      alert("Los abonos ingresados en $ deben ser menores a 2000");
+      //alert("Los abonos ingresados en $ deben ser menores a 2000");
       document.getElementById('abono1').value=0;
       abono1=0;
     }
@@ -203,26 +203,26 @@
 
 @section('content')
   <!-- Modal Fecha -->
-    @if($FechaActual != $hoy)
-      <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title text-info" id="exampleModalCenterTitle"><i class="fas fa-info text-info"></i></h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div class="modal-body">
-              <h4 class="h6">La tasa de venta no esta actualizada</h4>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-outline-success" data-dismiss="modal">Aceptar</button>
-            </div>
+  @if($FechaTasaDolar != $FechaActual)
+    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title text-info" id="exampleModalCenterTitle"><i class="fas fa-info text-info"></i> Informacion</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <h4 class="h6">La tasa del DOLAR no esta actualizada, informe al supervisor</h4>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline-success" data-dismiss="modal">Aceptar</button>
           </div>
         </div>
       </div>
-    @endif
+    </div>
+  @endif
 
   <hr class="row align-items-start col-12">
   <h5 class="text-info">
@@ -257,10 +257,22 @@
           <td class="text-right">
             Tasa de Cambio:
           </td>
-
+      <?php
+        if($FechaTasaDolar != $FechaActual){
+      ?>
           <td>
-            <input type="number" step="0.01" min="0" placeholder="0,00" value="{{$TasaActual}}" id="tasa" class="form-control text-center bg-success text-white" disabled>
+            <input type="number" step="0.01" min="0" placeholder="0,00" value="{{$TasaDolar}}" id="tasa" class="form-control text-center bg-danger text-white" disabled>
           </td>
+      <?php
+        }
+        else{
+      ?>
+          <td>
+            <input type="number" step="0.01" min="0" placeholder="0,00" value="{{$TasaDolar}}" id="tasa" class="form-control text-center bg-success text-white" disabled>
+          </td>
+      <?php   
+        }
+      ?>
         </tr>
 
         <tr>
@@ -276,9 +288,22 @@
             Fecha Tasa de Cambio:
           </td>
 
+      <?php
+        if($FechaTasaDolar != $FechaActual){
+      ?>
           <td>
-            <input type="text" value="{{$FechaActual}}" id="fecha" class="form-control text-center bg-success text-white" disabled>
+            <input type="text" value="{{$FechaTasaDolar}}" id="fecha" class="form-control text-center bg-danger text-white" disabled>
           </td>
+      <?php
+        }
+        else{
+      ?>
+          <td>
+            <input type="text" value="{{$FechaTasaDolar}}" id="fecha" class="form-control text-center bg-success text-white" disabled>
+          </td>
+      <?php   
+        }
+      ?>
         </tr>
 
         <tr>
@@ -451,4 +476,11 @@
       Volver al inicio
     </a>
   </div>
+
+  <script>
+    $(document).ready(function(){
+        $('[data-toggle="tooltip"]').tooltip();   
+    });
+    $('#exampleModalCenter').modal('show')
+  </script>
 @endsection
