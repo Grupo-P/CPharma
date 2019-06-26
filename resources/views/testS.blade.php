@@ -19,7 +19,7 @@
     return $arrayValidaciones;
   }
 
-  $Moneda = 'USD $.';
+  $Moneda = 'Dolar';
 
   $FechaTasaDolar = new DateTime("now");
   $FechaActual = $FechaTasaDolar = $FechaTasaDolar->format("Y-m-d");
@@ -227,7 +227,7 @@
   <hr class="row align-items-start col-12">
   <h5 class="text-info">
     <i class="fas fa-money-bill-alt"></i>
-    Cuadre de conversiones de facturas y pagos
+    Calculo de factura en divisa
   </h5>
   <hr class="row align-items-start col-12">
   
@@ -320,7 +320,7 @@
           </td>
 
           <td>
-            <input type="number" min="0" max="2" placeholder="0" value="2" id="decimales" class="form-control text-center bg-success text-white" disabled>
+            <input type="number" min="0" max="2" placeholder="0" value="2" id="decimales" class="form-control text-center" disabled>
           </td>
         </tr>
 
@@ -338,7 +338,7 @@
           </td>
 
           <td>
-            <input type="number" step="0.01" min="0" placeholder="0,00" value="200" id="tolerancia" class="form-control text-center bg-success text-white" disabled>
+            <input type="number" step="0.01" min="0" placeholder="0,00" value="200" id="tolerancia" class="form-control text-center" disabled>
           </td>
         </tr>
 
