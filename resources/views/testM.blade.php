@@ -1,7 +1,7 @@
 @extends('layouts.modelUser')
 
 @section('title')
-  Tasas de venta
+  Dosificaciones
 @endsection
 
 <?php 
@@ -17,16 +17,6 @@
     $arrayValidaciones[0] = $FechaActual;
     $arrayValidaciones[1] = $TasaActual;
     return $arrayValidaciones;
-  }
-
-  $FechaActual = new DateTime("now");
-  $FechaActual = $FechaActual->format("Y-m-d");
-  $TasaActual = TasaFechaConversion($FechaActual,'USD $.');
-
-  while(is_null($TasaActual)) {
-    $arrayResult =  ValidarFecha($FechaActual);
-    $FechaActual = $arrayResult[0];
-    $TasaActual = $arrayResult[1];
   }
 ?>
 
@@ -200,280 +190,413 @@
 </script>
 
 @section('content')
-  <!-- Modal Fecha -->
-  @if (true)
-    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title text-info" id="exampleModalCenterTitle"><i class="fas fa-info text-info"></i></h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <h4 class="h6">La tasa de venta no esta actualizada</h4>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-outline-success" data-dismiss="modal">Aceptar</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  @endif
-
   <hr class="row align-items-start col-12">
   <h5 class="text-info">
-    <i class="fas fa-money-bill-alt"></i>
-    Cuadre de conversiones de facturas y pagos
+    <i class="fas fa-eye-dropper"></i>
+    C&Aacute;LCULO DE DOSIFICACIONES
   </h5>
   <hr class="row align-items-start col-12">
   
   <a name="calculo-conversiones"></a>
-  <form name="cuadre" class="form-group">
+  <form name="jarabes" class="form-group">
     <table class="table table-borderless table-hover">
-      <thead class="thead-dark">
+      <thead class="thead-dark" align="center">
         <th scope="col" colspan="2">
-          <b>C&Aacute;LCULO DE CONVERSIONES</b>
+          <b>DOSIFICACIONES PARA JARABES</b>
         </th>
 
         <th scope="col" colspan="2">
-          <b>CONFIGURACI&Oacute;N</b>
+          <b>DOSIFICACIONES PARA TABLETAS</b>
         </th>
       </thead>
     
       <tbody>
         <tr>
           <td class="text-right">
-            Total Factura Bs (Con IVA) #1:
+            Cantidad CC por Dosis:
           </td>
 
           <td>
-            <input type="number" step="0.01" min="0" placeholder="0,00" id="fac1" class="form-control text-center bg-warning" autofocus onblur="calcularFactura();">
+            <input type="number" step="0.01" min="0" placeholder="0,00" id="cantDJ" class="form-control text-center bg-warning" autofocus onblur="">
           </td>
 
           <td class="text-right">
-            Tasa de Cambio:
+            Cantidad MG por Dosis Recetada:
           </td>
 
           <td>
-            <input type="number" step="0.01" min="0" placeholder="0,00" value="{{$TasaActual}}" id="tasa" class="form-control text-center bg-success text-white" disabled>
+            <input type="number" step="0.01" min="0" placeholder="0,00" id="cantDT" class="form-control text-center bg-warning" autofocus onblur="">
           </td>
         </tr>
 
         <tr>
           <td class="text-right">
-            Total Factura Bs (Con IVA) #2:
+            Cada cuantas horas la Dosis:
           </td>
 
           <td>
-            <input type="number" step="0.01" min="0" placeholder="0,00" id="fac2" class="form-control text-center bg-warning" onblur="calcularFactura();">
+            <input type="number" step="0.01" min="0" placeholder="0,00" id="itervHJ" class="form-control text-center bg-warning" autofocus onblur="">
           </td>
 
           <td class="text-right">
-            Fecha Tasa de Cambio:
+            Cuantas veces al dia la Dosis:
           </td>
 
           <td>
-            <input type="text" value="{{$FechaActual}}" id="fecha" class="form-control text-center bg-success text-white" disabled>
+            <input type="number" step="0.01" min="0" placeholder="0,00" id="itervHT" class="form-control text-center bg-warning" autofocus onblur="">
           </td>
         </tr>
 
         <tr>
           <td class="text-right">
-            Total Factura Bs (Con IVA) #3:
+            Cantidad de dias del Tratamiento:
           </td>
 
           <td>
-            <input type="number" step="0.01" min="0" placeholder="0,00" id="fac3" class="form-control text-center bg-warning" onblur="calcularFactura();">
+            <input type="number" step="0.01" min="0" placeholder="0,00" id="diasJ" class="form-control text-center bg-warning" autofocus onblur="">
           </td>
 
           <td class="text-right">
-            Cantidad Decimales:
+            Cantidad de dias del Tratamiento:
           </td>
 
           <td>
-            <input type="number" min="0" max="2" placeholder="0" value="2" id="decimales" class="form-control text-center bg-success text-white" disabled>
+            <input type="number" step="0.01" min="0" placeholder="0,00" id="diasT" class="form-control text-center bg-warning" autofocus onblur="">
           </td>
         </tr>
 
         <tr>
           <td class="text-right">
-            Total Facturas Bs (Con IVA):
+            Cantidad de ML Requeridos:
           </td>
 
           <td>
-            <input type="number" step="0.01" min="0" placeholder="0,00" id="totalFacBs" class="form-control text-center" disabled>
+            <input type="text" placeholder="-" id="resultadoJ" class="form-control text-center" disabled>
           </td>
 
           <td class="text-right">
-            Tolerancia Vuelto en Bs:
+            Cantidad de Dosis Requeridas:
           </td>
 
           <td>
-            <input type="number" step="0.01" min="0" placeholder="0,00" value="200" id="tolerancia" class="form-control text-center bg-success text-white" disabled>
+            <input type="text" placeholder="-" id="resultadoT" class="form-control text-center" disabled>
           </td>
         </tr>
 
         <tr>
           <td class="text-right">
-            Total Factura $:
+            Cantidad de ML del medicamento:
           </td>
 
           <td>
-            <input type="number" step="0.01" min="0" placeholder="0,00" id="totalFacDs" class="form-control text-center" disabled>
+            <input type="number" step="0.01" min="0" placeholder="0,00" id="medicamentoJ" class="form-control text-center bg-warning" onblur="">
           </td>
 
-          <td colspan="2">
-            <b>TOTALES</b>
+          <td class="text-right">
+            Concentracion del medicamento (MG):
+          </td>
+
+          <td>
+            <input type="number" step="0.01" min="0" placeholder="0,00" id="concentracion" class="form-control text-center bg-warning" onblur="">
+          </td>
+        </tr>
+
+        <tr>
+          <td colspan="2"></td>
+
+          <td class="text-right">
+            Cantidad de Pastillas del medicamento:
+          </td>
+
+          <td>
+            <input type="number" step="0.01" min="0" placeholder="0,00" id="medicamentoT" class="form-control text-center bg-warning" onblur="">
           </td>
         </tr>
 
         <tr>
           <td class="text-right">
-            Abono #1 en $:
+            Unidades Requeridas a Comprar:
           </td>
 
           <td>
-            <input type="number" step="0.01" min="0" placeholder="0,00" id="abono1" class="form-control text-center bg-warning" onblur="calcularAbono();">
+            <input type="text" placeholder="-" id="resultado1J" class="form-control text-center" disabled>
           </td>
 
           <td class="text-right">
-            Saldo Restante en $:
+            Unidades Requeridas a Comprar:
           </td>
 
           <td>
-            <input type="number" step="0.01" min="0" placeholder="0,00" id="saldoRestanteDs" class="form-control text-center" disabled>
+            <input type="text" placeholder="-" id="resultado1T" class="form-control text-center" disabled>
           </td>
         </tr>
 
         <tr>
           <td class="text-right">
-            Abono #2 en Bs:
+            Unidades Redondeadas:
           </td>
 
           <td>
-            <input type="number" step="0.01" min="0" placeholder="0,00" id="abono2" class="form-control text-center bg-warning" onblur="calcularAbono();">
+            <input type="text" placeholder="-" id="resultado2J" class="form-control text-center" disabled>
           </td>
 
           <td class="text-right">
-            Saldo Restante en Bs:
+            Unidades Redondeadas:
           </td>
 
           <td>
-            <input type="number" step="0.01" min="0" placeholder="0,00" id="saldoRestanteBs" class="form-control text-center" disabled>
+            <input type="text" placeholder="-" id="resultado2T" class="form-control text-center" disabled>
           </td>
         </tr>
 
         <tr>
-          <td class="text-right">
-            Conversion Abono #1 en Bs:
-          </td>
-
-          <td>
-            <input type="number" step="0.01" min="0" placeholder="0,00" id="convAbono1" class="form-control text-center" disabled>
-          </td>
-
-          <td colspan="2">
-            <input type="text" placeholder="-" class="form-control text-center" id="resultado" disabled>
-          </td>
-        </tr>
-
-        <tr>
-          <td class="text-right">
-            Total Abonos Bs:
-          </td>
-          
-          <td>
-            <input type="number" step="0.01" min="0" placeholder="0,00" id="totalAbonos" class="form-control text-center" disabled>
-          </td>
-
           <td class="text-center">
-            <button type="reset" class="btn btn-danger" onclick="limpiarClases();">
-              Borrar y empezar de nuevo
+            <button type="reset" class="btn btn-success">
+              Borrardo dosificacion de jarabes
             </button>
           </td>
 
-          <td class="text-center">
+          <td class="text-center" colspan="2">
             <a href="#ver-manual" title="Ir al manual de usuario" class="btn btn-primary">
-              Ver manual de usuario
+              Ver instrucciones
             </a>
+          </td>
+
+          <td class="text-center">
+            <button type="reset" class="btn btn-success">
+              Borrardo dosificacion de tabletas
+            </button>
           </td>
         </tr>
       </tbody>
     </table>
   </form>
 
-  <br><br><br><br>
-  
+  <br><br>
+
+  <form name="tabletas" class="form-group">
+    <table class="table table-borderless table-hover">
+      <thead class="thead-dark" align="center">
+        <th scope="col" colspan="2">
+          <b>DOSIFICACIONES PARA JARABES</b>
+        </th>
+
+        <th scope="col" colspan="2">
+          <b>DOSIFICACIONES PARA TABLETAS</b>
+        </th>
+      </thead>
+    
+      <tbody>
+        <tr>
+          <td class="text-right">
+            Cantidad CC por Dosis:
+          </td>
+
+          <td>
+            <input type="number" step="0.01" min="0" placeholder="0,00" id="cantDJ" class="form-control text-center bg-warning" autofocus onblur="">
+          </td>
+
+          <td class="text-right">
+            Cantidad MG por Dosis Recetada:
+          </td>
+
+          <td>
+            <input type="number" step="0.01" min="0" placeholder="0,00" id="cantDT" class="form-control text-center bg-warning" autofocus onblur="">
+          </td>
+        </tr>
+
+        <tr>
+          <td class="text-right">
+            Cada cuantas horas la Dosis:
+          </td>
+
+          <td>
+            <input type="number" step="0.01" min="0" placeholder="0,00" id="itervHJ" class="form-control text-center bg-warning" autofocus onblur="">
+          </td>
+
+          <td class="text-right">
+            Cuantas veces al dia la Dosis:
+          </td>
+
+          <td>
+            <input type="number" step="0.01" min="0" placeholder="0,00" id="itervHT" class="form-control text-center bg-warning" autofocus onblur="">
+          </td>
+        </tr>
+
+        <tr>
+          <td class="text-right">
+            Cantidad de dias del Tratamiento:
+          </td>
+
+          <td>
+            <input type="number" step="0.01" min="0" placeholder="0,00" id="diasJ" class="form-control text-center bg-warning" autofocus onblur="">
+          </td>
+
+          <td class="text-right">
+            Cantidad de dias del Tratamiento:
+          </td>
+
+          <td>
+            <input type="number" step="0.01" min="0" placeholder="0,00" id="diasT" class="form-control text-center bg-warning" autofocus onblur="">
+          </td>
+        </tr>
+
+        <tr>
+          <td class="text-right">
+            Cantidad de ML Requeridos:
+          </td>
+
+          <td>
+            <input type="text" placeholder="-" id="resultadoJ" class="form-control text-center" disabled>
+          </td>
+
+          <td class="text-right">
+            Cantidad de Dosis Requeridas:
+          </td>
+
+          <td>
+            <input type="text" placeholder="-" id="resultadoT" class="form-control text-center" disabled>
+          </td>
+        </tr>
+
+        <tr>
+          <td class="text-right">
+            Cantidad de ML del medicamento:
+          </td>
+
+          <td>
+            <input type="number" step="0.01" min="0" placeholder="0,00" id="medicamentoJ" class="form-control text-center bg-warning" onblur="">
+          </td>
+
+          <td class="text-right">
+            Concentracion del medicamento (MG):
+          </td>
+
+          <td>
+            <input type="number" step="0.01" min="0" placeholder="0,00" id="concentracion" class="form-control text-center bg-warning" onblur="">
+          </td>
+        </tr>
+
+        <tr>
+          <td colspan="2"></td>
+
+          <td class="text-right">
+            Cantidad de Pastillas del medicamento:
+          </td>
+
+          <td>
+            <input type="number" step="0.01" min="0" placeholder="0,00" id="medicamentoT" class="form-control text-center bg-warning" onblur="">
+          </td>
+        </tr>
+
+        <tr>
+          <td class="text-right">
+            Unidades Requeridas a Comprar:
+          </td>
+
+          <td>
+            <input type="text" placeholder="-" id="resultado1J" class="form-control text-center" disabled>
+          </td>
+
+          <td class="text-right">
+            Unidades Requeridas a Comprar:
+          </td>
+
+          <td>
+            <input type="text" placeholder="-" id="resultado1T" class="form-control text-center" disabled>
+          </td>
+        </tr>
+
+        <tr>
+          <td class="text-right">
+            Unidades Redondeadas:
+          </td>
+
+          <td>
+            <input type="text" placeholder="-" id="resultado2J" class="form-control text-center" disabled>
+          </td>
+
+          <td class="text-right">
+            Unidades Redondeadas:
+          </td>
+
+          <td>
+            <input type="text" placeholder="-" id="resultado2T" class="form-control text-center" disabled>
+          </td>
+        </tr>
+
+        <tr>
+          <td class="text-center">
+            <button type="reset" class="btn btn-success">
+              Borrardo dosificacion de jarabes
+            </button>
+          </td>
+
+          <td class="text-center" colspan="2">
+            <a href="#ver-manual" title="Ir al manual de usuario" class="btn btn-primary">
+              Ver instrucciones
+            </a>
+          </td>
+
+          <td class="text-center">
+            <button type="reset" class="btn btn-success">
+              Borrardo dosificacion de tabletas
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </form>
+
+  <br><br>
+
   <a name="ver-manual"></a>
   <table class="table table-bordered table-striped">
-    <thead class="thead-dark">
+    <thead class="thead-dark" align="center">
       <th scope="col">
-        <b>MANUAL DE USUARIO</b>
+        <b>INSTRUCCIONES</b>
       </th>
     </thead>
 
     <tbody>
       <tr>
-        <td>* Solo se deben llenar los campos en color amarillo.</td>
-      </tr>
-
-      <tr>
-        <td>
-          * Cuando el cliente aun deba algo se marcara el saldo en color rojo!
+        <td>* Solo debes colocar informacion en los campos <span class="bg-warning text-dark"><b>AMARILLOS<b></span>
         </td>
       </tr>
 
       <tr>
         <td>
-          * Pendiente con el monto de la tasa, asegurarse de actualizarla cada dia.
-        </td>
-      </tr>
-
-      <tr>
-        <td>* El campo decimales solo acepta numeros entre 0 y 2.</td>
-      </tr>
-
-      <tr>
-        <td>
-          * El campo Tasa de Cambio Acepta numeros mayores a Bs 4500 y menores a Bs 10000.
+          * Los Campos <b>"Cantidad dias de Tratamiento"</b> solo acepta numeros enteros.
         </td>
       </tr>
 
       <tr>
         <td>
-          * El campo de Abonos en $ acepta montos mayores o iguales a 0 y menores a 2000$.
+          * Si los miligramos recomendados vs el recetado <b>no es igual</b> o la mitad o el doble se emite una alerta.
         </td>
       </tr>
 
       <tr>
         <td>
-          * El bot&oacute;n de borrado no toca el campo de tasa de cambio y decimales.
+          * El boton de borrado solo toca los campos en amarillo.
         </td>
       </tr>
 
       <tr>
         <td>
-          * Importante en Saldo restante en $ NO se le debe cobrar al cliente, sino lo reflejado en el recuadro final.
+          * El calculo que requiere el cliente no se mostrara hasta que se coloquen todos los campos en amarillo.
         </td>
       </tr>
 
       <tr>
         <td>
-          * Todos los pagos del cliente se debe relacionar en los abonos y buscar el saldo quede en 0 o cercano a 0.
+          * El Campo de dosis requeridas permite numeros decimales mayores a 0.
         </td>
       </tr>
 
       <tr>
         <td>
-          * La tolerancia del vuelto lo que valida es el monto minimo para generar un vuelto al cliente.
-        </td>
-      </tr>
-
-      <tr>
-        <td>
-          * El campo Fecha Tasa debe ser de hoy de lo contrario la hoja no permite ser usada.
+          * El valor colocado en la parte de jarabes para decir cada cuantas horas es el tratamiento deberia ser divisible entre 24 hrs.
         </td>
       </tr>
     </tbody>
@@ -484,12 +607,4 @@
       Volver al inicio
     </a>
   </div>
-
-  <script>
-    $(document).ready(function(){
-        $('[data-toggle="tooltip"]').tooltip();   
-    });
-    $('#exampleModalCenter').modal('show')
-  </script>
-
 @endsection
