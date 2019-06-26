@@ -1,151 +1,410 @@
-@extends('layouts.model')
+@extends('layouts.modelUser')
 
 @section('title')
-    Reporte
+  Tasas de venta
 @endsection
 
-@section('content')
-  <h1 class="h5 text-info">
-    <i class="fas fa-file-invoice"></i>
-    TEST
-  </h1>
-  <hr class="row align-items-start col-12">
+<script type="text/javascript" src="{{ asset('assets/jquery/jquery-2.2.2.min.js') }}"></script>
+<script type="text/javascript" src="{{ asset('assets/jquery/jquery-ui.min.js') }}" ></script>
+<script>
+  function limpiarClases() {
+    var resultado=document.getElementById('resultado');
+    resultado.value = "-";
+    resultado.classList.remove("bg-danger", "text-white");
+  }
 
-  <?php 
+  function calcularFactura() {
+    var fac1=0,fac2=0,fac3=0,totalFacBs=0,totalFacDs=0,tasa=0,decimales=0;
+
+    fac1=parseFloat(document.getElementById('fac1').value);
+    fac2=parseFloat(document.getElementById('fac2').value);
+    fac3=parseFloat(document.getElementById('fac3').value);
+    tasa = parseFloat(document.getElementById('tasa').value);
+    decimales = parseInt(document.getElementById('decimales').value);
+
+    if(fac1<0 || fac2<0 || fac3<0) {
+      alert("No se admiten valores negativos.");
+      if(fac1<0) {
+        document.getElementById('fac1').value=0;
+        fac1=0;
+      }
+
+      if(fac2<0) {
+        document.getElementById('fac2').value=0;
+        fac2=0;
+      }
+
+      if(fac3<0) {
+        document.getElementById('fac3').value=0;
+        fac3=0;
+      }
+    }
+
+    if(isNaN(fac1) || isNaN(fac2) || isNaN(fac3)) {
+      if(!isNaN(fac1)) {
+        totalFacBs = fac1;
+        if(!isNaN(fac2)) {
+          totalFacBs = fac1 + fac2;
+        }
+        if(!isNaN(fac3)) {
+          totalFacBs = fac1 + fac3;
+        }
+      }
+
+      if(!isNaN(fac2)) {
+        totalFacBs = fac2;
+        if(!isNaN(fac1)) {
+          totalFacBs = fac2 + fac1;
+        }
+        if(!isNaN(fac3)) {
+          totalFacBs = fac2 + fac3;
+        }
+      }
+
+      if(!isNaN(fac3)) {
+        totalFacBs = fac3;
+        if(!isNaN(fac1)) {
+          totalFacBs = fac3 + fac1;
+        }
+        if(!isNaN(fac2)) {
+          totalFacBs = fac3 + fac2;
+        }
+      }
+    }
+    else{
+      totalFacBs = fac1 + fac2 + fac3;
+    }
+
+    totalFacDs = parseFloat(totalFacBs).toFixed(decimales) / tasa;
+
+    document.getElementById('totalFacBs').value = parseFloat(totalFacBs).toFixed(decimales);
+    document.getElementById('totalFacDs').value = parseFloat(totalFacDs).toFixed(decimales);
+
+    var tolerancia=parseFloat(document.getElementById('tolerancia').value);
+    var resultado=document.getElementById('resultado');
+    var saldoRestanteBs=parseFloat(totalFacBs).toFixed(decimales);
+    var saldoRestanteDs=parseFloat(totalFacDs).toFixed(decimales);
+
+    document.getElementById('saldoRestanteBs').value = saldoRestanteBs;
+    document.getElementById('saldoRestanteDs').value = saldoRestanteDs;
+
+    if(saldoRestanteBs>0) {
+      document.getElementById('resultado').value = "El cliente debe: Bs. "+saldoRestanteBs;
+      resultado.classList.add("bg-danger", "text-white");
+    }
+    else if(saldoRestanteBs<((-1)*tolerancia)) {
+      document.getElementById('resultado').value = "Hay un vuelto pendiente de: Bs. "+saldoRestanteBs;
+      resultado.classList.remove("bg-danger", "text-white");
+    }
+    else {
+      document.getElementById('resultado').value = "-";
+      resultado.classList.remove("bg-danger", "text-white");
+    }
+  }
+
+  function calcularAbono() {
+    var abono1=0,abono2=0,convAbono1=0,totalAbonos=0,tasa=0,decimales=0;
+
+    abono1 = parseFloat(document.getElementById('abono1').value);
+    abono2 = parseFloat(document.getElementById('abono2').value);
+    tasa = parseFloat(document.getElementById('tasa').value);
+    decimales = parseInt(document.getElementById('decimales').value);
+
+    if(abono1<0 || abono2<0) {
+      alert("No se admiten valores negativos.");
+      if(abono1<0) {
+        document.getElementById('abono1').value=0;
+        abono1=0;
+      }
+
+      if(abono2<0) {
+        document.getElementById('abono2').value=0;
+        abono2=0;
+      }
+    }
+
+    if(!isNaN(abono1)) {
+      convAbono1 = abono1*tasa;
+      totalAbonos=convAbono1;
+      if(!isNaN(abono2)) {
+        totalAbonos = convAbono1+abono2;
+      }
+    }
+
+    if(!isNaN(abono2)) {
+      totalAbonos=abono2;
+      if(!isNaN(convAbono1)) {
+        totalAbonos = convAbono1+abono2;
+      }
+    }
+
+    var totalFacBs=0,saldoRestanteBs=0,saldoRestanteDs=0,resultado='';
+
+    totalFacBs=parseFloat(document.getElementById('totalFacBs').value);
+
+    saldoRestanteBs = totalFacBs-totalAbonos;
+    saldoRestanteDs = saldoRestanteBs/tasa;
+
+    document.getElementById('convAbono1').value = parseFloat(convAbono1).toFixed(decimales);
+    document.getElementById('totalAbonos').value = parseFloat(totalAbonos).toFixed(decimales);
+    document.getElementById('saldoRestanteBs').value = parseFloat(saldoRestanteBs).toFixed(decimales);
+    document.getElementById('saldoRestanteDs').value = parseFloat(saldoRestanteDs).toFixed(decimales);
+
+    var tolerancia=parseFloat(document.getElementById('tolerancia').value);
+    var resultado=document.getElementById('resultado');
+
+    if(saldoRestanteBs>0) {
+      document.getElementById('resultado').value = "El cliente debe: Bs. "+saldoRestanteBs.toFixed(decimales);
+      resultado.classList.add("bg-danger", "text-white");
+    }
+    else if(saldoRestanteBs<((-1)*tolerancia)) {
+      document.getElementById('resultado').value = "Hay un vuelto pendiente de: Bs. "+saldoRestanteBs.toFixed(decimales);
+      resultado.classList.remove("bg-danger", "text-white");
+    }
+    else {
+      document.getElementById('resultado').value = "-";
+      resultado.classList.remove("bg-danger", "text-white");
+    }
+  }
+</script>
+
+<?php 
   include(app_path().'\functions\config.php');
   include(app_path().'\functions\querys.php');
   include(app_path().'\functions\funciones.php');
   include(app_path().'\functions\reportes.php');
 
-  $ArtJson = "";
+  $FechaActual = new DateTime("now");
+  $FechaActual = $FechaActual->format("Y-m-d");
+  $TasaActual = TasaFechaConversion($FechaActual,'USD $.');
+?>
+
+@section('content')
+  <hr class="row align-items-start col-12">
+  <h5 class="text-info">
+    <i class="fas fa-money-bill-alt"></i>
+    Cuadre de conversiones de facturas y pagos
+  </h5>
+  <hr class="row align-items-start col-12">
   
-  if (isset($_GET['Id']))
-  {
-    $InicioCarga = new DateTime("now");
+  <a name="calculo-conversiones"></a>
+  <form name="cuadre" class="form-group">
+    <table class="table table-borderless table-hover">
+      <thead class="thead-dark" align="center">
+        <th scope="col" colspan="2">
+          <b>C&Aacute;LCULO DE CONVERSIONES</b>
+        </th>
+
+        <th scope="col" colspan="2">
+          <b>INFORMACION</b>
+        </th>
+      </thead>
     
-    if (isset($_GET['SEDE'])){      
-      echo '<h1 class="h5 text-success"  align="left"> <i class="fas fa-prescription"></i> '.NombreSede($_GET['SEDE']).'</h1>';
-    }
-    echo '<hr class="row align-items-start col-12">';
+      <tbody>
+        <tr>
+          <td class="text-right">
+            Total Factura Bs (Con IVA) #1:
+          </td>
 
-    echo"Sede: ".$_GET['SEDE'];
-    echo'ID articulo: '.$_GET['Id'];
+          <td>
+            <input type="number" step="0.01" min="0" placeholder="0,00" id="fac1" class="form-control text-center bg-warning" autofocus onblur="calcularFactura();">
+          </td>
 
-    //ReporteHistoricoProducto($_GET['SEDE'],$_GET['Id']);
+          <td class="text-right">
+            Tasa de Cambio:
+          </td>
 
-    $FinCarga = new DateTime("now");
-    $IntervalCarga = $InicioCarga->diff($FinCarga);
-    echo'Tiempo de carga: '.$IntervalCarga->format("%Y-%M-%D %H:%I:%S");
-  } 
-  else{
-    $InicioCarga = new DateTime("now");
-    /**/
-    $_GET['SEDE'] = 'DBs';
+          <td>
+            <input type="number" step="0.01" min="0" placeholder="0,00" value="{{$TasaActual}}" id="tasa" class="form-control text-center bg-success text-white" disabled>
+          </td>
+        </tr>
 
-    if (isset($_GET['SEDE'])){      
-      echo '<h1 class="h5 text-success"  align="left"> <i class="fas fa-prescription"></i> '.NombreSede($_GET['SEDE']).'</h1>';
-    }
-    echo '<hr class="row align-items-start col-12">';
+        <tr>
+          <td class="text-right">
+            Total Factura Bs (Con IVA) #2:
+          </td>
+
+          <td>
+            <input type="number" step="0.01" min="0" placeholder="0,00" id="fac2" class="form-control text-center bg-warning" onblur="calcularFactura();">
+          </td>
+
+          <td class="text-right">
+            Fecha Tasa de Cambio:
+          </td>
+
+          <td>
+            <input type="text" value="{{$FechaActual}}" id="fecha" class="form-control text-center bg-success text-white" disabled>
+          </td>
+        </tr>
+
+        <tr>
+          <td class="text-right">
+            Total Factura Bs (Con IVA) #3:
+          </td>
+
+          <td>
+            <input type="number" step="0.01" min="0" placeholder="0,00" id="fac3" class="form-control text-center bg-warning" onblur="calcularFactura();">
+          </td>
+
+          <td class="text-right">
+            Cantidad Decimales:
+          </td>
+
+          <td>
+            <input type="number" min="0" max="2" placeholder="0" value="2" id="decimales" class="form-control text-center bg-success text-white" disabled>
+          </td>
+        </tr>
+
+        <tr>
+          <td class="text-right">
+            Total Facturas Bs (Con IVA):
+          </td>
+
+          <td>
+            <input type="number" step="0.01" min="0" placeholder="0,00" id="totalFacBs" class="form-control text-center" disabled>
+          </td>
+
+          <td class="text-right">
+            Tolerancia Vuelto en Bs:
+          </td>
+
+          <td>
+            <input type="number" step="0.01" min="0" placeholder="0,00" value="200" id="tolerancia" class="form-control text-center bg-success text-white" disabled>
+          </td>
+        </tr>
+
+        <tr>
+          <td class="text-right">
+            Total Factura $:
+          </td>
+
+          <td>
+            <input type="number" step="0.01" min="0" placeholder="0,00" id="totalFacDs" class="form-control text-center" disabled>
+          </td>
     
-    $sql = QListaArticulos();
-    $ArtJson = armarJson($sql,$_GET['SEDE']);
+        <thead class="thead-dark" align="center">
+          <th scope="col" colspan="2" class="bg-white">
+          </th>
 
-    echo '
-    <form autocomplete="off" action="" target="_blank">
-      <div class="autocomplete" style="width:90%;">
-        <input id="myInput" type="text" name="Descrip" placeholder="Ingrese el nombre del articulo " onkeyup="conteo()" required>
-        <input id="myId" name="Id" type="hidden">
-        <input id="SEDE" name="SEDE" type="hidden" value="';
-        print_r($_GET['SEDE']);
-        echo'">
-      </div>
-      <input type="submit" value="Buscar" class="btn btn-outline-success">
-    </form>
-    ';
+          <th scope="col" colspan="2">
+            <b>RESTANTES</b>
+          </th>
+        </thead>
 
-    $FinCarga = new DateTime("now");
-    $IntervalCarga = $InicioCarga->diff($FinCarga);
-    echo'Tiempo de carga: '.$IntervalCarga->format("%Y-%M-%D %H:%I:%S");
-  } 
-?>
+        <tr>
+          <td class="text-right">
+            Abono #1 en $:
+          </td>
+
+          <td>
+            <input type="number" step="0.01" min="0" placeholder="0,00" id="abono1" class="form-control text-center bg-warning" onblur="calcularAbono();">
+          </td>
+
+          <td class="text-right">
+            Saldo Restante en $:
+          </td>
+
+          <td>
+            <input type="number" step="0.01" min="0" placeholder="0,00" id="saldoRestanteDs" class="form-control text-center" disabled>
+          </td>
+        </tr>
+
+        <tr>
+          <td class="text-right">
+            Abono #2 en Bs:
+          </td>
+
+          <td>
+            <input type="number" step="0.01" min="0" placeholder="0,00" id="abono2" class="form-control text-center bg-warning" onblur="calcularAbono();">
+          </td>
+
+          <td class="text-right">
+            Saldo Restante en Bs:
+          </td>
+
+          <td>
+            <input type="number" step="0.01" min="0" placeholder="0,00" id="saldoRestanteBs" class="form-control text-center" disabled>
+          </td>
+        </tr>
+
+        <tr>
+          <td class="text-right">
+            Conversion Abono #1 en Bs:
+          </td>
+
+          <td>
+            <input type="number" step="0.01" min="0" placeholder="0,00" id="convAbono1" class="form-control text-center" disabled>
+          </td>
+
+          <td colspan="2">
+            <input type="text" placeholder="-" class="form-control text-center" id="resultado" disabled>
+          </td>
+        </tr>
+
+        <tr>
+          <td class="text-right">
+            Total Abonos Bs:
+          </td>
+          
+          <td>
+            <input type="number" step="0.01" min="0" placeholder="0,00" id="totalAbonos" class="form-control text-center" disabled>
+          </td>
+
+          <td class="text-center">
+            <button type="reset" class="btn btn-success" onclick="limpiarClases();">
+              Borrar y empezar de nuevo
+            </button>
+          </td>
+
+          <td class="text-center">
+            <a href="#ver-manual" title="Ir al manual de usuario" class="btn btn-primary">
+              Ver instrucciones
+            </a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </form>
+
+  <br><br>
+
+  <a name="ver-manual"></a>
+  <table class="table table-bordered table-striped">
+    <thead class="thead-dark" align="center">
+      <th scope="col">
+        <b>INSTRUCCIONES</b>
+      </th>
+    </thead>
+
+    <tbody>
+      <tr>
+        <td>* Solo debes colocar informacion en los campos <span class="bg-warning text-dark"><b>AMARILLOS<b></span>
+        </td>
+      </tr>
+
+      <tr>
+        <td>* Si el cliente presenta deuda, lo veras en color<span class="bg-danger text-white"><b>ROJO<b></span>
+        </td>
+      </tr>
+
+      <tr>
+        <td>
+          * Verifica que la <b>tasa</b> sea la del dia en curso.
+        </td>
+      </tr>
+
+      <tr>
+        <td>
+          * El campo de <b>abonos en dolares</b> solo acepta montos menores a 2000$.
+        </td>
+      </tr>
+
+    </tbody>
+  </table>
+
+  <div class="text-center">
+    <a href="#calculo-conversiones" title="Volver al inicio" class="btn btn-primary">
+      Volver al inicio
+    </a>
+  </div>
 @endsection
-
-@section('scriptsHead')
-    <script type="text/javascript" src="{{ asset('assets/js/sortTable.js') }}">
-    </script>
-    <script type="text/javascript" src="{{ asset('assets/js/filter.js') }}">  
-    </script>
-    <script type="text/javascript" src="{{ asset('assets/js/functions.js') }}"> 
-    </script>
-    <script type="text/javascript" src="{{ asset('assets/jquery/jquery-2.2.2.min.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('assets/jquery/jquery-ui.min.js') }}" ></script>
-
-    <style>
-    * {
-      box-sizing: border-box;
-    }
-
-    /*the container must be positioned relative:*/
-    .autocomplete {
-      position: relative;
-      display: inline-block;
-    }
-
-    input {
-      border: 1px solid transparent;
-      background-color: #f1f1f1;
-      border-radius: 5px;
-      padding: 10px;
-      font-size: 16px;
-    }
-
-    input[type=text] {
-      background-color: #f1f1f1;
-      width: 100%;
-    }
-
-    .autocomplete-items {
-      position: absolute;
-      border: 1px solid #d4d4d4;
-      border-bottom: none;
-      border-top: none;
-      z-index: 99;
-      /*position the autocomplete items to be the same width as the container:*/
-      top: 100%;
-      left: 0;
-      right: 0;
-    }
-
-    .autocomplete-items div {
-      padding: 10px;
-      cursor: pointer;
-      background-color: #fff; 
-      border-bottom: 1px solid #d4d4d4; 
-    }
-
-    /*when hovering an item:*/
-    .autocomplete-items div:hover {
-      background-color: #e9e9e9; 
-    }
-
-    /*when navigating through the items using the arrow keys:*/
-    .autocomplete-active {
-      background-color: DodgerBlue !important; 
-      color: #ffffff; 
-    }
-    </style>
-@endsection
-
-@section('scriptsFoot')
-<?php
-  if($ArtJson!=""){
-?>
-    <script type="text/javascript">
-      ArrJs = eval(<?php echo $ArtJson ?>);
-      autocompletado(document.getElementById("myInput"),document.getElementById("myId"), ArrJs);
-    </script> 
-<?php
-  }
-?>  
-@endsection
-
