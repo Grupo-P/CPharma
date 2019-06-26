@@ -149,7 +149,12 @@
       }
     }
 
-    if(!isNaN(abono1)) {
+    if(!isNaN(abono1) && abono1>2000) {
+      alert("Los abonos ingresados en $ deben ser menores a 2000");
+      document.getElementById('abono1').value=0;
+      abono1=0;
+    }
+    else if(!isNaN(abono1)) {
       convAbono1 = abono1*tasa;
       totalAbonos=convAbono1;
       if(!isNaN(abono2)) {
