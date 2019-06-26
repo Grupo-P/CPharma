@@ -198,6 +198,7 @@
     }
   }
 </script>
+
 @section('content')
   <!-- Modal Fecha -->
   @if (true)

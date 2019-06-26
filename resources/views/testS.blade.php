@@ -4,6 +4,32 @@
   Tasas de venta
 @endsection
 
+<?php 
+  include(app_path().'\functions\config.php');
+  include(app_path().'\functions\querys.php');
+  include(app_path().'\functions\funciones.php');
+  include(app_path().'\functions\reportes.php');
+
+  function ValidarFecha($FechaActual){
+    $arrayValidaciones = array(2);
+    $FechaActual = date("Y-m-d",strtotime($FechaActual."- 1 days"));
+    $TasaActual = TasaFechaConversion($FechaActual,'USD $.');
+    $arrayValidaciones[0] = $FechaActual;
+    $arrayValidaciones[1] = $TasaActual;
+    return $arrayValidaciones;
+  }
+
+  $FechaActual = new DateTime("now");
+  $FechaActual = $FechaActual->format("Y-m-d");
+  $TasaActual = TasaFechaConversion($FechaActual,'USD $.');
+
+  while(is_null($TasaActual)) {
+    $arrayResult =  ValidarFecha($FechaActual);
+    $FechaActual = $arrayResult[0];
+    $TasaActual = $arrayResult[1];
+  }
+?>
+
 <script type="text/javascript" src="{{ asset('assets/jquery/jquery-2.2.2.min.js') }}"></script>
 <script type="text/javascript" src="{{ asset('assets/jquery/jquery-ui.min.js') }}" ></script>
 <script>
@@ -123,7 +149,12 @@
       }
     }
 
-    if(!isNaN(abono1)) {
+    if(!isNaN(abono1) && abono1>2000) {
+      alert("Los abonos ingresados en $ deben ser menores a 2000");
+      document.getElementById('abono1').value=0;
+      abono1=0;
+    }
+    else if(!isNaN(abono1)) {
       convAbono1 = abono1*tasa;
       totalAbonos=convAbono1;
       if(!isNaN(abono2)) {
@@ -167,17 +198,6 @@
     }
   }
 </script>
-
-<?php 
-  include(app_path().'\functions\config.php');
-  include(app_path().'\functions\querys.php');
-  include(app_path().'\functions\funciones.php');
-  include(app_path().'\functions\reportes.php');
-
-  $FechaActual = new DateTime("now");
-  $FechaActual = $FechaActual->format("Y-m-d");
-  $TasaActual = TasaFechaConversion($FechaActual,'USD $.');
-?>
 
 @section('content')
   <hr class="row align-items-start col-12">
