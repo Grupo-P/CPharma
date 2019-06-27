@@ -23,98 +23,40 @@
 <script type="text/javascript" src="{{ asset('assets/jquery/jquery-2.2.2.min.js') }}"></script>
 <script type="text/javascript" src="{{ asset('assets/jquery/jquery-ui.min.js') }}" ></script>
 <script>
-  function limpiarClases() {
+  /*function limpiarClases() {
     var resultado=document.getElementById('resultado');
     resultado.value = "-";
     resultado.classList.remove("bg-danger", "text-white");
-  }
+  }*/
 
-  function calcularFactura() {
-    var fac1=0,fac2=0,fac3=0,totalFacBs=0,totalFacDs=0,tasa=0,decimales=0;
+  function calcularCantidadJarabes() {
+    var cantDJ=0,itervHJ=0,diasJ=0,resultadoJ1=0;
 
-    fac1=parseFloat(document.getElementById('fac1').value);
-    fac2=parseFloat(document.getElementById('fac2').value);
-    fac3=parseFloat(document.getElementById('fac3').value);
-    tasa = parseFloat(document.getElementById('tasa').value);
-    decimales = parseInt(document.getElementById('decimales').value);
+    cantDJ=parseFloat(document.getElementById('cantDJ').value);
+    itervHJ=parseFloat(document.getElementById('itervHJ').value);
+    diasJ = parseInt(document.getElementById('diasJ').value);
 
-    if(fac1<0 || fac2<0 || fac3<0) {
+    if(cantDJ<0 || itervHJ<0 || diasJ<0) {
       alert("No se admiten valores negativos.");
-      if(fac1<0) {
-        document.getElementById('fac1').value=0;
-        fac1=0;
+      if(cantDJ<0) {
+        document.getElementById('cantDJ').value=0;
+        cantDJ=0;
       }
 
-      if(fac2<0) {
-        document.getElementById('fac2').value=0;
-        fac2=0;
+      if(itervHJ<0) {
+        document.getElementById('itervHJ').value=0;
+        itervHJ=0;
       }
 
-      if(fac3<0) {
-        document.getElementById('fac3').value=0;
-        fac3=0;
-      }
-    }
-
-    if(isNaN(fac1) || isNaN(fac2) || isNaN(fac3)) {
-      if(!isNaN(fac1)) {
-        totalFacBs = fac1;
-        if(!isNaN(fac2)) {
-          totalFacBs = fac1 + fac2;
-        }
-        if(!isNaN(fac3)) {
-          totalFacBs = fac1 + fac3;
-        }
-      }
-
-      if(!isNaN(fac2)) {
-        totalFacBs = fac2;
-        if(!isNaN(fac1)) {
-          totalFacBs = fac2 + fac1;
-        }
-        if(!isNaN(fac3)) {
-          totalFacBs = fac2 + fac3;
-        }
-      }
-
-      if(!isNaN(fac3)) {
-        totalFacBs = fac3;
-        if(!isNaN(fac1)) {
-          totalFacBs = fac3 + fac1;
-        }
-        if(!isNaN(fac2)) {
-          totalFacBs = fac3 + fac2;
-        }
+      if(diasJ<0) {
+        document.getElementById('diasJ').value=0;
+        diasJ=0;
       }
     }
-    else{
-      totalFacBs = fac1 + fac2 + fac3;
-    }
 
-    totalFacDs = parseFloat(totalFacBs).toFixed(decimales) / tasa;
-
-    document.getElementById('totalFacBs').value = parseFloat(totalFacBs).toFixed(decimales);
-    document.getElementById('totalFacDs').value = parseFloat(totalFacDs).toFixed(decimales);
-
-    var tolerancia=parseFloat(document.getElementById('tolerancia').value);
-    var resultado=document.getElementById('resultado');
-    var saldoRestanteBs=parseFloat(totalFacBs).toFixed(decimales);
-    var saldoRestanteDs=parseFloat(totalFacDs).toFixed(decimales);
-
-    document.getElementById('saldoRestanteBs').value = saldoRestanteBs;
-    document.getElementById('saldoRestanteDs').value = saldoRestanteDs;
-
-    if(saldoRestanteBs>0) {
-      document.getElementById('resultado').value = "El cliente debe: Bs. "+saldoRestanteBs;
-      resultado.classList.add("bg-danger", "text-white");
-    }
-    else if(saldoRestanteBs<((-1)*tolerancia)) {
-      document.getElementById('resultado').value = "Hay un vuelto pendiente de: Bs. "+saldoRestanteBs;
-      resultado.classList.remove("bg-danger", "text-white");
-    }
-    else {
-      document.getElementById('resultado').value = "-";
-      resultado.classList.remove("bg-danger", "text-white");
+    if(!isNaN(cantDJ) && !isNaN(itervHJ) && !isNaN(diasJ)) {
+      resultadoJ1 = cantDJ * (24/itervHJ) * diasJ;
+      document.getElementById('resultadoJ1').value = resultadoJ1.toFixed(2);
     }
   }
 
@@ -216,7 +158,7 @@
           </td>
 
           <td>
-            <input type="number" step="0.01" min="0" tabindex="1" placeholder="0,00" id="cantDJ" class="form-control text-center bg-warning" onblur="" autofocus>
+            <input type="number" step="0.01" min="0" tabindex="1" placeholder="0,00" id="cantDJ" class="form-control text-center bg-warning" onblur="calcularCantidadJarabes();" autofocus>
           </td>
 
           <td class="text-right">
@@ -234,7 +176,7 @@
           </td>
 
           <td>
-            <input type="number" step="0.01" min="0" tabindex="2" placeholder="0,00" id="itervHJ" class="form-control text-center bg-warning" onblur="">
+            <input type="number" step="0.01" min="0" tabindex="2" placeholder="0,00" id="itervHJ" class="form-control text-center bg-warning" onblur="calcularCantidadJarabes();">
           </td>
 
           <td class="text-right">
@@ -252,7 +194,7 @@
           </td>
 
           <td>
-            <input type="number" min="0" tabindex="3" placeholder="0" id="diasJ" class="form-control text-center bg-warning" onblur="">
+            <input type="number" min="0" tabindex="3" placeholder="0" id="diasJ" class="form-control text-center bg-warning" pattern="[0-9]*" onblur="calcularCantidadJarabes();">
           </td>
           
           <td class="text-right">
