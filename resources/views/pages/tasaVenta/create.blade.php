@@ -63,10 +63,10 @@
                     </th>
                     <td>
                       <select id="moneda" name="moneda" class="form-control" required>
-                        <option>Bs.S.</option>
-                        <option>USD $.</option>
-                        <option>COP $.</option>
-                        <option>€.</option>
+                        <option>Bolivar Soberano</option>
+                        <option>Dolar</option>
+                        <option>Peso Colombiano</option>
+                        <option>Euro</option>
                       </select>
                     </td>
                 </tr>
