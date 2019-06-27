@@ -1,4 +1,4 @@
-@extends('layouts.default')
+@extends('layouts.basic_welcome')
 
 <style>
     .full-height {
@@ -19,7 +19,7 @@
         font-size: 84px;
     }
     .m-b-md {
-        margin-bottom: 30px;
+        margin-bottom: 180px;
     }
 </style>
 
