@@ -39,6 +39,7 @@
     var resultado=document.getElementById('resultado');
     resultado.value = "-";
     resultado.classList.remove("bg-danger", "text-white");
+    document.getElementById("fac1").focus();
   }
 
   function calcularFactura() {
@@ -251,7 +252,7 @@
           </td>
 
           <td>
-            <input type="number" step="0.01" min="0" placeholder="0,00" id="fac1" class="form-control text-center bg-warning" autofocus onblur="calcularFactura();">
+            <input type="number" step="0.01" min="0" placeholder="0,00" name="fac1" id="fac1" class="form-control text-center bg-warning" autofocus onblur="calcularFactura();" onkeypress="FocusChange()">
           </td>
 
           <td class="text-right">
@@ -281,7 +282,7 @@
           </td>
 
           <td>
-            <input type="number" step="0.01" min="0" placeholder="0,00" id="fac2" class="form-control text-center bg-warning" onblur="calcularFactura();">
+            <input type="number" step="0.01" min="0" placeholder="0,00" name="fac2" id="fac2" class="form-control text-center bg-warning" onblur="calcularFactura();" onkeypress="FocusChange()">
           </td>
 
           <td class="text-right">
@@ -312,7 +313,7 @@
           </td>
 
           <td>
-            <input type="number" step="0.01" min="0" placeholder="0,00" id="fac3" class="form-control text-center bg-warning" onblur="calcularFactura();">
+            <input type="number" step="0.01" min="0" placeholder="0,00" name="fac3" id="fac3" class="form-control text-center bg-warning" onblur="calcularFactura();" onkeypress="FocusChange()">
           </td>
 
           <td class="text-right">
@@ -366,7 +367,7 @@
           </td>
 
           <td>
-            <input type="number" step="0.01" min="0" placeholder="0,00" id="abono1" class="form-control text-center bg-warning" onblur="calcularAbono();">
+            <input type="number" step="0.01" min="0" placeholder="0,00" name="abono1" id="abono1" class="form-control text-center bg-warning" onblur="calcularAbono();" onkeypress="FocusChange()">
           </td>
 
           <td class="text-right">
@@ -384,7 +385,7 @@
           </td>
 
           <td>
-            <input type="number" step="0.01" min="0" placeholder="0,00" id="abono2" class="form-control text-center bg-warning" onblur="calcularAbono();">
+            <input type="number" step="0.01" min="0" placeholder="0,00" name="abono2" id="abono2" class="form-control text-center bg-warning" onblur="calcularAbono();" onkeypress="FocusChange()">
           </td>
 
           <td class="text-right">
@@ -420,7 +421,7 @@
           </td>
 
           <td class="text-center">
-            <button type="reset" class="btn btn-success" onclick="limpiarClases();">
+            <button type="reset" name="btn-borrarN" id="btn-borrarN" class="btn btn-success" onclick="limpiarClases();">
               Borrar y empezar de nuevo
             </button>
           </td>
@@ -483,4 +484,31 @@
     });
     $('#exampleModalCenter').modal('show')
   </script>
+
+  <script>
+      function FocusChange() {
+        if (event.keyCode == 13) {
+
+          if(document.activeElement.name){
+            var ElementoActivo = document.activeElement.name;
+          }
+          
+          if(document.activeElement.name == 'fac1'){
+            document.getElementById("fac2").focus();
+          }
+          else if(document.activeElement.name == 'fac2'){
+            document.getElementById("fac3").focus();
+          }
+          else if(document.activeElement.name == 'fac3'){
+            document.getElementById("abono1").focus();
+          }
+          else if(document.activeElement.name == 'abono1'){
+            document.getElementById("abono2").focus();
+          }
+          else if(document.activeElement.name == 'abono2'){
+            document.getElementById("btn-borrarN").focus();
+          }
+        }
+      };
+    </script>
 @endsection
