@@ -209,16 +209,16 @@
       <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title text-info" id="exampleModalCenterTitle"><i class="fas fa-info text-info"></i> Informacion</h5>
+            <h5 class="modal-title text-warning" id="exampleModalCenterTitle"><i class="fas fa-exclamation-triangle"></i>&nbsp;Advertencia</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
           <div class="modal-body">
-            <h4 class="h6">La tasa del DOLAR no esta actualizada, informe al supervisor</h4>
+            <h4 class="h6">La tasa de venta no est&aacute; actualizada, contacte a su supervisor.</h4>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-outline-success" data-dismiss="modal">Aceptar</button>
+            <button type="button" class="btn btn-outline-warning" data-dismiss="modal">Aceptar</button>
           </div>
         </div>
       </div>
@@ -237,11 +237,11 @@
     <table class="table table-borderless table-hover">
       <thead class="thead-dark" align="center">
         <th scope="col" colspan="2">
-          <b>C&Aacute;LCULO DE CONVERSIONES</b>
+          <b>FACTURAS DEL CLIENTE</b>
         </th>
 
         <th scope="col" colspan="2">
-          <b>INFORMACION</b>
+           <b>INFORMACI&Oacute;N</b>
         </th>
       </thead>
     
@@ -293,14 +293,14 @@
         if($FechaTasaDolar != $FechaActual){
       ?>
           <td>
-            <input type="text" value="{{$FechaTasaDolar}}" id="fecha" class="form-control text-center bg-danger text-white" disabled>
+            <input type="text" value="{{date('d-m-Y',strtotime($FechaTasaDolar))}}" id="fecha" class="form-control text-center bg-danger text-white" disabled>
           </td>
       <?php
         }
         else{
       ?>
           <td>
-            <input type="text" value="{{$FechaTasaDolar}}" id="fecha" class="form-control text-center bg-success text-white" disabled>
+            <input type="text" value="{{date('d-m-Y',strtotime($FechaTasaDolar))}}" id="fecha" class="form-control text-center bg-success text-white" disabled>
           </td>
       <?php   
         }
@@ -351,16 +351,22 @@
           <td>
             <input type="number" step="0.01" min="0" placeholder="0,00" id="totalFacDs" class="form-control text-center" disabled>
           </td>
-    
-        <thead class="thead-dark" align="center">
-          <th scope="col" colspan="2" class="bg-white">
-          </th>
+          
+          <td colspan="2">&nbsp;</td>
+        </tr>
+      </tbody>
 
-          <th scope="col" colspan="2">
-            <b>RESTANTES</b>
-          </th>
-        </thead>
+       <thead class="thead-dark" align="center">
+        <th scope="col" colspan="2">
+          <b>ABONOS DEL CLIENTE</b>
+        </th>
 
+        <th scope="col" colspan="2">
+          <b>SALDOS RESTANTES</b>
+        </th>
+      </thead>
+
+      <tbody>
         <tr>
           <td class="text-right">
             Abono #1 en $:
@@ -453,7 +459,7 @@
       </tr>
 
       <tr>
-        <td>* Si el cliente presenta deuda, lo veras en color<span class="bg-danger text-white"><b>ROJO<b></span>
+        <td>* Si el cliente presenta deuda, lo veras en color <span class="bg-danger text-white"><b>ROJO<b></span>
         </td>
       </tr>
 
@@ -480,9 +486,9 @@
 
   <script>
     $(document).ready(function(){
-        $('[data-toggle="tooltip"]').tooltip();   
+      $('[data-toggle="tooltip"]').tooltip();   
     });
-    $('#exampleModalCenter').modal('show')
+    $('#exampleModalCenter').modal('show');
   </script>
 
   <script>
