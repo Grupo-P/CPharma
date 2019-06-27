@@ -158,7 +158,7 @@
           </td>
 
           <td>
-            <input type="number" step="0.01" min="0" tabindex="1" placeholder="0,00" id="cantDJ" class="form-control text-center bg-warning" onblur="calcularCantidadJarabes();" autofocus>
+            <input type="number" step="0.01" min="0" tabindex="1" placeholder="0,00" id="cantDJ" name="cantDJ" class="form-control text-center bg-warning" onblur="calcularCantidadJarabes();" onkeypress="FocusChange();" autofocus>
           </td>
 
           <td class="text-right">
@@ -166,7 +166,7 @@
           </td>
 
           <td>
-            <input type="number" step="0.01" min="0" tabindex="4" placeholder="0,00" id="medicamentoJ" class="form-control text-center bg-warning" onblur="">
+            <input type="number" step="0.01" min="0" tabindex="4" placeholder="0,00" id="medicamentoJ" name="medicamentoJ" class="form-control text-center bg-warning" onblur="" onkeypress="FocusChange();">
           </td>
         </tr>
 
@@ -176,7 +176,7 @@
           </td>
 
           <td>
-            <input type="number" step="0.01" min="0" tabindex="2" placeholder="0,00" id="itervHJ" class="form-control text-center bg-warning" onblur="calcularCantidadJarabes();">
+            <input type="number" step="0.01" min="0" tabindex="2" placeholder="0,00" id="itervHJ" name="itervHJ" class="form-control text-center bg-warning" onblur="calcularCantidadJarabes();" onkeypress="FocusChange();">
           </td>
 
           <td class="text-right">
@@ -194,7 +194,7 @@
           </td>
 
           <td>
-            <input type="number" min="0" tabindex="3" placeholder="0" id="diasJ" class="form-control text-center bg-warning" pattern="[0-9]*" onblur="calcularCantidadJarabes();">
+            <input type="number" min="0" tabindex="3" placeholder="0" id="diasJ" name="diasJ" class="form-control text-center bg-warning" pattern="[0-9]*" onblur="calcularCantidadJarabes();" onkeypress="FocusChange();">
           </td>
           
           <td class="text-right">
@@ -387,4 +387,27 @@
       Volver al inicio
     </a>
   </div>
+
+  <script>
+    function FocusChange() {
+      if(event.keyCode == 13) {
+        if(document.activeElement.name) {
+          var ElementoActivo = document.activeElement.name;
+        }
+        
+        if(document.activeElement.name == 'cantDJ') {
+          document.getElementById("itervHJ").focus();
+        }
+        else if(document.activeElement.name == 'itervHJ') {
+          document.getElementById("diasJ").focus();
+        }
+        else if(document.activeElement.name == 'diasJ') {
+          document.getElementById("medicamentoJ").focus();
+        }
+        else if(document.activeElement.name == 'medicamentoJ') {
+          document.getElementById("cantDJ").focus();
+        }
+      }
+    }
+  </script>
 @endsection
