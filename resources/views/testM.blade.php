@@ -252,7 +252,7 @@
           </td>
 
           <td>
-            <input type="number" step="0.01" min="0" tabindex="3" placeholder="0,00" id="diasJ" class="form-control text-center bg-warning" onblur="">
+            <input type="number" min="0" tabindex="3" placeholder="0" id="diasJ" class="form-control text-center bg-warning" onblur="">
           </td>
           
           <td class="text-right">
@@ -341,7 +341,7 @@
           </td>
 
           <td>
-            <input type="number" step="0.01" min="0" tabindex="9" placeholder="0,00" id="diasT" class="form-control text-center bg-warning" onblur="">
+            <input type="number" min="0" tabindex="9" placeholder="0" id="diasT" class="form-control text-center bg-warning" onblur="">
           </td>
 
           <td class="text-right">
