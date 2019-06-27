@@ -15,6 +15,10 @@ Route::get('/', function() {
     return view('welcome');
 });
 
+Route::get('/cuadreDivisa', function() {
+    return view('pages.caja.cuadreDivisa');
+});
+
 Auth::routes();
 
 Route::get('/testS', function() {
