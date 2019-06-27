@@ -23,12 +23,6 @@
 <script type="text/javascript" src="{{ asset('assets/jquery/jquery-2.2.2.min.js') }}"></script>
 <script type="text/javascript" src="{{ asset('assets/jquery/jquery-ui.min.js') }}" ></script>
 <script>
-  /*function limpiarClases() {
-    var resultado=document.getElementById('resultado');
-    resultado.value = "-";
-    resultado.classList.remove("bg-danger", "text-white");
-  }*/
-
   function calcularCantidadJarabes() {
     var cantDJ=0,itervHJ=0,diasJ=0,resultadoJ1=0;
 
@@ -57,76 +51,16 @@
     if(!isNaN(cantDJ) && !isNaN(itervHJ) && !isNaN(diasJ)) {
       resultadoJ1 = cantDJ * (24/itervHJ) * diasJ;
       document.getElementById('resultadoJ1').value = resultadoJ1.toFixed(2);
-    }
-  }
 
-  function calcularAbono() {
-    var abono1=0,abono2=0,convAbono1=0,totalAbonos=0,tasa=0,decimales=0;
+      var medicamentoJ = parseFloat(document.getElementById('medicamentoJ').value);
 
-    abono1 = parseFloat(document.getElementById('abono1').value);
-    abono2 = parseFloat(document.getElementById('abono2').value);
-    tasa = parseFloat(document.getElementById('tasa').value);
-    decimales = parseInt(document.getElementById('decimales').value);
+      if(!isNaN(medicamentoJ)) {
+        var resultadoJ2 = resultadoJ1/medicamentoJ;
+        var resultadoJ3 = Math.ceil(resultadoJ2);
 
-    if(abono1<0 || abono2<0) {
-      alert("No se admiten valores negativos.");
-      if(abono1<0) {
-        document.getElementById('abono1').value=0;
-        abono1=0;
+        document.getElementById('resultadoJ2').value = resultadoJ2.toFixed(2);
+        document.getElementById('resultadoJ3').value = resultadoJ3;
       }
-
-      if(abono2<0) {
-        document.getElementById('abono2').value=0;
-        abono2=0;
-      }
-    }
-
-    if(!isNaN(abono1) && abono1>2000) {
-      alert("Los abonos ingresados en $ deben ser menores a 2000");
-      document.getElementById('abono1').value=0;
-      abono1=0;
-    }
-    else if(!isNaN(abono1)) {
-      convAbono1 = abono1*tasa;
-      totalAbonos=convAbono1;
-      if(!isNaN(abono2)) {
-        totalAbonos = convAbono1+abono2;
-      }
-    }
-
-    if(!isNaN(abono2)) {
-      totalAbonos=abono2;
-      if(!isNaN(convAbono1)) {
-        totalAbonos = convAbono1+abono2;
-      }
-    }
-
-    var totalFacBs=0,saldoRestanteBs=0,saldoRestanteDs=0,resultado='';
-
-    totalFacBs=parseFloat(document.getElementById('totalFacBs').value);
-
-    saldoRestanteBs = totalFacBs-totalAbonos;
-    saldoRestanteDs = saldoRestanteBs/tasa;
-
-    document.getElementById('convAbono1').value = parseFloat(convAbono1).toFixed(decimales);
-    document.getElementById('totalAbonos').value = parseFloat(totalAbonos).toFixed(decimales);
-    document.getElementById('saldoRestanteBs').value = parseFloat(saldoRestanteBs).toFixed(decimales);
-    document.getElementById('saldoRestanteDs').value = parseFloat(saldoRestanteDs).toFixed(decimales);
-
-    var tolerancia=parseFloat(document.getElementById('tolerancia').value);
-    var resultado=document.getElementById('resultado');
-
-    if(saldoRestanteBs>0) {
-      document.getElementById('resultado').value = "El cliente debe: Bs. "+saldoRestanteBs.toFixed(decimales);
-      resultado.classList.add("bg-danger", "text-white");
-    }
-    else if(saldoRestanteBs<((-1)*tolerancia)) {
-      document.getElementById('resultado').value = "Hay un vuelto pendiente de: Bs. "+saldoRestanteBs.toFixed(decimales);
-      resultado.classList.remove("bg-danger", "text-white");
-    }
-    else {
-      document.getElementById('resultado').value = "-";
-      resultado.classList.remove("bg-danger", "text-white");
     }
   }
 </script>
@@ -166,7 +100,7 @@
           </td>
 
           <td>
-            <input type="number" step="0.01" min="0" tabindex="4" placeholder="0,00" id="medicamentoJ" name="medicamentoJ" class="form-control text-center bg-warning" onblur="" onkeypress="FocusChange();">
+            <input type="number" step="0.01" min="0" tabindex="4" placeholder="0,00" id="medicamentoJ" name="medicamentoJ" class="form-control text-center bg-warning" onblur="calcularCantidadJarabes();" onkeypress="FocusChange();">
           </td>
         </tr>
 
