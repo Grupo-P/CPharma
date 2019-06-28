@@ -16,6 +16,9 @@
   <!-- Navbar brand -->
   <a class="navbar-brand titleIcon" href="{{ url('/cuadreDivisa') }}"><b><i class="fas fa-hand-holding-usd"></i></b>
   </a>
+  &nbsp;&nbsp;
+  <a class="navbar-brand titleIcon" href="{{ url('/dosificacion') }}"><b><i class="fas fa-prescription"></i></b>
+  </a>
 
   <!-- Collapsible content -->
 </nav>

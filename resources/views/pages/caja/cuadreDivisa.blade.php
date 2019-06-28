@@ -224,15 +224,15 @@
       </div>
     </div>
   @endif
-
+  
+  <a name="Inicio"></a>
   <hr class="row align-items-start col-12">
   <h5 class="text-info">
     <i class="fas fa-money-bill-alt"></i>
-    Calculo de factura en divisa
+    C&Aacute;LCULO DE FACTURA EN DIVISA
   </h5>
   <hr class="row align-items-start col-12">
   
-  <a name="calculo-conversiones"></a>
   <form name="cuadre" class="form-group">
     <table class="table table-borderless table-hover">
       <thead class="thead-dark" align="center">
@@ -457,7 +457,13 @@
         <td>* Solo debes colocar informacion en los campos <span class="bg-warning text-dark"><b>AMARILLOS<b></span>
         </td>
       </tr>
-
+      
+      <tr>
+        <td>
+          * El boton de borrado solo afecta los campos en <span class="bg-warning text-dark"><b>AMARILLO<b></span>
+        </td>
+      </tr>
+      
       <tr>
         <td>* Si el cliente presenta deuda, lo veras en color <span class="bg-danger text-white"><b>ROJO<b></span>
         </td>
@@ -479,7 +485,7 @@
   </table>
 
   <div class="text-center">
-    <a href="#calculo-conversiones" title="Volver al inicio" class="btn btn-primary">
+    <a href="#Inicio" title="Volver al inicio" class="btn btn-primary">
       Volver al inicio
     </a>
   </div>

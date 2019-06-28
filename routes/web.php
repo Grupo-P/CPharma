@@ -19,6 +19,10 @@ Route::get('/cuadreDivisa', function() {
     return view('pages.caja.cuadreDivisa');
 });
 
+Route::get('/dosificacion', function() {
+    return view('pages.caja.dosificaciones');
+});
+
 Auth::routes();
 
 Route::get('/testS', function() {
