@@ -10,6 +10,14 @@
   include(app_path().'\functions\funciones.php');
   include(app_path().'\functions\reportes.php');
 
+  /*
+    TITULO: ValidarFecha
+    PARAMETROS : [$FechaTasaDolar] fecha actual
+                 [$Moneda] la moneda a buscar
+    FUNCION: Realizar la busqueda de la tasa segun la fecha, en caso de no ser la fecha del dia, se haran tantas iteraciones hacia atras como sean necesarias hasta encontrar una tasa valida
+    RETORNO: Un array conteniendo la fecha y la tasa encontrada
+  */
+
   function ValidarFecha($FechaTasaDolar,$Moneda){
     $arrayValidaciones = array(2);
     $FechaTasaDolar = date("Y-m-d",strtotime($FechaTasaDolar."- 1 days"));
@@ -20,7 +28,6 @@
   }
 
   $Moneda = 'Dolar';
-
   $FechaTasaDolar = new DateTime("now");
   $FechaActual = $FechaTasaDolar = $FechaTasaDolar->format("Y-m-d");
   $TasaDolar = TasaFechaConversion($FechaTasaDolar,$Moneda);
@@ -39,6 +46,16 @@
 <script type="text/javascript" src="{{ asset('assets/jquery/jquery-2.2.2.min.js') }}"></script>
 <script type="text/javascript" src="{{ asset('assets/jquery/jquery-ui.min.js') }}" ></script>
 <script>
+  /*
+    TITULO: limpiarClases
+    PARAMETROS : No aplica
+    FUNCION: Limpia todos los residuos de clases que pintan colores
+    RETORNO: No aplica
+
+    Variables:
+      * resultado: El campo donde se refleja la deuda del cliente
+  */
+ 
   function limpiarClases() {
     var resultado=document.getElementById('resultado');
     resultado.value = "-";
@@ -46,8 +63,28 @@
     document.getElementById("fac1").focus();
   }
 
+  /*
+    TITULO: calcularFactura
+    PARAMETROS : No aplica
+    FUNCION: Realizar los calculos para conectar una o las tres facturas en un resultado dado en bolivares o divisas
+    RETORNO: No aplica
+
+    Variables:
+      - Variables de entrada:
+        * fac1: Factura #1 del cliente Bs 
+        * fac2: Factura #2 del cliente Bs 
+        * fac3: Factura #3 del cliente Bs 
+        * tasa: Tasa en dolares traida de la BBDD
+        * decimales: Cantidad de decimales a manejar traida de la BBDD
+      - Variables de salida:
+        * totalFacBs: Total de las facturas en Bs
+        * totalFacDs: Total de las facturas en $
+        * tolerancia: Limite de vuelto significativo traida de la BBDD
+        * resultado: Campo que muestra el resultado final de los calculos
+  */
+
   function calcularFactura() {
-    var fac1=0,fac2=0,fac3=0,totalFacBs=0,totalFacDs=0,tasa=0,decimales=0;
+    var fac1=0,fac2=0,fac3=0,tasa=0,decimales=0,totalFacBs=0,totalFacDs=0;
 
     fac1=parseFloat(document.getElementById('fac1').value);
     fac2=parseFloat(document.getElementById('fac2').value);
@@ -108,25 +145,24 @@
       totalFacBs = fac1 + fac2 + fac3;
     }
 
-    totalFacDs = parseFloat(totalFacBs).toFixed(decimales) / tasa;
+    totalFacDs = (totalFacBs/tasa).toFixed(decimales);
+    totalFacBs = totalFacBs.toFixed(decimales);
 
-    document.getElementById('totalFacBs').value = parseFloat(totalFacBs).toFixed(decimales);
-    document.getElementById('totalFacDs').value = parseFloat(totalFacDs).toFixed(decimales);
+    document.getElementById('totalFacBs').value = totalFacBs;
+    document.getElementById('totalFacDs').value = totalFacDs;
 
     var tolerancia=parseFloat(document.getElementById('tolerancia').value);
     var resultado=document.getElementById('resultado');
-    var saldoRestanteBs=parseFloat(totalFacBs).toFixed(decimales);
-    var saldoRestanteDs=parseFloat(totalFacDs).toFixed(decimales);
 
-    document.getElementById('saldoRestanteBs').value = saldoRestanteBs;
-    document.getElementById('saldoRestanteDs').value = saldoRestanteDs;
+    document.getElementById('saldoRestanteBs').value = totalFacBs;
+    document.getElementById('saldoRestanteDs').value = totalFacDs;
 
-    if(saldoRestanteBs>0) {
-      document.getElementById('resultado').value = "El cliente debe: Bs. "+saldoRestanteBs;
+    if(totalFacBs>0) {
+      document.getElementById('resultado').value = "El cliente debe: Bs. "+totalFacBs;
       resultado.classList.add("bg-danger", "text-white");
     }
-    else if(saldoRestanteBs<((-1)*tolerancia)) {
-      document.getElementById('resultado').value = "Hay un vuelto pendiente de: Bs. "+saldoRestanteBs;
+    else if(totalFacBs<((-1)*tolerancia)) {
+      document.getElementById('resultado').value = "Hay un vuelto pendiente de: Bs. "+totalFacBs;
       resultado.classList.remove("bg-danger", "text-white");
     }
     else {
@@ -176,27 +212,29 @@
       }
     }
 
-    var totalFacBs=0,saldoRestanteBs=0,saldoRestanteDs=0,resultado='';
+    var totalFacBs=0,saldoRestanteBs=0,saldoRestanteDs=0;
 
     totalFacBs=parseFloat(document.getElementById('totalFacBs').value);
 
-    saldoRestanteBs = totalFacBs-totalAbonos;
-    saldoRestanteDs = saldoRestanteBs/tasa;
+    convAbono1 = convAbono1.toFixed(decimales);
+    totalAbonos = totalAbonos.toFixed(decimales);
+    saldoRestanteBs = (totalFacBs-totalAbonos).toFixed(decimales);
+    saldoRestanteDs = (saldoRestanteBs/tasa).toFixed(decimales);
 
-    document.getElementById('convAbono1').value = parseFloat(convAbono1).toFixed(decimales);
-    document.getElementById('totalAbonos').value = parseFloat(totalAbonos).toFixed(decimales);
-    document.getElementById('saldoRestanteBs').value = parseFloat(saldoRestanteBs).toFixed(decimales);
-    document.getElementById('saldoRestanteDs').value = parseFloat(saldoRestanteDs).toFixed(decimales);
+    document.getElementById('convAbono1').value = convAbono1;
+    document.getElementById('totalAbonos').value = totalAbonos;
+    document.getElementById('saldoRestanteBs').value = saldoRestanteBs;
+    document.getElementById('saldoRestanteDs').value = saldoRestanteDs;
 
     var tolerancia=parseFloat(document.getElementById('tolerancia').value);
     var resultado=document.getElementById('resultado');
 
     if(saldoRestanteBs>0) {
-      document.getElementById('resultado').value = "El cliente debe: Bs. "+saldoRestanteBs.toFixed(decimales);
+      document.getElementById('resultado').value = "El cliente debe: Bs. "+saldoRestanteBs;
       resultado.classList.add("bg-danger", "text-white");
     }
     else if(saldoRestanteBs<((-1)*tolerancia)) {
-      document.getElementById('resultado').value = "Hay un vuelto pendiente de: Bs. "+saldoRestanteBs.toFixed(decimales);
+      document.getElementById('resultado').value = "Hay un vuelto pendiente de: Bs. "+saldoRestanteBs;
       resultado.classList.remove("bg-danger", "text-white");
     }
     else {
@@ -421,11 +459,11 @@
           </td>
 
           <td>
-            Saldo Restante en $:
+            Saldo Restante en Bs:
           </td>
 
           <td>
-            <input type="number" step="0.01" min="0" placeholder="0,00" id="saldoRestanteDs" class="form-control" disabled>
+            <input type="number" step="0.01" min="0" placeholder="0,00" id="saldoRestanteBs" class="form-control" disabled>
           </td>
         </tr>
 
@@ -439,11 +477,11 @@
           </td>
 
           <td>
-            Saldo Restante en Bs:
+            Saldo Restante en $:
           </td>
 
           <td>
-            <input type="number" step="0.01" min="0" placeholder="0,00" id="saldoRestanteBs" class="form-control" disabled>
+            <input type="number" step="0.01" min="0" placeholder="0,00" id="saldoRestanteDs" class="form-control" disabled>
           </td>
         </tr>
 
