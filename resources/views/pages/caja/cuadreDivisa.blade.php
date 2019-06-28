@@ -32,6 +32,10 @@
   }
 ?>
 
+<style>
+  form table thead + tbody tr td input {text-align:center;}
+</style>
+
 <script type="text/javascript" src="{{ asset('assets/jquery/jquery-2.2.2.min.js') }}"></script>
 <script type="text/javascript" src="{{ asset('assets/jquery/jquery-ui.min.js') }}" ></script>
 <script>
@@ -52,7 +56,7 @@
     decimales = parseInt(document.getElementById('decimales').value);
 
     if(fac1<0 || fac2<0 || fac3<0) {
-      //alert("No se admiten valores negativos.");
+      $('#errorModalCenter').modal('show');
       if(fac1<0) {
         document.getElementById('fac1').value=0;
         fac1=0;
@@ -140,7 +144,7 @@
     decimales = parseInt(document.getElementById('decimales').value);
 
     if(abono1<0 || abono2<0) {
-      //alert("No se admiten valores negativos.");
+      $('#errorModalCenter').modal('show');
       if(abono1<0) {
         document.getElementById('abono1').value=0;
         abono1=0;
@@ -153,7 +157,7 @@
     }
 
     if(!isNaN(abono1) && abono1>2000) {
-      //alert("Los abonos ingresados en $ deben ser menores a 2000");
+      $('#errorModalRango').modal('show');
       document.getElementById('abono1').value=0;
       abono1=0;
     }
@@ -224,6 +228,46 @@
       </div>
     </div>
   @endif
+
+  <!-- Modal Valores Negativos -->
+  <div class="modal fade" id="errorModalCenter" tabindex="-1" role="dialog" aria-labelledby="errorModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title text-danger" id="errorModalCenterTitle"><i class="fas fa-exclamation-circle"></i>&nbsp;Error</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <h4 class="h6">No se permiten valores negativos</h4>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Aceptar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Error En Rango Dolares -->
+  <div class="modal fade" id="errorModalRango" tabindex="-1" role="dialog" aria-labelledby="errorModalRangoTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title text-danger" id="errorModalRangoTitle"><i class="fas fa-exclamation-circle"></i>&nbsp;Error</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <h4 class="h6">Los Abonos en dolares deben ser menores a 2000</h4>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Aceptar</button>
+        </div>
+      </div>
+    </div>
+  </div>
   
   <a name="Inicio"></a>
   <hr class="row align-items-start col-12">
@@ -245,31 +289,31 @@
         </th>
       </thead>
     
-      <tbody>
+      <tbody align="right">
         <tr>
-          <td class="text-right">
+          <td>
             Total Factura Bs (Con IVA) #1:
           </td>
 
           <td>
-            <input type="number" step="0.01" min="0" placeholder="0,00" name="fac1" id="fac1" class="form-control text-center bg-warning" autofocus onblur="calcularFactura();" onkeypress="FocusChange()">
+            <input type="number" step="0.01" min="0" placeholder="0,00" name="fac1" id="fac1" class="form-control bg-warning" autofocus onblur="calcularFactura();" onkeypress="FocusChange()">
           </td>
 
-          <td class="text-right">
+          <td>
             Tasa de Cambio:
           </td>
       <?php
         if($FechaTasaDolar != $FechaActual){
       ?>
           <td>
-            <input type="number" step="0.01" min="0" placeholder="0,00" value="{{$TasaDolar}}" id="tasa" class="form-control text-center bg-danger text-white" disabled>
+            <input type="number" step="0.01" min="0" placeholder="0,00" value="{{$TasaDolar}}" id="tasa" class="form-control bg-danger text-white" disabled>
           </td>
       <?php
         }
         else{
       ?>
           <td>
-            <input type="number" step="0.01" min="0" placeholder="0,00" value="{{$TasaDolar}}" id="tasa" class="form-control text-center bg-success text-white" disabled>
+            <input type="number" step="0.01" min="0" placeholder="0,00" value="{{$TasaDolar}}" id="tasa" class="form-control bg-success text-white" disabled>
           </td>
       <?php   
         }
@@ -277,15 +321,15 @@
         </tr>
 
         <tr>
-          <td class="text-right">
+          <td>
             Total Factura Bs (Con IVA) #2:
           </td>
 
           <td>
-            <input type="number" step="0.01" min="0" placeholder="0,00" name="fac2" id="fac2" class="form-control text-center bg-warning" onblur="calcularFactura();" onkeypress="FocusChange()">
+            <input type="number" step="0.01" min="0" placeholder="0,00" name="fac2" id="fac2" class="form-control bg-warning" onblur="calcularFactura();" onkeypress="FocusChange()">
           </td>
 
-          <td class="text-right">
+          <td>
             Fecha Tasa de Cambio:
           </td>
 
@@ -293,14 +337,14 @@
         if($FechaTasaDolar != $FechaActual){
       ?>
           <td>
-            <input type="text" value="{{date('d-m-Y',strtotime($FechaTasaDolar))}}" id="fecha" class="form-control text-center bg-danger text-white" disabled>
+            <input type="text" value="{{date('d-m-Y',strtotime($FechaTasaDolar))}}" id="fecha" class="form-control bg-danger text-white" disabled>
           </td>
       <?php
         }
         else{
       ?>
           <td>
-            <input type="text" value="{{date('d-m-Y',strtotime($FechaTasaDolar))}}" id="fecha" class="form-control text-center bg-success text-white" disabled>
+            <input type="text" value="{{date('d-m-Y',strtotime($FechaTasaDolar))}}" id="fecha" class="form-control bg-success text-white" disabled>
           </td>
       <?php   
         }
@@ -308,55 +352,55 @@
         </tr>
 
         <tr>
-          <td class="text-right">
+          <td>
             Total Factura Bs (Con IVA) #3:
           </td>
 
           <td>
-            <input type="number" step="0.01" min="0" placeholder="0,00" name="fac3" id="fac3" class="form-control text-center bg-warning" onblur="calcularFactura();" onkeypress="FocusChange()">
+            <input type="number" step="0.01" min="0" placeholder="0,00" name="fac3" id="fac3" class="form-control bg-warning" onblur="calcularFactura();" onkeypress="FocusChange()">
           </td>
 
-          <td class="text-right">
+          <td>
             Cantidad Decimales:
           </td>
 
           <td>
-            <input type="number" min="0" max="2" placeholder="0" value="2" id="decimales" class="form-control text-center" disabled>
+            <input type="number" min="0" max="2" placeholder="0" value="2" id="decimales" class="form-control" disabled>
           </td>
         </tr>
 
         <tr>
-          <td class="text-right">
+          <td>
             Total Facturas Bs (Con IVA):
           </td>
 
           <td>
-            <input type="number" step="0.01" min="0" placeholder="0,00" id="totalFacBs" class="form-control text-center" disabled>
+            <input type="number" step="0.01" min="0" placeholder="0,00" id="totalFacBs" class="form-control" disabled>
           </td>
 
-          <td class="text-right">
+          <td>
             Tolerancia Vuelto en Bs:
           </td>
 
           <td>
-            <input type="number" step="0.01" min="0" placeholder="0,00" value="200" id="tolerancia" class="form-control text-center" disabled>
+            <input type="number" step="0.01" min="0" placeholder="0,00" value="200" id="tolerancia" class="form-control" disabled>
           </td>
         </tr>
 
         <tr>
-          <td class="text-right">
+          <td>
             Total Factura $:
           </td>
 
           <td>
-            <input type="number" step="0.01" min="0" placeholder="0,00" id="totalFacDs" class="form-control text-center" disabled>
+            <input type="number" step="0.01" min="0" placeholder="0,00" id="totalFacDs" class="form-control" disabled>
           </td>
           
           <td colspan="2">&nbsp;</td>
         </tr>
       </tbody>
 
-       <thead class="thead-dark" align="center">
+      <thead class="thead-dark" align="center">
         <th scope="col" colspan="2">
           <b>ABONOS DEL CLIENTE</b>
         </th>
@@ -366,64 +410,64 @@
         </th>
       </thead>
 
-      <tbody>
+      <tbody align="right">
         <tr>
-          <td class="text-right">
+          <td>
             Abono #1 en $:
           </td>
 
           <td>
-            <input type="number" step="0.01" min="0" placeholder="0,00" name="abono1" id="abono1" class="form-control text-center bg-warning" onblur="calcularAbono();" onkeypress="FocusChange()">
+            <input type="number" step="0.01" min="0" placeholder="0,00" name="abono1" id="abono1" class="form-control bg-warning" onblur="calcularAbono();" onkeypress="FocusChange()">
           </td>
 
-          <td class="text-right">
+          <td>
             Saldo Restante en $:
           </td>
 
           <td>
-            <input type="number" step="0.01" min="0" placeholder="0,00" id="saldoRestanteDs" class="form-control text-center" disabled>
+            <input type="number" step="0.01" min="0" placeholder="0,00" id="saldoRestanteDs" class="form-control" disabled>
           </td>
         </tr>
 
         <tr>
-          <td class="text-right">
+          <td>
             Abono #2 en Bs:
           </td>
 
           <td>
-            <input type="number" step="0.01" min="0" placeholder="0,00" name="abono2" id="abono2" class="form-control text-center bg-warning" onblur="calcularAbono();" onkeypress="FocusChange()">
+            <input type="number" step="0.01" min="0" placeholder="0,00" name="abono2" id="abono2" class="form-control bg-warning" onblur="calcularAbono();" onkeypress="FocusChange()">
           </td>
 
-          <td class="text-right">
+          <td>
             Saldo Restante en Bs:
           </td>
 
           <td>
-            <input type="number" step="0.01" min="0" placeholder="0,00" id="saldoRestanteBs" class="form-control text-center" disabled>
+            <input type="number" step="0.01" min="0" placeholder="0,00" id="saldoRestanteBs" class="form-control" disabled>
           </td>
         </tr>
 
         <tr>
-          <td class="text-right">
+          <td>
             Conversion Abono #1 en Bs:
           </td>
 
           <td>
-            <input type="number" step="0.01" min="0" placeholder="0,00" id="convAbono1" class="form-control text-center" disabled>
+            <input type="number" step="0.01" min="0" placeholder="0,00" id="convAbono1" class="form-control" disabled>
           </td>
 
           <td colspan="2">
-            <input type="text" placeholder="-" class="form-control text-center" id="resultado" disabled>
+            <input type="text" placeholder="-" class="form-control" id="resultado" disabled>
           </td>
         </tr>
 
         <tr>
-          <td class="text-right">
+          <td>
             Total Abonos Bs:
           </td>
           
           <td>
-            <input type="number" step="0.01" min="0" placeholder="0,00" id="totalAbonos" class="form-control text-center" disabled>
+            <input type="number" step="0.01" min="0" placeholder="0,00" id="totalAbonos" class="form-control" disabled>
           </td>
 
           <td class="text-center">
