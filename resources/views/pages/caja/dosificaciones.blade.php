@@ -27,16 +27,34 @@
 <script type="text/javascript" src="{{ asset('assets/jquery/jquery-2.2.2.min.js') }}"></script>
 <script type="text/javascript" src="{{ asset('assets/jquery/jquery-ui.min.js') }}" ></script>
 <script>
+  /*
+    TITULO: calcularCantidadJarabes
+    PARAMETROS : No aplica
+    FUNCION: Realizar los calculos necesarios para dosificar los jarabes
+    RETORNO: No aplica
+
+    Variables:
+      - Variables de entrada:
+        * cantDJ: Cantidad de CC por dosis
+        * itervHJ: Intervalo de horas de la dosis
+        * diasJ: Dias del tratamiento
+        * medicamentoJ: Cantidad de ML del medicamento
+      - Variables de salida:
+        * resultadoJ1: Cantidad de ML requeridos
+        * resultadoJ2: Unidades requeridas a comprar
+        * resultadoJ3: Unidades redondeadas
+  */
+
   function calcularCantidadJarabes() {
-    var cantDJ=0,itervHJ=0,diasJ=0,resultadoJ1=0,medicamentoJ=0;
+    var cantDJ=0,itervHJ=0,diasJ=0,medicamentoJ=0;
 
     cantDJ=parseFloat(document.getElementById('cantDJ').value);
     itervHJ=parseFloat(document.getElementById('itervHJ').value);
     diasJ = parseInt(document.getElementById('diasJ').value);
-    medicamentoJ = parseInt(document.getElementById('medicamentoJ').value);
+    medicamentoJ = parseFloat(document.getElementById('medicamentoJ').value);
 
-    if(cantDJ<0 || itervHJ<0 || diasJ<0  || medicamentoJ<0) {
-      $('#errorModalCenter').modal('show');
+    if(cantDJ<0 || itervHJ<0 || diasJ<0 || medicamentoJ<0) {
+      $('#errorModalCenter').modal('show');//Llama al modal de error
       if(cantDJ<0) {
         document.getElementById('cantDJ').value=0;
         cantDJ=0;      
@@ -60,18 +78,11 @@
 
     if(!isNaN(cantDJ) && !isNaN(itervHJ) && !isNaN(diasJ)) {
       if((cantDJ>0) && (itervHJ>0) && (diasJ>0)) {
-        resultadoJ1 = cantDJ * (24/itervHJ) * diasJ;
+        var resultadoJ1 = cantDJ * (24/itervHJ) * diasJ;
         document.getElementById('resultadoJ1').value = resultadoJ1.toFixed(2);
 
-        var medicamentoJ = parseFloat(document.getElementById('medicamentoJ').value);
-
         if(!isNaN(medicamentoJ)) {
-          if(medicamentoJ<0) {
-            $('#errorModalCenter').modal('show');
-            document.getElementById('medicamentoJ').value=0;
-            medicamentoJ=0;
-          }
-          else if(medicamentoJ>0) {
+          if(medicamentoJ>0) {
             var resultadoJ2 = (resultadoJ1/medicamentoJ).toFixed(2);
             var resultadoJ3 = Math.ceil(resultadoJ2);
 
@@ -79,6 +90,7 @@
             document.getElementById('resultadoJ3').value = resultadoJ3;
 
             if(24%itervHJ!==0) {
+              //Llama al modal de advertencia
               $('#exampleModalCenter').modal('show');
             }
           }
@@ -87,17 +99,36 @@
     }
   }
 
+  /*
+    TITULO: calcularCantidadTabletas
+    PARAMETROS : No aplica
+    FUNCION: Realizar los calculos necesarios para dosificar las tabletas
+    RETORNO: No aplica
+
+    Variables:
+      - Variables de entrada:
+        * cantDT: Cantidad de MG por dosis recetada
+        * itervHT: Intervalo de horas de la dosis
+        * diasT: Dias del tratamiento
+        * concentracion: Concentracion del medicamento (MG)
+        * medicamentoT: Cantidad de pastillas del medicamento
+      - Variables de salida:
+        * resultadoT1: Cantidad de dosis requerida
+        * resultadoT2: Unidades requeridas a comprar
+        * resultadoT3: Unidades redondeadas
+  */
+
   function calcularCantidadTabletas() {
-    var cantDT=0,itervHT=0,diasT=0,resultadoT1=0,concentracion=0,medicamentoT=0;
+    var cantDT=0,itervHT=0,diasT=0,concentracion=0,medicamentoT=0;
 
     cantDT=parseFloat(document.getElementById('cantDT').value);
     itervHT=parseFloat(document.getElementById('itervHT').value);
     diasT = parseInt(document.getElementById('diasT').value);
-    concentracion = parseInt(document.getElementById('concentracion').value);
-    medicamentoT = parseInt(document.getElementById('medicamentoT').value);
+    concentracion = parseFloat(document.getElementById('concentracion').value);
+    medicamentoT = parseFloat(document.getElementById('medicamentoT').value);
 
     if(cantDT<0 || itervHT<0 || diasT<0 || concentracion<0 || medicamentoT<0) {
-      $('#errorModalCenter').modal('show');
+      $('#errorModalCenter').modal('show');//Llama al modal de error
       if(cantDT<0) {
         document.getElementById('cantDT').value=0;
         cantDT=0;
@@ -126,26 +157,28 @@
 
     if(!isNaN(cantDT) && !isNaN(itervHT) && !isNaN(diasT)) {
       if((cantDT>0) && (itervHT>0) && (diasT>0)) {
-        resultadoT1 = cantDT * (24/itervHT) * diasT;
+        var resultadoT1 = itervHT * diasT;
         document.getElementById('resultadoT1').value = resultadoT1.toFixed(2);
 
-        var medicamentoJ = parseFloat(document.getElementById('medicamentoJ').value);
+        if(!isNaN(concentracion) && !isNaN(medicamentoT)) {
+          if(concentracion>0 && medicamentoT>0) {
 
-        if(!isNaN(medicamentoJ)) {
-          if(medicamentoJ<0) {
-            $('#errorModalCenter').modal('show');
-            document.getElementById('medicamentoJ').value=0;
-            medicamentoJ=0;
-          }
-          else if(medicamentoJ>0) {
-            var resultadoJ2 = (resultadoJ1/medicamentoJ).toFixed(2);
-            var resultadoJ3 = Math.ceil(resultadoJ2);
+            var resultadoT2=0,resultadoT3=0;
 
-            document.getElementById('resultadoJ2').value = resultadoJ2;
-            document.getElementById('resultadoJ3').value = resultadoJ3;
+            if(concentracion === cantDT) {
+              resultadoT2 = (resultadoT1/medicamentoT).toFixed(2);
+              resultadoT3 = Math.ceil(resultadoT2);
+            }
+            else if((concentracion<cantDT) || (concentracion>cantDT)) {
+              resultadoT2 = (resultadoT1/(medicamentoT*(concentracion/cantDT))).toFixed(2);
+              resultadoT3 = Math.ceil(resultadoT2);
+            }
 
-            if(24%itervHJ!==0) {
-              $('#exampleModalCenter').modal('show');
+            document.getElementById('resultadoT2').value = resultadoT2;
+            document.getElementById('resultadoT3').value = resultadoT3;
+
+            if(((concentracion/cantDT)!==0.5) && ((concentracion/cantDT)!==2) && ((concentracion/cantDT)!==1)) {
+              $('#errorModalMG').modal('show');//Llama al modal de error
             }
           }
         }
@@ -175,6 +208,26 @@
     </div>
   </div>
 
+  <!-- Modal Dosis Jarabe -->
+  <div class="modal fade" id="errorModalMG" tabindex="-1" role="dialog" aria-labelledby="errorModalMGTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title text-warning" id="errorModalMGTitle"><i class="fas fa-exclamation-triangle"></i>&nbsp;Advertencia</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <h4 class="h6">Existe una inconsistencia entre el medicamento deseado y el recomendado</h4>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-warning" data-dismiss="modal">Aceptar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Modal Valores Negativos -->
   <div class="modal fade" id="errorModalCenter" tabindex="-1" role="dialog" aria-labelledby="errorModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
@@ -186,7 +239,7 @@
           </button>
         </div>
         <div class="modal-body">
-          <h4 class="h6">No se permitem valores negativos</h4>
+          <h4 class="h6">No se permiten valores negativos</h4>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Aceptar</button>
