@@ -98,12 +98,10 @@
         document.getElementById('fac1').value=0;
         fac1=0;
       }
-
       if(fac2<0) {
         document.getElementById('fac2').value=0;
         fac2=0;
       }
-
       if(fac3<0) {
         document.getElementById('fac3').value=0;
         fac3=0;
@@ -141,7 +139,7 @@
         }
       }
     }
-    else{
+    else {
       totalFacBs = fac1 + fac2 + fac3;
     }
 
@@ -150,12 +148,11 @@
 
     document.getElementById('totalFacBs').value = totalFacBs;
     document.getElementById('totalFacDs').value = totalFacDs;
+    document.getElementById('saldoRestanteBs').value = totalFacBs;
+    document.getElementById('saldoRestanteDs').value = totalFacDs;
 
     var tolerancia=parseFloat(document.getElementById('tolerancia').value);
     var resultado=document.getElementById('resultado');
-
-    document.getElementById('saldoRestanteBs').value = totalFacBs;
-    document.getElementById('saldoRestanteDs').value = totalFacDs;
 
     if(totalFacBs>0) {
       document.getElementById('resultado').value = "El cliente debe: Bs. "+totalFacBs;
@@ -171,6 +168,27 @@
     }
   }
 
+  /*
+    TITULO: calcularAbono
+    PARAMETROS : No aplica
+    FUNCION: Realizar los calculos para finiquitar la factura basado en los abonos del cliente, permite abonar en dolares y en bolivares simultaneamente
+    RETORNO: No aplica
+
+    Variables:
+      - Variables de entrada:
+        * abono1: Abono #1 del cliente $
+        * abono2: Abono #2 del cliente Bs
+        * tasa: Tasa en dolares traida de la BBDD
+        * decimales: Cantidad de decimales a manejar traida de la BBDD
+        * tolerancia: Limite de vuelto significativo traida de la BBDD
+      - Variables de salida:
+        * convAbono1: Campo que muestra la conversion del abono en $ a Bs
+        * totalAbonos: Sumatoria total de abonos (Considera $ convertidos a Bs)
+        * resultado: Campo que muestra el resultado final de los calculos
+        * saldoRestanteBs: Muestra el saldo que todavia se debe en Bs
+        * saldoRestanteDs: Muestra el saldo que todavia se debe en $
+  */
+
   function calcularAbono() {
     var abono1=0,abono2=0,convAbono1=0,totalAbonos=0,tasa=0,decimales=0;
 
@@ -185,7 +203,6 @@
         document.getElementById('abono1').value=0;
         abono1=0;
       }
-
       if(abono2<0) {
         document.getElementById('abono2').value=0;
         abono2=0;
@@ -204,7 +221,6 @@
         totalAbonos = convAbono1+abono2;
       }
     }
-
     if(!isNaN(abono2)) {
       totalAbonos=abono2;
       if(!isNaN(convAbono1)) {
