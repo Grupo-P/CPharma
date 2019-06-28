@@ -46,33 +46,46 @@
   */
 
   function calcularCantidadJarabes() {
-    var cantDJ=0,itervHJ=0,diasJ=0,medicamentoJ=0;
+    var cantDJ=0,itervHJ=0,diasJ=0,medicamentoJ=0,
+    concentracion=0,concentracionR=0,concentracionD=0;
 
     cantDJ=parseFloat(document.getElementById('cantDJ').value);
     itervHJ=parseFloat(document.getElementById('itervHJ').value);
     diasJ = parseInt(document.getElementById('diasJ').value);
     medicamentoJ = parseFloat(document.getElementById('medicamentoJ').value);
+    concentracion = parseFloat(document.getElementById('concentracion').value);
+    concentracionR = parseFloat(document.getElementById('concentracionR').value);
+    concentracionD = parseFloat(document.getElementById('concentracionD').value);
 
-    if(cantDJ<0 || itervHJ<0 || diasJ<0 || medicamentoJ<0) {
+    if(cantDJ<0 || itervHJ<0 || diasJ<0 || medicamentoJ<0 || concentracion<0 || concentracionR<0 || concentracionD<0) {
       $('#errorModalCenter').modal('show');//Llama al modal de error
       if(cantDJ<0) {
         document.getElementById('cantDJ').value=0;
         cantDJ=0;      
       }
-
       if(itervHJ<0) {
         document.getElementById('itervHJ').value=0;
         itervHJ=0;
       }
-
       if(diasJ<0) {
         document.getElementById('diasJ').value=0;
         diasJ=0;
       }
-
       if(medicamentoJ<0) {
         document.getElementById('medicamentoJ').value=0;
         medicamentoJ=0;
+      }
+      if(concentracion<0) {
+        document.getElementById('concentracion').value=0;
+        concentracion=0;
+      }
+      if(concentracionR<0) {
+        document.getElementById('concentracionR').value=0;
+        concentracionR=0;
+      }
+      if(concentracionD<0) {
+        document.getElementById('concentracionD').value=0;
+        concentracionD=0;
       }
     }
 
@@ -81,13 +94,20 @@
         var resultadoJ1 = cantDJ * (24/itervHJ) * diasJ;
         document.getElementById('resultadoJ1').value = resultadoJ1.toFixed(2);
 
-        if(!isNaN(medicamentoJ)) {
-          if(medicamentoJ>0) {
-            var resultadoJ2 = (resultadoJ1/medicamentoJ).toFixed(2);
-            var resultadoJ3 = Math.ceil(resultadoJ2);
+        if(!isNaN(medicamentoJ) && !isNaN(concentracion) && !isNaN(concentracionR) && !isNaN(concentracionD)) {
+          if(medicamentoJ>0 && concentracion>0 && concentracionR>0 && concentracionD>0) {
+            var aux1 = (concentracionR/concentracion);
+            var aux2 = (concentracionD/concentracion);
+            var aux3 = (aux1/aux2);
+            var resultadoJ2 = (resultadoJ1*aux3).toFixed(2);
+            var resultadoJ3 = (aux3*cantDJ).toFixed(2);
+            var resultadoJ4 = ((resultadoJ1*aux3)/medicamentoJ).toFixed(2);
+            var resultadoJ5 = Math.ceil(resultadoJ4);
 
             document.getElementById('resultadoJ2').value = resultadoJ2;
             document.getElementById('resultadoJ3').value = resultadoJ3;
+            document.getElementById('resultadoJ4').value = resultadoJ4;
+            document.getElementById('resultadoJ5').value = resultadoJ5;
 
             if(24%itervHJ!==0) {
               //Llama al modal de advertencia
