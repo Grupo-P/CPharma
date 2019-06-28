@@ -115,6 +115,18 @@
             }
           }
         }
+        else if(!isNaN(medicamentoJ)) {
+          var resultadoJ4 = (resultadoJ1/medicamentoJ).toFixed(2);
+          var resultadoJ5 = Math.ceil(resultadoJ4);
+
+          document.getElementById('resultadoJ4').value = resultadoJ4;
+          document.getElementById('resultadoJ5').value = resultadoJ5;
+
+          if(24%itervHJ!==0) {
+            //Llama al modal de advertencia
+            $('#exampleModalCenter').modal('show');
+          }
+        }
       }
     }
   }
