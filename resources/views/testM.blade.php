@@ -39,10 +39,15 @@
         * itervHJ: Intervalo de horas de la dosis
         * diasJ: Dias del tratamiento
         * medicamentoJ: Cantidad de ML del medicamento
+        * concentracion: Concentracion del medicamento
+        * concentracionR: Concentracion recomendada del medicamento
+        * concentracionD: Concentracion disponible del medicamento
       - Variables de salida:
         * resultadoJ1: Cantidad de ML requeridos
-        * resultadoJ2: Unidades requeridas a comprar
-        * resultadoJ3: Unidades redondeadas
+        * resultadoJ2: ML Requeridos Convertidos
+        * resultadoJ3: Nueva Dosis Convertida (CC)
+        * resultadoJ4: Cantidad Frascos a Comprar
+        * resultadoJ5: Unidades de Frascos Redondeadas
   */
 
   function calcularCantidadJarabes() {
@@ -108,11 +113,6 @@
             document.getElementById('resultadoJ3').value = resultadoJ3;
             document.getElementById('resultadoJ4').value = resultadoJ4;
             document.getElementById('resultadoJ5').value = resultadoJ5;
-
-            if(24%itervHJ!==0) {
-              //Llama al modal de advertencia
-              $('#exampleModalCenter').modal('show');
-            }
           }
         }
         else if(!isNaN(medicamentoJ)) {
@@ -121,11 +121,6 @@
 
           document.getElementById('resultadoJ4').value = resultadoJ4;
           document.getElementById('resultadoJ5').value = resultadoJ5;
-
-          if(24%itervHJ!==0) {
-            //Llama al modal de advertencia
-            $('#exampleModalCenter').modal('show');
-          }
         }
       }
     }
@@ -145,26 +140,6 @@
         </div>
         <div class="modal-body">
           <h4 class="h6">El valor colocado en <b>horas de dosis</b> no es un n&uacute;mero divisible entre 24 horas</h4>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-outline-warning" data-dismiss="modal">Aceptar</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Modal Dosis Jarabe -->
-  <div class="modal fade" id="errorModalMG" tabindex="-1" role="dialog" aria-labelledby="errorModalMGTitle" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title text-warning" id="errorModalMGTitle"><i class="fas fa-exclamation-triangle"></i>&nbsp;Advertencia</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <h4 class="h6">Existe una inconsistencia entre el medicamento deseado y el recomendado</h4>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-outline-warning" data-dismiss="modal">Aceptar</button>
@@ -286,7 +261,7 @@
           </td>
 
           <td>
-            Unidades Requeridas a Comprar:
+            ML Requeridos Convertidos:
           </td>
 
           <td>
