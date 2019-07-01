@@ -27,109 +27,100 @@
 <script type="text/javascript" src="{{ asset('assets/jquery/jquery-2.2.2.min.js') }}"></script>
 <script type="text/javascript" src="{{ asset('assets/jquery/jquery-ui.min.js') }}" ></script>
 <script>
+  /*
+    TITULO: calcularCantidadJarabes
+    PARAMETROS : No aplica
+    FUNCION: Realizar los calculos necesarios para dosificar los jarabes
+    RETORNO: No aplica
+
+    Variables:
+      - Variables de entrada:
+        * cantDJ: Cantidad de CC por dosis
+        * itervHJ: Intervalo de horas de la dosis
+        * diasJ: Dias del tratamiento
+        * medicamentoJ: Cantidad de ML del medicamento
+        * concentracion: Concentracion del medicamento
+        * concentracionR: Concentracion recomendada del medicamento
+        * concentracionD: Concentracion disponible del medicamento
+      - Variables de salida:
+        * resultadoJ1: Cantidad de ML requeridos
+        * resultadoJ2: ML Requeridos Convertidos
+        * resultadoJ3: Nueva Dosis Convertida (CC)
+        * resultadoJ4: Cantidad Frascos a Comprar
+        * resultadoJ5: Unidades de Frascos Redondeadas
+  */
+
   function calcularCantidadJarabes() {
-    var cantDJ=0,itervHJ=0,diasJ=0,resultadoJ1=0;
+    var cantDJ=0,itervHJ=0,diasJ=0,medicamentoJ=0,
+    concentracion=0,concentracionR=0,concentracionD=0;
 
     cantDJ=parseFloat(document.getElementById('cantDJ').value);
     itervHJ=parseFloat(document.getElementById('itervHJ').value);
     diasJ = parseInt(document.getElementById('diasJ').value);
+    medicamentoJ = parseFloat(document.getElementById('medicamentoJ').value);
+    concentracion = parseFloat(document.getElementById('concentracion').value);
+    concentracionR = parseFloat(document.getElementById('concentracionR').value);
+    concentracionD = parseFloat(document.getElementById('concentracionD').value);
 
-    if(cantDJ<0 || itervHJ<0 || diasJ<0) {
-      $('#errorModalCenter').modal('show');
+    if(cantDJ<0 || itervHJ<0 || diasJ<0 || medicamentoJ<0 || concentracion<0 || concentracionR<0 || concentracionD<0) {
+      $('#errorModalCenter').modal('show');//Llama al modal de error
       if(cantDJ<0) {
         document.getElementById('cantDJ').value=0;
-        cantDJ=0;
+        cantDJ=0;      
       }
-
       if(itervHJ<0) {
         document.getElementById('itervHJ').value=0;
         itervHJ=0;
       }
-
       if(diasJ<0) {
         document.getElementById('diasJ').value=0;
         diasJ=0;
+      }
+      if(medicamentoJ<0) {
+        document.getElementById('medicamentoJ').value=0;
+        medicamentoJ=0;
+      }
+      if(concentracion<0) {
+        document.getElementById('concentracion').value=0;
+        concentracion=0;
+      }
+      if(concentracionR<0) {
+        document.getElementById('concentracionR').value=0;
+        concentracionR=0;
+      }
+      if(concentracionD<0) {
+        document.getElementById('concentracionD').value=0;
+        concentracionD=0;
       }
     }
 
     if(!isNaN(cantDJ) && !isNaN(itervHJ) && !isNaN(diasJ)) {
       if((cantDJ>0) && (itervHJ>0) && (diasJ>0)) {
-        resultadoJ1 = cantDJ * (24/itervHJ) * diasJ;
+        var resultadoJ1 = cantDJ * (24/itervHJ) * diasJ;
         document.getElementById('resultadoJ1').value = resultadoJ1.toFixed(2);
 
-        var medicamentoJ = parseFloat(document.getElementById('medicamentoJ').value);
-
-        if(!isNaN(medicamentoJ)) {
-          if(medicamentoJ<0) {
-            $('#errorModalCenter').modal('show');
-            document.getElementById('medicamentoJ').value=0;
-            medicamentoJ=0;
-          }
-          else if(medicamentoJ>0) {
-            var resultadoJ2 = (resultadoJ1/medicamentoJ).toFixed(2);
-            var resultadoJ3 = Math.ceil(resultadoJ2);
+        if(!isNaN(medicamentoJ) && !isNaN(concentracion) && !isNaN(concentracionR) && !isNaN(concentracionD)) {
+          if(medicamentoJ>0 && concentracion>0 && concentracionR>0 && concentracionD>0) {
+            var aux1 = (concentracionR/concentracion);
+            var aux2 = (concentracionD/concentracion);
+            var aux3 = (aux1/aux2);
+            var resultadoJ2 = (resultadoJ1*aux3).toFixed(2);
+            var resultadoJ3 = (aux3*cantDJ).toFixed(2);
+            var resultadoJ4 = ((resultadoJ1*aux3)/medicamentoJ).toFixed(2);
+            var resultadoJ5 = Math.ceil(resultadoJ4);
 
             document.getElementById('resultadoJ2').value = resultadoJ2;
             document.getElementById('resultadoJ3').value = resultadoJ3;
-
-            if(24%itervHJ!==0) {
-              $('#exampleModalCenter').modal('show');
-            }
+            document.getElementById('resultadoJ4').value = resultadoJ4;
+            document.getElementById('resultadoJ5').value = resultadoJ5;
           }
         }
-      }
-    }
-  }
+        else if(!isNaN(medicamentoJ)) {
+          var resultadoJ4 = (resultadoJ1/medicamentoJ).toFixed(2);
+          var resultadoJ5 = Math.ceil(resultadoJ4);
 
-  function calcularCantidadTabletas() {
-    var cantDT=0,itervHT=0,diasT=0,resultadoT1=0;
-
-    cantDT=parseFloat(document.getElementById('cantDT').value);
-    itervHT=parseFloat(document.getElementById('itervHT').value);
-    diasT = parseInt(document.getElementById('diasT').value);
-
-    if(cantDT<0 || itervHT<0 || diasT<0) {
-      $('#errorModalCenter').modal('show');
-      if(cantDT<0) {
-        document.getElementById('cantDT').value=0;
-        cantDT=0;
-      }
-
-      if(itervHT<0) {
-        document.getElementById('itervHT').value=0;
-        itervHT=0;
-      }
-
-      if(diasT<0) {
-        document.getElementById('diasT').value=0;
-        diasT=0;
-      }
-    }
-
-    if(!isNaN(cantDT) && !isNaN(itervHT) && !isNaN(diasT)) {
-      if((cantDT>0) && (itervHT>0) && (diasT>0)) {
-        resultadoT1 = cantDT * (24/itervHT) * diasT;
-        document.getElementById('resultadoT1').value = resultadoT1.toFixed(2);
-
-        var medicamentoJ = parseFloat(document.getElementById('medicamentoJ').value);
-
-        if(!isNaN(medicamentoJ)) {
-          if(medicamentoJ<0) {
-            $('#errorModalCenter').modal('show');
-            document.getElementById('medicamentoJ').value=0;
-            medicamentoJ=0;
-          }
-          else if(medicamentoJ>0) {
-            var resultadoJ2 = (resultadoJ1/medicamentoJ).toFixed(2);
-            var resultadoJ3 = Math.ceil(resultadoJ2);
-
-            document.getElementById('resultadoJ2').value = resultadoJ2;
-            document.getElementById('resultadoJ3').value = resultadoJ3;
-
-            if(24%itervHJ!==0) {
-              $('#exampleModalCenter').modal('show');
-            }
-          }
+          document.getElementById('resultadoJ4').value = resultadoJ4;
+          document.getElementById('resultadoJ5').value = resultadoJ5;
         }
       }
     }
@@ -148,7 +139,7 @@
           </button>
         </div>
         <div class="modal-body">
-          <h4 class="h6">El valor colocado en <b>Cada cuantas horas la dosis</b> no es un n&uacute;mero divisible entre 24 hrs.</h4>
+          <h4 class="h6">El valor colocado en <b>horas de dosis</b> no es un n&uacute;mero divisible entre 24 horas</h4>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-outline-warning" data-dismiss="modal">Aceptar</button>
@@ -168,7 +159,7 @@
           </button>
         </div>
         <div class="modal-body">
-          <h4 class="h6"><b>No se admiten</b> valores negativos.</h4>
+          <h4 class="h6">No se permiten valores negativos</h4>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Aceptar</button>
@@ -177,22 +168,19 @@
     </div>
   </div>
 
+  <a name="Inicio"></a>
   <hr class="row align-items-start col-12">
   <h5 class="text-info">
-    <i class="fas fa-eye-dropper"></i>
-    C&Aacute;LCULO DE DOSIFICACIONES
-    <a href="#ver-manual" tabindex="15" class="btn btn-primary">
-      Ver instrucciones
-    </a>
+    <i class="fas fa-prescription"></i>
+    C&Aacute;LCULO DE DOSIFICACIONES DE JARABES
   </h5>
   <hr class="row align-items-start col-12">
-  
   <a name="dosificaciones-jarabes"></a>
   <form name="jarabes" class="form-group">
     <table class="table table-borderless table-hover">
       <thead class="thead-dark" align="center">
         <th scope="col" colspan="4">
-          <b>DOSIFICACIONES PARA JARABES</b>
+          <b>DOSIFICACIONES PARA JARABES - CONVERSI&Oacute;N</b>
         </th>
       </thead>
     
@@ -225,11 +213,11 @@
           </td>
 
           <td>
-            Unidades Requeridas a Comprar:
+            Concentracion por (MG):
           </td>
 
           <td>
-            <input type="text" placeholder="-" id="resultadoJ2" class="form-control" disabled>
+            <input type="number" step="0.01" min="0" tabindex="5" placeholder="0,00" id="concentracion" name="concentracion" class="form-control bg-warning" onblur="calcularCantidadJarabes();" onkeypress="FocusChange();">
           </td>
         </tr>
 
@@ -243,11 +231,23 @@
           </td>
           
           <td>
-            Unidades Redondeadas:
+            Concentracion Recetada (MG):
           </td>
 
           <td>
-            <input type="text" placeholder="-" id="resultadoJ3" class="form-control" disabled>
+            <input type="number" step="0.01" min="0" tabindex="6" placeholder="0,00" id="concentracionR" name="concentracionR" class="form-control bg-warning" onblur="calcularCantidadJarabes();" onkeypress="FocusChange();">
+          </td>
+        </tr>
+
+        <tr>
+          <td colspan="2">&nbsp;</td>
+
+          <td>
+            Concentracion Disponible (MG):
+          </td>
+
+          <td>
+            <input type="number" step="0.01" min="0" tabindex="7" placeholder="0,00" id="concentracionD" name="concentracionD" class="form-control bg-warning" onblur="calcularCantidadJarabes();" onkeypress="FocusChange();">
           </td>
         </tr>
 
@@ -259,115 +259,60 @@
           <td>
             <input type="text" placeholder="-" id="resultadoJ1" class="form-control" disabled>
           </td>
-          
+
           <td>
-            <button type="reset" tabindex="5" class="btn btn-success">
+            ML Requeridos Convertidos:
+          </td>
+
+          <td>
+            <input type="text" placeholder="-" id="resultadoJ2" class="form-control" disabled>
+          </td>
+        </tr>
+      </tbody>
+
+      <thead class="thead-dark" align="center">
+        <th scope="col" colspan="4">
+          <b>RESULTADOS</b>
+        </th>
+      </thead>
+
+      <tbody align="right">
+        <tr>
+          <td>
+            Nueva Dosis Convertida (CC):
+          </td>
+
+          <td>
+            <input type="text" placeholder="-" id="resultadoJ3" class="form-control" disabled>
+          </td>
+
+          <td>
+            Cantidad Frascos a Comprar:
+          </td>
+
+          <td>
+            <input type="text" placeholder="-" id="resultadoJ4" class="form-control" disabled>
+          </td>
+        </tr>
+
+        <tr>
+          <td>
+            Unidades de Frascos Redondeadas:
+          </td>
+
+          <td>
+            <input type="text" placeholder="-" id="resultadoJ5" class="form-control" disabled>
+          </td>
+
+          <td>
+            <button type="reset" tabindex="8" class="btn btn-success">
               Borrado dosificacion de jarabes
             </button>
           </td>
 
           <td>
-            <a href="#dosificaciones-tabletas" tabindex="6" class="btn btn-primary">
-              Ir a dosificaciones para tabletas
-            </a>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </form>
-  
-  <a name="dosificaciones-tabletas"></a>
-  <form name="tabletas" class="form-group">
-    <table class="table table-borderless table-hover">
-      <thead class="thead-dark" align="center">
-        <th scope="col" colspan="4">
-          <b>DOSIFICACIONES PARA TABLETAS</b>
-        </th>
-      </thead>
-    
-      <tbody align="right">
-        <tr>
-          <td>
-            Cantidad MG por Dosis Recetada:
-          </td>
-
-          <td>
-            <input type="number" step="0.01" min="0" tabindex="7" placeholder="0,00" id="cantDT" name="cantDT" class="form-control bg-warning" onblur="calcularCantidadTabletas()" onkeypress="FocusChange();">
-          </td>
-
-          <td>
-            Concentracion del medicamento (MG):
-          </td>
-
-          <td>
-            <input type="number" step="0.01" min="0" tabindex="10" placeholder="0,00" id="concentracion" name="concentracion" class="form-control bg-warning" onblur="calcularCantidadTabletas()" onkeypress="FocusChange();">
-          </td>
-        </tr>
-
-        <tr>
-          <td>
-            Cuantas veces al dia la Dosis:
-          </td>
-
-          <td>
-            <input type="number" step="0.01" min="0" tabindex="8" placeholder="0,00" id="itervHT" name="itervHT" class="form-control bg-warning" onblur="calcularCantidadTabletas()" onkeypress="FocusChange();">
-          </td>
-
-          <td>
-            Cantidad de Pastillas del medicamento:
-          </td>
-
-          <td>
-            <input type="number" step="0.01" min="0" tabindex="11" placeholder="0,00" id="medicamentoT" name="medicamentoT" class="form-control bg-warning" onblur="calcularCantidadTabletas()" onkeypress="FocusChange();">
-          </td>
-        </tr>
-
-        <tr>
-          <td>
-            Cantidad de dias del Tratamiento:
-          </td>
-
-          <td>
-            <input type="number" min="0" tabindex="9" placeholder="0" id="diasT" name="diasT" class="form-control bg-warning" onblur="calcularCantidadTabletas()" onkeypress="FocusChange();">
-          </td>
-
-          <td>
-            Unidades Requeridas a Comprar:
-          </td>
-
-          <td>
-            <input type="text" placeholder="-" id="resultadoT2" class="form-control" disabled>
-          </td>
-        </tr>
-
-        <tr>
-          <td>
-            Cantidad de Dosis Requeridas:
-          </td>
-
-          <td>
-            <input type="text" placeholder="-" id="resultadoT1" class="form-control" disabled>
-          </td>
-
-          <td>
-            Unidades Redondeadas:
-          </td>
-
-          <td>
-            <input type="text" placeholder="-" id="resultadoT3" class="form-control" disabled>
-          </td>
-        </tr>
-
-        <tr>
-          <td colspan="2">
-            <button type="reset" tabindex="12" class="btn btn-success">
-              Borrado dosificacion de tabletas
-            </button>
-          </td>
-
-          <td align="left" colspan="2">
-            <a href="#dosificaciones-jarabes" tabindex="13" class="btn btn-primary">
-              Ir a dosificaciones para jarabes
+            <a href="#ver-manual" tabindex="9" class="btn btn-primary">
+              Ver instrucciones
             </a>
           </td>
         </tr>
@@ -391,44 +336,26 @@
 
       <tr>
         <td>
-          * Los Campos <b>"Cantidad dias de Tratamiento"</b> solo acepta numeros enteros.
+          * El Campo <b>Cantidad dias de Tratamiento</b> solo acepta numeros enteros
         </td>
       </tr>
 
       <tr>
         <td>
-          * Si los miligramos recomendados vs el recetado <b>no es igual</b> o la mitad o el doble se emite una alerta.
+          * El boton de borrado solo afecta los campos en <span class="bg-warning text-dark"><b>AMARILLO<b></span>
         </td>
       </tr>
 
       <tr>
         <td>
-          * El boton de borrado solo toca los campos en amarillo.
-        </td>
-      </tr>
-
-      <tr>
-        <td>
-          * El calculo que requiere el cliente no se mostrara hasta que se coloquen todos los campos en amarillo.
-        </td>
-      </tr>
-
-      <tr>
-        <td>
-          * El Campo de dosis requeridas permite numeros decimales mayores a 0.
-        </td>
-      </tr>
-
-      <tr>
-        <td>
-          * El valor colocado en la parte de jarabes para decir cada cuantas horas es el tratamiento deberia ser divisible entre 24 hrs.
+          * El calculo que requiere el cliente solo se mostrara al completar <b>TODOS</b> los campos <span class="bg-warning text-dark"><b>AMARILLOS<b></span>
         </td>
       </tr>
     </tbody>
   </table>
 
   <div class="text-center">
-    <a href="#dosificaciones-jarabes" tabindex="14" title="Volver al inicio" class="btn btn-primary">
+    <a href="#Inicio" tabindex="10" title="Volver al inicio" class="btn btn-primary">
       Volver al inicio
     </a>
   </div>
@@ -456,22 +383,16 @@
           document.getElementById("medicamentoJ").focus();
         }
         else if(document.activeElement.name == 'medicamentoJ') {
-          document.getElementById("cantDJ").focus();
-        }
-        else if(document.activeElement.name == 'cantDT') {
-          document.getElementById("itervHT").focus();
-        }
-        else if(document.activeElement.name == 'itervHT') {
-          document.getElementById("diasT").focus();
-        }
-        else if(document.activeElement.name == 'diasT') {
           document.getElementById("concentracion").focus();
         }
         else if(document.activeElement.name == 'concentracion') {
-          document.getElementById("medicamentoT").focus();
+          document.getElementById("concentracionR").focus();
         }
-        else if(document.activeElement.name == 'medicamentoT') {
-          document.getElementById("cantDT").focus();
+        else if(document.activeElement.name == 'concentracionR') {
+          document.getElementById("concentracionD").focus();
+        }
+        else if(document.activeElement.name == 'concentracionD') {
+          document.getElementById("cantDJ").focus();
         }
       }
     }
