@@ -8,24 +8,25 @@
 
 <title>CPharma - @yield('title')</title>
 
-<!-- Scripts -->
-<!-- Scritps Originales -->
-<!-- <script src="{{ asset('assets/js/app.js') }}" defer></script> -->
+<!-- Fonts Awesaome CSS -->
+<link rel="stylesheet" href="{{asset('assets/fonts/fontawesome/css/all.css')}}">
 
-<!-- Scritps Bootstrap 4 -->
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+<!-- Fonts: Nunito -->
+<link rel="stylesheet" href="{{asset('assets/fonts/Nunito.css')}}" type="text/css">
 
-<!-- Fonts Originales-->
-<link rel="dns-prefetch" href="https://fonts.gstatic.com">
-<link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet" type="text/css">
+<!-- Scritps Bootstrap 4 CSS -->
+<link rel="stylesheet" href="{{asset('assets/bootstrap/css/bootstrap.css')}}">
+<link rel="stylesheet" href="{{asset('assets/bootstrap/css/bootstrap-grid.css')}}">.
+<link rel="stylesheet" href="{{asset('assets/bootstrap/css/bootstrap-reboot.css')}}">
 
-<!-- Fonts Awesaome-->
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+<!-- JS Scritps -->
 
-<!-- Styles CSS Originales-->
-<!-- <link rel="stylesheet" href="{{ asset('assets/css/app.css') }}"> -->
+<!-- Jquery -->
+<script src="{{asset('assets/jquery/jquery-3.3.1.slim.min.js')}}"></script>
 
-<!-- Styles CSS Bootstrap 4-->
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+<!-- Popper -->
+<script src="{{asset('assets/popper/popper.min.js')}}"></script>
+
+<!-- Bootstrap -->
+<script src="{{asset('assets/bootstrap/js/bootstrap.js')}}"></script>
+<script src="{{asset('assets/bootstrap/js/bootstrap.bundle.js')}}"></script>

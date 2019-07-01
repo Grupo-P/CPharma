@@ -23,6 +23,14 @@ Route::get('/dosificacion', function() {
     return view('pages.caja.dosificaciones');
 });
 
+Route::get('/conversionDosis', function() {
+    return view('pages.caja.conversionDosis');
+});
+
+Route::get('/ACI', function() {
+    return view('pages.ACI.ProximamenteACI');
+});
+
 Auth::routes();
 
 Route::get('/testS', function() {
