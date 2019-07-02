@@ -47,12 +47,12 @@ class CartaCompromisoController extends Controller {
             $cartaCompromiso = new CartaCompromiso();
             $cartaCompromiso->articulo = $request->input('articulo');
             $cartaCompromiso->lote = $request->input('lote');
-            $cartaCompromiso->fechaV = $request->input('fecha_de_vencimiento');
+            $cartaCompromiso->fechaV = $request->input('fecha_vencimiento');
             $cartaCompromiso->fechaV = date('Y-m-d',strtotime($cartaCompromiso->fechaV));
             $cartaCompromiso->proveedor = $request->input('proveedor');
-            $cartaCompromiso->fechaR = $request->input('fecha_de_recepcion');
+            $cartaCompromiso->fechaR = $request->input('fecha_recepcion');
             $cartaCompromiso->fechaR = date('Y-m-d',strtotime($cartaCompromiso->fechaR));
-            $cartaCompromiso->fechaT = $request->input('fecha_de_tope');
+            $cartaCompromiso->fechaT = $request->input('fecha_tope');
             $cartaCompromiso->fechaT = date('Y-m-d',strtotime($cartaCompromiso->fechaT));
             $cartaCompromiso->causa = $request->input('causa');
             $cartaCompromiso->nota = $request->input('nota');

@@ -11,6 +11,6 @@ class CartaCompromiso extends Model {
      * @var array
      */
     protected $fillable = [
-        'articulo', 'lote', 'fecha_de_vencimiento', 'proveedor', 'fecha_de_recepcion', 'fecha_de_tope', 'causa', 'nota', 'estatus', 'user'
+        'articulo', 'lote', 'fecha_vencimiento', 'proveedor', 'fecha_recepcion', 'fecha_tope', 'causa', 'nota', 'estatus', 'user'
     ];
 }

@@ -15,10 +15,10 @@ class CreateCartaCompromisosTable extends Migration {
             $table->increments('id');
             $table->string('articulo');
             $table->string('lote');
-            $table->timestamp('fecha_de_vencimiento');
+            $table->date('fecha_vencimiento');
             $table->string('proveedor');
-            $table->timestamp('fecha_de_recepcion');
-            $table->timestamp('fecha_de_tope');
+            $table->date('fecha_recepcion');
+            $table->date('fecha_tope');
             $table->string('causa');
             $table->string('nota');
             $table->string('estatus');
