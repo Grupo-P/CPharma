@@ -3,6 +3,7 @@
 namespace compras\Http\Controllers;
 
 use Illuminate\Http\Request;
+use compras\CartaCompromiso;
 use compras\User;
 
 class CartaCompromisoController extends Controller {
@@ -22,7 +23,8 @@ class CartaCompromisoController extends Controller {
      */
     public function index() {
         return view('pages.cartaCompromiso.index');
-        //return view('pages.tasaVenta.index', compact('tasaVenta'));
+        /*$cartaCompromiso = CartaCompromiso::orderBy('fecha', 'desc')->get();
+        return view('pages.cartaCompromiso.index', compact('cartaCompromiso'));*/
     }
 
     /**
@@ -41,7 +43,27 @@ class CartaCompromisoController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request) {
-        //
+        try {
+            $cartaCompromiso = new CartaCompromiso();
+            $cartaCompromiso->articulo = $request->input('articulo');
+            $cartaCompromiso->lote = $request->input('lote');
+            $cartaCompromiso->fechaV = $request->input('fechaV');
+            $cartaCompromiso->fechaV = date('Y-m-d',strtotime($cartaCompromiso->fechaV));
+            $cartaCompromiso->proveedor = $request->input('proveedor');
+            $cartaCompromiso->fechaR = $request->input('fechaR');
+            $cartaCompromiso->fechaR = date('Y-m-d',strtotime($cartaCompromiso->fechaR));
+            $cartaCompromiso->fechaT = $request->input('fechaT');
+            $cartaCompromiso->fechaT = date('Y-m-d',strtotime($cartaCompromiso->fechaT));
+            $cartaCompromiso->causa = $request->input('causa');
+            $cartaCompromiso->nota = $request->input('nota');
+            $cartaCompromiso->estatus = $request->input('estatus');
+            $cartaCompromiso->user = auth()->user()->name;
+            $cartaCompromiso->save();
+            return redirect()->route('cartaCompromiso.index')->with('Saved', ' Informacion');
+        }
+        catch(\Illuminate\Database\QueryException $e) {
+            return back()->with('Error', ' Error');
+        }
     }
 
     /**
