@@ -3,15 +3,26 @@
 namespace compras\Http\Controllers;
 
 use Illuminate\Http\Request;
+use compras\User;
 
 class CartaCompromisoController extends Controller {
+    /**
+     * Create a new controller instance with auth.
+     *
+     * 
+     */
+    public function __construct() {
+        $this->middleware('auth');
+    }
+
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
     public function index() {
-        //
+        return view('pages.cartaCompromiso.index');
+        //return view('pages.tasaVenta.index', compact('tasaVenta'));
     }
 
     /**
