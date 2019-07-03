@@ -79,7 +79,7 @@
       <a class="nav-link" href="{{ url('/cartaCompromiso') }}">
         <span data-feather="home"></span>
         <i class="far fa-address-card"></i>
-        Carta de compromiso<span class="sr-only">(current)</span>
+        Carta compromiso<span class="sr-only">(current)</span>
       </a>
     </li>
     
@@ -110,7 +110,7 @@
       <a class="nav-link" href="{{ url('/cartaCompromiso') }}">
         <span data-feather="home"></span>
         <i class="far fa-address-card"></i>
-        Carta de compromiso<span class="sr-only">(current)</span>
+        Carta compromiso<span class="sr-only">(current)</span>
       </a>
     </li>
 
@@ -149,7 +149,7 @@
       <a class="nav-link" href="{{ url('/cartaCompromiso') }}">
         <span data-feather="home"></span>
         <i class="far fa-address-card"></i>
-        Carta de compromiso<span class="sr-only">(current)</span>
+        Carta compromiso<span class="sr-only">(current)</span>
       </a>
     </li>
 

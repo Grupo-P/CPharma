@@ -23,8 +23,6 @@ class CartaCompromisoController extends Controller {
      */
     public function index() {
         return view('pages.cartaCompromiso.index');
-        /*$cartaCompromiso = CartaCompromiso::orderBy('fecha', 'desc')->get();
-        return view('pages.cartaCompromiso.index', compact('cartaCompromiso'));*/
     }
 
     /**
@@ -33,7 +31,7 @@ class CartaCompromisoController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function create() {
-        //
+        return view('pages.cartaCompromiso.create');
     }
 
     /**
@@ -47,13 +45,13 @@ class CartaCompromisoController extends Controller {
             $cartaCompromiso = new CartaCompromiso();
             $cartaCompromiso->articulo = $request->input('articulo');
             $cartaCompromiso->lote = $request->input('lote');
-            $cartaCompromiso->fechaV = $request->input('fecha_vencimiento');
-            $cartaCompromiso->fechaV = date('Y-m-d',strtotime($cartaCompromiso->fechaV));
+            $cartaCompromiso->fecha_vencimiento = $request->input('fecha_vencimiento');
+            $cartaCompromiso->fecha_vencimiento = date('Y-m-d',strtotime($cartaCompromiso->fecha_vencimiento));
             $cartaCompromiso->proveedor = $request->input('proveedor');
-            $cartaCompromiso->fechaR = $request->input('fecha_recepcion');
-            $cartaCompromiso->fechaR = date('Y-m-d',strtotime($cartaCompromiso->fechaR));
-            $cartaCompromiso->fechaT = $request->input('fecha_tope');
-            $cartaCompromiso->fechaT = date('Y-m-d',strtotime($cartaCompromiso->fechaT));
+            $cartaCompromiso->fecha_recepcion = $request->input('fecha_recepcion');
+            $cartaCompromiso->fecha_recepcion = date('Y-m-d',strtotime($cartaCompromiso->fecha_recepcion));
+            $cartaCompromiso->fecha_tope = $request->input('fecha_tope');
+            $cartaCompromiso->fecha_tope = date('Y-m-d',strtotime($cartaCompromiso->fecha_tope));
             $cartaCompromiso->causa = $request->input('causa');
             $cartaCompromiso->nota = $request->input('nota');
             $cartaCompromiso->estatus = $request->input('estatus');
