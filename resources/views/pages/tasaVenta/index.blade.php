@@ -90,11 +90,12 @@
 	    	{{--SOLO PARA CASOS DONDE SE NECESITE AGREGAR UNA NUEVA MONEDA--}}
 	        {{-- <td style="width:10%;" align="center">	
 				<a href="{{ url('/tasaVenta/create') }}" role="button" class="btn btn-outline-info btn-sm" 
-				style="display: inline; text-align: left;">
+				style="display:inline; text-align:left;">
 				<i class="fa fa-plus"></i>
 					Agregar		      		
 				</a>
 	        </td> --}}
+	        
 	        <td style="width:90%;">
 	        	<div class="input-group md-form form-sm form-1 pl-0">
 				  <div class="input-group-prepend">
