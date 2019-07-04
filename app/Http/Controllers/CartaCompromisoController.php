@@ -83,7 +83,8 @@ class CartaCompromisoController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function edit($id) {
-        //
+        $cartaCompromiso = CartaCompromiso::find($id);
+        return view('pages.cartaCompromiso.edit', compact('cartaCompromiso'));
     }
 
     /**
@@ -94,7 +95,17 @@ class CartaCompromisoController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id) {
-        //
+        try{
+            $cartaCompromiso = CartaCompromiso::find($id);
+            $cartaCompromiso->fill($request->all());
+            $cartaCompromiso->estatus = $request->input('estatus');
+            $cartaCompromiso->user = auth()->user()->name;
+            $cartaCompromiso->save();
+            return redirect()->route('cartaCompromiso.index')->with('Updated', ' Informacion');
+        }
+        catch(\Illuminate\Database\QueryException $e){
+            return back()->with('Error', ' Error');
+        }
     }
 
     /**
