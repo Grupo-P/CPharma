@@ -132,7 +132,16 @@
 		      <td>{{$cartaC->proveedor}}</td>
 		      <td>{{date('d-m-Y',strtotime($cartaC->fecha_recepcion))}}</td>
 		      <td>{{date('d-m-Y',strtotime($cartaC->fecha_tope))}}</td>
-		      <td>{{$cartaC->estatus}}</td>
+		      <td>
+		      	<?php
+					if($cartaC->estatus == 'ACTIVO') {
+						echo 'ABIERTO';
+					}
+					else {
+						echo 'CERRADO';
+					}
+				?>
+		      </td>
 		    <!-- Inicio Validacion de ROLES -->
 		      <td style="width:140px;">
 				
@@ -141,7 +150,7 @@
 				?>
 
 					<?php
-					if($cartaC->estatus == 'Abierto'){
+					if($cartaC->estatus == 'ACTIVO'){
 					?>
 						<a href="/cartaCompromiso/{{$cartaC->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
 			      			<i class="far fa-eye"></i>			      		
@@ -158,7 +167,7 @@
 						</form>
 					<?php
 					}
-					else if($cartaC->estatus == 'Cerrado'){
+					else if($cartaC->estatus == 'INACTIVO'){
 					?>		
 			      	<form action="/cartaCompromiso/{{$cartaC->id}}" method="POST" style="display:inline;">
 					    @method('DELETE')

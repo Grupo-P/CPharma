@@ -53,8 +53,7 @@
     <table class="table table-borderless table-striped">
       <thead class="thead-dark">
         <tr>
-          <th scope="row"></th>
-          <th scope="row"></th>
+          <th scope="row" colspan="2"></th>
         </tr>
       </thead>
       <tbody>
@@ -121,18 +120,6 @@
           </th>
           <td>
             <textarea name="nota" id="nota" class="form-control" rows="4" placeholder="Nota del compromiso" maxlength="450"></textarea>
-          </td>
-        </tr>
-
-        <tr>
-          <th>
-            Estatus
-          </th>
-          <td>
-            <select id="estatus" name="estatus" class="form-control" required>
-              <option>Abierto</option>
-              <option>Cerrado</option>
-            </select>
           </td>
         </tr>
       </tbody>

@@ -55,7 +55,7 @@ class CartaCompromisoController extends Controller {
             $cartaCompromiso->fecha_tope = date('Y-m-d',strtotime($cartaCompromiso->fecha_tope));
             $cartaCompromiso->causa = $request->input('causa');
             $cartaCompromiso->nota = $request->input('nota');
-            $cartaCompromiso->estatus = $request->input('estatus');
+            $cartaCompromiso->estatus = 'ACTIVO';
             $cartaCompromiso->user = auth()->user()->name;
             $cartaCompromiso->save();
             return redirect()->route('cartaCompromiso.index')->with('Saved', ' Informacion');
@@ -117,15 +117,15 @@ class CartaCompromisoController extends Controller {
     public function destroy($id) {
         $cartaCompromiso = CartaCompromiso::find($id);
 
-        if($cartaCompromiso->estatus == 'Abierto'){
-            $cartaCompromiso->estatus = 'Cerrado';
-        }
-        else if($cartaCompromiso->estatus == 'Cerrado'){
-            $cartaCompromiso->estatus = 'Abierto';
-        }
+         if($cartaCompromiso->estatus == 'ACTIVO'){
+            $cartaCompromiso->estatus = 'INACTIVO';
+         }
+         else if($cartaCompromiso->estatus == 'INACTIVO'){
+            $cartaCompromiso->estatus = 'ACTIVO';
+         }
 
-        $cartaCompromiso->user = auth()->user()->name;
-        $cartaCompromiso->save();
-        return redirect()->route('cartaCompromiso.index')->with('Deleted', ' Informacion');
+         $cartaCompromiso->user = auth()->user()->name;        
+         $cartaCompromiso->save();
+         return redirect()->route('cartaCompromiso.index')->with('Deleted', ' Informacion');
     }
 }

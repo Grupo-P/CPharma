@@ -51,17 +51,6 @@
       </thead>
       <tbody>
         <tr>
-          <th>
-            Estatus
-          </th>
-          <td>
-            <select id="estatus" name="estatus" class="form-control" required>
-              <option>Abierto</option>
-              <option>Cerrado</option>
-            </select>
-          </td>
-        </tr>
-        <tr>
           <th>Fecha tope</th>
           <td>
             <input id="fecha_tope" type="date" name="fecha_tope" value="{{$cartaCompromiso->fecha_tope}}" class="form-control" disabled>
