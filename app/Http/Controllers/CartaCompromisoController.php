@@ -115,6 +115,17 @@ class CartaCompromisoController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function destroy($id) {
-        //
+        $cartaCompromiso = CartaCompromiso::find($id);
+
+        if($cartaCompromiso->estatus == 'Abierto'){
+            $cartaCompromiso->estatus = 'Cerrado';
+        }
+        else if($cartaCompromiso->estatus == 'Cerrado'){
+            $cartaCompromiso->estatus = 'Abierto';
+        }
+
+        $cartaCompromiso->user = auth()->user()->name;
+        $cartaCompromiso->save();
+        return redirect()->route('cartaCompromiso.index')->with('Deleted', ' Informacion');
     }
 }
