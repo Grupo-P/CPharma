@@ -106,6 +106,95 @@
 	    </tr>
 	</table>
 
+	<br/>
+	
+	<table class="table table-striped table-borderless col-12 sortable" id="myTable">
+	  	<thead class="thead-dark">
+		    <tr>
+		      	<th scope="col">#</th>
+		      	<th scope="col">Art&iacute;culo</th>
+		      	<th scope="col">Lote</th>
+		      	<th scope="col">Fecha de vencimiento</th>
+		      	<th scope="col">Proveedor</th>
+		      	<th scope="col">Fecha de recepci&oacute;n</th>
+		      	<th scope="col">Fecha tope</th>
+		      	<th scope="col">Estatus</th>
+		      	<th scope="col">Acciones</th>
+		    </tr>
+	  	</thead>
+	  	<tbody>
+		@foreach($cartaCompromiso as $cartaC)
+		    <tr>
+		      <th>{{$cartaC->id}}</th>
+		      <td>{{$cartaC->articulo}}</td>
+		      <td>{{$cartaC->lote}}</td>
+		      <td>{{date('Y-m-d',strtotime($cartaC->fecha_vencimiento))}}</td>
+		      <td>{{$cartaC->proveedor}}</td>
+		      <td>{{date('Y-m-d',strtotime($cartaC->fecha_recepcion))}}</td>
+		      <td>{{date('Y-m-d',strtotime($cartaC->fecha_tope))}}</td>
+		      <td>{{$cartaC->estatus}}</td>
+		    <!-- Inicio Validacion de ROLES -->
+		      <td style="width:140px;">
+				
+				<?php
+				if(Auth::user()->role == 'MASTER' || Auth::user()->role == 'DEVELOPER'){
+				?>
+
+					<?php
+					if($cartaC->estatus == 'Abierto'){
+					?>
+						<a href="/cartaCompromiso/{{$cartaC->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
+			      			<i class="far fa-eye"></i>			      		
+			      		</a>
+
+			      		<a href="/cartaCompromiso/{{$cartaC->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
+			      			<i class="fas fa-edit"></i>			      		
+				      	</a>
+				 					  
+				      	<form action="/cartaCompromiso/{{$cartaC->id}}" method="POST" style="display:inline;">
+						    @method('DELETE')
+						    @csrf					    
+						    <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Desincorporar"><i class="fa fa-reply"></i></button>
+						</form>
+					<?php
+					}
+					else if($cartaC->estatus == 'Cerrado'){
+					?>		
+			      	<form action="/cartaCompromiso/{{$cartaC->id}}" method="POST" style="display:inline;">
+					    @method('DELETE')
+					    @csrf					    
+					    <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Reincorporar"><i class="fa fa-share"></i></button>
+					</form>
+					<?php
+					}					
+					?>
+				<?php	
+				} else if(Auth::user()->role == 'SUPERVISOR' || Auth::user()->role == 'ADMINISTRADOR'){
+				?>
+					<a href="/cartaCompromiso/{{$cartaC->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
+		      			<i class="far fa-eye"></i>			      		
+		      		</a>
+
+		      		<a href="/cartaCompromiso/{{$cartaC->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
+		      			<i class="fas fa-edit"></i>
+	      			</a>
+				<?php
+				} else if(Auth::user()->role == 'USUARIO'){
+				?>
+					<a href="/cartaCompromiso/{{$cartaC->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
+		      			<i class="far fa-eye"></i>			      		
+		      		</a>		
+				<?php
+				}
+				?>
+										
+		      </td>
+		    <!-- Fin Validacion de ROLES -->
+		    </tr>
+		@endforeach
+		</tbody>
+	</table>
+
 	<script>
 		$(document).ready(function(){
 		    $('[data-toggle="tooltip"]').tooltip();   
