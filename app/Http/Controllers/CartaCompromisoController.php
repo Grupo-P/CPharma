@@ -72,7 +72,8 @@ class CartaCompromisoController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function show($id) {
-        //
+        $cartaCompromiso = CartaCompromiso::find($id);
+        return view('pages.cartaCompromiso.show', compact('cartaCompromiso'));
     }
 
     /**

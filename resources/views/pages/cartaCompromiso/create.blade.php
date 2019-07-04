@@ -1,7 +1,7 @@
 @extends('layouts.model')
 
 @section('title')
-    Carta compromiso
+    Carta de compromiso
 @endsection
 
 @section('content')

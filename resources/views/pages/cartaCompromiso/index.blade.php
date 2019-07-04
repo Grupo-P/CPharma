@@ -128,10 +128,10 @@
 		      <th>{{$cartaC->id}}</th>
 		      <td>{{$cartaC->articulo}}</td>
 		      <td>{{$cartaC->lote}}</td>
-		      <td>{{date('Y-m-d',strtotime($cartaC->fecha_vencimiento))}}</td>
+		      <td>{{date('d-m-Y',strtotime($cartaC->fecha_vencimiento))}}</td>
 		      <td>{{$cartaC->proveedor}}</td>
-		      <td>{{date('Y-m-d',strtotime($cartaC->fecha_recepcion))}}</td>
-		      <td>{{date('Y-m-d',strtotime($cartaC->fecha_tope))}}</td>
+		      <td>{{date('d-m-Y',strtotime($cartaC->fecha_recepcion))}}</td>
+		      <td>{{date('d-m-Y',strtotime($cartaC->fecha_tope))}}</td>
 		      <td>{{$cartaC->estatus}}</td>
 		    <!-- Inicio Validacion de ROLES -->
 		      <td style="width:140px;">
