@@ -98,7 +98,8 @@ class CartaCompromisoController extends Controller {
         try{
             $cartaCompromiso = CartaCompromiso::find($id);
             $cartaCompromiso->fill($request->all());
-            $cartaCompromiso->estatus = $request->input('estatus');
+            $cartaCompromiso->causa = $request->input('causa');
+            $cartaCompromiso->nota = $request->input('nota');
             $cartaCompromiso->user = auth()->user()->name;
             $cartaCompromiso->save();
             return redirect()->route('cartaCompromiso.index')->with('Updated', ' Informacion');

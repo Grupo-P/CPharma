@@ -4,6 +4,24 @@
     Carta de compromiso
 @endsection
 
+<script>
+  function enviar() {
+    var formulario = document.getElementById("form_registros");
+    var fecha_vencimiento = document.getElementById("fecha_vencimiento").value;
+    var fecha_tope = document.getElementById("fecha_tope").value;
+    var fecha_recepcion = document.getElementById("fecha_recepcion").value;
+
+    if((fecha_tope <= fecha_vencimiento) && (fecha_tope > fecha_recepcion)) {
+      formulario.submit();
+      return true;
+    } 
+    else {
+      $('#errorValidation').modal('show');
+      return false;
+    }
+  }
+</script>
+
 @section('content')
   <!-- Modal Error -->
   @if(session('Error'))
@@ -33,6 +51,31 @@
     </div>
   @endif
 
+  <div class="modal fade" id="errorValidation" tabindex="-1" role="dialog" aria-labelledby="errorValidationTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title text-danger" id="errorValidationTitle">
+            <i class="fas fa-exclamation-triangle text-danger"></i>{{session('Error')}}
+          </h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <h4 class="h6">
+            <b>La fecha tope</b> debe ser menor o igual a <b>la fecha de vencimiento</b> y mayor a la <b>fecha de recepci&oacute;n</b>
+          </h4>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-success" data-dismiss="modal">
+            Aceptar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <h1 class="h5 text-info">
     <i class="fas fa-plus"></i>
     Agregar carta de compromiso
@@ -48,7 +91,7 @@
 
   <br><br>
 
-  {!!Form::open(['route' => 'cartaCompromiso.store', 'method' => 'POST'])!!}
+  {!!Form::open(['route' => 'cartaCompromiso.store', 'id' => 'form_registros', 'method' => 'POST', 'onsubmit' => 'return enviar();'])!!}
   <fieldset>
     <table class="table table-borderless table-striped">
       <thead class="thead-dark">
@@ -60,14 +103,14 @@
         <tr>
           <th scope="row">{!! Form::label('articulo', 'Art&iacute;culo') !!}</th>
           <td>
-            {!!Form::text('articulo', null, ['class' => 'form-control', 'placeholder' => 'Nombre del art&iacute;culo', 'autofocus', 'required'])!!}
+            {!!Form::text('articulo', null, ['class' => 'form-control', 'id' => 'articulo', 'placeholder' => 'Nombre del art&iacute;culo', 'autofocus', 'required'])!!}
           </td>
         </tr>
 
         <tr>
           <th scope="row">{!! Form::label('lote', 'Lote') !!}</th>
           <td>
-            {!!Form::text('lote', null, ['class' => 'form-control', 'placeholder' => 'Lote del art&iacute;culo', 'required'])!!}
+            {!!Form::text('lote', null, ['class' => 'form-control', 'id' => 'lote', 'placeholder' => 'Lote del art&iacute;culo', 'required'])!!}
           </td>
         </tr>
 
@@ -83,7 +126,7 @@
         <tr>
           <th scope="row">{!! Form::label('proveedor', 'Proveedor') !!}</th>
           <td>
-            {!!Form::text('proveedor', null, ['class' => 'form-control', 'placeholder' => 'Nombre del proveedor', 'required'])!!}
+            {!!Form::text('proveedor', null, ['class' => 'form-control', 'id' => 'proveedor', 'placeholder' => 'Nombre del proveedor', 'required'])!!}
           </td>
         </tr>
 
@@ -110,7 +153,7 @@
             Causa
           </th>
           <td>
-            <textarea name="causa" id="causa" class="form-control" rows="4" placeholder="Causa del compromiso" maxlength="450"></textarea>
+            <textarea name="causa" id="causa" class="form-control" rows="4" placeholder="Causa del compromiso" maxlength="450" required></textarea>
           </td>
         </tr>
 
@@ -119,7 +162,7 @@
             Nota
           </th>
           <td>
-            <textarea name="nota" id="nota" class="form-control" rows="4" placeholder="Nota del compromiso" maxlength="450"></textarea>
+            <textarea name="nota" id="nota" class="form-control" rows="4" placeholder="Nota del compromiso" maxlength="450" required></textarea>
           </td>
         </tr>
       </tbody>
