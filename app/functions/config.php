@@ -36,7 +36,7 @@ define ("nameFLL" , "smartlalago");
 /*
 	Cadena de conexion con la base de datos de Smartpharma FAU
 */
-define ("serverFAU" , "10.100.0.34\smartfau");
+define ("serverFAU" , "10.100.0.34\SMARTPHARMA");
 define ("userFAU" , "sa");
 define ("passFAU" , "Soporte123");
 define ("nameFAU" , "smartfau");
