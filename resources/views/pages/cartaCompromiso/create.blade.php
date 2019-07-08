@@ -5,7 +5,21 @@
 @endsection
 
 <script>
-  function enviar() {
+  /*
+    TITULO: enviarFormulario
+    PARAMETROS : No aplica
+    FUNCION: Realizar la validacion de todas las fechas y permitir o no el envio
+    RETORNO: true o false
+
+    Variables:
+      - Variables de entrada:
+        * formulario: Formulario principal con los campos del registro
+        * fecha_vencimiento: La fecha de vencimiento del articulo
+        * fecha_tope: La fecha limite de la carta de compromiso
+        * fecha_recepcion: La de recepcion del articulo
+  */
+ 
+  function enviarFormulario() {
     var formulario = document.getElementById("form_registros");
     var fecha_vencimiento = document.getElementById("fecha_vencimiento").value;
     var fecha_tope = document.getElementById("fecha_tope").value;
@@ -91,7 +105,7 @@
 
   <br><br>
 
-  {!!Form::open(['route' => 'cartaCompromiso.store', 'id' => 'form_registros', 'method' => 'POST', 'onsubmit' => 'return enviar();'])!!}
+  {!!Form::open(['route' => 'cartaCompromiso.store', 'id' => 'form_registros', 'method' => 'POST', 'onsubmit' => 'return enviarFormulario();'])!!}
   <fieldset>
     <table class="table table-borderless table-striped">
       <thead class="thead-dark">
