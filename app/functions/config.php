@@ -20,33 +20,26 @@ define ("SedeDBm","Servidor de Desarrollo Manuel");
  define ("passCP","");
  define ("nameCP","cpharma");
 /*
-	Cadena de conexion con la base de datos de Smartpharma FTN
+	Cadena de conexion con la base de datos de Smartpharma FTN (ON LINE)
 */
 define ("serverFTN" , "10.100.0.2\SMARTPHARMA,1450");
 define ("userFTN" , "sa");
 define ("passFTN" , "Soporte123");
 define ("nameFTN" , "SMART");
 /*
-	Cadena de conexion con la base de datos de Smartpharma FLL
+	Cadena de conexion con la base de datos de Smartpharma FLL (ON LINE)
 */
 define ("serverFLL" , "192.168.7.34\SMARTPHARMA");
 define ("userFLL" , "sa");
 define ("passFLL" , "Soporte123");
 define ("nameFLL" , "smartlalago");
 /*
-	Cadena de conexion con la base de datos de Smartpharma FAU
+	Cadena de conexion con la base de datos de Smartpharma FAU (ON LINE)
 */
 define ("serverFAU" , "10.100.0.34\SMARTPHARMA");
 define ("userFAU" , "sa");
 define ("passFAU" , "Soporte123");
 define ("nameFAU" , "smartfau");
-/*
-	Cadena de conexion con la base de datos del servidor de Desarrollo Sergio.
-*/
- define ("serverDBs" , "SERGIO-PC");
- define ("userDBs" , "sa");
- define ("passDBs" , "soporte123");
- define ("nameDBs" , "SMART");
  /*
 	Cadena de conexion con la base de datos del servidor de Desarrollo Manuel.
 */
@@ -54,4 +47,14 @@ define ("nameFAU" , "smartfau");
  define ("userDBm" , "sa");
  define ("passDBm" , "soporte123");
  define ("nameDBm" , "SMART");
+
+
+
+ /*
+	Cadena de conexion con la base de datos del servidor de Desarrollo Sergio (ON LINE)
+*/
+ define ("serverDBs" , "SERGIO-PC");
+ define ("userDBs" , "sa");
+ define ("passDBs" , "soporte123");
+ define ("nameDBs" , "SMART");
 ?>
