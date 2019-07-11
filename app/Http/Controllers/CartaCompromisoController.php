@@ -95,7 +95,7 @@ class CartaCompromisoController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id) {
-        try{
+        try {
             $cartaCompromiso = CartaCompromiso::find($id);
             $cartaCompromiso->fill($request->all());
             $cartaCompromiso->causa = $request->input('causa');
@@ -104,7 +104,7 @@ class CartaCompromisoController extends Controller {
             $cartaCompromiso->save();
             return redirect()->route('cartaCompromiso.index')->with('Updated', ' Informacion');
         }
-        catch(\Illuminate\Database\QueryException $e){
+        catch(\Illuminate\Database\QueryException $e) {
             return back()->with('Error', ' Error');
         }
     }
@@ -118,14 +118,14 @@ class CartaCompromisoController extends Controller {
     public function destroy($id) {
         $cartaCompromiso = CartaCompromiso::find($id);
 
-         if($cartaCompromiso->estatus == 'ACTIVO'){
+         if($cartaCompromiso->estatus == 'ACTIVO') {
             $cartaCompromiso->estatus = 'INACTIVO';
          }
-         else if($cartaCompromiso->estatus == 'INACTIVO'){
+         else if($cartaCompromiso->estatus == 'INACTIVO') {
             $cartaCompromiso->estatus = 'ACTIVO';
          }
 
-         $cartaCompromiso->user = auth()->user()->name;        
+         $cartaCompromiso->user = auth()->user()->name;
          $cartaCompromiso->save();
          return redirect()->route('cartaCompromiso.index')->with('Deleted', ' Informacion');
     }
