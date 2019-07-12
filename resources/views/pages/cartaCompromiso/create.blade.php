@@ -5,66 +5,6 @@
 @endsection
 
 @section('content')
-  <?php 
-    include(app_path().'\functions\config.php');
-    include(app_path().'\functions\querys.php');
-    include(app_path().'\functions\funciones.php');
-    include(app_path().'\functions\reportes.php');
-  ?>
-
-  <!-- Modal Error -->
-  @if(session('Error'))
-    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title text-danger" id="exampleModalCenterTitle">
-              <i class="fas fa-exclamation-triangle text-danger"></i>{{session('Error')}}
-            </h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <h4 class="h6">
-              El registro no pudo ser almacenado
-            </h4>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-outline-success" data-dismiss="modal">
-              Aceptar
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  @endif
-
-  <div class="modal fade" id="errorValidation" tabindex="-1" role="dialog" aria-labelledby="errorValidationTitle" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title text-danger" id="errorValidationTitle">
-            <i class="fas fa-exclamation-triangle text-danger"></i>{{session('Error')}}
-          </h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <h4 class="h6">
-            <b>La fecha tope</b> debe ser menor o igual a <b>la fecha de vencimiento</b> y mayor a la <b>fecha de recepci&oacute;n</b>
-          </h4>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-outline-success" data-dismiss="modal">
-            Aceptar
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-
   <h1 class="h5 text-info">
     <i class="fas fa-plus"></i>
     Agregar carta de compromiso
@@ -77,141 +17,167 @@
       <i class="fa fa-reply">&nbsp;Regresar</i>
     </button>
   </form>
+  <hr class="row align-items-start col-12">
+  
+  {{-- OJO REEMPLAZAR "FTN" POR LA CAPTURA DE LA SEDE DE LA FUNCION DE OPTETOS --}}
 
-  <br><br>
+  <?php
+    include(app_path().'\functions\config.php');
+    include(app_path().'\functions\querys.php');
+    include(app_path().'\functions\funciones.php');
+    include(app_path().'\functions\reportes.php');
 
-  {!!Form::open(['route' => 'cartaCompromiso.store', 'id' => 'form_registros', 'method' => 'POST', 'onsubmit' => 'return enviarFormulario();'])!!}
-  <fieldset>
-    <table class="table table-borderless table-striped">
-      <thead class="thead-dark">
-        <tr>
-          <th scope="row" colspan="2"></th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <th scope="row">{!! Form::label('articulo', 'Art&iacute;culo') !!}</th>
-          <td>
-            {!!Form::text('articulo', null, ['class' => 'form-control', 'id' => 'articulo', 'placeholder' => 'Nombre del art&iacute;culo', 'autofocus', 'required'])!!}
-          </td>
-        </tr>
-
-        <tr>
-          <th scope="row">{!! Form::label('lote', 'Lote') !!}</th>
-          <td>
-            {!!Form::text('lote', null, ['class' => 'form-control', 'id' => 'lote', 'placeholder' => 'Lote del art&iacute;culo', 'required'])!!}
-          </td>
-        </tr>
-
-        <tr>
-          <th>
-            Fecha de vencimiento
-          </th>
-          <td>
-            <input id="fecha_vencimiento" type="date" name="fecha_vencimiento" class="form-control" required>
-          </td>
-        </tr>
-
-        <tr>
-          <th scope="row">{!! Form::label('proveedor', 'Proveedor') !!}</th>
-          <td>
-            {!!Form::text('proveedor', null, ['class' => 'form-control', 'id' => 'proveedor', 'placeholder' => 'Nombre del proveedor', 'required'])!!}
-          </td>
-        </tr>
-
-        <tr>
-          <th>
-            Fecha de recepci&oacute;n
-          </th>
-          <td>
-            <input id="fecha_recepcion" type="date" name="fecha_recepcion" class="form-control" required>
-          </td>
-        </tr>
-
-        <tr>
-          <th>
-            Fecha tope
-          </th>
-          <td>
-            <input id="fecha_tope" type="date" name="fecha_tope" class="form-control" required>
-          </td>
-        </tr>
-
-        <tr>
-          <th>
-            Causa
-          </th>
-          <td>
-            <textarea name="causa" id="causa" class="form-control" rows="4" placeholder="Causa del compromiso" maxlength="450" required></textarea>
-          </td>
-        </tr>
-
-        <tr>
-          <th>
-            Nota
-          </th>
-          <td>
-            <textarea name="nota" id="nota" class="form-control" rows="4" placeholder="Nota del compromiso" maxlength="450" required></textarea>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-    {!!Form::submit('Guardar', ['class' => 'btn btn-outline-success btn-md'])!!}
-  </fieldset>
-  {!!Form::close()!!}
-
-  <script>
-    //Al cargar el documento se ocultara el modal y se mostrara al ser llamado
-    $(document).ready(function(){
-        $('[data-toggle="tooltip"]').tooltip();   
-    });
-    $('#exampleModalCenter').modal('show');
-
-    /*
-      TITULO: enviarFormulario
-      PARAMETROS : No aplica
-      FUNCION: Realizar la validacion de todas las fechas y permitir o no el envio
-      RETORNO: true o false
-
-      Variables:
-        - Variables de entrada:
-          * formulario: Formulario principal con los campos del registro
-          * fecha_vencimiento: La fecha de vencimiento del articulo
-          * fecha_tope: La fecha limite de la carta de compromiso
-          * fecha_recepcion: La de recepcion del articulo
-    */
-   
-    function enviarFormulario() {
-      var formulario = document.getElementById("form_registros");
-      var fecha_vencimiento = document.getElementById("fecha_vencimiento").value;
-      var fecha_tope = document.getElementById("fecha_tope").value;
-      var fecha_recepcion = document.getElementById("fecha_recepcion").value;
-
-      if((fecha_tope <= fecha_vencimiento) && (fecha_tope > fecha_recepcion)) {
-        formulario.submit();
-        return true;
-      } 
-      else {
-        $('#errorValidation').modal('show');
-        return false;
-      }
+    $ArtJson = "";
+    
+    if(isset($_GET['Id'])) {
+      /*CASO 2: CARGA AL HABER SELECCIONADO UN PROVEEDOR
+                Se pasa a la carga de las facturas del proveedor*/
+      $InicioCarga = new DateTime("now");
+      
+      ReporteProveedorFactura("FTN",$_GET['Id'],$_GET['Nombre']);
+      
+      $FinCarga = new DateTime("now");
+      $IntervalCarga = $InicioCarga->diff($FinCarga);
+      echo'Tiempo de carga: '.$IntervalCarga->format("%Y-%M-%D %H:%I:%S");
     }
-  </script>
+    else if(isset($_GET['TroquelN'])) {
+      /*CASO 5: ACTUALIZAR EL TROQUEL
+                Se pasa a mostrar el resultado de actualizar el troquel*/
+      $InicioCarga = new DateTime("now");
+
+      ReporteTroquel("FTN",$_GET['IdProv'],$_GET['NombreProv'],$_GET['IdFact'],$_GET['IdArt'],$_GET['TroquelN']);
+
+      $FinCarga = new DateTime("now");
+      $IntervalCarga = $InicioCarga->diff($FinCarga);
+      echo'Tiempo de carga: '.$IntervalCarga->format("%Y-%M-%D %H:%I:%S");
+    }
+    else if(isset($_GET['IdArt'])) {
+      /*CASO 4: CARGA AL HABER SELECCIONADO UNA ARTICULO
+                Se pasa a la actualizacion del troquel*/
+      $InicioCarga = new DateTime("now");
+
+      ReporteArticuloTroquel("FTN",$_GET['IdProv'],$_GET['NombreProv'],$_GET['IdFact'],$_GET['IdArt']);
+
+      $FinCarga = new DateTime("now");
+      $IntervalCarga = $InicioCarga->diff($FinCarga);
+      echo'Tiempo de carga: '.$IntervalCarga->format("%Y-%M-%D %H:%I:%S");
+    }
+    else if(isset($_GET['IdFact'])){
+    /*CASO 3: CARGA AL HABER SELECCIONADO UNA FACTURA 
+              Se pasa a la seleccion del articulo*/
+      $InicioCarga = new DateTime("now");
+
+      ReporteFacturaArticulo("FTN",$_GET['IdProv'],$_GET['NombreProv'],$_GET['IdFact']);
+
+      $FinCarga = new DateTime("now");
+      $IntervalCarga = $InicioCarga->diff($FinCarga);
+      echo'Tiempo de carga: '.$IntervalCarga->format("%Y-%M-%D %H:%I:%S");
+    }
+    else {
+      /*CASO 1: AL CARGAR EL REPORTE DESDE EL MENU
+                Se pasa a la seleccion del proveedor*/
+      $InicioCarga = new DateTime("now");
+
+      $sql = QListaProveedores();
+      $ArtJson = armarJson($sql,"FTN");
+
+      echo '
+      <form autocomplete="off" action="">
+        <div class="autocomplete" style="width:90%;">
+          <input id="myInput" type="text" name="Nombre" placeholder="Ingrese el nombre del proveedor " onkeyup="conteo()" required>
+          <input id="myId" name="Id" type="hidden">
+          <td>
+          <input id="SEDE" name="SEDE" type="hidden" value="';
+          print_r("FTN");
+          echo'">
+          </td>
+        </div>
+        <input type="submit" value="Buscar" class="btn btn-outline-success">
+      </form>
+      ';
+
+      $FinCarga = new DateTime("now");
+      $IntervalCarga = $InicioCarga->diff($FinCarga);
+      echo'Tiempo de carga: '.$IntervalCarga->format("%Y-%M-%D %H:%I:%S");
+    } 
+?>
 @endsection
 
-<style>
-  * {box-sizing:border-box;}
-  /*the container must be positioned relative:*/
-  input {
-    border:1px solid transparent; 
-    background-color:#f1f1f1; 
-    border-radius:5px; 
-    padding:10px; 
-    font-size:16px;
-  }
+@section('scriptsHead')
+    <script type="text/javascript" src="{{ asset('assets/js/sortTable.js') }}">
+    </script>
+    <script type="text/javascript" src="{{ asset('assets/js/filter.js') }}">  
+    </script>
+    <script type="text/javascript" src="{{ asset('assets/js/functions.js') }}"> 
+    </script>
+    <script type="text/javascript" src="{{ asset('assets/jquery/jquery-2.2.2.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('assets/jquery/jquery-ui.min.js') }}" ></script>
 
-  input[type=date] {
-    background-color:#f1f1f1;
-    width:100%;
-  }
-</style>
+    <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    /*the container must be positioned relative:*/
+    .autocomplete {
+      position: relative;
+      display: inline-block;
+    }
+
+    input {
+      border: 1px solid transparent;
+      background-color: #f1f1f1;
+      border-radius: 5px;
+      padding: 10px;
+      font-size: 16px;
+    }
+
+    input[type=text] {
+      background-color: #f1f1f1;
+      width: 100%;
+    }
+
+    .autocomplete-items {
+      position: absolute;
+      border: 1px solid #d4d4d4;
+      border-bottom: none;
+      border-top: none;
+      z-index: 99;
+      /*position the autocomplete items to be the same width as the container:*/
+      top: 100%;
+      left: 0;
+      right: 0;
+    }
+
+    .autocomplete-items div {
+      padding: 10px;
+      cursor: pointer;
+      background-color: #fff; 
+      border-bottom: 1px solid #d4d4d4; 
+    }
+
+    /*when hovering an item:*/
+    .autocomplete-items div:hover {
+      background-color: #e9e9e9; 
+    }
+
+    /*when navigating through the items using the arrow keys:*/
+    .autocomplete-active {
+      background-color: DodgerBlue !important; 
+      color: #ffffff; 
+    }
+    </style>
+@endsection
+
+@section('scriptsFoot')
+  <?php
+    if($ArtJson!=""){
+  ?>
+    <script type="text/javascript">
+      ArrJs = eval(<?php echo $ArtJson ?>);
+      autocompletado(document.getElementById("myInput"),document.getElementById("myId"), ArrJs);
+    </script> 
+  <?php
+    }
+  ?>  
+@endsection
