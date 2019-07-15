@@ -9,15 +9,8 @@
     <i class="fas fa-plus"></i>
     Agregar carta de compromiso
   </h1>
+  <hr class="row align-items-start col-12">
 
-  <hr class="row align-items-start col-12">
-  <form action="/cartaCompromiso/" method="POST" style="display:inline;">  
-    @csrf                       
-    <button type="submit" name="Regresar" role="button" class="btn btn-outline-info btn-sm"data-placement="top">
-      <i class="fa fa-reply">&nbsp;Regresar</i>
-    </button>
-  </form>
-  <hr class="row align-items-start col-12">
   
   {{-- OJO REEMPLAZAR "FTN" POR LA CAPTURA DE LA SEDE DE LA FUNCION DE OPTETOS --}}
 
@@ -32,6 +25,10 @@
     if(isset($_GET['Id'])) {
       /*CASO 2: CARGA AL HABER SELECCIONADO UN PROVEEDOR
                 Se pasa a la carga de las facturas del proveedor*/
+      if ("FTN"=="FTN"){      
+        echo '<h1 class="h5 text-success"  align="left"> <i class="fas fa-prescription"></i> '.NombreSede("FTN").'</h1>';
+      }
+      echo '<hr class="row align-items-start col-12">';
       $InicioCarga = new DateTime("now");
       
       ReporteProveedorFactura("FTN",$_GET['Id'],$_GET['Nombre']);
@@ -40,23 +37,17 @@
       $IntervalCarga = $InicioCarga->diff($FinCarga);
       echo'Tiempo de carga: '.$IntervalCarga->format("%Y-%M-%D %H:%I:%S");
     }
-    else if(isset($_GET['TroquelN'])) {
-      /*CASO 5: ACTUALIZAR EL TROQUEL
-                Se pasa a mostrar el resultado de actualizar el troquel*/
-      $InicioCarga = new DateTime("now");
-
-      ReporteTroquel("FTN",$_GET['IdProv'],$_GET['NombreProv'],$_GET['IdFact'],$_GET['IdArt'],$_GET['TroquelN']);
-
-      $FinCarga = new DateTime("now");
-      $IntervalCarga = $InicioCarga->diff($FinCarga);
-      echo'Tiempo de carga: '.$IntervalCarga->format("%Y-%M-%D %H:%I:%S");
-    }
     else if(isset($_GET['IdArt'])) {
       /*CASO 4: CARGA AL HABER SELECCIONADO UNA ARTICULO
                 Se pasa a la actualizacion del troquel*/
+      if("FTN"=="FTN"){      
+        echo '<h1 class="h5 text-success"  align="left"> <i class="fas fa-prescription"></i> '.NombreSede("FTN").'</h1>';
+      }
+      echo '<hr class="row align-items-start col-12">';
+
       $InicioCarga = new DateTime("now");
 
-      ReporteArticuloTroquel("FTN",$_GET['IdProv'],$_GET['NombreProv'],$_GET['IdFact'],$_GET['IdArt']);
+      GuardarCartaCompromiso("FTN",$_GET['IdProv'],$_GET['NombreProv'],$_GET['IdFact'],$_GET['IdArt']);
 
       $FinCarga = new DateTime("now");
       $IntervalCarga = $InicioCarga->diff($FinCarga);
@@ -65,6 +56,11 @@
     else if(isset($_GET['IdFact'])){
     /*CASO 3: CARGA AL HABER SELECCIONADO UNA FACTURA 
               Se pasa a la seleccion del articulo*/
+      if("FTN"=="FTN"){      
+        echo '<h1 class="h5 text-success"  align="left"> <i class="fas fa-prescription"></i> '.NombreSede("FTN").'</h1>';
+      }
+      echo '<hr class="row align-items-start col-12">';
+
       $InicioCarga = new DateTime("now");
 
       ReporteFacturaArticulo("FTN",$_GET['IdProv'],$_GET['NombreProv'],$_GET['IdFact']);
@@ -76,6 +72,11 @@
     else {
       /*CASO 1: AL CARGAR EL REPORTE DESDE EL MENU
                 Se pasa a la seleccion del proveedor*/
+      if("FTN"=="FTN"){      
+        echo '<h1 class="h5 text-success"  align="left"> <i class="fas fa-prescription"></i> '.NombreSede("FTN").'</h1>';
+      }
+      echo '<hr class="row align-items-start col-12">';
+
       $InicioCarga = new DateTime("now");
 
       $sql = QListaProveedores();

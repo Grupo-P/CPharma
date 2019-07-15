@@ -1587,4 +1587,124 @@
 		sqlsrv_close($conn);
 	}
 
+	/*****************************************************************************/
+	/************************ REPORTE CARTA DE COMPROMISO *******************/
+
+	/*
+		TITULO: GuardarCartaCompromiso
+		PARAMETROS: [$SedeConnection] sede donde se hara la conexion
+					[$IdProveedor] ID del proveedor a buscar
+					[$NombreProveedor] Nombre del proveedor a buscar
+					[$IdFatura] id de la factura
+					[$IdArticulo] ide del articulo
+		FUNCION: arma la lista del troquel segun el articulo
+		RETORNO: no aplica
+	 */
+	function GuardarCartaCompromiso($SedeConnection,$IdProveedor,$NombreProveedor,$IdFatura,$IdArticulo){
+		
+		$conn = ConectarSmartpharma($SedeConnection);
+
+		$sql1 = QArticulo($IdArticulo);
+		$result = sqlsrv_query($conn,$sql1);
+
+		$sql2 = QTroquelArticuloFactura($IdFatura,$IdArticulo);
+		$result2 = sqlsrv_query($conn,$sql2);
+		$row2 = sqlsrv_fetch_array( $result2, SQLSRV_FETCH_ASSOC);
+
+		$sqlNFact = QNumeroFactura($IdFatura);
+		$resultNFact = sqlsrv_query($conn,$sqlNFact);
+		$rowNFact = sqlsrv_fetch_array($resultNFact,SQLSRV_FETCH_ASSOC);
+		$NumeroFactura = $rowNFact["NumeroFactura"];
+
+		echo '
+		<div class="input-group md-form form-sm form-1 pl-0">
+		  <div class="input-group-prepend">
+		    <span class="input-group-text purple lighten-3" id="basic-text1">
+		    	<i class="fas fa-search text-white"
+		        aria-hidden="true"></i>
+		    </span>
+		  </div>
+		  <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterAllTable()">
+		</div>
+		<br/>
+		';
+
+		echo '
+		<table class="table table-striped table-bordered col-12 sortable">
+			<thead class="thead-dark">
+			    <tr>
+			    	<th scope="col">Numero de Factura</th>
+			    	<th scope="col">Proveedor</th>
+			    </tr>
+		  	</thead>
+		  	<tbody>
+		  	<tr>
+	  	';
+	  	echo '<td>'.$NumeroFactura.'</td>';
+		echo '<td>'.$NombreProveedor.'</td>';
+	  	echo '
+	  		</tr>
+	  		</tbody>
+		</table>';
+
+		echo'
+		<table class="table table-striped table-bordered col-12 sortable" id="myTable">
+		  	<thead class="thead-dark">
+			    <tr>
+			    	<th scope="col">Codigo</th>
+			    	<th scope="col">Descripcion</th>
+			    	<th scope="col">Fecha de vencimiento</th>
+			    	<th scope="col">Fecha tope</th>
+			    	<th scope="col">Fecha de recepcion</th>
+			    </tr>
+		  	</thead>
+		  	<tbody>
+		 ';
+
+		while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
+			echo '<tr>';
+			echo '<td align="center">'.$row["CodigoArticulo"].'</td>';
+			echo '<td align="center">'.$row["Descripcion"].'</td>';
+			echo '<td align="center"><input id="fecha_vencimiento" name="fecha_vencimiento" type="date" autofocus></td>';
+			echo '<td align="center"><input id="fecha_tope" name="fecha_tope" type="date"></td>';
+			echo '<td align="center"><input id="fecha_recepcion" name="fecha_recepcion" type="date" autofocus></td>';
+			echo '</tr>';
+		}
+	  	echo '
+	  		</tbody>
+		</table>';
+
+		echo '
+		<form autocomplete="off" action="">
+		<table class="table table-striped table-bordered col-12 sortable">
+			<thead class="thead-dark">
+			    <tr>
+			    	<th scope="col">Nota</th>
+			    	<th scope="col">Causa</th>
+			    </tr>
+		  	</thead>
+		  	
+		  	<tbody>
+		  	<tr>
+	  	';
+	  	echo '<td><textarea name="nota" id="nota" class="form-control"></textarea></td>';
+		echo '<td><textarea name="causa" id="causa" class="form-control"></textarea></td>
+	  		</tr>
+	  		</tbody>
+		</table>
+
+		<div class="text-center">
+			<input id="SEDE" name="SEDE" type="hidden" value="';
+	            print_r($SedeConnection);
+	            echo'">
+	            <input id="IdArt" name="IdArt" type="hidden" value="'.$row["Id"].'">
+	            <input id="articulo" name="articulo" type="hidden" value="'.$row["Descripcion"].'">
+		        <input id="proveedor" name="proveedor" type="hidden" value="'.$NombreProveedor.'">
+			<input type="submit" value="Guardar" class="btn btn-outline-success">
+		</div>
+
+		</form>';
+
+		sqlsrv_close($conn);
+	}
 ?>
