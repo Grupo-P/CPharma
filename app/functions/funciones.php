@@ -1,5 +1,24 @@
 <?php
 	/*
+		TITULO: ValidarConectividad
+		PARAMETROS: No Aplica
+		FUNCION: Valida la conexion con un servidor definido
+		RETORNO: Estatus de la conectividad
+	 */
+	function ValidarConectividad(){
+		
+		$serverName = "serverName\sqlexpress, 1542";
+		$connectionInfo = array( "Database"=>"dbName", "UID"=>"userName", "PWD"=>"password");
+		$conn = sqlsrv_connect( $serverName, $connectionInfo);
+
+		if( $conn ) {
+		     echo "Conexión establecida.<br />";
+		}else{
+		     echo "Conexión no se pudo establecer.<br />";
+		     die( print_r( sqlsrv_errors(), true));	
+		}
+	}
+	/*
 		TITULO: ConectarXampp
 		PARAMETROS: No Aplica
 		FUNCION: Conexion con servidor de XAMPP

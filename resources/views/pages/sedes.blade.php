@@ -74,7 +74,8 @@
    	</div>
 <!-- FTN:OFF-LINE *****  FLL:OFF-LINE *****  FAU:ON-LINE -->
 	<?php
-		if($MiUbicacion == 'FAU'){
+		$FlagTemporal = 0;
+		if($MiUbicacion == 'FAU' && $FlagTemporal==1 ){
 	?>
    	<div class="card-deck">
    		<!-- Reportes -->

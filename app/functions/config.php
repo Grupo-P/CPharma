@@ -39,6 +39,14 @@ define ("userFLL" , "sa");
 define ("passFLL" , "Soporte123");
 define ("nameFLL" , "smartlalago");
 
+/*
+	Cadena de conexion Smartpharma FAU (ON LINE)
+*/
+define ("serverFAU" , "10.100.0.34\SMARTPHARMA");
+define ("userFAU" , "sa");
+define ("passFAU" , "Soporte123");
+define ("nameFAU" , "smartfau");
+
  /*
 	Cadena de conexion con la base de datos del servidor de Desarrollo Manuel.
 */
@@ -69,24 +77,25 @@ define ("nameFLL" , "smartlalago");
 */
 /*
 	Cadena de conexion Smartpharma FAU (ON LINE)
-*/
+
 define ("serverFAU" , "10.100.0.34\SMARTPHARMA");
 define ("userFAU" , "sa");
 define ("passFAU" , "Soporte123");
 define ("nameFAU" , "smartfau");
-/*
+
 	Cadena de conexion Smartpharma FAU-FTN (OFF LINE)
-*/
+
 define ("serverFAUFTN" , "SERGIO-PC");
 define ("userFAUFTN" , "sa");
 define ("passFAUFTN" , "soporte123");
 define ("nameFAUFTN" , "cpharmafau");
-/*
+
 	Cadena de conexion Smartpharma FAU-FLL (OFF LINE)
-*/
+
 define ("serverFAUFLL" , "SERGIO-PC");
 define ("userFAUFLL" , "sa");
 define ("passFAUFLL" , "soporte123");
 define ("nameFAUFLL" , "cpharmafll");
+*/
 
 ?>

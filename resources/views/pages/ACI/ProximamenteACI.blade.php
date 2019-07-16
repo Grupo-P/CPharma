@@ -46,10 +46,10 @@
 
 @section('content')
     <main role="main" class="content flex-center position-ref full-height fondopantalla">
-        <div class="frameS">
+        <!-- <div class="frameS">
             <a href="{{ url('/') }}">
                 <h1 class="title m-b-md text-info">PROXIMAMENTE</h1>
             </a>
-        </div>
+        </div> -->
     </main>
 @endsection
