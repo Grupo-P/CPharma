@@ -1615,6 +1615,7 @@
 		$resultNFact = sqlsrv_query($conn,$sqlNFact);
 		$rowNFact = sqlsrv_fetch_array($resultNFact,SQLSRV_FETCH_ASSOC);
 		$NumeroFactura = $rowNFact["NumeroFactura"];
+		$Articulo="";
 
 		echo '
 		<div class="input-group md-form form-sm form-1 pl-0">
@@ -1662,9 +1663,10 @@
 		 ';
 
 		while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
+			$Articulo=$row["Descripcion"];
 			echo '<tr>';
 			echo '<td align="center">'.$row["CodigoArticulo"].'</td>';
-			echo '<td align="center">'.$row["Descripcion"].'</td>';
+			echo '<td align="center">'.$Articulo.'</td>';
 			echo '<td align="center"><input id="fecha_vencimiento" name="fecha_vencimiento" type="date" autofocus></td>';
 			echo '<td align="center"><input id="fecha_tope" name="fecha_tope" type="date"></td>';
 			echo '<td align="center"><input id="fecha_recepcion" name="fecha_recepcion" type="date" autofocus></td>';
@@ -1675,7 +1677,7 @@
 		</table>';
 
 		echo '
-		<form autocomplete="off" action="">
+		<form autocomplete="off" action="cartaCompromiso.store">
 		<table class="table table-striped table-bordered col-12 sortable">
 			<thead class="thead-dark">
 			    <tr>
@@ -1687,8 +1689,8 @@
 		  	<tbody>
 		  	<tr>
 	  	';
-	  	echo '<td><textarea name="nota" id="nota" class="form-control"></textarea></td>';
-		echo '<td><textarea name="causa" id="causa" class="form-control"></textarea></td>
+	  	echo '<td><textarea name="nota" id="nota" class="form-control" rows="4"></textarea></td>';
+		echo '<td><textarea name="causa" id="causa" class="form-control" rows="4"></textarea></td>
 	  		</tr>
 	  		</tbody>
 		</table>
@@ -1697,12 +1699,11 @@
 			<input id="SEDE" name="SEDE" type="hidden" value="';
 	            print_r($SedeConnection);
 	            echo'">
-	            <input id="IdArt" name="IdArt" type="hidden" value="'.$row["Id"].'">
-	            <input id="articulo" name="articulo" type="hidden" value="'.$row["Descripcion"].'">
+	            <input id="articulo" name="articulo" type="hidden" value="'.$Articulo.'">
 		        <input id="proveedor" name="proveedor" type="hidden" value="'.$NombreProveedor.'">
 			<input type="submit" value="Guardar" class="btn btn-outline-success">
 		</div>
-
+		
 		</form>';
 
 		sqlsrv_close($conn);
