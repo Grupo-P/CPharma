@@ -66,6 +66,7 @@
                     <select name="role" class="form-control">
                         <option>USUARIO</option>
                         <option>SUPERVISOR</option>
+                        <option>SUPERVISOR CAJA</option>
                         <option>ADMINISTRADOR</option>
                         <option>MASTER</option>
                         <option>DEVELOPER</option>
