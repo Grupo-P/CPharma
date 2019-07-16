@@ -1130,9 +1130,9 @@
 		FUNCION:
 		RETORNO:
 	 */
-	function QCartaDeCompromiso() {
+	function QCartaDeCompromiso($IdProveedor,$IdFatura,$IdArticulo) {
 		$sql = "
-		SELECT
+		SELECT 
 		ComFactura.ComProveedorId,
 		ComEntradaMercancia.InvLoteId,
 		ComFactura.NumeroFactura, 
@@ -1143,9 +1143,9 @@
 		INNER JOIN ComFacturaDetalle ON ComFactura.Id = ComFacturaDetalle.ComFacturaId
 		INNER JOIN InvArticulo ON ComFacturaDetalle.InvArticuloId = InvArticulo.Id
 		INNER JOIN ComEntradaMercancia ON ComEntradaMercancia.InvArticuloId = InvArticulo.Id
-		WHERE ComFactura.ComProveedorId='2' 
-		AND ComFactura.NumeroFactura='6867299'
-		AND InvArticulo.CodigoArticulo='36675'
+		WHERE ComFactura.ComProveedorId='$IdProveedor' 
+		AND ComFactura.Id='$IdFatura'
+		AND InvArticulo.Id='$IdArticulo'
 		GROUP BY ComFactura.ComProveedorId, ComEntradaMercancia.InvLoteId, ComFactura.NumeroFactura, CONVERT(DATE,ComFactura.FechaDocumento), InvArticulo.CodigoArticulo, InvArticulo.Descripcion
 		ORDER BY ComEntradaMercancia.InvLoteId ASC
 		";

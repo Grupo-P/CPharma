@@ -10,7 +10,6 @@
     Agregar carta de compromiso
   </h1>
   <hr class="row align-items-start col-12">
-
   
   {{-- OJO REEMPLAZAR "FTN" POR LA CAPTURA DE LA SEDE DE LA FUNCION DE OPTETOS --}}
 
