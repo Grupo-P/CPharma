@@ -16,7 +16,7 @@
 		include(app_path().'\functions\config.php'); 
 		include(app_path().'\functions\funciones.php');
 
-		if (isset($_GET['SEDE'])){						
+		if (isset($_GET['SEDE'])){					
 			echo '<h1 class="h5 text-success"  align="left"> <i class="fas fa-prescription"></i> '.NombreSede($_GET['SEDE']).'</h1>';
 		}		
 	?>

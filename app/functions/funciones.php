@@ -1,5 +1,24 @@
 <?php
 	/*
+		TITULO: ValidarConectividad
+		PARAMETROS: No Aplica
+		FUNCION: Valida la conexion con un servidor definido
+		RETORNO: Estatus de la conectividad
+	 */
+	function ValidarConectividad(){
+		
+		$serverName = "serverName\sqlexpress, 1542";
+		$connectionInfo = array( "Database"=>"dbName", "UID"=>"userName", "PWD"=>"password");
+		$conn = sqlsrv_connect( $serverName, $connectionInfo);
+
+		if( $conn ) {
+		     echo "Conexión establecida.<br />";
+		}else{
+		     echo "Conexión no se pudo establecer.<br />";
+		     die( print_r( sqlsrv_errors(), true));	
+		}
+	}
+	/*
 		TITULO: ConectarXampp
 		PARAMETROS: No Aplica
 		FUNCION: Conexion con servidor de XAMPP
@@ -37,7 +56,7 @@
 				$conn = sqlsrv_connect(serverFLL,$connectionInfo);
 				return $conn;
 			break;
-
+/*Casos FTN:OFF-LINE *****  FLL:OFF-LINE *****  FAU:ON-LIN*/
 			case 'FAU':
 				$connectionInfo = array(
 					"Database"=>nameFAU,
@@ -48,6 +67,26 @@
 				return $conn;
 			break;
 
+			case 'FAUFTN':
+				$connectionInfo = array(
+					"Database"=>nameFAUFTN,
+					"UID"=>userFAUFTN,
+					"PWD"=>passFAUFTN
+				);
+				$conn = sqlsrv_connect(serverFAUFTN,$connectionInfo);
+				return $conn;
+			break;
+
+			case 'FAUFLL':
+				$connectionInfo = array(
+					"Database"=>nameFAUFLL,
+					"UID"=>userFAUFLL,
+					"PWD"=>passFAUFLL
+				);
+				$conn = sqlsrv_connect(serverFAUFLL,$connectionInfo);
+				return $conn;
+			break;
+/************************************************************************/
 			case 'DBs':
 				$connectionInfo = array(
 					"Database"=>nameDBs,
@@ -66,6 +105,48 @@
 				);
 				$conn = sqlsrv_connect(serverDBm,$connectionInfo);
 				return $conn;
+			break;
+		}
+	}
+	/*
+		TITULO: MiUbicacion
+		PARAMETROS: No aplica
+		FUNCION: Descubrir desde que sede estoy entrando a la aplicacion
+		RETORNO: Sede en la que me encuentro
+	 */
+	function MiUbicacion(){
+		$NombreCliente = gethostname();
+		//echo "<br/>Su nombre de pc es : ".$NombreCliente;
+
+		$IpCliente = gethostbyname($NombreCliente);
+		//echo "<br/>Su direccion IP es : ".$IpCliente;
+
+		$Octeto = explode(".", $IpCliente);
+		//echo"<br/>Segmento de red: ".$Octeto[2];
+
+		switch ($Octeto[2]) {
+			case '1':
+				return 'FTN';
+			break;
+
+			case '2':
+				return 'FTN';
+			break;
+
+			case '10':
+				return 'FTN';
+			break;
+
+			case '7':
+				return 'FLL';
+			break;
+
+			case '12':
+				return 'FAU';
+			break;
+			
+			default:
+				return ''.$Octeto[2];
 			break;
 		}
 	}
@@ -153,12 +234,22 @@
 				$sede = SedeFLL;
 				return $sede;
 			break;
-
+/*Casos FTN:OFF-LINE *****  FLL:OFF-LINE *****  FAU:ON-LIN*/
 			case 'FAU':
 				$sede = SedeFAU;
 				return $sede;
 			break;
 
+			case 'FAUFTN':
+				$sede = SedeFAUFTN;
+				return $sede;
+			break;
+
+			case 'FAUFLL':
+				$sede = SedeFAUFLL;
+				return $sede;
+			break;
+/************************************************************/
 			case 'DBs':
 				$sede = SedeDBs;
 				return $sede;

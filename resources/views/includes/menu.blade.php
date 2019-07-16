@@ -82,7 +82,13 @@
         Tasa de mercado<span class="sr-only">(current)</span>
       </a>
     </li>
+<?php
+  }
+?>
 
+<?php
+  if(Auth::user()->role == 'SUPERVISOR CAJA'){
+?>
     <li class="nav-item">
       <a class="nav-link" href="{{ url('/tasaVenta') }}">
         <span data-feather="home"></span>
