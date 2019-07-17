@@ -48,6 +48,24 @@
 
       GuardarCartaDeCompromiso($_GET['articulo'],$_GET['lote'],$_GET['fecha_vencimiento'],$_GET['proveedor'],$_GET['fecha_recepcion'],$_GET['fecha_tope'],$_GET['causa'],$_GET['nota']);
 
+      $sql = QListaProveedores();
+      $ArtJson = armarJson($sql,$_GET['SEDE']);
+
+      echo '
+      <form autocomplete="off" action="">
+        <div class="autocomplete" style="width:90%;">
+          <input id="myInput" type="text" name="Nombre" placeholder="Ingrese el nombre del proveedor " onkeyup="conteo()" required>
+          <input id="myId" name="Id" type="hidden">
+          <td>
+          <input id="SEDE" name="SEDE" type="hidden" value="';
+          print_r($_GET['SEDE']);
+          echo'">
+          </td>
+        </div>
+        <input type="submit" value="Buscar" class="btn btn-outline-success">
+      </form>
+      ';
+
       $FinCarga = new DateTime("now");
       $IntervalCarga = $InicioCarga->diff($FinCarga);
       echo'Tiempo de carga: '.$IntervalCarga->format("%Y-%M-%D %H:%I:%S");
@@ -116,7 +134,7 @@
       $IntervalCarga = $InicioCarga->diff($FinCarga);
       echo'Tiempo de carga: '.$IntervalCarga->format("%Y-%M-%D %H:%I:%S");
     } 
-?>
+  ?>
 @endsection
 
 @section('scriptsHead')

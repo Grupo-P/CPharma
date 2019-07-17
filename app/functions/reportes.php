@@ -1600,8 +1600,7 @@
 		FUNCION: arma la lista del troquel segun el articulo
 		RETORNO: no aplica
 	 */
-	function CartaDeCompromiso($SedeConnection,$IdProveedor,$NombreProveedor,$IdFatura,$IdArticulo){
-		
+	function CartaDeCompromiso($SedeConnection,$IdProveedor,$NombreProveedor,$IdFatura,$IdArticulo) {
 		$conn = ConectarSmartpharma($SedeConnection);
 
 		$sql = QCartaDeCompromiso($IdProveedor,$IdFatura,$IdArticulo);
@@ -1657,8 +1656,6 @@
 				</tr>
 	  		</tbody>
 		</table>';
-
-		
 
 		echo'
 		<table class="table table-striped table-bordered col-12 sortable" id="myTable">
@@ -1731,11 +1728,11 @@
 		RETORNO: no aplica
 	 */
 	function GuardarCartaDeCompromiso($articulo,$lote,$fecha_vencimiento,$proveedor,$fecha_recepcion,$fecha_tope,$causa,$nota) {
+		$user = auth()->user()->name;
+		$date = date('Y-m-d h:m:s',time());
 		$conn = ConectarXampp();
-		$sql = QGuardarCartaDeCompromiso($articulo,$lote,$fecha_vencimiento,$proveedor,$fecha_recepcion,$fecha_tope,$causa,$nota);
+		$sql = QGuardarCartaDeCompromiso($articulo,$lote,$fecha_vencimiento,$proveedor,$fecha_recepcion,$fecha_tope,$causa,$nota,$user,$date);
 		$result = mysqli_query($conn,$sql);
 		mysqli_close($conn);
-
-		//header('Location: /carpeta/mipagina.php');
 	}
 ?>
