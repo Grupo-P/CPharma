@@ -10,8 +10,6 @@
     Agregar carta de compromiso
   </h1>
   <hr class="row align-items-start col-12">
-  
-  {{-- OJO REEMPLAZAR "FTN" POR LA CAPTURA DE LA SEDE DE LA FUNCION DE OPTETOS --}}
 
   <?php
     include(app_path().'\functions\config.php');
@@ -20,17 +18,19 @@
     include(app_path().'\functions\reportes.php');
 
     $ArtJson = "";
+    //OJO ELIMINAR $_GET['SEDE']="FTN";
+    $_GET['SEDE']="FTN";
     
     if(isset($_GET['Id'])) {
       /*CASO 2: CARGA AL HABER SELECCIONADO UN PROVEEDOR
                 Se pasa a la carga de las facturas del proveedor*/
-      if ("FTN"=="FTN"){      
-        echo '<h1 class="h5 text-success"  align="left"> <i class="fas fa-prescription"></i> '.NombreSede("FTN").'</h1>';
+      if (isset($_GET['SEDE'])){      
+        echo '<h1 class="h5 text-success"  align="left"> <i class="fas fa-prescription"></i> '.NombreSede($_GET['SEDE']).'</h1>';
       }
       echo '<hr class="row align-items-start col-12">';
       $InicioCarga = new DateTime("now");
       
-      ReporteProveedorFactura("FTN",$_GET['Id'],$_GET['Nombre']);
+      ReporteProveedorFactura($_GET['SEDE'],$_GET['Id'],$_GET['Nombre']);
       
       $FinCarga = new DateTime("now");
       $IntervalCarga = $InicioCarga->diff($FinCarga);
@@ -39,14 +39,14 @@
     else if(isset($_GET['IdArt'])) {
       /*CASO 4: CARGA AL HABER SELECCIONADO UNA ARTICULO
                 Se pasa a la actualizacion del troquel*/
-      if("FTN"=="FTN"){      
-        echo '<h1 class="h5 text-success"  align="left"> <i class="fas fa-prescription"></i> '.NombreSede("FTN").'</h1>';
+      if(isset($_GET['SEDE'])){      
+        echo '<h1 class="h5 text-success"  align="left"> <i class="fas fa-prescription"></i> '.NombreSede($_GET['SEDE']).'</h1>';
       }
       echo '<hr class="row align-items-start col-12">';
 
       $InicioCarga = new DateTime("now");
 
-      GuardarCartaCompromiso("FTN",$_GET['IdProv'],$_GET['NombreProv'],$_GET['IdFact'],$_GET['IdArt']);
+      GuardarCartaCompromiso($_GET['SEDE'],$_GET['IdProv'],$_GET['NombreProv'],$_GET['IdFact'],$_GET['IdArt']);
 
       $FinCarga = new DateTime("now");
       $IntervalCarga = $InicioCarga->diff($FinCarga);
@@ -55,14 +55,14 @@
     else if(isset($_GET['IdFact'])){
     /*CASO 3: CARGA AL HABER SELECCIONADO UNA FACTURA 
               Se pasa a la seleccion del articulo*/
-      if("FTN"=="FTN"){      
-        echo '<h1 class="h5 text-success"  align="left"> <i class="fas fa-prescription"></i> '.NombreSede("FTN").'</h1>';
+      if(isset($_GET['SEDE'])){      
+        echo '<h1 class="h5 text-success"  align="left"> <i class="fas fa-prescription"></i> '.NombreSede($_GET['SEDE']).'</h1>';
       }
       echo '<hr class="row align-items-start col-12">';
 
       $InicioCarga = new DateTime("now");
 
-      ReporteFacturaArticulo("FTN",$_GET['IdProv'],$_GET['NombreProv'],$_GET['IdFact']);
+      ReporteFacturaArticulo($_GET['SEDE'],$_GET['IdProv'],$_GET['NombreProv'],$_GET['IdFact']);
 
       $FinCarga = new DateTime("now");
       $IntervalCarga = $InicioCarga->diff($FinCarga);
@@ -71,15 +71,15 @@
     else {
       /*CASO 1: AL CARGAR EL REPORTE DESDE EL MENU
                 Se pasa a la seleccion del proveedor*/
-      if("FTN"=="FTN"){      
-        echo '<h1 class="h5 text-success"  align="left"> <i class="fas fa-prescription"></i> '.NombreSede("FTN").'</h1>';
+      if(isset($_GET['SEDE'])){      
+        echo '<h1 class="h5 text-success"  align="left"> <i class="fas fa-prescription"></i> '.NombreSede($_GET['SEDE']).'</h1>';
       }
       echo '<hr class="row align-items-start col-12">';
 
       $InicioCarga = new DateTime("now");
 
       $sql = QListaProveedores();
-      $ArtJson = armarJson($sql,"FTN");
+      $ArtJson = armarJson($sql,$_GET['SEDE']);
 
       echo '
       <form autocomplete="off" action="">
@@ -88,7 +88,7 @@
           <input id="myId" name="Id" type="hidden">
           <td>
           <input id="SEDE" name="SEDE" type="hidden" value="';
-          print_r("FTN");
+          print_r($_GET['SEDE']);
           echo'">
           </td>
         </div>

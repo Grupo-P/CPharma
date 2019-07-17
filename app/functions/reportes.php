@@ -1626,7 +1626,7 @@
 		</div><br/>';
 
 		echo '
-		<form autocomplete="off" action="cartaCompromiso.store">
+		<form autocomplete="off" action="">
 		<table class="table table-striped table-bordered col-12 sortable">
 			<thead class="thead-dark">
 			    <tr>
@@ -1712,7 +1712,7 @@
 
 			<div class="text-center">
 				<input id="articulo" name="articulo" type="hidden" value="'.$Articulo.'">
-				<input id="articulo" name="articulo" type="hidden" value="'.$NombreProveedor.'">
+				<input id="proveedor" name="proveedor" type="hidden" value="'.$NombreProveedor.'">
 				<input type="submit" value="Guardar" class="btn btn-outline-success">
 			</div>
 		</form>';
