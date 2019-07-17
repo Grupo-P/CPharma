@@ -1625,7 +1625,7 @@
 		</div><br/>';
 
 		echo '
-		<form autocomplete="off" action="">
+		<form autocomplete="off" action="" id="form_registros">
 		<table class="table table-striped table-bordered col-12 sortable">
 			<thead class="thead-dark">
 			    <tr>

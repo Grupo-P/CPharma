@@ -4,7 +4,64 @@
     Carta de compromiso
 @endsection
 
+<script>
+  /*
+    TITULO: enviarFormulario
+    PARAMETROS : No aplica
+    FUNCION: Realizar la validacion de todas las fechas y permitir o no el envio
+    RETORNO: true o false
+
+    Variables:
+      - Variables de entrada:
+        * formulario: Formulario principal con los campos del registro
+        * fecha_vencimiento: La fecha de vencimiento del articulo
+        * fecha_tope: La fecha limite de la carta de compromiso
+        * fecha_recepcion: La de recepcion del articulo
+  */
+ 
+  function enviarFormulario() {
+    var formulario = document.getElementById("form_registros");
+    var fecha_vencimiento = document.getElementById("fecha_vencimiento").value;
+    var fecha_tope = document.getElementById("fecha_tope").value;
+    var fecha_recepcion = document.getElementById("fecha_recepcion").value;
+
+    if((fecha_tope <= fecha_vencimiento) && (fecha_tope > fecha_recepcion)) {
+      formulario.submit();
+      return true;
+    } 
+    else {
+      $('#errorValidation').modal('show');
+      return false;
+    }
+  }
+</script>
+
 @section('content')
+  <div class="modal fade" id="errorValidation" tabindex="-1" role="dialog" aria-labelledby="errorValidationTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title text-danger" id="errorValidationTitle">
+            <i class="fas fa-exclamation-triangle text-danger"></i>{{session('Error')}}
+          </h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <h4 class="h6">
+            <b>La fecha tope</b> debe ser menor o igual a <b>la fecha de vencimiento</b> y mayor a la <b>fecha de recepci&oacute;n</b>
+          </h4>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-success" data-dismiss="modal">
+            Aceptar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
   <h1 class="h5 text-info">
     <i class="fas fa-plus"></i>
     Agregar carta de compromiso
@@ -135,6 +192,13 @@
       echo'Tiempo de carga: '.$IntervalCarga->format("%Y-%M-%D %H:%I:%S");
     } 
   ?>
+
+  <script>
+    $(document).ready(function(){
+        $('[data-toggle="tooltip"]').tooltip();   
+    });
+    $('#exampleModalCenter').modal('show');
+  </script>
 @endsection
 
 @section('scriptsHead')
