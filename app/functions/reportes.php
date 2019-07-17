@@ -1600,7 +1600,7 @@
 		FUNCION: arma la lista del troquel segun el articulo
 		RETORNO: no aplica
 	 */
-	function GuardarCartaCompromiso($SedeConnection,$IdProveedor,$NombreProveedor,$IdFatura,$IdArticulo){
+	function CartaDeCompromiso($SedeConnection,$IdProveedor,$NombreProveedor,$IdFatura,$IdArticulo){
 		
 		$conn = ConectarSmartpharma($SedeConnection);
 
@@ -1718,5 +1718,24 @@
 		</form>';
 
 		sqlsrv_close($conn);
+	}
+
+	/*
+		TITULO: GuardarCartaCompromiso
+		PARAMETROS: [$SedeConnection] sede donde se hara la conexion
+					[$IdProveedor] ID del proveedor a buscar
+					[$NombreProveedor] Nombre del proveedor a buscar
+					[$IdFatura] id de la factura
+					[$IdArticulo] ide del articulo
+		FUNCION: arma la lista del troquel segun el articulo
+		RETORNO: no aplica
+	 */
+	function GuardarCartaDeCompromiso($articulo,$lote,$fecha_vencimiento,$proveedor,$fecha_recepcion,$fecha_tope,$causa,$nota) {
+		$conn = ConectarXampp();
+		$sql = QGuardarCartaDeCompromiso($articulo,$lote,$fecha_vencimiento,$proveedor,$fecha_recepcion,$fecha_tope,$causa,$nota);
+		$result = mysqli_query($conn,$sql);
+		mysqli_close($conn);
+
+		//header('Location: /carpeta/mipagina.php');
 	}
 ?>

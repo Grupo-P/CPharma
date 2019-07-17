@@ -36,9 +36,25 @@
       $IntervalCarga = $InicioCarga->diff($FinCarga);
       echo'Tiempo de carga: '.$IntervalCarga->format("%Y-%M-%D %H:%I:%S");
     }
+    else if(isset($_GET['lote'])){
+      /*CASO 5: CARGA AL HABER COMPLETADO LA CARTA DE COMPROMISO
+                Se pasa a la solicitud de fechas*/
+      if (isset($_GET['SEDE'])){      
+        echo '<h1 class="h5 text-success"  align="left"> <i class="fas fa-prescription"></i> '.NombreSede($_GET['SEDE']).'</h1>';
+      }
+      echo '<hr class="row align-items-start col-12">';
+
+      $InicioCarga = new DateTime("now");
+
+      GuardarCartaDeCompromiso($_GET['articulo'],$_GET['lote'],$_GET['fecha_vencimiento'],$_GET['proveedor'],$_GET['fecha_recepcion'],$_GET['fecha_tope'],$_GET['causa'],$_GET['nota']);
+
+      $FinCarga = new DateTime("now");
+      $IntervalCarga = $InicioCarga->diff($FinCarga);
+      echo'Tiempo de carga: '.$IntervalCarga->format("%Y-%M-%D %H:%I:%S");
+    }
     else if(isset($_GET['IdArt'])) {
       /*CASO 4: CARGA AL HABER SELECCIONADO UNA ARTICULO
-                Se pasa a la actualizacion del troquel*/
+                Se pasa a la solicitud de fechas*/
       if(isset($_GET['SEDE'])){      
         echo '<h1 class="h5 text-success"  align="left"> <i class="fas fa-prescription"></i> '.NombreSede($_GET['SEDE']).'</h1>';
       }
@@ -46,7 +62,7 @@
 
       $InicioCarga = new DateTime("now");
 
-      GuardarCartaCompromiso($_GET['SEDE'],$_GET['IdProv'],$_GET['NombreProv'],$_GET['IdFact'],$_GET['IdArt']);
+      CartaDeCompromiso($_GET['SEDE'],$_GET['IdProv'],$_GET['NombreProv'],$_GET['IdFact'],$_GET['IdArt']);
 
       $FinCarga = new DateTime("now");
       $IntervalCarga = $InicioCarga->diff($FinCarga);
