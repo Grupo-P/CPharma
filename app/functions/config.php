@@ -29,18 +29,21 @@ define ("serverFTN" , "10.100.0.2\SMARTPHARMA,1450");
 define ("userFTN" , "sa");
 define ("passFTN" , "Soporte123");
 define ("nameFTN" , "SMART");
+define ("nameFTNOFF" , "cpharmaftn");
 /**********************************************************************************/
 /************************* CONEXION ON LINE FLL **********************************/
 define ("serverFLL" , "192.168.7.34\SMARTPHARMA");
 define ("userFLL" , "sa");
 define ("passFLL" , "Soporte123");
 define ("nameFLL" , "smartlalago");
+define ("nameFLLOFF" , "cpharmafll");
 /**********************************************************************************/
 /************************* CONEXION ON LINE FAU **********************************/
 define ("serverFAU" , "10.100.0.34\SMARTPHARMA");
 define ("userFAU" , "sa");
 define ("passFAU" , "Soporte123");
 define ("nameFAU" , "smartfau");
+define ("nameFAUOFF" , "cpharmafau");
 /**********************************************************************************/
 /********************* CONEXION SERVER DESARROLLO DE MANUEL **********************/
  define ("serverDBm" , "DESKTOP-AGKHTEB");
@@ -54,35 +57,4 @@ define ("nameFAU" , "smartfau");
  define ("passDBs" , "soporte123");
  define ("nameDBs" , "SMART");
 /**********************************************************************************/
-
-
-/***************************** Smartpharma FAU ********************************/
-/*
-	Cadenas de conexion Servidor Smartpharma FAU
-	BaseDatosLocal: Smartpharma FAU
-	Estatus: OFF LINE - ON LINE
-*/
-/*
-	Cadena de conexion Smartpharma FAU (ON LINE)
-
-define ("serverFAU" , "10.100.0.34\SMARTPHARMA");
-define ("userFAU" , "sa");
-define ("passFAU" , "Soporte123");
-define ("nameFAU" , "smartfau");
-
-	Cadena de conexion Smartpharma FAU-FTN (OFF LINE)
-
-define ("serverFAUFTN" , "SERGIO-PC");
-define ("userFAUFTN" , "sa");
-define ("passFAUFTN" , "soporte123");
-define ("nameFAUFTN" , "cpharmafau");
-
-	Cadena de conexion Smartpharma FAU-FLL (OFF LINE)
-
-define ("serverFAUFLL" , "SERGIO-PC");
-define ("userFAUFLL" , "sa");
-define ("passFAUFLL" , "soporte123");
-define ("nameFAUFLL" , "cpharmafll");
-*/
-
 ?>

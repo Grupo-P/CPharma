@@ -42,16 +42,38 @@
 	 */
 	function ConectarSmartpharma($SedeConnection) {
 		switch($SedeConnection) {
+	/*INICIO BLOQUE DE FTN*/ /*Regresar el cambio del nombre para FTN*/
 			case 'FTN':
 				$connectionInfo = array(
-					"Database"=>nameFTN,
-					"UID"=>userFTN,
-					"PWD"=>passFTN
+					"Database"=>nameDBs,
+					"UID"=>userDBs,
+					"PWD"=>passDBs
 				);
-				$conn = sqlsrv_connect(serverFTN,$connectionInfo);
+				$conn = sqlsrv_connect(serverDBs,$connectionInfo);
 				return $conn;
 			break;
 
+			case 'FTNFLL':
+				$connectionInfo = array(
+					"Database"=>nameFLLOFF,
+					"UID"=>userDBs,
+					"PWD"=>passDBs
+				);
+				$conn = sqlsrv_connect(serverDBs,$connectionInfo);
+				return $conn;
+			break;
+
+			case 'FTNFAU':
+				$connectionInfo = array(
+					"Database"=>nameFAUOFF,
+					"UID"=>userDBs,
+					"PWD"=>passDBs
+				);
+				$conn = sqlsrv_connect(serverDBs,$connectionInfo);
+				return $conn;
+			break;
+	/*FIN BLOQUE DE FTN*/
+	/*INICIO BLOQUE DE FLL*/
 			case 'FLL':
 				$connectionInfo = array(
 					"Database"=>nameFLL,
@@ -61,7 +83,8 @@
 				$conn = sqlsrv_connect(serverFLL,$connectionInfo);
 				return $conn;
 			break;
-
+	/*FIN BLOQUE DE FLL*/
+	/*INICIO BLOQUE DE FAU*/
 			case 'FAU':
 				$connectionInfo = array(
 					"Database"=>nameFAU,
@@ -71,7 +94,7 @@
 				$conn = sqlsrv_connect(serverFAU,$connectionInfo);
 				return $conn;
 			break;
-
+	/*INICIO BLOQUE DE FAU*/
 			case 'DBs':
 				$connectionInfo = array(
 					"Database"=>nameDBs,
@@ -105,6 +128,7 @@
 		$Octeto = explode(".", $IpCliente);
 		
 		switch ($Octeto[2]) {
+		/*INICIO BLOQUE DE FTN*/
 			case '1':
 				return 'FTN';
 			break;
@@ -116,15 +140,17 @@
 			case '10':
 				return 'FTN';
 			break;
-
+		/*FIN BLOQUE DE FTN*/
+		/*INICIO BLOQUE DE FLL*/
 			case '7':
 				return 'FLL';
 			break;
-
+		/*FIN BLOQUE DE FTN*/
+		/*INICIO BLOQUE DE FAU*/
 			case '12':
 				return 'FAU';
 			break;
-			
+		/*INICIO BLOQUE DE FAU*/	
 			default:
 				return ''.$Octeto[2];
 			break;
@@ -138,21 +164,34 @@
 	 */
 	function NombreSede($SedeConnection) {
 		switch($SedeConnection) {
+	/*INICIO BLOQUE DE FTN*/
 			case 'FTN':
 				$sede = SedeFTN;
 				return $sede;
 			break;
 
+			case 'FTNFLL':
+				$sede = SedeFLLOFF;
+				return $sede;
+			break;
+
+			case 'FTNFAU':
+				$sede = SedeFAUOFF;
+				return $sede;
+			break;
+	/*FIN BLOQUE DE FTN*/
+	/*INICIO BLOQUE DE FLL*/
 			case 'FLL':
 				$sede = SedeFLL;
 				return $sede;
 			break;
-
+	/*FIN BLOQUE DE FLL*/
+	/*INICIO BLOQUE DE FAU*/
 			case 'FAU':
 				$sede = SedeFAU;
 				return $sede;
 			break;
-
+	/*FIN BLOQUE DE FAU*/
 			case 'DBs':
 				$sede = SedeDBs;
 				return $sede;
