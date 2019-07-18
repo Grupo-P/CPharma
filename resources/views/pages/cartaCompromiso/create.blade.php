@@ -4,7 +4,54 @@
     Carta de compromiso
 @endsection
 
+<script type="text/javascript" src="{{ asset('assets/jquery/jquery-2.2.2.min.js') }}"></script>
+<script type="text/javascript" src="{{ asset('assets/jquery/jquery-ui.min.js') }}" ></script>
+
 @section('content')
+  <!-- Modal Error De Fechas -->
+  <div class="modal fade" id="errorModalCenter" tabindex="-1" role="dialog" aria-labelledby="errorModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title text-danger" id="errorModalCenterTitle">
+            <i class="fas fa-exclamation-circle"></i>&nbsp;Error
+          </h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <h4 class="h6">
+            <b>La fecha tope</b> debe ser menor o igual a <b>la fecha de vencimiento</b> y mayor a la <b>fecha de recepci&oacute;n</b>
+          </h4>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-info" data-dismiss="modal">Aceptar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title text-info" id="exampleModalCenterTitle"><i class="fas fa-info text-info text-info"></i> Informaci&oacute;n
+          </h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <h4 class="h6">El registro fue almacenado exitosamente</h4>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-success" data-dismiss="modal">Aceptar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <h1 class="h5 text-info">
     <i class="fas fa-plus"></i>
     Agregar carta de compromiso
@@ -47,6 +94,11 @@
       $InicioCarga = new DateTime("now");
 
       if(($_GET['fecha_tope'] <= $_GET['fecha_vencimiento']) && ($_GET['fecha_tope'] > $_GET['fecha_recepcion'])) {
+        ?> 
+        <script>
+          $('#exampleModalCenter').modal('show');
+        </script> 
+      <?php
         GuardarCartaDeCompromiso($_GET['articulo'],$_GET['lote'],$_GET['fecha_vencimiento'],$_GET['proveedor'],$_GET['fecha_recepcion'],$_GET['fecha_tope'],$_GET['causa'],$_GET['nota']);
 
         $sql = QListaProveedores();
@@ -68,6 +120,11 @@
         ';
       }
       else {
+      ?> 
+        <script>
+          $('#errorModalCenter').modal('show');
+        </script> 
+      <?php
         CartaDeCompromiso($_GET['SEDE'],$_GET['IdProv'],$_GET['proveedor'],$_GET['IdFact'],$_GET['IdArt']);
       }
 
@@ -140,6 +197,12 @@
       echo'Tiempo de carga: '.$IntervalCarga->format("%Y-%M-%D %H:%I:%S");
     } 
   ?>
+
+  <script>
+    $(document).ready(function(){
+      $('[data-toggle="tooltip"]').tooltip(); 
+    });
+  </script>
 @endsection
 
 @section('scriptsHead')
@@ -149,8 +212,6 @@
     </script>
     <script type="text/javascript" src="{{ asset('assets/js/functions.js') }}"> 
     </script>
-    <script type="text/javascript" src="{{ asset('assets/jquery/jquery-2.2.2.min.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('assets/jquery/jquery-ui.min.js') }}" ></script>
 
     <style>
     * {
