@@ -4,6 +4,38 @@
     Carta de compromiso
 @endsection
 
+<script>
+  /*
+    TITULO: enviarFormulario
+    PARAMETROS : No aplica
+    FUNCION: Realizar la validacion de todas las fechas y permitir o no el envio
+    RETORNO: true o false
+
+    Variables:
+      - Variables de entrada:
+        * formulario: Formulario principal con los campos del registro
+        * fecha_vencimiento: La fecha de vencimiento del articulo
+        * fecha_tope: La fecha limite de la carta de compromiso
+        * fecha_recepcion: La de recepcion del articulo
+  */
+ 
+  function enviarFormulario() {
+    var formulario = document.getElementById("form_registros");
+    var fecha_vencimiento = document.getElementById("fecha_vencimiento").value;
+    var fecha_tope = document.getElementById("fecha_tope").value;
+    var fecha_recepcion = document.getElementById("fecha_recepcion").value;
+
+    if((fecha_tope <= fecha_vencimiento) && (fecha_tope > fecha_recepcion)) {
+      formulario.submit();
+      return true;
+    } 
+    else {
+      $('#errorValidation').modal('show');
+      return false;
+    }
+  }
+</script>
+
 @section('content')
   <div class="modal fade" id="errorValidation" tabindex="-1" role="dialog" aria-labelledby="errorValidationTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
@@ -29,7 +61,11 @@
       </div>
     </div>
   </div>
+<<<<<<< HEAD
 
+=======
+  
+>>>>>>> CartaDeCompromisoReplanteado
   <h1 class="h5 text-info">
     <i class="fas fa-plus"></i>
     Agregar carta de compromiso
@@ -165,7 +201,11 @@
     $(document).ready(function(){
         $('[data-toggle="tooltip"]').tooltip();   
     });
+<<<<<<< HEAD
     //$('#errorValidation').modal('show');
+=======
+    $('#exampleModalCenter').modal('show');
+>>>>>>> CartaDeCompromisoReplanteado
   </script>
 @endsection
 
