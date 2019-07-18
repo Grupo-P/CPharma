@@ -1601,7 +1601,6 @@
 		RETORNO: no aplica
 	 */
 	function CartaDeCompromiso($SedeConnection,$IdProveedor,$NombreProveedor,$IdFatura,$IdArticulo) {
-		usarScript();
 		$conn = ConectarSmartpharma($SedeConnection);
 
 		$sql = QCartaDeCompromiso($IdProveedor,$IdFatura,$IdArticulo);
@@ -1626,7 +1625,7 @@
 		</div><br/>';
 
 		echo '
-		<form autocomplete="off" action="" id="form_registros">
+		<form autocomplete="off" action="">
 		<table class="table table-striped table-bordered col-12 sortable">
 			<thead class="thead-dark">
 			    <tr>
@@ -1681,7 +1680,7 @@
 						<input id="fecha_tope" name="fecha_tope" type="date">
 					</td>
 					<td align="center">
-						<input id="fecha_recepcion" name="fecha_recepcion" type="date" autofocus>
+						<input id="fecha_recepcion" name="fecha_recepcion" type="date">
 					</td>
 			 	</tr>
 	  		</tbody>
@@ -1711,6 +1710,10 @@
 			<div class="text-center">
 				<input id="articulo" name="articulo" type="hidden" value="'.$Articulo.'">
 				<input id="proveedor" name="proveedor" type="hidden" value="'.$NombreProveedor.'">
+				<input id="SEDE" name="SEDE" type="hidden" value="'.$SedeConnection.'">
+				<input id="IdProv" name="IdProv" type="hidden" value="'.$IdProveedor.'">
+				<input id="IdFact" name="IdFact" type="hidden" value="'.$IdFatura.'">
+				<input id="IdArt" name="IdArt" type="hidden" value="'.$IdArticulo.'">
 				<input type="submit" value="Guardar" class="btn btn-outline-success">
 			</div>
 		</form>';
@@ -1735,27 +1738,5 @@
 		$sql = QGuardarCartaDeCompromiso($articulo,$lote,$fecha_vencimiento,$proveedor,$fecha_recepcion,$fecha_tope,$causa,$nota,$user,$date);
 		$result = mysqli_query($conn,$sql);
 		mysqli_close($conn);
-	}
-
-	function usarScript() {
-		echo '
-			<script>
-			  function enviarFormulario() {
-			    var formulario = document.getElementById("form_registros");
-			    var fecha_vencimiento = document.getElementById("fecha_vencimiento").value;
-			    var fecha_tope = document.getElementById("fecha_tope").value;
-			    var fecha_recepcion = document.getElementById("fecha_recepcion").value;
-
-			    if((fecha_tope <= fecha_vencimiento) && (fecha_tope > fecha_recepcion)) {
-			      formulario.submit();
-			      return true;
-			    } 
-			    else {
-			      $("#errorValidation").modal("show");
-			      return false;
-			    }
-			  }
-			</script>
-		';
 	}
 ?>

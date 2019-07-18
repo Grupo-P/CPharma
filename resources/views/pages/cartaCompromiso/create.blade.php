@@ -5,31 +5,6 @@
 @endsection
 
 @section('content')
-  <div class="modal fade" id="errorValidation" tabindex="-1" role="dialog" aria-labelledby="errorValidationTitle" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title text-danger" id="errorValidationTitle">
-            <i class="fas fa-exclamation-triangle text-danger"></i>{{session('Error')}}
-          </h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <h4 class="h6">
-            <b>La fecha tope</b> debe ser menor o igual a <b>la fecha de vencimiento</b> y mayor a la <b>fecha de recepci&oacute;n</b>
-          </h4>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-outline-success" data-dismiss="modal">
-            Aceptar
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-
   <h1 class="h5 text-info">
     <i class="fas fa-plus"></i>
     Agregar carta de compromiso
@@ -71,25 +46,30 @@
 
       $InicioCarga = new DateTime("now");
 
-      GuardarCartaDeCompromiso($_GET['articulo'],$_GET['lote'],$_GET['fecha_vencimiento'],$_GET['proveedor'],$_GET['fecha_recepcion'],$_GET['fecha_tope'],$_GET['causa'],$_GET['nota']);
+      if(($_GET['fecha_tope'] <= $_GET['fecha_vencimiento']) && ($_GET['fecha_tope'] > $_GET['fecha_recepcion'])) {
+        GuardarCartaDeCompromiso($_GET['articulo'],$_GET['lote'],$_GET['fecha_vencimiento'],$_GET['proveedor'],$_GET['fecha_recepcion'],$_GET['fecha_tope'],$_GET['causa'],$_GET['nota']);
 
-      $sql = QListaProveedores();
-      $ArtJson = armarJson($sql,$_GET['SEDE']);
+        $sql = QListaProveedores();
+        $ArtJson = armarJson($sql,$_GET['SEDE']);
 
-      echo '
-      <form autocomplete="off" action="">
-        <div class="autocomplete" style="width:90%;">
-          <input id="myInput" type="text" name="Nombre" placeholder="Ingrese el nombre del proveedor " onkeyup="conteo()" required>
-          <input id="myId" name="Id" type="hidden">
-          <td>
-          <input id="SEDE" name="SEDE" type="hidden" value="';
-          print_r($_GET['SEDE']);
-          echo'">
-          </td>
-        </div>
-        <input type="submit" value="Buscar" class="btn btn-outline-success">
-      </form>
-      ';
+        echo '
+        <form autocomplete="off" action="">
+          <div class="autocomplete" style="width:90%;">
+            <input id="myInput" type="text" name="Nombre" placeholder="Ingrese el nombre del proveedor " onkeyup="conteo()" required>
+            <input id="myId" name="Id" type="hidden">
+            <td>
+            <input id="SEDE" name="SEDE" type="hidden" value="';
+            print_r($_GET['SEDE']);
+            echo'">
+            </td>
+          </div>
+          <input type="submit" value="Buscar" class="btn btn-outline-success">
+        </form>
+        ';
+      }
+      else {
+        CartaDeCompromiso($_GET['SEDE'],$_GET['IdProv'],$_GET['proveedor'],$_GET['IdFact'],$_GET['IdArt']);
+      }
 
       $FinCarga = new DateTime("now");
       $IntervalCarga = $InicioCarga->diff($FinCarga);
@@ -160,13 +140,6 @@
       echo'Tiempo de carga: '.$IntervalCarga->format("%Y-%M-%D %H:%I:%S");
     } 
   ?>
-
-  <script>
-    $(document).ready(function(){
-        $('[data-toggle="tooltip"]').tooltip();   
-    });
-    //$('#errorValidation').modal('show');
-  </script>
 @endsection
 
 @section('scriptsHead')
