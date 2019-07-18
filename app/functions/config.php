@@ -53,7 +53,6 @@ define ("nameFAU" , "smartfau");
  define ("userDBs" , "sa");
  define ("passDBs" , "soporte123");
  define ("nameDBs" , "SMART");
- define ("nameDBm" , "SMART");
 /**********************************************************************************/
 
 

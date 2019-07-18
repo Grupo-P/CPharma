@@ -1,24 +1,5 @@
 <?php
 	/*
-		TITULO: ValidarConectividad
-		PARAMETROS: No Aplica
-		FUNCION: Valida la conexion con un servidor definido
-		RETORNO: Estatus de la conectividad
-	 */
-	function ValidarConectividad(){
-		
-		$serverName = "serverName\sqlexpress, 1542";
-		$connectionInfo = array( "Database"=>"dbName", "UID"=>"userName", "PWD"=>"password");
-		$conn = sqlsrv_connect( $serverName, $connectionInfo);
-
-		if( $conn ) {
-		     echo "Conexión establecida.<br />";
-		}else{
-		     echo "Conexión no se pudo establecer.<br />";
-		     die( print_r( sqlsrv_errors(), true));	
-		}
-	}
-	/*
 		TITULO: ConectarXampp
 		PARAMETROS: No Aplica
 		FUNCION: Conexion con servidor de XAMPP
@@ -28,6 +9,30 @@
 		$conexion = mysqli_connect(serverCP,userCP,passCP);
 		mysqli_select_db($conexion,nameCP);
 	    return $conexion;
+	}
+	/*
+		TITULO: ValidarConectividad
+		PARAMETROS: [$conn] $conexion con la sede
+		FUNCION: Valida la conexion con un servidor definido
+		RETORNO: Estatus de la conectividad
+	 */
+	function ValidarConectividad($SedeConnection){
+		$InicioCarga = new DateTime("now");
+
+		$NombreSede = NombreSede($SedeConnection);
+		$conn = ConectarSmartpharma($SedeConnection);
+		echo('Sede: '.$NombreSede.'<br/>');
+
+		if($conn) {
+		     echo "Conexión establecida<br/>";
+		}else{
+		     echo "Conexión no se pudo establecer<br/>";
+		     die( print_r( sqlsrv_errors(), true));
+		}
+
+		$FinCarga = new DateTime("now");
+    	$IntervalCarga = $InicioCarga->diff($FinCarga);
+    	echo'Tiempo de carga: '.$IntervalCarga->format("%Y-%M-%D %H:%I:%S");
 	}
 	/*
 		TITULO: ConectarSmartpharma
@@ -56,7 +61,7 @@
 				$conn = sqlsrv_connect(serverFLL,$connectionInfo);
 				return $conn;
 			break;
-/*Casos FTN:OFF-LINE *****  FLL:OFF-LINE *****  FAU:ON-LIN*/
+
 			case 'FAU':
 				$connectionInfo = array(
 					"Database"=>nameFAU,
@@ -67,26 +72,6 @@
 				return $conn;
 			break;
 
-			case 'FAUFTN':
-				$connectionInfo = array(
-					"Database"=>nameFAUFTN,
-					"UID"=>userFAUFTN,
-					"PWD"=>passFAUFTN
-				);
-				$conn = sqlsrv_connect(serverFAUFTN,$connectionInfo);
-				return $conn;
-			break;
-
-			case 'FAUFLL':
-				$connectionInfo = array(
-					"Database"=>nameFAUFLL,
-					"UID"=>userFAUFLL,
-					"PWD"=>passFAUFLL
-				);
-				$conn = sqlsrv_connect(serverFAUFLL,$connectionInfo);
-				return $conn;
-			break;
-/************************************************************************/
 			case 'DBs':
 				$connectionInfo = array(
 					"Database"=>nameDBs,
@@ -116,14 +101,9 @@
 	 */
 	function MiUbicacion(){
 		$NombreCliente = gethostname();
-		//echo "<br/>Su nombre de pc es : ".$NombreCliente;
-
 		$IpCliente = gethostbyname($NombreCliente);
-		//echo "<br/>Su direccion IP es : ".$IpCliente;
-
 		$Octeto = explode(".", $IpCliente);
-		//echo"<br/>Segmento de red: ".$Octeto[2];
-
+		
 		switch ($Octeto[2]) {
 			case '1':
 				return 'FTN';
@@ -147,6 +127,40 @@
 			
 			default:
 				return ''.$Octeto[2];
+			break;
+		}
+	}
+	/*
+		TITULO: NombreSede
+		PARAMETROS: [$SedeConnection] Siglas de la sede para la conexion
+		FUNCION: Retornar el nombre de la sede con la que se esta conectando
+		RETORNO: Nombre de la sede conectada
+	 */
+	function NombreSede($SedeConnection) {
+		switch($SedeConnection) {
+			case 'FTN':
+				$sede = SedeFTN;
+				return $sede;
+			break;
+
+			case 'FLL':
+				$sede = SedeFLL;
+				return $sede;
+			break;
+
+			case 'FAU':
+				$sede = SedeFAU;
+				return $sede;
+			break;
+
+			case 'DBs':
+				$sede = SedeDBs;
+				return $sede;
+			break;
+
+			case 'DBm':
+				$sede = SedeDBm;
+				return $sede;
 			break;
 		}
 	}
@@ -216,50 +230,6 @@
 		$result = ConsultaEspecialSmartpharma ($sql,$SedeConnection);
 	    $arrayJson = array_flatten_recursive($result);
 	    return json_encode($arrayJson);
-	}
-	/*
-		TITULO: NombreSede
-		PARAMETROS: [$SedeConnection] Siglas de la sede para la conexion
-		FUNCION: Retornar el nombre de la sede con la que se esta conectando
-		RETORNO: Nombre de la sede conectada
-	 */
-	function NombreSede($SedeConnection) {
-		switch($SedeConnection) {
-			case 'FTN':
-				$sede = SedeFTN;
-				return $sede;
-			break;
-
-			case 'FLL':
-				$sede = SedeFLL;
-				return $sede;
-			break;
-/*Casos FTN:OFF-LINE *****  FLL:OFF-LINE *****  FAU:ON-LIN*/
-			case 'FAU':
-				$sede = SedeFAU;
-				return $sede;
-			break;
-
-			case 'FAUFTN':
-				$sede = SedeFAUFTN;
-				return $sede;
-			break;
-
-			case 'FAUFLL':
-				$sede = SedeFAUFLL;
-				return $sede;
-			break;
-/************************************************************/
-			case 'DBs':
-				$sede = SedeDBs;
-				return $sede;
-			break;
-
-			case 'DBm':
-				$sede = SedeDBm;
-				return $sede;
-			break;
-		}
 	}
 	/*
 		TITULO: CalculoPrecio
