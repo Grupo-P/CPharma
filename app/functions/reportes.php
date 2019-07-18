@@ -1663,9 +1663,9 @@
 			    <tr>
 			    	<th scope="col">Codigo</th>
 			    	<th scope="col">Descripcion</th>
+			    	<th scope="col">Fecha de recepcion</th>
 			    	<th scope="col">Fecha de vencimiento</th>
 			    	<th scope="col">Fecha tope</th>
-			    	<th scope="col">Fecha de recepcion</th>
 			    </tr>
 		  	</thead>
 
@@ -1674,13 +1674,13 @@
 					<td align="center">'.$CodigoArticulo.'</td>
 					<td align="center">'.$Articulo.'</td>
 					<td align="center">
-						<input id="fecha_vencimiento" name="fecha_vencimiento" type="date" autofocus>
+						<input id="fecha_recepcion" name="fecha_recepcion" type="date" autofocus>
+					</td>
+					<td align="center">
+						<input id="fecha_vencimiento" name="fecha_vencimiento" type="date">
 					</td>
 					<td align="center">
 						<input id="fecha_tope" name="fecha_tope" type="date">
-					</td>
-					<td align="center">
-						<input id="fecha_recepcion" name="fecha_recepcion" type="date">
 					</td>
 			 	</tr>
 	  		</tbody>
