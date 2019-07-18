@@ -1601,6 +1601,7 @@
 		RETORNO: no aplica
 	 */
 	function CartaDeCompromiso($SedeConnection,$IdProveedor,$NombreProveedor,$IdFatura,$IdArticulo) {
+		usarScript();
 		$conn = ConectarSmartpharma($SedeConnection);
 
 		$sql = QCartaDeCompromiso($IdProveedor,$IdFatura,$IdArticulo);
@@ -1625,7 +1626,7 @@
 		</div><br/>';
 
 		echo '
-		<form autocomplete="off" action="">
+		<form autocomplete="off" action="" id="form_registros">
 		<table class="table table-striped table-bordered col-12 sortable">
 			<thead class="thead-dark">
 			    <tr>
@@ -1734,5 +1735,27 @@
 		$sql = QGuardarCartaDeCompromiso($articulo,$lote,$fecha_vencimiento,$proveedor,$fecha_recepcion,$fecha_tope,$causa,$nota,$user,$date);
 		$result = mysqli_query($conn,$sql);
 		mysqli_close($conn);
+	}
+
+	function usarScript() {
+		echo '
+			<script>
+			  function enviarFormulario() {
+			    var formulario = document.getElementById("form_registros");
+			    var fecha_vencimiento = document.getElementById("fecha_vencimiento").value;
+			    var fecha_tope = document.getElementById("fecha_tope").value;
+			    var fecha_recepcion = document.getElementById("fecha_recepcion").value;
+
+			    if((fecha_tope <= fecha_vencimiento) && (fecha_tope > fecha_recepcion)) {
+			      formulario.submit();
+			      return true;
+			    } 
+			    else {
+			      $("#errorValidation").modal("show");
+			      return false;
+			    }
+			  }
+			</script>
+		';
 	}
 ?>
