@@ -9,6 +9,7 @@
 		include(app_path().'\functions\config.php'); 
 		include(app_path().'\functions\funciones.php');
 		
-		ValidarConectividad('FTN');
+		$MiUbicacion = MiUbicacion();
+		ValidarConectividad($MiUbicacion);
 	?>
 @endsection
