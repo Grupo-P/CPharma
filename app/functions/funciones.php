@@ -42,34 +42,34 @@
 	 */
 	function ConectarSmartpharma($SedeConnection) {
 		switch($SedeConnection) {
-	/*INICIO BLOQUE DE FTN*/ /*Regresar el cambio del nombre para FTN*/
+	/*INICIO BLOQUE DE FTN*/
 			case 'FTN':
 				$connectionInfo = array(
-					"Database"=>nameDBs,
-					"UID"=>userDBs,
-					"PWD"=>passDBs
+					"Database"=>nameFTN,
+					"UID"=>userFTN,
+					"PWD"=>passFTN
 				);
-				$conn = sqlsrv_connect(serverDBs,$connectionInfo);
+				$conn = sqlsrv_connect(serverFTN,$connectionInfo);
 				return $conn;
 			break;
 
 			case 'FTNFLL':
 				$connectionInfo = array(
 					"Database"=>nameFLLOFF,
-					"UID"=>userDBs,
-					"PWD"=>passDBs
+					"UID"=>userFTN,
+					"PWD"=>passFTN
 				);
-				$conn = sqlsrv_connect(serverDBs,$connectionInfo);
+				$conn = sqlsrv_connect(serverFTN,$connectionInfo);
 				return $conn;
 			break;
 
 			case 'FTNFAU':
 				$connectionInfo = array(
 					"Database"=>nameFAUOFF,
-					"UID"=>userDBs,
-					"PWD"=>passDBs
+					"UID"=>userFTN,
+					"PWD"=>passFTN
 				);
-				$conn = sqlsrv_connect(serverDBs,$connectionInfo);
+				$conn = sqlsrv_connect(serverFTN,$connectionInfo);
 				return $conn;
 			break;
 	/*FIN BLOQUE DE FTN*/
@@ -83,11 +83,51 @@
 				$conn = sqlsrv_connect(serverFLL,$connectionInfo);
 				return $conn;
 			break;
+
+			case 'FLLFTN':
+				$connectionInfo = array(
+					"Database"=>nameFTNOFF,
+					"UID"=>userFLL,
+					"PWD"=>passFLL
+				);
+				$conn = sqlsrv_connect(serverFLL,$connectionInfo);
+				return $conn;
+			break;
+
+			case 'FLLFAU':
+				$connectionInfo = array(
+					"Database"=>nameFAUOFF,
+					"UID"=>userFLL,
+					"PWD"=>passFLL
+				);
+				$conn = sqlsrv_connect(serverFLL,$connectionInfo);
+				return $conn;
+			break;
 	/*FIN BLOQUE DE FLL*/
 	/*INICIO BLOQUE DE FAU*/
 			case 'FAU':
 				$connectionInfo = array(
 					"Database"=>nameFAU,
+					"UID"=>userFAU,
+					"PWD"=>passFAU
+				);
+				$conn = sqlsrv_connect(serverFAU,$connectionInfo);
+				return $conn;
+			break;
+
+			case 'FAUFTN':
+				$connectionInfo = array(
+					"Database"=>nameFTNOFF,
+					"UID"=>userFAU,
+					"PWD"=>passFAU
+				);
+				$conn = sqlsrv_connect(serverFAU,$connectionInfo);
+				return $conn;
+			break;
+
+			case 'FAUFLL':
+				$connectionInfo = array(
+					"Database"=>nameFAUOFF,
 					"UID"=>userFAU,
 					"PWD"=>passFAU
 				);
@@ -185,10 +225,30 @@
 				$sede = SedeFLL;
 				return $sede;
 			break;
+
+			case 'FLLFTN':
+				$sede = SedeFTNOFF;
+				return $sede;
+			break;
+
+			case 'FLLFAU':
+				$sede = SedeFAUOFF;
+				return $sede;
+			break;
 	/*FIN BLOQUE DE FLL*/
 	/*INICIO BLOQUE DE FAU*/
 			case 'FAU':
 				$sede = SedeFAU;
+				return $sede;
+			break;
+
+			case 'FAUFTN':
+				$sede = SedeFTNOFF;
+				return $sede;
+			break;
+
+			case 'FAUFLL':
+				$sede = SedeFLLOFF;
 				return $sede;
 			break;
 	/*FIN BLOQUE DE FAU*/
