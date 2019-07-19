@@ -142,7 +142,7 @@
 
 			case 'FAUFLL':
 				$connectionInfo = array(
-					"Database"=>nameFAUOFF,
+					"Database"=>nameFLLOFF,
 					"UID"=>userFAU,
 					"PWD"=>passFAU
 				);

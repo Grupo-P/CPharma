@@ -76,7 +76,7 @@
 <!-- INICIO: Panel CPharma OFF Line -->
 	<?php
 /*INICIO CASO FTN (ON-LINE), FLL (OFF-LINE) FAU (OFF-LINE)*/
-	if(MiUbicacion() == 'FTN'){
+	if($MiUbicacion == 'FTN'){
 	?>	
 		<div class="card-deck">
 	   		<!-- Reportes -->
@@ -117,7 +117,7 @@
 	<?php 
 /*FIN CASO FTN (ON-LINE), FLL (OFF-LINE) FAU (OFF-LINE)*/
 	}
-	else if(MiUbicacion() =='FLL'){
+	else if($MiUbicacion =='FLL'){
 	?>
 		<div class="card-deck">
 	   		<!-- Reportes -->
@@ -157,7 +157,7 @@
 		</div>
 	<?php
 	}
-	else if(MiUbicacion() =='FAU'){
+	else if($MiUbicacion =='FAU'){
 	?>
 		<div class="card-deck">
 	   		<!-- Reportes -->
@@ -197,7 +197,7 @@
 		</div>
 	<?php
 	}
-	else if(MiUbicacion() == 'GP'){
+	else if($MiUbicacion == 'GP'){
 	?>	
 		<div class="card-deck">
 	   		<!-- Reportes -->
