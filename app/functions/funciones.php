@@ -16,8 +16,7 @@
 		FUNCION: Busca la fecha de la ultima restauracion de la base de datos
 		RETORNO: Fecha de ultima restauracion
 	 */
-	function LastRestoreDB($nameDataBase){
-		$SedeConnection = MiUbicacion();
+	function LastRestoreDB($nameDataBase,$SedeConnection){
 		$conn = ConectarSmartpharma($SedeConnection);
 		$sql = QLastRestoreDB($nameDataBase);
 		$result = sqlsrv_query($conn,$sql);

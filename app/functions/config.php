@@ -56,11 +56,11 @@ define ("nameFAUOFF" , "cpharmafau");
  define ("serverDBs" , "SERGIO-PC");
  define ("userDBs" , "sa");
  define ("passDBs" , "soporte123");
- define ("nameDBs" , "SMART");
+ define ("nameDBs" , "cpharmaftn");
 /**********************************************************************************/
 /********************* CONEXION SERVER DESARROLLO GRUPO P **********************/
  define ("serverGP" , "SERGIO-PC");
  define ("userGP" , "sa");
  define ("passGP" , "soporte123");
- define ("nameGP" , "SMART");
+ define ("nameGP" , "cpharmaftn");
 ?>

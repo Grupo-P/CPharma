@@ -10,7 +10,7 @@
 		include(app_path().'\functions\config.php'); 
 		include(app_path().'\functions\Querys.php');
 		include(app_path().'\functions\funciones.php');
-		$MiUbicacion = MiUbicacion();
+		$SedeConnection = MiUbicacion();
 	?>
 
 	<h1 class="h5 text-info">
@@ -76,7 +76,7 @@
 <!-- INICIO: Panel CPharma OFF Line -->
 	<?php
 /*INICIO CASO FTN (ON-LINE), FLL (OFF-LINE) FAU (OFF-LINE)*/
-	if($MiUbicacion == 'FTN'){
+	if($SedeConnection == 'FTN'){
 	?>	
 		<div class="card-deck">
 	   		<!-- Reportes -->
@@ -84,7 +84,7 @@
 		  		<div class="card-body text-left bg-success">
 		    		<h5 class="card-title">
 			    		<span class="card-text text-white">
-			    			<?php echo "".SedeFLLOFF."<br/>".LastRestoreDB(nameFLLOFF);?>
+			    			<?php echo "".SedeFLLOFF."<br/>".LastRestoreDB(nameFLLOFF,$SedeConnection);?>
 			    		</span>
 		    		</h5>	    	    
 		  		</div>
@@ -101,7 +101,7 @@
 		  		<div class="card-body text-left bg-info">
 		    		<h5 class="card-title">
 			    		<span class="card-text text-white">
-			    			<?php echo "".SedeFAUOFF."<br/>".LastRestoreDB(nameFAUOFF);?>
+			    			<?php echo "".SedeFAUOFF."<br/>".LastRestoreDB(nameFAUOFF,$SedeConnection);?>
 			    		</span>
 		    		</h5>	    	    
 		  		</div>
@@ -117,7 +117,7 @@
 	<?php 
 /*FIN CASO FTN (ON-LINE), FLL (OFF-LINE) FAU (OFF-LINE)*/
 	}
-	else if($MiUbicacion =='FLL'){
+	else if($SedeConnection =='FLL'){
 	?>
 		<div class="card-deck">
 	   		<!-- Reportes -->
@@ -125,7 +125,7 @@
 		  		<div class="card-body text-left bg-danger">
 		    		<h5 class="card-title">
 			    		<span class="card-text text-white">
-			    			<?php echo "".SedeFTNOFF."<br/>".LastRestoreDB(nameFTNOFF);?>
+			    			<?php echo "".SedeFTNOFF."<br/>".LastRestoreDB(nameFTNOFF,$SedeConnection);?>
 			    		</span>
 		    		</h5>	    	    
 		  		</div>
@@ -142,7 +142,7 @@
 		  		<div class="card-body text-left bg-info">
 		    		<h5 class="card-title">
 			    		<span class="card-text text-white">
-			    			<?php echo "".SedeFAUOFF."<br/>".LastRestoreDB(nameFAUOFF);?>
+			    			<?php echo "".SedeFAUOFF."<br/>".LastRestoreDB(nameFAUOFF,$SedeConnection);?>
 			    		</span>
 		    		</h5>	    	    
 		  		</div>
@@ -157,7 +157,7 @@
 		</div>
 	<?php
 	}
-	else if($MiUbicacion =='FAU'){
+	else if($SedeConnection =='FAU'){
 	?>
 		<div class="card-deck">
 	   		<!-- Reportes -->
@@ -165,7 +165,7 @@
 		  		<div class="card-body text-left bg-danger">
 		    		<h5 class="card-title">
 			    		<span class="card-text text-white">
-			    			<?php echo "".SedeFTNOFF."<br/>".LastRestoreDB(nameFTNOFF);?>
+			    			<?php echo "".SedeFTNOFF."<br/>".LastRestoreDB(nameFTNOFF,$SedeConnection);?>
 			    		</span>
 		    		</h5>	    	    
 		  		</div>
@@ -182,7 +182,7 @@
 		  		<div class="card-body text-left bg-success">
 		    		<h5 class="card-title">
 			    		<span class="card-text text-white">
-			    			<?php echo "".SedeFLLOFF."<br/>".LastRestoreDB(nameFLLOFF);?>
+			    			<?php echo "".SedeFLLOFF."<br/>".LastRestoreDB(nameFLLOFF,$SedeConnection);?>
 			    		</span>
 		    		</h5>	    	    
 		  		</div>
@@ -197,7 +197,7 @@
 		</div>
 	<?php
 	}
-	else if($MiUbicacion == 'GP'){
+	else if($SedeConnection == 'GP'){
 	?>	
 		<div class="card-deck">
 	   		<!-- Reportes -->
@@ -205,7 +205,7 @@
 		  		<div class="card-body text-left bg-danger">
 		    		<h5 class="card-title">
 			    		<span class="card-text text-white">
-			    			<?php echo "".SedeFTNOFF."<br/>".LastRestoreDB(nameFTN);?>
+			    			<?php echo "".SedeFTNOFF."<br/>".LastRestoreDB(nameFTNOFF,$SedeConnection);?>
 			    		</span>
 		    		</h5>	    	    
 		  		</div>
@@ -222,7 +222,7 @@
 		  		<div class="card-body text-left bg-success">
 		    		<h5 class="card-title">
 			    		<span class="card-text text-white">
-			    			<?php echo "".SedeFLLOFF."<br/>".LastRestoreDB(nameFLLOFF);?>
+			    			<?php echo "".SedeFLLOFF."<br/>".LastRestoreDB(nameFLLOFF,$SedeConnection);?>
 			    		</span>
 		    		</h5>	    	    
 		  		</div>
@@ -239,7 +239,7 @@
 		  		<div class="card-body text-left bg-info">
 		    		<h5 class="card-title">
 			    		<span class="card-text text-white">
-			    			<?php echo "".SedeFAUOFF."<br/>".LastRestoreDB(nameFAUOFF);?>
+			    			<?php echo "".SedeFAUOFF."<br/>".LastRestoreDB(nameFAUOFF,$SedeConnection);?>
 			    		</span>
 		    		</h5>	    	    
 		  		</div>
