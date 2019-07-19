@@ -11,6 +11,21 @@
 	    return $conexion;
 	}
 	/*
+		TITULO: QLastRestoreDB
+		PARAMETROS: [$nameDataBase] Nombre de la base de datos a buscar
+		FUNCION: Busca la fecha de la ultima restauracion de la base de datos
+		RETORNO: Fecha de ultima restauracion
+	 */
+	function LastRestoreDB($nameDataBase){
+		$SedeConnection = MiUbicacion();
+		$conn = ConectarSmartpharma($SedeConnection);
+		$sql = QLastRestoreDB($nameDataBase);
+		$result = sqlsrv_query($conn,$sql);
+		$row = sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC);
+		$FechaRestauracion = $row["FechaRestauracion"]->format("Y-m-d h:i:s");
+		return $FechaRestauracion;
+	}
+	/*
 		TITULO: ValidarConectividad
 		PARAMETROS: [$conn] $conexion con la sede
 		FUNCION: Valida la conexion con un servidor definido
@@ -134,7 +149,48 @@
 				$conn = sqlsrv_connect(serverFAU,$connectionInfo);
 				return $conn;
 			break;
-	/*INICIO BLOQUE DE FAU*/
+	/*FIN BLOQUE DE FAU*/ 
+	/*INICIO BLOQUE DE GRUPO P*/
+			case 'GP':
+				$connectionInfo = array(
+					"Database"=>nameGP,
+					"UID"=>userGP,
+					"PWD"=>passGP
+				);
+				$conn = sqlsrv_connect(serverGP,$connectionInfo);
+				return $conn;
+			break;
+
+			case 'GPFTN':
+				$connectionInfo = array(
+					"Database"=>nameFTNOFF,
+					"UID"=>userGP,
+					"PWD"=>passGP
+				);
+				$conn = sqlsrv_connect(serverGP,$connectionInfo);
+				return $conn;
+			break;
+
+			case 'GPFLL':
+				$connectionInfo = array(
+					"Database"=>nameFLLOFF,
+					"UID"=>userGP,
+					"PWD"=>passGP
+				);
+				$conn = sqlsrv_connect(serverGP,$connectionInfo);
+				return $conn;
+			break;
+
+			case 'GPFAU':
+				$connectionInfo = array(
+					"Database"=>nameFAUOFF,
+					"UID"=>userGP,
+					"PWD"=>passGP
+				);
+				$conn = sqlsrv_connect(serverGP,$connectionInfo);
+				return $conn;
+			break;
+	/*FIN BLOQUE DE GRUPO P*/ 
 			case 'DBs':
 				$connectionInfo = array(
 					"Database"=>nameDBs,
@@ -178,7 +234,7 @@
 			break;
 
 			case '10':
-				return 'FTN';
+				return 'GP';
 			break;
 		/*FIN BLOQUE DE FTN*/
 		/*INICIO BLOQUE DE FLL*/
@@ -252,6 +308,27 @@
 				return $sede;
 			break;
 	/*FIN BLOQUE DE FAU*/
+	/*INICIO BLOQUE DE GRUPO P*/ 
+			case 'GP':
+				$sede = SedeGP;
+				return $sede;
+			break;
+
+			case 'GPFTN':
+				$sede = SedeFTNOFF;
+				return $sede;
+			break;
+
+			case 'GPFLL':
+				$sede = SedeFLLOFF;
+				return $sede;
+			break;
+
+			case 'GPFAU':
+				$sede = SedeFAUOFF;
+				return $sede;
+			break;
+	/*FIN BLOQUE DE GRUPO P*/ 
 			case 'DBs':
 				$sede = SedeDBs;
 				return $sede;

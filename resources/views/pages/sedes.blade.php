@@ -8,6 +8,7 @@
 
 	<?php 
 		include(app_path().'\functions\config.php'); 
+		include(app_path().'\functions\Querys.php');
 		include(app_path().'\functions\funciones.php');
 		$MiUbicacion = MiUbicacion();
 	?>
@@ -75,8 +76,7 @@
 <!-- INICIO: Panel CPharma OFF Line -->
 	<?php
 /*INICIO CASO FTN (ON-LINE), FLL (OFF-LINE) FAU (OFF-LINE)*/
-	$FlagSede = 'FTN'; //Cambiar $FlagSede por MiUbicacion()
-	if($FlagSede == 'FTN'){
+	if(MiUbicacion() == 'FTN'){
 	?>	
 		<div class="card-deck">
 	   		<!-- Reportes -->
@@ -84,7 +84,7 @@
 		  		<div class="card-body text-left bg-success">
 		    		<h5 class="card-title">
 			    		<span class="card-text text-white">
-			    			<?php echo "".SedeFLLOFF; ?>
+			    			<?php echo "".SedeFLLOFF."<br/>".LastRestoreDB(nameFLLOFF);?>
 			    		</span>
 		    		</h5>	    	    
 		  		</div>
@@ -101,7 +101,7 @@
 		  		<div class="card-body text-left bg-info">
 		    		<h5 class="card-title">
 			    		<span class="card-text text-white">
-			    			<?php echo "".SedeFAUOFF; ?>
+			    			<?php echo "".SedeFAUOFF."<br/>".LastRestoreDB(nameFAUOFF);?>
 			    		</span>
 		    		</h5>	    	    
 		  		</div>
@@ -117,7 +117,7 @@
 	<?php 
 /*FIN CASO FTN (ON-LINE), FLL (OFF-LINE) FAU (OFF-LINE)*/
 	}
-	else if($FlagSede =='FLL'){
+	else if(MiUbicacion() =='FLL'){
 	?>
 		<div class="card-deck">
 	   		<!-- Reportes -->
@@ -125,7 +125,7 @@
 		  		<div class="card-body text-left bg-danger">
 		    		<h5 class="card-title">
 			    		<span class="card-text text-white">
-			    			<?php echo "".SedeFTNOFF; ?>
+			    			<?php echo "".SedeFTNOFF."<br/>".LastRestoreDB(nameFTNOFF);?>
 			    		</span>
 		    		</h5>	    	    
 		  		</div>
@@ -142,7 +142,7 @@
 		  		<div class="card-body text-left bg-info">
 		    		<h5 class="card-title">
 			    		<span class="card-text text-white">
-			    			<?php echo "".SedeFAUOFF; ?>
+			    			<?php echo "".SedeFAUOFF."<br/>".LastRestoreDB(nameFAUOFF);?>
 			    		</span>
 		    		</h5>	    	    
 		  		</div>
@@ -157,7 +157,7 @@
 		</div>
 	<?php
 	}
-	else if($FlagSede =='FAU'){
+	else if(MiUbicacion() =='FAU'){
 	?>
 		<div class="card-deck">
 	   		<!-- Reportes -->
@@ -165,7 +165,7 @@
 		  		<div class="card-body text-left bg-danger">
 		    		<h5 class="card-title">
 			    		<span class="card-text text-white">
-			    			<?php echo "".SedeFTNOFF; ?>
+			    			<?php echo "".SedeFTNOFF."<br/>".LastRestoreDB(nameFTNOFF);?>
 			    		</span>
 		    		</h5>	    	    
 		  		</div>
@@ -182,7 +182,7 @@
 		  		<div class="card-body text-left bg-success">
 		    		<h5 class="card-title">
 			    		<span class="card-text text-white">
-			    			<?php echo "".SedeFLLOFF; ?>
+			    			<?php echo "".SedeFLLOFF."<br/>".LastRestoreDB(nameFLLOFF);?>
 			    		</span>
 		    		</h5>	    	    
 		  		</div>
@@ -197,7 +197,64 @@
 		</div>
 	<?php
 	}
-   	?>
+	else if(MiUbicacion() == 'GP'){
+	?>	
+		<div class="card-deck">
+	   		<!-- Reportes -->
+			<div class="card border-danger mb-3" style="width: 14rem;">	  	
+		  		<div class="card-body text-left bg-danger">
+		    		<h5 class="card-title">
+			    		<span class="card-text text-white">
+			    			<?php echo "".SedeFTNOFF."<br/>".LastRestoreDB(nameFTN);?>
+			    		</span>
+		    		</h5>	    	    
+		  		</div>
+			  	<div class="card-footer bg-transparent border-danger text-right">
+			  		<form action="/reporte/" style="display: inline;">
+					    @csrf
+					    <input id="SEDE" name="SEDE" type="hidden" value="GPFTN">  
+					    <button type="submit" name="Reporte" role="button" class="btn btn-outline-danger btn-sm"></i>Ver reportes</button>
+					</form>
+			  	</div>
+			</div>
+
+			<div class="card border-success mb-3" style="width: 14rem;">	  	
+		  		<div class="card-body text-left bg-success">
+		    		<h5 class="card-title">
+			    		<span class="card-text text-white">
+			    			<?php echo "".SedeFLLOFF."<br/>".LastRestoreDB(nameFLLOFF);?>
+			    		</span>
+		    		</h5>	    	    
+		  		</div>
+			  	<div class="card-footer bg-transparent border-success text-right">
+			  		<form action="/reporte/" style="display: inline;">
+					    @csrf
+					    <input id="SEDE" name="SEDE" type="hidden" value="GPFLL">
+					    <button type="submit" name="Reporte" role="button" class="btn btn-outline-success btn-sm"></i>Ver reportes</button>
+					</form>
+			  	</div>
+			</div>
+
+			<div class="card border-info mb-3" style="width: 14rem;">	  	
+		  		<div class="card-body text-left bg-info">
+		    		<h5 class="card-title">
+			    		<span class="card-text text-white">
+			    			<?php echo "".SedeFAUOFF."<br/>".LastRestoreDB(nameFAUOFF);?>
+			    		</span>
+		    		</h5>	    	    
+		  		</div>
+			  	<div class="card-footer bg-transparent border-info text-right">
+			  		<form action="/reporte/" style="display: inline;">
+					    @csrf
+					    <input id="SEDE" name="SEDE" type="hidden" value="GPFAU">
+					    <button type="submit" name="Reporte" role="button" class="btn btn-outline-info btn-sm"></i>Ver reportes</button>
+					</form>
+			  	</div>
+			</div>
+		</div>
+	<?php
+	}
+	?>
 <!-- FIN: Panel CPharma OFF Line -->
    	<?php
 	  if(Auth::user()->role == 'DEVELOPER'){

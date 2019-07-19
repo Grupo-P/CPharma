@@ -10,6 +10,7 @@ define("Impuesto",1.16);
 define ("SedeFTN","Farmacia Tierra Negra");
 define ("SedeFLL","Farmacia La Lago");
 define ("SedeFAU","Farmacia Avenida Universidad");
+define ("SedeGP","GRUPO P");
 define ("SedeDBs","Servidor de Desarrollo Sergio");
 define ("SedeDBm","Servidor de Desarrollo Manuel");
 /**********************************************************************************/
@@ -57,4 +58,9 @@ define ("nameFAUOFF" , "cpharmafau");
  define ("passDBs" , "soporte123");
  define ("nameDBs" , "SMART");
 /**********************************************************************************/
+/********************* CONEXION SERVER DESARROLLO GRUPO P **********************/
+ define ("serverGP" , "SERGIO-PC");
+ define ("userGP" , "sa");
+ define ("passGP" , "soporte123");
+ define ("nameGP" , "SMART");
 ?>
