@@ -1158,12 +1158,12 @@
 		FUNCION:
 		RETORNO:
 	 */
-	function QGuardarCartaDeCompromiso($articulo,$lote,$fecha_vencimiento,$proveedor,$fecha_recepcion,$fecha_tope,$causa,$nota,$user,$date) {
+	function QGuardarCartaDeCompromiso($proveedor,$articulo,$lote,$fecha_documento,$fecha_recepcion,$fecha_vencimiento,$fecha_tope,$causa,$nota,$user,$date) {
 		$sql = "
 		INSERT INTO carta_compromisos 
-		(articulo, lote, fecha_vencimiento, proveedor, fecha_recepcion, fecha_tope, causa, nota, estatus, user,created_at,updated_at)
+		(proveedor,articulo,lote,fecha_documento,fecha_recepcion,fecha_vencimiento,fecha_tope,causa,nota,estatus,user,created_at,updated_at)
 		VALUES 
-		('$articulo', '$lote', '$fecha_vencimiento', '$proveedor', '$fecha_recepcion', '$fecha_tope', '$causa', '$nota', 'ACTIVO', '$user','$date','$date')
+		('$proveedor','$articulo','$lote','$fecha_documento','$fecha_recepcion','$fecha_vencimiento','$fecha_tope','$causa','$nota','ACTIVO','$user','$date','$date')
 		";
 		return $sql;
 	}

@@ -44,15 +44,22 @@ class CartaCompromisoController extends Controller {
     public function store(Request $request) {
         try {
             $cartaCompromiso = new CartaCompromiso();
+            $cartaCompromiso->proveedor = $request->input('proveedor');
             $cartaCompromiso->articulo = $request->input('articulo');
             $cartaCompromiso->lote = $request->input('lote');
-            $cartaCompromiso->fecha_vencimiento = $request->input('fecha_vencimiento');
-            $cartaCompromiso->fecha_vencimiento = date('Y-m-d',strtotime($cartaCompromiso->fecha_vencimiento));
-            $cartaCompromiso->proveedor = $request->input('proveedor');
+
+            $cartaCompromiso->fecha_documento = $request->input('fecha_documento');
+            $cartaCompromiso->fecha_documento = date('Y-m-d',strtotime($cartaCompromiso->fecha_documento));
+
             $cartaCompromiso->fecha_recepcion = $request->input('fecha_recepcion');
             $cartaCompromiso->fecha_recepcion = date('Y-m-d',strtotime($cartaCompromiso->fecha_recepcion));
+
+            $cartaCompromiso->fecha_vencimiento = $request->input('fecha_vencimiento');
+            $cartaCompromiso->fecha_vencimiento = date('Y-m-d',strtotime($cartaCompromiso->fecha_vencimiento));
+            
             $cartaCompromiso->fecha_tope = $request->input('fecha_tope');
             $cartaCompromiso->fecha_tope = date('Y-m-d',strtotime($cartaCompromiso->fecha_tope));
+
             $cartaCompromiso->causa = $request->input('causa');
             $cartaCompromiso->nota = $request->input('nota');
             $cartaCompromiso->estatus = 'ACTIVO';

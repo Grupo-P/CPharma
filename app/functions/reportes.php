@@ -1663,9 +1663,6 @@
 			    <tr>
 			    	<th scope="col">Codigo</th>
 			    	<th scope="col">Descripcion</th>
-			    	<th scope="col">Fecha de recepcion</th>
-			    	<th scope="col">Fecha de vencimiento</th>
-			    	<th scope="col">Fecha tope</th>
 			    </tr>
 		  	</thead>
 
@@ -1673,8 +1670,28 @@
 				<tr> 
 					<td align="center">'.$CodigoArticulo.'</td>
 					<td align="center">'.$Articulo.'</td>
+			 	</tr>
+	  		</tbody>
+		</table>';
+
+		echo '
+		<table class="table table-striped table-bordered col-12 sortable" id="myTable">
+		  	<thead class="thead-dark">
+			    <tr>
+			    	<th scope="col">Fecha de documento</th>
+			    	<th scope="col">Fecha de recepcion (Articulo)</th>
+			    	<th scope="col">Fecha de vencimiento (Articulo)</th>
+			    	<th scope="col">Fecha tope (Carta compromiso)</th>
+			    </tr>
+		  	</thead>
+
+		  	<tbody>
+				<tr>
 					<td align="center">
-						<input id="fecha_recepcion" name="fecha_recepcion" type="date" autofocus>
+						<input id="fecha_documento" name="fecha_documento" type="date" autofocus>
+					</td>
+					<td align="center">
+						<input id="fecha_recepcion" name="fecha_recepcion" type="date">
 					</td>
 					<td align="center">
 						<input id="fecha_vencimiento" name="fecha_vencimiento" type="date">
@@ -1690,19 +1707,20 @@
 			<table class="table table-striped table-bordered col-12 sortable">
 				<thead class="thead-dark">
 				    <tr>
-				    	<th scope="col">Nota</th>
 				    	<th scope="col">Causa</th>
+				    	<th scope="col">Nota</th>
 				    </tr>
 			  	</thead>
 		  	
 			  	<tbody>
 			  		<tr>
-	  					<td>
-	  						<textarea name="nota" id="nota" class="form-control" rows="4"></textarea>
-	  					</td>
 						<td>
 							<textarea name="causa" id="causa" class="form-control" rows="4"></textarea>
 						</td>
+
+	  					<td>
+	  						<textarea name="nota" id="nota" class="form-control" rows="4"></textarea>
+	  					</td>
 	  				</tr>
 	  			</tbody>
 			</table>
@@ -1731,11 +1749,11 @@
 		FUNCION: arma la lista del troquel segun el articulo
 		RETORNO: no aplica
 	 */
-	function GuardarCartaDeCompromiso($articulo,$lote,$fecha_vencimiento,$proveedor,$fecha_recepcion,$fecha_tope,$causa,$nota) {
+	function GuardarCartaDeCompromiso($proveedor,$articulo,$lote,$fecha_documento,$fecha_recepcion,$fecha_vencimiento,$fecha_tope,$causa,$nota) {
 		$user = auth()->user()->name;
 		$date = date('Y-m-d h:m:s',time());
 		$conn = ConectarXampp();
-		$sql = QGuardarCartaDeCompromiso($articulo,$lote,$fecha_vencimiento,$proveedor,$fecha_recepcion,$fecha_tope,$causa,$nota,$user,$date);
+		$sql = QGuardarCartaDeCompromiso($proveedor,$articulo,$lote,$fecha_documento,$fecha_recepcion,$fecha_vencimiento,$fecha_tope,$causa,$nota,$user,$date);
 		$result = mysqli_query($conn,$sql);
 		mysqli_close($conn);
 	}

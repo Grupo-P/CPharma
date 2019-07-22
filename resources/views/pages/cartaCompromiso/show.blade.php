@@ -30,6 +30,11 @@
 	  	</thead>
 
 	  	<tbody>
+	  		<tr>
+		      	<th scope="row">Proveedor</th>
+	    	  	<td>{{$cartaCompromiso->proveedor}}</td>
+		    </tr>
+
 		    <tr>
 		      	<th scope="row">Art&iacute;culo</th>
 	    	  	<td>{{$cartaCompromiso->articulo}}</td>
@@ -41,22 +46,22 @@
 		    </tr>
 
 		    <tr>
-		      	<th scope="row">Fecha de vencimiento</th>
-	    	  	<td>{{date('d-m-Y',strtotime($cartaCompromiso->fecha_vencimiento))}}</td>
+		      	<th scope="row">Fecha de documento</th>
+	    	  	<td>{{date('d-m-Y',strtotime($cartaCompromiso->fecha_documento))}}</td>
 		    </tr>
 
 		    <tr>
-		      	<th scope="row">Proveedor</th>
-	    	  	<td>{{$cartaCompromiso->proveedor}}</td>
-		    </tr>
-
-		    <tr>
-		      	<th scope="row">Fecha de recepci&oacute;n</th>
+		      	<th scope="row">Fecha de recepci&oacute;n (Art&iacute;culo)</th>
 	    	  	<td>{{date('d-m-Y',strtotime($cartaCompromiso->fecha_recepcion))}}</td>
 		    </tr>
 
 		    <tr>
-		      	<th scope="row">Fecha tope</th>
+		      	<th scope="row">Fecha de vencimiento (Art&iacute;culo)</th>
+	    	  	<td>{{date('d-m-Y',strtotime($cartaCompromiso->fecha_vencimiento))}}</td>
+		    </tr>
+
+		    <tr>
+		      	<th scope="row">Fecha tope (carta compromiso)</th>
 	    	  	<td>{{date('d-m-Y',strtotime($cartaCompromiso->fecha_tope))}}</td>
 		    </tr>
 

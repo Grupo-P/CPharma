@@ -8,12 +8,12 @@
 <script type="text/javascript" src="{{ asset('assets/jquery/jquery-ui.min.js') }}" ></script>
 
 @section('content')
-  <!-- Modal Error De Fechas -->
-  <div class="modal fade" id="errorModalCenter" tabindex="-1" role="dialog" aria-labelledby="errorModalCenterTitle" aria-hidden="true">
+  <!-- Modal Error De Fecha Recepcion Mayor A Fecha Tope -->
+  <div class="modal fade" id="errorModalCenter1" tabindex="-1" role="dialog" aria-labelledby="errorModalCenterTitle1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title text-danger" id="errorModalCenterTitle">
+          <h5 class="modal-title text-danger" id="errorModalCenterTitle1">
             <i class="fas fa-exclamation-circle"></i>&nbsp;Error
           </h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -22,7 +22,7 @@
         </div>
         <div class="modal-body">
           <h4 class="h6">
-            <b>La fecha tope</b> debe ser menor o igual a <b>la fecha de vencimiento</b> y mayor a la <b>fecha de recepci&oacute;n</b>
+            <b>La fecha tope (Carta de compromiso)</b> no puede ser menor que <b>la fecha de recepcion (Articulo)</b>
           </h4>
         </div>
         <div class="modal-footer">
@@ -32,6 +32,79 @@
     </div>
   </div>
 
+  <!-- Modal Error De Fecha Tope Menor A Fecha De Recepcion -->
+  <div class="modal fade" id="errorModalCenter2" tabindex="-1" role="dialog" aria-labelledby="errorModalCenterTitle2" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title text-danger" id="errorModalCenterTitle2">
+            <i class="fas fa-exclamation-circle"></i>&nbsp;Error
+          </h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <h4 class="h6">
+            <b>La fecha de vencimiento (Articulo)</b> no puede ser mayor que <b>la fecha tope (Carta de compromiso)</b>
+          </h4>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-info" data-dismiss="modal">Aceptar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Error De Fecha De Recepcion Mayor A Fecha De Vencimiento -->
+  <div class="modal fade" id="errorModalCenter3" tabindex="-1" role="dialog" aria-labelledby="errorModalCenterTitle3" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title text-danger" id="errorModalCenterTitle3">
+            <i class="fas fa-exclamation-circle"></i>&nbsp;Error
+          </h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <h4 class="h6">
+            <b>La fecha de recepcion (Articulo)</b> no puede ser mayor que <b>la fecha de vencimiento (Articulo)</b>
+          </h4>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-info" data-dismiss="modal">Aceptar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Error De Fecha De Recepcion Mayor A Fecha De Vencimiento -->
+  <div class="modal fade" id="errorModalCenter4" tabindex="-1" role="dialog" aria-labelledby="errorModalCenterTitle4" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title text-danger" id="errorModalCenterTitle4">
+            <i class="fas fa-exclamation-circle"></i>&nbsp;Error
+          </h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <h4 class="h6">
+            <b>La fecha de recepcion (Articulo)</b> no puede ser menor que <b>la fecha de documento</b>
+          </h4>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-info" data-dismiss="modal">Aceptar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Modal Registro Almacenado Con Exito -->
   <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
       <div class="modal-content">
@@ -93,13 +166,16 @@
 
       $InicioCarga = new DateTime("now");
 
-      if(($_GET['fecha_tope'] <= $_GET['fecha_vencimiento']) && ($_GET['fecha_tope'] > $_GET['fecha_recepcion'])) {
+      if(($_GET['fecha_recepcion'] < $_GET['fecha_tope']) 
+        && ($_GET['fecha_vencimiento'] <= $_GET['fecha_tope']) 
+        && ($_GET['fecha_recepcion'] < $_GET['fecha_vencimiento']) 
+        && ($_GET['fecha_recepcion'] >= $_GET['fecha_documento'])) {
         ?> 
         <script>
           $('#exampleModalCenter').modal('show');
         </script> 
       <?php
-        GuardarCartaDeCompromiso($_GET['articulo'],$_GET['lote'],$_GET['fecha_vencimiento'],$_GET['proveedor'],$_GET['fecha_recepcion'],$_GET['fecha_tope'],$_GET['causa'],$_GET['nota']);
+        GuardarCartaDeCompromiso($_GET['proveedor'],$_GET['articulo'],$_GET['lote'],$_GET['fecha_documento'],$_GET['fecha_recepcion'],$_GET['fecha_vencimiento'],$_GET['fecha_tope'],$_GET['causa'],$_GET['nota']);
 
         $sql = QListaProveedores();
         $ArtJson = armarJson($sql,$_GET['SEDE']);
@@ -120,11 +196,57 @@
         ';
       }
       else {
-      ?> 
-        <script>
-          $('#errorModalCenter').modal('show');
-        </script> 
-      <?php
+        if(is_null($_GET['fecha_vencimiento'])) {
+          if($_GET['fecha_recepcion'] > $_GET['fecha_tope']) {
+            ?>
+              <script>
+                $('#errorModalCenter1').modal('show');
+              </script>
+            <?php
+          }
+
+          if($_GET['fecha_recepcion'] < $_GET['fecha_documento']) {
+            ?>
+              <script>
+                $('#errorModalCenter4').modal('show');
+              </script>
+            <?php
+          }
+        }
+        else {
+          if($_GET['fecha_recepcion'] > $_GET['fecha_tope']) {
+            ?>
+              <script>
+                $('#errorModalCenter1').modal('show');
+              </script>
+            <?php
+          }
+
+          if($_GET['fecha_vencimiento'] > $_GET['fecha_tope']) {
+            ?>
+              <script>
+                $('#errorModalCenter2').modal('show');
+              </script>
+            <?php
+          }
+
+          if($_GET['fecha_recepcion'] < $_GET['fecha_vencimiento']) {
+            ?>
+              <script>
+                $('#errorModalCenter3').modal('show');
+              </script>
+            <?php
+          }
+
+          if($_GET['fecha_recepcion'] < $_GET['fecha_documento']) {
+            ?>
+              <script>
+                $('#errorModalCenter4').modal('show');
+              </script>
+            <?php
+          }
+        }
+
         CartaDeCompromiso($_GET['SEDE'],$_GET['IdProv'],$_GET['proveedor'],$_GET['IdFact'],$_GET['IdArt']);
       }
 
