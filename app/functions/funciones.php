@@ -1,24 +1,5 @@
 <?php
 	/*
-		TITULO: ValidarConectividad
-		PARAMETROS: No Aplica
-		FUNCION: Valida la conexion con un servidor definido
-		RETORNO: Estatus de la conectividad
-	 */
-	function ValidarConectividad(){
-		
-		$serverName = "serverName\sqlexpress, 1542";
-		$connectionInfo = array( "Database"=>"dbName", "UID"=>"userName", "PWD"=>"password");
-		$conn = sqlsrv_connect( $serverName, $connectionInfo);
-
-		if( $conn ) {
-		     echo "Conexión establecida.<br />";
-		}else{
-		     echo "Conexión no se pudo establecer.<br />";
-		     die( print_r( sqlsrv_errors(), true));	
-		}
-	}
-	/*
 		TITULO: ConectarXampp
 		PARAMETROS: No Aplica
 		FUNCION: Conexion con servidor de XAMPP
@@ -30,6 +11,44 @@
 	    return $conexion;
 	}
 	/*
+		TITULO: QLastRestoreDB
+		PARAMETROS: [$nameDataBase] Nombre de la base de datos a buscar
+		FUNCION: Busca la fecha de la ultima restauracion de la base de datos
+		RETORNO: Fecha de ultima restauracion
+	 */
+	function LastRestoreDB($nameDataBase,$SedeConnection){
+		$conn = ConectarSmartpharma($SedeConnection);
+		$sql = QLastRestoreDB($nameDataBase);
+		$result = sqlsrv_query($conn,$sql);
+		$row = sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC);
+		$FechaRestauracion = $row["FechaRestauracion"]->format("Y-m-d h:i:s");
+		return $FechaRestauracion;
+	}
+	/*
+		TITULO: ValidarConectividad
+		PARAMETROS: [$conn] $conexion con la sede
+		FUNCION: Valida la conexion con un servidor definido
+		RETORNO: Estatus de la conectividad
+	 */
+	function ValidarConectividad($SedeConnection){
+		$InicioCarga = new DateTime("now");
+
+		$NombreSede = NombreSede($SedeConnection);
+		$conn = ConectarSmartpharma($SedeConnection);
+		echo('Sede: '.$NombreSede.'<br/>');
+
+		if($conn) {
+		     echo "Conexión establecida<br/>";
+		}else{
+		     echo "Conexión no se pudo establecer<br/>";
+		     die( print_r( sqlsrv_errors(), true));
+		}
+
+		$FinCarga = new DateTime("now");
+    	$IntervalCarga = $InicioCarga->diff($FinCarga);
+    	echo'Tiempo de carga: '.$IntervalCarga->format("%Y-%M-%D %H:%I:%S");
+	}
+	/*
 		TITULO: ConectarSmartpharma
 		PARAMETROS: [$SedeConnection] Siglas de la sede para la conexion
 		FUNCION: Conectar el sistema con la sede que se desea
@@ -37,6 +56,7 @@
 	 */
 	function ConectarSmartpharma($SedeConnection) {
 		switch($SedeConnection) {
+	/*INICIO BLOQUE DE FTN*/
 			case 'FTN':
 				$connectionInfo = array(
 					"Database"=>nameFTN,
@@ -47,6 +67,27 @@
 				return $conn;
 			break;
 
+			case 'FTNFLL':
+				$connectionInfo = array(
+					"Database"=>nameFLLOFF,
+					"UID"=>userFTN,
+					"PWD"=>passFTN
+				);
+				$conn = sqlsrv_connect(serverFTN,$connectionInfo);
+				return $conn;
+			break;
+
+			case 'FTNFAU':
+				$connectionInfo = array(
+					"Database"=>nameFAUOFF,
+					"UID"=>userFTN,
+					"PWD"=>passFTN
+				);
+				$conn = sqlsrv_connect(serverFTN,$connectionInfo);
+				return $conn;
+			break;
+	/*FIN BLOQUE DE FTN*/
+	/*INICIO BLOQUE DE FLL*/
 			case 'FLL':
 				$connectionInfo = array(
 					"Database"=>nameFLL,
@@ -56,7 +97,28 @@
 				$conn = sqlsrv_connect(serverFLL,$connectionInfo);
 				return $conn;
 			break;
-/*Casos FTN:OFF-LINE *****  FLL:OFF-LINE *****  FAU:ON-LIN*/
+
+			case 'FLLFTN':
+				$connectionInfo = array(
+					"Database"=>nameFTNOFF,
+					"UID"=>userFLL,
+					"PWD"=>passFLL
+				);
+				$conn = sqlsrv_connect(serverFLL,$connectionInfo);
+				return $conn;
+			break;
+
+			case 'FLLFAU':
+				$connectionInfo = array(
+					"Database"=>nameFAUOFF,
+					"UID"=>userFLL,
+					"PWD"=>passFLL
+				);
+				$conn = sqlsrv_connect(serverFLL,$connectionInfo);
+				return $conn;
+			break;
+	/*FIN BLOQUE DE FLL*/
+	/*INICIO BLOQUE DE FAU*/
 			case 'FAU':
 				$connectionInfo = array(
 					"Database"=>nameFAU,
@@ -69,24 +131,65 @@
 
 			case 'FAUFTN':
 				$connectionInfo = array(
-					"Database"=>nameFAUFTN,
-					"UID"=>userFAUFTN,
-					"PWD"=>passFAUFTN
+					"Database"=>nameFTNOFF,
+					"UID"=>userFAU,
+					"PWD"=>passFAU
 				);
-				$conn = sqlsrv_connect(serverFAUFTN,$connectionInfo);
+				$conn = sqlsrv_connect(serverFAU,$connectionInfo);
 				return $conn;
 			break;
 
 			case 'FAUFLL':
 				$connectionInfo = array(
-					"Database"=>nameFAUFLL,
-					"UID"=>userFAUFLL,
-					"PWD"=>passFAUFLL
+					"Database"=>nameFLLOFF,
+					"UID"=>userFAU,
+					"PWD"=>passFAU
 				);
-				$conn = sqlsrv_connect(serverFAUFLL,$connectionInfo);
+				$conn = sqlsrv_connect(serverFAU,$connectionInfo);
 				return $conn;
 			break;
-/************************************************************************/
+	/*FIN BLOQUE DE FAU*/ 
+	/*INICIO BLOQUE DE GRUPO P*/
+			case 'GP':
+				$connectionInfo = array(
+					"Database"=>nameGP,
+					"UID"=>userGP,
+					"PWD"=>passGP
+				);
+				$conn = sqlsrv_connect(serverGP,$connectionInfo);
+				return $conn;
+			break;
+
+			case 'GPFTN':
+				$connectionInfo = array(
+					"Database"=>nameFTNOFF,
+					"UID"=>userGP,
+					"PWD"=>passGP
+				);
+				$conn = sqlsrv_connect(serverGP,$connectionInfo);
+				return $conn;
+			break;
+
+			case 'GPFLL':
+				$connectionInfo = array(
+					"Database"=>nameFLLOFF,
+					"UID"=>userGP,
+					"PWD"=>passGP
+				);
+				$conn = sqlsrv_connect(serverGP,$connectionInfo);
+				return $conn;
+			break;
+
+			case 'GPFAU':
+				$connectionInfo = array(
+					"Database"=>nameFAUOFF,
+					"UID"=>userGP,
+					"PWD"=>passGP
+				);
+				$conn = sqlsrv_connect(serverGP,$connectionInfo);
+				return $conn;
+			break;
+	/*FIN BLOQUE DE GRUPO P*/ 
 			case 'DBs':
 				$connectionInfo = array(
 					"Database"=>nameDBs,
@@ -116,15 +219,11 @@
 	 */
 	function MiUbicacion(){
 		$NombreCliente = gethostname();
-		//echo "<br/>Su nombre de pc es : ".$NombreCliente;
-
 		$IpCliente = gethostbyname($NombreCliente);
-		//echo "<br/>Su direccion IP es : ".$IpCliente;
-
 		$Octeto = explode(".", $IpCliente);
-		//echo"<br/>Segmento de red: ".$Octeto[2];
-
+		
 		switch ($Octeto[2]) {
+		/*INICIO BLOQUE DE FTN*/
 			case '1':
 				return 'FTN';
 			break;
@@ -134,19 +233,109 @@
 			break;
 
 			case '10':
-				return 'FTN';
+				return 'GP';
 			break;
-
+		/*FIN BLOQUE DE FTN*/
+		/*INICIO BLOQUE DE FLL*/
 			case '7':
 				return 'FLL';
 			break;
-
+		/*FIN BLOQUE DE FTN*/
+		/*INICIO BLOQUE DE FAU*/
 			case '12':
 				return 'FAU';
 			break;
-			
+		/*INICIO BLOQUE DE FAU*/	
 			default:
 				return ''.$Octeto[2];
+			break;
+		}
+	}
+	/*
+		TITULO: NombreSede
+		PARAMETROS: [$SedeConnection] Siglas de la sede para la conexion
+		FUNCION: Retornar el nombre de la sede con la que se esta conectando
+		RETORNO: Nombre de la sede conectada
+	 */
+	function NombreSede($SedeConnection) {
+		switch($SedeConnection) {
+	/*INICIO BLOQUE DE FTN*/
+			case 'FTN':
+				$sede = SedeFTN;
+				return $sede;
+			break;
+
+			case 'FTNFLL':
+				$sede = SedeFLLOFF;
+				return $sede;
+			break;
+
+			case 'FTNFAU':
+				$sede = SedeFAUOFF;
+				return $sede;
+			break;
+	/*FIN BLOQUE DE FTN*/
+	/*INICIO BLOQUE DE FLL*/
+			case 'FLL':
+				$sede = SedeFLL;
+				return $sede;
+			break;
+
+			case 'FLLFTN':
+				$sede = SedeFTNOFF;
+				return $sede;
+			break;
+
+			case 'FLLFAU':
+				$sede = SedeFAUOFF;
+				return $sede;
+			break;
+	/*FIN BLOQUE DE FLL*/
+	/*INICIO BLOQUE DE FAU*/
+			case 'FAU':
+				$sede = SedeFAU;
+				return $sede;
+			break;
+
+			case 'FAUFTN':
+				$sede = SedeFTNOFF;
+				return $sede;
+			break;
+
+			case 'FAUFLL':
+				$sede = SedeFLLOFF;
+				return $sede;
+			break;
+	/*FIN BLOQUE DE FAU*/
+	/*INICIO BLOQUE DE GRUPO P*/ 
+			case 'GP':
+				$sede = SedeGP;
+				return $sede;
+			break;
+
+			case 'GPFTN':
+				$sede = SedeFTNOFF;
+				return $sede;
+			break;
+
+			case 'GPFLL':
+				$sede = SedeFLLOFF;
+				return $sede;
+			break;
+
+			case 'GPFAU':
+				$sede = SedeFAUOFF;
+				return $sede;
+			break;
+	/*FIN BLOQUE DE GRUPO P*/ 
+			case 'DBs':
+				$sede = SedeDBs;
+				return $sede;
+			break;
+
+			case 'DBm':
+				$sede = SedeDBm;
+				return $sede;
 			break;
 		}
 	}
@@ -216,50 +405,6 @@
 		$result = ConsultaEspecialSmartpharma ($sql,$SedeConnection);
 	    $arrayJson = array_flatten_recursive($result);
 	    return json_encode($arrayJson);
-	}
-	/*
-		TITULO: NombreSede
-		PARAMETROS: [$SedeConnection] Siglas de la sede para la conexion
-		FUNCION: Retornar el nombre de la sede con la que se esta conectando
-		RETORNO: Nombre de la sede conectada
-	 */
-	function NombreSede($SedeConnection) {
-		switch($SedeConnection) {
-			case 'FTN':
-				$sede = SedeFTN;
-				return $sede;
-			break;
-
-			case 'FLL':
-				$sede = SedeFLL;
-				return $sede;
-			break;
-/*Casos FTN:OFF-LINE *****  FLL:OFF-LINE *****  FAU:ON-LIN*/
-			case 'FAU':
-				$sede = SedeFAU;
-				return $sede;
-			break;
-
-			case 'FAUFTN':
-				$sede = SedeFAUFTN;
-				return $sede;
-			break;
-
-			case 'FAUFLL':
-				$sede = SedeFAUFLL;
-				return $sede;
-			break;
-/************************************************************/
-			case 'DBs':
-				$sede = SedeDBs;
-				return $sede;
-			break;
-
-			case 'DBm':
-				$sede = SedeDBm;
-				return $sede;
-			break;
-		}
 	}
 	/*
 		TITULO: CalculoPrecio
