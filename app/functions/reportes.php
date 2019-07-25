@@ -1738,23 +1738,5 @@
 
 		sqlsrv_close($conn);
 	}
-
-	/*
-		TITULO: GuardarCartaCompromiso
-		PARAMETROS: [$SedeConnection] sede donde se hara la conexion
-					[$IdProveedor] ID del proveedor a buscar
-					[$NombreProveedor] Nombre del proveedor a buscar
-					[$IdFatura] id de la factura
-					[$IdArticulo] ide del articulo
-		FUNCION: arma la lista del troquel segun el articulo
-		RETORNO: no aplica
-	 */
-	function GuardarCartaDeCompromiso($proveedor,$articulo,$lote,$fecha_documento,$fecha_recepcion,$fecha_vencimiento,$fecha_tope,$causa,$nota) {
-		$user = auth()->user()->name;
-		$date = date('Y-m-d h:m:s',time());
-		$conn = ConectarXampp();
-		$sql = QGuardarCartaDeCompromiso($proveedor,$articulo,$lote,$fecha_documento,$fecha_recepcion,$fecha_vencimiento,$fecha_tope,$causa,$nota,$user,$date);
-		$result = mysqli_query($conn,$sql);
-		mysqli_close($conn);
-	}
+	
 ?>
