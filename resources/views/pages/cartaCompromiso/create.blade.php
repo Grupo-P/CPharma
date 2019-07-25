@@ -170,6 +170,58 @@
         $fecha_documento = new DateTime($_GET['fecha_documento']);
         $fecha_recepcion = new DateTime($_GET['fecha_recepcion']);
         $fecha_tope = new DateTime($_GET['fecha_tope']);
+
+        $diferencia1 = $fecha_recepcion->diff($fecha_tope);
+        $diferencia1_numero = (int)$diferencia1->format('%R%a');
+
+        $diferencia4 = $fecha_documento->diff($fecha_recepcion);
+        $diferencia4_numero = (int)$diferencia4->format('%R%a');
+
+        if(($diferencia1_numero > 0) && ($diferencia4_numero >= 0)) {
+          ?> 
+          <script>
+            $('#exampleModalCenter').modal('show');
+          </script> 
+        <?php
+          GuardarCartaDeCompromiso($_GET['proveedor'],$_GET['articulo'],$_GET['lote'],$_GET['fecha_documento'],$_GET['fecha_recepcion'],null,$_GET['fecha_tope'],$_GET['causa'],$_GET['nota']);
+
+          $sql = QListaProveedores();
+          $ArtJson = armarJson($sql,$_GET['SEDE']);
+
+          echo '
+          <form autocomplete="off" action="">
+            <div class="autocomplete" style="width:90%;">
+              <input id="myInput" type="text" name="Nombre" placeholder="Ingrese el nombre del proveedor " onkeyup="conteo()" required>
+              <input id="myId" name="Id" type="hidden">
+              <td>
+              <input id="SEDE" name="SEDE" type="hidden" value="';
+              print_r($_GET['SEDE']);
+              echo'">
+              </td>
+            </div>
+            <input type="submit" value="Buscar" class="btn btn-outline-success">
+          </form>
+          ';
+        }
+        else {
+          if($diferencia1_numero <= 0) {
+            ?>
+              <script>
+                $('#errorModalCenter1').modal('show');
+              </script>
+            <?php
+          }
+
+          if($diferencia4_numero < 0) {
+            ?>
+              <script>
+                $('#errorModalCenter4').modal('show');
+              </script>
+            <?php
+          }
+
+          CartaDeCompromiso($_GET['SEDE'],$_GET['IdProv'],$_GET['proveedor'],$_GET['IdFact'],$_GET['IdArt']);
+        }
       }
       else {
         $fecha_documento = new DateTime($_GET['fecha_documento']);
