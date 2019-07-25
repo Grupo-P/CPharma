@@ -166,55 +166,60 @@
 
       $InicioCarga = new DateTime("now");
 
-      if(($_GET['fecha_recepcion'] < $_GET['fecha_tope']) 
-        && ($_GET['fecha_vencimiento'] <= $_GET['fecha_tope']) 
-        && ($_GET['fecha_recepcion'] < $_GET['fecha_vencimiento']) 
-        && ($_GET['fecha_recepcion'] >= $_GET['fecha_documento'])) {
-        ?> 
-        <script>
-          $('#exampleModalCenter').modal('show');
-        </script> 
-      <?php
-        GuardarCartaDeCompromiso($_GET['proveedor'],$_GET['articulo'],$_GET['lote'],$_GET['fecha_documento'],$_GET['fecha_recepcion'],$_GET['fecha_vencimiento'],$_GET['fecha_tope'],$_GET['causa'],$_GET['nota']);
-
-        $sql = QListaProveedores();
-        $ArtJson = armarJson($sql,$_GET['SEDE']);
-
-        echo '
-        <form autocomplete="off" action="">
-          <div class="autocomplete" style="width:90%;">
-            <input id="myInput" type="text" name="Nombre" placeholder="Ingrese el nombre del proveedor " onkeyup="conteo()" required>
-            <input id="myId" name="Id" type="hidden">
-            <td>
-            <input id="SEDE" name="SEDE" type="hidden" value="';
-            print_r($_GET['SEDE']);
-            echo'">
-            </td>
-          </div>
-          <input type="submit" value="Buscar" class="btn btn-outline-success">
-        </form>
-        ';
+      if($_GET['fecha_vencimiento'] == ''){
+        $fecha_documento = new DateTime($_GET['fecha_documento']);
+        $fecha_recepcion = new DateTime($_GET['fecha_recepcion']);
+        $fecha_tope = new DateTime($_GET['fecha_tope']);
       }
       else {
-        if(is_null($_GET['fecha_vencimiento'])) {
-          if($_GET['fecha_recepcion'] > $_GET['fecha_tope']) {
-            ?>
-              <script>
-                $('#errorModalCenter1').modal('show');
-              </script>
-            <?php
-          }
+        $fecha_documento = new DateTime($_GET['fecha_documento']);
+        $fecha_recepcion = new DateTime($_GET['fecha_recepcion']);
+        $fecha_vencimiento = new DateTime($_GET['fecha_vencimiento']);
+        $fecha_tope = new DateTime($_GET['fecha_tope']);
 
-          if($_GET['fecha_recepcion'] < $_GET['fecha_documento']) {
-            ?>
-              <script>
-                $('#errorModalCenter4').modal('show');
-              </script>
-            <?php
-          }
+        $diferencia1 = $fecha_recepcion->diff($fecha_tope);
+        $diferencia1_numero = (int)$diferencia1->format('%R%a');
+
+        $diferencia2 = $fecha_vencimiento->diff($fecha_tope);
+        $diferencia2_numero = (int)$diferencia2->format('%R%a');
+
+        $diferencia3 = $fecha_recepcion->diff($fecha_vencimiento);
+        $diferencia3_numero = (int)$diferencia3->format('%R%a');
+
+        $diferencia4 = $fecha_documento->diff($fecha_recepcion);
+        $diferencia4_numero = (int)$diferencia4->format('%R%a');
+
+        if(($diferencia1_numero > 0) 
+          && ($diferencia2_numero <= 0) 
+          && ($diferencia3_numero > 0) 
+          && ($diferencia4_numero >= 0)) {
+          ?> 
+          <script>
+            $('#exampleModalCenter').modal('show');
+          </script> 
+        <?php
+          GuardarCartaDeCompromiso($_GET['proveedor'],$_GET['articulo'],$_GET['lote'],$_GET['fecha_documento'],$_GET['fecha_recepcion'],$_GET['fecha_vencimiento'],$_GET['fecha_tope'],$_GET['causa'],$_GET['nota']);
+
+          $sql = QListaProveedores();
+          $ArtJson = armarJson($sql,$_GET['SEDE']);
+
+          echo '
+          <form autocomplete="off" action="">
+            <div class="autocomplete" style="width:90%;">
+              <input id="myInput" type="text" name="Nombre" placeholder="Ingrese el nombre del proveedor " onkeyup="conteo()" required>
+              <input id="myId" name="Id" type="hidden">
+              <td>
+              <input id="SEDE" name="SEDE" type="hidden" value="';
+              print_r($_GET['SEDE']);
+              echo'">
+              </td>
+            </div>
+            <input type="submit" value="Buscar" class="btn btn-outline-success">
+          </form>
+          ';
         }
         else {
-          if($_GET['fecha_recepcion'] > $_GET['fecha_tope']) {
+          if($diferencia1_numero <= 0) {
             ?>
               <script>
                 $('#errorModalCenter1').modal('show');
@@ -222,7 +227,7 @@
             <?php
           }
 
-          if($_GET['fecha_vencimiento'] > $_GET['fecha_tope']) {
+          if($diferencia2_numero > 0) {
             ?>
               <script>
                 $('#errorModalCenter2').modal('show');
@@ -230,7 +235,7 @@
             <?php
           }
 
-          if($_GET['fecha_recepcion'] < $_GET['fecha_vencimiento']) {
+          if($diferencia3_numero <= 0) {
             ?>
               <script>
                 $('#errorModalCenter3').modal('show');
@@ -238,16 +243,16 @@
             <?php
           }
 
-          if($_GET['fecha_recepcion'] < $_GET['fecha_documento']) {
+          if($diferencia4_numero < 0) {
             ?>
               <script>
                 $('#errorModalCenter4').modal('show');
               </script>
             <?php
           }
-        }
 
-        CartaDeCompromiso($_GET['SEDE'],$_GET['IdProv'],$_GET['proveedor'],$_GET['IdFact'],$_GET['IdArt']);
+          CartaDeCompromiso($_GET['SEDE'],$_GET['IdProv'],$_GET['proveedor'],$_GET['IdFact'],$_GET['IdArt']);
+        }
       }
 
       $FinCarga = new DateTime("now");
