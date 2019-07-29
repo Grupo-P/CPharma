@@ -1207,14 +1207,13 @@
 		InvArticulo.Id AS IdArticulo,
 		InvArticulo.CodigoArticulo AS CodigoInterno,
 		InvArticulo.Descripcion,
-		InvLoteAlmacen.InvLoteId AS IdLote,
-		InvLoteAlmacen.InvAlmacenId AS IdAlmacen,
-		InvLoteAlmacen.Existencia
+		SUM(InvLoteAlmacen.Existencia) AS Existencia
 		FROM InvArticulo
 		INNER JOIN InvLoteAlmacen ON InvArticulo.Id=InvLoteAlmacen.InvArticuloId
 		WHERE InvLoteAlmacen.Existencia > 0
 		AND (InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
-		ORDER BY InvLoteAlmacen.InvAlmacenId, InvLoteAlmacen.Existencia ASC
+		GROUP BY InvArticulo.Id, InvArticulo.CodigoArticulo, InvArticulo.Descripcion
+		ORDER BY InvArticulo.Id, Existencia ASC
 		";
 		return $sql;
 	}
