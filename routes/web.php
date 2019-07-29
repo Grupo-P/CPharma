@@ -100,3 +100,5 @@ Route::resource('proveedor', 'ProveedorController');
 Route::resource('usuario', 'UserController');
 
 Route::resource('tasaVenta','TasaVentaController');
+
+Route::resource('cartaCompromiso', 'CartaCompromisoController');
