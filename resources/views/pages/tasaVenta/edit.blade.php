@@ -58,7 +58,7 @@
           <tbody>
               <tr>
                   <th scope="row">{!! Form::label('tasa', 'Tasa') !!}</th>
-                  <td>{!! Form::number('tasa', null, [ 'class' => 'form-control', 'placeholder' => 'xx.xx', 'step' => '0.01', 'min' => '4500', 'max' => '10000', 'autofocus', 'required']) !!}</td>
+                  <td>{!! Form::number('tasa', null, [ 'class' => 'form-control', 'placeholder' => 'xx.xx', 'step' => '0.01', 'min' => '8000', 'max' => '20000', 'autofocus', 'required']) !!}</td>
               </tr>
               <tr>
                 <th>Moneda</th>

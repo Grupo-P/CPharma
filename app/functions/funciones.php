@@ -585,4 +585,43 @@
 		$CantidadPedido = (($VentaDiaria * $DiasPedido)-$Existencia);
 		return $CantidadPedido;
 	}
+
+	/*
+		TITULO: GuardarCartaCompromiso
+		PARAMETROS: [$SedeConnection] sede donde se hara la conexion
+					[$IdProveedor] ID del proveedor a buscar
+					[$NombreProveedor] Nombre del proveedor a buscar
+					[$IdFatura] id de la factura
+					[$IdArticulo] ide del articulo
+		FUNCION: arma la lista del troquel segun el articulo
+		RETORNO: no aplica
+	 */
+	function GuardarCartaDeCompromiso($proveedor,$articulo,$lote,$fecha_documento,$fecha_recepcion,$fecha_vencimiento,$fecha_tope,$causa,$nota) {
+		$user = auth()->user()->name;
+		$date = date('Y-m-d h:m:s',time());
+		$conn = ConectarXampp();
+		$sql = QGuardarCartaDeCompromiso($proveedor,$articulo,$lote,$fecha_documento,$fecha_recepcion,$fecha_vencimiento,$fecha_tope,$causa,$nota,$user,$date);
+		$result = mysqli_query($conn,$sql);
+		mysqli_close($conn);
+	}
+
+	/*
+		TITULO: ValidarFechas
+		PARAMETROS: [$Fecha1] Fecha que se restaras
+					[$Fecha2] Fecha a la que se le restara
+		FUNCION: Calcula la diferencia entre ambas fechas restando la primera a la segunda
+		RETORNO: 
+			- Un numero positivo en caso de que la segunda fecha sea mayor
+			- Un numero negativo en caso de que la segunda fecha sea menor
+			- Cero en caso de que ambas fechas sean iguales
+	 */
+	function ValidarFechas($Fecha1,$Fecha2) {
+		$fecha_inicial = new DateTime($Fecha1);
+        $fecha_final = new DateTime($Fecha2);
+
+		$diferencia = $fecha_inicial->diff($fecha_final);
+		$diferencia_numero = (int)$diferencia->format('%R%a');
+
+		return $diferencia_numero;
+	}
 ?>

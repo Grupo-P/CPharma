@@ -51,6 +51,13 @@
       </thead>
       <tbody>
         <tr>
+          <th>Proveedor</th>
+          <td>
+            <input id="proveedor" type="text" name="proveedor" value="{{$cartaCompromiso->proveedor}}" class="form-control" disabled>
+          </td>
+        </tr>
+
+        <tr>
           <th>Art&iacute;culo</th>
           <td>
             <input id="articulo" type="text" name="articulo" value="{{$cartaCompromiso->articulo}}" class="form-control" disabled>
@@ -65,23 +72,23 @@
         </tr>
 
         <tr>
-          <th>Fecha de vencimiento</th>
+          <th>Fecha de recepci&oacute;n (Art&iacute;culo)</th>
+          <td>
+            <input id="fecha_recepcion" type="date" name="fecha_recepcion" value="{{$cartaCompromiso->fecha_recepcion}}" class="form-control" disabled>
+          </td>
+        </tr>
+
+        <tr>
+          <th>Fecha de vencimiento (Art&iacute;culo)</th>
           <td>
             <input id="fecha_vencimiento" type="date" name="fecha_vencimiento" value="{{$cartaCompromiso->fecha_vencimiento}}" class="form-control" disabled>
           </td>
         </tr>
 
         <tr>
-          <th>Proveedor</th>
+          <th>Fecha tope (Carta compromiso)</th>
           <td>
-            <input id="proveedor" type="text" name="proveedor" value="{{$cartaCompromiso->proveedor}}" class="form-control" disabled>
-          </td>
-        </tr>
-
-        <tr>
-          <th>Fecha de recepci&oacute;n</th>
-          <td>
-            <input id="fecha_recepcion" type="date" name="fecha_recepcion" value="{{$cartaCompromiso->fecha_recepcion}}" class="form-control" disabled>
+            <input id="fecha_tope" type="date" name="fecha_tope" value="{{$cartaCompromiso->fecha_tope}}" class="form-control" disabled>
           </td>
         </tr>
 
@@ -90,7 +97,7 @@
             Causa
           </th>
           <td>
-            <textarea name="causa" id="causa" class="form-control" rows="4" placeholder="Causa del compromiso" maxlength="450">
+            <textarea name="causa" id="causa" class="form-control" rows="3" placeholder="Causa del compromiso" maxlength="450">
               {{$cartaCompromiso->causa}}
             </textarea>
           </td>
@@ -101,16 +108,9 @@
             Nota
           </th>
           <td>
-            <textarea name="nota" id="nota" class="form-control" rows="4" placeholder="Nota del compromiso" maxlength="450">
+            <textarea name="nota" id="nota" class="form-control" rows="3" placeholder="Nota del compromiso" maxlength="450">
               {{$cartaCompromiso->nota}}
             </textarea>
-          </td>
-        </tr>
-
-        <tr>
-          <th>Fecha tope</th>
-          <td>
-            <input id="fecha_tope" type="date" name="fecha_tope" value="{{$cartaCompromiso->fecha_tope}}" class="form-control" disabled>
           </td>
         </tr>
       </tbody>

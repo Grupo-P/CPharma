@@ -1587,4 +1587,156 @@
 		sqlsrv_close($conn);
 	}
 
+	/*****************************************************************************/
+	/************************ REPORTE CARTA DE COMPROMISO *******************/
+
+	/*
+		TITULO: GuardarCartaCompromiso
+		PARAMETROS: [$SedeConnection] sede donde se hara la conexion
+					[$IdProveedor] ID del proveedor a buscar
+					[$NombreProveedor] Nombre del proveedor a buscar
+					[$IdFatura] id de la factura
+					[$IdArticulo] ide del articulo
+		FUNCION: arma la lista del troquel segun el articulo
+		RETORNO: no aplica
+	 */
+	function CartaDeCompromiso($SedeConnection,$IdProveedor,$NombreProveedor,$IdFatura,$IdArticulo) {
+		$conn = ConectarSmartpharma($SedeConnection);
+
+		$sql = QCartaDeCompromiso($IdProveedor,$IdFatura,$IdArticulo);
+		$result = sqlsrv_query($conn,$sql);
+		$row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC);
+
+		$NumeroFactura = $row["NumeroFactura"];
+		$CodigoArticulo = $row["CodigoArticulo"];
+		$Articulo=$row["Descripcion"];
+		$FechaDocumento=$row["FechaDocumento"];
+		$Lote=$row["InvLoteId"];
+
+		echo '
+		<div class="input-group md-form form-sm form-1 pl-0">
+			<div class="input-group-prepend">
+		    	<span class="input-group-text purple lighten-3" id="basic-text1">
+					<i class="fas fa-search text-white" aria-hidden="true"></i>
+		    	</span>
+		  	</div>
+
+		  	<input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterAllTable()">
+		</div><br/>';
+
+		echo '
+		<form autocomplete="off" action="">
+		<table class="table table-striped table-bordered col-12 sortable">
+			<thead class="thead-dark">
+			    <tr>
+			    	<th scope="col">Numero de Factura</th>
+			    	<th scope="col">Proveedor</th>
+			    	<th scope="col">Lote</th>
+			    </tr>
+		  	</thead>
+
+		  	<tbody>
+		  		<tr>
+		  			<td>'.$NumeroFactura.'</td>
+					<td>'.$NombreProveedor.'</td>
+					<td>
+						<select name="lote" id="lote" style="width:100%;">
+							<option value="'.$Lote.'">'
+								.$Lote.
+							'</option>';
+
+				while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
+					$Lote=$row["InvLoteId"];
+					echo '<option value="'.$Lote.'">'
+							.$Lote.
+						'</option>';
+				}
+			  	   echo '</select>
+			  		</td>
+				</tr>
+	  		</tbody>
+		</table>';
+
+		echo'
+		<table class="table table-striped table-bordered col-12 sortable" id="myTable">
+		  	<thead class="thead-dark">
+			    <tr>
+			    	<th scope="col">Codigo</th>
+			    	<th scope="col">Descripcion</th>
+			    </tr>
+		  	</thead>
+
+		  	<tbody>
+				<tr> 
+					<td align="center">'.$CodigoArticulo.'</td>
+					<td align="center">'.$Articulo.'</td>
+			 	</tr>
+	  		</tbody>
+		</table>';
+
+		echo '
+		<table class="table table-striped table-bordered col-12 sortable" id="myTable">
+		  	<thead class="thead-dark">
+			    <tr>
+			    	<th scope="col">Fecha de documento</th>
+			    	<th scope="col">Fecha de recepcion (Articulo)</th>
+			    	<th scope="col">Fecha de vencimiento (Articulo)</th>
+			    	<th scope="col">Fecha tope (Carta compromiso)</th>
+			    </tr>
+		  	</thead>
+
+		  	<tbody>
+				<tr>
+					<td align="center">
+						<input id="fecha_documento" name="fecha_documento" type="date" autofocus>
+					</td>
+					<td align="center">
+						<input id="fecha_recepcion" name="fecha_recepcion" type="date">
+					</td>
+					<td align="center">
+						<input id="fecha_vencimiento" name="fecha_vencimiento" type="date">
+					</td>
+					<td align="center">
+						<input id="fecha_tope" name="fecha_tope" type="date">
+					</td>
+			 	</tr>
+	  		</tbody>
+		</table>';
+
+		echo '
+			<table class="table table-striped table-bordered col-12 sortable">
+				<thead class="thead-dark">
+				    <tr>
+				    	<th scope="col">Causa</th>
+				    	<th scope="col">Nota</th>
+				    </tr>
+			  	</thead>
+		  	
+			  	<tbody>
+			  		<tr>
+						<td>
+							<textarea name="causa" id="causa" class="form-control" rows="4"></textarea>
+						</td>
+
+	  					<td>
+	  						<textarea name="nota" id="nota" class="form-control" rows="4"></textarea>
+	  					</td>
+	  				</tr>
+	  			</tbody>
+			</table>
+
+			<div class="text-center">
+				<input id="articulo" name="articulo" type="hidden" value="'.$Articulo.'">
+				<input id="proveedor" name="proveedor" type="hidden" value="'.$NombreProveedor.'">
+				<input id="SEDE" name="SEDE" type="hidden" value="'.$SedeConnection.'">
+				<input id="IdProv" name="IdProv" type="hidden" value="'.$IdProveedor.'">
+				<input id="IdFact" name="IdFact" type="hidden" value="'.$IdFatura.'">
+				<input id="IdArt" name="IdArt" type="hidden" value="'.$IdArticulo.'">
+				<input type="submit" value="Guardar" class="btn btn-outline-success">
+			</div>
+		</form>';
+
+		sqlsrv_close($conn);
+	}
+	
 ?>

@@ -112,12 +112,11 @@
 	  	<thead class="thead-dark">
 		    <tr>
 		      	<th scope="col">#</th>
+		      	<th scope="col">Proveedor</th>
 		      	<th scope="col">Art&iacute;culo</th>
 		      	<th scope="col">Lote</th>
-		      	<th scope="col">Fecha de vencimiento</th>
-		      	<th scope="col">Proveedor</th>
-		      	<th scope="col">Fecha de recepci&oacute;n</th>
-		      	<th scope="col">Fecha tope</th>
+		      	<th scope="col">Fecha de vencimiento (Art&iacute;culo)</th>
+		      	<th scope="col">Fecha tope (Carta compromiso)</th>
 		      	<th scope="col">Estatus</th>
 		      	<th scope="col">Acciones</th>
 		    </tr>
@@ -126,11 +125,10 @@
 		@foreach($cartaCompromiso as $cartaC)
 		    <tr>
 		      <th>{{$cartaC->id}}</th>
+		      <td>{{$cartaC->proveedor}}</td>
 		      <td>{{$cartaC->articulo}}</td>
 		      <td>{{$cartaC->lote}}</td>
 		      <td>{{date('d-m-Y',strtotime($cartaC->fecha_vencimiento))}}</td>
-		      <td>{{$cartaC->proveedor}}</td>
-		      <td>{{date('d-m-Y',strtotime($cartaC->fecha_recepcion))}}</td>
 		      <td>{{date('d-m-Y',strtotime($cartaC->fecha_tope))}}</td>
 		      <td>
 		      	<?php
