@@ -36,7 +36,7 @@ class DepartamentoController extends Controller
      */
     public function create()
     {
-        //
+        return view('pages.departamento.create');
     }
 
     /**
@@ -47,7 +47,18 @@ class DepartamentoController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try{
+            $departamentos = new Departamento();
+            $departamentos->nombre = $request->input('nombre');
+            $departamentos->descripcion = $request->input('descripcion');            
+            $departamentos->user = auth()->user()->name;
+            $departamentos->estatus = 'ACTIVO';
+            $departamentos->save();
+            return redirect()->route('departamento.index')->with('Saved', ' Informacion');
+        }
+        catch(\Illuminate\Database\QueryException $e){
+            return back()->with('Error', ' Error');
+        }
     }
 
     /**
