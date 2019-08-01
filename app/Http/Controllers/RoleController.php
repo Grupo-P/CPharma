@@ -3,9 +3,20 @@
 namespace compras\Http\Controllers;
 
 use Illuminate\Http\Request;
+use compras\Role;
 
 class RoleController extends Controller
 {
+    /**
+     * Create a new controller instance with auth.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -13,7 +24,8 @@ class RoleController extends Controller
      */
     public function index()
     {
-        //
+        $roles =  Role::all();
+        return view('pages.role.index', compact('roles'));
     }
 
     /**
