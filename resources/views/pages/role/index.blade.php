@@ -1,7 +1,7 @@
 @extends('layouts.model')
 
 @section('title')
-    Role
+    Roles
 @endsection
 
 @section('scriptsHead')
@@ -81,14 +81,15 @@
 
 	<h1 class="h5 text-info">
 		<i class="fas fa-user-circle"></i>
-		Rol
+		Roles
 	</h1>
 
 	<hr class="row align-items-start col-12">
 	<table style="width:100%;">
 	    <tr>
 	        <td style="width:10%;" align="center">
-				<a href="{{ url('/rol/create') }}" role="button" class="btn btn-outline-info btn-sm" 
+	        	<!--{{ url('/rol/create') }}-->
+				<a href="" role="button" class="btn btn-outline-info btn-sm" 
 				style="display: inline; text-align: left;">
 				<i class="fa fa-plus"></i>
 					Agregar		      		
@@ -112,22 +113,18 @@
 		    <tr>
 		      	<th scope="col">#</th>
 		      	<th scope="col">Nombre</th>
-		      	<th scope="col">RIF</th>
-		      	<th scope="col">Teléfono</th>
-		      	{{-- <th scope="col">Dirección</th> --}}
+		      	<th scope="col">Descripcion</th>
 		      	<th scope="col">Estatus</th>
 		      	<th scope="col">Acciones</th>
 		    </tr>
 	  	</thead>
 	  	<tbody>
-		@foreach($empresas as $empresa)
+		@foreach($roles as $rol)
 		    <tr>
-		      <th>{{$empresa->id}}</th>
-		      <td>{{$empresa->nombre}}</td>
-		      <td>{{$empresa->rif}}</td>
-		      <td>{{$empresa->telefono}}</td>
-		      {{-- <td>{{$empresa->direccion}}</td> --}}
-		      <td>{{$empresa->estatus}}</td>
+		      <th>{{$rol->id}}</th>
+		      <td>{{$rol->nombre}}</td>
+		      <td>{{$rol->descripcion}}</td>
+		      <td>{{$rol->estatus}}</td>
 		      
 		    <!-- Inicio Validacion de ROLES -->
 		      <td style="width:140px;">
@@ -137,26 +134,26 @@
 				?>
 
 					<?php
-					if($empresa->estatus == 'ACTIVO'){
+					if($rol->estatus == 'ACTIVO'){
 					?>
-						<a href="/empresa/{{$empresa->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
+						<a href="/rol/{{$rol->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
 			      			<i class="far fa-eye"></i>			      		
 			      		</a>
 
-			      		<a href="/empresa/{{$empresa->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
+			      		<a href="/rol/{{$rol->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
 			      			<i class="fas fa-edit"></i>			      		
 				      	</a>
 				 					  
-				      	<form action="/empresa/{{$empresa->id}}" method="POST" style="display: inline;">
+				      	<form action="/rol/{{$rol->id}}" method="POST" style="display: inline;">
 						    @method('DELETE')
 						    @csrf					    
 						    <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Desincorporar"><i class="fa fa-reply"></i></button>
 						</form>
 					<?php
 					}
-					else if($empresa->estatus == 'INACTIVO'){
+					else if($rol->estatus == 'INACTIVO'){
 					?>		
-			      	<form action="/empresa/{{$empresa->id}}" method="POST" style="display: inline;">
+			      	<form action="/rol/{{$rol->id}}" method="POST" style="display: inline;">
 					    @method('DELETE')
 					    @csrf					    
 					    <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Reincorporar"><i class="fa fa-share"></i></button>
@@ -167,17 +164,17 @@
 				<?php	
 				} else if(Auth::user()->role == 'SUPERVISOR' || Auth::user()->role == 'ADMINISTRADOR' || Auth::user()->role == 'SUPERVISOR CAJA'){ 
 				?>
-					<a href="/empresa/{{$empresa->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
+					<a href="/rol/{{$rol->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
 		      			<i class="far fa-eye"></i>			      		
 		      		</a>
 
-		      		<a href="/empresa/{{$empresa->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
+		      		<a href="/rol/{{$rol->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
 		      			<i class="fas fa-edit"></i>
 	      			</a>
 				<?php
 				} else if(Auth::user()->role == 'USUARIO'){
 				?>
-					<a href="/empresa/{{$empresa->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
+					<a href="/rol/{{$rol->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
 		      			<i class="far fa-eye"></i>			      		
 		      		</a>		
 				<?php

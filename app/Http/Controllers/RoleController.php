@@ -35,7 +35,7 @@ class RoleController extends Controller
      */
     public function create()
     {
-        //
+        return view('pages.empresa.create');
     }
 
     /**
