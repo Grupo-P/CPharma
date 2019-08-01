@@ -85,7 +85,8 @@ class RoleController extends Controller
      */
     public function edit($id)
     {
-        //
+        $rol = Role::find($id);
+        return view('pages.role.edit', compact('rol'));
     }
 
     /**
@@ -97,7 +98,17 @@ class RoleController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        try{
+            $rol = Role::find($id);
+            $rol->fill($request->all());
+            $rol->user = auth()->user()->name;
+            $rol->estatus = 'ACTIVO';
+            $rol->save();
+            return redirect()->route('rol.index')->with('Updated', ' Informacion');
+        }
+        catch(\Illuminate\Database\QueryException $e){
+            return back()->with('Error', ' Error');
+        }
     }
 
     /**
@@ -108,6 +119,17 @@ class RoleController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $rol = Role::find($id);
+
+         if($rol->estatus == 'ACTIVO'){
+            $rol->estatus = 'INACTIVO';
+         }
+         else if($rol->estatus == 'INACTIVO'){
+            $rol->estatus = 'ACTIVO';
+         }
+
+         $rol->user = auth()->user()->name;      
+         $rol->save();
+         return redirect()->route('rol.index')->with('Deleted', ' Informacion');
     }
 }

@@ -26,9 +26,10 @@
           </div>
         </div>
     @endif
+
     <h1 class="h5 text-info">
-        <i class="fas fa-plus"></i>
-        Agregar rol
+        <i class="fas fa-edit"></i>
+        Modificar rol
     </h1>
 
     <hr class="row align-items-start col-12">
@@ -41,9 +42,8 @@
     <br>
     <br>
 
-    {!! Form::open(['route' => 'rol.store', 'method' => 'POST']) !!}
+    {!! Form::model($rol, ['route' => ['rol.update', $rol], 'method' => 'PUT']) !!}
     <fieldset>
-
         <table class="table table-borderless table-striped">
         <thead class="thead-dark">
             <tr>
@@ -105,6 +105,7 @@
         {!! Form::submit('Guardar', ['class' => 'btn btn-outline-success btn-md']) !!}
     </fieldset>
     {!! Form::close()!!} 
+
     <script>
         $(document).ready(function(){
             $('[data-toggle="tooltip"]').tooltip();   
