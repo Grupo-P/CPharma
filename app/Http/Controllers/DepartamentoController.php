@@ -69,7 +69,8 @@ class DepartamentoController extends Controller
      */
     public function show($id)
     {
-        //
+        $departamentos = Departamento::find($id);    
+        return view('pages.departamento.show', compact('departamentos'));
     }
 
     /**
@@ -80,7 +81,8 @@ class DepartamentoController extends Controller
      */
     public function edit($id)
     {
-        //
+        $departamentos = Departamento::find($id);    
+        return view('pages.departamento.edit', compact('departamentos'));
     }
 
     /**
@@ -92,7 +94,17 @@ class DepartamentoController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        try{
+            $departamentos = Departamento::find($id);
+            $departamentos->fill($request->all());
+            $departamentos->user = auth()->user()->name;
+            $departamentos->estatus = 'ACTIVO';
+            $departamentos->save();
+            return redirect()->route('departamento.index')->with('Updated', ' Informacion');
+        }
+        catch(\Illuminate\Database\QueryException $e){
+            return back()->with('Error', ' Error');
+        }
     }
 
     /**
@@ -103,6 +115,17 @@ class DepartamentoController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $departamentos = Departamento::find($id);
+
+         if($departamentos->estatus == 'ACTIVO'){
+            $departamentos->estatus = 'INACTIVO';
+         }
+         else if($departamentos->estatus == 'INACTIVO'){
+            $departamentos->estatus = 'ACTIVO';
+         }
+
+         $departamentos->user = auth()->user()->name;      
+         $departamentos->save();
+         return redirect()->route('departamento.index')->with('Deleted', ' Informacion');
     }
 }
