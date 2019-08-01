@@ -1,7 +1,7 @@
 @extends('layouts.model')
 
 @section('title')
-    Roles
+    Rol
 @endsection
 
 @section('scriptsHead')
@@ -87,9 +87,8 @@
 	<hr class="row align-items-start col-12">
 	<table style="width:100%;">
 	    <tr>
-	        <td style="width:10%;" align="center">
-	        	<!--{{ url('/rol/create') }}-->
-				<a href="" role="button" class="btn btn-outline-info btn-sm" 
+	        <td style="width:10%;" align="center">	        	
+				<a href="{{ url('/rol/create') }}" role="button" class="btn btn-outline-info btn-sm" 
 				style="display: inline; text-align: left;">
 				<i class="fa fa-plus"></i>
 					Agregar		      		
@@ -113,7 +112,10 @@
 		    <tr>
 		      	<th scope="col">#</th>
 		      	<th scope="col">Nombre</th>
-		      	<th scope="col">Descripcion</th>
+		      	<th scope="col">¿Lee?</th>
+		      	<th scope="col">¿Agrega?</th>
+		      	<th scope="col">¿Modifica?</th>
+		      	<th scope="col">¿Elimina?</th>
 		      	<th scope="col">Estatus</th>
 		      	<th scope="col">Acciones</th>
 		    </tr>
@@ -123,7 +125,10 @@
 		    <tr>
 		      <th>{{$rol->id}}</th>
 		      <td>{{$rol->nombre}}</td>
-		      <td>{{$rol->descripcion}}</td>
+		      <td>{{$rol->read}}</td>
+		      <td>{{$rol->create}}</td>
+		      <td>{{$rol->update}}</td>
+		      <td>{{$rol->delete}}</td>
 		      <td>{{$rol->estatus}}</td>
 		      
 		    <!-- Inicio Validacion de ROLES -->

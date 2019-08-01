@@ -1,7 +1,7 @@
 @extends('layouts.model')
 
 @section('title')
-    Empresa
+    Rol
 @endsection
 
 @section('content')
@@ -17,7 +17,7 @@
                 </button>
               </div>
               <div class="modal-body">
-                <h4 class="h6">La empresa no fue almacenada, el RIF ya esta registrado</h4>
+                <h4 class="h6">El rol no pudo ser almaceno</h4>
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-outline-success" data-dismiss="modal">Aceptar</button>
@@ -28,12 +28,12 @@
     @endif
     <h1 class="h5 text-info">
         <i class="fas fa-plus"></i>
-        Agregar empresa
+        Agregar rol
     </h1>
 
     <hr class="row align-items-start col-12">
 
-    <form action="/empresa/" method="POST" style="display: inline;">  
+    <form action="/rol/" method="POST" style="display: inline;">  
         @csrf                       
         <button type="submit" name="Regresar" role="button" class="btn btn-outline-info btn-sm"data-placement="top"><i class="fa fa-reply">&nbsp;Regresar</i></button>
     </form>
@@ -41,7 +41,7 @@
     <br>
     <br>
 
-    {!! Form::open(['route' => 'empresa.store', 'method' => 'POST']) !!}
+    {!! Form::open(['route' => 'rol.store', 'method' => 'POST']) !!}
     <fieldset>
 
         <table class="table table-borderless table-striped">
@@ -54,23 +54,51 @@
         <tbody>
             <tr>
                 <th scope="row">{!! Form::label('nombre', 'Nombre') !!}</th>
-                <td>{!! Form::text('nombre', null, [ 'class' => 'form-control', 'placeholder' => 'Farmacia Tierra Negra C.A.', 'autofocus', 'required']) !!}</td>
+                <td>{!! Form::text('nombre', null, [ 'class' => 'form-control', 'placeholder' => 'USUARIO', 'autofocus', 'required']) !!}</td>
             </tr>
             <tr>
-                <th scope="row">{!! Form::label('rif', 'RIF') !!}</th>
-                <td>{!! Form::text('rif', null, [ 'class' => 'form-control', 'placeholder' => 'J-400145717' , 'required', 'pattern' => '^[A-Za-z]-\d{9}$']) !!}</td>
+                <th scope="row">{!! Form::label('descripcion', 'Descripcion') !!}</th>
+                <td>{!! Form::textarea('descripcion', null, [ 'class' => 'form-control', 'placeholder' => 'Detalles importantes del rol', 'rows' => '2', 'required']) !!}</td>
             </tr>
             <tr>
-                <th scope="row">{!! Form::label('telefono', 'Telefono') !!}</th>
-                <td>{!! Form::text('telefono', null, [ 'class' => 'form-control', 'placeholder' => '0261-9876543,0212-1234567', 'required', 'pattern' => '[0-9_,-]*']) !!}</td>
+                <th scope="row">{!! Form::label('read', '¿Lee Informacion?') !!}</th>
+                <td>
+                    <select name="read" class="form-control" required="required">
+                        <option selected="selected">Seleccione...</option>
+                        <option>SI</option>
+                        <option>NO</option>                        
+                    </select>
+                </td>
             </tr>
             <tr>
-                <th scope="row">{!! Form::label('direccion', 'Direccion') !!}</th>
-                <td>{!! Form::textarea('direccion', null, [ 'class' => 'form-control', 'placeholder' => 'Calle 72 esquina av. 14A, local nro. 13a-99 sector tierra negra Maracaibo Zulia zona postal 4002', 'rows' => '2', 'required']) !!}</td>
+                <th scope="row">{!! Form::label('create', '¿Agrega Informacion?') !!}</th>
+                <td>
+                    <select name="create" class="form-control" required="required">
+                        <option selected="selected">Seleccione...</option>
+                        <option>SI</option>
+                        <option>NO</option>                        
+                    </select>
+                </td>
             </tr>
             <tr>
-                <th scope="row">{!! Form::label('observacion', 'Observaciones') !!}</th>
-                <td>{!! Form::textarea('observacion', null, [ 'class' => 'form-control', 'placeholder' => 'Detalles importantes de la empresa', 'rows' => '3']) !!}</td>
+                <th scope="row">{!! Form::label('update', '¿Modifica Informacion?') !!}</th>
+                <td>
+                    <select name="update" class="form-control" required="required">
+                        <option selected="selected">Seleccione...</option>
+                        <option>SI</option>
+                        <option>NO</option>                        
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">{!! Form::label('delete', '¿Elimina Informacion?') !!}</th>
+                <td>
+                    <select name="delete" class="form-control" required="required">
+                        <option selected="selected">Seleccione...</option>
+                        <option>SI</option>
+                        <option>NO</option>                        
+                    </select>
+                </td>
             </tr>
         </tbody>
         </table>

@@ -4,6 +4,7 @@ namespace compras\Http\Controllers;
 
 use Illuminate\Http\Request;
 use compras\Role;
+use compras\User;
 
 class RoleController extends Controller
 {
@@ -35,7 +36,7 @@ class RoleController extends Controller
      */
     public function create()
     {
-        return view('pages.empresa.create');
+        return view('pages.role.create');
     }
 
     /**
@@ -46,7 +47,22 @@ class RoleController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try{
+            $rol = new Role();
+            $rol->nombre = $request->input('nombre');
+            $rol->descripcion = $request->input('descripcion');
+            $rol->create = $request->input('create');
+            $rol->read = $request->input('read');
+            $rol->update = $request->input('update');
+            $rol->delete = $request->input('delete');
+            $rol->user = auth()->user()->name;
+            $rol->estatus = 'ACTIVO';
+            $rol->save();
+            return redirect()->route('rol.index')->with('Saved', ' Informacion');
+        }
+        catch(\Illuminate\Database\QueryException $e){
+            return back()->with('Error', ' Error');
+        }
     }
 
     /**
@@ -57,7 +73,8 @@ class RoleController extends Controller
      */
     public function show($id)
     {
-        //
+        $rol = Role::find($id);        
+        return view('pages.role.show', compact('rol'));
     }
 
     /**
