@@ -177,7 +177,7 @@
     </li>
 
     <li class="nav-item">
-      <a class="nav-link" href="{{ url('/rol') }}">
+      <a class="nav-link" href="{{ url('/departamento') }}">
       <!-- <a class="nav-link" href="{{ url('/testS') }}"> -->
         <span data-feather="home"></span>
         <i class="fas fa-box"></i>

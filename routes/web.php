@@ -104,3 +104,5 @@ Route::resource('tasaVenta','TasaVentaController');
 Route::resource('cartaCompromiso', 'CartaCompromisoController');
 
 Route::resource('rol', 'RoleController');
+
+Route::resource('departamento', 'DepartamentoController');

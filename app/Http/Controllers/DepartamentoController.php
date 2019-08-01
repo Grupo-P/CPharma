@@ -3,9 +3,21 @@
 namespace compras\Http\Controllers;
 
 use Illuminate\Http\Request;
+use compras\Departamento;
+use compras\User;
 
 class DepartamentoController extends Controller
 {
+    /**
+     * Create a new controller instance with auth.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -13,7 +25,8 @@ class DepartamentoController extends Controller
      */
     public function index()
     {
-        //
+        $departamentos =  Departamento::all();
+        return view('pages.departamento.index', compact('departamentos'));
     }
 
     /**
