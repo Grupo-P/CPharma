@@ -64,7 +64,7 @@
 </li>
 
 <li class="nav-item">
-  <a class="nav-link" href="{{ url('/sede') }}">
+  <a class="nav-link" href="{{ url('/sedes_reporte') }}">
     <span data-feather="home"></span>
     <i class="fas fa-file-invoice"></i>
     Reportes<span class="sr-only">(current)</span>
@@ -184,7 +184,7 @@
     </li>
 
     <li class="nav-item">
-      <a class="nav-link" href="{{ url('/sedes') }}">
+      <a class="nav-link" href="{{ url('/sede') }}">
       <!-- <a class="nav-link" href="{{ url('/testS') }}"> -->
         <span data-feather="home"></span>
         <i class="fas fa-box"></i>

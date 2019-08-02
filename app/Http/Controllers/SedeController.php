@@ -3,9 +3,21 @@
 namespace compras\Http\Controllers;
 
 use Illuminate\Http\Request;
+use compras\Sede;
+use compras\User;
 
 class SedeController extends Controller
 {
+    /**
+     * Create a new controller instance with auth.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -13,7 +25,8 @@ class SedeController extends Controller
      */
     public function index()
     {
-        //
+        $sedes =  Sede::all();
+        return view('pages.sede.index', compact('sedes'));
     }
 
     /**
@@ -23,7 +36,7 @@ class SedeController extends Controller
      */
     public function create()
     {
-        //
+        return view('pages.sede.create');
     }
 
     /**
@@ -34,7 +47,20 @@ class SedeController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try{
+            $sedes = new Sede();
+            $sedes->rif = $request->input('rif');
+            $sedes->razon_social = $request->input('razon_social');
+            $sedes->siglas = $request->input('siglas');   
+            $sedes->direccion = $request->input('direccion');       
+            $sedes->user = auth()->user()->name;
+            $sedes->estatus = 'ACTIVO';
+            $sedes->save();
+            return redirect()->route('sede.index')->with('Saved', ' Informacion');
+        }
+        catch(\Illuminate\Database\QueryException $e){
+            return back()->with('Error', ' Error');
+        }
     }
 
     /**

@@ -1,7 +1,7 @@
 @extends('layouts.model')
 
 @section('title')
-    Departamento
+    Sede
 @endsection
 
 @section('scriptsHead')
@@ -25,7 +25,7 @@
 		        </button>
 		      </div>
 		      <div class="modal-body">
-		        <h4 class="h6">Departamento almacenado con exito</h4>
+		        <h4 class="h6">Sede almacenada con exito</h4>
 		      </div>
 		      <div class="modal-footer">
 		        <button type="button" class="btn btn-outline-success" data-dismiss="modal">Aceptar</button>
@@ -47,7 +47,7 @@
 		        </button>
 		      </div>
 		      <div class="modal-body">
-		        <h4 class="h6">Departamento modificado con exito</h4>
+		        <h4 class="h6">Sede modificada con exito</h4>
 		      </div>
 		      <div class="modal-footer">
 		        <button type="button" class="btn btn-outline-success" data-dismiss="modal">Aceptar</button>
@@ -69,7 +69,7 @@
 		        </button>
 		      </div>
 		      <div class="modal-body">
-		        <h4 class="h6">Departamento actualizado con exito</h4>
+		        <h4 class="h6">Sede actualizada con exito</h4>
 		      </div>
 		      <div class="modal-footer">
 		        <button type="button" class="btn btn-outline-success" data-dismiss="modal">Aceptar</button>	
@@ -80,15 +80,15 @@
 	@endif
 
 	<h1 class="h5 text-info">
-		<i class="fab fa-buffer"></i>
-		Departamento
+		<i class="fas fa-store-alt"></i>
+		Sede
 	</h1>
 
 	<hr class="row align-items-start col-12">
 	<table style="width:100%;">
 	    <tr>
 	        <td style="width:10%;" align="center">	        	
-				<a href="{{ url('/departamento/create') }}" role="button" class="btn btn-outline-info btn-sm" 
+				<a href="{{ url('/sede/create') }}" role="button" class="btn btn-outline-info btn-sm" 
 				style="display: inline; text-align: left;">
 				<i class="fas fa-plus"></i>
 					Agregar		      		
@@ -111,19 +111,21 @@
 	  	<thead class="thead-dark">
 		    <tr>
 		      	<th scope="col">#</th>
-		      	<th scope="col">Nombre</th>
-		      	<th scope="col">Descripcion</th>		      	
+		      	<th scope="col">RIF</th>
+		      	<th scope="col">Siglas</th>	
+		      	<th scope="col">Razon Social</th>	      	
 		      	<th scope="col">Estatus</th>
 		      	<th scope="col">Acciones</th>
 		    </tr>
 	  	</thead>
 	  	<tbody>
-		@foreach($departamentos as $departamento)
+		@foreach($sedes as $sede)
 		    <tr>
-		      <th>{{$departamento->id}}</th>
-		      <td>{{$departamento->nombre}}</td>
-		      <td>{{$departamento->descripcion}}</td>
-		      <td>{{$departamento->estatus}}</td>
+		      <th>{{$sede->id}}</th>
+		      <td>{{$sede->rif}}</td>
+		      <td>{{$sede->siglas}}</td>
+		      <td>{{$sede->razon_social}}</td>
+		      <td>{{$sede->estatus}}</td>
 		      
 		    <!-- Inicio Validacion de ROLES -->
 		      <td style="width:140px;">
@@ -133,26 +135,26 @@
 				?>
 
 					<?php
-					if($departamento->estatus == 'ACTIVO'){
+					if($sede->estatus == 'ACTIVO'){
 					?>
-						<a href="/departamento/{{$departamento->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
+						<a href="/sede/{{$sede->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
 			      			<i class="far fa-eye"></i>			      		
 			      		</a>
 
-			      		<a href="/departamento/{{$departamento->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
+			      		<a href="/sede/{{$sede->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
 			      			<i class="fas fa-edit"></i>			      		
 				      	</a>
 				 					  
-				      	<form action="/departamento/{{$departamento->id}}" method="POST" style="display: inline;">
+				      	<form action="/sede/{{$sede->id}}" method="POST" style="display: inline;">
 						    @method('DELETE')
 						    @csrf					    
 						    <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Desincorporar"><i class="fa fa-reply"></i></button>
 						</form>
 					<?php
 					}
-					else if($departamento->estatus == 'INACTIVO'){
+					else if($sede->estatus == 'INACTIVO'){
 					?>		
-			      	<form action="/departamento/{{$departamento->id}}" method="POST" style="display: inline;">
+			      	<form action="/sede/{{$sede->id}}" method="POST" style="display: inline;">
 					    @method('DELETE')
 					    @csrf					    
 					    <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Reincorporar"><i class="fa fa-share"></i></button>
@@ -163,17 +165,17 @@
 				<?php	
 				} else if(Auth::user()->role == 'SUPERVISOR' || Auth::user()->role == 'ADMINISTRADOR' || Auth::user()->role == 'SUPERVISOR CAJA'){ 
 				?>
-					<a href="/departamento/{{$departamento->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
+					<a href="/sede/{{$sede->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
 		      			<i class="far fa-eye"></i>			      		
 		      		</a>
 
-		      		<a href="/departamento/{{$departamento->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
+		      		<a href="/sede/{{$sede->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
 		      			<i class="fas fa-edit"></i>
 	      			</a>
 				<?php
 				} else if(Auth::user()->role == 'USUARIO'){
 				?>
-					<a href="/departamento/{{$departamento->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
+					<a href="/sede/{{$sede->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
 		      			<i class="far fa-eye"></i>			      		
 		      		</a>		
 				<?php

@@ -41,7 +41,7 @@ Route::get('/testM', function() {
     return view('testM');
 });
 
-Route::get('/sede', function() {
+Route::get('/sedes_reporte', function() {
     return view('pages.sedes');
 });
 
@@ -107,4 +107,4 @@ Route::resource('rol', 'RoleController');
 
 Route::resource('departamento', 'DepartamentoController');
 
-Route::resource('sedes', 'SedeController');
+Route::resource('sede', 'SedeController');
