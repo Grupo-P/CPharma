@@ -26,14 +26,15 @@
           </div>
         </div>
     @endif
+
     <h1 class="h5 text-info">
-        <i class="fas fa-plus"></i>
-        Agregar sede
+        <i class="fas fa-edit"></i>
+        Modificar sede
     </h1>
 
     <hr class="row align-items-start col-12">
 
-    <form action="/sede/" method="POST" style="display: inline;">
+    <form action="/sede/" method="POST" style="display: inline;">  
         @csrf                       
         <button type="submit" name="Regresar" role="button" class="btn btn-outline-info btn-sm"data-placement="top"><i class="fa fa-reply">&nbsp;Regresar</i></button>
     </form>
@@ -41,9 +42,8 @@
     <br>
     <br>
 
-    {!! Form::open(['route' => 'sede.store', 'method' => 'POST']) !!}
+    {!! Form::model($sedes, ['route' => ['sede.update', $sedes], 'method' => 'PUT']) !!}
     <fieldset>
-
         <table class="table table-borderless table-striped">
         <thead class="thead-dark">
             <tr>
@@ -73,6 +73,7 @@
         {!! Form::submit('Guardar', ['class' => 'btn btn-outline-success btn-md']) !!}
     </fieldset>
     {!! Form::close()!!} 
+
     <script>
         $(document).ready(function(){
             $('[data-toggle="tooltip"]').tooltip();   

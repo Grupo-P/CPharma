@@ -71,7 +71,8 @@ class SedeController extends Controller
      */
     public function show($id)
     {
-        //
+        $sedes = Sede::find($id);  
+        return view('pages.sede.show', compact('sedes'));
     }
 
     /**
@@ -82,7 +83,8 @@ class SedeController extends Controller
      */
     public function edit($id)
     {
-        //
+        $sedes = Sede::find($id);    
+        return view('pages.sede.edit', compact('sedes'));
     }
 
     /**
@@ -94,7 +96,17 @@ class SedeController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        try{
+            $sedes = Sede::find($id);
+            $sedes->fill($request->all());
+            $sedes->user = auth()->user()->name;
+            $sedes->estatus = 'ACTIVO';
+            $sedes->save();
+            return redirect()->route('sede.index')->with('Updated', ' Informacion');
+        }
+        catch(\Illuminate\Database\QueryException $e){
+            return back()->with('Error', ' Error');
+        }
     }
 
     /**
@@ -105,6 +117,17 @@ class SedeController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $sedes = Sede::find($id);
+
+         if($sedes->estatus == 'ACTIVO'){
+            $sedes->estatus = 'INACTIVO';
+         }
+         else if($sedes->estatus == 'INACTIVO'){
+            $sedes->estatus = 'ACTIVO';
+         }
+
+         $sedes->user = auth()->user()->name;      
+         $sedes->save();
+         return redirect()->route('sede.index')->with('Deleted', ' Informacion');
     }
 }

@@ -185,6 +185,15 @@
 
     <li class="nav-item">
       <a class="nav-link" href="{{ url('/sede') }}">
+        <span data-feather="home"></span>
+        <i class="fas fa-store-alt"></i>
+        Sede<span class="sr-only">(current)</span>
+      </a>
+    </li>
+
+<!--Menus de pruebas para el desarrollo-->
+    <li class="nav-item">
+      <a class="nav-link" href="{{ url('/sede') }}">
       <!-- <a class="nav-link" href="{{ url('/testS') }}"> -->
         <span data-feather="home"></span>
         <i class="fas fa-box"></i>
