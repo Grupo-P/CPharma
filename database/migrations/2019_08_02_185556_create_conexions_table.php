@@ -15,6 +15,12 @@ class CreateConexionsTable extends Migration
     {
         Schema::create('conexions', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('instancia');
+            $table->string('base_datos');
+            $table->string('usuario');
+            $table->string('credencial');
+            $table->string('estatus');
+            $table->String('user');
             $table->timestamps();
         });
     }
