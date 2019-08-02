@@ -169,7 +169,6 @@
 
     <li class="nav-item">
       <a class="nav-link" href="{{ url('/rol') }}">
-      <!-- <a class="nav-link" href="{{ url('/testS') }}"> -->
         <span data-feather="home"></span>
         <i class="fas fa-user-circle"></i>
         Roles<span class="sr-only">(current)</span>
@@ -178,7 +177,6 @@
 
     <li class="nav-item">
       <a class="nav-link" href="{{ url('/departamento') }}">
-      <!-- <a class="nav-link" href="{{ url('/testS') }}"> -->
         <span data-feather="home"></span>
         <i class="fab fa-buffer"></i>
         Departamento<span class="sr-only">(current)</span>
@@ -186,7 +184,7 @@
     </li>
 
     <li class="nav-item">
-      <a class="nav-link" href="{{ url('/departamento') }}">
+      <a class="nav-link" href="{{ url('/sedes') }}">
       <!-- <a class="nav-link" href="{{ url('/testS') }}"> -->
         <span data-feather="home"></span>
         <i class="fas fa-box"></i>
