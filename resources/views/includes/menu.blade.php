@@ -180,6 +180,15 @@
       <a class="nav-link" href="{{ url('/departamento') }}">
       <!-- <a class="nav-link" href="{{ url('/testS') }}"> -->
         <span data-feather="home"></span>
+        <i class="fab fa-buffer"></i>
+        Departamento<span class="sr-only">(current)</span>
+      </a>
+    </li>
+
+    <li class="nav-item">
+      <a class="nav-link" href="{{ url('/departamento') }}">
+      <!-- <a class="nav-link" href="{{ url('/testS') }}"> -->
+        <span data-feather="home"></span>
         <i class="fas fa-box"></i>
         Test Sergio<span class="sr-only">(current)</span>
       </a>
