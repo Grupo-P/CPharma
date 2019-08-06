@@ -22,7 +22,7 @@ class DiasCeroController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function index() {
-        //
+        return view('pages.reporte.reporte11');
     }
 
     /**

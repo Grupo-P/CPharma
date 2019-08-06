@@ -624,4 +624,21 @@
 
 		return $diferencia_numero;
 	}
+
+	/*
+		TITULO: GuardarDiasEnCero
+		PARAMETROS: [$IdArticulo] Id del articulo
+					[$CodigoInterno] Codigo interno del articulo
+					[$Descripcion] Nombre del articulo
+					[$Existencia] Existencia del articulo
+					[$FechaCaptura] El dia de hoy
+		FUNCION: crea una conexion con la base de datos cpharma e ingresa datos
+		RETORNO: no aplica
+	 */
+	function GuardarDiasEnCero($IdArticulo,$CodigoInterno,$Descripcion,$Existencia,$FechaCaptura,$user,$date) {
+		$conn = ConectarXampp();
+		$sql = QGuardarDiasEnCero($IdArticulo,$CodigoInterno,$Descripcion,$Existencia,$FechaCaptura,$user,$date);
+		$result = mysqli_query($conn,$sql);
+		mysqli_close($conn);
+	}
 ?>

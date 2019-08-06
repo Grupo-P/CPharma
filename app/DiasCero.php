@@ -11,6 +11,6 @@ class DiasCero extends Model {
      * @var array
      */
     protected $fillable = [
-        'codigo_articulo', 'id_articulo', 'descripcion', 'existencia', 'fecha_captura', 'user'
+        'id_articulo', 'codigo_articulo', 'descripcion', 'existencia', 'fecha_captura', 'user'
     ];
 }

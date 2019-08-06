@@ -1213,7 +1213,33 @@
 		WHERE InvLoteAlmacen.Existencia > 0
 		AND (InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
 		GROUP BY InvArticulo.Id, InvArticulo.CodigoArticulo, InvArticulo.Descripcion
-		ORDER BY InvArticulo.Id, Existencia ASC
+		ORDER BY InvArticulo.Id ASC
+		";
+		return $sql;
+	}
+
+	/*
+		TITULO: QGuardarDiasEnCero
+		PARAMETROS: [$proveedor] Id del provedor solicitado
+					[$articulo] Descripcion del articulo
+					[$lote] Lote al que pertenece el articulo
+					[$fecha_documento] Fecha de la factura
+					[$fecha_recepcion] Fecha de recepcion del articulo
+					[$fecha_vencimiento] Fecha de vencimiento del articulo
+					[$fecha_tope] Fecha tope del compromiso
+					[$causa] Causa del compromiso
+					[$nota] Notas adicionales
+					[$user] Usuario responsable
+					[$date] Fecha de creacion del compromiso
+		FUNCION: Construir las columnas correspondientes al reporte
+		RETORNO: Un String con la query
+	 */
+	function QGuardarDiasEnCero($IdArticulo,$CodigoInterno,$Descripcion,$Existencia,$FechaCaptura,$user,$date) {
+		$sql = "
+		INSERT INTO dias_ceros 
+		(id_articulo,codigo_articulo,descripcion,existencia,fecha_captura,user,created_at,updated_at)
+		VALUES 
+		('$IdArticulo','$CodigoInterno','$Descripcion','$Existencia','$FechaCaptura','$user','$date','$date')
 		";
 		return $sql;
 	}

@@ -1591,7 +1591,7 @@
 	/************************ REPORTE CARTA DE COMPROMISO *******************/
 
 	/*
-		TITULO: GuardarCartaCompromiso
+		TITULO: CartaDeCompromiso
 		PARAMETROS: [$SedeConnection] sede donde se hara la conexion
 					[$IdProveedor] ID del proveedor a buscar
 					[$NombreProveedor] Nombre del proveedor a buscar
@@ -1735,6 +1735,46 @@
 				<input type="submit" value="Guardar" class="btn btn-outline-success">
 			</div>
 		</form>';
+
+		sqlsrv_close($conn);
+	}
+
+	/*****************************************************************************/
+	/************************ REPORTE 11 DIAS EN CERO *******************/
+
+	/*
+		TITULO: ReporteDiasEnCero
+		PARAMETROS: 
+		FUNCION: 
+		RETORNO: no aplica
+	 */
+	function ReporteDiasEnCero($SedeConnection) {
+		$conn = ConectarSmartpharma($SedeConnection);
+
+		$sql = QDiasEnCero();
+		$result = sqlsrv_query($conn,$sql);
+
+		$FechaCaptura = new DateTime("now");
+		$FechaCaptura = $FechaCaptura->format('Y-m-d');
+		$user = auth()->user()->name;
+
+		$cont = 0;
+
+		while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
+			$IdArticulo = $row["IdArticulo"];
+			$CodigoInterno = $row["CodigoInterno"];
+			$Descripcion=$row["Descripcion"];
+			$Existencia=intval($row["Existencia"]);
+			$date = date('Y-m-d h:m:s',time());
+
+			GuardarDiasEnCero($IdArticulo,$CodigoInterno,$Descripcion,$Existencia,$FechaCaptura,$user,$date);
+
+			/*GuardarDiasEnCero($row["IdArticulo"],$row["CodigoInterno"],$row["Descripcion"],intval($row["Existencia"]),$FechaCaptura,$user,date('Y-m-d h:m:s',time()));*/
+
+			$cont++;
+		}
+
+		echo "".$cont;
 
 		sqlsrv_close($conn);
 	}
