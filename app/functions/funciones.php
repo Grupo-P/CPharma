@@ -17,11 +17,14 @@
 		RETORNO: Fecha de ultima restauracion
 	 */
 	function LastRestoreDB($nameDataBase,$SedeConnection){
+		$SedeConnection = 'FTN';
 		$conn = ConectarSmartpharma($SedeConnection);
 		$sql = QLastRestoreDB($nameDataBase);
 		$result = sqlsrv_query($conn,$sql);
 		$row = sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC);
-		$FechaRestauracion = $row["FechaRestauracion"]->format("Y-m-d h:i:s");
+		//$FechaRestauracion = $row["FechaRestauracion"]->format("Y-m-d h:i:s");//F2
+		$FechaRestauracion = new DateTime('now');
+		$FechaRestauracion = $FechaRestauracion->format("Y-m-d h:i:s");
 		return $FechaRestauracion;
 	}
 	/*

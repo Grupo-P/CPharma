@@ -87,11 +87,11 @@
 	<table style="width:100%;">
 	    <tr>
 	        <td style="width:10%;" align="center">	
-				<a href="{{ url('/cartaCompromiso/create') }}" role="button" class="btn btn-outline-info btn-sm" 
-				style="display:inline; text-align:left;">
-				<i class="fa fa-plus"></i>
-					Agregar		      		
-				</a>
+				<form action="/cartaCompromiso/create" style="display:inline;">
+				    @csrf
+				    <input id="SEDE" name="SEDE" type="hidden" value="<?php print_r($_GET['SEDE']); ?>">				   
+				    <button type="submit" name="Reporte" role="button" class="btn btn-outline-info btn-sm"><i class="fa fa-plus"></i>&nbsp;Agregar</button>
+				</form>
 	        </td>
 	        
 	        <td style="width:90%;">

@@ -138,8 +138,6 @@
     include(app_path().'\functions\reportes.php');
 
     $ArtJson = "";
-    //OJO ELIMINAR $_GET['SEDE']="FTN";
-    $_GET['SEDE']="FTN";
     
     if(isset($_GET['Id'])) {
       /*CASO 2: CARGA AL HABER SELECCIONADO UN PROVEEDOR
