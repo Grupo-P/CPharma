@@ -585,7 +585,6 @@
 		$CantidadPedido = (($VentaDiaria * $DiasPedido)-$Existencia);
 		return $CantidadPedido;
 	}
-
 	/*
 		TITULO: GuardarCartaCompromiso
 		PARAMETROS: [$SedeConnection] sede donde se hara la conexion
@@ -604,7 +603,6 @@
 		$result = mysqli_query($conn,$sql);
 		mysqli_close($conn);
 	}
-
 	/*
 		TITULO: ValidarFechas
 		PARAMETROS: [$Fecha1] Fecha que se restaras
@@ -623,5 +621,34 @@
 		$diferencia_numero = (int)$diferencia->format('%R%a');
 
 		return $diferencia_numero;
+	}
+	/*
+		TITULO: 
+		PARAMETROS: 
+		FUNCION: 
+		RETORNO: 
+	 */
+	function ProductoDolarizado($conn,$IdArticulo) {
+		$Dolarizado = '';
+		
+		$sql = QDolarizados();
+		$result = sqlsrv_query($conn,$sql);
+		$row = sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC);
+		$IdDolarizado = $row["Id"];
+
+		$sql1 = QArticuloDolarizado($IdArticulo,$IdDolarizado);
+		$params = array();
+		$options =  array("Scrollable"=>SQLSRV_CURSOR_KEYSET);
+		$result1 = sqlsrv_query($conn,$sql1,$params,$options);
+		$row_count = sqlsrv_num_rows($result1);
+		
+		if($row_count == 0) {
+			$Dolarizado = 'NO';
+		}
+		else {
+			$Dolarizado = 'SI';
+		}
+
+	  	return $Dolarizado;
 	}
 ?>

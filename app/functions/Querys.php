@@ -30,58 +30,6 @@
 		";					
 		return $sql;
 	}
-	/*
-		TITULO: QTablaTemp
-		PARAMETROS: [$Cant] Cantidad de tablas temporales a preparar
-		FUNCION: Borra el contenido de las tablas temporales si estan en uso
-		RETORNO: Tablas temporales vacias
-	 */
-	function QTablaTemp($Cant) {
-		$sql='';
-		for($i=0;$i<$Cant;$i++) {
-			if($i==0) {
-				$sql = "
-					IF OBJECT_ID ('TablaTemp', 'U') IS NOT NULL
-						DROP TABLE TablaTemp;
-				";
-			}
-			else {
-				$flag = "
-					IF OBJECT_ID ('TablaTemp".$i."', 'U') IS NOT NULL
-						DROP TABLE TablaTemp".$i.";
-				";
-				$sql = $sql.$flag;
-			}
-		}
-		return $sql;
-	}
-	/*
-		TITULO: QTablaTemp
-		PARAMETROS: [$inicio,$fin] inicio y fin del rango a preparar
-		FUNCION: Borra el contenido de las tablas temporales si estan en uso
-		RETORNO: Tablas temporales vacias
-	 */
-	function QTablaTempR($inicio,$fin) {
-		QTablaTemp(ClenTable);
-
-		$sql='';
-		for($i=$inicio;$i<$fin;$i++) {
-			if($i==0){
-				$sql = "
-					IF OBJECT_ID ('TablaTemp', 'U') IS NOT NULL
-						DROP TABLE TablaTemp;
-				";
-			}
-			else {
-				$flag = "
-					IF OBJECT_ID ('TablaTemp".$i."', 'U') IS NOT NULL
-						DROP TABLE TablaTemp".$i.";
-				";
-				$sql = $sql.$flag;
-			}
-		}
-		return $sql;
-	}
 	/*SELECT tasa FROM tasa_ventas where fecha='2019-06-25' AND moneda='USD$'
 		TITULO: QTasaConversion
 		PARAMETROS: [$QFecha] Fecha de la que se quiere la tasa
@@ -327,6 +275,34 @@
 		";
 		return $sql;
 	}
+	/*
+		TITULO: 
+		PARAMETROS: 
+		FUNCION:
+		RETORNO:
+	 */
+	function QDolarizados() {
+		$sql = "
+		SELECT * FROM InvAtributo WHERE InvAtributo.Descripcion = 'Dolarizados'
+		";
+		return $sql;
+	}
+	/*
+		TITULO: 
+		PARAMETROS: 
+		FUNCION:
+		RETORNO:
+	 */
+	function QArticuloDolarizado($IdArticulo,$IdDolarizado) {
+		$sql = "
+		SELECT * 
+		FROM InvArticuloAtributo 
+		WHERE InvArticuloAtributo.InvAtributoId = '$IdDolarizado' 
+		AND InvArticuloAtributo.InvArticuloId = '$IdArticulo'
+		";
+		return $sql;
+	}
+
 	/*
 		TITULO: QUnidadesVendidasCliente
 		PARAMETROS: [$FInicial] Fecha inicial del rango a consultar
@@ -1194,5 +1170,4 @@
 		";
 		return $sql;
 	}
-
 ?>
