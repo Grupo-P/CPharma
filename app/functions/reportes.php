@@ -1792,8 +1792,7 @@
 			$Descripcion_User=$row["Descripcion"];
 			$Existencia=intval($row["Existencia"]);
 			$date = date('Y-m-d h:m:s',time());
-
-			$Descripcion = addslashes($Descripcion);//Escapa los caracteres especiales
+			$Descripcion = addslashes($Descripcion_User);//Escapa los caracteres especiales
 
 			GuardarDiasEnCero($IdArticulo,$CodigoInterno,$Descripcion,$Existencia,$FechaCaptura,$user,$date);
 		

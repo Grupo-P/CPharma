@@ -46,7 +46,7 @@
 
 		$InicioCarga = new DateTime("now");
 
-		$_GET['SEDE'] = "DBs";//Borrar esta sentencia
+		$_GET['SEDE'] = "FTN";//Borrar esta sentencia
 
 		if(isset($_GET['SEDE'])) {
 			echo '<h1 class="h5 text-success"  align="left"> <i class="fas fa-prescription"></i> '.NombreSede($_GET['SEDE']).'</h1>';

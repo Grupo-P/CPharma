@@ -647,7 +647,7 @@
 
 function pesca(){
 
-	$conn = ConectarSmartpharma('DBs');
+	$conn = ConectarSmartpharma('DBm');
 	$sql = QDiasEnCero();
 	$Result_SQLServer = sqlsrv_query($conn,$sql);
 
