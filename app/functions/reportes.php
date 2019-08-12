@@ -1789,9 +1789,11 @@
 		while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
 			$IdArticulo = $row["IdArticulo"];
 			$CodigoInterno = $row["CodigoInterno"];
-			$Descripcion=$row["Descripcion"];
+			$Descripcion_User=$row["Descripcion"];
 			$Existencia=intval($row["Existencia"]);
 			$date = date('Y-m-d h:m:s',time());
+
+			$Descripcion = addslashes($Descripcion);//Escapa los caracteres especiales
 
 			GuardarDiasEnCero($IdArticulo,$CodigoInterno,$Descripcion,$Existencia,$FechaCaptura,$user,$date);
 		
@@ -1799,7 +1801,7 @@
 			echo '<td>'.$cont.'</td>';
 			echo '<td>'.$IdArticulo.'</td>';
 			echo '<td>'.$CodigoInterno.'</td>';
-			echo '<td>'.$Descripcion.'</td>';
+			echo '<td>'.$Descripcion_User.'</td>';
 			echo '<td>'.$Existencia.'</td>';			
 			echo '</tr>';
 

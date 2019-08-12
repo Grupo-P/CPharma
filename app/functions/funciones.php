@@ -8,6 +8,7 @@
 	function ConectarXampp() {
 		$conexion = mysqli_connect(serverCP,userCP,passCP);
 		mysqli_select_db($conexion,nameCP);
+		mysqli_set_charset($conexion,'utf8');
 	    return $conexion;
 	}
 	/*
