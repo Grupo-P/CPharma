@@ -623,10 +623,11 @@
 		return $diferencia_numero;
 	}
 	/*
-		TITULO: 
-		PARAMETROS: 
-		FUNCION: 
-		RETORNO: 
+		TITULO: ProductoDolarizado
+		PARAMETROS: [$conn] cadena de conexion
+					[$IdArticulo] id del articulo a buscar
+		FUNCION: Determina si el producto esta dolarizado 
+		RETORNO: Retorna si el producto esta dolarizado o no
 	 */
 	function ProductoDolarizado($conn,$IdArticulo) {
 		$Dolarizado = '';

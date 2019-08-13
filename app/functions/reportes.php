@@ -1751,6 +1751,5 @@
 		</form>';
 
 		sqlsrv_close($conn);
-	}
-	
+	}	
 ?>

@@ -276,22 +276,28 @@
 		return $sql;
 	}
 	/*
-		TITULO: 
-		PARAMETROS: 
-		FUNCION:
-		RETORNO:
+		TITULO: QDolarizados
+		PARAMETROS: No Aplica
+		FUNCION: Busca el Id del atributo si la categoriza es dolarizado
+		RETORNO: Retorna el id del atributo dolarizado
 	 */
 	function QDolarizados() {
 		$sql = "
-		SELECT * FROM InvAtributo WHERE InvAtributo.Descripcion = 'Dolarizados'
+		SELECT * 
+		FROM InvAtributo 
+		WHERE 
+		InvAtributo.Descripcion = 'Dolarizados'
+		OR  InvAtributo.Descripcion = 'Giordany'
+		OR  InvAtributo.Descripcion = 'giordany'
 		";
 		return $sql;
 	}
 	/*
-		TITULO: 
-		PARAMETROS: 
-		FUNCION:
-		RETORNO:
+		TITULO: QArticuloDolarizado
+		PARAMETROS: [$IdArticulo] id del articulo a buscar
+					[$IdDolarizado] id del atributo dolarizado
+		FUNCION: Busca detro de la tabla dolarizados el articulo en cuestion
+		RETORNO: Retorna la dupla de valores de ser conseguido
 	 */
 	function QArticuloDolarizado($IdArticulo,$IdDolarizado) {
 		$sql = "
