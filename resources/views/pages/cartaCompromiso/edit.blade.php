@@ -1,7 +1,7 @@
 @extends('layouts.model')
 
 @section('title')
-    Carta de compromiso
+    Compromisos
 @endsection
 
 @section('content')
@@ -29,7 +29,7 @@
 
   <h1 class="h5 text-info">
       <i class="fas fa-edit"></i>
-      Actualizar carta de compromiso
+      Actualizar carta compromiso
   </h1>
 
   <hr class="row align-items-start col-12">
@@ -72,6 +72,13 @@
         </tr>
 
         <tr>
+          <th>Fecha de factura</th>
+          <td>
+            <input id="fecha_recepcion" type="date" name="fecha_recepcion" value="{{$cartaCompromiso->fecha_documento}}" class="form-control" disabled>
+          </td>
+        </tr>
+
+        <tr>
           <th>Fecha de recepci&oacute;n (Art&iacute;culo)</th>
           <td>
             <input id="fecha_recepcion" type="date" name="fecha_recepcion" value="{{$cartaCompromiso->fecha_recepcion}}" class="form-control" disabled>
@@ -86,7 +93,7 @@
         </tr>
 
         <tr>
-          <th>Fecha tope (Carta compromiso)</th>
+          <th>Fecha tope (Compromiso)</th>
           <td>
             <input id="fecha_tope" type="date" name="fecha_tope" value="{{$cartaCompromiso->fecha_tope}}" class="form-control" disabled>
           </td>

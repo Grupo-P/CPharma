@@ -7,7 +7,7 @@
 @section('content')
  	<h1 class="h5 text-info">
 		<i class="far fa-eye"></i>
-		Detalle de la carta de compromiso
+		Detalle de los compromisos
 	</h1>
 
 	<hr class="row align-items-start col-12">
@@ -46,7 +46,7 @@
 		    </tr>
 
 		    <tr>
-		      	<th scope="row">Fecha de documento</th>
+		      	<th scope="row">Fecha de factura</th>
 	    	  	<td>{{date('d-m-Y',strtotime($cartaCompromiso->fecha_documento))}}</td>
 		    </tr>
 

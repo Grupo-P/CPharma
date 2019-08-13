@@ -1611,7 +1611,9 @@
 		$CodigoArticulo = $row["CodigoArticulo"];
 		$Articulo=$row["Descripcion"];
 		$FechaDocumento=$row["FechaDocumento"];
-		$Lote=$row["InvLoteId"];
+		$FechaRecepcion=$row["FechaRecepcion"];
+		$FechaVencimiento=$row["FechaVencimiento"];
+		$Lote=$row["NumeroLote"];
 
 		echo '
 		<div class="input-group md-form form-sm form-1 pl-0">
@@ -1646,7 +1648,7 @@
 							'</option>';
 
 				while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
-					$Lote=$row["InvLoteId"];
+					$Lote=$row["NumeroLote"];
 					echo '<option value="'.$Lote.'">'
 							.$Lote.
 						'</option>';
@@ -1678,7 +1680,7 @@
 		<table class="table table-striped table-bordered col-12 sortable" id="myTable">
 		  	<thead class="thead-dark">
 			    <tr>
-			    	<th scope="col">Fecha de documento</th>
+			    	<th scope="col">Fecha de factura</th>
 			    	<th scope="col">Fecha de recepcion (Articulo)</th>
 			    	<th scope="col">Fecha de vencimiento (Articulo)</th>
 			    	<th scope="col">Fecha tope (Carta compromiso)</th>
@@ -1688,16 +1690,16 @@
 		  	<tbody>
 				<tr>
 					<td align="center">
-						<input id="fecha_documento" name="fecha_documento" type="date" autofocus>
+						<input type="text" value="'.$FechaDocumento->format('d/m/Y').'" disabled>
 					</td>
 					<td align="center">
-						<input id="fecha_recepcion" name="fecha_recepcion" type="date">
+						<input type="text" value="'.$FechaRecepcion->format('d/m/Y').'" disabled>
 					</td>
 					<td align="center">
 						<input id="fecha_vencimiento" name="fecha_vencimiento" type="date">
 					</td>
 					<td align="center">
-						<input id="fecha_tope" name="fecha_tope" type="date">
+						<input id="fecha_tope" name="fecha_tope" type="date" required>
 					</td>
 			 	</tr>
 	  		</tbody>
@@ -1715,11 +1717,11 @@
 			  	<tbody>
 			  		<tr>
 						<td>
-							<textarea name="causa" id="causa" class="form-control" rows="4"></textarea>
+							<textarea name="causa" id="causa" class="form-control" rows="4" required></textarea>
 						</td>
 
 	  					<td>
-	  						<textarea name="nota" id="nota" class="form-control" rows="4"></textarea>
+	  						<textarea name="nota" id="nota" class="form-control" rows="4" required></textarea>
 	  					</td>
 	  				</tr>
 	  			</tbody>
@@ -1732,6 +1734,8 @@
 				<input id="IdProv" name="IdProv" type="hidden" value="'.$IdProveedor.'">
 				<input id="IdFact" name="IdFact" type="hidden" value="'.$IdFatura.'">
 				<input id="IdArt" name="IdArt" type="hidden" value="'.$IdArticulo.'">
+				<input id="fecha_documento" name="fecha_documento" type="hidden" value="'.$FechaDocumento->format('Y-m-d').'">
+				<input id="fecha_recepcion" name="fecha_recepcion" type="hidden" value="'.$FechaRecepcion->format('Y-m-d').'">
 				<input type="submit" value="Guardar" class="btn btn-outline-success">
 			</div>
 		</form>';

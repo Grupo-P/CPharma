@@ -206,7 +206,7 @@
 	  		<div class="card-body text-left bg-secondary">
 	    		<h5 class="card-title">
 		    		<span class="card-text text-white">
-		    			Cartas de compromiso
+		    			Compromisos
 		    		</span>
 	    		</h5>	    	    
 	  		</div>

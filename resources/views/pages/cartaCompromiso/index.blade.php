@@ -1,7 +1,7 @@
 @extends('layouts.model')
 
 @section('title')
-    Carta de compromiso
+    Compromisos
 @endsection
 
 @section('scriptsHead')
@@ -80,7 +80,7 @@
 
 	<h1 class="h5 text-info">
 		<i class="far fa-address-card"></i>
-		Carta de compromiso
+		Compromisos
 	</h1>
 	
 	<hr class="row align-items-start col-12">

@@ -1147,22 +1147,23 @@
 	 */
 	function QCartaDeCompromiso($IdProveedor,$IdFatura,$IdArticulo) {
 		$sql = "
-		SELECT 
-		ComFactura.ComProveedorId,
-		ComEntradaMercancia.InvLoteId,
+		SELECT ComFactura.ComProveedorId,
+		InvLote.Numero AS NumeroLote,
 		ComFactura.NumeroFactura, 
 		CONVERT(DATE,ComFactura.FechaDocumento) AS FechaDocumento,
+		CONVERT(DATE,ComFactura.FechaRegistro) AS FechaRecepcion,
+		CONVERT(DATE,InvLote.FechaVencimiento) AS FechaVencimiento,
 		InvArticulo.CodigoArticulo,
 		InvArticulo.Descripcion
 		FROM ComFactura
 		INNER JOIN ComFacturaDetalle ON ComFactura.Id = ComFacturaDetalle.ComFacturaId
 		INNER JOIN InvArticulo ON ComFacturaDetalle.InvArticuloId = InvArticulo.Id
-		INNER JOIN ComEntradaMercancia ON ComEntradaMercancia.InvArticuloId = InvArticulo.Id
+		INNER JOIN InvLote ON InvLote.InvArticuloId = InvArticulo.Id
 		WHERE ComFactura.ComProveedorId='$IdProveedor' 
 		AND ComFactura.Id='$IdFatura'
 		AND InvArticulo.Id='$IdArticulo'
-		GROUP BY ComFactura.ComProveedorId, ComEntradaMercancia.InvLoteId, ComFactura.NumeroFactura, CONVERT(DATE,ComFactura.FechaDocumento), InvArticulo.CodigoArticulo, InvArticulo.Descripcion
-		ORDER BY ComEntradaMercancia.InvLoteId ASC
+		AND CONVERT(DATE,ComFactura.FechaRegistro) = CONVERT(DATE,InvLote.FechaEntrada)
+		ORDER BY InvLote.Numero ASC
 		";
 		return $sql;
 	}

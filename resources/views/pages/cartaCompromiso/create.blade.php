@@ -1,7 +1,7 @@
 @extends('layouts.model')
 
 @section('title')
-    Carta de compromiso
+    Compromisos
 @endsection
 
 <script type="text/javascript" src="{{ asset('assets/jquery/jquery-2.2.2.min.js') }}"></script>
@@ -22,7 +22,7 @@
         </div>
         <div class="modal-body">
           <h4 class="h6">
-            <b>La fecha tope (Carta de compromiso)</b> no puede ser menor que <b>la fecha de recepcion (Articulo)</b>
+            <b>La fecha tope (Compromiso)</b> no puede ser menor que <b>la fecha de recepcion (Articulo)</b>
           </h4>
         </div>
         <div class="modal-footer">
@@ -46,7 +46,7 @@
         </div>
         <div class="modal-body">
           <h4 class="h6">
-            <b>La fecha de vencimiento (Articulo)</b> no puede ser mayor que <b>la fecha tope (Carta de compromiso)</b>
+            <b>La fecha de vencimiento (Articulo)</b> no puede ser mayor que <b>la fecha tope (Compromiso)</b>
           </h4>
         </div>
         <div class="modal-footer">
@@ -127,7 +127,7 @@
 
   <h1 class="h5 text-info">
     <i class="fas fa-plus"></i>
-    Agregar carta de compromiso
+    Agregar Compromisos
   </h1>
   <hr class="row align-items-start col-12">
 
@@ -155,7 +155,7 @@
       echo'Tiempo de carga: '.$IntervalCarga->format("%Y-%M-%D %H:%I:%S");
     }
     else if(isset($_GET['lote'])){
-      /*CASO 5: CARGA AL HABER COMPLETADO LA CARTA DE COMPROMISO
+      /*CASO 5: CARGA AL HABER COMPLETADO LA Compromiso
                 Se pasa a la solicitud de fechas*/
       if (isset($_GET['SEDE'])){      
         echo '<h1 class="h5 text-success"  align="left"> <i class="fas fa-prescription"></i> '.NombreSede($_GET['SEDE']).'</h1>';
