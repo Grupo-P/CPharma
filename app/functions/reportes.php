@@ -85,6 +85,8 @@
 
 		$Precio = CalculoPrecio($conn,$IdArticulo,$IsIVA,$Existencia);
 
+		$Dolarizado = ProductoDolarizado($conn,$IdArticulo);
+
 		$TasaActual = TasaFecha(date('Y-m-d'));
 
 		echo '
@@ -106,6 +108,7 @@
 			      	<th scope="col">Descripcion</td>
 			      	<th scope="col">Existencia</td>
 			      	<th scope="col">Precio (Con IVA)</td>
+			      	<th scope="col">Dolarizado</td>
 			      	<th scope="col">Tasa actual</td>
 			      	<th scope="col">Precio en divisa (Con IVA)</td>
 			    </tr>
@@ -117,6 +120,10 @@
 		echo '<td>'.$row["Descripcion"].'</td>';
 		echo '<td align="center">'.intval($Existencia).'</td>';
 		echo '<td align="center">'." ".round($Precio,2)." ".SigVe.'</td>';
+
+		$Dolarizado = ProductoDolarizado($conn,$IdArticulo);
+
+		echo '<td align="center">'.$Dolarizado.'</td>';
 
 		if($TasaActual!=0){
 			echo '<td align="center">'." ".$TasaActual." ".SigVe.'</td>';
@@ -1744,6 +1751,5 @@
 		</form>';
 
 		sqlsrv_close($conn);
-	}
-	
+	}	
 ?>
