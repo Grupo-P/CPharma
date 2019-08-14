@@ -116,7 +116,7 @@
 		      	<th scope="col">Art&iacute;culo</th>
 		      	<th scope="col">Lote</th>
 		      	<th scope="col">Fecha de vencimiento (Art&iacute;culo)</th>
-		      	<th scope="col">Fecha tope (Carta compromiso)</th>
+		      	<th scope="col">Fecha tope (Compromiso)</th>
 		      	<th scope="col">Estatus</th>
 		      	<th scope="col">Acciones</th>
 		    </tr>

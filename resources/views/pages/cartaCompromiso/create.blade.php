@@ -94,7 +94,7 @@
         </div>
         <div class="modal-body">
           <h4 class="h6">
-            <b>La fecha de recepcion (Articulo)</b> no puede ser menor que <b>la fecha de documento</b>
+            <b>La fecha de recepcion (Articulo)</b> no puede ser menor que <b>la fecha de factura</b>
           </h4>
         </div>
         <div class="modal-footer">
