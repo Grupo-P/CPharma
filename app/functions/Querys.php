@@ -1163,6 +1163,7 @@
 		AND ComFactura.Id='$IdFatura'
 		AND InvArticulo.Id='$IdArticulo'
 		AND CONVERT(DATE,ComFactura.FechaRegistro) = CONVERT(DATE,InvLote.FechaEntrada)
+		GROUP BY ComFactura.ComProveedorId, InvLote.Numero, ComFactura.NumeroFactura, CONVERT(DATE,ComFactura.FechaDocumento), CONVERT(DATE,ComFactura.FechaRegistro), CONVERT(DATE,InvLote.FechaVencimiento), InvArticulo.CodigoArticulo, InvArticulo.Descripcion
 		ORDER BY InvLote.Numero ASC
 		";
 		return $sql;

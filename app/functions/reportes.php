@@ -1612,8 +1612,11 @@
 		$Articulo=$row["Descripcion"];
 		$FechaDocumento=$row["FechaDocumento"];
 		$FechaRecepcion=$row["FechaRecepcion"];
-		$FechaVencimiento=$row["FechaVencimiento"];
 		$Lote=$row["NumeroLote"];
+		
+		//Variables para validar el vencimiento
+		$FechaVencimiento=$row["FechaVencimiento"];
+		$VencimientoNulo = is_null($FechaVencimiento);
 
 		echo '
 		<div class="input-group md-form form-sm form-1 pl-0">
@@ -1694,10 +1697,20 @@
 					</td>
 					<td align="center">
 						<input type="text" value="'.$FechaRecepcion->format('d/m/Y').'" disabled>
-					</td>
+					</td>';
+					if(!$VencimientoNulo) {
+						echo '
 					<td align="center">
-						<input id="fecha_vencimiento" name="fecha_vencimiento" type="date">
-					</td>
+						<input type="text" value="'.$FechaVencimiento->format('d/m/Y').'" disabled>
+					</td>';
+					}
+					else {
+						echo '
+					<td align="center">
+						<input type="text" value="00/00/0000" disabled>
+					</td>';
+					}
+					echo '
 					<td align="center">
 						<input id="fecha_tope" name="fecha_tope" type="date" required>
 					</td>
@@ -1735,7 +1748,17 @@
 				<input id="IdFact" name="IdFact" type="hidden" value="'.$IdFatura.'">
 				<input id="IdArt" name="IdArt" type="hidden" value="'.$IdArticulo.'">
 				<input id="fecha_documento" name="fecha_documento" type="hidden" value="'.$FechaDocumento->format('Y-m-d').'">
-				<input id="fecha_recepcion" name="fecha_recepcion" type="hidden" value="'.$FechaRecepcion->format('Y-m-d').'">
+				<input id="fecha_recepcion" name="fecha_recepcion" type="hidden" value="'.$FechaRecepcion->format('Y-m-d').'">';
+
+					if(!$VencimientoNulo) {
+						echo '
+						<input id="fecha_vencimiento" name="fecha_vencimiento" type="hidden" value="'.$FechaVencimiento->format('Y-m-d').'">';
+					}
+					else {
+						echo '
+						<input id="fecha_vencimiento" name="fecha_vencimiento" type="hidden" value="'.$FechaVencimiento.'">';
+					}
+					echo '
 				<input type="submit" value="Guardar" class="btn btn-outline-success">
 			</div>
 		</form>';
