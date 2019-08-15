@@ -22,7 +22,7 @@ class CartaCompromisoController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function index() {
-        $cartaCompromiso = CartaCompromiso::orderBy('fecha_vencimiento', 'desc')->get();
+        $cartaCompromiso = CartaCompromiso::orderBy('id', 'asc')->get();
         return view('pages.cartaCompromiso.index', compact('cartaCompromiso'));
     }
 
