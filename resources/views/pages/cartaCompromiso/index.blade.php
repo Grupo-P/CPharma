@@ -146,7 +146,15 @@
 		      <td>{{$cartaC->proveedor}}</td>
 		      <td>{{$cartaC->articulo}}</td>
 		      <td>{{$cartaC->lote}}</td>
-		      <td>{{date('d-m-Y',strtotime($cartaC->fecha_vencimiento))}}</td>
+		      <td>
+		      	@if($cartaC->fecha_vencimiento != '0000-00-00')
+		      		{{date('d-m-Y',strtotime($cartaC->fecha_vencimiento))}}
+		      	@endif
+
+		      	@if($cartaC->fecha_vencimiento == '0000-00-00')
+		      		<?php echo '00-00-0000'; ?>
+		      	@endif
+		      </td>
 		      <td>{{date('d-m-Y',strtotime($cartaC->fecha_tope))}}</td>
 		      <td>
 		      	<?php
