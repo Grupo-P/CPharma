@@ -39,6 +39,7 @@
   }
 </style>
 
+<!-- USUARIOS -->
 <li class="nav-item">
   <a class="nav-link active" href="{{ url('/home') }}">
     <span data-feather="home"></span>
@@ -72,14 +73,15 @@
 </li>
 
 <?php
-  if(Auth::user()->role == 'ADMINISTRADOR'){
+  if(Auth::user()->role == 'SUPERVISOR CAJA'){
 ?>
-    <hr class="row align-items-center">
+    <!-- SUPERVISOR CAJA -->
+    <hr class="row align-items-center bg-success">
     <li class="nav-item">
-      <a class="nav-link" href="{{ url('/dolar') }}">
+      <a class="nav-link" href="{{ url('/tasaVenta') }}">
         <span data-feather="home"></span>
-        <i class="fas fa-money-bill-alt"></i>
-        Tasa de mercado<span class="sr-only">(current)</span>
+        <i class="fas fa-credit-card"></i>
+        Tasa de venta<span class="sr-only">(current)</span>
       </a>
     </li>
 <?php
@@ -87,13 +89,15 @@
 ?>
 
 <?php
-  if(Auth::user()->role == 'SUPERVISOR CAJA'){
+  if(Auth::user()->role == 'ADMINISTRADOR'){
 ?>
+    <!-- ADMINISTRADOR -->
+    <hr class="row align-items-center bg-success">
     <li class="nav-item">
-      <a class="nav-link" href="{{ url('/tasaVenta') }}">
+      <a class="nav-link" href="{{ url('/dolar') }}">
         <span data-feather="home"></span>
-        <i class="fas fa-credit-card"></i>
-        Tasa de venta<span class="sr-only">(current)</span>
+        <i class="fas fa-money-bill-alt"></i>
+        Tasa de mercado<span class="sr-only">(current)</span>
       </a>
     </li>
 <?php
@@ -103,20 +107,22 @@
 <?php
   if(Auth::user()->role == 'MASTER'){
 ?>
-    <hr class="row align-items-center">
-    <li class="nav-item">
-      <a class="nav-link" href="{{ url('/dolar') }}">
-        <span data-feather="home"></span>
-        <i class="fas fa-money-bill-alt"></i>
-        Tasa de mercado<span class="sr-only">(current)</span>
-      </a>
-    </li>
+    <!-- MASTER -->
+    <hr class="row align-items-center bg-success">
 
     <li class="nav-item">
       <a class="nav-link" href="{{ url('/tasaVenta') }}">
         <span data-feather="home"></span>
         <i class="fas fa-credit-card"></i>
         Tasa de venta<span class="sr-only">(current)</span>
+      </a>
+    </li>
+
+    <li class="nav-item">
+      <a class="nav-link" href="{{ url('/dolar') }}">
+        <span data-feather="home"></span>
+        <i class="fas fa-money-bill-alt"></i>
+        Tasa de mercado<span class="sr-only">(current)</span>
       </a>
     </li>
 
@@ -134,15 +140,17 @@
 <?php
   if(Auth::user()->role == 'DEVELOPER'){
 ?>
-    <hr class="row align-items-center">
+    <!-- DEVELOPER -->
+    <hr class="row align-items-center bg-success">
+
     <li class="nav-item">
-      <a class="nav-link" href="{{ url('/cartaCompromiso') }}">
+      <a class="nav-link" href="{{ url('/tasaVenta') }}">
         <span data-feather="home"></span>
-        <i class="far fa-address-card"></i>
-        Carta compromiso<span class="sr-only">(current)</span>
+        <i class="fas fa-credit-card"></i>
+        Tasa de venta<span class="sr-only">(current)</span>
       </a>
     </li>
-
+    
     <li class="nav-item">
       <a class="nav-link" href="{{ url('/dolar') }}">
         <span data-feather="home"></span>
@@ -152,18 +160,21 @@
     </li>
 
     <li class="nav-item">
-      <a class="nav-link" href="{{ url('/tasaVenta') }}">
-        <span data-feather="home"></span>
-        <i class="fas fa-credit-card"></i>
-        Tasa de venta<span class="sr-only">(current)</span>
-      </a>
-    </li>
-
-    <li class="nav-item">
       <a class="nav-link" href="{{ url('/usuario') }}">
         <span data-feather="home"></span>
         <i class="fas fa-user"></i>
         Usuario<span class="sr-only">(current)</span>
+      </a>
+    </li>
+    
+    <!-- TODO LO QUE ESTE DEBAJO DE ESTA LINEA ESTA EN FASE DE DESARROLLO -->
+    <hr class="row align-items-center bg-danger">
+
+    <li class="nav-item">
+      <a class="nav-link" href="{{ url('/cartaCompromiso') }}">
+        <span data-feather="home"></span>
+        <i class="far fa-address-card"></i>
+        Carta compromiso<span class="sr-only">(current)</span>
       </a>
     </li>
 
