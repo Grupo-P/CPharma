@@ -111,9 +111,7 @@
             Causa
           </th>
           <td>
-            <textarea name="causa" id="causa" class="form-control" rows="3" placeholder="Causa del compromiso" maxlength="450">
-              {{$cartaCompromiso->causa}}
-            </textarea>
+            <textarea name="causa" id="causa" class="form-control" rows="3" placeholder="Causa del compromiso" maxlength="450">{{$cartaCompromiso->causa}}</textarea>
           </td>
         </tr>
 
@@ -122,9 +120,7 @@
             Nota
           </th>
           <td>
-            <textarea name="nota" id="nota" class="form-control" rows="3" placeholder="Nota del compromiso" maxlength="450">
-              {{$cartaCompromiso->nota}}
-            </textarea>
+            <textarea name="nota" id="nota" class="form-control" rows="3" placeholder="Nota del compromiso" maxlength="450">{{$cartaCompromiso->nota}}</textarea>
           </td>
         </tr>
       </tbody>

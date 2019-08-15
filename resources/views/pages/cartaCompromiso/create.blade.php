@@ -181,7 +181,7 @@
             $('#exampleModalCenter').modal('show');
           </script> 
         <?php
-          GuardarCartaDeCompromiso($_GET['proveedor'],$_GET['articulo'],$_GET['lote'],$_GET['fecha_documento'],$_GET['fecha_recepcion'],null,$_GET['fecha_tope'],$_GET['causa'],$_GET['nota']);
+          GuardarCartaDeCompromiso($_GET['proveedor'],$_GET['articulo'],$_GET['lote'],$_GET['fecha_documento'],$_GET['fecha_recepcion'],null,$_GET['fecha_tope'],trim($_GET['causa']),trim($_GET['nota']));
 
           $sql = QListaProveedores();
           $ArtJson = armarJson($sql,$_GET['SEDE']);
@@ -248,7 +248,7 @@
             $('#exampleModalCenter').modal('show');
           </script> 
         <?php
-          GuardarCartaDeCompromiso($_GET['proveedor'],$_GET['articulo'],$_GET['lote'],$_GET['fecha_documento'],$_GET['fecha_recepcion'],$_GET['fecha_vencimiento'],$_GET['fecha_tope'],$_GET['causa'],$_GET['nota']);
+          GuardarCartaDeCompromiso($_GET['proveedor'],$_GET['articulo'],$_GET['lote'],$_GET['fecha_documento'],$_GET['fecha_recepcion'],$_GET['fecha_vencimiento'],$_GET['fecha_tope'],trim($_GET['causa']),trim($_GET['nota']));
 
           $sql = QListaProveedores();
           $ArtJson = armarJson($sql,$_GET['SEDE']);
