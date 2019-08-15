@@ -1605,6 +1605,7 @@
 
 		$sql = QCartaDeCompromiso($IdProveedor,$IdFatura,$IdArticulo);
 		$result = sqlsrv_query($conn,$sql);
+		$result1 = sqlsrv_query($conn,$sql);
 		$row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC);
 
 		$NumeroFactura = $row["NumeroFactura"];
@@ -1618,6 +1619,47 @@
 		$FechaVencimiento=$row["FechaVencimiento"];
 		$VencimientoNulo = is_null($FechaVencimiento);
 
+		$flag = array();
+		$i = 0;
+		while($row1 = sqlsrv_fetch_array($result1, SQLSRV_FETCH_ASSOC)) {
+			$Lote1=$row1["NumeroLote"];
+			$FechaVencimiento1=$row1["FechaVencimiento"];
+			$VencimientoNulo = is_null($FechaVencimiento1);
+
+			$flag[$i] = utf8_encode($Lote1);
+
+			if($VencimientoNulo){
+				$flag[$i+1] = utf8_encode('');
+			}
+			else{
+				$flag[$i+1] = utf8_encode($FechaVencimiento1->format('Y-m-d'));
+			}
+ 			
+ 			$i+=2;
+	  	}
+		$ArrFinal = json_encode($flag);
+
+		?>
+
+		<script>
+			function capturarLote() {
+				var select = document.getElementById('lote');
+				select.addEventListener('change',
+				  function(){
+				    var selectedOption = this.options[select.selectedIndex];
+				});
+
+				ArrJs = eval(<?php echo $ArrFinal ?>);
+				indice = ArrJs.indexOf(select.value);
+				indiceFecha = indice+1;
+				FechaVencimientoJs = ArrJs[indiceFecha];
+
+				document.getElementById('fecha_vencimiento').value = FechaVencimientoJs;
+				document.getElementById('input_fechaV').value = FechaVencimientoJs;
+			}
+		</script>
+
+		<?php
 		echo '
 		<div class="input-group md-form form-sm form-1 pl-0">
 			<div class="input-group-prepend">
@@ -1645,7 +1687,7 @@
 		  			<td>'.$NumeroFactura.'</td>
 					<td>'.$NombreProveedor.'</td>
 					<td>
-						<select name="lote" id="lote" style="width:100%;">
+						<select name="lote" id="lote" style="width:100%;" onchange="capturarLote();">
 							<option value="'.$Lote.'">'
 								.$Lote.
 							'</option>';
@@ -1701,13 +1743,13 @@
 					if(!$VencimientoNulo) {
 						echo '
 					<td align="center">
-						<input type="text" value="'.$FechaVencimiento->format('d/m/Y').'" disabled>
+						<input type="text" id="input_fechaV" value="'.$FechaVencimiento->format('d/m/Y').'" disabled>
 					</td>';
 					}
 					else {
 						echo '
 					<td align="center">
-						<input type="text" value="00/00/0000" disabled>
+						<input type="text" id="input_fechaV" value="00/00/0000" disabled>
 					</td>';
 					}
 					echo '

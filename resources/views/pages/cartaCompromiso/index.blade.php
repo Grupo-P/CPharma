@@ -86,12 +86,14 @@
 	<hr class="row align-items-start col-12">
 	<table style="width:100%;">
 	    <tr>
+	    	<?php
+        		if(isset($_GET['SEDE'])) {
+        	?>
 	        <td style="width:10%;" align="center">	
-				<form action="/cartaCompromiso/create" style="display:inline;">
-				    @csrf
-				    <input id="SEDE" name="SEDE" type="hidden" value="<?php print_r($_GET['SEDE']); ?>">				   
-				    <button type="submit" name="Reporte" role="button" class="btn btn-outline-info btn-sm"><i class="fa fa-plus"></i>&nbsp;Agregar</button>
-				</form>
+				<a href="/cartaCompromiso/create?SEDE=<?php print_r($_GET['SEDE']); ?>" role="button" class="btn btn-outline-info btn-sm" style="display:inline; text-align:left;">
+				<i class="fa fa-plus"></i>
+					Agregar		      		
+				</a>
 	        </td>
 	        
 	        <td style="width:90%;">
@@ -103,6 +105,22 @@
 				  <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterFirsTable()">
 				</div>
 	        </td>
+	        	<?php
+	        		}
+	        		else {
+	        	?>
+	        	<td>
+		        	<div class="input-group md-form form-sm form-1 pl-0">
+					  <div class="input-group-prepend">
+					    <span class="input-group-text purple lighten-3" id="basic-text1"><i class="fas fa-search text-white"
+					        aria-hidden="true"></i></span>
+					  </div>
+					  <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterFirsTable()">
+					</div>
+		        </td>
+		        <?php
+	        		}
+	        	?>
 	    </tr>
 	</table>
 
