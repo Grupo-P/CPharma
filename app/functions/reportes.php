@@ -1649,13 +1649,31 @@
 				    var selectedOption = this.options[select.selectedIndex];
 				});
 
-				ArrJs = eval(<?php echo $ArrFinal ?>);
-				indice = ArrJs.indexOf(select.value);
-				indiceFecha = indice+1;
-				FechaVencimientoJs = ArrJs[indiceFecha];
+				var ArrJs = eval(<?php echo $ArrFinal ?>);
+				var indice = ArrJs.indexOf(select.value);
+				var indiceFecha = indice+1;
+				var FechaVencimientoJs = ArrJs[indiceFecha];
+
+				if(FechaVencimientoJs == '') {
+					document.getElementById('input_fechaV').value = '00/00/0000';
+				}
+				else {
+					document.getElementById('input_fechaV').value = formato(FechaVencimientoJs);
+				}
 
 				document.getElementById('fecha_vencimiento').value = FechaVencimientoJs;
-				document.getElementById('input_fechaV').value = FechaVencimientoJs;
+			}
+
+			/**
+			 * Convierte un texto de la forma 2017-01-10 a la forma
+			 * 10/01/2017
+			 *
+			 * @param {string} texto Texto de la forma 2017-01-10
+			 * @return {string} texto de la forma 10/01/2017
+			 *
+			 */
+			function formato(texto){
+			  return texto.replace(/^(\d{4})-(\d{2})-(\d{2})$/g,'$3/$2/$1');
 			}
 		</script>
 
