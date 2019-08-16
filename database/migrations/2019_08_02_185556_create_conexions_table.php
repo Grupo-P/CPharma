@@ -15,6 +15,7 @@ class CreateConexionsTable extends Migration
     {
         Schema::create('conexions', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('siglas')->unique();
             $table->string('instancia');
             $table->string('base_datos');
             $table->string('usuario');
