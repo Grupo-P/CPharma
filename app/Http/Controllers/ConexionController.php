@@ -84,7 +84,8 @@ class ConexionController extends Controller
      */
     public function edit($id)
     {
-        //
+        $conexiones = Conexion::find($id);  
+        return view('pages.conexion.edit', compact('conexiones'));
     }
 
     /**
@@ -96,7 +97,17 @@ class ConexionController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        try{
+            $conexiones = Conexion::find($id);
+            $conexiones->fill($request->all());
+            $conexiones->user = auth()->user()->name;
+            $conexiones->estatus = 'ACTIVO';
+            $conexiones->save();
+            return redirect()->route('conexion.index')->with('Updated', ' Informacion');
+        }
+        catch(\Illuminate\Database\QueryException $e){
+            return back()->with('Error', ' Error');
+        }
     }
 
     /**
@@ -107,6 +118,17 @@ class ConexionController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $conexiones = Conexion::find($id);
+
+         if($conexiones->estatus == 'ACTIVO'){
+            $conexiones->estatus = 'INACTIVO';
+         }
+         else if($conexiones->estatus == 'INACTIVO'){
+            $conexiones->estatus = 'ACTIVO';
+         }
+
+         $conexiones->user = auth()->user()->name;      
+         $conexiones->save();
+         return redirect()->route('conexion.index')->with('Deleted', ' Informacion');
     }
 }
