@@ -72,7 +72,8 @@ class ConexionController extends Controller
      */
     public function show($id)
     {
-        //
+        $conexiones = Conexion::find($id); 
+        return view('pages.conexion.show', compact('conexiones'));
     }
 
     /**
