@@ -3,9 +3,21 @@
 namespace compras\Http\Controllers;
 
 use Illuminate\Http\Request;
+use compras\Conexion;
+use compras\User;
 
 class ConexionController extends Controller
 {
+    /**
+     * Create a new controller instance with auth.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -13,7 +25,8 @@ class ConexionController extends Controller
      */
     public function index()
     {
-        //
+        $conexiones =  Conexion::all();
+        return view('pages.conexion.index', compact('conexiones'));
     }
 
     /**
@@ -23,7 +36,7 @@ class ConexionController extends Controller
      */
     public function create()
     {
-        //
+        return view('pages.conexion.create');
     }
 
     /**

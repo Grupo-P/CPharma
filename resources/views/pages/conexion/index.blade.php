@@ -111,21 +111,24 @@
 	  	<thead class="thead-dark">
 		    <tr>
 		      	<th scope="col">#</th>
-		      	<th scope="col">RIF</th>
-		      	<th scope="col">Siglas</th>	
-		      	<th scope="col">Razon Social</th>	      	
+		      	<th scope="col">Siglas</th>
+		      	<th scope="col">Instancia</th>	
+		      	<th scope="col">Base de Datos</th>	      	
+		      	<th scope="col">Usuario</th>
+		      	<th scope="col">Credencial</th>
 		      	<th scope="col">Estatus</th>
-		      	<th scope="col">Acciones</th>
 		    </tr>
 	  	</thead>
 	  	<tbody>
-		@foreach($sedes as $sede)
+		@foreach($conexiones as $conexion)
 		    <tr>
-		      <th>{{$sede->id}}</th>
-		      <td>{{$sede->rif}}</td>
-		      <td>{{$sede->siglas}}</td>
-		      <td>{{$sede->razon_social}}</td>
-		      <td>{{$sede->estatus}}</td>
+		      <th>{{$conexion->id}}</th>
+		      <td>{{$conexion->siglas}}</td>
+		      <td>{{$conexion->instancia}}</td>
+		      <td>{{$conexion->base_datos}}</td>
+		      <td>{{$conexion->usuario}}</td>
+		      <td>{{$conexion->credencial}}</td>
+		      <td>{{$conexion->estatus}}</td>
 		      
 		    <!-- Inicio Validacion de ROLES -->
 		      <td style="width:140px;">
@@ -135,26 +138,26 @@
 				?>
 
 					<?php
-					if($sede->estatus == 'ACTIVO'){
+					if($conexion->estatus == 'ACTIVO'){
 					?>
-						<a href="/sede/{{$sede->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
+						<a href="/conexion/{{$conexion->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
 			      			<i class="far fa-eye"></i>			      		
 			      		</a>
 
-			      		<a href="/sede/{{$sede->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
+			      		<a href="/conexion/{{$conexion->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
 			      			<i class="fas fa-edit"></i>			      		
 				      	</a>
 				 					  
-				      	<form action="/sede/{{$sede->id}}" method="POST" style="display: inline;">
+				      	<form action="/conexion/{{$conexion->id}}" method="POST" style="display: inline;">
 						    @method('DELETE')
 						    @csrf					    
 						    <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Desincorporar"><i class="fa fa-reply"></i></button>
 						</form>
 					<?php
 					}
-					else if($sede->estatus == 'INACTIVO'){
+					else if($conexion->estatus == 'INACTIVO'){
 					?>		
-			      	<form action="/sede/{{$sede->id}}" method="POST" style="display: inline;">
+			      	<form action="/conexion/{{$conexion->id}}" method="POST" style="display: inline;">
 					    @method('DELETE')
 					    @csrf					    
 					    <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Reincorporar"><i class="fa fa-share"></i></button>
@@ -165,17 +168,17 @@
 				<?php	
 				} else if(Auth::user()->role == 'SUPERVISOR' || Auth::user()->role == 'ADMINISTRADOR' || Auth::user()->role == 'SUPERVISOR CAJA'){ 
 				?>
-					<a href="/sede/{{$sede->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
+					<a href="/conexion/{{$conexion->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
 		      			<i class="far fa-eye"></i>			      		
 		      		</a>
 
-		      		<a href="/sede/{{$sede->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
+		      		<a href="/conexion/{{$conexion->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
 		      			<i class="fas fa-edit"></i>
 	      			</a>
 				<?php
 				} else if(Auth::user()->role == 'USUARIO'){
 				?>
-					<a href="/sede/{{$sede->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
+					<a href="/conexion/{{$conexion->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
 		      			<i class="far fa-eye"></i>			      		
 		      		</a>		
 				<?php
