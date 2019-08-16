@@ -88,11 +88,11 @@
         <tr>
           <th>Fecha de vencimiento (Art&iacute;culo)</th>
           <td>
-              @if($cartaCompromiso->fecha_vencimiento != '0000-00-00')
+              @if($cartaCompromiso->fecha_vencimiento != null)
                 <input id="fecha_vencimiento" type="date" name="fecha_vencimiento" value="{{$cartaCompromiso->fecha_vencimiento}}" class="form-control" disabled>
               @endif
 
-              @if($cartaCompromiso->fecha_vencimiento == '0000-00-00')
+              @if($cartaCompromiso->fecha_vencimiento == null)
                 <input id="fecha_vencimiento" name="fecha_vencimiento" type="hidden" value="{{$cartaCompromiso->fecha_vencimiento}}">
                 <label class="form-control" style="background-color:#e9ecef; opacity:1;">00-00-0000</label>
               @endif

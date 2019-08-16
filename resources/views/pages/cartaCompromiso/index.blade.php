@@ -86,9 +86,6 @@
 	<hr class="row align-items-start col-12">
 	<table style="width:100%;">
 	    <tr>
-	    	<?php
-        		if(isset($_GET['SEDE'])) {
-        	?>
 	        <td style="width:10%;" align="center">	
 				<a href="/cartaCompromiso/create?SEDE=<?php print_r($_GET['SEDE']); ?>" role="button" class="btn btn-outline-info btn-sm" style="display:inline; text-align:left;">
 				<i class="fa fa-plus"></i>
@@ -102,25 +99,9 @@
 				    <span class="input-group-text purple lighten-3" id="basic-text1"><i class="fas fa-search text-white"
 				        aria-hidden="true"></i></span>
 				  </div>
-				  <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterFirsTable()">
+				  <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterAllTable()">
 				</div>
 	        </td>
-	        	<?php
-	        		}
-	        		else {
-	        	?>
-	        	<td>
-		        	<div class="input-group md-form form-sm form-1 pl-0">
-					  <div class="input-group-prepend">
-					    <span class="input-group-text purple lighten-3" id="basic-text1"><i class="fas fa-search text-white"
-					        aria-hidden="true"></i></span>
-					  </div>
-					  <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterFirsTable()">
-					</div>
-		        </td>
-		        <?php
-	        		}
-	        	?>
 	    </tr>
 	</table>
 
@@ -148,11 +129,11 @@
 		      <td>{{$cartaC->articulo}}</td>
 		      <td>{{$cartaC->lote}}</td>
 		      <td>
-		      	@if($cartaC->fecha_vencimiento != '0000-00-00')
+		      	@if($cartaC->fecha_vencimiento != null)
 		      		{{date('d-m-Y',strtotime($cartaC->fecha_vencimiento))}}
 		      	@endif
 
-		      	@if($cartaC->fecha_vencimiento == '0000-00-00')
+		      	@if($cartaC->fecha_vencimiento == null)
 		      		<?php echo '00-00-0000'; ?>
 		      	@endif
 		      </td>
@@ -196,7 +177,7 @@
 					<?php
 					if($cartaC->estatus == 'ACTIVO'){
 					?>
-						<a href="/cartaCompromiso/{{$cartaC->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
+			      		<a href="/cartaCompromiso/{{$cartaC->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
 			      			<i class="far fa-eye"></i>			      		
 			      		</a>
 
@@ -206,7 +187,8 @@
 				 					  
 				      	<form action="/cartaCompromiso/{{$cartaC->id}}" method="POST" style="display:inline;">
 						    @method('DELETE')
-						    @csrf					    
+						    @csrf
+						    <input id="SEDE" name="SEDE" type="hidden" value="<?php print_r($_GET['SEDE']); ?>">
 						    <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Desincorporar"><i class="fa fa-reply"></i></button>
 						</form>
 					<?php
@@ -215,7 +197,8 @@
 					?>		
 			      	<form action="/cartaCompromiso/{{$cartaC->id}}" method="POST" style="display:inline;">
 					    @method('DELETE')
-					    @csrf					    
+					    @csrf
+					    <input id="SEDE" name="SEDE" type="hidden" value="<?php print_r($_GET['SEDE']); ?>">
 					    <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Reincorporar"><i class="fa fa-share"></i></button>
 					</form>
 					<?php

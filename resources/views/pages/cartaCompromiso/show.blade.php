@@ -58,11 +58,11 @@
 		    <tr>
 		      	<th scope="row">Fecha de vencimiento (Art&iacute;culo)</th>
 	    	  	<td>
-	    	  		@if($cartaCompromiso->fecha_vencimiento != '0000-00-00')
+	    	  		@if($cartaCompromiso->fecha_vencimiento != null)
 			      		{{date('d-m-Y',strtotime($cartaCompromiso->fecha_vencimiento))}}
 			      	@endif
 
-			      	@if($cartaCompromiso->fecha_vencimiento == '0000-00-00')
+			      	@if($cartaCompromiso->fecha_vencimiento == null)
 			      		<?php echo '00-00-0000'; ?>
 			      	@endif
 	    	  	</td>

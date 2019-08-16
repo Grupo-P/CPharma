@@ -54,8 +54,15 @@ class CartaCompromisoController extends Controller {
             $cartaCompromiso->fecha_recepcion = $request->input('fecha_recepcion');
             $cartaCompromiso->fecha_recepcion = date('Y-m-d',strtotime($cartaCompromiso->fecha_recepcion));
 
-            $cartaCompromiso->fecha_vencimiento = $request->input('fecha_vencimiento');
-            $cartaCompromiso->fecha_vencimiento = date('Y-m-d',strtotime($cartaCompromiso->fecha_vencimiento));
+            $vencimiento = $request->input('fecha_vencimiento');
+
+            if($vencimiento != '0000-00-00') {
+                $cartaCompromiso->fecha_vencimiento = $request->input('fecha_vencimiento');
+                $cartaCompromiso->fecha_vencimiento = date('Y-m-d',strtotime($cartaCompromiso->fecha_vencimiento));
+            }
+            else {
+                $cartaCompromiso->fecha_vencimiento = null;
+            }
             
             $cartaCompromiso->fecha_tope = $request->input('fecha_tope');
             $cartaCompromiso->fecha_tope = date('Y-m-d',strtotime($cartaCompromiso->fecha_tope));
@@ -65,7 +72,7 @@ class CartaCompromisoController extends Controller {
             $cartaCompromiso->estatus = 'ACTIVO';
             $cartaCompromiso->user = auth()->user()->name;
             $cartaCompromiso->save();
-            return redirect()->route('cartaCompromiso.index')->with('Saved', ' Informacion');
+            return redirect()->route('cartaCompromiso.index', 'SEDE='.$request->input('SEDE'))->with('Saved', ' Informacion');
         }
         catch(\Illuminate\Database\QueryException $e) {
             return back()->with('Error', ' Error');
@@ -122,7 +129,7 @@ class CartaCompromisoController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id) {
+    public function destroy(Request $request, $id) {
         $cartaCompromiso = CartaCompromiso::find($id);
 
          if($cartaCompromiso->estatus == 'ACTIVO') {
@@ -134,6 +141,6 @@ class CartaCompromisoController extends Controller {
 
          $cartaCompromiso->user = auth()->user()->name;
          $cartaCompromiso->save();
-         return redirect()->route('cartaCompromiso.index')->with('Deleted', ' Informacion');
+         return redirect()->route('cartaCompromiso.index', 'SEDE='.$request->input('SEDE'))->with('Deleted', ' Informacion');
     }
 }

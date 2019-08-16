@@ -103,27 +103,6 @@
       </div>
     </div>
   </div>
-  
-  <!-- Modal Registro Almacenado Con Exito -->
-  <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title text-info" id="exampleModalCenterTitle"><i class="fas fa-info text-info text-info"></i> Informaci&oacute;n
-          </h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <h4 class="h6">El registro fue almacenado exitosamente</h4>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-outline-success" data-dismiss="modal">Aceptar</button>
-        </div>
-      </div>
-    </div>
-  </div>
 
   <h1 class="h5 text-info">
     <i class="fas fa-plus"></i>
@@ -176,30 +155,26 @@
         $diferencia4_numero = (int)$diferencia4->format('%R%a');
 
         if(($diferencia1_numero > 0) && ($diferencia4_numero >= 0)) {
-          ?> 
-          <script>
-            $('#exampleModalCenter').modal('show');
-          </script> 
-        <?php
-          GuardarCartaDeCompromiso($_GET['proveedor'],$_GET['articulo'],$_GET['lote'],$_GET['fecha_documento'],$_GET['fecha_recepcion'],null,$_GET['fecha_tope'],trim($_GET['causa']),trim($_GET['nota']));
+        ?>
 
-          $sql = QListaProveedores();
-          $ArtJson = armarJson($sql,$_GET['SEDE']);
-
-          echo '
-          <form autocomplete="off" action="">
-            <div class="autocomplete" style="width:90%;">
-              <input id="myInput" type="text" name="Nombre" placeholder="Ingrese el nombre del proveedor " onkeyup="conteo()" required>
-              <input id="myId" name="Id" type="hidden">
-              <td>
-              <input id="SEDE" name="SEDE" type="hidden" value="';
-              print_r($_GET['SEDE']);
-              echo'">
-              </td>
-            </div>
-            <input type="submit" value="Buscar" class="btn btn-outline-success">
+          <form action="{{url('/cartaCompromiso')}}" method="POST" id="redireccionado">
+            @csrf
+            <input id="proveedor" name="proveedor" type="hidden" value="<?php print_r($_GET['proveedor']); ?>">
+            <input id="articulo" name="articulo" type="hidden" value="<?php print_r($_GET['articulo']); ?>">
+            <input id="lote" name="lote" type="hidden" value="<?php print_r($_GET['lote']); ?>">
+            <input id="fecha_documento" name="fecha_documento" type="hidden" value="<?php print_r($_GET['fecha_documento']); ?>">
+            <input id="fecha_recepcion" name="fecha_recepcion" type="hidden" value="<?php print_r($_GET['fecha_recepcion']); ?>">
+            <input id="fecha_vencimiento" name="fecha_vencimiento" type="hidden" value="0000-00-00">
+            <input id="fecha_tope" name="fecha_tope" type="hidden" value="<?php print_r($_GET['fecha_tope']); ?>">
+            <input id="causa" name="causa" type="hidden" value="<?php print_r(trim($_GET['causa'])); ?>">
+            <input id="nota" name="nota" type="hidden" value="<?php print_r(trim($_GET['nota'])); ?>">
+            <input id="SEDE" name="SEDE" type="hidden" value="<?php print_r(trim($_GET['SEDE'])); ?>">
           </form>
-          ';
+
+          <script>
+            document.getElementById('redireccionado').submit();
+          </script>
+          <?php
         }
         else {
           if($diferencia1_numero <= 0) {
@@ -243,30 +218,25 @@
           && ($diferencia2_numero <= 0) 
           && ($diferencia3_numero > 0) 
           && ($diferencia4_numero >= 0)) {
-          ?> 
-          <script>
-            $('#exampleModalCenter').modal('show');
-          </script> 
-        <?php
-          GuardarCartaDeCompromiso($_GET['proveedor'],$_GET['articulo'],$_GET['lote'],$_GET['fecha_documento'],$_GET['fecha_recepcion'],$_GET['fecha_vencimiento'],$_GET['fecha_tope'],trim($_GET['causa']),trim($_GET['nota']));
-
-          $sql = QListaProveedores();
-          $ArtJson = armarJson($sql,$_GET['SEDE']);
-
-          echo '
-          <form autocomplete="off" action="">
-            <div class="autocomplete" style="width:90%;">
-              <input id="myInput" type="text" name="Nombre" placeholder="Ingrese el nombre del proveedor " onkeyup="conteo()" required>
-              <input id="myId" name="Id" type="hidden">
-              <td>
-              <input id="SEDE" name="SEDE" type="hidden" value="';
-              print_r($_GET['SEDE']);
-              echo'">
-              </td>
-            </div>
-            <input type="submit" value="Buscar" class="btn btn-outline-success">
+          ?>
+          <form action="{{url('/cartaCompromiso')}}" method="POST" id="redireccionado">
+            @csrf
+            <input id="proveedor" name="proveedor" type="hidden" value="<?php print_r($_GET['proveedor']); ?>">
+            <input id="articulo" name="articulo" type="hidden" value="<?php print_r($_GET['articulo']); ?>">
+            <input id="lote" name="lote" type="hidden" value="<?php print_r($_GET['lote']); ?>">
+            <input id="fecha_documento" name="fecha_documento" type="hidden" value="<?php print_r($_GET['fecha_documento']); ?>">
+            <input id="fecha_recepcion" name="fecha_recepcion" type="hidden" value="<?php print_r($_GET['fecha_recepcion']); ?>">
+            <input id="fecha_vencimiento" name="fecha_vencimiento" type="hidden" value="<?php print_r($_GET['fecha_vencimiento']); ?>">
+            <input id="fecha_tope" name="fecha_tope" type="hidden" value="<?php print_r($_GET['fecha_tope']); ?>">
+            <input id="causa" name="causa" type="hidden" value="<?php print_r(trim($_GET['causa'])); ?>">
+            <input id="nota" name="nota" type="hidden" value="<?php print_r(trim($_GET['nota'])); ?>">
+            <input id="SEDE" name="SEDE" type="hidden" value="<?php print_r(trim($_GET['SEDE'])); ?>">
           </form>
-          ';
+
+          <script>
+            document.getElementById('redireccionado').submit();
+          </script>
+          <?php
         }
         else {
           if($diferencia1_numero <= 0) {
