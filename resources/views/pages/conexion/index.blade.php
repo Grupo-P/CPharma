@@ -117,6 +117,7 @@
 		      	<th scope="col">Usuario</th>
 		      	<th scope="col">Credencial</th>
 		      	<th scope="col">Estatus</th>
+		      	<th scope="col">Acciones</th>
 		    </tr>
 	  	</thead>
 	  	<tbody>

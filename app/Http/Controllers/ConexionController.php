@@ -47,7 +47,21 @@ class ConexionController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try{
+            $conexiones = new Conexion();
+            $conexiones->siglas = $request->input('siglas');
+            $conexiones->instancia = $request->input('instancia');
+            $conexiones->base_datos = $request->input('base_datos');   
+            $conexiones->usuario = $request->input('usuario'); 
+            $conexiones->credencial = $request->input('credencial');       
+            $conexiones->user = auth()->user()->name;
+            $conexiones->estatus = 'ACTIVO';
+            $conexiones->save();
+            return redirect()->route('conexion.index')->with('Saved', ' Informacion');
+        }
+        catch(\Illuminate\Database\QueryException $e){
+            return back()->with('Error', ' Error');
+        }
     }
 
     /**
