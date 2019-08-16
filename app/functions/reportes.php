@@ -1613,22 +1613,18 @@
 		$Articulo=$row["Descripcion"];
 		$FechaDocumento=$row["FechaDocumento"];
 		$FechaRecepcion=$row["FechaRecepcion"];
-		$Lote=$row["NumeroLote"];
-		
-		//Variables para validar el vencimiento
 		$FechaVencimiento=$row["FechaVencimiento"];
-		$VencimientoNulo = is_null($FechaVencimiento);
+		$Lote=$row["NumeroLote"];
 
 		$flag = array();
 		$i = 0;
 		while($row1 = sqlsrv_fetch_array($result1, SQLSRV_FETCH_ASSOC)) {
 			$Lote1=$row1["NumeroLote"];
 			$FechaVencimiento1=$row1["FechaVencimiento"];
-			$VencimientoNulo = is_null($FechaVencimiento1);
 
 			$flag[$i] = utf8_encode($Lote1);
 
-			if($VencimientoNulo){
+			if(is_null($FechaVencimiento1)){
 				$flag[$i+1] = utf8_encode('');
 			}
 			else{
@@ -1758,7 +1754,7 @@
 					<td align="center">
 						<input type="text" value="'.$FechaRecepcion->format('d/m/Y').'" disabled>
 					</td>';
-					if(!$VencimientoNulo) {
+					if(!is_null($FechaVencimiento)) {
 						echo '
 					<td align="center">
 						<input type="text" id="input_fechaV" value="'.$FechaVencimiento->format('d/m/Y').'" disabled>
@@ -1810,7 +1806,7 @@
 				<input id="fecha_documento" name="fecha_documento" type="hidden" value="'.$FechaDocumento->format('Y-m-d').'">
 				<input id="fecha_recepcion" name="fecha_recepcion" type="hidden" value="'.$FechaRecepcion->format('Y-m-d').'">';
 
-					if(!$VencimientoNulo) {
+					if(!is_null($FechaVencimiento)) {
 						echo '
 						<input id="fecha_vencimiento" name="fecha_vencimiento" type="hidden" value="'.$FechaVencimiento->format('Y-m-d').'">';
 					}

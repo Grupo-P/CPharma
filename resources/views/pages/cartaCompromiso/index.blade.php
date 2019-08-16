@@ -140,6 +140,7 @@
 		    </tr>
 	  	</thead>
 	  	<tbody>
+
 		@foreach($cartaCompromiso as $cartaC)
 		    <tr>
 		      <th>{{$cartaC->id}}</th>
@@ -155,7 +156,26 @@
 		      		<?php echo '00-00-0000'; ?>
 		      	@endif
 		      </td>
+
+		      <?php 
+		      	$Ahora = new DateTime("now");
+		      	$fecha_inicial = new DateTime($Ahora->format('Y-m-d'));
+		        $fecha_final = new DateTime($cartaC->fecha_tope);
+
+				$diferencia = $fecha_inicial->diff($fecha_final);
+				$diferencia_numero = (int)$diferencia->format('%R%a');
+
+				if(($cartaC->estatus == 'ACTIVO') && ($diferencia_numero <= 7)) {
+		      ?>
+		      <td class="bg-danger text-white">{{date('d-m-Y',strtotime($cartaC->fecha_tope))}}</td>
+		      <?php 
+		      	}
+		      	else {
+		      ?>
 		      <td>{{date('d-m-Y',strtotime($cartaC->fecha_tope))}}</td>
+		      <?php 
+		      	}
+		      ?>
 		      <td>
 		      	<?php
 					if($cartaC->estatus == 'ACTIVO') {
@@ -234,5 +254,4 @@
 		});
 		$('#exampleModalCenter').modal('show')
 	</script>
-
 @endsection
