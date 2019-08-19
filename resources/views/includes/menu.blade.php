@@ -210,10 +210,17 @@
       </a>
     </li>
 
+    <li class="nav-item">
+      <a class="nav-link" href="{{ url('/configuracion') }}">      
+        <span data-feather="home"></span>
+        <i class="fas fa-cogs"></i>
+        Configuracion<span class="sr-only">(current)</span>
+      </a>
+    </li>
+
 <!--Menus de pruebas para el desarrollo-->
     <li class="nav-item">
-      <a class="nav-link" href="{{ url('/conexion') }}">
-      <!-- <a class="nav-link" href="{{ url('/testS') }}"> -->
+      <a class="nav-link" href="{{ url('/testS') }}">     
         <span data-feather="home"></span>
         <i class="fas fa-box"></i>
         Test Sergio<span class="sr-only">(current)</span>
@@ -226,7 +233,7 @@
         <i class="fas fa-box"></i>
         Test Manuel<span class="sr-only">(current)</span>
       </a>
-    </li> 
+    </li>
 <?php
   }
 ?>

@@ -110,3 +110,5 @@ Route::resource('departamento', 'DepartamentoController');
 Route::resource('sede', 'SedeController');
 
 Route::resource('conexion', 'ConexionController');
+
+Route::resource('configuracion', 'ConfiguracionController');
