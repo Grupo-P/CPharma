@@ -12,7 +12,7 @@
 
 	<hr class="row align-items-start col-12">
 
-	<form action="/cartaCompromiso/" method="POST" style="display:inline;">  
+	<form action="/cartaCompromiso/?SEDE=<?php print_r($_GET['SEDE']); ?>" method="POST" style="display:inline;">  
 	    @csrf					    
 	    <button type="submit" name="Regresar" role="button" class="btn btn-outline-info btn-sm"data-placement="top">
 	    	<i class="fa fa-reply">&nbsp;Regresar</i>

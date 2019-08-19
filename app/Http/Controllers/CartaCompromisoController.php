@@ -116,7 +116,7 @@ class CartaCompromisoController extends Controller {
             $cartaCompromiso->nota = $request->input('nota');
             $cartaCompromiso->user = auth()->user()->name;
             $cartaCompromiso->save();
-            return redirect()->route('cartaCompromiso.index')->with('Updated', ' Informacion');
+            return redirect()->route('cartaCompromiso.index', 'SEDE='.$request->input('SEDE'))->with('Updated', ' Informacion');
         }
         catch(\Illuminate\Database\QueryException $e) {
             return back()->with('Error', ' Error');
