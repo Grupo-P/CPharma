@@ -3,9 +3,22 @@
 namespace compras\Http\Controllers;
 
 use Illuminate\Http\Request;
+use compras\Configuracion;
+use compras\User;
+
 
 class ConfiguracionController extends Controller
 {
+    /**
+     * Create a new controller instance with auth.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -13,7 +26,8 @@ class ConfiguracionController extends Controller
      */
     public function index()
     {
-        //
+        $configuraciones =  Configuracion::all();
+        return view('pages.configuracion.index', compact('configuraciones'));
     }
 
     /**
