@@ -11,13 +11,14 @@ class CreateCartaCompromisosTable extends Migration {
      * @return void
      */
     public function up() {
-        Schema::create('carta_compromisos', function (Blueprint $table) {
+        Schema::create('carta_compromisos', function (Blueprint $table)    {
             $table->increments('id');
+            $table->string('proveedor');
             $table->string('articulo');
             $table->string('lote');
-            $table->date('fecha_vencimiento');
-            $table->string('proveedor');
+            $table->date('fecha_documento');
             $table->date('fecha_recepcion');
+            $table->date('fecha_vencimiento')->nullable();
             $table->date('fecha_tope');
             $table->string('causa');
             $table->string('nota');

@@ -18,6 +18,7 @@ class CreateDolarsTable extends Migration
             $table->timestamp('fecha')->unique();
             $table->float('tasa',8,2);
             $table->string('user');
+            $table->string('estatus');
             $table->timestamps();
         });
     }
