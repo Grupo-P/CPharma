@@ -1149,6 +1149,7 @@
 		$sql = "
 		SELECT ComFactura.ComProveedorId,
 		InvLote.Numero AS NumeroLote,
+		InvLote.LoteFabricante,
 		ComFactura.NumeroFactura, 
 		CONVERT(DATE,ComFactura.FechaDocumento) AS FechaDocumento,
 		CONVERT(DATE,ComFactura.FechaRegistro) AS FechaRecepcion,
@@ -1163,7 +1164,7 @@
 		AND ComFactura.Id='$IdFatura'
 		AND InvArticulo.Id='$IdArticulo'
 		AND CONVERT(DATE,ComFactura.FechaRegistro) = CONVERT(DATE,InvLote.FechaEntrada)
-		GROUP BY ComFactura.ComProveedorId, InvLote.Numero, ComFactura.NumeroFactura, CONVERT(DATE,ComFactura.FechaDocumento), CONVERT(DATE,ComFactura.FechaRegistro), CONVERT(DATE,InvLote.FechaVencimiento), InvArticulo.CodigoArticulo, InvArticulo.Descripcion
+		GROUP BY ComFactura.ComProveedorId, InvLote.Numero, InvLote.LoteFabricante, ComFactura.NumeroFactura, CONVERT(DATE,ComFactura.FechaDocumento), CONVERT(DATE,ComFactura.FechaRegistro), CONVERT(DATE,InvLote.FechaVencimiento), InvArticulo.CodigoArticulo, InvArticulo.Descripcion
 		ORDER BY InvLote.Numero ASC
 		";
 		return $sql;

@@ -1615,40 +1615,51 @@
 		$FechaRecepcion=$row["FechaRecepcion"];
 		$FechaVencimiento=$row["FechaVencimiento"];
 		$Lote=$row["NumeroLote"];
+		$LoteFabricante=$row["LoteFabricante"];
+		$LoteFabricanteAnterior="";
 
 		$flag = array();
+		$flag2 = array();//Array LoteFabricante
 		$i = 0;
 		while($row1 = sqlsrv_fetch_array($result1, SQLSRV_FETCH_ASSOC)) {
 			$Lote1=$row1["NumeroLote"];
+			$LoteFabricante1=$row1["LoteFabricante"];
 			$FechaVencimiento1=$row1["FechaVencimiento"];
 
 			$flag[$i] = utf8_encode($Lote1);
 
+			//LoteFabricante
+			$flag2[$i] = utf8_encode($LoteFabricante1);
+
 			if(is_null($FechaVencimiento1)){
 				$flag[$i+1] = utf8_encode('');
+				$flag2[$i+1] = utf8_encode('');
 			}
 			else{
 				$flag[$i+1] = utf8_encode($FechaVencimiento1->format('Y-m-d'));
+				$flag2[$i+1] = utf8_encode($FechaVencimiento1->format('Y-m-d'));
 			}
  			
  			$i+=2;
 	  	}
 		$ArrFinal = json_encode($flag);
-
+		$ArrFinal2 = json_encode($flag2);
 		?>
 
 		<script>
-			function capturarLote() {
-				var select = document.getElementById('lote');
-				select.addEventListener('change',
-				  function(){
-				    var selectedOption = this.options[select.selectedIndex];
-				});
-
-				var ArrJs = eval(<?php echo $ArrFinal ?>);
-				var indice = ArrJs.indexOf(select.value);
-				var indiceFecha = indice+1;
-				var FechaVencimientoJs = ArrJs[indiceFecha];
+			function capturarLote(e) {
+				if(isNaN(e.value)) {
+					var ArrJs2 = eval(<?php echo $ArrFinal2 ?>);
+					var indice = ArrJs2.indexOf(e.value);
+					var indiceFecha = indice+1;
+					var FechaVencimientoJs = ArrJs2[indiceFecha];
+				}
+				else {
+					var ArrJs = eval(<?php echo $ArrFinal ?>);
+					var indice = ArrJs.indexOf(e.value);
+					var indiceFecha = indice+1;
+					var FechaVencimientoJs = ArrJs[indiceFecha];
+				}
 
 				if(FechaVencimientoJs == '') {
 					document.getElementById('input_fechaV').value = '00/00/0000';
@@ -1700,17 +1711,36 @@
 		  		<tr>
 		  			<td>'.$NumeroFactura.'</td>
 					<td>'.$NombreProveedor.'</td>
-					<td>
-						<select name="lote" id="lote" style="width:100%;" onchange="capturarLote();">
+					<td>';
+					if($LoteFabricante == null) { echo '
+						<select name="lote" id="lote" style="width:100%;" onchange="capturarLote(this);">
 							<option value="'.$Lote.'">'
 								.$Lote.
 							'</option>';
+					}
+					else { echo '
+						<select name="lote" id="lote" style="width:100%;" onchange="capturarLote(this);">
+							<option value="'.$LoteFabricante.'">'
+								.$LoteFabricante.
+							'</option>';
+						$LoteFabricanteAnterior = $LoteFabricante;
+					}
 
 				while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
 					$Lote=$row["NumeroLote"];
-					echo '<option value="'.$Lote.'">'
+					$LoteFabricante=$row["LoteFabricante"];
+
+					if($LoteFabricante == null) { echo '
+						<option value="'.$Lote.'">'
 							.$Lote.
 						'</option>';
+					}
+					else if($LoteFabricanteAnterior != $LoteFabricante) { echo '
+						<option value="'.$LoteFabricante.'">'
+							.$LoteFabricante.
+						'</option>';
+					}
+					
 				}
 			  	   echo '</select>
 			  		</td>
