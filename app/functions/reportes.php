@@ -1657,8 +1657,8 @@
 		?>
 
 		<script>
-			function capturarLote(e) {
-				if(isNaN(e.value)) {
+			function capturarLote(e,loteNulo) {
+				if(isNaN(e.value) || loteNulo == '1') {
 					var ArrJs2 = eval(<?php echo $ArrFinal2 ?>);
 					var indice = ArrJs2.indexOf(e.value);
 					var indiceFecha = indice+1;
@@ -1723,13 +1723,13 @@
 					<td>'.$NombreProveedor.'</td>
 					<td>';
 					if($LoteFabricante == null) { echo '
-						<select name="lote" id="lote" style="width:100%;" onchange="capturarLote(this);">
+						<select name="lote" id="lote" style="width:100%;" onchange="capturarLote(this,1);">
 							<option value="'.$Lote.'">'
 								.$Lote.
 							'</option>';
 					}
 					else { echo '
-						<select name="lote" id="lote" style="width:100%;" onchange="capturarLote(this);">
+						<select name="lote" id="lote" style="width:100%;" onchange="capturarLote(this,2);">
 							<option value="'.$LoteFabricante.'">'
 								.$LoteFabricante.
 							'</option>';
