@@ -17,12 +17,14 @@
 	  	<div class="modal-dialog modal-dialog-centered" role="document">
 		    <div class="modal-content">
 		      <div class="modal-header">
-		        <h5 class="modal-title text-info" id="exampleModalCenterTitle"><i class="fas fa-bell text-info"></i> Actualizaciones</h5>
+		        <h5 class="modal-title text-info" id="exampleModalCenterTitle"><i class="fas fa-bell text-info"></i> Novedades</h5>
 		        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
 		          <span aria-hidden="true">&times;</span>
 		        </button>
 		      </div>
 		      <div class="modal-body">
+		      	<label>Hola <b class="text-info">{{ Auth::user()->name }}</b></label>
+		      	<label>tenemos algunas novedades para ti.!</label>
 		        <ul style="list-style:none">
 		        	<i class="far fa-check-circle text-info" style="display: inline;"></i>
     				<li class="card-text text-dark" style="display: inline;">
