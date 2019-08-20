@@ -4,7 +4,7 @@ namespace compras;
 
 use Illuminate\Database\Eloquent\Model;
 
-class CartaCompromiso extends Model 
+class Sede extends Model
 {
     /**
      * The attributes that are mass assignable.
@@ -12,6 +12,6 @@ class CartaCompromiso extends Model
      * @var array
      */
     protected $fillable = [
-        'articulo', 'lote', 'fecha_vencimiento', 'proveedor', 'fecha_recepcion', 'fecha_tope', 'causa', 'nota', 'estatus', 'user'
+        'rif', 'razon_social','siglas','direccion','estatus','user'
     ];
 }

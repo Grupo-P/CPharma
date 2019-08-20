@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddEstatusToDolars extends Migration
+class CreateConfiguracionsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,14 @@ class AddEstatusToDolars extends Migration
      */
     public function up()
     {
-        Schema::table('dolars', function (Blueprint $table) {
+        Schema::create('configuracions', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('variable')->unique();
+            $table->string('descripcion');
+            $table->string('valor');
             $table->string('estatus');
+            $table->String('user');
+            $table->timestamps();
         });
     }
 
@@ -25,8 +31,6 @@ class AddEstatusToDolars extends Migration
      */
     public function down()
     {
-        Schema::table('dolars', function (Blueprint $table) {
-            $table->dropColumn('estatus');
-        });
+        Schema::dropIfExists('configuracions');
     }
 }

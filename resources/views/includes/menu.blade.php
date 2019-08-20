@@ -39,6 +39,7 @@
   }
 </style>
 
+<!-- USUARIOS -->
 <li class="nav-item">
   <a class="nav-link active" href="{{ url('/home') }}">
     <span data-feather="home"></span>
@@ -64,7 +65,7 @@
 </li>
 
 <li class="nav-item">
-  <a class="nav-link" href="{{ url('/sede') }}">
+  <a class="nav-link" href="{{ url('/sedes_reporte') }}">
     <span data-feather="home"></span>
     <i class="fas fa-file-invoice"></i>
     Reportes<span class="sr-only">(current)</span>
@@ -72,14 +73,15 @@
 </li>
 
 <?php
-  if(Auth::user()->role == 'ADMINISTRADOR'){
+  if(Auth::user()->role == 'SUPERVISOR CAJA'){
 ?>
-    <hr class="row align-items-center">
+    <!-- SUPERVISOR CAJA -->
+    <hr class="row align-items-center bg-success">
     <li class="nav-item">
-      <a class="nav-link" href="{{ url('/dolar') }}">
+      <a class="nav-link" href="{{ url('/tasaVenta') }}">
         <span data-feather="home"></span>
-        <i class="fas fa-money-bill-alt"></i>
-        Tasa de mercado<span class="sr-only">(current)</span>
+        <i class="fas fa-credit-card"></i>
+        Tasa de venta<span class="sr-only">(current)</span>
       </a>
     </li>
 <?php
@@ -87,13 +89,15 @@
 ?>
 
 <?php
-  if(Auth::user()->role == 'SUPERVISOR CAJA'){
+  if(Auth::user()->role == 'ADMINISTRADOR'){
 ?>
+    <!-- ADMINISTRADOR -->
+    <hr class="row align-items-center bg-success">
     <li class="nav-item">
-      <a class="nav-link" href="{{ url('/tasaVenta') }}">
+      <a class="nav-link" href="{{ url('/dolar') }}">
         <span data-feather="home"></span>
-        <i class="fas fa-credit-card"></i>
-        Tasa de venta<span class="sr-only">(current)</span>
+        <i class="fas fa-money-bill-alt"></i>
+        Tasa de mercado<span class="sr-only">(current)</span>
       </a>
     </li>
 <?php
@@ -103,20 +107,22 @@
 <?php
   if(Auth::user()->role == 'MASTER'){
 ?>
-    <hr class="row align-items-center">
-    <li class="nav-item">
-      <a class="nav-link" href="{{ url('/dolar') }}">
-        <span data-feather="home"></span>
-        <i class="fas fa-money-bill-alt"></i>
-        Tasa de mercado<span class="sr-only">(current)</span>
-      </a>
-    </li>
+    <!-- MASTER -->
+    <hr class="row align-items-center bg-success">
 
     <li class="nav-item">
       <a class="nav-link" href="{{ url('/tasaVenta') }}">
         <span data-feather="home"></span>
         <i class="fas fa-credit-card"></i>
         Tasa de venta<span class="sr-only">(current)</span>
+      </a>
+    </li>
+
+    <li class="nav-item">
+      <a class="nav-link" href="{{ url('/dolar') }}">
+        <span data-feather="home"></span>
+        <i class="fas fa-money-bill-alt"></i>
+        Tasa de mercado<span class="sr-only">(current)</span>
       </a>
     </li>
 
@@ -134,20 +140,22 @@
 <?php
   if(Auth::user()->role == 'DEVELOPER'){
 ?>
-    <hr class="row align-items-center">
-    <li class="nav-item">
-      <a class="nav-link" href="{{ url('/dolar') }}">
-        <span data-feather="home"></span>
-        <i class="fas fa-money-bill-alt"></i>
-        Tasa de mercado<span class="sr-only">(current)</span>
-      </a>
-    </li>
+    <!-- DEVELOPER -->
+    <hr class="row align-items-center bg-success">
 
     <li class="nav-item">
       <a class="nav-link" href="{{ url('/tasaVenta') }}">
         <span data-feather="home"></span>
         <i class="fas fa-credit-card"></i>
         Tasa de venta<span class="sr-only">(current)</span>
+      </a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-link" href="{{ url('/dolar') }}">
+        <span data-feather="home"></span>
+        <i class="fas fa-money-bill-alt"></i>
+        Tasa de mercado<span class="sr-only">(current)</span>
       </a>
     </li>
 
@@ -158,9 +166,69 @@
         Usuario<span class="sr-only">(current)</span>
       </a>
     </li>
+    
+    <!-- TODO LO QUE ESTE DEBAJO DE ESTA LINEA ESTA EN FASE DE DESARROLLO -->
+    <hr class="row align-items-center bg-danger">
 
     <li class="nav-item">
-      <a class="nav-link" href="{{ url('/testS') }}">
+      <a class="nav-link" href="{{ url('/cartaCompromiso') }}">
+        <span data-feather="home"></span>
+        <i class="far fa-address-card"></i>
+        Carta compromiso<span class="sr-only">(current)</span>
+      </a>
+    </li>
+
+    <li class="nav-item">
+      <a class="nav-link" href="{{ url('/rol') }}">
+        <span data-feather="home"></span>
+        <i class="fas fa-user-circle"></i>
+        Roles<span class="sr-only">(current)</span>
+      </a>
+    </li>
+
+    <li class="nav-item">
+      <a class="nav-link" href="{{ url('/departamento') }}">
+        <span data-feather="home"></span>
+        <i class="fab fa-buffer"></i>
+        Departamento<span class="sr-only">(current)</span>
+      </a>
+    </li>
+
+    <li class="nav-item">
+      <a class="nav-link" href="{{ url('/sede') }}">
+        <span data-feather="home"></span>
+        <i class="fas fa-store-alt"></i>
+        Sede<span class="sr-only">(current)</span>
+      </a>
+    </li>
+
+    <li class="nav-item">
+      <a class="nav-link" href="{{ url('/conexion') }}">
+        <span data-feather="home"></span>
+        <i class="fas fa-network-wired"></i>
+        Conexion<span class="sr-only">(current)</span>
+      </a>
+    </li>
+
+    <li class="nav-item">
+      <a class="nav-link" href="{{ url('/configuracion') }}">      
+        <span data-feather="home"></span>
+        <i class="fas fa-cogs"></i>
+        Configuracion<span class="sr-only">(current)</span>
+      </a>
+    </li>
+
+    <li class="nav-item">
+      <a class="nav-link" href="{{ url('/auditoria') }}">      
+        <span data-feather="home"></span>
+        <i class="fas fa-search"></i>
+        Auditoria<span class="sr-only">(current)</span>
+      </a>
+    </li>
+
+<!--Menus de pruebas para el desarrollo-->
+    <li class="nav-item">
+      <a class="nav-link" href="{{ url('/testS') }}">     
         <span data-feather="home"></span>
         <i class="fas fa-box"></i>
         Test Sergio<span class="sr-only">(current)</span>
@@ -173,7 +241,7 @@
         <i class="fas fa-box"></i>
         Test Manuel<span class="sr-only">(current)</span>
       </a>
-    </li> 
+    </li>
 <?php
   }
 ?>

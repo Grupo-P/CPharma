@@ -41,7 +41,7 @@ Route::get('/testM', function() {
     return view('testM');
 });
 
-Route::get('/sede', function() {
+Route::get('/sedes_reporte', function() {
     return view('pages.sedes');
 });
 
@@ -107,4 +107,14 @@ Route::resource('tasaVenta','TasaVentaController');
 
 Route::resource('cartaCompromiso', 'CartaCompromisoController');
 
-Route::resource('diasCero', 'DiasCeroController');
+Route::resource('rol', 'RoleController');
+
+Route::resource('departamento', 'DepartamentoController');
+
+Route::resource('sede', 'SedeController');
+
+Route::resource('conexion', 'ConexionController');
+
+Route::resource('configuracion', 'ConfiguracionController');
+
+Route::resource('auditoria', 'AuditoriaController');
