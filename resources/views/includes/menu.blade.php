@@ -218,6 +218,14 @@
       </a>
     </li>
 
+    <li class="nav-item">
+      <a class="nav-link" href="{{ url('/auditoria') }}">      
+        <span data-feather="home"></span>
+        <i class="fas fa-search"></i>
+        Auditoria<span class="sr-only">(current)</span>
+      </a>
+    </li>
+
 <!--Menus de pruebas para el desarrollo-->
     <li class="nav-item">
       <a class="nav-link" href="{{ url('/testS') }}">     

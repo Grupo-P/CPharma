@@ -4,7 +4,8 @@ namespace compras;
 
 use Illuminate\Database\Eloquent\Model;
 
-class CartaCompromiso extends Model {
+class CartaCompromiso extends Model 
+{
     /**
      * The attributes that are mass assignable.
      *
