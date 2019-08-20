@@ -13,6 +13,31 @@
 		$dolar = DB::table('dolars')->count();
 	?>
 
+	<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+	  	<div class="modal-dialog modal-dialog-centered" role="document">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <h5 class="modal-title text-info" id="exampleModalCenterTitle"><i class="fas fa-bell text-info"></i> Actualizaciones</h5>
+		        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+		          <span aria-hidden="true">&times;</span>
+		        </button>
+		      </div>
+		      <div class="modal-body">
+		        <ul style="list-style:none">
+		        	<i class="far fa-check-circle text-info" style="display: inline;"></i>
+    				<li class="card-text text-dark" style="display: inline;">
+    					Ya puedes ver el reporte <b class="text-info">Analitico de precios</b>
+    				</li>		
+    			</ul>
+		      </div>
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-outline-info" data-dismiss="modal">Aceptar</button>
+		      </div>
+		    </div>
+	  	</div>
+	</div>
+
+
 	<h1 class="h5 text-info">
 		<i class="fas fa-chart-pie"></i>
 		Dashboard
@@ -116,27 +141,9 @@
 	</div>
 
 	<div class="card-deck">
-		{{-- NEWS --}}
-		<div class="card border-warning  mb-3" style="width: 14rem;">	  	
-	  		<div class="card-body text-left bg-warning">
-	    		<h2 class="card-title">
-		    		<span class="card-text text-white">
-		    			<i class="fas fa-bell"></i>
-		    			Actualizaciones
-		    		</span>
-	    		</h2>
-	    		<p class="card-text text-white">
-	    			<ul>
-	    				<li class="card-text text-white ">
-	    					Ya puedes ver el reporte <b>Analitico de precios</b>
-	    				</li>		
-	    			</ul>
-	    		</p>
-	  		</div>  
-		</div>
 		{{-- CONTACTO --}}
-		<div class="card border-primary  mb-3" style="width: 14rem;">	  	
-	  		<div class="card-body text-left bg-primary">
+		<div class="card border-info  mb-3" style="width: 14rem;">	  	
+	  		<div class="card-body text-left bg-info">
 	    		<h2 class="card-title">	    			
 		    		<span class="card-text text-white">
 		    			<i class="fas fa-info"></i>
@@ -159,4 +166,11 @@
 	  		</div>  
 		</div>
 	</div>
+
+	<script>
+		$(document).ready(function(){
+		    $('[data-toggle="tooltip"]').tooltip();   
+		});
+		$('#exampleModalCenter').modal('show')
+	</script>
 @endsection
