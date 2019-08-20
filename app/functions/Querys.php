@@ -1131,48 +1131,25 @@
 	 */
 	function QCartaDeCompromiso($IdProveedor,$IdFatura,$IdArticulo) {
 		$sql = "
-		SELECT 
-		ComFactura.ComProveedorId,
-		ComEntradaMercancia.InvLoteId,
+		SELECT ComFactura.ComProveedorId,
+		InvLote.Numero AS NumeroLote,
+		InvLote.LoteFabricante,
 		ComFactura.NumeroFactura, 
 		CONVERT(DATE,ComFactura.FechaDocumento) AS FechaDocumento,
+		CONVERT(DATE,ComFactura.FechaRegistro) AS FechaRecepcion,
+		CONVERT(DATE,InvLote.FechaVencimiento) AS FechaVencimiento,
 		InvArticulo.CodigoArticulo,
 		InvArticulo.Descripcion
 		FROM ComFactura
 		INNER JOIN ComFacturaDetalle ON ComFactura.Id = ComFacturaDetalle.ComFacturaId
 		INNER JOIN InvArticulo ON ComFacturaDetalle.InvArticuloId = InvArticulo.Id
-		INNER JOIN ComEntradaMercancia ON ComEntradaMercancia.InvArticuloId = InvArticulo.Id
+		INNER JOIN InvLote ON InvLote.InvArticuloId = InvArticulo.Id
 		WHERE ComFactura.ComProveedorId='$IdProveedor' 
 		AND ComFactura.Id='$IdFatura'
 		AND InvArticulo.Id='$IdArticulo'
-		GROUP BY ComFactura.ComProveedorId, ComEntradaMercancia.InvLoteId, ComFactura.NumeroFactura, CONVERT(DATE,ComFactura.FechaDocumento), InvArticulo.CodigoArticulo, InvArticulo.Descripcion
-		ORDER BY ComEntradaMercancia.InvLoteId ASC
-		";
-		return $sql;
-	}
-
-	/*
-		TITULO: QGuardarCartaDeCompromiso
-		PARAMETROS: [$proveedor] Id del provedor solicitado
-					[$articulo] Descripcion del articulo
-					[$lote] Lote al que pertenece el articulo
-					[$fecha_documento] Fecha de la factura
-					[$fecha_recepcion] Fecha de recepcion del articulo
-					[$fecha_vencimiento] Fecha de vencimiento del articulo
-					[$fecha_tope] Fecha tope del compromiso
-					[$causa] Causa del compromiso
-					[$nota] Notas adicionales
-					[$user] Usuario responsable
-					[$date] Fecha de creacion del compromiso
-		FUNCION: Construir las columnas correspondientes al reporte
-		RETORNO: Un String con la query
-	 */
-	function QGuardarCartaDeCompromiso($proveedor,$articulo,$lote,$fecha_documento,$fecha_recepcion,$fecha_vencimiento,$fecha_tope,$causa,$nota,$user,$date) {
-		$sql = "
-		INSERT INTO carta_compromisos 
-		(proveedor,articulo,lote,fecha_documento,fecha_recepcion,fecha_vencimiento,fecha_tope,causa,nota,estatus,user,created_at,updated_at)
-		VALUES 
-		('$proveedor','$articulo','$lote','$fecha_documento','$fecha_recepcion','$fecha_vencimiento','$fecha_tope','$causa','$nota','ACTIVO','$user','$date','$date')
+		AND CONVERT(DATE,ComFactura.FechaRegistro) = CONVERT(DATE,InvLote.FechaEntrada)
+		GROUP BY ComFactura.ComProveedorId, InvLote.Numero, InvLote.LoteFabricante, ComFactura.NumeroFactura, CONVERT(DATE,ComFactura.FechaDocumento), CONVERT(DATE,ComFactura.FechaRegistro), CONVERT(DATE,InvLote.FechaVencimiento), InvArticulo.CodigoArticulo, InvArticulo.Descripcion
+		ORDER BY InvLote.Numero ASC
 		";
 		return $sql;
 	}

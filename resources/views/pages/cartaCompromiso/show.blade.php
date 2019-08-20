@@ -7,12 +7,12 @@
 @section('content')
  	<h1 class="h5 text-info">
 		<i class="far fa-eye"></i>
-		Detalle de la carta de compromiso
+		Detalle de los compromisos
 	</h1>
 
 	<hr class="row align-items-start col-12">
 
-	<form action="/cartaCompromiso/" method="POST" style="display:inline;">  
+	<form action="/cartaCompromiso/?SEDE=<?php print_r($_GET['SEDE']); ?>" method="POST" style="display:inline;">  
 	    @csrf					    
 	    <button type="submit" name="Regresar" role="button" class="btn btn-outline-info btn-sm"data-placement="top">
 	    	<i class="fa fa-reply">&nbsp;Regresar</i>
@@ -46,7 +46,7 @@
 		    </tr>
 
 		    <tr>
-		      	<th scope="row">Fecha de documento</th>
+		      	<th scope="row">Fecha de factura</th>
 	    	  	<td>{{date('d-m-Y',strtotime($cartaCompromiso->fecha_documento))}}</td>
 		    </tr>
 
@@ -57,7 +57,15 @@
 
 		    <tr>
 		      	<th scope="row">Fecha de vencimiento (Art&iacute;culo)</th>
-	    	  	<td>{{date('d-m-Y',strtotime($cartaCompromiso->fecha_vencimiento))}}</td>
+	    	  	<td>
+	    	  		@if($cartaCompromiso->fecha_vencimiento != null)
+			      		{{date('d-m-Y',strtotime($cartaCompromiso->fecha_vencimiento))}}
+			      	@endif
+
+			      	@if($cartaCompromiso->fecha_vencimiento == null)
+			      		<?php echo '00-00-0000'; ?>
+			      	@endif
+	    	  	</td>
 		    </tr>
 
 		    <tr>

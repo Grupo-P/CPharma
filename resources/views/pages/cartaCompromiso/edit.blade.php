@@ -1,7 +1,7 @@
 @extends('layouts.model')
 
 @section('title')
-    Carta de compromiso
+    Compromisos
 @endsection
 
 @section('content')
@@ -29,12 +29,12 @@
 
   <h1 class="h5 text-info">
       <i class="fas fa-edit"></i>
-      Actualizar carta de compromiso
+      Actualizar carta compromiso
   </h1>
 
   <hr class="row align-items-start col-12">
 
-  <form action="/cartaCompromiso/" method="POST" style="display: inline;">  
+  <form action="/cartaCompromiso/?SEDE=<?php print_r($_GET['SEDE']); ?>" method="POST" style="display: inline;">  
       @csrf
       <button type="submit" name="Regresar" role="button" class="btn btn-outline-info btn-sm"data-placement="top"><i class="fa fa-reply">&nbsp;Regresar</i></button>
   </form>
@@ -72,6 +72,13 @@
         </tr>
 
         <tr>
+          <th>Fecha de factura</th>
+          <td>
+            <input id="fecha_recepcion" type="date" name="fecha_recepcion" value="{{$cartaCompromiso->fecha_documento}}" class="form-control" disabled>
+          </td>
+        </tr>
+
+        <tr>
           <th>Fecha de recepci&oacute;n (Art&iacute;culo)</th>
           <td>
             <input id="fecha_recepcion" type="date" name="fecha_recepcion" value="{{$cartaCompromiso->fecha_recepcion}}" class="form-control" disabled>
@@ -81,12 +88,19 @@
         <tr>
           <th>Fecha de vencimiento (Art&iacute;culo)</th>
           <td>
-            <input id="fecha_vencimiento" type="date" name="fecha_vencimiento" value="{{$cartaCompromiso->fecha_vencimiento}}" class="form-control" disabled>
+              @if($cartaCompromiso->fecha_vencimiento != null)
+                <input id="fecha_vencimiento" type="date" name="fecha_vencimiento" value="{{$cartaCompromiso->fecha_vencimiento}}" class="form-control" disabled>
+              @endif
+
+              @if($cartaCompromiso->fecha_vencimiento == null)
+                <input id="fecha_vencimiento" name="fecha_vencimiento" type="hidden" value="{{$cartaCompromiso->fecha_vencimiento}}">
+                <label class="form-control" style="background-color:#e9ecef; opacity:1;">00-00-0000</label>
+              @endif
           </td>
         </tr>
 
         <tr>
-          <th>Fecha tope (Carta compromiso)</th>
+          <th>Fecha tope (Compromiso)</th>
           <td>
             <input id="fecha_tope" type="date" name="fecha_tope" value="{{$cartaCompromiso->fecha_tope}}" class="form-control" disabled>
           </td>
@@ -97,20 +111,17 @@
             Causa
           </th>
           <td>
-            <textarea name="causa" id="causa" class="form-control" rows="3" placeholder="Causa del compromiso" maxlength="450">
-              {{$cartaCompromiso->causa}}
-            </textarea>
+            <textarea name="causa" id="causa" class="form-control" rows="3" placeholder="Causa del compromiso" maxlength="450">{{$cartaCompromiso->causa}}</textarea>
           </td>
         </tr>
 
         <tr>
           <th>
             Nota
+            <input id="SEDE" name="SEDE" type="hidden" value="<?php print_r($_GET['SEDE']); ?>">
           </th>
           <td>
-            <textarea name="nota" id="nota" class="form-control" rows="3" placeholder="Nota del compromiso" maxlength="450">
-              {{$cartaCompromiso->nota}}
-            </textarea>
+            <textarea name="nota" id="nota" class="form-control" rows="3" placeholder="Nota del compromiso" maxlength="450">{{$cartaCompromiso->nota}}</textarea>
           </td>
         </tr>
       </tbody>
