@@ -1,39 +1,35 @@
 <style>
   a{
     text-decoration: none;
-    color: green;
+    color: #28A745;
   }
 
   li > a {      
-    /*border-style: solid;
-    border-width: 1px;
-    border-color: green;
-    border-radius: 5px;*/
     margin-top: 2px;
   }
 
   li > a:hover {      
     border-style: solid;
     border-width: 1px;
-    border-color: green;
+    border-color: #28A745;
     border-radius: 5px;
-    background-color: green;
+    background-color: #28A745;
     color: white;
   }
 
   ul > a:hover {      
     border-style: solid;
     border-width: 1px;
-    border-color: green;
+    border-color: #28A745;
     border-radius: 5px;
-    background-color: green;
+    background-color: #28A745;
     color: white;
   }
 
   .dropdiv{
     border-style: solid;
     border-width: 1px;
-    border-color: green;
+    border-color: #28A745;
     border-radius: 5px;
     background: rgba(255,255,255,0.92);
   }
@@ -167,16 +163,7 @@
       </a>
     </li>
     
-    <!-- TODO LO QUE ESTE DEBAJO DE ESTA LINEA ESTA EN FASE DE DESARROLLO -->
-    <hr class="row align-items-center bg-danger">
-
-    <li class="nav-item">
-      <a class="nav-link" href="{{ url('/cartaCompromiso') }}">
-        <span data-feather="home"></span>
-        <i class="far fa-address-card"></i>
-        Carta compromiso<span class="sr-only">(current)</span>
-      </a>
-    </li>
+    <hr class="row align-items-center bg-warning">
 
     <li class="nav-item">
       <a class="nav-link" href="{{ url('/rol') }}">
@@ -226,7 +213,9 @@
       </a>
     </li>
 
-<!--Menus de pruebas para el desarrollo-->
+<!-- TODO LO QUE ESTE DEBAJO DE ESTA LINEA ESTA EN FASE DE DESARROLLO -->
+<hr class="row align-items-center bg-danger">
+
     <li class="nav-item">
       <a class="nav-link" href="{{ url('/testS') }}">     
         <span data-feather="home"></span>
