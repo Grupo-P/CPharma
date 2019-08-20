@@ -622,34 +622,79 @@
 
 		return $diferencia_numero;
 	}
+
 	/*
-		TITULO: ProductoDolarizado
-		PARAMETROS: [$conn] cadena de conexion
-					[$IdArticulo] id del articulo a buscar
-		FUNCION: Determina si el producto esta dolarizado 
-		RETORNO: Retorna si el producto esta dolarizado o no
+		TITULO: GuardarDiasEnCero
+		PARAMETROS: [$IdArticulo] Id del articulo
+					[$CodigoInterno] Codigo interno del articulo
+					[$Descripcion] Nombre del articulo
+					[$Existencia] Existencia del articulo
+					[$FechaCaptura] El dia de hoy
+		FUNCION: crea una conexion con la base de datos cpharma e ingresa datos
+		RETORNO: no aplica
 	 */
-	function ProductoDolarizado($conn,$IdArticulo) {
-		$Dolarizado = '';
-		
-		$sql = QDolarizados();
-		$result = sqlsrv_query($conn,$sql);
-		$row = sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC);
-		$IdDolarizado = $row["Id"];
-
-		$sql1 = QArticuloDolarizado($IdArticulo,$IdDolarizado);
-		$params = array();
-		$options =  array("Scrollable"=>SQLSRV_CURSOR_KEYSET);
-		$result1 = sqlsrv_query($conn,$sql1,$params,$options);
-		$row_count = sqlsrv_num_rows($result1);
-		
-		if($row_count == 0) {
-			$Dolarizado = 'NO';
-		}
-		else {
-			$Dolarizado = 'SI';
-		}
-
-	  	return $Dolarizado;
+	function GuardarDiasEnCero($IdArticulo,$CodigoInterno,$Descripcion,$Existencia,$Precio,$FechaCaptura,$user,$date) {
+		$conn = ConectarXampp();
+		$sql = QGuardarDiasEnCero($IdArticulo,$CodigoInterno,$Descripcion,$Existencia,$Precio,$FechaCaptura,$user,$date);
+		$result = mysqli_query($conn,$sql);
+		mysqli_close($conn);
 	}
+
+/************************************************/
+
+function pesca(){
+
+	$conn = ConectarSmartpharma('DBm');
+	$sql = QDiasEnCero();
+	$Result_SQLServer = sqlsrv_query($conn,$sql);
+
+	while ($Tabla_SQLServer = sqlsrv_fetch_array($Result_SQLServer, SQLSRV_FETCH_ASSOC)) {
+		
+		$IdArticulo_SqlServer = $Tabla_SQLServer["IdArticulo"];
+
+		$connCP = ConectarXampp();
+		$sqlCP = "SELECT id_articulo FROM dias_ceros where id_articulo ='$IdArticulo_SqlServer'";
+		$Result_Dias_Cero = mysqli_query($connCP,$sqlCP);
+		$Tabla_Dias_Cero = mysqli_fetch_assoc($Result_Dias_Cero);
+		$IdArticulo_Dias_Cero = $Tabla_Dias_Cero['id_articulo'];
+
+		if($IdArticulo_SqlServer != $IdArticulo_Dias_Cero){
+			echo '
+			<div class="input-group md-form form-sm form-1 pl-0">
+			  <div class="input-group-prepend">
+			    <span class="input-group-text purple lighten-3" id="basic-text1">
+			    	<i class="fas fa-search text-white"
+			        aria-hidden="true"></i>
+			    </span>
+			  </div>
+			  <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterFirsTable()">
+			</div>
+			<br/>
+			<table class="table table-striped table-bordered col-12 sortable" id="myTable">
+			  	<thead class="thead-dark">
+				    <tr>
+				      	<th scope="col">IdArticulo</th>
+				      	<th scope="col">CodigoInterno</th>
+				      	<th scope="col">Descripcion</th>
+				      	<th scope="col">Existencia</th>
+				    </tr>
+			  	</thead>
+			  	<tbody>
+			';
+
+			echo '<tr>';
+			echo '<td>'.$Tabla_SQLServer['IdArticulo'].'</td>';
+			echo '<td>'.$Tabla_SQLServer['CodigoInterno'].'</td>';
+			echo '<td>'.$Tabla_SQLServer['Descripcion'].'</td>';
+			echo '<td>'.$Tabla_SQLServer['Existencia'].'</td>';
+			echo '</tr>';
+
+			echo '
+	  		</tbody>
+		</table>';
+		}
+	}
+	sqlsrv_close($conn);
+}
+/************************************************/
 ?>

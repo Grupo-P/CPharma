@@ -1122,10 +1122,12 @@
 	}
 
 	/*
-		TITULO: 
-		PARAMETROS: 
-		FUNCION:
-		RETORNO:
+		TITULO: QCartaDeCompromiso
+		PARAMETROS: [$IdProveedor] Id del provedor solicitado, 
+					[$IdFatura] Id de la factura actual
+					[$IdArticulo] Id del articulo solicitado
+		FUNCION: Construir las columnas correspondientes al reporte
+		RETORNO: Un String con la query
 	 */
 	function QCartaDeCompromiso($IdProveedor,$IdFatura,$IdArticulo) {
 		$sql = "
@@ -1150,10 +1152,20 @@
 	}
 
 	/*
-		TITULO: 
-		PARAMETROS: 
-		FUNCION:
-		RETORNO:
+		TITULO: QGuardarCartaDeCompromiso
+		PARAMETROS: [$proveedor] Id del provedor solicitado
+					[$articulo] Descripcion del articulo
+					[$lote] Lote al que pertenece el articulo
+					[$fecha_documento] Fecha de la factura
+					[$fecha_recepcion] Fecha de recepcion del articulo
+					[$fecha_vencimiento] Fecha de vencimiento del articulo
+					[$fecha_tope] Fecha tope del compromiso
+					[$causa] Causa del compromiso
+					[$nota] Notas adicionales
+					[$user] Usuario responsable
+					[$date] Fecha de creacion del compromiso
+		FUNCION: Construir las columnas correspondientes al reporte
+		RETORNO: Un String con la query
 	 */
 	function QGuardarCartaDeCompromiso($proveedor,$articulo,$lote,$fecha_documento,$fecha_recepcion,$fecha_vencimiento,$fecha_tope,$causa,$nota,$user,$date) {
 		$sql = "
@@ -1161,6 +1173,56 @@
 		(proveedor,articulo,lote,fecha_documento,fecha_recepcion,fecha_vencimiento,fecha_tope,causa,nota,estatus,user,created_at,updated_at)
 		VALUES 
 		('$proveedor','$articulo','$lote','$fecha_documento','$fecha_recepcion','$fecha_vencimiento','$fecha_tope','$causa','$nota','ACTIVO','$user','$date','$date')
+		";
+		return $sql;
+	}
+
+	/*
+		TITULO: QDiasEnCero
+		PARAMETROS: No aplica
+		FUNCION: Construir las columnas correspondientes al reporte
+		RETORNO: Un String con la query
+	 */
+	function QDiasEnCero() {
+		$sql = "
+		SELECT 
+		InvArticulo.Id AS IdArticulo,
+		InvArticulo.CodigoArticulo AS CodigoInterno,
+		InvArticulo.Descripcion,
+		SUM(InvLoteAlmacen.Existencia) AS Existencia,
+		InvArticulo.FinConceptoImptoIdCompra AS ConceptoImpuesto
+		FROM InvArticulo
+		INNER JOIN InvLoteAlmacen ON InvArticulo.Id=InvLoteAlmacen.InvArticuloId
+		WHERE InvLoteAlmacen.Existencia > 0
+		AND (InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
+		GROUP BY InvArticulo.Id, InvArticulo.CodigoArticulo, InvArticulo.Descripcion, InvArticulo.FinConceptoImptoIdCompra
+		ORDER BY InvArticulo.Id ASC
+		";
+		return $sql;
+	}
+
+	/*
+		TITULO: QGuardarDiasEnCero
+		PARAMETROS: [$proveedor] Id del provedor solicitado
+					[$articulo] Descripcion del articulo
+					[$lote] Lote al que pertenece el articulo
+					[$fecha_documento] Fecha de la factura
+					[$fecha_recepcion] Fecha de recepcion del articulo
+					[$fecha_vencimiento] Fecha de vencimiento del articulo
+					[$fecha_tope] Fecha tope del compromiso
+					[$causa] Causa del compromiso
+					[$nota] Notas adicionales
+					[$user] Usuario responsable
+					[$date] Fecha de creacion del compromiso
+		FUNCION: Construir las columnas correspondientes al reporte
+		RETORNO: Un String con la query
+	 */
+	function QGuardarDiasEnCero($IdArticulo,$CodigoInterno,$Descripcion,$Existencia,$Precio,$FechaCaptura,$user,$date) {
+		$sql = "
+		INSERT INTO dias_ceros 
+		(id_articulo,codigo_articulo,descripcion,existencia,precio,fecha_captura,user,created_at,updated_at)
+		VALUES 
+		('$IdArticulo','$CodigoInterno','$Descripcion','$Existencia','$Precio','$FechaCaptura','$user','$date','$date')
 		";
 		return $sql;
 	}

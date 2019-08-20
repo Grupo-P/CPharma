@@ -8,11 +8,10 @@
 		RETORNO: No aplica
 	 */
 	function ReporteActivacionProveedores($SedeConnection){
-
 		$conn = ConectarSmartpharma($SedeConnection);
 
 		$sql = QCleanTable('CP_QFRegProveedor');
-		sqlsrv_query($conn,$sql);		
+		sqlsrv_query($conn,$sql);
 
 		$sql1 = QFRegProveedor();
 		sqlsrv_query($conn,$sql1);
@@ -1605,7 +1604,7 @@
 	/************************ REPORTE CARTA DE COMPROMISO *******************/
 
 	/*
-		TITULO: GuardarCartaCompromiso
+		TITULO: CartaDeCompromiso
 		PARAMETROS: [$SedeConnection] sede donde se hara la conexion
 					[$IdProveedor] ID del proveedor a buscar
 					[$NombreProveedor] Nombre del proveedor a buscar
@@ -1751,5 +1750,80 @@
 		</form>';
 
 		sqlsrv_close($conn);
-	}	
+	}
+
+	/*****************************************************************************/
+	/************************ REPORTE 11 DIAS EN CERO *******************/
+
+	/*
+		TITULO: ReporteDiasEnCero
+		PARAMETROS: 
+		FUNCION: 
+		RETORNO: no aplica
+	 */
+	function ReporteDiasEnCero($SedeConnection) {
+		$conn = ConectarSmartpharma($SedeConnection);
+
+		$sql = QDiasEnCero();
+		$result = sqlsrv_query($conn,$sql);
+
+		$FechaCaptura = new DateTime("now");
+		$FechaCaptura = $FechaCaptura->format('Y-m-d');
+		$user = auth()->user()->name;
+
+		$cont = 1;
+
+		echo '
+			<div class="input-group md-form form-sm form-1 pl-0">
+			  <div class="input-group-prepend">
+			    <span class="input-group-text purple lighten-3" id="basic-text1">
+			    	<i class="fas fa-search text-white"
+			        aria-hidden="true"></i>
+			    </span>
+			  </div>
+			  <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterFirsTable()">
+			</div>
+			<br/>
+			<table class="table table-striped table-bordered col-12 sortable" id="myTable">
+			  	<thead class="thead-dark">
+				    <tr>
+				    	<th scope="col">Cotador</th>
+				      	<th scope="col">IdArticulo</th>
+				      	<th scope="col">CodigoInterno</th>
+				      	<th scope="col">Descripcion</th>
+				      	<th scope="col">Existencia</th>
+				  	</tr>
+			  	</thead>
+			  	<tbody>
+			';
+
+		while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
+			$IdArticulo = $row["IdArticulo"];
+			$CodigoInterno = $row["CodigoInterno"];
+			$Descripcion_User=$row["Descripcion"];
+			$Existencia=intval($row["Existencia"]);
+			$date = date('Y-m-d h:m:s',time());
+			$Descripcion = addslashes($Descripcion_User);//Escapa los caracteres especiales
+			$IsIVA = $row["ConceptoImpuesto"];
+			$Precio = CalculoPrecio($conn,$IdArticulo,$IsIVA,$Existencia);
+			
+			GuardarDiasEnCero($IdArticulo,$CodigoInterno,$Descripcion,$Existencia,$Precio,$FechaCaptura,$user,$date);
+		
+			echo '<tr>';
+			echo '<td>'.$cont.'</td>';
+			echo '<td>'.$IdArticulo.'</td>';
+			echo '<td>'.$CodigoInterno.'</td>';
+			echo '<td>'.$Descripcion_User.'</td>';
+			echo '<td>'.$Existencia.'</td>';			
+			echo '</tr>';
+
+			$cont++;
+		}
+
+		echo '
+	  		</tbody>
+		</table>';
+
+		sqlsrv_close($conn);
+	}
 ?>
