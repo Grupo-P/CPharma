@@ -119,9 +119,6 @@
 		echo '<td>'.$row["Descripcion"].'</td>';
 		echo '<td align="center">'.intval($Existencia).'</td>';
 		echo '<td align="center">'." ".round($Precio,2)." ".SigVe.'</td>';
-
-		$Dolarizado = ProductoDolarizado($conn,$IdArticulo);
-
 		echo '<td align="center">'.$Dolarizado.'</td>';
 
 		if($TasaActual!=0){

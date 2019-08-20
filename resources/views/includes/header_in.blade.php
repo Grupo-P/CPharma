@@ -4,21 +4,21 @@
 
  .divborder{
     border-collapse: collapse;
-    border-color: green;
+    border-color: #28A745;
   }
 
   .aborder{
     border-collapse: collapse;
-    border-color: green;
-    color: green;
+    border-color: #28A745;
+    color: #28A745;
     background-color: none;
   }
 
   .aborder:hover{
       border-collapse: collapse;
-      border-color: green;
+      border-color: #28A745;
       color: white;
-      background-color: green;
+      background-color: #28A745;
     }
 
     .title {
@@ -56,8 +56,8 @@
         @else
           <li class="nav-item dropdown">
             <a id="navbarDropdown" class="nav-link dropdown-toggle text-succees" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-            <i class="fas fa-user"></i>
-            {{ Auth::user()->name }} <span class="caret"></span>
+            <i class="fas fa-user text-succees"></i>
+            {{ Auth::user()->name }} <span class="caret text-succees"></span>
             </a>
 
             <div class="dropdown-menu dropdown-menu-right divborder" aria-labelledby="navbarDropdown">

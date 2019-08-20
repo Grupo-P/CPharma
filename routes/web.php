@@ -118,3 +118,5 @@ Route::resource('conexion', 'ConexionController');
 Route::resource('configuracion', 'ConfiguracionController');
 
 Route::resource('auditoria', 'AuditoriaController');
+
+Route::resource('diasCero', 'DiasCeroController');

@@ -28,7 +28,8 @@
 		        <ul style="list-style:none">
 		        	<i class="far fa-check-circle text-info" style="display: inline;"></i>
     				<li class="card-text text-dark" style="display: inline;">
-    					Ya puedes ver el reporte <b class="text-info">Analitico de precios</b>
+    					Ya puedes ver el reporte <b class="text-info">Compromiso</b>,
+    					ideal para los <b class="text-info">departamentos</b> procesamiento y <b class="text-info">devoluciones</b>
     				</li>		
     			</ul>
 		      </div>
@@ -88,7 +89,7 @@
 	    		<h2 class="card-title">
 		    		<span class="card-text text-white">
 		    			<i class="fas fa-file-invoice"></i>
-		    			10	    			
+		    			11	    			
 		    		</span>
 	    		</h2>
 	    		<p class="card-text text-white">Reportes disponibles</p>

@@ -589,24 +589,6 @@
 		return $CantidadPedido;
 	}
 	/*
-		TITULO: GuardarCartaCompromiso
-		PARAMETROS: [$SedeConnection] sede donde se hara la conexion
-					[$IdProveedor] ID del proveedor a buscar
-					[$NombreProveedor] Nombre del proveedor a buscar
-					[$IdFatura] id de la factura
-					[$IdArticulo] ide del articulo
-		FUNCION: arma la lista del troquel segun el articulo
-		RETORNO: no aplica
-	 */
-	function GuardarCartaDeCompromiso($proveedor,$articulo,$lote,$fecha_documento,$fecha_recepcion,$fecha_vencimiento,$fecha_tope,$causa,$nota) {
-		$user = auth()->user()->name;
-		$date = date('Y-m-d h:m:s',time());
-		$conn = ConectarXampp();
-		$sql = QGuardarCartaDeCompromiso($proveedor,$articulo,$lote,$fecha_documento,$fecha_recepcion,$fecha_vencimiento,$fecha_tope,$causa,$nota,$user,$date);
-		$result = mysqli_query($conn,$sql);
-		mysqli_close($conn);
-	}
-	/*
 		TITULO: ValidarFechas
 		PARAMETROS: [$Fecha1] Fecha que se restaras
 					[$Fecha2] Fecha a la que se le restara
@@ -625,7 +607,6 @@
 
 		return $diferencia_numero;
 	}
-
 	/*
 		TITULO: GuardarDiasEnCero
 		PARAMETROS: [$IdArticulo] Id del articulo
@@ -642,62 +623,90 @@
 		$result = mysqli_query($conn,$sql);
 		mysqli_close($conn);
 	}
-
-/************************************************/
-
-function pesca(){
-
-	$conn = ConectarSmartpharma('DBm');
-	$sql = QDiasEnCero();
-	$Result_SQLServer = sqlsrv_query($conn,$sql);
-
-	while ($Tabla_SQLServer = sqlsrv_fetch_array($Result_SQLServer, SQLSRV_FETCH_ASSOC)) {
+	/*
+		TITULO: ProductoDolarizado
+		PARAMETROS: [$conn] cadena de conexion
+					[$IdArticulo] id del articulo a buscar
+		FUNCION: Determina si el producto esta dolarizado 
+		RETORNO: Retorna si el producto esta dolarizado o no
+ 	*/
+	function ProductoDolarizado($conn,$IdArticulo) {
+		$Dolarizado = '';
 		
-		$IdArticulo_SqlServer = $Tabla_SQLServer["IdArticulo"];
+		$sql = QDolarizados();
+		$result = sqlsrv_query($conn,$sql);
+		$row = sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC);
+		$IdDolarizado = $row["Id"];
 
-		$connCP = ConectarXampp();
-		$sqlCP = "SELECT id_articulo FROM dias_ceros where id_articulo ='$IdArticulo_SqlServer'";
-		$Result_Dias_Cero = mysqli_query($connCP,$sqlCP);
-		$Tabla_Dias_Cero = mysqli_fetch_assoc($Result_Dias_Cero);
-		$IdArticulo_Dias_Cero = $Tabla_Dias_Cero['id_articulo'];
-
-		if($IdArticulo_SqlServer != $IdArticulo_Dias_Cero){
-			echo '
-			<div class="input-group md-form form-sm form-1 pl-0">
-			  <div class="input-group-prepend">
-			    <span class="input-group-text purple lighten-3" id="basic-text1">
-			    	<i class="fas fa-search text-white"
-			        aria-hidden="true"></i>
-			    </span>
-			  </div>
-			  <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterFirsTable()">
-			</div>
-			<br/>
-			<table class="table table-striped table-bordered col-12 sortable" id="myTable">
-			  	<thead class="thead-dark">
-				    <tr>
-				      	<th scope="col">IdArticulo</th>
-				      	<th scope="col">CodigoInterno</th>
-				      	<th scope="col">Descripcion</th>
-				      	<th scope="col">Existencia</th>
-				    </tr>
-			  	</thead>
-			  	<tbody>
-			';
-
-			echo '<tr>';
-			echo '<td>'.$Tabla_SQLServer['IdArticulo'].'</td>';
-			echo '<td>'.$Tabla_SQLServer['CodigoInterno'].'</td>';
-			echo '<td>'.$Tabla_SQLServer['Descripcion'].'</td>';
-			echo '<td>'.$Tabla_SQLServer['Existencia'].'</td>';
-			echo '</tr>';
-
-			echo '
-	  		</tbody>
-		</table>';
+		$sql1 = QArticuloDolarizado($IdArticulo,$IdDolarizado);
+		$params = array();
+		$options =  array("Scrollable"=>SQLSRV_CURSOR_KEYSET);
+		$result1 = sqlsrv_query($conn,$sql1,$params,$options);
+		$row_count = sqlsrv_num_rows($result1);
+		
+		if($row_count == 0) {
+			$Dolarizado = 'NO';
 		}
+		else {
+			$Dolarizado = 'SI';
+		}
+
+	  	return $Dolarizado;
 	}
-	sqlsrv_close($conn);
-}
-/************************************************/
+	/************************************************/
+	function pesca(){
+
+		$conn = ConectarSmartpharma('DBm');
+		$sql = QDiasEnCero();
+		$Result_SQLServer = sqlsrv_query($conn,$sql);
+
+		while ($Tabla_SQLServer = sqlsrv_fetch_array($Result_SQLServer, SQLSRV_FETCH_ASSOC)) {
+			
+			$IdArticulo_SqlServer = $Tabla_SQLServer["IdArticulo"];
+
+			$connCP = ConectarXampp();
+			$sqlCP = "SELECT id_articulo FROM dias_ceros where id_articulo ='$IdArticulo_SqlServer'";
+			$Result_Dias_Cero = mysqli_query($connCP,$sqlCP);
+			$Tabla_Dias_Cero = mysqli_fetch_assoc($Result_Dias_Cero);
+			$IdArticulo_Dias_Cero = $Tabla_Dias_Cero['id_articulo'];
+
+			if($IdArticulo_SqlServer != $IdArticulo_Dias_Cero){
+				echo '
+				<div class="input-group md-form form-sm form-1 pl-0">
+				  <div class="input-group-prepend">
+				    <span class="input-group-text purple lighten-3" id="basic-text1">
+				    	<i class="fas fa-search text-white"
+				        aria-hidden="true"></i>
+				    </span>
+				  </div>
+				  <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterFirsTable()">
+				</div>
+				<br/>
+				<table class="table table-striped table-bordered col-12 sortable" id="myTable">
+				  	<thead class="thead-dark">
+					    <tr>
+					      	<th scope="col">IdArticulo</th>
+					      	<th scope="col">CodigoInterno</th>
+					      	<th scope="col">Descripcion</th>
+					      	<th scope="col">Existencia</th>
+					    </tr>
+				  	</thead>
+				  	<tbody>
+				';
+
+				echo '<tr>';
+				echo '<td>'.$Tabla_SQLServer['IdArticulo'].'</td>';
+				echo '<td>'.$Tabla_SQLServer['CodigoInterno'].'</td>';
+				echo '<td>'.$Tabla_SQLServer['Descripcion'].'</td>';
+				echo '<td>'.$Tabla_SQLServer['Existencia'].'</td>';
+				echo '</tr>';
+
+				echo '
+		  		</tbody>
+			</table>';
+			}
+		}
+		sqlsrv_close($conn);
+	}
+	/************************************************/
 ?>
