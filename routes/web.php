@@ -89,6 +89,10 @@ Route::get('/reporte10', function() {
     return view('pages.reporte.reporte10');
 });
 
+Route::get('/reporte11', function() {
+    return view('pages.reporte.reporte11');
+});
+
 Route::get('home', 'HomeController@index')->name('home');
 
 Route::resource('dolar', 'DolarController');
@@ -102,3 +106,5 @@ Route::resource('usuario', 'UserController');
 Route::resource('tasaVenta','TasaVentaController');
 
 Route::resource('cartaCompromiso', 'CartaCompromisoController');
+
+Route::resource('diasCero', 'DiasCeroController');
