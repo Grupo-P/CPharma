@@ -30,58 +30,6 @@
 		";					
 		return $sql;
 	}
-	/*
-		TITULO: QTablaTemp
-		PARAMETROS: [$Cant] Cantidad de tablas temporales a preparar
-		FUNCION: Borra el contenido de las tablas temporales si estan en uso
-		RETORNO: Tablas temporales vacias
-	 */
-	function QTablaTemp($Cant) {
-		$sql='';
-		for($i=0;$i<$Cant;$i++) {
-			if($i==0) {
-				$sql = "
-					IF OBJECT_ID ('TablaTemp', 'U') IS NOT NULL
-						DROP TABLE TablaTemp;
-				";
-			}
-			else {
-				$flag = "
-					IF OBJECT_ID ('TablaTemp".$i."', 'U') IS NOT NULL
-						DROP TABLE TablaTemp".$i.";
-				";
-				$sql = $sql.$flag;
-			}
-		}
-		return $sql;
-	}
-	/*
-		TITULO: QTablaTemp
-		PARAMETROS: [$inicio,$fin] inicio y fin del rango a preparar
-		FUNCION: Borra el contenido de las tablas temporales si estan en uso
-		RETORNO: Tablas temporales vacias
-	 */
-	function QTablaTempR($inicio,$fin) {
-		QTablaTemp(ClenTable);
-
-		$sql='';
-		for($i=$inicio;$i<$fin;$i++) {
-			if($i==0){
-				$sql = "
-					IF OBJECT_ID ('TablaTemp', 'U') IS NOT NULL
-						DROP TABLE TablaTemp;
-				";
-			}
-			else {
-				$flag = "
-					IF OBJECT_ID ('TablaTemp".$i."', 'U') IS NOT NULL
-						DROP TABLE TablaTemp".$i.";
-				";
-				$sql = $sql.$flag;
-			}
-		}
-		return $sql;
-	}
 	/*SELECT tasa FROM tasa_ventas where fecha='2019-06-25' AND moneda='USD$'
 		TITULO: QTasaConversion
 		PARAMETROS: [$QFecha] Fecha de la que se quiere la tasa
@@ -327,6 +275,40 @@
 		";
 		return $sql;
 	}
+	/*
+		TITULO: QDolarizados
+		PARAMETROS: No Aplica
+		FUNCION: Busca el Id del atributo si la categoriza es dolarizado
+		RETORNO: Retorna el id del atributo dolarizado
+	 */
+	function QDolarizados() {
+		$sql = "
+		SELECT * 
+		FROM InvAtributo 
+		WHERE 
+		InvAtributo.Descripcion = 'Dolarizados'
+		OR  InvAtributo.Descripcion = 'Giordany'
+		OR  InvAtributo.Descripcion = 'giordany'
+		";
+		return $sql;
+	}
+	/*
+		TITULO: QArticuloDolarizado
+		PARAMETROS: [$IdArticulo] id del articulo a buscar
+					[$IdDolarizado] id del atributo dolarizado
+		FUNCION: Busca detro de la tabla dolarizados el articulo en cuestion
+		RETORNO: Retorna la dupla de valores de ser conseguido
+	 */
+	function QArticuloDolarizado($IdArticulo,$IdDolarizado) {
+		$sql = "
+		SELECT * 
+		FROM InvArticuloAtributo 
+		WHERE InvArticuloAtributo.InvAtributoId = '$IdDolarizado' 
+		AND InvArticuloAtributo.InvArticuloId = '$IdArticulo'
+		";
+		return $sql;
+	}
+
 	/*
 		TITULO: QUnidadesVendidasCliente
 		PARAMETROS: [$FInicial] Fecha inicial del rango a consultar
@@ -1140,45 +1122,84 @@
 	}
 
 	/*
-		TITULO: 
-		PARAMETROS: 
-		FUNCION:
-		RETORNO:
+		TITULO: QCartaDeCompromiso
+		PARAMETROS: [$IdProveedor] Id del provedor solicitado, 
+					[$IdFatura] Id de la factura actual
+					[$IdArticulo] Id del articulo solicitado
+		FUNCION: Construir las columnas correspondientes al reporte
+		RETORNO: Un String con la query
 	 */
 	function QCartaDeCompromiso($IdProveedor,$IdFatura,$IdArticulo) {
 		$sql = "
-		SELECT 
-		ComFactura.ComProveedorId,
-		ComEntradaMercancia.InvLoteId,
+		SELECT ComFactura.ComProveedorId,
+		InvLote.Numero AS NumeroLote,
+		InvLote.LoteFabricante,
 		ComFactura.NumeroFactura, 
 		CONVERT(DATE,ComFactura.FechaDocumento) AS FechaDocumento,
+		CONVERT(DATE,ComFactura.FechaRegistro) AS FechaRecepcion,
+		CONVERT(DATE,InvLote.FechaVencimiento) AS FechaVencimiento,
 		InvArticulo.CodigoArticulo,
 		InvArticulo.Descripcion
 		FROM ComFactura
 		INNER JOIN ComFacturaDetalle ON ComFactura.Id = ComFacturaDetalle.ComFacturaId
 		INNER JOIN InvArticulo ON ComFacturaDetalle.InvArticuloId = InvArticulo.Id
-		INNER JOIN ComEntradaMercancia ON ComEntradaMercancia.InvArticuloId = InvArticulo.Id
+		INNER JOIN InvLote ON InvLote.InvArticuloId = InvArticulo.Id
 		WHERE ComFactura.ComProveedorId='$IdProveedor' 
 		AND ComFactura.Id='$IdFatura'
 		AND InvArticulo.Id='$IdArticulo'
-		GROUP BY ComFactura.ComProveedorId, ComEntradaMercancia.InvLoteId, ComFactura.NumeroFactura, CONVERT(DATE,ComFactura.FechaDocumento), InvArticulo.CodigoArticulo, InvArticulo.Descripcion
-		ORDER BY ComEntradaMercancia.InvLoteId ASC
+		AND CONVERT(DATE,ComFactura.FechaRegistro) = CONVERT(DATE,InvLote.FechaEntrada)
+		GROUP BY ComFactura.ComProveedorId, InvLote.Numero, InvLote.LoteFabricante, ComFactura.NumeroFactura, CONVERT(DATE,ComFactura.FechaDocumento), CONVERT(DATE,ComFactura.FechaRegistro), CONVERT(DATE,InvLote.FechaVencimiento), InvArticulo.CodigoArticulo, InvArticulo.Descripcion
+		ORDER BY InvLote.Numero ASC
 		";
 		return $sql;
 	}
 
 	/*
-		TITULO: 
-		PARAMETROS: 
-		FUNCION:
-		RETORNO:
+		TITULO: QDiasEnCero
+		PARAMETROS: No aplica
+		FUNCION: Construir las columnas correspondientes al reporte
+		RETORNO: Un String con la query
 	 */
-	function QGuardarCartaDeCompromiso($proveedor,$articulo,$lote,$fecha_documento,$fecha_recepcion,$fecha_vencimiento,$fecha_tope,$causa,$nota,$user,$date) {
+	function QDiasEnCero() {
 		$sql = "
-		INSERT INTO carta_compromisos 
-		(proveedor,articulo,lote,fecha_documento,fecha_recepcion,fecha_vencimiento,fecha_tope,causa,nota,estatus,user,created_at,updated_at)
+		SELECT 
+		InvArticulo.Id AS IdArticulo,
+		InvArticulo.CodigoArticulo AS CodigoInterno,
+		InvArticulo.Descripcion,
+		SUM(InvLoteAlmacen.Existencia) AS Existencia,
+		InvArticulo.FinConceptoImptoIdCompra AS ConceptoImpuesto
+		FROM InvArticulo
+		INNER JOIN InvLoteAlmacen ON InvArticulo.Id=InvLoteAlmacen.InvArticuloId
+		WHERE InvLoteAlmacen.Existencia > 0
+		AND (InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
+		GROUP BY InvArticulo.Id, InvArticulo.CodigoArticulo, InvArticulo.Descripcion, InvArticulo.FinConceptoImptoIdCompra
+		ORDER BY InvArticulo.Id ASC
+		";
+		return $sql;
+	}
+
+	/*
+		TITULO: QGuardarDiasEnCero
+		PARAMETROS: [$proveedor] Id del provedor solicitado
+					[$articulo] Descripcion del articulo
+					[$lote] Lote al que pertenece el articulo
+					[$fecha_documento] Fecha de la factura
+					[$fecha_recepcion] Fecha de recepcion del articulo
+					[$fecha_vencimiento] Fecha de vencimiento del articulo
+					[$fecha_tope] Fecha tope del compromiso
+					[$causa] Causa del compromiso
+					[$nota] Notas adicionales
+					[$user] Usuario responsable
+					[$date] Fecha de creacion del compromiso
+		FUNCION: Construir las columnas correspondientes al reporte
+		RETORNO: Un String con la query
+	 */
+	function QGuardarDiasEnCero($IdArticulo,$CodigoInterno,$Descripcion,$Existencia,$Precio,$FechaCaptura,$user,$date) {
+		$sql = "
+		INSERT INTO dias_ceros 
+		(id_articulo,codigo_articulo,descripcion,existencia,precio,fecha_captura,user,created_at,updated_at)
 		VALUES 
-		('$proveedor','$articulo','$lote','$fecha_documento','$fecha_recepcion','$fecha_vencimiento','$fecha_tope','$causa','$nota','ACTIVO','$user','$date','$date')
+		('$IdArticulo','$CodigoInterno','$Descripcion','$Existencia','$Precio','$FechaCaptura','$user','$date','$date')
 		";
 		return $sql;
 	}
@@ -1194,5 +1215,4 @@
 		";
 		return $sql;
 	}
-
 ?>
