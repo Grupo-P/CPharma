@@ -8,11 +8,10 @@
 		RETORNO: No aplica
 	 */
 	function ReporteActivacionProveedores($SedeConnection){
-
 		$conn = ConectarSmartpharma($SedeConnection);
 
 		$sql = QCleanTable('CP_QFRegProveedor');
-		sqlsrv_query($conn,$sql);		
+		sqlsrv_query($conn,$sql);
 
 		$sql1 = QFRegProveedor();
 		sqlsrv_query($conn,$sql1);
@@ -1749,7 +1748,6 @@
 		RETORNO: no aplica
 	 */
 	function ReporteDiasEnCero($SedeConnection) {
-
 		$conn = ConectarSmartpharma($SedeConnection);
 
 		$sql = QDiasEnCero();
@@ -1762,7 +1760,6 @@
 		$cont = 1;
 
 		echo '
-		<h3>Tabla de Dias en Cero SQL Server</h3>
 			<div class="input-group md-form form-sm form-1 pl-0">
 			  <div class="input-group-prepend">
 			    <span class="input-group-text purple lighten-3" id="basic-text1">
@@ -1793,8 +1790,10 @@
 			$Existencia=intval($row["Existencia"]);
 			$date = date('Y-m-d h:m:s',time());
 			$Descripcion = addslashes($Descripcion_User);//Escapa los caracteres especiales
-
-			GuardarDiasEnCero($IdArticulo,$CodigoInterno,$Descripcion,$Existencia,$FechaCaptura,$user,$date);
+			$IsIVA = $row["ConceptoImpuesto"];
+			$Precio = CalculoPrecio($conn,$IdArticulo,$IsIVA,$Existencia);
+			
+			GuardarDiasEnCero($IdArticulo,$CodigoInterno,$Descripcion,$Existencia,$Precio,$FechaCaptura,$user,$date);
 		
 			echo '<tr>';
 			echo '<td>'.$cont.'</td>';
@@ -1812,59 +1811,5 @@
 		</table>';
 
 		sqlsrv_close($conn);
-
-
-/*Aqui inicia la segunda tabla*/
-
-		$connCP = ConectarXampp();
-		$sqlCP = "SELECT * FROM dias_ceros";
-		$Result_Dias_Cero = mysqli_query($connCP,$sqlCP);
-		$contador = 1;
-
-		echo '
-			<h3>Tabla de Dias en Cero CPharma</h3>
-			<div class="input-group md-form form-sm form-1 pl-0">
-			  <div class="input-group-prepend">
-			    <span class="input-group-text purple lighten-3" id="basic-text1">
-			    	<i class="fas fa-search text-white"
-			        aria-hidden="true"></i>
-			    </span>
-			  </div>
-			  <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterFirsTable()">
-			</div>
-			<br/>
-			<table class="table table-striped table-bordered col-12 sortable" id="myTable">
-			  	<thead class="thead-dark">
-				    <tr>
-				    	<th scope="col">Cotador</th>
-				      	<th scope="col">IdArticulo</th>
-				      	<th scope="col">CodigoInterno</th>
-				      	<th scope="col">Descripcion</th>
-				      	<th scope="col">Existencia</th>				 
-				    </tr>
-			  	</thead>
-			  	<tbody>
-			';
-
-		while($Tabla_Dias_Cero = mysqli_fetch_assoc($Result_Dias_Cero)) {
-			$IdArticulo = $Tabla_Dias_Cero["id_articulo"];
-			$CodigoInterno = $Tabla_Dias_Cero["codigo_articulo"];
-			$Descripcion=$Tabla_Dias_Cero["descripcion"];
-			$Existencia=intval($Tabla_Dias_Cero["existencia"]);
-
-			echo '<tr>';
-			echo '<td>'.$contador.'</td>';
-			echo '<td>'.$IdArticulo.'</td>';
-			echo '<td>'.$CodigoInterno.'</td>';
-			echo '<td>'.$Descripcion.'</td>';
-			echo '<td>'.$Existencia.'</td>';
-			echo '</tr>';
-
-			$contador++;
-		}
-
-		echo '
-	  		</tbody>
-		</table>';
 	}
 ?>

@@ -8,7 +8,6 @@
 	function ConectarXampp() {
 		$conexion = mysqli_connect(serverCP,userCP,passCP);
 		mysqli_select_db($conexion,nameCP);
-		mysqli_set_charset($conexion,'utf8');
 	    return $conexion;
 	}
 	/*
@@ -636,9 +635,9 @@
 		FUNCION: crea una conexion con la base de datos cpharma e ingresa datos
 		RETORNO: no aplica
 	 */
-	function GuardarDiasEnCero($IdArticulo,$CodigoInterno,$Descripcion,$Existencia,$FechaCaptura,$user,$date) {
+	function GuardarDiasEnCero($IdArticulo,$CodigoInterno,$Descripcion,$Existencia,$Precio,$FechaCaptura,$user,$date) {
 		$conn = ConectarXampp();
-		$sql = QGuardarDiasEnCero($IdArticulo,$CodigoInterno,$Descripcion,$Existencia,$FechaCaptura,$user,$date);
+		$sql = QGuardarDiasEnCero($IdArticulo,$CodigoInterno,$Descripcion,$Existencia,$Precio,$FechaCaptura,$user,$date);
 		$result = mysqli_query($conn,$sql);
 		mysqli_close($conn);
 	}

@@ -1207,12 +1207,13 @@
 		InvArticulo.Id AS IdArticulo,
 		InvArticulo.CodigoArticulo AS CodigoInterno,
 		InvArticulo.Descripcion,
-		SUM(InvLoteAlmacen.Existencia) AS Existencia
+		SUM(InvLoteAlmacen.Existencia) AS Existencia,
+		InvArticulo.FinConceptoImptoIdCompra AS ConceptoImpuesto
 		FROM InvArticulo
 		INNER JOIN InvLoteAlmacen ON InvArticulo.Id=InvLoteAlmacen.InvArticuloId
 		WHERE InvLoteAlmacen.Existencia > 0
 		AND (InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
-		GROUP BY InvArticulo.Id, InvArticulo.CodigoArticulo, InvArticulo.Descripcion
+		GROUP BY InvArticulo.Id, InvArticulo.CodigoArticulo, InvArticulo.Descripcion, InvArticulo.FinConceptoImptoIdCompra
 		ORDER BY InvArticulo.Id ASC
 		";
 		return $sql;
@@ -1234,12 +1235,12 @@
 		FUNCION: Construir las columnas correspondientes al reporte
 		RETORNO: Un String con la query
 	 */
-	function QGuardarDiasEnCero($IdArticulo,$CodigoInterno,$Descripcion,$Existencia,$FechaCaptura,$user,$date) {
+	function QGuardarDiasEnCero($IdArticulo,$CodigoInterno,$Descripcion,$Existencia,$Precio,$FechaCaptura,$user,$date) {
 		$sql = "
 		INSERT INTO dias_ceros 
-		(id_articulo,codigo_articulo,descripcion,existencia,fecha_captura,user,created_at,updated_at)
+		(id_articulo,codigo_articulo,descripcion,existencia,precio,fecha_captura,user,created_at,updated_at)
 		VALUES 
-		('$IdArticulo','$CodigoInterno','$Descripcion','$Existencia','$FechaCaptura','$user','$date','$date')
+		('$IdArticulo','$CodigoInterno','$Descripcion','$Existencia','$Precio','$FechaCaptura','$user','$date','$date')
 		";
 		return $sql;
 	}
