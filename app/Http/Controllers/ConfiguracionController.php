@@ -37,7 +37,7 @@ class ConfiguracionController extends Controller
      */
     public function create()
     {
-        //
+        return view('pages.configuracion.create');
     }
 
     /**
@@ -48,7 +48,19 @@ class ConfiguracionController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try{
+            $configuraciones = new Configuracion();
+            $configuraciones->variable = $request->input('variable');
+            $configuraciones->descripcion = $request->input('descripcion');
+            $configuraciones->valor = $request->input('valor');          
+            $configuraciones->user = auth()->user()->name;
+            $configuraciones->estatus = 'ACTIVO';
+            $configuraciones->save();
+            return redirect()->route('configuracion.index')->with('Saved', ' Informacion');
+        }
+        catch(\Illuminate\Database\QueryException $e){
+            return back()->with('Error', ' Error');
+        }
     }
 
     /**
