@@ -585,7 +585,6 @@
 		$CantidadPedido = (($VentaDiaria * $DiasPedido)-$Existencia);
 		return $CantidadPedido;
 	}
-
 	/*
 		TITULO: GuardarCartaCompromiso
 		PARAMETROS: [$SedeConnection] sede donde se hara la conexion
@@ -604,7 +603,6 @@
 		$result = mysqli_query($conn,$sql);
 		mysqli_close($conn);
 	}
-
 	/*
 		TITULO: ValidarFechas
 		PARAMETROS: [$Fecha1] Fecha que se restaras

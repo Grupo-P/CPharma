@@ -84,6 +84,8 @@
 
 		$Precio = CalculoPrecio($conn,$IdArticulo,$IsIVA,$Existencia);
 
+		$Dolarizado = ProductoDolarizado($conn,$IdArticulo);
+
 		$TasaActual = TasaFecha(date('Y-m-d'));
 
 		echo '
@@ -105,6 +107,7 @@
 			      	<th scope="col">Descripcion</td>
 			      	<th scope="col">Existencia</td>
 			      	<th scope="col">Precio (Con IVA)</td>
+			      	<th scope="col">Dolarizado</td>
 			      	<th scope="col">Tasa actual</td>
 			      	<th scope="col">Precio en divisa (Con IVA)</td>
 			    </tr>
@@ -116,6 +119,10 @@
 		echo '<td>'.$row["Descripcion"].'</td>';
 		echo '<td align="center">'.intval($Existencia).'</td>';
 		echo '<td align="center">'." ".round($Precio,2)." ".SigVe.'</td>';
+
+		$Dolarizado = ProductoDolarizado($conn,$IdArticulo);
+
+		echo '<td align="center">'.$Dolarizado.'</td>';
 
 		if($TasaActual!=0){
 			echo '<td align="center">'." ".$TasaActual." ".SigVe.'</td>';
@@ -518,7 +525,14 @@
 
 			echo '<tr>';
 			echo '<td align="left">'.$row["CodigoArticulo"].'</td>';
-			echo '<td align="left">'.$row["Descripcion"].'</td>';
+
+			echo 
+			'<td align="left">
+			<a href="/reporte2?Id='.$IdArticulo.'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
+				.$row["Descripcion"].
+			'</a>
+			</td>';
+
 			echo '<td align="center">'.intval($Existencia).'</td>';
 
 			$Venta = intval($row["TotalUnidadesVendidasCliente"]);
