@@ -71,7 +71,8 @@ class ConfiguracionController extends Controller
      */
     public function show($id)
     {
-        //
+        $configuraciones = Configuracion::find($id);
+        return view('pages.configuracion.show', compact('configuraciones'));
     }
 
     /**
@@ -82,7 +83,8 @@ class ConfiguracionController extends Controller
      */
     public function edit($id)
     {
-        //
+        $configuraciones = Configuracion::find($id);  
+        return view('pages.configuracion.edit', compact('configuraciones'));
     }
 
     /**
@@ -94,7 +96,17 @@ class ConfiguracionController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        try{
+            $configuraciones = Configuracion::find($id);
+            $configuraciones->fill($request->all());
+            $configuraciones->user = auth()->user()->name;
+            $configuraciones->estatus = 'ACTIVO';
+            $configuraciones->save();
+            return redirect()->route('configuracion.index')->with('Updated', ' Informacion');
+        }
+        catch(\Illuminate\Database\QueryException $e){
+            return back()->with('Error', ' Error');
+        }
     }
 
     /**
@@ -105,6 +117,17 @@ class ConfiguracionController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $configuraciones = Configuracion::find($id);
+
+         if($configuraciones->estatus == 'ACTIVO'){
+            $configuraciones->estatus = 'INACTIVO';
+         }
+         else if($configuraciones->estatus == 'INACTIVO'){
+            $configuraciones->estatus = 'ACTIVO';
+         }
+
+         $configuraciones->user = auth()->user()->name;      
+         $configuraciones->save();
+         return redirect()->route('configuracion.index')->with('Deleted', ' Informacion');
     }
 }
