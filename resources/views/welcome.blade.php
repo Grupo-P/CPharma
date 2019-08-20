@@ -2,7 +2,7 @@
 
 <style>
     .full-height {
-        height: 85vh;
+        height: 82vh;
     }
     .flex-center {
         align-items: center;
