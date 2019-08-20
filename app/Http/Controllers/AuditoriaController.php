@@ -3,9 +3,21 @@
 namespace compras\Http\Controllers;
 
 use Illuminate\Http\Request;
+use compras\Auditoria;
+use compras\User;
 
 class AuditoriaController extends Controller
 {
+    /**
+     * Create a new controller instance with auth.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -13,7 +25,8 @@ class AuditoriaController extends Controller
      */
     public function index()
     {
-        //
+        $auditorias =  Auditoria::all();
+        return view('pages.auditoria.index', compact('auditorias'));
     }
 
     /**
@@ -23,7 +36,8 @@ class AuditoriaController extends Controller
      */
     public function create()
     {
-        //
+        $auditorias =  Auditoria::all();
+        return view('pages.auditoria.index', compact('auditorias'));
     }
 
     /**
@@ -34,7 +48,8 @@ class AuditoriaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $auditorias =  Auditoria::all();
+        return view('pages.auditoria.index', compact('auditorias'));
     }
 
     /**
@@ -45,7 +60,8 @@ class AuditoriaController extends Controller
      */
     public function show($id)
     {
-        //
+        $auditorias =  Auditoria::all();
+        return view('pages.auditoria.index', compact('auditorias'));
     }
 
     /**
@@ -56,7 +72,8 @@ class AuditoriaController extends Controller
      */
     public function edit($id)
     {
-        //
+        $auditorias =  Auditoria::all();
+        return view('pages.auditoria.index', compact('auditorias'));
     }
 
     /**
@@ -68,7 +85,8 @@ class AuditoriaController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $auditorias =  Auditoria::all();
+        return view('pages.auditoria.index', compact('auditorias'));
     }
 
     /**
@@ -79,6 +97,7 @@ class AuditoriaController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $auditorias =  Auditoria::all();
+        return view('pages.auditoria.index', compact('auditorias'));
     }
 }
