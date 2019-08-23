@@ -95,7 +95,7 @@
 	    		<p class="card-text text-white">Reportes disponibles</p>
 	  		</div>
 		  	<div class="card-footer bg-transparent border-info text-right">
-		  		<a href="/sede/" class="btn btn-outline-info btn-sm">Visualizar</a>
+		  		<a href="/sedes_reporte/" class="btn btn-outline-info btn-sm">Visualizar</a>
 		  	</div>
 		</div>
 	</div>
