@@ -1205,6 +1205,39 @@
 	}
 
 	/*
+		TITULO: QGuardarCapturaDiaria
+		PARAMETROS: [$FechaCaptura] El dia de hoy
+					[$date] valor para creacion y actualizacion
+		FUNCION: crea una conexion con la base de datos cpharma e ingresa datos
+		RETORNO: no aplica
+	 */
+
+	function QGuardarCapturaDiaria($TotalRegistros,$FechaCaptura,$date) {
+		$sql = "
+		INSERT INTO capturas_diarias 
+		(total_registros,fecha_captura,created_at,updated_at)
+		VALUES 
+		('$TotalRegistros','$FechaCaptura','$date','$date')
+		";
+		return $sql;
+	}
+
+	/*
+		TITULO: QCapturaDiaria
+		PARAMETROS: [$FechaCaptura] El dia de hoy
+		FUNCION: crea una conexion con la base de datos cpharma e ingresa datos
+		RETORNO: no aplica
+	 */
+
+	function QCapturaDiaria($FechaCaptura) {
+		$sql = "SELECT COUNT(*) AS TotalRegistros
+		FROM dias_ceros 
+		WHERE dias_ceros.fecha_captura = '$FechaCaptura'
+		";
+		return $sql;
+	}
+
+	/*
 		TITULO: 
 		PARAMETROS: 
 		FUNCION:

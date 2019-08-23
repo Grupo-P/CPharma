@@ -21,7 +21,7 @@
 		$sql = QLastRestoreDB($nameDataBase);
 		$result = sqlsrv_query($conn,$sql);
 		$row = sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC);
-		$FechaRestauracion = $row["FechaRestauracion"]->format("Y-m-d h:i:s");//F2
+		$FechaRestauracion = $row["FechaRestauracion"]->format("Y-m-d h:i:s");
 		return $FechaRestauracion;
 	}
 	/*
@@ -704,6 +704,26 @@
 			}
 		}
 		sqlsrv_close($conn);
+	}
+	/*
+		TITULO: GuardarCapturaDiaria
+		PARAMETROS: [$FechaCaptura] El dia de hoy
+					[$date] valor para creacion y actualizacion
+		FUNCION: crea una conexion con la base de datos cpharma e ingresa datos
+		RETORNO: no aplica
+	 */
+	function GuardarCapturaDiaria($FechaCaptura,$date) {
+		$conn = ConectarXampp();
+
+		$sql = QCapturaDiaria($FechaCaptura);
+		$result = mysqli_query($conn,$sql);
+		$row = mysqli_fetch_assoc($result);
+		$TotalRegistros = $row["TotalRegistros"];
+
+		$sql1 = QGuardarCapturaDiaria($TotalRegistros,$FechaCaptura,$date);
+		$result1 = mysqli_query($conn,$sql1);
+		
+		mysqli_close($conn);
 	}
 	/************************************************/
 ?>
