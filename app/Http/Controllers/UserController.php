@@ -53,6 +53,8 @@ class UserController extends Controller
         $usuario->role = $request->input('role');
         $usuario->password = Hash::make($request->input('password'));
         $usuario->estatus = 'ACTIVO';
+        $usuario->sede = 'PRUEBA';
+        $usuario->departamento = 'PRUEBA';
         $usuario->save();
         return redirect()->route('usuario.index')->with('Saved', ' Informacion');
         }
