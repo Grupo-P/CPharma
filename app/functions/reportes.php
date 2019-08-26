@@ -47,8 +47,8 @@
 
 			echo '<tr>';
 			echo 
-			'<td align="left">
-			<a href="/reporte7?Nombre='.$NombreProveedor.'&Id='.$IdProveedor.'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
+			'<td align="left" class="latido">
+			<a href="/reporte7?Nombre='.$NombreProveedor.'&Id='.$IdProveedor.'&SEDE='.$SedeConnection.'" target="_blank" style="text-decoration: none; color: black;">'
 				.$NombreProveedor.
 			'</a>
 			</td>';

@@ -17,9 +17,15 @@
     }
     .title {
         font-size: 84px;
+        transform: scale(1);
+        transition: width 1s, height 1s, transform 2s;
     }
     .m-b-md {
         margin-bottom: 180px;
+    }
+    .title:hover{
+        transform: scale(1.2);
+        transition: width 1s, height 1s, transform 2s;
     }
 </style>
 

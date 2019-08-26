@@ -1,5 +1,17 @@
 @extends('layouts.model')
 
+<style>	
+	.latido{
+		text-decoration: none;
+		transition: width 1s, height 1s, transform 1s;
+  	}
+	.latido:hover{
+		text-decoration: none;
+    	transition: width 1s, height 1s, transform 1s;
+    	transform: translate(20px,0px);
+  	}
+</style>
+
 @section('title')
     Reporte
 @endsection
