@@ -26,10 +26,45 @@
 		      	<label>Hola <b class="text-info">{{ Auth::user()->name }}</b></label>
 		      	<label>tenemos algunas novedades para ti.!</label>
 		        <ul style="list-style:none">
-		        	<i class="far fa-check-circle text-info" style="display: inline;"></i>
     				<li class="card-text text-dark" style="display: inline;">
-    					Ya puedes ver el reporte <b class="text-info">Compromiso</b>,
-    					ideal para los <b class="text-info">departamentos</b> procesamiento y <b class="text-info">devoluciones</b>
+    					Ya puedes ir de un reporte a otro de manera mas sencilla,
+    					solo debes hacer <b class="text-info">click</b> sobre el nombre de los <b class="text-info">productos</b> o <b class="text-info">proveedores</b>. Los enlaces son los siguientes:
+    					<br/><br/>
+		
+						<i class="far fa-check-circle text-info" style="display: inline;"></i>
+						Activacion de proveedores
+						<i class="fas fa-arrow-right text-info"></i>
+						Catalogo de proveedor
+						<br/>
+						<i class="far fa-check-circle text-info" style="display: inline;"></i>
+						Historico de productos
+						<i class="fas fa-arrow-right text-info"></i>
+						Pedido de productos
+						<br/>
+						<i class="far fa-check-circle text-info" style="display: inline;"></i>
+						Productos mas vendidos
+						<i class="fas fa-arrow-right text-info"></i>
+						Historico de productos
+						<br/>
+						<i class="far fa-check-circle text-info" style="display: inline;"></i>
+						Productos menos vendidos
+						<i class="fas fa-arrow-right text-info"></i>
+						Historico de productos
+						<br/>
+						<i class="far fa-check-circle text-info" style="display: inline;"></i>
+						Productos en falla
+						<i class="fas fa-arrow-right text-info"></i>
+						Historico de productos
+						<br/>
+						<i class="far fa-check-circle text-info" style="display: inline;"></i>
+						Pedido de productos
+						<i class="fas fa-arrow-right text-info"></i>
+						Historico de productos
+						<br/>
+						<i class="far fa-check-circle text-info" style="display: inline;"></i>
+						Catalogo de proveedor
+						<i class="fas fa-arrow-right text-info"></i>
+						Historico de productos
     				</li>		
     			</ul>
 		      </div>
@@ -149,7 +184,7 @@
 	  		<div class="card-body text-left bg-info">
 	    		<h2 class="card-title">	    			
 		    		<span class="card-text text-white">
-		    			<i class="fas fa-info"></i>
+		    			<i class="far fa-lightbulb"></i>
 		    			Tienes una idea.?
 		    		</span>
 	    		</h2>
