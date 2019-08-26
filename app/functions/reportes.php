@@ -1,3 +1,15 @@
+<style> 
+  .barrido{
+    	text-decoration: none;
+    	transition: width 1s, height 1s, transform 1s;
+    }
+  .barrido:hover{
+    	text-decoration: none;
+      transition: width 1s, height 1s, transform 1s;
+      transform: translate(20px,0px);
+    }
+</style>
+
 <?php
 	/*****************************************************************************/
 	/************************ REPORTE 1 ACTIVACION DE PROVEEDORES ****************/
@@ -47,7 +59,7 @@
 
 			echo '<tr>';
 			echo 
-			'<td align="left" class="latido">
+			'<td align="left" class="barrido">
 			<a href="/reporte7?Nombre='.$NombreProveedor.'&Id='.$IdProveedor.'&SEDE='.$SedeConnection.'" target="_blank" style="text-decoration: none; color: black;">'
 				.$NombreProveedor.
 			'</a>
@@ -127,7 +139,7 @@
 		echo '<td>'.$row["CodigoArticulo"].'</td>';
 
 		echo 
-			'<td align="left">
+			'<td align="left" class="barrido">
 			<a href="/reporte6?&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
 				.$row["Descripcion"].
 			'</a>
@@ -281,7 +293,14 @@
 
 			echo '<tr>';
 			echo '<td align="left">'.$row["CodigoArticulo"].'</td>';
-			echo '<td align="left">'.$row["Descripcion"].'</td>';
+
+			echo 
+			'<td align="left" class="barrido">
+			<a href="/reporte2?Id='.$IdArticulo.'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
+				.$row["Descripcion"].
+			'</a>
+			</td>';
+
 			echo '<td align="center">'.intval($Existencia).'</td>';
 			echo '<td align="center">'.intval($row["TotalVecesVendidasCliente"]).'</td>';
 
@@ -414,7 +433,14 @@
 
 			echo '<tr>';
 			echo '<td align="left">'.$row["CodigoArticulo"].'</td>';
-			echo '<td align="left">'.$row["Descripcion"].'</td>';
+			
+			echo 
+			'<td align="left" class="barrido">
+			<a href="/reporte2?Id='.$IdArticulo.'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
+				.$row["Descripcion"].
+			'</a>
+			</td>';
+			
 			echo '<td align="center">'.intval($Existencia).'</td>';
 			echo '<td align="center">'." ".round($Precio,2)." ".SigVe.'</td>';
 			
