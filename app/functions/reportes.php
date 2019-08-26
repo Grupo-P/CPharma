@@ -1,3 +1,15 @@
+<style> 
+  .barrido{
+    	text-decoration: none;
+    	transition: width 1s, height 1s, transform 1s;
+    }
+  .barrido:hover{
+    	text-decoration: none;
+      transition: width 1s, height 1s, transform 1s;
+      transform: translate(20px,0px);
+    }
+</style>
+
 <?php
 	/*****************************************************************************/
 	/************************ REPORTE 1 ACTIVACION DE PROVEEDORES ****************/
@@ -42,8 +54,17 @@
 		';
 		
 		while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
+			$IdProveedor = $row['Id'];
+			$NombreProveedor = $row['Nombre'];
+
 			echo '<tr>';
-			echo '<td>'.$row['Nombre'].'</td>';
+			echo 
+			'<td align="left" class="barrido">
+			<a href="/reporte7?Nombre='.$NombreProveedor.'&Id='.$IdProveedor.'&SEDE='.$SedeConnection.'" target="_blank" style="text-decoration: none; color: black;">'
+				.$NombreProveedor.
+			'</a>
+			</td>';
+
 			echo '<td align="center">'.($row['FechaRegistro'])->format('Y-m-d').'</td>';
 			echo '<td align="center">'.$row['RangoDias'].'</td>';
 			echo '</tr>';
@@ -116,7 +137,14 @@
 	  	';
 		echo '<tr>';
 		echo '<td>'.$row["CodigoArticulo"].'</td>';
-		echo '<td>'.$row["Descripcion"].'</td>';
+
+		echo 
+			'<td align="left" class="barrido">
+			<a href="/reporte6?&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
+				.$row["Descripcion"].
+			'</a>
+			</td>';
+
 		echo '<td align="center">'.intval($Existencia).'</td>';
 		echo '<td align="center">'." ".round($Precio,2)." ".SigVe.'</td>';
 		echo '<td align="center">'.$Dolarizado.'</td>';
@@ -265,7 +293,14 @@
 
 			echo '<tr>';
 			echo '<td align="left">'.$row["CodigoArticulo"].'</td>';
-			echo '<td align="left">'.$row["Descripcion"].'</td>';
+
+			echo 
+			'<td align="left" class="barrido">
+			<a href="/reporte2?Id='.$IdArticulo.'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
+				.$row["Descripcion"].
+			'</a>
+			</td>';
+
 			echo '<td align="center">'.intval($Existencia).'</td>';
 			echo '<td align="center">'.intval($row["TotalVecesVendidasCliente"]).'</td>';
 
@@ -398,7 +433,14 @@
 
 			echo '<tr>';
 			echo '<td align="left">'.$row["CodigoArticulo"].'</td>';
-			echo '<td align="left">'.$row["Descripcion"].'</td>';
+			
+			echo 
+			'<td align="left" class="barrido">
+			<a href="/reporte2?Id='.$IdArticulo.'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
+				.$row["Descripcion"].
+			'</a>
+			</td>';
+
 			echo '<td align="center">'.intval($Existencia).'</td>';
 			echo '<td align="center">'." ".round($Precio,2)." ".SigVe.'</td>';
 			
@@ -524,7 +566,7 @@
 			echo '<td align="left">'.$row["CodigoArticulo"].'</td>';
 
 			echo 
-			'<td align="left">
+			'<td align="left" class="barrido">
 			<a href="/reporte2?Id='.$IdArticulo.'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
 				.$row["Descripcion"].
 			'</a>
@@ -654,7 +696,14 @@
 
 			echo '<tr>';
 			echo '<td align="left">'.$row["CodigoArticulo"].'</td>';
-			echo '<td align="left">'.$row["Descripcion"].'</td>';
+			
+			echo 
+			'<td align="left" class="barrido">
+			<a href="/reporte2?Id='.$IdArticulo.'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
+				.$row["Descripcion"].
+			'</a>
+			</td>';
+
 			echo '<td align="center">'.intval($Existencia).'</td>';
 
 			$Venta = intval($row["TotalUnidadesVendidasCliente"]);
@@ -784,9 +833,17 @@
 		';
 		
 		while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
+				$IdArticulo = $row["Id"];
 				echo '<tr>';
 				echo '<td align="left">'.$row["CodigoArticulo"].'</td>';
-				echo '<td align="left">'.$row["Descripcion"].'</td>';
+				
+				echo 
+				'<td align="left" class="barrido">
+				<a href="/reporte2?Id='.$IdArticulo.'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
+					.$row["Descripcion"].
+				'</a>
+				</td>';
+
 				echo '</tr>';
 	  	}
 	  	echo '
@@ -894,7 +951,13 @@
 
 				echo '<tr>';
 				echo '<td align="left">'.$row["CodigoArticulo"].'</td>';
-				echo '<td align="left">'.$row["Descripcion"].'</td>';
+				
+				echo 
+				'<td align="left" class="barrido">
+				<a href="/reporte2?Id='.$IdArticulo.'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
+					.$row["Descripcion"].
+				'</a>
+				</td>';
 		
 			$Unico = ProductoUnico($conn,$IdArticulo,$IdProveedor);
 				echo '<td align="center">'.$Unico.'</td>';

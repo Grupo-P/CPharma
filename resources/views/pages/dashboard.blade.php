@@ -13,6 +13,22 @@
 		$dolar = DB::table('dolars')->count();
 	?>
 
+<style> 
+  	.beep{
+	  -webkit-animation: tiembla 0.5s infinite;
+	}
+	@-webkit-keyframes tiembla{
+	  0%  { -webkit-transform:rotateZ(0deg);}
+	  13% { -webkit-transform:rotateZ(5deg);}
+	  26%{ -webkit-transform:rotateZ(10deg);}
+	  39% { -webkit-transform:rotateZ(5deg)}
+	  52% { -webkit-transform:rotateZ(0deg)}
+	  65% { -webkit-transform:rotateZ(-5deg)}
+	  78%{ -webkit-transform:rotateZ(-10deg);}
+	  91% { -webkit-transform:rotateZ(-5deg)}
+	}
+</style>
+
 	<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
 	  	<div class="modal-dialog modal-dialog-centered" role="document">
 		    <div class="modal-content">
@@ -26,10 +42,45 @@
 		      	<label>Hola <b class="text-info">{{ Auth::user()->name }}</b></label>
 		      	<label>tenemos algunas novedades para ti.!</label>
 		        <ul style="list-style:none">
-		        	<i class="far fa-check-circle text-info" style="display: inline;"></i>
     				<li class="card-text text-dark" style="display: inline;">
-    					Ya puedes ver el reporte <b class="text-info">Compromiso</b>,
-    					ideal para los <b class="text-info">departamentos</b> procesamiento y <b class="text-info">devoluciones</b>
+    					Ya puedes ir de un reporte a otro de manera mas sencilla,
+    					solo debes hacer <b class="text-info">click</b> sobre el nombre de los <b class="text-info">productos</b> o <b class="text-info">proveedores</b>. Los enlaces son los siguientes:
+    					<br/><br/>
+		
+						<i class="far fa-check-circle text-info" style="display: inline;"></i>
+						Activacion de proveedores
+						<i class="fas fa-arrow-right text-info"></i>
+						Catalogo de proveedor
+						<br/>
+						<i class="far fa-check-circle text-info" style="display: inline;"></i>
+						Historico de productos
+						<i class="fas fa-arrow-right text-info"></i>
+						Pedido de productos
+						<br/>
+						<i class="far fa-check-circle text-info" style="display: inline;"></i>
+						Productos mas vendidos
+						<i class="fas fa-arrow-right text-info"></i>
+						Historico de productos
+						<br/>
+						<i class="far fa-check-circle text-info" style="display: inline;"></i>
+						Productos menos vendidos
+						<i class="fas fa-arrow-right text-info"></i>
+						Historico de productos
+						<br/>
+						<i class="far fa-check-circle text-info" style="display: inline;"></i>
+						Productos en falla
+						<i class="fas fa-arrow-right text-info"></i>
+						Historico de productos
+						<br/>
+						<i class="far fa-check-circle text-info" style="display: inline;"></i>
+						Pedido de productos
+						<i class="fas fa-arrow-right text-info"></i>
+						Historico de productos
+						<br/>
+						<i class="far fa-check-circle text-info" style="display: inline;"></i>
+						Catalogo de proveedor
+						<i class="fas fa-arrow-right text-info"></i>
+						Historico de productos
     				</li>		
     			</ul>
 		      </div>
@@ -147,9 +198,11 @@
 		{{-- CONTACTO --}}
 		<div class="card border-info  mb-3" style="width: 14rem;">	  	
 	  		<div class="card-body text-left bg-info">
-	    		<h2 class="card-title">	    			
+	    		<h2 class="card-title">	 		
+		    		<span class="card-text text-warning">
+		    			<i class="far fa-lightbulb beep"></i>
+		    		</span>
 		    		<span class="card-text text-white">
-		    			<i class="fas fa-info"></i>
 		    			Tienes una idea.?
 		    		</span>
 	    		</h2>
