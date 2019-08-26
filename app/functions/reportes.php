@@ -42,8 +42,17 @@
 		';
 		
 		while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
+			$IdProveedor = $row['Id'];
+			$NombreProveedor = $row['Nombre'];
+
 			echo '<tr>';
-			echo '<td>'.$row['Nombre'].'</td>';
+			echo 
+			'<td align="left">
+			<a href="/reporte7?Nombre='.$NombreProveedor.'&Id='.$IdProveedor.'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
+				.$NombreProveedor.
+			'</a>
+			</td>';
+
 			echo '<td align="center">'.($row['FechaRegistro'])->format('Y-m-d').'</td>';
 			echo '<td align="center">'.$row['RangoDias'].'</td>';
 			echo '</tr>';
