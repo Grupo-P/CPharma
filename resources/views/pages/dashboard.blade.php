@@ -13,6 +13,22 @@
 		$dolar = DB::table('dolars')->count();
 	?>
 
+<style> 
+  	.beep{
+	  -webkit-animation: tiembla 0.5s infinite;
+	}
+	@-webkit-keyframes tiembla{
+	  0%  { -webkit-transform:rotateZ(0deg);}
+	  13% { -webkit-transform:rotateZ(5deg);}
+	  26%{ -webkit-transform:rotateZ(10deg);}
+	  39% { -webkit-transform:rotateZ(5deg)}
+	  52% { -webkit-transform:rotateZ(0deg)}
+	  65% { -webkit-transform:rotateZ(-5deg)}
+	  78%{ -webkit-transform:rotateZ(-10deg);}
+	  91% { -webkit-transform:rotateZ(-5deg)}
+	}
+</style>
+
 	<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
 	  	<div class="modal-dialog modal-dialog-centered" role="document">
 		    <div class="modal-content">
@@ -182,9 +198,11 @@
 		{{-- CONTACTO --}}
 		<div class="card border-info  mb-3" style="width: 14rem;">	  	
 	  		<div class="card-body text-left bg-info">
-	    		<h2 class="card-title">	    			
+	    		<h2 class="card-title">	 		
+		    		<span class="card-text text-warning">
+		    			<i class="far fa-lightbulb beep"></i>
+		    		</span>
 		    		<span class="card-text text-white">
-		    			<i class="far fa-lightbulb"></i>
 		    			Tienes una idea.?
 		    		</span>
 	    		</h2>
