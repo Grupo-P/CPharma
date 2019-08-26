@@ -440,7 +440,7 @@
 				.$row["Descripcion"].
 			'</a>
 			</td>';
-			
+
 			echo '<td align="center">'.intval($Existencia).'</td>';
 			echo '<td align="center">'." ".round($Precio,2)." ".SigVe.'</td>';
 			
@@ -566,7 +566,7 @@
 			echo '<td align="left">'.$row["CodigoArticulo"].'</td>';
 
 			echo 
-			'<td align="left">
+			'<td align="left" class="barrido">
 			<a href="/reporte2?Id='.$IdArticulo.'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
 				.$row["Descripcion"].
 			'</a>
