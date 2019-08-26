@@ -833,9 +833,17 @@
 		';
 		
 		while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
+				$IdArticulo = $row["Id"];
 				echo '<tr>';
 				echo '<td align="left">'.$row["CodigoArticulo"].'</td>';
-				echo '<td align="left">'.$row["Descripcion"].'</td>';
+				
+				echo 
+				'<td align="left" class="barrido">
+				<a href="/reporte2?Id='.$IdArticulo.'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
+					.$row["Descripcion"].
+				'</a>
+				</td>';
+
 				echo '</tr>';
 	  	}
 	  	echo '
@@ -943,7 +951,13 @@
 
 				echo '<tr>';
 				echo '<td align="left">'.$row["CodigoArticulo"].'</td>';
-				echo '<td align="left">'.$row["Descripcion"].'</td>';
+				
+				echo 
+				'<td align="left" class="barrido">
+				<a href="/reporte2?Id='.$IdArticulo.'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
+					.$row["Descripcion"].
+				'</a>
+				</td>';
 		
 			$Unico = ProductoUnico($conn,$IdArticulo,$IdProveedor);
 				echo '<td align="center">'.$Unico.'</td>';
