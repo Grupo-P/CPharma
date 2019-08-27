@@ -109,6 +109,8 @@
 
 		$TasaActual = TasaFecha(date('Y-m-d'));
 
+		$Descripcion = $row["Descripcion"];
+
 		echo '
 		<div class="input-group md-form form-sm form-1 pl-0">
 		  <div class="input-group-prepend">
@@ -140,8 +142,8 @@
 
 		echo 
 			'<td align="left" class="barrido">
-			<a href="/reporte6?&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
-				.$row["Descripcion"].
+			<a href="/reporte10?Descrip='.$Descripcion.'&Id='.$IdArticulo.'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
+				.$Descripcion.
 			'</a>
 			</td>';
 
@@ -1533,6 +1535,8 @@
 
 		$Precio=CalculoPrecio($conn,$IdArticulo,$IsIVA,$Existencia);
 
+		$Dolarizado = ProductoDolarizado($conn,$IdArticulo);
+
 		$TasaActual=TasaFecha(date('Y-m-d'));
 
 		echo '
@@ -1554,6 +1558,7 @@
 			      	<th scope="col">Descripcion</td>
 			      	<th scope="col">Existencia</td>
 			      	<th scope="col">Precio (Con IVA)</td>
+			      	<th scope="col">Dolarizado</td>
 			      	<th scope="col">Tasa actual</td>
 			      	<th scope="col">Precio en divisa (Con IVA)</td>
 			    </tr>
@@ -1565,6 +1570,7 @@
 		echo '<td>'.$row["Descripcion"].'</td>';
 		echo '<td align="center">'.intval($Existencia).'</td>';
 		echo '<td align="center">'." ".round($Precio,2)." ".SigVe.'</td>';
+		echo '<td align="center">'.$Dolarizado.'</td>';
 
 		if($TasaActual!=0){
 			echo '<td align="center">'." ".$TasaActual." ".SigVe.'</td>';

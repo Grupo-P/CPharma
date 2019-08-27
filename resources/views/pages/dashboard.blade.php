@@ -55,7 +55,7 @@
 						<i class="far fa-check-circle text-info" style="display: inline;"></i>
 						Historico de productos
 						<i class="fas fa-arrow-right text-info"></i>
-						Pedido de productos
+						Analitico de precios
 						<br/>
 						<i class="far fa-check-circle text-info" style="display: inline;"></i>
 						Productos mas vendidos
