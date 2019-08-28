@@ -5,6 +5,7 @@ namespace compras\Http\Controllers;
 use Illuminate\Http\Request;
 use compras\Conexion;
 use compras\User;
+use compras\Sede;
 
 class ConexionController extends Controller
 {
@@ -36,7 +37,8 @@ class ConexionController extends Controller
      */
     public function create()
     {
-        return view('pages.conexion.create');
+        $sedes = Sede::pluck('siglas','id');
+        return view('pages.conexion.create', compact('sedes'));
     }
 
     /**
@@ -84,8 +86,9 @@ class ConexionController extends Controller
      */
     public function edit($id)
     {
-        $conexiones = Conexion::find($id);  
-        return view('pages.conexion.edit', compact('conexiones'));
+        $conexiones = Conexion::find($id);
+        $sedes = Sede::pluck('siglas','id'); 
+        return view('pages.conexion.edit', compact('conexiones','sedes'));
     }
 
     /**
