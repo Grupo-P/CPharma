@@ -12,6 +12,6 @@ class Auditoria extends Model
      * @var array
      */
     protected $fillable = [
-        'accion', 'tabla','registro', 'user'
+        'id','accion', 'tabla','registro', 'user'
     ];
 }

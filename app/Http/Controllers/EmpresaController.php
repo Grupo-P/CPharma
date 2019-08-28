@@ -5,6 +5,7 @@ namespace compras\Http\Controllers;
 use Illuminate\Http\Request;
 use compras\Empresa;
 use compras\User;
+use compras\Auditoria;
 
 class EmpresaController extends Controller
 {
@@ -25,6 +26,13 @@ class EmpresaController extends Controller
      */
     public function index()
     {   
+        $Auditoria = new Auditoria();
+        $Auditoria->accion = 'VISTA';
+        $Auditoria->tabla = 'EMPRESA';
+        $Auditoria->registro = 'TODOS';
+        $Auditoria->user = auth()->user()->name;
+        $Auditoria->save();
+        
         $empresas =  Empresa::all();
         return view('pages.empresa.index', compact('empresas'));
     }
