@@ -61,15 +61,47 @@
                 <td>{!! Form::text('email', null, [ 'class' => 'form-control', 'placeholder' => 'pperez@empresa.com']) !!}</td>
             </tr>
             <tr>
-                <th scope="row">{!! Form::label('role', 'Rol') !!}</th>
+                <th scope="row">{!! Form::label('sede', 'Sede') !!}
+                </th>
+                <td>
+                    <select name="sede" class="form-control">
+                        <?php
+                        foreach($sedes as $sede){
+                        ?>
+                        <option value="<?php echo $sede; ?>"><?php echo $sede; ?></option>
+                        <?php
+                        }
+                        ?>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">{!! Form::label('departamento', 'Departamento') !!}
+                </th>
+                <td>
+                    <select name="departamento" class="form-control">
+                        <?php
+                        foreach($departamentos as $departamento){
+                        ?>
+                        <option value="<?php echo $departamento; ?>"><?php echo $departamento; ?></option>
+                        <?php
+                        }
+                        ?>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">{!! Form::label('role', 'Rol') !!}
+                </th>
                 <td>
                     <select name="role" class="form-control">
-                        <option>USUARIO</option>
-                        <option>SUPERVISOR</option>
-                        <option>SUPERVISOR CAJA</option>
-                        <option>ADMINISTRADOR</option>
-                        <option>MASTER</option>
-                        <option>DEVELOPER</option>
+                        <?php
+                        foreach($roles as $rol){
+                        ?>
+                        <option value="<?php echo $rol; ?>"><?php echo $rol; ?></option>
+                        <?php
+                        }
+                        ?>
                     </select>
                 </td>
             </tr>
