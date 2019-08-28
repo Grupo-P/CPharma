@@ -78,22 +78,3 @@
         $('#exampleModalCenter').modal('show')
     </script>
 @endsection
-
-<style>
-    * {
-      box-sizing: border-box;
-    }
-    /*the container must be positioned relative:*/
-    input {
-      border: 1px solid transparent;
-      background-color: #f1f1f1;
-      border-radius: 5px;
-      padding: 10px;
-      font-size: 16px;
-    }
-
-    input[type=date] {
-      background-color: #f1f1f1;
-      width: 100%;
-    }
-</style>
