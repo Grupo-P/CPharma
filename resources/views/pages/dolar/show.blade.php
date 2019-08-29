@@ -39,11 +39,7 @@
 		    <tr>
 		      	<th scope="row">Estatus</th>
 	    	  	<td>{{$dolar->estatus}}</td>
-		    </tr>
-		    <tr>
-		      	<th scope="row">Usuario</th>
-	    	  	<td>{{$dolar->user}}</td>
-		    </tr>
+		    </tr>		    
 		    <tr>
 		      	<th scope="row">Creada</th>
 	    	  	<td>{{$dolar->created_at}}</td>
@@ -51,6 +47,10 @@
 		    <tr>
 		      	<th scope="row">Ultima Actualización</th>
 	    	  	<td>{{$dolar->updated_at}}</td>
+		    </tr>
+		    <tr>
+		      	<th scope="row">Actualizado por</th>
+	    	  	<td>{{$dolar->user}}</td>
 		    </tr>
 	  	</tbody>
 	</table>

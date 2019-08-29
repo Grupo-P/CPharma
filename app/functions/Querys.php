@@ -1243,8 +1243,12 @@
 		FUNCION:
 		RETORNO:
 	 */
-	function QModelo() {
+	function QGuardarAditoria($IdArticulo,$CodigoInterno,$Descripcion,$Existencia,$Precio,$FechaCaptura,$user,$date,$sergio) {
 		$sql = "
+		INSERT INTO dias_ceros 
+		(id_articulo,codigo_articulo,descripcion,existencia,precio,fecha_captura,user,created_at,updated_at)
+		VALUES 
+		('$IdArticulo','$CodigoInterno','$Descripcion','$Existencia','$Precio','$FechaCaptura','$user','$date','$date')
 		";
 		return $sql;
 	}

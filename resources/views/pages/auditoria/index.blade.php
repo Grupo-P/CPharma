@@ -115,8 +115,7 @@
 		      	<th scope="col">Tabla</th>	
 		      	<th scope="col">Registro</th>	      			      	
 		      	<th scope="col">Usuario</th>
-		      	<th scope="col">Fecha Actualizacion</th>
-		      	<!-- <th scope="col">Acciones</th> -->
+		      	<th scope="col">Fecha Actualizacion</th>		      	
 		    </tr>
 	  	</thead>
 	  	<tbody>

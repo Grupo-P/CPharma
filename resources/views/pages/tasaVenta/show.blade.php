@@ -41,11 +41,7 @@
 		    <tr>
 		      	<th scope="row">Estatus</th>
 	    	  	<td>{{$tasaVenta->estatus}}</td>
-		    </tr>
-		    <tr>
-		      	<th scope="row">Usuario</th>
-	    	  	<td>{{$tasaVenta->user}}</td>
-		    </tr>
+		    </tr>		 
 		    <tr>
 		      	<th scope="row">Creada</th>
 	    	  	<td>{{$tasaVenta->created_at}}</td>
@@ -53,6 +49,10 @@
 		    <tr>
 		      	<th scope="row">Ultima Actualización</th>
 	    	  	<td>{{$tasaVenta->updated_at}}</td>
+		    </tr>
+		     <tr>
+		      	<th scope="row">Actualizado por</th>
+	    	  	<td>{{$tasaVenta->user}}</td>
 		    </tr>
 	  	</tbody>
 	</table>

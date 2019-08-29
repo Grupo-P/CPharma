@@ -4,7 +4,10 @@ namespace compras\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use compras\User;
+use compras\User; 
+use compras\Role;
+use compras\Sede;
+use compras\Departamento;
 
 class UserController extends Controller
 {
@@ -35,7 +38,10 @@ class UserController extends Controller
      */
     public function create()
     {
-        return view('pages.usuario.create');
+        $roles = Role::pluck('nombre','id');
+        $sedes = Sede::pluck('razon_social','id');
+        $departamentos = Departamento::pluck('nombre','id');
+        return view('pages.usuario.create', compact('roles','sedes','departamentos'));
     }
 
     /**
@@ -53,8 +59,8 @@ class UserController extends Controller
         $usuario->role = $request->input('role');
         $usuario->password = Hash::make($request->input('password'));
         $usuario->estatus = 'ACTIVO';
-        $usuario->sede = 'PRUEBA';
-        $usuario->departamento = 'PRUEBA';
+        $usuario->sede = $request->input('sede');
+        $usuario->departamento = $request->input('departamento');
         $usuario->save();
         return redirect()->route('usuario.index')->with('Saved', ' Informacion');
         }
@@ -84,7 +90,10 @@ class UserController extends Controller
     public function edit($id)
     {
         $usuario = User::find($id);
-        return view('pages.usuario.edit', compact('usuario'));
+        $roles = Role::pluck('nombre','id');                
+        $sedes = Sede::pluck('razon_social','id');
+        $departamentos = Departamento::pluck('nombre','id');
+        return view('pages.usuario.edit', compact('usuario','roles','sedes','departamentos'));
     }
 
     /**

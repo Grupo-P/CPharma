@@ -53,9 +53,20 @@
         </thead>
         <tbody>
             <tr>
-                <th scope="row">{!! Form::label('siglas', 'Siglas') !!}</th>
-                <td>{!! Form::text('siglas', null, [ 'class' => 'form-control', 'placeholder' => 'FTN', 'autofocus', 'required']) !!}</td>
-            </tr>
+                <th scope="row">{!! Form::label('siglas', 'Siglas') !!}
+                </th>
+                <td>
+                    <select name="siglas" class="form-control">
+                        <?php
+                        foreach($sedes as $sede){
+                        ?>
+                        <option value="<?php echo $sede; ?>"><?php echo $sede; ?></option>
+                        <?php
+                        }
+                        ?>
+                    </select>
+                </td>
+            </tr>            
             <tr>
                 <th scope="row">{!! Form::label('instancia', 'Instancia') !!}</th>
                 <td>{!! Form::text('instancia', null, [ 'class' => 'form-control', 'placeholder' => '11.25.0.41\SMARTPHARMA', 'autofocus', 'required']) !!}</td>

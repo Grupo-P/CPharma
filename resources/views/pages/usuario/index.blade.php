@@ -113,6 +113,8 @@
 		      	<th scope="col">#</th>
 		      	<th scope="col">Nombre</th>
 		      	<th scope="col">Correo</th>
+		      	<th scope="col">Sede</th>
+		      	<th scope="col">Departamento</th>
 		      	<th scope="col">Rol</th>
 		      	<th scope="col">Estatus</th>
 		      	<th scope="col">Acciones</th> 
@@ -123,7 +125,9 @@
 		    <tr>
 		      <th>{{$usuario->id}}</th>
 		      <td>{{$usuario->name}}</td>
-		      <td>{{$usuario->email}}</td>
+		      <td>{{$usuario->email}}</td>		      
+		      <td>{{$usuario->sede}}</td> 
+		      <td>{{$usuario->departamento}}</td> 
 		      <td>{{$usuario->role}}</td> 
 		      <td>{{$usuario->estatus}}</td>
 		      

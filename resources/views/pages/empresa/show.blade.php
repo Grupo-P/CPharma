@@ -56,6 +56,10 @@
 		      	<th scope="row">Ultima Actualización</th>
 	    	  	<td>{{$empresa->updated_at}}</td>
 		    </tr>
+		    <tr>
+		      	<th scope="row">Actualizado por</th>
+	    	  	<td>{{$empresa->user}}</td>
+		    </tr>
 	  	</tbody>
 	</table>
 @endsection

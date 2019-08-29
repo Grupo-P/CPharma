@@ -33,9 +33,17 @@
 	    	  	<td>{{$usuario->email}}</td>
 		    </tr>
 		    <tr>
+		      	<th scope="row">Sede</th>
+	    	  	<td>{{$usuario->sede}}</td>
+		    </tr>
+		    <tr>
+		      	<th scope="row">Departamento</th>
+	    	  	<td>{{$usuario->departamento}}</td>
+		    </tr>	
+		    <tr>
 		      	<th scope="row">Rol</th>
 	    	  	<td>{{$usuario->role}}</td>
-		    </tr>		
+		    </tr>		   
 		    <tr>
 		      	<th scope="row">Estatus</th>
 	    	  	<td>{{$usuario->estatus}}</td>

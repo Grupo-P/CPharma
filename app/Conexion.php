@@ -12,6 +12,6 @@ class Conexion extends Model
      * @var array
      */
     protected $fillable = [
-        'instancia', 'base_datos', 'usuario', 'credencial', 'estatus', 'user'
+        'instancia', 'base_datos', 'usuario', 'credencial', 'estatus', 'user','siglas'
     ];
 }
