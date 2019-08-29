@@ -1248,4 +1248,16 @@
 		";
 		return $sql;
 	}
+
+	/***************************************************************/
+	function GuardarAuditoria($accion,$tabla,$registro,$user) {
+		$sql = "
+		INSERT INTO auditorias 
+		(accion,tabla,registro,user)
+		VALUES 
+		('$accion','$tabla','$registro','$user')
+		";
+		return $sql;
+	}
+	/*****************************************************************/
 ?>
