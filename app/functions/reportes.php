@@ -1971,10 +1971,13 @@
 				      	<th scope="col">CodigoInterno</th>
 				      	<th scope="col">Descripcion</th>
 				      	<th scope="col">Existencia</th>
+				      	<th scope="col">Precio</th>
 				  	</tr>
 			  	</thead>
 			  	<tbody>
 			';
+
+		$date = '';
 
 		while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
 			$IdArticulo = $row["IdArticulo"];
@@ -1993,7 +1996,8 @@
 			echo '<td>'.$IdArticulo.'</td>';
 			echo '<td>'.$CodigoInterno.'</td>';
 			echo '<td>'.$Descripcion_User.'</td>';
-			echo '<td>'.$Existencia.'</td>';			
+			echo '<td>'.$Existencia.'</td>';
+			echo '<td>'." ".round($Precio,2)." ".SigVe.'</td>';
 			echo '</tr>';
 
 			$cont++;
@@ -2002,6 +2006,8 @@
 		echo '
 	  		</tbody>
 		</table>';
+
+		GuardarCapturaDiaria($FechaCaptura,$date);
 
 		sqlsrv_close($conn);
 	}
