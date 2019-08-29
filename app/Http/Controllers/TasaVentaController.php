@@ -5,6 +5,7 @@ namespace compras\Http\Controllers;
 use Illuminate\Http\Request;
 use compras\TasaVenta;
 use compras\User;
+use compras\Auditoria;
 
 class TasaVentaController extends Controller {
     /**
@@ -51,6 +52,14 @@ class TasaVentaController extends Controller {
             $tasaVenta->estatus = 'ACTIVO';
             $tasaVenta->user = auth()->user()->name;
             $tasaVenta->save();
+
+            $Auditoria = new Auditoria();
+            $Auditoria->accion = 'CREAR';
+            $Auditoria->tabla = 'TASA VENTA';
+            $Auditoria->registro = $request->input('moneda');
+            $Auditoria->user = auth()->user()->name;
+            $Auditoria->save();
+
             return redirect()->route('tasaVenta.index')->with('Saved', ' Informacion');
         }
         catch(\Illuminate\Database\QueryException $e){
@@ -66,6 +75,14 @@ class TasaVentaController extends Controller {
      */
     public function show($id) {
         $tasaVenta = TasaVenta::find($id);
+
+        $Auditoria = new Auditoria();
+        $Auditoria->accion = 'CONSULTAR';
+        $Auditoria->tabla = 'TASA VENTA';
+        $Auditoria->registro = $tasaVenta->moneda;
+        $Auditoria->user = auth()->user()->name;
+        $Auditoria->save();
+
         return view('pages.tasaVenta.show', compact('tasaVenta'));
     }
 
@@ -94,6 +111,14 @@ class TasaVentaController extends Controller {
             $tasaVenta->fecha = date('Y-m-d',strtotime($tasaVenta->fecha));
             $tasaVenta->user = auth()->user()->name;
             $tasaVenta->save();
+
+            $Auditoria = new Auditoria();
+            $Auditoria->accion = 'EDITAR';
+            $Auditoria->tabla = 'TASA VENTA';
+            $Auditoria->registro = $tasaVenta->moneda;
+            $Auditoria->user = auth()->user()->name;
+            $Auditoria->save();
+
             return redirect()->route('tasaVenta.index')->with('Updated', ' Informacion');
         }
         catch(\Illuminate\Database\QueryException $e){
@@ -110,15 +135,25 @@ class TasaVentaController extends Controller {
     public function destroy($id) {
         $tasaVenta = TasaVenta::find($id);
 
+        $Auditoria = new Auditoria();
+        $Auditoria->tabla = 'TASA VENTA';
+        $Auditoria->registro = $tasaVenta->moneda;
+        $Auditoria->user = auth()->user()->name;       
+
         if($tasaVenta->estatus == 'ACTIVO'){
             $tasaVenta->estatus = 'INACTIVO';
+             $Auditoria->accion = 'DESINCORPORAR';
         }
         else if($tasaVenta->estatus == 'INACTIVO'){
             $tasaVenta->estatus = 'ACTIVO';
+             $Auditoria->accion = 'REINCORPORAR';
         }
 
         $tasaVenta->user = auth()->user()->name;
         $tasaVenta->save();
+
+        $Auditoria->save();
+
         return redirect()->route('tasaVenta.index')->with('Deleted', ' Informacion');
     }
 }
