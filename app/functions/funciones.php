@@ -650,8 +650,13 @@
 
 	  	return $Dolarizado;
 	}
-	/************************************************/
-	function pesca(){
+	/*
+		TITULO: Pesca
+		PARAMETROS: No aplica
+		FUNCION: buscar la diferencia de datos entre dos bases de datos
+		RETORNO: dierencias entre dos tablas de una base de datos
+	 */
+	function Pesca(){
 
 		$conn = ConectarSmartpharma('DBm');
 		$sql = QDiasEnCero();
@@ -725,5 +730,18 @@
 		
 		mysqli_close($conn);
 	}
-	/************************************************/
+	/*
+		TITULO: GuardarAuditoria
+		PARAMETROS: $accion,$tabla,$registro,$user
+		FUNCION: capturar y guardar el evento en la auditoria
+		RETORNO: no aplica
+	 */
+	function GuardarAuditoria($accion,$tabla,$registro,$user) {
+		$conn = ConectarXampp();
+		$date = new DateTime('now');
+		$date = $date->format("Y-m-d H:i:s");
+		$sql = QGuardarAuditoria($accion,$tabla,$registro,$user,$date);
+		mysqli_query($conn,$sql);
+		mysqli_close($conn);
+	}
 ?>

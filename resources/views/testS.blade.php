@@ -11,6 +11,6 @@
 		include(app_path().'\functions\funciones.php');
 		include(app_path().'\functions\reportes.php');
 		
-		pesca();
+		Pesca();
 	?>
 @endsection

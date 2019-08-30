@@ -1236,32 +1236,30 @@
 		";
 		return $sql;
 	}
-
+	/*
+		TITULO: QGuardarAuditoria
+		PARAMETROS: $accion,$tabla,$registro,$user
+		FUNCION: capturar y guardar el evento en la auditoria
+		RETORNO: no aplica
+	 */
+	function QGuardarAuditoria($accion,$tabla,$registro,$user,$date) {
+		$sql = "
+		INSERT INTO auditorias
+		(accion,tabla,registro,user,created_at,updated_at)
+		VALUES 
+		('$accion','$tabla','$registro','$user','$date','$date')
+		";
+		return $sql;
+	}
 	/*
 		TITULO: 
 		PARAMETROS: 
 		FUNCION:
 		RETORNO:
 	 */
-	function QGuardarAditoria($IdArticulo,$CodigoInterno,$Descripcion,$Existencia,$Precio,$FechaCaptura,$user,$date,$sergio) {
+	function QModelo() {
 		$sql = "
-		INSERT INTO dias_ceros 
-		(id_articulo,codigo_articulo,descripcion,existencia,precio,fecha_captura,user,created_at,updated_at)
-		VALUES 
-		('$IdArticulo','$CodigoInterno','$Descripcion','$Existencia','$Precio','$FechaCaptura','$user','$date','$date')
 		";
 		return $sql;
 	}
-
-	/***************************************************************/
-	function GuardarAuditoria($accion,$tabla,$registro,$user) {
-		$sql = "
-		INSERT INTO auditorias 
-		(accion,tabla,registro,user)
-		VALUES 
-		('$accion','$tabla','$registro','$user')
-		";
-		return $sql;
-	}
-	/*****************************************************************/
 ?>
