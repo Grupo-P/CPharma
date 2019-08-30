@@ -736,10 +736,11 @@
 		FUNCION: capturar y guardar el evento en la auditoria
 		RETORNO: no aplica
 	 */
-	function GuardarAuditoria($accion,$tabla,$registro,$user) {
+	function GuardarAuditoria($accion,$tabla,$registro) {
 		$conn = ConectarXampp();
 		$date = new DateTime('now');
 		$date = $date->format("Y-m-d H:i:s");
+		$user = auth()->user()->name;
 		$sql = QGuardarAuditoria($accion,$tabla,$registro,$user,$date);
 		mysqli_query($conn,$sql);
 		mysqli_close($conn);

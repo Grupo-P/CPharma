@@ -54,6 +54,7 @@
 		echo '<hr class="row align-items-start col-12">';
 
 		ReporteDiasEnCero($_GET['SEDE']);
+		GuardarAuditoria('CONSULTAR','REPORTE','Dias en cero');
 
 		?> 
           <script>

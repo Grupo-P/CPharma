@@ -29,6 +29,7 @@
     echo '<hr class="row align-items-start col-12">';
 
     ReporteHistoricoProducto($_GET['SEDE'],$_GET['Id']);
+    GuardarAuditoria('CONSULTAR','REPORTE','Historico de productos');
 
     $FinCarga = new DateTime("now");
     $IntervalCarga = $InicioCarga->diff($FinCarga);

@@ -27,6 +27,7 @@
     echo '<hr class="row align-items-start col-12">';
 
     ReporteProductosFalla($_GET['SEDE'],$_GET['fechaInicio'],$_GET['fechaFin']);
+    GuardarAuditoria('CONSULTAR','REPORTE','Productos en falla');
 
     $FinCarga = new DateTime("now");
     $IntervalCarga = $InicioCarga->diff($FinCarga);

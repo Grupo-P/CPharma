@@ -29,6 +29,7 @@
     echo '<hr class="row align-items-start col-12">';
 
     ReportePedidoProductos($_GET['SEDE'],$_GET['Descrip'],$_GET['fechaInicio'],$_GET['fechaFin']);
+    GuardarAuditoria('CONSULTAR','REPORTE','Pedido de productos');
 
     $FinCarga = new DateTime("now");
     $IntervalCarga = $InicioCarga->diff($FinCarga);
