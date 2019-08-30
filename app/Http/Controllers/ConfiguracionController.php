@@ -5,7 +5,7 @@ namespace compras\Http\Controllers;
 use Illuminate\Http\Request;
 use compras\Configuracion;
 use compras\User;
-
+use compras\Auditoria;
 
 class ConfiguracionController extends Controller
 {
@@ -56,6 +56,14 @@ class ConfiguracionController extends Controller
             $configuraciones->user = auth()->user()->name;
             $configuraciones->estatus = 'ACTIVO';
             $configuraciones->save();
+
+            $Auditoria = new Auditoria();
+            $Auditoria->accion = 'CREAR';
+            $Auditoria->tabla = 'CONFIGURACION';
+            $Auditoria->registro = $request->input('variable');
+            $Auditoria->user = auth()->user()->name;
+            $Auditoria->save();
+
             return redirect()->route('configuracion.index')->with('Saved', ' Informacion');
         }
         catch(\Illuminate\Database\QueryException $e){
@@ -72,6 +80,14 @@ class ConfiguracionController extends Controller
     public function show($id)
     {
         $configuraciones = Configuracion::find($id);
+
+        $Auditoria = new Auditoria();
+        $Auditoria->accion = 'CONSULTAR';
+        $Auditoria->tabla = 'CONFIGURACION';
+        $Auditoria->registro = $configuraciones->variable;
+        $Auditoria->user = auth()->user()->name;
+        $Auditoria->save();
+
         return view('pages.configuracion.show', compact('configuraciones'));
     }
 
@@ -102,6 +118,14 @@ class ConfiguracionController extends Controller
             $configuraciones->user = auth()->user()->name;
             $configuraciones->estatus = 'ACTIVO';
             $configuraciones->save();
+
+            $Auditoria = new Auditoria();
+            $Auditoria->accion = 'EDITAR';
+            $Auditoria->tabla = 'CONFIGURACION';
+            $Auditoria->registro = $configuraciones->variable;
+            $Auditoria->user = auth()->user()->name;
+            $Auditoria->save();
+
             return redirect()->route('configuracion.index')->with('Updated', ' Informacion');
         }
         catch(\Illuminate\Database\QueryException $e){
@@ -119,15 +143,25 @@ class ConfiguracionController extends Controller
     {
         $configuraciones = Configuracion::find($id);
 
+        $Auditoria = new Auditoria();        
+        $Auditoria->tabla = 'CONFIGURACION';
+        $Auditoria->registro = $configuraciones->variable;
+        $Auditoria->user = auth()->user()->name;        
+
          if($configuraciones->estatus == 'ACTIVO'){
             $configuraciones->estatus = 'INACTIVO';
+            $Auditoria->accion = 'DESINCORPORAR';
          }
          else if($configuraciones->estatus == 'INACTIVO'){
             $configuraciones->estatus = 'ACTIVO';
+            $Auditoria->accion = 'REINCORPORAR';
          }
 
          $configuraciones->user = auth()->user()->name;      
          $configuraciones->save();
+
+         $Auditoria->save();
+
          return redirect()->route('configuracion.index')->with('Deleted', ' Informacion');
     }
 }
