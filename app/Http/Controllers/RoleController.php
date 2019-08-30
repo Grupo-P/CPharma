@@ -5,6 +5,7 @@ namespace compras\Http\Controllers;
 use Illuminate\Http\Request;
 use compras\Role;
 use compras\User;
+use compras\Auditoria;
 
 class RoleController extends Controller
 {
@@ -58,6 +59,14 @@ class RoleController extends Controller
             $rol->user = auth()->user()->name;
             $rol->estatus = 'ACTIVO';
             $rol->save();
+
+            $Auditoria = new Auditoria();
+            $Auditoria->accion = 'CREAR';
+            $Auditoria->tabla = 'ROL';
+            $Auditoria->registro = $request->input('nombre');
+            $Auditoria->user = auth()->user()->name;
+            $Auditoria->save();
+
             return redirect()->route('rol.index')->with('Saved', ' Informacion');
         }
         catch(\Illuminate\Database\QueryException $e){
@@ -73,7 +82,15 @@ class RoleController extends Controller
      */
     public function show($id)
     {
-        $rol = Role::find($id);        
+        $rol = Role::find($id);
+
+        $Auditoria = new Auditoria();
+        $Auditoria->accion = 'CONSULTAR';
+        $Auditoria->tabla = 'ROL';
+        $Auditoria->registro = $rol->nombre;
+        $Auditoria->user = auth()->user()->name;
+        $Auditoria->save();
+
         return view('pages.role.show', compact('rol'));
     }
 
@@ -104,6 +121,14 @@ class RoleController extends Controller
             $rol->user = auth()->user()->name;
             $rol->estatus = 'ACTIVO';
             $rol->save();
+
+            $Auditoria = new Auditoria();
+            $Auditoria->accion = 'EDITAR';
+            $Auditoria->tabla = 'ROL';
+            $Auditoria->registro = $rol->nombre;
+            $Auditoria->user = auth()->user()->name;
+            $Auditoria->save();
+
             return redirect()->route('rol.index')->with('Updated', ' Informacion');
         }
         catch(\Illuminate\Database\QueryException $e){
@@ -121,15 +146,25 @@ class RoleController extends Controller
     {
         $rol = Role::find($id);
 
+        $Auditoria = new Auditoria();
+        $Auditoria->tabla = 'ROL';
+        $Auditoria->registro = $rol->nombre;
+        $Auditoria->user = auth()->user()->name;       
+
          if($rol->estatus == 'ACTIVO'){
             $rol->estatus = 'INACTIVO';
+            $Auditoria->accion = 'DESINCORPORAR';
          }
          else if($rol->estatus == 'INACTIVO'){
             $rol->estatus = 'ACTIVO';
+            $Auditoria->accion = 'REINCORPORAR';
          }
 
-         $rol->user = auth()->user()->name;      
-         $rol->save();
-         return redirect()->route('rol.index')->with('Deleted', ' Informacion');
+        $rol->user = auth()->user()->name;      
+        $rol->save();
+
+        $Auditoria->save();
+
+        return redirect()->route('rol.index')->with('Deleted', ' Informacion');
     }
 }

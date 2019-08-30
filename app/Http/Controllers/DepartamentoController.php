@@ -5,6 +5,7 @@ namespace compras\Http\Controllers;
 use Illuminate\Http\Request;
 use compras\Departamento;
 use compras\User;
+use compras\Auditoria;
 
 class DepartamentoController extends Controller
 {
@@ -54,6 +55,14 @@ class DepartamentoController extends Controller
             $departamentos->user = auth()->user()->name;
             $departamentos->estatus = 'ACTIVO';
             $departamentos->save();
+
+            $Auditoria = new Auditoria();
+            $Auditoria->accion = 'CREAR';
+            $Auditoria->tabla = 'DEPARTAMENTO';
+            $Auditoria->registro = $request->input('nombre');
+            $Auditoria->user = auth()->user()->name;
+            $Auditoria->save();
+
             return redirect()->route('departamento.index')->with('Saved', ' Informacion');
         }
         catch(\Illuminate\Database\QueryException $e){
@@ -69,7 +78,15 @@ class DepartamentoController extends Controller
      */
     public function show($id)
     {
-        $departamentos = Departamento::find($id);    
+        $departamentos = Departamento::find($id);
+
+        $Auditoria = new Auditoria();
+        $Auditoria->accion = 'CONSULTAR';
+        $Auditoria->tabla = 'DEPARTAMENTO';
+        $Auditoria->registro = $departamentos->nombre;
+        $Auditoria->user = auth()->user()->name;
+        $Auditoria->save();
+
         return view('pages.departamento.show', compact('departamentos'));
     }
 
@@ -100,6 +117,14 @@ class DepartamentoController extends Controller
             $departamentos->user = auth()->user()->name;
             $departamentos->estatus = 'ACTIVO';
             $departamentos->save();
+
+            $Auditoria = new Auditoria();
+            $Auditoria->accion = 'EDITAR';
+            $Auditoria->tabla = 'DEPARTAMENTO';
+            $Auditoria->registro = $departamentos->nombre;
+            $Auditoria->user = auth()->user()->name;
+            $Auditoria->save();
+
             return redirect()->route('departamento.index')->with('Updated', ' Informacion');
         }
         catch(\Illuminate\Database\QueryException $e){
@@ -117,15 +142,25 @@ class DepartamentoController extends Controller
     {
         $departamentos = Departamento::find($id);
 
+        $Auditoria = new Auditoria();        
+        $Auditoria->tabla = 'DEPARTAMENTO';
+        $Auditoria->registro = $departamentos->nombre;
+        $Auditoria->user = auth()->user()->name;        
+
          if($departamentos->estatus == 'ACTIVO'){
             $departamentos->estatus = 'INACTIVO';
+            $Auditoria->accion = 'DESINCORPORAR';
          }
          else if($departamentos->estatus == 'INACTIVO'){
             $departamentos->estatus = 'ACTIVO';
+            $Auditoria->accion = 'REINCORPORAR';
          }
 
          $departamentos->user = auth()->user()->name;      
          $departamentos->save();
+
+         $Auditoria->save();
+
          return redirect()->route('departamento.index')->with('Deleted', ' Informacion');
     }
 }
