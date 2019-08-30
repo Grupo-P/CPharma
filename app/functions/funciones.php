@@ -21,7 +21,7 @@
 		$sql = QLastRestoreDB($nameDataBase);
 		$result = sqlsrv_query($conn,$sql);
 		$row = sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC);
-		$FechaRestauracion = $row["FechaRestauracion"]->format("Y-m-d h:i:s");
+		$FechaRestauracion = $row["FechaRestauracion"]->format("Y-m-d h:i:s a");
 		return $FechaRestauracion;
 	}
 	/*
