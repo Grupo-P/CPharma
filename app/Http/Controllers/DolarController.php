@@ -5,6 +5,7 @@ namespace compras\Http\Controllers;
 use Illuminate\Http\Request;
 use compras\Dolar;
 use compras\User;
+use compras\Auditoria;
 
 class DolarController extends Controller
 {   
@@ -55,6 +56,14 @@ class DolarController extends Controller
             $dolar->estatus = 'ACTIVO';
             $dolar->user = auth()->user()->name;
             $dolar->save();
+
+            $Auditoria = new Auditoria();
+            $Auditoria->accion = 'CREAR';
+            $Auditoria->tabla = 'TASA MERCADO';
+            $Auditoria->registro = $request->input('tasa');
+            $Auditoria->user = auth()->user()->name;
+            $Auditoria->save();
+
             return redirect()->route('dolar.index')->with('Saved', ' Informacion');
         }
         catch(\Illuminate\Database\QueryException $e){
@@ -70,7 +79,15 @@ class DolarController extends Controller
      */
     public function show($id)
     {
-        $dolar = Dolar::find($id);        
+        $dolar = Dolar::find($id); 
+
+        $Auditoria = new Auditoria();
+        $Auditoria->accion = 'CONSULTAR';
+        $Auditoria->tabla = 'TASA MERCADO';
+        $Auditoria->registro = $dolar->tasa;
+        $Auditoria->user = auth()->user()->name;
+        $Auditoria->save();
+
         return view('pages.dolar.show', compact('dolar'));
     }
 
@@ -101,6 +118,14 @@ class DolarController extends Controller
             $dolar->fecha = date('Y-m-d',strtotime($dolar->fecha));
             $dolar->user = auth()->user()->name;
             $dolar->save();
+
+            $Auditoria = new Auditoria();
+            $Auditoria->accion = 'EDITAR';
+            $Auditoria->tabla = 'TASA MERCADO';
+            $Auditoria->registro = $dolar->tasa;
+            $Auditoria->user = auth()->user()->name;
+            $Auditoria->save();
+
             return redirect()->route('dolar.index')->with('Updated', ' Informacion');
         }
         catch(\Illuminate\Database\QueryException $e){
@@ -118,15 +143,25 @@ class DolarController extends Controller
     {
         $dolar = Dolar::find($id);
 
+        $Auditoria = new Auditoria();
+        $Auditoria->tabla = 'TASA MERCADO';
+        $Auditoria->registro = $dolar->tasa;
+        $Auditoria->user = auth()->user()->name;        
+
          if($dolar->estatus == 'ACTIVO'){
             $dolar->estatus = 'INACTIVO';
+            $Auditoria->accion = 'DESINCORPORAR';
          }
          else if($dolar->estatus == 'INACTIVO'){
             $dolar->estatus = 'ACTIVO';
+            $Auditoria->accion = 'REINCORPORAR';
          }
 
          $dolar->user = auth()->user()->name;        
          $dolar->save();
+
+         $Auditoria->save();
+
          return redirect()->route('dolar.index')->with('Deleted', ' Informacion');
     }
 }
