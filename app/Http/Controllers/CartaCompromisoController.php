@@ -5,6 +5,7 @@ namespace compras\Http\Controllers;
 use Illuminate\Http\Request;
 use compras\CartaCompromiso;
 use compras\User;
+use compras\Auditoria;
 
 class CartaCompromisoController extends Controller {
     /**
@@ -72,6 +73,14 @@ class CartaCompromisoController extends Controller {
             $cartaCompromiso->estatus = 'ACTIVO';
             $cartaCompromiso->user = auth()->user()->name;
             $cartaCompromiso->save();
+
+            $Auditoria = new Auditoria();
+            $Auditoria->accion = 'CREAR';
+            $Auditoria->tabla = 'CARTA COMPROMISO';
+            $Auditoria->registro = $request->input('articulo');
+            $Auditoria->user = auth()->user()->name;
+            $Auditoria->save();
+
             return redirect()->route('cartaCompromiso.index', 'SEDE='.$request->input('SEDE'))->with('Saved', ' Informacion');
         }
         catch(\Illuminate\Database\QueryException $e) {
@@ -87,6 +96,14 @@ class CartaCompromisoController extends Controller {
      */
     public function show($id) {
         $cartaCompromiso = CartaCompromiso::find($id);
+
+        $Auditoria = new Auditoria();
+        $Auditoria->accion = 'CONSULTAR';
+        $Auditoria->tabla = 'CARTA COMPROMISO';
+        $Auditoria->registro = $cartaCompromiso->articulo;
+        $Auditoria->user = auth()->user()->name;
+        $Auditoria->save();
+
         return view('pages.cartaCompromiso.show', compact('cartaCompromiso'));
     }
 
@@ -116,6 +133,14 @@ class CartaCompromisoController extends Controller {
             $cartaCompromiso->nota = $request->input('nota');
             $cartaCompromiso->user = auth()->user()->name;
             $cartaCompromiso->save();
+
+            $Auditoria = new Auditoria();
+            $Auditoria->accion = 'EDITAR';
+            $Auditoria->tabla = 'CARTA COMPROMISO';
+            $Auditoria->registro = $cartaCompromiso->articulo;
+            $Auditoria->user = auth()->user()->name;
+            $Auditoria->save();
+
             return redirect()->route('cartaCompromiso.index', 'SEDE='.$request->input('SEDE'))->with('Updated', ' Informacion');
         }
         catch(\Illuminate\Database\QueryException $e) {
@@ -132,15 +157,25 @@ class CartaCompromisoController extends Controller {
     public function destroy(Request $request, $id) {
         $cartaCompromiso = CartaCompromiso::find($id);
 
+        $Auditoria = new Auditoria();        
+        $Auditoria->tabla = 'CARTA COMPROMISO';
+        $Auditoria->registro = $cartaCompromiso->articulo;
+        $Auditoria->user = auth()->user()->name;        
+
          if($cartaCompromiso->estatus == 'ACTIVO') {
             $cartaCompromiso->estatus = 'INACTIVO';
+            $Auditoria->accion = 'DESINCORPORAR';
          }
          else if($cartaCompromiso->estatus == 'INACTIVO') {
             $cartaCompromiso->estatus = 'ACTIVO';
+            $Auditoria->accion = 'REINCORPORAR';
          }
 
          $cartaCompromiso->user = auth()->user()->name;
          $cartaCompromiso->save();
+
+         $Auditoria->save();
+         
          return redirect()->route('cartaCompromiso.index', 'SEDE='.$request->input('SEDE'))->with('Deleted', ' Informacion');
     }
 }
