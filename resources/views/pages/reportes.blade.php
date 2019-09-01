@@ -35,8 +35,19 @@
 		  	<div class="card-footer bg-transparent border-danger text-right">
 		  		<form action="/reporte1/" style="display: inline;">
 				    @csrf
-				    <input id="SEDE" name="SEDE" type="hidden" value="<?php print_r($_GET['SEDE']); ?>">				   
+				    <input id="SEDE" name="SEDE" type="hidden" value="<?php print_r($_GET['SEDE']); ?>">
+				<?php
+					if(
+						Auth::user()->departamento == 'COMPRAS' 
+						|| Auth::user()->departamento == 'LÍDER DE TIENDA'
+						|| Auth::user()->departamento == 'GERENCIA'
+						|| Auth::user()->departamento == 'TECNOLOGIA'
+					){
+				?>
 				    <button type="submit" name="Reporte" role="button" class="btn btn-outline-danger btn-sm"></i>Visualizar</button>
+				<?php
+					}
+				?>
 				</form>
 		  	</div>
 		</div>
@@ -52,8 +63,19 @@
 		  	<div class="card-footer bg-transparent border-success text-right">
 		  		<form action="/reporte2/" style="display: inline;">
 				    @csrf
-				    <input id="SEDE" name="SEDE" type="hidden" value="<?php print_r($_GET['SEDE']); ?>">				   
+				    <input id="SEDE" name="SEDE" type="hidden" value="<?php print_r($_GET['SEDE']); ?>">				   				   
+				<?php
+					if(
+						Auth::user()->departamento == 'COMPRAS'
+						|| Auth::user()->departamento == 'OPERACIONES' 
+						|| Auth::user()->departamento == 'GERENCIA'
+						|| Auth::user()->departamento == 'TECNOLOGIA'
+					){
+				?>
 				    <button type="submit" name="Reporte" role="button" class="btn btn-outline-success btn-sm"></i>Visualizar</button>
+				<?php
+					}
+				?>
 				</form>
 		  	</div>
 		</div>
@@ -69,8 +91,20 @@
 		  	<div class="card-footer bg-transparent border-info text-right">
 		  		<form action="/reporte3/" style="display: inline;">
 				    @csrf
-				    <input id="SEDE" name="SEDE" type="hidden" value="<?php print_r($_GET['SEDE']); ?>">				   
+				    <input id="SEDE" name="SEDE" type="hidden" value="<?php print_r($_GET['SEDE']); ?>">
+				<?php
+					if(
+						Auth::user()->departamento == 'COMPRAS'
+						|| Auth::user()->departamento == 'LÍDER DE TIENDA'
+						|| Auth::user()->departamento == 'SURTIDO' 
+						|| Auth::user()->departamento == 'GERENCIA'
+						|| Auth::user()->departamento == 'TECNOLOGIA'
+					){
+				?>				   
 				    <button type="submit" name="Reporte" role="button" class="btn btn-outline-info btn-sm"></i>Visualizar</button>
+				<?php
+					}
+				?>
 				</form>
 		  	</div>
 		</div>
@@ -89,8 +123,19 @@
 		  	<div class="card-footer bg-transparent border-warning text-right">
 		  		<form action="/reporte4/" style="display: inline;">
 				    @csrf
-				    <input id="SEDE" name="SEDE" type="hidden" value="<?php print_r($_GET['SEDE']); ?>">				   
+				    <input id="SEDE" name="SEDE" type="hidden" value="<?php print_r($_GET['SEDE']); ?>">
+				<?php
+					if(
+						Auth::user()->departamento == 'COMPRAS'
+						|| Auth::user()->departamento == 'LÍDER DE TIENDA'
+						|| Auth::user()->departamento == 'GERENCIA'
+						|| Auth::user()->departamento == 'TECNOLOGIA'
+					){
+				?>				   
 				    <button type="submit" name="Reporte" role="button" class="btn btn-outline-warning btn-sm"></i>Visualizar</button>
+				<?php
+					}
+				?>
 				</form>
 		  	</div>
 		</div>
@@ -106,8 +151,19 @@
 		  	<div class="card-footer bg-transparent border-secondary text-right">
 		  		<form action="/reporte5/" style="display: inline;">
 				    @csrf
-				    <input id="SEDE" name="SEDE" type="hidden" value="<?php print_r($_GET['SEDE']); ?>">				   
+				    <input id="SEDE" name="SEDE" type="hidden" value="<?php print_r($_GET['SEDE']); ?>">
+				<?php
+					if(
+						Auth::user()->departamento == 'COMPRAS'
+						|| Auth::user()->departamento == 'LÍDER DE TIENDA'
+						|| Auth::user()->departamento == 'GERENCIA'
+						|| Auth::user()->departamento == 'TECNOLOGIA'
+					){
+				?>				   
 				    <button type="submit" name="Reporte" role="button" class="btn btn-outline-secondary btn-sm"></i>Visualizar</button>
+				<?php
+					}
+				?>
 				</form>
 		  	</div>
 		</div>
@@ -123,8 +179,18 @@
 		  	<div class="card-footer bg-transparent border-dark text-right">
 		  		<form action="/reporte6/" style="display: inline;">
 				    @csrf
-				    <input id="SEDE" name="SEDE" type="hidden" value="<?php print_r($_GET['SEDE']); ?>">				   
+				    <input id="SEDE" name="SEDE" type="hidden" value="<?php print_r($_GET['SEDE']); ?>">
+				<?php
+					if(
+						Auth::user()->departamento == 'COMPRAS'						
+						|| Auth::user()->departamento == 'GERENCIA'
+						|| Auth::user()->departamento == 'TECNOLOGIA'
+					){
+				?>				   
 				    <button type="submit" name="Reporte" role="button" class="btn btn-outline-dark btn-sm"></i>Visualizar</button>
+				<?php
+					}
+				?>
 				</form>
 		  	</div>
 		</div>
@@ -143,8 +209,18 @@
 		  	<div class="card-footer bg-transparent border-danger text-right">
 		  		<form action="/reporte7/" style="display: inline;">
 				    @csrf
-				    <input id="SEDE" name="SEDE" type="hidden" value="<?php print_r($_GET['SEDE']); ?>">				   
+				    <input id="SEDE" name="SEDE" type="hidden" value="<?php print_r($_GET['SEDE']); ?>">
+				<?php
+					if(
+						Auth::user()->departamento == 'COMPRAS'						
+						|| Auth::user()->departamento == 'GERENCIA'
+						|| Auth::user()->departamento == 'TECNOLOGIA'
+					){
+				?>				   
 				    <button type="submit" name="Reporte" role="button" class="btn btn-outline-danger btn-sm"></i>Visualizar</button>
+				<?php
+					}
+				?>
 				</form>
 		  	</div>
 		</div>
@@ -160,8 +236,18 @@
 		  	<div class="card-footer bg-transparent border-success text-right">
 		  		<form action="/reporte8/" style="display: inline;">
 				    @csrf
-				    <input id="SEDE" name="SEDE" type="hidden" value="<?php print_r($_GET['SEDE']); ?>">				   
+				    <input id="SEDE" name="SEDE" type="hidden" value="<?php print_r($_GET['SEDE']); ?>">
+				<?php
+					if(
+						Auth::user()->departamento == 'OPERACIONES'
+						|| Auth::user()->departamento == 'GERENCIA'
+						|| Auth::user()->departamento == 'TECNOLOGIA'
+					){
+				?>				   
 				    <button type="submit" name="Reporte" role="button" class="btn btn-outline-success btn-sm"></i>Visualizar</button>
+				<?php
+					}
+				?>
 				</form>
 		  	</div>
 		</div>
@@ -177,8 +263,18 @@
 		  	<div class="card-footer bg-transparent border-info text-right">
 		  		<form action="/reporte9/" style="display: inline;">
 				    @csrf
-				    <input id="SEDE" name="SEDE" type="hidden" value="<?php print_r($_GET['SEDE']); ?>">				   
+				    <input id="SEDE" name="SEDE" type="hidden" value="<?php print_r($_GET['SEDE']); ?>">
+				<?php
+					if(
+						Auth::user()->departamento == 'SURTIDO'
+						|| Auth::user()->departamento == 'GERENCIA'
+						|| Auth::user()->departamento == 'TECNOLOGIA'
+					){
+				?>				   
 				    <button type="submit" name="Reporte" role="button" class="btn btn-outline-info btn-sm"></i>Visualizar</button>
+				<?php
+					}
+				?>
 				</form>
 		  	</div>
 		</div>
@@ -196,8 +292,20 @@
 		  	<div class="card-footer bg-transparent border-warning text-right">
 		  		<form action="/reporte10/" style="display: inline;">
 				    @csrf
-				    <input id="SEDE" name="SEDE" type="hidden" value="<?php print_r($_GET['SEDE']); ?>">				   
+				    <input id="SEDE" name="SEDE" type="hidden" value="<?php print_r($_GET['SEDE']); ?>">
+				<?php
+					if(
+						Auth::user()->departamento == 'COMPRAS'
+						|| Auth::user()->departamento == 'LÍDER DE TIENDA'
+						|| Auth::user()->departamento == 'OPERACIONES' 
+						|| Auth::user()->departamento == 'GERENCIA'
+						|| Auth::user()->departamento == 'TECNOLOGIA'
+					){
+				?>				   
 				    <button type="submit" name="Reporte" role="button" class="btn btn-outline-warning btn-sm"></i>Visualizar</button>
+				<?php
+					}
+				?>
 				</form>
 		  	</div>
 		</div>
@@ -213,8 +321,20 @@
 		  	<div class="card-footer bg-transparent border-secondary text-right">
 		  		<form action="/cartaCompromiso" style="display: inline;">
 				    @csrf
-				    <input id="SEDE" name="SEDE" type="hidden" value="<?php print_r($_GET['SEDE']); ?>">				   
+				    <input id="SEDE" name="SEDE" type="hidden" value="<?php print_r($_GET['SEDE']); ?>">
+				<?php
+					if(
+						Auth::user()->departamento == 'COMPRAS'
+						|| Auth::user()->departamento == 'DEVOLUCIONES'
+						|| Auth::user()->departamento == 'OPERACIONES' 
+						|| Auth::user()->departamento == 'GERENCIA'
+						|| Auth::user()->departamento == 'TECNOLOGIA'
+					){
+				?>				   
 				    <button type="submit" name="Reporte" role="button" class="btn btn-outline-secondary btn-sm"></i>Visualizar</button>
+				<?php
+					}
+				?>
 				</form>
 		  	</div>
 		</div>

@@ -44,21 +44,45 @@
   </a>
 </li>
 
-<li class="nav-item">
-  <a class="nav-link active" href="{{ url('/empresa') }}">
-    <span data-feather="home"></span>
-    <i class="fas fa-industry"></i>
-    Empresa <span class="sr-only">(current)</span>
-  </a>
-</li>
+<?php
+  if(
+    Auth::user()->departamento == 'COMPRAS'
+    || Auth::user()->departamento == 'DEVOLUCIONES'
+    || Auth::user()->departamento == 'OPERACIONES' 
+    || Auth::user()->departamento == 'GERENCIA'
+    || Auth::user()->departamento == 'TECNOLOGIA'
+  ){
+?>
+  <li class="nav-item">
+    <a class="nav-link active" href="{{ url('/empresa') }}">
+      <span data-feather="home"></span>
+      <i class="fas fa-industry"></i>
+      Empresa <span class="sr-only">(current)</span>
+    </a>
+  </li>
+<?php
+  }
+?>
 
-<li class="nav-item">
-  <a class="nav-link active" href="{{ url('/proveedor') }}">
-    <span data-feather="home"></span>
-    <i class="fas fa-dolly"></i>
-    Proveedor <span class="sr-only">(current)</span>
-  </a>
-</li>
+<?php
+  if(
+    Auth::user()->departamento == 'COMPRAS'
+    || Auth::user()->departamento == 'DEVOLUCIONES'
+    || Auth::user()->departamento == 'OPERACIONES' 
+    || Auth::user()->departamento == 'GERENCIA'
+    || Auth::user()->departamento == 'TECNOLOGIA'
+  ){
+?>
+  <li class="nav-item">
+    <a class="nav-link active" href="{{ url('/proveedor') }}">
+      <span data-feather="home"></span>
+      <i class="fas fa-dolly"></i>
+      Proveedor <span class="sr-only">(current)</span>
+    </a>
+  </li>
+<?php
+  }
+?>
 
 <li class="nav-item">
   <a class="nav-link" href="{{ url('/sedes_reporte') }}">
@@ -69,7 +93,9 @@
 </li>
 
 <?php
-  if(Auth::user()->role == 'SUPERVISOR CAJA'){
+  if(
+    Auth::user()->role == 'SUPERVISOR CAJA' 
+    || Auth::user()->departamento == 'LÍDER DE TIENDA'){
 ?>
     <!-- SUPERVISOR CAJA -->
     <hr class="row align-items-center bg-success">

@@ -33,8 +33,17 @@
 		  	<div class="card-footer bg-transparent border-danger text-right">
 		  		<form action="/reporte/" style="display: inline;">
 				    @csrf
-				    <input id="SEDE" name="SEDE" type="hidden" value="FTN">  
+				    <input id="SEDE" name="SEDE" type="hidden" value="FTN"> 
+				<?php
+					if(
+						Auth::user()->sede == 'FARMACIA TIERRA NEGRA, C.A.' 
+						|| Auth::user()->sede == 'GRUPO P, C.A'
+					){
+				?> 
 				    <button type="submit" name="Reporte" role="button" class="btn btn-outline-danger btn-sm"></i>Ver reportes</button>
+				<?php
+					}
+				?>
 				</form>
 		  	</div>
 		</div>
@@ -50,8 +59,17 @@
 		  	<div class="card-footer bg-transparent border-success text-right">
 		  		<form action="/reporte/" style="display: inline;">
 				    @csrf
-				    <input id="SEDE" name="SEDE" type="hidden" value="FLL">  
+				    <input id="SEDE" name="SEDE" type="hidden" value="FLL">
+				<?php
+					if(
+						Auth::user()->sede == 'FARMACIA LA LAGO,C.A.' 
+						|| Auth::user()->sede == 'GRUPO P, C.A'
+					){
+				?>  
 				    <button type="submit" name="Reporte" role="button" class="btn btn-outline-success btn-sm"></i>Ver reportes</button>
+				<?php
+					}
+				?>
 				</form>
 		  	</div>
 		</div>
@@ -68,13 +86,25 @@
 		  		<form action="/reporte/" style="display: inline;">
 				    @csrf
 				    <input id="SEDE" name="SEDE" type="hidden" value="FAU">  
+				<?php
+					if(
+						Auth::user()->sede == 'FARMACIA AVENIDA UNIVERSIDAD, C.A.' 
+						|| Auth::user()->sede == 'GRUPO P, C.A'
+					){
+				?>     
 				    <button type="submit" name="Reporte" role="button" class="btn btn-outline-info btn-sm"></i>Ver reportes</button>
+				<?php
+					}
+				?>
 				</form>
 		  	</div>
 		</div>
    	</div>
 <!-- INICIO: Panel CPharma OFF Line -->
-	<?php
+<?php
+if(
+	Auth::user()->sede == 'GRUPO P, C.A'
+){
 /*INICIO CASO FTN (ON-LINE), FLL (OFF-LINE) FAU (OFF-LINE)*/
 	if($SedeConnection == 'FTN'){
 	?>	
@@ -254,7 +284,8 @@
 		</div>
 	<?php
 	}
-	?>
+}
+?>
 <!-- FIN: Panel CPharma OFF Line -->
    	<?php
 	  if(Auth::user()->role == 'DEVELOPER'){
