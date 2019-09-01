@@ -1237,6 +1237,17 @@
 		return $sql;
 	}
 	/*
+		TITULO: QVerCapturaDiaria
+		PARAMETROS: [$FechaCaptura] El dia de hoy
+		FUNCION: crea una conexion con la base de datos cpharma e ingresa datos
+		RETORNO: no aplica
+	 */
+
+	function QVerCapturaDiaria() {
+		$sql = "SELECT * FROM capturas_diarias";
+		return $sql;
+	}
+	/*
 		TITULO: QGuardarAuditoria
 		PARAMETROS: $accion,$tabla,$registro,$user
 		FUNCION: capturar y guardar el evento en la auditoria
