@@ -19,7 +19,7 @@ class CapturaDiasCero extends Command
      *
      * @var string
      */
-    protected $description = 'Este comando ejecuta la captura automatica de la datas necesaria para dias en cero';
+    protected $description = 'Este comando ejecuta la captura automatica de la data necesaria para dias en cero';
 
     /**
      * Create a new command instance.
@@ -38,13 +38,20 @@ class CapturaDiasCero extends Command
      */
     public function handle()
     {
+        include(app_path().'\functions\config.php');
+        include(app_path().'\functions\querys.php');
+        include(app_path().'\functions\funciones.php');
+        include(app_path().'\functions\reportes.php');
+
+        DiasEnCero();
+
         $Auditoria = new Auditoria();
-        $Auditoria->accion = 'CAPTURA';
-        $Auditoria->tabla = 'AUTOMATICA';
-        $Auditoria->registro = 'LARAVEL';
-        $Auditoria->user = 'SERGIO COVA';
+        $Auditoria->accion = 'CAPTURAR';
+        $Auditoria->tabla = 'DIAS CERO';
+        $Auditoria->registro = 'CPHARMA';
+        $Auditoria->user = 'SYSTEM';
         $Auditoria->save();
 
-        $this->info('La captura fue ejecutada satisfactoriamente!');
+        $this->info('La captura de la data de dias en cero fue ejecutada satisfactoriamente!');
     }
 }

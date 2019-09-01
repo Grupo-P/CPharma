@@ -605,22 +605,6 @@
 		return $diferencia_numero;
 	}
 	/*
-		TITULO: GuardarDiasEnCero
-		PARAMETROS: [$IdArticulo] Id del articulo
-					[$CodigoInterno] Codigo interno del articulo
-					[$Descripcion] Nombre del articulo
-					[$Existencia] Existencia del articulo
-					[$FechaCaptura] El dia de hoy
-		FUNCION: crea una conexion con la base de datos cpharma e ingresa datos
-		RETORNO: no aplica
-	 */
-	function GuardarDiasEnCero($IdArticulo,$CodigoInterno,$Descripcion,$Existencia,$Precio,$FechaCaptura,$user,$date) {
-		$conn = ConectarXampp();
-		$sql = QGuardarDiasEnCero($IdArticulo,$CodigoInterno,$Descripcion,$Existencia,$Precio,$FechaCaptura,$user,$date);
-		$result = mysqli_query($conn,$sql);
-		mysqli_close($conn);
-	}
-	/*
 		TITULO: ProductoDolarizado
 		PARAMETROS: [$conn] cadena de conexion
 					[$IdArticulo] id del articulo a buscar
@@ -745,4 +729,47 @@
 		mysqli_query($conn,$sql);
 		mysqli_close($conn);
 	}
+
+	/*
+		TITULO: ReporteDiasEnCero
+		PARAMETROS: no aplica
+		FUNCION: Captura y almacena la data para dias en cero
+		RETORNO: no aplica
+	 */
+	function DiasEnCero() {
+		$SedeConnection = MiUbicacion();
+		//El siguiente if debe ser removido al finalizar la prueba
+		if($SedeConnection='GP'){
+			$SedeConnection='FTN';
+		}
+		//
+		$conn = ConectarSmartpharma($SedeConnection);
+		$connCPharma = ConectarXampp();
+
+		$sql = QDiasEnCero();
+		$result = sqlsrv_query($conn,$sql);
+
+		$FechaCaptura = new DateTime("now");
+		$FechaCaptura = $FechaCaptura->format('Y-m-d');
+		$user = 'SYSTEM';
+		$date = '';
+
+		while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
+			$IdArticulo = $row["IdArticulo"];
+			$CodigoInterno = $row["CodigoInterno"];
+			$Descripcion_User=$row["Descripcion"];
+			$Descripcion = addslashes($Descripcion_User);//Escapa los caracteres especiales
+			$Existencia=intval($row["Existencia"]);
+			$IsIVA = $row["ConceptoImpuesto"];
+			$Precio = CalculoPrecio($conn,$IdArticulo,$IsIVA,$Existencia);
+			$date = date('Y-m-d h:m:s',time());
+			
+			$sqlCPharma = QGuardarDiasEnCero($IdArticulo,$CodigoInterno,$Descripcion,$Existencia,$Precio,$FechaCaptura,$user,$date);
+			mysqli_query($connCPharma,$sqlCPharma);
+		}
+		GuardarCapturaDiaria($FechaCaptura,$date);
+
+		mysqli_close($connCPharma);
+		sqlsrv_close($conn);
+	}	
 ?>

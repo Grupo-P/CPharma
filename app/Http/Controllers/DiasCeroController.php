@@ -22,7 +22,7 @@ class DiasCeroController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function index() {
-        return view('pages.reporte.reporte11');
+        return view('pages.auditoria.index', compact('auditorias'));
     }
 
     /**
@@ -31,7 +31,7 @@ class DiasCeroController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function create() {
-        //
+        return view('pages.reporte.reporte11');
     }
 
     /**
