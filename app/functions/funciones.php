@@ -703,7 +703,6 @@
 	 */
 	function GuardarCapturaDiaria($FechaCaptura,$date) {
 		$conn = ConectarXampp();
-
 		$sql = QCapturaDiaria($FechaCaptura);
 		$result = mysqli_query($conn,$sql);
 		$row = mysqli_fetch_assoc($result);
@@ -738,11 +737,6 @@
 	 */
 	function DiasEnCero() {
 		$SedeConnection = MiUbicacion();
-		//El siguiente if debe ser removido al finalizar la prueba
-		if($SedeConnection='GP'){
-			$SedeConnection='FTN';
-		}
-		//
 		$conn = ConectarSmartpharma($SedeConnection);
 		$connCPharma = ConectarXampp();
 
@@ -762,7 +756,7 @@
 			$Existencia=intval($row["Existencia"]);
 			$IsIVA = $row["ConceptoImpuesto"];
 			$Precio = CalculoPrecio($conn,$IdArticulo,$IsIVA,$Existencia);
-			$date = date('Y-m-d h:m:s',time());
+			$date = date('Y-m-d h:i:s',time());
 			
 			$sqlCPharma = QGuardarDiasEnCero($IdArticulo,$CodigoInterno,$Descripcion,$Existencia,$Precio,$FechaCaptura,$user,$date);
 			mysqli_query($connCPharma,$sqlCPharma);
