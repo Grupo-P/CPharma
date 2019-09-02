@@ -292,6 +292,7 @@
 			    	<th scope="col">Codigo</th>
 			      	<th scope="col">Descripcion</th>
 			      	<th scope="col">Existencia</th>
+			      	<th scope="col">Tipo</th>
 			      	<th scope="col">Veces Facturado</th>
 			      	<th scope="col">Unidades vendidas</th>
 			      	<th scope="col">Unidades Compradas</th>
@@ -310,6 +311,8 @@
 			$row1 = sqlsrv_fetch_array($result1,SQLSRV_FETCH_ASSOC);
 			$Existencia = $row1["Existencia"];
 
+			$Tipo = ProductoMedicina($conn,$IdArticulo);
+
 			echo '<tr>';
 			echo '<td align="left">'.$row["CodigoArticulo"].'</td>';
 
@@ -321,6 +324,7 @@
 			</td>';
 
 			echo '<td align="center">'.intval($Existencia).'</td>';
+			echo '<td align="center">'.$Tipo.'</td>';
 			echo '<td align="center">'.intval($row["TotalVecesVendidasCliente"]).'</td>';
 
 			$Venta = intval($row["TotalUnidadesVendidasCliente"]);

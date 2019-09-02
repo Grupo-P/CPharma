@@ -1295,6 +1295,37 @@
 		return $sql;
 	}
 	/*
+		TITULO: QMedicinas
+		PARAMETROS: No Aplica
+		FUNCION: Busca el Id del atributo si la categoriza es medicinas
+		RETORNO: Retorna el id del atributo medicinas
+	 */
+	function QMedicinas() {
+		$sql = "
+		SELECT * 
+		FROM InvAtributo 
+		WHERE 
+		InvAtributo.Descripcion = 'Medicina'
+		";
+		return $sql;
+	}
+	/*
+		TITULO: QArticuloMedicina
+		PARAMETROS: [$IdArticulo] id del articulo a buscar
+					[$IdMedicina] id del atributo dolarizado
+		FUNCION: Busca detro de la tabla medicinas el articulo en cuestion
+		RETORNO: Retorna la dupla de valores de ser conseguido
+	 */
+	function QArticuloMedicina($IdArticulo,$IdMedicina) {
+		$sql = "
+		SELECT * 
+		FROM InvArticuloAtributo 
+		WHERE InvArticuloAtributo.InvAtributoId = '$IdMedicina' 
+		AND InvArticuloAtributo.InvArticuloId = '$IdArticulo'
+		";
+		return $sql;
+	}
+	/*
 		TITULO: 
 		PARAMETROS: 
 		FUNCION:

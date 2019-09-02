@@ -797,4 +797,34 @@
 		$CodigoBarra = $row["CodigoBarra"];
 	  	return $CodigoBarra;
 	}
+	/*
+		TITULO: ProductoMedicina
+		PARAMETROS: [$conn] cadena de conexion
+					[$IdArticulo] id del articulo a buscar
+		FUNCION: Determina si el producto esta dolarizado 
+		RETORNO: Retorna si el producto esta dolarizado o no
+ 	*/
+	function ProductoMedicina($conn,$IdArticulo) {
+		$Medicina = '';
+		
+		$sql = QMedicinas();
+		$result = sqlsrv_query($conn,$sql);
+		$row = sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC);
+		$IdMedicina = $row["Id"];
+
+		$sql1 = QArticuloMedicina($IdArticulo,$IdMedicina);
+		$params = array();
+		$options =  array("Scrollable"=>SQLSRV_CURSOR_KEYSET);
+		$result1 = sqlsrv_query($conn,$sql1,$params,$options);
+		$row_count = sqlsrv_num_rows($result1);
+		
+		if($row_count == 0) {
+			$Medicina = 'MISCELANEO';
+		}
+		else {
+			$Medicina = 'MEDICINA';
+		}
+
+	  	return $Medicina;
+	}
 ?>
