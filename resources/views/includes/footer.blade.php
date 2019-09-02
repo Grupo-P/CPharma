@@ -14,7 +14,7 @@
 </style>
 
 <div class="p-3 mb-2 bg-white text-info footer-copyright text-center py-3">
-	<span>CPharma v.3.7.1 © 2018 - <?php echo''.date('Y'); ?> Copyright Grupo P</span>
+	<span>CPharma v.3.7.2 © 2018 - <?php echo''.date('Y'); ?> Copyright Grupo P</span>
 	<br>
 	<a href="https://www.instagram.com/covacode/" target="blank" class="text-info">Sergio Cova</a>
   and
