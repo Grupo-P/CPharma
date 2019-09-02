@@ -1263,6 +1263,21 @@
 		return $sql;
 	}
 	/*
+		TITULO: QCodigoBarra
+		PARAMETROS: [$IdArticulo] Id del articulo que se va a buscar
+		FUNCION: Buscar el codigo de barra del articulo
+		RETORNO: Codigo de barra del articulo
+	 */
+	function QCodigoBarra($IdArticulo) {
+		$sql = "
+			SELECT * 
+			FROM InvCodigoBarra 
+			WHERE InvCodigoBarra.InvArticuloId = '$IdArticulo'
+			AND InvCodigoBarra.EsPrincipal = 1
+		";
+		return $sql;
+	}
+	/*
 		TITULO: 
 		PARAMETROS: 
 		FUNCION:

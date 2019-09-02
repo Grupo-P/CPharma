@@ -765,5 +765,36 @@
 
 		mysqli_close($connCPharma);
 		sqlsrv_close($conn);
+	}
+	/*
+		TITULO: ProductoGravado
+		PARAMETROS: $IsIVA
+		FUNCION: determina si un producto es gravado o no
+		RETORNO: retorna si el producto es gravado o no
+	 */
+	function ProductoGravado($IsIVA){
+		$EsGravado = '';
+
+		if($IsIVA == 1) {
+			$EsGravado = 'SI';
+		}
+		else {
+			$EsGravado = 'NO';
+		}
+	  	return $EsGravado;
 	}	
+	/*
+		TITULO: ProductoGravado
+		PARAMETROS: $IsIVA
+		FUNCION: determina si un producto es gravado o no
+		RETORNO: retorna si el producto es gravado o no
+	 */
+	function CodigoBarra($conn,$IdArticulo){
+		$CodigoBarra = '';
+		$sql = QCodigoBarra($IdArticulo);
+		$result = sqlsrv_query($conn,$sql);
+		$row = sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC);
+		$CodigoBarra = $row["CodigoBarra"];
+	  	return $CodigoBarra;
+	}
 ?>

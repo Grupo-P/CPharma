@@ -104,11 +104,10 @@
 		$Existencia = $row1["Existencia"];
 
 		$Precio = CalculoPrecio($conn,$IdArticulo,$IsIVA,$Existencia);
-
+		$CodigoBarra = CodigoBarra($conn,$IdArticulo);
 		$Dolarizado = ProductoDolarizado($conn,$IdArticulo);
-
+		$Gravado = ProductoGravado($IsIVA);
 		$TasaActual = TasaFecha(date('Y-m-d'));
-
 		$Descripcion = $row["Descripcion"];
 
 		echo '
@@ -130,6 +129,8 @@
 			      	<th scope="col">Descripcion</td>
 			      	<th scope="col">Existencia</td>
 			      	<th scope="col">Precio (Con IVA)</td>
+			      	<th scope="col">Codigo de Barra</td>
+			      	<th scope="col">Gravado?</td>
 			      	<th scope="col">Dolarizado</td>
 			      	<th scope="col">Tasa actual</td>
 			      	<th scope="col">Precio en divisa (Con IVA)</td>
@@ -149,6 +150,8 @@
 
 		echo '<td align="center">'.intval($Existencia).'</td>';
 		echo '<td align="center">'." ".round($Precio,2)." ".SigVe.'</td>';
+		echo '<td align="center">'.$CodigoBarra.'</td>';
+		echo '<td align="center">'.$Gravado.'</td>';
 		echo '<td align="center">'.$Dolarizado.'</td>';
 
 		if($TasaActual!=0){
@@ -176,6 +179,7 @@
 			      	<th scope="col">Cantidad recibida</th>
 			      	<th scope="col">Costo bruto (Sin IVA)</th>
 			      	<th scope="col">Tasa en historico</th>
+			      	<th scope="col">Costo bruto (Sin IVA) HOY</th>
 					<th scope="col">Costo en divisa (Sin IVA)</th>
 			    </tr>
 		  	</thead>
@@ -193,10 +197,23 @@
 				$Tasa = TasaFecha($FechaD);
 				
 				if($Tasa != 0){
+					$CostoDivisa = round(($row2["M_PrecioCompraBruto"]/$Tasa),2);
+					
+
 					echo '<td align="center">'." ".$Tasa." ".SigVe.'</td>';
-					echo '<td align="center">'." ".round(($row2["M_PrecioCompraBruto"]/$Tasa),2)." ".SigDolar.'</td>';
+
+					if($TasaActual!=0){
+						$CostoBrutoHoy = $CostoDivisa*$TasaActual;
+						echo '<td align="center">'." ".$CostoBrutoHoy." ".SigVe.'</td>';
+					}
+					else{
+						echo '<td align="center">0.00 '.SigVe.'</td>';
+					}
+
+					echo '<td align="center">'." ".$CostoDivisa." ".SigDolar.'</td>';
 				}
 				else{
+					echo '<td align="center">0.00 '.SigVe.'</td>';
 					echo '<td align="center">0.00 '.SigVe.'</td>';
 					echo '<td align="center">0.00 '.SigDolar.'</td>';
 				}
