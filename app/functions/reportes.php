@@ -945,6 +945,7 @@
 			    <tr>
 			    	<th scope="col">Codigo</th>
 			      	<th scope="col">Descripcion</th>
+			      	<th scope="col">Codigo de Barra</td>
 			      	<th scope="col">Producto Unico</th>
 			      	<th scope="col">Precio (Con IVA)</th>
 			      	<th scope="col">Existencia</th>
@@ -977,6 +978,8 @@
 					.$row["Descripcion"].
 				'</a>
 				</td>';
+			$CodigoBarra = CodigoBarra($conn,$IdArticulo);
+				echo '<td align="center">'.$CodigoBarra.'</td>';
 		
 			$Unico = ProductoUnico($conn,$IdArticulo,$IdProveedor);
 				echo '<td align="center">'.$Unico.'</td>';
