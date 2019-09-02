@@ -104,6 +104,7 @@
 		$Existencia = $row1["Existencia"];
 
 		$Precio = CalculoPrecio($conn,$IdArticulo,$IsIVA,$Existencia);
+		$CodigoBarra = CodigoBarra($conn,$IdArticulo);
 		$Dolarizado = ProductoDolarizado($conn,$IdArticulo);
 		$Gravado = ProductoGravado($IsIVA);
 		$TasaActual = TasaFecha(date('Y-m-d'));
@@ -128,6 +129,7 @@
 			      	<th scope="col">Descripcion</td>
 			      	<th scope="col">Existencia</td>
 			      	<th scope="col">Precio (Con IVA)</td>
+			      	<th scope="col">Codigo de Barra</td>
 			      	<th scope="col">Gravado?</td>
 			      	<th scope="col">Dolarizado</td>
 			      	<th scope="col">Tasa actual</td>
@@ -148,6 +150,7 @@
 
 		echo '<td align="center">'.intval($Existencia).'</td>';
 		echo '<td align="center">'." ".round($Precio,2)." ".SigVe.'</td>';
+		echo '<td align="center">'.$CodigoBarra.'</td>';
 		echo '<td align="center">'.$Gravado.'</td>';
 		echo '<td align="center">'.$Dolarizado.'</td>';
 

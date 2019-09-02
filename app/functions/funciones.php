@@ -767,10 +767,10 @@
 		sqlsrv_close($conn);
 	}
 	/*
-		TITULO: ReporteDiasEnCero
-		PARAMETROS: no aplica
-		FUNCION: Captura y almacena la data para dias en cero
-		RETORNO: no aplica
+		TITULO: ProductoGravado
+		PARAMETROS: $IsIVA
+		FUNCION: determina si un producto es gravado o no
+		RETORNO: retorna si el producto es gravado o no
 	 */
 	function ProductoGravado($IsIVA){
 		$EsGravado = '';
@@ -783,4 +783,18 @@
 		}
 	  	return $EsGravado;
 	}	
+	/*
+		TITULO: ProductoGravado
+		PARAMETROS: $IsIVA
+		FUNCION: determina si un producto es gravado o no
+		RETORNO: retorna si el producto es gravado o no
+	 */
+	function CodigoBarra($conn,$IdArticulo){
+		$CodigoBarra = '';
+		$sql = QCodigoBarra($IdArticulo);
+		$result = sqlsrv_query($conn,$sql);
+		$row = sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC);
+		$CodigoBarra = $row["CodigoBarra"];
+	  	return $CodigoBarra;
+	}
 ?>
