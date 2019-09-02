@@ -697,8 +697,7 @@
 			      	<th scope="col">Venta diaria</th>
 					<th scope="col">Dias restantes</th>
 			      	<th scope="col">Precio (Con IVA)</th>
-			      	<th scope="col">Ultimo Lote</th>
-			      	<th scope="col">Ultima Venta (En rango)</th>
+			      	<th scope="col">Ultimo Lote</th>			   
 			    </tr>
 		  	</thead>
 		  	<tbody>
@@ -736,10 +735,10 @@
 			$row2 = sqlsrv_fetch_array($result2,SQLSRV_FETCH_ASSOC);
 			$UltimoLote = $row2["UltimoLote"];
 
-			$sql10 = QUltimaVenta($IdArticulo,$FInicial,$FFinal);
+			$sql10 = QUltimaVentaCR($IdArticulo,$FInicial,$FFinal);
 			$result3 = sqlsrv_query($conn,$sql10);
 			$row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
-			$UltimaVenta = $row3["UltimaVenta"];
+			$UltimaVenta = $row3["UltimaVenta"];			
 
 			echo '<td align="center">'.$Venta.'</td>';
 			echo '<td align="center">'.intval($row["TotalUnidadesCompradasProveedor"]).'</td>';
@@ -954,6 +953,7 @@
 			      	<th scope="col">Venta diaria</th>
 			      	<th scope="col">Dias restantes</th>
 			      	<th scope="col">Ultima Venta (En rango)</th>
+			      	<th scope="col">Ultima Venta</th>
 			      	<th scope="col">Pedir</th>
 			    </tr>
 		  	</thead>
@@ -1025,13 +1025,25 @@
 				echo '<td align="center">'.round($VentaDiaria,2).'</td>';
 				echo '<td align="center">'.round($DiasRestantes,2).'</td>';
 
-			$sql11 = QUltimaVenta($IdArticulo,$FInicial,$FFinal);
+			$sql11 = QUltimaVentaCR($IdArticulo,$FInicial,$FFinal);
 			$result3 = sqlsrv_query($conn,$sql11);
 			$row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
 			$UltimaVenta = $row3["UltimaVenta"];
 
+			$sql12 = QUltimaVentaSR($IdArticulo);
+			$result4 = sqlsrv_query($conn,$sql12);
+			$row4 = sqlsrv_fetch_array($result4,SQLSRV_FETCH_ASSOC);
+			$UltimaVentaSR = $row4["UltimaVenta"];
+
 			if(($UltimaVenta)){
 				echo '<td align="center">'.$UltimaVenta->format('Y-m-d').'</td>';
+			}
+			else{
+				echo '<td align="center"> - </td>';
+			}
+
+			if(($UltimaVentaSR)){
+				echo '<td align="center">'.$UltimaVentaSR->format('Y-m-d').'</td>';
 			}
 			else{
 				echo '<td align="center"> - </td>';
