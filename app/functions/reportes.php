@@ -179,6 +179,7 @@
 			      	<th scope="col">Cantidad recibida</th>
 			      	<th scope="col">Costo bruto (Sin IVA)</th>
 			      	<th scope="col">Tasa en historico</th>
+			      	<th scope="col">Costo bruto (Sin IVA) HOY</th>
 					<th scope="col">Costo en divisa (Sin IVA)</th>
 			    </tr>
 		  	</thead>
@@ -196,10 +197,23 @@
 				$Tasa = TasaFecha($FechaD);
 				
 				if($Tasa != 0){
+					$CostoDivisa = round(($row2["M_PrecioCompraBruto"]/$Tasa),2);
+					
+
 					echo '<td align="center">'." ".$Tasa." ".SigVe.'</td>';
-					echo '<td align="center">'." ".round(($row2["M_PrecioCompraBruto"]/$Tasa),2)." ".SigDolar.'</td>';
+
+					if($TasaActual!=0){
+						$CostoBrutoHoy = $CostoDivisa*$TasaActual;
+						echo '<td align="center">'." ".$CostoBrutoHoy." ".SigVe.'</td>';
+					}
+					else{
+						echo '<td align="center">0.00 '.SigVe.'</td>';
+					}
+
+					echo '<td align="center">'." ".$CostoDivisa." ".SigDolar.'</td>';
 				}
 				else{
+					echo '<td align="center">0.00 '.SigVe.'</td>';
 					echo '<td align="center">0.00 '.SigVe.'</td>';
 					echo '<td align="center">0.00 '.SigDolar.'</td>';
 				}
