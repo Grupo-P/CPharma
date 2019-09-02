@@ -5,6 +5,7 @@ namespace compras\Http\Controllers;
 use Illuminate\Http\Request;
 use compras\Sede;
 use compras\User;
+use compras\Auditoria;
 
 class SedeController extends Controller
 {
@@ -56,6 +57,14 @@ class SedeController extends Controller
             $sedes->user = auth()->user()->name;
             $sedes->estatus = 'ACTIVO';
             $sedes->save();
+
+            $Auditoria = new Auditoria();
+            $Auditoria->accion = 'CREAR';
+            $Auditoria->tabla = 'SEDE';
+            $Auditoria->registro = $request->input('razon_social');
+            $Auditoria->user = auth()->user()->name;
+            $Auditoria->save();
+
             return redirect()->route('sede.index')->with('Saved', ' Informacion');
         }
         catch(\Illuminate\Database\QueryException $e){
@@ -71,7 +80,15 @@ class SedeController extends Controller
      */
     public function show($id)
     {
-        $sedes = Sede::find($id);  
+        $sedes = Sede::find($id); 
+
+        $Auditoria = new Auditoria();
+        $Auditoria->accion = 'CONSULTAR';
+        $Auditoria->tabla = 'SEDE';
+        $Auditoria->registro = $sedes->razon_social;
+        $Auditoria->user = auth()->user()->name;
+        $Auditoria->save();
+
         return view('pages.sede.show', compact('sedes'));
     }
 
@@ -102,6 +119,14 @@ class SedeController extends Controller
             $sedes->user = auth()->user()->name;
             $sedes->estatus = 'ACTIVO';
             $sedes->save();
+
+            $Auditoria = new Auditoria();
+            $Auditoria->accion = 'EDITAR';
+            $Auditoria->tabla = 'SEDE';
+            $Auditoria->registro = $sedes->razon_social;
+            $Auditoria->user = auth()->user()->name;
+            $Auditoria->save();
+
             return redirect()->route('sede.index')->with('Updated', ' Informacion');
         }
         catch(\Illuminate\Database\QueryException $e){
@@ -119,15 +144,25 @@ class SedeController extends Controller
     {
         $sedes = Sede::find($id);
 
+        $Auditoria = new Auditoria();
+        $Auditoria->tabla = 'SEDE';
+        $Auditoria->registro = $sedes->razon_social;
+        $Auditoria->user = auth()->user()->name;
+
          if($sedes->estatus == 'ACTIVO'){
             $sedes->estatus = 'INACTIVO';
+            $Auditoria->accion = 'DESINCORPORAR';
          }
          else if($sedes->estatus == 'INACTIVO'){
             $sedes->estatus = 'ACTIVO';
+            $Auditoria->accion = 'REINCORPORAR';
          }
 
          $sedes->user = auth()->user()->name;      
          $sedes->save();
+
+         $Auditoria->save();
+
          return redirect()->route('sede.index')->with('Deleted', ' Informacion');
     }
 }

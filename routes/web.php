@@ -93,6 +93,10 @@ Route::get('/reporte11', function() {
     return view('pages.reporte.reporte11');
 });
 
+Route::get('/diascero', function() {
+    return view('pages.diascero.index');
+});
+
 Route::get('home', 'HomeController@index')->name('home');
 
 Route::resource('dolar', 'DolarController');
@@ -118,5 +122,3 @@ Route::resource('conexion', 'ConexionController');
 Route::resource('configuracion', 'ConfiguracionController');
 
 Route::resource('auditoria', 'AuditoriaController');
-
-Route::resource('diasCero', 'DiasCeroController');

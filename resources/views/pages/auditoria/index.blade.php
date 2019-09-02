@@ -121,12 +121,12 @@
 	  	<tbody>
 		@foreach($auditorias as $auditoria)
 		    <tr>
-		      <th>{{$auditoria->id}}</th>
-		      <td>{{$auditoria->accion}}</td>
-		      <td>{{$auditoria->tabla}}</td>
-		      <td>{{$auditoria->registro}}</td>
-		      <td>{{$auditoria->user}}</td>
-		      <td>{{$auditoria->updated_at}}</td>
+		      <th>{{strtoupper($auditoria->id)}}</th>
+		      <td>{{strtoupper($auditoria->accion)}}</td>
+		      <td>{{strtoupper($auditoria->tabla)}}</td>
+		      <td>{{strtoupper($auditoria->registro)}}</td>
+		      <td>{{strtoupper($auditoria->user)}}</td>
+		      <td>{{strtoupper($auditoria->updated_at)}}</td>
 		    </tr>
 		@endforeach
 		</tbody>

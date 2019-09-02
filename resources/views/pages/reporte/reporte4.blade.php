@@ -29,6 +29,7 @@
     echo '<hr class="row align-items-start col-12">';
 
     ReporteProductosMenosVendidos($_GET['SEDE'],$_GET['top'],$_GET['fechaInicio'],$_GET['fechaFin']);
+    GuardarAuditoria('CONSULTAR','REPORTE','Productos menos vendidos');
 
     $FinCarga = new DateTime("now");
     $IntervalCarga = $InicioCarga->diff($FinCarga);

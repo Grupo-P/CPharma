@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use compras\Conexion;
 use compras\User;
 use compras\Sede;
+use compras\Auditoria;
 
 class ConexionController extends Controller
 {
@@ -59,6 +60,14 @@ class ConexionController extends Controller
             $conexiones->user = auth()->user()->name;
             $conexiones->estatus = 'ACTIVO';
             $conexiones->save();
+
+            $Auditoria = new Auditoria();
+            $Auditoria->accion = 'CREAR';
+            $Auditoria->tabla = 'CONEXION';
+            $Auditoria->registro = $request->input('siglas');
+            $Auditoria->user = auth()->user()->name;
+            $Auditoria->save();
+
             return redirect()->route('conexion.index')->with('Saved', ' Informacion');
         }
         catch(\Illuminate\Database\QueryException $e){
@@ -75,6 +84,14 @@ class ConexionController extends Controller
     public function show($id)
     {
         $conexiones = Conexion::find($id); 
+
+        $Auditoria = new Auditoria();
+        $Auditoria->accion = 'CONSULTAR';
+        $Auditoria->tabla = 'CONEXION';
+        $Auditoria->registro = $conexiones->siglas;
+        $Auditoria->user = auth()->user()->name;
+        $Auditoria->save();
+
         return view('pages.conexion.show', compact('conexiones'));
     }
 
@@ -106,6 +123,14 @@ class ConexionController extends Controller
             $conexiones->user = auth()->user()->name;
             $conexiones->estatus = 'ACTIVO';
             $conexiones->save();
+
+            $Auditoria = new Auditoria();
+            $Auditoria->accion = 'EDITAR';
+            $Auditoria->tabla = 'CONEXION';
+            $Auditoria->registro = $conexiones->siglas;
+            $Auditoria->user = auth()->user()->name;
+            $Auditoria->save();
+
             return redirect()->route('conexion.index')->with('Updated', ' Informacion');
         }
         catch(\Illuminate\Database\QueryException $e){
@@ -123,15 +148,23 @@ class ConexionController extends Controller
     {
         $conexiones = Conexion::find($id);
 
+        $Auditoria = new Auditoria();        
+        $Auditoria->tabla = 'CONEXION';
+        $Auditoria->registro = $conexiones->siglas;
+        $Auditoria->user = auth()->user()->name;        
+
          if($conexiones->estatus == 'ACTIVO'){
             $conexiones->estatus = 'INACTIVO';
+            $Auditoria->accion = 'DESINCORPORAR';
          }
          else if($conexiones->estatus == 'INACTIVO'){
             $conexiones->estatus = 'ACTIVO';
+            $Auditoria->accion = 'REINCORPORAR';
          }
 
          $conexiones->user = auth()->user()->name;      
          $conexiones->save();
+         $Auditoria->save();
          return redirect()->route('conexion.index')->with('Deleted', ' Informacion');
     }
 }

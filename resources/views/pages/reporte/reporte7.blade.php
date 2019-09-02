@@ -67,6 +67,7 @@
     ';
 
     ReporteCatalogoProveedor($_GET['SEDE'],$_GET['Id'],$_GET['Nombre']);
+    GuardarAuditoria('CONSULTAR','REPORTE','Catalogo de proveedor');
     
     $FinCarga = new DateTime("now");
     $IntervalCarga = $InicioCarga->diff($FinCarga);

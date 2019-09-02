@@ -8,6 +8,7 @@ use compras\User;
 use compras\Role;
 use compras\Sede;
 use compras\Departamento;
+use compras\Auditoria;
 
 class UserController extends Controller
 {
@@ -53,16 +54,24 @@ class UserController extends Controller
     public function store(Request $request)
     {
         try{
-        $usuario = new User();
-        $usuario->name = $request->input('name');
-        $usuario->email = $request->input('email');
-        $usuario->role = $request->input('role');
-        $usuario->password = Hash::make($request->input('password'));
-        $usuario->estatus = 'ACTIVO';
-        $usuario->sede = $request->input('sede');
-        $usuario->departamento = $request->input('departamento');
-        $usuario->save();
-        return redirect()->route('usuario.index')->with('Saved', ' Informacion');
+            $usuario = new User();
+            $usuario->name = $request->input('name');
+            $usuario->email = $request->input('email');
+            $usuario->role = $request->input('role');
+            $usuario->password = Hash::make($request->input('password'));
+            $usuario->estatus = 'ACTIVO';
+            $usuario->sede = $request->input('sede');
+            $usuario->departamento = $request->input('departamento');
+            $usuario->save();
+
+            $Auditoria = new Auditoria();
+            $Auditoria->accion = 'CREAR';
+            $Auditoria->tabla = 'USUARIO';
+            $Auditoria->registro = $request->input('name');
+            $Auditoria->user = auth()->user()->name;
+            $Auditoria->save();
+
+            return redirect()->route('usuario.index')->with('Saved', ' Informacion');
         }
         catch(\Illuminate\Database\QueryException $e){
             return back()->with('Error', ' Error');
@@ -77,7 +86,15 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        $usuario = User::find($id);        
+        $usuario = User::find($id);
+
+        $Auditoria = new Auditoria();
+        $Auditoria->accion = 'CONSULTAR';
+        $Auditoria->tabla = 'USUARIO';
+        $Auditoria->registro = $usuario->name;
+        $Auditoria->user = auth()->user()->name;
+        $Auditoria->save();
+
         return view('pages.usuario.show', compact('usuario'));
     }
 
@@ -106,10 +123,16 @@ class UserController extends Controller
     public function update(Request $request, $id)
     {
         try{
-        $usuario = User::find($id);
-        $contrasena = $usuario->password;
+            $usuario = User::find($id);
+            $contrasena = $usuario->password;
+            $usuario->fill($request->all());
 
-        $usuario->fill($request->all());
+            $Auditoria = new Auditoria();
+            $Auditoria->accion = 'EDITAR';
+            $Auditoria->tabla = 'USUARIO';
+            $Auditoria->registro = $usuario->name;
+            $Auditoria->user = auth()->user()->name;
+            $Auditoria->save();
 
         if($usuario->password != $contrasena){
             $usuario->password = Hash::make($request->input('password'));
@@ -133,13 +156,23 @@ class UserController extends Controller
     {
         $usuario = User::find($id);
 
+        $Auditoria = new Auditoria();        
+        $Auditoria->tabla = 'USUARIO';
+        $Auditoria->registro = $usuario->name;
+        $Auditoria->user = auth()->user()->name;
+
          if($usuario->estatus == 'ACTIVO'){
             $usuario->estatus = 'INACTIVO';
+            $Auditoria->accion = 'DESINCORPORAR';
          }
          else if($usuario->estatus == 'INACTIVO'){
             $usuario->estatus = 'ACTIVO';
+            $Auditoria->accion = 'REINCORPORAR';
          }       
          $usuario->save();
+
+         $Auditoria->save();
+         
          return redirect()->route('usuario.index')->with('Deleted', ' Informacion');
     }
 }

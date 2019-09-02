@@ -30,7 +30,7 @@
           <p class="card-text text-white">Capturar la informaci&oacute;n</p>
         </div>
         <div class="card-footer bg-transparent border-info text-right">
-          <a href="/diasCero/" class="btn btn-outline-info btn-sm">Click aqui</a>
+          
         </div>
     </div>
   </div>

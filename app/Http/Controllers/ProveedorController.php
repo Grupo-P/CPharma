@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use compras\Proveedor;
 use compras\User;
 use compras\Empresa;
+use compras\Auditoria;
 
 class ProveedorController extends Controller
 {
@@ -50,18 +51,26 @@ class ProveedorController extends Controller
     public function store(Request $request)
     {
         try{
-        $proveedor = new Proveedor();
-        $proveedor->nombre = $request->input('nombre');
-        $proveedor->apellido = $request->input('apellido');
-        $proveedor->telefono = $request->input('telefono');
-        $proveedor->correo = $request->input('correo');
-        $proveedor->cargo = $request->input('cargo');
-        $proveedor->empresa = $request->input('empresa');
-        $proveedor->Estatus = 'ACTIVO';
-        $proveedor->observacion = $request->input('observacion');
-        $proveedor->user = auth()->user()->name;
-        $proveedor->save();
-        return redirect()->route('proveedor.index')->with('Saved', ' Informacion');
+            $proveedor = new Proveedor();
+            $proveedor->nombre = $request->input('nombre');
+            $proveedor->apellido = $request->input('apellido');
+            $proveedor->telefono = $request->input('telefono');
+            $proveedor->correo = $request->input('correo');
+            $proveedor->cargo = $request->input('cargo');
+            $proveedor->empresa = $request->input('empresa');
+            $proveedor->Estatus = 'ACTIVO';
+            $proveedor->observacion = $request->input('observacion');
+            $proveedor->user = auth()->user()->name;
+            $proveedor->save();
+
+            $Auditoria = new Auditoria();
+            $Auditoria->accion = 'CREAR';
+            $Auditoria->tabla = 'PROVEEDOR';
+            $Auditoria->registro = $request->input('nombre').$request->input('apellido');
+            $Auditoria->user = auth()->user()->name;
+            $Auditoria->save();
+
+            return redirect()->route('proveedor.index')->with('Saved', ' Informacion');
         }
         catch(\Illuminate\Database\QueryException $e){
             return back()->with('Error', ' Error');
@@ -76,7 +85,15 @@ class ProveedorController extends Controller
      */
     public function show($id)
     {
-        $proveedor = Proveedor::find($id);      
+        $proveedor = Proveedor::find($id); 
+
+        $Auditoria = new Auditoria();
+        $Auditoria->accion = 'CONSULTAR';
+        $Auditoria->tabla = 'PROVEEDOR';
+        $Auditoria->registro = $proveedor->nombre.$proveedor->apellido;
+        $Auditoria->user = auth()->user()->name;
+        $Auditoria->save();
+
         return view('pages.proveedor.show', compact('proveedor'));
     }
 
@@ -103,11 +120,19 @@ class ProveedorController extends Controller
     public function update(Request $request, $id)
     {
         try{
-        $proveedor = Proveedor::find($id);
-        $proveedor->fill($request->all());
-        $proveedor->user = auth()->user()->name;
-        $proveedor->save();
-        return redirect()->route('proveedor.index')->with('Updated', ' Informacion');
+            $proveedor = Proveedor::find($id);
+            $proveedor->fill($request->all());
+            $proveedor->user = auth()->user()->name;
+            $proveedor->save();
+
+            $Auditoria = new Auditoria();
+            $Auditoria->accion = 'EDITAR';
+            $Auditoria->tabla = 'PROVEEDOR';
+            $Auditoria->registro = $proveedor->nombre.$proveedor->apellido;
+            $Auditoria->user = auth()->user()->name;
+            $Auditoria->save();
+
+            return redirect()->route('proveedor.index')->with('Updated', ' Informacion');
         }
         catch(\Illuminate\Database\QueryException $e){
             return back()->with('Error', ' Error');
@@ -124,15 +149,25 @@ class ProveedorController extends Controller
     {
         $proveedor = Proveedor::find($id);
 
+        $Auditoria = new Auditoria();
+        $Auditoria->tabla = 'PROVEEDOR';
+        $Auditoria->registro = $proveedor->nombre.$proveedor->apellido;
+        $Auditoria->user = auth()->user()->name;
+
          if($proveedor->estatus == 'ACTIVO'){
             $proveedor->estatus = 'INACTIVO';
+            $Auditoria->accion = 'DESINCORPORAR';
          }
          else if($proveedor->estatus == 'INACTIVO'){
             $proveedor->estatus = 'ACTIVO';
+            $Auditoria->accion = 'REINCORPORAR';
          }
 
          $proveedor->user = auth()->user()->name;        
          $proveedor->save();
+
+         $Auditoria->save();
+
          return redirect()->route('proveedor.index')->with('Deleted', ' Informacion');
     }
 }

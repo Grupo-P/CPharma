@@ -113,9 +113,21 @@
 	    		</h2>
 	    		<p class="card-text text-white">Empresas registradas</p>
 	  		</div>
+	  	<?php
+	  		if( 
+	  			Auth::user()->departamento == 'COMPRAS'
+			    || Auth::user()->departamento == 'DEVOLUCIONES'
+			    || Auth::user()->departamento == 'OPERACIONES' 
+			    || Auth::user()->departamento == 'GERENCIA'
+			    || Auth::user()->departamento == 'TECNOLOGIA'
+	  		){
+	 	?>
 		  	<div class="card-footer bg-transparent border-danger text-right">
 		  		<a href="/empresa/" class="btn btn-outline-danger btn-sm">Visualizar</a>
 		  	</div>
+		 <?php
+			}
+		?>
 		</div>
 		<!-- Provedores -->
 		<div class="card border-success mb-3" style="width: 14rem;">	  	
@@ -130,9 +142,21 @@
 	    		</h2>
 	    		<p class="card-text text-white">Proveedores registrados</p>
 	  		</div>
+  		<?php
+	  		if( 
+	  			Auth::user()->departamento == 'COMPRAS'
+			    || Auth::user()->departamento == 'DEVOLUCIONES'
+			    || Auth::user()->departamento == 'OPERACIONES' 
+			    || Auth::user()->departamento == 'GERENCIA'
+			    || Auth::user()->departamento == 'TECNOLOGIA'
+	  		){
+	 	?>
 		  	<div class="card-footer bg-transparent border-success text-right">
 		  		<a href="/proveedor/" class="btn btn-outline-success btn-sm">Visualizar</a>
 		  	</div>
+		<?php
+			}
+		?>
 		</div>
 		<!-- Reportes -->
 		<div class="card border-info mb-3" style="width: 14rem;">	  	
@@ -152,9 +176,6 @@
 	</div>
 	
 	<div class="card-deck">		
-		<?php
-		  if(Auth::user()->role == 'MASTER' || Auth::user()->role == 'DEVELOPER'){
-		 ?>
 		<!-- Usuario -->
 		<div class="card border-dark mb-3" style="width: 14rem;">	  	
 	  		<div class="card-body text-left bg-dark">
@@ -168,9 +189,15 @@
 	    		</h2>
 	    		<p class="card-text text-white">Usuarios registrados</p>
 	  		</div>
+  		<?php
+		  if(Auth::user()->role == 'MASTER' || Auth::user()->role == 'DEVELOPER'){
+	 	?>
 		  	<div class="card-footer bg-transparent border-dark text-right">
 		  		<a href="/usuario/" class="btn btn-outline-dark btn-sm">Visualizar</a>
 		  	</div>
+		<?php
+			}
+		?>
 		</div>
 		<!-- Dolar -->
 		<div class="card border-secondary mb-3" style="width: 14rem;">	  	
@@ -185,13 +212,16 @@
 	    		</h2>
 	    		<p class="card-text text-white">Tasas registradas</p>
 	  		</div>
+  		<?php
+		  	if(Auth::user()->role == 'MASTER' || Auth::user()->role == 'DEVELOPER'){
+	 	?>
 		  	<div class="card-footer bg-transparent border-secondary text-right">
 		  		<a href="/dolar/" class="btn btn-outline-secondary btn-sm">Visualizar</a>
 		  	</div>
-		</div>
 		<?php
 			}
-		?>
+		?>		
+		</div>		
 	</div>
 
 	<div class="card-deck">

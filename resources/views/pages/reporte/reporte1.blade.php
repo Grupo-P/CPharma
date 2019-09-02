@@ -25,6 +25,7 @@
 	echo '<hr class="row align-items-start col-12">';
 	
 	ReporteActivacionProveedores($_GET['SEDE']);
+	GuardarAuditoria('CONSULTAR','REPORTE','Activacion de proveedores');
 
 	$FinCarga = new DateTime("now");
     $IntervalCarga = $InicioCarga->diff($FinCarga);

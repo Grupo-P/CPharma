@@ -27,6 +27,7 @@
 		    echo '<hr class="row align-items-start col-12">';
 
 		    ReporteProductosParaSurtir($_GET['SEDE'],$_GET['fechaInicio'],$_GET['fechaFin']);
+        GuardarAuditoria('CONSULTAR','REPORTE','Productos para surtir');
 
 		    $FinCarga = new DateTime("now");
 		    $IntervalCarga = $InicioCarga->diff($FinCarga);
