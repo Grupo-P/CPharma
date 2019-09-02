@@ -765,5 +765,22 @@
 
 		mysqli_close($connCPharma);
 		sqlsrv_close($conn);
+	}
+	/*
+		TITULO: ReporteDiasEnCero
+		PARAMETROS: no aplica
+		FUNCION: Captura y almacena la data para dias en cero
+		RETORNO: no aplica
+	 */
+	function ProductoGravado($IsIVA){
+		$EsGravado = '';
+
+		if($IsIVA == 1) {
+			$EsGravado = 'SI';
+		}
+		else {
+			$EsGravado = 'NO';
+		}
+	  	return $EsGravado;
 	}	
 ?>
