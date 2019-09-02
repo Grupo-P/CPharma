@@ -628,12 +628,12 @@
 		return $sql;
 	}
 	/*
-		TITULO: QUltimaVenta
+		TITULO: QUltimaVentaCR
 		PARAMETROS: [$IdArticulo] Id del articulo a buscar
 		FUNCION: Buscar la fecha de la ultima venta del articulo dentro del rango 
 		RETORNO: La fecha de la ultima venta
 	 */
-	function QUltimaVenta($IdArticulo,$FInicial,$FFinal) {
+	function QUltimaVentaCR($IdArticulo,$FInicial,$FFinal) {
 		$sql="
 			SELECT TOP 1
 			CONVERT(DATE,VenFactura.FechaDocumento) AS UltimaVenta
@@ -1274,6 +1274,23 @@
 			FROM InvCodigoBarra 
 			WHERE InvCodigoBarra.InvArticuloId = '$IdArticulo'
 			AND InvCodigoBarra.EsPrincipal = 1
+		";
+		return $sql;
+	}
+	/*
+		TITULO: QUltimaVentaSR
+		PARAMETROS: [$IdArticulo] Id del articulo a buscar
+		FUNCION: Buscar la fecha de la ultima venta del articulo sin rango 
+		RETORNO: La fecha de la ultima venta
+	 */
+	function QUltimaVentaSR($IdArticulo) {
+		$sql="
+			SELECT TOP 1
+			CONVERT(DATE,VenFactura.FechaDocumento) AS UltimaVenta
+			FROM VenFactura
+			INNER JOIN VenFacturaDetalle ON VenFacturaDetalle.VenFacturaId = VenFactura.Id
+			WHERE VenFacturaDetalle.InvArticuloId = '$IdArticulo'
+			ORDER BY FechaDocumento DESC
 		";
 		return $sql;
 	}
