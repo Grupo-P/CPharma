@@ -353,7 +353,9 @@
 				    <input id="SEDE" name="SEDE" type="hidden" value="<?php print_r($_GET['SEDE']); ?>">
 				<?php
 					if(
-						Auth::user()->departamento == 'COMPRAS'						
+						Auth::user()->departamento == 'COMPRAS'
+						|| Auth::user()->departamento == 'LÍDER DE TIENDA'
+						|| Auth::user()->departamento == 'OPERACIONES' 
 						|| Auth::user()->departamento == 'GERENCIA'
 						|| Auth::user()->departamento == 'TECNOLOGIA'
 					){

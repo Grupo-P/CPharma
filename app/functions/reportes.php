@@ -348,7 +348,7 @@
 
 			echo '<td align="center">'.intval($Existencia).'</td>';
 			echo '<td align="center">'.$Tipo.'</td>';
-			echo '<td align="center">'." ".round($TotalVenta,2)." ".SigVe.'</td>';
+			echo '<td align="center">'." ".intval(round($TotalVenta,2))." ".SigVe.'</td>';
 			echo '<td align="center">'.intval($row["TotalVecesVendidasCliente"]).'</td>';
 
 			$Venta = intval($row["TotalUnidadesVendidasCliente"]);
