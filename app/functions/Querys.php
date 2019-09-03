@@ -1284,27 +1284,20 @@
 		FUNCION: Construir la consulta para el despliegue del reporte DetalleDeMovimiento
 		RETORNO: Un String con las instrucciones de la consulta
 	 */
-	function QDetalleDeMovimiento($IdArticulo) {
+	function QDetalleDeMovimiento($IdArticulo,$FInicial,$FFinal) {
 		$sql = "
 			SELECT 
-				InvLoteAlmacen.InvLoteId,
-				InvLoteAlmacen.Auditoria_FechaCreacion AS FechaLote,
-				InvLoteAlmacen.Existencia,
-				InvLote.M_PrecioCompraBruto,
+				InvMovimiento.InvLoteId,
+				InvMovimiento.FechaMovimiento,
 				InvMovimiento.InvCausaId,
 				InvCausa.Descripcion AS Movimiento,
 				InvMovimiento.Cantidad
-			FROM InvLoteAlmacen
-			INNER JOIN InvLote ON InvLote.Id=InvLoteAlmacen.InvLoteId
-			INNER JOIN InvMovimiento ON InvMovimiento.InvLoteId = InvLoteAlmacen.InvLoteId
+			FROM InvMovimiento
 			INNER JOIN InvCausa ON InvMovimiento.InvCausaId=InvCausa.Id
-			WHERE(
-				(InvLoteAlmacen.InvArticuloId='$IdArticulo')
-				AND (InvLoteAlmacen.Existencia>0)
-				AND (CONVERT(DATE,InvMovimiento.Auditoria_FechaCreacion)=CONVERT(DATE,InvLoteAlmacen.Auditoria_FechaCreacion))
-			)
-			GROUP BY InvLoteAlmacen.InvLoteId,InvLoteAlmacen.Auditoria_FechaCreacion,Existencia,M_PrecioCompraBruto,InvMovimiento.InvCausaId,InvCausa.Descripcion,InvMovimiento.Cantidad
-			ORDER BY FechaLote DESC
+			WHERE InvMovimiento.InvArticuloId='$IdArticulo'
+			AND (CONVERT(DATE,InvMovimiento.FechaMovimiento) >= '$FInicial' AND CONVERT(DATE,InvMovimiento.FechaMovimiento) <= '$FFinal')
+			GROUP BY InvMovimiento.InvLoteId,InvMovimiento.FechaMovimiento,InvMovimiento.InvCausaId,InvCausa.Descripcion,InvMovimiento.Cantidad
+			ORDER BY InvMovimiento.FechaMovimiento DESC
 		";
 		return $sql;
 	}

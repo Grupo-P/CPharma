@@ -2102,15 +2102,15 @@
 		  	<tbody>
 	  	';
 
-	  	$sql8=QDetalleDeMovimiento($IdArticulo);
+	  	$sql8=QDetalleDeMovimiento($IdArticulo,$FInicial,$FFinal);
 		$result3=sqlsrv_query($conn,$sql8);
 
 	  	while($row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC)) {
 	  		echo '
 	  			<tr>
-			    	<td align="center">'.$row3["FechaLote"]->format("d-m-Y").'</td>';
+			    	<td align="center">'.$row3["FechaMovimiento"]->format("d-m-Y").'</td>';
 
-			$Hora = date('h:i a',strtotime($row3["FechaLote"]->format("H:m:s")));
+			$Hora = date('h:i a',strtotime($row3["FechaMovimiento"]->format("H:m:s")));
 
 			echo '
 			      	<td align="center">'.$Hora.'</td>
