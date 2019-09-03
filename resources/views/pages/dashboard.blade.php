@@ -39,48 +39,38 @@
 		        </button>
 		      </div>
 		      <div class="modal-body">
-		      	<label>Hola <b class="text-info">{{ Auth::user()->name }}</b></label>
-		      	<label>tenemos algunas novedades para ti.!</label>
+		      	<label>Hola <b class="text-info">{{ Auth::user()->name }}</b>!!</label>
+		      	Estas usando<b class="text-info"> CPharma v.3.7.3 </b>esta version incluye las siguientes mejoras</label>
+
 		        <ul style="list-style:none">
     				<li class="card-text text-dark" style="display: inline;">
-    					Ya puedes ir de un reporte a otro de manera mas sencilla,
-    					solo debes hacer <b class="text-info">click</b> sobre el nombre de los <b class="text-info">productos</b> o <b class="text-info">proveedores</b>. Los enlaces son los siguientes:
+    					<br/>
+						<i class="far fa-check-circle text-info" style="display: inline;"></i>
+						Histórico de Productos: Se agregaron los campos
+						<b class="text-info"> Codigo de Barra </b>,
+						<b class="text-info"> Gravado? </b> y
+						<b class="text-info"> Costo Bruto (Sin IVA) HOY</b>.
+    				</li>
+    				<li class="card-text text-dark" style="display: inline;">
     					<br/><br/>
-		
 						<i class="far fa-check-circle text-info" style="display: inline;"></i>
-						Activacion de proveedores
-						<i class="fas fa-arrow-right text-info"></i>
-						Catalogo de proveedor
-						<br/>
+						Artículos más Vendidos: Se agregaron los campos
+						<b class="text-info"> Tipo </b> y
+						<b class="text-info"> Total Ventas</b>.
+    				</li>
+    				<li class="card-text text-dark" style="display: inline;">
+    					<br/><br/>
 						<i class="far fa-check-circle text-info" style="display: inline;"></i>
-						Historico de productos
-						<i class="fas fa-arrow-right text-info"></i>
-						Analitico de precios
-						<br/>
+						Catálogo de Proveedor: Se agregaron los campos
+						<b class="text-info"> Codigo de Barra </b> y
+						<b class="text-info"> Ultima Venta</b>.
+    				</li>
+    				<li class="card-text text-dark" style="display: inline;">
+    					<br/><br/>
 						<i class="far fa-check-circle text-info" style="display: inline;"></i>
-						Productos mas vendidos
-						<i class="fas fa-arrow-right text-info"></i>
-						Historico de productos
-						<br/>
-						<i class="far fa-check-circle text-info" style="display: inline;"></i>
-						Productos menos vendidos
-						<i class="fas fa-arrow-right text-info"></i>
-						Historico de productos
-						<br/>
-						<i class="far fa-check-circle text-info" style="display: inline;"></i>
-						Productos en falla
-						<i class="fas fa-arrow-right text-info"></i>
-						Historico de productos
-						<br/>
-						<i class="far fa-check-circle text-info" style="display: inline;"></i>
-						Pedido de productos
-						<i class="fas fa-arrow-right text-info"></i>
-						Historico de productos
-						<br/>
-						<i class="far fa-check-circle text-info" style="display: inline;"></i>
-						Catalogo de proveedor
-						<i class="fas fa-arrow-right text-info"></i>
-						Historico de productos
+						Pedido de Productos: Se agregaron los campos
+						<b class="text-info"> Codigo de Barra </b> y
+						<b class="text-info"> Ultima Venta</b>, adicional ahora debes colocar la cantidad de dias a pedir.
     				</li>		
     			</ul>
 		      </div>
