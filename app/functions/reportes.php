@@ -293,6 +293,7 @@
 			      	<th scope="col">Descripcion</th>
 			      	<th scope="col">Existencia</th>
 			      	<th scope="col">Tipo</th>
+			      	<th scope="col">Total de Venta</th>
 			      	<th scope="col">Veces Facturado</th>
 			      	<th scope="col">Unidades vendidas</th>
 			      	<th scope="col">Unidades Compradas</th>
@@ -313,6 +314,28 @@
 
 			$Tipo = ProductoMedicina($conn,$IdArticulo);
 
+			$sql = QCleanTable('CP_QVentasParcial');
+			sqlsrv_query($conn,$sql);
+			$sql = QCleanTable('CP_QDevolucionParcial');
+			sqlsrv_query($conn,$sql);
+
+			$sql8 = QVentasParcial($FInicial,$FFinal,$IdArticulo);
+			sqlsrv_query($conn,$sql8);
+			$sql9 = QDevolucionParcial($FInicial,$FFinal,$IdArticulo);
+			sqlsrv_query($conn,$sql9);
+
+			$sql10 = QIntegracionVentasParcial();
+			$result2 = sqlsrv_query($conn,$sql10);
+			$row2 = sqlsrv_fetch_array($result2,SQLSRV_FETCH_ASSOC);
+			$TotalVenta = $row2["TotalVenta"];
+
+			$sql11 = QIntegracionDevolucionParcial();
+			$result3 = sqlsrv_query($conn,$sql11);
+			$row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
+			$TotalDevolucion = $row3["TotalDevolucion"];
+
+			$TotalVenta = $TotalVenta - $TotalDevolucion;
+
 			echo '<tr>';
 			echo '<td align="left">'.$row["CodigoArticulo"].'</td>';
 
@@ -325,6 +348,7 @@
 
 			echo '<td align="center">'.intval($Existencia).'</td>';
 			echo '<td align="center">'.$Tipo.'</td>';
+			echo '<td align="center">'." ".round($TotalVenta,2)." ".SigVe.'</td>';
 			echo '<td align="center">'.intval($row["TotalVecesVendidasCliente"]).'</td>';
 
 			$Venta = intval($row["TotalUnidadesVendidasCliente"]);
@@ -350,6 +374,10 @@
 		$sql = QCleanTable('CP_QUnidadesReclamoProveedor');
 		sqlsrv_query($conn,$sql);
 		$sql = QCleanTable('CP_QIntegracionProductosVendidos');
+		sqlsrv_query($conn,$sql);
+		$sql = QCleanTable('CP_QVentasParcial');
+		sqlsrv_query($conn,$sql);
+		$sql = QCleanTable('CP_QDevolucionParcial');
 		sqlsrv_query($conn,$sql);
 
 		sqlsrv_close($conn);
