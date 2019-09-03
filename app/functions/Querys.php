@@ -1292,7 +1292,7 @@
 				InvLoteAlmacen.Existencia,
 				InvLote.M_PrecioCompraBruto,
 				InvMovimiento.InvCausaId,
-				InvCausa.Descripcion,
+				InvCausa.Descripcion AS Movimiento,
 				InvMovimiento.Cantidad
 			FROM InvLoteAlmacen
 			INNER JOIN InvLote ON InvLote.Id=InvLoteAlmacen.InvLoteId

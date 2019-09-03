@@ -2114,8 +2114,8 @@
 
 			echo '
 			      	<td align="center">'.$Hora.'</td>
-			      	<td align="center">-</td>
-			      	<td align="center">-</td>
+			      	<td align="center">'.$row3["Movimiento"].'</td>
+			      	<td align="center">'.intval($row3["Cantidad"]).'</td>
 			    </tr>
 			';
 	  	}
