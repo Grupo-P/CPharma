@@ -28,7 +28,7 @@
     }
     echo '<hr class="row align-items-start col-12">';
 
-    ReportePedidoProductos($_GET['SEDE'],$_GET['Descrip'],$_GET['fechaInicio'],$_GET['fechaFin']);
+    ReportePedidoProductos($_GET['SEDE'],$_GET['Descrip'],$_GET['fechaInicio'],$_GET['fechaFin'],$_GET['pedido']);
     GuardarAuditoria('CONSULTAR','REPORTE','Pedido de productos');
 
     $FinCarga = new DateTime("now");
@@ -50,6 +50,12 @@
     <form id="form" autocomplete="off" action="" target="_blank">
         <table style="width:100%;">
           <tr>
+          <td align="center">
+              Pedido cant. dias
+            </td>
+            <td align="right" style="width:20%;">
+              <input id="pedido" type="text" name="pedido" required style="width:100%;" autofocus>
+            </td>
             <td align="center">
               Fecha Inicio:
             </td>
@@ -69,7 +75,7 @@
             </td>
           </tr>
           <tr>
-            <td colspan="4">
+            <td colspan="6">
               <div class="autocomplete" style="width:90%;">
                 <input id="myInput" type="text" name="Descrip" placeholder="Ingrese el nombre del articulo " onkeyup="conteo()" required>
               </div>

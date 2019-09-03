@@ -632,7 +632,7 @@
 		FUNCION: Arma una lista para el pedido de productos
 		RETORNO: No aplica
 	 */
-	function ReportePedidoProductos($SedeConnection,$Descripcion,$FInicial,$FFinal){
+	function ReportePedidoProductos($SedeConnection,$Descripcion,$FInicial,$FFinal,$DiasPedido){
 
 		$conn = ConectarSmartpharma($SedeConnection);
 
@@ -687,6 +687,7 @@
 		<br/>
 		';
 
+		echo'<h6 align="center">Pedido en base a: '.$DiasPedido.' dias </h6>';
 		echo'<h6 align="center">Periodo desde el '.$FInicial.' al '.$FFinalImpresion.' </h6>';
 
 		echo'
@@ -704,7 +705,8 @@
 			      	<th scope="col">Precio (Con IVA)</th>
 			      	<th scope="col">Ultimo Lote</th>
 			      	<th scope="col">Ultima Venta (En Rango)</th>
-			      	<th scope="col">Ultima Venta</th>			   
+			      	<th scope="col">Ultima Venta</th>
+			      	<th scope="col">Pedir</th>			   
 			    </tr>
 		  	</thead>
 		  	<tbody>
@@ -781,6 +783,10 @@
 			else{
 				echo '<td align="center"> - </td>';
 			}
+
+			$CantidadPedido = CantidadPedido($VentaDiaria,$DiasPedido,$Existencia);
+
+				echo '<td align="center">'.intval($CantidadPedido).'</td>';
 
 			echo '</tr>';
 		}
