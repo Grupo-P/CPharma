@@ -292,6 +292,8 @@
 			    	<th scope="col">Codigo</th>
 			      	<th scope="col">Descripcion</th>
 			      	<th scope="col">Existencia</th>
+			      	<th scope="col">Tipo</th>
+			      	<th scope="col">Total de Venta</th>
 			      	<th scope="col">Veces Facturado</th>
 			      	<th scope="col">Unidades vendidas</th>
 			      	<th scope="col">Unidades Compradas</th>
@@ -310,6 +312,30 @@
 			$row1 = sqlsrv_fetch_array($result1,SQLSRV_FETCH_ASSOC);
 			$Existencia = $row1["Existencia"];
 
+			$Tipo = ProductoMedicina($conn,$IdArticulo);
+
+			$sql = QCleanTable('CP_QVentasParcial');
+			sqlsrv_query($conn,$sql);
+			$sql = QCleanTable('CP_QDevolucionParcial');
+			sqlsrv_query($conn,$sql);
+
+			$sql8 = QVentasParcial($FInicial,$FFinal,$IdArticulo);
+			sqlsrv_query($conn,$sql8);
+			$sql9 = QDevolucionParcial($FInicial,$FFinal,$IdArticulo);
+			sqlsrv_query($conn,$sql9);
+
+			$sql10 = QIntegracionVentasParcial();
+			$result2 = sqlsrv_query($conn,$sql10);
+			$row2 = sqlsrv_fetch_array($result2,SQLSRV_FETCH_ASSOC);
+			$TotalVenta = $row2["TotalVenta"];
+
+			$sql11 = QIntegracionDevolucionParcial();
+			$result3 = sqlsrv_query($conn,$sql11);
+			$row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
+			$TotalDevolucion = $row3["TotalDevolucion"];
+
+			$TotalVenta = $TotalVenta - $TotalDevolucion;
+
 			echo '<tr>';
 			echo '<td align="left">'.$row["CodigoArticulo"].'</td>';
 
@@ -321,6 +347,8 @@
 			</td>';
 
 			echo '<td align="center">'.intval($Existencia).'</td>';
+			echo '<td align="center">'.$Tipo.'</td>';
+			echo '<td align="center">'." ".round($TotalVenta,2)." ".SigVe.'</td>';
 			echo '<td align="center">'.intval($row["TotalVecesVendidasCliente"]).'</td>';
 
 			$Venta = intval($row["TotalUnidadesVendidasCliente"]);
@@ -346,6 +374,10 @@
 		$sql = QCleanTable('CP_QUnidadesReclamoProveedor');
 		sqlsrv_query($conn,$sql);
 		$sql = QCleanTable('CP_QIntegracionProductosVendidos');
+		sqlsrv_query($conn,$sql);
+		$sql = QCleanTable('CP_QVentasParcial');
+		sqlsrv_query($conn,$sql);
+		$sql = QCleanTable('CP_QDevolucionParcial');
 		sqlsrv_query($conn,$sql);
 
 		sqlsrv_close($conn);
@@ -628,7 +660,7 @@
 		FUNCION: Arma una lista para el pedido de productos
 		RETORNO: No aplica
 	 */
-	function ReportePedidoProductos($SedeConnection,$Descripcion,$FInicial,$FFinal){
+	function ReportePedidoProductos($SedeConnection,$Descripcion,$FInicial,$FFinal,$DiasPedido){
 
 		$conn = ConectarSmartpharma($SedeConnection);
 
@@ -683,6 +715,7 @@
 		<br/>
 		';
 
+		echo'<h6 align="center">Pedido en base a: '.$DiasPedido.' dias </h6>';
 		echo'<h6 align="center">Periodo desde el '.$FInicial.' al '.$FFinalImpresion.' </h6>';
 
 		echo'
@@ -691,13 +724,17 @@
 			    <tr>
 			    	<th scope="col">Codigo</th>
 			      	<th scope="col">Descripcion</th>
+			      	<th scope="col">Codigo de Barra</th>
 			      	<th scope="col">Existencia</th>
 			      	<th scope="col">Unidades vendidas</th>
 			      	<th scope="col">Unidades compradas</th>
 			      	<th scope="col">Venta diaria</th>
 					<th scope="col">Dias restantes</th>
 			      	<th scope="col">Precio (Con IVA)</th>
-			      	<th scope="col">Ultimo Lote</th>			   
+			      	<th scope="col">Ultimo Lote</th>
+			      	<th scope="col">Ultima Venta (En Rango)</th>
+			      	<th scope="col">Ultima Venta</th>
+			      	<th scope="col">Pedir</th>			   
 			    </tr>
 		  	</thead>
 		  	<tbody>
@@ -722,6 +759,9 @@
 			'</a>
 			</td>';
 
+			$CodigoBarra = CodigoBarra($conn,$IdArticulo);
+				echo '<td align="center">'.$CodigoBarra.'</td>';
+
 			echo '<td align="center">'.intval($Existencia).'</td>';
 
 			$Venta = intval($row["TotalUnidadesVendidasCliente"]);
@@ -738,7 +778,12 @@
 			$sql10 = QUltimaVentaCR($IdArticulo,$FInicial,$FFinal);
 			$result3 = sqlsrv_query($conn,$sql10);
 			$row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
-			$UltimaVenta = $row3["UltimaVenta"];			
+			$UltimaVentaCR = $row3["UltimaVenta"];
+
+			$sql11 = QUltimaVentaSR($IdArticulo);
+			$result4 = sqlsrv_query($conn,$sql11);
+			$row4 = sqlsrv_fetch_array($result4,SQLSRV_FETCH_ASSOC);
+			$UltimaVentaSR = $row4["UltimaVenta"];				
 
 			echo '<td align="center">'.$Venta.'</td>';
 			echo '<td align="center">'.intval($row["TotalUnidadesCompradasProveedor"]).'</td>';
@@ -753,12 +798,23 @@
 				echo '<td align="center"> - </td>';
 			}
 
-			if(($UltimaVenta)){
-				echo '<td align="center">'.$UltimaVenta->format('Y-m-d').'</td>';
+			if(($UltimaVentaCR)){
+				echo '<td align="center">'.$UltimaVentaCR->format('Y-m-d').'</td>';
 			}
 			else{
 				echo '<td align="center"> - </td>';
 			}
+
+			if(($UltimaVentaSR)){
+				echo '<td align="center">'.$UltimaVentaSR->format('Y-m-d').'</td>';
+			}
+			else{
+				echo '<td align="center"> - </td>';
+			}
+
+			$CantidadPedido = CantidadPedido($VentaDiaria,$DiasPedido,$Existencia);
+
+				echo '<td align="center">'.intval($CantidadPedido).'</td>';
 
 			echo '</tr>';
 		}

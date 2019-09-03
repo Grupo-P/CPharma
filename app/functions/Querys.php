@@ -1295,6 +1295,113 @@
 		return $sql;
 	}
 	/*
+		TITULO: QMedicinas
+		PARAMETROS: No Aplica
+		FUNCION: Busca el Id del atributo si la categoriza es medicinas
+		RETORNO: Retorna el id del atributo medicinas
+	 */
+	function QMedicinas() {
+		$sql = "
+		SELECT * 
+		FROM InvAtributo 
+		WHERE 
+		InvAtributo.Descripcion = 'Medicina'
+		";
+		return $sql;
+	}
+	/*
+		TITULO: QArticuloMedicina
+		PARAMETROS: [$IdArticulo] id del articulo a buscar
+					[$IdMedicina] id del atributo dolarizado
+		FUNCION: Busca detro de la tabla medicinas el articulo en cuestion
+		RETORNO: Retorna la dupla de valores de ser conseguido
+	 */
+	function QArticuloMedicina($IdArticulo,$IdMedicina) {
+		$sql = "
+		SELECT * 
+		FROM InvArticuloAtributo 
+		WHERE InvArticuloAtributo.InvAtributoId = '$IdMedicina' 
+		AND InvArticuloAtributo.InvArticuloId = '$IdArticulo'
+		";
+		return $sql;
+	}
+	/*
+		TITULO: QVentasParcial
+		PARAMETROS: [$FInicial] Fecha inicial del rango a consultar
+					[$FFinal] Fecha final del rango a consutar
+					[$IdArticulo] Id del articulo a consultar
+		FUNCION: Busca las unidades vendidas y el total en bs de esas unidades
+		RETORNO: retorna las unidades vendidas y el tota de esas ventas
+	 */
+	function QVentasParcial($FInicial,$FFinal,$IdArticulo) {
+		$sql = "
+			SELECT
+			VenVentaDetalle.InvArticuloId, 
+			VenVentaDetalle.PrecioBruto,
+			VenVentaDetalle.Cantidad,
+			(VenVentaDetalle.PrecioBruto * VenVentaDetalle.Cantidad) As SubTotalVenta
+			INTO CP_QVentasParcial
+			FROM VenVentaDetalle
+			INNER JOIN VenVenta ON VenVenta.Id = VenVentaDetalle.VenVentaId 
+			WHERE (VenVenta.FechaDocumentoVenta > '$FInicial' AND VenVenta.FechaDocumentoVenta < '$FFinal')
+			AND VenVentaDetalle.InvArticuloId = '$IdArticulo'
+		";
+		return $sql;
+	}
+	/*
+		TITULO: QIntegracionVentasParcial
+		PARAMETROS: no aplica
+		FUNCION: integra las ventas parciales
+		RETORNO: retorna la integracion de las ventas parciales
+	 */
+	function QIntegracionVentasParcial() {
+		$sql = "
+			SELECT
+			(ROUND(CAST(SUM (CP_QVentasParcial.Cantidad) AS DECIMAL(38,2)),2,0)) as UnidadesVendidas,
+			(ROUND(CAST(SUM (CP_QVentasParcial.SubTotalVenta) AS DECIMAL(38,2)),2,0)) as TotalVenta
+			FROM CP_QVentasParcial
+		";
+		return $sql;
+	}
+	/*
+		TITULO: QDevolucionParcial
+		PARAMETROS: [$FInicial] Fecha inicial del rango a consultar
+					[$FFinal] Fecha final del rango a consutar
+					[$IdArticulo] Id del articulo a consultar
+		FUNCION: Busca las unidades devueltas y el total en bs de esas unidades
+		RETORNO: retorna las unidades devueltas y el tota de esas ventas
+	 */
+	function QDevolucionParcial($FInicial,$FFinal,$IdArticulo) {
+		$sql = "
+			SELECT
+			VenDevolucionDetalle.InvArticuloId, 
+			VenDevolucionDetalle.PrecioBruto,
+			VenDevolucionDetalle.Cantidad As Cantidad,
+			(VenDevolucionDetalle.PrecioBruto * VenDevolucionDetalle.Cantidad) As SubTotalDevolucion
+			INTO CP_QDevolucionParcial
+			FROM VenDevolucionDetalle
+			INNER JOIN VenDevolucion ON VenDevolucion.Id = VenDevolucionDetalle.VenDevolucionId 
+			WHERE (VenDevolucion.FechaDocumento > '$FInicial' AND VenDevolucion.FechaDocumento < '$FFinal')
+			AND VenDevolucionDetalle.InvArticuloId = '$IdArticulo'
+		";
+		return $sql;
+	}
+	/*
+		TITULO: QIntegracionVentasParcial
+		PARAMETROS: no aplica
+		FUNCION: integra las ventas parciales
+		RETORNO: retorna la integracion de las ventas parciales
+	 */
+	function QIntegracionDevolucionParcial() {
+		$sql = "
+			SELECT
+			(ROUND(CAST(SUM (CP_QDevolucionParcial.Cantidad) AS DECIMAL(38,2)),2,0)) as UnidadesDevueltas,
+			(ROUND(CAST(SUM (CP_QDevolucionParcial.SubTotalDevolucion) AS DECIMAL(38,2)),2,0)) as TotalDevolucion
+			FROM CP_QDevolucionParcial
+		";
+		return $sql;
+	}
+	/*
 		TITULO: 
 		PARAMETROS: 
 		FUNCION:
