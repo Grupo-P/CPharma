@@ -81,8 +81,7 @@
       if(isset($_GET['SEDE'])) {
         echo '
             <h1 class="h5 text-success"  align="left">
-              <i class="fas fa-prescription"></i> '.
-                NombreSede($_GET['SEDE']).
+              <i class="fas fa-prescription"></i> '.NombreSede($_GET['SEDE']).
             '</h1>';
       }
       echo '<hr class="row align-items-start col-12">';
@@ -95,35 +94,66 @@
       echo'Tiempo de carga: '.$IntervalCarga->format("%Y-%M-%D %H:%I:%S");
     }
     else {
-      $InicioCarga = new DateTime("now");
-
       if(isset($_GET['SEDE'])) {
         echo '
             <h1 class="h5 text-success"  align="left">
-                <i class="fas fa-prescription"></i> '.
-                  NombreSede($_GET['SEDE']).
-              '</h1>';
+              <i class="fas fa-prescription"></i> '.NombreSede($_GET['SEDE']).
+            '</h1>';
       }
       echo '<hr class="row align-items-start col-12">';
 
-        $sql = QListaArticulos();
-        $ArtJson = armarJson($sql,$_GET['SEDE']);
+      $InicioCarga = new DateTime("now");
+      $sql = QListaArticulos();
+      $ArtJson = armarJson($sql,$_GET['SEDE']);
 
       echo '
-        <form autocomplete="off" action="" target="_blank">
-          <div class="autocomplete" style="width:90%;">
-            <input id="myInput" type="text" name="Descrip" placeholder="Ingrese el nombre del articulo " onkeyup="conteo()" required>
-            <input id="myId" name="Id" type="hidden">
-            <input id="SEDE" name="SEDE" type="hidden" value="';
-            print_r($_GET['SEDE']); echo'">
-            </div>
-            <input type="submit" value="Buscar" class="btn btn-outline-success">
-          </form>
-        ';
+        <form id="form" autocomplete="off" action="" target="_blank">
+          <table style="width:100%;">
+            <tr>
+              <td align="center">
+                Fecha Inicio:
+              </td>
 
-        $FinCarga = new DateTime("now");
-        $IntervalCarga = $InicioCarga->diff($FinCarga);
-        echo'Tiempo de carga: '.$IntervalCarga->format("%Y-%M-%D %H:%I:%S");
+              <td>
+                <input id="fechaInicio" type="date" name="fechaInicio" required style="width:100%;">
+              </td>
+
+              <td align="center">
+                Fecha Fin:
+              </td>
+
+              <td align="right">
+                <input id="fechaFin" name="fechaFin" type="date" required style="width:100%;">
+              </td>
+
+              <td>
+                <input id="SEDE" name="SEDE" type="hidden" value="'; print_r($_GET['SEDE']);
+                echo'">
+              </td>
+            </tr>
+
+            <tr>
+              <td colspan="4">&nbsp;</td>
+            </tr>
+
+            <tr>
+              <td colspan="4">
+                <div class="autocomplete" style="width:90%;">
+                  <input id="myInput" type="text" name="Descrip" placeholder="Ingrese el nombre del articulo " onkeyup="conteo()" required>
+                </div>
+
+                <input id="myId" name="Id" type="hidden">
+
+                <input type="submit" value="Buscar" class="btn btn-outline-success" style="width:9%;">
+              </td>
+            </tr>
+          </table>
+        </form>
+      ';
+
+      $FinCarga = new DateTime("now");
+      $IntervalCarga = $InicioCarga->diff($FinCarga);
+      echo'Tiempo de carga: '.$IntervalCarga->format("%Y-%M-%D %H:%I:%S");
     }
   ?>
 @endsection
