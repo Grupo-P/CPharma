@@ -93,6 +93,10 @@ Route::get('/reporte12', function() {
     return view('pages.reporte.reporte12');
 });
 
+Route::get('/reporte13', function() {
+    return view('pages.reporte.reporte13');
+});
+
 Route::get('/diascero', function() {
     return view('pages.diascero.index');
 });

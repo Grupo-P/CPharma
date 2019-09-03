@@ -7,7 +7,7 @@
 @section('content')
 	<h1 class="h5 text-info">
 		<i class="fas fa-file-invoice"></i>
-		Productos Por Fallar
+		Productos mas vendidos
 	</h1>
 	<hr class="row align-items-start col-12">
 
@@ -17,7 +17,7 @@
   include(app_path().'\functions\funciones.php');
   include(app_path().'\functions\reportes.php');
 
-	if (isset($_GET['Existencia']))
+	if (isset($_GET['top']))
 	{
     $InicioCarga = new DateTime("now");
 
@@ -26,26 +26,14 @@
     }
     echo '<hr class="row align-items-start col-12">';
 
-    echo 'Existencia: '.$_GET['Existencia'];
-    echo '<br/>';
-    echo 'fechaInicio: '.$_GET['fechaInicio'];
-    echo '<br/>';
-    echo 'fechaFin: '.$_GET['fechaFin'];
-    echo '<br/>';
-    //
-    //
-    //GuardarAuditoria('CONSULTAR','REPORTE','Productos mas vendidos');
+    ReporteProductosMasVendidos($_GET['SEDE'],$_GET['top'],$_GET['fechaInicio'],$_GET['fechaFin']);
+    GuardarAuditoria('CONSULTAR','REPORTE','Productos mas vendidos');
     
     $FinCarga = new DateTime("now");
     $IntervalCarga = $InicioCarga->diff($FinCarga);
     echo'Tiempo de carga: '.$IntervalCarga->format("%Y-%M-%D %H:%I:%S");
 	} 
 	else{
-
-	//---------- Borrar ----------
-    $_GET['SEDE'] = 'FTN';
-    //---------- Borrar ----------
-
     if (isset($_GET['SEDE'])){      
       echo '<h1 class="h5 text-success"  align="left"> <i class="fas fa-prescription"></i> '.NombreSede($_GET['SEDE']).'</h1>';
     }
@@ -56,10 +44,20 @@
         <table style="width:100%;">
           <tr>
             <td align="center">
-              Existencia:
+              TOP:
             </td>
-            <td>
-              <input id="Existencia" type="number" name="Existencia" required style="width:100%;" placeholder="Cantidad en numero">
+            <td align="right" style="width:20%;">
+              <select name="top" class="form-control">
+                <option>5</option>
+                <option>10</option>
+                <option>15</option>
+                <option>20</option>
+                <option>50</option>
+                <option>100</option>
+                <option>200</option>
+                <option>500</option>
+                <option>1000</option>
+              </select>
             </td>
             <td align="center">
               Fecha Inicio:
