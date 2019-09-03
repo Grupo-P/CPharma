@@ -1643,12 +1643,12 @@
 			<thead class="thead-dark">
 			    <tr>
 			    	<th scope="col">Codigo</th>
-			      	<th scope="col">Descripcion</td>
-			      	<th scope="col">Existencia</td>
-			      	<th scope="col">Precio (Con IVA)</td>
-			      	<th scope="col">Dolarizado</td>
-			      	<th scope="col">Tasa actual</td>
-			      	<th scope="col">Precio en divisa (Con IVA)</td>
+			      	<th scope="col">Descripcion</th>
+			      	<th scope="col">Existencia</th>
+			      	<th scope="col">Precio (Con IVA)</th>
+			      	<th scope="col">Dolarizado</th>
+			      	<th scope="col">Tasa actual</th>
+			      	<th scope="col">Precio en divisa (Con IVA)</th>
 			    </tr>
 		  	</thead>
 		  	<tbody>
@@ -2015,6 +2015,202 @@
 				<input type="submit" value="Guardar" class="btn btn-outline-success">
 			</div>
 		</form>';
+
+		sqlsrv_close($conn);
+	}
+
+	/*****************************************************************************/
+	/************************ REPORTE 12 DETALLE DE MOVIMIENTO *******************/
+
+	/*
+		TITULO: ReporteDetalleDeMovimiento
+		PARAMETROS: [$SedeConnection] sede donde se hara la conexion
+					[$FInicial] Fecha inicial del rango a buscar
+					[$FFinal] Fecha final del rango a buscar
+					[$IdArticulo] ide del articulo
+		FUNCION: arma la lista del troquel segun el articulo
+		RETORNO: no aplica
+	 */
+	function ReporteDetalleDeMovimiento($SedeConnection,$FInicial,$FFinal,$IdArticulo) {
+		$conn=ConectarSmartpharma($SedeConnection);
+
+		$sql=QArticulo($IdArticulo);
+		sqlsrv_query($conn,$sql);
+		$result=sqlsrv_query($conn,$sql);
+		$row=sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC);
+
+		$sql1=QExistenciaArticulo($IdArticulo,0);
+		$result1=sqlsrv_query($conn,$sql1);
+		$row1=sqlsrv_fetch_array($result1,SQLSRV_FETCH_ASSOC);
+
+		$IsIVA=$row["ConceptoImpuesto"];
+		$Existencia=$row1["Existencia"];
+
+		$Precio=CalculoPrecio($conn,$IdArticulo,$IsIVA,$Existencia);
+
+		$Dolarizado = ProductoDolarizado($conn,$IdArticulo);
+
+		$TasaActual=TasaFecha(date('Y-m-d'));
+
+		//-------------------- Inicio Rangos --------------------
+		$FFinalImpresion= $FFinal;
+		$FFinal = date("Y-m-d",strtotime($FFinal."+ 1 days"));
+
+		$sql = QCleanTable('CP_QUnidadesVendidasCliente');
+		sqlsrv_query($conn,$sql);
+		$sql = QCleanTable('CP_QUnidadesDevueltaCliente');
+		sqlsrv_query($conn,$sql);
+		$sql = QCleanTable('CP_QUnidadesCompradasProveedor');
+		sqlsrv_query($conn,$sql);
+		$sql = QCleanTable('CP_QUnidadesReclamoProveedor');
+		sqlsrv_query($conn,$sql);
+		$sql = QCleanTable('CP_QIntegracionProductosVendidos');
+		sqlsrv_query($conn,$sql);
+		$sql = QCleanTable('CP_QIntegracionProductosFalla');
+		sqlsrv_query($conn,$sql);
+		$sql = QCleanTable('CP_QArticuloDescLike');
+		sqlsrv_query($conn,$sql);
+
+		$sql1 = QUnidadesVendidasCliente($FInicial,$FFinal);
+		$sql2 = QUnidadesDevueltaCliente($FInicial,$FFinal);
+		$sql3 = QUnidadesCompradasProveedor($FInicial,$FFinal);
+		$sql4 = QUnidadesReclamoProveedor($FInicial,$FFinal);
+		$sql5 = QIntegracionProductosVendidos();
+		$sql6 = QIntegracionProductosFalla();
+		$sql61 = QArticuloDescLike($row["Descripcion"],0);
+		$sql7 = QPedidoProductos();
+		
+		sqlsrv_query($conn,$sql1);
+		sqlsrv_query($conn,$sql2);
+		sqlsrv_query($conn,$sql3);
+		sqlsrv_query($conn,$sql4);
+		sqlsrv_query($conn,$sql5);
+		sqlsrv_query($conn,$sql6);
+		sqlsrv_query($conn,$sql61);
+		$result2 = sqlsrv_query($conn,$sql7);
+
+		$RangoDias = RangoDias($FInicial,$FFinal);
+		//-------------------- Fin Rangos --------------------
+		
+		$row2=sqlsrv_fetch_array($result2,SQLSRV_FETCH_ASSOC);
+		$Venta = intval($row2["TotalUnidadesVendidasCliente"]);
+		$VentaDiaria = VentaDiaria($Venta,$RangoDias);
+		$DiasRestantes = DiasRestantes($Existencia,$VentaDiaria);
+
+		echo '
+		<div class="input-group md-form form-sm form-1 pl-0">
+		  <div class="input-group-prepend">
+		    <span class="input-group-text purple lighten-3" id="basic-text1">
+		    	<i class="fas fa-search text-white"
+		        aria-hidden="true"></i>
+		    </span>
+		  </div>
+		  <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterAllTable()">
+		</div>
+		<br/>';
+
+		echo '
+		<h6 align="center">Detalle de movimientos del '.$FInicial.' al '.$FFinalImpresion.' </h6>
+
+		<table class="table table-striped table-bordered col-12 sortable">
+			<thead class="thead-dark">
+			    <tr>
+			    	<th scope="col">Codigo</th>
+			      	<th scope="col">Descripcion</th>
+			      	<th scope="col">Existencia</th>
+			      	<th scope="col">Unidades vendidas</th>
+			      	<th scope="col">Dias restantes</th>
+			      	<th scope="col">Precio (Con IVA)</th>
+			      	<th scope="col">Dolarizado</th>
+			      	<th scope="col">Tasa actual</th>
+			      	<th scope="col">Precio en divisa (Con IVA)</th>
+			    </tr>
+		  	</thead>
+
+		  	<tbody>
+	  	';
+
+		echo '
+				<tr>
+					<td>'.$row["CodigoArticulo"].'</td>
+					<td>'.$row["Descripcion"].'</td>
+					<td align="center">'.intval($Existencia).'</td>
+					<td align="center">'.$Venta.'</td>
+					<td align="center">'.$DiasRestantes.'</td>
+					<td align="center">'." ".round($Precio,2)." ".SigVe.'</td>
+					<td align="center">'.$Dolarizado.'</td>
+		';
+
+		if($TasaActual!=0){
+			echo '
+					<td align="center">'." ".$TasaActual." ".SigVe.'</td>
+					<td align="center">'.round(($Precio/$TasaActual),2)." ".SigDolar.'</td>
+			';
+		}
+		else{
+			echo '
+					<td align="center">0.00 '.SigVe.'</td>
+					<td align="center">0.00 '.SigDolar.'</td>
+			';
+		}
+		echo '
+				</tr>
+	  		</tbody>
+		</table>';
+
+		echo '<br>';
+
+		echo '
+		<table class="table table-striped table-bordered col-12 sortable" id="myTable">
+			<thead class="thead-dark">
+			    <tr>
+			    	<th scope="col" class="text-center">Fecha</th>
+			      	<th scope="col" class="text-center">Hora</th>
+			      	<th scope="col" class="text-center">Tipo de movimiento</th>
+			      	<th scope="col" class="text-center">Cantidad</th>
+			    </tr>
+		  	</thead>
+
+		  	<tbody>
+	  	';
+
+	  	$sql8=QDetalleDeMovimiento($IdArticulo,$FInicial,$FFinal);
+		$result3=sqlsrv_query($conn,$sql8);
+
+	  	while($row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC)) {
+	  		echo '
+	  			<tr>
+			    	<td align="center">'.$row3["FechaMovimiento"]->format("d-m-Y").'</td>';
+
+			$Hora = date('h:i a',strtotime($row3["FechaMovimiento"]->format("H:m:s")));
+
+			echo '
+			      	<td align="center">'.$Hora.'</td>
+			      	<td align="center">'.utf8_encode($row3["Movimiento"]).'</td>
+			      	<td align="center">'.intval($row3["Cantidad"]).'</td>
+			    </tr>
+			';
+	  	}
+
+	  	echo '
+	  		</tbody>
+	  	</table>
+	  	';
+
+		$sql = QCleanTable('CP_QUnidadesVendidasCliente');
+		sqlsrv_query($conn,$sql);
+		$sql = QCleanTable('CP_QUnidadesDevueltaCliente');
+		sqlsrv_query($conn,$sql);
+		$sql = QCleanTable('CP_QUnidadesCompradasProveedor');
+		sqlsrv_query($conn,$sql);
+		$sql = QCleanTable('CP_QUnidadesReclamoProveedor');
+		sqlsrv_query($conn,$sql);
+		$sql = QCleanTable('CP_QIntegracionProductosVendidos');
+		sqlsrv_query($conn,$sql);
+		$sql = QCleanTable('CP_QIntegracionProductosFalla');
+		sqlsrv_query($conn,$sql);
+		$sql = QCleanTable('CP_QArticuloDescLike');
+		sqlsrv_query($conn,$sql);
 
 		sqlsrv_close($conn);
 	}

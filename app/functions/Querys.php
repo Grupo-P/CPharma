@@ -1277,6 +1277,31 @@
 		";
 		return $sql;
 	}
+
+	/*
+		TITULO: QDetalleDeMovimiento
+		PARAMETROS: [$IdArticulo] Id del articulo actual
+		FUNCION: Construir la consulta para el despliegue del reporte DetalleDeMovimiento
+		RETORNO: Un String con las instrucciones de la consulta
+	 */
+	function QDetalleDeMovimiento($IdArticulo,$FInicial,$FFinal) {
+		$sql = "
+			SELECT 
+				InvMovimiento.InvLoteId,
+				InvMovimiento.FechaMovimiento,
+				InvMovimiento.InvCausaId,
+				InvCausa.Descripcion AS Movimiento,
+				InvMovimiento.Cantidad
+			FROM InvMovimiento
+			INNER JOIN InvCausa ON InvMovimiento.InvCausaId=InvCausa.Id
+			WHERE InvMovimiento.InvArticuloId='$IdArticulo'
+			AND (CONVERT(DATE,InvMovimiento.FechaMovimiento) >= '$FInicial' AND CONVERT(DATE,InvMovimiento.FechaMovimiento) <= '$FFinal')
+			GROUP BY InvMovimiento.InvLoteId,InvMovimiento.FechaMovimiento,InvMovimiento.InvCausaId,InvCausa.Descripcion,InvMovimiento.Cantidad
+			ORDER BY InvMovimiento.FechaMovimiento ASC
+		";
+		return $sql;
+	}
+
 	/*
 		TITULO: QUltimaVentaSR
 		PARAMETROS: [$IdArticulo] Id del articulo a buscar
