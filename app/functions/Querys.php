@@ -1297,7 +1297,7 @@
 			WHERE InvMovimiento.InvArticuloId='$IdArticulo'
 			AND (CONVERT(DATE,InvMovimiento.FechaMovimiento) >= '$FInicial' AND CONVERT(DATE,InvMovimiento.FechaMovimiento) <= '$FFinal')
 			GROUP BY InvMovimiento.InvLoteId,InvMovimiento.FechaMovimiento,InvMovimiento.InvCausaId,InvCausa.Descripcion,InvMovimiento.Cantidad
-			ORDER BY InvMovimiento.FechaMovimiento DESC
+			ORDER BY InvMovimiento.FechaMovimiento ASC
 		";
 		return $sql;
 	}

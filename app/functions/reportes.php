@@ -2055,6 +2055,7 @@
 			      	<th scope="col">Precio en divisa (Con IVA)</th>
 			    </tr>
 		  	</thead>
+
 		  	<tbody>
 	  	';
 
@@ -2089,7 +2090,7 @@
 		echo '<br>';
 
 		echo '
-		<table class="table table-striped table-bordered col-12 sortable">
+		<table class="table table-striped table-bordered col-12 sortable" id="myTable">
 			<thead class="thead-dark">
 			    <tr>
 			    	<th scope="col" class="text-center">Fecha</th>
