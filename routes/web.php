@@ -89,8 +89,8 @@ Route::get('/reporte10', function() {
     return view('pages.reporte.reporte10');
 });
 
-Route::get('/reporte11', function() {
-    return view('pages.reporte.reporte11');
+Route::get('/reporte12', function() {
+    return view('pages.reporte.reporte12');
 });
 
 Route::get('/diascero', function() {
