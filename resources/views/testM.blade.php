@@ -86,7 +86,7 @@
       }
       echo '<hr class="row align-items-start col-12">';
 
-      ReporteAnaliticoDePrecios($_GET['SEDE'],$_GET['Id']);
+      ReporteDetalleDeMovimiento($_GET['SEDE'],$_GET['fechaInicio'],$_GET['fechaFin'],$_GET['Id']);
       GuardarAuditoria('CONSULTAR','REPORTE','Analitico de precios');
 
       $FinCarga = new DateTime("now");
