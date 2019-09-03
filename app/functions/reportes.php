@@ -695,13 +695,16 @@
 			    <tr>
 			    	<th scope="col">Codigo</th>
 			      	<th scope="col">Descripcion</th>
+			      	<th scope="col">Codigo de Barra</th>
 			      	<th scope="col">Existencia</th>
 			      	<th scope="col">Unidades vendidas</th>
 			      	<th scope="col">Unidades compradas</th>
 			      	<th scope="col">Venta diaria</th>
 					<th scope="col">Dias restantes</th>
 			      	<th scope="col">Precio (Con IVA)</th>
-			      	<th scope="col">Ultimo Lote</th>			   
+			      	<th scope="col">Ultimo Lote</th>
+			      	<th scope="col">Ultima Venta (En Rango)</th>
+			      	<th scope="col">Ultima Venta</th>			   
 			    </tr>
 		  	</thead>
 		  	<tbody>
@@ -726,6 +729,9 @@
 			'</a>
 			</td>';
 
+			$CodigoBarra = CodigoBarra($conn,$IdArticulo);
+				echo '<td align="center">'.$CodigoBarra.'</td>';
+
 			echo '<td align="center">'.intval($Existencia).'</td>';
 
 			$Venta = intval($row["TotalUnidadesVendidasCliente"]);
@@ -742,7 +748,12 @@
 			$sql10 = QUltimaVentaCR($IdArticulo,$FInicial,$FFinal);
 			$result3 = sqlsrv_query($conn,$sql10);
 			$row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
-			$UltimaVenta = $row3["UltimaVenta"];			
+			$UltimaVentaCR = $row3["UltimaVenta"];
+
+			$sql11 = QUltimaVentaSR($IdArticulo);
+			$result4 = sqlsrv_query($conn,$sql11);
+			$row4 = sqlsrv_fetch_array($result4,SQLSRV_FETCH_ASSOC);
+			$UltimaVentaSR = $row4["UltimaVenta"];				
 
 			echo '<td align="center">'.$Venta.'</td>';
 			echo '<td align="center">'.intval($row["TotalUnidadesCompradasProveedor"]).'</td>';
@@ -757,8 +768,15 @@
 				echo '<td align="center"> - </td>';
 			}
 
-			if(($UltimaVenta)){
-				echo '<td align="center">'.$UltimaVenta->format('Y-m-d').'</td>';
+			if(($UltimaVentaCR)){
+				echo '<td align="center">'.$UltimaVentaCR->format('Y-m-d').'</td>';
+			}
+			else{
+				echo '<td align="center"> - </td>';
+			}
+
+			if(($UltimaVentaSR)){
+				echo '<td align="center">'.$UltimaVentaSR->format('Y-m-d').'</td>';
 			}
 			else{
 				echo '<td align="center"> - </td>';
