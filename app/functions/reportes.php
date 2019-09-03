@@ -1572,12 +1572,12 @@
 			<thead class="thead-dark">
 			    <tr>
 			    	<th scope="col">Codigo</th>
-			      	<th scope="col">Descripcion</td>
-			      	<th scope="col">Existencia</td>
-			      	<th scope="col">Precio (Con IVA)</td>
-			      	<th scope="col">Dolarizado</td>
-			      	<th scope="col">Tasa actual</td>
-			      	<th scope="col">Precio en divisa (Con IVA)</td>
+			      	<th scope="col">Descripcion</th>
+			      	<th scope="col">Existencia</th>
+			      	<th scope="col">Precio (Con IVA)</th>
+			      	<th scope="col">Dolarizado</th>
+			      	<th scope="col">Tasa actual</th>
+			      	<th scope="col">Precio en divisa (Con IVA)</th>
 			    </tr>
 		  	</thead>
 		  	<tbody>
@@ -2045,14 +2045,14 @@
 			<thead class="thead-dark">
 			    <tr>
 			    	<th scope="col">Codigo</th>
-			      	<th scope="col">Descripcion</td>
-			      	<th scope="col">Existencia</td>
-			      	<th scope="col">Unidades vendidas</td>
-			      	<th scope="col">Dias restantes</td>
-			      	<th scope="col">Precio (Con IVA)</td>
-			      	<th scope="col">Dolarizado</td>
-			      	<th scope="col">Tasa actual</td>
-			      	<th scope="col">Precio en divisa (Con IVA)</td>
+			      	<th scope="col">Descripcion</th>
+			      	<th scope="col">Existencia</th>
+			      	<th scope="col">Unidades vendidas</th>
+			      	<th scope="col">Dias restantes</th>
+			      	<th scope="col">Precio (Con IVA)</th>
+			      	<th scope="col">Dolarizado</th>
+			      	<th scope="col">Tasa actual</th>
+			      	<th scope="col">Precio en divisa (Con IVA)</th>
 			    </tr>
 		  	</thead>
 		  	<tbody>
@@ -2085,6 +2085,45 @@
 				</tr>
 	  		</tbody>
 		</table>';
+
+		echo '<br>';
+
+		echo '
+		<table class="table table-striped table-bordered col-12 sortable">
+			<thead class="thead-dark">
+			    <tr>
+			    	<th scope="col" class="text-center">Fecha</th>
+			      	<th scope="col" class="text-center">Hora</th>
+			      	<th scope="col" class="text-center">Tipo de movimiento</th>
+			      	<th scope="col" class="text-center">Cantidad</th>
+			    </tr>
+		  	</thead>
+
+		  	<tbody>
+	  	';
+
+	  	$sql8=QDetalleDeMovimiento($IdArticulo);
+		$result3=sqlsrv_query($conn,$sql8);
+
+	  	while($row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC)) {
+	  		echo '
+	  			<tr>
+			    	<td align="center">'.$row3["FechaLote"]->format("d-m-Y").'</td>';
+
+			$Hora = date('h:i a',strtotime($row3["FechaLote"]->format("H:m:s")));
+
+			echo '
+			      	<td align="center">'.$Hora.'</td>
+			      	<td align="center">-</td>
+			      	<td align="center">-</td>
+			    </tr>
+			';
+	  	}
+
+	  	echo '
+	  		</tbody>
+	  	</table>
+	  	';
 
 		$sql = QCleanTable('CP_QUnidadesVendidasCliente');
 		sqlsrv_query($conn,$sql);
