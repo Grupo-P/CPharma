@@ -233,6 +233,54 @@
 		}
 	}
 	/*
+		TITULO: QLoteArticuloDiasCero
+		PARAMETROS: [$IdArticulo] Id del articulo
+					[$CantAlmacen] determina el los almacenes donde se buscara el lote
+					0: para los almacenes [1,2]
+					1: para todos los almacenes
+		FUNCION: Busca el lote correspondiente al articulo especificado
+		RETORNO: Regresa el Id del lote correspondiente
+	 */
+	function QLoteArticuloDiasCero($IdArticulo,$CantAlmacen) {
+		switch($CantAlmacen) {
+			case '0':
+			$sql = "
+				SELECT
+				InvLoteAlmacen.InvLoteId
+				INTO CP_QLoteArticuloDiasCero
+				FROM InvLoteAlmacen
+				WHERE(InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
+				AND (InvLoteAlmacen.InvArticuloId = '$IdArticulo')
+				AND (InvLoteAlmacen.Existencia>0)
+			";
+			return $sql;
+			break;
+			
+			case '1':
+			$sql = "
+				SELECT
+				InvLoteAlmacen.InvLoteId
+				INTO CP_QLoteArticuloDiasCero
+				FROM InvLoteAlmacen
+				WHERE(InvLoteAlmacen.InvArticuloId = '$IdArticulo')
+				AND (InvLoteAlmacen.Existencia>0)
+			";
+			return $sql;
+			break;
+
+			case '2':
+			$sql = "
+				SELECT
+				InvLoteAlmacen.InvLoteId
+				INTO CP_QLoteArticuloDiasCero
+				FROM InvLoteAlmacen
+				WHERE(InvLoteAlmacen.InvArticuloId = '$IdArticulo')
+			";
+			return $sql;
+			break;
+		}
+	}
+	/*
 		TITULO: QLote
 		PARAMETROS: Funciona en conjunto con QLoteArticulo
 		FUNCION: Busca el precio de compra bruto y el precio troquelado
@@ -247,6 +295,25 @@
 			InvLote.M_PrecioTroquelado
 			FROM InvLote
 			INNER JOIN CP_QLoteArticulo ON CP_QLoteArticulo.InvLoteId = InvLote.Id
+			ORDER BY invlote.M_PrecioTroquelado, invlote.M_PrecioCompraBruto DESC
+		";
+		return $sql;
+	}
+	/*
+		TITULO: QLoteDiasCero
+		PARAMETROS: Funciona en conjunto con QLoteArticulo
+		FUNCION: Busca el precio de compra bruto y el precio troquelado
+				 (Funciona en conjunto con QLoteArticulo)
+		RETORNO: Retorna el precio de compra bruto y el precio troquelado
+	 */
+	function QLoteDiasCero() {
+		$sql = "
+			SELECT TOP 1
+			InvLote.Id,
+			InvLote.M_PrecioCompraBruto,
+			InvLote.M_PrecioTroquelado
+			FROM InvLote
+			INNER JOIN CP_QLoteArticuloDiasCero ON CP_QLoteArticuloDiasCero.InvLoteId = InvLote.Id
 			ORDER BY invlote.M_PrecioTroquelado, invlote.M_PrecioCompraBruto DESC
 		";
 		return $sql;
@@ -1225,7 +1292,7 @@
 	/*
 		TITULO: QCapturaDiaria
 		PARAMETROS: [$FechaCaptura] El dia de hoy
-		FUNCION: crea una conexion con la base de datos cpharma e ingresa datos
+		FUNCION: cuenta el total de registos de dias en cero
 		RETORNO: no aplica
 	 */
 
@@ -1239,12 +1306,35 @@
 	/*
 		TITULO: QVerCapturaDiaria
 		PARAMETROS: [$FechaCaptura] El dia de hoy
-		FUNCION: crea una conexion con la base de datos cpharma e ingresa datos
+		FUNCION: consulta todos los datos de la captura diaria
 		RETORNO: no aplica
 	 */
 
 	function QVerCapturaDiaria() {
 		$sql = "SELECT * FROM capturas_diarias";
+		return $sql;
+	}
+	/*
+		TITULO: QVerCapturaDiaria
+		PARAMETROS: [$FechaCaptura] El dia de hoy
+		FUNCION: valida que la fecha exista en la tabla captura diaria
+		RETORNO: no aplica
+	 */
+
+	function QValidarCapturaDiaria($FechaCaptura) {
+		$sql = "SELECT count(*) AS CuentaCaptura 
+		FROM capturas_diarias WHERE fecha_captura = '$FechaCaptura'";
+		return $sql;
+	}
+	/*
+		TITULO: QBorrarDiasCero
+		PARAMETROS: [$FechaCaptura] fecha de la captura
+		FUNCION: borra los registros de dias en cero de la fecha seleccionada
+		RETORNO: no aplica
+	 */
+
+	function QBorrarDiasCero($FechaCaptura) {
+		$sql = "DELETE FROM dias_ceros WHERE fecha_captura = '$FechaCaptura'";
 		return $sql;
 	}
 	/*
