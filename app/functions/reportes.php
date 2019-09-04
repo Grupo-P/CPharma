@@ -2161,13 +2161,6 @@
 	  		</tbody>
 		</table>';
 
-		$sql9 = QCleanTable('CP_QResumenDeMovimientos');
-		sqlsrv_query($conn,$sql9);
-		$sql10 = QCleanTable('CP_QResumenDeMovimientos');
-		sqlsrv_query($conn,$sql10);
-		$sql11 = QAgruparDetalleDeMovimientos();
-		$result4 = sqlsrv_query($conn,$sql11);
-
 		echo '<br>';
 
 		echo '
@@ -2182,12 +2175,25 @@
 			    </tr>
 		  	</thead>
 
-		  	<tbody>
-		  		<tr>
-					<td align="center">-</td>
-			      	<td align="center">-</td>
-			      	<td align="center">-</td>
+		  	<tbody>';
+
+		  	$sql9 = QCleanTable('CP_QResumenDeMovimientos');
+			sqlsrv_query($conn,$sql9);
+			$sql10 = QIntegracionResumenDeMovimientos($IdArticulo,$FInicial,$FFinal);
+			sqlsrv_query($conn,$sql10);
+			$sql11 = QAgruparDetalleDeMovimientos();
+			$result4 = sqlsrv_query($conn,$sql11);
+
+		  	while($row4 = sqlsrv_fetch_array($result4,SQLSRV_FETCH_ASSOC)) {
+		  		echo '
+	  			<tr>
+					<td align="center">'.$row4["FechaMovimiento"].'</td>
+			      	<td align="center">'.utf8_encode($row4["Movimiento"]).'</td>
+			      	<td align="center">'.$row4["Cantidad"].'</td>
 			    </tr>
+		  		';
+		  	}
+		echo '
 			</tbody>
 		</table>
 	  	';
@@ -2216,7 +2222,7 @@
 	  	while($row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC)) {
 	  		echo '
 	  			<tr>
-			    	<td align="center">'.$row3["FechaMovimiento"]->format("d-m-Y").'</td>';
+			    	<td align="center">'.$row3["FechaMovimiento"]->format("d/m/Y").'</td>';
 
 			$Hora = date('h:i a',strtotime($row3["FechaMovimiento"]->format("H:m:s")));
 
