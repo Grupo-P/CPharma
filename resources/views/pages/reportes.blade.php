@@ -67,7 +67,9 @@
 				<?php
 					if(
 						Auth::user()->departamento == 'COMPRAS'
-						|| Auth::user()->departamento == 'OPERACIONES' 
+						|| Auth::user()->departamento == 'OPERACIONES'
+						|| Auth::user()->departamento == 'LÍDER DE TIENDA'
+						|| Auth::user()->departamento == 'DEVOLUCIONES'  
 						|| Auth::user()->departamento == 'GERENCIA'
 						|| Auth::user()->departamento == 'TECNOLOGIA'
 					){
