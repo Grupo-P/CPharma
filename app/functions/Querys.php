@@ -1427,6 +1427,22 @@
 		return $sql;
 	}
 	/*
+		TITULO: QProductosPorFallar
+		PARAMETROS: Funciona en conjunto con QIntegracionProductosFalla
+		FUNCION: Arma una lista de productos vendido con existencia mayor a 0 y menor que la existencia
+		RETORNO: Lista de productos mas vendidos con existencia en 0
+	 */
+	function QProductosPorFallar($Existencia) {
+		$sql = "
+			SELECT * FROM CP_QIntegracionProductosFalla
+			WHERE 
+			(CP_QIntegracionProductosFalla.Existencia > 0)
+			AND (CP_QIntegracionProductosFalla.Existencia < '$Existencia')
+			ORDER BY CP_QIntegracionProductosFalla.TotalUnidadesVendidasCliente DESC
+		";
+		return $sql;
+	}
+	/*
 		TITULO: 
 		PARAMETROS: 
 		FUNCION:

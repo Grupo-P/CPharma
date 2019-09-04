@@ -26,14 +26,7 @@
     }
     echo '<hr class="row align-items-start col-12">';
 
-    echo 'Existencia: '.$_GET['Existencia'];
-    echo '<br/>';
-    echo 'fechaInicio: '.$_GET['fechaInicio'];
-    echo '<br/>';
-    echo 'fechaFin: '.$_GET['fechaFin'];
-    echo '<br/>';
-    //
-    //
+    ReporteProductosPorFallar($_GET['SEDE'],$_GET['fechaInicio'],$_GET['fechaFin'],$_GET['Existencia']);
     //GuardarAuditoria('CONSULTAR','REPORTE','Productos mas vendidos');
     
     $FinCarga = new DateTime("now");
