@@ -2271,7 +2271,7 @@
 		</div>
 		<br/>
 		';
-
+		echo'<h6 align="center">Existencia menor a: '.$ExistenciaB.' dias </h6>';
 		echo'<h6 align="center">Periodo desde el '.$FInicial.' al '.$FFinalImpresion.' </h6>';
 
 		echo'
