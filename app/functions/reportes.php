@@ -290,26 +290,26 @@
 		';
 
 		echo'<h6 align="center">Periodo desde el '.$FInicial.' al '.$FFinalImpresion.' </h6>';
-
 		echo'
 		<table class="table table-striped table-bordered col-12 sortable" id="myTable">
 		  	<thead class="thead-dark">
 			    <tr>
+			    	<th scope="col">#</th>
 			    	<th scope="col">Codigo</th>
 			      	<th scope="col">Descripcion</th>
 			      	<th scope="col">Existencia</th>
 			      	<th scope="col">Tipo</th>
 			      	<th scope="col">Total de Venta</th>
-			      	<th scope="col">Veces Facturado</th>
-			      	<th scope="col">Unidades vendidas</th>
-			      	<th scope="col">Unidades Compradas</th>
+			      	<th scope="col">Veces Facturado</th>			      
+			      	<th scope="col">Unidades vendidas</th>			      	
+			      	<th scope="col">Unidades Compradas</th>		      			      
 			      	<th scope="col">Venta diaria</th>
 			      	<th scope="col">Dias restantes</th>
 			    </tr>
 		  	</thead>
 		  	<tbody>
 		';
-
+		$contador = 1;
 		while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
 			$IdArticulo = $row["Id"];
 
@@ -343,6 +343,7 @@
 			$TotalVenta = $TotalVenta - $TotalDevolucion;
 
 			echo '<tr>';
+			echo '<td align="center"><strong>'.intval($contador).'</strong></td>';
 			echo '<td align="left">'.$row["CodigoArticulo"].'</td>';
 
 			echo 
@@ -355,17 +356,36 @@
 			echo '<td align="center">'.intval($Existencia).'</td>';
 			echo '<td align="center">'.$Tipo.'</td>';
 			echo '<td align="center">'." ".intval(round($TotalVenta,2))." ".SigVe.'</td>';
-			echo '<td align="center">'.intval($row["TotalVecesVendidasCliente"]).'</td>';
+			
+			echo 
+			'<td align="center" class="barrido">
+			<a href="reporte12?fechaInicio='.$FInicial.'&fechaFin='.$FFinalImpresion.'&SEDE='.$SedeConnection.'&Descrip='.$row["Descripcion"].'&Id='.$IdArticulo.'" style="text-decoration: none; color: black;" target="_blank">'
+				.$row["TotalVecesVendidasCliente"].
+			'</a>
+			</td>';
 
 			$Venta = intval($row["TotalUnidadesVendidasCliente"]);
 			$VentaDiaria = VentaDiaria($Venta,$RangoDias);
 			$DiasRestantes = DiasRestantes($Existencia,$VentaDiaria);
 
-			echo '<td align="center">'.$Venta.'</td>';
-			echo '<td align="center">'.intval($row["TotalUnidadesCompradasProveedor"]).'</td>';
+			echo 
+			'<td align="center" class="barrido">
+			<a href="reporte12?fechaInicio='.$FInicial.'&fechaFin='.$FFinalImpresion.'&SEDE='.$SedeConnection.'&Descrip='.$row["Descripcion"].'&Id='.$IdArticulo.'" style="text-decoration: none; color: black;" target="_blank">'
+				.$Venta.
+			'</a>
+			</td>';
+
+			echo 
+			'<td align="center" class="barrido">
+			<a href="reporte12?fechaInicio='.$FInicial.'&fechaFin='.$FFinalImpresion.'&SEDE='.$SedeConnection.'&Descrip='.$row["Descripcion"].'&Id='.$IdArticulo.'" style="text-decoration: none; color: black;" target="_blank">'
+				.intval($row["TotalUnidadesCompradasProveedor"]).
+			'</a>
+			</td>';
+
 			echo '<td align="center">'.round($VentaDiaria,2).'</td>';
 			echo '<td align="center">'.round($DiasRestantes,2).'</td>';
 			echo '</tr>';
+		$contador++;
 	  	}
 	  	echo '
 	  		</tbody>
