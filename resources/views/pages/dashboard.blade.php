@@ -40,11 +40,17 @@
 		      </div>
 		      <div class="modal-body">
 		      	<label>Hola <b class="text-info">{{ Auth::user()->name }}</b>!!</label>
-		      	Estas usando<b class="text-info"> CPharma v.3.8</b>, esta version incluye las siguientes mejoras:</label>
+		      	Estas usando<b class="text-info"> CPharma v.3.9</b>, esta version incluye las siguientes mejoras:</label>
 
 		        <ul style="list-style:none">
 		        	<li class="card-text text-dark" style="display: inline;">
     					<br/>
+						<i class="far fa-check-circle text-info" style="display: inline;"></i>
+						Desde ya esta disponible el reporte: 
+						<b class="text-info">Productos Por Fallar</b>!!
+    				</li>
+		        	<li class="card-text text-dark" style="display: inline;">
+    					<br/><br/>
 						<i class="far fa-check-circle text-info" style="display: inline;"></i>
 						Desde ya esta disponible el reporte: 
 						<b class="text-info">Detalle de movimientos</b>!!
@@ -160,7 +166,7 @@
 	    		<h2 class="card-title">
 		    		<span class="card-text text-white">
 		    			<i class="fas fa-file-invoice"></i>
-		    			12	    			
+		    			13	    			
 		    		</span>
 	    		</h2>
 	    		<p class="card-text text-white">Reportes disponibles</p>

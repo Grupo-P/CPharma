@@ -5,20 +5,20 @@
 @endsection
 
 @section('content')
-	<h1 class="h5 text-info">
-		<i class="fas fa-file-invoice"></i>
-		Productos mas vendidos
-	</h1>
-	<hr class="row align-items-start col-12">
+  <h1 class="h5 text-info">
+    <i class="fas fa-file-invoice"></i>
+    Productos Por Fallar
+  </h1>
+  <hr class="row align-items-start col-12">
 
-  <?php	
+  <?php 
   include(app_path().'\functions\config.php');
   include(app_path().'\functions\querys.php');
   include(app_path().'\functions\funciones.php');
   include(app_path().'\functions\reportes.php');
 
-	if (isset($_GET['top']))
-	{
+  if (isset($_GET['Existencia']))
+  {
     $InicioCarga = new DateTime("now");
 
     if (isset($_GET['SEDE'])){      
@@ -26,38 +26,29 @@
     }
     echo '<hr class="row align-items-start col-12">';
 
-    ReporteProductosMasVendidos($_GET['SEDE'],$_GET['top'],$_GET['fechaInicio'],$_GET['fechaFin']);
-    GuardarAuditoria('CONSULTAR','REPORTE','Productos mas vendidos');
+    ReporteProductosPorFallar($_GET['SEDE'],$_GET['fechaInicio'],$_GET['fechaFin'],$_GET['Existencia']);
+    GuardarAuditoria('CONSULTAR','REPORTE','Productos Por Fallar');
     
     $FinCarga = new DateTime("now");
     $IntervalCarga = $InicioCarga->diff($FinCarga);
     echo'Tiempo de carga: '.$IntervalCarga->format("%Y-%M-%D %H:%I:%S");
-	} 
-	else{
+  } 
+  else{
+
     if (isset($_GET['SEDE'])){      
       echo '<h1 class="h5 text-success"  align="left"> <i class="fas fa-prescription"></i> '.NombreSede($_GET['SEDE']).'</h1>';
     }
     echo '<hr class="row align-items-start col-12">';
 
-		echo '
-		<form autocomplete="off" action="" target="_blank">
+    echo '
+    <form autocomplete="off" action="" target="_blank">
         <table style="width:100%;">
           <tr>
             <td align="center">
-              TOP:
+              Existencia:
             </td>
-            <td align="right" style="width:20%;">
-              <select name="top" class="form-control">
-                <option>5</option>
-                <option>10</option>
-                <option>15</option>
-                <option>20</option>
-                <option>50</option>
-                <option>100</option>
-                <option>200</option>
-                <option>500</option>
-                <option>1000</option>
-              </select>
+            <td>
+              <input id="Existencia" type="number" name="Existencia" required style="width:100%;" placeholder="Cantidad en numero">
             </td>
             <td align="center">
               Fecha Inicio:
@@ -78,24 +69,24 @@
               <input type="submit" value="Buscar" class="btn btn-outline-success">
             </td>
           </tr>
-		    </table>
-	  	</form>
-	  	';
-	} 
+        </table>
+      </form>
+      ';
+  } 
 ?>
 @endsection
 
 @section('scriptsHead')
     <script type="text/javascript" src="{{ asset('assets/js/sortTable.js') }}">
     </script>
-    <script type="text/javascript" src="{{ asset('assets/js/filter.js') }}">	
+    <script type="text/javascript" src="{{ asset('assets/js/filter.js') }}">  
     </script>
-    <script type="text/javascript" src="{{ asset('assets/js/functions.js') }}">	
+    <script type="text/javascript" src="{{ asset('assets/js/functions.js') }}"> 
     </script>
     <script type="text/javascript" src="{{ asset('assets/jquery/jquery-2.2.2.min.js') }}"></script>
-  	<script type="text/javascript" src="{{ asset('assets/jquery/jquery-ui.min.js') }}" ></script>
+    <script type="text/javascript" src="{{ asset('assets/jquery/jquery-ui.min.js') }}" ></script>
 
-  	<style>
+    <style>
     * {
       box-sizing: border-box;
     }
