@@ -1713,15 +1713,17 @@
 			<table class="table table-striped table-bordered col-12 sortable" id="myTable">
 				<thead class="thead-dark">
 				    <tr>
+				    	<th scope="col">#</th>
 				    	<th scope="col">Codigo</th>
 				      	<th scope="col">Descripcion</th>
 				      	<th scope="col">Existencia</th>
-				      	<th scope="col">Ultimo Lote (En Rango)</th>
-				      	<th scope="col">Tiempo en Tienda (Dias)</th>
+				      	<th scope="col">Ultimo Lote</br>(En Rango)</th>
+				      	<th scope="col">Tiempo en Tienda</br>(Dias)</th>
 				    </tr>
 		  		</thead>
 		  		<tbody>
 		';
+		$contador = 1;
 		while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
 			$IdArticulo = $row["Id"];
 			$FechaRegistro = $row["FechaRegistro"];
@@ -1738,13 +1740,22 @@
 
 			if($Existencia > 0){
 				echo '<tr>';
+				echo '<td align="center"><strong>'.intval($contador).'</strong></td>';
 				echo '<td align="left">'.$row["CodigoArticulo"].'</td>';
-				echo '<td align="left">'.$row["Descripcion"].'</td>';
+
+				echo 
+				'<td align="left" class="barrido">
+				<a href="/reporte2?Id='.$IdArticulo.'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
+					.$row["Descripcion"].
+				'</a>
+				</td>';
+				
 				echo '<td align="center">'.intval($Existencia).'</td>';
 				echo '<td align="center">'.($FechaRegistro)->format("Y-m-d").'</td>';
 				echo '<td align="center">'.$TiempoTienda.'</td>';
 				echo '</tr>';
 			}
+		$contador++;
 	  	}
 	  	echo '
 	  		</tbody>
