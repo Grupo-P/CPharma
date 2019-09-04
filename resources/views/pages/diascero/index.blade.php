@@ -59,7 +59,7 @@
 	  	<?php
 		while($row = $result->fetch_assoc()) {
 			echo '<tr>';
-			echo '<td align="center">'.$row['id'].'</td>';
+			echo '<td align="center"><strong>'.$row['id'].'</strong></td>';
 			echo '<td align="center">'.$row['total_registros'].'</td>';
 			echo '<td align="center">'.$row['fecha_captura'].'</td>';
 			echo '<td align="center">'.$row['created_at'].'</td>';

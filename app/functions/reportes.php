@@ -131,12 +131,12 @@
 			    	<th scope="col">Codigo</th>
 			      	<th scope="col">Descripcion</td>
 			      	<th scope="col">Existencia</td>
-			      	<th scope="col">Precio (Con IVA)</td>
+			      	<th scope="col">Precio</br>(Con IVA)</td>
 			      	<th scope="col">Codigo de Barra</td>
 			      	<th scope="col">Gravado?</td>
-			      	<th scope="col">Dolarizado</td>
+			      	<th scope="col">Dolarizado?</td>
 			      	<th scope="col">Tasa actual</td>
-			      	<th scope="col">Precio en divisa (Con IVA)</td>
+			      	<th scope="col">Precio en divisa</br>(Con IVA)</td>
 			    </tr>
 		  	</thead>
 		  	<tbody>
@@ -177,20 +177,22 @@
 		<table class="table table-striped table-bordered col-12 sortable" id="myTable">
 		  	<thead class="thead-dark">
 			    <tr>
+			    	<th scope="col">#</th>
 			    	<th scope="col">Proveedor</th>
 			      	<th scope="col">Fecha de documento</th>
 			      	<th scope="col">Cantidad recibida</th>
-			      	<th scope="col">Costo bruto (Sin IVA)</th>
+			      	<th scope="col">Costo bruto</br>(Sin IVA)</th>
 			      	<th scope="col">Tasa en historico</th>
-			      	<th scope="col">Costo bruto (Sin IVA) HOY</th>
-					<th scope="col">Costo en divisa (Sin IVA)</th>
+			      	<th scope="col">Costo bruto</br>(Sin IVA) HOY</th>
+					<th scope="col">Costo en divisa</br>(Sin IVA)</th>
 			    </tr>
 		  	</thead>
 		  	<tbody>
 		';
-
+		$contador = 1;
 		while($row2 = sqlsrv_fetch_array($result2, SQLSRV_FETCH_ASSOC)) {
 				echo '<tr>';
+				echo '<td align="center"><strong>'.intval($contador).'</strong></td>';
 				echo '<td>'.$row2["Nombre"].'</td>';
 				echo '<td align="center">'.$row2["FechaDocumento"]->format('Y-m-d').'</td>';
 				echo '<td align="center">'.intval($row2['CantidadRecibidaFactura']).'</td>';
@@ -221,6 +223,7 @@
 					echo '<td align="center">0.00 '.SigDolar.'</td>';
 				}
 				echo '</tr>';
+			$contador++;
 	  	}
 	  	echo '
 	  		</tbody>
