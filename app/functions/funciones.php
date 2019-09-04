@@ -465,6 +465,64 @@
 		return $Precio;
 	}
 	/*
+		TITULO: CalculoPrecioDiasCero
+		PARAMETROS: [$conn] Cadena de conexion para la base de datos
+					[$IdArticulo] Id del articulo
+					[$IsIVA] Si aplica o no
+		FUNCION: Calcular el precio del articulo
+		RETORNO: Precio del articulo
+	 */
+	function CalculoPrecioDiasCero($conn,$IdArticulo,$IsIVA,$Existencia) {
+		$Precio = 0;
+
+		if($Existencia == 0) {
+			$Precio = 0;
+		}
+		else {
+		/*PRECIO TROQUELADO*/
+			$sql0 = QCleanTable('CP_QLoteArticuloDiasCero');
+			sqlsrv_query($conn,$sql0);
+
+			$sql = QLoteArticuloDiasCero($IdArticulo,0);
+			sqlsrv_query($conn,$sql);
+			
+			$sql1 = QLoteDiasCero();
+			$result1 = sqlsrv_query($conn,$sql1);
+			$row1 = sqlsrv_fetch_array($result1,SQLSRV_FETCH_ASSOC);
+			$PrecioTroquelado = $row1["M_PrecioTroquelado"];
+			
+			if($PrecioTroquelado!=NULL) {
+				$Precio = $PrecioTroquelado;
+			}
+		/*PRECIO CALCULADO*/
+			else {
+				$sql0 = QCleanTable('CP_QLoteArticuloDiasCero');
+				sqlsrv_query($conn,$sql0);
+
+				$sql2 = QLoteArticuloDiasCero($IdArticulo,1);
+				sqlsrv_query($conn,$sql2);
+				
+				$sql3 = QLoteDiasCero();
+				$result3 = sqlsrv_query($conn,$sql3);
+				$row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
+				$PrecioBruto = $row3["M_PrecioCompraBruto"];
+
+				if($IsIVA == 1) {
+					$PrecioCalculado = ($PrecioBruto/Utilidad)*Impuesto;
+					$Precio = $PrecioCalculado;
+				}
+				else {
+					$PrecioCalculado = ($PrecioBruto/Utilidad);
+					$Precio = $PrecioCalculado;
+				}
+			}
+		}
+		$sql0 = QCleanTable('CP_QLoteArticuloDiasCero');
+		sqlsrv_query($conn,$sql0);
+
+		return $Precio;
+	}
+	/*
 		TITULO: TasaFechaConversion
 		PARAMETROS: [$Fecha] Fecha de la que se buscara la tasa
 		FUNCION: Buscar el valor de la tasa
@@ -709,8 +767,8 @@
 		$TotalRegistros = $row["TotalRegistros"];
 
 		$sql1 = QGuardarCapturaDiaria($TotalRegistros,$FechaCaptura,$date);
-		$result1 = mysqli_query($conn,$sql1);
-		
+		mysqli_query($conn,$sql1);
+
 		mysqli_close($conn);
 	}
 	/*
@@ -755,7 +813,7 @@
 			$Descripcion = addslashes($Descripcion_User);//Escapa los caracteres especiales
 			$Existencia=intval($row["Existencia"]);
 			$IsIVA = $row["ConceptoImpuesto"];
-			$Precio = CalculoPrecio($conn,$IdArticulo,$IsIVA,$Existencia);
+			$Precio = CalculoPrecioDiasCero($conn,$IdArticulo,$IsIVA,$Existencia);
 			$date = date('Y-m-d h:i:s',time());
 			
 			$sqlCPharma = QGuardarDiasEnCero($IdArticulo,$CodigoInterno,$Descripcion,$Existencia,$Precio,$FechaCaptura,$user,$date);
@@ -763,8 +821,22 @@
 		}
 		GuardarCapturaDiaria($FechaCaptura,$date);
 
-		mysqli_close($connCPharma);
-		sqlsrv_close($conn);
+		$sqlCC = QValidarCapturaDiaria($FechaCaptura);
+		$resultCC = mysqli_query($connCPharma,$sqlCC);
+		$rowCC = mysqli_fetch_assoc($resultCC);
+		$CuentaCaptura = $rowCC["CuentaCaptura"];
+
+		if($CuentaCaptura == 0){
+			$sqlB = QBorrarDiasCero($FechaCaptura);
+			mysqli_query($connCPharma,$sqlB);
+			mysqli_close($connCPharma);
+			sqlsrv_close($conn);
+			DiasEnCero();
+		}
+		else{
+			mysqli_close($connCPharma);
+			sqlsrv_close($conn);
+		}
 	}
 	/*
 		TITULO: ProductoGravado
