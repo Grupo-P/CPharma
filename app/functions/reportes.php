@@ -472,6 +472,7 @@
 		<table class="table table-striped table-bordered col-12 sortable" id="myTable">
 		  	<thead class="thead-dark">
 			    <tr>
+			    	<th scope="col">#</th>
 			    	<th scope="col">Codigo</th>
 			      	<th scope="col">Descripcion</th>
 			      	<th scope="col">Existencia</th>
@@ -486,7 +487,7 @@
 		  	</thead>
 		  	<tbody>
 		';
-
+		$contador = 1;
 		while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
 			$IdArticulo = $row["Id"];
 
@@ -509,6 +510,7 @@
 			$row4=sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
 
 			echo '<tr>';
+			echo '<td align="center"><strong>'.intval($contador).'</strong></td>';
 			echo '<td align="left">'.$row["CodigoArticulo"].'</td>';
 			
 			echo 
@@ -528,17 +530,35 @@
 				echo '<td align="center">'.$row4["TiempoTienda"].'</td>';
 			}
 			
-			echo '<td align="center">'.intval($row["TotalVecesVendidasCliente"]).'</td>';
+			echo 
+			'<td align="center" class="barrido">
+			<a href="reporte12?fechaInicio='.$FInicial.'&fechaFin='.$FFinalImpresion.'&SEDE='.$SedeConnection.'&Descrip='.$row["Descripcion"].'&Id='.$IdArticulo.'" style="text-decoration: none; color: black;" target="_blank">'
+				.intval($row["TotalVecesVendidasCliente"]).
+			'</a>
+			</td>';
 
 			$Venta = intval($row["TotalUnidadesVendidasCliente"]);
 			$VentaDiaria = VentaDiaria($Venta,$RangoDias);
 			$DiasRestantes = DiasRestantes($Existencia,$VentaDiaria);
+			
+			echo 
+			'<td align="center" class="barrido">
+			<a href="reporte12?fechaInicio='.$FInicial.'&fechaFin='.$FFinalImpresion.'&SEDE='.$SedeConnection.'&Descrip='.$row["Descripcion"].'&Id='.$IdArticulo.'" style="text-decoration: none; color: black;" target="_blank">'
+				.$Venta.
+			'</a>
+			</td>';
 
-			echo '<td align="center">'.$Venta.'</td>';
-			echo '<td align="center">'.intval($row["TotalUnidadesCompradasProveedor"]).'</td>';
+			echo 
+			'<td align="center" class="barrido">
+			<a href="reporte12?fechaInicio='.$FInicial.'&fechaFin='.$FFinalImpresion.'&SEDE='.$SedeConnection.'&Descrip='.$row["Descripcion"].'&Id='.$IdArticulo.'" style="text-decoration: none; color: black;" target="_blank">'
+				.intval($row["TotalUnidadesCompradasProveedor"]).
+			'</a>
+			</td>';
+
 			echo '<td align="center">'.round($VentaDiaria,2).'</td>';
 			echo '<td align="center">'.round($DiasRestantes,2).'</td>';
 			echo '</tr>';
+		$contador++;
 	  	}
 	  	echo '
 	  		</tbody>
