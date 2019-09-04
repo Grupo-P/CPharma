@@ -2189,7 +2189,7 @@
 	  			<tr>
 					<td align="center">'.$row4["FechaMovimiento"].'</td>
 			      	<td align="center">'.utf8_encode($row4["Movimiento"]).'</td>
-			      	<td align="center">'.$row4["Cantidad"].'</td>
+			      	<td align="center">'.intval($row4["Cantidad"]).'</td>
 			    </tr>
 		  		';
 		  	}
