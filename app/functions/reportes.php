@@ -595,16 +595,22 @@
 		echo'
 		<table class="table table-striped table-bordered col-12 sortable" id="myTable">
 		  	<thead class="thead-dark">
-			    <tr>
+			    <tr>	
+			    	<th scope="col">#</th>
 			    	<th scope="col">Codigo</th>
 			      	<th scope="col">Descripcion</th>
+			      	<th scope="col">Tipo</th>
 			      	<th scope="col">Existencia</th>
 			      	<th scope="col">Unidades vendidas</th>
+			      	<th scope="col">Total de Venta</th>
+			      	<th scope="col">Ultima Venta</th>
+			      	<th scope="col">Dias en Falla</th>
+			      	<th scope="col">Ultimo Proveedor</th>			      	
 			    </tr>
 		  	</thead>
 		  	<tbody>
 		';
-
+		$contador = 1;
 		while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
 			$IdArticulo = $row["Id"];
 
@@ -613,7 +619,35 @@
 			$row1 = sqlsrv_fetch_array($result1,SQLSRV_FETCH_ASSOC);
 			$Existencia = $row1["Existencia"];
 
+			$Tipo = ProductoMedicina($conn,$IdArticulo);
+
+			$sql10 = QIntegracionVentasParcial();
+			$result2 = sqlsrv_query($conn,$sql10);
+			$row2 = sqlsrv_fetch_array($result2,SQLSRV_FETCH_ASSOC);
+			$TotalVenta = $row2["TotalVenta"];
+
+			$sql11 = QIntegracionDevolucionParcial();
+			$result3 = sqlsrv_query($conn,$sql11);
+			$row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
+			$TotalDevolucion = $row3["TotalDevolucion"];
+
+			$TotalVenta = $TotalVenta - $TotalDevolucion;
+
+			$sql12 = QUltimaVentaSR($IdArticulo);
+			$result4 = sqlsrv_query($conn,$sql12);
+			$row4 = sqlsrv_fetch_array($result4,SQLSRV_FETCH_ASSOC);
+			$UltimaVentaSR = $row4["UltimaVenta"];
+
+			$sql13 = QUltimoProveedor($IdArticulo);
+			$result5 = sqlsrv_query($conn,$sql13);
+			$row5 = sqlsrv_fetch_array($result5,SQLSRV_FETCH_ASSOC);
+			$UltimoProveedor = $row5["Nombre"];
+
+			$Hoy = new DateTime('now');			
+			$DiasEnFalla = ValidarFechas($UltimaVentaSR->format("Y-m-d"),$Hoy->format("Y-m-d"));
+
 			echo '<tr>';
+			echo '<td align="center"><strong>'.intval($contador).'</strong></td>';
 			echo '<td align="left">'.$row["CodigoArticulo"].'</td>';
 
 			echo 
@@ -623,12 +657,28 @@
 			'</a>
 			</td>';
 
+			echo '<td align="center">'.$Tipo.'</td>';
 			echo '<td align="center">'.intval($Existencia).'</td>';
 
 			$Venta = intval($row["TotalUnidadesVendidasCliente"]);
 
 			echo '<td align="center">'.$Venta.'</td>';
+
+			echo '<td align="center">'." ".intval(round($TotalVenta,2))." ".SigVe.'</td>';
+
+			if(($UltimaVentaSR)){
+				echo '<td align="center">'.$UltimaVentaSR->format('Y-m-d').'</td>';
+			}
+			else{
+				echo '<td align="center"> - </td>';
+			}
+
+			echo '<td align="center">'.intval($DiasEnFalla).'</td>';
+
+			echo '<td>'.$UltimoProveedor.'</td>';
+
 			echo '</tr>';
+			$contador++;
 	  	}
 	  	echo '
 	  		</tbody>
