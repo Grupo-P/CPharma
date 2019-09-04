@@ -667,6 +667,16 @@
 
 			$Tipo = ProductoMedicina($conn,$IdArticulo);
 
+			$sql = QCleanTable('CP_QVentasParcial');
+			sqlsrv_query($conn,$sql);
+			$sql = QCleanTable('CP_QDevolucionParcial');
+			sqlsrv_query($conn,$sql);
+
+			$sql8 = QVentasParcial($FInicial,$FFinal,$IdArticulo);
+			sqlsrv_query($conn,$sql8);
+			$sql9 = QDevolucionParcial($FInicial,$FFinal,$IdArticulo);
+			sqlsrv_query($conn,$sql9);
+
 			$sql10 = QIntegracionVentasParcial();
 			$result2 = sqlsrv_query($conn,$sql10);
 			$row2 = sqlsrv_fetch_array($result2,SQLSRV_FETCH_ASSOC);
@@ -688,6 +698,7 @@
 			$result5 = sqlsrv_query($conn,$sql13);
 			$row5 = sqlsrv_fetch_array($result5,SQLSRV_FETCH_ASSOC);
 			$UltimoProveedor = $row5["Nombre"];
+			$IdProveedor = $row5["Id"];
 
 			$Hoy = new DateTime('now');			
 			$DiasEnFalla = ValidarFechas($UltimaVentaSR->format("Y-m-d"),$Hoy->format("Y-m-d"));
@@ -708,7 +719,12 @@
 
 			$Venta = intval($row["TotalUnidadesVendidasCliente"]);
 
-			echo '<td align="center">'.$Venta.'</td>';
+			echo
+			'<td align="center" class="barrido">
+			<a href="reporte12?fechaInicio='.$FInicial.'&fechaFin='.$FFinalImpresion.'&SEDE='.$SedeConnection.'&Descrip='.$row["Descripcion"].'&Id='.$IdArticulo.'" style="text-decoration: none; color: black;" target="_blank">'
+				.$Venta.
+			'</a>
+			</td>';
 
 			echo '<td align="center">'." ".intval(round($TotalVenta,2))." ".SigVe.'</td>';
 
@@ -721,7 +737,12 @@
 
 			echo '<td align="center">'.intval($DiasEnFalla).'</td>';
 
-			echo '<td>'.$UltimoProveedor.'</td>';
+			echo 
+			'<td align="left" class="barrido">
+			<a href="/reporte7?Nombre='.$UltimoProveedor.'&Id='.$IdProveedor.'&SEDE='.$SedeConnection.'" target="_blank" style="text-decoration: none; color: black;">'
+				.$UltimoProveedor.
+			'</a>
+			</td>';
 
 			echo '</tr>';
 			$contador++;
@@ -741,6 +762,10 @@
 		$sql = QCleanTable('CP_QIntegracionProductosVendidos');
 		sqlsrv_query($conn,$sql);
 		$sql = QCleanTable('CP_QIntegracionProductosFalla');
+		sqlsrv_query($conn,$sql);
+		$sql = QCleanTable('CP_QVentasParcial');
+		sqlsrv_query($conn,$sql);
+		$sql = QCleanTable('CP_QDevolucionParcial');
 		sqlsrv_query($conn,$sql);
 
 		sqlsrv_close($conn);
@@ -2475,6 +2500,7 @@
 			$result5 = sqlsrv_query($conn,$sql13);
 			$row5 = sqlsrv_fetch_array($result5,SQLSRV_FETCH_ASSOC);
 			$UltimoProveedor = $row5["Nombre"];
+			$IdProveedor = $row5["Id"];
 
 			echo '<tr>';
 			echo '<td align="left">'.intval($contador).'</td>';
@@ -2504,6 +2530,13 @@
 
 			echo '<td>'.$UltimoProveedor.'</td>';
 
+			echo 
+			'<td align="left" class="barrido">
+			<a href="/reporte7?Nombre='.$UltimoProveedor.'&Id='.$IdProveedor.'&SEDE='.$SedeConnection.'" target="_blank" style="text-decoration: none; color: black;">'
+				.$UltimoProveedor.
+			'</a>
+			</td>';
+
 			echo '</tr>';
 			$contador++;
 	  	}
@@ -2522,6 +2555,10 @@
 		$sql = QCleanTable('CP_QIntegracionProductosVendidos');
 		sqlsrv_query($conn,$sql);
 		$sql = QCleanTable('CP_QIntegracionProductosFalla');
+		sqlsrv_query($conn,$sql);
+		$sql = QCleanTable('CP_QVentasParcial');
+		sqlsrv_query($conn,$sql);
+		$sql = QCleanTable('CP_QDevolucionParcial');
 		sqlsrv_query($conn,$sql);
 
 		sqlsrv_close($conn);
