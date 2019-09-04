@@ -1464,6 +1464,26 @@
 		";
 		return $sql;
 	}
+
+	/*
+		TITULO: QAgruparDetalleDeMovimientos
+		PARAMETROS: No aplica
+		FUNCION: Arma la consulta para agrupar por tipo de movimiento y sumar las cantidades
+		RETORNO: Un String con la query resuelta
+	 */
+	function QAgruparDetalleDeMovimientos() {
+		$sql = "
+			SELECT
+			CONVERT(VARCHAR(10), CP_QResumenDeMovimientos.FechaMovimiento, 103) AS FechaMovimiento,
+			CP_QResumenDeMovimientos.Movimiento,
+			SUM(CP_QResumenDeMovimientos.Cantidad) AS Cantidad
+			FROM CP_QResumenDeMovimientos
+			GROUP BY CONVERT(VARCHAR(10), CP_QResumenDeMovimientos.FechaMovimiento, 103), CP_QResumenDeMovimientos.Movimiento
+			ORDER BY CONVERT(VARCHAR(10), CP_QResumenDeMovimientos.FechaMovimiento, 103) ASC
+		";
+		return $sql;
+	}
+
 	/*
 		TITULO: 
 		PARAMETROS: 

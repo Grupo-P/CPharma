@@ -2051,8 +2051,13 @@
 		$TasaActual=TasaFecha(date('Y-m-d'));
 
 		//-------------------- Inicio Rangos --------------------
-		$FFinalImpresion= $FFinal;
-		$FFinal = date("Y-m-d",strtotime($FFinal."+ 1 days"));
+		$FechaDeHoy = new DateTime('now');
+		$Diferencia = ValidarFechas($FechaDeHoy->format('Y-m-d'),$FFinal);
+		$FFinalImpresion = $FFinal;
+
+		if($Diferencia == 0) {
+			$FFinal = date("Y-m-d",strtotime($FFinal."+ 1 days"));
+		}
 
 		$sql = QCleanTable('CP_QUnidadesVendidasCliente');
 		sqlsrv_query($conn,$sql);
@@ -2108,7 +2113,7 @@
 		<br/>';
 
 		echo '
-		<h6 align="center">Detalle de movimientos del '.$FInicial.' al '.$FFinalImpresion.' </h6>
+		<h5 align="center">Encabezado de movimientos del '.$FInicial.' al '.$FFinalImpresion.'</h5>
 
 		<table class="table table-striped table-bordered col-12 sortable">
 			<thead class="thead-dark">
@@ -2156,9 +2161,42 @@
 	  		</tbody>
 		</table>';
 
+		$sql9 = QCleanTable('CP_QResumenDeMovimientos');
+		sqlsrv_query($conn,$sql9);
+		$sql10 = QCleanTable('CP_QResumenDeMovimientos');
+		sqlsrv_query($conn,$sql10);
+		$sql11 = QAgruparDetalleDeMovimientos();
+		$result4 = sqlsrv_query($conn,$sql11);
+
 		echo '<br>';
 
 		echo '
+		<h5 align="center">Resumen de movimientos</h5>
+
+		<table class="table table-striped table-bordered col-12 sortable">
+			<thead class="thead-dark">
+			    <tr>
+			    	<th scope="col" class="text-center">Fecha</th>
+			      	<th scope="col" class="text-center">Tipo de movimiento</th>
+			      	<th scope="col" class="text-center">Cantidad</th>
+			    </tr>
+		  	</thead>
+
+		  	<tbody>
+		  		<tr>
+					<td align="center">-</td>
+			      	<td align="center">-</td>
+			      	<td align="center">-</td>
+			    </tr>
+			</tbody>
+		</table>
+	  	';
+
+		echo '<br>';
+
+		echo '
+		<h5 align="center">Detalle de movimientos</h5>
+
 		<table class="table table-striped table-bordered col-12 sortable" id="myTable">
 			<thead class="thead-dark">
 			    <tr>
@@ -2170,7 +2208,7 @@
 		  	</thead>
 
 		  	<tbody>
-	  	';
+		';
 
 	  	$sql8=QDetalleDeMovimiento($IdArticulo,$FInicial,$FFinal);
 		$result3=sqlsrv_query($conn,$sql8);
@@ -2208,6 +2246,8 @@
 		$sql = QCleanTable('CP_QIntegracionProductosFalla');
 		sqlsrv_query($conn,$sql);
 		$sql = QCleanTable('CP_QArticuloDescLike');
+		sqlsrv_query($conn,$sql);
+		$sql = QCleanTable('CP_QResumenDeMovimientos');
 		sqlsrv_query($conn,$sql);
 
 		sqlsrv_close($conn);
