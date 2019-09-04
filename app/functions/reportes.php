@@ -1134,6 +1134,7 @@
 		<table class="table table-striped table-bordered col-12 sortable" id="myTable">
 		  	<thead class="thead-dark">
 			    <tr>
+			    	<th scope="col">#</th>
 			    	<th scope="col">Codigo</th>
 			      	<th scope="col">Descripcion</th>
 			      	<th scope="col">Codigo de Barra</td>
@@ -1151,7 +1152,7 @@
 		  	</thead>
 		  	<tbody>
 		';
-
+		$contador = 1;
 		while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
 			$IdArticulo = $row["Id"];
 			$IsIVA = $row["ConceptoImpuesto"];
@@ -1162,6 +1163,7 @@
 			$Existencia = $row1["Existencia"];
 
 				echo '<tr>';
+				echo '<td align="center"><strong>'.intval($contador).'</strong></td>';
 				echo '<td align="left">'.$row["CodigoArticulo"].'</td>';
 				
 				echo 
@@ -1208,8 +1210,19 @@
 			$TotalUnidadesVendidasCliente = ($row2["UnidadesVendidasCliente"]-$row2["UnidadesDevueltaCliente"]);
 			$TotalUnidadesCompradasProveedor = ($row2["UnidadesCompradasProveedor"]-$row2["UnidadesReclamoProveedor"]);
 
-				echo '<td align="center">'.intval($TotalUnidadesVendidasCliente).'</td>';
-				echo '<td align="center">'.intval($TotalUnidadesCompradasProveedor).'</td>';
+			echo
+			'<td align="center" class="barrido">
+			<a href="reporte12?fechaInicio='.$FInicial.'&fechaFin='.$FFinalImpresion.'&SEDE='.$SedeConnection.'&Descrip='.$row["Descripcion"].'&Id='.$IdArticulo.'" style="text-decoration: none; color: black;" target="_blank">'
+				.intval($TotalUnidadesVendidasCliente).
+			'</a>
+			</td>';
+
+			echo
+			'<td align="center" class="barrido">
+			<a href="reporte12?fechaInicio='.$FInicial.'&fechaFin='.$FFinalImpresion.'&SEDE='.$SedeConnection.'&Descrip='.$row["Descripcion"].'&Id='.$IdArticulo.'" style="text-decoration: none; color: black;" target="_blank">'
+				.intval($TotalUnidadesCompradasProveedor).
+			'</a>
+			</td>';
 
 			$VentaDiaria = VentaDiaria($TotalUnidadesVendidasCliente,$RangoDias);
 			$DiasRestantes = DiasRestantes($Existencia,$VentaDiaria);
@@ -1246,6 +1259,7 @@
 				echo '<td align="center">'.intval($CantidadPedido).'</td>';
 
 			echo '</tr>';
+		$contador++;
 	  	}
 	  	echo '
 	  		</tbody>
