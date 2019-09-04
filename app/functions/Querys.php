@@ -1554,6 +1554,51 @@
 		";
 		return $sql;
 	}
+
+	/*
+		TITULO: QIntegracionResumenDeMovimientos
+		PARAMETROS: No aplica
+		FUNCION: Arma la consulta para cargar la tabla temporal del resumen de los detalles de movimientos
+		RETORNO: Un String con la query resuelta
+	 */
+	function QIntegracionResumenDeMovimientos($IdArticulo,$FInicial,$FFinal) {
+		$sql = "
+			SELECT 
+				InvMovimiento.InvLoteId,
+				InvMovimiento.FechaMovimiento,
+				InvMovimiento.InvCausaId,
+				InvCausa.Descripcion AS Movimiento,
+				InvMovimiento.Cantidad
+			INTO CP_QResumenDeMovimientos
+			FROM InvMovimiento
+			INNER JOIN InvCausa ON InvMovimiento.InvCausaId=InvCausa.Id
+			WHERE InvMovimiento.InvArticuloId='$IdArticulo'
+			AND (CONVERT(DATE,InvMovimiento.FechaMovimiento) >= '$FInicial' AND CONVERT(DATE,InvMovimiento.FechaMovimiento) <= '$FFinal')
+			GROUP BY InvMovimiento.InvLoteId,InvMovimiento.FechaMovimiento,InvMovimiento.InvCausaId,InvCausa.Descripcion,InvMovimiento.Cantidad
+			ORDER BY InvMovimiento.FechaMovimiento ASC
+		";
+		return $sql;
+	}
+
+	/*
+		TITULO: QAgruparDetalleDeMovimientos
+		PARAMETROS: No aplica
+		FUNCION: Arma la consulta para agrupar por tipo de movimiento y sumar las cantidades
+		RETORNO: Un String con la query resuelta
+	 */
+	function QAgruparDetalleDeMovimientos() {
+		$sql = "
+			SELECT
+			CONVERT(VARCHAR(10), CP_QResumenDeMovimientos.FechaMovimiento, 103) AS FechaMovimiento,
+			CP_QResumenDeMovimientos.Movimiento,
+			SUM(CP_QResumenDeMovimientos.Cantidad) AS Cantidad
+			FROM CP_QResumenDeMovimientos
+			GROUP BY CONVERT(VARCHAR(10), CP_QResumenDeMovimientos.FechaMovimiento, 103), CP_QResumenDeMovimientos.Movimiento
+			ORDER BY CONVERT(VARCHAR(10), CP_QResumenDeMovimientos.FechaMovimiento, 103) ASC
+		";
+		return $sql;
+	}
+
 	/*
 		TITULO: 
 		PARAMETROS: 

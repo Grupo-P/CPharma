@@ -71,9 +71,6 @@
     include(app_path().'\functions\reportes.php');
 
     $ArtJson="";
-    //---------- Borrar ----------
-    $_GET['SEDE'] = 'FTN';
-    //---------- Borrar ----------
     
     if(isset($_GET['Id'])) {
       $InicioCarga = new DateTime("now");
@@ -87,7 +84,7 @@
       echo '<hr class="row align-items-start col-12">';
 
       ReporteDetalleDeMovimiento($_GET['SEDE'],$_GET['fechaInicio'],$_GET['fechaFin'],$_GET['Id']);
-      GuardarAuditoria('CONSULTAR','REPORTE','Analitico de precios');
+      GuardarAuditoria('CONSULTAR','REPORTE','Detalle de movimientos');
 
       $FinCarga = new DateTime("now");
       $IntervalCarga = $InicioCarga->diff($FinCarga);
