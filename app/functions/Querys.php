@@ -1443,6 +1443,28 @@
 		return $sql;
 	}
 	/*
+		TITULO: QUltimoProveedor
+		PARAMETROS: [$IdArticuloQ] Id del articulo
+		FUNCION: busca el ultimo proveedor en despachar el articulo
+		RETORNO: ultimo proveedor en despachar el articulo
+	 */
+	function QUltimoProveedor($IdArticulo) {
+		$sql = "
+			SELECT TOP 1
+			GenPersona.Nombre,
+			CONVERT(DATE,ComFactura.FechaRegistro) As FechaRegistro,
+			CONVERT(DATE,ComFactura.FechaDocumento) As FechaDocumento
+			FROM InvArticulo
+			INNER JOIN ComFacturaDetalle ON InvArticulo.Id = ComFacturaDetalle.InvArticuloId
+			INNER JOIN ComFactura ON ComFactura.Id = ComFacturaDetalle.ComFacturaId
+			INNER JOIN ComProveedor ON ComProveedor.Id = ComFactura.ComProveedorId
+			INNER JOIN GenPersona ON GenPersona.Id = ComProveedor.GenPersonaId
+			WHERE InvArticulo.Id = '$IdArticulo'
+			ORDER BY ComFactura.FechaDocumento DESC
+		";
+		return $sql;
+	}
+	/*
 		TITULO: 
 		PARAMETROS: 
 		FUNCION:
