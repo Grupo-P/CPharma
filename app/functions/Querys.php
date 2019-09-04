@@ -1427,6 +1427,44 @@
 		return $sql;
 	}
 	/*
+		TITULO: QProductosPorFallar
+		PARAMETROS: Funciona en conjunto con QIntegracionProductosFalla
+		FUNCION: Arma una lista de productos vendido con existencia mayor a 0 y menor que la existencia
+		RETORNO: Lista de productos mas vendidos con existencia en 0
+	 */
+	function QProductosPorFallar($Existencia) {
+		$sql = "
+			SELECT * FROM CP_QIntegracionProductosFalla
+			WHERE 
+			(CP_QIntegracionProductosFalla.Existencia > 0)
+			AND (CP_QIntegracionProductosFalla.Existencia < '$Existencia')
+			ORDER BY CP_QIntegracionProductosFalla.TotalUnidadesVendidasCliente DESC
+		";
+		return $sql;
+	}
+	/*
+		TITULO: QUltimoProveedor
+		PARAMETROS: [$IdArticuloQ] Id del articulo
+		FUNCION: busca el ultimo proveedor en despachar el articulo
+		RETORNO: ultimo proveedor en despachar el articulo
+	 */
+	function QUltimoProveedor($IdArticulo) {
+		$sql = "
+			SELECT TOP 1
+			GenPersona.Nombre,
+			CONVERT(DATE,ComFactura.FechaRegistro) As FechaRegistro,
+			CONVERT(DATE,ComFactura.FechaDocumento) As FechaDocumento
+			FROM InvArticulo
+			INNER JOIN ComFacturaDetalle ON InvArticulo.Id = ComFacturaDetalle.InvArticuloId
+			INNER JOIN ComFactura ON ComFactura.Id = ComFacturaDetalle.ComFacturaId
+			INNER JOIN ComProveedor ON ComProveedor.Id = ComFactura.ComProveedorId
+			INNER JOIN GenPersona ON GenPersona.Id = ComProveedor.GenPersonaId
+			WHERE InvArticulo.Id = '$IdArticulo'
+			ORDER BY ComFactura.FechaDocumento DESC
+		";
+		return $sql;
+	}
+	/*
 		TITULO: 
 		PARAMETROS: 
 		FUNCION:

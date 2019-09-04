@@ -2018,10 +2018,8 @@
 
 		sqlsrv_close($conn);
 	}
-
 	/*****************************************************************************/
 	/************************ REPORTE 12 DETALLE DE MOVIMIENTO *******************/
-
 	/*
 		TITULO: ReporteDetalleDeMovimiento
 		PARAMETROS: [$SedeConnection] sede donde se hara la conexion
@@ -2210,6 +2208,178 @@
 		$sql = QCleanTable('CP_QIntegracionProductosFalla');
 		sqlsrv_query($conn,$sql);
 		$sql = QCleanTable('CP_QArticuloDescLike');
+		sqlsrv_query($conn,$sql);
+
+		sqlsrv_close($conn);
+	}
+	/*****************************************************************************/
+	/************************ REPORTE 13 PRODUCTOS POR FALLAR ***********************/
+	/*
+		TITULO: ReporteProductosPorFallar
+		PARAMETROS: [$SedeConnection] Siglas de la sede para la conexion		
+					[$FInicial] Fecha inicial del rango donde se buscara
+					[$FFinal] Fecha final del rango donde se buscara
+					[$Existencia] Existencia para validar
+		FUNCION: Arma una lista de productos por fallar
+		RETORNO: No aplica
+	 */
+	function ReporteProductosPorFallar($SedeConnection,$FInicial,$FFinal,$ExistenciaB){
+
+		$conn = ConectarSmartpharma($SedeConnection);
+
+		$FFinalImpresion= $FFinal;
+		$FFinal = date("Y-m-d",strtotime($FFinal."+ 1 days"));
+
+		$sql = QCleanTable('CP_QUnidadesVendidasCliente');
+		sqlsrv_query($conn,$sql);
+		$sql = QCleanTable('CP_QUnidadesDevueltaCliente');
+		sqlsrv_query($conn,$sql);
+		$sql = QCleanTable('CP_QUnidadesCompradasProveedor');
+		sqlsrv_query($conn,$sql);
+		$sql = QCleanTable('CP_QUnidadesReclamoProveedor');
+		sqlsrv_query($conn,$sql);
+		$sql = QCleanTable('CP_QIntegracionProductosVendidos');
+		sqlsrv_query($conn,$sql);
+		$sql = QCleanTable('CP_QIntegracionProductosFalla');
+		sqlsrv_query($conn,$sql);
+
+		$sql1 = QUnidadesVendidasCliente($FInicial,$FFinal);
+		$sql2 = QUnidadesDevueltaCliente($FInicial,$FFinal);
+		$sql3 = QUnidadesCompradasProveedor($FInicial,$FFinal);
+		$sql4 = QUnidadesReclamoProveedor($FInicial,$FFinal);
+		$sql5 = QIntegracionProductosVendidos();
+		$sql6 = QIntegracionProductosFalla();
+		$sql7 = QProductosPorFallar($ExistenciaB);
+		
+		sqlsrv_query($conn,$sql1);
+		sqlsrv_query($conn,$sql2);
+		sqlsrv_query($conn,$sql3);
+		sqlsrv_query($conn,$sql4);
+		sqlsrv_query($conn,$sql5);
+		sqlsrv_query($conn,$sql6);
+		$result = sqlsrv_query($conn,$sql7);
+
+		echo '
+		<div class="input-group md-form form-sm form-1 pl-0">
+		  <div class="input-group-prepend">
+		    <span class="input-group-text purple lighten-3" id="basic-text1">
+		    	<i class="fas fa-search text-white"
+		        aria-hidden="true"></i>
+		    </span>
+		  </div>
+		  <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterAllTable()">
+		</div>
+		<br/>
+		';
+		echo'<h6 align="center">Existencia menor a: '.$ExistenciaB.' productos </h6>';
+		echo'<h6 align="center">Periodo desde el '.$FInicial.' al '.$FFinalImpresion.' </h6>';
+
+		echo'
+		<table class="table table-striped table-bordered col-12 sortable" id="myTable">
+		  	<thead class="thead-dark">
+			    <tr>
+			    	<th scope="col">#</th>
+			    	<th scope="col">Codigo</th>
+			      	<th scope="col">Descripcion</th>
+			      	<th scope="col">Tipo</th>
+			      	<th scope="col">Existencia</th>
+			      	<th scope="col">Unidades vendidas</th>
+			      	<th scope="col">Total de Venta</th>
+			      	<th scope="col">Ultima Venta</th>
+			      	<th scope="col">Ultimo Proveedor</th>
+			    </tr>
+		  	</thead>
+		  	<tbody>
+		';
+		$contador = 1;
+		while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
+			$IdArticulo = $row["Id"];
+
+			$sql7 = QExistenciaArticulo($IdArticulo,0);
+			$result1 = sqlsrv_query($conn,$sql7);
+			$row1 = sqlsrv_fetch_array($result1,SQLSRV_FETCH_ASSOC);
+			$Existencia = $row1["Existencia"];
+
+			$Tipo = ProductoMedicina($conn,$IdArticulo);
+
+			$sql = QCleanTable('CP_QVentasParcial');
+			sqlsrv_query($conn,$sql);
+			$sql = QCleanTable('CP_QDevolucionParcial');
+			sqlsrv_query($conn,$sql);
+
+			$sql8 = QVentasParcial($FInicial,$FFinal,$IdArticulo);
+			sqlsrv_query($conn,$sql8);
+			$sql9 = QDevolucionParcial($FInicial,$FFinal,$IdArticulo);
+			sqlsrv_query($conn,$sql9);
+
+			$sql10 = QIntegracionVentasParcial();
+			$result2 = sqlsrv_query($conn,$sql10);
+			$row2 = sqlsrv_fetch_array($result2,SQLSRV_FETCH_ASSOC);
+			$TotalVenta = $row2["TotalVenta"];
+
+			$sql11 = QIntegracionDevolucionParcial();
+			$result3 = sqlsrv_query($conn,$sql11);
+			$row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
+			$TotalDevolucion = $row3["TotalDevolucion"];
+
+			$TotalVenta = $TotalVenta - $TotalDevolucion;
+
+			$sql12 = QUltimaVentaSR($IdArticulo);
+			$result4 = sqlsrv_query($conn,$sql12);
+			$row4 = sqlsrv_fetch_array($result4,SQLSRV_FETCH_ASSOC);
+			$UltimaVentaSR = $row4["UltimaVenta"];
+
+			$sql13 = QUltimoProveedor($IdArticulo);
+			$result5 = sqlsrv_query($conn,$sql13);
+			$row5 = sqlsrv_fetch_array($result5,SQLSRV_FETCH_ASSOC);
+			$UltimoProveedor = $row5["Nombre"];
+
+			echo '<tr>';
+			echo '<td align="left">'.intval($contador).'</td>';
+			echo '<td align="left">'.$row["CodigoArticulo"].'</td>';
+
+			echo 
+			'<td align="left" class="barrido">
+			<a href="/reporte2?Id='.$IdArticulo.'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
+				.$row["Descripcion"].
+			'</a>
+			</td>';
+
+			echo '<td align="center">'.$Tipo.'</td>';
+			echo '<td align="center">'.intval($Existencia).'</td>';
+
+			$Venta = intval($row["TotalUnidadesVendidasCliente"]);
+			echo '<td align="center">'.$Venta.'</td>';
+
+			echo '<td align="center">'." ".intval(round($TotalVenta,2))." ".SigVe.'</td>';
+
+			if(($UltimaVentaSR)){
+				echo '<td align="center">'.$UltimaVentaSR->format('Y-m-d').'</td>';
+			}
+			else{
+				echo '<td align="center"> - </td>';
+			}
+
+			echo '<td>'.$UltimoProveedor.'</td>';
+
+			echo '</tr>';
+			$contador++;
+	  	}
+	  	echo '
+	  		</tbody>
+		</table>';
+		
+		$sql = QCleanTable('CP_QUnidadesVendidasCliente');
+		sqlsrv_query($conn,$sql);
+		$sql = QCleanTable('CP_QUnidadesDevueltaCliente');
+		sqlsrv_query($conn,$sql);
+		$sql = QCleanTable('CP_QUnidadesCompradasProveedor');
+		sqlsrv_query($conn,$sql);
+		$sql = QCleanTable('CP_QUnidadesReclamoProveedor');
+		sqlsrv_query($conn,$sql);
+		$sql = QCleanTable('CP_QIntegracionProductosVendidos');
+		sqlsrv_query($conn,$sql);
+		$sql = QCleanTable('CP_QIntegracionProductosFalla');
 		sqlsrv_query($conn,$sql);
 
 		sqlsrv_close($conn);
