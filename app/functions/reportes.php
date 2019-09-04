@@ -604,7 +604,8 @@
 			      	<th scope="col">Unidades vendidas</th>
 			      	<th scope="col">Total de Venta</th>
 			      	<th scope="col">Ultima Venta</th>
-			      	<th scope="col">Ultimo Proveedor</th>
+			      	<th scope="col">Dias en Falla</th>
+			      	<th scope="col">Ultimo Proveedor</th>			      	
 			    </tr>
 		  	</thead>
 		  	<tbody>
@@ -642,6 +643,9 @@
 			$row5 = sqlsrv_fetch_array($result5,SQLSRV_FETCH_ASSOC);
 			$UltimoProveedor = $row5["Nombre"];
 
+			$Hoy = new DateTime('now');			
+			$DiasEnFalla = ValidarFechas($UltimaVentaSR->format("Y-m-d"),$Hoy->format("Y-m-d"));
+
 			echo '<tr>';
 			echo '<td align="center"><strong>'.intval($contador).'</strong></td>';
 			echo '<td align="left">'.$row["CodigoArticulo"].'</td>';
@@ -669,8 +673,10 @@
 				echo '<td align="center"> - </td>';
 			}
 
+			echo '<td align="center">'.intval($DiasEnFalla).'</td>';
+
 			echo '<td>'.$UltimoProveedor.'</td>';
-			
+
 			echo '</tr>';
 			$contador++;
 	  	}
