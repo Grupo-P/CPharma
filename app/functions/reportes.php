@@ -39,12 +39,13 @@
 		        aria-hidden="true"></i>
 		    </span>
 		  </div>
-		  <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterFirsTable()">
+		  <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterAllTable()">
 		</div>
 		<br/>
 		<table class="table table-striped table-bordered col-12 sortable" id="myTable">
 		  	<thead class="thead-dark">
 			    <tr>
+			    	<th scope="col">#</th>
 			      	<th scope="col">Proveedor</th>
 			      	<th scope="col">Ultimo registro</th>
 			      	<th scope="col">Dias sin facturar</th>
@@ -52,12 +53,13 @@
 		  	</thead>
 		  	<tbody>
 		';
-		
+		$contador = 1;
 		while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
 			$IdProveedor = $row['Id'];
 			$NombreProveedor = $row['Nombre'];
 
 			echo '<tr>';
+			echo '<td align="center"><strong>'.intval($contador).'</strong></td>';
 			echo 
 			'<td align="left" class="barrido">
 			<a href="/reporte7?Nombre='.$NombreProveedor.'&Id='.$IdProveedor.'&SEDE='.$SedeConnection.'" target="_blank" style="text-decoration: none; color: black;">'
@@ -68,6 +70,7 @@
 			echo '<td align="center">'.($row['FechaRegistro'])->format('Y-m-d').'</td>';
 			echo '<td align="center">'.$row['RangoDias'].'</td>';
 			echo '</tr>';
+			$contador++;
 	  	}
 	  	echo '
 	  		</tbody>
