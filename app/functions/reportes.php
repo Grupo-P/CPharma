@@ -1337,6 +1337,7 @@
 		<table class="table table-striped table-bordered col-12 sortable" id="myTable">
 		  	<thead class="thead-dark">
 			    <tr>
+			    	<th scope="col">#</th>
 			    	<th scope="col">Numero de Factura</th>
 			    	<th scope="col">Fecha Documento</th>
 			    	<th scope="col">Usuario Auditor</th>
@@ -1345,10 +1346,11 @@
 		  	</thead>
 		  	<tbody>
 		 ';
-
+	 	$contador = 1;
 		while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
 			
 			echo '<tr>';
+			echo '<td align="left"><strong>'.intval($contador).'</strong></td>';
 			echo '<td align="center">'.$row["NumeroFactura"].'</td>';
 			echo '<td align="center">'.$row["FechaDocumento"]->format('Y-m-d').'</td>';
 			echo '<td align="center">'.$row["Auditoria_Usuario"].'</td>';
@@ -1369,6 +1371,7 @@
 		    ';
 
 			echo '</tr>';
+		$contador++;
 		}
 	  	echo '
 	  		</tbody>
@@ -1432,6 +1435,7 @@
 		<table class="table table-striped table-bordered col-12 sortable" id="myTable">
 		  	<thead class="thead-dark">
 			    <tr>
+			    	<th scope="col">#</th>
 			    	<th scope="col">Codigo</th>
 			    	<th scope="col">Descripcion</th>
 			    	<th scope="col">Seleccion</th>
@@ -1439,10 +1443,11 @@
 		  	</thead>
 		  	<tbody>
 		 ';
-
+		 $contador = 1;
 		while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
 			
 			echo '<tr>';
+			echo '<td align="center"><strong>'.intval($contador).'</strong></td>';
 			echo '<td align="center">'.$row["CodigoArticulo"].'</td>';
 			echo '<td align="center">'.$row["Descripcion"].'</td>';
 			echo '
@@ -1463,6 +1468,7 @@
 		    ';
 
 			echo '</tr>';
+		$contador++;
 		}
 	  	echo '
 	  		</tbody>
