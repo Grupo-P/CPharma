@@ -2692,20 +2692,30 @@
 		  	<tbody>
 		';
 		$contador = 1;
-		/*
-		while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
-			$IdArticulo = $row["Id"];
+		
+		while(($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) && $contador<2) {
+			$IdArticulo = $row["IdArticulo"];
 
-			
+		/*********BORRAR DESPUES**********/
+			$IdArticulo = '57067'; //SI
+			$IdArticulo = '58125'; //NO
+		/*********BORRAR DESPUES**********/
+
+			$ExistenciaValida = ValidarExistenciaDiaria($IdArticulo,$FInicial,$FFinal);
+
+			if($ExistenciaValida == TRUE){
+				echo 'Existencia Valida: SI';
+			}
+			else if($ExistenciaValida == FALSE){
+				echo 'Existencia Valida: NO';
+			}
 
 			$contador++;
-	  	}*/
+	  	}
 	  	echo '
 	  		</tbody>
 		</table>';
 
-		ProductosEnCaida('57067',$FInicial,$FFinal);
-		
 		sqlsrv_close($conn);
 	}
 ?>

@@ -19,9 +19,9 @@
 
   $InicioCarga = new DateTime("now");
   
-  /********************/
+  /*********BORRAR DESPUES**********/
   $_GET['SEDE'] = 'FTN';
-  /*********************/
+  /*********BORRAR DESPUES**********/
 
   if (isset($_GET['SEDE'])){      
     echo '<h1 class="h5 text-success"  align="left"> <i class="fas fa-prescription"></i> '.NombreSede($_GET['SEDE']).'</h1>';

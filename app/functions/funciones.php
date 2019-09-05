@@ -900,18 +900,19 @@
 	  	return $Medicina;
 	}
 	/*
-		TITULO: ProductosEnCaida
+		TITULO: ValidarExistenciaPC
 		PARAMETROS: [$FInicial] fecha inicial a evaluar
 					[$FFinal] fecha final a evaluar
-		FUNCION:
-		RETORNO:
+		FUNCION: valida la existencia para productos en caida
+		RETORNO: retorna si el producto es valido para considerar
 	 */
-	function ProductosEnCaida($IdArticulo,$FInicial,$FFinal) {
+	function ValidarExistenciaDiaria($IdArticulo,$FInicial,$FFinal) {
 		$connCPharma = ConectarXampp();
 
 		$RangoDias = RangoDias($FInicial,$FFinal);
-		
-		while($RangoDias>0){
+		$IsValido = TRUE;
+
+		while($RangoDias>0 && $IsValido==TRUE){
 
 			$sql = QExistenciaHistorico($IdArticulo,$FInicial);
 			$result = mysqli_query($connCPharma,$sql);
@@ -922,17 +923,19 @@
 			if($CuentaExistencia>0){
 				echo'<br/><br/>Dia: '.$FInicial;
 				echo'<br/>Existencia: '.$Existencia;
+				$IsValido = TRUE;
 			}
 			else{
 				echo'<br/><br/>Dia: '.$FInicial;
 				echo'<br/>Existencia: '.$Existencia;
+				$IsValido = FALSE;
 			}
 			
 			$FInicial = date("Y-m-d",strtotime($FInicial."+1 days"));
 			$RangoDias = RangoDias($FInicial,$FFinal);
 		}
 
-		if($RangoDias==0){
+		if($RangoDias==0 && $IsValido==TRUE){
 
 			$sql = QExistenciaHistorico($IdArticulo,$FInicial);
 			$result = mysqli_query($connCPharma,$sql);
@@ -943,13 +946,15 @@
 			if($CuentaExistencia>0){
 				echo'<br/><br/>Dia: '.$FInicial;
 				echo'<br/>Existencia: '.$Existencia;
+				$IsValido = TRUE;
 			}
 			else{
 				echo'<br/><br/>Dia: '.$FInicial;
 				echo'<br/>Existencia: '.$Existencia;
+				$IsValido = FALSE;
 			}
 		}
-		
 		mysqli_close($connCPharma);
+		return $IsValido;
 	}
 ?>
