@@ -2293,9 +2293,9 @@
 		</div>
 		<br/>';
 
-		echo '
-		<h5 align="center">Encabezado de movimientos del '.$FInicial.' al '.$FFinalImpresion.'</h5>
+		echo'<h6 align="center">Periodo desde el '.$FInicial.' al '.$FFinalImpresion.' </h6>';
 
+		echo '
 		<table class="table table-striped table-bordered col-12 sortable">
 			<thead class="thead-dark">
 			    <tr>
@@ -2317,7 +2317,13 @@
 		echo '
 				<tr>
 					<td>'.$row["CodigoArticulo"].'</td>
-					<td>'.$row["Descripcion"].'</td>
+		
+				<td align="left" class="barrido">
+					<a href="/reporte2?Id='.$IdArticulo.'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
+						.$row["Descripcion"].
+					'</a>
+					</td>
+
 					<td align="center">'.intval($Existencia).'</td>
 					<td align="center">'.$Venta.'</td>
 					<td align="center">'.$DiasRestantes.'</td>
@@ -2345,11 +2351,12 @@
 		echo '<br>';
 
 		echo '
-		<h5 align="center">Resumen de movimientos</h5>
+		<h6 align="center">Resumen de movimientos</h6>
 
 		<table class="table table-striped table-bordered col-12 sortable">
 			<thead class="thead-dark">
 			    <tr>
+			    	<th scope="col">#</th>
 			    	<th scope="col" class="text-center">Fecha</th>
 			      	<th scope="col" class="text-center">Tipo de movimiento</th>
 			      	<th scope="col" class="text-center">Cantidad</th>
@@ -2365,14 +2372,17 @@
 			$sql11 = QAgruparDetalleDeMovimientos();
 			$result4 = sqlsrv_query($conn,$sql11);
 
+			$contador = 1;
 		  	while($row4 = sqlsrv_fetch_array($result4,SQLSRV_FETCH_ASSOC)) {
 		  		echo '
 	  			<tr>
+	  				<td align="center"><strong>'.intval($contador).'</strong></td>
 					<td align="center">'.$row4["FechaMovimiento"].'</td>
 			      	<td align="center">'.utf8_encode($row4["Movimiento"]).'</td>
 			      	<td align="center">'.intval($row4["Cantidad"]).'</td>
 			    </tr>
 		  		';
+		  	$contador++;
 		  	}
 		echo '
 			</tbody>
@@ -2382,11 +2392,12 @@
 		echo '<br>';
 
 		echo '
-		<h5 align="center">Detalle de movimientos</h5>
+		<h6 align="center">Detalle de movimientos</h6>
 
 		<table class="table table-striped table-bordered col-12 sortable" id="myTable">
 			<thead class="thead-dark">
 			    <tr>
+			    	<th scope="col">#</th>
 			    	<th scope="col" class="text-center">Fecha</th>
 			      	<th scope="col" class="text-center">Hora</th>
 			      	<th scope="col" class="text-center">Tipo de movimiento</th>
@@ -2400,19 +2411,22 @@
 	  	$sql8=QDetalleDeMovimiento($IdArticulo,$FInicial,$FFinal);
 		$result3=sqlsrv_query($conn,$sql8);
 
+		$contador = 1;
 	  	while($row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC)) {
 	  		echo '
 	  			<tr>
+	  				<td align="center"><strong>'.intval($contador).'</strong></td>
 			    	<td align="center">'.$row3["FechaMovimiento"]->format("d/m/Y").'</td>';
 
 			$Hora = date('h:i a',strtotime($row3["FechaMovimiento"]->format("H:m:s")));
 
-			echo '
+			echo '					
 			      	<td align="center">'.$Hora.'</td>
 			      	<td align="center">'.utf8_encode($row3["Movimiento"]).'</td>
 			      	<td align="center">'.intval($row3["Cantidad"]).'</td>
 			    </tr>
 			';
+		$contador++;
 	  	}
 
 	  	echo '
