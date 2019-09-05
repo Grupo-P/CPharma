@@ -59,8 +59,8 @@
 
 @section('content')
   <h1 class="h5 text-info">
-    <i class="far fa-list-alt"></i>
-    Detalle de movimientos
+    <i class="fas fa-file-invoice"></i>
+    Artículos Devaluados
   </h1>
   <hr class="row align-items-start col-12">
   
@@ -70,24 +70,20 @@
     include(app_path().'\functions\funciones.php');
     include(app_path().'\functions\reportes.php');
 
-    $ArtJson="";
     //---------- Borrar ----------
     $_GET['SEDE'] = 'FTN';
     //---------- Borrar ----------
-    
-    if(isset($_GET['Id'])) {
+    if(isset($_GET['fechaInicio'])) {
       $InicioCarga = new DateTime("now");
-
+      
       if(isset($_GET['SEDE'])) {
         echo '
-            <h1 class="h5 text-success"  align="left">
-              <i class="fas fa-prescription"></i> '.NombreSede($_GET['SEDE']).
-            '</h1>';
+          <h1 class="h5 text-success"  align="left">
+            <i class="fas fa-prescription"></i> '.NombreSede($_GET['SEDE']).
+          '</h1>
+        ';
       }
       echo '<hr class="row align-items-start col-12">';
-
-      ReporteDetalleDeMovimiento($_GET['SEDE'],$_GET['fechaInicio'],$_GET['fechaFin'],$_GET['Id']);
-      GuardarAuditoria('CONSULTAR','REPORTE','Analitico de precios');
 
       $FinCarga = new DateTime("now");
       $IntervalCarga = $InicioCarga->diff($FinCarga);
@@ -96,77 +92,36 @@
     else {
       if(isset($_GET['SEDE'])) {
         echo '
-            <h1 class="h5 text-success"  align="left">
-              <i class="fas fa-prescription"></i> '.NombreSede($_GET['SEDE']).
-            '</h1>';
+          <h1 class="h5 text-success"  align="left">
+            <i class="fas fa-prescription"></i> '.NombreSede($_GET['SEDE']).
+          '</h1>
+        ';
       }
       echo '<hr class="row align-items-start col-12">';
 
-      $InicioCarga = new DateTime("now");
-      $sql = QListaArticulos();
-      $ArtJson = armarJson($sql,$_GET['SEDE']);
-
       echo '
-        <form id="form" autocomplete="off" action="" target="_blank">
+        <form autocomplete="off" action="" target="_blank">
           <table style="width:100%;">
             <tr>
               <td align="center">
-                Fecha Inicio:
+                <label for="fechaInicio">
+                  Fecha de inicio del reporte:
+                </label>
               </td>
 
               <td>
                 <input id="fechaInicio" type="date" name="fechaInicio" required style="width:100%;">
               </td>
 
-              <td align="center">
-                Fecha Fin:
-              </td>
+              <input id="SEDE" name="SEDE" type="hidden" value="'; print_r($_GET['SEDE']); echo'">
 
               <td align="right">
-                <input id="fechaFin" name="fechaFin" type="date" required style="width:100%;">
-              </td>
-
-              <td>
-                <input id="SEDE" name="SEDE" type="hidden" value="'; print_r($_GET['SEDE']);
-                echo'">
-              </td>
-            </tr>
-
-            <tr>
-              <td colspan="4">&nbsp;</td>
-            </tr>
-
-            <tr>
-              <td colspan="4">
-                <div class="autocomplete" style="width:90%;">
-                  <input id="myInput" type="text" name="Descrip" placeholder="Ingrese el nombre del articulo " onkeyup="conteo()" required>
-                </div>
-
-                <input id="myId" name="Id" type="hidden">
-
-                <input type="submit" value="Buscar" class="btn btn-outline-success" style="width:9%;">
+                <input type="submit" value="Buscar" class="btn btn-outline-success">
               </td>
             </tr>
           </table>
         </form>
       ';
-
-      $FinCarga = new DateTime("now");
-      $IntervalCarga = $InicioCarga->diff($FinCarga);
-      echo'Tiempo de carga: '.$IntervalCarga->format("%Y-%M-%D %H:%I:%S");
-    }
-  ?>
-@endsection
-
-@section('scriptsFoot')
-  <?php
-    if($ArtJson!="") {
-  ?>
-  <script type="text/javascript">
-    ArrJs = eval(<?php echo $ArtJson ?>);
-    autocompletado(document.getElementById("myInput"),document.getElementById("myId"), ArrJs);
-  </script>
-  <?php
     }
   ?>
 @endsection
