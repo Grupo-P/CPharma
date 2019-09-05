@@ -30,7 +30,6 @@
     $InicioCarga = new DateTime("now");
     
     ReporteProveedorFactura($_GET['SEDE'],$_GET['Id'],$_GET['Nombre']);
-    GuardarAuditoria('CONSULTAR','REPORTE','Actualizar Troquel');
     
     $FinCarga = new DateTime("now");
     $IntervalCarga = $InicioCarga->diff($FinCarga);
@@ -47,6 +46,7 @@
     $InicioCarga = new DateTime("now");
 
     ReporteTroquel($_GET['SEDE'],$_GET['IdProv'],$_GET['NombreProv'],$_GET['IdFact'],$_GET['IdArt'],$_GET['TroquelN']);
+    GuardarAuditoria('CONSULTAR','REPORTE','Actualizar Troquel');
 
     $FinCarga = new DateTime("now");
     $IntervalCarga = $InicioCarga->diff($FinCarga);

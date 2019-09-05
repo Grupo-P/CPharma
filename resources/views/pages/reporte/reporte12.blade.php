@@ -59,7 +59,7 @@
 
 @section('content')
   <h1 class="h5 text-info">
-    <i class="far fa-list-alt"></i>
+    <i class="fas fa-file-invoice"></i>
     Detalle de movimientos
   </h1>
   <hr class="row align-items-start col-12">

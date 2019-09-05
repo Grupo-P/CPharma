@@ -39,12 +39,13 @@
 		        aria-hidden="true"></i>
 		    </span>
 		  </div>
-		  <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterFirsTable()">
+		  <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterAllTable()">
 		</div>
 		<br/>
 		<table class="table table-striped table-bordered col-12 sortable" id="myTable">
 		  	<thead class="thead-dark">
 			    <tr>
+			    	<th scope="col">#</th>
 			      	<th scope="col">Proveedor</th>
 			      	<th scope="col">Ultimo registro</th>
 			      	<th scope="col">Dias sin facturar</th>
@@ -52,12 +53,13 @@
 		  	</thead>
 		  	<tbody>
 		';
-		
+		$contador = 1;
 		while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
 			$IdProveedor = $row['Id'];
 			$NombreProveedor = $row['Nombre'];
 
 			echo '<tr>';
+			echo '<td align="center"><strong>'.intval($contador).'</strong></td>';
 			echo 
 			'<td align="left" class="barrido">
 			<a href="/reporte7?Nombre='.$NombreProveedor.'&Id='.$IdProveedor.'&SEDE='.$SedeConnection.'" target="_blank" style="text-decoration: none; color: black;">'
@@ -68,6 +70,7 @@
 			echo '<td align="center">'.($row['FechaRegistro'])->format('Y-m-d').'</td>';
 			echo '<td align="center">'.$row['RangoDias'].'</td>';
 			echo '</tr>';
+			$contador++;
 	  	}
 	  	echo '
 	  		</tbody>
@@ -128,12 +131,12 @@
 			    	<th scope="col">Codigo</th>
 			      	<th scope="col">Descripcion</td>
 			      	<th scope="col">Existencia</td>
-			      	<th scope="col">Precio (Con IVA)</td>
+			      	<th scope="col">Precio</br>(Con IVA)</td>
 			      	<th scope="col">Codigo de Barra</td>
 			      	<th scope="col">Gravado?</td>
-			      	<th scope="col">Dolarizado</td>
+			      	<th scope="col">Dolarizado?</td>
 			      	<th scope="col">Tasa actual</td>
-			      	<th scope="col">Precio en divisa (Con IVA)</td>
+			      	<th scope="col">Precio en divisa</br>(Con IVA)</td>
 			    </tr>
 		  	</thead>
 		  	<tbody>
@@ -174,20 +177,22 @@
 		<table class="table table-striped table-bordered col-12 sortable" id="myTable">
 		  	<thead class="thead-dark">
 			    <tr>
+			    	<th scope="col">#</th>
 			    	<th scope="col">Proveedor</th>
 			      	<th scope="col">Fecha de documento</th>
 			      	<th scope="col">Cantidad recibida</th>
-			      	<th scope="col">Costo bruto (Sin IVA)</th>
+			      	<th scope="col">Costo bruto</br>(Sin IVA)</th>
 			      	<th scope="col">Tasa en historico</th>
-			      	<th scope="col">Costo bruto (Sin IVA) HOY</th>
-					<th scope="col">Costo en divisa (Sin IVA)</th>
+			      	<th scope="col">Costo bruto</br>(Sin IVA) HOY</th>
+					<th scope="col">Costo en divisa</br>(Sin IVA)</th>
 			    </tr>
 		  	</thead>
 		  	<tbody>
 		';
-
+		$contador = 1;
 		while($row2 = sqlsrv_fetch_array($result2, SQLSRV_FETCH_ASSOC)) {
 				echo '<tr>';
+				echo '<td align="center"><strong>'.intval($contador).'</strong></td>';
 				echo '<td>'.$row2["Nombre"].'</td>';
 				echo '<td align="center">'.$row2["FechaDocumento"]->format('Y-m-d').'</td>';
 				echo '<td align="center">'.intval($row2['CantidadRecibidaFactura']).'</td>';
@@ -218,6 +223,7 @@
 					echo '<td align="center">0.00 '.SigDolar.'</td>';
 				}
 				echo '</tr>';
+			$contador++;
 	  	}
 	  	echo '
 	  		</tbody>
@@ -284,26 +290,26 @@
 		';
 
 		echo'<h6 align="center">Periodo desde el '.$FInicial.' al '.$FFinalImpresion.' </h6>';
-
 		echo'
 		<table class="table table-striped table-bordered col-12 sortable" id="myTable">
 		  	<thead class="thead-dark">
 			    <tr>
+			    	<th scope="col">#</th>
 			    	<th scope="col">Codigo</th>
 			      	<th scope="col">Descripcion</th>
 			      	<th scope="col">Existencia</th>
 			      	<th scope="col">Tipo</th>
 			      	<th scope="col">Total de Venta</th>
-			      	<th scope="col">Veces Facturado</th>
-			      	<th scope="col">Unidades vendidas</th>
-			      	<th scope="col">Unidades Compradas</th>
+			      	<th scope="col">Veces Facturado</th>			      
+			      	<th scope="col">Unidades vendidas</th>			      	
+			      	<th scope="col">Unidades Compradas</th>		      			      
 			      	<th scope="col">Venta diaria</th>
 			      	<th scope="col">Dias restantes</th>
 			    </tr>
 		  	</thead>
 		  	<tbody>
 		';
-
+		$contador = 1;
 		while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
 			$IdArticulo = $row["Id"];
 
@@ -337,6 +343,7 @@
 			$TotalVenta = $TotalVenta - $TotalDevolucion;
 
 			echo '<tr>';
+			echo '<td align="center"><strong>'.intval($contador).'</strong></td>';
 			echo '<td align="left">'.$row["CodigoArticulo"].'</td>';
 
 			echo 
@@ -349,17 +356,36 @@
 			echo '<td align="center">'.intval($Existencia).'</td>';
 			echo '<td align="center">'.$Tipo.'</td>';
 			echo '<td align="center">'." ".intval(round($TotalVenta,2))." ".SigVe.'</td>';
-			echo '<td align="center">'.intval($row["TotalVecesVendidasCliente"]).'</td>';
+			
+			echo 
+			'<td align="center" class="barrido">
+			<a href="reporte12?fechaInicio='.$FInicial.'&fechaFin='.$FFinalImpresion.'&SEDE='.$SedeConnection.'&Descrip='.$row["Descripcion"].'&Id='.$IdArticulo.'" style="text-decoration: none; color: black;" target="_blank">'
+				.$row["TotalVecesVendidasCliente"].
+			'</a>
+			</td>';
 
 			$Venta = intval($row["TotalUnidadesVendidasCliente"]);
 			$VentaDiaria = VentaDiaria($Venta,$RangoDias);
 			$DiasRestantes = DiasRestantes($Existencia,$VentaDiaria);
 
-			echo '<td align="center">'.$Venta.'</td>';
-			echo '<td align="center">'.intval($row["TotalUnidadesCompradasProveedor"]).'</td>';
+			echo 
+			'<td align="center" class="barrido">
+			<a href="reporte12?fechaInicio='.$FInicial.'&fechaFin='.$FFinalImpresion.'&SEDE='.$SedeConnection.'&Descrip='.$row["Descripcion"].'&Id='.$IdArticulo.'" style="text-decoration: none; color: black;" target="_blank">'
+				.$Venta.
+			'</a>
+			</td>';
+
+			echo 
+			'<td align="center" class="barrido">
+			<a href="reporte12?fechaInicio='.$FInicial.'&fechaFin='.$FFinalImpresion.'&SEDE='.$SedeConnection.'&Descrip='.$row["Descripcion"].'&Id='.$IdArticulo.'" style="text-decoration: none; color: black;" target="_blank">'
+				.intval($row["TotalUnidadesCompradasProveedor"]).
+			'</a>
+			</td>';
+
 			echo '<td align="center">'.round($VentaDiaria,2).'</td>';
 			echo '<td align="center">'.round($DiasRestantes,2).'</td>';
 			echo '</tr>';
+		$contador++;
 	  	}
 	  	echo '
 	  		</tbody>
@@ -446,6 +472,7 @@
 		<table class="table table-striped table-bordered col-12 sortable" id="myTable">
 		  	<thead class="thead-dark">
 			    <tr>
+			    	<th scope="col">#</th>
 			    	<th scope="col">Codigo</th>
 			      	<th scope="col">Descripcion</th>
 			      	<th scope="col">Existencia</th>
@@ -460,7 +487,7 @@
 		  	</thead>
 		  	<tbody>
 		';
-
+		$contador = 1;
 		while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
 			$IdArticulo = $row["Id"];
 
@@ -483,6 +510,7 @@
 			$row4=sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
 
 			echo '<tr>';
+			echo '<td align="center"><strong>'.intval($contador).'</strong></td>';
 			echo '<td align="left">'.$row["CodigoArticulo"].'</td>';
 			
 			echo 
@@ -502,17 +530,35 @@
 				echo '<td align="center">'.$row4["TiempoTienda"].'</td>';
 			}
 			
-			echo '<td align="center">'.intval($row["TotalVecesVendidasCliente"]).'</td>';
+			echo 
+			'<td align="center" class="barrido">
+			<a href="reporte12?fechaInicio='.$FInicial.'&fechaFin='.$FFinalImpresion.'&SEDE='.$SedeConnection.'&Descrip='.$row["Descripcion"].'&Id='.$IdArticulo.'" style="text-decoration: none; color: black;" target="_blank">'
+				.intval($row["TotalVecesVendidasCliente"]).
+			'</a>
+			</td>';
 
 			$Venta = intval($row["TotalUnidadesVendidasCliente"]);
 			$VentaDiaria = VentaDiaria($Venta,$RangoDias);
 			$DiasRestantes = DiasRestantes($Existencia,$VentaDiaria);
+			
+			echo 
+			'<td align="center" class="barrido">
+			<a href="reporte12?fechaInicio='.$FInicial.'&fechaFin='.$FFinalImpresion.'&SEDE='.$SedeConnection.'&Descrip='.$row["Descripcion"].'&Id='.$IdArticulo.'" style="text-decoration: none; color: black;" target="_blank">'
+				.$Venta.
+			'</a>
+			</td>';
 
-			echo '<td align="center">'.$Venta.'</td>';
-			echo '<td align="center">'.intval($row["TotalUnidadesCompradasProveedor"]).'</td>';
+			echo 
+			'<td align="center" class="barrido">
+			<a href="reporte12?fechaInicio='.$FInicial.'&fechaFin='.$FFinalImpresion.'&SEDE='.$SedeConnection.'&Descrip='.$row["Descripcion"].'&Id='.$IdArticulo.'" style="text-decoration: none; color: black;" target="_blank">'
+				.intval($row["TotalUnidadesCompradasProveedor"]).
+			'</a>
+			</td>';
+
 			echo '<td align="center">'.round($VentaDiaria,2).'</td>';
 			echo '<td align="center">'.round($DiasRestantes,2).'</td>';
 			echo '</tr>';
+		$contador++;
 	  	}
 	  	echo '
 	  		</tbody>
@@ -621,6 +667,16 @@
 
 			$Tipo = ProductoMedicina($conn,$IdArticulo);
 
+			$sql = QCleanTable('CP_QVentasParcial');
+			sqlsrv_query($conn,$sql);
+			$sql = QCleanTable('CP_QDevolucionParcial');
+			sqlsrv_query($conn,$sql);
+
+			$sql8 = QVentasParcial($FInicial,$FFinal,$IdArticulo);
+			sqlsrv_query($conn,$sql8);
+			$sql9 = QDevolucionParcial($FInicial,$FFinal,$IdArticulo);
+			sqlsrv_query($conn,$sql9);
+
 			$sql10 = QIntegracionVentasParcial();
 			$result2 = sqlsrv_query($conn,$sql10);
 			$row2 = sqlsrv_fetch_array($result2,SQLSRV_FETCH_ASSOC);
@@ -642,6 +698,7 @@
 			$result5 = sqlsrv_query($conn,$sql13);
 			$row5 = sqlsrv_fetch_array($result5,SQLSRV_FETCH_ASSOC);
 			$UltimoProveedor = $row5["Nombre"];
+			$IdProveedor = $row5["Id"];
 
 			$Hoy = new DateTime('now');			
 			$DiasEnFalla = ValidarFechas($UltimaVentaSR->format("Y-m-d"),$Hoy->format("Y-m-d"));
@@ -662,7 +719,12 @@
 
 			$Venta = intval($row["TotalUnidadesVendidasCliente"]);
 
-			echo '<td align="center">'.$Venta.'</td>';
+			echo
+			'<td align="center" class="barrido">
+			<a href="reporte12?fechaInicio='.$FInicial.'&fechaFin='.$FFinalImpresion.'&SEDE='.$SedeConnection.'&Descrip='.$row["Descripcion"].'&Id='.$IdArticulo.'" style="text-decoration: none; color: black;" target="_blank">'
+				.$Venta.
+			'</a>
+			</td>';
 
 			echo '<td align="center">'." ".intval(round($TotalVenta,2))." ".SigVe.'</td>';
 
@@ -675,7 +737,12 @@
 
 			echo '<td align="center">'.intval($DiasEnFalla).'</td>';
 
-			echo '<td>'.$UltimoProveedor.'</td>';
+			echo 
+			'<td align="left" class="barrido">
+			<a href="/reporte7?Nombre='.$UltimoProveedor.'&Id='.$IdProveedor.'&SEDE='.$SedeConnection.'" target="_blank" style="text-decoration: none; color: black;">'
+				.$UltimoProveedor.
+			'</a>
+			</td>';
 
 			echo '</tr>';
 			$contador++;
@@ -695,6 +762,10 @@
 		$sql = QCleanTable('CP_QIntegracionProductosVendidos');
 		sqlsrv_query($conn,$sql);
 		$sql = QCleanTable('CP_QIntegracionProductosFalla');
+		sqlsrv_query($conn,$sql);
+		$sql = QCleanTable('CP_QVentasParcial');
+		sqlsrv_query($conn,$sql);
+		$sql = QCleanTable('CP_QDevolucionParcial');
 		sqlsrv_query($conn,$sql);
 
 		sqlsrv_close($conn);
@@ -772,6 +843,7 @@
 		<table class="table table-striped table-bordered col-12 sortable" id="myTable">
 		  	<thead class="thead-dark">
 			    <tr>
+			    	<th scope="col">#</th>
 			    	<th scope="col">Codigo</th>
 			      	<th scope="col">Descripcion</th>
 			      	<th scope="col">Codigo de Barra</th>
@@ -789,7 +861,7 @@
 		  	</thead>
 		  	<tbody>
 		';
-
+		$contador = 1;
 		while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
 			$IdArticulo = $row["Id"];
 			$IsIVA = $row["ConceptoImpuesto"];
@@ -800,6 +872,7 @@
 			$Existencia = $row1["Existencia"];
 
 			echo '<tr>';
+			echo '<td align="center"><strong>'.intval($contador).'</strong></td>';
 			echo '<td align="left">'.$row["CodigoArticulo"].'</td>';
 			
 			echo 
@@ -835,8 +908,20 @@
 			$row4 = sqlsrv_fetch_array($result4,SQLSRV_FETCH_ASSOC);
 			$UltimaVentaSR = $row4["UltimaVenta"];				
 
-			echo '<td align="center">'.$Venta.'</td>';
-			echo '<td align="center">'.intval($row["TotalUnidadesCompradasProveedor"]).'</td>';
+			echo
+			'<td align="center" class="barrido">
+			<a href="reporte12?fechaInicio='.$FInicial.'&fechaFin='.$FFinalImpresion.'&SEDE='.$SedeConnection.'&Descrip='.$row["Descripcion"].'&Id='.$IdArticulo.'" style="text-decoration: none; color: black;" target="_blank">'
+				.$Venta.
+			'</a>
+			</td>';
+
+			echo
+			'<td align="center" class="barrido">
+			<a href="reporte12?fechaInicio='.$FInicial.'&fechaFin='.$FFinalImpresion.'&SEDE='.$SedeConnection.'&Descrip='.$row["Descripcion"].'&Id='.$IdArticulo.'" style="text-decoration: none; color: black;" target="_blank">'
+				.intval($row["TotalUnidadesCompradasProveedor"]).
+			'</a>
+			</td>';
+
 			echo '<td align="center">'.round($VentaDiaria,2).'</td>';
 			echo '<td align="center">'.round($DiasRestantes,2).'</td>';
 			echo '<td align="center">'." ".round($Precio,2)." ".SigVe.'</td>';
@@ -867,6 +952,7 @@
 				echo '<td align="center">'.intval($CantidadPedido).'</td>';
 
 			echo '</tr>';
+		$contador++;
 		}
 		echo '
 	  		</tbody>
@@ -949,26 +1035,29 @@
 		<table class="table table-striped table-bordered col-12 sortable" id="myTable">
 		  	<thead class="thead-dark">
 			    <tr>
+			    	<th scope="col">#</th>
 			    	<th scope="col">Codigo</th>
 			      	<th scope="col">Descripcion</th>
 			    </tr>
 		  	</thead>
 		  	<tbody>
 		';
-		
+		$contador = 1;
 		while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
-				$IdArticulo = $row["Id"];
-				echo '<tr>';
-				echo '<td align="left">'.$row["CodigoArticulo"].'</td>';
-				
-				echo 
-				'<td align="left" class="barrido">
-				<a href="/reporte2?Id='.$IdArticulo.'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
-					.$row["Descripcion"].
-				'</a>
-				</td>';
+			$IdArticulo = $row["Id"];
+			echo '<tr>';
+			echo '<td align="left"><strong>'.intval($contador).'</strong></td>';
+			echo '<td align="left">'.$row["CodigoArticulo"].'</td>';
+			
+			echo 
+			'<td align="left" class="barrido">
+			<a href="/reporte2?Id='.$IdArticulo.'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
+				.$row["Descripcion"].
+			'</a>
+			</td>';
 
-				echo '</tr>';
+			echo '</tr>';
+		$contador++;
 	  	}
 	  	echo '
 	  		</tbody>
@@ -1048,6 +1137,7 @@
 		<table class="table table-striped table-bordered col-12 sortable" id="myTable">
 		  	<thead class="thead-dark">
 			    <tr>
+			    	<th scope="col">#</th>
 			    	<th scope="col">Codigo</th>
 			      	<th scope="col">Descripcion</th>
 			      	<th scope="col">Codigo de Barra</td>
@@ -1065,7 +1155,7 @@
 		  	</thead>
 		  	<tbody>
 		';
-
+		$contador = 1;
 		while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
 			$IdArticulo = $row["Id"];
 			$IsIVA = $row["ConceptoImpuesto"];
@@ -1076,6 +1166,7 @@
 			$Existencia = $row1["Existencia"];
 
 				echo '<tr>';
+				echo '<td align="center"><strong>'.intval($contador).'</strong></td>';
 				echo '<td align="left">'.$row["CodigoArticulo"].'</td>';
 				
 				echo 
@@ -1122,8 +1213,19 @@
 			$TotalUnidadesVendidasCliente = ($row2["UnidadesVendidasCliente"]-$row2["UnidadesDevueltaCliente"]);
 			$TotalUnidadesCompradasProveedor = ($row2["UnidadesCompradasProveedor"]-$row2["UnidadesReclamoProveedor"]);
 
-				echo '<td align="center">'.intval($TotalUnidadesVendidasCliente).'</td>';
-				echo '<td align="center">'.intval($TotalUnidadesCompradasProveedor).'</td>';
+			echo
+			'<td align="center" class="barrido">
+			<a href="reporte12?fechaInicio='.$FInicial.'&fechaFin='.$FFinalImpresion.'&SEDE='.$SedeConnection.'&Descrip='.$row["Descripcion"].'&Id='.$IdArticulo.'" style="text-decoration: none; color: black;" target="_blank">'
+				.intval($TotalUnidadesVendidasCliente).
+			'</a>
+			</td>';
+
+			echo
+			'<td align="center" class="barrido">
+			<a href="reporte12?fechaInicio='.$FInicial.'&fechaFin='.$FFinalImpresion.'&SEDE='.$SedeConnection.'&Descrip='.$row["Descripcion"].'&Id='.$IdArticulo.'" style="text-decoration: none; color: black;" target="_blank">'
+				.intval($TotalUnidadesCompradasProveedor).
+			'</a>
+			</td>';
 
 			$VentaDiaria = VentaDiaria($TotalUnidadesVendidasCliente,$RangoDias);
 			$DiasRestantes = DiasRestantes($Existencia,$VentaDiaria);
@@ -1160,6 +1262,7 @@
 				echo '<td align="center">'.intval($CantidadPedido).'</td>';
 
 			echo '</tr>';
+		$contador++;
 	  	}
 	  	echo '
 	  		</tbody>
@@ -1234,6 +1337,7 @@
 		<table class="table table-striped table-bordered col-12 sortable" id="myTable">
 		  	<thead class="thead-dark">
 			    <tr>
+			    	<th scope="col">#</th>
 			    	<th scope="col">Numero de Factura</th>
 			    	<th scope="col">Fecha Documento</th>
 			    	<th scope="col">Usuario Auditor</th>
@@ -1242,10 +1346,11 @@
 		  	</thead>
 		  	<tbody>
 		 ';
-
+	 	$contador = 1;
 		while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
 			
 			echo '<tr>';
+			echo '<td align="left"><strong>'.intval($contador).'</strong></td>';
 			echo '<td align="center">'.$row["NumeroFactura"].'</td>';
 			echo '<td align="center">'.$row["FechaDocumento"]->format('Y-m-d').'</td>';
 			echo '<td align="center">'.$row["Auditoria_Usuario"].'</td>';
@@ -1266,6 +1371,7 @@
 		    ';
 
 			echo '</tr>';
+		$contador++;
 		}
 	  	echo '
 	  		</tbody>
@@ -1329,6 +1435,7 @@
 		<table class="table table-striped table-bordered col-12 sortable" id="myTable">
 		  	<thead class="thead-dark">
 			    <tr>
+			    	<th scope="col">#</th>
 			    	<th scope="col">Codigo</th>
 			    	<th scope="col">Descripcion</th>
 			    	<th scope="col">Seleccion</th>
@@ -1336,10 +1443,11 @@
 		  	</thead>
 		  	<tbody>
 		 ';
-
+		 $contador = 1;
 		while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
 			
 			echo '<tr>';
+			echo '<td align="center"><strong>'.intval($contador).'</strong></td>';
 			echo '<td align="center">'.$row["CodigoArticulo"].'</td>';
 			echo '<td align="center">'.$row["Descripcion"].'</td>';
 			echo '
@@ -1360,6 +1468,7 @@
 		    ';
 
 			echo '</tr>';
+		$contador++;
 		}
 	  	echo '
 	  		</tbody>
@@ -1604,15 +1713,17 @@
 			<table class="table table-striped table-bordered col-12 sortable" id="myTable">
 				<thead class="thead-dark">
 				    <tr>
+				    	<th scope="col">#</th>
 				    	<th scope="col">Codigo</th>
 				      	<th scope="col">Descripcion</th>
 				      	<th scope="col">Existencia</th>
-				      	<th scope="col">Ultimo Lote (En Rango)</th>
-				      	<th scope="col">Tiempo en Tienda (Dias)</th>
+				      	<th scope="col">Ultimo Lote</br>(En Rango)</th>
+				      	<th scope="col">Tiempo en Tienda</br>(Dias)</th>
 				    </tr>
 		  		</thead>
 		  		<tbody>
 		';
+		$contador = 1;
 		while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
 			$IdArticulo = $row["Id"];
 			$FechaRegistro = $row["FechaRegistro"];
@@ -1629,13 +1740,22 @@
 
 			if($Existencia > 0){
 				echo '<tr>';
+				echo '<td align="center"><strong>'.intval($contador).'</strong></td>';
 				echo '<td align="left">'.$row["CodigoArticulo"].'</td>';
-				echo '<td align="left">'.$row["Descripcion"].'</td>';
+
+				echo 
+				'<td align="left" class="barrido">
+				<a href="/reporte2?Id='.$IdArticulo.'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
+					.$row["Descripcion"].
+				'</a>
+				</td>';
+				
 				echo '<td align="center">'.intval($Existencia).'</td>';
 				echo '<td align="center">'.($FechaRegistro)->format("Y-m-d").'</td>';
 				echo '<td align="center">'.$TiempoTienda.'</td>';
 				echo '</tr>';
 			}
+		$contador++;
 	  	}
 	  	echo '
 	  		</tbody>
@@ -1705,7 +1825,14 @@
 	  	';
 		echo '<tr>';
 		echo '<td>'.$row["CodigoArticulo"].'</td>';
-		echo '<td>'.$row["Descripcion"].'</td>';
+		
+		echo 
+			'<td align="left" class="barrido">
+			<a href="/reporte2?Id='.$IdArticulo.'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
+				.$row["Descripcion"].
+			'</a>
+			</td>';
+
 		echo '<td align="center">'.intval($Existencia).'</td>';
 		echo '<td align="center">'." ".round($Precio,2)." ".SigVe.'</td>';
 		echo '<td align="center">'.$Dolarizado.'</td>';
@@ -1733,6 +1860,7 @@
 		<table class="table table-striped table-bordered col-12 sortable" id="myTable">
 		  	<thead class="thead-dark">
 			    <tr>
+			    	<th scope="col">#</th>
 			    	<th scope="col">Origen</th>
 			    	<th scope="col">Detalles</th>
 			      	<th scope="col">Fecha creacion de lote</th>
@@ -1747,13 +1875,14 @@
 		  	</thead>
 		  	<tbody>
 		';
-
+		$contador = 1;
 		while($row2=sqlsrv_fetch_array($result2,SQLSRV_FETCH_ASSOC)) {
 			$FechaVariable=$row2["FechaLote"]->format("Y-m-d");
 			$PrecioBruto=$row2["M_PrecioCompraBruto"];
 			echo '<tr>';
 			//VALIDACION PARA CASO DE COMPRA
 				if($row2["InvCausaId"]==1) {
+					echo '<td align="center"><strong>'.intval($contador).'</strong></td>';
 					echo '<td align="center">Compra</td>';
 
 					$sql3=QProveedorYCantidadComprada2($IdArticulo,$FechaVariable,$PrecioBruto);
@@ -1765,6 +1894,7 @@
 					echo '<td align="center">'.intval($row3["CantidadRecibidaFactura"]).'</td>';
 				}
 				else {
+					echo '<td align="center"><strong>'.intval($contador).'</strong></td>';
 					echo '<td align="center">Inventario</td>';
 					echo '<td align="center">'.$row2["Descripcion"].'</td>';
 					echo '<td align="center">'.$FechaVariable.'</td>';
@@ -1795,6 +1925,7 @@
 				}
 				echo '<td align="center">'.$row2["Responsable"].'</td>';
 			echo '</tr>';
+		$contador++;
 		}
 
 	  	echo '
@@ -2162,9 +2293,9 @@
 		</div>
 		<br/>';
 
-		echo '
-		<h5 align="center">Encabezado de movimientos del '.$FInicial.' al '.$FFinalImpresion.'</h5>
+		echo'<h6 align="center">Periodo desde el '.$FInicial.' al '.$FFinalImpresion.' </h6>';
 
+		echo '
 		<table class="table table-striped table-bordered col-12 sortable">
 			<thead class="thead-dark">
 			    <tr>
@@ -2186,7 +2317,13 @@
 		echo '
 				<tr>
 					<td>'.$row["CodigoArticulo"].'</td>
-					<td>'.$row["Descripcion"].'</td>
+		
+				<td align="left" class="barrido">
+					<a href="/reporte2?Id='.$IdArticulo.'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
+						.$row["Descripcion"].
+					'</a>
+					</td>
+
 					<td align="center">'.intval($Existencia).'</td>
 					<td align="center">'.$Venta.'</td>
 					<td align="center">'.$DiasRestantes.'</td>
@@ -2214,11 +2351,12 @@
 		echo '<br>';
 
 		echo '
-		<h5 align="center">Resumen de movimientos</h5>
+		<h6 align="center">Resumen de movimientos</h6>
 
 		<table class="table table-striped table-bordered col-12 sortable">
 			<thead class="thead-dark">
 			    <tr>
+			    	<th scope="col">#</th>
 			    	<th scope="col" class="text-center">Fecha</th>
 			      	<th scope="col" class="text-center">Tipo de movimiento</th>
 			      	<th scope="col" class="text-center">Cantidad</th>
@@ -2234,14 +2372,17 @@
 			$sql11 = QAgruparDetalleDeMovimientos();
 			$result4 = sqlsrv_query($conn,$sql11);
 
+			$contador = 1;
 		  	while($row4 = sqlsrv_fetch_array($result4,SQLSRV_FETCH_ASSOC)) {
 		  		echo '
 	  			<tr>
+	  				<td align="center"><strong>'.intval($contador).'</strong></td>
 					<td align="center">'.$row4["FechaMovimiento"].'</td>
 			      	<td align="center">'.utf8_encode($row4["Movimiento"]).'</td>
 			      	<td align="center">'.intval($row4["Cantidad"]).'</td>
 			    </tr>
 		  		';
+		  	$contador++;
 		  	}
 		echo '
 			</tbody>
@@ -2251,11 +2392,12 @@
 		echo '<br>';
 
 		echo '
-		<h5 align="center">Detalle de movimientos</h5>
+		<h6 align="center">Detalle de movimientos</h6>
 
 		<table class="table table-striped table-bordered col-12 sortable" id="myTable">
 			<thead class="thead-dark">
 			    <tr>
+			    	<th scope="col">#</th>
 			    	<th scope="col" class="text-center">Fecha</th>
 			      	<th scope="col" class="text-center">Hora</th>
 			      	<th scope="col" class="text-center">Tipo de movimiento</th>
@@ -2269,19 +2411,22 @@
 	  	$sql8=QDetalleDeMovimiento($IdArticulo,$FInicial,$FFinal);
 		$result3=sqlsrv_query($conn,$sql8);
 
+		$contador = 1;
 	  	while($row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC)) {
 	  		echo '
 	  			<tr>
+	  				<td align="center"><strong>'.intval($contador).'</strong></td>
 			    	<td align="center">'.$row3["FechaMovimiento"]->format("d/m/Y").'</td>';
 
 			$Hora = date('h:i a',strtotime($row3["FechaMovimiento"]->format("H:m:s")));
 
-			echo '
+			echo '					
 			      	<td align="center">'.$Hora.'</td>
 			      	<td align="center">'.utf8_encode($row3["Movimiento"]).'</td>
 			      	<td align="center">'.intval($row3["Cantidad"]).'</td>
 			    </tr>
 			';
+		$contador++;
 	  	}
 
 	  	echo '
@@ -2429,9 +2574,10 @@
 			$result5 = sqlsrv_query($conn,$sql13);
 			$row5 = sqlsrv_fetch_array($result5,SQLSRV_FETCH_ASSOC);
 			$UltimoProveedor = $row5["Nombre"];
+			$IdProveedor = $row5["Id"];
 
 			echo '<tr>';
-			echo '<td align="left">'.intval($contador).'</td>';
+			echo '<td align="center"><strong>'.intval($contador).'</strong></td>';
 			echo '<td align="left">'.$row["CodigoArticulo"].'</td>';
 
 			echo 
@@ -2445,7 +2591,13 @@
 			echo '<td align="center">'.intval($Existencia).'</td>';
 
 			$Venta = intval($row["TotalUnidadesVendidasCliente"]);
-			echo '<td align="center">'.$Venta.'</td>';
+			
+			echo 
+			'<td align="center" class="barrido">
+			<a href="reporte12?fechaInicio='.$FInicial.'&fechaFin='.$FFinalImpresion.'&SEDE='.$SedeConnection.'&Descrip='.$row["Descripcion"].'&Id='.$IdArticulo.'" style="text-decoration: none; color: black;" target="_blank">'
+				.$Venta.
+			'</a>
+			</td>';
 
 			echo '<td align="center">'." ".intval(round($TotalVenta,2))." ".SigVe.'</td>';
 
@@ -2456,7 +2608,12 @@
 				echo '<td align="center"> - </td>';
 			}
 
-			echo '<td>'.$UltimoProveedor.'</td>';
+			echo 
+			'<td align="left" class="barrido">
+			<a href="/reporte7?Nombre='.$UltimoProveedor.'&Id='.$IdProveedor.'&SEDE='.$SedeConnection.'" target="_blank" style="text-decoration: none; color: black;">'
+				.$UltimoProveedor.
+			'</a>
+			</td>';
 
 			echo '</tr>';
 			$contador++;
@@ -2476,6 +2633,10 @@
 		$sql = QCleanTable('CP_QIntegracionProductosVendidos');
 		sqlsrv_query($conn,$sql);
 		$sql = QCleanTable('CP_QIntegracionProductosFalla');
+		sqlsrv_query($conn,$sql);
+		$sql = QCleanTable('CP_QVentasParcial');
+		sqlsrv_query($conn,$sql);
+		$sql = QCleanTable('CP_QDevolucionParcial');
 		sqlsrv_query($conn,$sql);
 
 		sqlsrv_close($conn);

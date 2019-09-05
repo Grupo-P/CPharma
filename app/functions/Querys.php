@@ -1541,6 +1541,7 @@
 	function QUltimoProveedor($IdArticulo) {
 		$sql = "
 			SELECT TOP 1
+			ComProveedor.Id,
 			GenPersona.Nombre,
 			CONVERT(DATE,ComFactura.FechaRegistro) As FechaRegistro,
 			CONVERT(DATE,ComFactura.FechaDocumento) As FechaDocumento

@@ -79,7 +79,7 @@
 	@endif
 
 	<h1 class="h5 text-info">
-		<i class="far fa-address-card"></i>
+		<i class="fas fa-file-invoice"></i>
 		Compromisos
 	</h1>
 	
