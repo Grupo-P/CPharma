@@ -33,7 +33,7 @@
 
   $FinCarga = new DateTime("now");
     $IntervalCarga = $InicioCarga->diff($FinCarga);
-    echo'Tiempo de carga: '.$IntervalCarga->format("%Y-%M-%D %H:%I:%S");
+    echo'<br/>Tiempo de carga: '.$IntervalCarga->format("%Y-%M-%D %H:%I:%S");
 ?>
 @endsection
 

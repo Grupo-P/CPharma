@@ -899,4 +899,57 @@
 
 	  	return $Medicina;
 	}
+	/*
+		TITULO: ProductosEnCaida
+		PARAMETROS: [$FInicial] fecha inicial a evaluar
+					[$FFinal] fecha final a evaluar
+		FUNCION:
+		RETORNO:
+	 */
+	function ProductosEnCaida($IdArticulo,$FInicial,$FFinal) {
+		$connCPharma = ConectarXampp();
+
+		$RangoDias = RangoDias($FInicial,$FFinal);
+		
+		while($RangoDias>0){
+
+			$sql = QExistenciaHistorico($IdArticulo,$FInicial);
+			$result = mysqli_query($connCPharma,$sql);
+			$row = mysqli_fetch_assoc($result);
+			$CuentaExistencia = $row["Cuenta"];
+			$Existencia = $row["Existencia"];
+
+			if($CuentaExistencia>0){
+				echo'<br/><br/>Dia: '.$FInicial;
+				echo'<br/>Existencia: '.$Existencia;
+			}
+			else{
+				echo'<br/><br/>Dia: '.$FInicial;
+				echo'<br/>Existencia: '.$Existencia;
+			}
+			
+			$FInicial = date("Y-m-d",strtotime($FInicial."+1 days"));
+			$RangoDias = RangoDias($FInicial,$FFinal);
+		}
+
+		if($RangoDias==0){
+
+			$sql = QExistenciaHistorico($IdArticulo,$FInicial);
+			$result = mysqli_query($connCPharma,$sql);
+			$row = mysqli_fetch_assoc($result);
+			$CuentaExistencia = $row["Cuenta"];
+			$Existencia = $row["Existencia"];
+
+			if($CuentaExistencia>0){
+				echo'<br/><br/>Dia: '.$FInicial;
+				echo'<br/>Existencia: '.$Existencia;
+			}
+			else{
+				echo'<br/><br/>Dia: '.$FInicial;
+				echo'<br/>Existencia: '.$Existencia;
+			}
+		}
+		
+		mysqli_close($connCPharma);
+	}
 ?>

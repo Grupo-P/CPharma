@@ -2692,13 +2692,19 @@
 		  	<tbody>
 		';
 		$contador = 1;
+		/*
 		while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
+			$IdArticulo = $row["Id"];
+
 			
+
 			$contador++;
-	  	}
+	  	}*/
 	  	echo '
 	  		</tbody>
 		</table>';
+
+		ProductosEnCaida('57067',$FInicial,$FFinal);
 		
 		sqlsrv_close($conn);
 	}

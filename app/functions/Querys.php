@@ -1614,6 +1614,23 @@
 		return $sql;
 	}
 	/*
+		TITULO: QExistenciaHistorico
+		PARAMETROS: [$IdArticulo] Id del articulo a buscar
+		FUNCION: cuenta el total de registos de dias en cero
+		RETORNO: no aplica
+		//
+	 */
+	function QExistenciaHistorico($IdArticulo,$FechaCaptura) {
+		$sql = "SELECT 
+		COUNT(*) AS Cuenta,
+		Existencia
+		FROM dias_ceros 
+		WHERE dias_ceros.id_articulo = '$IdArticulo' 
+		AND fecha_captura = '$FechaCaptura'
+		";
+		return $sql;
+	}
+	/*
 		TITULO: 
 		PARAMETROS: 
 		FUNCION:
