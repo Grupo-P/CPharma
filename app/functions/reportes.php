@@ -1825,7 +1825,14 @@
 	  	';
 		echo '<tr>';
 		echo '<td>'.$row["CodigoArticulo"].'</td>';
-		echo '<td>'.$row["Descripcion"].'</td>';
+		
+		echo 
+			'<td align="left" class="barrido">
+			<a href="/reporte2?Id='.$IdArticulo.'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
+				.$row["Descripcion"].
+			'</a>
+			</td>';
+
 		echo '<td align="center">'.intval($Existencia).'</td>';
 		echo '<td align="center">'." ".round($Precio,2)." ".SigVe.'</td>';
 		echo '<td align="center">'.$Dolarizado.'</td>';
@@ -1853,6 +1860,7 @@
 		<table class="table table-striped table-bordered col-12 sortable" id="myTable">
 		  	<thead class="thead-dark">
 			    <tr>
+			    	<th scope="col">#</th>
 			    	<th scope="col">Origen</th>
 			    	<th scope="col">Detalles</th>
 			      	<th scope="col">Fecha creacion de lote</th>
@@ -1867,13 +1875,14 @@
 		  	</thead>
 		  	<tbody>
 		';
-
+		$contador = 1;
 		while($row2=sqlsrv_fetch_array($result2,SQLSRV_FETCH_ASSOC)) {
 			$FechaVariable=$row2["FechaLote"]->format("Y-m-d");
 			$PrecioBruto=$row2["M_PrecioCompraBruto"];
 			echo '<tr>';
 			//VALIDACION PARA CASO DE COMPRA
 				if($row2["InvCausaId"]==1) {
+					echo '<td align="center"><strong>'.intval($contador).'</strong></td>';
 					echo '<td align="center">Compra</td>';
 
 					$sql3=QProveedorYCantidadComprada2($IdArticulo,$FechaVariable,$PrecioBruto);
@@ -1885,6 +1894,7 @@
 					echo '<td align="center">'.intval($row3["CantidadRecibidaFactura"]).'</td>';
 				}
 				else {
+					echo '<td align="center"><strong>'.intval($contador).'</strong></td>';
 					echo '<td align="center">Inventario</td>';
 					echo '<td align="center">'.$row2["Descripcion"].'</td>';
 					echo '<td align="center">'.$FechaVariable.'</td>';
@@ -1915,6 +1925,7 @@
 				}
 				echo '<td align="center">'.$row2["Responsable"].'</td>';
 			echo '</tr>';
+		$contador++;
 		}
 
 	  	echo '
