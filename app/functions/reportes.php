@@ -2697,7 +2697,7 @@
 			$IdArticulo = $row["IdArticulo"];
 
 		/*********BORRAR DESPUES**********/
-			//$IdArticulo = '57067';
+			$IdArticulo = '57067';
 				/*
 				* Existencia todos los dias SI
 				* Existencia decreciente SI
@@ -2706,7 +2706,7 @@
 				/*
 				* Existencia todos los dias NO
 				*/
-			$IdArticulo = '53273';
+			//$IdArticulo = '53273';
 				/*
 				* Existencia todos los dias SI
 				* Existencia decreciente NO
@@ -2715,12 +2715,24 @@
 
 			$ExistenciaValida = ValidarExistenciaDiaria($IdArticulo,$FInicial,$FFinal);
 
+			echo'<br/><br/>+++++++++++++++++++++++++++++++++++';
 			if($ExistenciaValida == TRUE){
 				echo '<br/><br/>Existencia Valida: SI';
 			}
 			else if($ExistenciaValida == FALSE){
 				echo '<br/><br/>Existencia Valida: NO';
 			}
+
+			$sql = QCleanTable('CP_QUnidadesVendidasClienteId');
+			sqlsrv_query($conn,$sql);
+			$sql = QCleanTable('CP_QUnidadesDevueltaClienteId');
+			sqlsrv_query($conn,$sql);
+			$sql = QCleanTable('CP_QUnidadesCompradasProveedorId');
+			sqlsrv_query($conn,$sql);
+			$sql = QCleanTable('CP_QUnidadesReclamoProveedorId');
+			sqlsrv_query($conn,$sql);
+			$sql = QCleanTable('CP_QIntegracionProductosVendidosId');
+			sqlsrv_query($conn,$sql);
 
 			$contador++;
 	  	}
