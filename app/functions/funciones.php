@@ -911,18 +911,29 @@
 
 		$RangoDias = RangoDias($FInicial,$FFinal);
 		$IsValido = TRUE;
+		$ExistenciaAyer = 0;
 
 		while($RangoDias>0 && $IsValido==TRUE){
-
+			echo'<br/><br/>***************************************';
 			$sql = QExistenciaHistorico($IdArticulo,$FInicial);
 			$result = mysqli_query($connCPharma,$sql);
 			$row = mysqli_fetch_assoc($result);
 			$CuentaExistencia = $row["Cuenta"];
 			$Existencia = $row["Existencia"];
 
+			if($ExistenciaAyer==0){
+				$ExistenciaAyer = $Existencia;
+			}
+
 			if($CuentaExistencia>0){
 				echo'<br/><br/>Dia: '.$FInicial;
 				echo'<br/>Existencia: '.(empty($Existencia)?0:$Existencia);
+
+				if($ExistenciaAyer>=$Existencia){
+					echo'<br/><br/>ExistenciaAyer: '.$ExistenciaAyer;
+					$ExistenciaAyer = $Existencia;
+				}
+
 				$IsValido = TRUE;
 			}
 			else{
@@ -934,7 +945,7 @@
 			$FInicial = date("Y-m-d",strtotime($FInicial."+1 days"));
 			$RangoDias = RangoDias($FInicial,$FFinal);
 		}
-
+		echo'<br/><br/>////////////////////////////////////////';
 		if($RangoDias==0 && $IsValido==TRUE){
 
 			$sql = QExistenciaHistorico($IdArticulo,$FInicial);
@@ -946,6 +957,12 @@
 			if($CuentaExistencia>0){
 				echo'<br/><br/>Dia: '.$FInicial;
 				echo'<br/>Existencia: '.(empty($Existencia)?0:$Existencia);
+
+				if($ExistenciaAyer>=$Existencia){
+					echo'<br/><br/>ExistenciaAyer: '.$ExistenciaAyer;
+					$ExistenciaAyer = $Existencia;
+				}
+
 				$IsValido = TRUE;
 			}
 			else{
