@@ -2654,8 +2654,9 @@
 	function ReporteArticulosDevaluados($SedeConnection,$FInicial) {
 		$conn = ConectarSmartpharma($SedeConnection);
 		$Hoy = new DateTime('now');
-		$Hoy = $Hoy->format('d-m-Y');
-
+		$Hoy = $Hoy->format('Y-m-d');
+		$DiasSolicitados = ValidarFechas($FInicial,$Hoy);
+		
 		echo '
 			<div class="input-group md-form form-sm form-1 pl-0">
 				<div class="input-group-prepend">
@@ -2706,7 +2707,7 @@
 				    	<td align="center">-</td>
 				    	<td align="center">-</td>
 				    	<td align="center">-</td>
-				    	<td align="center">-</td>
+				    	<td align="center">'.$DiasSolicitados.'</td>
 				    	<td align="center">-</td>
 				    </tr>
 			';

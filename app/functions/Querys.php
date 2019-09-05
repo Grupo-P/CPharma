@@ -1093,9 +1093,9 @@
 		AS TiempoTienda
 		FROM InvLoteAlmacen
 		WHERE
-		InvLoteAlmacen.InvArticuloId = '$IdArticulo' AND
-		(InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2) AND
-		(InvLoteAlmacen.Existencia > 0)
+		InvLoteAlmacen.InvArticuloId = '$IdArticulo' 
+		AND (InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2) 
+		AND InvLoteAlmacen.Existencia > 0
 		ORDER BY InvLoteAlmacen.Auditoria_FechaCreacion DESC
 		";
 		return $sql;
