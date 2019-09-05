@@ -927,18 +927,23 @@
 
 			if($CuentaExistencia>0){
 				echo'<br/><br/>Dia: '.$FInicial;
-				echo'<br/>Existencia: '.(empty($Existencia)?0:$Existencia);
+				echo'<br/>ExistenciaValida1: '.(empty($Existencia)?0:$Existencia);
 
 				if($ExistenciaAyer>=$Existencia){
-					echo'<br/><br/>ExistenciaAyer: '.$ExistenciaAyer;
+					echo'<br/><br/>ExistenciaAyerSI1: '.$ExistenciaAyer;
 					$ExistenciaAyer = $Existencia;
+				}
+				else {
+					echo'<br/><br/>ExistenciaAyerNO1: '.$ExistenciaAyer;
+					$ExistenciaAyer = $Existencia;
+					echo'<br/><br/>Aqui se hace false';
 				}
 
 				$IsValido = TRUE;
 			}
 			else{
 				echo'<br/><br/>Dia: '.$FInicial;
-				echo'<br/>Existencia: '.(empty($Existencia)?0:$Existencia);
+				echo'<br/>ExistenciaInvalida1: '.(empty($Existencia)?0:$Existencia);
 				$IsValido = FALSE;
 			}
 			
@@ -956,18 +961,23 @@
 
 			if($CuentaExistencia>0){
 				echo'<br/><br/>Dia: '.$FInicial;
-				echo'<br/>Existencia: '.(empty($Existencia)?0:$Existencia);
+				echo'<br/>ExistenciaValida2: '.(empty($Existencia)?0:$Existencia);
 
 				if($ExistenciaAyer>=$Existencia){
-					echo'<br/><br/>ExistenciaAyer: '.$ExistenciaAyer;
+					echo'<br/><br/>ExistenciaAyerSI2: '.$ExistenciaAyer;
 					$ExistenciaAyer = $Existencia;
+				}
+				else {
+					echo'<br/><br/>ExistenciaAyerNO2: '.$ExistenciaAyer;
+					$ExistenciaAyer = $Existencia;
+					echo'<br/><br/>Aqui se hace false';
 				}
 
 				$IsValido = TRUE;
 			}
 			else{
 				echo'<br/><br/>Dia: '.$FInicial;
-				echo'<br/>Existencia: '.(empty($Existencia)?0:$Existencia);
+				echo'<br/>ExistenciaInvalida2: '.(empty($Existencia)?0:$Existencia);
 				$IsValido = FALSE;
 			}
 		}

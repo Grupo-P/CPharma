@@ -2697,8 +2697,20 @@
 			$IdArticulo = $row["IdArticulo"];
 
 		/*********BORRAR DESPUES**********/
-			$IdArticulo = '57067'; //SI
-			//$IdArticulo = '58125'; //NO
+			//$IdArticulo = '57067';
+				/*
+				* Existencia todos los dias SI
+				* Existencia decreciente SI
+				*/
+			//$IdArticulo = '58125'; 
+				/*
+				* Existencia todos los dias NO
+				*/
+			$IdArticulo = '53273';
+				/*
+				* Existencia todos los dias SI
+				* Existencia decreciente NO
+				*/
 		/*********BORRAR DESPUES**********/
 
 			$ExistenciaValida = ValidarExistenciaDiaria($IdArticulo,$FInicial,$FFinal);
