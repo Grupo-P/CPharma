@@ -2577,7 +2577,7 @@
 			$IdProveedor = $row5["Id"];
 
 			echo '<tr>';
-			echo '<td align="left">'.intval($contador).'</td>';
+			echo '<td align="center"><strong>'.intval($contador).'</strong></td>';
 			echo '<td align="left">'.$row["CodigoArticulo"].'</td>';
 
 			echo 
@@ -2591,7 +2591,13 @@
 			echo '<td align="center">'.intval($Existencia).'</td>';
 
 			$Venta = intval($row["TotalUnidadesVendidasCliente"]);
-			echo '<td align="center">'.$Venta.'</td>';
+			
+			echo 
+			'<td align="center" class="barrido">
+			<a href="reporte12?fechaInicio='.$FInicial.'&fechaFin='.$FFinalImpresion.'&SEDE='.$SedeConnection.'&Descrip='.$row["Descripcion"].'&Id='.$IdArticulo.'" style="text-decoration: none; color: black;" target="_blank">'
+				.$Venta.
+			'</a>
+			</td>';
 
 			echo '<td align="center">'." ".intval(round($TotalVenta,2))." ".SigVe.'</td>';
 
@@ -2601,8 +2607,6 @@
 			else{
 				echo '<td align="center"> - </td>';
 			}
-
-			echo '<td>'.$UltimoProveedor.'</td>';
 
 			echo 
 			'<td align="left" class="barrido">

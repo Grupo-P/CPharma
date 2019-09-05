@@ -372,15 +372,15 @@
    	</div>
 
    	<div class="card-deck">
-   		<div class="card border-warning mb-3" style="width: 14rem;">	  	
-	  		<div class="card-body text-left bg-warning">
+   		<div class="card border-danger mb-3" style="width: 14rem;">	  	
+	  		<div class="card-body text-left bg-danger">
 	    		<h5 class="card-title">
 		    		<span class="card-text text-white">
 		    			Productos Por Fallar
 		    		</span>
 	    		</h5>	    	    
 	  		</div>
-		  	<div class="card-footer bg-transparent border-warning text-right">
+		  	<div class="card-footer bg-transparent border-danger text-right">
 		  		<form action="/reporte13/" style="display: inline;">
 				    @csrf
 				    <input id="SEDE" name="SEDE" type="hidden" value="<?php print_r($_GET['SEDE']); ?>">
@@ -392,7 +392,7 @@
 						|| Auth::user()->departamento == 'TECNOLOGIA'
 					){
 				?>				   
-				    <button type="submit" name="Reporte" role="button" class="btn btn-outline-warning btn-sm"></i>Visualizar</button>
+				    <button type="submit" name="Reporte" role="button" class="btn btn-outline-danger btn-sm"></i>Visualizar</button>
 				<?php
 					}
 				?>
