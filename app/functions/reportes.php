@@ -1776,7 +1776,7 @@
 		FUNCION: Armar una tabla de historico de compra del articulo
 		RETORNO: No aplica
 	 */
-	function ReporteAnaliticoDePrecios($SedeConnection,$IdArticulo){
+	function ReporteAnaliticoDePrecios($SedeConnection,$IdArticulo) {
 		$conn=ConectarSmartpharma($SedeConnection);
 
 		$sql=QArticulo($IdArticulo);
@@ -2638,6 +2638,86 @@
 		sqlsrv_query($conn,$sql);
 		$sql = QCleanTable('CP_QDevolucionParcial');
 		sqlsrv_query($conn,$sql);
+
+		sqlsrv_close($conn);
+	}
+
+	/*****************************************************************************/
+	/********************** REPORTE 14 ARTICULOS DEVALUADOS **********************/
+	/*
+		TITULO: ReporteArticulosDevaluados
+		PARAMETROS: [$SedeConnection] Siglas de la sede para la conexion		
+					[$FInicial] Fecha inicial del rango donde se buscara
+		FUNCION: Arma una lista de productos por fallar
+		RETORNO: No aplica
+	 */
+	function ReporteArticulosDevaluados($SedeConnection,$FInicial) {
+		$conn = ConectarSmartpharma($SedeConnection);
+		$Hoy = new DateTime('now');
+		$Hoy = $Hoy->format('d-m-Y');
+
+		echo '
+			<div class="input-group md-form form-sm form-1 pl-0">
+				<div class="input-group-prepend">
+					<span class="input-group-text purple lighten-3" id="basic-text1">
+						<i class="fas fa-search text-white" aria-hidden="true"></i>
+					</span>
+			  	</div>
+
+			  	<input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterAllTable()">
+			</div><br/>
+		';
+
+		echo '<h6 align="center">Periodo desde el '.$FInicial.' al '.$Hoy.'</h6>';
+
+		echo'
+			<table class="table table-striped table-bordered col-12 sortable" id="myTable">
+			  	<thead class="thead-dark">
+				    <tr>
+				    	<th scope="col">#</th>
+				    	<th scope="col">Codigo</th>
+				      	<th scope="col">Descripcion</th>
+				      	<th scope="col">Precio</th>
+				      	<th scope="col">Cantidad</th>
+				      	<th scope="col">Valor lote</th>
+				      	<th scope="col">Ultimo lote</th>
+				      	<th scope="col">Tasa historico</th>
+				      	<th scope="col">Precio en $</th>
+				      	<th scope="col">Valor lote $</th>
+				      	<th scope="col">Dias en tienda</th>
+				      	<th scope="col">Ultimo proveedor</th>
+				    </tr>
+			  	</thead>
+
+			  	<tbody>
+		';
+
+		$contador = 1;
+		while($contador<=10) {
+			echo '
+			  		<tr>
+				    	<td align="center">'.$contador.'</td>
+				    	<td align="center">-</td>
+				    	<td align="center">-</td>
+				    	<td align="center">-</td>
+				    	<td align="center">-</td>
+				    	<td align="center">-</td>
+				    	<td align="center">-</td>
+				    	<td align="center">-</td>
+				    	<td align="center">-</td>
+				    	<td align="center">-</td>
+				    	<td align="center">-</td>
+				    	<td align="center">-</td>
+				    </tr>
+			';
+			$contador++;
+		}
+
+		echo '
+
+			  	</tbody>
+			</table>
+		';
 
 		sqlsrv_close($conn);
 	}

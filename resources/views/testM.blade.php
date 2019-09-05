@@ -75,7 +75,7 @@
     //---------- Borrar ----------
     if(isset($_GET['fechaInicio'])) {
       $InicioCarga = new DateTime("now");
-      
+
       if(isset($_GET['SEDE'])) {
         echo '
           <h1 class="h5 text-success"  align="left">
@@ -84,6 +84,9 @@
         ';
       }
       echo '<hr class="row align-items-start col-12">';
+
+      ReporteArticulosDevaluados($_GET['SEDE'],$_GET['fechaInicio']);
+      GuardarAuditoria('CONSULTAR','REPORTE','Articulos Devaluados');
 
       $FinCarga = new DateTime("now");
       $IntervalCarga = $InicioCarga->diff($FinCarga);
