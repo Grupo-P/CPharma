@@ -2698,16 +2698,16 @@
 
 		/*********BORRAR DESPUES**********/
 			$IdArticulo = '57067'; //SI
-			$IdArticulo = '58125'; //NO
+			//$IdArticulo = '58125'; //NO
 		/*********BORRAR DESPUES**********/
 
 			$ExistenciaValida = ValidarExistenciaDiaria($IdArticulo,$FInicial,$FFinal);
 
 			if($ExistenciaValida == TRUE){
-				echo 'Existencia Valida: SI';
+				echo '<br/><br/>Existencia Valida: SI';
 			}
 			else if($ExistenciaValida == FALSE){
-				echo 'Existencia Valida: NO';
+				echo '<br/><br/>Existencia Valida: NO';
 			}
 
 			$contador++;

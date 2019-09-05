@@ -922,12 +922,12 @@
 
 			if($CuentaExistencia>0){
 				echo'<br/><br/>Dia: '.$FInicial;
-				echo'<br/>Existencia: '.$Existencia;
+				echo'<br/>Existencia: '.(empty($Existencia)?0:$Existencia);
 				$IsValido = TRUE;
 			}
 			else{
 				echo'<br/><br/>Dia: '.$FInicial;
-				echo'<br/>Existencia: '.$Existencia;
+				echo'<br/>Existencia: '.(empty($Existencia)?0:$Existencia);
 				$IsValido = FALSE;
 			}
 			
@@ -945,12 +945,12 @@
 
 			if($CuentaExistencia>0){
 				echo'<br/><br/>Dia: '.$FInicial;
-				echo'<br/>Existencia: '.$Existencia;
+				echo'<br/>Existencia: '.(empty($Existencia)?0:$Existencia);
 				$IsValido = TRUE;
 			}
 			else{
 				echo'<br/><br/>Dia: '.$FInicial;
-				echo'<br/>Existencia: '.$Existencia;
+				echo'<br/>Existencia: '.(empty($Existencia)?0:$Existencia);
 				$IsValido = FALSE;
 			}
 		}
