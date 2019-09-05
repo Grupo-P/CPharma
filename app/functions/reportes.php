@@ -2641,4 +2641,65 @@
 
 		sqlsrv_close($conn);
 	}
+	/*****************************************************************************/
+	/************************ REPORTE 14 PRODUCTOS EN CAIDA ****************/
+	/*
+		TITULO: ReporteActivacionProveedores
+		PARAMETROS : [$SedeConnection] Siglas de la sede para la conexion
+		FUNCION: Armar el reporte de activacion de proveedores
+		RETORNO: No aplica
+	 */
+	function ReporteProductosEnCaida($SedeConnection){
+		$conn = ConectarSmartpharma($SedeConnection);
+
+		$FFinal = date("Y-m-d");     
+	  	$FInicial = date("Y-m-d",strtotime($FFinal."-3 days"));
+
+	  	$sql = QArticuloExistenciaActual();
+	  	$result = sqlsrv_query($conn,$sql);
+		
+	  	echo '
+		<div class="input-group md-form form-sm form-1 pl-0">
+		  <div class="input-group-prepend">
+		    <span class="input-group-text purple lighten-3" id="basic-text1">
+		    	<i class="fas fa-search text-white"
+		        aria-hidden="true"></i>
+		    </span>
+		  </div>
+		  <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterAllTable()">
+		</div>
+		<br/>
+		';
+
+		echo'<h6 align="center">Evaluado desde el '.$FInicial.' al '.$FFinal.' </h6>';
+
+		echo'
+		<table class="table table-striped table-bordered col-12 sortable" id="myTable">
+		  	<thead class="thead-dark">
+			    <tr>
+			    	<th scope="col">#</th>
+			    	<th scope="col">Codigo</th>
+			      	<th scope="col">Descripcion</th>
+			      	<th scope="col">Tipo</th>
+			      	<th scope="col">Precio (Con IVA)</th>
+			      	<th scope="col">Unidades vendidas</th>
+			      	<th scope="col">Total de Venta</th>
+			      	<th scope="col">Dias restantes</th>
+			      	<th scope="col">Ultima Venta</th>
+			      	<th scope="col">Ultimo Proveedor</th>
+			    </tr>
+		  	</thead>
+		  	<tbody>
+		';
+		$contador = 1;
+		while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
+			
+			$contador++;
+	  	}
+	  	echo '
+	  		</tbody>
+		</table>';
+		
+		sqlsrv_close($conn);
+	}
 ?>

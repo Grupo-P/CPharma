@@ -1220,7 +1220,6 @@
 		";
 		return $sql;
 	}
-
 	/*
 		TITULO: QDiasEnCero
 		PARAMETROS: No aplica
@@ -1244,7 +1243,6 @@
 		";
 		return $sql;
 	}
-
 	/*
 		TITULO: QGuardarDiasEnCero
 		PARAMETROS: [$proveedor] Id del provedor solicitado
@@ -1270,7 +1268,6 @@
 		";
 		return $sql;
 	}
-
 	/*
 		TITULO: QGuardarCapturaDiaria
 		PARAMETROS: [$FechaCaptura] El dia de hoy
@@ -1288,7 +1285,6 @@
 		";
 		return $sql;
 	}
-
 	/*
 		TITULO: QCapturaDiaria
 		PARAMETROS: [$FechaCaptura] El dia de hoy
@@ -1309,7 +1305,6 @@
 		FUNCION: consulta todos los datos de la captura diaria
 		RETORNO: no aplica
 	 */
-
 	function QVerCapturaDiaria() {
 		$sql = "SELECT * FROM capturas_diarias";
 		return $sql;
@@ -1320,7 +1315,6 @@
 		FUNCION: valida que la fecha exista en la tabla captura diaria
 		RETORNO: no aplica
 	 */
-
 	function QValidarCapturaDiaria($FechaCaptura) {
 		$sql = "SELECT count(*) AS CuentaCaptura 
 		FROM capturas_diarias WHERE fecha_captura = '$FechaCaptura'";
@@ -1332,7 +1326,6 @@
 		FUNCION: borra los registros de dias en cero de la fecha seleccionada
 		RETORNO: no aplica
 	 */
-
 	function QBorrarDiasCero($FechaCaptura) {
 		$sql = "DELETE FROM dias_ceros WHERE fecha_captura = '$FechaCaptura'";
 		return $sql;
@@ -1555,7 +1548,6 @@
 		";
 		return $sql;
 	}
-
 	/*
 		TITULO: QIntegracionResumenDeMovimientos
 		PARAMETROS: No aplica
@@ -1580,7 +1572,6 @@
 		";
 		return $sql;
 	}
-
 	/*
 		TITULO: QAgruparDetalleDeMovimientos
 		PARAMETROS: No aplica
@@ -1599,7 +1590,29 @@
 		";
 		return $sql;
 	}
-
+	/*
+		TITULO: QArticuloExistenciaActual
+		PARAMETROS: No aplica
+		FUNCION: Construir las columnas correspondientes al reporte
+		RETORNO: Un String con la query
+	 */
+	function QArticuloExistenciaActual() {
+		$sql = "
+		SELECT
+		InvArticulo.Id AS IdArticulo,
+		InvArticulo.CodigoArticulo AS CodigoInterno,
+		InvArticulo.Descripcion,
+		SUM(InvLoteAlmacen.Existencia) AS Existencia,
+		InvArticulo.FinConceptoImptoIdCompra AS ConceptoImpuesto
+		FROM InvArticulo
+		INNER JOIN InvLoteAlmacen ON InvArticulo.Id=InvLoteAlmacen.InvArticuloId
+		WHERE InvLoteAlmacen.Existencia > 0
+		AND (InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
+		GROUP BY InvArticulo.Id, InvArticulo.CodigoArticulo, InvArticulo.Descripcion, InvArticulo.FinConceptoImptoIdCompra
+		ORDER BY InvArticulo.Id ASC
+		";
+		return $sql;
+	}
 	/*
 		TITULO: 
 		PARAMETROS: 
