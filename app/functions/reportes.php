@@ -2713,7 +2713,7 @@
 				*/
 		/*********BORRAR DESPUES**********/
 
-			$ExistenciaValida = ValidarExistenciaDiaria($IdArticulo,$FInicial,$FFinal);
+			$ExistenciaValida = ValidarExistenciaDiaria($conn,$IdArticulo,$FInicial,$FFinal);
 
 			echo'<br/><br/>+++++++++++++++++++++++++++++++++++';
 			if($ExistenciaValida == TRUE){

@@ -900,20 +900,66 @@
 	  	return $Medicina;
 	}
 	/*
-		TITULO: ValidarExistenciaPC
+		TITULO: ValidarExistenciaDiaria
 		PARAMETROS: [$FInicial] fecha inicial a evaluar
 					[$FFinal] fecha final a evaluar
 		FUNCION: valida la existencia para productos en caida
 		RETORNO: retorna si el producto es valido para considerar
 	 */
-	function ValidarExistenciaDiaria($IdArticulo,$FInicial,$FFinal) {
+	function ValidarExistenciaDiaria($conn,$IdArticulo,$FInicial,$FFinal) {
 		$connCPharma = ConectarXampp();
 
 		$RangoDias = RangoDias($FInicial,$FFinal);
+		$RangoVentaValido = $RangoDias/2;
 		$IsValido = TRUE;
 		$ExistenciaAyer = 0;
+		$ContadorVentasDias = 0;
+		$ContadorComprasDias = 0;
 
 		while($RangoDias>0 && $IsValido==TRUE){
+
+			$sql = QCleanTable('CP_QUnidadesVendidasClienteId');
+			sqlsrv_query($conn,$sql);
+			$sql = QCleanTable('CP_QUnidadesDevueltaClienteId');
+			sqlsrv_query($conn,$sql);
+			$sql = QCleanTable('CP_QUnidadesCompradasProveedorId');
+			sqlsrv_query($conn,$sql);
+			$sql = QCleanTable('CP_QUnidadesReclamoProveedorId');
+			sqlsrv_query($conn,$sql);
+			$sql = QCleanTable('CP_QIntegracionProductosVendidosId');
+			sqlsrv_query($conn,$sql);
+ 
+			$FFinalVentas = date("Y-m-d",strtotime($FInicial."+ 1 days"));
+			$sql6 = QUnidadesVendidasClienteId($FInicial,$FFinalVentas,$IdArticulo);
+			$sql7 = QUnidadesDevueltaClienteId($FInicial,$FFinalVentas,$IdArticulo);
+			$sql8 = QUnidadesCompradasProveedorId($FInicial,$FFinalVentas,$IdArticulo);
+			$sql9 = QUnidadesReclamoProveedorId($FInicial,$FFinalVentas,$IdArticulo);
+			$sql10 = QIntegracionProductosVendidosId();
+	
+			sqlsrv_query($conn,$sql6);
+			sqlsrv_query($conn,$sql7);
+			sqlsrv_query($conn,$sql8);
+			sqlsrv_query($conn,$sql9);
+			sqlsrv_query($conn,$sql10);
+
+			$result2 = sqlsrv_query($conn,'SELECT * FROM CP_QIntegracionProductosVendidosId');
+
+			$row2 = sqlsrv_fetch_array($result2,SQLSRV_FETCH_ASSOC);
+			$TotalVecesVendidasCliente = ($row2["VecesVendidasCliente"]-$row2["VecesDevueltaCliente"]);
+			$TotalVecesCompradasProveedor = ($row2["VecesCompradasProveedor"]-$row2["VecesReclamoProveedor"]);
+
+			echo'<br/><br/>---------------+++++++++++++++++---------------';
+			echo'<br/><br/>TotalVecesVendidasCliente: '.$TotalVecesVendidasCliente;
+			echo'<br/><br/>TotalVecesCompradasProveedor: '.$TotalVecesCompradasProveedor;
+			echo'<br/><br/>---------------+++++++++++++++++---------------';
+
+			if($TotalVecesVendidasCliente>0){
+				$ContadorVentasDias++;
+			}
+			if($TotalVecesCompradasProveedor>0){
+				$ContadorComprasDias++;
+			}
+
 			echo'<br/><br/>***************************************';
 			$sql = QExistenciaHistorico($IdArticulo,$FInicial);
 			$result = mysqli_query($connCPharma,$sql);
@@ -948,8 +994,52 @@
 			
 			$FInicial = date("Y-m-d",strtotime($FInicial."+1 days"));
 			$RangoDias = RangoDias($FInicial,$FFinal);
-		}
-		echo'<br/><br/>////////////////////////////////////////';
+		}//FIN DEL WHILE
+
+			echo'<br/><br/>///////////////FUERA DEL WHILE/////////////////////';
+
+			$sql = QCleanTable('CP_QUnidadesVendidasClienteId');
+			sqlsrv_query($conn,$sql);
+			$sql = QCleanTable('CP_QUnidadesDevueltaClienteId');
+			sqlsrv_query($conn,$sql);
+			$sql = QCleanTable('CP_QUnidadesCompradasProveedorId');
+			sqlsrv_query($conn,$sql);
+			$sql = QCleanTable('CP_QUnidadesReclamoProveedorId');
+			sqlsrv_query($conn,$sql);
+			$sql = QCleanTable('CP_QIntegracionProductosVendidosId');
+			sqlsrv_query($conn,$sql);
+ 
+			$FFinalVentas = date("Y-m-d",strtotime($FInicial."+ 1 days"));
+			$sql6 = QUnidadesVendidasClienteId($FInicial,$FFinalVentas,$IdArticulo);
+			$sql7 = QUnidadesDevueltaClienteId($FInicial,$FFinalVentas,$IdArticulo);
+			$sql8 = QUnidadesCompradasProveedorId($FInicial,$FFinalVentas,$IdArticulo);
+			$sql9 = QUnidadesReclamoProveedorId($FInicial,$FFinalVentas,$IdArticulo);
+			$sql10 = QIntegracionProductosVendidosId();
+	
+			sqlsrv_query($conn,$sql6);
+			sqlsrv_query($conn,$sql7);
+			sqlsrv_query($conn,$sql8);
+			sqlsrv_query($conn,$sql9);
+			sqlsrv_query($conn,$sql10);
+
+			$result2 = sqlsrv_query($conn,'SELECT * FROM CP_QIntegracionProductosVendidosId');
+
+			$row2 = sqlsrv_fetch_array($result2,SQLSRV_FETCH_ASSOC);
+			$TotalVecesVendidasCliente = ($row2["VecesVendidasCliente"]-$row2["VecesDevueltaCliente"]);
+			$TotalVecesCompradasProveedor = ($row2["VecesCompradasProveedor"]-$row2["VecesReclamoProveedor"]);
+
+			echo'<br/><br/>---------------+++++++++++++++++---------------';
+			echo'<br/><br/>TotalVecesVendidasCliente: '.$TotalVecesVendidasCliente;
+			echo'<br/><br/>TotalVecesCompradasProveedor: '.$TotalVecesCompradasProveedor;
+			echo'<br/><br/>---------------+++++++++++++++++---------------';
+
+			if($TotalVecesVendidasCliente>0){
+				$ContadorVentasDias++;
+			}
+			if($TotalVecesCompradasProveedor>0){
+				$ContadorComprasDias++;
+			}
+
 		if($RangoDias==0 && $IsValido==TRUE){
 
 			$sql = QExistenciaHistorico($IdArticulo,$FInicial);
@@ -982,6 +1072,29 @@
 				$IsValido = FALSE;
 			}
 		}
+
+		echo'<br/><br/>---------------+++++++++++++++++---------------';
+		echo'<br/><br/>RangoDias: '.($RangoVentaValido*2);
+		echo'<br/><br/>RangoVentaValido: '.$RangoVentaValido;
+		echo'<br/><br/>ContadorVentasDias: '.$ContadorVentasDias;
+		echo'<br/><br/>ContadorComprasDias: '.$ContadorComprasDias;
+		echo'<br/><br/>---------------+++++++++++++++++---------------';
+
+		if($ContadorVentasDias>=$RangoVentaValido){
+			echo'<br/><br/>ContadorVentasDias: Venta valida';
+		}
+		else{
+			echo'<br/><br/>ContadorVentasDias: Venta invalida';
+		}
+
+		echo'<br/><br/>---------------+++++++++++++++++---------------';
+		if($ContadorComprasDias==0){
+			echo'<br/><br/>ContadorComprasDias: Venta valida';
+		}
+		else{
+			echo'<br/><br/>ContadorComprasDias: Venta invalida';
+		}
+
 		mysqli_close($connCPharma);
 		return $IsValido;
 	}
