@@ -2784,6 +2784,38 @@
 
 		echo '<td align="center">'." ".intval(round($TotalVenta,2))." ".SigVe.'</td>';
 
+		$Venta = intval($TotalUniades);
+		$RangoDias = RangoDias($FInicial,$FFinal);
+		$VentaDiaria = VentaDiaria($Venta,$RangoDias);
+		$DiasRestantes = DiasRestantes($Existencia,$VentaDiaria);
+
+		echo '<td align="center">'.round($DiasRestantes,2).'</td>';
+
+		$sql12 = QUltimaVentaSR($IdArticulo);
+		$result4 = sqlsrv_query($conn,$sql12);
+		$row4 = sqlsrv_fetch_array($result4,SQLSRV_FETCH_ASSOC);
+		$UltimaVentaSR = $row4["UltimaVenta"];
+
+		if(($UltimaVentaSR)){
+				echo '<td align="center">'.$UltimaVentaSR->format('Y-m-d').'</td>';
+		}
+		else{
+			echo '<td align="center"> - </td>';
+		}
+
+		$sql13 = QUltimoProveedor($IdArticulo);
+		$result5 = sqlsrv_query($conn,$sql13);
+		$row5 = sqlsrv_fetch_array($result5,SQLSRV_FETCH_ASSOC);
+		$UltimoProveedor = $row5["Nombre"];
+		$IdProveedor = $row5["Id"];
+
+		echo 
+		'<td align="left" class="barrido">
+		<a href="/reporte7?Nombre='.$UltimoProveedor.'&Id='.$IdProveedor.'&SEDE='.$SedeConnection.'" target="_blank" style="text-decoration: none; color: black;">'
+			.$UltimoProveedor.
+		'</a>
+		</td>';
+
 		echo '</tr>';
 
 			$contador++;
