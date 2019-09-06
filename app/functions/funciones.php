@@ -1111,4 +1111,29 @@
 		mysqli_close($connCPharma);
 		return $IsValido;
 	}
+
+	function ExistenciaDiasCero($IdArticulo,$FInicialCiclo,$FFinalCiclo){
+		$connCPharma = ConectarXampp();		
+		$RangoDiasCiclo = RangoDias($FInicialCiclo,$FFinalCiclo);
+
+		while($RangoDiasCiclo>0){
+			$sql = QExistenciaHistorico($IdArticulo,$FInicialCiclo);
+			$result = mysqli_query($connCPharma,$sql);
+			$row = mysqli_fetch_assoc($result);			
+			$ExistenciaCiclo = $row["Existencia"];
+			echo '<td align="center">'.intval($ExistenciaCiclo).'</td>';
+			$FInicialCiclo = date("Y-m-d",strtotime($FInicialCiclo."+1 days"));
+			$RangoDiasCiclo = RangoDias($FInicialCiclo,$FFinalCiclo);
+		}
+		if($RangoDiasCiclo==0){
+			$sql = QExistenciaHistorico($IdArticulo,$FInicialCiclo);
+			$result = mysqli_query($connCPharma,$sql);
+			$row = mysqli_fetch_assoc($result);			
+			$ExistenciaCiclo = $row["Existencia"];
+			echo '<td align="center">'.intval($ExistenciaCiclo).'</td>';
+			$FInicialCiclo = date("Y-m-d",strtotime($FInicialCiclo."+1 days"));
+			$RangoDiasCiclo = RangoDias($FInicialCiclo,$FFinalCiclo);
+		}
+		mysqli_close($connCPharma);
+	}
 ?>

@@ -2658,6 +2658,11 @@
  	 /*********BORRAR DESPUES**********/  
 	  	$FInicial = date("Y-m-d",strtotime($FFinal."-3 days"));
 
+	  	$FInicialCiclo = $FInicial;
+		$FFinalCiclo = $FFinal;
+
+		$ExistenciaValida;
+
 	  	$sql = QArticuloExistenciaActual();
 	  	$result = sqlsrv_query($conn,$sql);
 		
@@ -2691,17 +2696,21 @@
 			      	<th scope="col">Dias restantes</th>
 			      	<th scope="col">Ultima Venta</th>
 			      	<th scope="col">Ultimo Proveedor</th>
+			      	<th scope="col">Dia 1</th>
+			      	<th scope="col">Dia 2</th>
+			      	<th scope="col">Dia 3</th>
+			      	<th scope="col">Dia 4</th>
 			    </tr>
 		  	</thead>
 		  	<tbody>
 		';
 		$contador = 1;
 	/*********BORRAR  && $contador<2 **********/
-		while(($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) && $contador<10) {
-			$IdArticulo = $row["IdArticulo"];
+		while(($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) && $contador<2) {
+			//$IdArticulo = $row["IdArticulo"];
 
 		/*********BORRAR DESPUES**********/
-			//$IdArticulo = '57067';
+			$IdArticulo = '57067';
 				/*
 				* Existencia todos los dias SI
 				* Existencia decreciente SI
@@ -2715,18 +2724,13 @@
 				* Existencia todos los dias SI
 				* Existencia decreciente NO
 				*/
-		/*********BORRAR DESPUES**********/
-		/*
+		/********* INICIO DE VALIDACION DE ARTICULO **********/
 			$ExistenciaValida = ValidarExistenciaDiaria($conn,$IdArticulo,$FInicial,$FFinal);
-
-			echo'<br/><br/>+++++++++++++++++++++++++++++++++++';
-			if($ExistenciaValida == TRUE){
-				echo '<br/><br/>Existencia Valida: SI';
-			}
-			else if($ExistenciaValida == FALSE){
-				echo '<br/><br/>Existencia Valida: NO';
-			}
-		*/
+		/********* FIN DE VALIDACION DE ARTICULO **********/
+		echo'<br/><br/>+++++++++++++++++++++++++++++++++++ '.$ExistenciaValida;
+		if($ExistenciaValida == TRUE){
+			echo '<br/><br/>Existencia Valida: SI';
+		
 		/*****************DE ACA EN ADELANTE EL REPORTE DEFINITIVO******************/
 
 		echo '<tr>';
@@ -2815,10 +2819,13 @@
 			.$UltimoProveedor.
 		'</a>
 		</td>';
-
+		/****************** INICIO DEL CICLO DE DIAS *******************/
+		ExistenciaDiasCero($IdArticulo,$FInicialCiclo,$FFinalCiclo);
+		/****************** FIN DEL CICLO DE DIAS *******************/
 		echo '</tr>';
 
 			$contador++;
+	  	}
 	  	}
 	  	echo '
 	  		</tbody>
