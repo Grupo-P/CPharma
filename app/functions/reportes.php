@@ -2652,7 +2652,10 @@
 	function ReporteProductosEnCaida($SedeConnection){
 		$conn = ConectarSmartpharma($SedeConnection);
 
-		$FFinal = date("Y-m-d");     
+		//$FFinal = date("Y-m-d");
+	/*********BORRAR DESPUES**********/
+  		$FFinal = date("2019-09-05");
+ 	 /*********BORRAR DESPUES**********/  
 	  	$FInicial = date("Y-m-d",strtotime($FFinal."-3 days"));
 
 	  	$sql = QArticuloExistenciaActual();
@@ -2692,7 +2695,7 @@
 		  	<tbody>
 		';
 		$contador = 1;
-		
+	/*********BORRAR  && $contador<2 **********/
 		while(($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) && $contador<2) {
 			$IdArticulo = $row["IdArticulo"];
 
@@ -2722,17 +2725,6 @@
 			else if($ExistenciaValida == FALSE){
 				echo '<br/><br/>Existencia Valida: NO';
 			}
-
-			$sql = QCleanTable('CP_QUnidadesVendidasClienteId');
-			sqlsrv_query($conn,$sql);
-			$sql = QCleanTable('CP_QUnidadesDevueltaClienteId');
-			sqlsrv_query($conn,$sql);
-			$sql = QCleanTable('CP_QUnidadesCompradasProveedorId');
-			sqlsrv_query($conn,$sql);
-			$sql = QCleanTable('CP_QUnidadesReclamoProveedorId');
-			sqlsrv_query($conn,$sql);
-			$sql = QCleanTable('CP_QIntegracionProductosVendidosId');
-			sqlsrv_query($conn,$sql);
 
 			$contador++;
 	  	}

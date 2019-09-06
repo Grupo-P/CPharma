@@ -1063,8 +1063,6 @@
 					echo'<br/><br/>Aqui se hace false';
 					$IsValido = FALSE;
 				}
-
-				$IsValido = TRUE;
 			}
 			else{
 				echo'<br/><br/>Dia: '.$FInicial;
@@ -1082,18 +1080,33 @@
 
 		if($ContadorVentasDias>=$RangoVentaValido){
 			echo'<br/><br/>ContadorVentasDias: Venta valida';
+			$IsValido = TRUE;
 		}
 		else{
 			echo'<br/><br/>ContadorVentasDias: Venta invalida';
+			$IsValido = FALSE;
 		}
 
 		echo'<br/><br/>---------------+++++++++++++++++---------------';
 		if($ContadorComprasDias==0){
 			echo'<br/><br/>ContadorComprasDias: Venta valida';
+			$IsValido = TRUE;
 		}
 		else{
 			echo'<br/><br/>ContadorComprasDias: Venta invalida';
+			$IsValido = FALSE;
 		}
+
+		$sql = QCleanTable('CP_QUnidadesVendidasClienteId');
+		sqlsrv_query($conn,$sql);
+		$sql = QCleanTable('CP_QUnidadesDevueltaClienteId');
+		sqlsrv_query($conn,$sql);
+		$sql = QCleanTable('CP_QUnidadesCompradasProveedorId');
+		sqlsrv_query($conn,$sql);
+		$sql = QCleanTable('CP_QUnidadesReclamoProveedorId');
+		sqlsrv_query($conn,$sql);
+		$sql = QCleanTable('CP_QIntegracionProductosVendidosId');
+		sqlsrv_query($conn,$sql);
 
 		mysqli_close($connCPharma);
 		return $IsValido;

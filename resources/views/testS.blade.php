@@ -20,7 +20,7 @@
   $InicioCarga = new DateTime("now");
   
   /*********BORRAR DESPUES**********/
-  $_GET['SEDE'] = 'FTN';
+    $_GET['SEDE'] = 'FTN';
   /*********BORRAR DESPUES**********/
 
   if (isset($_GET['SEDE'])){      
