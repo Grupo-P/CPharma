@@ -2652,6 +2652,21 @@
 	function ReporteProductosEnCaida($SedeConnection){
 		$conn = ConectarSmartpharma($SedeConnection);
 
+		$sql = QCleanTable('CP_QVentasParcial');
+		sqlsrv_query($conn,$sql);
+		$sql = QCleanTable('CP_QDevolucionParcial');
+		sqlsrv_query($conn,$sql);
+		$sql = QCleanTable('CP_QUnidadesVendidasClienteId');
+		sqlsrv_query($conn,$sql);
+		$sql = QCleanTable('CP_QUnidadesDevueltaClienteId');
+		sqlsrv_query($conn,$sql);
+		$sql = QCleanTable('CP_QUnidadesCompradasProveedorId');
+		sqlsrv_query($conn,$sql);
+		$sql = QCleanTable('CP_QUnidadesReclamoProveedorId');
+		sqlsrv_query($conn,$sql);
+		$sql = QCleanTable('CP_QIntegracionProductosVendidosId');
+		sqlsrv_query($conn,$sql);
+
 		//$FFinal = date("Y-m-d");
 	/*********BORRAR DESPUES**********/
   		$FFinal = date("2019-09-05");
@@ -2706,11 +2721,12 @@
 		';
 		$contador = 1;
 	/*********BORRAR  && $contador<2 **********/
-		while(($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) && $contador<2) {
-			//$IdArticulo = $row["IdArticulo"];
-
+		while(($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) && $contador<100) {
+			$IdArticulo = $row["IdArticulo"];
+			
 		/*********BORRAR DESPUES**********/
-			$IdArticulo = '57067';
+			//$IdArticulo = '57067';
+			//$IdArticulo = '26'; 
 				/*
 				* Existencia todos los dias SI
 				* Existencia decreciente SI
@@ -2725,11 +2741,14 @@
 				* Existencia decreciente NO
 				*/
 		/********* INICIO DE VALIDACION DE ARTICULO **********/
+			echo'<br/><br/>**********';
+			echo'<br/>Entre - IdArticulo: '.$IdArticulo;
 			$ExistenciaValida = ValidarExistenciaDiaria($conn,$IdArticulo,$FInicial,$FFinal);
+			echo'<br/>Validacion: '.$ExistenciaValida;
 		/********* FIN DE VALIDACION DE ARTICULO **********/
-		echo'<br/><br/>+++++++++++++++++++++++++++++++++++ '.$ExistenciaValida;
+		//echo'<br/><br/>+++++++++++++++++++++++++++++++++++ '.$ExistenciaValida;
 		if($ExistenciaValida == TRUE){
-			echo '<br/><br/>Existencia Valida: SI';
+			//echo '<br/><br/>Existencia Valida: SI';
 		
 		/*****************DE ACA EN ADELANTE EL REPORTE DEFINITIVO******************/
 
@@ -2824,8 +2843,24 @@
 		/****************** FIN DEL CICLO DE DIAS *******************/
 		echo '</tr>';
 
-			$contador++;
 	  	}
+
+	  	$sql = QCleanTable('CP_QVentasParcial');
+		sqlsrv_query($conn,$sql);
+		$sql = QCleanTable('CP_QDevolucionParcial');
+		sqlsrv_query($conn,$sql);
+		$sql = QCleanTable('CP_QUnidadesVendidasClienteId');
+		sqlsrv_query($conn,$sql);
+		$sql = QCleanTable('CP_QUnidadesDevueltaClienteId');
+		sqlsrv_query($conn,$sql);
+		$sql = QCleanTable('CP_QUnidadesCompradasProveedorId');
+		sqlsrv_query($conn,$sql);
+		$sql = QCleanTable('CP_QUnidadesReclamoProveedorId');
+		sqlsrv_query($conn,$sql);
+		$sql = QCleanTable('CP_QIntegracionProductosVendidosId');
+		sqlsrv_query($conn,$sql);
+
+		$contador++;
 	  	}
 	  	echo '
 	  		</tbody>

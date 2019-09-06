@@ -948,10 +948,10 @@
 			$TotalVecesVendidasCliente = ($row2["VecesVendidasCliente"]-$row2["VecesDevueltaCliente"]);
 			$TotalVecesCompradasProveedor = ($row2["VecesCompradasProveedor"]-$row2["VecesReclamoProveedor"]);
 
-			echo'<br/><br/>---------------+++++++++++++++++---------------';
-			echo'<br/><br/>TotalVecesVendidasCliente: '.$TotalVecesVendidasCliente;
-			echo'<br/><br/>TotalVecesCompradasProveedor: '.$TotalVecesCompradasProveedor;
-			echo'<br/><br/>---------------+++++++++++++++++---------------';
+			//echo'<br/><br/>---------------+++++++++++++++++---------------';
+			///echo'<br/><br/>TotalVecesVendidasCliente: '.$TotalVecesVendidasCliente;
+			//echo'<br/><br/>TotalVecesCompradasProveedor: '.$TotalVecesCompradasProveedor;
+			//echo'<br/><br/>---------------+++++++++++++++++---------------';
 
 			if($TotalVecesVendidasCliente>0){
 				$ContadorVentasDias++;
@@ -960,7 +960,7 @@
 				$ContadorComprasDias++;
 			}
 
-			echo'<br/><br/>***************************************';
+			//echo'<br/><br/>***************************************';
 			$sql = QExistenciaHistorico($IdArticulo,$FInicial);
 			$result = mysqli_query($connCPharma,$sql);
 			$row = mysqli_fetch_assoc($result);
@@ -972,23 +972,23 @@
 			}
 
 			if($CuentaExistencia>0){
-				echo'<br/><br/>Dia: '.$FInicial;
-				echo'<br/>ExistenciaValida1: '.(empty($Existencia)?0:$Existencia);
+				//echo'<br/><br/>Dia: '.$FInicial;
+				//echo'<br/>ExistenciaValida1: '.(empty($Existencia)?0:$Existencia);
 
 				if($ExistenciaAyer>=$Existencia){
-					echo'<br/><br/>ExistenciaAyerSI1: '.$ExistenciaAyer;
+					//echo'<br/><br/>ExistenciaAyerSI1: '.$ExistenciaAyer;
 					$ExistenciaAyer = $Existencia;
 					$IsValido = TRUE;
 				}
 				else {
-					echo'<br/><br/>ExistenciaAyerNO1: '.$ExistenciaAyer;
+					//echo'<br/><br/>ExistenciaAyerNO1: '.$ExistenciaAyer;
 					$ExistenciaAyer = $Existencia;					
 					$IsValido = FALSE;
 				}
 			}
 			else{
-				echo'<br/><br/>Dia: '.$FInicial;
-				echo'<br/>ExistenciaInvalida1: '.(empty($Existencia)?0:$Existencia);
+				//echo'<br/><br/>Dia: '.$FInicial;
+				//echo'<br/>ExistenciaInvalida1: '.(empty($Existencia)?0:$Existencia);
 				$IsValido = FALSE;
 			}
 			
@@ -996,7 +996,7 @@
 			$RangoDias = RangoDias($FInicial,$FFinal);
 		}//FIN DEL WHILE
 
-			echo'<br/><br/>///////////////FUERA DEL WHILE/////////////////////';
+			//echo'<br/><br/>///////////////FUERA DEL WHILE/////////////////////';
 
 			$sql = QCleanTable('CP_QUnidadesVendidasClienteId');
 			sqlsrv_query($conn,$sql);
@@ -1027,12 +1027,12 @@
 			$row2 = sqlsrv_fetch_array($result2,SQLSRV_FETCH_ASSOC);
 			$TotalVecesVendidasCliente = ($row2["VecesVendidasCliente"]-$row2["VecesDevueltaCliente"]);
 			$TotalVecesCompradasProveedor = ($row2["VecesCompradasProveedor"]-$row2["VecesReclamoProveedor"]);
-
+			/*
 			echo'<br/><br/>---------------+++++++++++++++++---------------';
 			echo'<br/><br/>TotalVecesVendidasCliente: '.$TotalVecesVendidasCliente;
 			echo'<br/><br/>TotalVecesCompradasProveedor: '.$TotalVecesCompradasProveedor;
 			echo'<br/><br/>---------------+++++++++++++++++---------------';
-
+			*/
 			if($TotalVecesVendidasCliente>0){
 				$ContadorVentasDias++;
 			}
@@ -1049,52 +1049,52 @@
 			$Existencia = $row["Existencia"];
 
 			if($CuentaExistencia>0){
-				echo'<br/><br/>Dia: '.$FInicial;
-				echo'<br/>ExistenciaValida2: '.(empty($Existencia)?0:$Existencia);
+				//echo'<br/><br/>Dia: '.$FInicial;
+				//echo'<br/>ExistenciaValida2: '.(empty($Existencia)?0:$Existencia);
 
 				if($ExistenciaAyer>=$Existencia){
-					echo'<br/><br/>ExistenciaAyerSI2: '.$ExistenciaAyer;
+					//echo'<br/><br/>ExistenciaAyerSI2: '.$ExistenciaAyer;
 					$ExistenciaAyer = $Existencia;
 					$IsValido = TRUE;
 				}
 				else {
-					echo'<br/><br/>ExistenciaAyerNO2: '.$ExistenciaAyer;
+					//echo'<br/><br/>ExistenciaAyerNO2: '.$ExistenciaAyer;
 					$ExistenciaAyer = $Existencia;
-					echo'<br/><br/>Aqui se hace false';
+					//echo'<br/><br/>Aqui se hace false';
 					$IsValido = FALSE;
 				}
 			}
 			else{
-				echo'<br/><br/>Dia: '.$FInicial;
-				echo'<br/>ExistenciaInvalida2: '.(empty($Existencia)?0:$Existencia);
+				//echo'<br/><br/>Dia: '.$FInicial;
+				//echo'<br/>ExistenciaInvalida2: '.(empty($Existencia)?0:$Existencia);
 				$IsValido = FALSE;
 			}
 		}
-
+		/*
 		echo'<br/><br/>---------------+++++++++++++++++---------------';
 		echo'<br/><br/>RangoDias: '.($RangoVentaValido*2);
 		echo'<br/><br/>RangoVentaValido: '.$RangoVentaValido;
 		echo'<br/><br/>ContadorVentasDias: '.$ContadorVentasDias;
 		echo'<br/><br/>ContadorComprasDias: '.$ContadorComprasDias;
 		echo'<br/><br/>---------------+++++++++++++++++---------------';
-
+		*/
 		if($ContadorVentasDias>=$RangoVentaValido){
-			echo'<br/><br/>ContadorVentasDias: Venta valida';
-			$IsValido = TRUE;
+			//echo'<br/><br/>ContadorVentasDias: Venta valida';
+			$IsValidoContadorVentasDias = TRUE;
 		}
 		else{
-			echo'<br/><br/>ContadorVentasDias: Venta invalida';
-			$IsValido = FALSE;
+			//echo'<br/><br/>ContadorVentasDias: Venta invalida';
+			$IsValidoContadorVentasDias = FALSE;
 		}
 
-		echo'<br/><br/>---------------+++++++++++++++++---------------';
+		//echo'<br/><br/>---------------+++++++++++++++++---------------';
 		if($ContadorComprasDias==0){
-			echo'<br/><br/>ContadorComprasDias: Venta valida';
-			$IsValido = TRUE;
+			//echo'<br/><br/>ContadorComprasDias: Venta valida';
+			$IsValidoContadorComprasDias = TRUE;
 		}
 		else{
-			echo'<br/><br/>ContadorComprasDias: Venta invalida';
-			$IsValido = FALSE;
+			//echo'<br/><br/>ContadorComprasDias: Venta invalida';
+			$IsValidoContadorComprasDias = FALSE;
 		}
 
 		$sql = QCleanTable('CP_QUnidadesVendidasClienteId');
@@ -1109,7 +1109,18 @@
 		sqlsrv_query($conn,$sql);
 
 		mysqli_close($connCPharma);
-		return $IsValido;
+		//echo'<br/>IsValido: '.$IsValido;
+		//echo'<br/>IsValidoContadorVentasDias: '.$IsValidoContadorVentasDias;
+		//echo'<br/>IsValidoContadorComprasDias: '.$IsValidoContadorComprasDias;
+
+		if(($IsValido==TRUE)&&($IsValidoContadorVentasDias==TRUE)&&($IsValidoContadorComprasDias==TRUE)){
+			$Valido = TRUE;
+		}
+		else{
+			$Valido = FALSE;
+		}
+		//echo'<br/>Valido: '.$Valido;
+		return $Valido;
 	}
 
 	function ExistenciaDiasCero($IdArticulo,$FInicialCiclo,$FFinalCiclo){
