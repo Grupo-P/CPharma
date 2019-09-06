@@ -2685,6 +2685,7 @@
 			      	<th scope="col">Descripcion</th>
 			      	<th scope="col">Tipo</th>
 			      	<th scope="col">Precio (Con IVA)</th>
+			      	<th scope="col">Existencia</th>
 			      	<th scope="col">Unidades vendidas</th>
 			      	<th scope="col">Total de Venta</th>
 			      	<th scope="col">Dias restantes</th>
@@ -2696,11 +2697,11 @@
 		';
 		$contador = 1;
 	/*********BORRAR  && $contador<2 **********/
-		while(($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) && $contador<2) {
+		while(($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) && $contador<10) {
 			$IdArticulo = $row["IdArticulo"];
 
 		/*********BORRAR DESPUES**********/
-			$IdArticulo = '57067';
+			//$IdArticulo = '57067';
 				/*
 				* Existencia todos los dias SI
 				* Existencia decreciente SI
@@ -2715,7 +2716,7 @@
 				* Existencia decreciente NO
 				*/
 		/*********BORRAR DESPUES**********/
-
+		/*
 			$ExistenciaValida = ValidarExistenciaDiaria($conn,$IdArticulo,$FInicial,$FFinal);
 
 			echo'<br/><br/>+++++++++++++++++++++++++++++++++++';
@@ -2725,6 +2726,65 @@
 			else if($ExistenciaValida == FALSE){
 				echo '<br/><br/>Existencia Valida: NO';
 			}
+		*/
+		/*****************DE ACA EN ADELANTE EL REPORTE DEFINITIVO******************/
+
+		echo '<tr>';
+		echo '<td align="center"><strong>'.intval($contador).'</strong></td>';
+		echo '<td align="left">'.$row["CodigoInterno"].'</td>';
+
+		echo 
+		'<td align="left" class="barrido">
+		<a href="/reporte2?Id='.$IdArticulo.'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
+			.$row["Descripcion"].
+		'</a>
+		</td>';
+
+		$Tipo = ProductoMedicina($conn,$IdArticulo);
+		echo '<td align="center">'.$Tipo.'</td>';
+
+		$IsIVA=$row["ConceptoImpuesto"];
+		$Existencia=$row["Existencia"];
+		$Precio = CalculoPrecio($conn,$IdArticulo,$IsIVA,$Existencia);
+		echo '<td align="center">'." ".round($Precio,2)." ".SigVe.'</td>';
+
+		echo '<td align="center">'.intval($Existencia).'</td>';
+
+		$sql = QCleanTable('CP_QVentasParcial');
+		sqlsrv_query($conn,$sql);
+		$sql = QCleanTable('CP_QDevolucionParcial');
+		sqlsrv_query($conn,$sql);
+
+		$sql8 = QVentasParcial($FInicial,$FFinal,$IdArticulo);
+		sqlsrv_query($conn,$sql8);
+		$sql9 = QDevolucionParcial($FInicial,$FFinal,$IdArticulo);
+		sqlsrv_query($conn,$sql9);
+
+		$sql10 = QIntegracionVentasParcial();
+		$result2 = sqlsrv_query($conn,$sql10);
+		$row2 = sqlsrv_fetch_array($result2,SQLSRV_FETCH_ASSOC);
+		$UnidadesVendidas = $row2["UnidadesVendidas"];
+		$TotalVenta = $row2["TotalVenta"];
+
+		$sql11 = QIntegracionDevolucionParcial();
+		$result3 = sqlsrv_query($conn,$sql11);
+		$row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC); 
+		$UnidadesDevueltas = $row3["UnidadesDevueltas"];
+		$TotalDevolucion = $row3["TotalDevolucion"];
+
+		$TotalUniades = $UnidadesVendidas - $UnidadesDevueltas;
+		$TotalVenta = $TotalVenta - $TotalDevolucion;
+
+		echo 
+		'<td align="center" class="barrido">
+		<a href="reporte12?fechaInicio='.$FInicial.'&fechaFin='.$FFinal.'&SEDE='.$SedeConnection.'&Descrip='.$row["Descripcion"].'&Id='.$IdArticulo.'" style="text-decoration: none; color: black;" target="_blank">'
+			.intval($TotalUniades).
+		'</a>
+		</td>';
+
+		echo '<td align="center">'." ".intval(round($TotalVenta,2))." ".SigVe.'</td>';
+
+		echo '</tr>';
 
 			$contador++;
 	  	}
