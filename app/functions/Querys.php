@@ -1594,29 +1594,6 @@
 ///				QUERYS EN DESARROLLO PARA PRODUCTOS EN CAIDA        ///
 //////////////////////////////////////////////////////////////////////////
 	/*
-		TITULO: QArticuloExistenciaActual
-		PARAMETROS: No aplica
-		FUNCION: Construir las columnas correspondientes al reporte
-		RETORNO: Un String con la query
-	 */
-	function QArticuloExistenciaActual() {
-		$sql = "
-		SELECT
-		InvArticulo.Id AS IdArticulo,
-		InvArticulo.CodigoArticulo AS CodigoInterno,
-		InvArticulo.Descripcion,
-		SUM(InvLoteAlmacen.Existencia) AS Existencia,
-		InvArticulo.FinConceptoImptoIdCompra AS ConceptoImpuesto
-		FROM InvArticulo
-		INNER JOIN InvLoteAlmacen ON InvArticulo.Id=InvLoteAlmacen.InvArticuloId
-		WHERE InvLoteAlmacen.Existencia > 0
-		AND (InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
-		GROUP BY InvArticulo.Id, InvArticulo.CodigoArticulo, InvArticulo.Descripcion, InvArticulo.FinConceptoImptoIdCompra
-		ORDER BY InvArticulo.Id ASC
-		";
-		return $sql;
-	}
-	/*
 		TITULO: QExistenciaHistorico
 		PARAMETROS: [$IdArticulo] Id del articulo a buscar
 		FUNCION: cuenta el total de registos de dias en cero
@@ -1624,12 +1601,50 @@
 		//
 	 */
 	function QExistenciaHistorico($IdArticulo,$FechaCaptura) {
-		$sql = "SELECT 
-		COUNT(*) AS Cuenta,
-		Existencia
-		FROM dias_ceros 
-		WHERE dias_ceros.id_articulo = '$IdArticulo' 
-		AND fecha_captura = '$FechaCaptura'
+		$sql = "
+			SELECT
+			COUNT(*) AS Cuenta,
+			Existencia			
+			FROM dias_ceros 
+			WHERE dias_ceros.id_articulo = '$IdArticulo' 
+			AND fecha_captura = '$FechaCaptura'
+		";
+		return $sql;
+	}
+	/*
+		TITULO: QFiltradoCaida
+		PARAMETROS: $FInicial,$FFinal
+		FUNCION: hace un filtrado de la data antes de entrar a dias en cero
+		RETORNO: no aplica
+		//
+	 */
+	function QFiltradoCaida($FInicial,$FFinal) {
+		$sql = "
+			SELECT
+			InvArticulo.Id AS IdArticulo,
+			InvArticulo.CodigoArticulo AS CodigoInterno,
+			InvArticulo.Descripcion,
+			SUM(InvLoteAlmacen.Existencia) AS Existencia,
+			InvArticulo.FinConceptoImptoIdCompra AS ConceptoImpuesto,
+			COUNT(*) AS VecesVendidasCliente,
+			(SELECT 
+				COUNT(*) AS VecesCompradasProveedor
+				FROM ComFacturaDetalle
+				INNER JOIN ComFactura ON  ComFactura.Id = ComFacturaDetalle.ComFacturaId
+				WHERE
+				(ComFactura.FechaRegistro > '$FInicial' AND ComFactura.FechaRegistro < '$FFinal') 
+				AND (InvArticulo.Id = ComFacturaDetalle.InvArticuloId)
+			)AS VecesCompradasProveedor
+			INTO CP_FiltradoCaida
+			FROM VenFacturaDetalle
+			INNER JOIN InvArticulo ON InvArticulo.Id = VenFacturaDetalle.InvArticuloId
+			INNER JOIN InvLoteAlmacen ON InvArticulo.Id=InvLoteAlmacen.InvArticuloId
+			INNER JOIN VenFactura ON VenFactura.Id = VenFacturaDetalle.VenFacturaId
+			WHERE InvLoteAlmacen.Existencia > 0
+			AND (InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
+			AND (VenFactura.FechaDocumento > '$FInicial' AND VenFactura.FechaDocumento < '$FFinal')
+			GROUP BY InvArticulo.Id, InvArticulo.CodigoArticulo, InvArticulo.Descripcion, InvArticulo.FinConceptoImptoIdCompra
+			ORDER BY InvArticulo.Id ASC
 		";
 		return $sql;
 	}

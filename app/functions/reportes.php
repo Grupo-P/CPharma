@@ -2641,9 +2641,6 @@
 
 		sqlsrv_close($conn);
 	}
-///////////////////////////////////////////////////////////////////////////
-///				REPORTE EN DESARROLLO PARA PRODUCTOS EN CAIDA        ///
-//////////////////////////////////////////////////////////////////////////
 	/*****************************************************************************/
 	/************************ REPORTE 14 PRODUCTOS EN CAIDA ****************/
 	/*
@@ -2652,240 +2649,25 @@
 		FUNCION: Armar el reporte de activacion de proveedores
 		RETORNO: No aplica
 	 */
-	function ReporteProductosEnCaida1($SedeConnection){
-		$conn = ConectarSmartpharma($SedeConnection);
-
-		$sql = QCleanTable('CP_QVentasParcial');
-		sqlsrv_query($conn,$sql);
-		$sql = QCleanTable('CP_QDevolucionParcial');
-		sqlsrv_query($conn,$sql);
-		$sql = QCleanTable('CP_QUnidadesVendidasClienteId');
-		sqlsrv_query($conn,$sql);
-		$sql = QCleanTable('CP_QUnidadesDevueltaClienteId');
-		sqlsrv_query($conn,$sql);
-		$sql = QCleanTable('CP_QUnidadesCompradasProveedorId');
-		sqlsrv_query($conn,$sql);
-		$sql = QCleanTable('CP_QUnidadesReclamoProveedorId');
-		sqlsrv_query($conn,$sql);
-		$sql = QCleanTable('CP_QIntegracionProductosVendidosId');
-		sqlsrv_query($conn,$sql);
-
-		//$FFinal = date("Y-m-d");
-	/*********BORRAR DESPUES**********/
-  		$FFinal = date("2019-09-05");
- 	 /*********BORRAR DESPUES**********/  
-	  	$FInicial = date("Y-m-d",strtotime($FFinal."-3 days"));
-
-	  	$FInicialCiclo = $FInicial;
-		$FFinalCiclo = $FFinal;
-
-		$ExistenciaValida;
-
-	  	$sql = QArticuloExistenciaActual();
-	  	$result = sqlsrv_query($conn,$sql);
-		
-	  	echo '
-		<div class="input-group md-form form-sm form-1 pl-0">
-		  <div class="input-group-prepend">
-		    <span class="input-group-text purple lighten-3" id="basic-text1">
-		    	<i class="fas fa-search text-white"
-		        aria-hidden="true"></i>
-		    </span>
-		  </div>
-		  <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterAllTable()">
-		</div>
-		<br/>
-		';
-
-		echo'<h6 align="center">Evaluado desde el '.$FInicial.' al '.$FFinal.' </h6>';
-
-		echo'
-		<table class="table table-striped table-bordered col-12 sortable" id="myTable">
-		  	<thead class="thead-dark">
-			    <tr>
-			    	<th scope="col">#</th>
-			    	<th scope="col">Codigo</th>
-			      	<th scope="col">Descripcion</th>
-			      	<th scope="col">Tipo</th>
-			      	<th scope="col">Precio (Con IVA)</th>
-			      	<th scope="col">Existencia</th>
-			      	<th scope="col">Unidades vendidas</th>
-			      	<th scope="col">Total de Venta</th>
-			      	<th scope="col">Dias restantes</th>
-			      	<th scope="col">Ultima Venta</th>
-			      	<th scope="col">Ultimo Proveedor</th>
-			      	<th scope="col">Dia 1</th>
-			      	<th scope="col">Dia 2</th>
-			      	<th scope="col">Dia 3</th>
-			      	<th scope="col">Dia 4</th>
-			    </tr>
-		  	</thead>
-		  	<tbody>
-		';
-		$contador = 1;
-	/*********BORRAR  && $contador<2 **********/
-		while(($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) && $contador<100) {
-			$IdArticulo = $row["IdArticulo"];
-			
-		/*********BORRAR DESPUES**********/
-			//$IdArticulo = '57067';
-			//$IdArticulo = '26'; 
-				/*
-				* Existencia todos los dias SI
-				* Existencia decreciente SI
-				*/
-			//$IdArticulo = '58125'; 
-				/*
-				* Existencia todos los dias NO
-				*/
-			//$IdArticulo = '53273';
-				/*
-				* Existencia todos los dias SI
-				* Existencia decreciente NO
-				*/
-		/********* INICIO DE VALIDACION DE ARTICULO **********/
-			echo'<br/><br/>**********';
-			echo'<br/>Entre - IdArticulo: '.$IdArticulo;
-			$ExistenciaValida = ValidarExistenciaDiaria($conn,$IdArticulo,$FInicial,$FFinal);
-			echo'<br/>Validacion: '.$ExistenciaValida;
-		/********* FIN DE VALIDACION DE ARTICULO **********/
-		//echo'<br/><br/>+++++++++++++++++++++++++++++++++++ '.$ExistenciaValida;
-		if($ExistenciaValida == TRUE){
-			//echo '<br/><br/>Existencia Valida: SI';
-		
-		/*****************DE ACA EN ADELANTE EL REPORTE DEFINITIVO******************/
-
-		echo '<tr>';
-		echo '<td align="center"><strong>'.intval($contador).'</strong></td>';
-		echo '<td align="left">'.$row["CodigoInterno"].'</td>';
-
-		echo 
-		'<td align="left" class="barrido">
-		<a href="/reporte2?Id='.$IdArticulo.'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
-			.$row["Descripcion"].
-		'</a>
-		</td>';
-
-		$Tipo = ProductoMedicina($conn,$IdArticulo);
-		echo '<td align="center">'.$Tipo.'</td>';
-
-		$IsIVA=$row["ConceptoImpuesto"];
-		$Existencia=$row["Existencia"];
-		$Precio = CalculoPrecio($conn,$IdArticulo,$IsIVA,$Existencia);
-		echo '<td align="center">'." ".round($Precio,2)." ".SigVe.'</td>';
-
-		echo '<td align="center">'.intval($Existencia).'</td>';
-
-		$sql = QCleanTable('CP_QVentasParcial');
-		sqlsrv_query($conn,$sql);
-		$sql = QCleanTable('CP_QDevolucionParcial');
-		sqlsrv_query($conn,$sql);
-
-		$sql8 = QVentasParcial($FInicial,$FFinal,$IdArticulo);
-		sqlsrv_query($conn,$sql8);
-		$sql9 = QDevolucionParcial($FInicial,$FFinal,$IdArticulo);
-		sqlsrv_query($conn,$sql9);
-
-		$sql10 = QIntegracionVentasParcial();
-		$result2 = sqlsrv_query($conn,$sql10);
-		$row2 = sqlsrv_fetch_array($result2,SQLSRV_FETCH_ASSOC);
-		$UnidadesVendidas = $row2["UnidadesVendidas"];
-		$TotalVenta = $row2["TotalVenta"];
-
-		$sql11 = QIntegracionDevolucionParcial();
-		$result3 = sqlsrv_query($conn,$sql11);
-		$row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC); 
-		$UnidadesDevueltas = $row3["UnidadesDevueltas"];
-		$TotalDevolucion = $row3["TotalDevolucion"];
-
-		$TotalUniades = $UnidadesVendidas - $UnidadesDevueltas;
-		$TotalVenta = $TotalVenta - $TotalDevolucion;
-
-		echo 
-		'<td align="center" class="barrido">
-		<a href="reporte12?fechaInicio='.$FInicial.'&fechaFin='.$FFinal.'&SEDE='.$SedeConnection.'&Descrip='.$row["Descripcion"].'&Id='.$IdArticulo.'" style="text-decoration: none; color: black;" target="_blank">'
-			.intval($TotalUniades).
-		'</a>
-		</td>';
-
-		echo '<td align="center">'." ".intval(round($TotalVenta,2))." ".SigVe.'</td>';
-
-		$Venta = intval($TotalUniades);
-		$RangoDias = RangoDias($FInicial,$FFinal);
-		$VentaDiaria = VentaDiaria($Venta,$RangoDias);
-		$DiasRestantes = DiasRestantes($Existencia,$VentaDiaria);
-
-		echo '<td align="center">'.round($DiasRestantes,2).'</td>';
-
-		$sql12 = QUltimaVentaSR($IdArticulo);
-		$result4 = sqlsrv_query($conn,$sql12);
-		$row4 = sqlsrv_fetch_array($result4,SQLSRV_FETCH_ASSOC);
-		$UltimaVentaSR = $row4["UltimaVenta"];
-
-		if(($UltimaVentaSR)){
-				echo '<td align="center">'.$UltimaVentaSR->format('Y-m-d').'</td>';
-		}
-		else{
-			echo '<td align="center"> - </td>';
-		}
-
-		$sql13 = QUltimoProveedor($IdArticulo);
-		$result5 = sqlsrv_query($conn,$sql13);
-		$row5 = sqlsrv_fetch_array($result5,SQLSRV_FETCH_ASSOC);
-		$UltimoProveedor = $row5["Nombre"];
-		$IdProveedor = $row5["Id"];
-
-		echo 
-		'<td align="left" class="barrido">
-		<a href="/reporte7?Nombre='.$UltimoProveedor.'&Id='.$IdProveedor.'&SEDE='.$SedeConnection.'" target="_blank" style="text-decoration: none; color: black;">'
-			.$UltimoProveedor.
-		'</a>
-		</td>';
-		/****************** INICIO DEL CICLO DE DIAS *******************/
-		ExistenciaDiasCero($IdArticulo,$FInicialCiclo,$FFinalCiclo);
-		/****************** FIN DEL CICLO DE DIAS *******************/
-		echo '</tr>';
-
-	  	}
-
-	  	$sql = QCleanTable('CP_QVentasParcial');
-		sqlsrv_query($conn,$sql);
-		$sql = QCleanTable('CP_QDevolucionParcial');
-		sqlsrv_query($conn,$sql);
-		$sql = QCleanTable('CP_QUnidadesVendidasClienteId');
-		sqlsrv_query($conn,$sql);
-		$sql = QCleanTable('CP_QUnidadesDevueltaClienteId');
-		sqlsrv_query($conn,$sql);
-		$sql = QCleanTable('CP_QUnidadesCompradasProveedorId');
-		sqlsrv_query($conn,$sql);
-		$sql = QCleanTable('CP_QUnidadesReclamoProveedorId');
-		sqlsrv_query($conn,$sql);
-		$sql = QCleanTable('CP_QIntegracionProductosVendidosId');
-		sqlsrv_query($conn,$sql);
-
-		$contador++;
-	  	}
-	  	echo '
-	  		</tbody>
-		</table>';
-
-		sqlsrv_close($conn);
-	}
-
-
-
-////////////////////////////////////////////////////////////////////
 	function ReporteProductosEnCaida($SedeConnection){
 		$conn = ConectarSmartpharma($SedeConnection);
 		$connCPharma = ConectarXampp();
 
-		/* FILTRO 1: Articulos con existencia actual mayor a 0 */
-		$sql = QArticuloExistenciaActual();
-	  	$result = sqlsrv_query($conn,$sql);
-
-  		/* Rangos de Fecha */
-  		$FFinal = date("2019-09-05"); //CAMBIAR A Y-m-d
+		/* Rangos de Fecha */
+  		$FFinal = date("2019-09-05"); //date("Y-m-d");
 	  	$FInicial = date("Y-m-d",strtotime($FFinal."-3 days"));
+	  	$RangoDias = RangoDias($FInicial,$FFinal);
+
+		$sql = QCleanTable('CP_FiltradoCaida');
+		sqlsrv_query($conn,$sql);
+
+		/* FILTRO 1: Articulos con existencia actual mayor a 0 */
+		$sql = QFiltradoCaida();
+		sqlsrv_query($conn,$sql);
+
+
+
+	  	$result = 
 
 	  	echo '
 		<div class="input-group md-form form-sm form-1 pl-0">
@@ -2927,12 +2709,12 @@
 		/* Inicio while que itera en los articulos con existencia actual > 0*/
 		while(
 				($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) 
-				&& ($contador<2)
+				&& ($contador<30)
 			)
 		{
 			$IdArticulo = $row["IdArticulo"];
+			echo'**********************************';
 			echo'$IdArticuloAFUERA: '.$IdArticulo;
-			echo'<br>';
 
 			$RangoDias = RangoDias($FInicial,$FFinal);
 			$FechaPivote = $FInicial;
