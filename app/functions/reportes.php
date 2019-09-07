@@ -2713,6 +2713,7 @@
 		$ContValidos = 0;
 		$ContNOValidosExistencia = 0;
 		$ContNOValidosVenta = 0;
+		$ContNOValidosDecreciente = 0;
 		/* Inicio while que itera en los articulos con existencia actual > 0*/
 		while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
 			$IdArticulo = $row["IdArticulo"];
@@ -2734,13 +2735,21 @@
 
 				if($CuentaVenta>=($RangoDias/2)){
 
-					echo'//////////////////////////////////////';
-					echo'<br/>$IdArticulo: '.$IdArticulo;
-					echo'<br/>$Descripcion: '.$row["Descripcion"];
-					echo'//////////////////////////////////////';
-					echo'<br/>';
+					$CuentaDecreciente = ExistenciaDecreciente($connCPharma,$IdArticulo,$FInicial,$FFinal,$RangoDias);
 
-					$ContValidos++;
+						if($CuentaDecreciente==TRUE){
+
+							echo'<br/>//////////////////////////////////////';
+							echo'<br/>$IdArticulo: '.$IdArticulo;
+							echo'<br/>$Descripcion: '.$row["Descripcion"];
+							echo'<br/>//////////////////////////////////////';
+							echo'<br/>';
+
+							$ContValidos++;
+						}
+						else{
+							$ContNOValidosDecreciente++;
+						}	
 				}
 				else{
 					$ContNOValidosVenta++;
@@ -2768,6 +2777,7 @@
 		echo'<br/>ContValidos: '.$ContValidos;
 		echo'<br/>ContNOValidosExistencia: '.$ContNOValidosExistencia;
 		echo'<br/>ContNOValidosVenta: '.$ContNOValidosVenta;
+		echo'<br/>ContNOValidosDecreciente: '.$ContNOValidosDecreciente;
 		echo'<br/>';
 		
 		echo '

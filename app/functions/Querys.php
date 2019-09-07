@@ -1682,6 +1682,22 @@
 		return $sql;
 	}
 	/*
+		TITULO: QExistenciaDiasCero
+		PARAMETROS: [$IdArticulo] Id del articulo a buscar
+		FUNCION: cuenta el total de repeticiones de un articulo en dias en cero
+		RETORNO: no aplica
+		//
+	 */
+	function QExistenciaDiasCero($IdArticulo,$FechaCaptura) {
+		$sql = "
+			SELECT existencia 
+			FROM dias_ceros 
+			WHERE dias_ceros.id_articulo = '$IdArticulo' 
+			AND `fecha_captura` = '$FechaCaptura'
+		";
+		return $sql;
+	}
+	/*
 		TITULO: 
 		PARAMETROS: 
 		FUNCION:

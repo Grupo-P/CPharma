@@ -950,25 +950,44 @@
 		FUNCION: 
 		RETORNO: 
  	*/
-	function ExistenciaDecreciente($conn,$IdArticulo,$FInicial,$FFinal) {
+	function ExistenciaDecreciente($connCPharma,$IdArticulo,$FInicial,$FFinal,$RangoDias) {
 		
-		$FFinalPivote = date("Y-m-d",strtotime($FInicial."+1 days"));
-		$CuentaVenta = 0;
+		$PrimerCiclo = TRUE;
+		$ExistenciaAyer = 0;
+		$CuentaDecreciente = TRUE;
+		$CuentaDecrece = 0;
 
-		while($FFinalPivote!=$FFinal){
+		while( ($FInicial!=$FFinal) && ($CuentaDecreciente==TRUE) ) {
 
-			$sql = QCuentaVenta($IdArticulo,$FInicial,$FFinalPivote);
-			$result = sqlsrv_query($conn,$sql);
-			$row = sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC);
-			$VecesVendida = $row["Cuenta"];
+			$sql = QExistenciaDiasCero($IdArticulo,$FInicial);
+			$result = mysqli_query($connCPharma,$sql);
+			$row = mysqli_fetch_assoc($result);
+			$ExistenciaHoy = $row["existencia"];
 
-			if($VecesVendida>0){
-				$CuentaVenta++;
+			if($PrimerCiclo == TRUE){
+				$PrimerCiclo = FALSE;
+				$ExistenciaAyer = $ExistenciaHoy;
+			}
+
+			if($ExistenciaAyer>=$ExistenciaHoy){
+				$CuentaDecreciente = TRUE;
+
+				if($ExistenciaAyer>$ExistenciaHoy){
+					$CuentaDecrece++;
+				}
+			}
+			else{
+				$CuentaDecreciente = FALSE;
 			}
 
 			$FInicial = date("Y-m-d",strtotime($FInicial."+1 days"));
-	  		$FFinalPivote = date("Y-m-d",strtotime($FFinalPivote."+1 days"));
 		}
-		return $CuentaVenta;
+		if($CuentaDecrece>=($RangoDias/2)){
+			$CuentaDecreciente = TRUE;
+		}
+		else{
+			$CuentaDecreciente = FALSE;
+		}
+		return $CuentaDecreciente;
 	}
 ?>
