@@ -2651,6 +2651,7 @@
 	 */
 	function ReporteProductosEnCaida($SedeConnection){
 		$conn = ConectarSmartpharma($SedeConnection);
+		$connCPharma = ConectarXampp();
 
 		/* Rangos de Fecha */
   		$FFinal = date('2019-09-05'); //date("Y-m-d");
@@ -2710,37 +2711,45 @@
 		';
 		$contador = 1;
 		$ContValidos = 0;
-		$ContNOValidos = 0;
+		$ContNOValidosExistencia = 0;
+		$ContNOValidosVenta = 0;
 		/* Inicio while que itera en los articulos con existencia actual > 0*/
 		while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
 			$IdArticulo = $row["IdArticulo"];
 
 			/* FILTRO 2: 
-			*	Existencia en dia
+			*	Mantuvo Existencia en rango
 			*	se cuenta las apariciones del articulo en la tabla de dias
 			*	en cero, la misma debe ser igual la diferencia de dias +1 
 			*/
-			$CuentaExistencia = CuentaExistencia($IdArticulo);
+			
+			$CuentaExistencia = CuentaExistencia($connCPharma,$IdArticulo);
 			if($CuentaExistencia==($RangoDias+1)){
-				$IsExistenciaDiaria = TRUE;
 
-				echo'//////////////////////////////////////';
-				echo'<br/>$IdArticulo: '.$IdArticulo;
-				echo'<br/>$Descripcion: '.$row["Descripcion"];
-				echo'//////////////////////////////////////';
-				echo'<br/>';
-				$ContValidos++;
+				/*  FILTRO 3: 
+				*	Venta en dia, esta se acumula 
+				*	El articulo debe tener venta al menos la mita de dias del rango 
+				*/
+				$CuentaVenta = CuentaVenta($conn,$IdArticulo,$FInicial,$FFinal);
+
+				if($CuentaVenta>=($RangoDias/2)){
+
+					echo'//////////////////////////////////////';
+					echo'<br/>$IdArticulo: '.$IdArticulo;
+					echo'<br/>$Descripcion: '.$row["Descripcion"];
+					echo'//////////////////////////////////////';
+					echo'<br/>';
+
+					$ContValidos++;
+				}
+				else{
+					$ContNOValidosVenta++;
+				}
 			}
 			else{
-				$IsExistenciaDiaria = FALSE;
-				$ContNOValidos++;
+				$ContNOValidosExistencia++;
 			}
 	
-			/*  FILTRO 3:
-			*	Venta en dia
-			**/
-			
-
 			/*
 			* 	Existencia decreciente
 			*/
@@ -2757,7 +2766,8 @@
 		echo'############################################';
 		echo'<br/>Contador: '.$contador;
 		echo'<br/>ContValidos: '.$ContValidos;
-		echo'<br/>ContNOValidos: '.$ContNOValidos;
+		echo'<br/>ContNOValidosExistencia: '.$ContNOValidosExistencia;
+		echo'<br/>ContNOValidosVenta: '.$ContNOValidosVenta;
 		echo'<br/>';
 		
 		echo '
@@ -2767,6 +2777,7 @@
 		$sql = QCleanTable('CP_FiltradoCaida');
 		sqlsrv_query($conn,$sql);
 
+		mysqli_close($connCPharma);
 		sqlsrv_close($conn);
 	}
 ?>

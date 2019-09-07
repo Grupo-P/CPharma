@@ -1610,6 +1610,26 @@
 		return $sql;
 	}
 	/*
+		TITULO: QCuentaVenta
+		PARAMETROS: $IdArticulo,$FInicial,$FFinal
+		FUNCION: cuenta la cantidad de veces que se vendio un producto en una fecha
+		RETORNO: no aplica
+		//
+	 */
+	function QCuentaVenta($IdArticulo,$FInicial,$FFinal) {
+		$sql = "
+			SELECT
+			COUNT(*) AS Cuenta
+			FROM VenFacturaDetalle
+			INNER JOIN InvArticulo ON InvArticulo.Id = VenFacturaDetalle.InvArticuloId
+			INNER JOIN VenFactura ON VenFactura.Id = VenFacturaDetalle.VenFacturaId
+			WHERE
+			(VenFactura.FechaDocumento > '$FInicial' AND VenFactura.FechaDocumento < '$FFinal')
+			AND (InvArticulo.Id = '$IdArticulo')
+		";
+		return $sql;
+	}
+	/*
 		TITULO: QFiltradoCaida
 		PARAMETROS: $FInicial,$FFinal
 		FUNCION: hace un filtrado de la data antes de entrar a dias en cero
