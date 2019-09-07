@@ -1632,7 +1632,7 @@
 				FROM ComFacturaDetalle
 				INNER JOIN ComFactura ON  ComFactura.Id = ComFacturaDetalle.ComFacturaId
 				WHERE
-				(ComFactura.FechaRegistro > '$FInicial' AND ComFactura.FechaRegistro < '$FFinal') 
+				(ComFactura.FechaRegistro > '2019-09-02' AND ComFactura.FechaRegistro < '2019-09-05') 
 				AND (InvArticulo.Id = ComFacturaDetalle.InvArticuloId)
 			)AS VecesCompradasProveedor
 			INTO CP_FiltradoCaida
@@ -1642,9 +1642,24 @@
 			INNER JOIN VenFactura ON VenFactura.Id = VenFacturaDetalle.VenFacturaId
 			WHERE InvLoteAlmacen.Existencia > 0
 			AND (InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
-			AND (VenFactura.FechaDocumento > '$FInicial' AND VenFactura.FechaDocumento < '$FFinal')
+			AND (VenFactura.FechaDocumento > '2019-09-02' AND VenFactura.FechaDocumento < '2019-09-05')
 			GROUP BY InvArticulo.Id, InvArticulo.CodigoArticulo, InvArticulo.Descripcion, InvArticulo.FinConceptoImptoIdCompra
 			ORDER BY InvArticulo.Id ASC
+		";
+		return $sql;
+	}
+	/*
+		TITULO: QIntegracionFiltradoCaida
+		PARAMETROS: $RangoDias
+		FUNCION: Integra y filtra la la tabla CP_FiltradoCaida 
+		RETORNO: la lista filtrada
+	 */
+	function QIntegracionFiltradoCaida($RangoDias) {
+		$sql = "
+			SELECT * FROM CP_FiltradoCaida 
+			WHERE (CP_FiltradoCaida.VecesVendidasCliente >= '4') 
+			AND (CP_FiltradoCaida.VecesCompradasProveedor = '0')
+			ORDER BY CP_FiltradoCaida.Existencia ASC
 		";
 		return $sql;
 	}

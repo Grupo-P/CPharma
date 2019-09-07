@@ -2651,23 +2651,26 @@
 	 */
 	function ReporteProductosEnCaida($SedeConnection){
 		$conn = ConectarSmartpharma($SedeConnection);
-		$connCPharma = ConectarXampp();
 
 		/* Rangos de Fecha */
-  		$FFinal = date("2019-09-05"); //date("Y-m-d");
+  		$FFinal = date('2019-09-06'); //date("Y-m-d");
 	  	$FInicial = date("Y-m-d",strtotime($FFinal."-3 days"));
-	  	$RangoDias = RangoDias($FInicial,$FFinal);
+	  	$RangoDias = intval(RangoDias($FInicial,$FFinal));
+	  	echo'<br/>$FFinal: '.$FFinal;
+	  	echo'<br/>FInicial: '.$FInicial;
+	  	echo'<br/>RangoDias: '.$RangoDias;
+	  	echo'<br/>sede: '.$SedeConnection;
+	  	echo'<br/>conn: '.$conn;
 
 		$sql = QCleanTable('CP_FiltradoCaida');
 		sqlsrv_query($conn,$sql);
 
 		/* FILTRO 1: Articulos con existencia actual mayor a 0 */
-		$sql = QFiltradoCaida();
-		sqlsrv_query($conn,$sql);
+		$sql1 = QFiltradoCaida($FFinal,$FFinal);
+		sqlsrv_query($conn,$sql1);
 
-
-
-	  	$result = 
+		$sql2 = QIntegracionFiltradoCaida($RangoDias);
+		$result = sqlsrv_query($conn,$sql2);
 
 	  	echo '
 		<div class="input-group md-form form-sm form-1 pl-0">
@@ -2703,91 +2706,26 @@
 		  	</thead>
 		  	<tbody>
 		';
-
 		$contador = 1;
-
 		/* Inicio while que itera en los articulos con existencia actual > 0*/
-		while(
-				($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) 
-				&& ($contador<30)
-			)
-		{
+		while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
+
+			echo'<br/>contador: '.$contador;
 			$IdArticulo = $row["IdArticulo"];
-			echo'**********************************';
-			echo'$IdArticuloAFUERA: '.$IdArticulo;
-
-			$RangoDias = RangoDias($FInicial,$FFinal);
-			$FechaPivote = $FInicial;
-
-			/* Inicio while que itera en el rango de fechas*/
-			while(
-					($RangoDias>0)
-					//&&($IsVentaEnDia==TRUE)
-					//&&($IsCompraEnDia==TRUE)
-					//&&($IsExistenciaEnDia==TRUE)
-					//&&($IsExistenciaDecreciente==TRUE)
-				){
-					echo'<br/>$IdArticuloWHILE: '.$IdArticulo;
-				/* FILTRO 2: Articulos con venta en el rango de fecha */
-				//$IsVentaEnDia = VentaEnDia($IdArticulo,$FechaPivote);
-
-				/* FILTRO 3: Articulos sin compra en el rango de fecha */
-				//$IsCompraEnDia = CompraEnDia($IdArticulo,$FechaPivote);
-				
-				/* FILTRO 4: Articulos con existencia en el rango de fecha */
-				//$IsExistenciaEnDia = ExistenciaEnDia($IdArticulo,$FechaPivote);
-
-				/* FILTRO 5: Articulos con existencia DECRECIENTE en rango de fecha */
-				//$IsExistenciaDecreciente = ExistenciaDecreciente($IdArticulo,$FechaPivote);
-					
-				/*Aumento en el dia para validar el rango*/
-				$FechaPivote = date("Y-m-d",strtotime($FechaPivote."+1 days"));
-				$RangoDias = RangoDias($FechaPivote,$FFinal);
-			}
-			/* Fin while que itera en el rango de fechas*/
-
-			if(
-				($RangoDias==0)
-				//&&($IsVentaEnDia==TRUE)
-				//&&($IsCompraEnDia==TRUE)
-				//&&($IsExistenciaEnDia==TRUE)
-				//&&($IsExistenciaDecreciente==TRUE)
-			){
-				echo'<br/>$IdArticuloIF: '.$IdArticulo;
-				/* FILTRO 2: Articulos con venta en el rango de fecha */
-				//$IsVentaEnDia = VentaEnDia($IdArticulo,$FechaPivote);
-
-				/* FILTRO 3: Articulos sin compra en el rango de fecha */
-				//$IsCompraEnDia = CompraEnDia($IdArticulo,$FechaPivote);
-				
-				/* FILTRO 4: Articulos con existencia en el rango de fecha */
-				//$IsExistenciaEnDia = ExistenciaEnDia($IdArticulo,$FechaPivote);
-
-				/* FILTRO 5: Articulos con existencia DECRECIENTE en rango de fecha */
-				//$IsExistenciaDecreciente = ExistenciaDecreciente($IdArticulo,$FechaPivote);
-			}
-
-			/*Incio del "IF BRUJO", donde se arma la tabla
-			if(
-				($IsVentaEnDia==TRUE)
-				&&($IsCompraEnDia==TRUE)
-				&&($IsExistenciaEnDia==TRUE)
-				&&($IsExistenciaDecreciente==TRUE)
-			){
-			
-
-
-			}
-			Fin del "IF BRUJO", donde se arma la tabla*/
-
+			echo'//////////////////////////////////////';
+			echo'<br/>$IdArticulo: '.$IdArticulo;
+			echo'<br/>$Descripcion: '.$row["Descripcion"];
+			echo'<br/>';
 			$contador++;
 		}
-		/* Fin while que itera en los articulos con existencia actual > 0*/
+		
 		echo '
 	  		</tbody>
 		</table>';
 
-		mysqli_close($connCPharma);
+		$sql = QCleanTable('CP_FiltradoCaida');
+		sqlsrv_query($conn,$sql);
+
 		sqlsrv_close($conn);
 	}
 ?>
