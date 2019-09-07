@@ -2641,6 +2641,9 @@
 
 		sqlsrv_close($conn);
 	}
+///////////////////////////////////////////////////////////////////////////
+///				REPORTE EN DESARROLLO PARA PRODUCTOS EN CAIDA        ///
+//////////////////////////////////////////////////////////////////////////
 	/*****************************************************************************/
 	/************************ REPORTE 14 PRODUCTOS EN CAIDA ****************/
 	/*
@@ -2649,7 +2652,7 @@
 		FUNCION: Armar el reporte de activacion de proveedores
 		RETORNO: No aplica
 	 */
-	function ReporteProductosEnCaida($SedeConnection){
+	function ReporteProductosEnCaida1($SedeConnection){
 		$conn = ConectarSmartpharma($SedeConnection);
 
 		$sql = QCleanTable('CP_QVentasParcial');
@@ -2866,6 +2869,143 @@
 	  		</tbody>
 		</table>';
 
+		sqlsrv_close($conn);
+	}
+
+
+
+////////////////////////////////////////////////////////////////////
+	function ReporteProductosEnCaida($SedeConnection){
+		$conn = ConectarSmartpharma($SedeConnection);
+		$connCPharma = ConectarXampp();
+
+		/* FILTRO 1: Articulos con existencia actual mayor a 0 */
+		$sql = QArticuloExistenciaActual();
+	  	$result = sqlsrv_query($conn,$sql);
+
+  		/* Rangos de Fecha */
+  		$FFinal = date("2019-09-05"); //CAMBIAR A Y-m-d
+	  	$FInicial = date("Y-m-d",strtotime($FFinal."-3 days"));
+
+	  	echo '
+		<div class="input-group md-form form-sm form-1 pl-0">
+		  <div class="input-group-prepend">
+		    <span class="input-group-text purple lighten-3" id="basic-text1">
+		    	<i class="fas fa-search text-white"
+		        aria-hidden="true"></i>
+		    </span>
+		  </div>
+		  <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterAllTable()">
+		</div>
+		<br/>
+		';
+
+		echo'<h6 align="center">Evaluado desde el '.$FInicial.' al '.$FFinal.' </h6>';
+
+		echo'
+		<table class="table table-striped table-bordered col-12 sortable" id="myTable">
+		  	<thead class="thead-dark">
+			    <tr>
+			    	<th scope="col">#</th>
+			    	<th scope="col">Codigo</th>
+			      	<th scope="col">Descripcion</th>			      	
+			      	<th scope="col">Precio (Con IVA)</th>
+			      	<th scope="col">Existencia</th>
+			      	<th scope="col">Dia 4</th>
+			      	<th scope="col">Dia 3</th>
+			      	<th scope="col">Dia 2</th>
+			      	<th scope="col">Dia 1</th>
+			      	<th scope="col">Unidades vendidas</th>
+			      	<th scope="col">Dias restantes</th>
+			    </tr>
+		  	</thead>
+		  	<tbody>
+		';
+
+		$contador = 1;
+
+		/* Inicio while que itera en los articulos con existencia actual > 0*/
+		while(
+				($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) 
+				&& ($contador<2)
+			)
+		{
+			$IdArticulo = $row["IdArticulo"];
+			echo'$IdArticuloAFUERA: '.$IdArticulo;
+			echo'<br>';
+
+			$RangoDias = RangoDias($FInicial,$FFinal);
+			$FechaPivote = $FInicial;
+
+			/* Inicio while que itera en el rango de fechas*/
+			while(
+					($RangoDias>0)
+					//&&($IsVentaEnDia==TRUE)
+					//&&($IsCompraEnDia==TRUE)
+					//&&($IsExistenciaEnDia==TRUE)
+					//&&($IsExistenciaDecreciente==TRUE)
+				){
+					echo'<br/>$IdArticuloWHILE: '.$IdArticulo;
+				/* FILTRO 2: Articulos con venta en el rango de fecha */
+				//$IsVentaEnDia = VentaEnDia($IdArticulo,$FechaPivote);
+
+				/* FILTRO 3: Articulos sin compra en el rango de fecha */
+				//$IsCompraEnDia = CompraEnDia($IdArticulo,$FechaPivote);
+				
+				/* FILTRO 4: Articulos con existencia en el rango de fecha */
+				//$IsExistenciaEnDia = ExistenciaEnDia($IdArticulo,$FechaPivote);
+
+				/* FILTRO 5: Articulos con existencia DECRECIENTE en rango de fecha */
+				//$IsExistenciaDecreciente = ExistenciaDecreciente($IdArticulo,$FechaPivote);
+					
+				/*Aumento en el dia para validar el rango*/
+				$FechaPivote = date("Y-m-d",strtotime($FechaPivote."+1 days"));
+				$RangoDias = RangoDias($FechaPivote,$FFinal);
+			}
+			/* Fin while que itera en el rango de fechas*/
+
+			if(
+				($RangoDias==0)
+				//&&($IsVentaEnDia==TRUE)
+				//&&($IsCompraEnDia==TRUE)
+				//&&($IsExistenciaEnDia==TRUE)
+				//&&($IsExistenciaDecreciente==TRUE)
+			){
+				echo'<br/>$IdArticuloIF: '.$IdArticulo;
+				/* FILTRO 2: Articulos con venta en el rango de fecha */
+				//$IsVentaEnDia = VentaEnDia($IdArticulo,$FechaPivote);
+
+				/* FILTRO 3: Articulos sin compra en el rango de fecha */
+				//$IsCompraEnDia = CompraEnDia($IdArticulo,$FechaPivote);
+				
+				/* FILTRO 4: Articulos con existencia en el rango de fecha */
+				//$IsExistenciaEnDia = ExistenciaEnDia($IdArticulo,$FechaPivote);
+
+				/* FILTRO 5: Articulos con existencia DECRECIENTE en rango de fecha */
+				//$IsExistenciaDecreciente = ExistenciaDecreciente($IdArticulo,$FechaPivote);
+			}
+
+			/*Incio del "IF BRUJO", donde se arma la tabla
+			if(
+				($IsVentaEnDia==TRUE)
+				&&($IsCompraEnDia==TRUE)
+				&&($IsExistenciaEnDia==TRUE)
+				&&($IsExistenciaDecreciente==TRUE)
+			){
+			
+
+
+			}
+			Fin del "IF BRUJO", donde se arma la tabla*/
+
+			$contador++;
+		}
+		/* Fin while que itera en los articulos con existencia actual > 0*/
+		echo '
+	  		</tbody>
+		</table>';
+
+		mysqli_close($connCPharma);
 		sqlsrv_close($conn);
 	}
 ?>
