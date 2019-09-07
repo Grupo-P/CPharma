@@ -1594,20 +1594,18 @@
 ///				QUERYS EN DESARROLLO PARA PRODUCTOS EN CAIDA        ///
 //////////////////////////////////////////////////////////////////////////
 	/*
-		TITULO: QExistenciaHistorico
+		TITULO: QCuentaExistencia
 		PARAMETROS: [$IdArticulo] Id del articulo a buscar
-		FUNCION: cuenta el total de registos de dias en cero
+		FUNCION: cuenta el total de repeticiones de un articulo en dias en cero
 		RETORNO: no aplica
 		//
 	 */
-	function QExistenciaHistorico($IdArticulo,$FechaCaptura) {
+	function QCuentaExistencia($IdArticulo) {
 		$sql = "
-			SELECT
-			COUNT(*) AS Cuenta,
-			Existencia			
+			SELECT 
+			COUNT(*) AS Cuenta 
 			FROM dias_ceros 
-			WHERE dias_ceros.id_articulo = '$IdArticulo' 
-			AND fecha_captura = '$FechaCaptura'
+			WHERE dias_ceros.id_articulo = '$IdArticulo'
 		";
 		return $sql;
 	}
@@ -1632,7 +1630,7 @@
 				FROM ComFacturaDetalle
 				INNER JOIN ComFactura ON  ComFactura.Id = ComFacturaDetalle.ComFacturaId
 				WHERE
-				(ComFactura.FechaRegistro > '2019-09-02' AND ComFactura.FechaRegistro < '2019-09-05') 
+				(ComFactura.FechaRegistro > '$FInicial' AND ComFactura.FechaRegistro < '$FFinal') 
 				AND (InvArticulo.Id = ComFacturaDetalle.InvArticuloId)
 			)AS VecesCompradasProveedor
 			INTO CP_FiltradoCaida
@@ -1642,7 +1640,7 @@
 			INNER JOIN VenFactura ON VenFactura.Id = VenFacturaDetalle.VenFacturaId
 			WHERE InvLoteAlmacen.Existencia > 0
 			AND (InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
-			AND (VenFactura.FechaDocumento > '2019-09-02' AND VenFactura.FechaDocumento < '2019-09-05')
+			AND (VenFactura.FechaDocumento > '$FInicial' AND VenFactura.FechaDocumento < '$FFinal')
 			GROUP BY InvArticulo.Id, InvArticulo.CodigoArticulo, InvArticulo.Descripcion, InvArticulo.FinConceptoImptoIdCompra
 			ORDER BY InvArticulo.Id ASC
 		";
@@ -1657,8 +1655,8 @@
 	function QIntegracionFiltradoCaida($RangoDias) {
 		$sql = "
 			SELECT * FROM CP_FiltradoCaida 
-			WHERE (CP_FiltradoCaida.VecesVendidasCliente >= '4') 
-			AND (CP_FiltradoCaida.VecesCompradasProveedor = '0')
+			WHERE (CP_FiltradoCaida.VecesVendidasCliente >= '$RangoDias') 
+			AND (CP_FiltradoCaida.VecesCompradasProveedor = 0)
 			ORDER BY CP_FiltradoCaida.Existencia ASC
 		";
 		return $sql;

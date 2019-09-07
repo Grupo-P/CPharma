@@ -2653,20 +2653,22 @@
 		$conn = ConectarSmartpharma($SedeConnection);
 
 		/* Rangos de Fecha */
-  		$FFinal = date('2019-09-06'); //date("Y-m-d");
+  		$FFinal = date('2019-09-05'); //date("Y-m-d");
 	  	$FInicial = date("Y-m-d",strtotime($FFinal."-3 days"));
 	  	$RangoDias = intval(RangoDias($FInicial,$FFinal));
-	  	echo'<br/>$FFinal: '.$FFinal;
+	  	echo'<br/>FFinal: '.$FFinal;
 	  	echo'<br/>FInicial: '.$FInicial;
 	  	echo'<br/>RangoDias: '.$RangoDias;
-	  	echo'<br/>sede: '.$SedeConnection;
-	  	echo'<br/>conn: '.$conn;
 
 		$sql = QCleanTable('CP_FiltradoCaida');
 		sqlsrv_query($conn,$sql);
 
-		/* FILTRO 1: Articulos con existencia actual mayor a 0 */
-		$sql1 = QFiltradoCaida($FFinal,$FFinal);
+		/* FILTRO 1: 
+		*	Articulos con existencia actual mayor a 0 
+		*	Articulos con veces vendidas en el rango
+		* 	Articulos sin compra en el rango
+		*/
+		$sql1 = QFiltradoCaida($FInicial,$FFinal);
 		sqlsrv_query($conn,$sql1);
 
 		$sql2 = QIntegracionFiltradoCaida($RangoDias);
@@ -2707,17 +2709,56 @@
 		  	<tbody>
 		';
 		$contador = 1;
+		$ContValidos = 0;
+		$ContNOValidos = 0;
 		/* Inicio while que itera en los articulos con existencia actual > 0*/
 		while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
-
-			echo'<br/>contador: '.$contador;
 			$IdArticulo = $row["IdArticulo"];
-			echo'//////////////////////////////////////';
-			echo'<br/>$IdArticulo: '.$IdArticulo;
-			echo'<br/>$Descripcion: '.$row["Descripcion"];
-			echo'<br/>';
+
+			/* FILTRO 2: 
+			*	Existencia en dia
+			*	se cuenta las apariciones del articulo en la tabla de dias
+			*	en cero, la misma debe ser igual la diferencia de dias +1 
+			*/
+			$CuentaExistencia = CuentaExistencia($IdArticulo);
+			if($CuentaExistencia==($RangoDias+1)){
+				$IsExistenciaDiaria = TRUE;
+
+				echo'//////////////////////////////////////';
+				echo'<br/>$IdArticulo: '.$IdArticulo;
+				echo'<br/>$Descripcion: '.$row["Descripcion"];
+				echo'//////////////////////////////////////';
+				echo'<br/>';
+				$ContValidos++;
+			}
+			else{
+				$IsExistenciaDiaria = FALSE;
+				$ContNOValidos++;
+			}
+	
+			/*  FILTRO 3:
+			*	Venta en dia
+			**/
+			
+
+			/*
+			* 	Existencia decreciente
+			*/
+			/*
+			$IsValido = ValidarEnDiasCero($IdArticulo,$FInicial,$FFinal);
+
+			if($IsValido == TRUE){
+				//AQUI SE DEBE IMPRIMIR ENTONCES EN LA TABLA
+			}
+			*/
 			$contador++;
 		}
+
+		echo'############################################';
+		echo'<br/>Contador: '.$contador;
+		echo'<br/>ContValidos: '.$ContValidos;
+		echo'<br/>ContNOValidos: '.$ContNOValidos;
+		echo'<br/>';
 		
 		echo '
 	  		</tbody>
