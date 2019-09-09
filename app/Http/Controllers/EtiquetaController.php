@@ -37,7 +37,7 @@ class EtiquetaController extends Controller
      */
     public function create()
     {
-        //
+        return view('pages.etiqueta.create');
     }
 
     /**
@@ -48,7 +48,29 @@ class EtiquetaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try{
+            $etiqueta = new Etiqueta();
+            $etiqueta->id_articulo = $request->input('id_articulo');
+            $etiqueta->codigo_articulo = $request->input('codigo_articulo');
+            $etiqueta->descripcion = $request->input('descripcion');
+            $etiqueta->condicion = 'ACTIVO';
+            $etiqueta->clasificacion = 'ACTIVO';
+            $etiqueta->estatus = 'ACTIVO';
+            $etiqueta->user = auth()->user()->name;
+            $etiqueta->save();
+
+            $Auditoria = new Auditoria();
+            $Auditoria->accion = 'CREAR';
+            $Auditoria->tabla = 'ETIQUETA';
+            $Auditoria->registro = $request->input('descripcion');
+            $Auditoria->user = auth()->user()->name;
+            $Auditoria->save();
+
+            return redirect()->route('etiqueta.index')->with('Saved', ' Informacion');
+        }
+        catch(\Illuminate\Database\QueryException $e){
+            return back()->with('Error', ' Error');
+        }
     }
 
     /**

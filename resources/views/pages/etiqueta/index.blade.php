@@ -25,7 +25,7 @@
 		        </button>
 		      </div>
 		      <div class="modal-body">
-		        <h4 class="h6">Articulo almacenado con exito</h4>
+		        <h4 class="h6">Etiqueta almacenada con exito</h4>
 		      </div>
 		      <div class="modal-footer">
 		        <button type="button" class="btn btn-outline-success" data-dismiss="modal">Aceptar</button>
@@ -47,7 +47,7 @@
 		        </button>
 		      </div>
 		      <div class="modal-body">
-		        <h4 class="h6">Articulo modificado con exito</h4>
+		        <h4 class="h6">Etiqueta modificada con exito</h4>
 		      </div>
 		      <div class="modal-footer">
 		        <button type="button" class="btn btn-outline-success" data-dismiss="modal">Aceptar</button>
@@ -69,7 +69,7 @@
 		        </button>
 		      </div>
 		      <div class="modal-body">
-		        <h4 class="h6">Articulo actualizado con exito</h4>
+		        <h4 class="h6">Etiqueta actualizada con exito</h4>
 		      </div>
 		      <div class="modal-footer">
 		        <button type="button" class="btn btn-outline-success" data-dismiss="modal">Aceptar</button>	
