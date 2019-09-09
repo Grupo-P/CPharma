@@ -899,4 +899,101 @@
 
 	  	return $Medicina;
 	}
+///////////////////////////////////////////////////////////////////////////
+///				FUNCIONES EN DESARROLLO PARA PRODUCTOS EN CAIDA        ///
+//////////////////////////////////////////////////////////////////////////
+	/*
+		TITULO: CuentaExistencia
+		PARAMETROS: 
+		FUNCION: 
+		RETORNO: 
+ 	*/
+	function CuentaExistencia($connCPharma,$IdArticulo) {
+		
+		$sql = QCuentaExistencia($IdArticulo);
+		$result = mysqli_query($connCPharma,$sql);
+		$row = mysqli_fetch_assoc($result);
+		$Cuenta = $row["Cuenta"];
+		
+		return $Cuenta;
+	}
+	/*
+		TITULO: CuentaVenta
+		PARAMETROS: 
+		FUNCION: 
+		RETORNO: 
+ 	*/
+	function CuentaVenta($conn,$IdArticulo,$FInicial,$FFinal) {
+		
+		$FFinalPivote = date("Y-m-d",strtotime($FInicial."+1 days"));
+		$CuentaVenta = 0;
+
+		while($FFinalPivote!=$FFinal){
+
+			$sql = QCuentaVenta($IdArticulo,$FInicial,$FFinalPivote);
+			$result = sqlsrv_query($conn,$sql);
+			$row = sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC);
+			$VecesVendida = $row["Cuenta"];
+
+			if($VecesVendida>0){
+				$CuentaVenta++;
+			}
+
+			$FInicial = date("Y-m-d",strtotime($FInicial."+1 days"));
+	  		$FFinalPivote = date("Y-m-d",strtotime($FFinalPivote."+1 days"));
+		}
+		return $CuentaVenta;
+	}
+	/*
+		TITULO: ExistenciaDecreciente
+		PARAMETROS: 
+		FUNCION: 
+		RETORNO: 
+ 	*/
+	function ExistenciaDecreciente($connCPharma,$IdArticulo,$FInicial,$FFinal,$RangoDias) {
+		
+		$PrimerCiclo = TRUE;
+		$ExistenciaAyer = 0;
+		$CuentaDecreciente = TRUE;
+		$CuentaDecrece = 0;
+		$indice = 0;
+		$ExistenciaDecreciente = array();
+
+		while( ($FInicial!=$FFinal) && ($CuentaDecreciente==TRUE) ) {
+
+			$sql = QExistenciaDiasCero($IdArticulo,$FInicial);
+			$result = mysqli_query($connCPharma,$sql);
+			$row = mysqli_fetch_assoc($result);
+			$ExistenciaHoy = $row["existencia"];
+
+			if($PrimerCiclo == TRUE){
+				$PrimerCiclo = FALSE;
+				$ExistenciaAyer = $ExistenciaHoy;
+			}
+
+			if($ExistenciaAyer>=$ExistenciaHoy){
+				$CuentaDecreciente = TRUE;
+				$ExistenciaDecreciente[$indice]=$ExistenciaHoy;
+				$indice++;
+
+				if($ExistenciaAyer>$ExistenciaHoy){
+					$CuentaDecrece++;
+				}
+			}
+			else{
+				$CuentaDecreciente = FALSE;
+			}
+
+			$FInicial = date("Y-m-d",strtotime($FInicial."+1 days"));
+		}
+
+		if($CuentaDecrece>=($RangoDias/2)){
+			$CuentaDecreciente = TRUE;
+		}
+		else{
+			$CuentaDecreciente = FALSE;
+		}
+		$ExistenciaDecreciente[$indice] = $CuentaDecreciente;
+		return $ExistenciaDecreciente;
+	}
 ?>
