@@ -81,7 +81,16 @@ class EtiquetaController extends Controller
      */
     public function show($id)
     {
-        //
+        $etiqueta = Etiqueta::find($id); 
+
+        $Auditoria = new Auditoria();
+        $Auditoria->accion = 'CONSULTAR';
+        $Auditoria->tabla = 'ETIQUETA';
+        $Auditoria->registro = $etiqueta->descripcion;
+        $Auditoria->user = auth()->user()->name;
+        $Auditoria->save();
+
+        return view('pages.etiqueta.show', compact('etiqueta'));
     }
 
     /**
