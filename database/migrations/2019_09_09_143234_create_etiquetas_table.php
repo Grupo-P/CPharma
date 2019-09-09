@@ -15,6 +15,13 @@ class CreateEtiquetasTable extends Migration
     {
         Schema::create('etiquetas', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('id_articulo');
+            $table->string('codigo_articulo');
+            $table->string('descripcion');
+            $table->string('condicion'); // CLASIFICADO, NO CLASIFICADO
+            $table->string('clasificacion'); //NO ETIQUETABLE,ETIQUETABLES,OBLIGATORIO
+            $table->string('estatus'); //ACTIVO,INACTIVO
+            $table->string('user');
             $table->timestamps();
         });
     }
