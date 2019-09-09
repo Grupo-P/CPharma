@@ -1600,6 +1600,266 @@
 		return $sql;
 	}
 
+	/****************** QUERYS DEL REPORTE DETALLE DE MOVIMIENTOS ******************/
+	/*
+		TITULO: QUnidadesVendidasCliente2
+		PARAMETROS: [$FInicial] Fecha inicial del rango a consultar
+					[$FFinal] Fecha final del rango a consutar
+		FUNCION: Consulta las Veces vendidas a clientes y las unidades vendidas de un producto
+		RETORNO: Tabla con los articulos, las veces vendidas y las unidades vendidas
+	 */
+	function QUnidadesVendidasCliente2($FInicial,$FFinal) {
+		$sql = "
+			SELECT
+			InvArticulo.Id,
+			InvArticulo.CodigoArticulo,
+			InvArticulo.Descripcion,
+			COUNT(*) AS VecesVendidasCliente,
+			SUM(VenFacturaDetalle.Cantidad) AS UnidadesVendidasCliente
+			INTO CP_QUnidadesVendidasCliente2
+			--TablaTemp
+			FROM VenFacturaDetalle
+			INNER JOIN InvArticulo ON InvArticulo.Id = VenFacturaDetalle.InvArticuloId
+			INNER JOIN VenFactura ON VenFactura.Id = VenFacturaDetalle.VenFacturaId
+			WHERE
+			(VenFactura.FechaDocumento > '$FInicial' AND VenFactura.FechaDocumento < '$FFinal')
+			GROUP BY InvArticulo.Id,InvArticulo.CodigoArticulo,InvArticulo.Descripcion
+			ORDER BY UnidadesVendidasCliente DESC
+		";
+		return $sql;
+	}
+
+	/*
+		TITULO: QUnidadesDevueltaCliente2
+		PARAMETROS: [$FInicial] Fecha inicial del rango a consultar
+					[$FFinal] Fecha final del rango a consutar
+		FUNCION: Consulta las Veces devuelta a clientes y las unidades devuelta de un producto
+		RETORNO: Tabla con los articulos, las veces devuelta y las unidades devuelta
+	 */
+	function QUnidadesDevueltaCliente2($FInicial,$FFinal) {
+		$sql = "
+			SELECT
+			InvArticulo.Id,
+			InvArticulo.CodigoArticulo,
+			InvArticulo.Descripcion,
+			COUNT(*) AS VecesDevueltaCliente,
+			SUM(VenDevolucionDetalle.Cantidad) AS UnidadesDevueltaCliente
+			INTO CP_QUnidadesDevueltaCliente2
+			--TablaTemp1
+			FROM VenDevolucionDetalle
+			INNER JOIN InvArticulo ON InvArticulo.Id = VenDevolucionDetalle.InvArticuloId
+			INNER JOIN VenDevolucion ON VenDevolucion.Id = VenDevolucionDetalle.VenDevolucionId
+			WHERE
+			(VenDevolucion.FechaDocumento > '$FInicial' AND VenDevolucion.FechaDocumento < '$FFinal')
+			GROUP BY InvArticulo.Id,InvArticulo.CodigoArticulo,InvArticulo.Descripcion
+			ORDER BY UnidadesDevueltaCliente DESC
+		";
+		return $sql;
+	}
+
+	/*
+		TITULO: QUnidadesCompradasProveedor2
+		PARAMETROS: [$FInicial] Fecha inicial del rango a consultar
+					[$FFinal] Fecha final del rango a consutar
+		FUNCION: Consulta las Veces Compradas a proveedores y las unidades compradas
+		RETORNO: Tabla con los articulos, las veces compradas y las unidades compradas
+	 */
+	function QUnidadesCompradasProveedor2($FInicial,$FFinal) {
+		$sql = "
+			SELECT
+			InvArticulo.Id,
+			InvArticulo.CodigoArticulo,
+			InvArticulo.Descripcion,
+			COUNT(*) AS VecesCompradasProveedor,
+			SUM(ComFacturaDetalle.CantidadFacturada) AS UnidadesCompradasProveedor,
+			CONVERT(DATE,ComFactura.FechaRegistro) AS FechaRegistro
+			INTO CP_QUnidadesCompradasProveedor2
+			--TablaTemp2
+			FROM ComFacturaDetalle
+			INNER JOIN InvArticulo ON InvArticulo.Id = ComFacturaDetalle.InvArticuloId
+			INNER JOIN ComFactura ON  ComFactura.Id = ComFacturaDetalle.ComFacturaId
+			WHERE
+			(ComFactura.FechaRegistro > '$FInicial' AND ComFactura.FechaRegistro < '$FFinal')
+			GROUP BY InvArticulo.Id,InvArticulo.CodigoArticulo,InvArticulo.Descripcion,FechaRegistro
+			ORDER BY UnidadesCompradasProveedor DESC
+		";
+		return $sql;
+	}
+
+	/*
+		TITULO: QUnidadesReclamoProveedor2
+		PARAMETROS: [$FInicial] Fecha inicial del rango a consultar
+					[$FFinal] Fecha final del rango a consutar
+		FUNCION: Consulta las Veces reclamo a proveedores y las unidades reclamo
+		RETORNO: Tabla con los articulos, las veces reclamo y las unidades reclamo
+	 */
+	function QUnidadesReclamoProveedor2($FInicial,$FFinal) {
+		$sql = "
+			SELECT
+			InvArticulo.Id,
+			InvArticulo.CodigoArticulo,
+			InvArticulo.Descripcion,
+			COUNT(*) AS VecesReclamoProveedor,
+			SUM(ComReclamoDetalle.Cantidad) AS UnidadesReclamoProveedor
+			INTO CP_QUnidadesReclamoProveedor2
+			--TablaTemp3
+			FROM ComReclamoDetalle
+			INNER JOIN InvArticulo ON InvArticulo.Id = ComReclamoDetalle.InvArticuloId
+			INNER JOIN ComReclamo ON ComReclamo.Id = ComReclamoDetalle.ComReclamoId
+			WHERE
+			(ComReclamo.FechaRegistro > '$FInicial' AND ComReclamo.FechaRegistro < '$FFinal')
+			GROUP BY InvArticulo.Id,InvArticulo.CodigoArticulo,InvArticulo.Descripcion
+			ORDER BY UnidadesReclamoProveedor DESC
+		";
+		return $sql;
+	}
+
+	/*
+		TITULO: QIntegracionProductosVendidos2
+		PARAMETROS: No aplica
+		FUNCION: Integrar la informacion de las consultas
+				[QUnidadesVendidasCliente,QUnidadesDevueltaCliente,QUnidadesCompradasProveedor,QUnidadesReclamoProveedor]
+		RETORNO: Tabla con datos integrados con valores 0 para campos NULL
+	 */
+	function QIntegracionProductosVendidos2() {
+		$sql = " 
+			SELECT
+			CP_QUnidadesVendidasCliente2.Id,
+			CP_QUnidadesVendidasCliente2.CodigoArticulo,
+			CP_QUnidadesVendidasCliente2.Descripcion,
+			ISNULL(CP_QUnidadesVendidasCliente2.VecesVendidasCliente,CAST(0 AS INT)) AS VecesVendidasCliente,
+			ISNULL(CP_QUnidadesDevueltaCliente2.VecesDevueltaCliente,CAST(0 AS INT)) AS VecesDevueltaCliente,
+			ISNULL(CP_QUnidadesVendidasCliente2.UnidadesVendidasCliente,CAST(0 AS INT)) AS UnidadesVendidasCliente,
+			ISNULL(CP_QUnidadesDevueltaCliente2.UnidadesDevueltaCliente,CAST(0 AS INT)) AS UnidadesDevueltaCliente,
+			ISNULL(CP_QUnidadesCompradasProveedor2.VecesCompradasProveedor,CAST(0 AS INT)) AS VecesCompradasProveedor,
+			ISNULL(CP_QUnidadesReclamoProveedor2.VecesReclamoProveedor,CAST(0 AS INT)) AS VecesReclamoProveedor,
+			ISNULL(CP_QUnidadesCompradasProveedor2.UnidadesCompradasProveedor,CAST(0 AS INT)) AS UnidadesCompradasProveedor,
+			ISNULL(CP_QUnidadesReclamoProveedor2.UnidadesReclamoProveedor,CAST(0 AS INT)) AS UnidadesReclamoProveedor
+			INTO CP_QIntegracionProductosVendidos2
+			--TablaTemp4
+			FROM CP_QUnidadesVendidasCliente2
+			LEFT JOIN CP_QUnidadesDevueltaCliente2 ON CP_QUnidadesDevueltaCliente2.Id = CP_QUnidadesVendidasCliente2.Id
+			LEFT JOIN CP_QUnidadesCompradasProveedor2 ON CP_QUnidadesCompradasProveedor2.Id = CP_QUnidadesVendidasCliente2.Id
+			LEFT JOIN CP_QUnidadesReclamoProveedor2 ON CP_QUnidadesReclamoProveedor2.Id = CP_QUnidadesVendidasCliente2.Id
+			ORDER BY UnidadesVendidasCliente DESC
+		";
+		return $sql;
+	}
+
+	/*
+		TITULO: QIntegracionProductosFalla2
+		PARAMETROS: No aplica
+		FUNCION: Integrar la informacion de las consultas
+				[QUnidadesVendidasCliente,QUnidadesDevueltaCliente,QUnidadesCompradasProveedor,QUnidadesReclamoProveedor]
+		RETORNO: Tabla con datos integrados con valores 0 para campos NULL
+	 */
+	function QIntegracionProductosFalla2() {
+		$sql="
+			SELECT
+			CP_QIntegracionProductosVendidos2.Id,
+			CP_QIntegracionProductosVendidos2.CodigoArticulo,
+			CP_QIntegracionProductosVendidos2.Descripcion,
+			CP_QIntegracionProductosVendidos2.VecesVendidasCliente,
+			CP_QIntegracionProductosVendidos2.VecesDevueltaCliente,
+			ISNULL((VecesVendidasCliente-VecesDevueltaCliente),0) AS TotalVecesVendidasCliente,
+			CP_QIntegracionProductosVendidos2.UnidadesVendidasCliente,
+			CP_QIntegracionProductosVendidos2.UnidadesDevueltaCliente,
+			ISNULL((UnidadesVendidasCliente-UnidadesDevueltaCliente),0) AS TotalUnidadesVendidasCliente,
+			CP_QIntegracionProductosVendidos2.VecesCompradasProveedor,
+			CP_QIntegracionProductosVendidos2.VecesReclamoProveedor,
+			ISNULL((VecesCompradasProveedor-VecesReclamoProveedor),0) AS TotalVecesCompradasProveedor,
+			CP_QIntegracionProductosVendidos2.UnidadesCompradasProveedor,
+			CP_QIntegracionProductosVendidos2.UnidadesReclamoProveedor,
+			ISNULL((UnidadesCompradasProveedor-UnidadesReclamoProveedor),0) AS TotalUnidadesCompradasProveedor,
+			SUM(InvLoteAlmacen.Existencia) AS Existencia
+			INTO CP_QIntegracionProductosFalla2
+			--TablaTemp5		
+			FROM CP_QIntegracionProductosVendidos2
+			INNER JOIN InvLoteAlmacen ON InvLoteAlmacen.InvArticuloId = CP_QIntegracionProductosVendidos2.Id
+			WHERE(InvLoteAlmacen.InvAlmacenId = 1 or InvLoteAlmacen.InvAlmacenId = 2)
+			GROUP BY
+			CP_QIntegracionProductosVendidos2.Id,
+			CP_QIntegracionProductosVendidos2.CodigoArticulo,
+			CP_QIntegracionProductosVendidos2.Descripcion,
+			CP_QIntegracionProductosVendidos2.VecesVendidasCliente,
+			CP_QIntegracionProductosVendidos2.VecesDevueltaCliente,
+			CP_QIntegracionProductosVendidos2.UnidadesVendidasCliente,
+			CP_QIntegracionProductosVendidos2.UnidadesDevueltaCliente,
+			CP_QIntegracionProductosVendidos2.VecesCompradasProveedor,
+			CP_QIntegracionProductosVendidos2.VecesReclamoProveedor,
+			CP_QIntegracionProductosVendidos2.UnidadesCompradasProveedor,
+			CP_QIntegracionProductosVendidos2.UnidadesReclamoProveedor
+			ORDER BY CP_QIntegracionProductosVendidos2.UnidadesVendidasCliente DESC
+		";
+		return $sql;
+	}
+
+	/*
+		TITULO: QArticuloDescLike2
+		PARAMETROS: [$DescripLike] Descripcion para buscar
+					[$TablaTemp] Variable para indicar si la busqueda sera almacenada en una tabla temporal
+		FUNCION: Buscar un articulo segun su descripcion
+		RETORNO: Caracteristicas del articulo
+	 */
+	function QArticuloDescLike2($DescripLike,$IntoTabla) {
+		switch($IntoTabla) {
+			case '0':
+			$sql = "
+				SELECT
+				InvArticulo.Id,
+				InvArticulo.CodigoArticulo,
+				InvArticulo.Descripcion,
+				InvArticulo.FinConceptoImptoIdCompra AS ConceptoImpuesto
+				INTO CP_QArticuloDescLike2
+				--TablaTemp6
+				FROM InvArticulo
+				WHERE InvArticulo.Descripcion LIKE '%$DescripLike%'
+				ORDER BY InvArticulo.Descripcion ASC
+			";
+			return $sql;
+			break;
+			
+			case '1':
+			$sql = "
+				SELECT
+				InvArticulo.Id,
+				InvArticulo.CodigoArticulo,
+				InvArticulo.Descripcion,
+				InvArticulo.FinConceptoImptoIdCompra AS ConceptoImpuesto
+				FROM InvArticulo
+				WHERE InvArticulo.Descripcion LIKE '%$DescripLike%'
+				ORDER BY InvArticulo.Descripcion ASC
+			";
+			return $sql;
+			break;
+		}
+	}
+
+	/*
+		TITULO: QPedidoProductos2
+		PARAMETROS: 
+		FUNCION: Arma la lista de pedido de productos
+		RETORNO: Lista prodcutos para pedir
+	 */
+	function QPedidoProductos2() {
+		$sql="
+			SELECT
+			CP_QArticuloDescLike2.Id,
+			CP_QArticuloDescLike2.CodigoArticulo,
+			CP_QArticuloDescLike2.Descripcion,
+			CP_QArticuloDescLike2.ConceptoImpuesto,
+			ISNULL((CP_QIntegracionProductosFalla2.TotalVecesVendidasCliente),0) AS TotalVecesVendidasCliente,
+			ISNULL((CP_QIntegracionProductosFalla2.TotalUnidadesVendidasCliente),0) AS TotalUnidadesVendidasCliente,
+			ISNULL((CP_QIntegracionProductosFalla2.TotalVecesCompradasProveedor),0) AS TotalVecesCompradasProveedor,
+			ISNULL((CP_QIntegracionProductosFalla2.TotalUnidadesCompradasProveedor),0) AS TotalUnidadesCompradasProveedor
+			FROM CP_QArticuloDescLike2
+			LEFT JOIN CP_QIntegracionProductosFalla2 ON CP_QIntegracionProductosFalla2.Id = CP_QArticuloDescLike2.Id
+			ORDER BY CP_QArticuloDescLike2.Descripcion ASC
+		";
+		return $sql;
+	}
+	/****************** QUERYS DEL REPORTE DETALLE DE MOVIMIENTOS ******************/
+
 	/*
 		TITULO: 
 		PARAMETROS: 
