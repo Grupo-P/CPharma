@@ -2656,7 +2656,7 @@
 		$Hoy = new DateTime('now');
 		$Hoy = $Hoy->format('Y-m-d');
 		$DiasSolicitados = ValidarFechas($FInicial,$Hoy);
-		
+
 		echo '
 			<div class="input-group md-form form-sm form-1 pl-0">
 				<div class="input-group-prepend">
@@ -2668,8 +2668,6 @@
 			  	<input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterAllTable()">
 			</div><br/>
 		';
-
-		echo '<h6 align="center">Periodo desde el '.$FInicial.' al '.$Hoy.'</h6>';
 
 		echo'
 			<table class="table table-striped table-bordered col-12 sortable" id="myTable">
