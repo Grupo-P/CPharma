@@ -249,6 +249,14 @@
 
 <!-- TODO LO QUE ESTE DEBAJO DE ESTA LINEA ESTA EN FASE DE DESARROLLO -->
 <hr class="row align-items-center bg-danger">
+    
+    <li class="nav-item">
+      <a class="nav-link" href="{{ url('/etiqueta') }}">     
+        <span data-feather="home"></span>
+        <i class="fas fa-tag"></i>
+        Test Etiqueta<span class="sr-only">(current)</span>
+      </a>
+    </li>
 
     <li class="nav-item">
       <a class="nav-link" href="{{ url('/testS') }}">     

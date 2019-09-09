@@ -3,9 +3,22 @@
 namespace compras\Http\Controllers;
 
 use Illuminate\Http\Request;
+use compras\Etiqueta;
+use compras\User;
+use compras\Auditoria;
 
 class EtiquetaController extends Controller
 {
+    /**
+     * Create a new controller instance with auth.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -13,7 +26,8 @@ class EtiquetaController extends Controller
      */
     public function index()
     {
-        //
+        $etiquetas =  Etiqueta::all();
+        return view('pages.etiqueta.index', compact('etiquetas'));
     }
 
     /**
