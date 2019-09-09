@@ -1590,116 +1590,6 @@
 		";
 		return $sql;
 	}
-<<<<<<< app/functions/Querys.php
-///////////////////////////////////////////////////////////////////////////
-///				QUERYS EN DESARROLLO PARA PRODUCTOS EN CAIDA        ///
-//////////////////////////////////////////////////////////////////////////
-	/*
-		TITULO: QCuentaExistencia
-		PARAMETROS: [$IdArticulo] Id del articulo a buscar
-		FUNCION: cuenta el total de repeticiones de un articulo en dias en cero
-		RETORNO: no aplica
-		//
-	 */
-	function QCuentaExistencia($IdArticulo) {
-		$sql = "
-			SELECT 
-			COUNT(*) AS Cuenta 
-			FROM dias_ceros 
-			WHERE dias_ceros.id_articulo = '$IdArticulo'
-		";
-		return $sql;
-	}
-	/*
-		TITULO: QCuentaVenta
-		PARAMETROS: $IdArticulo,$FInicial,$FFinal
-		FUNCION: cuenta la cantidad de veces que se vendio un producto en una fecha
-		RETORNO: no aplica
-		//
-	 */
-	function QCuentaVenta($IdArticulo,$FInicial,$FFinal) {
-		$sql = "
-			SELECT
-			COUNT(*) AS Cuenta
-			FROM VenFacturaDetalle
-			INNER JOIN InvArticulo ON InvArticulo.Id = VenFacturaDetalle.InvArticuloId
-			INNER JOIN VenFactura ON VenFactura.Id = VenFacturaDetalle.VenFacturaId
-			WHERE
-			(VenFactura.FechaDocumento > '$FInicial' AND VenFactura.FechaDocumento < '$FFinal')
-			AND (InvArticulo.Id = '$IdArticulo')
-		";
-		return $sql;
-	}
-	/*
-		TITULO: QFiltradoCaida
-		PARAMETROS: $FInicial,$FFinal
-		FUNCION: hace un filtrado de la data antes de entrar a dias en cero
-		RETORNO: no aplica
-		//
-	 */
-	function QFiltradoCaida($FInicial,$FFinal) {
-		$sql = "
-			SELECT
-			InvArticulo.Id AS IdArticulo,
-			InvArticulo.CodigoArticulo AS CodigoArticulo,
-			InvArticulo.Descripcion,
-			SUM(InvLoteAlmacen.Existencia) AS Existencia,
-			InvArticulo.FinConceptoImptoIdCompra AS ConceptoImpuesto,
-			COUNT(*) AS VecesVendidasCliente,
-			(SELECT 
-				COUNT(*) AS VecesCompradasProveedor
-				FROM ComFacturaDetalle
-				INNER JOIN ComFactura ON  ComFactura.Id = ComFacturaDetalle.ComFacturaId
-				WHERE
-				(ComFactura.FechaRegistro > '$FInicial' AND ComFactura.FechaRegistro < '$FFinal') 
-				AND (InvArticulo.Id = ComFacturaDetalle.InvArticuloId)
-			)AS VecesCompradasProveedor
-			INTO CP_FiltradoCaida
-			FROM VenFacturaDetalle
-			INNER JOIN InvArticulo ON InvArticulo.Id = VenFacturaDetalle.InvArticuloId
-			INNER JOIN InvLoteAlmacen ON InvArticulo.Id=InvLoteAlmacen.InvArticuloId
-			INNER JOIN VenFactura ON VenFactura.Id = VenFacturaDetalle.VenFacturaId
-			WHERE InvLoteAlmacen.Existencia > 0
-			AND (InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
-			AND (VenFactura.FechaDocumento > '$FInicial' AND VenFactura.FechaDocumento < '$FFinal')
-			GROUP BY InvArticulo.Id, InvArticulo.CodigoArticulo, InvArticulo.Descripcion, InvArticulo.FinConceptoImptoIdCompra
-			ORDER BY InvArticulo.Id ASC
-		";
-		return $sql;
-	}
-	/*
-		TITULO: QIntegracionFiltradoCaida
-		PARAMETROS: $RangoDias
-		FUNCION: Integra y filtra la la tabla CP_FiltradoCaida 
-		RETORNO: la lista filtrada
-	 */
-	function QIntegracionFiltradoCaida($RangoDias) {
-		$sql = "
-			SELECT * FROM CP_FiltradoCaida 
-			WHERE (CP_FiltradoCaida.VecesVendidasCliente >= '$RangoDias') 
-			AND (CP_FiltradoCaida.VecesCompradasProveedor = 0)
-			ORDER BY CP_FiltradoCaida.Existencia ASC
-		";
-		return $sql;
-	}
-	/*
-		TITULO: QExistenciaDiasCero
-		PARAMETROS: [$IdArticulo] Id del articulo a buscar
-		FUNCION: cuenta el total de repeticiones de un articulo en dias en cero
-		RETORNO: no aplica
-		//
-	 */
-	function QExistenciaDiasCero($IdArticulo,$FechaCaptura) {
-		$sql = "
-			SELECT existencia 
-			FROM dias_ceros 
-			WHERE dias_ceros.id_articulo = '$IdArticulo' 
-			AND `fecha_captura` = '$FechaCaptura'
-		";
-		return $sql;
-	}
-=======
-
 	/****************** QUERYS DEL REPORTE DETALLE DE MOVIMIENTOS ******************/
 	/*
 		TITULO: QUnidadesVendidasCliente2
@@ -1960,7 +1850,7 @@
 	}
 	/****************** QUERYS DEL REPORTE DETALLE DE MOVIMIENTOS ******************/
 
-    ///////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////
 ///				QUERYS EN DESARROLLO PARA PRODUCTOS EN CAIDA        ///
 //////////////////////////////////////////////////////////////////////////
 	/*
@@ -2067,7 +1957,6 @@
 		";
 		return $sql;
 	}
->>>>>>> app/functions/Querys.php
 	/*
 		TITULO: 
 		PARAMETROS: 
