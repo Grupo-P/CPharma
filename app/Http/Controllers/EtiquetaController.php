@@ -101,7 +101,8 @@ class EtiquetaController extends Controller
      */
     public function edit($id)
     {
-        //
+        $etiqueta = Etiqueta::find($id);
+        return view('pages.etiqueta.edit', compact('etiqueta'));
     }
 
     /**
@@ -113,7 +114,24 @@ class EtiquetaController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        try{
+            $etiqueta = Etiqueta::find($id);
+            $etiqueta->fill($request->all());
+            $etiqueta->user = auth()->user()->name;
+            $etiqueta->save();
+
+            $Auditoria = new Auditoria();
+            $Auditoria->accion = 'EDITAR';
+            $Auditoria->tabla = 'ETIQUETA';
+            $Auditoria->registro = $etiqueta->descripcion;
+            $Auditoria->user = auth()->user()->name;
+            $Auditoria->save();
+
+            return redirect()->route('etiqueta.index')->with('Updated', ' Informacion');
+        }
+        catch(\Illuminate\Database\QueryException $e){
+            return back()->with('Error', ' Error');
+        }
     }
 
     /**
@@ -124,6 +142,27 @@ class EtiquetaController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $etiqueta = Etiqueta::find($id);
+
+        $Auditoria = new Auditoria();
+        $Auditoria->tabla = 'ETIQUETA';
+        $Auditoria->registro = $etiqueta->descripcion;
+        $Auditoria->user = auth()->user()->name;
+
+        if($etiqueta->estatus == 'ACTIVO'){
+            $etiqueta->estatus = 'INACTIVO';
+            $Auditoria->accion = 'DESINCORPORAR';
+        }
+        else if($etiqueta->estatus == 'INACTIVO'){
+            $etiqueta->estatus = 'ACTIVO';
+            $Auditoria->accion = 'REINCORPORAR';
+        }
+
+        $etiqueta->user = auth()->user()->name;        
+        $etiqueta->save();
+
+        $Auditoria->save();
+
+        return redirect()->route('etiqueta.index')->with('Deleted', ' Informacion');
     }
 }
