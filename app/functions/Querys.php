@@ -1640,7 +1640,7 @@
 		$sql = "
 			SELECT
 			InvArticulo.Id AS IdArticulo,
-			InvArticulo.CodigoArticulo AS CodigoInterno,
+			InvArticulo.CodigoArticulo AS CodigoArticulo,
 			InvArticulo.Descripcion,
 			SUM(InvLoteAlmacen.Existencia) AS Existencia,
 			InvArticulo.FinConceptoImptoIdCompra AS ConceptoImpuesto,

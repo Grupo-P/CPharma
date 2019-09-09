@@ -2657,9 +2657,6 @@
   		$FFinal = date('2019-09-05'); //date("Y-m-d");
 	  	$FInicial = date("Y-m-d",strtotime($FFinal."-3 days"));
 	  	$RangoDias = intval(RangoDias($FInicial,$FFinal));
-	  	echo'<br/>FFinal: '.$FFinal;
-	  	echo'<br/>FInicial: '.$FInicial;
-	  	echo'<br/>RangoDias: '.$RangoDias;
 
 		$sql = QCleanTable('CP_FiltradoCaida');
 		sqlsrv_query($conn,$sql);
@@ -2699,6 +2696,12 @@
 			      	<th scope="col">Descripcion</th>			      	
 			      	<th scope="col">Precio (Con IVA)</th>
 			      	<th scope="col">Existencia</th>
+			      	<th scope="col">Dia 10</th>
+			      	<th scope="col">Dia 9</th>
+			      	<th scope="col">Dia 8</th>
+			      	<th scope="col">Dia 7</th>
+			      	<th scope="col">Dia 6</th>
+			      	<th scope="col">Dia 5</th>
 			      	<th scope="col">Dia 4</th>
 			      	<th scope="col">Dia 3</th>
 			      	<th scope="col">Dia 2</th>
@@ -2739,11 +2742,17 @@
 
 						if($CuentaDecreciente==TRUE){
 
-							echo'<br/>//////////////////////////////////////';
-							echo'<br/>$IdArticulo: '.$IdArticulo;
-							echo'<br/>$Descripcion: '.$row["Descripcion"];
-							echo'<br/>//////////////////////////////////////';
-							echo'<br/>';
+						echo '<tr>';
+						echo '<td align="center"><strong>'.intval($ContValidos+1).'</strong></td>';
+						echo '<td align="left">'.$row["CodigoArticulo"].'</td>';
+
+						echo 
+						'<td align="left" class="barrido">
+						<a href="/reporte2?Id='.$IdArticulo.'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
+							.$row["Descripcion"].
+						'</a>
+						</td>';
+						echo '</tr>';
 
 							$ContValidos++;
 						}
@@ -2771,18 +2780,18 @@
 			*/
 			$contador++;
 		}
+		echo '
+	  		</tbody>
+		</table>';
 
-		echo'############################################';
+		echo'<br/>############################################';
 		echo'<br/>Contador: '.$contador;
 		echo'<br/>ContValidos: '.$ContValidos;
 		echo'<br/>ContNOValidosExistencia: '.$ContNOValidosExistencia;
 		echo'<br/>ContNOValidosVenta: '.$ContNOValidosVenta;
 		echo'<br/>ContNOValidosDecreciente: '.$ContNOValidosDecreciente;
+		echo'<br/>############################################';
 		echo'<br/>';
-		
-		echo '
-	  		</tbody>
-		</table>';
 
 		$sql = QCleanTable('CP_FiltradoCaida');
 		sqlsrv_query($conn,$sql);
