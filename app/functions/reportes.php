@@ -2240,29 +2240,29 @@
 			$FFinal = date("Y-m-d",strtotime($FFinal."+ 1 days"));
 		}
 
-		$sql = QCleanTable('CP_QUnidadesVendidasCliente');
+		$sql = QCleanTable('CP_QUnidadesVendidasCliente2');
 		sqlsrv_query($conn,$sql);
-		$sql = QCleanTable('CP_QUnidadesDevueltaCliente');
+		$sql = QCleanTable('CP_QUnidadesDevueltaCliente2');
 		sqlsrv_query($conn,$sql);
-		$sql = QCleanTable('CP_QUnidadesCompradasProveedor');
+		$sql = QCleanTable('CP_QUnidadesCompradasProveedor2');
 		sqlsrv_query($conn,$sql);
-		$sql = QCleanTable('CP_QUnidadesReclamoProveedor');
+		$sql = QCleanTable('CP_QUnidadesReclamoProveedor2');
 		sqlsrv_query($conn,$sql);
-		$sql = QCleanTable('CP_QIntegracionProductosVendidos');
+		$sql = QCleanTable('CP_QIntegracionProductosVendidos2');
 		sqlsrv_query($conn,$sql);
-		$sql = QCleanTable('CP_QIntegracionProductosFalla');
+		$sql = QCleanTable('CP_QIntegracionProductosFalla2');
 		sqlsrv_query($conn,$sql);
-		$sql = QCleanTable('CP_QArticuloDescLike');
+		$sql = QCleanTable('CP_QArticuloDescLike2');
 		sqlsrv_query($conn,$sql);
 
-		$sql1 = QUnidadesVendidasCliente($FInicial,$FFinal);
-		$sql2 = QUnidadesDevueltaCliente($FInicial,$FFinal);
-		$sql3 = QUnidadesCompradasProveedor($FInicial,$FFinal);
-		$sql4 = QUnidadesReclamoProveedor($FInicial,$FFinal);
-		$sql5 = QIntegracionProductosVendidos();
-		$sql6 = QIntegracionProductosFalla();
-		$sql61 = QArticuloDescLike($row["Descripcion"],0);
-		$sql7 = QPedidoProductos();
+		$sql1 = QUnidadesVendidasCliente2($FInicial,$FFinal);
+		$sql2 = QUnidadesDevueltaCliente2($FInicial,$FFinal);
+		$sql3 = QUnidadesCompradasProveedor2($FInicial,$FFinal);
+		$sql4 = QUnidadesReclamoProveedor2($FInicial,$FFinal);
+		$sql5 = QIntegracionProductosVendidos2();
+		$sql6 = QIntegracionProductosFalla2();
+		$sql61 = QArticuloDescLike2($row["Descripcion"],0);
+		$sql7 = QPedidoProductos2();
 		
 		sqlsrv_query($conn,$sql1);
 		sqlsrv_query($conn,$sql2);
@@ -2382,7 +2382,7 @@
 			      	<td align="center">'.intval($row4["Cantidad"]).'</td>
 			    </tr>
 		  		';
-		  	$contador++;
+		  		$contador++;
 		  	}
 		echo '
 			</tbody>
@@ -2426,7 +2426,7 @@
 			      	<td align="center">'.intval($row3["Cantidad"]).'</td>
 			    </tr>
 			';
-		$contador++;
+			$contador++;
 	  	}
 
 	  	echo '
@@ -2434,20 +2434,21 @@
 	  	</table>
 	  	';
 
-		$sql = QCleanTable('CP_QUnidadesVendidasCliente');
+	  	$sql = QCleanTable('CP_QUnidadesVendidasCliente2');
 		sqlsrv_query($conn,$sql);
-		$sql = QCleanTable('CP_QUnidadesDevueltaCliente');
+		$sql = QCleanTable('CP_QUnidadesDevueltaCliente2');
 		sqlsrv_query($conn,$sql);
-		$sql = QCleanTable('CP_QUnidadesCompradasProveedor');
+		$sql = QCleanTable('CP_QUnidadesCompradasProveedor2');
 		sqlsrv_query($conn,$sql);
-		$sql = QCleanTable('CP_QUnidadesReclamoProveedor');
+		$sql = QCleanTable('CP_QUnidadesReclamoProveedor2');
 		sqlsrv_query($conn,$sql);
-		$sql = QCleanTable('CP_QIntegracionProductosVendidos');
+		$sql = QCleanTable('CP_QIntegracionProductosVendidos2');
 		sqlsrv_query($conn,$sql);
-		$sql = QCleanTable('CP_QIntegracionProductosFalla');
+		$sql = QCleanTable('CP_QIntegracionProductosFalla2');
 		sqlsrv_query($conn,$sql);
-		$sql = QCleanTable('CP_QArticuloDescLike');
+		$sql = QCleanTable('CP_QArticuloDescLike2');
 		sqlsrv_query($conn,$sql);
+
 		$sql = QCleanTable('CP_QResumenDeMovimientos');
 		sqlsrv_query($conn,$sql);
 
