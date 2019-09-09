@@ -2763,6 +2763,48 @@
 							echo '<td align="center">'.intval($ExistenciaDesc).'</td>'; 
 						}
 						
+						$sql = QCleanTable('CP_QUnidadesVendidasClienteId');
+						sqlsrv_query($conn,$sql);
+						$sql = QCleanTable('CP_QUnidadesDevueltaClienteId');
+						sqlsrv_query($conn,$sql);
+						$sql = QCleanTable('CP_QUnidadesCompradasProveedorId');
+						sqlsrv_query($conn,$sql);
+						$sql = QCleanTable('CP_QUnidadesReclamoProveedorId');
+						sqlsrv_query($conn,$sql);
+						$sql = QCleanTable('CP_QIntegracionProductosVendidosId');
+						sqlsrv_query($conn,$sql);		
+
+						$sql6 = QUnidadesVendidasClienteId($FInicial,$FFinal,$IdArticulo);
+						$sql7 = QUnidadesDevueltaClienteId($FInicial,$FFinal,$IdArticulo);
+						$sql8 = QUnidadesCompradasProveedorId($FInicial,$FFinal,$IdArticulo);
+						$sql9 = QUnidadesReclamoProveedorId($FInicial,$FFinal,$IdArticulo);
+						$sql10 = QIntegracionProductosVendidosId();
+				
+						sqlsrv_query($conn,$sql6);
+						sqlsrv_query($conn,$sql7);
+						sqlsrv_query($conn,$sql8);
+						sqlsrv_query($conn,$sql9);
+						sqlsrv_query($conn,$sql10);
+
+						$result2 = sqlsrv_query($conn,'SELECT * FROM CP_QIntegracionProductosVendidosId');
+						$row2 = sqlsrv_fetch_array($result2,SQLSRV_FETCH_ASSOC);
+						$TotalUnidadesVendidasCliente = ($row2["UnidadesVendidasCliente"]-$row2["UnidadesDevueltaCliente"]);
+						$TotalUnidadesCompradasProveedor = ($row2["UnidadesCompradasProveedor"]-$row2["UnidadesReclamoProveedor"]); 
+
+						$Venta = intval($TotalUnidadesVendidasCliente);
+						$VentaDiaria = VentaDiaria($Venta,$RangoDias);
+						$DiasRestantes = DiasRestantes($Existencia,$VentaDiaria);
+
+						echo 
+						'<td align="center" class="barrido">
+						<a href="reporte12?fechaInicio='.$FInicial.'&fechaFin='.$FFinal.'&SEDE='.$SedeConnection.'&Descrip='.$row["Descripcion"].'&Id='.$IdArticulo.'" style="text-decoration: none; color: black;" target="_blank">'
+							.$Venta.
+						'</a>
+						</td>';
+
+						echo '<td align="center">'.round($DiasRestantes,2).'</td>';
+						echo '</tr>';
+
 						echo '</tr>';
 
 							$ContValidos++;
