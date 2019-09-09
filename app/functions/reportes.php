@@ -2696,13 +2696,6 @@
 			      	<th scope="col">Descripcion</th>			      	
 			      	<th scope="col">Precio (Con IVA)</th>
 			      	<th scope="col">Existencia</th>
-			      	<th scope="col">Dia 10</th>
-			      	<th scope="col">Dia 9</th>
-			      	<th scope="col">Dia 8</th>
-			      	<th scope="col">Dia 7</th>
-			      	<th scope="col">Dia 6</th>
-			      	<th scope="col">Dia 5</th>
-			      	<th scope="col">Dia 4</th>
 			      	<th scope="col">Dia 3</th>
 			      	<th scope="col">Dia 2</th>
 			      	<th scope="col">Dia 1</th>
@@ -2720,13 +2713,11 @@
 		/* Inicio while que itera en los articulos con existencia actual > 0*/
 		while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
 			$IdArticulo = $row["IdArticulo"];
-
 			/* FILTRO 2: 
 			*	Mantuvo Existencia en rango
 			*	se cuenta las apariciones del articulo en la tabla de dias
 			*	en cero, la misma debe ser igual la diferencia de dias +1 
 			*/
-			
 			$CuentaExistencia = CuentaExistencia($connCPharma,$IdArticulo);
 			if($CuentaExistencia==($RangoDias+1)){
 
@@ -2738,9 +2729,21 @@
 
 				if($CuentaVenta>=($RangoDias/2)){
 
-					$CuentaDecreciente = ExistenciaDecreciente($connCPharma,$IdArticulo,$FInicial,$FFinal,$RangoDias);
+					$ExistenciaDecreciente = ExistenciaDecreciente($connCPharma,$IdArticulo,$FInicial,$FFinal,$RangoDias);
+
+						$CuentaDecreciente = array_pop($ExistenciaDecreciente);
 
 						if($CuentaDecreciente==TRUE){
+
+						$IdArticulo = $row["IdArticulo"];
+						$IsIVA = $row["ConceptoImpuesto"];
+
+						$sql1 = QExistenciaArticulo($IdArticulo,0);
+						$result1 = sqlsrv_query($conn,$sql1);
+						$row1 = sqlsrv_fetch_array($result1,SQLSRV_FETCH_ASSOC);
+						$Existencia = $row1["Existencia"];
+
+						$Precio = CalculoPrecio($conn,$IdArticulo,$IsIVA,$Existencia);
 
 						echo '<tr>';
 						echo '<td align="center"><strong>'.intval($ContValidos+1).'</strong></td>';
@@ -2752,6 +2755,14 @@
 							.$row["Descripcion"].
 						'</a>
 						</td>';
+
+						echo '<td align="center">'." ".round($Precio,2)." ".SigVe.'</td>';
+						echo '<td align="center">'.intval($Existencia).'</td>'; 
+
+						foreach ($ExistenciaDecreciente as $ExistenciaDesc) {
+							echo '<td align="center">'.intval($ExistenciaDesc).'</td>'; 
+						}
+						
 						echo '</tr>';
 
 							$ContValidos++;

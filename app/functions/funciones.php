@@ -956,6 +956,8 @@
 		$ExistenciaAyer = 0;
 		$CuentaDecreciente = TRUE;
 		$CuentaDecrece = 0;
+		$indice = 0;
+		$ExistenciaDecreciente = array();
 
 		while( ($FInicial!=$FFinal) && ($CuentaDecreciente==TRUE) ) {
 
@@ -971,6 +973,8 @@
 
 			if($ExistenciaAyer>=$ExistenciaHoy){
 				$CuentaDecreciente = TRUE;
+				$ExistenciaDecreciente[$indice]=$ExistenciaHoy;
+				$indice++;
 
 				if($ExistenciaAyer>$ExistenciaHoy){
 					$CuentaDecrece++;
@@ -982,12 +986,14 @@
 
 			$FInicial = date("Y-m-d",strtotime($FInicial."+1 days"));
 		}
+
 		if($CuentaDecrece>=($RangoDias/2)){
 			$CuentaDecreciente = TRUE;
 		}
 		else{
 			$CuentaDecreciente = FALSE;
 		}
-		return $CuentaDecreciente;
+		$ExistenciaDecreciente[$indice] = $CuentaDecreciente;
+		return $ExistenciaDecreciente;
 	}
 ?>
