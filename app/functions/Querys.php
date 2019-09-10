@@ -1601,6 +1601,29 @@
 	}
 
 	/*
+		TITULO: QArticulosDevaluados
+		PARAMETROS: [$FechaBandera] Fecha minima de dias en la tienda
+		FUNCION: Armar una tabla virtual con los registros solicitados 
+		RETORNO: Un String con la query pertinente
+	 */
+	function QArticulosDevaluados($FechaBandera) {
+		$sql = "
+		SELECT 
+		InvLote.Id, 
+		CONVERT(DATE,InvLoteAlmacen.Auditoria_FechaCreacion) AS FechaLote, 
+		InvArticulo.Descripcion
+		FROM InvLote
+		INNER JOIN InvLoteAlmacen ON InvLote.Id = InvLoteAlmacen.InvLoteId
+		INNER JOIN InvArticulo ON InvArticulo.Id = InvLote.InvArticuloId
+		WHERE InvLoteAlmacen.Existencia>0 
+		AND (InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
+		AND InvLote.Auditoria_FechaCreacion < '$FechaBandera'
+		ORDER BY InvLoteAlmacen.Auditoria_FechaCreacion, InvArticulo.Descripcion DESC
+		";
+		return $sql;
+	}
+
+	/*
 		TITULO: 
 		PARAMETROS: 
 		FUNCION:
