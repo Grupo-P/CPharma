@@ -2707,20 +2707,21 @@
 			$Dolarizado = ProductoDolarizado($conn,$IdArticulo);
 
 			if($Dolarizado == 'NO') {
-				// $sql2 = QExistenciaArticulo($IdArticulo,0);
-				// $result2 = sqlsrv_query($conn,$sql2);
-				// $row2 = sqlsrv_fetch_array($result2,SQLSRV_FETCH_ASSOC);
+				$sql3 = QExistenciaArticulo($IdArticulo,0);
+				$result3 = sqlsrv_query($conn,$sql3);
+				$row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
 
-				// $IsIVA = $row1["ConceptoImpuesto"];
-				// $Existencia = $row2["Existencia"];
+				$IsIVA = $row2["ConceptoImpuesto"];
+				$Existencia = $row3["Existencia"];
+				$Precio = CalculoPrecio($conn,$IdArticulo,$IsIVA,$Existencia);
 
 				echo '
 					<tr>
 				    	<td align="center"><strong>'.intval($contador).'</strong></td>
 				    	<td align="center">'.$row2["CodigoArticulo"].'</td>
 				      	<td>'.utf8_encode($row2["Descripcion"]).'</td>
-				      	<td align="center">-</td>
-				      	<td align="center">-</td>
+				      	<td align="center">'." ".round($Precio,2)." ".SigVe.'</td>
+				      	<td align="center">'.intval($Existencia).'</td>
 				      	<td align="center">-</td>
 				      	<td align="center">-</td>
 				      	<td align="center">-</td>
