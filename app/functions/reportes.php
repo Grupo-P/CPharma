@@ -2678,7 +2678,7 @@
 				    	<th scope="col">Codigo</th>
 				      	<th scope="col">Descripcion</th>
 				      	<th scope="col">Precio</th>
-				      	<th scope="col">Cantidad</th>
+				      	<th scope="col">Existencia</th>
 				      	<th scope="col">Valor lote</th>
 				      	<th scope="col">Ultimo lote</th>
 				      	<th scope="col">Tasa historico</th>
@@ -2714,6 +2714,14 @@
 				$IsIVA = $row2["ConceptoImpuesto"];
 				$Existencia = $row3["Existencia"];
 				$Precio = CalculoPrecio($conn,$IdArticulo,$IsIVA,$Existencia);
+				$ValorLote = $Precio * intval($Existencia);
+
+				$sql4 = QUltimoLote($IdArticulo);
+				$result4 = sqlsrv_query($conn,$sql4);
+				$row4 = sqlsrv_fetch_array($result4,SQLSRV_FETCH_ASSOC);
+
+				$UltimoLote = $row4["UltimoLote"];
+				$UltimoLote = $UltimoLote->format('d-m-Y');
 
 				echo '
 					<tr>
@@ -2722,8 +2730,8 @@
 				      	<td>'.utf8_encode($row2["Descripcion"]).'</td>
 				      	<td align="center">'." ".round($Precio,2)." ".SigVe.'</td>
 				      	<td align="center">'.intval($Existencia).'</td>
-				      	<td align="center">-</td>
-				      	<td align="center">-</td>
+				      	<td align="center">'." ".round($ValorLote,2)." ".SigVe.'</td>
+				      	<td align="center">'.$UltimoLote.'</td>
 				      	<td align="center">-</td>
 				      	<td align="center">-</td>
 				      	<td align="center">-</td>
