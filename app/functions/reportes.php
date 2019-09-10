@@ -2232,13 +2232,8 @@
 		$TasaActual=TasaFecha(date('Y-m-d'));
 
 		//-------------------- Inicio Rangos --------------------
-		$FechaDeHoy = new DateTime('now');
-		$Diferencia = ValidarFechas($FechaDeHoy->format('Y-m-d'),$FFinal);
 		$FFinalImpresion = $FFinal;
-
-		if($Diferencia == 0) {
-			$FFinal = date("Y-m-d",strtotime($FFinal."+ 1 days"));
-		}
+		$FFinal = date("Y-m-d",strtotime($FFinal."+ 1 days"));
 
 		$sql = QCleanTable('CP_QUnidadesVendidasCliente2');
 		sqlsrv_query($conn,$sql);
@@ -2374,6 +2369,12 @@
 
 			$contador = 1;
 		  	while($row4 = sqlsrv_fetch_array($result4,SQLSRV_FETCH_ASSOC)) {
+		  		$FechaComparativa = date('d/m/Y',strtotime($FFinal));
+		  		
+		  		if($FechaComparativa == $row4["FechaMovimiento"]) {
+		  			break;
+		  		}
+
 		  		echo '
 	  			<tr>
 	  				<td align="center"><strong>'.intval($contador).'</strong></td>
@@ -2413,6 +2414,10 @@
 
 		$contador = 1;
 	  	while($row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC)) {
+	  		if($row3["FechaMovimiento"]->format("Y-m-d") == $FFinal) {
+	  			break;
+	  		}
+
 	  		echo '
 	  			<tr>
 	  				<td align="center"><strong>'.intval($contador).'</strong></td>
