@@ -2692,24 +2692,41 @@
 		';
 
 		$contador = 1;
-		while($contador<=10) {
-			echo '
-			  		<tr>
-				    	<td align="center">'.$contador.'</td>
-				    	<td align="center">-</td>
-				    	<td align="center">-</td>
-				    	<td align="center">-</td>
-				    	<td align="center">-</td>
-				    	<td align="center">-</td>
-				    	<td align="center">-</td>
-				    	<td align="center">-</td>
-				    	<td align="center">-</td>
-				    	<td align="center">-</td>
-				    	<td align="center">'.$DiasSolicitados.'</td>
-				    	<td align="center">-</td>
+		$sql1 = QArticulosDevaluados($FInicial);
+		$result1 = sqlsrv_query($conn,$sql1);
+
+		while($row1 = sqlsrv_fetch_array($result1,SQLSRV_FETCH_ASSOC)) {
+			$IdArticulo = $row1["InvArticuloId"];
+			$Dolarizado = ProductoDolarizado($conn,$IdArticulo);
+
+			if($Dolarizado == 'NO') {
+				$sql2 = QExistenciaArticulo($IdArticulo,0);
+				$result2 = sqlsrv_query($conn,$sql2);
+				$row2 = sqlsrv_fetch_array($result2,SQLSRV_FETCH_ASSOC);
+
+				$IsIVA = $row1["ConceptoImpuesto"];
+				$Existencia = $row2["Existencia"];
+				//$Precio = CalculoPrecio($conn,$IdArticulo,$IsIVA,$Existencia);
+
+				echo '
+					<tr>
+				    	<td align="center"><strong>'.intval($contador).'</strong></td>
+				    	<td align="center">'.$row1["CodigoArticulo"].'</td>
+				      	<td align="left">'.utf8_encode($row1["Descripcion"]).'</td>
+				      	<td align="center">-</td>
+				      	<td align="center">'.intval($Existencia).'</td>
+				      	<td align="center">-</td>
+				      	<td align="center">-</td>
+				      	<td align="center">-</td>
+				      	<td align="center">-</td>
+				      	<td align="center">-</td>
+				      	<td align="center">-</td>
+				      	<td align="center">-</td>
 				    </tr>
-			';
-			$contador++;
+				';
+
+				$contador++;
+			}
 		}
 
 		echo '

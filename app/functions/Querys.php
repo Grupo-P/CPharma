@@ -1610,8 +1610,11 @@
 		$sql = "
 		SELECT 
 		InvLote.Id, 
+		InvLote.InvArticuloId,
+		InvArticulo.CodigoArticulo,
 		CONVERT(DATE,InvLoteAlmacen.Auditoria_FechaCreacion) AS FechaLote, 
-		InvArticulo.Descripcion
+		InvArticulo.Descripcion,
+		InvArticulo.FinConceptoImptoIdCompra AS ConceptoImpuesto
 		FROM InvLote
 		INNER JOIN InvLoteAlmacen ON InvLote.Id = InvLoteAlmacen.InvLoteId
 		INNER JOIN InvArticulo ON InvArticulo.Id = InvLote.InvArticuloId

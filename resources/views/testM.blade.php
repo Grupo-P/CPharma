@@ -71,7 +71,7 @@
     include(app_path().'\functions\reportes.php');
 
     //---------- Borrar ----------
-    $_GET['SEDE'] = 'FTN';
+    $_GET['SEDE'] = 'DBm';
     //---------- Borrar ----------
     if(isset($_GET['fechaInicio'])) {
       $InicioCarga = new DateTime("now");
