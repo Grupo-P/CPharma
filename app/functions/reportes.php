@@ -2663,15 +2663,16 @@
 					<span class="input-group-text purple lighten-3" id="basic-text1">
 						<i class="fas fa-search text-white" aria-hidden="true"></i>
 					</span>
-			  	</div>
+				</div>
 
-			  	<input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterAllTable()">
-			</div><br/>
+				<input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterAllTable()">
+			</div>
+			<br/>
 		';
 
 		echo'
 			<table class="table table-striped table-bordered col-12 sortable" id="myTable">
-			  	<thead class="thead-dark">
+				<thead class="thead-dark">
 				    <tr>
 				    	<th scope="col">#</th>
 				    	<th scope="col">Codigo</th>
@@ -2691,30 +2692,35 @@
 			  	<tbody>
 		';
 
+		$sql = QCleanTable('CP_ArticulosDevaluados');
+		sqlsrv_query($conn,$sql);
+
 		$contador = 1;
 		$sql1 = QArticulosDevaluados($FInicial);
-		$result1 = sqlsrv_query($conn,$sql1);
+		sqlsrv_query($conn,$sql1);
 
-		while($row1 = sqlsrv_fetch_array($result1,SQLSRV_FETCH_ASSOC)) {
-			$IdArticulo = $row1["InvArticuloId"];
+		$sql2 = QFiltrarArticulosDevaluados();
+		$result2 = sqlsrv_query($conn,$sql2);
+
+		while($row2 = sqlsrv_fetch_array($result2,SQLSRV_FETCH_ASSOC)) {
+			$IdArticulo = $row2["InvArticuloId"];
 			$Dolarizado = ProductoDolarizado($conn,$IdArticulo);
 
 			if($Dolarizado == 'NO') {
-				$sql2 = QExistenciaArticulo($IdArticulo,0);
-				$result2 = sqlsrv_query($conn,$sql2);
-				$row2 = sqlsrv_fetch_array($result2,SQLSRV_FETCH_ASSOC);
+				// $sql2 = QExistenciaArticulo($IdArticulo,0);
+				// $result2 = sqlsrv_query($conn,$sql2);
+				// $row2 = sqlsrv_fetch_array($result2,SQLSRV_FETCH_ASSOC);
 
-				$IsIVA = $row1["ConceptoImpuesto"];
-				$Existencia = $row2["Existencia"];
-				//$Precio = CalculoPrecio($conn,$IdArticulo,$IsIVA,$Existencia);
+				// $IsIVA = $row1["ConceptoImpuesto"];
+				// $Existencia = $row2["Existencia"];
 
 				echo '
 					<tr>
 				    	<td align="center"><strong>'.intval($contador).'</strong></td>
-				    	<td align="center">'.$row1["CodigoArticulo"].'</td>
-				      	<td align="left">'.utf8_encode($row1["Descripcion"]).'</td>
+				    	<td align="center">'.$row2["CodigoArticulo"].'</td>
+				      	<td>'.utf8_encode($row2["Descripcion"]).'</td>
 				      	<td align="center">-</td>
-				      	<td align="center">'.intval($Existencia).'</td>
+				      	<td align="center">-</td>
 				      	<td align="center">-</td>
 				      	<td align="center">-</td>
 				      	<td align="center">-</td>
@@ -2734,6 +2740,9 @@
 			  	</tbody>
 			</table>
 		';
+
+		$sql = QCleanTable('CP_ArticulosDevaluados');
+		sqlsrv_query($conn,$sql);
 
 		sqlsrv_close($conn);
 	}
