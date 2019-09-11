@@ -996,4 +996,189 @@
 		$ExistenciaDecreciente[$indice] = $CuentaDecreciente;
 		return $ExistenciaDecreciente;
 	}
+	/*
+		TITULO: ProuctosEnCaida
+		PARAMETROS: no aplica
+		FUNCION: Captura y almacena la data para productos en caida
+		RETORNO: no aplica
+	 */
+	function ProuctosEnCaida() {
+		$SedeConnection = MiUbicacion();
+		$conn = ConectarSmartpharma($SedeConnection);
+		$connCPharma = ConectarXampp();
+
+		$sqlB = QBorrarProductosCaida();
+		mysqli_query($connCPharma,$sqlB);
+
+		$FechaCaptura = new DateTime("now");
+		$FechaCaptura = $FechaCaptura->format('Y-m-d');
+		$user = 'SYSTEM';
+
+		/* Rangos de Fecha */
+  		$FFinal = date("Y-m-d");
+	  	$FInicial = date("Y-m-d",strtotime($FFinal."-3 days"));
+	  	$RangoDias = intval(RangoDias($FInicial,$FFinal));
+
+		$sql = QCleanTable('CP_FiltradoCaida');
+		sqlsrv_query($conn,$sql);
+
+		/* FILTRO 1: 
+		*	Articulos con existencia actual mayor a 0 
+		*	Articulos con veces vendidas en el rango
+		* 	Articulos sin compra en el rango
+		*/
+		$sql1 = QFiltradoCaida($FInicial,$FFinal);
+		sqlsrv_query($conn,$sql1);
+
+		$sql2 = QIntegracionFiltradoCaida($RangoDias);
+		$result = sqlsrv_query($conn,$sql2);
+
+		/* Inicio while que itera en los articulos con existencia actual > 0*/
+		while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
+			$IdArticulo = $row["IdArticulo"];
+			$CodigoArticulo = $row["CodigoArticulo"];
+			$Descripcion_User = $row["Descripcion"];
+			$Descripcion = addslashes($Descripcion_User);
+			$IsIVA = $row["ConceptoImpuesto"];
+
+			$sql1 = QExistenciaArticulo($IdArticulo,0);
+			$result1 = sqlsrv_query($conn,$sql1);
+			$row1 = sqlsrv_fetch_array($result1,SQLSRV_FETCH_ASSOC);
+			$Existencia = $row1["Existencia"];
+			$date = date('Y-m-d h:i:s',time());
+
+			/* FILTRO 2: 
+			*	Dias restantes
+			*	si dias restantes es menor de 10 entra en el rango sino es rechazado
+			*/
+			$sql = QCleanTable('CP_QUnidadesVendidasClienteId');
+			sqlsrv_query($conn,$sql);
+			$sql = QCleanTable('CP_QUnidadesDevueltaClienteId');
+			sqlsrv_query($conn,$sql);
+			$sql = QCleanTable('CP_QUnidadesCompradasProveedorId');
+			sqlsrv_query($conn,$sql);
+			$sql = QCleanTable('CP_QUnidadesReclamoProveedorId');
+			sqlsrv_query($conn,$sql);
+			$sql = QCleanTable('CP_QIntegracionProductosVendidosId');
+			sqlsrv_query($conn,$sql);		
+
+			$sql6 = QUnidadesVendidasClienteId($FInicial,$FFinal,$IdArticulo);
+			$sql7 = QUnidadesDevueltaClienteId($FInicial,$FFinal,$IdArticulo);
+			$sql8 = QUnidadesCompradasProveedorId($FInicial,$FFinal,$IdArticulo);
+			$sql9 = QUnidadesReclamoProveedorId($FInicial,$FFinal,$IdArticulo);
+			$sql10 = QIntegracionProductosVendidosId();
+	
+			sqlsrv_query($conn,$sql6);
+			sqlsrv_query($conn,$sql7);
+			sqlsrv_query($conn,$sql8);
+			sqlsrv_query($conn,$sql9);
+			sqlsrv_query($conn,$sql10);
+
+			$result2 = sqlsrv_query($conn,'SELECT * FROM CP_QIntegracionProductosVendidosId');
+			$row2 = sqlsrv_fetch_array($result2,SQLSRV_FETCH_ASSOC);
+			$TotalUnidadesVendidasCliente = ($row2["UnidadesVendidasCliente"]-$row2["UnidadesDevueltaCliente"]);
+			$TotalUnidadesCompradasProveedor = ($row2["UnidadesCompradasProveedor"]-$row2["UnidadesReclamoProveedor"]); 
+
+			$Venta = intval($TotalUnidadesVendidasCliente);
+			$VentaDiaria = VentaDiaria($Venta,$RangoDias);
+			$DiasRestantes = DiasRestantes($Existencia,$VentaDiaria);
+
+			if($DiasRestantes<11){
+
+				/* FILTRO 3:
+				*	Mantuvo Existencia en rango
+				*	se cuenta las apariciones del articulo en la tabla de dias
+				*	en cero, la misma debe ser igual la diferencia de dias +1 
+				*/
+				$CuentaExistencia = CuentaExistencia($connCPharma,$IdArticulo);
+				if($CuentaExistencia==($RangoDias+1)){
+
+					/*  FILTRO 4: 
+					*	Venta en dia, esta se acumula 
+					*	El articulo debe tener venta al menos la mita de dias del rango 
+					*/
+					$CuentaVenta = CuentaVenta($conn,$IdArticulo,$FInicial,$FFinal);
+
+					if($CuentaVenta>=($RangoDias/2)){
+
+						$ExistenciaDecreciente = ExistenciaDecreciente($connCPharma,$IdArticulo,$FInicial,$FFinal,$RangoDias);
+
+						$CuentaDecreciente = array_pop($ExistenciaDecreciente);
+
+						/*  FILTRO 5: 
+						*	Si el articulo decrece su existencia rango 
+						*/
+						if($CuentaDecreciente==TRUE){
+							
+							$Precio = CalculoPrecio($conn,$IdArticulo,$IsIVA,$Existencia);
+
+							$Dia10 = $ExistenciaDecreciente[0];
+							$Dia9 = $ExistenciaDecreciente[1];
+							$Dia8 = $ExistenciaDecreciente[2];
+							$Dia7 = $ExistenciaDecreciente[3];
+							$Dia6 = $ExistenciaDecreciente[4];
+							$Dia5 = $ExistenciaDecreciente[5];
+							$Dia4 = $ExistenciaDecreciente[6];
+							$Dia3 = $ExistenciaDecreciente[7];
+							$Dia2 = $ExistenciaDecreciente[8];
+							$Dia1 = $ExistenciaDecreciente[9];
+						
+						$sqlCPharma = QGuardarProductosCaida($IdArticulo,$CodigoArticulo,$Descripcion,$Precio,$Existencia,$Dia10,$Dia9,$Dia8,$Dia7,$Dia6,$Dia5,$Dia4,$Dia3,$Dia2,$Dia1,$Venta,$DiasRestantes,$FechaCaptura,$user,$date);
+
+						mysqli_query($connCPharma,$sqlCPharma);
+
+						}		
+					}
+				}
+			}
+		}
+		GuardarCapturaCaida($FechaCaptura,$date);
+		
+		$sql = QCleanTable('CP_QUnidadesVendidasClienteId');
+		sqlsrv_query($conn,$sql);
+		$sql = QCleanTable('CP_QUnidadesDevueltaClienteId');
+		sqlsrv_query($conn,$sql);
+		$sql = QCleanTable('CP_QUnidadesCompradasProveedorId');
+		sqlsrv_query($conn,$sql);
+		$sql = QCleanTable('CP_QUnidadesReclamoProveedorId');
+		sqlsrv_query($conn,$sql);
+		$sql = QCleanTable('CP_QIntegracionProductosVendidosId');
+		sqlsrv_query($conn,$sql);
+		$sql = QCleanTable('CP_FiltradoCaida');
+		sqlsrv_query($conn,$sql);
+
+		$sqlCC = QValidarCapturaCaida($FechaCaptura);
+		$resultCC = mysqli_query($connCPharma,$sqlCC);
+		$rowCC = mysqli_fetch_assoc($resultCC);
+		$CuentaCaptura = $rowCC["CuentaCaptura"];
+
+		if($CuentaCaptura == 0){
+			mysqli_close($connCPharma);
+			sqlsrv_close($conn);
+			ProuctosEnCaida();
+		}
+		else{
+			mysqli_close($connCPharma);
+			sqlsrv_close($conn);
+		}
+	}
+	/*
+		TITULO: GuardarCapturaDiaria
+		PARAMETROS: [$FechaCaptura] El dia de hoy
+					[$date] valor para creacion y actualizacion
+		FUNCION: crea una conexion con la base de datos cpharma e ingresa datos
+		RETORNO: no aplica
+	 */
+	function GuardarCapturaCaida($FechaCaptura,$date) {
+		$conn = ConectarXampp();
+		$sql = QCapturaCaida($FechaCaptura);
+		$result = mysqli_query($conn,$sql);
+		$row = mysqli_fetch_assoc($result);
+		$TotalRegistros = $row["TotalRegistros"];
+
+		$sql1 = QGuardarCapturaCaida($TotalRegistros,$FechaCaptura,$date);
+		mysqli_query($conn,$sql1);
+
+		mysqli_close($conn);
+	}
 ?>

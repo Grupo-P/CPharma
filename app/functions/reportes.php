@@ -2656,29 +2656,16 @@
 		RETORNO: No aplica
 	 */
 	function ReporteProductosEnCaida($SedeConnection){
-		$conn = ConectarSmartpharma($SedeConnection);
+
 		$connCPharma = ConectarXampp();
 
-		/* Rangos de Fecha */
-  		$FFinal = date('2019-09-05'); //date("Y-m-d");
+		$FFinal = date('2019-09-05'); //date("Y-m-d");
 	  	$FInicial = date("Y-m-d",strtotime($FFinal."-3 days"));
-	  	$RangoDias = intval(RangoDias($FInicial,$FFinal));
 
-		$sql = QCleanTable('CP_FiltradoCaida');
-		sqlsrv_query($conn,$sql);
+		$sql = "SELECT * FROM productos_caida";
+		$result = mysqli_query($connCPharma,$sql);
 
-		/* FILTRO 1: 
-		*	Articulos con existencia actual mayor a 0 
-		*	Articulos con veces vendidas en el rango
-		* 	Articulos sin compra en el rango
-		*/
-		$sql1 = QFiltradoCaida($FInicial,$FFinal);
-		sqlsrv_query($conn,$sql1);
-
-		$sql2 = QIntegracionFiltradoCaida($RangoDias);
-		$result = sqlsrv_query($conn,$sql2);
-
-	  	echo '
+		echo '
 		<div class="input-group md-form form-sm form-1 pl-0">
 		  <div class="input-group-prepend">
 		    <span class="input-group-text purple lighten-3" id="basic-text1">
@@ -2690,172 +2677,94 @@
 		</div>
 		<br/>
 		';
-
-		echo'<h6 align="center">Evaluado desde el '.$FInicial.' al '.$FFinal.' </h6>';
-
+		
 		echo'
-		<table class="table table-striped table-bordered col-12 sortable" id="myTable">
-		  	<thead class="thead-dark">
+
+		<h6 align="center">Periodo desde el '.$FInicial.' al '.$FFinal.' </h6>
+
+		<table class="table table-striped table-bordered col-12 sortable">
+			<thead class="thead-dark">
 			    <tr>
-			    	<th scope="col">#</th>
+			    	<th scope="col">#</th>			
 			    	<th scope="col">Codigo</th>
-			      	<th scope="col">Descripcion</th>			      	
-			      	<th scope="col">Precio (Con IVA)</th>
-			      	<th scope="col">Existencia</th>
-			      	<th scope="col">Dia 3</th>
-			      	<th scope="col">Dia 2</th>
-			      	<th scope="col">Dia 1</th>
-			      	<th scope="col">Unidades vendidas</th>
-			      	<th scope="col">Dias restantes</th>
+			      	<th scope="col">Descripcion</td>
+			      	<th scope="col">Precio</br>(Con IVA)</td>
+			      	<th scope="col">Existencia</td>
+			      	<th scope="col">Dia 10</td>
+			      	<th scope="col">Dia 9</td>
+			      	<th scope="col">Dia 8</td>
+			      	<th scope="col">Dia 7</td>
+			      	<th scope="col">Dia 6</td>
+			      	<th scope="col">Dia 5</td>
+			      	<th scope="col">Dia 4</td>
+			      	<th scope="col">Dia 3</td>
+			      	<th scope="col">Dia 2</td>
+			      	<th scope="col">Dia 1</td>
+			      	<th scope="col">UnidadesVendidas</td>
+			      	<th scope="col">DiasRestantes</td>	      				      
 			    </tr>
 		  	</thead>
 		  	<tbody>
-		';
-		$contador = 1;
-		$ContValidos = 0;
-		$ContNOValidosExistencia = 0;
-		$ContNOValidosVenta = 0;
-		$ContNOValidosDecreciente = 0;
-		/* Inicio while que itera en los articulos con existencia actual > 0*/
-		while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
-			$IdArticulo = $row["IdArticulo"];
-			/* FILTRO 2: 
-			*	Mantuvo Existencia en rango
-			*	se cuenta las apariciones del articulo en la tabla de dias
-			*	en cero, la misma debe ser igual la diferencia de dias +1 
-			*/
-			$CuentaExistencia = CuentaExistencia($connCPharma,$IdArticulo);
-			if($CuentaExistencia==($RangoDias+1)){
+	  	';
 
-				/*  FILTRO 3: 
-				*	Venta en dia, esta se acumula 
-				*	El articulo debe tener venta al menos la mita de dias del rango 
-				*/
-				$CuentaVenta = CuentaVenta($conn,$IdArticulo,$FInicial,$FFinal);
+	  	$contador = 1;
+		while($row = mysqli_fetch_assoc($result)){
+			$IdArticulo = $row['IdArticulo'];
+			$CodigoArticulo = $row['CodigoArticulo'];
+			$Descripcion = $row['Descripcion'];
+			$Precio = $row['Precio'];
+			$Existencia = $row['Existencia'];
+			$Dia10 = $row['Dia10'];
+			$Dia9 = $row['Dia9'];
+			$Dia8 = $row['Dia8'];
+			$Dia7 = $row['Dia7'];
+			$Dia6 = $row['Dia6'];
+			$Dia5 = $row['Dia5'];
+			$Dia4 = $row['Dia4'];
+			$Dia3 = $row['Dia3'];
+			$Dia2 = $row['Dia2'];
+			$Dia1 = $row['Dia1'];
+			$UnidadesVendidas = $row['UnidadesVendidas'];
+			$DiasRestantes = $row['DiasRestantes'];
 
-				if($CuentaVenta>=($RangoDias/2)){
+			echo '<tr>';
+			echo '<td align="center"><strong>'.intval($contador).'</strong></td>';
+			echo '<td>'.$row["CodigoArticulo"].'</td>';
 
-					$ExistenciaDecreciente = ExistenciaDecreciente($connCPharma,$IdArticulo,$FInicial,$FFinal,$RangoDias);
+			echo 
+			'<td align="left" class="barrido">
+			<a href="/reporte2?Id='.$IdArticulo.'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
+				.$Descripcion.
+			'</a>
+			</td>';
 
-						$CuentaDecreciente = array_pop($ExistenciaDecreciente);
+			echo '<td align="center">'." ".round($Precio,2)." ".SigVe.'</td>';
+			echo '<td align="center">'.intval($Existencia).'</td>';
+			echo '<td align="center">'.intval($Dia10).'</td>';
+			echo '<td align="center">'.intval($Dia9).'</td>';
+			echo '<td align="center">'.intval($Dia8).'</td>';
+			echo '<td align="center">'.intval($Dia7).'</td>';
+			echo '<td align="center">'.intval($Dia6).'</td>';
+			echo '<td align="center">'.intval($Dia5).'</td>';
+			echo '<td align="center">'.intval($Dia4).'</td>';
+			echo '<td align="center">'.intval($Dia3).'</td>';
+			echo '<td align="center">'.intval($Dia2).'</td>';
+			echo '<td align="center">'.intval($Dia1).'</td>';
 
-						if($CuentaDecreciente==TRUE){
+			echo 
+			'<td align="center" class="barrido">
+			<a href="reporte12?fechaInicio='.$FInicial.'&fechaFin='.$FFinal.'&SEDE='.$SedeConnection.'&Descrip='.$Descripcion.'&Id='.$IdArticulo.'" style="text-decoration: none; color: black;" target="_blank">'
+				.$UnidadesVendidas.
+			'</a>
+			</td>';
 
-						$IdArticulo = $row["IdArticulo"];
-						$IsIVA = $row["ConceptoImpuesto"];
+			echo '<td align="center">'.round($DiasRestantes,2).'</td>';
 
-						$sql1 = QExistenciaArticulo($IdArticulo,0);
-						$result1 = sqlsrv_query($conn,$sql1);
-						$row1 = sqlsrv_fetch_array($result1,SQLSRV_FETCH_ASSOC);
-						$Existencia = $row1["Existencia"];
-
-						$Precio = CalculoPrecio($conn,$IdArticulo,$IsIVA,$Existencia);
-
-						echo '<tr>';
-						echo '<td align="center"><strong>'.intval($ContValidos+1).'</strong></td>';
-						echo '<td align="left">'.$row["CodigoArticulo"].'</td>';
-
-						echo 
-						'<td align="left" class="barrido">
-						<a href="/reporte2?Id='.$IdArticulo.'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
-							.$row["Descripcion"].
-						'</a>
-						</td>';
-
-						echo '<td align="center">'." ".round($Precio,2)." ".SigVe.'</td>';
-						echo '<td align="center">'.intval($Existencia).'</td>'; 
-
-						foreach ($ExistenciaDecreciente as $ExistenciaDesc) {
-							echo '<td align="center">'.intval($ExistenciaDesc).'</td>'; 
-						}
-						
-						$sql = QCleanTable('CP_QUnidadesVendidasClienteId');
-						sqlsrv_query($conn,$sql);
-						$sql = QCleanTable('CP_QUnidadesDevueltaClienteId');
-						sqlsrv_query($conn,$sql);
-						$sql = QCleanTable('CP_QUnidadesCompradasProveedorId');
-						sqlsrv_query($conn,$sql);
-						$sql = QCleanTable('CP_QUnidadesReclamoProveedorId');
-						sqlsrv_query($conn,$sql);
-						$sql = QCleanTable('CP_QIntegracionProductosVendidosId');
-						sqlsrv_query($conn,$sql);		
-
-						$sql6 = QUnidadesVendidasClienteId($FInicial,$FFinal,$IdArticulo);
-						$sql7 = QUnidadesDevueltaClienteId($FInicial,$FFinal,$IdArticulo);
-						$sql8 = QUnidadesCompradasProveedorId($FInicial,$FFinal,$IdArticulo);
-						$sql9 = QUnidadesReclamoProveedorId($FInicial,$FFinal,$IdArticulo);
-						$sql10 = QIntegracionProductosVendidosId();
-				
-						sqlsrv_query($conn,$sql6);
-						sqlsrv_query($conn,$sql7);
-						sqlsrv_query($conn,$sql8);
-						sqlsrv_query($conn,$sql9);
-						sqlsrv_query($conn,$sql10);
-
-						$result2 = sqlsrv_query($conn,'SELECT * FROM CP_QIntegracionProductosVendidosId');
-						$row2 = sqlsrv_fetch_array($result2,SQLSRV_FETCH_ASSOC);
-						$TotalUnidadesVendidasCliente = ($row2["UnidadesVendidasCliente"]-$row2["UnidadesDevueltaCliente"]);
-						$TotalUnidadesCompradasProveedor = ($row2["UnidadesCompradasProveedor"]-$row2["UnidadesReclamoProveedor"]); 
-
-						$Venta = intval($TotalUnidadesVendidasCliente);
-						$VentaDiaria = VentaDiaria($Venta,$RangoDias);
-						$DiasRestantes = DiasRestantes($Existencia,$VentaDiaria);
-
-						echo 
-						'<td align="center" class="barrido">
-						<a href="reporte12?fechaInicio='.$FInicial.'&fechaFin='.$FFinal.'&SEDE='.$SedeConnection.'&Descrip='.$row["Descripcion"].'&Id='.$IdArticulo.'" style="text-decoration: none; color: black;" target="_blank">'
-							.$Venta.
-						'</a>
-						</td>';
-
-						echo '<td align="center">'.round($DiasRestantes,2).'</td>';
-						echo '</tr>';
-
-						echo '</tr>';
-
-							$ContValidos++;
-						}
-						else{
-							$ContNOValidosDecreciente++;
-						}	
-				}
-				else{
-					$ContNOValidosVenta++;
-				}
-			}
-			else{
-				$ContNOValidosExistencia++;
-			}
-	
-			/*
-			* 	Existencia decreciente
-			*/
-			/*
-			$IsValido = ValidarEnDiasCero($IdArticulo,$FInicial,$FFinal);
-
-			if($IsValido == TRUE){
-				//AQUI SE DEBE IMPRIMIR ENTONCES EN LA TABLA
-			}
-			*/
-			$contador++;
+		$contador++;
 		}
 		echo '
 	  		</tbody>
 		</table>';
-
-		echo'<br/>############################################';
-		echo'<br/>Contador: '.$contador;
-		echo'<br/>ContValidos: '.$ContValidos;
-		echo'<br/>ContNOValidosExistencia: '.$ContNOValidosExistencia;
-		echo'<br/>ContNOValidosVenta: '.$ContNOValidosVenta;
-		echo'<br/>ContNOValidosDecreciente: '.$ContNOValidosDecreciente;
-		echo'<br/>############################################';
-		echo'<br/>';
-
-		$sql = QCleanTable('CP_FiltradoCaida');
-		sqlsrv_query($conn,$sql);
-
 		mysqli_close($connCPharma);
-		sqlsrv_close($conn);
 	}
 ?>

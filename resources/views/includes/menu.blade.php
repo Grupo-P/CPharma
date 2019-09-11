@@ -247,6 +247,14 @@
       </a>
     </li>
 
+    <li class="nav-item">
+      <a class="nav-link" href="{{ url('/productoscaida') }}">      
+        <span data-feather="home"></span>
+        <i class="fas fa-search"></i>
+        Productos en Caida<span class="sr-only">(current)</span>
+      </a>
+    </li>
+
 <!-- TODO LO QUE ESTE DEBAJO DE ESTA LINEA ESTA EN FASE DE DESARROLLO -->
 <hr class="row align-items-center bg-danger">
 
