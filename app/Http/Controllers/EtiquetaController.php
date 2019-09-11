@@ -26,7 +26,7 @@ class EtiquetaController extends Controller
      */
     public function index()
     {   
-        $etiquetas =  Etiqueta::all();
+        $etiquetas =  Etiqueta::orderBy('condicion', 'desc')->get();
         return view('pages.etiqueta.index', compact('etiquetas'));
     }
 
@@ -66,16 +66,26 @@ class EtiquetaController extends Controller
      */
     public function show($id)
     {
-        $etiqueta = Etiqueta::find($id); 
+        $etiqueta = Etiqueta::find($id);
 
         $Auditoria = new Auditoria();
-        $Auditoria->accion = 'CONSULTAR';
+        $Auditoria->accion = 'EDITAR';
         $Auditoria->tabla = 'ETIQUETA';
         $Auditoria->registro = $etiqueta->descripcion;
         $Auditoria->user = auth()->user()->name;
         $Auditoria->save();
 
-        return view('pages.etiqueta.show', compact('etiqueta'));
+        if($etiqueta->clasificacion != 'OBLIGATORIO ETIQUETAR'){
+            $etiqueta->condicion = 'CLASIFICADO';
+            $etiqueta->clasificacion = 'OBLIGATORIO ETIQUETAR';
+        }
+        
+        $etiqueta->user = auth()->user()->name;        
+        $etiqueta->save();
+
+        $Auditoria->save();
+
+        return redirect()->route('etiqueta.index');
     }
 
     /**
@@ -87,7 +97,25 @@ class EtiquetaController extends Controller
     public function edit($id)
     {
         $etiqueta = Etiqueta::find($id);
-        return view('pages.etiqueta.edit', compact('etiqueta'));
+
+        $Auditoria = new Auditoria();
+        $Auditoria->accion = 'EDITAR';
+        $Auditoria->tabla = 'ETIQUETA';
+        $Auditoria->registro = $etiqueta->descripcion;
+        $Auditoria->user = auth()->user()->name;
+        $Auditoria->save();
+
+        if($etiqueta->clasificacion != 'ETIQUETABLE'){
+            $etiqueta->condicion = 'CLASIFICADO';
+            $etiqueta->clasificacion = 'ETIQUETABLE';
+        }
+        
+        $etiqueta->user = auth()->user()->name;        
+        $etiqueta->save();
+
+        $Auditoria->save();
+
+        return redirect()->route('etiqueta.index');
     }
 
     /**
@@ -99,7 +127,7 @@ class EtiquetaController extends Controller
      */
     public function update(Request $request, $id)
     {
-        return redirect()->route('etiqueta.index')->with('Deleted', ' Informacion');
+        return redirect()->action('EtiquetaController@index');
     }
 
     /**
@@ -113,24 +141,22 @@ class EtiquetaController extends Controller
         $etiqueta = Etiqueta::find($id);
 
         $Auditoria = new Auditoria();
+        $Auditoria->accion = 'EDITAR';
         $Auditoria->tabla = 'ETIQUETA';
         $Auditoria->registro = $etiqueta->descripcion;
         $Auditoria->user = auth()->user()->name;
+        $Auditoria->save();
 
-        if($etiqueta->estatus == 'ACTIVO'){
-            $etiqueta->estatus = 'INACTIVO';
-            $Auditoria->accion = 'DESINCORPORAR';
+        if($etiqueta->clasificacion != 'NO ETIQUETABLE'){
+            $etiqueta->condicion = 'CLASIFICADO';
+            $etiqueta->clasificacion = 'NO ETIQUETABLE';
         }
-        else if($etiqueta->estatus == 'INACTIVO'){
-            $etiqueta->estatus = 'ACTIVO';
-            $Auditoria->accion = 'REINCORPORAR';
-        }
-
+        
         $etiqueta->user = auth()->user()->name;        
         $etiqueta->save();
 
         $Auditoria->save();
 
-        return redirect()->route('etiqueta.index')->with('Deleted', ' Informacion');
+        return redirect()->route('etiqueta.index');
     }
 }

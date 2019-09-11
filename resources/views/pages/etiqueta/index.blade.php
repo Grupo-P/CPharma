@@ -144,18 +144,18 @@
 					<?php
 					if($etiqueta->estatus == 'ACTIVO'){
 					?>
-						<a href="/etiqueta/{{$etiqueta->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
-			      			<i class="far fa-eye"></i>			      		
+						<a href="/etiqueta/{{$etiqueta->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Obligatorio Etiquetar">
+			      			<i class="fas fa-check-double"></i>			      		
 			      		</a>
 
-			      		<a href="/etiqueta/{{$etiqueta->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
-			      			<i class="fas fa-edit"></i>			      		
+			      		<a href="/etiqueta/{{$etiqueta->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Etiquetable">
+			      			<i class="fas fa-check"></i>			      		
 				      	</a>
 				 					  
 				      	<form action="/etiqueta/{{$etiqueta->id}}" method="POST" style="display: inline;">
 						    @method('DELETE')
 						    @csrf					    
-						    <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Desincorporar"><i class="fa fa-reply"></i></button>
+						    <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="No Etiquetable"><i class="fas fa-ban"></i></button>
 						</form>
 					<?php
 					}
