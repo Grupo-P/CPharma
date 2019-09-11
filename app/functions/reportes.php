@@ -2676,6 +2676,9 @@
 		  <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterAllTable()">
 		</div>
 		<br/>
+		';
+		
+		echo'
 
 		<h6 align="center">Periodo desde el '.$FInicial.' al '.$FFinal.' </h6>
 
@@ -2730,7 +2733,7 @@
 
 			echo 
 			'<td align="left" class="barrido">
-			<a href="/reporte10?Descrip='.$Descripcion.'&Id='.$IdArticulo.'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
+			<a href="/reporte2?Id='.$IdArticulo.'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
 				.$Descripcion.
 			'</a>
 			</td>';
