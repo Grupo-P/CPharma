@@ -996,4 +996,55 @@
 		$ExistenciaDecreciente[$indice] = $CuentaDecreciente;
 		return $ExistenciaDecreciente;
 	}
+	/*
+		TITULO: ProuctosEnCaida
+		PARAMETROS: no aplica
+		FUNCION: Captura y almacena la data para dias en cero
+		RETORNO: no aplica
+	 */
+	function ProuctosEnCaida() {
+		$SedeConnection = MiUbicacion();
+		$conn = ConectarSmartpharma($SedeConnection);
+		$connCPharma = ConectarXampp();
+
+		$sql = QDiasEnCero();
+		$result = sqlsrv_query($conn,$sql);
+
+		$FechaCaptura = new DateTime("now");
+		$FechaCaptura = $FechaCaptura->format('Y-m-d');
+		$user = 'SYSTEM';
+		$date = '';
+
+		while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
+			$IdArticulo = $row["IdArticulo"];
+			$CodigoInterno = $row["CodigoInterno"];
+			$Descripcion_User=$row["Descripcion"];
+			$Descripcion = addslashes($Descripcion_User);//Escapa los caracteres especiales
+			$Existencia=intval($row["Existencia"]);
+			$IsIVA = $row["ConceptoImpuesto"];
+			$Precio = CalculoPrecioDiasCero($conn,$IdArticulo,$IsIVA,$Existencia);
+			$date = date('Y-m-d h:i:s',time());
+			
+			$sqlCPharma = QGuardarDiasEnCero($IdArticulo,$CodigoInterno,$Descripcion,$Existencia,$Precio,$FechaCaptura,$user,$date);
+			mysqli_query($connCPharma,$sqlCPharma);
+		}
+		GuardarCapturaDiaria($FechaCaptura,$date);
+
+		$sqlCC = QValidarCapturaDiaria($FechaCaptura);
+		$resultCC = mysqli_query($connCPharma,$sqlCC);
+		$rowCC = mysqli_fetch_assoc($resultCC);
+		$CuentaCaptura = $rowCC["CuentaCaptura"];
+
+		if($CuentaCaptura == 0){
+			$sqlB = QBorrarDiasCero($FechaCaptura);
+			mysqli_query($connCPharma,$sqlB);
+			mysqli_close($connCPharma);
+			sqlsrv_close($conn);
+			DiasEnCero();
+		}
+		else{
+			mysqli_close($connCPharma);
+			sqlsrv_close($conn);
+		}
+	}
 ?>
