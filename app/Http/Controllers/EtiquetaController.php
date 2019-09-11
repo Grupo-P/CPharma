@@ -55,29 +55,7 @@ class EtiquetaController extends Controller
      */
     public function store(Request $request)
     {
-        try{
-            $etiqueta = new Etiqueta();
-            $etiqueta->id_articulo = $request->input('id_articulo');
-            $etiqueta->codigo_articulo = $request->input('codigo_articulo');
-            $etiqueta->descripcion = $request->input('descripcion');
-            $etiqueta->condicion = 'ACTIVO';
-            $etiqueta->clasificacion = 'ACTIVO';
-            $etiqueta->estatus = 'ACTIVO';
-            $etiqueta->user = auth()->user()->name;
-            $etiqueta->save();
-
-            $Auditoria = new Auditoria();
-            $Auditoria->accion = 'CREAR';
-            $Auditoria->tabla = 'ETIQUETA';
-            $Auditoria->registro = $request->input('descripcion');
-            $Auditoria->user = auth()->user()->name;
-            $Auditoria->save();
-
-            return redirect()->route('etiqueta.index')->with('Saved', ' Informacion');
-        }
-        catch(\Illuminate\Database\QueryException $e){
-            return back()->with('Error', ' Error');
-        }
+        return redirect()->action('EtiquetaController@index');
     }
 
     /**
@@ -121,24 +99,7 @@ class EtiquetaController extends Controller
      */
     public function update(Request $request, $id)
     {
-        try{
-            $etiqueta = Etiqueta::find($id);
-            $etiqueta->fill($request->all());
-            $etiqueta->user = auth()->user()->name;
-            $etiqueta->save();
-
-            $Auditoria = new Auditoria();
-            $Auditoria->accion = 'EDITAR';
-            $Auditoria->tabla = 'ETIQUETA';
-            $Auditoria->registro = $etiqueta->descripcion;
-            $Auditoria->user = auth()->user()->name;
-            $Auditoria->save();
-
-            return redirect()->route('etiqueta.index')->with('Updated', ' Informacion');
-        }
-        catch(\Illuminate\Database\QueryException $e){
-            return back()->with('Error', ' Error');
-        }
+        return redirect()->route('etiqueta.index')->with('Deleted', ' Informacion');
     }
 
     /**
