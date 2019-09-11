@@ -37,7 +37,7 @@
         if(is_null($IdArticuloCPharma)){
 
             $condicion = 'NO CLASIFICADO';
-            $clasificacion = 'ETIQUETABLES';
+            $clasificacion = 'PENDIENTE';
             $estatus = 'ACTIVO';
             $user = 'SYSTEM';
             $date = new DateTime('now');
