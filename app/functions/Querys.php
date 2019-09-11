@@ -2030,6 +2030,63 @@
 		";
 		return $sql;
 	}
+///////////////////////////////////////////////////////////////////////////
+///				QUERYS EN DESARROLLO PARA PRODUCTOS EN CAIDA        ///
+//////////////////////////////////////////////////////////////////////////
+	/*
+		TITULO: QExistenciaActual
+		PARAMETROS: no aplica
+		FUNCION: busca los articulos en existencia hoy
+		RETORNO: no aplica
+		//
+	 */
+	function QExistenciaActual() {
+		$sql = "
+			SELECT
+			InvArticulo.Id AS IdArticulo,
+			InvArticulo.CodigoArticulo AS CodigoInterno,
+			InvArticulo.Descripcion,
+			SUM(InvLoteAlmacen.Existencia) AS Existencia,
+			InvArticulo.FinConceptoImptoIdCompra AS ConceptoImpuesto
+			FROM InvArticulo
+			INNER JOIN InvLoteAlmacen ON InvArticulo.Id=InvLoteAlmacen.InvArticuloId
+			WHERE InvLoteAlmacen.Existencia > 0
+			AND (InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
+			GROUP BY InvArticulo.Id, InvArticulo.CodigoArticulo, InvArticulo.Descripcion, InvArticulo.FinConceptoImptoIdCompra
+			ORDER BY InvArticulo.Id ASC
+		";
+		return $sql;
+	}
+	/*
+		TITULO: QEtiquetaArticulo
+		PARAMETROS: [$IdArticulo] Id del articulo a buscar
+		FUNCION: regresa los datos del articulo
+		RETORNO: no aplica
+		//
+	 */
+	function QEtiquetaArticulo($IdArticulo) {
+		$sql = "
+			SELECT * FROM etiquetas
+			WHERE etiquetas.id_articulo = '$IdArticulo'
+		";
+		return $sql;
+	}
+	/*
+		TITULO: QGuardarEtiquetaArticulo
+		PARAMETROS: $id_articulo,$codigo_articulo,$descripcion,$condicion,$clasificacion,$estatus,$user,$date
+		FUNCION: guarda la informacion en la tabla etiquetas
+		RETORNO: no aplica
+	 */
+	function QGuardarEtiquetaArticulo($id_articulo,$codigo_articulo,$descripcion,$condicion,$clasificacion,$estatus,$user,$date) {
+		$sql = "
+		INSERT INTO etiquetas
+		(id_articulo,codigo_articulo,descripcion,condicion,clasificacion,estatus,user,created_at,updated_at)
+		VALUES 
+		('$id_articulo','$codigo_articulo','$descripcion','$condicion','$clasificacion','$estatus','$user','$date','$date')
+		";
+		return $sql;
+	}
+
 	/*
 		TITULO: QGuardarProductosCaida
 		PARAMETROS: Todos los campos
@@ -2155,3 +2212,5 @@
 	}
 	
 ?>
+
+
