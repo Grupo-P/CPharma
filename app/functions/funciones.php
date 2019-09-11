@@ -1004,9 +1004,6 @@
 	 */
 	function ProuctosEnCaida() {
 		$SedeConnection = MiUbicacion();
-
-		$SedeConnection = 'FTN';
-
 		$conn = ConectarSmartpharma($SedeConnection);
 		$connCPharma = ConectarXampp();
 
@@ -1018,7 +1015,7 @@
 		$user = 'SYSTEM';
 
 		/* Rangos de Fecha */
-  		$FFinal = date('2019-09-05'); //date("Y-m-d");
+  		$FFinal = date("Y-m-d");
 	  	$FInicial = date("Y-m-d",strtotime($FFinal."-3 days"));
 	  	$RangoDias = intval(RangoDias($FInicial,$FFinal));
 
@@ -1118,21 +1115,13 @@
 							$Dia10 = $ExistenciaDecreciente[0];
 							$Dia9 = $ExistenciaDecreciente[1];
 							$Dia8 = $ExistenciaDecreciente[2];
-							/*$Dia7 = $ExistenciaDecreciente[3];
+							$Dia7 = $ExistenciaDecreciente[3];
 							$Dia6 = $ExistenciaDecreciente[4];
 							$Dia5 = $ExistenciaDecreciente[5];
 							$Dia4 = $ExistenciaDecreciente[6];
 							$Dia3 = $ExistenciaDecreciente[7];
 							$Dia2 = $ExistenciaDecreciente[8];
-							$Dia1 = $ExistenciaDecreciente[9];*/
-						//Borrar despues
-							$Dia7 = 0;
-							$Dia6 = 0;
-							$Dia5 = 0;
-							$Dia4 = 0;
-							$Dia3 = 0;
-							$Dia2 = 0;
-							$Dia1 = 0;
+							$Dia1 = $ExistenciaDecreciente[9];
 						
 						$sqlCPharma = QGuardarProductosCaida($IdArticulo,$CodigoArticulo,$Descripcion,$Precio,$Existencia,$Dia10,$Dia9,$Dia8,$Dia7,$Dia6,$Dia5,$Dia4,$Dia3,$Dia2,$Dia1,$Venta,$DiasRestantes,$FechaCaptura,$user,$date);
 
