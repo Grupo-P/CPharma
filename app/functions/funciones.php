@@ -1003,8 +1003,19 @@
 		RETORNO: no aplica
 	 */
 	function ProuctosEnCaida() {
+		$SedeConnection = MiUbicacion();
+
+		$SedeConnection = 'FTN';
+
 		$conn = ConectarSmartpharma($SedeConnection);
 		$connCPharma = ConectarXampp();
+
+		$sqlB = QBorrarProductosCaida();
+		mysqli_query($connCPharma,$sqlB);
+
+		$FechaCaptura = new DateTime("now");
+		$FechaCaptura = $FechaCaptura->format('Y-m-d');
+		$user = 'SYSTEM';
 
 		/* Rangos de Fecha */
   		$FFinal = date('2019-09-05'); //date("Y-m-d");
@@ -1025,53 +1036,20 @@
 		$sql2 = QIntegracionFiltradoCaida($RangoDias);
 		$result = sqlsrv_query($conn,$sql2);
 
-	  	echo '
-		<div class="input-group md-form form-sm form-1 pl-0">
-		  <div class="input-group-prepend">
-		    <span class="input-group-text purple lighten-3" id="basic-text1">
-		    	<i class="fas fa-search text-white"
-		        aria-hidden="true"></i>
-		    </span>
-		  </div>
-		  <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterAllTable()">
-		</div>
-		<br/>
-		';
-
-		echo'<h6 align="center">Evaluado desde el '.$FInicial.' al '.$FFinal.' </h6>';
-
-		echo'
-		<table class="table table-striped table-bordered col-12 sortable" id="myTable">
-		  	<thead class="thead-dark">
-			    <tr>
-			    	<th scope="col">#</th>
-			    	<th scope="col">Codigo</th>
-			      	<th scope="col">Descripcion</th>			      	
-			      	<th scope="col">Precio (Con IVA)</th>
-			      	<th scope="col">Existencia</th>
-			      	<th scope="col">Dia 3</th>
-			      	<th scope="col">Dia 2</th>
-			      	<th scope="col">Dia 1</th>
-			      	<th scope="col">Unidades vendidas</th>
-			      	<th scope="col">Dias restantes</th>
-			    </tr>
-		  	</thead>
-		  	<tbody>
-		';
-		$contador = 1;
-		$ContValidos = 0;
-		$ContNOValidosExistencia = 0;
-		$ContNOValidosVenta = 0;
-		$ContNOValidosDecreciente = 0;
-		$ContNOValidosDiasRestantes = 0;
 		/* Inicio while que itera en los articulos con existencia actual > 0*/
 		while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
 			$IdArticulo = $row["IdArticulo"];
+			$CodigoArticulo = $row["CodigoArticulo"];
+			$Descripcion_User = $row["Descripcion"];
+			$Descripcion = addslashes($Descripcion_User);
+			$IsIVA = $row["ConceptoImpuesto"];
 
 			$sql1 = QExistenciaArticulo($IdArticulo,0);
 			$result1 = sqlsrv_query($conn,$sql1);
 			$row1 = sqlsrv_fetch_array($result1,SQLSRV_FETCH_ASSOC);
 			$Existencia = $row1["Existencia"];
+			$date = date('Y-m-d h:i:s',time());
+
 			/* FILTRO 2: 
 			*	Dias restantes
 			*	si dias restantes es menor de 10 entra en el rango sino es rechazado
@@ -1128,78 +1106,42 @@
 
 						$ExistenciaDecreciente = ExistenciaDecreciente($connCPharma,$IdArticulo,$FInicial,$FFinal,$RangoDias);
 
-							$CuentaDecreciente = array_pop($ExistenciaDecreciente);
+						$CuentaDecreciente = array_pop($ExistenciaDecreciente);
 
-							if($CuentaDecreciente==TRUE){
-
-							$IdArticulo = $row["IdArticulo"];
-							$IsIVA = $row["ConceptoImpuesto"];
-
+						if($CuentaDecreciente==TRUE){
+							
 							$Precio = CalculoPrecio($conn,$IdArticulo,$IsIVA,$Existencia);
 
-							echo '<tr>';
-							echo '<td align="center"><strong>'.intval($ContValidos+1).'</strong></td>';
-							echo '<td align="left">'.$row["CodigoArticulo"].'</td>';
+							$Dia10 = $ExistenciaDecreciente[0];
+							$Dia9 = $ExistenciaDecreciente[1];
+							$Dia8 = $ExistenciaDecreciente[2];
+							/*$Dia7 = $ExistenciaDecreciente[3];
+							$Dia6 = $ExistenciaDecreciente[4];
+							$Dia5 = $ExistenciaDecreciente[5];
+							$Dia4 = $ExistenciaDecreciente[6];
+							$Dia3 = $ExistenciaDecreciente[7];
+							$Dia2 = $ExistenciaDecreciente[8];
+							$Dia1 = $ExistenciaDecreciente[9];*/
+						//Borrar despues
+							$Dia7 = 0;
+							$Dia6 = 0;
+							$Dia5 = 0;
+							$Dia4 = 0;
+							$Dia3 = 0;
+							$Dia2 = 0;
+							$Dia1 = 0;
+						
+						$sqlCPharma = QGuardarProductosCaida($IdArticulo,$CodigoArticulo,$Descripcion,$Precio,$Existencia,$Dia10,$Dia9,$Dia8,$Dia7,$Dia6,$Dia5,$Dia4,$Dia3,$Dia2,$Dia1,$Venta,$DiasRestantes,$FechaCaptura,$user,$date);
 
-							echo 
-							'<td align="left" class="barrido">
-							<a href="/reporte2?Id='.$IdArticulo.'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
-								.$row["Descripcion"].
-							'</a>
-							</td>';
+						mysqli_query($connCPharma,$sqlCPharma);
 
-							echo '<td align="center">'." ".round($Precio,2)." ".SigVe.'</td>';
-							echo '<td align="center">'.intval($Existencia).'</td>'; 
-
-							foreach ($ExistenciaDecreciente as $ExistenciaDesc) {
-								echo '<td align="center">'.intval($ExistenciaDesc).'</td>'; 
-							}
-							
-							echo 
-							'<td align="center" class="barrido">
-							<a href="reporte12?fechaInicio='.$FInicial.'&fechaFin='.$FFinal.'&SEDE='.$SedeConnection.'&Descrip='.$row["Descripcion"].'&Id='.$IdArticulo.'" style="text-decoration: none; color: black;" target="_blank">'
-								.$Venta.
-							'</a>
-							</td>';
-
-							echo '<td align="center">'.round($DiasRestantes,2).'</td>';
-							echo '</tr>';
-
-							echo '</tr>';
-
-								$ContValidos++;
-							}
-							else{
-								$ContNOValidosDecreciente++;
-							}	
-					}
-					else{
-						$ContNOValidosVenta++;
+						}		
 					}
 				}
-				else{
-					$ContNOValidosExistencia++;
-				}
 			}
-			else{
-				$ContNOValidosDiasRestantes++;
-			}
-			$contador++;
 		}
-		echo '
-	  		</tbody>
-		</table>';
-
-		echo'<br/>############################################';
-		echo'<br/>Contador: '.$contador;
-		echo'<br/>ContValidos: '.$ContValidos;
-		echo'<br/>ContNOValidosDiasRestantes: '.$ContNOValidosDiasRestantes;
-		echo'<br/>ContNOValidosExistencia: '.$ContNOValidosExistencia;
-		echo'<br/>ContNOValidosVenta: '.$ContNOValidosVenta;
-		echo'<br/>ContNOValidosDecreciente: '.$ContNOValidosDecreciente;
-		echo'<br/>############################################';
-		echo'<br/>';
-
+		GuardarCapturaCaida($FechaCaptura,$date);
+		
 		$sql = QCleanTable('CP_QUnidadesVendidasClienteId');
 		sqlsrv_query($conn,$sql);
 		$sql = QCleanTable('CP_QUnidadesDevueltaClienteId');
@@ -1213,8 +1155,38 @@
 		$sql = QCleanTable('CP_FiltradoCaida');
 		sqlsrv_query($conn,$sql);
 
-		mysqli_close($connCPharma);
-		sqlsrv_close($conn);
+		$sqlCC = QValidarCapturaCaida($FechaCaptura);
+		$resultCC = mysqli_query($connCPharma,$sqlCC);
+		$rowCC = mysqli_fetch_assoc($resultCC);
+		$CuentaCaptura = $rowCC["CuentaCaptura"];
+
+		if($CuentaCaptura == 0){
+			mysqli_close($connCPharma);
+			sqlsrv_close($conn);
+			ProuctosEnCaida();
+		}
+		else{
+			mysqli_close($connCPharma);
+			sqlsrv_close($conn);
+		}
 	}
+	/*
+		TITULO: GuardarCapturaDiaria
+		PARAMETROS: [$FechaCaptura] El dia de hoy
+					[$date] valor para creacion y actualizacion
+		FUNCION: crea una conexion con la base de datos cpharma e ingresa datos
+		RETORNO: no aplica
+	 */
+	function GuardarCapturaCaida($FechaCaptura,$date) {
+		$conn = ConectarXampp();
+		$sql = QCapturaCaida($FechaCaptura);
+		$result = mysqli_query($conn,$sql);
+		$row = mysqli_fetch_assoc($result);
+		$TotalRegistros = $row["TotalRegistros"];
+
+		$sql1 = QGuardarCapturaCaida($TotalRegistros,$FechaCaptura,$date);
+		mysqli_query($conn,$sql1);
+
+		mysqli_close($conn);
 	}
 ?>

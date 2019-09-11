@@ -1958,6 +1958,73 @@
 		return $sql;
 	}
 	/*
+		TITULO: QGuardarProductosCaida
+		PARAMETROS: Todos los campos
+		FUNCION: guardar en la tabla productos en caida
+		RETORNO: no aplica
+	 */
+	function QGuardarProductosCaida($IdArticulo,$CodigoArticulo,$Descripcion,$Precio,$Existencia,$Dia10,$Dia9,$Dia8,$Dia7,$Dia6,$Dia5,$Dia4,$Dia3,$Dia2,$Dia1,$UnidadesVendidas,$DiasRestantes,$fecha_captura,$user,$date) {
+		$sql = "
+		INSERT INTO productos_caida
+		(IdArticulo,CodigoArticulo,Descripcion,Precio,Existencia,Dia10,Dia9,Dia8,Dia7,Dia6,Dia5,Dia4,Dia3,Dia2,Dia1,UnidadesVendidas,DiasRestantes,fecha_captura,user,created_at,updated_at)
+		VALUES 
+		('$IdArticulo','$CodigoArticulo','$Descripcion','$Precio','$Existencia','$Dia10','$Dia9','$Dia8','$Dia7','$Dia6','$Dia5','$Dia4','$Dia3','$Dia2','$Dia1','$UnidadesVendidas','$DiasRestantes','$fecha_captura','$user','$date','$date')
+		";
+		return $sql;
+	}
+	/*
+		TITULO: QCapturaCaida
+		PARAMETROS: [$FechaCaptura] El dia de hoy
+		FUNCION: cuenta el total de registos de productos en caida
+		RETORNO: no aplica
+	 */
+
+	function QCapturaCaida($FechaCaptura) {
+		$sql = "SELECT COUNT(*) AS TotalRegistros
+		FROM productos_caida 
+		WHERE productos_caida.fecha_captura = '$FechaCaptura'
+		";
+		return $sql;
+	}
+	/*
+		TITULO: QGuardarCapturaCaida
+		PARAMETROS: [$FechaCaptura] El dia de hoy
+					[$date] valor para creacion y actualizacion
+		FUNCION: crea una conexion con la base de datos cpharma e ingresa datos
+		RETORNO: no aplica
+	 */
+
+	function QGuardarCapturaCaida($TotalRegistros,$FechaCaptura,$date) {
+		$sql = "
+		INSERT INTO captura_caida 
+		(total_registros,fecha_captura,created_at,updated_at)
+		VALUES 
+		('$TotalRegistros','$FechaCaptura','$date','$date')
+		";
+		return $sql;
+	}
+	/*
+		TITULO: QValidarCapturaCaida
+		PARAMETROS: [$FechaCaptura] El dia de hoy
+		FUNCION: valida que la fecha exista en la tabla captura diaria
+		RETORNO: no aplica
+	 */
+	function QValidarCapturaCaida($FechaCaptura) {
+		$sql = "SELECT count(*) AS CuentaCaptura 
+		FROM capturas_caida WHERE fecha_captura = '$FechaCaptura'";
+		return $sql;
+	}
+		/*
+		TITULO: QBorrarProductosCaida
+		PARAMETROS: [$FechaCaptura] fecha de la captura
+		FUNCION: borra los registros de dias en cero de la fecha seleccionada
+		RETORNO: no aplica
+	 */
+	function QBorrarProductosCaida() {
+		$sql = "DELETE FROM productos_caida";
+		return $sql;
+	}
+	/*
 		TITULO: 
 		PARAMETROS: 
 		FUNCION:
