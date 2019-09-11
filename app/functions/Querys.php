@@ -53,6 +53,8 @@
 		$conCP = ConectarXampp();
 		$consulta = "SELECT tasa FROM dolars where fecha='$Fecha'";
 		$resultado = mysqli_query($conCP,$consulta);
+		//Cerrar conexion con Cpharma
+		mysqli_close($conCP);
 		return $resultado;
 	}
 	/*
