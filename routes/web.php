@@ -98,8 +98,13 @@ Route::get('/reporte13', function() {
 });
 
 Route::get('/diascero', function() {
-    return view('pages.diascero.index');
+    return view('pages.diascero.index'); 
 });
+
+Route::get('/productoscaida', function() {
+    return view('pages.productoscaida.index');
+});
+
 
 Route::get('home', 'HomeController@index')->name('home');
 

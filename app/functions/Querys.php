@@ -1293,7 +1293,6 @@
 		";
 		return $sql;
 	}
-
 	/*
 		TITULO: QDiasEnCero
 		PARAMETROS: No aplica
@@ -1317,7 +1316,6 @@
 		";
 		return $sql;
 	}
-
 	/*
 		TITULO: QGuardarDiasEnCero
 		PARAMETROS: [$proveedor] Id del provedor solicitado
@@ -1343,7 +1341,6 @@
 		";
 		return $sql;
 	}
-
 	/*
 		TITULO: QGuardarCapturaDiaria
 		PARAMETROS: [$FechaCaptura] El dia de hoy
@@ -1361,7 +1358,6 @@
 		";
 		return $sql;
 	}
-
 	/*
 		TITULO: QCapturaDiaria
 		PARAMETROS: [$FechaCaptura] El dia de hoy
@@ -1382,7 +1378,6 @@
 		FUNCION: consulta todos los datos de la captura diaria
 		RETORNO: no aplica
 	 */
-
 	function QVerCapturaDiaria() {
 		$sql = "SELECT * FROM capturas_diarias";
 		return $sql;
@@ -1393,7 +1388,6 @@
 		FUNCION: valida que la fecha exista en la tabla captura diaria
 		RETORNO: no aplica
 	 */
-
 	function QValidarCapturaDiaria($FechaCaptura) {
 		$sql = "SELECT count(*) AS CuentaCaptura 
 		FROM capturas_diarias WHERE fecha_captura = '$FechaCaptura'";
@@ -1405,7 +1399,6 @@
 		FUNCION: borra los registros de dias en cero de la fecha seleccionada
 		RETORNO: no aplica
 	 */
-
 	function QBorrarDiasCero($FechaCaptura) {
 		$sql = "DELETE FROM dias_ceros WHERE fecha_captura = '$FechaCaptura'";
 		return $sql;
@@ -1628,7 +1621,6 @@
 		";
 		return $sql;
 	}
-
 	/*
 		TITULO: QIntegracionResumenDeMovimientos
 		PARAMETROS: No aplica
@@ -1653,7 +1645,6 @@
 		";
 		return $sql;
 	}
-
 	/*
 		TITULO: QAgruparDetalleDeMovimientos
 		PARAMETROS: No aplica
@@ -1672,53 +1663,440 @@
 		";
 		return $sql;
 	}
-
+	/****************** QUERYS DEL REPORTE DETALLE DE MOVIMIENTOS ******************/
 	/*
-		TITULO: QArticulosDevaluados
-		PARAMETROS: [$FechaBandera] Fecha minima de dias en la tienda
-		FUNCION: Armar una tabla temporal con los registros solicitados 
-		RETORNO: Un String con la query pertinente
+		TITULO: QUnidadesVendidasCliente2
+		PARAMETROS: [$FInicial] Fecha inicial del rango a consultar
+					[$FFinal] Fecha final del rango a consutar
+		FUNCION: Consulta las Veces vendidas a clientes y las unidades vendidas de un producto
+		RETORNO: Tabla con los articulos, las veces vendidas y las unidades vendidas
 	 */
-	function QArticulosDevaluados($FechaBandera) {
+	function QUnidadesVendidasCliente2($FInicial,$FFinal) {
 		$sql = "
-		SELECT 
-		InvLote.Id,  
-		InvLote.InvArticuloId,
-		InvArticulo.CodigoArticulo,
-		CONVERT(DATE,InvLoteAlmacen.Auditoria_FechaCreacion) AS FechaLote,  
-		InvArticulo.Descripcion,
-		InvArticulo.FinConceptoImptoIdCompra AS ConceptoImpuesto
-		INTO CP_ArticulosDevaluados
-		FROM InvLote
-		INNER JOIN InvLoteAlmacen ON InvLote.Id = InvLoteAlmacen.InvLoteId
-		INNER JOIN InvArticulo ON InvArticulo.Id = InvLote.InvArticuloId
-		WHERE InvLoteAlmacen.Existencia>0 
-		AND (InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
-		AND InvLoteAlmacen.Auditoria_FechaCreacion < '$FechaBandera'
-		ORDER BY InvLoteAlmacen.Auditoria_FechaCreacion, InvArticulo.Descripcion DESC
+			SELECT
+			InvArticulo.Id,
+			InvArticulo.CodigoArticulo,
+			InvArticulo.Descripcion,
+			COUNT(*) AS VecesVendidasCliente,
+			SUM(VenFacturaDetalle.Cantidad) AS UnidadesVendidasCliente
+			INTO CP_QUnidadesVendidasCliente2
+			--TablaTemp
+			FROM VenFacturaDetalle
+			INNER JOIN InvArticulo ON InvArticulo.Id = VenFacturaDetalle.InvArticuloId
+			INNER JOIN VenFactura ON VenFactura.Id = VenFacturaDetalle.VenFacturaId
+			WHERE
+			(VenFactura.FechaDocumento > '$FInicial' AND VenFactura.FechaDocumento < '$FFinal')
+			GROUP BY InvArticulo.Id,InvArticulo.CodigoArticulo,InvArticulo.Descripcion
+			ORDER BY UnidadesVendidasCliente DESC
 		";
 		return $sql;
 	}
 
 	/*
-		TITULO: QFiltrarArticulosDevaluados
+		TITULO: QUnidadesDevueltaCliente2
+		PARAMETROS: [$FInicial] Fecha inicial del rango a consultar
+					[$FFinal] Fecha final del rango a consutar
+		FUNCION: Consulta las Veces devuelta a clientes y las unidades devuelta de un producto
+		RETORNO: Tabla con los articulos, las veces devuelta y las unidades devuelta
+	 */
+	function QUnidadesDevueltaCliente2($FInicial,$FFinal) {
+		$sql = "
+			SELECT
+			InvArticulo.Id,
+			InvArticulo.CodigoArticulo,
+			InvArticulo.Descripcion,
+			COUNT(*) AS VecesDevueltaCliente,
+			SUM(VenDevolucionDetalle.Cantidad) AS UnidadesDevueltaCliente
+			INTO CP_QUnidadesDevueltaCliente2
+			--TablaTemp1
+			FROM VenDevolucionDetalle
+			INNER JOIN InvArticulo ON InvArticulo.Id = VenDevolucionDetalle.InvArticuloId
+			INNER JOIN VenDevolucion ON VenDevolucion.Id = VenDevolucionDetalle.VenDevolucionId
+			WHERE
+			(VenDevolucion.FechaDocumento > '$FInicial' AND VenDevolucion.FechaDocumento < '$FFinal')
+			GROUP BY InvArticulo.Id,InvArticulo.CodigoArticulo,InvArticulo.Descripcion
+			ORDER BY UnidadesDevueltaCliente DESC
+		";
+		return $sql;
+	}
+
+	/*
+		TITULO: QUnidadesCompradasProveedor2
+		PARAMETROS: [$FInicial] Fecha inicial del rango a consultar
+					[$FFinal] Fecha final del rango a consutar
+		FUNCION: Consulta las Veces Compradas a proveedores y las unidades compradas
+		RETORNO: Tabla con los articulos, las veces compradas y las unidades compradas
+	 */
+	function QUnidadesCompradasProveedor2($FInicial,$FFinal) {
+		$sql = "
+			SELECT
+			InvArticulo.Id,
+			InvArticulo.CodigoArticulo,
+			InvArticulo.Descripcion,
+			COUNT(*) AS VecesCompradasProveedor,
+			SUM(ComFacturaDetalle.CantidadFacturada) AS UnidadesCompradasProveedor,
+			CONVERT(DATE,ComFactura.FechaRegistro) AS FechaRegistro
+			INTO CP_QUnidadesCompradasProveedor2
+			--TablaTemp2
+			FROM ComFacturaDetalle
+			INNER JOIN InvArticulo ON InvArticulo.Id = ComFacturaDetalle.InvArticuloId
+			INNER JOIN ComFactura ON  ComFactura.Id = ComFacturaDetalle.ComFacturaId
+			WHERE
+			(ComFactura.FechaRegistro > '$FInicial' AND ComFactura.FechaRegistro < '$FFinal')
+			GROUP BY InvArticulo.Id,InvArticulo.CodigoArticulo,InvArticulo.Descripcion,FechaRegistro
+			ORDER BY UnidadesCompradasProveedor DESC
+		";
+		return $sql;
+	}
+
+	/*
+		TITULO: QUnidadesReclamoProveedor2
+		PARAMETROS: [$FInicial] Fecha inicial del rango a consultar
+					[$FFinal] Fecha final del rango a consutar
+		FUNCION: Consulta las Veces reclamo a proveedores y las unidades reclamo
+		RETORNO: Tabla con los articulos, las veces reclamo y las unidades reclamo
+	 */
+	function QUnidadesReclamoProveedor2($FInicial,$FFinal) {
+		$sql = "
+			SELECT
+			InvArticulo.Id,
+			InvArticulo.CodigoArticulo,
+			InvArticulo.Descripcion,
+			COUNT(*) AS VecesReclamoProveedor,
+			SUM(ComReclamoDetalle.Cantidad) AS UnidadesReclamoProveedor
+			INTO CP_QUnidadesReclamoProveedor2
+			--TablaTemp3
+			FROM ComReclamoDetalle
+			INNER JOIN InvArticulo ON InvArticulo.Id = ComReclamoDetalle.InvArticuloId
+			INNER JOIN ComReclamo ON ComReclamo.Id = ComReclamoDetalle.ComReclamoId
+			WHERE
+			(ComReclamo.FechaRegistro > '$FInicial' AND ComReclamo.FechaRegistro < '$FFinal')
+			GROUP BY InvArticulo.Id,InvArticulo.CodigoArticulo,InvArticulo.Descripcion
+			ORDER BY UnidadesReclamoProveedor DESC
+		";
+		return $sql;
+	}
+
+	/*
+		TITULO: QIntegracionProductosVendidos2
 		PARAMETROS: No aplica
-		FUNCION: Filtar los articulos eliminando los duplicados
-		RETORNO: String con la query
+		FUNCION: Integrar la informacion de las consultas
+				[QUnidadesVendidasCliente,QUnidadesDevueltaCliente,QUnidadesCompradasProveedor,QUnidadesReclamoProveedor]
+		RETORNO: Tabla con datos integrados con valores 0 para campos NULL
 	 */
-	function QFiltrarArticulosDevaluados() {
-		$sql = "
-		SELECT 
-		CP_ArticulosDevaluados.InvArticuloId,
-		CP_ArticulosDevaluados.CodigoArticulo,
-		CP_ArticulosDevaluados.Descripcion,
-		CP_ArticulosDevaluados.ConceptoImpuesto
-		FROM CP_ArticulosDevaluados
-		GROUP BY CP_ArticulosDevaluados.InvArticuloId, CP_ArticulosDevaluados.CodigoArticulo, CP_ArticulosDevaluados.Descripcion, CP_ArticulosDevaluados.ConceptoImpuesto
+	function QIntegracionProductosVendidos2() {
+		$sql = " 
+			SELECT
+			CP_QUnidadesVendidasCliente2.Id,
+			CP_QUnidadesVendidasCliente2.CodigoArticulo,
+			CP_QUnidadesVendidasCliente2.Descripcion,
+			ISNULL(CP_QUnidadesVendidasCliente2.VecesVendidasCliente,CAST(0 AS INT)) AS VecesVendidasCliente,
+			ISNULL(CP_QUnidadesDevueltaCliente2.VecesDevueltaCliente,CAST(0 AS INT)) AS VecesDevueltaCliente,
+			ISNULL(CP_QUnidadesVendidasCliente2.UnidadesVendidasCliente,CAST(0 AS INT)) AS UnidadesVendidasCliente,
+			ISNULL(CP_QUnidadesDevueltaCliente2.UnidadesDevueltaCliente,CAST(0 AS INT)) AS UnidadesDevueltaCliente,
+			ISNULL(CP_QUnidadesCompradasProveedor2.VecesCompradasProveedor,CAST(0 AS INT)) AS VecesCompradasProveedor,
+			ISNULL(CP_QUnidadesReclamoProveedor2.VecesReclamoProveedor,CAST(0 AS INT)) AS VecesReclamoProveedor,
+			ISNULL(CP_QUnidadesCompradasProveedor2.UnidadesCompradasProveedor,CAST(0 AS INT)) AS UnidadesCompradasProveedor,
+			ISNULL(CP_QUnidadesReclamoProveedor2.UnidadesReclamoProveedor,CAST(0 AS INT)) AS UnidadesReclamoProveedor
+			INTO CP_QIntegracionProductosVendidos2
+			--TablaTemp4
+			FROM CP_QUnidadesVendidasCliente2
+			LEFT JOIN CP_QUnidadesDevueltaCliente2 ON CP_QUnidadesDevueltaCliente2.Id = CP_QUnidadesVendidasCliente2.Id
+			LEFT JOIN CP_QUnidadesCompradasProveedor2 ON CP_QUnidadesCompradasProveedor2.Id = CP_QUnidadesVendidasCliente2.Id
+			LEFT JOIN CP_QUnidadesReclamoProveedor2 ON CP_QUnidadesReclamoProveedor2.Id = CP_QUnidadesVendidasCliente2.Id
+			ORDER BY UnidadesVendidasCliente DESC
 		";
 		return $sql;
 	}
 
+	/*
+		TITULO: QIntegracionProductosFalla2
+		PARAMETROS: No aplica
+		FUNCION: Integrar la informacion de las consultas
+				[QUnidadesVendidasCliente,QUnidadesDevueltaCliente,QUnidadesCompradasProveedor,QUnidadesReclamoProveedor]
+		RETORNO: Tabla con datos integrados con valores 0 para campos NULL
+	 */
+	function QIntegracionProductosFalla2() {
+		$sql="
+			SELECT
+			CP_QIntegracionProductosVendidos2.Id,
+			CP_QIntegracionProductosVendidos2.CodigoArticulo,
+			CP_QIntegracionProductosVendidos2.Descripcion,
+			CP_QIntegracionProductosVendidos2.VecesVendidasCliente,
+			CP_QIntegracionProductosVendidos2.VecesDevueltaCliente,
+			ISNULL((VecesVendidasCliente-VecesDevueltaCliente),0) AS TotalVecesVendidasCliente,
+			CP_QIntegracionProductosVendidos2.UnidadesVendidasCliente,
+			CP_QIntegracionProductosVendidos2.UnidadesDevueltaCliente,
+			ISNULL((UnidadesVendidasCliente-UnidadesDevueltaCliente),0) AS TotalUnidadesVendidasCliente,
+			CP_QIntegracionProductosVendidos2.VecesCompradasProveedor,
+			CP_QIntegracionProductosVendidos2.VecesReclamoProveedor,
+			ISNULL((VecesCompradasProveedor-VecesReclamoProveedor),0) AS TotalVecesCompradasProveedor,
+			CP_QIntegracionProductosVendidos2.UnidadesCompradasProveedor,
+			CP_QIntegracionProductosVendidos2.UnidadesReclamoProveedor,
+			ISNULL((UnidadesCompradasProveedor-UnidadesReclamoProveedor),0) AS TotalUnidadesCompradasProveedor,
+			SUM(InvLoteAlmacen.Existencia) AS Existencia
+			INTO CP_QIntegracionProductosFalla2
+			--TablaTemp5		
+			FROM CP_QIntegracionProductosVendidos2
+			INNER JOIN InvLoteAlmacen ON InvLoteAlmacen.InvArticuloId = CP_QIntegracionProductosVendidos2.Id
+			WHERE(InvLoteAlmacen.InvAlmacenId = 1 or InvLoteAlmacen.InvAlmacenId = 2)
+			GROUP BY
+			CP_QIntegracionProductosVendidos2.Id,
+			CP_QIntegracionProductosVendidos2.CodigoArticulo,
+			CP_QIntegracionProductosVendidos2.Descripcion,
+			CP_QIntegracionProductosVendidos2.VecesVendidasCliente,
+			CP_QIntegracionProductosVendidos2.VecesDevueltaCliente,
+			CP_QIntegracionProductosVendidos2.UnidadesVendidasCliente,
+			CP_QIntegracionProductosVendidos2.UnidadesDevueltaCliente,
+			CP_QIntegracionProductosVendidos2.VecesCompradasProveedor,
+			CP_QIntegracionProductosVendidos2.VecesReclamoProveedor,
+			CP_QIntegracionProductosVendidos2.UnidadesCompradasProveedor,
+			CP_QIntegracionProductosVendidos2.UnidadesReclamoProveedor
+			ORDER BY CP_QIntegracionProductosVendidos2.UnidadesVendidasCliente DESC
+		";
+		return $sql;
+	}
+
+	/*
+		TITULO: QArticuloDescLike2
+		PARAMETROS: [$DescripLike] Descripcion para buscar
+					[$TablaTemp] Variable para indicar si la busqueda sera almacenada en una tabla temporal
+		FUNCION: Buscar un articulo segun su descripcion
+		RETORNO: Caracteristicas del articulo
+	 */
+	function QArticuloDescLike2($DescripLike,$IntoTabla) {
+		switch($IntoTabla) {
+			case '0':
+			$sql = "
+				SELECT
+				InvArticulo.Id,
+				InvArticulo.CodigoArticulo,
+				InvArticulo.Descripcion,
+				InvArticulo.FinConceptoImptoIdCompra AS ConceptoImpuesto
+				INTO CP_QArticuloDescLike2
+				--TablaTemp6
+				FROM InvArticulo
+				WHERE InvArticulo.Descripcion LIKE '%$DescripLike%'
+				ORDER BY InvArticulo.Descripcion ASC
+			";
+			return $sql;
+			break;
+			
+			case '1':
+			$sql = "
+				SELECT
+				InvArticulo.Id,
+				InvArticulo.CodigoArticulo,
+				InvArticulo.Descripcion,
+				InvArticulo.FinConceptoImptoIdCompra AS ConceptoImpuesto
+				FROM InvArticulo
+				WHERE InvArticulo.Descripcion LIKE '%$DescripLike%'
+				ORDER BY InvArticulo.Descripcion ASC
+			";
+			return $sql;
+			break;
+		}
+	}
+
+	/*
+		TITULO: QPedidoProductos2
+		PARAMETROS: 
+		FUNCION: Arma la lista de pedido de productos
+		RETORNO: Lista prodcutos para pedir
+	 */
+	function QPedidoProductos2() {
+		$sql="
+			SELECT
+			CP_QArticuloDescLike2.Id,
+			CP_QArticuloDescLike2.CodigoArticulo,
+			CP_QArticuloDescLike2.Descripcion,
+			CP_QArticuloDescLike2.ConceptoImpuesto,
+			ISNULL((CP_QIntegracionProductosFalla2.TotalVecesVendidasCliente),0) AS TotalVecesVendidasCliente,
+			ISNULL((CP_QIntegracionProductosFalla2.TotalUnidadesVendidasCliente),0) AS TotalUnidadesVendidasCliente,
+			ISNULL((CP_QIntegracionProductosFalla2.TotalVecesCompradasProveedor),0) AS TotalVecesCompradasProveedor,
+			ISNULL((CP_QIntegracionProductosFalla2.TotalUnidadesCompradasProveedor),0) AS TotalUnidadesCompradasProveedor
+			FROM CP_QArticuloDescLike2
+			LEFT JOIN CP_QIntegracionProductosFalla2 ON CP_QIntegracionProductosFalla2.Id = CP_QArticuloDescLike2.Id
+			ORDER BY CP_QArticuloDescLike2.Descripcion ASC
+		";
+		return $sql;
+	}
+	/****************** QUERYS DEL REPORTE DETALLE DE MOVIMIENTOS ******************/
+
+///////////////////////////////////////////////////////////////////////////
+///				QUERYS EN DESARROLLO PARA PRODUCTOS EN CAIDA        ///
+//////////////////////////////////////////////////////////////////////////
+	/*
+		TITULO: QCuentaExistencia
+		PARAMETROS: [$IdArticulo] Id del articulo a buscar
+		FUNCION: cuenta el total de repeticiones de un articulo en dias en cero
+		RETORNO: no aplica
+		//
+	 */
+	function QCuentaExistencia($IdArticulo) {
+		$sql = "
+			SELECT 
+			COUNT(*) AS Cuenta 
+			FROM dias_ceros 
+			WHERE dias_ceros.id_articulo = '$IdArticulo'
+		";
+		return $sql;
+	}
+	/*
+		TITULO: QCuentaVenta
+		PARAMETROS: $IdArticulo,$FInicial,$FFinal
+		FUNCION: cuenta la cantidad de veces que se vendio un producto en una fecha
+		RETORNO: no aplica
+		//
+	 */
+	function QCuentaVenta($IdArticulo,$FInicial,$FFinal) {
+		$sql = "
+			SELECT
+			COUNT(*) AS Cuenta
+			FROM VenFacturaDetalle
+			INNER JOIN InvArticulo ON InvArticulo.Id = VenFacturaDetalle.InvArticuloId
+			INNER JOIN VenFactura ON VenFactura.Id = VenFacturaDetalle.VenFacturaId
+			WHERE
+			(VenFactura.FechaDocumento > '$FInicial' AND VenFactura.FechaDocumento < '$FFinal')
+			AND (InvArticulo.Id = '$IdArticulo')
+		";
+		return $sql;
+	}
+	/*
+		TITULO: QFiltradoCaida
+		PARAMETROS: $FInicial,$FFinal
+		FUNCION: hace un filtrado de la data antes de entrar a dias en cero
+		RETORNO: no aplica
+		//
+	 */
+	function QFiltradoCaida($FInicial,$FFinal) {
+		$sql = "
+			SELECT
+			InvArticulo.Id AS IdArticulo,
+			InvArticulo.CodigoArticulo AS CodigoArticulo,
+			InvArticulo.Descripcion,
+			SUM(InvLoteAlmacen.Existencia) AS Existencia,
+			InvArticulo.FinConceptoImptoIdCompra AS ConceptoImpuesto,
+			COUNT(*) AS VecesVendidasCliente,
+			(SELECT 
+				COUNT(*) AS VecesCompradasProveedor
+				FROM ComFacturaDetalle
+				INNER JOIN ComFactura ON  ComFactura.Id = ComFacturaDetalle.ComFacturaId
+				WHERE
+				(ComFactura.FechaRegistro > '$FInicial' AND ComFactura.FechaRegistro < '$FFinal') 
+				AND (InvArticulo.Id = ComFacturaDetalle.InvArticuloId)
+			)AS VecesCompradasProveedor
+			INTO CP_FiltradoCaida
+			FROM VenFacturaDetalle
+			INNER JOIN InvArticulo ON InvArticulo.Id = VenFacturaDetalle.InvArticuloId
+			INNER JOIN InvLoteAlmacen ON InvArticulo.Id=InvLoteAlmacen.InvArticuloId
+			INNER JOIN VenFactura ON VenFactura.Id = VenFacturaDetalle.VenFacturaId
+			WHERE InvLoteAlmacen.Existencia > 0
+			AND (InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
+			AND (VenFactura.FechaDocumento > '$FInicial' AND VenFactura.FechaDocumento < '$FFinal')
+			GROUP BY InvArticulo.Id, InvArticulo.CodigoArticulo, InvArticulo.Descripcion, InvArticulo.FinConceptoImptoIdCompra
+			ORDER BY InvArticulo.Id ASC
+		";
+		return $sql;
+	}
+	/*
+		TITULO: QIntegracionFiltradoCaida
+		PARAMETROS: $RangoDias
+		FUNCION: Integra y filtra la la tabla CP_FiltradoCaida 
+		RETORNO: la lista filtrada
+	 */
+	function QIntegracionFiltradoCaida($RangoDias) {
+		$sql = "
+			SELECT * FROM CP_FiltradoCaida 
+			WHERE (CP_FiltradoCaida.VecesVendidasCliente >= '$RangoDias') 
+			AND (CP_FiltradoCaida.VecesCompradasProveedor = 0)
+			ORDER BY CP_FiltradoCaida.Existencia ASC
+		";
+		return $sql;
+	}
+	/*
+		TITULO: QExistenciaDiasCero
+		PARAMETROS: [$IdArticulo] Id del articulo a buscar
+		FUNCION: cuenta el total de repeticiones de un articulo en dias en cero
+		RETORNO: no aplica
+		//
+	 */
+	function QExistenciaDiasCero($IdArticulo,$FechaCaptura) {
+		$sql = "
+			SELECT existencia 
+			FROM dias_ceros 
+			WHERE dias_ceros.id_articulo = '$IdArticulo' 
+			AND `fecha_captura` = '$FechaCaptura'
+		";
+		return $sql;
+	}
+	/*
+		TITULO: QGuardarProductosCaida
+		PARAMETROS: Todos los campos
+		FUNCION: guardar en la tabla productos en caida
+		RETORNO: no aplica
+	 */
+	function QGuardarProductosCaida($IdArticulo,$CodigoArticulo,$Descripcion,$Precio,$Existencia,$Dia10,$Dia9,$Dia8,$Dia7,$Dia6,$Dia5,$Dia4,$Dia3,$Dia2,$Dia1,$UnidadesVendidas,$DiasRestantes,$fecha_captura,$user,$date) {
+		$sql = "
+		INSERT INTO productos_caida
+		(IdArticulo,CodigoArticulo,Descripcion,Precio,Existencia,Dia10,Dia9,Dia8,Dia7,Dia6,Dia5,Dia4,Dia3,Dia2,Dia1,UnidadesVendidas,DiasRestantes,fecha_captura,user,created_at,updated_at)
+		VALUES 
+		('$IdArticulo','$CodigoArticulo','$Descripcion','$Precio','$Existencia','$Dia10','$Dia9','$Dia8','$Dia7','$Dia6','$Dia5','$Dia4','$Dia3','$Dia2','$Dia1','$UnidadesVendidas','$DiasRestantes','$fecha_captura','$user','$date','$date')
+		";
+		return $sql;
+	}
+	/*
+		TITULO: QCapturaCaida
+		PARAMETROS: [$FechaCaptura] El dia de hoy
+		FUNCION: cuenta el total de registos de productos en caida
+		RETORNO: no aplica
+	 */
+
+	function QCapturaCaida($FechaCaptura) {
+		$sql = "SELECT COUNT(*) AS TotalRegistros
+		FROM productos_caida 
+		WHERE productos_caida.fecha_captura = '$FechaCaptura'
+		";
+		return $sql;
+	}
+	/*
+		TITULO: QGuardarCapturaCaida
+		PARAMETROS: [$FechaCaptura] El dia de hoy
+					[$date] valor para creacion y actualizacion
+		FUNCION: crea una conexion con la base de datos cpharma e ingresa datos
+		RETORNO: no aplica
+	 */
+
+	function QGuardarCapturaCaida($TotalRegistros,$FechaCaptura,$date) {
+		$sql = "
+		INSERT INTO captura_caida 
+		(total_registros,fecha_captura,created_at,updated_at)
+		VALUES 
+		('$TotalRegistros','$FechaCaptura','$date','$date')
+		";
+		return $sql;
+	}
+	/*
+		TITULO: QValidarCapturaCaida
+		PARAMETROS: [$FechaCaptura] El dia de hoy
+		FUNCION: valida que la fecha exista en la tabla captura diaria
+		RETORNO: no aplica
+	 */
+	function QValidarCapturaCaida($FechaCaptura) {
+		$sql = "SELECT count(*) AS CuentaCaptura
+		FROM captura_caida WHERE fecha_captura = '$FechaCaptura'";
+		return $sql;
+	}
+		/*
+		TITULO: QBorrarProductosCaida
+		PARAMETROS: [$FechaCaptura] fecha de la captura
+		FUNCION: borra los registros de dias en cero de la fecha seleccionada
+		RETORNO: no aplica
+	 */
+	function QBorrarProductosCaida() {
+		$sql = "DELETE FROM productos_caida";
+		return $sql;
+	}
 	/*
 		TITULO: 
 		PARAMETROS: 
@@ -1730,4 +2108,5 @@
 		";
 		return $sql;
 	}
+	
 ?>
