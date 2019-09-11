@@ -1776,7 +1776,7 @@
 		FUNCION: Armar una tabla de historico de compra del articulo
 		RETORNO: No aplica
 	 */
-	function ReporteAnaliticoDePrecios($SedeConnection,$IdArticulo){
+	function ReporteAnaliticoDePrecios($SedeConnection,$IdArticulo) {
 		$conn=ConectarSmartpharma($SedeConnection);
 
 		$sql=QArticulo($IdArticulo);
