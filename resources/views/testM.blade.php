@@ -71,8 +71,9 @@
     include(app_path().'\functions\reportes.php');
 
     //---------- Borrar ----------
-    $_GET['SEDE'] = 'DBm';
+    $_GET['SEDE'] = MiUbicacion();
     //---------- Borrar ----------
+    
     if(isset($_GET['fechaInicio'])) {
       $InicioCarga = new DateTime("now");
 
