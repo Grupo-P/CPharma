@@ -2677,7 +2677,7 @@
 		</div>
 		<br/>
 
-		<h6 align="center">Periodo desde el '.$FInicial.' al '.$FInicial.' </h6>
+		<h6 align="center">Periodo desde el '.$FInicial.' al '.$FFinal.' </h6>
 
 		<table class="table table-striped table-bordered col-12 sortable">
 			<thead class="thead-dark">
@@ -2757,6 +2757,9 @@
 
 		$contador++;
 		}
-		mysqli_close($conn);
+		echo '
+	  		</tbody>
+		</table>';
+		mysqli_close($connCPharma);
 	}
 ?>
