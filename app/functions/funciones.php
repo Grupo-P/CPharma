@@ -1108,6 +1108,9 @@
 
 						$CuentaDecreciente = array_pop($ExistenciaDecreciente);
 
+						/*  FILTRO 5: 
+						*	Si el articulo decrece su existencia rango 
+						*/
 						if($CuentaDecreciente==TRUE){
 							
 							$Precio = CalculoPrecio($conn,$IdArticulo,$IsIVA,$Existencia);

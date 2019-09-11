@@ -2656,5 +2656,107 @@
 		RETORNO: No aplica
 	 */
 	function ReporteProductosEnCaida($SedeConnection){
+
+		$connCPharma = ConectarXampp();
+
+		$FFinal = date('2019-09-05'); //date("Y-m-d");
+	  	$FInicial = date("Y-m-d",strtotime($FFinal."-3 days"));
+
+		$sql = "SELECT * FROM productos_caida";
+		$result = mysqli_query($connCPharma,$sql);
+
+		echo '
+		<div class="input-group md-form form-sm form-1 pl-0">
+		  <div class="input-group-prepend">
+		    <span class="input-group-text purple lighten-3" id="basic-text1">
+		    	<i class="fas fa-search text-white"
+		        aria-hidden="true"></i>
+		    </span>
+		  </div>
+		  <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterAllTable()">
+		</div>
+		<br/>
+
+		<h6 align="center">Periodo desde el '.$FInicial.' al '.$FInicial.' </h6>
+
+		<table class="table table-striped table-bordered col-12 sortable">
+			<thead class="thead-dark">
+			    <tr>
+			    	<th scope="col">#</th>			
+			    	<th scope="col">Codigo</th>
+			      	<th scope="col">Descripcion</td>
+			      	<th scope="col">Precio</br>(Con IVA)</td>
+			      	<th scope="col">Existencia</td>
+			      	<th scope="col">Dia 10</td>
+			      	<th scope="col">Dia 9</td>
+			      	<th scope="col">Dia 8</td>
+			      	<th scope="col">Dia 7</td>
+			      	<th scope="col">Dia 6</td>
+			      	<th scope="col">Dia 5</td>
+			      	<th scope="col">Dia 4</td>
+			      	<th scope="col">Dia 3</td>
+			      	<th scope="col">Dia 2</td>
+			      	<th scope="col">Dia 1</td>
+			      	<th scope="col">UnidadesVendidas</td>
+			      	<th scope="col">DiasRestantes</td>	      				      
+			    </tr>
+		  	</thead>
+		  	<tbody>
+	  	';
+
+	  	$contador = 1;
+		while($row = mysqli_fetch_assoc($result)){
+			$IdArticulo = $row['IdArticulo'];
+			$CodigoArticulo = $row['CodigoArticulo'];
+			$Descripcion = $row['Descripcion'];
+			$Precio = $row['Precio'];
+			$Dia10 = $row['Dia10'];
+			$Dia9 = $row['Dia9'];
+			$Dia8 = $row['Dia8'];
+			$Dia7 = $row['Dia7'];
+			$Dia6 = $row['Dia6'];
+			$Dia5 = $row['Dia5'];
+			$Dia4 = $row['Dia4'];
+			$Dia3 = $row['Dia3'];
+			$Dia1 = $row['Dia1'];
+			$UnidadesVendidas = $row['UnidadesVendidas'];
+			$DiasRestantes = $row['DiasRestantes'];
+
+			echo '<tr>';
+			echo '<td align="center"><strong>'.intval($contador).'</strong></td>';
+			echo '<td>'.$row["CodigoArticulo"].'</td>';
+
+			echo 
+			'<td align="left" class="barrido">
+			<a href="/reporte10?Descrip='.$Descripcion.'&Id='.$IdArticulo.'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
+				.$Descripcion.
+			'</a>
+			</td>';
+
+			echo '<td align="center">'." ".round($Precio,2)." ".SigVe.'</td>';
+			echo '<td align="center">'.intval($Existencia).'</td>';
+			echo '<td align="center">'.intval($Dia10).'</td>';
+			echo '<td align="center">'.intval($Dia9).'</td>';
+			echo '<td align="center">'.intval($Dia8).'</td>';
+			echo '<td align="center">'.intval($Dia7).'</td>';
+			echo '<td align="center">'.intval($Dia6).'</td>';
+			echo '<td align="center">'.intval($Dia5).'</td>';
+			echo '<td align="center">'.intval($Dia4).'</td>';
+			echo '<td align="center">'.intval($Dia3).'</td>';
+			echo '<td align="center">'.intval($Dia2).'</td>';
+			echo '<td align="center">'.intval($Dia1).'</td>';
+
+			echo 
+			'<td align="center" class="barrido">
+			<a href="reporte12?fechaInicio='.$FInicial.'&fechaFin='.$FFinal.'&SEDE='.$SedeConnection.'&Descrip='.$Descripcion.'&Id='.$IdArticulo.'" style="text-decoration: none; color: black;" target="_blank">'
+				.$UnidadesVendidas.
+			'</a>
+			</td>';
+
+			echo '<td align="center">'.round($DiasRestantes,2).'</td>';
+
+		$contador++;
+		}
+		mysqli_close($conn);
 	}
 ?>
