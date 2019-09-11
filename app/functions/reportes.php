@@ -2710,6 +2710,7 @@
 			$CodigoArticulo = $row['CodigoArticulo'];
 			$Descripcion = $row['Descripcion'];
 			$Precio = $row['Precio'];
+			$Existencia = $row['Existencia'];
 			$Dia10 = $row['Dia10'];
 			$Dia9 = $row['Dia9'];
 			$Dia8 = $row['Dia8'];
@@ -2718,6 +2719,7 @@
 			$Dia5 = $row['Dia5'];
 			$Dia4 = $row['Dia4'];
 			$Dia3 = $row['Dia3'];
+			$Dia2 = $row['Dia2'];
 			$Dia1 = $row['Dia1'];
 			$UnidadesVendidas = $row['UnidadesVendidas'];
 			$DiasRestantes = $row['DiasRestantes'];
