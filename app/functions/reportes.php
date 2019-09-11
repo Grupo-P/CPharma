@@ -2722,12 +2722,17 @@
 				$UltimoLote = $row4["UltimoLote"];
 				$UltimoLote = $UltimoLote->format('Y-m-d');
 				$Tasa = TasaFecha($UltimoLote);
+				$Descripcion = utf8_encode($row2["Descripcion"]);
 
 				echo '
 					<tr>
 						<td align="center"><strong>'.intval($contador).'</strong></td>
 				    	<td align="center">'.$row2["CodigoArticulo"].'</td>
-				      	<td>'.utf8_encode($row2["Descripcion"]).'</td>
+				    	<td align="left" class="barrido">
+				    		<a href="/reporte10?Descrip='.$Descripcion.'&Id='.$IdArticulo.'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
+				    			.$Descripcion
+				    		.'</a>
+				    	</td>
 				      	<td align="center">'." ".round($Precio,2)." ".SigVe.'</td>
 				      	<td align="center">'.intval($Existencia).'</td>
 				      	<td align="center">'." ".round($ValorLote,2)." ".SigVe.'</td>
@@ -2759,10 +2764,16 @@
 				$sql6 = QUltimoProveedor($IdArticulo);
 				$result6 = sqlsrv_query($conn,$sql6);
 				$row6 = sqlsrv_fetch_array($result6,SQLSRV_FETCH_ASSOC);
+				$NombreProveedor = utf8_encode($row6["Nombre"]);
+				$IdProveedor = $row6["Id"];
 
 				echo '
 				      	<td align="center">'.$row5["TiempoTienda"].'</td>
-				      	<td align="center">'.utf8_encode($row6["Nombre"]).'</td>
+				      	<td align="left" class="barrido">
+				      		<a href="/reporte7?Nombre='.$NombreProveedor.'&Id='.$IdProveedor.'&SEDE='.$SedeConnection.'" target="_blank" style="text-decoration: none; color: black;">'
+				      			.$NombreProveedor
+				      		.'</a>
+				      	</td>
 				    </tr>
 				';
 
