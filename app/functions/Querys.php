@@ -2010,8 +2010,8 @@
 		RETORNO: no aplica
 	 */
 	function QValidarCapturaCaida($FechaCaptura) {
-		$sql = "SELECT count(*) AS CuentaCaptura 
-		FROM capturas_caida WHERE fecha_captura = '$FechaCaptura'";
+		$sql = "SELECT count(*) AS CuentaCaptura
+		FROM captura_caida WHERE fecha_captura = '$FechaCaptura'";
 		return $sql;
 	}
 		/*
