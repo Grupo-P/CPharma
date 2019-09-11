@@ -2767,4 +2767,154 @@
 		</table>';
 		mysqli_close($connCPharma);
 	}
+	/*****************************************************************************/
+	/********************** REPORTE 15 ARTICULOS DEVALUADOS **********************/
+	/*
+		TITULO: ReporteArticulosDevaluados
+		PARAMETROS: [$SedeConnection] Siglas de la sede para la conexion		
+					[$FInicial] Fecha inicial del rango donde se buscara
+		FUNCION: Arma una lista de productos por fallar
+		RETORNO: No aplica
+	 */
+	function ReporteArticulosDevaluados($SedeConnection,$FInicial) {
+		$conn = ConectarSmartpharma($SedeConnection);
+		$Hoy = new DateTime('now');
+		$Hoy = $Hoy->format('Y-m-d');
+		$DiasSolicitados = ValidarFechas($FInicial,$Hoy);
+
+		echo '
+			<div class="input-group md-form form-sm form-1 pl-0">
+				<div class="input-group-prepend">
+					<span class="input-group-text purple lighten-3" id="basic-text1">
+						<i class="fas fa-search text-white" aria-hidden="true"></i>
+					</span>
+				</div>
+
+				<input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterAllTable()">
+			</div><br/>
+		';
+
+		echo'
+			<table class="table table-striped table-bordered col-12 sortable" id="myTable">
+			  	<thead class="thead-dark">
+				    <tr>
+				    	<th scope="col">#</th>
+				    	<th scope="col">Codigo</th>
+				      	<th scope="col">Descripcion</th>
+				      	<th scope="col">Precio</th>
+				      	<th scope="col">Existencia</th>
+				      	<th scope="col">Valor lote</th>
+				      	<th scope="col">Ultimo lote</th>
+						<th scope="col">Tasa historico</th>
+						<th scope="col">Precio en $</th>
+						<th scope="col">Valor lote $</th>
+						<th scope="col">Dias en tienda</th>
+						<th scope="col">Ultimo proveedor</th>
+				    </tr>
+			  	</thead>
+
+			  	<tbody>
+		';
+
+		$sql = QCleanTable('CP_ArticulosDevaluados');
+		sqlsrv_query($conn,$sql);
+
+		$contador = 1;
+		$sql1 = QArticulosDevaluados($FInicial);
+		sqlsrv_query($conn,$sql1);
+
+		$sql2 = QFiltrarArticulosDevaluados();
+		$result2 = sqlsrv_query($conn,$sql2);
+
+		while($row2 = sqlsrv_fetch_array($result2,SQLSRV_FETCH_ASSOC)) {
+			$IdArticulo = $row2["InvArticuloId"];
+			$Dolarizado = ProductoDolarizado($conn,$IdArticulo);
+
+			if($Dolarizado == 'NO') {
+				$sql3 = QExistenciaArticulo($IdArticulo,0);
+				$result3 = sqlsrv_query($conn,$sql3);
+				$row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
+
+				$IsIVA = $row2["ConceptoImpuesto"];
+				$Existencia = $row3["Existencia"];
+				$Precio = CalculoPrecio($conn,$IdArticulo,$IsIVA,$Existencia);
+				$ValorLote = $Precio * intval($Existencia);
+
+				$sql4 = QUltimoLote($IdArticulo);
+				$result4 = sqlsrv_query($conn,$sql4);
+				$row4 = sqlsrv_fetch_array($result4,SQLSRV_FETCH_ASSOC);
+
+				$UltimoLote = $row4["UltimoLote"];
+				$UltimoLote = $UltimoLote->format('Y-m-d');
+				$Tasa = TasaFecha($UltimoLote);
+				$Descripcion = utf8_encode($row2["Descripcion"]);
+
+				echo '
+					<tr>
+						<td align="center"><strong>'.intval($contador).'</strong></td>
+				    	<td align="center">'.$row2["CodigoArticulo"].'</td>
+				    	<td align="left" class="barrido">
+				    		<a href="/reporte10?Descrip='.$Descripcion.'&Id='.$IdArticulo.'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
+				    			.$Descripcion
+				    		.'</a>
+				    	</td>
+				      	<td align="center">'." ".round($Precio,2)." ".SigVe.'</td>
+				      	<td align="center">'.intval($Existencia).'</td>
+				      	<td align="center">'." ".round($ValorLote,2)." ".SigVe.'</td>
+				      	<td align="center">'.$UltimoLote.'</td>
+				';
+
+				if($Tasa!=0){
+					$PrecioDolarizado = round(($Precio/$Tasa),2);
+					$ValorLoteDolarizado = $PrecioDolarizado * intval($Existencia);
+
+					echo '
+						<td align="center">'." ".$Tasa." ".SigVe.'</td>
+						<td align="center">'." ".$PrecioDolarizado." ".SigDolar.'</td>
+						<td align="center">'." ".$ValorLoteDolarizado." ".SigDolar.'</td>
+					';
+				}
+				else{
+					echo '
+						<td align="center">0.00 '.SigVe.'</td>
+						<td align="center">0.00 '.SigDolar.'</td>
+						<td align="center">0.00 '.SigDolar.'</td>
+					';
+				}
+
+				$sql5 = QTiempoEnTienda($IdArticulo);
+				$result5=sqlsrv_query($conn,$sql5);
+				$row5=sqlsrv_fetch_array($result5,SQLSRV_FETCH_ASSOC);
+
+				$sql6 = QUltimoProveedor($IdArticulo);
+				$result6 = sqlsrv_query($conn,$sql6);
+				$row6 = sqlsrv_fetch_array($result6,SQLSRV_FETCH_ASSOC);
+				$NombreProveedor = utf8_encode($row6["Nombre"]);
+				$IdProveedor = $row6["Id"];
+
+				echo '
+				      	<td align="center">'.$row5["TiempoTienda"].'</td>
+				      	<td align="left" class="barrido">
+				      		<a href="/reporte7?Nombre='.$NombreProveedor.'&Id='.$IdProveedor.'&SEDE='.$SedeConnection.'" target="_blank" style="text-decoration: none; color: black;">'
+				      			.$NombreProveedor
+				      		.'</a>
+				      	</td>
+				    </tr>
+				';
+
+				$contador++;
+			}
+		}
+
+		echo '
+
+			  	</tbody>
+			</table>
+		';
+
+		$sql = QCleanTable('CP_ArticulosDevaluados');
+		sqlsrv_query($conn,$sql);
+
+		sqlsrv_close($conn);
+	}
 ?>

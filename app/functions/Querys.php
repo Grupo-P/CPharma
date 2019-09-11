@@ -2098,6 +2098,51 @@
 		return $sql;
 	}
 	/*
+	TITULO: QArticulosDevaluados
+	PARAMETROS: [$FechaBandera] Fecha minima de dias en la tienda
+	FUNCION: Armar una tabla temporal con los registros solicitados 
+	RETORNO: Un String con la query pertinente
+	 */
+	function QArticulosDevaluados($FechaBandera) {
+		$sql = "
+		SELECT 
+		InvLote.Id,  
+		InvLote.InvArticuloId,
+		InvArticulo.CodigoArticulo,
+		CONVERT(DATE,InvLoteAlmacen.Auditoria_FechaCreacion) AS FechaLote,  
+		InvArticulo.Descripcion,
+		InvArticulo.FinConceptoImptoIdCompra AS ConceptoImpuesto
+		INTO CP_ArticulosDevaluados
+		FROM InvLote
+		INNER JOIN InvLoteAlmacen ON InvLote.Id = InvLoteAlmacen.InvLoteId
+		INNER JOIN InvArticulo ON InvArticulo.Id = InvLote.InvArticuloId
+		WHERE InvLoteAlmacen.Existencia>0 
+		AND (InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
+		AND InvLoteAlmacen.Auditoria_FechaCreacion < '$FechaBandera'
+		ORDER BY InvLoteAlmacen.Auditoria_FechaCreacion, InvArticulo.Descripcion DESC
+		";
+		return $sql;
+	}
+
+	/*
+		TITULO: QFiltrarArticulosDevaluados
+		PARAMETROS: No aplica
+		FUNCION: Filtar los articulos eliminando los duplicados
+		RETORNO: String con la query
+	 */
+	function QFiltrarArticulosDevaluados() {
+		$sql = "
+		SELECT 
+		CP_ArticulosDevaluados.InvArticuloId,
+		CP_ArticulosDevaluados.CodigoArticulo,
+		CP_ArticulosDevaluados.Descripcion,
+		CP_ArticulosDevaluados.ConceptoImpuesto
+		FROM CP_ArticulosDevaluados
+		GROUP BY CP_ArticulosDevaluados.InvArticuloId, CP_ArticulosDevaluados.CodigoArticulo, CP_ArticulosDevaluados.Descripcion, CP_ArticulosDevaluados.ConceptoImpuesto
+		";
+		return $sql;
+	}
+	/*
 		TITULO: 
 		PARAMETROS: 
 		FUNCION:
