@@ -109,7 +109,6 @@ Route::get('/productoscaida', function() {
     return view('pages.productoscaida.index');
 });
 
-
 Route::get('home', 'HomeController@index')->name('home');
 
 Route::resource('dolar', 'DolarController');

@@ -25,7 +25,7 @@ class EtiquetaController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {
+    {   
         $etiquetas =  Etiqueta::all();
         return view('pages.etiqueta.index', compact('etiquetas'));
     }
@@ -37,7 +37,14 @@ class EtiquetaController extends Controller
      */
     public function create()
     {
-        return view('pages.etiqueta.create');
+        include(app_path().'\functions\config.php');
+        include(app_path().'\functions\Querys.php');
+        include(app_path().'\functions\funciones.php');
+        include(app_path().'\functions\reportes.php');
+
+        ValidarEtiquetas();
+
+        return redirect()->action('EtiquetaController@index');
     }
 
     /**
