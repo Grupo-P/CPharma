@@ -18,18 +18,17 @@
   include(app_path().'\functions\reportes.php');
 
   $InicioCarga = new DateTime("now");
-  
-  /*********BORRAR DESPUES**********/
-    $_GET['SEDE'] = 'FTN';
-  /*********BORRAR DESPUES**********/
 
+  //Borrar despues//
+  $_GET['SEDE'] = MiUbicacion();
+  //
   if (isset($_GET['SEDE'])){      
     echo '<h1 class="h5 text-success"  align="left"> <i class="fas fa-prescription"></i> '.NombreSede($_GET['SEDE']).'</h1>';
   }
   echo '<hr class="row align-items-start col-12">';
-  
+
   ReporteProductosEnCaida($_GET['SEDE']);
-  //GuardarAuditoria('CONSULTAR','REPORTE','Activacion de proveedores');
+  GuardarAuditoria('CONSULTAR','REPORTE','Productos en Caida');
 
   $FinCarga = new DateTime("now");
     $IntervalCarga = $InicioCarga->diff($FinCarga);

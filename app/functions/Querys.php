@@ -53,6 +53,8 @@
 		$conCP = ConectarXampp();
 		$consulta = "SELECT tasa FROM dolars where fecha='$Fecha'";
 		$resultado = mysqli_query($conCP,$consulta);
+		//Cerrar conexion con Cpharma
+		mysqli_close($conCP);
 		return $resultado;
 	}
 	/*
@@ -280,6 +282,56 @@
 			break;
 		}
 	}
+
+	/*
+		TITULO: QLoteArticuloDevaluado
+		PARAMETROS: [$IdArticulo] Id del articulo
+					[$CantAlmacen] determina el los almacenes donde se buscara el lote
+					0: para los almacenes [1,2]
+					1: para todos los almacenes
+		FUNCION: Busca el lote correspondiente al articulo especificado
+		RETORNO: Regresa el Id del lote correspondiente
+	 */
+	function QLoteArticuloDevaluado($IdArticulo,$CantAlmacen) {
+		switch($CantAlmacen) {
+			case '0':
+			$sql = "
+				SELECT
+				InvLoteAlmacen.InvLoteId
+				INTO CP_QLoteArticuloDevaluado
+				FROM InvLoteAlmacen
+				WHERE(InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
+				AND (InvLoteAlmacen.InvArticuloId = '$IdArticulo')
+				AND (InvLoteAlmacen.Existencia>0)
+			";
+			return $sql;
+			break;
+			
+			case '1':
+			$sql = "
+				SELECT
+				InvLoteAlmacen.InvLoteId
+				INTO CP_QLoteArticuloDevaluado
+				FROM InvLoteAlmacen
+				WHERE(InvLoteAlmacen.InvArticuloId = '$IdArticulo')
+				AND (InvLoteAlmacen.Existencia>0)
+			";
+			return $sql;
+			break;
+
+			case '2':
+			$sql = "
+				SELECT
+				InvLoteAlmacen.InvLoteId
+				INTO CP_QLoteArticuloDevaluado
+				FROM InvLoteAlmacen
+				WHERE(InvLoteAlmacen.InvArticuloId = '$IdArticulo')
+			";
+			return $sql;
+			break;
+		}
+	}
+
 	/*
 		TITULO: QLote
 		PARAMETROS: Funciona en conjunto con QLoteArticulo
@@ -318,6 +370,27 @@
 		";
 		return $sql;
 	}
+
+	/*
+		TITULO: QLoteDevaluado
+		PARAMETROS: Funciona en conjunto con QLoteArticuloDevaluado
+		FUNCION: Busca el precio de compra bruto y el precio troquelado
+				 (Funciona en conjunto con QLoteArticulo)
+		RETORNO: Retorna el precio de compra bruto y el precio troquelado
+	 */
+	function QLoteDevaluado() {
+		$sql = "
+			SELECT TOP 1
+			InvLote.Id,
+			InvLote.M_PrecioCompraBruto,
+			InvLote.M_PrecioTroquelado
+			FROM InvLote
+			INNER JOIN CP_QLoteArticuloDevaluado ON CP_QLoteArticulo.InvLoteId = InvLote.Id
+			ORDER BY invlote.M_PrecioTroquelado, invlote.M_PrecioCompraBruto DESC
+		";
+		return $sql;
+	}
+
 	/*
 		TITULO: QHistoricoArticulo
 		PARAMETROS: [$IdArticuloQ] Id del articulo
@@ -1093,9 +1166,9 @@
 		AS TiempoTienda
 		FROM InvLoteAlmacen
 		WHERE
-		InvLoteAlmacen.InvArticuloId = '$IdArticulo' AND
-		(InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2) AND
-		(InvLoteAlmacen.Existencia > 0)
+		InvLoteAlmacen.InvArticuloId = '$IdArticulo' 
+		AND (InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2) 
+		AND InvLoteAlmacen.Existencia > 0
 		ORDER BY InvLoteAlmacen.Auditoria_FechaCreacion DESC
 		";
 		return $sql;
@@ -2014,6 +2087,118 @@
 		return $sql;
 	}
 
+	/*
+		TITULO: QGuardarProductosCaida
+		PARAMETROS: Todos los campos
+		FUNCION: guardar en la tabla productos en caida
+		RETORNO: no aplica
+	 */
+	function QGuardarProductosCaida($IdArticulo,$CodigoArticulo,$Descripcion,$Precio,$Existencia,$Dia10,$Dia9,$Dia8,$Dia7,$Dia6,$Dia5,$Dia4,$Dia3,$Dia2,$Dia1,$UnidadesVendidas,$DiasRestantes,$fecha_captura,$user,$date) {
+		$sql = "
+		INSERT INTO productos_caida
+		(IdArticulo,CodigoArticulo,Descripcion,Precio,Existencia,Dia10,Dia9,Dia8,Dia7,Dia6,Dia5,Dia4,Dia3,Dia2,Dia1,UnidadesVendidas,DiasRestantes,fecha_captura,user,created_at,updated_at)
+		VALUES 
+		('$IdArticulo','$CodigoArticulo','$Descripcion','$Precio','$Existencia','$Dia10','$Dia9','$Dia8','$Dia7','$Dia6','$Dia5','$Dia4','$Dia3','$Dia2','$Dia1','$UnidadesVendidas','$DiasRestantes','$fecha_captura','$user','$date','$date')
+		";
+		return $sql;
+	}
+	/*
+		TITULO: QCapturaCaida
+		PARAMETROS: [$FechaCaptura] El dia de hoy
+		FUNCION: cuenta el total de registos de productos en caida
+		RETORNO: no aplica
+	 */
+
+	function QCapturaCaida($FechaCaptura) {
+		$sql = "SELECT COUNT(*) AS TotalRegistros
+		FROM productos_caida 
+		WHERE productos_caida.fecha_captura = '$FechaCaptura'
+		";
+		return $sql;
+	}
+	/*
+		TITULO: QGuardarCapturaCaida
+		PARAMETROS: [$FechaCaptura] El dia de hoy
+					[$date] valor para creacion y actualizacion
+		FUNCION: crea una conexion con la base de datos cpharma e ingresa datos
+		RETORNO: no aplica
+	 */
+
+	function QGuardarCapturaCaida($TotalRegistros,$FechaCaptura,$date) {
+		$sql = "
+		INSERT INTO captura_caida 
+		(total_registros,fecha_captura,created_at,updated_at)
+		VALUES 
+		('$TotalRegistros','$FechaCaptura','$date','$date')
+		";
+		return $sql;
+	}
+	/*
+		TITULO: QValidarCapturaCaida
+		PARAMETROS: [$FechaCaptura] El dia de hoy
+		FUNCION: valida que la fecha exista en la tabla captura diaria
+		RETORNO: no aplica
+	 */
+	function QValidarCapturaCaida($FechaCaptura) {
+		$sql = "SELECT count(*) AS CuentaCaptura
+		FROM captura_caida WHERE fecha_captura = '$FechaCaptura'";
+		return $sql;
+	}
+		/*
+		TITULO: QBorrarProductosCaida
+		PARAMETROS: [$FechaCaptura] fecha de la captura
+		FUNCION: borra los registros de dias en cero de la fecha seleccionada
+		RETORNO: no aplica
+	 */
+	function QBorrarProductosCaida() {
+		$sql = "DELETE FROM productos_caida";
+		return $sql;
+	}
+	/*
+	TITULO: QArticulosDevaluados
+	PARAMETROS: [$FechaBandera] Fecha minima de dias en la tienda
+	FUNCION: Armar una tabla temporal con los registros solicitados 
+	RETORNO: Un String con la query pertinente
+	 */
+	function QArticulosDevaluados($FechaBandera) {
+		$sql = "
+		SELECT 
+		InvLote.Id,  
+		InvLote.InvArticuloId,
+		InvArticulo.CodigoArticulo,
+		CONVERT(DATE,InvLoteAlmacen.Auditoria_FechaCreacion) AS FechaLote,  
+		InvArticulo.Descripcion,
+		InvArticulo.FinConceptoImptoIdCompra AS ConceptoImpuesto
+		INTO CP_ArticulosDevaluados
+		FROM InvLote
+		INNER JOIN InvLoteAlmacen ON InvLote.Id = InvLoteAlmacen.InvLoteId
+		INNER JOIN InvArticulo ON InvArticulo.Id = InvLote.InvArticuloId
+		WHERE InvLoteAlmacen.Existencia>0 
+		AND (InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
+		AND InvLoteAlmacen.Auditoria_FechaCreacion < '$FechaBandera'
+		ORDER BY InvLoteAlmacen.Auditoria_FechaCreacion, InvArticulo.Descripcion DESC
+		";
+		return $sql;
+	}
+
+	/*
+		TITULO: QFiltrarArticulosDevaluados
+		PARAMETROS: No aplica
+		FUNCION: Filtar los articulos eliminando los duplicados
+		RETORNO: String con la query
+	 */
+	function QFiltrarArticulosDevaluados() {
+		$sql = "
+		SELECT 
+		CP_ArticulosDevaluados.InvArticuloId,
+		CP_ArticulosDevaluados.CodigoArticulo,
+		CP_ArticulosDevaluados.Descripcion,
+		CP_ArticulosDevaluados.ConceptoImpuesto
+		FROM CP_ArticulosDevaluados
+		GROUP BY CP_ArticulosDevaluados.InvArticuloId, CP_ArticulosDevaluados.CodigoArticulo, CP_ArticulosDevaluados.Descripcion, CP_ArticulosDevaluados.ConceptoImpuesto
+		";
+		return $sql;
+	}
 	/*
 		TITULO: 
 		PARAMETROS: 
