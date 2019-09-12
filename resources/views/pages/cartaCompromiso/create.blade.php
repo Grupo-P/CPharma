@@ -4,8 +4,69 @@
     Compromisos
 @endsection
 
-<script type="text/javascript" src="{{ asset('assets/jquery/jquery-2.2.2.min.js') }}"></script>
-<script type="text/javascript" src="{{ asset('assets/jquery/jquery-ui.min.js') }}" ></script>
+
+@section('scriptsHead')
+  <script type="text/javascript" src="{{ asset('assets/jquery/jquery-2.2.2.min.js') }}"></script>
+  <script type="text/javascript" src="{{ asset('assets/jquery/jquery-ui.min.js') }}" ></script>
+  <script type="text/javascript" src="{{ asset('assets/js/sortTable.js') }}"></script>
+  <script type="text/javascript" src="{{ asset('assets/js/filter.js') }}"></script>
+  <script type="text/javascript" src="{{ asset('assets/js/functions.js') }}"></script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    /*the container must be positioned relative:*/
+    .autocomplete {
+      position: relative;
+      display: inline-block;
+    }
+
+    input {
+      border: 1px solid transparent;
+      background-color: #f1f1f1;
+      border-radius: 5px;
+      padding: 10px;
+      font-size: 16px;
+    }
+
+    input[type=text] {
+      background-color: #f1f1f1;
+      width: 100%;
+    }
+
+    .autocomplete-items {
+      position: absolute;
+      border: 1px solid #d4d4d4;
+      border-bottom: none;
+      border-top: none;
+      z-index: 99;
+      /*position the autocomplete items to be the same width as the container:*/
+      top: 100%;
+      left: 0;
+      right: 0;
+    }
+
+    .autocomplete-items div {
+      padding: 10px;
+      cursor: pointer;
+      background-color: #fff; 
+      border-bottom: 1px solid #d4d4d4; 
+    }
+
+    /*when hovering an item:*/
+    .autocomplete-items div:hover {
+      background-color: #e9e9e9; 
+    }
+
+    /*when navigating through the items using the arrow keys:*/
+    .autocomplete-active {
+      background-color: DodgerBlue !important; 
+      color: #ffffff; 
+    }
+  </style>
+@endsection
 
 @section('content')
   <!-- Modal Error De Fecha Recepcion Mayor A Fecha Tope -->
@@ -121,29 +182,37 @@
     if(isset($_GET['Id'])) {
       /*CASO 2: CARGA AL HABER SELECCIONADO UN PROVEEDOR
                 Se pasa a la carga de las facturas del proveedor*/
-      if (isset($_GET['SEDE'])){      
-        echo '<h1 class="h5 text-success"  align="left"> <i class="fas fa-prescription"></i> '.NombreSede($_GET['SEDE']).'</h1>';
+      if(isset($_GET['SEDE'])) {
+        echo '
+          <h1 class="h5 text-success" align="left">
+            <i class="fas fa-prescription"></i> '.NombreSede($_GET['SEDE']).
+          '</h1>
+        ';
       }
       echo '<hr class="row align-items-start col-12">';
+
       $InicioCarga = new DateTime("now");
-      
       ReporteProveedorFactura($_GET['SEDE'],$_GET['Id'],$_GET['Nombre']);
-      
       $FinCarga = new DateTime("now");
       $IntervalCarga = $InicioCarga->diff($FinCarga);
+
       echo'Tiempo de carga: '.$IntervalCarga->format("%Y-%M-%D %H:%I:%S");
     }
-    else if(isset($_GET['lote'])){
+    else if(isset($_GET['lote'])) {
       /*CASO 5: CARGA AL HABER COMPLETADO LA Compromiso
                 Se pasa a la solicitud de fechas*/
-      if (isset($_GET['SEDE'])){      
-        echo '<h1 class="h5 text-success"  align="left"> <i class="fas fa-prescription"></i> '.NombreSede($_GET['SEDE']).'</h1>';
+      if(isset($_GET['SEDE'])) {
+        echo '
+          <h1 class="h5 text-success" align="left">
+            <i class="fas fa-prescription"></i> '.NombreSede($_GET['SEDE']).
+          '</h1>
+        ';
       }
       echo '<hr class="row align-items-start col-12">';
 
       $InicioCarga = new DateTime("now");
 
-      if($_GET['fecha_vencimiento'] == ''){
+      if($_GET['fecha_vencimiento'] == '') {
         $fecha_documento = new DateTime($_GET['fecha_documento']);
         $fecha_recepcion = new DateTime($_GET['fecha_recepcion']);
         $fecha_tope = new DateTime($_GET['fecha_tope']);
@@ -282,8 +351,12 @@
     else if(isset($_GET['IdArt'])) {
       /*CASO 4: CARGA AL HABER SELECCIONADO UNA ARTICULO
                 Se pasa a la solicitud de fechas*/
-      if(isset($_GET['SEDE'])){      
-        echo '<h1 class="h5 text-success"  align="left"> <i class="fas fa-prescription"></i> '.NombreSede($_GET['SEDE']).'</h1>';
+      if(isset($_GET['SEDE'])) {
+        echo '
+          <h1 class="h5 text-success" align="left">
+            <i class="fas fa-prescription"></i> '.NombreSede($_GET['SEDE']).
+          '</h1>
+        ';
       }
       echo '<hr class="row align-items-start col-12">';
 
@@ -295,11 +368,15 @@
       $IntervalCarga = $InicioCarga->diff($FinCarga);
       echo'Tiempo de carga: '.$IntervalCarga->format("%Y-%M-%D %H:%I:%S");
     }
-    else if(isset($_GET['IdFact'])){
-    /*CASO 3: CARGA AL HABER SELECCIONADO UNA FACTURA 
+    else if(isset($_GET['IdFact'])) {
+      /*CASO 3: CARGA AL HABER SELECCIONADO UNA FACTURA 
               Se pasa a la seleccion del articulo*/
-      if(isset($_GET['SEDE'])){      
-        echo '<h1 class="h5 text-success"  align="left"> <i class="fas fa-prescription"></i> '.NombreSede($_GET['SEDE']).'</h1>';
+      if(isset($_GET['SEDE'])) {
+        echo '
+          <h1 class="h5 text-success" align="left">
+            <i class="fas fa-prescription"></i> '.NombreSede($_GET['SEDE']).
+          '</h1>
+        ';
       }
       echo '<hr class="row align-items-start col-12">';
 
@@ -314,8 +391,12 @@
     else {
       /*CASO 1: AL CARGAR EL REPORTE DESDE EL MENU
                 Se pasa a la seleccion del proveedor*/
-      if(isset($_GET['SEDE'])){      
-        echo '<h1 class="h5 text-success"  align="left"> <i class="fas fa-prescription"></i> '.NombreSede($_GET['SEDE']).'</h1>';
+      if(isset($_GET['SEDE'])) {
+        echo '
+          <h1 class="h5 text-success" align="left">
+            <i class="fas fa-prescription"></i> '.NombreSede($_GET['SEDE']).
+          '</h1>
+        ';
       }
       echo '<hr class="row align-items-start col-12">';
 
@@ -325,18 +406,14 @@
       $ArtJson = armarJson($sql,$_GET['SEDE']);
 
       echo '
-      <form autocomplete="off" action="">
-        <div class="autocomplete" style="width:90%;">
-          <input id="myInput" type="text" name="Nombre" placeholder="Ingrese el nombre del proveedor " onkeyup="conteo()" required>
-          <input id="myId" name="Id" type="hidden">
-          <td>
-          <input id="SEDE" name="SEDE" type="hidden" value="';
-          print_r($_GET['SEDE']);
-          echo'">
-          </td>
-        </div>
-        <input type="submit" value="Buscar" class="btn btn-outline-success">
-      </form>
+        <form autocomplete="off" action="">
+          <div class="autocomplete" style="width:90%;">
+            <input id="myInput" type="text" name="Nombre" placeholder="Ingrese el nombre del proveedor " onkeyup="conteo()" required>
+            <input id="myId" name="Id" type="hidden">
+            <input id="SEDE" name="SEDE" type="hidden" value="'; print_r($_GET['SEDE']); echo'">
+          </div>
+          <input type="submit" value="Buscar" class="btn btn-outline-success">
+        </form>
       ';
 
       $FinCarga = new DateTime("now");
@@ -350,70 +427,6 @@
       $('[data-toggle="tooltip"]').tooltip(); 
     });
   </script>
-@endsection
-
-@section('scriptsHead')
-    <script type="text/javascript" src="{{ asset('assets/js/sortTable.js') }}">
-    </script>
-    <script type="text/javascript" src="{{ asset('assets/js/filter.js') }}">  
-    </script>
-    <script type="text/javascript" src="{{ asset('assets/js/functions.js') }}"> 
-    </script>
-
-    <style>
-    * {
-      box-sizing: border-box;
-    }
-
-    /*the container must be positioned relative:*/
-    .autocomplete {
-      position: relative;
-      display: inline-block;
-    }
-
-    input {
-      border: 1px solid transparent;
-      background-color: #f1f1f1;
-      border-radius: 5px;
-      padding: 10px;
-      font-size: 16px;
-    }
-
-    input[type=text] {
-      background-color: #f1f1f1;
-      width: 100%;
-    }
-
-    .autocomplete-items {
-      position: absolute;
-      border: 1px solid #d4d4d4;
-      border-bottom: none;
-      border-top: none;
-      z-index: 99;
-      /*position the autocomplete items to be the same width as the container:*/
-      top: 100%;
-      left: 0;
-      right: 0;
-    }
-
-    .autocomplete-items div {
-      padding: 10px;
-      cursor: pointer;
-      background-color: #fff; 
-      border-bottom: 1px solid #d4d4d4; 
-    }
-
-    /*when hovering an item:*/
-    .autocomplete-items div:hover {
-      background-color: #e9e9e9; 
-    }
-
-    /*when navigating through the items using the arrow keys:*/
-    .autocomplete-active {
-      background-color: DodgerBlue !important; 
-      color: #ffffff; 
-    }
-    </style>
 @endsection
 
 @section('scriptsFoot')
