@@ -93,19 +93,19 @@
 					Validar		      		
 				</a>
 	        </td>
-	        <td style="width:13%;" align="left">	
+	        <td style="width:15%;" align="left">	
 				<a href="{{ url('/EtqObliatoria') }}" role="button" class="btn btn-outline-success btn-sm" 
 				style="display: inline; text-align: left;" target="_blank">
-					Generar Obliagtorias 		      		
+					Generar Obliagtorias		      		
 				</a>
 	        </td>
-	        <td style="width:13%;" align="left">	
+	        <td style="width:15%;" align="left">	
 				<a href="{{ url('/EtqEtiquetable') }}" role="button" class="btn btn-outline-info btn-sm" 
 				style="display: inline; text-align: left;" target="_blank">
 					Generar	Etiquetables	      		
 				</a>
 	        </td>
-	        <td style="width:70%;">
+	        <td style="width:63%;">
 	        	<div class="input-group md-form form-sm form-1 pl-0">
 				  <div class="input-group-prepend">
 				    <span class="input-group-text purple lighten-3" id="basic-text1"><i class="fas fa-search text-white"
