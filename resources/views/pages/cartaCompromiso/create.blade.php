@@ -213,15 +213,8 @@
       $InicioCarga = new DateTime("now");
 
       if($_GET['fecha_vencimiento'] == '') {
-        $fecha_documento = new DateTime($_GET['fecha_documento']);
-        $fecha_recepcion = new DateTime($_GET['fecha_recepcion']);
-        $fecha_tope = new DateTime($_GET['fecha_tope']);
-
-        $diferencia1 = $fecha_recepcion->diff($fecha_tope);
-        $diferencia1_numero = (int)$diferencia1->format('%R%a');
-
-        $diferencia4 = $fecha_documento->diff($fecha_recepcion);
-        $diferencia4_numero = (int)$diferencia4->format('%R%a');
+        $diferencia1_numero = ValidarFechas($_GET['fecha_recepcion'],$_GET['fecha_tope']);
+        $diferencia4_numero = ValidarFechas($_GET['fecha_documento'],$_GET['fecha_recepcion']);
 
         if(($diferencia1_numero > 0) && ($diferencia4_numero >= 0)) {
         ?>
@@ -266,22 +259,10 @@
         }
       }
       else {
-        $fecha_documento = new DateTime($_GET['fecha_documento']);
-        $fecha_recepcion = new DateTime($_GET['fecha_recepcion']);
-        $fecha_vencimiento = new DateTime($_GET['fecha_vencimiento']);
-        $fecha_tope = new DateTime($_GET['fecha_tope']);
-
-        $diferencia1 = $fecha_recepcion->diff($fecha_tope);
-        $diferencia1_numero = (int)$diferencia1->format('%R%a');
-
-        $diferencia2 = $fecha_vencimiento->diff($fecha_tope);
-        $diferencia2_numero = (int)$diferencia2->format('%R%a');
-
-        $diferencia3 = $fecha_recepcion->diff($fecha_vencimiento);
-        $diferencia3_numero = (int)$diferencia3->format('%R%a');
-
-        $diferencia4 = $fecha_documento->diff($fecha_recepcion);
-        $diferencia4_numero = (int)$diferencia4->format('%R%a');
+        $diferencia1_numero = ValidarFechas($_GET['fecha_recepcion'],$_GET['fecha_tope']);
+        $diferencia2_numero = ValidarFechas($_GET['fecha_vencimiento'],$_GET['fecha_tope']);
+        $diferencia3_numero = ValidarFechas($_GET['fecha_recepcion'],$_GET['fecha_vencimiento']);
+        $diferencia4_numero = ValidarFechas($_GET['fecha_documento'],$_GET['fecha_recepcion']);
 
         if(($diferencia1_numero > 0) 
           && ($diferencia2_numero <= 0) 
