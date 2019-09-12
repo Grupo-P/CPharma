@@ -2176,6 +2176,7 @@
 		WHERE InvLoteAlmacen.Existencia>0 
 		AND (InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
 		AND InvLoteAlmacen.Auditoria_FechaCreacion < '$FechaBandera'
+		AND InvLote.FechaEntrada < '$FechaBandera'
 		ORDER BY InvLoteAlmacen.Auditoria_FechaCreacion, InvArticulo.Descripcion DESC
 		";
 		return $sql;
