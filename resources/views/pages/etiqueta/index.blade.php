@@ -88,18 +88,24 @@
 	<table style="width:100%;">
 	    <tr>
 	        <td style="width:7%;" align="center">	
-				<a href="{{ url('/etiqueta/create') }}" role="button" class="btn btn-outline-info btn-sm" 
+				<a href="{{ url('/etiqueta/create') }}" role="button" class="btn btn-outline-danger btn-sm" 
 				style="display: inline; text-align: left;">
 					Validar		      		
 				</a>
 	        </td>
-	        <td style="width:7%;" align="left">	
-				<a href="{{ url('/etiqueta/create') }}" role="button" class="btn btn-outline-success btn-sm" 
+	        <td style="width:13%;" align="left">	
+				<a href="#" role="button" class="btn btn-outline-success btn-sm" 
 				style="display: inline; text-align: left;">
-					Generar		      		
+					Generar Obliagtorias 		      		
 				</a>
 	        </td>
-	        <td style="width:90%;">
+	        <td style="width:13%;" align="left">	
+				<a href="#" role="button" class="btn btn-outline-info btn-sm" 
+				style="display: inline; text-align: left;">
+					Generar	Etiquetables	      		
+				</a>
+	        </td>
+	        <td style="width:70%;">
 	        	<div class="input-group md-form form-sm form-1 pl-0">
 				  <div class="input-group-prepend">
 				    <span class="input-group-text purple lighten-3" id="basic-text1"><i class="fas fa-search text-white"
