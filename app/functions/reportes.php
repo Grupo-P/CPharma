@@ -2794,6 +2794,8 @@
 			</div><br/>
 		';
 
+		echo'<h6 align="center">Periodo desde el '.$FInicial.' hacia atrás</h6>';
+
 		echo'
 			<table class="table table-striped table-bordered col-12 sortable" id="myTable">
 			  	<thead class="thead-dark">
