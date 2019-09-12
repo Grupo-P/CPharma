@@ -94,14 +94,14 @@
 				</a>
 	        </td>
 	        <td style="width:13%;" align="left">	
-				<a href="#" role="button" class="btn btn-outline-success btn-sm" 
-				style="display: inline; text-align: left;">
+				<a href="{{ url('/EtqObliatoria') }}" role="button" class="btn btn-outline-success btn-sm" 
+				style="display: inline; text-align: left;" target="_blank">
 					Generar Obliagtorias 		      		
 				</a>
 	        </td>
 	        <td style="width:13%;" align="left">	
-				<a href="#" role="button" class="btn btn-outline-info btn-sm" 
-				style="display: inline; text-align: left;">
+				<a href="{{ url('/EtqEtiquetable') }}" role="button" class="btn btn-outline-info btn-sm" 
+				style="display: inline; text-align: left;" target="_blank">
 					Generar	Etiquetables	      		
 				</a>
 	        </td>
