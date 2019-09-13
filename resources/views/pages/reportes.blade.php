@@ -399,5 +399,33 @@
 				</form>
 		  	</div>
 		</div>
+
+		<div class="card border-success mb-3" style="width: 14rem;">	  	
+	  		<div class="card-body text-left bg-success">
+	    		<h5 class="card-title">
+		    		<span class="card-text text-white">
+		    			Productos en caida
+		    		</span>
+	    		</h5>	    	    
+	  		</div>
+		  	<div class="card-footer bg-transparent border-success text-right">
+		  		<form action="/reporte14/" style="display: inline;">
+				    @csrf
+				    <input id="SEDE" name="SEDE" type="hidden" value="<?php print_r($_GET['SEDE']); ?>">
+				<?php
+					if(
+						Auth::user()->departamento == 'COMPRAS'
+						|| Auth::user()->departamento == 'LÍDER DE TIENDA'
+						|| Auth::user()->departamento == 'GERENCIA'
+						|| Auth::user()->departamento == 'TECNOLOGIA'
+					){
+				?>				   
+				    <button type="submit" name="Reporte" role="button" class="btn btn-outline-success btn-sm"></i>Visualizar</button>
+				<?php
+					}
+				?>
+				</form>
+		  	</div>
+		</div>
    	</div>
 @endsection

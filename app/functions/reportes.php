@@ -290,6 +290,7 @@
 		';
 
 		echo'<h6 align="center">Periodo desde el '.$FInicial.' al '.$FFinalImpresion.' </h6>';
+		
 		echo'
 		<table class="table table-striped table-bordered col-12 sortable" id="myTable">
 		  	<thead class="thead-dark">
@@ -2655,7 +2656,7 @@
 		FUNCION: Armar el reporte de activacion de proveedores
 		RETORNO: No aplica
 	 */
-	function ReporteProductosEnCaida($SedeConnection){
+	function ReporteProductosEnCaida($SedeConnection) {
 
 		$connCPharma = ConectarXampp();
 
@@ -2678,11 +2679,10 @@
 		<br/>
 		';
 		
-		echo'
+		echo'<h6 align="center">Periodo desde el '.$FInicial.' al '.$FFinal.' </h6>';
 
-		<h6 align="center">Periodo desde el '.$FInicial.' al '.$FFinal.' </h6>
-
-		<table class="table table-striped table-bordered col-12 sortable">
+		echo '
+		<table class="table table-striped table-bordered col-12 sortable" id="myTable">
 			<thead class="thead-dark">
 			    <tr>
 			    	<th scope="col">#</th>			
@@ -2700,8 +2700,8 @@
 			      	<th scope="col">Dia 3</td>
 			      	<th scope="col">Dia 2</td>
 			      	<th scope="col">Dia 1</td>
-			      	<th scope="col">UnidadesVendidas</td>
-			      	<th scope="col">DiasRestantes</td>	      				      
+			      	<th scope="col">Unidades Vendidas</td>
+			      	<th scope="col">Dias Restantes</td>	      			      
 			    </tr>
 		  	</thead>
 		  	<tbody>
@@ -2734,11 +2734,11 @@
 			echo 
 			'<td align="left" class="barrido">
 			<a href="/reporte2?Id='.$IdArticulo.'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
-				.$Descripcion.
+				.$row["Descripcion"].
 			'</a>
 			</td>';
 
-			echo '<td align="center">'." ".round($Precio,2)." ".SigVe.'</td>';
+			echo '<td align="center">'." ".intval($Precio)." ".SigVe.'</td>';
 			echo '<td align="center">'.intval($Existencia).'</td>';
 			echo '<td align="center">'.intval($Dia10).'</td>';
 			echo '<td align="center">'.intval($Dia9).'</td>';
@@ -2759,7 +2759,7 @@
 			</td>';
 
 			echo '<td align="center">'.round($DiasRestantes,2).'</td>';
-
+			echo '</tr>';
 		$contador++;
 		}
 		echo '
@@ -2783,15 +2783,16 @@
 		$DiasSolicitados = ValidarFechas($FInicial,$Hoy);
 
 		echo '
-			<div class="input-group md-form form-sm form-1 pl-0">
-				<div class="input-group-prepend">
-					<span class="input-group-text purple lighten-3" id="basic-text1">
-						<i class="fas fa-search text-white" aria-hidden="true"></i>
-					</span>
-				</div>
-
-				<input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterAllTable()">
-			</div><br/>
+		<div class="input-group md-form form-sm form-1 pl-0">
+		  <div class="input-group-prepend">
+		    <span class="input-group-text purple lighten-3" id="basic-text1">
+		    	<i class="fas fa-search text-white"
+		        aria-hidden="true"></i>
+		    </span>
+		  </div>
+		  <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterAllTable()">
+		</div>
+		<br/>
 		';
 
 		echo'
