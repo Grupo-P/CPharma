@@ -2659,8 +2659,8 @@
 
 		$connCPharma = ConectarXampp();
 
-		$FFinal = date('2019-09-05'); //date("Y-m-d");
-	  	$FInicial = date("Y-m-d",strtotime($FFinal."-3 days"));
+		$FFinal = date("Y-m-d");
+	  	$FInicial = date("Y-m-d",strtotime($FFinal."-10 days"));
 
 		$sql = "SELECT * FROM productos_caida";
 		$result = mysqli_query($connCPharma,$sql);
