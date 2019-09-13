@@ -846,8 +846,8 @@
 			    <tr>
 			    	<th scope="col">#</th>
 			    	<th scope="col">Codigo</th>
-			      	<th scope="col">Descripcion</th>
-			      	<th scope="col">Codigo de Barra</th>
+			    	<th scope="col">Codigo de Barra</th>
+			      	<th scope="col">Descripcion</th>			      	
 			      	<th scope="col">Existencia</th>
 			      	<th scope="col">Unidades vendidas</th>
 			      	<th scope="col">Unidades compradas</th>
@@ -875,6 +875,9 @@
 			echo '<tr>';
 			echo '<td align="center"><strong>'.intval($contador).'</strong></td>';
 			echo '<td align="left">'.$row["CodigoArticulo"].'</td>';
+
+			$CodigoBarra = CodigoBarra($conn,$IdArticulo);
+				echo '<td align="center">'.$CodigoBarra.'</td>';
 			
 			echo 
 			'<td align="left" class="barrido">
@@ -882,9 +885,6 @@
 				.$row["Descripcion"].
 			'</a>
 			</td>';
-
-			$CodigoBarra = CodigoBarra($conn,$IdArticulo);
-				echo '<td align="center">'.$CodigoBarra.'</td>';
 
 			echo '<td align="center">'.intval($Existencia).'</td>';
 
@@ -1140,8 +1140,8 @@
 			    <tr>
 			    	<th scope="col">#</th>
 			    	<th scope="col">Codigo</th>
-			      	<th scope="col">Descripcion</th>
-			      	<th scope="col">Codigo de Barra</td>
+			    	<th scope="col">Codigo de Barra</td>
+			      	<th scope="col">Descripcion</th>			      	
 			      	<th scope="col">Producto Unico</th>
 			      	<th scope="col">Precio (Con IVA)</th>
 			      	<th scope="col">Existencia</th>
@@ -1169,15 +1169,16 @@
 				echo '<tr>';
 				echo '<td align="center"><strong>'.intval($contador).'</strong></td>';
 				echo '<td align="left">'.$row["CodigoArticulo"].'</td>';
+
+				$CodigoBarra = CodigoBarra($conn,$IdArticulo);
+				echo '<td align="center">'.$CodigoBarra.'</td>';
 				
 				echo 
 				'<td align="left" class="barrido">
 				<a href="/reporte2?Id='.$IdArticulo.'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
 					.$row["Descripcion"].
 				'</a>
-				</td>';
-			$CodigoBarra = CodigoBarra($conn,$IdArticulo);
-				echo '<td align="center">'.$CodigoBarra.'</td>';
+				</td>';			
 		
 			$Unico = ProductoUnico($conn,$IdArticulo,$IdProveedor);
 				echo '<td align="center">'.$Unico.'</td>';
