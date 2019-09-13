@@ -72,6 +72,7 @@
 
     //---------- Borrar ----------
     $_GET['SEDE'] = MiUbicacion();
+    //$_GET['SEDE'] = 'FTN';
     //---------- Borrar ----------
     
     if(isset($_GET['fechaInicio'])) {
