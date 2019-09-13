@@ -780,10 +780,13 @@
 			InvLote.Id,
 			InvLote.M_PrecioCompraBruto,
 			InvLote.M_PrecioTroquelado,
-			CONVERT(DATE,InvLote.FechaEntrada) AS UltimoLote
+			CONVERT(DATE,InvLote.FechaEntrada) AS UltimoLote,
+			InvLoteAlmacen.Existencia,
+			InvLoteAlmacen.InvAlmacenId
 			FROM InvLote
 			INNER JOIN InvLoteAlmacen ON InvLoteAlmacen.InvLoteId = InvLote.Id
-			WHERE InvLote.InvArticuloId  = '$IdArticulo'
+			WHERE InvLote.InvArticuloId = '$IdArticulo' 
+			AND (InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2) 
 			AND InvLoteAlmacen.Existencia > 0
 			AND InvLote.FechaEntrada < '$FechaBandera'
 			ORDER BY UltimoLote DESC
