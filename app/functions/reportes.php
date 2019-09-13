@@ -129,10 +129,10 @@
 			<thead class="thead-dark">
 			    <tr>
 			    	<th scope="col">Codigo</th>
+			    	<th scope="col">Codigo de Barra</td>
 			      	<th scope="col">Descripcion</td>
 			      	<th scope="col">Existencia</td>
-			      	<th scope="col">Precio</br>(Con IVA)</td>
-			      	<th scope="col">Codigo de Barra</td>
+			      	<th scope="col">Precio</br>(Con IVA)</td>			      	
 			      	<th scope="col">Gravado?</td>
 			      	<th scope="col">Dolarizado?</td>
 			      	<th scope="col">Tasa actual</td>
@@ -143,6 +143,7 @@
 	  	';
 		echo '<tr>';
 		echo '<td>'.$row["CodigoArticulo"].'</td>';
+		echo '<td align="center">'.$CodigoBarra.'</td>';
 
 		echo 
 			'<td align="left" class="barrido">
@@ -152,8 +153,7 @@
 			</td>';
 
 		echo '<td align="center">'.intval($Existencia).'</td>';
-		echo '<td align="center">'." ".round($Precio,2)." ".SigVe.'</td>';
-		echo '<td align="center">'.$CodigoBarra.'</td>';
+		echo '<td align="center">'." ".round($Precio,2)." ".SigVe.'</td>';		
 		echo '<td align="center">'.$Gravado.'</td>';
 		echo '<td align="center">'.$Dolarizado.'</td>';
 
