@@ -2887,18 +2887,16 @@
 						';
 					}
 
-					$sql5 = QTiempoEnTienda($IdArticulo);
-					$result5=sqlsrv_query($conn,$sql5);
-					$row5=sqlsrv_fetch_array($result5,SQLSRV_FETCH_ASSOC);
-
 					$sql6 = QUltimoProveedor($IdArticulo);
 					$result6 = sqlsrv_query($conn,$sql6);
 					$row6 = sqlsrv_fetch_array($result6,SQLSRV_FETCH_ASSOC);
 					$NombreProveedor = utf8_encode($row6["Nombre"]);
 					$IdProveedor = $row6["Id"];
 
+					$TiempoTienda = ValidarFechas($UltimoLote,$Hoy);
+
 					echo '
-					      	<td align="center">'.$row5["TiempoTienda"].'</td>
+					      	<td align="center">'.$TiempoTienda.'</td>
 					      	<td align="left" class="barrido">
 					      		<a href="/reporte7?Nombre='.$NombreProveedor.'&Id='.$IdProveedor.'&SEDE='.$SedeConnection.'" target="_blank" style="text-decoration: none; color: black;">'
 					      			.$NombreProveedor

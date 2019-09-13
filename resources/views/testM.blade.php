@@ -71,8 +71,8 @@
     include(app_path().'\functions\reportes.php');
 
     //---------- Borrar ----------
-    $_GET['SEDE'] = MiUbicacion();
-    //$_GET['SEDE'] = 'FTN';
+    //$_GET['SEDE'] = MiUbicacion();
+    $_GET['SEDE'] = 'FTN';
     //---------- Borrar ----------
     
     if(isset($_GET['fechaInicio'])) {
