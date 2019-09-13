@@ -122,6 +122,22 @@
         Tasa de mercado<span class="sr-only">(current)</span>
       </a>
     </li>
+
+    <li class="nav-item">
+      <a class="nav-link" href="{{ url('/diascero') }}">      
+        <span data-feather="home"></span>
+        <i class="far fa-calendar"></i>
+        Dias en cero<span class="sr-only">(current)</span>
+      </a>
+    </li>
+
+    <li class="nav-item">
+      <a class="nav-link" href="{{ url('/productoscaida') }}">      
+        <span data-feather="home"></span>
+        <i class="fas fa-chart-line"></i>
+        Productos en Caida<span class="sr-only">(current)</span>
+      </a>
+    </li>
 <?php
   }
 ?>
