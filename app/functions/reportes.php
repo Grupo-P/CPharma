@@ -19,6 +19,7 @@
 		FUNCION: Armar el reporte de activacion de proveedores
 		RETORNO: No aplica
 	 */
+	/*
 	function ReporteActivacionProveedores($SedeConnection){
 		$conn = ConectarSmartpharma($SedeConnection);
 
@@ -56,7 +57,7 @@
 		$contador = 1;
 		while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
 			$IdProveedor = $row['Id'];
-			$NombreProveedor = $row['Nombre'];
+			$NombreProveedor = utf8_encode(addslashes($row['Nombre']));
 
 			echo '<tr>';
 			echo '<td align="center"><strong>'.intval($contador).'</strong></td>';
@@ -81,6 +82,7 @@
 		
 		sqlsrv_close($conn);
 	}
+	*/
 	/*****************************************************************************/
 	/************************ REPORTE 2 HISTORICO DE PRODUCTOS *******************/
 	/*
@@ -132,10 +134,10 @@
 			    	<th scope="col">Codigo de Barra</td>
 			      	<th scope="col">Descripcion</td>
 			      	<th scope="col">Existencia</td>
-			      	<th scope="col">Precio</br>(Con IVA)</td>			      	
+			      	<th scope="col">Precio</br>(Con IVA) '.SigVe.'</td>	      	
 			      	<th scope="col">Gravado?</td>
 			      	<th scope="col">Dolarizado?</td>
-			      	<th scope="col">Tasa actual</td>
+			      	<th scope="col">Tasa actual '.SigVe.'</td>
 			      	<th scope="col">Precio en divisa</br>(Con IVA)</td>
 			    </tr>
 		  	</thead>
@@ -153,7 +155,7 @@
 			</td>';
 
 		echo '<td align="center">'.intval($Existencia).'</td>';
-		echo '<td align="center">'." ".round($Precio,2)." ".SigVe.'</td>';		
+		echo '<td align="center">'." ".number_format ($Precio,2,"," ,"." ).'</td>';	
 		echo '<td align="center">'.$Gravado.'</td>';
 		echo '<td align="center">'.$Dolarizado.'</td>';
 
