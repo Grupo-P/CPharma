@@ -109,6 +109,13 @@ Route::get('/productoscaida', function() {
     return view('pages.productoscaida.index');
 });
 
+Route::get('/EtqObliatoria', function() {
+    return view('pages.etiqueta.obligatorias');
+});
+
+Route::get('/EtqEtiquetable', function() {
+    return view('pages.etiqueta.etiquetables');
+});
 
 Route::get('home', 'HomeController@index')->name('home');
 

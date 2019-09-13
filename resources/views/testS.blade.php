@@ -31,8 +31,8 @@
   GuardarAuditoria('CONSULTAR','REPORTE','Productos en Caida');
 
   $FinCarga = new DateTime("now");
-    $IntervalCarga = $InicioCarga->diff($FinCarga);
-    echo'<br/>Tiempo de carga: '.$IntervalCarga->format("%Y-%M-%D %H:%I:%S");
+  $IntervalCarga = $InicioCarga->diff($FinCarga);
+  echo'<br/>Tiempo de carga: '.$IntervalCarga->format("%Y-%M-%D %H:%I:%S");
 ?>
 @endsection
 

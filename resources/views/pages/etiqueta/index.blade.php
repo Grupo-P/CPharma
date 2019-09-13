@@ -87,14 +87,25 @@
 	<hr class="row align-items-start col-12">
 	<table style="width:100%;">
 	    <tr>
-	        <td style="width:10%;" align="center">	
-				<a href="{{ url('/etiqueta/create') }}" role="button" class="btn btn-outline-info btn-sm" 
+	        <td style="width:7%;" align="center">	
+				<a href="{{ url('/etiqueta/create') }}" role="button" class="btn btn-outline-danger btn-sm" 
 				style="display: inline; text-align: left;">
-				<i class="fa fa-plus"></i>
-					Agregar		      		
+					Validar		      		
 				</a>
 	        </td>
-	        <td style="width:90%;">
+	        <td style="width:15%;" align="left">	
+				<a href="{{ url('/EtqObliatoria') }}" role="button" class="btn btn-outline-success btn-sm" 
+				style="display: inline; text-align: left;" target="_blank">
+					Generar Obliagtorias		      		
+				</a>
+	        </td>
+	        <td style="width:15%;" align="left">	
+				<a href="{{ url('/EtqEtiquetable') }}" role="button" class="btn btn-outline-info btn-sm" 
+				style="display: inline; text-align: left;" target="_blank">
+					Generar	Etiquetables	      		
+				</a>
+	        </td>
+	        <td style="width:63%;">
 	        	<div class="input-group md-form form-sm form-1 pl-0">
 				  <div class="input-group-prepend">
 				    <span class="input-group-text purple lighten-3" id="basic-text1"><i class="fas fa-search text-white"
@@ -139,18 +150,18 @@
 					<?php
 					if($etiqueta->estatus == 'ACTIVO'){
 					?>
-						<a href="/etiqueta/{{$etiqueta->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
-			      			<i class="far fa-eye"></i>			      		
+						<a href="/etiqueta/{{$etiqueta->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Obligatorio Etiquetar">
+			      			<i class="fas fa-check-double"></i>			      		
 			      		</a>
 
-			      		<a href="/etiqueta/{{$etiqueta->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
-			      			<i class="fas fa-edit"></i>			      		
+			      		<a href="/etiqueta/{{$etiqueta->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Etiquetable">
+			      			<i class="fas fa-check"></i>			      		
 				      	</a>
 				 					  
 				      	<form action="/etiqueta/{{$etiqueta->id}}" method="POST" style="display: inline;">
 						    @method('DELETE')
 						    @csrf					    
-						    <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Desincorporar"><i class="fa fa-reply"></i></button>
+						    <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="No Etiquetable"><i class="fas fa-ban"></i></button>
 						</form>
 					<?php
 					}

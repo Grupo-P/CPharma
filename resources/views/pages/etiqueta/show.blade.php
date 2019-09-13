@@ -28,20 +28,16 @@
 		    </tr>
 	  	</thead>
 	  	<tbody>
-	  		<tr>
-		      	<th scope="row">id_articulo</th>
-	    	  	<td>{{$etiqueta->id_articulo}}</td>
-		    </tr>
 		    <tr>
-		      	<th scope="row">codigo_articulo</th>
+		      	<th scope="row">Codigo Interno</th>
 	    	  	<td>{{$etiqueta->codigo_articulo}}</td>
 		    </tr>
 		    <tr>
-		      	<th scope="row">condicion</th>
+		      	<th scope="row">Condicion</th>
 	    	  	<td>{{$etiqueta->condicion}}</td>
 		    </tr>
 		    <tr>
-		      	<th scope="row">clasificacion</th>
+		      	<th scope="row">Clasificacion</th>
 	    	  	<td>{{$etiqueta->clasificacion}}</td>
 		    </tr>		    
 		    <tr>
