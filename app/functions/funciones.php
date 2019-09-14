@@ -1282,4 +1282,6 @@
 	    mysqli_close($connCPharma);
 	    sqlsrv_close($conn);
 	}
+
+	function GenererEtiquetas(){
 ?>

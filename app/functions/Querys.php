@@ -2200,6 +2200,20 @@
 		return $sql;
 	}
 	/*
+		TITULO: QEtiquetaArticulo
+		PARAMETROS: [$IdArticulo] Id del articulo a buscar
+		FUNCION: regresa los datos del articulo
+		RETORNO: no aplica
+		//
+	 */
+	function QEtiquetables() {
+		$sql = "
+			SELECT * FROM etiquetas 
+			WHERE clasificacion = 'ETIQUETABLE'
+		";
+		return $sql;
+	}
+	/*
 		TITULO: 
 		PARAMETROS: 
 		FUNCION:
