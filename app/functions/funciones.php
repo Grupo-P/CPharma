@@ -1253,7 +1253,7 @@
 	    
 	    $contador = 0;
 
-	    while(($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC))&&($contador<10)) {
+	    while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
 	        $IdArticulo = $row["IdArticulo"];
 	        $CodigoInterno = $row["CodigoInterno"];
 	        $Descripcion=$row["Descripcion"];	        
@@ -1333,6 +1333,7 @@
 				}
 
 				$Dolarizado = ProductoDolarizado($conn,$IdArticulo);
+				$CodigoBarra = CodigoBarra($conn,$IdArticulo);
 				
 				if($Dolarizado=='SI'){
 					$simbolo = '*';
@@ -1346,7 +1347,7 @@
 						<thead>
 							<tr>
 								<td class="centrado titulo" colspan="2">
-									'.$CodigoArticulo.'
+									'.$CodigoBarra.'
 								</td>
 							</tr>	
 						</thead>

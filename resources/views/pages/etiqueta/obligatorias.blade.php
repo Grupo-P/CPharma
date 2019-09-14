@@ -8,7 +8,7 @@
 
 	<h1 class="h5 text-info">
 		<i class="fas fa-tag"></i>
-		Etiquetables
+		Obligatoriamente Etiquetar
 	</h1>
 	<hr class="row align-items-start col-12">
 

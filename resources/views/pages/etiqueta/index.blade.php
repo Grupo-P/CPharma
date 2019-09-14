@@ -93,6 +93,7 @@
 					Validar		      		
 				</a>
 	        </td>
+        <!--
 	        <td style="width:15%;" align="left">	
 				<a href="{{ url('/EtqObliatoria') }}" role="button" class="btn btn-outline-success btn-sm" 
 				style="display: inline; text-align: left;" target="_blank">
@@ -105,6 +106,7 @@
 					Generar	Etiquetables	      		
 				</a>
 	        </td>
+	    -->
 	        <td style="width:63%;">
 	        	<div class="input-group md-form form-sm form-1 pl-0">
 				  <div class="input-group-prepend">
