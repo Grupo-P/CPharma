@@ -1072,6 +1072,7 @@
 		$FechaCaptura = new DateTime("now");
 		$FechaCaptura = $FechaCaptura->format('Y-m-d');
 		$user = 'SYSTEM';
+		$date = date('Y-m-d h:i:s',time());
 
 		/* Rangos de Fecha */
   		$FFinal = date("Y-m-d");
@@ -1104,7 +1105,6 @@
 			$result1 = sqlsrv_query($conn,$sql1);
 			$row1 = sqlsrv_fetch_array($result1,SQLSRV_FETCH_ASSOC);
 			$Existencia = $row1["Existencia"];
-			$date = date('Y-m-d h:i:s',time());
 
 			/* FILTRO 2: 
 			*	Dias restantes
@@ -1287,17 +1287,16 @@
 	function GenererEtiquetables() {
 		//BORRRAR
 		$SedeConnection = 'FTN';
-
-		$connCPharma = ConectarXampp();
 	    $conn = ConectarSmartpharma($SedeConnection);
 	    
-	    $sqlC = QEtiquetables();
-		$result = mysqli_query($connCPharma,$sqlC);
+		$connCPharma = ConectarXampp();		
+		$resultado = $connCPharma->query('SELECT * FROM etiquetas');
 
 		$FHoy = date("Y-m-d");
 	  	$FAyer = date("Y-m-d",strtotime($FHoy."-1 days"));
-		
-		while($row = $result->fetch_assoc()) {
+	  	$CuentaCard=0;
+
+		while($row = $resultado->fetch_assoc()) {
 			$IdArticulo = $row["id_articulo"];
 
 			$sql = QArticulo($IdArticulo);
@@ -1389,10 +1388,15 @@
 								<td class="derecha rowIzq">
 									'.$FHoy.'
 								</td>
-							</tr>
+							</tr>				
 						</tbody>
 					</table>
 				';
+				$CuentaCard++;
+				if($CuentaCard == 3){
+					echo'<br><br>';
+					$CuentaCard=0;
+				}
 			}
 		}
 		mysqli_close($connCPharma);

@@ -24,26 +24,23 @@
 	tbody{
 		border: 1px solid black;
 		border-radius: 0px;
+		margin-bottom: 2px;
 	}
 	td{
 		width: 4cm;
 	}
 	.titulo{
-		background-color: green;
 		height: 1cm;
 		font-size: 1em;
 	}
 	.descripcion{
-		background-color: blue;
 		height: 1cm;
 		font-size: 0.8em;
 	}
 	.rowDer{
-		background-color: red;
 		height: 1cm;
 	}
 	.rowIzq{
-		background-color: pink;
 		height: 1cm;
 	}
 	.centrado{

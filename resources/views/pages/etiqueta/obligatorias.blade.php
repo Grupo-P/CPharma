@@ -114,6 +114,347 @@
 					</td>
 				</tr>
 			</tbody>
+		</table>
+
+		<table>
+			<thead>
+				<tr>
+					<td class="centrado titulo" colspan="2">
+						Codigo Interno
+					</td>
+				</tr>	
+			</thead>
+			<tbody>
+				<tr rowspan="2">
+					<td class="centrado descripcion" colspan="2">
+						Arena para Gatos asdasdasdadas adfsdf 
+					</td>
+				</tr>
+				<tr>
+					<td class="izquierda rowDer">
+						PMVP Bs.
+					</td>
+					<td class="derecha rowIzq">
+						82.500,00
+					</td>
+				</tr>
+				<tr>
+					<td class="izquierda rowDer">
+						IVA 16% Bs.
+					</td>
+					<td class="derecha rowIzq">
+						123.113.200,00
+					</td>
+				</tr>
+				<tr>
+					<td class="izquierda rowDer">
+						<strong>Total a Pagar Bs.</strong>
+					</td>
+					<td class="derecha rowIzq">
+						<strong>13.200,00</strong>
+					</td>
+				</tr>
+				<tr>
+					<td class="izquierda dolarizado rowDer">
+						<strong>*</strong>
+					</td>
+					<td class="derecha rowIzq">
+						12/09/2019
+					</td>
+				</tr>
+			</tbody>
+		</table>
+
+		<table>
+			<thead>
+				<tr>
+					<td class="centrado titulo" colspan="2">
+						Codigo Interno
+					</td>
+				</tr>	
+			</thead>
+			<tbody>
+				<tr rowspan="2">
+					<td class="centrado descripcion" colspan="2">
+						Arena para  
+					</td>
+				</tr>
+				<tr>
+					<td class="izquierda rowDer">
+						PMVP Bs.
+					</td>
+					<td class="derecha rowIzq">
+						82.500,00
+					</td>
+				</tr>
+				<tr>
+					<td class="izquierda rowDer">
+						IVA 16% Bs.
+					</td>
+					<td class="derecha rowIzq">
+						113.200,00
+					</td>
+				</tr>
+				<tr>
+					<td class="izquierda rowDer">
+						<strong>Total a Pagar Bs.</strong>
+					</td>
+					<td class="derecha rowIzq">
+						<strong>13.200,00</strong>
+					</td>
+				</tr>
+				<tr>
+					<td class="izquierda dolarizado rowDer">
+						<strong>*</strong>
+					</td>
+					<td class="derecha rowIzq">
+						12/09/2019
+					</td>
+				</tr>
+			</tbody>
+		</table>
+
+<br><br>
+
+		<table>
+			<thead>
+				<tr>
+					<td class="centrado titulo" colspan="2">
+						Codigo Interno
+					</td>
+				</tr>	
+			</thead>
+			<tbody>
+				<tr rowspan="2">
+					<td class="centrado descripcion" colspan="2">
+						Arena para Gatos asdasdasdadas adfsdf 
+					</td>
+				</tr>
+				<tr>
+					<td class="izquierda rowDer">
+						PMVP Bs.
+					</td>
+					<td class="derecha rowIzq">
+						82.500,00
+					</td>
+				</tr>
+				<tr>
+					<td class="izquierda rowDer">
+						IVA 16% Bs.
+					</td>
+					<td class="derecha rowIzq">
+						123.113.200,00
+					</td>
+				</tr>
+				<tr>
+					<td class="izquierda rowDer">
+						<strong>Total a Pagar Bs.</strong>
+					</td>
+					<td class="derecha rowIzq">
+						<strong>13.200,00</strong>
+					</td>
+				</tr>
+				<tr>
+					<td class="izquierda dolarizado rowDer">
+						<strong>*</strong>
+					</td>
+					<td class="derecha rowIzq">
+						12/09/2019
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		<table>
+			<thead>
+				<tr>
+					<td class="centrado titulo" colspan="2">
+						Codigo Interno
+					</td>
+				</tr>	
+			</thead>
+			<tbody>
+				<tr rowspan="2">
+					<td class="centrado descripcion" colspan="2">
+						Arena para Gatos asdasdasdadas adfsdf 
+					</td>
+				</tr>
+				<tr>
+					<td class="izquierda rowDer">
+						PMVP Bs.
+					</td>
+					<td class="derecha rowIzq">
+						82.500,00
+					</td>
+				</tr>
+				<tr>
+					<td class="izquierda rowDer">
+						IVA 16% Bs.
+					</td>
+					<td class="derecha rowIzq">
+						123.113.200,00
+					</td>
+				</tr>
+				<tr>
+					<td class="izquierda rowDer">
+						<strong>Total a Pagar Bs.</strong>
+					</td>
+					<td class="derecha rowIzq">
+						<strong>13.200,00</strong>
+					</td>
+				</tr>
+				<tr>
+					<td class="izquierda dolarizado rowDer">
+						<strong>*</strong>
+					</td>
+					<td class="derecha rowIzq">
+						12/09/2019
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		<table>
+			<thead>
+				<tr>
+					<td class="centrado titulo" colspan="2">
+						Codigo Interno
+					</td>
+				</tr>	
+			</thead>
+			<tbody>
+				<tr rowspan="2">
+					<td class="centrado descripcion" colspan="2">
+						Arena para Gatos asdasdasdadas adfsdf 
+					</td>
+				</tr>
+				<tr>
+					<td class="izquierda rowDer">
+						PMVP Bs.
+					</td>
+					<td class="derecha rowIzq">
+						82.500,00
+					</td>
+				</tr>
+				<tr>
+					<td class="izquierda rowDer">
+						IVA 16% Bs.
+					</td>
+					<td class="derecha rowIzq">
+						123.113.200,00
+					</td>
+				</tr>
+				<tr>
+					<td class="izquierda rowDer">
+						<strong>Total a Pagar Bs.</strong>
+					</td>
+					<td class="derecha rowIzq">
+						<strong>13.200,00</strong>
+					</td>
+				</tr>
+				<tr>
+					<td class="izquierda dolarizado rowDer">
+						<strong>*</strong>
+					</td>
+					<td class="derecha rowIzq">
+						12/09/2019
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		<table>
+			<thead>
+				<tr>
+					<td class="centrado titulo" colspan="2">
+						Codigo Interno
+					</td>
+				</tr>	
+			</thead>
+			<tbody>
+				<tr rowspan="2">
+					<td class="centrado descripcion" colspan="2">
+						Arena para Gatos asdasdasdadas adfsdf 
+					</td>
+				</tr>
+				<tr>
+					<td class="izquierda rowDer">
+						PMVP Bs.
+					</td>
+					<td class="derecha rowIzq">
+						82.500,00
+					</td>
+				</tr>
+				<tr>
+					<td class="izquierda rowDer">
+						IVA 16% Bs.
+					</td>
+					<td class="derecha rowIzq">
+						123.113.200,00
+					</td>
+				</tr>
+				<tr>
+					<td class="izquierda rowDer">
+						<strong>Total a Pagar Bs.</strong>
+					</td>
+					<td class="derecha rowIzq">
+						<strong>13.200,00</strong>
+					</td>
+				</tr>
+				<tr>
+					<td class="izquierda dolarizado rowDer">
+						<strong>*</strong>
+					</td>
+					<td class="derecha rowIzq">
+						12/09/2019
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		<table>
+			<thead>
+				<tr>
+					<td class="centrado titulo" colspan="2">
+						Codigo Interno
+					</td>
+				</tr>	
+			</thead>
+			<tbody>
+				<tr rowspan="2">
+					<td class="centrado descripcion" colspan="2">
+						Arena para Gatos asdasdasdadas adfsdf 
+					</td>
+				</tr>
+				<tr>
+					<td class="izquierda rowDer">
+						PMVP Bs.
+					</td>
+					<td class="derecha rowIzq">
+						82.500,00
+					</td>
+				</tr>
+				<tr>
+					<td class="izquierda rowDer">
+						IVA 16% Bs.
+					</td>
+					<td class="derecha rowIzq">
+						123.113.200,00
+					</td>
+				</tr>
+				<tr>
+					<td class="izquierda rowDer">
+						<strong>Total a Pagar Bs.</strong>
+					</td>
+					<td class="derecha rowIzq">
+						<strong>13.200,00</strong>
+					</td>
+				</tr>
+				<tr>
+					<td class="izquierda dolarizado rowDer">
+						<strong>*</strong>
+					</td>
+					<td class="derecha rowIzq">
+						12/09/2019
+					</td>
+				</tr>
+			</tbody>
 		</table>	
 	
 @endsection
