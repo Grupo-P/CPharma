@@ -1063,7 +1063,6 @@
 	 */
 	function ProuctosEnCaida() {
 		$SedeConnection = MiUbicacion();
-		$SedeConnection = 'FTN';
 		$conn = ConectarSmartpharma($SedeConnection);
 		$connCPharma = ConectarXampp();
 

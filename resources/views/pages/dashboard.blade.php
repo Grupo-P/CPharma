@@ -40,50 +40,25 @@
 		      </div>
 		      <div class="modal-body">
 		      	<label>Hola <b class="text-info">{{ Auth::user()->name }}</b>!!</label>
-		      	Estas usando<b class="text-info"> CPharma v.3.9.3</b>, esta version incluye las siguientes mejoras:</label>
+		      	Estas usando<b class="text-info"> CPharma v.4</b>, esta version incluye las siguientes mejoras:</label>
 
 		        <ul style="list-style:none">
 		        	<li class="card-text text-dark" style="display: inline;">
     					<br/>
 						<i class="far fa-check-circle text-info" style="display: inline;"></i>
 						Desde ya esta disponible el reporte: 
-						<b class="text-info">Productos Por Fallar</b>!!
+						<b class="text-info">Productos en caida</b>!!
     				</li>
-		        	<li class="card-text text-dark" style="display: inline;">
-    					<br/><br/>
-						<i class="far fa-check-circle text-info" style="display: inline;"></i>
-						Desde ya esta disponible el reporte: 
-						<b class="text-info">Detalle de movimientos</b>!!
-    				</li>
-    				<li class="card-text text-dark" style="display: inline;">
+		        	
+    				<!-- <li class="card-text text-dark" style="display: inline;">
     					<br/><br/>
 						<i class="far fa-check-circle text-info" style="display: inline;"></i>
 						En Histórico de Productos: Se agregaron los campos
 						<b class="text-info"> Codigo de Barra </b>,
 						<b class="text-info"> Gravado? </b> y
 						<b class="text-info"> Costo Bruto (Sin IVA) HOY</b>.
-    				</li>
-    				<li class="card-text text-dark" style="display: inline;">
-    					<br/><br/>
-						<i class="far fa-check-circle text-info" style="display: inline;"></i>
-						En Artículos más Vendidos: Se agregaron los campos
-						<b class="text-info"> Tipo </b> y
-						<b class="text-info"> Total Ventas</b>.
-    				</li>
-    				<li class="card-text text-dark" style="display: inline;">
-    					<br/><br/>
-						<i class="far fa-check-circle text-info" style="display: inline;"></i>
-						En Catálogo de Proveedor: Se agregaron los campos
-						<b class="text-info"> Codigo de Barra </b> y
-						<b class="text-info"> Ultima Venta</b>.
-    				</li>
-    				<li class="card-text text-dark" style="display: inline;">
-    					<br/><br/>
-						<i class="far fa-check-circle text-info" style="display: inline;"></i>
-						En Pedido de Productos: Se agregaron los campos
-						<b class="text-info"> Codigo de Barra </b> y
-						<b class="text-info"> Ultima Venta</b>, adicional ahora debes colocar la cantidad de dias a pedir.
-    				</li>		
+    				</li> -->
+		
     			</ul>
 		      </div>
 		      <div class="modal-footer">
@@ -166,7 +141,7 @@
 	    		<h2 class="card-title">
 		    		<span class="card-text text-white">
 		    			<i class="fas fa-file-invoice"></i>
-		    			13	    			
+		    			14	    			
 		    		</span>
 	    		</h2>
 	    		<p class="card-text text-white">Reportes disponibles</p>

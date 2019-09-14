@@ -19,6 +19,7 @@
 		FUNCION: Armar el reporte de activacion de proveedores
 		RETORNO: No aplica
 	 */
+	/*
 	function ReporteActivacionProveedores($SedeConnection){
 		$conn = ConectarSmartpharma($SedeConnection);
 
@@ -56,7 +57,7 @@
 		$contador = 1;
 		while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
 			$IdProveedor = $row['Id'];
-			$NombreProveedor = $row['Nombre'];
+			$NombreProveedor = utf8_encode(addslashes($row['Nombre']));
 
 			echo '<tr>';
 			echo '<td align="center"><strong>'.intval($contador).'</strong></td>';
@@ -81,6 +82,7 @@
 		
 		sqlsrv_close($conn);
 	}
+	*/
 	/*****************************************************************************/
 	/************************ REPORTE 2 HISTORICO DE PRODUCTOS *******************/
 	/*
@@ -129,13 +131,13 @@
 			<thead class="thead-dark">
 			    <tr>
 			    	<th scope="col">Codigo</th>
+			    	<th scope="col">Codigo de Barra</td>
 			      	<th scope="col">Descripcion</td>
 			      	<th scope="col">Existencia</td>
-			      	<th scope="col">Precio</br>(Con IVA)</td>
-			      	<th scope="col">Codigo de Barra</td>
+			      	<th scope="col">Precio</br>(Con IVA) '.SigVe.'</td>	      	
 			      	<th scope="col">Gravado?</td>
 			      	<th scope="col">Dolarizado?</td>
-			      	<th scope="col">Tasa actual</td>
+			      	<th scope="col">Tasa actual '.SigVe.'</td>
 			      	<th scope="col">Precio en divisa</br>(Con IVA)</td>
 			    </tr>
 		  	</thead>
@@ -143,6 +145,7 @@
 	  	';
 		echo '<tr>';
 		echo '<td>'.$row["CodigoArticulo"].'</td>';
+		echo '<td align="center">'.$CodigoBarra.'</td>';
 
 		echo 
 			'<td align="left" class="barrido">
@@ -152,8 +155,7 @@
 			</td>';
 
 		echo '<td align="center">'.intval($Existencia).'</td>';
-		echo '<td align="center">'." ".round($Precio,2)." ".SigVe.'</td>';
-		echo '<td align="center">'.$CodigoBarra.'</td>';
+		echo '<td align="center">'." ".number_format ($Precio,2,"," ,"." ).'</td>';	
 		echo '<td align="center">'.$Gravado.'</td>';
 		echo '<td align="center">'.$Dolarizado.'</td>';
 
@@ -290,6 +292,7 @@
 		';
 
 		echo'<h6 align="center">Periodo desde el '.$FInicial.' al '.$FFinalImpresion.' </h6>';
+		
 		echo'
 		<table class="table table-striped table-bordered col-12 sortable" id="myTable">
 		  	<thead class="thead-dark">
@@ -845,8 +848,8 @@
 			    <tr>
 			    	<th scope="col">#</th>
 			    	<th scope="col">Codigo</th>
-			      	<th scope="col">Descripcion</th>
-			      	<th scope="col">Codigo de Barra</th>
+			    	<th scope="col">Codigo de Barra</th>
+			      	<th scope="col">Descripcion</th>			      	
 			      	<th scope="col">Existencia</th>
 			      	<th scope="col">Unidades vendidas</th>
 			      	<th scope="col">Unidades compradas</th>
@@ -874,6 +877,9 @@
 			echo '<tr>';
 			echo '<td align="center"><strong>'.intval($contador).'</strong></td>';
 			echo '<td align="left">'.$row["CodigoArticulo"].'</td>';
+
+			$CodigoBarra = CodigoBarra($conn,$IdArticulo);
+				echo '<td align="center">'.$CodigoBarra.'</td>';
 			
 			echo 
 			'<td align="left" class="barrido">
@@ -881,9 +887,6 @@
 				.$row["Descripcion"].
 			'</a>
 			</td>';
-
-			$CodigoBarra = CodigoBarra($conn,$IdArticulo);
-				echo '<td align="center">'.$CodigoBarra.'</td>';
 
 			echo '<td align="center">'.intval($Existencia).'</td>';
 
@@ -1139,8 +1142,8 @@
 			    <tr>
 			    	<th scope="col">#</th>
 			    	<th scope="col">Codigo</th>
-			      	<th scope="col">Descripcion</th>
-			      	<th scope="col">Codigo de Barra</td>
+			    	<th scope="col">Codigo de Barra</td>
+			      	<th scope="col">Descripcion</th>			      	
 			      	<th scope="col">Producto Unico</th>
 			      	<th scope="col">Precio (Con IVA)</th>
 			      	<th scope="col">Existencia</th>
@@ -1168,15 +1171,16 @@
 				echo '<tr>';
 				echo '<td align="center"><strong>'.intval($contador).'</strong></td>';
 				echo '<td align="left">'.$row["CodigoArticulo"].'</td>';
+
+				$CodigoBarra = CodigoBarra($conn,$IdArticulo);
+				echo '<td align="center">'.$CodigoBarra.'</td>';
 				
 				echo 
 				'<td align="left" class="barrido">
 				<a href="/reporte2?Id='.$IdArticulo.'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
 					.$row["Descripcion"].
 				'</a>
-				</td>';
-			$CodigoBarra = CodigoBarra($conn,$IdArticulo);
-				echo '<td align="center">'.$CodigoBarra.'</td>';
+				</td>';			
 		
 			$Unico = ProductoUnico($conn,$IdArticulo,$IdProveedor);
 				echo '<td align="center">'.$Unico.'</td>';
@@ -2655,7 +2659,7 @@
 		FUNCION: Armar el reporte de activacion de proveedores
 		RETORNO: No aplica
 	 */
-	function ReporteProductosEnCaida($SedeConnection){
+	function ReporteProductosEnCaida($SedeConnection) {
 
 		$connCPharma = ConectarXampp();
 
@@ -2678,11 +2682,10 @@
 		<br/>
 		';
 		
-		echo'
+		echo'<h6 align="center">Periodo desde el '.$FInicial.' al '.$FFinal.' </h6>';
 
-		<h6 align="center">Periodo desde el '.$FInicial.' al '.$FFinal.' </h6>
-
-		<table class="table table-striped table-bordered col-12 sortable">
+		echo '
+		<table class="table table-striped table-bordered col-12 sortable" id="myTable">
 			<thead class="thead-dark">
 			    <tr>
 			    	<th scope="col">#</th>			
@@ -2700,8 +2703,8 @@
 			      	<th scope="col">Dia 3</td>
 			      	<th scope="col">Dia 2</td>
 			      	<th scope="col">Dia 1</td>
-			      	<th scope="col">UnidadesVendidas</td>
-			      	<th scope="col">DiasRestantes</td>	      				      
+			      	<th scope="col">Unidades Vendidas</td>
+			      	<th scope="col">Dias Restantes</td>	      			      
 			    </tr>
 		  	</thead>
 		  	<tbody>
@@ -2734,11 +2737,11 @@
 			echo 
 			'<td align="left" class="barrido">
 			<a href="/reporte2?Id='.$IdArticulo.'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
-				.$Descripcion.
+				.$row["Descripcion"].
 			'</a>
 			</td>';
 
-			echo '<td align="center">'." ".round($Precio,2)." ".SigVe.'</td>';
+			echo '<td align="center">'." ".intval($Precio)." ".SigVe.'</td>';
 			echo '<td align="center">'.intval($Existencia).'</td>';
 			echo '<td align="center">'.intval($Dia10).'</td>';
 			echo '<td align="center">'.intval($Dia9).'</td>';
@@ -2759,7 +2762,7 @@
 			</td>';
 
 			echo '<td align="center">'.round($DiasRestantes,2).'</td>';
-
+			echo '</tr>';
 		$contador++;
 		}
 		echo '
@@ -2783,15 +2786,16 @@
 		$DiasSolicitados = ValidarFechas($FInicial,$Hoy);
 
 		echo '
-			<div class="input-group md-form form-sm form-1 pl-0">
-				<div class="input-group-prepend">
-					<span class="input-group-text purple lighten-3" id="basic-text1">
-						<i class="fas fa-search text-white" aria-hidden="true"></i>
-					</span>
-				</div>
-
-				<input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterAllTable()">
-			</div><br/>
+		<div class="input-group md-form form-sm form-1 pl-0">
+		  <div class="input-group-prepend">
+		    <span class="input-group-text purple lighten-3" id="basic-text1">
+		    	<i class="fas fa-search text-white"
+		        aria-hidden="true"></i>
+		    </span>
+		  </div>
+		  <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterAllTable()">
+		</div>
+		<br/>
 		';
 
 		echo'
