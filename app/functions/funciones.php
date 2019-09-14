@@ -1294,9 +1294,11 @@
 	    $sql = QEtiquetables();
 		$result = mysqli_query($connCPharma,$sql);
 
-		$FFinal = date("Y-m-d");
-	  	$FInicial = date("Y-m-d",strtotime($FFinal."-1 days"));
+		$FHoy = date("Y-m-d");
+	  	$FAyer = date("Y-m-d",strtotime($FHoy."-1 days"));
 		
+		$CuentaCard = 0;
+
 		while($row = mysqli_fetch_assoc($result)) {
 			$IdArticulo = $row["id_articulo"];
 
@@ -1309,22 +1311,35 @@
 			$result1 = sqlsrv_query($conn,$sql1);
 			$row1 = sqlsrv_fetch_array($result1,SQLSRV_FETCH_ASSOC);
 
-			$IsIVA = $row["ConceptoImpuesto"];
+			$CodigoArticulo = $row["CodigoArticulo"];
+			$Descripcion = $row["Descripcion"];
+			$IsIVA = $row["ConceptoImpuesto"];		
 			$Existencia = $row1["Existencia"];
 
 			$PrecioHoy = CalculoPrecio($conn,$IdArticulo,$IsIVA,$Existencia);
 
-		    $sqlCC = QDiasCeroEtiqueta();
+		    $sqlCC = QDiasCeroEtiqueta($IdArticulo,$FAyer);
 			$resultCC = mysqli_query($connCPharma,$sqlCC);
 			$rowCC = mysqli_fetch_assoc($resultCC);
 			$PrecioAyer = $rowCC["precio"];
 
 			if($PrecioHoy!=$PrecioAyer){
-				//se imprime la etiqueta
+				if($CuentaCard==0){
+					//Se imprime el inicio de la card
+					echo'<div class="card-deck">';
+				}
+
+
+
+				$CuentaCard++;
+
+				if($CuentaCard==2){
+					//Se imprime el fin de la card
+					echo'</div>';
+					$CuentaCard = 0;
+				}
 			}
-
 		}
-
 		 mysqli_close($connCPharma);
 	    sqlsrv_close($conn);
 	}
