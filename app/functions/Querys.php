@@ -284,55 +284,6 @@
 	}
 
 	/*
-		TITULO: QLoteArticuloDevaluado
-		PARAMETROS: [$IdArticulo] Id del articulo
-					[$CantAlmacen] determina el los almacenes donde se buscara el lote
-					0: para los almacenes [1,2]
-					1: para todos los almacenes
-		FUNCION: Busca el lote correspondiente al articulo especificado
-		RETORNO: Regresa el Id del lote correspondiente
-	 */
-	function QLoteArticuloDevaluado($IdArticulo,$CantAlmacen) {
-		switch($CantAlmacen) {
-			case '0':
-			$sql = "
-				SELECT
-				InvLoteAlmacen.InvLoteId
-				INTO CP_QLoteArticuloDevaluado
-				FROM InvLoteAlmacen
-				WHERE(InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
-				AND (InvLoteAlmacen.InvArticuloId = '$IdArticulo')
-				AND (InvLoteAlmacen.Existencia>0)
-			";
-			return $sql;
-			break;
-			
-			case '1':
-			$sql = "
-				SELECT
-				InvLoteAlmacen.InvLoteId
-				INTO CP_QLoteArticuloDevaluado
-				FROM InvLoteAlmacen
-				WHERE(InvLoteAlmacen.InvArticuloId = '$IdArticulo')
-				AND (InvLoteAlmacen.Existencia>0)
-			";
-			return $sql;
-			break;
-
-			case '2':
-			$sql = "
-				SELECT
-				InvLoteAlmacen.InvLoteId
-				INTO CP_QLoteArticuloDevaluado
-				FROM InvLoteAlmacen
-				WHERE(InvLoteAlmacen.InvArticuloId = '$IdArticulo')
-			";
-			return $sql;
-			break;
-		}
-	}
-
-	/*
 		TITULO: QLote
 		PARAMETROS: Funciona en conjunto con QLoteArticulo
 		FUNCION: Busca el precio de compra bruto y el precio troquelado
@@ -366,26 +317,6 @@
 			InvLote.M_PrecioTroquelado
 			FROM InvLote
 			INNER JOIN CP_QLoteArticuloDiasCero ON CP_QLoteArticuloDiasCero.InvLoteId = InvLote.Id
-			ORDER BY invlote.M_PrecioTroquelado, invlote.M_PrecioCompraBruto DESC
-		";
-		return $sql;
-	}
-
-	/*
-		TITULO: QLoteDevaluado
-		PARAMETROS: Funciona en conjunto con QLoteArticuloDevaluado
-		FUNCION: Busca el precio de compra bruto y el precio troquelado
-				 (Funciona en conjunto con QLoteArticulo)
-		RETORNO: Retorna el precio de compra bruto y el precio troquelado
-	 */
-	function QLoteDevaluado() {
-		$sql = "
-			SELECT TOP 1
-			InvLote.Id,
-			InvLote.M_PrecioCompraBruto,
-			InvLote.M_PrecioTroquelado
-			FROM InvLote
-			INNER JOIN CP_QLoteArticuloDevaluado ON CP_QLoteArticulo.InvLoteId = InvLote.Id
 			ORDER BY invlote.M_PrecioTroquelado, invlote.M_PrecioCompraBruto DESC
 		";
 		return $sql;
@@ -763,6 +694,32 @@
 			CONVERT(DATE,InvLote.FechaEntrada) AS UltimoLote
 			FROM InvLote
 			WHERE InvLote.InvArticuloId  = '$IdArticulo'
+			ORDER BY UltimoLote DESC
+		";
+		return $sql;
+	}
+
+	/*
+		TITULO: QUltimoLote2
+		PARAMETROS: [$IdArticulo] Id del articulo a buscar
+		FUNCION: Buscar la fecha del ultimo lote del articulo en cuestion
+		RETORNO: La fecha del ultimo lote
+	 */
+	function QUltimoLote2($IdArticulo,$FechaBandera) {
+		$sql="
+			SELECT TOP 1
+			InvLote.Id,
+			InvLote.M_PrecioCompraBruto,
+			InvLote.M_PrecioTroquelado,
+			CONVERT(DATE,InvLote.FechaEntrada) AS UltimoLote,
+			InvLoteAlmacen.Existencia,
+			InvLoteAlmacen.InvAlmacenId
+			FROM InvLote
+			INNER JOIN InvLoteAlmacen ON InvLoteAlmacen.InvLoteId = InvLote.Id
+			WHERE InvLote.InvArticuloId = '$IdArticulo' 
+			AND (InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2) 
+			AND InvLoteAlmacen.Existencia > 0
+			AND InvLote.FechaEntrada < '$FechaBandera'
 			ORDER BY UltimoLote DESC
 		";
 		return $sql;
@@ -2176,6 +2133,7 @@
 		WHERE InvLoteAlmacen.Existencia>0 
 		AND (InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
 		AND InvLoteAlmacen.Auditoria_FechaCreacion < '$FechaBandera'
+		AND InvLote.FechaEntrada < '$FechaBandera'
 		ORDER BY InvLoteAlmacen.Auditoria_FechaCreacion, InvArticulo.Descripcion DESC
 		";
 		return $sql;
