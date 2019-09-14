@@ -1288,18 +1288,16 @@
 		//BORRRAR
 		$SedeConnection = 'FTN';
 
+		$connCPharma = ConectarXampp();
 	    $conn = ConectarSmartpharma($SedeConnection);
-	    $connCPharma = ConectarXampp();
-
-	    $sql = QEtiquetables();
-		$result = mysqli_query($connCPharma,$sql);
+	    
+	    $sqlC = QEtiquetables();
+		$result = mysqli_query($connCPharma,$sqlC);
 
 		$FHoy = date("Y-m-d");
 	  	$FAyer = date("Y-m-d",strtotime($FHoy."-1 days"));
 		
-		$CuentaCard = 0;
-
-		while($row = mysqli_fetch_assoc($result)) {
+		while($row = $result->fetch_assoc()) {
 			$IdArticulo = $row["id_articulo"];
 
 			$sql = QArticulo($IdArticulo);
@@ -1312,7 +1310,7 @@
 			$row1 = sqlsrv_fetch_array($result1,SQLSRV_FETCH_ASSOC);
 
 			$CodigoArticulo = $row["CodigoArticulo"];
-			$Descripcion = $row["Descripcion"];
+			$Descripcion = utf8_encode(addslashes($row["Descripcion"]));
 			$IsIVA = $row["ConceptoImpuesto"];		
 			$Existencia = $row1["Existencia"];
 
@@ -1324,23 +1322,80 @@
 			$PrecioAyer = $rowCC["precio"];
 
 			if($PrecioHoy!=$PrecioAyer){
-				if($CuentaCard==0){
-					//Se imprime el inicio de la card
-					echo'<div class="card-deck">';
+
+				if($IsIVA == 1){
+					$PMVP = $PrecioHoy/1.16;
+					$IVA = $PrecioHoy-$PMVP;
+				}
+				else{
+					$PMVP = $PrecioHoy;
+					$IVA = 0;
 				}
 
-
-
-				$CuentaCard++;
-
-				if($CuentaCard==2){
-					//Se imprime el fin de la card
-					echo'</div>';
-					$CuentaCard = 0;
+				$Dolarizado = ProductoDolarizado($conn,$IdArticulo);
+				
+				if($Dolarizado=='SI'){
+					$simbolo = '*';
 				}
+				else{
+					$simbolo = '';
+				}
+
+				echo'
+					<table>
+						<thead>
+							<tr>
+								<td class="centrado titulo" colspan="2">
+									'.$CodigoArticulo.'
+								</td>
+							</tr>	
+						</thead>
+						<tbody>
+							<tr rowspan="2">
+								<td class="centrado descripcion" colspan="2">
+									'.$Descripcion.' 
+								</td>
+							</tr>
+							<tr>
+								<td class="izquierda rowDer">
+									PMVP Bs.
+								</td>
+								<td class="derecha rowIzq">
+									'.number_format ($PMVP,2,"," ,"." ).'
+								</td>
+							</tr>
+							<tr>
+								<td class="izquierda rowDer">
+									IVA 16% Bs.
+								</td>
+								<td class="derecha rowIzq">
+									'.number_format ($IVA,2,"," ,"." ).'
+								</td>
+							</tr>
+							<tr>
+								<td class="izquierda rowDer">
+									<strong>Total a Pagar Bs.</strong>
+								</td>
+								<td class="derecha rowIzq">
+									<strong>
+									'.number_format ($PrecioHoy,2,"," ,"." ).'
+									</strong>
+								</td>
+							</tr>
+							<tr>
+								<td class="izquierda dolarizado rowDer">
+									<strong>'.$simbolo.'</strong>
+								</td>
+								<td class="derecha rowIzq">
+									'.$FHoy.'
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				';
 			}
 		}
-		 mysqli_close($connCPharma);
+		mysqli_close($connCPharma);
 	    sqlsrv_close($conn);
 	}
 ?>
