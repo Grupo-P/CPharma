@@ -1241,7 +1241,8 @@
 		mysqli_close($conn);
 	}
 	/****************/
-	function ValidarEtiquetas(){
+	function ValidarEtiquetas() {
+		//BORRRAR
 		$SedeConnection = 'FTN';
 
 	    $conn = ConectarSmartpharma($SedeConnection);
@@ -1283,5 +1284,48 @@
 	    sqlsrv_close($conn);
 	}
 
-	function GenererEtiquetas(){
+	function GenererEtiquetables() {
+		//BORRRAR
+		$SedeConnection = 'FTN';
+
+	    $conn = ConectarSmartpharma($SedeConnection);
+	    $connCPharma = ConectarXampp();
+
+	    $sql = QEtiquetables();
+		$result = mysqli_query($connCPharma,$sql);
+
+		$FFinal = date("Y-m-d");
+	  	$FInicial = date("Y-m-d",strtotime($FFinal."-1 days"));
+		
+		while($row = mysqli_fetch_assoc($result)) {
+			$IdArticulo = $row["id_articulo"];
+
+			$sql = QArticulo($IdArticulo);
+			sqlsrv_query($conn,$sql);
+			$result = sqlsrv_query($conn,$sql);
+			$row = sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC);
+
+			$sql1 = QExistenciaArticulo($IdArticulo,0);
+			$result1 = sqlsrv_query($conn,$sql1);
+			$row1 = sqlsrv_fetch_array($result1,SQLSRV_FETCH_ASSOC);
+
+			$IsIVA = $row["ConceptoImpuesto"];
+			$Existencia = $row1["Existencia"];
+
+			$PrecioHoy = CalculoPrecio($conn,$IdArticulo,$IsIVA,$Existencia);
+
+		    $sqlCC = QDiasCeroEtiqueta();
+			$resultCC = mysqli_query($connCPharma,$sqlCC);
+			$rowCC = mysqli_fetch_assoc($resultCC);
+			$PrecioAyer = $rowCC["precio"];
+
+			if($PrecioHoy!=$PrecioAyer){
+				//se imprime la etiqueta
+			}
+
+		}
+
+		 mysqli_close($connCPharma);
+	    sqlsrv_close($conn);
+	}
 ?>

@@ -2213,6 +2213,15 @@
 		";
 		return $sql;
 	}
+	function QDiasCeroEtiqueta($IdArticulo,$FechaCaptura) {
+		$sql = "
+			SELECT * 
+			FROM dias_ceros 
+			WHERE dias_ceros.id_articulo = '$IdArticulo' 
+			AND `fecha_captura` = '$FechaCaptura'
+		";
+		return $sql;
+	}
 	/*
 		TITULO: 
 		PARAMETROS: 
