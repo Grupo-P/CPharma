@@ -1252,14 +1252,13 @@
 	    
 	    $contador = 0;
 
-	    while(($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC))&&($contador<6)) {
+	    while(($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC))&&($contador<10)) {
 	        $IdArticulo = $row["IdArticulo"];
 	        $CodigoInterno = $row["CodigoInterno"];
 	        $Descripcion=$row["Descripcion"];	        
 	        $Existencia = intval($row["Existencia"]);
 	 
 	        $sqlCPharma = QEtiquetaArticulo($IdArticulo);
-
 	        $ResultCPharma = mysqli_query($connCPharma,$sqlCPharma);
 	        $RowCPharma = mysqli_fetch_assoc($ResultCPharma);
 	        $IdArticuloCPharma = $RowCPharma['id_articulo'];
