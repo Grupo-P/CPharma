@@ -1284,13 +1284,14 @@
 	    sqlsrv_close($conn);
 	}
 
-	function GenererEtiquetables() {
+	function GenererEtiquetas($clasificacion) {
 		//BORRRAR
 		$SedeConnection = 'FTN';
 	    $conn = ConectarSmartpharma($SedeConnection);
 	    
-		$connCPharma = ConectarXampp();		
-		$resultado = $connCPharma->query('SELECT * FROM etiquetas');
+		$connCPharma = ConectarXampp();	
+		$resultado = $connCPharma->query("SELECT * FROM etiquetas 
+			WHERE clasificacion = '$clasificacion'");
 
 		$FHoy = date("Y-m-d");
 	  	$FAyer = date("Y-m-d",strtotime($FHoy."-1 days"));

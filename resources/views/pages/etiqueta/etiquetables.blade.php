@@ -61,8 +61,8 @@
 	include(app_path().'\functions\querys.php');
 	include(app_path().'\functions\funciones.php');
 	include(app_path().'\functions\reportes.php');
-	
-	GenererEtiquetables();
+
+	GenererEtiquetas('ETIQUETABLE');
 ?>		
 @endsection
 
