@@ -2431,7 +2431,7 @@
 	 */
 	function QBorrarDiasEtiqueta($FechaCaptura) {
 		$sql = "DELETE FROM capturas_etiqueta WHERE fecha_captura = '$FechaCaptura'";
-	
+	}
 	/*
 		TITULO: 
 		PARAMETROS: 
@@ -2442,8 +2442,5 @@
 		$sql = "
 		";
 		return $sql;
-	}
-	
+	}	
 ?>
-
-
