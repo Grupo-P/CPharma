@@ -698,27 +698,6 @@
 		";
 		return $sql;
 	}
-
-	/*
-		TITULO: QUltimoLote2
-		PARAMETROS: [$IdArticulo] Id del articulo a buscar
-		FUNCION: Buscar la fecha del ultimo lote del articulo en cuestion
-		RETORNO: La fecha del ultimo lote
-	 */
-	function QUltimoLote2($IdArticulo,$FechaBandera) {
-		$sql="
-			SELECT TOP 1
-			InvLote.Id,
-			InvLote.M_PrecioCompraBruto,
-			InvLote.M_PrecioTroquelado,
-			CONVERT(DATE,InvLote.FechaEntrada) AS UltimoLote
-			FROM InvLote
-			WHERE InvLote.InvArticuloId = '$IdArticulo' 
-			AND (CONVERT(DATE,InvLote.FechaEntrada) <= '$FechaBandera')
-			ORDER BY UltimoLote DESC
-		";
-		return $sql;
-	}
 	/*
 		TITULO: QUltimaVentaCR
 		PARAMETROS: [$IdArticulo] Id del articulo a buscar

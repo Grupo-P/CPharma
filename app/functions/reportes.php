@@ -2836,7 +2836,7 @@
 			$Dolarizado = ProductoDolarizado($conn,$IdArticulo);
 
 			if($Dolarizado == 'NO') {
-				$sql4 = QUltimoLote2($IdArticulo,$FInicial);
+				$sql4 = QUltimoLote($IdArticulo,$FInicial);
 				$result4 = sqlsrv_query($conn,$sql4);
 				$row4 = sqlsrv_fetch_array($result4,SQLSRV_FETCH_ASSOC);
 				$UltimoLote = $row4["UltimoLote"];
