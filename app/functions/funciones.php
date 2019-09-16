@@ -1280,9 +1280,24 @@
 
 	        $contador++;
 	    }
+	    GuardarCapturaDiaria($FechaCaptura,$date);
 
-	    mysqli_close($connCPharma);
-	    sqlsrv_close($conn);
+		$sqlCC = QValidarCapturaDiaria($FechaCaptura);
+		$resultCC = mysqli_query($connCPharma,$sqlCC);
+		$rowCC = mysqli_fetch_assoc($resultCC);
+		$CuentaCaptura = $rowCC["CuentaCaptura"];
+
+		if($CuentaCaptura == 0){
+			$sqlB = QBorrarDiasCero($FechaCaptura);
+			mysqli_query($connCPharma,$sqlB);
+			mysqli_close($connCPharma);
+			sqlsrv_close($conn);
+			DiasEnCero();
+		}
+		else{
+			mysqli_close($connCPharma);
+			sqlsrv_close($conn);
+		}
 	}
 
 	function GenererEtiquetas($clasificacion) {

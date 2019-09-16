@@ -3,6 +3,7 @@
 namespace compras\Console\Commands;
 
 use Illuminate\Console\Command;
+use compras\Auditoria;
 
 class CapturaEtiquetas extends Command
 {
