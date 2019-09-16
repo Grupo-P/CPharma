@@ -1257,7 +1257,7 @@
 		$date = '';
 	    
 	    $contador = 0;
-
+	    
 	    while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
 	        $IdArticulo = $row["IdArticulo"];
 	        $CodigoInterno = $row["CodigoInterno"];
@@ -1284,6 +1284,7 @@
 
 	        $contador++;
 	    }
+
 	    GuardarCapturaEtiqueta($FechaCaptura,$date);
 
 		$sqlCC = QValidarCapturaEtiqueta($FechaCaptura);

@@ -2387,11 +2387,10 @@
 		FUNCION: cuenta el total de registos de dias en cero
 		RETORNO: no aplica
 	 */
-
 	function QCapturaEtiqueta($FechaCaptura) {
-		$sql = "SELECT COUNT(*) AS TotalRegistros
-		FROM captura_etiqueta 
-		WHERE captura_etiqueta.fecha_captura = '$FechaCaptura'
+		$sql = "SELECT COUNT(*) AS TotalRegistros 
+		FROM etiquetas 
+		WHERE CONVERT(etiquetas.created_at,date) = '$FechaCaptura'
 		";
 		return $sql;
 	}
@@ -2405,7 +2404,7 @@
 
 	function QGuardarCapturaEtiqueta($TotalRegistros,$FechaCaptura,$date) {
 		$sql = "
-		INSERT INTO capturas_etiqueta
+		INSERT INTO captura_etiqueta
 		(total_registros,fecha_captura,created_at,updated_at)
 		VALUES 
 		('$TotalRegistros','$FechaCaptura','$date','$date')
@@ -2420,7 +2419,7 @@
 	 */
 	function QValidarCapturaEtiqueta($FechaCaptura) {
 		$sql = "SELECT count(*) AS CuentaCaptura 
-		FROM capturas_etiqueta WHERE fecha_captura = '$FechaCaptura'";
+		FROM captura_etiqueta WHERE fecha_captura = '$FechaCaptura'";
 		return $sql;
 	}
 	/*
@@ -2430,7 +2429,7 @@
 		RETORNO: no aplica
 	 */
 	function QBorrarDiasEtiqueta($FechaCaptura) {
-		$sql = "DELETE FROM capturas_etiqueta WHERE fecha_captura = '$FechaCaptura'";
+		$sql = "DELETE FROM captura_etiqueta WHERE fecha_captura = '$FechaCaptura'";
 	}
 	/*
 		TITULO: 
