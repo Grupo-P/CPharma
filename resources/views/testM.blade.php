@@ -49,6 +49,10 @@
 ?>
 
 <script>
+  $(document).ready(function(){
+    $('[data-toggle="tooltip"]').tooltip();
+  });
+  
   function FocusChange() {
     if (event.keyCode == 13) {
 
@@ -616,9 +620,6 @@
   </div>
 
   <script type="text/javascript">
-    $(document).ready(function(){
-      $('[data-toggle="tooltip"]').tooltip();
-    });
     $('#exampleModalCenter').modal('show');
   </script>
 @endsection
