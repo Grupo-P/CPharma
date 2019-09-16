@@ -69,11 +69,6 @@
     include(app_path().'\functions\querys.php');
     include(app_path().'\functions\funciones.php');
     include(app_path().'\functions\reportes.php');
-
-    //---------- Borrar ----------
-    //$_GET['SEDE'] = MiUbicacion();
-    $_GET['SEDE'] = 'FTN';
-    //---------- Borrar ----------
     
     if(isset($_GET['fechaInicio'])) {
       $InicioCarga = new DateTime("now");
