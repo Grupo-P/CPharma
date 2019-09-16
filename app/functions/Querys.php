@@ -711,15 +711,10 @@
 			InvLote.Id,
 			InvLote.M_PrecioCompraBruto,
 			InvLote.M_PrecioTroquelado,
-			CONVERT(DATE,InvLote.FechaEntrada) AS UltimoLote,
-			InvLoteAlmacen.Existencia,
-			InvLoteAlmacen.InvAlmacenId
+			CONVERT(DATE,InvLote.FechaEntrada) AS UltimoLote
 			FROM InvLote
-			INNER JOIN InvLoteAlmacen ON InvLoteAlmacen.InvLoteId = InvLote.Id
 			WHERE InvLote.InvArticuloId = '$IdArticulo' 
-			AND (InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2) 
-			AND (InvLoteAlmacen.Existencia > 0)
-			AND (InvLoteAlmacen.Auditoria_FechaCreacion <= '$FechaBandera')
+			AND (CONVERT(DATE,InvLote.FechaEntrada) <= '$FechaBandera')
 			ORDER BY UltimoLote DESC
 		";
 		return $sql;
@@ -2132,7 +2127,7 @@
 		INNER JOIN InvArticulo ON InvArticulo.Id = InvLote.InvArticuloId
 		WHERE InvLoteAlmacen.Existencia>0 
 		AND (InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
-		AND (InvLoteAlmacen.Auditoria_FechaCreacion < '$FechaBandera')
+		AND (CONVERT(DATE,InvLoteAlmacen.Auditoria_FechaCreacion) < '$FechaBandera')
 		ORDER BY InvLoteAlmacen.Auditoria_FechaCreacion, InvArticulo.Descripcion DESC
 		";
 		return $sql;
