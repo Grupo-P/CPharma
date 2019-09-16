@@ -1063,7 +1063,7 @@
 	 */
 	function ProuctosEnCaida() {
 		$SedeConnection = MiUbicacion();
-		$conn = ConectarSmartpharma('FTN');
+		$conn = ConectarSmartpharma($SedeConnection);
 		$connCPharma = ConectarXampp();
 
 		$sqlB = QBorrarProductosCaida();
