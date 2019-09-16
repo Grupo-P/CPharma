@@ -719,7 +719,7 @@
 			WHERE InvLote.InvArticuloId = '$IdArticulo' 
 			AND (InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2) 
 			AND (InvLoteAlmacen.Existencia > 0)
-			AND (InvLoteAlmacen.Auditoria_FechaCreacion < '$FechaBandera')
+			AND (InvLoteAlmacen.Auditoria_FechaCreacion <= '$FechaBandera')
 			ORDER BY UltimoLote DESC
 		";
 		return $sql;
@@ -2133,7 +2133,6 @@
 		WHERE InvLoteAlmacen.Existencia>0 
 		AND (InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
 		AND (InvLoteAlmacen.Auditoria_FechaCreacion < '$FechaBandera')
-		AND (InvLote.FechaEntrada < '$FechaBandera')
 		ORDER BY InvLoteAlmacen.Auditoria_FechaCreacion, InvArticulo.Descripcion DESC
 		";
 		return $sql;
