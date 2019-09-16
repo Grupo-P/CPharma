@@ -2432,6 +2432,22 @@
 		$sql = "DELETE FROM captura_etiqueta WHERE fecha_captura = '$FechaCaptura'";
 	}
 	/*
+		TITULO: QExistenciaArticuloDevaluado
+		PARAMETROS: [$IdArticulo] Id del articulo que se va a buscar
+		FUNCION: Buscar la existencia de del articulos
+		RETORNO: Existencia
+	 */
+	function QExistenciaArticuloDevaluado($IdArticulo) {
+		$sql = "
+			SELECT
+			SUM (InvLoteAlmacen.Existencia) As Existencia
+			FROM InvLoteAlmacen
+			WHERE(InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
+			AND (InvLoteAlmacen.InvArticuloId = '$IdArticulo')
+		";
+		return $sql;
+	}
+	/*
 		TITULO: 
 		PARAMETROS: 
 		FUNCION:
