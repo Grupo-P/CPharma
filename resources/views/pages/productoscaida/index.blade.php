@@ -20,12 +20,12 @@
 	include(app_path().'\functions\reportes.php');
 
 	$connCPharma = ConectarXampp();
-	$sqlCPharma = "SELECT * FROM captura_caida";
+	$sqlCPharma = "SELECT * FROM captura_caida order by fecha_captura desc";
 	$result = mysqli_query($connCPharma,$sqlCPharma);
 ?>
 
 	<h1 class="h5 text-info">
-		<i class="fas fa-search"></i>
+		<i class="fas fa-chart-line"></i>
 		Productos en Caida
 	</h1>
 

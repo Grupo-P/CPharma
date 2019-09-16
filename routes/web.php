@@ -117,6 +117,10 @@ Route::get('/EtqEtiquetable', function() {
     return view('pages.etiqueta.etiquetables');
 });
 
+Route::get('/CapturaEtiqueta', function() {
+    return view('pages.etiqueta.CapturaEtiqueta');
+});
+
 Route::get('home', 'HomeController@index')->name('home');
 
 Route::resource('dolar', 'DolarController');

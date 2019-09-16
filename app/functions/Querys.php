@@ -1379,7 +1379,7 @@
 		RETORNO: no aplica
 	 */
 	function QVerCapturaDiaria() {
-		$sql = "SELECT * FROM capturas_diarias";
+		$sql = "SELECT * FROM capturas_diarias order by fecha_captura desc";
 		return $sql;
 	}
 	/*
