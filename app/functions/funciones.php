@@ -1063,7 +1063,7 @@
 	 */
 	function ProuctosEnCaida() {
 		$SedeConnection = MiUbicacion();
-		$conn = ConectarSmartpharma($SedeConnection);
+		$conn = ConectarSmartpharma('FTN');
 		$connCPharma = ConectarXampp();
 
 		$sqlB = QBorrarProductosCaida();
@@ -1101,7 +1101,7 @@
 			$Descripcion = addslashes($Descripcion_User);
 			$IsIVA = $row["ConceptoImpuesto"];
 
-			$sql1 = QExistenciaArticulo($IdArticulo,0);
+			$sql1 = QExistenciaArticuloPC($IdArticulo,0);
 			$result1 = sqlsrv_query($conn,$sql1);
 			$row1 = sqlsrv_fetch_array($result1,SQLSRV_FETCH_ASSOC);
 			$Existencia = $row1["Existencia"];
@@ -1110,22 +1110,22 @@
 			*	Dias restantes
 			*	si dias restantes es menor de 10 entra en el rango sino es rechazado
 			*/
-			$sql = QCleanTable('CP_QUnidadesVendidasClienteId');
+			$sql = QCleanTable('CP_QUnidadesVendidasClienteIdPC');
 			sqlsrv_query($conn,$sql);
-			$sql = QCleanTable('CP_QUnidadesDevueltaClienteId');
+			$sql = QCleanTable('CP_QUnidadesDevueltaClienteIdPC');
 			sqlsrv_query($conn,$sql);
-			$sql = QCleanTable('CP_QUnidadesCompradasProveedorId');
+			$sql = QCleanTable('CP_QUnidadesCompradasProveedorIdPC');
 			sqlsrv_query($conn,$sql);
-			$sql = QCleanTable('CP_QUnidadesReclamoProveedorId');
+			$sql = QCleanTable('CP_QUnidadesReclamoProveedorIdPC');
 			sqlsrv_query($conn,$sql);
-			$sql = QCleanTable('CP_QIntegracionProductosVendidosId');
+			$sql = QCleanTable('CP_QIntegracionProductosVendidosIdPC');
 			sqlsrv_query($conn,$sql);		
 
-			$sql6 = QUnidadesVendidasClienteId($FInicial,$FFinal,$IdArticulo);
-			$sql7 = QUnidadesDevueltaClienteId($FInicial,$FFinal,$IdArticulo);
-			$sql8 = QUnidadesCompradasProveedorId($FInicial,$FFinal,$IdArticulo);
-			$sql9 = QUnidadesReclamoProveedorId($FInicial,$FFinal,$IdArticulo);
-			$sql10 = QIntegracionProductosVendidosId();
+			$sql6 = QUnidadesVendidasClienteIdPC($FInicial,$FFinal,$IdArticulo);
+			$sql7 = QUnidadesDevueltaClienteIdPC($FInicial,$FFinal,$IdArticulo);
+			$sql8 = QUnidadesCompradasProveedorIdPC($FInicial,$FFinal,$IdArticulo);
+			$sql9 = QUnidadesReclamoProveedorIdPC($FInicial,$FFinal,$IdArticulo);
+			$sql10 = QIntegracionProductosVendidosIdPC();
 	
 			sqlsrv_query($conn,$sql6);
 			sqlsrv_query($conn,$sql7);
@@ -1193,15 +1193,15 @@
 		}
 		GuardarCapturaCaida($FechaCaptura,$date);
 		
-		$sql = QCleanTable('CP_QUnidadesVendidasClienteId');
+		$sql = QCleanTable('CP_QUnidadesVendidasClienteIdPC');
 		sqlsrv_query($conn,$sql);
-		$sql = QCleanTable('CP_QUnidadesDevueltaClienteId');
+		$sql = QCleanTable('CP_QUnidadesDevueltaClienteIdPC');
 		sqlsrv_query($conn,$sql);
-		$sql = QCleanTable('CP_QUnidadesCompradasProveedorId');
+		$sql = QCleanTable('CP_QUnidadesCompradasProveedorIdPC');
 		sqlsrv_query($conn,$sql);
-		$sql = QCleanTable('CP_QUnidadesReclamoProveedorId');
+		$sql = QCleanTable('CP_QUnidadesReclamoProveedorIdPC');
 		sqlsrv_query($conn,$sql);
-		$sql = QCleanTable('CP_QIntegracionProductosVendidosId');
+		$sql = QCleanTable('CP_QIntegracionProductosVendidosIdPC');
 		sqlsrv_query($conn,$sql);
 		$sql = QCleanTable('CP_FiltradoCaida');
 		sqlsrv_query($conn,$sql);

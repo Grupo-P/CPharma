@@ -2210,6 +2210,178 @@
 		return $sql;
 	}
 	/*
+		TITULO: QExistenciaArticuloPC
+		PARAMETROS: [$IdArticulo] Id del articulo que se va a buscar
+					[$CantAlmacen] determina el los almacenes donde se buscara el lote
+					0: para los almacenes [1,2]
+					1: para todos los almacenes
+		FUNCION: Buscar la existencia de del articulos
+		RETORNO: Existencia
+	 */
+	function QExistenciaArticuloPC($IdArticulo,$CantAlmacen) {
+		switch($CantAlmacen) {
+			case '0':
+				$sql = "
+				SELECT
+				SUM (InvLoteAlmacen.Existencia) As Existencia
+				FROM InvLoteAlmacen
+				WHERE(InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
+				AND (InvLoteAlmacen.InvArticuloId = '$IdArticulo')
+			";
+			return $sql;
+			break;
+			
+			case '1':
+			$sql = "
+				SELECT
+				SUM(InvLoteAlmacen.Existencia) As Existencia
+				FROM InvLoteAlmacen
+				WHERE(InvLoteAlmacen.InvArticuloId = '$IdArticulo')
+			";
+			return $sql;
+			break;
+		}
+	}
+	/*
+		TITULO: QUnidadesVendidasClienteIdPC
+		PARAMETROS: [$FInicial,$FFinal,$Id] Fecha inicial y final del rango y id del articulo
+		FUNCION: bucar las unidades vendidas en el rango del articulo determindo
+		RETORNO: unidades vendidas del articulo
+	 */
+	function QUnidadesVendidasClienteIdPC($FInicial,$FFinal,$Id) {
+		$sql = "
+			SELECT
+			InvArticulo.Id,
+			InvArticulo.CodigoArticulo,
+			InvArticulo.Descripcion,
+			COUNT(*) AS VecesVendidasCliente,
+			SUM(VenFacturaDetalle.Cantidad) AS UnidadesVendidasCliente
+			INTO CP_QUnidadesVendidasClienteIdPC
+			--TablaTemp
+			FROM VenFacturaDetalle
+			INNER JOIN InvArticulo ON InvArticulo.Id = VenFacturaDetalle.InvArticuloId
+			INNER JOIN VenFactura ON VenFactura.Id = VenFacturaDetalle.VenFacturaId
+			WHERE
+			(VenFactura.FechaDocumento > '$FInicial' AND VenFactura.FechaDocumento < '$FFinal')
+			AND (InvArticulo.Id = '$Id')
+			GROUP BY InvArticulo.Id,InvArticulo.CodigoArticulo,InvArticulo.Descripcion
+			ORDER BY InvArticulo.Id DESC
+		";
+		return $sql;
+	}
+	/*
+		TITULO: QUnidadesDevueltaClienteIdPC
+		PARAMETROS: [$FInicial,$FFinal,$Id] Fecha inicial y final del rango y id del articulo
+		FUNCION: buscar las unidades devueltas por los clientes
+		RETORNO: unidades devueltas
+	 */
+	function QUnidadesDevueltaClienteIdPC($FInicial,$FFinal,$Id) {
+		$sql = "
+			SELECT
+			InvArticulo.Id,
+			InvArticulo.CodigoArticulo,
+			InvArticulo.Descripcion,
+			COUNT(*) AS VecesDevueltaCliente,
+			SUM(VenDevolucionDetalle.Cantidad) AS UnidadesDevueltaCliente
+			INTO CP_QUnidadesDevueltaClienteIdPC
+			--TablaTemp1
+			FROM VenDevolucionDetalle
+			INNER JOIN InvArticulo ON InvArticulo.Id = VenDevolucionDetalle.InvArticuloId
+			INNER JOIN VenDevolucion ON VenDevolucion.Id = VenDevolucionDetalle.VenDevolucionId
+			WHERE
+			(VenDevolucion.FechaDocumento > '$FInicial' AND VenDevolucion.FechaDocumento < '$FFinal')
+			AND (InvArticulo.Id = '$Id')
+			GROUP BY InvArticulo.Id,InvArticulo.CodigoArticulo,InvArticulo.Descripcion
+			ORDER BY UnidadesDevueltaCliente DESC
+		";
+		return $sql;
+	}
+	/*
+		TITULO: QUnidadesCompradasProveedorIdPC
+		PARAMETROS: [$FInicial,$FFinal,$Id] Fecha inicial y final del rango y id del articulo
+		FUNCION: buscar las unidades compradas a los proveedores
+		RETORNO: unidades compradas
+	 */
+	function QUnidadesCompradasProveedorIdPC($FInicial,$FFinal,$Id) {
+		$sql = "
+			SELECT
+			InvArticulo.Id,
+			InvArticulo.CodigoArticulo,
+			InvArticulo.Descripcion,
+			COUNT(*) AS VecesCompradasProveedor,
+			SUM(ComFacturaDetalle.CantidadFacturada) AS UnidadesCompradasProveedor
+			INTO CP_QUnidadesCompradasProveedorIdPC
+			--TablaTemp2
+			FROM ComFacturaDetalle
+			INNER JOIN InvArticulo ON InvArticulo.Id = ComFacturaDetalle.InvArticuloId
+			INNER JOIN ComFactura ON  ComFactura.Id = ComFacturaDetalle.ComFacturaId
+			WHERE
+			(ComFactura.FechaRegistro > '$FInicial' AND ComFactura.FechaRegistro < '$FFinal')
+			AND (InvArticulo.Id = '$Id')
+			GROUP BY InvArticulo.Id,InvArticulo.CodigoArticulo,InvArticulo.Descripcion
+			ORDER BY UnidadesCompradasProveedor DESC
+		";
+		return $sql;
+	}
+	/*
+		TITULO: QUnidadesReclamoProveedorIdPC
+		PARAMETROS: [$FInicial,$FFinal,$Id] Fecha inicial y final del rango y id del articulo
+		FUNCION: buscar las unidades reclamadas a proveedores
+		RETORNO: unidades reclamadas
+	 */
+	function QUnidadesReclamoProveedorIdPC($FInicial,$FFinal,$Id) {
+		$sql = "
+			SELECT
+			InvArticulo.Id,
+			InvArticulo.CodigoArticulo,
+			InvArticulo.Descripcion,
+			COUNT(*) AS VecesReclamoProveedor,
+			SUM(ComReclamoDetalle.Cantidad) AS UnidadesReclamoProveedor
+			INTO CP_QUnidadesReclamoProveedorIdPC
+			--TablaTemp3
+			FROM ComReclamoDetalle
+			INNER JOIN InvArticulo ON InvArticulo.Id = ComReclamoDetalle.InvArticuloId
+			INNER JOIN ComReclamo ON ComReclamo.Id = ComReclamoDetalle.ComReclamoId
+			WHERE
+			(ComReclamo.FechaRegistro > '$FInicial' AND ComReclamo.FechaRegistro < '$FFinal')
+			AND (InvArticulo.Id = '$Id')
+			GROUP BY InvArticulo.Id,InvArticulo.CodigoArticulo,InvArticulo.Descripcion
+			ORDER BY UnidadesReclamoProveedor DESC
+		";
+		return $sql;
+	}
+	/*
+		TITULO: QIntegracionProductosVendidosPC
+		PARAMETROS: No aplica
+		FUNCION: Integrar la informacion de las consultas
+				[QUnidadesVendidasCliente,QUnidadesDevueltaCliente,QUnidadesCompradasProveedor,QUnidadesReclamoProveedor]
+		RETORNO: Tabla con datos integrados con valores 0 para campos NULL
+	 */
+	function QIntegracionProductosVendidosIdPC() {
+		$sql = " 
+			SELECT
+			CP_QUnidadesVendidasClienteIdPC.Id,
+			CP_QUnidadesVendidasClienteIdPC.CodigoArticulo,
+			CP_QUnidadesVendidasClienteIdPC.Descripcion,
+			ISNULL(CP_QUnidadesVendidasClienteIdPC.VecesVendidasCliente,CAST(0 AS INT)) AS VecesVendidasCliente,
+			ISNULL(CP_QUnidadesDevueltaClienteIdPC.VecesDevueltaCliente,CAST(0 AS INT)) AS VecesDevueltaCliente,
+			ISNULL(CP_QUnidadesVendidasClienteIdPC.UnidadesVendidasCliente,CAST(0 AS INT)) AS UnidadesVendidasCliente,
+			ISNULL(CP_QUnidadesDevueltaClienteIdPC.UnidadesDevueltaCliente,CAST(0 AS INT)) AS UnidadesDevueltaCliente,
+			ISNULL(CP_QUnidadesCompradasProveedorIdPC.VecesCompradasProveedor,CAST(0 AS INT)) AS VecesCompradasProveedor,
+			ISNULL(CP_QUnidadesReclamoProveedorIdPC.VecesReclamoProveedor,CAST(0 AS INT)) AS VecesReclamoProveedor,
+			ISNULL(CP_QUnidadesCompradasProveedorIdPC.UnidadesCompradasProveedor,CAST(0 AS INT)) AS UnidadesCompradasProveedor,
+			ISNULL(CP_QUnidadesReclamoProveedorIdPC.UnidadesReclamoProveedor,CAST(0 AS INT)) AS UnidadesReclamoProveedor
+			INTO CP_QIntegracionProductosVendidosIdPC
+			--TablaTemp4
+			FROM CP_QUnidadesVendidasClienteIdPC
+			LEFT JOIN CP_QUnidadesDevueltaClienteIdPC ON CP_QUnidadesDevueltaClienteIdPC.Id = CP_QUnidadesVendidasClienteIdPC.Id
+			LEFT JOIN CP_QUnidadesCompradasProveedorIdPC ON CP_QUnidadesCompradasProveedorIdPC.Id = CP_QUnidadesVendidasClienteIdPC.Id
+			LEFT JOIN CP_QUnidadesReclamoProveedorIdPC ON CP_QUnidadesReclamoProveedorIdPC.Id = CP_QUnidadesVendidasClienteIdPC.Id
+			ORDER BY UnidadesVendidasCliente DESC
+		";
+		return $sql;
+	}
+	/*
 		TITULO: 
 		PARAMETROS: 
 		FUNCION:
