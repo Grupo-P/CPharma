@@ -2852,7 +2852,7 @@
 
 						$IsIVA = $row2["ConceptoImpuesto"];
 						$Existencia = $row3["Existencia"];
-						$Precio = CalculoPrecio($conn,$IdArticulo,$IsIVA,$Existencia);
+						$Precio = CalculoPrecioDevaluado($conn,$IdArticulo,$IsIVA,$Existencia);
 						$ValorLote = $Precio * intval($Existencia);
 
 						$Tasa = TasaFecha($UltimoLote);
