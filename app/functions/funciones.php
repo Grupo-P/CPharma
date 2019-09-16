@@ -1251,6 +1251,10 @@
 
 	    $sql = QExistenciaActual();
 	    $result = sqlsrv_query($conn,$sql);
+
+	    $FechaCaptura = new DateTime("now");
+		$FechaCaptura = $FechaCaptura->format('Y-m-d');
+		$date = '';
 	    
 	    $contador = 0;
 
@@ -1280,19 +1284,19 @@
 
 	        $contador++;
 	    }
-	    GuardarCapturaDiaria($FechaCaptura,$date);
+	    GuardarCapturaEtiqueta($FechaCaptura,$date);
 
-		$sqlCC = QValidarCapturaDiaria($FechaCaptura);
+		$sqlCC = QValidarCapturaEtiqueta($FechaCaptura);
 		$resultCC = mysqli_query($connCPharma,$sqlCC);
 		$rowCC = mysqli_fetch_assoc($resultCC);
 		$CuentaCaptura = $rowCC["CuentaCaptura"];
 
 		if($CuentaCaptura == 0){
-			$sqlB = QBorrarDiasCero($FechaCaptura);
-			mysqli_query($connCPharma,$sqlB);
+			$sqlB = QBorrarDiasEtiqueta($FechaCaptura);
+			mysqli_query($connCPharma,$sqlB);			
 			mysqli_close($connCPharma);
 			sqlsrv_close($conn);
-			DiasEnCero();
+			ValidarEtiquetas();
 		}
 		else{
 			mysqli_close($connCPharma);
@@ -1420,5 +1424,24 @@
 		}
 		mysqli_close($connCPharma);
 	    sqlsrv_close($conn);
+	}
+	/*
+		TITULO: GuardarCapturaEtiqueta
+		PARAMETROS: [$FechaCaptura] El dia de hoy
+					[$date] valor para creacion y actualizacion
+		FUNCION: crea una conexion con la base de datos cpharma e ingresa datos
+		RETORNO: no aplica
+	 */
+	function GuardarCapturaEtiqueta($FechaCaptura,$date) {
+		$conn = ConectarXampp();
+		$sql = QCapturaEtiqueta($FechaCaptura);
+		$result = mysqli_query($conn,$sql);
+		$row = mysqli_fetch_assoc($result);
+		$TotalRegistros = $row["TotalRegistros"];
+
+		$sql1 = QGuardarCapturaEtiqueta($TotalRegistros,$FechaCaptura,$date);
+		mysqli_query($conn,$sql1);
+
+		mysqli_close($conn);
 	}
 ?>

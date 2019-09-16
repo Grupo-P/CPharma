@@ -2382,6 +2382,57 @@
 		return $sql;
 	}
 	/*
+		TITULO: QCapturaDiaria
+		PARAMETROS: [$FechaCaptura] El dia de hoy
+		FUNCION: cuenta el total de registos de dias en cero
+		RETORNO: no aplica
+	 */
+
+	function QCapturaEtiqueta($FechaCaptura) {
+		$sql = "SELECT COUNT(*) AS TotalRegistros
+		FROM captura_etiqueta 
+		WHERE captura_etiqueta.fecha_captura = '$FechaCaptura'
+		";
+		return $sql;
+	}
+	/*
+		TITULO: QGuardarCapturaEtiqueta
+		PARAMETROS: [$FechaCaptura] El dia de hoy
+					[$date] valor para creacion y actualizacion
+		FUNCION: crea una conexion con la base de datos cpharma e ingresa datos
+		RETORNO: no aplica
+	 */
+
+	function QGuardarCapturaEtiqueta($TotalRegistros,$FechaCaptura,$date) {
+		$sql = "
+		INSERT INTO capturas_etiqueta
+		(total_registros,fecha_captura,created_at,updated_at)
+		VALUES 
+		('$TotalRegistros','$FechaCaptura','$date','$date')
+		";
+		return $sql;
+	}
+	/*
+		TITULO: QValidarCapturaEtiqueta
+		PARAMETROS: [$FechaCaptura] El dia de hoy
+		FUNCION: valida que la fecha exista en la tabla captura diaria
+		RETORNO: no aplica
+	 */
+	function QValidarCapturaEtiqueta($FechaCaptura) {
+		$sql = "SELECT count(*) AS CuentaCaptura 
+		FROM capturas_etiqueta WHERE fecha_captura = '$FechaCaptura'";
+		return $sql;
+	}
+	/*
+		TITULO: QBorrarDiasEtiqueta
+		PARAMETROS: [$FechaCaptura] fecha de la captura
+		FUNCION: borra los registros de dias en cero de la fecha seleccionada
+		RETORNO: no aplica
+	 */
+	function QBorrarDiasEtiqueta($FechaCaptura) {
+		$sql = "DELETE FROM capturas_etiqueta WHERE fecha_captura = '$FechaCaptura'";
+	
+	/*
 		TITULO: 
 		PARAMETROS: 
 		FUNCION:
