@@ -1133,7 +1133,7 @@
 			sqlsrv_query($conn,$sql9);
 			sqlsrv_query($conn,$sql10);
 
-			$result2 = sqlsrv_query($conn,'SELECT * FROM CP_QIntegracionProductosVendidosId');
+			$result2 = sqlsrv_query($conn,'SELECT * FROM CP_QIntegracionProductosVendidosIdPC');
 			$row2 = sqlsrv_fetch_array($result2,SQLSRV_FETCH_ASSOC);
 			$TotalUnidadesVendidasCliente = ($row2["UnidadesVendidasCliente"]-$row2["UnidadesDevueltaCliente"]);
 			$TotalUnidadesCompradasProveedor = ($row2["UnidadesCompradasProveedor"]-$row2["UnidadesReclamoProveedor"]); 
