@@ -27,6 +27,7 @@ class Kernel extends ConsoleKernel
     {
         $schedule->command('Capturar:DiasCero'); 
         $schedule->command('Capturar:ProductosCaida');  
+        $schedule->command('Capturar:Etiquetas');
     }
 
     /**

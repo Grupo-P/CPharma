@@ -94,6 +94,25 @@
 
 <?php
   if(
+    Auth::user()->departamento == 'SURTIDO'
+    || Auth::user()->departamento == 'LÍDER DE TIENDA'        
+    || Auth::user()->departamento == 'GERENCIA'
+    || Auth::user()->departamento == 'TECNOLOGIA'
+  ){
+?>
+  <li class="nav-item">
+    <a class="nav-link" href="{{ url('/etiqueta') }}">     
+      <span data-feather="home"></span>
+      <i class="fas fa-tag"></i>
+      Etiquetas<span class="sr-only">(current)</span>
+    </a>
+  </li>
+<?php
+  }
+?>
+
+<?php
+  if(
     Auth::user()->role == 'SUPERVISOR CAJA' 
     || Auth::user()->departamento == 'LÍDER DE TIENDA'){
 ?>
@@ -136,6 +155,14 @@
         <span data-feather="home"></span>
         <i class="fas fa-chart-line"></i>
         Productos en Caida<span class="sr-only">(current)</span>
+      </a>
+    </li>
+
+    <li class="nav-item">
+      <a class="nav-link" href="{{ url('/CapturaEtiqueta') }}">      
+        <span data-feather="home"></span>
+        <i class="fas fa-tag"></i>
+        Captura Etiquetas<span class="sr-only">(current)</span>
       </a>
     </li>
 <?php
@@ -264,6 +291,14 @@
     </li>
 
     <li class="nav-item">
+      <a class="nav-link" href="{{ url('/CapturaEtiqueta') }}">      
+        <span data-feather="home"></span>
+        <i class="fas fa-tag"></i>
+        Captura Etiquetas<span class="sr-only">(current)</span>
+      </a>
+    </li>
+
+    <li class="nav-item">
       <a class="nav-link" href="{{ url('/auditoria') }}">      
         <span data-feather="home"></span>
         <i class="fas fa-search"></i>
@@ -274,14 +309,6 @@
 <!-- TODO LO QUE ESTE DEBAJO DE ESTA LINEA ESTA EN FASE DE DESARROLLO -->
 <hr class="row align-items-center bg-danger">
     
-    <li class="nav-item">
-      <a class="nav-link" href="{{ url('/etiqueta') }}">     
-        <span data-feather="home"></span>
-        <i class="fas fa-tag"></i>
-        Test Etiqueta<span class="sr-only">(current)</span>
-      </a>
-    </li>
-
     <li class="nav-item">
       <a class="nav-link" href="{{ url('/testS') }}">     
         <span data-feather="home"></span>

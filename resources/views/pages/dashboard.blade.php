@@ -40,7 +40,7 @@
 		      </div>
 		      <div class="modal-body">
 		      	<label>Hola <b class="text-info">{{ Auth::user()->name }}</b>!!</label>
-		      	Estas usando<b class="text-info"> CPharma v.4</b>, esta version incluye las siguientes mejoras:</label>
+		      	Estas usando<b class="text-info"> CPharma v.4.1</b>, esta version incluye las siguientes mejoras:</label>
 
 		        <ul style="list-style:none">
 		        	<li class="card-text text-dark" style="display: inline;">
@@ -48,6 +48,10 @@
 						<i class="far fa-check-circle text-info" style="display: inline;"></i>
 						Desde ya esta disponible el reporte: 
 						<b class="text-info">Productos en caida</b>!!
+						<br/><br/>
+						<i class="far fa-check-circle text-info" style="display: inline;"></i>
+						Desde ya esta disponible el modulo: 
+						<b class="text-info">Etiquetas</b>!!
     				</li>
 		        	
     				<!-- <li class="card-text text-dark" style="display: inline;">

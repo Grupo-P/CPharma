@@ -1,7 +1,7 @@
 @extends('layouts.model')
 
 @section('title')
-    Dias en cero
+    Etiquetas
 @endsection
 
 @section('scriptsHead')
@@ -20,13 +20,13 @@
 	include(app_path().'\functions\reportes.php');
 
 	$connCPharma = ConectarXampp();
-	$sqlCPharma = QVerCapturaDiaria();
+	$sqlCPharma = "SELECT * FROM captura_etiqueta order by fecha_captura desc";
 	$result = mysqli_query($connCPharma,$sqlCPharma);
 ?>
 
 	<h1 class="h5 text-info">
-		<i class="far fa-calendar"></i>
-		Dias en cero
+		<i class="fas fa-tag"></i>
+		Etiquetas
 	</h1>
 
 	<hr class="row align-items-start col-12">
