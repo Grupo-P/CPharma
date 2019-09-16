@@ -49,6 +49,30 @@
 ?>
 
 <script>
+  function FocusChange() {
+    if (event.keyCode == 13) {
+
+      if(document.activeElement.name){
+        var ElementoActivo = document.activeElement.name;
+      }
+      
+      if(document.activeElement.name == 'fac1'){
+        document.getElementById("fac2").focus();
+      }
+      else if(document.activeElement.name == 'fac2'){
+        document.getElementById("fac3").focus();
+      }
+      else if(document.activeElement.name == 'fac3'){
+        document.getElementById("abono1").focus();
+      }
+      else if(document.activeElement.name == 'abono1'){
+        document.getElementById("abono2").focus();
+      }
+      else if(document.activeElement.name == 'abono2'){
+        document.getElementById("btn-borrarN").focus();
+      }
+    }
+  }
   /*
     TITULO: limpiarClases
     PARAMETROS : No aplica
@@ -591,38 +615,11 @@
     </a>
   </div>
 
-  <script>
-      function FocusChange() {
-        if (event.keyCode == 13) {
-
-          if(document.activeElement.name){
-            var ElementoActivo = document.activeElement.name;
-          }
-          
-          if(document.activeElement.name == 'fac1'){
-            document.getElementById("fac2").focus();
-          }
-          else if(document.activeElement.name == 'fac2'){
-            document.getElementById("fac3").focus();
-          }
-          else if(document.activeElement.name == 'fac3'){
-            document.getElementById("abono1").focus();
-          }
-          else if(document.activeElement.name == 'abono1'){
-            document.getElementById("abono2").focus();
-          }
-          else if(document.activeElement.name == 'abono2'){
-            document.getElementById("btn-borrarN").focus();
-          }
-        }
-      };
-    </script>
-
-    <script type="text/javascript">
-      $(document).ready(function(){
-        $('[data-toggle="tooltip"]').tooltip();
-      });
-      $('#exampleModalCenter').modal('show');
-    </script>
+  <script type="text/javascript">
+    $(document).ready(function(){
+      $('[data-toggle="tooltip"]').tooltip();
+    });
+    $('#exampleModalCenter').modal('show');
+  </script>
 @endsection
 
