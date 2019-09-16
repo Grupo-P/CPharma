@@ -2783,7 +2783,6 @@
 		$conn = ConectarSmartpharma($SedeConnection);
 		$Hoy = new DateTime('now');
 		$Hoy = $Hoy->format('Y-m-d');
-		$DiasSolicitados = ValidarFechas($FInicial,$Hoy);
 
 		echo '
 		<div class="input-group md-form form-sm form-1 pl-0">
@@ -2846,7 +2845,7 @@
 				$Diferencia = ValidarFechas($FInicial,$UltimoLote);
 
 				if($Diferencia < 0) {
-					$sql3 = QExistenciaArticulo($IdArticulo,0);
+					$sql3 = QExistenciaArticuloDevaluado($IdArticulo);
 					$result3 = sqlsrv_query($conn,$sql3);
 					$row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
 

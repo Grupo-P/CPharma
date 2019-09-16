@@ -718,8 +718,8 @@
 			INNER JOIN InvLoteAlmacen ON InvLoteAlmacen.InvLoteId = InvLote.Id
 			WHERE InvLote.InvArticuloId = '$IdArticulo' 
 			AND (InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2) 
-			AND InvLoteAlmacen.Existencia > 0
-			AND InvLote.FechaEntrada < '$FechaBandera'
+			AND (InvLoteAlmacen.Existencia > 0)
+			AND (InvLoteAlmacen.Auditoria_FechaCreacion < '$FechaBandera')
 			ORDER BY UltimoLote DESC
 		";
 		return $sql;
@@ -2132,8 +2132,8 @@
 		INNER JOIN InvArticulo ON InvArticulo.Id = InvLote.InvArticuloId
 		WHERE InvLoteAlmacen.Existencia>0 
 		AND (InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
-		AND InvLoteAlmacen.Auditoria_FechaCreacion < '$FechaBandera'
-		AND InvLote.FechaEntrada < '$FechaBandera'
+		AND (InvLoteAlmacen.Auditoria_FechaCreacion < '$FechaBandera')
+		AND (InvLote.FechaEntrada < '$FechaBandera')
 		ORDER BY InvLoteAlmacen.Auditoria_FechaCreacion, InvArticulo.Descripcion DESC
 		";
 		return $sql;
@@ -2157,6 +2157,24 @@
 		";
 		return $sql;
 	}
+
+	/*
+		TITULO: QExistenciaArticuloDevaluado
+		PARAMETROS: [$IdArticulo] Id del articulo que se va a buscar
+		FUNCION: Buscar la existencia de del articulos
+		RETORNO: Existencia
+	 */
+	function QExistenciaArticuloDevaluado($IdArticulo) {
+		$sql = "
+			SELECT
+			SUM (InvLoteAlmacen.Existencia) As Existencia
+			FROM InvLoteAlmacen
+			WHERE(InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
+			AND (InvLoteAlmacen.InvArticuloId = '$IdArticulo')
+		";
+		return $sql;
+	}
+
 	/*
 		TITULO: 
 		PARAMETROS: 
