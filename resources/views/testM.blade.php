@@ -4,6 +4,15 @@
   Tasas de venta
 @endsection
 
+<style>
+  form table thead + tbody tr td input {text-align:center;}
+</style>
+
+@section('scriptsHead')
+  <script type="text/javascript" src="{{ asset('assets/jquery/jquery-2.2.2.min.js') }}"></script>
+  <script type="text/javascript" src="{{ asset('assets/jquery/jquery-ui.min.js') }}" ></script>
+@endsection
+
 <?php 
   include(app_path().'\functions\config.php');
   include(app_path().'\functions\querys.php');
@@ -39,12 +48,6 @@
   }
 ?>
 
-<style>
-  form table thead + tbody tr td input {text-align:center;}
-</style>
-
-<script type="text/javascript" src="{{ asset('assets/jquery/jquery-2.2.2.min.js') }}"></script>
-<script type="text/javascript" src="{{ asset('assets/jquery/jquery-ui.min.js') }}" ></script>
 <script>
   /*
     TITULO: limpiarClases
@@ -589,13 +592,6 @@
   </div>
 
   <script>
-    $(document).ready(function(){
-      $('[data-toggle="tooltip"]').tooltip();   
-    });
-    $('#exampleModalCenter').modal('show');
-  </script>
-
-  <script>
       function FocusChange() {
         if (event.keyCode == 13) {
 
@@ -621,4 +617,12 @@
         }
       };
     </script>
+
+    <script type="text/javascript">
+      $(document).ready(function(){
+        $('[data-toggle="tooltip"]').tooltip();
+      });
+      $('#exampleModalCenter').modal('show');
+    </script>
 @endsection
+
