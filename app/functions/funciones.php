@@ -524,6 +524,65 @@
 	}
 
 	/*
+		TITULO: CalculoPrecioDevaluado
+		PARAMETROS: [$conn] Cadena de conexion para la base de datos
+					[$IdArticulo] Id del articulo
+					[$IsIVA] Si aplica o no
+		FUNCION: Calcular el precio del articulo
+		RETORNO: Precio del articulo
+	 */
+	function CalculoPrecioDevaluado($conn,$IdArticulo,$IsIVA,$Existencia) {
+		$Precio = 0;
+
+		if($Existencia == 0) {
+			$Precio = 0;
+		}
+		else {
+		/*PRECIO TROQUELADO*/
+			$sql0 = QCleanTable('CP_QLoteArticuloDevaluado');
+			sqlsrv_query($conn,$sql0);
+
+			$sql = QLoteArticuloDevaluado($IdArticulo,0);
+			sqlsrv_query($conn,$sql);
+			
+			$sql1 = QLoteDevaluado();
+			$result1 = sqlsrv_query($conn,$sql1);
+			$row1 = sqlsrv_fetch_array($result1,SQLSRV_FETCH_ASSOC);
+			$PrecioTroquelado = $row1["M_PrecioTroquelado"];
+			
+			if($PrecioTroquelado!=NULL) {
+				$Precio = $PrecioTroquelado;
+			}
+		/*PRECIO CALCULADO*/
+			else {
+				$sql0 = QCleanTable('CP_QLoteArticuloDevaluado');
+				sqlsrv_query($conn,$sql0);
+
+				$sql2 = QLoteArticuloDevaluado($IdArticulo,1);
+				sqlsrv_query($conn,$sql2);
+				
+				$sql3 = QLoteDevaluado();
+				$result3 = sqlsrv_query($conn,$sql3);
+				$row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
+				$PrecioBruto = $row3["M_PrecioCompraBruto"];
+
+				if($IsIVA == 1) {
+					$PrecioCalculado = ($PrecioBruto/Utilidad)*Impuesto;
+					$Precio = $PrecioCalculado;
+				}
+				else {
+					$PrecioCalculado = ($PrecioBruto/Utilidad);
+					$Precio = $PrecioCalculado;
+				}
+			}
+		}
+		$sql0 = QCleanTable('CP_QLoteArticuloDevaluado');
+		sqlsrv_query($conn,$sql0);
+
+		return $Precio;
+	}
+
+	/*
 		TITULO: TasaFechaConversion
 		PARAMETROS: [$Fecha] Fecha de la que se buscara la tasa
 		FUNCION: Buscar el valor de la tasa
