@@ -1243,9 +1243,6 @@
 	/****************/
 	function ValidarEtiquetas() {
 		$SedeConnection = MiUbicacion();
-
-		//Borrar
-		$SedeConnection = 'FTN';
 	    $conn = ConectarSmartpharma($SedeConnection);
 	    $connCPharma = ConectarXampp();
 
@@ -1307,8 +1304,6 @@
 
 	function GenererEtiquetas($clasificacion) {
 		$SedeConnection = MiUbicacion();
-		//BORRRAR
-		$SedeConnection = 'FTN';
 	    $conn = ConectarSmartpharma($SedeConnection);
 	    
 		$connCPharma = ConectarXampp();	
