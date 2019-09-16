@@ -2840,75 +2840,77 @@
 				$result4 = sqlsrv_query($conn,$sql4);
 				$row4 = sqlsrv_fetch_array($result4,SQLSRV_FETCH_ASSOC);
 				$UltimoLote = $row4["UltimoLote"];
-				$UltimoLote = $UltimoLote->format('Y-m-d');
 
-				$Diferencia = ValidarFechas($FInicial,$UltimoLote);
+				if(!is_null($UltimoLote)) {
+					$UltimoLote = $UltimoLote->format('Y-m-d');
+					$Diferencia = ValidarFechas($FInicial,$UltimoLote);
 
-				if($Diferencia < 0) {
-					$sql3 = QExistenciaArticuloDevaluado($IdArticulo);
-					$result3 = sqlsrv_query($conn,$sql3);
-					$row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
+					if($Diferencia < 0) {
+						$sql3 = QExistenciaArticuloDevaluado($IdArticulo);
+						$result3 = sqlsrv_query($conn,$sql3);
+						$row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
 
-					$IsIVA = $row2["ConceptoImpuesto"];
-					$Existencia = $row3["Existencia"];
-					$Precio = CalculoPrecio($conn,$IdArticulo,$IsIVA,$Existencia);
-					$ValorLote = $Precio * intval($Existencia);
+						$IsIVA = $row2["ConceptoImpuesto"];
+						$Existencia = $row3["Existencia"];
+						$Precio = CalculoPrecio($conn,$IdArticulo,$IsIVA,$Existencia);
+						$ValorLote = $Precio * intval($Existencia);
 
-					$Tasa = TasaFecha($UltimoLote);
-					$Descripcion = utf8_encode($row2["Descripcion"]);
-
-					echo '
-						<tr>
-							<td align="center"><strong>'.intval($contador).'</strong></td>
-					    	<td align="center">'.$row2["CodigoArticulo"].'</td>
-					    	<td align="left" class="barrido">
-					    		<a href="/reporte10?Descrip='.$Descripcion.'&Id='.$IdArticulo.'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
-					    			.$Descripcion
-					    		.'</a>
-					    	</td>
-					      	<td align="center">'." ".round($Precio,2)." ".SigVe.'</td>
-					      	<td align="center">'.intval($Existencia).'</td>
-					      	<td align="center">'." ".round($ValorLote,2)." ".SigVe.'</td>
-					      	<td align="center">'.$UltimoLote.'</td>
-					';
-
-					if($Tasa!=0){
-						$PrecioDolarizado = round(($Precio/$Tasa),2);
-						$ValorLoteDolarizado = $PrecioDolarizado * intval($Existencia);
+						$Tasa = TasaFecha($UltimoLote);
+						$Descripcion = utf8_encode($row2["Descripcion"]);
 
 						echo '
-							<td align="center">'." ".$Tasa." ".SigVe.'</td>
-							<td align="center">'." ".$PrecioDolarizado." ".SigDolar.'</td>
-							<td align="center">'." ".$ValorLoteDolarizado." ".SigDolar.'</td>
+							<tr>
+								<td align="center"><strong>'.intval($contador).'</strong></td>
+						    	<td align="center">'.$row2["CodigoArticulo"].'</td>
+						    	<td align="left" class="barrido">
+						    		<a href="/reporte10?Descrip='.$Descripcion.'&Id='.$IdArticulo.'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
+						    			.$Descripcion
+						    		.'</a>
+						    	</td>
+						      	<td align="center">'." ".round($Precio,2)." ".SigVe.'</td>
+						      	<td align="center">'.intval($Existencia).'</td>
+						      	<td align="center">'." ".round($ValorLote,2)." ".SigVe.'</td>
+						      	<td align="center">'.$UltimoLote.'</td>
 						';
-					}
-					else{
+
+						if($Tasa!=0){
+							$PrecioDolarizado = round(($Precio/$Tasa),2);
+							$ValorLoteDolarizado = $PrecioDolarizado * intval($Existencia);
+
+							echo '
+								<td align="center">'." ".$Tasa." ".SigVe.'</td>
+								<td align="center">'." ".$PrecioDolarizado." ".SigDolar.'</td>
+								<td align="center">'." ".$ValorLoteDolarizado." ".SigDolar.'</td>
+							';
+						}
+						else{
+							echo '
+								<td align="center">0.00 '.SigVe.'</td>
+								<td align="center">0.00 '.SigDolar.'</td>
+								<td align="center">0.00 '.SigDolar.'</td>
+							';
+						}
+
+						$sql6 = QUltimoProveedor($IdArticulo);
+						$result6 = sqlsrv_query($conn,$sql6);
+						$row6 = sqlsrv_fetch_array($result6,SQLSRV_FETCH_ASSOC);
+						$NombreProveedor = utf8_encode($row6["Nombre"]);
+						$IdProveedor = $row6["Id"];
+
+						$TiempoTienda = ValidarFechas($UltimoLote,$Hoy);
+
 						echo '
-							<td align="center">0.00 '.SigVe.'</td>
-							<td align="center">0.00 '.SigDolar.'</td>
-							<td align="center">0.00 '.SigDolar.'</td>
+						      	<td align="center">'.$TiempoTienda.'</td>
+						      	<td align="left" class="barrido">
+						      		<a href="/reporte7?Nombre='.$NombreProveedor.'&Id='.$IdProveedor.'&SEDE='.$SedeConnection.'" target="_blank" style="text-decoration: none; color: black;">'
+						      			.$NombreProveedor
+						      		.'</a>
+						      	</td>
+						    </tr>
 						';
+
+						$contador++;
 					}
-
-					$sql6 = QUltimoProveedor($IdArticulo);
-					$result6 = sqlsrv_query($conn,$sql6);
-					$row6 = sqlsrv_fetch_array($result6,SQLSRV_FETCH_ASSOC);
-					$NombreProveedor = utf8_encode($row6["Nombre"]);
-					$IdProveedor = $row6["Id"];
-
-					$TiempoTienda = ValidarFechas($UltimoLote,$Hoy);
-
-					echo '
-					      	<td align="center">'.$TiempoTienda.'</td>
-					      	<td align="left" class="barrido">
-					      		<a href="/reporte7?Nombre='.$NombreProveedor.'&Id='.$IdProveedor.'&SEDE='.$SedeConnection.'" target="_blank" style="text-decoration: none; color: black;">'
-					      			.$NombreProveedor
-					      		.'</a>
-					      	</td>
-					    </tr>
-					';
-
-					$contador++;
 				}
 			}
 		}
