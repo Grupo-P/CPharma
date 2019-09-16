@@ -1072,6 +1072,7 @@
 		$FechaCaptura = new DateTime("now");
 		$FechaCaptura = $FechaCaptura->format('Y-m-d');
 		$user = 'SYSTEM';
+		$date = date('Y-m-d h:i:s',time());
 
 		/* Rangos de Fecha */
   		$FFinal = date("Y-m-d");
@@ -1100,32 +1101,31 @@
 			$Descripcion = addslashes($Descripcion_User);
 			$IsIVA = $row["ConceptoImpuesto"];
 
-			$sql1 = QExistenciaArticulo($IdArticulo,0);
+			$sql1 = QExistenciaArticuloPC($IdArticulo,0);
 			$result1 = sqlsrv_query($conn,$sql1);
 			$row1 = sqlsrv_fetch_array($result1,SQLSRV_FETCH_ASSOC);
 			$Existencia = $row1["Existencia"];
-			$date = date('Y-m-d h:i:s',time());
 
 			/* FILTRO 2: 
 			*	Dias restantes
 			*	si dias restantes es menor de 10 entra en el rango sino es rechazado
 			*/
-			$sql = QCleanTable('CP_QUnidadesVendidasClienteId');
+			$sql = QCleanTable('CP_QUnidadesVendidasClienteIdPC');
 			sqlsrv_query($conn,$sql);
-			$sql = QCleanTable('CP_QUnidadesDevueltaClienteId');
+			$sql = QCleanTable('CP_QUnidadesDevueltaClienteIdPC');
 			sqlsrv_query($conn,$sql);
-			$sql = QCleanTable('CP_QUnidadesCompradasProveedorId');
+			$sql = QCleanTable('CP_QUnidadesCompradasProveedorIdPC');
 			sqlsrv_query($conn,$sql);
-			$sql = QCleanTable('CP_QUnidadesReclamoProveedorId');
+			$sql = QCleanTable('CP_QUnidadesReclamoProveedorIdPC');
 			sqlsrv_query($conn,$sql);
-			$sql = QCleanTable('CP_QIntegracionProductosVendidosId');
+			$sql = QCleanTable('CP_QIntegracionProductosVendidosIdPC');
 			sqlsrv_query($conn,$sql);		
 
-			$sql6 = QUnidadesVendidasClienteId($FInicial,$FFinal,$IdArticulo);
-			$sql7 = QUnidadesDevueltaClienteId($FInicial,$FFinal,$IdArticulo);
-			$sql8 = QUnidadesCompradasProveedorId($FInicial,$FFinal,$IdArticulo);
-			$sql9 = QUnidadesReclamoProveedorId($FInicial,$FFinal,$IdArticulo);
-			$sql10 = QIntegracionProductosVendidosId();
+			$sql6 = QUnidadesVendidasClienteIdPC($FInicial,$FFinal,$IdArticulo);
+			$sql7 = QUnidadesDevueltaClienteIdPC($FInicial,$FFinal,$IdArticulo);
+			$sql8 = QUnidadesCompradasProveedorIdPC($FInicial,$FFinal,$IdArticulo);
+			$sql9 = QUnidadesReclamoProveedorIdPC($FInicial,$FFinal,$IdArticulo);
+			$sql10 = QIntegracionProductosVendidosIdPC();
 	
 			sqlsrv_query($conn,$sql6);
 			sqlsrv_query($conn,$sql7);
@@ -1133,7 +1133,7 @@
 			sqlsrv_query($conn,$sql9);
 			sqlsrv_query($conn,$sql10);
 
-			$result2 = sqlsrv_query($conn,'SELECT * FROM CP_QIntegracionProductosVendidosId');
+			$result2 = sqlsrv_query($conn,'SELECT * FROM CP_QIntegracionProductosVendidosIdPC');
 			$row2 = sqlsrv_fetch_array($result2,SQLSRV_FETCH_ASSOC);
 			$TotalUnidadesVendidasCliente = ($row2["UnidadesVendidasCliente"]-$row2["UnidadesDevueltaCliente"]);
 			$TotalUnidadesCompradasProveedor = ($row2["UnidadesCompradasProveedor"]-$row2["UnidadesReclamoProveedor"]); 
@@ -1193,15 +1193,15 @@
 		}
 		GuardarCapturaCaida($FechaCaptura,$date);
 		
-		$sql = QCleanTable('CP_QUnidadesVendidasClienteId');
+		$sql = QCleanTable('CP_QUnidadesVendidasClienteIdPC');
 		sqlsrv_query($conn,$sql);
-		$sql = QCleanTable('CP_QUnidadesDevueltaClienteId');
+		$sql = QCleanTable('CP_QUnidadesDevueltaClienteIdPC');
 		sqlsrv_query($conn,$sql);
-		$sql = QCleanTable('CP_QUnidadesCompradasProveedorId');
+		$sql = QCleanTable('CP_QUnidadesCompradasProveedorIdPC');
 		sqlsrv_query($conn,$sql);
-		$sql = QCleanTable('CP_QUnidadesReclamoProveedorId');
+		$sql = QCleanTable('CP_QUnidadesReclamoProveedorIdPC');
 		sqlsrv_query($conn,$sql);
-		$sql = QCleanTable('CP_QIntegracionProductosVendidosId');
+		$sql = QCleanTable('CP_QIntegracionProductosVendidosIdPC');
 		sqlsrv_query($conn,$sql);
 		$sql = QCleanTable('CP_FiltradoCaida');
 		sqlsrv_query($conn,$sql);
@@ -1241,25 +1241,30 @@
 		mysqli_close($conn);
 	}
 	/****************/
-	function ValidarEtiquetas(){
-		$SedeConnection = 'FTN';
+	function ValidarEtiquetas() {
+		$SedeConnection = MiUbicacion();
 
+		//Borrar
+		$SedeConnection = 'FTN';
 	    $conn = ConectarSmartpharma($SedeConnection);
 	    $connCPharma = ConectarXampp();
 
 	    $sql = QExistenciaActual();
 	    $result = sqlsrv_query($conn,$sql);
+
+	    $FechaCaptura = new DateTime("now");
+		$FechaCaptura = $FechaCaptura->format('Y-m-d');
+		$date = '';
 	    
 	    $contador = 0;
-
-	    while(($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC))&&($contador<6)) {
+	    
+	    while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
 	        $IdArticulo = $row["IdArticulo"];
 	        $CodigoInterno = $row["CodigoInterno"];
 	        $Descripcion=$row["Descripcion"];	        
 	        $Existencia = intval($row["Existencia"]);
 	 
 	        $sqlCPharma = QEtiquetaArticulo($IdArticulo);
-
 	        $ResultCPharma = mysqli_query($connCPharma,$sqlCPharma);
 	        $RowCPharma = mysqli_fetch_assoc($ResultCPharma);
 	        $IdArticuloCPharma = $RowCPharma['id_articulo'];
@@ -1280,7 +1285,164 @@
 	        $contador++;
 	    }
 
-	    mysqli_close($connCPharma);
+	    GuardarCapturaEtiqueta($FechaCaptura,$date);
+
+		$sqlCC = QValidarCapturaEtiqueta($FechaCaptura);
+		$resultCC = mysqli_query($connCPharma,$sqlCC);
+		$rowCC = mysqli_fetch_assoc($resultCC);
+		$CuentaCaptura = $rowCC["CuentaCaptura"];
+
+		if($CuentaCaptura == 0){
+			$sqlB = QBorrarDiasEtiqueta($FechaCaptura);
+			mysqli_query($connCPharma,$sqlB);			
+			mysqli_close($connCPharma);
+			sqlsrv_close($conn);
+			ValidarEtiquetas();
+		}
+		else{
+			mysqli_close($connCPharma);
+			sqlsrv_close($conn);
+		}
+	}
+
+	function GenererEtiquetas($clasificacion) {
+		$SedeConnection = MiUbicacion();
+		//BORRRAR
+		$SedeConnection = 'FTN';
+	    $conn = ConectarSmartpharma($SedeConnection);
+	    
+		$connCPharma = ConectarXampp();	
+		$resultado = $connCPharma->query("SELECT * FROM etiquetas 
+			WHERE clasificacion = '$clasificacion'");
+
+		$FHoy = date("Y-m-d");
+	  	$FAyer = date("Y-m-d",strtotime($FHoy."-1 days"));
+	  	$CuentaCard=0;
+
+		while($row = $resultado->fetch_assoc()) {
+			$IdArticulo = $row["id_articulo"];
+
+			$sql = QArticulo($IdArticulo);
+			sqlsrv_query($conn,$sql);
+			$result = sqlsrv_query($conn,$sql);
+			$row = sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC);
+
+			$sql1 = QExistenciaArticulo($IdArticulo,0);
+			$result1 = sqlsrv_query($conn,$sql1);
+			$row1 = sqlsrv_fetch_array($result1,SQLSRV_FETCH_ASSOC);
+
+			$CodigoArticulo = $row["CodigoArticulo"];
+			$Descripcion = utf8_encode(addslashes($row["Descripcion"]));
+			$IsIVA = $row["ConceptoImpuesto"];		
+			$Existencia = $row1["Existencia"];
+
+			$PrecioHoy = CalculoPrecio($conn,$IdArticulo,$IsIVA,$Existencia);
+
+		    $sqlCC = QDiasCeroEtiqueta($IdArticulo,$FAyer);
+			$resultCC = mysqli_query($connCPharma,$sqlCC);
+			$rowCC = mysqli_fetch_assoc($resultCC);
+			$PrecioAyer = $rowCC["precio"];
+
+			if($PrecioHoy!=$PrecioAyer){
+
+				if($IsIVA == 1){
+					$PMVP = $PrecioHoy/1.16;
+					$IVA = $PrecioHoy-$PMVP;
+				}
+				else{
+					$PMVP = $PrecioHoy;
+					$IVA = 0;
+				}
+
+				$Dolarizado = ProductoDolarizado($conn,$IdArticulo);
+				$CodigoBarra = CodigoBarra($conn,$IdArticulo);
+				
+				if($Dolarizado=='SI'){
+					$simbolo = '*';
+				}
+				else{
+					$simbolo = '';
+				}
+
+				echo'
+					<table>
+						<thead>
+							<tr>
+								<td class="centrado titulo" colspan="2">
+									'.$CodigoBarra.'
+								</td>
+							</tr>	
+						</thead>
+						<tbody>
+							<tr rowspan="2">
+								<td class="centrado descripcion" colspan="2">
+									'.$Descripcion.' 
+								</td>
+							</tr>
+							<tr>
+								<td class="izquierda rowDer">
+									PMVP Bs.
+								</td>
+								<td class="derecha rowIzq">
+									'.number_format ($PMVP,2,"," ,"." ).'
+								</td>
+							</tr>
+							<tr>
+								<td class="izquierda rowDer">
+									IVA 16% Bs.
+								</td>
+								<td class="derecha rowIzq">
+									'.number_format ($IVA,2,"," ,"." ).'
+								</td>
+							</tr>
+							<tr>
+								<td class="izquierda rowDer">
+									<strong>Total a Pagar Bs.</strong>
+								</td>
+								<td class="derecha rowIzq">
+									<strong>
+									'.number_format ($PrecioHoy,2,"," ,"." ).'
+									</strong>
+								</td>
+							</tr>
+							<tr>
+								<td class="izquierda dolarizado rowDer">
+									<strong>'.$simbolo.'</strong>
+								</td>
+								<td class="derecha rowIzq">
+									'.$FHoy.'
+								</td>
+							</tr>				
+						</tbody>
+					</table>
+				';
+				$CuentaCard++;
+				if($CuentaCard == 3){
+					echo'<br><br>';
+					$CuentaCard=0;
+				}
+			}
+		}
+		mysqli_close($connCPharma);
 	    sqlsrv_close($conn);
+	}
+	/*
+		TITULO: GuardarCapturaEtiqueta
+		PARAMETROS: [$FechaCaptura] El dia de hoy
+					[$date] valor para creacion y actualizacion
+		FUNCION: crea una conexion con la base de datos cpharma e ingresa datos
+		RETORNO: no aplica
+	 */
+	function GuardarCapturaEtiqueta($FechaCaptura,$date) {
+		$conn = ConectarXampp();
+		$sql = QCapturaEtiqueta($FechaCaptura);
+		$result = mysqli_query($conn,$sql);
+		$row = mysqli_fetch_assoc($result);
+		$TotalRegistros = $row["TotalRegistros"];
+
+		$sql1 = QGuardarCapturaEtiqueta($TotalRegistros,$FechaCaptura,$date);
+		mysqli_query($conn,$sql1);
+
+		mysqli_close($conn);
 	}
 ?>
