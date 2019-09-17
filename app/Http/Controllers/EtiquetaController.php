@@ -29,7 +29,7 @@ class EtiquetaController extends Controller
         $etiquetas =  
         Etiqueta::orderBy('condicion', 'desc')->
         where('clasificacion', 'PENDIENTE')->get();
-        
+
         return view('pages.etiqueta.index', compact('etiquetas'));
     }
 
@@ -56,9 +56,20 @@ class EtiquetaController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
-        return redirect()->action('EtiquetaController@index');
+    public function store(Request $request) // AQUI QUEDE
+    {   
+        $clasificacion = $request->input('clasificacion');
+
+        if($etiqueta->clasificacion != 'OBLIGATORIO ETIQUETAR'){
+            
+            $etiqueta->clasificacion = 'OBLIGATORIO ETIQUETAR';
+        }
+
+        $etiquetas =  
+        Etiqueta::orderBy('condicion', 'desc')->
+        where('clasificacion', 'PENDIENTE')->get();
+        
+        return view('pages.etiqueta.index', compact('etiquetas'));
     }
 
     /**
