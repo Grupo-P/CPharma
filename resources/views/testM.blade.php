@@ -139,16 +139,23 @@
       //Identificamos los objetos del DOM con objetos JQuery
       var botonLimpiar = $('#btn-borrarN');
       var resultado = $('#resultado');
-      var fac1 = $('#fac1');
-      var fac2 = $('#fac2');
-      var fac3 = $('#fac3');
+      var elementoActivo = '';
+
+      //Facturas y totales
+      var fac1 = $('#fac1'); //Factura #1 del cliente Bs
+      var fac2 = $('#fac2'); //Factura #2 del cliente Bs
+      var fac3 = $('#fac3'); //Factura #3 del cliente Bs
+      var totalFacBs = $('#totalFacBs'); //Monto total calculado en Bs
+      var totalFacDs = $('#totalFacDs'); //Monto total calculado en $
+
+      //Abonos del cliente
       var abono1 = $('#abono1');
       var abono2 = $('#abono2');
-      var tasa = $('#tasa');
-      var decimales = $('#decimales');
-      var totalFacBs = $('#totalFacBs');
-      var totalFacDs = $('#totalFacDs');
-      var elementoActivo = '';
+
+      //Campos requeridos traidos del back end
+      var tasa = $('#tasa').val(); //Tasa de venta
+      var decimales = $('#decimales').val(); //Numero de decimales de la factura
+      var tolerancia = $('#tolerancia').val(); //Tolerancia de vuelto al cliente
 
       //Colocamos el boton de borrado a la escucha del click
       botonLimpiar.click(function() {
@@ -172,6 +179,11 @@
           }
         }
       });
+
+      //Transformamos los campos back end a valores flotantes para poder operar con ellos
+      tasa = parseFloat(tasa);
+      decimales = parseFloat(decimales);
+      tolerancia = parseFloat(tolerancia);
 
       //Metodo para calcular los totales de las facturas
       $('#fac1, #fac2, #fac3').blur(function(e) {
