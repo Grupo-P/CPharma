@@ -32,32 +32,30 @@
           * resultado: Campo que muestra el resultado final de los calculos
     */
 
-    function calcularFactura() {
-      var fac1=0,fac2=0,fac3=0,tasa=0,decimales=0,totalFacBs=0,totalFacDs=0;
+    function calcularFactura(fac1, fac2, fac3, totalFacBs, totalFacDs, tasa, decimales, tolerancia, resultado) {
 
-      fac1=parseFloat(document.getElementById('fac1').value);
-      fac2=parseFloat(document.getElementById('fac2').value);
-      fac3=parseFloat(document.getElementById('fac3').value);
-      tasa = parseFloat(document.getElementById('tasa').value);
-      decimales = parseInt(document.getElementById('decimales').value);
+      var f1 = parseFloat(fac1.val());
+      var f2 = parseFloat(fac2.val());
+      var f3 = parseFloat(fac3.val());
 
-      if(fac1<0 || fac2<0 || fac3<0) {
+      if((f1 < 0) || (f2 < 0) || (f3 < 0)) {
+        
         $('#errorModalCenter').modal('show');
-        if(fac1<0) {
-          document.getElementById('fac1').value=0;
-          fac1=0;
+        
+        if(f1 < 0) {
+          fac1.val('');
         }
-        if(fac2<0) {
-          document.getElementById('fac2').value=0;
-          fac2=0;
+
+        if(f2 < 0) {
+          fac2.val('');
         }
-        if(fac3<0) {
-          document.getElementById('fac3').value=0;
-          fac3=0;
+
+        if(f3 < 0) {
+          fac3.val('');
         }
       }
 
-      if(isNaN(fac1) || isNaN(fac2) || isNaN(fac3)) {
+      /*if(isNaN(fac1) || isNaN(fac2) || isNaN(fac3)) {
         if(!isNaN(fac1)) {
           totalFacBs = fac1;
           if(!isNaN(fac2)) {
@@ -100,9 +98,6 @@
       document.getElementById('saldoRestanteBs').value = totalFacBs;
       document.getElementById('saldoRestanteDs').value = totalFacDs;
 
-      var tolerancia=parseFloat(document.getElementById('tolerancia').value);
-      var resultado=document.getElementById('resultado');
-
       if(totalFacBs>0) {
         document.getElementById('resultado').value = "El cliente debe: Bs. "+totalFacBs;
         resultado.classList.add("bg-danger", "text-white");
@@ -114,7 +109,7 @@
       else {
         document.getElementById('resultado').value = "-";
         resultado.classList.remove("bg-danger", "text-white");
-      }
+      }*/
     }
 
     function separarMiles(cantidad, decimales) {
@@ -263,7 +258,7 @@
       //Colocamos el boton de borrado a la escucha del click
       botonLimpiar.click(function() {
         //Borra el resultado, elimina las clases existentes y pasa el foco a la factura 1
-        resultado.val('-').removeClass('bg-danger text-white');
+        resultado.removeClass('bg-danger text-white').val('-');
         fac1.focus();
       });
 
@@ -274,6 +269,7 @@
 
       //Gestionador de eventos
       $('#fac1, #fac2, #fac3, #abono1, #abono2').on({
+
         //Metodo para cambiar el foco con la tecla intro
         keypress: function(e) {
           if(e.keyCode == 13) {
@@ -290,13 +286,13 @@
           }
         },
 
-        //Metodo para calcular los totales de las facturas
+        //Gestionador de calculos
         blur: function(e) {
           switch(e.target.id) {
             case 'fac1':
             case 'fac2':
             case 'fac3':
-              calcularFactura();
+              calcularFactura(fac1, fac2, fac3, totalFacBs, totalFacDs, tasa, decimales, tolerancia, resultado);
             break;
 
             case 'abono1':
