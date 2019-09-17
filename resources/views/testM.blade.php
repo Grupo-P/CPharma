@@ -14,10 +14,6 @@
   <script type="text/javascript" src="{{ asset('assets/jquery/jquery-2.2.2.min.js') }}"></script>
   <script type="text/javascript" src="{{ asset('assets/jquery/jquery-ui.min.js') }}" ></script>
   <script>
-    $(document).ready(function(){
-      $('[data-toggle="tooltip"]').tooltip();
-    });
-
     function separarMiles(cantidad, decimales) {
       // por si pasan un numero en vez de un string
       cantidad += ''; 
@@ -68,22 +64,6 @@
           document.getElementById("btn-borrarN").focus();
         }
       }
-    }
-    /*
-      TITULO: limpiarClases
-      PARAMETROS : No aplica
-      FUNCION: Limpia todos los residuos de clases que pintan colores
-      RETORNO: No aplica
-
-      Variables:
-        * resultado: El campo donde se refleja la deuda del cliente
-    */
-   
-    function limpiarClases() {
-      var resultado=document.getElementById('resultado');
-      resultado.value = "-";
-      resultado.classList.remove("bg-danger", "text-white");
-      document.getElementById("fac1").focus();
     }
 
     /*
@@ -281,6 +261,23 @@
         resultado.classList.remove("bg-danger", "text-white");
       }
     }
+
+    //Luego de cargar el documento ejecutar los scripst
+    $(document).ready(function() {
+      $('[data-toggle="tooltip"]').tooltip();
+
+      //Identificamos los objetos del DOM con objetos JQuery
+      var botonLimpiar = $('#btn-borrarN');
+      var resultado = $('#resultado');
+      var fac1 = $('#fac1');
+
+      //Colocamos el boton de borrado a la escucha del click
+      botonLimpiar.click(function() {
+        //Borra el resultado, elimina las clases existentes y pasa el foco a la factura 1
+        resultado.val('-').removeClass('bg-danger text-white');
+        fac1.focus();
+      });
+    });
   </script>
 @endsection
 
@@ -584,7 +581,7 @@
           </td>
 
           <td class="text-center">
-            <button type="reset" name="btn-borrarN" id="btn-borrarN" class="btn btn-success" onclick="limpiarClases();">
+            <button type="reset" name="btn-borrarN" id="btn-borrarN" class="btn btn-success">
               Borrar y empezar de nuevo
             </button>
           </td>
