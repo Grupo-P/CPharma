@@ -41,31 +41,6 @@
       return cantidad_parts.join('.');
     }
 
-    function FocusChange() {
-      if (event.keyCode == 13) {
-
-        if(document.activeElement.name){
-          var ElementoActivo = document.activeElement.name;
-        }
-        
-        if(document.activeElement.name == 'fac1'){
-          document.getElementById("fac2").focus();
-        }
-        else if(document.activeElement.name == 'fac2'){
-          document.getElementById("fac3").focus();
-        }
-        else if(document.activeElement.name == 'fac3'){
-          document.getElementById("abono1").focus();
-        }
-        else if(document.activeElement.name == 'abono1'){
-          document.getElementById("abono2").focus();
-        }
-        else if(document.activeElement.name == 'abono2'){
-          document.getElementById("btn-borrarN").focus();
-        }
-      }
-    }
-
     /*
       TITULO: calcularFactura
       PARAMETROS : No aplica
@@ -270,12 +245,33 @@
       var botonLimpiar = $('#btn-borrarN');
       var resultado = $('#resultado');
       var fac1 = $('#fac1');
+      var fac2 = $('#fac2');
+      var fac3 = $('#fac3');
+      var abono1 = $('#abono1');
+      var abono2 = $('#abono2');
+      var elementoActivo = '';
 
       //Colocamos el boton de borrado a la escucha del click
       botonLimpiar.click(function() {
         //Borra el resultado, elimina las clases existentes y pasa el foco a la factura 1
         resultado.val('-').removeClass('bg-danger text-white');
         fac1.focus();
+      });
+
+      //Metodo para cambiar el foco con la tecla intro
+      $('#fac1, #fac2, #fac3, #abono1, #abono2').keypress(function(e) {
+        if(e.keyCode == 13) {
+          elementoActivo = document.activeElement.id;
+
+          switch(elementoActivo) {
+            case 'fac1': fac2.focus(); break;
+            case 'fac2': fac3.focus(); break;
+            case 'fac3': abono1.focus(); break;
+            case 'abono1': abono2.focus(); break;
+            case 'abono2': botonLimpiar.focus(); break;
+            default: fac1.focus();
+          }
+        }
       });
     });
   </script>
@@ -406,7 +402,7 @@
           </td>
 
           <td>
-            <input type="number" step="0.01" min="0" placeholder="0,00" name="fac1" id="fac1" class="form-control bg-warning" autofocus onblur="calcularFactura();" onkeypress="FocusChange()">
+            <input type="number" step="0.01" min="0" placeholder="0,00" name="fac1" id="fac1" class="form-control bg-warning" autofocus onblur="calcularFactura();">
           </td>
 
           <td>
@@ -436,7 +432,7 @@
           </td>
 
           <td>
-            <input type="number" step="0.01" min="0" placeholder="0,00" name="fac2" id="fac2" class="form-control bg-warning" onblur="calcularFactura();" onkeypress="FocusChange()">
+            <input type="number" step="0.01" min="0" placeholder="0,00" name="fac2" id="fac2" class="form-control bg-warning" onblur="calcularFactura();">
           </td>
 
           <td>
@@ -467,7 +463,7 @@
           </td>
 
           <td>
-            <input type="number" step="0.01" min="0" placeholder="0,00" name="fac3" id="fac3" class="form-control bg-warning" onblur="calcularFactura();" onkeypress="FocusChange()">
+            <input type="number" step="0.01" min="0" placeholder="0,00" name="fac3" id="fac3" class="form-control bg-warning" onblur="calcularFactura();">
           </td>
 
           <td>
@@ -527,7 +523,7 @@
           </td>
 
           <td>
-            <input type="number" step="0.01" min="0" placeholder="0,00" name="abono1" id="abono1" class="form-control bg-warning" onblur="calcularAbono();" onkeypress="FocusChange()">
+            <input type="number" step="0.01" min="0" placeholder="0,00" name="abono1" id="abono1" class="form-control bg-warning" onblur="calcularAbono();">
           </td>
 
           <td>
@@ -545,7 +541,7 @@
           </td>
 
           <td>
-            <input type="number" step="0.01" min="0" placeholder="0,00" name="abono2" id="abono2" class="form-control bg-warning" onblur="calcularAbono();" onkeypress="FocusChange()">
+            <input type="number" step="0.01" min="0" placeholder="0,00" name="abono2" id="abono2" class="form-control bg-warning" onblur="calcularAbono();">
           </td>
 
           <td>
