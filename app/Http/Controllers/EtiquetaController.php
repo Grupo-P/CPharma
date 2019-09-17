@@ -26,7 +26,10 @@ class EtiquetaController extends Controller
      */
     public function index()
     {   
-        $etiquetas =  Etiqueta::orderBy('condicion', 'desc')->get();
+        $etiquetas =  
+        Etiqueta::orderBy('condicion', 'desc')->
+        where('clasificacion', 'PENDIENTE')->get();
+        
         return view('pages.etiqueta.index', compact('etiquetas'));
     }
 
