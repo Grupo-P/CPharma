@@ -4,9 +4,11 @@
   Tasas de venta
 @endsection
 
-<style>
-  form table thead + tbody tr td input {text-align:center;}
-</style>
+@section('estilosInternos')
+  <style>
+    form table thead + tbody tr td input {text-align:center;}
+  </style>
+@endsection
 
 @section('scriptsHead')
   <script type="text/javascript" src="{{ asset('assets/jquery/jquery-2.2.2.min.js') }}"></script>
