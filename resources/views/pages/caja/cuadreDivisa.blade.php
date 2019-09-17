@@ -360,14 +360,14 @@
         if($FechaTasaDolar != $FechaActual){
       ?>
           <td>
-            <input type="number" step="0.01" min="0" placeholder="0,00" value="{{$TasaDolar}}" id="tasa" class="form-control bg-danger text-white" disabled>
+            <input type="number" value="{{$TasaDolar}}" id="tasa" class="form-control bg-danger text-white" disabled>
           </td>
       <?php
         }
         else{
       ?>
           <td>
-            <input type="number" step="0.01" min="0" placeholder="0,00" value="{{$TasaDolar}}" id="tasa" class="form-control bg-success text-white" disabled>
+            <input type="number" value="{{$TasaDolar}}" id="tasa" class="form-control bg-success text-white" disabled>
           </td>
       <?php   
         }
