@@ -11,28 +11,26 @@
 @endsection
 
 @section('scriptsCabecera')
-  <script type="text/javascript" src="{{ asset('assets/jquery/jquery-2.2.2.min.js') }}"></script>
-  <script type="text/javascript" src="{{ asset('assets/jquery/jquery-ui.min.js') }}" ></script>
   <script>
     /*
-    TITULO: calcularFactura
-    PARAMETROS : No aplica
-    FUNCION: Realizar los calculos para conectar una o las tres facturas en un resultado dado en bolivares o divisas
-    RETORNO: No aplica
+      TITULO: calcularFactura
+      PARAMETROS : No aplica
+      FUNCION: Realizar los calculos para conectar una o las tres facturas en un resultado dado en bolivares o divisas
+      RETORNO: No aplica
 
-    Variables:
-      - Variables de entrada:
-        * fac1: Factura #1 del cliente Bs 
-        * fac2: Factura #2 del cliente Bs 
-        * fac3: Factura #3 del cliente Bs 
-        * tasa: Tasa en dolares traida de la BBDD
-        * decimales: Cantidad de decimales a manejar traida de la BBDD
-      - Variables de salida:
-        * totalFacBs: Total de las facturas en Bs
-        * totalFacDs: Total de las facturas en $
-        * tolerancia: Limite de vuelto significativo traida de la BBDD
-        * resultado: Campo que muestra el resultado final de los calculos
-  */
+      Variables:
+        - Variables de entrada:
+          * fac1: Factura #1 del cliente Bs 
+          * fac2: Factura #2 del cliente Bs 
+          * fac3: Factura #3 del cliente Bs 
+          * tasa: Tasa en dolares traida de la BBDD
+          * decimales: Cantidad de decimales a manejar traida de la BBDD
+        - Variables de salida:
+          * totalFacBs: Total de las facturas en Bs
+          * totalFacDs: Total de las facturas en $
+          * tolerancia: Limite de vuelto significativo traida de la BBDD
+          * resultado: Campo que muestra el resultado final de los calculos
+    */
 
     function calcularFactura() {
       var fac1=0,fac2=0,fac3=0,tasa=0,decimales=0,totalFacBs=0,totalFacDs=0;
