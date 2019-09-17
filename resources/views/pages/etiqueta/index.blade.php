@@ -146,7 +146,10 @@
 		      <td style="width:140px;">
 				
 				<?php
-				if(Auth::user()->role == 'MASTER' || Auth::user()->role == 'DEVELOPER'){
+				if(Auth::user()->role == 'MASTER'
+					|| Auth::user()->role == 'DEVELOPER'
+					|| Auth::user()->role == 'SUPERVISOR'
+					|| Auth::user()->role == 'USUARIO'){
 				?>
 
 					<?php
@@ -178,25 +181,9 @@
 					}					
 					?>
 				<?php	
-				} else if(Auth::user()->role == 'SUPERVISOR' || Auth::user()->role == 'ADMINISTRADOR' || Auth::user()->role == 'SUPERVISOR CAJA'){ 
+				} 
 				?>
-					<a href="/etiqueta/{{$etiqueta->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
-		      			<i class="far fa-eye"></i>			      		
-		      		</a>
 
-		      		<a href="/etiqueta/{{$etiqueta->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
-		      			<i class="fas fa-edit"></i>
-	      			</a>
-				<?php
-				} else if(Auth::user()->role == 'USUARIO'){
-				?>
-					<a href="/etiqueta/{{$etiqueta->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
-		      			<i class="far fa-eye"></i>			      		
-		      		</a>		
-				<?php
-				}
-				?>
-										
 		      </td>
 		    <!-- Fin Validacion de ROLES -->
 
