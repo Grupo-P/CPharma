@@ -16,6 +16,23 @@
     //Variables globales para almacenar valores numericos de facturas y totales
     var f1 = 0, f2 = 0, f3 = 0, totalBs = 0, totalDs = 0;
 
+    /*
+      TITULO: calcularFactura
+      PARAMETROS : [fac1] Objeto JQuery con el campo factura 1
+                   [fac2] Objeto JQuery con el campo factura 2
+                   [fac3] Objeto JQuery con el campo factura 3
+                   [totalFacBs] Objeto JQuery con el campo total en Bs
+                   [totalFacDs] Objeto JQuery con el campo total en $
+                   [tasa] Objeto JQuery con el campo tasa de venta Back End
+                   [decimales] Objeto JQuery con el campo decimales de venta Back End
+                   [tolerancia] Objeto JQuery con el campo tolerancia de venta Back End
+                   [saldoRestanteBs] Objeto JQuery con el campo saldo restante en Bs
+                   [saldoRestanteDs] Objeto JQuery con el campo saldo restante en $
+                   [resultado] Objeto JQuery para el resultado final de la factura
+      FUNCION: Realizar los calculos para conectar una o las tres facturas en un resultado dado en bolivares o divisas
+      RETORNO: No aplica
+    */
+
     function calcularFactura(fac1, fac2, fac3, totalFacBs, totalFacDs, tasa, decimales, tolerancia, saldoRestanteBs, saldoRestanteDs, resultado) {
 
       //Variables para guardar el valor numerico de las facturas fac1, fac2 y fac3
@@ -90,8 +107,8 @@
       }
 
       //Calculo de totales
-      totalDs = (totalBs/tasa).toFixed(decimales);
-      totalBs = totalBs.toFixed(decimales);
+      totalDs = (Math.round((totalBs/tasa) * 100)) / 100;
+      totalBs = (Math.round((totalBs * 100))) / 100;
 
       //Imprimir resultados
       totalFacBs.val(totalBs);
@@ -99,11 +116,10 @@
       saldoRestanteBs.val(totalBs);
       saldoRestanteDs.val(totalDs);
 
-      /*if(totalFacBs>0) {
-        document.getElementById('resultado').value = "El cliente debe: Bs. "+totalFacBs;
-        resultado.classList.add("bg-danger", "text-white");
+      if(totalBs > 0) {
+        resultado.val('El cliente debe: Bs. ' + totalBs).addClass('bg-danger text-white');
       }
-      else if(totalFacBs<((-1)*tolerancia)) {
+      /*else if(totalFacBs<((-1)*tolerancia)) {
         document.getElementById('resultado').value = "Hay un vuelto pendiente de: Bs. "+totalFacBs;
         resultado.classList.remove("bg-danger", "text-white");
       }
@@ -300,7 +316,7 @@
 
             case 'abono1':
             case 'abono2':
-              calcularAbono();
+              //calcularAbono();
             break;
           }
         }
