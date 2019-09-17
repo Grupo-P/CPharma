@@ -300,6 +300,11 @@
             case 'fac3':
               calcularFactura();
             break;
+
+            case 'abono1':
+            case 'abono2':
+              calcularAbono();
+            break;
           }
         }
       });
@@ -554,7 +559,7 @@
           </td>
 
           <td>
-            <input type="number" step="0.01" min="0" placeholder="0,00" name="abono1" id="abono1" class="form-control bg-warning" onblur="calcularAbono();">
+            <input type="number" step="0.01" min="0" placeholder="0,00" name="abono1" id="abono1" class="form-control bg-warning">
           </td>
 
           <td>
@@ -572,7 +577,7 @@
           </td>
 
           <td>
-            <input type="number" step="0.01" min="0" placeholder="0,00" name="abono2" id="abono2" class="form-control bg-warning" onblur="calcularAbono();">
+            <input type="number" step="0.01" min="0" placeholder="0,00" name="abono2" id="abono2" class="form-control bg-warning">
           </td>
 
           <td>
