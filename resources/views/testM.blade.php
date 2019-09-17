@@ -40,25 +40,7 @@
       f2 = parseFloat(fac2.val());
       f3 = parseFloat(fac3.val());
 
-      if((f1 < 0) || (f2 < 0) || (f3 < 0)) {
-        
-        $('#errorModalCenter').modal('show');
-        
-        if(f1 < 0) {
-          fac1.val('');
-          f1 = 0;
-        }
-
-        if(f2 < 0) {
-          fac2.val('');
-          f2 = 0;
-        }
-
-        if(f3 < 0) {
-          fac3.val('');
-          f3 = 0;
-        }
-      }
+      validarNegativos(fac1, fac2, fac3);
 
       //Validacion y suma de totales en bolivares
       if(isNaN(f1) || isNaN(f2) || isNaN(f3)) {
@@ -127,6 +109,52 @@
         document.getElementById('resultado').value = "-";
         resultado.classList.remove("bg-danger", "text-white");
       }*/
+
+      formatearVariables();
+    }
+
+    /*
+      TITULO: validarNegativos
+      PARAMETROS : [fac1] Objeto JQuery con el campo factura 1
+                   [fac2] Objeto JQuery con el campo factura 2
+                   [fac3] Objeto JQuery con el campo factura 3
+      FUNCION: Validar si alguna de las facturas tiene valores negativos, lanzar un mensaje de error y formatear los valores a 0
+      RETORNO: No aplica
+    */
+    function validarNegativos(fac1, fac2, fac3) {
+      if((f1 < 0) || (f2 < 0) || (f3 < 0)) {
+        
+        $('#errorModalCenter').modal('show');
+        
+        if(f1 < 0) {
+          fac1.val('');
+          f1 = 0;
+        }
+
+        if(f2 < 0) {
+          fac2.val('');
+          f2 = 0;
+        }
+
+        if(f3 < 0) {
+          fac3.val('');
+          f3 = 0;
+        }
+      }
+    }
+
+    /*
+      TITULO: validarNegativos
+      PARAMETROS : No aplica
+      FUNCION: Formatear las variables para evitar valores basura
+      RETORNO: No aplica
+    */
+    function formatearVariables() {
+      f1 = 0;
+      f2 = 0;
+      f3 = 0;
+      totalBs = 0;
+      totalDs = 0;
     }
 
     function separarMiles(cantidad, decimales) {
