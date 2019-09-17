@@ -12,54 +12,36 @@
 
 @section('scriptsCabecera')
   <script>
-    /*
-      TITULO: calcularFactura
-      PARAMETROS : No aplica
-      FUNCION: Realizar los calculos para conectar una o las tres facturas en un resultado dado en bolivares o divisas
-      RETORNO: No aplica
 
-      Variables:
-        - Variables de entrada:
-          * fac1: Factura #1 del cliente Bs 
-          * fac2: Factura #2 del cliente Bs 
-          * fac3: Factura #3 del cliente Bs 
-          * tasa: Tasa en dolares traida de la BBDD
-          * decimales: Cantidad de decimales a manejar traida de la BBDD
-        - Variables de salida:
-          * totalFacBs: Total de las facturas en Bs
-          * totalFacDs: Total de las facturas en $
-          * tolerancia: Limite de vuelto significativo traida de la BBDD
-          * resultado: Campo que muestra el resultado final de los calculos
-    */
+    //Variables globales para almacenar valores numericos de facturas y totales
+    var f1 = 0, f2 = 0, f3 = 0, totalBs = 0, totalDs = 0;
 
-    function calcularFactura(fac1, fac2, fac3, totalFacBs, totalFacDs, tasa, decimales, tolerancia, resultado) {
+    function calcularFactura(fac1, fac2, fac3, totalFacBs, totalFacDs, tasa, decimales, tolerancia, saldoRestanteBs, saldoRestanteDs, resultado) {
 
       //Variables para guardar el valor numerico de las facturas fac1, fac2 y fac3
-      var f1 = parseFloat(fac1.val());
-      var f2 = parseFloat(fac2.val());
-      var f3 = parseFloat(fac3.val());
+      f1 = parseFloat(fac1.val());
+      f2 = parseFloat(fac2.val());
+      f3 = parseFloat(fac3.val());
 
-      //Validacion de numeros negativos
       if((f1 < 0) || (f2 < 0) || (f3 < 0)) {
         
         $('#errorModalCenter').modal('show');
         
         if(f1 < 0) {
           fac1.val('');
+          f1 = 0;
         }
 
         if(f2 < 0) {
           fac2.val('');
+          f2 = 0;
         }
 
         if(f3 < 0) {
           fac3.val('');
+          f3 = 0;
         }
       }
-
-      //Variables para guardar el valor numerico de los totales en dolares y bolivares
-      var totalBs = 0;
-      var totalDs = 0;
 
       //Validacion y suma de totales en bolivares
       if(isNaN(f1) || isNaN(f2) || isNaN(f3)) {
@@ -107,15 +89,17 @@
         totalBs = f1 + f2 + f3;
       }
 
-      /*totalFacDs = (totalFacBs/tasa).toFixed(decimales);
-      totalFacBs = totalFacBs.toFixed(decimales);
+      //Calculo de totales
+      totalDs = (totalBs/tasa).toFixed(decimales);
+      totalBs = totalBs.toFixed(decimales);
 
-      document.getElementById('totalFacBs').value = totalFacBs;
-      document.getElementById('totalFacDs').value = totalFacDs;
-      document.getElementById('saldoRestanteBs').value = totalFacBs;
-      document.getElementById('saldoRestanteDs').value = totalFacDs;
+      //Imprimir resultados
+      totalFacBs.val(totalBs);
+      totalFacDs.val(totalDs);
+      saldoRestanteBs.val(totalBs);
+      saldoRestanteDs.val(totalDs);
 
-      if(totalFacBs>0) {
+      /*if(totalFacBs>0) {
         document.getElementById('resultado').value = "El cliente debe: Bs. "+totalFacBs;
         resultado.classList.add("bg-danger", "text-white");
       }
@@ -262,6 +246,8 @@
       var fac3 = $('#fac3'); //Factura #3 del cliente Bs
       var totalFacBs = $('#totalFacBs'); //Monto total calculado en Bs
       var totalFacDs = $('#totalFacDs'); //Monto total calculado en $
+      var saldoRestanteBs = $('#saldoRestanteBs');
+      var saldoRestanteDs = $('#saldoRestanteDs');
 
       //Abonos del cliente
       var abono1 = $('#abono1');
@@ -309,7 +295,7 @@
             case 'fac1':
             case 'fac2':
             case 'fac3':
-              calcularFactura(fac1, fac2, fac3, totalFacBs, totalFacDs, tasa, decimales, tolerancia, resultado);
+              calcularFactura(fac1, fac2, fac3, totalFacBs, totalFacDs, tasa, decimales, tolerancia, saldoRestanteBs, saldoRestanteDs, resultado);
             break;
 
             case 'abono1':
