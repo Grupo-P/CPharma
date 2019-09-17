@@ -34,10 +34,12 @@
 
     function calcularFactura(fac1, fac2, fac3, totalFacBs, totalFacDs, tasa, decimales, tolerancia, resultado) {
 
+      //Variables para guardar el valor numerico de las facturas fac1, fac2 y fac3
       var f1 = parseFloat(fac1.val());
       var f2 = parseFloat(fac2.val());
       var f3 = parseFloat(fac3.val());
 
+      //Validacion de numeros negativos
       if((f1 < 0) || (f2 < 0) || (f3 < 0)) {
         
         $('#errorModalCenter').modal('show');
@@ -55,42 +57,57 @@
         }
       }
 
-      /*if(isNaN(fac1) || isNaN(fac2) || isNaN(fac3)) {
-        if(!isNaN(fac1)) {
-          totalFacBs = fac1;
-          if(!isNaN(fac2)) {
-            totalFacBs = fac1 + fac2;
+      //Variables para guardar el valor numerico de los totales en dolares y bolivares
+      var totalBs = 0;
+      var totalDs = 0;
+
+      //Validacion y suma de totales en bolivares
+      if(isNaN(f1) || isNaN(f2) || isNaN(f3)) {
+
+        //Validacion de la factura 1
+        if(!isNaN(f1)) {
+          totalBs = f1;
+
+          if(!isNaN(f2)) {
+            totalBs += f2;
           }
-          if(!isNaN(fac3)) {
-            totalFacBs = fac1 + fac3;
+
+          if(!isNaN(f3)) {
+            totalBs += f3;
           }
         }
 
-        if(!isNaN(fac2)) {
-          totalFacBs = fac2;
-          if(!isNaN(fac1)) {
-            totalFacBs = fac2 + fac1;
+        //Validacion de la factura 2
+        if(!isNaN(f2)) {
+          totalBs = f2;
+
+          if(!isNaN(f1)) {
+            totalBs += f1;
           }
-          if(!isNaN(fac3)) {
-            totalFacBs = fac2 + fac3;
+
+          if(!isNaN(f3)) {
+            totalBs += f3;
           }
         }
 
-        if(!isNaN(fac3)) {
-          totalFacBs = fac3;
-          if(!isNaN(fac1)) {
-            totalFacBs = fac3 + fac1;
+        //Validacion de la factura 3
+        if(!isNaN(f3)) {
+          totalBs = f3;
+
+          if(!isNaN(f1)) {
+            totalBs += f1;
           }
-          if(!isNaN(fac2)) {
-            totalFacBs = fac3 + fac2;
+
+          if(!isNaN(f2)) {
+            totalBs += f2;
           }
         }
       }
       else {
-        totalFacBs = fac1 + fac2 + fac3;
+        totalBs = f1 + f2 + f3;
       }
 
-      totalFacDs = (totalFacBs/tasa).toFixed(decimales);
+      /*totalFacDs = (totalFacBs/tasa).toFixed(decimales);
       totalFacBs = totalFacBs.toFixed(decimales);
 
       document.getElementById('totalFacBs').value = totalFacBs;
