@@ -646,14 +646,6 @@
       Volver al inicio
     </a>
   </div>
-
-  @section('estilosInternos')
-    <style>
-      form table thead + tbody tr td input {text-align:center;}
-    </style>
-  @endsection
-
-  
 @endsection
 
 @section('scriptsPie')
