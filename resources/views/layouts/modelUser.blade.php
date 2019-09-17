@@ -2,7 +2,7 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>    
         @include('includes.head')
-        @yield('scriptsHead')
+        @yield('scriptsCabecera')
     </head>   
     <body>
         <header>
@@ -15,7 +15,7 @@
 
         <footer>
             @include('includes.footer')
-            @yield('scriptsFoot')
+            @yield('scriptsPie')
         </footer>
     </body>
 </html>
