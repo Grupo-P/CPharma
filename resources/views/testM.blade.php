@@ -101,14 +101,12 @@
       if(totalBs > 0) {
         resultado.val('El cliente debe: Bs. ' + totalBs).addClass('bg-danger text-white');
       }
-      /*else if(totalFacBs<((-1)*tolerancia)) {
-        document.getElementById('resultado').value = "Hay un vuelto pendiente de: Bs. "+totalFacBs;
-        resultado.classList.remove("bg-danger", "text-white");
+      else if(totalBs < ((-1) * tolerancia)) {
+        resultado.val('Hay un vuelto pendiente de: Bs. ' + totalBs).removeClass('bg-danger text-white');
       }
       else {
-        document.getElementById('resultado').value = "-";
-        resultado.classList.remove("bg-danger", "text-white");
-      }*/
+        resultado.val('-').removeClass('bg-danger text-white');
+      }
 
       formatearVariables();
     }
@@ -144,7 +142,7 @@
     }
 
     /*
-      TITULO: validarNegativos
+      TITULO: formatearVariables
       PARAMETROS : No aplica
       FUNCION: Formatear las variables para evitar valores basura
       RETORNO: No aplica
