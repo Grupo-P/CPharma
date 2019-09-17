@@ -14,6 +14,111 @@
   <script type="text/javascript" src="{{ asset('assets/jquery/jquery-2.2.2.min.js') }}"></script>
   <script type="text/javascript" src="{{ asset('assets/jquery/jquery-ui.min.js') }}" ></script>
   <script>
+    /*
+    TITULO: calcularFactura
+    PARAMETROS : No aplica
+    FUNCION: Realizar los calculos para conectar una o las tres facturas en un resultado dado en bolivares o divisas
+    RETORNO: No aplica
+
+    Variables:
+      - Variables de entrada:
+        * fac1: Factura #1 del cliente Bs 
+        * fac2: Factura #2 del cliente Bs 
+        * fac3: Factura #3 del cliente Bs 
+        * tasa: Tasa en dolares traida de la BBDD
+        * decimales: Cantidad de decimales a manejar traida de la BBDD
+      - Variables de salida:
+        * totalFacBs: Total de las facturas en Bs
+        * totalFacDs: Total de las facturas en $
+        * tolerancia: Limite de vuelto significativo traida de la BBDD
+        * resultado: Campo que muestra el resultado final de los calculos
+  */
+
+    function calcularFactura() {
+      var fac1=0,fac2=0,fac3=0,tasa=0,decimales=0,totalFacBs=0,totalFacDs=0;
+
+      fac1=parseFloat(document.getElementById('fac1').value);
+      fac2=parseFloat(document.getElementById('fac2').value);
+      fac3=parseFloat(document.getElementById('fac3').value);
+      tasa = parseFloat(document.getElementById('tasa').value);
+      decimales = parseInt(document.getElementById('decimales').value);
+
+      if(fac1<0 || fac2<0 || fac3<0) {
+        $('#errorModalCenter').modal('show');
+        if(fac1<0) {
+          document.getElementById('fac1').value=0;
+          fac1=0;
+        }
+        if(fac2<0) {
+          document.getElementById('fac2').value=0;
+          fac2=0;
+        }
+        if(fac3<0) {
+          document.getElementById('fac3').value=0;
+          fac3=0;
+        }
+      }
+
+      if(isNaN(fac1) || isNaN(fac2) || isNaN(fac3)) {
+        if(!isNaN(fac1)) {
+          totalFacBs = fac1;
+          if(!isNaN(fac2)) {
+            totalFacBs = fac1 + fac2;
+          }
+          if(!isNaN(fac3)) {
+            totalFacBs = fac1 + fac3;
+          }
+        }
+
+        if(!isNaN(fac2)) {
+          totalFacBs = fac2;
+          if(!isNaN(fac1)) {
+            totalFacBs = fac2 + fac1;
+          }
+          if(!isNaN(fac3)) {
+            totalFacBs = fac2 + fac3;
+          }
+        }
+
+        if(!isNaN(fac3)) {
+          totalFacBs = fac3;
+          if(!isNaN(fac1)) {
+            totalFacBs = fac3 + fac1;
+          }
+          if(!isNaN(fac2)) {
+            totalFacBs = fac3 + fac2;
+          }
+        }
+      }
+      else {
+        totalFacBs = fac1 + fac2 + fac3;
+      }
+
+      totalFacDs = (totalFacBs/tasa).toFixed(decimales);
+      totalFacBs = totalFacBs.toFixed(decimales);
+
+      document.getElementById('totalFacBs').value = totalFacBs;
+      document.getElementById('totalFacDs').value = totalFacDs;
+      document.getElementById('saldoRestanteBs').value = totalFacBs;
+      document.getElementById('saldoRestanteDs').value = totalFacDs;
+
+      var tolerancia=parseFloat(document.getElementById('tolerancia').value);
+      var resultado=document.getElementById('resultado');
+
+      if(totalFacBs>0) {
+        document.getElementById('resultado').value = "El cliente debe: Bs. "+totalFacBs;
+        resultado.classList.add("bg-danger", "text-white");
+      }
+      else if(totalFacBs<((-1)*tolerancia)) {
+        document.getElementById('resultado').value = "Hay un vuelto pendiente de: Bs. "+totalFacBs;
+        resultado.classList.remove("bg-danger", "text-white");
+      }
+      else {
+        document.getElementById('resultado').value = "-";
+        resultado.classList.remove("bg-danger", "text-white");
+      }
+    }
+
     function separarMiles(cantidad, decimales) {
       // por si pasan un numero en vez de un string
       cantidad += ''; 
@@ -164,30 +269,39 @@
         fac1.focus();
       });
 
-      //Metodo para cambiar el foco con la tecla intro
-      $('#fac1, #fac2, #fac3, #abono1, #abono2').keypress(function(e) {
-        if(e.keyCode == 13) {
-          elementoActivo = document.activeElement.id;
-
-          switch(elementoActivo) {
-            case 'fac1': fac2.focus(); break;
-            case 'fac2': fac3.focus(); break;
-            case 'fac3': abono1.focus(); break;
-            case 'abono1': abono2.focus(); break;
-            case 'abono2': botonLimpiar.focus(); break;
-            default: fac1.focus();
-          }
-        }
-      });
-
       //Transformamos los campos back end a valores flotantes para poder operar con ellos
       tasa = parseFloat(tasa);
       decimales = parseFloat(decimales);
       tolerancia = parseFloat(tolerancia);
 
-      //Metodo para calcular los totales de las facturas
-      $('#fac1, #fac2, #fac3').blur(function(e) {
+      //Gestionador de eventos
+      $('#fac1, #fac2, #fac3, #abono1, #abono2').on({
+        //Metodo para cambiar el foco con la tecla intro
+        keypress: function(e) {
+          if(e.keyCode == 13) {
+            elementoActivo = document.activeElement.id;
 
+            switch(elementoActivo) {
+              case 'fac1': fac2.focus(); break;
+              case 'fac2': fac3.focus(); break;
+              case 'fac3': abono1.focus(); break;
+              case 'abono1': abono2.focus(); break;
+              case 'abono2': botonLimpiar.focus(); break;
+              default: fac1.focus();
+            }
+          }
+        },
+
+        //Metodo para calcular los totales de las facturas
+        blur: function(e) {
+          switch(e.target.id) {
+            case 'fac1':
+            case 'fac2':
+            case 'fac3':
+              calcularFactura();
+            break;
+          }
+        }
       });
 
     });
