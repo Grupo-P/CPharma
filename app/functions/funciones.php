@@ -1254,8 +1254,8 @@
 		$date = '';
 	    
 	    $contador = 0;
-	    
-	    while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
+	     //Borrar el contador del while
+	    while(($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC))&&($contador<10)) {
 	        $IdArticulo = $row["IdArticulo"];
 	        $CodigoInterno = $row["CodigoInterno"];
 	        $Descripcion=$row["Descripcion"];	        
