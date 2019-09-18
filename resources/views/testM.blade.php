@@ -144,8 +144,13 @@
       RETORNO: No aplica
     */
     function formatearVariables() {
+      //Facturas
       totalBs = 0;
       totalDs = 0;
+      
+      //Abonos
+      convA1 = 0;
+      totalAb = 0;
     }
 
     /*
@@ -188,7 +193,7 @@
     /********************* ABONOS DEL CLIENTE *********************/
 
     //Variables globales para almacenar valores numericos de abonos y totales
-    var ab1 = 0, ab2 = 0, convA1 = 0, totalAb = 0;
+    var ab1 = 0, ab2 = 0, convA1 = 0, totalAb = 0, restanteBs = 0, restanteDs = 0;
 
     /*
       TITULO: calcularAbono
@@ -241,24 +246,18 @@
         totalAb = convA1 + ab2;
       }
 
-      //Calculo de totales a mostrar
-      totalBs = parseFloat(totalFacBs.val());
+      if(totalAb > 0) {
+        //Calculo de totales a mostrar
+        totalBs = parseFloat(totalFacBs.val());
+        restanteBs = (totalBs - totalAb).toFixed(decimales);
+        restanteDs = (restanteBs / tasa).toFixed(decimales);
 
-      //redondearArriba(numero);
-
-      convAbono1 = convAbono1.toFixed(decimales);
-      totalAbonos = totalAbonos.toFixed(decimales);
-      saldoRestanteBs = (totalFacBs-totalAbonos).toFixed(decimales);
-      saldoRestanteDs = (saldoRestanteBs/tasa).toFixed(decimales);
-
-      document.getElementById('convAbono1').value = convAbono1;
-      document.getElementById('totalAbonos').value = totalAbonos;
-      document.getElementById('saldoRestanteBs').value = saldoRestanteBs;
-      document.getElementById('saldoRestanteDs').value = saldoRestanteDs;
-
-      tolerancia=parseFloat(document.getElementById('tolerancia').value);
-      resultado=document.getElementById('resultado');
-
+        saldoRestanteBs.val(restanteBs);
+        saldoRestanteDs.val(restanteDs);
+        convAbono1.val(convA1);
+        totalAbonos.val(totalAb);
+      }
+      
       /*if(saldoRestanteBs>0) {
         document.getElementById('resultado').value = "El cliente debe: Bs. "+saldoRestanteBs;
         resultado.classList.add("bg-danger", "text-white");
@@ -272,6 +271,7 @@
         resultado.classList.remove("bg-danger", "text-white");
       }
       */
+      formatearVariables()
     }
 
     /*
