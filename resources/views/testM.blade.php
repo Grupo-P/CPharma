@@ -261,11 +261,10 @@
       if(restanteBs > 0) {
         resultado.val('El cliente debe: Bs. ' + restanteBs).addClass('bg-danger text-white');
       }
-      /*else if(saldoRestanteBs<((-1)*tolerancia)) {
-        document.getElementById('resultado').value = "Hay un vuelto pendiente de: Bs. "+saldoRestanteBs;
-        resultado.classList.remove("bg-danger", "text-white");
+      else if(restanteBs < ((-1)*tolerancia)) {
+        resultado.val('Hay un vuelto pendiente de: Bs. ' + restanteBs).removeClass('bg-danger text-white');
       }
-      else {
+      /*else {
         document.getElementById('resultado').value = "-";
         resultado.classList.remove("bg-danger", "text-white");
       }*/
