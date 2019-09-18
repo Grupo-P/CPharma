@@ -89,7 +89,7 @@
       if(totalBs > 0) {
         //Calculo de totales
         totalDs = (Math.ceil((totalBs/tasa) * 100)) / 100;
-        totalBs = (Math.ceil((totalBs * 100))) / 100;
+        totalBs = redondearArriba(totalBs);
 
         //Imprimir resultados
         totalFacBs.val(totalBs);
@@ -146,6 +146,16 @@
     function formatearVariables() {
       totalBs = 0;
       totalDs = 0;
+    }
+
+    /*
+      TITULO: redondearArriba
+      PARAMETROS : [numero] Numero a redondear
+      FUNCION: Redondea a 2 decimales siempre hacia arriba
+      RETORNO: Numero redondeado
+    */
+    function redondearArriba(numero) {
+      return (Math.ceil((numero * 100))) / 100;
     }
 
     function separarMiles(cantidad, decimales) {
@@ -231,7 +241,10 @@
         totalAb = convA1 + ab2;
       }
 
-      /*totalFacBs=parseFloat(document.getElementById('totalFacBs').value);
+      //Calculo de totales a mostrar
+      totalBs = parseFloat(totalFacBs.val());
+
+      //redondearArriba(numero);
 
       convAbono1 = convAbono1.toFixed(decimales);
       totalAbonos = totalAbonos.toFixed(decimales);
@@ -246,7 +259,7 @@
       tolerancia=parseFloat(document.getElementById('tolerancia').value);
       resultado=document.getElementById('resultado');
 
-      if(saldoRestanteBs>0) {
+      /*if(saldoRestanteBs>0) {
         document.getElementById('resultado').value = "El cliente debe: Bs. "+saldoRestanteBs;
         resultado.classList.add("bg-danger", "text-white");
       }
