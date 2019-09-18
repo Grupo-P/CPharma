@@ -171,21 +171,21 @@
       RETORNO: Numero con formato moneda
     */
     function separarMiles(cantidad, decimales) {
-      // por si pasan un numero en vez de un string
+      //Transformamos el numero en string
       cantidad += ''; 
 
-      // elimino cualquier cosa que no sea numero o punto
+      //Eliminar cualquier caracter diferente a (.) o numeros
       cantidad = parseFloat(cantidad.replace(/[^0-9\.]/g, '')); 
       
-      // por si la variable no fue fue pasada
+      //Validar los decimales
       decimales = decimales || 0; 
 
-      // si no es un numero o es igual a cero retorno el mismo cero
+      //Si el numero es cero o texto alphanumerico retornamos cero
       if(isNaN(cantidad) || cantidad === 0)  {
           return parseFloat(0).toFixed(decimales);
       }
 
-      // si es mayor o menor que cero retorno el valor formateado como numero
+      //Si el valor es mayor o menor que cero formateamos a moneda
       cantidad = '' + cantidad.toFixed(decimales);
       var cantidad_parts = cantidad.split('.'),
       regexp = /(\d+)(\d{3})/;
@@ -194,6 +194,7 @@
           cantidad_parts[0] = cantidad_parts[0].replace(regexp, '$1' + ',' + '$2');
       }
 
+      //Retornamos el valor formateado
       return cantidad_parts.join('.');
     }
 
