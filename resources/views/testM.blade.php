@@ -275,7 +275,7 @@
         saldoRestanteBs.val('-' + separarMiles(restanteBs, decimales));
         saldoRestanteDs.val('-' + separarMiles(restanteDs, decimales));
       }
-      else {
+      else if(restanteBs != 0) {
         resultado.val('Hay un vuelto pendiente de: Bs. ' + separarMiles(restanteBs, decimales)).removeClass('bg-danger text-white');
         saldoRestanteBs.val('-' + separarMiles(restanteBs, decimales));
         saldoRestanteDs.val('-' + separarMiles(restanteDs, decimales));
