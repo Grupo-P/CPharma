@@ -15,7 +15,7 @@
     /********************* FACTURAS DEL CLIENTE *********************/
 
     //Variables globales para almacenar valores numericos de facturas y totales
-    var f1 = 0, f2 = 0, f3 = 0, totalBs = 0, totalDs = 0;
+    var f1 = 0, f2 = 0, f3 = 0, totalBs = 0, totalDs = 0, auxBs = 0;
 
     /*
       TITULO: calcularFactura
@@ -98,6 +98,9 @@
         saldoRestanteDs.val(separarMiles(totalDs, decimales));
         
         resultado.val('El cliente debe: Bs. ' + separarMiles(totalBs, decimales)).addClass('bg-danger text-white');
+
+        //Variable auxiliar para conservar temporalmente el valor del total
+        auxBs = totalBs;
       }
       else if(totalBs < ((-1) * tolerancia)) {
         resultado.val('Hay un vuelto pendiente de: Bs. ' + separarMiles(totalBs, decimales)).removeClass('bg-danger text-white');
@@ -256,7 +259,7 @@
 
       if(totalAb > 0) {
         //Calculo de totales a mostrar
-        totalBs = parseFloat(totalFacBs.val());
+        totalBs = auxBs;
         restanteBs = (totalBs - totalAb).toFixed(decimales);
         restanteDs = (restanteBs / tasa).toFixed(decimales);
 
@@ -266,12 +269,22 @@
         // saldoRestanteDs.val(restanteDs);
         // convAbono1.val(convA1.toFixed(decimales));
         // totalAbonos.val(totalAb.toFixed(decimales));
+        
+
+        saldoRestanteBs.val(separarMiles(restanteBs, decimales));
+        saldoRestanteDs.val(separarMiles(restanteDs, decimales));
+        convAbono1.val(separarMiles(convA1, decimales));
+        totalAbonos.val(separarMiles(totalAb, decimales));
+
+        console.log(restanteBs);
+        console.log(restanteDs);
+        console.log(totalAb);
       }
       
       if(restanteBs > 0) {
         resultado.val('El cliente debe: Bs. ' + restanteBs).addClass('bg-danger text-white');
       }
-      else if(restanteBs < ((-1)*tolerancia)) {
+      else if(restanteBs < ((-1) * tolerancia)) {
         resultado.val('Hay un vuelto pendiente de: Bs. ' + restanteBs).removeClass('bg-danger text-white');
       }
       
