@@ -187,23 +187,19 @@
 
     /*
       TITULO: calcularAbono
-      PARAMETROS : No aplica
-      FUNCION: Realizar los calculos para finiquitar la factura basado en los abonos del cliente, permite abonar en dolares y en bolivares simultaneamente
+      PARAMETROS : [abono1] Objeto JQuery con el campo abono 1
+                   [abono2] Objeto JQuery con el campo abono 2
+                   [convAbono1] Objeto JQuery con el campo conversion abono 1 en Bs
+                   [totalAbonos] Objeto JQuery con el campo total abonos en Bs
+                   [totalFacBs] Objeto JQuery con el campo total en Bs
+                   [tasa] Objeto JQuery con el campo tasa de venta Back End
+                   [decimales] Objeto JQuery con el campo decimales de venta Back End
+                   [tolerancia] Objeto JQuery con el campo tolerancia de venta Back End
+                   [saldoRestanteBs] Objeto JQuery con el campo saldo restante en Bs
+                   [saldoRestanteDs] Objeto JQuery con el campo saldo restante en $
+                   [resultado] Objeto JQuery para el resultado final de la factura
+      FUNCION: Realizar los calculos para las conversiones de los abonos del cliente en $ y dar los resultados de las restas a de la factura en ambas monedas
       RETORNO: No aplica
-
-      Variables:
-        - Variables de entrada:
-          * abono1: Abono #1 del cliente $
-          * abono2: Abono #2 del cliente Bs
-          * tasa: Tasa en dolares traida de la BBDD
-          * decimales: Cantidad de decimales a manejar traida de la BBDD
-          * tolerancia: Limite de vuelto significativo traida de la BBDD
-        - Variables de salida:
-          * convAbono1: Campo que muestra la conversion del abono en $ a Bs
-          * totalAbonos: Sumatoria total de abonos (Considera $ convertidos a Bs)
-          * resultado: Campo que muestra el resultado final de los calculos
-          * saldoRestanteBs: Muestra el saldo que todavia se debe en Bs
-          * saldoRestanteDs: Muestra el saldo que todavia se debe en $
     */
 
     function calcularAbono(abono1, abono2, convAbono1, totalAbonos, totalFacBs, tasa, decimales, tolerancia, saldoRestanteBs, saldoRestanteDs, resultado) {
