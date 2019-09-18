@@ -205,24 +205,31 @@
 
       validarAbonosNegativos(abono1, abono2);
 
-      if(!isNaN(ab1) && (ab1 > 2000)) {//Validar abono en dolares inferior o igual a 2000
+      //Validar abono en dolares inferior o igual a 2000
+      if(!isNaN(ab1) && (ab1 > 2000)) {
         $('#errorModalRango').modal('show');
         abono1.val('');
         ab1 = 0;
       }
-      /*else if(!isNaN(abono1)) {
-        convAbono1 = abono1*tasa;
-        totalAbonos=convAbono1;
-        if(!isNaN(abono2)) {
-          totalAbonos = convAbono1+abono2;
+      
+      //Calcular conversiones y totales de los abonos
+      if(isNaN(ab1) || isNaN(ab2)) {
+
+        if(!isNaN(ab1)) {
+          convA1 = ab1 * tasa;
+          totalAb = convA1;
+        }
+        else if(!isNaN(ab2)) {
+          totalAb = ab2;
         }
       }
-      if(!isNaN(abono2)) {
-        totalAbonos=abono2;
-        if(!isNaN(convAbono1)) {
-          totalAbonos = convAbono1+abono2;
-        }
-      }*/
+      else if(convA1 > 0) {
+        totalAb = convA1 + ab2;
+      }
+      else {
+        convA1 = ab1 * tasa;
+        totalAb = convA1 + ab2;
+      }
 
       /*totalFacBs=parseFloat(document.getElementById('totalFacBs').value);
 
