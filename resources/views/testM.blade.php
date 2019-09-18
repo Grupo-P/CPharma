@@ -258,19 +258,18 @@
         totalAbonos.val(totalAb);
       }
       
-      /*if(saldoRestanteBs>0) {
-        document.getElementById('resultado').value = "El cliente debe: Bs. "+saldoRestanteBs;
-        resultado.classList.add("bg-danger", "text-white");
+      if(restanteBs > 0) {
+        resultado.val('El cliente debe: Bs. ' + restanteBs).addClass('bg-danger text-white');
       }
-      else if(saldoRestanteBs<((-1)*tolerancia)) {
+      /*else if(saldoRestanteBs<((-1)*tolerancia)) {
         document.getElementById('resultado').value = "Hay un vuelto pendiente de: Bs. "+saldoRestanteBs;
         resultado.classList.remove("bg-danger", "text-white");
       }
       else {
         document.getElementById('resultado').value = "-";
         resultado.classList.remove("bg-danger", "text-white");
-      }
-      */
+      }*/
+      
       formatearVariables()
     }
 
