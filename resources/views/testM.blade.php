@@ -264,10 +264,9 @@
       else if(restanteBs < ((-1)*tolerancia)) {
         resultado.val('Hay un vuelto pendiente de: Bs. ' + restanteBs).removeClass('bg-danger text-white');
       }
-      /*else {
-        document.getElementById('resultado').value = "-";
-        resultado.classList.remove("bg-danger", "text-white");
-      }*/
+      else {
+        resultado.val('-').removeClass('bg-danger text-white');
+      }
       
       formatearVariables()
     }
