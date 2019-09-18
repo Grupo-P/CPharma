@@ -163,6 +163,13 @@
       return (Math.ceil((numero * 100))) / 100;
     }
 
+    /*
+      TITULO: separarMiles
+      PARAMETROS : [cantidad] Numero a transformar
+                   [decimales] Numero de decimales solicitados
+      FUNCION: Transforma con expresiones regulares un valor numerico a formato moneda
+      RETORNO: Numero con formato moneda
+    */
     function separarMiles(cantidad, decimales) {
       // por si pasan un numero en vez de un string
       cantidad += ''; 
