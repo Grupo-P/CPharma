@@ -271,7 +271,7 @@
         resultado.val('El cliente debe: Bs. ' + separarMiles(restanteBs, decimales)).addClass('bg-danger text-white');
       }
       else if(restanteBs < ((-1) * tolerancia)) {
-        resultado.val('Hay un vuelto pendiente de: Bs. -' + separarMiles(restanteBs, decimales)).removeClass('bg-danger text-white');
+        resultado.val('Hay un vuelto pendiente de: Bs. ' + separarMiles(restanteBs, decimales)).removeClass('bg-danger text-white');
         saldoRestanteBs.val('-' + separarMiles(restanteBs, decimales));
         saldoRestanteDs.val('-' + separarMiles(restanteDs, decimales));
       }
