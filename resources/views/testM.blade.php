@@ -205,12 +205,12 @@
 
       validarAbonosNegativos(abono1, abono2);
 
-      /*if(!isNaN(abono1) && abono1>2000) {
+      if(!isNaN(ab1) && (ab1 > 2000)) {//Validar abono en dolares inferior o igual a 2000
         $('#errorModalRango').modal('show');
-        document.getElementById('abono1').value=0;
-        abono1=0;
+        abono1.val('');
+        ab1 = 0;
       }
-      else if(!isNaN(abono1)) {
+      /*else if(!isNaN(abono1)) {
         convAbono1 = abono1*tasa;
         totalAbonos=convAbono1;
         if(!isNaN(abono2)) {
@@ -222,9 +222,9 @@
         if(!isNaN(convAbono1)) {
           totalAbonos = convAbono1+abono2;
         }
-      }
+      }*/
 
-      totalFacBs=parseFloat(document.getElementById('totalFacBs').value);
+      /*totalFacBs=parseFloat(document.getElementById('totalFacBs').value);
 
       convAbono1 = convAbono1.toFixed(decimales);
       totalAbonos = totalAbonos.toFixed(decimales);
