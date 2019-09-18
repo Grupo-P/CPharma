@@ -262,10 +262,10 @@
 
         //separarMiles(cantidad, decimales);
         //Imrpimir resultados
-        saldoRestanteBs.val(restanteBs);
-        saldoRestanteDs.val(restanteDs);
-        convAbono1.val(convA1.toFixed(decimales));
-        totalAbonos.val(totalAb.toFixed(decimales));
+        // saldoRestanteBs.val(restanteBs);
+        // saldoRestanteDs.val(restanteDs);
+        // convAbono1.val(convA1.toFixed(decimales));
+        // totalAbonos.val(totalAb.toFixed(decimales));
       }
       
       if(restanteBs > 0) {
