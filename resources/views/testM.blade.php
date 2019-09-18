@@ -92,10 +92,10 @@
         totalBs = redondearArriba(totalBs);
 
         //Imprimir resultados
-        totalFacBs.val(totalBs);
-        totalFacDs.val(totalDs);
-        saldoRestanteBs.val(totalBs);
-        saldoRestanteDs.val(totalDs);
+        totalFacBs.val(totalBs.toFixed(decimales));
+        totalFacDs.val(totalDs.toFixed(decimales));
+        saldoRestanteBs.val(totalBs.toFixed(decimales));
+        saldoRestanteDs.val(totalDs.toFixed(decimales));
         
         resultado.val('El cliente debe: Bs. ' + totalBs).addClass('bg-danger text-white');
       }
@@ -254,8 +254,8 @@
 
         saldoRestanteBs.val(restanteBs);
         saldoRestanteDs.val(restanteDs);
-        convAbono1.val(convA1);
-        totalAbonos.val(totalAb);
+        convAbono1.val(convA1.toFixed(decimales));
+        totalAbonos.val(totalAb.toFixed(decimales));
       }
       
       if(restanteBs > 0) {
