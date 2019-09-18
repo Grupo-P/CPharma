@@ -53,7 +53,6 @@
           if(!isNaN(f2)) {
             totalBs += f2;
           }
-
           if(!isNaN(f3)) {
             totalBs += f3;
           }
@@ -66,7 +65,6 @@
           if(!isNaN(f1)) {
             totalBs += f1;
           }
-
           if(!isNaN(f3)) {
             totalBs += f3;
           }
@@ -79,7 +77,6 @@
           if(!isNaN(f1)) {
             totalBs += f1;
           }
-
           if(!isNaN(f2)) {
             totalBs += f2;
           }
@@ -129,12 +126,10 @@
           fac1.val('');
           f1 = 0;
         }
-
         if(f2 < 0) {
           fac2.val('');
           f2 = 0;
         }
-
         if(f3 < 0) {
           fac3.val('');
           f3 = 0;
@@ -203,24 +198,14 @@
     */
 
     function calcularAbono(abono1, abono2, convAbono1, totalAbonos, totalFacBs, tasa, decimales, tolerancia, saldoRestanteBs, saldoRestanteDs, resultado) {
-      abono1 = parseFloat(document.getElementById('abono1').value);
-      abono2 = parseFloat(document.getElementById('abono2').value);
-      tasa = parseFloat(document.getElementById('tasa').value);
-      decimales = parseInt(document.getElementById('decimales').value);
 
-      if(abono1<0 || abono2<0) {
-        $('#errorModalCenter').modal('show');
-        if(abono1<0) {
-          document.getElementById('abono1').value=0;
-          abono1=0;
-        }
-        if(abono2<0) {
-          document.getElementById('abono2').value=0;
-          abono2=0;
-        }
-      }
+      //Variables para guardar el valor numerico de los abonos 1 y 2
+      ab1 = parseFloat(abono1.val());
+      ab2 = parseFloat(abono2.val());
 
-      if(!isNaN(abono1) && abono1>2000) {
+      validarAbonosNegativos(abono1, abono2);
+
+      /*if(!isNaN(abono1) && abono1>2000) {
         $('#errorModalRango').modal('show');
         document.getElementById('abono1').value=0;
         abono1=0;
@@ -265,6 +250,30 @@
       else {
         document.getElementById('resultado').value = "-";
         resultado.classList.remove("bg-danger", "text-white");
+      }
+      */
+    }
+
+    /*
+      TITULO: validarAbonosNegativos
+      PARAMETROS : [abono1] Objeto JQuery con el campo abono 1
+                   [abono2] Objeto JQuery con el campo abono 2
+      FUNCION: Validar si alguno de los abonos tiene valores negativos, lanzar un mensaje de error y formatear los valores a 0
+      RETORNO: No aplica
+    */
+    function validarAbonosNegativos(abono1, abono2) {
+      if((ab1 < 0) || (ab2 < 0)) {
+
+        $('#errorModalCenter').modal('show');
+
+        if(ab1 < 0) {
+          abono1.val('');
+          ab1 = 0;
+        }
+        if(ab2 < 0) {
+          abono2.val('');
+          ab2 = 0;
+        }
       }
     }
 
