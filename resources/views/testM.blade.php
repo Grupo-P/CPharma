@@ -99,11 +99,8 @@
         
         resultado.val('El cliente debe: Bs. ' + separarMiles(totalBs, decimales)).addClass('bg-danger text-white');
 
-        //Variable auxiliar para conservar temporalmente el valor del total
+        //Variable auxiliar para conservar temporalmente el valor del total en Bs
         auxBs = totalBs;
-      }
-      else if(totalBs < ((-1) * tolerancia)) {
-        resultado.val('Hay un vuelto pendiente de: Bs. ' + separarMiles(totalBs, decimales)).removeClass('bg-danger text-white');
       }
       else {
         resultado.val('-').removeClass('bg-danger text-white');
@@ -263,29 +260,25 @@
         restanteBs = (totalBs - totalAb).toFixed(decimales);
         restanteDs = (restanteBs / tasa).toFixed(decimales);
 
-        //separarMiles(cantidad, decimales);
-        //Imrpimir resultados
-        // saldoRestanteBs.val(restanteBs);
-        // saldoRestanteDs.val(restanteDs);
-        // convAbono1.val(convA1.toFixed(decimales));
-        // totalAbonos.val(totalAb.toFixed(decimales));
-        
-
+        //Imprimir resultados
         saldoRestanteBs.val(separarMiles(restanteBs, decimales));
         saldoRestanteDs.val(separarMiles(restanteDs, decimales));
         convAbono1.val(separarMiles(convA1, decimales));
         totalAbonos.val(separarMiles(totalAb, decimales));
-
-        console.log(restanteBs);
-        console.log(restanteDs);
-        console.log(totalAb);
       }
       
       if(restanteBs > 0) {
-        resultado.val('El cliente debe: Bs. ' + restanteBs).addClass('bg-danger text-white');
+        resultado.val('El cliente debe: Bs. ' + separarMiles(restanteBs, decimales)).addClass('bg-danger text-white');
       }
       else if(restanteBs < ((-1) * tolerancia)) {
-        resultado.val('Hay un vuelto pendiente de: Bs. ' + restanteBs).removeClass('bg-danger text-white');
+        resultado.val('Hay un vuelto pendiente de: Bs. -' + separarMiles(restanteBs, decimales)).removeClass('bg-danger text-white');
+        saldoRestanteBs.val('-' + separarMiles(restanteBs, decimales));
+        saldoRestanteDs.val('-' + separarMiles(restanteDs, decimales));
+      }
+      else {
+        resultado.val('Hay un vuelto pendiente de: Bs. ' + separarMiles(restanteBs, decimales)).removeClass('bg-danger text-white');
+        saldoRestanteBs.val('-' + separarMiles(restanteBs, decimales));
+        saldoRestanteDs.val('-' + separarMiles(restanteDs, decimales));
       }
       
       formatearVariables()
