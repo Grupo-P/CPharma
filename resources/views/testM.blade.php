@@ -12,6 +12,7 @@
 
 @section('scriptsCabecera')
   <script>
+    /********************* FACTURAS DEL CLIENTE *********************/
 
     //Variables globales para almacenar valores numericos de facturas y totales
     var f1 = 0, f2 = 0, f3 = 0, totalBs = 0, totalDs = 0;
@@ -179,6 +180,11 @@
       return cantidad_parts.join('.');
     }
 
+    /********************* ABONOS DEL CLIENTE *********************/
+
+    //Variables globales para almacenar valores numericos de abonos y totales
+    var ab1 = 0, ab2 = 0, convA1 = 0, totalAb = 0;
+
     /*
       TITULO: calcularAbono
       PARAMETROS : No aplica
@@ -200,9 +206,7 @@
           * saldoRestanteDs: Muestra el saldo que todavia se debe en $
     */
 
-    function calcularAbono() {
-      var abono1=0,abono2=0,convAbono1=0,totalAbonos=0,tasa=0,decimales=0;
-
+    function calcularAbono(abono1, abono2, convAbono1, totalAbonos, totalFacBs, tasa, decimales, tolerancia, saldoRestanteBs, saldoRestanteDs, resultado) {
       abono1 = parseFloat(document.getElementById('abono1').value);
       abono2 = parseFloat(document.getElementById('abono2').value);
       tasa = parseFloat(document.getElementById('tasa').value);
@@ -239,8 +243,6 @@
         }
       }
 
-      var totalFacBs=0,saldoRestanteBs=0,saldoRestanteDs=0;
-
       totalFacBs=parseFloat(document.getElementById('totalFacBs').value);
 
       convAbono1 = convAbono1.toFixed(decimales);
@@ -253,8 +255,8 @@
       document.getElementById('saldoRestanteBs').value = saldoRestanteBs;
       document.getElementById('saldoRestanteDs').value = saldoRestanteDs;
 
-      var tolerancia=parseFloat(document.getElementById('tolerancia').value);
-      var resultado=document.getElementById('resultado');
+      tolerancia=parseFloat(document.getElementById('tolerancia').value);
+      resultado=document.getElementById('resultado');
 
       if(saldoRestanteBs>0) {
         document.getElementById('resultado').value = "El cliente debe: Bs. "+saldoRestanteBs;
@@ -270,7 +272,8 @@
       }
     }
 
-    //Luego de cargar el documento ejecutar los scripst
+    /********************* INICIO DE LA EJECUCION DEL SCRIPT *********************/
+
     $(document).ready(function() {
       $('[data-toggle="tooltip"]').tooltip();
 
@@ -291,6 +294,8 @@
       //Abonos del cliente
       var abono1 = $('#abono1');
       var abono2 = $('#abono2');
+      var convAbono1 = $('#convAbono1');
+      var totalAbonos = $('#totalAbonos');
 
       //Campos requeridos traidos del back end
       var tasa = $('#tasa').val(); //Tasa de venta
@@ -339,13 +344,14 @@
 
             case 'abono1':
             case 'abono2':
-              //calcularAbono();
+              calcularAbono(abono1, abono2, convAbono1, totalAbonos, totalFacBs, tasa, decimales, tolerancia, saldoRestanteBs, saldoRestanteDs, resultado);
             break;
           }
         }
       });
 
     });
+    /********************* INICIO DE LA EJECUCION DEL SCRIPT *********************/
   </script>
 @endsection
 
