@@ -92,15 +92,23 @@
         totalBs = redondearArriba(totalBs);
 
         //Imprimir resultados
-        totalFacBs.val(totalBs.toFixed(decimales));
-        totalFacDs.val(totalDs.toFixed(decimales));
-        saldoRestanteBs.val(totalBs.toFixed(decimales));
-        saldoRestanteDs.val(totalDs.toFixed(decimales));
+        // totalFacBs.val(totalBs.toFixed(decimales));
+        // totalFacDs.val(totalDs.toFixed(decimales));
+        // saldoRestanteBs.val(totalBs.toFixed(decimales));
+        // saldoRestanteDs.val(totalDs.toFixed(decimales));
         
-        resultado.val('El cliente debe: Bs. ' + totalBs).addClass('bg-danger text-white');
+        // resultado.val('El cliente debe: Bs. ' + totalBs).addClass('bg-danger text-white');
+        
+        //separarMiles(cantidad, decimales);
+        totalFacBs.val(separarMiles(totalBs, decimales));
+        totalFacDs.val(separarMiles(totalDs, decimales));
+        saldoRestanteBs.val(separarMiles(totalBs, decimales));
+        saldoRestanteDs.val(separarMiles(totalDs, decimales));
+        
+        resultado.val('El cliente debe: Bs. ' + separarMiles(totalBs, decimales)).addClass('bg-danger text-white');
       }
       else if(totalBs < ((-1) * tolerancia)) {
-        resultado.val('Hay un vuelto pendiente de: Bs. ' + totalBs).removeClass('bg-danger text-white');
+        resultado.val('Hay un vuelto pendiente de: Bs. ' + separarMiles(totalBs, decimales)).removeClass('bg-danger text-white');
       }
       else {
         resultado.val('-').removeClass('bg-danger text-white');
@@ -578,7 +586,7 @@
           </td>
 
           <td>
-            <input type="number" step="0.01" min="0" placeholder="0,00" id="totalFacBs" class="form-control" disabled>
+            <input type="text" placeholder="0,00" id="totalFacBs" class="form-control" disabled>
           </td>
 
           <td>
@@ -596,7 +604,7 @@
           </td>
 
           <td>
-            <input type="number" step="0.01" min="0" placeholder="0,00" id="totalFacDs" class="form-control" disabled>
+            <input type="text" placeholder="0,00" id="totalFacDs" class="form-control" disabled>
           </td>
           
           <td colspan="2">&nbsp;</td>
@@ -628,7 +636,7 @@
           </td>
 
           <td>
-            <input type="number" step="0.01" min="0" placeholder="0,00" id="saldoRestanteBs" class="form-control" disabled>
+            <input type="text" placeholder="0,00" id="saldoRestanteBs" class="form-control" disabled>
           </td>
         </tr>
 
@@ -646,7 +654,7 @@
           </td>
 
           <td>
-            <input type="number" step="0.01" min="0" placeholder="0,00" id="saldoRestanteDs" class="form-control" disabled>
+            <input type="text" placeholder="0,00" id="saldoRestanteDs" class="form-control" disabled>
           </td>
         </tr>
 
@@ -656,7 +664,7 @@
           </td>
 
           <td>
-            <input type="number" step="0.01" min="0" placeholder="0,00" id="convAbono1" class="form-control" disabled>
+            <input type="text" placeholder="0,00" id="convAbono1" class="form-control" disabled>
           </td>
 
           <td colspan="2">
@@ -670,7 +678,7 @@
           </td>
           
           <td>
-            <input type="number" step="0.01" min="0" placeholder="0,00" id="totalAbonos" class="form-control" disabled>
+            <input type="text" placeholder="0,00" id="totalAbonos" class="form-control" disabled>
           </td>
 
           <td class="text-center">
