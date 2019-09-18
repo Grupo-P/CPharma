@@ -92,14 +92,6 @@
         totalBs = redondearArriba(totalBs);
 
         //Imprimir resultados
-        // totalFacBs.val(totalBs.toFixed(decimales));
-        // totalFacDs.val(totalDs.toFixed(decimales));
-        // saldoRestanteBs.val(totalBs.toFixed(decimales));
-        // saldoRestanteDs.val(totalDs.toFixed(decimales));
-        
-        // resultado.val('El cliente debe: Bs. ' + totalBs).addClass('bg-danger text-white');
-        
-        //separarMiles(cantidad, decimales);
         totalFacBs.val(separarMiles(totalBs, decimales));
         totalFacDs.val(separarMiles(totalDs, decimales));
         saldoRestanteBs.val(separarMiles(totalBs, decimales));
@@ -260,6 +252,8 @@
         restanteBs = (totalBs - totalAb).toFixed(decimales);
         restanteDs = (restanteBs / tasa).toFixed(decimales);
 
+        //separarMiles(cantidad, decimales);
+        //Imrpimir resultados
         saldoRestanteBs.val(restanteBs);
         saldoRestanteDs.val(restanteDs);
         convAbono1.val(convA1.toFixed(decimales));
