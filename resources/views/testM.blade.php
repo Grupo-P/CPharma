@@ -88,17 +88,17 @@
         totalBs = f1 + f2 + f3;
       }
 
-      //Calculo de totales
-      totalDs = (Math.round((totalBs/tasa) * 100)) / 100;
-      totalBs = (Math.round((totalBs * 100))) / 100;
-
-      //Imprimir resultados
-      totalFacBs.val(totalBs);
-      totalFacDs.val(totalDs);
-      saldoRestanteBs.val(totalBs);
-      saldoRestanteDs.val(totalDs);
-
       if(totalBs > 0) {
+        //Calculo de totales
+        totalDs = (Math.ceil((totalBs/tasa) * 100)) / 100;
+        totalBs = (Math.ceil((totalBs * 100))) / 100;
+
+        //Imprimir resultados
+        totalFacBs.val(totalBs);
+        totalFacDs.val(totalDs);
+        saldoRestanteBs.val(totalBs);
+        saldoRestanteDs.val(totalDs);
+        
         resultado.val('El cliente debe: Bs. ' + totalBs).addClass('bg-danger text-white');
       }
       else if(totalBs < ((-1) * tolerancia)) {
@@ -148,9 +148,6 @@
       RETORNO: No aplica
     */
     function formatearVariables() {
-      f1 = 0;
-      f2 = 0;
-      f3 = 0;
       totalBs = 0;
       totalDs = 0;
     }
