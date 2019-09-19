@@ -155,13 +155,13 @@
         }
 
         /*
-          TITULO: redondearArriba
-          PARAMETROS : [numero] Numero a redondear
-          FUNCION: Redondea a 2 decimales siempre hacia arriba
-          RETORNO: Numero redondeado
+            TITULO: redondearArriba
+            PARAMETROS : [numero] Numero a redondear
+            FUNCION: Redondea a 2 decimales siempre hacia arriba
+            RETORNO: Numero redondeado
         */
         function redondearArriba(numero) {
-          return (Math.ceil((numero * 100))) / 100;
+            return (Math.ceil((numero * 100))) / 100;
         }
 
         /*
