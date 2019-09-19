@@ -367,10 +367,8 @@
 
       //Gestionador de eventos
       $('#fac1, #fac2, #fac3, #abono1, #abono2').on({
-
-        //Metodo para cambiar el foco con la tecla intro
         keypress: function(e) {
-          if(e.keyCode == 13) {
+          if(e.keyCode == 13) {//Metodo para cambiar el foco con la tecla intro
             elementoActivo = document.activeElement.id;
 
             switch(elementoActivo) {
@@ -380,6 +378,11 @@
               case 'abono1': abono2.focus(); break;
               case 'abono2': botonLimpiar.focus(); break;
               default: fac1.focus();
+            }
+          }
+          else if(e.keyCode == 48) {//Metodo para evitar ceros al principio
+            if((e.target.value == '')) {
+              e.preventDefault();
             }
           }
         },
