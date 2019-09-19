@@ -104,6 +104,11 @@
                 auxBs = totalBs;
             }
             else {
+                totalFacBs.val('');
+                totalFacDs.val('');
+                saldoRestanteBs.val('');
+                saldoRestanteDs.val('');
+
                 resultado.val('-').removeClass('bg-danger text-white');
             }
 
