@@ -466,8 +466,7 @@
                     </div>
 
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-outline-warning" data-dismiss="modal">     Aceptar
-                        </button>
+                        <button type="button" class="btn btn-outline-warning" data-dismiss="modal">Aceptar</button>
                     </div>
                 </div>
             </div>
@@ -476,22 +475,27 @@
 
     <!-- Modal Valores Negativos -->
     <div class="modal fade" id="errorModalCenter" tabindex="-1" role="dialog" aria-labelledby="errorModalCenterTitle" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title text-danger" id="errorModalCenterTitle"><i class="fas fa-exclamation-circle"></i>&nbsp;Error</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title text-danger" id="errorModalCenterTitle">
+                        <i class="fas fa-exclamation-circle"></i>&nbsp;Error
+                    </h5>
+
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <div class="modal-body">
+                    <h4 class="h6">No se permiten valores negativos</h4>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Aceptar</button>
+                </div>
+            </div>
         </div>
-        <div class="modal-body">
-          <h4 class="h6">No se permiten valores negativos</h4>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Aceptar</button>
-        </div>
-      </div>
-    </div>
     </div>
 
     <!-- Modal Error En Rango Dolares -->
