@@ -207,16 +207,16 @@
         /*
             TITULO: calcularAbono
             PARAMETROS : [abono1] Objeto JQuery con el campo abono 1
-                       [abono2] Objeto JQuery con el campo abono 2
-                       [convAbono1] Objeto JQuery con el campo conversion abono 1 en Bs
-                       [totalAbonos] Objeto JQuery con el campo total abonos en Bs
-                       [totalFacBs] Objeto JQuery con el campo total en Bs
-                       [tasa] Objeto JQuery con el campo tasa de venta Back End
-                       [decimales] Objeto JQuery con el campo decimales de venta Back End
-                       [tolerancia] Objeto JQuery con el campo tolerancia de venta Back End
-                       [saldoRestanteBs] Objeto JQuery con el campo saldo restante en Bs
-                       [saldoRestanteDs] Objeto JQuery con el campo saldo restante en $
-                       [resultado] Objeto JQuery para el resultado final de la factura
+                         [abono2] Objeto JQuery con el campo abono 2
+                         [convAbono1] Objeto JQuery con el campo conversion abono 1 en Bs
+                         [totalAbonos] Objeto JQuery con el campo total abonos en Bs
+                         [totalFacBs] Objeto JQuery con el campo total en Bs
+                         [tasa] Objeto JQuery con el campo tasa de venta Back End
+                         [decimales] Objeto JQuery con el campo decimales de venta Back End
+                         [tolerancia] Objeto JQuery con el campo tolerancia de venta Back End
+                         [saldoRestanteBs] Objeto JQuery con el campo saldo restante en Bs
+                         [saldoRestanteDs] Objeto JQuery con el campo saldo restante en $
+                         [resultado] Objeto JQuery para el resultado final de la factura
             FUNCION: Realizar los calculos para las conversiones de los abonos del cliente en $ y dar los resultados de las restas a de la factura en ambas monedas
             RETORNO: No aplica
         */
@@ -296,26 +296,26 @@
         }
 
         /*
-          TITULO: validarAbonosNegativos
-          PARAMETROS : [abono1] Objeto JQuery con el campo abono 1
-                       [abono2] Objeto JQuery con el campo abono 2
-          FUNCION: Validar si alguno de los abonos tiene valores negativos, lanzar un mensaje de error y formatear los valores a 0
-          RETORNO: No aplica
+            TITULO: validarAbonosNegativos
+            PARAMETROS : [abono1] Objeto JQuery con el campo abono 1
+                         [abono2] Objeto JQuery con el campo abono 2
+            FUNCION: Validar si alguno de los abonos tiene valores negativos, lanzar un mensaje de error y formatear los valores a 0
+            RETORNO: No aplica
         */
         function validarAbonosNegativos(abono1, abono2) {
-          if((ab1 < 0) || (ab2 < 0)) {
+            if((ab1 < 0) || (ab2 < 0)) {
 
-            $('#errorModalCenter').modal('show');
+                $('#errorModalCenter').modal('show');
 
-            if(ab1 < 0) {
-              abono1.val('');
-              ab1 = 0;
+                if(ab1 < 0) {
+                    abono1.val('');
+                    ab1 = 0;
+                }
+                if(ab2 < 0) {
+                    abono2.val('');
+                    ab2 = 0;
+                }
             }
-            if(ab2 < 0) {
-              abono2.val('');
-              ab2 = 0;
-            }
-          }
         }
 
         /********************* INICIO DE LA EJECUCION DEL SCRIPT *********************/
