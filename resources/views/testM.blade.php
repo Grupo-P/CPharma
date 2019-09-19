@@ -749,9 +749,7 @@
     </table>
 
     <div class="text-center">
-    <a href="#Inicio" title="Volver al inicio" class="btn btn-primary">
-      Volver al inicio
-    </a>
+        <a href="#Inicio" title="Volver al inicio" class="btn btn-primary">Volver al inicio</a>
     </div>
 @endsection
 
