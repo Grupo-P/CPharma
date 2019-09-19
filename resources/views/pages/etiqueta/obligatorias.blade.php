@@ -20,30 +20,43 @@
 		margin:-2px;
 	}
 	thead{
-		border: 1px solid black;
+		border-top: 1px solid black;
+		border-right: 1px solid black;
+		border-left: 1px solid black;
 		border-radius: 0px;
 	}
 	tbody{
-		border: 1px solid black;
+		border-bottom: 1px solid black;
+		border-right: 1px solid black;
+		border-left: 1px solid black;
 		border-radius: 0px;
 		/*margin-bottom: 2px;*/
 	}
-	td{
-		width: 4cm;
+	.rowCenter{
+		width: 8cm;
+	}
+	.rowIzqA{
+		width: 5cm;
+	}
+	.rowDerA{
+		width: 3cm;
 	}
 	.titulo{
-		height: 1cm;
-		font-size: 1em;
+		height: 0.5cm;
+		font-size: 0.8em;
+		/*background-color: red;*/
 	}
 	.descripcion{
-		height: 1cm;
-		font-size: 0.8em;
+		height: 1.5cm;
+		/*background-color: blue;*/ 
 	}
 	.rowDer{
 		height: 1cm;
+		/*background-color: pink;*/
 	}
 	.rowIzq{
 		height: 1cm;
+		/*background-color: green;*/
 	}
 	.centrado{
 		text-align: center;
@@ -56,6 +69,9 @@
 	.izquierda{
 		text-align: left;
 		text-transform: uppercase;
+	}
+	.aumento{
+		font-size: 1.2em;
 	}
 </style>
 <?php

@@ -1363,49 +1363,49 @@
 					<table>
 						<thead>
 							<tr>
-								<td class="centrado titulo" colspan="2">
-									'.$CodigoBarra.'
+								<td class="centrado titulo rowCenter" colspan="2">
+									Código: '.$CodigoBarra.'
 								</td>
 							</tr>	
 						</thead>
 						<tbody>
 							<tr rowspan="2">
-								<td class="centrado descripcion" colspan="2">
-									'.$Descripcion.' 
+								<td class="centrado descripcion aumento rowCenter" colspan="2">
+									<strong>'.$Descripcion.'</strong> 
 								</td>
 							</tr>
 							<tr>
-								<td class="izquierda rowDer">
+								<td class="izquierda rowIzq rowIzqA">
 									PMVP Bs.
 								</td>
-								<td class="derecha rowIzq">
+								<td class="derecha rowDer rowDerA rowDer rowDerA">
 									'.number_format ($PMVP,2,"," ,"." ).'
 								</td>
 							</tr>
 							<tr>
-								<td class="izquierda rowDer">
+								<td class="izquierda rowIzq rowIzqA">
 									IVA 16% Bs.
 								</td>
-								<td class="derecha rowIzq">
+								<td class="derecha rowDer rowDerA">
 									'.number_format ($IVA,2,"," ,"." ).'
 								</td>
 							</tr>
 							<tr>
-								<td class="izquierda rowDer">
+								<td class="izquierda rowIzq rowIzqA aumento">
 									<strong>Total a Pagar Bs.</strong>
 								</td>
-								<td class="derecha rowIzq">
+								<td class="derecha rowDer rowDerA aumento">
 									<strong>
 									'.number_format ($PrecioHoy,2,"," ,"." ).'
 									</strong>
 								</td>
 							</tr>
 							<tr>
-								<td class="izquierda dolarizado rowDer">
+								<td class="izquierda dolarizado rowIzq rowIzqA">
 									<strong>'.$simbolo.'</strong>
 								</td>
-								<td class="derecha rowIzq">
-									'.$FHoy.'
+								<td class="derecha rowDer rowDerA">
+									'.date("d-m-Y").'
 								</td>
 							</tr>				
 						</tbody>
