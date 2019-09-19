@@ -640,89 +640,72 @@
                 </tr>
             </tbody>
 
-          <thead class="thead-dark" align="center">
-            <th scope="col" colspan="2">
-              <b>ABONOS DEL CLIENTE</b>
-            </th>
+            <thead class="thead-dark" align="center">
+                <th scope="col" colspan="2"><b>ABONOS DEL CLIENTE</b></th>
+                <th scope="col" colspan="2"><b>SALDOS RESTANTES</b></th>
+            </thead>
 
-            <th scope="col" colspan="2">
-              <b>SALDOS RESTANTES</b>
-            </th>
-          </thead>
+            <tbody align="right">
+                <tr>
+                    <td>Abono #1 en $:</td>
 
-          <tbody align="right">
-            <tr>
-              <td>
-                Abono #1 en $:
-              </td>
+                    <td>
+                        <input type="number" step="0.01" min="0" placeholder="0,00" name="abono1" id="abono1" class="form-control bg-warning">
+                    </td>
 
-              <td>
-                <input type="number" step="0.01" min="0" placeholder="0,00" name="abono1" id="abono1" class="form-control bg-warning">
-              </td>
+                    <td>Saldo Restante en Bs:</td>
 
-              <td>
-                Saldo Restante en Bs:
-              </td>
+                    <td>
+                        <input type="text" placeholder="0,00" id="saldoRestanteBs" class="form-control" disabled>
+                    </td>
+                </tr>
 
-              <td>
-                <input type="text" placeholder="0,00" id="saldoRestanteBs" class="form-control" disabled>
-              </td>
-            </tr>
+                <tr>
+                    <td>Abono #2 en Bs:</td>
 
-            <tr>
-              <td>
-                Abono #2 en Bs:
-              </td>
+                    <td>
+                        <input type="number" step="0.01" min="0" placeholder="0,00" name="abono2" id="abono2" class="form-control bg-warning">
+                    </td>
 
-              <td>
-                <input type="number" step="0.01" min="0" placeholder="0,00" name="abono2" id="abono2" class="form-control bg-warning">
-              </td>
+                    <td>Saldo Restante en $:</td>
 
-              <td>
-                Saldo Restante en $:
-              </td>
+                    <td>
+                        <input type="text" placeholder="0,00" id="saldoRestanteDs" class="form-control" disabled>
+                    </td>
+                </tr>
 
-              <td>
-                <input type="text" placeholder="0,00" id="saldoRestanteDs" class="form-control" disabled>
-              </td>
-            </tr>
+                <tr>
+                    <td>Conversion Abono #1 en Bs:</td>
 
-            <tr>
-              <td>
-                Conversion Abono #1 en Bs:
-              </td>
+                    <td>
+                        <input type="text" placeholder="0,00" id="convAbono1" class="form-control" disabled>
+                    </td>
 
-              <td>
-                <input type="text" placeholder="0,00" id="convAbono1" class="form-control" disabled>
-              </td>
+                    <td colspan="2">
+                        <input type="text" placeholder="-" class="form-control" id="resultado" disabled>
+                    </td>
+                </tr>
 
-              <td colspan="2">
-                <input type="text" placeholder="-" class="form-control" id="resultado" disabled>
-              </td>
-            </tr>
+                <tr>
+                    <td>Total Abonos Bs:</td>
 
-            <tr>
-              <td>
-                Total Abonos Bs:
-              </td>
-              
-              <td>
-                <input type="text" placeholder="0,00" id="totalAbonos" class="form-control" disabled>
-              </td>
+                    <td>
+                        <input type="text" placeholder="0,00" id="totalAbonos" class="form-control" disabled>
+                    </td>
 
-              <td class="text-center">
-                <button type="reset" name="btn-borrarN" id="btn-borrarN" class="btn btn-success">
-                  Borrar y empezar de nuevo
-                </button>
-              </td>
+                    <td class="text-center">
+                        <button type="reset" name="btn-borrarN" id="btn-borrarN" class="btn btn-success">
+                            Borrar y empezar de nuevo
+                        </button>
+                    </td>
 
-              <td class="text-center">
-                <a href="#ver-manual" title="Ir al manual de usuario" class="btn btn-primary">
-                  Ver instrucciones
-                </a>
-              </td>
-            </tr>
-          </tbody>
+                    <td class="text-center">
+                        <a href="#ver-manual" title="Ir al manual de usuario" class="btn btn-primary">
+                            Ver instrucciones
+                        </a>
+                    </td>
+                </tr>
+            </tbody>
         </table>
     </form>
 
