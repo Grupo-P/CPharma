@@ -1413,7 +1413,7 @@
 				';
 				$CuentaCard++;
 				if($CuentaCard == 3){
-					echo'<br><br>';
+					echo'<br>';
 					$CuentaCard=0;
 				}
 			}

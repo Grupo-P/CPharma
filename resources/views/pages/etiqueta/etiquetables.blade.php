@@ -6,16 +6,18 @@
 
 @section('content')
 
-	<h1 class="h5 text-info">
+	<h1 class="h5 text-info" style="display: inline;">
 		<i class="fas fa-tag"></i>
 		Etiquetables
 	</h1>
+	<input type="button" name="imprimir" value="Imprimir" class="btn btn-outline-info btn-sm" onclick="window.print();" style="display: inline; margin-left: 50px;">
 	<hr class="row align-items-start col-12">
 
 <style>	
 	table{
 		display: inline;
-		padding: 0.2cm;	
+		/*padding: 0.2cm;*/
+		margin:-2px;
 	}
 	thead{
 		border: 1px solid black;
@@ -24,10 +26,10 @@
 	tbody{
 		border: 1px solid black;
 		border-radius: 0px;
-		margin-bottom: 2px;
+		/*margin-bottom: 2px;*/
 	}
 	td{
-		width: 4cm;
+		width: 3.5cm;
 	}
 	.titulo{
 		height: 1cm;
