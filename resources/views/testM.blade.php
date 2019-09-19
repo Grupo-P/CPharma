@@ -709,46 +709,43 @@
         </table>
     </form>
 
-    <br><br>
+    <br/><br/>
 
     <a name="ver-manual"></a>
     <table class="table table-bordered table-striped">
-    <thead class="thead-dark" align="center">
-      <th scope="col">
-        <b>INSTRUCCIONES</b>
-      </th>
-    </thead>
+        <thead class="thead-dark" align="center">
+            <th scope="col"><b>INSTRUCCIONES</b></th>
+        </thead>
 
-    <tbody>
-      <tr>
-        <td>* Solo debes colocar informacion en los campos <span class="bg-warning text-dark"><b>AMARILLOS<b></span>
-        </td>
-      </tr>
-      
-      <tr>
-        <td>
-          * El boton de borrado solo afecta los campos en <span class="bg-warning text-dark"><b>AMARILLO<b></span>
-        </td>
-      </tr>
-      
-      <tr>
-        <td>* Si el cliente presenta deuda, lo veras en color <span class="bg-danger text-white"><b>ROJO<b></span>
-        </td>
-      </tr>
+        <tbody>
+            <tr>
+                <td>
+                    * Solo debes colocar informacion en los campos <span class="bg-warning text-dark"><b>AMARILLOS<b></span>
+                </td>
+            </tr>
 
-      <tr>
-        <td>
-          * Verifica que la <b>tasa</b> sea la del dia en curso.
-        </td>
-      </tr>
+            <tr>
+                <td>
+                    * El boton de borrado solo afecta los campos en <span class="bg-warning text-dark"><b>AMARILLO<b></span>
+                </td>
+            </tr>
 
-      <tr>
-        <td>
-          * El campo de <b>abonos en dolares</b> solo acepta montos menores a 2000$.
-        </td>
-      </tr>
+            <tr>
+                <td>
+                    * Si el cliente presenta deuda, lo veras en color <span class="bg-danger text-white"><b>ROJO<b></span>
+                </td>
+            </tr>
 
-    </tbody>
+            <tr>
+                <td>* Verifica que la <b>tasa</b> sea la del dia en curso.</td>
+            </tr>
+
+            <tr>
+                <td>
+                    * El campo de <b>abonos en dolares</b> solo acepta montos menores a 2000$.
+                </td>
+            </tr>
+        </tbody>
     </table>
 
     <div class="text-center">
