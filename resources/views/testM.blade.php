@@ -99,9 +99,6 @@
                 saldoRestanteDs.val(separarMiles(totalDs, decimales));
 
                 resultado.val('El cliente debe: Bs. ' + separarMiles(totalBs, decimales)).addClass('bg-danger text-white');
-
-                //Variable auxiliar para conservar temporalmente el valor del total en Bs
-                auxBs = totalBs;
             }
             else {
                 totalFacBs.val('');
@@ -111,6 +108,9 @@
 
                 resultado.val('-').removeClass('bg-danger text-white');
             }
+
+            //Variable auxiliar para conservar temporalmente el valor del total en Bs
+            auxBs = totalBs;
 
             formatearVariables();
         }
