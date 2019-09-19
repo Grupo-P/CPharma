@@ -340,6 +340,7 @@
         //Borra el resultado, elimina las clases existentes y pasa el foco a la factura 1
         resultado.removeClass('bg-danger text-white').val('-');
         fac1.focus();
+        auxBs = 0;
       });
 
       //Transformamos los campos back end a valores flotantes para poder operar con ellos
