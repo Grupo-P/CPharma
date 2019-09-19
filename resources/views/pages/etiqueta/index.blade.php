@@ -108,38 +108,46 @@
 	    <tr>
 	    	<td style="width:10%;" align="center">
 	    		<?php
-	    			$etiqueta->clasificacion = 'ETIQUETA';
+	    			$etiqueta->id = 0;
 	    		?>
-    			<form action="/etiqueta/{{$etiqueta->clasificacion}}" method="POST" style="display: inline;">
+    			<form action="/etiqueta/{{$etiqueta->id}}" method="POST" style="display: inline;">
 				    @method('PUT')
 				    @csrf					    
 				    <button type="submit" name="Eliminar" role="button" class="btn btn-outline-dark btn-sm">Pendientes</button>
 				</form>
-				<!-- <a href="#" role="button" class="btn btn-outline-dark btn-sm" 
-				style="display: inline;">
-					Pendientes	      		
-				</a> -->
 	        </td>
 
-	        <td style="width:13%;" align="center">	
-				<a href="#" role="button" class="btn btn-outline-danger btn-sm" 
-				style="display: inline;">
-					No Etiquetables	      		
-				</a>
+	        <td style="width:13%;" align="center">
+	        	<?php
+	    			$etiqueta->id = 1;
+	    		?>
+    			<form action="/etiqueta/{{$etiqueta->id}}" method="POST" style="display: inline;">
+				    @method('PUT')
+				    @csrf					    
+				    <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm">No Etiquetables</button>
+				</form>	
+			</td>
+
+	        <td style="width:10%;" align="center">
+	        	<?php
+	    			$etiqueta->id = 2;
+	    		?>
+    			<form action="/etiqueta/{{$etiqueta->id}}" method="POST" style="display: inline;">
+				    @method('PUT')
+				    @csrf					    
+				    <button type="submit" name="Eliminar" role="button" class="btn btn-outline-info btn-sm">Etiquetables</button>
+				</form>						
 	        </td>
 
-	        <td style="width:10%;" align="center">	
-				<a href="#" role="button" class="btn btn-outline-info btn-sm" 
-				style="display: inline;">
-					Etiquetables	      		
-				</a>
-	        </td>
-
-	        <td style="width:15%;" align="center">	
-				<a href="#" role="button" class="btn btn-outline-success btn-sm" 
-				style="display: inline;">
-					Obligatorias Etiquetar	      		
-				</a>
+	        <td style="width:15%;" align="center">
+	        	<?php
+	    			$etiqueta->id = 3;
+	    		?>
+    			<form action="/etiqueta/{{$etiqueta->id}}" method="POST" style="display: inline;">
+				    @method('PUT')
+				    @csrf					    
+				    <button type="submit" name="Eliminar" role="button" class="btn btn-outline-success btn-sm">Obligatorias Etiquetar</button>
+				</form>			
 	        </td>
 
 	        <td style="width:14%;" align="center">	
