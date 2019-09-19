@@ -58,11 +58,7 @@ class EtiquetaController extends Controller
      */
     public function store(Request $request)
     {   
-        $etiquetas =  
-        Etiqueta::orderBy('id', 'asc')->
-        where('clasificacion', 'ETIQUETABLE')->take(100)->get();
-
-        return view('pages.etiqueta.index', compact('etiquetas'));
+        return redirect()->action('EtiquetaController@index');
     }
 
     /**
@@ -133,8 +129,14 @@ class EtiquetaController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
-    {
-        return redirect()->action('EtiquetaController@index');
+    {   
+        $clasificacion = $request->clasificacion;
+        echo'Calsific: '.$clasificacion;
+        $etiquetas =  
+        Etiqueta::orderBy('id', 'asc')->
+        where('clasificacion',$clasificacion)->take(100)->get();
+
+        return view('pages.etiqueta.index', compact('etiquetas'));
     }
 
     /**

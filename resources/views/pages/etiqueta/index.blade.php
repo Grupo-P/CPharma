@@ -83,6 +83,11 @@
 		<i class="fas fa-tag"></i>
 		Etiqueta
 	</h1>
+	
+	<?php
+		use compras\Etiqueta;
+		$etiqueta = new Etiqueta();
+	?>
 
 	<hr class="row align-items-start col-12">
 	<table style="width:100%;">
@@ -101,11 +106,19 @@
 	    <br/>
 	    <table>
 	    <tr>
-	    	<td style="width:10%;" align="center">	
-				<a href="#" role="button" class="btn btn-outline-dark btn-sm" 
+	    	<td style="width:10%;" align="center">
+	    		<?php
+	    			$etiqueta->clasificacion = 'ETIQUETA';
+	    		?>
+    			<form action="/etiqueta/{{$etiqueta->clasificacion}}" method="POST" style="display: inline;">
+				    @method('PUT')
+				    @csrf					    
+				    <button type="submit" name="Eliminar" role="button" class="btn btn-outline-dark btn-sm">Pendientes</button>
+				</form>
+				<!-- <a href="#" role="button" class="btn btn-outline-dark btn-sm" 
 				style="display: inline;">
 					Pendientes	      		
-				</a>
+				</a> -->
 	        </td>
 
 	        <td style="width:13%;" align="center">	
