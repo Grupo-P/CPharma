@@ -745,6 +745,10 @@
                     * El campo de <b>abonos en dolares</b> solo acepta montos menores a 2000$.
                 </td>
             </tr>
+
+            <tr>
+                <td>* <b>Nuestro separador de decimales es la coma (,)</b></td>
+            </tr>
         </tbody>
     </table>
 
