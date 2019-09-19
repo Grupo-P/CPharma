@@ -773,7 +773,7 @@
 @endsection
 
 @section('scriptsPie')
-  <script type="text/javascript">
-    $('#exampleModalCenter').modal('show');
-  </script>
+    <script type="text/javascript">
+        $('#exampleModalCenter').modal('show');
+    </script>
 @endsection
