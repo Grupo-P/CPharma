@@ -271,11 +271,14 @@
         resultado.val('El cliente debe: Bs. ' + separarMiles(restanteBs, decimales)).addClass('bg-danger text-white');
       }
       else if(restanteBs < ((-1) * tolerancia)) {
-        resultado.val('Hay un vuelto pendiente de: Bs. ' + separarMiles(restanteBs, decimales)).removeClass('bg-danger text-white');
+        resultado.val('Hay un vuelto pendiente de: Bs. -' + separarMiles(restanteBs, decimales)).removeClass('bg-danger text-white');
         saldoRestanteBs.val('-' + separarMiles(restanteBs, decimales));
         saldoRestanteDs.val('-' + separarMiles(restanteDs, decimales));
       }
       else if(restanteBs != 0) {
+        resultado.val('-').removeClass('bg-danger text-white');
+      }
+      else if((restanteBs == 0) && (totalBs > 0)) {
         resultado.val('-').removeClass('bg-danger text-white');
       }
       
@@ -340,7 +343,11 @@
         //Borra el resultado, elimina las clases existentes y pasa el foco a la factura 1
         resultado.removeClass('bg-danger text-white').val('-');
         fac1.focus();
+
+        //Formateo de variables auxiliares
         auxBs = 0;
+        restanteBs = 0;
+        restanteDs = 0;
       });
 
       //Transformamos los campos back end a valores flotantes para poder operar con ellos
