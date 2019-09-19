@@ -56,19 +56,12 @@ class EtiquetaController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request) // AQUI QUEDE
+    public function store(Request $request)
     {   
-        $clasificacion = $request->input('clasificacion');
-
-        if($etiqueta->clasificacion != 'OBLIGATORIO ETIQUETAR'){
-            
-            $etiqueta->clasificacion = 'OBLIGATORIO ETIQUETAR';
-        }
-
         $etiquetas =  
-        Etiqueta::orderBy('condicion', 'desc')->
-        where('clasificacion', 'PENDIENTE')->get();
-        
+        Etiqueta::orderBy('id', 'asc')->
+        where('clasificacion', 'ETIQUETABLE')->take(100)->get();
+
         return view('pages.etiqueta.index', compact('etiquetas'));
     }
 
