@@ -94,7 +94,7 @@
 	/*
 		TITULO: R1Q_Activacion_Proveedores
 		PARAMETROS: No aplica
-		FUNCION: Query que genera la lista de los proveedores con la diferencia en dias desde el ultimo despacho de mercancia 
+		FUNCION: Query que genera la lista de los proveedores con la diferencia en dias desde el ultimo despacho de mercancia. 
 		RETORNO: Lista de proveedores con diferencia en dias respecto al dia actual
 	 */
 	function R1Q_Activacion_Proveedores() {
