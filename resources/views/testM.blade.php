@@ -261,8 +261,20 @@
         restanteDs = (restanteBs / tasa).toFixed(decimales);
 
         //Imprimir resultados
-        saldoRestanteBs.val(separarMiles(restanteBs, decimales));
-        saldoRestanteDs.val(separarMiles(restanteDs, decimales));
+        if((restanteBs < 0) || (restanteDs < 0)) {
+          if(restanteBs) {
+            saldoRestanteBs.val('-' + separarMiles(restanteBs, decimales));
+          }
+
+          if(restanteDs) {
+            saldoRestanteDs.val('-' + separarMiles(restanteDs, decimales));
+          }
+        }
+        else {
+          saldoRestanteBs.val(separarMiles(restanteBs, decimales));
+          saldoRestanteDs.val(separarMiles(restanteDs, decimales));
+        }
+        
         convAbono1.val(separarMiles(convA1, decimales));
         totalAbonos.val(separarMiles(totalAb, decimales));
       }
@@ -272,8 +284,6 @@
       }
       else if(restanteBs < ((-1) * tolerancia)) {
         resultado.val('Hay un vuelto pendiente de: Bs. -' + separarMiles(restanteBs, decimales)).removeClass('bg-danger text-white');
-        saldoRestanteBs.val('-' + separarMiles(restanteBs, decimales));
-        saldoRestanteDs.val('-' + separarMiles(restanteDs, decimales));
       }
       else if(restanteBs != 0) {
         resultado.val('-').removeClass('bg-danger text-white');
