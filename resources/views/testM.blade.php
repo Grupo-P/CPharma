@@ -321,89 +321,88 @@
         /********************* INICIO DE LA EJECUCION DEL SCRIPT *********************/
 
         $(document).ready(function() {
-          $('[data-toggle="tooltip"]').tooltip();
+            $('[data-toggle="tooltip"]').tooltip();
 
-          //Identificamos los objetos del DOM con objetos JQuery
-          var botonLimpiar = $('#btn-borrarN');
-          var resultado = $('#resultado');
-          var elementoActivo = '';
+            //Identificamos los objetos del DOM con objetos JQuery
+            var botonLimpiar = $('#btn-borrarN');
+            var resultado = $('#resultado');
+            var elementoActivo = '';
 
-          //Facturas y totales
-          var fac1 = $('#fac1'); //Factura #1 del cliente Bs
-          var fac2 = $('#fac2'); //Factura #2 del cliente Bs
-          var fac3 = $('#fac3'); //Factura #3 del cliente Bs
-          var totalFacBs = $('#totalFacBs'); //Monto total calculado en Bs
-          var totalFacDs = $('#totalFacDs'); //Monto total calculado en $
-          var saldoRestanteBs = $('#saldoRestanteBs');
-          var saldoRestanteDs = $('#saldoRestanteDs');
+            //Facturas y totales
+            var fac1 = $('#fac1'); //Factura #1 del cliente Bs
+            var fac2 = $('#fac2'); //Factura #2 del cliente Bs
+            var fac3 = $('#fac3'); //Factura #3 del cliente Bs
+            var totalFacBs = $('#totalFacBs'); //Monto total calculado en Bs
+            var totalFacDs = $('#totalFacDs'); //Monto total calculado en $
+            var saldoRestanteBs = $('#saldoRestanteBs');
+            var saldoRestanteDs = $('#saldoRestanteDs');
 
-          //Abonos del cliente
-          var abono1 = $('#abono1');
-          var abono2 = $('#abono2');
-          var convAbono1 = $('#convAbono1');
-          var totalAbonos = $('#totalAbonos');
+            //Abonos del cliente
+            var abono1 = $('#abono1');
+            var abono2 = $('#abono2');
+            var convAbono1 = $('#convAbono1');
+            var totalAbonos = $('#totalAbonos');
 
-          //Campos requeridos traidos del back end
-          var tasa = $('#tasa').val(); //Tasa de venta
-          var decimales = $('#decimales').val(); //Numero de decimales de la factura
-          var tolerancia = $('#tolerancia').val(); //Tolerancia de vuelto al cliente
+            //Campos requeridos traidos del back end
+            var tasa = $('#tasa').val(); //Tasa de venta
+            var decimales = $('#decimales').val(); //Numero de decimales de la factura
+            var tolerancia = $('#tolerancia').val(); //Tolerancia de vuelto al cliente
 
-          //Colocamos el boton de borrado a la escucha del click
-          botonLimpiar.click(function() {
-            //Borra el resultado, elimina las clases existentes y pasa el foco a la factura 1
-            resultado.removeClass('bg-danger text-white').val('-');
-            fac1.focus();
+            //Colocamos el boton de borrado a la escucha del click
+            botonLimpiar.click(function() {
+                //Borra el resultado, elimina las clases existentes y pasa el foco a la factura 1
+                resultado.removeClass('bg-danger text-white').val('-');
+                fac1.focus();
 
-            //Formateo de variables auxiliares
-            auxBs = 0;
-            restanteBs = 0;
-            restanteDs = 0;
-          });
+                //Formateo de variables auxiliares
+                auxBs = 0;
+                restanteBs = 0;
+                restanteDs = 0;
+            });
 
-          //Transformamos los campos back end a valores flotantes para poder operar con ellos
-          tasa = parseFloat(tasa);
-          decimales = parseFloat(decimales);
-          tolerancia = parseFloat(tolerancia);
+            //Transformamos los campos back end a valores flotantes para poder operar con ellos
+            tasa = parseFloat(tasa);
+            decimales = parseFloat(decimales);
+            tolerancia = parseFloat(tolerancia);
 
-          //Gestionador de eventos
-          $('#fac1, #fac2, #fac3, #abono1, #abono2').on({
-            keypress: function(e) {
-              if(e.keyCode == 13) {//Metodo para cambiar el foco con la tecla intro
-                elementoActivo = document.activeElement.id;
+            //Gestionador de eventos
+            $('#fac1, #fac2, #fac3, #abono1, #abono2').on({
+                keypress: function(e) {
+                    if(e.keyCode == 13) {//Metodo para cambiar el foco con la tecla intro
+                        elementoActivo = document.activeElement.id;
 
-                switch(elementoActivo) {
-                  case 'fac1': fac2.focus(); break;
-                  case 'fac2': fac3.focus(); break;
-                  case 'fac3': abono1.focus(); break;
-                  case 'abono1': abono2.focus(); break;
-                  case 'abono2': botonLimpiar.focus(); break;
-                  default: fac1.focus();
+                        switch(elementoActivo) {
+                            case 'fac1': fac2.focus(); break;
+                            case 'fac2': fac3.focus(); break;
+                            case 'fac3': abono1.focus(); break;
+                            case 'abono1': abono2.focus(); break;
+                            case 'abono2': botonLimpiar.focus(); break;
+                            default: fac1.focus();
+                        }
+                    }
+                    else if(e.keyCode == 48) {//Metodo para evitar ceros al principio
+                        if(e.target.value == '') {
+                            e.preventDefault();
+                        }
+                    }
+                },
+
+                //Gestionador de calculos
+                blur: function(e) {
+                    switch(e.target.id) {
+                        case 'fac1':
+                        case 'fac2':
+                        case 'fac3':
+                          calcularFactura(fac1, fac2, fac3, totalFacBs, totalFacDs, tasa, decimales, tolerancia, saldoRestanteBs, saldoRestanteDs, resultado);
+                        break;
+
+                        case 'abono1':
+                        case 'abono2':
+                          calcularAbono(abono1, abono2, convAbono1, totalAbonos, totalFacBs, tasa, decimales, tolerancia, saldoRestanteBs, saldoRestanteDs, resultado);
+                        break;
+                    }
                 }
-              }
-              else if(e.keyCode == 48) {//Metodo para evitar ceros al principio
-                if(e.target.value == '') {
-                  e.preventDefault();
-                }
-              }
-            },
-
-            //Gestionador de calculos
-            blur: function(e) {
-              switch(e.target.id) {
-                case 'fac1':
-                case 'fac2':
-                case 'fac3':
-                  calcularFactura(fac1, fac2, fac3, totalFacBs, totalFacDs, tasa, decimales, tolerancia, saldoRestanteBs, saldoRestanteDs, resultado);
-                break;
-
-                case 'abono1':
-                case 'abono2':
-                  calcularAbono(abono1, abono2, convAbono1, totalAbonos, totalFacBs, tasa, decimales, tolerancia, saldoRestanteBs, saldoRestanteDs, resultado);
-                break;
-              }
-            }
-          });
-
+            });
         });
         /********************* INICIO DE LA EJECUCION DEL SCRIPT *********************/
     </script>
