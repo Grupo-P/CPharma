@@ -1,30 +1,26 @@
 @extends('layouts.model')
-
 @section('title')
     Reporte
 @endsection
-
 @section('content')
 	<h1 class="h5 text-info">
 		<i class="fas fa-file-invoice"></i>
 		Activacion de proveedores
 	</h1>
 	<hr class="row align-items-start col-12">
-
 <?php	
 	include(app_path().'\functions\config.php');
 	include(app_path().'\functions\querys.php');
 	include(app_path().'\functions\funciones.php');
-	//include(app_path().'\functions\reportes.php');
 
 	$InicioCarga = new DateTime("now");
-	
+
 	if (isset($_GET['SEDE'])){			
 		echo '<h1 class="h5 text-success"  align="left"> <i class="fas fa-prescription"></i> '.NombreSede($_GET['SEDE']).'</h1>';
 	}
 	echo '<hr class="row align-items-start col-12">';
-	
-	ReporteActivacionProveedores($_GET['SEDE']);
+
+	R1_Activacion_Proveedores($_GET['SEDE']);
 	GuardarAuditoria('CONSULTAR','REPORTE','Activacion de proveedores');
 
 	$FinCarga = new DateTime("now");
@@ -32,26 +28,24 @@
     echo'Tiempo de carga: '.$IntervalCarga->format("%Y-%M-%D %H:%I:%S");
 ?>
 @endsection
-
 @section('scriptsHead')
     <script src="{{ asset('assets/js/sortTable.js') }}">	
     </script>
     <script src="{{ asset('assets/js/filter.js') }}">	
     </script>
 @endsection
-
 <?php
-	function ReporteActivacionProveedores($SedeConnection) {
+	/*
+		TITULO: Reporte1_Activacion_Proveedores
+		PARAMETROS: [$SedeConnection] Sede a la cual se conectara el sistema
+		FUNCION: Arma el reporte de activacion de proveedores
+		RETORNO: Lista de activacio de proveedores
+	 */
+	function R1_Activacion_Proveedores($SedeConnection) {
 		$conn = ConectarSmartpharma($SedeConnection);
-
-		$sql = QCleanTable('CP_QFRegProveedor');
-		sqlsrv_query($conn,$sql);
-
-		$sql1 = QFRegProveedor();
-		sqlsrv_query($conn,$sql1);
-
-		$sql2 = QFRegRangoProveedor();
-		$result = sqlsrv_query($conn,$sql2);
+		$sql = R1Q_Activacion_Proveedores();
+		$result = sqlsrv_query($conn,$sql);
+		$contador = 1;
 
 		echo '
 		<div class="input-group md-form form-sm form-1 pl-0">
@@ -75,11 +69,10 @@
 		  	</thead>
 		  	<tbody>
 		';
-		$contador = 1;
+		
 		while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
 			$IdProveedor = $row['Id'];
 			$NombreProveedor = utf8_encode(addslashes($row['Nombre']));
-
 			echo '<tr>';
 			echo '<td align="center"><strong>'.intval($contador).'</strong></td>';
 			echo 
@@ -88,19 +81,44 @@
 				.$NombreProveedor.
 			'</a>
 			</td>';
-
-			echo '<td align="center">'.($row['FechaRegistro'])->format('Y-m-d').'</td>';
-			echo '<td align="center">'.$row['RangoDias'].'</td>';
+			echo '<td align="center">'.($row['FechaRegistro'])->format('d-m-Y').'</td>';
+			echo '<td align="center">'.intval($row['RangoDias']).'</td>';
 			echo '</tr>';
 			$contador++;
 	  	}
 	  	echo '
 	  		</tbody>
 		</table>';
-
-		$sql3 = QCleanTable('CP_QFRegProveedor');
-		sqlsrv_query($conn,$sql3);
-		
 		sqlsrv_close($conn);
+	}
+	/*
+		TITULO: R1Q_Activacion_Proveedores
+		PARAMETROS: No aplica
+		FUNCION: Query que genera la lista de los proveedores con la diferencia en dias desde el ultimo despacho de mercancia 
+		RETORNO: Lista de proveedores con diferencia en dias respecto al dia actual
+	 */
+	function R1Q_Activacion_Proveedores() {
+		$sql = " 
+			SELECT
+			ComProveedor.Id,
+			GenPersona.Nombre,
+			(SELECT TOP 1
+				CONVERT(DATE,ComFactura.FechaRegistro)
+				FROM ComFactura
+				WHERE ComFactura.ComProveedorId= ComProveedor.Id
+				ORDER BY FechaRegistro DESC) AS FechaRegistro,
+			DATEDIFF(DAY,CONVERT(DATE,
+				(SELECT TOP 1	CONVERT(DATE,ComFactura.FechaRegistro)
+				FROM ComFactura 
+				WHERE ComFactura.ComProveedorId= ComProveedor.Id 
+				ORDER BY FechaRegistro DESC))
+				,GETDATE()) As RangoDias
+			FROM ComProveedor
+			INNER JOIN GenPersona ON ComProveedor.GenPersonaId=GenPersona.Id
+			INNER JOIN ComFactura ON ComFactura.ComProveedorId=ComProveedor.Id
+			GROUP BY ComProveedor.Id, GenPersona.Nombre
+			ORDER BY RangoDias ASC
+		";
+		return $sql;
 	}
 ?>
