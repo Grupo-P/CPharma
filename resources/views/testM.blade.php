@@ -277,11 +277,11 @@
                     }
                 }
                 else {
-                    if(restanteBs > 0) {
+                    if(restanteBs >= 0) {
                         saldoRestanteBs.val(separarMiles(restanteBs, decimales));
                     }
 
-                    if(restanteDs > 0) {
+                    if(restanteDs >= 0) {
                         saldoRestanteDs.val(separarMiles(restanteDs, decimales));
                     }
                 }
