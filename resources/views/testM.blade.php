@@ -165,38 +165,38 @@
         }
 
         /*
-          TITULO: separarMiles
-          PARAMETROS : [cantidad] Numero a transformar
-                       [decimales] Numero de decimales solicitados
-          FUNCION: Transforma con expresiones regulares un valor numerico a formato moneda
-          RETORNO: Numero con formato moneda
+            TITULO: separarMiles
+            PARAMETROS : [cantidad] Numero a transformar
+                         [decimales] Numero de decimales solicitados
+            FUNCION: Transforma con expresiones regulares un valor numerico a formato moneda
+            RETORNO: Numero con formato moneda
         */
         function separarMiles(cantidad, decimales) {
-          //Transformamos el numero en string
-          cantidad += ''; 
+            //Transformamos el numero en string
+            cantidad += ''; 
 
-          //Eliminar cualquier caracter diferente a (.) o numeros
-          cantidad = parseFloat(cantidad.replace(/[^0-9\.]/g, '')); 
-          
-          //Validar los decimales
-          decimales = decimales || 0; 
+            //Eliminar cualquier caracter diferente a (.) o numeros
+            cantidad = parseFloat(cantidad.replace(/[^0-9\.]/g, '')); 
 
-          //Si el numero es cero o texto alphanumerico retornamos cero
-          if(isNaN(cantidad) || cantidad === 0)  {
-              return parseFloat(0).toFixed(decimales);
-          }
+            //Validar los decimales
+            decimales = decimales || 0; 
 
-          //Si el valor es mayor o menor que cero formateamos a moneda
-          cantidad = '' + cantidad.toFixed(decimales);
-          var cantidad_parts = cantidad.split('.'),
-          regexp = /(\d+)(\d{3})/;
+            //Si el numero es cero o texto alphanumerico retornamos cero
+            if(isNaN(cantidad) || cantidad === 0)  {
+                return parseFloat(0).toFixed(decimales);
+            }
 
-          while(regexp.test(cantidad_parts[0])) {
-              cantidad_parts[0] = cantidad_parts[0].replace(regexp, '$1' + '.' + '$2');
-          }
+            //Si el valor es mayor o menor que cero formateamos a moneda
+            cantidad = '' + cantidad.toFixed(decimales);
+            var cantidad_parts = cantidad.split('.'),
+            regexp = /(\d+)(\d{3})/;
 
-          //Retornamos el valor formateado
-          return cantidad_parts.join(',');
+            while(regexp.test(cantidad_parts[0])) {
+                cantidad_parts[0] = cantidad_parts[0].replace(regexp, '$1' + '.' + '$2');
+            }
+
+            //Retornamos el valor formateado
+            return cantidad_parts.join(',');
         }
 
         /********************* ABONOS DEL CLIENTE *********************/
