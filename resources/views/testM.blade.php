@@ -205,8 +205,8 @@
         var ab1 = 0, ab2 = 0, convA1 = 0, totalAb = 0, restanteBs = 0, restanteDs = 0;
 
         /*
-          TITULO: calcularAbono
-          PARAMETROS : [abono1] Objeto JQuery con el campo abono 1
+            TITULO: calcularAbono
+            PARAMETROS : [abono1] Objeto JQuery con el campo abono 1
                        [abono2] Objeto JQuery con el campo abono 2
                        [convAbono1] Objeto JQuery con el campo conversion abono 1 en Bs
                        [totalAbonos] Objeto JQuery con el campo total abonos en Bs
@@ -217,83 +217,82 @@
                        [saldoRestanteBs] Objeto JQuery con el campo saldo restante en Bs
                        [saldoRestanteDs] Objeto JQuery con el campo saldo restante en $
                        [resultado] Objeto JQuery para el resultado final de la factura
-          FUNCION: Realizar los calculos para las conversiones de los abonos del cliente en $ y dar los resultados de las restas a de la factura en ambas monedas
-          RETORNO: No aplica
+            FUNCION: Realizar los calculos para las conversiones de los abonos del cliente en $ y dar los resultados de las restas a de la factura en ambas monedas
+            RETORNO: No aplica
         */
-
         function calcularAbono(abono1, abono2, convAbono1, totalAbonos, totalFacBs, tasa, decimales, tolerancia, saldoRestanteBs, saldoRestanteDs, resultado) {
 
-          //Variables para guardar el valor numerico de los abonos 1 y 2
-          ab1 = parseFloat(abono1.val());
-          ab2 = parseFloat(abono2.val());
+            //Variables para guardar el valor numerico de los abonos 1 y 2
+            ab1 = parseFloat(abono1.val());
+            ab2 = parseFloat(abono2.val());
 
-          validarAbonosNegativos(abono1, abono2);
+            validarAbonosNegativos(abono1, abono2);
 
-          //Validar abono en dolares inferior o igual a 2000
-          if(!isNaN(ab1) && (ab1 > 2000)) {
-            $('#errorModalRango').modal('show');
-            abono1.val('');
-            ab1 = 0;
-          }
-          
-          //Calcular conversiones y totales de los abonos
-          if(isNaN(ab1) || isNaN(ab2)) {
-
-            if(!isNaN(ab1)) {
-              convA1 = ab1 * tasa;
-              totalAb = convA1;
+            //Validar abono en dolares inferior o igual a 2000
+            if(!isNaN(ab1) && (ab1 > 2000)) {
+                $('#errorModalRango').modal('show');
+                abono1.val('');
+                ab1 = 0;
             }
-            else if(!isNaN(ab2)) {
-              totalAb = ab2;
+
+            //Calcular conversiones y totales de los abonos
+            if(isNaN(ab1) || isNaN(ab2)) {
+
+                if(!isNaN(ab1)) {
+                    convA1 = ab1 * tasa;
+                    totalAb = convA1;
+                }
+                else if(!isNaN(ab2)) {
+                    totalAb = ab2;
+                }
             }
-          }
-          else if(convA1 > 0) {
-            totalAb = convA1 + ab2;
-          }
-          else {
-            convA1 = ab1 * tasa;
-            totalAb = convA1 + ab2;
-          }
-
-          if(totalAb > 0) {
-            //Calculo de totales a mostrar
-            totalBs = auxBs;
-            restanteBs = (totalBs - totalAb).toFixed(decimales);
-            restanteDs = (restanteBs / tasa).toFixed(decimales);
-
-            //Imprimir resultados
-            if((restanteBs < 0) || (restanteDs < 0)) {
-              if(restanteBs) {
-                saldoRestanteBs.val('-' + separarMiles(restanteBs, decimales));
-              }
-
-              if(restanteDs) {
-                saldoRestanteDs.val('-' + separarMiles(restanteDs, decimales));
-              }
+            else if(convA1 > 0) {
+                totalAb = convA1 + ab2;
             }
             else {
-              saldoRestanteBs.val(separarMiles(restanteBs, decimales));
-              saldoRestanteDs.val(separarMiles(restanteDs, decimales));
+                convA1 = ab1 * tasa;
+                totalAb = convA1 + ab2;
             }
-            
-            convAbono1.val(separarMiles(convA1, decimales));
-            totalAbonos.val(separarMiles(totalAb, decimales));
-          }
+
+            if(totalAb > 0) {
+                //Calculo de totales a mostrar
+                totalBs = auxBs;
+                restanteBs = (totalBs - totalAb).toFixed(decimales);
+                restanteDs = (restanteBs / tasa).toFixed(decimales);
+
+                //Imprimir resultados
+                if((restanteBs < 0) || (restanteDs < 0)) {
+                    if(restanteBs) {
+                        saldoRestanteBs.val('-' + separarMiles(restanteBs, decimales));
+                    }
+
+                    if(restanteDs) {
+                        saldoRestanteDs.val('-' + separarMiles(restanteDs, decimales));
+                    }
+                }
+                else {
+                    saldoRestanteBs.val(separarMiles(restanteBs, decimales));
+                    saldoRestanteDs.val(separarMiles(restanteDs, decimales));
+                }
+
+                convAbono1.val(separarMiles(convA1, decimales));
+                totalAbonos.val(separarMiles(totalAb, decimales));
+            }
+
+            if(restanteBs > 0) {
+                resultado.val('El cliente debe: Bs. ' + separarMiles(restanteBs, decimales)).addClass('bg-danger text-white');
+            }
+            else if(restanteBs < ((-1) * tolerancia)) {
+                resultado.val('Hay un vuelto pendiente de: Bs. -' + separarMiles(restanteBs, decimales)).removeClass('bg-danger text-white');
+            }
+            else if(restanteBs != 0) {
+                resultado.val('-').removeClass('bg-danger text-white');
+            }
+            else if((restanteBs == 0) && (totalBs > 0)) {
+                resultado.val('-').removeClass('bg-danger text-white');
+            }
           
-          if(restanteBs > 0) {
-            resultado.val('El cliente debe: Bs. ' + separarMiles(restanteBs, decimales)).addClass('bg-danger text-white');
-          }
-          else if(restanteBs < ((-1) * tolerancia)) {
-            resultado.val('Hay un vuelto pendiente de: Bs. -' + separarMiles(restanteBs, decimales)).removeClass('bg-danger text-white');
-          }
-          else if(restanteBs != 0) {
-            resultado.val('-').removeClass('bg-danger text-white');
-          }
-          else if((restanteBs == 0) && (totalBs > 0)) {
-            resultado.val('-').removeClass('bg-danger text-white');
-          }
-          
-          formatearVariables()
+            formatearVariables();
         }
 
         /*
