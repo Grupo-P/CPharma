@@ -381,7 +381,7 @@
             }
           }
           else if(e.keyCode == 48) {//Metodo para evitar ceros al principio
-            if((e.target.value == '')) {
+            if(e.target.value == '') {
               e.preventDefault();
             }
           }
