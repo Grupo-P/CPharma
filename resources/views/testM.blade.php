@@ -139,19 +139,19 @@
         }
 
         /*
-          TITULO: formatearVariables
-          PARAMETROS : No aplica
-          FUNCION: Formatear las variables para evitar valores basura
-          RETORNO: No aplica
+            TITULO: formatearVariables
+            PARAMETROS : No aplica
+            FUNCION: Formatear las variables para evitar valores basura
+            RETORNO: No aplica
         */
         function formatearVariables() {
-          //Facturas
-          totalBs = 0;
-          totalDs = 0;
-          
-          //Abonos
-          convA1 = 0;
-          totalAb = 0;
+            //Facturas
+            totalBs = 0;
+            totalDs = 0;
+
+            //Abonos
+            convA1 = 0;
+            totalAb = 0;
         }
 
         /*
