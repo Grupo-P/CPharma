@@ -500,22 +500,27 @@
 
     <!-- Modal Error En Rango Dolares -->
     <div class="modal fade" id="errorModalRango" tabindex="-1" role="dialog" aria-labelledby="errorModalRangoTitle" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title text-danger" id="errorModalRangoTitle"><i class="fas fa-exclamation-circle"></i>&nbsp;Error</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title text-danger" id="errorModalRangoTitle">
+                        <i class="fas fa-exclamation-circle"></i>&nbsp;Error
+                    </h5>
+
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <div class="modal-body">
+                    <h4 class="h6">Los Abonos en dolares deben ser menores a 2000</h4>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Aceptar</button>
+                </div>
+            </div>
         </div>
-        <div class="modal-body">
-          <h4 class="h6">Los Abonos en dolares deben ser menores a 2000</h4>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Aceptar</button>
-        </div>
-      </div>
-    </div>
     </div>
 
     <a name="Inicio"></a>
