@@ -191,11 +191,11 @@
       regexp = /(\d+)(\d{3})/;
 
       while(regexp.test(cantidad_parts[0])) {
-          cantidad_parts[0] = cantidad_parts[0].replace(regexp, '$1' + ',' + '$2');
+          cantidad_parts[0] = cantidad_parts[0].replace(regexp, '$1' + '.' + '$2');
       }
 
       //Retornamos el valor formateado
-      return cantidad_parts.join('.');
+      return cantidad_parts.join(',');
     }
 
     /********************* ABONOS DEL CLIENTE *********************/
