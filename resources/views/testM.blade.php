@@ -267,17 +267,23 @@
 
                 //Imprimir resultados
                 if((restanteBs < 0) || (restanteDs < 0)) {
-                    if(restanteBs) {
+
+                    if(restanteBs < 0) {
                         saldoRestanteBs.val('-' + separarMiles(restanteBs, decimales));
                     }
 
-                    if(restanteDs) {
+                    if(restanteDs < 0) {
                         saldoRestanteDs.val('-' + separarMiles(restanteDs, decimales));
                     }
                 }
                 else {
-                    saldoRestanteBs.val(separarMiles(restanteBs, decimales));
-                    saldoRestanteDs.val(separarMiles(restanteDs, decimales));
+                    if(restanteBs > 0) {
+                        saldoRestanteBs.val(separarMiles(restanteBs, decimales));
+                    }
+
+                    if(restanteDs > 0) {
+                        saldoRestanteDs.val(separarMiles(restanteDs, decimales));
+                    }
                 }
 
                 convAbono1.val(separarMiles(convA1, decimales));
