@@ -408,39 +408,39 @@
     </script>
 @endsection
 
-<?php 
-  include(app_path().'\functions\config.php');
-  include(app_path().'\functions\querys.php');
-  include(app_path().'\functions\funciones.php');
-  include(app_path().'\functions\reportes.php');
+<?php
+    include(app_path().'\functions\config.php');
+    include(app_path().'\functions\querys.php');
+    include(app_path().'\functions\funciones.php');
+    include(app_path().'\functions\reportes.php');
 
-  /*
-    TITULO: ValidarFecha
-    PARAMETROS : [$FechaTasaDolar] fecha actual
-                 [$Moneda] la moneda a buscar
-    FUNCION: Realizar la busqueda de la tasa segun la fecha, en caso de no ser la fecha del dia, se haran tantas iteraciones hacia atras como sean necesarias hasta encontrar una tasa valida
-    RETORNO: Un array conteniendo la fecha y la tasa encontrada
-  */
+    /*
+        TITULO: ValidarFecha
+        PARAMETROS: [$FechaTasaDolar] fecha actual
+                    [$Moneda] la moneda a buscar
+        FUNCION: Realizar la busqueda de la tasa segun la fecha, en caso de no ser la fecha del dia, se haran tantas iteraciones hacia atras como sean necesarias hasta encontrar una tasa valida
+        RETORNO: Un array conteniendo la fecha y la tasa encontrada
+    */
+    
+    function ValidarFecha($FechaTasaDolar,$Moneda) {
+        $arrayValidaciones = array(2);
+        $FechaTasaDolar = date("Y-m-d",strtotime($FechaTasaDolar."- 1 days"));
+        $TasaDolar = TasaFechaConversion($FechaTasaDolar,$Moneda);
+        $arrayValidaciones[0] = $FechaTasaDolar;
+        $arrayValidaciones[1] = $TasaDolar;
+        return $arrayValidaciones;
+    }
 
-  function ValidarFecha($FechaTasaDolar,$Moneda){
-    $arrayValidaciones = array(2);
-    $FechaTasaDolar = date("Y-m-d",strtotime($FechaTasaDolar."- 1 days"));
+    $Moneda = 'Dolar';
+    $FechaTasaDolar = new DateTime("now");
+    $FechaActual = $FechaTasaDolar = $FechaTasaDolar->format("Y-m-d");
     $TasaDolar = TasaFechaConversion($FechaTasaDolar,$Moneda);
-    $arrayValidaciones[0] = $FechaTasaDolar;
-    $arrayValidaciones[1] = $TasaDolar;
-    return $arrayValidaciones;
-  }
 
-  $Moneda = 'Dolar';
-  $FechaTasaDolar = new DateTime("now");
-  $FechaActual = $FechaTasaDolar = $FechaTasaDolar->format("Y-m-d");
-  $TasaDolar = TasaFechaConversion($FechaTasaDolar,$Moneda);
-
-  while(is_null($TasaDolar)) {
-    $arrayResult =  ValidarFecha($FechaTasaDolar,$Moneda);
-    $FechaTasaDolar = $arrayResult[0];
-    $TasaDolar = $arrayResult[1];
-  }
+    while(is_null($TasaDolar)) {
+        $arrayResult =  ValidarFecha($FechaTasaDolar,$Moneda);
+        $FechaTasaDolar = $arrayResult[0];
+        $TasaDolar = $arrayResult[1];
+    }
 ?>
 
 @section('content')
