@@ -444,30 +444,38 @@
 ?>
 
 @section('content')
-  <!-- Modal Fecha -->
-  @if($FechaTasaDolar != $FechaActual)
-    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title text-warning" id="exampleModalCenterTitle"><i class="fas fa-exclamation-triangle"></i>&nbsp;Advertencia</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <h4 class="h6">La tasa de venta no est&aacute; actualizada, contacte a su supervisor.</h4>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-outline-warning" data-dismiss="modal">Aceptar</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  @endif
+    <!-- Modal Fecha -->
+    @if($FechaTasaDolar != $FechaActual)
+        <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title text-warning" id="exampleModalCenterTitle">
+                            <i class="fas fa-exclamation-triangle"></i>&nbsp;Advertencia
+                        </h5>
 
-  <!-- Modal Valores Negativos -->
-  <div class="modal fade" id="errorModalCenter" tabindex="-1" role="dialog" aria-labelledby="errorModalCenterTitle" aria-hidden="true">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+
+                    <div class="modal-body">
+                        <h4 class="h6">
+                            La tasa de venta no est&aacute; actualizada, contacte a su supervisor.
+                        </h4>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-warning" data-dismiss="modal">     Aceptar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
+
+    <!-- Modal Valores Negativos -->
+    <div class="modal fade" id="errorModalCenter" tabindex="-1" role="dialog" aria-labelledby="errorModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -484,10 +492,10 @@
         </div>
       </div>
     </div>
-  </div>
+    </div>
 
-  <!-- Modal Error En Rango Dolares -->
-  <div class="modal fade" id="errorModalRango" tabindex="-1" role="dialog" aria-labelledby="errorModalRangoTitle" aria-hidden="true">
+    <!-- Modal Error En Rango Dolares -->
+    <div class="modal fade" id="errorModalRango" tabindex="-1" role="dialog" aria-labelledby="errorModalRangoTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -504,17 +512,17 @@
         </div>
       </div>
     </div>
-  </div>
-  
-  <a name="Inicio"></a>
-  <hr class="row align-items-start col-12">
-  <h5 class="text-info">
+    </div>
+
+    <a name="Inicio"></a>
+    <hr class="row align-items-start col-12">
+    <h5 class="text-info">
     <i class="fas fa-money-bill-alt"></i>
     C&Aacute;LCULO DE FACTURA EN DIVISA
-  </h5>
-  <hr class="row align-items-start col-12">
-  
-  <form name="cuadre" class="form-group">
+    </h5>
+    <hr class="row align-items-start col-12">
+
+    <form name="cuadre" class="form-group">
     <table class="table table-borderless table-hover">
       <thead class="thead-dark" align="center">
         <th scope="col" colspan="2">
@@ -525,7 +533,7 @@
            <b>INFORMACI&Oacute;N</b>
         </th>
       </thead>
-    
+
       <tbody align="right">
         <tr>
           <td>
@@ -721,12 +729,12 @@
         </tr>
       </tbody>
     </table>
-  </form>
+    </form>
 
-  <br><br>
+    <br><br>
 
-  <a name="ver-manual"></a>
-  <table class="table table-bordered table-striped">
+    <a name="ver-manual"></a>
+    <table class="table table-bordered table-striped">
     <thead class="thead-dark" align="center">
       <th scope="col">
         <b>INSTRUCCIONES</b>
@@ -763,13 +771,13 @@
       </tr>
 
     </tbody>
-  </table>
+    </table>
 
-  <div class="text-center">
+    <div class="text-center">
     <a href="#Inicio" title="Volver al inicio" class="btn btn-primary">
       Volver al inicio
     </a>
-  </div>
+    </div>
 @endsection
 
 @section('scriptsPie')
