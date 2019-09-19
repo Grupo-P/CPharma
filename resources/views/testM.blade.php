@@ -526,218 +526,204 @@
     <a name="Inicio"></a>
     <hr class="row align-items-start col-12">
     <h5 class="text-info">
-    <i class="fas fa-money-bill-alt"></i>
-    C&Aacute;LCULO DE FACTURA EN DIVISA
+        <i class="fas fa-money-bill-alt"></i>
+        C&Aacute;LCULO DE FACTURA EN DIVISA
     </h5>
     <hr class="row align-items-start col-12">
 
     <form name="cuadre" class="form-group">
-    <table class="table table-borderless table-hover">
-      <thead class="thead-dark" align="center">
-        <th scope="col" colspan="2">
-          <b>FACTURAS DEL CLIENTE</b>
-        </th>
+        <table class="table table-borderless table-hover">
+            <thead class="thead-dark" align="center">
+                <th scope="col" colspan="2"><b>FACTURAS DEL CLIENTE</b></th>
+                <th scope="col" colspan="2"><b>INFORMACI&Oacute;N</b></th>
+            </thead>
 
-        <th scope="col" colspan="2">
-           <b>INFORMACI&Oacute;N</b>
-        </th>
-      </thead>
+            <tbody align="right">
+                <tr>
+                    <td>Total Factura Bs (Con IVA) #1:</td>
 
-      <tbody align="right">
-        <tr>
-          <td>
-            Total Factura Bs (Con IVA) #1:
-          </td>
+                    <td>
+                        <input type="number" step="0.01" min="0" placeholder="0,00" name="fac1" id="fac1" class="form-control bg-warning" autofocus>
+                    </td>
 
-          <td>
-            <input type="number" step="0.01" min="0" placeholder="0,00" name="fac1" id="fac1" class="form-control bg-warning" autofocus>
-          </td>
+                    <td>Tasa de Cambio:</td>
 
-          <td>
-            Tasa de Cambio:
-          </td>
-      <?php
-        if($FechaTasaDolar != $FechaActual){
-      ?>
-          <td>
-            <input type="number" step="0.01" min="0" placeholder="0,00" value="{{$TasaDolar}}" id="tasa" class="form-control bg-danger text-white" disabled>
-          </td>
-      <?php
-        }
-        else{
-      ?>
-          <td>
-            <input type="number" step="0.01" min="0" placeholder="0,00" value="{{$TasaDolar}}" id="tasa" class="form-control bg-success text-white" disabled>
-          </td>
-      <?php   
-        }
-      ?>
-        </tr>
+                    <?php
+                        if($FechaTasaDolar != $FechaActual) {
+                    ?>
 
-        <tr>
-          <td>
-            Total Factura Bs (Con IVA) #2:
-          </td>
+                    <td>
+                        <input type="number" step="0.01" min="0" placeholder="0,00" value="{{$TasaDolar}}" id="tasa" class="form-control bg-danger text-white" disabled>
+                    </td>
 
-          <td>
-            <input type="number" step="0.01" min="0" placeholder="0,00" name="fac2" id="fac2" class="form-control bg-warning">
-          </td>
+                    <?php
+                        }
+                        else {
+                    ?>
 
-          <td>
-            Fecha Tasa de Cambio:
-          </td>
+                    <td>
+                        <input type="number" step="0.01" min="0" placeholder="0,00" value="{{$TasaDolar}}" id="tasa" class="form-control bg-success text-white" disabled>
+                    </td>
 
-      <?php
-        if($FechaTasaDolar != $FechaActual){
-      ?>
-          <td>
-            <input type="text" value="{{date('d-m-Y',strtotime($FechaTasaDolar))}}" id="fecha" class="form-control bg-danger text-white" disabled>
-          </td>
-      <?php
-        }
-        else{
-      ?>
-          <td>
-            <input type="text" value="{{date('d-m-Y',strtotime($FechaTasaDolar))}}" id="fecha" class="form-control bg-success text-white" disabled>
-          </td>
-      <?php   
-        }
-      ?>
-        </tr>
+                    <?php   
+                        }
+                    ?>
+                </tr>
 
-        <tr>
-          <td>
-            Total Factura Bs (Con IVA) #3:
-          </td>
+                <tr>
+                    <td>Total Factura Bs (Con IVA) #2:</td>
 
-          <td>
-            <input type="number" step="0.01" min="0" placeholder="0,00" name="fac3" id="fac3" class="form-control bg-warning">
-          </td>
+                    <td>
+                        <input type="number" step="0.01" min="0" placeholder="0,00" name="fac2" id="fac2" class="form-control bg-warning">
+                    </td>
 
-          <td>
-            Cantidad Decimales:
-          </td>
+                    <td>Fecha Tasa de Cambio:</td>
 
-          <td>
-            <input type="number" min="0" max="2" placeholder="0" value="2" id="decimales" class="form-control" disabled>
-          </td>
-        </tr>
+                    <?php
+                        if($FechaTasaDolar != $FechaActual) {
+                    ?>
 
-        <tr>
-          <td>
-            Total Facturas Bs (Con IVA):
-          </td>
+                    <td>
+                        <input type="text" value="{{date('d-m-Y',strtotime($FechaTasaDolar))}}" id="fecha" class="form-control bg-danger text-white" disabled>
+                    </td>
 
-          <td>
-            <input type="text" placeholder="0,00" id="totalFacBs" class="form-control" disabled>
-          </td>
+                    <?php
+                        }
+                        else {
+                    ?>
 
-          <td>
-            Tolerancia Vuelto en Bs:
-          </td>
+                    <td>
+                        <input type="text" value="{{date('d-m-Y',strtotime($FechaTasaDolar))}}" id="fecha" class="form-control bg-success text-white" disabled>
+                    </td>
 
-          <td>
-            <input type="number" step="0.01" min="0" placeholder="0,00" value="200" id="tolerancia" class="form-control" disabled>
-          </td>
-        </tr>
+                    <?php   
+                        }
+                    ?>
+                </tr>
 
-        <tr>
-          <td>
-            Total Factura $:
-          </td>
+                <tr>
+                    <td>Total Factura Bs (Con IVA) #3:</td>
 
-          <td>
-            <input type="text" placeholder="0,00" id="totalFacDs" class="form-control" disabled>
-          </td>
-          
-          <td colspan="2">&nbsp;</td>
-        </tr>
-      </tbody>
+                    <td>
+                        <input type="number" step="0.01" min="0" placeholder="0,00" name="fac3" id="fac3" class="form-control bg-warning">
+                    </td>
 
-      <thead class="thead-dark" align="center">
-        <th scope="col" colspan="2">
-          <b>ABONOS DEL CLIENTE</b>
-        </th>
+                    <td>Cantidad Decimales:</td>
 
-        <th scope="col" colspan="2">
-          <b>SALDOS RESTANTES</b>
-        </th>
-      </thead>
+                    <td>
+                        <input type="number" min="0" max="2" placeholder="0" value="2" id="decimales" class="form-control" disabled>
+                    </td>
+                </tr>
 
-      <tbody align="right">
-        <tr>
-          <td>
-            Abono #1 en $:
-          </td>
+                <tr>
+                    <td>Total Facturas Bs (Con IVA):</td>
 
-          <td>
-            <input type="number" step="0.01" min="0" placeholder="0,00" name="abono1" id="abono1" class="form-control bg-warning">
-          </td>
+                    <td>
+                        <input type="text" placeholder="0,00" id="totalFacBs" class="form-control" disabled>
+                    </td>
 
-          <td>
-            Saldo Restante en Bs:
-          </td>
+                    <td>Tolerancia Vuelto en Bs:</td>
 
-          <td>
-            <input type="text" placeholder="0,00" id="saldoRestanteBs" class="form-control" disabled>
-          </td>
-        </tr>
+                    <td>
+                        <input type="number" step="0.01" min="0" placeholder="0,00" value="200" id="tolerancia" class="form-control" disabled>
+                    </td>
+                </tr>
 
-        <tr>
-          <td>
-            Abono #2 en Bs:
-          </td>
+                <tr>
+                    <td>Total Factura $:</td>
 
-          <td>
-            <input type="number" step="0.01" min="0" placeholder="0,00" name="abono2" id="abono2" class="form-control bg-warning">
-          </td>
+                    <td>
+                        <input type="text" placeholder="0,00" id="totalFacDs" class="form-control" disabled>
+                    </td>
 
-          <td>
-            Saldo Restante en $:
-          </td>
+                    <td colspan="2">&nbsp;</td>
+                </tr>
+            </tbody>
 
-          <td>
-            <input type="text" placeholder="0,00" id="saldoRestanteDs" class="form-control" disabled>
-          </td>
-        </tr>
+          <thead class="thead-dark" align="center">
+            <th scope="col" colspan="2">
+              <b>ABONOS DEL CLIENTE</b>
+            </th>
 
-        <tr>
-          <td>
-            Conversion Abono #1 en Bs:
-          </td>
+            <th scope="col" colspan="2">
+              <b>SALDOS RESTANTES</b>
+            </th>
+          </thead>
 
-          <td>
-            <input type="text" placeholder="0,00" id="convAbono1" class="form-control" disabled>
-          </td>
+          <tbody align="right">
+            <tr>
+              <td>
+                Abono #1 en $:
+              </td>
 
-          <td colspan="2">
-            <input type="text" placeholder="-" class="form-control" id="resultado" disabled>
-          </td>
-        </tr>
+              <td>
+                <input type="number" step="0.01" min="0" placeholder="0,00" name="abono1" id="abono1" class="form-control bg-warning">
+              </td>
 
-        <tr>
-          <td>
-            Total Abonos Bs:
-          </td>
-          
-          <td>
-            <input type="text" placeholder="0,00" id="totalAbonos" class="form-control" disabled>
-          </td>
+              <td>
+                Saldo Restante en Bs:
+              </td>
 
-          <td class="text-center">
-            <button type="reset" name="btn-borrarN" id="btn-borrarN" class="btn btn-success">
-              Borrar y empezar de nuevo
-            </button>
-          </td>
+              <td>
+                <input type="text" placeholder="0,00" id="saldoRestanteBs" class="form-control" disabled>
+              </td>
+            </tr>
 
-          <td class="text-center">
-            <a href="#ver-manual" title="Ir al manual de usuario" class="btn btn-primary">
-              Ver instrucciones
-            </a>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+            <tr>
+              <td>
+                Abono #2 en Bs:
+              </td>
+
+              <td>
+                <input type="number" step="0.01" min="0" placeholder="0,00" name="abono2" id="abono2" class="form-control bg-warning">
+              </td>
+
+              <td>
+                Saldo Restante en $:
+              </td>
+
+              <td>
+                <input type="text" placeholder="0,00" id="saldoRestanteDs" class="form-control" disabled>
+              </td>
+            </tr>
+
+            <tr>
+              <td>
+                Conversion Abono #1 en Bs:
+              </td>
+
+              <td>
+                <input type="text" placeholder="0,00" id="convAbono1" class="form-control" disabled>
+              </td>
+
+              <td colspan="2">
+                <input type="text" placeholder="-" class="form-control" id="resultado" disabled>
+              </td>
+            </tr>
+
+            <tr>
+              <td>
+                Total Abonos Bs:
+              </td>
+              
+              <td>
+                <input type="text" placeholder="0,00" id="totalAbonos" class="form-control" disabled>
+              </td>
+
+              <td class="text-center">
+                <button type="reset" name="btn-borrarN" id="btn-borrarN" class="btn btn-success">
+                  Borrar y empezar de nuevo
+                </button>
+              </td>
+
+              <td class="text-center">
+                <a href="#ver-manual" title="Ir al manual de usuario" class="btn btn-primary">
+                  Ver instrucciones
+                </a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
     </form>
 
     <br><br>
