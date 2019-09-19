@@ -26,7 +26,10 @@ class EtiquetaController extends Controller
      */
     public function index()
     {   
-        $etiquetas =  Etiqueta::orderBy('condicion', 'desc')->get();
+        $etiquetas =  
+        Etiqueta::orderBy('id', 'asc')->
+        where('clasificacion', 'PENDIENTE')->take(50)->get();
+
         return view('pages.etiqueta.index', compact('etiquetas'));
     }
 
@@ -54,7 +57,7 @@ class EtiquetaController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {
+    {   
         return redirect()->action('EtiquetaController@index');
     }
 
@@ -126,8 +129,33 @@ class EtiquetaController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
-    {
-        return redirect()->action('EtiquetaController@index');
+    {   
+        switch ($id) {
+            case 0:
+                $etiquetas =  
+                Etiqueta::orderBy('id', 'asc')->
+                where('clasificacion','PENDIENTE')->take(50)->get();
+            break;
+            case 1:
+                $etiquetas =  
+                Etiqueta::orderBy('id', 'asc')->
+                where('clasificacion','NO ETIQUETABLE')->get();            
+            break;
+            case 2:
+                $etiquetas =  
+                Etiqueta::orderBy('id', 'asc')->
+                where('clasificacion','ETIQUETABLE')->get();
+            break;
+            case 3:
+                $etiquetas =  
+                Etiqueta::orderBy('id', 'asc')->
+                where('clasificacion','OBLIGATORIO ETIQUETAR')->get();
+            break;
+            default:
+                
+            break;
+        }
+        return view('pages.etiqueta.index', compact('etiquetas'));
     }
 
     /**
