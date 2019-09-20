@@ -166,10 +166,10 @@
     $IsIVA = $row["ConceptoImpuesto"];
     $Gravado = FG_Producto_Gravado($IsIVA);
     $Dolarizado = FG_Producto_Dolarizado($conn,$IdArticulo);
-    $TasaActual = FG_Tasa_Fecha($connCPharma,date('Y-m-d'));  
+    $TasaActual = FG_Tasa_Fecha($connCPharma,date('Y-m-d'));
 
 //AQUI QUEDE
-    $Precio = CalculoPrecio($conn,$IdArticulo,$IsIVA,$Existencia);
+    $Precio = FG_Calculo_Precio($conn,$IdArticulo,$IsIVA,$Existencia);
 //AQUI QUEDE
 
     echo 'Prueba

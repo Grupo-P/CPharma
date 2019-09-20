@@ -1494,4 +1494,46 @@
 		$Tasa = $row['tasa'];
 		return $Tasa;
 	}
+	/*
+		TITULO: FG_Calculo_Precio
+		PARAMETROS: [$conn] Cadena de conexion para la base de datos
+					[$IdArticulo] Id del articulo
+					[$IsIVA] Si aplica o no
+					[$Existencia] existencia actual del producto
+		FUNCION: Calcular el precio del articulo
+		RETORNO: Precio del articulo
+	 */
+	function FG_Calculo_Precio($conn,$IdArticulo,$IsIVA,$Existencia) {		
+		if($Existencia == 0) {
+			$Precio = 0;
+		}
+		else {
+		/*PRECIO TROQUELADO*/
+			$sql = QG_Precio_Troquelado($IdArticulo);
+			$result = sqlsrv_query($conn,$sql);
+			$row = sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC);
+			$PrecioTroquelado = $row["M_PrecioTroquelado"];
+			
+			if($PrecioTroquelado!=NULL) {
+				$Precio = $PrecioTroquelado;
+			}		
+			else {
+			/*PRECIO CALCULADO*/ 
+				$sql = QG_Precio_Calculado($IdArticulo);
+				$result = sqlsrv_query($conn,$sql);
+				$row = sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC);
+				$PrecioBruto = $row["M_PrecioCompraBruto"];
+
+				if($IsIVA == 1) {
+					$PrecioCalculado = ($PrecioBruto/Utilidad)*Impuesto;
+					$Precio = $PrecioCalculado;
+				}
+				else { 
+					$PrecioCalculado = ($PrecioBruto/Utilidad);
+					$Precio = $PrecioCalculado;
+				}
+			}
+		}
+		return $Precio;
+	}
 ?>
