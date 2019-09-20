@@ -2457,5 +2457,29 @@
 		$sql = "
 		";
 		return $sql;
+	}
+/**********************************************************************/
+/******************  INICIO DE QUERYS GENERALES   *********************/
+/**********************************************************************/
+	/*
+		TITULO: QG_Dolarizados
+		PARAMETROS: [$IdArticulo] Id del articulo que se va a buscar
+		FUNCION: Busca el Id del atributo si la categoriza es dolarizado
+		RETORNO: Retorna el id del atributo dolarizado
+	 */
+	function QG_Dolarizados($IdArticulo) {
+		$sql = "
+		SELECT * 
+		FROM InvArticuloAtributo 
+		WHERE InvArticuloAtributo.InvAtributoId = 
+			(SELECT InvAtributo.Id
+			FROM InvAtributo 
+			WHERE 
+			InvAtributo.Descripcion = 'Dolarizados'
+			OR  InvAtributo.Descripcion = 'Giordany'
+			OR  InvAtributo.Descripcion = 'giordany') 
+		AND InvArticuloAtributo.InvArticuloId = '$IdArticulo'
+		";
+		return $sql;
 	}	
 ?>
