@@ -78,6 +78,7 @@
   	include(app_path().'\functions\config.php');
     include(app_path().'\functions\querys.php');
     include(app_path().'\functions\funciones.php');
+    //include(app_path().'\functions\reportes.php');
 
     $ArtJson = "";
   	
@@ -89,6 +90,7 @@
       }
       echo '<hr class="row align-items-start col-12">';
 
+      //ReporteHistoricoProducto($_GET['SEDE'],$_GET['Id']);
       R2_Historico_Producto($_GET['SEDE'],$_GET['Id']);
       GuardarAuditoria('CONSULTAR','REPORTE','Historico de productos');
 
@@ -148,7 +150,7 @@
     FUNCION: Armar una tabla del historico de compra del articulo
     RETORNO: No aplica
   */
-  function R2_Historico_Producto($SedeConnection,$IdArticulo){
+  function R2_Historico_Producto($SedeConnection,$IdArticulo) {
     
     $conn = ConectarSmartpharma($SedeConnection);
 
@@ -163,10 +165,10 @@
     $IsIVA = $row["ConceptoImpuesto"];
     
 //AQUI QUEDE
-
-    $Precio = CalculoPrecio($conn,$IdArticulo,$IsIVA,$Existencia);
-    $CodigoBarra = CodigoBarra($conn,$IdArticulo);
     $Dolarizado = ProductoDolarizado($conn,$IdArticulo);
+//AQUI QUEDE
+//
+    $Precio = CalculoPrecio($conn,$IdArticulo,$IsIVA,$Existencia);
     $Gravado = ProductoGravado($IsIVA);
     $TasaActual = TasaFecha(date('Y-m-d'));
     
