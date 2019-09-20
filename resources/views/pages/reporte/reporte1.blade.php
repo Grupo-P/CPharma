@@ -4,6 +4,20 @@
     Reporte
 @endsection
 
+@section('scriptsHead')
+	<style> 
+	  	.barrido{
+    		text-decoration: none;
+    		transition: width 1s, height 1s, transform 1s;
+	    }
+	  	.barrido:hover{
+	    	text-decoration: none;
+	      	transition: width 1s, height 1s, transform 1s;
+	      	transform: translate(20px,0px);
+	    }
+	</style>
+@endsection
+
 @section('content')
 	<h1 class="h5 text-info">
 		<i class="fas fa-file-invoice"></i>
