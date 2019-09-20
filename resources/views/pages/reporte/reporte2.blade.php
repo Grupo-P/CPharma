@@ -1,7 +1,7 @@
 @extends('layouts.model')
 
 @section('title')
-    Reporte
+  Reporte
 @endsection
 
 @section('scriptsHead')
@@ -85,7 +85,7 @@
   	if (isset($_GET['Id'])) {
       $InicioCarga = new DateTime("now");
       
-      if (isset($_GET['SEDE'])) {      
+      if (isset($_GET['SEDE'])) {     
         echo '<h1 class="h5 text-success"  align="left"> <i class="fas fa-prescription"></i> '.NombreSede($_GET['SEDE']).'</h1>';
       }
       echo '<hr class="row align-items-start col-12">';
@@ -163,13 +163,13 @@
     $Descripcion = $row["Descripcion"];
     $Existencia = $row1["Existencia"];
     $IsIVA = $row["ConceptoImpuesto"];
-    
+    $Dolarizado = FG_Producto_Dolarizado($conn,$IdArticulo);
 //AQUI QUEDE
-    $Dolarizado = ProductoDolarizado($conn,$IdArticulo);
+    $Gravado = ProductoGravado($IsIVA);
 //AQUI QUEDE
 //
     $Precio = CalculoPrecio($conn,$IdArticulo,$IsIVA,$Existencia);
-    $Gravado = ProductoGravado($IsIVA);
+  
     $TasaActual = TasaFecha(date('Y-m-d'));
     
 
