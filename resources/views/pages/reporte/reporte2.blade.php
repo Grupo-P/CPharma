@@ -153,6 +153,7 @@
   function R2_Historico_Producto($SedeConnection,$IdArticulo) {
     
     $conn = ConectarSmartpharma($SedeConnection);
+    $connCPharma = ConectarXampp();
 
     $sql = R2Q_Detalle_Articulo($IdArticulo);
     $result = sqlsrv_query($conn,$sql);
@@ -163,15 +164,13 @@
     $Descripcion = $row["Descripcion"];
     $Existencia = $row1["Existencia"];
     $IsIVA = $row["ConceptoImpuesto"];
+    $Gravado = FG_Producto_Gravado($IsIVA);
     $Dolarizado = FG_Producto_Dolarizado($conn,$IdArticulo);
+    $TasaActual = FG_Tasa_Fecha($connCPharma,date('Y-m-d'));  
+
 //AQUI QUEDE
-    $Gravado = ProductoGravado($IsIVA);
-//AQUI QUEDE
-//
     $Precio = CalculoPrecio($conn,$IdArticulo,$IsIVA,$Existencia);
-  
-    $TasaActual = TasaFecha(date('Y-m-d'));
-    
+//AQUI QUEDE
 
     echo '
     <div class="input-group md-form form-sm form-1 pl-0">
@@ -289,6 +288,7 @@
         </tbody>
     </table>';
 
+    mysqli_close($connCPharma);
     sqlsrv_close($conn);
   }
   /*

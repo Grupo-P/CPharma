@@ -903,7 +903,7 @@
 		PARAMETROS: $IsIVA
 		FUNCION: determina si un producto es gravado o no
 		RETORNO: retorna si el producto es gravado o no
-	 */
+ 	*/
 	function ProductoGravado($IsIVA){
 		$EsGravado = '';
 
@@ -1464,5 +1464,34 @@
 			$Dolarizado = 'SI';
 		}
 	  	return $Dolarizado;
+	}
+	/*
+		TITULO: FG_Producto_Gravado
+		PARAMETROS: [$IsIVA] campo que almacena el ConceptoImpuesto
+		FUNCION: determina si un producto es gravado o no
+		RETORNO: retorna si el producto es gravado o no
+ 	*/
+	function FG_Producto_Gravado($IsIVA){
+		if($IsIVA == 1) {
+			$EsGravado = 'SI';
+		}
+		else {
+			$EsGravado = 'NO';
+		}
+	  	return $EsGravado;
+	}
+ 	/*
+		TITULO: FG_Tasa_Fecha
+		PARAMETROS: [$connCPharma] cadena de conexion con xampp
+					[$Fecha] Fecha de la que se buscara la tasa
+		FUNCION: Buscar el valor de la tasa
+		RETORNO: Valor de la tasa
+	 */
+	function FG_Tasa_Fecha($connCPharma,$Fecha) {
+		$sql = QG_Tasa_Fecha($Fecha);
+		$result = mysqli_query($connCPharma,$sql);
+		$row = mysqli_fetch_assoc($result);
+		$Tasa = $row['tasa'];
+		return $Tasa;
 	}
 ?>

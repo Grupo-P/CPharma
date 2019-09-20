@@ -2481,5 +2481,15 @@
 		AND InvArticuloAtributo.InvArticuloId = '$IdArticulo'
 		";
 		return $sql;
-	}	
+	}
+	/*
+		TITULO: QG_Tasa_Fecha
+		PARAMETROS: [$Fecha] Fecha de la que se quiere la tasa
+		FUNCION: Buscar el valor de la tasa en un dia especifico
+		RETORNO: Valor de la tasa al dia que se solicito
+	 */
+	function QG_Tasa_Fecha($Fecha) {
+		$sql = "SELECT tasa FROM dolars where fecha = '$Fecha'";
+		return $sql;
+	}
 ?>
