@@ -54,7 +54,7 @@
             <tbody>
                 <tr>
                     <th scope="row">{!! Form::label('tasa', 'Tasa') !!}</th>
-                    <td>{!! Form::text('tasa', null, [ 'class' => 'form-control', 'placeholder' => 'xx.xx', 'autofocus', 'required']) !!}</td>
+                    <td>{!! Form::number('tasa', null, [ 'class' => 'form-control', 'placeholder' => 'xx.xx', 'step' => '0.01', 'min' => '10000', 'max' => '35000', 'autofocus', 'required']) !!}</td>
                 </tr>
 
                 <tr>

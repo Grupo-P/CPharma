@@ -19,6 +19,8 @@
 <link rel="stylesheet" href="{{asset('assets/bootstrap/css/bootstrap-grid.css')}}">.
 <link rel="stylesheet" href="{{asset('assets/bootstrap/css/bootstrap-reboot.css')}}">
 
+@yield('estilosInternos')
+
 <!-- JS Scritps -->
 
 <!-- Jquery -->
