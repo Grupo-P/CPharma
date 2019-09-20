@@ -167,9 +167,10 @@
     $Gravado = FG_Producto_Gravado($IsIVA);
     $Dolarizado = FG_Producto_Dolarizado($conn,$IdArticulo);
     $TasaActual = FG_Tasa_Fecha($connCPharma,date('Y-m-d'));
+    $Precio = FG_Calculo_Precio($conn,$IdArticulo,$IsIVA,$Existencia);
 
 //AQUI QUEDE
-    $Precio = FG_Calculo_Precio($conn,$IdArticulo,$IsIVA,$Existencia);
+    
 //AQUI QUEDE
 
     echo 'Prueba
