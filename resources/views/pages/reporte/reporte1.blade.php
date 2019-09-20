@@ -5,6 +5,15 @@
 @endsection
 
 @section('scriptsHead')
+	<script type="text/javascript" src="{{ asset('assets/js/sortTable.js') }}">
+  	</script>
+  	<script type="text/javascript" src="{{ asset('assets/js/filter.js') }}">  
+  	</script>
+  	<script type="text/javascript" src="{{ asset('assets/js/functions.js') }}"> 
+  	</script>
+  	<script type="text/javascript" src="{{ asset('assets/jquery/jquery-2.2.2.min.js') }}"></script>
+  	<script type="text/javascript" src="{{ asset('assets/jquery/jquery-ui.min.js') }}" ></script>
+
 	<style> 
 	  	.barrido{
     		text-decoration: none;
@@ -44,13 +53,6 @@
 	    $IntervalCarga = $InicioCarga->diff($FinCarga);
 	    echo'Tiempo de carga: '.$IntervalCarga->format("%Y-%M-%D %H:%I:%S");
 	?>
-@endsection
-
-@section('scriptsHead')
-    <script src="{{ asset('assets/js/sortTable.js') }}">	
-    </script>
-    <script src="{{ asset('assets/js/filter.js') }}">	
-    </script>
 @endsection
 
 <?php
