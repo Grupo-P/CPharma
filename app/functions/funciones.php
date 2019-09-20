@@ -1440,4 +1440,65 @@
 
 		mysqli_close($conn);
 	}
+/**********************************************************************/
+/******************  INICIO DE FUNCIONES GENERALES   ******************/
+/**********************************************************************/
+	/*
+		TITULO: FG1_Calculo_Precio
+		PARAMETROS: [$conn] Cadena de conexion para la base de datos
+					[$IdArticulo] Id del articulo
+					[$IsIVA] Si aplica o no
+		FUNCION: Calcular el precio del articulo
+		RETORNO: Precio del articulo
+ 	*/
+	function FG1_Calculo_Precio($conn,$IdArticulo,$IsIVA,$Existencia) {
+		$Precio = 0;
+
+		if($Existencia == 0) {
+			$Precio = 0;
+		}
+		else {
+		/*PRECIO TROQUELADO*/
+			$sql0 = QCleanTable('CP_QLoteArticulo');
+			sqlsrv_query($conn,$sql0);
+
+			$sql = QLoteArticulo($IdArticulo,0);
+			sqlsrv_query($conn,$sql);
+			
+			$sql1 = QLote();
+			$result1 = sqlsrv_query($conn,$sql1);
+			$row1 = sqlsrv_fetch_array($result1,SQLSRV_FETCH_ASSOC);
+			$PrecioTroquelado = $row1["M_PrecioTroquelado"];
+			
+			if($PrecioTroquelado!=NULL) {
+				$Precio = $PrecioTroquelado;
+			}
+		/*PRECIO CALCULADO*/
+			else {
+				$sql0 = QCleanTable('CP_QLoteArticulo');
+				sqlsrv_query($conn,$sql0);
+
+				$sql2 = QLoteArticulo($IdArticulo,1);
+				sqlsrv_query($conn,$sql2);
+				
+				$sql3 = QLote();
+				$result3 = sqlsrv_query($conn,$sql3);
+				$row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
+				$PrecioBruto = $row3["M_PrecioCompraBruto"];
+
+				if($IsIVA == 1) {
+					$PrecioCalculado = ($PrecioBruto/Utilidad)*Impuesto;
+					$Precio = $PrecioCalculado;
+				}
+				else {
+					$PrecioCalculado = ($PrecioBruto/Utilidad);
+					$Precio = $PrecioCalculado;
+				}
+			}
+		}
+		$sql0 = QCleanTable('CP_QLoteArticulo');
+		sqlsrv_query($conn,$sql0);
+
+		return $Precio;
+	}
 ?>
