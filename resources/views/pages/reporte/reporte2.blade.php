@@ -162,7 +162,7 @@
     $CodigoArticulo = $row["CodigoArticulo"];
     $CodigoBarra = $row["CodigoBarra"];
     $Descripcion = $row["Descripcion"];
-    $Existencia = $row1["Existencia"];
+    $Existencia = $row["Existencia"];
     $IsIVA = $row["ConceptoImpuesto"];
     $Gravado = FG_Producto_Gravado($IsIVA);
     $Dolarizado = FG_Producto_Dolarizado($conn,$IdArticulo);
@@ -172,7 +172,7 @@
     $Precio = CalculoPrecio($conn,$IdArticulo,$IsIVA,$Existencia);
 //AQUI QUEDE
 
-    echo '
+    echo 'Prueba
     <div class="input-group md-form form-sm form-1 pl-0">
       <div class="input-group-prepend">
         <span class="input-group-text purple lighten-3" id="basic-text1">
