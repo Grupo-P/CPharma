@@ -78,7 +78,6 @@
   	include(app_path().'\functions\config.php');
     include(app_path().'\functions\querys.php');
     include(app_path().'\functions\funciones.php');
-    //include(app_path().'\functions\reportes.php');
 
     $ArtJson = "";
   	
@@ -90,7 +89,6 @@
       }
       echo '<hr class="row align-items-start col-12">';
 
-      //ReporteHistoricoProducto($_GET['SEDE'],$_GET['Id']);
       R2_Historico_Producto($_GET['SEDE'],$_GET['Id']);
       GuardarAuditoria('CONSULTAR','REPORTE','Historico de productos');
 
@@ -159,6 +157,9 @@
     $result = sqlsrv_query($conn,$sql);
     $row = sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC);
 
+    $sql2 = R2Q_Historico_Articulo($IdArticulo);
+    $result2 = sqlsrv_query($conn,$sql2);
+
     $CodigoArticulo = $row["CodigoArticulo"];
     $CodigoBarra = $row["CodigoBarra"];
     $Descripcion = $row["Descripcion"];
@@ -169,11 +170,7 @@
     $TasaActual = FG_Tasa_Fecha($connCPharma,date('Y-m-d'));
     $Precio = FG_Calculo_Precio($conn,$IdArticulo,$IsIVA,$Existencia);
 
-//AQUI QUEDE
-    
-//AQUI QUEDE
-
-    echo 'Prueba
+    echo '
     <div class="input-group md-form form-sm form-1 pl-0">
       <div class="input-group-prepend">
         <span class="input-group-text purple lighten-3" id="basic-text1">
@@ -189,14 +186,14 @@
       <thead class="thead-dark">
           <tr>
             <th scope="col">Codigo</th>
-            <th scope="col">Codigo de Barra</td>
+            <th scope="col">Codigo de barra</td>
               <th scope="col">Descripcion</td>
               <th scope="col">Existencia</td>
               <th scope="col">Precio</br>(Con IVA) '.SigVe.'</td>         
               <th scope="col">Gravado?</td>
               <th scope="col">Dolarizado?</td>
               <th scope="col">Tasa actual '.SigVe.'</td>
-              <th scope="col">Precio en divisa</br>(Con IVA)</td>
+              <th scope="col">Precio en divisa</br>(Con IVA) '.SigDolar.'</td>
           </tr>
         </thead>
         <tbody>
@@ -208,30 +205,28 @@
     echo 
       '<td align="left" class="barrido">
       <a href="/reporte10?Descrip='.$Descripcion.'&Id='.$IdArticulo.'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
-        .$Descripcion.
+        .utf8_encode(addslashes($Descripcion)).
       '</a>
       </td>';
 
     echo '<td align="center">'.intval($Existencia).'</td>';
-    echo '<td align="center">'." ".number_format ($Precio,2,"," ,"." ).'</td>'; 
+    echo '<td align="center">'.number_format($Precio,2,"," ,"." ).'</td>'; 
     echo '<td align="center">'.$Gravado.'</td>';
     echo '<td align="center">'.$Dolarizado.'</td>';
 
     if($TasaActual!=0){
-      echo '<td align="center">'." ".$TasaActual." ".SigVe.'</td>';
-      echo '<td align="center">'." ".round(($Precio/$TasaActual),2)." ".SigDolar.'</td>';
+      echo '<td align="center">'.number_format($TasaActual,2,"," ,"." ).'</td>';
+      $PrecioDolar = $Precio/$TasaActual;
+      echo '<td align="center">'.number_format($PrecioDolar,2,"," ,"." ).'</td>';
     }
     else{
-      echo '<td align="center">0.00 '.SigVe.'</td>';
-      echo '<td align="center">0.00 '.SigDolar.'</td>';
+      echo '<td align="center">0,00</td>';
+      echo '<td align="center">0,00</td>';
     }
     echo '
         </tr>
         </tbody>
     </table>';
-
-    $sql2 = QHistoricoArticulo($IdArticulo);
-    $result2 = sqlsrv_query($conn,$sql2);
 
     echo'
     <table class="table table-striped table-bordered col-12 sortable" id="myTable">
@@ -241,10 +236,10 @@
             <th scope="col">Proveedor</th>
               <th scope="col">Fecha de documento</th>
               <th scope="col">Cantidad recibida</th>
-              <th scope="col">Costo bruto</br>(Sin IVA)</th>
-              <th scope="col">Tasa en historico</th>
-              <th scope="col">Costo bruto</br>(Sin IVA) HOY</th>
-          <th scope="col">Costo en divisa</br>(Sin IVA)</th>
+              <th scope="col">Costo bruto</br>(Sin IVA) '.SigVe.'</th>
+              <th scope="col">Tasa en historico '.SigVe.'</th>
+              <th scope="col">Costo bruto</br>HOY (Sin IVA) '.SigVe.'</th>
+          <th scope="col">Costo en divisa</br>(Sin IVA) '.SigDolar.'</th>
           </tr>
         </thead>
         <tbody>
@@ -253,34 +248,32 @@
     while($row2 = sqlsrv_fetch_array($result2, SQLSRV_FETCH_ASSOC)) {
         echo '<tr>';
         echo '<td align="center"><strong>'.intval($contador).'</strong></td>';
-        echo '<td>'.$row2["Nombre"].'</td>';
-        echo '<td align="center">'.$row2["FechaDocumento"]->format('Y-m-d').'</td>';
+        echo '<td>'.utf8_encode(addslashes($row2["Nombre"])).'</td>';
+        echo '<td align="center">'.$row2["FechaDocumento"]->format('d-m-Y').'</td>';
         echo '<td align="center">'.intval($row2['CantidadRecibidaFactura']).'</td>';
-        echo '<td align="center">'." ".round($row2["M_PrecioCompraBruto"],2)." ".SigVe.'</td>';
+        echo '<td align="center">'.number_format($row2["M_PrecioCompraBruto"],2,"," ,"." ).'</td>';
 
-        $FechaD = $row2["FechaDocumento"]->format('Y-m-d');
-        $Tasa = TasaFecha($FechaD);
-        
-        if($Tasa != 0){
-          $CostoDivisa = round(($row2["M_PrecioCompraBruto"]/$Tasa),2);
-          
-
-          echo '<td align="center">'." ".$Tasa." ".SigVe.'</td>';
+        $FechaHist = $row2["FechaDocumento"]->format('Y-m-d');
+        $Tasa = FG_Tasa_Fecha($connCPharma,$FechaHist);
+         
+        if($Tasa != 0) {
+          $CostoDivisa = $row2["M_PrecioCompraBruto"]/$Tasa;
+          echo '<td align="center">'.number_format($Tasa,2,"," ,"." ).'</td>';
 
           if($TasaActual!=0){
             $CostoBrutoHoy = $CostoDivisa*$TasaActual;
-            echo '<td align="center">'." ".$CostoBrutoHoy." ".SigVe.'</td>';
+            echo '<td align="center">'.number_format($CostoBrutoHoy,2,"," ,"." ).'</td>';
           }
           else{
-            echo '<td align="center">0.00 '.SigVe.'</td>';
+            echo '<td align="center">0,00</td>';
           }
 
-          echo '<td align="center">'." ".$CostoDivisa." ".SigDolar.'</td>';
+          echo '<td align="center">'.number_format($CostoDivisa,2,"," ,"." ).'</td>';
         }
         else{
-          echo '<td align="center">0.00 '.SigVe.'</td>';
-          echo '<td align="center">0.00 '.SigVe.'</td>';
-          echo '<td align="center">0.00 '.SigDolar.'</td>';
+          echo '<td align="center">0,00</td>';
+          echo '<td align="center">0,00</td>';
+          echo '<td align="center">0,00</td>';
         }
         echo '</tr>';
       $contador++;
@@ -288,7 +281,6 @@
       echo '
         </tbody>
     </table>';
-
     mysqli_close($connCPharma);
     sqlsrv_close($conn);
   }
@@ -331,6 +323,30 @@
       InvArticulo.FinConceptoImptoIdCompra AS ConceptoImpuesto
       FROM InvArticulo
       WHERE InvArticulo.Id = '$IdArticulo'
+    ";
+    return $sql;
+  }
+  /*
+    TITULO: R2Q_Historico_Articulo
+    PARAMETROS: [$IdArticuloQ] Id del articulo
+    FUNCION: Armar la tabla del historico de articulos
+    RETORNO: La tabla de historico del articulo
+   */
+  function R2Q_Historico_Articulo($IdArticulo) {
+    $sql = "
+      SELECT
+      GenPersona.Nombre,
+      CONVERT(DATE,ComFactura.FechaRegistro) As FechaRegistro,
+      CONVERT(DATE,ComFactura.FechaDocumento) As FechaDocumento,
+      ComFacturaDetalle.CantidadRecibidaFactura,
+      ComFacturaDetalle.M_PrecioCompraBruto
+      FROM InvArticulo
+      INNER JOIN ComFacturaDetalle ON InvArticulo.Id = ComFacturaDetalle.InvArticuloId
+      INNER JOIN ComFactura ON ComFactura.Id = ComFacturaDetalle.ComFacturaId
+      INNER JOIN ComProveedor ON ComProveedor.Id = ComFactura.ComProveedorId
+      INNER JOIN GenPersona ON GenPersona.Id = ComProveedor.GenPersonaId
+      WHERE InvArticulo.Id = '$IdArticulo'
+      ORDER BY ComFactura.FechaDocumento DESC
     ";
     return $sql;
   }
