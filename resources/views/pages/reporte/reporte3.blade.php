@@ -204,6 +204,32 @@
 
     echo'<h6 align="center">Periodo desde el '.$FInicialImp.' al '.$FFinalImp.' </h6>';
 
+    echo'
+    <table class="table table-striped table-bordered col-12 sortable" id="myTable">
+        <thead class="thead-dark">
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Codigo</th>
+              <th scope="col">Descripcion</th>
+              <th scope="col">Existencia</th>
+              <th scope="col">Tipo</th>
+              <th scope="col">Total de Venta</th>
+              <th scope="col">Veces Facturado</th>            
+              <th scope="col">Unidades vendidas</th>              
+              <th scope="col">Unidades Compradas</th>                     
+              <th scope="col">Venta diaria</th>
+              <th scope="col">Dias restantes</th>
+          </tr>
+        </thead>
+        <tbody>
+    ';
+
+//AQUI QUEDE
+
+    echo '
+        </tbody>
+    </table>';
+
     $sql = QG_CleanTable('CP_R3Q_Unidades_Vendidas');
     sqlsrv_query($conn,$sql);
     $sql = QG_CleanTable('CP_R3Q_Unidades_Devueltas');
