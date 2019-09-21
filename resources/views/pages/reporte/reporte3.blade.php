@@ -225,6 +225,10 @@
     ';
 
 //AQUI QUEDE
+  $contador = 1;
+  while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
+
+  }
 
     echo '
         </tbody>
@@ -360,6 +364,32 @@
       LEFT JOIN CP_R3Q_Unidades_Compradas ON CP_R3Q_Unidades_Compradas.InvArticuloId = CP_R3Q_Unidades_Vendidas.InvArticuloId
       LEFT JOIN CP_R3Q_Unidades_Reclamadas ON CP_R3Q_Unidades_Reclamadas.InvArticuloId = CP_R3Q_Unidades_Vendidas.InvArticuloId
       ORDER BY UnidadesVendidas DESC
+    ";
+    return $sql;
+  }
+  /*
+    TITULO: R3Q_Detalle_Articulo
+    PARAMETROS: [$IdArticulo] $IdArticulo del articulo a buscar
+    FUNCION: Query que genera el detalle del articulo solicitado
+    RETORNO: Detalle del articulo
+   */
+  function R3Q_Detalle_Articulo($IdArticulo) {
+    $sql = " 
+      SELECT
+      InvArticulo.Id,
+      InvArticulo.CodigoArticulo,
+      (SELECT CodigoBarra
+          FROM InvCodigoBarra 
+          WHERE InvCodigoBarra.InvArticuloId = '$IdArticulo'
+          AND InvCodigoBarra.EsPrincipal = 1) As CodigoBarra,
+      InvArticulo.Descripcion,
+        (SELECT SUM (InvLoteAlmacen.Existencia) As Existencia
+          FROM InvLoteAlmacen
+          WHERE(InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
+          AND (InvLoteAlmacen.InvArticuloId = '$IdArticulo')) AS Existencia,
+      InvArticulo.FinConceptoImptoIdCompra AS ConceptoImpuesto
+      FROM InvArticulo
+      WHERE InvArticulo.Id = '$IdArticulo'
     ";
     return $sql;
   }
