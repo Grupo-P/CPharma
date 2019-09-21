@@ -2462,6 +2462,19 @@
 /******************  INICIO DE QUERYS GENERALES   *********************/
 /**********************************************************************/
 	/*
+		TITULO: QG_CleanTable
+		PARAMETROS: [$NombreTabla] Nombre de la tabla para preparar
+		FUNCION: Prepara la tabla para su uso
+		RETORNO: Tabla preparada para usar
+ 	*/
+	function QG_CleanTable($NombreTabla) {		
+		$sql = "
+			IF OBJECT_ID ('".$NombreTabla."', 'U') IS NOT NULL
+				DROP TABLE ".$NombreTabla.";
+		";					
+		return $sql;
+	}
+	/*
 		TITULO: QG_Dolarizados
 		PARAMETROS: [$IdArticulo] Id del articulo que se va a buscar
 		FUNCION: Busca el Id del atributo si la categoriza es dolarizado

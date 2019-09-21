@@ -1536,4 +1536,18 @@
 		}
 		return $Precio;
 	}
+	/*
+		TITULO: FG_Rango_Dias
+		PARAMETROS: [$FInicial] Fecha donde inicia el rango
+					[$FFinal] Fecha donde termina el rango
+		FUNCION: Calcular el rango de diferencia de dias entre el las fechas
+		RETORNO: rango de dias
+	 */
+	function FG_Rango_Dias($FInicial,$FFinal) {
+		$FechaI = new DateTime($FInicial);
+	    $FechaF = new DateTime($FFinal);
+	    $Rango = $FechaI->diff($FechaF);
+	    $Rango = $Rango->format('%a');
+	    return $Rango;
+	}
 ?>
