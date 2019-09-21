@@ -92,6 +92,7 @@
 		FUNCION: Armar una tabla de historico de compra del articulo
 		RETORNO: No aplica
 	 */
+	/*
 	function ReporteHistoricoProducto($SedeConnection,$IdArticulo){
 		
 		$conn = ConectarSmartpharma($SedeConnection);
@@ -233,6 +234,7 @@
 
 		sqlsrv_close($conn);
 	}
+	*/
 	/*****************************************************************************/
 	/************************ REPORTE 3 PRODUCTOS MAS VENDIDOS *******************/
 	/*
