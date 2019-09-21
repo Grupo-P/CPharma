@@ -903,7 +903,7 @@
 		PARAMETROS: $IsIVA
 		FUNCION: determina si un producto es gravado o no
 		RETORNO: retorna si el producto es gravado o no
-	 */
+ 	*/
 	function ProductoGravado($IsIVA){
 		$EsGravado = '';
 
@@ -1439,5 +1439,101 @@
 		mysqli_query($conn,$sql1);
 
 		mysqli_close($conn);
+	}
+/**********************************************************************/
+/******************  INICIO DE FUNCIONES GENERALES   ******************/
+/**********************************************************************/
+	/*
+		TITULO: FG_Producto_Dolarizado
+		PARAMETROS: [$conn] cadena de conexion
+					[$IdArticulo] id del articulo a buscar
+		FUNCION: Determina si el producto esta dolarizado 
+		RETORNO: Retorna si el producto esta dolarizado o no
+ 	*/
+	function FG_Producto_Dolarizado($conn,$IdArticulo) { 
+		$sql = QG_Dolarizados($IdArticulo);
+		$params = array();
+		$options =  array("Scrollable"=>SQLSRV_CURSOR_KEYSET);
+		$result = sqlsrv_query($conn,$sql,$params,$options);
+		$row_count = sqlsrv_num_rows($result);
+		
+		if($row_count == 0) {
+			$Dolarizado = 'NO';
+		}
+		else {
+			$Dolarizado = 'SI';
+		}
+	  	return $Dolarizado;
+	}
+	/*
+		TITULO: FG_Producto_Gravado
+		PARAMETROS: [$IsIVA] campo que almacena el ConceptoImpuesto
+		FUNCION: determina si un producto es gravado o no
+		RETORNO: retorna si el producto es gravado o no
+ 	*/
+	function FG_Producto_Gravado($IsIVA){
+		if($IsIVA == 1) {
+			$EsGravado = 'SI';
+		}
+		else {
+			$EsGravado = 'NO';
+		}
+	  	return $EsGravado;
+	}
+ 	/*
+		TITULO: FG_Tasa_Fecha
+		PARAMETROS: [$connCPharma] cadena de conexion con xampp
+					[$Fecha] Fecha de la que se buscara la tasa
+		FUNCION: Buscar el valor de la tasa
+		RETORNO: Valor de la tasa
+	 */
+	function FG_Tasa_Fecha($connCPharma,$Fecha) {
+		$sql = QG_Tasa_Fecha($Fecha);
+		$result = mysqli_query($connCPharma,$sql);
+		$row = mysqli_fetch_assoc($result);
+		$Tasa = $row['tasa'];
+		return $Tasa;
+	}
+	/*
+		TITULO: FG_Calculo_Precio
+		PARAMETROS: [$conn] Cadena de conexion para la base de datos
+					[$IdArticulo] Id del articulo
+					[$IsIVA] Si aplica o no
+					[$Existencia] existencia actual del producto
+		FUNCION: Calcular el precio del articulo
+		RETORNO: Precio del articulo
+	 */
+	function FG_Calculo_Precio($conn,$IdArticulo,$IsIVA,$Existencia) {		
+		if($Existencia == 0) {
+			$Precio = 0;
+		}
+		else {
+		/*PRECIO TROQUELADO*/
+			$sql = QG_Precio_Troquelado($IdArticulo);
+			$result = sqlsrv_query($conn,$sql);
+			$row = sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC);
+			$PrecioTroquelado = $row["M_PrecioTroquelado"];
+			
+			if($PrecioTroquelado!=NULL) {
+				$Precio = $PrecioTroquelado;
+			}		
+			else {
+			/*PRECIO CALCULADO*/ 
+				$sql = QG_Precio_Calculado($IdArticulo);
+				$result = sqlsrv_query($conn,$sql);
+				$row = sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC);
+				$PrecioBruto = $row["M_PrecioCompraBruto"];
+
+				if($IsIVA == 1) {
+					$PrecioCalculado = ($PrecioBruto/Utilidad)*Impuesto;
+					$Precio = $PrecioCalculado;
+				}
+				else { 
+					$PrecioCalculado = ($PrecioBruto/Utilidad);
+					$Precio = $PrecioCalculado;
+				}
+			}
+		}
+		return $Precio;
 	}
 ?>
