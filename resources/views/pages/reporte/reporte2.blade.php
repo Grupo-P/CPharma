@@ -162,7 +162,7 @@
 
     $CodigoArticulo = $row["CodigoArticulo"];
     $CodigoBarra = $row["CodigoBarra"];
-    $Descripcion = $row["Descripcion"];
+    $Descripcion = utf8_encode(addslashes($row["Descripcion"]));
     $Existencia = $row["Existencia"];
     $IsIVA = $row["ConceptoImpuesto"];
     $Gravado = FG_Producto_Gravado($IsIVA);
@@ -205,7 +205,7 @@
     echo 
       '<td align="left" class="barrido">
       <a href="/reporte10?Descrip='.$Descripcion.'&Id='.$IdArticulo.'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
-        .utf8_encode(addslashes($Descripcion)).
+        .$Descripcion.
       '</a>
       </td>';
 
