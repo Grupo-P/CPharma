@@ -2448,16 +2448,31 @@
 		return $sql;
 	}
 	/*
-		TITULO: QG1_RangoMinTasaVenta
+		TITULO: QG_RangoMinTasaVenta
 		PARAMETROS: No aplica
 		FUNCION: Armar la logica necesaria para ejecutar la query
 		RETORNO: String con la query
 	 */
-	function QG1_RangoMinTasaVenta() {
+	function QG_RangoMinTasaVenta() {
 		$sql = "
 			SELECT * 
 			FROM configuracions 
 			WHERE configuracions.variable = 'RangoMinDolar'
+		";
+		return $sql;
+	}
+
+	/*
+		TITULO: QG_RangoMaxTasaVenta
+		PARAMETROS: No aplica
+		FUNCION: Armar la logica necesaria para ejecutar la query
+		RETORNO: String con la query
+	 */
+	function QG_RangoMaxTasaVenta() {
+		$sql = "
+			SELECT * 
+			FROM configuracions 
+			WHERE configuracions.variable = 'RangoMaxDolar'
 		";
 		return $sql;
 	}
