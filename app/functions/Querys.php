@@ -2220,7 +2220,7 @@
 		FUNCION: Filtar los articulos eliminando los duplicados
 		RETORNO: String con la query
 	 */
-	function QFiltrarArticulosDevaluados() {
+	/*function QFiltrarArticulosDevaluados() {
 		$sql = "
 		SELECT 
 		CP_ArticulosDevaluados.InvArticuloId,
@@ -2231,7 +2231,7 @@
 		GROUP BY CP_ArticulosDevaluados.InvArticuloId, CP_ArticulosDevaluados.CodigoArticulo, CP_ArticulosDevaluados.Descripcion, CP_ArticulosDevaluados.ConceptoImpuesto
 		";
 		return $sql;
-	}
+	}*/
 	
 	function QDiasCeroEtiqueta($IdArticulo,$FechaCaptura) {
 		$sql = "
