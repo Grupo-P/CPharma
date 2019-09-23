@@ -2551,7 +2551,7 @@
 			WHERE(InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
 			AND (InvLoteAlmacen.InvArticuloId = '$IdArticulo')
 			AND (InvLoteAlmacen.Existencia>0)
-			ORDER BY invlote.M_PrecioTroquelado, invlote.M_PrecioCompraBruto DESC
+			ORDER BY invlote.M_PrecioTroquelado DESC
 		";
 		return $sql;
 	}
@@ -2571,7 +2571,7 @@
 			INNER JOIN InvLote ON InvLote.Id = InvLoteAlmacen.InvLoteId
 			WHERE (InvLoteAlmacen.InvArticuloId = '$IdArticulo')
 			AND (InvLoteAlmacen.Existencia>0)
-			ORDER BY invlote.M_PrecioTroquelado, invlote.M_PrecioCompraBruto DESC
+			ORDER BY invlote.M_PrecioCompraBruto DESC
 		";
 		return $sql;
 	}

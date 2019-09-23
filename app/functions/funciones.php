@@ -1518,7 +1518,7 @@
 				$Precio = $PrecioTroquelado;
 			}		
 			else {
-			/*PRECIO CALCULADO*/ 
+			/*PRECIO CALCULADO*/
 				$sql = QG_Precio_Calculado($IdArticulo);
 				$result = sqlsrv_query($conn,$sql);
 				$row = sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC);
