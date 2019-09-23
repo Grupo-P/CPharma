@@ -333,7 +333,7 @@
 
         $(document).ready(function() {
             $('[data-toggle="tooltip"]').tooltip();
-
+            
             //Identificamos los objetos del DOM con objetos JQuery
             var botonLimpiar = $('#btn-borrarN');
             var resultado = $('#resultado');
@@ -358,11 +358,16 @@
             var tasa = $('#tasa').val(); //Tasa de venta
             var decimales = $('#decimales').val(); //Numero de decimales de la factura
             var tolerancia = $('#tolerancia').val(); //Tolerancia de vuelto al cliente
+            
+            //Tasa con formato para el usuario
+            var tasaM = $('#tasaM');
+            tasaM.attr('value', separarMiles(tasa, decimales));
 
             //Colocamos el boton de borrado a la escucha del click
             botonLimpiar.click(function() {
                 //Borra el resultado, elimina las clases existentes y pasa el foco a la factura 1
                 resultado.removeClass('bg-danger text-white').val('-');
+                
                 fac1.focus();
 
                 //Formateo de variables auxiliares
@@ -411,6 +416,13 @@
                         case 'abono2':
                           calcularAbono(abono1, abono2, convAbono1, totalAbonos, totalFacBs, tasa, decimales, tolerancia, saldoRestanteBs, saldoRestanteDs, resultado);
                         break;
+                    }
+                },
+
+                //Gestionador de tasa a mostrar
+                focus: function(e) {
+                    if(e.target.id == 'fac1') {
+                        tasaM.attr('value', separarMiles(tasa, decimales));
                     }
                 }
             });
@@ -564,7 +576,8 @@
                     ?>
 
                     <td>
-                        <input type="number" step="0.01" min="0" placeholder="0,00" value="{{$TasaDolar}}" id="tasa" class="form-control bg-danger text-white" disabled>
+                        <input type="text" id="tasaM" class="form-control bg-danger text-white"  disabled>
+                        <input type="hidden" value="{{$TasaDolar}}" id="tasa">
                     </td>
 
                     <?php
@@ -573,7 +586,8 @@
                     ?>
 
                     <td>
-                        <input type="number" step="0.01" min="0" placeholder="0,00" value="{{$TasaDolar}}" id="tasa" class="form-control bg-success text-white" disabled>
+                        <input type="text" id="tasaM" class="form-control bg-success text-white"  disabled>
+                        <input type="hidden" value="{{$TasaDolar}}" id="tasa">
                     </td>
 
                     <?php   
