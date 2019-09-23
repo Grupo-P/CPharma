@@ -2476,7 +2476,6 @@
 		";
 		return $sql;
 	}
-
 	/*
 		TITULO: 
 		PARAMETROS: 
