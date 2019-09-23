@@ -2821,14 +2821,17 @@
 			  	<tbody>
 		';
 
-		$sql = QCleanTable('CP_ArticulosDevaluados');
-		sqlsrv_query($conn,$sql);
+		/*$sql = QCleanTable('CP_ArticulosDevaluados');
+		sqlsrv_query($conn,$sql);*/
 
 		$contador = 1;
-		$sql1 = QArticulosDevaluados($FInicial);
+		/*$sql1 = QArticulosDevaluados($FInicial);
 		sqlsrv_query($conn,$sql1);
 
 		$sql2 = QFiltrarArticulosDevaluados();
+		$result2 = sqlsrv_query($conn,$sql2);*/
+
+		$sql2 = QArticulosDevaluados($FInicial);
 		$result2 = sqlsrv_query($conn,$sql2);
 
 		while($row2 = sqlsrv_fetch_array($result2,SQLSRV_FETCH_ASSOC)) {
@@ -2836,21 +2839,26 @@
 			$Dolarizado = ProductoDolarizado($conn,$IdArticulo);
 
 			if($Dolarizado == 'NO') {
-				$sql4 = QUltimoLote($IdArticulo,$FInicial);
+				/*$sql4 = QUltimoLote($IdArticulo,$FInicial);
 				$result4 = sqlsrv_query($conn,$sql4);
 				$row4 = sqlsrv_fetch_array($result4,SQLSRV_FETCH_ASSOC);
-				$UltimoLote = $row4["UltimoLote"];
+				$UltimoLote = $row4["UltimoLote"];*/
+				$UltimoLote = $row2['FechaLote'];
 
 				if(!is_null($UltimoLote)) {
 					$UltimoLote = $UltimoLote->format('Y-m-d');
 					$Diferencia = ValidarFechas($FInicial,$UltimoLote);
 
 					if($Diferencia < 0) {
+						$sql = QArticulo($IdArticulo);
+						$result = sqlsrv_query($conn,$sql);
+						$row = sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC);
+
 						$sql3 = QExistenciaArticuloDevaluado($IdArticulo);
 						$result3 = sqlsrv_query($conn,$sql3);
 						$row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
 
-						$IsIVA = $row2["ConceptoImpuesto"];
+						$IsIVA = $row["ConceptoImpuesto"];
 						$Existencia = $row3["Existencia"];
 						$Precio = CalculoPrecioDevaluado($conn,$IdArticulo,$IsIVA,$Existencia);
 						$ValorLote = $Precio * intval($Existencia);
@@ -2921,8 +2929,8 @@
 			</table>
 		';
 
-		$sql = QCleanTable('CP_ArticulosDevaluados');
-		sqlsrv_query($conn,$sql);
+		/*$sql = QCleanTable('CP_ArticulosDevaluados');
+		sqlsrv_query($conn,$sql);*/
 
 		sqlsrv_close($conn);
 	}
