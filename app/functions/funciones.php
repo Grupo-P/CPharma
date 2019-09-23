@@ -1550,4 +1550,47 @@
 	    $Rango = $Rango->format('%a');
 	    return $Rango;
 	}
+	/*
+		TITULO: FG_Tipo_Producto
+		PARAMETROS: [$conn] cadena de conexion
+					[$IdArticulo] id del articulo a buscar
+		FUNCION: Determina si el producto esta dolarizado 
+		RETORNO: Retorna si el producto esta dolarizado o no
+ 	*/
+	function FG_Tipo_Producto($conn,$IdArticulo) { 
+		$sql = QG_Tipo_Producto($IdArticulo);
+		$params = array();
+		$options =  array("Scrollable"=>SQLSRV_CURSOR_KEYSET);
+		$result = sqlsrv_query($conn,$sql,$params,$options);
+		$row_count = sqlsrv_num_rows($result);
+
+		if($row_count == 0) {
+			$Medicina = 'MISCELANEO';
+		}
+		else {
+			$Medicina = 'MEDICINA';
+		}
+	  	return $Medicina;
+	}
+	/*
+		TITULO: FG_Tipo_Producto
+		PARAMETROS: [$conn] cadena de conexion
+					[$IdArticulo] id del articulo a buscar
+		FUNCION: Determina si el producto esta dolarizado 
+		RETORNO: Retorna si el producto esta dolarizado o no
+ 	*/
+	function FG_TotalVenta($conn,$FInicial,$FFinal,$IdArticulo) { 
+		$sql = QG_SubTotalVenta_Articulo($FInicial,$FFinal,$IdArticulo);
+		$result = sqlsrv_query($conn,$sql);
+		$row = sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC);
+		$SubTotalVenta = $row["SubTotalVenta"];
+
+		$sql = QG_SubTotalDevolucion_Articulo($FInicial,$FFinal,$IdArticulo);
+		$result = sqlsrv_query($conn,$sql);
+		$row = sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC);
+		$SubTotalDevolucion = $row["SubTotalDevolucion"];
+
+		$TotalVenta = ($SubTotalVenta-$SubTotalDevolucion);
+		return $TotalVenta;
+	}
 ?>

@@ -2546,4 +2546,57 @@
 		";
 		return $sql;
 	}
+	/*
+		TITULO: QG_Tipo_Producto
+		PARAMETROS: [$IdArticulo] Id del articulo que se va a buscar
+		FUNCION: Busca el Id del atributo si la categoriza es dolarizado
+		RETORNO: Retorna el id del atributo dolarizado
+	 */
+	function QG_Tipo_Producto($IdArticulo) {
+		$sql = "
+		SELECT * 
+		FROM InvArticuloAtributo 
+		WHERE InvArticuloAtributo.InvAtributoId = 
+			(SELECT InvAtributo.Id
+			FROM InvAtributo 
+			WHERE 
+			InvAtributo.Descripcion = 'Medicina') 
+		AND InvArticuloAtributo.InvArticuloId = '$IdArticulo'
+		";
+		return $sql;
+	}
+	/*
+		TITULO: QG_SubTotalVenta_Articulo
+		PARAMETROS: [$IdArticulo] Id del articulo que se va a buscar
+		FUNCION: Busca el Id del atributo si la categoriza es dolarizado
+		RETORNO: Retorna el id del atributo dolarizado
+	 */
+	function QG_SubTotalVenta_Articulo($FInicial,$FFinal,$IdArticulo) {
+		$sql = "
+		SELECT
+		(ROUND(CAST(SUM (VenVentaDetalle.PrecioBruto * VenVentaDetalle.Cantidad) AS DECIMAL(38,2)),2,0)) as SubTotalVenta
+		FROM VenVentaDetalle
+		INNER JOIN VenVenta ON VenVenta.Id = VenVentaDetalle.VenVentaId 
+		WHERE (VenVenta.FechaDocumentoVenta > '$FInicial' AND VenVenta.FechaDocumentoVenta < '$FFinal')
+		AND VenVentaDetalle.InvArticuloId = '$IdArticulo'
+		";
+		return $sql;
+	}
+	/*
+		TITULO: QG_SubTotalVenta_Articulo
+		PARAMETROS: [$IdArticulo] Id del articulo que se va a buscar
+		FUNCION: Busca el Id del atributo si la categoriza es dolarizado
+		RETORNO: Retorna el id del atributo dolarizado
+	 */
+	function QG_SubTotalDevolucion_Articulo($FInicial,$FFinal,$IdArticulo) {
+		$sql = "
+		SELECT
+		(ROUND(CAST(SUM (VenDevolucionDetalle.PrecioBruto * VenDevolucionDetalle.Cantidad) AS DECIMAL(38,2)),2,0)) as SubTotalDevolucion
+		FROM VenDevolucionDetalle
+		INNER JOIN VenDevolucion ON VenDevolucion.Id = VenDevolucionDetalle.VenDevolucionId 
+		WHERE (VenDevolucion.FechaDocumento > '$FInicial' AND VenDevolucion.FechaDocumento < '$FFinal')
+		AND VenDevolucionDetalle.InvArticuloId = '$IdArticulo'
+		";
+		return $sql;
+	}
 ?>

@@ -178,16 +178,26 @@
     $sql = QG_CleanTable('CP_R3Q_Unidades_Reclamadas');
     sqlsrv_query($conn,$sql);
 
-    $sql = R3Q_Unidades_Vendidas($FInicial,$FFinal);
+    $sql1 = R3Q_Unidades_Vendidas($FInicial,$FFinal);
+    $sql2 = R3Q_Unidades_Devueltas($FInicial,$FFinal);
+    $sql3 = R3Q_Unidades_Compradas($FInicial,$FFinal);
+    $sql4 = R3Q_Unidades_Reclamadas($FInicial,$FFinal);
+    $sql5 = R3Q_TOP_MasVendidos($Top);
+
+    sqlsrv_query($conn,$sql1);
+    sqlsrv_query($conn,$sql2);
+    sqlsrv_query($conn,$sql3); 
+    sqlsrv_query($conn,$sql4);
+    $result = sqlsrv_query($conn,$sql5);
+
+    $sql = QG_CleanTable('CP_R3Q_Unidades_Vendidas');
     sqlsrv_query($conn,$sql);
-    $sql = R3Q_Unidades_Devueltas($FInicial,$FFinal);
+    $sql = QG_CleanTable('CP_R3Q_Unidades_Devueltas');
     sqlsrv_query($conn,$sql);
-    $sql = R3Q_Unidades_Compradas($FInicial,$FFinal);
+    $sql = QG_CleanTable('CP_R3Q_Unidades_Compradas');
     sqlsrv_query($conn,$sql);
-    $sql = R3Q_Unidades_Reclamadas($FInicial,$FFinal);  
+    $sql = QG_CleanTable('CP_R3Q_Unidades_Reclamadas');
     sqlsrv_query($conn,$sql);
-    $sql = R3Q_TOP_MasVendidos($FInicial,$FFinal);
-    $result = sqlsrv_query($conn,$sql);
 
     echo '
     <div class="input-group md-form form-sm form-1 pl-0">
@@ -210,40 +220,60 @@
           <tr>
             <th scope="col">#</th>
             <th scope="col">Codigo</th>
-              <th scope="col">Descripcion</th>
-              <th scope="col">Existencia</th>
-              <th scope="col">Tipo</th>
-              <th scope="col">Total de Venta</th>
-              <th scope="col">Veces Facturado</th>            
-              <th scope="col">Unidades vendidas</th>              
-              <th scope="col">Unidades Compradas</th>                     
-              <th scope="col">Venta diaria</th>
-              <th scope="col">Dias restantes</th>
+            <th scope="col">Codigo de barra</th>
+            <th scope="col">Descripcion</th>
+            <th scope="col">Existencia</th>
+            <th scope="col">Tipo</th>
+            <th scope="col">Total de Venta '.SigVe.'</th>
+            <th scope="col">Veces Facturado</th>            
+            <th scope="col">Unidades vendidas</th>              
+            <th scope="col">Unidades Compradas</th>                     
+            <th scope="col">Venta diaria</th>
+            <th scope="col">Dias restantes</th>
           </tr>
         </thead>
         <tbody>
     ';
 
-//AQUI QUEDE
-  $contador = 1;
-  while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
 
-  }
+    $contador = 1;
+    while($row = sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC)) {
+      $IdArticulo = $row["InvArticuloId"];
+      
+      $sql1 = R3Q_Detalle_Articulo($IdArticulo);
+      $result1 = sqlsrv_query($conn,$sql1);
+      $row1 = sqlsrv_fetch_array($result1,SQLSRV_FETCH_ASSOC);
+
+      $CodigoArticulo = $row1["CodigoArticulo"];
+      $CodigoBarra = $row1["CodigoBarra"];
+      $Descripcion = utf8_encode(addslashes($row1["Descripcion"]));
+      $Existencia = $row1["Existencia"];
+      $Tipo = FG_Tipo_Producto($conn,$IdArticulo);
+      $TotalVenta = FG_TotalVenta($conn,$FInicial,$FFinal,$IdArticulo);
+
+//AQUI QUEDE
+      echo '<tr>';
+      echo '<td align="center"><strong>'.intval($contador).'</strong></td>';
+      echo '<td>'.$CodigoArticulo.'</td>';
+      echo '<td align="center">'.$CodigoBarra.'</td>';
+      echo 
+      '<td align="left" class="barrido">
+      <a href="/reporte10?Descrip='.$Descripcion.'&Id='.$IdArticulo.'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
+        .$Descripcion.
+      '</a>
+      </td>';
+      echo '<td align="center">'.intval($Existencia).'</td>';
+      echo '<td align="center">'.$Tipo.'</td>';
+      echo '<td align="center">'.number_format($TotalVenta,2,"," ,"." ).'</td>';
+      echo '</tr>';
+      $contador++;
+    }
 
     echo '
         </tbody>
     </table>';
 
-    $sql = QG_CleanTable('CP_R3Q_Unidades_Vendidas');
-    sqlsrv_query($conn,$sql);
-    $sql = QG_CleanTable('CP_R3Q_Unidades_Devueltas');
-    sqlsrv_query($conn,$sql);
-    $sql = QG_CleanTable('CP_R3Q_Unidades_Compradas');
-    sqlsrv_query($conn,$sql);
-    $sql = QG_CleanTable('CP_R3Q_Unidades_Reclamadas');
-    sqlsrv_query($conn,$sql);
-
-    sqlsrv_close($conn); 
+    sqlsrv_close($conn);
   }
   /*
     TITULO: R3Q_Unidades_Vendidas
