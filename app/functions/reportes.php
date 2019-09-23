@@ -92,6 +92,7 @@
 		FUNCION: Armar una tabla de historico de compra del articulo
 		RETORNO: No aplica
 	 */
+	/*
 	function ReporteHistoricoProducto($SedeConnection,$IdArticulo){
 		
 		$conn = ConectarSmartpharma($SedeConnection);
@@ -233,6 +234,7 @@
 
 		sqlsrv_close($conn);
 	}
+	*/
 	/*****************************************************************************/
 	/************************ REPORTE 3 PRODUCTOS MAS VENDIDOS *******************/
 	/*
@@ -312,6 +314,7 @@
 		  	</thead>
 		  	<tbody>
 		';
+
 		$contador = 1;
 		while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
 			$IdArticulo = $row["Id"];
@@ -320,9 +323,8 @@
 			$result1 = sqlsrv_query($conn,$sql7);
 			$row1 = sqlsrv_fetch_array($result1,SQLSRV_FETCH_ASSOC);
 			$Existencia = $row1["Existencia"];
-
 			$Tipo = ProductoMedicina($conn,$IdArticulo);
-
+//AQUI QUEDE
 			$sql = QCleanTable('CP_QVentasParcial');
 			sqlsrv_query($conn,$sql);
 			$sql = QCleanTable('CP_QDevolucionParcial');
