@@ -1593,4 +1593,34 @@
 		$TotalVenta = ($SubTotalVenta-$SubTotalDevolucion);
 		return $TotalVenta;
 	}
+	/*
+		TITULO: FG_Venta_Diaria
+		PARAMETROS: [$Venta] Venta
+					[$RangoDias] Rango de dias entre dos fechas
+		FUNCION: Calcular la venta al diaria promedio en base al rango de dias
+		RETORNO: Venta diaria promedio
+	 */
+	function FG_Venta_Diaria($Venta,$RangoDias) {
+		$VentaDiaria = 0;
+		if($RangoDias != 0){
+			$VentaDiaria = $Venta/$RangoDias;
+		}
+		$VentaDiaria = round($VentaDiaria,2);
+		return $VentaDiaria;
+	}
+	/*
+		TITULO: FG_Dias_Restantes
+		PARAMETROS: [$Existencia] Existencia de un producto
+					[$VentaDiaria] Venta diaria promedio del prodcuto
+		FUNCION: Calcular los dias restantes de inventario promedio
+		RETORNO: Dias restantes promedio
+	 */
+	function FG_Dias_Restantes($Existencia,$VentaDiaria) {
+		$DiasRestantes = 0;
+		if($VentaDiaria != 0){
+			$DiasRestantes = $Existencia/$VentaDiaria;
+		}
+		$DiasRestantes = round($DiasRestantes,2);
+		return $DiasRestantes;
+	}
 ?>

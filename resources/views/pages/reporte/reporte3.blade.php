@@ -79,7 +79,6 @@
   include(app_path().'\functions\config.php');
   include(app_path().'\functions\querys.php');
   include(app_path().'\functions\funciones.php');
-  include(app_path().'\functions\reportes.php');
 
 	if (isset($_GET['top']))
 	{
@@ -90,7 +89,6 @@
     }
     echo '<hr class="row align-items-start col-12">';
 
-    //ReporteProductosMasVendidos($_GET['SEDE'],$_GET['top'],$_GET['fechaInicio'],$_GET['fechaFin']);
     R3_Productos_MasVendidos($_GET['SEDE'],$_GET['top'],$_GET['fechaInicio'],$_GET['fechaFin']);
     GuardarAuditoria('CONSULTAR','REPORTE','Productos mas vendidos');
     
@@ -219,8 +217,7 @@
         <thead class="thead-dark">
           <tr>
             <th scope="col">#</th>
-            <th scope="col">Codigo</th>
-            <th scope="col">Codigo de barra</th>
+            <th scope="col">Codigo</th>            
             <th scope="col">Descripcion</th>
             <th scope="col">Existencia</th>
             <th scope="col">Tipo</th>
@@ -235,7 +232,6 @@
         <tbody>
     ';
 
-
     $contador = 1;
     while($row = sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC)) {
       $IdArticulo = $row["InvArticuloId"];
@@ -245,17 +241,17 @@
       $row1 = sqlsrv_fetch_array($result1,SQLSRV_FETCH_ASSOC);
 
       $CodigoArticulo = $row1["CodigoArticulo"];
-      $CodigoBarra = $row1["CodigoBarra"];
       $Descripcion = utf8_encode(addslashes($row1["Descripcion"]));
       $Existencia = $row1["Existencia"];
       $Tipo = FG_Tipo_Producto($conn,$IdArticulo);
       $TotalVenta = FG_TotalVenta($conn,$FInicial,$FFinal,$IdArticulo);
+      $Venta = $row["UnidadesVendidas"];
+      $VentaDiaria = FG_Venta_Diaria($Venta,$RangoDias);
+      $DiasRestantes = FG_Dias_Restantes($Existencia,$VentaDiaria);
 
-//AQUI QUEDE
       echo '<tr>';
       echo '<td align="center"><strong>'.intval($contador).'</strong></td>';
       echo '<td>'.$CodigoArticulo.'</td>';
-      echo '<td align="center">'.$CodigoBarra.'</td>';
       echo 
       '<td align="left" class="barrido">
       <a href="/reporte10?Descrip='.$Descripcion.'&Id='.$IdArticulo.'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
@@ -265,6 +261,26 @@
       echo '<td align="center">'.intval($Existencia).'</td>';
       echo '<td align="center">'.$Tipo.'</td>';
       echo '<td align="center">'.number_format($TotalVenta,2,"," ,"." ).'</td>';
+      echo 
+      '<td align="center" class="barrido">
+      <a href="reporte12?fechaInicio='.$FInicial.'&fechaFin='.$FFinalImp.'&SEDE='.$SedeConnection.'&Descrip='.$Descripcion.'&Id='.$IdArticulo.'" style="text-decoration: none; color: black;" target="_blank">'
+        .intval($row["VecesVendidas"]).
+      '</a>
+      </td>';
+      echo 
+      '<td align="center" class="barrido">
+      <a href="reporte12?fechaInicio='.$FInicial.'&fechaFin='.$FFinalImp.'&SEDE='.$SedeConnection.'&Descrip='.$Descripcion.'&Id='.$IdArticulo.'" style="text-decoration: none; color: black;" target="_blank">'
+        .intval($Venta).
+      '</a>
+      </td>';
+      echo 
+      '<td align="center" class="barrido">
+      <a href="reporte12?fechaInicio='.$FInicial.'&fechaFin='.$FFinalImp.'&SEDE='.$SedeConnection.'&Descrip='.$Descripcion.'&Id='.$IdArticulo.'" style="text-decoration: none; color: black;" target="_blank">'
+        .intval($row["UnidadesCompradas"]).
+      '</a>
+      </td>';
+      echo '<td align="center">'.round($VentaDiaria,2).'</td>';
+      echo '<td align="center">'.round($DiasRestantes,2).'</td>';
       echo '</tr>';
       $contador++;
     }
