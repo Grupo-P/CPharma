@@ -2178,6 +2178,7 @@
 		AND (CONVERT(DATE,InvLoteAlmacen.Auditoria_FechaCreacion) < '$FechaBandera')
 		ORDER BY InvLoteAlmacen.Auditoria_FechaCreacion, InvArticulo.Descripcion DESC
 		";*/
+
 		$sql = "
 		SELECT DISTINCT
 		--Campos
@@ -2198,6 +2199,7 @@
 		FROM InvLoteAlmacen
 		WHERE InvLoteAlmacen.InvArticuloId = InvArticulo.Id
 		AND (InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)) AS Existencia,--Existencia
+		InvArticulo.FinConceptoImptoIdCompra AS ConceptoImpuesto,
 		InvArticulo.Descripcion--Descripcion del articulo
 		--Tabla de origen
 		FROM InvLote

@@ -2843,6 +2843,7 @@
 				$result4 = sqlsrv_query($conn,$sql4);
 				$row4 = sqlsrv_fetch_array($result4,SQLSRV_FETCH_ASSOC);
 				$UltimoLote = $row4["UltimoLote"];*/
+				
 				$UltimoLote = $row2['FechaLote'];
 
 				if(!is_null($UltimoLote)) {
@@ -2850,7 +2851,7 @@
 					$Diferencia = ValidarFechas($FInicial,$UltimoLote);
 
 					if($Diferencia < 0) {
-						$sql = QArticulo($IdArticulo);
+						/*$sql = QArticulo($IdArticulo);
 						$result = sqlsrv_query($conn,$sql);
 						$row = sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC);
 
@@ -2859,7 +2860,10 @@
 						$row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
 
 						$IsIVA = $row["ConceptoImpuesto"];
-						$Existencia = $row3["Existencia"];
+						$Existencia = $row3["Existencia"];*/
+
+						$IsIVA = $row2["ConceptoImpuesto"];
+						$Existencia = $row2["Existencia"];
 						$Precio = CalculoPrecioDevaluado($conn,$IdArticulo,$IsIVA,$Existencia);
 						$ValorLote = $Precio * intval($Existencia);
 
