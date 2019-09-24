@@ -92,7 +92,6 @@
     echo '<hr class="row align-items-start col-12">';
 
     R4_Productos_MenosVendidos($_GET['SEDE'],$_GET['top'],$_GET['fechaInicio'],$_GET['fechaFin']);
-    //ReporteProductosMenosVendidos($_GET['SEDE'],$_GET['top'],$_GET['fechaInicio'],$_GET['fechaFin']);
     GuardarAuditoria('CONSULTAR','REPORTE','Productos menos vendidos');
 
     $FinCarga = new DateTime("now");

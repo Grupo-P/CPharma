@@ -2664,4 +2664,44 @@
 		";
 		return $sql;
 	}
+	/*
+		TITULO: QG_UltimaVenta
+		PARAMETROS: [$IdArticulo] Id del articulo a buscar
+		FUNCION: Buscar la fecha de la ultima venta del articulo sin rango 
+		RETORNO: La fecha de la ultima venta
+	 */
+	function QG_UltimaVenta($IdArticulo) {
+		$sql="
+			SELECT TOP 1
+			CONVERT(DATE,VenFactura.FechaDocumento) AS UltimaVenta
+			FROM VenFactura
+			INNER JOIN VenFacturaDetalle ON VenFacturaDetalle.VenFacturaId = VenFactura.Id
+			WHERE VenFacturaDetalle.InvArticuloId = '$IdArticulo'
+			ORDER BY FechaDocumento DESC
+		";
+		return $sql;
+	}
+	/*
+		TITULO: QG_UltimoProveedor
+		PARAMETROS: [$IdArticuloQ] Id del articulo
+		FUNCION: busca el ultimo proveedor en despachar el articulo
+		RETORNO: ultimo proveedor en despachar el articulo
+	 */
+	function QG_UltimoProveedor($IdArticulo) {
+		$sql = "
+			SELECT TOP 1
+			ComProveedor.Id,
+			GenPersona.Nombre,
+			CONVERT(DATE,ComFactura.FechaRegistro) As FechaRegistro,
+			CONVERT(DATE,ComFactura.FechaDocumento) As FechaDocumento
+			FROM InvArticulo
+			INNER JOIN ComFacturaDetalle ON InvArticulo.Id = ComFacturaDetalle.InvArticuloId
+			INNER JOIN ComFactura ON ComFactura.Id = ComFacturaDetalle.ComFacturaId
+			INNER JOIN ComProveedor ON ComProveedor.Id = ComFactura.ComProveedorId
+			INNER JOIN GenPersona ON GenPersona.Id = ComProveedor.GenPersonaId
+			WHERE InvArticulo.Id = '$IdArticulo'
+			ORDER BY ComFactura.FechaDocumento DESC
+		";
+		return $sql;
+	}
 ?>
