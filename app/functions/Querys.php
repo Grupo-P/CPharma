@@ -2551,7 +2551,7 @@
 			WHERE(InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
 			AND (InvLoteAlmacen.InvArticuloId = '$IdArticulo')
 			AND (InvLoteAlmacen.Existencia>0)
-			ORDER BY invlote.M_PrecioTroquelado, invlote.M_PrecioCompraBruto DESC
+			ORDER BY invlote.M_PrecioTroquelado DESC
 		";
 		return $sql;
 	}
@@ -2571,7 +2571,7 @@
 			INNER JOIN InvLote ON InvLote.Id = InvLoteAlmacen.InvLoteId
 			WHERE (InvLoteAlmacen.InvArticuloId = '$IdArticulo')
 			AND (InvLoteAlmacen.Existencia>0)
-			ORDER BY invlote.M_PrecioTroquelado, invlote.M_PrecioCompraBruto DESC
+			ORDER BY invlote.M_PrecioCompraBruto DESC
 		";
 		return $sql;
 	}
@@ -2625,6 +2625,23 @@
 		INNER JOIN VenDevolucion ON VenDevolucion.Id = VenDevolucionDetalle.VenDevolucionId 
 		WHERE (VenDevolucion.FechaDocumento > '$FInicial' AND VenDevolucion.FechaDocumento < '$FFinal')
 		AND VenDevolucionDetalle.InvArticuloId = '$IdArticulo'
+		";
+		return $sql;
+	}
+	/*
+		TITULO: QG_Utilidad_Articulo
+		PARAMETROS: [$IdArticulo] Id del articulo que se va a buscar
+		FUNCION: Busca el Id del atributo si la categoriza es dolarizado
+		RETORNO: Retorna el id del atributo dolarizado
+	 */
+	function QG_Utilidad_Articulo($IdArticulo) {
+		$sql = "
+		SELECT VenCondicionVenta.PorcentajeUtilidad AS UtilidadArticulo
+		FROM VenCondicionVenta 
+		WHERE VenCondicionVenta.Id = (
+			SELECT VenCondicionVenta_VenCondicionVentaArticulo.Id
+			FROM VenCondicionVenta_VenCondicionVentaArticulo 
+			WHERE VenCondicionVenta_VenCondicionVentaArticulo.InvArticuloId = '$IdArticulo')
 		";
 		return $sql;
 	}
