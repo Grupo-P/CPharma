@@ -1303,7 +1303,7 @@
 	}
 
 	function GenererEtiquetas($clasificacion) {
-		$SedeConnection = MiUbicacion();
+		$SedeConnection = MiUbicacion();		
 	    $conn = ConectarSmartpharma($SedeConnection);
 	    
 		$connCPharma = ConectarXampp();	
@@ -1331,9 +1331,9 @@
 			$IsIVA = $row["ConceptoImpuesto"];		
 			$Existencia = $row1["Existencia"];
 
-			$PrecioHoy = CalculoPrecio($conn,$IdArticulo,$IsIVA,$Existencia);
+			$PrecioHoy = FG_Calculo_Precio($conn,$IdArticulo,$IsIVA,$Existencia);
 
-		    $sqlCC = QDiasCeroEtiqueta($IdArticulo,$FAyer);
+	    $sqlCC = QDiasCeroEtiqueta($IdArticulo,$FAyer);
 			$resultCC = mysqli_query($connCPharma,$sqlCC);
 			$rowCC = mysqli_fetch_assoc($resultCC);
 			$PrecioAyer = $rowCC["precio"];
@@ -1341,7 +1341,7 @@
 			if($PrecioHoy!=$PrecioAyer){
 
 				if($IsIVA == 1){
-					$PMVP = $PrecioHoy/1.16;
+					$PMVP = $PrecioHoy/Impuesto;
 					$IVA = $PrecioHoy-$PMVP;
 				}
 				else{
@@ -1514,23 +1514,29 @@
 			$row = sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC);
 			$PrecioTroquelado = $row["M_PrecioTroquelado"];
 			
-			if($PrecioTroquelado!=NULL) {
+			if($PrecioTroquelado!=NULL){
 				$Precio = $PrecioTroquelado;
 			}		
-			else {
-			/*PRECIO CALCULADO*/ 
+			else{
+			/*PRECIO CALCULADO*/
 				$sql = QG_Precio_Calculado($IdArticulo);
 				$result = sqlsrv_query($conn,$sql);
 				$row = sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC);
 				$PrecioBruto = $row["M_PrecioCompraBruto"];
+				$Utilidad = FG_Utilidad_Articulo($conn,$IdArticulo);
 
-				if($IsIVA == 1) {
-					$PrecioCalculado = ($PrecioBruto/Utilidad)*Impuesto;
-					$Precio = $PrecioCalculado;
+				if($Utilidad==0){
+					$Precio = 0;
 				}
-				else { 
-					$PrecioCalculado = ($PrecioBruto/Utilidad);
-					$Precio = $PrecioCalculado;
+				else{					
+					if($IsIVA == 1){
+						$PrecioCalculado = ($PrecioBruto/$Utilidad)*Impuesto;
+						$Precio = $PrecioCalculado;
+					}
+					else {
+						$PrecioCalculado = ($PrecioBruto/$Utilidad);
+						$Precio = $PrecioCalculado;
+					}
 				}
 			}
 		}
@@ -1622,5 +1628,26 @@
 		}
 		$DiasRestantes = round($DiasRestantes,2);
 		return $DiasRestantes;
+	}
+	/*
+		TITULO: FG_Tipo_Producto
+		PARAMETROS: [$conn] cadena de conexion
+					[$IdArticulo] id del articulo a buscar
+		FUNCION: Determina si el producto esta dolarizado 
+		RETORNO: Retorna si el producto esta dolarizado o no
+ 	*/
+	function FG_Utilidad_Articulo($conn,$IdArticulo) { 
+		$sql = QG_Utilidad_Articulo($IdArticulo);
+		$result = sqlsrv_query($conn,$sql);
+		$row = sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC);
+		$PorcentajeUtilidad = $row["UtilidadArticulo"];
+
+		if($PorcentajeUtilidad!=0){
+			$Utilidad = (1-($PorcentajeUtilidad/100));
+		}
+		else{
+			$Utilidad = 0;
+		}
+		return $Utilidad;
 	}
 ?>

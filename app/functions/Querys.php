@@ -2551,7 +2551,7 @@
 			WHERE(InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
 			AND (InvLoteAlmacen.InvArticuloId = '$IdArticulo')
 			AND (InvLoteAlmacen.Existencia>0)
-			ORDER BY invlote.M_PrecioTroquelado, invlote.M_PrecioCompraBruto DESC
+			ORDER BY invlote.M_PrecioTroquelado DESC
 		";
 		return $sql;
 	}
@@ -2571,7 +2571,7 @@
 			INNER JOIN InvLote ON InvLote.Id = InvLoteAlmacen.InvLoteId
 			WHERE (InvLoteAlmacen.InvArticuloId = '$IdArticulo')
 			AND (InvLoteAlmacen.Existencia>0)
-			ORDER BY invlote.M_PrecioTroquelado, invlote.M_PrecioCompraBruto DESC
+			ORDER BY invlote.M_PrecioCompraBruto DESC
 		";
 		return $sql;
 	}
@@ -2629,7 +2629,24 @@
 		return $sql;
 	}
 	/*
-		TITULO: QG_Tiempo_Tienda
+		TITULO: QG_Utilidad_Articulo
+		PARAMETROS: [$IdArticulo] Id del articulo que se va a buscar
+		FUNCION: Busca el Id del atributo si la categoriza es dolarizado
+		RETORNO: Retorna el id del atributo dolarizado
+	 */
+	function QG_Utilidad_Articulo($IdArticulo) {
+		$sql = "
+		SELECT VenCondicionVenta.PorcentajeUtilidad AS UtilidadArticulo
+		FROM VenCondicionVenta 
+		WHERE VenCondicionVenta.Id = (
+			SELECT VenCondicionVenta_VenCondicionVentaArticulo.Id
+			FROM VenCondicionVenta_VenCondicionVentaArticulo 
+			WHERE VenCondicionVenta_VenCondicionVentaArticulo.InvArticuloId = '$IdArticulo')
+		";
+		return $sql;
+	}
+  /*
+    TITULO: QG_Tiempo_Tienda
 		PARAMETROS: [$IdArticulo] Id del articulo actual
 		FUNCION: Construir la consulta para saber la fecha en dias
 		RETORNO: Un String con el query
@@ -2644,7 +2661,5 @@
 		INNER JOIN invlote on invlote.id = InvLoteAlmacen.InvLoteId
 		WHERE InvLotealmacen.InvArticuloId = '$IdArticulo' AND existencia >0
 		ORDER BY InvLote.Auditoria_FechaCreacion DESC
-		";
-		return $sql;
 	}
 ?>
