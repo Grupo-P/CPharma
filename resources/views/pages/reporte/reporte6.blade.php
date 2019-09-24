@@ -200,6 +200,7 @@ jQuery(document).on('ready',function(){
     $FFinalImp= date("d-m-Y", strtotime($FFinal));
 
     $FFinal = date("Y-m-d",strtotime($FFinal."+ 1 days"));
+    $RangoDias = FG_Rango_Dias($FInicial,$FFinal);
 
     $sql = QG_CleanTable('CP_R6Q_Unidades_Vendidas');
     sqlsrv_query($conn,$sql);
@@ -260,7 +261,7 @@ jQuery(document).on('ready',function(){
             <th scope="col">Unidades compradas</th>
             <th scope="col">Venta diaria</th>
             <th scope="col">Dias restantes</th>
-            <th scope="col">Precio (Con IVA)</th>
+            <th scope="col">Precio (Con IVA) '.SigVe.'</th>
             <th scope="col">Ultimo Lote</th>
             <th scope="col">Ultima Venta (En Rango)</th>
             <th scope="col">Ultima Venta</th>
@@ -269,11 +270,98 @@ jQuery(document).on('ready',function(){
         </thead>
         <tbody>
     ';
+    $contador = 1;
+    while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
+      $IdArticulo = $row["InvArticuloId"];
+      $UnidadesVendidas = intval($row["UnidadesVendidas"]);
+      $UnidadesCompradas = intval($row["UnidadesCompradas"]);
 
+      $sql1 = R6Q_Detalle_Articulo($IdArticulo);
+      $result1 = sqlsrv_query($conn,$sql1);
+      $row1 = sqlsrv_fetch_array($result1,SQLSRV_FETCH_ASSOC);
+
+      $CodigoArticulo = $row1["CodigoArticulo"];
+      $CodigoBarra = $row1["CodigoBarra"];
+      $Descripcion = utf8_encode(addslashes($row1["Descripcion"]));
+      $Existencia = $row1["Existencia"];
+      $IsIVA = $row1["ConceptoImpuesto"];
+      $VentaDiaria = FG_Venta_Diaria($UnidadesVendidas,$RangoDias);
+      $DiasRestantes = FG_Dias_Restantes($Existencia,$VentaDiaria);
+      $Precio = FG_Calculo_Precio($conn,$IdArticulo,$IsIVA,$Existencia);
+
+      $sql2 = QG_Ultimo_Lote($IdArticulo);
+      $result2 = sqlsrv_query($conn,$sql2);
+      $row2 = sqlsrv_fetch_array($result2,SQLSRV_FETCH_ASSOC);
+      $UltimoLote = $row2["UltimoLote"];
+
+      $sql3 = QG_Ultima_Venta_Rango($IdArticulo,$FInicial,$FFinal);
+      $result3 = sqlsrv_query($conn,$sql3);
+      $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
+      $UltimaVentaRango = $row3["UltimaVenta"];
+
+      $sql4 = QG_UltimaVenta($IdArticulo);
+      $result4 = sqlsrv_query($conn,$sql4);
+      $row4 = sqlsrv_fetch_array($result4,SQLSRV_FETCH_ASSOC);
+      $UltimaVenta = $row4["UltimaVenta"];
+
+      $CantidadPedido = FG_Cantidad_Pedido($VentaDiaria,$DiasPedido,$Existencia);
+
+      echo '<tr>';
+      echo '<td align="center"><strong>'.intval($contador).'</strong></td>';
+      echo '<td align="left">'.$CodigoArticulo.'</td>';
+      echo '<td align="center">'.$CodigoBarra.'</td>';
+      echo 
+      '<td align="left" class="barrido">
+      <a href="/reporte2?Id='.$IdArticulo.'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
+        .$Descripcion.
+      '</a>
+      </td>';
+      echo '<td align="center">'.intval($Existencia).'</td>';
+      echo
+      '<td align="center" class="barrido">
+      <a href="reporte12?fechaInicio='.$FInicial.'&fechaFin='.$FFinal.'&SEDE='.$SedeConnection.'&Descrip='.$Descripcion.'&Id='.$IdArticulo.'" style="text-decoration: none; color: black;" target="_blank">'
+        .intval($UnidadesVendidas).
+      '</a>
+      </td>';
+      echo
+      '<td align="center" class="barrido">
+      <a href="reporte12?fechaInicio='.$FInicial.'&fechaFin='.$FFinal.'&SEDE='.$SedeConnection.'&Descrip='.$Descripcion.'&Id='.$IdArticulo.'" style="text-decoration: none; color: black;" target="_blank">'
+        .intval($UnidadesCompradas).
+      '</a>
+      </td>';
+      echo '<td align="center">'.round($VentaDiaria,2).'</td>';
+      echo '<td align="center">'.round($DiasRestantes,2).'</td>';
+      echo '<td align="center">'.number_format($Precio,2,"," ,"." ).'</td>';
+      
+      if(($UltimoLote)){
+        echo '<td align="center">'.$UltimoLote->format('d-m-Y').'</td>';
+      }
+      else{
+        echo '<td align="center"> - </td>';
+      }
+
+      if(($UltimaVentaRango)){
+        echo '<td align="center">'.$UltimaVentaRango->format('d-m-Y').'</td>';
+      }
+      else{
+        echo '<td align="center"> - </td>';
+      }
+
+      if(($UltimaVenta)){
+        echo '<td align="center">'.$UltimaVenta->format('d-m-Y').'</td>';
+      }
+      else{
+        echo '<td align="center"> - </td>';
+      }
+
+      echo '<td align="center">'.intval($CantidadPedido).'</td>';
+      echo '</tr>';
+    $contador++;
+    }
     echo '
         </tbody>
     </table>';
-    
+
     sqlsrv_close($conn);
   }
   /*
@@ -401,12 +489,12 @@ jQuery(document).on('ready',function(){
     return $sql;
   }
   /*
-    TITULO: R3Q_Detalle_Articulo
+    TITULO: R6Q_Detalle_Articulo
     PARAMETROS: [$IdArticulo] $IdArticulo del articulo a buscar
     FUNCION: Query que genera el detalle del articulo solicitado
     RETORNO: Detalle del articulo
    */
-  function R3Q_Detalle_Articulo($DescripLike) {
+  function R6Q_Detalle_Articulo($IdArticulo) {
     $sql = " 
       SELECT
       InvArticulo.Id,
