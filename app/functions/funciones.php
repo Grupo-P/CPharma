@@ -1331,9 +1331,9 @@
 			$IsIVA = $row["ConceptoImpuesto"];		
 			$Existencia = $row1["Existencia"];
 
-			$PrecioHoy = CalculoPrecio($conn,$IdArticulo,$IsIVA,$Existencia);
+			$PrecioHoy = FG_Calculo_Precio($conn,$IdArticulo,$IsIVA,$Existencia);
 
-		    $sqlCC = QDiasCeroEtiqueta($IdArticulo,$FAyer);
+	    $sqlCC = QDiasCeroEtiqueta($IdArticulo,$FAyer);
 			$resultCC = mysqli_query($connCPharma,$sqlCC);
 			$rowCC = mysqli_fetch_assoc($resultCC);
 			$PrecioAyer = $rowCC["precio"];
