@@ -246,6 +246,7 @@
 		FUNCION: Arma una tabla con los productos mas vendidos
 		RETORNO: No aplica
 	 */
+	/*
 	function ReporteProductosMasVendidos($SedeConnection,$Top,$FInicial,$FFinal){
 
 		$conn = ConectarSmartpharma($SedeConnection);
@@ -324,7 +325,6 @@
 			$row1 = sqlsrv_fetch_array($result1,SQLSRV_FETCH_ASSOC);
 			$Existencia = $row1["Existencia"];
 			$Tipo = ProductoMedicina($conn,$IdArticulo);
-//AQUI QUEDE
 			$sql = QCleanTable('CP_QVentasParcial');
 			sqlsrv_query($conn,$sql);
 			$sql = QCleanTable('CP_QDevolucionParcial');
@@ -413,6 +413,7 @@
 
 		sqlsrv_close($conn);
 	}
+	*/
 	/*****************************************************************************/
 	/************************ REPORTE 4 PRODUCTOS MENOS VENDIDOS *****************/
 	/*
