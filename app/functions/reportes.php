@@ -424,6 +424,7 @@
 		FUNCION: Arma una tabla con los productos menos vendidos
 		RETORNO: No aplica
 	 */
+	/*
 	function ReporteProductosMenosVendidos($SedeConnection,$Top,$FInicial,$FFinal){
 
 		$conn = ConectarSmartpharma($SedeConnection);
@@ -582,6 +583,7 @@
 
 		sqlsrv_close($conn);
 	}
+	*/
 	/*****************************************************************************/
 	/************************ REPORTE 5 PRODUCTOS EN FALLA ***********************/
 	/*

@@ -2628,4 +2628,23 @@
 		";
 		return $sql;
 	}
+	/*
+		TITULO: QG_Tiempo_Tienda
+		PARAMETROS: [$IdArticulo] Id del articulo actual
+		FUNCION: Construir la consulta para saber la fecha en dias
+		RETORNO: Un String con el query
+	 */
+	function QG_Tiempo_Tienda($IdArticulo) {
+		$sql = "
+		SELECT TOP 1 
+		InvLoteId,
+		CONVERT(DATE,InvLote.Auditoria_FechaCreacion) AS FechaTienda,
+		DATEDIFF(DAY,CONVERT(DATE,InvLote.Auditoria_FechaCreacion),GETDATE()) AS TiempoTienda
+		FROM InvLoteAlmacen 
+		INNER JOIN invlote on invlote.id = InvLoteAlmacen.InvLoteId
+		WHERE InvLotealmacen.InvArticuloId = '$IdArticulo' AND existencia >0
+		ORDER BY InvLote.Auditoria_FechaCreacion DESC
+		";
+		return $sql;
+	}
 ?>
