@@ -465,24 +465,24 @@ jQuery(document).on('ready',function(){
   function R6Q_Integracion_Pedido_Productos($DescripLike) {
     $sql = "
       SELECT
-      CP_R5Q_Unidades_Vendidas.InvArticuloId,
-      ((ISNULL(CP_R5Q_Unidades_Vendidas.VecesVendidas,CAST(0 AS INT))) - 
-      (ISNULL(CP_R5Q_Unidades_Devueltas.VecesDevueltas,CAST(0 AS INT))) 
+      CP_R6Q_Unidades_Vendidas.InvArticuloId,
+      ((ISNULL(CP_R6Q_Unidades_Vendidas.VecesVendidas,CAST(0 AS INT))) - 
+      (ISNULL(CP_R6Q_Unidades_Devueltas.VecesDevueltas,CAST(0 AS INT))) 
       ) AS VecesVendidas,
-      ((ISNULL(CP_R5Q_Unidades_Vendidas.UnidadesVendidas,CAST(0 AS INT))) -
-      (ISNULL(CP_R5Q_Unidades_Devueltas.UnidadesDevueltas,CAST(0 AS INT))) 
+      ((ISNULL(CP_R6Q_Unidades_Vendidas.UnidadesVendidas,CAST(0 AS INT))) -
+      (ISNULL(CP_R6Q_Unidades_Devueltas.UnidadesDevueltas,CAST(0 AS INT))) 
       ) AS UnidadesVendidas,
-      ((ISNULL(CP_R5Q_Unidades_Compradas.VecesCompradas,CAST(0 AS INT))) -
-      (ISNULL(CP_R5Q_Unidades_Reclamadas.VecesReclamadas,CAST(0 AS INT))) 
+      ((ISNULL(CP_R6Q_Unidades_Compradas.VecesCompradas,CAST(0 AS INT))) -
+      (ISNULL(CP_R6Q_Unidades_Reclamadas.VecesReclamadas,CAST(0 AS INT))) 
       ) AS VecesCompradas,
-      ((ISNULL(CP_R5Q_Unidades_Compradas.UnidadesCompradas,CAST(0 AS INT))) -
-      (ISNULL(CP_R5Q_Unidades_Reclamadas.UnidadesReclamadas,CAST(0 AS INT))) 
+      ((ISNULL(CP_R6Q_Unidades_Compradas.UnidadesCompradas,CAST(0 AS INT))) -
+      (ISNULL(CP_R6Q_Unidades_Reclamadas.UnidadesReclamadas,CAST(0 AS INT))) 
       ) AS UnidadesCompradas
-      FROM CP_R5Q_Unidades_Vendidas
-      LEFT JOIN CP_R5Q_Unidades_Devueltas ON CP_R5Q_Unidades_Devueltas.InvArticuloId = CP_R5Q_Unidades_Vendidas.InvArticuloId
-      LEFT JOIN CP_R5Q_Unidades_Compradas ON CP_R5Q_Unidades_Compradas.InvArticuloId = CP_R5Q_Unidades_Vendidas.InvArticuloId
-      LEFT JOIN CP_R5Q_Unidades_Reclamadas ON CP_R5Q_Unidades_Reclamadas.InvArticuloId = CP_R5Q_Unidades_Vendidas.InvArticuloId
-      INNER JOIN InvArticulo ON InvArticulo.Id = CP_R5Q_Unidades_Vendidas.InvArticuloId
+      FROM CP_R6Q_Unidades_Vendidas
+      LEFT JOIN CP_R6Q_Unidades_Devueltas ON CP_R6Q_Unidades_Devueltas.InvArticuloId = CP_R6Q_Unidades_Vendidas.InvArticuloId
+      LEFT JOIN CP_R6Q_Unidades_Compradas ON CP_R6Q_Unidades_Compradas.InvArticuloId = CP_R6Q_Unidades_Vendidas.InvArticuloId
+      LEFT JOIN CP_R6Q_Unidades_Reclamadas ON CP_R6Q_Unidades_Reclamadas.InvArticuloId = CP_R6Q_Unidades_Vendidas.InvArticuloId
+      INNER JOIN InvArticulo ON InvArticulo.Id = CP_R6Q_Unidades_Vendidas.InvArticuloId
       WHERE InvArticulo.Descripcion LIKE '%$DescripLike%'
       ORDER BY UnidadesVendidas DESC
     ";
