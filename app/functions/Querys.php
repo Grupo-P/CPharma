@@ -2628,4 +2628,21 @@
 		";
 		return $sql;
 	}
+	/*
+		TITULO: QG_Utilidad_Articulo
+		PARAMETROS: [$IdArticulo] Id del articulo que se va a buscar
+		FUNCION: Busca el Id del atributo si la categoriza es dolarizado
+		RETORNO: Retorna el id del atributo dolarizado
+	 */
+	function QG_Utilidad_Articulo($IdArticulo) {
+		$sql = "
+		SELECT VenCondicionVenta.PorcentajeUtilidad AS UtilidadArticulo
+		FROM VenCondicionVenta 
+		WHERE VenCondicionVenta.Id = (
+			SELECT VenCondicionVenta_VenCondicionVentaArticulo.Id
+			FROM VenCondicionVenta_VenCondicionVentaArticulo 
+			WHERE VenCondicionVenta_VenCondicionVentaArticulo.InvArticuloId = '$IdArticulo')
+		";
+		return $sql;
+	}
 ?>

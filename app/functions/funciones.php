@@ -1523,13 +1523,14 @@
 				$result = sqlsrv_query($conn,$sql);
 				$row = sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC);
 				$PrecioBruto = $row["M_PrecioCompraBruto"];
+				$Utilidad = FG_Utilidad_Articulo($conn,$IdArticulo);
 
 				if($IsIVA == 1) {
-					$PrecioCalculado = ($PrecioBruto/Utilidad)*Impuesto;
+					$PrecioCalculado = ($PrecioBruto/$Utilidad)*Impuesto;
 					$Precio = $PrecioCalculado;
 				}
-				else { 
-					$PrecioCalculado = ($PrecioBruto/Utilidad);
+				else {
+					$PrecioCalculado = ($PrecioBruto/$Utilidad);
 					$Precio = $PrecioCalculado;
 				}
 			}
@@ -1622,5 +1623,20 @@
 		}
 		$DiasRestantes = round($DiasRestantes,2);
 		return $DiasRestantes;
+	}
+	/*
+		TITULO: FG_Tipo_Producto
+		PARAMETROS: [$conn] cadena de conexion
+					[$IdArticulo] id del articulo a buscar
+		FUNCION: Determina si el producto esta dolarizado 
+		RETORNO: Retorna si el producto esta dolarizado o no
+ 	*/
+	function FG_Utilidad_Articulo($conn,$IdArticulo) { 
+		$sql = QG_Utilidad_Articulo($IdArticulo);
+		$result = sqlsrv_query($conn,$sql);
+		$row = sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC);
+		$PorcentajeUtilidad = $row["UtilidadArticulo"];
+		$Utilidad = (1-($PorcentajeUtilidad/100));
+		return $Utilidad;
 	}
 ?>
