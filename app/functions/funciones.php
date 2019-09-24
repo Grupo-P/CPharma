@@ -1514,10 +1514,10 @@
 			$row = sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC);
 			$PrecioTroquelado = $row["M_PrecioTroquelado"];
 			
-			if($PrecioTroquelado!=NULL) {
+			if($PrecioTroquelado!=NULL){
 				$Precio = $PrecioTroquelado;
 			}		
-			else {
+			else{
 			/*PRECIO CALCULADO*/
 				$sql = QG_Precio_Calculado($IdArticulo);
 				$result = sqlsrv_query($conn,$sql);
@@ -1525,13 +1525,18 @@
 				$PrecioBruto = $row["M_PrecioCompraBruto"];
 				$Utilidad = FG_Utilidad_Articulo($conn,$IdArticulo);
 
-				if($IsIVA == 1) {
-					$PrecioCalculado = ($PrecioBruto/$Utilidad)*Impuesto;
-					$Precio = $PrecioCalculado;
+				if($Utilidad==0){
+					$Precio = 0;
 				}
-				else {
-					$PrecioCalculado = ($PrecioBruto/$Utilidad);
-					$Precio = $PrecioCalculado;
+				else{					
+					if($IsIVA == 1){
+						$PrecioCalculado = ($PrecioBruto/$Utilidad)*Impuesto;
+						$Precio = $PrecioCalculado;
+					}
+					else {
+						$PrecioCalculado = ($PrecioBruto/$Utilidad);
+						$Precio = $PrecioCalculado;
+					}
 				}
 			}
 		}
@@ -1636,7 +1641,13 @@
 		$result = sqlsrv_query($conn,$sql);
 		$row = sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC);
 		$PorcentajeUtilidad = $row["UtilidadArticulo"];
-		$Utilidad = (1-($PorcentajeUtilidad/100));
+
+		if($PorcentajeUtilidad!=0){
+			$Utilidad = (1-($PorcentajeUtilidad/100));
+		}
+		else{
+			$Utilidad = 0;
+		}
 		return $Utilidad;
 	}
 ?>
