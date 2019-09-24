@@ -1303,7 +1303,7 @@
 	}
 
 	function GenererEtiquetas($clasificacion) {
-		$SedeConnection = MiUbicacion();
+		$SedeConnection = MiUbicacion();		
 	    $conn = ConectarSmartpharma($SedeConnection);
 	    
 		$connCPharma = ConectarXampp();	
@@ -1341,7 +1341,7 @@
 			if($PrecioHoy!=$PrecioAyer){
 
 				if($IsIVA == 1){
-					$PMVP = $PrecioHoy/1.16;
+					$PMVP = $PrecioHoy/Impuesto;
 					$IVA = $PrecioHoy-$PMVP;
 				}
 				else{
