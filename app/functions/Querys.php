@@ -2645,7 +2645,7 @@
 		";
 		return $sql;
 	}
-  /*
+  	/*
     TITULO: QG_Tiempo_Tienda
 		PARAMETROS: [$IdArticulo] Id del articulo actual
 		FUNCION: Construir la consulta para saber la fecha en dias
@@ -2661,5 +2661,7 @@
 		INNER JOIN invlote on invlote.id = InvLoteAlmacen.InvLoteId
 		WHERE InvLotealmacen.InvArticuloId = '$IdArticulo' AND existencia >0
 		ORDER BY InvLote.Auditoria_FechaCreacion DESC
+		";
+		return $sql;
 	}
 ?>
