@@ -2682,6 +2682,25 @@
 		return $sql;
 	}
 	/*
+		TITULO: QG_Ultima_Venta_Rango
+		PARAMETROS: [$IdArticulo] Id del articulo a buscar
+		FUNCION: Buscar la fecha de la ultima venta del articulo dentro del rango 
+		RETORNO: La fecha de la ultima venta
+	 */
+	function QG_Ultima_Venta_Rango($IdArticulo,$FInicial,$FFinal) {
+		$sql="
+			SELECT TOP 1
+			CONVERT(DATE,VenFactura.FechaDocumento) AS UltimaVenta
+			FROM VenFactura
+			INNER JOIN VenFacturaDetalle ON VenFacturaDetalle.VenFacturaId = VenFactura.Id
+			WHERE
+			(VenFactura.FechaDocumento > '$FInicial' AND VenFactura.FechaDocumento < '$FFinal')
+			AND (VenFacturaDetalle.InvArticuloId = '$IdArticulo')
+			ORDER BY FechaDocumento DESC
+		";
+		return $sql;
+	}
+	/*
 		TITULO: QG_UltimoProveedor
 		PARAMETROS: [$IdArticuloQ] Id del articulo
 		FUNCION: busca el ultimo proveedor en despachar el articulo
@@ -2701,6 +2720,23 @@
 			INNER JOIN GenPersona ON GenPersona.Id = ComProveedor.GenPersonaId
 			WHERE InvArticulo.Id = '$IdArticulo'
 			ORDER BY ComFactura.FechaDocumento DESC
+		";
+		return $sql;
+	}
+	/*
+		TITULO: QG_Ultimo_Lote
+		PARAMETROS: [$IdArticulo] Id del articulo a buscar
+		FUNCION: Buscar el ultimo lote del articulo sin rango 
+		RETORNO: La fecha de la ultima venta
+	 */
+	function QG_Ultimo_Lote($IdArticulo) {
+		$sql="
+			SELECT TOP 1
+			InvLote.Id,
+			CONVERT(DATE,InvLote.FechaEntrada) AS UltimoLote
+			FROM InvLote
+			WHERE InvLote.InvArticuloId  = '$IdArticulo'
+			ORDER BY UltimoLote DESC
 		";
 		return $sql;
 	}

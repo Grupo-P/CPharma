@@ -1650,4 +1650,16 @@
 		}
 		return $Utilidad;
 	}
+	/*
+		TITULO: FG_Cantidad_Pedido
+		PARAMETROS: [$Existencia] Existencia de un producto
+					[$VentaDiaria] Venta diaria promedio del prodcuto
+					[$DiasPedido] Dias para el pedido
+		FUNCION: calcular la cantidad a pedir
+		RETORNO: cantidad a pedir
+	 */
+	function FG_Cantidad_Pedido($VentaDiaria,$DiasPedido,$Existencia) {
+		$CantidadPedido = (($VentaDiaria * $DiasPedido)-$Existencia);
+		return $CantidadPedido;
+	}
 ?>

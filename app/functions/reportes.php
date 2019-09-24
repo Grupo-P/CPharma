@@ -595,6 +595,7 @@
 		FUNCION: Arma una lista de productos en falla
 		RETORNO: No aplica
 	 */
+	/*
 	function ReporteProductosFalla($SedeConnection,$FInicial,$FFinal){
 
 		$conn = ConectarSmartpharma($SedeConnection);
@@ -778,6 +779,7 @@
 
 		sqlsrv_close($conn);
 	}
+	*/
 	/*****************************************************************************/
 	/************************ REPORTE 6 PEDIDO DE PRODUCTOS **********************/
 	/*
