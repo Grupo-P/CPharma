@@ -791,6 +791,7 @@
 		FUNCION: Arma una lista para el pedido de productos
 		RETORNO: No aplica
 	 */
+	/*
 	function ReportePedidoProductos($SedeConnection,$Descripcion,$FInicial,$FFinal,$DiasPedido){
 
 		$conn = ConectarSmartpharma($SedeConnection);
@@ -985,6 +986,7 @@
 
 		sqlsrv_close($conn);
 	}
+	*/
 	/*****************************************************************************/
 	/************************ REPORTE 7 CATALOGO PROVEEDOR ***********************/
 	/*
