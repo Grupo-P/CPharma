@@ -2231,6 +2231,7 @@
 		INNER JOIN InvLote ON InvLote.Id = InvLoteAlmacen.InvLoteId
 		WHERE (InvLoteAlmacen.InvArticuloId = InvArticulo.Id)
 		AND (InvLoteAlmacen.Existencia > 0)
+		AND (InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
 		ORDER BY InvLote.Auditoria_FechaCreacion DESC)) AS FechaLote,--Fecha de creacion del lote
 		(SELECT SUM(InvLoteAlmacen.Existencia)
 		FROM InvLoteAlmacen
@@ -2509,7 +2510,7 @@
 		FUNCION: Buscar la existencia de del articulos
 		RETORNO: Existencia
 	 */
-	function QExistenciaArticuloDevaluado($IdArticulo) {
+	/*function QExistenciaArticuloDevaluado($IdArticulo) {
 		$sql = "
 			SELECT
 			SUM (InvLoteAlmacen.Existencia) As Existencia
@@ -2518,7 +2519,7 @@
 			AND (InvLoteAlmacen.InvArticuloId = '$IdArticulo')
 		";
 		return $sql;
-	}
+	}*/
 	/*
 		TITULO: 
 		PARAMETROS: 
