@@ -129,9 +129,8 @@
     </form>
     <br>
     ';
-
-    ReporteCatalogoProveedor($_GET['SEDE'],$_GET['Id'],$_GET['Nombre']);
-    GuardarAuditoria('CONSULTAR','REPORTE','Catalogo de proveedor');
+//AQUI QUEDE
+    R7_Catalogo_Proveedor_C2($_GET['SEDE'],$_GET['Id'],$_GET['Nombre']);
     
     $FinCarga = new DateTime("now");
     $IntervalCarga = $InicioCarga->diff($FinCarga);
@@ -147,6 +146,7 @@
     $InicioCarga = new DateTime("now");
 
     ReporteCatalogoProveedorR($_GET['SEDE'],$_GET['IdProv'],$_GET['NombreProv'],$_GET['fechaInicio'],$_GET['fechaFin'],$_GET['pedido']);
+    GuardarAuditoria('CONSULTAR','REPORTE','Catalogo de proveedor');
 
     $FinCarga = new DateTime("now");
     $IntervalCarga = $InicioCarga->diff($FinCarga);
@@ -200,6 +200,87 @@
 @endsection
 
 <?php
+/*
+    TITULO: R7_Catalogo_Proveedor_C2
+    PARAMETROS: [$SedeConnection] sede donde se hara la conexion
+          [$IdProveedor] ID del proveedor a buscar
+          [$NombreProveedor] Nombre del proveedor a buscar
+    FUNCION: Armar el reporte catalogo de proveedor
+    RETORNO: No aplica
+   */
+  function R7_Catalogo_Proveedor_C2($SedeConnection,$IdProveedor,$NombreProveedor){
+
+    $conn = ConectarSmartpharma($SedeConnection);
+
+    $sql = R7Q_Catalogo_Proveedor($IdProveedor);
+    $result = sqlsrv_query($conn,$sql);
+
+    echo '
+    <div class="input-group md-form form-sm form-1 pl-0">
+      <div class="input-group-prepend">
+        <span class="input-group-text purple lighten-3" id="basic-text1">
+          <i class="fas fa-search text-white"
+            aria-hidden="true"></i>
+        </span>
+      </div>
+      <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterAllTable()">
+    </div>
+    <br/>
+
+    <table class="table table-striped table-bordered col-12 sortable">
+      <thead class="thead-dark">
+          <tr>
+            <th scope="col">Proveedor</th>
+          </tr>
+        </thead>
+        <tbody>
+        <tr>
+      ';
+    echo '<td>'.utf8_encode(addslashes($NombreProveedor)).'</td>';
+      echo '
+        </tr>
+        </tbody>
+    </table>';
+
+    echo'
+    <table class="table table-striped table-bordered col-12 sortable" id="myTable">
+        <thead class="thead-dark">
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Codigo</th>
+            <th scope="col">Codigo de Barra</th>
+            <th scope="col">Descripcion</th>
+          </tr>
+        </thead>
+        <tbody>
+    ';
+    $contador = 1;
+    while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
+      $IdArticulo = $row["Id"];
+      $CodigoArticulo = $row["CodigoArticulo"];
+      $CodigoBarra = $row["CodigoBarra"];
+      $Descripcion = utf8_encode(addslashes($row["Descripcion"]));
+
+      echo '<tr>';
+      echo '<td align="left"><strong>'.intval($contador).'</strong></td>';
+      echo '<td align="left">'.$CodigoArticulo.'</td>';
+      echo '<td align="center">'.$CodigoBarra.'</td>';
+      echo 
+      '<td align="left" class="barrido">
+      <a href="/reporte2?Id='.$IdArticulo.'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
+        .$Descripcion.
+      '</a>
+      </td>';
+
+      echo '</tr>';
+    $contador++;
+      }
+      echo '
+        </tbody>
+    </table>';
+
+    sqlsrv_close($conn);
+  }
   /*
     TITULO: R7Q_Lista_Proveedores
     PARAMETROS: No aplica
@@ -216,6 +297,36 @@
       INNER JOIN ComFactura ON ComFactura.ComProveedorId=ComProveedor.Id
       GROUP BY ComProveedor.Id, GenPersona.Nombre
       ORDER BY ComProveedor.Id ASC
+    ";
+    return $sql;
+  }
+  /*
+    TITULO: R7Q_Catalogo_Proveedor
+    PARAMETROS: No aplica
+    FUNCION: Armar una lista de proveedores
+    RETORNO: Lista de proveedores
+   */
+  function R7Q_Catalogo_Proveedor($IdProveedor) {
+    $sql = "
+      SELECT
+      InvArticulo.Id,
+      InvArticulo.CodigoArticulo,
+      (SELECT CodigoBarra
+          FROM InvCodigoBarra 
+          WHERE InvCodigoBarra.InvArticuloId = InvArticulo.Id
+          AND InvCodigoBarra.EsPrincipal = 1) As CodigoBarra,
+      InvArticulo.Descripcion,
+      (SELECT (ROUND(CAST(SUM (InvLoteAlmacen.Existencia) AS DECIMAL(38,0)),2,0)) As Existencia
+          FROM InvLoteAlmacen
+          WHERE(InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
+          AND (InvLoteAlmacen.InvArticuloId = InvArticulo.Id)) AS Existencia,
+      InvArticulo.FinConceptoImptoIdCompra AS ConceptoImpuesto
+      FROM ComFacturaDetalle
+      INNER JOIN ComFactura ON ComFactura.Id = ComFacturaDetalle.ComFacturaId
+      INNER JOIN InvArticulo ON InvArticulo.Id = ComFacturaDetalle.InvArticuloId
+      WHERE ComFactura.ComProveedorId = '$IdProveedor'
+      GROUP BY InvArticulo.Id,InvArticulo.CodigoArticulo,InvArticulo.Descripcion,InvArticulo.FinConceptoImptoIdCompra
+      ORDER BY InvArticulo.Id ASC
     ";
     return $sql;
   }
