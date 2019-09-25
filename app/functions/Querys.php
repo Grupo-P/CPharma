@@ -2229,12 +2229,12 @@
 		InvLote.Auditoria_FechaCreacion
 		FROM InvLoteAlmacen
 		INNER JOIN InvLote ON InvLote.Id = InvLoteAlmacen.InvLoteId
-		WHERE InvLoteAlmacen.InvArticuloId = InvArticulo.Id
-		AND InvLoteAlmacen.Existencia > 0
+		WHERE (InvLoteAlmacen.InvArticuloId = InvArticulo.Id)
+		AND (InvLoteAlmacen.Existencia > 0)
 		ORDER BY InvLote.Auditoria_FechaCreacion DESC)) AS FechaLote,--Fecha de creacion del lote
 		(SELECT SUM(InvLoteAlmacen.Existencia)
 		FROM InvLoteAlmacen
-		WHERE InvLoteAlmacen.InvArticuloId = InvArticulo.Id
+		WHERE (InvLoteAlmacen.InvArticuloId = InvArticulo.Id)
 		AND (InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)) AS Existencia,--Existencia
 		InvArticulo.FinConceptoImptoIdCompra AS ConceptoImpuesto,
 		InvArticulo.Descripcion--Descripcion del articulo
@@ -2244,7 +2244,7 @@
 		INNER JOIN InvArticulo ON InvArticulo.Id = InvLote.InvArticuloId
 		INNER JOIN InvLoteAlmacen ON InvLote.Id = InvLoteAlmacen.InvLoteId
 		--Condiciones
-		WHERE InvLoteAlmacen.Existencia > 0 
+		WHERE (InvLoteAlmacen.Existencia > 0) 
 		AND (InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
 		AND (CONVERT(DATE,InvLoteAlmacen.Auditoria_FechaCreacion) < '$FechaBandera')
 		--Ordenado
