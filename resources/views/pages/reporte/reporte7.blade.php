@@ -4,6 +4,70 @@
     Reporte
 @endsection
 
+@section('scriptsHead')
+    <script type="text/javascript" src="{{ asset('assets/js/sortTable.js') }}">
+    </script>
+    <script type="text/javascript" src="{{ asset('assets/js/filter.js') }}">  
+    </script>
+    <script type="text/javascript" src="{{ asset('assets/js/functions.js') }}"> 
+    </script>
+    <script type="text/javascript" src="{{ asset('assets/jquery/jquery-2.2.2.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('assets/jquery/jquery-ui.min.js') }}" ></script>
+
+    <style>
+    * {
+      box-sizing: border-box;
+    }
+    .autocomplete {
+      position: relative;
+      display: inline-block;
+    }
+    input {
+      border: 1px solid transparent;
+      background-color: #f1f1f1;
+      border-radius: 5px;
+      padding: 10px;
+      font-size: 16px;
+    }
+    input[type=text] {
+      background-color: #f1f1f1;
+      width: 100%;
+    }
+    .autocomplete-items {
+      position: absolute;
+      border: 1px solid #d4d4d4;
+      border-bottom: none;
+      border-top: none;
+      z-index: 99;
+      top: 100%;
+      left: 0;
+      right: 0;
+    }
+    .autocomplete-items div {
+      padding: 10px;
+      cursor: pointer;
+      background-color: #fff; 
+      border-bottom: 1px solid #d4d4d4; 
+    }
+    .autocomplete-items div:hover {
+      background-color: #e9e9e9; 
+    }
+    .autocomplete-active {
+      background-color: DodgerBlue !important; 
+      color: #ffffff; 
+    }
+    .barrido{
+      text-decoration: none;
+      transition: width 1s, height 1s, transform 1s;
+    }
+    .barrido:hover{
+      text-decoration: none;
+      transition: width 1s, height 1s, transform 1s;
+      transform: translate(20px,0px);
+    }
+    </style>
+@endsection
+
 @section('content')
   <h1 class="h5 text-info">
     <i class="fas fa-file-invoice"></i>
@@ -30,40 +94,40 @@
     
     echo '
     <form autocomplete="off" action="" target="_blank">
-        <table style="width:100%;">
-          <tr>
-            <td align="center">
-              Pedido cant. dias
-            </td>
-            <td align="right" style="width:20%;">
-              <input id="pedido" type="text" name="pedido" required style="width:100%;" autofocus>
-            </td>
-            <td align="center">
-              Fecha Inicio:
-            </td>
-            <td>
-              <input id="fechaInicio" type="date" name="fechaInicio" required style="width:100%;">
-            </td>
-            <td align="center">
-              Fecha Fin:
-            </td>
-            <td align="right">
-              <input id="fechaFin" name="fechaFin" type="date" required style="width:100%;">
-            </td>
-            <td>
-            <input id="SEDE" name="SEDE" type="hidden" value="';
-            print_r($_GET['SEDE']);
-            echo'">
-            </td>
-            <td align="right">
-              <input type="submit" value="Buscar" class="btn btn-outline-success">
-            </td>
-          </tr>
-        </table>
-        <input id="IdProv" name="IdProv" type="hidden" value="'.$_GET['Id'].'">
-        <input id="NombreProv" name="NombreProv" type="hidden" value="'.$_GET['Nombre'].'">
-      </form>
-      <br>
+      <table style="width:100%;">
+        <tr>
+          <td align="center">
+            Pedido cant. dias
+          </td>
+          <td align="right" style="width:20%;">
+            <input id="pedido" type="text" name="pedido" required style="width:100%;" autofocus>
+          </td>
+          <td align="center">
+            Fecha Inicio:
+          </td>
+          <td>
+            <input id="fechaInicio" type="date" name="fechaInicio" required style="width:100%;">
+          </td>
+          <td align="center">
+            Fecha Fin:
+          </td>
+          <td align="right">
+            <input id="fechaFin" name="fechaFin" type="date" required style="width:100%;">
+          </td>
+          <td>
+          <input id="SEDE" name="SEDE" type="hidden" value="';
+          print_r($_GET['SEDE']);
+          echo'">
+          </td>
+          <td align="right">
+            <input type="submit" value="Buscar" class="btn btn-outline-success">
+          </td>
+        </tr>
+      </table>
+      <input id="IdProv" name="IdProv" type="hidden" value="'.$_GET['Id'].'">
+      <input id="NombreProv" name="NombreProv" type="hidden" value="'.$_GET['Nombre'].'">
+    </form>
+    <br>
     ';
 
     ReporteCatalogoProveedor($_GET['SEDE'],$_GET['Id'],$_GET['Nombre']);
@@ -97,7 +161,7 @@
 
     $InicioCarga = new DateTime("now");
 
-    $sql = QListaProveedores();
+    $sql = R7Q_Lista_Proveedores();
     $ArtJson = armarJson($sql,$_GET['SEDE']);
 
     echo '
@@ -122,72 +186,6 @@
 ?>
 @endsection
 
-@section('scriptsHead')
-    <script type="text/javascript" src="{{ asset('assets/js/sortTable.js') }}">
-    </script>
-    <script type="text/javascript" src="{{ asset('assets/js/filter.js') }}">  
-    </script>
-    <script type="text/javascript" src="{{ asset('assets/js/functions.js') }}"> 
-    </script>
-    <script type="text/javascript" src="{{ asset('assets/jquery/jquery-2.2.2.min.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('assets/jquery/jquery-ui.min.js') }}" ></script>
-
-    <style>
-    * {
-      box-sizing: border-box;
-    }
-
-    /*the container must be positioned relative:*/
-    .autocomplete {
-      position: relative;
-      display: inline-block;
-    }
-
-    input {
-      border: 1px solid transparent;
-      background-color: #f1f1f1;
-      border-radius: 5px;
-      padding: 10px;
-      font-size: 16px;
-    }
-
-    input[type=text] {
-      background-color: #f1f1f1;
-      width: 100%;
-    }
-
-    .autocomplete-items {
-      position: absolute;
-      border: 1px solid #d4d4d4;
-      border-bottom: none;
-      border-top: none;
-      z-index: 99;
-      /*position the autocomplete items to be the same width as the container:*/
-      top: 100%;
-      left: 0;
-      right: 0;
-    }
-
-    .autocomplete-items div {
-      padding: 10px;
-      cursor: pointer;
-      background-color: #fff; 
-      border-bottom: 1px solid #d4d4d4; 
-    }
-
-    /*when hovering an item:*/
-    .autocomplete-items div:hover {
-      background-color: #e9e9e9; 
-    }
-
-    /*when navigating through the items using the arrow keys:*/
-    .autocomplete-active {
-      background-color: DodgerBlue !important; 
-      color: #ffffff; 
-    }
-    </style>
-@endsection
-
 @section('scriptsFoot')
 <?php
   if($ArtJson!=""){
@@ -201,3 +199,24 @@
 ?>  
 @endsection
 
+<?php
+  /*
+    TITULO: R7Q_Lista_Proveedores
+    PARAMETROS: No aplica
+    FUNCION: Armar una lista de proveedores
+    RETORNO: Lista de proveedores
+   */
+  function R7Q_Lista_Proveedores() {
+    $sql = "
+      SELECT
+      GenPersona.Nombre,
+      ComProveedor.Id
+      FROM ComProveedor
+      INNER JOIN GenPersona ON ComProveedor.GenPersonaId=GenPersona.Id
+      INNER JOIN ComFactura ON ComFactura.ComProveedorId=ComProveedor.Id
+      GROUP BY ComProveedor.Id, GenPersona.Nombre
+      ORDER BY ComProveedor.Id ASC
+    ";
+    return $sql;
+  }
+?>

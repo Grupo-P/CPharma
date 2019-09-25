@@ -1002,7 +1002,7 @@
 		$conn = ConectarSmartpharma($SedeConnection);
 
 		$sql = QCleanTable('QFacturasProducto');
-    	sqlsrv_query($conn,$sql);
+  	sqlsrv_query($conn,$sql);
 		$sql = QCleanTable('CP_QfacturaProveedor');
 		sqlsrv_query($conn,$sql);
 		$sql = QCleanTable('CP_QDetalleFactura');
