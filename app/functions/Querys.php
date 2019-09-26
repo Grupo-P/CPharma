@@ -2433,6 +2433,51 @@
 		$sql = "DELETE FROM captura_etiqueta WHERE fecha_captura = '$FechaCaptura'";
 	}
 	/*
+		TITULO: QExistenciaArticuloDevaluado
+		PARAMETROS: [$IdArticulo] Id del articulo que se va a buscar
+		FUNCION: Buscar la existencia de del articulos
+		RETORNO: Existencia
+	 */
+	function QExistenciaArticuloDevaluado($IdArticulo) {
+		$sql = "
+			SELECT
+			SUM (InvLoteAlmacen.Existencia) As Existencia
+			FROM InvLoteAlmacen
+			WHERE(InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
+			AND (InvLoteAlmacen.InvArticuloId = '$IdArticulo')
+		";
+		return $sql;
+	}
+	/*
+		TITULO: QG_RangoMinTasaVenta
+		PARAMETROS: No aplica
+		FUNCION: Armar la logica necesaria para ejecutar la query
+		RETORNO: String con la query
+	 */
+	function QG_RangoMinTasaVenta() {
+		$sql = "
+			SELECT * 
+			FROM configuracions 
+			WHERE configuracions.variable = 'RangoMinDolar'
+		";
+		return $sql;
+	}
+
+	/*
+		TITULO: QG_RangoMaxTasaVenta
+		PARAMETROS: No aplica
+		FUNCION: Armar la logica necesaria para ejecutar la query
+		RETORNO: String con la query
+	 */
+	function QG_RangoMaxTasaVenta() {
+		$sql = "
+			SELECT * 
+			FROM configuracions 
+			WHERE configuracions.variable = 'RangoMaxDolar'
+		";
+		return $sql;
+	}
+	/*
 		TITULO: 
 		PARAMETROS: 
 		FUNCION:
