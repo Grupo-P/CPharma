@@ -57,14 +57,14 @@
     color: #ffffff; 
   }
   .barrido{
-      text-decoration: none;
-      transition: width 1s, height 1s, transform 1s;
-    }
-    .barrido:hover{
-      text-decoration: none;
-      transition: width 1s, height 1s, transform 1s;
-      transform: translate(20px,0px);
-    }
+    text-decoration: none;
+    transition: width 1s, height 1s, transform 1s;
+  }
+  .barrido:hover{
+    text-decoration: none;
+    transition: width 1s, height 1s, transform 1s;
+    transform: translate(20px,0px);
+  }
   </style>
 @endsection
 
@@ -80,8 +80,7 @@
   include(app_path().'\functions\querys.php');
   include(app_path().'\functions\funciones.php');
 
-	if (isset($_GET['top']))
-	{
+	if (isset($_GET['top'])) {
     $InicioCarga = new DateTime("now");
 
     if (isset($_GET['SEDE'])){      

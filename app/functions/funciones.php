@@ -659,7 +659,7 @@
 	function ProductoUnico($conn,$IdArticulo,$IdProveedor) {
 		$Unico = '';
 		
-		$sql = QCleanTable('QFacturasProducto');
+		$sql = QCleanTable('CP_QFacturasProducto');
 		sqlsrv_query($conn,$sql);
 		$sql = QCleanTable('CP_QProvedorUnico');
 		sqlsrv_query($conn,$sql);			
@@ -1661,5 +1661,26 @@
 	function FG_Cantidad_Pedido($VentaDiaria,$DiasPedido,$Existencia) {
 		$CantidadPedido = (($VentaDiaria * $DiasPedido)-$Existencia);
 		return $CantidadPedido;
+	}
+	/*
+		TITULO: ProductoUnico
+		PARAMETROS: [$conn,$IdArticulo,$IdProveedor] conecion, id del articulo, id del provedor
+		FUNCION: determinar si un prducto es unico
+		RETORNO: SI o NO segun sea el caso
+	 */
+	function FG_Producto_Unico($conn,$IdArticulo,$IdProveedor) {
+		$sql = QG_Provedor_Unico($IdProveedor,$IdArticulo);
+		$params = array();
+		$options =  array("Scrollable"=>SQLSRV_CURSOR_KEYSET);
+		$result = sqlsrv_query($conn,$sql,$params,$options);
+		$row_count = sqlsrv_num_rows($result);
+
+		if($row_count == 0) {
+			$Unico = 'SI';
+		}
+		else {
+			$Unico = 'NO';
+		}
+	  	return $Unico;
 	}
 ?>
