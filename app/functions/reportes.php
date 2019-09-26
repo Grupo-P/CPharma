@@ -2860,7 +2860,7 @@
 						      	<td align="center">'." ".round($Precio,2)." ".SigVe.'</td>
 						      	<td align="center">'.intval($Existencia).'</td>
 						      	<td align="center">'." ".round($ValorLote,2)." ".SigVe.'</td>
-						      	<td align="center">'.$UltimoLote.'</td>
+						      	<td align="center">'.$row2['FechaLote']->format('d-m-Y').'</td>
 						';
 
 						if($Tasa!=0){
