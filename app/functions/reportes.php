@@ -996,7 +996,8 @@
 					[$NombreProveedor] Nombre del proveedor a buscar
 		FUNCION: Armar el reporte catalogo de proveedor
 		RETORNO: No aplica
-	 */
+ 	*/
+ 	/*
 	function ReporteCatalogoProveedor($SedeConnection,$IdProveedor,$NombreProveedor){
 
 		$conn = ConectarSmartpharma($SedeConnection);
@@ -1082,6 +1083,7 @@
 
 		sqlsrv_close($conn);
 	}
+	*/
 	/*
 		TITULO: ReporteCatalogoProveedor
 		PARAMETROS: [$SedeConnection] sede donde se hara la conexion
@@ -1090,6 +1092,7 @@
 		FUNCION: Armar el reporte catalogo de proveedor
 		RETORNO: No aplica
 	 */
+	/*
 	function ReporteCatalogoProveedorR($SedeConnection,$IdProveedor,$NombreProveedor,$FInicial,$FFinal,$DiasPedido){
 
 		$FFinalImpresion= $FFinal;
@@ -1189,7 +1192,7 @@
 				<a href="/reporte2?Id='.$IdArticulo.'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
 					.$row["Descripcion"].
 				'</a>
-				</td>';			
+				</td>';		
 		
 			$Unico = ProductoUnico($conn,$IdArticulo,$IdProveedor);
 				echo '<td align="center">'.$Unico.'</td>';
@@ -1300,6 +1303,7 @@
 
 		sqlsrv_close($conn);
 	}
+	*/
 	/****************************************************************************/
 	/********************* REPORTE 8 ACTUALIZAR TROQUEL *************************/
 	/*

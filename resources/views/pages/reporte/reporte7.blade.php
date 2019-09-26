@@ -79,7 +79,6 @@
   include(app_path().'\functions\config.php');
   include(app_path().'\functions\querys.php');
   include(app_path().'\functions\funciones.php');
-  include(app_path().'\functions\reportes.php');
 
   $ArtJson = "";
   
@@ -129,7 +128,7 @@
     </form>
     <br>
     ';
-//AQUI QUEDE
+
     R7_Catalogo_Proveedor_C2($_GET['SEDE'],$_GET['Id'],$_GET['Nombre']);
     
     $FinCarga = new DateTime("now");
@@ -145,7 +144,7 @@
 
     $InicioCarga = new DateTime("now");
 
-    ReporteCatalogoProveedorR($_GET['SEDE'],$_GET['IdProv'],$_GET['NombreProv'],$_GET['fechaInicio'],$_GET['fechaFin'],$_GET['pedido']);
+    R7_Catalogo_Proveedor_C3($_GET['SEDE'],$_GET['IdProv'],$_GET['NombreProv'],$_GET['fechaInicio'],$_GET['fechaFin'],$_GET['pedido']);
     GuardarAuditoria('CONSULTAR','REPORTE','Catalogo de proveedor');
 
     $FinCarga = new DateTime("now");
@@ -282,6 +281,189 @@
     sqlsrv_close($conn);
   }
   /*
+    TITULO: R7_Catalogo_Proveedor_C3
+    PARAMETROS: [$SedeConnection] sede donde se hara la conexion
+          [$IdProveedor] ID del proveedor a buscar
+          [$NombreProveedor] Nombre del proveedor a buscar
+    FUNCION: Armar el reporte catalogo de proveedor
+    RETORNO: No aplica
+   */
+  function R7_Catalogo_Proveedor_C3($SedeConnection,$IdProveedor,$NombreProveedor,$FInicial,$FFinal,$DiasPedido){
+
+    $conn = ConectarSmartpharma($SedeConnection);
+
+    $FInicialImp = date("d-m-Y", strtotime($FInicial));
+    $FFinalImp= date("d-m-Y", strtotime($FFinal));
+
+    $FFinal = date("Y-m-d",strtotime($FFinal."+ 1 days"));
+    $RangoDias = FG_Rango_Dias($FInicial,$FFinal);
+
+    $sql = R7Q_Catalogo_Proveedor($IdProveedor);
+    $result = sqlsrv_query($conn,$sql);
+
+    echo '
+    <div class="input-group md-form form-sm form-1 pl-0">
+      <div class="input-group-prepend">
+        <span class="input-group-text purple lighten-3" id="basic-text1">
+          <i class="fas fa-search text-white"
+            aria-hidden="true"></i>
+        </span>
+      </div>
+      <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterAllTable()">
+    </div>
+    <br/>
+    ';
+    echo'<h6 align="center">Pedido en base a: '.$DiasPedido.' dias </h6>';
+    echo'<h6 align="center">Periodo desde el '.$FInicialImp.' al '.$FFinalImp.' </h6>';
+ 
+    echo '
+    <table class="table table-striped table-bordered col-12 sortable">
+      <thead class="thead-dark">
+          <tr>
+            <th scope="col">Proveedor</th>
+          </tr>
+        </thead>
+        <tbody>
+        <tr>
+      ';
+    echo '<td>'.utf8_encode(addslashes($NombreProveedor)).'</td>';
+      echo '
+        </tr>
+        </tbody>
+    </table>';
+
+    echo'
+    <table class="table table-striped table-bordered col-12 sortable" id="myTable">
+        <thead class="thead-dark">
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Codigo</th>
+            <th scope="col">Codigo de Barra</td>
+              <th scope="col">Descripcion</th>              
+              <th scope="col">Producto Unico</th>
+              <th scope="col">Precio (Con IVA) '.SigVe.'</th>
+              <th scope="col">Existencia</th>
+              <th scope="col">Unidades vendidas</th>
+              <th scope="col">Unidades compradas</th>
+              <th scope="col">Venta diaria</th>
+              <th scope="col">Dias restantes</th>
+              <th scope="col">Ultima Venta (En rango)</th>
+              <th scope="col">Ultima Venta</th>
+              <th scope="col">Pedir</th>
+          </tr>
+        </thead>
+        <tbody>
+    ';
+
+    $contador = 1;
+    while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
+      $IdArticulo = $row["Id"];
+      $CodigoArticulo = $row["CodigoArticulo"];
+      $CodigoBarra = $row["CodigoBarra"];
+      $Existencia = $row["Existencia"];
+      $Descripcion = utf8_encode(addslashes($row["Descripcion"]));
+      $IsIVA = $row["ConceptoImpuesto"];
+      $Unico = FG_Producto_Unico($conn,$IdArticulo,$IdProveedor);
+      $Precio = FG_Calculo_Precio($conn,$IdArticulo,$IsIVA,$Existencia);
+
+      $sql = QG_CleanTable('CP_R7Q_Unidades_Vendidas');
+      sqlsrv_query($conn,$sql);
+      $sql = QG_CleanTable('CP_R7Q_Unidades_Devueltas');
+      sqlsrv_query($conn,$sql);
+      $sql = QG_CleanTable('CP_R7Q_Unidades_Compradas');
+      sqlsrv_query($conn,$sql);
+      $sql = QG_CleanTable('CP_R7Q_Unidades_Reclamadas');
+      sqlsrv_query($conn,$sql);
+
+      $sql1 = R7Q_Unidades_Vendidas($FInicial,$FFinal,$IdArticulo);
+      $sql2 = R7Q_Unidades_Devueltas($FInicial,$FFinal,$IdArticulo);
+      $sql3 = R7Q_Unidades_Compradas($FInicial,$FFinal,$IdArticulo);
+      $sql4 = R7Q_Unidades_Reclamadas($FInicial,$FFinal,$IdArticulo);
+      $sql5 = R7Q_Integracion_Catalogo_Proveedor();
+
+      sqlsrv_query($conn,$sql1);
+      sqlsrv_query($conn,$sql2);
+      sqlsrv_query($conn,$sql3); 
+      sqlsrv_query($conn,$sql4);
+      $result2 = sqlsrv_query($conn,$sql5);
+
+      $sql = QG_CleanTable('CP_R7Q_Unidades_Vendidas');
+      sqlsrv_query($conn,$sql);
+      $sql = QG_CleanTable('CP_R7Q_Unidades_Devueltas');
+      sqlsrv_query($conn,$sql);
+      $sql = QG_CleanTable('CP_R7Q_Unidades_Compradas');
+      sqlsrv_query($conn,$sql);
+      $sql = QG_CleanTable('CP_R7Q_Unidades_Reclamadas');
+      sqlsrv_query($conn,$sql);
+
+      $row2 = sqlsrv_fetch_array($result2,SQLSRV_FETCH_ASSOC);
+      $UnidadesVendidas = $row["UnidadesVendidas"];
+      $UnidadesCompradas = $row["UnidadesCompradas"];
+      $VentaDiaria = FG_Venta_Diaria($UnidadesVendidas,$RangoDias);
+      $DiasRestantes = FG_Dias_Restantes($Existencia,$VentaDiaria);
+      $CantidadPedido = FG_Cantidad_Pedido($VentaDiaria,$DiasPedido,$Existencia);
+
+      $sql3 = QG_Ultima_Venta_Rango($IdArticulo,$FInicial,$FFinal);
+      $result3 = sqlsrv_query($conn,$sql3);
+      $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
+      $UltimaVentaRango = $row3["UltimaVenta"];
+
+      $sql4 = QG_UltimaVenta($IdArticulo);
+      $result4 = sqlsrv_query($conn,$sql4);
+      $row4 = sqlsrv_fetch_array($result4,SQLSRV_FETCH_ASSOC);
+      $UltimaVenta = $row4["UltimaVenta"];
+
+      echo '<tr>';
+      echo '<td align="center"><strong>'.intval($contador).'</strong></td>';
+      echo '<td align="left">'.$CodigoArticulo.'</td>';
+      echo '<td align="center">'.$CodigoBarra.'</td>';
+      echo 
+      '<td align="left" class="barrido">
+      <a href="/reporte2?Id='.$IdArticulo.'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
+        .$Descripcion.
+      '</a>
+      </td>';     
+      echo '<td align="center">'.$Unico.'</td>';
+      echo '<td align="center">'.number_format($Precio,2,"," ,"." ).'</td>';
+      echo '<td align="center">'.intval($Existencia).'</td>';
+      echo
+      '<td align="center" class="barrido">
+      <a href="reporte12?fechaInicio='.$FInicialImp.'&fechaFin='.$FFinalImp.'&SEDE='.$SedeConnection.'&Descrip='.$Descripcion.'&Id='.$IdArticulo.'" style="text-decoration: none; color: black;" target="_blank">'
+        .intval($UnidadesVendidas).
+      '</a>
+      </td>';
+      echo
+      '<td align="center" class="barrido">
+      <a href="reporte12?fechaInicio='.$FInicialImp.'&fechaFin='.$FFinalImp.'&SEDE='.$SedeConnection.'&Descrip='.$Descripcion.'&Id='.$IdArticulo.'" style="text-decoration: none; color: black;" target="_blank">'
+        .intval($UnidadesCompradas).
+      '</a>
+      </td>';
+      echo '<td align="center">'.round($VentaDiaria,2).'</td>';
+      echo '<td align="center">'.round($DiasRestantes,2).'</td>';
+
+      if(($UltimaVentaRango)){
+        echo '<td align="center">'.$UltimaVentaRango->format('d-m-Y').'</td>';
+      }
+      else{
+        echo '<td align="center"> - </td>';
+      }
+
+      if(($UltimaVenta)){
+        echo '<td align="center">'.$UltimaVenta->format('d-m-Y').'</td>';
+      }
+      else{
+        echo '<td align="center"> - </td>';
+      }
+      echo '<td align="center">'.intval($CantidadPedido).'</td>';
+      echo '</tr>';
+    $contador++;
+      }
+      echo '
+        </tbody>
+    </table>';
+    sqlsrv_close($conn);
+  }
+  /*
     TITULO: R7Q_Lista_Proveedores
     PARAMETROS: No aplica
     FUNCION: Armar una lista de proveedores
@@ -327,6 +509,129 @@
       WHERE ComFactura.ComProveedorId = '$IdProveedor'
       GROUP BY InvArticulo.Id,InvArticulo.CodigoArticulo,InvArticulo.Descripcion,InvArticulo.FinConceptoImptoIdCompra
       ORDER BY InvArticulo.Id ASC
+    ";
+    return $sql;
+  }
+  /*
+    TITULO: R7Q_Unidades_Vendidas
+    PARAMETROS: [$FInicial] Fecha inicial del rango a consultar
+                [$FFinal] Fecha final del rango a consutar
+    FUNCION: Consulta las Veces vendidas a clientes y las unidades vendidas de un producto
+    RETORNO: Tabla con los articulos, las veces vendidas y las unidades vendidas
+   */
+  function R7Q_Unidades_Vendidas($FInicial,$FFinal,$IdArticulo) {
+    $sql = "
+      SELECT 
+      VenFacturaDetalle.InvArticuloId,
+      ISNULL(COUNT(*),CAST(0 AS INT)) AS VecesVendidas,
+      (ROUND(CAST(SUM(VenFacturaDetalle.Cantidad) AS DECIMAL(38,0)),2,0)) as UnidadesVendidas
+      INTO CP_R7Q_Unidades_Vendidas
+      FROM VenFacturaDetalle
+      INNER JOIN VenFactura ON VenFactura.Id = VenFacturaDetalle.VenFacturaId
+      WHERE
+      (VenFactura.FechaDocumento > '$FInicial' AND VenFactura.FechaDocumento < '$FFinal') AND (VenFacturaDetalle.InvArticuloId = '$IdArticulo')
+      GROUP BY VenFacturaDetalle.InvArticuloId
+      ORDER BY UnidadesVendidas DESC
+    ";          
+    return $sql;
+  }
+  /*
+    TITULO: R7Q_Unidades_Devueltas
+    PARAMETROS: [$FInicial] Fecha inicial del rango a consultar
+                [$FFinal] Fecha final del rango a consutar
+    FUNCION: Consulta las Veces devuelta a clientes y las unidades devuelta de un producto
+    RETORNO: Tabla con los articulos, las veces devuelta y las unidades devuelta
+  */
+  function R7Q_Unidades_Devueltas($FInicial,$FFinal,$IdArticulo) {  
+    $sql = "
+      SELECT
+      VenDevolucionDetalle.InvArticuloId,
+      ISNULL(COUNT(*),CAST(0 AS INT)) AS VecesDevueltas,
+      (ROUND(CAST(SUM(VenDevolucionDetalle.Cantidad) AS DECIMAL(38,0)),2,0)) as UnidadesDevueltas
+      INTO CP_R7Q_Unidades_Devueltas
+      FROM VenDevolucionDetalle
+      INNER JOIN VenDevolucion ON VenDevolucion.Id = VenDevolucionDetalle.VenDevolucionId
+      WHERE
+      (VenDevolucion.FechaDocumento > '$FInicial' AND VenDevolucion.FechaDocumento < '$FFinal') AND (VenDevolucionDetalle.InvArticuloId = '$IdArticulo')
+      GROUP BY VenDevolucionDetalle.InvArticuloId
+      ORDER BY UnidadesDevueltas DESC
+    ";          
+    return $sql;
+  }
+  /*
+    TITULO: R7Q_Unidades_Compradas
+    PARAMETROS: [$FInicial] Fecha inicial del rango a consultar
+                [$FFinal] Fecha final del rango a consutar
+    FUNCION: Consulta las Veces vendidas a clientes y las unidades vendidas de un producto
+    RETORNO: Tabla con los articulos, las veces vendidas y las unidades vendidas
+   */
+  function R7Q_Unidades_Compradas($FInicial,$FFinal,$IdArticulo) {   
+    $sql = "
+      SELECT
+      ComFacturaDetalle.InvArticuloId,
+      ISNULL(COUNT(*),CAST(0 AS INT)) AS VecesCompradas,
+      (ROUND(CAST(SUM(ComFacturaDetalle.CantidadFacturada) AS DECIMAL(38,0)),2,0)) as UnidadesCompradas
+      INTO CP_R7Q_Unidades_Compradas
+      FROM ComFacturaDetalle      
+      INNER JOIN ComFactura ON  ComFactura.Id = ComFacturaDetalle.ComFacturaId
+      WHERE
+      (ComFactura.FechaRegistro > '$FInicial' AND ComFactura.FechaRegistro < '$FFinal') AND (ComFacturaDetalle.InvArticuloId = '$IdArticulo')
+      GROUP BY ComFacturaDetalle.InvArticuloId
+      ORDER BY UnidadesCompradas DESC
+    ";          
+    return $sql;
+  }
+  /*
+    TITULO: R7Q_Unidades_Reclamadas
+    PARAMETROS: [$FInicial] Fecha inicial del rango a consultar
+          [$FFinal] Fecha final del rango a consutar
+    FUNCION: Consulta las Veces reclamo a proveedores y las unidades reclamo
+    RETORNO: Tabla con los articulos, las veces reclamo y las unidades reclamo
+   */
+  function R7Q_Unidades_Reclamadas($FInicial,$FFinal,$IdArticulo) {   
+    $sql = "
+      SELECT
+      ComReclamoDetalle.InvArticuloId,
+      ISNULL(COUNT(*),CAST(0 AS INT)) AS VecesReclamadas,
+      (ROUND(CAST(SUM(ComReclamoDetalle.Cantidad) AS DECIMAL(38,0)),2,0)) as UnidadesReclamadas
+      INTO CP_R7Q_Unidades_Reclamadas
+      FROM ComReclamoDetalle
+      INNER JOIN ComReclamo ON ComReclamo.Id = ComReclamoDetalle.ComReclamoId
+      WHERE
+      (ComReclamo.FechaRegistro > '$FInicial' AND ComReclamo.FechaRegistro < '$FFinal') AND (ComReclamoDetalle.InvArticuloId = '$IdArticulo')
+      GROUP BY ComReclamoDetalle.InvArticuloId
+      ORDER BY UnidadesReclamadas DESC
+    ";          
+    return $sql;
+  }
+  /*
+    TITULO: R7Q_Integracion_Catalogo_Proveedor
+    PARAMETROS: No aplica
+    FUNCION: Ubicar el top de productos mas vendidos
+    RETORNO: Lista de productos mas vendidos
+   */
+  function R7Q_Integracion_Catalogo_Proveedor() {
+    $sql = "
+      SELECT
+      CP_R7Q_Unidades_Vendidas.InvArticuloId,
+      ((ISNULL(CP_R7Q_Unidades_Vendidas.VecesVendidas,CAST(0 AS INT))) - 
+      (ISNULL(CP_R7Q_Unidades_Devueltas.VecesDevueltas,CAST(0 AS INT))) 
+      ) AS VecesVendidas,
+      ((ISNULL(CP_R7Q_Unidades_Vendidas.UnidadesVendidas,CAST(0 AS INT))) -
+      (ISNULL(CP_R7Q_Unidades_Devueltas.UnidadesDevueltas,CAST(0 AS INT))) 
+      ) AS UnidadesVendidas,
+      ((ISNULL(CP_R7Q_Unidades_Compradas.VecesCompradas,CAST(0 AS INT))) -
+      (ISNULL(CP_R7Q_Unidades_Reclamadas.VecesReclamadas,CAST(0 AS INT))) 
+      ) AS VecesCompradas,
+      ((ISNULL(CP_R7Q_Unidades_Compradas.UnidadesCompradas,CAST(0 AS INT))) -
+      (ISNULL(CP_R7Q_Unidades_Reclamadas.UnidadesReclamadas,CAST(0 AS INT))) 
+      ) AS UnidadesCompradas
+      FROM CP_R7Q_Unidades_Vendidas
+      LEFT JOIN CP_R7Q_Unidades_Devueltas ON CP_R7Q_Unidades_Devueltas.InvArticuloId = CP_R7Q_Unidades_Vendidas.InvArticuloId
+      LEFT JOIN CP_R7Q_Unidades_Compradas ON CP_R7Q_Unidades_Compradas.InvArticuloId = CP_R7Q_Unidades_Vendidas.InvArticuloId
+      LEFT JOIN CP_R7Q_Unidades_Reclamadas ON CP_R7Q_Unidades_Reclamadas.InvArticuloId = CP_R7Q_Unidades_Vendidas.InvArticuloId
+      INNER JOIN InvArticulo ON InvArticulo.Id = CP_R7Q_Unidades_Vendidas.InvArticuloId
+      ORDER BY UnidadesVendidas DESC
     ";
     return $sql;
   }
