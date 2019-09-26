@@ -83,31 +83,16 @@
 		<i class="fas fa-tag"></i>
 		Etiqueta
 	</h1>
+	
+	<?php
+		use compras\Etiqueta;
+		$etiqueta = new Etiqueta();
+	?>
 
 	<hr class="row align-items-start col-12">
 	<table style="width:100%;">
-	    <tr>
-	        <td style="width:7%;" align="center">	
-				<a href="{{ url('/etiqueta/create') }}" role="button" class="btn btn-outline-danger btn-sm" 
-				style="display: inline; text-align: left;">
-					Validar		      		
-				</a>
-	        </td>
-        <!--
-	        <td style="width:15%;" align="left">	
-				<a href="{{ url('/EtqObliatoria') }}" role="button" class="btn btn-outline-success btn-sm" 
-				style="display: inline; text-align: left;" target="_blank">
-					Generar Obliagtorias		      		
-				</a>
-	        </td>
-	        <td style="width:15%;" align="left">	
-				<a href="{{ url('/EtqEtiquetable') }}" role="button" class="btn btn-outline-info btn-sm" 
-				style="display: inline; text-align: left;" target="_blank">
-					Generar	Etiquetables	      		
-				</a>
-	        </td>
-	    -->
-	        <td style="width:63%;">
+		<tr>
+	        <td style="width:100%;">
 	        	<div class="input-group md-form form-sm form-1 pl-0">
 				  <div class="input-group-prepend">
 				    <span class="input-group-text purple lighten-3" id="basic-text1"><i class="fas fa-search text-white"
@@ -115,6 +100,74 @@
 				  </div>
 				  <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterAllTable()">
 				</div>
+	        </td>
+	    </tr>
+	    </table>
+	    <br/>
+	    <table>
+	    <tr>
+	    	<td style="width:10%;" align="center">
+	    		<?php
+	    			$etiqueta->id = 0;
+	    		?>
+    			<form action="/etiqueta/{{$etiqueta->id}}" method="POST" style="display: inline;">
+				    @method('PUT')
+				    @csrf					    
+				    <button type="submit" name="Eliminar" role="button" class="btn btn-outline-dark btn-sm">Pendientes</button>
+				</form>
+	        </td>
+
+	        <td style="width:13%;" align="center">
+	        	<?php
+	    			$etiqueta->id = 1;
+	    		?>
+    			<form action="/etiqueta/{{$etiqueta->id}}" method="POST" style="display: inline;">
+				    @method('PUT')
+				    @csrf					    
+				    <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm">No Etiquetables</button>
+				</form>	
+			</td>
+
+	        <td style="width:10%;" align="center">
+	        	<?php
+	    			$etiqueta->id = 2;
+	    		?>
+    			<form action="/etiqueta/{{$etiqueta->id}}" method="POST" style="display: inline;">
+				    @method('PUT')
+				    @csrf					    
+				    <button type="submit" name="Eliminar" role="button" class="btn btn-outline-info btn-sm">Etiquetables</button>
+				</form>						
+	        </td>
+
+	        <td style="width:15%;" align="center">
+	        	<?php
+	    			$etiqueta->id = 3;
+	    		?>
+    			<form action="/etiqueta/{{$etiqueta->id}}" method="POST" style="display: inline;">
+				    @method('PUT')
+				    @csrf					    
+				    <button type="submit" name="Eliminar" role="button" class="btn btn-outline-success btn-sm">Obligatorias Etiquetar</button>
+				</form>			
+	        </td>
+
+	        <td style="width:14%;" align="center">	
+				<a href="{{ url('/etiqueta/create') }}" role="button" class="btn btn-outline-warning btn-sm" 
+				style="display: inline;">
+					Validar Etiquetas	      		
+				</a>
+	        </td>
+        
+	        <td style="width:15%;" align="center">	
+				<a href="{{ url('/EtqObliatoria') }}" role="button" class="btn btn-outline-success btn-sm" 
+				style="display: inline;" target="_blank">
+					Generar Obliagtorias		      		
+				</a>
+	        </td>
+	        <td style="width:15%;" align="center">	
+				<a href="{{ url('/EtqEtiquetable') }}" role="button" class="btn btn-outline-info btn-sm" 
+				style="display: inline;" target="_blank">
+					Generar	Etiquetables	      		
+				</a>
 	        </td>
 	    </tr>
 	</table>
@@ -146,7 +199,10 @@
 		      <td style="width:140px;">
 				
 				<?php
-				if(Auth::user()->role == 'MASTER' || Auth::user()->role == 'DEVELOPER'){
+				if(Auth::user()->role == 'MASTER'
+					|| Auth::user()->role == 'DEVELOPER'
+					|| Auth::user()->role == 'SUPERVISOR'
+					|| Auth::user()->role == 'USUARIO'){
 				?>
 
 					<?php
@@ -178,25 +234,9 @@
 					}					
 					?>
 				<?php	
-				} else if(Auth::user()->role == 'SUPERVISOR' || Auth::user()->role == 'ADMINISTRADOR' || Auth::user()->role == 'SUPERVISOR CAJA'){ 
+				} 
 				?>
-					<a href="/etiqueta/{{$etiqueta->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
-		      			<i class="far fa-eye"></i>			      		
-		      		</a>
 
-		      		<a href="/etiqueta/{{$etiqueta->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
-		      			<i class="fas fa-edit"></i>
-	      			</a>
-				<?php
-				} else if(Auth::user()->role == 'USUARIO'){
-				?>
-					<a href="/etiqueta/{{$etiqueta->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
-		      			<i class="far fa-eye"></i>			      		
-		      		</a>		
-				<?php
-				}
-				?>
-										
 		      </td>
 		    <!-- Fin Validacion de ROLES -->
 

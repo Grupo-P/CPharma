@@ -92,6 +92,7 @@
 		FUNCION: Armar una tabla de historico de compra del articulo
 		RETORNO: No aplica
 	 */
+	/*
 	function ReporteHistoricoProducto($SedeConnection,$IdArticulo){
 		
 		$conn = ConectarSmartpharma($SedeConnection);
@@ -233,6 +234,7 @@
 
 		sqlsrv_close($conn);
 	}
+	*/
 	/*****************************************************************************/
 	/************************ REPORTE 3 PRODUCTOS MAS VENDIDOS *******************/
 	/*
@@ -244,6 +246,7 @@
 		FUNCION: Arma una tabla con los productos mas vendidos
 		RETORNO: No aplica
 	 */
+	/*
 	function ReporteProductosMasVendidos($SedeConnection,$Top,$FInicial,$FFinal){
 
 		$conn = ConectarSmartpharma($SedeConnection);
@@ -312,6 +315,7 @@
 		  	</thead>
 		  	<tbody>
 		';
+
 		$contador = 1;
 		while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
 			$IdArticulo = $row["Id"];
@@ -320,9 +324,7 @@
 			$result1 = sqlsrv_query($conn,$sql7);
 			$row1 = sqlsrv_fetch_array($result1,SQLSRV_FETCH_ASSOC);
 			$Existencia = $row1["Existencia"];
-
 			$Tipo = ProductoMedicina($conn,$IdArticulo);
-
 			$sql = QCleanTable('CP_QVentasParcial');
 			sqlsrv_query($conn,$sql);
 			$sql = QCleanTable('CP_QDevolucionParcial');
@@ -411,6 +413,7 @@
 
 		sqlsrv_close($conn);
 	}
+	*/
 	/*****************************************************************************/
 	/************************ REPORTE 4 PRODUCTOS MENOS VENDIDOS *****************/
 	/*
@@ -422,6 +425,7 @@
 		FUNCION: Arma una tabla con los productos menos vendidos
 		RETORNO: No aplica
 	 */
+	/*
 	function ReporteProductosMenosVendidos($SedeConnection,$Top,$FInicial,$FFinal){
 
 		$conn = ConectarSmartpharma($SedeConnection);
@@ -580,6 +584,7 @@
 
 		sqlsrv_close($conn);
 	}
+	*/
 	/*****************************************************************************/
 	/************************ REPORTE 5 PRODUCTOS EN FALLA ***********************/
 	/*
@@ -590,6 +595,7 @@
 		FUNCION: Arma una lista de productos en falla
 		RETORNO: No aplica
 	 */
+	/*
 	function ReporteProductosFalla($SedeConnection,$FInicial,$FFinal){
 
 		$conn = ConectarSmartpharma($SedeConnection);
@@ -773,6 +779,7 @@
 
 		sqlsrv_close($conn);
 	}
+	*/
 	/*****************************************************************************/
 	/************************ REPORTE 6 PEDIDO DE PRODUCTOS **********************/
 	/*
@@ -784,6 +791,7 @@
 		FUNCION: Arma una lista para el pedido de productos
 		RETORNO: No aplica
 	 */
+	/*
 	function ReportePedidoProductos($SedeConnection,$Descripcion,$FInicial,$FFinal,$DiasPedido){
 
 		$conn = ConectarSmartpharma($SedeConnection);
@@ -978,6 +986,7 @@
 
 		sqlsrv_close($conn);
 	}
+	*/
 	/*****************************************************************************/
 	/************************ REPORTE 7 CATALOGO PROVEEDOR ***********************/
 	/*
@@ -987,13 +996,14 @@
 					[$NombreProveedor] Nombre del proveedor a buscar
 		FUNCION: Armar el reporte catalogo de proveedor
 		RETORNO: No aplica
-	 */
+ 	*/
+ 	/*
 	function ReporteCatalogoProveedor($SedeConnection,$IdProveedor,$NombreProveedor){
 
 		$conn = ConectarSmartpharma($SedeConnection);
 
 		$sql = QCleanTable('QFacturasProducto');
-    	sqlsrv_query($conn,$sql);
+  	sqlsrv_query($conn,$sql);
 		$sql = QCleanTable('CP_QfacturaProveedor');
 		sqlsrv_query($conn,$sql);
 		$sql = QCleanTable('CP_QDetalleFactura');
@@ -1073,6 +1083,7 @@
 
 		sqlsrv_close($conn);
 	}
+	*/
 	/*
 		TITULO: ReporteCatalogoProveedor
 		PARAMETROS: [$SedeConnection] sede donde se hara la conexion
@@ -1081,6 +1092,7 @@
 		FUNCION: Armar el reporte catalogo de proveedor
 		RETORNO: No aplica
 	 */
+	/*
 	function ReporteCatalogoProveedorR($SedeConnection,$IdProveedor,$NombreProveedor,$FInicial,$FFinal,$DiasPedido){
 
 		$FFinalImpresion= $FFinal;
@@ -1180,7 +1192,7 @@
 				<a href="/reporte2?Id='.$IdArticulo.'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
 					.$row["Descripcion"].
 				'</a>
-				</td>';			
+				</td>';		
 		
 			$Unico = ProductoUnico($conn,$IdArticulo,$IdProveedor);
 				echo '<td align="center">'.$Unico.'</td>';
@@ -1291,6 +1303,7 @@
 
 		sqlsrv_close($conn);
 	}
+	*/
 	/****************************************************************************/
 	/********************* REPORTE 8 ACTUALIZAR TROQUEL *************************/
 	/*

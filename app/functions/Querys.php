@@ -2442,5 +2442,280 @@
 		$sql = "
 		";
 		return $sql;
-	}	
+	}
+/**********************************************************************/
+/******************  INICIO DE QUERYS GENERALES   *********************/
+/**********************************************************************/
+	/*
+		TITULO: QG_CleanTable
+		PARAMETROS: [$NombreTabla] Nombre de la tabla para preparar
+		FUNCION: Prepara la tabla para su uso
+		RETORNO: Tabla preparada para usar
+ 	*/
+	function QG_CleanTable($NombreTabla) {		
+		$sql = "
+			IF OBJECT_ID ('".$NombreTabla."', 'U') IS NOT NULL
+				DROP TABLE ".$NombreTabla.";
+		";					
+		return $sql;
+	}
+	/*
+		TITULO: QG_Dolarizados
+		PARAMETROS: [$IdArticulo] Id del articulo que se va a buscar
+		FUNCION: Busca el Id del atributo si la categoriza es dolarizado
+		RETORNO: Retorna el id del atributo dolarizado
+	 */
+	function QG_Dolarizados($IdArticulo) {
+		$sql = "
+		SELECT * 
+		FROM InvArticuloAtributo 
+		WHERE InvArticuloAtributo.InvAtributoId = 
+			(SELECT InvAtributo.Id
+			FROM InvAtributo 
+			WHERE 
+			InvAtributo.Descripcion = 'Dolarizados'
+			OR  InvAtributo.Descripcion = 'Giordany'
+			OR  InvAtributo.Descripcion = 'giordany') 
+		AND InvArticuloAtributo.InvArticuloId = '$IdArticulo'
+		";
+		return $sql;
+	}
+	/*
+		TITULO: QG_Tasa_Fecha
+		PARAMETROS: [$Fecha] Fecha de la que se quiere la tasa
+		FUNCION: Buscar el valor de la tasa en un dia especifico
+		RETORNO: Valor de la tasa al dia que se solicito
+	 */
+	function QG_Tasa_Fecha($Fecha) {
+		$sql = "SELECT tasa FROM dolars where fecha = '$Fecha'";
+		return $sql;
+	}
+	/*
+		TITULO: QG_Dolarizados
+		PARAMETROS: [$IdArticulo] Id del articulo que se va a buscar
+		FUNCION: Busca el Id del atributo si la categoriza es dolarizado
+		RETORNO: Retorna el id del atributo dolarizado
+	 */
+	function QG_Precio_Troquelado($IdArticulo) {
+		$sql = "
+			SELECT TOP 1
+			InvLote.Id,
+			InvLote.M_PrecioCompraBruto,
+			InvLote.M_PrecioTroquelado
+			FROM InvLoteAlmacen
+			INNER JOIN InvLote ON InvLote.Id = InvLoteAlmacen.InvLoteId
+			WHERE(InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
+			AND (InvLoteAlmacen.InvArticuloId = '$IdArticulo')
+			AND (InvLoteAlmacen.Existencia>0)
+			ORDER BY invlote.M_PrecioTroquelado DESC
+		";
+		return $sql;
+	}
+	/*
+		TITULO: QG_Precio_Calculado
+		PARAMETROS: [$IdArticulo] Id del articulo que se va a buscar
+		FUNCION: Busca el Id del atributo si la categoriza es dolarizado
+		RETORNO: Retorna el id del atributo dolarizado
+	 */
+	function QG_Precio_Calculado($IdArticulo) {
+		$sql = "
+			SELECT TOP 1
+			InvLote.Id,
+			InvLote.M_PrecioCompraBruto,
+			InvLote.M_PrecioTroquelado
+			FROM InvLoteAlmacen
+			INNER JOIN InvLote ON InvLote.Id = InvLoteAlmacen.InvLoteId
+			WHERE (InvLoteAlmacen.InvArticuloId = '$IdArticulo')
+			AND (InvLoteAlmacen.Existencia>0)
+			ORDER BY invlote.M_PrecioCompraBruto DESC
+		";
+		return $sql;
+	}
+	/*
+		TITULO: QG_Tipo_Producto
+		PARAMETROS: [$IdArticulo] Id del articulo que se va a buscar
+		FUNCION: Busca el Id del atributo si la categoriza es dolarizado
+		RETORNO: Retorna el id del atributo dolarizado
+	 */
+	function QG_Tipo_Producto($IdArticulo) {
+		$sql = "
+		SELECT * 
+		FROM InvArticuloAtributo 
+		WHERE InvArticuloAtributo.InvAtributoId = 
+			(SELECT InvAtributo.Id
+			FROM InvAtributo 
+			WHERE 
+			InvAtributo.Descripcion = 'Medicina') 
+		AND InvArticuloAtributo.InvArticuloId = '$IdArticulo'
+		";
+		return $sql;
+	}
+	/*
+		TITULO: QG_SubTotalVenta_Articulo
+		PARAMETROS: [$IdArticulo] Id del articulo que se va a buscar
+		FUNCION: Busca el Id del atributo si la categoriza es dolarizado
+		RETORNO: Retorna el id del atributo dolarizado
+	 */
+	function QG_SubTotalVenta_Articulo($FInicial,$FFinal,$IdArticulo) {
+		$sql = "
+		SELECT
+		(ROUND(CAST(SUM (VenVentaDetalle.PrecioBruto * VenVentaDetalle.Cantidad) AS DECIMAL(38,2)),2,0)) as SubTotalVenta
+		FROM VenVentaDetalle
+		INNER JOIN VenVenta ON VenVenta.Id = VenVentaDetalle.VenVentaId 
+		WHERE (VenVenta.FechaDocumentoVenta > '$FInicial' AND VenVenta.FechaDocumentoVenta < '$FFinal')
+		AND VenVentaDetalle.InvArticuloId = '$IdArticulo'
+		";
+		return $sql;
+	}
+	/*
+		TITULO: QG_SubTotalVenta_Articulo
+		PARAMETROS: [$IdArticulo] Id del articulo que se va a buscar
+		FUNCION: Busca el Id del atributo si la categoriza es dolarizado
+		RETORNO: Retorna el id del atributo dolarizado
+	 */
+	function QG_SubTotalDevolucion_Articulo($FInicial,$FFinal,$IdArticulo) {
+		$sql = "
+		SELECT
+		(ROUND(CAST(SUM (VenDevolucionDetalle.PrecioBruto * VenDevolucionDetalle.Cantidad) AS DECIMAL(38,2)),2,0)) as SubTotalDevolucion
+		FROM VenDevolucionDetalle
+		INNER JOIN VenDevolucion ON VenDevolucion.Id = VenDevolucionDetalle.VenDevolucionId 
+		WHERE (VenDevolucion.FechaDocumento > '$FInicial' AND VenDevolucion.FechaDocumento < '$FFinal')
+		AND VenDevolucionDetalle.InvArticuloId = '$IdArticulo'
+		";
+		return $sql;
+	}
+	/*
+		TITULO: QG_Utilidad_Articulo
+		PARAMETROS: [$IdArticulo] Id del articulo que se va a buscar
+		FUNCION: Busca el Id del atributo si la categoriza es dolarizado
+		RETORNO: Retorna el id del atributo dolarizado
+	 */
+	function QG_Utilidad_Articulo($IdArticulo) {
+		$sql = "
+		SELECT VenCondicionVenta.PorcentajeUtilidad AS UtilidadArticulo
+		FROM VenCondicionVenta 
+		WHERE VenCondicionVenta.Id = (
+			SELECT VenCondicionVenta_VenCondicionVentaArticulo.Id
+			FROM VenCondicionVenta_VenCondicionVentaArticulo 
+			WHERE VenCondicionVenta_VenCondicionVentaArticulo.InvArticuloId = '$IdArticulo')
+		";
+		return $sql;
+	}
+  	/*
+    TITULO: QG_Tiempo_Tienda
+		PARAMETROS: [$IdArticulo] Id del articulo actual
+		FUNCION: Construir la consulta para saber la fecha en dias
+		RETORNO: Un String con el query
+	 */
+	function QG_Tiempo_Tienda($IdArticulo) {
+		$sql = "
+		SELECT TOP 1 
+		InvLoteId,
+		CONVERT(DATE,InvLote.Auditoria_FechaCreacion) AS FechaTienda,
+		DATEDIFF(DAY,CONVERT(DATE,InvLote.Auditoria_FechaCreacion),GETDATE()) AS TiempoTienda
+		FROM InvLoteAlmacen 
+		INNER JOIN invlote on invlote.id = InvLoteAlmacen.InvLoteId
+		WHERE InvLotealmacen.InvArticuloId = '$IdArticulo' AND existencia >0
+		ORDER BY InvLote.Auditoria_FechaCreacion DESC
+		";
+		return $sql;
+	}
+	/*
+		TITULO: QG_UltimaVenta
+		PARAMETROS: [$IdArticulo] Id del articulo a buscar
+		FUNCION: Buscar la fecha de la ultima venta del articulo sin rango 
+		RETORNO: La fecha de la ultima venta
+	 */
+	function QG_UltimaVenta($IdArticulo) {
+		$sql="
+			SELECT TOP 1
+			CONVERT(DATE,VenFactura.FechaDocumento) AS UltimaVenta
+			FROM VenFactura
+			INNER JOIN VenFacturaDetalle ON VenFacturaDetalle.VenFacturaId = VenFactura.Id
+			WHERE VenFacturaDetalle.InvArticuloId = '$IdArticulo'
+			ORDER BY FechaDocumento DESC
+		";
+		return $sql;
+	}
+	/*
+		TITULO: QG_Ultima_Venta_Rango
+		PARAMETROS: [$IdArticulo] Id del articulo a buscar
+		FUNCION: Buscar la fecha de la ultima venta del articulo dentro del rango 
+		RETORNO: La fecha de la ultima venta
+	 */
+	function QG_Ultima_Venta_Rango($IdArticulo,$FInicial,$FFinal) {
+		$sql="
+			SELECT TOP 1
+			CONVERT(DATE,VenFactura.FechaDocumento) AS UltimaVenta
+			FROM VenFactura
+			INNER JOIN VenFacturaDetalle ON VenFacturaDetalle.VenFacturaId = VenFactura.Id
+			WHERE
+			(VenFactura.FechaDocumento > '$FInicial' AND VenFactura.FechaDocumento < '$FFinal')
+			AND (VenFacturaDetalle.InvArticuloId = '$IdArticulo')
+			ORDER BY FechaDocumento DESC
+		";
+		return $sql;
+	}
+	/*
+		TITULO: QG_UltimoProveedor
+		PARAMETROS: [$IdArticuloQ] Id del articulo
+		FUNCION: busca el ultimo proveedor en despachar el articulo
+		RETORNO: ultimo proveedor en despachar el articulo
+	 */
+	function QG_UltimoProveedor($IdArticulo) {
+		$sql = "
+			SELECT TOP 1
+			ComProveedor.Id,
+			GenPersona.Nombre,
+			CONVERT(DATE,ComFactura.FechaRegistro) As FechaRegistro,
+			CONVERT(DATE,ComFactura.FechaDocumento) As FechaDocumento
+			FROM InvArticulo
+			INNER JOIN ComFacturaDetalle ON InvArticulo.Id = ComFacturaDetalle.InvArticuloId
+			INNER JOIN ComFactura ON ComFactura.Id = ComFacturaDetalle.ComFacturaId
+			INNER JOIN ComProveedor ON ComProveedor.Id = ComFactura.ComProveedorId
+			INNER JOIN GenPersona ON GenPersona.Id = ComProveedor.GenPersonaId
+			WHERE InvArticulo.Id = '$IdArticulo'
+			ORDER BY ComFactura.FechaDocumento DESC
+		";
+		return $sql;
+	}
+	/*
+		TITULO: QG_Ultimo_Lote
+		PARAMETROS: [$IdArticulo] Id del articulo a buscar
+		FUNCION: Buscar el ultimo lote del articulo sin rango 
+		RETORNO: La fecha de la ultima venta
+	 */
+	function QG_Ultimo_Lote($IdArticulo) {
+		$sql="
+			SELECT TOP 1
+			InvLote.Id,
+			CONVERT(DATE,InvLote.FechaEntrada) AS UltimoLote
+			FROM InvLote
+			WHERE InvLote.InvArticuloId  = '$IdArticulo'
+			ORDER BY UltimoLote DESC
+		";
+		return $sql;
+	}
+	/*
+		TITULO: QG_Provedor_Unico
+		PARAMETROS: [$IdProveedor] Id del proveedor a buscar
+		FUNCION: Buscar en las facturas si hay otro proveedor que surta el producto
+		RETORNO: Lista de proveedores que surten el producto 
+		[Funciona en conjunto con QFacturasProducto]
+	 */
+	function QG_Provedor_Unico($IdProveedor,$IdArticulo) {
+		$sql = "
+		SELECT
+		ComProveedor.Id,
+		GenPersona.Nombre
+		FROM ComProveedor
+		INNER JOIN GenPersona ON ComProveedor.GenPersonaId=GenPersona.Id
+		INNER JOIN ComFactura ON ComFactura.ComProveedorId=ComProveedor.Id
+		INNER JOIN ComFacturaDetalle ON ComFacturaDetalle.ComFacturaId = ComFactura.Id
+		WHERE ComFactura.ComProveedorId <> '$IdProveedor' and ComFacturaDetalle.InvArticuloId = '$IdArticulo'
+		GROUP BY ComProveedor.Id, GenPersona.Nombre
+		ORDER BY ComProveedor.Id ASC
+		";
+		return $sql;
+	}
 ?>

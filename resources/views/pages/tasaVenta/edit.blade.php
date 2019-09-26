@@ -5,7 +5,27 @@
 @endsection
 
 @section('content')
-<!-- Modal Guardar -->
+    <?php
+        include(app_path().'\functions\config.php');
+        include(app_path().'\functions\querys.php');
+        include(app_path().'\functions\funciones.php');
+
+        $conCP = ConectarXampp();
+        
+        $sql1 = QG_RangoMinTasaVenta();
+        $result1 = mysqli_query($conCP, $sql1);
+        $row1 = mysqli_fetch_assoc($result1);
+        $minimo = floatval($row1['valor']);
+
+        $sql2 = QG_RangoMaxTasaVenta();
+        $result2 = mysqli_query($conCP, $sql2);
+        $row2 = mysqli_fetch_assoc($result2);
+        $maximo = floatval($row2['valor']);
+
+        mysqli_close($conCP);
+    ?>
+
+    <!-- Modal Guardar -->
     @if(session('Error'))
         <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
           <div class="modal-dialog modal-dialog-centered" role="document">
@@ -58,7 +78,7 @@
           <tbody>
               <tr>
                   <th scope="row">{!! Form::label('tasa', 'Tasa') !!}</th>
-                  <td>{!! Form::number('tasa', null, [ 'class' => 'form-control', 'placeholder' => 'xx.xx', 'step' => '0.01', 'min' => '10000', 'max' => '35000', 'autofocus', 'required']) !!}</td>
+                  <td>{!! Form::number('tasa', null, [ 'class' => 'form-control', 'placeholder' => 'xx.xx', 'step' => '0.01', 'min' => $minimo, 'max' => $maximo, 'autofocus', 'required']) !!}</td>
               </tr>
               <tr>
                 <th>Moneda</th>
