@@ -2162,40 +2162,41 @@
 	 */
 	function QArticulosDevaluados($FechaBandera) {
 		$sql = "
-		SELECT 
-		InvLote.Id,  
-		InvLote.InvArticuloId,
-		InvArticulo.CodigoArticulo,
-		CONVERT(DATE,InvLoteAlmacen.Auditoria_FechaCreacion) AS FechaLote,  
-		InvArticulo.Descripcion,
-		InvArticulo.FinConceptoImptoIdCompra AS ConceptoImpuesto
-		INTO CP_ArticulosDevaluados
+		SELECT DISTINCT
+		--Campos
+		(SELECT TOP 1
+		InvLote.Id
 		FROM InvLote
-		INNER JOIN InvLoteAlmacen ON InvLote.Id = InvLoteAlmacen.InvLoteId
+		WHERE InvLote.InvArticuloId = InvArticulo.Id
+		ORDER BY InvLote.FechaEntrada DESC) AS Id,--Id del lote
+		InvArticulo.Id AS InvArticuloId,--Id del articulo
+		InvArticulo.CodigoArticulo,--Codigo interno
+		CONVERT(DATE, 
+		(SELECT TOP 1
+		InvLote.Auditoria_FechaCreacion
+		FROM InvLoteAlmacen
+		INNER JOIN InvLote ON InvLote.Id = InvLoteAlmacen.InvLoteId
+		WHERE (InvLoteAlmacen.InvArticuloId = InvArticulo.Id)
+		AND (InvLoteAlmacen.Existencia > 0)
+		AND (InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
+		ORDER BY InvLote.Auditoria_FechaCreacion DESC)) AS FechaLote,--Fecha de creacion del lote
+		(SELECT SUM(InvLoteAlmacen.Existencia)
+		FROM InvLoteAlmacen
+		WHERE (InvLoteAlmacen.InvArticuloId = InvArticulo.Id)
+		AND (InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)) AS Existencia,--Existencia
+		InvArticulo.FinConceptoImptoIdCompra AS ConceptoImpuesto,
+		InvArticulo.Descripcion--Descripcion del articulo
+		--Tabla de origen
+		FROM InvLote
+		--Tablas relacionadas
 		INNER JOIN InvArticulo ON InvArticulo.Id = InvLote.InvArticuloId
-		WHERE InvLoteAlmacen.Existencia>0 
+		INNER JOIN InvLoteAlmacen ON InvLote.Id = InvLoteAlmacen.InvLoteId
+		--Condiciones
+		WHERE (InvLoteAlmacen.Existencia > 0) 
 		AND (InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
 		AND (CONVERT(DATE,InvLoteAlmacen.Auditoria_FechaCreacion) < '$FechaBandera')
-		ORDER BY InvLoteAlmacen.Auditoria_FechaCreacion, InvArticulo.Descripcion DESC
-		";
-		return $sql;
-	}
-
-	/*
-		TITULO: QFiltrarArticulosDevaluados
-		PARAMETROS: No aplica
-		FUNCION: Filtar los articulos eliminando los duplicados
-		RETORNO: String con la query
-	 */
-	function QFiltrarArticulosDevaluados() {
-		$sql = "
-		SELECT 
-		CP_ArticulosDevaluados.InvArticuloId,
-		CP_ArticulosDevaluados.CodigoArticulo,
-		CP_ArticulosDevaluados.Descripcion,
-		CP_ArticulosDevaluados.ConceptoImpuesto
-		FROM CP_ArticulosDevaluados
-		GROUP BY CP_ArticulosDevaluados.InvArticuloId, CP_ArticulosDevaluados.CodigoArticulo, CP_ArticulosDevaluados.Descripcion, CP_ArticulosDevaluados.ConceptoImpuesto
+		--Ordenado
+		ORDER BY FechaLote, InvArticulo.Descripcion DESC
 		";
 		return $sql;
 	}
@@ -2430,51 +2431,6 @@
 	 */
 	function QBorrarDiasEtiqueta($FechaCaptura) {
 		$sql = "DELETE FROM captura_etiqueta WHERE fecha_captura = '$FechaCaptura'";
-	}
-	/*
-		TITULO: QExistenciaArticuloDevaluado
-		PARAMETROS: [$IdArticulo] Id del articulo que se va a buscar
-		FUNCION: Buscar la existencia de del articulos
-		RETORNO: Existencia
-	 */
-	function QExistenciaArticuloDevaluado($IdArticulo) {
-		$sql = "
-			SELECT
-			SUM (InvLoteAlmacen.Existencia) As Existencia
-			FROM InvLoteAlmacen
-			WHERE(InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
-			AND (InvLoteAlmacen.InvArticuloId = '$IdArticulo')
-		";
-		return $sql;
-	}
-	/*
-		TITULO: QG_RangoMinTasaVenta
-		PARAMETROS: No aplica
-		FUNCION: Armar la logica necesaria para ejecutar la query
-		RETORNO: String con la query
-	 */
-	function QG_RangoMinTasaVenta() {
-		$sql = "
-			SELECT * 
-			FROM configuracions 
-			WHERE configuracions.variable = 'RangoMinDolar'
-		";
-		return $sql;
-	}
-
-	/*
-		TITULO: QG_RangoMaxTasaVenta
-		PARAMETROS: No aplica
-		FUNCION: Armar la logica necesaria para ejecutar la query
-		RETORNO: String con la query
-	 */
-	function QG_RangoMaxTasaVenta() {
-		$sql = "
-			SELECT * 
-			FROM configuracions 
-			WHERE configuracions.variable = 'RangoMaxDolar'
-		";
-		return $sql;
 	}
 	/*
 		TITULO: 

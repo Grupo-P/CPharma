@@ -2810,7 +2810,7 @@
 		<br/>
 		';
 
-		echo'<h6 align="center">Periodo desde el '.$FInicial.' hacia atrás</h6>';
+		echo'<h6 align="center">Registro de articulos con fecha menor al '.$FInicial.'</h6>';
 
 		echo'
 			<table class="table table-striped table-bordered col-12 sortable" id="myTable">
@@ -2834,14 +2834,9 @@
 			  	<tbody>
 		';
 
-		$sql = QCleanTable('CP_ArticulosDevaluados');
-		sqlsrv_query($conn,$sql);
-
 		$contador = 1;
-		$sql1 = QArticulosDevaluados($FInicial);
-		sqlsrv_query($conn,$sql1);
 
-		$sql2 = QFiltrarArticulosDevaluados();
+		$sql2 = QArticulosDevaluados($FInicial);
 		$result2 = sqlsrv_query($conn,$sql2);
 
 		while($row2 = sqlsrv_fetch_array($result2,SQLSRV_FETCH_ASSOC)) {
@@ -2849,22 +2844,17 @@
 			$Dolarizado = ProductoDolarizado($conn,$IdArticulo);
 
 			if($Dolarizado == 'NO') {
-				$sql4 = QUltimoLote($IdArticulo,$FInicial);
-				$result4 = sqlsrv_query($conn,$sql4);
-				$row4 = sqlsrv_fetch_array($result4,SQLSRV_FETCH_ASSOC);
-				$UltimoLote = $row4["UltimoLote"];
+				
+				$UltimoLote = $row2['FechaLote'];
 
 				if(!is_null($UltimoLote)) {
 					$UltimoLote = $UltimoLote->format('Y-m-d');
 					$Diferencia = ValidarFechas($FInicial,$UltimoLote);
 
 					if($Diferencia < 0) {
-						$sql3 = QExistenciaArticuloDevaluado($IdArticulo);
-						$result3 = sqlsrv_query($conn,$sql3);
-						$row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
 
 						$IsIVA = $row2["ConceptoImpuesto"];
-						$Existencia = $row3["Existencia"];
+						$Existencia = $row2["Existencia"];
 						$Precio = CalculoPrecioDevaluado($conn,$IdArticulo,$IsIVA,$Existencia);
 						$ValorLote = $Precio * intval($Existencia);
 
@@ -2883,7 +2873,7 @@
 						      	<td align="center">'." ".round($Precio,2)." ".SigVe.'</td>
 						      	<td align="center">'.intval($Existencia).'</td>
 						      	<td align="center">'." ".round($ValorLote,2)." ".SigVe.'</td>
-						      	<td align="center">'.$UltimoLote.'</td>
+						      	<td align="center">'.$row2['FechaLote']->format('d-m-Y').'</td>
 						';
 
 						if($Tasa!=0){
@@ -2933,9 +2923,6 @@
 			  	</tbody>
 			</table>
 		';
-
-		$sql = QCleanTable('CP_ArticulosDevaluados');
-		sqlsrv_query($conn,$sql);
 
 		sqlsrv_close($conn);
 	}
