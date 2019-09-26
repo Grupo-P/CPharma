@@ -397,8 +397,8 @@
       sqlsrv_query($conn,$sql);
 
       $row2 = sqlsrv_fetch_array($result2,SQLSRV_FETCH_ASSOC);
-      $UnidadesVendidas = $row["UnidadesVendidas"];
-      $UnidadesCompradas = $row["UnidadesCompradas"];
+      $UnidadesVendidas = $row2["UnidadesVendidas"];
+      $UnidadesCompradas = $row2["UnidadesCompradas"];
       $VentaDiaria = FG_Venta_Diaria($UnidadesVendidas,$RangoDias);
       $DiasRestantes = FG_Dias_Restantes($Existencia,$VentaDiaria);
       $CantidadPedido = FG_Cantidad_Pedido($VentaDiaria,$DiasPedido,$Existencia);
