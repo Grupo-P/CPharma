@@ -2797,7 +2797,7 @@
 		<br/>
 		';
 
-		echo'<h6 align="center">Periodo desde el '.$FInicial.' hacia atrás</h6>';
+		echo'<h6 align="center">Registro de articulos con fecha menor al '.$FInicial.'</h6>';
 
 		echo'
 			<table class="table table-striped table-bordered col-12 sortable" id="myTable">
@@ -2821,15 +2821,7 @@
 			  	<tbody>
 		';
 
-		/*$sql = QCleanTable('CP_ArticulosDevaluados');
-		sqlsrv_query($conn,$sql);*/
-
 		$contador = 1;
-		/*$sql1 = QArticulosDevaluados($FInicial);
-		sqlsrv_query($conn,$sql1);
-
-		$sql2 = QFiltrarArticulosDevaluados();
-		$result2 = sqlsrv_query($conn,$sql2);*/
 
 		$sql2 = QArticulosDevaluados($FInicial);
 		$result2 = sqlsrv_query($conn,$sql2);
@@ -2839,10 +2831,6 @@
 			$Dolarizado = ProductoDolarizado($conn,$IdArticulo);
 
 			if($Dolarizado == 'NO') {
-				/*$sql4 = QUltimoLote($IdArticulo,$FInicial);
-				$result4 = sqlsrv_query($conn,$sql4);
-				$row4 = sqlsrv_fetch_array($result4,SQLSRV_FETCH_ASSOC);
-				$UltimoLote = $row4["UltimoLote"];*/
 				
 				$UltimoLote = $row2['FechaLote'];
 
@@ -2851,16 +2839,6 @@
 					$Diferencia = ValidarFechas($FInicial,$UltimoLote);
 
 					if($Diferencia < 0) {
-						/*$sql = QArticulo($IdArticulo);
-						$result = sqlsrv_query($conn,$sql);
-						$row = sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC);
-
-						$sql3 = QExistenciaArticuloDevaluado($IdArticulo);
-						$result3 = sqlsrv_query($conn,$sql3);
-						$row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
-
-						$IsIVA = $row["ConceptoImpuesto"];
-						$Existencia = $row3["Existencia"];*/
 
 						$IsIVA = $row2["ConceptoImpuesto"];
 						$Existencia = $row2["Existencia"];
@@ -2932,9 +2910,6 @@
 			  	</tbody>
 			</table>
 		';
-
-		/*$sql = QCleanTable('CP_ArticulosDevaluados');
-		sqlsrv_query($conn,$sql);*/
 
 		sqlsrv_close($conn);
 	}
