@@ -2763,4 +2763,103 @@
 		";
 		return $sql;
 	}
+	/*
+		TITULO: QG_Existencia_Actual
+		PARAMETROS: no aplica
+		FUNCION: busca los articulos en existencia hoy
+		RETORNO: no aplica
+ 	*/
+	function QG_Existencia_Actual() {
+		$sql = "
+			SELECT
+			InvArticulo.Id AS IdArticulo,
+			InvArticulo.CodigoArticulo AS CodigoInterno,
+			InvArticulo.Descripcion
+			FROM InvArticulo
+			INNER JOIN InvLoteAlmacen ON InvArticulo.Id=InvLoteAlmacen.InvArticuloId
+			WHERE InvLoteAlmacen.Existencia > 0
+			AND (InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
+			GROUP BY InvArticulo.Id, InvArticulo.CodigoArticulo, InvArticulo.Descripcion, InvArticulo.FinConceptoImptoIdCompra
+			ORDER BY InvArticulo.Id ASC
+		";
+		return $sql;
+	}
+	/*
+		TITULO: QG_Etiqueta_Articulo
+		PARAMETROS: [$IdArticulo] Id del articulo a buscar
+		FUNCION: regresa los datos del articulo
+		RETORNO: no aplica
+	*/
+	function QG_Etiqueta_Articulo($IdArticulo) {
+		$sql = "
+			SELECT * FROM etiquetas
+			WHERE etiquetas.id_articulo = '$IdArticulo'
+		";
+		return $sql;
+	}
+	/*
+		TITULO: QG_Guardar_Etiqueta_Articulo
+		PARAMETROS: $id_articulo,$codigo_articulo,$descripcion,$condicion,$clasificacion,$estatus,$user,$date
+		FUNCION: guarda la informacion en la tabla etiquetas
+		RETORNO: no aplica
+	 */
+	function QG_Guardar_Etiqueta_Articulo($id_articulo,$codigo_articulo,$descripcion,$condicion,$clasificacion,$estatus,$user,$date) {
+		$sql = "
+		INSERT INTO etiquetas
+		(id_articulo,codigo_articulo,descripcion,condicion,clasificacion,estatus,user,created_at,updated_at)
+		VALUES 
+		('$id_articulo','$codigo_articulo','$descripcion','$condicion','$clasificacion','$estatus','$user','$date','$date')
+		";
+		return $sql;
+	}
+	/*
+		TITULO: QG_Captura_Etiqueta
+		PARAMETROS: [$FechaCaptura] El dia de hoy
+		FUNCION: cuenta el total de registos de dias en cero
+		RETORNO: no aplica
+	 */
+	function QG_Captura_Etiqueta($FechaCaptura) {
+		$sql = "SELECT COUNT(*) AS TotalRegistros 
+		FROM etiquetas 
+		WHERE CONVERT(etiquetas.created_at,date) = '$FechaCaptura'
+		";
+		return $sql;
+	}
+	/*
+		TITULO: QG_Guardar_Captura_Etiqueta
+		PARAMETROS: [$FechaCaptura] El dia de hoy
+					[$date] valor para creacion y actualizacion
+		FUNCION: crea una conexion con la base de datos cpharma e ingresa datos
+		RETORNO: no aplica
+	 */
+
+	function QG_Guardar_Captura_Etiqueta($TotalRegistros,$FechaCaptura,$date) {
+		$sql = "
+		INSERT INTO captura_etiqueta
+		(total_registros,fecha_captura,created_at,updated_at)
+		VALUES 
+		('$TotalRegistros','$FechaCaptura','$date','$date')
+		";
+		return $sql;
+	}
+	/*
+		TITULO: QG_Validar_Captura_Etiqueta
+		PARAMETROS: [$FechaCaptura] El dia de hoy
+		FUNCION: valida que la fecha exista en la tabla captura diaria
+		RETORNO: no aplica
+	 */
+	function QG_Validar_Captura_Etiqueta($FechaCaptura) {
+		$sql = "SELECT count(*) AS CuentaCaptura 
+		FROM captura_etiqueta WHERE fecha_captura = '$FechaCaptura'";
+		return $sql;
+	}
+	/*
+		TITULO: QG_Borrar_Captura_Etiqueta
+		PARAMETROS: [$FechaCaptura] fecha de la captura
+		FUNCION: borra los registros de dias en cero de la fecha seleccionada
+		RETORNO: no aplica
+	 */
+	function QG_Borrar_Captura_Etiqueta($FechaCaptura) {
+		$sql = "DELETE FROM captura_etiqueta WHERE fecha_captura = '$FechaCaptura'";
+	}
 ?>
