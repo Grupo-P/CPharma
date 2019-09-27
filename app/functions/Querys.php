@@ -1161,6 +1161,7 @@
 	function QTiempoEnTienda($IdArticulo) {
 		$sql = "
 		SELECT TOP 1
+		CONVERT(DATE, Invlote.Auditoria_FechaCreacion) AS FechaTienda,
 		DATEDIFF(DAY, CONVERT(DATE, Invlote.Auditoria_FechaCreacion), GETDATE())
 		AS TiempoTienda
 		FROM InvLoteAlmacen
