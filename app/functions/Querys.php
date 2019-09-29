@@ -2861,5 +2861,47 @@
 	 */
 	function QG_Borrar_Captura_Etiqueta($FechaCaptura) {
 		$sql = "DELETE FROM captura_etiqueta WHERE fecha_captura = '$FechaCaptura'";
+		return $sql;
+	}
+	/*
+    TITULO: QG_Detalle_Articulo
+    PARAMETROS: [$IdArticulo] $IdArticulo del articulo a buscar
+    FUNCION: Query que genera el detalle del articulo solicitado
+    RETORNO: Detalle del articulo
+   	*/
+  	function QG_Detalle_Articulo($IdArticulo) {
+	    $sql = " 
+	      SELECT
+	      InvArticulo.Id,
+	      InvArticulo.CodigoArticulo,
+	      (SELECT CodigoBarra
+	          FROM InvCodigoBarra 
+	          WHERE InvCodigoBarra.InvArticuloId = '$IdArticulo'
+	          AND InvCodigoBarra.EsPrincipal = 1) As CodigoBarra,
+	      InvArticulo.Descripcion,
+	        (SELECT SUM (InvLoteAlmacen.Existencia) As Existencia
+	          FROM InvLoteAlmacen
+	          WHERE(InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
+	          AND (InvLoteAlmacen.InvArticuloId = '$IdArticulo')) AS Existencia,
+	      InvArticulo.FinConceptoImptoIdCompra AS ConceptoImpuesto
+	      FROM InvArticulo
+	      WHERE InvArticulo.Id = '$IdArticulo'
+	    ";
+  	return $sql;
+  	}
+	/*
+    TITULO: QG_Detalle_Articulo
+    PARAMETROS: [$IdArticulo] $IdArticulo del articulo a buscar
+    FUNCION: Query que genera el detalle del articulo solicitado
+    RETORNO: Detalle del articulo
+   */
+  function QG_DiasCero_PrecioAyer($IdArticulo,$FechaCaptura) {
+		$sql = "
+			SELECT precio
+			FROM dias_ceros 
+			WHERE dias_ceros.id_articulo = '$IdArticulo' 
+			AND `fecha_captura` = '$FechaCaptura'
+		";
+		return $sql;
 	}
 ?>
