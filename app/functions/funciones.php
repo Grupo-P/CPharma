@@ -2319,4 +2319,145 @@
 		$sql1 = QG_Guardar_Captura_Diaria($TotalRegistros,$FechaCaptura,$date);
 		mysqli_query($connCPharma,$sql1);
 	}
+	/*
+		TITULO: FG_Prouctos_EnCaida
+		PARAMETROS: no aplica
+		FUNCION: Captura y almacena la data para productos en caida
+		RETORNO: no aplica
+	 */
+	function FG_Prouctos_EnCaida() {
+		//$SedeConnection = MiUbicacion();
+		$SedeConnection = 'FTN';
+		$conn = ConectarSmartpharma($SedeConnection);
+		$connCPharma = ConectarXampp();
+
+		$sqlB = QG_Borrar_ProductosCaida();
+		mysqli_query($connCPharma,$sqlB);
+
+		$FechaCaptura = new DateTime("now");
+		$FechaCaptura = $FechaCaptura->format('Y-m-d');
+		$user = 'SYSTEM';
+		$date = date('Y-m-d h:i:s',time());
+
+		/* Rangos de Fecha */
+  		$FFinal = date("Y-m-d");
+	  	$FInicial = date("Y-m-d",strtotime($FFinal."-10 days"));
+	  	$RangoDias = intval(FG_Rango_Dias($FInicial,$FFinal));
+
+		/* FILTRO 1:
+		*	Articulos con veces vendidas en el rango
+		* Articulos sin compra en el rango
+		*/
+		$sql = QCleanTable('CP_QG_Unidades_Vendidas');
+		sqlsrv_query($conn,$sql);
+		$sql = QCleanTable('CP_QG_Unidades_Devueltas');
+		sqlsrv_query($conn,$sql);
+		$sql = QCleanTable('CP_QG_Unidades_Compradas');
+		sqlsrv_query($conn,$sql);
+		$sql = QCleanTable('CP_QG_Unidades_Reclamadas');
+		sqlsrv_query($conn,$sql);
+		
+		$sql1 = QG_ArtVendidos_ProductoCaida($FInicial,$FFinal);
+		sqlsrv_query($conn,$sql1);
+		$sql1 = QG_ArtDevueltos_ProductoCaida($FInicial,$FFinal);
+		sqlsrv_query($conn,$sql1);
+		$sql1 = QG_ArtComprados_ProductoCaida($FInicial,$FFinal);
+		sqlsrv_query($conn,$sql1);
+		$sql1 = QG_ArtReclamados_ProductoCaida($FInicial,$FFinal);
+		sqlsrv_query($conn,$sql1);
+
+		$sql3 = QG_Integracion_ProductoCaida($RangoDias);
+		$result = sqlsrv_query($conn,$sql3);
+
+		$sql = QCleanTable('CP_QG_Unidades_Vendidas');
+		sqlsrv_query($conn,$sql);
+		$sql = QCleanTable('CP_QG_Unidades_Devueltas');
+		sqlsrv_query($conn,$sql);
+		$sql = QCleanTable('CP_QG_Unidades_Compradas');
+		sqlsrv_query($conn,$sql);
+		$sql = QCleanTable('CP_QG_Unidades_Reclamadas');
+		sqlsrv_query($conn,$sql);
+
+		/* Inicio while que itera en los articulos con existencia actual > 0*/
+		while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
+			$IdArticulo = $row["IdArticulo"];
+			
+			$sql1 = QG_DetalleArticulo_ProductoCaida($IdArticulo);
+    	$result1 = sqlsrv_query($conn,$sql1);
+    	$row1 = sqlsrv_fetch_array($result1,SQLSRV_FETCH_ASSOC);
+
+    	$CodigoArticulo = $row1["CodigoArticulo"];
+  		$Descripcion = utf8_encode(addslashes($row1["Descripcion"]));
+    	$Existencia = $row1["Existencia"];
+    	$UnidadesVendidas = $row["UnidadesVendidas"];
+    	$VentaDiaria = FG_Venta_Diaria($UnidadesVendidas,$RangoDias);
+    	$DiasRestantes = FG_Dias_Restantes($Existencia,$VentaDiaria);
+			/* FILTRO 2: 
+			*	Dias restantes
+			*	si dias restantes es menor de 10 entra en el rango sino es rechazado
+			*/
+			if($DiasRestantes<11){
+				/* FILTRO 3:
+				*	Mantuvo Existencia en rango
+				*	se cuenta las apariciones del articulo en la tabla de dias
+				*	en cero, la misma debe ser igual la diferencia de dias +1 
+				*/
+				$CuentaExistencia = CuentaExistencia($connCPharma,$IdArticulo);
+				if($CuentaExistencia==($RangoDias+1)){
+					/*  FILTRO 4: 
+					*	Venta en dia, esta se acumula 
+					*	El articulo debe tener venta al menos la mita de dias del rango 
+					*/
+					$CuentaVenta = CuentaVenta($conn,$IdArticulo,$FInicial,$FFinal);
+
+					if($CuentaVenta>=($RangoDias/2)){
+
+						$ExistenciaDecreciente = ExistenciaDecreciente($connCPharma,$IdArticulo,$FInicial,$FFinal,$RangoDias);
+
+						$CuentaDecreciente = array_pop($ExistenciaDecreciente);
+
+						/*  FILTRO 5: 
+						*	Si el articulo decrece su existencia rango 
+						*/
+						if($CuentaDecreciente==TRUE){
+							
+							$Precio = CalculoPrecio($conn,$IdArticulo,$IsIVA,$Existencia);
+
+							$Dia1 = array_pop($ExistenciaDecreciente);
+							$Dia2 = array_pop($ExistenciaDecreciente);
+							$Dia3 = array_pop($ExistenciaDecreciente);
+							$Dia4 = array_pop($ExistenciaDecreciente);
+							$Dia5 = array_pop($ExistenciaDecreciente);
+							$Dia6 = array_pop($ExistenciaDecreciente);
+							$Dia7 = array_pop($ExistenciaDecreciente);
+							$Dia8 = array_pop($ExistenciaDecreciente);
+							$Dia9 = array_pop($ExistenciaDecreciente);
+							$Dia10 = array_pop($ExistenciaDecreciente);
+							
+						$sqlCPharma = QGuardarProductosCaida($IdArticulo,$CodigoArticulo,$Descripcion,$Precio,$Existencia,$Dia10,$Dia9,$Dia8,$Dia7,$Dia6,$Dia5,$Dia4,$Dia3,$Dia2,$Dia1,$Venta,$DiasRestantes,$FechaCaptura,$user,$date);
+
+						mysqli_query($connCPharma,$sqlCPharma);
+
+						}		
+					}
+				}
+			}
+		}
+		GuardarCapturaCaida($FechaCaptura,$date);
+		
+		$sqlCC = QValidarCapturaCaida($FechaCaptura);
+		$resultCC = mysqli_query($connCPharma,$sqlCC);
+		$rowCC = mysqli_fetch_assoc($resultCC);
+		$CuentaCaptura = $rowCC["CuentaCaptura"];
+
+		if($CuentaCaptura == 0){
+			mysqli_close($connCPharma);
+			sqlsrv_close($conn);
+			ProuctosEnCaida();
+		}
+		else{
+			mysqli_close($connCPharma);
+			sqlsrv_close($conn);
+		}
+	}
 ?>

@@ -41,9 +41,8 @@ class ProductosCaida extends Command
         include(app_path().'\functions\config.php');
         include(app_path().'\functions\querys.php');
         include(app_path().'\functions\funciones.php');
-        include(app_path().'\functions\reportes.php');
 
-        ProuctosEnCaida();
+        FG_Prouctos_EnCaida();
 
         $Auditoria = new Auditoria();
         $Auditoria->accion = 'CAPTURAR';
