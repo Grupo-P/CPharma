@@ -117,8 +117,24 @@ Route::get('/EtqObliatoria', function() {
     return view('pages.etiqueta.obligatorias');
 });
 
+Route::get('/EtqObliatoriaD', function() {
+    return view('pages.etiqueta.obligatoriasDolar');
+});
+
+Route::get('/EtqObliatoriaND', function() {
+    return view('pages.etiqueta.obligatoriasNoDolar');
+});
+
 Route::get('/EtqEtiquetable', function() {
     return view('pages.etiqueta.etiquetables');
+});
+
+Route::get('/EtqEtiquetableD', function() {
+    return view('pages.etiqueta.etiquetablesDolar');
+});
+
+Route::get('/EtqEtiquetableND', function() {
+    return view('pages.etiqueta.etiquetablesNoDolar');
 });
 
 Route::get('/CapturaEtiqueta', function() {

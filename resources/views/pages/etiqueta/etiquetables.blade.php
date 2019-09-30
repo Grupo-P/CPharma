@@ -1,4 +1,4 @@
-@extends('layouts.default')
+@extends('layouts.etiquetas')
 
 @section('title')
     Etiqueta
@@ -79,8 +79,11 @@
 	include(app_path().'\functions\querys.php');
 	include(app_path().'\functions\funciones.php');
 	include(app_path().'\functions\reportes.php');
-
-	GenererEtiquetas('ETIQUETABLE');
+	$InicioCarga = new DateTime("now");
+	FG_Generer_Etiquetas('ETIQUETABLE','TODO');
+	$FinCarga = new DateTime("now");
+    $IntervalCarga = $InicioCarga->diff($FinCarga);
+    echo'Tiempo de carga: '.$IntervalCarga->format("%Y-%M-%D %H:%I:%S");
 ?>		
 @endsection
 

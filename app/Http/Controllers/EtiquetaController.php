@@ -45,7 +45,7 @@ class EtiquetaController extends Controller
         include(app_path().'\functions\funciones.php');
         include(app_path().'\functions\reportes.php');
 
-        ValidarEtiquetas();
+        FG_Validar_Etiquetas();
 
         return redirect()->action('EtiquetaController@index');
     }
