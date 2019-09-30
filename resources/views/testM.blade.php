@@ -68,12 +68,11 @@
 		include(app_path().'\functions\config.php');
 		include(app_path().'\functions\querys.php');
 		include(app_path().'\functions\funciones.php');
-		include(app_path().'\functions\reportes.php');
 
 		$ArtJson="";
 
         //---------- BORRAR ESTA LINEA ----------
-        $_GET['SEDE'] = 'DBm';
+        $_GET['SEDE'] = 'FTN';
         //---------- BORRAR ESTA LINEA ----------
         
 		if(isset($_GET['Id'])) {
@@ -81,14 +80,15 @@
 
 			if(isset($_GET['SEDE'])) {
 				echo '
-						<h1 class="h5 text-success"  align="left">
-							<i class="fas fa-prescription"></i> '.
-								NombreSede($_GET['SEDE']).
-						'</h1>';
+                    <h1 class="h5 text-success" align="left">
+                        <i class="fas fa-prescription"></i> '
+                        .NombreSede($_GET['SEDE'])
+                    .'</h1>
+                ';
 			}
 			echo '<hr class="row align-items-start col-12">';
 
-			ReporteAnaliticoDePrecios($_GET['SEDE'],$_GET['Id']);
+			R10_Analitico_Precios($_GET['SEDE'],$_GET['Id']);
 			GuardarAuditoria('CONSULTAR','REPORTE','Analitico de precios');
 
 			$FinCarga = new DateTime("now");
@@ -100,14 +100,15 @@
 
 			if(isset($_GET['SEDE'])) {
 				echo '
-		    		<h1 class="h5 text-success"  align="left">
-	      				<i class="fas fa-prescription"></i> '.
-	      					NombreSede($_GET['SEDE']).
-		      		'</h1>';
+                    <h1 class="h5 text-success" align="left">
+                        <i class="fas fa-prescription"></i> '
+                        .NombreSede($_GET['SEDE'])
+                    .'</h1>
+                ';
 			}
 			echo '<hr class="row align-items-start col-12">';
 
-		    $sql = QListaArticulos();
+		    $sql = R10Q_Lista_Articulos();
 		    $ArtJson = armarJson($sql,$_GET['SEDE']);
 
 			echo '
@@ -141,3 +142,188 @@
 		}
 	?>
 @endsection
+
+<?php
+    /*
+        TITULO: R10_Analitico_Precios
+        PARAMETROS : [$SedeConnection] Siglas de la sede para la conexion
+                     [$IdArticuloQ] Id del articulo a buscar
+        FUNCION: Armar una tabla de historico de compra del articulo
+        RETORNO: No aplica
+    */
+    function R10_Analitico_Precios($SedeConnection,$IdArticulo) {
+        $conn = ConectarSmartpharma($SedeConnection);
+
+        $sql = QArticulo($IdArticulo);
+        sqlsrv_query($conn,$sql);
+        $result = sqlsrv_query($conn,$sql);
+        $row = sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC);
+
+        $sql1 = QExistenciaArticulo($IdArticulo,0);
+        $result1 = sqlsrv_query($conn,$sql1);
+        $row1 = sqlsrv_fetch_array($result1,SQLSRV_FETCH_ASSOC);
+
+        $IsIVA = $row["ConceptoImpuesto"];
+        $Existencia = $row1["Existencia"];
+
+        $Precio = CalculoPrecio($conn,$IdArticulo,$IsIVA,$Existencia);
+
+        $Dolarizado = ProductoDolarizado($conn,$IdArticulo);
+
+        $TasaActual = TasaFecha(date('Y-m-d'));
+
+        echo '
+        <div class="input-group md-form form-sm form-1 pl-0">
+          <div class="input-group-prepend">
+            <span class="input-group-text purple lighten-3" id="basic-text1">
+                <i class="fas fa-search text-white"
+                aria-hidden="true"></i>
+            </span>
+          </div>
+          <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterAllTable()">
+        </div>
+        <br/>
+
+        <table class="table table-striped table-bordered col-12 sortable">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Codigo</th>
+                    <th scope="col">Descripcion</th>
+                    <th scope="col">Existencia</th>
+                    <th scope="col">Precio (Con IVA)</th>
+                    <th scope="col">Dolarizado</th>
+                    <th scope="col">Tasa actual</th>
+                    <th scope="col">Precio en divisa (Con IVA)</th>
+                </tr>
+            </thead>
+            <tbody>
+        ';
+        echo '<tr>';
+        echo '<td>'.$row["CodigoArticulo"].'</td>';
+        
+        echo 
+            '<td align="left" class="barrido">
+            <a href="/reporte2?Id='.$IdArticulo.'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
+                .$row["Descripcion"].
+            '</a>
+            </td>';
+
+        echo '<td align="center">'.intval($Existencia).'</td>';
+        echo '<td align="center">'." ".round($Precio,2)." ".SigVe.'</td>';
+        echo '<td align="center">'.$Dolarizado.'</td>';
+
+        if($TasaActual!=0){
+            echo '<td align="center">'." ".$TasaActual." ".SigVe.'</td>';
+            echo '<td align="center">'.
+                    round(($Precio/$TasaActual),2).
+                    " ".SigDolar.
+                 '</td>';
+        }
+        else{
+            echo '<td align="center">0.00 '.SigVe.'</td>';
+            echo '<td align="center">0.00 '.SigDolar.'</td>';
+        }
+        echo '
+                </tr>
+            </tbody>
+        </table>';
+
+        $sql2=QLoteAlmacenAnalitico($IdArticulo);
+        $result2=sqlsrv_query($conn,$sql2);
+
+        echo'
+        <table class="table table-striped table-bordered col-12 sortable" id="myTable">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Origen</th>
+                    <th scope="col">Detalles</th>
+                    <th scope="col">Fecha creacion de lote</th>
+                    <th scope="col">Cantidad recibida</th>
+                    <th scope="col">Almacen</th>
+                    <th scope="col">Existencia</th>
+                    <th scope="col">Costo bruto (Sin IVA)</th>
+                    <th scope="col">Tasa en historico</th>
+                    <th scope="col">Costo en divisa (Sin IVA)</th>
+                    <th scope="col">Responsable</th>
+                </tr>
+            </thead>
+            <tbody>
+        ';
+        $contador = 1;
+        while($row2=sqlsrv_fetch_array($result2,SQLSRV_FETCH_ASSOC)) {
+            $FechaVariable=$row2["FechaLote"]->format("Y-m-d");
+            $PrecioBruto=$row2["M_PrecioCompraBruto"];
+            echo '<tr>';
+            //VALIDACION PARA CASO DE COMPRA
+                if($row2["InvCausaId"]==1) {
+                    echo '<td align="center"><strong>'.intval($contador).'</strong></td>';
+                    echo '<td align="center">Compra</td>';
+
+                    $sql3=QProveedorYCantidadComprada2($IdArticulo,$FechaVariable,$PrecioBruto);
+                    $result3=sqlsrv_query($conn,$sql3);
+                    $row3=sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
+
+                    echo '<td align="center">'.$row3["Nombre"].'</td>';
+                    echo '<td align="center">'.$FechaVariable.'</td>';
+                    echo '<td align="center">'.intval($row3["CantidadRecibidaFactura"]).'</td>';
+                }
+                else {
+                    echo '<td align="center"><strong>'.intval($contador).'</strong></td>';
+                    echo '<td align="center">Inventario</td>';
+                    echo '<td align="center">'.$row2["Descripcion"].'</td>';
+                    echo '<td align="center">'.$FechaVariable.'</td>';
+
+                    $sql3=QProveedorYCantidadComprada($IdArticulo,$FechaVariable);
+                    $result3=sqlsrv_query($conn,$sql3);
+                    $row3=sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
+
+                    echo '<td align="center">'.intval($row3["CantidadRecibidaFactura"]).'</td>';
+                }
+                echo '<td align="center">'.$row2["CodigoAlmacen"].'</td>';
+                echo '<td align="center">'.intval($row2["Existencia"]).'</td>';
+                echo '<td align="center">'.
+                        round($PrecioBruto,2)." ".SigVe.
+                     '</td>';
+
+                $TasaVariable=TasaFecha($FechaVariable);
+                if($TasaVariable!=0){
+                    echo '<td align="center">'.$TasaVariable." ".SigVe.'</td>';
+                    echo '<td align="center">'.
+                            round(($PrecioBruto/$TasaVariable),2).
+                            " ".SigDolar.
+                         '</td>';
+                }
+                else{
+                    echo '<td align="center">0.00 '.SigVe.'</td>';
+                    echo '<td align="center">0.00 '.SigDolar.'</td>';
+                }
+                echo '<td align="center">'.$row2["Responsable"].'</td>';
+            echo '</tr>';
+        $contador++;
+        }
+
+        echo '
+            </tbody>
+        </table>';
+
+        sqlsrv_close($conn);
+    }
+
+    /*
+        TITULO: R10Q_Lista_Articulos
+        PARAMETROS: No aplica
+        FUNCION: Armar una lista de articulos con descripcion e id
+        RETORNO: Lista de articulos con descripcion e id
+    */
+    function R10Q_Lista_Articulos() {
+        $sql = "
+            SELECT
+            InvArticulo.Descripcion,
+            InvArticulo.Id
+            FROM InvArticulo
+            ORDER BY InvArticulo.Descripcion ASC
+        ";
+        return $sql;
+    }
+?>
