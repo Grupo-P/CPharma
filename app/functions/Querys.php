@@ -1161,15 +1161,16 @@
 	function QTiempoEnTienda($IdArticulo) {
 		$sql = "
 		SELECT TOP 1
-		CONVERT(DATE,InvLoteAlmacen.Auditoria_FechaCreacion) AS FechaTienda,
-		DATEDIFF(DAY,CONVERT(DATE,InvLoteAlmacen.Auditoria_FechaCreacion),GETDATE())
+		CONVERT(DATE, Invlote.Auditoria_FechaCreacion) AS FechaTienda,
+		DATEDIFF(DAY, CONVERT(DATE, Invlote.Auditoria_FechaCreacion), GETDATE())
 		AS TiempoTienda
 		FROM InvLoteAlmacen
+		INNER JOIN InvLote ON InvLote.Id = InvLoteAlmacen.InvLoteId
 		WHERE
-		InvLoteAlmacen.InvArticuloId = '$IdArticulo' 
+		Invlote.InvArticuloId = '$IdArticulo' 
 		AND (InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2) 
 		AND InvLoteAlmacen.Existencia > 0
-		ORDER BY InvLoteAlmacen.Auditoria_FechaCreacion DESC
+		ORDER BY CONVERT(DATE, Invlote.Auditoria_FechaCreacion) DESC
 		";
 		return $sql;
 	}

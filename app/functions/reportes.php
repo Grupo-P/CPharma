@@ -1696,7 +1696,7 @@
 		FUNCION: Arma una lista con los productos surtidos y sus fechas
 		RETORNO: No aplica
 	 */
-	function ReporteProductosParaSurtir($SedeConnection,$FInicial,$FFinal) {
+	/*function ReporteProductosParaSurtir($SedeConnection,$FInicial,$FFinal) {
 		$conn = ConectarSmartpharma($SedeConnection);
 
 		$FFinalImpresion = $FFinal;
@@ -1722,9 +1722,12 @@
 			<br/>
 		';
 
-		echo'<h6 align="center">
-				Periodo desde el '.$FInicial.' al '.$FFinalImpresion.
-			' </h6>';
+		echo'
+			<h6 align="center">Periodo desde el '
+				. date("d-m-Y", strtotime($FInicial)) . ' al '
+				. date("d-m-Y", strtotime($FFinalImpresion))
+			. '</h6>
+		';
 
 		echo'
 			<table class="table table-striped table-bordered col-12 sortable" id="myTable">
@@ -1740,10 +1743,11 @@
 		  		</thead>
 		  		<tbody>
 		';
+
 		$contador = 1;
+
 		while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
 			$IdArticulo = $row["Id"];
-			$FechaRegistro = $row["FechaRegistro"];
 			
 			$sql2 = QExistenciaArticulo($IdArticulo,0);
 			$result2 = sqlsrv_query($conn,$sql2);
@@ -1754,25 +1758,36 @@
 			$result3 = sqlsrv_query($conn,$sql3);
 			$row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
 			$TiempoTienda = $row3["TiempoTienda"];
+			$FechaRegistro = $row3["FechaTienda"];
 
-			if($Existencia > 0){
-				echo '<tr>';
-				echo '<td align="center"><strong>'.intval($contador).'</strong></td>';
-				echo '<td align="left">'.$row["CodigoArticulo"].'</td>';
-
-				echo 
-				'<td align="left" class="barrido">
-				<a href="/reporte2?Id='.$IdArticulo.'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
-					.$row["Descripcion"].
-				'</a>
-				</td>';
+			if(!is_null($FechaRegistro)) {
+				$Diferencia1 = ValidarFechas($FechaRegistro->format("Y-m-d"), $FInicial);
+				$Diferencia2 = ValidarFechas($FechaRegistro->format("Y-m-d"), $FFinalImpresion);
 				
-				echo '<td align="center">'.intval($Existencia).'</td>';
-				echo '<td align="center">'.($FechaRegistro)->format("Y-m-d").'</td>';
-				echo '<td align="center">'.$TiempoTienda.'</td>';
-				echo '</tr>';
+				if(($Diferencia1 <= 0) && ($Diferencia2 >= 0)) {
+
+					if($Existencia > 0) {
+						echo '
+							<tr>
+								<td align="center"><strong>'.intval($contador).'</strong></td>
+								<td align="left">'.$row["CodigoArticulo"].'</td>
+								<td align="left" class="barrido">
+									<a href="/reporte2?Id='.$IdArticulo.'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
+										.utf8_encode(addslashes($row["Descripcion"]))
+									.'</a>
+								</td>
+								<td align="center">'.intval($Existencia).'</td>
+								<td align="center">'.$FechaRegistro->format("d-m-Y").'</td>
+								<td align="center">'.$TiempoTienda.'</td>
+							</tr>
+						';
+					}
+					
+					$contador++;
+				}
+
 			}
-		$contador++;
+
 	  	}
 	  	echo '
 	  		</tbody>
@@ -1782,7 +1797,7 @@
 		sqlsrv_query($conn,$sql);
 
 		sqlsrv_close($conn);
-	}
+	}*/
 
 	/*****************************************************************************/
 	/************************ REPORTE 10 ANALITICO DE PRECIOS *******************/
