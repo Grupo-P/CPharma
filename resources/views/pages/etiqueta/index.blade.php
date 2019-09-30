@@ -92,87 +92,132 @@
 	<hr class="row align-items-start col-12">
 	<table style="width:100%;">
 		<tr>
-	        <td style="width:100%;">
-	        	<div class="input-group md-form form-sm form-1 pl-0">
-				  <div class="input-group-prepend">
-				    <span class="input-group-text purple lighten-3" id="basic-text1"><i class="fas fa-search text-white"
-				        aria-hidden="true"></i></span>
-				  </div>
-				  <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterAllTable()">
+      <td style="width:100%;">
+        	<div class="input-group md-form form-sm form-1 pl-0">
+			  <div class="input-group-prepend">
+			    <span class="input-group-text purple lighten-3" id="basic-text1"><i class="fas fa-search text-white"
+			        aria-hidden="true"></i></span>
+			  </div>
+			  <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterAllTable()">
 				</div>
-	        </td>
-	    </tr>
-	    </table>
-	    <br/>
-	    <table>
+      </td>
+    </tr>
+  </table>
+  <br/>
+  <table class="table table-striped table-borderless col-12 sortable">
+  	<thead class="thead-dark">
 	    <tr>
-	    	<td style="width:10%;" align="center">
-	    		<?php
-	    			$etiqueta->id = 0;
-	    		?>
-    			<form action="/etiqueta/{{$etiqueta->id}}" method="POST" style="display: inline;">
-				    @method('PUT')
-				    @csrf					    
-				    <button type="submit" name="Eliminar" role="button" class="btn btn-outline-dark btn-sm">Pendientes</button>
+	      	<th scope="col" colspan="5" style="text-align: center;">CLASIFICACION</th>
+	    </tr>
+		</thead>
+		<tbody>
+	  	<tr>
+	  	<td style="width:20%;" align="center">
+	  		<?php
+	  			$etiqueta->id = 0;
+	  		?>
+				<form action="/etiqueta/{{$etiqueta->id}}" method="POST" style="display: inline;">
+			    @method('PUT')
+			    @csrf					    
+			    <button type="submit" name="Eliminar" role="button" class="btn btn-outline-dark btn-sm">Pendientes</button>
 				</form>
-	        </td>
+	    </td>
 
-	        <td style="width:13%;" align="center">
-	        	<?php
-	    			$etiqueta->id = 1;
-	    		?>
-    			<form action="/etiqueta/{{$etiqueta->id}}" method="POST" style="display: inline;">
-				    @method('PUT')
-				    @csrf					    
-				    <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm">No Etiquetables</button>
-				</form>	
+	    <td style="width:20%;" align="center">
+	      	<?php
+	  			$etiqueta->id = 1;
+	  		?>
+				<form action="/etiqueta/{{$etiqueta->id}}" method="POST" style="display: inline;">
+			    @method('PUT')
+			    @csrf					    
+			    <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm">No Etiquetables</button>
+					</form>	
 			</td>
 
-	        <td style="width:10%;" align="center">
-	        	<?php
-	    			$etiqueta->id = 2;
-	    		?>
-    			<form action="/etiqueta/{{$etiqueta->id}}" method="POST" style="display: inline;">
-				    @method('PUT')
-				    @csrf					    
-				    <button type="submit" name="Eliminar" role="button" class="btn btn-outline-info btn-sm">Etiquetables</button>
+	    <td style="width:20%;" align="center">
+	      	<?php
+	  			$etiqueta->id = 2;
+	  		?>
+				<form action="/etiqueta/{{$etiqueta->id}}" method="POST" style="display: inline;">
+			    @method('PUT')
+			    @csrf					    
+			    <button type="submit" name="Eliminar" role="button" class="btn btn-outline-info btn-sm">Etiquetables</button>
 				</form>						
-	        </td>
+	    </td>
 
-	        <td style="width:15%;" align="center">
-	        	<?php
-	    			$etiqueta->id = 3;
-	    		?>
-    			<form action="/etiqueta/{{$etiqueta->id}}" method="POST" style="display: inline;">
-				    @method('PUT')
-				    @csrf					    
-				    <button type="submit" name="Eliminar" role="button" class="btn btn-outline-success btn-sm">Obligatorias Etiquetar</button>
+	    <td style="width:20%;" align="center">
+	      	<?php
+	  			$etiqueta->id = 3;
+	  		?>
+				<form action="/etiqueta/{{$etiqueta->id}}" method="POST" style="display: inline;">
+			    @method('PUT')
+			    @csrf					    
+			    <button type="submit" name="Eliminar" role="button" class="btn btn-outline-success btn-sm">Obligatorias Etiquetar</button>
 				</form>			
-	        </td>
+	    </td>
 
-	        <td style="width:14%;" align="center">	
+	    <td style="width:20%;" align="center">	
 				<a href="{{ url('/etiqueta/create') }}" role="button" class="btn btn-outline-warning btn-sm" 
 				style="display: inline;">
 					Validar Etiquetas	      		
 				</a>
-	        </td>
-        
-	        <td style="width:15%;" align="center">	
+	    </td>
+	    </tr>
+		</tbody>
+	</table>
+	<table class="table table-striped table-borderless col-12 sortable">
+  	<thead class="thead-dark">
+	    <tr>
+	      	<th scope="col" colspan="6" style="text-align: center;">GENERAR ETIQUETAS</th>
+	    </tr>
+		</thead>
+		<tbody>
+	  	<tr>
+	        <td style="width:16%;" align="center">	
 				<a href="{{ url('/EtqObliatoria') }}" role="button" class="btn btn-outline-success btn-sm" 
 				style="display: inline;" target="_blank">
-					Generar Obliagtorias		      		
+					Obliagtorias (Todo)		      		
 				</a>
 	        </td>
-	        <td style="width:15%;" align="center">	
+
+	        <td style="width:16%;" align="center">	
+				<a href="{{ url('/EtqObliatoria') }}" role="button" class="btn btn-outline-success btn-sm" 
+				style="display: inline;" target="_blank">
+					Obliagtorias ($)		      		
+				</a>
+	        </td>
+
+	        <td style="width:16%;" align="center">	
+				<a href="{{ url('/EtqObliatoria') }}" role="button" class="btn btn-outline-success btn-sm" 
+				style="display: inline;" target="_blank">
+					Obliagtorias (NO $)		      		
+				</a>
+	        </td>
+
+	        <td style="width:16%;" align="center">	
 				<a href="{{ url('/EtqEtiquetable') }}" role="button" class="btn btn-outline-info btn-sm" 
 				style="display: inline;" target="_blank">
-					Generar	Etiquetables	      		
+					Etiquetables (Todo)	      		
 				</a>
 	        </td>
-	    </tr>
+
+	        <td style="width:16%;" align="center">	
+				<a href="{{ url('/EtqEtiquetable') }}" role="button" class="btn btn-outline-info btn-sm" 
+				style="display: inline;" target="_blank">
+					Etiquetables ($)	      		
+				</a>
+	        </td>
+
+	        <td style="width:16%;" align="center">	
+				<a href="{{ url('/EtqEtiquetable') }}" role="button" class="btn btn-outline-info btn-sm" 
+				style="display: inline;" target="_blank">
+					Etiquetables (NO $)	      		
+				</a>
+	        </td>
+			</tr>
+		</tbody>
 	</table>
 	<br/>
-	
 	<table class="table table-striped table-borderless col-12 sortable" id="myTable">
 	  	<thead class="thead-dark">
 		    <tr>

@@ -2541,7 +2541,7 @@
 		FUNCION: Busca el Id del atributo si la categoriza es dolarizado
 		RETORNO: Retorna el id del atributo dolarizado
 	 */
-	function QG_Precio_Troquelado($IdArticulo) {
+	function QG_Precio_Troquelado($IdArticulo,$IdAlmacen) {
 		$sql = "
 			SELECT TOP 1
 			InvLote.Id,
@@ -2549,7 +2549,7 @@
 			InvLote.M_PrecioTroquelado
 			FROM InvLoteAlmacen
 			INNER JOIN InvLote ON InvLote.Id = InvLoteAlmacen.InvLoteId
-			WHERE(InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
+			WHERE(InvLoteAlmacen.InvAlmacenId = '$IdAlmacen')
 			AND (InvLoteAlmacen.InvArticuloId = '$IdArticulo')
 			AND (InvLoteAlmacen.Existencia>0)
 			ORDER BY invlote.M_PrecioTroquelado DESC

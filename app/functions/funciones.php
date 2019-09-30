@@ -1508,38 +1508,56 @@
 		DESARROLLADO POR: SERGIO COVA
 	 */
 	function FG_Calculo_Precio($conn,$IdArticulo,$IsIVA,$Existencia) {		
-		if($Existencia == 0) {
+		if($Existencia ===0) {
 			$Precio = 0;
 		}
 		else {
-		/*PRECIO TROQUELADO*/
-			$sql = QG_Precio_Troquelado($IdArticulo);
+		/*CASO ALMACEN 1*/
+			$sql = QG_Precio_Troquelado($IdArticulo,1);
 			$result = sqlsrv_query($conn,$sql);
 			$row = sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC);
-			$PrecioTroquelado = $row["M_PrecioTroquelado"];
-			
-			if($PrecioTroquelado!=NULL){
-				$Precio = $PrecioTroquelado;
-			}		
-			else{
+			$PrecioTroqueladoA1 = $row["M_PrecioTroquelado"];
+
+			/*PRECIO TROQUELADO ALMACEN 1*/
+			if($PrecioTroqueladoA1!=NULL){
+				$Precio = $PrecioTroqueladoA1;
+			}
 			/*PRECIO CALCULADO*/
+			else{
 				$sql = QG_Precio_Calculado($IdArticulo);
 				$result = sqlsrv_query($conn,$sql);
 				$row = sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC);
 				$PrecioBruto = $row["M_PrecioCompraBruto"];
-				$Utilidad = FG_Utilidad_Articulo($conn,$IdArticulo);
 
-				if($Utilidad==0){
-					$Precio = 0;
-				}
-				else{					
-					if($IsIVA == 1){
-						$PrecioCalculado = ($PrecioBruto/$Utilidad)*Impuesto;
-						$Precio = $PrecioCalculado;
+				if($PrecioBruto!=NULL){
+					$Utilidad = FG_Utilidad_Articulo($conn,$IdArticulo);
+
+					if($Utilidad==0){
+						$Precio = 0;
 					}
-					else {
-						$PrecioCalculado = ($PrecioBruto/$Utilidad);
-						$Precio = $PrecioCalculado;
+					else{					
+						if($IsIVA == 1){
+							$PrecioCalculado = ($PrecioBruto/$Utilidad)*Impuesto;
+							$Precio = $PrecioCalculado;
+						}
+						else {
+							$PrecioCalculado = ($PrecioBruto/$Utilidad);
+							$Precio = $PrecioCalculado;
+						}
+					}
+				}
+				else{
+					$sql = QG_Precio_Troquelado($IdArticulo,2);
+					$result = sqlsrv_query($conn,$sql);
+					$row = sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC);
+					$PrecioTroqueladoA2 = $row["M_PrecioTroquelado"];
+
+					/*PRECIO TROQUELADO ALMACEN 2*/
+					if($PrecioTroqueladoA2!=NULL){
+						$Precio = $PrecioTroqueladoA2;
+					}
+					else{
+						$Precio = 0;
 					}
 				}
 			}
@@ -1776,15 +1794,15 @@
 	function FG_Generer_Etiquetas($clasificacion) {
 		//$SedeConnection = MiUbicacion();
 		$SedeConnection = 'FTN';		
-    $conn = ConectarSmartpharma($SedeConnection);
+  	$conn = ConectarSmartpharma($SedeConnection);
 	    
 		$connCPharma = ConectarXampp();	
 		$resultado = $connCPharma->query("SELECT id_articulo FROM etiquetas WHERE clasificacion = '$clasificacion'");
 
 		$FHoy = date("Y-m-d");
-  	$FAyer = date("Y-m-d",strtotime($FHoy."-1 days"));
-  	$CuentaCard=0;
-  	$CuentaEtiqueta=0;
+		$FAyer = date("Y-m-d",strtotime($FHoy."-1 days"));
+		$CuentaCard=0;
+		$CuentaEtiqueta=0;
 
 		while($row = $resultado->fetch_assoc()) {
 			$IdArticulo = $row["id_articulo"];
@@ -1806,7 +1824,7 @@
 				$rowCC = mysqli_fetch_assoc($resultCC);
 				$PrecioAyer = $rowCC["precio"];
 
-				if($PrecioHoy!=$PrecioAyer){
+				if( floatval(round($PrecioHoy,2)) != floatval($PrecioAyer) ){
 					$Dolarizado = FG_Producto_Dolarizado($conn,$IdArticulo);
 
 					if($IsIVA == 1){
@@ -1855,7 +1873,22 @@
 									<td class="derecha rowDer rowDerA">
 										'.number_format ($IVA,2,"," ,"." ).'
 									</td>
-								</tr>
+								</tr>';
+								if( floatval(round($PrecioHoy,2)) < floatval($PrecioAyer) ){
+									echo'
+										<tr>
+											<td class="izquierda rowIzq rowIzqA" style="color:red;">
+												Precio Bs. Antes
+											</td>
+											<td class="derecha rowDer rowDerA" style="color:red;">
+												<del>
+												'.number_format ($PrecioAyer,2,"," ,"." ).'
+												</del>
+											</td>
+										</tr>
+									';
+								}
+								echo'
 								<tr>
 									<td class="izquierda rowIzq rowIzqA aumento">
 										<strong>Total a Pagar Bs.</strong>
@@ -1900,39 +1933,57 @@
 		RETORNO: Precio del articulo
 		DESARROLLADO POR: SERGIO COVA
 	 */
-	function FG_Calculo_Precio_Etiquetas($conn,$IdArticulo,$IsIVA,$Existencia) {		
-		if($Existencia===0) {
+	function FG_Calculo_Precio_Etiquetas($conn,$IdArticulo,$IsIVA,$Existencia) {
+		if($Existencia ===0) {
 			$Precio = 0;
 		}
 		else {
-		/*PRECIO TROQUELADO*/
-			$sql = QG_Precio_Troquelado($IdArticulo);
+		/*CASO ALMACEN 1*/
+			$sql = QG_Precio_Troquelado($IdArticulo,1);
 			$result = sqlsrv_query($conn,$sql);
 			$row = sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC);
-			$PrecioTroquelado = $row["M_PrecioTroquelado"];
-			
-			if($PrecioTroquelado!=NULL){
-				$Precio = $PrecioTroquelado;
-			}		
-			else{
+			$PrecioTroqueladoA1 = $row["M_PrecioTroquelado"];
+
+			/*PRECIO TROQUELADO ALMACEN 1*/
+			if($PrecioTroqueladoA1!=NULL){
+				$Precio = $PrecioTroqueladoA1;
+			}
 			/*PRECIO CALCULADO*/
+			else{
 				$sql = QG_Precio_Calculado($IdArticulo);
 				$result = sqlsrv_query($conn,$sql);
 				$row = sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC);
 				$PrecioBruto = $row["M_PrecioCompraBruto"];
-				$Utilidad = FG_Utilidad_Articulo($conn,$IdArticulo);
 
-				if($Utilidad==0){
-					$Precio = 0;
-				}
-				else{					
-					if($IsIVA == 1){
-						$PrecioCalculado = ($PrecioBruto/$Utilidad)*Impuesto;
-						$Precio = $PrecioCalculado;
+				if($PrecioBruto!=NULL){
+					$Utilidad = FG_Utilidad_Articulo($conn,$IdArticulo);
+
+					if($Utilidad==0){
+						$Precio = 0;
 					}
-					else {
-						$PrecioCalculado = ($PrecioBruto/$Utilidad);
-						$Precio = $PrecioCalculado;
+					else{					
+						if($IsIVA == 1){
+							$PrecioCalculado = ($PrecioBruto/$Utilidad)*Impuesto;
+							$Precio = $PrecioCalculado;
+						}
+						else {
+							$PrecioCalculado = ($PrecioBruto/$Utilidad);
+							$Precio = $PrecioCalculado;
+						}
+					}
+				}
+				else{
+					$sql = QG_Precio_Troquelado($IdArticulo,2);
+					$result = sqlsrv_query($conn,$sql);
+					$row = sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC);
+					$PrecioTroqueladoA2 = $row["M_PrecioTroquelado"];
+
+					/*PRECIO TROQUELADO ALMACEN 2*/
+					if($PrecioTroqueladoA2!=NULL){
+						$Precio = $PrecioTroqueladoA2;
+					}
+					else{
+						$Precio = 0;
 					}
 				}
 			}
