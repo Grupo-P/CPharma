@@ -180,60 +180,63 @@
         $TasaActual = FG_Tasa_Fecha($connCPharma,date('Y-m-d'));
 
         echo '
-        <div class="input-group md-form form-sm form-1 pl-0">
-          <div class="input-group-prepend">
-            <span class="input-group-text purple lighten-3" id="basic-text1">
-                <i class="fas fa-search text-white"
-                aria-hidden="true"></i>
-            </span>
-          </div>
-          <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterAllTable()">
-        </div>
-        <br/>
+            <div class="input-group md-form form-sm form-1 pl-0">
+                <div class="input-group-prepend">
+                    <span class="input-group-text purple lighten-3" id="basic-text1">
+                        <i class="fas fa-search text-white" aria-hidden="true"></i>
+                    </span>
+                </div>
+                <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterAllTable()">
+            </div>
+            <br/>
 
-        <table class="table table-striped table-bordered col-12 sortable">
-            <thead class="thead-dark">
-                <tr>
-                    <th scope="col">Codigo</th>
-                    <th scope="col">Descripcion</th>
-                    <th scope="col">Existencia</th>
-                    <th scope="col">Precio (Con IVA)</th>
-                    <th scope="col">Dolarizado</th>
-                    <th scope="col">Tasa actual</th>
-                    <th scope="col">Precio en divisa (Con IVA)</th>
-                </tr>
-            </thead>
+            <table class="table table-striped table-bordered col-12 sortable">
+                <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">Codigo</th>
+                        <th scope="col">Descripcion</th>
+                        <th scope="col">Existencia</th>
+                        <th scope="col">Precio (Con IVA) '.SigVe.'</th>
+                        <th scope="col">Dolarizado</th>
+                        <th scope="col">Tasa actual '.SigVe.'</th>
+                        <th scope="col">Precio en divisa <br/> (Con IVA) '.SigDolar.'</th>
+                    </tr>
+                </thead>
             <tbody>
         ';
-        echo '<tr>';
-        echo '<td>'.$row["CodigoArticulo"].'</td>';
-        
-        echo 
-            '<td align="left" class="barrido">
-            <a href="/reporte2?Id='.$IdArticulo.'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
-                .utf8_encode(addslashes($row["Descripcion"])).
-            '</a>
-            </td>';
 
-        echo '<td align="center">'.intval($Existencia).'</td>';
-        echo '<td align="center">'." ".round($Precio,2)." ".SigVe.'</td>';
-        echo '<td align="center">'.$Dolarizado.'</td>';
-
-        if($TasaActual!=0){
-            echo '<td align="center">'." ".$TasaActual." ".SigVe.'</td>';
-            echo '<td align="center">'.
-                    round(($Precio/$TasaActual),2).
-                    " ".SigDolar.
-                 '</td>';
-        }
-        else{
-            echo '<td align="center">0.00 '.SigVe.'</td>';
-            echo '<td align="center">0.00 '.SigDolar.'</td>';
-        }
         echo '
-                </tr>
-            </tbody>
-        </table>';
+                <tr>
+                    <td>'.$row["CodigoArticulo"].'</td>
+                    <td align="left" class="barrido">
+                        <a href="/reporte2?Id='.$IdArticulo.'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
+                            .utf8_encode(addslashes($row["Descripcion"]))
+                        .'</a>
+                    </td>
+                    <td align="center">'.intval($Existencia).'</td>
+                    <td align="center">'.number_format($Precio,2,"," ,"." ).'</td>
+                    <td align="center">'.$Dolarizado.'</td>';
+
+                    if($TasaActual!=0) {
+                        
+                        $PrecioDolar = $Precio/$TasaActual;
+
+                        echo '
+                            <td align="center">'.number_format($TasaActual,2,"," ,"." ).'</td>
+                            <td align="center">'.number_format($PrecioDolar,2,"," ,"." ).'</td>
+                        ';
+                    }
+                    else {
+                        echo '
+                            <td align="center">0,00</td>
+                            <td align="center">0,00</td>
+                        ';
+                    }
+        echo '
+                    </tr>
+                </tbody>
+            </table>
+        ';
 
         $sql2=QLoteAlmacenAnalitico($IdArticulo);
         $result2=sqlsrv_query($conn,$sql2);
