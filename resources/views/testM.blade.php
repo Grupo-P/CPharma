@@ -7,7 +7,7 @@
 @section('content')
 	<h1 class="h5 text-info">
 		<i class="fas fa-file-invoice"></i>
-		Anal&iacute;tico de precios
+		Analítico de precios
 	</h1>
 	<hr class="row align-items-start col-12">
 	
@@ -18,7 +18,11 @@
 		include(app_path().'\functions\reportes.php');
 
 		$ArtJson="";
-	
+
+        //---------- BORRAR ESTA LINEA ----------
+        $_GET['SEDE'] = 'DBm';
+        //---------- BORRAR ESTA LINEA ----------
+        
 		if(isset($_GET['Id'])) {
 			$InicioCarga = new DateTime("now");
 
