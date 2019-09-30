@@ -1786,12 +1786,12 @@
 	}
 	/*
 		TITULO: FG_Generer_Etiquetas
-		PARAMETROS: [$FechaCaptura] El dia de hoy
-					[$date] valor para creacion y actualizacion
+		PARAMETROS: [$clasificacion] Parametro que indica el tipo de clasificacion, solo puede recibir ETIQUETABLE o OBLIGATORIO ETIQUETAR
+					[$tipo] Parametro que indica la dolarizacion, solo pude recibir DOLARIZADO, NO DOLARIZADO o TODO
 		FUNCION: crea una conexion con la base de datos cpharma e ingresa datos
 		RETORNO: no aplica
  	*/
-	function FG_Generer_Etiquetas($clasificacion) {
+	function FG_Generer_Etiquetas($clasificacion,$tipo) {
 		//$SedeConnection = MiUbicacion();
 		$SedeConnection = 'FTN';		
   	$conn = ConectarSmartpharma($SedeConnection);
@@ -1815,106 +1815,304 @@
 			$Descripcion = utf8_encode(addslashes($row1["Descripcion"]));
 			$Existencia = $row1["Existencia"];
 			$IsIVA = $row1["ConceptoImpuesto"];	
-			
-			if(intval($Existencia)>0) {
-				$PrecioHoy = FG_Calculo_Precio_Etiquetas($conn,$IdArticulo,$IsIVA,$Existencia);
+			$Dolarizado = FG_Producto_Dolarizado($conn,$IdArticulo);
 
-				$sqlCC = QG_DiasCero_PrecioAyer($IdArticulo,$FAyer);
-				$resultCC = mysqli_query($connCPharma,$sqlCC);
-				$rowCC = mysqli_fetch_assoc($resultCC);
-				$PrecioAyer = $rowCC["precio"];
+			if(($Dolarizado=='SI')&&($tipo=='DOLARIZADO')){
 
-				if( floatval(round($PrecioHoy,2)) != floatval($PrecioAyer) ){
-					$Dolarizado = FG_Producto_Dolarizado($conn,$IdArticulo);
+				if(intval($Existencia)>0) {
+					$PrecioHoy = FG_Calculo_Precio_Etiquetas($conn,$IdArticulo,$IsIVA,$Existencia);
 
-					if($IsIVA == 1){
-						$PMVP = $PrecioHoy/Impuesto;
-						$IVA = $PrecioHoy-$PMVP;
-					}
-					else{
-						$PMVP = $PrecioHoy;
-						$IVA = 0;
-					}
+					$sqlCC = QG_DiasCero_PrecioAyer($IdArticulo,$FAyer);
+					$resultCC = mysqli_query($connCPharma,$sqlCC);
+					$rowCC = mysqli_fetch_assoc($resultCC);
+					$PrecioAyer = $rowCC["precio"];
 
-					if($Dolarizado=='SI'){
+					if( floatval(round($PrecioHoy,2)) != floatval($PrecioAyer) ){
+						if($IsIVA == 1){
+							$PMVP = $PrecioHoy/Impuesto;
+							$IVA = $PrecioHoy-$PMVP;
+						}
+						else{
+							$PMVP = $PrecioHoy;
+							$IVA = 0;
+						}
+
 						$simbolo = '*';
-					}
-					else{
-						$simbolo = '';
-					}
-
-					echo'
-						<table>
-							<thead>
-								<tr>
-									<td class="centrado titulo rowCenter" colspan="2">
-										Código: '.$CodigoBarra.'
-									</td>
-								</tr>	
-							</thead>
-							<tbody>
-								<tr rowspan="2">
-									<td class="centrado descripcion aumento rowCenter" colspan="2">
-										<strong>'.$Descripcion.'</strong> 
-									</td>
-								</tr>
-								<tr>
-									<td class="izquierda rowIzq rowIzqA">
-										PMVP Bs.
-									</td>
-									<td class="derecha rowDer rowDerA rowDer rowDerA">
-										'.number_format ($PMVP,2,"," ,"." ).'
-									</td>
-								</tr>
-								<tr>
-									<td class="izquierda rowIzq rowIzqA">
-										IVA 16% Bs.
-									</td>
-									<td class="derecha rowDer rowDerA">
-										'.number_format ($IVA,2,"," ,"." ).'
-									</td>
-								</tr>';
-								if( floatval(round($PrecioHoy,2)) < floatval($PrecioAyer) ){
+						
+						echo'
+							<table>
+								<thead>
+									<tr>
+										<td class="centrado titulo rowCenter" colspan="2">
+											Código: '.$CodigoBarra.'
+										</td>
+									</tr>	
+								</thead>
+								<tbody>
+									<tr rowspan="2">
+										<td class="centrado descripcion aumento rowCenter" colspan="2">
+											<strong>'.$Descripcion.'</strong> 
+										</td>
+									</tr>
+									<tr>
+										<td class="izquierda rowIzq rowIzqA">
+											PMVP Bs.
+										</td>
+										<td class="derecha rowDer rowDerA rowDer rowDerA">
+											'.number_format ($PMVP,2,"," ,"." ).'
+										</td>
+									</tr>
+									<tr>
+										<td class="izquierda rowIzq rowIzqA">
+											IVA 16% Bs.
+										</td>
+										<td class="derecha rowDer rowDerA">
+											'.number_format ($IVA,2,"," ,"." ).'
+										</td>
+									</tr>';
+									if( floatval(round($PrecioHoy,2)) < floatval($PrecioAyer) ){
+										echo'
+											<tr>
+												<td class="izquierda rowIzq rowIzqA" style="color:red;">
+													Precio Bs. Antes
+												</td>
+												<td class="derecha rowDer rowDerA" style="color:red;">
+													<del>
+													'.number_format ($PrecioAyer,2,"," ,"." ).'
+													</del>
+												</td>
+											</tr>
+										';
+									}
 									echo'
-										<tr>
-											<td class="izquierda rowIzq rowIzqA" style="color:red;">
-												Precio Bs. Antes
-											</td>
-											<td class="derecha rowDer rowDerA" style="color:red;">
-												<del>
-												'.number_format ($PrecioAyer,2,"," ,"." ).'
-												</del>
-											</td>
-										</tr>
-									';
-								}
-								echo'
-								<tr>
-									<td class="izquierda rowIzq rowIzqA aumento">
-										<strong>Total a Pagar Bs.</strong>
-									</td>
-									<td class="derecha rowDer rowDerA aumento">
-										<strong>
-										'.number_format ($PrecioHoy,2,"," ,"." ).'
-										</strong>
-									</td>
-								</tr>
-								<tr>
-									<td class="izquierda dolarizado rowIzq rowIzqA">
-										<strong>'.$simbolo.'</strong>
-									</td>
-									<td class="derecha rowDer rowDerA">
-										'.date("d-m-Y").'
-									</td>
-								</tr>				
-							</tbody>
-						</table>
-					';
-					$CuentaCard++;
-					$CuentaEtiqueta++;
-					if($CuentaCard == 3){
-						echo'<br>';
-						$CuentaCard=0;
+									<tr>
+										<td class="izquierda rowIzq rowIzqA aumento">
+											<strong>Total a Pagar Bs.</strong>
+										</td>
+										<td class="derecha rowDer rowDerA aumento">
+											<strong>
+											'.number_format ($PrecioHoy,2,"," ,"." ).'
+											</strong>
+										</td>
+									</tr>
+									<tr>
+										<td class="izquierda dolarizado rowIzq rowIzqA">
+											<strong>'.$simbolo.'</strong>
+										</td>
+										<td class="derecha rowDer rowDerA">
+											'.date("d-m-Y").'
+										</td>
+									</tr>				
+								</tbody>
+							</table>
+						';
+						$CuentaCard++;
+						$CuentaEtiqueta++;
+						if($CuentaCard == 3){
+							echo'<br>';
+							$CuentaCard=0;
+						}
+					}
+				}
+			}
+			else if(($Dolarizado=='NO')&&($tipo=='NO DOLARIZADO')){
+
+				if(intval($Existencia)>0) {
+					$PrecioHoy = FG_Calculo_Precio_Etiquetas($conn,$IdArticulo,$IsIVA,$Existencia);
+
+					$sqlCC = QG_DiasCero_PrecioAyer($IdArticulo,$FAyer);
+					$resultCC = mysqli_query($connCPharma,$sqlCC);
+					$rowCC = mysqli_fetch_assoc($resultCC);
+					$PrecioAyer = $rowCC["precio"];
+
+					if( floatval(round($PrecioHoy,2)) != floatval($PrecioAyer) ){
+						if($IsIVA == 1){
+							$PMVP = $PrecioHoy/Impuesto;
+							$IVA = $PrecioHoy-$PMVP;
+						}
+						else{
+							$PMVP = $PrecioHoy;
+							$IVA = 0;
+						}
+
+						$simbolo = '';
+
+						echo'
+							<table>
+								<thead>
+									<tr>
+										<td class="centrado titulo rowCenter" colspan="2">
+											Código: '.$CodigoBarra.'
+										</td>
+									</tr>	
+								</thead>
+								<tbody>
+									<tr rowspan="2">
+										<td class="centrado descripcion aumento rowCenter" colspan="2">
+											<strong>'.$Descripcion.'</strong> 
+										</td>
+									</tr>
+									<tr>
+										<td class="izquierda rowIzq rowIzqA">
+											PMVP Bs.
+										</td>
+										<td class="derecha rowDer rowDerA rowDer rowDerA">
+											'.number_format ($PMVP,2,"," ,"." ).'
+										</td>
+									</tr>
+									<tr>
+										<td class="izquierda rowIzq rowIzqA">
+											IVA 16% Bs.
+										</td>
+										<td class="derecha rowDer rowDerA">
+											'.number_format ($IVA,2,"," ,"." ).'
+										</td>
+									</tr>';
+									if( floatval(round($PrecioHoy,2)) < floatval($PrecioAyer) ){
+										echo'
+											<tr>
+												<td class="izquierda rowIzq rowIzqA" style="color:red;">
+													Precio Bs. Antes
+												</td>
+												<td class="derecha rowDer rowDerA" style="color:red;">
+													<del>
+													'.number_format ($PrecioAyer,2,"," ,"." ).'
+													</del>
+												</td>
+											</tr>
+										';
+									}
+									echo'
+									<tr>
+										<td class="izquierda rowIzq rowIzqA aumento">
+											<strong>Total a Pagar Bs.</strong>
+										</td>
+										<td class="derecha rowDer rowDerA aumento">
+											<strong>
+											'.number_format ($PrecioHoy,2,"," ,"." ).'
+											</strong>
+										</td>
+									</tr>
+									<tr>
+										<td class="izquierda dolarizado rowIzq rowIzqA">
+											<strong>'.$simbolo.'</strong>
+										</td>
+										<td class="derecha rowDer rowDerA">
+											'.date("d-m-Y").'
+										</td>
+									</tr>				
+								</tbody>
+							</table>
+						';
+						$CuentaCard++;
+						$CuentaEtiqueta++;
+						if($CuentaCard == 3){
+							echo'<br>';
+							$CuentaCard=0;
+						}
+					}
+				}
+			}
+			else if($tipo=='TODO'){
+
+				if(intval($Existencia)>0) {
+					$PrecioHoy = FG_Calculo_Precio_Etiquetas($conn,$IdArticulo,$IsIVA,$Existencia);
+
+					$sqlCC = QG_DiasCero_PrecioAyer($IdArticulo,$FAyer);
+					$resultCC = mysqli_query($connCPharma,$sqlCC);
+					$rowCC = mysqli_fetch_assoc($resultCC);
+					$PrecioAyer = $rowCC["precio"];
+
+					if( floatval(round($PrecioHoy,2)) != floatval($PrecioAyer) ){
+						if($IsIVA == 1){
+							$PMVP = $PrecioHoy/Impuesto;
+							$IVA = $PrecioHoy-$PMVP;
+						}
+						else{
+							$PMVP = $PrecioHoy;
+							$IVA = 0;
+						}
+
+						if($Dolarizado=='SI'){
+							$simbolo = '*';
+						}
+						else{
+							$simbolo = '';
+						}
+
+						echo'
+							<table>
+								<thead>
+									<tr>
+										<td class="centrado titulo rowCenter" colspan="2">
+											Código: '.$CodigoBarra.'
+										</td>
+									</tr>	
+								</thead>
+								<tbody>
+									<tr rowspan="2">
+										<td class="centrado descripcion aumento rowCenter" colspan="2">
+											<strong>'.$Descripcion.'</strong> 
+										</td>
+									</tr>
+									<tr>
+										<td class="izquierda rowIzq rowIzqA">
+											PMVP Bs.
+										</td>
+										<td class="derecha rowDer rowDerA rowDer rowDerA">
+											'.number_format ($PMVP,2,"," ,"." ).'
+										</td>
+									</tr>
+									<tr>
+										<td class="izquierda rowIzq rowIzqA">
+											IVA 16% Bs.
+										</td>
+										<td class="derecha rowDer rowDerA">
+											'.number_format ($IVA,2,"," ,"." ).'
+										</td>
+									</tr>';
+									if( floatval(round($PrecioHoy,2)) < floatval($PrecioAyer) ){
+										echo'
+											<tr>
+												<td class="izquierda rowIzq rowIzqA" style="color:red;">
+													Precio Bs. Antes
+												</td>
+												<td class="derecha rowDer rowDerA" style="color:red;">
+													<del>
+													'.number_format ($PrecioAyer,2,"," ,"." ).'
+													</del>
+												</td>
+											</tr>
+										';
+									}
+									echo'
+									<tr>
+										<td class="izquierda rowIzq rowIzqA aumento">
+											<strong>Total a Pagar Bs.</strong>
+										</td>
+										<td class="derecha rowDer rowDerA aumento">
+											<strong>
+											'.number_format ($PrecioHoy,2,"," ,"." ).'
+											</strong>
+										</td>
+									</tr>
+									<tr>
+										<td class="izquierda dolarizado rowIzq rowIzqA">
+											<strong>'.$simbolo.'</strong>
+										</td>
+										<td class="derecha rowDer rowDerA">
+											'.date("d-m-Y").'
+										</td>
+									</tr>				
+								</tbody>
+							</table>
+						';
+						$CuentaCard++;
+						$CuentaEtiqueta++;
+						if($CuentaCard == 3){
+							echo'<br>';
+							$CuentaCard=0;
+						}
 					}
 				}
 			}

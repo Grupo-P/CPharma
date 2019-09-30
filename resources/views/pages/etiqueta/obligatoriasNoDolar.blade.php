@@ -8,7 +8,7 @@
 
 	<h1 class="h5 text-info" style="display: inline;">
 		<i class="fas fa-tag"></i>
-		Obligatorias Etiquetar
+		Obligatorias Etiquetar NO Dolarizado
 	</h1>
 	<input type="button" name="imprimir" value="Imprimir" class="btn btn-outline-info btn-sm" onclick="window.print();" style="display: inline; margin-left: 50px;">
 	<hr class="row align-items-start col-12">
@@ -80,7 +80,7 @@
 	include(app_path().'\functions\funciones.php');
 	include(app_path().'\functions\reportes.php');
 	$InicioCarga = new DateTime("now");
-	FG_Generer_Etiquetas('OBLIGATORIO ETIQUETAR','TODO');
+	FG_Generer_Etiquetas('OBLIGATORIO ETIQUETAR','NO DOLARIZADO');
 	$FinCarga = new DateTime("now");
     $IntervalCarga = $InicioCarga->diff($FinCarga);
     echo'Tiempo de carga: '.$IntervalCarga->format("%Y-%M-%D %H:%I:%S");

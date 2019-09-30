@@ -181,14 +181,14 @@
 	        </td>
 
 	        <td style="width:16%;" align="center">	
-				<a href="{{ url('/EtqObliatoria') }}" role="button" class="btn btn-outline-success btn-sm" 
+				<a href="{{ url('/EtqObliatoriaD') }}" role="button" class="btn btn-outline-success btn-sm" 
 				style="display: inline;" target="_blank">
 					Obliagtorias ($)		      		
 				</a>
 	        </td>
 
 	        <td style="width:16%;" align="center">	
-				<a href="{{ url('/EtqObliatoria') }}" role="button" class="btn btn-outline-success btn-sm" 
+				<a href="{{ url('/EtqObliatoriaND') }}" role="button" class="btn btn-outline-success btn-sm" 
 				style="display: inline;" target="_blank">
 					Obliagtorias (NO $)		      		
 				</a>
@@ -202,14 +202,14 @@
 	        </td>
 
 	        <td style="width:16%;" align="center">	
-				<a href="{{ url('/EtqEtiquetable') }}" role="button" class="btn btn-outline-info btn-sm" 
+				<a href="{{ url('/EtqEtiquetableD') }}" role="button" class="btn btn-outline-info btn-sm" 
 				style="display: inline;" target="_blank">
 					Etiquetables ($)	      		
 				</a>
 	        </td>
 
 	        <td style="width:16%;" align="center">	
-				<a href="{{ url('/EtqEtiquetable') }}" role="button" class="btn btn-outline-info btn-sm" 
+				<a href="{{ url('/EtqEtiquetableND') }}" role="button" class="btn btn-outline-info btn-sm" 
 				style="display: inline;" target="_blank">
 					Etiquetables (NO $)	      		
 				</a>
