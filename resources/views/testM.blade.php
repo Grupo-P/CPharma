@@ -242,24 +242,25 @@
         $result2=sqlsrv_query($conn,$sql2);
 
         echo'
-        <table class="table table-striped table-bordered col-12 sortable" id="myTable">
-            <thead class="thead-dark">
-                <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Origen</th>
-                    <th scope="col">Detalles</th>
-                    <th scope="col">Fecha creacion de lote</th>
-                    <th scope="col">Cantidad recibida</th>
-                    <th scope="col">Almacen</th>
-                    <th scope="col">Existencia</th>
-                    <th scope="col">Costo bruto (Sin IVA)</th>
-                    <th scope="col">Tasa en historico</th>
-                    <th scope="col">Costo en divisa (Sin IVA)</th>
-                    <th scope="col">Responsable</th>
-                </tr>
-            </thead>
-            <tbody>
+            <table class="table table-striped table-bordered col-12 sortable" id="myTable">
+                <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Origen</th>
+                        <th scope="col">Detalles</th>
+                        <th scope="col">Fecha creacion de lote</th>
+                        <th scope="col">Cantidad recibida</th>
+                        <th scope="col">Almacen</th>
+                        <th scope="col">Existencia</th>
+                        <th scope="col">Costo bruto (Sin IVA) '.SigVe.'</th>
+                        <th scope="col">Tasa en historico '.SigVe.'</th>
+                        <th scope="col">Costo en divisa (Sin IVA) '.SigDolar.'</th>
+                        <th scope="col">Responsable</th>
+                    </tr>
+                </thead>
+                <tbody>
         ';
+        
         $contador = 1;
         while($row2=sqlsrv_fetch_array($result2,SQLSRV_FETCH_ASSOC)) {
             $FechaVariable=$row2["FechaLote"]->format("Y-m-d");
