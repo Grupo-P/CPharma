@@ -1715,8 +1715,7 @@
 		RETORNO: SI o NO segun sea el caso
 	 */
 	function FG_Validar_Etiquetas() {
-		//$SedeConnection = MiUbicacion();
-		$SedeConnection = 'FTN';
+		$SedeConnection = MiUbicacion();
 	    $conn = ConectarSmartpharma($SedeConnection);
 	    $connCPharma = ConectarXampp();
 
@@ -1792,8 +1791,7 @@
 		RETORNO: no aplica
  	*/
 	function FG_Generer_Etiquetas($clasificacion,$tipo) {
-		//$SedeConnection = MiUbicacion();
-		$SedeConnection = 'FTN';		
+		$SedeConnection = MiUbicacion();	
   	$conn = ConectarSmartpharma($SedeConnection);
 	    
 		$connCPharma = ConectarXampp();	
