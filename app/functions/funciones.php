@@ -2186,4 +2186,137 @@
 		}
 		return $Precio;
 	}
+	/*
+		TITULO: FG_Dias_EnCero
+		PARAMETROS: no aplica
+		FUNCION: Captura y almacena la data para dias en cero
+		RETORNO: no aplica
+	 */
+	function FG_Dias_EnCero() {
+		$SedeConnection = MiUbicacion();
+		$conn = ConectarSmartpharma($SedeConnection);
+		$connCPharma = ConectarXampp();
+
+		$sql = QG_Dias_EnCero();
+		$result = sqlsrv_query($conn,$sql);
+
+		$FechaCaptura = new DateTime("now");
+		$FechaCaptura = $FechaCaptura->format('Y-m-d');
+		$user = 'SYSTEM';
+		$date = '';
+
+		while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
+			$IdArticulo = $row["IdArticulo"];
+			$CodigoInterno = $row["CodigoInterno"];
+			$Descripcion = utf8_encode(addslashes($row["Descripcion"]));
+			$Existencia=intval($row["Existencia"]);
+			$IsIVA = $row["ConceptoImpuesto"];
+			$Precio = FG_Calculo_Precio_Dias_EnCero($conn,$IdArticulo,$IsIVA,$Existencia);
+			$date = date('Y-m-d h:i:s',time());
+			
+			$sqlCPharma = QG_Guardar_Dias_EnCero($IdArticulo,$CodigoInterno,$Descripcion,$Existencia,$Precio,$FechaCaptura,$user,$date);
+			mysqli_query($connCPharma,$sqlCPharma);
+		}
+		FG_Guardar_Captura_Diaria($connCPharma,$FechaCaptura,$date);
+
+		$sqlCC = QG_Validar_Captura_Diaria($FechaCaptura);
+		$resultCC = mysqli_query($connCPharma,$sqlCC);
+		$rowCC = mysqli_fetch_assoc($resultCC);
+		$CuentaCaptura = $rowCC["CuentaCaptura"];
+
+		if($CuentaCaptura == 0){
+			$sqlB = QG_Borrar_DiasCero($FechaCaptura);
+			mysqli_query($connCPharma,$sqlB);
+			mysqli_close($connCPharma);
+			sqlsrv_close($conn);
+			FG_Dias_EnCero();
+		}
+		else{
+			mysqli_close($connCPharma);
+			sqlsrv_close($conn);
+		}
+	}
+	/*
+		TITULO: FG_Calculo_Precio_Dias_EnCero
+		PARAMETROS: [$conn] Cadena de conexion para la base de datos
+					[$IdArticulo] Id del articulo
+					[$IsIVA] Si aplica o no
+					[$Existencia] existencia actual del producto
+		FUNCION: Calcular el precio del articulo
+		RETORNO: Precio del articulo
+		DESARROLLADO POR: SERGIO COVA
+	 */
+	function FG_Calculo_Precio_Dias_EnCero($conn,$IdArticulo,$IsIVA,$Existencia) {
+		if($Existencia ===0) {
+			$Precio = 0;
+		}
+		else {
+		/*CASO ALMACEN 1*/
+			$sql = QG_Precio_Troquelado($IdArticulo,1);
+			$result = sqlsrv_query($conn,$sql);
+			$row = sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC);
+			$PrecioTroqueladoA1 = $row["M_PrecioTroquelado"];
+
+			/*PRECIO TROQUELADO ALMACEN 1*/
+			if($PrecioTroqueladoA1!=NULL){
+				$Precio = $PrecioTroqueladoA1;
+			}
+			/*PRECIO CALCULADO*/
+			else{
+				$sql = QG_Precio_Calculado($IdArticulo);
+				$result = sqlsrv_query($conn,$sql);
+				$row = sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC);
+				$PrecioBruto = $row["M_PrecioCompraBruto"];
+
+				if($PrecioBruto!=NULL){
+					$Utilidad = FG_Utilidad_Articulo($conn,$IdArticulo);
+
+					if($Utilidad==0){
+						$Precio = 0;
+					}
+					else{					
+						if($IsIVA == 1){
+							$PrecioCalculado = ($PrecioBruto/$Utilidad)*Impuesto;
+							$Precio = $PrecioCalculado;
+						}
+						else {
+							$PrecioCalculado = ($PrecioBruto/$Utilidad);
+							$Precio = $PrecioCalculado;
+						}
+					}
+				}
+				else{
+					$sql = QG_Precio_Troquelado($IdArticulo,2);
+					$result = sqlsrv_query($conn,$sql);
+					$row = sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC);
+					$PrecioTroqueladoA2 = $row["M_PrecioTroquelado"];
+
+					/*PRECIO TROQUELADO ALMACEN 2*/
+					if($PrecioTroqueladoA2!=NULL){
+						$Precio = $PrecioTroqueladoA2;
+					}
+					else{
+						$Precio = 0;
+					}
+				}
+			}
+		}
+		return $Precio;
+	}
+	/*
+		TITULO: FG_Guardar_Captura_Diaria
+		PARAMETROS: [$FechaCaptura] El dia de hoy
+					[$date] valor para creacion y actualizacion
+		FUNCION: crea una conexion con la base de datos cpharma e ingresa datos
+		RETORNO: no aplica
+	 */
+	function FG_Guardar_Captura_Diaria($connCPharma,$FechaCaptura,$date) {
+		$sql = QG_Captura_Diaria($FechaCaptura);
+		$result = mysqli_query($connCPharma,$sql);
+		$row = mysqli_fetch_assoc($result);
+		$TotalRegistros = $row["TotalRegistros"];
+
+		$sql1 = QG_Guardar_Captura_Diaria($TotalRegistros,$FechaCaptura,$date);
+		mysqli_query($connCPharma,$sql1);
+	}
 ?>
