@@ -150,26 +150,20 @@
                      [$IdArticuloQ] Id del articulo a buscar
         FUNCION: Armar una tabla de historico de compra del articulo
         RETORNO: No aplica
+        AUTOR: Ing. Manuel Henriquez
     */
     function R10_Analitico_Precios($SedeConnection,$IdArticulo) {
         $conn = ConectarSmartpharma($SedeConnection);
 
-        $sql = QArticulo($IdArticulo);
-        sqlsrv_query($conn,$sql);
+        $sql = R10Q_Detalle_Articulo($IdArticulo);
         $result = sqlsrv_query($conn,$sql);
         $row = sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC);
 
-        $sql1 = QExistenciaArticulo($IdArticulo,0);
-        $result1 = sqlsrv_query($conn,$sql1);
-        $row1 = sqlsrv_fetch_array($result1,SQLSRV_FETCH_ASSOC);
-
         $IsIVA = $row["ConceptoImpuesto"];
-        $Existencia = $row1["Existencia"];
+        $Existencia = $row["Existencia"];
 
         $Precio = CalculoPrecio($conn,$IdArticulo,$IsIVA,$Existencia);
-
         $Dolarizado = ProductoDolarizado($conn,$IdArticulo);
-
         $TasaActual = TasaFecha(date('Y-m-d'));
 
         echo '
@@ -315,6 +309,7 @@
         PARAMETROS: No aplica
         FUNCION: Armar una lista de articulos con descripcion e id
         RETORNO: Lista de articulos con descripcion e id
+        AUTOR: Ing. Manuel Henriquez
     */
     function R10Q_Lista_Articulos() {
         $sql = "
@@ -323,6 +318,34 @@
             InvArticulo.Id
             FROM InvArticulo
             ORDER BY InvArticulo.Descripcion ASC
+        ";
+        return $sql;
+    }
+
+    /*
+        TITULO: R10Q_Detalle_Articulo
+        PARAMETROS: [$IdArticulo] $IdArticulo del articulo a buscar
+        FUNCION: Query que genera el detalle del articulo solicitado
+        RETORNO: Detalle del articulo
+        AUTOR: Ing. Manuel Henriquez
+    */
+    function R10Q_Detalle_Articulo($IdArticulo) {
+        $sql = " 
+            SELECT
+            InvArticulo.Id,
+            InvArticulo.CodigoArticulo,
+                (SELECT CodigoBarra
+                FROM InvCodigoBarra 
+                WHERE InvCodigoBarra.InvArticuloId = '$IdArticulo'
+                AND InvCodigoBarra.EsPrincipal = 1) As CodigoBarra,
+            InvArticulo.Descripcion,
+                (SELECT SUM(InvLoteAlmacen.Existencia) As Existencia
+                FROM InvLoteAlmacen
+                WHERE (InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
+                AND (InvLoteAlmacen.InvArticuloId = '$IdArticulo')) AS Existencia,
+            InvArticulo.FinConceptoImptoIdCompra AS ConceptoImpuesto
+            FROM InvArticulo
+            WHERE InvArticulo.Id = '$IdArticulo'
         ";
         return $sql;
     }
