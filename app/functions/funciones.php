@@ -1709,7 +1709,8 @@
 		RETORNO: SI o NO segun sea el caso
 	 */
 	function FG_Validar_Etiquetas() {
-		$SedeConnection = MiUbicacion();
+		//$SedeConnection = MiUbicacion();
+		$SedeConnection = 'FTN';
 	    $conn = ConectarSmartpharma($SedeConnection);
 	    $connCPharma = ConectarXampp();
 
@@ -2187,7 +2188,8 @@
 		RETORNO: no aplica
 	 */
 	function FG_Dias_EnCero() {
-		$SedeConnection = MiUbicacion();
+		//$SedeConnection = MiUbicacion();
+		$SedeConnection = 'FTN';
 		$conn = ConectarSmartpharma($SedeConnection);
 		$connCPharma = ConectarXampp();
 
@@ -2373,7 +2375,7 @@
 
 		/* Inicio while que itera en los articulos con existencia actual > 0*/
 		while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
-			$IdArticulo = $row["IdArticulo"];
+			$IdArticulo = $row["InvArticuloId"];
 			
 			$sql1 = QG_DetalleArticulo_ProductoCaida($IdArticulo);
     	$result1 = sqlsrv_query($conn,$sql1);
