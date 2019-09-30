@@ -1716,9 +1716,12 @@
 			<br/>
 		';
 
-		echo'<h6 align="center">
-				Periodo desde el '.$FInicial.' al '.$FFinalImpresion.
-			' </h6>';
+		echo'
+			<h6 align="center">Periodo desde el '
+				. date("d-m-Y", strtotime($FInicial)) . ' al '
+				. date("d-m-Y", strtotime($FFinalImpresion))
+			. '</h6>
+		';
 
 		echo'
 			<table class="table table-striped table-bordered col-12 sortable" id="myTable">
@@ -1764,7 +1767,7 @@
 								<td align="left">'.$row["CodigoArticulo"].'</td>
 								<td align="left" class="barrido">
 									<a href="/reporte2?Id='.$IdArticulo.'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
-										.$row["Descripcion"]
+										.utf8_encode(addslashes($row["Descripcion"]))
 									.'</a>
 								</td>
 								<td align="center">'.intval($Existencia).'</td>
