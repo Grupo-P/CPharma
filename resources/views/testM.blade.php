@@ -295,9 +295,7 @@
                 }
                 echo '<td align="center">'.$row2["CodigoAlmacen"].'</td>';
                 echo '<td align="center">'.$row2["Existencia"].'</td>';
-                echo '<td align="center">'.
-                        round($PrecioBruto,2)." ".SigVe.
-                     '</td>';
+                echo '<td align="center">'.number_format($PrecioBruto,2,"," ,"." ).'</td>';
 
                 $TasaVariable=TasaFecha($FechaVariable);
                 if($TasaVariable!=0){
