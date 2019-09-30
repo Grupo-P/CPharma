@@ -54,6 +54,17 @@
 
         /*when navigating through the items using the arrow keys:*/
         .autocomplete-active {background-color:DodgerBlue !important; color:#fff;}
+
+        .barrido{
+            text-decoration: none;
+            transition: width 1s, height 1s, transform 1s;
+        }
+
+        .barrido:hover{
+            text-decoration: none;
+            transition: width 1s, height 1s, transform 1s;
+            transform: translate(20px,0px);
+        }
     </style>
 @endsection
 
@@ -153,7 +164,9 @@
         AUTOR: Ing. Manuel Henriquez
     */
     function R10_Analitico_Precios($SedeConnection,$IdArticulo) {
+        
         $conn = ConectarSmartpharma($SedeConnection);
+        $connCPharma = ConectarXampp();
 
         $sql = R10Q_Detalle_Articulo($IdArticulo);
         $result = sqlsrv_query($conn,$sql);
@@ -162,9 +175,9 @@
         $IsIVA = $row["ConceptoImpuesto"];
         $Existencia = $row["Existencia"];
 
-        $Precio = CalculoPrecio($conn,$IdArticulo,$IsIVA,$Existencia);
-        $Dolarizado = ProductoDolarizado($conn,$IdArticulo);
-        $TasaActual = TasaFecha(date('Y-m-d'));
+        $Precio = FG_Calculo_Precio($conn,$IdArticulo,$IsIVA,$Existencia);
+        $Dolarizado = FG_Producto_Dolarizado($conn,$IdArticulo);
+        $TasaActual = FG_Tasa_Fecha($connCPharma,date('Y-m-d'));
 
         echo '
         <div class="input-group md-form form-sm form-1 pl-0">
@@ -198,7 +211,7 @@
         echo 
             '<td align="left" class="barrido">
             <a href="/reporte2?Id='.$IdArticulo.'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
-                .$row["Descripcion"].
+                .utf8_encode(addslashes($row["Descripcion"])).
             '</a>
             </td>';
 
@@ -258,14 +271,14 @@
                     $result3=sqlsrv_query($conn,$sql3);
                     $row3=sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
 
-                    echo '<td align="center">'.$row3["Nombre"].'</td>';
+                    echo '<td align="center">'.utf8_encode(addslashes($row3["Nombre"])).'</td>';
                     echo '<td align="center">'.$FechaVariable.'</td>';
                     echo '<td align="center">'.intval($row3["CantidadRecibidaFactura"]).'</td>';
                 }
                 else {
                     echo '<td align="center"><strong>'.intval($contador).'</strong></td>';
                     echo '<td align="center">Inventario</td>';
-                    echo '<td align="center">'.$row2["Descripcion"].'</td>';
+                    echo '<td align="center">'.utf8_encode(addslashes($row2["Descripcion"])).'</td>';
                     echo '<td align="center">'.$FechaVariable.'</td>';
 
                     $sql3=QProveedorYCantidadComprada($IdArticulo,$FechaVariable);
@@ -301,6 +314,7 @@
             </tbody>
         </table>';
 
+        mysqli_close($connCPharma);
         sqlsrv_close($conn);
     }
 
