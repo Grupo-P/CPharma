@@ -238,9 +238,6 @@
             </table>
         ';
 
-        $sql2=QLoteAlmacenAnalitico($IdArticulo);
-        $result2=sqlsrv_query($conn,$sql2);
-
         echo'
             <table class="table table-striped table-bordered col-12 sortable" id="myTable">
                 <thead class="thead-dark">
@@ -260,13 +257,18 @@
                 </thead>
                 <tbody>
         ';
-        
+
         $contador = 1;
-        while($row2=sqlsrv_fetch_array($result2,SQLSRV_FETCH_ASSOC)) {
+        $sql2 = R10Q_Lote_Analitico($IdArticulo);
+        $result2 = sqlsrv_query($conn,$sql2);
+
+        while($row2 = sqlsrv_fetch_array($result2,SQLSRV_FETCH_ASSOC)) {
+
             $FechaVariable=$row2["FechaLote"]->format("Y-m-d");
             $PrecioBruto=$row2["M_PrecioCompraBruto"];
+
             echo '<tr>';
-            //VALIDACION PARA CASO DE COMPRA
+                //VALIDACION PARA CASO DE COMPRA
                 if($row2["InvCausaId"]==1) {
                     echo '<td align="center"><strong>'.intval($contador).'</strong></td>';
                     echo '<td align="center">Compra</td>';
@@ -276,14 +278,14 @@
                     $row3=sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
 
                     echo '<td align="center">'.utf8_encode(addslashes($row3["Nombre"])).'</td>';
-                    echo '<td align="center">'.$FechaVariable.'</td>';
+                    echo '<td align="center">'.$row2["FechaLote"]->format("d-m-Y").'</td>';
                     echo '<td align="center">'.intval($row3["CantidadRecibidaFactura"]).'</td>';
                 }
                 else {
                     echo '<td align="center"><strong>'.intval($contador).'</strong></td>';
                     echo '<td align="center">Inventario</td>';
                     echo '<td align="center">'.utf8_encode(addslashes($row2["Descripcion"])).'</td>';
-                    echo '<td align="center">'.$FechaVariable.'</td>';
+                    echo '<td align="center">'.$row2["FechaLote"]->format("d-m-Y").'</td>';
 
                     $sql3=QProveedorYCantidadComprada($IdArticulo,$FechaVariable);
                     $result3=sqlsrv_query($conn,$sql3);
@@ -292,7 +294,7 @@
                     echo '<td align="center">'.intval($row3["CantidadRecibidaFactura"]).'</td>';
                 }
                 echo '<td align="center">'.$row2["CodigoAlmacen"].'</td>';
-                echo '<td align="center">'.intval($row2["Existencia"]).'</td>';
+                echo '<td align="center">'.$row2["Existencia"].'</td>';
                 echo '<td align="center">'.
                         round($PrecioBruto,2)." ".SigVe.
                      '</td>';
@@ -364,6 +366,46 @@
             InvArticulo.FinConceptoImptoIdCompra AS ConceptoImpuesto
             FROM InvArticulo
             WHERE InvArticulo.Id = '$IdArticulo'
+        ";
+        return $sql;
+    }
+
+    /*
+        TITULO: R10Q_Lote_Analitico
+        PARAMETROS: [$IdArticulo] Id del articulo actual
+        FUNCION: Construir la consulta para el despliegue del reporte AnaliticoDePrecio
+        RETORNO: Un String con las instrucciones de la consulta
+     */
+    function R10Q_Lote_Analitico($IdArticulo) {
+        $sql = "
+            SELECT 
+            InvLoteAlmacen.InvLoteId,
+            InvMovimiento.InvCausaId,
+            InvCausa.Descripcion,
+            CONVERT(DATE,InvLoteAlmacen.Auditoria_FechaCreacion) AS FechaLote,
+            InvAlmacen.CodigoAlmacen,
+            ROUND(CAST(InvLoteAlmacen.Existencia AS DECIMAL(38,0)),2,0) AS Existencia,
+            InvLote.M_PrecioCompraBruto,
+            InvLote.Auditoria_Usuario AS Responsable
+            FROM InvLoteAlmacen
+            INNER JOIN InvAlmacen ON InvAlmacen.Id=InvLoteAlmacen.InvAlmacenId
+            INNER JOIN InvLote ON InvLote.Id=InvLoteAlmacen.InvLoteId
+            INNER JOIN InvMovimiento ON InvMovimiento.InvLoteId = InvLoteAlmacen.InvLoteId
+            INNER JOIN InvCausa ON InvMovimiento.InvCausaId=InvCausa.Id
+            WHERE InvLoteAlmacen.InvArticuloId='$IdArticulo'
+            AND (InvLoteAlmacen.Existencia>0)
+            AND (CONVERT(DATE,InvMovimiento.Auditoria_FechaCreacion)=CONVERT(DATE,InvLoteAlmacen.Auditoria_FechaCreacion)) 
+            AND (
+                (InvMovimiento.InvCausaId=1) 
+                OR (InvMovimiento.InvCausaId=5)
+                OR (InvMovimiento.InvCausaId=7)
+                OR (InvMovimiento.InvCausaId=9)
+                OR (InvMovimiento.InvCausaId=11)
+                OR (InvMovimiento.InvCausaId=14)
+            )
+
+            GROUP BY InvLoteAlmacen.InvLoteId,InvMovimiento.InvCausaId,InvCausa.Descripcion,CONVERT(DATE,InvLoteAlmacen.Auditoria_FechaCreacion),InvAlmacen.CodigoAlmacen,InvLoteAlmacen.Existencia,InvLote.M_PrecioCompraBruto,InvLote.Auditoria_Usuario
+            ORDER BY FechaLote DESC
         ";
         return $sql;
     }
