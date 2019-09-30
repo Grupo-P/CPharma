@@ -2163,40 +2163,41 @@
 	 */
 	function QArticulosDevaluados($FechaBandera) {
 		$sql = "
-		SELECT 
-		InvLote.Id,  
-		InvLote.InvArticuloId,
-		InvArticulo.CodigoArticulo,
-		CONVERT(DATE,InvLoteAlmacen.Auditoria_FechaCreacion) AS FechaLote,  
-		InvArticulo.Descripcion,
-		InvArticulo.FinConceptoImptoIdCompra AS ConceptoImpuesto
-		INTO CP_ArticulosDevaluados
+		SELECT DISTINCT
+		--Campos
+		(SELECT TOP 1
+		InvLote.Id
 		FROM InvLote
-		INNER JOIN InvLoteAlmacen ON InvLote.Id = InvLoteAlmacen.InvLoteId
+		WHERE InvLote.InvArticuloId = InvArticulo.Id
+		ORDER BY InvLote.FechaEntrada DESC) AS Id,--Id del lote
+		InvArticulo.Id AS InvArticuloId,--Id del articulo
+		InvArticulo.CodigoArticulo,--Codigo interno
+		CONVERT(DATE, 
+		(SELECT TOP 1
+		InvLote.Auditoria_FechaCreacion
+		FROM InvLoteAlmacen
+		INNER JOIN InvLote ON InvLote.Id = InvLoteAlmacen.InvLoteId
+		WHERE (InvLoteAlmacen.InvArticuloId = InvArticulo.Id)
+		AND (InvLoteAlmacen.Existencia > 0)
+		AND (InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
+		ORDER BY InvLote.Auditoria_FechaCreacion DESC)) AS FechaLote,--Fecha de creacion del lote
+		(SELECT SUM(InvLoteAlmacen.Existencia)
+		FROM InvLoteAlmacen
+		WHERE (InvLoteAlmacen.InvArticuloId = InvArticulo.Id)
+		AND (InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)) AS Existencia,--Existencia
+		InvArticulo.FinConceptoImptoIdCompra AS ConceptoImpuesto,
+		InvArticulo.Descripcion--Descripcion del articulo
+		--Tabla de origen
+		FROM InvLote
+		--Tablas relacionadas
 		INNER JOIN InvArticulo ON InvArticulo.Id = InvLote.InvArticuloId
-		WHERE InvLoteAlmacen.Existencia>0 
+		INNER JOIN InvLoteAlmacen ON InvLote.Id = InvLoteAlmacen.InvLoteId
+		--Condiciones
+		WHERE (InvLoteAlmacen.Existencia > 0) 
 		AND (InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
 		AND (CONVERT(DATE,InvLoteAlmacen.Auditoria_FechaCreacion) < '$FechaBandera')
-		ORDER BY InvLoteAlmacen.Auditoria_FechaCreacion, InvArticulo.Descripcion DESC
-		";
-		return $sql;
-	}
-
-	/*
-		TITULO: QFiltrarArticulosDevaluados
-		PARAMETROS: No aplica
-		FUNCION: Filtar los articulos eliminando los duplicados
-		RETORNO: String con la query
-	 */
-	function QFiltrarArticulosDevaluados() {
-		$sql = "
-		SELECT 
-		CP_ArticulosDevaluados.InvArticuloId,
-		CP_ArticulosDevaluados.CodigoArticulo,
-		CP_ArticulosDevaluados.Descripcion,
-		CP_ArticulosDevaluados.ConceptoImpuesto
-		FROM CP_ArticulosDevaluados
-		GROUP BY CP_ArticulosDevaluados.InvArticuloId, CP_ArticulosDevaluados.CodigoArticulo, CP_ArticulosDevaluados.Descripcion, CP_ArticulosDevaluados.ConceptoImpuesto
+		--Ordenado
+		ORDER BY FechaLote, InvArticulo.Descripcion DESC
 		";
 		return $sql;
 	}
@@ -2541,7 +2542,7 @@
 		FUNCION: Busca el Id del atributo si la categoriza es dolarizado
 		RETORNO: Retorna el id del atributo dolarizado
 	 */
-	function QG_Precio_Troquelado($IdArticulo) {
+	function QG_Precio_Troquelado($IdArticulo,$IdAlmacen) {
 		$sql = "
 			SELECT TOP 1
 			InvLote.Id,
@@ -2549,7 +2550,7 @@
 			InvLote.M_PrecioTroquelado
 			FROM InvLoteAlmacen
 			INNER JOIN InvLote ON InvLote.Id = InvLoteAlmacen.InvLoteId
-			WHERE(InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
+			WHERE(InvLoteAlmacen.InvAlmacenId = '$IdAlmacen')
 			AND (InvLoteAlmacen.InvArticuloId = '$IdArticulo')
 			AND (InvLoteAlmacen.Existencia>0)
 			ORDER BY invlote.M_PrecioTroquelado DESC
@@ -2738,6 +2739,169 @@
 			FROM InvLote
 			WHERE InvLote.InvArticuloId  = '$IdArticulo'
 			ORDER BY UltimoLote DESC
+		";
+		return $sql;
+	}
+	/*
+		TITULO: QG_Provedor_Unico
+		PARAMETROS: [$IdProveedor] Id del proveedor a buscar
+		FUNCION: Buscar en las facturas si hay otro proveedor que surta el producto
+		RETORNO: Lista de proveedores que surten el producto 
+		[Funciona en conjunto con QFacturasProducto]
+	 */
+	function QG_Provedor_Unico($IdProveedor,$IdArticulo) {
+		$sql = "
+		SELECT
+		ComProveedor.Id,
+		GenPersona.Nombre
+		FROM ComProveedor
+		INNER JOIN GenPersona ON ComProveedor.GenPersonaId=GenPersona.Id
+		INNER JOIN ComFactura ON ComFactura.ComProveedorId=ComProveedor.Id
+		INNER JOIN ComFacturaDetalle ON ComFacturaDetalle.ComFacturaId = ComFactura.Id
+		WHERE ComFactura.ComProveedorId <> '$IdProveedor' and ComFacturaDetalle.InvArticuloId = '$IdArticulo'
+		GROUP BY ComProveedor.Id, GenPersona.Nombre
+		ORDER BY ComProveedor.Id ASC
+		";
+		return $sql;
+	}
+	/*
+		TITULO: QG_Existencia_Actual
+		PARAMETROS: no aplica
+		FUNCION: busca los articulos en existencia hoy
+		RETORNO: no aplica
+ 	*/
+	function QG_Existencia_Actual() {
+		$sql = "
+			SELECT
+			InvArticulo.Id AS IdArticulo,
+			InvArticulo.CodigoArticulo AS CodigoInterno,
+			InvArticulo.Descripcion
+			FROM InvArticulo
+			INNER JOIN InvLoteAlmacen ON InvArticulo.Id=InvLoteAlmacen.InvArticuloId
+			WHERE InvLoteAlmacen.Existencia > 0
+			AND (InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
+			GROUP BY InvArticulo.Id, InvArticulo.CodigoArticulo, InvArticulo.Descripcion, InvArticulo.FinConceptoImptoIdCompra
+			ORDER BY InvArticulo.Id ASC
+		";
+		return $sql;
+	}
+	/*
+		TITULO: QG_Etiqueta_Articulo
+		PARAMETROS: [$IdArticulo] Id del articulo a buscar
+		FUNCION: regresa los datos del articulo
+		RETORNO: no aplica
+	*/
+	function QG_Etiqueta_Articulo($IdArticulo) {
+		$sql = "
+			SELECT * FROM etiquetas
+			WHERE etiquetas.id_articulo = '$IdArticulo'
+		";
+		return $sql;
+	}
+	/*
+		TITULO: QG_Guardar_Etiqueta_Articulo
+		PARAMETROS: $id_articulo,$codigo_articulo,$descripcion,$condicion,$clasificacion,$estatus,$user,$date
+		FUNCION: guarda la informacion en la tabla etiquetas
+		RETORNO: no aplica
+	 */
+	function QG_Guardar_Etiqueta_Articulo($id_articulo,$codigo_articulo,$descripcion,$condicion,$clasificacion,$estatus,$user,$date) {
+		$sql = "
+		INSERT INTO etiquetas
+		(id_articulo,codigo_articulo,descripcion,condicion,clasificacion,estatus,user,created_at,updated_at)
+		VALUES 
+		('$id_articulo','$codigo_articulo','$descripcion','$condicion','$clasificacion','$estatus','$user','$date','$date')
+		";
+		return $sql;
+	}
+	/*
+		TITULO: QG_Captura_Etiqueta
+		PARAMETROS: [$FechaCaptura] El dia de hoy
+		FUNCION: cuenta el total de registos de dias en cero
+		RETORNO: no aplica
+	 */
+	function QG_Captura_Etiqueta($FechaCaptura) {
+		$sql = "SELECT COUNT(*) AS TotalRegistros 
+		FROM etiquetas 
+		WHERE CONVERT(etiquetas.created_at,date) = '$FechaCaptura'
+		";
+		return $sql;
+	}
+	/*
+		TITULO: QG_Guardar_Captura_Etiqueta
+		PARAMETROS: [$FechaCaptura] El dia de hoy
+					[$date] valor para creacion y actualizacion
+		FUNCION: crea una conexion con la base de datos cpharma e ingresa datos
+		RETORNO: no aplica
+	 */
+
+	function QG_Guardar_Captura_Etiqueta($TotalRegistros,$FechaCaptura,$date) {
+		$sql = "
+		INSERT INTO captura_etiqueta
+		(total_registros,fecha_captura,created_at,updated_at)
+		VALUES 
+		('$TotalRegistros','$FechaCaptura','$date','$date')
+		";
+		return $sql;
+	}
+	/*
+		TITULO: QG_Validar_Captura_Etiqueta
+		PARAMETROS: [$FechaCaptura] El dia de hoy
+		FUNCION: valida que la fecha exista en la tabla captura diaria
+		RETORNO: no aplica
+	 */
+	function QG_Validar_Captura_Etiqueta($FechaCaptura) {
+		$sql = "SELECT count(*) AS CuentaCaptura 
+		FROM captura_etiqueta WHERE fecha_captura = '$FechaCaptura'";
+		return $sql;
+	}
+	/*
+		TITULO: QG_Borrar_Captura_Etiqueta
+		PARAMETROS: [$FechaCaptura] fecha de la captura
+		FUNCION: borra los registros de dias en cero de la fecha seleccionada
+		RETORNO: no aplica
+	 */
+	function QG_Borrar_Captura_Etiqueta($FechaCaptura) {
+		$sql = "DELETE FROM captura_etiqueta WHERE fecha_captura = '$FechaCaptura'";
+		return $sql;
+	}
+	/*
+    TITULO: QG_Detalle_Articulo
+    PARAMETROS: [$IdArticulo] $IdArticulo del articulo a buscar
+    FUNCION: Query que genera el detalle del articulo solicitado
+    RETORNO: Detalle del articulo
+   	*/
+  	function QG_Detalle_Articulo($IdArticulo) {
+	    $sql = " 
+	      SELECT
+	      InvArticulo.Id,
+	      InvArticulo.CodigoArticulo,
+	      (SELECT CodigoBarra
+	          FROM InvCodigoBarra 
+	          WHERE InvCodigoBarra.InvArticuloId = '$IdArticulo'
+	          AND InvCodigoBarra.EsPrincipal = 1) As CodigoBarra,
+	      InvArticulo.Descripcion,
+	        (SELECT SUM (InvLoteAlmacen.Existencia) As Existencia
+	          FROM InvLoteAlmacen
+	          WHERE(InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
+	          AND (InvLoteAlmacen.InvArticuloId = '$IdArticulo')) AS Existencia,
+	      InvArticulo.FinConceptoImptoIdCompra AS ConceptoImpuesto
+	      FROM InvArticulo
+	      WHERE InvArticulo.Id = '$IdArticulo'
+	    ";
+  	return $sql;
+  	}
+	/*
+    TITULO: QG_Detalle_Articulo
+    PARAMETROS: [$IdArticulo] $IdArticulo del articulo a buscar
+    FUNCION: Query que genera el detalle del articulo solicitado
+    RETORNO: Detalle del articulo
+   */
+  function QG_DiasCero_PrecioAyer($IdArticulo,$FechaCaptura) {
+		$sql = "
+			SELECT precio
+			FROM dias_ceros 
+			WHERE dias_ceros.id_articulo = '$IdArticulo' 
+			AND `fecha_captura` = '$FechaCaptura'
 		";
 		return $sql;
 	}

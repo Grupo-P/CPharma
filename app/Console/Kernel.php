@@ -25,9 +25,9 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('Capturar:DiasCero'); 
-        $schedule->command('Capturar:ProductosCaida');  
-        $schedule->command('Capturar:Etiquetas');
+        $schedule->command('Capturar:DiasCero')->withoutOverlapping();
+        $schedule->command('Capturar:ProductosCaida')->withoutOverlapping();  
+        $schedule->command('Capturar:Etiquetas')->withoutOverlapping();
     }
 
     /**

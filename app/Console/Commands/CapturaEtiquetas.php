@@ -41,9 +41,8 @@ class CapturaEtiquetas extends Command
         include(app_path().'\functions\config.php');
         include(app_path().'\functions\querys.php');
         include(app_path().'\functions\funciones.php');
-        include(app_path().'\functions\reportes.php');
 
-        ValidarEtiquetas();
+        FG_Validar_Etiquetas();
 
         $Auditoria = new Auditoria();
         $Auditoria->accion = 'CAPTURAR';
