@@ -969,12 +969,10 @@
 		RETORNO: 
  	*/
 	function CuentaExistencia($connCPharma,$IdArticulo) {
-		
 		$sql = QCuentaExistencia($IdArticulo);
 		$result = mysqli_query($connCPharma,$sql);
 		$row = mysqli_fetch_assoc($result);
 		$Cuenta = $row["Cuenta"];
-		
 		return $Cuenta;
 	}
 	/*
@@ -1000,7 +998,7 @@
 			}
 
 			$FInicial = date("Y-m-d",strtotime($FInicial."+1 days"));
-	  		$FFinalPivote = date("Y-m-d",strtotime($FFinalPivote."+1 days"));
+  		$FFinalPivote = date("Y-m-d",strtotime($FFinalPivote."+1 days"));
 		}
 		return $CuentaVenta;
 	}
@@ -1016,7 +1014,6 @@
 		$ExistenciaAyer = 0;
 		$CuentaDecreciente = TRUE;
 		$CuentaDecrece = 0;
-		$indice = 0;
 		$ExistenciaDecreciente = array();
 
 		while( ($FInicial!=$FFinal) && ($CuentaDecreciente==TRUE) ) {
@@ -1228,17 +1225,14 @@
 		FUNCION: crea una conexion con la base de datos cpharma e ingresa datos
 		RETORNO: no aplica
 	 */
-	function GuardarCapturaCaida($FechaCaptura,$date) {
-		$conn = ConectarXampp();
+	function GuardarCapturaCaida($connCPharma,$FechaCaptura,$date) {
 		$sql = QCapturaCaida($FechaCaptura);
-		$result = mysqli_query($conn,$sql);
+		$result = mysqli_query($connCPharma,$sql);
 		$row = mysqli_fetch_assoc($result);
 		$TotalRegistros = $row["TotalRegistros"];
 
 		$sql1 = QGuardarCapturaCaida($TotalRegistros,$FechaCaptura,$date);
-		mysqli_query($conn,$sql1);
-
-		mysqli_close($conn);
+		mysqli_query($connCPharma,$sql1);
 	}
 	/****************/
 	function ValidarEtiquetas() {
@@ -2337,7 +2331,6 @@
 		$FechaCaptura = new DateTime("now");
 		$FechaCaptura = $FechaCaptura->format('Y-m-d');
 		$user = 'SYSTEM';
-		$date = date('Y-m-d h:i:s',time());
 
 		/* Rangos de Fecha */
   		$FFinal = date("Y-m-d");
@@ -2389,6 +2382,7 @@
     	$CodigoArticulo = $row1["CodigoArticulo"];
   		$Descripcion = utf8_encode(addslashes($row1["Descripcion"]));
     	$Existencia = $row1["Existencia"];
+    	$IsIVA = $row1["ConceptoImpuesto"];
     	$UnidadesVendidas = $row["UnidadesVendidas"];
     	$VentaDiaria = FG_Venta_Diaria($UnidadesVendidas,$RangoDias);
     	$DiasRestantes = FG_Dias_Restantes($Existencia,$VentaDiaria);
@@ -2419,9 +2413,9 @@
 						/*  FILTRO 5: 
 						*	Si el articulo decrece su existencia rango 
 						*/
-						if($CuentaDecreciente==TRUE){
+						if(($CuentaDecreciente==TRUE)&&(count($ExistenciaDecreciente)>=$RangoDias)){
 							
-							$Precio = CalculoPrecio($conn,$IdArticulo,$IsIVA,$Existencia);
+							$Precio = FG_Calculo_Precio_Producto_Caida($conn,$IdArticulo,$IsIVA,$Existencia);
 
 							$Dia1 = array_pop($ExistenciaDecreciente);
 							$Dia2 = array_pop($ExistenciaDecreciente);
@@ -2434,16 +2428,17 @@
 							$Dia9 = array_pop($ExistenciaDecreciente);
 							$Dia10 = array_pop($ExistenciaDecreciente);
 							
-						$sqlCPharma = QGuardarProductosCaida($IdArticulo,$CodigoArticulo,$Descripcion,$Precio,$Existencia,$Dia10,$Dia9,$Dia8,$Dia7,$Dia6,$Dia5,$Dia4,$Dia3,$Dia2,$Dia1,$Venta,$DiasRestantes,$FechaCaptura,$user,$date);
+							$date = date('Y-m-d h:i:s',time());
 
-						mysqli_query($connCPharma,$sqlCPharma);
+							$sqlCPharma = QGuardarProductosCaida($IdArticulo,$CodigoArticulo,$Descripcion,$Precio,$Existencia,$Dia10,$Dia9,$Dia8,$Dia7,$Dia6,$Dia5,$Dia4,$Dia3,$Dia2,$Dia1,$UnidadesVendidas,$DiasRestantes,$FechaCaptura,$user,$date);
 
+							mysqli_query($connCPharma,$sqlCPharma);
 						}		
 					}
 				}
 			}
 		}
-		GuardarCapturaCaida($FechaCaptura,$date);
+		GuardarCapturaCaida($connCPharma,$FechaCaptura,$date);
 		
 		$sqlCC = QValidarCapturaCaida($FechaCaptura);
 		$resultCC = mysqli_query($connCPharma,$sqlCC);
@@ -2453,11 +2448,78 @@
 		if($CuentaCaptura == 0){
 			mysqli_close($connCPharma);
 			sqlsrv_close($conn);
-			ProuctosEnCaida();
+			FG_Prouctos_EnCaida();
 		}
 		else{
 			mysqli_close($connCPharma);
 			sqlsrv_close($conn);
 		}
+	}
+	/*
+		TITULO: FG_Calculo_Precio_Producto_Caida
+		PARAMETROS: [$conn] Cadena de conexion para la base de datos
+					[$IdArticulo] Id del articulo
+					[$IsIVA] Si aplica o no
+					[$Existencia] existencia actual del producto
+		FUNCION: Calcular el precio del articulo
+		RETORNO: Precio del articulo
+		DESARROLLADO POR: SERGIO COVA
+	 */
+	function FG_Calculo_Precio_Producto_Caida($conn,$IdArticulo,$IsIVA,$Existencia) {
+		if($Existencia===0) {
+			$Precio = 0;
+		}
+		else {
+		/*CASO ALMACEN 1*/
+			$sql = QG_Precio_Troquelado($IdArticulo,1);
+			$result = sqlsrv_query($conn,$sql);
+			$row = sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC);
+			$PrecioTroqueladoA1 = $row["M_PrecioTroquelado"];
+
+			/*PRECIO TROQUELADO ALMACEN 1*/
+			if($PrecioTroqueladoA1!=NULL){
+				$Precio = $PrecioTroqueladoA1;
+			}
+			/*PRECIO CALCULADO*/
+			else{
+				$sql = QG_Precio_Calculado($IdArticulo);
+				$result = sqlsrv_query($conn,$sql);
+				$row = sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC);
+				$PrecioBruto = $row["M_PrecioCompraBruto"];
+
+				if($PrecioBruto!=NULL){
+					$Utilidad = FG_Utilidad_Articulo($conn,$IdArticulo);
+
+					if($Utilidad==0){
+						$Precio = 0;
+					}
+					else{					
+						if($IsIVA == 1){
+							$PrecioCalculado = ($PrecioBruto/$Utilidad)*Impuesto;
+							$Precio = $PrecioCalculado;
+						}
+						else {
+							$PrecioCalculado = ($PrecioBruto/$Utilidad);
+							$Precio = $PrecioCalculado;
+						}
+					}
+				}
+				else{
+					$sql = QG_Precio_Troquelado($IdArticulo,2);
+					$result = sqlsrv_query($conn,$sql);
+					$row = sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC);
+					$PrecioTroqueladoA2 = $row["M_PrecioTroquelado"];
+
+					/*PRECIO TROQUELADO ALMACEN 2*/
+					if($PrecioTroqueladoA2!=NULL){
+						$Precio = $PrecioTroqueladoA2;
+					}
+					else{
+						$Precio = 0;
+					}
+				}
+			}
+		}
+		return $Precio;
 	}
 ?>
