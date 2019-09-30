@@ -55,10 +55,6 @@
         include(app_path().'\functions\querys.php');
         include(app_path().'\functions\funciones.php');
 
-        //--------- Borrar esta linea ---------//
-        $_GET['SEDE'] = 'FTN';
-        //--------- Borrar esta linea ---------//
-
         if(isset($_GET['fechaInicio'])) {
 
             $InicioCarga = new DateTime("now");

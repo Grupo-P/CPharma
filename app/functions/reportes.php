@@ -1690,7 +1690,7 @@
 		FUNCION: Arma una lista con los productos surtidos y sus fechas
 		RETORNO: No aplica
 	 */
-	function ReporteProductosParaSurtir($SedeConnection,$FInicial,$FFinal) {
+	/*function ReporteProductosParaSurtir($SedeConnection,$FInicial,$FFinal) {
 		$conn = ConectarSmartpharma($SedeConnection);
 
 		$FFinalImpresion = $FFinal;
@@ -1791,7 +1791,7 @@
 		sqlsrv_query($conn,$sql);
 
 		sqlsrv_close($conn);
-	}
+	}*/
 
 	/*****************************************************************************/
 	/************************ REPORTE 10 ANALITICO DE PRECIOS *******************/
