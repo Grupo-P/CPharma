@@ -1181,7 +1181,7 @@
 		FUNCION: Construir la consulta para el despliegue del reporte AnaliticoDePrecio
 		RETORNO: Un String con las instrucciones de la consulta
 	 */
-	function QLoteAlmacenAnalitico($IdArticulo) {
+	/*function QLoteAlmacenAnalitico($IdArticulo) {
 		$sql = "
 			SELECT 
 				InvLoteAlmacen.InvLoteId,
@@ -1214,7 +1214,7 @@
 			ORDER BY FechaLote DESC
 		";
 		return $sql;
-	}
+	}*/
 
 	/*
 		TITULO: QProveedorYCantidadComprada
@@ -1222,7 +1222,7 @@
 		FUNCION: Arma las filas correspondientes a los proveedores y el despacho
 		RETORNO: Un String con las instrucciones de la query
 	 */
-	function QProveedorYCantidadComprada($IdArticulo,$FechaLote) {
+	/*function QProveedorYCantidadComprada($IdArticulo,$FechaLote) {
 		$sql = "
 			SELECT
 				GenPersona.Nombre,
@@ -1239,9 +1239,9 @@
 			ORDER BY ComFactura.FechaRegistro DESC
 		";
 		return $sql;
-	}
+	}*/
 
-	function QProveedorYCantidadComprada2($IdArticulo,$FechaLote,$PrecioBruto) {
+	/*function QProveedorYCantidadComprada2($IdArticulo,$FechaLote,$PrecioBruto) {
 		$sql = "
 			SELECT
 				GenPersona.Nombre,
@@ -1260,7 +1260,7 @@
 			ORDER BY ComFactura.FechaRegistro DESC
 		";
 		return $sql;
-	}
+	}*/
 
 	/*
 		TITULO: QCartaDeCompromiso
