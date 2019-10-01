@@ -1044,7 +1044,6 @@
 			$FInicial = date("Y-m-d",strtotime($FInicial."+1 days"));
 		}
 
-		echo'<br>CuentaDecrece: '.$CuentaDecrece.'************';
 		if(($CuentaDecrece>=($RangoDias/2))&&($CuentaDecreciente==TRUE)){
 			$CuentaDecreciente = TRUE;
 		}
@@ -2322,8 +2321,7 @@
 		RETORNO: no aplica
 	 */
 	function FG_Prouctos_EnCaida() {
-		//$SedeConnection = MiUbicacion();
-		$SedeConnection = 'FTN';
+		$SedeConnection = MiUbicacion();
 		$conn = ConectarSmartpharma($SedeConnection);
 		$connCPharma = ConectarXampp();
 

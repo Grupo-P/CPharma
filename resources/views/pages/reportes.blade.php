@@ -420,7 +420,7 @@
 						|| Auth::user()->departamento == 'TECNOLOGIA'
 					){
 				?>				   
-				    <button type="submit" name="Reporte" role="button" class="btn btn-outline-success btn-sm" disabled="disabled"></i>Visualizar</button>
+				    <button type="submit" name="Reporte" role="button" class="btn btn-outline-success btn-sm"></i>Visualizar</button>
 				<?php
 					}
 				?>
