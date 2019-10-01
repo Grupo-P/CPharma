@@ -202,6 +202,8 @@ jQuery(document).on('ready',function(){
     $FFinal = date("Y-m-d",strtotime($FFinal."+ 1 days"));
     $RangoDias = FG_Rango_Dias($FInicial,$FFinal);
 
+    $sql = QG_CleanTable('CP_R6Q_Descripcion_Like');
+    sqlsrv_query($conn,$sql);
     $sql = QG_CleanTable('CP_R6Q_Unidades_Vendidas');
     sqlsrv_query($conn,$sql);
     $sql = QG_CleanTable('CP_R6Q_Unidades_Devueltas');
@@ -211,18 +213,22 @@ jQuery(document).on('ready',function(){
     $sql = QG_CleanTable('CP_R6Q_Unidades_Reclamadas');
     sqlsrv_query($conn,$sql);
 
+    $sql0 = R6Q_Descripcion_Like($DescripLike);
     $sql1 = R6Q_Unidades_Vendidas($FInicial,$FFinal);
     $sql2 = R6Q_Unidades_Devueltas($FInicial,$FFinal);
     $sql3 = R6Q_Unidades_Compradas($FInicial,$FFinal);
     $sql4 = R6Q_Unidades_Reclamadas($FInicial,$FFinal);
-    $sql5 = R6Q_Integracion_Pedido_Productos($DescripLike);
+    $sql5 = R6Q_Integracion_Pedido_Productos();
 
+    sqlsrv_query($conn,$sql0);
     sqlsrv_query($conn,$sql1);
     sqlsrv_query($conn,$sql2);
     sqlsrv_query($conn,$sql3); 
     sqlsrv_query($conn,$sql4);
     $result = sqlsrv_query($conn,$sql5);
 
+    $sql = QG_CleanTable('CP_R6Q_Descripcion_Like');
+    sqlsrv_query($conn,$sql);
     $sql = QG_CleanTable('CP_R6Q_Unidades_Vendidas');
     sqlsrv_query($conn,$sql);
     $sql = QG_CleanTable('CP_R6Q_Unidades_Devueltas');
@@ -371,6 +377,24 @@ jQuery(document).on('ready',function(){
     FUNCION: Consulta las Veces vendidas a clientes y las unidades vendidas de un producto
     RETORNO: Tabla con los articulos, las veces vendidas y las unidades vendidas
    */
+  function R6Q_Descripcion_Like($DescripLike) {   
+    $sql = "
+      SELECT
+      InvArticulo.Id AS InvArticuloId,
+      InvArticulo.Descripcion
+      INTO CP_R6Q_Descripcion_Like
+      FROM InvArticulo
+      WHERE InvArticulo.Descripcion LIKE '%$DescripLike%'
+    ";          
+    return $sql;
+  }
+  /*
+    TITULO: R6Q_Unidades_Vendidas
+    PARAMETROS: [$FInicial] Fecha inicial del rango a consultar
+                [$FFinal] Fecha final del rango a consutar
+    FUNCION: Consulta las Veces vendidas a clientes y las unidades vendidas de un producto
+    RETORNO: Tabla con los articulos, las veces vendidas y las unidades vendidas
+   */
   function R6Q_Unidades_Vendidas($FInicial,$FFinal) {   
     $sql = "
       SELECT
@@ -462,10 +486,11 @@ jQuery(document).on('ready',function(){
     FUNCION: Ubicar el top de productos mas vendidos
     RETORNO: Lista de productos mas vendidos
    */
-  function R6Q_Integracion_Pedido_Productos($DescripLike) {
+  function R6Q_Integracion_Pedido_Productos() {
     $sql = "
       SELECT
-      CP_R6Q_Unidades_Vendidas.InvArticuloId,
+      CP_R6Q_Descripcion_Like.InvArticuloId,
+      CP_R6Q_Descripcion_Like.Descripcion,
       ((ISNULL(CP_R6Q_Unidades_Vendidas.VecesVendidas,CAST(0 AS INT))) - 
       (ISNULL(CP_R6Q_Unidades_Devueltas.VecesDevueltas,CAST(0 AS INT))) 
       ) AS VecesVendidas,
@@ -478,12 +503,11 @@ jQuery(document).on('ready',function(){
       ((ISNULL(CP_R6Q_Unidades_Compradas.UnidadesCompradas,CAST(0 AS INT))) -
       (ISNULL(CP_R6Q_Unidades_Reclamadas.UnidadesReclamadas,CAST(0 AS INT))) 
       ) AS UnidadesCompradas
-      FROM CP_R6Q_Unidades_Vendidas
-      LEFT JOIN CP_R6Q_Unidades_Devueltas ON CP_R6Q_Unidades_Devueltas.InvArticuloId = CP_R6Q_Unidades_Vendidas.InvArticuloId
-      LEFT JOIN CP_R6Q_Unidades_Compradas ON CP_R6Q_Unidades_Compradas.InvArticuloId = CP_R6Q_Unidades_Vendidas.InvArticuloId
-      LEFT JOIN CP_R6Q_Unidades_Reclamadas ON CP_R6Q_Unidades_Reclamadas.InvArticuloId = CP_R6Q_Unidades_Vendidas.InvArticuloId
-      INNER JOIN InvArticulo ON InvArticulo.Id = CP_R6Q_Unidades_Vendidas.InvArticuloId
-      WHERE InvArticulo.Descripcion LIKE '%$DescripLike%'
+      FROM CP_R6Q_Descripcion_Like
+      LEFT JOIN CP_R6Q_Unidades_Vendidas ON CP_R6Q_Unidades_Vendidas.InvArticuloId = CP_R6Q_Descripcion_Like.InvArticuloId
+      LEFT JOIN CP_R6Q_Unidades_Devueltas ON CP_R6Q_Unidades_Devueltas.InvArticuloId = CP_R6Q_Descripcion_Like.InvArticuloId
+      LEFT JOIN CP_R6Q_Unidades_Compradas ON CP_R6Q_Unidades_Compradas.InvArticuloId = CP_R6Q_Descripcion_Like.InvArticuloId
+      LEFT JOIN CP_R6Q_Unidades_Reclamadas ON CP_R6Q_Unidades_Reclamadas.InvArticuloId = CP_R6Q_Descripcion_Like.InvArticuloId
       ORDER BY UnidadesVendidas DESC
     ";
     return $sql;
