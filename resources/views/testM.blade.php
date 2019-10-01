@@ -296,26 +296,38 @@
                     $sql3 = R10Q_Proveedor_Cantidad_Comprada($IdArticulo,$FechaVariable);
                     $result3 = sqlsrv_query($conn,$sql3);
                     $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
+
                     echo '<td align="center">'.intval($row3["CantidadRecibidaFactura"]).'</td>';
                 }
-                echo '<td align="center">'.$row2["CodigoAlmacen"].'</td>';
-                echo '<td align="center">'.$row2["Existencia"].'</td>';
-                echo '<td align="center">'.number_format($PrecioBruto,2,"," ,"." ).'</td>';
 
-                $TasaVariable=TasaFecha($FechaVariable);
-                if($TasaVariable!=0){
-                    echo '<td align="center">'.$TasaVariable." ".SigVe.'</td>';
-                    echo '<td align="center">'.
-                            round(($PrecioBruto/$TasaVariable),2).
-                            " ".SigDolar.
-                         '</td>';
+                echo '
+                    <td align="center">'.$row2["CodigoAlmacen"].'</td>
+                    <td align="center">'.$row2["Existencia"].'</td>
+                    <td align="center">'.number_format($PrecioBruto,2,"," ,"." ).'</td>
+                ';
+
+                $TasaVariable = TasaFecha($FechaVariable);
+
+                if($TasaVariable != 0) {
+
+                    $CostoDivisa = $PrecioBruto / $TasaVariable;
+
+                    echo '
+                        <td align="center">'.$TasaVariable.'</td>
+                        <td align="center">'.number_format($CostoDivisa,2,"," ,"." ).'</td>
+                    ';
                 }
-                else{
-                    echo '<td align="center">0.00 '.SigVe.'</td>';
-                    echo '<td align="center">0.00 '.SigDolar.'</td>';
+                else {
+                    echo '
+                        <td align="center">0,00</td>
+                        <td align="center">0,00</td>
+                    ';
                 }
-                echo '<td align="center">'.$row2["Responsable"].'</td>';
-            echo '</tr>';
+
+                echo '
+                    <td align="center">'.$row2["Responsable"].'</td>
+                </tr>
+            ';
         $contador++;
         }
 
