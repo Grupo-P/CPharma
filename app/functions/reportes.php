@@ -2686,7 +2686,7 @@
 		PARAMETROS : [$SedeConnection] Siglas de la sede para la conexion
 		FUNCION: Armar el reporte de activacion de proveedores
 		RETORNO: No aplica
-	 */
+	 *//*
 	function ReporteProductosEnCaida($SedeConnection) {
 
 		$connCPharma = ConectarXampp();
@@ -2714,7 +2714,40 @@
 		';
 		
 		echo'<h6 align="center">Periodo desde el '.$FInicialImp.' al '.$FFinalImp.' </h6>';
+		echo'<h6 align="center">Los productos de este reporte cumplen con los siguientes criterios</h6>';
 
+		echo '
+		<table class="table table-striped table-bordered col-12 sortable" id="myTable">
+			<thead class="thead-dark">
+	    	<tr>
+					<th scope="col">Compra</th>
+	      	<th scope="col">Venta</th>
+	      	<th scope="col">Existencia</th>
+	    	</tr>
+	    </thead>
+	    <tbody>
+	    	<tr>
+					<td scope="col">
+							<ul>
+								<li>NO tener compras en el rango</li>
+							</ul>
+					</td>
+	      	<td scope="col">
+							<ul>
+								<li>Tener ventas en el rango</li>
+							</ul>
+	      	</td>
+	      	<td scope="col">
+							<ul>
+								<li>Tener<span style="color:red;"> EXISTENCIA</span> el dia de <span style="color:red;">HOY</span></li>
+								<li>Dias restantes de existencia <span style="color:red;">menor a 10</span></li>
+								<li>Tener existencia <span style="color:red;">TODOS</span> los dias del rango</li>
+							</ul>
+	      	</td>
+	    	</tr>
+	    </tbody
+	  </table>';
+	
 		echo '
 		<table class="table table-striped table-bordered col-12 sortable" id="myTable">
 			<thead class="thead-dark">
@@ -2800,7 +2833,7 @@
 	  		</tbody>
 		</table>';
 		mysqli_close($connCPharma);
-	}
+	}*/
 	/*****************************************************************************/
 	/********************** REPORTE 15 ARTICULOS DEVALUADOS **********************/
 	/*
