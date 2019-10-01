@@ -264,33 +264,38 @@
 
         while($row2 = sqlsrv_fetch_array($result2,SQLSRV_FETCH_ASSOC)) {
 
-            $FechaVariable=$row2["FechaLote"]->format("Y-m-d");
-            $PrecioBruto=$row2["M_PrecioCompraBruto"];
+            $FechaVariable = $row2["FechaLote"]->format("Y-m-d");
+            $PrecioBruto = $row2["M_PrecioCompraBruto"];
 
             echo '<tr>';
-                //VALIDACION PARA CASO DE COMPRA
-                if($row2["InvCausaId"]==1) {
-                    echo '<td align="center"><strong>'.intval($contador).'</strong></td>';
-                    echo '<td align="center">Compra</td>';
+                if($row2["InvCausaId"] == 1) {//VALIDACION PARA CASO DE COMPRA
 
-                    $sql3=QProveedorYCantidadComprada2($IdArticulo,$FechaVariable,$PrecioBruto);
-                    $result3=sqlsrv_query($conn,$sql3);
-                    $row3=sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
+                    echo '
+                        <td align="center"><strong>'.intval($contador).'</strong></td>
+                        <td align="center">Compra</td>
+                    ';
 
-                    echo '<td align="center">'.utf8_encode(addslashes($row3["Nombre"])).'</td>';
-                    echo '<td align="center">'.$row2["FechaLote"]->format("d-m-Y").'</td>';
-                    echo '<td align="center">'.intval($row3["CantidadRecibidaFactura"]).'</td>';
+                    $sql3 = R10Q_Proveedor_Cantidad_Comprada($IdArticulo,$FechaVariable);
+                    $result3 = sqlsrv_query($conn,$sql3);
+                    $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
+
+                    echo '
+                        <td align="center">'.utf8_encode(addslashes($row3["Nombre"])).'</td>
+                        <td align="center">'.$row2["FechaLote"]->format("d-m-Y").'</td>
+                        <td align="center">'.intval($row3["CantidadRecibidaFactura"]).'</td>';
                 }
                 else {
-                    echo '<td align="center"><strong>'.intval($contador).'</strong></td>';
-                    echo '<td align="center">Inventario</td>';
-                    echo '<td align="center">'.utf8_encode(addslashes($row2["Descripcion"])).'</td>';
-                    echo '<td align="center">'.$row2["FechaLote"]->format("d-m-Y").'</td>';
 
-                    $sql3=QProveedorYCantidadComprada($IdArticulo,$FechaVariable);
-                    $result3=sqlsrv_query($conn,$sql3);
-                    $row3=sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
+                    echo '
+                        <td align="center"><strong>'.intval($contador).'</strong></td>
+                        <td align="center">Inventario</td>
+                        <td align="center">'.utf8_encode(addslashes($row2["Descripcion"])).'</td>
+                        <td align="center">'.$row2["FechaLote"]->format("d-m-Y").'</td>
+                    ';
 
+                    $sql3 = R10Q_Proveedor_Cantidad_Comprada($IdArticulo,$FechaVariable);
+                    $result3 = sqlsrv_query($conn,$sql3);
+                    $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
                     echo '<td align="center">'.intval($row3["CantidadRecibidaFactura"]).'</td>';
                 }
                 echo '<td align="center">'.$row2["CodigoAlmacen"].'</td>';
@@ -373,6 +378,7 @@
         PARAMETROS: [$IdArticulo] Id del articulo actual
         FUNCION: Construir la consulta para el despliegue del reporte AnaliticoDePrecio
         RETORNO: Un String con las instrucciones de la consulta
+        AUTOR: Ing. Manuel Henriquez
      */
     function R10Q_Lote_Analitico($IdArticulo) {
         $sql = "
@@ -404,6 +410,31 @@
 
             GROUP BY InvLoteAlmacen.InvLoteId,InvMovimiento.InvCausaId,InvCausa.Descripcion,CONVERT(DATE,InvLoteAlmacen.Auditoria_FechaCreacion),InvAlmacen.CodigoAlmacen,InvLoteAlmacen.Existencia,InvLote.M_PrecioCompraBruto,InvLote.Auditoria_Usuario
             ORDER BY FechaLote DESC
+        ";
+        return $sql;
+    }
+
+    /*
+        TITULO: R10Q_Proveedor_Cantidad_Comprada
+        PARAMETROS: [$IdArticulo] Id del articulo actual
+                    [$FechaLote] fecha de creacion del lote
+        FUNCION: Arma las filas correspondientes a los proveedores y el despacho
+        RETORNO: Un String con las instrucciones de la query
+        AUTOR: Ing. Manuel Henriquez
+    */
+    function R10Q_Proveedor_Cantidad_Comprada($IdArticulo,$FechaLote) {
+        $sql = "
+            SELECT
+            GenPersona.Nombre,
+            ComFacturaDetalle.CantidadRecibidaFactura
+            FROM InvArticulo
+            INNER JOIN ComFacturaDetalle ON InvArticulo.Id=ComFacturaDetalle.InvArticuloId
+            INNER JOIN ComFactura ON ComFactura.Id=ComFacturaDetalle.ComFacturaId
+            INNER JOIN ComProveedor ON ComProveedor.Id=ComFactura.ComProveedorId
+            INNER JOIN GenPersona ON GenPersona.Id=ComProveedor.GenPersonaId
+            WHERE (InvArticulo.Id = '$IdArticulo') 
+            AND (CONVERT(DATE,ComFactura.FechaRegistro) = '$FechaLote')
+            ORDER BY ComFactura.FechaRegistro DESC
         ";
         return $sql;
     }
