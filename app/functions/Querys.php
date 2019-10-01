@@ -1934,12 +1934,12 @@
 		RETORNO: no aplica
 		//
 	 */
-	function QCuentaExistencia($IdArticulo) {
+	function QCuentaExistencia($IdArticulo,$FInicial,$FFinal) {
 		$sql = "
 			SELECT 
 			COUNT(*) AS Cuenta 
 			FROM dias_ceros 
-			WHERE dias_ceros.id_articulo = '$IdArticulo'
+			WHERE dias_ceros.id_articulo = '$IdArticulo' AND (fecha_captura >= '$FInicial' AND `fecha_captura` < '$FFinal')
 		";
 		return $sql;
 	}
@@ -2093,12 +2093,12 @@
 		FUNCION: guardar en la tabla productos en caida
 		RETORNO: no aplica
 	 */
-	function QGuardarProductosCaida($IdArticulo,$CodigoArticulo,$Descripcion,$Precio,$Existencia,$Dia10,$Dia9,$Dia8,$Dia7,$Dia6,$Dia5,$Dia4,$Dia3,$Dia2,$Dia1,$UnidadesVendidas,$DiasRestantes,$fecha_captura,$user,$date) {
+	function QGuardarProductosCaida($IdArticulo,$CodigoArticulo,$Descripcion,$Precio,$Existencia,$Dia10,$Dia9,$Dia8,$Dia7,$Dia6,$Dia5,$Dia4,$Dia3,$Dia2,$Dia1,$UnidadesVendidas,$DiasRestantes,$fecha_captura,$user,$created_at,$updated_at) {
 		$sql = "
 		INSERT INTO productos_caida
 		(IdArticulo,CodigoArticulo,Descripcion,Precio,Existencia,Dia10,Dia9,Dia8,Dia7,Dia6,Dia5,Dia4,Dia3,Dia2,Dia1,UnidadesVendidas,DiasRestantes,fecha_captura,user,created_at,updated_at)
 		VALUES 
-		('$IdArticulo','$CodigoArticulo','$Descripcion','$Precio','$Existencia','$Dia10','$Dia9','$Dia8','$Dia7','$Dia6','$Dia5','$Dia4','$Dia3','$Dia2','$Dia1','$UnidadesVendidas','$DiasRestantes','$fecha_captura','$user','$date','$date')
+		('$IdArticulo','$CodigoArticulo','$Descripcion','$Precio','$Existencia','$Dia10','$Dia9','$Dia8','$Dia7','$Dia6','$Dia5','$Dia4','$Dia3','$Dia2','$Dia1','$UnidadesVendidas','$DiasRestantes','$fecha_captura','$user','$created_at','$updated_at')
 		";
 		return $sql;
 	}
