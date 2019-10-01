@@ -2243,25 +2243,25 @@
 		RETORNO: no aplica
 	 */
 	function ReporteDetalleDeMovimiento($SedeConnection,$FInicial,$FFinal,$IdArticulo) {
-		$conn=ConectarSmartpharma($SedeConnection);
+		$conn = ConectarSmartpharma($SedeConnection);
 
-		$sql=QArticulo($IdArticulo);
+		$sql = QArticulo($IdArticulo);
 		sqlsrv_query($conn,$sql);
-		$result=sqlsrv_query($conn,$sql);
-		$row=sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC);
+		$result = sqlsrv_query($conn,$sql);
+		$row = sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC);
 
-		$sql1=QExistenciaArticulo($IdArticulo,0);
-		$result1=sqlsrv_query($conn,$sql1);
-		$row1=sqlsrv_fetch_array($result1,SQLSRV_FETCH_ASSOC);
+		$sql1 = QExistenciaArticulo($IdArticulo,0);
+		$result1 = sqlsrv_query($conn,$sql1);
+		$row1 = sqlsrv_fetch_array($result1,SQLSRV_FETCH_ASSOC);
 
-		$IsIVA=$row["ConceptoImpuesto"];
-		$Existencia=$row1["Existencia"];
+		$IsIVA = $row["ConceptoImpuesto"];
+		$Existencia = $row1["Existencia"];
 
-		$Precio=CalculoPrecio($conn,$IdArticulo,$IsIVA,$Existencia);
+		$Precio = CalculoPrecio($conn,$IdArticulo,$IsIVA,$Existencia);
 
 		$Dolarizado = ProductoDolarizado($conn,$IdArticulo);
 
-		$TasaActual=TasaFecha(date('Y-m-d'));
+		$TasaActual = TasaFecha(date('Y-m-d'));
 
 		//-------------------- Inicio Rangos --------------------
 		$FFinalImpresion = $FFinal;
@@ -2319,175 +2319,181 @@
 		$RangoDias = RangoDias($FInicial,$FFinal);
 		//-------------------- Fin Rangos --------------------
 		
-		$row2=sqlsrv_fetch_array($result2,SQLSRV_FETCH_ASSOC);
+		$row2 = sqlsrv_fetch_array($result2,SQLSRV_FETCH_ASSOC);
 		$Venta = intval($row2["TotalUnidadesVendidasCliente"]);
 		$VentaDiaria = VentaDiaria($Venta,$RangoDias);
 		$DiasRestantes = DiasRestantes($Existencia,$VentaDiaria);
 
 		echo '
-		<div class="input-group md-form form-sm form-1 pl-0">
-		  <div class="input-group-prepend">
-		    <span class="input-group-text purple lighten-3" id="basic-text1">
-		    	<i class="fas fa-search text-white"
-		        aria-hidden="true"></i>
-		    </span>
-		  </div>
-		  <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterAllTable()">
-		</div>
-		<br/>';
-
-		echo'<h6 align="center">Periodo desde el '.$FInicial.' al '.$FFinalImpresion.' </h6>';
+            <div class="input-group md-form form-sm form-1 pl-0">
+                <div class="input-group-prepend">
+                    <span class="input-group-text purple lighten-3" id="basic-text1">
+                        <i class="fas fa-search text-white" aria-hidden="true"></i>
+                    </span>
+                </div>
+                <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterAllTable()">
+            </div>
+    		<br/>
+		';
 
 		echo '
-		<table class="table table-striped table-bordered col-12 sortable">
-			<thead class="thead-dark">
-			    <tr>
-			    	<th scope="col">Codigo</th>
-			      	<th scope="col">Descripcion</th>
-			      	<th scope="col">Existencia</th>
-			      	<th scope="col">Unidades vendidas</th>
-			      	<th scope="col">Dias restantes</th>
-			      	<th scope="col">Precio (Con IVA)</th>
-			      	<th scope="col">Dolarizado</th>
-			      	<th scope="col">Tasa actual</th>
-			      	<th scope="col">Precio en divisa (Con IVA)</th>
-			    </tr>
-		  	</thead>
+            <h6 align="center">Periodo desde el '.$FInicial.' al '.$FFinalImpresion.'</h6>
 
-		  	<tbody>
+            <table class="table table-striped table-bordered col-12 sortable">
+                <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">Codigo</th>
+    			      	<th scope="col">Descripcion</th>
+    			      	<th scope="col">Existencia</th>
+    			      	<th scope="col">Unidades vendidas</th>
+    			      	<th scope="col">Dias restantes</th>
+    			      	<th scope="col">Precio (Con IVA)</th>
+    			      	<th scope="col">Dolarizado</th>
+    			      	<th scope="col">Tasa actual</th>
+    			      	<th scope="col">Precio en divisa (Con IVA)</th>
+                    </tr>
+                </thead>
+
+                <tbody>
 	  	';
 
 		echo '
-				<tr>
-					<td>'.$row["CodigoArticulo"].'</td>
-		
-				<td align="left" class="barrido">
-					<a href="/reporte2?Id='.$IdArticulo.'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
-						.$row["Descripcion"].
-					'</a>
-					</td>
-
-					<td align="center">'.intval($Existencia).'</td>
-					<td align="center">'.$Venta.'</td>
-					<td align="center">'.$DiasRestantes.'</td>
-					<td align="center">'." ".round($Precio,2)." ".SigVe.'</td>
-					<td align="center">'.$Dolarizado.'</td>
+                    <tr>
+                        <td>'.$row["CodigoArticulo"].'</td>
+                        <td align="left" class="barrido">
+                            <a href="/reporte2?Id='.$IdArticulo.'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
+                                .$row["Descripcion"]
+                            .'</a>
+                        </td>
+    					<td align="center">'.intval($Existencia).'</td>
+    					<td align="center">'.$Venta.'</td>
+    					<td align="center">'.$DiasRestantes.'</td>
+    					<td align="center">'." ".round($Precio,2)." ".SigVe.'</td>
+    					<td align="center">'.$Dolarizado.'</td>
 		';
 
 		if($TasaActual!=0){
 			echo '
-					<td align="center">'." ".$TasaActual." ".SigVe.'</td>
-					<td align="center">'.round(($Precio/$TasaActual),2)." ".SigDolar.'</td>
+    					<td align="center">'." ".$TasaActual." ".SigVe.'</td>
+    					<td align="center">'.round(($Precio/$TasaActual),2)." ".SigDolar.'</td>
 			';
 		}
 		else{
 			echo '
-					<td align="center">0.00 '.SigVe.'</td>
-					<td align="center">0.00 '.SigDolar.'</td>
+    					<td align="center">0.00 '.SigVe.'</td>
+    					<td align="center">0.00 '.SigDolar.'</td>
 			';
 		}
 		echo '
-				</tr>
-	  		</tbody>
-		</table>';
-
-		echo '<br>';
-
-		echo '
-		<h6 align="center">Resumen de movimientos</h6>
-
-		<table class="table table-striped table-bordered col-12 sortable">
-			<thead class="thead-dark">
-			    <tr>
-			    	<th scope="col">#</th>
-			    	<th scope="col" class="text-center">Fecha</th>
-			      	<th scope="col" class="text-center">Tipo de movimiento</th>
-			      	<th scope="col" class="text-center">Cantidad</th>
-			    </tr>
-		  	</thead>
-
-		  	<tbody>';
-
-		  	$sql9 = QCleanTable('CP_QResumenDeMovimientos');
-			sqlsrv_query($conn,$sql9);
-			$sql10 = QIntegracionResumenDeMovimientos($IdArticulo,$FInicial,$FFinal);
-			sqlsrv_query($conn,$sql10);
-			$sql11 = QAgruparDetalleDeMovimientos();
-			$result4 = sqlsrv_query($conn,$sql11);
-
-			$sql = QCleanTable('CP_QResumenDeMovimientos');
-			sqlsrv_query($conn,$sql);
-
-			$contador = 1;
-		  	while($row4 = sqlsrv_fetch_array($result4,SQLSRV_FETCH_ASSOC)) {
-		  		$FechaComparativa = date('d/m/Y',strtotime($FFinal));
-		  		
-		  		if($FechaComparativa == $row4["FechaMovimiento"]) {
-		  			break;
-		  		}
-
-		  		echo '
-	  			<tr>
-	  				<td align="center"><strong>'.intval($contador).'</strong></td>
-					<td align="center">'.$row4["FechaMovimiento"].'</td>
-			      	<td align="center">'.utf8_encode($row4["Movimiento"]).'</td>
-			      	<td align="center">'.intval($row4["Cantidad"]).'</td>
-			    </tr>
-		  		';
-		  		$contador++;
-		  	}
-		echo '
-			</tbody>
-		</table>
-	  	';
-
-		echo '<br>';
+    				</tr>
+    	  		</tbody>
+    		</table>
+        ';
 
 		echo '
-		<h6 align="center">Detalle de movimientos</h6>
+            <br>
+    		<h6 align="center">Resumen de movimientos</h6>
 
-		<table class="table table-striped table-bordered col-12 sortable" id="myTable">
-			<thead class="thead-dark">
-			    <tr>
-			    	<th scope="col">#</th>
-			    	<th scope="col" class="text-center">Fecha</th>
-			      	<th scope="col" class="text-center">Hora</th>
-			      	<th scope="col" class="text-center">Tipo de movimiento</th>
-			      	<th scope="col" class="text-center">Cantidad</th>
-			    </tr>
-		  	</thead>
+    		<table class="table table-striped table-bordered col-12 sortable">
+                <thead class="thead-dark">
+    			    <tr>
+    			    	<th scope="col">#</th>
+    			    	<th scope="col" class="text-center">Fecha</th>
+    			      	<th scope="col" class="text-center">Tipo de movimiento</th>
+    			      	<th scope="col" class="text-center">Cantidad</th>
+    			    </tr>
+    		  	</thead>
 
-		  	<tbody>
+    		  	<tbody>
+        ';
+
+        $sql9 = QCleanTable('CP_QResumenDeMovimientos');
+        sqlsrv_query($conn,$sql9);
+        $sql10 = QIntegracionResumenDeMovimientos($IdArticulo,$FInicial,$FFinal);
+        sqlsrv_query($conn,$sql10);
+        $sql11 = QAgruparDetalleDeMovimientos();
+        $result4 = sqlsrv_query($conn,$sql11);
+
+		$sql = QCleanTable('CP_QResumenDeMovimientos');
+		sqlsrv_query($conn,$sql);
+
+		$contador = 1;
+
+	  	while($row4 = sqlsrv_fetch_array($result4,SQLSRV_FETCH_ASSOC)) {
+
+            $FechaComparativa = date('d/m/Y',strtotime($FFinal));
+	  		
+	  		if($FechaComparativa == $row4["FechaMovimiento"]) {
+	  			break;
+	  		}
+
+	  		echo '
+                    <tr>
+    	  				<td align="center"><strong>'.intval($contador).'</strong></td>
+    					<td align="center">'.$row4["FechaMovimiento"].'</td>
+    			      	<td align="center">'.utf8_encode($row4["Movimiento"]).'</td>
+    			      	<td align="center">'.intval($row4["Cantidad"]).'</td>
+    			    </tr>
+	  		';
+
+	  		$contador++;
+	  	}
+
+        echo '
+
+                </tbody>
+            </table>
+        ';
+
+		echo '
+            <br>
+            <h6 align="center">Detalle de movimientos</h6>
+
+            <table class="table table-striped table-bordered col-12 sortable" id="myTable">
+    			<thead class="thead-dark">
+    			    <tr>
+    			    	<th scope="col">#</th>
+    			    	<th scope="col" class="text-center">Fecha</th>
+    			      	<th scope="col" class="text-center">Hora</th>
+    			      	<th scope="col" class="text-center">Tipo de movimiento</th>
+    			      	<th scope="col" class="text-center">Cantidad</th>
+    			    </tr>
+    		  	</thead>
+
+    		  	<tbody>
 		';
 
-	  	$sql8=QDetalleDeMovimiento($IdArticulo,$FInicial,$FFinal);
+        $sql8=QDetalleDeMovimiento($IdArticulo,$FInicial,$FFinal);
 		$result3=sqlsrv_query($conn,$sql8);
 
 		$contador = 1;
+
 	  	while($row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC)) {
+
 	  		if($row3["FechaMovimiento"]->format("Y-m-d") == $FFinal) {
 	  			break;
 	  		}
 
 	  		echo '
-	  			<tr>
-	  				<td align="center"><strong>'.intval($contador).'</strong></td>
-			    	<td align="center">'.$row3["FechaMovimiento"]->format("d/m/Y").'</td>';
+    	  			<tr>
+    	  				<td align="center"><strong>'.intval($contador).'</strong></td>
+    			    	<td align="center">'.$row3["FechaMovimiento"]->format("d/m/Y").'</td>
+            ';
 
 			$Hora = date('h:i a',strtotime($row3["FechaMovimiento"]->format("H:m:s")));
 
 			echo '					
-			      	<td align="center">'.$Hora.'</td>
-			      	<td align="center">'.utf8_encode($row3["Movimiento"]).'</td>
-			      	<td align="center">'.intval($row3["Cantidad"]).'</td>
-			    </tr>
+    			      	<td align="center">'.$Hora.'</td>
+    			      	<td align="center">'.utf8_encode($row3["Movimiento"]).'</td>
+    			      	<td align="center">'.intval($row3["Cantidad"]).'</td>
+    			    </tr>
 			';
 			$contador++;
 	  	}
 
 	  	echo '
-	  		</tbody>
-	  	</table>
+                </tbody>
+    	  	</table>
 	  	';
 
 		sqlsrv_close($conn);
