@@ -81,10 +81,6 @@
 		include(app_path().'\functions\funciones.php');
 
 		$ArtJson="";
-
-        //---------- BORRAR ESTA LINEA ----------
-        $_GET['SEDE'] = 'FTN';
-        //---------- BORRAR ESTA LINEA ----------
         
 		if(isset($_GET['Id'])) {
 			$InicioCarga = new DateTime("now");
