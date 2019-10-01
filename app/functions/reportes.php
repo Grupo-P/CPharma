@@ -2298,7 +2298,23 @@
 		sqlsrv_query($conn,$sql5);
 		sqlsrv_query($conn,$sql6);
 		sqlsrv_query($conn,$sql61);
+		
 		$result2 = sqlsrv_query($conn,$sql7);
+
+		$sql = QCleanTable('CP_QUnidadesVendidasCliente2');
+		sqlsrv_query($conn,$sql);
+		$sql = QCleanTable('CP_QUnidadesDevueltaCliente2');
+		sqlsrv_query($conn,$sql);
+		$sql = QCleanTable('CP_QUnidadesCompradasProveedor2');
+		sqlsrv_query($conn,$sql);
+		$sql = QCleanTable('CP_QUnidadesReclamoProveedor2');
+		sqlsrv_query($conn,$sql);
+		$sql = QCleanTable('CP_QIntegracionProductosVendidos2');
+		sqlsrv_query($conn,$sql);
+		$sql = QCleanTable('CP_QIntegracionProductosFalla2');
+		sqlsrv_query($conn,$sql);
+		$sql = QCleanTable('CP_QArticuloDescLike2');
+		sqlsrv_query($conn,$sql);
 
 		$RangoDias = RangoDias($FInicial,$FFinal);
 		//-------------------- Fin Rangos --------------------
@@ -2399,6 +2415,9 @@
 			$sql11 = QAgruparDetalleDeMovimientos();
 			$result4 = sqlsrv_query($conn,$sql11);
 
+			$sql = QCleanTable('CP_QResumenDeMovimientos');
+			sqlsrv_query($conn,$sql);
+
 			$contador = 1;
 		  	while($row4 = sqlsrv_fetch_array($result4,SQLSRV_FETCH_ASSOC)) {
 		  		$FechaComparativa = date('d/m/Y',strtotime($FFinal));
@@ -2470,24 +2489,6 @@
 	  		</tbody>
 	  	</table>
 	  	';
-
-	  	$sql = QCleanTable('CP_QUnidadesVendidasCliente2');
-		sqlsrv_query($conn,$sql);
-		$sql = QCleanTable('CP_QUnidadesDevueltaCliente2');
-		sqlsrv_query($conn,$sql);
-		$sql = QCleanTable('CP_QUnidadesCompradasProveedor2');
-		sqlsrv_query($conn,$sql);
-		$sql = QCleanTable('CP_QUnidadesReclamoProveedor2');
-		sqlsrv_query($conn,$sql);
-		$sql = QCleanTable('CP_QIntegracionProductosVendidos2');
-		sqlsrv_query($conn,$sql);
-		$sql = QCleanTable('CP_QIntegracionProductosFalla2');
-		sqlsrv_query($conn,$sql);
-		$sql = QCleanTable('CP_QArticuloDescLike2');
-		sqlsrv_query($conn,$sql);
-
-		$sql = QCleanTable('CP_QResumenDeMovimientos');
-		sqlsrv_query($conn,$sql);
 
 		sqlsrv_close($conn);
 	}
