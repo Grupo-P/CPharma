@@ -968,8 +968,8 @@
 		FUNCION: 
 		RETORNO: 
  	*/
-	function CuentaExistencia($connCPharma,$IdArticulo) {
-		$sql = QCuentaExistencia($IdArticulo);
+	function CuentaExistencia($connCPharma,$IdArticulo,$FInicial,$FFinal) {
+		$sql = QCuentaExistencia($IdArticulo,$FInicial,$FFinal);
 		$result = mysqli_query($connCPharma,$sql);
 		$row = mysqli_fetch_assoc($result);
 		$Cuenta = $row["Cuenta"];
@@ -984,6 +984,7 @@
 	function CuentaVenta($conn,$IdArticulo,$FInicial,$FFinal) {
 		
 		$FFinalPivote = date("Y-m-d",strtotime($FInicial."+1 days"));
+		$FFinal = date("Y-m-d",strtotime($FFinal."+1 days"));
 		$CuentaVenta = 0;
 
 		while($FFinalPivote!=$FFinal){
@@ -1502,7 +1503,7 @@
 		DESARROLLADO POR: SERGIO COVA
 	 */
 	function FG_Calculo_Precio($conn,$IdArticulo,$IsIVA,$Existencia) {		
-		if($Existencia ===0) {
+		if($Existencia==0) {
 			$Precio = 0;
 		}
 		else {
@@ -1568,10 +1569,10 @@
 	 */
 	function FG_Rango_Dias($FInicial,$FFinal) {
 		$FechaI = new DateTime($FInicial);
-	    $FechaF = new DateTime($FFinal);
-	    $Rango = $FechaI->diff($FechaF);
-	    $Rango = $Rango->format('%a');
-	    return $Rango;
+    $FechaF = new DateTime($FFinal);
+    $Rango = $FechaI->diff($FechaF);
+    $Rango = $Rango->format('%a');
+    return $Rango;
 	}
 	/*
 		TITULO: FG_Tipo_Producto
@@ -1785,7 +1786,7 @@
 		RETORNO: no aplica
  	*/
 	function FG_Generer_Etiquetas($clasificacion,$tipo) {
-		$SedeConnection = MiUbicacion();	
+		$SedeConnection = MiUbicacion();
   	$conn = ConectarSmartpharma($SedeConnection);
 	    
 		$connCPharma = ConectarXampp();	
@@ -2124,7 +2125,7 @@
 		DESARROLLADO POR: SERGIO COVA
 	 */
 	function FG_Calculo_Precio_Etiquetas($conn,$IdArticulo,$IsIVA,$Existencia) {
-		if($Existencia ===0) {
+		if($Existencia==0) {
 			$Precio = 0;
 		}
 		else {
@@ -2241,7 +2242,7 @@
 		DESARROLLADO POR: SERGIO COVA
 	 */
 	function FG_Calculo_Precio_Dias_EnCero($conn,$IdArticulo,$IsIVA,$Existencia) {
-		if($Existencia ===0) {
+		if($Existencia==0) {
 			$Precio = 0;
 		}
 		else {
@@ -2330,6 +2331,7 @@
 		$FechaCaptura = new DateTime("now");
 		$FechaCaptura = $FechaCaptura->format('Y-m-d');
 		$user = 'SYSTEM';
+		$date = date('Y-m-d h:i:s',time());
 
 		/* Rangos de Fecha */
   		$FFinal = date("Y-m-d");
@@ -2373,7 +2375,7 @@
 		/* Inicio while que itera en los articulos con existencia actual > 0*/
 		while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
 			$IdArticulo = $row["InvArticuloId"];
-			
+
 			$sql1 = QG_DetalleArticulo_ProductoCaida($IdArticulo);
     	$result1 = sqlsrv_query($conn,$sql1);
     	$row1 = sqlsrv_fetch_array($result1,SQLSRV_FETCH_ASSOC);
@@ -2395,15 +2397,16 @@
 				*	se cuenta las apariciones del articulo en la tabla de dias
 				*	en cero, la misma debe ser igual la diferencia de dias +1 
 				*/
-				$CuentaExistencia = CuentaExistencia($connCPharma,$IdArticulo);
-				if($CuentaExistencia==($RangoDias+1)){
+				$CuentaExistencia = CuentaExistencia($connCPharma,$IdArticulo,$FInicial,$FFinal);
+				
+				if($CuentaExistencia==$RangoDias){
 					/*  FILTRO 4: 
 					*	Venta en dia, esta se acumula 
 					*	El articulo debe tener venta al menos la mita de dias del rango 
 					*/
 					$CuentaVenta = CuentaVenta($conn,$IdArticulo,$FInicial,$FFinal);
 
-					if($CuentaVenta>=($RangoDias/2)){
+					if($CuentaVenta>=($RangoDias/2)){		
 
 						$ExistenciaDecreciente = ExistenciaDecreciente($connCPharma,$IdArticulo,$FInicial,$FFinal,$RangoDias);
 
@@ -2412,8 +2415,8 @@
 						/*  FILTRO 5: 
 						*	Si el articulo decrece su existencia rango 
 						*/
-						if(($CuentaDecreciente==TRUE)&&(count($ExistenciaDecreciente)>=$RangoDias)){
-							
+						if($CuentaDecreciente==TRUE){
+
 							$Precio = FG_Calculo_Precio_Producto_Caida($conn,$IdArticulo,$IsIVA,$Existencia);
 
 							$Dia1 = array_pop($ExistenciaDecreciente);
@@ -2426,16 +2429,14 @@
 							$Dia8 = array_pop($ExistenciaDecreciente);
 							$Dia9 = array_pop($ExistenciaDecreciente);
 							$Dia10 = array_pop($ExistenciaDecreciente);
-							
-							$date = date('Y-m-d h:i:s',time());
 
-							$sqlCPharma = QGuardarProductosCaida($IdArticulo,$CodigoArticulo,$Descripcion,$Precio,$Existencia,$Dia10,$Dia9,$Dia8,$Dia7,$Dia6,$Dia5,$Dia4,$Dia3,$Dia2,$Dia1,$UnidadesVendidas,$DiasRestantes,$FechaCaptura,$user,$date);
+							$sqlCPharma = QGuardarProductosCaida($IdArticulo,$CodigoArticulo,$Descripcion,$Precio,$Existencia,$Dia10,$Dia9,$Dia8,$Dia7,$Dia6,$Dia5,$Dia4,$Dia3,$Dia2,$Dia1,$UnidadesVendidas,$DiasRestantes,$FechaCaptura,$user,$date,$date);
 
 							mysqli_query($connCPharma,$sqlCPharma);
-						}		
-					}
+						}						
+					}	
 				}
-			}
+			}	
 		}
 		GuardarCapturaCaida($connCPharma,$FechaCaptura,$date);
 		
@@ -2465,7 +2466,7 @@
 		DESARROLLADO POR: SERGIO COVA
 	 */
 	function FG_Calculo_Precio_Producto_Caida($conn,$IdArticulo,$IsIVA,$Existencia) {
-		if($Existencia===0) {
+		if($Existencia==0) {
 			$Precio = 0;
 		}
 		else {
