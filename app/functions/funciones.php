@@ -1709,8 +1709,7 @@
 		RETORNO: SI o NO segun sea el caso
 	 */
 	function FG_Validar_Etiquetas() {
-		//$SedeConnection = MiUbicacion();
-		$SedeConnection = 'FTN';
+		$SedeConnection = MiUbicacion();
 	    $conn = ConectarSmartpharma($SedeConnection);
 	    $connCPharma = ConectarXampp();
 
@@ -2188,8 +2187,7 @@
 		RETORNO: no aplica
 	 */
 	function FG_Dias_EnCero() {
-		//$SedeConnection = MiUbicacion();
-		$SedeConnection = 'FTN';
+		$SedeConnection = MiUbicacion();
 		$conn = ConectarSmartpharma($SedeConnection);
 		$connCPharma = ConectarXampp();
 
@@ -2322,8 +2320,7 @@
 		RETORNO: no aplica
 	 */
 	function FG_Prouctos_EnCaida() {
-		//$SedeConnection = MiUbicacion();
-		$SedeConnection = 'FTN';
+		$SedeConnection = MiUbicacion();
 		$conn = ConectarSmartpharma($SedeConnection);
 		$connCPharma = ConectarXampp();
 
