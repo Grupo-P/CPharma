@@ -2339,9 +2339,6 @@
   		$FFinal = date("Y-m-d");
 	  	$FInicial = date("Y-m-d",strtotime($FFinal."-10 days"));
 	  	$RangoDias = intval(FG_Rango_Dias($FInicial,$FFinal));
-	  	echo'<br>RangoDias: '.$RangoDias.'************';
-	  	echo'<br>FInicial: '.$FInicial.'************';
-	  	echo'<br>FFinal: '.$FFinal.'************';
 
 		/* FILTRO 1:
 		*	Articulos con veces vendidas en el rango
@@ -2378,21 +2375,9 @@
 		sqlsrv_query($conn,$sql);
 
 		/* Inicio while que itera en los articulos con existencia actual > 0*/
-		//while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
-			//$IdArticulo = $row["InvArticuloId"];
-			
-			/*BORRAR ESTO*/
-				$Filtro1 = 'NO';
-				$IdArticulo = 312;
-	    		while( ($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) &&  ($Filtro1=='NO') ) {
-						$IdArticuloROW = $row["InvArticuloId"];
-						if($IdArticuloROW==$IdArticulo){
-							$Filtro1 = 'SI';
-						}
-					}
-					echo'\nEl Producto paso el filtro 1 (Con Venta, Sin Compra): '.$Filtro1.'************';
-    	/*BORRAR ESTO*/
-		
+		while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
+			$IdArticulo = $row["InvArticuloId"];
+
 			$sql1 = QG_DetalleArticulo_ProductoCaida($IdArticulo);
     	$result1 = sqlsrv_query($conn,$sql1);
     	$row1 = sqlsrv_fetch_array($result1,SQLSRV_FETCH_ASSOC);
@@ -2408,32 +2393,22 @@
 			*	Dias restantes
 			*	si dias restantes es menor de 10 entra en el rango sino es rechazado
 			*/
-			echo'<br>DiasRestantes: '.$DiasRestantes.'************';
 			if($DiasRestantes<11){
-				
-					echo'\nEl Producto paso el filtro 2 (Dias Restantes): SI ************';
-				
 				/* FILTRO 3:
 				*	Mantuvo Existencia en rango
 				*	se cuenta las apariciones del articulo en la tabla de dias
 				*	en cero, la misma debe ser igual la diferencia de dias +1 
 				*/
 				$CuentaExistencia = CuentaExistencia($connCPharma,$IdArticulo,$FInicial,$FFinal);
-				echo'<br>CuentaExistencia: '.$CuentaExistencia.'************';
+				
 				if($CuentaExistencia==$RangoDias){
-
-					echo'\nEl Producto paso el filtro 3 (Existencia Rango): SI ************';
-
 					/*  FILTRO 4: 
 					*	Venta en dia, esta se acumula 
 					*	El articulo debe tener venta al menos la mita de dias del rango 
 					*/
 					$CuentaVenta = CuentaVenta($conn,$IdArticulo,$FInicial,$FFinal);
 
-					echo'<br>CuentaVenta: '.$CuentaVenta.'************';
-					if($CuentaVenta>=($RangoDias/2)){
-
-						echo'\nEl Producto paso el filtro 4 (Venta en dia): SI ************';
+					if($CuentaVenta>=($RangoDias/2)){		
 
 						$ExistenciaDecreciente = ExistenciaDecreciente($connCPharma,$IdArticulo,$FInicial,$FFinal,$RangoDias);
 
@@ -2444,8 +2419,6 @@
 						*/
 						if($CuentaDecreciente==TRUE){
 
-							echo'\nEl Producto paso el filtro 5 (Existencia Decrece): SI ************';
-							
 							$Precio = FG_Calculo_Precio_Producto_Caida($conn,$IdArticulo,$IsIVA,$Existencia);
 
 							$Dia1 = array_pop($ExistenciaDecreciente);
@@ -2462,29 +2435,11 @@
 							$sqlCPharma = QGuardarProductosCaida($IdArticulo,$CodigoArticulo,$Descripcion,$Precio,$Existencia,$Dia10,$Dia9,$Dia8,$Dia7,$Dia6,$Dia5,$Dia4,$Dia3,$Dia2,$Dia1,$UnidadesVendidas,$DiasRestantes,$FechaCaptura,$user,$date,$date);
 
 							mysqli_query($connCPharma,$sqlCPharma);
-						}
-						else{
-							echo'\nEl Producto paso el filtro 5 (Existencia Decrece): NO ************';	
-						}	
-						
-					}
-					else{
-						echo'\nEl Producto paso el filtro 4 (Venta en dia): NO ************';
-					}
-					
+						}						
+					}	
 				}
-				else{
-					echo'\nEl Producto paso el filtro 3 (Existencia Rango): NO ************';
-				}
-				
-			}
-			else{
-				echo'\nEl Producto paso el filtro 2 (Dias Restantes): NO ************';
-			}
-			
-		//}
-		echo'\nEl Producto es: '.$Descripcion.'************';
-
+			}	
+		}
 		GuardarCapturaCaida($connCPharma,$FechaCaptura,$date);
 		
 		$sqlCC = QValidarCapturaCaida($FechaCaptura);
