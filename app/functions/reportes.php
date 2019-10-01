@@ -2686,15 +2686,18 @@
 		PARAMETROS : [$SedeConnection] Siglas de la sede para la conexion
 		FUNCION: Armar el reporte de activacion de proveedores
 		RETORNO: No aplica
-	 */
+	 *//*
 	function ReporteProductosEnCaida($SedeConnection) {
 
 		$connCPharma = ConectarXampp();
 
 		$FFinal = date("Y-m-d");
-	  	$FInicial = date("Y-m-d",strtotime($FFinal."-10 days"));
+	  $FInicial = date("Y-m-d",strtotime($FFinal."-10 days"));
 
-		$sql = "SELECT * FROM productos_caida";
+	  $FInicialImp = date("d-m-Y", strtotime($FInicial));
+    $FFinalImp= date("d-m-Y", strtotime($FFinal));
+
+		$sql = "SELECT * FROM productos_caida ORDER BY CAST(UnidadesVendidas AS INT) DESC";
 		$result = mysqli_query($connCPharma,$sql);
 
 		echo '
@@ -2710,8 +2713,41 @@
 		<br/>
 		';
 		
-		echo'<h6 align="center">Periodo desde el '.$FInicial.' al '.$FFinal.' </h6>';
+		echo'<h6 align="center">Periodo desde el '.$FInicialImp.' al '.$FFinalImp.' </h6>';
+		echo'<h6 align="center">Los productos de este reporte cumplen con los siguientes criterios</h6>';
 
+		echo '
+		<table class="table table-striped table-bordered col-12 sortable" id="myTable">
+			<thead class="thead-dark">
+	    	<tr>
+					<th scope="col">Compra</th>
+	      	<th scope="col">Venta</th>
+	      	<th scope="col">Existencia</th>
+	    	</tr>
+	    </thead>
+	    <tbody>
+	    	<tr>
+					<td scope="col">
+							<ul>
+								<li>NO tener compras en el rango</li>
+							</ul>
+					</td>
+	      	<td scope="col">
+							<ul>
+								<li>Tener ventas en el rango</li>
+							</ul>
+	      	</td>
+	      	<td scope="col">
+							<ul>
+								<li>Tener<span style="color:red;"> EXISTENCIA</span> el dia de <span style="color:red;">HOY</span></li>
+								<li>Dias restantes de existencia <span style="color:red;">menor a 10</span></li>
+								<li>Tener existencia <span style="color:red;">TODOS</span> los dias del rango</li>
+							</ul>
+	      	</td>
+	    	</tr>
+	    </tbody
+	  </table>';
+	
 		echo '
 		<table class="table table-striped table-bordered col-12 sortable" id="myTable">
 			<thead class="thead-dark">
@@ -2719,7 +2755,7 @@
 			    	<th scope="col">#</th>			
 			    	<th scope="col">Codigo</th>
 			      	<th scope="col">Descripcion</td>
-			      	<th scope="col">Precio</br>(Con IVA)</td>
+			      	<th scope="col">Precio</br>(Con IVA) '.SigVe.'</td>
 			      	<th scope="col">Existencia</td>
 			      	<th scope="col">Dia 10</td>
 			      	<th scope="col">Dia 9</td>
@@ -2742,7 +2778,7 @@
 		while($row = mysqli_fetch_assoc($result)){
 			$IdArticulo = $row['IdArticulo'];
 			$CodigoArticulo = $row['CodigoArticulo'];
-			$Descripcion = $row['Descripcion'];
+			$Descripcion = utf8_encode(addslashes($row['Descripcion']));
 			$Precio = $row['Precio'];
 			$Existencia = $row['Existencia'];
 			$Dia10 = $row['Dia10'];
@@ -2769,7 +2805,7 @@
 			'</a>
 			</td>';
 
-			echo '<td align="center">'." ".intval($Precio)." ".SigVe.'</td>';
+			echo '<td align="center">'.number_format($Precio,2,"," ,"." ).'</td>';
 			echo '<td align="center">'.intval($Existencia).'</td>';
 			echo '<td align="center">'.intval($Dia10).'</td>';
 			echo '<td align="center">'.intval($Dia9).'</td>';
@@ -2785,7 +2821,7 @@
 			echo 
 			'<td align="center" class="barrido">
 			<a href="reporte12?fechaInicio='.$FInicial.'&fechaFin='.$FFinal.'&SEDE='.$SedeConnection.'&Descrip='.$Descripcion.'&Id='.$IdArticulo.'" style="text-decoration: none; color: black;" target="_blank">'
-				.$UnidadesVendidas.
+				.intval($UnidadesVendidas).
 			'</a>
 			</td>';
 
@@ -2797,7 +2833,7 @@
 	  		</tbody>
 		</table>';
 		mysqli_close($connCPharma);
-	}
+	}*/
 	/*****************************************************************************/
 	/********************** REPORTE 15 ARTICULOS DEVALUADOS **********************/
 	/*

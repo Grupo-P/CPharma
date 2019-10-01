@@ -2339,8 +2339,8 @@
 	  	$RangoDias = intval(FG_Rango_Dias($FInicial,$FFinal));
 
 		/* FILTRO 1:
-		*	Articulos con veces vendidas en el rango
-		* Articulos sin compra en el rango
+		*  Articulos con veces vendidas en el rango
+		*  Articulos sin compra en el rango
 		*/
 		$sql = QCleanTable('CP_QG_Unidades_Vendidas');
 		sqlsrv_query($conn,$sql);
