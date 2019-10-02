@@ -5,14 +5,9 @@
 @endsection
 
 @section('scriptsHead')
-    <script type="text/javascript" src="{{ asset('assets/js/sortTable.js') }}">
-    </script>
-    <script type="text/javascript" src="{{ asset('assets/js/filter.js') }}">  
-    </script>
-    <script type="text/javascript" src="{{ asset('assets/js/functions.js') }}"> 
-    </script>
-    <script type="text/javascript" src="{{ asset('assets/jquery/jquery-2.2.2.min.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('assets/jquery/jquery-ui.min.js') }}" ></script>
+    <script type="text/javascript" src="{{ asset('assets/js/sortTable.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('assets/js/filter.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('assets/js/functions.js') }}"></script>
 
     <style>
       * {box-sizing:border-box;}
@@ -68,7 +63,6 @@
     include(app_path().'\functions\config.php');
     include(app_path().'\functions\querys.php');
     include(app_path().'\functions\funciones.php');
-    include(app_path().'\functions\reportes.php');
 
     $ArtJson="";
 
