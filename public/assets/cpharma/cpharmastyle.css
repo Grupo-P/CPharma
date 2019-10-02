@@ -1,14 +1,45 @@
-.barrido {
-	text-decoration: none;
-	transition: width 1s, height 1s, transform 1s;
-}
-.barrido:hover {
-	text-decoration: none;
-	transition: width 1s, height 1s, transform 1s;
-	transform: translate(20px,0px);
-}
-.stickyCP {
-  	position: -webkit-sticky; /* Safari */
- 	position: sticky;
-  	top: 0;
-}
+/*Welcome Styles*/
+	.CP-Welcome-content {
+        text-align: center;
+    }
+	.CP-Welcome-flex-center {
+        align-items: center;
+        display: flex;
+        justify-content: center;
+    }
+    .CP-Welcome-position-ref {
+        position: relative;
+    }
+	.CP-Welcome-full-height {
+        height: 55vh;
+    }
+    .CP-Welcome-title {
+        font-size: 84px;
+    }
+/*Efectos, Trasiciones o Transformaciones*/
+	.CP-Latido {
+		transform: scale(1);
+        transition: width 1s, height 1s, transform 2s;
+	}
+	.CP-Latido:hover {
+        transform: scale(1.2);
+        transition: width 1s, height 1s, transform 2s;
+    }
+	.barrido {
+		text-decoration: none;
+		transition: width 1s, height 1s, transform 1s;
+	}
+	.barrido:hover {
+		text-decoration: none;
+		transition: width 1s, height 1s, transform 1s;
+		transform: translate(20px,0px);
+	}
+	.stickyCP {
+	  	position: -webkit-sticky; /* Safari */
+	 	position: sticky;
+	  	top: 0;
+	}
+/**/
+.CP-title-NavBar {
+        font-size: 30px;
+    }
