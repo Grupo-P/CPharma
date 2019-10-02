@@ -2522,4 +2522,16 @@
 		}
 		return $Precio;
 	}
+	/*
+		TITULO: FG_Limpiar_Texto
+		PARAMETROS: [$texto] String que sera formateado
+		FUNCION: limpia el texto de caracteres no imprimibles
+		RETORNO: Texto limpio
+		DESARROLLADO POR: SERGIO COVA
+	 */
+	function FG_Limpiar_Texto($texto) {
+		$texto = utf8_encode($texto);	
+		$texto = preg_replace("/[^A-Za-z0-9_\-\&\ñ\Ñ\'\(\)\.\,\s]/",'',$texto);
+		return $texto;
+	}
 ?>
