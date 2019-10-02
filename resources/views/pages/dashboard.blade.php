@@ -22,6 +22,7 @@
 			->select('registro')
  			->groupBy('registro')
  			->orderBy(DB::raw('count(*)'),'desc')
+ 			->where('tabla','reporte')
          	->take(1)->get();
         $auditor = $auditor[0];
         $auditorias = $auditor->registro;
@@ -75,27 +76,29 @@
 	<div class="card-deck">
 		<div class="card CP-border-golden mb-3" style="width: 14rem;">	  	
 	  		<div class="card-body text-left CP-bg-golden">
-	    		<h5>
+	    		<h4>
 		    		<span class="card-text text-white">
-		    			<i class="fas fa-star"></i>
+		    			<i class="fas fa-star CP-Latir"></i>
 		    			<?php
-							echo 'Reporte mas usado: '.$auditorias;
+							echo ''.$auditorias;
 						?>						
 		    		</span>
-	    		</h5>
+	    		</h4>
+	    		<p class="card-text text-white">Reporte mas usado</p>
 	  		</div>	
 		</div>
 
 		<div class="card CP-border-golden mb-3" style="width: 14rem;">	  	
 	  		<div class="card-body text-left CP-bg-golden">
-	    		<h5>
+	    		<h4>
 		    		<span class="card-text text-white">
-		    			<i class="fas fa-star"></i>
+		    			<i class="fas fa-star CP-Latir"></i>
 		    			<?php
-							echo 'Usuario mas activo: '.$usuarioAct;
+							echo ''.$usuarioAct;
 						?>						
 		    		</span>
-	    		</h5>
+	    		</h4>
+	    		<p class="card-text text-white">Usuario mas activo</p>
 	  		</div>	
 		</div>
 	</div>

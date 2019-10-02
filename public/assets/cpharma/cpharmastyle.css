@@ -100,12 +100,21 @@
 	.CP-bg-golden{
 		background-color: #DAA520 !important;
 	}
+	.CP-text-golden{
+		color: #DAA520 !important;
+	}
 
-
-
-
-
-
+	.CP-Latir {
+	  -webkit-animation: latir 2.5s infinite;
+	}
+	@-webkit-keyframes latir{
+	  0%  { -webkit-transform:scale(1.3);}
+	  20% { -webkit-transform:scale(1);}
+	  40%{ -webkit-transform:scale(1);}
+	  60% { -webkit-transform:scale(1.3)}
+	  80% { -webkit-transform:scale(1)}
+	  100% { -webkit-transform:scale(1.3)}
+	}
 
 	.barrido {
 		text-decoration: none;
