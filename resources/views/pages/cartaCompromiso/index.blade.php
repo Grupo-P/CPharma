@@ -110,14 +110,14 @@
 	<table class="table table-striped table-borderless col-12 sortable" id="myTable">
 	  	<thead class="thead-dark">
 		    <tr>
-		      	<th scope="col">#</th>
-		      	<th scope="col">Proveedor</th>
-		      	<th scope="col">Art&iacute;culo</th>
-		      	<th scope="col">Lote</th>
-		      	<th scope="col">Fecha de vencimiento (Art&iacute;culo)</th>
-		      	<th scope="col">Fecha tope (Compromiso)</th>
-		      	<th scope="col">Estatus</th>
-		      	<th scope="col">Acciones</th>
+		      	<th scope="col" class="stickyCP">#</th>
+		      	<th scope="col" class="stickyCP">Proveedor</th>
+		      	<th scope="col" class="stickyCP">Art&iacute;culo</th>
+		      	<th scope="col" class="stickyCP">Lote</th>
+		      	<th scope="col" class="stickyCP">Fecha de vencimiento (Art&iacute;culo)</th>
+		      	<th scope="col" class="stickyCP">Fecha tope (Compromiso)</th>
+		      	<th scope="col" class="stickyCP">Estatus</th>
+		      	<th scope="col" class="stickyCP">Acciones</th>
 		    </tr>
 	  	</thead>
 	  	<tbody>

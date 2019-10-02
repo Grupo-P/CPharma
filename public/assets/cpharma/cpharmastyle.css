@@ -1,0 +1,14 @@
+.barrido {
+	text-decoration: none;
+	transition: width 1s, height 1s, transform 1s;
+}
+.barrido:hover {
+	text-decoration: none;
+	transition: width 1s, height 1s, transform 1s;
+	transform: translate(20px,0px);
+}
+.stickyCP {
+  	position: -webkit-sticky; /* Safari */
+ 	position: sticky;
+  	top: 0;
+}

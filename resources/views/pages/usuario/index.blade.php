@@ -110,14 +110,14 @@
 	<table class="table table-striped table-borderless col-12 sortable" id="myTable">
 	  	<thead class="thead-dark">
 		    <tr>
-		      	<th scope="col">#</th>
-		      	<th scope="col">Nombre</th>
-		      	<th scope="col">Correo</th>
-		      	<th scope="col">Sede</th>
-		      	<th scope="col">Departamento</th>
-		      	<th scope="col">Rol</th>
-		      	<th scope="col">Estatus</th>
-		      	<th scope="col">Acciones</th> 
+		      	<th scope="col" class="stickyCP">#</th>
+		      	<th scope="col" class="stickyCP">Nombre</th>
+		      	<th scope="col" class="stickyCP">Correo</th>
+		      	<th scope="col" class="stickyCP">Sede</th>
+		      	<th scope="col" class="stickyCP">Departamento</th>
+		      	<th scope="col" class="stickyCP">Rol</th>
+		      	<th scope="col" class="stickyCP">Estatus</th>
+		      	<th scope="col" class="stickyCP">Acciones</th> 
 		    </tr>
 	  	</thead>
 	  	<tbody>
