@@ -16,6 +16,43 @@
     .CP-Welcome-title {
         font-size: 84px;
     }
+/*Nav Bar Icons Styles*/
+	.CP-Menu-titleIcon {
+      font-size: 50px;
+      color:#5bc0de;
+  	}
+
+	.CP-Menu-titleIcon:hover {
+		color:#5cb85c;
+	}
+	.CP-divborder {
+	    border-collapse: collapse;
+	    border-color: #28A745;
+  	}
+  	.CP-aborder {
+	    border-collapse: collapse;
+	    border-color: #28A745;
+	    color: #28A745;
+	    background-color: none;
+	}
+  	.CP-aborder:hover {
+      	border-collapse: collapse;
+      	border-color: #28A745;
+      	color: white;
+      	background-color: #28A745;
+	}
+/*Footer Styles*/
+	.CP-Links-No-Style {
+      text-decoration: none;
+    }
+
+    .CP-Links-No-Style:hover {      
+      text-decoration: none;
+    }
+
+    .CP-Links-No-Style:visited {      
+      text-decoration: none;
+    }
 /*Efectos, Trasiciones o Transformaciones*/
 	.CP-Latido {
 		transform: scale(1);
