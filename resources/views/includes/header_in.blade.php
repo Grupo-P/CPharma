@@ -15,7 +15,7 @@
         
       @else
         <li class="nav-item dropdown">
-          <a id="navbarDropdown" class="nav-link dropdown-toggle text-succees" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+          <a id="navbarDropdown" class="nav-link dropdown-toggle text-succees CP-Links-Menu" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
           <i class="fas fa-user text-succees"></i>
           {{ Auth::user()->name }} <span class="caret text-succees"></span>
           </a>
