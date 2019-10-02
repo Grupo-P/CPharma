@@ -81,7 +81,7 @@
       }
       echo '<hr class="row align-items-start col-12">';
 
-      R10_Detalle_Movimientos($_GET['SEDE'],$_GET['fechaInicio'],$_GET['fechaFin'],$_GET['Id']);
+      R12_Detalle_Movimientos($_GET['SEDE'],$_GET['fechaInicio'],$_GET['fechaFin'],$_GET['Id']);
       GuardarAuditoria('CONSULTAR','REPORTE','Detalle de movimientos');
 
       $FinCarga = new DateTime("now");
@@ -169,7 +169,7 @@
 <?php
 
   /*
-    TITULO: R10_Detalle_Movimientos
+    TITULO: R12_Detalle_Movimientos
     PARAMETROS: [$SedeConnection] sede donde se hara la conexion
           [$FInicial] Fecha inicial del rango a buscar
           [$FFinal] Fecha final del rango a buscar
@@ -178,20 +178,17 @@
     RETORNO: no aplica
     AUTOR: Ing. Manuel Henriquez
    */
-  function R10_Detalle_Movimientos($SedeConnection,$FInicial,$FFinal,$IdArticulo) {
+  function R12_Detalle_Movimientos($SedeConnection,$FInicial,$FFinal,$IdArticulo) {
     $conn = ConectarSmartpharma($SedeConnection);
 
-    $sql = QArticulo($IdArticulo);
+    $sql = R12Q_Detalle_Articulo($IdArticulo);
     sqlsrv_query($conn,$sql);
     $result = sqlsrv_query($conn,$sql);
     $row = sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC);
 
-    $sql1 = QExistenciaArticulo($IdArticulo,0);
-    $result1 = sqlsrv_query($conn,$sql1);
-    $row1 = sqlsrv_fetch_array($result1,SQLSRV_FETCH_ASSOC);
-
     $IsIVA = $row["ConceptoImpuesto"];
-    $Existencia = $row1["Existencia"];
+    $Existencia = $row["Existencia"];
+    $Descripcion = $row["Descripcion"];
 
     $Precio = CalculoPrecio($conn,$IdArticulo,$IsIVA,$Existencia);
 
@@ -224,7 +221,7 @@
     $sql4 = QUnidadesReclamoProveedor2($FInicial,$FFinal);
     $sql5 = QIntegracionProductosVendidos2();
     $sql6 = QIntegracionProductosFalla2();
-    $sql61 = QArticuloDescLike2($row["Descripcion"],0);
+    $sql61 = QArticuloDescLike2($Descripcion,0);
     $sql7 = QPedidoProductos2();
     
     sqlsrv_query($conn,$sql1);
@@ -298,7 +295,7 @@
                         <td>'.$row["CodigoArticulo"].'</td>
                         <td align="left" class="barrido">
                             <a href="/reporte2?Id='.$IdArticulo.'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
-                                .$row["Descripcion"]
+                                .$Descripcion
                             .'</a>
                         </td>
               <td align="center">'.intval($Existencia).'</td>
@@ -432,6 +429,34 @@
       ';
 
     sqlsrv_close($conn);
+  }
+
+  /*
+    TITULO: R12Q_Detalle_Articulo
+    PARAMETROS: [$IdArticulo] $IdArticulo del articulo a buscar
+    FUNCION: Query que genera el detalle del articulo solicitado
+    RETORNO: Detalle del articulo
+    AUTOR: Ing. Manuel Henriquez
+   */
+  function R12Q_Detalle_Articulo($IdArticulo) {
+    $sql = " 
+      SELECT
+      InvArticulo.Id,
+      InvArticulo.CodigoArticulo,
+      (SELECT CodigoBarra
+          FROM InvCodigoBarra 
+          WHERE InvCodigoBarra.InvArticuloId = '$IdArticulo'
+          AND InvCodigoBarra.EsPrincipal = 1) As CodigoBarra,
+      InvArticulo.Descripcion,
+        (SELECT SUM (InvLoteAlmacen.Existencia) As Existencia
+          FROM InvLoteAlmacen
+          WHERE(InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
+          AND (InvLoteAlmacen.InvArticuloId = '$IdArticulo')) AS Existencia,
+      InvArticulo.FinConceptoImptoIdCompra AS ConceptoImpuesto
+      FROM InvArticulo
+      WHERE InvArticulo.Id = '$IdArticulo'
+    ";
+    return $sql;
   }
 
 ?>
