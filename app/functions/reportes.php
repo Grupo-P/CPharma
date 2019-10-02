@@ -2422,9 +2422,9 @@
 	  	while($row4 = sqlsrv_fetch_array($result4,SQLSRV_FETCH_ASSOC)) {
 
             $FechaComparativa = date('d/m/Y',strtotime($FFinal));
-	  		
+
 	  		if($FechaComparativa == $row4["FechaMovimiento"]) {
-	  			break;
+	  			continue;
 	  		}
 
 	  		echo '
@@ -2463,8 +2463,8 @@
     		  	<tbody>
 		';
 
-        $sql8=QDetalleDeMovimiento($IdArticulo,$FInicial,$FFinal);
-		$result3=sqlsrv_query($conn,$sql8);
+        $sql8 = QDetalleDeMovimiento($IdArticulo,$FInicial,$FFinal);
+		$result3 = sqlsrv_query($conn,$sql8);
 
 		$contador = 1;
 
