@@ -5,35 +5,42 @@
 @endsection
 
 @section('content')
-
 	<?php
-		$usuarios = DB::table('users')->count();
 		$empresas = DB::table('empresas')->count();
 		$proveedores = DB::table('proveedors')->count();
+		$usuarios = DB::table('users')->count();
 		$dolar = DB::table('dolars')->count();
-	?>
 
-<style> 
-  	.beep{
-	  -webkit-animation: tiembla 0.5s infinite;
-	}
-	@-webkit-keyframes tiembla{
-	  0%  { -webkit-transform:rotateZ(0deg);}
-	  13% { -webkit-transform:rotateZ(5deg);}
-	  26%{ -webkit-transform:rotateZ(10deg);}
-	  39% { -webkit-transform:rotateZ(5deg)}
-	  52% { -webkit-transform:rotateZ(0deg)}
-	  65% { -webkit-transform:rotateZ(-5deg)}
-	  78%{ -webkit-transform:rotateZ(-10deg);}
-	  91% { -webkit-transform:rotateZ(-5deg)}
-	}
-</style>
+		$tasaVenta = DB::table('tasa_ventas')->where('moneda', 'Dolar')->value('updated_at');
+		$Tasa = DB::table('tasa_ventas')->where('moneda', 'Dolar')->value('tasa');
+		$Tasa = number_format($Tasa,2,"," ,"." );
+		$tasaVenta = new DateTime($tasaVenta);
+		$tasaVenta = $tasaVenta->format("d-m-Y h:i:s a");
+
+		$auditor =  
+			DB::table('auditorias')
+			->select('registro')
+ 			->groupBy('registro')
+ 			->orderBy(DB::raw('count(*)'),'desc')
+         	->take(1)->get();
+        $auditor = $auditor[0];
+        $auditorias = $auditor->registro;
+
+        $auditor =  
+			DB::table('auditorias')
+			->select('user')
+ 			->groupBy('user')
+ 			->orderBy(DB::raw('count(*)'),'desc')
+         	->take(1)->get();
+        $auditor = $auditor[0];
+        $usuarioAct = $auditor->user;
+	?>
 
 	<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
 	  	<div class="modal-dialog modal-dialog-centered" role="document">
 		    <div class="modal-content">
 		      <div class="modal-header">
-		        <h5 class="modal-title text-info" id="exampleModalCenterTitle"><i class="fas fa-bell text-info beep"></i> Novedades</h5>
+		        <h5 class="modal-title text-info" id="exampleModalCenterTitle"><i class="fas fa-bell text-info CP-beep"></i> Novedades</h5>
 		        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
 		          <span aria-hidden="true">&times;</span>
 		        </button>
@@ -49,16 +56,6 @@
 						Desde ya esta disponible el reporte: 
 						<b class="text-info">Articulos devaluados</b>!!
     				</li>
-		        	
-    				<!-- <li class="card-text text-dark" style="display: inline;">
-    					<br/><br/>
-						<i class="far fa-check-circle text-info" style="display: inline;"></i>
-						En Histórico de Productos: Se agregaron los campos
-						<b class="text-info"> Codigo de Barra </b>,
-						<b class="text-info"> Gravado? </b> y
-						<b class="text-info"> Costo Bruto (Sin IVA) HOY</b>.
-    				</li> -->
-		
     			</ul>
 		      </div>
 		      <div class="modal-footer">
@@ -68,14 +65,41 @@
 	  	</div>
 	</div>
 
-
 	<h1 class="h5 text-info">
 		<i class="fas fa-chart-pie"></i>
 		Dashboard
 	</h1>
 
 	<hr class="row align-items-start col-12"> 
-	
+
+	<div class="card-deck">
+		<div class="card CP-border-golden mb-3" style="width: 14rem;">	  	
+	  		<div class="card-body text-left CP-bg-golden">
+	    		<h5>
+		    		<span class="card-text text-white">
+		    			<i class="fas fa-star"></i>
+		    			<?php
+							echo 'Reporte mas usado: '.$auditorias;
+						?>						
+		    		</span>
+	    		</h5>
+	  		</div>	
+		</div>
+
+		<div class="card CP-border-golden mb-3" style="width: 14rem;">	  	
+	  		<div class="card-body text-left CP-bg-golden">
+	    		<h5>
+		    		<span class="card-text text-white">
+		    			<i class="fas fa-star"></i>
+		    			<?php
+							echo 'Usuario mas activo: '.$usuarioAct;
+						?>						
+		    		</span>
+	    		</h5>
+	  		</div>	
+		</div>
+	</div>
+
 	<div class="card-deck">
 		<!-- Empresas -->
 	 	<div class="card border-danger mb-3" style="width: 14rem;">	  	
@@ -141,7 +165,7 @@
 	    		<h2 class="card-title">
 		    		<span class="card-text text-white">
 		    			<i class="fas fa-file-invoice"></i>
-		    			14	    			
+		    			15	    			
 		    		</span>
 	    		</h2>
 	    		<p class="card-text text-white">Reportes disponibles</p>
@@ -154,8 +178,8 @@
 	
 	<div class="card-deck">		
 		<!-- Usuario -->
-		<div class="card border-dark mb-3" style="width: 14rem;">	  	
-	  		<div class="card-body text-left bg-dark">
+		<div class="card border-warning mb-3" style="width: 14rem;">	  	
+	  		<div class="card-body text-left bg-warning">
 	    		<h2 class="card-title">
 		    		<span class="card-text text-white">	
 		    		<i class="fas fa-user"></i>	    			
@@ -169,8 +193,8 @@
   		<?php
 		  if(Auth::user()->role == 'MASTER' || Auth::user()->role == 'DEVELOPER'){
 	 	?>
-		  	<div class="card-footer bg-transparent border-dark text-right">
-		  		<a href="/usuario/" class="btn btn-outline-dark btn-sm">Visualizar</a>
+		  	<div class="card-footer bg-transparent border-warning text-right">
+		  		<a href="/usuario/" class="btn btn-outline-warning btn-sm">Visualizar</a>
 		  	</div>
 		<?php
 			}
@@ -198,7 +222,34 @@
 		<?php
 			}
 		?>		
-		</div>		
+		</div>
+		<!-- Tasa Venta -->
+		<div class="card border-dark mb-3" style="width: 14rem;">	  	
+	  		<div class="card-body text-left bg-dark">
+	    		<h3 class="card-title">
+		    		<span class="card-text text-white">
+		    			<i class="fas fa-credit-card"></i>
+		    			<?php
+							echo 'Tasa Venta: '.$Tasa;
+						?>						
+		    		</span>
+	    		</h3>
+	    		<p class="card-text text-white">
+					<?php 
+						echo 'Ultima Actualizacion: '.$tasaVenta;
+					?>
+	    		</p>
+	  		</div>
+  		<?php
+		  	if(Auth::user()->role == 'MASTER' || Auth::user()->role == 'DEVELOPER'){
+	 	?>
+		  	<div class="card-footer bg-transparent border-dark text-right">
+		  		<a href="/tasaVenta/" class="btn btn-outline-dark btn-sm">Visualizar</a>
+		  	</div>
+		<?php
+			}
+		?>		
+		</div>	
 	</div>
 
 	<div class="card-deck">
@@ -207,7 +258,7 @@
 	  		<div class="card-body text-left bg-info">
 	    		<h2 class="card-title">	 		
 		    		<span class="card-text text-warning">
-		    			<i class="far fa-lightbulb beep"></i>
+		    			<i class="far fa-lightbulb CP-beep"></i>
 		    		</span>
 		    		<span class="card-text text-white">
 		    			Tienes una idea.?

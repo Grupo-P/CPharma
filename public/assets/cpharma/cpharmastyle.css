@@ -73,6 +73,19 @@
 	    color: white;
   	}
 /*Efectos, Trasiciones o Transformaciones*/
+	.CP-beep {
+	  -webkit-animation: tiembla 0.5s infinite;
+	}
+	@-webkit-keyframes tiembla{
+	  0%  { -webkit-transform:rotateZ(0deg);}
+	  13% { -webkit-transform:rotateZ(5deg);}
+	  26%{ -webkit-transform:rotateZ(10deg);}
+	  39% { -webkit-transform:rotateZ(5deg)}
+	  52% { -webkit-transform:rotateZ(0deg)}
+	  65% { -webkit-transform:rotateZ(-5deg)}
+	  78%{ -webkit-transform:rotateZ(-10deg);}
+	  91% { -webkit-transform:rotateZ(-5deg)}
+	}
 	.CP-Latido {
 		transform: scale(1);
         transition: width 1s, height 1s, transform 2s;
@@ -81,6 +94,19 @@
         transform: scale(1.2);
         transition: width 1s, height 1s, transform 2s;
     }
+	.CP-border-golden {
+		border-color: #DAA520 !important;
+	}
+	.CP-bg-golden{
+		background-color: #DAA520 !important;
+	}
+
+
+
+
+
+
+
 	.barrido {
 		text-decoration: none;
 		transition: width 1s, height 1s, transform 1s;
