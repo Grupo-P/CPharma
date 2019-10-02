@@ -4,13 +4,6 @@
     Empresa
 @endsection
 
-@section('scriptsHead')
-    <script src="{{ asset('assets/js/sortTable.js') }}">	
-    </script>
-    <script src="{{ asset('assets/js/filter.js') }}">	
-    </script>
-@endsection
-
 @section('content')
 
 	<!-- Modal Guardar -->
@@ -124,8 +117,7 @@
 		      <th>{{$empresa->id}}</th>
 		      <td>{{$empresa->nombre}}</td>
 		      <td>{{$empresa->rif}}</td>
-		      <td>{{$empresa->telefono}}</td>
-		      {{-- <td>{{$empresa->direccion}}</td> --}}
+		      <td>{{$empresa->telefono}}</td>		      
 		      <td>{{$empresa->estatus}}</td>
 		      
 		    <!-- Inicio Validacion de ROLES -->
@@ -185,7 +177,6 @@
 										
 		      </td>
 		    <!-- Fin Validacion de ROLES -->
-
 		    </tr>
 		@endforeach
 		</tbody>
@@ -197,5 +188,4 @@
 		});
 		$('#exampleModalCenter').modal('show')
 	</script>
-
 @endsection
