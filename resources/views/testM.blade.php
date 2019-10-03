@@ -180,7 +180,7 @@
     FUNCION: arma la lista del troquel segun el articulo
     RETORNO: no aplica
     AUTOR: Ing. Manuel Henriquez
-   */
+  */
   function R12_Detalle_Movimientos($SedeConnection,$FInicial,$FFinal,$IdArticulo) {
     $conn = ConectarSmartpharma($SedeConnection);
     $connCPharma = ConectarXampp();
@@ -200,7 +200,6 @@
 
     mysqli_close($connCPharma);
 
-    //-------------------- Inicio Rangos --------------------
     $FFinalImpresion = $FFinal;
     $FFinal = date("Y-m-d",strtotime($FFinal."+ 1 days"));
 
@@ -217,76 +216,81 @@
     ';
 
     echo '
-            <h6 align="center">Periodo desde el '.$FInicial.' al '.$FFinalImpresion.'</h6>
+      <h6 align="center">Periodo desde el '.$FInicial.' al '.$FFinalImpresion.'</h6>
 
-            <table class="table table-striped table-bordered col-12 sortable">
-                <thead class="thead-dark">
-                    <tr>
-                        <th scope="col">Codigo</th>
-                  <th scope="col">Descripcion</th>
-                  <th scope="col">Existencia</th>
-                  <th scope="col">Unidades vendidas</th>
-                  <th scope="col">Dias restantes</th>
-                  <th scope="col">Precio (Con IVA)</th>
-                  <th scope="col">Dolarizado</th>
-                  <th scope="col">Tasa actual</th>
-                  <th scope="col">Precio en divisa (Con IVA)</th>
-                    </tr>
-                </thead>
+      <table class="table table-striped table-bordered col-12 sortable">
+        <thead class="thead-dark">
+          <tr>
+            <th scope="col">Codigo</th>
+            <th scope="col">Descripcion</th>
+            <th scope="col">Existencia</th>
+            <th scope="col">Unidades vendidas</th>
+            <th scope="col">Dias restantes</th>
+            <th scope="col">Precio</br>(Con IVA) '.SigVe.'</th>
+            <th scope="col">Dolarizado</th>
+            <th scope="col">Tasa actual '.SigVe.'</th>
+            <th scope="col">Precio en divisa</br>(Con IVA) '.SigDolar.'</th>
+          </tr>
+        </thead>
 
-                <tbody>
-      ';
-
-    echo '
-                    <tr>
-                        <td>'.$row["CodigoArticulo"].'</td>
-                        <td align="left" class="barrido">
-                            <a href="/reporte2?Id='.$IdArticulo.'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
-                                .$Descripcion
-                            .'</a>
-                        </td>
-              <td align="center">'.intval($Existencia).'</td>
-              
-              <td align="center">'." ".round($Precio,2)." ".SigVe.'</td>
-              <td align="center">'.$Dolarizado.'</td>
+        <tbody>
     ';
 
-    if($TasaActual!=0){
+    echo '
+      <tr>
+        <td>'.$row["CodigoArticulo"].'</td>
+        <td align="left" class="barrido">
+          <a href="/reporte2?Id='.$IdArticulo.'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
+            .$Descripcion
+          .'</a>
+        </td>
+        <td align="center">'.intval($Existencia).'</td>
+        <td align="center">-</td>
+        <td align="center">-</td>
+        <td align="center">'.number_format($Precio,2,"," ,"." ).'</td>
+        <td align="center">'.$Dolarizado.'</td>
+    ';
+
+    if($TasaActual != 0) {
+
+      $PrecioDolar = $Precio / $TasaActual;
+
       echo '
-              <td align="center">'." ".$TasaActual." ".SigVe.'</td>
-              <td align="center">'.round(($Precio/$TasaActual),2)." ".SigDolar.'</td>
+        <td align="center">'.number_format($TasaActual,2,"," ,"." ).'</td>
+        <td align="center">'.number_format($PrecioDolar,2,"," ,"." ).'</td>
       ';
     }
     else{
       echo '
-              <td align="center">0.00 '.SigVe.'</td>
-              <td align="center">0.00 '.SigDolar.'</td>
+        <td align="center">0,00</td>
+        <td align="center">0,00</td>
       ';
     }
-    echo '
-            </tr>
-            </tbody>
-        </table>
-        ';
 
     echo '
-            <br>
-        <h6 align="center">Resumen de movimientos</h6>
+          </tr>
+        </tbody>
+      </table>
+    ';
 
-        <table class="table table-striped table-bordered col-12 sortable">
-                <thead class="thead-dark">
-              <tr>
-                <th scope="col">#</th>
-                <th scope="col" class="text-center">Fecha</th>
-                  <th scope="col" class="text-center">Tipo de movimiento</th>
-                  <th scope="col" class="text-center">Cantidad</th>
-              </tr>
-            </thead>
+    echo '
+      <br>
+      <h6 align="center">Resumen de movimientos</h6>
 
-            <tbody>
-        ';
+      <table class="table table-striped table-bordered col-12 sortable">
+        <thead class="thead-dark">
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col" class="text-center">Fecha</th>
+              <th scope="col" class="text-center">Tipo de movimiento</th>
+              <th scope="col" class="text-center">Cantidad</th>
+          </tr>
+        </thead>
 
-        $sql9 = QCleanTable('CP_QResumenDeMovimientos');
+        <tbody>
+    ';
+
+    $sql9 = QCleanTable('CP_QResumenDeMovimientos');
         sqlsrv_query($conn,$sql9);
         $sql10 = QIntegracionResumenDeMovimientos($IdArticulo,$FInicial,$FFinal);
         sqlsrv_query($conn,$sql10);
