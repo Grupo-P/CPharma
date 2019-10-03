@@ -290,15 +290,8 @@
         <tbody>
     ';
 
-    $sql9 = QCleanTable('CP_QResumenDeMovimientos');
-    sqlsrv_query($conn,$sql9);
-    $sql10 = QIntegracionResumenDeMovimientos($IdArticulo,$FInicial,$FFinal);
-    sqlsrv_query($conn,$sql10);
-    $sql11 = QAgruparDetalleDeMovimientos();
-    $result4 = sqlsrv_query($conn,$sql11);
-
-    $sql = QCleanTable('CP_QResumenDeMovimientos');
-    sqlsrv_query($conn,$sql);
+    $sql9 = R12Q_Resumen_Movimiento($IdArticulo,$FInicial,$FFinal);
+    $result4 = sqlsrv_query($conn,$sql9);
 
     $contador = 1;
     $FechaComparativa = date('d/m/Y',strtotime($FFinal));
@@ -431,6 +424,32 @@
       AND (CONVERT(DATE,InvMovimiento.FechaMovimiento) >= '$FInicial' AND CONVERT(DATE,InvMovimiento.FechaMovimiento) <= '$FFinal')
       GROUP BY InvMovimiento.InvLoteId,InvMovimiento.FechaMovimiento,InvMovimiento.InvCausaId,InvCausa.Descripcion,InvMovimiento.Cantidad
       ORDER BY InvMovimiento.FechaMovimiento ASC
+    ";
+    return $sql;
+  }
+
+  /*
+    TITULO: R12Q_Resumen_Movimiento
+    PARAMETROS: [$IdArticulo] Id del articulo actual
+                [$FInicial] Fecha inicial del rango
+                [$FFinal] Fecha final del rango
+    FUNCION: Construir la consulta para el despliegue el resumen del reporte
+    RETORNO: Un String con las instrucciones de la consulta
+    AUTOR: Ing. Manuel Henriquez
+   */
+  function R12Q_Resumen_Movimiento($IdArticulo,$FInicial,$FFinal) {
+    $sql = "
+      SELECT 
+        CONVERT(VARCHAR(10), InvMovimiento.FechaMovimiento, 103) AS FechaMovimiento,
+        InvMovimiento.InvCausaId,
+        InvCausa.Descripcion AS Movimiento,
+        SUM(InvMovimiento.Cantidad) AS Cantidad
+      FROM InvMovimiento
+      INNER JOIN InvCausa ON InvMovimiento.InvCausaId=InvCausa.Id
+      WHERE InvMovimiento.InvArticuloId='$IdArticulo'
+      AND (CONVERT(DATE,InvMovimiento.FechaMovimiento) >= '$FInicial' AND CONVERT(DATE,InvMovimiento.FechaMovimiento) <= '$FFinal')
+      GROUP BY CONVERT(VARCHAR(10), InvMovimiento.FechaMovimiento, 103), InvMovimiento.InvCausaId, InvCausa.Descripcion
+      ORDER BY FechaMovimiento ASC
     ";
     return $sql;
   }
