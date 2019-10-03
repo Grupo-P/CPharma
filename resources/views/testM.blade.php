@@ -307,7 +307,7 @@
           <td align="center"><strong>'.intval($contador).'</strong></td>
           <td align="center">'.$row4["FechaMovimiento"].'</td>
           <td align="center">'.utf8_encode($row4["Movimiento"]).'</td>
-          <td align="center">'.intval($row4["Cantidad"]).'</td>
+          <td align="center">'.$row4["Cantidad"].'</td>
         </tr>
       ';
 
@@ -358,7 +358,7 @@
             .date('h:i a',strtotime($row3["FechaMovimiento"]->format("H:m:s")))
           .'</td>
           <td align="center">'.utf8_encode($row3["Movimiento"]).'</td>
-          <td align="center">'.intval($row3["Cantidad"]).'</td>
+          <td align="center">'.$row3["Cantidad"].'</td>
         </tr>
       ';
 
@@ -417,7 +417,7 @@
         InvMovimiento.FechaMovimiento,
         InvMovimiento.InvCausaId,
         InvCausa.Descripcion AS Movimiento,
-        InvMovimiento.Cantidad
+        ROUND(CAST(InvMovimiento.Cantidad AS DECIMAL(38,0)),2,0) AS Cantidad
       FROM InvMovimiento
       INNER JOIN InvCausa ON InvMovimiento.InvCausaId=InvCausa.Id
       WHERE InvMovimiento.InvArticuloId='$IdArticulo'
@@ -443,7 +443,7 @@
         CONVERT(VARCHAR(10), InvMovimiento.FechaMovimiento, 103) AS FechaMovimiento,
         InvMovimiento.InvCausaId,
         InvCausa.Descripcion AS Movimiento,
-        SUM(InvMovimiento.Cantidad) AS Cantidad
+        ROUND(CAST(SUM(InvMovimiento.Cantidad) AS DECIMAL(38,0)),2,0) AS Cantidad
       FROM InvMovimiento
       INNER JOIN InvCausa ON InvMovimiento.InvCausaId=InvCausa.Id
       WHERE InvMovimiento.InvArticuloId='$IdArticulo'
