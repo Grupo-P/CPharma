@@ -441,14 +441,13 @@
     $sql = "
       SELECT 
         CONVERT(VARCHAR(10), InvMovimiento.FechaMovimiento, 103) AS FechaMovimiento,
-        InvMovimiento.InvCausaId,
         InvCausa.Descripcion AS Movimiento,
         ROUND(CAST(SUM(InvMovimiento.Cantidad) AS DECIMAL(38,0)),2,0) AS Cantidad
       FROM InvMovimiento
       INNER JOIN InvCausa ON InvMovimiento.InvCausaId=InvCausa.Id
       WHERE InvMovimiento.InvArticuloId='$IdArticulo'
       AND (CONVERT(DATE,InvMovimiento.FechaMovimiento) >= '$FInicial' AND CONVERT(DATE,InvMovimiento.FechaMovimiento) <= '$FFinal')
-      GROUP BY CONVERT(VARCHAR(10), InvMovimiento.FechaMovimiento, 103), InvMovimiento.InvCausaId, InvCausa.Descripcion
+      GROUP BY CONVERT(VARCHAR(10), InvMovimiento.FechaMovimiento, 103), InvCausa.Descripcion
       ORDER BY FechaMovimiento ASC
     ";
     return $sql;
