@@ -180,6 +180,7 @@
    */
   function R12_Detalle_Movimientos($SedeConnection,$FInicial,$FFinal,$IdArticulo) {
     $conn = ConectarSmartpharma($SedeConnection);
+    $connCPharma = ConectarXampp();
 
     $sql = R12Q_Detalle_Articulo($IdArticulo);
     sqlsrv_query($conn,$sql);
@@ -191,24 +192,25 @@
     $Descripcion = $row["Descripcion"];
 
     $Precio = FG_Calculo_Precio($conn,$IdArticulo,$IsIVA,$Existencia);
-    $Dolarizado = ProductoDolarizado($conn,$IdArticulo);
-    $TasaActual = TasaFecha(date('Y-m-d'));
+    $Dolarizado = FG_Producto_Dolarizado($conn,$IdArticulo);
+    $TasaActual = FG_Tasa_Fecha($connCPharma,date('Y-m-d'));
+
+    mysqli_close($connCPharma);
 
     //-------------------- Inicio Rangos --------------------
     $FFinalImpresion = $FFinal;
     $FFinal = date("Y-m-d",strtotime($FFinal."+ 1 days"));
-    //-------------------- Fin Rangos --------------------
 
     echo '
-            <div class="input-group md-form form-sm form-1 pl-0">
-                <div class="input-group-prepend">
-                    <span class="input-group-text purple lighten-3" id="basic-text1">
-                        <i class="fas fa-search text-white" aria-hidden="true"></i>
-                    </span>
-                </div>
-                <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterAllTable()">
-            </div>
-        <br/>
+      <div class="input-group md-form form-sm form-1 pl-0">
+        <div class="input-group-prepend">
+          <span class="input-group-text purple lighten-3" id="basic-text1">
+            <i class="fas fa-search text-white" aria-hidden="true"></i>
+          </span>
+        </div>
+        <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterAllTable()">
+      </div>
+      <br/>
     ';
 
     echo '
