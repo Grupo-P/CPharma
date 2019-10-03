@@ -67,7 +67,7 @@
     $ArtJson="";
 
     //--------- BORRAR ESTA LINEA ---------//
-    $_GET['SEDE'] = 'FTN';
+    $_GET['SEDE'] = 'DBm';
     //--------- BORRAR ESTA LINEA ---------//
     
     if(isset($_GET['Id'])) {
@@ -190,72 +190,14 @@
     $Existencia = $row["Existencia"];
     $Descripcion = $row["Descripcion"];
 
-    $Precio = CalculoPrecio($conn,$IdArticulo,$IsIVA,$Existencia);
-
+    $Precio = FG_Calculo_Precio($conn,$IdArticulo,$IsIVA,$Existencia);
     $Dolarizado = ProductoDolarizado($conn,$IdArticulo);
-
     $TasaActual = TasaFecha(date('Y-m-d'));
 
     //-------------------- Inicio Rangos --------------------
     $FFinalImpresion = $FFinal;
     $FFinal = date("Y-m-d",strtotime($FFinal."+ 1 days"));
-
-    $sql = QCleanTable('CP_QUnidadesVendidasCliente2');
-    sqlsrv_query($conn,$sql);
-    $sql = QCleanTable('CP_QUnidadesDevueltaCliente2');
-    sqlsrv_query($conn,$sql);
-    $sql = QCleanTable('CP_QUnidadesCompradasProveedor2');
-    sqlsrv_query($conn,$sql);
-    $sql = QCleanTable('CP_QUnidadesReclamoProveedor2');
-    sqlsrv_query($conn,$sql);
-    $sql = QCleanTable('CP_QIntegracionProductosVendidos2');
-    sqlsrv_query($conn,$sql);
-    $sql = QCleanTable('CP_QIntegracionProductosFalla2');
-    sqlsrv_query($conn,$sql);
-    $sql = QCleanTable('CP_QArticuloDescLike2');
-    sqlsrv_query($conn,$sql);
-
-    $sql1 = QUnidadesVendidasCliente2($FInicial,$FFinal);
-    $sql2 = QUnidadesDevueltaCliente2($FInicial,$FFinal);
-    $sql3 = QUnidadesCompradasProveedor2($FInicial,$FFinal);
-    $sql4 = QUnidadesReclamoProveedor2($FInicial,$FFinal);
-    $sql5 = QIntegracionProductosVendidos2();
-    $sql6 = QIntegracionProductosFalla2();
-    $sql61 = QArticuloDescLike2($Descripcion,0);
-    $sql7 = QPedidoProductos2();
-    
-    sqlsrv_query($conn,$sql1);
-    sqlsrv_query($conn,$sql2);
-    sqlsrv_query($conn,$sql3);
-    sqlsrv_query($conn,$sql4);
-    sqlsrv_query($conn,$sql5);
-    sqlsrv_query($conn,$sql6);
-    sqlsrv_query($conn,$sql61);
-    
-    $result2 = sqlsrv_query($conn,$sql7);
-
-    $sql = QCleanTable('CP_QUnidadesVendidasCliente2');
-    sqlsrv_query($conn,$sql);
-    $sql = QCleanTable('CP_QUnidadesDevueltaCliente2');
-    sqlsrv_query($conn,$sql);
-    $sql = QCleanTable('CP_QUnidadesCompradasProveedor2');
-    sqlsrv_query($conn,$sql);
-    $sql = QCleanTable('CP_QUnidadesReclamoProveedor2');
-    sqlsrv_query($conn,$sql);
-    $sql = QCleanTable('CP_QIntegracionProductosVendidos2');
-    sqlsrv_query($conn,$sql);
-    $sql = QCleanTable('CP_QIntegracionProductosFalla2');
-    sqlsrv_query($conn,$sql);
-    $sql = QCleanTable('CP_QArticuloDescLike2');
-    sqlsrv_query($conn,$sql);
-
-    $RangoDias = RangoDias($FInicial,$FFinal);
     //-------------------- Fin Rangos --------------------
-    
-    $row2 = sqlsrv_fetch_array($result2,SQLSRV_FETCH_ASSOC);
-    $Venta = intval($row2["TotalUnidadesVendidasCliente"]);
-    $VentaDiaria = VentaDiaria($Venta,$RangoDias);
-    $DiasRestantes = DiasRestantes($Existencia,$VentaDiaria);
 
     echo '
             <div class="input-group md-form form-sm form-1 pl-0">
@@ -299,8 +241,7 @@
                             .'</a>
                         </td>
               <td align="center">'.intval($Existencia).'</td>
-              <td align="center">'.$Venta.'</td>
-              <td align="center">'.$DiasRestantes.'</td>
+              
               <td align="center">'." ".round($Precio,2)." ".SigVe.'</td>
               <td align="center">'.$Dolarizado.'</td>
     ';
