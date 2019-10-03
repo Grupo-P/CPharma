@@ -345,7 +345,7 @@
     ';
 
     $contador = 1;
-    $sql8 = QDetalleDeMovimiento($IdArticulo,$FInicial,$FFinal);
+    $sql8 = R12Q_Detalle_Movimiento($IdArticulo,$FInicial,$FFinal);
     $result3 = sqlsrv_query($conn,$sql8);
 
     while($row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC)) {
@@ -404,6 +404,33 @@
       InvArticulo.FinConceptoImptoIdCompra AS ConceptoImpuesto
       FROM InvArticulo
       WHERE InvArticulo.Id = '$IdArticulo'
+    ";
+    return $sql;
+  }
+
+  /*
+    TITULO: R12Q_Detalle_Movimiento
+    PARAMETROS: [$IdArticulo] Id del articulo actual
+                [$FInicial] Fecha inicial del rango
+                [$FFinal] Fecha final del rango
+    FUNCION: Construir la consulta para el despliegue del reporte DetalleDeMovimiento
+    RETORNO: Un String con las instrucciones de la consulta
+    AUTOR: Ing. Manuel Henriquez
+   */
+  function R12Q_Detalle_Movimiento($IdArticulo,$FInicial,$FFinal) {
+    $sql = "
+      SELECT 
+        InvMovimiento.InvLoteId,
+        InvMovimiento.FechaMovimiento,
+        InvMovimiento.InvCausaId,
+        InvCausa.Descripcion AS Movimiento,
+        InvMovimiento.Cantidad
+      FROM InvMovimiento
+      INNER JOIN InvCausa ON InvMovimiento.InvCausaId=InvCausa.Id
+      WHERE InvMovimiento.InvArticuloId='$IdArticulo'
+      AND (CONVERT(DATE,InvMovimiento.FechaMovimiento) >= '$FInicial' AND CONVERT(DATE,InvMovimiento.FechaMovimiento) <= '$FFinal')
+      GROUP BY InvMovimiento.InvLoteId,InvMovimiento.FechaMovimiento,InvMovimiento.InvCausaId,InvCausa.Descripcion,InvMovimiento.Cantidad
+      ORDER BY InvMovimiento.FechaMovimiento ASC
     ";
     return $sql;
   }
