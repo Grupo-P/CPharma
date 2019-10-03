@@ -241,7 +241,7 @@
         <td>'.$row["CodigoArticulo"].'</td>
         <td align="left" class="barrido">
           <a href="/reporte2?Id='.$IdArticulo.'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
-            .$Descripcion
+            .utf8_encode($Descripcion)
           .'</a>
         </td>
         <td align="center">'.intval($Existencia).'</td>
@@ -276,14 +276,14 @@
     echo '
       <br>
       <h6 align="center">Resumen de movimientos</h6>
-
+      
       <table class="table table-striped table-bordered col-12 sortable">
         <thead class="thead-dark">
           <tr>
             <th scope="col">#</th>
             <th scope="col" class="text-center">Fecha</th>
-              <th scope="col" class="text-center">Tipo de movimiento</th>
-              <th scope="col" class="text-center">Cantidad</th>
+            <th scope="col" class="text-center">Tipo de movimiento</th>
+            <th scope="col" class="text-center">Cantidad</th>
           </tr>
         </thead>
 
@@ -291,41 +291,40 @@
     ';
 
     $sql9 = QCleanTable('CP_QResumenDeMovimientos');
-        sqlsrv_query($conn,$sql9);
-        $sql10 = QIntegracionResumenDeMovimientos($IdArticulo,$FInicial,$FFinal);
-        sqlsrv_query($conn,$sql10);
-        $sql11 = QAgruparDetalleDeMovimientos();
-        $result4 = sqlsrv_query($conn,$sql11);
+    sqlsrv_query($conn,$sql9);
+    $sql10 = QIntegracionResumenDeMovimientos($IdArticulo,$FInicial,$FFinal);
+    sqlsrv_query($conn,$sql10);
+    $sql11 = QAgruparDetalleDeMovimientos();
+    $result4 = sqlsrv_query($conn,$sql11);
 
     $sql = QCleanTable('CP_QResumenDeMovimientos');
     sqlsrv_query($conn,$sql);
 
     $contador = 1;
-        $FechaComparativa = date('d/m/Y',strtotime($FFinal));
+    $FechaComparativa = date('d/m/Y',strtotime($FFinal));
 
-      while($row4 = sqlsrv_fetch_array($result4,SQLSRV_FETCH_ASSOC)) {
+    while($row4 = sqlsrv_fetch_array($result4,SQLSRV_FETCH_ASSOC)) {
 
-        if($FechaComparativa == $row4["FechaMovimiento"]) {
-          continue;
-        }
-
-        echo '
-                    <tr>
-                <td align="center"><strong>'.intval($contador).'</strong></td>
-              <td align="center">'.$row4["FechaMovimiento"].'</td>
-                  <td align="center">'.utf8_encode($row4["Movimiento"]).'</td>
-                  <td align="center">'.intval($row4["Cantidad"]).'</td>
-              </tr>
-        ';
-
-        $contador++;
+      if($FechaComparativa == $row4["FechaMovimiento"]) {
+        continue;
       }
 
-        echo '
+      echo '
+        <tr>
+          <td align="center"><strong>'.intval($contador).'</strong></td>
+          <td align="center">'.$row4["FechaMovimiento"].'</td>
+          <td align="center">'.utf8_encode($row4["Movimiento"]).'</td>
+          <td align="center">'.intval($row4["Cantidad"]).'</td>
+        </tr>
+      ';
 
-                </tbody>
-            </table>
-        ';
+      $contador++;
+    }
+
+    echo '
+          </tbody>
+      </table>
+    ';
 
     echo '
             <br>
