@@ -355,7 +355,7 @@
 
       echo '          
           <td align="center">'
-            .date('h:i a',strtotime($row3["FechaMovimiento"]->format("H:m:s")))
+            .date('h:i a',strtotime($row3["FechaMovimiento"]->format("H:i:s")))
           .'</td>
           <td align="center">'.utf8_encode($row3["Movimiento"]).'</td>
           <td align="center">'.$row3["Cantidad"].'</td>
