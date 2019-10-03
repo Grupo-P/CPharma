@@ -327,55 +327,55 @@
     ';
 
     echo '
-            <br>
-            <h6 align="center">Detalle de movimientos</h6>
+      <br>
+      <h6 align="center">Detalle de movimientos</h6>
 
-            <table class="table table-striped table-bordered col-12 sortable" id="myTable">
-          <thead class="thead-dark">
-              <tr>
-                <th scope="col">#</th>
-                <th scope="col" class="text-center">Fecha</th>
-                  <th scope="col" class="text-center">Hora</th>
-                  <th scope="col" class="text-center">Tipo de movimiento</th>
-                  <th scope="col" class="text-center">Cantidad</th>
-              </tr>
-            </thead>
+      <table class="table table-striped table-bordered col-12 sortable" id="myTable">
+        <thead class="thead-dark">
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col" class="text-center">Fecha</th>
+              <th scope="col" class="text-center">Hora</th>
+              <th scope="col" class="text-center">Tipo de movimiento</th>
+              <th scope="col" class="text-center">Cantidad</th>
+          </tr>
+        </thead>
 
-            <tbody>
+        <tbody>
     ';
 
-        $sql8 = QDetalleDeMovimiento($IdArticulo,$FInicial,$FFinal);
+    $contador = 1;
+    $sql8 = QDetalleDeMovimiento($IdArticulo,$FInicial,$FFinal);
     $result3 = sqlsrv_query($conn,$sql8);
 
-    $contador = 1;
+    while($row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC)) {
 
-      while($row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC)) {
-
-        if($row3["FechaMovimiento"]->format("Y-m-d") == $FFinal) {
-          break;
-        }
-
-        echo '
-              <tr>
-                <td align="center"><strong>'.intval($contador).'</strong></td>
-                <td align="center">'.$row3["FechaMovimiento"]->format("d/m/Y").'</td>
-            ';
-
-      $Hora = date('h:i a',strtotime($row3["FechaMovimiento"]->format("H:m:s")));
-
-      echo '          
-                  <td align="center">'.$Hora.'</td>
-                  <td align="center">'.utf8_encode($row3["Movimiento"]).'</td>
-                  <td align="center">'.intval($row3["Cantidad"]).'</td>
-              </tr>
-      ';
-      $contador++;
+      if($row3["FechaMovimiento"]->format("Y-m-d") == $FFinal) {
+        break;
       }
 
       echo '
-                </tbody>
-          </table>
+        <tr>
+          <td align="center"><strong>'.intval($contador).'</strong></td>
+          <td align="center">'.$row3["FechaMovimiento"]->format("d/m/Y").'</td>
       ';
+
+      echo '          
+          <td align="center">'
+            .date('h:i a',strtotime($row3["FechaMovimiento"]->format("H:m:s")))
+          .'</td>
+          <td align="center">'.utf8_encode($row3["Movimiento"]).'</td>
+          <td align="center">'.intval($row3["Cantidad"]).'</td>
+        </tr>
+      ';
+
+      $contador++;
+    }
+
+    echo '
+        </tbody>
+      </table>
+    ';
 
     sqlsrv_close($conn);
   }
