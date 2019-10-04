@@ -192,7 +192,7 @@
 
     $IsIVA = $row["ConceptoImpuesto"];
     $Existencia = $row["Existencia"];
-    $Descripcion = $row["Descripcion"];
+    $Descripcion = utf8_encode($row["Descripcion"]);
 
     $Precio = FG_Calculo_Precio($conn,$IdArticulo,$IsIVA,$Existencia);
     $Dolarizado = FG_Producto_Dolarizado($conn,$IdArticulo);
@@ -202,6 +202,49 @@
 
     $FFinalImpresion = $FFinal;
     $FFinal = date("Y-m-d",strtotime($FFinal."+ 1 days"));
+
+    $sql1 = QG_CleanTable('CP_R12Q_Descripcion_Like');
+    sqlsrv_query($conn,$sql1);
+    $sql1 = QG_CleanTable('CP_R12Q_Unidades_Vendidas');
+    sqlsrv_query($conn,$sql1);
+    $sql1 = QG_CleanTable('CP_R12Q_Unidades_Devueltas');
+    sqlsrv_query($conn,$sql1);
+    $sql1 = QG_CleanTable('CP_R12Q_Unidades_Compradas');
+    sqlsrv_query($conn,$sql1);
+    $sql1 = QG_CleanTable('CP_R12Q_Unidades_Reclamadas');
+    sqlsrv_query($conn,$sql1);
+
+    $sql2 = R12Q_Descripcion_Like($Descripcion);
+    $sql3 = R12Q_Unidades_Vendidas($FInicial,$FFinal);
+    $sql4 = R12Q_Unidades_Devueltas($FInicial,$FFinal);
+    $sql5 = R12Q_Unidades_Compradas($FInicial,$FFinal);
+    $sql6 = R12Q_Unidades_Reclamadas($FInicial,$FFinal);
+    $sql7 = R12Q_Integracion_Pedido_Productos();
+
+    sqlsrv_query($conn,$sql2);
+    sqlsrv_query($conn,$sql3);
+    sqlsrv_query($conn,$sql4);
+    sqlsrv_query($conn,$sql5); 
+    sqlsrv_query($conn,$sql6);
+    $result1 = sqlsrv_query($conn,$sql7);
+
+    $sql1 = QG_CleanTable('CP_R12Q_Descripcion_Like');
+    sqlsrv_query($conn,$sql1);
+    $sql1 = QG_CleanTable('CP_R12Q_Unidades_Vendidas');
+    sqlsrv_query($conn,$sql1);
+    $sql1 = QG_CleanTable('CP_R12Q_Unidades_Devueltas');
+    sqlsrv_query($conn,$sql1);
+    $sql1 = QG_CleanTable('CP_R12Q_Unidades_Compradas');
+    sqlsrv_query($conn,$sql1);
+    $sql1 = QG_CleanTable('CP_R12Q_Unidades_Reclamadas');
+    sqlsrv_query($conn,$sql1);
+
+    $row1 = sqlsrv_fetch_array($result1, SQLSRV_FETCH_ASSOC);
+
+    $RangoDias = FG_Rango_Dias($FInicial,$FFinal);
+    $UnidadesVendidas = intval($row1["UnidadesVendidas"]);
+    $VentaDiaria = FG_Venta_Diaria($UnidadesVendidas,$RangoDias);
+    $DiasRestantes = FG_Dias_Restantes($Existencia,$VentaDiaria);
 
     echo '
       <div class="input-group md-form form-sm form-1 pl-0">
@@ -241,12 +284,16 @@
         <td>'.$row["CodigoArticulo"].'</td>
         <td align="left" class="barrido">
           <a href="/reporte2?Id='.$IdArticulo.'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
-            .utf8_encode($Descripcion)
+            .$Descripcion
           .'</a>
         </td>
         <td align="center">'.intval($Existencia).'</td>
-        <td align="center">-</td>
-        <td align="center">-</td>
+        <td align="center" class="barrido">
+          <a href="reporte12?fechaInicio='.$FInicial.'&fechaFin='.$FFinal.'&SEDE='.$SedeConnection.'&Descrip='.$Descripcion.'&Id='.$IdArticulo.'" style="text-decoration: none; color: black;" target="_blank">'
+            .$UnidadesVendidas
+          .'</a>
+        </td>
+        <td align="center">'.round($DiasRestantes,2).'</td>
         <td align="center">'.number_format($Precio,2,"," ,"." ).'</td>
         <td align="center">'.$Dolarizado.'</td>
     ';
