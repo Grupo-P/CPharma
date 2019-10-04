@@ -2242,7 +2242,7 @@
 		FUNCION: arma la lista del troquel segun el articulo
 		RETORNO: no aplica
 	 */
-	function ReporteDetalleDeMovimiento($SedeConnection,$FInicial,$FFinal,$IdArticulo) {
+	/*function ReporteDetalleDeMovimiento($SedeConnection,$FInicial,$FFinal,$IdArticulo) {
 		$conn = ConectarSmartpharma($SedeConnection);
 
 		$sql = QArticulo($IdArticulo);
@@ -2496,7 +2496,7 @@
 	  	';
 
 		sqlsrv_close($conn);
-	}
+	}*/
 	/*****************************************************************************/
 	/************************ REPORTE 13 PRODUCTOS POR FALLAR ***********************/
 	/*
