@@ -210,7 +210,7 @@
 
     $sql2 = R12Q_Unidades_Vendidas($FInicial,$FFinal);
     $sql3 = R12Q_Unidades_Devueltas($FInicial,$FFinal);
-    $sql4 = R12Q_Integracion_Unidades_Vendidas();
+    $sql4 = R12Q_Integracion_Unidades_Vendidas($IdArticulo);
 
     sqlsrv_query($conn,$sql2);
     sqlsrv_query($conn,$sql3);
