@@ -211,7 +211,7 @@
 
             $IsIVA = $row2["ConceptoImpuesto"];
             $Existencia = $row2["Existencia"];
-            $Precio = CalculoPrecioDevaluado($conn,$IdArticulo,$IsIVA,$Existencia);
+            $Precio = FG_Calculo_Precio($conn,$IdArticulo,$IsIVA,$Existencia);
             $ValorLote = $Precio * intval($Existencia);
 
             $Tasa = TasaFecha($UltimoLote);
@@ -232,7 +232,7 @@
                   <td align="center">'.$row2['FechaLote']->format('d-m-Y').'</td>
             ';
 
-            if($Tasa!=0){
+            if($Tasa != 0) {
               $PrecioDolarizado = round(($Precio/$Tasa),2);
               $ValorLoteDolarizado = $PrecioDolarizado * intval($Existencia);
 
@@ -242,7 +242,7 @@
                 <td align="center">'.number_format($ValorLoteDolarizado,2,"," ,"." ).'</td>
               ';
             }
-            else{
+            else {
               echo '
                 <td align="center">0,00</td>
                 <td align="center">0,00</td>
@@ -316,7 +316,7 @@
       FROM InvLoteAlmacen
       WHERE (InvLoteAlmacen.InvArticuloId = InvArticulo.Id)
       AND (InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)) AS Existencia,--Existencia
-      
+
       InvArticulo.FinConceptoImptoIdCompra AS ConceptoImpuesto,
       InvArticulo.Descripcion--Descripcion del articulo
       --Tabla de origen
