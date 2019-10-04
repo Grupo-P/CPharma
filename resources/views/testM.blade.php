@@ -191,10 +191,11 @@
 
     $contador = 1;
 
-    $sql2 = QArticulosDevaluados($FInicial);
+    $sql2 = R12_Q_Articulos_Devaluados($FInicial);
     $result2 = sqlsrv_query($conn,$sql2);
 
     while($row2 = sqlsrv_fetch_array($result2,SQLSRV_FETCH_ASSOC)) {
+
       $IdArticulo = $row2["InvArticuloId"];
       $Dolarizado = ProductoDolarizado($conn,$IdArticulo);
 
@@ -225,10 +226,10 @@
                       .$Descripcion
                     .'</a>
                   </td>
-                    <td align="center">'." ".round($Precio,2)." ".SigVe.'</td>
-                    <td align="center">'.intval($Existencia).'</td>
-                    <td align="center">'." ".round($ValorLote,2)." ".SigVe.'</td>
-                    <td align="center">'.$row2['FechaLote']->format('d-m-Y').'</td>
+                  <td align="center">'.number_format($Precio,2,"," ,"." ).'</td>
+                  <td align="center">'.intval($Existencia).'</td>
+                  <td align="center">'.number_format($ValorLote,2,"," ,"." ).'</td>
+                  <td align="center">'.$row2['FechaLote']->format('d-m-Y').'</td>
             ';
 
             if($Tasa!=0){
@@ -237,15 +238,15 @@
 
               echo '
                 <td align="center">'." ".$Tasa." ".SigVe.'</td>
-                <td align="center">'." ".$PrecioDolarizado." ".SigDolar.'</td>
-                <td align="center">'." ".$ValorLoteDolarizado." ".SigDolar.'</td>
+                <td align="center">'.number_format($PrecioDolarizado,2,"," ,"." ).'</td>
+                <td align="center">'.number_format($ValorLoteDolarizado,2,"," ,"." ).'</td>
               ';
             }
             else{
               echo '
-                <td align="center">0.00 '.SigVe.'</td>
-                <td align="center">0.00 '.SigDolar.'</td>
-                <td align="center">0.00 '.SigDolar.'</td>
+                <td align="center">0,00</td>
+                <td align="center">0,00</td>
+                <td align="center">0,00</td>
               ';
             }
 
@@ -258,13 +259,13 @@
             $TiempoTienda = ValidarFechas($UltimoLote,$Hoy);
 
             echo '
-                    <td align="center">'.$TiempoTienda.'</td>
-                    <td align="left" class="barrido">
-                      <a href="/reporte7?Nombre='.$NombreProveedor.'&Id='.$IdProveedor.'&SEDE='.$SedeConnection.'" target="_blank" style="text-decoration: none; color: black;">'
-                        .$NombreProveedor
-                      .'</a>
-                    </td>
-                </tr>
+                <td align="center">'.$TiempoTienda.'</td>
+                <td align="left" class="barrido">
+                  <a href="/reporte7?Nombre='.$NombreProveedor.'&Id='.$IdProveedor.'&SEDE='.$SedeConnection.'" target="_blank" style="text-decoration: none; color: black;">'
+                    .$NombreProveedor
+                  .'</a>
+                </td>
+              </tr>
             ';
 
             $contador++;
@@ -275,11 +276,57 @@
 
     echo '
 
-          </tbody>
+        </tbody>
       </table>
     ';
 
     sqlsrv_close($conn);
   }
 
+  /*
+  TITULO: R12_Q_Articulos_Devaluados
+  PARAMETROS: [$FechaBandera] Fecha minima de dias en la tienda
+  FUNCION: Armar una tabla temporal con los registros solicitados 
+  RETORNO: Un String con la query pertinente
+   */
+  function R12_Q_Articulos_Devaluados($FechaBandera) {
+    $sql = "
+    SELECT DISTINCT
+    --Campos
+    (SELECT TOP 1
+    InvLote.Id
+    FROM InvLote
+    WHERE InvLote.InvArticuloId = InvArticulo.Id
+    ORDER BY InvLote.FechaEntrada DESC) AS Id,--Id del lote
+    InvArticulo.Id AS InvArticuloId,--Id del articulo
+    InvArticulo.CodigoArticulo,--Codigo interno
+    CONVERT(DATE, 
+    (SELECT TOP 1
+    InvLote.Auditoria_FechaCreacion
+    FROM InvLoteAlmacen
+    INNER JOIN InvLote ON InvLote.Id = InvLoteAlmacen.InvLoteId
+    WHERE (InvLoteAlmacen.InvArticuloId = InvArticulo.Id)
+    AND (InvLoteAlmacen.Existencia > 0)
+    AND (InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
+    ORDER BY InvLote.Auditoria_FechaCreacion DESC)) AS FechaLote,--Fecha de creacion del lote
+    (SELECT SUM(InvLoteAlmacen.Existencia)
+    FROM InvLoteAlmacen
+    WHERE (InvLoteAlmacen.InvArticuloId = InvArticulo.Id)
+    AND (InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)) AS Existencia,--Existencia
+    InvArticulo.FinConceptoImptoIdCompra AS ConceptoImpuesto,
+    InvArticulo.Descripcion--Descripcion del articulo
+    --Tabla de origen
+    FROM InvLote
+    --Tablas relacionadas
+    INNER JOIN InvArticulo ON InvArticulo.Id = InvLote.InvArticuloId
+    INNER JOIN InvLoteAlmacen ON InvLote.Id = InvLoteAlmacen.InvLoteId
+    --Condiciones
+    WHERE (InvLoteAlmacen.Existencia > 0) 
+    AND (InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
+    AND (CONVERT(DATE,InvLoteAlmacen.Auditoria_FechaCreacion) < '$FechaBandera')
+    --Ordenado
+    ORDER BY FechaLote, InvArticulo.Descripcion DESC
+    ";
+    return $sql;
+  }
 ?>
