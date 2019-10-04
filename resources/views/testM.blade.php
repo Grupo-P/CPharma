@@ -209,34 +209,22 @@
     sqlsrv_query($conn,$sql1);
     $sql1 = QG_CleanTable('CP_R12Q_Unidades_Devueltas');
     sqlsrv_query($conn,$sql1);
-    $sql1 = QG_CleanTable('CP_R12Q_Unidades_Compradas');
-    sqlsrv_query($conn,$sql1);
-    $sql1 = QG_CleanTable('CP_R12Q_Unidades_Reclamadas');
-    sqlsrv_query($conn,$sql1);
 
     $sql2 = R12Q_Descripcion_Like($Descripcion);
     $sql3 = R12Q_Unidades_Vendidas($FInicial,$FFinal);
     $sql4 = R12Q_Unidades_Devueltas($FInicial,$FFinal);
-    $sql5 = R12Q_Unidades_Compradas($FInicial,$FFinal);
-    $sql6 = R12Q_Unidades_Reclamadas($FInicial,$FFinal);
-    $sql7 = R12Q_Integracion_Pedido_Productos();
+    $sql5 = R12Q_Integracion_Unidades_Vendidas();
 
     sqlsrv_query($conn,$sql2);
     sqlsrv_query($conn,$sql3);
     sqlsrv_query($conn,$sql4);
-    sqlsrv_query($conn,$sql5); 
-    sqlsrv_query($conn,$sql6);
-    $result1 = sqlsrv_query($conn,$sql7);
+    $result1 = sqlsrv_query($conn,$sql5);
 
     $sql1 = QG_CleanTable('CP_R12Q_Descripcion_Like');
     sqlsrv_query($conn,$sql1);
     $sql1 = QG_CleanTable('CP_R12Q_Unidades_Vendidas');
     sqlsrv_query($conn,$sql1);
     $sql1 = QG_CleanTable('CP_R12Q_Unidades_Devueltas');
-    sqlsrv_query($conn,$sql1);
-    $sql1 = QG_CleanTable('CP_R12Q_Unidades_Compradas');
-    sqlsrv_query($conn,$sql1);
-    $sql1 = QG_CleanTable('CP_R12Q_Unidades_Reclamadas');
     sqlsrv_query($conn,$sql1);
 
     $row1 = sqlsrv_fetch_array($result1, SQLSRV_FETCH_ASSOC);
@@ -288,11 +276,7 @@
           .'</a>
         </td>
         <td align="center">'.intval($Existencia).'</td>
-        <td align="center" class="barrido">
-          <a href="reporte12?fechaInicio='.$FInicial.'&fechaFin='.$FFinal.'&SEDE='.$SedeConnection.'&Descrip='.$Descripcion.'&Id='.$IdArticulo.'" style="text-decoration: none; color: black;" target="_blank">'
-            .$UnidadesVendidas
-          .'</a>
-        </td>
+        <td align="center">'.$UnidadesVendidas.'</td>
         <td align="center">'.round($DiasRestantes,2).'</td>
         <td align="center">'.number_format($Precio,2,"," ,"." ).'</td>
         <td align="center">'.$Dolarizado.'</td>
@@ -500,4 +484,96 @@
     return $sql;
   }
 
+  /*
+    TITULO: R12Q_Unidades_Vendidas
+    PARAMETROS: [$FInicial] Fecha inicial del rango a consultar
+                [$FFinal] Fecha final del rango a consutar
+    FUNCION: Consulta las Veces vendidas a clientes y las unidades vendidas de un producto
+    RETORNO: Tabla con los articulos, las veces vendidas y las unidades vendidas
+    AUTOR: Ing. Manuel Henriquez
+   */
+  function R12Q_Descripcion_Like($DescripLike) {   
+    $sql = "
+      SELECT
+      InvArticulo.Id AS InvArticuloId,
+      InvArticulo.Descripcion
+      INTO CP_R12Q_Descripcion_Like
+      FROM InvArticulo
+      WHERE InvArticulo.Descripcion LIKE '%$DescripLike%'
+    ";          
+    return $sql;
+  }
+
+  /*
+    TITULO: R12Q_Unidades_Vendidas
+    PARAMETROS: [$FInicial] Fecha inicial del rango a consultar
+                [$FFinal] Fecha final del rango a consutar
+    FUNCION: Consulta las Veces vendidas a clientes y las unidades vendidas de un producto
+    RETORNO: Tabla con los articulos, las veces vendidas y las unidades vendidas
+    AUTOR: Ing. Manuel Henriquez
+   */
+  function R12Q_Unidades_Vendidas($FInicial,$FFinal) {   
+    $sql = "
+      SELECT
+      VenFacturaDetalle.InvArticuloId,
+      ISNULL(COUNT(*),CAST(0 AS INT)) AS VecesVendidas,
+      (ROUND(CAST(SUM(VenFacturaDetalle.Cantidad) AS DECIMAL(38,0)),2,0)) as UnidadesVendidas
+      INTO CP_R12Q_Unidades_Vendidas
+      FROM VenFacturaDetalle
+      INNER JOIN VenFactura ON VenFactura.Id = VenFacturaDetalle.VenFacturaId
+      WHERE
+      (VenFactura.FechaDocumento > '$FInicial' AND VenFactura.FechaDocumento < '$FFinal')
+      GROUP BY VenFacturaDetalle.InvArticuloId
+      ORDER BY UnidadesVendidas DESC
+    ";          
+    return $sql;
+  }
+
+  /*
+    TITULO: R12Q_Unidades_Devueltas
+    PARAMETROS: [$FInicial] Fecha inicial del rango a consultar
+                [$FFinal] Fecha final del rango a consutar
+    FUNCION: Consulta las Veces devuelta a clientes y las unidades devuelta de un producto
+    RETORNO: Tabla con los articulos, las veces devuelta y las unidades devuelta
+    AUTOR: Ing. Manuel Henriquez
+  */
+  function R12Q_Unidades_Devueltas($FInicial,$FFinal) {  
+    $sql = "
+      SELECT
+      VenDevolucionDetalle.InvArticuloId,
+      ISNULL(COUNT(*),CAST(0 AS INT)) AS VecesDevueltas,
+      (ROUND(CAST(SUM(VenDevolucionDetalle.Cantidad) AS DECIMAL(38,0)),2,0)) as UnidadesDevueltas
+      INTO CP_R12Q_Unidades_Devueltas
+      FROM VenDevolucionDetalle
+      INNER JOIN VenDevolucion ON VenDevolucion.Id = VenDevolucionDetalle.VenDevolucionId
+      WHERE
+      (VenDevolucion.FechaDocumento > '$FInicial' AND VenDevolucion.FechaDocumento < '$FFinal')
+      GROUP BY VenDevolucionDetalle.InvArticuloId
+      ORDER BY UnidadesDevueltas DESC
+    ";          
+    return $sql;
+  }
+
+  /*
+    TITULO: R12Q_Integracion_Unidades_Vendidas
+    PARAMETROS: No aplica
+    FUNCION: Integrar y calcular las unidades vendidas
+    RETORNO: String con la query
+    AUTOR: Ing. Manuel Henriquez
+   */
+  function R12Q_Integracion_Unidades_Vendidas() {
+    $sql = "
+      SELECT
+      CP_R12Q_Descripcion_Like.InvArticuloId,
+      CP_R12Q_Descripcion_Like.Descripcion,
+      ((ISNULL(CP_R12Q_Unidades_Vendidas.UnidadesVendidas,CAST(0 AS INT))) -
+      (ISNULL(CP_R12Q_Unidades_Devueltas.UnidadesDevueltas,CAST(0 AS INT))) 
+      ) AS UnidadesVendidas
+      FROM CP_R12Q_Descripcion_Like
+      LEFT JOIN CP_R12Q_Unidades_Vendidas ON CP_R12Q_Unidades_Vendidas.InvArticuloId = CP_R12Q_Descripcion_Like.InvArticuloId
+      LEFT JOIN CP_R12Q_Unidades_Devueltas ON CP_R12Q_Unidades_Devueltas.InvArticuloId = CP_R12Q_Descripcion_Like.InvArticuloId
+      ORDER BY UnidadesVendidas DESC
+    ";
+    return $sql;
+  }
 ?>
