@@ -315,24 +315,24 @@
         <tbody>
     ';
 
-    $sql9 = R12Q_Resumen_Movimiento($IdArticulo,$FInicial,$FFinal);
-    $result4 = sqlsrv_query($conn,$sql9);
+    $sql5 = R12Q_Resumen_Movimiento($IdArticulo,$FInicial,$FFinal);
+    $result2 = sqlsrv_query($conn,$sql5);
 
     $contador = 1;
     $FechaComparativa = date('d/m/Y',strtotime($FFinal));
 
-    while($row4 = sqlsrv_fetch_array($result4,SQLSRV_FETCH_ASSOC)) {
+    while($row2 = sqlsrv_fetch_array($result2,SQLSRV_FETCH_ASSOC)) {
 
-      if($FechaComparativa == $row4["FechaMovimiento"]) {
+      if($FechaComparativa == $row2["FechaMovimiento"]) {
         continue;
       }
 
       echo '
         <tr>
           <td align="center"><strong>'.intval($contador).'</strong></td>
-          <td align="center">'.$row4["FechaMovimiento"].'</td>
-          <td align="center">'.utf8_encode($row4["Movimiento"]).'</td>
-          <td align="center">'.$row4["Cantidad"].'</td>
+          <td align="center">'.$row2["FechaMovimiento"].'</td>
+          <td align="center">'.utf8_encode($row2["Movimiento"]).'</td>
+          <td align="center">'.$row2["Cantidad"].'</td>
         </tr>
       ';
 
@@ -363,8 +363,8 @@
     ';
 
     $contador = 1;
-    $sql8 = R12Q_Detalle_Movimiento($IdArticulo,$FInicial,$FFinal);
-    $result3 = sqlsrv_query($conn,$sql8);
+    $sql6 = R12Q_Detalle_Movimiento($IdArticulo,$FInicial,$FFinal);
+    $result3 = sqlsrv_query($conn,$sql6);
 
     while($row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC)) {
 
