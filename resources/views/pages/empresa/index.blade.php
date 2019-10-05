@@ -4,13 +4,6 @@
     Empresa
 @endsection
 
-@section('scriptsHead')
-    <script src="{{ asset('assets/js/sortTable.js') }}">	
-    </script>
-    <script src="{{ asset('assets/js/filter.js') }}">	
-    </script>
-@endsection
-
 @section('content')
 
 	<!-- Modal Guardar -->
@@ -110,13 +103,12 @@
 	<table class="table table-striped table-borderless col-12 sortable" id="myTable">
 	  	<thead class="thead-dark">
 		    <tr>
-		      	<th scope="col">#</th>
-		      	<th scope="col">Nombre</th>
-		      	<th scope="col">RIF</th>
-		      	<th scope="col">Teléfono</th>
-		      	{{-- <th scope="col">Dirección</th> --}}
-		      	<th scope="col">Estatus</th>
-		      	<th scope="col">Acciones</th>
+		      	<th scope="col" class="stickyCP">#</th>
+		      	<th scope="col" class="stickyCP">Nombre</th>
+		      	<th scope="col" class="stickyCP">RIF</th>
+		      	<th scope="col" class="stickyCP">Teléfono</th>		      	
+		      	<th scope="col" class="stickyCP">Estatus</th>
+		      	<th scope="col" class="stickyCP">Acciones</th>
 		    </tr>
 	  	</thead>
 	  	<tbody>
@@ -125,8 +117,7 @@
 		      <th>{{$empresa->id}}</th>
 		      <td>{{$empresa->nombre}}</td>
 		      <td>{{$empresa->rif}}</td>
-		      <td>{{$empresa->telefono}}</td>
-		      {{-- <td>{{$empresa->direccion}}</td> --}}
+		      <td>{{$empresa->telefono}}</td>		      
 		      <td>{{$empresa->estatus}}</td>
 		      
 		    <!-- Inicio Validacion de ROLES -->
@@ -186,7 +177,6 @@
 										
 		      </td>
 		    <!-- Fin Validacion de ROLES -->
-
 		    </tr>
 		@endforeach
 		</tbody>
@@ -198,5 +188,4 @@
 		});
 		$('#exampleModalCenter').modal('show')
 	</script>
-
 @endsection

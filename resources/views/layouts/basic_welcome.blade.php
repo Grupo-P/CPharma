@@ -14,7 +14,6 @@
             <footer class="fixed-bottom">
                 @include('includes.footer')
             </footer>
-
         </div>
     </body>
 </html>

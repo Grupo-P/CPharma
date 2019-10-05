@@ -4,29 +4,6 @@
     Reporte
 @endsection
 
-@section('scriptsHead')
-	<script type="text/javascript" src="{{ asset('assets/js/sortTable.js') }}">
-  	</script>
-  	<script type="text/javascript" src="{{ asset('assets/js/filter.js') }}">  
-  	</script>
-  	<script type="text/javascript" src="{{ asset('assets/js/functions.js') }}"> 
-  	</script>
-  	<script type="text/javascript" src="{{ asset('assets/jquery/jquery-2.2.2.min.js') }}"></script>
-  	<script type="text/javascript" src="{{ asset('assets/jquery/jquery-ui.min.js') }}" ></script>
-
-	<style> 
-	  	.barrido{
-    		text-decoration: none;
-    		transition: width 1s, height 1s, transform 1s;
-	    }
-	  	.barrido:hover{
-	    	text-decoration: none;
-	      	transition: width 1s, height 1s, transform 1s;
-	      	transform: translate(20px,0px);
-	    }
-	</style>
-@endsection
-
 @section('content')
 	<h1 class="h5 text-info">
 		<i class="fas fa-file-invoice"></i>
@@ -82,10 +59,10 @@
 		<table class="table table-striped table-bordered col-12 sortable" id="myTable">
 		  	<thead class="thead-dark">
 			    <tr>
-			    	<th scope="col">#</th>
-			      	<th scope="col">Proveedor</th>
-			      	<th scope="col">Ultimo registro</th>
-			      	<th scope="col">Dias sin facturar</th>
+			    	<th scope="col" class="stickyCP">#</th>
+			      	<th scope="col" class="stickyCP">Proveedor</th>
+			      	<th scope="col" class="stickyCP">Ultimo registro</th>
+			      	<th scope="col" class="stickyCP">Dias sin facturar</th>
 			    </tr>
 		  	</thead>
 		  	<tbody>
@@ -93,7 +70,7 @@
 		
 		while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
 			$IdProveedor = $row['Id'];
-			$NombreProveedor = utf8_encode(addslashes($row['Nombre']));
+			$NombreProveedor = FG_Limpiar_Texto($row['Nombre']);
 			echo '<tr>';
 			echo '<td align="center"><strong>'.intval($contador).'</strong></td>';
 			echo 

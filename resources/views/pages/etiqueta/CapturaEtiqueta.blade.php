@@ -48,11 +48,11 @@
 	<table class="table table-striped table-borderless col-12 sortable" id="myTable">
 	  	<thead class="thead-dark">
 		    <tr>
-		      	<th scope="col">#</th>
-		      	<th scope="col">Total de Registros</th>
-		      	<th scope="col">Fecha de Captura</th>
-		      	<th scope="col">Fecha de Creacion</th>
-		      	<th scope="col">Fecha de Actualizacion</th>
+		      	<th scope="col" class="stickyCP">#</th>
+		      	<th scope="col" class="stickyCP">Total de Registros</th>
+		      	<th scope="col" class="stickyCP">Fecha de Captura</th>
+		      	<th scope="col" class="stickyCP">Fecha de Creacion</th>
+		      	<th scope="col" class="stickyCP">Fecha de Actualizacion</th>
 		    </tr>
 	  	</thead>
 	  	<tbody>
