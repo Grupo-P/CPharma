@@ -23,6 +23,10 @@
         $maximo = floatval($row2['valor']);
 
         mysqli_close($conCP);
+
+        $Hoy = new DateTime();
+        $HoyMostrar = $Hoy->format('Y-m-d 00:00:00');
+        $Hoy = $Hoy->format('Y-m-d');
     ?>
 
     <!-- Modal Guardar -->
@@ -84,8 +88,8 @@
                 <th>Moneda</th>
                 <td>
                   <select name="moneda" id="moneda" class="form-control" style="width:100%;" disabled>
-                    <option>Bolivar Soberano</option>
                     <option>Dolar</option>
+                    <option>Bolivar Soberano</option>
                     <option>Peso Colombiano</option>
                     <option>Euro</option>
                   </select>
@@ -96,7 +100,8 @@
                     Fecha
                   </th>
                   <td>
-                    <input id="fecha" type="date" name="fecha" class="form-control" style="width:100%;" required>
+                    <input type="date" class="form-control" value="<?php echo $Hoy ?>" style="width:100%;" required disabled>
+                    <input id="fecha" type="hidden" name="fecha" value="<?php echo $HoyMostrar ?>">
                   </td>
               </tr>
           </tbody>
