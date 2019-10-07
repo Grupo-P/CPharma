@@ -531,14 +531,14 @@
 		FUNCION: Calcular el precio del articulo
 		RETORNO: Precio del articulo
 	 */
-	function CalculoPrecioDevaluado($conn,$IdArticulo,$IsIVA,$Existencia) {
+	/*function CalculoPrecioDevaluado($conn,$IdArticulo,$IsIVA,$Existencia) {
 		$Precio = 0;
 
 		if($Existencia == 0) {
 			$Precio = 0;
 		}
 		else {
-		/*PRECIO TROQUELADO*/
+			//PRECIO TROQUELADO
 			$sql0 = QCleanTable('CP_QLoteArticuloDevaluado');
 			sqlsrv_query($conn,$sql0);
 
@@ -553,7 +553,7 @@
 			if($PrecioTroquelado!=NULL) {
 				$Precio = $PrecioTroquelado;
 			}
-		/*PRECIO CALCULADO*/
+			//PRECIO CALCULADO
 			else {
 				$sql0 = QCleanTable('CP_QLoteArticuloDevaluado');
 				sqlsrv_query($conn,$sql0);
@@ -580,7 +580,7 @@
 		sqlsrv_query($conn,$sql0);
 
 		return $Precio;
-	}
+	}*/
 
 	/*
 		TITULO: TasaFechaConversion

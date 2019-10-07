@@ -292,7 +292,7 @@
 		FUNCION: Busca el lote correspondiente al articulo especificado
 		RETORNO: Regresa el Id del lote correspondiente
 	 */
-	function QLoteArticuloDevaluado($IdArticulo,$CantAlmacen) {
+	/*function QLoteArticuloDevaluado($IdArticulo,$CantAlmacen) {
 		switch($CantAlmacen) {
 			case '0':
 			$sql = "
@@ -330,7 +330,7 @@
 			return $sql;
 			break;
 		}
-	}
+	}*/
 
 	/*
 		TITULO: QLote
@@ -378,7 +378,7 @@
 				 (Funciona en conjunto con QLoteArticulo)
 		RETORNO: Retorna el precio de compra bruto y el precio troquelado
 	 */
-	function QLoteDevaluado() {
+	/*function QLoteDevaluado() {
 		$sql = "
 			SELECT TOP 1
 			InvLote.Id,
@@ -389,7 +389,7 @@
 			ORDER BY invlote.M_PrecioTroquelado, invlote.M_PrecioCompraBruto DESC
 		";
 		return $sql;
-	}
+	}*/
 
 	/*
 		TITULO: QHistoricoArticulo
@@ -2160,7 +2160,7 @@
 	FUNCION: Armar una tabla temporal con los registros solicitados 
 	RETORNO: Un String con la query pertinente
 	 */
-	function QArticulosDevaluados($FechaBandera) {
+	/*function QArticulosDevaluados($FechaBandera) {
 		$sql = "
 		SELECT DISTINCT
 		--Campos
@@ -2199,7 +2199,7 @@
 		ORDER BY FechaLote, InvArticulo.Descripcion DESC
 		";
 		return $sql;
-	}
+	}*/
 	
 	function QDiasCeroEtiqueta($IdArticulo,$FechaCaptura) {
 		$sql = "

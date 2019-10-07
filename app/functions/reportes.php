@@ -2850,7 +2850,7 @@
 		FUNCION: Arma una lista de productos por fallar
 		RETORNO: No aplica
 	 */
-	function ReporteArticulosDevaluados($SedeConnection,$FInicial) {
+	/*function ReporteArticulosDevaluados($SedeConnection,$FInicial) {
 		$conn = ConectarSmartpharma($SedeConnection);
 		$Hoy = new DateTime('now');
 		$Hoy = $Hoy->format('Y-m-d');
@@ -2983,5 +2983,5 @@
 		';
 
 		sqlsrv_close($conn);
-	}
+	}*/
 ?>
