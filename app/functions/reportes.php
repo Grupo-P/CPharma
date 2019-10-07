@@ -2242,7 +2242,7 @@
 		FUNCION: arma la lista del troquel segun el articulo
 		RETORNO: no aplica
 	 */
-	function ReporteDetalleDeMovimiento($SedeConnection,$FInicial,$FFinal,$IdArticulo) {
+	/*function ReporteDetalleDeMovimiento($SedeConnection,$FInicial,$FFinal,$IdArticulo) {
 		$conn = ConectarSmartpharma($SedeConnection);
 
 		$sql = QArticulo($IdArticulo);
@@ -2418,10 +2418,9 @@
 		sqlsrv_query($conn,$sql);
 
 		$contador = 1;
+        $FechaComparativa = date('d/m/Y',strtotime($FFinal));
 
 	  	while($row4 = sqlsrv_fetch_array($result4,SQLSRV_FETCH_ASSOC)) {
-
-            $FechaComparativa = date('d/m/Y',strtotime($FFinal));
 
 	  		if($FechaComparativa == $row4["FechaMovimiento"]) {
 	  			continue;
@@ -2497,7 +2496,7 @@
 	  	';
 
 		sqlsrv_close($conn);
-	}
+	}*/
 	/*****************************************************************************/
 	/************************ REPORTE 13 PRODUCTOS POR FALLAR ***********************/
 	/*

@@ -1441,7 +1441,7 @@
 		FUNCION: Construir la consulta para el despliegue del reporte DetalleDeMovimiento
 		RETORNO: Un String con las instrucciones de la consulta
 	 */
-	function QDetalleDeMovimiento($IdArticulo,$FInicial,$FFinal) {
+	/*function QDetalleDeMovimiento($IdArticulo,$FInicial,$FFinal) {
 		$sql = "
 			SELECT 
 				InvMovimiento.InvLoteId,
@@ -1457,7 +1457,7 @@
 			ORDER BY InvMovimiento.FechaMovimiento ASC
 		";
 		return $sql;
-	}
+	}*/
 
 	/*
 		TITULO: QUltimaVentaSR
@@ -1628,7 +1628,7 @@
 		FUNCION: Arma la consulta para cargar la tabla temporal del resumen de los detalles de movimientos
 		RETORNO: Un String con la query resuelta
 	 */
-	function QIntegracionResumenDeMovimientos($IdArticulo,$FInicial,$FFinal) {
+	/*function QIntegracionResumenDeMovimientos($IdArticulo,$FInicial,$FFinal) {
 		$sql = "
 			SELECT 
 				InvMovimiento.InvLoteId,
@@ -1645,14 +1645,14 @@
 			ORDER BY InvMovimiento.FechaMovimiento ASC
 		";
 		return $sql;
-	}
+	}*/
 	/*
 		TITULO: QAgruparDetalleDeMovimientos
 		PARAMETROS: No aplica
 		FUNCION: Arma la consulta para agrupar por tipo de movimiento y sumar las cantidades
 		RETORNO: Un String con la query resuelta
 	 */
-	function QAgruparDetalleDeMovimientos() {
+	/*function QAgruparDetalleDeMovimientos() {
 		$sql = "
 			SELECT
 			CONVERT(VARCHAR(10), CP_QResumenDeMovimientos.FechaMovimiento, 103) AS FechaMovimiento,
@@ -1663,7 +1663,7 @@
 			ORDER BY CONVERT(VARCHAR(10), CP_QResumenDeMovimientos.FechaMovimiento, 103) ASC
 		";
 		return $sql;
-	}
+	}*/
 	/****************** QUERYS DEL REPORTE DETALLE DE MOVIMIENTOS ******************/
 	/*
 		TITULO: QUnidadesVendidasCliente2
