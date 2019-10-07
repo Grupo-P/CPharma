@@ -43,6 +43,7 @@ class ProductosCaida extends Command
         include(app_path().'\functions\funciones.php');
 
         FG_Prouctos_EnCaida();
+        //UpdateDiasCero();
 
         $Auditoria = new Auditoria();
         $Auditoria->accion = 'CAPTURAR';

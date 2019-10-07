@@ -1710,8 +1710,8 @@
 		RETORNO: SI o NO segun sea el caso
 	 */
 	function FG_Validar_Etiquetas() {
-		//$SedeConnection = MiUbicacion();
-		$SedeConnection = 'FTN';
+		$SedeConnection = MiUbicacion();
+		//$SedeConnection = 'FTN';
 	    $conn = ConectarSmartpharma($SedeConnection);
 	    $connCPharma = ConectarXampp();
 
@@ -2189,8 +2189,8 @@
 		RETORNO: no aplica
 	 */
 	function FG_Dias_EnCero() {
-		//$SedeConnection = MiUbicacion();
-		$SedeConnection = 'FTN';
+		$SedeConnection = MiUbicacion();
+		//$SedeConnection = 'FTN';
 		$conn = ConectarSmartpharma($SedeConnection);
 		$connCPharma = ConectarXampp();
 
@@ -2323,8 +2323,8 @@
 		RETORNO: no aplica
 	 */
 	function FG_Prouctos_EnCaida() {
-		//$SedeConnection = MiUbicacion();
-		$SedeConnection = 'FTN';
+		$SedeConnection = MiUbicacion();
+		//$SedeConnection = 'FTN';
 		$conn = ConectarSmartpharma($SedeConnection);
 		$connCPharma = ConectarXampp();
 
@@ -2376,10 +2376,10 @@
 		sqlsrv_query($conn,$sql);
 
 		/* Inicio while que itera en los articulos con existencia actual > 0*/
-//	while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
+		while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
 
-			/*COMANDOS PARA TEST*/
-    	$IdArticulo = 2736;
+			/*COMANDOS PARA TEST
+    	$IdArticulo = 54806;
 			$flag = FALSE;
 			while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
 				$IdArticuloR = $row['InvArticuloId'];
@@ -2394,8 +2394,9 @@
 			else{
 				echo'----Filtro 1 * Sin compra rango * Con venta en rango: NO----';
 			}
-			/*COMANDOS PARA TEST*/	
-		
+			COMANDOS PARA TEST*/	
+			
+			$IdArticulo = $row["InvArticuloId"];
 			$sql1 = QG_DetalleArticulo_ProductoCaida($IdArticulo);
     	$result1 = sqlsrv_query($conn,$sql1);
     	$row1 = sqlsrv_fetch_array($result1,SQLSRV_FETCH_ASSOC);
@@ -2409,7 +2410,7 @@
     	$DiasRestantes = FG_Dias_Restantes($Existencia,$VentaDiaria);
 
     	/*COMANDOS PARA TEST*/
-    	echo'----- Articulo: '.$Descripcion.' -----';
+    	//echo'----- Articulo: '.$Descripcion.' -----';
     	/*COMANDOS PARA TEST*/
 
 			/* FILTRO 2: 
@@ -2419,7 +2420,7 @@
 			if($DiasRestantes<11){
 
 				/*COMANDOS PARA TEST*/
-				echo'----Filtro 2 * Dias restantes < 11: SI '.$DiasRestantes.' ----';
+				//echo'----Filtro 2 * Dias restantes < 11: SI '.$DiasRestantes.' ----';
 				/*COMANDOS PARA TEST*/
 
 				/* FILTRO 3:
@@ -2432,7 +2433,7 @@
 				if($CuentaExistencia==$RangoDias){
 
 					/*COMANDOS PARA TEST*/
-					echo'----Filtro 3 * Existencia en rango: SI '.$CuentaExistencia.' ----';
+					//echo'----Filtro 3 * Existencia en rango: SI '.$CuentaExistencia.' ----';
 					/*COMANDOS PARA TEST*/
 
 					/*  FILTRO 4: 
@@ -2444,7 +2445,7 @@
 					if($CuentaVenta>=($RangoDias/2)){
 
 						/*COMANDOS PARA TEST*/
-						echo'----Filtro 4 * Venta en dias: SI '.$CuentaVenta.' ----';
+						//echo'----Filtro 4 * Venta en dias: SI '.$CuentaVenta.' ----';
 						/*COMANDOS PARA TEST*/		
 
 						$ExistenciaDecreciente = ExistenciaDecreciente($connCPharma,$IdArticulo,$FInicial,$FFinal,$RangoDias);
@@ -2457,7 +2458,7 @@
 						if($CuentaDecreciente==TRUE){
 
 							/*COMANDOS PARA TEST*/
-							echo'----Filtro 5 * Decrece su existencia: SI ----';
+							//echo'----Filtro 5 * Decrece su existencia: SI ----';
 							/*COMANDOS PARA TEST*/
 
 							$Precio = FG_Calculo_Precio_Producto_Caida($conn,$IdArticulo,$IsIVA,$Existencia);
@@ -2477,30 +2478,30 @@
 
 							mysqli_query($connCPharma,$sqlCPharma);
 						}	
-						else{
+						//else{
 							/*COMANDOS PARA TEST*/
-							echo'----Filtro 5 * Decrece su existencia: NO ----';
+							//echo'----Filtro 5 * Decrece su existencia: NO ----';
 							/*COMANDOS PARA TEST*/
-						}					
+						//}					
 					}
-					else{
+					//else{
 						/*COMANDOS PARA TEST*/
-						echo'----Filtro 4 * Venta en dias: NO '.$CuentaVenta.' ----';
+						//echo'----Filtro 4 * Venta en dias: NO '.$CuentaVenta.' ----';
 						/*COMANDOS PARA TEST*/
-					}	
+					//}	
 				}
-				else{
+				//else{
 					/*COMANDOS PARA TEST*/
-					echo'----Filtro 3 * Existencia en rango: NO '.$CuentaExistencia.' ----';
+					//echo'----Filtro 3 * Existencia en rango: NO '.$CuentaExistencia.' ----';
 					/*COMANDOS PARA TEST*/
-				}
+				//}
 			}
-			else{
+			//else{
 				/*COMANDOS PARA TEST*/
-				echo'----Filtro 2 * Dias restantes < 11: NO '.$DiasRestantes.' ----';
+				//echo'----Filtro 2 * Dias restantes < 11: NO '.$DiasRestantes.' ----';
 				/*COMANDOS PARA TEST*/
-			}	
-//	}
+			//}	
+		}
 		GuardarCapturaCaida($connCPharma,$FechaCaptura,$date);
 		
 		$sqlCC = QValidarCapturaCaida($FechaCaptura);
@@ -2596,5 +2597,28 @@
 		$texto = utf8_encode($texto);	
 		$texto = preg_replace("/[^A-Za-z0-9_\-\&\ñ\Ñ\'\(\)\.\,\s]/",'',$texto);
 		return $texto;
+	}
+	/*
+		TITULO: UpdateDiasCero
+		PARAMETROS: no aplica
+		FUNCION: actualiza campos en la tabla dias en cero
+		RETORNO: no aplica
+		DESARROLLADO POR: SERGIO COVA
+	 */
+	function UpdateDiasCero(){
+		$conn = ConectarXampp();
+		
+		$sql0 = "SELECT * FROM dias_ceros";
+		$Result_Dias_Cero = mysqli_query($conn,$sql0);
+		
+		$contador = 284616;
+
+		while( ($Tabla_Dias_Cero = mysqli_fetch_assoc($Result_Dias_Cero))  ){
+			$Id =  $Tabla_Dias_Cero['id'];
+			$sql="UPDATE dias_ceros SET id ='$contador' where id = '$Id'";
+			mysqli_query($conn,$sql);
+			$contador++;
+		}
+		mysqli_close($conn);
 	}
 ?>
