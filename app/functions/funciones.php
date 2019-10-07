@@ -1786,7 +1786,7 @@
 		FUNCION: crea una conexion con la base de datos cpharma e ingresa datos
 		RETORNO: no aplica
  	*/
-	function FG_Generer_Etiquetas($clasificacion,$tipo) {
+	function FG_Generer_Etiquetas($clasificacion,$tipo,$dia) {
 		//$SedeConnection = MiUbicacion();
 		$SedeConnection = 'FTN';
   	$conn = ConectarSmartpharma($SedeConnection);
@@ -1796,7 +1796,7 @@
 		$FManana = date("Y-m-d",strtotime($FHoy."+1 days"));
 		$FAyer = date("Y-m-d",strtotime($FHoy."-1 days"));
 
-  	$sql = QCleanTable('CP_Etiqueta_C1');
+		$sql = QCleanTable('CP_Etiqueta_C1');
 		sqlsrv_query($conn,$sql);
 		$sql = QCleanTable('CP_Etiqueta_C2');
 		sqlsrv_query($conn,$sql);
@@ -1805,14 +1805,28 @@
 		$sql = QCleanTable('CP_Etiqueta_C4');
 		sqlsrv_query($conn,$sql);
 
-		$sql1 = QG_CP_Etiqueta_C1($FHoy,$FManana);
-		sqlsrv_query($conn,$sql1);
-		$sql2 = QG_CP_Etiqueta_C2($FHoy,$FManana);
-		sqlsrv_query($conn,$sql2);
-		$sql2 = QG_CP_Etiqueta_C3($FHoy,$FManana);
-		sqlsrv_query($conn,$sql2);
-		$sql2 = QG_CP_Etiqueta_C4($FHoy,$FManana);
-		sqlsrv_query($conn,$sql2);
+  	if($dia=='HOY'){
+  		$sql1 = QG_CP_Etiqueta_C1($FHoy,$FManana);
+			sqlsrv_query($conn,$sql1);
+			$sql2 = QG_CP_Etiqueta_C2($FHoy,$FManana);
+			sqlsrv_query($conn,$sql2);
+			$sql2 = QG_CP_Etiqueta_C3($FHoy,$FManana);
+			sqlsrv_query($conn,$sql2);
+			$sql2 = QG_CP_Etiqueta_C4($FHoy,$FManana);
+			sqlsrv_query($conn,$sql2);
+  	}
+  	else if($dia=='AYER'){
+  		$sql1 = QG_CP_Etiqueta_C1($FAyer,$FHoy);
+			sqlsrv_query($conn,$sql1);
+			$sql2 = QG_CP_Etiqueta_C2($FAyer,$FHoy);
+			sqlsrv_query($conn,$sql2);
+			$sql2 = QG_CP_Etiqueta_C3($FAyer,$FHoy);
+			sqlsrv_query($conn,$sql2);
+			$sql2 = QG_CP_Etiqueta_C4($FAyer,$FHoy);
+			sqlsrv_query($conn,$sql2);
+
+			$FAyer = date("Y-m-d",strtotime($FAyer."-1 days"));
+  	}
 
 		$result = sqlsrv_query($conn,"SELECT * FROM CP_Etiqueta_C4 ORDER BY IdArticulo ASC");
 

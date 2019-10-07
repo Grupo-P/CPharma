@@ -80,7 +80,7 @@
 	include(app_path().'\functions\funciones.php');
 	include(app_path().'\functions\reportes.php');
 	$InicioCarga = new DateTime("now");
-	FG_Generer_Etiquetas('OBLIGATORIO ETIQUETAR','NO DOLARIZADO');
+	FG_Generer_Etiquetas('OBLIGATORIO ETIQUETAR','NO DOLARIZADO','HOY');
 	$FinCarga = new DateTime("now");
     $IntervalCarga = $InicioCarga->diff($FinCarga);
     echo'Tiempo de carga: '.$IntervalCarga->format("%Y-%M-%D %H:%I:%S");
