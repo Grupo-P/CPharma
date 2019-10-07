@@ -149,9 +149,9 @@ class TasaVentaController extends Controller {
             $tasaVenta->estatus = 'ACTIVO';
             $Auditoria->accion = 'REINCORPORAR';
 
-            $Hoy = new DateTime();
-            $Ahora = new DateTime($Hoy->format('Y-m-d') . ' 00:00:00');
-            $tasaVenta->fecha = $Ahora;
+            $Fecha = date('Y-m-d', strtotime($tasaVenta->fecha));
+            $FechaFinal = new DateTime($Fecha . ' 00:00:00');
+            $tasaVenta->fecha = $FechaFinal;
         }
 
         $tasaVenta->user = auth()->user()->name;
