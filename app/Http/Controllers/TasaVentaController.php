@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use compras\TasaVenta;
 use compras\User;
 use compras\Auditoria;
+use DateTime;
 
 class TasaVentaController extends Controller {
     /**
@@ -142,11 +143,15 @@ class TasaVentaController extends Controller {
 
         if($tasaVenta->estatus == 'ACTIVO'){
             $tasaVenta->estatus = 'INACTIVO';
-             $Auditoria->accion = 'DESINCORPORAR';
+            $Auditoria->accion = 'DESINCORPORAR';
         }
         else if($tasaVenta->estatus == 'INACTIVO'){
             $tasaVenta->estatus = 'ACTIVO';
-             $Auditoria->accion = 'REINCORPORAR';
+            $Auditoria->accion = 'REINCORPORAR';
+
+            $Hoy = new DateTime();
+            $Ahora = new DateTime($Hoy->format('Y-m-d') . ' 00:00:00');
+            $tasaVenta->fecha = $Ahora;
         }
 
         $tasaVenta->user = auth()->user()->name;
