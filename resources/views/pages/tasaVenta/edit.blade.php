@@ -23,10 +23,6 @@
         $maximo = floatval($row2['valor']);
 
         mysqli_close($conCP);
-
-        $Hoy = new DateTime();
-        $HoyMostrar = $Hoy->format('Y-m-d 00:00:00');
-        $Hoy = $Hoy->format('Y-m-d');
     ?>
 
     <!-- Modal Guardar -->
@@ -96,13 +92,30 @@
                 </td>
               </tr>
               <tr>
-                  <th>
-                    Fecha
-                  </th>
+                  <th>Fecha</th>
+
+                  <?php 
+                  if(Auth::user()->role == 'MASTER' || Auth::user()->role == 'DEVELOPER'){
+                    $Fecha = date('d-m-Y', strtotime($tasaVenta->fecha));
+                  ?>
                   <td>
-                    <input type="date" class="form-control" value="<?php echo $Hoy ?>" style="width:100%;" required disabled>
-                    <input id="fecha" type="hidden" name="fecha" value="<?php echo $HoyMostrar ?>">
+                    <input type="text" id="fecha" name="fecha" class="form-control" value="<?php echo $Fecha ?>" style="width:100%;" required disabled>
                   </td>
+                  <?php
+                    } else {
+                      $Hoy = new DateTime();
+                      $Hoy = $Hoy->format('d-m-Y');
+                      $HoyEnviar = date('d-m-Y', strtotime($Hoy . ' 00:00:00'));
+                  ?>
+
+                  <td>
+                    <input type="text" class="form-control" value="<?php echo $Hoy ?>" style="width:100%;" required disabled>
+                    <input type="hidden" id="fecha" name="fecha" value="<?php echo $HoyEnviar ?>">
+                  </td>
+
+                  <?php
+                    }
+                  ?>
               </tr>
           </tbody>
         </table>
