@@ -1787,14 +1787,400 @@
 		RETORNO: no aplica
  	*/
 	function FG_Generer_Etiquetas($clasificacion,$tipo) {
-		$SedeConnection = MiUbicacion();
+		//$SedeConnection = MiUbicacion();
+		$SedeConnection = 'FTN';
   	$conn = ConectarSmartpharma($SedeConnection);
-	    
-		$connCPharma = ConectarXampp();	
+  	$connCPharma = ConectarXampp();	
+
+  	$FHoy = date("Y-m-d");
+		$FManana = date("Y-m-d",strtotime($FHoy."+1 days"));
+		$FAyer = date("Y-m-d",strtotime($FHoy."-1 days"));
+
+  	$sql = QCleanTable('CP_Etiqueta_C1');
+		sqlsrv_query($conn,$sql);
+		$sql = QCleanTable('CP_Etiqueta_C2');
+		sqlsrv_query($conn,$sql);
+		$sql = QCleanTable('CP_Etiqueta_C3');
+		sqlsrv_query($conn,$sql);
+		$sql = QCleanTable('CP_Etiqueta_C4');
+		sqlsrv_query($conn,$sql);
+
+		$sql1 = QG_CP_Etiqueta_C1($FHoy,$FManana);
+		sqlsrv_query($conn,$sql1);
+		$sql2 = QG_CP_Etiqueta_C2($FHoy,$FManana);
+		sqlsrv_query($conn,$sql2);
+		$sql2 = QG_CP_Etiqueta_C3($FHoy,$FManana);
+		sqlsrv_query($conn,$sql2);
+		$sql2 = QG_CP_Etiqueta_C4($FHoy,$FManana);
+		sqlsrv_query($conn,$sql2);
+
+		$result = sqlsrv_query($conn,"SELECT * FROM CP_Etiqueta_C4 ORDER BY IdArticulo ASC");
+
+		$sql = QCleanTable('CP_Etiqueta_C1');
+		sqlsrv_query($conn,$sql);
+		$sql = QCleanTable('CP_Etiqueta_C2');
+		sqlsrv_query($conn,$sql);
+		$sql = QCleanTable('CP_Etiqueta_C3');
+		sqlsrv_query($conn,$sql);
+		$sql = QCleanTable('CP_Etiqueta_C4');
+		sqlsrv_query($conn,$sql);
+
+		$CuentaCard = 0;
+		$CuentaEtiqueta = 0;
+
+		while( $row = sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC) ){
+			$IdArticulo = $row['IdArticulo'];
+			
+			$result1 = $connCPharma->query("SELECT id_articulo FROM etiquetas WHERE id_articulo = '$IdArticulo' AND clasificacion = '$clasificacion'");
+			$row1= $result1->fetch_assoc();
+			$IdArticuloP = $row1['id_articulo'];
+
+			if(!is_null($IdArticuloP)){
+
+				$Dolarizado = FG_Producto_Dolarizado($conn,$IdArticulo);
+
+				if(($Dolarizado=='SI')&&($tipo=='DOLARIZADO')){
+
+					$sql2 = QG_Detalle_Articulo($IdArticulo);
+					$result2 = sqlsrv_query($conn,$sql2);
+					$row2 = sqlsrv_fetch_array($result2,SQLSRV_FETCH_ASSOC);
+
+					$CodigoBarra = $row2["CodigoBarra"];
+					$Descripcion = FG_Limpiar_Texto($row2["Descripcion"]);
+					$Existencia = $row2["Existencia"];
+					$IsIVA = $row2["ConceptoImpuesto"];
+
+					if(intval($Existencia)>0){
+
+						$PrecioHoy = FG_Calculo_Precio_Etiquetas($conn,$IdArticulo,$IsIVA,$Existencia);
+
+						$sqlCC = QG_DiasCero_PrecioAyer($IdArticulo,$FAyer);
+						$resultCC = mysqli_query($connCPharma,$sqlCC);
+						$rowCC = mysqli_fetch_assoc($resultCC);
+						$PrecioAyer = $rowCC["precio"];
+
+						if( floatval(round($PrecioHoy,2)) != floatval($PrecioAyer) ){
+							if($IsIVA == 1){
+								$PMVP = $PrecioHoy/Impuesto;
+								$IVA = $PrecioHoy-$PMVP;
+							}
+							else{
+								$PMVP = $PrecioHoy;
+								$IVA = 0;
+							}
+
+							$simbolo = '*';
+							
+							echo'
+								<table>
+									<thead>
+										<tr>
+											<td class="centrado titulo rowCenter" colspan="2">
+												Código: '.$CodigoBarra.'
+											</td>
+										</tr>	
+									</thead>
+									<tbody>
+										<tr rowspan="2">
+											<td class="centrado descripcion aumento rowCenter" colspan="2">
+												<strong>'.$Descripcion.'</strong> 
+											</td>
+										</tr>
+										<tr>
+											<td class="izquierda rowIzq rowIzqA">
+												PMVP Bs.
+											</td>
+											<td class="derecha rowDer rowDerA rowDer rowDerA">
+												'.number_format ($PMVP,2,"," ,"." ).'
+											</td>
+										</tr>
+										<tr>
+											<td class="izquierda rowIzq rowIzqA">
+												IVA 16% Bs.
+											</td>
+											<td class="derecha rowDer rowDerA">
+												'.number_format ($IVA,2,"," ,"." ).'
+											</td>
+										</tr>';
+										if( floatval(round($PrecioHoy,2)) < floatval($PrecioAyer) ){
+											echo'
+												<tr>
+													<td class="izquierda rowIzq rowIzqA" style="color:red;">
+														Precio Bs. Antes
+													</td>
+													<td class="derecha rowDer rowDerA" style="color:red;">
+														<del>
+														'.number_format ($PrecioAyer,2,"," ,"." ).'
+														</del>
+													</td>
+												</tr>
+											';
+										}
+										echo'
+										<tr>
+											<td class="izquierda rowIzq rowIzqA aumento">
+												<strong>Total a Pagar Bs.</strong>
+											</td>
+											<td class="derecha rowDer rowDerA aumento">
+												<strong>
+												'.number_format ($PrecioHoy,2,"," ,"." ).'
+												</strong>
+											</td>
+										</tr>
+										<tr>
+											<td class="izquierda dolarizado rowIzq rowIzqA">
+												<strong>'.$simbolo.'</strong>
+											</td>
+											<td class="derecha rowDer rowDerA">
+												'.date("d-m-Y").'
+											</td>
+										</tr>				
+									</tbody>
+								</table>
+							';
+							$CuentaCard++;
+							$CuentaEtiqueta++;
+							if($CuentaCard == 3){
+								echo'<br>';
+								$CuentaCard=0;
+							}
+						}
+					}
+				}
+				else if(($Dolarizado=='NO')&&($tipo=='NO DOLARIZADO')){
+
+					$sql2 = QG_Detalle_Articulo($IdArticulo);
+					$result2 = sqlsrv_query($conn,$sql2);
+					$row2 = sqlsrv_fetch_array($result2,SQLSRV_FETCH_ASSOC);
+
+					$CodigoBarra = $row2["CodigoBarra"];
+					$Descripcion = FG_Limpiar_Texto($row2["Descripcion"]);
+					$Existencia = $row2["Existencia"];
+					$IsIVA = $row2["ConceptoImpuesto"];
+
+					if(intval($Existencia)>0){
+
+						$PrecioHoy = FG_Calculo_Precio_Etiquetas($conn,$IdArticulo,$IsIVA,$Existencia);
+
+						$sqlCC = QG_DiasCero_PrecioAyer($IdArticulo,$FAyer);
+						$resultCC = mysqli_query($connCPharma,$sqlCC);
+						$rowCC = mysqli_fetch_assoc($resultCC);
+						$PrecioAyer = $rowCC["precio"];
+
+						if( floatval(round($PrecioHoy,2)) != floatval($PrecioAyer) ){
+							if($IsIVA == 1){
+								$PMVP = $PrecioHoy/Impuesto;
+								$IVA = $PrecioHoy-$PMVP;
+							}
+							else{
+								$PMVP = $PrecioHoy;
+								$IVA = 0;
+							}
+
+							$simbolo = '';
+							
+							echo'
+								<table>
+									<thead>
+										<tr>
+											<td class="centrado titulo rowCenter" colspan="2">
+												Código: '.$CodigoBarra.'
+											</td>
+										</tr>	
+									</thead>
+									<tbody>
+										<tr rowspan="2">
+											<td class="centrado descripcion aumento rowCenter" colspan="2">
+												<strong>'.$Descripcion.'</strong> 
+											</td>
+										</tr>
+										<tr>
+											<td class="izquierda rowIzq rowIzqA">
+												PMVP Bs.
+											</td>
+											<td class="derecha rowDer rowDerA rowDer rowDerA">
+												'.number_format ($PMVP,2,"," ,"." ).'
+											</td>
+										</tr>
+										<tr>
+											<td class="izquierda rowIzq rowIzqA">
+												IVA 16% Bs.
+											</td>
+											<td class="derecha rowDer rowDerA">
+												'.number_format ($IVA,2,"," ,"." ).'
+											</td>
+										</tr>';
+										if( floatval(round($PrecioHoy,2)) < floatval($PrecioAyer) ){
+											echo'
+												<tr>
+													<td class="izquierda rowIzq rowIzqA" style="color:red;">
+														Precio Bs. Antes
+													</td>
+													<td class="derecha rowDer rowDerA" style="color:red;">
+														<del>
+														'.number_format ($PrecioAyer,2,"," ,"." ).'
+														</del>
+													</td>
+												</tr>
+											';
+										}
+										echo'
+										<tr>
+											<td class="izquierda rowIzq rowIzqA aumento">
+												<strong>Total a Pagar Bs.</strong>
+											</td>
+											<td class="derecha rowDer rowDerA aumento">
+												<strong>
+												'.number_format ($PrecioHoy,2,"," ,"." ).'
+												</strong>
+											</td>
+										</tr>
+										<tr>
+											<td class="izquierda dolarizado rowIzq rowIzqA">
+												<strong>'.$simbolo.'</strong>
+											</td>
+											<td class="derecha rowDer rowDerA">
+												'.date("d-m-Y").'
+											</td>
+										</tr>				
+									</tbody>
+								</table>
+							';
+							$CuentaCard++;
+							$CuentaEtiqueta++;
+							if($CuentaCard == 3){
+								echo'<br>';
+								$CuentaCard=0;
+							}
+						}
+					}
+				}
+				else if($tipo=='TODO'){
+
+					$sql2 = QG_Detalle_Articulo($IdArticulo);
+					$result2 = sqlsrv_query($conn,$sql2);
+					$row2 = sqlsrv_fetch_array($result2,SQLSRV_FETCH_ASSOC);
+
+					$CodigoBarra = $row2["CodigoBarra"];
+					$Descripcion = FG_Limpiar_Texto($row2["Descripcion"]);
+					$Existencia = $row2["Existencia"];
+					$IsIVA = $row2["ConceptoImpuesto"];
+
+					if(intval($Existencia)>0){
+
+						$PrecioHoy = FG_Calculo_Precio_Etiquetas($conn,$IdArticulo,$IsIVA,$Existencia);
+
+						$sqlCC = QG_DiasCero_PrecioAyer($IdArticulo,$FAyer);
+						$resultCC = mysqli_query($connCPharma,$sqlCC);
+						$rowCC = mysqli_fetch_assoc($resultCC);
+						$PrecioAyer = $rowCC["precio"];
+
+						if( floatval(round($PrecioHoy,2)) != floatval($PrecioAyer) ){
+							if($IsIVA == 1){
+								$PMVP = $PrecioHoy/Impuesto;
+								$IVA = $PrecioHoy-$PMVP;
+							}
+							else{
+								$PMVP = $PrecioHoy;
+								$IVA = 0;
+							}
+
+							if($Dolarizado=='SI'){
+								$simbolo = '*';
+							}
+							else{
+								$simbolo = '';
+							}
+							
+							echo'
+								<table>
+									<thead>
+										<tr>
+											<td class="centrado titulo rowCenter" colspan="2">
+												Código: '.$CodigoBarra.'
+											</td>
+										</tr>	
+									</thead>
+									<tbody>
+										<tr rowspan="2">
+											<td class="centrado descripcion aumento rowCenter" colspan="2">
+												<strong>'.$Descripcion.'</strong> 
+											</td>
+										</tr>
+										<tr>
+											<td class="izquierda rowIzq rowIzqA">
+												PMVP Bs.
+											</td>
+											<td class="derecha rowDer rowDerA rowDer rowDerA">
+												'.number_format ($PMVP,2,"," ,"." ).'
+											</td>
+										</tr>
+										<tr>
+											<td class="izquierda rowIzq rowIzqA">
+												IVA 16% Bs.
+											</td>
+											<td class="derecha rowDer rowDerA">
+												'.number_format ($IVA,2,"," ,"." ).'
+											</td>
+										</tr>';
+										if( floatval(round($PrecioHoy,2)) < floatval($PrecioAyer) ){
+											echo'
+												<tr>
+													<td class="izquierda rowIzq rowIzqA" style="color:red;">
+														Precio Bs. Antes
+													</td>
+													<td class="derecha rowDer rowDerA" style="color:red;">
+														<del>
+														'.number_format ($PrecioAyer,2,"," ,"." ).'
+														</del>
+													</td>
+												</tr>
+											';
+										}
+										echo'
+										<tr>
+											<td class="izquierda rowIzq rowIzqA aumento">
+												<strong>Total a Pagar Bs.</strong>
+											</td>
+											<td class="derecha rowDer rowDerA aumento">
+												<strong>
+												'.number_format ($PrecioHoy,2,"," ,"." ).'
+												</strong>
+											</td>
+										</tr>
+										<tr>
+											<td class="izquierda dolarizado rowIzq rowIzqA">
+												<strong>'.$simbolo.'</strong>
+											</td>
+											<td class="derecha rowDer rowDerA">
+												'.date("d-m-Y").'
+											</td>
+										</tr>				
+									</tbody>
+								</table>
+							';
+							$CuentaCard++;
+							$CuentaEtiqueta++;
+							if($CuentaCard == 3){
+								echo'<br>';
+								$CuentaCard=0;
+							}
+						}
+					}
+				}
+			}
+		}
+		echo "<br/>Se imprimiran ".$CuentaEtiqueta." etiquetas<br/>";
+		mysqli_close($connCPharma);
+    sqlsrv_close($conn);
+	}
+
+
+/*AQUI VOY
 		$resultado = $connCPharma->query("SELECT id_articulo FROM etiquetas WHERE clasificacion = '$clasificacion'");
 
 		$FHoy = date("Y-m-d");
-		$FAyer = date("Y-m-d",strtotime($FHoy."-1 days"));
+		
 		$CuentaCard=0;
 		$CuentaEtiqueta=0;
 
@@ -2114,7 +2500,7 @@
 		echo "<br/>Se imprimiran ".$CuentaEtiqueta." etiquetas<br/>";
 		mysqli_close($connCPharma);
     sqlsrv_close($conn);
-	}
+	}*/
 	/*
 		TITULO: FG_Calculo_Precio_Etiquetas
 		PARAMETROS: [$conn] Cadena de conexion para la base de datos
