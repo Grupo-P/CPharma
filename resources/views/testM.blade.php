@@ -149,6 +149,7 @@
   function R15_Articulos_Devaluados($SedeConnection,$FInicial) {
     
     $conn = ConectarSmartpharma($SedeConnection);
+    $connCPharma = ConectarXampp();
     $Hoy = new DateTime('now');
     $Hoy = $Hoy->format('Y-m-d');
     $FInicialImpresion = date('d-m-Y',strtotime($FInicial));
@@ -197,7 +198,7 @@
     while($row2 = sqlsrv_fetch_array($result2,SQLSRV_FETCH_ASSOC)) {
 
       $IdArticulo = $row2["InvArticuloId"];
-      $Dolarizado = ProductoDolarizado($conn,$IdArticulo);
+      $Dolarizado = FG_Producto_Dolarizado($conn,$IdArticulo);
 
       if($Dolarizado == 'NO') {
         
@@ -214,7 +215,7 @@
             $Precio = FG_Calculo_Precio($conn,$IdArticulo,$IsIVA,$Existencia);
             $ValorLote = $Precio * intval($Existencia);
 
-            $Tasa = TasaFecha($UltimoLote);
+            $Tasa = FG_Tasa_Fecha($connCPharma,$UltimoLote);
             $Descripcion = utf8_encode($row2["Descripcion"]);
 
             echo '
@@ -250,7 +251,7 @@
               ';
             }
 
-            $sql6 = QUltimoProveedor($IdArticulo);
+            $sql6 = QG_UltimoProveedor($IdArticulo);
             $result6 = sqlsrv_query($conn,$sql6);
             $row6 = sqlsrv_fetch_array($result6,SQLSRV_FETCH_ASSOC);
             $NombreProveedor = utf8_encode($row6["Nombre"]);
@@ -280,6 +281,7 @@
       </table>
     ';
 
+    mysqli_close($connCPharma);
     sqlsrv_close($conn);
   }
 
