@@ -168,7 +168,7 @@
 	<table class="table table-striped table-borderless col-12 sortable">
   	<thead class="thead-dark">
 	    <tr>
-	      	<th scope="col" colspan="6" style="text-align: center;">GENERAR ETIQUETAS</th>
+	      	<th scope="col" colspan="6" style="text-align: center;">GENERAR ETIQUETAS DE HOY</th>
 	    </tr>
 		</thead>
 		<tbody>
