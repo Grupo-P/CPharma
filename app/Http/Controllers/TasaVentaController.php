@@ -144,14 +144,18 @@ class TasaVentaController extends Controller {
         if($tasaVenta->estatus == 'ACTIVO'){
             $tasaVenta->estatus = 'INACTIVO';
             $Auditoria->accion = 'DESINCORPORAR';
+
+            $tasaVenta->fecha = new DateTime(
+                date('Y-m-d', strtotime($tasaVenta->fecha)) 
+                . ' 00:00:00');
         }
         else if($tasaVenta->estatus == 'INACTIVO'){
             $tasaVenta->estatus = 'ACTIVO';
             $Auditoria->accion = 'REINCORPORAR';
 
-            $Fecha = date('Y-m-d', strtotime($tasaVenta->fecha));
-            $FechaFinal = new DateTime($Fecha . ' 00:00:00');
-            $tasaVenta->fecha = $FechaFinal;
+            $tasaVenta->fecha = new DateTime(
+                date('Y-m-d', strtotime($tasaVenta->fecha)) 
+                . ' 00:00:00');
         }
 
         $tasaVenta->user = auth()->user()->name;
