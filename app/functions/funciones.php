@@ -2694,4 +2694,298 @@
 		}
 		mysqli_close($conn);
 	}
+	/*
+		TITULO: FG_Generer_Etiquetas_Todo
+		PARAMETROS: [$clasificacion] Parametro que indica el tipo de clasificacion, solo puede recibir ETIQUETABLE o OBLIGATORIO ETIQUETAR
+					[$tipo] Parametro que indica la dolarizacion, solo pude recibir DOLARIZADO, NO DOLARIZADO o TODO
+		FUNCION: crea una conexion con la base de datos cpharma e ingresa datos
+		RETORNO: no aplica
+ 	*/
+	function FG_Generer_Etiquetas_Todo($clasificacion,$tipo) {
+		//$SedeConnection = MiUbicacion();
+		$SedeConnection = 'FTN';
+  	$conn = ConectarSmartpharma($SedeConnection);
+  	$connCPharma = ConectarXampp();	
+
+  	$FHoy = date("Y-m-d");
+		$FManana = date("Y-m-d",strtotime($FHoy."+1 days"));
+		$FAyer = date("Y-m-d",strtotime($FHoy."-1 days"));
+
+		$CuentaCard = 0;
+		$CuentaEtiqueta = 0;
+
+		$result = $connCPharma->query("SELECT id_articulo FROM etiquetas WHERE clasificacion = '$clasificacion'");
+
+		while($row = $result->fetch_assoc()){
+			$IdArticulo = $row['id_articulo'];
+			$Dolarizado = FG_Producto_Dolarizado($conn,$IdArticulo);
+
+			if(($Dolarizado=='SI')&&($tipo=='DOLARIZADO')){
+
+				$sql2 = QG_Detalle_Articulo($IdArticulo);
+				$result2 = sqlsrv_query($conn,$sql2);
+				$row2 = sqlsrv_fetch_array($result2,SQLSRV_FETCH_ASSOC);
+
+				$CodigoBarra = $row2["CodigoBarra"];
+				$Descripcion = FG_Limpiar_Texto($row2["Descripcion"]);
+				$Existencia = $row2["Existencia"];
+				$IsIVA = $row2["ConceptoImpuesto"];
+
+				if(intval($Existencia)>0){
+
+					$PrecioHoy = FG_Calculo_Precio_Etiquetas($conn,$IdArticulo,$IsIVA,$Existencia);
+
+					if($IsIVA == 1){
+						$PMVP = $PrecioHoy/Impuesto;
+						$IVA = $PrecioHoy-$PMVP;
+					}
+					else{
+						$PMVP = $PrecioHoy;
+						$IVA = 0;
+					}
+
+					$simbolo = '*';
+					
+					echo'
+						<table>
+							<thead>
+								<tr>
+									<td class="centrado titulo rowCenter" colspan="2">
+										Código: '.$CodigoBarra.'
+									</td>
+								</tr>	
+							</thead>
+							<tbody>
+								<tr rowspan="2">
+									<td class="centrado descripcion aumento rowCenter" colspan="2">
+										<strong>'.$Descripcion.'</strong> 
+									</td>
+								</tr>
+								<tr>
+									<td class="izquierda rowIzq rowIzqA">
+										PMVP Bs.
+									</td>
+									<td class="derecha rowDer rowDerA rowDer rowDerA">
+										'.number_format ($PMVP,2,"," ,"." ).'
+									</td>
+								</tr>
+								<tr>
+									<td class="izquierda rowIzq rowIzqA">
+										IVA 16% Bs.
+									</td>
+									<td class="derecha rowDer rowDerA">
+										'.number_format ($IVA,2,"," ,"." ).'
+									</td>
+								</tr>
+								<tr>
+									<td class="izquierda rowIzq rowIzqA aumento">
+										<strong>Total a Pagar Bs.</strong>
+									</td>
+									<td class="derecha rowDer rowDerA aumento">
+										<strong>
+										'.number_format ($PrecioHoy,2,"," ,"." ).'
+										</strong>
+									</td>
+								</tr>
+								<tr>
+									<td class="izquierda dolarizado rowIzq rowIzqA">
+										<strong>'.$simbolo.'</strong>
+									</td>
+									<td class="derecha rowDer rowDerA">
+										'.date("d-m-Y").'
+									</td>
+								</tr>				
+							</tbody>
+						</table>
+					';
+					$CuentaCard++;
+					$CuentaEtiqueta++;
+					if($CuentaCard == 3){
+						echo'<br>';
+						$CuentaCard=0;
+					}
+				}
+			}
+			else if(($Dolarizado=='NO')&&($tipo=='NO DOLARIZADO')){
+
+				$sql2 = QG_Detalle_Articulo($IdArticulo);
+				$result2 = sqlsrv_query($conn,$sql2);
+				$row2 = sqlsrv_fetch_array($result2,SQLSRV_FETCH_ASSOC);
+
+				$CodigoBarra = $row2["CodigoBarra"];
+				$Descripcion = FG_Limpiar_Texto($row2["Descripcion"]);
+				$Existencia = $row2["Existencia"];
+				$IsIVA = $row2["ConceptoImpuesto"];
+
+				if(intval($Existencia)>0){
+
+					$PrecioHoy = FG_Calculo_Precio_Etiquetas($conn,$IdArticulo,$IsIVA,$Existencia);
+
+					if($IsIVA == 1){
+						$PMVP = $PrecioHoy/Impuesto;
+						$IVA = $PrecioHoy-$PMVP;
+					}
+					else{
+						$PMVP = $PrecioHoy;
+						$IVA = 0;
+					}
+
+					$simbolo = '';
+					
+					echo'
+						<table>
+							<thead>
+								<tr>
+									<td class="centrado titulo rowCenter" colspan="2">
+										Código: '.$CodigoBarra.'
+									</td>
+								</tr>	
+							</thead>
+							<tbody>
+								<tr rowspan="2">
+									<td class="centrado descripcion aumento rowCenter" colspan="2">
+										<strong>'.$Descripcion.'</strong> 
+									</td>
+								</tr>
+								<tr>
+									<td class="izquierda rowIzq rowIzqA">
+										PMVP Bs.
+									</td>
+									<td class="derecha rowDer rowDerA rowDer rowDerA">
+										'.number_format ($PMVP,2,"," ,"." ).'
+									</td>
+								</tr>
+								<tr>
+									<td class="izquierda rowIzq rowIzqA">
+										IVA 16% Bs.
+									</td>
+									<td class="derecha rowDer rowDerA">
+										'.number_format ($IVA,2,"," ,"." ).'
+									</td>
+								</tr>
+								<tr>
+									<td class="izquierda rowIzq rowIzqA aumento">
+										<strong>Total a Pagar Bs.</strong>
+									</td>
+									<td class="derecha rowDer rowDerA aumento">
+										<strong>
+										'.number_format ($PrecioHoy,2,"," ,"." ).'
+										</strong>
+									</td>
+								</tr>
+								<tr>
+									<td class="izquierda dolarizado rowIzq rowIzqA">
+										<strong>'.$simbolo.'</strong>
+									</td>
+									<td class="derecha rowDer rowDerA">
+										'.date("d-m-Y").'
+									</td>
+								</tr>				
+							</tbody>
+						</table>
+					';
+					$CuentaCard++;
+					$CuentaEtiqueta++;
+					if($CuentaCard == 3){
+						echo'<br>';
+						$CuentaCard=0;
+					}
+				}
+			}
+			else if($tipo=='TODO'){
+
+				$sql2 = QG_Detalle_Articulo($IdArticulo);
+				$result2 = sqlsrv_query($conn,$sql2);
+				$row2 = sqlsrv_fetch_array($result2,SQLSRV_FETCH_ASSOC);
+
+				$CodigoBarra = $row2["CodigoBarra"];
+				$Descripcion = FG_Limpiar_Texto($row2["Descripcion"]);
+				$Existencia = $row2["Existencia"];
+				$IsIVA = $row2["ConceptoImpuesto"];
+
+				if(intval($Existencia)>0){
+
+					$PrecioHoy = FG_Calculo_Precio_Etiquetas($conn,$IdArticulo,$IsIVA,$Existencia);
+
+					if($IsIVA == 1){
+						$PMVP = $PrecioHoy/Impuesto;
+						$IVA = $PrecioHoy-$PMVP;
+					}
+					else{
+						$PMVP = $PrecioHoy;
+						$IVA = 0;
+					}
+
+					if($Dolarizado=='SI'){
+						$simbolo = '*';
+					}
+					else{
+						$simbolo = '';
+					}
+					
+					echo'
+						<table>
+							<thead>
+								<tr>
+									<td class="centrado titulo rowCenter" colspan="2">
+										Código: '.$CodigoBarra.'
+									</td>
+								</tr>	
+							</thead>
+							<tbody>
+								<tr rowspan="2">
+									<td class="centrado descripcion aumento rowCenter" colspan="2">
+										<strong>'.$Descripcion.'</strong> 
+									</td>
+								</tr>
+								<tr>
+									<td class="izquierda rowIzq rowIzqA">
+										PMVP Bs.
+									</td>
+									<td class="derecha rowDer rowDerA rowDer rowDerA">
+										'.number_format ($PMVP,2,"," ,"." ).'
+									</td>
+								</tr>
+								<tr>
+									<td class="izquierda rowIzq rowIzqA">
+										IVA 16% Bs.
+									</td>
+									<td class="derecha rowDer rowDerA">
+										'.number_format ($IVA,2,"," ,"." ).'
+									</td>
+								</tr>
+								<tr>
+									<td class="izquierda rowIzq rowIzqA aumento">
+										<strong>Total a Pagar Bs.</strong>
+									</td>
+									<td class="derecha rowDer rowDerA aumento">
+										<strong>
+										'.number_format ($PrecioHoy,2,"," ,"." ).'
+										</strong>
+									</td>
+								</tr>
+								<tr>
+									<td class="izquierda dolarizado rowIzq rowIzqA">
+										<strong>'.$simbolo.'</strong>
+									</td>
+									<td class="derecha rowDer rowDerA">
+										'.date("d-m-Y").'
+									</td>
+								</tr>				
+							</tbody>
+						</table>
+					';
+					$CuentaCard++;
+					$CuentaEtiqueta++;
+					if($CuentaCard == 3){
+						echo'<br>';
+						$CuentaCard=0;
+					}
+				}
+			}
+		}
+		echo "<br/>Se imprimiran ".$CuentaEtiqueta." etiquetas<br/>";
+		mysqli_close($connCPharma);
+    sqlsrv_close($conn);
+	}
 ?>
