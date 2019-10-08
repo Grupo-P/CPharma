@@ -103,7 +103,6 @@
 	.CP-text-golden{
 		color: #DAA520 !important;
 	}
-
 	.CP-Latir {
 	  -webkit-animation: latir 2.5s infinite;
 	}
@@ -115,6 +114,12 @@
 	  80% { -webkit-transform:scale(1)}
 	  100% { -webkit-transform:scale(1.3)}
 	}
+/*Alineaciones*/
+	.CP-Vertical-Center {
+        vertical-align: middle;
+    }
+
+
 
 	.barrido {
 		text-decoration: none;

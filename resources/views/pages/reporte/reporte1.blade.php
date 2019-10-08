@@ -4,14 +4,6 @@
     Reporte
 @endsection
 
-@section('scriptsHead')
-    <style>
-        .table .thead-dark th {
-            vertical-align: middle;
-        }
-    </style>
-@endsection
-
 @section('content')
 	<h1 class="h5 text-info">
 		<i class="fas fa-file-invoice"></i>
