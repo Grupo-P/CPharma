@@ -84,20 +84,38 @@
                 <th>Moneda</th>
                 <td>
                   <select name="moneda" id="moneda" class="form-control" style="width:100%;" disabled>
-                    <option>Bolivar Soberano</option>
                     <option>Dolar</option>
+                    <option>Bolivar Soberano</option>
                     <option>Peso Colombiano</option>
                     <option>Euro</option>
                   </select>
                 </td>
               </tr>
               <tr>
-                  <th>
-                    Fecha
-                  </th>
+                  <th>Fecha</th>
+
+                  <?php 
+                  if(Auth::user()->role == 'MASTER' || Auth::user()->role == 'DEVELOPER'){
+                    $Fecha = date('d-m-Y', strtotime($tasaVenta->fecha));
+                  ?>
                   <td>
-                    <input id="fecha" type="date" name="fecha" class="form-control" style="width:100%;" required>
+                    <input type="text" id="fecha" name="fecha" class="form-control" value="<?php echo $Fecha ?>" style="width:100%;" required disabled>
                   </td>
+                  <?php
+                    } else {
+                      $Hoy = new DateTime();
+                      $Hoy = $Hoy->format('d-m-Y');
+                      $HoyEnviar = date('d-m-Y', strtotime($Hoy . ' 00:00:00'));
+                  ?>
+
+                  <td>
+                    <input type="text" class="form-control" value="<?php echo $Hoy ?>" style="width:100%;" required disabled>
+                    <input type="hidden" id="fecha" name="fecha" value="<?php echo $HoyEnviar ?>">
+                  </td>
+
+                  <?php
+                    }
+                  ?>
               </tr>
           </tbody>
         </table>

@@ -38,8 +38,13 @@
 	 */
 	function QTasaConversion($Fecha,$Moneda) {
 		$conCP = ConectarXampp();
-		$consulta = "SELECT tasa FROM tasa_ventas where fecha='$Fecha' 
-						AND moneda='$Moneda'";
+		$consulta = "
+			SELECT tasa 
+			FROM tasa_ventas 
+			WHERE fecha = '$Fecha'
+			AND moneda = '$Moneda'
+			AND estatus = 'ACTIVO'
+		";
 		$resultado = mysqli_query($conCP,$consulta);
 		return $resultado;
 	}
