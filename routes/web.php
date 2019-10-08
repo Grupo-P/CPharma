@@ -141,6 +141,14 @@ Route::get('/CapturaEtiqueta', function() {
     return view('pages.etiqueta.CapturaEtiqueta');
 });
 
+Route::get('/Generar_Etiquetas', function() {
+    return view('pages.etiqueta.Generar_Etiquetas');
+});
+
+Route::get('/Generar_Etiquetas_Todo', function() {
+    return view('pages.etiqueta.Generar_Etiquetas_Todo');
+});
+
 Route::get('home', 'HomeController@index')->name('home');
 
 Route::resource('dolar', 'DolarController');
