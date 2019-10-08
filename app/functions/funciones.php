@@ -2531,7 +2531,7 @@
 	 */
 	function FG_Limpiar_Texto($texto) {
 		$texto = utf8_encode($texto);	
-		$texto = preg_replace("/[^A-Za-z0-9_\-\&\ñ\Ñ\'\(\)\.\,\s]/",'',$texto);
+		$texto = preg_replace("/[^A-Za-z0-9_\-\&\ñ\Ñ\'\(\)\.\,\s][á|é|í|ó|ú|Á|É|Í|Ó|Ú]/",'',$texto);
 		return $texto;
 	}
 ?>
