@@ -1,3 +1,20 @@
 <?php
 /*Querys que son ejecutadas en el manejador de base de datos MYSQL*/
+	/**********************************************************************************/
+	/*
+		TITULO: MySQL_Guardar_Auditoria
+		PARAMETROS: $accion,$tabla,$registro,$user
+		FUNCION: capturar y guardar el evento en la auditoria
+		RETORNO: query para almacenar la auditoria
+		DESARROLLADO POR: SERGIO COVA
+	 */
+	function MySQL_Guardar_Auditoria($accion,$tabla,$registro,$user,$date) {
+		$sql = "
+		INSERT INTO auditorias
+		(accion,tabla,registro,user,created_at,updated_at)
+		VALUES 
+		('$accion','$tabla','$registro','$user','$date','$date')
+		";
+		return $sql;
+	}
 ?>

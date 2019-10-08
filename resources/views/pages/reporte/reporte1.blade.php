@@ -13,18 +13,19 @@
 
 	<?php	
 		include(app_path().'\functions\config.php');
-		include(app_path().'\functions\querys.php');
-		include(app_path().'\functions\funciones.php');
+		include(app_path().'\functions\functions.php');
+		include(app_path().'\functions\querys_mysql.php');
+		include(app_path().'\functions\querys_sqlserver.php');
 
 		$InicioCarga = new DateTime("now");
 
 		if (isset($_GET['SEDE'])){			
-			echo '<h1 class="h5 text-success"  align="left"> <i class="fas fa-prescription"></i> '.NombreSede($_GET['SEDE']).'</h1>';
+			echo '<h1 class="h5 text-success"  align="left"> <i class="fas fa-prescription"></i> '.FG_Nombre_Sede($_GET['SEDE']).'</h1>';
 		}
 		echo '<hr class="row align-items-start col-12">';
 
 		R1_Activacion_Proveedores($_GET['SEDE']);
-		GuardarAuditoria('CONSULTAR','REPORTE','Activacion de proveedores');
+		FG_Guardar_Auditoria('CONSULTAR','REPORTE','Activacion de proveedores');
 
 		$FinCarga = new DateTime("now");
     $IntervalCarga = $InicioCarga->diff($FinCarga);
@@ -38,9 +39,10 @@
 		PARAMETROS: [$SedeConnection] Sede a la cual se conectara el sistema
 		FUNCION: Arma el reporte de activacion de proveedores
 		RETORNO: Lista de activacio de proveedores
+		DESAROLLADO POR: SERGIO COVA
 	 */
 	function R1_Activacion_Proveedores($SedeConnection) {
-		$conn = ConectarSmartpharma($SedeConnection);
+		$conn = FG_Conectar_Smartpharma($SedeConnection);
 		$sql = R1Q_Activacion_Proveedores();
 		$result = sqlsrv_query($conn,$sql);
 		$contador = 1;
@@ -57,24 +59,23 @@
 		</div>
 		<br/>
 		<table class="table table-striped table-bordered col-12 sortable" id="myTable">
-		  	<thead class="thead-dark">
-			    <tr>
-			    	<th scope="col" class="stickyCP">#</th>
-			      	<th scope="col" class="stickyCP">Proveedor</th>
-			      	<th scope="col" class="stickyCP">Ultimo registro</th>
-			      	<th scope="col" class="stickyCP">Dias sin facturar</th>
-			    </tr>
-		  	</thead>
-		  	<tbody>
+	  	<thead class="thead-dark">
+		    <tr>
+		    	<th scope="col" class="CP-sticky">#</th>
+	      	<th scope="col" class="CP-sticky">Proveedor</th>
+	      	<th scope="col" class="CP-sticky">Ultimo registro</th>
+	      	<th scope="col" class="CP-sticky">Dias sin facturar</th>
+		    </tr>
+	  	</thead>
+	  	<tbody>
 		';
-		
 		while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
 			$IdProveedor = $row['Id'];
 			$NombreProveedor = FG_Limpiar_Texto($row['Nombre']);
 			echo '<tr>';
 			echo '<td align="center"><strong>'.intval($contador).'</strong></td>';
 			echo 
-			'<td align="left" class="barrido">
+			'<td align="left" class="CP-barrido">
 			<a href="/reporte7?Nombre='.$NombreProveedor.'&Id='.$IdProveedor.'&SEDE='.$SedeConnection.'" target="_blank" style="text-decoration: none; color: black;">'
 				.$NombreProveedor.
 			'</a>
@@ -94,6 +95,7 @@
 		PARAMETROS: No aplica
 		FUNCION: Query que genera la lista de los proveedores con la diferencia en dias desde el ultimo despacho de mercancia. 
 		RETORNO: Lista de proveedores con diferencia en dias respecto al dia actual
+		DESAROLLADO POR: SERGIO COVA
 	 */
 	function R1Q_Activacion_Proveedores() {
 		$sql = " 
