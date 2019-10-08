@@ -1787,8 +1787,8 @@
 		RETORNO: no aplica
  	*/
 	function FG_Generer_Etiquetas($clasificacion,$tipo,$dia) {
-		//$SedeConnection = MiUbicacion();
-		$SedeConnection = 'FTN';
+		$SedeConnection = MiUbicacion();
+		//$SedeConnection = 'FTN';
   	$conn = ConectarSmartpharma($SedeConnection);
   	$connCPharma = ConectarXampp();	
 
@@ -2702,8 +2702,8 @@
 		RETORNO: no aplica
  	*/
 	function FG_Generer_Etiquetas_Todo($clasificacion,$tipo) {
-		//$SedeConnection = MiUbicacion();
-		$SedeConnection = 'FTN';
+		$SedeConnection = MiUbicacion();
+		//$SedeConnection = 'FTN';
   	$conn = ConectarSmartpharma($SedeConnection);
   	$connCPharma = ConectarXampp();	
 
