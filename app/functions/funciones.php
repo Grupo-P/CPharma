@@ -1814,6 +1814,7 @@
 			sqlsrv_query($conn,$sql2);
 			$sql2 = QG_CP_Etiqueta_C4($FHoy,$FManana);
 			sqlsrv_query($conn,$sql2);
+			$FchaCambio = $FHoy;
   	}
   	else if($dia=='AYER'){
   		$sql1 = QG_CP_Etiqueta_C1($FAyer,$FHoy);
@@ -1824,8 +1825,7 @@
 			sqlsrv_query($conn,$sql2);
 			$sql2 = QG_CP_Etiqueta_C4($FAyer,$FHoy);
 			sqlsrv_query($conn,$sql2);
-
-			$FAyer = date("Y-m-d",strtotime($FAyer."-1 days"));
+			$FchaCambio = $FAyer;
   	}
 
 		$result = sqlsrv_query($conn,"SELECT * FROM CP_Etiqueta_C4 ORDER BY IdArticulo ASC");
@@ -1868,7 +1868,7 @@
 
 						$PrecioHoy = FG_Calculo_Precio_Etiquetas($conn,$IdArticulo,$IsIVA,$Existencia);
 
-						$sqlCC = QG_DiasCero_PrecioAyer($IdArticulo,$FAyer);
+						$sqlCC = QG_DiasCero_PrecioAyer($IdArticulo,$FchaCambio);
 						$resultCC = mysqli_query($connCPharma,$sqlCC);
 						$rowCC = mysqli_fetch_assoc($resultCC);
 						$PrecioAyer = $rowCC["precio"];
@@ -1976,7 +1976,7 @@
 
 						$PrecioHoy = FG_Calculo_Precio_Etiquetas($conn,$IdArticulo,$IsIVA,$Existencia);
 
-						$sqlCC = QG_DiasCero_PrecioAyer($IdArticulo,$FAyer);
+						$sqlCC = QG_DiasCero_PrecioAyer($IdArticulo,$FchaCambio);
 						$resultCC = mysqli_query($connCPharma,$sqlCC);
 						$rowCC = mysqli_fetch_assoc($resultCC);
 						$PrecioAyer = $rowCC["precio"];
@@ -2084,7 +2084,7 @@
 
 						$PrecioHoy = FG_Calculo_Precio_Etiquetas($conn,$IdArticulo,$IsIVA,$Existencia);
 
-						$sqlCC = QG_DiasCero_PrecioAyer($IdArticulo,$FAyer);
+						$sqlCC = QG_DiasCero_PrecioAyer($IdArticulo,$FchaCambio);
 						$resultCC = mysqli_query($connCPharma,$sqlCC);
 						$rowCC = mysqli_fetch_assoc($resultCC);
 						$PrecioAyer = $rowCC["precio"];
