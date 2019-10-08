@@ -74,7 +74,7 @@
 	echo'
 	<h1 class="h5 text-info" style="display: inline;">
 		<i class="fas fa-tag"></i>
-		'.$clasificacion.': '.$tipo.' ('.$dia.') LLegues
+		'.$clasificacion.': '.$tipo.' ('.$dia.')
 	</h1>
 	<input type="button" name="imprimir" value="Imprimir" class="btn btn-outline-info btn-sm" onclick="window.print();" style="display: inline; margin-left: 50px;">
 	<hr class="row align-items-start col-12">
