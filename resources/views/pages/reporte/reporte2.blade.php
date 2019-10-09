@@ -5,15 +5,6 @@
 @endsection
 
 @section('scriptsHead')
-  <script type="text/javascript" src="{{ asset('assets/js/sortTable.js') }}">
-  </script>
-  <script type="text/javascript" src="{{ asset('assets/js/filter.js') }}">  
-  </script>
-  <script type="text/javascript" src="{{ asset('assets/js/functions.js') }}"> 
-  </script>
-  <script type="text/javascript" src="{{ asset('assets/jquery/jquery-2.2.2.min.js') }}"></script>
-  <script type="text/javascript" src="{{ asset('assets/jquery/jquery-ui.min.js') }}" ></script>
-
   <style>
     * {
       box-sizing: border-box;
@@ -56,15 +47,6 @@
       background-color: DodgerBlue !important; 
       color: #ffffff; 
     }
-    .barrido{
-      text-decoration: none;
-      transition: width 1s, height 1s, transform 1s;
-    }
-    .barrido:hover{
-      text-decoration: none;
-      transition: width 1s, height 1s, transform 1s;
-      transform: translate(20px,0px);
-    }
   </style>
 @endsection
 
@@ -76,21 +58,23 @@
 	<hr class="row align-items-start col-12">
   <?php	
   	include(app_path().'\functions\config.php');
-    include(app_path().'\functions\querys.php');
-    include(app_path().'\functions\funciones.php');
+    include(app_path().'\functions\functions.php');
+    include(app_path().'\functions\querys_mysql.php');
+    include(app_path().'\functions\querys_sqlserver.php');
 
     $ArtJson = "";
+    $CodJson = "";
+
+    if (isset($_GET['SEDE'])) {     
+        echo '<h1 class="h5 text-success"  align="left"> <i class="fas fa-prescription"></i> '.FG_Nombre_Sede($_GET['SEDE']).'</h1>';
+      }
+      echo '<hr class="row align-items-start col-12">';
   	
   	if (isset($_GET['Id'])) {
       $InicioCarga = new DateTime("now");
       
-      if (isset($_GET['SEDE'])) {     
-        echo '<h1 class="h5 text-success"  align="left"> <i class="fas fa-prescription"></i> '.NombreSede($_GET['SEDE']).'</h1>';
-      }
-      echo '<hr class="row align-items-start col-12">';
-
       R2_Historico_Producto($_GET['SEDE'],$_GET['Id']);
-      GuardarAuditoria('CONSULTAR','REPORTE','Historico de productos');
+      FG_Guardar_Auditoria('CONSULTAR','REPORTE','Historico de productos');
 
       $FinCarga = new DateTime("now");
       $IntervalCarga = $InicioCarga->diff($FinCarga);
@@ -99,24 +83,33 @@
   	else {
       $InicioCarga = new DateTime("now");
 
-      if (isset($_GET['SEDE'])){      
-        echo '<h1 class="h5 text-success"  align="left"> <i class="fas fa-prescription"></i> '.NombreSede($_GET['SEDE']).'</h1>';
-      }
-      echo '<hr class="row align-items-start col-12">';
-      
       $sql = R2Q_Lista_Articulos();
-      $ArtJson = armarJson($sql,$_GET['SEDE']);
+      $ArtJson = FG_Armar_Json($sql,$_GET['SEDE']);
+
+      $sql1 = R2Q_Lista_Articulos_CodBarra();
+      $CodJson = FG_Armar_Json($sql1,$_GET['SEDE']);
 
   		echo '
   		<form autocomplete="off" action="" target="_blank">
   	    <div class="autocomplete" style="width:90%;">
-  	      <input id="myInput" type="text" name="Descrip" placeholder="Ingrese el nombre del articulo " onkeyup="conteo()" required>
+  	      <input id="myInput" type="text" name="Descrip" placeholder="Ingrese el nombre del articulo " onkeyup="conteo()">
   	      <input id="myId" name="Id" type="hidden">
-          <input id="SEDE" name="SEDE" type="hidden" value="';
+  	    </div>
+        <input id="SEDE" name="SEDE" type="hidden" value="';
           print_r($_GET['SEDE']);
           echo'">
-  	    </div>
   	    <input type="submit" value="Buscar" class="btn btn-outline-success">
+      </form>
+      <br/>
+      <form autocomplete="off" action="" target="_blank">
+        <div class="autocomplete" style="width:90%;">
+          <input id="myInputCB" type="text" name="CodBar" placeholder="Ingrese el codigo de barra del articulo " onkeyup="conteoCB()">
+          <input id="myIdCB" name="Id" type="hidden">
+        </div>
+        <input id="SEDE" name="SEDE" type="hidden" value="';
+          print_r($_GET['SEDE']);
+          echo'">
+        <input type="submit" value="Buscar" class="btn btn-outline-success">
     	</form>
     	';
 
@@ -137,6 +130,16 @@
     </script> 
   <?php
     }
+  ?> 
+  <?php
+    if($CodJson!=""){
+  ?>
+    <script type="text/javascript">
+      ArrJsCB = eval(<?php echo $CodJson ?>);
+      autocompletadoCB(document.getElementById("myInputCB"),document.getElementById("myIdCB"), ArrJsCB);
+    </script> 
+  <?php
+    }
   ?>  
 @endsection
 
@@ -147,11 +150,12 @@
                  [$IdArticuloQ] Id del articulo a buscar
     FUNCION: Armar una tabla del historico de compra del articulo
     RETORNO: No aplica
+    DESAROLLADO POR: SERGIO COVA
   */
   function R2_Historico_Producto($SedeConnection,$IdArticulo) {
     
-    $conn = ConectarSmartpharma($SedeConnection);
-    $connCPharma = ConectarXampp();
+    $conn = FG_Conectar_Smartpharma($SedeConnection);
+    $connCPharma = FG_Conectar_CPharma();
 
     $sql = R2Q_Detalle_Articulo($IdArticulo);
     $result = sqlsrv_query($conn,$sql);
@@ -160,15 +164,21 @@
     $sql2 = R2Q_Historico_Articulo($IdArticulo);
     $result2 = sqlsrv_query($conn,$sql2);
 
-    $CodigoArticulo = $row["CodigoArticulo"];
+    $CodigoArticulo = $row["CodigoInterno"];
     $CodigoBarra = $row["CodigoBarra"];
-    $Descripcion = utf8_encode(addslashes($row["Descripcion"]));
+    $Descripcion = FG_Limpiar_Texto($row["Descripcion"]);
+    $Dolarizado = $row["Dolarizado"];
     $Existencia = $row["Existencia"];
-    $IsIVA = $row["ConceptoImpuesto"];
+    $IsIVA = $row["Impuesto"];
+    $Utilidad = $row["Utilidad"];
+    $TroquelAlmacen1 = $row["TroquelAlmacen1"];
+    $TroquelAlmacen2 = $row["TroquelAlmacen2"];
+    $PrecioCompraBruto = $row["PrecioCompraBruto"];
+
     $Gravado = FG_Producto_Gravado($IsIVA);
-    $Dolarizado = FG_Producto_Dolarizado($conn,$IdArticulo);
+    $Dolarizado = FG_Producto_Dolarizado($Dolarizado);
     $TasaActual = FG_Tasa_Fecha($connCPharma,date('Y-m-d'));
-    $Precio = FG_Calculo_Precio($conn,$IdArticulo,$IsIVA,$Existencia);
+    $Precio = FG_Calculo_Precio($Existencia,$TroquelAlmacen1,$PrecioCompraBruto,$Utilidad,$IsIVA,$TroquelAlmacen2);
 
     echo '
     <div class="input-group md-form form-sm form-1 pl-0">
@@ -184,26 +194,26 @@
 
     <table class="table table-striped table-bordered col-12 sortable">
       <thead class="thead-dark">
-          <tr>
-            <th scope="col">Codigo</th>
-            <th scope="col">Codigo de barra</td>
-              <th scope="col">Descripcion</td>
-              <th scope="col">Existencia</td>
-              <th scope="col">Precio</br>(Con IVA) '.SigVe.'</td>         
-              <th scope="col">Gravado?</td>
-              <th scope="col">Dolarizado?</td>
-              <th scope="col">Tasa actual '.SigVe.'</td>
-              <th scope="col">Precio en divisa</br>(Con IVA) '.SigDolar.'</td>
-          </tr>
-        </thead>
-        <tbody>
+        <tr>
+          <th scope="col" class="CP-Vertical-Center">Codigo</th>
+          <th scope="col">Codigo de barra</td>
+          <th scope="col">Descripcion</td>
+          <th scope="col">Existencia</td>
+          <th scope="col">Precio</br>(Con IVA) '.SigVe.'</td>         
+          <th scope="col">Gravado?</td>
+          <th scope="col">Dolarizado?</td>
+          <th scope="col">Tasa actual '.SigVe.'</td>
+          <th scope="col">Precio en divisa</br>(Con IVA) '.SigDolar.'</td>
+        </tr>
+      </thead>
+      <tbody>
       ';
     echo '<tr>';
     echo '<td>'.$CodigoArticulo.'</td>';
     echo '<td align="center">'.$CodigoBarra.'</td>';
 
     echo 
-      '<td align="left" class="barrido">
+      '<td align="left" class="CP-barrido">
       <a href="/reporte10?Descrip='.$Descripcion.'&Id='.$IdArticulo.'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
         .$Descripcion.
       '</a>
@@ -232,14 +242,14 @@
     <table class="table table-striped table-bordered col-12 sortable" id="myTable">
         <thead class="thead-dark">
           <tr>
-            <th scope="col">#</th>
-            <th scope="col">Proveedor</th>
-              <th scope="col">Fecha de documento</th>
-              <th scope="col">Cantidad recibida</th>
-              <th scope="col">Costo bruto</br>(Sin IVA) '.SigVe.'</th>
-              <th scope="col">Tasa en historico '.SigVe.'</th>
-              <th scope="col">Costo bruto</br>HOY (Sin IVA) '.SigVe.'</th>
-          <th scope="col">Costo en divisa</br>(Sin IVA) '.SigDolar.'</th>
+            <th scope="col" class="CP-sticky">#</th>
+            <th scope="col" class="CP-sticky">Proveedor</th>
+            <th scope="col" class="CP-sticky">Fecha de documento</th>
+            <th scope="col" class="CP-sticky">Cantidad recibida</th>
+            <th scope="col" class="CP-sticky">Costo bruto</br>(Sin IVA) '.SigVe.'</th>
+            <th scope="col" class="CP-sticky">Tasa en historico '.SigVe.'</th>
+            <th scope="col" class="CP-sticky">Costo bruto</br>HOY (Sin IVA) '.SigVe.'</th>
+          <th scope="col" class="CP-sticky">Costo en divisa</br>(Sin IVA) '.SigDolar.'</th>
           </tr>
         </thead>
         <tbody>
@@ -248,7 +258,7 @@
     while($row2 = sqlsrv_fetch_array($result2, SQLSRV_FETCH_ASSOC)) {
         echo '<tr>';
         echo '<td align="center"><strong>'.intval($contador).'</strong></td>';
-        echo '<td>'.utf8_encode(addslashes($row2["Nombre"])).'</td>';
+        echo '<td>'.FG_Limpiar_Texto($row2["Nombre"]).'</td>';
         echo '<td align="center">'.$row2["FechaDocumento"]->format('d-m-Y').'</td>';
         echo '<td align="center">'.intval($row2['CantidadRecibidaFactura']).'</td>';
         echo '<td align="center">'.number_format($row2["M_PrecioCompraBruto"],2,"," ,"." ).'</td>';
@@ -289,6 +299,7 @@
     PARAMETROS: No aplica
     FUNCION: Armar una lista de articulos con descripcion e id
     RETORNO: Lista de articulos con descripcion e id
+    DESAROLLADO POR: SERGIO COVA
    */
   function R2Q_Lista_Articulos() {
     $sql = "
@@ -301,28 +312,175 @@
     return $sql;
   }
   /*
+    TITULO: R2Q_Lista_Articulos_CodBarra
+    PARAMETROS: No aplica
+    FUNCION: Armar una lista de articulos con descripcion e id
+    RETORNO: Lista de articulos con descripcion e id
+    DESAROLLADO POR: SERGIO COVA
+   */
+  function R2Q_Lista_Articulos_CodBarra() {
+    $sql = "
+      SELECT
+      (SELECT CodigoBarra
+      FROM InvCodigoBarra 
+      WHERE InvCodigoBarra.InvArticuloId = InvArticulo.Id
+      AND InvCodigoBarra.EsPrincipal = 1) AS CodigoBarra,
+      InvArticulo.Id
+      FROM InvArticulo
+      ORDER BY CodigoBarra ASC
+    ";
+    return $sql;
+  }
+  /*
     TITULO: R2Q_Detalle_Articulo
     PARAMETROS: [$IdArticulo] $IdArticulo del articulo a buscar
     FUNCION: Query que genera el detalle del articulo solicitado
     RETORNO: Detalle del articulo
+    DESAROLLADO POR: SERGIO COVA
    */
   function R2Q_Detalle_Articulo($IdArticulo) {
     $sql = " 
       SELECT
-      InvArticulo.Id,
-      InvArticulo.CodigoArticulo,
+    --Id Articulo
+      InvArticulo.Id AS IdArticulo,
+    --Codigo Interno
+      InvArticulo.CodigoArticulo AS CodigoInterno,
+    --Codigo de Barra
       (SELECT CodigoBarra
-          FROM InvCodigoBarra 
-          WHERE InvCodigoBarra.InvArticuloId = '$IdArticulo'
-          AND InvCodigoBarra.EsPrincipal = 1) As CodigoBarra,
+      FROM InvCodigoBarra 
+      WHERE InvCodigoBarra.InvArticuloId = InvArticulo.Id
+      AND InvCodigoBarra.EsPrincipal = 1) AS CodigoBarra,
+    --Descripcion
       InvArticulo.Descripcion,
-        (SELECT SUM (InvLoteAlmacen.Existencia) As Existencia
-          FROM InvLoteAlmacen
-          WHERE(InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
-          AND (InvLoteAlmacen.InvArticuloId = '$IdArticulo')) AS Existencia,
-      InvArticulo.FinConceptoImptoIdCompra AS ConceptoImpuesto
+    --Impuesto (1 SI aplica impuesto, 0 NO aplica impuesto)
+      (ISNULL(InvArticulo.FinConceptoImptoIdCompra,CAST(0 AS INT))) AS Impuesto,
+    --Utilidad (Utilidad del articulo, Utilidad es 1.00 NO considerar la utilidad para el calculo de precio)
+      ROUND(CAST(1-((ISNULL(ROUND(CAST((SELECT VenCondicionVenta.PorcentajeUtilidad
+          FROM VenCondicionVenta 
+          WHERE VenCondicionVenta.Id = (
+            SELECT VenCondicionVenta_VenCondicionVentaArticulo.Id
+            FROM VenCondicionVenta_VenCondicionVentaArticulo 
+            WHERE VenCondicionVenta_VenCondicionVentaArticulo.InvArticuloId = InvArticulo.Id)) AS DECIMAL(38,4)),2,0),CAST(0 AS INT)))/100)AS DECIMAL(38,2)),2,0) AS Utilidad,
+    --Precio Troquel Almacen 1
+      (ROUND(CAST((SELECT TOP 1
+      InvLote.M_PrecioTroquelado
+      FROM InvLoteAlmacen
+      INNER JOIN InvLote ON InvLote.Id = InvLoteAlmacen.InvLoteId
+      WHERE(InvLoteAlmacen.InvAlmacenId = '1')
+      AND (InvLoteAlmacen.InvArticuloId = InvArticulo.Id)
+      AND (InvLoteAlmacen.Existencia>0)
+      ORDER BY invlote.M_PrecioTroquelado DESC)AS DECIMAL(38,2)),2,0)) AS TroquelAlmacen1,
+    --Precio Troquel Almacen 2
+      (ROUND(CAST((SELECT TOP 1
+      InvLote.M_PrecioTroquelado
+      FROM InvLoteAlmacen
+      INNER JOIN InvLote ON InvLote.Id = InvLoteAlmacen.InvLoteId
+      WHERE(InvLoteAlmacen.InvAlmacenId = '2')
+      AND (InvLoteAlmacen.InvArticuloId = InvArticulo.Id)
+      AND (InvLoteAlmacen.Existencia>0)
+      ORDER BY invlote.M_PrecioTroquelado DESC)AS DECIMAL(38,2)),2,0)) AS TroquelAlmacen2,
+    --Precio Compra Bruto
+      (ROUND(CAST((SELECT TOP 1
+      InvLote.M_PrecioCompraBruto
+      FROM InvLoteAlmacen
+      INNER JOIN InvLote ON InvLote.Id = InvLoteAlmacen.InvLoteId
+      WHERE (InvLoteAlmacen.InvArticuloId = InvArticulo.Id)
+      AND (InvLoteAlmacen.Existencia>0)
+      ORDER BY invlote.M_PrecioCompraBruto DESC)AS DECIMAL(38,2)),2,0)) AS PrecioCompraBruto,
+    --Existencia (Segun el almacen del filtro)
+      (ROUND(CAST((SELECT SUM (InvLoteAlmacen.Existencia) As Existencia
+                  FROM InvLoteAlmacen
+                  WHERE(InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
+                  AND (InvLoteAlmacen.InvArticuloId = InvArticulo.Id)) AS DECIMAL(38,0)),2,0))  AS Existencia,
+    --Dolarizado (0 NO es dolarizado, Id Articulo SI es dolarizado)
+      (ISNULL((SELECT
+      InvArticuloAtributo.InvArticuloId
+      FROM InvArticuloAtributo 
+      WHERE InvArticuloAtributo.InvAtributoId = 
+        (SELECT InvAtributo.Id
+        FROM InvAtributo 
+        WHERE 
+        InvAtributo.Descripcion = 'Dolarizados'
+        OR  InvAtributo.Descripcion = 'Giordany'
+        OR  InvAtributo.Descripcion = 'giordany') 
+      AND InvArticuloAtributo.InvArticuloId = InvArticulo.Id),CAST(0 AS INT))) AS Dolarizado,
+    --Tipo Producto (0 Miscelaneos, Id Articulo Medicinas)
+      (ISNULL((SELECT
+      InvArticuloAtributo.InvArticuloId 
+      FROM InvArticuloAtributo 
+      WHERE InvArticuloAtributo.InvAtributoId = 
+        (SELECT InvAtributo.Id
+        FROM InvAtributo 
+        WHERE 
+        InvAtributo.Descripcion = 'Medicina') 
+      AND InvArticuloAtributo.InvArticuloId = InvArticulo.Id),CAST(0 AS INT))) AS Tipo,
+    --Articulo Estrella (0 NO es Articulo Estrella , Id SI es Articulo Estrella)
+      (ISNULL((SELECT
+      InvArticuloAtributo.InvArticuloId 
+      FROM InvArticuloAtributo 
+      WHERE InvArticuloAtributo.InvAtributoId = 
+        (SELECT InvAtributo.Id
+        FROM InvAtributo 
+        WHERE 
+        InvAtributo.Descripcion = 'Articulo Estrella') 
+      AND InvArticuloAtributo.InvArticuloId = InvArticulo.Id),CAST(0 AS INT))) AS ArticuloEstrella,
+    -- Ultima Venta (Fecha)
+      (SELECT TOP 1
+      CONVERT(DATE,VenFactura.FechaDocumento)
+      FROM VenFactura
+      INNER JOIN VenFacturaDetalle ON VenFacturaDetalle.VenFacturaId = VenFactura.Id
+      WHERE VenFacturaDetalle.InvArticuloId = InvArticulo.Id
+      ORDER BY FechaDocumento DESC) AS UltimaVenta,
+    --Tiempo sin Venta (En dias)
+      (SELECT TOP 1
+      DATEDIFF(DAY,CONVERT(DATE,VenFactura.FechaDocumento),GETDATE())
+      FROM VenFactura
+      INNER JOIN VenFacturaDetalle ON VenFacturaDetalle.VenFacturaId = VenFactura.Id
+      WHERE VenFacturaDetalle.InvArticuloId = InvArticulo.Id
+      ORDER BY FechaDocumento DESC) AS TiempoSinVenta,
+    --Ultimo Lote (Fecha)
+      (SELECT TOP 1
+      CONVERT(DATE,InvLote.FechaEntrada) AS UltimoLote
+      FROM InvLote
+      WHERE InvLote.InvArticuloId  = InvArticulo.Id
+      ORDER BY UltimoLote DESC) AS UltimoLote,
+    --Tiempo Tienda (En dias)
+      (SELECT TOP 1 
+      DATEDIFF(DAY,CONVERT(DATE,InvLote.FechaEntrada),GETDATE())
+      FROM InvLoteAlmacen 
+      INNER JOIN invlote on invlote.id = InvLoteAlmacen.InvLoteId
+      WHERE InvLotealmacen.InvArticuloId = InvArticulo.Id
+      ORDER BY InvLote.Auditoria_FechaCreacion DESC) AS TiempoTienda,
+    -- Ultimo Proveedor (Id Proveedor)
+      (SELECT TOP 1
+      ComProveedor.Id
+      FROM ComFacturaDetalle
+      INNER JOIN ComFactura ON ComFactura.Id = ComFacturaDetalle.ComFacturaId
+      INNER JOIN ComProveedor ON ComProveedor.Id = ComFactura.ComProveedorId
+      INNER JOIN GenPersona ON GenPersona.Id = ComProveedor.GenPersonaId
+      WHERE ComFacturaDetalle.InvArticuloId = InvArticulo.Id
+      ORDER BY ComFactura.FechaDocumento DESC) AS  UltimoProveedorID,
+    -- Ultimo Proveedor (Nombre Proveedor)
+      (SELECT TOP 1
+      GenPersona.Nombre
+      FROM ComFacturaDetalle
+      INNER JOIN ComFactura ON ComFactura.Id = ComFacturaDetalle.ComFacturaId
+      INNER JOIN ComProveedor ON ComProveedor.Id = ComFactura.ComProveedorId
+      INNER JOIN GenPersona ON GenPersona.Id = ComProveedor.GenPersonaId
+      WHERE ComFacturaDetalle.InvArticuloId = InvArticulo.Id
+      ORDER BY ComFactura.FechaDocumento DESC) AS  UltimoProveedorNombre
+    --Tabla principal
       FROM InvArticulo
+    --Joins
+      INNER JOIN InvLoteAlmacen ON InvLoteAlmacen.InvArticuloId = InvArticulo.Id
+      LEFT JOIN InvArticuloAtributo ON InvArticuloAtributo.InvArticuloId = InvArticulo.Id
+      LEFT JOIN InvAtributo ON InvAtributo.Id = InvArticuloAtributo.InvAtributoId 
+    --Condicionales
       WHERE InvArticulo.Id = '$IdArticulo'
+    --Agrupamientos
+      GROUP BY InvArticulo.Id, InvArticulo.CodigoArticulo, InvArticulo.Descripcion, InvArticulo.FinConceptoImptoIdCompra
+    --Ordanamiento
+      ORDER BY InvArticulo.Id ASC 
     ";
     return $sql;
   }
@@ -331,6 +489,7 @@
     PARAMETROS: [$IdArticuloQ] Id del articulo
     FUNCION: Armar la tabla del historico de articulos
     RETORNO: La tabla de historico del articulo
+    DESAROLLADO POR: SERGIO COVA
    */
   function R2Q_Historico_Articulo($IdArticulo) {
     $sql = "

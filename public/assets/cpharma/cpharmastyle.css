@@ -126,6 +126,7 @@
 		transform: translate(20px,0px);
 	}
 /*Alineaciones*/
-	.CP-Vertical-Center {
-    vertical-align: middle;
-  }
+	.table .thead-dark th {
+      vertical-align: middle;
+      text-align: center;
+    }
