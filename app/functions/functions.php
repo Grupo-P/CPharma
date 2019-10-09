@@ -375,6 +375,23 @@
 	}
 	/**********************************************************************************/
 	/*
+		TITULO: FG_Tipo_Producto
+		PARAMETROS: [$TipoArticulo] tipo del producto
+		FUNCION: Determina si el producto esta dolarizado 
+		RETORNO: Retorna si el producto esta dolarizado o no
+		DESARROLLADO POR: SERGIO COVA
+ 	*/
+	function FG_Tipo_Producto($TipoArticulo) { 
+		if($TipoArticulo == 0) {
+			$Tipo = 'MISCELANEO';
+		}
+		else {
+			$Tipo = 'MEDICINA';
+		}
+		return $Tipo;
+	}
+	/**********************************************************************************/
+	/*
 		TITULO: FG_Producto_Dolarizado
 		PARAMETROS: [$conn] cadena de conexion
 					[$IdArticulo] id del articulo a buscar
@@ -458,5 +475,53 @@
 			}
 		}
 		return $Precio;
+	}
+	/**********************************************************************************/
+	/*
+		TITULO: FG_Rango_Dias
+		PARAMETROS: [$FInicial] Fecha donde inicia el rango
+					[$FFinal] Fecha donde termina el rango
+		FUNCION: Calcular el rango de diferencia de dias entre el las fechas
+		RETORNO: rango de dias
+		DESARROLLADO POR: SERGIO COVA
+	 */
+	function FG_Rango_Dias($FInicial,$FFinal) {
+		$FechaI = new DateTime($FInicial);
+    $FechaF = new DateTime($FFinal);
+    $Rango = $FechaI->diff($FechaF);
+    $Rango = $Rango->format('%a');
+    return $Rango;
+	}
+	/**********************************************************************************/
+	/*
+		TITULO: FG_Venta_Diaria
+		PARAMETROS: [$Venta] Venta
+					[$RangoDias] Rango de dias entre dos fechas
+		FUNCION: Calcular la venta al diaria promedio en base al rango de dias
+		RETORNO: Venta diaria promedio
+	 */
+	function FG_Venta_Diaria($Venta,$RangoDias) {
+		$VentaDiaria = 0;
+		if($RangoDias != 0){
+			$VentaDiaria = $Venta/$RangoDias;
+		}
+		$VentaDiaria = round($VentaDiaria,2);
+		return $VentaDiaria;
+	}
+	/**********************************************************************************/
+	/*
+		TITULO: FG_Dias_Restantes
+		PARAMETROS: [$Existencia] Existencia de un producto
+					[$VentaDiaria] Venta diaria promedio del prodcuto
+		FUNCION: Calcular los dias restantes de inventario promedio
+		RETORNO: Dias restantes promedio
+	 */
+	function FG_Dias_Restantes($Existencia,$VentaDiaria) {
+		$DiasRestantes = 0;
+		if($VentaDiaria != 0){
+			$DiasRestantes = $Existencia/$VentaDiaria;
+		}
+		$DiasRestantes = round($DiasRestantes,2);
+		return $DiasRestantes;
 	}
 ?>
