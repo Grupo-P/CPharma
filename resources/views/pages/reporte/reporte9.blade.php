@@ -136,12 +136,12 @@
       <table class="table table-striped table-bordered col-12 sortable" id="myTable">
         <thead class="thead-dark">
           <tr>
-            <th scope="col">#</th>
-            <th scope="col">Codigo</th>
-            <th scope="col">Descripcion</th>
-            <th scope="col">Existencia</th>
-            <th scope="col">Ultimo Lote</br>(En Rango)</th>
-            <th scope="col">Tiempo en Tienda</br>(Dias)</th>
+            <th scope="col" class="CP-sticky">#</th>
+            <th scope="col" class="CP-sticky">Codigo</th>
+            <th scope="col" class="CP-sticky">Descripcion</th>
+            <th scope="col" class="CP-sticky">Existencia</th>
+            <th scope="col" class="CP-sticky">Ultimo Lote</br>(En Rango)</th>
+            <th scope="col" class="CP-sticky">Tiempo en Tienda</br>(Dias)</th>
           </tr>
         </thead>
         <tbody>
@@ -164,7 +164,7 @@
             <tr>
               <td align="center"><strong>'.intval($contador).'</strong></td>
               <td align="left">'.$row["CodigoArticulo"].'</td>
-              <td align="left" class="barrido">
+              <td align="left" class="CP-barrido">
                   <a href="/reporte2?Id='.$IdArticulo.'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
                       .FG_Limpiar_Texto($row["Descripcion"])
                   .'</a>
