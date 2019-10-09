@@ -500,4 +500,15 @@
 		$DiasRestantes = round($DiasRestantes,2);
 		return $DiasRestantes;
 	}
+	/**********************************************************************************/
+	/*
+		TITULO: FG_Cantidad_Pedido
+		FUNCION: calcular la cantidad a pedir
+		RETORNO: cantidad a pedir
+		DESARROLLADO POR: SERGIO COVA
+	 */
+	function FG_Cantidad_Pedido($VentaDiaria,$DiasPedido,$Existencia) {
+		$CantidadPedido = (($VentaDiaria * $DiasPedido)-$Existencia);
+		return $CantidadPedido;
+	}
 ?>
