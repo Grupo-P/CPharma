@@ -500,4 +500,24 @@
 		$DiasRestantes = round($DiasRestantes,2);
 		return $DiasRestantes;
 	}
+
+	/**********************************************************************************/
+	/*
+		TITULO: FG_Validar_Fechas
+		FUNCION: Calcula la diferencia entre ambas fechas restando la primera a la segunda
+		RETORNO: 
+			- Un numero positivo en caso de que la segunda fecha sea mayor
+			- Un numero negativo en caso de que la segunda fecha sea menor
+			- Cero en caso de que ambas fechas sean iguales
+		DESARROLLADO POR: MANUEL HENRIQUEZ
+	 */
+	function FG_Validar_Fechas($Fecha1,$Fecha2) {
+		$fecha_inicial = new DateTime($Fecha1);
+        $fecha_final = new DateTime($Fecha2);
+
+		$diferencia = $fecha_inicial->diff($fecha_final);
+		$diferencia_numero = (int)$diferencia->format('%R%a');
+
+		return $diferencia_numero;
+	}
 ?>

@@ -106,7 +106,7 @@
   */
 
   function R9_Productos_Surtir($SedeConnection, $FInicial, $FFinal) {
-    $conn = ConectarSmartpharma($SedeConnection);
+    $conn = FG_Conectar_Smartpharma($SedeConnection);
 
     $FFinalImpresion = $FFinal;
     $FFinal = date("Y-m-d",strtotime($FFinal."+ 1 days"));
@@ -156,8 +156,8 @@
       $TiempoTienda = $row["TiempoTienda"];
 
       if(!is_null($FechaRegistro)) {
-        $Diferencia1 = ValidarFechas($FechaRegistro->format("Y-m-d"), $FInicial);
-        $Diferencia2 = ValidarFechas($FechaRegistro->format("Y-m-d"), $FFinalImpresion);
+        $Diferencia1 = FG_Validar_Fechas($FechaRegistro->format("Y-m-d"), $FInicial);
+        $Diferencia2 = FG_Validar_Fechas($FechaRegistro->format("Y-m-d"), $FFinalImpresion);
         
         if(($Diferencia1 <= 0) && ($Diferencia2 >= 0)) {
           echo '
@@ -166,7 +166,7 @@
               <td align="left">'.$row["CodigoArticulo"].'</td>
               <td align="left" class="barrido">
                   <a href="/reporte2?Id='.$IdArticulo.'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
-                      .utf8_encode(addslashes($row["Descripcion"]))
+                      .FG_Limpiar_Texto($row["Descripcion"])
                   .'</a>
               </td>
               <td align="center">'.intval($Existencia).'</td>
