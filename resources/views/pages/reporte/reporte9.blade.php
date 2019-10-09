@@ -1,46 +1,39 @@
 @extends('layouts.model')
 
 @section('title')
-    Reporte
+  Reporte
 @endsection
 
 @section('scriptsHead')
-    <script type="text/javascript" src="{{ asset('assets/js/sortTable.js') }}">
-    </script>
-    <script type="text/javascript" src="{{ asset('assets/js/filter.js') }}">  
-    </script>
-    <script type="text/javascript" src="{{ asset('assets/js/functions.js') }}"> 
-    </script>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
 
-    <style>
-        * {
-            box-sizing: border-box;
-        }
+    input {
+      border: 1px solid transparent;
+      background-color: #f1f1f1;
+      border-radius: 5px;
+      padding: 10px;
+      font-size: 16px;
+    }
 
-        input {
-            border: 1px solid transparent;
-            background-color: #f1f1f1;
-            border-radius: 5px;
-            padding: 10px;
-            font-size: 16px;
-        }
+    input[type=text] {
+      background-color: #f1f1f1;
+      width: 100%;
+    }
 
-        input[type=text] {
-            background-color: #f1f1f1;
-            width: 100%;
-        }
+    .barrido {
+      text-decoration: none;
+      transition: width 1s, height 1s, transform 1s;
+    }
 
-        .barrido {
-            text-decoration: none;
-            transition: width 1s, height 1s, transform 1s;
-        }
-
-        .barrido:hover {
-            text-decoration: none;
-            transition: width 1s, height 1s, transform 1s;
-            transform: translate(20px,0px);
-        }
-    </style>
+    .barrido:hover {
+      text-decoration: none;
+      transition: width 1s, height 1s, transform 1s;
+      transform: translate(20px,0px);
+    }
+  </style>
 @endsection
 
 @section('content')
