@@ -17,6 +17,7 @@
 		";
 		return $sql;
 	}
+	/**********************************************************************************/
 	/*
 		TITULO: QG_Tasa_Fecha
 		PARAMETROS: [$Fecha] Fecha de la que se quiere la tasa

@@ -195,7 +195,7 @@
     <table class="table table-striped table-bordered col-12 sortable">
       <thead class="thead-dark">
         <tr>
-          <th scope="col">Codigo</th>
+          <th scope="col" class="CP-Vertical-Center">Codigo</th>
           <th scope="col">Codigo de barra</td>
           <th scope="col">Descripcion</td>
           <th scope="col">Existencia</td>

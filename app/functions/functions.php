@@ -14,6 +14,7 @@
 	    $arrayJson = FG_array_flatten_recursive($result);
 	    return json_encode($arrayJson);
 	}
+	/**********************************************************************************/
 	/*
 		TITULO: FG_Consulta_Especial_Smartpharma
 		PARAMETROS: [$sql] Cadena de sql a ejecutar,
@@ -51,6 +52,7 @@
 			die(print_r(sqlsrv_errors(),true));
 		}
 	}
+	/**********************************************************************************/
 	/*
 		TITULO: FG_array_flatten_recursive
 		PARAMETROS: [$array] Arreglo para aplicar la recursividad
@@ -71,6 +73,7 @@
 	   }
 	   return $flat;
 	}
+	/**********************************************************************************/
 	/*
 		TITULO: FG_Nombre_Sede
 		PARAMETROS: [$SedeConnection] Siglas de la sede para la conexion
@@ -353,6 +356,7 @@
 		mysqli_query($connCPharma,$sql);
 		mysqli_close($connCPharma);
 	}
+	/**********************************************************************************/
 	/*
 		TITULO: FG_Producto_Gravado
 		PARAMETROS: [$IsIVA] campo que almacena el ConceptoImpuesto
@@ -369,6 +373,7 @@
 		}
 		return $EsGravado;
 	}
+	/**********************************************************************************/
 	/*
 		TITULO: FG_Producto_Dolarizado
 		PARAMETROS: [$conn] cadena de conexion
@@ -386,6 +391,7 @@
 		}
 		return $EsDolarizado;
 	}
+	/**********************************************************************************/
 	/*
 		TITULO: FG_Tasa_Fecha
 		PARAMETROS: [$connCPharma] cadena de conexion con xampp
@@ -401,6 +407,7 @@
 		$Tasa = $row['tasa'];
 		return $Tasa;
 	}
+	/**********************************************************************************/
 	/*
 		TITULO: FG_Calculo_Precio
 		PARAMETROS: [$conn] Cadena de conexion para la base de datos
