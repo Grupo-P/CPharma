@@ -68,8 +68,8 @@
   }
   echo '<hr class="row align-items-start col-12">';
 	
-	if (isset($_GET['top']))
-	{
+	if (isset($_GET['top'])) {
+    
     $InicioCarga = new DateTime("now");
 
     R4_Productos_MenosVendidos($_GET['SEDE'],$_GET['top'],$_GET['fechaInicio'],$_GET['fechaFin']);
@@ -158,9 +158,7 @@
     </div>
     <br/>
     ';
-
     echo'<h6 align="center">Periodo desde el '.$FInicialImp.' al '.$FFinalImp.' </h6>';
-
     echo'
     <table class="table table-striped table-bordered col-12 sortable" id="myTable">
         <thead class="thead-dark">
@@ -255,9 +253,9 @@
   /**********************************************************************************/
   /*
     TITULO: R4Q_TOP_MenosVendidos
-    PARAMETROS: [$Top] Varaible para indicar el top a buscar
     FUNCION: Ubicar el top de productos mas vendidos
     RETORNO: Lista de productos mas vendidos
+    DESAROLLADO POR: SERGIO COVA
    */
   function R4Q_TOP_MenosVendidos($Top,$FInicial,$FFinal) {
     $sql = "
@@ -425,7 +423,6 @@
   /**********************************************************************************/
   /*
     TITULO: R4Q_Detalle_Articulo
-    PARAMETROS: [$IdArticulo] $IdArticulo del articulo a buscar
     FUNCION: Query que genera el detalle del articulo solicitado
     RETORNO: Detalle del articulo
     DESAROLLADO POR: SERGIO COVA
