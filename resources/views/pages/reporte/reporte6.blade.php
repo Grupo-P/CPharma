@@ -74,11 +74,17 @@
   }
   echo '<hr class="row align-items-start col-12">';
 
-  if (isset($_GET['Id'])){
+  if ((isset($_GET['Descrip']))OR(isset($_GET['CodBar']))){
 
     $InicioCarga = new DateTime("now");
 
-    R6_Pedido_Productos($_GET['SEDE'],$_GET['Descrip'],$_GET['fechaInicio'],$_GET['fechaFin'],$_GET['pedido']);
+    if((isset($_GET['Descrip']))&&(!empty($_GET['Descrip']))) {
+      R6_Pedido_Productos($_GET['SEDE'],$_GET['Descrip'],$_GET['fechaInicio'],$_GET['fechaFin'],$_GET['pedido'],'Descrip');
+    }
+    else if(isset($_GET['CodBar'])&&(!empty($_GET['CodBar']))){
+      R6_Pedido_Productos($_GET['SEDE'],$_GET['IdCB'],$_GET['fechaInicio'],$_GET['fechaFin'],$_GET['pedido'],'CodBar');
+    }
+  
     FG_Guardar_Auditoria('CONSULTAR','REPORTE','Pedido de productos');
 
     $FinCarga = new DateTime("now");
@@ -90,6 +96,9 @@
 
     $sql = R6Q_Lista_Articulos();
     $ArtJson = FG_Armar_Json($sql,$_GET['SEDE']);
+
+    $sql1 = R6Q_Lista_Articulos_CodBarra();
+    $CodJson = FG_Armar_Json($sql1,$_GET['SEDE']);
 
     echo '
     <form id="form" autocomplete="off" action="" target="_blank">
@@ -112,16 +121,25 @@
             </td>
             <td align="right">
               <input id="fechaFin" name="fechaFin" type="date" required style="width:100%;">
+              <input id="SEDE" name="SEDE" type="hidden" value="';
+              print_r($_GET['SEDE']);
+              echo'">
             </td>
           </tr>
           <tr>
             <td colspan="6">
               <div class="autocomplete" style="width:90%;">
               <input id="myInput" type="text" name="Descrip" placeholder="Ingrese el nombre del articulo " onkeyup="conteo()">
-              <input id="myId" name="Id" type="hidden">
-              <input id="SEDE" name="SEDE" type="hidden" value="';
-              print_r($_GET['SEDE']);
-              echo'">
+              <input id="myId" name="IdD" type="hidden">
+              </div>
+              <input type="submit" value="Buscar" class="btn btn-outline-success">
+            </td>
+          </tr>
+          <tr>
+            <td colspan="6">
+              <div class="autocomplete" style="width:90%;">
+              <input id="myInputCB" type="text" name="CodBar" placeholder="Ingrese el codigo de barra del articulo " onkeyup="conteoCB()">
+              <input id="myIdCB" name="IdCB" type="hidden">
               </div>
               <input type="submit" value="Buscar" class="btn btn-outline-success">
             </td>
@@ -137,12 +155,22 @@
 @endsection
 
 @section('scriptsFoot')
-<?php
+  <?php
     if($ArtJson!=""){
   ?>
     <script type="text/javascript">
       ArrJs = eval(<?php echo $ArtJson ?>);
       autocompletado(document.getElementById("myInput"),document.getElementById("myId"), ArrJs);
+    </script> 
+  <?php
+    }
+  ?> 
+  <?php
+    if($CodJson!=""){
+  ?>
+    <script type="text/javascript">
+      ArrJsCB = eval(<?php echo $CodJson ?>);
+      autocompletadoCB(document.getElementById("myInputCB"),document.getElementById("myIdCB"), ArrJsCB);
     </script> 
   <?php
     }
@@ -156,7 +184,7 @@
     RETORNO: No aplica
     DESAROLLADO POR: SERGIO COVA
    */
-  function R6_Pedido_Productos($SedeConnection,$DescripLike,$FInicial,$FFinal,$DiasPedido){
+  function R6_Pedido_Productos($SedeConnection,$Valor,$FInicial,$FFinal,$DiasPedido,$Flag){
 
     $conn = FG_Conectar_Smartpharma($SedeConnection);
 
@@ -166,134 +194,259 @@
     $FFinal = date("Y-m-d",strtotime($FFinal."+ 1 days"));
     $RangoDias = FG_Rango_Dias($FInicial,$FFinal);
 
-    $sql = R6Q_Descripcion_Like($DescripLike);
-    $result = sqlsrv_query($conn,$sql);
+    if($Flag=='Descrip') {
+      $sql = R6Q_Descripcion_Like($Valor);
+      $result = sqlsrv_query($conn,$sql);
 
-    echo '
-    <div class="input-group md-form form-sm form-1 pl-0">
-      <div class="input-group-prepend">
-        <span class="input-group-text purple lighten-3" id="basic-text1">
-          <i class="fas fa-search text-white"
-            aria-hidden="true"></i>
-        </span>
+      echo '
+      <div class="input-group md-form form-sm form-1 pl-0">
+        <div class="input-group-prepend">
+          <span class="input-group-text purple lighten-3" id="basic-text1">
+            <i class="fas fa-search text-white"
+              aria-hidden="true"></i>
+          </span>
+        </div>
+        <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterAllTable()">
       </div>
-      <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterAllTable()">
-    </div>
-    <br/>
-    ';
-    echo'<h6 align="center">Pedido en base a: '.$DiasPedido.' dias </h6>';
-    echo'<h6 align="center">Periodo desde el '.$FInicialImp.' al '.$FFinalImp.' </h6>';
-    echo'
-    <table class="table table-striped table-bordered col-12 sortable" id="myTable">
-        <thead class="thead-dark">
-          <tr>
-            <th scope="col" class="CP-sticky">#</th>
-            <th scope="col" class="CP-sticky">Codigo</th>
-            <th scope="col" class="CP-sticky">Codigo de Barra</th>
-            <th scope="col" class="CP-sticky">Descripcion</th>              
-            <th scope="col" class="CP-sticky">Existencia</th>
-            <th scope="col" class="CP-sticky">Unidades vendidas</th>
-            <th scope="col" class="CP-sticky">Unidades compradas</th>
-            <th scope="col" class="CP-sticky">Venta diaria</th>
-            <th scope="col" class="CP-sticky">Dias restantes</th>
-            <th scope="col" class="CP-sticky">Precio (Con IVA) '.SigVe.'</th>
-            <th scope="col" class="CP-sticky">Ultimo Lote</th>
-            <th scope="col" class="CP-sticky">Ultima Venta (En Rango)</th>
-            <th scope="col" class="CP-sticky">Ultima Venta</th>
-            <th scope="col" class="CP-sticky">Pedir</th>         
-          </tr>
-        </thead>
-        <tbody>
-    ';
-    $contador = 1;
-    while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
-      $IdArticulo = $row["InvArticuloId"];
+      <br/>
+      ';
+      echo'<h6 align="center">Pedido en base a: '.$DiasPedido.' dias </h6>';
+      echo'<h6 align="center">Periodo desde el '.$FInicialImp.' al '.$FFinalImp.' </h6>';
+      echo'
+      <table class="table table-striped table-bordered col-12 sortable" id="myTable">
+          <thead class="thead-dark">
+            <tr>
+              <th scope="col" class="CP-sticky">#</th>
+              <th scope="col" class="CP-sticky">Codigo</th>
+              <th scope="col" class="CP-sticky">Codigo de Barra</th>
+              <th scope="col" class="CP-sticky">Descripcion</th>              
+              <th scope="col" class="CP-sticky">Existencia</th>
+              <th scope="col" class="CP-sticky">Unidades vendidas</th>
+              <th scope="col" class="CP-sticky">Unidades compradas</th>
+              <th scope="col" class="CP-sticky">Venta diaria</th>
+              <th scope="col" class="CP-sticky">Dias restantes</th>
+              <th scope="col" class="CP-sticky">Precio (Con IVA) '.SigVe.'</th>
+              <th scope="col" class="CP-sticky">Ultimo Lote</th>
+              <th scope="col" class="CP-sticky">Ultima Venta (En Rango)</th>
+              <th scope="col" class="CP-sticky">Ultima Venta</th>
+              <th scope="col" class="CP-sticky">Pedir</th>         
+            </tr>
+          </thead>
+          <tbody>
+      ';
+      $contador = 1;
+      while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
+        $IdArticulo = $row["InvArticuloId"];
 
-      $sql1 = R6Q_Integracion_Pedido_Productos($IdArticulo,$FInicial,$FFinal);
-      $result1 = sqlsrv_query($conn,$sql1);
-      $row1 = sqlsrv_fetch_array($result1, SQLSRV_FETCH_ASSOC);
+        $sql1 = R6Q_Integracion_Pedido_Productos($IdArticulo,$FInicial,$FFinal);
+        $result1 = sqlsrv_query($conn,$sql1);
+        $row1 = sqlsrv_fetch_array($result1, SQLSRV_FETCH_ASSOC);
 
-      $UnidadesVendidas = intval($row1["TotalUnidadesVendidas"]);
-      $UnidadesCompradas = intval($row1["TotalUnidadesCompradas"]);
-      $UltimaVentaRango = $row1["UltimaVentaRango"];
+        $UnidadesVendidas = intval($row1["TotalUnidadesVendidas"]);
+        $UnidadesCompradas = intval($row1["TotalUnidadesCompradas"]);
+        $UltimaVentaRango = $row1["UltimaVentaRango"];
 
-      $sql2 = R6Q_Detalle_Articulo($IdArticulo);
-      $result2 = sqlsrv_query($conn,$sql2);
-      $row2 = sqlsrv_fetch_array($result2, SQLSRV_FETCH_ASSOC);
+        $sql2 = R6Q_Detalle_Articulo($IdArticulo);
+        $result2 = sqlsrv_query($conn,$sql2);
+        $row2 = sqlsrv_fetch_array($result2, SQLSRV_FETCH_ASSOC);
 
-      $CodigoArticulo = $row2["CodigoInterno"];
-      $CodigoBarra = $row2["CodigoBarra"];
-      $Descripcion = FG_Limpiar_Texto($row2["Descripcion"]);
-      $UltimoLote = $row2["UltimoLote"];
-      $UltimaVenta = $row2["UltimaVenta"];
-      $Existencia = $row2["Existencia"];
-      $IsIVA = $row2["Impuesto"];
-      $Utilidad = $row2["Utilidad"];
-      $TroquelAlmacen1 = $row2["TroquelAlmacen1"];
-      $TroquelAlmacen2 = $row2["TroquelAlmacen2"];
-      $PrecioCompraBruto = $row2["PrecioCompraBruto"];
-      $VentaDiaria = FG_Venta_Diaria($UnidadesVendidas,$RangoDias);
-      $DiasRestantes = FG_Dias_Restantes($Existencia,$VentaDiaria);
+        $CodigoArticulo = $row2["CodigoInterno"];
+        $CodigoBarra = $row2["CodigoBarra"];
+        $Descripcion = FG_Limpiar_Texto($row2["Descripcion"]);
+        $UltimoLote = $row2["UltimoLote"];
+        $UltimaVenta = $row2["UltimaVenta"];
+        $Existencia = $row2["Existencia"];
+        $IsIVA = $row2["Impuesto"];
+        $Utilidad = $row2["Utilidad"];
+        $TroquelAlmacen1 = $row2["TroquelAlmacen1"];
+        $TroquelAlmacen2 = $row2["TroquelAlmacen2"];
+        $PrecioCompraBruto = $row2["PrecioCompraBruto"];
+        $VentaDiaria = FG_Venta_Diaria($UnidadesVendidas,$RangoDias);
+        $DiasRestantes = FG_Dias_Restantes($Existencia,$VentaDiaria);
 
-      $Precio = FG_Calculo_Precio($Existencia,$TroquelAlmacen1,$PrecioCompraBruto,$Utilidad,$IsIVA,$TroquelAlmacen2);
-      $CantidadPedido = FG_Cantidad_Pedido($VentaDiaria,$DiasPedido,$Existencia);
+        $Precio = FG_Calculo_Precio($Existencia,$TroquelAlmacen1,$PrecioCompraBruto,$Utilidad,$IsIVA,$TroquelAlmacen2);
+        $CantidadPedido = FG_Cantidad_Pedido($VentaDiaria,$DiasPedido,$Existencia);
 
-      echo '<tr>';
-      echo '<td align="center"><strong>'.intval($contador).'</strong></td>';
-      echo '<td align="left">'.$CodigoArticulo.'</td>';
-      echo '<td align="center">'.$CodigoBarra.'</td>';
-      echo 
-      '<td align="left" class="CP-barrido">
-      <a href="/reporte2?Id='.$IdArticulo.'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
-        .$Descripcion.
-      '</a>
-      </td>';
-      echo '<td align="center">'.intval($Existencia).'</td>';
-      echo
-      '<td align="center" class="CP-barrido">
-      <a href="reporte12?fechaInicio='.$FInicial.'&fechaFin='.$FFinalImp.'&SEDE='.$SedeConnection.'&Descrip='.$Descripcion.'&Id='.$IdArticulo.'" style="text-decoration: none; color: black;" target="_blank">'
-        .intval($UnidadesVendidas).
-      '</a>
-      </td>';
-      echo
-      '<td align="center" class="CP-barrido">
-      <a href="reporte12?fechaInicio='.$FInicial.'&fechaFin='.$FFinalImp.'&SEDE='.$SedeConnection.'&Descrip='.$Descripcion.'&Id='.$IdArticulo.'" style="text-decoration: none; color: black;" target="_blank">'
-        .intval($UnidadesCompradas).
-      '</a>
-      </td>';
-      echo '<td align="center">'.round($VentaDiaria,2).'</td>';
-      echo '<td align="center">'.round($DiasRestantes,2).'</td>';
-      echo '<td align="center">'.number_format($Precio,2,"," ,"." ).'</td>';
-      
-      if(($UltimoLote)){
-        echo '<td align="center">'.$UltimoLote->format('d-m-Y').'</td>';
+        echo '<tr>';
+        echo '<td align="center"><strong>'.intval($contador).'</strong></td>';
+        echo '<td align="left">'.$CodigoArticulo.'</td>';
+        echo '<td align="center">'.$CodigoBarra.'</td>';
+        echo 
+        '<td align="left" class="CP-barrido">
+        <a href="/reporte2?Id='.$IdArticulo.'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
+          .$Descripcion.
+        '</a>
+        </td>';
+        echo '<td align="center">'.intval($Existencia).'</td>';
+        echo
+        '<td align="center" class="CP-barrido">
+        <a href="reporte12?fechaInicio='.$FInicial.'&fechaFin='.$FFinalImp.'&SEDE='.$SedeConnection.'&Descrip='.$Descripcion.'&Id='.$IdArticulo.'" style="text-decoration: none; color: black;" target="_blank">'
+          .intval($UnidadesVendidas).
+        '</a>
+        </td>';
+        echo
+        '<td align="center" class="CP-barrido">
+        <a href="reporte12?fechaInicio='.$FInicial.'&fechaFin='.$FFinalImp.'&SEDE='.$SedeConnection.'&Descrip='.$Descripcion.'&Id='.$IdArticulo.'" style="text-decoration: none; color: black;" target="_blank">'
+          .intval($UnidadesCompradas).
+        '</a>
+        </td>';
+        echo '<td align="center">'.round($VentaDiaria,2).'</td>';
+        echo '<td align="center">'.round($DiasRestantes,2).'</td>';
+        echo '<td align="center">'.number_format($Precio,2,"," ,"." ).'</td>';
+        
+        if(($UltimoLote)){
+          echo '<td align="center">'.$UltimoLote->format('d-m-Y').'</td>';
+        }
+        else{
+          echo '<td align="center"> - </td>';
+        }
+
+        if(($UltimaVentaRango)){
+          echo '<td align="center">'.$UltimaVentaRango->format('d-m-Y').'</td>';
+        }
+        else{
+          echo '<td align="center"> - </td>';
+        }
+
+        if(($UltimaVenta)){
+          echo '<td align="center">'.$UltimaVenta->format('d-m-Y').'</td>';
+        }
+        else{
+          echo '<td align="center"> - </td>';
+        }
+
+        echo '<td align="center">'.intval($CantidadPedido).'</td>';
+        echo '</tr>';
+      $contador++;
       }
-      else{
-        echo '<td align="center"> - </td>';
-      }
-
-      if(($UltimaVentaRango)){
-        echo '<td align="center">'.$UltimaVentaRango->format('d-m-Y').'</td>';
-      }
-      else{
-        echo '<td align="center"> - </td>';
-      }
-
-      if(($UltimaVenta)){
-        echo '<td align="center">'.$UltimaVenta->format('d-m-Y').'</td>';
-      }
-      else{
-        echo '<td align="center"> - </td>';
-      }
-
-      echo '<td align="center">'.intval($CantidadPedido).'</td>';
-      echo '</tr>';
-    $contador++;
+      echo '
+          </tbody>
+      </table>';
     }
-    echo '
-        </tbody>
-    </table>';
+    else if($Flag=='CodBar') {
 
+      echo '
+      <div class="input-group md-form form-sm form-1 pl-0">
+        <div class="input-group-prepend">
+          <span class="input-group-text purple lighten-3" id="basic-text1">
+            <i class="fas fa-search text-white"
+              aria-hidden="true"></i>
+          </span>
+        </div>
+        <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterAllTable()">
+      </div>
+      <br/>
+      ';
+      echo'<h6 align="center">Pedido en base a: '.$DiasPedido.' dias </h6>';
+      echo'<h6 align="center">Periodo desde el '.$FInicialImp.' al '.$FFinalImp.' </h6>';
+      echo'
+      <table class="table table-striped table-bordered col-12 sortable" id="myTable">
+          <thead class="thead-dark">
+            <tr>
+              <th scope="col" class="CP-sticky">#</th>
+              <th scope="col" class="CP-sticky">Codigo</th>
+              <th scope="col" class="CP-sticky">Codigo de Barra</th>
+              <th scope="col" class="CP-sticky">Descripcion</th>              
+              <th scope="col" class="CP-sticky">Existencia</th>
+              <th scope="col" class="CP-sticky">Unidades vendidas</th>
+              <th scope="col" class="CP-sticky">Unidades compradas</th>
+              <th scope="col" class="CP-sticky">Venta diaria</th>
+              <th scope="col" class="CP-sticky">Dias restantes</th>
+              <th scope="col" class="CP-sticky">Precio (Con IVA) '.SigVe.'</th>
+              <th scope="col" class="CP-sticky">Ultimo Lote</th>
+              <th scope="col" class="CP-sticky">Ultima Venta (En Rango)</th>
+              <th scope="col" class="CP-sticky">Ultima Venta</th>
+              <th scope="col" class="CP-sticky">Pedir</th>         
+            </tr>
+          </thead>
+          <tbody>
+      ';
+        $contador = 1;
+        $IdArticulo = $Valor;
+
+        $sql1 = R6Q_Integracion_Pedido_Productos($IdArticulo,$FInicial,$FFinal);
+        $result1 = sqlsrv_query($conn,$sql1);
+        $row1 = sqlsrv_fetch_array($result1, SQLSRV_FETCH_ASSOC);
+
+        $UnidadesVendidas = intval($row1["TotalUnidadesVendidas"]);
+        $UnidadesCompradas = intval($row1["TotalUnidadesCompradas"]);
+        $UltimaVentaRango = $row1["UltimaVentaRango"];
+
+        $sql2 = R6Q_Detalle_Articulo($IdArticulo);
+        $result2 = sqlsrv_query($conn,$sql2);
+        $row2 = sqlsrv_fetch_array($result2, SQLSRV_FETCH_ASSOC);
+
+        $CodigoArticulo = $row2["CodigoInterno"];
+        $CodigoBarra = $row2["CodigoBarra"];
+        $Descripcion = FG_Limpiar_Texto($row2["Descripcion"]);
+        $UltimoLote = $row2["UltimoLote"];
+        $UltimaVenta = $row2["UltimaVenta"];
+        $Existencia = $row2["Existencia"];
+        $IsIVA = $row2["Impuesto"];
+        $Utilidad = $row2["Utilidad"];
+        $TroquelAlmacen1 = $row2["TroquelAlmacen1"];
+        $TroquelAlmacen2 = $row2["TroquelAlmacen2"];
+        $PrecioCompraBruto = $row2["PrecioCompraBruto"];
+        $VentaDiaria = FG_Venta_Diaria($UnidadesVendidas,$RangoDias);
+        $DiasRestantes = FG_Dias_Restantes($Existencia,$VentaDiaria);
+
+        $Precio = FG_Calculo_Precio($Existencia,$TroquelAlmacen1,$PrecioCompraBruto,$Utilidad,$IsIVA,$TroquelAlmacen2);
+        $CantidadPedido = FG_Cantidad_Pedido($VentaDiaria,$DiasPedido,$Existencia);
+
+        echo '<tr>';
+        echo '<td align="center"><strong>'.intval($contador).'</strong></td>';
+        echo '<td align="left">'.$CodigoArticulo.'</td>';
+        echo '<td align="center">'.$CodigoBarra.'</td>';
+        echo 
+        '<td align="left" class="CP-barrido">
+        <a href="/reporte2?Id='.$IdArticulo.'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
+          .$Descripcion.
+        '</a>
+        </td>';
+        echo '<td align="center">'.intval($Existencia).'</td>';
+        echo
+        '<td align="center" class="CP-barrido">
+        <a href="reporte12?fechaInicio='.$FInicial.'&fechaFin='.$FFinalImp.'&SEDE='.$SedeConnection.'&Descrip='.$Descripcion.'&Id='.$IdArticulo.'" style="text-decoration: none; color: black;" target="_blank">'
+          .intval($UnidadesVendidas).
+        '</a>
+        </td>';
+        echo
+        '<td align="center" class="CP-barrido">
+        <a href="reporte12?fechaInicio='.$FInicial.'&fechaFin='.$FFinalImp.'&SEDE='.$SedeConnection.'&Descrip='.$Descripcion.'&Id='.$IdArticulo.'" style="text-decoration: none; color: black;" target="_blank">'
+          .intval($UnidadesCompradas).
+        '</a>
+        </td>';
+        echo '<td align="center">'.round($VentaDiaria,2).'</td>';
+        echo '<td align="center">'.round($DiasRestantes,2).'</td>';
+        echo '<td align="center">'.number_format($Precio,2,"," ,"." ).'</td>';
+        
+        if(($UltimoLote)){
+          echo '<td align="center">'.$UltimoLote->format('d-m-Y').'</td>';
+        }
+        else{
+          echo '<td align="center"> - </td>';
+        }
+
+        if(($UltimaVentaRango)){
+          echo '<td align="center">'.$UltimaVentaRango->format('d-m-Y').'</td>';
+        }
+        else{
+          echo '<td align="center"> - </td>';
+        }
+
+        if(($UltimaVenta)){
+          echo '<td align="center">'.$UltimaVenta->format('d-m-Y').'</td>';
+        }
+        else{
+          echo '<td align="center"> - </td>';
+        }
+
+        echo '<td align="center">'.intval($CantidadPedido).'</td>';
+        echo '</tr>';
+        echo '
+            </tbody>
+      </table>';
+    }
     sqlsrv_close($conn);
   }
   /**********************************************************************************/
