@@ -63,15 +63,16 @@
     include(app_path().'\functions\querys_sqlserver.php');
 
     $ArtJson = "";
+    $CodJson = "";
+
+    if (isset($_GET['SEDE'])) {     
+        echo '<h1 class="h5 text-success"  align="left"> <i class="fas fa-prescription"></i> '.FG_Nombre_Sede($_GET['SEDE']).'</h1>';
+      }
+      echo '<hr class="row align-items-start col-12">';
   	
   	if (isset($_GET['Id'])) {
       $InicioCarga = new DateTime("now");
       
-      if (isset($_GET['SEDE'])) {     
-        echo '<h1 class="h5 text-success"  align="left"> <i class="fas fa-prescription"></i> '.FG_Nombre_Sede($_GET['SEDE']).'</h1>';
-      }
-      echo '<hr class="row align-items-start col-12">';
-
       R2_Historico_Producto($_GET['SEDE'],$_GET['Id']);
       FG_Guardar_Auditoria('CONSULTAR','REPORTE','Historico de productos');
 
@@ -82,24 +83,33 @@
   	else {
       $InicioCarga = new DateTime("now");
 
-      if (isset($_GET['SEDE'])){      
-        echo '<h1 class="h5 text-success"  align="left"> <i class="fas fa-prescription"></i> '.FG_Nombre_Sede($_GET['SEDE']).'</h1>';
-      }
-      echo '<hr class="row align-items-start col-12">';
-      
       $sql = R2Q_Lista_Articulos();
       $ArtJson = FG_Armar_Json($sql,$_GET['SEDE']);
+
+      $sql1 = R2Q_Lista_Articulos_CodBarra();
+      $CodJson = FG_Armar_Json($sql1,$_GET['SEDE']);
 
   		echo '
   		<form autocomplete="off" action="" target="_blank">
   	    <div class="autocomplete" style="width:90%;">
-  	      <input id="myInput" type="text" name="Descrip" placeholder="Ingrese el nombre del articulo " onkeyup="conteo()" required>
+  	      <input id="myInput" type="text" name="Descrip" placeholder="Ingrese el nombre del articulo " onkeyup="conteo()">
   	      <input id="myId" name="Id" type="hidden">
-          <input id="SEDE" name="SEDE" type="hidden" value="';
+  	    </div>
+        <input id="SEDE" name="SEDE" type="hidden" value="';
           print_r($_GET['SEDE']);
           echo'">
-  	    </div>
   	    <input type="submit" value="Buscar" class="btn btn-outline-success">
+      </form>
+      <br/>
+      <form autocomplete="off" action="" target="_blank">
+        <div class="autocomplete" style="width:90%;">
+          <input id="myInputCB" type="text" name="CodBar" placeholder="Ingrese el codigo de barra del articulo " onkeyup="conteoCB()">
+          <input id="myIdCB" name="Id" type="hidden">
+        </div>
+        <input id="SEDE" name="SEDE" type="hidden" value="';
+          print_r($_GET['SEDE']);
+          echo'">
+        <input type="submit" value="Buscar" class="btn btn-outline-success">
     	</form>
     	';
 
@@ -117,6 +127,16 @@
     <script type="text/javascript">
       ArrJs = eval(<?php echo $ArtJson ?>);
       autocompletado(document.getElementById("myInput"),document.getElementById("myId"), ArrJs);
+    </script> 
+  <?php
+    }
+  ?> 
+  <?php
+    if($CodJson!=""){
+  ?>
+    <script type="text/javascript">
+      ArrJsCB = eval(<?php echo $CodJson ?>);
+      autocompletadoCB(document.getElementById("myInputCB"),document.getElementById("myIdCB"), ArrJsCB);
     </script> 
   <?php
     }
@@ -288,6 +308,26 @@
       InvArticulo.Id
       FROM InvArticulo
       ORDER BY InvArticulo.Descripcion ASC
+    ";
+    return $sql;
+  }
+  /*
+    TITULO: R2Q_Lista_Articulos_CodBarra
+    PARAMETROS: No aplica
+    FUNCION: Armar una lista de articulos con descripcion e id
+    RETORNO: Lista de articulos con descripcion e id
+    DESAROLLADO POR: SERGIO COVA
+   */
+  function R2Q_Lista_Articulos_CodBarra() {
+    $sql = "
+      SELECT
+      (SELECT CodigoBarra
+      FROM InvCodigoBarra 
+      WHERE InvCodigoBarra.InvArticuloId = InvArticulo.Id
+      AND InvCodigoBarra.EsPrincipal = 1) AS CodigoBarra,
+      InvArticulo.Id
+      FROM InvArticulo
+      ORDER BY CodigoBarra ASC
     ";
     return $sql;
   }
