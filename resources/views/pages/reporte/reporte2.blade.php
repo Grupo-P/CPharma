@@ -144,10 +144,9 @@
 @endsection
 
 <?php
+  /**********************************************************************************/
   /*
     TITULO: R2_Historico_Producto
-    PARAMETROS : [$SedeConnection] Siglas de la sede para la conexion
-                 [$IdArticuloQ] Id del articulo a buscar
     FUNCION: Armar una tabla del historico de compra del articulo
     RETORNO: No aplica
     DESAROLLADO POR: SERGIO COVA
@@ -195,7 +194,7 @@
     <table class="table table-striped table-bordered col-12 sortable">
       <thead class="thead-dark">
         <tr>
-          <th scope="col" class="CP-Vertical-Center">Codigo</th>
+          <th scope="col">Codigo</th>
           <th scope="col">Codigo de barra</td>
           <th scope="col">Descripcion</td>
           <th scope="col">Existencia</td>
@@ -294,9 +293,9 @@
     mysqli_close($connCPharma);
     sqlsrv_close($conn);
   }
+  /**********************************************************************************/
   /*
     TITULO: R2Q_Lista_Articulos
-    PARAMETROS: No aplica
     FUNCION: Armar una lista de articulos con descripcion e id
     RETORNO: Lista de articulos con descripcion e id
     DESAROLLADO POR: SERGIO COVA
@@ -311,9 +310,9 @@
     ";
     return $sql;
   }
+  /**********************************************************************************/
   /*
     TITULO: R2Q_Lista_Articulos_CodBarra
-    PARAMETROS: No aplica
     FUNCION: Armar una lista de articulos con descripcion e id
     RETORNO: Lista de articulos con descripcion e id
     DESAROLLADO POR: SERGIO COVA
@@ -331,9 +330,9 @@
     ";
     return $sql;
   }
+  /**********************************************************************************/
   /*
     TITULO: R2Q_Detalle_Articulo
-    PARAMETROS: [$IdArticulo] $IdArticulo del articulo a buscar
     FUNCION: Query que genera el detalle del articulo solicitado
     RETORNO: Detalle del articulo
     DESAROLLADO POR: SERGIO COVA
@@ -484,9 +483,9 @@
     ";
     return $sql;
   }
+  /**********************************************************************************/
   /*
     TITULO: R2Q_Historico_Articulo
-    PARAMETROS: [$IdArticuloQ] Id del articulo
     FUNCION: Armar la tabla del historico de articulos
     RETORNO: La tabla de historico del articulo
     DESAROLLADO POR: SERGIO COVA
