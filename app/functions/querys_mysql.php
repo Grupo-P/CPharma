@@ -3,7 +3,6 @@
 	/**********************************************************************************/
 	/*
 		TITULO: MySQL_Guardar_Auditoria
-		PARAMETROS: $accion,$tabla,$registro,$user
 		FUNCION: capturar y guardar el evento en la auditoria
 		RETORNO: query para almacenar la auditoria
 		DESARROLLADO POR: SERGIO COVA
@@ -20,7 +19,6 @@
 	/**********************************************************************************/
 	/*
 		TITULO: QG_Tasa_Fecha
-		PARAMETROS: [$Fecha] Fecha de la que se quiere la tasa
 		FUNCION: Buscar el valor de la tasa en un dia especifico
 		RETORNO: Valor de la tasa al dia que se solicito
 		DESARROLLADO POR: SERGIO COVA

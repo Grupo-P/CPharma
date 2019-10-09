@@ -3,8 +3,6 @@
 	/**********************************************************************************/
 	/*
 		TITULO: FG_Armar_Json
-		PARAMETROS: [$sql] Cadena de sql a ejecutar,
-					[$SedeConnection] Siglas de la sede para la conexion
 		FUNCION: Armar un arreglo Json con las palabras claves encontradas
 		RETORNO: Arreglo Json
 		DESAROLLADO POR: SERGIO COVA
@@ -17,8 +15,6 @@
 	/**********************************************************************************/
 	/*
 		TITULO: FG_Consulta_Especial_Smartpharma
-		PARAMETROS: [$sql] Cadena de sql a ejecutar,
-					[$SedeConnection] Siglas de la sede para la conexion
 		FUNCION: Hacer una consulta a smartpharma
 		RETORNO: Arreglo de datos
 		DESAROLLADO POR: SERGIO COVA
@@ -55,7 +51,6 @@
 	/**********************************************************************************/
 	/*
 		TITULO: FG_array_flatten_recursive
-		PARAMETROS: [$array] Arreglo para aplicar la recursividad
 		FUNCION: Iterar en el arreglo para la busqueda de variables
 		RETORNO: Palabra clave buscada
 		DESAROLLADO POR: SERGIO COVA
@@ -76,7 +71,6 @@
 	/**********************************************************************************/
 	/*
 		TITULO: FG_Nombre_Sede
-		PARAMETROS: [$SedeConnection] Siglas de la sede para la conexion
 		FUNCION: Retornar el nombre de la sede con la que se esta conectando
 		RETORNO: Nombre de la sede conectada
 		DESAROLLADO POR: SERGIO COVA
@@ -158,7 +152,6 @@
 	/**********************************************************************************/
 	/*
 		TITULO: FG_Conectar_Smartpharma
-		PARAMETROS: [$SedeConnection] Siglas de la sede para la conexion
 		FUNCION: Conectar el sistema con la sede que se desea
 		RETORNO: Conexion a Smartpharma
 		DESAROLLADO POR: SERGIO COVA
@@ -315,7 +308,6 @@
 	/**********************************************************************************/
 	/*
 		TITULO: FG_Conectar_CPharma
-		PARAMETROS: No Aplica
 		FUNCION: Conexion con servidor de XAMPP
 		RETORNO: Conexion a XAMPP
 		DESARROLLADO POR: SERGIO COVA
@@ -328,7 +320,6 @@
 	/**********************************************************************************/
 	/*
 		TITULO: FG_Limpiar_Texto
-		PARAMETROS: [$texto] String que sera formateado
 		FUNCION: limpia el texto de caracteres no imprimibles
 		RETORNO: Texto limpio
 		DESARROLLADO POR: SERGIO COVA
@@ -342,7 +333,6 @@
 	/**********************************************************************************/
 	/*
 		TITULO: FG_Guardar_Auditoria
-		PARAMETROS: [$accion,$tabla,$registro,$user]
 		FUNCION: capturar y guardar el evento en la auditoria
 		RETORNO: no aplica
 		DESARROLLADO POR: SERGIO COVA
@@ -359,7 +349,6 @@
 	/**********************************************************************************/
 	/*
 		TITULO: FG_Producto_Gravado
-		PARAMETROS: [$IsIVA] campo que almacena el ConceptoImpuesto
 		FUNCION: determina si un producto es gravado o no
 		RETORNO: retorna si el producto es gravado o no
 		DESARROLLADO POR: SERGIO COVA
@@ -376,9 +365,8 @@
 	/**********************************************************************************/
 	/*
 		TITULO: FG_Tipo_Producto
-		PARAMETROS: [$TipoArticulo] tipo del producto
-		FUNCION: Determina si el producto esta dolarizado 
-		RETORNO: Retorna si el producto esta dolarizado o no
+		FUNCION: Determina si el producto es miscelaneo o medicina
+		RETORNO: Retorna si el producto es miscelaneo o medicina
 		DESARROLLADO POR: SERGIO COVA
  	*/
 	function FG_Tipo_Producto($TipoArticulo) { 
@@ -393,8 +381,6 @@
 	/**********************************************************************************/
 	/*
 		TITULO: FG_Producto_Dolarizado
-		PARAMETROS: [$conn] cadena de conexion
-					[$IdArticulo] id del articulo a buscar
 		FUNCION: Determina si el producto esta dolarizado 
 		RETORNO: Retorna si el producto esta dolarizado o no
 		DESARROLLADO POR: SERGIO COVA
@@ -411,8 +397,6 @@
 	/**********************************************************************************/
 	/*
 		TITULO: FG_Tasa_Fecha
-		PARAMETROS: [$connCPharma] cadena de conexion con xampp
-					[$Fecha] Fecha de la que se buscara la tasa
 		FUNCION: Buscar el valor de la tasa
 		RETORNO: Valor de la tasa
 		DESARROLLADO POR: SERGIO COVA
@@ -427,10 +411,6 @@
 	/**********************************************************************************/
 	/*
 		TITULO: FG_Calculo_Precio
-		PARAMETROS: [$conn] Cadena de conexion para la base de datos
-					[$IdArticulo] Id del articulo
-					[$IsIVA] Si aplica o no
-					[$Existencia] existencia actual del producto
 		FUNCION: Calcular el precio del articulo
 		RETORNO: Precio del articulo
 		DESARROLLADO POR: SERGIO COVA
@@ -479,8 +459,6 @@
 	/**********************************************************************************/
 	/*
 		TITULO: FG_Rango_Dias
-		PARAMETROS: [$FInicial] Fecha donde inicia el rango
-					[$FFinal] Fecha donde termina el rango
 		FUNCION: Calcular el rango de diferencia de dias entre el las fechas
 		RETORNO: rango de dias
 		DESARROLLADO POR: SERGIO COVA
@@ -495,10 +473,9 @@
 	/**********************************************************************************/
 	/*
 		TITULO: FG_Venta_Diaria
-		PARAMETROS: [$Venta] Venta
-					[$RangoDias] Rango de dias entre dos fechas
 		FUNCION: Calcular la venta al diaria promedio en base al rango de dias
 		RETORNO: Venta diaria promedio
+		DESARROLLADO POR: SERGIO COVA
 	 */
 	function FG_Venta_Diaria($Venta,$RangoDias) {
 		$VentaDiaria = 0;
@@ -511,10 +488,9 @@
 	/**********************************************************************************/
 	/*
 		TITULO: FG_Dias_Restantes
-		PARAMETROS: [$Existencia] Existencia de un producto
-					[$VentaDiaria] Venta diaria promedio del prodcuto
 		FUNCION: Calcular los dias restantes de inventario promedio
 		RETORNO: Dias restantes promedio
+		DESARROLLADO POR: SERGIO COVA
 	 */
 	function FG_Dias_Restantes($Existencia,$VentaDiaria) {
 		$DiasRestantes = 0;

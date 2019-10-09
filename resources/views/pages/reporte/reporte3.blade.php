@@ -126,12 +126,9 @@
 @endsection
 
 <?php 
+  /**********************************************************************************/
   /*
     TITULO: R3_Productos_MasVendidos
-    PARAMETROS: [$SedeConnection] Siglas de la sede para la conexion
-          [$Top] Top de articulos a buscar
-          [$FInicial] Fecha inicial del rango donde se buscara
-          [$FFinal] Fecha final del rango donde se buscara
     FUNCION: Arma una tabla con los productos mas vendidos
     RETORNO: No aplica
     DESAROLLADO POR: SERGIO COVA
@@ -240,9 +237,9 @@
 
     sqlsrv_close($conn);
   }
+  /**********************************************************************************/
   /*
     TITULO: R3Q_TOP_MasVendidos
-    PARAMETROS: [$Top] Varaible para indicar el top a buscar
     FUNCION: Ubicar el top de productos mas vendidos
     RETORNO: Lista de productos mas vendidos
     DESAROLLADO POR: SERGIO COVA
@@ -410,9 +407,9 @@
     ";
     return $sql;
   }
+  /**********************************************************************************/
   /*
-    TITULO: R2Q_Detalle_Articulo
-    PARAMETROS: [$IdArticulo] $IdArticulo del articulo a buscar
+    TITULO: R3Q_Detalle_Articulo
     FUNCION: Query que genera el detalle del articulo solicitado
     RETORNO: Detalle del articulo
     DESAROLLADO POR: SERGIO COVA

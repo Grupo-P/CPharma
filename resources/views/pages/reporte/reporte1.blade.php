@@ -34,9 +34,9 @@
 @endsection
 
 <?php
+	/**********************************************************************************/
 	/*
 		TITULO: Reporte1_Activacion_Proveedores
-		PARAMETROS: [$SedeConnection] Sede a la cual se conectara el sistema
 		FUNCION: Arma el reporte de activacion de proveedores
 		RETORNO: Lista de activacio de proveedores
 		DESAROLLADO POR: SERGIO COVA
@@ -90,9 +90,9 @@
 		</table>';
 		sqlsrv_close($conn);
 	}
+	/**********************************************************************************/
 	/*
 		TITULO: R1Q_Activacion_Proveedores
-		PARAMETROS: No aplica
 		FUNCION: Query que genera la lista de los proveedores con la diferencia en dias desde el ultimo despacho de mercancia. 
 		RETORNO: Lista de proveedores con diferencia en dias respecto al dia actual
 		DESAROLLADO POR: SERGIO COVA
