@@ -177,7 +177,8 @@
   ?>  
 @endsection
 
-<?php 
+<?php
+  /**********************************************************************************/ 
   /*
     TITULO: R6_Pedido_Productos
     FUNCION: Arma una lista para el pedido de productos
@@ -672,7 +673,7 @@
       INNER JOIN VenFactura ON VenFactura.Id = VenFacturaDetalle.VenFacturaId
     --Condicionales
       WHERE
-      (VenFactura.FechaDocumento > '2019-10-06' AND VenFactura.FechaDocumento < '2019-10-09')
+      (VenFactura.FechaDocumento > '$FInicial' AND VenFactura.FechaDocumento < '$FFinal')
       AND VenFacturaDetalle.InvArticuloId = '$IdArticulo'
     --Agrupamientos
       GROUP BY VenFacturaDetalle.InvArticuloId 
