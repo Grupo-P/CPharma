@@ -2,6 +2,76 @@
 /*Funciones Generales al sistema CPharma*/
 	/**********************************************************************************/
 	/*
+		TITULO: FG_Armar_Json
+		PARAMETROS: [$sql] Cadena de sql a ejecutar,
+					[$SedeConnection] Siglas de la sede para la conexion
+		FUNCION: Armar un arreglo Json con las palabras claves encontradas
+		RETORNO: Arreglo Json
+		DESAROLLADO POR: SERGIO COVA
+	 */
+	function FG_Armar_Json($sql,$SedeConnection) {
+		$result = FG_Consulta_Especial_Smartpharma ($sql,$SedeConnection);
+	    $arrayJson = FG_array_flatten_recursive($result);
+	    return json_encode($arrayJson);
+	}
+	/*
+		TITULO: FG_Consulta_Especial_Smartpharma
+		PARAMETROS: [$sql] Cadena de sql a ejecutar,
+					[$SedeConnection] Siglas de la sede para la conexion
+		FUNCION: Hacer una consulta a smartpharma
+		RETORNO: Arreglo de datos
+		DESAROLLADO POR: SERGIO COVA
+	 */
+	function FG_Consulta_Especial_Smartpharma($sql,$SedeConnection) {
+		$conn = FG_Conectar_Smartpharma($SedeConnection);
+		if($conn) {
+			$stmt = sqlsrv_query($conn,$sql);
+			if($stmt === false) {
+				die(print_r(sqlsrv_errors(),true));
+			}
+			$i = 0;
+			$final[$i] = sqlsrv_fetch_array($stmt,SQLSRV_FETCH_NUMERIC);
+			$i++;
+			if($final[0] != NULL) {
+				while($result = sqlsrv_fetch_array($stmt,SQLSRV_FETCH_NUMERIC)) {
+					$final[$i] = $result;
+					$i++;
+				}
+				sqlsrv_free_stmt($stmt);
+				sqlsrv_close($conn);
+				return $final;
+			}
+			else {
+				sqlsrv_free_stmt( $stmt);
+				sqlsrv_close($conn);
+				return NULL;
+			}
+		}
+		else {
+			die(print_r(sqlsrv_errors(),true));
+		}
+	}
+	/*
+		TITULO: FG_array_flatten_recursive
+		PARAMETROS: [$array] Arreglo para aplicar la recursividad
+		FUNCION: Iterar en el arreglo para la busqueda de variables
+		RETORNO: Palabra clave buscada
+		DESAROLLADO POR: SERGIO COVA
+	 */
+	function FG_array_flatten_recursive($array) {
+	   if(!is_array($array)) {
+		   return false;
+	   }
+	   $flat = array();
+	   $RII = new RecursiveIteratorIterator(new RecursiveArrayIterator($array));
+	   $i = 0;
+	   foreach($RII as $key => $value) {
+		   $flat[$i] = utf8_encode($value);
+		   $i++;
+	   }
+	   return $flat;
+	}
+	/*
 		TITULO: FG_Nombre_Sede
 		PARAMETROS: [$SedeConnection] Siglas de la sede para la conexion
 		FUNCION: Retornar el nombre de la sede con la que se esta conectando
@@ -282,5 +352,104 @@
 		$sql = MySQL_Guardar_Auditoria($accion,$tabla,$registro,$user,$date);
 		mysqli_query($connCPharma,$sql);
 		mysqli_close($connCPharma);
+	}
+	/*
+		TITULO: FG_Producto_Gravado
+		PARAMETROS: [$IsIVA] campo que almacena el ConceptoImpuesto
+		FUNCION: determina si un producto es gravado o no
+		RETORNO: retorna si el producto es gravado o no
+		DESARROLLADO POR: SERGIO COVA
+ 	*/
+	function FG_Producto_Gravado($IsIVA){
+		if($IsIVA == 1) {
+			$EsGravado = 'SI';
+		}
+		else {
+			$EsGravado = 'NO';
+		}
+		return $EsGravado;
+	}
+	/*
+		TITULO: FG_Producto_Dolarizado
+		PARAMETROS: [$conn] cadena de conexion
+					[$IdArticulo] id del articulo a buscar
+		FUNCION: Determina si el producto esta dolarizado 
+		RETORNO: Retorna si el producto esta dolarizado o no
+		DESARROLLADO POR: SERGIO COVA
+ 	*/
+	function FG_Producto_Dolarizado($IsDolarizado) { 
+		if($IsDolarizado == 0) {
+			$EsDolarizado = 'NO';
+		}
+		else {
+			$EsDolarizado = 'SI';
+		}
+		return $EsDolarizado;
+	}
+	/*
+		TITULO: FG_Tasa_Fecha
+		PARAMETROS: [$connCPharma] cadena de conexion con xampp
+					[$Fecha] Fecha de la que se buscara la tasa
+		FUNCION: Buscar el valor de la tasa
+		RETORNO: Valor de la tasa
+		DESARROLLADO POR: SERGIO COVA
+	 */
+	function FG_Tasa_Fecha($connCPharma,$Fecha) {
+		$sql = QG_Tasa_Fecha($Fecha);
+		$result = mysqli_query($connCPharma,$sql);
+		$row = mysqli_fetch_assoc($result);
+		$Tasa = $row['tasa'];
+		return $Tasa;
+	}
+	/*
+		TITULO: FG_Calculo_Precio
+		PARAMETROS: [$conn] Cadena de conexion para la base de datos
+					[$IdArticulo] Id del articulo
+					[$IsIVA] Si aplica o no
+					[$Existencia] existencia actual del producto
+		FUNCION: Calcular el precio del articulo
+		RETORNO: Precio del articulo
+		DESARROLLADO POR: SERGIO COVA
+	 */
+	function FG_Calculo_Precio($Existencia,$TroquelAlmacen1,$PrecioCompraBruto,$Utilidad,$IsIVA,$TroquelAlmacen2) {		
+		if($Existencia==0) {
+			$Precio = 0;
+		}
+		else {
+		/*CASO ALMACEN 1*/
+			/*PRECIO TROQUELADO ALMACEN 1*/
+			if($TroquelAlmacen1!=NULL){
+				$Precio = $TroquelAlmacen1;
+			}
+			/*PRECIO CALCULADO*/
+			else{
+				if($PrecioCompraBruto!=NULL){
+
+					if($Utilidad==1){
+						$Precio = 0;
+					}
+					else{					
+						if($IsIVA == 1){
+							$PrecioCalculado = ($PrecioCompraBruto/$Utilidad)*Impuesto;
+							$Precio = $PrecioCalculado;
+						}
+						else {
+							$PrecioCalculado = ($PrecioCompraBruto/$Utilidad);
+							$Precio = $PrecioCalculado;
+						}
+					}
+				}
+				else{
+					/*PRECIO TROQUELADO ALMACEN 2*/
+					if($TroquelAlmacen2!=NULL){
+						$Precio = $TroquelAlmacen2;
+					}
+					else{
+						$Precio = 0;
+					}
+				}
+			}
+		}
+		return $Precio;
 	}
 ?>
