@@ -97,99 +97,93 @@
 @endsection
 
 <?php
-
-    /*
+  /*
     TITULO: R9_Productos_Surtir
-            PARAMETROS: [$SedeConnection] Siglas de la sede para la conexion
-                        [$FInicial] Fecha inicial del rango donde se buscara
-                        [$FFinal] Fecha final del rango donde se buscara
-            FUNCION: Arma una lista con los productos surtidos y sus fechas
-            RETORNO: No aplica
-            AUTOR: Ing. Manuel Henriquez
-    */
+    FUNCION: Arma una lista con los productos surtidos y sus fechas
+    RETORNO: No aplica
+    AUTOR: Ing. Manuel Henriquez
+  */
 
-    function R9_Productos_Surtir($SedeConnection, $FInicial, $FFinal) {
-        $conn = ConectarSmartpharma($SedeConnection);
+  function R9_Productos_Surtir($SedeConnection, $FInicial, $FFinal) {
+    $conn = ConectarSmartpharma($SedeConnection);
 
-        $FFinalImpresion = $FFinal;
-        $FFinal = date("Y-m-d",strtotime($FFinal."+ 1 days"));
+    $FFinalImpresion = $FFinal;
+    $FFinal = date("Y-m-d",strtotime($FFinal."+ 1 days"));
 
-        $sql = R9Q_Productos_Surtir($FInicial,$FFinal);
-        $result = sqlsrv_query($conn, $sql);
+    $sql = R9Q_Productos_Surtir($FInicial,$FFinal);
+    $result = sqlsrv_query($conn, $sql);
 
-        echo '
-            <div class="input-group md-form form-sm form-1 pl-0">
-                <div class="input-group-prepend">
-                    <span class="input-group-text purple lighten-3" id="basic-text1">
-                        <i class="fas fa-search text-white" aria-hidden="true"></i>
-                    </span>
-                </div>
-                <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterAllTable()">
-            </div>
-            <br/>
-        ';
+    echo '
+      <div class="input-group md-form form-sm form-1 pl-0">
+        <div class="input-group-prepend">
+          <span class="input-group-text purple lighten-3" id="basic-text1">
+            <i class="fas fa-search text-white" aria-hidden="true"></i>
+          </span>
+        </div>
+        <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterAllTable()">
+      </div>
+      <br/>
+    ';
 
-        echo'
-            <h6 align="center">Periodo desde el '
-                . date("d-m-Y", strtotime($FInicial)) . ' al '
-                . date("d-m-Y", strtotime($FFinalImpresion))
-            . '</h6>
-        ';
+    echo'
+      <h6 align="center">Periodo desde el ' . date("d-m-Y", strtotime($FInicial)) . ' al '
+        . date("d-m-Y", strtotime($FFinalImpresion))
+      . '</h6>
+    ';
 
-        echo'
-            <table class="table table-striped table-bordered col-12 sortable" id="myTable">
-                <thead class="thead-dark">
-                    <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">Codigo</th>
-                        <th scope="col">Descripcion</th>
-                        <th scope="col">Existencia</th>
-                        <th scope="col">Ultimo Lote</br>(En Rango)</th>
-                        <th scope="col">Tiempo en Tienda</br>(Dias)</th>
-                    </tr>
-                </thead>
-                <tbody>
-        ';
+    echo'
+      <table class="table table-striped table-bordered col-12 sortable" id="myTable">
+        <thead class="thead-dark">
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Codigo</th>
+            <th scope="col">Descripcion</th>
+            <th scope="col">Existencia</th>
+            <th scope="col">Ultimo Lote</br>(En Rango)</th>
+            <th scope="col">Tiempo en Tienda</br>(Dias)</th>
+          </tr>
+        </thead>
+        <tbody>
+    ';
 
-        $contador = 1;
+    $contador = 1;
 
-        while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
-            $IdArticulo = $row["Id"];
-            $FechaRegistro = $row["FechaTienda"];
-            $Existencia = $row["Existencia"];
-            $TiempoTienda = $row["TiempoTienda"];
+    while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
+      $IdArticulo = $row["Id"];
+      $FechaRegistro = $row["FechaTienda"];
+      $Existencia = $row["Existencia"];
+      $TiempoTienda = $row["TiempoTienda"];
 
-            if(!is_null($FechaRegistro)) {
-                $Diferencia1 = ValidarFechas($FechaRegistro->format("Y-m-d"), $FInicial);
-                $Diferencia2 = ValidarFechas($FechaRegistro->format("Y-m-d"), $FFinalImpresion);
-                
-                if(($Diferencia1 <= 0) && ($Diferencia2 >= 0)) {
-                    echo '
-                        <tr>
-                            <td align="center"><strong>'.intval($contador).'</strong></td>
-                            <td align="left">'.$row["CodigoArticulo"].'</td>
-                            <td align="left" class="barrido">
-                                <a href="/reporte2?Id='.$IdArticulo.'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
-                                    .utf8_encode(addslashes($row["Descripcion"]))
-                                .'</a>
-                            </td>
-                            <td align="center">'.intval($Existencia).'</td>
-                            <td align="center">'.$FechaRegistro->format("d-m-Y").'</td>
-                            <td align="center">'.$TiempoTienda.'</td>
-                        </tr>
-                    ';
-                    $contador++;
-                }
-
-            }
-
+      if(!is_null($FechaRegistro)) {
+        $Diferencia1 = ValidarFechas($FechaRegistro->format("Y-m-d"), $FInicial);
+        $Diferencia2 = ValidarFechas($FechaRegistro->format("Y-m-d"), $FFinalImpresion);
+        
+        if(($Diferencia1 <= 0) && ($Diferencia2 >= 0)) {
+          echo '
+            <tr>
+              <td align="center"><strong>'.intval($contador).'</strong></td>
+              <td align="left">'.$row["CodigoArticulo"].'</td>
+              <td align="left" class="barrido">
+                  <a href="/reporte2?Id='.$IdArticulo.'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
+                      .utf8_encode(addslashes($row["Descripcion"]))
+                  .'</a>
+              </td>
+              <td align="center">'.intval($Existencia).'</td>
+              <td align="center">'.$FechaRegistro->format("d-m-Y").'</td>
+              <td align="center">'.$TiempoTienda.'</td>
+            </tr>
+          ';
+          $contador++;
         }
-        echo '
-            </tbody>
-        </table>';
-
-        sqlsrv_close($conn);
+      }
     }
+    echo '
+        </tbody>
+      </table>
+    ';
+
+    sqlsrv_close($conn);
+  }
 
     /*
         TITULO: R9Q_Productos_Surtir
