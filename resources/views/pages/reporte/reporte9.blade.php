@@ -46,7 +46,7 @@
 
         echo '
           <h1 class="h5 text-success" align="left">
-            <i class="fas fa-prescription"></i> '.NombreSede($_GET['SEDE'])
+            <i class="fas fa-prescription"></i> '.FG_Nombre_Sede($_GET['SEDE'])
           .'</h1>
         ';
       }
@@ -54,7 +54,7 @@
       echo '<hr class="row align-items-start col-12">';
 
       R9_Productos_Surtir($_GET['SEDE'], $_GET['fechaInicio'], $_GET['fechaFin']);
-      GuardarAuditoria('CONSULTAR', 'REPORTE', 'Productos para surtir');
+      FG_Guardar_Auditoria('CONSULTAR', 'REPORTE', 'Productos para surtir');
 
       $FinCarga = new DateTime("now");
       $IntervalCarga = $InicioCarga->diff($FinCarga);
@@ -66,7 +66,7 @@
 
         echo '
           <h1 class="h5 text-success" align="left">
-            <i class="fas fa-prescription"></i> '.NombreSede($_GET['SEDE'])
+            <i class="fas fa-prescription"></i> '.FG_Nombre_Sede($_GET['SEDE'])
           .'</h1>
         ';
       }
