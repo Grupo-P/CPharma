@@ -65,50 +65,51 @@
 
   <br><br>
 
-    {!! Form::model($tasaVenta, ['route' => ['tasaVenta.update', $tasaVenta], 'method' => 'PUT']) !!}
+  {!! Form::model($tasaVenta, ['route' => ['tasaVenta.update', $tasaVenta], 'method' => 'PUT']) !!}
     <fieldset>
-        <table class="table table-borderless table-striped">
-          <thead class="thead-dark">
-              <tr>
-                  <th scope="row"></th>
-                  <th scope="row"></th>
-              </tr>
-          </thead>
-          <tbody>
-              <tr>
-                  <th scope="row">{!! Form::label('tasa', 'Tasa') !!}</th>
-                  <td>{!! Form::number('tasa', null, [ 'class' => 'form-control', 'placeholder' => 'xx.xx', 'step' => '0.01', 'min' => $minimo, 'max' => $maximo, 'autofocus', 'required']) !!}</td>
-              </tr>
-              <tr>
-                <th>Moneda</th>
-                <td>
-                  <select name="moneda" id="moneda" class="form-control" style="width:100%;" disabled>
-                    <option>Dolar</option>
-                    <option>Bolivar Soberano</option>
-                    <option>Peso Colombiano</option>
-                    <option>Euro</option>
-                  </select>
-                </td>
-              </tr>
-              <tr>
-                  <th>Fecha</th>
+      <table class="table table-borderless table-striped">
+        <thead class="thead-dark">
+          <tr>
+            <th scope="row"></th>
+            <th scope="row"></th>
+          </tr>
+        </thead>
 
-                  <?php
-                      $Hoy = new DateTime();
-                      $Hoy = $Hoy->format('d-m-Y');
-                      $HoyEnviar = date('d-m-Y', strtotime($Hoy . ' 00:00:00'));
-                  ?>
+        <tbody>
+          <tr>
+            <th scope="row">{!! Form::label('tasa', 'Tasa') !!}</th>
+            <td>{!! Form::number('tasa', null, [ 'class' => 'form-control', 'placeholder' => 'xx.xx', 'step' => '0.01', 'min' => $minimo, 'max' => $maximo, 'autofocus', 'required']) !!}</td>
+          </tr>
+          <tr>
+            <th>{!! Form::label('moneda', 'Moneda') !!}</th>
+            <td>
+              <select name="moneda" id="moneda" class="form-control" style="width:100%;" disabled>
+                <option>Dolar</option>
+                <option>Bolivar Soberano</option>
+                <option>Peso Colombiano</option>
+                <option>Euro</option>
+              </select>
+            </td>
+          </tr>
+          <tr>
+              <th>{!! Form::label('fecha', 'Fecha') !!}</th>
 
-                  <td>
-                    <input type="text" class="form-control" value="<?php echo $Hoy ?>" style="width:100%;" required disabled>
-                    <input type="hidden" id="fecha" name="fecha" value="<?php echo $HoyEnviar ?>">
-                  </td>
-              </tr>
-          </tbody>
-        </table>
-        {!! Form::submit('Guardar', ['class' => 'btn btn-outline-success btn-md']) !!}
+              <?php
+                $Hoy = new DateTime();
+                $Hoy = $Hoy->format('d-m-Y');
+                $HoyEnviar = date('d-m-Y', strtotime($Hoy . ' 00:00:00'));
+              ?>
+
+              <td>
+                <input type="text" class="form-control" value="<?php echo $Hoy ?>" style="width:100%;" required disabled>
+                <input type="hidden" id="fecha" name="fecha" value="<?php echo $HoyEnviar ?>">
+              </td>
+          </tr>
+        </tbody>
+      </table>
+      {!! Form::submit('Guardar', ['class' => 'btn btn-outline-success btn-md']) !!}
     </fieldset>
-    {!! Form::close()!!} 
+  {!! Form::close()!!} 
 
     <script>
         $(document).ready(function(){
