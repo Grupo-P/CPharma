@@ -185,56 +185,54 @@
     sqlsrv_close($conn);
   }
 
-    /*
-        TITULO: R9Q_Productos_Surtir
-        PARAMETROS: [$FInicial] Fecha inicial del rango a consultar
-                    [$FFinal] Fecha final del rango a consutar
-        FUNCION: Consulta las Veces Compradas a proveedores y las unidades compradas
-        RETORNO: Tabla con los articulos, las veces compradas y las unidades compradas
-        Autos: Ing. Manuel Henriquez
-    */
-    function R9Q_Productos_Surtir($FInicial, $FFinal) {
-        $sql = "
-            SELECT
-            InvArticulo.Id,
-            InvArticulo.CodigoArticulo,
-            InvArticulo.Descripcion,
-            (SELECT
-            (ROUND(CAST(SUM (InvLoteAlmacen.Existencia) AS DECIMAL(38,0)),2,0))
-            FROM InvLoteAlmacen
-            WHERE(InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
-            AND (InvLoteAlmacen.InvArticuloId = InvArticulo.Id)) as Existencia,
-            (SELECT TOP 1
-            CONVERT(DATE, Invlote.Auditoria_FechaCreacion) AS FechaTienda
-            FROM InvLoteAlmacen
-            INNER JOIN InvLote ON InvLote.Id = InvLoteAlmacen.InvLoteId
-            WHERE
-            Invlote.InvArticuloId = InvArticulo.Id 
-            AND (InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2) 
-            AND InvLoteAlmacen.Existencia > 0
-            ORDER BY CONVERT(DATE, Invlote.Auditoria_FechaCreacion) DESC)  AS FechaTienda,
-            (SELECT TOP 1
-            DATEDIFF(DAY, CONVERT(DATE, Invlote.Auditoria_FechaCreacion), GETDATE())
-            FROM InvLoteAlmacen
-            INNER JOIN InvLote ON InvLote.Id = InvLoteAlmacen.InvLoteId
-            WHERE
-            Invlote.InvArticuloId = InvArticulo.Id 
-            AND (InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2) 
-            AND InvLoteAlmacen.Existencia > 0
-            ORDER BY CONVERT(DATE, Invlote.Auditoria_FechaCreacion) DESC) AS TiempoTienda
-            FROM ComFacturaDetalle
-            INNER JOIN InvArticulo ON InvArticulo.Id = ComFacturaDetalle.InvArticuloId
-            INNER JOIN ComFactura ON  ComFactura.Id = ComFacturaDetalle.ComFacturaId
-            WHERE (ComFactura.FechaRegistro > '$FInicial') 
-            AND (ComFactura.FechaRegistro < '$FFinal')
-            AND (((SELECT
-            (ROUND(CAST(SUM (InvLoteAlmacen.Existencia) AS DECIMAL(38,0)),2,0))
-            FROM InvLoteAlmacen
-            WHERE(InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
-            AND (InvLoteAlmacen.InvArticuloId = InvArticulo.Id)))>0)
-            GROUP BY InvArticulo.Id, InvArticulo.CodigoArticulo, InvArticulo.Descripcion, FechaRegistro
-            ORDER BY FechaTienda ASC
-        ";
-        return $sql;
-    }
+  /*
+    TITULO: R9Q_Productos_Surtir
+    FUNCION: Consulta las Veces Compradas a proveedores y las unidades compradas
+    RETORNO: Tabla con los articulos, las veces compradas y las unidades compradas
+    Autos: Ing. Manuel Henriquez
+  */
+  function R9Q_Productos_Surtir($FInicial, $FFinal) {
+    $sql = "
+      SELECT
+      InvArticulo.Id,
+      InvArticulo.CodigoArticulo,
+      InvArticulo.Descripcion,
+      (SELECT
+      (ROUND(CAST(SUM (InvLoteAlmacen.Existencia) AS DECIMAL(38,0)),2,0))
+      FROM InvLoteAlmacen
+      WHERE(InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
+      AND (InvLoteAlmacen.InvArticuloId = InvArticulo.Id)) as Existencia,
+      (SELECT TOP 1
+      CONVERT(DATE, Invlote.Auditoria_FechaCreacion) AS FechaTienda
+      FROM InvLoteAlmacen
+      INNER JOIN InvLote ON InvLote.Id = InvLoteAlmacen.InvLoteId
+      WHERE
+      Invlote.InvArticuloId = InvArticulo.Id 
+      AND (InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2) 
+      AND InvLoteAlmacen.Existencia > 0
+      ORDER BY CONVERT(DATE, Invlote.Auditoria_FechaCreacion) DESC)  AS FechaTienda,
+      (SELECT TOP 1
+      DATEDIFF(DAY, CONVERT(DATE, Invlote.Auditoria_FechaCreacion), GETDATE())
+      FROM InvLoteAlmacen
+      INNER JOIN InvLote ON InvLote.Id = InvLoteAlmacen.InvLoteId
+      WHERE
+      Invlote.InvArticuloId = InvArticulo.Id 
+      AND (InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2) 
+      AND InvLoteAlmacen.Existencia > 0
+      ORDER BY CONVERT(DATE, Invlote.Auditoria_FechaCreacion) DESC) AS TiempoTienda
+      FROM ComFacturaDetalle
+      INNER JOIN InvArticulo ON InvArticulo.Id = ComFacturaDetalle.InvArticuloId
+      INNER JOIN ComFactura ON  ComFactura.Id = ComFacturaDetalle.ComFacturaId
+      WHERE (ComFactura.FechaRegistro > '$FInicial') 
+      AND (ComFactura.FechaRegistro < '$FFinal')
+      AND (((SELECT
+      (ROUND(CAST(SUM (InvLoteAlmacen.Existencia) AS DECIMAL(38,0)),2,0))
+      FROM InvLoteAlmacen
+      WHERE(InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
+      AND (InvLoteAlmacen.InvArticuloId = InvArticulo.Id)))>0)
+      GROUP BY InvArticulo.Id, InvArticulo.CodigoArticulo, InvArticulo.Descripcion, FechaRegistro
+      ORDER BY FechaTienda ASC
+    ";
+    return $sql;
+  }
 ?>
