@@ -61,7 +61,8 @@
     include(app_path().'\functions\querys_mysql.php');
     include(app_path().'\functions\querys_sqlserver.php');
 
-    $ArtJson="";
+    $ArtJson = "";
+    $CodJson = "";
     
     if(isset($_GET['Id'])) {
       $InicioCarga = new DateTime("now");
@@ -141,15 +142,25 @@
 
 @section('scriptsFoot')
   <?php
-    if($ArtJson!="") {
+    if($ArtJson!=""){
   ?>
-  <script type="text/javascript">
-    ArrJs = eval(<?php echo $ArtJson ?>);
-    autocompletado(document.getElementById("myInput"),document.getElementById("myId"), ArrJs);
-  </script>
+    <script type="text/javascript">
+      ArrJs = eval(<?php echo $ArtJson ?>);
+      autocompletado(document.getElementById("myInput"),document.getElementById("myId"), ArrJs);
+    </script> 
   <?php
     }
+  ?> 
+  <?php
+    if($CodJson!=""){
   ?>
+    <script type="text/javascript">
+      ArrJsCB = eval(<?php echo $CodJson ?>);
+      autocompletadoCB(document.getElementById("myInputCB"),document.getElementById("myIdCB"), ArrJsCB);
+    </script> 
+  <?php
+    }
+  ?>  
 @endsection
 
 <?php
