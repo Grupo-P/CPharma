@@ -307,7 +307,7 @@
           <td align="center">'.number_format($PrecioBruto,2,"," ,"." ).'</td>
         ';
 
-        $TasaVariable = TasaFecha($FechaVariable);
+        $TasaVariable = FG_Tasa_Fecha($connCPharma,$FechaVariable);
 
         if($TasaVariable != 0) {
           $CostoDivisa = $PrecioBruto / $TasaVariable;
