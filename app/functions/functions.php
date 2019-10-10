@@ -500,8 +500,40 @@
 		$DiasRestantes = round($DiasRestantes,2);
 		return $DiasRestantes;
 	}
-
 	/**********************************************************************************/
+	/*
+		TITULO: FG_Cantidad_Pedido
+		FUNCION: calcular la cantidad a pedir
+		RETORNO: cantidad a pedir
+		DESARROLLADO POR: SERGIO COVA
+	 */
+	function FG_Cantidad_Pedido($VentaDiaria,$DiasPedido,$Existencia) {
+		$CantidadPedido = (($VentaDiaria * $DiasPedido)-$Existencia);
+		return $CantidadPedido;
+	}
+	/**********************************************************************************/
+	/*
+		TITULO: ProductoUnico
+		FUNCION: determinar si un prducto es unico
+		RETORNO: SI o NO segun sea el caso
+		DESARROLLADO POR: SERGIO COVA
+	 */
+	function FG_Producto_Unico($conn,$IdArticulo,$IdProveedor) {
+		$sql = QG_Provedor_Unico($IdProveedor,$IdArticulo);
+		$params = array();
+		$options =  array("Scrollable"=>SQLSRV_CURSOR_KEYSET);
+		$result = sqlsrv_query($conn,$sql,$params,$options);
+		$row_count = sqlsrv_num_rows($result);
+
+		if($row_count == 0) {
+			$Unico = 'SI';
+		}
+		else {
+			$Unico = 'NO';
+		}
+	  	return $Unico;
+	}
+  /**********************************************************************************/
 	/*
 		TITULO: FG_Validar_Fechas
 		FUNCION: Calcula la diferencia entre ambas fechas restando la primera a la segunda
@@ -519,5 +551,5 @@
 		$diferencia_numero = (int)$diferencia->format('%R%a');
 
 		return $diferencia_numero;
-	}
+  }
 ?>
