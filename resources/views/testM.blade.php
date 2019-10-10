@@ -287,7 +287,7 @@
           echo '
             <td align="center"><strong>'.intval($contador).'</strong></td>
             <td align="center">Inventario</td>
-            <td align="center">'.FG_Limpiar_Texto($row["Descripcion"]).'</td>
+            <td align="center">'.FG_Limpiar_Texto($row2["Descripcion"]).'</td>
             <td align="center">'.$row2["FechaLote"]->format("d-m-Y").'</td>
           ';
 
