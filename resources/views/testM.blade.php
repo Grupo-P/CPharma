@@ -245,17 +245,17 @@
         <table class="table table-striped table-bordered col-12 sortable" id="myTable">
           <thead class="thead-dark">
             <tr>
-              <th scope="col">#</th>
-              <th scope="col">Origen</th>
-              <th scope="col">Detalles</th>
-              <th scope="col">Fecha creacion de lote</th>
-              <th scope="col">Cantidad recibida</th>
-              <th scope="col">Almacen</th>
-              <th scope="col">Existencia</th>
-              <th scope="col">Costo bruto (Sin IVA) '.SigVe.'</th>
-              <th scope="col">Tasa en historico '.SigVe.'</th>
-              <th scope="col">Costo en divisa (Sin IVA) '.SigDolar.'</th>
-              <th scope="col">Responsable</th>
+              <th scope="col" class="CP-sticky">#</th>
+              <th scope="col" class="CP-sticky">Origen</th>
+              <th scope="col" class="CP-sticky">Detalles</th>
+              <th scope="col" class="CP-sticky">Fecha creacion de lote</th>
+              <th scope="col" class="CP-sticky">Cantidad recibida</th>
+              <th scope="col" class="CP-sticky">Almacen</th>
+              <th scope="col" class="CP-sticky">Existencia</th>
+              <th scope="col" class="CP-sticky">Costo bruto (Sin IVA) '.SigVe.'</th>
+              <th scope="col" class="CP-sticky">Tasa en historico '.SigVe.'</th>
+              <th scope="col" class="CP-sticky">Costo en divisa (Sin IVA) '.SigDolar.'</th>
+              <th scope="col" class="CP-sticky">Responsable</th>
             </tr>
           </thead>
           <tbody>
