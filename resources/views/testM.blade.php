@@ -49,13 +49,13 @@
 @endsection
 
 @section('content')
-	<h1 class="h5 text-info">
-		<i class="fas fa-file-invoice"></i>
-		Analítico de precios
-	</h1>
-	<hr class="row align-items-start col-12">
-	
-	<?php
+  <h1 class="h5 text-info">
+    <i class="fas fa-file-invoice"></i>
+    Analítico de precios
+  </h1>
+  <hr class="row align-items-start col-12">
+
+  <?php
     include(app_path().'\functions\config.php');
     include(app_path().'\functions\functions.php');
     include(app_path().'\functions\querys_mysql.php');
@@ -68,19 +68,18 @@
     $_GET['SEDE'] = 'FTN';
     //-------------- BORRAR --------------//
 
+    if(isset($_GET['SEDE'])) {
+      echo '
+        <h1 class="h5 text-success" align="left">
+          <i class="fas fa-prescription"></i> '
+          .FG_Nombre_Sede($_GET['SEDE'])
+        .'</h1>
+      ';
+    }
+    echo '<hr class="row align-items-start col-12">';
+
     if(isset($_GET['Id'])) {
-
       $InicioCarga = new DateTime("now");
-
-      if(isset($_GET['SEDE'])) {
-        echo '
-          <h1 class="h5 text-success" align="left">
-            <i class="fas fa-prescription"></i> '.FG_Nombre_Sede($_GET['SEDE'])
-          .'</h1>
-        ';
-      }
-
-      echo '<hr class="row align-items-start col-12">';
 
       R10_Analitico_Precios($_GET['SEDE'],$_GET['Id']);
       FG_Guardar_Auditoria('CONSULTAR','REPORTE','Analitico de precios');
@@ -88,40 +87,32 @@
       $FinCarga = new DateTime("now");
       $IntervalCarga = $InicioCarga->diff($FinCarga);
       echo'Tiempo de carga: '.$IntervalCarga->format("%Y-%M-%D %H:%I:%S");
-		}
-		else {
-			$InicioCarga = new DateTime("now");
+    }
+    else {
+      $InicioCarga = new DateTime("now");
 
-			if(isset($_GET['SEDE'])) {
-				echo '
-                    <h1 class="h5 text-success" align="left">
-                        <i class="fas fa-prescription"></i> '
-                        .FG_Nombre_Sede($_GET['SEDE'])
-                    .'</h1>
-                ';
-			}
-			echo '<hr class="row align-items-start col-12">';
+      $sql = R10Q_Lista_Articulos();
+      $ArtJson = FG_Armar_Json($sql,$_GET['SEDE']);
 
-		    $sql = R10Q_Lista_Articulos();
-		    $ArtJson = armarJson($sql,$_GET['SEDE']);
+      $sql1 = R2Q_Lista_Articulos_CodBarra();
+      $CodJson = FG_Armar_Json($sql1,$_GET['SEDE']);
 
-			echo '
-				<form autocomplete="off" action="" target="_blank">
-					<div class="autocomplete" style="width:90%;">
-						<input id="myInput" type="text" name="Descrip" placeholder="Ingrese el nombre del articulo " onkeyup="conteo()" required>
-						<input id="myId" name="Id" type="hidden">
-						<input id="SEDE" name="SEDE" type="hidden" value="';
-						print_r($_GET['SEDE']); echo'">
-			    	</div>
-			    	<input type="submit" value="Buscar" class="btn btn-outline-success">
-		  		</form>
-		  	';
+      echo '
+        <form autocomplete="off" action="" target="_blank">
+          <div class="autocomplete" style="width:90%;">
+            <input id="myInput" type="text" name="Descrip" placeholder="Ingrese el nombre del articulo " onkeyup="conteo()" required>
+            <input id="myId" name="Id" type="hidden">
+            <input id="SEDE" name="SEDE" type="hidden" value="'; print_r($_GET['SEDE']); echo'">
+          </div>
+          <input type="submit" value="Buscar" class="btn btn-outline-success">
+        </form>
+      ';
 
-		    $FinCarga = new DateTime("now");
-		    $IntervalCarga = $InicioCarga->diff($FinCarga);
-		    echo'Tiempo de carga: '.$IntervalCarga->format("%Y-%M-%D %H:%I:%S");
-		}
-	?>
+      $FinCarga = new DateTime("now");
+      $IntervalCarga = $InicioCarga->diff($FinCarga);
+      echo'Tiempo de carga: '.$IntervalCarga->format("%Y-%M-%D %H:%I:%S");
+    }
+  ?>
 @endsection
 
 @section('scriptsFoot')
