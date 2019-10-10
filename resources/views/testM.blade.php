@@ -174,6 +174,7 @@
     $TroquelAlmacen1 = $row["TroquelAlmacen1"];
     $TroquelAlmacen2 = $row["TroquelAlmacen2"];
     $PrecioCompraBruto = $row["PrecioCompraBruto"];
+    $UltimoProveedorNombre = FG_Limpiar_Texto($row["UltimoProveedorNombre"]);
 
     $Dolarizado = FG_Producto_Dolarizado($Dolarizado);
     $TasaActual = FG_Tasa_Fecha($connCPharma,date('Y-m-d'));
@@ -276,14 +277,10 @@
             <td align="center">Compra</td>
           ';
 
-          $sql3 = R10Q_Proveedor_Cantidad_Comprada($IdArticulo,$FechaVariable);
-          $result3 = sqlsrv_query($conn,$sql3);
-          $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
-
           echo '
-            <td align="center">'.utf8_encode(addslashes($row3["Nombre"])).'</td>
+            <td align="center">'.$UltimoProveedorNombre.'</td>
             <td align="center">'.$row2["FechaLote"]->format("d-m-Y").'</td>
-            <td align="center">'.intval($row3["CantidadRecibidaFactura"]).'</td>
+            <td align="center">'.intval($row2["CantidadRecibida"]).'</td>
           ';
         }
         else {
@@ -294,11 +291,7 @@
             <td align="center">'.$row2["FechaLote"]->format("d-m-Y").'</td>
           ';
 
-          $sql3 = R10Q_Proveedor_Cantidad_Comprada($IdArticulo,$FechaVariable);
-          $result3 = sqlsrv_query($conn,$sql3);
-          $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
-
-          echo '<td align="center">'.intval($row3["CantidadRecibidaFactura"]).'</td>';
+          echo '<td align="center">'.intval($row2["CantidadRecibida"]).'</td>';
         }
 
         echo '
@@ -542,59 +535,41 @@
      */
     function R10Q_Lote_Analitico($IdArticulo) {
         $sql = "
-            SELECT 
-            InvLoteAlmacen.InvLoteId,
-            InvMovimiento.InvCausaId,
-            InvCausa.Descripcion,
-            CONVERT(DATE,InvLoteAlmacen.Auditoria_FechaCreacion) AS FechaLote,
-            InvAlmacen.CodigoAlmacen,
-            ROUND(CAST(InvLoteAlmacen.Existencia AS DECIMAL(38,0)),2,0) AS Existencia,
-            InvLote.M_PrecioCompraBruto,
-            InvLote.Auditoria_Usuario AS Responsable
-            FROM InvLoteAlmacen
-            INNER JOIN InvAlmacen ON InvAlmacen.Id=InvLoteAlmacen.InvAlmacenId
-            INNER JOIN InvLote ON InvLote.Id=InvLoteAlmacen.InvLoteId
-            INNER JOIN InvMovimiento ON InvMovimiento.InvLoteId = InvLoteAlmacen.InvLoteId
-            INNER JOIN InvCausa ON InvMovimiento.InvCausaId=InvCausa.Id
-            WHERE InvLoteAlmacen.InvArticuloId='$IdArticulo'
-            AND (InvLoteAlmacen.Existencia>0)
-            AND (CONVERT(DATE,InvMovimiento.Auditoria_FechaCreacion)=CONVERT(DATE,InvLoteAlmacen.Auditoria_FechaCreacion)) 
-            AND (
-                (InvMovimiento.InvCausaId=1) 
-                OR (InvMovimiento.InvCausaId=5)
-                OR (InvMovimiento.InvCausaId=7)
-                OR (InvMovimiento.InvCausaId=9)
-                OR (InvMovimiento.InvCausaId=11)
-                OR (InvMovimiento.InvCausaId=14)
-            )
+          SELECT 
+          InvLoteAlmacen.InvLoteId,
+          InvMovimiento.InvCausaId,
+          InvCausa.Descripcion,
+          CONVERT(DATE,InvLoteAlmacen.Auditoria_FechaCreacion) AS FechaLote,
+          ROUND(CAST((SELECT
+          ComFacturaDetalle.CantidadRecibidaFactura
+          FROM ComFacturaDetalle
+          INNER JOIN ComFactura ON  ComFactura.Id = ComFacturaDetalle.ComFacturaId
+          WHERE ComFacturaDetalle.InvArticuloId = '$IdArticulo'
+          AND (CONVERT(DATE,ComFactura.FechaRegistro) = CONVERT(DATE,InvLoteAlmacen.Auditoria_FechaCreacion))
+          GROUP BY ComFacturaDetalle.CantidadRecibidaFactura, ComFactura.FechaRegistro) AS DECIMAL(38,0)),2,0) AS CantidadRecibida,
+          InvAlmacen.CodigoAlmacen,
+          ROUND(CAST(InvLoteAlmacen.Existencia AS DECIMAL(38,0)),2,0) AS Existencia,
+          InvLote.M_PrecioCompraBruto,
+          InvLote.Auditoria_Usuario AS Responsable
+          FROM InvLoteAlmacen
+          INNER JOIN InvAlmacen ON InvAlmacen.Id=InvLoteAlmacen.InvAlmacenId
+          INNER JOIN InvLote ON InvLote.Id=InvLoteAlmacen.InvLoteId
+          INNER JOIN InvMovimiento ON InvMovimiento.InvLoteId = InvLoteAlmacen.InvLoteId
+          INNER JOIN InvCausa ON InvMovimiento.InvCausaId=InvCausa.Id
+          WHERE InvLoteAlmacen.InvArticuloId='$IdArticulo'
+          AND (InvLoteAlmacen.Existencia>0)
+          AND (CONVERT(DATE,InvMovimiento.Auditoria_FechaCreacion)=CONVERT(DATE,InvLoteAlmacen.Auditoria_FechaCreacion)) 
+          AND (
+              (InvMovimiento.InvCausaId=1) 
+              OR (InvMovimiento.InvCausaId=5)
+              OR (InvMovimiento.InvCausaId=7)
+              OR (InvMovimiento.InvCausaId=9)
+              OR (InvMovimiento.InvCausaId=11)
+              OR (InvMovimiento.InvCausaId=14)
+          )
 
-            GROUP BY InvLoteAlmacen.InvLoteId,InvMovimiento.InvCausaId,InvCausa.Descripcion,CONVERT(DATE,InvLoteAlmacen.Auditoria_FechaCreacion),InvAlmacen.CodigoAlmacen,InvLoteAlmacen.Existencia,InvLote.M_PrecioCompraBruto,InvLote.Auditoria_Usuario
-            ORDER BY FechaLote DESC
-        ";
-        return $sql;
-    }
-
-    /*
-        TITULO: R10Q_Proveedor_Cantidad_Comprada
-        PARAMETROS: [$IdArticulo] Id del articulo actual
-                    [$FechaLote] fecha de creacion del lote
-        FUNCION: Arma las filas correspondientes a los proveedores y el despacho
-        RETORNO: Un String con las instrucciones de la query
-        AUTOR: Ing. Manuel Henriquez
-    */
-    function R10Q_Proveedor_Cantidad_Comprada($IdArticulo,$FechaLote) {
-        $sql = "
-            SELECT
-            GenPersona.Nombre,
-            ComFacturaDetalle.CantidadRecibidaFactura
-            FROM InvArticulo
-            INNER JOIN ComFacturaDetalle ON InvArticulo.Id=ComFacturaDetalle.InvArticuloId
-            INNER JOIN ComFactura ON ComFactura.Id=ComFacturaDetalle.ComFacturaId
-            INNER JOIN ComProveedor ON ComProveedor.Id=ComFactura.ComProveedorId
-            INNER JOIN GenPersona ON GenPersona.Id=ComProveedor.GenPersonaId
-            WHERE (InvArticulo.Id = '$IdArticulo') 
-            AND (CONVERT(DATE,ComFactura.FechaRegistro) = '$FechaLote')
-            ORDER BY ComFactura.FechaRegistro DESC
+          GROUP BY InvLoteAlmacen.InvLoteId,InvMovimiento.InvCausaId,InvCausa.Descripcion,CONVERT(DATE,InvLoteAlmacen.Auditoria_FechaCreacion),InvAlmacen.CodigoAlmacen,InvLoteAlmacen.Existencia,InvLote.M_PrecioCompraBruto,InvLote.Auditoria_Usuario
+          ORDER BY FechaLote DESC
         ";
         return $sql;
     }
