@@ -116,16 +116,26 @@
 @endsection
 
 @section('scriptsFoot')
-	<?php
-		if($ArtJson!="") {
-	?>
-	<script type="text/javascript">
-		ArrJs = eval(<?php echo $ArtJson ?>);
-		autocompletado(document.getElementById("myInput"),document.getElementById("myId"), ArrJs);
-	</script>
-	<?php
-		}
-	?>
+  <?php
+    if($ArtJson!=""){
+  ?>
+    <script type="text/javascript">
+      ArrJs = eval(<?php echo $ArtJson ?>);
+      autocompletado(document.getElementById("myInput"),document.getElementById("myId"), ArrJs);
+    </script> 
+  <?php
+    }
+  ?> 
+  <?php
+    if($CodJson!=""){
+  ?>
+    <script type="text/javascript">
+      ArrJsCB = eval(<?php echo $CodJson ?>);
+      autocompletadoCB(document.getElementById("myInputCB"),document.getElementById("myIdCB"), ArrJsCB);
+    </script> 
+  <?php
+    }
+  ?>  
 @endsection
 
 <?php
