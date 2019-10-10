@@ -139,55 +139,52 @@
 @endsection
 
 <?php
-    /*
-        TITULO: R10_Analitico_Precios
-        PARAMETROS : [$SedeConnection] Siglas de la sede para la conexion
-                     [$IdArticuloQ] Id del articulo a buscar
-        FUNCION: Armar una tabla de historico de compra del articulo
-        RETORNO: No aplica
-        AUTOR: Ing. Manuel Henriquez
-    */
-    function R10_Analitico_Precios($SedeConnection,$IdArticulo) {
-        
-        $conn = ConectarSmartpharma($SedeConnection);
-        $connCPharma = ConectarXampp();
+  /*
+    TITULO: R10_Analitico_Precios
+    FUNCION: Armar una tabla de historico de compra del articulo
+    RETORNO: No aplica
+    AUTOR: Ing. Manuel Henriquez
+  */
+  function R10_Analitico_Precios($SedeConnection,$IdArticulo) {
+    $conn = FG_Conectar_Smartpharma($SedeConnection);
+    $connCPharma = FG_Conectar_CPharma();
 
-        $sql = R10Q_Detalle_Articulo($IdArticulo);
-        $result = sqlsrv_query($conn,$sql);
-        $row = sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC);
+    $sql = R10Q_Detalle_Articulo($IdArticulo);
+    $result = sqlsrv_query($conn,$sql);
+    $row = sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC);
 
-        $IsIVA = $row["ConceptoImpuesto"];
-        $Existencia = $row["Existencia"];
+    $IsIVA = $row["ConceptoImpuesto"];
+    $Existencia = $row["Existencia"];
 
-        $Precio = FG_Calculo_Precio($conn,$IdArticulo,$IsIVA,$Existencia);
-        $Dolarizado = FG_Producto_Dolarizado($conn,$IdArticulo);
-        $TasaActual = FG_Tasa_Fecha($connCPharma,date('Y-m-d'));
+    $Precio = FG_Calculo_Precio($conn,$IdArticulo,$IsIVA,$Existencia);
+    $Dolarizado = FG_Producto_Dolarizado($conn,$IdArticulo);
+    $TasaActual = FG_Tasa_Fecha($connCPharma,date('Y-m-d'));
 
-        echo '
-            <div class="input-group md-form form-sm form-1 pl-0">
-                <div class="input-group-prepend">
-                    <span class="input-group-text purple lighten-3" id="basic-text1">
-                        <i class="fas fa-search text-white" aria-hidden="true"></i>
-                    </span>
-                </div>
-                <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterAllTable()">
-            </div>
-            <br/>
+    echo '
+      <div class="input-group md-form form-sm form-1 pl-0">
+        <div class="input-group-prepend">
+          <span class="input-group-text purple lighten-3" id="basic-text1">
+            <i class="fas fa-search text-white" aria-hidden="true"></i>
+          </span>
+        </div>
+        <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterAllTable()">
+      </div>
+      <br/>
 
-            <table class="table table-striped table-bordered col-12 sortable">
-                <thead class="thead-dark">
-                    <tr>
-                        <th scope="col">Codigo</th>
-                        <th scope="col">Descripcion</th>
-                        <th scope="col">Existencia</th>
-                        <th scope="col">Precio (Con IVA) '.SigVe.'</th>
-                        <th scope="col">Dolarizado</th>
-                        <th scope="col">Tasa actual '.SigVe.'</th>
-                        <th scope="col">Precio en divisa <br/> (Con IVA) '.SigDolar.'</th>
-                    </tr>
-                </thead>
-            <tbody>
-        ';
+      <table class="table table-striped table-bordered col-12 sortable">
+        <thead class="thead-dark">
+          <tr>
+            <th scope="col">Codigo</th>
+            <th scope="col">Descripcion</th>
+            <th scope="col">Existencia</th>
+            <th scope="col">Precio (Con IVA) '.SigVe.'</th>
+            <th scope="col">Dolarizado</th>
+            <th scope="col">Tasa actual '.SigVe.'</th>
+            <th scope="col">Precio en divisa <br/> (Con IVA) '.SigDolar.'</th>
+          </tr>
+        </thead>
+        <tbody>
+      ';
 
         echo '
                 <tr>
