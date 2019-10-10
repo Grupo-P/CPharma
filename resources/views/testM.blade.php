@@ -197,38 +197,38 @@
         <tbody>
       ';
 
-        echo '
-                <tr>
-                    <td>'.$row["CodigoArticulo"].'</td>
-                    <td align="left" class="barrido">
-                        <a href="/reporte2?Id='.$IdArticulo.'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
-                            .utf8_encode(addslashes($row["Descripcion"]))
-                        .'</a>
-                    </td>
-                    <td align="center">'.intval($Existencia).'</td>
-                    <td align="center">'.number_format($Precio,2,"," ,"." ).'</td>
-                    <td align="center">'.$Dolarizado.'</td>';
+      echo '
+        <tr>
+          <td>'.$row["CodigoArticulo"].'</td>
+          <td align="left" class="barrido">
+              <a href="/reporte2?Id='.$IdArticulo.'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
+                  .utf8_encode(addslashes($row["Descripcion"]))
+              .'</a>
+          </td>
+          <td align="center">'.intval($Existencia).'</td>
+          <td align="center">'.number_format($Precio,2,"," ,"." ).'</td>
+          <td align="center">'.$Dolarizado.'</td>
+      ';
 
-                    if($TasaActual!=0) {
-                        
-                        $PrecioDolar = $Precio/$TasaActual;
+      if($TasaActual!=0) {
+        $PrecioDolar = $Precio/$TasaActual;
 
-                        echo '
-                            <td align="center">'.number_format($TasaActual,2,"," ,"." ).'</td>
-                            <td align="center">'.number_format($PrecioDolar,2,"," ,"." ).'</td>
-                        ';
-                    }
-                    else {
-                        echo '
-                            <td align="center">0,00</td>
-                            <td align="center">0,00</td>
-                        ';
-                    }
         echo '
-                    </tr>
-                </tbody>
-            </table>
+          <td align="center">'.number_format($TasaActual,2,"," ,"." ).'</td>
+          <td align="center">'.number_format($PrecioDolar,2,"," ,"." ).'</td>
         ';
+      }
+      else {
+        echo '
+          <td align="center">0,00</td>
+          <td align="center">0,00</td>
+        ';
+      }
+      echo '
+            </tr>
+          </tbody>
+        </table>
+      ';
 
         echo'
             <table class="table table-striped table-bordered col-12 sortable" id="myTable">
