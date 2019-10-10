@@ -194,12 +194,13 @@
         <thead class="thead-dark">
           <tr>
             <th scope="col">Codigo</th>
+            <th scope="col">Codigo de barra</td>
             <th scope="col">Descripcion</th>
             <th scope="col">Existencia</th>
-            <th scope="col">Precio (Con IVA) '.SigVe.'</th>
-            <th scope="col">Dolarizado</th>
+            <th scope="col">Precio</br>(Con IVA) '.SigVe.'</td>  
+            <th scope="col">Dolarizado?</th>
             <th scope="col">Tasa actual '.SigVe.'</th>
-            <th scope="col">Precio en divisa <br/> (Con IVA) '.SigDolar.'</th>
+            <th scope="col">Precio en divisa</br>(Con IVA) '.SigDolar.'</td>
           </tr>
         </thead>
         <tbody>
@@ -207,10 +208,11 @@
 
       echo '
         <tr>
-          <td>'.$row["CodigoArticulo"].'</td>
-          <td align="left" class="barrido">
+          <td align="center">'.$CodigoArticulo.'</td>
+          <td align="center">'.$CodigoBarra.'</td>
+          <td align="left" class="CP-barrido">
               <a href="/reporte2?Id='.$IdArticulo.'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
-                  .utf8_encode(addslashes($row["Descripcion"]))
+                  .$Descripcion
               .'</a>
           </td>
           <td align="center">'.intval($Existencia).'</td>
@@ -218,8 +220,8 @@
           <td align="center">'.$Dolarizado.'</td>
       ';
 
-      if($TasaActual!=0) {
-        $PrecioDolar = $Precio/$TasaActual;
+      if($TasaActual != 0) {
+        $PrecioDolar = $Precio / $TasaActual;
 
         echo '
           <td align="center">'.number_format($TasaActual,2,"," ,"." ).'</td>
