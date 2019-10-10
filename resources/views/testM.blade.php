@@ -94,16 +94,27 @@
       $sql = R10Q_Lista_Articulos();
       $ArtJson = FG_Armar_Json($sql,$_GET['SEDE']);
 
-      $sql1 = R2Q_Lista_Articulos_CodBarra();
+      $sql1 = R10Q_Lista_Articulos_CodBarra();
       $CodJson = FG_Armar_Json($sql1,$_GET['SEDE']);
 
       echo '
         <form autocomplete="off" action="" target="_blank">
           <div class="autocomplete" style="width:90%;">
-            <input id="myInput" type="text" name="Descrip" placeholder="Ingrese el nombre del articulo " onkeyup="conteo()" required>
+            <input id="myInput" type="text" name="Descrip" placeholder="Ingrese el nombre del articulo" onkeyup="conteo()">
             <input id="myId" name="Id" type="hidden">
-            <input id="SEDE" name="SEDE" type="hidden" value="'; print_r($_GET['SEDE']); echo'">
           </div>
+          <input id="SEDE" name="SEDE" type="hidden" value="'; print_r($_GET['SEDE']); echo'">
+          <input type="submit" value="Buscar" class="btn btn-outline-success">
+        </form>
+
+        <br/>
+
+        <form autocomplete="off" action="" target="_blank">
+          <div class="autocomplete" style="width:90%;">
+            <input id="myInputCB" type="text" name="CodBar" placeholder="Ingrese el codigo de barra del articulo" onkeyup="conteoCB()">
+            <input id="myIdCB" name="Id" type="hidden">
+          </div>
+          <input id="SEDE" name="SEDE" type="hidden" value="'; print_r($_GET['SEDE']); echo'">
           <input type="submit" value="Buscar" class="btn btn-outline-success">
         </form>
       ';
@@ -329,14 +340,35 @@
         AUTOR: Ing. Manuel Henriquez
     */
     function R10Q_Lista_Articulos() {
-        $sql = "
-            SELECT
-            InvArticulo.Descripcion,
-            InvArticulo.Id
-            FROM InvArticulo
-            ORDER BY InvArticulo.Descripcion ASC
-        ";
-        return $sql;
+      $sql = "
+        SELECT
+        InvArticulo.Descripcion,
+        InvArticulo.Id
+        FROM InvArticulo
+        ORDER BY InvArticulo.Descripcion ASC
+      ";
+      return $sql;
+    }
+
+    /*
+      TITULO: R10Q_Lista_Articulos_CodBarra
+      FUNCION: Armar una lista de articulos con descripcion e id
+      RETORNO: Lista de articulos con descripcion e id
+      DESAROLLADO POR: SERGIO COVA
+   */
+    
+    function R10Q_Lista_Articulos_CodBarra() {
+      $sql = "
+        SELECT
+        (SELECT CodigoBarra
+        FROM InvCodigoBarra 
+        WHERE InvCodigoBarra.InvArticuloId = InvArticulo.Id
+        AND InvCodigoBarra.EsPrincipal = 1) AS CodigoBarra,
+        InvArticulo.Id
+        FROM InvArticulo
+        ORDER BY CodigoBarra ASC
+      ";
+      return $sql;
     }
 
     /*
