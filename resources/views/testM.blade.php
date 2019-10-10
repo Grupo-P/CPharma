@@ -230,106 +230,105 @@
         </table>
       ';
 
-        echo'
-            <table class="table table-striped table-bordered col-12 sortable" id="myTable">
-                <thead class="thead-dark">
-                    <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">Origen</th>
-                        <th scope="col">Detalles</th>
-                        <th scope="col">Fecha creacion de lote</th>
-                        <th scope="col">Cantidad recibida</th>
-                        <th scope="col">Almacen</th>
-                        <th scope="col">Existencia</th>
-                        <th scope="col">Costo bruto (Sin IVA) '.SigVe.'</th>
-                        <th scope="col">Tasa en historico '.SigVe.'</th>
-                        <th scope="col">Costo en divisa (Sin IVA) '.SigDolar.'</th>
-                        <th scope="col">Responsable</th>
-                    </tr>
-                </thead>
-                <tbody>
-        ';
+      echo'
+        <table class="table table-striped table-bordered col-12 sortable" id="myTable">
+          <thead class="thead-dark">
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Origen</th>
+              <th scope="col">Detalles</th>
+              <th scope="col">Fecha creacion de lote</th>
+              <th scope="col">Cantidad recibida</th>
+              <th scope="col">Almacen</th>
+              <th scope="col">Existencia</th>
+              <th scope="col">Costo bruto (Sin IVA) '.SigVe.'</th>
+              <th scope="col">Tasa en historico '.SigVe.'</th>
+              <th scope="col">Costo en divisa (Sin IVA) '.SigDolar.'</th>
+              <th scope="col">Responsable</th>
+            </tr>
+          </thead>
+          <tbody>
+      ';
 
-        $contador = 1;
-        $sql2 = R10Q_Lote_Analitico($IdArticulo);
-        $result2 = sqlsrv_query($conn,$sql2);
+      $contador = 1;
+      $sql2 = R10Q_Lote_Analitico($IdArticulo);
+      $result2 = sqlsrv_query($conn,$sql2);
 
-        while($row2 = sqlsrv_fetch_array($result2,SQLSRV_FETCH_ASSOC)) {
+      while($row2 = sqlsrv_fetch_array($result2,SQLSRV_FETCH_ASSOC)) {
+        $FechaVariable = $row2["FechaLote"]->format("Y-m-d");
+        $PrecioBruto = $row2["M_PrecioCompraBruto"];
 
-            $FechaVariable = $row2["FechaLote"]->format("Y-m-d");
-            $PrecioBruto = $row2["M_PrecioCompraBruto"];
+        echo '<tr>';
 
-            echo '<tr>';
-                if($row2["InvCausaId"] == 1) {//VALIDACION PARA CASO DE COMPRA
+        if($row2["InvCausaId"] == 1) {//VALIDACION PARA CASO DE COMPRA
+          echo '
+            <td align="center"><strong>'.intval($contador).'</strong></td>
+            <td align="center">Compra</td>
+          ';
 
-                    echo '
-                        <td align="center"><strong>'.intval($contador).'</strong></td>
-                        <td align="center">Compra</td>
-                    ';
+          $sql3 = R10Q_Proveedor_Cantidad_Comprada($IdArticulo,$FechaVariable);
+          $result3 = sqlsrv_query($conn,$sql3);
+          $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
 
-                    $sql3 = R10Q_Proveedor_Cantidad_Comprada($IdArticulo,$FechaVariable);
-                    $result3 = sqlsrv_query($conn,$sql3);
-                    $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
+          echo '
+            <td align="center">'.utf8_encode(addslashes($row3["Nombre"])).'</td>
+            <td align="center">'.$row2["FechaLote"]->format("d-m-Y").'</td>
+            <td align="center">'.intval($row3["CantidadRecibidaFactura"]).'</td>
+          ';
+        }
+        else {
+          echo '
+            <td align="center"><strong>'.intval($contador).'</strong></td>
+            <td align="center">Inventario</td>
+            <td align="center">'.utf8_encode(addslashes($row2["Descripcion"])).'</td>
+            <td align="center">'.$row2["FechaLote"]->format("d-m-Y").'</td>
+          ';
 
-                    echo '
-                        <td align="center">'.utf8_encode(addslashes($row3["Nombre"])).'</td>
-                        <td align="center">'.$row2["FechaLote"]->format("d-m-Y").'</td>
-                        <td align="center">'.intval($row3["CantidadRecibidaFactura"]).'</td>
-                    ';
-                }
-                else {
+          $sql3 = R10Q_Proveedor_Cantidad_Comprada($IdArticulo,$FechaVariable);
+          $result3 = sqlsrv_query($conn,$sql3);
+          $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
 
-                    echo '
-                        <td align="center"><strong>'.intval($contador).'</strong></td>
-                        <td align="center">Inventario</td>
-                        <td align="center">'.utf8_encode(addslashes($row2["Descripcion"])).'</td>
-                        <td align="center">'.$row2["FechaLote"]->format("d-m-Y").'</td>
-                    ';
-
-                    $sql3 = R10Q_Proveedor_Cantidad_Comprada($IdArticulo,$FechaVariable);
-                    $result3 = sqlsrv_query($conn,$sql3);
-                    $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
-
-                    echo '<td align="center">'.intval($row3["CantidadRecibidaFactura"]).'</td>';
-                }
-
-                echo '
-                    <td align="center">'.$row2["CodigoAlmacen"].'</td>
-                    <td align="center">'.$row2["Existencia"].'</td>
-                    <td align="center">'.number_format($PrecioBruto,2,"," ,"." ).'</td>
-                ';
-
-                $TasaVariable = TasaFecha($FechaVariable);
-
-                if($TasaVariable != 0) {
-
-                    $CostoDivisa = $PrecioBruto / $TasaVariable;
-
-                    echo '
-                        <td align="center">'.$TasaVariable.'</td>
-                        <td align="center">'.number_format($CostoDivisa,2,"," ,"." ).'</td>
-                    ';
-                }
-                else {
-                    echo '
-                        <td align="center">0,00</td>
-                        <td align="center">0,00</td>
-                    ';
-                }
-
-                echo '
-                    <td align="center">'.$row2["Responsable"].'</td>
-                </tr>
-            ';
-        $contador++;
+          echo '<td align="center">'.intval($row3["CantidadRecibidaFactura"]).'</td>';
         }
 
         echo '
-            </tbody>
-        </table>';
+          <td align="center">'.$row2["CodigoAlmacen"].'</td>
+          <td align="center">'.$row2["Existencia"].'</td>
+          <td align="center">'.number_format($PrecioBruto,2,"," ,"." ).'</td>
+        ';
 
-        mysqli_close($connCPharma);
-        sqlsrv_close($conn);
+        $TasaVariable = TasaFecha($FechaVariable);
+
+        if($TasaVariable != 0) {
+          $CostoDivisa = $PrecioBruto / $TasaVariable;
+
+          echo '
+            <td align="center">'.$TasaVariable.'</td>
+            <td align="center">'.number_format($CostoDivisa,2,"," ,"." ).'</td>
+          ';
+        }
+        else {
+          echo '
+            <td align="center">0,00</td>
+            <td align="center">0,00</td>
+          ';
+        }
+
+        echo '
+            <td align="center">'.$row2["Responsable"].'</td>
+          </tr>
+        ';
+        
+        $contador++;
+      }
+
+      echo '
+          </tbody>
+        </table>
+      ';
+
+      mysqli_close($connCPharma);
+      sqlsrv_close($conn);
     }
 
     /*
