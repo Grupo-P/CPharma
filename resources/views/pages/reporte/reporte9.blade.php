@@ -38,20 +38,17 @@
     include(app_path().'\functions\querys_mysql.php');
     include(app_path().'\functions\querys_sqlserver.php');
 
+    if(isset($_GET['SEDE'])) {
+      echo '
+        <h1 class="h5 text-success" align="left">
+          <i class="fas fa-prescription"></i> '.FG_Nombre_Sede($_GET['SEDE'])
+        .'</h1>
+      ';
+    }
+    echo '<hr class="row align-items-start col-12">';
+
     if(isset($_GET['fechaInicio'])) {
-
       $InicioCarga = new DateTime("now");
-
-      if(isset($_GET['SEDE'])) {
-
-        echo '
-          <h1 class="h5 text-success" align="left">
-            <i class="fas fa-prescription"></i> '.FG_Nombre_Sede($_GET['SEDE'])
-          .'</h1>
-        ';
-      }
-
-      echo '<hr class="row align-items-start col-12">';
 
       R9_Productos_Surtir($_GET['SEDE'], $_GET['fechaInicio'], $_GET['fechaFin']);
       FG_Guardar_Auditoria('CONSULTAR', 'REPORTE', 'Productos para surtir');
@@ -61,18 +58,6 @@
       echo'Tiempo de carga: '.$IntervalCarga->format("%Y-%M-%D %H:%I:%S");
     }
     else {
-
-      if(isset($_GET['SEDE'])) {
-
-        echo '
-          <h1 class="h5 text-success" align="left">
-            <i class="fas fa-prescription"></i> '.FG_Nombre_Sede($_GET['SEDE'])
-          .'</h1>
-        ';
-      }
-
-      echo '<hr class="row align-items-start col-12">';
-
       echo '
         <form autocomplete="off" action="" target="_blank">
           <table style="width:100%;">
