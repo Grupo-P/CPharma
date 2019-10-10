@@ -56,36 +56,38 @@
 	<hr class="row align-items-start col-12">
 	
 	<?php
-		include(app_path().'\functions\config.php');
+    include(app_path().'\functions\config.php');
     include(app_path().'\functions\functions.php');
     include(app_path().'\functions\querys_mysql.php');
     include(app_path().'\functions\querys_sqlserver.php');
 
-		$ArtJson="";
+    $ArtJson="";
+    $CodJson = "";
 
-        //-------------- BORRAR --------------//
-        $_GET['SEDE'] = 'FTN';
-        //-------------- BORRAR --------------//
-        
-		if(isset($_GET['Id'])) {
-			$InicioCarga = new DateTime("now");
+    //-------------- BORRAR --------------//
+    $_GET['SEDE'] = 'FTN';
+    //-------------- BORRAR --------------//
 
-			if(isset($_GET['SEDE'])) {
-				echo '
-                    <h1 class="h5 text-success" align="left">
-                        <i class="fas fa-prescription"></i> '
-                        .NombreSede($_GET['SEDE'])
-                    .'</h1>
-                ';
-			}
-			echo '<hr class="row align-items-start col-12">';
+    if(isset($_GET['Id'])) {
 
-			R10_Analitico_Precios($_GET['SEDE'],$_GET['Id']);
-			GuardarAuditoria('CONSULTAR','REPORTE','Analitico de precios');
+      $InicioCarga = new DateTime("now");
 
-			$FinCarga = new DateTime("now");
-			$IntervalCarga = $InicioCarga->diff($FinCarga);
-			echo'Tiempo de carga: '.$IntervalCarga->format("%Y-%M-%D %H:%I:%S");
+      if(isset($_GET['SEDE'])) {
+        echo '
+          <h1 class="h5 text-success" align="left">
+            <i class="fas fa-prescription"></i> '.FG_Nombre_Sede($_GET['SEDE'])
+          .'</h1>
+        ';
+      }
+
+      echo '<hr class="row align-items-start col-12">';
+
+      R10_Analitico_Precios($_GET['SEDE'],$_GET['Id']);
+      FG_Guardar_Auditoria('CONSULTAR','REPORTE','Analitico de precios');
+
+      $FinCarga = new DateTime("now");
+      $IntervalCarga = $InicioCarga->diff($FinCarga);
+      echo'Tiempo de carga: '.$IntervalCarga->format("%Y-%M-%D %H:%I:%S");
 		}
 		else {
 			$InicioCarga = new DateTime("now");
@@ -94,7 +96,7 @@
 				echo '
                     <h1 class="h5 text-success" align="left">
                         <i class="fas fa-prescription"></i> '
-                        .NombreSede($_GET['SEDE'])
+                        .FG_Nombre_Sede($_GET['SEDE'])
                     .'</h1>
                 ';
 			}
