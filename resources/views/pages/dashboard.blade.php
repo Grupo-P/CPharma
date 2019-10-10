@@ -18,6 +18,7 @@
 		$tasaVenta = $tasaVenta->format("d-m-Y h:i:s a");
 
 		$FHoy = date("Y-m-d");
+		$FAyer = date("Y-m-d",strtotime($FHoy."-1 days"));
 
 		$auditor =  
 		DB::table('auditorias')
@@ -25,7 +26,7 @@
 		->groupBy('registro')
 		->orderBy(DB::raw('count(*)'),'desc')
 		->where('tabla','reporte')
-		->where('updated_at', '>',$FHoy)
+		->where('updated_at', '>',$FAyer)
    	->take(1)->get();
     $auditor = $auditor[0];
     $auditorias = $auditor->registro;
@@ -35,7 +36,7 @@
 		->select('user')
 		->groupBy('user')
 		->orderBy(DB::raw('count(*)'),'desc')
-		->where('updated_at', '>',$FHoy)
+		->where('updated_at', '>',$FAyer)
    	->take(1)->get();
     $auditor = $auditor[0];
     $usuarioAct = $auditor->user;
