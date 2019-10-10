@@ -5,10 +5,6 @@
 @endsection
 
 @section('scriptsHead')
-  <script type="text/javascript" src="{{ asset('assets/js/sortTable.js') }}"></script>
-  <script type="text/javascript" src="{{ asset('assets/js/filter.js') }}"></script>
-  <script type="text/javascript" src="{{ asset('assets/js/functions.js') }}"></script>
-
   <style>
     * {box-sizing:border-box;}
 
@@ -49,16 +45,6 @@
 
     /*when navigating through the items using the arrow keys:*/
     .autocomplete-active {background-color:DodgerBlue !important; color:#fff;}
-
-    .barrido{
-      text-decoration: none;
-      transition: width 1s, height 1s, transform 1s;
-    }
-    .barrido:hover{
-      text-decoration: none;
-      transition: width 1s, height 1s, transform 1s;
-      transform: translate(20px,0px);
-    }
   </style>
 @endsection
 
