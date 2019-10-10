@@ -17,24 +17,28 @@
 		$tasaVenta = new DateTime($tasaVenta);
 		$tasaVenta = $tasaVenta->format("d-m-Y h:i:s a");
 
-		$auditor =  
-			DB::table('auditorias')
-			->select('registro')
- 			->groupBy('registro')
- 			->orderBy(DB::raw('count(*)'),'desc')
- 			->where('tabla','reporte')
-         	->take(1)->get();
-        $auditor = $auditor[0];
-        $auditorias = $auditor->registro;
+		$FHoy = date("Y-m-d");
 
-        $auditor =  
-			DB::table('auditorias')
-			->select('user')
- 			->groupBy('user')
- 			->orderBy(DB::raw('count(*)'),'desc')
-         	->take(1)->get();
-        $auditor = $auditor[0];
-        $usuarioAct = $auditor->user;
+		$auditor =  
+		DB::table('auditorias')
+		->select('registro')
+		->groupBy('registro')
+		->orderBy(DB::raw('count(*)'),'desc')
+		->where('tabla','reporte')
+		->where('updated_at', '>',$FHoy)
+   	->take(1)->get();
+    $auditor = $auditor[0];
+    $auditorias = $auditor->registro;
+
+    $auditor =  
+		DB::table('auditorias')
+		->select('user')
+		->groupBy('user')
+		->orderBy(DB::raw('count(*)'),'desc')
+		->where('updated_at', '>',$FHoy)
+   	->take(1)->get();
+    $auditor = $auditor[0];
+    $usuarioAct = $auditor->user;
 	?>
 
 	<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
