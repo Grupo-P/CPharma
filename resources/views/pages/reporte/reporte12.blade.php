@@ -207,12 +207,9 @@
     ";
     return $sql;
   }
+  /**********************************************************************************/
   /*
     TITULO: R12_Detalle_Movimientos
-    PARAMETROS: [$SedeConnection] sede donde se hara la conexion
-          [$FInicial] Fecha inicial del rango a buscar
-          [$FFinal] Fecha final del rango a buscar
-          [$IdArticulo] ide del articulo
     FUNCION: arma la lista del troquel segun el articulo
     RETORNO: no aplica
     AUTOR: Ing. Manuel Henriquez
@@ -339,15 +336,15 @@
         <tbody>
     ';
 
-    $sql5 = R12Q_Resumen_Movimiento($IdArticulo,$FInicial,$FFinal);
-    $result2 = sqlsrv_query($conn,$sql5);
+    $sql3 = R12Q_Resumen_Movimiento($IdArticulo,$FInicial,$FFinal);
+    $result2 = sqlsrv_query($conn,$sql3);
 
     $contador = 1;
     $FechaComparativa = date('d/m/Y',strtotime($FFinal));
 
     while($row2 = sqlsrv_fetch_array($result2,SQLSRV_FETCH_ASSOC)) {
 
-      if($FechaComparativa == $row2["FechaMovimiento"]) {
+      if($row2["FechaMovimiento"] >= $FechaComparativa) {
         continue;
       }
 
@@ -387,8 +384,8 @@
     ';
 
     $contador = 1;
-    $sql6 = R12Q_Detalle_Movimiento($IdArticulo,$FInicial,$FFinal);
-    $result3 = sqlsrv_query($conn,$sql6);
+    $sql4 = R12Q_Detalle_Movimiento($IdArticulo,$FInicial,$FFinal);
+    $result3 = sqlsrv_query($conn,$sql4);
 
     while($row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC)) {
 
@@ -421,10 +418,9 @@
 
     sqlsrv_close($conn);
   }
-
+  /**********************************************************************************/
   /*
     TITULO: R12Q_Detalle_Articulo
-    PARAMETROS: [$IdArticulo] $IdArticulo del articulo a buscar
     FUNCION: Query que genera el detalle del articulo solicitado
     RETORNO: Detalle del articulo
     AUTOR: Ing. Manuel Henriquez
@@ -577,6 +573,28 @@
   }
 
   /*
+    TITULO: R12Q_Resumen_Movimiento
+    FUNCION: Construir la consulta para el despliegue el resumen del reporte
+    RETORNO: Un String con las instrucciones de la consulta
+    AUTOR: Ing. Manuel Henriquez
+   */
+  function R12Q_Resumen_Movimiento($IdArticulo,$FInicial,$FFinal) {
+    $sql = "
+      SELECT 
+        CONVERT(VARCHAR(10), InvMovimiento.FechaMovimiento, 103) AS FechaMovimiento,
+        InvCausa.Descripcion AS Movimiento,
+        ROUND(CAST(SUM(InvMovimiento.Cantidad) AS DECIMAL(38,0)),2,0) AS Cantidad
+      FROM InvMovimiento
+      INNER JOIN InvCausa ON InvMovimiento.InvCausaId=InvCausa.Id
+      WHERE InvMovimiento.InvArticuloId='$IdArticulo'
+      AND (CONVERT(DATE,InvMovimiento.FechaMovimiento) >= '$FInicial' AND CONVERT(DATE,InvMovimiento.FechaMovimiento) <= '$FFinal')
+      GROUP BY CONVERT(VARCHAR(10), InvMovimiento.FechaMovimiento, 103), InvCausa.Descripcion
+      ORDER BY FechaMovimiento ASC
+    ";
+    return $sql;
+  }
+
+  /*
     TITULO: R12Q_Detalle_Movimiento
     PARAMETROS: [$IdArticulo] Id del articulo actual
                 [$FInicial] Fecha inicial del rango
@@ -599,31 +617,6 @@
       AND (CONVERT(DATE,InvMovimiento.FechaMovimiento) >= '$FInicial' AND CONVERT(DATE,InvMovimiento.FechaMovimiento) <= '$FFinal')
       GROUP BY InvMovimiento.InvLoteId,InvMovimiento.FechaMovimiento,InvMovimiento.InvCausaId,InvCausa.Descripcion,InvMovimiento.Cantidad
       ORDER BY InvMovimiento.FechaMovimiento ASC
-    ";
-    return $sql;
-  }
-
-  /*
-    TITULO: R12Q_Resumen_Movimiento
-    PARAMETROS: [$IdArticulo] Id del articulo actual
-                [$FInicial] Fecha inicial del rango
-                [$FFinal] Fecha final del rango
-    FUNCION: Construir la consulta para el despliegue el resumen del reporte
-    RETORNO: Un String con las instrucciones de la consulta
-    AUTOR: Ing. Manuel Henriquez
-   */
-  function R12Q_Resumen_Movimiento($IdArticulo,$FInicial,$FFinal) {
-    $sql = "
-      SELECT 
-        CONVERT(VARCHAR(10), InvMovimiento.FechaMovimiento, 103) AS FechaMovimiento,
-        InvCausa.Descripcion AS Movimiento,
-        ROUND(CAST(SUM(InvMovimiento.Cantidad) AS DECIMAL(38,0)),2,0) AS Cantidad
-      FROM InvMovimiento
-      INNER JOIN InvCausa ON InvMovimiento.InvCausaId=InvCausa.Id
-      WHERE InvMovimiento.InvArticuloId='$IdArticulo'
-      AND (CONVERT(DATE,InvMovimiento.FechaMovimiento) >= '$FInicial' AND CONVERT(DATE,InvMovimiento.FechaMovimiento) <= '$FFinal')
-      GROUP BY CONVERT(VARCHAR(10), InvMovimiento.FechaMovimiento, 103), InvCausa.Descripcion
-      ORDER BY FechaMovimiento ASC
     ";
     return $sql;
   }
