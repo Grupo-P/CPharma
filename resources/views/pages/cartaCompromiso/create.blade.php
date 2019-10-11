@@ -195,8 +195,8 @@
       $InicioCarga = new DateTime("now");
 
       if($_GET['fecha_vencimiento'] == '') {
-        $diferencia1_numero = ValidarFechas($_GET['fecha_recepcion'],$_GET['fecha_tope']);
-        $diferencia4_numero = ValidarFechas($_GET['fecha_documento'],$_GET['fecha_recepcion']);
+        $diferencia1_numero = FG_Validar_Fechas($_GET['fecha_recepcion'],$_GET['fecha_tope']);
+        $diferencia4_numero = FG_Validar_Fechas($_GET['fecha_documento'],$_GET['fecha_recepcion']);
 
         if(($diferencia1_numero > 0) && ($diferencia4_numero >= 0)) {
         ?>
@@ -237,14 +237,14 @@
             <?php
           }
 
-          CartaDeCompromiso($_GET['SEDE'],$_GET['IdProv'],$_GET['proveedor'],$_GET['IdFact'],$_GET['IdArt']);
+          R11_Carta_Compromiso($_GET['SEDE'],$_GET['IdProv'],$_GET['proveedor'],$_GET['IdFact'],$_GET['IdArt']);
         }
       }
       else {
-        $diferencia1_numero = ValidarFechas($_GET['fecha_recepcion'],$_GET['fecha_tope']);
-        $diferencia2_numero = ValidarFechas($_GET['fecha_vencimiento'],$_GET['fecha_tope']);
-        $diferencia3_numero = ValidarFechas($_GET['fecha_recepcion'],$_GET['fecha_vencimiento']);
-        $diferencia4_numero = ValidarFechas($_GET['fecha_documento'],$_GET['fecha_recepcion']);
+        $diferencia1_numero = FG_Validar_Fechas($_GET['fecha_recepcion'],$_GET['fecha_tope']);
+        $diferencia2_numero = FG_Validar_Fechas($_GET['fecha_vencimiento'],$_GET['fecha_tope']);
+        $diferencia3_numero = FG_Validar_Fechas($_GET['fecha_recepcion'],$_GET['fecha_vencimiento']);
+        $diferencia4_numero = FG_Validar_Fechas($_GET['fecha_documento'],$_GET['fecha_recepcion']);
 
         if(($diferencia1_numero > 0) 
           && ($diferencia2_numero <= 0) 
@@ -303,7 +303,7 @@
             <?php
           }
 
-          CartaDeCompromiso($_GET['SEDE'],$_GET['IdProv'],$_GET['proveedor'],$_GET['IdFact'],$_GET['IdArt']);
+          R11_Carta_Compromiso($_GET['SEDE'],$_GET['IdProv'],$_GET['proveedor'],$_GET['IdFact'],$_GET['IdArt']);
         }
       }
 
