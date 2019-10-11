@@ -19,27 +19,6 @@
 
 		$FHoy = date("Y-m-d");
 		$FAyer = date("Y-m-d",strtotime($FHoy."-1 days"));
-
-		$auditor =  
-		DB::table('auditorias')
-		->select('registro')
-		->groupBy('registro')
-		->orderBy(DB::raw('count(*)'),'desc')
-		->where('tabla','reporte')
-		->where('updated_at', '>',$FAyer)
-   	->take(1)->get();
-    $auditor = $auditor[0];
-    $auditorias = $auditor->registro;
-
-    $auditor =  
-		DB::table('auditorias')
-		->select('user')
-		->groupBy('user')
-		->orderBy(DB::raw('count(*)'),'desc')
-		->where('updated_at', '>',$FAyer)
-   	->take(1)->get();
-    $auditor = $auditor[0];
-    $usuarioAct = $auditor->user;
 	?>
 
 	<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -78,35 +57,64 @@
 
 	<hr class="row align-items-start col-12"> 
 
-	<div class="card-deck">
-		<div class="card CP-border-golden mb-3" style="width: 14rem;">	  	
-	  		<div class="card-body text-left CP-bg-golden">
-	    		<h4>
-		    		<span class="card-text text-white">
-		    			<i class="fas fa-star CP-Latir"></i>
-		    			<?php
-							echo ''.$auditorias;
-						?>						
-		    		</span>
-	    		</h4>
+<?php
+	$auditor = 
+	DB::table('auditorias')
+	->select('registro')
+	->groupBy('registro')
+	->orderBy(DB::raw('count(*)'),'desc')
+	->where('tabla','reporte')
+	->where('updated_at', '>',$FAyer)
+ 	->take(1)->get();
+
+ 	if(!empty($auditor[0])){
+ 		$auditor = $auditor[0];
+  	$auditorias = $auditor->registro;
+
+  	echo'
+			<div class="card-deck">
+				<div class="card CP-border-golden mb-3" style="width: 14rem;">	  	
+	  			<div class="card-body text-left CP-bg-golden">
+		    		<h4>
+			    		<span class="card-text text-white">
+			    			<i class="fas fa-star CP-Latir"></i>
+			    			'.$auditorias.'			
+			    		</span>
+		    		</h4>
 	    		<p class="card-text text-white">Reporte mas usado</p>
 	  		</div>	
-		</div>
+			</div>
+  	';
+ 	}
 
-		<div class="card CP-border-golden mb-3" style="width: 14rem;">	  	
-	  		<div class="card-body text-left CP-bg-golden">
-	    		<h4>
-		    		<span class="card-text text-white">
-		    			<i class="fas fa-star CP-Latir"></i>
-		    			<?php
-							echo ''.$usuarioAct;
-						?>						
-		    		</span>
-	    		</h4>
-	    		<p class="card-text text-white">Usuario mas activo</p>
-	  		</div>	
+  $auditor =  
+	DB::table('auditorias')
+	->select('user')
+	->groupBy('user')
+	->orderBy(DB::raw('count(*)'),'desc')
+	->where('updated_at', '>',$FAyer)
+ 	->take(1)->get();
+
+ 	if(!empty($auditor[0])){
+ 		$auditor = $auditor[0];
+  	$usuarioAct = $auditor->user;
+
+  	echo'
+			<div class="card CP-border-golden mb-3" style="width: 14rem;">	  	
+		  		<div class="card-body text-left CP-bg-golden">
+		    		<h4>
+			    		<span class="card-text text-white">
+			    			<i class="fas fa-star CP-Latir"></i>
+			    			'.$usuarioAct.'	
+			    		</span>
+		    		</h4>
+		    		<p class="card-text text-white">Usuario mas activo</p>
+		  		</div>	
+			</div>
 		</div>
-	</div>
+  	';
+  }
+?>
 
 	<div class="card-deck">
 		<!-- Empresas -->
