@@ -327,7 +327,7 @@
               Se pasa a la seleccion del articulo*/
       $InicioCarga = new DateTime("now");
 
-      ReporteFacturaArticulo($_GET['SEDE'],$_GET['IdProv'],$_GET['NombreProv'],$_GET['IdFact']);
+      R11_Factura_Articulo($_GET['SEDE'],$_GET['IdProv'],$_GET['NombreProv'],$_GET['IdFact']);
 
       $FinCarga = new DateTime("now");
       $IntervalCarga = $InicioCarga->diff($FinCarga);
@@ -493,7 +493,7 @@
     TITULO: R11Q_Factura_Proveedor_Toquel
     FUNCION: Buscar la lista de facturas donde interviene el proveedor
     RETORNO: lista de facturas
-    DESAROLLADO POR: SERGIO COVA
+    DESAROLLADO POR: MANUEL HENRIQUEZ
   */
   function R11Q_Factura_Proveedor_Toquel($IdProveedor) {
     $sql = "
@@ -505,6 +505,140 @@
       FROM ComFactura
       WHERE ComFactura.ComProveedorId = '$IdProveedor'
       ORDER BY FacturaId ASC
+    ";
+    return $sql;
+  }
+
+  /**********************************************************************************/
+  /*
+    TITULO: R11_Factura_Articulo
+    FUNCION: arma la lista de articulos por factura
+    RETORNO: no aplica
+    DESAROLLADO POR: MANUEL HENRIQUEZ
+  */
+  function R11_Factura_Articulo($SedeConnection,$IdProveedor,$NombreProveedor,$IdFatura){
+    $conn = FG_Conectar_Smartpharma($SedeConnection);
+    $sql1 = R11Q_Factura_Articulo($IdFatura);
+    $result = sqlsrv_query($conn,$sql1);
+
+    $sqlNFact = R11Q_Numero_Factura($IdFatura);
+    $resultNFact = sqlsrv_query($conn,$sqlNFact);
+    $rowNFact = sqlsrv_fetch_array($resultNFact,SQLSRV_FETCH_ASSOC);
+    $NumeroFactura = $rowNFact["NumeroFactura"];
+
+    echo '
+      <div class="input-group md-form form-sm form-1 pl-0">
+        <div class="input-group-prepend">
+          <span class="input-group-text purple lighten-3" id="basic-text1">
+            <i class="fas fa-search text-white" aria-hidden="true"></i>
+          </span>
+        </div>
+        <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterAllTable()">
+      </div>
+      <br/>
+    ';
+
+    echo '
+      <table class="table table-striped table-bordered col-12 sortable">
+        <thead class="thead-dark">
+          <tr>
+            <th scope="col">Numero de Factura</th>
+            <th scope="col">Proveedor</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>'.$NumeroFactura.'</td>
+            <td>'.FG_Limpiar_Texto($NombreProveedor).'</td>
+          </tr>
+        </tbody>
+      </table>
+    ';
+
+    echo'
+      <table class="table table-striped table-bordered col-12 sortable" id="myTable">
+        <thead class="thead-dark">
+          <tr>
+            <th scope="col" class="CP-sticky">#</th>
+            <th scope="col" class="CP-sticky">Codigo</th>
+            <th scope="col" class="CP-sticky">Descripcion</th>
+            <th scope="col" class="CP-sticky">Seleccion</th>
+          </tr>
+        </thead>
+        <tbody>
+    ';
+
+    $contador = 1;
+
+    while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
+      echo '
+        <tr>
+          <td align="center"><strong>'.intval($contador).'</strong></td>
+          <td align="center">'.$row["CodigoArticulo"].'</td>
+          <td align="center">'.FG_Limpiar_Texto($row["Descripcion"]).'</td>
+          <td align="center">
+            <form autocomplete="off" action="">
+              <input id="SEDE" name="SEDE" type="hidden" value="';
+                print_r($SedeConnection);
+                echo'">
+              <input type="submit" value="Selecionar" class="btn btn-outline-success">
+              <input id="IdArt" name="IdArt" type="hidden" value="'.$row["Id"].'">
+              <input id="IdFact" name="IdFact" type="hidden" value="'.$IdFatura.'">
+              <input id="IdProv" name="IdProv" type="hidden" value="'.$IdProveedor.'">
+              <input id="NombreProv" name="NombreProv" type="hidden" value="'
+                .FG_Limpiar_Texto($NombreProveedor)
+              .'">
+            </form>
+            <br>
+          </td>
+        </tr>
+      ';
+      $contador++;
+    }
+
+    echo '
+        </tbody>
+      </table>
+    ';
+    
+    sqlsrv_close($conn);
+  }
+
+  /**********************************************************************************/
+  /*
+    TITULO: R11Q_Factura_Articulo
+    FUNCION: busca los articulos que intervienen en una factura
+    RETORNO: lista de articulos
+    DESAROLLADO POR: MANUEL HENRIQUEZ
+  */
+  function R11Q_Factura_Articulo($IdFatura) {
+    $sql = "
+      SELECT
+      ComFacturaDetalle.ComFacturaId AS FacturaId,
+      InvArticulo.Id,
+      InvArticulo.CodigoArticulo,
+      InvArticulo.Descripcion,
+      InvArticulo.FinConceptoImptoIdCompra AS ConceptoImpuesto
+      FROM ComFacturaDetalle
+      INNER JOIN InvArticulo ON InvArticulo.Id = ComFacturaDetalle.InvArticuloId
+      WHERE ComFacturaDetalle.ComFacturaId = '$IdFatura'
+      ORDER BY FacturaId,InvArticulo.Id ASC
+    ";
+    return $sql;
+  }
+
+  /**********************************************************************************/
+  /*
+    TITULO: R11Q_Numero_Factura
+    FUNCION:
+    RETORNO:
+    DESAROLLADO POR: MANUEL HENRIQUEZ
+  */
+  function R11Q_Numero_Factura($IdFactura) {
+    $sql = "
+      SELECT ComFactura.NumeroFactura AS NumeroFactura
+      FROM ComFactura 
+      WHERE ComFactura.Id = '$IdFactura'
     ";
     return $sql;
   }
