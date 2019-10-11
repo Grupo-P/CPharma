@@ -887,20 +887,22 @@
         <input id="IdFact" name="IdFact" type="hidden" value="'.$IdFatura.'">
         <input id="IdArt" name="IdArt" type="hidden" value="'.$IdArticulo.'">
         <input id="fecha_documento" name="fecha_documento" type="hidden" value="'.$FechaDocumento->format('Y-m-d').'">
-        <input id="fecha_recepcion" name="fecha_recepcion" type="hidden" value="'.$FechaRecepcion->format('Y-m-d').'">';
+        <input id="fecha_recepcion" name="fecha_recepcion" type="hidden" value="'.$FechaRecepcion->format('Y-m-d').'">
+    ';
 
-          if(!is_null($FechaVencimiento)) {
-            echo '
-            <input id="fecha_vencimiento" name="fecha_vencimiento" type="hidden" value="'.$FechaVencimiento->format('Y-m-d').'">';
-          }
-          else {
-            echo '
-            <input id="fecha_vencimiento" name="fecha_vencimiento" type="hidden" value="'.$FechaVencimiento.'">';
-          }
-          echo '
-        <input type="submit" value="Guardar" class="btn btn-outline-success">
-      </div>
-    </form>';
+    if(!is_null($FechaVencimiento)) {
+      echo '
+        <input id="fecha_vencimiento" name="fecha_vencimiento" type="hidden" value="'.$FechaVencimiento->format('Y-m-d').'">';
+    }
+    else {
+      echo '
+        <input id="fecha_vencimiento" name="fecha_vencimiento" type="hidden" value="'.$FechaVencimiento.'">';
+    }
+    echo '
+          <input type="submit" value="Guardar" class="btn btn-outline-success">
+        </div>
+      </form>
+    ';
 
     sqlsrv_close($conn);
   }
