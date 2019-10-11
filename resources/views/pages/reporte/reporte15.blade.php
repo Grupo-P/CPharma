@@ -5,17 +5,9 @@
 @endsection
 
 @section('scriptsHead')
-  <script type="text/javascript" src="{{ asset('assets/js/sortTable.js') }}">
-  </script>
-  <script type="text/javascript" src="{{ asset('assets/js/filter.js') }}">  
-  </script>
-  <script type="text/javascript" src="{{ asset('assets/js/functions.js') }}"> 
-  </script>
-
   <style>
     * {box-sizing:border-box;}
 
-    /*the container must be positioned relative:*/
     .autocomplete {position:relative; display:inline-block;}
 
     input {
@@ -34,7 +26,6 @@
       border-bottom:none;
       border-top:none;
       z-index:99;
-      /*position the autocomplete items to be the same width as the container:*/
       top:100%;
       left:0;
       right:0;
@@ -47,22 +38,8 @@
       border-bottom:1px solid #d4d4d4; 
     }
 
-    /*when hovering an item:*/
     .autocomplete-items div:hover {background-color:#e9e9e9;}
-
-    /*when navigating through the items using the arrow keys:*/
     .autocomplete-active {background-color:DodgerBlue !important; color:#fff;}
-
-    .barrido{
-      text-decoration: none;
-      transition: width 1s, height 1s, transform 1s;
-    }
-
-    .barrido:hover{
-      text-decoration: none;
-      transition: width 1s, height 1s, transform 1s;
-      transform: translate(20px,0px);
-    }
   </style>
 @endsection
 
@@ -75,61 +52,53 @@
 
   <?php
     include(app_path().'\functions\config.php');
-    include(app_path().'\functions\querys.php');
-    include(app_path().'\functions\funciones.php');
+    include(app_path().'\functions\functions.php');
+    include(app_path().'\functions\querys_mysql.php');
+    include(app_path().'\functions\querys_sqlserver.php');
+
+    if(isset($_GET['SEDE'])) {
+      echo '
+        <h1 class="h5 text-success"  align="left">
+          <i class="fas fa-prescription"></i> '.FG_Nombre_Sede($_GET['SEDE']).
+        '</h1>
+      ';
+    }
+    echo '<hr class="row align-items-start col-12">';
 
     if(isset($_GET['fechaInicio'])) {
       $InicioCarga = new DateTime("now");
 
-      if(isset($_GET['SEDE'])) {
-        echo '
-          <h1 class="h5 text-success"  align="left">
-            <i class="fas fa-prescription"></i> '.NombreSede($_GET['SEDE']).
-          '</h1>
-        ';
-      }
-      echo '<hr class="row align-items-start col-12">';
-
       R15_Articulos_Devaluados($_GET['SEDE'],$_GET['fechaInicio']);
-      GuardarAuditoria('CONSULTAR','REPORTE','Articulos Devaluados');
+      FG_Guardar_Auditoria('CONSULTAR','REPORTE','Articulos Devaluados');
 
       $FinCarga = new DateTime("now");
       $IntervalCarga = $InicioCarga->diff($FinCarga);
       echo'Tiempo de carga: '.$IntervalCarga->format("%Y-%M-%D %H:%I:%S");
     }
     else {
-        if(isset($_GET['SEDE'])) {
-          echo '
-            <h1 class="h5 text-success"  align="left">
-              <i class="fas fa-prescription"></i> '.NombreSede($_GET['SEDE']).
-            '</h1>
-          ';
-        }
-        echo '<hr class="row align-items-start col-12">';
+      echo '
+        <form autocomplete="off" action="" target="_blank">
+          <table style="width:100%;">
+            <tr>
+              <td align="center">
+                <label for="fechaInicio">Fecha de inicio del reporte:</label>
+              </td>
 
-        echo '
-          <form autocomplete="off" action="" target="_blank">
-            <table style="width:100%;">
-              <tr>
-                <td align="center">
-                  <label for="fechaInicio">Fecha de inicio del reporte:</label>
-                </td>
+              <td>
+                <input id="fechaInicio" type="date" name="fechaInicio" required style="width:100%;">
+              </td>
 
-                <td>
-                  <input id="fechaInicio" type="date" name="fechaInicio" required style="width:100%;">
-                </td>
+              <input id="SEDE" name="SEDE" type="hidden" value="'; 
+                print_r($_GET['SEDE']); 
+              echo'">
 
-                <input id="SEDE" name="SEDE" type="hidden" value="'; 
-                  print_r($_GET['SEDE']); 
-                echo'">
-
-                <td align="right">
-                  <input type="submit" value="Buscar" class="btn btn-outline-success">
-                </td>
-              </tr>
-            </table>
-          </form>
-        ';
+              <td align="right">
+                <input type="submit" value="Buscar" class="btn btn-outline-success">
+              </td>
+            </tr>
+          </table>
+        </form>
+      ';
     }
   ?>
 @endsection
