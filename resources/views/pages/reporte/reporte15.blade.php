@@ -113,8 +113,8 @@
   */
   function R15_Articulos_Devaluados($SedeConnection,$FInicial) {
     
-    $conn = ConectarSmartpharma($SedeConnection);
-    $connCPharma = ConectarXampp();
+    $conn = FG_Conectar_Smartpharma($SedeConnection);
+    $connCPharma = FG_Conectar_CPharma();
     $Hoy = new DateTime('now');
     $Hoy = $Hoy->format('Y-m-d');
     $FInicialImpresion = date('d-m-Y',strtotime($FInicial));
@@ -163,31 +163,35 @@
     while($row2 = sqlsrv_fetch_array($result2,SQLSRV_FETCH_ASSOC)) {
 
       $IdArticulo = $row2["InvArticuloId"];
-      $Dolarizado = FG_Producto_Dolarizado($conn,$IdArticulo);
-
+      $Dolarizado = FG_Producto_Dolarizado($row2["Dolarizado"]);
+      
       if($Dolarizado == 'NO') {
-        
         $UltimoLote = $row2['FechaLote'];
 
         if(!is_null($UltimoLote)) {
           $UltimoLote = $UltimoLote->format('Y-m-d');
-          $Diferencia = ValidarFechas($FInicial,$UltimoLote);
+          $Diferencia = FG_Validar_Fechas($FInicial,$UltimoLote);
 
           if($Diferencia < 0) {
 
-            $IsIVA = $row2["ConceptoImpuesto"];
             $Existencia = $row2["Existencia"];
-            $Precio = FG_Calculo_Precio($conn,$IdArticulo,$IsIVA,$Existencia);
+            $TroquelAlmacen1 = $row2["TroquelAlmacen1"];
+            $PrecioCompraBruto = $row2["PrecioCompraBruto"];
+            $Utilidad = $row2["Utilidad"];
+            $IsIVA = $row2["ConceptoImpuesto"];
+            $TroquelAlmacen2 = $row2["TroquelAlmacen2"];
+
+            $Precio = FG_Calculo_Precio($Existencia,$TroquelAlmacen1,$PrecioCompraBruto,$Utilidad,$IsIVA,$TroquelAlmacen2);
             $ValorLote = $Precio * intval($Existencia);
 
             $Tasa = FG_Tasa_Fecha($connCPharma,$UltimoLote);
-            $Descripcion = utf8_encode($row2["Descripcion"]);
+            $Descripcion = FG_Limpiar_Texto($row2["Descripcion"]);
 
             echo '
               <tr>
                 <td align="center"><strong>'.intval($contador).'</strong></td>
                   <td align="center">'.$row2["CodigoArticulo"].'</td>
-                  <td align="left" class="barrido">
+                  <td align="left" class="CP-barrido">
                     <a href="/reporte10?Descrip='.$Descripcion.'&Id='.$IdArticulo.'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
                       .$Descripcion
                     .'</a>
@@ -216,19 +220,16 @@
               ';
             }
 
-            $sql6 = QG_UltimoProveedor($IdArticulo);
-            $result6 = sqlsrv_query($conn,$sql6);
-            $row6 = sqlsrv_fetch_array($result6,SQLSRV_FETCH_ASSOC);
-            $NombreProveedor = utf8_encode($row6["Nombre"]);
-            $IdProveedor = $row6["Id"];
+            $UltimoProveedorNombre = FG_Limpiar_Texto($row2["UltimoProveedorNombre"]);
+            $IdProveedor = $row2["Id"];
 
-            $TiempoTienda = ValidarFechas($UltimoLote,$Hoy);
+            $TiempoTienda = FG_Validar_Fechas($UltimoLote,$Hoy);
 
             echo '
                 <td align="center">'.$TiempoTienda.'</td>
-                <td align="left" class="barrido">
-                  <a href="/reporte7?Nombre='.$NombreProveedor.'&Id='.$IdProveedor.'&SEDE='.$SedeConnection.'" target="_blank" style="text-decoration: none; color: black;">'
-                    .$NombreProveedor
+                <td align="left" class="CP-barrido">
+                  <a href="/reporte7?Nombre='.$UltimoProveedorNombre.'&Id='.$IdProveedor.'&SEDE='.$SedeConnection.'" target="_blank" style="text-decoration: none; color: black;">'
+                    .$UltimoProveedorNombre
                   .'</a>
                 </td>
               </tr>
@@ -269,6 +270,56 @@
       InvArticulo.Id AS InvArticuloId,--Id del articulo
       InvArticulo.CodigoArticulo,--Codigo interno
 
+      --Dolarizado (0 NO es dolarizado, Id Articulo SI es dolarizado)
+      (ISNULL((SELECT
+      InvArticuloAtributo.InvArticuloId
+      FROM InvArticuloAtributo 
+      WHERE InvArticuloAtributo.InvAtributoId = 
+        (SELECT InvAtributo.Id
+        FROM InvAtributo 
+        WHERE 
+        InvAtributo.Descripcion = 'Dolarizados'
+        OR  InvAtributo.Descripcion = 'Giordany'
+        OR  InvAtributo.Descripcion = 'giordany') 
+      AND InvArticuloAtributo.InvArticuloId = InvArticulo.Id),CAST(0 AS INT))) AS Dolarizado,
+
+      --Utilidad (Utilidad del articulo, Utilidad es 1.00 NO considerar la utilidad para el calculo de precio)
+      ROUND(CAST(1-((ISNULL(ROUND(CAST((SELECT VenCondicionVenta.PorcentajeUtilidad
+          FROM VenCondicionVenta 
+          WHERE VenCondicionVenta.Id = (
+            SELECT VenCondicionVenta_VenCondicionVentaArticulo.Id
+            FROM VenCondicionVenta_VenCondicionVentaArticulo 
+            WHERE VenCondicionVenta_VenCondicionVentaArticulo.InvArticuloId = InvArticulo.Id)) AS DECIMAL(38,4)),2,0),CAST(0 AS INT)))/100)AS DECIMAL(38,2)),2,0) AS Utilidad,
+
+      --Precio Troquel Almacen 1
+      (ROUND(CAST((SELECT TOP 1
+      InvLote.M_PrecioTroquelado
+      FROM InvLoteAlmacen
+      INNER JOIN InvLote ON InvLote.Id = InvLoteAlmacen.InvLoteId
+      WHERE(InvLoteAlmacen.InvAlmacenId = '1')
+      AND (InvLoteAlmacen.InvArticuloId = InvArticulo.Id)
+      AND (InvLoteAlmacen.Existencia>0)
+      ORDER BY invlote.M_PrecioTroquelado DESC)AS DECIMAL(38,2)),2,0)) AS TroquelAlmacen1,
+
+      --Precio Compra Bruto
+      (ROUND(CAST((SELECT TOP 1
+      InvLote.M_PrecioCompraBruto
+      FROM InvLoteAlmacen
+      INNER JOIN InvLote ON InvLote.Id = InvLoteAlmacen.InvLoteId
+      WHERE (InvLoteAlmacen.InvArticuloId = InvArticulo.Id)
+      AND (InvLoteAlmacen.Existencia>0)
+      ORDER BY invlote.M_PrecioCompraBruto DESC)AS DECIMAL(38,2)),2,0)) AS PrecioCompraBruto,
+
+      --Precio Troquel Almacen 2
+      (ROUND(CAST((SELECT TOP 1
+      InvLote.M_PrecioTroquelado
+      FROM InvLoteAlmacen
+      INNER JOIN InvLote ON InvLote.Id = InvLoteAlmacen.InvLoteId
+      WHERE(InvLoteAlmacen.InvAlmacenId = '2')
+      AND (InvLoteAlmacen.InvArticuloId = InvArticulo.Id)
+      AND (InvLoteAlmacen.Existencia>0)
+      ORDER BY invlote.M_PrecioTroquelado DESC)AS DECIMAL(38,2)),2,0)) AS TroquelAlmacen2,
+
       CONVERT(DATE, 
       (SELECT TOP 1
       InvLote.Auditoria_FechaCreacion
@@ -285,7 +336,25 @@
       AND (InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)) AS Existencia,--Existencia
 
       InvArticulo.FinConceptoImptoIdCompra AS ConceptoImpuesto,
-      InvArticulo.Descripcion--Descripcion del articulo
+      InvArticulo.Descripcion,
+      -- Ultimo Proveedor (Id Proveedor)
+      (SELECT TOP 1
+      ComProveedor.Id
+      FROM ComFacturaDetalle
+      INNER JOIN ComFactura ON ComFactura.Id = ComFacturaDetalle.ComFacturaId
+      INNER JOIN ComProveedor ON ComProveedor.Id = ComFactura.ComProveedorId
+      INNER JOIN GenPersona ON GenPersona.Id = ComProveedor.GenPersonaId
+      WHERE ComFacturaDetalle.InvArticuloId = InvArticulo.Id
+      ORDER BY ComFactura.FechaDocumento DESC) AS  UltimoProveedorID,
+    -- Ultimo Proveedor (Nombre Proveedor)
+      (SELECT TOP 1
+      GenPersona.Nombre
+      FROM ComFacturaDetalle
+      INNER JOIN ComFactura ON ComFactura.Id = ComFacturaDetalle.ComFacturaId
+      INNER JOIN ComProveedor ON ComProveedor.Id = ComFactura.ComProveedorId
+      INNER JOIN GenPersona ON GenPersona.Id = ComProveedor.GenPersonaId
+      WHERE ComFacturaDetalle.InvArticuloId = InvArticulo.Id
+      ORDER BY ComFactura.FechaDocumento DESC) AS  UltimoProveedorNombre
       --Tabla de origen
       FROM InvLote
       --Tablas relacionadas
