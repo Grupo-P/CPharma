@@ -348,7 +348,7 @@
 
     while($row2 = sqlsrv_fetch_array($result2,SQLSRV_FETCH_ASSOC)) {
 
-      if($row2["FechaMovimiento"] >= $FechaComparativa) {
+      if($row2["FechaMovimiento"] == $FechaComparativa) {
         continue;
       }
 
