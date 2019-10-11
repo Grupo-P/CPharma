@@ -7,8 +7,6 @@
 @section('scriptsHead')
   <style>
     * {box-sizing:border-box;}
-
-    /*the container must be positioned relative:*/
     .autocomplete {position:relative; display:inline-block;}
 
     input {
@@ -27,10 +25,9 @@
       border-bottom:none;
       border-top:none;
       z-index:99;
-      /*position the autocomplete items to be the same width as the container:*/
-        top:100%;
-        left:0;
-        right:0;
+      top:100%;
+      left:0;
+      right:0;
     }
 
     .autocomplete-items div {
@@ -40,10 +37,7 @@
       border-bottom:1px solid #d4d4d4; 
     }
 
-    /*when hovering an item:*/
     .autocomplete-items div:hover {background-color:#e9e9e9;}
-
-    /*when navigating through the items using the arrow keys:*/
     .autocomplete-active {background-color:DodgerBlue !important; color:#fff;}
   </style>
 @endsection
@@ -63,36 +57,27 @@
 
     $ArtJson = "";
     $CodJson = "";
+
+    if(isset($_GET['SEDE'])) {
+      echo '
+        <h1 class="h5 text-success"  align="left">
+          <i class="fas fa-prescription"></i> '.FG_Nombre_Sede($_GET['SEDE'])
+        .'</h1>
+      ';
+    }
+    echo '<hr class="row align-items-start col-12">';
     
     if(isset($_GET['Id'])) {
       $InicioCarga = new DateTime("now");
 
-      if(isset($_GET['SEDE'])) {
-        echo '
-          <h1 class="h5 text-success"  align="left">
-            <i class="fas fa-prescription"></i> '.NombreSede($_GET['SEDE'])
-          .'</h1>
-        ';
-      }
-      echo '<hr class="row align-items-start col-12">';
-
       R12_Detalle_Movimientos($_GET['SEDE'],$_GET['fechaInicio'],$_GET['fechaFin'],$_GET['Id']);
-      GuardarAuditoria('CONSULTAR','REPORTE','Detalle de movimientos');
+      FG_Guardar_Auditoria('CONSULTAR','REPORTE','Detalle de movimientos');
 
       $FinCarga = new DateTime("now");
       $IntervalCarga = $InicioCarga->diff($FinCarga);
       echo'Tiempo de carga: '.$IntervalCarga->format("%Y-%M-%D %H:%I:%S");
     }
     else {
-      if(isset($_GET['SEDE'])) {
-        echo '
-          <h1 class="h5 text-success" align="left">
-            <i class="fas fa-prescription"></i> '.NombreSede($_GET['SEDE'])
-          .'</h1>
-        ';
-      }
-      echo '<hr class="row align-items-start col-12">';
-
       $InicioCarga = new DateTime("now");
       $sql = QListaArticulos();
       $ArtJson = armarJson($sql,$_GET['SEDE']);
