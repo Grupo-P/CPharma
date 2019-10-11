@@ -1,7 +1,7 @@
 @extends('layouts.model')
 
 @section('title')
-    Reporte
+  Reporte
 @endsection
 
 @section('content')
@@ -40,7 +40,7 @@
 		FUNCION: Arma el reporte de activacion de proveedores
 		RETORNO: Lista de activacio de proveedores
 		DESAROLLADO POR: SERGIO COVA
-	 */
+ 	*/
 	function R1_Activacion_Proveedores($SedeConnection) {
 		$conn = FG_Conectar_Smartpharma($SedeConnection);
 		$sql = R1Q_Activacion_Proveedores();
@@ -67,7 +67,7 @@
 	      	<th scope="col" class="CP-sticky">Dias sin facturar</th>
 		    </tr>
 	  	</thead>
-	  	<tbody>
+  	<tbody>
 		';
 		while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
 			$IdProveedor = $row['Id'];
@@ -84,9 +84,9 @@
 			echo '<td align="center">'.intval($row['RangoDias']).'</td>';
 			echo '</tr>';
 			$contador++;
-	  	}
+  	}
 	  	echo '
-	  		</tbody>
+  		</tbody>
 		</table>';
 		sqlsrv_close($conn);
 	}

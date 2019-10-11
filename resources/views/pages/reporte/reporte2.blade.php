@@ -66,7 +66,7 @@
     $CodJson = "";
 
     if (isset($_GET['SEDE'])) {     
-        echo '<h1 class="h5 text-success"  align="left"> <i class="fas fa-prescription"></i> '.FG_Nombre_Sede($_GET['SEDE']).'</h1>';
+      echo '<h1 class="h5 text-success"  align="left"> <i class="fas fa-prescription"></i> '.FG_Nombre_Sede($_GET['SEDE']).'</h1>';
       }
       echo '<hr class="row align-items-start col-12">';
   	
@@ -92,7 +92,7 @@
   		echo '
   		<form autocomplete="off" action="" target="_blank">
   	    <div class="autocomplete" style="width:90%;">
-  	      <input id="myInput" type="text" name="Descrip" placeholder="Ingrese el nombre del articulo " onkeyup="conteo()">
+          <input id="myInput" type="text" name="Descrip" placeholder="Ingrese el nombre del articulo " onkeyup="conteo()">
   	      <input id="myId" name="Id" type="hidden">
   	    </div>
         <input id="SEDE" name="SEDE" type="hidden" value="';
@@ -206,18 +206,16 @@
         </tr>
       </thead>
       <tbody>
-      ';
+    ';
     echo '<tr>';
     echo '<td>'.$CodigoArticulo.'</td>';
     echo '<td align="center">'.$CodigoBarra.'</td>';
-
     echo 
       '<td align="left" class="CP-barrido">
       <a href="/reporte10?Descrip='.$Descripcion.'&Id='.$IdArticulo.'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
         .$Descripcion.
       '</a>
       </td>';
-
     echo '<td align="center">'.intval($Existencia).'</td>';
     echo '<td align="center">'.number_format($Precio,2,"," ,"." ).'</td>'; 
     echo '<td align="center">'.$Gravado.'</td>';
@@ -233,8 +231,8 @@
       echo '<td align="center">0,00</td>';
     }
     echo '
-        </tr>
-        </tbody>
+      </tr>
+      </tbody>
     </table>';
 
     echo'
@@ -288,7 +286,7 @@
       $contador++;
       }
       echo '
-        </tbody>
+      </tbody>
     </table>';
     mysqli_close($connCPharma);
     sqlsrv_close($conn);
@@ -299,7 +297,7 @@
     FUNCION: Armar una lista de articulos con descripcion e id
     RETORNO: Lista de articulos con descripcion e id
     DESAROLLADO POR: SERGIO COVA
-   */
+  */
   function R2Q_Lista_Articulos() {
     $sql = "
       SELECT
@@ -316,7 +314,7 @@
     FUNCION: Armar una lista de articulos con descripcion e id
     RETORNO: Lista de articulos con descripcion e id
     DESAROLLADO POR: SERGIO COVA
-   */
+  */
   function R2Q_Lista_Articulos_CodBarra() {
     $sql = "
       SELECT
@@ -336,7 +334,7 @@
     FUNCION: Query que genera el detalle del articulo solicitado
     RETORNO: Detalle del articulo
     DESAROLLADO POR: SERGIO COVA
-   */
+  */
   function R2Q_Detalle_Articulo($IdArticulo) {
     $sql = " 
       SELECT
@@ -489,7 +487,7 @@
     FUNCION: Armar la tabla del historico de articulos
     RETORNO: La tabla de historico del articulo
     DESAROLLADO POR: SERGIO COVA
-   */
+  */
   function R2Q_Historico_Articulo($IdArticulo) {
     $sql = "
       SELECT

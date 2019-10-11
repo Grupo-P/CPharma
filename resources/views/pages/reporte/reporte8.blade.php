@@ -1,7 +1,7 @@
 @extends('layouts.model')
 
 @section('title')
-    Reporte
+  Reporte
 @endsection
 
 @section('scriptsHead')
@@ -57,7 +57,7 @@
   </h1>
   <hr class="row align-items-start col-12">
 
-  <?php 
+<?php 
   include(app_path().'\functions\config.php');
   include(app_path().'\functions\functions.php');
   include(app_path().'\functions\querys_mysql.php');
@@ -165,7 +165,7 @@
     FUNCION: Armar una lista de proveedores
     RETORNO: Lista de proveedores
     DESAROLLADO POR: SERGIO COVA
-   */
+  */
   function R8Q_Lista_Proveedores() {
     $sql = "
       SELECT
@@ -185,7 +185,7 @@
     FUNCION:  Arma la lista de factura por proveedores
     RETORNO: no aplica
     DESAROLLADO POR: SERGIO COVA
-   */
+  */
   function R8_Proveedor_Factura($SedeConnection,$IdProveedor,$NombreProveedor){
     
     $conn = FG_Conectar_Smartpharma($SedeConnection);
@@ -270,7 +270,7 @@
     FUNCION: Buscar la lista de facturas donde interviene el proveedor
     RETORNO: lista de facturas
     DESAROLLADO POR: SERGIO COVA
-   */
+  */
   function R8Q_Factura_Proveedor_Toquel($IdProveedor) {
     $sql = "
     SELECT
@@ -290,7 +290,7 @@
     FUNCION: arma la lista de articulos por factura
     RETORNO: no aplica
     DESAROLLADO POR: SERGIO COVA
-   */
+  */
   function R8_Factura_Articulo($SedeConnection,$IdProveedor,$NombreProveedor,$IdFatura){
     
     $conn = FG_Conectar_Smartpharma($SedeConnection);
@@ -345,7 +345,7 @@
         </thead>
         <tbody>
      ';
-     $contador = 1;
+    $contador = 1;
     while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
       echo '<tr>';
       echo '<td align="center"><strong>'.intval($contador).'</strong></td>';
@@ -370,8 +370,8 @@
       echo '</tr>';
     $contador++;
     }
-      echo '
-        </tbody>
+    echo '
+      </tbody>
     </table>';
     sqlsrv_close($conn);
   }
@@ -381,7 +381,7 @@
     FUNCION: busca los articulos que intervienen en una factura
     RETORNO: lista de articulos
     DESAROLLADO POR: SERGIO COVA
-   */
+  */
   function R8Q_Factura_Articulo($IdFatura) {
     $sql = "
     SELECT
@@ -403,7 +403,7 @@
     FUNCION:
     RETORNO:
     DESAROLLADO POR: SERGIO COVA
-   */
+  */
   function R8Q_Numero_Factura($IdFactura) {
     $sql = "
       SELECT ComFactura.NumeroFactura AS NumeroFactura
@@ -418,7 +418,7 @@
     FUNCION: arma la lista del troquel segun el articulo
     RETORNO: no aplica
     DESAROLLADO POR: SERGIO COVA
-   */
+  */
   function R8_Articulo_Troquel($SedeConnection,$IdProveedor,$NombreProveedor,$IdFatura,$IdArticulo){
     
     $conn = FG_Conectar_Smartpharma($SedeConnection);
@@ -461,9 +461,9 @@
       ';
       echo '<td>'.$NumeroFactura.'</td>';
     echo '<td>'.FG_Limpiar_Texto($NombreProveedor).'</td>';
-      echo '
-        </tr>
-        </tbody>
+    echo '
+      </tr>
+      </tbody>
     </table>';
 
     echo'
@@ -512,8 +512,8 @@
         ';
       echo '</tr>';
     }
-      echo '
-        </tbody>
+    echo '
+      </tbody>
     </table>';
     sqlsrv_close($conn);
   }
@@ -523,7 +523,7 @@
     FUNCION: Buscar informacion del articulo
     RETORNO: Datos del articulo
     DESAROLLADO POR: SERGIO COVA
-   */
+  */
   function R8Q_Articulo($IdArticulo) {
     $sql = "
       SELECT
@@ -542,7 +542,7 @@
     FUNCION: busca el troquel del articulo de la factura
     RETORNO: retora en valor del troquel del articulo
     DESAROLLADO POR: SERGIO COVA
-   */
+  */
   function R8Q_Troquel_Articulo_Factura($IdFatura,$IdArticulo) {
     $sql = "
     SELECT
@@ -560,7 +560,7 @@
     FUNCION: arma la lista definitiva con el troquel actualizado
     RETORNO: no aplica
     DESAROLLADO POR: SERGIO COVA
-   */
+  */
   function R8_Troquel($SedeConnection,$IdProveedor,$NombreProveedor,$IdFatura,$IdArticulo,$PrecioTroquel){
     
     $conn = FG_Conectar_Smartpharma($SedeConnection);
@@ -639,7 +639,7 @@
     FUNCION: actualiza el precio del troquel del articulo
     RETORNO: precio actualizado del troquel
     DESAROLLADO POR: SERGIO COVA
-   */
+  */
   function R8Q_Actualizar_Troquel($IdFatura,$IdArticulo,$PrecioTroquel) {
     $sql = "
     UPDATE ComFacturaDetalle

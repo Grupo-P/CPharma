@@ -1,7 +1,7 @@
 @extends('layouts.model')
 
 @section('title')
-    Reporte
+  Reporte
 @endsection
 
 @section('scriptsHead')
@@ -57,7 +57,7 @@
 	</h1>
 	<hr class="row align-items-start col-12">
 
-  <?php	
+<?php	
 	include(app_path().'\functions\config.php');
   include(app_path().'\functions\functions.php');
   include(app_path().'\functions\querys_mysql.php');
@@ -121,7 +121,7 @@
           </tr>
 		    </table>
 	  	</form>
-	  	';
+  	';
 	} 
 ?>
 @endsection
@@ -178,7 +178,6 @@
         </thead>
         <tbody>
     ';
-
     $contador = 1;
     while($row = sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC)) {
       $IdArticulo = $row["InvArticuloId"];
@@ -243,11 +242,9 @@
       echo '</tr>';
       $contador++;
     }
-
     echo '
-        </tbody>
+      </tbody>
     </table>';
-
     sqlsrv_close($conn);
   }
   /**********************************************************************************/
@@ -256,7 +253,7 @@
     FUNCION: Ubicar el top de productos mas vendidos
     RETORNO: Lista de productos mas vendidos
     DESAROLLADO POR: SERGIO COVA
-   */
+  */
   function R4Q_TOP_MenosVendidos($Top,$FInicial,$FFinal) {
     $sql = "
       SELECT TOP $Top
@@ -426,7 +423,7 @@
     FUNCION: Query que genera el detalle del articulo solicitado
     RETORNO: Detalle del articulo
     DESAROLLADO POR: SERGIO COVA
-   */
+  */
   function R4Q_Detalle_Articulo($IdArticulo) {
     $sql = " 
       SELECT
