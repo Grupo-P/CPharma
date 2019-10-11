@@ -181,7 +181,9 @@
       /*CASO 2: CARGA AL HABER SELECCIONADO UN PROVEEDOR
                 Se pasa a la carga de las facturas del proveedor*/
       $InicioCarga = new DateTime("now");
-      ReporteProveedorFactura($_GET['SEDE'],$_GET['Id'],$_GET['Nombre']);
+
+      R11_Proveedor_Factura($_GET['SEDE'],$_GET['Id'],$_GET['Nombre']);
+
       $FinCarga = new DateTime("now");
       $IntervalCarga = $InicioCarga->diff($FinCarga);
 
@@ -382,7 +384,7 @@
     TITULO: R11Q_Lista_Proveedores
     FUNCION: Armar una lista de proveedores
     RETORNO: Lista de proveedores
-    DESAROLLADO POR: SERGIO COVA
+    DESAROLLADO POR: MANUEL HENRIQUEZ
   */
   function R11Q_Lista_Proveedores() {
     $sql = "
@@ -398,4 +400,112 @@
     return $sql;
   }
 
+  /**********************************************************************************/
+  /*
+    TITULO: R11_Proveedor_Factura
+    FUNCION:  Arma la lista de factura por proveedores
+    RETORNO: no aplica
+    DESAROLLADO POR: MANUEL HENRIQUEZ
+  */
+  function R11_Proveedor_Factura($SedeConnection,$IdProveedor,$NombreProveedor) {
+    $conn = FG_Conectar_Smartpharma($SedeConnection);
+    $sql1 = R11Q_Factura_Proveedor_Toquel($IdProveedor);
+    $result = sqlsrv_query($conn,$sql1);
+
+    echo '
+      <div class="input-group md-form form-sm form-1 pl-0">
+        <div class="input-group-prepend">
+          <span class="input-group-text purple lighten-3" id="basic-text1">
+            <i class="fas fa-search text-white" aria-hidden="true"></i>
+          </span>
+        </div>
+        <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterAllTable()">
+      </div>
+      <br/>
+    ';
+
+    echo '
+      <table class="table table-striped table-bordered col-12 sortable">
+        <thead class="thead-dark">
+          <tr>
+            <th scope="col">Proveedor</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>'.FG_Limpiar_Texto($NombreProveedor).'</td>
+          </tr>
+        </tbody>
+      </table>
+    ';
+
+    echo'
+      <table class="table table-striped table-bordered col-12 sortable" id="myTable">
+        <thead class="thead-dark">
+          <tr>
+            <th scope="col" class="CP-sticky">#</th>
+            <th scope="col" class="CP-sticky">Numero de Factura</th>
+            <th scope="col" class="CP-sticky">Fecha Documento</th>
+            <th scope="col" class="CP-sticky">Usuario Auditor</th>
+            <th scope="col" class="CP-sticky">Seleccion</th>
+          </tr>
+        </thead>
+        <tbody>
+    ';
+
+    $contador = 1;
+
+    while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
+      echo '
+        <tr>
+          <td align="left"><strong>'.intval($contador).'</strong></td>
+          <td align="center">'.$row["NumeroFactura"].'</td>
+          <td align="center">'.$row["FechaDocumento"]->format('d-m-Y').'</td>
+          <td align="center">'.$row["Auditoria_Usuario"].'</td>
+          <td align="center">
+            <form autocomplete="off" action="">
+              <input id="SEDE" name="SEDE" type="hidden" value="'; 
+                print_r($SedeConnection);
+              echo'">
+              <input type="submit" value="Selecionar" class="btn btn-outline-success">
+              <input id="IdFact" name="IdFact" type="hidden" value="'.intval($row["FacturaId"]).'">
+              <input id="IdProv" name="IdProv" type="hidden" value="'.$IdProveedor.'">
+              <input id="NombreProv" name="NombreProv" type="hidden" value="'.FG_Limpiar_Texto($NombreProveedor).'">
+            </form>
+            <br>
+          </td>
+        </tr>
+      ';
+
+      $contador++;
+    }
+
+    echo '
+        </tbody>
+      </table>
+    ';
+
+    sqlsrv_close($conn);
+  }
+
+  /**********************************************************************************/
+  /*
+    TITULO: R11Q_Factura_Proveedor_Toquel
+    FUNCION: Buscar la lista de facturas donde interviene el proveedor
+    RETORNO: lista de facturas
+    DESAROLLADO POR: SERGIO COVA
+  */
+  function R11Q_Factura_Proveedor_Toquel($IdProveedor) {
+    $sql = "
+      SELECT
+      ComFactura.Id AS FacturaId,
+      ComFactura.NumeroFactura,
+      CONVERT(DATE,ComFactura.FechaDocumento) AS FechaDocumento,
+      ComFactura.Auditoria_Usuario
+      FROM ComFactura
+      WHERE ComFactura.ComProveedorId = '$IdProveedor'
+      ORDER BY FacturaId ASC
+    ";
+    return $sql;
+  }
 ?>
