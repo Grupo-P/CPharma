@@ -10,7 +10,8 @@
       box-sizing:border-box;
     }
     .autocomplete {
-      position:relative; display:inline-block;
+      position:relative; 
+      display:inline-block;
     }
     input {
       border:1px solid transparent;
@@ -20,7 +21,8 @@
       font-size:16px;
     }
     input[type=text] {
-      background-color:#f1f1f1; width:100%;
+      background-color:#f1f1f1; 
+      width:100%;
     }
     .autocomplete-items {
       position:absolute;
@@ -42,7 +44,8 @@
       background-color:#e9e9e9;
     }
     .autocomplete-active {
-      background-color:DodgerBlue !important; color:#fff;
+      background-color:DodgerBlue !important; 
+      color:#fff;
     }
   </style>
 @endsection
