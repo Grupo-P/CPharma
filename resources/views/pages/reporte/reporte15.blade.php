@@ -137,18 +137,18 @@
       <table class="table table-striped table-bordered col-12 sortable" id="myTable">
         <thead class="thead-dark">
           <tr>
-            <th scope="col">#</th>
-            <th scope="col">Codigo</th>
-            <th scope="col">Descripcion</th>
-            <th scope="col">Precio '.SigVe.'</th>
-            <th scope="col">Existencia</th>
-            <th scope="col">Valor lote '.SigVe.'</th>
-            <th scope="col">Ultimo lote</th>
-            <th scope="col">Tasa historico  '.SigVe.'</th>
-            <th scope="col">Precio en  '.SigDolar.'</th>
-            <th scope="col">Valor lote  '.SigDolar.'</th>
-            <th scope="col">Dias en tienda</th>
-            <th scope="col">Ultimo proveedor</th>
+            <th scope="col" class="CP-sticky">#</th>
+            <th scope="col" class="CP-sticky">Codigo</th>
+            <th scope="col" class="CP-sticky">Descripcion</th>
+            <th scope="col" class="CP-sticky">Precio '.SigVe.'</th>
+            <th scope="col" class="CP-sticky">Existencia</th>
+            <th scope="col" class="CP-sticky">Valor lote '.SigVe.'</th>
+            <th scope="col" class="CP-sticky">Ultimo lote</th>
+            <th scope="col" class="CP-sticky">Tasa historico  '.SigVe.'</th>
+            <th scope="col" class="CP-sticky">Precio en  '.SigDolar.'</th>
+            <th scope="col" class="CP-sticky">Valor lote  '.SigDolar.'</th>
+            <th scope="col" class="CP-sticky">Dias en tienda</th>
+            <th scope="col" class="CP-sticky">Ultimo proveedor</th>
           </tr>
         </thead>
 
