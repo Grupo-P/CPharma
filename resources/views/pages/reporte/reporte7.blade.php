@@ -57,7 +57,7 @@
   </h1>
   <hr class="row align-items-start col-12">
 
-  <?php 
+<?php 
   include(app_path().'\functions\config.php');
   include(app_path().'\functions\functions.php');
   include(app_path().'\functions\querys_mysql.php');
@@ -66,7 +66,7 @@
   $ArtJson = "";
 
   if (isset($_GET['SEDE'])){      
-      echo '<h1 class="h5 text-success"  align="left"> <i class="fas fa-prescription"></i> '.FG_Nombre_Sede($_GET['SEDE']).'</h1>';
+    echo '<h1 class="h5 text-success"  align="left"> <i class="fas fa-prescription"></i> '.FG_Nombre_Sede($_GET['SEDE']).'</h1>';
     }
     echo '<hr class="row align-items-start col-12">';
   
@@ -173,13 +173,13 @@
 @endsection
 
 <?php
-/**********************************************************************************/
+  /**********************************************************************************/
   /*
     TITULO: R7_Catalogo_Proveedor_C2
     FUNCION: Armar el reporte catalogo de proveedor
     RETORNO: No aplica
     DESAROLLADO POR: SERGIO COVA
-   */
+  */
   function R7_Catalogo_Proveedor_C2($SedeConnection,$IdProveedor,$NombreProveedor){
 
     $conn = FG_Conectar_Smartpharma($SedeConnection);
@@ -253,13 +253,12 @@
 
     sqlsrv_close($conn);
   }
+  /**********************************************************************************/
   /*
     TITULO: R7_Catalogo_Proveedor_C3
-    PARAMETROS: [$SedeConnection] sede donde se hara la conexion
-          [$IdProveedor] ID del proveedor a buscar
-          [$NombreProveedor] Nombre del proveedor a buscar
     FUNCION: Armar el reporte catalogo de proveedor
     RETORNO: No aplica
+    DESAROLLADO POR: SERGIO COVA
    */
   function R7_Catalogo_Proveedor_C3($SedeConnection,$IdProveedor,$NombreProveedor,$FInicial,$FFinal,$DiasPedido){
 
@@ -403,10 +402,10 @@
       }
       echo '<td align="center">'.intval($CantidadPedido).'</td>';
       echo '</tr>';
-    $contador++;
-      }
-      echo '
-        </tbody>
+      $contador++;
+    }
+    echo '
+      </tbody>
     </table>';
     sqlsrv_close($conn);
   }
@@ -416,7 +415,7 @@
     FUNCION: Armar una lista de proveedores
     RETORNO: Lista de proveedores
     DESAROLLADO POR: SERGIO COVA
-   */
+  */
   function R7Q_Lista_Proveedores() {
     $sql = "
       SELECT
@@ -436,7 +435,7 @@
     FUNCION: Armar una lista de proveedores
     RETORNO: Lista de proveedores
     DESAROLLADO POR: SERGIO COVA
-   */
+  */
   function R7Q_Catalogo_Proveedor($IdProveedor) {
     $sql = "
       SELECT
@@ -467,7 +466,7 @@
     FUNCION: Query que genera el detalle del articulo solicitado
     RETORNO: Detalle del articulo
     DESAROLLADO POR: SERGIO COVA
-   */
+  */
   function R7Q_Detalle_Articulo($IdArticulo) {
     $sql = " 
       SELECT
@@ -620,7 +619,7 @@
     FUNCION: Ubicar el top de productos mas vendidos
     RETORNO: Lista de productos mas vendidos
     DESAROLLADO POR: SERGIO COVA
-   */
+  */
   function R7Q_Integracion_Catalogo($IdArticulo,$FInicial,$FFinal) {
     $sql = "
       SELECT

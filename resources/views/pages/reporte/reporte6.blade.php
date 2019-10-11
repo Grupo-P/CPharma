@@ -178,13 +178,13 @@
 @endsection
 
 <?php
-  /**********************************************************************************/ 
+  /********************************************************************************/ 
   /*
     TITULO: R6_Pedido_Productos
     FUNCION: Arma una lista para el pedido de productos
     RETORNO: No aplica
     DESAROLLADO POR: SERGIO COVA
-   */
+  */
   function R6_Pedido_Productos($SedeConnection,$Valor,$FInicial,$FFinal,$DiasPedido,$Flag){
 
     $conn = FG_Conectar_Smartpharma($SedeConnection);
@@ -318,10 +318,10 @@
 
         echo '<td align="center">'.intval($CantidadPedido).'</td>';
         echo '</tr>';
-      $contador++;
+        $contador++;
       }
       echo '
-          </tbody>
+        </tbody>
       </table>';
     }
     else if($Flag=='CodBar') {
@@ -441,11 +441,10 @@
         else{
           echo '<td align="center"> - </td>';
         }
-
         echo '<td align="center">'.intval($CantidadPedido).'</td>';
         echo '</tr>';
         echo '
-            </tbody>
+          </tbody>
       </table>';
     }
     sqlsrv_close($conn);
@@ -456,7 +455,7 @@
     FUNCION: Armar una lista de articulos
     RETORNO: Lista de articulos
     DESAROLLADO POR: SERGIO COVA
-   */
+  */
   function R6Q_Lista_Articulos() {
     $sql = "
       SELECT
@@ -473,7 +472,7 @@
     FUNCION: Armar una lista de articulos con descripcion e id
     RETORNO: Lista de articulos con descripcion e id
     DESAROLLADO POR: SERGIO COVA
-   */
+  */
   function R6Q_Lista_Articulos_CodBarra() {
     $sql = "
       SELECT
@@ -493,7 +492,7 @@
     FUNCION: Consulta los articulos que conindicen con la palabra buscada
     RETORNO: lista de id de articulos en coincidencia
     DESAROLLADO POR: SERGIO COVA
-   */
+  */
   function R6Q_Descripcion_Like($DescripLike) {   
     $sql = "
       SELECT
@@ -509,7 +508,7 @@
     FUNCION: Ubicar el top de productos mas vendidos
     RETORNO: Lista de productos mas vendidos
     DESAROLLADO POR: SERGIO COVA
-   */
+  */
   function R6Q_Integracion_Pedido_Productos($IdArticulo,$FInicial,$FFinal) {
     $sql = "
       SELECT
@@ -688,7 +687,7 @@
     FUNCION: Query que genera el detalle del articulo solicitado
     RETORNO: Detalle del articulo
     DESAROLLADO POR: SERGIO COVA
-   */
+  */
   function R6Q_Detalle_Articulo($IdArticulo) {
     $sql = " 
       SELECT
