@@ -1,23 +1,15 @@
 @extends('layouts.model')
 
 @section('title')
-    Compromisos
+  Compromisos
 @endsection
 
-
 @section('scriptsHead')
-  <script type="text/javascript" src="{{ asset('assets/jquery/jquery-2.2.2.min.js') }}"></script>
-  <script type="text/javascript" src="{{ asset('assets/jquery/jquery-ui.min.js') }}" ></script>
-  <script type="text/javascript" src="{{ asset('assets/js/sortTable.js') }}"></script>
-  <script type="text/javascript" src="{{ asset('assets/js/filter.js') }}"></script>
-  <script type="text/javascript" src="{{ asset('assets/js/functions.js') }}"></script>
-
   <style>
     * {
       box-sizing: border-box;
     }
 
-    /*the container must be positioned relative:*/
     .autocomplete {
       position: relative;
       display: inline-block;
@@ -42,7 +34,6 @@
       border-bottom: none;
       border-top: none;
       z-index: 99;
-      /*position the autocomplete items to be the same width as the container:*/
       top: 100%;
       left: 0;
       right: 0;
@@ -55,12 +46,10 @@
       border-bottom: 1px solid #d4d4d4; 
     }
 
-    /*when hovering an item:*/
     .autocomplete-items div:hover {
       background-color: #e9e9e9; 
     }
 
-    /*when navigating through the items using the arrow keys:*/
     .autocomplete-active {
       background-color: DodgerBlue !important; 
       color: #ffffff; 
@@ -173,24 +162,24 @@
 
   <?php
     include(app_path().'\functions\config.php');
-    include(app_path().'\functions\querys.php');
-    include(app_path().'\functions\funciones.php');
-    include(app_path().'\functions\reportes.php');
+    include(app_path().'\functions\functions.php');
+    include(app_path().'\functions\querys_mysql.php');
+    include(app_path().'\functions\querys_sqlserver.php');
 
     $ArtJson = "";
+
+    if(isset($_GET['SEDE'])) {
+      echo '
+        <h1 class="h5 text-success" align="left">
+          <i class="fas fa-prescription"></i> '.FG_Nombre_Sede($_GET['SEDE']).
+        '</h1>
+      ';
+    }
+    echo '<hr class="row align-items-start col-12">';
     
     if(isset($_GET['Id'])) {
       /*CASO 2: CARGA AL HABER SELECCIONADO UN PROVEEDOR
                 Se pasa a la carga de las facturas del proveedor*/
-      if(isset($_GET['SEDE'])) {
-        echo '
-          <h1 class="h5 text-success" align="left">
-            <i class="fas fa-prescription"></i> '.NombreSede($_GET['SEDE']).
-          '</h1>
-        ';
-      }
-      echo '<hr class="row align-items-start col-12">';
-
       $InicioCarga = new DateTime("now");
       ReporteProveedorFactura($_GET['SEDE'],$_GET['Id'],$_GET['Nombre']);
       $FinCarga = new DateTime("now");
@@ -201,15 +190,6 @@
     else if(isset($_GET['lote'])) {
       /*CASO 5: CARGA AL HABER COMPLETADO LA Compromiso
                 Se pasa a la solicitud de fechas*/
-      if(isset($_GET['SEDE'])) {
-        echo '
-          <h1 class="h5 text-success" align="left">
-            <i class="fas fa-prescription"></i> '.NombreSede($_GET['SEDE']).
-          '</h1>
-        ';
-      }
-      echo '<hr class="row align-items-start col-12">';
-
       $InicioCarga = new DateTime("now");
 
       if($_GET['fecha_vencimiento'] == '') {
@@ -332,15 +312,6 @@
     else if(isset($_GET['IdArt'])) {
       /*CASO 4: CARGA AL HABER SELECCIONADO UNA ARTICULO
                 Se pasa a la solicitud de fechas*/
-      if(isset($_GET['SEDE'])) {
-        echo '
-          <h1 class="h5 text-success" align="left">
-            <i class="fas fa-prescription"></i> '.NombreSede($_GET['SEDE']).
-          '</h1>
-        ';
-      }
-      echo '<hr class="row align-items-start col-12">';
-
       $InicioCarga = new DateTime("now");
 
       CartaDeCompromiso($_GET['SEDE'],$_GET['IdProv'],$_GET['NombreProv'],$_GET['IdFact'],$_GET['IdArt']);
@@ -352,15 +323,6 @@
     else if(isset($_GET['IdFact'])) {
       /*CASO 3: CARGA AL HABER SELECCIONADO UNA FACTURA 
               Se pasa a la seleccion del articulo*/
-      if(isset($_GET['SEDE'])) {
-        echo '
-          <h1 class="h5 text-success" align="left">
-            <i class="fas fa-prescription"></i> '.NombreSede($_GET['SEDE']).
-          '</h1>
-        ';
-      }
-      echo '<hr class="row align-items-start col-12">';
-
       $InicioCarga = new DateTime("now");
 
       ReporteFacturaArticulo($_GET['SEDE'],$_GET['IdProv'],$_GET['NombreProv'],$_GET['IdFact']);
@@ -372,15 +334,6 @@
     else {
       /*CASO 1: AL CARGAR EL REPORTE DESDE EL MENU
                 Se pasa a la seleccion del proveedor*/
-      if(isset($_GET['SEDE'])) {
-        echo '
-          <h1 class="h5 text-success" align="left">
-            <i class="fas fa-prescription"></i> '.NombreSede($_GET['SEDE']).
-          '</h1>
-        ';
-      }
-      echo '<hr class="row align-items-start col-12">';
-
       $InicioCarga = new DateTime("now");
 
       $sql = QListaProveedores();
