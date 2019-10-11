@@ -862,23 +862,21 @@
     echo '
       <table class="table table-striped table-bordered col-12 sortable">
         <thead class="thead-dark">
-            <tr>
-              <th scope="col">Causa</th>
-              <th scope="col">Nota</th>
-            </tr>
-          </thead>
-        
-          <tbody>
-            <tr>
+          <tr>
+            <th scope="col">Causa</th>
+            <th scope="col">Nota</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
             <td>
               <textarea name="causa" id="causa" class="form-control" rows="4" required></textarea>
             </td>
-
-              <td>
-                <textarea name="nota" id="nota" class="form-control" rows="4" required></textarea>
-              </td>
-            </tr>
-          </tbody>
+            <td>
+              <textarea name="nota" id="nota" class="form-control" rows="4" required></textarea>
+            </td>
+          </tr>
+        </tbody>
       </table>
 
       <div class="text-center">
