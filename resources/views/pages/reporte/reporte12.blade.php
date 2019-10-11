@@ -118,7 +118,22 @@
                 <input type="submit" value="Buscar" class="btn btn-outline-success" style="width:9%;">
               </td>
             </tr>
+
+            <tr>
+              <td colspan="4">&nbsp;</td>
+            </tr>
           </table>
+        </form>
+
+        <form autocomplete="off" action="" target="_blank">
+          <div class="autocomplete" style="width:90%;">
+            <input id="myInputCB" type="text" name="CodBar" placeholder="Ingrese el codigo de barra del articulo " onkeyup="conteoCB()">
+            <input id="myIdCB" name="Id" type="hidden">
+          </div>
+          <input id="SEDE" name="SEDE" type="hidden" value="'; 
+            print_r($_GET['SEDE']);
+            echo'">
+          <input type="submit" value="Buscar" class="btn btn-outline-success" style="width:9%;">
         </form>
       ';
 
