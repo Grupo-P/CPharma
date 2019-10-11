@@ -336,8 +336,8 @@
                 Se pasa a la seleccion del proveedor*/
       $InicioCarga = new DateTime("now");
 
-      $sql = QListaProveedores();
-      $ArtJson = armarJson($sql,$_GET['SEDE']);
+      $sql = R11Q_Lista_Proveedores();
+      $ArtJson = FG_Armar_Json($sql,$_GET['SEDE']);
 
       echo '
         <form autocomplete="off" action="">
@@ -375,3 +375,27 @@
     }
   ?>  
 @endsection
+
+<?php
+  /**********************************************************************************/
+  /*
+    TITULO: R11Q_Lista_Proveedores
+    FUNCION: Armar una lista de proveedores
+    RETORNO: Lista de proveedores
+    DESAROLLADO POR: SERGIO COVA
+  */
+  function R11Q_Lista_Proveedores() {
+    $sql = "
+      SELECT
+      GenPersona.Nombre,
+      ComProveedor.Id
+      FROM ComProveedor
+      INNER JOIN GenPersona ON ComProveedor.GenPersonaId=GenPersona.Id
+      INNER JOIN ComFactura ON ComFactura.ComProveedorId=ComProveedor.Id
+      GROUP BY ComProveedor.Id, GenPersona.Nombre
+      ORDER BY ComProveedor.Id ASC
+    ";
+    return $sql;
+  }
+
+?>
