@@ -832,20 +832,25 @@
             </td>
             <td align="center">
               <input type="text" value="'.$FechaRecepcion->format('d/m/Y').'" disabled>
-            </td>';
-            if(!is_null($FechaVencimiento)) {
-              echo '
-            <td align="center">
-              <input type="text" id="input_fechaV" value="'.$FechaVencimiento->format('d/m/Y').'" disabled>
-            </td>';
-            }
-            else {
-              echo '
-            <td align="center">
-              <input type="text" id="input_fechaV" value="00/00/0000" disabled>
-            </td>';
-            }
-            echo '
+            </td>
+    ';
+
+    if(!is_null($FechaVencimiento)) {
+      echo '
+        <td align="center">
+          <input type="text" id="input_fechaV" value="'.$FechaVencimiento->format('d/m/Y').'" disabled>
+        </td>
+      ';
+    }
+    else {
+      echo '
+        <td align="center">
+          <input type="text" id="input_fechaV" value="00/00/0000" disabled>
+        </td>
+      ';
+    }
+    
+    echo '
             <td align="center">
               <input id="fecha_tope" name="fecha_tope" type="date" required>
             </td>
