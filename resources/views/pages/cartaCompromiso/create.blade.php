@@ -663,7 +663,7 @@
 
     $NumeroFactura = $row["NumeroFactura"];
     $CodigoArticulo = $row["CodigoArticulo"];
-    $Articulo = $row["Descripcion"];
+    $Articulo = FG_Limpiar_Texto($row["Descripcion"]);
     $FechaDocumento = $row["FechaDocumento"];
     $FechaRecepcion = $row["FechaRecepcion"];
     $FechaVencimiento = $row["FechaVencimiento"];
@@ -797,7 +797,7 @@
     ';
 
     echo'
-    <table class="table table-striped table-bordered col-12 sortable" id="myTable">
+      <table class="table table-striped table-bordered col-12 sortable" id="myTable">
         <thead class="thead-dark">
           <tr>
             <th scope="col">Codigo</th>
@@ -806,15 +806,16 @@
         </thead>
 
         <tbody>
-        <tr> 
-          <td align="center">'.$CodigoArticulo.'</td>
-          <td align="center">'.$Articulo.'</td>
-        </tr>
+          <tr> 
+            <td align="center">'.$CodigoArticulo.'</td>
+            <td align="center">'.$Articulo.'</td>
+          </tr>
         </tbody>
-    </table>';
+      </table>
+    ';
 
     echo '
-    <table class="table table-striped table-bordered col-12 sortable" id="myTable">
+      <table class="table table-striped table-bordered col-12 sortable" id="myTable">
         <thead class="thead-dark">
           <tr>
             <th scope="col">Fecha de factura</th>
@@ -825,32 +826,33 @@
         </thead>
 
         <tbody>
-        <tr>
-          <td align="center">
-            <input type="text" value="'.$FechaDocumento->format('d/m/Y').'" disabled>
-          </td>
-          <td align="center">
-            <input type="text" value="'.$FechaRecepcion->format('d/m/Y').'" disabled>
-          </td>';
-          if(!is_null($FechaVencimiento)) {
+          <tr>
+            <td align="center">
+              <input type="text" value="'.$FechaDocumento->format('d/m/Y').'" disabled>
+            </td>
+            <td align="center">
+              <input type="text" value="'.$FechaRecepcion->format('d/m/Y').'" disabled>
+            </td>';
+            if(!is_null($FechaVencimiento)) {
+              echo '
+            <td align="center">
+              <input type="text" id="input_fechaV" value="'.$FechaVencimiento->format('d/m/Y').'" disabled>
+            </td>';
+            }
+            else {
+              echo '
+            <td align="center">
+              <input type="text" id="input_fechaV" value="00/00/0000" disabled>
+            </td>';
+            }
             echo '
-          <td align="center">
-            <input type="text" id="input_fechaV" value="'.$FechaVencimiento->format('d/m/Y').'" disabled>
-          </td>';
-          }
-          else {
-            echo '
-          <td align="center">
-            <input type="text" id="input_fechaV" value="00/00/0000" disabled>
-          </td>';
-          }
-          echo '
-          <td align="center">
-            <input id="fecha_tope" name="fecha_tope" type="date" required>
-          </td>
-        </tr>
+            <td align="center">
+              <input id="fecha_tope" name="fecha_tope" type="date" required>
+            </td>
+          </tr>
         </tbody>
-    </table>';
+      </table>
+    ';
 
     echo '
       <table class="table table-striped table-bordered col-12 sortable">
