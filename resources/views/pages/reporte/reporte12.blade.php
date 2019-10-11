@@ -79,8 +79,12 @@
     }
     else {
       $InicioCarga = new DateTime("now");
-      $sql = QListaArticulos();
-      $ArtJson = armarJson($sql,$_GET['SEDE']);
+
+      $sql = R12Q_Lista_Articulos();
+      $ArtJson = FG_Armar_Json($sql,$_GET['SEDE']);
+
+      $sql1 = R12Q_Lista_Articulos_CodBarra();
+      $CodJson = FG_Armar_Json($sql1,$_GET['SEDE']);
 
       echo '
         <form id="form" autocomplete="off" action="" target="_blank">
@@ -149,7 +153,45 @@
 @endsection
 
 <?php
-
+  /**********************************************************************************/
+  /*
+    TITULO: R12Q_Lista_Articulos
+    FUNCION: Armar una lista de articulos con descripcion e id
+    RETORNO: Lista de articulos con descripcion e id
+    DESAROLLADO POR: SERGIO COVA
+    ACTUALIZADO POR: MANUEL HENRIQUEZ
+   */
+  function R12Q_Lista_Articulos() {
+    $sql = "
+      SELECT
+      InvArticulo.Descripcion,
+      InvArticulo.Id
+      FROM InvArticulo
+      ORDER BY InvArticulo.Descripcion ASC
+    ";
+    return $sql;
+  }
+  /**********************************************************************************/
+  /*
+    TITULO: R12Q_Lista_Articulos_CodBarra
+    FUNCION: Armar una lista de articulos con descripcion e id
+    RETORNO: Lista de articulos con descripcion e id
+    DESAROLLADO POR: SERGIO COVA
+    ACTUALIZADO POR: MANUEL HENRIQUEZ
+   */
+  function R12Q_Lista_Articulos_CodBarra() {
+    $sql = "
+      SELECT
+      (SELECT CodigoBarra
+      FROM InvCodigoBarra 
+      WHERE InvCodigoBarra.InvArticuloId = InvArticulo.Id
+      AND InvCodigoBarra.EsPrincipal = 1) AS CodigoBarra,
+      InvArticulo.Id
+      FROM InvArticulo
+      ORDER BY CodigoBarra ASC
+    ";
+    return $sql;
+  }
   /*
     TITULO: R12_Detalle_Movimientos
     PARAMETROS: [$SedeConnection] sede donde se hara la conexion
