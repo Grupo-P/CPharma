@@ -5,17 +5,9 @@
 @endsection
 
 @section('scriptsHead')
-  <script type="text/javascript" src="{{ asset('assets/js/sortTable.js') }}">
-  </script>
-  <script type="text/javascript" src="{{ asset('assets/js/filter.js') }}">  
-  </script>
-  <script type="text/javascript" src="{{ asset('assets/js/functions.js') }}"> 
-  </script>
-
   <style>
     * {box-sizing:border-box;}
 
-    /*the container must be positioned relative:*/
     .autocomplete {position:relative; display:inline-block;}
 
     input {
@@ -34,7 +26,6 @@
       border-bottom:none;
       border-top:none;
       z-index:99;
-      /*position the autocomplete items to be the same width as the container:*/
       top:100%;
       left:0;
       right:0;
@@ -47,22 +38,8 @@
       border-bottom:1px solid #d4d4d4; 
     }
 
-    /*when hovering an item:*/
     .autocomplete-items div:hover {background-color:#e9e9e9;}
-
-    /*when navigating through the items using the arrow keys:*/
     .autocomplete-active {background-color:DodgerBlue !important; color:#fff;}
-
-    .barrido{
-      text-decoration: none;
-      transition: width 1s, height 1s, transform 1s;
-    }
-
-    .barrido:hover{
-      text-decoration: none;
-      transition: width 1s, height 1s, transform 1s;
-      transform: translate(20px,0px);
-    }
   </style>
 @endsection
 
@@ -75,61 +52,53 @@
 
   <?php
     include(app_path().'\functions\config.php');
-    include(app_path().'\functions\querys.php');
-    include(app_path().'\functions\funciones.php');
+    include(app_path().'\functions\functions.php');
+    include(app_path().'\functions\querys_mysql.php');
+    include(app_path().'\functions\querys_sqlserver.php');
+
+    if(isset($_GET['SEDE'])) {
+      echo '
+        <h1 class="h5 text-success"  align="left">
+          <i class="fas fa-prescription"></i> '.FG_Nombre_Sede($_GET['SEDE']).
+        '</h1>
+      ';
+    }
+    echo '<hr class="row align-items-start col-12">';
 
     if(isset($_GET['fechaInicio'])) {
       $InicioCarga = new DateTime("now");
 
-      if(isset($_GET['SEDE'])) {
-        echo '
-          <h1 class="h5 text-success"  align="left">
-            <i class="fas fa-prescription"></i> '.NombreSede($_GET['SEDE']).
-          '</h1>
-        ';
-      }
-      echo '<hr class="row align-items-start col-12">';
-
       R15_Articulos_Devaluados($_GET['SEDE'],$_GET['fechaInicio']);
-      GuardarAuditoria('CONSULTAR','REPORTE','Articulos Devaluados');
+      FG_Guardar_Auditoria('CONSULTAR','REPORTE','Articulos Devaluados');
 
       $FinCarga = new DateTime("now");
       $IntervalCarga = $InicioCarga->diff($FinCarga);
       echo'Tiempo de carga: '.$IntervalCarga->format("%Y-%M-%D %H:%I:%S");
     }
     else {
-        if(isset($_GET['SEDE'])) {
-          echo '
-            <h1 class="h5 text-success"  align="left">
-              <i class="fas fa-prescription"></i> '.NombreSede($_GET['SEDE']).
-            '</h1>
-          ';
-        }
-        echo '<hr class="row align-items-start col-12">';
+      echo '
+        <form autocomplete="off" action="" target="_blank">
+          <table style="width:100%;">
+            <tr>
+              <td align="center">
+                <label for="fechaInicio">Fecha de inicio del reporte:</label>
+              </td>
 
-        echo '
-          <form autocomplete="off" action="" target="_blank">
-            <table style="width:100%;">
-              <tr>
-                <td align="center">
-                  <label for="fechaInicio">Fecha de inicio del reporte:</label>
-                </td>
+              <td>
+                <input id="fechaInicio" type="date" name="fechaInicio" required style="width:100%;">
+              </td>
 
-                <td>
-                  <input id="fechaInicio" type="date" name="fechaInicio" required style="width:100%;">
-                </td>
+              <input id="SEDE" name="SEDE" type="hidden" value="'; 
+                print_r($_GET['SEDE']); 
+              echo'">
 
-                <input id="SEDE" name="SEDE" type="hidden" value="'; 
-                  print_r($_GET['SEDE']); 
-                echo'">
-
-                <td align="right">
-                  <input type="submit" value="Buscar" class="btn btn-outline-success">
-                </td>
-              </tr>
-            </table>
-          </form>
-        ';
+              <td align="right">
+                <input type="submit" value="Buscar" class="btn btn-outline-success">
+              </td>
+            </tr>
+          </table>
+        </form>
+      ';
     }
   ?>
 @endsection
@@ -144,8 +113,8 @@
   */
   function R15_Articulos_Devaluados($SedeConnection,$FInicial) {
     
-    $conn = ConectarSmartpharma($SedeConnection);
-    $connCPharma = ConectarXampp();
+    $conn = FG_Conectar_Smartpharma($SedeConnection);
+    $connCPharma = FG_Conectar_CPharma();
     $Hoy = new DateTime('now');
     $Hoy = $Hoy->format('Y-m-d');
     $FInicialImpresion = date('d-m-Y',strtotime($FInicial));
@@ -168,18 +137,18 @@
       <table class="table table-striped table-bordered col-12 sortable" id="myTable">
         <thead class="thead-dark">
           <tr>
-            <th scope="col">#</th>
-            <th scope="col">Codigo</th>
-            <th scope="col">Descripcion</th>
-            <th scope="col">Precio '.SigVe.'</th>
-            <th scope="col">Existencia</th>
-            <th scope="col">Valor lote '.SigVe.'</th>
-            <th scope="col">Ultimo lote</th>
-            <th scope="col">Tasa historico  '.SigVe.'</th>
-            <th scope="col">Precio en  '.SigDolar.'</th>
-            <th scope="col">Valor lote  '.SigDolar.'</th>
-            <th scope="col">Dias en tienda</th>
-            <th scope="col">Ultimo proveedor</th>
+            <th scope="col" class="CP-sticky">#</th>
+            <th scope="col" class="CP-sticky">Codigo</th>
+            <th scope="col" class="CP-sticky">Descripcion</th>
+            <th scope="col" class="CP-sticky">Precio '.SigVe.'</th>
+            <th scope="col" class="CP-sticky">Existencia</th>
+            <th scope="col" class="CP-sticky">Valor lote '.SigVe.'</th>
+            <th scope="col" class="CP-sticky">Ultimo lote</th>
+            <th scope="col" class="CP-sticky">Tasa historico  '.SigVe.'</th>
+            <th scope="col" class="CP-sticky">Precio en  '.SigDolar.'</th>
+            <th scope="col" class="CP-sticky">Valor lote  '.SigDolar.'</th>
+            <th scope="col" class="CP-sticky">Dias en tienda</th>
+            <th scope="col" class="CP-sticky">Ultimo proveedor</th>
           </tr>
         </thead>
 
@@ -194,31 +163,35 @@
     while($row2 = sqlsrv_fetch_array($result2,SQLSRV_FETCH_ASSOC)) {
 
       $IdArticulo = $row2["InvArticuloId"];
-      $Dolarizado = FG_Producto_Dolarizado($conn,$IdArticulo);
-
+      $Dolarizado = FG_Producto_Dolarizado($row2["Dolarizado"]);
+      
       if($Dolarizado == 'NO') {
-        
         $UltimoLote = $row2['FechaLote'];
 
         if(!is_null($UltimoLote)) {
           $UltimoLote = $UltimoLote->format('Y-m-d');
-          $Diferencia = ValidarFechas($FInicial,$UltimoLote);
+          $Diferencia = FG_Validar_Fechas($FInicial,$UltimoLote);
 
           if($Diferencia < 0) {
 
-            $IsIVA = $row2["ConceptoImpuesto"];
             $Existencia = $row2["Existencia"];
-            $Precio = FG_Calculo_Precio($conn,$IdArticulo,$IsIVA,$Existencia);
+            $TroquelAlmacen1 = $row2["TroquelAlmacen1"];
+            $PrecioCompraBruto = $row2["PrecioCompraBruto"];
+            $Utilidad = $row2["Utilidad"];
+            $IsIVA = $row2["ConceptoImpuesto"];
+            $TroquelAlmacen2 = $row2["TroquelAlmacen2"];
+
+            $Precio = FG_Calculo_Precio($Existencia,$TroquelAlmacen1,$PrecioCompraBruto,$Utilidad,$IsIVA,$TroquelAlmacen2);
             $ValorLote = $Precio * intval($Existencia);
 
             $Tasa = FG_Tasa_Fecha($connCPharma,$UltimoLote);
-            $Descripcion = utf8_encode($row2["Descripcion"]);
+            $Descripcion = FG_Limpiar_Texto($row2["Descripcion"]);
 
             echo '
               <tr>
                 <td align="center"><strong>'.intval($contador).'</strong></td>
                   <td align="center">'.$row2["CodigoArticulo"].'</td>
-                  <td align="left" class="barrido">
+                  <td align="left" class="CP-barrido">
                     <a href="/reporte10?Descrip='.$Descripcion.'&Id='.$IdArticulo.'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
                       .$Descripcion
                     .'</a>
@@ -247,19 +220,16 @@
               ';
             }
 
-            $sql6 = QG_UltimoProveedor($IdArticulo);
-            $result6 = sqlsrv_query($conn,$sql6);
-            $row6 = sqlsrv_fetch_array($result6,SQLSRV_FETCH_ASSOC);
-            $NombreProveedor = utf8_encode($row6["Nombre"]);
-            $IdProveedor = $row6["Id"];
+            $UltimoProveedorNombre = FG_Limpiar_Texto($row2["UltimoProveedorNombre"]);
+            $IdProveedor = $row2["Id"];
 
-            $TiempoTienda = ValidarFechas($UltimoLote,$Hoy);
+            $TiempoTienda = FG_Validar_Fechas($UltimoLote,$Hoy);
 
             echo '
                 <td align="center">'.$TiempoTienda.'</td>
-                <td align="left" class="barrido">
-                  <a href="/reporte7?Nombre='.$NombreProveedor.'&Id='.$IdProveedor.'&SEDE='.$SedeConnection.'" target="_blank" style="text-decoration: none; color: black;">'
-                    .$NombreProveedor
+                <td align="left" class="CP-barrido">
+                  <a href="/reporte7?Nombre='.$UltimoProveedorNombre.'&Id='.$IdProveedor.'&SEDE='.$SedeConnection.'" target="_blank" style="text-decoration: none; color: black;">'
+                    .$UltimoProveedorNombre
                   .'</a>
                 </td>
               </tr>
@@ -300,6 +270,56 @@
       InvArticulo.Id AS InvArticuloId,--Id del articulo
       InvArticulo.CodigoArticulo,--Codigo interno
 
+      --Dolarizado (0 NO es dolarizado, Id Articulo SI es dolarizado)
+      (ISNULL((SELECT
+      InvArticuloAtributo.InvArticuloId
+      FROM InvArticuloAtributo 
+      WHERE InvArticuloAtributo.InvAtributoId = 
+        (SELECT InvAtributo.Id
+        FROM InvAtributo 
+        WHERE 
+        InvAtributo.Descripcion = 'Dolarizados'
+        OR  InvAtributo.Descripcion = 'Giordany'
+        OR  InvAtributo.Descripcion = 'giordany') 
+      AND InvArticuloAtributo.InvArticuloId = InvArticulo.Id),CAST(0 AS INT))) AS Dolarizado,
+
+      --Utilidad (Utilidad del articulo, Utilidad es 1.00 NO considerar la utilidad para el calculo de precio)
+      ROUND(CAST(1-((ISNULL(ROUND(CAST((SELECT VenCondicionVenta.PorcentajeUtilidad
+          FROM VenCondicionVenta 
+          WHERE VenCondicionVenta.Id = (
+            SELECT VenCondicionVenta_VenCondicionVentaArticulo.Id
+            FROM VenCondicionVenta_VenCondicionVentaArticulo 
+            WHERE VenCondicionVenta_VenCondicionVentaArticulo.InvArticuloId = InvArticulo.Id)) AS DECIMAL(38,4)),2,0),CAST(0 AS INT)))/100)AS DECIMAL(38,2)),2,0) AS Utilidad,
+
+      --Precio Troquel Almacen 1
+      (ROUND(CAST((SELECT TOP 1
+      InvLote.M_PrecioTroquelado
+      FROM InvLoteAlmacen
+      INNER JOIN InvLote ON InvLote.Id = InvLoteAlmacen.InvLoteId
+      WHERE(InvLoteAlmacen.InvAlmacenId = '1')
+      AND (InvLoteAlmacen.InvArticuloId = InvArticulo.Id)
+      AND (InvLoteAlmacen.Existencia>0)
+      ORDER BY invlote.M_PrecioTroquelado DESC)AS DECIMAL(38,2)),2,0)) AS TroquelAlmacen1,
+
+      --Precio Compra Bruto
+      (ROUND(CAST((SELECT TOP 1
+      InvLote.M_PrecioCompraBruto
+      FROM InvLoteAlmacen
+      INNER JOIN InvLote ON InvLote.Id = InvLoteAlmacen.InvLoteId
+      WHERE (InvLoteAlmacen.InvArticuloId = InvArticulo.Id)
+      AND (InvLoteAlmacen.Existencia>0)
+      ORDER BY invlote.M_PrecioCompraBruto DESC)AS DECIMAL(38,2)),2,0)) AS PrecioCompraBruto,
+
+      --Precio Troquel Almacen 2
+      (ROUND(CAST((SELECT TOP 1
+      InvLote.M_PrecioTroquelado
+      FROM InvLoteAlmacen
+      INNER JOIN InvLote ON InvLote.Id = InvLoteAlmacen.InvLoteId
+      WHERE(InvLoteAlmacen.InvAlmacenId = '2')
+      AND (InvLoteAlmacen.InvArticuloId = InvArticulo.Id)
+      AND (InvLoteAlmacen.Existencia>0)
+      ORDER BY invlote.M_PrecioTroquelado DESC)AS DECIMAL(38,2)),2,0)) AS TroquelAlmacen2,
+
       CONVERT(DATE, 
       (SELECT TOP 1
       InvLote.Auditoria_FechaCreacion
@@ -316,7 +336,25 @@
       AND (InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)) AS Existencia,--Existencia
 
       InvArticulo.FinConceptoImptoIdCompra AS ConceptoImpuesto,
-      InvArticulo.Descripcion--Descripcion del articulo
+      InvArticulo.Descripcion,
+      -- Ultimo Proveedor (Id Proveedor)
+      (SELECT TOP 1
+      ComProveedor.Id
+      FROM ComFacturaDetalle
+      INNER JOIN ComFactura ON ComFactura.Id = ComFacturaDetalle.ComFacturaId
+      INNER JOIN ComProveedor ON ComProveedor.Id = ComFactura.ComProveedorId
+      INNER JOIN GenPersona ON GenPersona.Id = ComProveedor.GenPersonaId
+      WHERE ComFacturaDetalle.InvArticuloId = InvArticulo.Id
+      ORDER BY ComFactura.FechaDocumento DESC) AS  UltimoProveedorID,
+    -- Ultimo Proveedor (Nombre Proveedor)
+      (SELECT TOP 1
+      GenPersona.Nombre
+      FROM ComFacturaDetalle
+      INNER JOIN ComFactura ON ComFactura.Id = ComFacturaDetalle.ComFacturaId
+      INNER JOIN ComProveedor ON ComProveedor.Id = ComFactura.ComProveedorId
+      INNER JOIN GenPersona ON GenPersona.Id = ComProveedor.GenPersonaId
+      WHERE ComFacturaDetalle.InvArticuloId = InvArticulo.Id
+      ORDER BY ComFactura.FechaDocumento DESC) AS  UltimoProveedorNombre
       --Tabla de origen
       FROM InvLote
       --Tablas relacionadas
