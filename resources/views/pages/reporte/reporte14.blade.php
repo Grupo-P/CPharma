@@ -1,75 +1,66 @@
 @extends('layouts.model')
 
 @section('title')
-    Reporte
+  Reporte
 @endsection
 
 @section('scriptsHead')
-    <script type="text/javascript" src="{{ asset('assets/js/sortTable.js') }}">
-    </script>
-    <script type="text/javascript" src="{{ asset('assets/js/filter.js') }}">  
-    </script>
-    <script type="text/javascript" src="{{ asset('assets/js/functions.js') }}"> 
-    </script>
-    <script type="text/javascript" src="{{ asset('assets/jquery/jquery-2.2.2.min.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('assets/jquery/jquery-ui.min.js') }}" ></script>
-
-    <style>
-    * {
-      box-sizing: border-box;
-    }
-    .autocomplete {
-      position: relative;
-      display: inline-block;
-    }
-    input {
-      border: 1px solid transparent;
-      background-color: #f1f1f1;
-      border-radius: 5px;
-      padding: 10px;
-      font-size: 16px;
-    }
-    input[type=text] {
-      background-color: #f1f1f1;
-      width: 100%;
-    }
-    .autocomplete-items {
-      position: absolute;
-      border: 1px solid #d4d4d4;
-      border-bottom: none;
-      border-top: none;
-      z-index: 99;
-      top: 100%;
-      left: 0;
-      right: 0;
-    }
-    .autocomplete-items div {
-      padding: 10px;
-      cursor: pointer;
-      background-color: #fff; 
-      border-bottom: 1px solid #d4d4d4; 
-    }
-    .autocomplete-items div:hover {
-      background-color: #e9e9e9; 
-    }
-    .autocomplete-active {
-      background-color: DodgerBlue !important; 
-      color: #ffffff; 
-    }
-    .barrido{
-      text-decoration: none;
-      transition: width 1s, height 1s, transform 1s;
-    }
-    .barrido:hover{
-      text-decoration: none;
-      transition: width 1s, height 1s, transform 1s;
-      transform: translate(20px,0px);
-    }
-    .alerta{
-      color: red;
-      text-transform: uppercase;
-    }
-    </style>
+  <style>
+  * {
+    box-sizing: border-box;
+  }
+  .autocomplete {
+    position: relative;
+    display: inline-block;
+  }
+  input {
+    border: 1px solid transparent;
+    background-color: #f1f1f1;
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 16px;
+  }
+  input[type=text] {
+    background-color: #f1f1f1;
+    width: 100%;
+  }
+  .autocomplete-items {
+    position: absolute;
+    border: 1px solid #d4d4d4;
+    border-bottom: none;
+    border-top: none;
+    z-index: 99;
+    top: 100%;
+    left: 0;
+    right: 0;
+  }
+  .autocomplete-items div {
+    padding: 10px;
+    cursor: pointer;
+    background-color: #fff; 
+    border-bottom: 1px solid #d4d4d4; 
+  }
+  .autocomplete-items div:hover {
+    background-color: #e9e9e9; 
+  }
+  .autocomplete-active {
+    background-color: DodgerBlue !important; 
+    color: #ffffff; 
+  }
+  .barrido{
+    text-decoration: none;
+    transition: width 1s, height 1s, transform 1s;
+  }
+  .barrido:hover{
+    text-decoration: none;
+    transition: width 1s, height 1s, transform 1s;
+    transform: translate(20px,0px);
+  }
+  .alerta{
+    color: red;
+    text-transform: uppercase;
+  }
+  </style>
 @endsection
 
 @section('content')
@@ -81,18 +72,19 @@
 
 <?php 
   include(app_path().'\functions\config.php');
-  include(app_path().'\functions\querys.php');
-  include(app_path().'\functions\funciones.php');
+  include(app_path().'\functions\functions.php');
+  include(app_path().'\functions\querys_mysql.php');
+  include(app_path().'\functions\querys_sqlserver.php');
 
   $InicioCarga = new DateTime("now");
 
   if (isset($_GET['SEDE'])){      
-    echo '<h1 class="h5 text-success"  align="left"> <i class="fas fa-prescription"></i> '.NombreSede($_GET['SEDE']).'</h1>';
+    echo '<h1 class="h5 text-success"  align="left"> <i class="fas fa-prescription"></i> '.FG_Nombre_Sede($_GET['SEDE']).'</h1>';
   }
   echo '<hr class="row align-items-start col-12">';
 
   R14_Productos_EnCaida($_GET['SEDE']);
-  GuardarAuditoria('CONSULTAR','REPORTE','Productos en Caida');
+  FG_Guardar_Auditoria('CONSULTAR','REPORTE','Productos en Caida');
 
   $FinCarga = new DateTime("now");
   $IntervalCarga = $InicioCarga->diff($FinCarga);
@@ -101,15 +93,16 @@
 @endsection
 
 <?php 
+  /**********************************************************************************/
   /*
     TITULO: ReporteActivacionProveedores
-    PARAMETROS : [$SedeConnection] Siglas de la sede para la conexion
     FUNCION: Armar el reporte de activacion de proveedores
     RETORNO: No aplica
-   */
+    DESAROLLADO POR: SERGIO COVA
+  */
   function R14_Productos_EnCaida($SedeConnection) {
 
-    $connCPharma = ConectarXampp();
+    $connCPharma = FG_Conectar_CPharma();
 
     $FFinal = date("Y-m-d");
     $FInicial = date("Y-m-d",strtotime($FFinal."-10 days"));
@@ -132,7 +125,6 @@
     </div>
     <br/>
     ';
-    
     echo'<h6 align="center">Periodo desde el '.$FInicialImp.' al '.$FFinalImp.' </h6>';
     echo'<h6 align="center">Los productos de este reporte cumplen con los siguientes criterios</h6>';
 
@@ -173,33 +165,33 @@
     <table class="table table-striped table-bordered col-12 sortable" id="myTable">
       <thead class="thead-dark">
           <tr>
-            <th scope="col">#</th>      
-            <th scope="col">Codigo</th>
-              <th scope="col">Descripcion</td>
-              <th scope="col">Precio</br>(Con IVA) '.SigVe.'</td>
-              <th scope="col">Existencia</td>
-              <th scope="col">Dia 10</td>
-              <th scope="col">Dia 9</td>
-              <th scope="col">Dia 8</td>
-              <th scope="col">Dia 7</td>
-              <th scope="col">Dia 6</td>
-              <th scope="col">Dia 5</td>
-              <th scope="col">Dia 4</td>
-              <th scope="col">Dia 3</td>
-              <th scope="col">Dia 2</td>
-              <th scope="col">Dia 1</td>
-              <th scope="col">Unidades Vendidas</td>
-              <th scope="col">Dias Restantes</td>                   
+            <th scope="col" class="CP-sticky">#</th>      
+            <th scope="col" class="CP-sticky">Codigo</th>
+              <th scope="col" class="CP-sticky">Descripcion</td>
+              <th scope="col" class="CP-sticky">Precio</br>(Con IVA) '.SigVe.'</td>
+              <th scope="col" class="CP-sticky">Existencia</td>
+              <th scope="col" class="CP-sticky">Dia 10</td>
+              <th scope="col" class="CP-sticky">Dia 9</td>
+              <th scope="col" class="CP-sticky">Dia 8</td>
+              <th scope="col" class="CP-sticky">Dia 7</td>
+              <th scope="col" class="CP-sticky">Dia 6</td>
+              <th scope="col" class="CP-sticky">Dia 5</td>
+              <th scope="col" class="CP-sticky">Dia 4</td>
+              <th scope="col" class="CP-sticky">Dia 3</td>
+              <th scope="col" class="CP-sticky">Dia 2</td>
+              <th scope="col" class="CP-sticky">Dia 1</td>
+              <th scope="col" class="CP-sticky">Unidades Vendidas</td>
+              <th scope="col" class="CP-sticky">Dias Restantes</td>                   
           </tr>
         </thead>
         <tbody>
       ';
 
-      $contador = 1;
+    $contador = 1;
     while($row = mysqli_fetch_assoc($result)){
       $IdArticulo = $row['IdArticulo'];
       $CodigoArticulo = $row['CodigoArticulo'];
-      $Descripcion = utf8_encode(addslashes($row['Descripcion']));
+      $Descripcion = FG_Limpiar_Texto($row['Descripcion']);
       $Precio = $row['Precio'];
       $Existencia = $row['Existencia'];
       $Dia10 = $row['Dia10'];
@@ -220,7 +212,7 @@
       echo '<td>'.$row["CodigoArticulo"].'</td>';
 
       echo 
-      '<td align="left" class="barrido">
+      '<td align="left" class="CP-barrido">
       <a href="/reporte2?Id='.$IdArticulo.'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
         .$Descripcion.
       '</a>
@@ -240,7 +232,7 @@
       echo '<td align="center">'.intval($Dia1).'</td>';
 
       echo 
-      '<td align="center" class="barrido">
+      '<td align="center" class="CP-barrido">
       <a href="reporte12?fechaInicio='.$FInicial.'&fechaFin='.$FFinal.'&SEDE='.$SedeConnection.'&Descrip='.$Descripcion.'&Id='.$IdArticulo.'" style="text-decoration: none; color: black;" target="_blank">'
         .intval($UnidadesVendidas).
       '</a>
