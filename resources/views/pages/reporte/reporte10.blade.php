@@ -6,11 +6,13 @@
 
 @section('scriptsHead')
   <style>
-    * {box-sizing:border-box;}
-
-    /*the container must be positioned relative:*/
-    .autocomplete {position:relative; display:inline-block;}
-
+    * {
+      box-sizing:border-box;
+    }
+    .autocomplete {
+      position:relative; 
+      display:inline-block;
+    }
     input {
       border:1px solid transparent;
       background-color:#f1f1f1;
@@ -18,33 +20,33 @@
       padding:10px;
       font-size:16px;
     }
-
-    input[type=text] {background-color:#f1f1f1; width:100%;}
-
+    input[type=text] {
+      background-color:#f1f1f1; 
+      width:100%;
+    }
     .autocomplete-items {
       position:absolute;
       border:1px solid #d4d4d4;
       border-bottom:none;
       border-top:none;
       z-index:99;
-      /*position the autocomplete items to be the same width as the container:*/
       top:100%;
       left:0;
       right:0;
     }
-
     .autocomplete-items div {
       padding:10px;
       cursor:pointer;
       background-color:#fff; 
       border-bottom:1px solid #d4d4d4; 
     }
-
-    /*when hovering an item:*/
-    .autocomplete-items div:hover {background-color:#e9e9e9;}
-
-    /*when navigating through the items using the arrow keys:*/
-    .autocomplete-active {background-color:DodgerBlue !important; color:#fff;}
+    .autocomplete-items div:hover {
+      background-color:#e9e9e9;
+    }
+    .autocomplete-active {
+      background-color:DodgerBlue !important; 
+      color:#fff;
+    }
   </style>
 @endsection
 
@@ -55,71 +57,71 @@
   </h1>
   <hr class="row align-items-start col-12">
 
-  <?php
-    include(app_path().'\functions\config.php');
-    include(app_path().'\functions\functions.php');
-    include(app_path().'\functions\querys_mysql.php');
-    include(app_path().'\functions\querys_sqlserver.php');
+<?php
+  include(app_path().'\functions\config.php');
+  include(app_path().'\functions\functions.php');
+  include(app_path().'\functions\querys_mysql.php');
+  include(app_path().'\functions\querys_sqlserver.php');
 
-    $ArtJson = "";
-    $CodJson = "";
+  $ArtJson = "";
+  $CodJson = "";
 
-    if(isset($_GET['SEDE'])) {
-      echo '
-        <h1 class="h5 text-success" align="left">
-          <i class="fas fa-prescription"></i> '
-          .FG_Nombre_Sede($_GET['SEDE'])
-        .'</h1>
-      ';
-    }
-    echo '<hr class="row align-items-start col-12">';
+  if(isset($_GET['SEDE'])) {
+    echo '
+      <h1 class="h5 text-success" align="left">
+        <i class="fas fa-prescription"></i> '
+        .FG_Nombre_Sede($_GET['SEDE'])
+      .'</h1>
+    ';
+  }
+  echo '<hr class="row align-items-start col-12">';
 
-    if(isset($_GET['Id'])) {
-      $InicioCarga = new DateTime("now");
+  if(isset($_GET['Id'])) {
+    $InicioCarga = new DateTime("now");
 
-      R10_Analitico_Precios($_GET['SEDE'],$_GET['Id']);
-      FG_Guardar_Auditoria('CONSULTAR','REPORTE','Analitico de precios');
+    R10_Analitico_Precios($_GET['SEDE'],$_GET['Id']);
+    FG_Guardar_Auditoria('CONSULTAR','REPORTE','Analitico de precios');
 
-      $FinCarga = new DateTime("now");
-      $IntervalCarga = $InicioCarga->diff($FinCarga);
-      echo'Tiempo de carga: '.$IntervalCarga->format("%Y-%M-%D %H:%I:%S");
-    }
-    else {
-      $InicioCarga = new DateTime("now");
+    $FinCarga = new DateTime("now");
+    $IntervalCarga = $InicioCarga->diff($FinCarga);
+    echo'Tiempo de carga: '.$IntervalCarga->format("%Y-%M-%D %H:%I:%S");
+  }
+  else {
+    $InicioCarga = new DateTime("now");
 
-      $sql = R10Q_Lista_Articulos();
-      $ArtJson = FG_Armar_Json($sql,$_GET['SEDE']);
+    $sql = R10Q_Lista_Articulos();
+    $ArtJson = FG_Armar_Json($sql,$_GET['SEDE']);
 
-      $sql1 = R10Q_Lista_Articulos_CodBarra();
-      $CodJson = FG_Armar_Json($sql1,$_GET['SEDE']);
+    $sql1 = R10Q_Lista_Articulos_CodBarra();
+    $CodJson = FG_Armar_Json($sql1,$_GET['SEDE']);
 
-      echo '
-        <form autocomplete="off" action="" target="_blank">
-          <div class="autocomplete" style="width:90%;">
-            <input id="myInput" type="text" name="Descrip" placeholder="Ingrese el nombre del articulo" onkeyup="conteo()">
-            <input id="myId" name="Id" type="hidden">
-          </div>
-          <input id="SEDE" name="SEDE" type="hidden" value="'; print_r($_GET['SEDE']); echo'">
-          <input type="submit" value="Buscar" class="btn btn-outline-success">
-        </form>
+    echo '
+      <form autocomplete="off" action="" target="_blank">
+        <div class="autocomplete" style="width:90%;">
+          <input id="myInput" type="text" name="Descrip" placeholder="Ingrese el nombre del articulo" onkeyup="conteo()">
+          <input id="myId" name="Id" type="hidden">
+        </div>
+        <input id="SEDE" name="SEDE" type="hidden" value="'; print_r($_GET['SEDE']); echo'">
+        <input type="submit" value="Buscar" class="btn btn-outline-success">
+      </form>
 
-        <br/>
+      <br/>
 
-        <form autocomplete="off" action="" target="_blank">
-          <div class="autocomplete" style="width:90%;">
-            <input id="myInputCB" type="text" name="CodBar" placeholder="Ingrese el codigo de barra del articulo" onkeyup="conteoCB()">
-            <input id="myIdCB" name="Id" type="hidden">
-          </div>
-          <input id="SEDE" name="SEDE" type="hidden" value="'; print_r($_GET['SEDE']); echo'">
-          <input type="submit" value="Buscar" class="btn btn-outline-success">
-        </form>
-      ';
+      <form autocomplete="off" action="" target="_blank">
+        <div class="autocomplete" style="width:90%;">
+          <input id="myInputCB" type="text" name="CodBar" placeholder="Ingrese el codigo de barra del articulo" onkeyup="conteoCB()">
+          <input id="myIdCB" name="Id" type="hidden">
+        </div>
+        <input id="SEDE" name="SEDE" type="hidden" value="'; print_r($_GET['SEDE']); echo'">
+        <input type="submit" value="Buscar" class="btn btn-outline-success">
+      </form>
+    ';
 
-      $FinCarga = new DateTime("now");
-      $IntervalCarga = $InicioCarga->diff($FinCarga);
-      echo'Tiempo de carga: '.$IntervalCarga->format("%Y-%M-%D %H:%I:%S");
-    }
-  ?>
+    $FinCarga = new DateTime("now");
+    $IntervalCarga = $InicioCarga->diff($FinCarga);
+    echo'Tiempo de carga: '.$IntervalCarga->format("%Y-%M-%D %H:%I:%S");
+  }
+?>
 @endsection
 
 @section('scriptsFoot')
@@ -146,6 +148,7 @@
 @endsection
 
 <?php
+  /**********************************************************************************/
   /*
     TITULO: R10_Analitico_Precios
     FUNCION: Armar una tabla de historico de compra del articulo
@@ -202,7 +205,6 @@
         </thead>
         <tbody>
       ';
-
       echo '
         <tr>
           <td align="center">'.$CodigoArticulo.'</td>
@@ -232,11 +234,10 @@
         ';
       }
       echo '
-            </tr>
-          </tbody>
-        </table>
+          </tr>
+        </tbody>
+      </table>
       ';
-
       echo'
         <table class="table table-striped table-bordered col-12 sortable" id="myTable">
           <thead class="thead-dark">
@@ -325,248 +326,245 @@
           </tbody>
         </table>
       ';
-
-      mysqli_close($connCPharma);
-      sqlsrv_close($conn);
-    }
-
-    /*
-        TITULO: R10Q_Lista_Articulos
-        PARAMETROS: No aplica
-        FUNCION: Armar una lista de articulos con descripcion e id
-        RETORNO: Lista de articulos con descripcion e id
-        AUTOR: Ing. Manuel Henriquez
-    */
-    function R10Q_Lista_Articulos() {
-      $sql = "
-        SELECT
-        InvArticulo.Descripcion,
-        InvArticulo.Id
-        FROM InvArticulo
-        ORDER BY InvArticulo.Descripcion ASC
-      ";
-      return $sql;
-    }
-
-    /*
-      TITULO: R10Q_Lista_Articulos_CodBarra
+    mysqli_close($connCPharma);
+    sqlsrv_close($conn);
+  }
+  /**********************************************************************************/
+  /*
+      TITULO: R10Q_Lista_Articulos
+      PARAMETROS: No aplica
       FUNCION: Armar una lista de articulos con descripcion e id
       RETORNO: Lista de articulos con descripcion e id
-      DESAROLLADO POR: SERGIO COVA
+      AUTOR: Ing. Manuel Henriquez
+  */
+  function R10Q_Lista_Articulos() {
+    $sql = "
+      SELECT
+      InvArticulo.Descripcion,
+      InvArticulo.Id
+      FROM InvArticulo
+      ORDER BY InvArticulo.Descripcion ASC
+    ";
+    return $sql;
+  }
+  /**********************************************************************************/
+  /*
+    TITULO: R10Q_Lista_Articulos_CodBarra
+    FUNCION: Armar una lista de articulos con descripcion e id
+    RETORNO: Lista de articulos con descripcion e id
+    DESAROLLADO POR: SERGIO COVA
+ */
+  function R10Q_Lista_Articulos_CodBarra() {
+    $sql = "
+      SELECT
+      (SELECT CodigoBarra
+      FROM InvCodigoBarra 
+      WHERE InvCodigoBarra.InvArticuloId = InvArticulo.Id
+      AND InvCodigoBarra.EsPrincipal = 1) AS CodigoBarra,
+      InvArticulo.Id
+      FROM InvArticulo
+      ORDER BY CodigoBarra ASC
+    ";
+    return $sql;
+  }
+  /**********************************************************************************/
+  /*
+      TITULO: R10Q_Detalle_Articulo
+      FUNCION: Query que genera el detalle del articulo solicitado
+      RETORNO: Detalle del articulo
+      AUTOR: Ing. Manuel Henriquez
+  */
+  function R10Q_Detalle_Articulo($IdArticulo) {
+    $sql = " 
+      SELECT
+    --Id Articulo
+      InvArticulo.Id AS IdArticulo,
+    --Codigo Interno
+      InvArticulo.CodigoArticulo AS CodigoInterno,
+    --Codigo de Barra
+      (SELECT CodigoBarra
+      FROM InvCodigoBarra 
+      WHERE InvCodigoBarra.InvArticuloId = InvArticulo.Id
+      AND InvCodigoBarra.EsPrincipal = 1) AS CodigoBarra,
+    --Descripcion
+      InvArticulo.Descripcion,
+    --Impuesto (1 SI aplica impuesto, 0 NO aplica impuesto)
+      (ISNULL(InvArticulo.FinConceptoImptoIdCompra,CAST(0 AS INT))) AS Impuesto,
+    --Utilidad (Utilidad del articulo, Utilidad es 1.00 NO considerar la utilidad para el calculo de precio)
+      ROUND(CAST(1-((ISNULL(ROUND(CAST((SELECT VenCondicionVenta.PorcentajeUtilidad
+          FROM VenCondicionVenta 
+          WHERE VenCondicionVenta.Id = (
+            SELECT VenCondicionVenta_VenCondicionVentaArticulo.Id
+            FROM VenCondicionVenta_VenCondicionVentaArticulo 
+            WHERE VenCondicionVenta_VenCondicionVentaArticulo.InvArticuloId = InvArticulo.Id)) AS DECIMAL(38,4)),2,0),CAST(0 AS INT)))/100)AS DECIMAL(38,2)),2,0) AS Utilidad,
+    --Precio Troquel Almacen 1
+      (ROUND(CAST((SELECT TOP 1
+      InvLote.M_PrecioTroquelado
+      FROM InvLoteAlmacen
+      INNER JOIN InvLote ON InvLote.Id = InvLoteAlmacen.InvLoteId
+      WHERE(InvLoteAlmacen.InvAlmacenId = '1')
+      AND (InvLoteAlmacen.InvArticuloId = InvArticulo.Id)
+      AND (InvLoteAlmacen.Existencia>0)
+      ORDER BY invlote.M_PrecioTroquelado DESC)AS DECIMAL(38,2)),2,0)) AS TroquelAlmacen1,
+    --Precio Troquel Almacen 2
+      (ROUND(CAST((SELECT TOP 1
+      InvLote.M_PrecioTroquelado
+      FROM InvLoteAlmacen
+      INNER JOIN InvLote ON InvLote.Id = InvLoteAlmacen.InvLoteId
+      WHERE(InvLoteAlmacen.InvAlmacenId = '2')
+      AND (InvLoteAlmacen.InvArticuloId = InvArticulo.Id)
+      AND (InvLoteAlmacen.Existencia>0)
+      ORDER BY invlote.M_PrecioTroquelado DESC)AS DECIMAL(38,2)),2,0)) AS TroquelAlmacen2,
+    --Precio Compra Bruto
+      (ROUND(CAST((SELECT TOP 1
+      InvLote.M_PrecioCompraBruto
+      FROM InvLoteAlmacen
+      INNER JOIN InvLote ON InvLote.Id = InvLoteAlmacen.InvLoteId
+      WHERE (InvLoteAlmacen.InvArticuloId = InvArticulo.Id)
+      AND (InvLoteAlmacen.Existencia>0)
+      ORDER BY invlote.M_PrecioCompraBruto DESC)AS DECIMAL(38,2)),2,0)) AS PrecioCompraBruto,
+    --Existencia (Segun el almacen del filtro)
+      (ROUND(CAST((SELECT SUM (InvLoteAlmacen.Existencia) As Existencia
+                  FROM InvLoteAlmacen
+                  WHERE(InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
+                  AND (InvLoteAlmacen.InvArticuloId = InvArticulo.Id)) AS DECIMAL(38,0)),2,0))  AS Existencia,
+    --Dolarizado (0 NO es dolarizado, Id Articulo SI es dolarizado)
+      (ISNULL((SELECT
+      InvArticuloAtributo.InvArticuloId
+      FROM InvArticuloAtributo 
+      WHERE InvArticuloAtributo.InvAtributoId = 
+        (SELECT InvAtributo.Id
+        FROM InvAtributo 
+        WHERE 
+        InvAtributo.Descripcion = 'Dolarizados'
+        OR  InvAtributo.Descripcion = 'Giordany'
+        OR  InvAtributo.Descripcion = 'giordany') 
+      AND InvArticuloAtributo.InvArticuloId = InvArticulo.Id),CAST(0 AS INT))) AS Dolarizado,
+    --Tipo Producto (0 Miscelaneos, Id Articulo Medicinas)
+      (ISNULL((SELECT
+      InvArticuloAtributo.InvArticuloId 
+      FROM InvArticuloAtributo 
+      WHERE InvArticuloAtributo.InvAtributoId = 
+        (SELECT InvAtributo.Id
+        FROM InvAtributo 
+        WHERE 
+        InvAtributo.Descripcion = 'Medicina') 
+      AND InvArticuloAtributo.InvArticuloId = InvArticulo.Id),CAST(0 AS INT))) AS Tipo,
+    --Articulo Estrella (0 NO es Articulo Estrella , Id SI es Articulo Estrella)
+      (ISNULL((SELECT
+      InvArticuloAtributo.InvArticuloId 
+      FROM InvArticuloAtributo 
+      WHERE InvArticuloAtributo.InvAtributoId = 
+        (SELECT InvAtributo.Id
+        FROM InvAtributo 
+        WHERE 
+        InvAtributo.Descripcion = 'Articulo Estrella') 
+      AND InvArticuloAtributo.InvArticuloId = InvArticulo.Id),CAST(0 AS INT))) AS ArticuloEstrella,
+    -- Ultima Venta (Fecha)
+      (SELECT TOP 1
+      CONVERT(DATE,VenFactura.FechaDocumento)
+      FROM VenFactura
+      INNER JOIN VenFacturaDetalle ON VenFacturaDetalle.VenFacturaId = VenFactura.Id
+      WHERE VenFacturaDetalle.InvArticuloId = InvArticulo.Id
+      ORDER BY FechaDocumento DESC) AS UltimaVenta,
+    --Tiempo sin Venta (En dias)
+      (SELECT TOP 1
+      DATEDIFF(DAY,CONVERT(DATE,VenFactura.FechaDocumento),GETDATE())
+      FROM VenFactura
+      INNER JOIN VenFacturaDetalle ON VenFacturaDetalle.VenFacturaId = VenFactura.Id
+      WHERE VenFacturaDetalle.InvArticuloId = InvArticulo.Id
+      ORDER BY FechaDocumento DESC) AS TiempoSinVenta,
+    --Ultimo Lote (Fecha)
+      (SELECT TOP 1
+      CONVERT(DATE,InvLote.FechaEntrada) AS UltimoLote
+      FROM InvLote
+      WHERE InvLote.InvArticuloId  = InvArticulo.Id
+      ORDER BY UltimoLote DESC) AS UltimoLote,
+    --Tiempo Tienda (En dias)
+      (SELECT TOP 1 
+      DATEDIFF(DAY,CONVERT(DATE,InvLote.FechaEntrada),GETDATE())
+      FROM InvLoteAlmacen 
+      INNER JOIN invlote on invlote.id = InvLoteAlmacen.InvLoteId
+      WHERE InvLotealmacen.InvArticuloId = InvArticulo.Id
+      ORDER BY InvLote.Auditoria_FechaCreacion DESC) AS TiempoTienda,
+    -- Ultimo Proveedor (Id Proveedor)
+      (SELECT TOP 1
+      ComProveedor.Id
+      FROM ComFacturaDetalle
+      INNER JOIN ComFactura ON ComFactura.Id = ComFacturaDetalle.ComFacturaId
+      INNER JOIN ComProveedor ON ComProveedor.Id = ComFactura.ComProveedorId
+      INNER JOIN GenPersona ON GenPersona.Id = ComProveedor.GenPersonaId
+      WHERE ComFacturaDetalle.InvArticuloId = InvArticulo.Id
+      ORDER BY ComFactura.FechaDocumento DESC) AS  UltimoProveedorID,
+    -- Ultimo Proveedor (Nombre Proveedor)
+      (SELECT TOP 1
+      GenPersona.Nombre
+      FROM ComFacturaDetalle
+      INNER JOIN ComFactura ON ComFactura.Id = ComFacturaDetalle.ComFacturaId
+      INNER JOIN ComProveedor ON ComProveedor.Id = ComFactura.ComProveedorId
+      INNER JOIN GenPersona ON GenPersona.Id = ComProveedor.GenPersonaId
+      WHERE ComFacturaDetalle.InvArticuloId = InvArticulo.Id
+      ORDER BY ComFactura.FechaDocumento DESC) AS  UltimoProveedorNombre
+    --Tabla principal
+      FROM InvArticulo
+    --Joins
+      LEFT JOIN InvLoteAlmacen ON InvLoteAlmacen.InvArticuloId = InvArticulo.Id
+      LEFT JOIN InvArticuloAtributo ON InvArticuloAtributo.InvArticuloId = InvArticulo.Id
+      LEFT JOIN InvAtributo ON InvAtributo.Id = InvArticuloAtributo.InvAtributoId 
+    --Condicionales
+      WHERE InvArticulo.Id = '$IdArticulo'
+    --Agrupamientos
+      GROUP BY InvArticulo.Id, InvArticulo.CodigoArticulo, InvArticulo.Descripcion, InvArticulo.FinConceptoImptoIdCompra
+    --Ordanamiento
+      ORDER BY InvArticulo.Id ASC 
+    ";
+    return $sql;
+  }
+  /**********************************************************************************/
+  /*
+      TITULO: R10Q_Lote_Analitico
+      PARAMETROS: [$IdArticulo] Id del articulo actual
+      FUNCION: Construir la consulta para el despliegue del reporte AnaliticoDePrecio
+      RETORNO: Un String con las instrucciones de la consulta
+      AUTOR: Ing. Manuel Henriquez
    */
-    
-    function R10Q_Lista_Articulos_CodBarra() {
-      $sql = "
-        SELECT
-        (SELECT CodigoBarra
-        FROM InvCodigoBarra 
-        WHERE InvCodigoBarra.InvArticuloId = InvArticulo.Id
-        AND InvCodigoBarra.EsPrincipal = 1) AS CodigoBarra,
-        InvArticulo.Id
-        FROM InvArticulo
-        ORDER BY CodigoBarra ASC
+  function R10Q_Lote_Analitico($IdArticulo) {
+    $sql = "
+      SELECT 
+      InvLoteAlmacen.InvLoteId,
+      InvMovimiento.InvCausaId,
+      InvCausa.Descripcion,
+      CONVERT(DATE,InvLoteAlmacen.Auditoria_FechaCreacion) AS FechaLote,
+      ROUND(CAST((SELECT
+      ComFacturaDetalle.CantidadRecibidaFactura
+      FROM ComFacturaDetalle
+      INNER JOIN ComFactura ON  ComFactura.Id = ComFacturaDetalle.ComFacturaId
+      WHERE ComFacturaDetalle.InvArticuloId = '$IdArticulo'
+      AND (CONVERT(DATE,ComFactura.FechaRegistro) = CONVERT(DATE,InvLoteAlmacen.Auditoria_FechaCreacion))
+      GROUP BY ComFacturaDetalle.CantidadRecibidaFactura, ComFactura.FechaRegistro) AS DECIMAL(38,0)),2,0) AS CantidadRecibida,
+      InvAlmacen.CodigoAlmacen,
+      ROUND(CAST(InvLoteAlmacen.Existencia AS DECIMAL(38,0)),2,0) AS Existencia,
+      InvLote.M_PrecioCompraBruto,
+      InvLote.Auditoria_Usuario AS Responsable
+      FROM InvLoteAlmacen
+      INNER JOIN InvAlmacen ON InvAlmacen.Id=InvLoteAlmacen.InvAlmacenId
+      INNER JOIN InvLote ON InvLote.Id=InvLoteAlmacen.InvLoteId
+      INNER JOIN InvMovimiento ON InvMovimiento.InvLoteId = InvLoteAlmacen.InvLoteId
+      INNER JOIN InvCausa ON InvMovimiento.InvCausaId=InvCausa.Id
+      WHERE InvLoteAlmacen.InvArticuloId='$IdArticulo'
+      AND (InvLoteAlmacen.Existencia>0)
+      AND (CONVERT(DATE,InvMovimiento.Auditoria_FechaCreacion)=CONVERT(DATE,InvLoteAlmacen.Auditoria_FechaCreacion)) 
+      AND (
+          (InvMovimiento.InvCausaId=1) 
+          OR (InvMovimiento.InvCausaId=5)
+          OR (InvMovimiento.InvCausaId=7)
+          OR (InvMovimiento.InvCausaId=9)
+          OR (InvMovimiento.InvCausaId=11)
+          OR (InvMovimiento.InvCausaId=14)
+      )
+      GROUP BY InvLoteAlmacen.InvLoteId,InvMovimiento.InvCausaId,InvCausa.Descripcion,CONVERT(DATE,InvLoteAlmacen.Auditoria_FechaCreacion),InvAlmacen.CodigoAlmacen,InvLoteAlmacen.Existencia,InvLote.M_PrecioCompraBruto,InvLote.Auditoria_Usuario
+      ORDER BY FechaLote DESC
       ";
-      return $sql;
-    }
-
-    /*
-        TITULO: R10Q_Detalle_Articulo
-        FUNCION: Query que genera el detalle del articulo solicitado
-        RETORNO: Detalle del articulo
-        AUTOR: Ing. Manuel Henriquez
-    */
-    function R10Q_Detalle_Articulo($IdArticulo) {
-      $sql = " 
-        SELECT
-      --Id Articulo
-        InvArticulo.Id AS IdArticulo,
-      --Codigo Interno
-        InvArticulo.CodigoArticulo AS CodigoInterno,
-      --Codigo de Barra
-        (SELECT CodigoBarra
-        FROM InvCodigoBarra 
-        WHERE InvCodigoBarra.InvArticuloId = InvArticulo.Id
-        AND InvCodigoBarra.EsPrincipal = 1) AS CodigoBarra,
-      --Descripcion
-        InvArticulo.Descripcion,
-      --Impuesto (1 SI aplica impuesto, 0 NO aplica impuesto)
-        (ISNULL(InvArticulo.FinConceptoImptoIdCompra,CAST(0 AS INT))) AS Impuesto,
-      --Utilidad (Utilidad del articulo, Utilidad es 1.00 NO considerar la utilidad para el calculo de precio)
-        ROUND(CAST(1-((ISNULL(ROUND(CAST((SELECT VenCondicionVenta.PorcentajeUtilidad
-            FROM VenCondicionVenta 
-            WHERE VenCondicionVenta.Id = (
-              SELECT VenCondicionVenta_VenCondicionVentaArticulo.Id
-              FROM VenCondicionVenta_VenCondicionVentaArticulo 
-              WHERE VenCondicionVenta_VenCondicionVentaArticulo.InvArticuloId = InvArticulo.Id)) AS DECIMAL(38,4)),2,0),CAST(0 AS INT)))/100)AS DECIMAL(38,2)),2,0) AS Utilidad,
-      --Precio Troquel Almacen 1
-        (ROUND(CAST((SELECT TOP 1
-        InvLote.M_PrecioTroquelado
-        FROM InvLoteAlmacen
-        INNER JOIN InvLote ON InvLote.Id = InvLoteAlmacen.InvLoteId
-        WHERE(InvLoteAlmacen.InvAlmacenId = '1')
-        AND (InvLoteAlmacen.InvArticuloId = InvArticulo.Id)
-        AND (InvLoteAlmacen.Existencia>0)
-        ORDER BY invlote.M_PrecioTroquelado DESC)AS DECIMAL(38,2)),2,0)) AS TroquelAlmacen1,
-      --Precio Troquel Almacen 2
-        (ROUND(CAST((SELECT TOP 1
-        InvLote.M_PrecioTroquelado
-        FROM InvLoteAlmacen
-        INNER JOIN InvLote ON InvLote.Id = InvLoteAlmacen.InvLoteId
-        WHERE(InvLoteAlmacen.InvAlmacenId = '2')
-        AND (InvLoteAlmacen.InvArticuloId = InvArticulo.Id)
-        AND (InvLoteAlmacen.Existencia>0)
-        ORDER BY invlote.M_PrecioTroquelado DESC)AS DECIMAL(38,2)),2,0)) AS TroquelAlmacen2,
-      --Precio Compra Bruto
-        (ROUND(CAST((SELECT TOP 1
-        InvLote.M_PrecioCompraBruto
-        FROM InvLoteAlmacen
-        INNER JOIN InvLote ON InvLote.Id = InvLoteAlmacen.InvLoteId
-        WHERE (InvLoteAlmacen.InvArticuloId = InvArticulo.Id)
-        AND (InvLoteAlmacen.Existencia>0)
-        ORDER BY invlote.M_PrecioCompraBruto DESC)AS DECIMAL(38,2)),2,0)) AS PrecioCompraBruto,
-      --Existencia (Segun el almacen del filtro)
-        (ROUND(CAST((SELECT SUM (InvLoteAlmacen.Existencia) As Existencia
-                    FROM InvLoteAlmacen
-                    WHERE(InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
-                    AND (InvLoteAlmacen.InvArticuloId = InvArticulo.Id)) AS DECIMAL(38,0)),2,0))  AS Existencia,
-      --Dolarizado (0 NO es dolarizado, Id Articulo SI es dolarizado)
-        (ISNULL((SELECT
-        InvArticuloAtributo.InvArticuloId
-        FROM InvArticuloAtributo 
-        WHERE InvArticuloAtributo.InvAtributoId = 
-          (SELECT InvAtributo.Id
-          FROM InvAtributo 
-          WHERE 
-          InvAtributo.Descripcion = 'Dolarizados'
-          OR  InvAtributo.Descripcion = 'Giordany'
-          OR  InvAtributo.Descripcion = 'giordany') 
-        AND InvArticuloAtributo.InvArticuloId = InvArticulo.Id),CAST(0 AS INT))) AS Dolarizado,
-      --Tipo Producto (0 Miscelaneos, Id Articulo Medicinas)
-        (ISNULL((SELECT
-        InvArticuloAtributo.InvArticuloId 
-        FROM InvArticuloAtributo 
-        WHERE InvArticuloAtributo.InvAtributoId = 
-          (SELECT InvAtributo.Id
-          FROM InvAtributo 
-          WHERE 
-          InvAtributo.Descripcion = 'Medicina') 
-        AND InvArticuloAtributo.InvArticuloId = InvArticulo.Id),CAST(0 AS INT))) AS Tipo,
-      --Articulo Estrella (0 NO es Articulo Estrella , Id SI es Articulo Estrella)
-        (ISNULL((SELECT
-        InvArticuloAtributo.InvArticuloId 
-        FROM InvArticuloAtributo 
-        WHERE InvArticuloAtributo.InvAtributoId = 
-          (SELECT InvAtributo.Id
-          FROM InvAtributo 
-          WHERE 
-          InvAtributo.Descripcion = 'Articulo Estrella') 
-        AND InvArticuloAtributo.InvArticuloId = InvArticulo.Id),CAST(0 AS INT))) AS ArticuloEstrella,
-      -- Ultima Venta (Fecha)
-        (SELECT TOP 1
-        CONVERT(DATE,VenFactura.FechaDocumento)
-        FROM VenFactura
-        INNER JOIN VenFacturaDetalle ON VenFacturaDetalle.VenFacturaId = VenFactura.Id
-        WHERE VenFacturaDetalle.InvArticuloId = InvArticulo.Id
-        ORDER BY FechaDocumento DESC) AS UltimaVenta,
-      --Tiempo sin Venta (En dias)
-        (SELECT TOP 1
-        DATEDIFF(DAY,CONVERT(DATE,VenFactura.FechaDocumento),GETDATE())
-        FROM VenFactura
-        INNER JOIN VenFacturaDetalle ON VenFacturaDetalle.VenFacturaId = VenFactura.Id
-        WHERE VenFacturaDetalle.InvArticuloId = InvArticulo.Id
-        ORDER BY FechaDocumento DESC) AS TiempoSinVenta,
-      --Ultimo Lote (Fecha)
-        (SELECT TOP 1
-        CONVERT(DATE,InvLote.FechaEntrada) AS UltimoLote
-        FROM InvLote
-        WHERE InvLote.InvArticuloId  = InvArticulo.Id
-        ORDER BY UltimoLote DESC) AS UltimoLote,
-      --Tiempo Tienda (En dias)
-        (SELECT TOP 1 
-        DATEDIFF(DAY,CONVERT(DATE,InvLote.FechaEntrada),GETDATE())
-        FROM InvLoteAlmacen 
-        INNER JOIN invlote on invlote.id = InvLoteAlmacen.InvLoteId
-        WHERE InvLotealmacen.InvArticuloId = InvArticulo.Id
-        ORDER BY InvLote.Auditoria_FechaCreacion DESC) AS TiempoTienda,
-      -- Ultimo Proveedor (Id Proveedor)
-        (SELECT TOP 1
-        ComProveedor.Id
-        FROM ComFacturaDetalle
-        INNER JOIN ComFactura ON ComFactura.Id = ComFacturaDetalle.ComFacturaId
-        INNER JOIN ComProveedor ON ComProveedor.Id = ComFactura.ComProveedorId
-        INNER JOIN GenPersona ON GenPersona.Id = ComProveedor.GenPersonaId
-        WHERE ComFacturaDetalle.InvArticuloId = InvArticulo.Id
-        ORDER BY ComFactura.FechaDocumento DESC) AS  UltimoProveedorID,
-      -- Ultimo Proveedor (Nombre Proveedor)
-        (SELECT TOP 1
-        GenPersona.Nombre
-        FROM ComFacturaDetalle
-        INNER JOIN ComFactura ON ComFactura.Id = ComFacturaDetalle.ComFacturaId
-        INNER JOIN ComProveedor ON ComProveedor.Id = ComFactura.ComProveedorId
-        INNER JOIN GenPersona ON GenPersona.Id = ComProveedor.GenPersonaId
-        WHERE ComFacturaDetalle.InvArticuloId = InvArticulo.Id
-        ORDER BY ComFactura.FechaDocumento DESC) AS  UltimoProveedorNombre
-      --Tabla principal
-        FROM InvArticulo
-      --Joins
-        LEFT JOIN InvLoteAlmacen ON InvLoteAlmacen.InvArticuloId = InvArticulo.Id
-        LEFT JOIN InvArticuloAtributo ON InvArticuloAtributo.InvArticuloId = InvArticulo.Id
-        LEFT JOIN InvAtributo ON InvAtributo.Id = InvArticuloAtributo.InvAtributoId 
-      --Condicionales
-        WHERE InvArticulo.Id = '$IdArticulo'
-      --Agrupamientos
-        GROUP BY InvArticulo.Id, InvArticulo.CodigoArticulo, InvArticulo.Descripcion, InvArticulo.FinConceptoImptoIdCompra
-      --Ordanamiento
-        ORDER BY InvArticulo.Id ASC 
-      ";
-      return $sql;
-    }
-
-    /*
-        TITULO: R10Q_Lote_Analitico
-        PARAMETROS: [$IdArticulo] Id del articulo actual
-        FUNCION: Construir la consulta para el despliegue del reporte AnaliticoDePrecio
-        RETORNO: Un String con las instrucciones de la consulta
-        AUTOR: Ing. Manuel Henriquez
-     */
-    function R10Q_Lote_Analitico($IdArticulo) {
-        $sql = "
-          SELECT 
-          InvLoteAlmacen.InvLoteId,
-          InvMovimiento.InvCausaId,
-          InvCausa.Descripcion,
-          CONVERT(DATE,InvLoteAlmacen.Auditoria_FechaCreacion) AS FechaLote,
-          ROUND(CAST((SELECT
-          ComFacturaDetalle.CantidadRecibidaFactura
-          FROM ComFacturaDetalle
-          INNER JOIN ComFactura ON  ComFactura.Id = ComFacturaDetalle.ComFacturaId
-          WHERE ComFacturaDetalle.InvArticuloId = '$IdArticulo'
-          AND (CONVERT(DATE,ComFactura.FechaRegistro) = CONVERT(DATE,InvLoteAlmacen.Auditoria_FechaCreacion))
-          GROUP BY ComFacturaDetalle.CantidadRecibidaFactura, ComFactura.FechaRegistro) AS DECIMAL(38,0)),2,0) AS CantidadRecibida,
-          InvAlmacen.CodigoAlmacen,
-          ROUND(CAST(InvLoteAlmacen.Existencia AS DECIMAL(38,0)),2,0) AS Existencia,
-          InvLote.M_PrecioCompraBruto,
-          InvLote.Auditoria_Usuario AS Responsable
-          FROM InvLoteAlmacen
-          INNER JOIN InvAlmacen ON InvAlmacen.Id=InvLoteAlmacen.InvAlmacenId
-          INNER JOIN InvLote ON InvLote.Id=InvLoteAlmacen.InvLoteId
-          INNER JOIN InvMovimiento ON InvMovimiento.InvLoteId = InvLoteAlmacen.InvLoteId
-          INNER JOIN InvCausa ON InvMovimiento.InvCausaId=InvCausa.Id
-          WHERE InvLoteAlmacen.InvArticuloId='$IdArticulo'
-          AND (InvLoteAlmacen.Existencia>0)
-          AND (CONVERT(DATE,InvMovimiento.Auditoria_FechaCreacion)=CONVERT(DATE,InvLoteAlmacen.Auditoria_FechaCreacion)) 
-          AND (
-              (InvMovimiento.InvCausaId=1) 
-              OR (InvMovimiento.InvCausaId=5)
-              OR (InvMovimiento.InvCausaId=7)
-              OR (InvMovimiento.InvCausaId=9)
-              OR (InvMovimiento.InvCausaId=11)
-              OR (InvMovimiento.InvCausaId=14)
-          )
-
-          GROUP BY InvLoteAlmacen.InvLoteId,InvMovimiento.InvCausaId,InvCausa.Descripcion,CONVERT(DATE,InvLoteAlmacen.Auditoria_FechaCreacion),InvAlmacen.CodigoAlmacen,InvLoteAlmacen.Existencia,InvLote.M_PrecioCompraBruto,InvLote.Auditoria_Usuario
-          ORDER BY FechaLote DESC
-        ";
-        return $sql;
-    }
+    return $sql;
+  }
 ?>

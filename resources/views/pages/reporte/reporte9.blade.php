@@ -9,7 +9,6 @@
     * {
       box-sizing: border-box;
     }
-
     input {
       border: 1px solid transparent;
       background-color: #f1f1f1;
@@ -17,7 +16,6 @@
       padding: 10px;
       font-size: 16px;
     }
-
     input[type=text] {
       background-color: #f1f1f1;
       width: 100%;
@@ -32,64 +30,64 @@
   </h1>
   <hr class="row align-items-start col-12">
   
-  <?php
-    include(app_path().'\functions\config.php');
-    include(app_path().'\functions\functions.php');
-    include(app_path().'\functions\querys_mysql.php');
-    include(app_path().'\functions\querys_sqlserver.php');
+<?php
+  include(app_path().'\functions\config.php');
+  include(app_path().'\functions\functions.php');
+  include(app_path().'\functions\querys_mysql.php');
+  include(app_path().'\functions\querys_sqlserver.php');
 
-    if(isset($_GET['SEDE'])) {
-      echo '
-        <h1 class="h5 text-success" align="left">
-          <i class="fas fa-prescription"></i> '.FG_Nombre_Sede($_GET['SEDE'])
-        .'</h1>
-      ';
-    }
-    echo '<hr class="row align-items-start col-12">';
+  if(isset($_GET['SEDE'])) {
+    echo '
+      <h1 class="h5 text-success" align="left">
+        <i class="fas fa-prescription"></i> '.FG_Nombre_Sede($_GET['SEDE'])
+      .'</h1>
+    ';
+  }
+  echo '<hr class="row align-items-start col-12">';
 
-    if(isset($_GET['fechaInicio'])) {
-      $InicioCarga = new DateTime("now");
+  if(isset($_GET['fechaInicio'])) {
+    $InicioCarga = new DateTime("now");
 
-      R9_Productos_Surtir($_GET['SEDE'], $_GET['fechaInicio'], $_GET['fechaFin']);
-      FG_Guardar_Auditoria('CONSULTAR', 'REPORTE', 'Productos para surtir');
+    R9_Productos_Surtir($_GET['SEDE'], $_GET['fechaInicio'], $_GET['fechaFin']);
+    FG_Guardar_Auditoria('CONSULTAR', 'REPORTE', 'Productos para surtir');
 
-      $FinCarga = new DateTime("now");
-      $IntervalCarga = $InicioCarga->diff($FinCarga);
-      echo'Tiempo de carga: '.$IntervalCarga->format("%Y-%M-%D %H:%I:%S");
-    }
-    else {
-      echo '
-        <form autocomplete="off" action="" target="_blank">
-          <table style="width:100%;">
-            <tr>
-              <td align="center">Fecha Inicio:</td>
-              <td>
-                <input id="fechaInicio" type="date" name="fechaInicio" required style="width:100%;">
-              </td>
-              <td align="center">Fecha Fin:</td>
-              <td align="right">
-                <input id="fechaFin" name="fechaFin" type="date" required style="width:100%;">
-              </td>
-              <td align="right">
-                <input id="SEDE" name="SEDE" type="hidden" value="'; print_r($_GET['SEDE']); echo'">
-                <input type="submit" value="Buscar" class="btn btn-outline-success">
-              </td>
-            </tr>
-          </table>
-        </form>
-      ';
-    }
-  ?>
+    $FinCarga = new DateTime("now");
+    $IntervalCarga = $InicioCarga->diff($FinCarga);
+    echo'Tiempo de carga: '.$IntervalCarga->format("%Y-%M-%D %H:%I:%S");
+  }
+  else {
+    echo '
+      <form autocomplete="off" action="" target="_blank">
+        <table style="width:100%;">
+          <tr>
+            <td align="center">Fecha Inicio:</td>
+            <td>
+              <input id="fechaInicio" type="date" name="fechaInicio" required style="width:100%;">
+            </td>
+            <td align="center">Fecha Fin:</td>
+            <td align="right">
+              <input id="fechaFin" name="fechaFin" type="date" required style="width:100%;">
+            </td>
+            <td align="right">
+              <input id="SEDE" name="SEDE" type="hidden" value="'; print_r($_GET['SEDE']); echo'">
+              <input type="submit" value="Buscar" class="btn btn-outline-success">
+            </td>
+          </tr>
+        </table>
+      </form>
+    ';
+  }
+?>
 @endsection
 
 <?php
+  /**********************************************************************************/
   /*
     TITULO: R9_Productos_Surtir
     FUNCION: Arma una lista con los productos surtidos y sus fechas
     RETORNO: No aplica
     AUTOR: Ing. Manuel Henriquez
   */
-
   function R9_Productos_Surtir($SedeConnection, $FInicial, $FFinal) {
     $conn = FG_Conectar_Smartpharma($SedeConnection);
 
@@ -110,13 +108,11 @@
       </div>
       <br/>
     ';
-
     echo'
       <h6 align="center">Periodo desde el ' . date("d-m-Y", strtotime($FInicial)) . ' al '
         . date("d-m-Y", strtotime($FFinalImpresion))
       . '</h6>
     ';
-
     echo'
       <table class="table table-striped table-bordered col-12 sortable" id="myTable">
         <thead class="thead-dark">
@@ -131,9 +127,7 @@
         </thead>
         <tbody>
     ';
-
     $contador = 1;
-
     while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
       $IdArticulo = $row["Id"];
       $FechaRegistro = $row["FechaTienda"];
@@ -164,13 +158,12 @@
       }
     }
     echo '
-        </tbody>
-      </table>
+      </tbody>
+    </table>
     ';
-
     sqlsrv_close($conn);
   }
-
+  /**********************************************************************************/
   /*
     TITULO: R9Q_Productos_Surtir
     FUNCION: Consulta las Veces Compradas a proveedores y las unidades compradas
