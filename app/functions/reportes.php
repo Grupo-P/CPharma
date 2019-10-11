@@ -1,4 +1,4 @@
-<style> 
+<!--<style> 
   .barrido{
     	text-decoration: none;
     	transition: width 1s, height 1s, transform 1s;
@@ -8,7 +8,7 @@
       transition: width 1s, height 1s, transform 1s;
       transform: translate(20px,0px);
     }
-</style>
+</style>-->
 
 <?php
 	/*****************************************************************************/
@@ -1314,6 +1314,7 @@
 		FUNCION:  Arma la lista de factura por proveedores
 		RETORNO: no aplica
 	 */
+	/*
 	function ReporteProveedorFactura($SedeConnection,$IdProveedor,$NombreProveedor){
 		
 		$conn = ConectarSmartpharma($SedeConnection);
@@ -1396,6 +1397,7 @@
 
 		sqlsrv_close($conn);
 	}
+	*/
 	/*
 		TITULO: ReporteFacturaArticulo
 		PARAMETROS: [$SedeConnection] sede donde se hara la conexion
@@ -1405,6 +1407,7 @@
 		FUNCION: arma la lista de articulos por factura
 		RETORNO: no aplica
 	 */
+	/*
 	function ReporteFacturaArticulo($SedeConnection,$IdProveedor,$NombreProveedor,$IdFatura){
 		
 		$conn = ConectarSmartpharma($SedeConnection);
@@ -1493,6 +1496,7 @@
 
 		sqlsrv_close($conn);
 	}
+	*/
 	/*
 		TITULO: ReporteArticuloTroquel
 		PARAMETROS: [$SedeConnection] sede donde se hara la conexion
@@ -1503,6 +1507,7 @@
 		FUNCION: arma la lista del troquel segun el articulo
 		RETORNO: no aplica
 	 */
+	/*
 	function ReporteArticuloTroquel($SedeConnection,$IdProveedor,$NombreProveedor,$IdFatura,$IdArticulo){
 		
 		$conn = ConectarSmartpharma($SedeConnection);
@@ -1602,6 +1607,7 @@
 
 		sqlsrv_close($conn);
 	}
+	*/
 	/*
 		TITULO: ReporteTroquel
 		PARAMETROS: [$SedeConnection] sede donde se hara la conexion
@@ -1613,6 +1619,7 @@
 		FUNCION: arma la lista definitiva con el troquel actualizado
 		RETORNO: no aplica
 	 */
+	/*
 	function ReporteTroquel($SedeConnection,$IdProveedor,$NombreProveedor,$IdFatura,$IdArticulo,$PrecioTroquel){
 		
 		$conn = ConectarSmartpharma($SedeConnection);
@@ -1686,7 +1693,7 @@
 		
 		sqlsrv_close($conn);
 	}
-
+	*/
 	/********************** REPORTE 9 PRODUCTOS PARA SURTIR **********************/
 	/*
 		TITULO: ReporteProductosParaSurtir
@@ -2508,6 +2515,7 @@
 		FUNCION: Arma una lista de productos por fallar
 		RETORNO: No aplica
 	 */
+	/*
 	function ReporteProductosPorFallar($SedeConnection,$FInicial,$FFinal,$ExistenciaB){
 
 		$conn = ConectarSmartpharma($SedeConnection);
@@ -2685,6 +2693,7 @@
 
 		sqlsrv_close($conn);
 	}
+	*/
 	/*****************************************************************************/
 	/************************ REPORTE 14 PRODUCTOS EN CAIDA ****************/
 	/*
@@ -2980,7 +2989,6 @@
 			  	</tbody>
 			</table>
 		';
-
 		sqlsrv_close($conn);
 	}*/
 ?>
