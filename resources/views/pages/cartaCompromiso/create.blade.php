@@ -316,7 +316,7 @@
                 Se pasa a la solicitud de fechas*/
       $InicioCarga = new DateTime("now");
 
-      CartaDeCompromiso($_GET['SEDE'],$_GET['IdProv'],$_GET['NombreProv'],$_GET['IdFact'],$_GET['IdArt']);
+      R11_Carta_Compromiso($_GET['SEDE'],$_GET['IdProv'],$_GET['NombreProv'],$_GET['IdFact'],$_GET['IdArt']);
 
       $FinCarga = new DateTime("now");
       $IntervalCarga = $InicioCarga->diff($FinCarga);
@@ -600,7 +600,7 @@
         </tbody>
       </table>
     ';
-    
+
     sqlsrv_close($conn);
   }
 
@@ -639,6 +639,299 @@
       SELECT ComFactura.NumeroFactura AS NumeroFactura
       FROM ComFactura 
       WHERE ComFactura.Id = '$IdFactura'
+    ";
+    return $sql;
+  }
+  /**********************************************************************************/
+  /*
+    TITULO: R11_Carta_Compromiso
+    PARAMETROS: [$SedeConnection] sede donde se hara la conexion
+          [$IdProveedor] ID del proveedor a buscar
+          [$NombreProveedor] Nombre del proveedor a buscar
+          [$IdFatura] id de la factura
+          [$IdArticulo] ide del articulo
+    FUNCION: arma la lista del troquel segun el articulo
+    RETORNO: no aplica
+   */
+  function R11_Carta_Compromiso($SedeConnection,$IdProveedor,$NombreProveedor,$IdFatura,$IdArticulo) {
+    $conn = FG_Conectar_Smartpharma($SedeConnection);
+
+    $sql = R11_QCarta_Compromiso($IdProveedor,$IdFatura,$IdArticulo);
+    $result = sqlsrv_query($conn,$sql);
+    $result1 = sqlsrv_query($conn,$sql);
+    $row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC);
+
+    $NumeroFactura = $row["NumeroFactura"];
+    $CodigoArticulo = $row["CodigoArticulo"];
+    $Articulo=$row["Descripcion"];
+    $FechaDocumento=$row["FechaDocumento"];
+    $FechaRecepcion=$row["FechaRecepcion"];
+    $FechaVencimiento=$row["FechaVencimiento"];
+    $Lote=$row["NumeroLote"];
+    $LoteFabricante=$row["LoteFabricante"];
+    $LoteFabricanteAnterior="";
+
+    $flag = array();
+    $flag2 = array();//Array LoteFabricante
+    $i = 0;
+    while($row1 = sqlsrv_fetch_array($result1, SQLSRV_FETCH_ASSOC)) {
+      $Lote1=$row1["NumeroLote"];
+      $LoteFabricante1=$row1["LoteFabricante"];
+      $FechaVencimiento1=$row1["FechaVencimiento"];
+
+      $flag[$i] = utf8_encode($Lote1);
+
+      //LoteFabricante
+      $flag2[$i] = utf8_encode($LoteFabricante1);
+
+      if(is_null($FechaVencimiento1)){
+        $flag[$i+1] = utf8_encode('');
+        $flag2[$i+1] = utf8_encode('');
+      }
+      else{
+        $flag[$i+1] = utf8_encode($FechaVencimiento1->format('Y-m-d'));
+        $flag2[$i+1] = utf8_encode($FechaVencimiento1->format('Y-m-d'));
+      }
+      
+      $i+=2;
+      }
+    $ArrFinal = json_encode($flag);
+    $ArrFinal2 = json_encode($flag2);
+    ?>
+
+    <script>
+      function capturarLote(e,loteNulo) {
+        if(isNaN(e.value) || loteNulo == '1') {
+          var ArrJs2 = eval(<?php echo $ArrFinal2 ?>);
+          var indice = ArrJs2.indexOf(e.value);
+          var indiceFecha = indice+1;
+          var FechaVencimientoJs = ArrJs2[indiceFecha];
+        }
+        else {
+          var ArrJs = eval(<?php echo $ArrFinal ?>);
+          var indice = ArrJs.indexOf(e.value);
+          var indiceFecha = indice+1;
+          var FechaVencimientoJs = ArrJs[indiceFecha];
+        }
+
+        if(FechaVencimientoJs == '') {
+          document.getElementById('input_fechaV').value = '00/00/0000';
+        }
+        else {
+          document.getElementById('input_fechaV').value = formato(FechaVencimientoJs);
+        }
+
+        document.getElementById('fecha_vencimiento').value = FechaVencimientoJs;
+      }
+
+      /**
+       * Convierte un texto de la forma 2017-01-10 a la forma
+       * 10/01/2017
+       *
+       * @param {string} texto Texto de la forma 2017-01-10
+       * @return {string} texto de la forma 10/01/2017
+       *
+       */
+      function formato(texto){
+        return texto.replace(/^(\d{4})-(\d{2})-(\d{2})$/g,'$3/$2/$1');
+      }
+    </script>
+
+    <?php
+    echo '
+    <div class="input-group md-form form-sm form-1 pl-0">
+      <div class="input-group-prepend">
+          <span class="input-group-text purple lighten-3" id="basic-text1">
+          <i class="fas fa-search text-white" aria-hidden="true"></i>
+          </span>
+        </div>
+
+        <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterAllTable()">
+    </div><br/>';
+
+    echo '
+    <form autocomplete="off" action="">
+    <table class="table table-striped table-bordered col-12 sortable">
+      <thead class="thead-dark">
+          <tr>
+            <th scope="col">Numero de Factura</th>
+            <th scope="col">Proveedor</th>
+            <th scope="col">Lote</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr>
+            <td>'.$NumeroFactura.'</td>
+          <td>'.$NombreProveedor.'</td>
+          <td>';
+          if($LoteFabricante == null) { echo '
+            <select name="lote" id="lote" style="width:100%;" onchange="capturarLote(this,1);">
+              <option value="'.$Lote.'">'
+                .$Lote.
+              '</option>';
+          }
+          else { echo '
+            <select name="lote" id="lote" style="width:100%;" onchange="capturarLote(this,2);">
+              <option value="'.$LoteFabricante.'">'
+                .$LoteFabricante.
+              '</option>';
+            $LoteFabricanteAnterior = $LoteFabricante;
+          }
+
+        while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
+          $Lote=$row["NumeroLote"];
+          $LoteFabricante=$row["LoteFabricante"];
+
+          if($LoteFabricante == null) { echo '
+            <option value="'.$Lote.'">'
+              .$Lote.
+            '</option>';
+          }
+          else if($LoteFabricanteAnterior != $LoteFabricante) { echo '
+            <option value="'.$LoteFabricante.'">'
+              .$LoteFabricante.
+            '</option>';
+          }
+          
+        }
+             echo '</select>
+            </td>
+        </tr>
+        </tbody>
+    </table>';
+
+    echo'
+    <table class="table table-striped table-bordered col-12 sortable" id="myTable">
+        <thead class="thead-dark">
+          <tr>
+            <th scope="col">Codigo</th>
+            <th scope="col">Descripcion</th>
+          </tr>
+        </thead>
+
+        <tbody>
+        <tr> 
+          <td align="center">'.$CodigoArticulo.'</td>
+          <td align="center">'.$Articulo.'</td>
+        </tr>
+        </tbody>
+    </table>';
+
+    echo '
+    <table class="table table-striped table-bordered col-12 sortable" id="myTable">
+        <thead class="thead-dark">
+          <tr>
+            <th scope="col">Fecha de factura</th>
+            <th scope="col">Fecha de recepcion (Articulo)</th>
+            <th scope="col">Fecha de vencimiento (Articulo)</th>
+            <th scope="col">Fecha tope (Carta compromiso)</th>
+          </tr>
+        </thead>
+
+        <tbody>
+        <tr>
+          <td align="center">
+            <input type="text" value="'.$FechaDocumento->format('d/m/Y').'" disabled>
+          </td>
+          <td align="center">
+            <input type="text" value="'.$FechaRecepcion->format('d/m/Y').'" disabled>
+          </td>';
+          if(!is_null($FechaVencimiento)) {
+            echo '
+          <td align="center">
+            <input type="text" id="input_fechaV" value="'.$FechaVencimiento->format('d/m/Y').'" disabled>
+          </td>';
+          }
+          else {
+            echo '
+          <td align="center">
+            <input type="text" id="input_fechaV" value="00/00/0000" disabled>
+          </td>';
+          }
+          echo '
+          <td align="center">
+            <input id="fecha_tope" name="fecha_tope" type="date" required>
+          </td>
+        </tr>
+        </tbody>
+    </table>';
+
+    echo '
+      <table class="table table-striped table-bordered col-12 sortable">
+        <thead class="thead-dark">
+            <tr>
+              <th scope="col">Causa</th>
+              <th scope="col">Nota</th>
+            </tr>
+          </thead>
+        
+          <tbody>
+            <tr>
+            <td>
+              <textarea name="causa" id="causa" class="form-control" rows="4" required></textarea>
+            </td>
+
+              <td>
+                <textarea name="nota" id="nota" class="form-control" rows="4" required></textarea>
+              </td>
+            </tr>
+          </tbody>
+      </table>
+
+      <div class="text-center">
+        <input id="articulo" name="articulo" type="hidden" value="'.$Articulo.'">
+        <input id="proveedor" name="proveedor" type="hidden" value="'.$NombreProveedor.'">
+        <input id="SEDE" name="SEDE" type="hidden" value="'.$SedeConnection.'">
+        <input id="IdProv" name="IdProv" type="hidden" value="'.$IdProveedor.'">
+        <input id="IdFact" name="IdFact" type="hidden" value="'.$IdFatura.'">
+        <input id="IdArt" name="IdArt" type="hidden" value="'.$IdArticulo.'">
+        <input id="fecha_documento" name="fecha_documento" type="hidden" value="'.$FechaDocumento->format('Y-m-d').'">
+        <input id="fecha_recepcion" name="fecha_recepcion" type="hidden" value="'.$FechaRecepcion->format('Y-m-d').'">';
+
+          if(!is_null($FechaVencimiento)) {
+            echo '
+            <input id="fecha_vencimiento" name="fecha_vencimiento" type="hidden" value="'.$FechaVencimiento->format('Y-m-d').'">';
+          }
+          else {
+            echo '
+            <input id="fecha_vencimiento" name="fecha_vencimiento" type="hidden" value="'.$FechaVencimiento.'">';
+          }
+          echo '
+        <input type="submit" value="Guardar" class="btn btn-outline-success">
+      </div>
+    </form>';
+
+    sqlsrv_close($conn);
+  }
+
+  /*
+    TITULO: R11_QCarta_Compromiso
+    FUNCION: Construir las columnas correspondientes al reporte
+    RETORNO: Un String con la query
+    DESARROLLADO POR: MANUEL HENRIQUEZ
+   */
+  function R11_QCarta_Compromiso($IdProveedor,$IdFatura,$IdArticulo) {
+    $sql = "
+      SELECT ComFactura.ComProveedorId,
+      InvLote.Numero AS NumeroLote,
+      InvLote.LoteFabricante,
+      ComFactura.NumeroFactura, 
+      CONVERT(DATE,ComFactura.FechaDocumento) AS FechaDocumento,
+      CONVERT(DATE,ComFactura.FechaRegistro) AS FechaRecepcion,
+      CONVERT(DATE,InvLote.FechaVencimiento) AS FechaVencimiento,
+      InvArticulo.CodigoArticulo,
+      InvArticulo.Descripcion
+      FROM ComFactura
+      INNER JOIN ComFacturaDetalle ON ComFactura.Id = ComFacturaDetalle.ComFacturaId
+      INNER JOIN InvArticulo ON ComFacturaDetalle.InvArticuloId = InvArticulo.Id
+      INNER JOIN InvLote ON InvLote.InvArticuloId = InvArticulo.Id
+      WHERE ComFactura.ComProveedorId='$IdProveedor' 
+      AND ComFactura.Id='$IdFatura'
+      AND InvArticulo.Id='$IdArticulo'
+      AND CONVERT(DATE,ComFactura.FechaRegistro) = CONVERT(DATE,InvLote.FechaEntrada)
+      GROUP BY ComFactura.ComProveedorId, InvLote.Numero, InvLote.LoteFabricante, ComFactura.NumeroFactura, CONVERT(DATE,ComFactura.FechaDocumento), CONVERT(DATE,ComFactura.FechaRegistro), CONVERT(DATE,InvLote.FechaVencimiento), InvArticulo.CodigoArticulo, InvArticulo.Descripcion
+      ORDER BY InvLote.Numero ASC
     ";
     return $sql;
   }
