@@ -116,29 +116,27 @@
     </thead>
   <tbody>
 
-		@foreach($cartaCompromiso as $cartaC)
-		    <tr>
-		      <th>{{$cartaC->id}}</th>
-		      <td>{{$cartaC->proveedor}}</td>
-		      <td>{{$cartaC->articulo}}</td>
-		      <td>{{$cartaC->lote}}</td>
-		      <td>
-		      	@if($cartaC->fecha_vencimiento != null)
-		      		{{date('d-m-Y',strtotime($cartaC->fecha_vencimiento))}}
-		      	@endif
+  @foreach($cartaCompromiso as $cartaC)
+    <tr>
+      <th>{{$cartaC->id}}</th>
+      <td>{{$cartaC->proveedor}}</td>
+      <td>{{$cartaC->articulo}}</td>
+      <td>{{$cartaC->lote}}</td>
+      <td>
+        @if($cartaC->fecha_vencimiento != null)
+          {{date('d-m-Y',strtotime($cartaC->fecha_vencimiento))}}
+        @endif
 
-		      	@if($cartaC->fecha_vencimiento == null)
-		      		<?php echo '00-00-0000'; ?>
-		      	@endif
-		      </td>
+        @if($cartaC->fecha_vencimiento == null)
+          <?php echo '00-00-0000'; ?>
+        @endif
+      </td>
 
-		      <?php 
-		      	$Ahora = new DateTime("now");
-		      	$fecha_inicial = new DateTime($Ahora->format('Y-m-d'));
-		        $fecha_final = new DateTime($cartaC->fecha_tope);
+      <?php
+        include(app_path().'\functions\functions.php');
 
-				$diferencia = $fecha_inicial->diff($fecha_final);
-				$diferencia_numero = (int)$diferencia->format('%R%a');
+        $Ahora = new DateTime("now");
+        $diferencia_numero = FG_Validar_Fechas($Ahora->format('Y-m-d'), $cartaC->fecha_tope);
 
 				if(($cartaC->estatus == 'ACTIVO') && ($diferencia_numero <= 7)) {
 		      ?>
