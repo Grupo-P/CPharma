@@ -28,15 +28,15 @@
   @endif
 
   <h1 class="h5 text-info">
-      <i class="fas fa-edit"></i>
-      Actualizar carta compromiso
+    <i class="fas fa-edit"></i>
+    Actualizar carta compromiso
   </h1>
 
   <hr class="row align-items-start col-12">
 
-  <form action="/cartaCompromiso/?SEDE=<?php print_r($_GET['SEDE']); ?>" method="POST" style="display: inline;">  
-      @csrf
-      <button type="submit" name="Regresar" role="button" class="btn btn-outline-info btn-sm"data-placement="top"><i class="fa fa-reply">&nbsp;Regresar</i></button>
+  <form action="/cartaCompromiso/?SEDE=<?php print_r($_GET['SEDE']); ?>" method="POST" style="display: inline;">
+    @csrf
+    <button type="submit" name="Regresar" role="button" class="btn btn-outline-info btn-sm"data-placement="top"><i class="fa fa-reply">&nbsp;Regresar</i></button>
   </form>
 
   <br><br>
@@ -49,6 +49,7 @@
           <th scope="row" colspan="2"></th>
         </tr>
       </thead>
+
       <tbody>
         <tr>
           <th>Proveedor</th>
@@ -88,14 +89,14 @@
         <tr>
           <th>Fecha de vencimiento (Art&iacute;culo)</th>
           <td>
-              @if($cartaCompromiso->fecha_vencimiento != null)
-                <input id="fecha_vencimiento" type="date" name="fecha_vencimiento" value="{{$cartaCompromiso->fecha_vencimiento}}" class="form-control" disabled>
-              @endif
+          @if($cartaCompromiso->fecha_vencimiento != null)
+            <input id="fecha_vencimiento" type="date" name="fecha_vencimiento" value="{{$cartaCompromiso->fecha_vencimiento}}" class="form-control" disabled>
+          @endif
 
-              @if($cartaCompromiso->fecha_vencimiento == null)
-                <input id="fecha_vencimiento" name="fecha_vencimiento" type="hidden" value="{{$cartaCompromiso->fecha_vencimiento}}">
-                <label class="form-control" style="background-color:#e9ecef; opacity:1;">00-00-0000</label>
-              @endif
+          @if($cartaCompromiso->fecha_vencimiento == null)
+            <input id="fecha_vencimiento" name="fecha_vencimiento" type="hidden" value="{{$cartaCompromiso->fecha_vencimiento}}">
+            <label class="form-control" style="background-color:#e9ecef; opacity:1;">00-00-0000</label>
+          @endif
           </td>
         </tr>
 
@@ -107,9 +108,7 @@
         </tr>
 
         <tr>
-          <th>
-            Causa
-          </th>
+          <th>Causa</th>
           <td>
             <textarea name="causa" id="causa" class="form-control" rows="3" placeholder="Causa del compromiso" maxlength="450">{{$cartaCompromiso->causa}}</textarea>
           </td>
