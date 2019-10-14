@@ -133,33 +133,41 @@
       </td>
 
       <?php
-        include(app_path().'\functions\functions.php');
-
         $Ahora = new DateTime("now");
-        $diferencia_numero = FG_Validar_Fechas($Ahora->format('Y-m-d'), $cartaC->fecha_tope);
+        $fecha_inicial = new DateTime($Ahora->format('Y-m-d'));
+        $fecha_final = new DateTime($cartaC->fecha_tope);
 
-				if(($cartaC->estatus == 'ACTIVO') && ($diferencia_numero <= 7)) {
-		      ?>
-		      <td class="bg-danger text-white">{{date('d-m-Y',strtotime($cartaC->fecha_tope))}}</td>
-		      <?php 
-		      	}
-		      	else {
-		      ?>
-		      <td>{{date('d-m-Y',strtotime($cartaC->fecha_tope))}}</td>
-		      <?php 
-		      	}
-		      ?>
-		      <td>
-		      	<?php
-					if($cartaC->estatus == 'ACTIVO') {
-						echo 'ABIERTO';
-					}
-					else {
-						echo 'CERRADO';
-					}
-				?>
-		      </td>
-		    <!-- Inicio Validacion de ROLES -->
+        $diferencia = $fecha_inicial->diff($fecha_final);
+        $diferencia_numero = (int)$diferencia->format('%R%a');
+
+        if(($cartaC->estatus == 'ACTIVO') && ($diferencia_numero <= 7)) {
+      ?>
+
+      <td class="bg-danger text-white">
+        {{date('d-m-Y',strtotime($cartaC->fecha_tope))}}
+      </td>
+
+      <?php
+        } else {
+      ?>
+
+      <td>{{date('d-m-Y',strtotime($cartaC->fecha_tope))}}</td>
+
+      <?php
+        }
+      ?>
+
+      <td>
+        <?php
+          if($cartaC->estatus == 'ACTIVO') {
+            echo 'ABIERTO';
+          } else {
+            echo 'CERRADO';
+          }
+        ?>
+      </td>
+
+      <!-- Inicio Validacion de ROLES -->
 		      <td style="width:140px;">
 				
 				<?php
