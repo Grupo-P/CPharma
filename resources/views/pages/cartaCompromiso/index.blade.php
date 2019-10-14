@@ -4,13 +4,6 @@
     Compromisos
 @endsection
 
-@section('scriptsHead')
-    <script src="{{ asset('assets/js/sortTable.js') }}">	
-    </script>
-    <script src="{{ asset('assets/js/filter.js') }}">	
-    </script>
-@endsection
-
 @section('content')
 	<!-- Modal Guardar -->
 	@if(session('Saved'))
