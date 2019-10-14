@@ -168,42 +168,41 @@
       </td>
 
       <!-- Inicio Validacion de ROLES -->
-		      <td style="width:140px;">
-				
-				<?php
-				if(Auth::user()->role == 'MASTER' || Auth::user()->role == 'DEVELOPER'){
-				?>
+      <td style="width:140px;">
+        <?php
+          if(Auth::user()->role == 'MASTER' || Auth::user()->role == 'DEVELOPER') {
+            if($cartaC->estatus == 'ACTIVO') {
+          ?>
 
-					<?php
-					if($cartaC->estatus == 'ACTIVO'){
-					?>
-			      		<a href="/cartaCompromiso/{{$cartaC->id}}?SEDE=<?php print_r($_GET['SEDE']); ?>" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
-			      			<i class="far fa-eye"></i>			      		
-			      		</a>
+          <a href="/cartaCompromiso/{{$cartaC->id}}?SEDE=<?php print_r($_GET['SEDE']); ?>" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
+            <i class="far fa-eye"></i>
+          </a>
 
-			      		<a href="/cartaCompromiso/{{$cartaC->id}}/edit?SEDE=<?php print_r($_GET['SEDE']); ?>" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
-			      			<i class="fas fa-edit"></i>			      		
-				      	</a>
-				 					  
-				      	<form action="/cartaCompromiso/{{$cartaC->id}}" method="POST" style="display:inline;">
-						    @method('DELETE')
-						    @csrf
-						    <input id="SEDE" name="SEDE" type="hidden" value="<?php print_r($_GET['SEDE']); ?>">
-						    <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Desincorporar"><i class="fa fa-reply"></i></button>
-						</form>
-					<?php
-					}
-					else if($cartaC->estatus == 'INACTIVO'){
-					?>		
-			      	<form action="/cartaCompromiso/{{$cartaC->id}}" method="POST" style="display:inline;">
-					    @method('DELETE')
-					    @csrf
-					    <input id="SEDE" name="SEDE" type="hidden" value="<?php print_r($_GET['SEDE']); ?>">
-					    <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Reincorporar"><i class="fa fa-share"></i></button>
-					</form>
-					<?php
-					}					
-					?>
+          <a href="/cartaCompromiso/{{$cartaC->id}}/edit?SEDE=<?php print_r($_GET['SEDE']); ?>" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
+            <i class="fas fa-edit"></i>
+          </a>
+
+          <form action="/cartaCompromiso/{{$cartaC->id}}" method="POST" style="display:inline;">
+            @method('DELETE')
+            @csrf
+            <input id="SEDE" name="SEDE" type="hidden" value="<?php print_r($_GET['SEDE']); ?>">
+            <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Desincorporar"><i class="fa fa-reply"></i></button>
+          </form>
+
+          <?php
+            } else if($cartaC->estatus == 'INACTIVO') {
+          ?>
+
+          <form action="/cartaCompromiso/{{$cartaC->id}}" method="POST" style="display:inline;">
+            @method('DELETE')
+            @csrf
+            <input id="SEDE" name="SEDE" type="hidden" value="<?php print_r($_GET['SEDE']); ?>">
+            <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Reincorporar"><i class="fa fa-share"></i></button>
+          </form>
+
+          <?php
+            }
+          ?>
 				<?php	
 				} else if(Auth::user()->role == 'SUPERVISOR' || Auth::user()->role == 'ADMINISTRADOR'){
 				?>
