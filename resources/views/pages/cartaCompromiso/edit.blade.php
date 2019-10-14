@@ -1,42 +1,42 @@
 @extends('layouts.model')
 
 @section('title')
-    Compromisos
+  Compromisos
 @endsection
 
 @section('content')
   <!-- Modal Error -->
-  @if (session('Error'))
-      <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title text-danger" id="exampleModalCenterTitle"><i class="fas fa-exclamation-triangle text-danger"></i>{{ session('Error') }}</h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div class="modal-body">
-              <h4 class="h6">El registro no pudo ser actualizado</h4>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-outline-success" data-dismiss="modal">Aceptar</button>
-            </div>
+  @if(session('Error'))
+    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title text-danger" id="exampleModalCenterTitle"><i class="fas fa-exclamation-triangle text-danger"></i>{{ session('Error') }}</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <h4 class="h6">El registro no pudo ser actualizado</h4>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline-success" data-dismiss="modal">Aceptar</button>
           </div>
         </div>
       </div>
+    </div>
   @endif
 
   <h1 class="h5 text-info">
-      <i class="fas fa-edit"></i>
-      Actualizar carta compromiso
+    <i class="fas fa-edit"></i>
+    Actualizar carta compromiso
   </h1>
 
   <hr class="row align-items-start col-12">
 
-  <form action="/cartaCompromiso/?SEDE=<?php print_r($_GET['SEDE']); ?>" method="POST" style="display: inline;">  
-      @csrf
-      <button type="submit" name="Regresar" role="button" class="btn btn-outline-info btn-sm"data-placement="top"><i class="fa fa-reply">&nbsp;Regresar</i></button>
+  <form action="/cartaCompromiso/?SEDE=<?php print_r($_GET['SEDE']); ?>" method="POST" style="display: inline;">
+    @csrf
+    <button type="submit" name="Regresar" role="button" class="btn btn-outline-info btn-sm"data-placement="top"><i class="fa fa-reply">&nbsp;Regresar</i></button>
   </form>
 
   <br><br>
@@ -49,6 +49,7 @@
           <th scope="row" colspan="2"></th>
         </tr>
       </thead>
+
       <tbody>
         <tr>
           <th>Proveedor</th>
@@ -88,14 +89,14 @@
         <tr>
           <th>Fecha de vencimiento (Art&iacute;culo)</th>
           <td>
-              @if($cartaCompromiso->fecha_vencimiento != null)
-                <input id="fecha_vencimiento" type="date" name="fecha_vencimiento" value="{{$cartaCompromiso->fecha_vencimiento}}" class="form-control" disabled>
-              @endif
+          @if($cartaCompromiso->fecha_vencimiento != null)
+            <input id="fecha_vencimiento" type="date" name="fecha_vencimiento" value="{{$cartaCompromiso->fecha_vencimiento}}" class="form-control" disabled>
+          @endif
 
-              @if($cartaCompromiso->fecha_vencimiento == null)
-                <input id="fecha_vencimiento" name="fecha_vencimiento" type="hidden" value="{{$cartaCompromiso->fecha_vencimiento}}">
-                <label class="form-control" style="background-color:#e9ecef; opacity:1;">00-00-0000</label>
-              @endif
+          @if($cartaCompromiso->fecha_vencimiento == null)
+            <input id="fecha_vencimiento" name="fecha_vencimiento" type="hidden" value="{{$cartaCompromiso->fecha_vencimiento}}">
+            <label class="form-control" style="background-color:#e9ecef; opacity:1;">00-00-0000</label>
+          @endif
           </td>
         </tr>
 
@@ -107,9 +108,7 @@
         </tr>
 
         <tr>
-          <th>
-            Causa
-          </th>
+          <th>Causa</th>
           <td>
             <textarea name="causa" id="causa" class="form-control" rows="3" placeholder="Causa del compromiso" maxlength="450">{{$cartaCompromiso->causa}}</textarea>
           </td>
@@ -137,22 +136,3 @@
     $('#exampleModalCenter').modal('show');
   </script>
 @endsection
-
-<style>
-  * {
-    box-sizing: border-box;
-  }
-  /*the container must be positioned relative:*/
-  input {
-    border: 1px solid transparent;
-    background-color: #f1f1f1;
-    border-radius: 5px;
-    padding: 10px;
-    font-size: 16px;
-  }
-
-  input[type=date] {
-    background-color: #f1f1f1;
-    width: 100%;
-  }
-</style>
