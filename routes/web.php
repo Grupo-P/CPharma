@@ -41,6 +41,10 @@ Route::get('/testM', function() {
     return view('testM');
 });
 
+Route::get('/testR', function() {
+    return view('testR');
+});
+
 Route::get('/sedes_reporte', function() {
     return view('pages.sedes');
 });
