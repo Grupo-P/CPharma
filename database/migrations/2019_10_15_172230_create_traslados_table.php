@@ -16,8 +16,8 @@ class CreateTrasladosTable extends Migration
         Schema::create('traslados', function (Blueprint $table) {
             $table->increments('id');
             $table->string('numero_ajuste');
-            $table->timestamp('fecha_ajuste');
-            $table->timestamp('fecha_traslado');
+            $table->date('fecha_ajuste');
+            $table->date('fecha_traslado');
             $table->string('sede_emisora');
             $table->string('sede_destino');
             $table->string('operador_ajuste');
