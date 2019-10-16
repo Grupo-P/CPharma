@@ -3,9 +3,23 @@
 namespace compras\Http\Controllers;
 
 use Illuminate\Http\Request;
+use compras\Auditoria;
+use compras\Traslado;
+use compras\Sede;
+use compras\User;
 
 class TrasladoController extends Controller
 {
+    /**
+     * Create a new controller instance with auth.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     /**
      * Display a listing of the resource.
      *
