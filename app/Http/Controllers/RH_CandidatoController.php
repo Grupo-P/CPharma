@@ -20,7 +20,7 @@ class RH_CandidatoController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function index() {
-        //
+        return view('pages.RRHH.candidatos.index');
     }
 
     /**
