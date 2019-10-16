@@ -151,7 +151,8 @@
       InvAjuste.NumeroAjuste AS NumeroAjuste,
       InvAjuste.Auditoria_FechaCreacion AS FechaAjuste,
       GETDATE() AS FechaActual,
-      InvAjuste.Auditoria_Usuario AS OperadorAjuste
+      InvAjuste.Auditoria_Usuario AS OperadorAjuste,
+      InvAjuste.Comentario
       FROM InvAjuste
       WHERE InvAjuste.Id = '$IdAjuste'
     ";

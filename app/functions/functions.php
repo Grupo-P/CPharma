@@ -552,4 +552,15 @@
 
 		return $diferencia_numero;
   }
+  /**********************************************************************************/
+  /*
+		TITULO: FG_Guardar_Traslado_Detalle
+		FUNCION: Guardar el detalle del traslado
+		RETORNO: no aplica
+		DESARROLLADO POR: SERGIO COVA
+	 */
+	function FG_Guardar_Traslado_Detalle($connCPharma,$id_traslado,$id_articulo,$codigo_interno,$codigo_barra,$descripcion,$gravado,$dolarizado,$cantidad,$costo_unit_bs_sin_iva,$costo_unit_usd_sin_iva,$total_imp_bs,$total_imp_usd,$total_bs,$total_usd,$date) {
+		$sql = MySQL_Traslado_Detalle($id_traslado,$id_articulo,$codigo_interno,$codigo_barra,$descripcion,$gravado,$dolarizado,$cantidad,$costo_unit_bs_sin_iva,$costo_unit_usd_sin_iva,$total_imp_bs,$total_imp_usd,$total_bs,$total_usd,$date);
+		mysqli_query($connCPharma,$sql);
+	}
 ?>
