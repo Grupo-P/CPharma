@@ -3,6 +3,8 @@
 namespace compras\Http\Controllers;
 
 use Illuminate\Http\Request;
+use compras\RH_Candidato;
+use compras\User;
 
 class RH_CandidatoController extends Controller {
     /**
@@ -20,7 +22,8 @@ class RH_CandidatoController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function index() {
-        return view('pages.RRHH.candidatos.index');
+        $candidatos = RH_Candidato::all();
+        return view('pages.RRHH.candidatos.index', compact('candidatos'));
     }
 
     /**
