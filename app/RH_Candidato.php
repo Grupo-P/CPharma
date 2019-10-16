@@ -10,5 +10,5 @@ class RH_Candidato extends Model {
      *
      * @var string
      */
-    protected $table = 'rh_candidato';
+    protected $table = 'rh_candidatos';
 }
