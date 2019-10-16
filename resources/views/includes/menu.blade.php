@@ -9,6 +9,24 @@
 
 <?php
   if(
+    Auth::user()->departamento == 'RRHH'
+    || Auth::user()->departamento == 'GERENCIA'
+    || Auth::user()->departamento == 'TECNOLOGIA'
+  ){
+?>
+  <li class="nav-item">
+    <a class="nav-link CP-Links-Menu" href="{{ url('/candidatos') }}">
+      <span data-feather="home"></span>
+      <i class="fas fa-user-check"></i>
+      Candidatos <span class="sr-only">(current)</span>
+    </a>
+  </li>
+<?php
+  }
+?>
+
+<?php
+  if(
     Auth::user()->departamento == 'COMPRAS'
     || Auth::user()->departamento == 'DEVOLUCIONES'
     || Auth::user()->departamento == 'OPERACIONES' 
@@ -47,6 +65,9 @@
   }
 ?>
 
+<?php
+  if(Auth::user()->departamento != 'RRHH') {
+?>
 <li class="nav-item">
   <a class="nav-link CP-Links-Menu" href="{{ url('/sedes_reporte') }}">
     <span data-feather="home"></span>
@@ -54,6 +75,9 @@
     Reportes<span class="sr-only">(current)</span>
   </a>
 </li>
+<?php
+  }
+?>
 
 <?php
   if(
