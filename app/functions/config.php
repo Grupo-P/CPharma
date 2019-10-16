@@ -7,10 +7,10 @@ define("Utilidad",0.77);
 define("Impuesto",1.16);
 /**********************************************************************************/
 /************************* NOMBRES SEDES ON-LINE *********************************/
-define ("SedeFTN","Farmacia Tierra Negra");
-define ("SedeFLL","Farmacia La Lago");
-define ("SedeFAU","Farmacia Avenida Universidad");
-define ("SedeGP","GRUPO P");
+define ("SedeFTN","FARMACIA TIERRA NEGRA, C.A.");
+define ("SedeFLL","FARMACIA LA LAGO,C.A.");
+define ("SedeFAU","FARMACIA AVENIDA UNIVERSIDAD, C.A.");
+define ("SedeGP","GRUPO P, C.A");
 define ("SedeDBs","Servidor de Desarrollo Sergio");
 define ("SedeDBm","Servidor de Desarrollo Manuel");
 /**********************************************************************************/

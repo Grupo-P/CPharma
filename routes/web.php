@@ -129,6 +129,10 @@ Route::get('/Generar_Etiquetas_Todo', function() {
     return view('pages.etiqueta.Generar_Etiquetas_Todo');
 });
 
+Route::get('/SearchAjuste', function() {
+    return view('pages.traslado.SearchAjuste');
+});
+
 Route::get('home', 'HomeController@index')->name('home');
 
 Route::resource('dolar', 'DolarController');
