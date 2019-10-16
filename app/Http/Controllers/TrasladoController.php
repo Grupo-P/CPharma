@@ -27,7 +27,8 @@ class TrasladoController extends Controller
      */
     public function index()
     {
-        //
+        $traslados =  Traslado::all();
+        return view('pages.traslado.index', compact('traslados'));
     }
 
     /**
