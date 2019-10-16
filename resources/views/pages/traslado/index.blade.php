@@ -122,6 +122,7 @@
 	  	<tbody>
 		@foreach($traslados as $traslado)
 		    <tr>
+		    	<th>{{$traslado->id}}</th>
 		      <th>{{$traslado->numero_ajuste}}</th>
 		      <td>{{$traslado->sede_emisora}}</td>
 		      <td>{{$traslado->sede_destino}}</td>
@@ -136,7 +137,7 @@
 				?>
 
 					<?php
-					if($traslado->estatus == 'ACTIVO'){
+					if($traslado->estatus == 'PROCESADO'){
 					?>
 						<a href="/traslado/{{$traslado->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
 			      			<i class="far fa-eye"></i>			      		

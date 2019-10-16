@@ -56,11 +56,13 @@
       $NumeroAjuste = $row["NumeroAjuste"];
 
       $FechaAjuste = $row["FechaAjuste"];
-      $FechaAjuste = $FechaAjuste->format("d-m-Y h:i:s a");
+      $FechaAjusteImp = $FechaAjuste->format("d-m-Y h:i:s a");
+      $FechaAjuste = $FechaAjuste->format("Y-m-d h:i:s");
       $OperadorAjuste = $row["OperadorAjuste"];
 
       $FechaActual = $row["FechaActual"];
-      $FechaActual = $FechaActual->format("d-m-Y h:i:s a");
+      $FechaActualImp = $FechaActual->format("d-m-Y h:i:s a");
+      $FechaActual =$FechaActual->format("Y-m-d h:i:s");
       $OperadorTraslado = auth()->user()->name;
 
       $SedeOrigen = FG_Nombre_Sede($_GET['SEDE']);
@@ -79,29 +81,35 @@
         <tbody>
             {!! Form::hidden('IdAjuste', $IdAjuste) !!}
             {!! Form::hidden('SEDE', $_GET['SEDE']) !!}
+            {!! Form::hidden('numero_ajuste', $NumeroAjuste) !!}
+            {!! Form::hidden('fecha_ajuste',$FechaAjuste) !!}
+            {!! Form::hidden('operador_ajuste',$OperadorAjuste) !!}
+            {!! Form::hidden('fecha_traslado',$FechaActual) !!}
+            {!! Form::hidden('operador_traslado',$OperadorTraslado) !!}
+            {!! Form::hidden('sede_emisora',$SedeOrigen) !!}
             <tr>
                 <th scope="row">{!! Form::label('numero_ajuste', 'Numero de Ajuste') !!}</th>
-                <td>{!! Form::text('numero_ajuste', $NumeroAjuste, [ 'class' => 'form-control', 'disabled']) !!}</td>
+                <td><label><?php echo($NumeroAjuste); ?></label></td>
             </tr> 
             <tr>
-                <th scope="row">{!! Form::label('fecha_ajuste', 'Fecha de Ajuste') !!}</th>
-                <td>{!! Form::text('fecha_ajuste', $FechaAjuste, [ 'class' => 'form-control', 'disabled']) !!}</td>
+                <th scope="row">{!! Form::label('FechaAjusteImp', 'Fecha de Ajuste') !!}</th>
+                <td><label><?php echo($FechaAjusteImp); ?></label></td>
             </tr> 
             <tr>
                 <th scope="row">{!! Form::label('operador_ajuste', 'Operador de Ajuste') !!}</th>
-                <td>{!! Form::text('operador_ajuste', $OperadorAjuste, [ 'class' => 'form-control', 'disabled']) !!}</td>
+                <td><label><?php echo($OperadorAjuste); ?></label></td>
             </tr>
             <tr>
-                <th scope="row">{!! Form::label('fecha_traslado', 'Fecha de Traslado') !!}</th>
-                <td>{!! Form::text('fecha_traslado', $FechaActual, [ 'class' => 'form-control', 'disabled']) !!}</td>
+                <th scope="row">{!! Form::label('FechaActualImp', 'Fecha de Traslado') !!}</th>
+                <td><label><?php echo($FechaActualImp); ?></label></td>   
             </tr> 
             <tr>
                 <th scope="row">{!! Form::label('operador_traslado', 'Operador de Traslado') !!}</th>
-                <td>{!! Form::text('operador_traslado', $OperadorTraslado, [ 'class' => 'form-control', 'disabled']) !!}</td>
+                <td><label><?php echo($OperadorTraslado); ?></label></td>
             </tr>
             <tr>
                 <th scope="row">{!! Form::label('sede_emisora', 'Sede Emisora') !!}</th>
-                <td>{!! Form::text('sede_emisora', $SedeOrigen, [ 'class' => 'form-control', 'disabled']) !!}</td>
+                <td><label><?php echo($SedeOrigen); ?></label></td>
             </tr> 
             <tr>
                 <th scope="row">{!! Form::label('sede_destino', 'Sede Destino') !!}
