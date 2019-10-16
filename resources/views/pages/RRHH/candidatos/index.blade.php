@@ -144,7 +144,7 @@
           <?php
             if(Auth::user()->role == 'MASTER' || Auth::user()->role == 'DEVELOPER') {
 
-              if($candidato->estatus == 'ACTIVO') {
+              if($candidato->estatus != 'RECHAZADO') {
           ?>
             <a href="/candidato/{{$candidato->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
               <i class="far fa-eye"></i>
@@ -163,7 +163,7 @@
             </form>
 
           <?php
-            } else if($candidato->estatus == 'INACTIVO') {
+            } else if($candidato->estatus == 'RECHAZADO') {
           ?>
             <form action="/candidato/{{$candidato->id}}" method="POST" style="display: inline;">
               @method('DELETE')
