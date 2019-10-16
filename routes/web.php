@@ -180,3 +180,6 @@ Route::resource('configuracion', 'ConfiguracionController');
 Route::resource('auditoria', 'AuditoriaController');
 
 Route::resource('etiqueta', 'EtiquetaController');
+
+//***************************** RRHH routing *****************************//
+Route::resource('candidatos', 'RH_CandidatoController');
