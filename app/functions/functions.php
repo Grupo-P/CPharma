@@ -565,8 +565,7 @@
 
     $sql = QG_Articulos_Ajuste($IdAjuste);
     $result = sqlsrv_query($conn,$sql);
-    $row = sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC);
-
+   
     while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
       $IdArticulo = $row["InvArticuloId"];
       $Cantidad = $row["Cantidad"];
@@ -595,29 +594,29 @@
 
         if($Gravado=='SI' && $Utilidad!= 1){
           $costo_unit_bs_sin_iva = ($Precio/Impuesto)*$Utilidad;
-          $costo_unit_usd_sin_iva = ($costo_unit_bs_sin_iva/$TasaActual);
-          $total_imp_usd = ($costo_unit_usd_sin_iva*$Cantidad)*(1-Impuesto);
+          $costo_unit_usd_sin_iva = round(($costo_unit_bs_sin_iva/$TasaActual),2);
+          $total_imp_usd = round(($costo_unit_usd_sin_iva*$Cantidad)*(1-Impuesto),2);
         }
         else if($Gravado== 'NO' && $Utilidad!= 1){
           $costo_unit_bs_sin_iva = ($Precio)*$Utilidad;
-          $costo_unit_usd_sin_iva = ($costo_unit_bs_sin_iva/$TasaActual);
+          $costo_unit_usd_sin_iva = round(($costo_unit_bs_sin_iva/$TasaActual),2);
           $total_imp_usd = 0.00;
         }
-        $total_usd = ($costo_unit_usd_sin_iva*$Cantidad)+$total_imp_usd;
+        $total_usd = round((($costo_unit_usd_sin_iva*$Cantidad)+$total_imp_usd),2);
         $costo_unit_bs_sin_iva = '-';
         $total_imp_bs = '-';
         $total_bs = '-';
       }
       else if($Dolarizado=='NO') {
-        $costo_unit_bs_sin_iva = $PrecioCompraBruto;
+        $costo_unit_bs_sin_iva = round($PrecioCompraBruto,2);
 
         if($Gravado== 'SI' && $Utilidad!= 1){
-          $total_imp_bs = ($costo_unit_bs_sin_iva*$Cantidad)*(1-Impuesto);
+          $total_imp_bs = round((($costo_unit_bs_sin_iva*$Cantidad)*(1-Impuesto)),2);
         }
         else if($Gravado== 'NO' && $Utilidad!= 1){
           $total_imp_bs = 0.00; 
         }
-        $total_bs = ($costo_unit_bs_sin_iva*$Cantidad)+$total_imp_bs;
+        $total_bs = round((($costo_unit_bs_sin_iva*$Cantidad)+$total_imp_bs),2);
         $costo_unit_usd_sin_iva = '-';
         $total_imp_usd = '-';
         $total_usd = '-';
@@ -625,18 +624,10 @@
       $date = new DateTime('now');
       $date = $date->format("Y-m-d H:i:s");
 
-      FG_Guardar_Traslado_Detalle($connCPharma,$IdTraslado,$IdArticulo,$CodigoArticulo,$CodigoBarra,$Descripcion,$Gravado,$Dolarizado,$Cantidad,$costo_unit_bs_sin_iva,$costo_unit_usd_sin_iva,$total_imp_bs,$total_imp_usd,$total_bs,$total_usd,$date);
+      $sqlCP = MySQL_Traslado_Detalle($IdTraslado,$IdArticulo,$CodigoArticulo,$CodigoBarra,$Descripcion,$Gravado,$Dolarizado,$Cantidad,$costo_unit_bs_sin_iva,$costo_unit_usd_sin_iva,$total_imp_bs,$total_imp_usd,$total_bs,$total_usd,$date);
+      mysqli_query($connCPharma,$sqlCP);
     }
-	}
-  /**********************************************************************************/
-  /*
-		TITULO: FG_Guardar_Traslado_Detalle
-		FUNCION: Guardar el detalle del traslado
-		RETORNO: no aplica
-		DESARROLLADO POR: SERGIO COVA
-	 */
-	function FG_Guardar_Traslado_Detalle($connCPharma,$id_traslado,$id_articulo,$codigo_interno,$codigo_barra,$descripcion,$gravado,$dolarizado,$cantidad,$costo_unit_bs_sin_iva,$costo_unit_usd_sin_iva,$total_imp_bs,$total_imp_usd,$total_bs,$total_usd,$date) {
-		$sql = MySQL_Traslado_Detalle($id_traslado,$id_articulo,$codigo_interno,$codigo_barra,$descripcion,$gravado,$dolarizado,$cantidad,$costo_unit_bs_sin_iva,$costo_unit_usd_sin_iva,$total_imp_bs,$total_imp_usd,$total_bs,$total_usd,$date);
-		mysqli_query($connCPharma,$sql);
+    sqlsrv_close($conn);
+    mysqli_close($connCPharma);
 	}
 ?>
