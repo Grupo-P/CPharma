@@ -95,10 +95,11 @@
       {!! Form::submit('Guardar', ['class' => 'btn btn-outline-success btn-md']) !!}
     </fieldset>
   {!! Form::close()!!}
-    <script>
-        $(document).ready(function(){
-            $('[data-toggle="tooltip"]').tooltip();   
-        });
-        $('#exampleModalCenter').modal('show')
-    </script>
+
+  <script>
+    $(document).ready(function() {
+      $('[data-toggle="tooltip"]').tooltip();
+    });
+    $('#exampleModalCenter').modal('show');
+  </script>
 @endsection
