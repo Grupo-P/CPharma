@@ -76,6 +76,26 @@
 
 <?php
   if(
+    Auth::user()->departamento == 'ALMACEN'
+    || Auth::user()->departamento == 'ADMINISTRACION '
+    || Auth::user()->departamento == 'OPERACIONES' 
+    || Auth::user()->departamento == 'GERENCIA'
+    || Auth::user()->departamento == 'TECNOLOGIA'
+  ){
+?>
+  <li class="nav-item">
+    <a class="nav-link CP-Links-Menu" href="{{ url('/traslado') }}">     
+      <span data-feather="home"></span>
+      <i class="fas fa-people-carry"></i>
+      Traslado<span class="sr-only">(current)</span>
+    </a>
+  </li>
+<?php
+  }
+?>
+
+<?php
+  if(
     Auth::user()->role == 'SUPERVISOR CAJA' 
     || Auth::user()->departamento == 'LÍDER DE TIENDA'){
 ?>
@@ -269,14 +289,6 @@
 <!-- TODO LO QUE ESTE DEBAJO DE ESTA LINEA ESTA EN FASE DE DESARROLLO -->
 <hr class="row align-items-center bg-danger">
 
-    <li class="nav-item">
-      <a class="nav-link CP-Links-Menu" href="{{ url('/traslado') }}">     
-        <span data-feather="home"></span>
-        <i class="fas fa-people-carry"></i>
-        Test Traslado<span class="sr-only">(current)</span>
-      </a>
-    </li>
-    
     <li class="nav-item">
       <a class="nav-link CP-Links-Menu" href="{{ url('/testS') }}">     
         <span data-feather="home"></span>
