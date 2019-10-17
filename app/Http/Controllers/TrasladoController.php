@@ -137,7 +137,24 @@ class TrasladoController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        try{
+          $traslado = Traslado::find($id);
+          $traslado->fill($request->all());
+          $traslado->estatus = 'EMBALADO';
+          $traslado->save();
+
+          $Auditoria = new Auditoria();
+          $Auditoria->accion = 'IMPRIMIR';
+          $Auditoria->tabla = 'GUIA ENVIO Y ETIQUETAS';
+          $Auditoria->registro = $traslado->numero_ajuste;
+          $Auditoria->user = auth()->user()->name;
+          $Auditoria->save();
+
+          return redirect()->route('traslado.index')->with('Updated', ' Informacion');
+        }
+        catch(\Illuminate\Database\QueryException $e){
+            return back()->with('Error', ' Error');
+        }
     }
 
     /**

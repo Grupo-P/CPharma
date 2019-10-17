@@ -132,14 +132,42 @@
 		    <!-- Inicio Validacion de ROLES -->
 		      <td style="width:140px;">
 					<?php
-					if(($traslado->estatus=='PROCESADO') && 
+					if(($traslado->estatus=='PROCESADO'||$traslado->estatus=='EMBALADO') && 
 						(Auth::user()->departamento == 'OPERACIONES' 
 				    || Auth::user()->departamento == 'GERENCIA'
 				    || Auth::user()->departamento == 'TECNOLOGIA')
 						){
 					?>
-						<a href="/traslado/{{$traslado->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle" style="width: 100%">
+						<a href="/traslado/{{$traslado->id}}" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Soporte Traslado" style="width: auto">
 	      			<i class="fas fa-print"></i>		      		
+	      		</a>
+					<?php
+					}
+					?>						
+		     
+					<?php
+					if(($traslado->estatus=='PROCESADO'||$traslado->estatus=='EMBALADO') && 
+						(Auth::user()->departamento == 'ALMACEN'
+				    || Auth::user()->departamento == 'GERENCIA'
+				    || Auth::user()->departamento == 'TECNOLOGIA')
+						){
+					?>
+						<a href="/traslado/{{$traslado->id}}/edit" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Embalar" style="width: auto">
+	      			<i class="fas fa-box-open"></i>      		
+	      		</a>
+					<?php
+					}
+					?>						
+
+		      <?php
+					if(($traslado->estatus=='EMBALADO') && 
+						(Auth::user()->departamento == 'ALMACEN'
+				    || Auth::user()->departamento == 'GERENCIA'
+				    || Auth::user()->departamento == 'TECNOLOGIA')
+						){
+					?>
+						<a href="/GuiaEnvio" role="button" class="btn btn-outline-warning btn-sm" data-toggle="tooltip" data-placement="top" title="Guia de envio y etiquetas" style="width: auto">
+	      			<i class="fas fa-tag"></i>     		
 	      		</a>
 					<?php
 					}

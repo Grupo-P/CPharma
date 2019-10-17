@@ -133,6 +133,10 @@ Route::get('/SearchAjuste', function() {
     return view('pages.traslado.SearchAjuste');
 });
 
+Route::get('/GuiaEnvio', function() {
+    return view('pages.traslado.guia_etiqueta');
+});
+
 Route::get('home', 'HomeController@index')->name('home');
 
 Route::resource('dolar', 'DolarController');

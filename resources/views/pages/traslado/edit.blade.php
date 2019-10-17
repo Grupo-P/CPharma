@@ -27,8 +27,8 @@
         </div>
     @endif
     <h1 class="h5 text-info">
-        <i class="fas fa-edit"></i>
-        Modificar traslado
+        <i class="fas fa-box-open"></i>
+        Embalar
     </h1>
 
     <hr class="row align-items-start col-12">
@@ -40,9 +40,8 @@
     <br/><br/>
 
     <?php
-      $FechaActual = $row["FechaActual"];
-      $FechaActualImp = $FechaActual->format("d-m-Y h:i:s a");
-      $FechaActual =$FechaActual->format("Y-m-d h:i:s");
+      $FechaActual = date('Y-m-d');
+      $FechaActualImp = date('d-m-Y');
       $Operador = auth()->user()->name;
     ?>
 
