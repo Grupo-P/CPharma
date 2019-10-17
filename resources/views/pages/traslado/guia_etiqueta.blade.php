@@ -40,6 +40,10 @@
 		font-size: 1.2em;
 		text-transform: uppercase;
 	}
+	.aumentoT{
+		font-size: 1.8em;
+		text-transform: uppercase;
+	}
 </style>
 
 <?php
@@ -61,6 +65,7 @@
 	$sede_emisora = $row['sede_emisora'];
 	$sede_destino = $row['sede_destino'];
 	$operador_envio = $row['operador_envio'];
+	$operador_embalaje = $row['operador_embalaje'];
 	$bultos = $row['bultos'];
 ?>
 
@@ -144,4 +149,61 @@
 		    </thead>
 	  	</tbody>
 	</table>
+	<?php
+		Etiquetas_Traslado($numero_ajuste,$fecha_ajuste,$sede_emisora,$sede_destino,$bultos,$fecha_embalaje,$operador_embalaje);
+	?>
 @endsection
+
+<?php 
+
+/**********************************************************************************/
+  /*
+    TITULO: Etiquetas_Traslado
+    FUNCION: Imprimir las etiquetas para el tarslado
+    RETORNO: no aplica
+    DESAROLLADO POR: SERGIO COVA
+  */
+ function Etiquetas_Traslado($numero_ajuste,$fecha_ajuste,$sede_emisora,$sede_destino,$bultos,$fecha_embalaje,$operador_embalaje){
+
+	$Contador = 1;
+	while($Contador<=$bultos){
+		echo'
+		<br/>
+		<table class="table-borderless" style="width:65%;">
+			<thead>
+		    <tr>
+		    		<th scope="row" colspan="8">
+		    			<span class="navbar-brand text-info CP-title-NavBar">
+		    				<b><i class="fas fa-syringe text-success"></i>CPharma</b>
+  						</span>
+		    			<span class="aumento">Bulto de traslados internos</span>
+		    		</th>
+		    </tr>
+	  	</thead>
+	  	<tbody>
+		    <tr>
+	      	<td colspan="8">Soporte #'.$numero_ajuste.' del '.$fecha_ajuste.'</td>
+		    </tr>
+		    <tr>
+	      	<td colspan="8" class="aumentoT"><strong>De: '.$sede_emisora.'</strong></td>
+		    </tr>
+		    <tr>
+	      	<td colspan="8" class="aumentoT"><strong>Para: '.$sede_destino.'</strong></td>
+		    </tr>
+		    <tr>
+	      	<td colspan="8" class="alinear-der">Preparado el '.$fecha_embalaje.' por '.$operador_embalaje.'</td>
+		    </tr>
+		    <tr>
+	      	<td colspan="8">Favor no aplilar demasiadas cajas y contemplar que el contenido es fragil para el momento de su movilizacion</td>
+		    </tr>
+		    <tr>
+	      	<td colspan="8" class="alinear-der aumento"><strong>Bulto '.$Contador.' de '.$bultos.'</strong></td>
+		    </tr>
+	  	</tbody>
+		</table>
+		';
+		$Contador++;
+	}
+		echo'<br/>';
+ }
+?>
