@@ -23,7 +23,7 @@ class RH_PruebaController extends Controller {
      */
     public function index()
     {
-        //
+        return view('pages.RRHH.pruebas.index');
     }
 
     /**
