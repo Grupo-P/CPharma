@@ -97,7 +97,16 @@ class TrasladoController extends Controller
      */
     public function show($id)
     {
-        //
+        $traslado = Traslado::find($id); 
+
+        $Auditoria = new Auditoria();
+        $Auditoria->accion = 'IMPRIMIR';
+        $Auditoria->tabla = 'TRASLADO';
+        $Auditoria->registro = $traslado->numero_ajuste;
+        $Auditoria->user = auth()->user()->name;
+        $Auditoria->save();
+
+        return view('pages.traslado.show', compact('traslado'));
     }
 
     /**

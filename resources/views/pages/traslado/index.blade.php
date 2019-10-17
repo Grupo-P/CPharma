@@ -131,59 +131,19 @@
 		      
 		    <!-- Inicio Validacion de ROLES -->
 		      <td style="width:140px;">
-				
-				<?php
-				if(Auth::user()->role == 'MASTER' || Auth::user()->role == 'DEVELOPER'){
-				?>
-
 					<?php
-					if($traslado->estatus == 'PROCESADO'){
+					if(($traslado->estatus=='PROCESADO') && 
+						(Auth::user()->departamento == 'OPERACIONES' 
+				    || Auth::user()->departamento == 'GERENCIA'
+				    || Auth::user()->departamento == 'TECNOLOGIA')
+						){
 					?>
-						<a href="/traslado/{{$traslado->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
-			      			<i class="far fa-eye"></i>			      		
-			      		</a>
-
-			      		<a href="/traslado/{{$traslado->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
-			      			<i class="fas fa-edit"></i>			      		
-				      	</a>
-				 					  
-				      	<form action="/traslado/{{$traslado->id}}" method="POST" style="display: inline;">
-						    @method('DELETE')
-						    @csrf					    
-						    <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Desincorporar"><i class="fa fa-reply"></i></button>
-						</form>
+						<a href="/traslado/{{$traslado->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle" style="width: 100%">
+	      			<i class="fas fa-print"></i>		      		
+	      		</a>
 					<?php
 					}
-					else if($traslado->estatus == 'INACTIVO'){
-					?>		
-			      	<form action="/traslado/{{$traslado->id}}" method="POST" style="display: inline;">
-					    @method('DELETE')
-					    @csrf					    
-					    <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Reincorporar"><i class="fa fa-share"></i></button>
-					</form>
-					<?php
-					}					
-					?>
-				<?php	
-				} else if(Auth::user()->role == 'SUPERVISOR' || Auth::user()->role == 'ADMINISTRADOR' || Auth::user()->role == 'SUPERVISOR CAJA'){ 
-				?>
-					<a href="/traslado/{{$traslado->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
-		      			<i class="far fa-eye"></i>			      		
-		      		</a>
-
-		      		<a href="/traslado/{{$traslado->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
-		      			<i class="fas fa-edit"></i>
-	      			</a>
-				<?php
-				} else if(Auth::user()->role == 'USUARIO'){
-				?>
-					<a href="/traslado/{{$traslado->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
-		      			<i class="far fa-eye"></i>			      		
-		      		</a>		
-				<?php
-				}
-				?>
-										
+					?>						
 		      </td>
 		    <!-- Fin Validacion de ROLES -->
 
