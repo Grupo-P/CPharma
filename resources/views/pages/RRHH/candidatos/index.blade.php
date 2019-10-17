@@ -114,7 +114,6 @@
             <th scope="col" class="stickyCP">Teléfono</th>          
             <th scope="col" class="stickyCP">Correo</th>
             <th scope="col" class="stickyCP">Estatus</th>
-            <th scope="col" class="stickyCP">Vacante</th>
             <th scope="col" class="stickyCP">Acciones</th>
         </tr>
       </thead>
@@ -137,7 +136,6 @@
 
           <td>{{$candidato->correo}}</td>
           <td>{{$candidato->estatus}}</td>
-          <td>{{$candidato->vacante}}</td>
 
           <!-- ***************** VALIDACION DE ROLES ***************** -->
           <td style="width:140px;">

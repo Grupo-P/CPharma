@@ -26,7 +26,6 @@ class CreateRhCandidatosTable extends Migration {
             $table->string('tipo_relacion');
             $table->string('relaciones_laborales');
             $table->string('estatus');
-            $table->string('vacante');
             $table->timestamps();
         });
     }
