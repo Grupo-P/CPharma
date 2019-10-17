@@ -1486,7 +1486,7 @@
 		DESARROLLADO POR: SERGIO COVA
 	 */
 	function FG_Tasa_Fecha($connCPharma,$Fecha) {
-		$sql = QG_Tasa_Fecha($Fecha);
+		$sql = MySQL_Tasa_Fecha($Fecha);
 		$result = mysqli_query($connCPharma,$sql);
 		$row = mysqli_fetch_assoc($result);
 		$Tasa = $row['tasa'];

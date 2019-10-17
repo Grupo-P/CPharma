@@ -108,13 +108,69 @@
 		    		<th scope="row">Total $.</th>
 		    </tr>
 		    </thead>
-
-
+					<?php
+						Imprimir_Traslado_Detalle($traslado->numero_ajuste);
+					?>
 	  	</tbody>
 	</table>
 @endsection
 
 <?php
-	
+	/**********************************************************************************/
+	/*
+		TITULO: Imprimir_Traslado_Detalle
+		FUNCION: Busca e imprime las lineas del detalle del traslado
+		RETORNO: no aplica
+		DESAROLLADO POR: SERGIO COVA
+	 */
+	function Imprimir_Traslado_Detalle($numero_ajuste) {
+			include(app_path().'\functions\config.php');
+      include(app_path().'\functions\functions.php');
+      include(app_path().'\functions\querys_mysql.php');
+      include(app_path().'\functions\querys_sqlserver.php');
 
+			$connCPharma = FG_Conectar_CPharma();
+			$sql = MySQL_Buscar_Traslado_Detalle($numero_ajuste);
+			$result = mysqli_query($connCPharma,$sql);
+
+			$Total_Cantidad = 0;
+			$Total_Impuesto_Bs = 0;
+			$Total_Impuesto_Usd = 0;
+			$Total_Bs = 0;
+			$Total_Usd = 0;
+
+			while($row = $result->fetch_assoc()) {
+				echo '<tr>';
+				echo '<td>'.$row['codigo_interno'].'</td>';
+				echo '<td>'.$row['codigo_barra'].'</td>';
+				echo '<td>'.$row['descripcion'].'</td>';
+				echo '<td>'.$row['gravado'].'</td>';
+				echo '<td>'.$row['dolarizado'].'</td>';
+				echo '<td>'.number_format(floatval($row['costo_unit_bs_sin_iva']),2,"," ,"." ).'</td>';
+				echo '<td>'.number_format(floatval($row['costo_unit_usd_sin_iva']),2,"," ,"." ).'</td>';
+				echo '<td>'.$row['cantidad'].'</td>';
+				echo '<td>'.number_format(floatval($row['total_imp_bs']),2,"," ,"." ).'</td>';
+				echo '<td>'.number_format(floatval($row['total_imp_usd']),2,"," ,"." ).'</td>';
+				echo '<td>'.number_format(floatval($row['total_bs']),2,"," ,"." ).'</td>';
+				echo '<td>'.number_format(floatval($row['total_usd']),2,"," ,"." ).'</td>';
+				echo '</tr>';
+
+				$Total_Cantidad += floatval($row['cantidad']);
+				$Total_Impuesto_Bs += floatval($row['total_imp_bs']);
+				$Total_Impuesto_Usd += floatval($row['total_imp_usd']);
+				$Total_Bs += floatval($row['total_bs']);
+				$Total_Usd += floatval($row['total_usd']);
+	  	}
+
+	  	echo '<tr>';
+	  	echo '<td colspan="7" class="alinear-der"><strong>Totales</strong></td>';
+	  	echo '<td><strong>'.$Total_Cantidad.'</strong></td>';
+	  	echo '<td><strong>'.number_format($Total_Impuesto_Bs,2,"," ,"." ).'</strong></td>';
+	  	echo '<td><strong>'.number_format($Total_Impuesto_Usd,2,"," ,"." ).'</strong></td>';
+	  	echo '<td><strong>'.number_format($Total_Bs,2,"," ,"." ).'</strong></td>';
+	  	echo '<td><strong>'.number_format($Total_Usd,2,"," ,"." ).'</strong></td>';
+	  	echo '</tr>';
+
+			mysqli_close($connCPharma);
+	}
 ?>

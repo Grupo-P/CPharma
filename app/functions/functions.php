@@ -402,7 +402,7 @@
 		DESARROLLADO POR: SERGIO COVA
 	 */
 	function FG_Tasa_Fecha($connCPharma,$Fecha) {
-		$sql = QG_Tasa_Fecha($Fecha);
+		$sql = MySQL_Tasa_Fecha($Fecha);
 		$result = mysqli_query($connCPharma,$sql);
 		$row = mysqli_fetch_assoc($result);
 		$Tasa = $row['tasa'];
@@ -624,7 +624,7 @@
       $date = new DateTime('now');
       $date = $date->format("Y-m-d H:i:s");
 
-      $sqlCP = MySQL_Traslado_Detalle($IdTraslado,$IdArticulo,$CodigoArticulo,$CodigoBarra,$Descripcion,$Gravado,$Dolarizado,$Cantidad,$costo_unit_bs_sin_iva,$costo_unit_usd_sin_iva,$total_imp_bs,$total_imp_usd,$total_bs,$total_usd,$date);
+      $sqlCP = MySQL_Guardar_Traslado_Detalle($IdTraslado,$IdArticulo,$CodigoArticulo,$CodigoBarra,$Descripcion,$Gravado,$Dolarizado,$Cantidad,$costo_unit_bs_sin_iva,$costo_unit_usd_sin_iva,$total_imp_bs,$total_imp_usd,$total_bs,$total_usd,$date);
       mysqli_query($connCPharma,$sqlCP);
     }
     sqlsrv_close($conn);
