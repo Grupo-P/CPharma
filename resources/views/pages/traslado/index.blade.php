@@ -8,7 +8,7 @@
 	include(app_path().'\functions\config.php');
   include(app_path().'\functions\functions.php');
   include(app_path().'\functions\querys_mysql.php');
-  include(app_path().'\functions\querys_sqlserver.php'); 
+  include(app_path().'\functions\querys_sqlserver.php');
 ?>
 
 @section('content')
@@ -83,8 +83,9 @@
 		<i class="fas fa-people-carry"></i>
 		Traslado
 	</h1>
-
+	
 	<hr class="row align-items-start col-12">
+	<br/>
 	<table style="width:100%;">
 	    <tr>
 	        <td style="width:10%;" align="center">        	
@@ -106,7 +107,53 @@
 	    </tr>
 	</table>
 	<br/>
-	
+	<table class="table table-striped table-borderless col-12 sortable">
+  	<thead class="thead-dark">
+	    <tr>
+	      	<th scope="col" colspan="5" style="text-align: center;">CLASIFICACION</th>
+	    </tr>
+		</thead>
+		<tbody>
+	  	<tr>
+	  	<td style="width:20%;" align="center">
+	  		<?php
+	  			$tipo = 3;
+	  		?>
+				<form action="/traslado?Tipo={{$tipo}}" method="GET" style="display: inline;">
+			    <button type="submit" name="Tipo" role="button" class="btn btn-outline-success btn-sm" value="3">TODO</button>
+				</form>
+	    </td>
+
+	  	<td style="width:20%;" align="center">
+	  		<?php
+	  			$tipo = 0;
+	  		?>
+				<form action="/traslado?Tipo={{$tipo}}" method="GET" style="display: inline;">
+			    <button type="submit" name="Tipo" role="button" class="btn btn-outline-dark btn-sm" value="0">PROCESADO</button>
+				</form>
+	    </td>
+
+	    <td style="width:20%;" align="center">
+	      	<?php
+	  			$tipo = 1;
+	  		?>
+				<form action="/traslado?Tipo={{$tipo}}" method="GET" style="display: inline;">
+			    <button type="submit" name="Tipo" role="button" class="btn btn-outline-danger btn-sm" value="1">EMBALADO</button>
+					</form>	
+			</td>
+
+	    <td style="width:20%;" align="center">
+	      	<?php
+	  			$tipo = 2;
+	  		?>
+				<form action="/traslado?Tipo={{$tipo}}" method="GET" style="display: inline;">
+			    <button type="submit" name="Tipo" role="button" class="btn btn-outline-info btn-sm" value="2">ENTREGADO</button>
+				</form>						
+	    </td>
+	    </tr>
+		</tbody>
+	</table>
+	<br/>
 	<table class="table table-striped table-borderless col-12 sortable" id="myTable">
 	  	<thead class="thead-dark">
 		    <tr>

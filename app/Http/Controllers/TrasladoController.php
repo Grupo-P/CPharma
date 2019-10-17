@@ -26,8 +26,36 @@ class TrasladoController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {
-        $traslados =  Traslado::all();
+    {   
+        
+        if(isset($_GET['Tipo'])){
+            $Tipo = $_GET['Tipo'];
+        }
+        else{
+            $Tipo = 3;
+        }
+        
+        switch ($Tipo) {
+            case 0:
+                $traslados =  
+                Traslado::orderBy('id', 'asc')->
+                where('estatus','PROCESADO')->take(50)->get();
+            break;
+            case 1:
+                $traslados =  
+                Traslado::orderBy('id', 'asc')->
+                where('estatus','EMBALADO')->get();            
+            break;
+            case 2:
+                $traslados =  
+                Traslado::orderBy('id', 'asc')->
+                where('estatus','ENTREGADO')->get();
+            break;
+            default:
+                $traslados =  Traslado::all();
+                return view('pages.traslado.index', compact('traslados'));
+            break;
+        }
         return view('pages.traslado.index', compact('traslados'));
     }
 
