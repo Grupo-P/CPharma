@@ -31,17 +31,16 @@
       </div>
     </div>
   @endif
-    <h1 class="h5 text-info">
-        <i class="fas fa-plus"></i>
-        Agregar candidato
-    </h1>
 
-    <hr class="row align-items-start col-12">
+  <h1 class="h5 text-info"><i class="fas fa-plus"></i>&nbsp;Agregar candidato</h1>
+  <hr class="row align-items-start col-12">
 
-    <form action="/candidatos/" method="POST" style="display: inline;">  
-        @csrf                       
-        <button type="submit" name="Regresar" role="button" class="btn btn-outline-info btn-sm"data-placement="top"><i class="fa fa-reply">&nbsp;Regresar</i></button>
-    </form>
+  <form action="/candidatos/" method="POST" style="display: inline;">  
+    @csrf
+    <button type="submit" name="Regresar" role="button" class="btn btn-outline-info btn-sm"data-placement="top">
+      <i class="fa fa-reply">&nbsp;Regresar</i>
+    </button>
+  </form>
 
     <br>
     <br>
