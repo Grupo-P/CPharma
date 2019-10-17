@@ -67,7 +67,19 @@
 
           <tr>
             <th scope="row">{!! Form::label('cedula', 'Cédula') !!}</th>
-            <td>{!! Form::text('cedula', null, [ 'class' => 'form-control', 'placeholder' => 'V-22476796']) !!}</td>
+            <td>
+              <table style="width: 100%;">
+                <tr style="background-color: transparent;">
+                  <td>
+                    {!! Form::select('tipo', ['V' => 'V', 'E' => 'E'], null, [ 'class' => 'form-control']) !!}
+                  </td>
+
+                  <td>
+                    {!! Form::text('cedula', null, [ 'class' => 'form-control', 'placeholder' => '24921001', 'required']) !!}
+                  </td>
+                </tr>
+              </table>
+            </td>
           </tr>
 
           <tr>
@@ -87,16 +99,37 @@
 
           <tr>
             <th scope="row">{!! Form::label('tipo_relacion', 'Tipo de relación') !!}</th>
-            <td>{!! Form::select('tipo_relacion', [
+            <td>
+              {!! Form::select('tipo_relacion', [
                 'Ince' => 'Ince', 
                 'Pasante' => 'Pasante',
                 'Trabajador regular' => 'Trabajador regular',
-              ], null, ['class' => 'form-control']) !!}</td>
+              ], null, ['class' => 'form-control']) !!}
+            </td>
+          </tr>
+
+          <tr>
+            <th scope="row">{!! Form::label('relaciones_laborales', 'Relaciones con trabajadores') !!}</th>
+            <td>
+              {!! Form::select('relaciones_laborales', [
+                'Si' => 'Si', 
+                'No' => 'No',
+              ], 'No', ['class' => 'form-control']) !!}
+            </td>
           </tr>
 
           <tr>
             <th scope="row">{!! Form::label('como_nos_contacto', 'Como nos contactó') !!}</th>
-            <td>{!! Form::text('como_nos_contacto', null, [ 'class' => 'form-control', 'placeholder' => 'Computrabajo']) !!}</td>
+            <td>
+              {!! Form::select('como_nos_contacto', [
+                'Computrabajo' => 'Computrabajo', 
+                'Bumeran' => 'Bumeran',
+                'Redes sociales' => 'Redes sociales',
+                'Instagram' => 'Instagram',
+                'Radio' => 'Radio',
+                'Recomendado' => 'Recomendado',
+              ], null, ['class' => 'form-control']) !!}
+            </td>
           </tr>
 
           <tr>
@@ -106,7 +139,7 @@
 
           <tr>
             <th scope="row">{!! Form::label('direccion', 'Dirección') !!}</th>
-            <td>{!! Form::textarea('direccion', null, [ 'class' => 'form-control', 'placeholder' => 'Av. 15 Delicias con calle 72', 'rows' => '3']) !!}</td>
+            <td>{!! Form::textarea('direccion', null, [ 'class' => 'form-control', 'placeholder' => 'Av. 15 Delicias con calle 72', 'rows' => '3', 'required']) !!}</td>
           </tr>
 
           <tr>
