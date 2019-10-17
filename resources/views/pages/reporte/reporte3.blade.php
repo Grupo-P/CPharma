@@ -182,9 +182,9 @@
             <th scope="col" class="CP-sticky">Unidades vendidas</th>              
             <th scope="col" class="CP-sticky">Unidades Compradas</th>                     
             <th scope="col" class="CP-sticky">Venta diaria</th>
-            <th scope="col" class="CP-sticky bg-danger text-white">Venta diaria (Quiebre)</th>
+            <th scope="col" class="CP-sticky bg-danger text-white">Venta diaria (Real)</th>
             <th scope="col" class="CP-sticky">Dias restantes</th>
-            <th scope="col" class="CP-sticky bg-danger text-white">Dias restantes (Quiebre)</th>
+            <th scope="col" class="CP-sticky bg-danger text-white">Dias restantes (Real)</th>
           </tr>
         </thead>
         <tbody>
