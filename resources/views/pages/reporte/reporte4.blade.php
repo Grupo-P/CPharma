@@ -136,6 +136,15 @@
   */
   function R4_Productos_MenosVendidos($SedeConnection,$Top,$FInicial,$FFinal){
     $conn = FG_Conectar_Smartpharma($SedeConnection);
+    $connCPharma = FG_Conectar_CPharma();
+
+  /*INCIO PARA CALCULOS CON DIAS EN CERO*/
+    $sql = MySQL_Rango_Dias_Cero();
+    $result = mysqli_query($connCPharma,$sql);
+    $row = $result->fetch_assoc();
+    $DC_FInicialImp = date("d-m-Y", strtotime($row['Inicio']));
+    $DC_FFinalImp = date("d-m-Y", strtotime($row['Fin']));
+ /*FIN PARA CALCULOS CON DIAS EN CERO*/
 
     $FInicialImp = date("d-m-Y", strtotime($FInicial));
     $FFinalImp = date("d-m-Y", strtotime($FFinal));
@@ -159,6 +168,7 @@
     <br/>
     ';
     echo'<h6 align="center">Periodo desde el '.$FInicialImp.' al '.$FFinalImp.' </h6>';
+    echo'<h6 align="center">La data recolectada para el calculo de <span style="color:red;">(Quiebre)</span> va desde el <span style="color:red;">'.$DC_FInicialImp.'</span> al <span style="color:red;">'.$DC_FFinalImp.'</span> </h6>';
     echo'
     <table class="table table-striped table-bordered col-12 sortable" id="myTable">
         <thead class="thead-dark">
@@ -173,7 +183,9 @@
             <th scope="col" class="CP-sticky">Unidades vendidas</th>              
             <th scope="col" class="CP-sticky">Unidades Compradas</th>                     
             <th scope="col" class="CP-sticky">Venta diaria</th>
+            <th scope="col" class="CP-sticky bg-danger text-white">Venta diaria (Quiebre)</th>
             <th scope="col" class="CP-sticky">Dias restantes</th>
+            <th scope="col" class="CP-sticky bg-danger text-white">Dias restantes (Quiebre)</th>
           </tr>
         </thead>
         <tbody>
@@ -181,6 +193,11 @@
     $contador = 1;
     while($row = sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC)) {
       $IdArticulo = $row["InvArticuloId"];
+
+      $sql2 = MySQL_Cuenta_Veces_Dias_Cero($IdArticulo,$FInicial,$FFinal);
+      $result2 = mysqli_query($connCPharma,$sql2);
+      $row2 = $result2->fetch_assoc();
+      $RangoDiasQuiebre = $row2['Cuenta'];
       
       $sql1 = R4Q_Detalle_Articulo($IdArticulo);
       $result1 = sqlsrv_query($conn,$sql1);
@@ -199,6 +216,9 @@
       $VentaDiaria = FG_Venta_Diaria($Venta,$RangoDias);
       $DiasRestantes = FG_Dias_Restantes($Existencia,$VentaDiaria);
       $Precio = FG_Calculo_Precio($Existencia,$TroquelAlmacen1,$PrecioCompraBruto,$Utilidad,$IsIVA,$TroquelAlmacen2);
+
+      $VentaDiariaQuiebre = FG_Venta_Diaria($Venta,$RangoDiasQuiebre);
+      $DiasRestantesQuiebre = FG_Dias_Restantes($Existencia,$VentaDiariaQuiebre);
 
       echo '<tr>';
       echo '<td align="center"><strong>'.intval($contador).'</strong></td>';
@@ -238,7 +258,9 @@
       '</a>
       </td>';
       echo '<td align="center">'.round($VentaDiaria,2).'</td>';
+      echo '<td align="center" class="bg-danger text-white">'.round($VentaDiariaQuiebre,2).'</td>';
       echo '<td align="center">'.round($DiasRestantes,2).'</td>';
+       echo '<td align="center" class="bg-danger text-white">'.round($DiasRestantesQuiebre,2).'</td>';
       echo '</tr>';
       $contador++;
     }
