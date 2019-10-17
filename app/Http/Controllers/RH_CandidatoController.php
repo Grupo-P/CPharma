@@ -42,7 +42,35 @@ class RH_CandidatoController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request) {
-        return $request;
+        try{
+            $candidatos = new RH_Candidato();
+            $candidatos->nombres = $request->input('nombres');
+            $candidatos->apellidos = $request->input('apellidos');
+
+            //Concatenacion de la cedula
+            $cedula = $request->input('tipo') . '-' . $request->input('cedula');
+
+            $candidatos->cedula = $cedula;
+            $candidatos->direccion = $request->input('direccion');
+            $candidatos->telefono_celular = $request->input('telefono_celular');
+            $candidatos->telefono_habitacion = $request->input('telefono_habitacion');
+            $candidatos->correo = $request->input('correo');
+            $candidatos->como_nos_contacto = $request->input('como_nos_contacto');
+            $candidatos->experiencia_laboral = $request->input('experiencia_laboral');
+            $candidatos->observaciones = $request->input('observaciones');
+            $candidatos->tipo_relacion = $request->input('tipo_relacion');
+            $candidatos->relaciones_laborales = $request->input('relaciones_laborales');
+            $candidatos->estatus = 'POSTULADO';
+            $candidatos->user = auth()->user()->name;
+            $candidatos->save();
+
+            return redirect()
+                ->route('candidatos.index')
+                ->with('Saved', ' Informacion');
+        }
+        catch(\Illuminate\Database\QueryException $e){
+            return back()->with('Error', ' Error');
+        }
     }
 
     /**
