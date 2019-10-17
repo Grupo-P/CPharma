@@ -42,19 +42,18 @@
     </button>
   </form>
 
-    <br>
-    <br>
+  <br/><br/>
 
-    {!! Form::open(['route' => 'candidatos.store', 'method' => 'POST']) !!}
+  {!! Form::open(['route' => 'candidatos.store', 'method' => 'POST']) !!}
     <fieldset>
-
-        <table class="table table-borderless table-striped">
+      <table class="table table-borderless table-striped">
         <thead class="thead-dark">
-            <tr>
-                <th scope="row"></th>
-                <th scope="row"></th>
-            </tr>
+          <tr>
+            <th scope="row"></th>
+            <th scope="row"></th>
+          </tr>
         </thead>
+
         <tbody>
             <tr>
                 <th scope="row">{!! Form::label('nombre', 'Nombre') !!}</th>
