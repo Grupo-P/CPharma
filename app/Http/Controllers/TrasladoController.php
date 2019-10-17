@@ -124,7 +124,8 @@ class TrasladoController extends Controller
      */
     public function edit($id)
     {
-        //
+        $traslado = Traslado::find($id); 
+        return view('pages.traslado.edit', compact('traslado'));
     }
 
     /**
