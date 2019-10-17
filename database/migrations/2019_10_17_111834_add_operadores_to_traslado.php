@@ -13,7 +13,7 @@ class AddOperadoresToTraslado extends Migration
      */
     public function up()
     {
-        Schema::table('traslado', function (Blueprint $table) {
+        Schema::table('traslados', function (Blueprint $table) {
             $table->string('operador_ajuste')->after('fecha_ajuste')->change();
             $table->string('operador_traslado')->after('fecha_traslado')->change();
             $table->string('fecha_embalaje')->after('bultos')->nullable();
@@ -30,7 +30,7 @@ class AddOperadoresToTraslado extends Migration
      */
     public function down()
     {
-        Schema::table('traslado', function (Blueprint $table) {
+        Schema::table('traslados', function (Blueprint $table) {
             //
         });
     }
