@@ -141,6 +141,10 @@ class TrasladoController extends Controller
           $traslado = Traslado::find($id);
           $traslado->fill($request->all());
           $traslado->estatus = 'EMBALADO';
+          $traslado->fecha_embalaje = date('Y-m-d');
+          $traslado->operador_embalaje = auth()->user()->name;
+          $traslado->fecha_envio = date('Y-m-d');
+          $traslado->operador_envio = auth()->user()->name;
           $traslado->save();
 
           $Auditoria = new Auditoria();

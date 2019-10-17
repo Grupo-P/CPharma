@@ -22,6 +22,7 @@
 	td{
 		border: 1px solid black;
 		border-radius: 0px;
+		width: 10cm;
 	}
 	th{
 		border: 1px solid black;
@@ -41,9 +42,31 @@
 	}
 </style>
 
+<?php
+	include(app_path().'\functions\config.php');
+  include(app_path().'\functions\functions.php');
+  include(app_path().'\functions\querys_mysql.php');
+  include(app_path().'\functions\querys_sqlserver.php');
+
+  $Ajuste = $_GET['Ajuste'];
+	$connCPharma = FG_Conectar_CPharma();
+	$sql = "SELECT * FROM traslados WHERE numero_ajuste='$Ajuste'";
+	$result = mysqli_query($connCPharma,$sql);
+	$row = $result->fetch_assoc();
+	mysqli_close($connCPharma);
+
+	$numero_ajuste = $row['numero_ajuste'];
+	$fecha_ajuste = $row['fecha_ajuste'];
+	$fecha_embalaje = $row['fecha_embalaje'];
+	$sede_emisora = $row['sede_emisora'];
+	$sede_destino = $row['sede_destino'];
+	$operador_envio = $row['operador_envio'];
+	$bultos = $row['bultos'];
+?>
+
  	<h1 class="h5 text-info" style="display: inline;">
-		<i class="fas fa-print"></i>
-		Soporte de traslado interno
+		<i class="fas fa-tag"></i>
+		Guia de envio y etiquetas
 	</h1>
 	<form action="/traslado/" method="POST" style="display: inline; margin-left: 50px;">  
 	    @csrf					    
@@ -60,119 +83,65 @@
 		    				<b><i class="fas fa-syringe text-success"></i>CPharma</b>
   						</span>
 		    		</th>
-		    		<th scope="row" colspan="8" class="aumento">Soporte de Traslado interno</th>
+		    		<th scope="row" colspan="4" class="aumento">Guia de Envio</th>
 		    </tr>
   	</thead>
 	  	<tbody>
 		    <tr>
 	      	<td colspan="4" class="alinear-der"># de Ajuste:</td>
-	      	<td colspan="8" class="alinear-izq">{{$traslado->numero_ajuste}}</td>
+	      	<td colspan="4" class="alinear-izq">{{$numero_ajuste}}</td>
 		    </tr>
 		    <tr>
 	      	<td colspan="4" class="alinear-der">Fecha de Ajuste:</td>
-	      	<td colspan="8" class="alinear-izq">{{$traslado->fecha_ajuste}}</td>
+	      	<td colspan="4" class="alinear-izq">{{$fecha_ajuste}}</td>
 		    </tr>
 		    <tr>
-	      	<td colspan="4" class="alinear-der">Fecha de Traslado:</td>
-	      	<td colspan="8" class="alinear-izq">{{$traslado->fecha_traslado}}</td>
+	      	<td colspan="4" class="alinear-der">Fecha de Embalaje:</td>
+	      	<td colspan="4" class="alinear-izq">{{$fecha_embalaje}}</td>
 		    </tr>
 		    <tr>
 	      	<td colspan="4" class="alinear-der">Sede Emisora:</td>
-	      	<td colspan="8" class="alinear-izq">{{$traslado->sede_emisora}}</td>
+	      	<td colspan="4" class="alinear-izq">{{$sede_emisora}}</td>
 		    </tr>
 		    <tr>
 	      	<td colspan="4" class="alinear-der">Sede Destino:</td>
-	      	<td colspan="8" class="alinear-izq">{{$traslado->sede_destino}}</td>
+	      	<td colspan="4" class="alinear-izq">{{$sede_destino}}</td>
 		    </tr>
 		    <tr>
-	      	<td colspan="4" class="alinear-der">Operador emisor del ajuste:</td>
-	      	<td colspan="8" class="alinear-izq">{{$traslado->operador_ajuste}}</td>
+	      	<td colspan="4" class="alinear-der">Operador emisor de la guia:</td>
+	      	<td colspan="4" class="alinear-izq">{{$operador_envio}}</td>
 		    </tr>
 		    <tr>
-	      	<td colspan="4" class="alinear-der">Operador emisor del traslado:</td>
-	      	<td colspan="8" class="alinear-izq">{{$traslado->operador_traslado}}</td>
+	      	<td colspan="4" class="alinear-der">Cantida total de bultos:</td>
+	      	<td colspan="4" class="alinear-izq">{{$bultos}}</td>
+		    </tr>
+		    <tr>
+	      	<td colspan="4">
+	      		<br/>
+	      		<span>______________________________</span><br/>
+	      		<span>Quien Recibe</span><br/>
+	      		<span>Nombre:</span><br/>
+	      		<span>Apellido:</span><br/>
+	      		<span>Fecha:</span><br/>
+	      		<span>Hora:</span><br/>
+			    </td>
+			    <td colspan="4">
+	      		<br/>
+	      		<span>______________________________</span><br/>
+	      		<span>Quien Entrega</span><br/>
+	      		<span>Nombre:</span><br/>
+	      		<span>Apellido:</span><br/>
+	      		<span>Fecha:</span><br/>
+	      		<span>Hora:</span><br/>
+			    </td>
 		    </tr>
 		    <thead>
-		    <tr>
-		    		<th scope="row">Codigo Interno</th>
-		    		<th scope="row">Codigo de Barra</th>
-		    		<th scope="row">Descripcion</th>
-		    		<th scope="row">Gravado?</th>
-		    		<th scope="row">Dolarizado?</th>
-		    		<th scope="row">Costo Unit Bs. S/IVA</th>
-		    		<th scope="row">Costo Unit $. S/IVA</th>
-		    		<th scope="row">Cantidad</th>
-		    		<th scope="row">Total Impuesto Bs.</th>
-		    		<th scope="row">Total Impuesto $.</th>
-		    		<th scope="row">Total Bs.</th>
-		    		<th scope="row">Total $.</th>
-		    </tr>
+			    <tr>
+			    	<th colspan="8">
+			    			Recuerde entregar el soporte de traslado junto con la mercancia
+			    	</th>
+			    </tr>
 		    </thead>
-					<?php
-						Imprimir_Traslado_Detalle($traslado->numero_ajuste);
-					?>
 	  	</tbody>
 	</table>
-	<?php $tasa = number_format(floatval($traslado->tasa),2,"," ,"." ); ?>
-	<span>Nota: La tasa usada para el calculo fue: <strong>{{$tasa}}</strong> tasa valida para la fecha: <strong>{{$traslado->fecha_tasa}}</strong>.</span>
 @endsection
-
-<?php
-	/**********************************************************************************/
-	/*
-		TITULO: Imprimir_Traslado_Detalle
-		FUNCION: Busca e imprime las lineas del detalle del traslado
-		RETORNO: no aplica
-		DESAROLLADO POR: SERGIO COVA
-	 */
-	function Imprimir_Traslado_Detalle($numero_ajuste) {
-			include(app_path().'\functions\config.php');
-      include(app_path().'\functions\functions.php');
-      include(app_path().'\functions\querys_mysql.php');
-      include(app_path().'\functions\querys_sqlserver.php');
-
-			$connCPharma = FG_Conectar_CPharma();
-			$sql = MySQL_Buscar_Traslado_Detalle($numero_ajuste);
-			$result = mysqli_query($connCPharma,$sql);
-
-			$Total_Cantidad = 0;
-			$Total_Impuesto_Bs = 0;
-			$Total_Impuesto_Usd = 0;
-			$Total_Bs = 0;
-			$Total_Usd = 0;
-
-			while($row = $result->fetch_assoc()) {
-				echo '<tr>';
-				echo '<td>'.$row['codigo_interno'].'</td>';
-				echo '<td>'.$row['codigo_barra'].'</td>';
-				echo '<td>'.$row['descripcion'].'</td>';
-				echo '<td>'.$row['gravado'].'</td>';
-				echo '<td>'.$row['dolarizado'].'</td>';
-				echo '<td>'.number_format(floatval($row['costo_unit_bs_sin_iva']),2,"," ,"." ).'</td>';
-				echo '<td>'.number_format(floatval($row['costo_unit_usd_sin_iva']),2,"," ,"." ).'</td>';
-				echo '<td>'.$row['cantidad'].'</td>';
-				echo '<td>'.number_format(floatval($row['total_imp_bs']),2,"," ,"." ).'</td>';
-				echo '<td>'.number_format(floatval($row['total_imp_usd']),2,"," ,"." ).'</td>';
-				echo '<td>'.number_format(floatval($row['total_bs']),2,"," ,"." ).'</td>';
-				echo '<td>'.number_format(floatval($row['total_usd']),2,"," ,"." ).'</td>';
-				echo '</tr>';
-
-				$Total_Cantidad += floatval($row['cantidad']);
-				$Total_Impuesto_Bs += floatval($row['total_imp_bs']);
-				$Total_Impuesto_Usd += floatval($row['total_imp_usd']);
-				$Total_Bs += floatval($row['total_bs']);
-				$Total_Usd += floatval($row['total_usd']);
-	  	}
-
-	  	echo '<tr>';
-	  	echo '<td colspan="7" class="alinear-der"><strong>Totales</strong></td>';
-	  	echo '<td><strong>'.$Total_Cantidad.'</strong></td>';
-	  	echo '<td><strong>'.number_format($Total_Impuesto_Bs,2,"," ,"." ).'</strong></td>';
-	  	echo '<td><strong>'.number_format($Total_Impuesto_Usd,2,"," ,"." ).'</strong></td>';
-	  	echo '<td><strong>'.number_format($Total_Bs,2,"," ,"." ).'</strong></td>';
-	  	echo '<td><strong>'.number_format($Total_Usd,2,"," ,"." ).'</strong></td>';
-	  	echo '</tr>';
-
-			mysqli_close($connCPharma);
-	}
-?>

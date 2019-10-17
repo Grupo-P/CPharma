@@ -166,7 +166,7 @@
 				    || Auth::user()->departamento == 'TECNOLOGIA')
 						){
 					?>
-						<a href="/GuiaEnvio" role="button" class="btn btn-outline-warning btn-sm" data-toggle="tooltip" data-placement="top" title="Guia de envio y etiquetas" style="width: auto">
+						<a href="/GuiaEnvio?Ajuste={{$traslado->numero_ajuste}}" role="button" class="btn btn-outline-warning btn-sm" data-toggle="tooltip" data-placement="top" title="Guia de envio y etiquetas" style="width: auto">
 	      			<i class="fas fa-tag"></i>     		
 	      		</a>
 					<?php
