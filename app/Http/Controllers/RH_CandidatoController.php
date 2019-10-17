@@ -32,7 +32,7 @@ class RH_CandidatoController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function create() {
-        //
+        return view('pages.RRHH.candidatos.create');
     }
 
     /**
