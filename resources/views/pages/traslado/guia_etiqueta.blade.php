@@ -22,7 +22,7 @@
 	td{
 		border: 1px solid black;
 		border-radius: 0px;
-		width: 10cm;
+		width: 12cm;
 	}
 	th{
 		border: 1px solid black;
@@ -43,6 +43,18 @@
 	.aumentoT{
 		font-size: 1.8em;
 		text-transform: uppercase;
+	}
+	.espacioT{
+		padding-top: 20px;
+		padding-bottom: 20px;
+	}
+	@page {size: landscape}
+
+	@media print{
+		.saltoDePagina{
+			display:block;
+			page-break-before:always;
+		}
 	}
 </style>
 
@@ -121,8 +133,8 @@
 	      	<td colspan="4" class="alinear-izq">{{$bultos}}</td>
 		    </tr>
 		    <tr>
-	      	<td colspan="4">
-	      		<br/>
+	      	<td colspan="4" class="alinear-izq">
+	      		<br/><br/><br/>
 	      		<span>______________________________</span><br/>
 	      		<span>Quien Recibe</span><br/>
 	      		<span>Nombre:</span><br/>
@@ -130,8 +142,8 @@
 	      		<span>Fecha:</span><br/>
 	      		<span>Hora:</span><br/>
 			    </td>
-			    <td colspan="4">
-	      		<br/>
+			    <td colspan="4" class="alinear-izq">
+	      		<br/><br/>
 	      		<span>______________________________</span><br/>
 	      		<span>Quien Entrega</span><br/>
 	      		<span>Nombre:</span><br/>
@@ -168,36 +180,37 @@
 	$Contador = 1;
 	while($Contador<=$bultos){
 		echo'
+		<div class="saltoDePagina"></div>
 		<br/>
-		<table class="table-borderless" style="width:65%;">
+		<table class="table-borderless" style="width:82%;">
 			<thead>
 		    <tr>
-		    		<th scope="row" colspan="8">
+		    		<th scope="row" colspan="8" class="espacioT">
 		    			<span class="navbar-brand text-info CP-title-NavBar">
 		    				<b><i class="fas fa-syringe text-success"></i>CPharma</b>
   						</span>
-		    			<span class="aumento">Bulto de traslados internos</span>
+		    			<span class="aumentoT espacioT">Bulto de traslados internos</span>
 		    		</th>
 		    </tr>
 	  	</thead>
 	  	<tbody>
 		    <tr>
-	      	<td colspan="8">Soporte #'.$numero_ajuste.' del '.$fecha_ajuste.'</td>
+	      	<td colspan="8" class="aumento espacioT">Soporte #'.$numero_ajuste.' del '.$fecha_ajuste.'</td>
 		    </tr>
 		    <tr>
-	      	<td colspan="8" class="aumentoT"><strong>De: '.$sede_emisora.'</strong></td>
+	      	<td colspan="8" class="aumentoT espacioT"><strong>De: '.$sede_emisora.'</strong></td>
 		    </tr>
 		    <tr>
-	      	<td colspan="8" class="aumentoT"><strong>Para: '.$sede_destino.'</strong></td>
+	      	<td colspan="8" class="aumentoT espacioT"><strong>Para: '.$sede_destino.'</strong></td>
 		    </tr>
 		    <tr>
-	      	<td colspan="8" class="alinear-der">Preparado el '.$fecha_embalaje.' por '.$operador_embalaje.'</td>
+	      	<td colspan="8" class="alinear-der aumento espacioT">Preparado el '.$fecha_embalaje.' por '.$operador_embalaje.'</td>
 		    </tr>
 		    <tr>
-	      	<td colspan="8">Favor no aplilar demasiadas cajas y contemplar que el contenido es fragil para el momento de su movilizacion</td>
+	      	<td colspan="8" class="aumento espacioT">Favor no aplilar demasiadas cajas y contemplar que el contenido es fragil para el momento de su movilizacion</td>
 		    </tr>
 		    <tr>
-	      	<td colspan="8" class="alinear-der aumento"><strong>Bulto '.$Contador.' de '.$bultos.'</strong></td>
+	      	<td colspan="8" class="alinear-der aumento espacioT"><strong>Bulto '.$Contador.' de '.$bultos.'</strong></td>
 		    </tr>
 	  	</tbody>
 		</table>
