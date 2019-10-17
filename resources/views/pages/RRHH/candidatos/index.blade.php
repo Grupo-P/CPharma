@@ -4,6 +4,12 @@
   Candidatos
 @endsection
 
+@section('scriptsHead')
+  <style>
+    th, td {text-align: center;}
+  </style>
+@endsection
+
 @section('content')
   <!-- Modal Guardar -->
   @if(session('Saved'))
@@ -110,7 +116,9 @@
       <thead class="thead-dark">
         <tr>
             <th scope="col" class="stickyCP">#</th>
-            <th scope="col" class="stickyCP">Nombre</th>
+            <th scope="col" class="stickyCP">Nombres</th>
+            <th scope="col" class="stickyCP">Apellidos</th>
+            <th scope="col" class="stickyCP">Cédula</th>
             <th scope="col" class="stickyCP">Teléfono</th>          
             <th scope="col" class="stickyCP">Correo</th>
             <th scope="col" class="stickyCP">Estatus</th>
@@ -122,7 +130,9 @@
       @foreach($candidatos as $candidato)
         <tr>
           <th>{{$candidato->id}}</th>
-          <td>{{$candidato->nombres}} {{$candidato->apellidos}}</td>
+          <td>{{$candidato->nombres}}</td>
+          <td>{{$candidato->apellidos}}</td>
+          <td>{{$candidato->cedula}}</td>
           
           <?php if($candidato->telefono_celular == '') { ?>
             <td>{{$candidato->telefono_habitacion}}</td>
@@ -144,15 +154,15 @@
 
               if($candidato->estatus != 'RECHAZADO') {
           ?>
-            <a href="/candidato/{{$candidato->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
+            <a href="/candidatos/{{$candidato->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
               <i class="far fa-eye"></i>
             </a>
 
-            <a href="/candidato/{{$candidato->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
+            <a href="/candidatos/{{$candidato->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
               <i class="fas fa-edit"></i>
             </a>
 
-            <form action="/candidato/{{$candidato->id}}" method="POST" style="display: inline;">
+            <form action="/candidatos/{{$candidato->id}}" method="POST" style="display: inline;">
               @method('DELETE')
               @csrf
               <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Desincorporar">
@@ -163,7 +173,7 @@
           <?php
             } else if($candidato->estatus == 'RECHAZADO') {
           ?>
-            <form action="/candidato/{{$candidato->id}}" method="POST" style="display: inline;">
+            <form action="/candidatos/{{$candidato->id}}" method="POST" style="display: inline;">
               @method('DELETE')
               @csrf
               <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Reincorporar">
@@ -174,17 +184,17 @@
             }
           } else if(Auth::user()->role == 'ANALISTA') {
           ?>
-            <a href="/candidato/{{$candidato->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
+            <a href="/candidatos/{{$candidato->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
               <i class="far fa-eye"></i>
             </a>
 
-            <a href="/candidato/{{$candidato->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
+            <a href="/candidatos/{{$candidato->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
               <i class="fas fa-edit"></i>
             </a>
           <?php
             } else if(Auth::user()->role == 'USUARIO') {
           ?>
-            <a href="/candidato/{{$candidato->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
+            <a href="/candidatos/{{$candidato->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
               <i class="far fa-eye"></i>
             </a>
           <?php
