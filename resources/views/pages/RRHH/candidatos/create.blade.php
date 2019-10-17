@@ -55,40 +55,46 @@
         </thead>
 
         <tbody>
-            <tr>
-                <th scope="row">{!! Form::label('nombre', 'Nombre') !!}</th>
-                <td>{!! Form::text('nombre', null, [ 'class' => 'form-control', 'placeholder' => 'Pedro', 'autofocus']) !!}</td>
-            </tr>
-            <tr>
-                <th scope="row">{!! Form::label('apellido', 'Apellido') !!}</th>
-                <td>{!! Form::text('apellido', null, [ 'class' => 'form-control', 'placeholder' => 'Perez']) !!}</td>
-            </tr>
-            <tr>
-                <th scope="row">{!! Form::label('telefono', 'Telefono') !!}</th>
-                <td>{!! Form::text('telefono', null, [ 'class' => 'form-control', 'placeholder' => '0414-1234567']) !!}</td>
-            </tr>
-            <tr>
-                <th scope="row">{!! Form::label('correo', 'Correo') !!}</th>
-                <td>{!! Form::text('correo', null, [ 'class' => 'form-control', 'placeholder' => 'pperez@empresa.com']) !!}</td>
-            </tr>
-            <tr>
-                <th scope="row">{!! Form::label('cargo', 'Cargo') !!}</th>
-                <td>{!! Form::text('cargo', null, [ 'class' => 'form-control', 'placeholder' => 'candidato']) !!}</td>
-            </tr>
-            <tr>
-                <th scope="row">{!! Form::label('empresa', 'Empresa') !!}
-                </th>
-                <td>{!! Form::text('correo', null, [ 'class' => 'form-control', 'placeholder' => 'pperez@empresa.com']) !!}</td>
-            </tr>
-            <tr>
-                <th scope="row">{!! Form::label('observacion', 'Observaciones') !!}</th>
-                <td>{!! Form::textarea('observacion', null, [ 'class' => 'form-control', 'placeholder' => 'Detalles importantes del candidato', 'rows' => '3']) !!}</td>
-            </tr>
+          <tr>
+            <th scope="row">{!! Form::label('nombre', 'Nombre') !!}</th>
+            <td>{!! Form::text('nombre', null, [ 'class' => 'form-control', 'placeholder' => 'Pedro', 'autofocus']) !!}</td>
+          </tr>
+
+          <tr>
+            <th scope="row">{!! Form::label('apellido', 'Apellido') !!}</th>
+            <td>{!! Form::text('apellido', null, [ 'class' => 'form-control', 'placeholder' => 'Perez']) !!}</td>
+          </tr>
+
+          <tr>
+            <th scope="row">{!! Form::label('telefono', 'Telefono') !!}</th>
+            <td>{!! Form::text('telefono', null, [ 'class' => 'form-control', 'placeholder' => '0414-1234567']) !!}</td>
+          </tr>
+
+          <tr>
+            <th scope="row">{!! Form::label('correo', 'Correo') !!}</th>
+            <td>{!! Form::text('correo', null, [ 'class' => 'form-control', 'placeholder' => 'pperez@empresa.com']) !!}</td>
+          </tr>
+
+          <tr>
+            <th scope="row">{!! Form::label('cargo', 'Cargo') !!}</th>
+            <td>{!! Form::text('cargo', null, [ 'class' => 'form-control', 'placeholder' => 'candidato']) !!}</td>
+          </tr>
+
+          <tr>
+            <th scope="row">{!! Form::label('empresa', 'Empresa') !!}</th>
+            <td>{!! Form::text('correo', null, [ 'class' => 'form-control', 'placeholder' => 'pperez@empresa.com']) !!}</td>
+          </tr>
+
+          <tr>
+            <th scope="row">{!! Form::label('observacion', 'Observaciones') !!}</th>
+            <td>{!! Form::textarea('observacion', null, [ 'class' => 'form-control', 'placeholder' => 'Detalles importantes del candidato', 'rows' => '3']) !!}</td>
+          </tr>
         </tbody>
-        </table>
-        {!! Form::submit('Guardar', ['class' => 'btn btn-outline-success btn-md']) !!}
+      </table>
+
+      {!! Form::submit('Guardar', ['class' => 'btn btn-outline-success btn-md']) !!}
     </fieldset>
-    {!! Form::close()!!}
+  {!! Form::close()!!}
     <script>
         $(document).ready(function(){
             $('[data-toggle="tooltip"]').tooltip();   
