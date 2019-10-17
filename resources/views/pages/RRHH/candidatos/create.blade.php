@@ -21,7 +21,7 @@
           </div>
           <div class="modal-body">
             <h4 class="h6">
-              El candidato no fue almacenado, el correo ya esta registrado
+              El candidato no fue almacenado, el correo o la cédula ya esta registrado
             </h4>
           </div>
           <div class="modal-footer">
