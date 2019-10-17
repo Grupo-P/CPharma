@@ -595,7 +595,7 @@
         if($Gravado=='SI' && $Utilidad!= 1){
           $costo_unit_bs_sin_iva = ($Precio/Impuesto)*$Utilidad;
           $costo_unit_usd_sin_iva = round(($costo_unit_bs_sin_iva/$TasaActual),2);
-          $total_imp_usd = round(($costo_unit_usd_sin_iva*$Cantidad)*(1-Impuesto),2);
+          $total_imp_usd = round(($costo_unit_usd_sin_iva*$Cantidad)*(Impuesto-1),2);
         }
         else if($Gravado== 'NO' && $Utilidad!= 1){
           $costo_unit_bs_sin_iva = ($Precio)*$Utilidad;
@@ -611,7 +611,7 @@
         $costo_unit_bs_sin_iva = round($PrecioCompraBruto,2);
 
         if($Gravado== 'SI' && $Utilidad!= 1){
-          $total_imp_bs = round((($costo_unit_bs_sin_iva*$Cantidad)*(1-Impuesto)),2);
+          $total_imp_bs = round((($costo_unit_bs_sin_iva*$Cantidad)*(Impuesto-1)),2);
         }
         else if($Gravado== 'NO' && $Utilidad!= 1){
           $total_imp_bs = 0.00; 

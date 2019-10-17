@@ -172,7 +172,7 @@
 		    <!-- Inicio Validacion de ROLES -->
 		      <td style="width:170px;">
 					<?php
-					if(($traslado->estatus=='PROCESADO'||$traslado->estatus=='EMBALADO') && 
+					if(($traslado->estatus=='PROCESADO'||$traslado->estatus=='EMBALADO'||$traslado->estatus=='ENTREGADO') && 
 						(Auth::user()->departamento == 'OPERACIONES' 
 				    || Auth::user()->departamento == 'GERENCIA'
 				    || Auth::user()->departamento == 'TECNOLOGIA')

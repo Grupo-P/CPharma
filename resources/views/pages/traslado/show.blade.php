@@ -60,40 +60,41 @@
 		    				<b><i class="fas fa-syringe text-success"></i>CPharma</b>
   						</span>
 		    		</th>
-		    		<th scope="row" colspan="8" class="aumento">Soporte de Traslado interno</th>
+		    		<th scope="row" colspan="9" class="aumento">Soporte de Traslado interno</th>
 		    </tr>
   	</thead>
 	  	<tbody>
 		    <tr>
 	      	<td colspan="4" class="alinear-der"># de Ajuste:</td>
-	      	<td colspan="8" class="alinear-izq">{{$traslado->numero_ajuste}}</td>
+	      	<td colspan="9" class="alinear-izq">{{$traslado->numero_ajuste}}</td>
 		    </tr>
 		    <tr>
 	      	<td colspan="4" class="alinear-der">Fecha de Ajuste:</td>
-	      	<td colspan="8" class="alinear-izq">{{$traslado->fecha_ajuste}}</td>
+	      	<td colspan="9" class="alinear-izq">{{$traslado->fecha_ajuste}}</td>
 		    </tr>
 		    <tr>
 	      	<td colspan="4" class="alinear-der">Fecha de Traslado:</td>
-	      	<td colspan="8" class="alinear-izq">{{$traslado->fecha_traslado}}</td>
+	      	<td colspan="9" class="alinear-izq">{{$traslado->fecha_traslado}}</td>
 		    </tr>
 		    <tr>
 	      	<td colspan="4" class="alinear-der">Sede Emisora:</td>
-	      	<td colspan="8" class="alinear-izq">{{$traslado->sede_emisora}}</td>
+	      	<td colspan="9" class="alinear-izq">{{$traslado->sede_emisora}}</td>
 		    </tr>
 		    <tr>
 	      	<td colspan="4" class="alinear-der">Sede Destino:</td>
-	      	<td colspan="8" class="alinear-izq">{{$traslado->sede_destino}}</td>
+	      	<td colspan="9" class="alinear-izq">{{$traslado->sede_destino}}</td>
 		    </tr>
 		    <tr>
 	      	<td colspan="4" class="alinear-der">Operador emisor del ajuste:</td>
-	      	<td colspan="8" class="alinear-izq">{{$traslado->operador_ajuste}}</td>
+	      	<td colspan="9" class="alinear-izq">{{$traslado->operador_ajuste}}</td>
 		    </tr>
 		    <tr>
 	      	<td colspan="4" class="alinear-der">Operador emisor del traslado:</td>
-	      	<td colspan="8" class="alinear-izq">{{$traslado->operador_traslado}}</td>
+	      	<td colspan="9" class="alinear-izq">{{$traslado->operador_traslado}}</td>
 		    </tr>
 		    <thead>
 		    <tr>
+		    		<th scope="row">#</th>
 		    		<th scope="row">Codigo Interno</th>
 		    		<th scope="row">Codigo de Barra</th>
 		    		<th scope="row">Descripcion</th>
@@ -141,8 +142,10 @@
 			$Total_Bs = 0;
 			$Total_Usd = 0;
 
+			$cont = 1;
 			while($row = $result->fetch_assoc()) {
 				echo '<tr>';
+				echo '<th>'.intval($cont).'</th>';
 				echo '<td>'.$row['codigo_interno'].'</td>';
 				echo '<td>'.$row['codigo_barra'].'</td>';
 				echo '<td>'.$row['descripcion'].'</td>';
@@ -162,10 +165,11 @@
 				$Total_Impuesto_Usd += floatval($row['total_imp_usd']);
 				$Total_Bs += floatval($row['total_bs']);
 				$Total_Usd += floatval($row['total_usd']);
+				$cont++;
 	  	}
 
 	  	echo '<tr>';
-	  	echo '<td colspan="7" class="alinear-der"><strong>Totales</strong></td>';
+	  	echo '<td colspan="8" class="alinear-der"><strong>Totales</strong></td>';
 	  	echo '<td><strong>'.$Total_Cantidad.'</strong></td>';
 	  	echo '<td><strong>'.number_format($Total_Impuesto_Bs,2,"," ,"." ).'</strong></td>';
 	  	echo '<td><strong>'.number_format($Total_Impuesto_Usd,2,"," ,"." ).'</strong></td>';
