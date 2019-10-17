@@ -60,6 +60,10 @@ class TrasladoController extends Controller
             $IdAjuste = $request->input('IdAjuste');
             $SedeConnection = $request->input('SEDE');
             $NumeroAjuste = $request->input('numero_ajuste');
+
+            $connCPharma = FG_Conectar_CPharma();
+            $tasa = FG_Tasa_Fecha($connCPharma,date('Y-m-d'));
+            mysqli_close($connCPharma);
         /*INICIO ENCABEZADO DEL TRASLADO*/
             $traslado->numero_ajuste = $NumeroAjuste;
             $traslado->fecha_ajuste = $request->input('fecha_ajuste');
@@ -69,6 +73,9 @@ class TrasladoController extends Controller
             $traslado->sede_emisora = $request->input('sede_emisora');
             $traslado->sede_destino = $request->input('sede_destino');
             $traslado->estatus = 'PROCESADO';
+            $traslado->bultos = '0';
+            $traslado->fecha_tasa = date('d-m-Y');
+            $traslado->tasa = $tasa;
             $traslado->save();
         /*FIN ENCABEZADO DEL TRASLADO*/
         /*INICIO DETALLE DEL TRASLADO*/

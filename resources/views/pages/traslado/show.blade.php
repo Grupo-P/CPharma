@@ -113,6 +113,8 @@
 					?>
 	  	</tbody>
 	</table>
+	<?php $tasa = number_format(floatval($traslado->tasa),2,"," ,"." ); ?>
+	<span>Nota: La tasa usada para el calculo fue: <strong>{{$tasa}}</strong> tasa valida para la fecha: <strong>{{$traslado->fecha_tasa}}</strong>.</span>
 @endsection
 
 <?php

@@ -17,7 +17,7 @@
                 </button>
               </div>
               <div class="modal-body">
-                <h4 class="h6">El traslado no pudo ser almacenado</h4>
+                <h4 class="h6">El traslado no pudo ser almacenado, ya existe un traslado para este ajuste</h4>
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-outline-success" data-dismiss="modal">Aceptar</button>
