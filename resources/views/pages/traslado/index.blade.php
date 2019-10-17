@@ -4,12 +4,12 @@
     Traslado
 @endsection
 
-@section('scriptsHead')
-    <script src="{{ asset('assets/js/sortTable.js') }}">	
-    </script>
-    <script src="{{ asset('assets/js/filter.js') }}">	
-    </script>
-@endsection
+<?php
+	include(app_path().'\functions\config.php');
+  include(app_path().'\functions\functions.php');
+  include(app_path().'\functions\querys_mysql.php');
+  include(app_path().'\functions\querys_sqlserver.php'); 
+?>
 
 @section('content')
 
@@ -110,27 +110,67 @@
 	<table class="table table-striped table-borderless col-12 sortable" id="myTable">
 	  	<thead class="thead-dark">
 		    <tr>
-		      	<th scope="col" class="stickyCP">#</th>
-		      	<th scope="col" class="stickyCP">Ajuste</th>
-		      	<th scope="col" class="stickyCP">Sede Emisora</th>	
-		      	<th scope="col" class="stickyCP">Sede Destino</th>
-		      	<th scope="col" class="stickyCP">Fecha</th>	
-		      	<th scope="col" class="stickyCP">Estatus</th>
-		      	<th scope="col" class="stickyCP">Acciones</th>
+		      	<th scope="col" class="CP-sticky">#</th>
+		      	<th scope="col" class="CP-sticky">Ajuste</th>
+		      	<th scope="col" class="CP-sticky">Fecha Ajuste</th>
+		      	<th scope="col" class="CP-sticky">Fecha Traslado</th>	
+		      	<th scope="col" class="CP-sticky">Sede Destino</th>
+		      	<th scope="col" class="CP-sticky">Unidades</th>
+		      	<th scope="col" class="CP-sticky">Bultos</th>
+		      	<th scope="col" class="CP-sticky">Total Bs.S</th>
+		      	<th scope="col" class="CP-sticky">Total $</th>
+		      	<th scope="col" class="CP-sticky">Estatus</th>
+		      	<th scope="col" class="CP-sticky">Dias en traslado</th>
+		      	<th scope="col" class="CP-sticky">Acciones</th>
 		    </tr>
 	  	</thead>
 	  	<tbody>
 		@foreach($traslados as $traslado)
+			<?php 
+				$connCPharma = FG_Conectar_CPharma();
+				$sql = MySQL_Buscar_Traslado_Detalle($traslado->numero_ajuste);
+				$result = mysqli_query($connCPharma,$sql);
+
+				$Total_Cantidad = 0;
+				$Total_Impuesto_Bs = 0;
+				$Total_Impuesto_Usd = 0;
+				$Total_Bs = 0;
+				$Total_Usd = 0;
+
+				while($row = $result->fetch_assoc()) {
+					$Total_Cantidad += floatval($row['cantidad']);
+					$Total_Impuesto_Bs += floatval($row['total_imp_bs']);
+					$Total_Impuesto_Usd += floatval($row['total_imp_usd']);
+					$Total_Bs += floatval($row['total_bs']);
+					$Total_Usd += floatval($row['total_usd']);
+				}
+				mysqli_close($connCPharma);
+
+				$Total_Bs = number_format ($Total_Bs,2,"," ,"." );
+				$Total_Usd = number_format ($Total_Usd,2,"," ,"." );
+
+				if($traslado->estatus=='ENTREGADO'){
+					$Dias = FG_Rango_Dias($traslado->fecha_ajuste,$traslado->updated_at);
+				}
+				else{
+					$Dias = '-';
+				}
+			?>
 		    <tr>
 		    	<th>{{$traslado->id}}</th>
-		      <th>{{$traslado->numero_ajuste}}</th>
-		      <td>{{$traslado->sede_emisora}}</td>
-		      <td>{{$traslado->sede_destino}}</td>
+		      <td>{{$traslado->numero_ajuste}}</td>
+		      <td>{{$traslado->fecha_ajuste}}</td>
 		      <td>{{$traslado->fecha_traslado}}</td>
+		      <td>{{$traslado->sede_destino}}</td>
+		      <td>{{$Total_Cantidad}}</td>
+		      <td>{{$traslado->bultos}}</td>
+		      <td>{{$Total_Bs}}</td>
+		      <td>{{$Total_Usd}}</td>
 		      <td>{{$traslado->estatus}}</td>
+		      <td>{{$Dias}}</td>
 		      
 		    <!-- Inicio Validacion de ROLES -->
-		      <td style="width:140px;">
+		      <td style="width:170px;">
 					<?php
 					if(($traslado->estatus=='PROCESADO'||$traslado->estatus=='EMBALADO') && 
 						(Auth::user()->departamento == 'OPERACIONES' 
@@ -169,6 +209,22 @@
 						<a href="/GuiaEnvio?Ajuste={{$traslado->numero_ajuste}}" role="button" class="btn btn-outline-warning btn-sm" data-toggle="tooltip" data-placement="top" title="Guia de envio y etiquetas" style="width: auto">
 	      			<i class="fas fa-tag"></i>     		
 	      		</a>
+					<?php
+					}
+					?>
+
+					<?php
+					if(($traslado->estatus=='EMBALADO') && 
+						(Auth::user()->departamento == 'ADMINISTRACION'
+				    || Auth::user()->departamento == 'GERENCIA'
+				    || Auth::user()->departamento == 'TECNOLOGIA')
+						){
+					?>
+						<form action="/traslado/{{$traslado->id}}" method="POST" style="display: inline;">
+					    @method('DELETE')
+					    @csrf					    
+					    <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Finalizar"><i class="fa fa-check"></i></button>
+						</form>
 					<?php
 					}
 					?>						

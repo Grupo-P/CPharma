@@ -169,6 +169,21 @@ class TrasladoController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $traslado = Traslado::find($id);
+
+        $Auditoria = new Auditoria();        
+        $Auditoria->tabla = 'TRASLADO';
+        $Auditoria->registro = $traslado->numero_ajuste;
+        $Auditoria->user = auth()->user()->name;        
+
+         if($traslado->estatus == 'EMBALADO'){
+            $traslado->estatus = 'ENTREGADO';
+            $Auditoria->accion = 'FINALIZADO';
+         }   
+         $traslado->save();
+
+         $Auditoria->save();
+
+         return redirect()->route('traslado.index')->with('Deleted', ' Informacion');
     }
 }
