@@ -351,7 +351,7 @@
           echo '<td align="center"> - </td>';
         }
 
-        echo '<td align="center">'.intval($CantidadPedidoQuiebre).'</td>';
+        echo '<td align="center">'.intval($CantidadPedido).'</td>';
          echo '<td align="center" class="bg-danger text-white">'.round($CantidadPedidoQuiebre,2).'</td>';
         echo '</tr>';
         $contador++;
