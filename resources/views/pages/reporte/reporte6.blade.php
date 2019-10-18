@@ -318,7 +318,7 @@
         echo '<td align="center">'.round($VentaDiaria,2).'</td>';
         echo '<td align="center" class="bg-danger text-white">'.round($VentaDiariaQuiebre,2).'</td>';
         echo '<td align="center">'.round($DiasRestantes,2).'</td>';
-         echo '<td align="center" class="bg-danger text-white">'.round($DiasRestantesQuiebre,2).'</td>';
+        echo '<td align="center" class="bg-danger text-white">'.round($DiasRestantesQuiebre,2).'</td>';
         echo '<td align="center">'.number_format($Precio,2,"," ,"." ).'</td>';
         
         if(($UltimoLote)){
