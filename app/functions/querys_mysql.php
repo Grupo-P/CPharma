@@ -54,4 +54,35 @@
 		$sql = "SELECT * FROM traslados_detalle WHERE id_traslado = '$id_traslado'";
 		return $sql;
 	}
+	/**********************************************************************************/
+	/*
+		TITULO: MySQL_Rango_Dias_Cero
+		FUNCION: Busca la fecha mas recien y la mas antigua en dias en cero
+		RETORNO: fecha mas antigua y mas recien
+		DESARROLLADO POR: SERGIO COVA
+	 */
+	function MySQL_Rango_Dias_Cero() {
+		$sql = "SELECT 
+		(SELECT fecha_captura FROM dias_ceros GROUP BY fecha_captura ORDER BY fecha_captura ASC LIMIT 1) AS Inicio,
+		(SELECT fecha_captura FROM dias_ceros GROUP BY fecha_captura ORDER BY fecha_captura DESC LIMIT 1) AS Fin
+		FROM dias_ceros
+		LIMIT 1";
+		return $sql;
+	}
+	/**********************************************************************************/
+	/*
+		TITULO: MySQL_Cuenta_Veces_Dias_Cero
+		FUNCION: Contar las veces que esta un articulo en dias en cero en un rango de terminado
+		RETORNO: Numero de veces de apariciones en el rango
+		DESARROLLADO POR: SERGIO COVA
+	 */
+	function MySQL_Cuenta_Veces_Dias_Cero($IdArticulo,$FInicial,$FFinal) {
+		$sql = "
+			SELECT 
+			COUNT(*) AS Cuenta 
+			FROM dias_ceros 
+			WHERE dias_ceros.id_articulo = '$IdArticulo' AND (fecha_captura >= '$FInicial' AND `fecha_captura` <= '$FFinal')
+		";
+		return $sql;
+	}
 ?>
