@@ -64,39 +64,31 @@
     font-size: 1em;
 	}
 	li > .CP-Links-Menu:hover {      
-    border-style: solid;
-    border-width: 1px;
-    border-color: #28A745;
-    border-radius: 5px;
-    background-color: #28A745;
-    color: white;
+    text-decoration: none;
+    color: #5bc0de;
 	}
 /*NewNav Styles*/
-	.CP-Links-Nav {
-    text-decoration: none;
-    color: #28A745;
-    margin: 6px;
+	.textoN{
+		text-decoration: none;
+		font-size: 1.6em;
     padding: 5px;
+    border: 0px;
 	}
-	li > .CP-Links-Nav {      
-    
-    font-size: 1.6em;
-    margin: 6px;
-    padding: 5px;
+	.textoN:hover{
+		text-decoration: none;
+		background-color: white;
+		color:#28A745;
 	}
-	li > .CP-Links-Nav:hover {      
-    border-style: solid;
-    border-width: 1px;
-    border-color: #28A745;
-    border-radius: 5px;
-    background-color: #28A745;
-    color: white;
-    margin: 6px;
-    padding: 5px;
-	}
-	.iconoI{
+	.textoI{
+		text-decoration: none;
 		font-size: 2em;
     padding: 5px;
+   	border: 0px;
+	}
+	.textoI:hover{
+		text-decoration: none;
+		background-color: white;
+		color:#28A745;
 	}
 /*Efectos, Trasiciones o Transformaciones*/
 	.CP-beep {
