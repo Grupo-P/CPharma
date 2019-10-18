@@ -167,7 +167,7 @@
     <br/>
     ';
     echo'<h6 align="center">Periodo desde el '.$FInicialImp.' al '.$FFinalImp.' </h6>';
-    echo'<h6 align="center">La data recolectada para el calculo de <span style="color:red;">(Quiebre)</span> va desde el <span style="color:red;">'.$DC_FInicialImp.'</span> al <span style="color:red;">'.$DC_FFinalImp.'</span> </h6>';
+    echo'<h6 align="center">La data recolectada para el calculo <span style="color:red;">(Real)</span> va desde el <span style="color:red;">'.$DC_FInicialImp.'</span> al <span style="color:red;">'.$DC_FFinalImp.'</span> </h6>';
     echo'
     <table class="table table-striped table-bordered col-12 sortable" id="myTable">
         <thead class="thead-dark">
