@@ -323,6 +323,7 @@
             <th scope="col" class="CP-sticky">Descripcion</th>              
             <th scope="col" class="CP-sticky">Producto Unico</th>
             <th scope="col" class="CP-sticky">Precio (Con IVA) '.SigVe.'</th>
+            <th scope="col" class="CP-sticky">Ultimo Precio (Sin IVA) '.SigVe.'</th>
             <th scope="col" class="CP-sticky">Existencia</th>
             <th scope="col" class="CP-sticky">Unidades vendidas</th>
             <th scope="col" class="CP-sticky">Unidades compradas</th>
@@ -356,6 +357,7 @@
       $CodigoBarra = $row2["CodigoBarra"];
       $Descripcion = FG_Limpiar_Texto($row2["Descripcion"]);
       $UltimaVenta = $row2["UltimaVenta"];
+      $UltimoPrecio = $row2["UltimoPrecio"];
       $Existencia = $row2["Existencia"];
       $IsIVA = $row2["Impuesto"];
       $Utilidad = $row2["Utilidad"];
@@ -392,6 +394,14 @@
       </td>';     
       echo '<td align="center">'.$Unico.'</td>';
       echo '<td align="center">'.number_format($Precio,2,"," ,"." ).'</td>';
+
+      if( ($Existencia==0) && (!is_null($UltimaVenta)) ){
+          echo '<td align="center">'.number_format($UltimoPrecio,2,"," ,"." ).'</td>';
+        }
+        else{
+          echo '<td align="center"> - </td>';
+        }
+
       echo '<td align="center">'.intval($Existencia).'</td>';
       echo
       '<td align="center" class="CP-barrido">
@@ -577,6 +587,13 @@
         WHERE 
         InvAtributo.Descripcion = 'Articulo Estrella') 
       AND InvArticuloAtributo.InvArticuloId = InvArticulo.Id),CAST(0 AS INT))) AS ArticuloEstrella,
+    --Ultimo Precio Sin Iva
+      (SELECT TOP 1
+      (ROUND(CAST((VenVentaDetalle.M_PrecioNeto) AS DECIMAL(38,2)),2,0))
+      FROM VenVenta
+      INNER JOIN VenVentaDetalle ON VenVentaDetalle.VenVentaId = VenVenta.Id
+      WHERE VenVentaDetalle.InvArticuloId = InvArticulo.Id
+      ORDER BY VenVenta.FechaDocumentoVenta DESC) AS UltimoPrecio,
     -- Ultima Venta (Fecha)
       (SELECT TOP 1
       CONVERT(DATE,VenFactura.FechaDocumento)
