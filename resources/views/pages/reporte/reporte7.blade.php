@@ -263,6 +263,15 @@
   function R7_Catalogo_Proveedor_C3($SedeConnection,$IdProveedor,$NombreProveedor,$FInicial,$FFinal,$DiasPedido){
 
     $conn = FG_Conectar_Smartpharma($SedeConnection);
+    $connCPharma = FG_Conectar_CPharma();
+
+  /*INCIO PARA CALCULOS CON DIAS EN CERO*/
+    $sql = MySQL_Rango_Dias_Cero();
+    $result = mysqli_query($connCPharma,$sql);
+    $row = $result->fetch_assoc();
+    $DC_FInicialImp = date("d-m-Y", strtotime($row['Inicio']));
+    $DC_FFinalImp = date("d-m-Y", strtotime($row['Fin']));
+ /*FIN PARA CALCULOS CON DIAS EN CERO*/
 
     $FInicialImp = date("d-m-Y", strtotime($FInicial));
     $FFinalImp= date("d-m-Y", strtotime($FFinal));
@@ -287,7 +296,7 @@
     ';
     echo'<h6 align="center">Pedido en base a: '.$DiasPedido.' dias </h6>';
     echo'<h6 align="center">Periodo desde el '.$FInicialImp.' al '.$FFinalImp.' </h6>';
- 
+    echo'<h6 align="center">La data recolectada para el calculo <span style="color:red;">(Real)</span> va desde el <span style="color:red;">'.$DC_FInicialImp.'</span> al <span style="color:red;">'.$DC_FFinalImp.'</span> </h6>';
     echo '
     <table class="table table-striped table-bordered col-12 sortable">
       <thead class="thead-dark">
@@ -318,10 +327,13 @@
             <th scope="col" class="CP-sticky">Unidades vendidas</th>
             <th scope="col" class="CP-sticky">Unidades compradas</th>
             <th scope="col" class="CP-sticky">Venta diaria</th>
+            <th scope="col" class="CP-sticky bg-danger text-white">Venta diaria (Real)</th>
             <th scope="col" class="CP-sticky">Dias restantes</th>
+            <th scope="col" class="CP-sticky bg-danger text-white">Dias restantes (Real)</th>
             <th scope="col" class="CP-sticky">Ultima Venta (En rango)</th>
             <th scope="col" class="CP-sticky">Ultima Venta</th>
             <th scope="col" class="CP-sticky">Pedir</th>
+            <th scope="col" class="CP-sticky bg-danger text-white">Pedir (Real)</th> 
           </tr>
         </thead>
         <tbody>
@@ -330,6 +342,11 @@
     $contador = 1;
     while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
       $IdArticulo = $row["Id"];
+
+      $sql3 = MySQL_Cuenta_Veces_Dias_Cero($IdArticulo,$FInicial,$FFinal);
+      $result3 = mysqli_query($connCPharma,$sql3);
+      $row3 = $result3->fetch_assoc();
+      $RangoDiasQuiebre = $row3['Cuenta'];
 
       $sql2 = R7Q_Detalle_Articulo($IdArticulo);
       $result2 = sqlsrv_query($conn,$sql2);
@@ -359,6 +376,10 @@
       $CantidadPedido = FG_Cantidad_Pedido($VentaDiaria,$DiasPedido,$Existencia);
       $Precio = FG_Calculo_Precio($Existencia,$TroquelAlmacen1,$PrecioCompraBruto,$Utilidad,$IsIVA,$TroquelAlmacen2);
 
+      $VentaDiariaQuiebre = FG_Venta_Diaria($UnidadesVendidas,$RangoDiasQuiebre);
+      $DiasRestantesQuiebre = FG_Dias_Restantes($Existencia,$VentaDiariaQuiebre);
+      $CantidadPedidoQuiebre = FG_Cantidad_Pedido($VentaDiariaQuiebre,$DiasPedido,$Existencia);
+
       echo '<tr>';
       echo '<td align="center"><strong>'.intval($contador).'</strong></td>';
       echo '<td align="left">'.$CodigoArticulo.'</td>';
@@ -385,7 +406,9 @@
       '</a>
       </td>';
       echo '<td align="center">'.round($VentaDiaria,2).'</td>';
+      echo '<td align="center" class="bg-danger text-white">'.round($VentaDiariaQuiebre,2).'</td>';
       echo '<td align="center">'.round($DiasRestantes,2).'</td>';
+      echo '<td align="center" class="bg-danger text-white">'.round($DiasRestantesQuiebre,2).'</td>';
 
       if(($UltimaVentaRango)){
         echo '<td align="center">'.$UltimaVentaRango->format('d-m-Y').'</td>';
@@ -401,6 +424,7 @@
         echo '<td align="center"> - </td>';
       }
       echo '<td align="center">'.intval($CantidadPedido).'</td>';
+      echo '<td align="center" class="bg-danger text-white">'.round($CantidadPedidoQuiebre,2).'</td>';
       echo '</tr>';
       $contador++;
     }
