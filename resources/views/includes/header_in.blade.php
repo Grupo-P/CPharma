@@ -1,5 +1,5 @@
 <!-- NavBar / Barra Navegacion -->
-<nav class="navbar navbar-expand-lg bg-white text-info" style="height:110px;">
+<nav class="navbar navbar-expand-lg bg-white text-info">
   <!-- Navbar brand -->
   <a class="navbar-brand text-info CP-title-NavBar bg-white" href="{{ url('/') }}"><b><i class="fas fa-syringe text-success"></i>CPharma</b>
   </a>
@@ -37,11 +37,7 @@
   <!-- AGENDA -->
 <!-------------------------------------------------------------------------------->
 <?php
-  if(
-    Auth::user()->departamento == 'COMPRAS'
-    || Auth::user()->departamento == 'GERENCIA'
-    || Auth::user()->departamento == 'TECNOLOGIA'
-  ){
+  if(Auth::user()->departamento == 'COMPRAS'){
 ?>
   <!-- COMPRAS -->
   <div class="btn-group navbar-brand">
@@ -64,11 +60,7 @@
 ?>
 <!-------------------------------------------------------------------------------->
 <?php
-  if(
-    Auth::user()->departamento == 'OPERACIONES'
-    || Auth::user()->departamento == 'GERENCIA'
-    || Auth::user()->departamento == 'TECNOLOGIA'
-  ){
+  if(Auth::user()->departamento == 'OPERACIONES'){
 ?>
   <!-- OPERACIONES -->
   <div class="btn-group navbar-brand">
@@ -98,11 +90,7 @@
 ?>
 <!-------------------------------------------------------------------------------->
 <?php
-  if(
-    Auth::user()->departamento == 'ALMACEN'
-    || Auth::user()->departamento == 'GERENCIA'
-    || Auth::user()->departamento == 'TECNOLOGIA'
-  ){
+  if(Auth::user()->departamento == 'ALMACEN'){
 ?>
   <!-- ALMACEN -->
   <div class="btn-group navbar-brand">
@@ -132,11 +120,7 @@
 ?>
 <!-------------------------------------------------------------------------------->
 <?php
-  if(
-    Auth::user()->departamento == 'DEVOLUCIONES'
-    || Auth::user()->departamento == 'GERENCIA'
-    || Auth::user()->departamento == 'TECNOLOGIA'
-  ){
+  if(Auth::user()->departamento == 'DEVOLUCIONES'){
 ?>
   <!-- DEVOLUCIONES -->
   <div class="btn-group navbar-brand">
@@ -159,11 +143,7 @@
 ?>
 <!-------------------------------------------------------------------------------->
 <?php
-  if(
-    Auth::user()->departamento == 'SURTIDO'
-    || Auth::user()->departamento == 'GERENCIA'
-    || Auth::user()->departamento == 'TECNOLOGIA'
-  ){
+  if(Auth::user()->departamento == 'SURTIDO'){
 ?>
   <!-- SURTIDO -->
   <div class="btn-group navbar-brand">
@@ -193,11 +173,7 @@
 ?>
 <!-------------------------------------------------------------------------------->
 <?php
-  if(
-    Auth::user()->departamento == 'VENTAS'
-    || Auth::user()->departamento == 'GERENCIA'
-    || Auth::user()->departamento == 'TECNOLOGIA'
-  ){
+  if(Auth::user()->departamento == 'VENTAS'){
 ?>
   <!-- VENTAS -->
   <div class="btn-group navbar-brand">
@@ -220,11 +196,7 @@
 ?>
 <!-------------------------------------------------------------------------------->
 <?php
-  if(
-    Auth::user()->departamento == 'RRHH'
-    || Auth::user()->departamento == 'GERENCIA'
-    || Auth::user()->departamento == 'TECNOLOGIA'
-  ){
+  if(Auth::user()->departamento == 'RRHH'){
 ?>
   <!-- RRHH -->
   <div class="btn-group navbar-brand">
@@ -247,11 +219,7 @@
 ?>
 <!-------------------------------------------------------------------------------->
 <?php
-  if(
-    Auth::user()->departamento == 'ADMINISTRACION'
-    || Auth::user()->departamento == 'GERENCIA'
-    || Auth::user()->departamento == 'TECNOLOGIA'
-  ){
+  if(Auth::user()->departamento == 'ADMINISTRACION'){
 ?>
   <!-- ADMINISTRACION -->
   <div class="btn-group navbar-brand">
@@ -309,11 +277,7 @@
 ?>
 <!-------------------------------------------------------------------------------->
 <?php
-  if(
-    Auth::user()->departamento == 'LÍDER DE TIENDA'
-    || Auth::user()->departamento == 'GERENCIA'
-    || Auth::user()->departamento == 'TECNOLOGIA'
-  ){
+  if(Auth::user()->departamento == 'LÍDER DE TIENDA'){
 ?>
   <!-- LÍDER DE TIENDA -->
   <div class="btn-group navbar-brand">
@@ -357,10 +321,7 @@
 ?>
 <!-------------------------------------------------------------------------------->
 <?php
-  if(
-    Auth::user()->departamento == 'GERENCIA'
-    || Auth::user()->departamento == 'TECNOLOGIA'
-  ){
+  if(Auth::user()->departamento == 'GERENCIA'){
 ?>
   <!-- GERENCIA -->
   <div class="btn-group navbar-brand">
@@ -446,9 +407,7 @@
 ?>
 <!------------------------------------------------------------------------------->
 <?php
-  if(
-    Auth::user()->departamento == 'TECNOLOGIA'
-  ){
+  if(Auth::user()->departamento == 'TECNOLOGIA'){
 ?>
   <!-- TECNOLOGIA -->
   <div class="btn-group navbar-brand">
@@ -569,10 +528,8 @@
 ?>
 <!-------------------------------------------------------------------------------->
 <?php
-  if(
-    Auth::user()->departamento == 'TECNOLOGIA'
-    || Auth::user()->role == 'DEVELOPER'
-  ){
+  if(Auth::user()->departamento == 'TECNOLOGIA'
+    || Auth::user()->role == 'DEVELOPER'){
 ?>
   <!-- DEVELOPER -->
   <div class="btn-group navbar-brand">
