@@ -81,7 +81,7 @@
 			SELECT 
 			COUNT(*) AS Cuenta 
 			FROM dias_ceros 
-			WHERE dias_ceros.id_articulo = '$IdArticulo' AND (fecha_captura >= '$FInicial' AND `fecha_captura` <= '$FFinal')
+			WHERE dias_ceros.id_articulo = '$IdArticulo' AND (fecha_captura >= '$FInicial' AND `fecha_captura` < '$FFinal')
 		";
 		return $sql;
 	}
