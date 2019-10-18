@@ -1,8 +1,9 @@
 <!-- NavBar / Barra Navegacion -->
-<nav class="navbar navbar-expand-lg bg-white text-info">
+<nav class="navbar navbar-expand-lg bg-white text-info" style="position: relative;">
   <!-- Navbar brand -->
-  <a class="navbar-brand text-info CP-title-NavBar bg-white" href="{{ url('/') }}"><b><i class="fas fa-syringe text-success"></i>CPharma</b>
+  <a class="navbar-brand text-info CP-title-NavBar bg-white" href="{{ url('/') }}" style="margin-right: 50px;"><b><i class="fas fa-syringe text-success"></i>CPharma</b>
   </a>
+<div style="position: absolute; right:0%">
 <!-------------------------------------------------------------------------------->
   <!-- DASHBOARD -->
   <li class="navbar-brand">
@@ -579,6 +580,7 @@
   </li>
   <!-- SALIR -->
 <!-------------------------------------------------------------------------------->
+</div>
 </nav>
 <hr class="row align-items-start col-12"> 
 
