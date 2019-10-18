@@ -70,6 +70,48 @@
 	}
 	/**********************************************************************************/
 	/*
+		TITULO: MiUbicacion
+		FUNCION: Descifrar desde que sede estoy entrando a la aplicacion
+		RETORNO: Sede en la que me encuentro
+		DESAROLLADO POR: SERGIO COVA
+	 */
+	function MiUbicacion(){
+		$NombreCliente = gethostname();
+		$IpCliente = gethostbyname($NombreCliente);
+		$Octeto = explode(".", $IpCliente);
+		
+		switch ($Octeto[2]) {
+		/*INICIO BLOQUE DE FTN*/
+			case '1':
+				return 'FTN';
+			break;
+
+			case '2':
+				return 'FTN';
+			break;
+		/*FIN BLOQUE DE FTN*/
+		/*INICIO BLOQUE DE GP*/
+			case '10':
+				return 'GP';
+			break;
+		/*FIN BLOQUE DE GP*/
+		/*INICIO BLOQUE DE FLL*/
+			case '7':
+				return 'FLL';
+			break;
+		/*FIN BLOQUE DE FLL*/
+		/*INICIO BLOQUE DE FAU*/
+			case '12':
+				return 'FAU';
+			break;
+		/*INICIO BLOQUE DE FAU*/	
+			default:
+				return ''.$Octeto[2];
+			break;
+		}
+	}
+	/**********************************************************************************/
+	/*
 		TITULO: FG_Nombre_Sede
 		FUNCION: Retornar el nombre de la sede con la que se esta conectando
 		RETORNO: Nombre de la sede conectada
