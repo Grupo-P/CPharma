@@ -1,7 +1,7 @@
 <!-- NavBar / Barra Navegacion -->
-<nav class="navbar navbar-expand-lg bg-dark text-info">
+<nav class="navbar navbar-expand-lg bg-white text-info">
   <!-- Navbar brand -->
-  <a class="navbar-brand text-info CP-title-NavBar bg-danger" href="{{ url('/') }}"><b><i class="fas fa-syringe text-success"></i>CPharma</b>
+  <a class="navbar-brand text-info CP-title-NavBar" href="{{ url('/') }}"><b><i class="fas fa-syringe text-success"></i>CPharma</b>
   </a>
   <!-- Collapse button -->
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#basicExampleNav"
@@ -9,16 +9,6 @@
     <i class="fas fa-bars text-success"></i>
   </button>
   <!-- Collapsible content -->
-  
-  <!-- Dashboard -->
-  <li class="navbar-brand">
-    <a class="navbar-brand CP-Links-Nav bg-danger" href="{{ url('/home') }}" role="button" data-toggle="tooltip" data-placement="top" title="Dashboard">
-      <span data-feather="home"></span>
-      <i class="fas fa-chart-pie"></i>
-      <span class="sr-only">(current)</span>
-    </a>
-  </li>
-
   <div class="collapse navbar-collapse" id="basicExampleNav">
     <ul class="navbar-nav ml-auto">
       @guest
