@@ -118,7 +118,7 @@
           <tr>
             <td colspan="4">
               <div class="autocomplete" style="width:90%;">
-                <input id="myInput" type="text" name="Descrip" placeholder="Ingrese el nombre del articulo " onkeyup="conteo()" required>
+                <input id="myInput" type="text" name="Descrip" placeholder="Ingrese el nombre del articulo " onkeyup="conteo()">
               </div>
 
               <input id="myId" name="Id" type="hidden">
@@ -131,9 +131,7 @@
             <td colspan="4">&nbsp;</td>
           </tr>
         </table>
-      </form>
-
-      <form autocomplete="off" action="" target="_blank">
+      
         <div class="autocomplete" style="width:90%;">
           <input id="myInputCB" type="text" name="CodBar" placeholder="Ingrese el codigo de barra del articulo " onkeyup="conteoCB()">
           <input id="myIdCB" name="Id" type="hidden">
