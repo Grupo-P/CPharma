@@ -85,6 +85,16 @@
     $IntervalCarga = $InicioCarga->diff($FinCarga);
     echo'Tiempo de carga: '.$IntervalCarga->format("%Y-%M-%D %H:%I:%S");
   }
+  else if(isset($_GET['IdCB'])) {
+    $InicioCarga = new DateTime("now");
+
+    R12_Detalle_Movimientos($_GET['SEDE'],$_GET['fechaInicio'],$_GET['fechaFin'],$_GET['IdCB']);
+    FG_Guardar_Auditoria('CONSULTAR','REPORTE','Detalle de movimientos');
+
+    $FinCarga = new DateTime("now");
+    $IntervalCarga = $InicioCarga->diff($FinCarga);
+    echo'Tiempo de carga: '.$IntervalCarga->format("%Y-%M-%D %H:%I:%S");
+  }
   else {
     $InicioCarga = new DateTime("now");
 
@@ -134,7 +144,7 @@
       
         <div class="autocomplete" style="width:90%;">
           <input id="myInputCB" type="text" name="CodBar" placeholder="Ingrese el codigo de barra del articulo " onkeyup="conteoCB()">
-          <input id="myIdCB" name="Id" type="hidden">
+          <input id="myIdCB" name="IdCB" type="hidden">
         </div>
         <input id="SEDE" name="SEDE" type="hidden" value="'; 
           print_r($_GET['SEDE']);
