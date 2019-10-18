@@ -70,14 +70,14 @@
 /*NewNav Styles*/
 	.textoN{
 		text-decoration: none;
-		font-size: 1.6em;
+		font-size: 0.8em; 
     padding: 5px;
-    border: 0px;
+    /*border: 0px;*/
 	}
 	.textoN:hover{
 		text-decoration: none;
-		background-color: white;
-		color:#28A745;
+		/*background-color: white;
+		color:#28A745;*/
 	}
 	.textoI{
 		text-decoration: none;
