@@ -82,6 +82,13 @@
           <i class="fas fa-file-invoice"></i>
           Reportes<span class="sr-only">(current)</span>
         </a>
+        <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('/traslado') }}">     
+          <span data-feather="home"></span>
+          <i class="fas fa-people-carry"></i>
+          Traslado<span class="sr-only">(current)</span>
+        </a>
+      </li>
       </li>
     </div>
   </div>
@@ -226,10 +233,10 @@
     </button>
     <div class="dropdown-menu">
       <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="{{ url('/sedes_reporte') }}">
+        <a class="nav-link CP-Links-Menu" href="#">
           <span data-feather="home"></span>
-          <i class="fas fa-file-invoice"></i>
-          Reportes<span class="sr-only">(current)</span>
+          <i class="fas fa-user"></i>
+          Candidatos<span class="sr-only">(current)</span>
         </a>
       </li>
     </div>
@@ -252,6 +259,20 @@
       <i class="fas fa-calculator"></i> Administracion
     </button>
     <div class="dropdown-menu" style="width:200px;">
+      <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('/sedes_reporte') }}">
+          <span data-feather="home"></span>
+          <i class="fas fa-file-invoice"></i>
+          Reportes<span class="sr-only">(current)</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('/traslado') }}">     
+          <span data-feather="home"></span>
+          <i class="fas fa-people-carry"></i>
+          Traslado<span class="sr-only">(current)</span>
+        </a>
+      </li>
       <li class="nav-item">
         <a class="nav-link CP-Links-Menu" href="{{ url('/dolar') }}">
           <span data-feather="home"></span>
@@ -307,6 +328,27 @@
           Reportes<span class="sr-only">(current)</span>
         </a>
       </li>
+      <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('/etiqueta') }}">     
+          <span data-feather="home"></span>
+          <i class="fas fa-tag"></i>
+          Etiquetas<span class="sr-only">(current)</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('/traslado') }}">     
+          <span data-feather="home"></span>
+          <i class="fas fa-people-carry"></i>
+          Traslado<span class="sr-only">(current)</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('/tasaVenta') }}">
+          <span data-feather="home"></span>
+          <i class="fas fa-credit-card"></i>
+          Tasa de venta<span class="sr-only">(current)</span>
+        </a>
+      </li>
     </div>
   </div>
   <!-- LÍDER DE TIENDA -->
@@ -332,10 +374,68 @@
           <i class="fas fa-file-invoice"></i>
           Reportes<span class="sr-only">(current)</span>
         </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('/etiqueta') }}">     
+          <span data-feather="home"></span>
+          <i class="fas fa-tag"></i>
+          Etiquetas<span class="sr-only">(current)</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('/traslado') }}">     
+          <span data-feather="home"></span>
+          <i class="fas fa-people-carry"></i>
+          Traslado<span class="sr-only">(current)</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('/tasaVenta') }}">
+          <span data-feather="home"></span>
+          <i class="fas fa-credit-card"></i>
+          Tasa de venta<span class="sr-only">(current)</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('/dolar') }}">
+          <span data-feather="home"></span>
+          <i class="fas fa-money-bill-alt"></i>
+          Tasa de mercado<span class="sr-only">(current)</span>
+        </a>
+      </li>
+      <li class="nav-item">
         <a class="nav-link CP-Links-Menu" href="{{ url('/usuario') }}">
           <span data-feather="home"></span>
           <i class="fas fa-user"></i>
           Usuario<span class="sr-only">(current)</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('/diascero') }}">      
+          <span data-feather="home"></span>
+          <i class="far fa-calendar"></i>
+          Dias en cero<span class="sr-only">(current)</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('/productoscaida') }}">      
+          <span data-feather="home"></span>
+          <i class="fas fa-chart-line"></i>
+          Productos en Caida<span class="sr-only">(current)</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('/CapturaEtiqueta') }}">     
+          <span data-feather="home"></span>
+          <i class="fas fa-tag"></i>
+          Captura Etiquetas<span class="sr-only">(current)</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('/auditoria') }}">      
+          <span data-feather="home"></span>
+          <i class="fas fa-search"></i>
+          Auditoria<span class="sr-only">(current)</span>
         </a>
       </li>
     </div>
@@ -361,6 +461,34 @@
           <span data-feather="home"></span>
           <i class="fas fa-file-invoice"></i>
           Reportes<span class="sr-only">(current)</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('/etiqueta') }}">     
+          <span data-feather="home"></span>
+          <i class="fas fa-tag"></i>
+          Etiquetas<span class="sr-only">(current)</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('/traslado') }}">     
+          <span data-feather="home"></span>
+          <i class="fas fa-people-carry"></i>
+          Traslado<span class="sr-only">(current)</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('/tasaVenta') }}">
+          <span data-feather="home"></span>
+          <i class="fas fa-credit-card"></i>
+          Tasa de venta<span class="sr-only">(current)</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('/dolar') }}">
+          <span data-feather="home"></span>
+          <i class="fas fa-money-bill-alt"></i>
+          Tasa de mercado<span class="sr-only">(current)</span>
         </a>
       </li>
       <li class="nav-item">
@@ -420,7 +548,7 @@
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="{{ url('/CapturaEtiqueta') }}">      
+        <a class="nav-link CP-Links-Menu" href="{{ url('/CapturaEtiqueta') }}">     
           <span data-feather="home"></span>
           <i class="fas fa-tag"></i>
           Captura Etiquetas<span class="sr-only">(current)</span>
