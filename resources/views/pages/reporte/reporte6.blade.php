@@ -241,6 +241,7 @@
               <th scope="col" class="CP-sticky">Dias restantes</th>
               <th scope="col" class="CP-sticky bg-danger text-white">Dias restantes (Real)</th>
               <th scope="col" class="CP-sticky">Precio (Con IVA) '.SigVe.'</th>
+              <th scope="col" class="CP-sticky">Ultimo Precio (Sin IVA) '.SigVe.'</th>
               <th scope="col" class="CP-sticky">Ultimo Lote</th>
               <th scope="col" class="CP-sticky">Ultima Venta (En Rango)</th>
               <th scope="col" class="CP-sticky">Ultima Venta</th>
@@ -274,7 +275,8 @@
         $CodigoArticulo = $row2["CodigoInterno"];
         $CodigoBarra = $row2["CodigoBarra"];
         $Descripcion = FG_Limpiar_Texto($row2["Descripcion"]);
-        $UltimoLote = $row2["UltimoLote"];
+        $UltimoLote = $row2["UltimoLote"]; 
+        $UltimoPrecio = $row2["UltimoPrecio"];
         $UltimaVenta = $row2["UltimaVenta"];
         $Existencia = intval($row2["Existencia"]);
         $IsIVA = $row2["Impuesto"];
@@ -320,6 +322,13 @@
         echo '<td align="center">'.round($DiasRestantes,2).'</td>';
         echo '<td align="center" class="bg-danger text-white">'.round($DiasRestantesQuiebre,2).'</td>';
         echo '<td align="center">'.number_format($Precio,2,"," ,"." ).'</td>';
+
+        if( ($Existencia==0) && (!is_null($UltimaVenta)) ){
+          echo '<td align="center">'.number_format($UltimoPrecio,2,"," ,"." ).'</td>';
+        }
+        else{
+          echo '<td align="center"> - </td>';
+        }
         
         if(($UltimoLote)){
           echo '<td align="center">'.$UltimoLote->format('d-m-Y').'</td>';
@@ -817,6 +826,13 @@
         WHERE 
         InvAtributo.Descripcion = 'Articulo Estrella') 
       AND InvArticuloAtributo.InvArticuloId = InvArticulo.Id),CAST(0 AS INT))) AS ArticuloEstrella,
+    --Ultimo Precio Sin Iva
+      (SELECT TOP 1
+      (ROUND(CAST((VenVentaDetalle.M_PrecioNeto) AS DECIMAL(38,2)),2,0))
+      FROM VenVenta
+      INNER JOIN VenVentaDetalle ON VenVentaDetalle.VenVentaId = VenVenta.Id
+      WHERE VenVentaDetalle.InvArticuloId = InvArticulo.Id
+      ORDER BY VenVenta.FechaDocumentoVenta DESC) AS UltimoPrecio,
     -- Ultima Venta (Fecha)
       (SELECT TOP 1
       CONVERT(DATE,VenFactura.FechaDocumento)
