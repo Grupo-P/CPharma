@@ -1,5 +1,5 @@
 <!-- NavBar / Barra Navegacion -->
-<nav class="navbar navbar-expand-lg bg-dark text-info">
+<nav class="navbar navbar-expand-lg bg-dark text-info" style="height:100px;">
   <!-- Navbar brand -->
   <a class="navbar-brand text-info CP-title-NavBar bg-danger" href="{{ url('/') }}"><b><i class="fas fa-syringe text-success"></i>CPharma</b>
   </a>
@@ -18,6 +18,24 @@
       <span class="sr-only">(current)</span>
     </a>
   </li>
+  <!-- Dashboard -->
+
+  <!-- Agenda -->
+  <div class="btn-group">
+    <button type="button" class="btn btn-danger iconoI"><i class="fas fa-book"></i></button>
+    <button type="button" class="btn btn-danger dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      <span class="sr-only">Toggle Dropdown</span>
+    </button>
+    <div class="dropdown-menu">
+      <a class="dropdown-item nav-link CP-Links-Menu" href="{{ url('/empresa') }}">
+        <i class="fas fa-industry"></i> Empresa
+      </a>
+      <a class="dropdown-item nav-link CP-Links-Menu" href="{{ url('/empresa') }}">
+        <i class="fas fa-dolly"></i></i> Proveedor
+      </a>
+    </div>
+  </div>
+  <!-- Agenda -->
 
   <div class="collapse navbar-collapse" id="basicExampleNav">
     <ul class="navbar-nav ml-auto">

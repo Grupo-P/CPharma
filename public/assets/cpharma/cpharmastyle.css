@@ -75,12 +75,14 @@
 	.CP-Links-Nav {
     text-decoration: none;
     color: #28A745;
-    padding: 6px;
+    margin: 6px;
+    padding: 5px;
 	}
 	li > .CP-Links-Nav {      
-    margin-top: 2px;
+    
     font-size: 1.6em;
-    padding: 6px;
+    margin: 6px;
+    padding: 5px;
 	}
 	li > .CP-Links-Nav:hover {      
     border-style: solid;
@@ -89,7 +91,12 @@
     border-radius: 5px;
     background-color: #28A745;
     color: white;
-    padding: 6px;
+    margin: 6px;
+    padding: 5px;
+	}
+	.iconoI{
+		font-size: 2em;
+    padding: 5px;
 	}
 /*Efectos, Trasiciones o Transformaciones*/
 	.CP-beep {
