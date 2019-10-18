@@ -10,14 +10,7 @@
     </header>
     <div class="container-fluid">
       <div class="row">
-        <nav class="col-md-2 d-none d-md-block sidebar">
-          <div class="sidebar-sticky">
-            <ul class="nav flex-column">
-              @include('includes.menu')
-            </ul>
-          </div>
-        </nav>
-        <main role="main" class="col-md-9 ml-sm-auto col-lg-10">
+        <main role="main" class="col-md-12 ml-sm-auto col-lg-12">
           @yield('content')
         </main>
       </div>
