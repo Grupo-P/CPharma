@@ -60,7 +60,7 @@
 
 	}
 	li > .CP-Links-Menu {      
-    margin-top: 2px;
+    margin: 1px;
     font-size: 1em;
 	}
 	li > .CP-Links-Menu:hover {      
@@ -81,14 +81,14 @@
 	}
 	.textoI{
 		text-decoration: none;
-		font-size: 2em;
+		font-size: 0.8em;
     padding: 5px;
-   	border: 0px;
+   	/*border: 0px;*/
 	}
 	.textoI:hover{
 		text-decoration: none;
-		background-color: white;
-		color:#28A745;
+		/*background-color: white;
+		color:#28A745;*/
 	}
 /*Efectos, Trasiciones o Transformaciones*/
 	.CP-beep {

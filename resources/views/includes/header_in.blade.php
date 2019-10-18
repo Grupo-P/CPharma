@@ -6,18 +6,16 @@
 <!-------------------------------------------------------------------------------->
   <!-- DASHBOARD -->
   <li class="navbar-brand">
-    <a class="navbar-brand btn btn-outline-info textoN" href="{{ url('/home') }}" role="button" data-toggle="tooltip" data-placement="top" title="DASHBOARD"> 
-      <span data-feather="home"></span>
-      <i class="fas fa-columns"></i>
-      Dashboard<span class="sr-only">(current)</span>
+    <a class="btn btn-outline-info textoN" href="{{ url('/home') }}" role="button" data-toggle="tooltip" data-placement="top"> 
+      <i class="fas fa-columns"></i> Dashboard
     </a>
   </li>
   <!-- DASHBOARD -->
 <!-------------------------------------------------------------------------------->
   <!-- AGENDA -->
-  <div class="btn-group" data-toggle="tooltip" data-placement="top" title="AGENDA">
+  <div class="btn-group navbar-brand">
     <button type="button" class="btn btn-outline-info dropdown-toggle textoI" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-      <i class="fas fa-book"></i>
+      <i class="fas fa-book"></i> Agenda
     </button>
     <div class="dropdown-menu">
       <li class="nav-item">
@@ -46,9 +44,9 @@
   ){
 ?>
   <!-- COMPRAS -->
-  <div class="btn-group" data-toggle="tooltip" data-placement="top" title="COMPRAS">
+  <div class="btn-group navbar-brand">
     <button type="button" class="btn btn-outline-info dropdown-toggle textoI" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-      <i class="fas fa-chart-bar"></i>
+      <i class="fas fa-chart-bar"></i> Compras
     </button>
     <div class="dropdown-menu">
       <li class="nav-item">
@@ -73,9 +71,9 @@
   ){
 ?>
   <!-- OPERACIONES -->
-  <div class="btn-group" data-toggle="tooltip" data-placement="top" title="OPERACIONES">
+  <div class="btn-group navbar-brand">
     <button type="button" class="btn btn-outline-info dropdown-toggle textoI" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-      <i class="fas fa-tasks"></i>
+      <i class="fas fa-tasks"></i> Operaciones
     </button>
     <div class="dropdown-menu">
       <li class="nav-item">
@@ -100,9 +98,9 @@
   ){
 ?>
   <!-- ALMACEN -->
-  <div class="btn-group" data-toggle="tooltip" data-placement="top" title="ALMACEN">
+  <div class="btn-group navbar-brand">
     <button type="button" class="btn btn-outline-info dropdown-toggle textoI" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-      <i class="fas fa-warehouse"></i>
+      <i class="fas fa-warehouse"></i> Almacen
     </button>
     <div class="dropdown-menu">
       <li class="nav-item">
@@ -134,9 +132,9 @@
   ){
 ?>
   <!-- DEVOLUCIONES -->
-  <div class="btn-group" data-toggle="tooltip" data-placement="top" title="DEVOLUCIONES">
+  <div class="btn-group navbar-brand">
     <button type="button" class="btn btn-outline-info dropdown-toggle textoI" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-      <i class="fas fa-history"></i>
+      <i class="fas fa-history"></i> Devoluciones
     </button>
     <div class="dropdown-menu">
       <li class="nav-item">
@@ -161,9 +159,9 @@
   ){
 ?>
   <!-- SURTIDO -->
-  <div class="btn-group" data-toggle="tooltip" data-placement="top" title="SURTIDO">
+  <div class="btn-group navbar-brand">
     <button type="button" class="btn btn-outline-info dropdown-toggle textoI" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-      <i class="fas fa-dolly-flatbed"></i>
+      <i class="fas fa-dolly-flatbed"></i> Surtido
     </button>
     <div class="dropdown-menu">
       <li class="nav-item">
@@ -195,9 +193,9 @@
   ){
 ?>
   <!-- VENTAS -->
-  <div class="btn-group" data-toggle="tooltip" data-placement="top" title="VENTAS">
+  <div class="btn-group navbar-brand">
     <button type="button" class="btn btn-outline-info dropdown-toggle textoI" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-      <i class="fas fa-cash-register"></i>
+      <i class="fas fa-cash-register"></i> Ventas
     </button>
     <div class="dropdown-menu">
       <li class="nav-item">
@@ -216,15 +214,42 @@
 <!-------------------------------------------------------------------------------->
 <?php
   if(
+    Auth::user()->departamento == 'RRHH'
+    || Auth::user()->departamento == 'GERENCIA'
+    || Auth::user()->departamento == 'TECNOLOGIA'
+  ){
+?>
+  <!-- RRHH -->
+  <div class="btn-group navbar-brand">
+    <button type="button" class="btn btn-outline-info dropdown-toggle textoI" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      <i class="fas fa-user-circle"></i> RRHH
+    </button>
+    <div class="dropdown-menu">
+      <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('/sedes_reporte') }}">
+          <span data-feather="home"></span>
+          <i class="fas fa-file-invoice"></i>
+          Reportes<span class="sr-only">(current)</span>
+        </a>
+      </li>
+    </div>
+  </div>
+  <!-- RRHH -->
+<?php
+  }
+?>
+<!-------------------------------------------------------------------------------->
+<?php
+  if(
     Auth::user()->departamento == 'ADMINISTRACION'
     || Auth::user()->departamento == 'GERENCIA'
     || Auth::user()->departamento == 'TECNOLOGIA'
   ){
 ?>
   <!-- ADMINISTRACION -->
-  <div class="btn-group" data-toggle="tooltip" data-placement="top" title="ADMINISTRACION">
+  <div class="btn-group navbar-brand">
     <button type="button" class="btn btn-outline-info dropdown-toggle textoI" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-      <i class="fas fa-calculator"></i>
+      <i class="fas fa-calculator"></i> Administracion
     </button>
     <div class="dropdown-menu" style="width:200px;">
       <li class="nav-item">
@@ -270,9 +295,9 @@
   ){
 ?>
   <!-- LÍDER DE TIENDA -->
-  <div class="btn-group" data-toggle="tooltip" data-placement="top" title="LÍDER DE TIENDA">
+  <div class="btn-group navbar-brand">
     <button type="button" class="btn btn-outline-info dropdown-toggle textoI" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-      <i class="fas fa-store"></i>
+      <i class="fas fa-store"></i> Lider de tienda
     </button>
     <div class="dropdown-menu">
       <li class="nav-item">
@@ -296,9 +321,9 @@
   ){
 ?>
   <!-- GERENCIA -->
-  <div class="btn-group" data-toggle="tooltip" data-placement="top" title="GERENCIA">
+  <div class="btn-group navbar-brand">
     <button type="button" class="btn btn-outline-info dropdown-toggle textoI" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-      <i class="fas fa-user-tie"></i>
+      <i class="fas fa-user-tie"></i> Gerencia
     </button>
     <div class="dropdown-menu">
       <li class="nav-item">
@@ -326,9 +351,9 @@
   ){
 ?>
   <!-- TECNOLOGIA -->
-  <div class="btn-group" data-toggle="tooltip" data-placement="top" title="TECNOLOGIA">
+  <div class="btn-group navbar-brand">
     <button type="button" class="btn btn-outline-info dropdown-toggle textoI" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-      <i class="fas fa-user-cog"></i>
+      <i class="fas fa-user-cog"></i> Tecnologia
     </button>
     <div class="dropdown-menu" style="width:200px;">
       <li class="nav-item">
@@ -422,9 +447,9 @@
   ){
 ?>
   <!-- DEVELOPER -->
-  <div class="btn-group" data-toggle="tooltip" data-placement="top" title="DEVELOPER">
+  <div class="btn-group navbar-brand">
     <button type="button" class="btn btn-outline-info dropdown-toggle textoI" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-      <i class="fas fa-user-secret"></i>
+      <i class="fas fa-user-secret"></i> Developer
     </button>
     <div class="dropdown-menu">
       <li class="nav-item">
