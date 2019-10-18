@@ -7,7 +7,7 @@
 <!-------------------------------------------------------------------------------->
   <!-- DASHBOARD -->
   <li class="navbar-brand">
-    <a class="btn btn-outline-info textoN" href="{{ url('/home') }}" role="button" data-toggle="tooltip" data-placement="top"> 
+    <a class="btn btn-outline-info textoN" href="{{ url('/home') }}" role="button"> 
       <i class="fas fa-columns"></i> Dashboard
     </a>
   </li>
@@ -568,7 +568,7 @@
 <!-------------------------------------------------------------------------------->
   <!-- SALIR -->
   <li class="navbar-brand">
-    <a class="navbar-brand textoN btn btn-outline-info" href="{{ route('logout') }}" role="button" data-toggle="tooltip" data-placement="top" title="SALIR"onclick="event.preventDefault();
+    <a class="navbar-brand textoN btn btn-outline-info" href="{{ route('logout') }}" role="button" onclick="event.preventDefault();
                        document.getElementById('logout-form').submit();">
       <span data-feather="home"></span>
       <i class="fas fa-power-off"></i>
@@ -583,10 +583,3 @@
 </div>
 </nav>
 <hr class="row align-items-start col-12"> 
-
-<script>
-  $(document).ready(function(){
-      $('[data-toggle="tooltip"]').tooltip();   
-  });
-  $('#exampleModalCenter').modal('show')
-</script>
