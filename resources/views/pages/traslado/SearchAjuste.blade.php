@@ -63,13 +63,19 @@
     include(app_path().'\functions\querys_sqlserver.php');
 
     $ArtJson = "";
-
+    
     $_GET['SEDE'] = MiUbicacion();
 
     if (isset($_GET['SEDE'])) {     
       echo '<h1 class="h5 text-success"  align="left"> <i class="fas fa-prescription"></i> '.FG_Nombre_Sede($_GET['SEDE']).'</h1>';
       }
       echo '<hr class="row align-items-start col-12">';
+      echo'
+        <form action="/traslado/" method="POST" style="display: inline;">                   
+        <button type="submit" name="Regresar" role="button" class="btn btn-outline-info btn-sm"data-placement="top"><i class="fa fa-reply">&nbsp;Regresar</i></button>
+        </form>
+        <br/><br/>
+      ';
   	
   	if (isset($_GET['Id'])) {
       $InicioCarga = new DateTime("now");

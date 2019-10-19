@@ -33,7 +33,8 @@
 		$sql = "
 		SELECT
 		InvAjusteDetalle.InvArticuloId,
-		(ROUND(CAST((InvAjusteDetalle.Cantidad) AS DECIMAL(38,0)),2,0))  AS Cantidad
+		(ROUND(CAST((InvAjusteDetalle.Cantidad) AS DECIMAL(38,0)),2,0))  AS Cantidad,
+    InvAjusteDetalle.InvLoteId AS lote
 		FROM InvAjusteDetalle 
 		WHERE ((InvAjusteDetalle.InvAjusteId = '$IdAjuste') 
 		AND (InvAjusteDetalle.M_TotalCostoDetalle < 0))
@@ -190,6 +191,73 @@
       GROUP BY InvArticulo.Id, InvArticulo.CodigoArticulo, InvArticulo.Descripcion, InvArticulo.FinConceptoImptoIdCompra
     --Ordanamiento
       ORDER BY InvArticulo.Id ASC 
+    ";
+    return $sql;
+  }
+  /**********************************************************************************/
+  /*
+    TITULO: QG_Lote_Sin_Existencia
+    FUNCION: busca la lista de articulos que corresponden a un ajuste
+    RETORNO: Lista de articulos del ajuste 
+    DESARROLLADO POR: SERGIO COVA
+   */
+  function QG_Lote_Sin_Existencia($Idlote,$IdArticulo) {
+    $sql = "
+    SELECT
+    --Id Articulo
+      InvArticulo.Id AS IdArticulo,
+    --Impuesto (1 SI aplica impuesto, 0 NO aplica impuesto)
+      (ISNULL(InvArticulo.FinConceptoImptoIdCompra,CAST(0 AS INT))) AS Impuesto,
+    --Utilidad (Utilidad del articulo, Utilidad es 1.00 NO considerar la utilidad para el calculo de precio)
+      ROUND(CAST(1-((ISNULL(ROUND(CAST((SELECT VenCondicionVenta.PorcentajeUtilidad
+          FROM VenCondicionVenta 
+          WHERE VenCondicionVenta.Id = (
+            SELECT VenCondicionVenta_VenCondicionVentaArticulo.Id
+            FROM VenCondicionVenta_VenCondicionVentaArticulo 
+            WHERE VenCondicionVenta_VenCondicionVentaArticulo.InvArticuloId = InvArticulo.Id)) AS DECIMAL(38,4)),2,0),CAST(0 AS INT)))/100)AS DECIMAL(38,2)),2,0) AS Utilidad,
+    --Precio Troquel Almacen 1
+      (ROUND(CAST((SELECT TOP 1
+      InvLote.M_PrecioTroquelado
+      FROM InvLoteAlmacen
+      INNER JOIN InvLote ON InvLote.Id = InvLoteAlmacen.InvLoteId
+      WHERE(InvLoteAlmacen.InvAlmacenId = '1')
+      AND (InvLoteAlmacen.InvArticuloId = InvArticulo.Id)
+      AND (InvLote.id = '$Idlote')
+      ORDER BY invlote.M_PrecioTroquelado DESC)AS DECIMAL(38,2)),2,0)) AS TroquelAlmacen1,
+    --Precio Troquel Almacen 2
+      (ROUND(CAST((SELECT TOP 1
+      InvLote.M_PrecioTroquelado
+      FROM InvLoteAlmacen
+      INNER JOIN InvLote ON InvLote.Id = InvLoteAlmacen.InvLoteId
+      WHERE(InvLoteAlmacen.InvAlmacenId = '2')
+      AND (InvLoteAlmacen.InvArticuloId = InvArticulo.Id)
+      AND (InvLote.id = '$Idlote')
+      ORDER BY invlote.M_PrecioTroquelado DESC)AS DECIMAL(38,2)),2,0)) AS TroquelAlmacen2,
+    --Precio Compra Bruto
+      (ROUND(CAST((SELECT TOP 1
+      InvLote.M_PrecioCompraBruto
+      FROM InvLoteAlmacen
+      INNER JOIN InvLote ON InvLote.Id = InvLoteAlmacen.InvLoteId
+      WHERE (InvLoteAlmacen.InvArticuloId = InvArticulo.Id)
+      AND (InvLote.id = '$Idlote')
+      ORDER BY invlote.M_PrecioCompraBruto DESC)AS DECIMAL(38,2)),2,0)) AS PrecioCompraBruto,
+    --Existencia (Segun el almacen del filtro)
+      (ROUND(CAST((SELECT SUM (InvLoteAlmacen.Existencia) As Existencia
+                  FROM InvLoteAlmacen
+                  WHERE(InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
+                  AND (InvLoteAlmacen.InvArticuloId = InvArticulo.Id)) AS DECIMAL(38,0)),2,0))  AS Existencia
+    --Tabla principal
+      FROM InvArticulo
+    --Joins
+      INNER JOIN InvLoteAlmacen ON InvLoteAlmacen.InvArticuloId = InvArticulo.Id
+      LEFT JOIN InvArticuloAtributo ON InvArticuloAtributo.InvArticuloId = InvArticulo.Id
+      LEFT JOIN InvAtributo ON InvAtributo.Id = InvArticuloAtributo.InvAtributoId 
+    --Condicionales
+      WHERE InvArticulo.Id = '$IdArticulo'
+    --Agrupamientos
+      GROUP BY InvArticulo.Id, InvArticulo.CodigoArticulo, InvArticulo.Descripcion, InvArticulo.FinConceptoImptoIdCompra
+    --Ordanamiento
+      ORDER BY InvArticulo.Id ASC
     ";
     return $sql;
   }

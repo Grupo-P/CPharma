@@ -60,6 +60,9 @@
       $FechaAjuste = $FechaAjuste->format("Y-m-d h:i:s");
       $OperadorAjuste = $row["OperadorAjuste"];
 
+      $Comentario = $row["Comentario"];
+      $M_TotalCostoAjuste = $row["M_TotalCostoAjuste"];
+
       $FechaActual = $row["FechaActual"];
       $FechaActualImp = $FechaActual->format("d-m-Y h:i:s a");
       $FechaActual =$FechaActual->format("Y-m-d h:i:s");
@@ -98,6 +101,14 @@
             <tr>
                 <th scope="row">{!! Form::label('operador_ajuste', 'Operador de Ajuste') !!}</th>
                 <td><label><?php echo($OperadorAjuste); ?></label></td>
+            </tr>
+            <tr>
+                <th scope="row">{!! Form::label('comentario', 'Comentario') !!}</th>
+                <td><label><?php echo($Comentario); ?></label></td>
+            </tr>
+            <tr>
+                <th scope="row">{!! Form::label('costo', 'Costo Total del Ajuste') !!}</th>
+                <td><label><?php echo(number_format($M_TotalCostoAjuste,2,"," ,"." )); ?></label> {{SigVe}}</td>
             </tr>
             <tr>
                 <th scope="row">{!! Form::label('FechaActualImp', 'Fecha de Traslado') !!}</th>
@@ -160,7 +171,8 @@
       InvAjuste.Auditoria_FechaCreacion AS FechaAjuste,
       GETDATE() AS FechaActual,
       InvAjuste.Auditoria_Usuario AS OperadorAjuste,
-      InvAjuste.Comentario
+      InvAjuste.Comentario,
+      InvAjuste.M_TotalCostoAjuste
       FROM InvAjuste
       WHERE InvAjuste.Id = '$IdAjuste'
     ";
