@@ -197,10 +197,10 @@
 				$Total_Usd = number_format ($Total_Usd,2,"," ,"." );
 
 				if($traslado->estatus=='ENTREGADO'){
-					$Dias = FG_Rango_Dias($traslado->fecha_ajuste,$traslado->updated_at);
+					$Dias = FG_Rango_Dias($traslado->traslado,$traslado->updated_at);
 				}
 				else{
-					$Dias = '-';
+					$Dias = FG_Rango_Dias($traslado->traslado,date('Y-m-d H:i:s'));
 				}
 			?>
 		    <tr>

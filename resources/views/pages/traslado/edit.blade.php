@@ -80,7 +80,7 @@
           </tr>
           <tr>
             <th scope="row">{!! Form::label('bultos', 'Cantidad de Bultos') !!}</th>
-            <td>{!! Form::text('bultos', null, [ 'class' => 'form-control', 'placeholder' => 'Ingrese la cantidad de bultos embalados', 'autofocus', 'required']) !!}</td>
+            <td>{!! Form::number('bultos', null, [ 'class' => 'form-control', 'placeholder' => 'Ingrese la cantidad de bultos embalados', 'autofocus', 'required', 'min' => '0'] ) !!}</td>
           </tr>
         </tbody>
         </table>
