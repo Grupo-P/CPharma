@@ -416,6 +416,12 @@
     $result4 = '';
     $row4 = '';
 
+    $FechaAnteriorCompra = '';
+    $sql6 = '';
+    $result5 = '';
+    $row5 = '';
+    //---------------------- Fin Nuevos Campos ----------------------
+
     while($row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC)) {
 
       if($row3["FechaMovimiento"]->format("Y-m-d") == $FFinal) {
@@ -439,7 +445,25 @@
       switch($row3["InvCausaId"]) {
         case 1:
         case 2: 
+          if($FechaAnteriorCompra == '') {
+            $sql6 = R12Q_Nombre_Proveedor_Bruto($IdArticulo,$row3["FechaMovimiento"]->format("Y-m-d"));
+            $result5 = sqlsrv_query($conn,$sql6);
+          }
+          else if($FechaAnteriorCompra != $row3["FechaMovimiento"]->format("Y-m-d")) {
+            $sql6 = R12Q_Nombre_Proveedor_Bruto($IdArticulo,$row3["FechaMovimiento"]->format("Y-m-d"));
+            $result5 = sqlsrv_query($conn,$sql6);
+          }
+
+          $row5 = sqlsrv_fetch_array($result5,SQLSRV_FETCH_ASSOC);
           
+          echo '
+              <td align="center">'. FG_Limpiar_Texto($row5["Nombre"]) .'</td>
+              <td align="center">-</td>
+              <td align="center">'. number_format($row5["M_PrecioCompraBruto"],2,"," ,"." ) .'</td>
+            </tr>
+          ';
+
+          $FechaAnteriorCompra = $row3["FechaMovimiento"]->format("Y-m-d");
         break;
         case 3:
           if($FechaAnteriorVenta == '') {
