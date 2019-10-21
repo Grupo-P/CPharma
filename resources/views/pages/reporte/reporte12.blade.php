@@ -410,6 +410,12 @@
     $sql4 = R12Q_Detalle_Movimiento($IdArticulo,$FInicial,$FFinal);
     $result3 = sqlsrv_query($conn,$sql4);
 
+    //---------------------- Nuevos Campos ----------------------
+    $FechaAnterior = '';
+    $sql5 = '';
+    $result4 = '';
+    $row4 = '';
+
     while($row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC)) {
 
       if($row3["FechaMovimiento"]->format("Y-m-d") == $FFinal) {
@@ -442,6 +448,13 @@
         break;
         case 3:
         case 4: 
+          if($FechaAnterior == '') {
+
+          }
+          $sql5 = R12Q_Nombre_Cliente_Caja($IdArticulo,$row3["FechaMovimiento"]->format("Y-m-d"));
+          $result4 = sqlsrv_query($conn,$sql5);
+          $row4 = sqlsrv_fetch_array($result4,SQLSRV_FETCH_ASSOC);
+
           echo '
               <td align="center">' 
                 . $row4["Nombre"] . " " . $row4["Apellido"] 
@@ -668,6 +681,13 @@
     ";
     return $sql;
   }
+  /**********************************************************************************/
+  /*
+    TITULO: R12Q_Nombre_Cliente_Caja
+    FUNCION: Query que genera el nombre del cliente y la caja en que fue atendido
+    RETORNO: Detalle de ventas
+    AUTOR: Ing. Manuel Henriquez
+   */
   function R12Q_Nombre_Cliente_Caja($IdArticulo,$FechaBandera) {
     $sql = "
       SELECT DISTINCT
