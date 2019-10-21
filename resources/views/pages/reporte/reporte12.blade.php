@@ -368,6 +368,8 @@
         continue;
       }
 
+      echo $row2["FechaMovimiento"][0] . $row2["FechaMovimiento"][1];
+
       echo '
         <tr>
           <td align="center"><strong>'.intval($contador).'</strong></td>
@@ -446,7 +448,7 @@
       echo '
         <tr>
           <td align="center"><strong>'.intval($contador).'</strong></td>
-          <td align="center">'.$row3["FechaMovimiento"]->format("d/m/Y").'</td>
+          <td align="center">'.$row3["FechaMovimiento"]->format("d-m-Y").'</td>
       ';
 
       echo '          
