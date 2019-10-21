@@ -3,6 +3,9 @@
 namespace compras\Http\Controllers;
 
 use Illuminate\Http\Request;
+use compras\OrdenCompra;
+use compras\User;
+use compras\Auditoria;
 
 class OrdenCompraController extends Controller
 {
