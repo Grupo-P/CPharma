@@ -15,6 +15,9 @@ class CreateRhPruebasTable extends Migration
     {
         Schema::create('rh_pruebas', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('tipo_prueba');
+            $table->string('nombre_prueba');
+            $table->string('user');
             $table->timestamps();
         });
     }
