@@ -527,7 +527,25 @@
         break;
         case 11:
         case 12:
+          if($FechaAnteriorCorreccion == '') {
+            $sql8 = R12Q_Responsable_Correccion($IdArticulo,$row3["FechaMovimiento"]->format("Y-m-d"));
+            $result7 = sqlsrv_query($conn,$sql8);
+          }
+          else if($FechaAnteriorCorreccion != $row3["FechaMovimiento"]->format("Y-m-d")) {
+            $sql8 = R12Q_Responsable_Correccion($IdArticulo,$row3["FechaMovimiento"]->format("Y-m-d"));
+            $result7 = sqlsrv_query($conn,$sql8);
+          }
 
+          $row7 = sqlsrv_fetch_array($result7,SQLSRV_FETCH_ASSOC);
+          
+          echo '
+              <td align="center">'. FG_Limpiar_Texto($row7["Responsable"]) . '</td>
+              <td align="center">-</td>
+              <td align="center">-</td>
+            </tr>
+          ';
+
+          $FechaAnteriorCorreccion = $row3["FechaMovimiento"]->format("Y-m-d");
         break;
         default: 
           echo '
@@ -840,7 +858,7 @@
       InvMovimiento.Cantidad,
       InvMovimiento.InvArticuloId,
       InvMovimiento.InvLoteId,
-      InvLote.Auditoria_Usuario
+      InvLote.Auditoria_Usuario AS Responsable
       FROM InvMovimiento
       INNER JOIN InvLote ON InvLote.Id = InvMovimiento.InvLoteId
       WHERE InvMovimiento.InvArticuloId = '$IdArticulo'
