@@ -397,6 +397,9 @@
             <th scope="col" class="CP-sticky">Hora</th>
             <th scope="col" class="CP-sticky">Tipo de movimiento</th>
             <th scope="col" class="CP-sticky">Cantidad</th>
+            <th scope="col" class="CP-sticky">Titular</th>
+            <th scope="col" class="CP-sticky">Origen</th>
+            <th scope="col" class="CP-sticky">Valor</th>
           </tr>
         </thead>
 
@@ -425,6 +428,9 @@
           .'</td>
           <td align="center">'.utf8_encode($row3["Movimiento"]).'</td>
           <td align="center">'.$row3["Cantidad"].'</td>
+          <td align="center">-</td>
+          <td align="center">-</td>
+          <td align="center">-</td>
         </tr>
       ';
 
