@@ -360,20 +360,24 @@
     $result2 = sqlsrv_query($conn,$sql3);
 
     $contador = 1;
-    $FechaComparativa = date('d/m/Y',strtotime($FFinal));
+    $FechaComparativa = date('d-m-Y',strtotime($FFinal));
 
     while($row2 = sqlsrv_fetch_array($result2,SQLSRV_FETCH_ASSOC)) {
+      $DiaActual = $row2["FechaMovimiento"][0] . $row2["FechaMovimiento"][1];
+      $MesActual = $row2["FechaMovimiento"][3] . $row2["FechaMovimiento"][4];
+      $Anioctual = $row2["FechaMovimiento"][6] . $row2["FechaMovimiento"][7] . $row2["FechaMovimiento"][8] . $row2["FechaMovimiento"][9];
 
-      if($row2["FechaMovimiento"] == $FechaComparativa) {
+      $FechaMovimiento = new DateTime($DiaActual . "-" . $MesActual . "-" . $Anioctual);
+      $FechaMovimiento = $FechaMovimiento->format('d-m-Y');
+
+      if($FechaMovimiento == $FechaComparativa) {
         continue;
       }
-
-      echo $row2["FechaMovimiento"][0] . $row2["FechaMovimiento"][1];
 
       echo '
         <tr>
           <td align="center"><strong>'.intval($contador).'</strong></td>
-          <td align="center">'.$row2["FechaMovimiento"].'</td>
+          <td align="center">'.$FechaMovimiento.'</td>
           <td align="center">'.utf8_encode($row2["Movimiento"]).'</td>
           <td align="center">'.$row2["Cantidad"].'</td>
         </tr>
