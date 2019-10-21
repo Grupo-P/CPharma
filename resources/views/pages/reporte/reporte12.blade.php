@@ -410,8 +410,8 @@
     $sql4 = R12Q_Detalle_Movimiento($IdArticulo,$FInicial,$FFinal);
     $result3 = sqlsrv_query($conn,$sql4);
 
-    //---------------------- Nuevos Campos ----------------------
-    $FechaAnterior = '';
+    //---------------------- Inicio Nuevos Campos ----------------------
+    $FechaAnteriorVenta = '';
     $sql5 = '';
     $result4 = '';
     $row4 = '';
@@ -439,19 +439,14 @@
       switch($row3["InvCausaId"]) {
         case 1:
         case 2: 
-          echo '
-              <td align="center">' . $row["UltimoProveedorNombre"] . '</td>
-              <td align="center">-</td>
-              <td align="center">-</td>
-            </tr>
-          ';
+          
         break;
         case 3:
-          if($FechaAnterior == '') {
+          if($FechaAnteriorVenta == '') {
             $sql5 = R12Q_Nombre_Cliente_Caja($IdArticulo,$row3["FechaMovimiento"]->format("Y-m-d"));
             $result4 = sqlsrv_query($conn,$sql5);
           }
-          else if($FechaAnterior != $row3["FechaMovimiento"]->format("Y-m-d")) {
+          else if($FechaAnteriorVenta != $row3["FechaMovimiento"]->format("Y-m-d")) {
             $sql5 = R12Q_Nombre_Cliente_Caja($IdArticulo,$row3["FechaMovimiento"]->format("Y-m-d"));
             $result4 = sqlsrv_query($conn,$sql5);
           }
@@ -469,7 +464,7 @@
             </tr>
           ';
 
-          $FechaAnterior = $row3["FechaMovimiento"]->format("Y-m-d");
+          $FechaAnteriorVenta = $row3["FechaMovimiento"]->format("Y-m-d");
         break;
         default: 
           echo '
@@ -685,6 +680,28 @@
       AND (CONVERT(DATE,InvMovimiento.FechaMovimiento) >= '$FInicial' AND CONVERT(DATE,InvMovimiento.FechaMovimiento) <= '$FFinal')
       GROUP BY InvMovimiento.InvLoteId,InvMovimiento.FechaMovimiento,InvMovimiento.InvCausaId,InvCausa.Descripcion,InvMovimiento.Cantidad
       ORDER BY InvMovimiento.FechaMovimiento ASC
+    ";
+    return $sql;
+  }
+  /**********************************************************************************/
+  /*
+    TITULO: R12Q_Nombre_Proveedor_Bruto
+    FUNCION: Query que genera el nombre del proveedor y el bruto de compra
+    RETORNO: Detalle de compra
+    AUTOR: Ing. Manuel Henriquez
+   */
+  function R12Q_Nombre_Proveedor_Bruto($IdArticulo,$FechaBandera) {
+    $sql = "
+      SELECT
+      GenPersona.Nombre,
+      ComFacturaDetalle.M_PrecioCompraBruto
+      FROM ComFacturaDetalle
+      INNER JOIN ComFactura ON ComFactura.Id = ComFacturaDetalle.ComFacturaId
+      INNER JOIN ComProveedor ON ComProveedor.Id = ComFactura.ComProveedorId
+      INNER JOIN GenPersona ON GenPersona.Id = ComProveedor.GenPersonaId
+      WHERE ComFacturaDetalle.InvArticuloId = '$IdArticulo'
+      AND CONVERT(DATE,ComFactura.FechaDocumento) = '$FechaBandera'
+      ORDER BY ComFactura.FechaDocumento DESC
     ";
     return $sql;
   }
