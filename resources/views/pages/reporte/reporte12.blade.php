@@ -425,6 +425,11 @@
     $sql7 = '';
     $result6 = '';
     $row6 = '';
+
+    $FechaAnteriorCorreccion = '';
+    $sql8 = '';
+    $result7 = '';
+    $row7 = '';
     //---------------------- Fin Nuevos Campos ----------------------
 
     while($row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC)) {
@@ -519,6 +524,10 @@
           ';
 
           $FechaAnteriorDevolucion = $row3["FechaMovimiento"]->format("Y-m-d");
+        break;
+        case 11:
+        case 12:
+
         break;
         default: 
           echo '
