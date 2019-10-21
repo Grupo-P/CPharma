@@ -428,11 +428,35 @@
           .'</td>
           <td align="center">'.utf8_encode($row3["Movimiento"]).'</td>
           <td align="center">'.$row3["Cantidad"].'</td>
-          <td align="center">-</td>
-          <td align="center">-</td>
-          <td align="center">-</td>
-        </tr>
       ';
+
+      switch($row3["InvCausaId"]) {
+        case 1:
+        case 2: 
+          echo '
+              <td align="center">' . $row["UltimoProveedorNombre"] . '</td>
+              <td align="center">-</td>
+              <td align="center">-</td>
+            </tr>
+          ';
+        break;
+        case 3:
+        case 4: 
+          echo '
+              <td align="center">' . $row["UltimoProveedorNombre"] . '</td>
+              <td align="center">-</td>
+              <td align="center">-</td>
+            </tr>
+          ';
+        break;
+        default: 
+          echo '
+              <td align="center">-</td>
+              <td align="center">-</td>
+              <td align="center">-</td>
+            </tr>
+          ';
+      }
 
       $contador++;
     }
