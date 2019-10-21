@@ -447,22 +447,29 @@
           ';
         break;
         case 3:
-        case 4: 
           if($FechaAnterior == '') {
-
+            $sql5 = R12Q_Nombre_Cliente_Caja($IdArticulo,$row3["FechaMovimiento"]->format("Y-m-d"));
+            $result4 = sqlsrv_query($conn,$sql5);
           }
-          $sql5 = R12Q_Nombre_Cliente_Caja($IdArticulo,$row3["FechaMovimiento"]->format("Y-m-d"));
-          $result4 = sqlsrv_query($conn,$sql5);
-          $row4 = sqlsrv_fetch_array($result4,SQLSRV_FETCH_ASSOC);
+          else if($FechaAnterior != $row3["FechaMovimiento"]->format("Y-m-d")) {
+            $sql5 = R12Q_Nombre_Cliente_Caja($IdArticulo,$row3["FechaMovimiento"]->format("Y-m-d"));
+            $result4 = sqlsrv_query($conn,$sql5);
+          }
 
+          $row4 = sqlsrv_fetch_array($result4,SQLSRV_FETCH_ASSOC);
+          
           echo '
               <td align="center">' 
-                . $row4["Nombre"] . " " . $row4["Apellido"] 
+                . FG_Limpiar_Texto($row4["Nombre"]) 
+                . " " 
+                . FG_Limpiar_Texto($row4["Apellido"]) 
               . '</td>
-              <td align="center">-</td>
+              <td align="center">'. $row4["CodigoCaja"] .'</td>
               <td align="center">-</td>
             </tr>
           ';
+
+          $FechaAnterior = $row3["FechaMovimiento"]->format("Y-m-d");
         break;
         default: 
           echo '
