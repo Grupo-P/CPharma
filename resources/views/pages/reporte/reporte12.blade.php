@@ -443,7 +443,9 @@
         case 3:
         case 4: 
           echo '
-              <td align="center">' . $row["UltimoProveedorNombre"] . '</td>
+              <td align="center">' 
+                . $row4["Nombre"] . " " . $row4["Apellido"] 
+              . '</td>
               <td align="center">-</td>
               <td align="center">-</td>
             </tr>
@@ -663,6 +665,26 @@
       AND (CONVERT(DATE,InvMovimiento.FechaMovimiento) >= '$FInicial' AND CONVERT(DATE,InvMovimiento.FechaMovimiento) <= '$FFinal')
       GROUP BY InvMovimiento.InvLoteId,InvMovimiento.FechaMovimiento,InvMovimiento.InvCausaId,InvCausa.Descripcion,InvMovimiento.Cantidad
       ORDER BY InvMovimiento.FechaMovimiento ASC
+    ";
+    return $sql;
+  }
+  function R12Q_Nombre_Cliente_Caja($IdArticulo,$FechaBandera) {
+    $sql = "
+      SELECT DISTINCT
+      VenFactura.Id,
+      GenPersona.Nombre,
+      GenPersona.Apellido,
+      VenFacturaDetalle.InvArticuloId,
+      VenFactura.VenClienteId,
+      VenFactura.VenCajaId,
+      (SELECT VenCaja.CodigoCaja FROM VenCaja WHERE VenCaja.Id = VenFactura.VenCajaId) AS CodigoCaja,
+      VenFactura.Auditoria_FechaCreacion
+      FROM VenFactura
+      INNER JOIN VenFacturaDetalle ON VenFacturaDetalle.VenFacturaId = VenFactura.Id
+      INNER JOIN VenCliente ON VenCliente.Id = VenFactura.VenClienteId
+      INNER JOIN GenPersona ON GenPersona.Id = VenCliente.GenPersonaId
+      WHERE  VenFacturaDetalle.InvArticuloId = '$IdArticulo'
+      AND CONVERT(DATE, VenFactura.Auditoria_FechaCreacion) = '$FechaBandera'
     ";
     return $sql;
   }
