@@ -869,6 +869,29 @@
   }
   /**********************************************************************************/
   /*
+    TITULO: R12Q_Responsable_Ajuste
+    FUNCION: Query que genera el responsable de la Ajuste de entrda o salida
+    RETORNO: Detalle de compra
+    AUTOR: Ing. Manuel Henriquez
+   */
+  function R12Q_Responsable_Ajuste($IdArticulo,$FechaBandera) {
+    $sql = "
+      SELECT 
+      InvMovimiento.InvCausaId,
+      InvMovimiento.Cantidad,
+      InvMovimiento.InvArticuloId,
+      InvMovimiento.InvLoteId,
+      InvLote.Auditoria_Usuario AS Responsable
+      FROM InvMovimiento
+      INNER JOIN InvLote ON InvLote.Id = InvMovimiento.InvLoteId
+      WHERE InvMovimiento.InvArticuloId = '$IdArticulo'
+      AND ((InvMovimiento.InvCausaId = '14') OR (InvMovimiento.InvCausaId = '15'))
+      AND CONVERT(DATE,InvMovimiento.FechaMovimiento) = '$FechaBandera'
+    ";
+    return $sql;
+  }
+  /**********************************************************************************/
+  /*
     TITULO: R12Q_Total_Venta
     FUNCION: Ubicar el top de productos mas vendidos
     RETORNO: Lista de productos mas vendidos
