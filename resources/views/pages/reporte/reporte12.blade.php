@@ -420,6 +420,11 @@
     $sql6 = '';
     $result5 = '';
     $row5 = '';
+
+    $FechaAnteriorDevolucion = '';
+    $sql7 = '';
+    $result6 = '';
+    $row6 = '';
     //---------------------- Fin Nuevos Campos ----------------------
 
     while($row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC)) {
@@ -490,6 +495,31 @@
 
           $FechaAnteriorVenta = $row3["FechaMovimiento"]->format("Y-m-d");
         break;
+        case 4: 
+          if($FechaAnteriorDevolucion == '') {
+            $sql7 = R12Q_Nombre_Cliente_Devolucion($IdArticulo,$row3["FechaMovimiento"]->format("Y-m-d"));
+            $result6 = sqlsrv_query($conn,$sql7);
+          }
+          else if($FechaAnteriorDevolucion != $row3["FechaMovimiento"]->format("Y-m-d")) {
+            $sql7 = R12Q_Nombre_Cliente_Devolucion($IdArticulo,$row3["FechaMovimiento"]->format("Y-m-d"));
+            $result6 = sqlsrv_query($conn,$sql7);
+          }
+
+          $row6 = sqlsrv_fetch_array($result6,SQLSRV_FETCH_ASSOC);
+          
+          echo '
+              <td align="center">' 
+                . FG_Limpiar_Texto($row6["Nombre"]) 
+                . " " 
+                . FG_Limpiar_Texto($row6["Apellido"]) 
+              . '</td>
+              <td align="center">'. $row6["CodigoCaja"] .'</td>
+              <td align="center">'. number_format($row6["Precio"],2,"," ,"." ) .'</td>
+            </tr>
+          ';
+
+          $FechaAnteriorDevolucion = $row3["FechaMovimiento"]->format("Y-m-d");
+        break;
         default: 
           echo '
               <td align="center">-</td>
@@ -497,10 +527,10 @@
               <td align="center">-</td>
             </tr>
           ';
-      }
+      }//switch
 
       $contador++;
-    }
+    }//while
 
     echo '
         </tbody>
@@ -775,8 +805,6 @@
       VenDevolucion.VenFacturaId,
       VenDevolucionDetalle.InvArticuloId,
       VenDevolucion.VenCajaId,
-      VenDevolucionDetalle.Cantidad,
-      VenDevolucionDetalle.PrecioBruto,
       (SELECT VenCaja.CodigoCaja FROM VenCaja WHERE VenCaja.Id = VenDevolucion.VenCajaId) AS CodigoCaja,
       (ROUND(CAST(VenDevolucionDetalle.Cantidad AS DECIMAL(38,0)),2,0) * VenDevolucionDetalle.PrecioBruto) AS Precio
       FROM VenDevolucion 
