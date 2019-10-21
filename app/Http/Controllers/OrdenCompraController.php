@@ -26,7 +26,8 @@ class OrdenCompraController extends Controller
      */
     public function index()
     {
-        //
+        $OrdenCompra =  OrdenCompra::all();
+        return view('pages.ordenCompra.index', compact('OrdenCompra'));
     }
 
     /**

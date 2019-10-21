@@ -539,6 +539,13 @@
     </button>
     <div class="dropdown-menu">
       <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('/ordenCompra') }}">     
+          <span data-feather="home"></span>
+          <i class="fas fa-box"></i>
+          Test Orden Compra<span class="sr-only">(current)</span>
+        </a>
+      </li>
+      <li class="nav-item">
         <a class="nav-link CP-Links-Menu" href="{{ url('/testS') }}">     
           <span data-feather="home"></span>
           <i class="fas fa-box"></i>
