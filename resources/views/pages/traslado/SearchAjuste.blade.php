@@ -65,6 +65,7 @@
     $ArtJson = "";
     
     $_GET['SEDE'] = MiUbicacion();
+    //$_GET['SEDE'] = 'FTN';
 
     if (isset($_GET['SEDE'])) {     
       echo '<h1 class="h5 text-success"  align="left"> <i class="fas fa-prescription"></i> '.FG_Nombre_Sede($_GET['SEDE']).'</h1>';

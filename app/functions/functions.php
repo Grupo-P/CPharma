@@ -678,29 +678,28 @@
 
       if($Existencia==0){
 
+      	$sql3 = QG_Lote_Sin_Existencia($IdLote,$IdArticulo);
+	      $result3 = sqlsrv_query($conn,$sql3);
+	      $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
+
+	      $IsIVASE = $row3["Impuesto"];
+	      $UtilidadSE = $row3["Utilidad"];
+	      $TroquelAlmacen1SE = $row3["TroquelAlmacen1"];
+	      $TroquelAlmacen2SE = $row3["TroquelAlmacen2"];
+	      $PrecioCompraBrutoSE = $row3["PrecioCompraBruto"];
+
       	if($Dolarizado=='SI') {
-	        $TasaActual = FG_Tasa_Fecha($connCPharma,date('Y-m-d'));
+	        	$TasaActualSE = FG_Tasa_Fecha($connCPharma,date('Y-m-d'));
+	        	$PrecioSE = FG_Calculo_Precio_Sin_Existencia($TroquelAlmacen1SE,$PrecioCompraBrutoSE,$UtilidadSE,$IsIVASE,$TroquelAlmacen2SE);
 
-	        	$sql3 = QG_Lote_Sin_Existencia($IdLote,$IdArticulo);
-			      $result3 = sqlsrv_query($conn,$sql3);
-			      $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
-
-			      $IsIVASE = $row3["Impuesto"];
-			      $UtilidadSE = $row3["Utilidad"];
-			      $TroquelAlmacen1SE = $row3["TroquelAlmacen1"];
-			      $TroquelAlmacen2SE = $row3["TroquelAlmacen2"];
-			      $PrecioCompraBrutoSE = $row3["PrecioCompraBruto"];
-
-	        	$Precio = FG_Calculo_Precio_Sin_Existencia($TroquelAlmacen1SE,$PrecioCompraBrutoSE,$UtilidadSE,$IsIVASE,$TroquelAlmacen2SE);
-
-	        if($Gravado=='SI' && $Utilidad!= 1){
-	          $costo_unit_bs_sin_iva = ($Precio/Impuesto)*$Utilidad;
-	          $costo_unit_usd_sin_iva = round(($costo_unit_bs_sin_iva/$TasaActual),2);
+	        if($Gravado=='SI' && $UtilidadSE!= 1){
+	          $costo_unit_bs_sin_iva = ($PrecioSE/Impuesto)*$UtilidadSE;
+	          $costo_unit_usd_sin_iva = round(($costo_unit_bs_sin_iva/$TasaActualSE),2);
 	          $total_imp_usd = round(($costo_unit_usd_sin_iva*$Cantidad)*(Impuesto-1),2);
 	        }
-	        else if($Gravado== 'NO' && $Utilidad!= 1){
-	          $costo_unit_bs_sin_iva = ($Precio)*$Utilidad;
-	          $costo_unit_usd_sin_iva = round(($costo_unit_bs_sin_iva/$TasaActual),2);
+	        else if($Gravado== 'NO' && $UtilidadSE!= 1){
+	          $costo_unit_bs_sin_iva = ($PrecioSE)*$UtilidadSE;
+	          $costo_unit_usd_sin_iva = round(($costo_unit_bs_sin_iva/$TasaActualSE),2);
 	          $total_imp_usd = 0.00;
 	        }
 	        $total_usd = round((($costo_unit_usd_sin_iva*$Cantidad)+$total_imp_usd),2);
@@ -709,12 +708,12 @@
 	        $total_bs = '-';
 	      }
 	      else if($Dolarizado=='NO') {
-	        $costo_unit_bs_sin_iva = round($PrecioCompraBruto,2);
+	        $costo_unit_bs_sin_iva = round($PrecioCompraBrutoSE,2);
 
-	        if($Gravado== 'SI' && $Utilidad!= 1){
+	        if($Gravado== 'SI' && $UtilidadSE!= 1){
 	          $total_imp_bs = round((($costo_unit_bs_sin_iva*$Cantidad)*(Impuesto-1)),2);
 	        }
-	        else if($Gravado== 'NO' && $Utilidad!= 1){
+	        else if($Gravado== 'NO' && $UtilidadSE!= 1){
 	          $total_imp_bs = 0.00; 
 	        }
 	        $total_bs = round((($costo_unit_bs_sin_iva*$Cantidad)+$total_imp_bs),2);
