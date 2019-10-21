@@ -430,6 +430,11 @@
     $sql8 = '';
     $result7 = '';
     $row7 = '';
+
+    $FechaAnteriorAjuste = '';
+    $sql9 = '';
+    $result8 = '';
+    $row8 = '';
     //---------------------- Fin Nuevos Campos ----------------------
 
     while($row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC)) {
@@ -546,6 +551,28 @@
           ';
 
           $FechaAnteriorCorreccion = $row3["FechaMovimiento"]->format("Y-m-d");
+        break;
+        case 14:
+        case 15:
+          if($FechaAnteriorAjuste == '') {
+            $sql9 = R12Q_Responsable_Ajuste($IdArticulo,$row3["FechaMovimiento"]->format("Y-m-d"));
+            $result8 = sqlsrv_query($conn,$sql9);
+          }
+          else if($FechaAnteriorAjuste != $row3["FechaMovimiento"]->format("Y-m-d")) {
+            $sql9 = R12Q_Responsable_Ajuste($IdArticulo,$row3["FechaMovimiento"]->format("Y-m-d"));
+            $result8 = sqlsrv_query($conn,$sql9);
+          }
+
+          $row8 = sqlsrv_fetch_array($result8,SQLSRV_FETCH_ASSOC);
+          
+          echo '
+              <td align="center">'. FG_Limpiar_Texto($row8["Responsable"]) . '</td>
+              <td align="center">-</td>
+              <td align="center">-</td>
+            </tr>
+          ';
+
+          $FechaAnteriorAjuste = $row3["FechaMovimiento"]->format("Y-m-d");
         break;
         default: 
           echo '
