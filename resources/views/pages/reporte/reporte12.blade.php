@@ -399,7 +399,7 @@
             <th scope="col" class="CP-sticky">Cantidad</th>
             <th scope="col" class="CP-sticky">Titular</th>
             <th scope="col" class="CP-sticky">Origen</th>
-            <th scope="col" class="CP-sticky">Valor</th>
+            <th scope="col" class="CP-sticky">Valor Bs.</th>
           </tr>
         </thead>
 
@@ -484,7 +484,7 @@
                 . FG_Limpiar_Texto($row4["Apellido"]) 
               . '</td>
               <td align="center">'. $row4["CodigoCaja"] .'</td>
-              <td align="center">-</td>
+              <td align="center">'. number_format($row4["Precio"],2,"," ,"." ) .'</td>
             </tr>
           ';
 
