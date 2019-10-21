@@ -761,6 +761,36 @@
   }
   /**********************************************************************************/
   /*
+    TITULO: R12Q_Nombre_Cliente_Devolucion
+    FUNCION: Query que genera el nombre del cliente y la caja en que fue atendido
+    RETORNO: Detalle de ventas
+    AUTOR: Ing. Manuel Henriquez
+   */
+  function R12Q_Nombre_Cliente_Devolucion($IdArticulo,$FechaBandera) {
+    $sql = "
+      SELECT DISTINCT
+      VenDevolucion.Id,
+      GenPersona.Nombre,
+      GenPersona.Apellido,
+      VenDevolucion.VenFacturaId,
+      VenDevolucionDetalle.InvArticuloId,
+      VenDevolucion.VenCajaId,
+      VenDevolucionDetalle.Cantidad,
+      VenDevolucionDetalle.PrecioBruto,
+      (SELECT VenCaja.CodigoCaja FROM VenCaja WHERE VenCaja.Id = VenDevolucion.VenCajaId) AS CodigoCaja,
+      (ROUND(CAST(VenDevolucionDetalle.Cantidad AS DECIMAL(38,0)),2,0) * VenDevolucionDetalle.PrecioBruto) AS Precio
+      FROM VenDevolucion 
+      INNER JOIN VenDevolucionDetalle ON VenDevolucionDetalle.VenDevolucionId = VenDevolucion.Id
+      INNER JOIN VenFactura ON VenFactura.Id = VenDevolucion.VenFacturaId
+      INNER JOIN VenCliente ON VenCliente.Id = VenFactura.VenClienteId
+      INNER JOIN GenPersona ON GenPersona.Id = VenCliente.GenPersonaId
+      WHERE VenDevolucionDetalle.InvArticuloId = '$IdArticulo'
+      AND CONVERT(DATE, VenDevolucion.Auditoria_FechaCreacion) = '$FechaBandera'
+    ";
+    return $sql;
+  }
+  /**********************************************************************************/
+  /*
     TITULO: R12Q_Total_Venta
     FUNCION: Ubicar el top de productos mas vendidos
     RETORNO: Lista de productos mas vendidos
