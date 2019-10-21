@@ -111,9 +111,6 @@
 		    </thead>
 					<?php
 						Imprimir_Traslado_Detalle($traslado->numero_ajuste);
-
-
-						echo'<br/>Precio Calculado existencia cero: '.FG_Calculo_Precio_Sin_Existencia(NULL,'19199.95','0.77','0',NULL);
 					?>
 	  	</tbody>
 	</table>
