@@ -819,6 +819,29 @@
   }
   /**********************************************************************************/
   /*
+    TITULO: R12Q_Responsable_Correccion
+    FUNCION: Query que genera el responsable de la correccion de costo
+    RETORNO: Detalle de compra
+    AUTOR: Ing. Manuel Henriquez
+   */
+  function R12Q_Responsable_Correccion($IdArticulo,$FechaBandera) {
+    $sql = "
+      SELECT 
+      InvMovimiento.InvCausaId,
+      InvMovimiento.Cantidad,
+      InvMovimiento.InvArticuloId,
+      InvMovimiento.InvLoteId,
+      InvLote.Auditoria_Usuario
+      FROM InvMovimiento
+      INNER JOIN InvLote ON InvLote.Id = InvMovimiento.InvLoteId
+      WHERE InvMovimiento.InvArticuloId = '$IdArticulo'
+      AND ((InvMovimiento.InvCausaId = '11') OR (InvMovimiento.InvCausaId = '12'))
+      AND CONVERT(DATE,InvMovimiento.FechaMovimiento) = '$FechaBandera'
+    ";
+    return $sql;
+  }
+  /**********************************************************************************/
+  /*
     TITULO: R12Q_Total_Venta
     FUNCION: Ubicar el top de productos mas vendidos
     RETORNO: Lista de productos mas vendidos
