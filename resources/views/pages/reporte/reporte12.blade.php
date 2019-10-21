@@ -745,7 +745,10 @@
       VenFacturaDetalle.InvArticuloId,
       VenFactura.VenClienteId,
       VenFactura.VenCajaId,
-      (SELECT VenCaja.CodigoCaja FROM VenCaja WHERE VenCaja.Id = VenFactura.VenCajaId) AS CodigoCaja,
+      (SELECT VenCaja.CodigoCaja 
+        FROM VenCaja 
+        WHERE VenCaja.Id = VenFactura.VenCajaId) AS CodigoCaja,
+      (ROUND(CAST(VenFacturaDetalle.Cantidad AS DECIMAL(38,0)),2,0) * VenFacturaDetalle.PrecioBruto) AS Precio,
       VenFactura.Auditoria_FechaCreacion
       FROM VenFactura
       INNER JOIN VenFacturaDetalle ON VenFacturaDetalle.VenFacturaId = VenFactura.Id
