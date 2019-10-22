@@ -1,14 +1,7 @@
 @extends('layouts.model')
 
 @section('title')
-    Rol
-@endsection
-
-@section('scriptsHead')
-    <script src="{{ asset('assets/js/sortTable.js') }}">	
-    </script>
-    <script src="{{ asset('assets/js/filter.js') }}">	
-    </script>
+    Orden de compra
 @endsection
 
 @section('content')
@@ -25,7 +18,7 @@
 		        </button>
 		      </div>
 		      <div class="modal-body">
-		        <h4 class="h6">Rol almacenado con exito</h4>
+		        <h4 class="h6">Orden de compra generada con exito</h4>
 		      </div>
 		      <div class="modal-footer">
 		        <button type="button" class="btn btn-outline-success" data-dismiss="modal">Aceptar</button>
@@ -47,7 +40,7 @@
 		        </button>
 		      </div>
 		      <div class="modal-body">
-		        <h4 class="h6">Rol modificado con exito</h4>
+		        <h4 class="h6">Orden de compra actualizada con exito</h4>
 		      </div>
 		      <div class="modal-footer">
 		        <button type="button" class="btn btn-outline-success" data-dismiss="modal">Aceptar</button>
@@ -69,7 +62,7 @@
 		        </button>
 		      </div>
 		      <div class="modal-body">
-		        <h4 class="h6">Rol actualizado con exito</h4>
+		        <h4 class="h6">Orden de compra actualizada con exito</h4>
 		      </div>
 		      <div class="modal-footer">
 		        <button type="button" class="btn btn-outline-success" data-dismiss="modal">Aceptar</button>	
@@ -80,7 +73,7 @@
 	@endif
 
 	<h1 class="h5 text-info">
-		<i class="fas fa-user-circle"></i>
+		<i class="far fa-file-alt"></i>
 		Roles
 	</h1>
 
@@ -88,7 +81,7 @@
 	<table style="width:100%;">
 	    <tr>
 	        <td style="width:10%;" align="center">	        	
-				<a href="{{ url('/rol/create') }}" role="button" class="btn btn-outline-info btn-sm" 
+				<a href="{{ url('/ordenCompra/create') }}" role="button" class="btn btn-outline-info btn-sm" 
 				style="display: inline; text-align: left;">
 				<i class="fa fa-plus"></i>
 					Agregar		      		
@@ -100,7 +93,7 @@
 				    <span class="input-group-text purple lighten-3" id="basic-text1"><i class="fas fa-search text-white"
 				        aria-hidden="true"></i></span>
 				  </div>
-				  <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterFirsTable()">
+				  <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterAllTable()">
 				</div>
 	        </td>
 	    </tr>
@@ -111,25 +104,32 @@
 	  	<thead class="thead-dark">
 		    <tr>
 		      	<th scope="col" class="stickyCP">#</th>
-		      	<th scope="col" class="stickyCP">Nombre</th>
-		      	<th scope="col" class="stickyCP">¿Lee?</th>
-		      	<th scope="col" class="stickyCP">¿Agrega?</th>
-		      	<th scope="col" class="stickyCP">¿Modifica?</th>
-		      	<th scope="col" class="stickyCP">¿Elimina?</th>
+		      	<th scope="col" class="stickyCP">Orden Compra</th>
+		      	<th scope="col" class="stickyCP">Proveedor</th>
+		      	<th scope="col" class="stickyCP">Fecha de la orden</th>
+		      	<th scope="col" class="stickyCP">Fecha estimada de despacho</th>
+		      	<th scope="col" class="stickyCP">Dias Transcurridos</th>
+		      	<th scope="col" class="stickyCP">Monto Total Bs</th>
+		      	<th scope="col" class="stickyCP">Monto Total $</th>
+		      	<th scope="col" class="stickyCP">Unidades</th>
+		      	<th scope="col" class="stickyCP">Condicion crediticia</th>
 		      	<th scope="col" class="stickyCP">Estatus</th>
+		      	<th scope="col" class="stickyCP">Calificacion</th>
+		      	<th scope="col" class="stickyCP">Monto Real</th>
+		      	<th scope="col" class="stickyCP">Aprobacion</th>
 		      	<th scope="col" class="stickyCP">Acciones</th>
 		    </tr>
 	  	</thead>
 	  	<tbody>
-		@foreach($roles as $rol)
+		@foreach($OrdenCompra as $ordenCompra)
 		    <tr>
-		      <th>{{$rol->id}}</th>
-		      <td>{{$rol->nombre}}</td>
-		      <td>{{$rol->read}}</td>
-		      <td>{{$rol->create}}</td>
-		      <td>{{$rol->update}}</td>
-		      <td>{{$rol->delete}}</td>
-		      <td>{{$rol->estatus}}</td>
+		      <th>{{$ordenCompra->id}}</th>
+		      <td>{{$ordenCompra->nombre}}</td>
+		      <td>{{$ordenCompra->read}}</td>
+		      <td>{{$ordenCompra->create}}</td>
+		      <td>{{$ordenCompra->update}}</td>
+		      <td>{{$ordenCompra->delete}}</td>
+		      <td>{{$ordenCompra->estatus}}</td>
 		      
 		    <!-- Inicio Validacion de ROLES -->
 		      <td style="width:140px;">
@@ -139,26 +139,26 @@
 				?>
 
 					<?php
-					if($rol->estatus == 'ACTIVO'){
+					if($ordenCompra->estatus == 'ACTIVO'){
 					?>
-						<a href="/rol/{{$rol->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
+						<a href="/ordenCompra/{{$ordenCompra->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
 			      			<i class="far fa-eye"></i>			      		
 			      		</a>
 
-			      		<a href="/rol/{{$rol->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
+			      		<a href="/ordenCompra/{{$ordenCompra->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
 			      			<i class="fas fa-edit"></i>			      		
 				      	</a>
 				 					  
-				      	<form action="/rol/{{$rol->id}}" method="POST" style="display: inline;">
+				      	<form action="/ordenCompra/{{$ordenCompra->id}}" method="POST" style="display: inline;">
 						    @method('DELETE')
 						    @csrf					    
 						    <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Desincorporar"><i class="fa fa-reply"></i></button>
 						</form>
 					<?php
 					}
-					else if($rol->estatus == 'INACTIVO'){
+					else if($ordenCompra->estatus == 'INACTIVO'){
 					?>		
-			      	<form action="/rol/{{$rol->id}}" method="POST" style="display: inline;">
+			      	<form action="/ordenCompra/{{$ordenCompra->id}}" method="POST" style="display: inline;">
 					    @method('DELETE')
 					    @csrf					    
 					    <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Reincorporar"><i class="fa fa-share"></i></button>
@@ -169,18 +169,18 @@
 				<?php	
 				} else if(Auth::user()->role == 'SUPERVISOR' || Auth::user()->role == 'ADMINISTRADOR' || Auth::user()->role == 'SUPERVISOR CAJA'){ 
 				?>
-					<a href="/rol/{{$rol->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
+					<a href="/ordenCompra/{{$ordenCompra->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
 		      			<i class="far fa-eye"></i>			      		
 		      		</a>
 
-		      		<a href="/rol/{{$rol->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
+		      		<a href="/ordenCompra/{{$ordenCompra->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
 		      			<i class="fas fa-edit"></i>
 	      			</a>
 				<?php
 				} else if(Auth::user()->role == 'USUARIO'){
 				?>
-					<a href="/rol/{{$rol->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
-		      			<i class="far fa-eye"></i>			      		
+					<a href="/ordenCompra/{{$ordenCompra->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
+		      			<i class="far fa-eye"></i>		      		
 		      		</a>		
 				<?php
 				}
