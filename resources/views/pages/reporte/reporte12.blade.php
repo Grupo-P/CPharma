@@ -363,12 +363,12 @@
     $FechaComparativa = date('d-m-Y',strtotime($FFinal));
 
     while($row2 = sqlsrv_fetch_array($result2,SQLSRV_FETCH_ASSOC)) {
-      $DiaActual = $row2["FechaMovimiento"][0] . $row2["FechaMovimiento"][1];
+      /*$DiaActual = $row2["FechaMovimiento"][0] . $row2["FechaMovimiento"][1];
       $MesActual = $row2["FechaMovimiento"][3] . $row2["FechaMovimiento"][4];
       $Anioctual = $row2["FechaMovimiento"][6] . $row2["FechaMovimiento"][7] . $row2["FechaMovimiento"][8] . $row2["FechaMovimiento"][9];
 
-      $FechaMovimiento = new DateTime($DiaActual . "-" . $MesActual . "-" . $Anioctual);
-      $FechaMovimiento = $FechaMovimiento->format('d-m-Y');
+      $FechaMovimiento = new DateTime($DiaActual . "-" . $MesActual . "-" . $Anioctual);*/
+      $FechaMovimiento = $row2["FechaMovimiento"]->format('d-m-Y');
 
       if($FechaMovimiento == $FechaComparativa) {
         continue;
@@ -761,14 +761,14 @@
   function R12Q_Resumen_Movimiento($IdArticulo,$FInicial,$FFinal) {
     $sql = "
       SELECT 
-        CONVERT(VARCHAR(10), InvMovimiento.FechaMovimiento, 103) AS FechaMovimiento,
-        InvCausa.Descripcion AS Movimiento,
-        ROUND(CAST(SUM(InvMovimiento.Cantidad) AS DECIMAL(38,0)),2,0) AS Cantidad
+      CONVERT(DATE,CONVERT(DATETIME,CONVERT(VARCHAR(10), InvMovimiento.FechaMovimiento, 103),103)) AS FechaMovimiento,
+      InvCausa.Descripcion AS Movimiento,
+      ROUND(CAST(SUM(InvMovimiento.Cantidad) AS DECIMAL(38,0)),2,0) AS Cantidad
       FROM InvMovimiento
       INNER JOIN InvCausa ON InvMovimiento.InvCausaId=InvCausa.Id
       WHERE InvMovimiento.InvArticuloId='$IdArticulo'
       AND (CONVERT(DATE,InvMovimiento.FechaMovimiento) >= '$FInicial' AND CONVERT(DATE,InvMovimiento.FechaMovimiento) <= '$FFinal')
-      GROUP BY CONVERT(VARCHAR(10), InvMovimiento.FechaMovimiento, 103), InvCausa.Descripcion
+      GROUP BY CONVERT(DATE,CONVERT(DATETIME,CONVERT(VARCHAR(10), InvMovimiento.FechaMovimiento, 103),103)), InvCausa.Descripcion
       ORDER BY FechaMovimiento ASC
     ";
     return $sql;
