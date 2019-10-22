@@ -361,6 +361,7 @@
 
     $contador = 1;
     $FechaComparativa = date('d-m-Y',strtotime($FFinal));
+    $FechaAnterior = '';
 
     while($row2 = sqlsrv_fetch_array($result2,SQLSRV_FETCH_ASSOC)) {
       $FechaMovimiento = $row2["FechaMovimiento"]->format('d-m-Y');
@@ -379,6 +380,7 @@
       ';
 
       $contador++;
+      $FechaAnterior = $row2["FechaMovimiento"]->format("Y-m-d");
     }
 
     echo '
