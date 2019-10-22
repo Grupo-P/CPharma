@@ -14,7 +14,7 @@ class AddEstatusToRhPruebasTable extends Migration
     public function up()
     {
         Schema::table('rh_pruebas', function (Blueprint $table) {
-            //
+            $table->string('estatus')->after('nombre_prueba');
         });
     }
 
@@ -26,7 +26,7 @@ class AddEstatusToRhPruebasTable extends Migration
     public function down()
     {
         Schema::table('rh_pruebas', function (Blueprint $table) {
-            //
+            $table->dropColumn('estatus');
         });
     }
 }
