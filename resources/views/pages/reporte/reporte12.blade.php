@@ -389,9 +389,9 @@
             ';
 
             $contador++;
-          }
-        }
-      }
+          }//for
+        }//if diferencia
+      }//if $FechaAnterior
 
       echo '
         <tr>
@@ -404,7 +404,7 @@
 
       $contador++;
       $FechaAnterior = $row2["FechaMovimiento"]->format("Y-m-d");
-    }
+    }//while 
 
     echo '
           </tbody>
