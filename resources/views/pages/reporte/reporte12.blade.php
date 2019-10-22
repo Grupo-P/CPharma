@@ -404,7 +404,28 @@
 
       $contador++;
       $FechaAnterior = $row2["FechaMovimiento"]->format("Y-m-d");
-    }//while 
+    }//while
+
+    $diferencia = FG_Validar_Fechas($FechaAnterior,$FFinal);
+
+    if($diferencia > 1) {
+      for($i=1;$i<$diferencia;$i++) {
+
+        $FechaAnterior = date("Y-m-d",strtotime($FechaAnterior."+ 1 days"));
+        $FechaIterada = new DateTime($FechaAnterior);
+
+        echo '
+          <tr>
+            <td align="center"><strong>'.intval($contador).'</strong></td>
+            <td align="center">'.$FechaIterada->format('d-m-Y').'</td>
+            <td align="center">Venta</td>
+            <td align="center">0</td>
+          </tr>
+        ';
+
+        $contador++;
+      }//for
+    }//if diferencia
 
     echo '
           </tbody>
