@@ -362,52 +362,12 @@
     $contador = 1;
     $FechaComparativa = date('d-m-Y',strtotime($FFinal));
 
-    /*$DiaActual = 0;
-    $DiaAnterior = 0;
-    $MesAnterior = 0;*/
-
     while($row2 = sqlsrv_fetch_array($result2,SQLSRV_FETCH_ASSOC)) {
       $FechaMovimiento = $row2["FechaMovimiento"]->format('d-m-Y');
 
       if($FechaMovimiento == $FechaComparativa) {
         continue;
       }
-
-      /*$DiaActual = $row2["FechaMovimiento"]->format('d');
-      $DiaActual = intval($DiaActual);
-
-      if(($DiaActual == $DiaAnterior) || ($DiaActual == ($DiaAnterior + 1))) {
-
-        echo '
-          <tr>
-            <td align="center"><strong>'.intval($contador).'</strong></td>
-            <td align="center">'.$FechaMovimiento.'</td>
-            <td align="center">'.utf8_encode($row2["Movimiento"]).'</td>
-            <td align="center">'.$row2["Cantidad"].'</td>
-          </tr>
-        ';
-      }
-      else {
-        $DiaAnterior++;
-
-        echo '
-          <tr>
-            <td align="center"><strong>'.intval($contador).'</strong></td>
-        ';
-
-        if($DiaAnterior > 9) {
-          echo '<td align="center">'.$DiaAnterior.'-'.$MesAnterior.'-'.$row2["FechaMovimiento"]->format('Y').'</td>';
-        }
-        else {
-          echo '<td align="center">0'.$DiaAnterior.'-'.$MesAnterior.'-'.$row2["FechaMovimiento"]->format('Y').'</td>';
-        }
-
-        echo '
-            <td align="center">Venta</td>
-            <td align="center">0</td>
-          </tr>
-        ';
-      }*/
 
       echo '
         <tr>
@@ -419,9 +379,6 @@
       ';
 
       $contador++;
-      /*$DiaAnterior = $DiaActual;
-      $MesAnterior = $row2["FechaMovimiento"]->format('m');
-      $MesAnterior = intval($MesAnterior);*/
     }
 
     echo '
