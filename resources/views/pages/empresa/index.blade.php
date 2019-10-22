@@ -78,13 +78,13 @@
 	</h1>
 
 	<hr class="row align-items-start col-12">
-	<table style="width:100%;">
+	<table style="width:100%;" class="CP-stickyBar">
 	    <tr>
 	        <td style="width:10%;" align="center">	
 				<a href="{{ url('/empresa/create') }}" role="button" class="btn btn-outline-info btn-sm" 
 				style="display: inline; text-align: left;">
 				<i class="fa fa-plus"></i>
-					Agregar		      		
+					Agregar
 				</a>
 	        </td>
 	        <td style="width:90%;">
@@ -93,7 +93,7 @@
 				    <span class="input-group-text purple lighten-3" id="basic-text1"><i class="fas fa-search text-white"
 				        aria-hidden="true"></i></span>
 				  </div>
-				  <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterFirsTable()">
+				  <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterFirsTable()" autofocus="autofocus">
 				</div>
 	        </td>
 	    </tr>
@@ -103,12 +103,12 @@
 	<table class="table table-striped table-borderless col-12 sortable" id="myTable">
 	  	<thead class="thead-dark">
 		    <tr>
-		      	<th scope="col" class="stickyCP">#</th>
-		      	<th scope="col" class="stickyCP">Nombre</th>
-		      	<th scope="col" class="stickyCP">RIF</th>
-		      	<th scope="col" class="stickyCP">Teléfono</th>		      	
-		      	<th scope="col" class="stickyCP">Estatus</th>
-		      	<th scope="col" class="stickyCP">Acciones</th>
+		      	<th scope="col" class="CP-sticky">#</th>
+		      	<th scope="col" class="CP-sticky">Nombre</th>
+		      	<th scope="col" class="CP-sticky">RIF</th>
+		      	<th scope="col" class="CP-sticky">Teléfono</th>		      	
+		      	<th scope="col" class="CP-sticky">Estatus</th>
+		      	<th scope="col" class="CP-sticky">Acciones</th>
 		    </tr>
 	  	</thead>
 	  	<tbody>
