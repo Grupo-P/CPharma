@@ -3,7 +3,9 @@
 namespace compras\Http\Controllers;
 
 use Illuminate\Http\Request;
+use compras\RH_Prueba;
 use compras\User;
+use compras\Auditoria;
 
 class RH_PruebaController extends Controller {
     /**
@@ -23,7 +25,8 @@ class RH_PruebaController extends Controller {
      */
     public function index()
     {
-        return view('pages.RRHH.pruebas.index');
+        $pruebas =  RH_Prueba::all();
+        return view('pages.RRHH.pruebas.index', compact('pruebas'));
     }
 
     /**
@@ -31,9 +34,8 @@ class RH_PruebaController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
-        //
+    public function create() {
+        return view('pages.RRHH.pruebas.create');
     }
 
     /**

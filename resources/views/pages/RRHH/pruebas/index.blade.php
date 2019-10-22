@@ -43,7 +43,7 @@
             </button>
           </div>
           <div class="modal-body">
-            <h4 class="h6> Prueba modificada con exito</h4>
+            <h4 class="h6"> Prueba modificada con exito</h4>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-outline-success" data-dismiss="modal">Aceptar</button>
@@ -86,7 +86,7 @@
   <table style="width:100%;">
     <tr>
       <td style="width:10%;" align="center">
-        <a href="#" role="button" class="btn btn-outline-info btn-sm" style="display: inline; text-align: left;">
+        <a href="/pruebas/create" role="button" class="btn btn-outline-info btn-sm" style="display: inline; text-align: left;">
           <i class="fa fa-plus"></i>&nbsp;Agregar
         </a>
       </td>
@@ -108,10 +108,89 @@
  <table class="table table-striped table-borderless col-12 sortable" id="myTable">
       <thead class="thead-dark">
          <tr>
-          <th scope="col" class="stickyCP">#</th>
-          <th scope="col" class="stickyCP">Nombre</th>
-          <th scope="col" class="stickyCP">Tipo</th>
+          <th scope="col" class="CP-sticky">#</th>
+          <th scope="col" class="CP-sticky">Tipo</th>
+          <th scope="col" class="CP-sticky">Nombre</th>
+          <th scope="col" class="CP-sticky">Estatus</th>
+          <th scope="col" class="CP-sticky">Acciones</th>
       </tr>
       </thead>
-</table>
-      @endsection
+
+<tbody>
+    @foreach($pruebas as $prueba)
+        <tr>
+          <th>{{$prueba->id}}</th>
+          <td>{{$prueba->tipo_prueba}}</td>
+          <td>{{$prueba->nombre_prueba}}</td>
+          <td>{{$prueba->estatus}}</td>
+        <!-- Inicio Validacion de ROLES -->
+          <td style="width:140px;">
+        
+        <?php
+        if(Auth::user()->role == 'MASTER' || Auth::user()->role == 'DEVELOPER'){
+        ?>
+
+          <?php
+          if($prueba->estatus == 'ACTIVO'){
+          ?>
+            <a href="/pruebas/{{$prueba->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
+                  <i class="far fa-eye"></i>                
+                </a>
+
+                <a href="/pruebas/{{$prueba->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
+                  <i class="fas fa-edit"></i>               
+                </a>
+                    
+                <form action="/pruebas/{{$prueba->id}}" method="POST" style="display: inline;">
+                @method('DELETE')
+                @csrf             
+                <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Desincorporar"><i class="fa fa-reply"></i></button>
+            </form>
+          <?php
+          }
+          else if($prueba->estatus == 'INACTIVO'){
+          ?>    
+              <form action="/pruebas/{{$prueba->id}}" method="POST" style="display: inline;">
+              @method('DELETE')
+              @csrf             
+              <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Reincorporar"><i class="fa fa-share"></i></button>
+          </form>
+          <?php
+          }         
+          ?>
+        <?php 
+        } else if(Auth::user()->role == 'SUPERVISOR' || Auth::user()->role == 'ADMINISTRADOR'){
+        ?>
+          <a href="/prueba/{{$prueba->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
+                <i class="far fa-eye"></i>                
+              </a>
+
+              <a href="/prueba/{{$prueba->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
+                <i class="fas fa-edit"></i>
+              </a>
+        <?php
+        } else if(Auth::user()->role == 'USUARIO'){
+        ?>
+          <a href="/prueba/{{$prueba->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
+                <i class="far fa-eye"></i>                
+              </a>    
+        <?php
+        }
+        ?>
+                    
+          </td>
+        <!-- Fin Validacion de ROLES -->
+
+        </tr>
+    @endforeach
+    </tbody>
+  </table>
+
+  <script>
+    $(document).ready(function(){
+        $('[data-toggle="tooltip"]').tooltip();   
+    });
+    $('#exampleModalCenter').modal('show')
+  </script>
+
+@endsection
