@@ -50,7 +50,6 @@ class RH_PruebaController extends Controller {
             $pruebas->tipo_prueba = $request->input('tipo_prueba');
             $pruebas->nombre_prueba = $request->input('nombre_prueba');
             $pruebas->estatus = 'ACTIVO';
-            $pruebas->observacion = $request->input('observacion');
             $pruebas->user = auth()->user()->name;
             $pruebas->save();
 

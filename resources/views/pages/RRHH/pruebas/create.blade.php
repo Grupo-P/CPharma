@@ -21,7 +21,7 @@
           </div>
           <div class="modal-body">
             <h4 class="h6">
-             La pruebas no fueron almacenadas
+             La pruebas no fueron almacenada
             </h4>
           </div>
           <div class="modal-footer">
