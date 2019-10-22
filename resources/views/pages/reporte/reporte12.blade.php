@@ -363,11 +363,6 @@
     $FechaComparativa = date('d-m-Y',strtotime($FFinal));
 
     while($row2 = sqlsrv_fetch_array($result2,SQLSRV_FETCH_ASSOC)) {
-      /*$DiaActual = $row2["FechaMovimiento"][0] . $row2["FechaMovimiento"][1];
-      $MesActual = $row2["FechaMovimiento"][3] . $row2["FechaMovimiento"][4];
-      $Anioctual = $row2["FechaMovimiento"][6] . $row2["FechaMovimiento"][7] . $row2["FechaMovimiento"][8] . $row2["FechaMovimiento"][9];
-
-      $FechaMovimiento = new DateTime($DiaActual . "-" . $MesActual . "-" . $Anioctual);*/
       $FechaMovimiento = $row2["FechaMovimiento"]->format('d-m-Y');
 
       if($FechaMovimiento == $FechaComparativa) {
