@@ -11,7 +11,7 @@
 <link rel="stylesheet" href="{{asset('assets/fonts/Nunito.css')}}" type="text/css">
 <!-- Scritps Bootstrap 4 CSS -->
 <link rel="stylesheet" href="{{asset('assets/bootstrap/css/bootstrap.css')}}">
-<link rel="stylesheet" href="{{asset('assets/bootstrap/css/bootstrap-grid.css')}}">.
+<link rel="stylesheet" href="{{asset('assets/bootstrap/css/bootstrap-grid.css')}}">
 <link rel="stylesheet" href="{{asset('assets/bootstrap/css/bootstrap-reboot.css')}}">
 <!-- CPharma Style -->
 <link rel="stylesheet" href="{{asset('assets/cpharma/cpharmastyle.css')}}">
