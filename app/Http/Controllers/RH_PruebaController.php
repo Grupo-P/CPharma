@@ -5,7 +5,6 @@ namespace compras\Http\Controllers;
 use Illuminate\Http\Request;
 use compras\RH_Prueba;
 use compras\User;
-use compras\Auditoria;
 
 class RH_PruebaController extends Controller {
     /**
@@ -46,7 +45,20 @@ class RH_PruebaController extends Controller {
      */
     public function store(Request $request)
     {
-        //
+        try{
+            $pruebas = new RH_Prueba();
+            $pruebas->tipo_prueba = $request->input('tipo_prueba');
+            $pruebas->nombre_prueba = $request->input('nombre_prueba');
+            $pruebas->estatus = 'ACTIVO';
+            $pruebas->observacion = $request->input('observacion');
+            $pruebas->user = auth()->user()->name;
+            $pruebas->save();
+
+            return redirect()->route('pruebas.index')->with('Saved', ' Informacion');
+        }
+        catch(\Illuminate\Database\QueryException $e){
+            return back()->with('Error', ' Error');
+        }
     }
 
     /**
