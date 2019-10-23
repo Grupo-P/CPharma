@@ -232,7 +232,7 @@
         var regExp = /^0[1246]{3}-[0-9]{7}$/;//Numero
         var regExp1 = /^[A-Za-zñÑáéíóúÁÉÍÓÚ]+\s?[A-Za-zñÑáéíóúÁÉÍÓÚ]+$/;//Nombre
         var regExp2 = /^[0-9]{7,}$/;//Cedula
-        var regExp3 = /^[0-9]{7,}$/;//Correo
+        var regExp3 = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;//Correo
 
         if((telefono_celular.val() == '') && (telefono_habitacion.val() == '')) {
           telefono_celular.addClass('border border-danger campoNulo');
