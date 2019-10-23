@@ -94,7 +94,7 @@
 
           <tr>
             <th scope="row">{!! Form::label('correo', 'Correo') !!}</th>
-            <td>{!! Form::text('correo', null, [ 'class' => 'form-control', 'placeholder' => 'mherrera@farmacia72.com']) !!}</td>
+            <td>{!! Form::email('correo', null, [ 'class' => 'form-control', 'placeholder' => 'mherrera@farmacia72.com']) !!}</td>
           </tr>
 
           <tr>
