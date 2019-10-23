@@ -100,6 +100,13 @@
     $FHoy = date('Y-m-d H:i:s');
     //$SedeDestino = FG_Nombre_Sede(MiUbicacion());
     $SedeDestino = FG_Nombre_Sede('FTN');
+
+    //$SedeOrigen = FG_Nombre_Sede(MiUbicacion());
+    $SedeOrigen = FG_Nombre_Sede('FTN');
+
+    //$SiglasOrigen = MiUbicacion();
+    $SiglasOrigen = 'FTN';
+
     $Operador = auth()->user()->name;
     ?>
 
@@ -146,7 +153,9 @@
           <tr>
             <th scope="row">{!! Form::label('destino', 'Destino') !!}</th>
             <td><label id="SedeD" name="SedeD"><?php echo($SedeDestino); ?></td>
-            <input id="SedeDestino" type="hidden" value="{{$SedeDestino}}">
+            <input id="SedeDestino" name="SedeDestino" type="hidden" value="{{$SedeDestino}}">
+            <input id="SedeOrigen" name="SedeOrigen" type="hidden" value="{{$SedeOrigen}}">
+            <input id="SiglasOrigen" name="SiglasOrigen" type="hidden" value="{{$SiglasOrigen}}">
           </tr>
           <tr>
             <th>Fecha estimada de despacho</th>

@@ -50,7 +50,49 @@ class OrdenCompraController extends Controller
      */
     public function store(Request $request)
     {
-        //
+      try{
+        $OrdenCompra = new OrdenCompra();
+
+        $sede_origen = $request->input('SedeOrigen');
+
+      /*INICIO DE SEDE DESTINO*/
+        if(($request->input('CDD'))=='SI'){
+          $sede_destino = 'CENTRO DE DISTRIBUCION';
+        }
+        else{
+          $sede_destino = $request->input('SedeDestino');
+        }
+      /*FIN DE SEDE DESTINO*/
+
+      /*INICIO DE CONDICION*/
+        if(($request->input('condicion'))=='CREDITO'){
+          $dias_credito = intval($request->input('dias_credito'));
+        }
+        else{
+          $dias_credito = 0;
+        }
+      /*FIN DE CONDICION*/
+
+      /*INICIO DE ASIGNACION DE CODIGO*/
+        $UltimaOrden = 
+        OrdenCompra::orderBy('id','desc')
+        ->take(1)->get();
+        if(!empty($UltimaOrden[0])){
+          $UltimoId = $UltimaOrden->id;
+        }
+        else{
+          $UltimoId = 0;
+        }
+        $UltimoId++;
+        $SiglasOrigen = $request->input('SiglasOrigen');
+        $CodigoOrden =  ''.$SiglasOrigen.''.$UltimoId;
+      /*FIN DE ASIGNACION DE CODIGO*/
+          
+        //return redirect()->route('ordenCompra.index')->with('Saved', ' Informacion');
+      }
+      catch(\Illuminate\Database\QueryException $e){
+        return back()->with('Error', 'Error');
+      }
     }
 
     /**
