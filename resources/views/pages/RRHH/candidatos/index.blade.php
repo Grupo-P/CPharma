@@ -119,8 +119,7 @@
             <th scope="col" class="stickyCP">Nombres</th>
             <th scope="col" class="stickyCP">Apellidos</th>
             <th scope="col" class="stickyCP">Cédula</th>
-            <th scope="col" class="stickyCP">Teléfono</th>          
-            <th scope="col" class="stickyCP">Correo</th>
+            <th scope="col" class="stickyCP">Teléfono</th>
             <th scope="col" class="stickyCP">Estatus</th>
             <th scope="col" class="stickyCP">Acciones</th>
         </tr>
@@ -144,7 +143,6 @@
             } 
           ?>
 
-          <td>{{$candidato->correo}}</td>
           <td>{{$candidato->estatus}}</td>
 
           <!-- ***************** VALIDACION DE ROLES ***************** -->
