@@ -135,7 +135,7 @@
                   </td>
 
                   <td>
-                    {!! Form::text('cedula', null, [ 'class' => 'form-control', 'placeholder' => '24921001', 'pattern' => '^[0-9]{7,}$', 'title' => 'Debe utilizar el patrón especificado [0-9]', 'required']) !!}
+                    {!! Form::text('cedula', null, [ 'class' => 'form-control', 'placeholder' => '24921001', 'required']) !!}
                   </td>
                 </tr>
               </table>
@@ -217,16 +217,22 @@
     $(document).ready(function() {
       $('[data-toggle="tooltip"]').tooltip();
 
+      var nombres = $('#nombres');
+      var apellidos = $('#apellidos');
+      var cedula = $('#cedula');
       var telefono_celular = $('#telefono_celular');
       var telefono_habitacion = $('#telefono_habitacion');
+      var correo = $('#correo');
       var enviar = $('#enviar');
       var crear_candidato = $('#crear_candidato');
 
       enviar.click(function(e) {
         e.preventDefault();
 
-        var regExp = /^0[1246]{3}-[0-9]{7}$/;
-        var regExp1 = /^[A-Za-zñÑáéíóúÁÉÍÓÚ]+\s?[A-Za-zñÑáéíóúÁÉÍÓÚ]+$/;
+        var regExp = /^0[1246]{3}-[0-9]{7}$/;//Numero
+        var regExp1 = /^[A-Za-zñÑáéíóúÁÉÍÓÚ]+\s?[A-Za-zñÑáéíóúÁÉÍÓÚ]+$/;//Nombre
+        var regExp2 = /^[0-9]{7,}$/;//Cedula
+        var regExp3 = /^[0-9]{7,}$/;//Correo
 
         if((telefono_celular.val() == '') && (telefono_habitacion.val() == '')) {
           telefono_celular.addClass('border border-danger campoNulo');
