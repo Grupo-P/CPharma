@@ -56,7 +56,15 @@
 
         <tbody>
           <tr>
-            <th scope="row">{!! Form::label('tipo_prueba', 'Tipo de Prueba') !!}</th>
+             <tr>
+                <th scope="row">{!! Form::label('tipo_prueba', 'Tipo de prueba') !!}</th>
+                <td>{!! Form::text('tipo_prueba', null, [ 'class' => 'form-control', 'placeholder' => 'Proyectiva', 'autofocus']) !!}</td>
+            </tr>
+            <tr>
+                <th scope="row">{!! Form::label('nombre_prueba', 'Nombre de prueba') !!}</th>
+                <td>{!! Form::text('nombre_prueba', null, [ 'class' => 'form-control', 'placeholder' => 'Zavic']) !!}</td>
+            </tr>
+          {{--   <th scope="row">{!! Form::label('tipo_prueba', 'Tipo de Prueba') !!}</th>
             <td>
               {!! Form::select('tipo_prueba', [
                 'Proyectiva' => 'Proyectiva', 
@@ -68,7 +76,7 @@
 
           <tr>
             <th scope="row">{!! Form::label('nombre_prueba', 'Nombre de Prueba') !!}</th>
-            <td>
+             <td>
               {!! Form::select('nombre_prueba', [
                 'Arbol/Casa/Persona' => 'Arbol/Casa/Persona',
                 'Figura humana' => 'Figura humana', 
@@ -82,8 +90,8 @@
                 'Test Domino48' => 'Test Domino48',
                 'Zavic' => 'Zavic',
               ], null, ['class' => 'form-control']) !!}
-            </td>
-          </tr>
+            </td> 
+          </tr> --}}
 
         </tbody>
       </table>

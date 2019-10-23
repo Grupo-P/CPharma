@@ -12,4 +12,15 @@ class RH_Prueba extends Model
      * @var string
      */
     protected $table = 'rh_pruebas';
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+    	'tipo_prueba',
+    	'nombre_prueba',
+    	'user'
+    ];
 }
