@@ -49,7 +49,7 @@ class RH_CandidatoController extends Controller {
         if(RH_Candidato::where('cedula', '=', $cedula)->exists()) {
             return back()->with('Error1', ' Error');
         }
-        else if(RH_Candidato::where('cedula', '=', $cedula)->exists()) {
+        else if(RH_Candidato::where('correo', '=', $correo)->exists()) {
             return back()->with('Error2', ' Error');
         }
         else {
