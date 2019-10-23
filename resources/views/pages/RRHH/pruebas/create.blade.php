@@ -70,7 +70,7 @@
             <th scope="row">{!! Form::label('nombre_prueba', 'Nombre de Prueba') !!}</th>
             <td>
               {!! Form::select('nombre_prueba', [
-                'Arbol/Cosa/Persona' => 'Arbol/Cosa/Persona',
+                'Arbol/Casa/Persona' => 'Arbol/Casa/Persona',
                 'Figura humana' => 'Figura humana', 
                 'Figura humana bajo la luvia' => 'Figura humana bajo la lluvia',
                 'Wartegg' => 'Wartegg',
