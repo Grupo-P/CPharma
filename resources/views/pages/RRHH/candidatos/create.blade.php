@@ -181,23 +181,40 @@
         else {
           var regExp = /^0[1246]{3}-[0-9]{7}$/;
 
-          if(regExp.test(e.target.value)) {
-            crear_candidato.submit();
+          if((telefono_celular.val() != '') && (telefono_habitacion.val() != '')) {
+
+            if((regExp.test(telefono_celular.val())) 
+              && (regExp.test(telefono_habitacion.val()))) {
+              crear_candidato.submit();
+            }
+            else {
+              telefono_celular.addClass('border border-danger campoNulo');
+              telefono_habitacion.addClass('border border-danger campoNulo');
+
+              telefono_celular.attr('placeholder', 'El formato esperado es: xxxx-xxxxxxx');
+              telefono_habitacion.attr('placeholder', 'El formato esperado es: xxxx-xxxxxxx');
+            }
+          }
+          else if(telefono_celular.val() != '') {
+
+            if(regExp.test(telefono_celular.val())) {
+              crear_candidato.submit();
+            }
+            else {
+              telefono_celular.addClass('border border-danger campoNulo');
+              telefono_celular.attr('placeholder', 'El formato esperado es: xxxx-xxxxxxx');
+            }
           }
           else {
-            switch(e.target.id) {
-            case 'telefono_celular':
-              telefono_celular.addClass('border border-danger campoNulo');
-              telefono_celular.attr('placeholder', 'El formato es: xxxx-xxxxxxx');
-            break;
 
-            case 'telefono_habitacion':
+            if(regExp.test(telefono_habitacion.val())) {
+              crear_candidato.submit();
+            }
+            else {
               telefono_habitacion.addClass('border border-danger campoNulo');
-              telefono_habitacion.attr('placeholder', 'El formato es: xxxx-xxxxxxx');
-            break;
+              telefono_habitacion.attr('placeholder', 'El formato esperado es: xxxx-xxxxxxx');
+            }
           }
-          }
-          
         }
       });
 
