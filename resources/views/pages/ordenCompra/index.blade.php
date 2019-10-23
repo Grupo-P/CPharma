@@ -74,7 +74,7 @@
 
 	<h1 class="h5 text-info">
 		<i class="far fa-file-alt"></i>
-		Roles
+		Orden de compra
 	</h1>
 
 	<hr class="row align-items-start col-12">
@@ -104,19 +104,22 @@
 	  	<thead class="thead-dark">
 		    <tr>
 		      	<th scope="col" class="stickyCP">#</th>
-		      	<th scope="col" class="stickyCP">Orden Compra</th>
+		      	<th scope="col" class="stickyCP">Orden compra</th>
 		      	<th scope="col" class="stickyCP">Proveedor</th>
 		      	<th scope="col" class="stickyCP">Fecha de la orden</th>
 		      	<th scope="col" class="stickyCP">Fecha estimada de despacho</th>
-		      	<th scope="col" class="stickyCP">Dias Transcurridos</th>
-		      	<th scope="col" class="stickyCP">Monto Total Bs</th>
-		      	<th scope="col" class="stickyCP">Monto Total $</th>
+		      	<th scope="col" class="stickyCP">Dias transcurridos</th>
+		      	<th scope="col" class="stickyCP">Monto total Bs</th>
+		      	<th scope="col" class="stickyCP">Monto total $</th>
 		      	<th scope="col" class="stickyCP">Unidades</th>
 		      	<th scope="col" class="stickyCP">Condicion crediticia</th>
 		      	<th scope="col" class="stickyCP">Estatus</th>
+		      	<th scope="col" class="stickyCP">Operador</th>
+		      	<th scope="col" class="stickyCP">Monto real</th>
+		      	<th scope="col" class="stickyCP">Fecha de aprobacion</th>
 		      	<th scope="col" class="stickyCP">Calificacion</th>
-		      	<th scope="col" class="stickyCP">Monto Real</th>
-		      	<th scope="col" class="stickyCP">Aprobacion</th>
+		      	<th scope="col" class="stickyCP">Fecha de recepcion</th>
+		      	<th scope="col" class="stickyCP">Fecha de ingreso</th>
 		      	<th scope="col" class="stickyCP">Acciones</th>
 		    </tr>
 	  	</thead>

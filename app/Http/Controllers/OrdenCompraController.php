@@ -4,6 +4,7 @@ namespace compras\Http\Controllers;
 
 use Illuminate\Http\Request;
 use compras\OrdenCompra;
+use compras\Sede;
 use compras\User;
 use compras\Auditoria;
 
@@ -37,7 +38,8 @@ class OrdenCompraController extends Controller
      */
     public function create()
     {
-        //
+       $sedes = Sede::pluck('razon_social','id');
+       return view('pages.ordenCompra.create', compact('sedes'));
     }
 
     /**
