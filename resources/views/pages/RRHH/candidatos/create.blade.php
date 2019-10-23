@@ -162,6 +162,19 @@
       var enviar = $('#enviar');
       var crear_candidato = $('#crear_candidato');
 
+      enviar.click(function(e) {
+        e.preventDefault();
+
+        if((telefono_celular.val() == '') && (telefono_habitacion.val() == '')) {
+          telefono_celular.css({
+            'border': '2px solid #f00'
+          });
+
+          telefono_habitacion.css({
+            'border': '2px solid #f00'
+          });
+        }
+      });
 
     });
     $('#exampleModalCenter').modal('show');
