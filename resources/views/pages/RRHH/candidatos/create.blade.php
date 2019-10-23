@@ -90,12 +90,12 @@
 
           <tr>
             <th scope="row">{!! Form::label('telefono_celular', 'Teléfono celular') !!}</th>
-            <td>{!! Form::text('telefono_celular', null, [ 'class' => 'form-control', 'placeholder' => '0414-1234567', 'pattern' => '^0[1246]{3}-[0-9]{7}$', 'title' => 'Debe utilizar el patrón especificado [xxxx-xxxxxxx]']) !!}</td>
+            <td>{!! Form::text('telefono_celular', null, [ 'class' => 'form-control', 'placeholder' => '0414-1234567']) !!}</td>
           </tr>
 
           <tr>
             <th scope="row">{!! Form::label('telefono_habitacion', 'Teléfono de habitación') !!}</th>
-            <td>{!! Form::text('telefono_habitacion', null, [ 'class' => 'form-control', 'placeholder' => '0261-1234567', 'pattern' => '^0[1246]{3}-[0-9]{7}$', 'title' => 'Debe utilizar el patrón especificado [xxxx-xxxxxxx]']) !!}</td>
+            <td>{!! Form::text('telefono_habitacion', null, [ 'class' => 'form-control', 'placeholder' => '0261-1234567']) !!}</td>
           </tr>
 
           <tr>
@@ -179,11 +179,34 @@
           telefono_habitacion.attr('placeholder', 'Debe colocar al menos un teléfono');
         }
         else {
-          crear_candidato.submit();
+          var regExp = /^0[1246]{3}-[0-9]{7}$/;
+
+          if(regExp.test(e.target.value)) {
+            crear_candidato.submit();
+          }
+          else {
+            
+          }
+          
         }
       });
 
-      
+      $('#telefono_celular, #telefono_habitacion').on({
+        keypress: function(e) {
+          telefono_celular.removeClass('border border-danger campoNulo');
+          telefono_habitacion.removeClass('border border-danger campoNulo');
+
+          switch(e.target.id) {
+            case 'telefono_celular':
+              telefono_habitacion.attr('placeholder', '0261-1234567');
+            break;
+
+            case 'telefono_habitacion':
+              telefono_celular.attr('placeholder', '0424-1234567');
+            break;
+          }
+        }
+      });
 
     });
     $('#exampleModalCenter').modal('show');
