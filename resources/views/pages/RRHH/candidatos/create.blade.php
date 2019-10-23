@@ -234,7 +234,17 @@
         var regExp2 = /^[0-9]{7,}$/;//Cedula
         var regExp3 = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;//Correo
 
-        if((telefono_celular.val() == '') && (telefono_habitacion.val() == '')) {
+        if((regExp1.test(nombres)) 
+          && (regExp1.test(apellidos)) 
+          && (regExp2.test(cedula))
+          && (regExp.test(telefono_celular))
+          && (regExp.test(telefono_habitacion))
+          && (regExp3.test(correo))
+        ) {
+          crear_candidato.submit();
+        }
+
+        /*if((telefono_celular.val() == '') && (telefono_habitacion.val() == '')) {
           telefono_celular.addClass('border border-danger campoNulo');
           telefono_habitacion.addClass('border border-danger campoNulo');
 
@@ -246,7 +256,7 @@
 
             if((regExp.test(telefono_celular.val())) 
               && (regExp.test(telefono_habitacion.val()))) {
-              crear_candidato.submit();
+              
             }
             else {
               telefono_celular.addClass('border border-danger campoNulo');
@@ -261,7 +271,7 @@
           else if(telefono_celular.val() != '') {
 
             if(regExp.test(telefono_celular.val())) {
-              crear_candidato.submit();
+              
             }
             else {
               telefono_celular.addClass('border border-danger campoNulo');
@@ -272,7 +282,7 @@
           else {
 
             if(regExp.test(telefono_habitacion.val())) {
-              crear_candidato.submit();
+              
             }
             else {
               telefono_habitacion.addClass('border border-danger campoNulo');
@@ -280,10 +290,10 @@
               telefono_habitacion.attr('placeholder', 'El formato esperado es: xxxx-xxxxxxx');
             }
           }
-        }
+        }*/
       });
 
-      $('#telefono_celular, #telefono_habitacion').on({
+      /*$('#telefono_celular, #telefono_habitacion').on({
         keypress: function(e) {
           telefono_celular.removeClass('border border-danger campoNulo');
           telefono_habitacion.removeClass('border border-danger campoNulo');
@@ -298,7 +308,7 @@
             break;
           }
         }
-      });
+      });*/
 
     });
     $('#exampleModalCenter').modal('show');
