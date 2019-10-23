@@ -56,17 +56,17 @@
 
         <tbody>
           <tr>
-            <th scope="row">{!! Form::label('nombres', 'Nombres') !!}</th>
+            <th scope="row">{!! Form::label('nombres', 'Nombres *') !!}</th>
             <td>{!! Form::text('nombres', null, [ 'class' => 'form-control', 'placeholder' => 'Maria Raquel', 'pattern' => '^[A-Za-zñÑáéíóúÁÉÍÓÚ]+\s?[A-Za-zñÑáéíóúÁÉÍÓÚ]+$', 'title' => 'Debe utilizar el patrón especificado [A-Z]', 'autofocus', 'required']) !!}</td>
           </tr>
 
           <tr>
-            <th scope="row">{!! Form::label('apellidos', 'Apellidos') !!}</th>
+            <th scope="row">{!! Form::label('apellidos', 'Apellidos *') !!}</th>
             <td>{!! Form::text('apellidos', null, [ 'class' => 'form-control', 'placeholder' => 'Herrera Perez', 'pattern' => '^[A-Za-zñÑáéíóúÁÉÍÓÚ]+\s?[A-Za-zñÑáéíóúÁÉÍÓÚ]+$', 'title' => 'Debe utilizar el patrón especificado [A-Z]', 'required']) !!}</td>
           </tr>
 
           <tr>
-            <th scope="row">{!! Form::label('cedula', 'Cédula') !!}</th>
+            <th scope="row">{!! Form::label('cedula', 'Cédula *') !!}</th>
             <td>
               <table style="width: 100%;">
                 <tr style="background-color: transparent;">
@@ -75,7 +75,7 @@
                   </td>
 
                   <td>
-                    {!! Form::text('cedula', null, [ 'class' => 'form-control', 'placeholder' => '24921001', 'required']) !!}
+                    {!! Form::text('cedula', null, [ 'class' => 'form-control', 'placeholder' => '24921001', 'pattern' => '^[0-9]{7,}$', 'title' => 'Debe utilizar el patrón especificado [0-9]', 'required']) !!}
                   </td>
                 </tr>
               </table>
@@ -138,7 +138,7 @@
           </tr>
 
           <tr>
-            <th scope="row">{!! Form::label('direccion', 'Dirección') !!}</th>
+            <th scope="row">{!! Form::label('direccion', 'Dirección *') !!}</th>
             <td>{!! Form::textarea('direccion', null, [ 'class' => 'form-control', 'placeholder' => 'Av. 15 Delicias con calle 72', 'rows' => '3', 'required']) !!}</td>
           </tr>
 
