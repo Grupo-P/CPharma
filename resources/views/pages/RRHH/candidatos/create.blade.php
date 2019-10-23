@@ -185,7 +185,17 @@
             crear_candidato.submit();
           }
           else {
-            
+            switch(e.target.id) {
+            case 'telefono_celular':
+              telefono_celular.addClass('border border-danger campoNulo');
+              telefono_celular.attr('placeholder', 'El formato es: xxxx-xxxxxxx');
+            break;
+
+            case 'telefono_habitacion':
+              telefono_habitacion.addClass('border border-danger campoNulo');
+              telefono_habitacion.attr('placeholder', 'El formato es: xxxx-xxxxxxx');
+            break;
+          }
           }
           
         }
