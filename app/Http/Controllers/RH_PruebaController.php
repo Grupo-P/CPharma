@@ -68,7 +68,9 @@ class RH_PruebaController extends Controller {
      */
     public function show($id)
     {
-        //
+        $pruebas = RH_Prueba::find($id);
+
+        return view('pages.RRHH.pruebas.show', compact('pruebas'));
     }
 
     /**
@@ -79,7 +81,8 @@ class RH_PruebaController extends Controller {
      */
     public function edit($id)
     {
-        //
+        $pruebas = RH_Prueba::find($id);
+        return view('pages.RRHH.pruebas.edit', compact('pruebas'));
     }
 
     /**
@@ -91,7 +94,18 @@ class RH_PruebaController extends Controller {
      */
     public function update(Request $request, $id)
     {
-        //
+        try{
+            $pruebas = RH_Prueba::find($id);
+            $pruebas->fill($request->all());
+            $pruebas->user = auth()->user()->name;
+            // $pruebas->observacion = $request->input('observacion');
+            $pruebas->save();
+
+            return redirect()->route('pruebas.index')->with('Updated', ' Informacion');
+        }
+        catch(\Illuminate\Database\QueryException $e){
+            return back()->with('Error', ' Error');
+        }
     }
 
     /**
