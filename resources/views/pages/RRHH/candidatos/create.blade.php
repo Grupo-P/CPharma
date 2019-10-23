@@ -117,12 +117,12 @@
         <tbody>
           <tr>
             <th scope="row">{!! Form::label('nombres', 'Nombres *', ['title' => 'Este campo es requerido']) !!}</th>
-            <td>{!! Form::text('nombres', null, [ 'class' => 'form-control', 'placeholder' => 'Maria Raquel', 'pattern' => '^[A-Za-zñÑáéíóúÁÉÍÓÚ]+\s?[A-Za-zñÑáéíóúÁÉÍÓÚ]+$', 'title' => 'Debe utilizar el patrón especificado [A-Z]', 'autofocus', 'required']) !!}</td>
+            <td>{!! Form::text('nombres', null, [ 'class' => 'form-control', 'placeholder' => 'Maria Raquel', 'autofocus', 'required']) !!}</td>
           </tr>
 
           <tr>
             <th scope="row">{!! Form::label('apellidos', 'Apellidos *', ['title' => 'Este campo es requerido']) !!}</th>
-            <td>{!! Form::text('apellidos', null, [ 'class' => 'form-control', 'placeholder' => 'Herrera Perez', 'pattern' => '^[A-Za-zñÑáéíóúÁÉÍÓÚ]+\s?[A-Za-zñÑáéíóúÁÉÍÓÚ]+$', 'title' => 'Debe utilizar el patrón especificado [A-Z]', 'required']) !!}</td>
+            <td>{!! Form::text('apellidos', null, [ 'class' => 'form-control', 'placeholder' => 'Herrera Perez', 'required']) !!}</td>
           </tr>
 
           <tr>
@@ -225,6 +225,9 @@
       enviar.click(function(e) {
         e.preventDefault();
 
+        var regExp = /^0[1246]{3}-[0-9]{7}$/;
+        var regExp1 = /^[A-Za-zñÑáéíóúÁÉÍÓÚ]+\s?[A-Za-zñÑáéíóúÁÉÍÓÚ]+$/;
+
         if((telefono_celular.val() == '') && (telefono_habitacion.val() == '')) {
           telefono_celular.addClass('border border-danger campoNulo');
           telefono_habitacion.addClass('border border-danger campoNulo');
@@ -233,8 +236,6 @@
           telefono_habitacion.attr('placeholder', 'Debe colocar al menos un teléfono');
         }
         else {
-          var regExp = /^0[1246]{3}-[0-9]{7}$/;
-
           if((telefono_celular.val() != '') && (telefono_habitacion.val() != '')) {
 
             if((regExp.test(telefono_celular.val())) 
