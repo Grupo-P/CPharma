@@ -100,9 +100,12 @@
     $FHoy = date('Y-m-d H:i:s');
     //$SedeDestino = FG_Nombre_Sede(MiUbicacion());
     $SedeDestino = FG_Nombre_Sede('FTN');
+    $Operador = auth()->user()->name;
     ?>
 
     {!! Form::open(['route' => 'ordenCompra.store', 'method' => 'POST']) !!}
+
+    {!! Form::hidden('Operador', $Operador) !!}
     <fieldset>
 
         <table class="table table-borderless table-striped">
@@ -116,6 +119,10 @@
           <tr>
               <th scope="row">{!! Form::label('fecha_actual)', 'Fecha Actual') !!}</th>
               <td><label><?php echo($FHoy); ?></label></td>
+          </tr>
+          <tr>
+              <th scope="row">{!! Form::label('Operador)', 'Operador') !!}</th>
+              <td><label><?php echo($Operador); ?></label></td>
           </tr>
           <tr>
               <th scope="row">{!! Form::label('proveedor', 'Proveedor') !!}</th>
@@ -164,6 +171,20 @@
               <input type="number" id="dias_credito" name="dias_credito" value="0" class="form-control" disabled="disabled">
             </td>
           </tr>
+          <tr>
+              <th scope="row">{!! Form::label('moneda','Moneda') !!}
+              </th>
+              <td>
+                <select name="moneda" id="moneda" class="form-control">
+                  <option value="<?php echo(SigVe); ?>"><?php echo(SigVe); ?></option>
+                  <option value="<?php echo(SigDolar); ?>"><?php echo(SigDolar); ?></option>
+                </select>
+              </td>
+          </tr>
+          <tr>
+            <th scope="row">{!! Form::label('observacion', 'Nota') !!}</th>
+            <td>{!! Form::textarea('observacion', null, [ 'class' => 'form-control', 'placeholder' => 'Detalles importantes', 'rows' => '3']) !!}</td>
+        </tr>
         </tbody>
         </table>
         {!! Form::submit('Guardar', ['class' => 'btn btn-outline-success btn-md']) !!}
