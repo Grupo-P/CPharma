@@ -84,12 +84,12 @@
 
           <tr>
             <th scope="row">{!! Form::label('telefono_celular', 'Teléfono celular') !!}</th>
-            <td>{!! Form::text('telefono_celular', null, [ 'class' => 'form-control', 'placeholder' => '0414-1234567']) !!}</td>
+            <td>{!! Form::text('telefono_celular', null, [ 'class' => 'form-control', 'placeholder' => '0414-1234567', 'pattern' => '^0[1246]{3}-[0-9]{7}$', 'title' => 'Debe utilizar el patrón especificado [xxxx-xxxxxxx]']) !!}</td>
           </tr>
 
           <tr>
             <th scope="row">{!! Form::label('telefono_habitacion', 'Teléfono de habitación') !!}</th>
-            <td>{!! Form::text('telefono_habitacion', null, [ 'class' => 'form-control', 'placeholder' => '0261-1234567']) !!}</td>
+            <td>{!! Form::text('telefono_habitacion', null, [ 'class' => 'form-control', 'placeholder' => '0261-1234567', 'pattern' => '^0[1246]{3}-[0-9]{7}$', 'title' => 'Debe utilizar el patrón especificado [xxxx-xxxxxxx]']) !!}</td>
           </tr>
 
           <tr>
