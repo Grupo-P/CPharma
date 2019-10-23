@@ -62,7 +62,7 @@
 
           <tr>
             <th scope="row">{!! Form::label('apellidos', 'Apellidos') !!}</th>
-            <td>{!! Form::text('apellidos', null, [ 'class' => 'form-control', 'placeholder' => 'Herrera Perez', 'required']) !!}</td>
+            <td>{!! Form::text('apellidos', null, [ 'class' => 'form-control', 'placeholder' => 'Herrera Perez', 'pattern' => '^[A-Za-zñÑáéíóúÁÉÍÓÚ]+\s?[A-Za-zñÑáéíóúÁÉÍÓÚ]+$', 'title' => 'Debe utilizar el patrón especificado [A-Z]', 'required']) !!}</td>
           </tr>
 
           <tr>
