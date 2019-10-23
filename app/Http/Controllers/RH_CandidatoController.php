@@ -42,9 +42,9 @@ class RH_CandidatoController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request) {
-        if (User::where('email', '=', Input::get('email'))->exists()) {
+        /*if (User::where('email', '=', Input::get('email'))->exists()) {
         
-        }
+        }*/
 
         try{
             $candidatos = new RH_Candidato();
