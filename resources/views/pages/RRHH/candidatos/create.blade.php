@@ -57,7 +57,7 @@
         <tbody>
           <tr>
             <th scope="row">{!! Form::label('nombres', 'Nombres') !!}</th>
-            <td>{!! Form::text('nombres', null, [ 'class' => 'form-control', 'placeholder' => 'Maria Raquel', 'autofocus', 'required']) !!}</td>
+            <td>{!! Form::text('nombres', null, [ 'class' => 'form-control', 'placeholder' => 'Maria Raquel', 'pattern' => '^[A-Za-zñÑáéíóúÁÉÍÓÚ]+\s?[A-Za-zñÑáéíóúÁÉÍÓÚ]+$', 'title' => 'Debe utilizar el patrón especificado [A-Z]', 'autofocus', 'required']) !!}</td>
           </tr>
 
           <tr>
