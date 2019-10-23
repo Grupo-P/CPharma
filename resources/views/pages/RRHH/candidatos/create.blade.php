@@ -191,6 +191,8 @@
               telefono_celular.addClass('border border-danger campoNulo');
               telefono_habitacion.addClass('border border-danger campoNulo');
 
+              telefono_celular.val('');
+              telefono_habitacion.val('');
               telefono_celular.attr('placeholder', 'El formato esperado es: xxxx-xxxxxxx');
               telefono_habitacion.attr('placeholder', 'El formato esperado es: xxxx-xxxxxxx');
             }
