@@ -1828,8 +1828,13 @@
 			$FchaCambio = $FAyer;
   	}
 
-		$result = sqlsrv_query($conn,"SELECT * FROM CP_Etiqueta_C4 ORDER BY IdArticulo ASC");
-
+  	if ($tipo=='NO DOLARIZADO'){
+  		$result = sqlsrv_query($conn,"SELECT * FROM CP_Etiqueta_C4 WHERE CP_Etiqueta_C4.Dolarizado = 0 ORDER BY IdArticulo ASC");
+  	}
+  	else if ($tipo=='DOLARIZADO'){
+  		$result = sqlsrv_query($conn,"SELECT * FROM CP_Etiqueta_C4 WHERE CP_Etiqueta_C4.Dolarizado <> 0 ORDER BY IdArticulo ASC");
+  	}
+		
 		$sql = QCleanTable('CP_Etiqueta_C1');
 		sqlsrv_query($conn,$sql);
 		$sql = QCleanTable('CP_Etiqueta_C2');
@@ -2706,10 +2711,6 @@
 		//$SedeConnection = 'FTN';
   	$conn = ConectarSmartpharma($SedeConnection);
   	$connCPharma = ConectarXampp();	
-
-  	$FHoy = date("Y-m-d");
-		$FManana = date("Y-m-d",strtotime($FHoy."+1 days"));
-		$FAyer = date("Y-m-d",strtotime($FHoy."-1 days"));
 
 		$CuentaCard = 0;
 		$CuentaEtiqueta = 0;
