@@ -174,8 +174,16 @@
         if((telefono_celular.val() == '') && (telefono_habitacion.val() == '')) {
           telefono_celular.addClass('border border-danger campoNulo');
           telefono_habitacion.addClass('border border-danger campoNulo');
+
+          telefono_celular.attr('placeholder', 'Debe colocar al menos un teléfono');
+          telefono_habitacion.attr('placeholder', 'Debe colocar al menos un teléfono');
+        }
+        else {
+          crear_candidato.submit();
         }
       });
+
+      
 
     });
     $('#exampleModalCenter').modal('show');
