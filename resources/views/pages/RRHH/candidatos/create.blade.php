@@ -44,7 +44,7 @@
 
   <br/><br/>
 
-  {!! Form::open(['route' => 'candidatos.store', 'method' => 'POST']) !!}
+  {!! Form::open(['route' => 'candidatos.store', 'method' => 'POST', 'id' => 'crear_candidato']) !!}
     <fieldset>
       <table class="table table-borderless table-striped">
         <thead class="thead-dark">
@@ -149,13 +149,20 @@
         </tbody>
       </table>
 
-      {!! Form::submit('Guardar', ['class' => 'btn btn-outline-success btn-md']) !!}
+      {!! Form::submit('Guardar', ['class' => 'btn btn-outline-success btn-md', 'id' => 'enviar']) !!}
     </fieldset>
   {!! Form::close()!!}
 
   <script>
     $(document).ready(function() {
       $('[data-toggle="tooltip"]').tooltip();
+
+      var telefono_celular = $('#telefono_celular');
+      var telefono_habitacion = $('#telefono_habitacion');
+      var enviar = $('#enviar');
+      var crear_candidato = $('#crear_candidato');
+
+
     });
     $('#exampleModalCenter').modal('show');
   </script>
