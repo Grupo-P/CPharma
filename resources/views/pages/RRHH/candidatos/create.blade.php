@@ -4,6 +4,12 @@
   Candidato
 @endsection
 
+@section('scriptsHead')
+  <style>
+    .campoNulo {border-width: 3px !important;}
+  </style>
+@endsection
+
 @section('content')
   <!-- Modal Guardar -->
   @if(session('Error'))
@@ -166,13 +172,8 @@
         e.preventDefault();
 
         if((telefono_celular.val() == '') && (telefono_habitacion.val() == '')) {
-          telefono_celular.css({
-            'border': '2px solid #f00'
-          });
-
-          telefono_habitacion.css({
-            'border': '2px solid #f00'
-          });
+          telefono_celular.addClass('border border-danger campoNulo');
+          telefono_habitacion.addClass('border border-danger campoNulo');
         }
       });
 
