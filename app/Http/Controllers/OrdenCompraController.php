@@ -118,7 +118,7 @@ class OrdenCompraController extends Controller
      */
     public function show($id)
     {
-        //
+        return back()->with('Saved', ' Informacion');
     }
 
     /**
