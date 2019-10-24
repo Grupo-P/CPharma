@@ -185,6 +185,7 @@
             <th scope="col" class="CP-sticky bg-danger text-white">Venta diaria (Real)</th>
             <th scope="col" class="CP-sticky">Dias restantes</th>
             <th scope="col" class="CP-sticky bg-danger text-white">Dias restantes (Real)</th>
+            <th scope="col" class="CP-sticky">Acciones</th>
           </tr>
         </thead>
         <tbody>
@@ -249,6 +250,12 @@
       echo '<td align="center" class="bg-danger text-white">'.round($VentaDiariaQuiebre,2).'</td>';
       echo '<td align="center">'.round($DiasRestantes,2).'</td>';
       echo '<td align="center" class="bg-danger text-white">'.round($DiasRestantesQuiebre,2).'</td>';
+      echo'
+      <td style="width:140px;">
+        <a href="#" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Orden de compra" style="width:100%;">
+          <i class="fas fa-angle-double-right"></i>                
+        </a>
+      ';
       echo '</tr>';
       $contador++;
     }
@@ -582,3 +589,12 @@
     return $sql;
   }
 ?>
+
+@section('scriptsFoot')
+<script>
+  $(document).ready(function(){
+      $('[data-toggle="tooltip"]').tooltip();   
+  });
+  $('#exampleModalCenter').modal('show')
+</script>
+@endsection
