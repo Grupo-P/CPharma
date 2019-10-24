@@ -97,7 +97,6 @@
     //$ArtJson = FG_Armar_Json($sql,MiUbicacion());
     $ArtJson = FG_Armar_Json($sql,'FTN');
 
-    $FHoy = date('Y-m-d H:i:s');
     //$SedeDestino = FG_Nombre_Sede(MiUbicacion());
     $SedeDestino = FG_Nombre_Sede('FTN');
 
@@ -108,6 +107,7 @@
     $SiglasOrigen = 'FTN';
 
     $Operador = auth()->user()->name;
+    $FHoy = date('Y-m-d H:i:s');
     ?>
 
     {!! Form::open(['route' => 'ordenCompra.store', 'method' => 'POST']) !!}
@@ -135,7 +135,7 @@
               <th scope="row">{!! Form::label('proveedor', 'Proveedor') !!}</th>
               <td>   
                 <div class="autocomplete" style="width:100%;">
-                <input id="myInput" class="form-control" type="text" name="proveedor" placeholder="Ingrese el nombre del proveedor " onkeyup="conteo()"  required="required" autofocus="autofocus">
+                <input id="myInput" class="form-control" type="text" name="proveedor" placeholder="Ingrese el nombre del proveedor " onkeyup="conteo()"  required="required" autofocus="autofocus" autocomplete="off">
                 <input id="myId" name="IdP" type="hidden">
                 </div>
               </td>

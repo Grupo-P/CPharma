@@ -53,14 +53,21 @@ class OrdenCompraController extends Controller
       try{
         $OrdenCompra = new OrdenCompra();
 
-        $sede_origen = $request->input('SedeOrigen');
+        $OrdenCompra->proveedor = $request->input('proveedor');
+        $OrdenCompra->fecha_estimada_despacho = $request->input('fecha_estimada_despacho');
+        $OrdenCompra->moneda = $request->input('moneda');
+        $OrdenCompra->observacion = $request->input('observacion');
+        $OrdenCompra->sede_origen = $request->input('SedeOrigen');
+        $OrdenCompra->user = auth()->user()->name;
+        $OrdenCompra->estatus = 'ACTIVO';
+        $OrdenCompra->estado = 'EN PROCESO';
 
       /*INICIO DE SEDE DESTINO*/
         if(($request->input('CDD'))=='SI'){
-          $sede_destino = 'CENTRO DE DISTRIBUCION';
+          $OrdenCompra->sede_destino = 'CENTRO DE DISTRIBUCION';
         }
         else{
-          $sede_destino = $request->input('SedeDestino');
+          $OrdenCompra->sede_destino = $request->input('SedeDestino');
         }
       /*FIN DE SEDE DESTINO*/
 
@@ -71,24 +78,32 @@ class OrdenCompraController extends Controller
         else{
           $dias_credito = 0;
         }
+        $OrdenCompra->condicion_crediticia = $request->input('condicion');
+        $OrdenCompra->dias_credito = $dias_credito;
       /*FIN DE CONDICION*/
 
       /*INICIO DE ASIGNACION DE CODIGO*/
         $UltimaOrden = 
         OrdenCompra::orderBy('id','desc')
+        ->select('id')
         ->take(1)->get();
-        if(!empty($UltimaOrden[0])){
-          $UltimoId = $UltimaOrden->id;
+
+        if( (!empty($UltimaOrden[0])) &&
+            ((($UltimaOrden[0]['id'])!=0) 
+            || (($UltimaOrden[0]['id'])!=NULL)
+            || (($UltimaOrden[0]['id'])!=''))
+          ) {
+          $UltimoId = $UltimaOrden[0]['id'];
         }
         else{
           $UltimoId = 0;
         }
         $UltimoId++;
         $SiglasOrigen = $request->input('SiglasOrigen');
-        $CodigoOrden =  ''.$SiglasOrigen.''.$UltimoId;
+        $OrdenCompra->codigo =  ''.$SiglasOrigen.''.$UltimoId;
       /*FIN DE ASIGNACION DE CODIGO*/
-          
-        //return redirect()->route('ordenCompra.index')->with('Saved', ' Informacion');
+        $OrdenCompra->save();
+        return redirect()->route('ordenCompra.index')->with('Saved', ''.$OrdenCompra->codigo);
       }
       catch(\Illuminate\Database\QueryException $e){
         return back()->with('Error', 'Error');

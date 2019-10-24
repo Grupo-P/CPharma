@@ -4,6 +4,13 @@
     Orden de compra
 @endsection
 
+<?php
+	include(app_path().'\functions\config.php');
+  include(app_path().'\functions\functions.php');
+  include(app_path().'\functions\querys_mysql.php');
+  include(app_path().'\functions\querys_sqlserver.php');
+?>
+
 @section('content')
 
 	<!-- Modal Guardar -->
@@ -12,13 +19,13 @@
 		  <div class="modal-dialog modal-dialog-centered" role="document">
 		    <div class="modal-content">
 		      <div class="modal-header">
-		        <h5 class="modal-title text-info" id="exampleModalCenterTitle"><i class="fas fa-info text-info"></i>{{ session('Saved') }}</h5>
+		        <h5 class="modal-title text-info" id="exampleModalCenterTitle"><i class="fas fa-info text-info"></i> Orden de compra: {{ session('Saved') }}</h5>
 		        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
 		          <span aria-hidden="true">&times;</span>
 		        </button>
 		      </div>
 		      <div class="modal-body">
-		        <h4 class="h6">Orden de compra generada con exito</h4>
+		        <h4 class="h6">Orden de compra generada con exito, codigo: {{ session('Saved') }}</h4>
 		      </div>
 		      <div class="modal-footer">
 		        <button type="button" class="btn btn-outline-success" data-dismiss="modal">Aceptar</button>
@@ -99,7 +106,7 @@
 	    </tr>
 	</table>
 	<br/>
-	
+
 	<table class="table table-striped table-borderless col-12 sortable" id="myTable">
 	  	<thead class="thead-dark">
 		    <tr>
@@ -113,6 +120,7 @@
 		      	<th scope="col" class="stickyCP">Monto total $</th>
 		      	<th scope="col" class="stickyCP">Unidades</th>
 		      	<th scope="col" class="stickyCP">Condicion crediticia</th>
+		      	<th scope="col" class="stickyCP">Dias de credito</th>
 		      	<th scope="col" class="stickyCP">Estatus</th>
 		      	<th scope="col" class="stickyCP">Operador</th>
 		      	<th scope="col" class="stickyCP">Monto real</th>
@@ -125,15 +133,35 @@
 	  	</thead>
 	  	<tbody>
 		@foreach($OrdenCompra as $ordenCompra)
+			<?php 
+				if($ordenCompra->estado=='CERRADA'){
+					$Dias = FG_Rango_Dias($ordenCompra->created_at,$ordenCompra->updated_at);
+				}
+				else{
+					$Dias = FG_Rango_Dias($ordenCompra->created_at,date('Y-m-d H:i:s'));
+				}
+			?>
+
 		    <tr>
 		      <th>{{$ordenCompra->id}}</th>
-		      <td>{{$ordenCompra->nombre}}</td>
-		      <td>{{$ordenCompra->read}}</td>
-		      <td>{{$ordenCompra->create}}</td>
-		      <td>{{$ordenCompra->update}}</td>
-		      <td>{{$ordenCompra->delete}}</td>
-		      <td>{{$ordenCompra->estatus}}</td>
-		      
+		      <td>{{$ordenCompra->codigo}}</td>
+		      <td>{{$ordenCompra->proveedor}}</td>
+		      <td>{{$ordenCompra->created_at}}</td>
+		      <td>{{$ordenCompra->fecha_estimada_despacho}}</td>
+		      <td>{{$Dias}}</td>
+		      <td>{{$ordenCompra->montoTotalBs}}</td>
+		      <td>{{$ordenCompra->montoTotalUsd}}</td>
+		      <td>{{$ordenCompra->totalUnidades}}</td>
+		      <td>{{$ordenCompra->condicion_crediticia}}</td>
+		      <td>{{$ordenCompra->dias_credito}}</td>
+		      <td>{{$ordenCompra->estado}}</td>
+		      <td>{{$ordenCompra->user}}</td>
+		      <td>{{$ordenCompra->montoTotalReal}}</td>
+		      <td>{{$ordenCompra->fecha_aprobacion}}</td>
+		      <td>{{$ordenCompra->calificacion}}</td>
+		      <td>{{$ordenCompra->fecha_recepcion}}</td>
+		      <td>{{$ordenCompra->fecha_ingreso}}</td>
+
 		    <!-- Inicio Validacion de ROLES -->
 		      <td style="width:140px;">
 				
@@ -187,11 +215,9 @@
 		      		</a>		
 				<?php
 				}
-				?>
-										
-		      </td>
+				?>				
+		     </td>
 		    <!-- Fin Validacion de ROLES -->
-
 		    </tr>
 		@endforeach
 		</tbody>
