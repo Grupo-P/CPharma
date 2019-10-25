@@ -11,7 +11,7 @@
   </style>
 
   <script>
-    var activarDanger = (Input) => {
+    var activarDangerRequerido = (Input) => {
       Input.addClass('border border-danger campoNulo');
       Input.attr('placeholder', 'Este campo es requerido');
     };
@@ -262,19 +262,19 @@
           || (direccion.val() == '')
         ) {
           if(nombres.val() == '') {
-            activarDanger(nombres);
+            activarDangerRequerido(nombres);
           }
 
           if(apellidos.val() == '') {
-            activarDanger(apellidos);
+            activarDangerRequerido(apellidos);
           }
 
           if(cedula.val() == '') {
-            activarDanger(cedula);
+            activarDangerRequerido(cedula);
           }
 
           if(direccion.val() == '') {
-            activarDanger(direccion);
+            activarDangerRequerido(direccion);
           }
         }
 
@@ -328,10 +328,16 @@
       });
 
       $('#nombres, #apellidos, #cedula, #direccion').on({
-        keypress: function(e) {
+        keydown: function(e) {
           switch(e.target.id) {
             case 'nombres':
-              if(nombres.hasClass('border border-danger campoNulo')) {
+              if(e.keyCode == 8) {
+                if(nombres.val().length == 1) {
+
+                  activarDangerRequerido(nombres);
+                }
+              }
+              else if(nombres.hasClass('border border-danger campoNulo')) {
 
                 nombres.removeClass('border border-danger campoNulo');
                 nombres.attr('placeholder', 'Maria Raquel');
