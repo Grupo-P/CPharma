@@ -261,10 +261,11 @@
                 correo.addClass(clasesError);
                 correo.attr('placeholder', 'Ingrese un correo valido');
               }
-            }
-          }
-          crear_candidato.submit();
-        }
+            }//Correo con valor
+
+            
+          }//Validacion de telefonos y correo
+        }//Validacion total
         
         //Caso para validar campos requeridos
         if(
@@ -361,8 +362,15 @@
                 }
               }
             break;
-          }
-        }
+
+            case 'correo':
+              if((e.keyCode != 9) && (e.keyCode != 16) && (e.keyCode != 20)) {
+                correo.removeClass('border border-danger campoNulo');
+                correo.attr('placeholder', 'mherrera@farmacia72.com');
+              }
+            break;
+          }//switch
+        }//keydown
       });
 
     });
