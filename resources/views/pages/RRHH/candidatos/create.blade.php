@@ -244,12 +244,10 @@
         var regExp3 = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;//Correo
 
         //En caso de cumplir las validaciones enviar el formulario
-        if((regExp1.test(nombres)) 
-          && (regExp1.test(apellidos)) 
-          && (regExp2.test(cedula))
-          && (regExp.test(telefono_celular))
-          && (regExp.test(telefono_habitacion))
-          && (regExp3.test(correo))
+        if((regExp1.test(nombres.val())) 
+          && (regExp1.test(apellidos.val())) 
+          && (regExp2.test(cedula.val()))
+          && (direccion.val() != '')
         ) {
           crear_candidato.submit();
         }
@@ -354,7 +352,7 @@
                 }
               }
               else if(apellidos.hasClass('border border-danger campoNulo')) {
-                
+
                 if((e.keyCode != 16) && (e.keyCode != 20)) {
                   apellidos.removeClass('border border-danger campoNulo');
                   apellidos.attr('placeholder', 'Herrera Perez');
