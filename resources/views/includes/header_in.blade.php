@@ -83,6 +83,13 @@
           Traslado<span class="sr-only">(current)</span>
         </a>
       </li>
+      <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('/tasaVenta') }}">
+          <span data-feather="home"></span>
+          <i class="fas fa-credit-card"></i>
+          Tasa de venta<span class="sr-only">(current)</span>
+        </a>
+      </li>
     </div>
   </div>
   <!-- OPERACIONES -->
