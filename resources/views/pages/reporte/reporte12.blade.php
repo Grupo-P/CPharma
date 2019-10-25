@@ -361,10 +361,7 @@
 
     $contador = 1;
     $FechaComparativa = date('d-m-Y',strtotime($FFinal));
-
-    /*$DiaActual = 0;
-    $DiaAnterior = 0;
-    $MesAnterior = 0;*/
+    $FechaAnterior = '';
 
     while($row2 = sqlsrv_fetch_array($result2,SQLSRV_FETCH_ASSOC)) {
       $FechaMovimiento = $row2["FechaMovimiento"]->format('d-m-Y');
@@ -373,41 +370,28 @@
         continue;
       }
 
-      /*$DiaActual = $row2["FechaMovimiento"]->format('d');
-      $DiaActual = intval($DiaActual);
+      if($FechaAnterior != '') {
+        $diferencia = FG_Validar_Fechas($FechaAnterior,$FechaMovimiento);
 
-      if(($DiaActual == $DiaAnterior) || ($DiaActual == ($DiaAnterior + 1))) {
+        if($diferencia > 1) {
+          for($i=1;$i<$diferencia;$i++) {
 
-        echo '
-          <tr>
-            <td align="center"><strong>'.intval($contador).'</strong></td>
-            <td align="center">'.$FechaMovimiento.'</td>
-            <td align="center">'.utf8_encode($row2["Movimiento"]).'</td>
-            <td align="center">'.$row2["Cantidad"].'</td>
-          </tr>
-        ';
-      }
-      else {
-        $DiaAnterior++;
+            $FechaAnterior = date("Y-m-d",strtotime($FechaAnterior."+ 1 days"));
+            $FechaIterada = new DateTime($FechaAnterior);
 
-        echo '
-          <tr>
-            <td align="center"><strong>'.intval($contador).'</strong></td>
-        ';
+            echo '
+              <tr>
+                <td align="center"><strong>'.intval($contador).'</strong></td>
+                <td align="center">'.$FechaIterada->format('d-m-Y').'</td>
+                <td align="center">Venta</td>
+                <td align="center">0</td>
+              </tr>
+            ';
 
-        if($DiaAnterior > 9) {
-          echo '<td align="center">'.$DiaAnterior.'-'.$MesAnterior.'-'.$row2["FechaMovimiento"]->format('Y').'</td>';
-        }
-        else {
-          echo '<td align="center">0'.$DiaAnterior.'-'.$MesAnterior.'-'.$row2["FechaMovimiento"]->format('Y').'</td>';
-        }
-
-        echo '
-            <td align="center">Venta</td>
-            <td align="center">0</td>
-          </tr>
-        ';
-      }*/
+            $contador++;
+          }//for
+        }//if diferencia
+      }//if $FechaAnterior
 
       echo '
         <tr>
@@ -419,10 +403,29 @@
       ';
 
       $contador++;
-      /*$DiaAnterior = $DiaActual;
-      $MesAnterior = $row2["FechaMovimiento"]->format('m');
-      $MesAnterior = intval($MesAnterior);*/
-    }
+      $FechaAnterior = $row2["FechaMovimiento"]->format("Y-m-d");
+    }//while
+
+    $diferencia = FG_Validar_Fechas($FechaAnterior,$FFinal);
+
+    if($diferencia > 1) {
+      for($i=1;$i<$diferencia;$i++) {
+
+        $FechaAnterior = date("Y-m-d",strtotime($FechaAnterior."+ 1 days"));
+        $FechaIterada = new DateTime($FechaAnterior);
+
+        echo '
+          <tr>
+            <td align="center"><strong>'.intval($contador).'</strong></td>
+            <td align="center">'.$FechaIterada->format('d-m-Y').'</td>
+            <td align="center">Venta</td>
+            <td align="center">0</td>
+          </tr>
+        ';
+
+        $contador++;
+      }//for
+    }//if diferencia
 
     echo '
           </tbody>
