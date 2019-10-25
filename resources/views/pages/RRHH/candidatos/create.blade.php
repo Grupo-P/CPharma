@@ -261,7 +261,21 @@
           || (cedula.val() == '')
           || (direccion.val() == '')
         ) {
-          
+          if(nombres.val() == '') {
+            activarDanger(nombres);
+          }
+
+          if(apellidos.val() == '') {
+            activarDanger(apellidos);
+          }
+
+          if(cedula.val() == '') {
+            activarDanger(cedula);
+          }
+
+          if(direccion.val() == '') {
+            activarDanger(direccion);
+          }
         }
 
         /*if((telefono_celular.val() == '') && (telefono_habitacion.val() == '')) {
