@@ -339,8 +339,10 @@
               }
               else if(nombres.hasClass('border border-danger campoNulo')) {
 
-                nombres.removeClass('border border-danger campoNulo');
-                nombres.attr('placeholder', 'Maria Raquel');
+                if((e.keyCode != 16) && (e.keyCode != 20)) {
+                  nombres.removeClass('border border-danger campoNulo');
+                  nombres.attr('placeholder', 'Maria Raquel');
+                }
               }
             break;
 
@@ -353,8 +355,10 @@
               }
               else if(apellidos.hasClass('border border-danger campoNulo')) {
                 
-                apellidos.removeClass('border border-danger campoNulo');
-                apellidos.attr('placeholder', 'Herrera Perez');
+                if((e.keyCode != 16) && (e.keyCode != 20)) {
+                  apellidos.removeClass('border border-danger campoNulo');
+                  apellidos.attr('placeholder', 'Herrera Perez');
+                }
               }
             break;
 
@@ -366,9 +370,11 @@
                 }
               }
               else if(cedula.hasClass('border border-danger campoNulo')) {
-                
-                cedula.removeClass('border border-danger campoNulo');
-                cedula.attr('placeholder', '24921001');
+
+                if((e.keyCode != 16) && (e.keyCode != 20)) {
+                  cedula.removeClass('border border-danger campoNulo');
+                  cedula.attr('placeholder', '24921001');
+                }
               }
             break;
 
@@ -380,9 +386,11 @@
                 }
               }
               else if(direccion.hasClass('border border-danger campoNulo')) {
-                
-                direccion.removeClass('border border-danger campoNulo');
-                direccion.attr('placeholder', 'Av. 15 Delicias con calle 72');
+
+                if((e.keyCode != 16) && (e.keyCode != 20)) {
+                  direccion.removeClass('border border-danger campoNulo');
+                  direccion.attr('placeholder', 'Av. 15 Delicias con calle 72');
+                }
               }
             break;
           }
