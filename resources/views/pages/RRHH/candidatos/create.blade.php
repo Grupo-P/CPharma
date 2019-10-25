@@ -345,6 +345,14 @@
                 apellidos.attr('placeholder', 'Herrera Perez');
               }
             break;
+
+            case 'cedula':
+              if(cedula.hasClass('border border-danger campoNulo')) {
+                
+                cedula.removeClass('border border-danger campoNulo');
+                cedula.attr('placeholder', '24921001');
+              }
+            break;
           }
         }
       });
