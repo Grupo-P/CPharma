@@ -7,7 +7,15 @@
 @section('scriptsHead')
   <style>
     .campoNulo {border-width: 3px !important;}
+    .campoNulo::placeholder {color: #dc3545; font-weight: bold;}
   </style>
+
+  <script>
+    var activarDanger = (Input) => {
+      Input.addClass('border border-danger campoNulo');
+      Input.attr('placeholder', 'Este campo es requerido');
+    };
+  </script>
 @endsection
 
 @section('content')
@@ -223,7 +231,7 @@
       var telefono_celular = $('#telefono_celular');
       var telefono_habitacion = $('#telefono_habitacion');
       var correo = $('#correo');
-      var correo = $('#correo');
+      var direccion = $('#direccion');
       var enviar = $('#enviar');
       var crear_candidato = $('#crear_candidato');
 
@@ -235,6 +243,7 @@
         var regExp2 = /^[0-9]{7,}$/;//Cedula
         var regExp3 = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;//Correo
 
+        //En caso de cumplir las validaciones enviar el formulario
         if((regExp1.test(nombres)) 
           && (regExp1.test(apellidos)) 
           && (regExp2.test(cedula))
@@ -244,13 +253,15 @@
         ) {
           crear_candidato.submit();
         }
-        else if(
+        
+        //Caso para validar campos requeridos
+        if(
           (nombres.val() == '')
           || (apellidos.val() == '')
           || (cedula.val() == '')
-          || (apellidos.val() == '')
+          || (direccion.val() == '')
         ) {
-
+          
         }
 
         /*if((telefono_celular.val() == '') && (telefono_habitacion.val() == '')) {
