@@ -98,7 +98,7 @@
 	</div>
 
 	<h1 class="h5 text-info">
-		<i class="fas fa-chart-pie"></i>
+		<i class="fas fa-columns"></i>
 		Dashboard
 	</h1>
 
