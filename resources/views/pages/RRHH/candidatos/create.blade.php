@@ -234,6 +234,7 @@
       var direccion = $('#direccion');
       var enviar = $('#enviar');
       var crear_candidato = $('#crear_candidato');
+      var clasesError = 'border border-danger campoNulo';
 
       enviar.click(function(e) {
         e.preventDefault();
@@ -254,7 +255,13 @@
             || (telefono_habitacion.val() != '') 
             || (correo.val() != '') 
           ) {
-
+            if(correo.val() != '') {
+              if(!regExp3.test(correo.val())) {
+                correo.val('');
+                correo.addClass(clasesError);
+                correo.attr('placeholder', 'Ingrese un correo valido');
+              }
+            }
           }
           crear_candidato.submit();
         }
@@ -284,8 +291,12 @@
         }
       });
 
-      $('#nombres, #apellidos, #cedula, #direccion').on({
+      $('#nombres, #apellidos, #cedula, #telefono_celular, #telefono_habitacion, ' 
+      + '#correo, #direccion').on({
         keydown: function(e) {
+
+          if(e.keyCode == 13) e.preventDefault();
+
           switch(e.target.id) {
             case 'nombres':
               if(e.keyCode == 8) {
@@ -296,7 +307,7 @@
               }
               else if(nombres.hasClass('border border-danger campoNulo')) {
 
-                if((e.keyCode != 16) && (e.keyCode != 20)) {
+                if((e.keyCode != 9) && (e.keyCode != 16) && (e.keyCode != 20)) {
                   nombres.removeClass('border border-danger campoNulo');
                   nombres.attr('placeholder', 'Maria Raquel');
                 }
@@ -312,7 +323,7 @@
               }
               else if(apellidos.hasClass('border border-danger campoNulo')) {
 
-                if((e.keyCode != 16) && (e.keyCode != 20)) {
+                if((e.keyCode != 9) && (e.keyCode != 16) && (e.keyCode != 20)) {
                   apellidos.removeClass('border border-danger campoNulo');
                   apellidos.attr('placeholder', 'Herrera Perez');
                 }
@@ -328,7 +339,7 @@
               }
               else if(cedula.hasClass('border border-danger campoNulo')) {
 
-                if((e.keyCode != 16) && (e.keyCode != 20)) {
+                if((e.keyCode != 9) && (e.keyCode != 16) && (e.keyCode != 20)) {
                   cedula.removeClass('border border-danger campoNulo');
                   cedula.attr('placeholder', '24921001');
                 }
@@ -344,7 +355,7 @@
               }
               else if(direccion.hasClass('border border-danger campoNulo')) {
 
-                if((e.keyCode != 16) && (e.keyCode != 20)) {
+                if((e.keyCode != 9) && (e.keyCode != 16) && (e.keyCode != 20)) {
                   direccion.removeClass('border border-danger campoNulo');
                   direccion.attr('placeholder', 'Av. 15 Delicias con calle 72');
                 }
