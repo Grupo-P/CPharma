@@ -345,7 +345,13 @@
             break;
 
             case 'apellidos':
-              if(apellidos.hasClass('border border-danger campoNulo')) {
+              if(e.keyCode == 8) {
+                if(apellidos.val().length == 1) {
+
+                  activarDangerRequerido(apellidos);
+                }
+              }
+              else if(apellidos.hasClass('border border-danger campoNulo')) {
                 
                 apellidos.removeClass('border border-danger campoNulo');
                 apellidos.attr('placeholder', 'Herrera Perez');
@@ -353,7 +359,13 @@
             break;
 
             case 'cedula':
-              if(cedula.hasClass('border border-danger campoNulo')) {
+              if(e.keyCode == 8) {
+                if(cedula.val().length == 1) {
+
+                  activarDangerRequerido(cedula);
+                }
+              }
+              else if(cedula.hasClass('border border-danger campoNulo')) {
                 
                 cedula.removeClass('border border-danger campoNulo');
                 cedula.attr('placeholder', '24921001');
