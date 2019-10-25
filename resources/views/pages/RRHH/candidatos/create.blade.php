@@ -332,8 +332,17 @@
           switch(e.target.id) {
             case 'nombres':
               if(nombres.hasClass('border border-danger campoNulo')) {
+
                 nombres.removeClass('border border-danger campoNulo');
                 nombres.attr('placeholder', 'Maria Raquel');
+              }
+            break;
+
+            case 'apellidos':
+              if(apellidos.hasClass('border border-danger campoNulo')) {
+                
+                apellidos.removeClass('border border-danger campoNulo');
+                apellidos.attr('placeholder', 'Herrera Perez');
               }
             break;
           }
