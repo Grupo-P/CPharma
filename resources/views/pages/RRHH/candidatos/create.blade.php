@@ -371,6 +371,20 @@
                 cedula.attr('placeholder', '24921001');
               }
             break;
+
+            case 'direccion':
+              if(e.keyCode == 8) {
+                if(direccion.val().length == 1) {
+
+                  activarDangerRequerido(direccion);
+                }
+              }
+              else if(direccion.hasClass('border border-danger campoNulo')) {
+                
+                direccion.removeClass('border border-danger campoNulo');
+                direccion.attr('placeholder', 'Av. 15 Delicias con calle 72');
+              }
+            break;
           }
         }
       });
