@@ -10,15 +10,14 @@
 		include(app_path().'\functions\config.php'); 
 		include(app_path().'\functions\Querys.php');
 		include(app_path().'\functions\funciones.php');
-		//$SedeConnection = MiUbicacion();
-		$SedeConnection = 'FTN';
+		$SedeConnection = MiUbicacion();
+		//$SedeConnection = 'FTN';
 	?>
 
 	<h1 class="h5 text-info">
 		<i class="fas fa-file-invoice"></i>
 		Reportes
 	</h1>
-
 	<hr class="row align-items-start col-12"> 
 	
 <!--Inicio de card de sedes con enlaces a otras sedes-->
@@ -26,7 +25,7 @@
 		if($SedeConnection == 'GP'){
 	?>
 		<div class="card-deck">
-   		<!-- Reportes -->
+ 		<!-- Reportes -->
 		<div class="card border-danger mb-3" style="width: 14rem;">	  	
 	  		<div class="card-body text-left bg-danger">
 	    		<h5 class="card-title">
@@ -531,13 +530,11 @@ if(
 				    @csrf
 				    <input id="SEDE" name="SEDE" type="hidden" value="DBs">  
 				    <button type="submit" name="Reporte" role="button" class="btn btn-outline-warning btn-sm"></i>Ver reportes</button>
-				</form>
+					</form>
 		  	</div>
-		</div>		
-   	</div>
-	
-	<div class="card-deck">
-   		<div class="card border-warning mb-3" style="width: 14rem;">	  	
+			</div>		
+
+	 		<div class="card border-warning mb-3" style="width: 14rem;">	  	
 	  		<div class="card-body text-left bg-warning">
 	    		<h5 class="card-title">
 		    		<span class="card-text text-white">
@@ -550,95 +547,12 @@ if(
 				    @csrf
 				    <input id="SEDE" name="SEDE" type="hidden" value="DBm">  
 				    <button type="submit" name="Reporte" role="button" class="btn btn-outline-warning btn-sm"></i>Ver reportes</button>
-				</form>
+					</form>
 		  	</div>
-		</div>		
+			</div>		
    	</div>
 
    	<?php
 		}
 	?>
-
-	<!-- 
-   	<div class="card-deck">
-   		
-		<div class="card border-danger mb-3" style="width: 14rem;">	  	
-	  		<div class="card-body text-left bg-danger">
-	    		<h5 class="card-title">
-		    		<span class="card-text text-white">
-		    			<?php echo "".SedeFTN; ?>
-		    		</span>
-	    		</h5>	    	    
-	  		</div>
-		  	<div class="card-footer bg-transparent border-danger text-right">
-		  		<form action="/reporte/" style="display: inline;">
-				    @csrf
-				    <input id="SEDE" name="SEDE" type="hidden" value="FTN"> 
-				<?php
-					if(
-						Auth::user()->sede == 'FARMACIA TIERRA NEGRA, C.A.' 
-						|| Auth::user()->sede == 'GRUPO P, C.A'
-					){
-				?> 
-				    <button type="submit" name="Reporte" role="button" class="btn btn-outline-danger btn-sm"></i>Ver reportes</button>
-				<?php
-					}
-				?>
-				</form>
-		  	</div>
-		</div>
-
-		<div class="card border-success mb-3" style="width: 14rem;">	  	
-	  		<div class="card-body text-left bg-success">
-	    		<h5 class="card-title">
-		    		<span class="card-text text-white">
-		    			<?php echo "".SedeFLL; ?>
-		    		</span>
-	    		</h5>	    	    
-	  		</div>
-		  	<div class="card-footer bg-transparent border-success text-right">
-		  		<form action="/reporte/" style="display: inline;">
-				    @csrf
-				    <input id="SEDE" name="SEDE" type="hidden" value="FLL">
-				<?php
-					if(
-						Auth::user()->sede == 'FARMACIA LA LAGO,C.A.' 
-						|| Auth::user()->sede == 'GRUPO P, C.A'
-					){
-				?>  
-				    <button type="submit" name="Reporte" role="button" class="btn btn-outline-success btn-sm"></i>Ver reportes</button>
-				<?php
-					}
-				?>
-				</form>
-		  	</div>
-		</div>
-
-		<div class="card border-info mb-3" style="width: 14rem;">	  	
-	  		<div class="card-body text-left bg-info">
-	    		<h5 class="card-title">
-		    		<span class="card-text text-white">
-		    			<?php echo "".SedeFAU; ?>
-		    		</span>
-	    		</h5>	    	    
-	  		</div>
-		  	<div class="card-footer bg-transparent border-info text-right">
-		  		<form action="/reporte/" style="display: inline;">
-				    @csrf
-				    <input id="SEDE" name="SEDE" type="hidden" value="FAU">  
-				<?php
-					if(
-						Auth::user()->sede == 'FARMACIA AVENIDA UNIVERSIDAD, C.A.' 
-						|| Auth::user()->sede == 'GRUPO P, C.A'
-					){
-				?>     
-				    <button type="submit" name="Reporte" role="button" class="btn btn-outline-info btn-sm"></i>Ver reportes</button>
-				<?php
-					}
-				?>
-				</form>
-		  	</div>
-		</div>
-   	</div> 
-   -->
 @endsection
