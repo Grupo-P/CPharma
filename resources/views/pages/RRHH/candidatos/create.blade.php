@@ -117,12 +117,12 @@
         <tbody>
           <tr>
             <th scope="row">{!! Form::label('nombres', 'Nombres *', ['title' => 'Este campo es requerido']) !!}</th>
-            <td>{!! Form::text('nombres', null, [ 'class' => 'form-control', 'placeholder' => 'Maria Raquel', 'autofocus', 'required']) !!}</td>
+            <td>{!! Form::text('nombres', null, [ 'class' => 'form-control', 'placeholder' => 'Maria Raquel', 'autofocus']) !!}</td>
           </tr>
 
           <tr>
             <th scope="row">{!! Form::label('apellidos', 'Apellidos *', ['title' => 'Este campo es requerido']) !!}</th>
-            <td>{!! Form::text('apellidos', null, [ 'class' => 'form-control', 'placeholder' => 'Herrera Perez', 'required']) !!}</td>
+            <td>{!! Form::text('apellidos', null, [ 'class' => 'form-control', 'placeholder' => 'Herrera Perez']) !!}</td>
           </tr>
 
           <tr>
@@ -135,7 +135,7 @@
                   </td>
 
                   <td>
-                    {!! Form::text('cedula', null, [ 'class' => 'form-control', 'placeholder' => '24921001', 'required']) !!}
+                    {!! Form::text('cedula', null, [ 'class' => 'form-control', 'placeholder' => '24921001']) !!}
                   </td>
                 </tr>
               </table>
@@ -199,7 +199,7 @@
 
           <tr>
             <th scope="row">{!! Form::label('direccion', 'Dirección *', ['title' => 'Este campo es requerido']) !!}</th>
-            <td>{!! Form::textarea('direccion', null, [ 'class' => 'form-control', 'placeholder' => 'Av. 15 Delicias con calle 72', 'rows' => '3', 'required']) !!}</td>
+            <td>{!! Form::textarea('direccion', null, [ 'class' => 'form-control', 'placeholder' => 'Av. 15 Delicias con calle 72', 'rows' => '3']) !!}</td>
           </tr>
 
           <tr>
@@ -223,6 +223,7 @@
       var telefono_celular = $('#telefono_celular');
       var telefono_habitacion = $('#telefono_habitacion');
       var correo = $('#correo');
+      var correo = $('#correo');
       var enviar = $('#enviar');
       var crear_candidato = $('#crear_candidato');
 
@@ -242,6 +243,14 @@
           && (regExp3.test(correo))
         ) {
           crear_candidato.submit();
+        }
+        else if(
+          (nombres.val() == '')
+          || (apellidos.val() == '')
+          || (cedula.val() == '')
+          || (apellidos.val() == '')
+        ) {
+
         }
 
         /*if((telefono_celular.val() == '') && (telefono_habitacion.val() == '')) {
