@@ -249,6 +249,13 @@
           && (regExp2.test(cedula.val()))
           && (direccion.val() != '')
         ) {
+          if(
+            (telefono_celular.val() != '') 
+            || (telefono_habitacion.val() != '') 
+            || (correo.val() != '') 
+          ) {
+
+          }
           crear_candidato.submit();
         }
         
@@ -275,54 +282,6 @@
             activarDangerRequerido(direccion);
           }
         }
-
-        /*if((telefono_celular.val() == '') && (telefono_habitacion.val() == '')) {
-          telefono_celular.addClass('border border-danger campoNulo');
-          telefono_habitacion.addClass('border border-danger campoNulo');
-
-          telefono_celular.attr('placeholder', 'Debe colocar al menos un teléfono');
-          telefono_habitacion.attr('placeholder', 'Debe colocar al menos un teléfono');
-        }
-        else {
-          if((telefono_celular.val() != '') && (telefono_habitacion.val() != '')) {
-
-            if((regExp.test(telefono_celular.val())) 
-              && (regExp.test(telefono_habitacion.val()))) {
-              
-            }
-            else {
-              telefono_celular.addClass('border border-danger campoNulo');
-              telefono_habitacion.addClass('border border-danger campoNulo');
-
-              telefono_celular.val('');
-              telefono_habitacion.val('');
-              telefono_celular.attr('placeholder', 'El formato esperado es: xxxx-xxxxxxx');
-              telefono_habitacion.attr('placeholder', 'El formato esperado es: xxxx-xxxxxxx');
-            }
-          }
-          else if(telefono_celular.val() != '') {
-
-            if(regExp.test(telefono_celular.val())) {
-              
-            }
-            else {
-              telefono_celular.addClass('border border-danger campoNulo');
-              telefono_celular.val('');
-              telefono_celular.attr('placeholder', 'El formato esperado es: xxxx-xxxxxxx');
-            }
-          }
-          else {
-
-            if(regExp.test(telefono_habitacion.val())) {
-              
-            }
-            else {
-              telefono_habitacion.addClass('border border-danger campoNulo');
-              telefono_celular.val('');
-              telefono_habitacion.attr('placeholder', 'El formato esperado es: xxxx-xxxxxxx');
-            }
-          }
-        }*/
       });
 
       $('#nombres, #apellidos, #cedula, #direccion').on({
