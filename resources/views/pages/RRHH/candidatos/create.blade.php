@@ -252,18 +252,34 @@
         ) {
           if(
             (telefono_celular.val() != '') 
-            || (telefono_habitacion.val() != '') 
-            || (correo.val() != '') 
+            && (telefono_habitacion.val() != '') 
+            && (correo.val() != '') 
           ) {
-            if(correo.val() != '') {
+            if((regExp.test(telefono_celular.val())) 
+              && (regExp.test(telefono_habitacion.val()))
+              && (regExp3.test(correo.val()))
+            ) {
+              crear_candidato.submit();
+            }
+            else {
+              if(!regExp.test(telefono_celular.val())) {
+                telefono_celular.val('');
+                telefono_celular.addClass(clasesError);
+                telefono_celular.attr('placeholder', 'El formato telefónico es: 0xxx-xxxxxxx');
+              }
+
+              if(!regExp.test(telefono_habitacion.val())) {
+                telefono_habitacion.val('');
+                telefono_habitacion.addClass(clasesError);
+                telefono_habitacion.attr('placeholder', 'El formato telefónico es: 0xxx-xxxxxxx');
+              }
+
               if(!regExp3.test(correo.val())) {
                 correo.val('');
                 correo.addClass(clasesError);
-                correo.attr('placeholder', 'Ingrese un correo valido');
+                correo.attr('placeholder', 'El formato de correo es: xxxxxxx\@xxxxxx.xxx');
               }
-            }//Correo con valor
-
-            
+            }
           }//Validacion de telefonos y correo
         }//Validacion total
         
@@ -360,6 +376,20 @@
                   direccion.removeClass('border border-danger campoNulo');
                   direccion.attr('placeholder', 'Av. 15 Delicias con calle 72');
                 }
+              }
+            break;
+
+            case 'telefono_celular':
+              if((e.keyCode != 9) && (e.keyCode != 16) && (e.keyCode != 20)) {
+                telefono_celular.removeClass('border border-danger campoNulo');
+                telefono_celular.attr('placeholder', '0414-1234567');
+              }
+            break;
+
+            case 'telefono_habitacion':
+              if((e.keyCode != 9) && (e.keyCode != 16) && (e.keyCode != 20)) {
+                telefono_habitacion.removeClass('border border-danger campoNulo');
+                telefono_habitacion.attr('placeholder', '0261-1234567');
               }
             break;
 
