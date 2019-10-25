@@ -254,7 +254,102 @@
 ?>
 <!-- COMPRAS -->
 <!-------------------------------------------------------------------------------->
+<!-------------------------------------------------------------------------------->
+<!-- OPERACIONES -->
+<?php
+  if(Auth::user()->departamento == 'OPERACIONES'){
+?>
+	<div class="card-deck">
+		<div class="card border-danger mb-3" style="width: 14rem;">	  	
+  		<div class="card-body text-left bg-danger">
+    		<h5 class="card-title">
+	    		<span class="card-text text-white">
+	    			Historico de productos
+	    		</span>
+    		</h5>	    	    
+  		</div>
+	  	<div class="card-footer bg-transparent border-danger text-right">
+	  		<form action="/reporte2/" style="display: inline;">
+			    @csrf
+			    <input id="SEDE" name="SEDE" type="hidden" value="<?php print_r($_GET['SEDE']); ?>">				   				   
+			    <button type="submit" name="Reporte" role="button" class="btn btn-outline-danger btn-sm"></i>Visualizar</button>
+				</form>
+	  	</div>
+		</div>
+		<div class="card border-success mb-3" style="width: 14rem;">
+			<div class="card-body text-left bg-success">
+    		<h5 class="card-title">
+	    		<span class="card-text text-white">
+	    			Actualizar troquel
+	    		</span>
+    		</h5>	    	    
+  		</div>
+	  	<div class="card-footer bg-transparent border-success text-right">
+	  		<form action="/reporte8/" style="display: inline;">
+			    @csrf
+			    <input id="SEDE" name="SEDE" type="hidden" value="<?php print_r($_GET['SEDE']); ?>">			   
+			    <button type="submit" name="Reporte" role="button" class="btn btn-outline-success btn-sm"></i>Visualizar</button>
+				</form>
+			</div>
+  	</div>
+  	<div class="card border-info mb-3" style="width: 14rem;">	  	
+			<div class="card-body text-left bg-info">
+	  		<h5 class="card-title">
+	    		<span class="card-text text-white">
+	    			Detalle de movimientos
+	    		</span>
+	  		</h5>	    	    
+			</div>
+	  	<div class="card-footer bg-transparent border-info text-right">
+	  		<form action="/reporte12/" style="display: inline;">
+			    @csrf
+			    <input id="SEDE" name="SEDE" type="hidden" value="<?php print_r($_GET['SEDE']); ?>">
+			    <button type="submit" name="Reporte" role="button" class="btn btn-outline-info btn-sm"></i>Visualizar</button>
+				</form>
+	  	</div>
+		</div>
+	</div>
 
+	<div class="card-deck">
+		<div class="card border-warning mb-3" style="width: 14rem;">	  	
+  		<div class="card-body text-left bg-warning">
+    		<h5 class="card-title">
+	    		<span class="card-text text-white">
+	    			Analitico de precios
+	    		</span>
+    		</h5>	    	    
+  		</div>
+	  	<div class="card-footer bg-transparent border-warning text-right">
+	  		<form action="/reporte10/" style="display: inline;">
+			    @csrf
+			    <input id="SEDE" name="SEDE" type="hidden" value="<?php print_r($_GET['SEDE']); ?>">			   
+			    <button type="submit" name="Reporte" role="button" class="btn btn-outline-warning btn-sm"></i>Visualizar</button>
+				</form>
+	  	</div>
+		</div>
+		<div class="card border-secondary mb-3" style="width: 14rem;">	  	
+  		<div class="card-body text-left bg-secondary">
+    		<h5 class="card-title">
+	    		<span class="card-text text-white">
+	    			Compromisos
+	    		</span>
+    		</h5>	    	    
+  		</div>
+	  	<div class="card-footer bg-transparent border-secondary text-right">
+	  		<form action="/cartaCompromiso" style="display: inline;">
+			    @csrf
+			    <input id="SEDE" name="SEDE" type="hidden" value="<?php print_r($_GET['SEDE']); ?>">				   
+			    <button type="submit" name="Reporte" role="button" class="btn btn-outline-secondary btn-sm"></i>Visualizar</button>
+				</form>
+	  	</div>
+		</div>
+ 	</div>
+	</div>
+<?php
+  }
+?>
+<!-- OPERACIONES -->
+<!-------------------------------------------------------------------------------->
 
 <?php
   if(Auth::user()->departamento == 'klk'){
