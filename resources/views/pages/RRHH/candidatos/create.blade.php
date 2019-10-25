@@ -327,22 +327,18 @@
         }*/
       });
 
-      /*$('#telefono_celular, #telefono_habitacion').on({
+      $('#nombres, #apellidos, #cedula, #direccion').on({
         keypress: function(e) {
-          telefono_celular.removeClass('border border-danger campoNulo');
-          telefono_habitacion.removeClass('border border-danger campoNulo');
-
           switch(e.target.id) {
-            case 'telefono_celular':
-              telefono_habitacion.attr('placeholder', '0261-1234567');
-            break;
-
-            case 'telefono_habitacion':
-              telefono_celular.attr('placeholder', '0424-1234567');
+            case 'nombres':
+              if(nombres.hasClass('border border-danger campoNulo')) {
+                nombres.removeClass('border border-danger campoNulo');
+                nombres.attr('placeholder', 'Maria Raquel');
+              }
             break;
           }
         }
-      });*/
+      });
 
     });
     $('#exampleModalCenter').modal('show');
