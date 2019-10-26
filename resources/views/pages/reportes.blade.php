@@ -256,22 +256,6 @@
 				</form>
 	  	</div>
 		</div>
-		<div class="card border-success mb-3" style="width: 14rem;">
-			<div class="card-body text-left bg-success">
-    		<h5 class="card-title">
-	    		<span class="card-text text-white">
-	    			Actualizar troquel
-	    		</span>
-    		</h5>	    	    
-  		</div>
-	  	<div class="card-footer bg-transparent border-success text-right">
-	  		<form action="/reporte8/" style="display: inline;">
-			    @csrf
-			    <input id="SEDE" name="SEDE" type="hidden" value="<?php print_r($_GET['SEDE']); ?>">			   
-			    <button type="submit" name="Reporte" role="button" class="btn btn-outline-success btn-sm"></i>Visualizar</button>
-				</form>
-			</div>
-  	</div>
   	<div class="card border-info mb-3" style="width: 14rem;">	  	
 			<div class="card-body text-left bg-info">
 	  		<h5 class="card-title">
@@ -288,9 +272,6 @@
 				</form>
 	  	</div>
 		</div>
-	</div>
-
-	<div class="card-deck">
 		<div class="card border-warning mb-3" style="width: 14rem;">	  	
   		<div class="card-body text-left bg-warning">
     		<h5 class="card-title">
