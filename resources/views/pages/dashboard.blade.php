@@ -6,6 +6,11 @@
 
 @section('content')
 	<?php
+		include(app_path().'\functions\config.php');
+		include(app_path().'\functions\functions.php');
+		include(app_path().'\functions\querys_mysql.php');
+		include(app_path().'\functions\querys_sqlserver.php');
+
 		$empresas = DB::table('empresas')->count();
 		$proveedores = DB::table('proveedors')->count();
 		$usuarios = DB::table('users')->count();
@@ -36,6 +41,16 @@
 			->orderBy(DB::raw('count(*)'),'desc')
 			->where('updated_at', '>',$FAyer)
 		 	->take(1)->get();
+
+		 	$usuario = Auth::user()->name;
+		 	$auditorReporteFavorito = 
+			DB::table('auditorias')
+			->select('registro')
+			->groupBy('registro')
+			->orderBy(DB::raw('count(*)'),'desc')
+			->where('tabla','reporte')
+			->where('user',$usuario)
+		 	->take(3)->get();
 	?>
 
 	<h1 class="h5 text-info">
@@ -44,6 +59,9 @@
 	</h1>
 	<hr class="row align-items-start col-12">
 
+<?php
+	if((Auth::user()->departamento != 'VENTAS')&&(Auth::user()->departamento != 'RRHH')){
+?>
 <!-------------------------------------------------------------------------------->
 <!-- DESTACADOS -->
 <?php
@@ -73,7 +91,7 @@
 		    			'.$usuarioAct.'	
 		    		</span>
 	    		</h4>
-	    		<p class="card-text text-white">Usuario mas activo</p>
+	    		<p class="card-text text-white">Reporte Favorito</p>
 	  		</div>	
 			</div>
 		</div>
@@ -117,13 +135,81 @@
 		</div>
   	';
   }
+
+  if( (!empty($auditorReporteFavorito[0])) ){
+  	$reporteFavorito1 = $auditorReporteFavorito[0];
+  	$reporteFavorito1 = $reporteFavorito1->registro;
+  	$Ruta1 = FG_Ruta_Reporte($reporteFavorito1);
+
+  	$reporteFavorito2 = $auditorReporteFavorito[1];
+  	$reporteFavorito2 = $reporteFavorito2->registro;
+  	$Ruta2 = FG_Ruta_Reporte($reporteFavorito2);
+
+  	$reporteFavorito3 = $auditorReporteFavorito[2];
+  	$reporteFavorito3 = $reporteFavorito3->registro;
+ 		$Ruta3 = FG_Ruta_Reporte($reporteFavorito3);
+
+  	echo'
+		<div class="card-deck">
+			<div class="card border-secondary mb-3" style="width: 14rem;">	  	
+	  		<div class="card-body text-left bg-secondary">
+	    		<h4>
+		    		<span class="card-text text-white">
+		    			<i class="fa fa-thumbtack"></i>
+		    			'.$reporteFavorito1.'
+		    		</span>
+	    		</h4>
+	    		<p class="card-text text-white">Reporte sugerido</p>
+	  		</div>
+	  		<div class="card-footer bg-transparent border-secondary text-right">
+		  		<form action="'.$Ruta1.'" style="display: inline;">
+				    <input id="SEDE" name="SEDE" type="hidden" value="'.MiUbicacion().'">
+				    <button type="submit" name="Reporte" role="button" class="btn btn-outline-secondary btn-sm"></i>Visualizar</button>
+					</form>
+	  		</div>
+	  	</div>
+	  	<div class="card border-secondary mb-3" style="width: 14rem;">	  	
+	  		<div class="card-body text-left bg-secondary">
+	    		<h4>
+		    		<span class="card-text text-white">
+		    			<i class="fa fa-thumbtack"></i>
+		    			'.$reporteFavorito2.'
+		    		</span>
+	    		</h4>
+	    		<p class="card-text text-white">Reporte sugerido</p>
+	  		</div>
+	  		<div class="card-footer bg-transparent border-secondary text-right">
+		  		<form action="'.$Ruta2.'" style="display: inline;">
+				    <input id="SEDE" name="SEDE" type="hidden" value="'.MiUbicacion().'">
+				    <button type="submit" name="Reporte" role="button" class="btn btn-outline-secondary btn-sm"></i>Visualizar</button>
+					</form>
+	  		</div>
+	  	</div>
+	  	<div class="card border-secondary mb-3" style="width: 14rem;">	  	
+	  		<div class="card-body text-left bg-secondary">
+	    		<h4>
+		    		<span class="card-text text-white">
+		    			<i class="fa fa-thumbtack"></i>
+		    			'.$reporteFavorito3.'
+		    		</span>
+	    		</h4>
+	    		<p class="card-text text-white">Reporte sugerido</p>
+	  		</div>
+	  		<div class="card-footer bg-transparent border-secondary text-right">
+		  		<form action="'.$Ruta3.'" style="display: inline;">
+				    <input id="SEDE" name="SEDE" type="hidden" value="'.MiUbicacion().'">
+				    <button type="submit" name="Reporte" role="button" class="btn btn-outline-secondary btn-sm"></i>Visualizar</button>
+					</form>
+	  		</div>
+	  	</div>
+		</div>
+		<hr class="row align-items-start col-12">
+  	';
+  }
 ?>
 <!-- DESTACADOS -->
 <!-------------------------------------------------------------------------------->
 <!-- AGENDA -->
-<?php
-	if((Auth::user()->departamento != 'VENTAS')&&(Auth::user()->departamento != 'RRHH')){
-?>
 <div class="card-deck">
 		<!-- Empresas -->
 	 	<div class="card border-danger mb-3" style="width: 14rem;">	  	
@@ -994,6 +1080,7 @@
 <!-- TECNOLOGIA -->
 <!-------------------------------------------------------------------------------->
 <!-- CONTACTO -->
+<hr class="row align-items-start col-12">
 	<div class="card-deck">
 		<div class="card border-info" style="width: 14rem;">	  	
   		<div class="card-body text-left bg-info">

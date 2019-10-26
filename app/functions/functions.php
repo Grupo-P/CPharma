@@ -772,4 +772,58 @@
     sqlsrv_close($conn);
     mysqli_close($connCPharma);
 	}
+	/**********************************************************************************/
+  /*
+		TITULO: FG_Ruta_Reporte
+		FUNCION:Busca la ruta que le pertenece al nombre del reporte
+		RETORNO: url
+		DESARROLLADO POR: SERGIO COVA
+ 	*/
+	function FG_Ruta_Reporte($NombreReporte){
+		switch ($NombreReporte) {
+			case 'Activacion de proveedores':
+				$ruta = '/reporte1';
+			break;
+			case 'Historico de productos':
+				$ruta = '/reporte2';
+			break;
+			case 'Productos mas vendidos':
+				$ruta = '/reporte3';
+			break;
+			case 'Productos menos vendidos':
+				$ruta = '/reporte4';
+			break;
+			case 'Productos en falla':
+				$ruta = '/reporte5';
+			break;
+			case 'Pedido de productos':
+				$ruta = '/reporte6';
+			break;
+			case 'Catalogo de proveedor':
+				$ruta = '/reporte7';
+			break;
+			case 'Productos para surtir':
+				$ruta = '/reporte9';
+			break;
+			case 'Analitico de precios':
+				$ruta = '/reporte10';
+			break;
+			case 'Detalle de movimientos':
+				$ruta = '/reporte12';
+			break;
+			case 'Productos Por Fallar':
+				$ruta = '/reporte13';
+			break;
+			case 'Productos en caida':
+				$ruta = '/reporte14';
+			break;
+			case 'Articulos devaluados':
+				$ruta = '/reporte15';
+			break;
+			default:
+				$ruta = '#';
+			break;
+		}
+		return $ruta;
+	}
 ?>
