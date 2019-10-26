@@ -785,91 +785,213 @@
 ?>
 <!-- LÍDER DE TIENDA -->
 <!-------------------------------------------------------------------------------->
-
+<!-- GERENCIA -->
 <?php
-  if(Auth::user()->role == 'fghfg'){
+  if(Auth::user()->departamento == 'GERENCIA'){
 ?>
-
+	<!-- Modal GERENCIA -->
+	<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  	<div class="modal-dialog modal-dialog-centered" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <h5 class="modal-title text-info" id="exampleModalCenterTitle"><i class="fas fa-bell text-info CP-beep"></i> Novedades</h5>
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	          <span aria-hidden="true">&times;</span>
+	        </button>
+	      </div>
+	      <div class="modal-body">
+	      	<label>Hola <b class="text-info">{{ Auth::user()->name }}</b>.</label>
+	      	<br/>
+	      	Estas usando<b class="text-info"> CPharma v.4.7</b>, para el departamento de <b class="text-info">{{ Auth::user()->departamento }}</b>, esta version incluye las siguientes mejoras:<br/><br/></label>
+  			<ul style="list-style:none">
+        	<li class="card-text text-dark" style="display: inline;">
+					<i class="far fa-check-circle text-info" style="display: inline;"></i>
+					Desde ya esta disponible el modulo: 
+					<b class="text-info">Traslado</b>!!
+  				</li>
+  			</ul>
+  			<ul style="list-style:none">
+        	<li class="card-text text-dark" style="display: inline;">
+					<i class="far fa-check-circle text-info" style="display: inline;"></i>
+					Se actualizaron las busquedas por 
+					<b class="text-info">Codigo de Barra</b>!!
+  				</li>
+  			</ul>
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-outline-info" data-dismiss="modal">Aceptar</button>
+	      </div>
+	    </div>
+  	</div>
+	</div>
+	<!-- Modal GERENCIA -->
+	<!-- Dashboard GERENCIA-->
 	<div class="card-deck">		
 		<!-- Usuario -->
 		<div class="card border-warning mb-3" style="width: 14rem;">	  	
-	  		<div class="card-body text-left bg-warning">
-	    		<h2 class="card-title">
-		    		<span class="card-text text-white">	
-		    		<i class="fas fa-user"></i>	    			
-		    			<?php
-							echo ''.$usuarios;
-						?>						
-		    		</span>
-	    		</h2>
-	    		<p class="card-text text-white">Usuarios registrados</p>
-	  		</div>
-  		<?php
-		  if(Auth::user()->role == 'MASTER' || Auth::user()->role == 'DEVELOPER'){
-	 	?>
-		  	<div class="card-footer bg-transparent border-warning text-right">
-		  		<a href="/usuario/" class="btn btn-outline-warning btn-sm">Visualizar</a>
-		  	</div>
-		<?php
-			}
-		?>
+  		<div class="card-body text-left bg-warning">
+    		<h2 class="card-title">
+	    		<span class="card-text text-white">	
+	    		<i class="fas fa-user"></i>	    			
+	    			<?php
+						echo ''.$usuarios;
+					?>						
+	    		</span>
+    		</h2>
+    		<p class="card-text text-white">Usuarios registrados</p>
+  		</div>
+	  	<div class="card-footer bg-transparent border-warning text-right">
+	  		<a href="/usuario/" class="btn btn-outline-warning btn-sm">Visualizar</a>
+	  	</div>
 		</div>
 		<!-- Dolar -->
 		<div class="card border-secondary mb-3" style="width: 14rem;">	  	
-	  		<div class="card-body text-left bg-secondary">
-	    		<h2 class="card-title">
-		    		<span class="card-text text-white">
-		    			<i class="fas fa-money-bill-alt"></i>
-		    			<?php
-							echo ''.$dolar;
-						?>						
-		    		</span>
-	    		</h2>
-	    		<p class="card-text text-white">Tasas registradas</p>
-	  		</div>
-  		<?php
-		  	if(Auth::user()->role == 'MASTER' || Auth::user()->role == 'DEVELOPER'){
-	 	?>
-		  	<div class="card-footer bg-transparent border-secondary text-right">
-		  		<a href="/dolar/" class="btn btn-outline-secondary btn-sm">Visualizar</a>
-		  	</div>
-		<?php
-			}
-		?>		
+  		<div class="card-body text-left bg-secondary">
+    		<h2 class="card-title">
+	    		<span class="card-text text-white">
+	    			<i class="fas fa-money-bill-alt"></i>
+	    			<?php
+						echo ''.$dolar;
+					?>						
+	    		</span>
+    		</h2>
+    		<p class="card-text text-white">Tasas de mercado registradas</p>
+  		</div>
+	  	<div class="card-footer bg-transparent border-secondary text-right">
+	  		<a href="/dolar/" class="btn btn-outline-secondary btn-sm">Visualizar</a>
+	  	</div>	
 		</div>
 		<!-- Tasa Venta -->
 		<div class="card border-dark mb-3" style="width: 14rem;">	  	
-	  		<div class="card-body text-left bg-dark">
-	    		<h3 class="card-title">
-		    		<span class="card-text text-white">
-		    			<i class="fas fa-credit-card"></i>
-		    			<?php
-							echo 'Tasa Venta: '.$Tasa;
-						?>						
-		    		</span>
-	    		</h3>
-	    		<p class="card-text text-white">
-					<?php 
-						echo 'Ultima Actualizacion: '.$tasaVenta;
-					?>
-	    		</p>
-	  		</div>
-  		<?php
-		  	if(Auth::user()->role == 'MASTER' || Auth::user()->role == 'DEVELOPER'){
-	 	?>
-		  	<div class="card-footer bg-transparent border-dark text-right">
-		  		<a href="/tasaVenta/" class="btn btn-outline-dark btn-sm">Visualizar</a>
-		  	</div>
-		<?php
-			}
-		?>		
+  		<div class="card-body text-left bg-dark">
+    		<h3 class="card-title">
+	    		<span class="card-text text-white">
+	    			<i class="fas fa-credit-card"></i>
+	    			<?php
+						echo 'Tasa Venta: '.$Tasa;
+					?>						
+	    		</span>
+    		</h3>
+    		<p class="card-text text-white">
+				<?php 
+					echo 'Ultima Actualizacion: '.$tasaVenta;
+				?>
+    		</p>
+  		</div>
+	  	<div class="card-footer bg-transparent border-dark text-right">
+	  		<a href="/tasaVenta/" class="btn btn-outline-dark btn-sm">Visualizar</a>
+	  	</div>
 		</div>	
 	</div>
-
-	<?php
-			}
-		?>
-
+	<!-- Dashboard GERENCIA-->
+<?php
+  }
+?>
+<!-- GERENCIA -->
+<!-------------------------------------------------------------------------------->
+<!-- TECNOLOGIA -->
+<?php
+  if(Auth::user()->departamento == 'TECNOLOGIA'){
+?>
+	<!-- Modal TECNOLOGIA -->
+	<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  	<div class="modal-dialog modal-dialog-centered" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <h5 class="modal-title text-info" id="exampleModalCenterTitle"><i class="fas fa-bell text-info CP-beep"></i> Novedades</h5>
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	          <span aria-hidden="true">&times;</span>
+	        </button>
+	      </div>
+	      <div class="modal-body">
+	      	<label>Hola <b class="text-info">{{ Auth::user()->name }}</b>.</label>
+	      	<br/>
+	      	Estas usando<b class="text-info"> CPharma v.4.7</b>, para el departamento de <b class="text-info">{{ Auth::user()->departamento }}</b>, esta version incluye las siguientes mejoras:<br/><br/></label>
+  			<ul style="list-style:none">
+        	<li class="card-text text-dark" style="display: inline;">
+					<i class="far fa-check-circle text-info" style="display: inline;"></i>
+					Desde ya esta disponible el modulo: 
+					<b class="text-info">Traslado</b>!!
+  				</li>
+  			</ul>
+  			<ul style="list-style:none">
+        	<li class="card-text text-dark" style="display: inline;">
+					<i class="far fa-check-circle text-info" style="display: inline;"></i>
+					Se actualizaron las busquedas por 
+					<b class="text-info">Codigo de Barra</b>!!
+  				</li>
+  			</ul>
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-outline-info" data-dismiss="modal">Aceptar</button>
+	      </div>
+	    </div>
+  	</div>
+	</div>
+	<!-- Modal TECNOLOGIA -->
+	<!-- Dashboard TECNOLOGIA-->
+	<div class="card-deck">		
+		<!-- Usuario -->
+		<div class="card border-warning mb-3" style="width: 14rem;">	  	
+  		<div class="card-body text-left bg-warning">
+    		<h2 class="card-title">
+	    		<span class="card-text text-white">	
+	    		<i class="fas fa-user"></i>	    			
+	    			<?php
+						echo ''.$usuarios;
+					?>						
+	    		</span>
+    		</h2>
+    		<p class="card-text text-white">Usuarios registrados</p>
+  		</div>
+	  	<div class="card-footer bg-transparent border-warning text-right">
+	  		<a href="/usuario/" class="btn btn-outline-warning btn-sm">Visualizar</a>
+	  	</div>
+		</div>
+		<!-- Dolar -->
+		<div class="card border-secondary mb-3" style="width: 14rem;">	  	
+  		<div class="card-body text-left bg-secondary">
+    		<h2 class="card-title">
+	    		<span class="card-text text-white">
+	    			<i class="fas fa-money-bill-alt"></i>
+	    			<?php
+						echo ''.$dolar;
+					?>						
+	    		</span>
+    		</h2>
+    		<p class="card-text text-white">Tasas de mercado registradas</p>
+  		</div>
+	  	<div class="card-footer bg-transparent border-secondary text-right">
+	  		<a href="/dolar/" class="btn btn-outline-secondary btn-sm">Visualizar</a>
+	  	</div>	
+		</div>
+		<!-- Tasa Venta -->
+		<div class="card border-dark mb-3" style="width: 14rem;">	  	
+  		<div class="card-body text-left bg-dark">
+    		<h3 class="card-title">
+	    		<span class="card-text text-white">
+	    			<i class="fas fa-credit-card"></i>
+	    			<?php
+						echo 'Tasa Venta: '.$Tasa;
+					?>						
+	    		</span>
+    		</h3>
+    		<p class="card-text text-white">
+				<?php 
+					echo 'Ultima Actualizacion: '.$tasaVenta;
+				?>
+    		</p>
+  		</div>
+	  	<div class="card-footer bg-transparent border-dark text-right">
+	  		<a href="/tasaVenta/" class="btn btn-outline-dark btn-sm">Visualizar</a>
+	  	</div>
+		</div>	
+	</div>
+	<!-- Dashboard TECNOLOGIA-->
+<?php
+  }
+?>
+<!-- TECNOLOGIA -->
 <!-------------------------------------------------------------------------------->
 <!-- CONTACTO -->
 	<div class="card-deck">
