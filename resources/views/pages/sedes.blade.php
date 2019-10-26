@@ -10,9 +10,8 @@
 		include(app_path().'\functions\config.php'); 
 		include(app_path().'\functions\Querys.php');
 		include(app_path().'\functions\funciones.php');
-		//$SedeConnection = MiUbicacion();
-		$SedeConnection = 'FLL';
-		Auth::user()->sede = 'FARMACIA TIERRA NEGRA, C.A.';
+		$SedeConnection = MiUbicacion();
+		//$SedeConnection = 'FTN';
 	?>
 
 	<h1 class="h5 text-info">
@@ -471,238 +470,246 @@
 <!-------------------------------------------------------------------------------->
 <!-- CPHARMA OFF LINE -->
 <!-------------------------------------------------------------------------------->
-<!-- CASO GP -->
-	
-	
-
-<!-- INICIO: Panel CPharma OFF Line -->
 <?php
-if(
-	Auth::user()->sede == 'GRUPO P, C.A'
-){
-/*INICIO CASO FTN (ON-LINE), FLL (OFF-LINE) FAU (OFF-LINE)*/
-	if($SedeConnection == 'FTN'){
+}
+	if(Auth::user()->sede == 'GRUPO P, C.A') {
+?>
+	<?php
+		if($SedeConnection == 'GP') {
 	?>	
+	<!-- CASO GP -->
 		<div class="card-deck">
-	   		<!-- Reportes -->
-			<div class="card border-success mb-3" style="width: 14rem;">	  	
-		  		<div class="card-body text-left bg-success">
-		    		<h5 class="card-title">
-			    		<span class="card-text text-white">
-			    			<?php echo "".SedeFLLOFF."<br/>".LastRestoreDB(nameFLLOFF,$SedeConnection);?>
-			    		</span>
-		    		</h5>	    	    
-		  		</div>
-			  	<div class="card-footer bg-transparent border-success text-right">
-			  		<form action="/reporte/" style="display: inline;">
-					    @csrf
-					    <input id="SEDE" name="SEDE" type="hidden" value="FTNFLL">  
-					    <button type="submit" name="Reporte" role="button" class="btn btn-outline-success btn-sm"></i>Ver reportes</button>
-					</form>
-			  	</div>
-			</div>
-
-			<div class="card border-info mb-3" style="width: 14rem;">	  	
-		  		<div class="card-body text-left bg-info">
-		    		<h5 class="card-title">
-			    		<span class="card-text text-white">
-			    			<?php echo "".SedeFAUOFF."<br/>".LastRestoreDB(nameFAUOFF,$SedeConnection);?>
-			    		</span>
-		    		</h5>	    	    
-		  		</div>
-			  	<div class="card-footer bg-transparent border-info text-right">
-			  		<form action="/reporte/" style="display: inline;">
-					    @csrf
-					    <input id="SEDE" name="SEDE" type="hidden" value="FTNFAU">  
-					    <button type="submit" name="Reporte" role="button" class="btn btn-outline-info btn-sm"></i>Ver reportes</button>
-					</form>
-			  	</div>
-			</div>
-		</div>
-	<?php 
-/*FIN CASO FTN (ON-LINE), FLL (OFF-LINE) FAU (OFF-LINE)*/
-	}
-	else if($SedeConnection =='FLL'){
-	?>
-		<div class="card-deck">
-	   		<!-- Reportes -->
 			<div class="card border-danger mb-3" style="width: 14rem;">	  	
-		  		<div class="card-body text-left bg-danger">
-		    		<h5 class="card-title">
-			    		<span class="card-text text-white">
-			    			<?php echo "".SedeFTNOFF."<br/>".LastRestoreDB(nameFTNOFF,$SedeConnection);?>
-			    		</span>
-		    		</h5>	    	    
-		  		</div>
-			  	<div class="card-footer bg-transparent border-danger text-right">
-			  		<form action="/reporte/" style="display: inline;">
-					    @csrf
-					    <input id="SEDE" name="SEDE" type="hidden" value="FLLFTN">  
-					    <button type="submit" name="Reporte" role="button" class="btn btn-outline-danger btn-sm"></i>Ver reportes</button>
+	  		<div class="card-body text-left bg-danger">
+	    		<h5 class="card-title">
+		    		<span class="card-text text-white">
+		    			<?php echo "".SedeFTNOFF."<br/>".LastRestoreDB(nameFTNOFF,$SedeConnection);?>
+		    		</span>
+	    		</h5>	    	    
+	  		</div>
+		  	<div class="card-footer bg-transparent border-danger text-right">
+		  		<form action="/reporte/" style="display: inline;">
+				    @csrf
+				    <input id="SEDE" name="SEDE" type="hidden" value="GPFTN">  
+				    <button type="submit" name="Reporte" role="button" class="btn btn-outline-danger btn-sm"></i>Ver reportes</button>
 					</form>
-			  	</div>
+		  	</div>
 			</div>
-
-			<div class="card border-info mb-3" style="width: 14rem;">	  	
-		  		<div class="card-body text-left bg-info">
-		    		<h5 class="card-title">
-			    		<span class="card-text text-white">
-			    			<?php echo "".SedeFAUOFF."<br/>".LastRestoreDB(nameFAUOFF,$SedeConnection);?>
-			    		</span>
-		    		</h5>	    	    
-		  		</div>
-			  	<div class="card-footer bg-transparent border-info text-right">
-			  		<form action="/reporte/" style="display: inline;">
-					    @csrf
-					    <input id="SEDE" name="SEDE" type="hidden" value="FLLFAU">
-					    <button type="submit" name="Reporte" role="button" class="btn btn-outline-info btn-sm"></i>Ver reportes</button>
-					</form>
-			  	</div>
-			</div>
-		</div>
-	<?php
-	}
-	else if($SedeConnection =='FAU'){
-	?>
-		<div class="card-deck">
-	   		<!-- Reportes -->
-			<div class="card border-danger mb-3" style="width: 14rem;">	  	
-		  		<div class="card-body text-left bg-danger">
-		    		<h5 class="card-title">
-			    		<span class="card-text text-white">
-			    			<?php echo "".SedeFTNOFF."<br/>".LastRestoreDB(nameFTNOFF,$SedeConnection);?>
-			    		</span>
-		    		</h5>	    	    
-		  		</div>
-			  	<div class="card-footer bg-transparent border-danger text-right">
-			  		<form action="/reporte/" style="display: inline;">
-					    @csrf
-					    <input id="SEDE" name="SEDE" type="hidden" value="FAUFTN"> 
-					    <button type="submit" name="Reporte" role="button" class="btn btn-outline-danger btn-sm"></i>Ver reportes</button>
-					</form>
-			  	</div>
-			</div>
-
 			<div class="card border-success mb-3" style="width: 14rem;">	  	
-		  		<div class="card-body text-left bg-success">
-		    		<h5 class="card-title">
-			    		<span class="card-text text-white">
-		    				<?php echo "".SedeFLLOFF."<br/>".LastRestoreDB(nameFLLOFF,$SedeConnection);?>
-			    		</span>
-		    		</h5>	    	    
-		  		</div>
-			  	<div class="card-footer bg-transparent border-success text-right">
-			  		<form action="/reporte/" style="display: inline;">
-					    @csrf
-					    <input id="SEDE" name="SEDE" type="hidden" value="FAUFLL">
-					    <button type="submit" name="Reporte" role="button" class="btn btn-outline-success btn-sm"></i>Ver reportes</button>
+	  		<div class="card-body text-left bg-success">
+	    		<h5 class="card-title">
+		    		<span class="card-text text-white">
+		    			<?php echo "".SedeFLLOFF."<br/>".LastRestoreDB(nameFLLOFF,$SedeConnection);?>
+		    		</span>
+	    		</h5>	    	    
+	  		</div>
+		  	<div class="card-footer bg-transparent border-success text-right">
+		  		<form action="/reporte/" style="display: inline;">
+				    @csrf
+				    <input id="SEDE" name="SEDE" type="hidden" value="GPFLL">
+				    <button type="submit" name="Reporte" role="button" class="btn btn-outline-success btn-sm"></i>Ver reportes</button>
 					</form>
-			  	</div>
+	  		</div>
+			</div>
+			<div class="card border-info mb-3" style="width: 14rem;">	  	
+	  		<div class="card-body text-left bg-info">
+	    		<h5 class="card-title">
+		    		<span class="card-text text-white">
+		    			<?php echo "".SedeFAUOFF."<br/>".LastRestoreDB(nameFAUOFF,$SedeConnection);?>
+		    		</span>
+	    		</h5>	    	    
+	  		</div>
+		  	<div class="card-footer bg-transparent border-info text-right">
+		  		<form action="/reporte/" style="display: inline;">
+				    @csrf
+				    <input id="SEDE" name="SEDE" type="hidden" value="GPFAU">
+				    <button type="submit" name="Reporte" role="button" class="btn btn-outline-info btn-sm"></i>Ver reportes</button>
+					</form>
+		  	</div>
 			</div>
 		</div>
+	<!-- CASO GP -->
 	<?php
-	}
-	else if($SedeConnection == 'GP'){
+		}
+		if($SedeConnection == 'FTN') {
 	?>	
+	<!-- CASO FTN -->
 		<div class="card-deck">
-	   		<!-- Reportes -->
-			<div class="card border-danger mb-3" style="width: 14rem;">	  	
-		  		<div class="card-body text-left bg-danger">
-		    		<h5 class="card-title">
-			    		<span class="card-text text-white">
-			    			<?php echo "".SedeFTNOFF."<br/>".LastRestoreDB(nameFTNOFF,$SedeConnection);?>
-			    		</span>
-		    		</h5>	    	    
-		  		</div>
-			  	<div class="card-footer bg-transparent border-danger text-right">
-			  		<form action="/reporte/" style="display: inline;">
-					    @csrf
-					    <input id="SEDE" name="SEDE" type="hidden" value="GPFTN">  
-					    <button type="submit" name="Reporte" role="button" class="btn btn-outline-danger btn-sm"></i>Ver reportes</button>
-					</form>
-			  	</div>
-			</div>
-
 			<div class="card border-success mb-3" style="width: 14rem;">	  	
-		  		<div class="card-body text-left bg-success">
-		    		<h5 class="card-title">
-			    		<span class="card-text text-white">
-			    			<?php echo "".SedeFLLOFF."<br/>".LastRestoreDB(nameFLLOFF,$SedeConnection);?>
-			    		</span>
-		    		</h5>	    	    
-		  		</div>
-			  	<div class="card-footer bg-transparent border-success text-right">
-			  		<form action="/reporte/" style="display: inline;">
-					    @csrf
-					    <input id="SEDE" name="SEDE" type="hidden" value="GPFLL">
-					    <button type="submit" name="Reporte" role="button" class="btn btn-outline-success btn-sm"></i>Ver reportes</button>
+	  		<div class="card-body text-left bg-success">
+	    		<h5 class="card-title">
+		    		<span class="card-text text-white">
+		    			<?php echo "".SedeFLLOFF."<br/>".LastRestoreDB(nameFLLOFF,$SedeConnection);?>
+		    		</span>
+	    		</h5>	    	    
+	  		</div>
+		  	<div class="card-footer bg-transparent border-success text-right">
+		  		<form action="/reporte/" style="display: inline;">
+				    @csrf
+				    <input id="SEDE" name="SEDE" type="hidden" value="GPFLL">
+				    <button type="submit" name="Reporte" role="button" class="btn btn-outline-success btn-sm"></i>Ver reportes</button>
 					</form>
-			  	</div>
+	  		</div>
 			</div>
-
 			<div class="card border-info mb-3" style="width: 14rem;">	  	
-		  		<div class="card-body text-left bg-info">
-		    		<h5 class="card-title">
-			    		<span class="card-text text-white">
-			    			<?php echo "".SedeFAUOFF."<br/>".LastRestoreDB(nameFAUOFF,$SedeConnection);?>
-			    		</span>
-		    		</h5>	    	    
-		  		</div>
-			  	<div class="card-footer bg-transparent border-info text-right">
-			  		<form action="/reporte/" style="display: inline;">
-					    @csrf
-					    <input id="SEDE" name="SEDE" type="hidden" value="GPFAU">
-					    <button type="submit" name="Reporte" role="button" class="btn btn-outline-info btn-sm"></i>Ver reportes</button>
+	  		<div class="card-body text-left bg-info">
+	    		<h5 class="card-title">
+		    		<span class="card-text text-white">
+		    			<?php echo "".SedeFAUOFF."<br/>".LastRestoreDB(nameFAUOFF,$SedeConnection);?>
+		    		</span>
+	    		</h5>	    	    
+	  		</div>
+		  	<div class="card-footer bg-transparent border-info text-right">
+		  		<form action="/reporte/" style="display: inline;">
+				    @csrf
+				    <input id="SEDE" name="SEDE" type="hidden" value="GPFAU">
+				    <button type="submit" name="Reporte" role="button" class="btn btn-outline-info btn-sm"></i>Ver reportes</button>
 					</form>
-			  	</div>
+		  	</div>
 			</div>
 		</div>
+	<!-- CASO FTN -->
 	<?php
+		}
+		if($SedeConnection == 'FLL') {
+	?>	
+	<!-- CASO FLL -->
+		<div class="card-deck">
+			<div class="card border-danger mb-3" style="width: 14rem;">	  	
+	  		<div class="card-body text-left bg-danger">
+	    		<h5 class="card-title">
+		    		<span class="card-text text-white">
+		    			<?php echo "".SedeFTNOFF."<br/>".LastRestoreDB(nameFTNOFF,$SedeConnection);?>
+		    		</span>
+	    		</h5>	    	    
+	  		</div>
+		  	<div class="card-footer bg-transparent border-danger text-right">
+		  		<form action="/reporte/" style="display: inline;">
+				    @csrf
+				    <input id="SEDE" name="SEDE" type="hidden" value="GPFTN">  
+				    <button type="submit" name="Reporte" role="button" class="btn btn-outline-danger btn-sm"></i>Ver reportes</button>
+					</form>
+		  	</div>
+			</div>
+			<div class="card border-info mb-3" style="width: 14rem;">	  	
+	  		<div class="card-body text-left bg-info">
+	    		<h5 class="card-title">
+		    		<span class="card-text text-white">
+		    			<?php echo "".SedeFAUOFF."<br/>".LastRestoreDB(nameFAUOFF,$SedeConnection);?>
+		    		</span>
+	    		</h5>	    	    
+	  		</div>
+		  	<div class="card-footer bg-transparent border-info text-right">
+		  		<form action="/reporte/" style="display: inline;">
+				    @csrf
+				    <input id="SEDE" name="SEDE" type="hidden" value="GPFAU">
+				    <button type="submit" name="Reporte" role="button" class="btn btn-outline-info btn-sm"></i>Ver reportes</button>
+					</form>
+		  	</div>
+			</div>
+		</div>
+	<!-- CASO FLL -->
+	<?php
+		}
+		if($SedeConnection == 'FAU') {
+	?>	
+	<!-- CASO FAU -->
+		<div class="card-deck">
+			<div class="card border-danger mb-3" style="width: 14rem;">	  	
+	  		<div class="card-body text-left bg-danger">
+	    		<h5 class="card-title">
+		    		<span class="card-text text-white">
+		    			<?php echo "".SedeFTNOFF."<br/>".LastRestoreDB(nameFTNOFF,$SedeConnection);?>
+		    		</span>
+	    		</h5>	    	    
+	  		</div>
+		  	<div class="card-footer bg-transparent border-danger text-right">
+		  		<form action="/reporte/" style="display: inline;">
+				    @csrf
+				    <input id="SEDE" name="SEDE" type="hidden" value="GPFTN">  
+				    <button type="submit" name="Reporte" role="button" class="btn btn-outline-danger btn-sm"></i>Ver reportes</button>
+					</form>
+		  	</div>
+			</div>
+			<div class="card border-success mb-3" style="width: 14rem;">	  	
+	  		<div class="card-body text-left bg-success">
+	    		<h5 class="card-title">
+		    		<span class="card-text text-white">
+		    			<?php echo "".SedeFLLOFF."<br/>".LastRestoreDB(nameFLLOFF,$SedeConnection);?>
+		    		</span>
+	    		</h5>	    	    
+	  		</div>
+		  	<div class="card-footer bg-transparent border-success text-right">
+		  		<form action="/reporte/" style="display: inline;">
+				    @csrf
+				    <input id="SEDE" name="SEDE" type="hidden" value="GPFLL">
+				    <button type="submit" name="Reporte" role="button" class="btn btn-outline-success btn-sm"></i>Ver reportes</button>
+					</form>
+	  		</div>
+			</div>
+		</div>
+	<!-- CASO FAU -->
+	<?php
+		}
+	  if(Auth::user()->role == 'DEVELOPER'){
+ 	?>
+	<!-- CASO USER DEVELOPER -->
+ 	<div class="card-deck">
+ 		<div class="card border-warning mb-3" style="width: 14rem;">	  	
+  		<div class="card-body text-left bg-warning">
+    		<h5 class="card-title">
+	    		<span class="card-text text-white">
+	    			<?php echo "".SedeDBs; ?>
+	    		</span>
+    		</h5>	    	    
+  		</div>
+	  	<div class="card-footer bg-transparent border-warning text-right">	  		
+	  		<form action="/reporte/" style="display: inline;">
+			    @csrf
+			    <input id="SEDE" name="SEDE" type="hidden" value="DBs">  
+			    <button type="submit" name="Reporte" role="button" class="btn btn-outline-warning btn-sm"></i>Ver reportes</button>
+				</form>
+	  	</div>
+		</div>		
+ 		<div class="card border-warning mb-3" style="width: 14rem;">	  	
+  		<div class="card-body text-left bg-warning">
+    		<h5 class="card-title">
+	    		<span class="card-text text-white">
+	    			<?php echo "".SedeDBm; ?>
+	    		</span>
+    		</h5>	    	    
+  		</div>
+	  	<div class="card-footer bg-transparent border-warning text-right">	  		
+	  		<form action="/reporte/" style="display: inline;">
+			    @csrf
+			    <input id="SEDE" name="SEDE" type="hidden" value="DBm">  
+			    <button type="submit" name="Reporte" role="button" class="btn btn-outline-warning btn-sm"></i>Ver reportes</button>
+				</form>
+	  	</div>
+		</div>
+		<div class="card border-warning mb-3" style="width: 14rem;">	  	
+  		<div class="card-body text-left bg-warning">
+    		<h5 class="card-title">
+	    		<span class="card-text text-white">
+	    			<?php echo "Servidor de Desarrollo Rubmary"; ?>
+	    		</span>
+    		</h5>	    	    
+  		</div>
+	  	<div class="card-footer bg-transparent border-warning text-right">	  		
+	  		<form action="/reporte/" style="display: inline;">
+			    @csrf
+			    <input id="SEDE" name="SEDE" type="hidden" value="DBs">  
+			    <button type="submit" name="Reporte" role="button" class="btn btn-outline-warning btn-sm"></i>Ver reportes</button>
+				</form>
+	  	</div>
+		</div>		
+ 	</div>
+ 	<!-- CASO USER DEVELOPER -->
+ 	<?php
 	}
 }
 ?>
-<!-- FIN: Panel CPharma OFF Line -->
-   	<?php
-	  if(Auth::user()->role == 'DEVELOPER'){
-	 ?>
-
-   	<div class="card-deck">
-   		<div class="card border-warning mb-3" style="width: 14rem;">	  	
-	  		<div class="card-body text-left bg-warning">
-	    		<h5 class="card-title">
-		    		<span class="card-text text-white">
-		    			<?php echo "".SedeDBs; ?>
-		    		</span>
-	    		</h5>	    	    
-	  		</div>
-		  	<div class="card-footer bg-transparent border-warning text-right">	  		
-		  		<form action="/reporte/" style="display: inline;">
-				    @csrf
-				    <input id="SEDE" name="SEDE" type="hidden" value="DBs">  
-				    <button type="submit" name="Reporte" role="button" class="btn btn-outline-warning btn-sm"></i>Ver reportes</button>
-					</form>
-		  	</div>
-			</div>		
-
-	 		<div class="card border-warning mb-3" style="width: 14rem;">	  	
-	  		<div class="card-body text-left bg-warning">
-	    		<h5 class="card-title">
-		    		<span class="card-text text-white">
-		    			<?php echo "".SedeDBm; ?>
-		    		</span>
-	    		</h5>	    	    
-	  		</div>
-		  	<div class="card-footer bg-transparent border-warning text-right">	  		
-		  		<form action="/reporte/" style="display: inline;">
-				    @csrf
-				    <input id="SEDE" name="SEDE" type="hidden" value="DBm">  
-				    <button type="submit" name="Reporte" role="button" class="btn btn-outline-warning btn-sm"></i>Ver reportes</button>
-					</form>
-		  	</div>
-			</div>		
-   	</div>
-
-   	<?php
-		}
-	?>
+<!-------------------------------------------------------------------------------->
+<!-- CPHARMA OFF LINE -->
+<!-------------------------------------------------------------------------------->
 @endsection
