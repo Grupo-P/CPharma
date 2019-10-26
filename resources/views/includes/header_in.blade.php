@@ -83,6 +83,13 @@
         </a>
       </li>
       <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('/cartaCompromiso') }}">     
+          <span data-feather="home"></span>
+          <i class="fas fa-list"></i>
+          Compromisos<span class="sr-only">(current)</span>
+        </a>
+      </li>
+      <li class="nav-item">
         <a class="nav-link CP-Links-Menu" href="{{ url('/traslado') }}">     
           <span data-feather="home"></span>
           <i class="fas fa-people-carry"></i>
@@ -147,6 +154,13 @@
           <span data-feather="home"></span>
           <i class="fas fa-file-invoice"></i>
           Reportes<span class="sr-only">(current)</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('/cartaCompromiso') }}">     
+          <span data-feather="home"></span>
+          <i class="fas fa-list"></i>
+          Compromisos<span class="sr-only">(current)</span>
         </a>
       </li>
       <li class="nav-item">
@@ -256,6 +270,13 @@
         </a>
       </li>
       <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('/cartaCompromiso') }}">     
+          <span data-feather="home"></span>
+          <i class="fas fa-list"></i>
+          Compromisos<span class="sr-only">(current)</span>
+        </a>
+      </li>
+      <li class="nav-item">
         <a class="nav-link CP-Links-Menu" href="{{ url('/traslado') }}">     
           <span data-feather="home"></span>
           <i class="fas fa-people-carry"></i>
@@ -314,6 +335,13 @@
         </a>
       </li>
       <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('/cartaCompromiso') }}">     
+          <span data-feather="home"></span>
+          <i class="fas fa-list"></i>
+          Compromisos<span class="sr-only">(current)</span>
+        </a>
+      </li>
+      <li class="nav-item">
         <a class="nav-link CP-Links-Menu" href="{{ url('/etiqueta') }}">     
           <span data-feather="home"></span>
           <i class="fas fa-tag"></i>
@@ -355,6 +383,13 @@
           <span data-feather="home"></span>
           <i class="fas fa-file-invoice"></i>
           Reportes<span class="sr-only">(current)</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('/cartaCompromiso') }}">     
+          <span data-feather="home"></span>
+          <i class="fas fa-list"></i>
+          Compromisos<span class="sr-only">(current)</span>
         </a>
       </li>
       <li class="nav-item">
@@ -441,6 +476,13 @@
           <span data-feather="home"></span>
           <i class="fas fa-file-invoice"></i>
           Reportes<span class="sr-only">(current)</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('/cartaCompromiso') }}">     
+          <span data-feather="home"></span>
+          <i class="fas fa-list"></i>
+          Compromisos<span class="sr-only">(current)</span>
         </a>
       </li>
       <li class="nav-item">
