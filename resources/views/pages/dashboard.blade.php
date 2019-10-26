@@ -118,6 +118,9 @@
   }
 ?>
 <!-------------------------------------------------------------------------------->
+<?php
+	if((Auth::user()->departamento != 'VENTAS')&&(Auth::user()->departamento != 'RRHH')){
+?>
 <div class="card-deck">
 		<!-- Empresas -->
 	 	<div class="card border-danger mb-3" style="width: 14rem;">	  	
@@ -153,10 +156,6 @@
 	  		<a href="/proveedor/" class="btn btn-outline-success btn-sm">Visualizar</a>
 	  	</div>
 		</div>
-
-	<?php
-		if(Auth::user()->departamento != 'VENTAS'){
-	?>
 		<!-- Reportes -->
 		<div class="card border-info mb-3" style="width: 14rem;">	  	
 	  		<div class="card-body text-left bg-info">
@@ -172,10 +171,10 @@
 		  		<a href="/sedes_reporte/" class="btn btn-outline-info btn-sm">Visualizar</a>
 		  	</div>
 		</div>
-	<?php
-	  }
-	?>
 	</div>
+<?php
+  }
+?>
 <!-------------------------------------------------------------------------------->
 <!-- COMPRAS -->
 <?php
@@ -601,12 +600,66 @@
 ?>
 <!-- VENTAS -->
 <!-------------------------------------------------------------------------------->
-
+<!-------------------------------------------------------------------------------->
+<!-- RRHH -->
+<?php
+  if(Auth::user()->departamento == 'RRHH'){
+?>
+	<!-- Modal RRHH -->
+	<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  	<div class="modal-dialog modal-dialog-centered" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <h5 class="modal-title text-info" id="exampleModalCenterTitle"><i class="fas fa-bell text-info CP-beep"></i> Novedades</h5>
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	          <span aria-hidden="true">&times;</span>
+	        </button>
+	      </div>
+	      <div class="modal-body">
+	      	<label>Hola <b class="text-info">{{ Auth::user()->name }}</b>.</label>
+	      	<br/>
+	      	Estas usando<b class="text-info"> CPharma v.4.7</b>, para el departamento de <b class="text-info">{{ Auth::user()->departamento }}</b>
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-outline-info" data-dismiss="modal">Aceptar</button>
+	      </div>
+	    </div>
+  	</div>
+	</div>
+	<!-- Modal RRHH -->
+	<!-- Dashboard RRHH-->
+	<div class="card-deck">
+		<div class="card border-dark mb-3" style="width: 14rem;">	  	
+			<div class="card-body text-left bg-dark">
+	  		<h3 class="card-title">
+	    		<span class="card-text text-white">
+	    			<i class="fas fa-user-circle"></i>
+	    			<?php
+						echo '0';
+					?>						
+	    		</span>
+	  		</h3>
+	  		<p class="card-text text-white">
+				<?php 
+					echo 'Candidatos registrados';
+				?>
+	  		</p>
+			</div>
+			<div class="card-footer bg-transparent border-dark text-right">
+	  		<a href="#" class="btn btn-outline-dark btn-sm">Visualizar</a>
+	  	</div>		
+		</div>
+	</div>
+	<!-- Dashboard RRHH-->
+<?php
+  }
+?>
+<!-- RRHH -->
+<!-------------------------------------------------------------------------------->
 
 <?php
-  if(Auth::user()->role == 'DEVELOPER'){
+  if(Auth::user()->role == 'fghfg'){
 ?>
-
 
 	<div class="card-deck">		
 		<!-- Usuario -->

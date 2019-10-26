@@ -13,6 +13,9 @@
   </li>
   <!-- DASHBOARD -->
 <!-------------------------------------------------------------------------------->
+<?php
+  if((Auth::user()->departamento != 'VENTAS')&&(Auth::user()->departamento != 'RRHH')){
+?>
   <!-- AGENDA -->
   <div class="btn-group navbar-brand">
     <button type="button" class="btn btn-outline-info dropdown-toggle textoI" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -35,6 +38,9 @@
       </li>
     </div>
   </div>
+<?php
+  }
+?>
   <!-- AGENDA -->
 <!-------------------------------------------------------------------------------->
 <?php
