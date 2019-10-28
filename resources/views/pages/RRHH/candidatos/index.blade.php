@@ -4,6 +4,12 @@
   Candidatos
 @endsection
 
+@section('scriptsHead')
+  <style>
+    th, td {text-align: center;}
+  </style>
+@endsection
+
 @section('content')
   <!-- Modal Guardar -->
   @if(session('Saved'))
@@ -67,7 +73,30 @@
             </button>
           </div>
           <div class="modal-body">
-            <h4 class="h6">Candidato actualizado con exito</h4>
+            <h4 class="h6">Candidato desincorporado con éxito</h4>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline-success" data-dismiss="modal">Aceptar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  @endif
+
+  @if(session('Deleted1'))
+    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title text-info" id="exampleModalCenterTitle">
+              <i class="fas fa-info text-info"></i>{{ session('Deleted') }}
+            </h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <h4 class="h6">Candidato reincorporado con éxito</h4>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-outline-success" data-dismiss="modal">Aceptar</button>
@@ -86,7 +115,7 @@
   <table style="width:100%;">
     <tr>
       <td style="width:10%;" align="center">
-        <a href="#" role="button" class="btn btn-outline-info btn-sm" style="display: inline; text-align: left;">
+        <a href="{{ url('/candidatos/create') }}" role="button" class="btn btn-outline-info btn-sm" style="display: inline; text-align: left;">
           <i class="fa fa-plus"></i>&nbsp;Agregar
         </a>
       </td>
@@ -110,11 +139,11 @@
       <thead class="thead-dark">
         <tr>
             <th scope="col" class="stickyCP">#</th>
-            <th scope="col" class="stickyCP">Nombre</th>
-            <th scope="col" class="stickyCP">Teléfono</th>          
-            <th scope="col" class="stickyCP">Correo</th>
+            <th scope="col" class="stickyCP">Nombres</th>
+            <th scope="col" class="stickyCP">Apellidos</th>
+            <th scope="col" class="stickyCP">Cédula</th>
+            <th scope="col" class="stickyCP">Teléfono</th>
             <th scope="col" class="stickyCP">Estatus</th>
-            <th scope="col" class="stickyCP">Vacante</th>
             <th scope="col" class="stickyCP">Acciones</th>
         </tr>
       </thead>
@@ -123,7 +152,9 @@
       @foreach($candidatos as $candidato)
         <tr>
           <th>{{$candidato->id}}</th>
-          <td>{{$candidato->nombres}} {{$candidato->apellidos}}</td>
+          <td>{{$candidato->nombres}}</td>
+          <td>{{$candidato->apellidos}}</td>
+          <td>{{$candidato->cedula}}</td>
           
           <?php if($candidato->telefono_celular == '') { ?>
             <td>{{$candidato->telefono_habitacion}}</td>
@@ -132,12 +163,14 @@
           ?>
             <td>{{$candidato->telefono_celular}}</td>
           <?php 
-            } 
+            } else {
+          ?>
+            <td>{{$candidato->telefono_celular}}</td>
+          <?php
+            }
           ?>
 
-          <td>{{$candidato->correo}}</td>
           <td>{{$candidato->estatus}}</td>
-          <td>{{$candidato->vacante}}</td>
 
           <!-- ***************** VALIDACION DE ROLES ***************** -->
           <td style="width:140px;">
@@ -146,15 +179,15 @@
 
               if($candidato->estatus != 'RECHAZADO') {
           ?>
-            <a href="/candidato/{{$candidato->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
+            <a href="/candidatos/{{$candidato->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
               <i class="far fa-eye"></i>
             </a>
 
-            <a href="/candidato/{{$candidato->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
+            <a href="/candidatos/{{$candidato->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
               <i class="fas fa-edit"></i>
             </a>
 
-            <form action="/candidato/{{$candidato->id}}" method="POST" style="display: inline;">
+            <form action="/candidatos/{{$candidato->id}}" method="POST" style="display: inline;">
               @method('DELETE')
               @csrf
               <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Desincorporar">
@@ -165,7 +198,7 @@
           <?php
             } else if($candidato->estatus == 'RECHAZADO') {
           ?>
-            <form action="/candidato/{{$candidato->id}}" method="POST" style="display: inline;">
+            <form action="/candidatos/{{$candidato->id}}" method="POST" style="display: inline;">
               @method('DELETE')
               @csrf
               <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Reincorporar">
@@ -176,17 +209,17 @@
             }
           } else if(Auth::user()->role == 'ANALISTA') {
           ?>
-            <a href="/candidato/{{$candidato->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
+            <a href="/candidatos/{{$candidato->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
               <i class="far fa-eye"></i>
             </a>
 
-            <a href="/candidato/{{$candidato->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
+            <a href="/candidatos/{{$candidato->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
               <i class="fas fa-edit"></i>
             </a>
           <?php
             } else if(Auth::user()->role == 'USUARIO') {
           ?>
-            <a href="/candidato/{{$candidato->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
+            <a href="/candidatos/{{$candidato->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
               <i class="far fa-eye"></i>
             </a>
           <?php
