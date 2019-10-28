@@ -173,3 +173,5 @@ Route::resource('ordenCompra', 'OrdenCompraController');
 Route::resource('candidatos', 'RH_CandidatoController');
 
 Route::resource('pruebas', 'RH_PruebaController');
+
+?>
