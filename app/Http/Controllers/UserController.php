@@ -33,12 +33,11 @@ class UserController extends Controller
             return view('pages.usuario.index', compact('usuarios'));
         }
         else{
-            $usuarios =  
+            $usuarios =
             User::all()
             ->where('role', '<>','DEVELOPER');
             return view('pages.usuario.index', compact('usuarios'));
         }
-        
     }
 
     /**
