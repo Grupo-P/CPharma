@@ -130,6 +130,10 @@ class RH_PruebaController extends Controller {
         $pruebas->user = auth()->user()->name;        
         $pruebas->save();
 
-        return redirect()->route('pruebas.index')->with('Deleted', ' Informacion');
+        if($pruebas->estatus == 'ACTIVO'){
+            return redirect()->route('pruebas.index')->with('Deleted', ' Informacion');
+        }
+
+        return redirect()->route('pruebas.index')->with('Deleted1', ' Informacion');
     }
 }
