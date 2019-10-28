@@ -61,7 +61,7 @@
                             <label for="estatus" class="col-md-4 col-form-label text-md-right">{{ __('Estatus') }}</label>
 
                             <div class="col-md-6">
-                                <input id="estatus" type="text" class="form-control{{ $errors->has('estatus') ? ' is-invalid' : '' }}" name="estatus" value="{{ old('estatus') }}" required autofocus>
+                                <input id="estatus" type="password" class="form-control{{ $errors->has('estatus') ? ' is-invalid' : '' }}" name="estatus" value="{{ old('estatus') }}" required autofocus>
 
                                 @if ($errors->has('estatus'))
                                     <span class="invalid-feedback" estatus="alert">
