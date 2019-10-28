@@ -168,3 +168,8 @@ Route::resource('etiqueta', 'EtiquetaController');
 Route::resource('traslado', 'TrasladoController');
 
 Route::resource('ordenCompra', 'OrdenCompraController');
+
+//***************************** RRHH routing *****************************//
+Route::resource('candidatos', 'RH_CandidatoController');
+
+Route::resource('pruebas', 'RH_PruebaController');
