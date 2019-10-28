@@ -136,6 +136,10 @@ class RH_CandidatoController extends Controller {
          $candidatos->user = auth()->user()->name;        
          $candidatos->save();
 
+         if($candidatos->estatus == 'POSTULADO'){
+            return redirect()->route('candidatos.index')->with('Deleted1', ' Informacion');
+         }
+
          return redirect()->route('candidatos.index')->with('Deleted', ' Informacion');
     }
 }
