@@ -118,6 +118,18 @@ class RH_PruebaController extends Controller {
      */
     public function destroy($id)
     {
-        //
+        $pruebas = RH_Prueba::find($id);
+
+        if($pruebas->estatus == 'ACTIVO'){
+            $pruebas->estatus = 'INACTIVO';
+        }
+        else if($pruebas->estatus == 'INACTIVO'){
+            $pruebas->estatus = 'ACTIVO';
+        }
+
+        $pruebas->user = auth()->user()->name;        
+        $pruebas->save();
+
+        return redirect()->route('pruebas.index')->with('Deleted', ' Informacion');
     }
 }
