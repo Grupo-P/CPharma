@@ -54,11 +54,11 @@
         <tbody>
           <tr>
             <th scope="row">{!! Form::label('nombres', 'Nombres') !!}</th>
-            <td>{!! Form::text('nombres', null, [ 'class' => 'form-control', 'placeholder' => 'Maria Raquel', 'autofocus']) !!}</td>
+            <td>{!! Form::text('nombres', null, [ 'class' => 'form-control', 'placeholder' => 'Maria Raquel', 'autofocus', 'pattern' => '^[A-Za-zñÑáéíóúÁÉÍÓÚ]+\s?[A-Za-zñÑáéíóúÁÉÍÓÚ]+$', 'title' => 'El nombre solo debe contener letras', 'required']) !!}</td>
           </tr>
           <tr>
               <th scope="row">{!! Form::label('apellidos', 'Apellidos') !!}</th>
-              <td>{!! Form::text('apellidos', null, [ 'class' => 'form-control', 'placeholder' => 'Herrera Perez']) !!}</td>
+              <td>{!! Form::text('apellidos', null, [ 'class' => 'form-control', 'placeholder' => 'Herrera Perez', 'pattern' => '^[A-Za-zñÑáéíóúÁÉÍÓÚ]+\s?[A-Za-zñÑáéíóúÁÉÍÓÚ]+$', 'title' => 'El apellido solo debe contener letras', 'required']) !!}</td>
           </tr>
           <tr>
             <th scope="row">{!! Form::label('cedula', 'Cédula') !!}</th>
@@ -70,7 +70,7 @@
                   </td>
 
                   <td>
-                    {!! Form::text('cedula', null, [ 'class' => 'form-control', 'placeholder' => '24921001']) !!}
+                    {!! Form::text('cedula', null, [ 'class' => 'form-control', 'placeholder' => '24921001', 'pattern' => '^[0-9]{7,}$', 'title' => 'La cédula debe ser un valor numérico', 'required']) !!}
                   </td>
                 </tr>
               </table>
@@ -78,15 +78,15 @@
           </tr>
           <tr>
               <th scope="row">{!! Form::label('telefono_celular', 'Teléfono celular') !!}</th>
-              <td>{!! Form::text('telefono_celular', null, [ 'class' => 'form-control', 'placeholder' => '0414-1234567']) !!}</td>
+              <td>{!! Form::text('telefono_celular', null, [ 'class' => 'form-control', 'placeholder' => '0414-1234567', 'pattern' => '^0[1246]{3}-[0-9]{7}$', 'title' => 'El formato telefónico es: 0xxx-xxxxxxx']) !!}</td>
           </tr>
           <tr>
               <th scope="row">{!! Form::label('telefono_habitacion', 'Teléfono de habitación') !!}</th>
-              <td>{!! Form::text('telefono_habitacion', null, [ 'class' => 'form-control', 'placeholder' => '0261-1234567']) !!}</td>
+              <td>{!! Form::text('telefono_habitacion', null, [ 'class' => 'form-control', 'placeholder' => '0261-1234567', 'pattern' => '^0[1246]{3}-[0-9]{7}$', 'title' => 'El formato telefónico es: 0xxx-xxxxxxx']) !!}</td>
           </tr>
           <tr>
               <th scope="row">{!! Form::label('correo', 'Correo') !!}</th>
-              <td>{!! Form::text('correo', null, [ 'class' => 'form-control', 'placeholder' => 'mherrera@farmacia72.com.ve']) !!}</td>
+              <td>{!! Form::text('correo', null, [ 'class' => 'form-control', 'placeholder' => 'mherrera@farmacia72.com.ve', 'pattern' => '^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$', 'title' => 'El formato de correo es: usuario@proveedor.dominio']) !!}</td>
           </tr>
 
           <tr>
@@ -102,7 +102,7 @@
 
           <tr>
               <th scope="row">{!! Form::label('direccion', 'Dirección') !!}</th>
-              <td>{!! Form::textarea('direccion', null, [ 'class' => 'form-control', 'placeholder' => 'Av. 15 delicias con calle 72', 'rows' => '3']) !!}</td>
+              <td>{!! Form::textarea('direccion', null, [ 'class' => 'form-control', 'placeholder' => 'Av. 15 delicias con calle 72', 'rows' => '3', 'required']) !!}</td>
           </tr>
           <tr>
               <th scope="row">{!! Form::label('observaciones', 'Observaciones') !!}</th>
