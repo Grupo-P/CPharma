@@ -9,8 +9,19 @@
 		Prueba_Precio_Articulo('49601');
 		Prueba_Precio_Articulo('49602');
 		Prueba_Precio_Articulo('49603');
-		Prueba_Precio_Articulo('49604');
-		Prueba_Precio_Articulo('49605');
+        Prueba_Precio_Articulo('49604');
+        Prueba_Precio_Articulo('49605');
+        Prueba_Precio_Articulo('59685');
+        Prueba_Precio_Articulo('59686');
+        Prueba_Precio_Articulo('59687');
+        Prueba_Precio_Articulo('59688');
+        Prueba_Precio_Articulo('59689');
+        Prueba_Precio_Articulo('59690');
+        Prueba_Precio_Articulo('59691');
+        Prueba_Precio_Articulo('59692');
+        Prueba_Precio_Articulo('59693');
+        Prueba_Precio_Articulo('59694');
+        Prueba_Precio_Articulo('59695');
 ?>
 
 <?php 
