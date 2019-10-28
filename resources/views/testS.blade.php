@@ -1,5 +1,5 @@
 <?php
-	include(app_path().'\functions\config.php');
+		include(app_path().'\functions\config.php');
 		include(app_path().'\functions\functions.php');
 		include(app_path().'\functions\querys_mysql.php');
 		include(app_path().'\functions\querys_sqlserver.php');
@@ -29,7 +29,7 @@
     $Precio = FG_Calculo_Precio_Alfa($Existencia,$ExistenciaAlmacen1,$ExistenciaAlmacen2,$IsTroquelado,$UtilidadArticulo,$UtilidadCategoria,$TroquelAlmacen1,$PrecioCompraBrutoAlmacen1,$TroquelAlmacen2,
 		$PrecioCompraBrutoAlmacen2,$PrecioCompraBruto,$IsIVA);
 
-		echo'Para el articulo: '.$Descripcion.', el precio final de venta es: '.$Precio;
+		echo'Para el articulo: '.$Descripcion.', el precio final de venta es: '.number_format($Precio,2,"," ,"." );
 ?>
 
 
@@ -240,5 +240,6 @@
 --Ordanamiento
     ORDER BY InvArticulo.Id ASC
 		";
+		return $sql;
 	}
 ?>

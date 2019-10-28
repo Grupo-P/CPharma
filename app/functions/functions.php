@@ -855,6 +855,6 @@
 					}
 				}
 			}
-		return $PrecioCalculado
+		return $PrecioCalculado;
 	}
 ?>
