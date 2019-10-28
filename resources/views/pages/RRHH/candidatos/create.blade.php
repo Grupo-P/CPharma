@@ -235,6 +235,7 @@
       var enviar = $('#enviar');
       var crear_candidato = $('#crear_candidato');
       var clasesError = 'border border-danger campoNulo';
+      var telefonoNulo = 'Debe indicar al menos un teléfono';
 
       enviar.click(function(e) {
         e.preventDefault();
@@ -281,6 +282,16 @@
               }
             }
           }//Validacion de telefonos y correo
+          else if(
+            (telefono_celular.val() == '') 
+            && (telefono_habitacion.val() == '')) {
+
+            telefono_celular.addClass(clasesError);
+            telefono_celular.attr('placeholder', telefonoNulo);
+
+            telefono_habitacion.addClass(clasesError);
+                telefono_habitacion.attr('placeholder', telefonoNulo);
+          }//Telefonos vacios
         }//Validacion total
         else if(
           (nombres.val() == '')
@@ -380,6 +391,13 @@
 
             case 'telefono_celular':
               if((e.keyCode != 9) && (e.keyCode != 16) && (e.keyCode != 20)) {
+
+                if(telefono_celular.attr('placeholder') == telefonoNulo) {
+
+                  telefono_habitacion.removeClass('border border-danger campoNulo');
+                  telefono_habitacion.attr('placeholder', '0261-1234567');
+                }
+
                 telefono_celular.removeClass('border border-danger campoNulo');
                 telefono_celular.attr('placeholder', '0414-1234567');
               }
@@ -387,6 +405,13 @@
 
             case 'telefono_habitacion':
               if((e.keyCode != 9) && (e.keyCode != 16) && (e.keyCode != 20)) {
+
+                if(telefono_habitacion.attr('placeholder') == telefonoNulo) {
+
+                  telefono_celular.removeClass('border border-danger campoNulo');
+                  telefono_celular.attr('placeholder', '0414-1234567');
+                }
+
                 telefono_habitacion.removeClass('border border-danger campoNulo');
                 telefono_habitacion.attr('placeholder', '0261-1234567');
               }
