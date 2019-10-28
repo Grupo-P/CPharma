@@ -5,15 +5,18 @@
   </a>
 <div style="position: absolute; right:0%">
 <!-------------------------------------------------------------------------------->
-  <!-- DASHBOARD -->
+<!-- DASHBOARD -->
   <li class="navbar-brand">
     <a class="btn btn-outline-info textoN" href="{{ url('/home') }}" role="button"> 
       <i class="fas fa-columns"></i> Dashboard
     </a>
   </li>
-  <!-- DASHBOARD -->
+<!-- DASHBOARD -->
 <!-------------------------------------------------------------------------------->
-  <!-- AGENDA -->
+<!-- AGENDA -->
+<?php
+  if((Auth::user()->departamento != 'VENTAS')&&(Auth::user()->departamento != 'RRHH')){
+?>
   <div class="btn-group navbar-brand">
     <button type="button" class="btn btn-outline-info dropdown-toggle textoI" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
       <i class="fas fa-book"></i> Agenda
@@ -35,12 +38,15 @@
       </li>
     </div>
   </div>
-  <!-- AGENDA -->
+<?php
+  }
+?>
+<!-- AGENDA -->
 <!-------------------------------------------------------------------------------->
+<!-- COMPRAS -->
 <?php
   if(Auth::user()->departamento == 'COMPRAS'){
 ?>
-  <!-- COMPRAS -->
   <div class="btn-group navbar-brand">
     <button type="button" class="btn btn-outline-info dropdown-toggle textoI" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
       <i class="fas fa-chart-bar"></i> Compras
@@ -53,17 +59,24 @@
           Reportes<span class="sr-only">(current)</span>
         </a>
       </li>
+      <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('/cartaCompromiso') }}">     
+          <span data-feather="home"></span>
+          <i class="fas fa-list"></i>
+          Compromisos<span class="sr-only">(current)</span>
+        </a>
+      </li>
     </div>
   </div>
-  <!-- COMPRAS -->
 <?php
   }
 ?>
+<!-- COMPRAS -->
 <!-------------------------------------------------------------------------------->
+<!-- OPERACIONES -->
 <?php
   if(Auth::user()->departamento == 'OPERACIONES'){
 ?>
-  <!-- OPERACIONES -->
   <div class="btn-group navbar-brand">
     <button type="button" class="btn btn-outline-info dropdown-toggle textoI" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
       <i class="fas fa-tasks"></i> Operaciones
@@ -77,23 +90,44 @@
         </a>
       </li>
       <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('/reporte8/') }}">     
+          <span data-feather="home"></span>
+          <i class="fas fa-stamp"></i>
+          Troquel<span class="sr-only">(current)</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('/cartaCompromiso') }}">     
+          <span data-feather="home"></span>
+          <i class="fas fa-list"></i>
+          Compromisos<span class="sr-only">(current)</span>
+        </a>
+      </li>
+      <li class="nav-item">
         <a class="nav-link CP-Links-Menu" href="{{ url('/traslado') }}">     
           <span data-feather="home"></span>
           <i class="fas fa-people-carry"></i>
           Traslado<span class="sr-only">(current)</span>
         </a>
       </li>
+      <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('/tasaVenta') }}">
+          <span data-feather="home"></span>
+          <i class="fas fa-credit-card"></i>
+          Tasa de venta<span class="sr-only">(current)</span>
+        </a>
+      </li>
     </div>
   </div>
-  <!-- OPERACIONES -->
 <?php
   }
 ?>
+<!-- OPERACIONES -->
 <!-------------------------------------------------------------------------------->
+<!-- ALMACEN -->
 <?php
   if(Auth::user()->departamento == 'ALMACEN'){
 ?>
-  <!-- ALMACEN -->
   <div class="btn-group navbar-brand">
     <button type="button" class="btn btn-outline-info dropdown-toggle textoI" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
       <i class="fas fa-warehouse"></i> Almacen
@@ -115,15 +149,15 @@
       </li>
     </div>
   </div>
-  <!-- ALMACEN -->
 <?php
   }
 ?>
+<!-- ALMACEN -->
 <!-------------------------------------------------------------------------------->
+<!-- DEVOLUCIONES -->
 <?php
   if(Auth::user()->departamento == 'DEVOLUCIONES'){
 ?>
-  <!-- DEVOLUCIONES -->
   <div class="btn-group navbar-brand">
     <button type="button" class="btn btn-outline-info dropdown-toggle textoI" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
       <i class="fas fa-history"></i> Devoluciones
@@ -136,17 +170,31 @@
           Reportes<span class="sr-only">(current)</span>
         </a>
       </li>
+      <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('/cartaCompromiso') }}">     
+          <span data-feather="home"></span>
+          <i class="fas fa-list"></i>
+          Compromisos<span class="sr-only">(current)</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('/traslado') }}">     
+          <span data-feather="home"></span>
+          <i class="fas fa-people-carry"></i>
+          Traslado<span class="sr-only">(current)</span>
+        </a>
+      </li>
     </div>
   </div>
-  <!-- DEVOLUCIONES -->
 <?php
   }
 ?>
+<!-- DEVOLUCIONES -->
 <!-------------------------------------------------------------------------------->
+<!-- SURTIDO -->
 <?php
   if(Auth::user()->departamento == 'SURTIDO'){
 ?>
-  <!-- SURTIDO -->
   <div class="btn-group navbar-brand">
     <button type="button" class="btn btn-outline-info dropdown-toggle textoI" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
       <i class="fas fa-dolly-flatbed"></i> Surtido
@@ -168,15 +216,15 @@
       </li>
     </div>
   </div>
-  <!-- SURTIDO -->
 <?php
   }
 ?>
+<!-- SURTIDO -->
 <!-------------------------------------------------------------------------------->
+<!-- VENTAS -->
 <?php
   if(Auth::user()->departamento == 'VENTAS'){
 ?>
-  <!-- VENTAS -->
   <div class="btn-group navbar-brand">
     <button type="button" class="btn btn-outline-info dropdown-toggle textoI" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
       <i class="fas fa-cash-register"></i> Ventas
@@ -191,15 +239,15 @@
       </li>
     </div>
   </div>
-  <!-- VENTAS -->
 <?php
   }
 ?>
+<!-- VENTAS -->
 <!-------------------------------------------------------------------------------->
+<!-- RRHH -->
 <?php
   if(Auth::user()->departamento == 'RRHH'){
 ?>
-  <!-- RRHH -->
   <div class="btn-group navbar-brand">
     <button type="button" class="btn btn-outline-info dropdown-toggle textoI" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
       <i class="fas fa-user-circle"></i> RRHH
@@ -214,15 +262,15 @@
       </li>
     </div>
   </div>
-  <!-- RRHH -->
 <?php
   }
 ?>
+<!-- RRHH -->
 <!-------------------------------------------------------------------------------->
+<!-- ADMINISTRACION -->
 <?php
   if(Auth::user()->departamento == 'ADMINISTRACION'){
 ?>
-  <!-- ADMINISTRACION -->
   <div class="btn-group navbar-brand">
     <button type="button" class="btn btn-outline-info dropdown-toggle textoI" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
       <i class="fas fa-calculator"></i> Administracion
@@ -233,6 +281,13 @@
           <span data-feather="home"></span>
           <i class="fas fa-file-invoice"></i>
           Reportes<span class="sr-only">(current)</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('/cartaCompromiso') }}">     
+          <span data-feather="home"></span>
+          <i class="fas fa-list"></i>
+          Compromisos<span class="sr-only">(current)</span>
         </a>
       </li>
       <li class="nav-item">
@@ -272,15 +327,15 @@
       </li>
     </div>
   </div>
-  <!-- ADMINISTRACION -->
 <?php
   }
 ?>
+<!-- ADMINISTRACION -->
 <!-------------------------------------------------------------------------------->
+<!-- LÍDER DE TIENDA -->
 <?php
   if(Auth::user()->departamento == 'LÍDER DE TIENDA'){
 ?>
-  <!-- LÍDER DE TIENDA -->
   <div class="btn-group navbar-brand">
     <button type="button" class="btn btn-outline-info dropdown-toggle textoI" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
       <i class="fas fa-store"></i> Lider de tienda
@@ -291,6 +346,20 @@
           <span data-feather="home"></span>
           <i class="fas fa-file-invoice"></i>
           Reportes<span class="sr-only">(current)</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('/reporte8/') }}">     
+          <span data-feather="home"></span>
+          <i class="fas fa-stamp"></i>
+          Troquel<span class="sr-only">(current)</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('/cartaCompromiso') }}">     
+          <span data-feather="home"></span>
+          <i class="fas fa-list"></i>
+          Compromisos<span class="sr-only">(current)</span>
         </a>
       </li>
       <li class="nav-item">
@@ -316,15 +385,15 @@
       </li>
     </div>
   </div>
-  <!-- LÍDER DE TIENDA -->
 <?php
   }
 ?>
+<!-- LÍDER DE TIENDA -->
 <!-------------------------------------------------------------------------------->
+<!-- GERENCIA -->
 <?php
   if(Auth::user()->departamento == 'GERENCIA'){
 ?>
-  <!-- GERENCIA -->
   <div class="btn-group navbar-brand">
     <button type="button" class="btn btn-outline-info dropdown-toggle textoI" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
       <i class="fas fa-user-tie"></i> Gerencia
@@ -335,6 +404,20 @@
           <span data-feather="home"></span>
           <i class="fas fa-file-invoice"></i>
           Reportes<span class="sr-only">(current)</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('/reporte8/') }}">     
+          <span data-feather="home"></span>
+          <i class="fas fa-stamp"></i>
+          Troquel<span class="sr-only">(current)</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('/cartaCompromiso') }}">     
+          <span data-feather="home"></span>
+          <i class="fas fa-list"></i>
+          Compromisos<span class="sr-only">(current)</span>
         </a>
       </li>
       <li class="nav-item">
@@ -402,15 +485,15 @@
       </li>
     </div>
   </div>
-  <!-- GERENCIA -->
 <?php
   }
 ?>
+<!-- GERENCIA -->
 <!------------------------------------------------------------------------------->
+<!-- TECNOLOGIA -->
 <?php
   if(Auth::user()->departamento == 'TECNOLOGIA'){
 ?>
-  <!-- TECNOLOGIA -->
   <div class="btn-group navbar-brand">
     <button type="button" class="btn btn-outline-info dropdown-toggle textoI" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
       <i class="fas fa-user-cog"></i> Tecnologia
@@ -421,6 +504,20 @@
           <span data-feather="home"></span>
           <i class="fas fa-file-invoice"></i>
           Reportes<span class="sr-only">(current)</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('/reporte8/') }}">     
+          <span data-feather="home"></span>
+          <i class="fas fa-stamp"></i>
+          Troquel<span class="sr-only">(current)</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('/cartaCompromiso') }}">     
+          <span data-feather="home"></span>
+          <i class="fas fa-list"></i>
+          Compromisos<span class="sr-only">(current)</span>
         </a>
       </li>
       <li class="nav-item">
@@ -523,16 +620,16 @@
       </li>
     </div>
   </div>
-  <!-- TECNOLOGIA -->
 <?php
   }
 ?>
+<!-- TECNOLOGIA -->
 <!-------------------------------------------------------------------------------->
+<!-- DEVELOPER -->
 <?php
   if(Auth::user()->departamento == 'TECNOLOGIA'
     || Auth::user()->role == 'DEVELOPER'){
 ?>
-  <!-- DEVELOPER -->
   <div class="btn-group navbar-brand">
     <button type="button" class="btn btn-outline-info dropdown-toggle textoI" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
       <i class="fas fa-user-secret"></i> Developer
@@ -568,12 +665,12 @@
       </li>
     </div>
   </div>
-  <!-- DEVELOPER -->
 <?php
   }
 ?>
+<!-- DEVELOPER -->
 <!-------------------------------------------------------------------------------->
-  <!-- SALIR -->
+<!-- SALIR -->
   <li class="navbar-brand">
     <a class="navbar-brand textoN btn btn-outline-info" href="{{ route('logout') }}" role="button" onclick="event.preventDefault();
                        document.getElementById('logout-form').submit();">
@@ -585,8 +682,8 @@
      @csrf
     </form>
   </li>
-  <!-- SALIR -->
+<!-- SALIR -->
 <!-------------------------------------------------------------------------------->
 </div>
 </nav>
-<hr class="row align-items-start col-12"> 
+<hr class="row align-items-start col-12">

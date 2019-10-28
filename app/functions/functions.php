@@ -857,4 +857,107 @@
 			}
 		return $PrecioCalculado;
 	}
+  /**********************************************************************************/
+  /*
+		TITULO: FG_Ruta_Reporte
+		FUNCION:Busca la ruta que le pertenece al nombre del reporte
+		RETORNO: url
+		DESARROLLADO POR: SERGIO COVA
+ 	*/
+	function FG_Ruta_Reporte($NombreReporte){
+		switch ($NombreReporte) {
+			case 'Activacion de proveedores':
+				$ruta = '/reporte1';
+			break;
+			case 'Historico de productos':
+				$ruta = '/reporte2';
+			break;
+			case 'Productos mas vendidos':
+				$ruta = '/reporte3';
+			break;
+			case 'Productos menos vendidos':
+				$ruta = '/reporte4';
+			break;
+			case 'Productos en falla':
+				$ruta = '/reporte5';
+			break;
+			case 'Pedido de productos':
+				$ruta = '/reporte6';
+			break;
+			case 'Catalogo de proveedor':
+				$ruta = '/reporte7';
+			break;
+			case 'Productos para surtir':
+				$ruta = '/reporte9';
+			break;
+			case 'Analitico de precios':
+				$ruta = '/reporte10';
+			break;
+			case 'Detalle de movimientos':
+				$ruta = '/reporte12';
+			break;
+			case 'Productos Por Fallar':
+				$ruta = '/reporte13';
+			break;
+			case 'Productos en caida':
+				$ruta = '/reporte14';
+			break;
+			case 'Articulos devaluados':
+				$ruta = '/reporte15';
+			break;
+			default:
+				$ruta = '#';
+			break;
+		}
+		return $ruta;
+	}
+	/**********************************************************************************/
+	/*
+		TITULO: FG_Reportes_Departamento
+		FUNCION: Consigue el numero de reportes disponibles para el departamento
+		RETORNO: cantidad de reportes
+		DESAROLLADO POR: SERGIO COVA
+	 */
+	function FG_Reportes_Departamento($Departamento) {
+		switch ($Departamento) {
+			case 'COMPRAS':
+				$Numero_Reportes = 12;
+			break;
+			case 'TECNOLOGIA':
+				$Numero_Reportes = 13;
+			break;
+			case 'SURTIDO':
+				$Numero_Reportes = 3;
+			break;
+			
+			default:
+				$Numero_Reportes = 0;
+			break;
+		}
+		return $Numero_Reportes;
+	}
+	/**********************************************************************************/
+	/*
+		TITULO: FG_Sede_OnLine
+		FUNCION: Determina si la sede es on-line
+		RETORNO: verdadero o falso
+		DESAROLLADO POR: SERGIO COVA
+	 */
+	function FG_Sede_OnLine($Sede) {
+		switch ($Sede) {
+			case 'FTN':
+				$Flag = TRUE;
+			break;
+			case 'FLL':
+				$Flag = TRUE;
+			break;
+			case 'FAU':
+				$Flag = TRUE;
+			break;
+			default:
+				$Flag = FALSE;
+			break;
+		}
+		return $Flag;
+  }
 ?>

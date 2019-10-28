@@ -3185,7 +3185,19 @@
   	function QG_CP_Etiqueta_C1($FHoy,$FManana){
   		$sql = " 
 			SELECT 
-			InvMovimiento.InvArticuloId AS IdArticulo
+			InvMovimiento.InvArticuloId AS IdArticulo,
+			--Dolarizado (0 NO es dolarizado, Id Articulo SI es dolarizado)
+			      (ISNULL((SELECT
+			      InvArticuloAtributo.InvArticuloId
+			      FROM InvArticuloAtributo 
+			      WHERE InvArticuloAtributo.InvAtributoId = 
+			        (SELECT InvAtributo.Id
+			        FROM InvAtributo 
+			        WHERE 
+			        InvAtributo.Descripcion = 'Dolarizados'
+			        OR  InvAtributo.Descripcion = 'Giordany'
+			        OR  InvAtributo.Descripcion = 'giordany') 
+			      AND InvArticuloAtributo.InvArticuloId = InvMovimiento.InvArticuloId),CAST(0 AS INT))) AS Dolarizado
 			--Tabla Principal and Tabla Temporal
 			INTO CP_Etiqueta_C1
 			FROM InvMovimiento
@@ -3214,7 +3226,19 @@
   	function QG_CP_Etiqueta_C2($FHoy,$FManana){
   		$sql = " 
 			SELECT
-			VenCondicionVenta_VenCondicionVentaArticulo.InvArticuloId AS IdArticulo
+			VenCondicionVenta_VenCondicionVentaArticulo.InvArticuloId AS IdArticulo,
+			--Dolarizado (0 NO es dolarizado, Id Articulo SI es dolarizado)
+			      (ISNULL((SELECT
+			      InvArticuloAtributo.InvArticuloId
+			      FROM InvArticuloAtributo 
+			      WHERE InvArticuloAtributo.InvAtributoId = 
+			        (SELECT InvAtributo.Id
+			        FROM InvAtributo 
+			        WHERE 
+			        InvAtributo.Descripcion = 'Dolarizados'
+			        OR  InvAtributo.Descripcion = 'Giordany'
+			        OR  InvAtributo.Descripcion = 'giordany') 
+			      AND InvArticuloAtributo.InvArticuloId = VenCondicionVenta_VenCondicionVentaArticulo.InvArticuloId),CAST(0 AS INT))) AS Dolarizado
 			--Tabla Principal and Tabla Temporal
 			INTO CP_Etiqueta_C2
 			FROM VenCondicionVenta
@@ -3230,7 +3254,7 @@
 						AND (InvLoteAlmacen.InvArticuloId = VenCondicionVenta_VenCondicionVentaArticulo.InvArticuloId)) > 0)
 			)
 			UNION
-			SELECT CP_Etiqueta_C1.IdArticulo
+			SELECT CP_Etiqueta_C1.IdArticulo,CP_Etiqueta_C1.Dolarizado
 			FROM CP_Etiqueta_C1
 			ORDER BY IdArticulo
 	    ";
@@ -3245,7 +3269,19 @@
   	function QG_CP_Etiqueta_C3($FHoy,$FManana){
   		$sql = " 
 			SELECT
-			InvLoteAlmacen.InvArticuloId AS IdArticulo
+			InvLoteAlmacen.InvArticuloId AS IdArticulo,
+			--Dolarizado (0 NO es dolarizado, Id Articulo SI es dolarizado)
+			      (ISNULL((SELECT
+			      InvArticuloAtributo.InvArticuloId
+			      FROM InvArticuloAtributo 
+			      WHERE InvArticuloAtributo.InvAtributoId = 
+			        (SELECT InvAtributo.Id
+			        FROM InvAtributo 
+			        WHERE 
+			        InvAtributo.Descripcion = 'Dolarizados'
+			        OR  InvAtributo.Descripcion = 'Giordany'
+			        OR  InvAtributo.Descripcion = 'giordany') 
+			      AND InvArticuloAtributo.InvArticuloId = InvLoteAlmacen.InvArticuloId),CAST(0 AS INT))) AS Dolarizado
 			--Tabla Principal and Tabla Temporal
 			INTO CP_Etiqueta_C3
 			FROM InvLoteAlmacen
@@ -3257,7 +3293,7 @@
 				AND (InvLoteAlmacen.Existencia = 0)	
 			)
 			UNION
-			SELECT CP_Etiqueta_C2.IdArticulo
+			SELECT CP_Etiqueta_C2.IdArticulo,CP_Etiqueta_C2.Dolarizado
 			FROM CP_Etiqueta_C2
 			ORDER BY IdArticulo
 	    ";
@@ -3272,7 +3308,19 @@
   	function QG_CP_Etiqueta_C4($FHoy,$FManana){
   		$sql = " 
 			SELECT
-			InvLote.InvArticuloId AS IdArticulo
+			InvLote.InvArticuloId AS IdArticulo,
+			--Dolarizado (0 NO es dolarizado, Id Articulo SI es dolarizado)
+			      (ISNULL((SELECT
+			      InvArticuloAtributo.InvArticuloId
+			      FROM InvArticuloAtributo 
+			      WHERE InvArticuloAtributo.InvAtributoId = 
+			        (SELECT InvAtributo.Id
+			        FROM InvAtributo 
+			        WHERE 
+			        InvAtributo.Descripcion = 'Dolarizados'
+			        OR  InvAtributo.Descripcion = 'Giordany'
+			        OR  InvAtributo.Descripcion = 'giordany') 
+			      AND InvArticuloAtributo.InvArticuloId = InvLote.InvArticuloId),CAST(0 AS INT))) AS Dolarizado
 			--Tabla Prinipal and Tabla Temporal
 			INTO CP_Etiqueta_C4
 			FROM InvLote 
@@ -3286,7 +3334,7 @@
 						AND (InvLoteAlmacen.InvArticuloId = InvLote.InvArticuloId)) > 0)
 			)
 			UNION
-			SELECT CP_Etiqueta_C3.IdArticulo
+			SELECT CP_Etiqueta_C3.IdArticulo,CP_Etiqueta_C3.Dolarizado
 			FROM CP_Etiqueta_C3
 			ORDER BY IdArticulo
 	    ";

@@ -236,3 +236,23 @@ function autocompletadoCB(inp, inpId, arr) {
       closeAllLists(e.target);
   });
 }
+
+function keypressCPharma(e){
+  if ( 
+      (e.altKey) && (e.ctrlKey) &&
+        ((String.fromCharCode(e.keyCode) == 'c')
+        ||(String.fromCharCode(e.keyCode) == 'C')
+      ) 
+    ){
+      window.location="/register";
+  } 
+
+  if ( 
+      (e.altKey) && (e.ctrlKey) &&
+        ((String.fromCharCode(e.keyCode) == 's')
+        ||(String.fromCharCode(e.keyCode) == 'S')
+      ) 
+    ){
+      window.open('https://www.instagram.com/covacode/', '_blank');
+  }
+}

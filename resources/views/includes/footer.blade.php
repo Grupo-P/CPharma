@@ -5,3 +5,12 @@
   and
   <a href="https://api.whatsapp.com/send?phone=584246827377&text=&source=&data=" target="blank" class="text-info CP-Links-No-Style">Manuel Henriquez</a>
 </div>
+
+@section('scriptsFoot')
+    <script type="text/javascript">
+      $(document).keydown(function (e) {
+        e = e || event;
+        keypressCPharma(e);
+      });
+    </script>
+@endsection

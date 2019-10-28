@@ -18,38 +18,86 @@
 		<i class="fas fa-file-invoice"></i>
 		Reportes
 	</h1>
-
 	<hr class="row align-items-start col-12"> 
-	
-<!--Inicio de card de sedes con enlaces a otras sedes-->
+
+<!-------------------------------------------------------------------------------->
+<!-- CPHARMA ON LINE -->
+<!-------------------------------------------------------------------------------->
+<!-- CASO GP -->
+<?php
+	if($SedeConnection == 'GP'){
+?>
 	<?php
-		if($SedeConnection == 'GP'){
+		if(Auth::user()->sede == 'FARMACIA TIERRA NEGRA, C.A.'){
 	?>
-		<div class="card-deck">
-   		<!-- Reportes -->
+	<div class="card-deck">
 		<div class="card border-danger mb-3" style="width: 14rem;">	  	
-	  		<div class="card-body text-left bg-danger">
-	    		<h5 class="card-title">
+  		<div class="card-body text-left bg-danger">
+    		<h5 class="card-title">
+	    		<span class="card-text text-white">
+	    			<?php echo "".SedeFTN; ?>
+	    		</span>
+    		</h5>	    	    
+  		</div>
+	  	<div class="card-footer bg-transparent border-danger text-right"> 
+		    <a href="http://cpharmaftn.com/" role="button" class="btn btn-outline-danger btn-sm" target="_blank"></i>Ver reportes</a>
+	  	</div>
+		</div>
+	</div>
+	<?php
+	}
+		if(Auth::user()->sede == 'FARMACIA LA LAGO,C.A.'){
+	?>
+	<div class="card-deck">
+		<div class="card border-success mb-3" style="width: 14rem;">	  	
+  		<div class="card-body text-left bg-success">
+    		<h5 class="card-title">
+	    		<span class="card-text text-white">
+	    			<?php echo "".SedeFLL; ?>
+	    		</span>
+    		</h5>	    	    
+  		</div>
+	  	<div class="card-footer bg-transparent border-success text-right">
+			  <a href="http://cpharmafll.com/" role="button" class="btn btn-outline-success btn-sm" target="_blank"></i>Ver reportes</a>
+	  	</div>
+		</div>
+	</div>
+	<?php
+	}
+		if(Auth::user()->sede == 'FARMACIA AVENIDA UNIVERSIDAD, C.A.'){
+	?> 
+	<div class="card-deck">
+		<div class="card border-info mb-3" style="width: 14rem;">	  	
+  		<div class="card-body text-left bg-info">
+    		<h5 class="card-title">
+	    		<span class="card-text text-white">
+	    			<?php echo "".SedeFAU; ?>
+	    		</span>
+    		</h5>	    	    
+  		</div>
+	  	<div class="card-footer bg-transparent border-info text-right">
+		   	<a href="http://cpharmafau.com/" role="button" class="btn btn-outline-info btn-sm" target="_blank"></i>Ver reportes</a>
+	  	</div>
+   	</div>
+  </div>
+  <?php
+	}
+		if(Auth::user()->sede == 'GRUPO P, C.A'){
+	?> 
+		<div class="card-deck">
+			<div class="card border-danger mb-3" style="width: 14rem;">	  	
+				<div class="card-body text-left bg-danger">
+		  		<h5 class="card-title">
 		    		<span class="card-text text-white">
 		    			<?php echo "".SedeFTN; ?>
 		    		</span>
-	    		</h5>	    	    
-	  		</div>
-		  	<div class="card-footer bg-transparent border-danger text-right">
-				<?php
-					if(
-						Auth::user()->sede == 'FARMACIA TIERRA NEGRA, C.A.' 
-						|| Auth::user()->sede == 'GRUPO P, C.A'
-					){
-				?> 
-				    <a href="http://cpharmaftn.com/" role="button" class="btn btn-outline-danger btn-sm" target="_blank"></i>Ver reportes</a>
-				<?php
-					}
-				?>
+		  		</h5>	    	    
+				</div>
+		  	<div class="card-footer bg-transparent border-danger text-right"> 
+			    <a href="http://cpharmaftn.com/" role="button" class="btn btn-outline-danger btn-sm" target="_blank"></i>Ver reportes</a>
 		  	</div>
-		</div>
-
-		<div class="card border-success mb-3" style="width: 14rem;">	  	
+			</div>
+			<div class="card border-success mb-3" style="width: 14rem;">	  	
 	  		<div class="card-body text-left bg-success">
 	    		<h5 class="card-title">
 		    		<span class="card-text text-white">
@@ -58,20 +106,10 @@
 	    		</h5>	    	    
 	  		</div>
 		  	<div class="card-footer bg-transparent border-success text-right">
-				<?php
-					if(
-						Auth::user()->sede == 'FARMACIA LA LAGO,C.A.' 
-						|| Auth::user()->sede == 'GRUPO P, C.A'
-					){
-				?>  
-				    <a href="http://cpharmafll.com/" role="button" class="btn btn-outline-success btn-sm" target="_blank"></i>Ver reportes</a>
-				<?php
-					}
-				?>
+				  <a href="http://cpharmafll.com/" role="button" class="btn btn-outline-success btn-sm" target="_blank"></i>Ver reportes</a>
 		  	</div>
-		</div>
-
-		<div class="card border-info mb-3" style="width: 14rem;">	  	
+			</div>
+			<div class="card border-info mb-3" style="width: 14rem;">	  	
 	  		<div class="card-body text-left bg-info">
 	    		<h5 class="card-title">
 		    		<span class="card-text text-white">
@@ -80,52 +118,99 @@
 	    		</h5>	    	    
 	  		</div>
 		  	<div class="card-footer bg-transparent border-info text-right">
-				<?php
-					if(
-						Auth::user()->sede == 'FARMACIA AVENIDA UNIVERSIDAD, C.A.' 
-						|| Auth::user()->sede == 'GRUPO P, C.A'
-					){
-				?>     
-				    <a href="http://cpharmafau.com/" role="button" class="btn btn-outline-info btn-sm" target="_blank"></i>Ver reportes</a>
-				<?php
-					}
-				?>
+			   	<a href="http://cpharmafau.com/" role="button" class="btn btn-outline-info btn-sm" target="_blank"></i>Ver reportes</a>
 		  	</div>
-		</div>
-   	</div>
+	   	</div>
+	  </div>
 	<?php
 		}
-		else if($SedeConnection == 'FTN'){
 	?>
-		<div class="card-deck">
-   		<!-- Reportes -->
+<!-- CASO GP -->
+<!-------------------------------------------------------------------------------->
+<!-- CASO FTN -->
+<?php
+}
+	if($SedeConnection == 'FTN'){
+?>
+	<?php
+		if(Auth::user()->sede == 'FARMACIA TIERRA NEGRA, C.A.'){
+	?>
+	<div class="card-deck">
 		<div class="card border-danger mb-3" style="width: 14rem;">	  	
-	  		<div class="card-body text-left bg-danger">
-	    		<h5 class="card-title">
+  		<div class="card-body text-left bg-danger">
+    		<h5 class="card-title">
+	    		<span class="card-text text-white">
+	    			<?php echo "".SedeFTN; ?>
+	    		</span>
+    		</h5>	    	    
+  		</div>
+  		<div class="card-footer bg-transparent border-danger text-right">
+				<form action="/reporte/" style="display: inline;">
+			    @csrf
+			    <input id="SEDE" name="SEDE" type="hidden" value="FTN"> 
+			    <button type="submit" name="Reporte" role="button" class="btn btn-outline-danger btn-sm"></i>Ver reportes</button>
+				</form>
+	  	</div>
+		</div>
+	</div>
+	<?php
+	}
+		if(Auth::user()->sede == 'FARMACIA LA LAGO,C.A.'){
+	?>
+	<div class="card-deck">
+		<div class="card border-success mb-3" style="width: 14rem;">	  	
+  		<div class="card-body text-left bg-success">
+    		<h5 class="card-title">
+	    		<span class="card-text text-white">
+	    			<?php echo "".SedeFLL; ?>
+	    		</span>
+    		</h5>	    	    
+  		</div>
+	  	<div class="card-footer bg-transparent border-success text-right">
+			  <a href="http://cpharmafll.com/" role="button" class="btn btn-outline-success btn-sm" target="_blank"></i>Ver reportes</a>
+	  	</div>
+		</div>
+	</div>
+	<?php
+	}
+		if(Auth::user()->sede == 'FARMACIA AVENIDA UNIVERSIDAD, C.A.'){
+	?> 
+	<div class="card-deck">
+		<div class="card border-info mb-3" style="width: 14rem;">	  	
+  		<div class="card-body text-left bg-info">
+    		<h5 class="card-title">
+	    		<span class="card-text text-white">
+	    			<?php echo "".SedeFAU; ?>
+	    		</span>
+    		</h5>	    	    
+  		</div>
+	  	<div class="card-footer bg-transparent border-info text-right">
+		   	<a href="http://cpharmafau.com/" role="button" class="btn btn-outline-info btn-sm" target="_blank"></i>Ver reportes</a>
+	  	</div>
+   	</div>
+  </div>
+  <?php
+	}
+		if(Auth::user()->sede == 'GRUPO P, C.A'){
+	?> 
+		<div class="card-deck">
+			<div class="card border-danger mb-3" style="width: 14rem;">	  	
+				<div class="card-body text-left bg-danger">
+		  		<h5 class="card-title">
 		    		<span class="card-text text-white">
 		    			<?php echo "".SedeFTN; ?>
 		    		</span>
-	    		</h5>	    	    
-	  		</div>
+		  		</h5>	    	    
+				</div>
 		  	<div class="card-footer bg-transparent border-danger text-right">
-				<form action="/reporte/" style="display: inline;">
+					<form action="/reporte/" style="display: inline;">
 				    @csrf
 				    <input id="SEDE" name="SEDE" type="hidden" value="FTN"> 
-				<?php
-					if(
-						Auth::user()->sede == 'FARMACIA TIERRA NEGRA, C.A.' 
-						|| Auth::user()->sede == 'GRUPO P, C.A'
-					){
-				?> 
 				    <button type="submit" name="Reporte" role="button" class="btn btn-outline-danger btn-sm"></i>Ver reportes</button>
-				<?php
-					}
-				?>
-				</form>
+					</form>
 		  	</div>
-		</div>
-
-		<div class="card border-success mb-3" style="width: 14rem;">	  	
+			</div>
+			<div class="card border-success mb-3" style="width: 14rem;">	  	
 	  		<div class="card-body text-left bg-success">
 	    		<h5 class="card-title">
 		    		<span class="card-text text-white">
@@ -134,20 +219,10 @@
 	    		</h5>	    	    
 	  		</div>
 		  	<div class="card-footer bg-transparent border-success text-right">
-				<?php
-					if(
-						Auth::user()->sede == 'FARMACIA LA LAGO,C.A.' 
-						|| Auth::user()->sede == 'GRUPO P, C.A'
-					){
-				?>  
-				    <a href="http://cpharmafll.com/" role="button" class="btn btn-outline-success btn-sm" target="_blank"></i>Ver reportes</a>
-				<?php
-					}
-				?>				
+				  <a href="http://cpharmafll.com/" role="button" class="btn btn-outline-success btn-sm" target="_blank"></i>Ver reportes</a>
 		  	</div>
-		</div>
-
-		<div class="card border-info mb-3" style="width: 14rem;">	  	
+			</div>
+			<div class="card border-info mb-3" style="width: 14rem;">	  	
 	  		<div class="card-body text-left bg-info">
 	    		<h5 class="card-title">
 		    		<span class="card-text text-white">
@@ -156,489 +231,485 @@
 	    		</h5>	    	    
 	  		</div>
 		  	<div class="card-footer bg-transparent border-info text-right">
-				<?php
-					if(
-						Auth::user()->sede == 'FARMACIA AVENIDA UNIVERSIDAD, C.A.' 
-						|| Auth::user()->sede == 'GRUPO P, C.A'
-					){
-				?>      
-				    <a href="http://cpharmafau.com/" role="button" class="btn btn-outline-info btn-sm" target="_blank"></i>Ver reportes</a>
-				<?php
-					}
-				?>				
+			   	<a href="http://cpharmafau.com/" role="button" class="btn btn-outline-info btn-sm" target="_blank"></i>Ver reportes</a>
 		  	</div>
-		</div>
-   	</div>
-	<?php
-		}
-		else if($SedeConnection == 'FLL'){
-	?>
-		<div class="card-deck">
-   		<!-- Reportes -->
-		<div class="card border-danger mb-3" style="width: 14rem;">	  	
-	  		<div class="card-body text-left bg-danger">
-	    		<h5 class="card-title">
-		    		<span class="card-text text-white">
-		    			<?php echo "".SedeFTN; ?>
-		    		</span>
-	    		</h5>	    	    
-	  		</div>
-		  	<div class="card-footer bg-transparent border-danger text-right">
-				<?php
-					if(
-						Auth::user()->sede == 'FARMACIA TIERRA NEGRA, C.A.' 
-						|| Auth::user()->sede == 'GRUPO P, C.A'
-					){
-				?> 
-				    <a href="http://cpharmaftn.com/" role="button" class="btn btn-outline-danger btn-sm" target="_blank"></i>Ver reportes</a>
-				<?php
-					}
-				?>
-		  	</div>
-		</div>
-
-		<div class="card border-success mb-3" style="width: 14rem;">	  	
-	  		<div class="card-body text-left bg-success">
-	    		<h5 class="card-title">
-		    		<span class="card-text text-white">
-		    			<?php echo "".SedeFLL; ?>
-		    		</span>
-	    		</h5>	    	    
-	  		</div>
-		  	<div class="card-footer bg-transparent border-success text-right">
-				<form action="/reporte/" style="display: inline;">
-				    @csrf
-				    <input id="SEDE" name="SEDE" type="hidden" value="FLL">
-				<?php
-					if(
-						Auth::user()->sede == 'FARMACIA LA LAGO,C.A.' 
-						|| Auth::user()->sede == 'GRUPO P, C.A'
-					){
-				?>  
-				    <button type="submit" name="Reporte" role="button" class="btn btn-outline-success btn-sm"></i>Ver reportes</button>
-				<?php
-					}
-				?>
-				</form>
-		  	</div>
-		</div>
-
-		<div class="card border-info mb-3" style="width: 14rem;">	  	
-	  		<div class="card-body text-left bg-info">
-	    		<h5 class="card-title">
-		    		<span class="card-text text-white">
-		    			<?php echo "".SedeFAU; ?>
-		    		</span>
-	    		</h5>	    	    
-	  		</div>
-		  	<div class="card-footer bg-transparent border-info text-right">
-				<?php
-					if(
-						Auth::user()->sede == 'FARMACIA AVENIDA UNIVERSIDAD, C.A.' 
-						|| Auth::user()->sede == 'GRUPO P, C.A'
-					){
-				?>     
-				    <a href="http://cpharmafau.com/" role="button" class="btn btn-outline-info btn-sm" target="_blank"></i>Ver reportes</a>
-				<?php
-					}
-				?>
-		  	</div>
-		</div>
-   	</div>
-	<?php
-		}
-		else if($SedeConnection == 'FAU'){
-	?>
-		<div class="card-deck">
-   		<!-- Reportes -->
-		<div class="card border-danger mb-3" style="width: 14rem;">	  	
-	  		<div class="card-body text-left bg-danger">
-	    		<h5 class="card-title">
-		    		<span class="card-text text-white">
-		    			<?php echo "".SedeFTN; ?>
-		    		</span>
-	    		</h5>	    	    
-	  		</div>
-		  	<div class="card-footer bg-transparent border-danger text-right">
-				<?php
-					if(
-						Auth::user()->sede == 'FARMACIA TIERRA NEGRA, C.A.' 
-						|| Auth::user()->sede == 'GRUPO P, C.A'
-					){
-				?> 
-				    <a href="http://cpharmaftn.com/" role="button" class="btn btn-outline-danger btn-sm" target="_blank"></i>Ver reportes</a>
-				<?php
-					}
-				?>
-		  	</div>
-		</div>
-
-		<div class="card border-success mb-3" style="width: 14rem;">	  	
-	  		<div class="card-body text-left bg-success">
-	    		<h5 class="card-title">
-		    		<span class="card-text text-white">
-		    			<?php echo "".SedeFLL; ?>
-		    		</span>
-	    		</h5>	    	    
-	  		</div>
-		  	<div class="card-footer bg-transparent border-success text-right">
-				<?php
-					if(
-						Auth::user()->sede == 'FARMACIA LA LAGO,C.A.' 
-						|| Auth::user()->sede == 'GRUPO P, C.A'
-					){
-				?>  
-				    <a href="http://cpharmafll.com/" role="button" class="btn btn-outline-success btn-sm" target="_blank"></i>Ver reportes</a>
-				<?php
-					}
-				?>
-		  	</div>
-		</div>
-
-		<div class="card border-info mb-3" style="width: 14rem;">	  	
-	  		<div class="card-body text-left bg-info">
-	    		<h5 class="card-title">
-		    		<span class="card-text text-white">
-		    			<?php echo "".SedeFAU; ?>
-		    		</span>
-	    		</h5>	    	    
-	  		</div>
-		  	<div class="card-footer bg-transparent border-info text-right">
-				<form action="/reporte/" style="display: inline;">
-				    @csrf
-				    <input id="SEDE" name="SEDE" type="hidden" value="FAU">  
-				<?php
-					if(
-						Auth::user()->sede == 'FARMACIA AVENIDA UNIVERSIDAD, C.A.' 
-						|| Auth::user()->sede == 'GRUPO P, C.A'
-					){
-				?>     
-				    <button type="submit" name="Reporte" role="button" class="btn btn-outline-info btn-sm"></i>Ver reportes</button>
-				<?php
-					}
-				?>
-				</form>
-		  	</div>
-		</div>
-   	</div>
+	   	</div>
+	  </div>
 	<?php
 		}
 	?>
-<!--FIN de card de sedes con enlaces a otras sedes-->
-
-<!-- INICIO: Panel CPharma OFF Line -->
+<!-- CASO FTN -->
+<!-------------------------------------------------------------------------------->
+<!-- CASO FLL -->
 <?php
-if(
-	Auth::user()->sede == 'GRUPO P, C.A'
-){
-/*INICIO CASO FTN (ON-LINE), FLL (OFF-LINE) FAU (OFF-LINE)*/
-	if($SedeConnection == 'FTN'){
-	?>	
-		<div class="card-deck">
-	   		<!-- Reportes -->
-			<div class="card border-success mb-3" style="width: 14rem;">	  	
-		  		<div class="card-body text-left bg-success">
-		    		<h5 class="card-title">
-			    		<span class="card-text text-white">
-			    			<?php echo "".SedeFLLOFF."<br/>".LastRestoreDB(nameFLLOFF,$SedeConnection);?>
-			    		</span>
-		    		</h5>	    	    
-		  		</div>
-			  	<div class="card-footer bg-transparent border-success text-right">
-			  		<form action="/reporte/" style="display: inline;">
-					    @csrf
-					    <input id="SEDE" name="SEDE" type="hidden" value="FTNFLL">  
-					    <button type="submit" name="Reporte" role="button" class="btn btn-outline-success btn-sm"></i>Ver reportes</button>
-					</form>
-			  	</div>
-			</div>
-
-			<div class="card border-info mb-3" style="width: 14rem;">	  	
-		  		<div class="card-body text-left bg-info">
-		    		<h5 class="card-title">
-			    		<span class="card-text text-white">
-			    			<?php echo "".SedeFAUOFF."<br/>".LastRestoreDB(nameFAUOFF,$SedeConnection);?>
-			    		</span>
-		    		</h5>	    	    
-		  		</div>
-			  	<div class="card-footer bg-transparent border-info text-right">
-			  		<form action="/reporte/" style="display: inline;">
-					    @csrf
-					    <input id="SEDE" name="SEDE" type="hidden" value="FTNFAU">  
-					    <button type="submit" name="Reporte" role="button" class="btn btn-outline-info btn-sm"></i>Ver reportes</button>
-					</form>
-			  	</div>
-			</div>
-		</div>
-	<?php 
-/*FIN CASO FTN (ON-LINE), FLL (OFF-LINE) FAU (OFF-LINE)*/
-	}
-	else if($SedeConnection =='FLL'){
+}
+	if($SedeConnection == 'FLL'){
+?>
+	<?php
+		if(Auth::user()->sede == 'FARMACIA TIERRA NEGRA, C.A.'){
 	?>
-		<div class="card-deck">
-	   		<!-- Reportes -->
-			<div class="card border-danger mb-3" style="width: 14rem;">	  	
-		  		<div class="card-body text-left bg-danger">
-		    		<h5 class="card-title">
-			    		<span class="card-text text-white">
-			    			<?php echo "".SedeFTNOFF."<br/>".LastRestoreDB(nameFTNOFF,$SedeConnection);?>
-			    		</span>
-		    		</h5>	    	    
-		  		</div>
-			  	<div class="card-footer bg-transparent border-danger text-right">
-			  		<form action="/reporte/" style="display: inline;">
-					    @csrf
-					    <input id="SEDE" name="SEDE" type="hidden" value="FLLFTN">  
-					    <button type="submit" name="Reporte" role="button" class="btn btn-outline-danger btn-sm"></i>Ver reportes</button>
-					</form>
-			  	</div>
-			</div>
-
-			<div class="card border-info mb-3" style="width: 14rem;">	  	
-		  		<div class="card-body text-left bg-info">
-		    		<h5 class="card-title">
-			    		<span class="card-text text-white">
-			    			<?php echo "".SedeFAUOFF."<br/>".LastRestoreDB(nameFAUOFF,$SedeConnection);?>
-			    		</span>
-		    		</h5>	    	    
-		  		</div>
-			  	<div class="card-footer bg-transparent border-info text-right">
-			  		<form action="/reporte/" style="display: inline;">
-					    @csrf
-					    <input id="SEDE" name="SEDE" type="hidden" value="FLLFAU">
-					    <button type="submit" name="Reporte" role="button" class="btn btn-outline-info btn-sm"></i>Ver reportes</button>
-					</form>
-			  	</div>
-			</div>
+	<div class="card-deck">
+		<div class="card border-danger mb-3" style="width: 14rem;">	  	
+  		<div class="card-body text-left bg-danger">
+    		<h5 class="card-title">
+	    		<span class="card-text text-white">
+	    			<?php echo "".SedeFTN; ?>
+	    		</span>
+    		</h5>	    	    
+  		</div>
+	  	<div class="card-footer bg-transparent border-danger text-right"> 
+		    <a href="http://cpharmaftn.com/" role="button" class="btn btn-outline-danger btn-sm" target="_blank"></i>Ver reportes</a>
+	  	</div>
 		</div>
+	</div>
 	<?php
 	}
-	else if($SedeConnection =='FAU'){
+		if(Auth::user()->sede == 'FARMACIA LA LAGO,C.A.'){
 	?>
-		<div class="card-deck">
-	   		<!-- Reportes -->
-			<div class="card border-danger mb-3" style="width: 14rem;">	  	
-		  		<div class="card-body text-left bg-danger">
-		    		<h5 class="card-title">
-			    		<span class="card-text text-white">
-			    			<?php echo "".SedeFTNOFF."<br/>".LastRestoreDB(nameFTNOFF,$SedeConnection);?>
-			    		</span>
-		    		</h5>	    	    
-		  		</div>
-			  	<div class="card-footer bg-transparent border-danger text-right">
-			  		<form action="/reporte/" style="display: inline;">
-					    @csrf
-					    <input id="SEDE" name="SEDE" type="hidden" value="FAUFTN"> 
-					    <button type="submit" name="Reporte" role="button" class="btn btn-outline-danger btn-sm"></i>Ver reportes</button>
-					</form>
-			  	</div>
-			</div>
-
-			<div class="card border-success mb-3" style="width: 14rem;">	  	
-		  		<div class="card-body text-left bg-success">
-		    		<h5 class="card-title">
-			    		<span class="card-text text-white">
-		    				<?php echo "".SedeFLLOFF."<br/>".LastRestoreDB(nameFLLOFF,$SedeConnection);?>
-			    		</span>
-		    		</h5>	    	    
-		  		</div>
-			  	<div class="card-footer bg-transparent border-success text-right">
-			  		<form action="/reporte/" style="display: inline;">
-					    @csrf
-					    <input id="SEDE" name="SEDE" type="hidden" value="FAUFLL">
-					    <button type="submit" name="Reporte" role="button" class="btn btn-outline-success btn-sm"></i>Ver reportes</button>
-					</form>
-			  	</div>
-			</div>
+	<div class="card-deck">
+		<div class="card border-success mb-3" style="width: 14rem;">	  	
+  		<div class="card-body text-left bg-success">
+    		<h5 class="card-title">
+	    		<span class="card-text text-white">
+	    			<?php echo "".SedeFLL; ?>
+	    		</span>
+    		</h5>	    	    
+  		</div>
+	  	<div class="card-footer bg-transparent border-success text-right">
+				<form action="/reporte/" style="display: inline;">
+			    @csrf
+			    <input id="SEDE" name="SEDE" type="hidden" value="FLL"> 
+			    <button type="submit" name="Reporte" role="button" class="btn btn-outline-success btn-sm"></i>Ver reportes</button>
+				</form>
+	  	</div>
 		</div>
+	</div>
 	<?php
 	}
-	else if($SedeConnection == 'GP'){
-	?>	
+		if(Auth::user()->sede == 'FARMACIA AVENIDA UNIVERSIDAD, C.A.'){
+	?> 
+	<div class="card-deck">
+		<div class="card border-info mb-3" style="width: 14rem;">	  	
+  		<div class="card-body text-left bg-info">
+    		<h5 class="card-title">
+	    		<span class="card-text text-white">
+	    			<?php echo "".SedeFAU; ?>
+	    		</span>
+    		</h5>	    	    
+  		</div>
+	  	<div class="card-footer bg-transparent border-info text-right">
+		   	<a href="http://cpharmafau.com/" role="button" class="btn btn-outline-info btn-sm" target="_blank"></i>Ver reportes</a>
+	  	</div>
+   	</div>
+  </div>
+  <?php
+	}
+		if(Auth::user()->sede == 'GRUPO P, C.A'){
+	?> 
 		<div class="card-deck">
-	   		<!-- Reportes -->
 			<div class="card border-danger mb-3" style="width: 14rem;">	  	
-		  		<div class="card-body text-left bg-danger">
-		    		<h5 class="card-title">
-			    		<span class="card-text text-white">
-			    			<?php echo "".SedeFTNOFF."<br/>".LastRestoreDB(nameFTNOFF,$SedeConnection);?>
-			    		</span>
-		    		</h5>	    	    
-		  		</div>
-			  	<div class="card-footer bg-transparent border-danger text-right">
-			  		<form action="/reporte/" style="display: inline;">
-					    @csrf
-					    <input id="SEDE" name="SEDE" type="hidden" value="GPFTN">  
-					    <button type="submit" name="Reporte" role="button" class="btn btn-outline-danger btn-sm"></i>Ver reportes</button>
-					</form>
-			  	</div>
+				<div class="card-body text-left bg-danger">
+		  		<h5 class="card-title">
+		    		<span class="card-text text-white">
+		    			<?php echo "".SedeFTN; ?>
+		    		</span>
+		  		</h5>	    	    
+				</div>
+		  	<div class="card-footer bg-transparent border-danger text-right"> 
+			    <a href="http://cpharmaftn.com/" role="button" class="btn btn-outline-danger btn-sm" target="_blank"></i>Ver reportes</a>
+		  	</div>
 			</div>
-
 			<div class="card border-success mb-3" style="width: 14rem;">	  	
-		  		<div class="card-body text-left bg-success">
-		    		<h5 class="card-title">
-			    		<span class="card-text text-white">
-			    			<?php echo "".SedeFLLOFF."<br/>".LastRestoreDB(nameFLLOFF,$SedeConnection);?>
-			    		</span>
-		    		</h5>	    	    
-		  		</div>
-			  	<div class="card-footer bg-transparent border-success text-right">
-			  		<form action="/reporte/" style="display: inline;">
-					    @csrf
-					    <input id="SEDE" name="SEDE" type="hidden" value="GPFLL">
-					    <button type="submit" name="Reporte" role="button" class="btn btn-outline-success btn-sm"></i>Ver reportes</button>
+	  		<div class="card-body text-left bg-success">
+	    		<h5 class="card-title">
+		    		<span class="card-text text-white">
+		    			<?php echo "".SedeFLL; ?>
+		    		</span>
+	    		</h5>	    	    
+	  		</div>
+		  	<div class="card-footer bg-transparent border-success text-right">
+					<form action="/reporte/" style="display: inline;">
+				    @csrf
+				    <input id="SEDE" name="SEDE" type="hidden" value="FLL"> 
+				    <button type="submit" name="Reporte" role="button" class="btn btn-outline-success btn-sm"></i>Ver reportes</button>
 					</form>
-			  	</div>
+		  	</div>
 			</div>
-
 			<div class="card border-info mb-3" style="width: 14rem;">	  	
-		  		<div class="card-body text-left bg-info">
-		    		<h5 class="card-title">
-			    		<span class="card-text text-white">
-			    			<?php echo "".SedeFAUOFF."<br/>".LastRestoreDB(nameFAUOFF,$SedeConnection);?>
-			    		</span>
-		    		</h5>	    	    
-		  		</div>
-			  	<div class="card-footer bg-transparent border-info text-right">
-			  		<form action="/reporte/" style="display: inline;">
-					    @csrf
-					    <input id="SEDE" name="SEDE" type="hidden" value="GPFAU">
-					    <button type="submit" name="Reporte" role="button" class="btn btn-outline-info btn-sm"></i>Ver reportes</button>
+	  		<div class="card-body text-left bg-info">
+	    		<h5 class="card-title">
+		    		<span class="card-text text-white">
+		    			<?php echo "".SedeFAU; ?>
+		    		</span>
+	    		</h5>	    	    
+	  		</div>
+		  	<div class="card-footer bg-transparent border-info text-right">
+			   	<a href="http://cpharmafau.com/" role="button" class="btn btn-outline-info btn-sm" target="_blank"></i>Ver reportes</a>
+		  	</div>
+	   	</div>
+	  </div>
+	<?php
+		}
+	?>
+<!-- CASO FLL -->
+<!-------------------------------------------------------------------------------->
+<!-- CASO FAU -->
+<?php
+}
+	if($SedeConnection == 'FAU'){
+?>
+	<?php
+		if(Auth::user()->sede == 'FARMACIA TIERRA NEGRA, C.A.'){
+	?>
+	<div class="card-deck">
+		<div class="card border-danger mb-3" style="width: 14rem;">	  	
+  		<div class="card-body text-left bg-danger">
+    		<h5 class="card-title">
+	    		<span class="card-text text-white">
+	    			<?php echo "".SedeFTN; ?>
+	    		</span>
+    		</h5>	    	    
+  		</div>
+	  	<div class="card-footer bg-transparent border-danger text-right"> 
+		    <a href="http://cpharmaftn.com/" role="button" class="btn btn-outline-danger btn-sm" target="_blank"></i>Ver reportes</a>
+	  	</div>
+		</div>
+	</div>
+	<?php
+	}
+		if(Auth::user()->sede == 'FARMACIA LA LAGO,C.A.'){
+	?>
+	<div class="card-deck">
+		<div class="card border-success mb-3" style="width: 14rem;">	  	
+  		<div class="card-body text-left bg-success">
+    		<h5 class="card-title">
+	    		<span class="card-text text-white">
+	    			<?php echo "".SedeFLL; ?>
+	    		</span>
+    		</h5>	    	    
+  		</div>
+	  	<div class="card-footer bg-transparent border-success text-right">
+			  <a href="http://cpharmafll.com/" role="button" class="btn btn-outline-success btn-sm" target="_blank"></i>Ver reportes</a>
+	  	</div>
+		</div>
+	</div>
+	<?php
+	}
+		if(Auth::user()->sede == 'FARMACIA AVENIDA UNIVERSIDAD, C.A.'){
+	?> 
+	<div class="card-deck">
+		<div class="card border-info mb-3" style="width: 14rem;">	  	
+  		<div class="card-body text-left bg-info">
+    		<h5 class="card-title">
+	    		<span class="card-text text-white">
+	    			<?php echo "".SedeFAU; ?>
+	    		</span>
+    		</h5>	    	    
+  		</div>
+	  	<div class="card-footer bg-transparent border-info text-right">
+				<form action="/reporte/" style="display: inline;">
+			    @csrf
+			    <input id="SEDE" name="SEDE" type="hidden" value="FAU">      
+			    <button type="submit" name="Reporte" role="button" class="btn btn-outline-info btn-sm"></i>Ver reportes</button>
+				</form>
+	  	</div>
+   	</div>
+  </div>
+  <?php
+	}
+		if(Auth::user()->sede == 'GRUPO P, C.A'){
+	?> 
+		<div class="card-deck">
+			<div class="card border-danger mb-3" style="width: 14rem;">	  	
+				<div class="card-body text-left bg-danger">
+		  		<h5 class="card-title">
+		    		<span class="card-text text-white">
+		    			<?php echo "".SedeFTN; ?>
+		    		</span>
+		  		</h5>	    	    
+				</div>
+		  	<div class="card-footer bg-transparent border-danger text-right"> 
+			    <a href="http://cpharmaftn.com/" role="button" class="btn btn-outline-danger btn-sm" target="_blank"></i>Ver reportes</a>
+		  	</div>
+			</div>
+			<div class="card border-success mb-3" style="width: 14rem;">	  	
+	  		<div class="card-body text-left bg-success">
+	    		<h5 class="card-title">
+		    		<span class="card-text text-white">
+		    			<?php echo "".SedeFLL; ?>
+		    		</span>
+	    		</h5>	    	    
+	  		</div>
+		  	<div class="card-footer bg-transparent border-success text-right">
+				  <a href="http://cpharmafll.com/" role="button" class="btn btn-outline-success btn-sm" target="_blank"></i>Ver reportes</a>
+		  	</div>
+			</div>
+			<div class="card border-info mb-3" style="width: 14rem;">	  	
+	  		<div class="card-body text-left bg-info">
+	    		<h5 class="card-title">
+		    		<span class="card-text text-white">
+		    			<?php echo "".SedeFAU; ?>
+		    		</span>
+	    		</h5>	    	    
+	  		</div>
+		  	<div class="card-footer bg-transparent border-info text-right">
+					<form action="/reporte/" style="display: inline;">
+				    @csrf
+				    <input id="SEDE" name="SEDE" type="hidden" value="FAU">      
+				    <button type="submit" name="Reporte" role="button" class="btn btn-outline-info btn-sm"></i>Ver reportes</button>
 					</form>
-			  	</div>
+		  	</div>
+	   	</div>
+	  </div>
+	<?php
+		}
+	?>
+<!-- CASO FAU -->
+<!-------------------------------------------------------------------------------->
+<!-- CPHARMA ON LINE -->
+<!-------------------------------------------------------------------------------->
+<!-- CPHARMA OFF LINE -->
+<!-------------------------------------------------------------------------------->
+<?php
+}
+	if(Auth::user()->sede == 'GRUPO P, C.A') {
+?>
+	<?php
+		if($SedeConnection == 'GP') {
+	?>	
+	<!-- CASO GP -->
+		<div class="card-deck">
+			<div class="card border-danger mb-3" style="width: 14rem;">	  	
+	  		<div class="card-body text-left bg-danger">
+	    		<h5 class="card-title">
+		    		<span class="card-text text-white">
+		    			<?php echo "".SedeFTNOFF."<br/>".LastRestoreDB(nameFTNOFF,$SedeConnection);?>
+		    		</span>
+	    		</h5>	    	    
+	  		</div>
+		  	<div class="card-footer bg-transparent border-danger text-right">
+		  		<form action="/reporte/" style="display: inline;">
+				    @csrf
+				    <input id="SEDE" name="SEDE" type="hidden" value="GPFTN">  
+				    <button type="submit" name="Reporte" role="button" class="btn btn-outline-danger btn-sm"></i>Ver reportes</button>
+					</form>
+		  	</div>
+			</div>
+			<div class="card border-success mb-3" style="width: 14rem;">	  	
+	  		<div class="card-body text-left bg-success">
+	    		<h5 class="card-title">
+		    		<span class="card-text text-white">
+		    			<?php echo "".SedeFLLOFF."<br/>".LastRestoreDB(nameFLLOFF,$SedeConnection);?>
+		    		</span>
+	    		</h5>	    	    
+	  		</div>
+		  	<div class="card-footer bg-transparent border-success text-right">
+		  		<form action="/reporte/" style="display: inline;">
+				    @csrf
+				    <input id="SEDE" name="SEDE" type="hidden" value="GPFLL">
+				    <button type="submit" name="Reporte" role="button" class="btn btn-outline-success btn-sm"></i>Ver reportes</button>
+					</form>
+	  		</div>
+			</div>
+			<div class="card border-info mb-3" style="width: 14rem;">	  	
+	  		<div class="card-body text-left bg-info">
+	    		<h5 class="card-title">
+		    		<span class="card-text text-white">
+		    			<?php echo "".SedeFAUOFF."<br/>".LastRestoreDB(nameFAUOFF,$SedeConnection);?>
+		    		</span>
+	    		</h5>	    	    
+	  		</div>
+		  	<div class="card-footer bg-transparent border-info text-right">
+		  		<form action="/reporte/" style="display: inline;">
+				    @csrf
+				    <input id="SEDE" name="SEDE" type="hidden" value="GPFAU">
+				    <button type="submit" name="Reporte" role="button" class="btn btn-outline-info btn-sm"></i>Ver reportes</button>
+					</form>
+		  	</div>
 			</div>
 		</div>
+	<!-- CASO GP -->
 	<?php
+		}
+		if($SedeConnection == 'FTN') {
+	?>	
+	<!-- CASO FTN -->
+		<div class="card-deck">
+			<div class="card border-success mb-3" style="width: 14rem;">	  	
+	  		<div class="card-body text-left bg-success">
+	    		<h5 class="card-title">
+		    		<span class="card-text text-white">
+		    			<?php echo "".SedeFLLOFF."<br/>".LastRestoreDB(nameFLLOFF,$SedeConnection);?>
+		    		</span>
+	    		</h5>	    	    
+	  		</div>
+		  	<div class="card-footer bg-transparent border-success text-right">
+		  		<form action="/reporte/" style="display: inline;">
+				    @csrf
+				    <input id="SEDE" name="SEDE" type="hidden" value="GPFLL">
+				    <button type="submit" name="Reporte" role="button" class="btn btn-outline-success btn-sm"></i>Ver reportes</button>
+					</form>
+	  		</div>
+			</div>
+			<div class="card border-info mb-3" style="width: 14rem;">	  	
+	  		<div class="card-body text-left bg-info">
+	    		<h5 class="card-title">
+		    		<span class="card-text text-white">
+		    			<?php echo "".SedeFAUOFF."<br/>".LastRestoreDB(nameFAUOFF,$SedeConnection);?>
+		    		</span>
+	    		</h5>	    	    
+	  		</div>
+		  	<div class="card-footer bg-transparent border-info text-right">
+		  		<form action="/reporte/" style="display: inline;">
+				    @csrf
+				    <input id="SEDE" name="SEDE" type="hidden" value="GPFAU">
+				    <button type="submit" name="Reporte" role="button" class="btn btn-outline-info btn-sm"></i>Ver reportes</button>
+					</form>
+		  	</div>
+			</div>
+		</div>
+	<!-- CASO FTN -->
+	<?php
+		}
+		if($SedeConnection == 'FLL') {
+	?>	
+	<!-- CASO FLL -->
+		<div class="card-deck">
+			<div class="card border-danger mb-3" style="width: 14rem;">	  	
+	  		<div class="card-body text-left bg-danger">
+	    		<h5 class="card-title">
+		    		<span class="card-text text-white">
+		    			<?php echo "".SedeFTNOFF."<br/>".LastRestoreDB(nameFTNOFF,$SedeConnection);?>
+		    		</span>
+	    		</h5>	    	    
+	  		</div>
+		  	<div class="card-footer bg-transparent border-danger text-right">
+		  		<form action="/reporte/" style="display: inline;">
+				    @csrf
+				    <input id="SEDE" name="SEDE" type="hidden" value="GPFTN">  
+				    <button type="submit" name="Reporte" role="button" class="btn btn-outline-danger btn-sm"></i>Ver reportes</button>
+					</form>
+		  	</div>
+			</div>
+			<div class="card border-info mb-3" style="width: 14rem;">	  	
+	  		<div class="card-body text-left bg-info">
+	    		<h5 class="card-title">
+		    		<span class="card-text text-white">
+		    			<?php echo "".SedeFAUOFF."<br/>".LastRestoreDB(nameFAUOFF,$SedeConnection);?>
+		    		</span>
+	    		</h5>	    	    
+	  		</div>
+		  	<div class="card-footer bg-transparent border-info text-right">
+		  		<form action="/reporte/" style="display: inline;">
+				    @csrf
+				    <input id="SEDE" name="SEDE" type="hidden" value="GPFAU">
+				    <button type="submit" name="Reporte" role="button" class="btn btn-outline-info btn-sm"></i>Ver reportes</button>
+					</form>
+		  	</div>
+			</div>
+		</div>
+	<!-- CASO FLL -->
+	<?php
+		}
+		if($SedeConnection == 'FAU') {
+	?>	
+	<!-- CASO FAU -->
+		<div class="card-deck">
+			<div class="card border-danger mb-3" style="width: 14rem;">	  	
+	  		<div class="card-body text-left bg-danger">
+	    		<h5 class="card-title">
+		    		<span class="card-text text-white">
+		    			<?php echo "".SedeFTNOFF."<br/>".LastRestoreDB(nameFTNOFF,$SedeConnection);?>
+		    		</span>
+	    		</h5>	    	    
+	  		</div>
+		  	<div class="card-footer bg-transparent border-danger text-right">
+		  		<form action="/reporte/" style="display: inline;">
+				    @csrf
+				    <input id="SEDE" name="SEDE" type="hidden" value="GPFTN">  
+				    <button type="submit" name="Reporte" role="button" class="btn btn-outline-danger btn-sm"></i>Ver reportes</button>
+					</form>
+		  	</div>
+			</div>
+			<div class="card border-success mb-3" style="width: 14rem;">	  	
+	  		<div class="card-body text-left bg-success">
+	    		<h5 class="card-title">
+		    		<span class="card-text text-white">
+		    			<?php echo "".SedeFLLOFF."<br/>".LastRestoreDB(nameFLLOFF,$SedeConnection);?>
+		    		</span>
+	    		</h5>	    	    
+	  		</div>
+		  	<div class="card-footer bg-transparent border-success text-right">
+		  		<form action="/reporte/" style="display: inline;">
+				    @csrf
+				    <input id="SEDE" name="SEDE" type="hidden" value="GPFLL">
+				    <button type="submit" name="Reporte" role="button" class="btn btn-outline-success btn-sm"></i>Ver reportes</button>
+					</form>
+	  		</div>
+			</div>
+		</div>
+	<!-- CASO FAU -->
+	<?php
+		}
+	  if(Auth::user()->role == 'DEVELOPER'){
+ 	?>
+	<!-- CASO USER DEVELOPER -->
+ 	<div class="card-deck">
+ 		<div class="card border-warning mb-3" style="width: 14rem;">	  	
+  		<div class="card-body text-left bg-warning">
+    		<h5 class="card-title">
+	    		<span class="card-text text-white">
+	    			<?php echo "".SedeDBs; ?>
+	    		</span>
+    		</h5>	    	    
+  		</div>
+	  	<div class="card-footer bg-transparent border-warning text-right">	  		
+	  		<form action="/reporte/" style="display: inline;">
+			    @csrf
+			    <input id="SEDE" name="SEDE" type="hidden" value="DBs">  
+			    <button type="submit" name="Reporte" role="button" class="btn btn-outline-warning btn-sm"></i>Ver reportes</button>
+				</form>
+	  	</div>
+		</div>		
+ 		<div class="card border-warning mb-3" style="width: 14rem;">	  	
+  		<div class="card-body text-left bg-warning">
+    		<h5 class="card-title">
+	    		<span class="card-text text-white">
+	    			<?php echo "".SedeDBm; ?>
+	    		</span>
+    		</h5>	    	    
+  		</div>
+	  	<div class="card-footer bg-transparent border-warning text-right">	  		
+	  		<form action="/reporte/" style="display: inline;">
+			    @csrf
+			    <input id="SEDE" name="SEDE" type="hidden" value="DBm">  
+			    <button type="submit" name="Reporte" role="button" class="btn btn-outline-warning btn-sm"></i>Ver reportes</button>
+				</form>
+	  	</div>
+		</div>
+		<div class="card border-warning mb-3" style="width: 14rem;">	  	
+  		<div class="card-body text-left bg-warning">
+    		<h5 class="card-title">
+	    		<span class="card-text text-white">
+	    			<?php echo "Servidor de Desarrollo Rubmary"; ?>
+	    		</span>
+    		</h5>	    	    
+  		</div>
+	  	<div class="card-footer bg-transparent border-warning text-right">	  		
+	  		<form action="/reporte/" style="display: inline;">
+			    @csrf
+			    <input id="SEDE" name="SEDE" type="hidden" value="DBs">  
+			    <button type="submit" name="Reporte" role="button" class="btn btn-outline-warning btn-sm"></i>Ver reportes</button>
+				</form>
+	  	</div>
+		</div>		
+ 	</div>
+ 	<!-- CASO USER DEVELOPER -->
+ 	<?php
 	}
 }
 ?>
-<!-- FIN: Panel CPharma OFF Line -->
-   	<?php
-	  if(Auth::user()->role == 'DEVELOPER'){
-	 ?>
-
-   	<div class="card-deck">
-   		<div class="card border-warning mb-3" style="width: 14rem;">	  	
-	  		<div class="card-body text-left bg-warning">
-	    		<h5 class="card-title">
-		    		<span class="card-text text-white">
-		    			<?php echo "".SedeDBs; ?>
-		    		</span>
-	    		</h5>	    	    
-	  		</div>
-		  	<div class="card-footer bg-transparent border-warning text-right">	  		
-		  		<form action="/reporte/" style="display: inline;">
-				    @csrf
-				    <input id="SEDE" name="SEDE" type="hidden" value="DBs">  
-				    <button type="submit" name="Reporte" role="button" class="btn btn-outline-warning btn-sm"></i>Ver reportes</button>
-				</form>
-		  	</div>
-		</div>		
-   	</div>
-	
-	<div class="card-deck">
-   		<div class="card border-warning mb-3" style="width: 14rem;">	  	
-	  		<div class="card-body text-left bg-warning">
-	    		<h5 class="card-title">
-		    		<span class="card-text text-white">
-		    			<?php echo "".SedeDBm; ?>
-		    		</span>
-	    		</h5>	    	    
-	  		</div>
-		  	<div class="card-footer bg-transparent border-warning text-right">	  		
-		  		<form action="/reporte/" style="display: inline;">
-				    @csrf
-				    <input id="SEDE" name="SEDE" type="hidden" value="DBm">  
-				    <button type="submit" name="Reporte" role="button" class="btn btn-outline-warning btn-sm"></i>Ver reportes</button>
-				</form>
-		  	</div>
-		</div>		
-   	</div>
-
-   	<?php
-		}
-	?>
-
-	<!-- 
-   	<div class="card-deck">
-   		
-		<div class="card border-danger mb-3" style="width: 14rem;">	  	
-	  		<div class="card-body text-left bg-danger">
-	    		<h5 class="card-title">
-		    		<span class="card-text text-white">
-		    			<?php echo "".SedeFTN; ?>
-		    		</span>
-	    		</h5>	    	    
-	  		</div>
-		  	<div class="card-footer bg-transparent border-danger text-right">
-		  		<form action="/reporte/" style="display: inline;">
-				    @csrf
-				    <input id="SEDE" name="SEDE" type="hidden" value="FTN"> 
-				<?php
-					if(
-						Auth::user()->sede == 'FARMACIA TIERRA NEGRA, C.A.' 
-						|| Auth::user()->sede == 'GRUPO P, C.A'
-					){
-				?> 
-				    <button type="submit" name="Reporte" role="button" class="btn btn-outline-danger btn-sm"></i>Ver reportes</button>
-				<?php
-					}
-				?>
-				</form>
-		  	</div>
-		</div>
-
-		<div class="card border-success mb-3" style="width: 14rem;">	  	
-	  		<div class="card-body text-left bg-success">
-	    		<h5 class="card-title">
-		    		<span class="card-text text-white">
-		    			<?php echo "".SedeFLL; ?>
-		    		</span>
-	    		</h5>	    	    
-	  		</div>
-		  	<div class="card-footer bg-transparent border-success text-right">
-		  		<form action="/reporte/" style="display: inline;">
-				    @csrf
-				    <input id="SEDE" name="SEDE" type="hidden" value="FLL">
-				<?php
-					if(
-						Auth::user()->sede == 'FARMACIA LA LAGO,C.A.' 
-						|| Auth::user()->sede == 'GRUPO P, C.A'
-					){
-				?>  
-				    <button type="submit" name="Reporte" role="button" class="btn btn-outline-success btn-sm"></i>Ver reportes</button>
-				<?php
-					}
-				?>
-				</form>
-		  	</div>
-		</div>
-
-		<div class="card border-info mb-3" style="width: 14rem;">	  	
-	  		<div class="card-body text-left bg-info">
-	    		<h5 class="card-title">
-		    		<span class="card-text text-white">
-		    			<?php echo "".SedeFAU; ?>
-		    		</span>
-	    		</h5>	    	    
-	  		</div>
-		  	<div class="card-footer bg-transparent border-info text-right">
-		  		<form action="/reporte/" style="display: inline;">
-				    @csrf
-				    <input id="SEDE" name="SEDE" type="hidden" value="FAU">  
-				<?php
-					if(
-						Auth::user()->sede == 'FARMACIA AVENIDA UNIVERSIDAD, C.A.' 
-						|| Auth::user()->sede == 'GRUPO P, C.A'
-					){
-				?>     
-				    <button type="submit" name="Reporte" role="button" class="btn btn-outline-info btn-sm"></i>Ver reportes</button>
-				<?php
-					}
-				?>
-				</form>
-		  	</div>
-		</div>
-   	</div> 
-   -->
+<!-------------------------------------------------------------------------------->
+<!-- CPHARMA OFF LINE -->
+<!-------------------------------------------------------------------------------->
 @endsection

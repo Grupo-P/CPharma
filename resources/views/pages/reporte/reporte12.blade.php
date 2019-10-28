@@ -360,25 +360,72 @@
     $result2 = sqlsrv_query($conn,$sql3);
 
     $contador = 1;
-    $FechaComparativa = date('d/m/Y',strtotime($FFinal));
+    $FechaComparativa = date('d-m-Y',strtotime($FFinal));
+    $FechaAnterior = '';
 
     while($row2 = sqlsrv_fetch_array($result2,SQLSRV_FETCH_ASSOC)) {
+      $FechaMovimiento = $row2["FechaMovimiento"]->format('d-m-Y');
 
-      if($row2["FechaMovimiento"] == $FechaComparativa) {
+      if($FechaMovimiento == $FechaComparativa) {
         continue;
       }
+
+      if($FechaAnterior != '') {
+        $diferencia = FG_Validar_Fechas($FechaAnterior,$FechaMovimiento);
+
+        if($diferencia > 1) {
+          for($i=1;$i<$diferencia;$i++) {
+
+            $FechaAnterior = date("Y-m-d",strtotime($FechaAnterior."+ 1 days"));
+            $FechaIterada = new DateTime($FechaAnterior);
+
+            echo '
+              <tr>
+                <td align="center"><strong>'.intval($contador).'</strong></td>
+                <td align="center">'.$FechaIterada->format('d-m-Y').'</td>
+                <td align="center">Venta</td>
+                <td align="center">0</td>
+              </tr>
+            ';
+
+            $contador++;
+          }//for
+        }//if diferencia
+      }//if $FechaAnterior
 
       echo '
         <tr>
           <td align="center"><strong>'.intval($contador).'</strong></td>
-          <td align="center">'.$row2["FechaMovimiento"].'</td>
+          <td align="center">'.$FechaMovimiento.'</td>
           <td align="center">'.utf8_encode($row2["Movimiento"]).'</td>
           <td align="center">'.$row2["Cantidad"].'</td>
         </tr>
       ';
 
       $contador++;
-    }
+      $FechaAnterior = $row2["FechaMovimiento"]->format("Y-m-d");
+    }//while
+
+    $diferencia = FG_Validar_Fechas($FechaAnterior,$FFinal);
+
+    if($diferencia > 1) {
+      for($i=1;$i<$diferencia;$i++) {
+
+        $FechaAnterior = date("Y-m-d",strtotime($FechaAnterior."+ 1 days"));
+        $FechaIterada = new DateTime($FechaAnterior);
+
+        echo '
+          <tr>
+            <td align="center"><strong>'.intval($contador).'</strong></td>
+            <td align="center">'.$FechaIterada->format('d-m-Y').'</td>
+            <td align="center">Venta</td>
+            <td align="center">0</td>
+          </tr>
+        ';
+
+        $contador++;
+      }//for
+    }//if diferencia
 
     echo '
           </tbody>
@@ -397,6 +444,9 @@
             <th scope="col" class="CP-sticky">Hora</th>
             <th scope="col" class="CP-sticky">Tipo de movimiento</th>
             <th scope="col" class="CP-sticky">Cantidad</th>
+            <th scope="col" class="CP-sticky">Titular</th>
+            <th scope="col" class="CP-sticky">Origen</th>
+            <th scope="col" class="CP-sticky">Valor Bs.</th>
           </tr>
         </thead>
 
@@ -407,6 +457,33 @@
     $sql4 = R12Q_Detalle_Movimiento($IdArticulo,$FInicial,$FFinal);
     $result3 = sqlsrv_query($conn,$sql4);
 
+    //---------------------- Inicio Nuevos Campos ----------------------
+    $FechaAnteriorVenta = '';
+    $sql5 = '';
+    $result4 = '';
+    $row4 = '';
+
+    $FechaAnteriorCompra = '';
+    $sql6 = '';
+    $result5 = '';
+    $row5 = '';
+
+    $FechaAnteriorDevolucion = '';
+    $sql7 = '';
+    $result6 = '';
+    $row6 = '';
+
+    $FechaAnteriorCorreccion = '';
+    $sql8 = '';
+    $result7 = '';
+    $row7 = '';
+
+    $FechaAnteriorAjuste = '';
+    $sql9 = '';
+    $result8 = '';
+    $row8 = '';
+    //---------------------- Fin Nuevos Campos ----------------------
+
     while($row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC)) {
 
       if($row3["FechaMovimiento"]->format("Y-m-d") == $FFinal) {
@@ -416,7 +493,7 @@
       echo '
         <tr>
           <td align="center"><strong>'.intval($contador).'</strong></td>
-          <td align="center">'.$row3["FechaMovimiento"]->format("d/m/Y").'</td>
+          <td align="center">'.$row3["FechaMovimiento"]->format("d-m-Y").'</td>
       ';
 
       echo '          
@@ -425,11 +502,136 @@
           .'</td>
           <td align="center">'.utf8_encode($row3["Movimiento"]).'</td>
           <td align="center">'.$row3["Cantidad"].'</td>
-        </tr>
       ';
 
+      switch($row3["InvCausaId"]) {
+        case 1:
+        case 2: 
+          if($FechaAnteriorCompra == '') {
+            $sql6 = R12Q_Nombre_Proveedor_Bruto($IdArticulo,$row3["FechaMovimiento"]->format("Y-m-d"));
+            $result5 = sqlsrv_query($conn,$sql6);
+          }
+          else if($FechaAnteriorCompra != $row3["FechaMovimiento"]->format("Y-m-d")) {
+            $sql6 = R12Q_Nombre_Proveedor_Bruto($IdArticulo,$row3["FechaMovimiento"]->format("Y-m-d"));
+            $result5 = sqlsrv_query($conn,$sql6);
+          }
+
+          $row5 = sqlsrv_fetch_array($result5,SQLSRV_FETCH_ASSOC);
+          
+          echo '
+              <td align="center">'. FG_Limpiar_Texto($row5["Nombre"]) .'</td>
+              <td align="center">-</td>
+              <td align="center">'. number_format($row5["M_PrecioCompraBruto"],2,"," ,"." ) .'</td>
+            </tr>
+          ';
+
+          $FechaAnteriorCompra = $row3["FechaMovimiento"]->format("Y-m-d");
+        break;
+        case 3:
+          if($FechaAnteriorVenta == '') {
+            $sql5 = R12Q_Nombre_Cliente_Caja($IdArticulo,$row3["FechaMovimiento"]->format("Y-m-d"));
+            $result4 = sqlsrv_query($conn,$sql5);
+          }
+          else if($FechaAnteriorVenta != $row3["FechaMovimiento"]->format("Y-m-d")) {
+            $sql5 = R12Q_Nombre_Cliente_Caja($IdArticulo,$row3["FechaMovimiento"]->format("Y-m-d"));
+            $result4 = sqlsrv_query($conn,$sql5);
+          }
+
+          $row4 = sqlsrv_fetch_array($result4,SQLSRV_FETCH_ASSOC);
+          
+          echo '
+              <td align="center">' 
+                . FG_Limpiar_Texto($row4["Nombre"]) 
+                . " " 
+                . FG_Limpiar_Texto($row4["Apellido"]) 
+              . '</td>
+              <td align="center">'. $row4["CodigoCaja"] .'</td>
+              <td align="center">'. number_format($row4["Precio"],2,"," ,"." ) .'</td>
+            </tr>
+          ';
+
+          $FechaAnteriorVenta = $row3["FechaMovimiento"]->format("Y-m-d");
+        break;
+        case 4: 
+          if($FechaAnteriorDevolucion == '') {
+            $sql7 = R12Q_Nombre_Cliente_Devolucion($IdArticulo,$row3["FechaMovimiento"]->format("Y-m-d"));
+            $result6 = sqlsrv_query($conn,$sql7);
+          }
+          else if($FechaAnteriorDevolucion != $row3["FechaMovimiento"]->format("Y-m-d")) {
+            $sql7 = R12Q_Nombre_Cliente_Devolucion($IdArticulo,$row3["FechaMovimiento"]->format("Y-m-d"));
+            $result6 = sqlsrv_query($conn,$sql7);
+          }
+
+          $row6 = sqlsrv_fetch_array($result6,SQLSRV_FETCH_ASSOC);
+          
+          echo '
+              <td align="center">' 
+                . FG_Limpiar_Texto($row6["Nombre"]) 
+                . " " 
+                . FG_Limpiar_Texto($row6["Apellido"]) 
+              . '</td>
+              <td align="center">'. $row6["CodigoCaja"] .'</td>
+              <td align="center">'. number_format($row6["Precio"],2,"," ,"." ) .'</td>
+            </tr>
+          ';
+
+          $FechaAnteriorDevolucion = $row3["FechaMovimiento"]->format("Y-m-d");
+        break;
+        case 11:
+        case 12:
+          if($FechaAnteriorCorreccion == '') {
+            $sql8 = R12Q_Responsable_Correccion($IdArticulo,$row3["FechaMovimiento"]->format("Y-m-d"));
+            $result7 = sqlsrv_query($conn,$sql8);
+          }
+          else if($FechaAnteriorCorreccion != $row3["FechaMovimiento"]->format("Y-m-d")) {
+            $sql8 = R12Q_Responsable_Correccion($IdArticulo,$row3["FechaMovimiento"]->format("Y-m-d"));
+            $result7 = sqlsrv_query($conn,$sql8);
+          }
+
+          $row7 = sqlsrv_fetch_array($result7,SQLSRV_FETCH_ASSOC);
+          
+          echo '
+              <td align="center">'. FG_Limpiar_Texto($row7["Responsable"]) . '</td>
+              <td align="center">-</td>
+              <td align="center">-</td>
+            </tr>
+          ';
+
+          $FechaAnteriorCorreccion = $row3["FechaMovimiento"]->format("Y-m-d");
+        break;
+        case 14:
+        case 15:
+          if($FechaAnteriorAjuste == '') {
+            $sql9 = R12Q_Responsable_Ajuste($IdArticulo,$row3["FechaMovimiento"]->format("Y-m-d"));
+            $result8 = sqlsrv_query($conn,$sql9);
+          }
+          else if($FechaAnteriorAjuste != $row3["FechaMovimiento"]->format("Y-m-d")) {
+            $sql9 = R12Q_Responsable_Ajuste($IdArticulo,$row3["FechaMovimiento"]->format("Y-m-d"));
+            $result8 = sqlsrv_query($conn,$sql9);
+          }
+
+          $row8 = sqlsrv_fetch_array($result8,SQLSRV_FETCH_ASSOC);
+          
+          echo '
+              <td align="center">'. FG_Limpiar_Texto($row8["Responsable"]) . '</td>
+              <td align="center">-</td>
+              <td align="center">-</td>
+            </tr>
+          ';
+
+          $FechaAnteriorAjuste = $row3["FechaMovimiento"]->format("Y-m-d");
+        break;
+        default: 
+          echo '
+              <td align="center">-</td>
+              <td align="center">-</td>
+              <td align="center">-</td>
+            </tr>
+          ';
+      }//switch
+
       $contador++;
-    }
+    }//while
 
     echo '
         </tbody>
@@ -600,14 +802,14 @@
   function R12Q_Resumen_Movimiento($IdArticulo,$FInicial,$FFinal) {
     $sql = "
       SELECT 
-        CONVERT(VARCHAR(10), InvMovimiento.FechaMovimiento, 103) AS FechaMovimiento,
-        InvCausa.Descripcion AS Movimiento,
-        ROUND(CAST(SUM(InvMovimiento.Cantidad) AS DECIMAL(38,0)),2,0) AS Cantidad
+      CONVERT(DATE,CONVERT(DATETIME,CONVERT(VARCHAR(10), InvMovimiento.FechaMovimiento, 103),103)) AS FechaMovimiento,
+      InvCausa.Descripcion AS Movimiento,
+      ROUND(CAST(SUM(InvMovimiento.Cantidad) AS DECIMAL(38,0)),2,0) AS Cantidad
       FROM InvMovimiento
       INNER JOIN InvCausa ON InvMovimiento.InvCausaId=InvCausa.Id
       WHERE InvMovimiento.InvArticuloId='$IdArticulo'
       AND (CONVERT(DATE,InvMovimiento.FechaMovimiento) >= '$FInicial' AND CONVERT(DATE,InvMovimiento.FechaMovimiento) <= '$FFinal')
-      GROUP BY CONVERT(VARCHAR(10), InvMovimiento.FechaMovimiento, 103), InvCausa.Descripcion
+      GROUP BY CONVERT(DATE,CONVERT(DATETIME,CONVERT(VARCHAR(10), InvMovimiento.FechaMovimiento, 103),103)), InvCausa.Descripcion
       ORDER BY FechaMovimiento ASC
     ";
     return $sql;
@@ -633,6 +835,132 @@
       AND (CONVERT(DATE,InvMovimiento.FechaMovimiento) >= '$FInicial' AND CONVERT(DATE,InvMovimiento.FechaMovimiento) <= '$FFinal')
       GROUP BY InvMovimiento.InvLoteId,InvMovimiento.FechaMovimiento,InvMovimiento.InvCausaId,InvCausa.Descripcion,InvMovimiento.Cantidad
       ORDER BY InvMovimiento.FechaMovimiento ASC
+    ";
+    return $sql;
+  }
+  /**********************************************************************************/
+  /*
+    TITULO: R12Q_Nombre_Proveedor_Bruto
+    FUNCION: Query que genera el nombre del proveedor y el bruto de compra
+    RETORNO: Detalle de compra
+    AUTOR: Ing. Manuel Henriquez
+   */
+  function R12Q_Nombre_Proveedor_Bruto($IdArticulo,$FechaBandera) {
+    $sql = "
+      SELECT
+      GenPersona.Nombre,
+      ComFacturaDetalle.M_PrecioCompraBruto
+      FROM ComFacturaDetalle
+      INNER JOIN ComFactura ON ComFactura.Id = ComFacturaDetalle.ComFacturaId
+      INNER JOIN ComProveedor ON ComProveedor.Id = ComFactura.ComProveedorId
+      INNER JOIN GenPersona ON GenPersona.Id = ComProveedor.GenPersonaId
+      WHERE ComFacturaDetalle.InvArticuloId = '$IdArticulo'
+      AND CONVERT(DATE,ComFactura.FechaDocumento) = '$FechaBandera'
+      ORDER BY ComFactura.FechaDocumento DESC
+    ";
+    return $sql;
+  }
+  /**********************************************************************************/
+  /*
+    TITULO: R12Q_Nombre_Cliente_Caja
+    FUNCION: Query que genera el nombre del cliente y la caja en que fue atendido
+    RETORNO: Detalle de ventas
+    AUTOR: Ing. Manuel Henriquez
+   */
+  function R12Q_Nombre_Cliente_Caja($IdArticulo,$FechaBandera) {
+    $sql = "
+      SELECT DISTINCT
+      VenFactura.Id,
+      GenPersona.Nombre,
+      GenPersona.Apellido,
+      VenFacturaDetalle.InvArticuloId,
+      VenFactura.VenClienteId,
+      VenFactura.VenCajaId,
+      (SELECT VenCaja.CodigoCaja 
+        FROM VenCaja 
+        WHERE VenCaja.Id = VenFactura.VenCajaId) AS CodigoCaja,
+      (ROUND(CAST(VenFacturaDetalle.Cantidad AS DECIMAL(38,0)),2,0) * VenFacturaDetalle.PrecioBruto) AS Precio,
+      VenFactura.Auditoria_FechaCreacion
+      FROM VenFactura
+      INNER JOIN VenFacturaDetalle ON VenFacturaDetalle.VenFacturaId = VenFactura.Id
+      INNER JOIN VenCliente ON VenCliente.Id = VenFactura.VenClienteId
+      INNER JOIN GenPersona ON GenPersona.Id = VenCliente.GenPersonaId
+      WHERE  VenFacturaDetalle.InvArticuloId = '$IdArticulo'
+      AND CONVERT(DATE, VenFactura.Auditoria_FechaCreacion) = '$FechaBandera'
+    ";
+    return $sql;
+  }
+  /**********************************************************************************/
+  /*
+    TITULO: R12Q_Nombre_Cliente_Devolucion
+    FUNCION: Query que genera el nombre del cliente y la caja en que fue atendido
+    RETORNO: Detalle de ventas
+    AUTOR: Ing. Manuel Henriquez
+   */
+  function R12Q_Nombre_Cliente_Devolucion($IdArticulo,$FechaBandera) {
+    $sql = "
+      SELECT DISTINCT
+      VenDevolucion.Id,
+      GenPersona.Nombre,
+      GenPersona.Apellido,
+      VenDevolucion.VenFacturaId,
+      VenDevolucionDetalle.InvArticuloId,
+      VenDevolucion.VenCajaId,
+      (SELECT VenCaja.CodigoCaja FROM VenCaja WHERE VenCaja.Id = VenDevolucion.VenCajaId) AS CodigoCaja,
+      (ROUND(CAST(VenDevolucionDetalle.Cantidad AS DECIMAL(38,0)),2,0) * VenDevolucionDetalle.PrecioBruto) AS Precio
+      FROM VenDevolucion 
+      INNER JOIN VenDevolucionDetalle ON VenDevolucionDetalle.VenDevolucionId = VenDevolucion.Id
+      INNER JOIN VenFactura ON VenFactura.Id = VenDevolucion.VenFacturaId
+      INNER JOIN VenCliente ON VenCliente.Id = VenFactura.VenClienteId
+      INNER JOIN GenPersona ON GenPersona.Id = VenCliente.GenPersonaId
+      WHERE VenDevolucionDetalle.InvArticuloId = '$IdArticulo'
+      AND CONVERT(DATE, VenDevolucion.Auditoria_FechaCreacion) = '$FechaBandera'
+    ";
+    return $sql;
+  }
+  /**********************************************************************************/
+  /*
+    TITULO: R12Q_Responsable_Correccion
+    FUNCION: Query que genera el responsable de la correccion de costo
+    RETORNO: Detalle de compra
+    AUTOR: Ing. Manuel Henriquez
+   */
+  function R12Q_Responsable_Correccion($IdArticulo,$FechaBandera) {
+    $sql = "
+      SELECT 
+      InvMovimiento.InvCausaId,
+      InvMovimiento.Cantidad,
+      InvMovimiento.InvArticuloId,
+      InvMovimiento.InvLoteId,
+      InvLote.Auditoria_Usuario AS Responsable
+      FROM InvMovimiento
+      INNER JOIN InvLote ON InvLote.Id = InvMovimiento.InvLoteId
+      WHERE InvMovimiento.InvArticuloId = '$IdArticulo'
+      AND ((InvMovimiento.InvCausaId = '11') OR (InvMovimiento.InvCausaId = '12'))
+      AND CONVERT(DATE,InvMovimiento.FechaMovimiento) = '$FechaBandera'
+    ";
+    return $sql;
+  }
+  /**********************************************************************************/
+  /*
+    TITULO: R12Q_Responsable_Ajuste
+    FUNCION: Query que genera el responsable de la Ajuste de entrda o salida
+    RETORNO: Detalle de compra
+    AUTOR: Ing. Manuel Henriquez
+   */
+  function R12Q_Responsable_Ajuste($IdArticulo,$FechaBandera) {
+    $sql = "
+      SELECT 
+      InvMovimiento.InvCausaId,
+      InvMovimiento.Cantidad,
+      InvMovimiento.InvArticuloId,
+      InvMovimiento.InvLoteId,
+      InvLote.Auditoria_Usuario AS Responsable
+      FROM InvMovimiento
+      INNER JOIN InvLote ON InvLote.Id = InvMovimiento.InvLoteId
+      WHERE InvMovimiento.InvArticuloId = '$IdArticulo'
+      AND ((InvMovimiento.InvCausaId = '14') OR (InvMovimiento.InvCausaId = '15'))
+      AND CONVERT(DATE,InvMovimiento.FechaMovimiento) = '$FechaBandera'
     ";
     return $sql;
   }
