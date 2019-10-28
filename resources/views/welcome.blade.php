@@ -16,3 +16,12 @@
         </h1>
     </main>
 @endsection
+
+@section('scriptsFoot')
+    <script type="text/javascript">
+      $(document).keydown(function (e) {
+        e = e || event;
+        keypressCPharma(e);
+      });
+    </script>
+@endsection
