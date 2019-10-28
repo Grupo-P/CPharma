@@ -282,9 +282,7 @@
             }
           }//Validacion de telefonos y correo
         }//Validacion total
-        
-        //Caso para validar campos requeridos
-        if(
+        else if(
           (nombres.val() == '')
           || (apellidos.val() == '')
           || (cedula.val() == '')
@@ -305,7 +303,8 @@
           if(direccion.val() == '') {
             activarDangerRequerido(direccion);
           }
-        }
+        }//Campos requeridos
+
       });
 
       $('#nombres, #apellidos, #cedula, #telefono_celular, #telefono_habitacion, ' 

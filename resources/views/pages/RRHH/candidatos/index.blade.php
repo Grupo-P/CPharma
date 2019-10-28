@@ -140,7 +140,11 @@
           ?>
             <td>{{$candidato->telefono_celular}}</td>
           <?php 
-            } 
+            } else {
+          ?>
+            <td>{{$candidato->telefono_celular}}</td>
+          <?php
+            }
           ?>
 
           <td>{{$candidato->estatus}}</td>
