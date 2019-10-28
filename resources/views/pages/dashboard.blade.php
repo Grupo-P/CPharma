@@ -22,6 +22,25 @@
 		$tasaVenta = new DateTime($tasaVenta);
 		$tasaVenta = $tasaVenta->format("d-m-Y h:i:s a");
 
+		$FechaTasaMercado = 
+		DB::table('dolars')
+		->select('updated_at')
+		->orderBy('fecha','desc')
+	 	->take(1)->get();
+
+		$FechaTasaMercado = ($FechaTasaMercado[0]->updated_at);
+		$FechaTasaMercado = new DateTime($FechaTasaMercado);
+		$FechaTasaMercado = $FechaTasaMercado->format('d-m-Y h:i:s a');
+
+		$TasaMercado = 
+		DB::table('dolars')
+		->select('tasa')
+		->orderBy('fecha','desc')
+	 	->take(1)->get();
+
+	 	$TasaMercado = ($TasaMercado[0]->tasa);
+		$TasaMercado = number_format($TasaMercado,2,"," ,"." );
+
 		$FHoy = date("Y-m-d");
 		$FAyer = date("Y-m-d",strtotime($FHoy."-1 days"));
 
@@ -50,7 +69,7 @@
 			->orderBy(DB::raw('count(*)'),'desc')
 			->where('tabla','reporte')
 			->where('user',$usuario)
-		 	->take(3)->get();
+		 	->take(2)->get();
 	?>
 
 	<h1 class="h5 text-info">
@@ -136,7 +155,7 @@
   	';
   }
 
-  if( (!empty($auditorReporteFavorito[0])) ){
+  if( (!empty($auditorReporteFavorito[0])) && (!empty($auditorReporteFavorito[1])) ){
   	$reporteFavorito1 = $auditorReporteFavorito[0];
   	$reporteFavorito1 = $reporteFavorito1->registro;
   	$Ruta1 = FG_Ruta_Reporte($reporteFavorito1);
@@ -144,10 +163,6 @@
   	$reporteFavorito2 = $auditorReporteFavorito[1];
   	$reporteFavorito2 = $reporteFavorito2->registro;
   	$Ruta2 = FG_Ruta_Reporte($reporteFavorito2);
-
-  	$reporteFavorito3 = $auditorReporteFavorito[2];
-  	$reporteFavorito3 = $reporteFavorito3->registro;
- 		$Ruta3 = FG_Ruta_Reporte($reporteFavorito3);
 
   	echo'
 		<div class="card-deck">
@@ -185,18 +200,57 @@
 					</form>
 	  		</div>
 	  	</div>
-	  	<div class="card border-secondary mb-3" style="width: 14rem;">	  	
+		</div>
+		<hr class="row align-items-start col-12">
+  	';
+  }
+  else  if( (!empty($auditorReporteFavorito[0])) && (empty($auditorReporteFavorito[1])) ){
+  	$reporteFavorito1 = $auditorReporteFavorito[0];
+  	$reporteFavorito1 = $reporteFavorito1->registro;
+  	$Ruta1 = FG_Ruta_Reporte($reporteFavorito1);
+
+  	echo'
+		<div class="card-deck">
+			<div class="card border-secondary mb-3" style="width: 14rem;">	  	
 	  		<div class="card-body text-left bg-secondary">
 	    		<h4>
 		    		<span class="card-text text-white">
 		    			<i class="fa fa-thumbtack"></i>
-		    			'.$reporteFavorito3.'
+		    			'.$reporteFavorito1.'
 		    		</span>
 	    		</h4>
 	    		<p class="card-text text-white">Reporte sugerido</p>
 	  		</div>
 	  		<div class="card-footer bg-transparent border-secondary text-right">
-		  		<form action="'.$Ruta3.'" style="display: inline;">
+		  		<form action="'.$Ruta1.'" style="display: inline;">
+				    <input id="SEDE" name="SEDE" type="hidden" value="'.MiUbicacion().'">
+				    <button type="submit" name="Reporte" role="button" class="btn btn-outline-secondary btn-sm"></i>Visualizar</button>
+					</form>
+	  		</div>
+	  	</div>
+		</div>
+		<hr class="row align-items-start col-12">
+  	';
+  }
+  else  if( (empty($auditorReporteFavorito[0])) && (!empty($auditorReporteFavorito[1])) ){
+  	$reporteFavorito2 = $auditorReporteFavorito[1];
+  	$reporteFavorito2 = $reporteFavorito2->registro;
+  	$Ruta2 = FG_Ruta_Reporte($reporteFavorito2);
+
+  	echo'
+		<div class="card-deck">
+	  	<div class="card border-secondary mb-3" style="width: 14rem;">	  	
+	  		<div class="card-body text-left bg-secondary">
+	    		<h4>
+		    		<span class="card-text text-white">
+		    			<i class="fa fa-thumbtack"></i>
+		    			'.$reporteFavorito2.'
+		    		</span>
+	    		</h4>
+	    		<p class="card-text text-white">Reporte sugerido</p>
+	  		</div>
+	  		<div class="card-footer bg-transparent border-secondary text-right">
+		  		<form action="'.$Ruta2.'" style="display: inline;">
 				    <input id="SEDE" name="SEDE" type="hidden" value="'.MiUbicacion().'">
 				    <button type="submit" name="Reporte" role="button" class="btn btn-outline-secondary btn-sm"></i>Visualizar</button>
 					</form>
@@ -403,6 +457,24 @@
 	<!-- Modal OPERACIONES -->
 	<!-- Dashboard OPERACIONES-->
 	<div class="card-deck">
+	<!-- Tasa Mercado -->
+		<div class="card border-secondary mb-3" style="width: 14rem;">	  	
+  		<div class="card-body text-left bg-secondary">
+	    		<h3 class="card-title">
+		    		<span class="card-text text-white">
+		    			<i class="fas fa-credit-card"></i>
+		    			<?php
+								echo 'Tasa Mercado: '.$TasaMercado.' '.SigVe;
+							?>						
+		    		</span>
+	    		</h3>
+	    		<p class="card-text text-white">
+					<?php 
+						echo 'Ultima Actualizacion: '.$FechaTasaMercado;
+					?>
+	    		</p>
+  		</div>
+		</div>
 	<!-- Tasa Venta -->
 		<div class="card border-dark mb-3" style="width: 14rem;">	  	
 			<div class="card-body text-left bg-dark">
@@ -784,19 +856,23 @@
 	<div class="card-deck">
 		<div class="card border-dark mb-3" style="width: 14rem;">	  	
   		<div class="card-body text-left bg-dark">
-    		<h2 class="card-title">
-	    		<span class="card-text text-white">
-	    			<i class="fas fa-money-bill-alt"></i>
-	    			<?php
-						echo ''.$dolar;
-					?>						
-	    		</span>
-    		</h2>
-    		<p class="card-text text-white">Tasas registradas</p>
+	    		<h3 class="card-title">
+		    		<span class="card-text text-white">
+		    			<i class="fas fa-credit-card"></i>
+		    			<?php
+								echo 'Tasa Mercado: '.$TasaMercado.' '.SigVe;
+							?>						
+		    		</span>
+	    		</h3>
+	    		<p class="card-text text-white">
+					<?php 
+						echo 'Ultima Actualizacion: '.$FechaTasaMercado;
+					?>
+	    		</p>
   		</div>
 	  	<div class="card-footer bg-transparent border-dark text-right">
 	  		<a href="/dolar/" class="btn btn-outline-dark btn-sm">Visualizar</a>
-	  	</div>		
+	  	</div>	
 		</div>
 	</div>
 	<!-- Dashboard ADMINISTRACION-->
@@ -933,15 +1009,19 @@
 		<!-- Dolar -->
 		<div class="card border-secondary mb-3" style="width: 14rem;">	  	
   		<div class="card-body text-left bg-secondary">
-    		<h2 class="card-title">
-	    		<span class="card-text text-white">
-	    			<i class="fas fa-money-bill-alt"></i>
-	    			<?php
-						echo ''.$dolar;
-					?>						
-	    		</span>
-    		</h2>
-    		<p class="card-text text-white">Tasas de mercado registradas</p>
+	    		<h3 class="card-title">
+		    		<span class="card-text text-white">
+		    			<i class="fas fa-credit-card"></i>
+		    			<?php
+								echo 'Tasa Mercado: '.$TasaMercado.' '.SigVe;
+							?>						
+		    		</span>
+	    		</h3>
+	    		<p class="card-text text-white">
+					<?php 
+						echo 'Ultima Actualizacion: '.$FechaTasaMercado;
+					?>
+	    		</p>
   		</div>
 	  	<div class="card-footer bg-transparent border-secondary text-right">
 	  		<a href="/dolar/" class="btn btn-outline-secondary btn-sm">Visualizar</a>
@@ -1037,15 +1117,19 @@
 		<!-- Dolar -->
 		<div class="card border-secondary mb-3" style="width: 14rem;">	  	
   		<div class="card-body text-left bg-secondary">
-    		<h2 class="card-title">
-	    		<span class="card-text text-white">
-	    			<i class="fas fa-money-bill-alt"></i>
-	    			<?php
-						echo ''.$dolar;
-					?>						
-	    		</span>
-    		</h2>
-    		<p class="card-text text-white">Tasas de mercado registradas</p>
+	    		<h3 class="card-title">
+		    		<span class="card-text text-white">
+		    			<i class="fas fa-credit-card"></i>
+		    			<?php
+								echo 'Tasa Mercado: '.$TasaMercado.' '.SigVe;
+							?>						
+		    		</span>
+	    		</h3>
+	    		<p class="card-text text-white">
+					<?php 
+						echo 'Ultima Actualizacion: '.$FechaTasaMercado;
+					?>
+	    		</p>
   		</div>
 	  	<div class="card-footer bg-transparent border-secondary text-right">
 	  		<a href="/dolar/" class="btn btn-outline-secondary btn-sm">Visualizar</a>
@@ -1058,8 +1142,8 @@
 	    		<span class="card-text text-white">
 	    			<i class="fas fa-credit-card"></i>
 	    			<?php
-						echo 'Tasa Venta: '.$Tasa;
-					?>						
+							echo 'Tasa Venta: '.$Tasa.' '.SigVe;
+						?>						
 	    		</span>
     		</h3>
     		<p class="card-text text-white">
