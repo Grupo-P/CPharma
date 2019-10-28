@@ -361,6 +361,31 @@
 	}
 	/**********************************************************************************/
 	/*
+		TITULO: FG_Reportes_Departamento
+		FUNCION: Consigue el numero de reportes disponibles para el departamento
+		RETORNO: cantidad de reportes
+		DESAROLLADO POR: SERGIO COVA
+	 */
+	function FG_Reportes_Departamento($Departamento) {
+		switch ($Departamento) {
+			case 'COMPRAS':
+				$Numero_Reportes = 12;
+			break;
+			case 'TECNOLOGIA':
+				$Numero_Reportes = 13;
+			break;
+			case 'SURTIDO':
+				$Numero_Reportes = 3;
+			break;
+			
+			default:
+				$Numero_Reportes = 0;
+			break;
+		}
+		return $Numero_Reportes;
+	}
+	/**********************************************************************************/
+	/*
 		TITULO: FG_Limpiar_Texto
 		FUNCION: limpia el texto de caracteres no imprimibles
 		RETORNO: Texto limpio

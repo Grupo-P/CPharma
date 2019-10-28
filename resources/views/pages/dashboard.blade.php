@@ -45,31 +45,31 @@
 		$FAyer = date("Y-m-d",strtotime($FHoy."-1 days"));
 
 		$auditorReporte = 
-			DB::table('auditorias')
-			->select('registro')
-			->groupBy('registro')
-			->orderBy(DB::raw('count(*)'),'desc')
-			->where('tabla','reporte')
-			->where('updated_at', '>',$FAyer)
-		 	->take(1)->get();
+		DB::table('auditorias')
+		->select('registro')
+		->groupBy('registro')
+		->orderBy(DB::raw('count(*)'),'desc')
+		->where('tabla','reporte')
+		->where('updated_at', '>',$FAyer)
+	 	->take(1)->get();
 
 		$auditorUser = 
-			DB::table('auditorias')
-			->select('user')
-			->groupBy('user')
-			->orderBy(DB::raw('count(*)'),'desc')
-			->where('updated_at', '>',$FAyer)
-		 	->take(1)->get();
+		DB::table('auditorias')
+		->select('user')
+		->groupBy('user')
+		->orderBy(DB::raw('count(*)'),'desc')
+		->where('updated_at', '>',$FAyer)
+	 	->take(1)->get();
 
-		 	$usuario = Auth::user()->name;
-		 	$auditorReporteFavorito = 
-			DB::table('auditorias')
-			->select('registro')
-			->groupBy('registro')
-			->orderBy(DB::raw('count(*)'),'desc')
-			->where('tabla','reporte')
-			->where('user',$usuario)
-		 	->take(2)->get();
+	 	$usuario = Auth::user()->name;
+	 	$auditorReporteFavorito = 
+		DB::table('auditorias')
+		->select('registro')
+		->groupBy('registro')
+		->orderBy(DB::raw('count(*)'),'desc')
+		->where('tabla','reporte')
+		->where('user',$usuario)
+	 	->take(2)->get();
 	?>
 
 	<h1 class="h5 text-info">
@@ -305,7 +305,9 @@
 	    		<h2 class="card-title">
 		    		<span class="card-text text-white">
 		    			<i class="fas fa-file-invoice"></i>
-		    			15	    			
+		    			<?php
+		    				echo''.FG_Reportes_Departamento(Auth::user()->departamento);
+		    			?>  			
 		    		</span>
 	    		</h2>
 	    		<p class="card-text text-white">Reportes disponibles</p>
