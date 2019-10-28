@@ -166,3 +166,5 @@ Route::resource('auditoria', 'AuditoriaController');
 Route::resource('etiqueta', 'EtiquetaController');
 
 Route::resource('traslado', 'TrasladoController');
+
+Route::resource('ordenCompra', 'OrdenCompraController');
