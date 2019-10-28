@@ -382,6 +382,30 @@
             activarDangerRequerido(direccion);
           }
         }//Campos requeridos
+        else if(!regExp1.test(nombres.val())) {
+
+          nombres.val('');
+          nombres.addClass(clasesError);
+          nombres.attr('placeholder', 'El formato del nombre no es el adecuado');
+
+          enviar = false;
+        }
+        else if(!regExp1.test(apellidos.val())) {
+
+          apellidos.val('');
+          apellidos.addClass(clasesError);
+          apellidos.attr('placeholder', 'El formato del apellido no es el adecuado');
+
+          enviar = false;
+        }
+        else if(!regExp2.test(cedula.val())) {
+
+          cedula.val('');
+          cedula.addClass(clasesError);
+          cedula.attr('placeholder', 'El formato de la cedula admite solo números');
+
+          enviar = false;
+        }
 
       });
 
@@ -399,10 +423,10 @@
                   activarDangerRequerido(nombres);
                 }
               }
-              else if(nombres.hasClass('border border-danger campoNulo')) {
+              else if(nombres.hasClass(clasesError)) {
 
                 if((e.keyCode != 9) && (e.keyCode != 16) && (e.keyCode != 20)) {
-                  nombres.removeClass('border border-danger campoNulo');
+                  nombres.removeClass(clasesError);
                   nombres.attr('placeholder', 'Maria Raquel');
                 }
               }
@@ -415,10 +439,10 @@
                   activarDangerRequerido(apellidos);
                 }
               }
-              else if(apellidos.hasClass('border border-danger campoNulo')) {
+              else if(apellidos.hasClass(clasesError)) {
 
                 if((e.keyCode != 9) && (e.keyCode != 16) && (e.keyCode != 20)) {
-                  apellidos.removeClass('border border-danger campoNulo');
+                  apellidos.removeClass(clasesError);
                   apellidos.attr('placeholder', 'Herrera Perez');
                 }
               }
@@ -431,10 +455,10 @@
                   activarDangerRequerido(cedula);
                 }
               }
-              else if(cedula.hasClass('border border-danger campoNulo')) {
+              else if(cedula.hasClass(clasesError)) {
 
                 if((e.keyCode != 9) && (e.keyCode != 16) && (e.keyCode != 20)) {
-                  cedula.removeClass('border border-danger campoNulo');
+                  cedula.removeClass(clasesError);
                   cedula.attr('placeholder', '24921001');
                 }
               }
@@ -447,10 +471,10 @@
                   activarDangerRequerido(direccion);
                 }
               }
-              else if(direccion.hasClass('border border-danger campoNulo')) {
+              else if(direccion.hasClass(clasesError)) {
 
                 if((e.keyCode != 9) && (e.keyCode != 16) && (e.keyCode != 20)) {
-                  direccion.removeClass('border border-danger campoNulo');
+                  direccion.removeClass(clasesError);
                   direccion.attr('placeholder', 'Av. 15 Delicias con calle 72');
                 }
               }
@@ -461,11 +485,11 @@
 
                 if(telefono_celular.attr('placeholder') == telefonoNulo) {
 
-                  telefono_habitacion.removeClass('border border-danger campoNulo');
+                  telefono_habitacion.removeClass(clasesError);
                   telefono_habitacion.attr('placeholder', '0261-1234567');
                 }
 
-                telefono_celular.removeClass('border border-danger campoNulo');
+                telefono_celular.removeClass(clasesError);
                 telefono_celular.attr('placeholder', '0414-1234567');
               }
             break;
@@ -475,18 +499,18 @@
 
                 if(telefono_habitacion.attr('placeholder') == telefonoNulo) {
 
-                  telefono_celular.removeClass('border border-danger campoNulo');
+                  telefono_celular.removeClass(clasesError);
                   telefono_celular.attr('placeholder', '0414-1234567');
                 }
 
-                telefono_habitacion.removeClass('border border-danger campoNulo');
+                telefono_habitacion.removeClass(clasesError);
                 telefono_habitacion.attr('placeholder', '0261-1234567');
               }
             break;
 
             case 'correo':
               if((e.keyCode != 9) && (e.keyCode != 16) && (e.keyCode != 20)) {
-                correo.removeClass('border border-danger campoNulo');
+                correo.removeClass(clasesError);
                 correo.attr('placeholder', 'mherrera@farmacia72.com');
               }
             break;
