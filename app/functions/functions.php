@@ -70,6 +70,48 @@
 	}
 	/**********************************************************************************/
 	/*
+		TITULO: MiUbicacion
+		FUNCION: Descifrar desde que sede estoy entrando a la aplicacion
+		RETORNO: Sede en la que me encuentro
+		DESAROLLADO POR: SERGIO COVA
+	 */
+	function MiUbicacion(){
+		$NombreCliente = gethostname();
+		$IpCliente = gethostbyname($NombreCliente);
+		$Octeto = explode(".", $IpCliente);
+		
+		switch ($Octeto[2]) {
+		/*INICIO BLOQUE DE FTN*/
+			case '1':
+				return 'FTN';
+			break;
+
+			case '2':
+				return 'FTN';
+			break;
+		/*FIN BLOQUE DE FTN*/
+		/*INICIO BLOQUE DE GP*/
+			case '10':
+				return 'GP';
+			break;
+		/*FIN BLOQUE DE GP*/
+		/*INICIO BLOQUE DE FLL*/
+			case '7':
+				return 'FLL';
+			break;
+		/*FIN BLOQUE DE FLL*/
+		/*INICIO BLOQUE DE FAU*/
+			case '12':
+				return 'FAU';
+			break;
+		/*INICIO BLOQUE DE FAU*/	
+			default:
+				return ''.$Octeto[2];
+			break;
+		}
+	}
+	/**********************************************************************************/
+	/*
 		TITULO: FG_Nombre_Sede
 		FUNCION: Retornar el nombre de la sede con la que se esta conectando
 		RETORNO: Nombre de la sede conectada
@@ -402,7 +444,7 @@
 		DESARROLLADO POR: SERGIO COVA
 	 */
 	function FG_Tasa_Fecha($connCPharma,$Fecha) {
-		$sql = QG_Tasa_Fecha($Fecha);
+		$sql = MySQL_Tasa_Fecha($Fecha);
 		$result = mysqli_query($connCPharma,$sql);
 		$row = mysqli_fetch_assoc($result);
 		$Tasa = $row['tasa'];
@@ -454,6 +496,50 @@
 				}
 			}
 		}
+		return $Precio;
+	}
+	/**********************************************************************************/
+	/*
+		TITULO: FG_Calculo_Precio_Sin_Existencia
+		FUNCION: Calcular el precio del articulo
+		RETORNO: Precio del articulo
+		DESARROLLADO POR: SERGIO COVA
+	 */
+	function FG_Calculo_Precio_Sin_Existencia($TroquelAlmacen1,$PrecioCompraBruto,$Utilidad,$IsIVA,$TroquelAlmacen2) {		
+		
+		/*CASO ALMACEN 1*/
+			/*PRECIO TROQUELADO ALMACEN 1*/
+			if($TroquelAlmacen1!=NULL){
+				$Precio = $TroquelAlmacen1;
+			}
+			/*PRECIO CALCULADO*/
+			else{
+				if($PrecioCompraBruto!=NULL){
+
+					if($Utilidad==1){
+						$Precio = 0;
+					}
+					else{					
+						if($IsIVA == 1){
+							$PrecioCalculado = ($PrecioCompraBruto/$Utilidad)*Impuesto;
+							$Precio = $PrecioCalculado;
+						}
+						else {
+							$PrecioCalculado = ($PrecioCompraBruto/$Utilidad);
+							$Precio = $PrecioCalculado;
+						}
+					}
+				}
+				else{
+					/*PRECIO TROQUELADO ALMACEN 2*/
+					if($TroquelAlmacen2!=NULL){
+						$Precio = $TroquelAlmacen2;
+					}
+					else{
+						$Precio = 0;
+					}
+				}
+			}
 		return $Precio;
 	}
 	/**********************************************************************************/
@@ -551,5 +637,327 @@
 		$diferencia_numero = (int)$diferencia->format('%R%a');
 
 		return $diferencia_numero;
+  }
+  /**********************************************************************************/
+  /*
+		TITULO: FG_Traslado_Detalle
+		FUNCION: Ejecuta las validaciones para el traslado detalle
+		RETORNO: no aplica
+		DESARROLLADO POR: SERGIO COVA
+	 */
+	function FG_Traslado_Detalle($SedeConnection,$NumeroAjuste,$IdAjuste) {
+    $conn = FG_Conectar_Smartpharma($SedeConnection);
+    $connCPharma = FG_Conectar_CPharma();
+
+    $sql = QG_Articulos_Ajuste($IdAjuste);
+    $result = sqlsrv_query($conn,$sql);
+   
+    while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
+      $IdArticulo = $row["InvArticuloId"];
+      $Cantidad = $row["Cantidad"];
+      $IdLote = $row["lote"];
+      $IdTraslado = $NumeroAjuste;
+
+      $sql1 = QG_Detalle_Articulo($IdArticulo);
+      $result1 = sqlsrv_query($conn,$sql1);
+      $row1 = sqlsrv_fetch_array($result1,SQLSRV_FETCH_ASSOC);
+
+      $CodigoArticulo = $row1["CodigoInterno"];
+      $CodigoBarra = $row1["CodigoBarra"];
+      $Descripcion = FG_Limpiar_Texto($row1["Descripcion"]);
+      $Existencia = $row1["Existencia"];
+      $Dolarizado = $row1["Dolarizado"];
+      $IsIVA = $row1["Impuesto"];
+      $Utilidad = $row1["Utilidad"];
+      $TroquelAlmacen1 = $row1["TroquelAlmacen1"];
+      $TroquelAlmacen2 = $row1["TroquelAlmacen2"];
+      $PrecioCompraBruto = $row1["PrecioCompraBruto"];
+      $Gravado = FG_Producto_Gravado($IsIVA);
+      $Dolarizado = FG_Producto_Dolarizado($Dolarizado);
+
+
+      if($Existencia==0){
+
+      	$sql3 = QG_Lote_Sin_Existencia($IdLote,$IdArticulo);
+	      $result3 = sqlsrv_query($conn,$sql3);
+	      $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
+
+	      $IsIVASE = $row3["Impuesto"];
+	      $UtilidadSE = $row3["Utilidad"];
+	      $TroquelAlmacen1SE = $row3["TroquelAlmacen1"];
+	      $TroquelAlmacen2SE = $row3["TroquelAlmacen2"];
+	      $PrecioCompraBrutoSE = $row3["PrecioCompraBruto"];
+
+      	if($Dolarizado=='SI') {
+	        	$TasaActualSE = FG_Tasa_Fecha($connCPharma,date('Y-m-d'));
+	        	$PrecioSE = FG_Calculo_Precio_Sin_Existencia($TroquelAlmacen1SE,$PrecioCompraBrutoSE,$UtilidadSE,$IsIVASE,$TroquelAlmacen2SE);
+
+	        if($Gravado=='SI' && $UtilidadSE!= 1){
+	          $costo_unit_bs_sin_iva = ($PrecioSE/Impuesto)*$UtilidadSE;
+	          $costo_unit_usd_sin_iva = round(($costo_unit_bs_sin_iva/$TasaActualSE),2);
+	          $total_imp_usd = round(($costo_unit_usd_sin_iva*$Cantidad)*(Impuesto-1),2);
+	        }
+	        else if($Gravado== 'NO' && $UtilidadSE!= 1){
+	          $costo_unit_bs_sin_iva = ($PrecioSE)*$UtilidadSE;
+	          $costo_unit_usd_sin_iva = round(($costo_unit_bs_sin_iva/$TasaActualSE),2);
+	          $total_imp_usd = 0.00;
+	        }
+	        $total_usd = round((($costo_unit_usd_sin_iva*$Cantidad)+$total_imp_usd),2);
+	        $costo_unit_bs_sin_iva = '-';
+	        $total_imp_bs = '-';
+	        $total_bs = '-';
+	      }
+	      else if($Dolarizado=='NO') {
+	        $costo_unit_bs_sin_iva = round($PrecioCompraBrutoSE,2);
+
+	        if($Gravado== 'SI' && $UtilidadSE!= 1){
+	          $total_imp_bs = round((($costo_unit_bs_sin_iva*$Cantidad)*(Impuesto-1)),2);
+	        }
+	        else if($Gravado== 'NO' && $UtilidadSE!= 1){
+	          $total_imp_bs = 0.00; 
+	        }
+	        $total_bs = round((($costo_unit_bs_sin_iva*$Cantidad)+$total_imp_bs),2);
+	        $costo_unit_usd_sin_iva = '-';
+	        $total_imp_usd = '-';
+	        $total_usd = '-';
+	      }
+	      $date = new DateTime('now');
+	      $date = $date->format("Y-m-d H:i:s");
+
+	      $sqlCP = MySQL_Guardar_Traslado_Detalle($IdTraslado,$IdArticulo,$CodigoArticulo,$CodigoBarra,$Descripcion,$Gravado,$Dolarizado,$Cantidad,$costo_unit_bs_sin_iva,$costo_unit_usd_sin_iva,$total_imp_bs,$total_imp_usd,$total_bs,$total_usd,$date);
+	      mysqli_query($connCPharma,$sqlCP);
+      }
+      else{
+
+	      if($Dolarizado=='SI') {
+	        $TasaActual = FG_Tasa_Fecha($connCPharma,date('Y-m-d'));
+	        $Precio = FG_Calculo_Precio($Existencia,$TroquelAlmacen1,$PrecioCompraBruto,$Utilidad,$IsIVA,$TroquelAlmacen2);
+
+	        if($Gravado=='SI' && $Utilidad!= 1){
+	          $costo_unit_bs_sin_iva = ($Precio/Impuesto)*$Utilidad;
+	          $costo_unit_usd_sin_iva = round(($costo_unit_bs_sin_iva/$TasaActual),2);
+	          $total_imp_usd = round(($costo_unit_usd_sin_iva*$Cantidad)*(Impuesto-1),2);
+	        }
+	        else if($Gravado== 'NO' && $Utilidad!= 1){
+	          $costo_unit_bs_sin_iva = ($Precio)*$Utilidad;
+	          $costo_unit_usd_sin_iva = round(($costo_unit_bs_sin_iva/$TasaActual),2);
+	          $total_imp_usd = 0.00;
+	        }
+	        $total_usd = round((($costo_unit_usd_sin_iva*$Cantidad)+$total_imp_usd),2);
+	        $costo_unit_bs_sin_iva = '-';
+	        $total_imp_bs = '-';
+	        $total_bs = '-';
+	      }
+	      else if($Dolarizado=='NO') {
+	        $costo_unit_bs_sin_iva = round($PrecioCompraBruto,2);
+
+	        if($Gravado== 'SI' && $Utilidad!= 1){
+	          $total_imp_bs = round((($costo_unit_bs_sin_iva*$Cantidad)*(Impuesto-1)),2);
+	        }
+	        else if($Gravado== 'NO' && $Utilidad!= 1){
+	          $total_imp_bs = 0.00; 
+	        }
+	        $total_bs = round((($costo_unit_bs_sin_iva*$Cantidad)+$total_imp_bs),2);
+	        $costo_unit_usd_sin_iva = '-';
+	        $total_imp_usd = '-';
+	        $total_usd = '-';
+	      }
+	      $date = new DateTime('now');
+	      $date = $date->format("Y-m-d H:i:s");
+
+	      $sqlCP = MySQL_Guardar_Traslado_Detalle($IdTraslado,$IdArticulo,$CodigoArticulo,$CodigoBarra,$Descripcion,$Gravado,$Dolarizado,$Cantidad,$costo_unit_bs_sin_iva,$costo_unit_usd_sin_iva,$total_imp_bs,$total_imp_usd,$total_bs,$total_usd,$date);
+	      mysqli_query($connCPharma,$sqlCP);
+	    }
+    }
+    sqlsrv_close($conn);
+    mysqli_close($connCPharma);
+	}
+	/**********************************************************************************/
+	/*
+		TITULO: FG_Calculo_Precio_Alfa
+		FUNCION: Calcular el precio del articulo
+		RETORNO: Precio del articulo
+		DESARROLLADO POR: SERGIO COVA
+	 */
+	function FG_Calculo_Precio_Alfa($Existencia,$ExistenciaAlmacen1,$ExistenciaAlmacen2,$IsTroquelado,$UtilidadArticulo,$UtilidadCategoria,$TroquelAlmacen1,$PrecioCompraBrutoAlmacen1,$TroquelAlmacen2,
+		$PrecioCompraBrutoAlmacen2,$PrecioCompraBruto,$IsIVA) {		
+
+		$FlagPrecio = FALSE;
+
+		if($Existencia==0) {
+			$Precio = 0;
+		}
+		else if($Existencia!=0) {
+			
+			if($IsTroquelado!=0) {
+				/*CASO 1: Cuando el articulo tiene el atributo troquelado*/
+				if( ($TroquelAlmacen1!=NULL) && ($FlagPrecio==FALSE) ){
+					$Precio = $TroquelAlmacen1;
+					$FlagPrecio=TRUE;
+				}
+				else if( ($TroquelAlmacen1==NULL) && ($ExistenciaAlmacen1!=0) && ($FlagPrecio==FALSE)) {
+					$Precio = FG_Precio_Calculado_Alfa($UtilidadArticulo,$UtilidadCategoria,$IsIVA,$PrecioCompraBrutoAlmacen1);
+					$FlagPrecio=TRUE;
+				}
+				else if( ($TroquelAlmacen2!=NULL) && ($FlagPrecio==FALSE) ){
+					$Precio = $TroquelAlmacen2;
+					$FlagPrecio=TRUE;
+				}
+				else if( ($TroquelAlmacen2==NULL) && ($ExistenciaAlmacen2!=0) && ($FlagPrecio==FALSE) ) {
+					$Precio = FG_Precio_Calculado_Alfa($UtilidadArticulo,$UtilidadCategoria,$IsIVA,$PrecioCompraBrutoAlmacen2);
+					$FlagPrecio=TRUE;
+				}
+			}
+			else if($IsTroquelado==0) {
+				/*CASO 2: Cuando el articulo NO tiene el atributo troquelado*/
+				$PrecioCalculado = FG_Precio_Calculado_Alfa($UtilidadArticulo,$UtilidadCategoria,$IsIVA,$PrecioCompraBruto);
+
+				$Precio = max($PrecioCalculado,$TroquelAlmacen1,$TroquelAlmacen2);
+			}
+		}
+		return $Precio;
+	}
+	/**********************************************************************************/
+	/*
+		TITULO: FG_Precio_Calculado_Alfa
+		FUNCION: Calcular el precio del articulo
+		RETORNO: Precio del articulo
+		DESARROLLADO POR: SERGIO COVA
+	 */
+	function FG_Precio_Calculado_Alfa($UtilidadArticulo,$UtilidadCategoria,$IsIVA,$PrecioCompraBruto){
+			if($IsIVA==1){
+				/*Caso 1: Aplica Impuesto*/
+				if($UtilidadArticulo!=1) {
+					$PrecioCalculado = ($PrecioCompraBruto/$UtilidadArticulo)*Impuesto;
+				}
+				else if($UtilidadArticulo==1){
+
+					if($UtilidadCategoria!=1){
+						$PrecioCalculado = ($PrecioCompraBruto/$UtilidadCategoria)*Impuesto;
+					}
+					else if($UtilidadCategoria==1){
+						$PrecioCalculado = 0;
+					}
+				}
+			}
+			if($IsIVA==0){
+				/*Caso 1: NO Aplica Impuesto*/
+				if($UtilidadArticulo!=1) {
+					$PrecioCalculado = ($PrecioCompraBruto/$UtilidadArticulo);
+				}
+				else if($UtilidadArticulo==1){
+
+					if($UtilidadCategoria!=1){
+						$PrecioCalculado = ($PrecioCompraBruto/$UtilidadCategoria);
+					}
+					else if($UtilidadCategoria==1){
+						$PrecioCalculado = 0;
+					}
+				}
+			}
+		return $PrecioCalculado;
+	}
+  /**********************************************************************************/
+  /*
+		TITULO: FG_Ruta_Reporte
+		FUNCION:Busca la ruta que le pertenece al nombre del reporte
+		RETORNO: url
+		DESARROLLADO POR: SERGIO COVA
+ 	*/
+	function FG_Ruta_Reporte($NombreReporte){
+		switch ($NombreReporte) {
+			case 'Activacion de proveedores':
+				$ruta = '/reporte1';
+			break;
+			case 'Historico de productos':
+				$ruta = '/reporte2';
+			break;
+			case 'Productos mas vendidos':
+				$ruta = '/reporte3';
+			break;
+			case 'Productos menos vendidos':
+				$ruta = '/reporte4';
+			break;
+			case 'Productos en falla':
+				$ruta = '/reporte5';
+			break;
+			case 'Pedido de productos':
+				$ruta = '/reporte6';
+			break;
+			case 'Catalogo de proveedor':
+				$ruta = '/reporte7';
+			break;
+			case 'Productos para surtir':
+				$ruta = '/reporte9';
+			break;
+			case 'Analitico de precios':
+				$ruta = '/reporte10';
+			break;
+			case 'Detalle de movimientos':
+				$ruta = '/reporte12';
+			break;
+			case 'Productos Por Fallar':
+				$ruta = '/reporte13';
+			break;
+			case 'Productos en caida':
+				$ruta = '/reporte14';
+			break;
+			case 'Articulos devaluados':
+				$ruta = '/reporte15';
+			break;
+			default:
+				$ruta = '#';
+			break;
+		}
+		return $ruta;
+	}
+	/**********************************************************************************/
+	/*
+		TITULO: FG_Reportes_Departamento
+		FUNCION: Consigue el numero de reportes disponibles para el departamento
+		RETORNO: cantidad de reportes
+		DESAROLLADO POR: SERGIO COVA
+	 */
+	function FG_Reportes_Departamento($Departamento) {
+		switch ($Departamento) {
+			case 'COMPRAS':
+				$Numero_Reportes = 12;
+			break;
+			case 'TECNOLOGIA':
+				$Numero_Reportes = 13;
+			break;
+			case 'SURTIDO':
+				$Numero_Reportes = 3;
+			break;
+			
+			default:
+				$Numero_Reportes = 0;
+			break;
+		}
+		return $Numero_Reportes;
+	}
+	/**********************************************************************************/
+	/*
+		TITULO: FG_Sede_OnLine
+		FUNCION: Determina si la sede es on-line
+		RETORNO: verdadero o falso
+		DESAROLLADO POR: SERGIO COVA
+	 */
+	function FG_Sede_OnLine($Sede) {
+		switch ($Sede) {
+			case 'FTN':
+				$Flag = TRUE;
+			break;
+			case 'FLL':
+				$Flag = TRUE;
+			break;
+			case 'FAU':
+				$Flag = TRUE;
+			break;
+			default:
+				$Flag = FALSE;
+			break;
+		}
+		return $Flag;
   }
 ?>

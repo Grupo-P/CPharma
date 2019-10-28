@@ -6,7 +6,7 @@
     <body>
         <div class="container">
             <header>
-                @include('includes.header_in')
+                @include('includes.header_log')
             </header>
             <article class="mx-auto my-auto">
                 @yield('content')

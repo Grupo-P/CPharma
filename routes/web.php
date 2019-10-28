@@ -117,30 +117,6 @@ Route::get('/productoscaida', function() {
     return view('pages.productoscaida.index');
 });
 
-Route::get('/EtqObliatoria', function() {
-    return view('pages.etiqueta.obligatorias');
-});
-
-Route::get('/EtqObliatoriaD', function() {
-    return view('pages.etiqueta.obligatoriasDolar');
-});
-
-Route::get('/EtqObliatoriaND', function() {
-    return view('pages.etiqueta.obligatoriasNoDolar');
-});
-
-Route::get('/EtqEtiquetable', function() {
-    return view('pages.etiqueta.etiquetables');
-});
-
-Route::get('/EtqEtiquetableD', function() {
-    return view('pages.etiqueta.etiquetablesDolar');
-});
-
-Route::get('/EtqEtiquetableND', function() {
-    return view('pages.etiqueta.etiquetablesNoDolar');
-});
-
 Route::get('/CapturaEtiqueta', function() {
     return view('pages.etiqueta.CapturaEtiqueta');
 });
@@ -151,6 +127,14 @@ Route::get('/Generar_Etiquetas', function() {
 
 Route::get('/Generar_Etiquetas_Todo', function() {
     return view('pages.etiqueta.Generar_Etiquetas_Todo');
+});
+
+Route::get('/SearchAjuste', function() {
+    return view('pages.traslado.SearchAjuste');
+});
+
+Route::get('/GuiaEnvio', function() {
+    return view('pages.traslado.guia_etiqueta');
 });
 
 Route::get('home', 'HomeController@index')->name('home');
@@ -180,6 +164,10 @@ Route::resource('configuracion', 'ConfiguracionController');
 Route::resource('auditoria', 'AuditoriaController');
 
 Route::resource('etiqueta', 'EtiquetaController');
+
+Route::resource('traslado', 'TrasladoController');
+
+Route::resource('ordenCompra', 'OrdenCompraController');
 
 //***************************** RRHH routing *****************************//
 Route::resource('candidatos', 'RH_CandidatoController');

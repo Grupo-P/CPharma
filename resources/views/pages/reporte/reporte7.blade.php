@@ -263,6 +263,15 @@
   function R7_Catalogo_Proveedor_C3($SedeConnection,$IdProveedor,$NombreProveedor,$FInicial,$FFinal,$DiasPedido){
 
     $conn = FG_Conectar_Smartpharma($SedeConnection);
+    $connCPharma = FG_Conectar_CPharma();
+
+  /*INCIO PARA CALCULOS CON DIAS EN CERO*/
+    $sql = MySQL_Rango_Dias_Cero();
+    $result = mysqli_query($connCPharma,$sql);
+    $row = $result->fetch_assoc();
+    $DC_FInicialImp = date("d-m-Y", strtotime($row['Inicio']));
+    $DC_FFinalImp = date("d-m-Y", strtotime($row['Fin']));
+ /*FIN PARA CALCULOS CON DIAS EN CERO*/
 
     $FInicialImp = date("d-m-Y", strtotime($FInicial));
     $FFinalImp= date("d-m-Y", strtotime($FFinal));
@@ -287,7 +296,7 @@
     ';
     echo'<h6 align="center">Pedido en base a: '.$DiasPedido.' dias </h6>';
     echo'<h6 align="center">Periodo desde el '.$FInicialImp.' al '.$FFinalImp.' </h6>';
- 
+    echo'<h6 align="center">La data recolectada para el calculo <span style="color:red;">(Real)</span> va desde el <span style="color:red;">'.$DC_FInicialImp.'</span> al <span style="color:red;">'.$DC_FFinalImp.'</span> </h6>';
     echo '
     <table class="table table-striped table-bordered col-12 sortable">
       <thead class="thead-dark">
@@ -314,14 +323,18 @@
             <th scope="col" class="CP-sticky">Descripcion</th>              
             <th scope="col" class="CP-sticky">Producto Unico</th>
             <th scope="col" class="CP-sticky">Precio (Con IVA) '.SigVe.'</th>
+            <th scope="col" class="CP-sticky">Ultimo Precio (Sin IVA) '.SigVe.'</th>
             <th scope="col" class="CP-sticky">Existencia</th>
             <th scope="col" class="CP-sticky">Unidades vendidas</th>
             <th scope="col" class="CP-sticky">Unidades compradas</th>
             <th scope="col" class="CP-sticky">Venta diaria</th>
+            <th scope="col" class="CP-sticky bg-danger text-white">Venta diaria (Real)</th>
             <th scope="col" class="CP-sticky">Dias restantes</th>
+            <th scope="col" class="CP-sticky bg-danger text-white">Dias restantes (Real)</th>
             <th scope="col" class="CP-sticky">Ultima Venta (En rango)</th>
             <th scope="col" class="CP-sticky">Ultima Venta</th>
             <th scope="col" class="CP-sticky">Pedir</th>
+            <th scope="col" class="CP-sticky bg-danger text-white">Pedir (Real)</th> 
           </tr>
         </thead>
         <tbody>
@@ -331,6 +344,11 @@
     while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
       $IdArticulo = $row["Id"];
 
+      $sql3 = MySQL_Cuenta_Veces_Dias_Cero($IdArticulo,$FInicial,$FFinal);
+      $result3 = mysqli_query($connCPharma,$sql3);
+      $row3 = $result3->fetch_assoc();
+      $RangoDiasQuiebre = $row3['Cuenta'];
+
       $sql2 = R7Q_Detalle_Articulo($IdArticulo);
       $result2 = sqlsrv_query($conn,$sql2);
       $row2 = sqlsrv_fetch_array($result2, SQLSRV_FETCH_ASSOC);
@@ -339,6 +357,7 @@
       $CodigoBarra = $row2["CodigoBarra"];
       $Descripcion = FG_Limpiar_Texto($row2["Descripcion"]);
       $UltimaVenta = $row2["UltimaVenta"];
+      $UltimoPrecio = $row2["UltimoPrecio"];
       $Existencia = $row2["Existencia"];
       $IsIVA = $row2["Impuesto"];
       $Utilidad = $row2["Utilidad"];
@@ -359,6 +378,10 @@
       $CantidadPedido = FG_Cantidad_Pedido($VentaDiaria,$DiasPedido,$Existencia);
       $Precio = FG_Calculo_Precio($Existencia,$TroquelAlmacen1,$PrecioCompraBruto,$Utilidad,$IsIVA,$TroquelAlmacen2);
 
+      $VentaDiariaQuiebre = FG_Venta_Diaria($UnidadesVendidas,$RangoDiasQuiebre);
+      $DiasRestantesQuiebre = FG_Dias_Restantes($Existencia,$VentaDiariaQuiebre);
+      $CantidadPedidoQuiebre = FG_Cantidad_Pedido($VentaDiariaQuiebre,$DiasPedido,$Existencia);
+
       echo '<tr>';
       echo '<td align="center"><strong>'.intval($contador).'</strong></td>';
       echo '<td align="left">'.$CodigoArticulo.'</td>';
@@ -371,6 +394,14 @@
       </td>';     
       echo '<td align="center">'.$Unico.'</td>';
       echo '<td align="center">'.number_format($Precio,2,"," ,"." ).'</td>';
+
+      if( ($Existencia==0) && (!is_null($UltimaVenta)) ){
+          echo '<td align="center">'.number_format($UltimoPrecio,2,"," ,"." ).'</td>';
+        }
+        else{
+          echo '<td align="center"> - </td>';
+        }
+
       echo '<td align="center">'.intval($Existencia).'</td>';
       echo
       '<td align="center" class="CP-barrido">
@@ -385,7 +416,9 @@
       '</a>
       </td>';
       echo '<td align="center">'.round($VentaDiaria,2).'</td>';
+      echo '<td align="center" class="bg-danger text-white">'.round($VentaDiariaQuiebre,2).'</td>';
       echo '<td align="center">'.round($DiasRestantes,2).'</td>';
+      echo '<td align="center" class="bg-danger text-white">'.round($DiasRestantesQuiebre,2).'</td>';
 
       if(($UltimaVentaRango)){
         echo '<td align="center">'.$UltimaVentaRango->format('d-m-Y').'</td>';
@@ -401,6 +434,7 @@
         echo '<td align="center"> - </td>';
       }
       echo '<td align="center">'.intval($CantidadPedido).'</td>';
+      echo '<td align="center" class="bg-danger text-white">'.round($CantidadPedidoQuiebre,2).'</td>';
       echo '</tr>';
       $contador++;
     }
@@ -553,6 +587,13 @@
         WHERE 
         InvAtributo.Descripcion = 'Articulo Estrella') 
       AND InvArticuloAtributo.InvArticuloId = InvArticulo.Id),CAST(0 AS INT))) AS ArticuloEstrella,
+    --Ultimo Precio Sin Iva
+      (SELECT TOP 1
+      (ROUND(CAST((VenVentaDetalle.M_PrecioNeto) AS DECIMAL(38,2)),2,0))
+      FROM VenVenta
+      INNER JOIN VenVentaDetalle ON VenVentaDetalle.VenVentaId = VenVenta.Id
+      WHERE VenVentaDetalle.InvArticuloId = InvArticulo.Id
+      ORDER BY VenVenta.FechaDocumentoVenta DESC) AS UltimoPrecio,
     -- Ultima Venta (Fecha)
       (SELECT TOP 1
       CONVERT(DATE,VenFactura.FechaDocumento)

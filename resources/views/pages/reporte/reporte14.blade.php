@@ -104,6 +104,14 @@
 
     $connCPharma = FG_Conectar_CPharma();
 
+  /*INCIO PARA CALCULOS CON DIAS EN CERO*/
+    $sql = MySQL_Rango_Dias_Cero();
+    $result = mysqli_query($connCPharma,$sql);
+    $row = $result->fetch_assoc();
+    $DC_FInicialImp = date("d-m-Y", strtotime($row['Inicio']));
+    $DC_FFinalImp = date("d-m-Y", strtotime($row['Fin']));
+ /*FIN PARA CALCULOS CON DIAS EN CERO*/
+
     $FFinal = date("Y-m-d");
     $FInicial = date("Y-m-d",strtotime($FFinal."-10 days"));
 
@@ -126,6 +134,7 @@
     <br/>
     ';
     echo'<h6 align="center">Periodo desde el '.$FInicialImp.' al '.$FFinalImp.' </h6>';
+    echo'<h6 align="center">La data recolectada para el calculo <span style="color:red;">(Real)</span> va desde el <span style="color:red;">'.$DC_FInicialImp.'</span> al <span style="color:red;">'.$DC_FFinalImp.'</span> </h6>';
     echo'<h6 align="center">Los productos de este reporte cumplen con los siguientes criterios</h6>';
 
     echo '
@@ -181,7 +190,8 @@
               <th scope="col" class="CP-sticky">Dia 2</td>
               <th scope="col" class="CP-sticky">Dia 1</td>
               <th scope="col" class="CP-sticky">Unidades Vendidas</td>
-              <th scope="col" class="CP-sticky">Dias Restantes</td>                   
+              <th scope="col" class="CP-sticky">Dias Restantes</td> 
+              <th scope="col" class="CP-sticky bg-danger text-white">Dias restantes (Real)</th>                  
           </tr>
         </thead>
         <tbody>
@@ -206,6 +216,13 @@
       $Dia1 = $row['Dia1'];
       $UnidadesVendidas = $row['UnidadesVendidas'];
       $DiasRestantes = $row['DiasRestantes'];
+
+      $sql2 = MySQL_Cuenta_Veces_Dias_Cero($IdArticulo,$FInicial,$FFinal);
+      $result2 = mysqli_query($connCPharma,$sql2);
+      $row2 = $result2->fetch_assoc();
+      $RangoDiasQuiebre = $row2['Cuenta'];
+      $VentaDiariaQuiebre = FG_Venta_Diaria($UnidadesVendidas,$RangoDiasQuiebre);
+      $DiasRestantesQuiebre = FG_Dias_Restantes($Existencia,$VentaDiariaQuiebre);
 
       echo '<tr>';
       echo '<td align="center"><strong>'.intval($contador).'</strong></td>';
@@ -239,6 +256,7 @@
       </td>';
 
       echo '<td align="center">'.round($DiasRestantes,2).'</td>';
+      echo '<td align="center" class="bg-danger text-white">'.round($DiasRestantesQuiebre,2).'</td>';
       echo '</tr>';
     $contador++;
     }

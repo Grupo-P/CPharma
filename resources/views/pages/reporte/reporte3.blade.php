@@ -56,6 +56,61 @@
 		Productos mas vendidos
 	</h1>
 	<hr class="row align-items-start col-12">
+  
+  <!-- Modal Guardar -->
+  @if (session('Saved'))
+    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title text-info" id="exampleModalCenterTitle"><i class="fas fa-info text-info"></i> Orden de compra</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <h4 class="h6">Articulo agregado a la orden de compra con exito</h4>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline-success" data-dismiss="modal">Aceptar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script type="text/javascript">
+      $('#exampleModalCenter').modal('show');
+    </script>
+  @endif
+
+  <!-- Modal Guardar -->
+    <div class="modal fade" id="OrdenModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title text-info" id="exampleModalCenterTitle"><i class="fas fa-info text-info"></i> Orden de compra</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form action="/ordenCompra/1" style="display: inline;" id="form_add_orden">
+              <tr>
+                <th scope="row">{!! Form::label('nombre', 'Costo') !!}</th>
+                <td>{!! Form::text('nombre', null, [ 'class' => 'form-control', 'placeholder' => 'Costo ofrecido por el proveedor', 'autofocus', 'required']) !!}</td>
+              </tr>
+              <br/>
+              <tr>
+                <th scope="row">{!! Form::label('nombre', 'Cantidad') !!}</th>
+                <td>{!! Form::text('nombre', null, [ 'class' => 'form-control', 'placeholder' => 'Cantidad a pedir del producto', 'autofocus', 'required']) !!}</td>
+              </tr>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-outline-success" onclick="articulo_add()">Aceptar</button>
+          </div>
+        </div>
+      </div>
+    </div>
 
 <?php	
   include(app_path().'\functions\config.php');
@@ -135,6 +190,15 @@
   */
   function R3_Productos_MasVendidos($SedeConnection,$Top,$FInicial,$FFinal){
     $conn = FG_Conectar_Smartpharma($SedeConnection);
+    $connCPharma = FG_Conectar_CPharma();
+
+  /*INCIO PARA CALCULOS CON DIAS EN CERO*/
+    $sql = MySQL_Rango_Dias_Cero();
+    $result = mysqli_query($connCPharma,$sql);
+    $row = $result->fetch_assoc();
+    $DC_FInicialImp = date("d-m-Y", strtotime($row['Inicio']));
+    $DC_FFinalImp = date("d-m-Y", strtotime($row['Fin']));
+ /*FIN PARA CALCULOS CON DIAS EN CERO*/
 
     $FInicialImp = date("d-m-Y", strtotime($FInicial));
     $FFinalImp= date("d-m-Y", strtotime($FFinal));
@@ -158,6 +222,7 @@
     <br/>
     ';
     echo'<h6 align="center">Periodo desde el '.$FInicialImp.' al '.$FFinalImp.' </h6>';
+    echo'<h6 align="center">La data recolectada para el calculo <span style="color:red;">(Real)</span> va desde el <span style="color:red;">'.$DC_FInicialImp.'</span> al <span style="color:red;">'.$DC_FFinalImp.'</span> </h6>';
     echo'
     <table class="table table-striped table-bordered col-12 sortable" id="myTable">
         <thead class="thead-dark">
@@ -172,7 +237,10 @@
             <th scope="col" class="CP-sticky">Unidades vendidas</th>              
             <th scope="col" class="CP-sticky">Unidades Compradas</th>                     
             <th scope="col" class="CP-sticky">Venta diaria</th>
+            <th scope="col" class="CP-sticky bg-danger text-white">Venta diaria (Real)</th>
             <th scope="col" class="CP-sticky">Dias restantes</th>
+            <th scope="col" class="CP-sticky bg-danger text-white">Dias restantes (Real)</th>
+            <th scope="col" class="CP-sticky">Acciones</th>
           </tr>
         </thead>
         <tbody>
@@ -180,6 +248,11 @@
     $contador = 1;
     while($row = sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC)) {
       $IdArticulo = $row["InvArticuloId"];
+
+      $sql2 = MySQL_Cuenta_Veces_Dias_Cero($IdArticulo,$FInicial,$FFinal);
+      $result2 = mysqli_query($connCPharma,$sql2);
+      $row2 = $result2->fetch_assoc();
+      $RangoDiasQuiebre = $row2['Cuenta'];
       
       $sql1 = R3Q_Detalle_Articulo($IdArticulo);
       $result1 = sqlsrv_query($conn,$sql1);
@@ -191,8 +264,12 @@
       $Tipo = FG_Tipo_Producto($row1["Tipo"]);
       $TotalVenta = $row["TotalVenta"];
       $Venta = $row["TotalUnidadesVendidas"];
+      
       $VentaDiaria = FG_Venta_Diaria($Venta,$RangoDias);
       $DiasRestantes = FG_Dias_Restantes($Existencia,$VentaDiaria);
+
+      $VentaDiariaQuiebre = FG_Venta_Diaria($Venta,$RangoDiasQuiebre);
+      $DiasRestantesQuiebre = FG_Dias_Restantes($Existencia,$VentaDiariaQuiebre);
 
       echo '<tr>';
       echo '<td align="center"><strong>'.intval($contador).'</strong></td>';
@@ -225,13 +302,22 @@
       '</a>
       </td>';
       echo '<td align="center">'.round($VentaDiaria,2).'</td>';
+      echo '<td align="center" class="bg-danger text-white">'.round($VentaDiariaQuiebre,2).'</td>';
       echo '<td align="center">'.round($DiasRestantes,2).'</td>';
+      echo '<td align="center" class="bg-danger text-white">'.round($DiasRestantesQuiebre,2).'</td>';
+      echo'
+      <td style="width:140px;">
+        <a href="#" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Orden de compra" style="width:100%;" onclick="display_modal()">
+          <i class="fas fa-angle-double-right"></i>                
+        </a>
+      ';
       echo '</tr>';
       $contador++;
     }
     echo '
       </tbody>
     </table>';
+    mysqli_close($connCPharma);
     sqlsrv_close($conn);
   }
   /**********************************************************************************/
@@ -558,3 +644,19 @@
     return $sql;
   }
 ?>
+
+@section('scriptsFoot')
+<script>
+  $(document).ready(function(){
+      $('[data-toggle="tooltip"]').tooltip();   
+  });
+  
+  function display_modal(){
+    $('#OrdenModalCenter').modal('show');
+  }
+
+  function articulo_add(){
+    document.getElementById('form_add_orden').submit();
+  }
+</script>
+@endsection

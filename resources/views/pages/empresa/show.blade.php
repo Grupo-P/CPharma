@@ -23,8 +23,7 @@
 	<table class="table table-borderless table-striped">
 		<thead class="thead-dark">
 		    <tr>
-	      		<th scope="row">{{$empresa->nombre}}</th>
-	      		<th scope="row"></th>
+	      		<th scope="row" colspan="2">{{$empresa->nombre}}</th>
 		    </tr>
 	  	</thead>
 	  	<tbody>

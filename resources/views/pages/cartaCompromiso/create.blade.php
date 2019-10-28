@@ -165,6 +165,7 @@
     include(app_path().'\functions\functions.php');
     include(app_path().'\functions\querys_mysql.php');
     include(app_path().'\functions\querys_sqlserver.php');
+    $_GET['SEDE'] = MiUbicacion();
 
     $ArtJson = "";
 

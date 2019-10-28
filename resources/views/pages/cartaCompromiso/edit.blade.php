@@ -27,6 +27,13 @@
     </div>
   @endif
 
+  <?php 
+    include(app_path().'\functions\config.php'); 
+    include(app_path().'\functions\Querys.php');
+    include(app_path().'\functions\funciones.php');
+    $_GET['SEDE'] = MiUbicacion();
+  ?>
+
   <h1 class="h5 text-info">
     <i class="fas fa-edit"></i>
     Actualizar carta compromiso

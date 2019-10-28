@@ -1,7 +1,16 @@
 <div class="p-3 mb-2 bg-white text-info footer-copyright text-center py-3">
-	<span>CPharma v.4.2 © 2018 - <?php echo''.date('Y'); ?> Copyright Grupo P</span>
+	<span>CPharma v.4.7 © 2018 - <?php echo''.date('Y'); ?> Copyright Grupo P</span>
 	<br>
 	<a href="https://www.instagram.com/covacode/" target="blank" class="text-info CP-Links-No-Style">Sergio Cova</a>
   and
   <a href="https://api.whatsapp.com/send?phone=584246827377&text=&source=&data=" target="blank" class="text-info CP-Links-No-Style">Manuel Henriquez</a>
 </div>
+
+@section('scriptsFoot')
+    <script type="text/javascript">
+      $(document).keydown(function (e) {
+        e = e || event;
+        keypressCPharma(e);
+      });
+    </script>
+@endsection
