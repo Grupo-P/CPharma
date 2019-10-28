@@ -292,6 +292,58 @@
             telefono_habitacion.addClass(clasesError);
                 telefono_habitacion.attr('placeholder', telefonoNulo);
           }//Telefonos vacios
+          else if(
+            (telefono_celular.val() != '') 
+            || (telefono_habitacion.val() != '')) {
+
+            if((regExp.test(telefono_celular.val())) 
+              && (regExp.test(telefono_habitacion.val()))) {
+
+              crear_candidato.submit();
+            }
+            
+            if(regExp.test(telefono_celular.val())) {
+
+              crear_candidato.submit();
+            }
+            else {
+
+              if(regExp.test(telefono_habitacion.val())) {
+
+                crear_candidato.submit();
+              }
+              else {
+                telefono_habitacion.val('');
+                telefono_habitacion.addClass(clasesError);
+                telefono_habitacion.attr('placeholder', 'El formato telefónico es: 0xxx-xxxxxxx');
+              }
+
+              telefono_celular.val('');
+              telefono_celular.addClass(clasesError);
+              telefono_celular.attr('placeholder', 'El formato telefónico es: 0xxx-xxxxxxx');
+            }
+
+            if(regExp.test(telefono_habitacion.val())) {
+
+              crear_candidato.submit();
+            }
+            else {
+
+              if(regExp.test(telefono_celular.val())) {
+
+                crear_candidato.submit();
+              }
+              else {
+                telefono_celular.val('');
+                telefono_celular.addClass(clasesError);
+                telefono_celular.attr('placeholder', 'El formato telefónico es: 0xxx-xxxxxxx');
+              }
+
+              telefono_habitacion.val('');
+              telefono_habitacion.addClass(clasesError);
+              telefono_habitacion.attr('placeholder', 'El formato telefónico es: 0xxx-xxxxxxx');
+            }
+          }
         }//Validacion total
         else if(
           (nombres.val() == '')
