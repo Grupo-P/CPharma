@@ -49,35 +49,37 @@ class RH_CandidatoController extends Controller {
         if(RH_Candidato::where('cedula', '=', $cedula)->exists()) {
             return back()->with('Error1', ' Error');
         }
-        else if(RH_Candidato::where('correo', '=', $correo)->exists()) {
-            return back()->with('Error2', ' Error');
-        }
-        else {
-            try {
-                $candidatos = new RH_Candidato();
-                $candidatos->nombres = $request->input('nombres');
-                $candidatos->apellidos = $request->input('apellidos');
-                $candidatos->cedula = $cedula;
-                $candidatos->direccion = $request->input('direccion');
-                $candidatos->telefono_celular = $request->input('telefono_celular');
-                $candidatos->telefono_habitacion = $request->input('telefono_habitacion');
-                $candidatos->correo = $correo;
-                $candidatos->como_nos_contacto = $request->input('como_nos_contacto');
-                $candidatos->experiencia_laboral = $request->input('experiencia_laboral');
-                $candidatos->observaciones = $request->input('observaciones');
-                $candidatos->tipo_relacion = $request->input('tipo_relacion');
-                $candidatos->relaciones_laborales = $request->input('relaciones_laborales');
-                $candidatos->estatus = 'POSTULADO';
-                $candidatos->user = auth()->user()->name;
-                $candidatos->save();
 
-                return redirect()
-                    ->route('candidatos.index')
-                    ->with('Saved', ' Informacion');
+        if($correo != '') {
+            if(RH_Candidato::where('correo', '=', $correo)->exists()) {
+                return back()->with('Error2', ' Error');
             }
-            catch(\Illuminate\Database\QueryException $e) {
-                return back()->with('Error', ' Error');
-            }
+        }
+
+        try {
+            $candidatos = new RH_Candidato();
+            $candidatos->nombres = $request->input('nombres');
+            $candidatos->apellidos = $request->input('apellidos');
+            $candidatos->cedula = $cedula;
+            $candidatos->direccion = $request->input('direccion');
+            $candidatos->telefono_celular = $request->input('telefono_celular');
+            $candidatos->telefono_habitacion = $request->input('telefono_habitacion');
+            $candidatos->correo = $correo;
+            $candidatos->como_nos_contacto = $request->input('como_nos_contacto');
+            $candidatos->experiencia_laboral = $request->input('experiencia_laboral');
+            $candidatos->observaciones = $request->input('observaciones');
+            $candidatos->tipo_relacion = $request->input('tipo_relacion');
+            $candidatos->relaciones_laborales = $request->input('relaciones_laborales');
+            $candidatos->estatus = 'POSTULADO';
+            $candidatos->user = auth()->user()->name;
+            $candidatos->save();
+
+            return redirect()
+                ->route('candidatos.index')
+                ->with('Saved', ' Informacion');
+        }
+        catch(\Illuminate\Database\QueryException $e) {
+            return back()->with('Error', ' Error');
         }
     }
 

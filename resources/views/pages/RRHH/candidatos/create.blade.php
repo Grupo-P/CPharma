@@ -245,6 +245,8 @@
         var regExp2 = /^[0-9]{7,}$/;//Cedula
         var regExp3 = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;//Correo
 
+        var enviar = false;
+
         //En caso de cumplir las validaciones enviar el formulario
         if((regExp1.test(nombres.val())) 
           && (regExp1.test(apellidos.val())) 
@@ -260,9 +262,11 @@
               && (regExp.test(telefono_habitacion.val()))
               && (regExp3.test(correo.val()))
             ) {
+              enviar = true;
               crear_candidato.submit();
             }
             else {
+              enviar = false;
               if(!regExp.test(telefono_celular.val())) {
                 telefono_celular.val('');
                 telefono_celular.addClass(clasesError);
@@ -286,6 +290,7 @@
             (telefono_celular.val() == '') 
             && (telefono_habitacion.val() == '')) {
 
+            enviar = false;
             telefono_celular.addClass(clasesError);
             telefono_celular.attr('placeholder', telefonoNulo);
 
@@ -299,49 +304,59 @@
             if((regExp.test(telefono_celular.val())) 
               && (regExp.test(telefono_habitacion.val()))) {
 
+              enviar = true;
               crear_candidato.submit();
             }
             
             if(regExp.test(telefono_celular.val())) {
 
-              crear_candidato.submit();
-            }
-            else {
-
-              if(regExp.test(telefono_habitacion.val())) {
-
+              if((regExp3.test(correo.val())) || (correo.val() == '')) {
+                enviar = true;
                 crear_candidato.submit();
               }
               else {
-                telefono_habitacion.val('');
-                telefono_habitacion.addClass(clasesError);
-                telefono_habitacion.attr('placeholder', 'El formato telefónico es: 0xxx-xxxxxxx');
+                correo.val('');
+                correo.addClass(clasesError);
+                correo.attr('placeholder', 'El formato de correo es: xxxxxxx\@xxxxxx.xxx');
+
+                enviar = false;
               }
-
-              telefono_celular.val('');
-              telefono_celular.addClass(clasesError);
-              telefono_celular.attr('placeholder', 'El formato telefónico es: 0xxx-xxxxxxx');
-            }
-
-            if(regExp.test(telefono_habitacion.val())) {
-
-              crear_candidato.submit();
+              
             }
             else {
 
-              if(regExp.test(telefono_celular.val())) {
-
-                crear_candidato.submit();
-              }
-              else {
+              if(!enviar) {
                 telefono_celular.val('');
                 telefono_celular.addClass(clasesError);
                 telefono_celular.attr('placeholder', 'El formato telefónico es: 0xxx-xxxxxxx');
               }
 
-              telefono_habitacion.val('');
-              telefono_habitacion.addClass(clasesError);
-              telefono_habitacion.attr('placeholder', 'El formato telefónico es: 0xxx-xxxxxxx');
+              enviar = false;
+            }
+
+            if(regExp.test(telefono_habitacion.val())) {
+
+              if((regExp3.test(correo.val())) || (correo.val() == '')) {
+                enviar = true;
+                crear_candidato.submit();
+              }
+              else {
+                correo.val('');
+                correo.addClass(clasesError);
+                correo.attr('placeholder', 'El formato de correo es: xxxxxxx\@xxxxxx.xxx');
+
+                enviar = false;
+              }
+            }
+            else {
+
+              if(!enviar) {
+                telefono_habitacion.val('');
+                telefono_habitacion.addClass(clasesError);
+                telefono_habitacion.attr('placeholder', 'El formato telefónico es: 0xxx-xxxxxxx');
+              }
+
+              enviar = false;
             }
           }
         }//Validacion total
