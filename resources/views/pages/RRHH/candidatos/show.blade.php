@@ -1,18 +1,18 @@
 @extends('layouts.model')
 
 @section('title')
-    Proveedor
+  Candidato
 @endsection
 
 @section('content')
  	<h1 class="h5 text-info">
 		<i class="far fa-eye"></i>
-		Detalle de proveedor
+		Detalles del candidato
 	</h1>
 
 	<hr class="row align-items-start col-12">
 
-	<form action="/proveedor/" method="POST" style="display: inline;">  
+	<form action="/candidatos/" method="POST" style="display: inline;">  
 	    @csrf					    
 	    <button type="submit" name="Regresar" role="button" class="btn btn-outline-info btn-sm"data-placement="top"><i class="fa fa-reply">&nbsp;Regresar</i></button>
 	</form>
@@ -23,46 +23,74 @@
 	<table class="table table-borderless table-striped">
 		<thead class="thead-dark">
 		    <tr>
-	      		<th scope="row">{{$proveedor->nombre}}&nbsp;{{$proveedor->apellido}}</th>
+	      		<th scope="row"></th>
 	      		<th scope="row"></th>
 		    </tr>
 	  	</thead>
 	  	<tbody>		
 		    <tr>
-		      	<th scope="row">Teléfono</th>
-	    	  	<td>{{$proveedor->telefono}}</td>
+		      	<th scope="row">Nombres</th>
+	    	  	<td>{{$candidatos->nombres}}</td>
 		    </tr>
 		    <tr>
-		      	<th scope="row">Correo</th>
-	    	  	<td>{{$proveedor->correo}}</td>
+		      	<th scope="row">Apellidos</th>
+	    	  	<td>{{$candidatos->apellidos}}</td>
 		    </tr>
 		    <tr>
-		      	<th scope="row">Cargo</th>
-	    	  	<td>{{$proveedor->cargo}}</td>
+		      	<th scope="row">Cédula</th>
+	    	  	<td>{{$candidatos->cedula}}</td>
 		    </tr>
 		    <tr>
-		      	<th scope="row">Empresa</th>
-	    	  	<td>{{$proveedor->empresa}}</td>
-		    </tr>
+            <th scope="row">Teléfono celular</th>
+            <td>{{$candidatos->telefono_celular}}</td>
+        </tr>
+        <tr>
+            <th scope="row">Teléfono de habitación</th>
+            <td>{{$candidatos->telefono_habitacion}}</td>
+        </tr>
+        <tr>
+            <th scope="row">Correo</th>
+            <td>{{$candidatos->correo}}</td>
+        </tr>
+        <tr>
+            <th scope="row">Como nos contactó</th>
+            <td>{{$candidatos->como_nos_contacto}}</td>
+        </tr>
+        <tr>
+            <th scope="row">Tipo de relación</th>
+            <td>{{$candidatos->tipo_relacion}}</td>
+        </tr>
+        <tr>
+            <th scope="row">Relaciones laborales</th>
+            <td>{{$candidatos->relaciones_laborales}}</td>
+        </tr>
+        <tr>
+            <th scope="row">Dirección</th>
+            <td>{{$candidatos->direccion}}</td>
+        </tr>
 		    <tr>
-		      	<th scope="row">Observaciones</th>
-	    	  	<td>{{$proveedor->observacion}}</td>
-		    </tr>
+            <th scope="row">Experiencia laboral</th>
+            <td>{{$candidatos->experiencia_laboral}}</td>
+        </tr>
+        <tr>
+            <th scope="row">Observaciones</th>
+            <td>{{$candidatos->observaciones}}</td>
+        </tr>
 		    <tr>
 		      	<th scope="row">Estatus</th>
-	    	  	<td>{{$proveedor->estatus}}</td>
+	    	  	<td>{{$candidatos->estatus}}</td>
 		    </tr>
 		    <tr>
 		      	<th scope="row">Creado</th>
-	    	  	<td>{{$proveedor->created_at}}</td>
+	    	  	<td>{{$candidatos->created_at}}</td>
 		    </tr>
 		    <tr>
 		      	<th scope="row">Ultima Actualización</th>
-	    	  	<td>{{$proveedor->updated_at}}</td>
+	    	  	<td>{{$candidatos->updated_at}}</td>
 		    </tr>
 		    <tr>
 		      	<th scope="row">Actualizado por</th>
-	    	  	<td>{{$proveedor->user}}</td>
+	    	  	<td>{{$candidatos->user}}</td>
 		    </tr>
 	  	</tbody>
 	</table>
