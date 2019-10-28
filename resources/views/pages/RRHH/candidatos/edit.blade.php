@@ -50,38 +50,36 @@
             <th scope="row"></th>
           </tr>
         </thead>
-        
+
         <tbody>
-            <tr>
-                <th scope="row">{!! Form::label('nombre', 'Nombre') !!}</th>
-                <td>{!! Form::text('nombre', null, [ 'class' => 'form-control', 'placeholder' => 'Pedro', 'autofocus']) !!}</td>
-            </tr>
-            <tr>
-                <th scope="row">{!! Form::label('apellido', 'Apellido') !!}</th>
-                <td>{!! Form::text('apellido', null, [ 'class' => 'form-control', 'placeholder' => 'Perez']) !!}</td>
-            </tr>
-            <tr>
-                <th scope="row">{!! Form::label('telefono', 'Telefono') !!}</th>
-                <td>{!! Form::text('telefono', null, [ 'class' => 'form-control', 'placeholder' => '04XX-7988326']) !!}</td>
-            </tr>
-            <tr>
-                <th scope="row">{!! Form::label('correo', 'Correo') !!}</th>
-                <td>{!! Form::text('correo', null, [ 'class' => 'form-control', 'placeholder' => 'pperez@empresa.com']) !!}</td>
-            </tr>
-            <tr>
-                <th scope="row">{!! Form::label('cargo', 'Cargo') !!}</th>
-                <td>{!! Form::text('cargo', null, [ 'class' => 'form-control', 'placeholder' => 'candidatos']) !!}</td>
-            </tr>
-            <tr>
-                <th scope="row">{!! Form::label('empresa', 'Empresa') !!}
-                </th>
-                <td>
-                </td>
-            </tr>
-            <tr>
-                <th scope="row">{!! Form::label('observacion', 'Observaciones') !!}</th>
-                <td>{!! Form::textarea('observacion', null, [ 'class' => 'form-control', 'placeholder' => 'Detalles importantes de la empresa', 'rows' => '3']) !!}</td>
-            </tr>
+          <tr>
+            <th scope="row">{!! Form::label('nombres', 'Nombres') !!}</th>
+            <td>{!! Form::text('nombres', null, [ 'class' => 'form-control', 'placeholder' => 'Maria Raquel', 'autofocus']) !!}</td>
+          </tr>
+          <tr>
+              <th scope="row">{!! Form::label('apellidos', 'Apellidos') !!}</th>
+              <td>{!! Form::text('apellidos', null, [ 'class' => 'form-control', 'placeholder' => 'Herrera Perez']) !!}</td>
+          </tr>
+          <tr>
+              <th scope="row">{!! Form::label('cedula', 'Cédula') !!}</th>
+              <td>{!! Form::text('cedula', null, [ 'class' => 'form-control', 'placeholder' => 'V-22476796']) !!}</td>
+          </tr>
+          <tr>
+              <th scope="row">{!! Form::label('telefono_celular', 'Teléfono celular') !!}</th>
+              <td>{!! Form::text('telefono_celular', null, [ 'class' => 'form-control', 'placeholder' => '0414-1234567']) !!}</td>
+          </tr>
+          <tr>
+              <th scope="row">{!! Form::label('telefono_habitacion', 'Teléfono de habitación') !!}</th>
+              <td>{!! Form::text('telefono_habitacion', null, [ 'class' => 'form-control', 'placeholder' => '0261-1234567']) !!}</td>
+          </tr>
+          <tr>
+              <th scope="row">{!! Form::label('correo', 'Correo') !!}</th>
+              <td>{!! Form::text('correo', null, [ 'class' => 'form-control', 'placeholder' => 'mherrera@farmacia72.com.ve']) !!}</td>
+          </tr>
+          <tr>
+              <th scope="row">{!! Form::label('observacion', 'Observaciones') !!}</th>
+              <td>{!! Form::textarea('observacion', null, [ 'class' => 'form-control', 'placeholder' => 'Detalles importantes de la empresa', 'rows' => '3']) !!}</td>
+          </tr>
         </tbody>
       </table>
       {!! Form::submit('Guardar', ['class' => 'btn btn-outline-success btn-md']) !!}
