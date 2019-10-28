@@ -97,8 +97,10 @@ class RH_PruebaController extends Controller {
         try{
             $pruebas = RH_Prueba::find($id);
             $pruebas->fill($request->all());
+
+            $pruebas->tipo_prueba = $request->input('tipo_prueba');
+            $pruebas->nombre_prueba = $request->input('nombre_prueba');
             $pruebas->user = auth()->user()->name;
-            // $pruebas->observacion = $request->input('observacion');
             $pruebas->save();
 
             return redirect()->route('pruebas.index')->with('Updated', ' Informacion');
