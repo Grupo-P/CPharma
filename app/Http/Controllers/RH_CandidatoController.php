@@ -124,6 +124,18 @@ class RH_CandidatoController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function destroy($id) {
-        //
+        $candidatos = RH_Candidato::find($id);
+
+         if($candidatos->estatus == 'POSTULADO'){
+            $candidatos->estatus = 'RECHAZADO';
+         }
+         else if($candidatos->estatus == 'RECHAZADO') {
+            $candidatos->estatus = 'POSTULADO';
+         }
+
+         $candidatos->user = auth()->user()->name;        
+         $candidatos->save();
+
+         return redirect()->route('candidatos.index')->with('Deleted', ' Informacion');
     }
 }
