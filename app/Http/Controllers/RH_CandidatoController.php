@@ -90,7 +90,10 @@ class RH_CandidatoController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function show($id) {
-        //
+
+        $candidatos = RH_Candidato::find($id);
+
+        return view('pages.RRHH.candidatos.show', compact('candidatos'));
     }
 
     /**
