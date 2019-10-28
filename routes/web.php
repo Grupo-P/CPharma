@@ -183,3 +183,5 @@ Route::resource('etiqueta', 'EtiquetaController');
 
 //***************************** RRHH routing *****************************//
 Route::resource('candidatos', 'RH_CandidatoController');
+
+Route::resource('pruebas', 'RH_PruebaController');
