@@ -61,8 +61,20 @@
               <td>{!! Form::text('apellidos', null, [ 'class' => 'form-control', 'placeholder' => 'Herrera Perez']) !!}</td>
           </tr>
           <tr>
-              <th scope="row">{!! Form::label('cedula', 'Cédula') !!}</th>
-              <td>{!! Form::text('cedula', null, [ 'class' => 'form-control', 'placeholder' => 'V-22476796']) !!}</td>
+            <th scope="row">{!! Form::label('cedula', 'Cédula') !!}</th>
+            <td>
+              <table style="width: 100%;">
+                <tr style="background-color: transparent;">
+                  <td>
+                    {!! Form::select('tipo', ['V' => 'V', 'E' => 'E'], null, [ 'class' => 'form-control']) !!}
+                  </td>
+
+                  <td>
+                    {!! Form::text('cedula', null, [ 'class' => 'form-control', 'placeholder' => '24921001']) !!}
+                  </td>
+                </tr>
+              </table>
+            </td>
           </tr>
           <tr>
               <th scope="row">{!! Form::label('telefono_celular', 'Teléfono celular') !!}</th>
@@ -76,9 +88,25 @@
               <th scope="row">{!! Form::label('correo', 'Correo') !!}</th>
               <td>{!! Form::text('correo', null, [ 'class' => 'form-control', 'placeholder' => 'mherrera@farmacia72.com.ve']) !!}</td>
           </tr>
+
           <tr>
-              <th scope="row">{!! Form::label('observacion', 'Observaciones') !!}</th>
-              <td>{!! Form::textarea('observacion', null, [ 'class' => 'form-control', 'placeholder' => 'Detalles importantes de la empresa', 'rows' => '3']) !!}</td>
+            <th scope="row">{!! Form::label('tipo_relacion', 'Tipo de relación') !!}</th>
+            <td>
+              {!! Form::select('tipo_relacion', [
+                'Ince' => 'Ince', 
+                'Pasante' => 'Pasante',
+                'Trabajador regular' => 'Trabajador regular',
+              ], null, ['class' => 'form-control']) !!}
+            </td>
+          </tr>
+
+          <tr>
+              <th scope="row">{!! Form::label('direccion', 'Dirección') !!}</th>
+              <td>{!! Form::textarea('direccion', null, [ 'class' => 'form-control', 'placeholder' => 'Av. 15 delicias con calle 72', 'rows' => '3']) !!}</td>
+          </tr>
+          <tr>
+              <th scope="row">{!! Form::label('observaciones', 'Observaciones') !!}</th>
+              <td>{!! Form::textarea('observaciones', null, [ 'class' => 'form-control', 'placeholder' => 'Detalles importantes del candidato', 'rows' => '3']) !!}</td>
           </tr>
         </tbody>
       </table>
@@ -87,9 +115,13 @@
   {!! Form::close()!!}
 
   <script>
-      $(document).ready(function(){
-          $('[data-toggle="tooltip"]').tooltip();   
-      });
-      $('#exampleModalCenter').modal('show')
+    $(document).ready(function(){
+      $('[data-toggle="tooltip"]').tooltip();
+
+      var cedula = $('#cedula');
+
+      cedula.val(cedula.val().substring(2));
+    });
+    $('#exampleModalCenter').modal('show');
   </script>
 @endsection

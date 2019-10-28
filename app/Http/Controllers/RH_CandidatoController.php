@@ -116,7 +116,24 @@ class RH_CandidatoController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id) {
-        //
+        
+        $cedula = $request->input('tipo') . '-' . $request->input('cedula');
+
+        try {
+            $candidatos = RH_Candidato::find($id);
+            $candidatos->fill($request->all());
+            
+            $candidatos->cedula = $cedula;
+            $candidatos->user = auth()->user()->name;
+            $candidatos->save();
+
+            return redirect()
+                ->route('candidatos.index')
+                ->with('Updated', ' Informacion');
+        }
+        catch(\Illuminate\Database\QueryException $e) {
+            return back()->with('Error', ' Error');
+        }
     }
 
     /**
