@@ -103,7 +103,9 @@ class RH_CandidatoController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function edit($id) {
-        //
+        $candidatos = RH_Candidato::find($id);
+
+        return view('pages.RRHH.candidatos.edit', compact('candidatos'));
     }
 
     /**
