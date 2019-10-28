@@ -14,10 +14,10 @@
 
 	<?php
 		include(app_path().'\functions\config.php'); 
-		include(app_path().'\functions\funciones.php');
+		include(app_path().'\functions\functions.php');
 
 		if (isset($_GET['SEDE'])){					
-			echo '<h1 class="h5 text-success"  align="left"> <i class="fas fa-prescription"></i> '.NombreSede($_GET['SEDE']).'</h1>';
+			echo '<h1 class="h5 text-success"  align="left"> <i class="fas fa-prescription"></i> '.FG_Nombre_Sede($_GET['SEDE']).'</h1>';
 		}		
 	?>
 	<hr class="row align-items-start col-12">
@@ -1126,6 +1126,10 @@
 				</form>
   		</div>
 		</div>
+	<?php
+		$FlagSede = FG_Sede_OnLine($_GET['SEDE']);
+		if($FlagSede==TRUE){
+	?>
 		<div class="card border-secondary mb-3" style="width: 14rem;">	  	
   		<div class="card-body text-left bg-secondary">
     		<h5 class="card-title">
@@ -1142,6 +1146,9 @@
 				</form>
 	  	</div>
 		</div>
+	<?php
+		}
+	?>
 		<div class="card border-dark mb-3" style="width: 14rem;">	  	
   		<div class="card-body text-left bg-dark">
     		<h5 class="card-title">
