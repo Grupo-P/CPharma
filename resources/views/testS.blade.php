@@ -4,9 +4,19 @@
 		include(app_path().'\functions\querys_mysql.php');
 		include(app_path().'\functions\querys_sqlserver.php');
 
-		$conn = FG_Conectar_Smartpharma('FTN');
+		
+		Prueba_Precio_Articulo('49600');
+		Prueba_Precio_Articulo('49601');
+		Prueba_Precio_Articulo('49602');
+		Prueba_Precio_Articulo('49603');
+		Prueba_Precio_Articulo('49604');
+		Prueba_Precio_Articulo('49605');
+?>
 
-    $sql = Query_Test_Precio('23837');
+<?php 
+	function Prueba_Precio_Articulo($IdArticulo){
+		$conn = FG_Conectar_Smartpharma('FTN');
+		$sql = Query_Test_Precio($IdArticulo);
     $result = sqlsrv_query($conn,$sql);
     $row = sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC);
 
@@ -29,14 +39,9 @@
     $Precio = FG_Calculo_Precio_Alfa($Existencia,$ExistenciaAlmacen1,$ExistenciaAlmacen2,$IsTroquelado,$UtilidadArticulo,$UtilidadCategoria,$TroquelAlmacen1,$PrecioCompraBrutoAlmacen1,$TroquelAlmacen2,
 		$PrecioCompraBrutoAlmacen2,$PrecioCompraBruto,$IsIVA);
 
-		echo'Para el articulo: '.$Descripcion.', el precio final de venta es: '.number_format($Precio,2,"," ,"." );
-?>
+		echo'<br/><br/>Para el articulo: '.$Descripcion.', el precio final de venta es: '.number_format($Precio,2,"," ,"." );
+	}
 
-
-
-
-
-<?php 
 	function Query_Test_Precio($IdArticulo){
 		$sql = "
 			SELECT
@@ -53,17 +58,6 @@
     AND InvCodigoBarra.EsPrincipal = 1) AS CodigoBarra,
 --Descripcion
     InvArticulo.Descripcion,
---Articulo Estrella (0 NO es Articulo Estrella, Id Articulo SI es Articulo Estrella)
-    (ISNULL((SELECT
-    InvArticuloAtributo.InvArticuloId
-    FROM InvArticuloAtributo 
-    WHERE InvArticuloAtributo.InvAtributoId = 
-    (SELECT InvAtributo.Id
-    FROM InvAtributo 
-    WHERE 
-    InvAtributo.Descripcion = 'Articulo Estrella'
-    OR  InvAtributo.Descripcion = 'articulo estrella') 
-    AND InvArticuloAtributo.InvArticuloId = InvArticulo.Id),CAST(0 AS INT))) AS Estrella,
 --Impuesto (1 SI aplica impuesto, 0 NO aplica impuesto)
     (ISNULL(InvArticulo.FinConceptoImptoIdCompra,CAST(0 AS INT))) AS Impuesto,
 --Troquelado (0 NO es Troquelado, Id Articulo SI es Troquelado)
