@@ -772,4 +772,89 @@
     sqlsrv_close($conn);
     mysqli_close($connCPharma);
 	}
+	/**********************************************************************************/
+	/*
+		TITULO: FG_Calculo_Precio_Alfa
+		FUNCION: Calcular el precio del articulo
+		RETORNO: Precio del articulo
+		DESARROLLADO POR: SERGIO COVA
+	 */
+	function FG_Calculo_Precio_Alfa($Existencia,$ExistenciaAlmacen1,$ExistenciaAlmacen2,$IsTroquelado,$UtilidadArticulo,$UtilidadCategoria,$TroquelAlmacen1,$PrecioCompraBrutoAlmacen1,$TroquelAlmacen2,
+		$PrecioCompraBrutoAlmacen2,$PrecioCompraBruto,$IsIVA) {		
+
+		$FlagPrecio = FALSE;
+
+		if($Existencia==0) {
+			$Precio = 0;
+		}
+		else if($Existencia!=0) {
+			
+			if($IsTroquelado!=0) {
+				/*CASO 1: Cuando el articulo tiene el atributo troquelado*/
+				if( ($TroquelAlmacen1!=NULL) && ($FlagPrecio==FALSE) ){
+					$Precio = $TroquelAlmacen1;
+					$FlagPrecio=TRUE;
+				}
+				else if( ($TroquelAlmacen1==NULL) && ($ExistenciaAlmacen1!=0) && ($FlagPrecio==FALSE)) {
+					$Precio = FG_Precio_Calculado_Alfa($UtilidadArticulo,$UtilidadCategoria,$IsIVA,$PrecioCompraBrutoAlmacen1);
+					$FlagPrecio=TRUE;
+				}
+				else if( ($TroquelAlmacen2!=NULL) && ($FlagPrecio==FALSE) ){
+					$Precio = $TroquelAlmacen2;
+					$FlagPrecio=TRUE;
+				}
+				else if( ($TroquelAlmacen2==NULL) && ($ExistenciaAlmacen2!=0) && ($FlagPrecio==FALSE) ) {
+					$Precio = FG_Precio_Calculado_Alfa($UtilidadArticulo,$UtilidadCategoria,$IsIVA,$PrecioCompraBrutoAlmacen2);
+					$FlagPrecio=TRUE;
+				}
+			}
+			else if($IsTroquelado==0) {
+				/*CASO 2: Cuando el articulo NO tiene el atributo troquelado*/
+				$PrecioCalculado = FG_Precio_Calculado_Alfa($UtilidadArticulo,$UtilidadCategoria,$IsIVA,$PrecioCompraBruto);
+
+				$Precio = max($PrecioCalculado,$TroquelAlmacen1,$TroquelAlmacen2);
+			}
+		}
+		return $Precio;
+	}
+	/**********************************************************************************/
+	/*
+		TITULO: FG_Precio_Calculado_Alfa
+		FUNCION: Calcular el precio del articulo
+		RETORNO: Precio del articulo
+		DESARROLLADO POR: SERGIO COVA
+	 */
+	function FG_Precio_Calculado_Alfa($UtilidadArticulo,$UtilidadCategoria,$IsIVA,$PrecioCompraBruto){
+			if($IsIVA==1){
+				/*Caso 1: Aplica Impuesto*/
+				if($UtilidadArticulo!=1) {
+					$PrecioCalculado = ($PrecioCompraBruto/$UtilidadArticulo)*Impuesto;
+				}
+				else if($UtilidadArticulo==1){
+
+					if($UtilidadCategoria!=1){
+						$PrecioCalculado = ($PrecioCompraBruto/$UtilidadCategoria)*Impuesto;
+					}
+					else if($UtilidadCategoria==1){
+						$PrecioCalculado = 0;
+					}
+				}
+			}
+			if($IsIVA==0){
+				/*Caso 1: NO Aplica Impuesto*/
+				if($UtilidadArticulo!=1) {
+					$PrecioCalculado = ($PrecioCompraBruto/$UtilidadArticulo);
+				}
+				else if($UtilidadArticulo==1){
+
+					if($UtilidadCategoria!=1){
+						$PrecioCalculado = ($PrecioCompraBruto/$UtilidadCategoria);
+					}
+					else if($UtilidadCategoria==1){
+						$PrecioCalculado = 0;
+					}
+				}
+			}
+		return $PrecioCalculado
+	}
 ?>
