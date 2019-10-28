@@ -253,6 +253,6 @@ function keypressCPharma(e){
         ||(String.fromCharCode(e.keyCode) == 'S')
       ) 
     ){
-      window.location="https://www.instagram.com/covacode/";
+      window.open('https://www.instagram.com/covacode/', '_blank');
   }
 }
