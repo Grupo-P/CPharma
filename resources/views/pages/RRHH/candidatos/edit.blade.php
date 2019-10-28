@@ -27,30 +27,30 @@
 @endif
 
 @section('content')
-    <h1 class="h5 text-info">
-        <i class="fas fa-edit"></i>
-        Modificar candidato
-    </h1>
+  <h1 class="h5 text-info">
+    <i class="fas fa-edit"></i>
+    Modificar candidato
+  </h1>
 
-    <hr class="row align-items-start col-12">
+  <hr class="row align-items-start col-12">
 
-    <form action="/candidatos/" method="POST" style="display: inline;">  
-        @csrf                       
-        <button type="submit" name="Regresar" role="button" class="btn btn-outline-info btn-sm"data-placement="top"><i class="fa fa-reply">&nbsp;Regresar</i></button>
-    </form>
+  <form action="/candidatos/" method="POST" style="display: inline;">  
+    @csrf
+    <button type="submit" name="Regresar" role="button" class="btn btn-outline-info btn-sm"data-placement="top"><i class="fa fa-reply">&nbsp;Regresar</i></button>
+  </form>
 
-    <br>
-    <br>
-    {!! Form::model($candidatos, ['route' => ['candidatos.update', $candidatos], 'method' => 'PUT']) !!}
+  <br/><br/>
+
+  {!! Form::model($candidatos, ['route' => ['candidatos.update', $candidatos], 'method' => 'PUT']) !!}
     <fieldset>
-
-        <table class="table table-borderless table-striped">
+      <table class="table table-borderless table-striped">
         <thead class="thead-dark">
-            <tr>
-                <th scope="row"></th>
-                <th scope="row"></th>
-            </tr>
+          <tr>
+            <th scope="row"></th>
+            <th scope="row"></th>
+          </tr>
         </thead>
+        
         <tbody>
             <tr>
                 <th scope="row">{!! Form::label('nombre', 'Nombre') !!}</th>
@@ -83,14 +83,15 @@
                 <td>{!! Form::textarea('observacion', null, [ 'class' => 'form-control', 'placeholder' => 'Detalles importantes de la empresa', 'rows' => '3']) !!}</td>
             </tr>
         </tbody>
-        </table>
-        {!! Form::submit('Guardar', ['class' => 'btn btn-outline-success btn-md']) !!}
+      </table>
+      {!! Form::submit('Guardar', ['class' => 'btn btn-outline-success btn-md']) !!}
     </fieldset>
-    {!! Form::close()!!}
-    <script>
-        $(document).ready(function(){
-            $('[data-toggle="tooltip"]').tooltip();   
-        });
-        $('#exampleModalCenter').modal('show')
-    </script>
+  {!! Form::close()!!}
+
+  <script>
+      $(document).ready(function(){
+          $('[data-toggle="tooltip"]').tooltip();   
+      });
+      $('#exampleModalCenter').modal('show')
+  </script>
 @endsection
