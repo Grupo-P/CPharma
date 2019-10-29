@@ -11,7 +11,7 @@
           <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
               <div class="modal-header">
-                <h5 class="modal-title text-danger" id="exampleModalCenterTitle"><i class="fas fa-exclamation-triangle text-danger"></i>{{ session('Error') }}</h5>
+                <h5 class="modal-title text-danger" id="exampleModalCenterTitle"><i class="fas fa-exclamation-triangle text-danger"></i>Traslado {{ session('Error') }}</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
                 </button>
@@ -26,6 +26,28 @@
           </div>
         </div>
     @endif
+
+    @if (session('tasaNula'))
+        <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title text-danger" id="exampleModalCenterTitle"><i class="fas fa-exclamation-triangle text-danger"></i>Traslado {{ session('Error') }}</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <h4 class="h6">El traslado no pudo ser almacenado, se debe agregar una tasa de mercado valida, contacte al departamento de administracion</h4>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-outline-success" data-dismiss="modal">Aceptar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+    @endif
+
     <h1 class="h5 text-info">
         <i class="fas fa-plus"></i>
         Agregar traslado
@@ -69,6 +91,7 @@
       $OperadorTraslado = auth()->user()->name;
 
       $SedeOrigen = FG_Nombre_Sede($_GET['SEDE']);
+      //$SedeOrigen = FG_Nombre_Sede('FTN');
     ?>
 
     {!! Form::open(['route' => 'traslado.store', 'method' => 'POST']) !!}
