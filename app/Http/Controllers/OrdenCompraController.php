@@ -174,31 +174,38 @@ class OrdenCompraController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
       $OrdenCompra = OrdenCompra::find($id);
 
-      if($OrdenCompra->estatus == 'ACTIVO'){
-        $OrdenCompra->estatus = 'EN ESPERA';
-      }   
-      else if($OrdenCompra->estatus == 'EN ESPERA'){
-
-        $usuario = auth()->user()->name;
-        $OrdenActiva = 
-        OrdenCompra::orderBy('id','asc')
-        ->where('user',$usuario)
-        ->where('estatus','ACTIVO')
-        ->get();
-
-        if(!empty($OrdenActiva[0]->codigo)) {
-          return redirect()->route('ordenCompra.index')->with('OrdenActiva', ''.$OrdenActiva[0]->codigo);
-        }
-        else if(empty($OrdenActiva[0]->codigo)) {
-          $OrdenCompra->estatus = 'ACTIVO';
-        }
+      if($request->input('anular')=='valido'){
+        $OrdenCompra->estado = 'ANULADA';
+        $OrdenCompra->estatus = 'ANULADA';
+        $OrdenCompra->save();
+        return redirect()->route('ordenCompra.index')->with('Updated', ' Informacion');
       }
-      $OrdenCompra->save();
+      else{
 
-      return redirect()->route('ordenCompra.index')->with('Deleted', ' Informacion');
+        if($OrdenCompra->estatus == 'ACTIVO'){
+          $OrdenCompra->estatus = 'EN ESPERA';
+        }   
+        else if($OrdenCompra->estatus == 'EN ESPERA'){
+          $usuario = auth()->user()->name;
+          $OrdenActiva = 
+          OrdenCompra::orderBy('id','asc')
+          ->where('user',$usuario)
+          ->where('estatus','ACTIVO')
+          ->get();
+
+          if(!empty($OrdenActiva[0]->codigo)) {
+            return redirect()->route('ordenCompra.index')->with('OrdenActiva', ''.$OrdenActiva[0]->codigo);
+          }
+          else if(empty($OrdenActiva[0]->codigo)) {
+            $OrdenCompra->estatus = 'ACTIVO';
+          }
+        }
+        $OrdenCompra->save();
+        return redirect()->route('ordenCompra.index')->with('Deleted', ' Informacion');
+      }
     }
 }

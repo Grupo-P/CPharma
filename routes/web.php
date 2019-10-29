@@ -169,6 +169,10 @@ Route::resource('traslado', 'TrasladoController');
 
 Route::resource('ordenCompra', 'OrdenCompraController');
 
+Route::get('/AnularOrdenCompra', function() {
+    return view('pages.ordenCompra.anular');
+});
+
 //***************************** RRHH routing *****************************//
 Route::resource('candidatos', 'RH_CandidatoController');
 

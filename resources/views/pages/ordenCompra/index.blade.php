@@ -195,9 +195,9 @@
 		      <td>{{$ordenCompra->fecha_ingreso}}</td>
 
 		    <!-- Inicio Validacion de ROLES -->
-		      <td style="width:140px;">
+		      <td style="width:300px;">
 				
-				<a href="/ordenCompra/{{$ordenCompra->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Soporte">
+				<a href="/ordenCompra/{{$ordenCompra->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Soporte" style="display: inline-block; width: 100%">
     			<i class="fas fa-print"></i>			      		
     		</a>
 
@@ -210,42 +210,41 @@
 				 		)
 					){
 				?>
-					<a href="/ordenCompra/{{$ordenCompra->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar orden">
+					<a href="/ordenCompra/{{$ordenCompra->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar orden" style="display: inline-block; width: 100%">
       			<i class="fas fa-edit"></i>			      		
 	      	</a>
 
-	      	<form action="#" method="POST" style="display: inline;">
+	      	<form action="#" method="POST">
 				    @method('DELETE')
 				    @csrf					    
-				    <button type="submit" name="Eliminar" role="button" class="btn btn-outline-warning btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar articulos"><i class="fa fa-edit"></i></button>
+				    <button type="submit" name="Eliminar" role="button" class="btn btn-outline-warning btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar articulos" style="display: inline-block; width: 100%"><i class="fa fa-edit"></i></button>
 					</form>
 
 					<?php
 					if($ordenCompra->estatus == 'ACTIVO'){
 					?>  
-		      	<form action="/ordenCompra/{{$ordenCompra->id}}" method="POST" style="display: inline;">
+		      	<form action="/ordenCompra/{{$ordenCompra->id}}" method="POST">
 				    @method('DELETE')
 				    @csrf					    
-				    <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Pausar"><i class="fa fa-pause"></i></button>
+				    <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Pausar" style="display: inline-block; width: 100%"><i class="fa fa-pause"></i></button>
 						</form>
 					<?php
 					}
 					else if($ordenCompra->estatus == 'EN ESPERA'){
 					?>  
-		      	<form action="/ordenCompra/{{$ordenCompra->id}}" method="POST" style="display: inline;">
+		      	<form action="/ordenCompra/{{$ordenCompra->id}}" method="POST">
 				    @method('DELETE')
 				    @csrf					    
-				    <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Activar"><i class="fa fa-play"></i></button>
+				    <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Activar" style="display: inline-block; width: 100%"><i class="fa fa-play"></i></button>
 						</form>
 					<?php
 					}
 					?>
 
-					<form action="/ordenCompra/{{$ordenCompra->id}}" method="POST" style="display: inline;">
-				    @method('DELETE')
-				    @csrf		
-				    <input type="hidden" name="anular" value="anular">			    
-				    <button type="submit" name="Eliminar" role="button" class="btn btn-outline-dark btn-sm" data-toggle="tooltip" data-placement="top" title="Activar"><i class="fa fa-share"></i></button>
+					<form action="/AnularOrdenCompra" method="PRE">
+				    <input type="hidden" name="anular" value="solicitud">
+				    <input type="hidden" name="id" value="{{$ordenCompra->id}}">   
+				    <button type="submit"role="button" class="btn btn-outline-dark btn-sm" data-toggle="tooltip" data-placement="top" title="Anular" style="display: inline-block; width: 100%"><i class="fa fa-ban"></i></button>
 					</form>
 		
 				<?php
