@@ -109,13 +109,21 @@
 	<hr class="row align-items-start col-12">
 	<table style="width:100%;">
 	    <tr>
-	        <td style="width:10%;" align="center">	        	
-				<a href="{{ url('/ordenCompra/create') }}" role="button" class="btn btn-outline-info btn-sm" 
-				style="display: inline; text-align: left;">
-				<i class="fa fa-plus"></i>
-					Agregar		      		
-				</a>
-	        </td>
+	    	<?php
+	    		if((Auth::user()->departamento == 'TECNOLOGIA')
+				 			|| (Auth::user()->departamento == 'GERENCIA')
+				 			|| (Auth::user()->departamento == 'COMPRAS')){
+	    	?>
+        <td style="width:10%;" align="center">	        	
+					<a href="{{ url('/ordenCompra/create') }}" role="button" class="btn btn-outline-info btn-sm" 
+					style="display: inline; text-align: left;">
+					<i class="fa fa-plus"></i>
+						Agregar		      		
+					</a>
+        </td>
+        <?php 
+      	}
+      	?>
 	        <td style="width:90%;">
 	        	<div class="input-group md-form form-sm form-1 pl-0">
 				  <div class="input-group-prepend">
@@ -189,8 +197,8 @@
 		    <!-- Inicio Validacion de ROLES -->
 		      <td style="width:140px;">
 				
-				<a href="/ordenCompra/{{$ordenCompra->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
-    			<i class="far fa-eye"></i>			      		
+				<a href="/ordenCompra/{{$ordenCompra->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Soporte">
+    			<i class="fas fa-print"></i>			      		
     		</a>
 
 				<?php
@@ -233,6 +241,13 @@
 					}
 					?>
 
+					<form action="/ordenCompra/{{$ordenCompra->id}}" method="POST" style="display: inline;">
+				    @method('DELETE')
+				    @csrf		
+				    <input type="hidden" name="anular" value="anular">			    
+				    <button type="submit" name="Eliminar" role="button" class="btn btn-outline-dark btn-sm" data-toggle="tooltip" data-placement="top" title="Activar"><i class="fa fa-share"></i></button>
+					</form>
+		
 				<?php
 				}
 				?>						
