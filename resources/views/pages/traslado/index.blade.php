@@ -197,10 +197,10 @@
 				$Total_Usd = number_format ($Total_Usd,2,"," ,"." );
 
 				if($traslado->estatus=='ENTREGADO'){
-					$Dias = FG_Rango_Dias($traslado->traslado,$traslado->updated_at);
+					$Dias = FG_Rango_Dias($traslado->fecha_traslado,$traslado->updated_at);
 				}
 				else{
-					$Dias = FG_Rango_Dias($traslado->traslado,date('Y-m-d H:i:s'));
+					$Dias = FG_Rango_Dias($traslado->fecha_traslado,date('Y-m-d H:i:s'));
 				}
 			?>
 		    <tr>
@@ -220,7 +220,8 @@
 		      <td style="width:170px;">
 					<?php
 					if(($traslado->estatus=='PROCESADO'||$traslado->estatus=='EMBALADO'||$traslado->estatus=='ENTREGADO') && 
-						(Auth::user()->departamento == 'OPERACIONES' 
+						(Auth::user()->departamento == 'OPERACIONES'
+						|| Auth::user()->departamento == 'LÍDER DE TIENDA' 
 				    || Auth::user()->departamento == 'GERENCIA'
 				    || Auth::user()->departamento == 'TECNOLOGIA')
 						){
@@ -235,6 +236,7 @@
 					<?php
 					if(($traslado->estatus=='PROCESADO'||$traslado->estatus=='EMBALADO') && 
 						(Auth::user()->departamento == 'ALMACEN'
+						|| Auth::user()->departamento == 'LÍDER DE TIENDA'
 				    || Auth::user()->departamento == 'GERENCIA'
 				    || Auth::user()->departamento == 'TECNOLOGIA')
 						){
@@ -249,6 +251,7 @@
 		      <?php
 					if(($traslado->estatus=='EMBALADO') && 
 						(Auth::user()->departamento == 'ALMACEN'
+						|| Auth::user()->departamento == 'LÍDER DE TIENDA'
 				    || Auth::user()->departamento == 'GERENCIA'
 				    || Auth::user()->departamento == 'TECNOLOGIA')
 						){

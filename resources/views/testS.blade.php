@@ -22,6 +22,7 @@
         Prueba_Precio_Articulo('59693');
         Prueba_Precio_Articulo('59694');
         Prueba_Precio_Articulo('59695');
+        Prueba_Precio_Articulo('59697');
 ?>
 
 <?php 
