@@ -174,4 +174,4 @@ Route::resource('candidatos', 'RH_CandidatoController');
 
 Route::resource('pruebas', 'RH_PruebaController');
 
-Route::resource('entrevistas', 'RH_Entrevistas');
+Route::resource('entrevistas', 'RH_EntrevistaController');
