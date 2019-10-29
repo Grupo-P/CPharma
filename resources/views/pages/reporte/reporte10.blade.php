@@ -538,6 +538,12 @@
       InvLoteAlmacen.InvLoteId,
       InvMovimiento.InvCausaId,
       InvCausa.Descripcion,
+      (SELECT
+      ComFactura.Id
+      FROM ComFacturaDetalle
+      INNER JOIN ComFactura ON  ComFactura.Id = ComFacturaDetalle.ComFacturaId
+      WHERE ComFacturaDetalle.InvArticuloId = '$IdArticulo'
+      AND (CONVERT(DATE,ComFactura.FechaRegistro) = CONVERT(DATE,InvLoteAlmacen.Auditoria_FechaCreacion))) AS IdFactura,
       CONVERT(DATE,InvLoteAlmacen.Auditoria_FechaCreacion) AS FechaLote,
       ROUND(CAST((SELECT
       ComFacturaDetalle.CantidadRecibidaFactura
