@@ -74,7 +74,7 @@
     @endif
     <h1 class="h5 text-info">
         <i class="fas fa-edit"></i>
-        Editar orden de compra
+        Modificar orden de compra
     </h1>
 
     <hr class="row align-items-start col-12">
