@@ -938,7 +938,12 @@
 			case 'SURTIDO':
 				$Numero_Reportes = 3;
 			break;
-			
+			case 'ADMINISTRACION':
+				$Numero_Reportes = 1;
+			break;
+			case 'LÍDER DE TIENDA':
+				$Numero_Reportes = 13;
+			break;
 			default:
 				$Numero_Reportes = 0;
 			break;
