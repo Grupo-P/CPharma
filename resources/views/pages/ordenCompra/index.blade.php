@@ -196,10 +196,15 @@
 
 		    <!-- Inicio Validacion de ROLES -->
 		      <td style="width:300px;">
-				
+				<?php 
+					if($ordenCompra->estado!='ANULADA'){
+				?>
 				<a href="/ordenCompra/{{$ordenCompra->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Soporte" style="display: inline-block; width: 100%">
     			<i class="fas fa-print"></i>			      		
     		</a>
+    		<?php
+    			}
+    		?>
 
 				<?php
 				if( ($ordenCompra->estado=='EN PROCESO')
