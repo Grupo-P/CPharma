@@ -932,9 +932,6 @@
 			case 'DEVOLUCIONES':
 				$Numero_Reportes = 2;
 			break;
-			case 'TECNOLOGIA':
-				$Numero_Reportes = 13;
-			break;
 			case 'SURTIDO':
 				$Numero_Reportes = 3;
 			break;
@@ -942,6 +939,12 @@
 				$Numero_Reportes = 1;
 			break;
 			case 'LÍDER DE TIENDA':
+				$Numero_Reportes = 13;
+			break;
+			case 'GERENCIA':
+				$Numero_Reportes = 13;
+			break;
+			case 'TECNOLOGIA':
 				$Numero_Reportes = 13;
 			break;
 			default:

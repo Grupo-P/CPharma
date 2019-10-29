@@ -197,6 +197,10 @@
 				</form>
   		</div>
 		</div>
+	<?php
+		$FlagSede = FG_Sede_OnLine($_GET['SEDE']);
+		if($FlagSede==TRUE){
+	?>
 		<div class="card border-secondary mb-3" style="width: 14rem;">	  	
   		<div class="card-body text-left bg-secondary">
     		<h5 class="card-title">
@@ -213,6 +217,9 @@
 				</form>
 	  	</div>
 		</div>
+	<?php
+		}
+	?>
 		<div class="card border-dark mb-3" style="width: 14rem;">	  	
   		<div class="card-body text-left bg-dark">
     		<h5 class="card-title">
@@ -664,6 +671,10 @@
 				</form>
   		</div>
 		</div>
+	<?php
+		$FlagSede = FG_Sede_OnLine($_GET['SEDE']);
+		if($FlagSede==TRUE){
+	?>
 		<div class="card border-secondary mb-3" style="width: 14rem;">	  	
   		<div class="card-body text-left bg-secondary">
     		<h5 class="card-title">
@@ -680,6 +691,9 @@
 				</form>
 	  	</div>
 		</div>
+	<?php
+		}
+	?>
 		<div class="card border-dark mb-3" style="width: 14rem;">	  	
   		<div class="card-body text-left bg-dark">
     		<h5 class="card-title">
@@ -895,6 +909,10 @@
 				</form>
   		</div>
 		</div>
+	<?php
+		$FlagSede = FG_Sede_OnLine($_GET['SEDE']);
+		if($FlagSede==TRUE){
+	?>
 		<div class="card border-secondary mb-3" style="width: 14rem;">	  	
   		<div class="card-body text-left bg-secondary">
     		<h5 class="card-title">
@@ -911,6 +929,9 @@
 				</form>
 	  	</div>
 		</div>
+	<?php
+		}
+	?>
 		<div class="card border-dark mb-3" style="width: 14rem;">	  	
   		<div class="card-body text-left bg-dark">
     		<h5 class="card-title">
