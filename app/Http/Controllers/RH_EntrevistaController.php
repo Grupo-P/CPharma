@@ -23,7 +23,8 @@ class RH_EntrevistaController extends Controller
      */
     public function index()
     {
-        return "prueba";
+        $entrevistas =  RH_Entrevista::all();
+        return view('pages.RRHH.entrevistas.index', compact('entrevistas'));
     }
 
     /**
