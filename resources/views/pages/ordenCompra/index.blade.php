@@ -202,9 +202,15 @@
 				 		)
 					){
 				?>
-					<a href="/ordenCompra/{{$ordenCompra->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
+					<a href="/ordenCompra/{{$ordenCompra->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar orden">
       			<i class="fas fa-edit"></i>			      		
 	      	</a>
+
+	      	<form action="#" method="POST" style="display: inline;">
+				    @method('DELETE')
+				    @csrf					    
+				    <button type="submit" name="Eliminar" role="button" class="btn btn-outline-warning btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar articulos"><i class="fa fa-edit"></i></button>
+					</form>
 
 					<?php
 					if($ordenCompra->estatus == 'ACTIVO'){
