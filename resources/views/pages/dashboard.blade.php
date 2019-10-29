@@ -15,22 +15,46 @@
 		$proveedores = DB::table('proveedors')->count();
 		$usuarios = DB::table('users')->count();
 		$dolar = DB::table('dolars')->count();
+		$candidatos = DB::table('rh_candidatos')->count();
+		$pruebas = DB::table('rh_pruebas')->count();
+
+	/*TASA DOLAR VENTA*/
+		$Tasa = DB::table('tasa_ventas')->where('moneda', 'Dolar')->value('tasa');
+		
+		if( (!empty($Tasa)) ){
+			$Tasa = number_format($Tasa,2,"," ,"." );
+		}
+		else{
+			$Tasa = number_format(0.00,2,"," ,"." );
+		}
 
 		$tasaVenta = DB::table('tasa_ventas')->where('moneda', 'Dolar')->value('updated_at');
-		$Tasa = DB::table('tasa_ventas')->where('moneda', 'Dolar')->value('tasa');
-		$Tasa = number_format($Tasa,2,"," ,"." );
-		$tasaVenta = new DateTime($tasaVenta);
-		$tasaVenta = $tasaVenta->format("d-m-Y h:i:s a");
+		
+		if( (!empty($tasaVenta)) ){
+			$tasaVenta = new DateTime($tasaVenta);
+			$tasaVenta = $tasaVenta->format("d-m-Y h:i:s a");
+		}
+		else{
+			$tasaVenta = '';
+		}
 
+	/*TASA DOLAR VENTA*/
+
+	/*TASA DOLAR MERCADO*/
 		$FechaTasaMercado = 
 		DB::table('dolars')
 		->select('updated_at')
 		->orderBy('fecha','desc')
 	 	->take(1)->get();
 
-		$FechaTasaMercado = ($FechaTasaMercado[0]->updated_at);
-		$FechaTasaMercado = new DateTime($FechaTasaMercado);
-		$FechaTasaMercado = $FechaTasaMercado->format('d-m-Y h:i:s a');
+		if( (!empty($FechaTasaMercado[0])) ){
+	 		$FechaTasaMercado = ($FechaTasaMercado[0]->updated_at);
+			$FechaTasaMercado = new DateTime($FechaTasaMercado);
+			$FechaTasaMercado = $FechaTasaMercado->format('d-m-Y h:i:s a');
+	 	}
+	 	else{
+	 		$FechaTasaMercado = '';
+	 	}
 
 		$TasaMercado = 
 		DB::table('dolars')
@@ -38,9 +62,16 @@
 		->orderBy('fecha','desc')
 	 	->take(1)->get();
 
-	 	$TasaMercado = ($TasaMercado[0]->tasa);
-		$TasaMercado = number_format($TasaMercado,2,"," ,"." );
+	 	if( (!empty($TasaMercado[0])) ){
+	 		$TasaMercado = ($TasaMercado[0]->tasa);
+			$TasaMercado = number_format($TasaMercado,2,"," ,"." );
+	 	}
+	 	else{
+	 		$TasaMercado = number_format(0.00,2,"," ,"." );
+	 	}
+ 	/*TASA DOLAR MERCADO*/
 
+ 	/*REPORTES MAS USADOS Y REPORTES SUGERIDOS*/
 		$FHoy = date("Y-m-d");
 		$FAyer = date("Y-m-d",strtotime($FHoy."-1 days"));
 
@@ -70,6 +101,7 @@
 		->where('tabla','reporte')
 		->where('user',$usuario)
 	 	->take(2)->get();
+ 	/*REPORTES MAS USADOS Y REPORTES SUGERIDOS*/
 	?>
 
 	<h1 class="h5 text-info">
@@ -776,7 +808,21 @@
 	      <div class="modal-body">
 	      	<label>Hola <b class="text-info">{{ Auth::user()->name }}</b>.</label>
 	      	<br/>
-	      	Estas usando<b class="text-info"> CPharma v.4.7</b>, para el departamento de <b class="text-info">{{ Auth::user()->departamento }}</b>
+	      	Estas usando<b class="text-info"> CPharma v.4.7</b>, para el departamento de <b class="text-info">{{ Auth::user()->departamento }}</b><br/><br/>
+	      	<ul style="list-style:none">
+	        	<li class="card-text text-dark" style="display: inline;">
+						<i class="far fa-check-circle text-info" style="display: inline;"></i>
+						Desde ya esta disponible el modulo: 
+						<b class="text-info">Candidatos</b>!!
+	  				</li>
+  				</ul>
+  				<ul style="list-style:none">
+	        	<li class="card-text text-dark" style="display: inline;">
+						<i class="far fa-check-circle text-info" style="display: inline;"></i>
+						Desde ya esta disponible el modulo: 
+						<b class="text-info">Pruebas</b>!!
+	  				</li>
+  				</ul>
 	      </div>
 	      <div class="modal-footer">
 	        <button type="button" class="btn btn-outline-info" data-dismiss="modal">Aceptar</button>
@@ -787,24 +833,44 @@
 	<!-- Modal RRHH -->
 	<!-- Dashboard RRHH-->
 	<div class="card-deck">
-		<div class="card border-dark mb-3" style="width: 14rem;">	  	
-			<div class="card-body text-left bg-dark">
-	  		<h3 class="card-title">
+		<div class="card border-danger mb-3" style="width: 14rem;">	  	
+			<div class="card-body text-left bg-danger">
+	  		<h2 class="card-title">
 	    		<span class="card-text text-white">
-	    			<i class="fas fa-user-circle"></i>
+	    			<i class="fas fa-user-check"></i>
 	    			<?php
-						echo '0';
+						echo ''.$candidatos;
 					?>						
 	    		</span>
-	  		</h3>
+	  		</h2>
 	  		<p class="card-text text-white">
 				<?php 
 					echo 'Candidatos registrados';
 				?>
 	  		</p>
 			</div>
-			<div class="card-footer bg-transparent border-dark text-right">
-	  		<a href="#" class="btn btn-outline-dark btn-sm">Visualizar</a>
+			<div class="card-footer bg-transparent border-danger text-right">
+	  		<a href="/candidatos" class="btn btn-outline-danger btn-sm">Visualizar</a>
+	  	</div>		
+		</div>
+		<div class="card border-success mb-3" style="width: 14rem;">	  	
+			<div class="card-body text-left bg-success">
+	  		<h3 class="card-title">
+	    		<span class="card-text text-white">
+	    			<i class="fas fa-tasks"></i>
+	    			<?php
+						echo ''.$pruebas;
+					?>						
+	    		</span>
+	  		</h3>
+	  		<p class="card-text text-white">
+				<?php 
+					echo 'Pruebas registradas';
+				?>
+	  		</p>
+			</div>
+			<div class="card-footer bg-transparent border-success text-right">
+	  		<a href="/pruebas" class="btn btn-outline-success btn-sm">Visualizar</a>
 	  	</div>		
 		</div>
 	</div>
