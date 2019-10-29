@@ -173,7 +173,6 @@
     $TroquelAlmacen1 = $row["TroquelAlmacen1"];
     $TroquelAlmacen2 = $row["TroquelAlmacen2"];
     $PrecioCompraBruto = $row["PrecioCompraBruto"];
-    $UltimoProveedorNombre = FG_Limpiar_Texto($row["UltimoProveedorNombre"]);
 
     $Dolarizado = FG_Producto_Dolarizado($Dolarizado);
     $TasaActual = FG_Tasa_Fecha($connCPharma,date('Y-m-d'));
@@ -262,6 +261,9 @@
       $sql2 = R10Q_Lote_Analitico($IdArticulo);
       $result2 = sqlsrv_query($conn,$sql2);
 
+      $sql3 = R10Q_Proveedores($IdArticulo);
+      $result3 = sqlsrv_query($conn,$sql3);
+
       while($row2 = sqlsrv_fetch_array($result2,SQLSRV_FETCH_ASSOC)) {
         $FechaVariable = $row2["FechaLote"]->format("Y-m-d");
         $PrecioBruto = $row2["M_PrecioCompraBruto"];
@@ -274,8 +276,10 @@
             <td align="center">Compra</td>
           ';
 
+          $row3 = sqlsrv_fetch_array($result2,SQLSRV_FETCH_ASSOC);
+
           echo '
-            <td align="center">'.$UltimoProveedorNombre.'</td>
+            <td align="center">'.FG_Limpiar_Texto($row3["Nombre"]).'</td>
             <td align="center">'.$row2["FechaLote"]->format("d-m-Y").'</td>
             <td align="center">'.intval($row2["CantidadRecibida"]).'</td>
           ';
@@ -565,6 +569,28 @@
       GROUP BY InvLoteAlmacen.InvLoteId,InvMovimiento.InvCausaId,InvCausa.Descripcion,CONVERT(DATE,InvLoteAlmacen.Auditoria_FechaCreacion),InvAlmacen.CodigoAlmacen,InvLoteAlmacen.Existencia,InvLote.M_PrecioCompraBruto,InvLote.Auditoria_Usuario
       ORDER BY FechaLote DESC
       ";
+    return $sql;
+  }
+
+  /**********************************************************************************/
+  /*
+      TITULO: R10Q_Proveedores
+      PARAMETROS: [$IdArticulo] Id del articulo actual
+      FUNCION: Devuelve los registros de todos los proveedores del articulo
+      RETORNO: Un String con las instrucciones de la consulta
+      AUTOR: Ing. Manuel Henriquez
+   */
+  function R10Q_Proveedores($IdArticulo) {
+    $sql = "
+      SELECT 
+      GenPersona.Nombre
+      FROM ComFacturaDetalle
+      INNER JOIN ComFactura ON ComFactura.Id = ComFacturaDetalle.ComFacturaId
+      INNER JOIN ComProveedor ON ComProveedor.Id = ComFactura.ComProveedorId
+      INNER JOIN GenPersona ON GenPersona.Id = ComProveedor.GenPersonaId
+      WHERE ComFacturaDetalle.InvArticuloId = '$IdArticulo'
+      ORDER BY ComFactura.FechaDocumento DESC
+    ";
     return $sql;
   }
 ?>
