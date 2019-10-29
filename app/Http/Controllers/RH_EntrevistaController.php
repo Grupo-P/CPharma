@@ -7,6 +7,16 @@ use Illuminate\Http\Request;
 class RH_EntrevistaController extends Controller
 {
     /**
+     * Create a new controller instance with auth.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
