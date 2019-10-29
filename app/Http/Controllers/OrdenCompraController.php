@@ -179,6 +179,7 @@ class OrdenCompraController extends Controller
       $OrdenCompra = OrdenCompra::find($id);
 
       if($request->input('anular')=='valido'){
+        $OrdenCompra->fill($request->all());
         $OrdenCompra->estado = 'ANULADA';
         $OrdenCompra->estatus = 'ANULADA';
         $OrdenCompra->save();
