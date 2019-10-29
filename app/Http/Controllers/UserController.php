@@ -28,8 +28,16 @@ class UserController extends Controller
      */
     public function index()
     {
-        $usuarios =  User::all();
-        return view('pages.usuario.index', compact('usuarios'));
+        if(auth()->user()->role == 'DEVELOPER'){
+            $usuarios =  User::all();
+            return view('pages.usuario.index', compact('usuarios'));
+        }
+        else{
+            $usuarios =
+            User::all()
+            ->where('role', '<>','DEVELOPER');
+            return view('pages.usuario.index', compact('usuarios'));
+        }
     }
 
     /**
