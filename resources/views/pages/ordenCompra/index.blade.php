@@ -187,6 +187,10 @@
 		    <!-- Inicio Validacion de ROLES -->
 		      <td style="width:140px;">
 				
+				<a href="/ordenCompra/{{$ordenCompra->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
+    			<i class="far fa-eye"></i>			      		
+    		</a>
+
 				<?php
 				if( ($ordenCompra->estado=='EN PROCESO')
 						&&
@@ -196,6 +200,9 @@
 				 		)
 					){
 				?>
+					<a href="/ordenCompra/{{$ordenCompra->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
+      			<i class="fas fa-edit"></i>			      		
+	      	</a>
 
 					<?php
 					if($ordenCompra->estatus == 'ACTIVO'){
@@ -203,7 +210,7 @@
 		      	<form action="/ordenCompra/{{$ordenCompra->id}}" method="POST" style="display: inline;">
 				    @method('DELETE')
 				    @csrf					    
-				    <button type="submit" name="Eliminar" role="button" class="btn btn-outline-warning btn-sm" data-toggle="tooltip" data-placement="top" title="Pausar"><i class="fa fa-pause"></i></button>
+				    <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Pausar"><i class="fa fa-pause"></i></button>
 						</form>
 					<?php
 					}
@@ -221,7 +228,7 @@
 		      	<form action="/ordenCompra/{{$ordenCompra->id}}" method="POST" style="display: inline;">
 				    @method('DELETE')
 				    @csrf					    
-				    <button type="submit" name="Eliminar" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Activar"><i class="fa fa-play"></i></button>
+				    <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Activar"><i class="fa fa-play"></i></button>
 						</form>
 					<?php
 					}

@@ -132,7 +132,8 @@ class OrdenCompraController extends Controller
      */
     public function show($id)
     {
-        return back()->with('Saved', ' Informacion');
+        $OrdenCompra = OrdenCompra::find($id);
+        return view('pages.ordenCompra.show', compact('OrdenCompra'));
     }
 
     /**
@@ -143,7 +144,8 @@ class OrdenCompraController extends Controller
      */
     public function edit($id)
     {
-        //
+      $OrdenCompra = OrdenCompra::find($id);
+      return view('pages.ordenCompra.edit', compact('OrdenCompra'));
     }
 
     /**
@@ -155,7 +157,15 @@ class OrdenCompraController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+       try{
+          $OrdenCompra = OrdenCompra::find($id);
+          $OrdenCompra->fill($request->all());
+          $OrdenCompra->save();
+          return redirect()->route('ordenCompra.index')->with('Updated', ' Informacion');
+        }
+        catch(\Illuminate\Database\QueryException $e){
+            return back()->with('Error', ' Error');
+        }
     }
 
     /**
