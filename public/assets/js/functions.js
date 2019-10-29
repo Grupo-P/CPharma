@@ -24,7 +24,7 @@ function autocompletado(inp, inpId, arr) {
       this.parentNode.appendChild(a);
       /*for each item in the array...*/
       var cont = conteo();
-      if (cont > 3) {
+      if (cont >= 3) {
 
       for (i = 0; i < arr.length; i++) {
         /*check if the item starts with the same letters as the text field value:*/
@@ -143,7 +143,7 @@ function autocompletadoCB(inp, inpId, arr) {
       this.parentNode.appendChild(a);
       /*for each item in the array...*/
       var cont = conteoCB();
-      if (cont > 6) {
+      if (cont >= 6) {
 
       for (i = 0; i < arr.length; i++) {
         /*check if the item starts with the same letters as the text field value:*/
