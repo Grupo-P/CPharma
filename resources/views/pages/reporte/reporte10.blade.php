@@ -586,7 +586,7 @@
       RETORNO: Un String con las instrucciones de la consulta
       AUTOR: Ing. Manuel Henriquez
    */
-  function R10Q_Proveedores($IdArticulo) {
+  function R10Q_Proveedores($IdArticulo,$IdFactura) {
     $sql = "
       SELECT 
       GenPersona.Nombre
@@ -595,6 +595,7 @@
       INNER JOIN ComProveedor ON ComProveedor.Id = ComFactura.ComProveedorId
       INNER JOIN GenPersona ON GenPersona.Id = ComProveedor.GenPersonaId
       WHERE ComFacturaDetalle.InvArticuloId = '$IdArticulo'
+      AND (ComFactura.Id = '$IdFactura')
       ORDER BY ComFactura.FechaDocumento DESC
     ";
     return $sql;
