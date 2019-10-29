@@ -26,9 +26,9 @@ class OrdenCompraController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {
-        $OrdenCompra =  OrdenCompra::all();
-        return view('pages.ordenCompra.index', compact('OrdenCompra'));
+    { 
+      $OrdenCompra =  OrdenCompra::all();
+      return view('pages.ordenCompra.index', compact('OrdenCompra'));
     }
 
     /**
@@ -51,59 +51,73 @@ class OrdenCompraController extends Controller
     public function store(Request $request)
     {
       try{
-        $OrdenCompra = new OrdenCompra();
 
-        $OrdenCompra->proveedor = $request->input('proveedor');
-        $OrdenCompra->fecha_estimada_despacho = $request->input('fecha_estimada_despacho');
-        $OrdenCompra->moneda = $request->input('moneda');
-        $OrdenCompra->observacion = $request->input('observacion');
-        $OrdenCompra->sede_origen = $request->input('SedeOrigen');
-        $OrdenCompra->user = auth()->user()->name;
-        $OrdenCompra->estatus = 'ACTIVO';
-        $OrdenCompra->estado = 'EN PROCESO';
+        $usuario = auth()->user()->name;
+        $OrdenActiva = 
+        OrdenCompra::orderBy('id','asc')
+        ->where('user',$usuario)
+        ->where('estatus','ACTIVO')
+        ->get();
 
-      /*INICIO DE SEDE DESTINO*/
-        if(($request->input('CDD'))=='SI'){
-          $OrdenCompra->sede_destino = 'CENTRO DE DISTRIBUCION';
+        if(!empty($OrdenActiva[0]->codigo)) {
+          return redirect()->route('ordenCompra.index')->with('OrdenActiva', ''.$OrdenActiva[0]->codigo);
         }
-        else{
-          $OrdenCompra->sede_destino = $request->input('SedeDestino');
-        }
-      /*FIN DE SEDE DESTINO*/
+        else if(empty($OrdenActiva[0]->codigo)) {
+         
+          $OrdenCompra = new OrdenCompra();
 
-      /*INICIO DE CONDICION*/
-        if(($request->input('condicion'))=='CREDITO'){
-          $dias_credito = intval($request->input('dias_credito'));
-        }
-        else{
-          $dias_credito = 0;
-        }
-        $OrdenCompra->condicion_crediticia = $request->input('condicion');
-        $OrdenCompra->dias_credito = $dias_credito;
-      /*FIN DE CONDICION*/
+          $OrdenCompra->proveedor = $request->input('proveedor');
+          $OrdenCompra->fecha_estimada_despacho = $request->input('fecha_estimada_despacho');
+          $OrdenCompra->moneda = $request->input('moneda');
+          $OrdenCompra->observacion = $request->input('observacion');
+          $OrdenCompra->sede_origen = $request->input('SedeOrigen');
+          $OrdenCompra->user = auth()->user()->name;
+          $OrdenCompra->estatus = 'ACTIVO';
+          $OrdenCompra->estado = 'EN PROCESO';
 
-      /*INICIO DE ASIGNACION DE CODIGO*/
-        $UltimaOrden = 
-        OrdenCompra::orderBy('id','desc')
-        ->select('id')
-        ->take(1)->get();
+        /*INICIO DE SEDE DESTINO*/
+          if(($request->input('CDD'))=='SI'){
+            $OrdenCompra->sede_destino = 'CENTRO DE DISTRIBUCION';
+          }
+          else{
+            $OrdenCompra->sede_destino = $request->input('SedeDestino');
+          }
+        /*FIN DE SEDE DESTINO*/
 
-        if( (!empty($UltimaOrden[0])) &&
-            ((($UltimaOrden[0]['id'])!=0) 
-            || (($UltimaOrden[0]['id'])!=NULL)
-            || (($UltimaOrden[0]['id'])!=''))
-          ) {
-          $UltimoId = $UltimaOrden[0]['id'];
+        /*INICIO DE CONDICION*/
+          if(($request->input('condicion'))=='CREDITO'){
+            $dias_credito = intval($request->input('dias_credito'));
+          }
+          else{
+            $dias_credito = 0;
+          }
+          $OrdenCompra->condicion_crediticia = $request->input('condicion');
+          $OrdenCompra->dias_credito = $dias_credito;
+        /*FIN DE CONDICION*/
+
+        /*INICIO DE ASIGNACION DE CODIGO*/
+          $UltimaOrden = 
+          OrdenCompra::orderBy('id','desc')
+          ->select('id')
+          ->take(1)->get();
+
+          if( (!empty($UltimaOrden[0])) &&
+              ((($UltimaOrden[0]['id'])!=0) 
+              || (($UltimaOrden[0]['id'])!=NULL)
+              || (($UltimaOrden[0]['id'])!=''))
+            ) {
+            $UltimoId = $UltimaOrden[0]['id'];
+          }
+          else{
+            $UltimoId = 0;
+          }
+          $UltimoId++;
+          $SiglasOrigen = $request->input('SiglasOrigen');
+          $OrdenCompra->codigo =  ''.$SiglasOrigen.''.$UltimoId;
+        /*FIN DE ASIGNACION DE CODIGO*/
+          $OrdenCompra->save();
+          return redirect()->route('ordenCompra.index')->with('Saved', ''.$OrdenCompra->codigo);
         }
-        else{
-          $UltimoId = 0;
-        }
-        $UltimoId++;
-        $SiglasOrigen = $request->input('SiglasOrigen');
-        $OrdenCompra->codigo =  ''.$SiglasOrigen.''.$UltimoId;
-      /*FIN DE ASIGNACION DE CODIGO*/
-        $OrdenCompra->save();
-        return redirect()->route('ordenCompra.index')->with('Saved', ''.$OrdenCompra->codigo);
       }
       catch(\Illuminate\Database\QueryException $e){
         return back()->with('Error', 'Error');
@@ -152,6 +166,32 @@ class OrdenCompraController extends Controller
      */
     public function destroy($id)
     {
-        //
+      $OrdenCompra = OrdenCompra::find($id);
+
+      if($OrdenCompra->estatus == 'ACTIVO'){
+        $OrdenCompra->estatus = 'EN ESPERA';
+      }   
+      else if($OrdenCompra->estatus == 'EN ESPERA'){
+        $OrdenCompra->estatus = 'IGNORAR';
+      }
+      else if($OrdenCompra->estatus == 'IGNORAR'){
+
+        $usuario = auth()->user()->name;
+        $OrdenActiva = 
+        OrdenCompra::orderBy('id','asc')
+        ->where('user',$usuario)
+        ->where('estatus','ACTIVO')
+        ->get();
+
+        if(!empty($OrdenActiva[0]->codigo)) {
+          return redirect()->route('ordenCompra.index')->with('OrdenActiva', ''.$OrdenActiva[0]->codigo);
+        }
+        else if(empty($OrdenActiva[0]->codigo)) {
+          $OrdenCompra->estatus = 'ACTIVO';
+        }
+      }
+      $OrdenCompra->save();
+
+      return redirect()->route('ordenCompra.index')->with('Deleted', ' Informacion');
     }
 }

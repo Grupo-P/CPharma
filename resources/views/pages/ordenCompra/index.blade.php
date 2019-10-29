@@ -79,6 +79,28 @@
 		</div>
 	@endif
 
+	<!-- Modal OrdenActiva -->
+	@if (session('OrdenActiva'))
+		<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+		  <div class="modal-dialog modal-dialog-centered" role="document">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <h5 class="modal-title text-danger" id="exampleModalCenterTitle"><i class="fas fa-info text-danger"></i> Orden de compra</h5>
+		        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+		          <span aria-hidden="true">&times;</span>
+		        </button>
+		      </div>
+		      <div class="modal-body">
+		        <h4 class="h6">Ya usted posee una orden de compra activa, codigo: {{ session('OrdenActiva') }}</h4>
+		      </div>
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-outline-success" data-dismiss="modal">Aceptar</button>
+		      </div>
+		    </div>
+		  </div>
+		</div>
+	@endif
+
 	<h1 class="h5 text-info">
 		<i class="far fa-file-alt"></i>
 		Orden de compra
@@ -166,56 +188,48 @@
 		      <td style="width:140px;">
 				
 				<?php
-				if(Auth::user()->role == 'MASTER' || Auth::user()->role == 'DEVELOPER'){
+				if( ($ordenCompra->estado=='EN PROCESO')
+						&&
+						( ($ordenCompra->user==Auth::user()->name)
+					 		|| (Auth::user()->departamento == 'TECNOLOGIA')
+					 		|| (Auth::user()->departamento == 'GERENCIA')
+				 		)
+					){
 				?>
 
 					<?php
 					if($ordenCompra->estatus == 'ACTIVO'){
-					?>
-						<a href="/ordenCompra/{{$ordenCompra->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
-			      			<i class="far fa-eye"></i>			      		
-			      		</a>
-
-			      		<a href="/ordenCompra/{{$ordenCompra->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
-			      			<i class="fas fa-edit"></i>			      		
-				      	</a>
-				 					  
-				      	<form action="/ordenCompra/{{$ordenCompra->id}}" method="POST" style="display: inline;">
-						    @method('DELETE')
-						    @csrf					    
-						    <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Desincorporar"><i class="fa fa-reply"></i></button>
+					?>  
+		      	<form action="/ordenCompra/{{$ordenCompra->id}}" method="POST" style="display: inline;">
+				    @method('DELETE')
+				    @csrf					    
+				    <button type="submit" name="Eliminar" role="button" class="btn btn-outline-warning btn-sm" data-toggle="tooltip" data-placement="top" title="Pausar"><i class="fa fa-pause"></i></button>
 						</form>
 					<?php
 					}
-					else if($ordenCompra->estatus == 'INACTIVO'){
-					?>		
-			      	<form action="/ordenCompra/{{$ordenCompra->id}}" method="POST" style="display: inline;">
-					    @method('DELETE')
-					    @csrf					    
-					    <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Reincorporar"><i class="fa fa-share"></i></button>
-					</form>
+					else if($ordenCompra->estatus == 'EN ESPERA'){
+					?>  
+		      	<form action="/ordenCompra/{{$ordenCompra->id}}" method="POST" style="display: inline;">
+				    @method('DELETE')
+				    @csrf					    
+				    <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Ignorar"><i class="fa fa-square"></i></button>
+						</form>
 					<?php
-					}					
+					}
+					else if($ordenCompra->estatus == 'IGNORAR'){
+					?>  
+		      	<form action="/ordenCompra/{{$ordenCompra->id}}" method="POST" style="display: inline;">
+				    @method('DELETE')
+				    @csrf					    
+				    <button type="submit" name="Eliminar" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Activar"><i class="fa fa-play"></i></button>
+						</form>
+					<?php
+					}
 					?>
-				<?php	
-				} else if(Auth::user()->role == 'SUPERVISOR' || Auth::user()->role == 'ADMINISTRADOR' || Auth::user()->role == 'SUPERVISOR CAJA'){ 
-				?>
-					<a href="/ordenCompra/{{$ordenCompra->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
-		      			<i class="far fa-eye"></i>			      		
-		      		</a>
 
-		      		<a href="/ordenCompra/{{$ordenCompra->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
-		      			<i class="fas fa-edit"></i>
-	      			</a>
-				<?php
-				} else if(Auth::user()->role == 'USUARIO'){
-				?>
-					<a href="/ordenCompra/{{$ordenCompra->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
-		      			<i class="far fa-eye"></i>		      		
-		      		</a>		
 				<?php
 				}
-				?>				
+				?>						
 		     </td>
 		    <!-- Fin Validacion de ROLES -->
 		    </tr>
