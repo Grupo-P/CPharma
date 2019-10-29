@@ -144,6 +144,7 @@
 		      	<th scope="col" class="stickyCP">Condicion crediticia</th>
 		      	<th scope="col" class="stickyCP">Dias de credito</th>
 		      	<th scope="col" class="stickyCP">Estatus</th>
+		      	<th scope="col" class="stickyCP">Estado Actual</th>
 		      	<th scope="col" class="stickyCP">Operador</th>
 		      	<th scope="col" class="stickyCP">Monto real</th>
 		      	<th scope="col" class="stickyCP">Fecha de aprobacion</th>
@@ -177,6 +178,7 @@
 		      <td>{{$ordenCompra->condicion_crediticia}}</td>
 		      <td>{{$ordenCompra->dias_credito}}</td>
 		      <td>{{$ordenCompra->estado}}</td>
+		      <td>{{$ordenCompra->estatus}}</td>
 		      <td>{{$ordenCompra->user}}</td>
 		      <td>{{$ordenCompra->montoTotalReal}}</td>
 		      <td>{{$ordenCompra->fecha_aprobacion}}</td>
@@ -215,15 +217,6 @@
 					<?php
 					}
 					else if($ordenCompra->estatus == 'EN ESPERA'){
-					?>  
-		      	<form action="/ordenCompra/{{$ordenCompra->id}}" method="POST" style="display: inline;">
-				    @method('DELETE')
-				    @csrf					    
-				    <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Ignorar"><i class="fa fa-square"></i></button>
-						</form>
-					<?php
-					}
-					else if($ordenCompra->estatus == 'IGNORAR'){
 					?>  
 		      	<form action="/ordenCompra/{{$ordenCompra->id}}" method="POST" style="display: inline;">
 				    @method('DELETE')

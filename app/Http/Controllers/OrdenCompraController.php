@@ -38,8 +38,8 @@ class OrdenCompraController extends Controller
      */
     public function create()
     {
-       $sedes = Sede::pluck('razon_social','id');
-       return view('pages.ordenCompra.create', compact('sedes'));
+      $sedes = Sede::pluck('razon_social','id');
+      return view('pages.ordenCompra.create', compact('sedes'));
     }
 
     /**
@@ -182,9 +182,6 @@ class OrdenCompraController extends Controller
         $OrdenCompra->estatus = 'EN ESPERA';
       }   
       else if($OrdenCompra->estatus == 'EN ESPERA'){
-        $OrdenCompra->estatus = 'IGNORAR';
-      }
-      else if($OrdenCompra->estatus == 'IGNORAR'){
 
         $usuario = auth()->user()->name;
         $OrdenActiva = 
