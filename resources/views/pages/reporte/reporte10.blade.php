@@ -276,7 +276,7 @@
             <td align="center">Compra</td>
           ';
 
-          $row3 = sqlsrv_fetch_array($result2,SQLSRV_FETCH_ASSOC);
+          $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
 
           echo '
             <td align="center">'.FG_Limpiar_Texto($row3["Nombre"]).'</td>
