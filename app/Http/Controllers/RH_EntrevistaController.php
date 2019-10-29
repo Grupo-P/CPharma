@@ -13,7 +13,7 @@ class RH_EntrevistaController extends Controller
      */
     public function index()
     {
-        //
+        return "prueba";
     }
 
     /**
