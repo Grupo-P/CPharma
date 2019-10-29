@@ -15,6 +15,12 @@ class CreateRhEntrevistasTable extends Migration
     {
         Schema::create('rh_entrevistas', function (Blueprint $table) {
             $table->increments('id');
+            $table->date('fecha_entrevista');
+            $table->string('entrevistadores');
+            $table->string('lugar');
+            $table->string('observaciones');
+            $table->string('estatus');
+            $table->string('user');
             $table->timestamps();
         });
     }
