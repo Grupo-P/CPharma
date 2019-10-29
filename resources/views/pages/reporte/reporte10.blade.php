@@ -261,9 +261,6 @@
       $sql2 = R10Q_Lote_Analitico($IdArticulo);
       $result2 = sqlsrv_query($conn,$sql2);
 
-      $sql3 = R10Q_Proveedores($IdArticulo);
-      $result3 = sqlsrv_query($conn,$sql3);
-
       while($row2 = sqlsrv_fetch_array($result2,SQLSRV_FETCH_ASSOC)) {
         $FechaVariable = $row2["FechaLote"]->format("Y-m-d");
         $PrecioBruto = $row2["M_PrecioCompraBruto"];
@@ -276,6 +273,8 @@
             <td align="center">Compra</td>
           ';
 
+          $sql3 = R10Q_Proveedores($IdArticulo,$row2["IdFactura"]);
+          $result3 = sqlsrv_query($conn,$sql3);
           $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
 
           echo '
