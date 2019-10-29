@@ -2,8 +2,7 @@
 	<span>CPharma v.4.7 © 2018 - <?php echo''.date('Y'); ?> Copyright Grupo P</span>
 	<br>
   Developed by
-	<a href="https://www.instagram.com/covacode/" target="blank" class="text-info CP-Links-No-Style">Sergio Cova</a>
-  ,
+	<a href="https://www.instagram.com/covacode/" target="blank" class="text-info CP-Links-No-Style">Sergio Cova</a>,
   <a href="https://api.whatsapp.com/send?phone=584246827377&text=&source=&data=" target="blank" class="text-info CP-Links-No-Style">Manuel Henriquez</a>
   and 
   <a href="#" class="text-info CP-Links-No-Style">Rubmary Vielma</a>
