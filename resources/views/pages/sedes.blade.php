@@ -7,7 +7,7 @@
 @section('content')
 
 	<?php
-		include(app_path().'\functions\config.php'); 
+		include(app_path().'\functions\config.php');
 		include(app_path().'\functions\Querys.php');
 		include(app_path().'\functions\funciones.php');
 		$SedeConnection = MiUbicacion();
@@ -546,7 +546,7 @@
 		  	<div class="card-footer bg-transparent border-success text-right">
 		  		<form action="/reporte/" style="display: inline;">
 				    @csrf
-				    <input id="SEDE" name="SEDE" type="hidden" value="GPFLL">
+				    <input id="SEDE" name="SEDE" type="hidden" value="FTNFLL">
 				    <button type="submit" name="Reporte" role="button" class="btn btn-outline-success btn-sm"></i>Ver reportes</button>
 					</form>
 	  		</div>
@@ -562,7 +562,7 @@
 		  	<div class="card-footer bg-transparent border-info text-right">
 		  		<form action="/reporte/" style="display: inline;">
 				    @csrf
-				    <input id="SEDE" name="SEDE" type="hidden" value="GPFAU">
+				    <input id="SEDE" name="SEDE" type="hidden" value="FTNFAU">
 				    <button type="submit" name="Reporte" role="button" class="btn btn-outline-info btn-sm"></i>Ver reportes</button>
 					</form>
 		  	</div>
@@ -586,7 +586,7 @@
 		  	<div class="card-footer bg-transparent border-danger text-right">
 		  		<form action="/reporte/" style="display: inline;">
 				    @csrf
-				    <input id="SEDE" name="SEDE" type="hidden" value="GPFTN">  
+				    <input id="SEDE" name="SEDE" type="hidden" value="FLLFTN">  
 				    <button type="submit" name="Reporte" role="button" class="btn btn-outline-danger btn-sm"></i>Ver reportes</button>
 					</form>
 		  	</div>
@@ -602,7 +602,7 @@
 		  	<div class="card-footer bg-transparent border-info text-right">
 		  		<form action="/reporte/" style="display: inline;">
 				    @csrf
-				    <input id="SEDE" name="SEDE" type="hidden" value="GPFAU">
+				    <input id="SEDE" name="SEDE" type="hidden" value="FLLFAU">
 				    <button type="submit" name="Reporte" role="button" class="btn btn-outline-info btn-sm"></i>Ver reportes</button>
 					</form>
 		  	</div>
@@ -626,7 +626,7 @@
 		  	<div class="card-footer bg-transparent border-danger text-right">
 		  		<form action="/reporte/" style="display: inline;">
 				    @csrf
-				    <input id="SEDE" name="SEDE" type="hidden" value="GPFTN">  
+				    <input id="SEDE" name="SEDE" type="hidden" value="FAUFTN">  
 				    <button type="submit" name="Reporte" role="button" class="btn btn-outline-danger btn-sm"></i>Ver reportes</button>
 					</form>
 		  	</div>
@@ -642,7 +642,7 @@
 		  	<div class="card-footer bg-transparent border-success text-right">
 		  		<form action="/reporte/" style="display: inline;">
 				    @csrf
-				    <input id="SEDE" name="SEDE" type="hidden" value="GPFLL">
+				    <input id="SEDE" name="SEDE" type="hidden" value="FAUFLL">
 				    <button type="submit" name="Reporte" role="button" class="btn btn-outline-success btn-sm"></i>Ver reportes</button>
 					</form>
 	  		</div>
