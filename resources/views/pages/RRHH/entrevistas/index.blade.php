@@ -42,7 +42,7 @@
             </button>
           </div>
           <div class="modal-body">
-            <h4 class="h6"> Prueba modificada con exito</h4>
+            <h4 class="h6"> jgjg </h4>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-outline-success" data-dismiss="modal">Aceptar</button>
@@ -51,8 +51,5 @@
       </div>
     </div>
   @endif
-
- 
-
 
 @endsection

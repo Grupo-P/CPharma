@@ -30,7 +30,6 @@ class RH_EntrevistaController extends Controller
         return view('pages.RRHH.entrevistas.index', compact('entrevistas'));
     }
 
-    
 
 
     /**
@@ -40,7 +39,7 @@ class RH_EntrevistaController extends Controller
      */
     public function create()
     {
-    
+     return view('pages.RRHH.entrevistas.create');
     }
 
     /**

@@ -267,6 +267,13 @@
           Pruebas<span class="sr-only">(current)</span>
         </a>
       </li>
+      <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="/entrevistas">
+          <span data-feather="home"></span>
+          <i class="fas fa-tasks"></i>
+          Entrevistas<span class="sr-only">(current)</span>
+        </a>
+      </li>
     </div>
   </div>
 <?php
@@ -625,6 +632,16 @@
           Auditoria<span class="sr-only">(current)</span>
         </a>
       </li>
+
+      <!-- Borrar esta seccion -->
+      <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="/entrevistas">
+          <span data-feather="home"></span>
+        <i class="fas fa-users"></i>
+          Entrevistas<span class="sr-only">(current)</span>
+        </a>
+      </li>
+      <!-- Borrar esta seccion -->
     </div>
   </div>
 <?php
