@@ -15,6 +15,7 @@ class CreateRhCandidatosEntrevistasTable extends Migration {
             $table->increments('id');
             $table->unsignedInteger('rh_candidatos_id');
             $table->unsignedInteger('rh_entrevistas_id');
+            $table->string('user');
             $table->timestamps();
 
             $table->foreign('rh_candidatos_id')
