@@ -142,6 +142,7 @@
 		    <tr>
 		      	<th scope="col" class="stickyCP">#</th>
 		      	<th scope="col" class="stickyCP">Orden compra</th>
+		      	<th scope="col" class="stickyCP">Sede Destino</th>
 		      	<th scope="col" class="stickyCP">Proveedor</th>
 		      	<th scope="col" class="stickyCP">Fecha de la orden</th>
 		      	<th scope="col" class="stickyCP">Fecha estimada de despacho</th>
@@ -176,6 +177,7 @@
 		    <tr>
 		      <th>{{$ordenCompra->id}}</th>
 		      <td>{{$ordenCompra->codigo}}</td>
+		       <td>{{$ordenCompra->sede_destino}}</td>
 		      <td>{{$ordenCompra->proveedor}}</td>
 		      <td>{{$ordenCompra->created_at}}</td>
 		      <td>{{$ordenCompra->fecha_estimada_despacho}}</td>
