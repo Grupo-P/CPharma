@@ -54,7 +54,7 @@
         <tbody>
           <tr>
             <th scope="row">{!! Form::label('nombres', 'Nombres') !!}</th>
-            <td>{!! Form::text('nombres', null, [ 'class' => 'form-control', 'placeholder' => 'Maria Raquel', 'autofocus', 'pattern' => '^[A-Za-zñÑáéíóúÁÉÍÓÚ]+\s?[A-Za-zñÑáéíóúÁÉÍÓÚ]+$', 'title' => 'El nombre solo debe contener letras', 'required']) !!}</td>
+            <td>{!! Form::text('nombres', null, [ 'class' => 'form-control', 'placeholder' => 'Maria Raquel', 'autofocus', 'pattern' => '^[A-Za-zñÑáéíóúÁÉÍÓÚ]+\s?[A-Za-zñÑáéíóúÁÉÍÓÚ]+\s?[A-Za-zñÑáéíóúÁÉÍÓÚ]+$', 'title' => 'El nombre solo debe contener letras', 'required']) !!}</td>
           </tr>
           <tr>
               <th scope="row">{!! Form::label('apellidos', 'Apellidos') !!}</th>
