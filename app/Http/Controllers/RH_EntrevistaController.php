@@ -24,13 +24,13 @@ class RH_EntrevistaController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    
-    {
-      $entrevistas =  RH_Entrevista::all();
+    public function index(){
+
+        $entrevistas = RH_Entrevista::all();
         return view('pages.RRHH.entrevistas.index', compact('entrevistas'));
     }
-    }
+
+    
 
 
     /**
@@ -40,7 +40,7 @@ class RH_EntrevistaController extends Controller
      */
     public function create()
     {
-        //
+    
     }
 
     /**
