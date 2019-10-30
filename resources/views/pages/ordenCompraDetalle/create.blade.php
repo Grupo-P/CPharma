@@ -93,6 +93,14 @@
                 if($OrdenCompra->sede_destino=='CENTRO DE DISTRIBUCION'){  
             ?>
             <tr>
+                <th scope="row">{!! Form::label('total_unidades', 'Total de Unidades') !!}</th>
+                <td>{!! Form::text('totalUnidades', null, [ 'class' => 'form-control', 'autofocus', 'required', 'id' => 'totalUnidades', 'onblur' =>'disponible()']) !!}</td>
+            </tr>
+            <tr>
+                <th scope="row">{!! Form::label('disponibles', 'Unidades Disponibles') !!}</th>
+                <td>{!! Form::text('unidadesDisponibles', null, [ 'class' => 'form-control', 'autofocus', 'required', 'id' => 'unidadesDisponibles', 'disabled'=>'disabled']) !!}</td>
+            </tr>
+            <tr>
                 <th scope="row">{!! Form::label('sede1', 'Cantidad para FTN') !!}</th>
                 <td>{!! Form::number('sede1', null, [ 'class' => 'form-control', 'autofocus', 'required', 'onblur' =>'sumaTotal()', 'id' => 'sede1']) !!}</td>
             </tr>
@@ -108,10 +116,7 @@
                 <th scope="row">{!! Form::label('sede4', 'Cantidad para MC') !!}</th>
                 <td>{!! Form::number('sede4', null, [ 'class' => 'form-control', 'autofocus', 'required', 'onblur' =>'sumaTotal()', 'id' => 'sede4']) !!}</td>
             </tr>
-            <tr>
-                <th scope="row">{!! Form::label('total_unidades', 'Total de Unidades') !!}</th>
-                <td>{!! Form::text('totalUnidades', null, [ 'class' => 'form-control', 'autofocus', 'required', 'id' => 'totalUnidades', 'disabled' => 'disabled']) !!}</td>
-            </tr>
+            
             <?php
             }
             else if($OrdenCompra->sede_destino!='CENTRO DE DISTRIBUCION'){
@@ -131,7 +136,7 @@
 
         </tbody>
         </table>
-        {!! Form::submit('Guardar', ['class' => 'btn btn-outline-success btn-md']) !!}
+        {!! Form::submit('Guardar', ['class' => 'btn btn-outline-success btn-md', 'id'=>'guardar']) !!}
     </fieldset>
     {!! Form::close()!!} 
     <script>
@@ -140,6 +145,16 @@
         });
         $('#exampleModalCenter').modal('show')
 
+        function disponible(){
+            totalUnidades = parseInt(document.getElementById('totalUnidades').value);
+            document.getElementById('unidadesDisponibles').value = parseInt(totalUnidades);
+
+            document.getElementById('sede1').value = 0;
+            document.getElementById('sede2').value = 0;
+            document.getElementById('sede3').value = 0;
+            document.getElementById('sede4').value = 0;
+        }
+
         function sumaTotal(){
             total = 0;
             sede1 = parseInt(document.getElementById('sede1').value);
@@ -147,13 +162,17 @@
             sede3 = parseInt(document.getElementById('sede3').value);
             sede4 = parseInt(document.getElementById('sede4').value);
 
+            totalUnidades = document.getElementById('totalUnidades').value;
+
             var sub1 = isNaN(sede1) ? 0 : sede1;
             var sub2 = isNaN(sede2) ? 0 : sede2;
             var sub3 = isNaN(sede3) ? 0 : sede3;
             var sub4 = isNaN(sede4) ? 0 : sede4;
 
             total = sub1+sub2+sub3+sub4;
-            document.getElementById('totalUnidades').value = parseInt(total);
+
+            totalUnidades = totalUnidades-total;
+            document.getElementById('unidadesDisponibles').value = totalUnidades;
         }
 
         function costoTotal(){
@@ -163,5 +182,16 @@
             CostoTotal = CostoUnitario*TotalUnidades;
             document.getElementById('CostoTotal').value = parseInt(CostoTotal);
         }
+
+        document.getElementById("guardar").addEventListener("click", function(event){
+          event.preventDefault();
+
+          if( (document.getElementById('unidadesDisponibles').value)!= 0 ){
+            alert('Unidades Disponibles Aun');
+          }
+          else{
+            alert('Cero Diponibilidad');
+          }
+        });
     </script>
 @endsection
