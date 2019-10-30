@@ -50,7 +50,14 @@ class RH_EntrevistaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $entrevistas = new RH_Entrevista();
+        $entrevistas->fecha_entrevista = $request->input('fecha_entrevista');
+        $entrevistas->entrevistadores = $request->input('entrevistadores');
+        $entrevistas->lugar = $request->input('lugar');
+        $entrevistas->observaciones = $request->input('observaciones');
+        $entrevistas->estatus = 'ACTIVO';
+        $entrevistas->user = auth()->user()->name;
+        $entrevistas->save();
     }
 
     /**

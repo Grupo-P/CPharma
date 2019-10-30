@@ -68,7 +68,7 @@
             </tr>
              <tr>
                 <th scope="row">{!! Form::label('observaciones', 'Observaciones') !!}</th>
-                <td>{!! Form::textarea('experiencia_laboral', null, [ 'class' => 'form-control', 'placeholder' => 'Detalles del entrevistado', 'rows' => '3']) !!}</td>
+                <td>{!! Form::textarea('experiencia_laboral', null, [ 'class' => 'form-control', 'placeholder' => 'Detalles del entrevistadores', 'rows' => '3']) !!}</td>
             </tr>
         </tbody>
       </table>
