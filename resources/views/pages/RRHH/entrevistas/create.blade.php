@@ -32,16 +32,15 @@
     </div>
   @endif
 
-  <h1 class="h5 text-info"><i class="fas fa-plus"></i>&nbsp;Agregar pruebas</h1>
+  <h1 class="h5 text-info"><i class="fas fa-users"></i></i>&nbsp;Agregar Entrevistas</h1>
   <hr class="row align-items-start col-12">
 
-  <form action="/pruebas/" method="POST" style="display: inline;">  
+  <form action="/entrevistas/" method="POST" style="display: inline;">  
     @csrf
     <button type="submit" name="Regresar" role="button" class="btn btn-outline-info btn-sm"data-placement="top">
       <i class="fa fa-reply">&nbsp;Regresar</i>
     </button>
   </form>
-
   <br/><br/>
 
   {!! Form::open(['route' => 'entrevistas.store', 'method' => 'POST']) !!}
@@ -106,4 +105,6 @@
     });
     $('#exampleModalCenter').modal('show');
   </script>
+
 @endsection
+
