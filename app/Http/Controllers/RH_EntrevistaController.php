@@ -58,6 +58,8 @@ class RH_EntrevistaController extends Controller
         $entrevistas->estatus = 'ACTIVO';
         $entrevistas->user = auth()->user()->name;
         $entrevistas->save();
+
+        return redirect()->route('entrevistas.index')->with('Saved', ' Informacion'); 
     }
 
     /**

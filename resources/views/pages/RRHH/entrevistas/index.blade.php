@@ -4,6 +4,12 @@
   Entrevistas
 @endsection
 
+@section('scriptsHead')
+  <style>
+    th, td {text-align: center;}
+  </style>
+@endsection
+
 @section('content')
   <!-- Modal Guardar -->
   @if(session('Saved'))
@@ -142,12 +148,12 @@
 <tbody>
     @foreach($entrevistas as $entrevista)
         <tr>
-          <th>{{$entrevistas->id}}</th>
-          <td>{{$entrevistas->fecha_entrevista}}</td>
-          <td>{{$entrevistas->entrevistadores}}</td>
-          <td>{{$entrevistas->lugar}}</td>
-          <td>{{$entrevistas->observaciones}}</td>
-          <td>{{$prueba->estatus}}</td>
+          <th>{{$entrevista->id}}</th>
+          <td>{{$entrevista->fecha_entrevista}}</td>
+          <td>{{$entrevista->entrevistadores}}</td>
+          <td>{{$entrevista->lugar}}</td>
+          <td>{{$entrevista->estatus}}</td>
+          
         <!-- Inicio Validacion de ROLES -->
           <td style="width:140px;">
         
@@ -156,26 +162,26 @@
         ?>
 
           <?php
-          if($prueba->estatus == 'ACTIVO'){
+          if($entrevista->estatus == 'ACTIVO'){
           ?>
-            <a href="/entrevistas/{{$entrevistas->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
+            <a href="/entrevistas/{{$entrevista->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
                   <i class="far fa-eye"></i>                
                 </a>
 
-                <a href="/entrevistas/{{$entrevistas->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
+                <a href="/entrevistas/{{$entrevista->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
                   <i class="fas fa-edit"></i>               
                 </a>
                     
-                <form action="/entrevistas/{{$entrevistas->id}}" method="POST" style="display: inline;">
+                <form action="/entrevistas/{{$entrevista->id}}" method="POST" style="display: inline;">
                 @method('DELETE')
                 @csrf             
                 <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Desincorporar"><i class="fa fa-reply"></i></button>
             </form>
           <?php
           }
-          else if($entrevistas->estatus == 'INACTIVO'){
+          else if($entrevista->estatus == 'INACTIVO'){
           ?>    
-              <form action="/entrevistas/{{$entrevistas->id}}" method="POST" style="display: inline;">
+              <form action="/entrevistas/{{$entrevista->id}}" method="POST" style="display: inline;">
               @method('DELETE')
               @csrf             
               <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Reincorporar"><i class="fa fa-share"></i></button>
@@ -186,17 +192,17 @@
         <?php 
         } else if(Auth::user()->role == 'ANALISTA'){
         ?>
-          <a href="/entrevistas/{{$entrevistas->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
+          <a href="/entrevistas/{{$entrevista->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
                 <i class="far fa-eye"></i>                
               </a>
 
-              <a href="/entrevistas/{{$entrevistas->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
+              <a href="/entrevistas/{{$entrevista->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
                 <i class="fas fa-edit"></i>
               </a>
         <?php
         } else if(Auth::user()->role == 'USUARIO'){
         ?>
-          <a href="/entrevistas/{{$entrevistas->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
+          <a href="/entrevistas/{{$entrevista->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
                 <i class="far fa-eye"></i>                
               </a>    
         <?php

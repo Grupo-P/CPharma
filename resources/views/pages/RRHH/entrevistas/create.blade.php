@@ -56,7 +56,7 @@
         <tbody>
              <tr>
                 <th scope="row">{!! Form::label('fecha_entrevista', 'Fecha de Entrevistas') !!}</th>
-                <td>{!! Form::date('fecha', null, [ 'class' => 'form-control', 'placeholder' => '', 'autofocus']) !!}</td>
+                <td>{!! Form::date('fecha_entrevista', null, [ 'class' => 'form-control', 'autofocus']) !!}</td>
             </tr>
             <tr>
                 <th scope="row">{!! Form::label('entrevistadores', 'Nombre de Entrevistadores') !!}</th>
@@ -68,7 +68,7 @@
             </tr>
              <tr>
                 <th scope="row">{!! Form::label('observaciones', 'Observaciones') !!}</th>
-                <td>{!! Form::textarea('experiencia_laboral', null, [ 'class' => 'form-control', 'placeholder' => 'Detalles del entrevistadores', 'rows' => '3']) !!}</td>
+                <td>{!! Form::textarea('observaciones', null, [ 'class' => 'form-control', 'placeholder' => 'Detalles del entrevistadores', 'rows' => '3']) !!}</td>
             </tr>
         </tbody>
       </table>
