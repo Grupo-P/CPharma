@@ -2,7 +2,10 @@
 
 namespace compras\Http\Controllers;
 
+
 use Illuminate\Http\Request;
+use compras\RH_Entrevista;
+use compras\User;
 
 class RH_EntrevistaController extends Controller
 {
@@ -22,9 +25,13 @@ class RH_EntrevistaController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
+    
     {
-       //
+      $entrevistas =  RH_Entrevista::all();
+        return view('pages.RRHH.entrevistas.index', compact('entrevistas'));
     }
+    }
+
 
     /**
      * Show the form for creating a new resource.
