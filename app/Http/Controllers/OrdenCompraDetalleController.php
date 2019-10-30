@@ -4,7 +4,7 @@ namespace compras\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class OdenCompraDetalleController extends Controller
+class OrdenCompraDetalleController extends Controller
 {
     /**
      * Display a listing of the resource.
