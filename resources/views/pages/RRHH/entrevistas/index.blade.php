@@ -25,7 +25,7 @@
             </button>
           </div>
           <div class="modal-body">
-            <h4 class="h6"> Prueba almacenada con exito</h4>
+            <h4 class="h6"> Entrevista almacenada con éxito</h4>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-outline-success" data-dismiss="modal">Aceptar</button>
@@ -49,7 +49,7 @@
             </button>
           </div>
           <div class="modal-body">
-            <h4 class="h6"> Prueba modificada con exito</h4>
+            <h4 class="h6"> Entrevista modificada con éxito</h4>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-outline-success" data-dismiss="modal">Aceptar</button>
@@ -73,7 +73,7 @@
             </button>
           </div>
           <div class="modal-body">
-            <h4 class="h6">Prueba Reincorporada con Éxito </h4>
+            <h4 class="h6"> Entrevista Reincorporada con éxito </h4>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-outline-success" data-dismiss="modal">Aceptar</button>
@@ -95,7 +95,7 @@
             </button>
           </div>
           <div class="modal-body">
-            <h4 class="h6">Prueba Desincorporada con Éxito </h4>
+            <h4 class="h6"> Entrevista Desincorporada con Éxito </h4>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-outline-success" data-dismiss="modal">Aceptar</button>

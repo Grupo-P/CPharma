@@ -124,6 +124,22 @@ class RH_EntrevistaController extends Controller
      */
     public function destroy($id)
     {
-        //
+          $entrevistas = RH_Entrevista::find($id);
+
+        if($entrevistas->estatus == 'ACTIVO'){
+            $entrevistas->estatus = 'INACTIVO';
+        }
+        else if($entrevistas->estatus == 'INACTIVO'){
+            $entrevistas->estatus = 'ACTIVO';
+        }
+
+        $entrevistas->user = auth()->user()->name;        
+        $entrevistas->save();
+
+        if($entrevistas->estatus == 'ACTIVO'){
+            return redirect()->route('entrevistas.index')->with('Deleted', ' Informacion');
+        }
+
+        return redirect()->route('entrevistas.index')->with('Deleted1', ' Informacion');
     }
 }
