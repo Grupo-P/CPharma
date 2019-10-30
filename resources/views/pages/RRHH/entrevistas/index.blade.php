@@ -100,7 +100,7 @@
   @endif
 
   <h1 class="h5 text-info">
-   <i class="fas fa-users"></i>&nbsp;Pruebas
+  <i class="fas fa-users"></i> &nbsp;Pruebas
   </h1>
 
   <hr class="row align-items-start col-12">
@@ -108,7 +108,7 @@
   <table style="width:100%;">
     <tr>
       <td style="width:10%;" align="center">
-        <a href="/pruebas/create" role="button" class="btn btn-outline-info btn-sm" style="display: inline; text-align: left;">
+        <a href="/entrevistas/create" role="button" class="btn btn-outline-info btn-sm" style="display: inline; text-align: left;">
           <i class="fa fa-plus"></i>&nbsp;Agregar
         </a>
       </td>

@@ -56,8 +56,8 @@
         <tbody>
           <tr>
              <tr>
-                <th scope="row">{!! Form::label('tipo_prueba', 'Tipo de prueba') !!}</th>
-                <td>{!! Form::text('tipo_prueba', null, [ 'class' => 'form-control', 'placeholder' => 'Proyectiva', 'autofocus']) !!}</td>
+                <th scope="row">{!! Form::label('fecha', 'Fecha de Entrevistas') !!}</th>
+                <td>{!! Form::date('fecha', null, [ 'class' => 'form-control', 'placeholder' => '', 'autofocus']) !!}</td>
             </tr>
             <tr>
                 <th scope="row">{!! Form::label('nombre_prueba', 'Nombre de prueba') !!}</th>
