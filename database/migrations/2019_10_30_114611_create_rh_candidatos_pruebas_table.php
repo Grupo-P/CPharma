@@ -13,7 +13,12 @@ class CreateRhCandidatosPruebasTable extends Migration {
     public function up() {
         Schema::create('rh_candidatos_pruebas', function (Blueprint $table) {
             $table->increments('id');
+            $table->unsignedInteger('rh_candidatos_id');
+            $table->unsignedInteger('rh_pruebas_id');
             $table->timestamps();
+
+            $table->foreign('rh_candidatos_id')->references('id')->on('rh_candidatos');
+            $table->foreign('rh_pruebas_id')->references('id')->on('rh_pruebas');
         });
     }
 
