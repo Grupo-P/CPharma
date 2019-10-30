@@ -625,23 +625,6 @@
           Auditoria<span class="sr-only">(current)</span>
         </a>
       </li>
-
-      <!-- Borrar -->
-      <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="/candidatos">
-          <span data-feather="home"></span>
-          <i class="fas fa-user-check"></i>
-          Candidatos<span class="sr-only">(current)</span>
-        </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="/pruebas">
-          <span data-feather="home"></span>
-          <i class="fas fa-tasks"></i>
-          Pruebas<span class="sr-only">(current)</span>
-        </a>
-      </li>
-      <!-- Borrar -->
     </div>
   </div>
 <?php
