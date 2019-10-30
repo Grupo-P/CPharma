@@ -100,7 +100,7 @@
   @endif
 
   <h1 class="h5 text-info">
-  <i class="fas fa-users"></i> &nbsp;Pruebas
+  <i class="fas fa-users"></i> &nbsp;Entrevistas
   </h1>
 
   <hr class="row align-items-start col-12">
@@ -132,7 +132,7 @@
          <tr>
           <th scope="col" class="CP-sticky">#</th>
           <th scope="col" class="CP-sticky">Fecha</th>
-          <th scope="col" class="CP-sticky">Participantes</th>
+          <th scope="col" class="CP-sticky">Entrevistadores</th>
            <th scope="col" class="CP-sticky">Lugar</th>
           <th scope="col" class="CP-sticky">Estatus</th>
           <th scope="col" class="CP-sticky">Acciones</th>
@@ -143,8 +143,10 @@
     @foreach($entrevistas as $entrevista)
         <tr>
           <th>{{$entrevistas->id}}</th>
-          <td>{{$entrevistas->fecha}}</td>
+          <td>{{$entrevistas->fecha_entrevista}}</td>
+          <td>{{$entrevistas->entrevistadores}}</td>
           <td>{{$entrevistas->lugar}}</td>
+          <td>{{$entrevistas->observaciones}}</td>
           <td>{{$prueba->estatus}}</td>
         <!-- Inicio Validacion de ROLES -->
           <td style="width:140px;">

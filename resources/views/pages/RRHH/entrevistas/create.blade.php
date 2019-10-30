@@ -54,44 +54,22 @@
         </thead>
 
         <tbody>
-          <tr>
              <tr>
-                <th scope="row">{!! Form::label('fecha', 'Fecha de Entrevistas') !!}</th>
+                <th scope="row">{!! Form::label('fecha_entrevista', 'Fecha de Entrevistas') !!}</th>
                 <td>{!! Form::date('fecha', null, [ 'class' => 'form-control', 'placeholder' => '', 'autofocus']) !!}</td>
             </tr>
             <tr>
-                <th scope="row">{!! Form::label('nombre_prueba', 'Nombre de prueba') !!}</th>
-                <td>{!! Form::text('nombre_prueba', null, [ 'class' => 'form-control', 'placeholder' => 'Zavic']) !!}</td>
+                <th scope="row">{!! Form::label('entrevistadores', 'Nombre de Entrevistadores') !!}</th>
+                <td>{!! Form::text('entrevistadores', null, [ 'class' => 'form-control', 'placeholder' => 'Ashley Caldera']) !!}</td>
             </tr>
-          {{--   <th scope="row">{!! Form::label('tipo_prueba', 'Tipo de Prueba') !!}</th>
-            <td>
-              {!! Form::select('tipo_prueba', [
-                'Proyectiva' => 'Proyectiva', 
-                'Psicométrica' => 'Psicométrica',
-              
-              ], null, ['class' => 'form-control']) !!}
-            </td>
-          </tr>
-
-          <tr>
-            <th scope="row">{!! Form::label('nombre_prueba', 'Nombre de Prueba') !!}</th>
-             <td>
-              {!! Form::select('nombre_prueba', [
-                'Arbol/Casa/Persona' => 'Arbol/Casa/Persona',
-                'Figura humana' => 'Figura humana', 
-                'Figura humana bajo la luvia' => 'Figura humana bajo la lluvia',
-                'Wartegg' => 'Wartegg',
-                'Xando y Vels' => 'Xando y Vels',
-                'Kostick' => 'Kostick',
-                'Therman Merrill' => 'Therman Merrill',
-                '16PF' => '16PF',
-                'Purdue' => 'Purdue',
-                'Test Domino48' => 'Test Domino48',
-                'Zavic' => 'Zavic',
-              ], null, ['class' => 'form-control']) !!}
-            </td> 
-          </tr> --}}
-
+             <tr>
+                <th scope="row">{!! Form::label('lugar', 'Lugar de Entrevista') !!}</th>
+                <td>{!! Form::text('lugar', null, [ 'class' => 'form-control', 'placeholder' => 'Delicias']) !!}</td>
+            </tr>
+             <tr>
+                <th scope="row">{!! Form::label('observaciones', 'Observaciones') !!}</th>
+                <td>{!! Form::textarea('experiencia_laboral', null, [ 'class' => 'form-control', 'placeholder' => 'Detalles del entrevistado', 'rows' => '3']) !!}</td>
+            </tr>
         </tbody>
       </table>
 
