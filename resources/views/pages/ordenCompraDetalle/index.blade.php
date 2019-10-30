@@ -81,9 +81,8 @@
 	<table style="width:100%;">
 		<tr>
 				<td style="width:7%;">
-					<form action="/ordenCompra" method="PRE">
-			        @csrf                       
-			        <button type="submit" name="Regresar" role="button" class="btn btn-outline-success btn-sm"data-placement="top" style="display: inline;"><i class="fa fa-reply">&nbsp;Regresar</i></button>
+					<form action="/ordenCompra/" method="POST">                  
+			        <button type="submit" role="button" class="btn btn-outline-success btn-sm"data-placement="top" style="display: inline;"><i class="fa fa-reply">&nbsp;Regresar</i></button>
 			    </form>
 				</td>
         <td style="width:7%;">	        	
