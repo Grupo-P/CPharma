@@ -55,7 +55,7 @@
 
         <tbody>
              <tr>
-                <th scope="row">{!! Form::label('fecha_entrevista', 'Fecha de Entrevistas') !!}</th>
+                <th scope="row">{!! Form::label('fecha_entrevista', 'Fecha de Entrevista') !!}</th>
                 <td>{!! Form::date('fecha_entrevista', null, [ 'class' => 'form-control', 'autofocus']) !!}</td>
             </tr>
             <tr>
