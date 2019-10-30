@@ -12,7 +12,7 @@ class AddUserToRhCandidatosPruebasTable extends Migration {
      */
     public function up() {
         Schema::table('rh_candidatos_pruebas', function (Blueprint $table) {
-            //
+            $table->string('user')->after('rh_pruebas_id');
         });
     }
 
@@ -23,7 +23,7 @@ class AddUserToRhCandidatosPruebasTable extends Migration {
      */
     public function down() {
         Schema::table('rh_candidatos_pruebas', function (Blueprint $table) {
-            //
+            $table->dropColumn('user');
         });
     }
 }
