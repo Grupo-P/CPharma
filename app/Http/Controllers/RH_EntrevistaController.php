@@ -70,7 +70,9 @@ class RH_EntrevistaController extends Controller
      */
     public function show($id)
     {
-        //
+          $entrevistas = RH_Entrevista::find($id);
+
+        return view('pages.RRHH.entrevistas.show', compact('entrevistas'));
     }
 
     /**
