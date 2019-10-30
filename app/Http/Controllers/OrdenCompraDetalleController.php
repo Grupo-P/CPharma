@@ -26,8 +26,21 @@ class OrdenCompraDetalleController extends Controller
      */
     public function index()
     {
-        $ordenCompraDetalle =  OrdenCompraDetalle::all();
-        return view('pages.ordenCompraDetalle.index', compact('ordenCompraDetalle'));
+        $usuario = auth()->user()->name;
+        $OrdenActiva = 
+        OrdenCompra::orderBy('id','asc')
+        ->where('user',$usuario)
+        ->where('estatus','ACTIVO')
+        ->get();
+
+        if(!empty($OrdenActiva[0]->codigo)) {
+           $ordenCompraDetalle =  OrdenCompraDetalle::all()
+           ->where('codigo_orden',$OrdenActiva[0]->codigo);
+             return view('pages.ordenCompraDetalle.index', compact('ordenCompraDetalles'));
+        }
+        else if(empty($OrdenActiva[0]->codigo)) {
+             return back();
+        }
     }
 
     /**
