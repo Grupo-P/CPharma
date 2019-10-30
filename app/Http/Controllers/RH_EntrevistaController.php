@@ -124,7 +124,7 @@ class RH_EntrevistaController extends Controller
      */
     public function destroy($id)
     {
-          $entrevistas = RH_Entrevista::find($id);
+        $entrevistas = RH_Entrevista::find($id);
 
         if($entrevistas->estatus == 'ACTIVO'){
             $entrevistas->estatus = 'INACTIVO';
@@ -137,9 +137,11 @@ class RH_EntrevistaController extends Controller
         $entrevistas->save();
 
         if($entrevistas->estatus == 'ACTIVO'){
-            return redirect()->route('entrevistas.index')->with('Deleted', ' Informacion');
+            return redirect()->route('entrevistas.index')
+            ->with('Deleted', ' Informacion');
         }
 
-        return redirect()->route('entrevistas.index')->with('Deleted1', ' Informacion');
+        return redirect()->route('entrevistas.index')
+        ->with('Deleted1', ' Informacion');
     }
 }

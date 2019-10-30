@@ -30,7 +30,7 @@
 	  	<tbody>		
 		    <tr>
 		      	<th scope="row">Fecha de Entrevista</th>
-	    	  	<td>{{$entrevistas->fecha_entrevista}}</td>
+	    	  	<td>{{date('d-m-Y',strtotime($entrevistas->fecha_entrevista))}}</td>
 		    </tr>
 		    <tr>
 		      	<th scope="row">Nombre de Entrevistadores</th>

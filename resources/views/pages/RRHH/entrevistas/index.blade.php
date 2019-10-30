@@ -149,7 +149,7 @@
     @foreach($entrevistas as $entrevista)
         <tr>
           <th>{{$entrevista->id}}</th>
-          <td>{{$entrevista->fecha_entrevista}}</td>
+          <td>{{date('d-m-Y',strtotime($entrevista->fecha_entrevista))}}</td>
           <td>{{$entrevista->entrevistadores}}</td>
           <td>{{$entrevista->lugar}}</td>
           <td>{{$entrevista->estatus}}</td>
