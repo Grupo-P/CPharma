@@ -183,17 +183,17 @@
         <?php 
         } else if(Auth::user()->role == 'ANALISTA'){
         ?>
-          <a href="/prueba/{{$prueba->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
+          <a href="/pruebas/{{$prueba->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
                 <i class="far fa-eye"></i>                
               </a>
 
-              <a href="/prueba/{{$prueba->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
+              <a href="/pruebas/{{$prueba->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
                 <i class="fas fa-edit"></i>
               </a>
         <?php
         } else if(Auth::user()->role == 'USUARIO'){
         ?>
-          <a href="/prueba/{{$prueba->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
+          <a href="/pruebas/{{$prueba->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
                 <i class="far fa-eye"></i>                
               </a>    
         <?php
