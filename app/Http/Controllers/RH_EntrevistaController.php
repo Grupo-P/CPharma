@@ -83,7 +83,9 @@ class RH_EntrevistaController extends Controller
      */
     public function edit($id)
     {
-        //
+           $entrevistas = RH_Entrevista::find($id);
+
+        return view('pages.RRHH.entrevistas.edit', compact('entrevistas'));
     }
 
     /**
