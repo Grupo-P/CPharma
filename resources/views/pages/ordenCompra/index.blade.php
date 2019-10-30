@@ -219,8 +219,7 @@
       			<i class="fas fa-edit"></i>			      		
 	      	</a>
 
-	      	<form action="#" method="POST">
-				    @method('DELETE')
+	      	<form action="/ordenCompraDetalle" method="GET">
 				    @csrf					    
 				    <button type="submit" name="Eliminar" role="button" class="btn btn-outline-warning btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar articulos" style="display: inline-block; width: 100%"><i class="fa fa-edit"></i></button>
 					</form>

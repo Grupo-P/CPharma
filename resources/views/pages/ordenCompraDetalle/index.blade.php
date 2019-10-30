@@ -79,15 +79,21 @@
 
 	<hr class="row align-items-start col-12">
 	<table style="width:100%;">
-	    <tr>
-        <td style="width:10%;" align="center">	        	
+		<tr>
+				<td style="width:7%;">
+					<form action="/ordenCompra" method="PRE">
+			        @csrf                       
+			        <button type="submit" name="Regresar" role="button" class="btn btn-outline-success btn-sm"data-placement="top" style="display: inline;"><i class="fa fa-reply">&nbsp;Regresar</i></button>
+			    </form>
+				</td>
+        <td style="width:7%;">	        	
 					<a href="{{ url('/ordenCompraDetalle/create') }}" role="button" class="btn btn-outline-info btn-sm" 
-					style="display: inline; text-align: left;">
+					style="display: inline;">
 					<i class="fas fa-plus"></i>
 					Agregar		      		
 				</a>
 	        </td>
-	        <td style="width:90%;">
+	        <td style="width:86%;">
 	        	<div class="input-group md-form form-sm form-1 pl-0">
 				  <div class="input-group-prepend">
 				    <span class="input-group-text purple lighten-3" id="basic-text1"><i class="fas fa-search text-white"

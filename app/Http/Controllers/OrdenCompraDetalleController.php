@@ -3,7 +3,8 @@
 namespace compras\Http\Controllers;
 
 use Illuminate\Http\Request;
-use compras\OrdenCompraDetalle;
+use compras\OrdenCompra;
+use compras\OrdenCompraDetalle; 
 use compras\User;
 use compras\Auditoria;
 
@@ -28,13 +29,12 @@ class OrdenCompraDetalleController extends Controller
     {
         $usuario = auth()->user()->name;
         $OrdenActiva = 
-        OrdenCompra::orderBy('id','asc')
-        ->where('user',$usuario)
+        OrdenCompra::where('user',$usuario)
         ->where('estatus','ACTIVO')
         ->get();
 
         if(!empty($OrdenActiva[0]->codigo)) {
-           $ordenCompraDetalle =  OrdenCompraDetalle::all()
+           $ordenCompraDetalles =  OrdenCompraDetalle::all()
            ->where('codigo_orden',$OrdenActiva[0]->codigo);
              return view('pages.ordenCompraDetalle.index', compact('ordenCompraDetalles'));
         }
