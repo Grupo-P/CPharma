@@ -139,10 +139,10 @@
       <thead class="thead-dark">
         <tr>
             <th scope="col" class="stickyCP">#</th>
-            <th scope="col" class="stickyCP">Nombres</th>
-            <th scope="col" class="stickyCP">Apellidos</th>
-            <th scope="col" class="stickyCP">Cédula</th>
-            <th scope="col" class="stickyCP">Teléfono</th>
+            <th scope="col" class="stickyCP">Sede</th>
+            <th scope="col" class="stickyCP">Nombre de la vacante</th>
+            <th scope="col" class="stickyCP">Turno</th>
+            <th scope="col" class="stickyCP">Departamento</th>
             <th scope="col" class="stickyCP">Estatus</th>
             <th scope="col" class="stickyCP">Acciones</th>
         </tr>
@@ -152,24 +152,10 @@
       @foreach($vacantes as $vacante)
         <tr>
           <th>{{$vacante->id}}</th>
-          <td>{{$vacante->nombres}}</td>
-          <td>{{$vacante->apellidos}}</td>
-          <td>{{$vacante->cedula}}</td>
-          
-          <?php if($vacante->telefono_celular == '') { ?>
-            <td>{{$vacante->telefono_habitacion}}</td>
-          <?php 
-            } else if($vacante->telefono_habitacion == '') { 
-          ?>
-            <td>{{$vacante->telefono_celular}}</td>
-          <?php 
-            } else {
-          ?>
-            <td>{{$vacante->telefono_celular}}</td>
-          <?php
-            }
-          ?>
-
+          <td>{{$vacante->sede}}</td>
+          <td>{{$vacante->nombre_vacante}}</td>
+          <td>{{$vacante->turno}}</td>
+          <td>{{$vacante->departamento}}</td>
           <td>{{$vacante->estatus}}</td>
 
           <!-- ***************** VALIDACION DE ROLES ***************** -->
