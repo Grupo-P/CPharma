@@ -337,14 +337,14 @@
           echo '<td align="center"> - </td>';
         }
 
-        if(($UltimaVentaRango)){
+        if(!is_null($UltimaVentaRango)){
           echo '<td align="center">'.$UltimaVentaRango->format('d-m-Y').'</td>';
         }
         else{
           echo '<td align="center"> - </td>';
         }
 
-        if(($UltimaVenta)){
+        if(!is_null($UltimaVenta)){
           echo '<td align="center">'.$UltimaVenta->format('d-m-Y').'</td>';
         }
         else{
@@ -472,14 +472,14 @@
         echo '<td align="center" class="bg-danger text-white">'.round($DiasRestantesQuiebre,2).'</td>';
         echo '<td align="center">'.number_format($Precio,2,"," ,"." ).'</td>';
         
-        if(($UltimoLote)){
+        if(!is_null($UltimoLote)){
           echo '<td align="center">'.$UltimoLote->format('d-m-Y').'</td>';
         }
         else{
           echo '<td align="center"> - </td>';
         }
 
-        if(($UltimaVentaRango)){
+        if(!is_null($UltimaVentaRango)){
           echo '<td align="center">'.$UltimaVentaRango->format('d-m-Y').'</td>';
         }
         else{
@@ -715,7 +715,7 @@
       CONVERT(DATE,VenFactura.FechaDocumento)
       FROM VenFactura
       INNER JOIN VenFacturaDetalle ON VenFacturaDetalle.VenFacturaId = VenFactura.Id
-      WHERE (VenFacturaDetalle.InvArticuloId = VenFacturaDetalle.InvArticuloId)
+      WHERE (VenFacturaDetalle.InvArticuloId = '$IdArticulo')
       AND (VenFactura.FechaDocumento > '$FInicial' AND VenFactura.FechaDocumento < '$FFinal')
       ORDER BY FechaDocumento DESC) AS UltimaVentaRango
     --Tabla Principal
