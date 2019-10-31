@@ -22,7 +22,9 @@ class RH_VacanteController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function index() {
-        return view('pages.RRHH.vacantes.index');
+        $vacantes = RH_Vacante::all();
+
+        return view('pages.RRHH.vacantes.index', compact('vacantes'));
     }
 
     /**
