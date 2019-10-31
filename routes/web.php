@@ -137,6 +137,10 @@ Route::get('/GuiaEnvio', function() {
     return view('pages.traslado.guia_etiqueta');
 });
 
+Route::get('/AnularOrdenCompra', function() {
+    return view('pages.ordenCompra.anular');
+});
+
 Route::get('home', 'HomeController@index')->name('home');
 
 Route::resource('dolar', 'DolarController');
@@ -168,6 +172,8 @@ Route::resource('etiqueta', 'EtiquetaController');
 Route::resource('traslado', 'TrasladoController');
 
 Route::resource('ordenCompra', 'OrdenCompraController');
+
+Route::resource('ordenCompraDetalle', 'OrdenCompraDetalleController');
 
 //***************************** RRHH routing *****************************//
 Route::resource('candidatos', 'RH_CandidatoController');

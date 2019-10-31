@@ -92,6 +92,10 @@ class TrasladoController extends Controller
             $connCPharma = FG_Conectar_CPharma();
             $tasa = FG_Tasa_Fecha($connCPharma,date('Y-m-d'));
             mysqli_close($connCPharma);
+
+            if(empty($tasa)){
+                return back()->with('tasaNula','Error');
+            }
         /*INICIO ENCABEZADO DEL TRASLADO*/
             $traslado->numero_ajuste = $NumeroAjuste;
             $traslado->fecha_ajuste = $request->input('fecha_ajuste');

@@ -79,6 +79,28 @@
 		</div>
 	@endif
 
+	<!-- Modal OrdenActiva -->
+	@if (session('OrdenActiva'))
+		<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+		  <div class="modal-dialog modal-dialog-centered" role="document">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <h5 class="modal-title text-danger" id="exampleModalCenterTitle"><i class="fas fa-info text-danger"></i> Orden de compra</h5>
+		        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+		          <span aria-hidden="true">&times;</span>
+		        </button>
+		      </div>
+		      <div class="modal-body">
+		        <h4 class="h6">Ya usted posee una orden de compra activa, codigo: {{ session('OrdenActiva') }}</h4>
+		      </div>
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-outline-success" data-dismiss="modal">Aceptar</button>
+		      </div>
+		    </div>
+		  </div>
+		</div>
+	@endif
+
 	<h1 class="h5 text-info">
 		<i class="far fa-file-alt"></i>
 		Orden de compra
@@ -87,13 +109,21 @@
 	<hr class="row align-items-start col-12">
 	<table style="width:100%;">
 	    <tr>
-	        <td style="width:10%;" align="center">	        	
-				<a href="{{ url('/ordenCompra/create') }}" role="button" class="btn btn-outline-info btn-sm" 
-				style="display: inline; text-align: left;">
-				<i class="fa fa-plus"></i>
-					Agregar		      		
-				</a>
-	        </td>
+	    	<?php
+	    		if((Auth::user()->departamento == 'TECNOLOGIA')
+				 			|| (Auth::user()->departamento == 'GERENCIA')
+				 			|| (Auth::user()->departamento == 'COMPRAS')){
+	    	?>
+        <td style="width:10%;" align="center">	        	
+					<a href="{{ url('/ordenCompra/create') }}" role="button" class="btn btn-outline-info btn-sm" 
+					style="display: inline; text-align: left;">
+					<i class="fa fa-plus"></i>
+						Agregar		      		
+					</a>
+        </td>
+        <?php 
+      	}
+      	?>
 	        <td style="width:90%;">
 	        	<div class="input-group md-form form-sm form-1 pl-0">
 				  <div class="input-group-prepend">
@@ -112,6 +142,7 @@
 		    <tr>
 		      	<th scope="col" class="stickyCP">#</th>
 		      	<th scope="col" class="stickyCP">Orden compra</th>
+		      	<th scope="col" class="stickyCP">Sede Destino</th>
 		      	<th scope="col" class="stickyCP">Proveedor</th>
 		      	<th scope="col" class="stickyCP">Fecha de la orden</th>
 		      	<th scope="col" class="stickyCP">Fecha estimada de despacho</th>
@@ -122,6 +153,7 @@
 		      	<th scope="col" class="stickyCP">Condicion crediticia</th>
 		      	<th scope="col" class="stickyCP">Dias de credito</th>
 		      	<th scope="col" class="stickyCP">Estatus</th>
+		      	<th scope="col" class="stickyCP">Estado Actual</th>
 		      	<th scope="col" class="stickyCP">Operador</th>
 		      	<th scope="col" class="stickyCP">Monto real</th>
 		      	<th scope="col" class="stickyCP">Fecha de aprobacion</th>
@@ -145,6 +177,7 @@
 		    <tr>
 		      <th>{{$ordenCompra->id}}</th>
 		      <td>{{$ordenCompra->codigo}}</td>
+		       <td>{{$ordenCompra->sede_destino}}</td>
 		      <td>{{$ordenCompra->proveedor}}</td>
 		      <td>{{$ordenCompra->created_at}}</td>
 		      <td>{{$ordenCompra->fecha_estimada_despacho}}</td>
@@ -155,6 +188,7 @@
 		      <td>{{$ordenCompra->condicion_crediticia}}</td>
 		      <td>{{$ordenCompra->dias_credito}}</td>
 		      <td>{{$ordenCompra->estado}}</td>
+		      <td>{{$ordenCompra->estatus}}</td>
 		      <td>{{$ordenCompra->user}}</td>
 		      <td>{{$ordenCompra->montoTotalReal}}</td>
 		      <td>{{$ordenCompra->fecha_aprobacion}}</td>
@@ -163,59 +197,65 @@
 		      <td>{{$ordenCompra->fecha_ingreso}}</td>
 
 		    <!-- Inicio Validacion de ROLES -->
-		      <td style="width:140px;">
-				
-				<?php
-				if(Auth::user()->role == 'MASTER' || Auth::user()->role == 'DEVELOPER'){
+		      <td style="width:300px;">
+				<?php 
+					if($ordenCompra->estado!='ANULADA'){
 				?>
+				<a href="/ordenCompra/{{$ordenCompra->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Soporte" style="display: inline-block; width: 100%">
+    			<i class="fas fa-print"></i>			      		
+    		</a>
+    		<?php
+    			}
+    		?>
+
+				<?php
+				if( ($ordenCompra->estado=='EN PROCESO')
+						&&
+						( ($ordenCompra->user==Auth::user()->name)
+					 		|| (Auth::user()->departamento == 'TECNOLOGIA')
+					 		|| (Auth::user()->departamento == 'GERENCIA')
+				 		)
+					){
+				?>
+					<a href="/ordenCompra/{{$ordenCompra->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar orden" style="display: inline-block; width: 100%">
+      			<i class="fas fa-edit"></i>			      		
+	      	</a>
+
+	      	<form action="/ordenCompraDetalle" method="GET">
+				    @csrf					    
+				    <button type="submit" name="Eliminar" role="button" class="btn btn-outline-warning btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar articulos" style="display: inline-block; width: 100%"><i class="fa fa-edit"></i></button>
+					</form>
 
 					<?php
 					if($ordenCompra->estatus == 'ACTIVO'){
-					?>
-						<a href="/ordenCompra/{{$ordenCompra->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
-			      			<i class="far fa-eye"></i>			      		
-			      		</a>
-
-			      		<a href="/ordenCompra/{{$ordenCompra->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
-			      			<i class="fas fa-edit"></i>			      		
-				      	</a>
-				 					  
-				      	<form action="/ordenCompra/{{$ordenCompra->id}}" method="POST" style="display: inline;">
-						    @method('DELETE')
-						    @csrf					    
-						    <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Desincorporar"><i class="fa fa-reply"></i></button>
+					?>  
+		      	<form action="/ordenCompra/{{$ordenCompra->id}}" method="POST">
+				    @method('DELETE')
+				    @csrf					    
+				    <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Pausar" style="display: inline-block; width: 100%"><i class="fa fa-pause"></i></button>
 						</form>
 					<?php
 					}
-					else if($ordenCompra->estatus == 'INACTIVO'){
-					?>		
-			      	<form action="/ordenCompra/{{$ordenCompra->id}}" method="POST" style="display: inline;">
-					    @method('DELETE')
-					    @csrf					    
-					    <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Reincorporar"><i class="fa fa-share"></i></button>
-					</form>
+					else if($ordenCompra->estatus == 'EN ESPERA'){
+					?>  
+		      	<form action="/ordenCompra/{{$ordenCompra->id}}" method="POST">
+				    @method('DELETE')
+				    @csrf					    
+				    <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Activar" style="display: inline-block; width: 100%"><i class="fa fa-play"></i></button>
+						</form>
 					<?php
-					}					
+					}
 					?>
-				<?php	
-				} else if(Auth::user()->role == 'SUPERVISOR' || Auth::user()->role == 'ADMINISTRADOR' || Auth::user()->role == 'SUPERVISOR CAJA'){ 
-				?>
-					<a href="/ordenCompra/{{$ordenCompra->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
-		      			<i class="far fa-eye"></i>			      		
-		      		</a>
 
-		      		<a href="/ordenCompra/{{$ordenCompra->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
-		      			<i class="fas fa-edit"></i>
-	      			</a>
-				<?php
-				} else if(Auth::user()->role == 'USUARIO'){
-				?>
-					<a href="/ordenCompra/{{$ordenCompra->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
-		      			<i class="far fa-eye"></i>		      		
-		      		</a>		
+					<form action="/AnularOrdenCompra" method="PRE">
+				    <input type="hidden" name="anular" value="solicitud">
+				    <input type="hidden" name="id" value="{{$ordenCompra->id}}">   
+				    <button type="submit"role="button" class="btn btn-outline-dark btn-sm" data-toggle="tooltip" data-placement="top" title="Anular" style="display: inline-block; width: 100%"><i class="fa fa-ban"></i></button>
+					</form>
+		
 				<?php
 				}
-				?>				
+				?>						
 		     </td>
 		    <!-- Fin Validacion de ROLES -->
 		    </tr>
