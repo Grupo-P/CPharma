@@ -12,7 +12,7 @@ class ChangeTypeDataToRhEntrevistasTable extends Migration {
      */
     public function up() {
         Schema::table('rh_entrevistas', function (Blueprint $table) {
-            //
+            $table->text('observaciones')->after('lugar')->change();
         });
     }
 
@@ -23,7 +23,7 @@ class ChangeTypeDataToRhEntrevistasTable extends Migration {
      */
     public function down() {
         Schema::table('rh_entrevistas', function (Blueprint $table) {
-            //
+            $table->string('observaciones')->after('lugar')->change();
         });
     }
 }
