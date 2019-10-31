@@ -4,6 +4,19 @@
     Detalle de orden de compra
 @endsection
 
+@section('scriptsHead')
+  <style>
+    .campoNulo {border-width: 3px !important;}
+    .campoNulo::placeholder {color: #dc3545; font-weight: bold;}
+  </style>
+
+  <script>
+    var activarDangerRequerido = (Input) => {
+      Input.addClass('border border-danger campoNulo');
+    };
+  </script>
+@endsection
+
 <?php
     use Illuminate\Http\Request;
     use compras\OrdenCompra;
@@ -58,7 +71,7 @@
     <br>
     <br>
 
-    {!! Form::open(['route' => 'ordenCompraDetalle.store', 'method' => 'POST']) !!}
+    {!! Form::open(['route' => 'ordenCompraDetalle.store', 'method' => 'POST', 'id' => 'guardar']) !!}
     <fieldset>
 
         <table class="table table-borderless table-striped">
@@ -136,14 +149,18 @@
 
         </tbody>
         </table>
-        {!! Form::submit('Guardar', ['class' => 'btn btn-outline-success btn-md', 'id'=>'guardar']) !!}
+        {!! Form::submit('Guardar', ['class' => 'btn btn-outline-success btn-md', 'id'=>'enviar']) !!}
     </fieldset>
     {!! Form::close()!!} 
     <script>
         $(document).ready(function(){
             $('[data-toggle="tooltip"]').tooltip();   
         });
-        $('#exampleModalCenter').modal('show')
+        $('#exampleModalCenter').modal('show');
+
+        var clasesError = 'border border-danger campoNulo';
+        var unidadesDisponibles = $('#unidadesDisponibles');
+        var guardar = $('#guardar');    
 
         function disponible(){
             totalUnidades = parseInt(document.getElementById('totalUnidades').value);
@@ -153,6 +170,7 @@
             document.getElementById('sede2').value = 0;
             document.getElementById('sede3').value = 0;
             document.getElementById('sede4').value = 0;
+            unidadesDisponibles.removeClass(clasesError);
         }
 
         function sumaTotal(){
@@ -173,6 +191,7 @@
 
             totalUnidades = totalUnidades-total;
             document.getElementById('unidadesDisponibles').value = totalUnidades;
+             unidadesDisponibles.removeClass(clasesError);
         }
 
         function costoTotal(){
@@ -183,14 +202,14 @@
             document.getElementById('CostoTotal').value = parseInt(CostoTotal);
         }
 
-        document.getElementById("guardar").addEventListener("click", function(event){
+        document.getElementById("enviar").addEventListener("click", function(event){
           event.preventDefault();
 
           if( (document.getElementById('unidadesDisponibles').value)!= 0 ){
-            alert('Unidades Disponibles Aun');
+            unidadesDisponibles.addClass(clasesError);
           }
           else{
-            alert('Cero Diponibilidad');
+            guardar.submit();
           }
         });
     </script>
