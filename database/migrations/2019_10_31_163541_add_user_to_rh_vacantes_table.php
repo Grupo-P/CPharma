@@ -12,7 +12,7 @@ class AddUserToRhVacantesTable extends Migration {
      */
     public function up() {
         Schema::table('rh_vacantes', function (Blueprint $table) {
-            //
+            $table->string('estatus')->after('user');
         });
     }
 
@@ -23,7 +23,7 @@ class AddUserToRhVacantesTable extends Migration {
      */
     public function down() {
         Schema::table('rh_vacantes', function (Blueprint $table) {
-            //
+            $table->dropColumn('estatus');
         });
     }
 }
