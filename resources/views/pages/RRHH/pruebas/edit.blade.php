@@ -17,7 +17,7 @@
                 </button>
               </div>
               <div class="modal-body">
-                <h4 class="h6">La empresa no fue almacenada, el RIF ya esta registrado</h4>
+                <h4 class="h6"> Prueba no registrada </h4>
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-outline-success" data-dismiss="modal">Aceptar</button>
@@ -56,11 +56,11 @@
            <tr>
              <tr>
                 <th scope="row">{!! Form::label('tipo_prueba', 'Tipo de prueba') !!}</th>
-                <td>{!! Form::text('tipo_prueba', null, [ 'class' => 'form-control', 'placeholder' => 'Proyectiva', 'autofocus']) !!}</td>
+                <td>{!! Form::text('tipo_prueba', null, [ 'class' => 'form-control', 'placeholder' => 'Proyectiva', 'autofocus', 'required']) !!}</td>
             </tr>
             <tr>
                 <th scope="row">{!! Form::label('nombre_prueba', 'Nombre de prueba') !!}</th>
-                <td>{!! Form::text('nombre_prueba', null, [ 'class' => 'form-control', 'placeholder' => 'Zavic']) !!}
+                <td>{!! Form::text('nombre_prueba', null, [ 'class' => 'form-control', 'placeholder' => 'Zavic', 'required']) !!}
                 </td>
             </tr>
            <th>

@@ -54,7 +54,7 @@
         <tbody>
           <tr>
             <th scope="row">{!! Form::label('nombres', 'Nombres') !!}</th>
-            <td>{!! Form::text('nombres', null, [ 'class' => 'form-control', 'placeholder' => 'Maria Raquel', 'autofocus', 'pattern' => '^[A-Za-zñÑáéíóúÁÉÍÓÚ]+\s?[A-Za-zñÑáéíóúÁÉÍÓÚ]+$', 'title' => 'El nombre solo debe contener letras', 'required']) !!}</td>
+            <td>{!! Form::text('nombres', null, [ 'class' => 'form-control', 'placeholder' => 'Maria Raquel', 'autofocus', 'pattern' => '^[A-Za-zñÑáéíóúÁÉÍÓÚ]+\s?[A-Za-zñÑáéíóúÁÉÍÓÚ]+\s?[A-Za-zñÑáéíóúÁÉÍÓÚ]+$', 'title' => 'El nombre solo debe contener letras', 'required']) !!}</td>
           </tr>
           <tr>
               <th scope="row">{!! Form::label('apellidos', 'Apellidos') !!}</th>
@@ -98,6 +98,35 @@
                 'Trabajador regular' => 'Trabajador regular',
               ], null, ['class' => 'form-control']) !!}
             </td>
+          </tr>
+
+          <tr>
+            <th scope="row">{!! Form::label('relaciones_laborales', 'Relaciones con trabajadores') !!}</th>
+            <td>
+              {!! Form::select('relaciones_laborales', [
+                'Si' => 'Si', 
+                'No' => 'No',
+              ], 'No', ['class' => 'form-control']) !!}
+            </td>
+          </tr>
+
+          <tr>
+            <th scope="row">{!! Form::label('como_nos_contacto', 'Como nos contactó') !!}</th>
+            <td>
+              {!! Form::select('como_nos_contacto', [
+                'Computrabajo' => 'Computrabajo', 
+                'Bumeran' => 'Bumeran',
+                'Redes sociales' => 'Redes sociales',
+                'Instagram' => 'Instagram',
+                'Radio' => 'Radio',
+                'Recomendado' => 'Recomendado',
+              ], null, ['class' => 'form-control']) !!}
+            </td>
+          </tr>
+
+          <tr>
+            <th scope="row">{!! Form::label('experiencia_laboral', 'Experiencia laboral') !!}</th>
+            <td>{!! Form::textarea('experiencia_laboral', null, [ 'class' => 'form-control', 'placeholder' => 'Experiencia laboral previa del candidato', 'rows' => '3']) !!}</td>
           </tr>
 
           <tr>

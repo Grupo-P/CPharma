@@ -1,7 +1,13 @@
 @extends('layouts.model')
 
 @section('title')
-  Pruebas
+  Entrevistas
+@endsection
+
+@section('scriptsHead')
+  <style>
+    th, td {text-align: center;}
+  </style>
 @endsection
 
 @section('content')
@@ -19,7 +25,7 @@
             </button>
           </div>
           <div class="modal-body">
-            <h4 class="h6"> Prueba almacenada con exito</h4>
+            <h4 class="h6"> Entrevista almacenada con éxito</h4>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-outline-success" data-dismiss="modal">Aceptar</button>
@@ -43,7 +49,7 @@
             </button>
           </div>
           <div class="modal-body">
-            <h4 class="h6"> Prueba modificada con exito</h4>
+            <h4 class="h6"> Entrevista modificada con éxito</h4>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-outline-success" data-dismiss="modal">Aceptar</button>
@@ -67,7 +73,7 @@
             </button>
           </div>
           <div class="modal-body">
-            <h4 class="h6">Prueba Reincorporada con Éxito </h4>
+            <h4 class="h6"> Entrevista Reincorporada con éxito </h4>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-outline-success" data-dismiss="modal">Aceptar</button>
@@ -89,7 +95,7 @@
             </button>
           </div>
           <div class="modal-body">
-            <h4 class="h6">Prueba Desincorporada con Éxito </h4>
+            <h4 class="h6"> Entrevista Desincorporada con Éxito </h4>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-outline-success" data-dismiss="modal">Aceptar</button>
@@ -100,7 +106,7 @@
   @endif
 
   <h1 class="h5 text-info">
-    <i class="fas fa-tasks"></i>&nbsp;Pruebas
+  <i class="fas fa-users"></i> &nbsp;Entrevistas
   </h1>
 
   <hr class="row align-items-start col-12">
@@ -108,7 +114,7 @@
   <table style="width:100%;">
     <tr>
       <td style="width:10%;" align="center">
-        <a href="/pruebas/create" role="button" class="btn btn-outline-info btn-sm" style="display: inline; text-align: left;">
+        <a href="/entrevistas/create" role="button" class="btn btn-outline-info btn-sm" style="display: inline; text-align: left;">
           <i class="fa fa-plus"></i>&nbsp;Agregar
         </a>
       </td>
@@ -131,20 +137,23 @@
       <thead class="thead-dark">
          <tr>
           <th scope="col" class="CP-sticky">#</th>
-          <th scope="col" class="CP-sticky">Tipo</th>
-          <th scope="col" class="CP-sticky">Nombre</th>
+          <th scope="col" class="CP-sticky">Fecha</th>
+          <th scope="col" class="CP-sticky">Entrevistadores</th>
+           <th scope="col" class="CP-sticky">Lugar</th>
           <th scope="col" class="CP-sticky">Estatus</th>
           <th scope="col" class="CP-sticky">Acciones</th>
       </tr>
       </thead>
 
 <tbody>
-    @foreach($pruebas as $prueba)
+    @foreach($entrevistas as $entrevista)
         <tr>
-          <th>{{$prueba->id}}</th>
-          <td>{{$prueba->tipo_prueba}}</td>
-          <td>{{$prueba->nombre_prueba}}</td>
-          <td>{{$prueba->estatus}}</td>
+          <th>{{$entrevista->id}}</th>
+          <td>{{date('d-m-Y',strtotime($entrevista->fecha_entrevista))}}</td>
+          <td>{{$entrevista->entrevistadores}}</td>
+          <td>{{$entrevista->lugar}}</td>
+          <td>{{$entrevista->estatus}}</td>
+          
         <!-- Inicio Validacion de ROLES -->
           <td style="width:140px;">
         
@@ -153,26 +162,26 @@
         ?>
 
           <?php
-          if($prueba->estatus == 'ACTIVO'){
+          if($entrevista->estatus == 'ACTIVO'){
           ?>
-            <a href="/pruebas/{{$prueba->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
+            <a href="/entrevistas/{{$entrevista->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
                   <i class="far fa-eye"></i>                
                 </a>
 
-                <a href="/pruebas/{{$prueba->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
+                <a href="/entrevistas/{{$entrevista->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
                   <i class="fas fa-edit"></i>               
                 </a>
                     
-                <form action="/pruebas/{{$prueba->id}}" method="POST" style="display: inline;">
+                <form action="/entrevistas/{{$entrevista->id}}" method="POST" style="display: inline;">
                 @method('DELETE')
                 @csrf             
                 <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Desincorporar"><i class="fa fa-reply"></i></button>
             </form>
           <?php
           }
-          else if($prueba->estatus == 'INACTIVO'){
+          else if($entrevista->estatus == 'INACTIVO'){
           ?>    
-              <form action="/pruebas/{{$prueba->id}}" method="POST" style="display: inline;">
+              <form action="/entrevistas/{{$entrevista->id}}" method="POST" style="display: inline;">
               @method('DELETE')
               @csrf             
               <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Reincorporar"><i class="fa fa-share"></i></button>
@@ -183,17 +192,17 @@
         <?php 
         } else if(Auth::user()->role == 'ANALISTA'){
         ?>
-          <a href="/pruebas/{{$prueba->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
+          <a href="/entrevistas/{{$entrevista->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
                 <i class="far fa-eye"></i>                
               </a>
 
-              <a href="/pruebas/{{$prueba->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
+              <a href="/entrevistas/{{$entrevista->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
                 <i class="fas fa-edit"></i>
               </a>
         <?php
         } else if(Auth::user()->role == 'USUARIO'){
         ?>
-          <a href="/pruebas/{{$prueba->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
+          <a href="/entrevistas/{{$entrevista->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
                 <i class="far fa-eye"></i>                
               </a>    
         <?php
