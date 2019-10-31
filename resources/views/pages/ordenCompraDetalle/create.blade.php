@@ -71,8 +71,20 @@
     <br>
     <br>
 
-    {!! Form::open(['route' => 'ordenCompraDetalle.store', 'method' => 'POST', 'id' => 'guardar']) !!}
-    {!! Form::hidden('codigoOrden',$OrdenCompra->codigo) !!}
+    <?php
+      if($OrdenCompra->sede_destino!='CENTRO DE DISTRIBUCION'){  
+    ?>
+      {!! Form::open(['route' => 'ordenCompraDetalle.store', 'method' => 'POST']) !!}
+    <?php
+      }
+      else if($OrdenCompra->sede_destino=='CENTRO DE DISTRIBUCION'){
+    ?>
+      {!! Form::open(['route' => 'ordenCompraDetalle.store', 'method' => 'POST', 'id' => 'guardar']) !!}
+    <?php
+      } 
+    ?>
+
+    {!! Form::hidden('codigo_orden',$OrdenCompra->codigo) !!}
     <fieldset>
 
         <table class="table table-borderless table-striped">
@@ -108,14 +120,17 @@
             <?php
                 if($_GET['Reporte']=='NO'){  
             ?>
-             {!! Form::hidden('isReporte','NO') !!}
-             {!! Form::hidden('id_articulo',0) !!}
-             {!! Form::hidden('codigo_articulo',0) !!}
-             {!! Form::hidden('codigo_barra',0) !!}
-
+              {!! Form::hidden('id_articulo',NULL) !!}
+              {!! Form::hidden('codigo_articulo',NULL) !!}
+              {!! Form::hidden('codigo_barra',NULL) !!}
+              {!! Form::hidden('existencia_rpt',NULL) !!}
+              {!! Form::hidden('dias_restantes_rpt',NULL) !!}
+              {!! Form::hidden('origen_rpt',NULL) !!}
+              {!! Form::hidden('rango_rpt',NULL) !!}
+              {!! Form::hidden('usuario',$usuario) !!}
               <tr>
                 <th scope="row">{!! Form::label('descripcion', 'Descripcion del articulo') !!}</th>
-                <td>{!! Form::text('descripcion', null, [ 'class' => 'form-control', 'autofocus', 'required']) !!}</td>
+                <td>{!! Form::text('descripcion', null, [ 'class' => 'form-control', 'autofocus', 'required'=>'required']) !!}</td>
               </tr>
         <!-- FIN DE CASO FORMULARIO PARA ARTICULOS NUEVOS -->
 
@@ -124,17 +139,19 @@
               }
               else if($_GET['Reporte']=='SI'){  
             ?>
-              {!! Form::hidden('isReporte','SI') !!}
               {!! Form::hidden('id_articulo',$_GET['id_articulo']) !!}
               {!! Form::hidden('codigo_articulo',$_GET['codigo_articulo']) !!}
               {!! Form::hidden('codigo_barra',$_GET['codigo_barra']) !!}
               {!! Form::hidden('descripcion',$_GET['descripcion']) !!}
-
+              {!! Form::hidden('existencia_rpt',$_GET['existencia_rpt']) !!}
+              {!! Form::hidden('dias_restantes_rpt',$_GET['dias_restantes_rpt']) !!}
+              {!! Form::hidden('origen_rpt',$_GET['origen_rpt']) !!}
+              {!! Form::hidden('rango_rpt',$_GET['rango_rpt']) !!}
+              {!! Form::hidden('usuario','SYSTEM') !!}
               <tr>
                 <th scope="row">{!! Form::label('descrip', 'Descripcion del articulo') !!}</th>
                 <td scope="row">{!! Form::label('descrip',$_GET['descripcion']) !!}</td>
               </tr>
-
             <?php 
               } 
             ?>
@@ -144,7 +161,7 @@
             <?php
                 if($OrdenCompra->sede_destino=='CENTRO DE DISTRIBUCION'){  
             ?>
-              {!! Form::hidden('isCDD','SI') !!}
+              {!! Form::hidden('isCDD','SI', [ 'id'=>'isCDD']) !!}
               <tr>
                 <th scope="row">{!! Form::label('total_unidades', 'Total de Unidades') !!}</th>
                 <td>{!! Form::text('totalUnidades', null, [ 'class' => 'form-control', 'autofocus', 'required', 'id' => 'totalUnidades', 'onblur' =>'disponible()']) !!}</td>
@@ -176,7 +193,11 @@
             }
             else if($OrdenCompra->sede_destino!='CENTRO DE DISTRIBUCION'){
             ?>
-              {!! Form::hidden('isCDD','NO') !!}
+              {!! Form::hidden('isCDD','NO', [ 'id'=>'isCDD']) !!}
+              {!! Form::hidden('sede1',NULL) !!}
+              {!! Form::hidden('sede2',NULL) !!}
+              {!! Form::hidden('sede3',NULL) !!}
+              {!! Form::hidden('sede4',NULL) !!}
               <tr>
                 <th scope="row">{!! Form::label('total_unidades', 'Total de Unidades') !!}</th>
                 <td>{!! Form::text('totalUnidades', null, [ 'class' => 'form-control', 'autofocus', 'required', 'id' => 'totalUnidades']) !!}</td>
@@ -193,13 +214,26 @@
             </tr>
             <tr>
                 <th scope="row">{!! Form::label('costo_total', 'Costo Total') !!}</th>
-                <td>{!! Form::text('CostoTotal', null, [ 'class' => 'form-control', 'autofocus', 'required', 'id' => 'CostoTotal', 'disabled' => 'disabled']) !!}</td>
+                <td>{!! Form::text('costo_total', null, [ 'class' => 'form-control', 'autofocus', 'required', 'id' => 'CostoTotal', 'disabled' => 'disabled']) !!}</td>
             </tr>
         <!-- FIN DE CALCULOS DE COSTOS CONTRA UNIDADES -->
 
         </tbody>
         </table>
-        {!! Form::submit('Guardar', ['class' => 'btn btn-outline-success btn-md', 'id'=>'enviar']) !!}
+        
+        <?php
+          if($OrdenCompra->sede_destino!='CENTRO DE DISTRIBUCION'){  
+        ?>
+          {!! Form::submit('Guardar', ['class' => 'btn btn-outline-success btn-md']) !!}
+        <?php
+          }
+          else if($OrdenCompra->sede_destino=='CENTRO DE DISTRIBUCION'){
+        ?>
+          {!! Form::submit('Guardar', ['class' => 'btn btn-outline-success btn-md', 'id'=>'guardar']) !!}
+        <?php
+          } 
+        ?>
+
     </fieldset>
     {!! Form::close()!!} 
     <script>
@@ -210,13 +244,13 @@
 
         var clasesError = 'border border-danger campoNulo';
         var unidadesDisponibles = $('#unidadesDisponibles');
-        var guardar = $('#guardar');    
+        var guardar = $('#guardar');  
+        var totalUnidades = $('#totalUnidades'); 
+        var costoUnitario = $('#CostoUnitario');
 
         function disponible(){
             totalUnidades = parseInt(document.getElementById('totalUnidades').value);
-
             var unidadesDisponibles = isNaN(totalUnidades) ? 0 : totalUnidades;
-
             document.getElementById('unidadesDisponibles').value = parseInt(unidadesDisponibles);
 
             document.getElementById('sede1').value = 0;
@@ -254,16 +288,5 @@
             CostoTotal = CostoUnitario*TotalUnidades;
             document.getElementById('CostoTotal').value = parseInt(CostoTotal);
         }
-
-        document.getElementById("enviar").addEventListener("click", function(event){
-          event.preventDefault();
-
-          if( (document.getElementById('unidadesDisponibles').value)!= 0 ){
-            unidadesDisponibles.addClass(clasesError);
-          }
-          else{
-            guardar.submit();
-          }
-        });
     </script>
 @endsection

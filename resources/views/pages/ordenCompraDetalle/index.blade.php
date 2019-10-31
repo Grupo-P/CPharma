@@ -110,13 +110,13 @@
 		      	<th scope="col" class="stickyCP">Codigo Orden</th>
 		      	<th scope="col" class="stickyCP">Codigo Interno</th>	
 		      	<th scope="col" class="stickyCP">Codigo Barra</th>	
-		      	<th scope="col" class="stickyCP">Descripcion</th>		      	
-		      	<th scope="col" class="stickyCP">Existecia Actual</th>	
+		      	<th scope="col" class="stickyCP">Descripcion</th>		      		
 		      	<th scope="col" class="stickyCP">Cantidad FTN</th>	
 		      	<th scope="col" class="stickyCP">Cantidad FLL</th>	
 		      	<th scope="col" class="stickyCP">Cantidad FAU</th>		
 		      	<th scope="col" class="stickyCP">Cantidad MC</th>	
-		      	<th scope="col" class="stickyCP">Total Unidades</th>	
+		      	<th scope="col" class="stickyCP">Total Unidades</th>
+		      	<th scope="col" class="stickyCP">Costo Unitario</th>	
 		      	<th scope="col" class="stickyCP">Costo Total</th>
 		      	<th scope="col" class="stickyCP">Existencia (Origen)</th>		
 		      	<th scope="col" class="stickyCP">Dias Restantes (Origen)</th>	
@@ -130,23 +130,22 @@
 		@foreach($ordenCompraDetalles as $ordenCompraDetalle)
 		    <tr>
 		      <th>{{$ordenCompraDetalle->id}}</th>
-		      <th>{{$ordenCompraDetalle->codigo_orden}}</th>
-		      <th>{{$ordenCompraDetalle->codigo_articulo}}</th>
-		      <th>{{$ordenCompraDetalle->codigo_barra}}</th>
-		      <th>{{$ordenCompraDetalle->descripcion}}</th>
-		      <th>{{$ordenCompraDetalle->existencia_actual}}</th>
-		      <th>{{$ordenCompraDetalle->sede1}}</th>
-		      <th>{{$ordenCompraDetalle->sede2}}</th>
-		      <th>{{$ordenCompraDetalle->sede3}}</th>
-		      <th>{{$ordenCompraDetalle->sede4}}</th>
-		      <th>{{$ordenCompraDetalle->total_unidades}}</th>
-		      <th>{{$ordenCompraDetalle->costo_unitario}}</th>
-		      <th>{{$ordenCompraDetalle->costo_total}}</th>
-		      <th>{{$ordenCompraDetalle->existencia_rpt}}</th>
-		      <th>{{$ordenCompraDetalle->dias_restantes_rpt}}</th>
-		      <th>{{$ordenCompraDetalle->origen_rpt}}</th>
-		      <th>{{$ordenCompraDetalle->rango_rpt}}</th>
-		      <th>{{$ordenCompraDetalle->estatus}}</th>
+		      <td>{{$ordenCompraDetalle->codigo_orden}}</td>
+		      <td>{{$ordenCompraDetalle->codigo_articulo}}</td>
+		      <td>{{$ordenCompraDetalle->codigo_barra}}</td>
+		      <td>{{$ordenCompraDetalle->descripcion}}</td>
+		      <td>{{$ordenCompraDetalle->sede1}}</td>
+		      <td>{{$ordenCompraDetalle->sede2}}</td>
+		      <td>{{$ordenCompraDetalle->sede3}}</td>
+		      <td>{{$ordenCompraDetalle->sede4}}</td>
+		      <td>{{$ordenCompraDetalle->total_unidades}}</td>
+		      <td>{{$ordenCompraDetalle->costo_unitario}}</td>
+		      <td>{{$ordenCompraDetalle->costo_total}}</td>
+		      <td>{{$ordenCompraDetalle->existencia_rpt}}</td>
+		      <td>{{$ordenCompraDetalle->dias_restantes_rpt}}</td>
+		      <td>{{$ordenCompraDetalle->origen_rpt}}</td>
+		      <td>{{$ordenCompraDetalle->rango_rpt}}</td>
+		      <td>{{$ordenCompraDetalle->estatus}}</td>
 		      
 		    <!-- Inicio Validacion de ROLES -->
 		      <td style="width:140px;">

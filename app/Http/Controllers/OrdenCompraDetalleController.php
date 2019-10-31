@@ -63,13 +63,29 @@ class OrdenCompraDetalleController extends Controller
     {
       try{
         $ordenCompraDetalles = new OrdenCompraDetalle();
-        $ordenCompraDetalles->codigo_orden = $request->input('codigoOrden');
+        $ordenCompraDetalles->codigo_orden = $request->input('codigo_orden');
         $ordenCompraDetalles->id_articulo = $request->input('id_articulo');
         $ordenCompraDetalles->codigo_articulo = $request->input('codigo_articulo');
         $ordenCompraDetalles->codigo_barra = $request->input('codigo_barra');
         $ordenCompraDetalles->descripcion = $request->input('descripcion');
+        $ordenCompraDetalles->sede1 = $request->input('sede1');
+        $ordenCompraDetalles->sede2 = $request->input('sede2');
+        $ordenCompraDetalles->sede3 = $request->input('sede3');
+        $ordenCompraDetalles->sede4 = $request->input('sede4');
+        $ordenCompraDetalles->total_unidades = $request->input('totalUnidades');
+        $ordenCompraDetalles->costo_unitario = $request->input('costo_unitario');
+        $ordenCompraDetalles->costo_total = ( 
+            ($request->input('totalUnidades')) * ($request->input('costo_unitario')) 
+          );
+        $ordenCompraDetalles->existencia_rpt = $request->input('existencia_rpt');
+        $ordenCompraDetalles->dias_restantes_rpt = $request->input('dias_restantes_rpt');
+        $ordenCompraDetalles->origen_rpt = $request->input('origen_rpt');
+        $ordenCompraDetalles->rango_rpt = $request->input('rango_rpt');
+        $ordenCompraDetalles->estatus = 'ACTIVO';
+        $ordenCompraDetalles->user = $request->input('usuario');
 
         $ordenCompraDetalles->save();
+        //print_r($ordenCompraDetalles);
 
       return redirect()->route('ordenCompraDetalle.index')->with('Saved', ' Informacion');
       }
