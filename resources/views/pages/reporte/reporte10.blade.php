@@ -173,7 +173,6 @@
     $TroquelAlmacen1 = $row["TroquelAlmacen1"];
     $TroquelAlmacen2 = $row["TroquelAlmacen2"];
     $PrecioCompraBruto = $row["PrecioCompraBruto"];
-    $UltimoProveedorNombre = FG_Limpiar_Texto($row["UltimoProveedorNombre"]);
 
     $Dolarizado = FG_Producto_Dolarizado($Dolarizado);
     $TasaActual = FG_Tasa_Fecha($connCPharma,date('Y-m-d'));
@@ -274,8 +273,12 @@
             <td align="center">Compra</td>
           ';
 
+          $sql3 = R10Q_Proveedores($IdArticulo,$row2["IdFactura"]);
+          $result3 = sqlsrv_query($conn,$sql3);
+          $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
+
           echo '
-            <td align="center">'.$UltimoProveedorNombre.'</td>
+            <td align="center">'.FG_Limpiar_Texto($row3["Nombre"]).'</td>
             <td align="center">'.$row2["FechaLote"]->format("d-m-Y").'</td>
             <td align="center">'.intval($row2["CantidadRecibida"]).'</td>
           ';
@@ -534,6 +537,12 @@
       InvLoteAlmacen.InvLoteId,
       InvMovimiento.InvCausaId,
       InvCausa.Descripcion,
+      (SELECT
+      ComFactura.Id
+      FROM ComFacturaDetalle
+      INNER JOIN ComFactura ON  ComFactura.Id = ComFacturaDetalle.ComFacturaId
+      WHERE ComFacturaDetalle.InvArticuloId = '$IdArticulo'
+      AND (CONVERT(DATE,ComFactura.FechaRegistro) = CONVERT(DATE,InvLoteAlmacen.Auditoria_FechaCreacion))) AS IdFactura,
       CONVERT(DATE,InvLoteAlmacen.Auditoria_FechaCreacion) AS FechaLote,
       ROUND(CAST((SELECT
       ComFacturaDetalle.CantidadRecibidaFactura
@@ -565,6 +574,29 @@
       GROUP BY InvLoteAlmacen.InvLoteId,InvMovimiento.InvCausaId,InvCausa.Descripcion,CONVERT(DATE,InvLoteAlmacen.Auditoria_FechaCreacion),InvAlmacen.CodigoAlmacen,InvLoteAlmacen.Existencia,InvLote.M_PrecioCompraBruto,InvLote.Auditoria_Usuario
       ORDER BY FechaLote DESC
       ";
+    return $sql;
+  }
+
+  /**********************************************************************************/
+  /*
+      TITULO: R10Q_Proveedores
+      PARAMETROS: [$IdArticulo] Id del articulo actual
+      FUNCION: Devuelve los registros de todos los proveedores del articulo
+      RETORNO: Un String con las instrucciones de la consulta
+      AUTOR: Ing. Manuel Henriquez
+   */
+  function R10Q_Proveedores($IdArticulo,$IdFactura) {
+    $sql = "
+      SELECT 
+      GenPersona.Nombre
+      FROM ComFacturaDetalle
+      INNER JOIN ComFactura ON ComFactura.Id = ComFacturaDetalle.ComFacturaId
+      INNER JOIN ComProveedor ON ComProveedor.Id = ComFactura.ComProveedorId
+      INNER JOIN GenPersona ON GenPersona.Id = ComProveedor.GenPersonaId
+      WHERE ComFacturaDetalle.InvArticuloId = '$IdArticulo'
+      AND (ComFactura.Id = '$IdFactura')
+      ORDER BY ComFactura.FechaDocumento DESC
+    ";
     return $sql;
   }
 ?>
