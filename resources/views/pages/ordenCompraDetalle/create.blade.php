@@ -164,7 +164,10 @@
 
         function disponible(){
             totalUnidades = parseInt(document.getElementById('totalUnidades').value);
-            document.getElementById('unidadesDisponibles').value = parseInt(totalUnidades);
+
+            var unidadesDisponibles = isNaN(totalUnidades) ? 0 : totalUnidades;
+
+            document.getElementById('unidadesDisponibles').value = parseInt(unidadesDisponibles);
 
             document.getElementById('sede1').value = 0;
             document.getElementById('sede2').value = 0;
