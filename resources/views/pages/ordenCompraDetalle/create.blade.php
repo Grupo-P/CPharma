@@ -72,6 +72,7 @@
     <br>
 
     {!! Form::open(['route' => 'ordenCompraDetalle.store', 'method' => 'POST', 'id' => 'guardar']) !!}
+    {!! Form::hidden('codigoOrden',$OrdenCompra->codigo) !!}
     <fieldset>
 
         <table class="table table-borderless table-striped">
@@ -102,42 +103,90 @@
                 <th scope="row">{!! Form::label('operador', 'Operador') !!}</th>
                 <td scope="row">{!! Form::label('user_orden',$OrdenCompra->user) !!}</td>
             </tr>
+  
+        <!-- INICIO DE CASO FORMULARIO PARA ARTICULOS NUEVOS -->
+            <?php
+                if($_GET['Reporte']=='NO'){  
+            ?>
+             {!! Form::hidden('isReporte','NO') !!}
+             {!! Form::hidden('id_articulo',0) !!}
+             {!! Form::hidden('codigo_articulo',0) !!}
+             {!! Form::hidden('codigo_barra',0) !!}
+
+              <tr>
+                <th scope="row">{!! Form::label('descripcion', 'Descripcion del articulo') !!}</th>
+                <td>{!! Form::text('descripcion', null, [ 'class' => 'form-control', 'autofocus', 'required']) !!}</td>
+              </tr>
+        <!-- FIN DE CASO FORMULARIO PARA ARTICULOS NUEVOS -->
+
+        <!-- INICIO DE CASO FORMULARIO PARA ARTICULOS DESDE REPORTES -->
+            <?php 
+              }
+              else if($_GET['Reporte']=='SI'){  
+            ?>
+              {!! Form::hidden('isReporte','SI') !!}
+              {!! Form::hidden('id_articulo',$_GET['id_articulo']) !!}
+              {!! Form::hidden('codigo_articulo',$_GET['codigo_articulo']) !!}
+              {!! Form::hidden('codigo_barra',$_GET['codigo_barra']) !!}
+              {!! Form::hidden('descripcion',$_GET['descripcion']) !!}
+
+              <tr>
+                <th scope="row">{!! Form::label('descrip', 'Descripcion del articulo') !!}</th>
+                <td scope="row">{!! Form::label('descrip',$_GET['descripcion']) !!}</td>
+              </tr>
+
+            <?php 
+              } 
+            ?>
+        <!-- FIN DE CASO FORMULARIO PARA ARTICULOS DESDE REPORTES -->
+
+        <!-- INICIO DE CASO FORMULARIO PARA CENTRO DE DISTRIBUCION -->
             <?php
                 if($OrdenCompra->sede_destino=='CENTRO DE DISTRIBUCION'){  
             ?>
-            <tr>
+              {!! Form::hidden('isCDD','SI') !!}
+              <tr>
                 <th scope="row">{!! Form::label('total_unidades', 'Total de Unidades') !!}</th>
                 <td>{!! Form::text('totalUnidades', null, [ 'class' => 'form-control', 'autofocus', 'required', 'id' => 'totalUnidades', 'onblur' =>'disponible()']) !!}</td>
-            </tr>
-            <tr>
+              </tr>
+              <tr>
                 <th scope="row">{!! Form::label('disponibles', 'Unidades Disponibles') !!}</th>
                 <td>{!! Form::text('unidadesDisponibles', null, [ 'class' => 'form-control', 'autofocus', 'required', 'id' => 'unidadesDisponibles', 'disabled'=>'disabled']) !!}</td>
-            </tr>
-            <tr>
+              </tr>
+              <tr>
                 <th scope="row">{!! Form::label('sede1', 'Cantidad para FTN') !!}</th>
                 <td>{!! Form::number('sede1', null, [ 'class' => 'form-control', 'autofocus', 'required', 'onblur' =>'sumaTotal()', 'id' => 'sede1']) !!}</td>
-            </tr>
-            <tr>
+              </tr>
+              <tr>
                 <th scope="row">{!! Form::label('sede2', 'Cantidad para FLL') !!}</th>
                 <td>{!! Form::number('sede2', null, [ 'class' => 'form-control', 'autofocus', 'required', 'onblur' =>'sumaTotal()', 'id' => 'sede2']) !!}</td>
-            </tr>
-            <tr>
+              </tr>
+              <tr>
                 <th scope="row">{!! Form::label('sede3', 'Cantidad para FAU') !!}</th>
                 <td>{!! Form::number('sede3', null, [ 'class' => 'form-control', 'autofocus', 'required', 'onblur' =>'sumaTotal()', 'id' => 'sede3']) !!}</td>
-            </tr>
-            <tr>
+              </tr>
+              <tr>
                 <th scope="row">{!! Form::label('sede4', 'Cantidad para MC') !!}</th>
                 <td>{!! Form::number('sede4', null, [ 'class' => 'form-control', 'autofocus', 'required', 'onblur' =>'sumaTotal()', 'id' => 'sede4']) !!}</td>
-            </tr>
-            
+              </tr>
+        <!-- FIN DE CASO FORMULARIO PARA CENTRO DE DISTRIBUCION -->
+
+        <!-- INICIO DE CASO FORMULARIO PARA UNICA SEDE -->
             <?php
             }
             else if($OrdenCompra->sede_destino!='CENTRO DE DISTRIBUCION'){
             ?>
-            
+              {!! Form::hidden('isCDD','NO') !!}
+              <tr>
+                <th scope="row">{!! Form::label('total_unidades', 'Total de Unidades') !!}</th>
+                <td>{!! Form::text('totalUnidades', null, [ 'class' => 'form-control', 'autofocus', 'required', 'id' => 'totalUnidades']) !!}</td>
+              </tr>
             <?php
             }
             ?>
+        <!-- FIN DE CASO FORMULARIO PARA UNICA SEDE -->
+
+        <!-- INCIO DE CALCULOS DE COSTOS CONTRA UNIDADES -->
             <tr>
                 <th scope="row">{!! Form::label('costo_unitario', 'Costo Unitario') !!}</th>
                 <td>{!! Form::number('costo_unitario', null, [ 'class' => 'form-control', 'autofocus', 'required', 'id'=>'CostoUnitario', 'onblur' =>'costoTotal()']) !!}</td>
@@ -146,6 +195,7 @@
                 <th scope="row">{!! Form::label('costo_total', 'Costo Total') !!}</th>
                 <td>{!! Form::text('CostoTotal', null, [ 'class' => 'form-control', 'autofocus', 'required', 'id' => 'CostoTotal', 'disabled' => 'disabled']) !!}</td>
             </tr>
+        <!-- FIN DE CALCULOS DE COSTOS CONTRA UNIDADES -->
 
         </tbody>
         </table>

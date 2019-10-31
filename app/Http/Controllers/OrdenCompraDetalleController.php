@@ -61,7 +61,21 @@ class OrdenCompraDetalleController extends Controller
      */
     public function store(Request $request)
     {
-        //
+      try{
+        $ordenCompraDetalles = new OrdenCompraDetalle();
+        $ordenCompraDetalles->codigo_orden = $request->input('codigoOrden');
+        $ordenCompraDetalles->id_articulo = $request->input('id_articulo');
+        $ordenCompraDetalles->codigo_articulo = $request->input('codigo_articulo');
+        $ordenCompraDetalles->codigo_barra = $request->input('codigo_barra');
+        $ordenCompraDetalles->descripcion = $request->input('descripcion');
+
+        $ordenCompraDetalles->save();
+
+      return redirect()->route('ordenCompraDetalle.index')->with('Saved', ' Informacion');
+      }
+      catch(\Illuminate\Database\QueryException $e){
+        return back()->with('Error', ' Error');
+      }
     }
 
     /**

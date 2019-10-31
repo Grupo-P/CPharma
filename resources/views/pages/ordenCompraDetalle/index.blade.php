@@ -86,11 +86,9 @@
 			    </form>
 				</td>
         <td style="width:7%;">	        	
-					<a href="{{ url('/ordenCompraDetalle/create') }}" role="button" class="btn btn-outline-info btn-sm" 
-					style="display: inline;">
-					<i class="fas fa-plus"></i>
-					Agregar		      		
-				</a>
+						<form action="{{ url('/ordenCompraDetalle/create') }}" method="PRE">
+			        <button type="submit" role="button" class="btn btn-outline-info btn-sm"data-placement="top" name="Reporte" value="NO" style="display: inline;"><i class="fas fa-plus">&nbsp;Agregar</i></button>
+				    </form>
 	        </td>
 	        <td style="width:86%;">
 	        	<div class="input-group md-form form-sm form-1 pl-0">
