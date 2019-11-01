@@ -112,6 +112,15 @@
 
           <tr>
             <th scope="row">
+              {!! Form::label('fecha_solicitud', 'Fecha de solicitud') !!}
+            </th>
+            <td>
+              {!! Form::date('fecha_solicitud', null, ['class' => 'form-control', 'required']) !!}
+            </td>
+          </tr>
+
+          <tr>
+            <th scope="row">
               {!! Form::label('comentarios', 'Comentarios *', ['title' => 'Éste campo es requerido']) !!}
             </th>
             <td>
