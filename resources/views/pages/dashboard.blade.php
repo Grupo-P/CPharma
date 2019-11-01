@@ -797,34 +797,34 @@
 ?>
 	<!-- Modal RRHH -->
 	<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-  	<div class="modal-dialog modal-dialog-centered" role="document">
-	    <div class="modal-content">
-	      <div class="modal-header">
-	        <h5 class="modal-title text-info" id="exampleModalCenterTitle"><i class="fas fa-bell text-info CP-beep"></i> Novedades</h5>
-	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-	          <span aria-hidden="true">&times;</span>
-	        </button>
-	      </div>
-	      <div class="modal-body">
-	      	<label>Hola <b class="text-info">{{ Auth::user()->name }}</b>.</label>
-	      	<br/>
-	      	Estas usando<b class="text-info"> CPharma v.4.8</b>, para el departamento de <b class="text-info">{{ Auth::user()->departamento }}</b><br/><br/>
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title text-info" id="exampleModalCenterTitle"><i class="fas fa-bell text-info CP-beep"></i> Novedades</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <label>Hola <b class="text-info">{{ Auth::user()->name }}</b>.</label>
+          <br/>
+          Estas usando<b class="text-info"> CPharma v.4.8</b>, para el departamento de <b class="text-info">{{ Auth::user()->departamento }}</b><br/><br/>
 	      	<ul style="list-style:none">
-	        	<li class="card-text text-dark" style="display: inline;">
-						<i class="far fa-check-circle text-info" style="display: inline;"></i>
-						Desde ya esta disponible el modulo: 
-						<b class="text-info">Candidatos</b>!!
-	  				</li>
-  				</ul>
+            <li class="card-text text-dark" style="display: inline;">
+              <i class="far fa-check-circle text-info" style="display: inline;"></i>
+              Desde ya esta disponible el modulo: 
+              <b class="text-info">Candidatos</b>!!
+            </li>
+          </ul>
   				<ul style="list-style:none">
-	        	<li class="card-text text-dark" style="display: inline;">
-						<i class="far fa-check-circle text-info" style="display: inline;"></i>
-						Desde ya esta disponible el modulo: 
-						<b class="text-info">Pruebas</b>!!
-	  				</li>
-  				</ul>
-	      </div>
-	      <div class="modal-footer">
+            <li class="card-text text-dark" style="display: inline;">
+              <i class="far fa-check-circle text-info" style="display: inline;"></i>
+              Desde ya esta disponible el modulo: 
+              <b class="text-info">Pruebas</b>!!
+            </li>
+          </ul>
+        </div>
+        <div class="modal-footer">
 	        <button type="button" class="btn btn-outline-info" data-dismiss="modal">Aceptar</button>
 	      </div>
 	    </div>
@@ -853,6 +853,7 @@
 	  		<a href="/candidatos" class="btn btn-outline-danger btn-sm">Visualizar</a>
 	  	</div>		
 		</div>
+
 		<div class="card border-success mb-3" style="width: 14rem;">	  	
 			<div class="card-body text-left bg-success">
 	  		<h3 class="card-title">
