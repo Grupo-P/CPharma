@@ -1,8 +1,6 @@
 @extends('layouts.model')
 
-@section('title')
-  Entrevistas
-@endsection
+@section('title', 'Entrevistas')
 
 @section('scriptsHead')
   <style>
@@ -25,7 +23,7 @@
             </button>
           </div>
           <div class="modal-body">
-            <h4 class="h6"> Entrevista almacenada con éxito</h4>
+            <h4 class="h6">Entrevista almacenada con éxito</h4>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-outline-success" data-dismiss="modal">Aceptar</button>
@@ -73,7 +71,7 @@
             </button>
           </div>
           <div class="modal-body">
-            <h4 class="h6"> Entrevista Reincorporada con éxito </h4>
+            <h4 class="h6">Entrevista Reincorporada con éxito</h4>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-outline-success" data-dismiss="modal">Aceptar</button>
@@ -82,7 +80,8 @@
       </div>
     </div>
   @endif
-   @if(session('Deleted1'))
+
+  @if(session('Deleted1'))
     <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
@@ -106,9 +105,8 @@
   @endif
 
   <h1 class="h5 text-info">
-  <i class="fas fa-users"></i> &nbsp;Entrevistas
+    <i class="fas fa-users"></i>&nbsp;Entrevistas
   </h1>
-
   <hr class="row align-items-start col-12">
 
   <table style="width:100%;">
@@ -133,32 +131,32 @@
   </table>
 
   <br/>
- <table class="table table-striped table-borderless col-12 sortable" id="myTable">
-      <thead class="thead-dark">
-         <tr>
-          <th scope="col" class="CP-sticky">#</th>
-          <th scope="col" class="CP-sticky">Fecha</th>
-          <th scope="col" class="CP-sticky">Entrevistadores</th>
-           <th scope="col" class="CP-sticky">Lugar</th>
-          <th scope="col" class="CP-sticky">Estatus</th>
-          <th scope="col" class="CP-sticky">Acciones</th>
-      </tr>
-      </thead>
 
-<tbody>
-    @foreach($entrevistas as $entrevista)
-        <tr>
-          <th>{{$entrevista->id}}</th>
-          <td>{{date('d-m-Y',strtotime($entrevista->fecha_entrevista))}}</td>
-          <td>{{$entrevista->entrevistadores}}</td>
-          <td>{{$entrevista->lugar}}</td>
-          <td>{{$entrevista->estatus}}</td>
-          
+  <table class="table table-striped table-borderless col-12 sortable" id="myTable">
+    <thead class="thead-dark">
+      <tr>
+        <th scope="col" class="CP-sticky">#</th>
+        <th scope="col" class="CP-sticky">Fecha</th>
+        <th scope="col" class="CP-sticky">Entrevistadores</th>
+        <th scope="col" class="CP-sticky">Lugar</th>
+        <th scope="col" class="CP-sticky">Estatus</th>
+        <th scope="col" class="CP-sticky">Acciones</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      @foreach($entrevistas as $entrevista)
+      <tr>
+        <th>{{$entrevista->id}}</th>
+        <td>{{date('d-m-Y',strtotime($entrevista->fecha_entrevista))}}</td>
+        <td>{{$entrevista->entrevistadores}}</td>
+        <td>{{$entrevista->lugar}}</td>
+        <td>{{$entrevista->estatus}}</td>
+
         <!-- Inicio Validacion de ROLES -->
-          <td style="width:140px;">
-        
+        <td style="width:140px;">
         <?php
-        if(Auth::user()->role == 'MASTER' || Auth::user()->role == 'DEVELOPER'){
+          if(Auth::user()->role == 'MASTER' || Auth::user()->role == 'DEVELOPER') {
         ?>
 
           <?php
