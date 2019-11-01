@@ -136,6 +136,18 @@ class OrdenCompraDetalleController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $ordenCompraDetalles = OrdenCompraDetalle::find($id);
+
+        if($ordenCompraDetalles->estatus == 'ACTIVO'){
+            $ordenCompraDetalles->estatus = 'INACTIVO';
+        }
+        else if($ordenCompraDetalles->estatus == 'INACTIVO'){
+            $ordenCompraDetalles->estatus = 'ACTIVO';
+        }
+
+        $ordenCompraDetalles->user = auth()->user()->name;        
+        $ordenCompraDetalles->save();
+
+        return redirect()->route('ordenCompraDetalle.index')->with('Deleted', ' Informacion');
     }
 }
