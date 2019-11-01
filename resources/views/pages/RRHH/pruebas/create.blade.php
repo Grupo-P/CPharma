@@ -1,8 +1,6 @@
 @extends('layouts.model')
 
-@section('title')
-  Pruebas
-@endsection
+@section('title', 'Crear prueba')
 
 @section('content')
   <!-- Modal Guardar -->
@@ -21,7 +19,7 @@
           </div>
           <div class="modal-body">
             <h4 class="h6">
-             La pruebas no fueron almacenada
+             La prueba no fue almacenada
             </h4>
           </div>
           <div class="modal-footer">
@@ -32,7 +30,9 @@
     </div>
   @endif
 
-  <h1 class="h5 text-info"><i class="fas fa-plus"></i>&nbsp;Agregar pruebas</h1>
+  <h1 class="h5 text-info">
+    <i class="fas fa-plus"></i>&nbsp;Agregar pruebas
+  </h1>
   <hr class="row align-items-start col-12">
 
   <form action="/pruebas/" method="POST" style="display: inline;">  
@@ -56,43 +56,22 @@
 
         <tbody>
           <tr>
-             <tr>
-                <th scope="row">{!! Form::label('tipo_prueba', 'Tipo de prueba') !!}</th>
-                <td>{!! Form::text('tipo_prueba', null, [ 'class' => 'form-control', 'placeholder' => 'Proyectiva', 'autofocus']) !!}</td>
-            </tr>
-            <tr>
-                <th scope="row">{!! Form::label('nombre_prueba', 'Nombre de prueba') !!}</th>
-                <td>{!! Form::text('nombre_prueba', null, [ 'class' => 'form-control', 'placeholder' => 'Zavic']) !!}</td>
-            </tr>
-          {{--   <th scope="row">{!! Form::label('tipo_prueba', 'Tipo de Prueba') !!}</th>
+            <th scope="row">
+              {!! Form::label('tipo_prueba', 'Tipo de prueba') !!}
+            </th>
             <td>
-              {!! Form::select('tipo_prueba', [
-                'Proyectiva' => 'Proyectiva', 
-                'Psicométrica' => 'Psicométrica',
-              
-              ], null, ['class' => 'form-control']) !!}
+              {!! Form::text('tipo_prueba', null, [ 'class' => 'form-control', 'placeholder' => 'Proyectiva', 'autofocus']) !!}
             </td>
           </tr>
 
           <tr>
-            <th scope="row">{!! Form::label('nombre_prueba', 'Nombre de Prueba') !!}</th>
-             <td>
-              {!! Form::select('nombre_prueba', [
-                'Arbol/Casa/Persona' => 'Arbol/Casa/Persona',
-                'Figura humana' => 'Figura humana', 
-                'Figura humana bajo la luvia' => 'Figura humana bajo la lluvia',
-                'Wartegg' => 'Wartegg',
-                'Xando y Vels' => 'Xando y Vels',
-                'Kostick' => 'Kostick',
-                'Therman Merrill' => 'Therman Merrill',
-                '16PF' => '16PF',
-                'Purdue' => 'Purdue',
-                'Test Domino48' => 'Test Domino48',
-                'Zavic' => 'Zavic',
-              ], null, ['class' => 'form-control']) !!}
-            </td> 
-          </tr> --}}
-
+            <th scope="row">
+              {!! Form::label('nombre_prueba', 'Nombre de prueba') !!}
+            </th>
+            <td>
+              {!! Form::text('nombre_prueba', null, [ 'class' => 'form-control', 'placeholder' => 'Zavic']) !!}
+            </td>
+          </tr>
         </tbody>
       </table>
 
