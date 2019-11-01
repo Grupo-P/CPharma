@@ -25,53 +25,55 @@
     </div>
   @endif
 
-    <h1 class="h5 text-info">
-        <i class="fas fa-edit"></i>
-        Modificar Prueba
-    </h1>
+  <h1 class="h5 text-info">
+    <i class="fas fa-edit"></i>
+    Modificar Prueba
+  </h1>
+  <hr class="row align-items-start col-12">
 
-    <hr class="row align-items-start col-12">
+  <form action="/pruebas/" method="POST" style="display: inline;">  
+    @csrf
+    <button type="submit" name="Regresar" role="button" class="btn btn-outline-info btn-sm"data-placement="top"><i class="fa fa-reply">&nbsp;Regresar</i></button>
+  </form>
 
-    <form action="/pruebas/" method="POST" style="display: inline;">  
-        @csrf                       
-        <button type="submit" name="Regresar" role="button" class="btn btn-outline-info btn-sm"data-placement="top"><i class="fa fa-reply">&nbsp;Regresar</i></button>
-    </form>
+  <br/><br/>
 
-    <br>
-    <br>
-
-    {!! Form::model($pruebas, ['route' => ['pruebas.update', $pruebas], 'method' => 'PUT']) !!}
+  {!! Form::model($pruebas, ['route' => ['pruebas.update', $pruebas], 'method' => 'PUT']) !!}
     <fieldset>
-
-        <table class="table table-borderless table-striped">
+      <table class="table table-borderless table-striped">
         <thead class="thead-dark">
-            <tr>
-                <th scope="row"></th>
-                <th scope="row"></th>
-            </tr>
+          <tr>
+            <th scope="row"></th>
+            <th scope="row"></th>
+          </tr>
         </thead>
-        <tbody>
-           <tr>
-             <tr>
-                <th scope="row">{!! Form::label('tipo_prueba', 'Tipo de prueba') !!}</th>
-                <td>{!! Form::text('tipo_prueba', null, [ 'class' => 'form-control', 'placeholder' => 'Proyectiva', 'autofocus', 'required']) !!}</td>
-            </tr>
-            <tr>
-                <th scope="row">{!! Form::label('nombre_prueba', 'Nombre de prueba') !!}</th>
-                <td>{!! Form::text('nombre_prueba', null, [ 'class' => 'form-control', 'placeholder' => 'Zavic', 'required']) !!}
-                </td>
-            </tr>
-           <th>
-        </tbody>
-        </table>
-        {!! Form::submit('Guardar', ['class' => 'btn btn-outline-success btn-md']) !!}
-    </fieldset>
-    {!! Form::close()!!} 
 
-    <script>
-        $(document).ready(function(){
-            $('[data-toggle="tooltip"]').tooltip();   
-        });
-        $('#exampleModalCenter').modal('show')
-    </script>
+        <tbody>
+          <tr>
+            <th scope="row">{!! Form::label('tipo_prueba', 'Tipo de prueba') !!}</th>
+            <td>
+              {!! Form::text('tipo_prueba', null, [ 'class' => 'form-control', 'placeholder' => 'Proyectiva', 'autofocus', 'required']) !!}
+            </td>
+          </tr>
+          <tr>
+            <th scope="row">
+              {!! Form::label('nombre_prueba', 'Nombre de prueba') !!}
+            </th>
+            <td>
+              {!! Form::text('nombre_prueba', null, [ 'class' => 'form-control', 'placeholder' => 'Zavic', 'required']) !!}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      {!! Form::submit('Guardar', ['class' => 'btn btn-outline-success btn-md']) !!}
+    </fieldset>
+  {!! Form::close()!!}
+
+  <script>
+    $(document).ready(function() {
+      $('[data-toggle="tooltip"]').tooltip();
+    });
+    $('#exampleModalCenter').modal('show');
+  </script>
 @endsection
