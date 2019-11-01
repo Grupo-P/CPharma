@@ -113,7 +113,7 @@ class RH_VacanteController extends Controller {
             
             $vacantes->fill($request->all());
             $vacantes->user = auth()->user()->name;
-            
+
             $vacantes->save();
 
             return redirect()
@@ -132,6 +132,22 @@ class RH_VacanteController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function destroy($id) {
-        //
+        $vacantes = RH_Vacante::find($id);
+
+        if($vacantes->estatus == 'ACTIVO') {
+            $vacantes->estatus = 'INACTIVO';
+        }
+        else if($vacantes->estatus == 'INACTIVO') {
+            $vacantes->estatus = 'ACTIVO';
+        }
+
+        $vacantes->user = auth()->user()->name;
+        $vacantes->save();
+
+        if($vacantes->estatus == 'ACTIVO') {
+            return redirect()->route('vacantes.index')->with('Deleted1', ' Informacion');
+        }
+
+        return redirect()->route('vacantes.index')->with('Deleted', ' Informacion');
     }
 }
