@@ -94,9 +94,10 @@ class RH_VacanteController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function edit($id) {
+        $vacantes = RH_Vacante::find($id);
         $sedes = Sede::pluck('razon_social');
 
-        return view('pages.RRHH.vacantes.edit', compact('sedes'));
+        return view('pages.RRHH.vacantes.edit', compact('vacantes', 'sedes'));
     }
 
     /**

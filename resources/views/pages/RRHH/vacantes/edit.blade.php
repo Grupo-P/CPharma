@@ -21,7 +21,7 @@
           </div>
           <div class="modal-body">
             <h4 class="h6">
-             La vacante no pudo ser almacenada
+             La vacante no pudo ser modificada
             </h4>
           </div>
           <div class="modal-footer">
@@ -39,13 +39,13 @@
 
   <form action="/vacantes/" method="POST" style="display: inline;">  
     @csrf
-    <button type="submit" name="Regresar" role="button" class="btn btn-outline-info btn-sm"data-placement="top">
+    <button type="submit" name="Regresar" role="button" class="btn btn-outline-info btn-sm" data-placement="top">
       <i class="fa fa-reply">&nbsp;Regresar</i>
     </button>
   </form>
   <br/><br/>
 
-  {!! Form::open(['route' => 'vacantes.store', 'method' => 'POST']) !!}
+  {!! Form::model($vacantes, ['route' => ['vacantes.update', $vacantes], 'method' => 'PUT']) !!}
     <fieldset>
       <table class="table table-borderless table-striped">
         <thead class="thead-dark">
