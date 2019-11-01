@@ -87,6 +87,8 @@
   include(app_path().'\functions\functions.php');
   include(app_path().'\functions\querys_mysql.php');
   include(app_path().'\functions\querys_sqlserver.php');
+  use Illuminate\Http\Request;
+  use compras\OrdenCompraDetalle;
 
   if (isset($_GET['SEDE'])){      
     echo '<h1 class="h5 text-success"  align="left"> <i class="fas fa-prescription"></i> '.FG_Nombre_Sede($_GET['SEDE']).'</h1>';
@@ -210,7 +212,7 @@
             <th scope="col" class="CP-sticky bg-danger text-white">Venta diaria (Real)</th>
             <th scope="col" class="CP-sticky">Dias restantes</th>
             <th scope="col" class="CP-sticky bg-danger text-white">Dias restantes (Real)</th>
-            <th scope="col" class="CP-sticky">Agragar a orden de compra</th>
+            <th scope="col" class="CP-sticky">Acciones</th>
           </tr>
         </thead>
         <tbody>
@@ -218,6 +220,11 @@
     $contador = 1;
     while($row = sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC)) {
       $IdArticulo = $row["InvArticuloId"];
+
+      $sqlDetalleOrden = "SELECT COUNT(*) AS CuentaOr FROM orden_compra_detalles WHERE id_articulo = '$IdArticulo'";
+      $resultDetalleOrden = mysqli_query($connCPharma,$sqlDetalleOrden);
+      $rowDetalleOrden = $resultDetalleOrden->fetch_assoc();
+      $cuentaArticuloOrden = $rowDetalleOrden['CuentaOr'];
 
       $sql2 = MySQL_Cuenta_Veces_Dias_Cero($IdArticulo,$FInicial,$FFinal);
       $result2 = mysqli_query($connCPharma,$sql2);
@@ -280,7 +287,7 @@
       /*BOTON PARA AGREGAR A LA ORDEN DE COMPRA*/
       echo'
       <td style="width:140px;">
-        <form action="/ordenCompraDetalle/create" method="PRE" style="display: inline; width:100%;" target="_blank">
+        <form action="/ordenCompraDetalle/create" method="PRE" style="display: block; width:100%;" target="_blank">
       ';
       echo'<input type="hidden" name="id_articulo" value="'.$IdArticulo.'">';
       echo'<input type="hidden" name="codigo_articulo" value="'.$CodigoArticulo.'">';
@@ -293,6 +300,18 @@
       echo'
           <button type="submit" name="Reporte" role="button" class="btn btn-outline-success btn-sm" value="SI" style="width:100%;">Agregar</button>
         </form>
+      ';
+      if( $cuentaArticuloOrden!=0 ) {
+        echo'
+          <br/> 
+          <form action="/ordenCompraDetalle/0" method="PRE" style="display: block; width:100%;" target="_blank">';
+        echo'<input type="hidden" name="id_articulo" value="'.$IdArticulo.'">';
+        echo'
+          <button type="submit" role="button" class="btn btn-outline-danger btn-sm" style="width:100%;">En Transito</button>
+        </form>
+      ';
+      }
+      echo'
       </td>
       ';
       /*BOTON PARA AGREGAR A LA ORDEN DE COMPRA*/
