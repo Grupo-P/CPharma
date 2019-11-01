@@ -83,6 +83,15 @@
 
           <tr>
             <th scope="row">
+              {!! Form::label('dias_libres', 'Dias libres *', ['title' => 'Éste campo es requerido']) !!}
+            </th>
+            <td>
+              {!! Form::text('dias_libres', null, ['class' => 'form-control', 'placeholder' => 'Domingo y lunes', 'pattern' => '^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s,]+$', 'required']) !!}
+            </td>
+          </tr>
+
+          <tr>
+            <th scope="row">
               {!! Form::label('comentarios', 'Comentarios *', ['title' => 'Éste campo es requerido']) !!}
             </th>
             <td>
