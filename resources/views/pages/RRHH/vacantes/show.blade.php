@@ -31,30 +31,37 @@
         <th scope="row">Fecha de vacantes</th>
         <td>{{date('d-m-Y',strtotime($vacantes->fecha_vacantes))}}</td>
       </tr>
+
       <tr>
         <th scope="row">Nombre de vacantesdores</th>
         <td>{{$vacantes->vacantesdores}}</td>
       </tr>
+
       <tr>
         <th scope="row">Lugar de vacantes</th>
         <td>{{$vacantes->lugar}}</td>
       </tr>
+
       <tr>
         <th scope="row">Observaciones</th>
         <td>{{$vacantes->observaciones}}</td>
       </tr>
+
       <tr>
         <th scope="row">Estatus</th>
         <td>{{$vacantes->estatus}}</td>
       </tr>
+
       <tr>
         <th scope="row">Creado</th>
         <td>{{$vacantes->created_at}}</td>
       </tr>
+
       <tr>
         <th scope="row">Ultima Actualización</th>
         <td>{{$vacantes->updated_at}}</td>
       </tr>
+      
       <tr>
         <th scope="row">Actualizado por</th>
         <td>{{$vacantes->user}}</td>
