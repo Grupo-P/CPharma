@@ -19,7 +19,7 @@
           </div>
           <div class="modal-body">
             <h4 class="h6">
-             La pruebas no fueron almacenada
+             La entrevista no fue almacenada
             </h4>
           </div>
           <div class="modal-footer">
@@ -54,22 +54,37 @@
         </thead>
 
         <tbody>
-             <tr>
-                <th scope="row">{!! Form::label('fecha_entrevista', 'Fecha de Entrevista') !!}</th>
-                <td>{!! Form::date('fecha_entrevista', null, [ 'class' => 'form-control', 'autofocus']) !!}</td>
-            </tr>
-            <tr>
-                <th scope="row">{!! Form::label('entrevistadores', 'Nombre de Entrevistadores') !!}</th>
-                <td>{!! Form::text('entrevistadores', null, [ 'class' => 'form-control', 'placeholder' => 'Ashley Caldera']) !!}</td>
-            </tr>
-             <tr>
-                <th scope="row">{!! Form::label('lugar', 'Lugar de Entrevista') !!}</th>
-                <td>{!! Form::text('lugar', null, [ 'class' => 'form-control', 'placeholder' => 'Delicias']) !!}</td>
-            </tr>
-             <tr>
-                <th scope="row">{!! Form::label('observaciones', 'Observaciones') !!}</th>
-                <td>{!! Form::textarea('observaciones', null, [ 'class' => 'form-control', 'placeholder' => 'Detalles del entrevistadores', 'rows' => '3']) !!}</td>
-            </tr>
+          <tr>
+            <th scope="row">
+              {!! Form::label('fecha_entrevista', 'Fecha de Entrevista') !!}
+            </th>
+            <td>
+              {!! Form::date('fecha_entrevista', null, [ 'class' => 'form-control', 'autofocus']) !!}
+            </td>
+          </tr>
+
+          <tr>
+            <th scope="row">
+              {!! Form::label('entrevistadores', 'Nombre de Entrevistadores') !!}
+            </th>
+            <td>
+              {!! Form::text('entrevistadores', null, [ 'class' => 'form-control', 'placeholder' => 'Ashley Caldera']) !!}
+            </td>
+          </tr>
+
+          <tr>
+            <th scope="row">{!! Form::label('lugar', 'Lugar de Entrevista') !!}</th>
+            <td>
+              {!! Form::text('lugar', null, [ 'class' => 'form-control', 'placeholder' => 'Delicias']) !!}
+            </td>
+          </tr>
+
+          <tr>
+            <th scope="row">{!! Form::label('observaciones', 'Observaciones') !!}</th>
+            <td>
+              {!! Form::textarea('observaciones', null, [ 'class' => 'form-control', 'placeholder' => 'Detalles del entrevistadores', 'rows' => '3']) !!}
+            </td>
+          </tr>
         </tbody>
       </table>
 
@@ -83,6 +98,4 @@
     });
     $('#exampleModalCenter').modal('show');
   </script>
-
 @endsection
-
