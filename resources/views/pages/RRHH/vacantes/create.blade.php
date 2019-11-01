@@ -79,7 +79,7 @@
               {!! Form::label('turno', 'Turno *', ['title' => 'Éste campo es requerido']) !!}
             </th>
             <td>
-              {!! Form::text('turno', null, ['class' => 'form-control', 'placeholder' => 'Nocturno', 'pattern' => '^[a-zA-Z]{6,10}$', 'required']) !!}
+              {!! Form::text('turno', null, ['class' => 'form-control', 'placeholder' => 'Nocturno', 'pattern' => '^(diurno)$|^(Diurno)$|^(nocturno)$|^(Nocturno)$|^(mixto)$|^(Mixto)$|^(vespertino)$|^(Vespertino)$', 'required']) !!}
             </td>
           </tr>
 
@@ -125,6 +125,15 @@
             </th>
             <td>
               {!! Form::date('fecha_limite', null, ['class' => 'form-control', 'required']) !!}
+            </td>
+          </tr>
+
+          <tr>
+            <th scope="row">
+              {!! Form::label('nivel_urgencia', 'Nivel de urgencia *', ['title' => 'Éste campo es requerido']) !!}
+            </th>
+            <td>
+              {!! Form::text('nivel_urgencia', null, ['class' => 'form-control', 'placeholder' => 'Alta, mediana o baja', 'pattern' => '^(alta)$|^(Alta)$|^(Mediana)$|^(mediana)$|^(baja)$|^(Baja)$', 'required']) !!}
             </td>
           </tr>
 
