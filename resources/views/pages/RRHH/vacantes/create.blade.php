@@ -56,10 +56,19 @@
         <tbody>
           <tr>
             <th scope="row">
-              {!! Form::label('nombre_vacante', 'Nombre de vacante') !!}
+              {!! Form::label('nombre_vacante', 'Nombre de vacante *', ['title' => 'Éste campo es requerido']) !!}
             </th>
             <td>
               {!! Form::text('nombre_vacante', null, ['class' => 'form-control', 'placeholder' => 'Analista de desarrollo I', 'autofocus', 'pattern' => '^[a-zA-ZáéíóúÁÉÍÓÚ\s]+$', 'required']) !!}
+            </td>
+          </tr>
+
+          <tr>
+            <th scope="row">
+              {!! Form::label('departamento', 'Departamento *', ['title' => 'Éste campo es requerido']) !!}
+            </th>
+            <td>
+              {!! Form::text('departamento', null, ['class' => 'form-control', 'placeholder' => 'Tecnología', 'pattern' => '^[a-zA-ZáéíóúÁÉÍÓÚ\s]+$', 'required']) !!}
             </td>
           </tr>
 
