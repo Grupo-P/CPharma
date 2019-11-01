@@ -121,6 +121,7 @@
             <?php
                 if($_GET['Reporte']=='NO'){  
             ?>
+              {!! Form::hidden('isReporte','NO', ['id'=>'isReporte']) !!}
               {!! Form::hidden('id_articulo',NULL) !!}
               {!! Form::hidden('codigo_articulo',NULL) !!}
               {!! Form::hidden('codigo_barra',NULL) !!}
@@ -130,7 +131,7 @@
               {!! Form::hidden('rango_rpt',NULL) !!}
               <tr>
                 <th scope="row">{!! Form::label('descripcion', 'Descripcion del articulo') !!}</th>
-                <td>{!! Form::text('descripcion', null, [ 'class' => 'form-control', 'autofocus', 'required'=>'required']) !!}</td>
+                <td>{!! Form::text('descripcion', null, [ 'class' => 'form-control', 'autofocus', 'required'=>'required', 'id'=>'descripcion']) !!}</td>
               </tr>
         <!-- FIN DE CASO FORMULARIO PARA ARTICULOS NUEVOS -->
 
@@ -160,7 +161,7 @@
             <?php
                 if($OrdenCompra->sede_destino=='CENTRO DE DISTRIBUCION'){  
             ?>
-              {!! Form::hidden('isCDD','SI', [ 'id'=>'isCDD']) !!}
+               {!! Form::hidden('isCDD','SI', ['id'=>'isCDD']) !!}
               <tr>
                 <th scope="row">{!! Form::label('total_unidades', 'Total de Unidades') !!}</th>
                 <td>{!! Form::text('totalUnidades', null, [ 'class' => 'form-control', 'autofocus', 'required', 'id' => 'totalUnidades', 'onblur' =>'disponible()']) !!}</td>
@@ -192,7 +193,6 @@
             }
             else if($OrdenCompra->sede_destino!='CENTRO DE DISTRIBUCION'){
             ?>
-              {!! Form::hidden('isCDD','NO', [ 'id'=>'isCDD']) !!}
               {!! Form::hidden('sede1',NULL) !!}
               {!! Form::hidden('sede2',NULL) !!}
               {!! Form::hidden('sede3',NULL) !!}
@@ -228,7 +228,7 @@
           }
           else if($OrdenCompra->sede_destino=='CENTRO DE DISTRIBUCION'){
         ?>
-          {!! Form::submit('Guardar', ['class' => 'btn btn-outline-success btn-md', 'id'=>'guardar']) !!}
+          {!! Form::button('Guardar', ['class' => 'btn btn-outline-success btn-md', 'id'=>'guardar', 'onclick'=>'GuardarCDD()']) !!}
         <?php
           } 
         ?>
@@ -244,8 +244,11 @@
         var clasesError = 'border border-danger campoNulo';
         var unidadesDisponibles = $('#unidadesDisponibles');
         var guardar = $('#guardar');  
-        var totalUnidades = $('#totalUnidades'); 
-        var costoUnitario = $('#CostoUnitario');
+        var totalUnidades = $('#totalUnidades');
+        var costoUnitario = $('#CostoUnitario'); 
+        var isCDD = $('#isCDD');
+        var isReporte = $('#isReporte');
+        var descrip = $('#descripcion');
 
         function disponible(){
             totalUnidades = parseInt(document.getElementById('totalUnidades').value);
@@ -256,7 +259,12 @@
             document.getElementById('sede2').value = 0;
             document.getElementById('sede3').value = 0;
             document.getElementById('sede4').value = 0;
-            unidadesDisponibles.removeClass(clasesError);
+
+            isCDD = document.getElementById('isCDD').value;
+
+            if(isCDD=='NO'){
+              unidadesDisponibles.removeClass(clasesError);
+            }
         }
 
         function sumaTotal(){
@@ -287,5 +295,40 @@
             CostoTotal = CostoUnitario*TotalUnidades;
             document.getElementById('CostoTotal').value = parseInt(CostoTotal);
         }
+
+        function GuardarCDD(){
+
+          CostoUnitario = parseInt(document.getElementById('CostoUnitario').value);
+          TotalUnidades = parseInt(document.getElementById('totalUnidades').value);
+          unidadesDispon = parseInt(document.getElementById('unidadesDisponibles').value);
+
+          var CostoUnitario = isNaN(CostoUnitario) ? 0 : CostoUnitario;
+          var TotalUnidades = isNaN(TotalUnidades) ? 0 : TotalUnidades;
+          var unidadesDispon = isNaN(unidadesDispon) ? 0 : unidadesDispon;
+
+          isReporte = document.getElementById('isReporte').value;
+
+          if(isReporte=='NO'){
+
+            descripcion = document.getElementById('descripcion').value;
+
+            if( (descripcion!='') && (CostoUnitario!=0) && (TotalUnidades!=0) && (unidadesDispon==0) ) {
+              guardar.submit();
+            }
+            else if (descripcion=='') {
+              descrip.addClass(clasesError);
+            }
+            else if (TotalUnidades==0) {
+              totalUnidades.addClass(clasesError);
+            }
+            else if (unidadesDispon!=0) {
+              unidadesDisponibles.addClass(clasesError);
+            }
+            else if (CostoUnitario==0) {
+              costoUnitario.addClass(clasesError);
+            } 
+          }
+        }
+        
     </script>
 @endsection
