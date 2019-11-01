@@ -28,23 +28,48 @@
 
     <tbody>
       <tr>
-        <th scope="row">Fecha de vacantes</th>
-        <td>{{date('d-m-Y',strtotime($vacantes->fecha_vacantes))}}</td>
+        <th scope="row">Sede</th>
+        <td>{{$vacantes->sede}}</td>
       </tr>
 
       <tr>
-        <th scope="row">Nombre de vacantesdores</th>
-        <td>{{$vacantes->vacantesdores}}</td>
+        <th scope="row">Nombre de la vacante</th>
+        <td>{{$vacantes->nombre_vacante}}</td>
       </tr>
 
       <tr>
-        <th scope="row">Lugar de vacantes</th>
-        <td>{{$vacantes->lugar}}</td>
+        <th scope="row">Departamento</th>
+        <td>{{$vacantes->departamento}}</td>
       </tr>
 
       <tr>
-        <th scope="row">Observaciones</th>
-        <td>{{$vacantes->observaciones}}</td>
+        <th scope="row">Turno</th>
+        <td>{{$vacantes->turno}}</td>
+      </tr>
+
+      <tr>
+        <th scope="row">Dias libres</th>
+        <td>{{$vacantes->dias_libres}}</td>
+      </tr>
+
+      <tr>
+        <th scope="row">Nivel de urgencia</th>
+        <td>{{$vacantes->nivel_urgencia}}</td>
+      </tr>
+
+      <tr>
+        <th scope="row">Fecha de solicitud</th>
+        <td>{{date('d-m-Y',strtotime($vacantes->fecha_solicitud))}}</td>
+      </tr>
+
+      <tr>
+        <th scope="row">Fecha límite</th>
+        <td>{{date('d-m-Y',strtotime($vacantes->fecha_limite))}}</td>
+      </tr>
+
+      <tr>
+        <th scope="row">Cantidad requerida</th>
+        <td>{{$vacantes->cantidad}}</td>
       </tr>
 
       <tr>
@@ -61,7 +86,7 @@
         <th scope="row">Ultima Actualización</th>
         <td>{{$vacantes->updated_at}}</td>
       </tr>
-      
+
       <tr>
         <th scope="row">Actualizado por</th>
         <td>{{$vacantes->user}}</td>
