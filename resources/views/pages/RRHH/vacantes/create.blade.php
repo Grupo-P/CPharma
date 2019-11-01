@@ -62,18 +62,15 @@
               {!! Form::text('nombre_vacante', null, ['class' => 'form-control', 'placeholder' => 'Analista de desarrollo I', 'autofocus', 'pattern' => '^[a-zA-ZáéíóúÁÉÍÓÚ\s]+$', 'required']) !!}
             </td>
           </tr>
-            <tr>
-                <th scope="row">{!! Form::label('entrevistadores', 'Nombre de Entrevistadores') !!}</th>
-                <td>{!! Form::text('entrevistadores', null, [ 'class' => 'form-control', 'placeholder' => 'Ashley Caldera']) !!}</td>
-            </tr>
-             <tr>
-                <th scope="row">{!! Form::label('lugar', 'Lugar de Entrevista') !!}</th>
-                <td>{!! Form::text('lugar', null, [ 'class' => 'form-control', 'placeholder' => 'Delicias']) !!}</td>
-            </tr>
-             <tr>
-                <th scope="row">{!! Form::label('observaciones', 'Observaciones') !!}</th>
-                <td>{!! Form::textarea('observaciones', null, [ 'class' => 'form-control', 'placeholder' => 'Detalles del entrevistadores', 'rows' => '3']) !!}</td>
-            </tr>
+
+          <tr>
+            <th scope="row">
+              {!! Form::label('observaciones', 'Observaciones') !!}
+            </th>
+            <td>
+              {!! Form::textarea('observaciones', null, [ 'class' => 'form-control', 'placeholder' => 'Detalles del entrevistadores', 'rows' => '3']) !!}
+            </td>
+          </tr>
         </tbody>
       </table>
 
@@ -87,5 +84,4 @@
     });
     $('#exampleModalCenter').modal('show');
   </script>
-
 @endsection
