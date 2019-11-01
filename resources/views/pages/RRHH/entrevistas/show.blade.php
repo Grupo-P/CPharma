@@ -18,46 +18,53 @@
 
   <br/><br/>
 
-	<table class="table table-borderless table-striped">
-		<thead class="thead-dark">
-		    <tr>
-	      		<th scope="row"></th>
-	      		<th scope="row"></th>
-		    </tr>
-	  	</thead>
-	  	<tbody>		
-		    <tr>
-		      	<th scope="row">Fecha de Entrevista</th>
-	    	  	<td>{{date('d-m-Y',strtotime($entrevistas->fecha_entrevista))}}</td>
-		    </tr>
-		    <tr>
-		      	<th scope="row">Nombre de Entrevistadores</th>
-	    	  	<td>{{$entrevistas->entrevistadores}}</td>
-		    </tr>
-		    <tr>
-		      	<th scope="row">Lugar de Entrevista</th>
-	    	  	<td>{{$entrevistas->lugar}}</td>
-		    </tr>
-		    <tr>
-            <th scope="row">Observaciones</th>
-            <td>{{$entrevistas->observaciones}}</td>
-        </tr>
-		    <tr>
-		      	<th scope="row">Estatus</th>
-	    	  	<td>{{$entrevistas->estatus}}</td>
-		    </tr>
-		    <tr>
-		      	<th scope="row">Creado</th>
-	    	  	<td>{{$entrevistas->created_at}}</td>
-		    </tr>
-		    <tr>
-		      	<th scope="row">Ultima Actualización</th>
-	    	  	<td>{{$entrevistas->updated_at}}</td>
-		    </tr>
-		    <tr>
-		      	<th scope="row">Actualizado por</th>
-	    	  	<td>{{$entrevistas->user}}</td>
-		    </tr>
-	  	</tbody>
-	</table>
+  <table class="table table-borderless table-striped">
+    <thead class="thead-dark">
+      <tr>
+        <th scope="row"></th>
+        <th scope="row"></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th scope="row">Fecha de Entrevista</th>
+        <td>{{date('d-m-Y',strtotime($entrevistas->fecha_entrevista))}}</td>
+      </tr>
+
+      <tr>
+        <th scope="row">Nombre de Entrevistadores</th>
+        <td>{{$entrevistas->entrevistadores}}</td>
+      </tr>
+
+      <tr>
+        <th scope="row">Lugar de Entrevista</th>
+        <td>{{$entrevistas->lugar}}</td>
+      </tr>
+
+      <tr>
+        <th scope="row">Observaciones</th>
+        <td>{{$entrevistas->observaciones}}</td>
+      </tr>
+
+      <tr>
+        <th scope="row">Estatus</th>
+        <td>{{$entrevistas->estatus}}</td>
+      </tr>
+
+      <tr>
+        <th scope="row">Creado</th>
+        <td>{{$entrevistas->created_at}}</td>
+      </tr>
+
+      <tr>
+        <th scope="row">Ultima Actualización</th>
+        <td>{{$entrevistas->updated_at}}</td>
+      </tr>
+
+      <tr>
+        <th scope="row">Actualizado por</th>
+        <td>{{$entrevistas->user}}</td>
+      </tr>
+    </tbody>
+  </table>
 @endsection
