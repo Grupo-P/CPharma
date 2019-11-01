@@ -32,7 +32,9 @@
     </div>
   @endif
 
-  <h1 class="h5 text-info"><i class="fas fa-users"></i></i>&nbsp;Agregar Entrevistas</h1>
+  <h1 class="h5 text-info">
+    <i class="fas fa-plus"></i>&nbsp;Agregar Entrevistas
+  </h1>
   <hr class="row align-items-start col-12">
 
   <form action="/entrevistas/" method="POST" style="display: inline;">  
