@@ -97,7 +97,19 @@
               {!! Form::label('sede', 'Sede *', ['title' => 'Éste campo es requerido']) !!}
             </th>
             <td>
-              {!! Form::select('sede', [SedeFTN => SedeFTN, SedeFLL => SedeFLL, SedeFAU => SedeFAU], null, ['class' => 'form-control', 'placeholder' => 'Seleccione una sede', 'required']) !!}
+              <select name="sede" id="sede" class="form-control" required>
+                <option value="">Seleccione una opción</option>
+
+                <?php
+                  foreach ($sedes as $sede) {
+                ?>
+
+                <option value="{{$sede}}">{{$sede}}</option>
+
+                <?php
+                  }
+                ?>
+              </select>
             </td>
           </tr>
 

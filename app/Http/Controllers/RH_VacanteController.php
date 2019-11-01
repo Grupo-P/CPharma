@@ -4,6 +4,7 @@ namespace compras\Http\Controllers;
 
 use Illuminate\Http\Request;
 use compras\RH_Vacante;
+use compras\Sede;
 use compras\User;
 
 class RH_VacanteController extends Controller {
@@ -33,7 +34,9 @@ class RH_VacanteController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function create() {
-        return view('pages.RRHH.vacantes.create');
+        $sedes = Sede::pluck('razon_social');
+
+        return view('pages.RRHH.vacantes.create', compact('sedes'));
     }
 
     /**
