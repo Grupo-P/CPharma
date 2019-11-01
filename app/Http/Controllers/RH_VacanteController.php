@@ -33,7 +33,7 @@ class RH_VacanteController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function create() {
-        //
+        return view('pages.RRHH.vacantes.create');
     }
 
     /**
