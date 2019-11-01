@@ -139,6 +139,15 @@
 
           <tr>
             <th scope="row">
+              {!! Form::label('solicitante', 'Solicitante *', ['title' => 'Éste campo es requerido']) !!}
+            </th>
+            <td>
+              {!! Form::text('solicitante', null, ['class' => 'form-control', 'placeholder' => 'Manuel Henriquez', 'pattern' => '^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s,]+$', 'required']) !!}
+            </td>
+          </tr>
+
+          <tr>
+            <th scope="row">
               {!! Form::label('comentarios', 'Comentarios *', ['title' => 'Éste campo es requerido']) !!}
             </th>
             <td>
