@@ -113,7 +113,8 @@ class OrdenCompraDetalleController extends Controller
      */
     public function edit($id)
     {
-        //
+        $ordenCompraDetalles = OrdenCompraDetalle::find($id);
+        return view('pages.ordenCompraDetalle.edit', compact('ordenCompraDetalles'));
     }
 
     /**
@@ -125,7 +126,15 @@ class OrdenCompraDetalleController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        try{
+          $ordenCompraDetalles = OrdenCompraDetalle::find($id);
+          $ordenCompraDetalles->fill($request->all());
+          $ordenCompraDetalles->save();
+          return redirect()->route('ordenCompraDetalle.index')->with('Updated', ' Informacion');
+        }
+        catch(\Illuminate\Database\QueryException $e){
+            return back()->with('Error', ' Error');
+        }
     }
 
     /**
