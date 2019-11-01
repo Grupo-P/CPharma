@@ -103,6 +103,15 @@
 
           <tr>
             <th scope="row">
+              {!! Form::label('cantidad', 'Cantidad de vacantes *', ['title' => 'Éste campo es requerido']) !!}
+            </th>
+            <td>
+              {!! Form::number('cantidad', null, ['class' => 'form-control', 'placeholder' => '1', 'min' => '1', 'required']) !!}
+            </td>
+          </tr>
+
+          <tr>
+            <th scope="row">
               {!! Form::label('comentarios', 'Comentarios *', ['title' => 'Éste campo es requerido']) !!}
             </th>
             <td>
