@@ -97,7 +97,7 @@
               {!! Form::label('sede', 'Sede *', ['title' => 'Éste campo es requerido']) !!}
             </th>
             <td>
-              {!! Form::select('sede', ['FTN' => SedeFTN, 'FLL' => SedeFLL, 'FAU' => SedeFAU], null, ['class' => 'form-control', 'placeholder' => 'Seleccione una sede', 'required']) !!}
+              {!! Form::select('sede', [SedeFTN => SedeFTN, SedeFLL => SedeFLL, SedeFAU => SedeFAU], null, ['class' => 'form-control', 'placeholder' => 'Seleccione una sede', 'required']) !!}
             </td>
           </tr>
 

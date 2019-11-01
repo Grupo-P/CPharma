@@ -43,7 +43,33 @@ class RH_VacanteController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request) {
-        return $request;
+        try {
+            $fecha_solicitud = $request->input('fecha_solicitud');
+            $fecha_limite = $request->input('fecha_limite');
+            
+            $vacantes = new RH_Vacante();
+
+            $vacantes->nombre_vacante = $request->input('nombre_vacante');
+            $vacantes->departamento = $request->input('departamento');
+            $vacantes->turno = $request->input('turno');
+            $vacantes->dias_libres = $request->input('dias_libres');
+            $vacantes->sede = $request->input('sede');
+            $vacantes->cantidad = intval($request->input('cantidad'));
+            $vacantes->fecha_solicitud = date('Y-m-d',strtotime($fecha_solicitud));
+            $vacantes->fecha_limite = date('Y-m-d',strtotime($fecha_limite));
+            $vacantes->nivel_urgencia = $request->input('nivel_urgencia');
+            $vacantes->solicitante = $request->input('solicitante');
+            $vacantes->comentarios = $request->input('comentarios');
+
+            $vacantes->estatus = 'ACTIVO';
+            $vacantes->user = auth()->user()->name;
+            $vacantes->save();
+
+            return redirect()->route('vacantes.index')->with('Saved', ' Informacion');
+        }
+        catch(\Illuminate\Database\QueryException $e) {
+            return back()->with('Error', ' Error');
+        }
     }
 
     /**
