@@ -3,6 +3,8 @@
 @section('title', 'Crear vacante')
 
 @section('content')
+  <?php include(app_path().'\functions\config.php'); ?>
+
   <!-- Modal Guardar -->
   @if(session('Error'))
     <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -87,6 +89,15 @@
             </th>
             <td>
               {!! Form::text('dias_libres', null, ['class' => 'form-control', 'placeholder' => 'Domingo y lunes', 'pattern' => '^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s,]+$', 'required']) !!}
+            </td>
+          </tr>
+
+          <tr>
+            <th scope="row">
+              {!! Form::label('sede', 'Sede *', ['title' => 'Éste campo es requerido']) !!}
+            </th>
+            <td>
+              {!! Form::select('sede', ['FTN' => SedeFTN, 'FLL' => SedeFLL, 'FAU' => SedeFAU], null, ['class' => 'form-control', 'placeholder' => 'Seleccione una sede', 'required']) !!}
             </td>
           </tr>
 
