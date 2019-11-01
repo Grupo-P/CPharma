@@ -16,8 +16,9 @@
 		$usuarios = DB::table('users')->count();
 		$dolar = DB::table('dolars')->count();
 		$candidatos = DB::table('rh_candidatos')->count();
-		$pruebas = DB::table('rh_pruebas')->count();
+    $vacantes = DB::table('rh_vacantes')->count();
     $entrevistas = DB::table('rh_entrevistas')->count();
+		$pruebas = DB::table('rh_pruebas')->count();
 
 	/*TASA DOLAR VENTA*/
 		$Tasa = DB::table('tasa_ventas')->where('moneda', 'Dolar')->value('tasa');
@@ -860,20 +861,20 @@
       <div class="card-body text-left bg-success">
         <h3 class="card-title">
           <span class="card-text text-white">
-            <i class="fas fa-tasks"></i>
+            <i class="fas fa-user-plus"></i>
             <?php
-            echo ''.$pruebas;
+            echo ''.$vacantes;
           ?>            
           </span>
         </h3>
         <p class="card-text text-white">
         <?php 
-          echo 'Pruebas registradas';
+          echo 'Vacantes registradas';
         ?>
         </p>
       </div>
       <div class="card-footer bg-transparent border-success text-right">
-        <a href="/pruebas" class="btn btn-outline-success btn-sm">Visualizar</a>
+        <a href="/vacantes" class="btn btn-outline-success btn-sm">Visualizar</a>
       </div>    
     </div>
 
