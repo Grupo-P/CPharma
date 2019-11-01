@@ -54,10 +54,14 @@
         </thead>
 
         <tbody>
-             <tr>
-                <th scope="row">{!! Form::label('fecha_entrevista', 'Fecha de Entrevista') !!}</th>
-                <td>{!! Form::date('fecha_entrevista', null, [ 'class' => 'form-control', 'autofocus']) !!}</td>
-            </tr>
+          <tr>
+            <th scope="row">
+              {!! Form::label('nombre_vacante', 'Nombre de vacante') !!}
+            </th>
+            <td>
+              {!! Form::text('nombre_vacante', null, ['class' => 'form-control', 'placeholder' => 'Analista de desarrollo I', 'autofocus', 'pattern' => '^[a-zA-ZáéíóúÁÉÍÓÚ\s]+$', 'required']) !!}
+            </td>
+          </tr>
             <tr>
                 <th scope="row">{!! Form::label('entrevistadores', 'Nombre de Entrevistadores') !!}</th>
                 <td>{!! Form::text('entrevistadores', null, [ 'class' => 'form-control', 'placeholder' => 'Ashley Caldera']) !!}</td>
