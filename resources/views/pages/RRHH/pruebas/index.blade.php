@@ -157,57 +157,52 @@
           <a href="/pruebas/{{$prueba->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
             <i class="fas fa-edit"></i>
           </a>
-                    
-                <form action="/pruebas/{{$prueba->id}}" method="POST" style="display: inline;">
-                @method('DELETE')
-                @csrf             
-                <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Desincorporar"><i class="fa fa-reply"></i></button>
-            </form>
-          <?php
-          }
-          else if($prueba->estatus == 'INACTIVO'){
-          ?>    
-              <form action="/pruebas/{{$prueba->id}}" method="POST" style="display: inline;">
-              @method('DELETE')
-              @csrf             
-              <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Reincorporar"><i class="fa fa-share"></i></button>
+
+          <form action="/pruebas/{{$prueba->id}}" method="POST" style="display: inline;">
+            @method('DELETE')
+            @csrf
+            <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Desincorporar"><i class="fa fa-reply"></i></button>
           </form>
           <?php
-          }         
+            }
+            else if($prueba->estatus == 'INACTIVO') {
           ?>
-        <?php 
-        } else if(Auth::user()->role == 'ANALISTA'){
-        ?>
+          <form action="/pruebas/{{$prueba->id}}" method="POST" style="display: inline;">
+            @method('DELETE')
+            @csrf
+            <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Reincorporar"><i class="fa fa-share"></i></button>
+          </form>
+          <?php
+            }
+          } else if(Auth::user()->role == 'ANALISTA') {
+          ?>
           <a href="/pruebas/{{$prueba->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
-                <i class="far fa-eye"></i>                
-              </a>
+            <i class="far fa-eye"></i>
+          </a>
 
-              <a href="/pruebas/{{$prueba->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
-                <i class="fas fa-edit"></i>
-              </a>
-        <?php
-        } else if(Auth::user()->role == 'USUARIO'){
-        ?>
+          <a href="/pruebas/{{$prueba->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
+            <i class="fas fa-edit"></i>
+          </a>
+          <?php
+            } else if(Auth::user()->role == 'USUARIO') {
+          ?>
           <a href="/pruebas/{{$prueba->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
-                <i class="far fa-eye"></i>                
-              </a>    
-        <?php
-        }
-        ?>
-                    
-          </td>
+            <i class="far fa-eye"></i>
+          </a>
+          <?php
+            }
+          ?>
+        </td>
         <!-- Fin Validacion de ROLES -->
-
-        </tr>
+      </tr>
     @endforeach
     </tbody>
   </table>
 
   <script>
-    $(document).ready(function(){
-        $('[data-toggle="tooltip"]').tooltip();   
+    $(document).ready(function() {
+        $('[data-toggle="tooltip"]').tooltip();
     });
-    $('#exampleModalCenter').modal('show')
+    $('#exampleModalCenter').modal('show');
   </script>
-
 @endsection
