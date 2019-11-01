@@ -82,7 +82,9 @@ class RH_VacanteController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function show($id) {
-        //
+        $vacantes = RH_Vacante::find($id);
+
+        return view('pages.RRHH.vacantes.show', compact('vacantes'));
     }
 
     /**

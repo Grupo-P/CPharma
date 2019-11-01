@@ -33,7 +33,7 @@
   @endif
 
   <h1 class="h5 text-info">
-    <i class="fas fa-user-plus"></i>&nbsp;Crear vacante
+    <i class="fas fa-plus"></i>&nbsp;Crear vacante
   </h1>
   <hr class="row align-items-start col-12">
 
