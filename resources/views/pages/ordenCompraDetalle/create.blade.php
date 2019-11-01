@@ -85,6 +85,7 @@
     ?>
 
     {!! Form::hidden('codigo_orden',$OrdenCompra->codigo) !!}
+    {!! Form::hidden('usuario',$usuario) !!}
     <fieldset>
 
         <table class="table table-borderless table-striped">
@@ -127,7 +128,6 @@
               {!! Form::hidden('dias_restantes_rpt',NULL) !!}
               {!! Form::hidden('origen_rpt',NULL) !!}
               {!! Form::hidden('rango_rpt',NULL) !!}
-              {!! Form::hidden('usuario',$usuario) !!}
               <tr>
                 <th scope="row">{!! Form::label('descripcion', 'Descripcion del articulo') !!}</th>
                 <td>{!! Form::text('descripcion', null, [ 'class' => 'form-control', 'autofocus', 'required'=>'required']) !!}</td>
@@ -147,7 +147,6 @@
               {!! Form::hidden('dias_restantes_rpt',$_GET['dias_restantes_rpt']) !!}
               {!! Form::hidden('origen_rpt',$_GET['origen_rpt']) !!}
               {!! Form::hidden('rango_rpt',$_GET['rango_rpt']) !!}
-              {!! Form::hidden('usuario','SYSTEM') !!}
               <tr>
                 <th scope="row">{!! Form::label('descrip', 'Descripcion del articulo') !!}</th>
                 <td scope="row">{!! Form::label('descrip',$_GET['descripcion']) !!}</td>

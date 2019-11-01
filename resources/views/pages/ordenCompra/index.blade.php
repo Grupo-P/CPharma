@@ -217,23 +217,25 @@
 				 		)
 					){
 				?>
-					<a href="/ordenCompra/{{$ordenCompra->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar orden" style="display: inline-block; width: 100%">
-      			<i class="fas fa-edit"></i>			      		
-	      	</a>
-
-	      	<form action="/ordenCompraDetalle" method="GET">
-				    @csrf					    
-				    <button type="submit" name="Eliminar" role="button" class="btn btn-outline-warning btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar articulos" style="display: inline-block; width: 100%"><i class="fa fa-edit"></i></button>
-					</form>
 
 					<?php
-					if($ordenCompra->estatus == 'ACTIVO'){
+						if($ordenCompra->estatus == 'ACTIVO'){
 					?>  
+		      	<a href="/ordenCompra/{{$ordenCompra->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar orden" style="display: inline-block; width: 100%">
+      				<i class="fas fa-edit"></i>			      		
+	      		</a>
+
+		      	<form action="/ordenCompraDetalle" method="GET">
+					    @csrf					    
+					    <button type="submit" name="Eliminar" role="button" class="btn btn-outline-warning btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar articulos" style="display: inline-block; width: 100%"><i class="fa fa-edit"></i></button>
+						</form>
+					 
 		      	<form action="/ordenCompra/{{$ordenCompra->id}}" method="POST">
 				    @method('DELETE')
 				    @csrf					    
 				    <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Pausar" style="display: inline-block; width: 100%"><i class="fa fa-pause"></i></button>
 						</form>
+
 					<?php
 					}
 					else if($ordenCompra->estatus == 'EN ESPERA'){

@@ -289,7 +289,7 @@
       echo'<input type="hidden" name="existencia_rpt" value="'.$Existencia.'">';
       echo'<input type="hidden" name="dias_restantes_rpt" value="'.$DiasRestantesQuiebre.'">';
       echo'<input type="hidden" name="origen_rpt" value="Productos mas vendidos">';
-      echo'<input type="hidden" name="rango_rpt" value="'.$FInicialImp.'-'.$FFinalImp.'">';
+      echo'<input type="hidden" name="rango_rpt" value="Del: '.$FInicialImp.' Al: '.$FFinalImp.'">';
       echo'
           <button type="submit" name="Reporte" role="button" class="btn btn-outline-success btn-sm" value="SI" style="width:100%;">Agregar</button>
         </form>
