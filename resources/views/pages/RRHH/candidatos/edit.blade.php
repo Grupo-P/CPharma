@@ -36,7 +36,7 @@
 
   <form action="/candidatos/" method="POST" style="display: inline;">  
     @csrf
-    <button type="submit" name="Regresar" role="button" class="btn btn-outline-info btn-sm"data-placement="top"><i class="fa fa-reply">&nbsp;Regresar</i></button>
+    <button type="submit" name="Regresar" role="button" class="btn btn-outline-info btn-sm" data-placement="top"><i class="fa fa-reply">&nbsp;Regresar</i></button>
   </form>
 
   <br/><br/>
