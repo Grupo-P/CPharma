@@ -1,8 +1,6 @@
 @extends('layouts.model')
 
-@section('title')
-  Vacante
-@endsection
+@section('title', 'Vacante')
 
 @section('content')
  	<h1 class="h5 text-info">
