@@ -1,8 +1,6 @@
 @extends('layouts.model')
 
-@section('title')
-  Candidatos
-@endsection
+@section('title', 'Candidatos')
 
 @section('scriptsHead')
   <style>

@@ -1,8 +1,6 @@
 @extends('layouts.model')
 
-@section('title')
-  Candidato
-@endsection
+@section('title', 'Modificar candidato')
 
 <!-- Modal Guardar -->
 @if(session('Error'))

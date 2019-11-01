@@ -1,8 +1,6 @@
 @extends('layouts.model')
 
-@section('title')
-  Candidato
-@endsection
+@section('title', 'Mostrar candidato')
 
 @section('content')
  	<h1 class="h5 text-info">
