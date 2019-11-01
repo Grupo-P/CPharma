@@ -112,10 +112,19 @@
 
           <tr>
             <th scope="row">
-              {!! Form::label('fecha_solicitud', 'Fecha de solicitud') !!}
+              {!! Form::label('fecha_solicitud', 'Fecha de solicitud *', ['title' => 'Éste campo es requerido']) !!}
             </th>
             <td>
               {!! Form::date('fecha_solicitud', null, ['class' => 'form-control', 'required']) !!}
+            </td>
+          </tr>
+
+          <tr>
+            <th scope="row">
+              {!! Form::label('fecha_limite', 'Fecha límite *', ['title' => 'Éste campo es requerido']) !!}
+            </th>
+            <td>
+              {!! Form::date('fecha_limite', null, ['class' => 'form-control', 'required']) !!}
             </td>
           </tr>
 
