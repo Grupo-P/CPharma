@@ -140,6 +140,7 @@
               }
               else if($_GET['Reporte']=='SI'){  
             ?>
+              {!! Form::hidden('isReporte','SI', ['id'=>'isReporte']) !!}
               {!! Form::hidden('id_articulo',$_GET['id_articulo']) !!}
               {!! Form::hidden('codigo_articulo',$_GET['codigo_articulo']) !!}
               {!! Form::hidden('codigo_barra',$_GET['codigo_barra']) !!}
@@ -317,6 +318,21 @@
             }
             else if (descripcion=='') {
               descrip.addClass(clasesError);
+            }
+            else if (TotalUnidades==0) {
+              totalUnidades.addClass(clasesError);
+            }
+            else if (unidadesDispon!=0) {
+              unidadesDisponibles.addClass(clasesError);
+            }
+            else if (CostoUnitario==0) {
+              costoUnitario.addClass(clasesError);
+            } 
+          }
+          else if(isReporte=='SI'){
+
+            if( (CostoUnitario!=0) && (TotalUnidades!=0) && (unidadesDispon==0) ) {
+              guardar.submit();
             }
             else if (TotalUnidades==0) {
               totalUnidades.addClass(clasesError);
