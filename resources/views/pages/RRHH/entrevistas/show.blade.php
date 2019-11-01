@@ -3,20 +3,20 @@
 @section('title', 'Entrevista')
 
 @section('content')
- 	<h1 class="h5 text-info">
-		<i class="far fa-eye"></i>
-		Detalles de las entrevistas
-	</h1>
+  <h1 class="h5 text-info">
+    <i class="far fa-eye"></i>
+    Detalles de las entrevistas
+  </h1>
+  <hr class="row align-items-start col-12">
 
-	<hr class="row align-items-start col-12">
+  <form action="/entrevistas/" method="POST" style="display: inline;">  
+    @csrf
+    <button type="submit" name="Regresar" role="button" class="btn btn-outline-info btn-sm"data-placement="top">
+      <i class="fa fa-reply">&nbsp;Regresar</i>
+    </button>
+  </form>
 
-	<form action="/entrevistas/" method="POST" style="display: inline;">  
-	    @csrf					    
-	    <button type="submit" name="Regresar" role="button" class="btn btn-outline-info btn-sm"data-placement="top"><i class="fa fa-reply">&nbsp;Regresar</i></button>
-	</form>
-
-	<br>
-	<br>
+  <br/><br/>
 
 	<table class="table table-borderless table-striped">
 		<thead class="thead-dark">
