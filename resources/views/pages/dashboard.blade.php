@@ -839,25 +839,25 @@
     <div class="card border-danger mb-3" style="width: 14rem;">
       <div class="card-body text-left bg-danger">
         <h2 class="card-title">
-	    		<span class="card-text text-white">
-	    			<i class="fas fa-user-check"></i>
-	    			<?php
-						echo ''.$candidatos;
-					?>						
-	    		</span>
-	  		</h2>
-	  		<p class="card-text text-white">
-				<?php 
-					echo 'Candidatos registrados';
-				?>
-	  		</p>
-			</div>
-			<div class="card-footer bg-transparent border-danger text-right">
-	  		<a href="/candidatos" class="btn btn-outline-danger btn-sm">Visualizar</a>
-	  	</div>		
-		</div>
+          <span class="card-text text-white">
+            <i class="fas fa-user-check"></i>
+            <?php
+            echo ''.$candidatos;
+          ?>            
+          </span>
+        </h2>
+        <p class="card-text text-white">
+        <?php 
+          echo 'Candidatos registrados';
+        ?>
+        </p>
+      </div>
+      <div class="card-footer bg-transparent border-danger text-right">
+        <a href="/candidatos" class="btn btn-outline-danger btn-sm">Visualizar</a>
+      </div>    
+    </div>
 
-		<div class="card border-success mb-3" style="width: 14rem;">      
+    <div class="card border-success mb-3" style="width: 14rem;">      
       <div class="card-body text-left bg-success">
         <h3 class="card-title">
           <span class="card-text text-white">
@@ -898,7 +898,30 @@
         <a href="/entrevistas" class="btn btn-outline-info btn-sm">Visualizar</a>
       </div>    
     </div>
-	</div>
+  </div>
+
+  <div class="card-deck">
+    <div class="card border-warning mb-3" style="width: 14rem;">
+      <div class="card-body text-left bg-warning">
+        <h2 class="card-title">
+          <span class="card-text text-white">
+            <i class="fas fa-tasks"></i>
+            <?php
+            echo ''.$pruebas;
+          ?>            
+          </span>
+        </h2>
+        <p class="card-text text-white">
+        <?php 
+          echo 'Pruebas registradas';
+        ?>
+        </p>
+      </div>
+      <div class="card-footer bg-transparent border-warning text-right">
+        <a href="/pruebas" class="btn btn-outline-warning btn-sm">Visualizar</a>
+      </div>    
+    </div>
+  </div>
 	<!-- Dashboard RRHH-->
 <?php
   }
