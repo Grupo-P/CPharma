@@ -157,22 +157,19 @@
         <td style="width:140px;">
         <?php
           if(Auth::user()->role == 'MASTER' || Auth::user()->role == 'DEVELOPER') {
+            if($entrevista->estatus == 'ACTIVO') {
         ?>
+          <a href="/entrevistas/{{$entrevista->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
+            <i class="far fa-eye"></i>
+          </a>
 
-          <?php
-          if($entrevista->estatus == 'ACTIVO'){
-          ?>
-            <a href="/entrevistas/{{$entrevista->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
-                  <i class="far fa-eye"></i>                
-                </a>
+          <a href="/entrevistas/{{$entrevista->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
+            <i class="fas fa-edit"></i>
+          </a>
 
-                <a href="/entrevistas/{{$entrevista->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
-                  <i class="fas fa-edit"></i>               
-                </a>
-                    
-                <form action="/entrevistas/{{$entrevista->id}}" method="POST" style="display: inline;">
-                @method('DELETE')
-                @csrf             
+          <form action="/entrevistas/{{$entrevista->id}}" method="POST" style="display: inline;">
+            @method('DELETE')
+            @csrf
                 <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Desincorporar"><i class="fa fa-reply"></i></button>
             </form>
           <?php
