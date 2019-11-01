@@ -108,7 +108,21 @@ class RH_VacanteController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id) {
-        //
+        try {
+            $vacantes = RH_Vacante::find($id);
+            
+            $vacantes->fill($request->all());
+            $vacantes->user = auth()->user()->name;
+            
+            $vacantes->save();
+
+            return redirect()
+                ->route('vacantes.index')
+                ->with('Updated', ' Informacion');
+        }
+        catch(\Illuminate\Database\QueryException $e) {
+            return back()->with('Error', ' Error');
+        }
     }
 
     /**
