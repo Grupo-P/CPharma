@@ -1,8 +1,6 @@
 @extends('layouts.model')
 
-@section('title')
-  Entrevistas
-@endsection
+@section('title', 'Crear entrevista')
 
 @section('content')
   <!-- Modal Guardar -->
