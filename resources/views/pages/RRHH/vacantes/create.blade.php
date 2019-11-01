@@ -43,7 +43,7 @@
   </form>
   <br/><br/>
 
-  {!! Form::open(['route' => 'entrevistas.store', 'method' => 'POST']) !!}
+  {!! Form::open(['route' => 'vacantes.store', 'method' => 'POST']) !!}
     <fieldset>
       <table class="table table-borderless table-striped">
         <thead class="thead-dark">
@@ -59,7 +59,7 @@
               {!! Form::label('nombre_vacante', 'Nombre de vacante *', ['title' => 'Éste campo es requerido']) !!}
             </th>
             <td>
-              {!! Form::text('nombre_vacante', null, ['class' => 'form-control', 'placeholder' => 'Analista de desarrollo I', 'autofocus', 'pattern' => '^[a-zA-ZáéíóúÁÉÍÓÚ\s]+$', 'required']) !!}
+              {!! Form::text('nombre_vacante', null, ['class' => 'form-control', 'placeholder' => 'Analista de desarrollo I', 'autofocus', 'pattern' => '^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$', 'required']) !!}
             </td>
           </tr>
 
@@ -68,16 +68,25 @@
               {!! Form::label('departamento', 'Departamento *', ['title' => 'Éste campo es requerido']) !!}
             </th>
             <td>
-              {!! Form::text('departamento', null, ['class' => 'form-control', 'placeholder' => 'Tecnología', 'pattern' => '^[a-zA-ZáéíóúÁÉÍÓÚ\s]+$', 'required']) !!}
+              {!! Form::text('departamento', null, ['class' => 'form-control', 'placeholder' => 'Tecnología', 'pattern' => '^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$', 'required']) !!}
             </td>
           </tr>
 
           <tr>
             <th scope="row">
-              {!! Form::label('observaciones', 'Observaciones') !!}
+              {!! Form::label('turno', 'Turno *', ['title' => 'Éste campo es requerido']) !!}
             </th>
             <td>
-              {!! Form::textarea('observaciones', null, [ 'class' => 'form-control', 'placeholder' => 'Detalles del entrevistadores', 'rows' => '3']) !!}
+              {!! Form::text('turno', null, ['class' => 'form-control', 'placeholder' => 'Nocturno', 'pattern' => '^[a-zA-Z]{6,10}$', 'required']) !!}
+            </td>
+          </tr>
+
+          <tr>
+            <th scope="row">
+              {!! Form::label('comentarios', 'Comentarios *', ['title' => 'Éste campo es requerido']) !!}
+            </th>
+            <td>
+              {!! Form::textarea('comentarios', null, [ 'class' => 'form-control', 'placeholder' => 'Detalles de la vacante', 'rows' => '3', 'required']) !!}
             </td>
           </tr>
         </tbody>
