@@ -101,6 +101,13 @@ class RH_CandidatoController extends Controller {
 
         $candidatos = RH_Candidato::find($id);
 
+        $Auditoria = new Auditoria();
+        $Auditoria->accion = 'CONSULTAR';
+        $Auditoria->tabla = 'RH_CANDIDATOS';
+        $Auditoria->registro = $candidatos->nombres.$candidatos->apellidos;
+        $Auditoria->user = auth()->user()->name;
+        $Auditoria->save();
+
         return view('pages.RRHH.candidatos.show', compact('candidatos'));
     }
 
