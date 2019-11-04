@@ -157,15 +157,24 @@ class RH_VacanteController extends Controller {
     public function destroy($id) {
         $vacantes = RH_Vacante::find($id);
 
+        $Auditoria = new Auditoria();
+        $Auditoria->tabla = 'RH_VACANTES';
+        $Auditoria->registro = $vacantes->nombre_vacante;
+        $Auditoria->user = auth()->user()->name;
+
         if($vacantes->estatus == 'ACTIVO') {
             $vacantes->estatus = 'INACTIVO';
+            $Auditoria->accion = 'DESINCORPORAR';
         }
         else if($vacantes->estatus == 'INACTIVO') {
             $vacantes->estatus = 'ACTIVO';
+            $Auditoria->accion = 'REINCORPORAR';
         }
 
         $vacantes->user = auth()->user()->name;
         $vacantes->save();
+
+        $Auditoria->save();
 
         if($vacantes->estatus == 'ACTIVO') {
             return redirect()
