@@ -13,8 +13,7 @@ class RH_PruebaController extends Controller {
      *
      * @return void
      */
-    public function __construct()
-    {
+    public function __construct() {
         $this->middleware('auth');
     }
 
@@ -23,9 +22,8 @@ class RH_PruebaController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
-        $pruebas =  RH_Prueba::all();
+    public function index() {
+        $pruebas = RH_Prueba::all();
         return view('pages.RRHH.pruebas.index', compact('pruebas'));
     }
 
@@ -44,9 +42,8 @@ class RH_PruebaController extends Controller {
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
-        try{
+    public function store(Request $request) {
+        try {
             $pruebas = new RH_Prueba();
             $pruebas->tipo_prueba = $request->input('tipo_prueba');
             $pruebas->nombre_prueba = $request->input('nombre_prueba');
@@ -56,7 +53,7 @@ class RH_PruebaController extends Controller {
 
             return redirect()->route('pruebas.index')->with('Saved', ' Informacion');
         }
-        catch(\Illuminate\Database\QueryException $e){
+        catch(\Illuminate\Database\QueryException $e) {
             return back()->with('Error', ' Error');
         }
     }
