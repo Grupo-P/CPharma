@@ -5,6 +5,7 @@ namespace compras\Http\Controllers;
 use Illuminate\Http\Request;
 use compras\RH_Candidato;
 use compras\User;
+use compras\Auditoria;
 
 class RH_CandidatoController extends Controller {
     /**
