@@ -58,6 +58,13 @@ class RH_EntrevistaController extends Controller {
             $entrevistas->user = auth()->user()->name;
             $entrevistas->save();
 
+            $Auditoria = new Auditoria();
+            $Auditoria->accion = 'CREAR';
+            $Auditoria->tabla = 'RH_ENTREVISTAS';
+            $Auditoria->registro = $request->input('entrevistadores');
+            $Auditoria->user = auth()->user()->name;
+            $Auditoria->save();
+
             return redirect()
                 ->route('entrevistas.index')
                 ->with('Saved', ' Informacion');
