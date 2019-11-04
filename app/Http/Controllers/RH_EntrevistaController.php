@@ -45,18 +45,26 @@ class RH_EntrevistaController extends Controller {
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
-        $entrevistas = new RH_Entrevista();
-        $entrevistas->fecha_entrevista = $request->input('fecha_entrevista');
-        $entrevistas->entrevistadores = $request->input('entrevistadores');
-        $entrevistas->lugar = $request->input('lugar');
-        $entrevistas->observaciones = $request->input('observaciones');
-        $entrevistas->estatus = 'ACTIVO';
-        $entrevistas->user = auth()->user()->name;
-        $entrevistas->save();
+    public function store(Request $request) {
 
-        return redirect()->route('entrevistas.index')->with('Saved', ' Informacion'); 
+        try {
+            $entrevistas = new RH_Entrevista();
+
+            $entrevistas->fecha_entrevista = $request->input('fecha_entrevista');
+            $entrevistas->entrevistadores = $request->input('entrevistadores');
+            $entrevistas->lugar = $request->input('lugar');
+            $entrevistas->observaciones = $request->input('observaciones');
+            $entrevistas->estatus = 'ACTIVO';
+            $entrevistas->user = auth()->user()->name;
+            $entrevistas->save();
+
+            return redirect()
+                ->route('entrevistas.index')
+                ->with('Saved', ' Informacion');
+        }
+        catch(\Illuminate\Database\QueryException $e) {
+            return back()->with('Error', ' Error');
+        }
     }
 
     /**
