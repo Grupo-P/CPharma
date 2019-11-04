@@ -117,10 +117,13 @@ class RH_EntrevistaController extends Controller {
      */
     public function update(Request $request, $id) {
         try {
+            $fecha_entrevista = $request->input('fecha_entrevista');
+            
             $entrevistas = RH_Entrevista::find($id);
             $entrevistas->fill($request->all());
 
-            
+            $entrevistas->fecha_entrevista = date('Y-m-d', strtotime($fecha_entrevista));
+
             $entrevistas->user = auth()->user()->name;
             $entrevistas->save();
 
