@@ -16,6 +16,8 @@
 		$usuarios = DB::table('users')->count();
 		$dolar = DB::table('dolars')->count();
 		$candidatos = DB::table('rh_candidatos')->count();
+    $vacantes = DB::table('rh_vacantes')->count();
+    $entrevistas = DB::table('rh_entrevistas')->count();
 		$pruebas = DB::table('rh_pruebas')->count();
 
 	/*TASA DOLAR VENTA*/
@@ -797,83 +799,129 @@
 ?>
 	<!-- Modal RRHH -->
 	<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-  	<div class="modal-dialog modal-dialog-centered" role="document">
-	    <div class="modal-content">
-	      <div class="modal-header">
-	        <h5 class="modal-title text-info" id="exampleModalCenterTitle"><i class="fas fa-bell text-info CP-beep"></i> Novedades</h5>
-	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-	          <span aria-hidden="true">&times;</span>
-	        </button>
-	      </div>
-	      <div class="modal-body">
-	      	<label>Hola <b class="text-info">{{ Auth::user()->name }}</b>.</label>
-	      	<br/>
-	      	Estas usando<b class="text-info"> CPharma v.4.8</b>, para el departamento de <b class="text-info">{{ Auth::user()->departamento }}</b><br/><br/>
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title text-info" id="exampleModalCenterTitle"><i class="fas fa-bell text-info CP-beep"></i> Novedades</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <label>Hola <b class="text-info">{{ Auth::user()->name }}</b>.</label>
+          <br/>
+          Estas usando<b class="text-info"> CPharma v.4.8</b>, para el departamento de <b class="text-info">{{ Auth::user()->departamento }}</b><br/><br/>
 	      	<ul style="list-style:none">
-	        	<li class="card-text text-dark" style="display: inline;">
-						<i class="far fa-check-circle text-info" style="display: inline;"></i>
-						Desde ya esta disponible el modulo: 
-						<b class="text-info">Candidatos</b>!!
-	  				</li>
-  				</ul>
+            <li class="card-text text-dark" style="display: inline;">
+              <i class="far fa-check-circle text-info" style="display: inline;"></i>
+              Desde ya esta disponible el modulo: 
+              <b class="text-info">Candidatos</b>!!
+            </li>
+          </ul>
   				<ul style="list-style:none">
-	        	<li class="card-text text-dark" style="display: inline;">
-						<i class="far fa-check-circle text-info" style="display: inline;"></i>
-						Desde ya esta disponible el modulo: 
-						<b class="text-info">Pruebas</b>!!
-	  				</li>
-  				</ul>
-	      </div>
-	      <div class="modal-footer">
+            <li class="card-text text-dark" style="display: inline;">
+              <i class="far fa-check-circle text-info" style="display: inline;"></i>
+              Desde ya esta disponible el modulo: 
+              <b class="text-info">Pruebas</b>!!
+            </li>
+          </ul>
+        </div>
+        <div class="modal-footer">
 	        <button type="button" class="btn btn-outline-info" data-dismiss="modal">Aceptar</button>
 	      </div>
 	    </div>
   	</div>
 	</div>
 	<!-- Modal RRHH -->
+
 	<!-- Dashboard RRHH-->
 	<div class="card-deck">
-		<div class="card border-danger mb-3" style="width: 14rem;">	  	
-			<div class="card-body text-left bg-danger">
-	  		<h2 class="card-title">
-	    		<span class="card-text text-white">
-	    			<i class="fas fa-user-check"></i>
-	    			<?php
-						echo ''.$candidatos;
-					?>						
-	    		</span>
-	  		</h2>
-	  		<p class="card-text text-white">
-				<?php 
-					echo 'Candidatos registrados';
-				?>
-	  		</p>
-			</div>
-			<div class="card-footer bg-transparent border-danger text-right">
-	  		<a href="/candidatos" class="btn btn-outline-danger btn-sm">Visualizar</a>
-	  	</div>		
-		</div>
-		<div class="card border-success mb-3" style="width: 14rem;">	  	
-			<div class="card-body text-left bg-success">
-	  		<h3 class="card-title">
-	    		<span class="card-text text-white">
-	    			<i class="fas fa-tasks"></i>
-	    			<?php
-						echo ''.$pruebas;
-					?>						
-	    		</span>
-	  		</h3>
-	  		<p class="card-text text-white">
-				<?php 
-					echo 'Pruebas registradas';
-				?>
-	  		</p>
-			</div>
-			<div class="card-footer bg-transparent border-success text-right">
-	  		<a href="/pruebas" class="btn btn-outline-success btn-sm">Visualizar</a>
-	  	</div>		
-		</div>
-	</div>
+    <div class="card border-danger mb-3" style="width: 14rem;">
+      <div class="card-body text-left bg-danger">
+        <h2 class="card-title">
+          <span class="card-text text-white">
+            <i class="fas fa-user-check"></i>
+            <?php
+            echo ''.$candidatos;
+          ?>            
+          </span>
+        </h2>
+        <p class="card-text text-white">
+        <?php 
+          echo 'Candidatos registrados';
+        ?>
+        </p>
+      </div>
+      <div class="card-footer bg-transparent border-danger text-right">
+        <a href="/candidatos" class="btn btn-outline-danger btn-sm">Visualizar</a>
+      </div>    
+    </div>
+
+    <div class="card border-success mb-3" style="width: 14rem;">      
+      <div class="card-body text-left bg-success">
+        <h3 class="card-title">
+          <span class="card-text text-white">
+            <i class="fas fa-user-plus"></i>
+            <?php
+            echo ''.$vacantes;
+          ?>            
+          </span>
+        </h3>
+        <p class="card-text text-white">
+        <?php 
+          echo 'Vacantes registradas';
+        ?>
+        </p>
+      </div>
+      <div class="card-footer bg-transparent border-success text-right">
+        <a href="/vacantes" class="btn btn-outline-success btn-sm">Visualizar</a>
+      </div>    
+    </div>
+
+    <div class="card border-info mb-3" style="width: 14rem;">      
+      <div class="card-body text-left bg-info">
+        <h3 class="card-title">
+          <span class="card-text text-white">
+            <i class="fas fa-users"></i>
+            <?php
+            echo ''.$entrevistas;
+          ?>            
+          </span>
+        </h3>
+        <p class="card-text text-white">
+        <?php 
+          echo 'Entrevistas registradas';
+        ?>
+        </p>
+      </div>
+      <div class="card-footer bg-transparent border-info text-right">
+        <a href="/entrevistas" class="btn btn-outline-info btn-sm">Visualizar</a>
+      </div>    
+    </div>
+  </div>
+
+  <div class="card-deck">
+    <div class="card border-warning mb-3" style="width: 14rem;">
+      <div class="card-body text-left bg-warning">
+        <h2 class="card-title">
+          <span class="card-text text-white">
+            <i class="fas fa-tasks"></i>
+            <?php
+            echo ''.$pruebas;
+          ?>            
+          </span>
+        </h2>
+        <p class="card-text text-white">
+        <?php 
+          echo 'Pruebas registradas';
+        ?>
+        </p>
+      </div>
+      <div class="card-footer bg-transparent border-warning text-right">
+        <a href="/pruebas" class="btn btn-outline-warning btn-sm">Visualizar</a>
+      </div>    
+    </div>
+  </div>
 	<!-- Dashboard RRHH-->
 <?php
   }

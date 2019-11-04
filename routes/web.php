@@ -181,3 +181,5 @@ Route::resource('candidatos', 'RH_CandidatoController');
 Route::resource('pruebas', 'RH_PruebaController');
 
 Route::resource('entrevistas', 'RH_EntrevistaController');
+
+Route::resource('vacantes', 'RH_VacanteController');
