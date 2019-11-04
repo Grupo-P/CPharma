@@ -80,9 +80,16 @@ class RH_EntrevistaController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
-    {
-          $entrevistas = RH_Entrevista::find($id);
+    public function show($id) {
+
+        $entrevistas = RH_Entrevista::find($id);
+
+        $Auditoria = new Auditoria();
+        $Auditoria->accion = 'CONSULTAR';
+        $Auditoria->tabla = 'RH_ENTREVISTAS';
+        $Auditoria->registro = $entrevistas->entrevistadores;
+        $Auditoria->user = auth()->user()->name;
+        $Auditoria->save();
 
         return view('pages.RRHH.entrevistas.show', compact('entrevistas'));
     }
