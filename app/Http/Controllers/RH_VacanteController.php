@@ -132,6 +132,13 @@ class RH_VacanteController extends Controller {
 
             $vacantes->save();
 
+            $Auditoria = new Auditoria();
+            $Auditoria->accion = 'EDITAR';
+            $Auditoria->tabla = 'RH_VACANTES';
+            $Auditoria->registro = $vacantes->nombre_vacante;
+            $Auditoria->user = auth()->user()->name;
+            $Auditoria->save();
+
             return redirect()
                 ->route('vacantes.index')
                 ->with('Updated', ' Informacion');
@@ -161,9 +168,13 @@ class RH_VacanteController extends Controller {
         $vacantes->save();
 
         if($vacantes->estatus == 'ACTIVO') {
-            return redirect()->route('vacantes.index')->with('Deleted1', ' Informacion');
+            return redirect()
+                ->route('vacantes.index')
+                ->with('Deleted1', ' Informacion');
         }
 
-        return redirect()->route('vacantes.index')->with('Deleted', ' Informacion');
+        return redirect()
+            ->route('vacantes.index')
+            ->with('Deleted', ' Informacion');
     }
 }
