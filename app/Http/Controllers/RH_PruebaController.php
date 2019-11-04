@@ -71,9 +71,16 @@ class RH_PruebaController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
-    {
+    public function show($id) {
+
         $pruebas = RH_Prueba::find($id);
+
+        $Auditoria = new Auditoria();
+        $Auditoria->accion = 'CONSULTAR';
+        $Auditoria->tabla = 'RH_PRUEBAS';
+        $Auditoria->registro = $pruebas->nombre_prueba;
+        $Auditoria->user = auth()->user()->name;
+        $Auditoria->save();
 
         return view('pages.RRHH.pruebas.show', compact('pruebas'));
     }
