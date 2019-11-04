@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use compras\RH_Vacante;
 use compras\Sede;
 use compras\User;
+use compras\Auditoria;
 
 class RH_VacanteController extends Controller {
     /**
@@ -63,12 +64,20 @@ class RH_VacanteController extends Controller {
             $vacantes->nivel_urgencia = $request->input('nivel_urgencia');
             $vacantes->solicitante = $request->input('solicitante');
             $vacantes->comentarios = $request->input('comentarios');
-
             $vacantes->estatus = 'ACTIVO';
             $vacantes->user = auth()->user()->name;
             $vacantes->save();
 
-            return redirect()->route('vacantes.index')->with('Saved', ' Informacion');
+            $Auditoria = new Auditoria();
+            $Auditoria->accion = 'CREAR';
+            $Auditoria->tabla = 'RH_VACANTES';
+            $Auditoria->registro = $request->input('nombre_vacante');
+            $Auditoria->user = auth()->user()->name;
+            $Auditoria->save();
+
+            return redirect()
+                ->route('vacantes.index')
+                ->with('Saved', ' Informacion');
         }
         catch(\Illuminate\Database\QueryException $e) {
             return back()->with('Error', ' Error');
@@ -83,6 +92,13 @@ class RH_VacanteController extends Controller {
      */
     public function show($id) {
         $vacantes = RH_Vacante::find($id);
+
+        $Auditoria = new Auditoria();
+        $Auditoria->accion = 'CONSULTAR';
+        $Auditoria->tabla = 'RH_VACANTES';
+        $Auditoria->registro = $vacantes->nombre_vacante;
+        $Auditoria->user = auth()->user()->name;
+        $Auditoria->save();
 
         return view('pages.RRHH.vacantes.show', compact('vacantes'));
     }
@@ -116,6 +132,13 @@ class RH_VacanteController extends Controller {
 
             $vacantes->save();
 
+            $Auditoria = new Auditoria();
+            $Auditoria->accion = 'EDITAR';
+            $Auditoria->tabla = 'RH_VACANTES';
+            $Auditoria->registro = $vacantes->nombre_vacante;
+            $Auditoria->user = auth()->user()->name;
+            $Auditoria->save();
+
             return redirect()
                 ->route('vacantes.index')
                 ->with('Updated', ' Informacion');
@@ -134,20 +157,33 @@ class RH_VacanteController extends Controller {
     public function destroy($id) {
         $vacantes = RH_Vacante::find($id);
 
+        $Auditoria = new Auditoria();
+        $Auditoria->tabla = 'RH_VACANTES';
+        $Auditoria->registro = $vacantes->nombre_vacante;
+        $Auditoria->user = auth()->user()->name;
+
         if($vacantes->estatus == 'ACTIVO') {
             $vacantes->estatus = 'INACTIVO';
+            $Auditoria->accion = 'DESINCORPORAR';
         }
         else if($vacantes->estatus == 'INACTIVO') {
             $vacantes->estatus = 'ACTIVO';
+            $Auditoria->accion = 'REINCORPORAR';
         }
 
         $vacantes->user = auth()->user()->name;
         $vacantes->save();
 
+        $Auditoria->save();
+
         if($vacantes->estatus == 'ACTIVO') {
-            return redirect()->route('vacantes.index')->with('Deleted1', ' Informacion');
+            return redirect()
+                ->route('vacantes.index')
+                ->with('Deleted1', ' Informacion');
         }
 
-        return redirect()->route('vacantes.index')->with('Deleted', ' Informacion');
+        return redirect()
+            ->route('vacantes.index')
+            ->with('Deleted', ' Informacion');
     }
 }
