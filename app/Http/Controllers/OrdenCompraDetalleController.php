@@ -105,6 +105,7 @@ class OrdenCompraDetalleController extends Controller
         $id_articulo = $request->input('id_articulo');
         $ordenCompraDetalles =
         OrdenCompraDetalle::where('id_articulo',$id_articulo)
+        ->where('estatus','ACTIVO')
         ->get();
         return view('pages.ordenCompraDetalle.show', compact('ordenCompraDetalles'));
     }

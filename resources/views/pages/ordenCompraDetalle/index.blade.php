@@ -157,8 +157,8 @@
 					<?php
 					if($ordenCompraDetalle->estatus == 'ACTIVO'){
 					?>
-						<a href="/ordenCompraDetalle/{{$ordenCompraDetalle->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
-	      			<i class="far fa-eye"></i>			      		
+						<a href="/ordenCompraDetalle/0?id_articulo={{$ordenCompraDetalle->id_articulo}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
+	      			<i class="far fa-eye"></i>		      		
 		      		</a>
 
 	      		<a href="/ordenCompraDetalle/{{$ordenCompraDetalle->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
