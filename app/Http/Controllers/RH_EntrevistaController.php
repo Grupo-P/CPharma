@@ -6,6 +6,7 @@ namespace compras\Http\Controllers;
 use Illuminate\Http\Request;
 use compras\RH_Entrevista;
 use compras\User;
+use compras\Auditoria;
 
 class RH_EntrevistaController extends Controller
 {
