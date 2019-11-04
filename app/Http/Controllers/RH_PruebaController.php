@@ -91,9 +91,9 @@ class RH_PruebaController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
-    {
+    public function edit($id) {
         $pruebas = RH_Prueba::find($id);
+
         return view('pages.RRHH.pruebas.edit', compact('pruebas'));
     }
 
@@ -104,20 +104,27 @@ class RH_PruebaController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
-    {
-        try{
+    public function update(Request $request, $id) {
+        try {
             $pruebas = RH_Prueba::find($id);
-            $pruebas->fill($request->all());
 
-            $pruebas->tipo_prueba = $request->input('tipo_prueba');
-            $pruebas->nombre_prueba = $request->input('nombre_prueba');
+            $pruebas->fill($request->all());
             $pruebas->user = auth()->user()->name;
+            
             $pruebas->save();
 
-            return redirect()->route('pruebas.index')->with('Updated', ' Informacion');
+            $Auditoria = new Auditoria();
+            $Auditoria->accion = 'EDITAR';
+            $Auditoria->tabla = 'RH_PRUEBAS';
+            $Auditoria->registro = $pruebas->nombre_prueba;
+            $Auditoria->user = auth()->user()->name;
+            $Auditoria->save();
+
+            return redirect()
+                ->route('pruebas.index')
+                ->with('Updated', ' Informacion');
         }
-        catch(\Illuminate\Database\QueryException $e){
+        catch(\Illuminate\Database\QueryException $e) {
             return back()->with('Error', ' Error');
         }
     }
