@@ -1,6 +1,14 @@
 @extends('layouts.model')
 
-@section('title', 'Pruebas')
+@section('title')
+  Vacantes
+@endsection
+
+@section('scriptsHead')
+  <style>
+    th, td {text-align: center;}
+  </style>
+@endsection
 
 @section('content')
   <!-- Modal Guardar -->
@@ -17,7 +25,7 @@
             </button>
           </div>
           <div class="modal-body">
-            <h4 class="h6">Prueba almacenada con exito</h4>
+            <h4 class="h6">Vacante almacenada con exito</h4>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-outline-success" data-dismiss="modal">Aceptar</button>
@@ -41,7 +49,7 @@
             </button>
           </div>
           <div class="modal-body">
-            <h4 class="h6">Prueba modificada con exito</h4>
+            <h4 class="h6">Vacante modificada con exito</h4>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-outline-success" data-dismiss="modal">Aceptar</button>
@@ -65,7 +73,7 @@
             </button>
           </div>
           <div class="modal-body">
-            <h4 class="h6">Prueba Reincorporada con Éxito</h4>
+            <h4 class="h6">Vacante desincorporada con éxito</h4>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-outline-success" data-dismiss="modal">Aceptar</button>
@@ -74,7 +82,8 @@
       </div>
     </div>
   @endif
-   @if(session('Deleted1'))
+
+  @if(session('Deleted1'))
     <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
@@ -87,7 +96,7 @@
             </button>
           </div>
           <div class="modal-body">
-            <h4 class="h6">Prueba Desincorporada con Éxito</h4>
+            <h4 class="h6">Vacante reincorporada con éxito</h4>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-outline-success" data-dismiss="modal">Aceptar</button>
@@ -98,14 +107,15 @@
   @endif
 
   <h1 class="h5 text-info">
-    <i class="fas fa-tasks"></i>&nbsp;Pruebas
+    <i class="fas fa-user-plus"></i>&nbsp;Vacantes
   </h1>
+
   <hr class="row align-items-start col-12">
 
   <table style="width:100%;">
     <tr>
       <td style="width:10%;" align="center">
-        <a href="/pruebas/create" role="button" class="btn btn-outline-info btn-sm" style="display: inline; text-align: left;">
+        <a href="{{ url('/vacantes/create') }}" role="button" class="btn btn-outline-info btn-sm" style="display: inline; text-align: left;">
           <i class="fa fa-plus"></i>&nbsp;Agregar
         </a>
       </td>
@@ -126,74 +136,86 @@
   <br/>
 
   <table class="table table-striped table-borderless col-12 sortable" id="myTable">
-    <thead class="thead-dark">
-      <tr>
-        <th scope="col" class="CP-sticky">#</th>
-        <th scope="col" class="CP-sticky">Tipo</th>
-        <th scope="col" class="CP-sticky">Nombre</th>
-        <th scope="col" class="CP-sticky">Estatus</th>
-        <th scope="col" class="CP-sticky">Acciones</th>
-      </tr>
-    </thead>
+      <thead class="thead-dark">
+        <tr>
+            <th scope="col" class="stickyCP">#</th>
+            <th scope="col" class="stickyCP">Sede</th>
+            <th scope="col" class="stickyCP">Nombre de la vacante</th>
+            <th scope="col" class="stickyCP">Departamento</th>
+            <th scope="col" class="stickyCP">Turno</th>
+            <th scope="col" class="stickyCP">Nivel de urgencia</th>
+            <th scope="col" class="stickyCP">Cantidad requerida</th>
+            <th scope="col" class="stickyCP">Estatus</th>
+            <th scope="col" class="stickyCP">Acciones</th>
+        </tr>
+      </thead>
 
-    <tbody>
-    @foreach($pruebas as $prueba)
-      <tr>
-        <th>{{$prueba->id}}</th>
-        <td>{{$prueba->tipo_prueba}}</td>
-        <td>{{$prueba->nombre_prueba}}</td>
-        <td>{{$prueba->estatus}}</td>
-        
-        <!-- Inicio Validacion de ROLES -->
-        <td style="width:140px;">
-        <?php
-          if(Auth::user()->role == 'MASTER' || Auth::user()->role == 'DEVELOPER') {
-            if($prueba->estatus == 'ACTIVO') {
-        ?>
-          <a href="/pruebas/{{$prueba->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
-            <i class="far fa-eye"></i>
-          </a>
+      <tbody>
+      @foreach($vacantes as $vacante)
+        <tr>
+          <th>{{$vacante->id}}</th>
+          <td>{{$vacante->sede}}</td>
+          <td>{{$vacante->nombre_vacante}}</td>
+          <td>{{$vacante->departamento}}</td>
+          <td>{{$vacante->turno}}</td>
+          <td>{{$vacante->nivel_urgencia}}</td>
+          <td>{{$vacante->cantidad}}</td>
+          <td>{{$vacante->estatus}}</td>
 
-          <a href="/pruebas/{{$prueba->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
-            <i class="fas fa-edit"></i>
-          </a>
-
-          <form action="/pruebas/{{$prueba->id}}" method="POST" style="display: inline;">
-            @method('DELETE')
-            @csrf
-            <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Desincorporar"><i class="fa fa-reply"></i></button>
-          </form>
+          <!-- ***************** VALIDACION DE ROLES ***************** -->
+          <td style="width:140px;">
           <?php
-            }
-            else if($prueba->estatus == 'INACTIVO') {
+            if(Auth::user()->role == 'MASTER' || Auth::user()->role == 'DEVELOPER') {
+
+              if($vacante->estatus != 'INACTIVO') {
           ?>
-          <form action="/pruebas/{{$prueba->id}}" method="POST" style="display: inline;">
-            @method('DELETE')
-            @csrf
-            <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Reincorporar"><i class="fa fa-share"></i></button>
-          </form>
+            <a href="/vacantes/{{$vacante->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
+              <i class="far fa-eye"></i>
+            </a>
+
+            <a href="/vacantes/{{$vacante->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
+              <i class="fas fa-edit"></i>
+            </a>
+
+            <form action="/vacantes/{{$vacante->id}}" method="POST" style="display: inline;">
+              @method('DELETE')
+              @csrf
+              <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Desincorporar">
+                <i class="fa fa-reply"></i>
+              </button>
+            </form>
+
+          <?php
+            } else if($vacante->estatus == 'INACTIVO') {
+          ?>
+            <form action="/vacantes/{{$vacante->id}}" method="POST" style="display: inline;">
+              @method('DELETE')
+              @csrf
+              <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Reincorporar">
+                <i class="fa fa-share"></i>
+              </button>
+            </form>
           <?php
             }
           } else if(Auth::user()->role == 'ANALISTA') {
           ?>
-          <a href="/pruebas/{{$prueba->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
-            <i class="far fa-eye"></i>
-          </a>
+            <a href="/vacantes/{{$vacante->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
+              <i class="far fa-eye"></i>
+            </a>
 
-          <a href="/pruebas/{{$prueba->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
-            <i class="fas fa-edit"></i>
-          </a>
+            <a href="/vacantes/{{$vacante->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
+              <i class="fas fa-edit"></i>
+            </a>
           <?php
             } else if(Auth::user()->role == 'USUARIO') {
           ?>
-          <a href="/pruebas/{{$prueba->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
-            <i class="far fa-eye"></i>
-          </a>
+            <a href="/vacantes/{{$vacante->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
+              <i class="far fa-eye"></i>
+            </a>
           <?php
             }
           ?>
         </td>
-        <!-- Fin Validacion de ROLES -->
       </tr>
     @endforeach
     </tbody>
@@ -201,7 +223,7 @@
 
   <script>
     $(document).ready(function() {
-        $('[data-toggle="tooltip"]').tooltip();
+      $('[data-toggle="tooltip"]').tooltip();
     });
     $('#exampleModalCenter').modal('show');
   </script>

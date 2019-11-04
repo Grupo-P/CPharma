@@ -246,7 +246,8 @@
 <!-------------------------------------------------------------------------------->
 <!-- RRHH -->
 <?php
-  if(Auth::user()->departamento == 'RRHH'){
+  if(Auth::user()->departamento == 'RRHH' 
+    || Auth::user()->departamento == 'TECNOLOGIA'){
 ?>
   <div class="btn-group navbar-brand">
     <button type="button" class="btn btn-outline-info dropdown-toggle textoI" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -272,6 +273,13 @@
           <span data-feather="home"></span>
           <i class="fas fa-users"></i>
           Entrevistas<span class="sr-only">(current)</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="/vacantes">
+          <span data-feather="home"></span>
+          <i class="fas fa-user-plus"></i>
+          Vacantes<span class="sr-only">(current)</span>
         </a>
       </li>
     </div>

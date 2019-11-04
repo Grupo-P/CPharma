@@ -1,8 +1,6 @@
 @extends('layouts.model')
 
-@section('title')
-  Entrevistas
-@endsection
+@section('title', 'Entrevistas')
 
 @section('scriptsHead')
   <style>
@@ -25,7 +23,7 @@
             </button>
           </div>
           <div class="modal-body">
-            <h4 class="h6"> Entrevista almacenada con éxito</h4>
+            <h4 class="h6">Entrevista almacenada con éxito</h4>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-outline-success" data-dismiss="modal">Aceptar</button>
@@ -73,7 +71,7 @@
             </button>
           </div>
           <div class="modal-body">
-            <h4 class="h6"> Entrevista Reincorporada con éxito </h4>
+            <h4 class="h6">Entrevista Reincorporada con éxito</h4>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-outline-success" data-dismiss="modal">Aceptar</button>
@@ -82,13 +80,14 @@
       </div>
     </div>
   @endif
-   @if(session('Deleted1'))
+
+  @if(session('Deleted1'))
     <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title text-info" id="exampleModalCenterTitle">
-              <i class="fas fa-info text-info"></i>{{ session('Deleted') }}
+              <i class="fas fa-info text-info"></i>{{ session('Deleted1') }}
             </h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
@@ -106,9 +105,8 @@
   @endif
 
   <h1 class="h5 text-info">
-  <i class="fas fa-users"></i> &nbsp;Entrevistas
+    <i class="fas fa-users"></i>&nbsp;Entrevistas
   </h1>
-
   <hr class="row align-items-start col-12">
 
   <table style="width:100%;">
@@ -133,95 +131,93 @@
   </table>
 
   <br/>
- <table class="table table-striped table-borderless col-12 sortable" id="myTable">
-      <thead class="thead-dark">
-         <tr>
-          <th scope="col" class="CP-sticky">#</th>
-          <th scope="col" class="CP-sticky">Fecha</th>
-          <th scope="col" class="CP-sticky">Entrevistadores</th>
-           <th scope="col" class="CP-sticky">Lugar</th>
-          <th scope="col" class="CP-sticky">Estatus</th>
-          <th scope="col" class="CP-sticky">Acciones</th>
+
+  <table class="table table-striped table-borderless col-12 sortable" id="myTable">
+    <thead class="thead-dark">
+      <tr>
+        <th scope="col" class="CP-sticky">#</th>
+        <th scope="col" class="CP-sticky">Fecha</th>
+        <th scope="col" class="CP-sticky">Entrevistadores</th>
+        <th scope="col" class="CP-sticky">Lugar</th>
+        <th scope="col" class="CP-sticky">Estatus</th>
+        <th scope="col" class="CP-sticky">Acciones</th>
       </tr>
-      </thead>
+    </thead>
 
-<tbody>
-    @foreach($entrevistas as $entrevista)
-        <tr>
-          <th>{{$entrevista->id}}</th>
-          <td>{{date('d-m-Y',strtotime($entrevista->fecha_entrevista))}}</td>
-          <td>{{$entrevista->entrevistadores}}</td>
-          <td>{{$entrevista->lugar}}</td>
-          <td>{{$entrevista->estatus}}</td>
-          
+    <tbody>
+      @foreach($entrevistas as $entrevista)
+      <tr>
+        <th>{{$entrevista->id}}</th>
+        <td>{{date('d-m-Y',strtotime($entrevista->fecha_entrevista))}}</td>
+        <td>{{$entrevista->entrevistadores}}</td>
+        <td>{{$entrevista->lugar}}</td>
+        <td>{{$entrevista->estatus}}</td>
+
         <!-- Inicio Validacion de ROLES -->
-          <td style="width:140px;">
-        
+        <td style="width:140px;">
         <?php
-        if(Auth::user()->role == 'MASTER' || Auth::user()->role == 'DEVELOPER'){
+          if(Auth::user()->role == 'MASTER' || Auth::user()->role == 'DEVELOPER') {
+            if($entrevista->estatus == 'ACTIVO') {
         ?>
+          <a href="/entrevistas/{{$entrevista->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
+            <i class="far fa-eye"></i>
+          </a>
 
-          <?php
-          if($entrevista->estatus == 'ACTIVO'){
-          ?>
-            <a href="/entrevistas/{{$entrevista->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
-                  <i class="far fa-eye"></i>                
-                </a>
+          <a href="/entrevistas/{{$entrevista->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
+            <i class="fas fa-edit"></i>
+          </a>
 
-                <a href="/entrevistas/{{$entrevista->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
-                  <i class="fas fa-edit"></i>               
-                </a>
-                    
-                <form action="/entrevistas/{{$entrevista->id}}" method="POST" style="display: inline;">
-                @method('DELETE')
-                @csrf             
-                <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Desincorporar"><i class="fa fa-reply"></i></button>
-            </form>
-          <?php
-          }
-          else if($entrevista->estatus == 'INACTIVO'){
-          ?>    
-              <form action="/entrevistas/{{$entrevista->id}}" method="POST" style="display: inline;">
-              @method('DELETE')
-              @csrf             
-              <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Reincorporar"><i class="fa fa-share"></i></button>
+          <form action="/entrevistas/{{$entrevista->id}}" method="POST" style="display: inline;">
+            @method('DELETE')
+            @csrf
+            <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Desincorporar"><i class="fa fa-reply"></i></button>
           </form>
           <?php
-          }         
+            }
+            else if($entrevista->estatus == 'INACTIVO') {
           ?>
-        <?php 
-        } else if(Auth::user()->role == 'ANALISTA'){
-        ?>
-          <a href="/entrevistas/{{$entrevista->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
-                <i class="far fa-eye"></i>                
-              </a>
 
-              <a href="/entrevistas/{{$entrevista->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
-                <i class="fas fa-edit"></i>
-              </a>
-        <?php
-        } else if(Auth::user()->role == 'USUARIO'){
-        ?>
+          <form action="/entrevistas/{{$entrevista->id}}" method="POST" style="display: inline;">
+            @method('DELETE')
+            @csrf
+            <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Reincorporar"><i class="fa fa-share"></i></button>
+          </form>
+
+          <?php
+            }
+          } else if(Auth::user()->role == 'ANALISTA') {
+          ?>
+
           <a href="/entrevistas/{{$entrevista->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
-                <i class="far fa-eye"></i>                
-              </a>    
-        <?php
-        }
-        ?>
-                    
-          </td>
+            <i class="far fa-eye"></i>
+          </a>
+
+          <a href="/entrevistas/{{$entrevista->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
+            <i class="fas fa-edit"></i>
+          </a>
+
+          <?php
+            } else if(Auth::user()->role == 'USUARIO') {
+          ?>
+
+          <a href="/entrevistas/{{$entrevista->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
+            <i class="far fa-eye"></i>
+          </a>
+
+          <?php
+            }
+          ?>
+        </td>
         <!-- Fin Validacion de ROLES -->
-
-        </tr>
+      </tr>
     @endforeach
     </tbody>
   </table>
 
   <script>
-    $(document).ready(function(){
-        $('[data-toggle="tooltip"]').tooltip();   
+    $(document).ready(function() {
+        $('[data-toggle="tooltip"]').tooltip();
     });
-    $('#exampleModalCenter').modal('show')
+    $('#exampleModalCenter').modal('show');
   </script>
-
 @endsection

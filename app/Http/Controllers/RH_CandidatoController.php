@@ -5,6 +5,7 @@ namespace compras\Http\Controllers;
 use Illuminate\Http\Request;
 use compras\RH_Candidato;
 use compras\User;
+use compras\Auditoria;
 
 class RH_CandidatoController extends Controller {
     /**
@@ -74,6 +75,13 @@ class RH_CandidatoController extends Controller {
             $candidatos->user = auth()->user()->name;
             $candidatos->save();
 
+            $Auditoria = new Auditoria();
+            $Auditoria->accion = 'CREAR';
+            $Auditoria->tabla = 'RH_CANDIDATOS';
+            $Auditoria->registro = $request->input('nombres') . " " . $request->input('apellidos');
+            $Auditoria->user = auth()->user()->name;
+            $Auditoria->save();
+
             return redirect()
                 ->route('candidatos.index')
                 ->with('Saved', ' Informacion');
@@ -92,6 +100,13 @@ class RH_CandidatoController extends Controller {
     public function show($id) {
 
         $candidatos = RH_Candidato::find($id);
+
+        $Auditoria = new Auditoria();
+        $Auditoria->accion = 'CONSULTAR';
+        $Auditoria->tabla = 'RH_CANDIDATOS';
+        $Auditoria->registro = $candidatos->nombres . " " . $candidatos->apellidos;
+        $Auditoria->user = auth()->user()->name;
+        $Auditoria->save();
 
         return view('pages.RRHH.candidatos.show', compact('candidatos'));
     }
@@ -127,6 +142,13 @@ class RH_CandidatoController extends Controller {
             $candidatos->user = auth()->user()->name;
             $candidatos->save();
 
+            $Auditoria = new Auditoria();
+            $Auditoria->accion = 'EDITAR';
+            $Auditoria->tabla = 'RH_CANDIDATOS';
+            $Auditoria->registro = $candidatos->nombres . " " . $candidatos->apellidos;
+            $Auditoria->user = auth()->user()->name;
+            $Auditoria->save();
+
             return redirect()
                 ->route('candidatos.index')
                 ->with('Updated', ' Informacion');
@@ -145,20 +167,29 @@ class RH_CandidatoController extends Controller {
     public function destroy($id) {
         $candidatos = RH_Candidato::find($id);
 
-         if($candidatos->estatus == 'POSTULADO'){
+        $Auditoria = new Auditoria();
+        $Auditoria->tabla = 'RH_CANDIDATOS';
+        $Auditoria->registro = $candidatos->nombres . " " . $candidatos->apellidos;
+        $Auditoria->user = auth()->user()->name;
+
+        if($candidatos->estatus == 'POSTULADO') {
             $candidatos->estatus = 'RECHAZADO';
-         }
-         else if($candidatos->estatus == 'RECHAZADO') {
+            $Auditoria->accion = 'DESINCORPORAR';
+        }
+        else if($candidatos->estatus == 'RECHAZADO') {
             $candidatos->estatus = 'POSTULADO';
-         }
+            $Auditoria->accion = 'REINCORPORAR';
+        }
 
-         $candidatos->user = auth()->user()->name;        
-         $candidatos->save();
+        $candidatos->user = auth()->user()->name;
+        $candidatos->save();
 
-         if($candidatos->estatus == 'POSTULADO'){
+        $Auditoria->save();
+
+        if($candidatos->estatus == 'POSTULADO') {
             return redirect()->route('candidatos.index')->with('Deleted1', ' Informacion');
-         }
+        }
 
-         return redirect()->route('candidatos.index')->with('Deleted', ' Informacion');
+        return redirect()->route('candidatos.index')->with('Deleted', ' Informacion');
     }
 }

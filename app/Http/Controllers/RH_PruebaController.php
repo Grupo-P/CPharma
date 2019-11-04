@@ -5,6 +5,7 @@ namespace compras\Http\Controllers;
 use Illuminate\Http\Request;
 use compras\RH_Prueba;
 use compras\User;
+use compras\Auditoria;
 
 class RH_PruebaController extends Controller {
     /**
@@ -12,8 +13,7 @@ class RH_PruebaController extends Controller {
      *
      * @return void
      */
-    public function __construct()
-    {
+    public function __construct() {
         $this->middleware('auth');
     }
 
@@ -22,9 +22,8 @@ class RH_PruebaController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
-        $pruebas =  RH_Prueba::all();
+    public function index() {
+        $pruebas = RH_Prueba::all();
         return view('pages.RRHH.pruebas.index', compact('pruebas'));
     }
 
@@ -43,9 +42,8 @@ class RH_PruebaController extends Controller {
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
-        try{
+    public function store(Request $request) {
+        try {
             $pruebas = new RH_Prueba();
             $pruebas->tipo_prueba = $request->input('tipo_prueba');
             $pruebas->nombre_prueba = $request->input('nombre_prueba');
@@ -53,9 +51,18 @@ class RH_PruebaController extends Controller {
             $pruebas->user = auth()->user()->name;
             $pruebas->save();
 
-            return redirect()->route('pruebas.index')->with('Saved', ' Informacion');
+            $Auditoria = new Auditoria();
+            $Auditoria->accion = 'CREAR';
+            $Auditoria->tabla = 'RH_PRUEBAS';
+            $Auditoria->registro = $request->input('nombre_prueba');
+            $Auditoria->user = auth()->user()->name;
+            $Auditoria->save();
+
+            return redirect()
+                ->route('pruebas.index')
+                ->with('Saved', ' Informacion');
         }
-        catch(\Illuminate\Database\QueryException $e){
+        catch(\Illuminate\Database\QueryException $e) {
             return back()->with('Error', ' Error');
         }
     }
@@ -66,9 +73,16 @@ class RH_PruebaController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
-    {
+    public function show($id) {
+
         $pruebas = RH_Prueba::find($id);
+
+        $Auditoria = new Auditoria();
+        $Auditoria->accion = 'CONSULTAR';
+        $Auditoria->tabla = 'RH_PRUEBAS';
+        $Auditoria->registro = $pruebas->nombre_prueba;
+        $Auditoria->user = auth()->user()->name;
+        $Auditoria->save();
 
         return view('pages.RRHH.pruebas.show', compact('pruebas'));
     }
@@ -79,9 +93,9 @@ class RH_PruebaController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
-    {
+    public function edit($id) {
         $pruebas = RH_Prueba::find($id);
+
         return view('pages.RRHH.pruebas.edit', compact('pruebas'));
     }
 
@@ -92,20 +106,27 @@ class RH_PruebaController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
-    {
-        try{
+    public function update(Request $request, $id) {
+        try {
             $pruebas = RH_Prueba::find($id);
-            $pruebas->fill($request->all());
 
-            $pruebas->tipo_prueba = $request->input('tipo_prueba');
-            $pruebas->nombre_prueba = $request->input('nombre_prueba');
+            $pruebas->fill($request->all());
             $pruebas->user = auth()->user()->name;
+
             $pruebas->save();
 
-            return redirect()->route('pruebas.index')->with('Updated', ' Informacion');
+            $Auditoria = new Auditoria();
+            $Auditoria->accion = 'EDITAR';
+            $Auditoria->tabla = 'RH_PRUEBAS';
+            $Auditoria->registro = $pruebas->nombre_prueba;
+            $Auditoria->user = auth()->user()->name;
+            $Auditoria->save();
+
+            return redirect()
+                ->route('pruebas.index')
+                ->with('Updated', ' Informacion');
         }
-        catch(\Illuminate\Database\QueryException $e){
+        catch(\Illuminate\Database\QueryException $e) {
             return back()->with('Error', ' Error');
         }
     }
@@ -116,24 +137,36 @@ class RH_PruebaController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
+    public function destroy($id) {
         $pruebas = RH_Prueba::find($id);
+
+        $Auditoria = new Auditoria();
+        $Auditoria->tabla = 'RH_PRUEBAS';
+        $Auditoria->registro = $pruebas->nombre_prueba;
+        $Auditoria->user = auth()->user()->name;
 
         if($pruebas->estatus == 'ACTIVO'){
             $pruebas->estatus = 'INACTIVO';
+            $Auditoria->accion = 'DESINCORPORAR';
         }
         else if($pruebas->estatus == 'INACTIVO'){
             $pruebas->estatus = 'ACTIVO';
+            $Auditoria->accion = 'REINCORPORAR';
         }
 
         $pruebas->user = auth()->user()->name;        
         $pruebas->save();
 
+        $Auditoria->save();
+
         if($pruebas->estatus == 'ACTIVO'){
-            return redirect()->route('pruebas.index')->with('Deleted', ' Informacion');
+            return redirect()
+                ->route('pruebas.index')
+                ->with('Deleted', ' Informacion');
         }
 
-        return redirect()->route('pruebas.index')->with('Deleted1', ' Informacion');
+        return redirect()
+            ->route('pruebas.index')
+            ->with('Deleted1', ' Informacion');
     }
 }
