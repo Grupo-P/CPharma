@@ -19,6 +19,7 @@
     $vacantes = DB::table('rh_vacantes')->count();
     $entrevistas = DB::table('rh_entrevistas')->count();
 		$pruebas = DB::table('rh_pruebas')->count();
+		$entrevistas = DB::table('rh_entrevistas')->count();
 
 	/*TASA DOLAR VENTA*/
 		$Tasa = DB::table('tasa_ventas')->where('moneda', 'Dolar')->value('tasa');
@@ -833,7 +834,6 @@
   	</div>
 	</div>
 	<!-- Modal RRHH -->
-
 	<!-- Dashboard RRHH-->
 	<div class="card-deck">
     <div class="card border-danger mb-3" style="width: 14rem;">

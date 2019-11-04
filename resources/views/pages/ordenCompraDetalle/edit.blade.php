@@ -59,7 +59,7 @@
     @endif
     <h1 class="h5 text-info">
         <i class="far fa-file-alt"></i>
-        Detalle de orden de compra
+        Modificar detalle de orden de compra
     </h1>
 
     <hr class="row align-items-start col-12">
@@ -74,12 +74,13 @@
     <?php
       if($OrdenCompra->sede_destino!='CENTRO DE DISTRIBUCION'){  
     ?>
-      {!! Form::open(['route' => 'ordenCompraDetalle.store', 'method' => 'POST']) !!}
+      {!! Form::model($ordenCompraDetalles, ['route' => ['ordenCompraDetalle.update', $ordenCompraDetalles], 'method' => 'PUT']) !!}
+
     <?php
       }
       else if($OrdenCompra->sede_destino=='CENTRO DE DISTRIBUCION'){
     ?>
-      {!! Form::open(['route' => 'ordenCompraDetalle.store', 'method' => 'POST', 'id' => 'guardar']) !!}
+      {!! Form::model($ordenCompraDetalles, ['route' => ['ordenCompraDetalle.update', $ordenCompraDetalles], 'method' => 'PUT', 'id' => 'guardar']) !!}
     <?php
       } 
     ?>
@@ -119,7 +120,7 @@
   
         <!-- INICIO DE CASO FORMULARIO PARA ARTICULOS NUEVOS -->
             <?php
-                if($_GET['Reporte']=='NO'){  
+                if($ordenCompraDetalles->id_articulo==NULL){  
             ?>
               {!! Form::hidden('isReporte','NO', ['id'=>'isReporte']) !!}
               {!! Form::hidden('id_articulo',NULL) !!}
@@ -138,20 +139,12 @@
         <!-- INICIO DE CASO FORMULARIO PARA ARTICULOS DESDE REPORTES -->
             <?php 
               }
-              else if($_GET['Reporte']=='SI'){  
+              else if($ordenCompraDetalles->id_articulo!=NULL){  
             ?>
               {!! Form::hidden('isReporte','SI', ['id'=>'isReporte']) !!}
-              {!! Form::hidden('id_articulo',$_GET['id_articulo']) !!}
-              {!! Form::hidden('codigo_articulo',$_GET['codigo_articulo']) !!}
-              {!! Form::hidden('codigo_barra',$_GET['codigo_barra']) !!}
-              {!! Form::hidden('descripcion',$_GET['descripcion']) !!}
-              {!! Form::hidden('existencia_rpt',$_GET['existencia_rpt']) !!}
-              {!! Form::hidden('dias_restantes_rpt',$_GET['dias_restantes_rpt']) !!}
-              {!! Form::hidden('origen_rpt',$_GET['origen_rpt']) !!}
-              {!! Form::hidden('rango_rpt',$_GET['rango_rpt']) !!}
               <tr>
                 <th scope="row">{!! Form::label('descrip', 'Descripcion del articulo') !!}</th>
-                <td scope="row">{!! Form::label('descrip',$_GET['descripcion']) !!}</td>
+                <td scope="row">{!! Form::label('descrip',$ordenCompraDetalles->descripcion) !!}</td>
               </tr>
             <?php 
               } 
@@ -165,11 +158,11 @@
                {!! Form::hidden('isCDD','SI', ['id'=>'isCDD']) !!}
               <tr>
                 <th scope="row">{!! Form::label('total_unidades', 'Total de Unidades') !!}</th>
-                <td>{!! Form::text('totalUnidades', null, [ 'class' => 'form-control', 'autofocus', 'required', 'id' => 'totalUnidades', 'onblur' =>'disponible()']) !!}</td>
+                <td>{!! Form::text('total_unidades', null, [ 'class' => 'form-control', 'autofocus', 'required', 'id' => 'totalUnidades', 'onblur' =>'disponible()']) !!}</td>
               </tr>
               <tr>
                 <th scope="row">{!! Form::label('disponibles', 'Unidades Disponibles') !!}</th>
-                <td>{!! Form::text('unidadesDisponibles', null, [ 'class' => 'form-control', 'autofocus', 'required', 'id' => 'unidadesDisponibles', 'disabled'=>'disabled']) !!}</td>
+                <td>{!! Form::text('total_unidades', null, [ 'class' => 'form-control', 'autofocus', 'required', 'id' => 'unidadesDisponibles', 'disabled'=>'disabled']) !!}</td>
               </tr>
               <tr>
                 <th scope="row">{!! Form::label('sede1', 'Cantidad para FTN') !!}</th>

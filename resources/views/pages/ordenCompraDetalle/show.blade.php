@@ -4,6 +4,11 @@
   Detalle de orden de compra
 @endsection
 
+<?php
+	use Illuminate\Http\Request;
+	use compras\OrdenCompra;
+?>
+
 @section('content')
 
 	<!-- Modal Guardar -->
@@ -80,17 +85,12 @@
 	<hr class="row align-items-start col-12">
 	<table style="width:100%;">
 		<tr>
-				<td style="width:7%;">
+				<td style="width:10%;">
 					<form action="/ordenCompra/" method="POST">                  
 			        <button type="submit" role="button" class="btn btn-outline-success btn-sm"data-placement="top" style="display: inline;"><i class="fa fa-reply">&nbsp;Regresar</i></button>
 			    </form>
 				</td>
-        <td style="width:7%;">	        	
-						<form action="{{ url('/ordenCompraDetalle/create') }}" method="PRE">
-			        <button type="submit" role="button" class="btn btn-outline-info btn-sm"data-placement="top" name="Reporte" value="NO" style="display: inline;"><i class="fas fa-plus">&nbsp;Agregar</i></button>
-				    </form>
-	        </td>
-	        <td style="width:86%;">
+	        <td style="width:90%;">
 	        	<div class="input-group md-form form-sm form-1 pl-0">
 				  <div class="input-group-prepend">
 				    <span class="input-group-text purple lighten-3" id="basic-text1"><i class="fas fa-search text-white"
@@ -108,6 +108,8 @@
 		    <tr>
 		      	<th scope="col" class="stickyCP">#</th>
 		      	<th scope="col" class="stickyCP">Codigo Orden</th>
+		      	<th scope="col" class="stickyCP">Operador Orden</th>
+		      	<th scope="col" class="stickyCP">Proveedor Orden</th>
 		      	<th scope="col" class="stickyCP">Codigo Interno</th>	
 		      	<th scope="col" class="stickyCP">Codigo Barra</th>	
 		      	<th scope="col" class="stickyCP">Descripcion</th>		      		
@@ -123,89 +125,41 @@
 		      	<th scope="col" class="stickyCP">Reporte (Origen)</th>	
 		      	<th scope="col" class="stickyCP">Rango (Origen)</th>	
 		      	<th scope="col" class="stickyCP">Estatus</th>
-		      	<th scope="col" class="stickyCP">Acciones</th>
 		    </tr>
 	  	</thead>
 	  	<tbody>
 		@foreach($ordenCompraDetalles as $ordenCompraDetalle)
-		    <tr>
-		      <th>{{$ordenCompraDetalle->id}}</th>
-		      <td>{{$ordenCompraDetalle->codigo_orden}}</td>
-		      <td>{{$ordenCompraDetalle->codigo_articulo}}</td>
-		      <td>{{$ordenCompraDetalle->codigo_barra}}</td>
-		      <td>{{$ordenCompraDetalle->descripcion}}</td>
-		      <td>{{$ordenCompraDetalle->sede1}}</td>
-		      <td>{{$ordenCompraDetalle->sede2}}</td>
-		      <td>{{$ordenCompraDetalle->sede3}}</td>
-		      <td>{{$ordenCompraDetalle->sede4}}</td>
-		      <td>{{$ordenCompraDetalle->total_unidades}}</td>
-		      <td>{{$ordenCompraDetalle->costo_unitario}}</td>
-		      <td>{{$ordenCompraDetalle->costo_total}}</td>
-		      <td>{{$ordenCompraDetalle->existencia_rpt}}</td>
-		      <td>{{$ordenCompraDetalle->dias_restantes_rpt}}</td>
-		      <td>{{$ordenCompraDetalle->origen_rpt}}</td>
-		      <td>{{$ordenCompraDetalle->rango_rpt}}</td>
-		      <td>{{$ordenCompraDetalle->estatus}}</td>
-		      
-		    <!-- Inicio Validacion de ROLES -->
-		      <td style="width:140px;">
+	    <tr>
+	      <th>{{$ordenCompraDetalle->id}}</th>
+	      <td>{{$ordenCompraDetalle->codigo_orden}}</td>
 				
 				<?php
-				if(Auth::user()->role == 'MASTER' || Auth::user()->role == 'DEVELOPER'){
+					$OrdenCompra = 
+				  OrdenCompra::where('codigo',$ordenCompraDetalle->codigo_orden)
+				  ->get();
+				  $i = 0;
+
+				  echo'<td>'.$OrdenCompra[$i]->user.'</td>';
+				  echo'<td>'.$OrdenCompra[$i]->proveedor.'</td>';
 				?>
 
-					<?php
-					if($ordenCompraDetalle->estatus == 'ACTIVO'){
-					?>
-						<a href="/ordenCompraDetalle/0?id_articulo={{$ordenCompraDetalle->id_articulo}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
-	      			<i class="far fa-eye"></i>		      		
-		      		</a>
-
-	      		<a href="/ordenCompraDetalle/{{$ordenCompraDetalle->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
-	      			<i class="fas fa-edit"></i>			      		
-		      	</a>
-				 					  
-		      	<form action="/ordenCompraDetalle/{{$ordenCompraDetalle->id}}" method="POST" style="display: inline;">
-				    @method('DELETE')
-				    @csrf					    
-				    	<button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Desincorporar"><i class="fa fa-reply"></i></button>
-						</form>
-					<?php
-					}
-					else if($ordenCompraDetalle->estatus == 'INACTIVO'){
-					?>		
-		      	<form action="/ordenCompraDetalle/{{$ordenCompraDetalle->id}}" method="POST" style="display: inline;">
-					    @method('DELETE')
-					    @csrf					    
-					    <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Reincorporar"><i class="fa fa-share"></i></button>
-					</form>
-					<?php
-					}					
-					?>
-				<?php	
-				} else if(Auth::user()->role == 'SUPERVISOR' || Auth::user()->role == 'ADMINISTRADOR' || Auth::user()->role == 'SUPERVISOR CAJA'){ 
-				?>
-					<a href="/ordenCompraDetalle/{{$ordenCompraDetalle->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
-		      			<i class="far fa-eye"></i>			      		
-		      		</a>
-
-		      		<a href="/ordenCompraDetalle/{{$ordenCompraDetalle->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
-		      			<i class="fas fa-edit"></i>
-	      			</a>
-				<?php
-				} else if(Auth::user()->role == 'USUARIO'){
-				?>
-					<a href="/ordenCompraDetalle/{{$ordenCompraDetalle->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
-		      			<i class="far fa-eye"></i>			      		
-		      		</a>		
-				<?php
-				}
-				?>
-										
-		      </td>
-		    <!-- Fin Validacion de ROLES -->
-
-		    </tr>
+	      <td>{{$ordenCompraDetalle->codigo_articulo}}</td>
+	      <td>{{$ordenCompraDetalle->codigo_barra}}</td>
+	      <td>{{$ordenCompraDetalle->descripcion}}</td>
+	      <td>{{$ordenCompraDetalle->sede1}}</td>
+	      <td>{{$ordenCompraDetalle->sede2}}</td>
+	      <td>{{$ordenCompraDetalle->sede3}}</td>
+	      <td>{{$ordenCompraDetalle->sede4}}</td>
+	      <td>{{$ordenCompraDetalle->total_unidades}}</td>
+	      <td>{{$ordenCompraDetalle->costo_unitario}}</td>
+	      <td>{{$ordenCompraDetalle->costo_total}}</td>
+	      <td>{{$ordenCompraDetalle->existencia_rpt}}</td>
+	      <td>{{$ordenCompraDetalle->dias_restantes_rpt}}</td>
+	      <td>{{$ordenCompraDetalle->origen_rpt}}</td>
+	      <td>{{$ordenCompraDetalle->rango_rpt}}</td>
+	      <td>{{$ordenCompraDetalle->estatus}}</td>
+	    </tr>
+	    <?php $i++; ?>
 		@endforeach
 		</tbody>
 	</table>

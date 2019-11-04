@@ -61,7 +61,37 @@ class OrdenCompraDetalleController extends Controller
      */
     public function store(Request $request)
     {
-        //
+      try{
+        $ordenCompraDetalles = new OrdenCompraDetalle();
+        $ordenCompraDetalles->codigo_orden = $request->input('codigo_orden');
+        $ordenCompraDetalles->id_articulo = $request->input('id_articulo');
+        $ordenCompraDetalles->codigo_articulo = $request->input('codigo_articulo');
+        $ordenCompraDetalles->codigo_barra = $request->input('codigo_barra');
+        $ordenCompraDetalles->descripcion = $request->input('descripcion');
+        $ordenCompraDetalles->sede1 = $request->input('sede1');
+        $ordenCompraDetalles->sede2 = $request->input('sede2');
+        $ordenCompraDetalles->sede3 = $request->input('sede3');
+        $ordenCompraDetalles->sede4 = $request->input('sede4');
+        $ordenCompraDetalles->total_unidades = $request->input('totalUnidades');
+        $ordenCompraDetalles->costo_unitario = $request->input('costo_unitario');
+        $ordenCompraDetalles->costo_total = ( 
+            ($request->input('totalUnidades')) * ($request->input('costo_unitario')) 
+          );
+        $ordenCompraDetalles->existencia_rpt = $request->input('existencia_rpt');
+        $ordenCompraDetalles->dias_restantes_rpt = $request->input('dias_restantes_rpt');
+        $ordenCompraDetalles->origen_rpt = $request->input('origen_rpt');
+        $ordenCompraDetalles->rango_rpt = $request->input('rango_rpt');
+        $ordenCompraDetalles->estatus = 'ACTIVO';
+        $ordenCompraDetalles->user = $request->input('usuario');
+
+        $ordenCompraDetalles->save();
+        //print_r($ordenCompraDetalles);
+
+      return redirect()->route('ordenCompraDetalle.index')->with('Saved', ' Informacion');
+      }
+      catch(\Illuminate\Database\QueryException $e){
+        return back()->with('Error', ' Error');
+      }
     }
 
     /**
@@ -70,9 +100,14 @@ class OrdenCompraDetalleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
-    {
-        //
+    public function show(Request $request, $id)
+    {   
+        $id_articulo = $request->input('id_articulo');
+        $ordenCompraDetalles =
+        OrdenCompraDetalle::where('id_articulo',$id_articulo)
+        ->where('estatus','ACTIVO')
+        ->get();
+        return view('pages.ordenCompraDetalle.show', compact('ordenCompraDetalles'));
     }
 
     /**
@@ -83,7 +118,8 @@ class OrdenCompraDetalleController extends Controller
      */
     public function edit($id)
     {
-        //
+        $ordenCompraDetalles = OrdenCompraDetalle::find($id);
+        return view('pages.ordenCompraDetalle.edit', compact('ordenCompraDetalles'));
     }
 
     /**
@@ -95,7 +131,15 @@ class OrdenCompraDetalleController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        try{
+          $ordenCompraDetalles = OrdenCompraDetalle::find($id);
+          $ordenCompraDetalles->fill($request->all());
+          $ordenCompraDetalles->save();
+          return redirect()->route('ordenCompraDetalle.index')->with('Updated', ' Informacion');
+        }
+        catch(\Illuminate\Database\QueryException $e){
+            return back()->with('Error', ' Error');
+        }
     }
 
     /**
@@ -106,6 +150,18 @@ class OrdenCompraDetalleController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $ordenCompraDetalles = OrdenCompraDetalle::find($id);
+
+        if($ordenCompraDetalles->estatus == 'ACTIVO'){
+            $ordenCompraDetalles->estatus = 'INACTIVO';
+        }
+        else if($ordenCompraDetalles->estatus == 'INACTIVO'){
+            $ordenCompraDetalles->estatus = 'ACTIVO';
+        }
+
+        $ordenCompraDetalles->user = auth()->user()->name;        
+        $ordenCompraDetalles->save();
+
+        return redirect()->route('ordenCompraDetalle.index')->with('Deleted', ' Informacion');
     }
 }

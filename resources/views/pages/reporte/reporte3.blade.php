@@ -82,41 +82,13 @@
     </script>
   @endif
 
-  <!-- Modal Guardar -->
-    <div class="modal fade" id="OrdenModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title text-info" id="exampleModalCenterTitle"><i class="fas fa-info text-info"></i> Orden de compra</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <form action="/ordenCompra/1" style="display: inline;" id="form_add_orden">
-              <tr>
-                <th scope="row">{!! Form::label('nombre', 'Costo') !!}</th>
-                <td>{!! Form::text('nombre', null, [ 'class' => 'form-control', 'placeholder' => 'Costo ofrecido por el proveedor', 'autofocus', 'required']) !!}</td>
-              </tr>
-              <br/>
-              <tr>
-                <th scope="row">{!! Form::label('nombre', 'Cantidad') !!}</th>
-                <td>{!! Form::text('nombre', null, [ 'class' => 'form-control', 'placeholder' => 'Cantidad a pedir del producto', 'autofocus', 'required']) !!}</td>
-              </tr>
-            </form>
-          </div>
-          <div class="modal-footer">
-            <button type="submit" class="btn btn-outline-success" onclick="articulo_add()">Aceptar</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
 <?php	
   include(app_path().'\functions\config.php');
   include(app_path().'\functions\functions.php');
   include(app_path().'\functions\querys_mysql.php');
   include(app_path().'\functions\querys_sqlserver.php');
+  use Illuminate\Http\Request;
+  use compras\OrdenCompraDetalle;
 
   if (isset($_GET['SEDE'])){      
     echo '<h1 class="h5 text-success"  align="left"> <i class="fas fa-prescription"></i> '.FG_Nombre_Sede($_GET['SEDE']).'</h1>';
@@ -249,6 +221,11 @@
     while($row = sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC)) {
       $IdArticulo = $row["InvArticuloId"];
 
+      $sqlDetalleOrden = "SELECT COUNT(*) AS CuentaOr FROM orden_compra_detalles WHERE id_articulo = '$IdArticulo'";
+      $resultDetalleOrden = mysqli_query($connCPharma,$sqlDetalleOrden);
+      $rowDetalleOrden = $resultDetalleOrden->fetch_assoc();
+      $cuentaArticuloOrden = $rowDetalleOrden['CuentaOr'];
+
       $sql2 = MySQL_Cuenta_Veces_Dias_Cero($IdArticulo,$FInicial,$FFinal);
       $result2 = mysqli_query($connCPharma,$sql2);
       $row2 = $result2->fetch_assoc();
@@ -259,6 +236,7 @@
       $row1 = sqlsrv_fetch_array($result1,SQLSRV_FETCH_ASSOC);
 
       $CodigoArticulo = $row1["CodigoInterno"];
+      $CodigoBarra = $row1["CodigoBarra"];
       $Descripcion = FG_Limpiar_Texto($row1["Descripcion"]);
       $Existencia = $row1["Existencia"];
       $Tipo = FG_Tipo_Producto($row1["Tipo"]);
@@ -305,12 +283,38 @@
       echo '<td align="center" class="bg-danger text-white">'.round($VentaDiariaQuiebre,2).'</td>';
       echo '<td align="center">'.round($DiasRestantes,2).'</td>';
       echo '<td align="center" class="bg-danger text-white">'.round($DiasRestantesQuiebre,2).'</td>';
+      
+      /*BOTON PARA AGREGAR A LA ORDEN DE COMPRA*/
       echo'
       <td style="width:140px;">
-        <a href="#" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Orden de compra" style="width:100%;" onclick="display_modal()">
-          <i class="fas fa-angle-double-right"></i>                
-        </a>
+        <form action="/ordenCompraDetalle/create" method="PRE" style="display: block; width:100%;" target="_blank">
       ';
+      echo'<input type="hidden" name="id_articulo" value="'.$IdArticulo.'">';
+      echo'<input type="hidden" name="codigo_articulo" value="'.$CodigoArticulo.'">';
+      echo'<input type="hidden" name="codigo_barra" value="'.$CodigoBarra.'">';
+      echo'<input type="hidden" name="descripcion" value="'.$Descripcion.'">';
+      echo'<input type="hidden" name="existencia_rpt" value="'.$Existencia.'">';
+      echo'<input type="hidden" name="dias_restantes_rpt" value="'.$DiasRestantesQuiebre.'">';
+      echo'<input type="hidden" name="origen_rpt" value="Productos mas vendidos">';
+      echo'<input type="hidden" name="rango_rpt" value="Del: '.$FInicialImp.' Al: '.$FFinalImp.'">';
+      echo'
+          <button type="submit" name="Reporte" role="button" class="btn btn-outline-success btn-sm" value="SI" style="width:100%;">Agregar</button>
+        </form>
+      ';
+      if( $cuentaArticuloOrden!=0 ) {
+        echo'
+          <br/> 
+          <form action="/ordenCompraDetalle/0" method="PRE" style="display: block; width:100%;" target="_blank">';
+        echo'<input type="hidden" name="id_articulo" value="'.$IdArticulo.'">';
+        echo'
+          <button type="submit" role="button" class="btn btn-outline-danger btn-sm" style="width:100%;">En Transito</button>
+        </form>
+      ';
+      }
+      echo'
+      </td>
+      ';
+      /*BOTON PARA AGREGAR A LA ORDEN DE COMPRA*/
       echo '</tr>';
       $contador++;
     }
@@ -650,13 +654,5 @@
   $(document).ready(function(){
       $('[data-toggle="tooltip"]').tooltip();   
   });
-  
-  function display_modal(){
-    $('#OrdenModalCenter').modal('show');
-  }
-
-  function articulo_add(){
-    document.getElementById('form_add_orden').submit();
-  }
 </script>
 @endsection

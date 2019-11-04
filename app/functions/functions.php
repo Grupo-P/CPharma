@@ -899,10 +899,10 @@
 			case 'Productos Por Fallar':
 				$ruta = '/reporte13';
 			break;
-			case 'Productos en caida':
+			case 'Productos en Caida':
 				$ruta = '/reporte14';
 			break;
-			case 'Articulos devaluados':
+			case 'Articulos Devaluados':
 				$ruta = '/reporte15';
 			break;
 			default:
