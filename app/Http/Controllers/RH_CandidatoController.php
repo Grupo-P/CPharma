@@ -167,20 +167,29 @@ class RH_CandidatoController extends Controller {
     public function destroy($id) {
         $candidatos = RH_Candidato::find($id);
 
-         if($candidatos->estatus == 'POSTULADO'){
+        $Auditoria = new Auditoria();
+        $Auditoria->tabla = 'RH_CANDIDATOS';
+        $Auditoria->registro = $candidatos->nombres . " " . $candidatos->apellidos;
+        $Auditoria->user = auth()->user()->name;
+
+        if($candidatos->estatus == 'POSTULADO') {
             $candidatos->estatus = 'RECHAZADO';
-         }
-         else if($candidatos->estatus == 'RECHAZADO') {
+            $Auditoria->accion = 'DESINCORPORAR';
+        }
+        else if($candidatos->estatus == 'RECHAZADO') {
             $candidatos->estatus = 'POSTULADO';
-         }
+            $Auditoria->accion = 'REINCORPORAR';
+        }
 
-         $candidatos->user = auth()->user()->name;        
-         $candidatos->save();
+        $candidatos->user = auth()->user()->name;
+        $candidatos->save();
 
-         if($candidatos->estatus == 'POSTULADO'){
+        $Auditoria->save();
+
+        if($candidatos->estatus == 'POSTULADO') {
             return redirect()->route('candidatos.index')->with('Deleted1', ' Informacion');
-         }
+        }
 
-         return redirect()->route('candidatos.index')->with('Deleted', ' Informacion');
+        return redirect()->route('candidatos.index')->with('Deleted', ' Informacion');
     }
 }
