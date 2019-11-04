@@ -103,9 +103,10 @@ class OrdenCompraDetalleController extends Controller
     public function show(Request $request, $id)
     {   
         $id_articulo = $request->input('id_articulo');
-        echo''.$id;
-        echo'<br/>: '.$id_articulo;
-        //return view('pages.ordenCompraDetalle.show', compact('id_articulo'));
+        $ordenCompraDetalles =
+        OrdenCompraDetalle::where('id_articulo',$id_articulo)
+        ->get();
+        return view('pages.ordenCompraDetalle.show', compact('ordenCompraDetalles'));
     }
 
     /**
