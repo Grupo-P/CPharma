@@ -142,6 +142,13 @@ class RH_CandidatoController extends Controller {
             $candidatos->user = auth()->user()->name;
             $candidatos->save();
 
+            $Auditoria = new Auditoria();
+            $Auditoria->accion = 'EDITAR';
+            $Auditoria->tabla = 'RH_CANDIDATOS';
+            $Auditoria->registro = $candidatos->nombres . " " . $candidatos->apellidos;
+            $Auditoria->user = auth()->user()->name;
+            $Auditoria->save();
+
             return redirect()
                 ->route('candidatos.index')
                 ->with('Updated', ' Informacion');
