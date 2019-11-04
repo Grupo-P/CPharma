@@ -8,15 +8,13 @@ use compras\RH_Entrevista;
 use compras\User;
 use compras\Auditoria;
 
-class RH_EntrevistaController extends Controller
-{
+class RH_EntrevistaController extends Controller {
     /**
      * Create a new controller instance with auth.
      *
      * @return void
      */
-    public function __construct()
-    {
+    public function __construct() {
         $this->middleware('auth');
     }
 
@@ -25,8 +23,7 @@ class RH_EntrevistaController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(){
-
+    public function index() {
         $entrevistas = RH_Entrevista::all();
         return view('pages.RRHH.entrevistas.index', compact('entrevistas'));
     }
@@ -38,9 +35,8 @@ class RH_EntrevistaController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
-     return view('pages.RRHH.entrevistas.create');
+    public function create() {
+        return view('pages.RRHH.entrevistas.create');
     }
 
     /**
