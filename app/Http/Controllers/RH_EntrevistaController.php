@@ -100,9 +100,8 @@ class RH_EntrevistaController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
-    {
-           $entrevistas = RH_Entrevista::find($id);
+    public function edit($id) {
+        $entrevistas = RH_Entrevista::find($id);
 
         return view('pages.RRHH.entrevistas.edit', compact('entrevistas'));
     }
