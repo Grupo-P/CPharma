@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use compras\RH_Vacante;
 use compras\Sede;
 use compras\User;
+use compras\Auditoria;
 
 class RH_VacanteController extends Controller {
     /**
