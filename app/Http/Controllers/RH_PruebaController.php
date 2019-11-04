@@ -110,7 +110,7 @@ class RH_PruebaController extends Controller {
 
             $pruebas->fill($request->all());
             $pruebas->user = auth()->user()->name;
-            
+
             $pruebas->save();
 
             $Auditoria = new Auditoria();
@@ -135,24 +135,36 @@ class RH_PruebaController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
+    public function destroy($id) {
         $pruebas = RH_Prueba::find($id);
+
+        $Auditoria = new Auditoria();
+        $Auditoria->tabla = 'RH_PRUEBAS';
+        $Auditoria->registro = $pruebas->nombre_prueba;
+        $Auditoria->user = auth()->user()->name;
 
         if($pruebas->estatus == 'ACTIVO'){
             $pruebas->estatus = 'INACTIVO';
+            $Auditoria->accion = 'DESINCORPORAR';
         }
         else if($pruebas->estatus == 'INACTIVO'){
             $pruebas->estatus = 'ACTIVO';
+            $Auditoria->accion = 'REINCORPORAR';
         }
 
         $pruebas->user = auth()->user()->name;        
         $pruebas->save();
 
+        $Auditoria->save();
+
         if($pruebas->estatus == 'ACTIVO'){
-            return redirect()->route('pruebas.index')->with('Deleted', ' Informacion');
+            return redirect()
+                ->route('pruebas.index')
+                ->with('Deleted', ' Informacion');
         }
 
-        return redirect()->route('pruebas.index')->with('Deleted1', ' Informacion');
+        return redirect()
+            ->route('pruebas.index')
+            ->with('Deleted1', ' Informacion');
     }
 }
