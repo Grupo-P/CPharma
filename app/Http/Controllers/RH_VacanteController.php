@@ -93,6 +93,13 @@ class RH_VacanteController extends Controller {
     public function show($id) {
         $vacantes = RH_Vacante::find($id);
 
+        $Auditoria = new Auditoria();
+        $Auditoria->accion = 'CONSULTAR';
+        $Auditoria->tabla = 'RH_VACANTES';
+        $Auditoria->registro = $vacantes->nombre_vacante;
+        $Auditoria->user = auth()->user()->name;
+        $Auditoria->save();
+
         return view('pages.RRHH.vacantes.show', compact('vacantes'));
     }
 
