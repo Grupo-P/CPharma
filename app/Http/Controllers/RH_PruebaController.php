@@ -58,7 +58,9 @@ class RH_PruebaController extends Controller {
             $Auditoria->user = auth()->user()->name;
             $Auditoria->save();
 
-            return redirect()->route('pruebas.index')->with('Saved', ' Informacion');
+            return redirect()
+                ->route('pruebas.index')
+                ->with('Saved', ' Informacion');
         }
         catch(\Illuminate\Database\QueryException $e) {
             return back()->with('Error', ' Error');

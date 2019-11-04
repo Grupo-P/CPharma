@@ -64,12 +64,20 @@ class RH_VacanteController extends Controller {
             $vacantes->nivel_urgencia = $request->input('nivel_urgencia');
             $vacantes->solicitante = $request->input('solicitante');
             $vacantes->comentarios = $request->input('comentarios');
-
             $vacantes->estatus = 'ACTIVO';
             $vacantes->user = auth()->user()->name;
             $vacantes->save();
 
-            return redirect()->route('vacantes.index')->with('Saved', ' Informacion');
+            $Auditoria = new Auditoria();
+            $Auditoria->accion = 'CREAR';
+            $Auditoria->tabla = 'RH_VACANTES';
+            $Auditoria->registro = $request->input('nombre_vacante');
+            $Auditoria->user = auth()->user()->name;
+            $Auditoria->save();
+
+            return redirect()
+                ->route('vacantes.index')
+                ->with('Saved', ' Informacion');
         }
         catch(\Illuminate\Database\QueryException $e) {
             return back()->with('Error', ' Error');
