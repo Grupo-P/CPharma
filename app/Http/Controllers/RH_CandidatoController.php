@@ -78,7 +78,7 @@ class RH_CandidatoController extends Controller {
             $Auditoria = new Auditoria();
             $Auditoria->accion = 'CREAR';
             $Auditoria->tabla = 'RH_CANDIDATOS';
-            $Auditoria->registro = $request->input('nombres').$request->input('apellidos');
+            $Auditoria->registro = $request->input('nombres') . " " . $request->input('apellidos');
             $Auditoria->user = auth()->user()->name;
             $Auditoria->save();
 
@@ -104,7 +104,7 @@ class RH_CandidatoController extends Controller {
         $Auditoria = new Auditoria();
         $Auditoria->accion = 'CONSULTAR';
         $Auditoria->tabla = 'RH_CANDIDATOS';
-        $Auditoria->registro = $candidatos->nombres.$candidatos->apellidos;
+        $Auditoria->registro = $candidatos->nombres . " " . $candidatos->apellidos;
         $Auditoria->user = auth()->user()->name;
         $Auditoria->save();
 
