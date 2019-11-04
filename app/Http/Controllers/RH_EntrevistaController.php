@@ -148,26 +148,36 @@ class RH_EntrevistaController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
+    public function destroy($id) {
         $entrevistas = RH_Entrevista::find($id);
+
+        $Auditoria = new Auditoria();
+        $Auditoria->tabla = 'RH_ENTREVISTAS';
+        $Auditoria->registro = $entrevistas->entrevistadores;
+        $Auditoria->user = auth()->user()->name;
 
         if($entrevistas->estatus == 'ACTIVO'){
             $entrevistas->estatus = 'INACTIVO';
+            $Auditoria->accion = 'DESINCORPORAR';
         }
         else if($entrevistas->estatus == 'INACTIVO'){
             $entrevistas->estatus = 'ACTIVO';
+            $Auditoria->accion = 'REINCORPORAR';
         }
 
         $entrevistas->user = auth()->user()->name;        
         $entrevistas->save();
 
+        $Auditoria->save();
+
         if($entrevistas->estatus == 'ACTIVO'){
-            return redirect()->route('entrevistas.index')
-            ->with('Deleted', ' Informacion');
+            return redirect()
+                ->route('entrevistas.index')
+                ->with('Deleted', ' Informacion');
         }
 
-        return redirect()->route('entrevistas.index')
-        ->with('Deleted1', ' Informacion');
+        return redirect()
+            ->route('entrevistas.index')
+            ->with('Deleted1', ' Informacion');
     }
 }
