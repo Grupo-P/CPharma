@@ -113,9 +113,8 @@ class RH_EntrevistaController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
-    {
-         try{
+    public function update(Request $request, $id) {
+        try {
             $entrevistas = RH_Entrevista::find($id);
             $entrevistas->fill($request->all());
 
@@ -127,7 +126,16 @@ class RH_EntrevistaController extends Controller {
             $entrevistas->user = auth()->user()->name;
             $entrevistas->save();
 
-            return redirect()->route('entrevistas.index')->with('Updated', ' Informacion');
+            $Auditoria = new Auditoria();
+            $Auditoria->accion = 'EDITAR';
+            $Auditoria->tabla = 'RH_ENTREVISTAS';
+            $Auditoria->registro = $entrevistas->entrevistadores;
+            $Auditoria->user = auth()->user()->name;
+            $Auditoria->save();
+
+            return redirect()
+                ->route('entrevistas.index')
+                ->with('Updated', ' Informacion');
         }
         catch(\Illuminate\Database\QueryException $e){
             return back()->with('Error', ' Error');
