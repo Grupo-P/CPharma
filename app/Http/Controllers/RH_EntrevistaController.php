@@ -48,9 +48,11 @@ class RH_EntrevistaController extends Controller {
     public function store(Request $request) {
 
         try {
+            $fecha_entrevista = $request->input('fecha_entrevista');
+
             $entrevistas = new RH_Entrevista();
 
-            $entrevistas->fecha_entrevista = $request->input('fecha_entrevista');
+            $entrevistas->fecha_entrevista = date('Y-m-d', strtotime($fecha_entrevista));
             $entrevistas->entrevistadores = $request->input('entrevistadores');
             $entrevistas->lugar = $request->input('lugar');
             $entrevistas->observaciones = $request->input('observaciones');
@@ -115,14 +117,13 @@ class RH_EntrevistaController extends Controller {
      */
     public function update(Request $request, $id) {
         try {
+            $fecha_entrevista = $request->input('fecha_entrevista');
+            
             $entrevistas = RH_Entrevista::find($id);
             $entrevistas->fill($request->all());
 
-            $entrevistas->fecha_entrevista = $request->input('fecha_entrevista');
-            $entrevistas->entrevistadores = $request->input('entrevistadores');
-            $entrevistas->lugar = $request->input('lugar');
-            $entrevistas->observaciones = $request->input('observaciones');
-            $entrevistas->estatus = 'ACTIVO'; 
+            $entrevistas->fecha_entrevista = date('Y-m-d', strtotime($fecha_entrevista));
+
             $entrevistas->user = auth()->user()->name;
             $entrevistas->save();
 
