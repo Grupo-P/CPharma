@@ -4,6 +4,11 @@
   Detalle de orden de compra
 @endsection
 
+<?php
+	use Illuminate\Http\Request;
+	use compras\OrdenCompra;
+?>
+
 @section('content')
 
 	<!-- Modal Guardar -->
@@ -74,23 +79,18 @@
 
 	<h1 class="h5 text-info">
 		<i class="far fa-file-alt"></i>
-		Detalle de orden de compra show
+		Detalle de orden de compra
 	</h1>
 
 	<hr class="row align-items-start col-12">
 	<table style="width:100%;">
 		<tr>
-				<td style="width:7%;">
+				<td style="width:10%;">
 					<form action="/ordenCompra/" method="POST">                  
 			        <button type="submit" role="button" class="btn btn-outline-success btn-sm"data-placement="top" style="display: inline;"><i class="fa fa-reply">&nbsp;Regresar</i></button>
 			    </form>
 				</td>
-        <td style="width:7%;">	        	
-						<form action="{{ url('/ordenCompraDetalle/create') }}" method="PRE">
-			        <button type="submit" role="button" class="btn btn-outline-info btn-sm"data-placement="top" name="Reporte" value="NO" style="display: inline;"><i class="fas fa-plus">&nbsp;Agregar</i></button>
-				    </form>
-	        </td>
-	        <td style="width:86%;">
+	        <td style="width:90%;">
 	        	<div class="input-group md-form form-sm form-1 pl-0">
 				  <div class="input-group-prepend">
 				    <span class="input-group-text purple lighten-3" id="basic-text1"><i class="fas fa-search text-white"
@@ -108,6 +108,8 @@
 		    <tr>
 		      	<th scope="col" class="stickyCP">#</th>
 		      	<th scope="col" class="stickyCP">Codigo Orden</th>
+		      	<th scope="col" class="stickyCP">Operador Orden</th>
+		      	<th scope="col" class="stickyCP">Proveedor Orden</th>
 		      	<th scope="col" class="stickyCP">Codigo Interno</th>	
 		      	<th scope="col" class="stickyCP">Codigo Barra</th>	
 		      	<th scope="col" class="stickyCP">Descripcion</th>		      		
@@ -127,25 +129,37 @@
 	  	</thead>
 	  	<tbody>
 		@foreach($ordenCompraDetalles as $ordenCompraDetalle)
-		    <tr>
-		      <th>{{$ordenCompraDetalle->id}}</th>
-		      <td>{{$ordenCompraDetalle->codigo_orden}}</td>
-		      <td>{{$ordenCompraDetalle->codigo_articulo}}</td>
-		      <td>{{$ordenCompraDetalle->codigo_barra}}</td>
-		      <td>{{$ordenCompraDetalle->descripcion}}</td>
-		      <td>{{$ordenCompraDetalle->sede1}}</td>
-		      <td>{{$ordenCompraDetalle->sede2}}</td>
-		      <td>{{$ordenCompraDetalle->sede3}}</td>
-		      <td>{{$ordenCompraDetalle->sede4}}</td>
-		      <td>{{$ordenCompraDetalle->total_unidades}}</td>
-		      <td>{{$ordenCompraDetalle->costo_unitario}}</td>
-		      <td>{{$ordenCompraDetalle->costo_total}}</td>
-		      <td>{{$ordenCompraDetalle->existencia_rpt}}</td>
-		      <td>{{$ordenCompraDetalle->dias_restantes_rpt}}</td>
-		      <td>{{$ordenCompraDetalle->origen_rpt}}</td>
-		      <td>{{$ordenCompraDetalle->rango_rpt}}</td>
-		      <td>{{$ordenCompraDetalle->estatus}}</td>
-		    </tr>
+	    <tr>
+	      <th>{{$ordenCompraDetalle->id}}</th>
+	      <td>{{$ordenCompraDetalle->codigo_orden}}</td>
+				
+				<?php
+					$OrdenCompra = 
+				  OrdenCompra::where('codigo',$ordenCompraDetalle->codigo_orden)
+				  ->get();
+				  $i = 0;
+
+				  echo'<td>'.$OrdenCompra[$i]->user.'</td>';
+				  echo'<td>'.$OrdenCompra[$i]->proveedor.'</td>';
+				?>
+
+	      <td>{{$ordenCompraDetalle->codigo_articulo}}</td>
+	      <td>{{$ordenCompraDetalle->codigo_barra}}</td>
+	      <td>{{$ordenCompraDetalle->descripcion}}</td>
+	      <td>{{$ordenCompraDetalle->sede1}}</td>
+	      <td>{{$ordenCompraDetalle->sede2}}</td>
+	      <td>{{$ordenCompraDetalle->sede3}}</td>
+	      <td>{{$ordenCompraDetalle->sede4}}</td>
+	      <td>{{$ordenCompraDetalle->total_unidades}}</td>
+	      <td>{{$ordenCompraDetalle->costo_unitario}}</td>
+	      <td>{{$ordenCompraDetalle->costo_total}}</td>
+	      <td>{{$ordenCompraDetalle->existencia_rpt}}</td>
+	      <td>{{$ordenCompraDetalle->dias_restantes_rpt}}</td>
+	      <td>{{$ordenCompraDetalle->origen_rpt}}</td>
+	      <td>{{$ordenCompraDetalle->rango_rpt}}</td>
+	      <td>{{$ordenCompraDetalle->estatus}}</td>
+	    </tr>
+	    <?php $i++; ?>
 		@endforeach
 		</tbody>
 	</table>
