@@ -13,7 +13,19 @@ class CreateRhCandidatosVacantesTable extends Migration {
     public function up() {
         Schema::create('rh_candidatos_vacantes', function (Blueprint $table) {
             $table->increments('id');
+            $table->unsignedInteger('rh_candidatos_id');
+            $table->unsignedInteger('rh_vacantes_id');
             $table->timestamps();
+
+            $table->foreign('rh_candidatos_id')
+            ->references('id')
+            ->on('rh_candidatos')
+            ->onDelete('cascade');
+
+            $table->foreign('rh_vacantes_id')
+            ->references('id')
+            ->on('rh_vacantes')
+            ->onDelete('cascade');
         });
     }
 
