@@ -25,7 +25,8 @@ class RH_ExamenesMController extends Controller
      */
     public function index()
     {
-        //
+        $examenesm = RH_ExamenesM::all();
+        return view('pages.RRHH.examenesm.index', compact('examenesm'));
     }
 
     /**
