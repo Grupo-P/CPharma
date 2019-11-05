@@ -11,14 +11,14 @@ class RH_ExamenesM extends Model
      *
      * @var string
      */
-    protected $table = 'rh_entrevistas';
+    protected $table = 'rh_examenes';
      /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-    	'fecha_entrevista', 'entrevistadores', 'lugar', 'observaciones', 'user'
+    	'empresa', 'representante', 'estado', 'user', 'observaciones', 'estatus'  
     ];
 
 }
