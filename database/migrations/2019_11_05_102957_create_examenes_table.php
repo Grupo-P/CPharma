@@ -15,6 +15,12 @@ class CreateExamenesTable extends Migration
     {
         Schema::create('rh_examenes', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('empresa');
+            $table->string('representante');
+            $table->string('estado');
+            $table->text('observaciones')->nullable();
+            $table->string('user');
+            $table->string('estatus');
             $table->timestamps();
         });
     }
