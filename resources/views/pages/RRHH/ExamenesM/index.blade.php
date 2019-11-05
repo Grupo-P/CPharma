@@ -41,11 +41,13 @@
     <thead class="thead-dark">
       <tr>
         <th scope="col" class="CP-sticky">#</th>
-        <th scope="col" class="CP-sticky">Fecha</th>
-        <th scope="col" class="CP-sticky">Entrevistadores</th>
-        <th scope="col" class="CP-sticky">Lugar</th>
+        <th scope="col" class="CP-sticky">Nombre de la empresa</th>
+        <th scope="col" class="CP-sticky">Representante de Empresa</th>
+        <th scope="col" class="CP-sticky">Estado</th>
+        <th scope="col" class="CP-sticky">Usuario</th>
         <th scope="col" class="CP-sticky">Estatus</th>
         <th scope="col" class="CP-sticky">Acciones</th>
+ 
       </tr>
     </thead> 
   </table>
