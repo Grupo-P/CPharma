@@ -285,7 +285,7 @@
       <li class="nav-item">
         <a class="nav-link CP-Links-Menu" href="/examenesm">
           <span data-feather="home"></span>
-          <i class="fas fa-user-plus"></i>
+          <i class="fas fa-user-md"></i>
           Examenes Médicos <span class="sr-only">(current)</span>
         </a>
       </li>

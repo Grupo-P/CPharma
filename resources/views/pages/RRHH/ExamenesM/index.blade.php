@@ -10,7 +10,7 @@
 @section('content')
  
   <h1 class="h5 text-info">
-    <i class="fas fa-users"></i>&nbsp;Entrevistas
+   <i class="fas fa-user-md"></i>&nbsp;Examenes Médicos
   </h1>
   <hr class="row align-items-start col-12">
 
