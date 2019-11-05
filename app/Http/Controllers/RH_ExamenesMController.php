@@ -7,7 +7,7 @@ use compras\RH_ExamenesM;
 use compras\User;
 use compras\Auditoria;
 
-class RH_ExamenesM extends Controller
+class RH_ExamenesMController extends Controller
 {
     /**
      * Create a new controller instance with auth.
