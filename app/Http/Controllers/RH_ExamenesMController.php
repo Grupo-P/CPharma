@@ -7,12 +7,11 @@ use compras\RH_ExamenesM;
 use compras\User;
 use compras\Auditoria;
 
-class RH_ExamenesMController extends Controller
-{
+class RH_ExamenesMController extends Controller {
     /**
      * Create a new controller instance with auth.
      *
-     * 
+     * @return void
      */
     public function __construct() {
         $this->middleware('auth');
@@ -56,7 +55,7 @@ class RH_ExamenesMController extends Controller
 
             $Auditoria = new Auditoria();
             $Auditoria->accion = 'CREAR';
-            $Auditoria->tabla = 'RH_ExamenesM';
+            $Auditoria->tabla = 'RH_EXAMENESM';
             $Auditoria->registro = $request->input('empresa');
             $Auditoria->user = auth()->user()->name;
             $Auditoria->save();
@@ -77,12 +76,12 @@ class RH_ExamenesMController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show($id) {
-         $examenesm = RH_ExamenesM::find($id);
+        $examenesm = RH_ExamenesM::find($id);
 
         $Auditoria = new Auditoria();
         $Auditoria->accion = 'CONSULTAR';
-        $Auditoria->tabla = 'RH_ExamenesM';
-        $Auditoria->registro = $examenesm->nombres . " " . $examenesm->apellidos;
+        $Auditoria->tabla = 'RH_EXAMENESM';
+        $Auditoria->registro = $examenesm->empresa;
         $Auditoria->user = auth()->user()->name;
         $Auditoria->save();
 
@@ -110,7 +109,7 @@ class RH_ExamenesMController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id) {
-          try {
+        try {
             $examenesm = RH_ExamenesM::find($id);
 
             $examenesm->fill($request->all());
@@ -120,7 +119,7 @@ class RH_ExamenesMController extends Controller
 
             $Auditoria = new Auditoria();
             $Auditoria->accion = 'EDITAR';
-            $Auditoria->tabla = 'RH_PRUEBAS';
+            $Auditoria->tabla = 'RH_EXAMENESM';
             $Auditoria->registro = $examenesm->empresa;
             $Auditoria->user = auth()->user()->name;
             $Auditoria->save();
@@ -141,10 +140,10 @@ class RH_ExamenesMController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function destroy($id) {
-       $examenesm = RH_ExamenesM::find($id);
+        $examenesm = RH_ExamenesM::find($id);
 
         $Auditoria = new Auditoria();
-        $Auditoria->tabla = 'RH_ExamenesM';
+        $Auditoria->tabla = 'RH_EXAMENESM';
         $Auditoria->registro = $examenesm->empresa;
         $Auditoria->user = auth()->user()->name;
 
