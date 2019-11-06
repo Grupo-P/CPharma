@@ -25,7 +25,7 @@ class RH_ExamenesMController extends Controller
      */
     public function index() {
         $examenesm = RH_ExamenesM::all();
-        return view('pages.RRHH.examenesm.index', compact('examenesm'));
+        return view('pages.RRHH.examenes_medicos.index', compact('examenesm'));
     }
 
     /**
@@ -34,7 +34,7 @@ class RH_ExamenesMController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function create() {
-        return view('pages.RRHH.examenesm.create');
+        return view('pages.RRHH.examenes_medicos.create');
     }
 
     /**
@@ -86,7 +86,7 @@ class RH_ExamenesMController extends Controller
         $Auditoria->user = auth()->user()->name;
         $Auditoria->save();
 
-        return view('pages.RRHH.examenesm.show', compact('examenesm'));
+        return view('pages.RRHH.examenes_medicos.show', compact('examenesm'));
     }
 
     /**
@@ -98,7 +98,7 @@ class RH_ExamenesMController extends Controller
     public function edit($id) {
         $examenesm = RH_ExamenesM::find($id);
 
-        return view('pages.RRHH.examenesm.edit', compact('examenesm'));
+        return view('pages.RRHH.examenes_medicos.edit', compact('examenesm'));
 
     }
 
