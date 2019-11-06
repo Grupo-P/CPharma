@@ -7,6 +7,7 @@
     th, td {text-align: center;}
   </style>
 @endsection
+
 @section('content')
  <!-- Modal Guardar -->
   @if(session('Saved'))
@@ -111,7 +112,7 @@
   <table style="width:100%;">
     <tr>
       <td style="width:10%;" align="center">
-        <a href="/entrevistas/create" role="button" class="btn btn-outline-info btn-sm" style="display: inline; text-align: left;">
+        <a href="/examenesm/create" role="button" class="btn btn-outline-info btn-sm" style="display: inline; text-align: left;">
           <i class="fa fa-plus"></i>&nbsp;Agregar
         </a>
       </td>
