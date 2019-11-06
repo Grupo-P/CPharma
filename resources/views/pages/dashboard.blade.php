@@ -107,10 +107,10 @@
   ?>
 
   <h1 class="h5 text-info">
-		<i class="fas fa-columns"></i>
-		Dashboard
-	</h1>
-	<hr class="row align-items-start col-12">
+    <i class="fas fa-columns"></i>
+    Dashboard
+  </h1>
+  <hr class="row align-items-start col-12">
 
 <?php
 	if((Auth::user()->departamento != 'VENTAS')&&(Auth::user()->departamento != 'RRHH')){
