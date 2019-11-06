@@ -21,29 +21,28 @@
     $pruebas = DB::table('rh_pruebas')->count();
     $entrevistas = DB::table('rh_entrevistas')->count();
 
-	/*TASA DOLAR VENTA*/
-		$Tasa = DB::table('tasa_ventas')->where('moneda', 'Dolar')->value('tasa');
-		
-		if( (!empty($Tasa)) ){
-			$Tasa = number_format($Tasa,2,"," ,"." );
-		}
-		else{
-			$Tasa = number_format(0.00,2,"," ,"." );
-		}
+  /*TASA DOLAR VENTA*/
+    $Tasa = DB::table('tasa_ventas')->where('moneda', 'Dolar')->value('tasa');
 
-		$tasaVenta = DB::table('tasa_ventas')->where('moneda', 'Dolar')->value('updated_at');
-		
-		if( (!empty($tasaVenta)) ){
-			$tasaVenta = new DateTime($tasaVenta);
-			$tasaVenta = $tasaVenta->format("d-m-Y h:i:s a");
-		}
-		else{
-			$tasaVenta = '';
-		}
+    if( (!empty($Tasa)) ) {
+      $Tasa = number_format($Tasa,2,"," ,"." );
+    }
+    else {
+      $Tasa = number_format(0.00,2,"," ,"." );
+    }
 
-	/*TASA DOLAR VENTA*/
+    $tasaVenta = DB::table('tasa_ventas')->where('moneda', 'Dolar')->value('updated_at');
 
-	/*TASA DOLAR MERCADO*/
+    if( (!empty($tasaVenta)) ) {
+      $tasaVenta = new DateTime($tasaVenta);
+      $tasaVenta = $tasaVenta->format("d-m-Y h:i:s a");
+    }
+    else {
+      $tasaVenta = '';
+    }
+  /*TASA DOLAR VENTA*/
+
+  /*TASA DOLAR MERCADO*/
 		$FechaTasaMercado = 
 		DB::table('dolars')
 		->select('updated_at')
