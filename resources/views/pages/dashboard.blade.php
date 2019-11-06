@@ -5,21 +5,21 @@
 @endsection
 
 @section('content')
-	<?php
-		include(app_path().'\functions\config.php');
-		include(app_path().'\functions\functions.php');
-		include(app_path().'\functions\querys_mysql.php');
-		include(app_path().'\functions\querys_sqlserver.php');
+  <?php
+    include(app_path().'\functions\config.php');
+    include(app_path().'\functions\functions.php');
+    include(app_path().'\functions\querys_mysql.php');
+    include(app_path().'\functions\querys_sqlserver.php');
 
-		$empresas = DB::table('empresas')->count();
-		$proveedores = DB::table('proveedors')->count();
-		$usuarios = DB::table('users')->count();
-		$dolar = DB::table('dolars')->count();
-		$candidatos = DB::table('rh_candidatos')->count();
+    $empresas = DB::table('empresas')->count();
+    $proveedores = DB::table('proveedors')->count();
+    $usuarios = DB::table('users')->count();
+    $dolar = DB::table('dolars')->count();
+    $candidatos = DB::table('rh_candidatos')->count();
     $vacantes = DB::table('rh_vacantes')->count();
     $entrevistas = DB::table('rh_entrevistas')->count();
-		$pruebas = DB::table('rh_pruebas')->count();
-		$entrevistas = DB::table('rh_entrevistas')->count();
+    $pruebas = DB::table('rh_pruebas')->count();
+    $entrevistas = DB::table('rh_entrevistas')->count();
 
 	/*TASA DOLAR VENTA*/
 		$Tasa = DB::table('tasa_ventas')->where('moneda', 'Dolar')->value('tasa');
