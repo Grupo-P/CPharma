@@ -141,6 +141,36 @@ class RH_ExamenesMController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function destroy($id) {
-        //
-    }
+       $examenesm = RH_ExamenesM::find($id);
+
+        $Auditoria = new Auditoria();
+        $Auditoria->tabla = 'RH_ExamenesM';
+        $Auditoria->registro = $examenesm->empresa;
+        $Auditoria->user = auth()->user()->name;
+
+        if($examenesm->estatus == 'ACTIVO'){
+            $examenesm->estatus = 'INACTIVO';
+            $Auditoria->accion = 'DESINCORPORAR';
+        }
+        else if($examenesm->estatus == 'INACTIVO'){
+            $examenesm->estatus = 'ACTIVO';
+            $Auditoria->accion = 'REINCORPORAR';
+        }
+
+        $examenesm->user = auth()->user()->name;        
+        $examenesm->save();
+
+        $Auditoria->save();
+
+        if($examenesm->estatus == 'ACTIVO'){
+            return redirect()
+                ->route('examenesm.index')
+                ->with('Deleted', ' Informacion');
+        }
+
+        return redirect()
+            ->route('examenesm.index')
+            ->with('Deleted1', ' Informacion');
+    }  
+    
 }
