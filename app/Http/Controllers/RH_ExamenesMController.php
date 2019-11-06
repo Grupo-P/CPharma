@@ -36,7 +36,7 @@ class RH_ExamenesMController extends Controller
      */
     public function create()
     {
-        //
+        return view('pages.RRHH.examenesm.create');
     }
 
     /**
