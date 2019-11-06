@@ -1,6 +1,6 @@
 @extends('layouts.model')
 
-@section('title', 'Crear Examenes Médicos')
+@section('title', 'Modificar Examenes Médicos')
 
 @section('content')
   <!-- Modal Guardar -->
@@ -9,18 +9,13 @@
       <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title text-danger" id="exampleModalCenterTitle">
-              <i class="fas fa-exclamation-triangle text-danger"></i>
-              {{ session('Error') }}
-            </h5>
+            <h5 class="modal-title text-danger" id="exampleModalCenterTitle"><i class="fas fa-exclamation-triangle text-danger"></i>{{ session('Error') }}</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
           <div class="modal-body">
-            <h4 class="h6">
-            Los Registros no fueron almacenados
-            </h4>
+            <h4 class="h6">Los Registros no fueron almacenados</h4>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-outline-success" data-dismiss="modal">Aceptar</button>
@@ -31,19 +26,19 @@
   @endif
 
   <h1 class="h5 text-info">
-    <i class="fas fa-plus"></i>&nbsp;Agregar Examenes Médicos
+    <i class="fas fa-edit"></i>
+    Modificar Examenes Médicos
   </h1>
   <hr class="row align-items-start col-12">
 
   <form action="/examenesm/" method="POST" style="display: inline;">  
     @csrf
-    <button type="submit" name="Regresar" role="button" class="btn btn-outline-info btn-sm"data-placement="top">
-      <i class="fa fa-reply">&nbsp;Regresar</i>
-    </button>
+    <button type="submit" name="Regresar" role="button" class="btn btn-outline-info btn-sm"data-placement="top"><i class="fa fa-reply">&nbsp;Regresar</i></button>
   </form>
+
   <br/><br/>
 
-  {!! Form::open(['route' => 'examenesm.store', 'method' => 'POST']) !!}
+  {!! Form::model($examenesm, ['route' => ['examenesm.update', $examenesm], 'method' => 'PUT']) !!}
     <fieldset>
       <table class="table table-borderless table-striped">
         <thead class="thead-dark">
@@ -56,30 +51,31 @@
         <tbody>
           <tr>
             <th scope="row">
-              {!! Form::label('empresa', 'Nombre de la empresa') !!}
+              {!! Form::label('empresa', 'Nombre de la empresa *', ['title' => 'Este campo es requerido']) !!}
             </th>
             <td>
-              {!! Form::text('empresa', null, [ 'class' => 'form-control', 'placeholder' => 'Medisur']) !!}
+              {!! Form::text('empresa', null, [ 'class' => 'form-control', 'placeholder' => 'Medisur', 'required']) !!}
             </td>
           </tr>
 
           <tr>
             <th scope="row">
-              {!! Form::label('representante', 'Representante de la empresa') !!}
+              {!! Form::label('representante', 'Representante de la empresa *', ['title' => 'Este campo es requerido']) !!}
             </th>
             <td>
-              {!! Form::text('representante', null, [ 'class' => 'form-control', 'placeholder' => 'Maria Ramirez']) !!}
+              {!! Form::text('representante', null, [ 'class' => 'form-control', 'placeholder' => 'Maria Ramirez', 'required']) !!}
             </td>
           </tr>
 
           <tr>
-           <th scope="row">{!! Form::label('estado', 'Tipo de Estado') !!}</th>
+           <th scope="row">{!! Form::label('estado', 'Tipo de Estado *', ['title' => 'Este campo es requerido']) !!}</th>
             <td>
               {!! Form::select('estado', [
+                '' => 'Seleccione una opción',
                 'Apto' => 'Apto', 
                 'Rechazado' => 'Rechazado',
                 'Aceptado con Restricciones' => 'Aceptado con Restricciones',
-              ], null, ['class' => 'form-control']) !!}
+              ], null, ['class' => 'form-control', 'required']) !!}
             </td>
           </tr>
 
