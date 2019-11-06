@@ -1,6 +1,6 @@
 @extends('layouts.model')
 
-@section('title', 'Crear entrevista')
+@section('title', 'Crear Examenes Médicos')
 
 @section('content')
   <!-- Modal Guardar -->
@@ -19,7 +19,7 @@
           </div>
           <div class="modal-body">
             <h4 class="h6">
-             La entrevista no fue almacenada
+            Los Registros no fueron almacenados
             </h4>
           </div>
           <div class="modal-footer">
@@ -31,11 +31,11 @@
   @endif
 
   <h1 class="h5 text-info">
-    <i class="fas fa-plus"></i>&nbsp;Agregar Entrevistas
+    <i class="fas fa-plus"></i>&nbsp;Agregar Examenes Médicos
   </h1>
   <hr class="row align-items-start col-12">
 
-  <form action="/entrevistas/" method="POST" style="display: inline;">  
+  <form action="/examenesm/" method="POST" style="display: inline;">  
     @csrf
     <button type="submit" name="Regresar" role="button" class="btn btn-outline-info btn-sm"data-placement="top">
       <i class="fa fa-reply">&nbsp;Regresar</i>
@@ -43,7 +43,7 @@
   </form>
   <br/><br/>
 
-  {!! Form::open(['route' => 'entrevistas.store', 'method' => 'POST']) !!}
+  {!! Form::open(['route' => 'examenesm.store', 'method' => 'POST']) !!}
     <fieldset>
       <table class="table table-borderless table-striped">
         <thead class="thead-dark">
@@ -56,33 +56,37 @@
         <tbody>
           <tr>
             <th scope="row">
-              {!! Form::label('fecha_entrevista', 'Fecha de Entrevista') !!}
+              {!! Form::label('empresa', 'Nombre de la empresa') !!}
             </th>
             <td>
-              {!! Form::date('fecha_entrevista', null, [ 'class' => 'form-control', 'autofocus']) !!}
+              {!! Form::text('empresa', null, [ 'class' => 'form-control', 'placeholder' => 'Medisur']) !!}
             </td>
           </tr>
 
           <tr>
             <th scope="row">
-              {!! Form::label('entrevistadores', 'Nombre de Entrevistadores') !!}
+              {!! Form::label('representante', 'Representante de la empresa') !!}
             </th>
             <td>
-              {!! Form::text('entrevistadores', null, [ 'class' => 'form-control', 'placeholder' => 'Ashley Caldera']) !!}
+              {!! Form::text('representante', null, [ 'class' => 'form-control', 'placeholder' => 'Maria Ramirez']) !!}
             </td>
           </tr>
 
           <tr>
-            <th scope="row">{!! Form::label('lugar', 'Lugar de Entrevista') !!}</th>
+           <th scope="row">{!! Form::label('estado', 'Tipo de Estado') !!}</th>
             <td>
-              {!! Form::text('lugar', null, [ 'class' => 'form-control', 'placeholder' => 'Delicias']) !!}
+              {!! Form::select('estado', [
+                'Apto' => 'Apto', 
+                'Rechazado' => 'Rechazado',
+                'Aceptado con Restricciones' => 'Aceptado con Restricciones',
+              ], null, ['class' => 'form-control']) !!}
             </td>
           </tr>
 
           <tr>
             <th scope="row">{!! Form::label('observaciones', 'Observaciones') !!}</th>
             <td>
-              {!! Form::textarea('observaciones', null, [ 'class' => 'form-control', 'placeholder' => 'Detalles del entrevistado', 'rows' => '3']) !!}
+              {!! Form::textarea('observaciones', null, [ 'class' => 'form-control', 'placeholder' => 'Detalles de los Examenes ', 'rows' => '3']) !!}
             </td>
           </tr>
         </tbody>

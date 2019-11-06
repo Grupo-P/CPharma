@@ -185,3 +185,5 @@ Route::resource('entrevistas', 'RH_EntrevistaController');
 Route::resource('vacantes', 'RH_VacanteController');
 
 Route::resource('empresaReferencias', 'RH_EmpresaReferenciaController');
+
+Route::resource('examenesm', 'RH_ExamenesMController');
