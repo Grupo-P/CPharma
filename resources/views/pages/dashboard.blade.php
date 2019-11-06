@@ -5,113 +5,113 @@
 @endsection
 
 @section('content')
-	<?php
-		include(app_path().'\functions\config.php');
-		include(app_path().'\functions\functions.php');
-		include(app_path().'\functions\querys_mysql.php');
-		include(app_path().'\functions\querys_sqlserver.php');
+  <?php
+    include(app_path().'\functions\config.php');
+    include(app_path().'\functions\functions.php');
+    include(app_path().'\functions\querys_mysql.php');
+    include(app_path().'\functions\querys_sqlserver.php');
 
-		$empresas = DB::table('empresas')->count();
-		$proveedores = DB::table('proveedors')->count();
-		$usuarios = DB::table('users')->count();
-		$dolar = DB::table('dolars')->count();
-		$candidatos = DB::table('rh_candidatos')->count();
+    $empresas = DB::table('empresas')->count();
+    $proveedores = DB::table('proveedors')->count();
+    $usuarios = DB::table('users')->count();
+    $dolar = DB::table('dolars')->count();
+    $candidatos = DB::table('rh_candidatos')->count();
     $vacantes = DB::table('rh_vacantes')->count();
     $entrevistas = DB::table('rh_entrevistas')->count();
-		$pruebas = DB::table('rh_pruebas')->count();
-		$entrevistas = DB::table('rh_entrevistas')->count();
+    $pruebas = DB::table('rh_pruebas')->count();
+    $entrevistas = DB::table('rh_entrevistas')->count();
+    $examenesm = DB::table('rh_examenes')->count();
 
-	/*TASA DOLAR VENTA*/
-		$Tasa = DB::table('tasa_ventas')->where('moneda', 'Dolar')->value('tasa');
-		
-		if( (!empty($Tasa)) ){
-			$Tasa = number_format($Tasa,2,"," ,"." );
-		}
-		else{
-			$Tasa = number_format(0.00,2,"," ,"." );
-		}
+  /*TASA DOLAR VENTA*/
+    $Tasa = DB::table('tasa_ventas')->where('moneda', 'Dolar')->value('tasa');
 
-		$tasaVenta = DB::table('tasa_ventas')->where('moneda', 'Dolar')->value('updated_at');
-		
-		if( (!empty($tasaVenta)) ){
-			$tasaVenta = new DateTime($tasaVenta);
-			$tasaVenta = $tasaVenta->format("d-m-Y h:i:s a");
-		}
-		else{
-			$tasaVenta = '';
-		}
+    if( (!empty($Tasa)) ) {
+      $Tasa = number_format($Tasa,2,"," ,"." );
+    }
+    else {
+      $Tasa = number_format(0.00,2,"," ,"." );
+    }
 
-	/*TASA DOLAR VENTA*/
+    $tasaVenta = DB::table('tasa_ventas')->where('moneda', 'Dolar')->value('updated_at');
 
-	/*TASA DOLAR MERCADO*/
-		$FechaTasaMercado = 
-		DB::table('dolars')
-		->select('updated_at')
-		->orderBy('fecha','desc')
-	 	->take(1)->get();
+    if( (!empty($tasaVenta)) ) {
+      $tasaVenta = new DateTime($tasaVenta);
+      $tasaVenta = $tasaVenta->format("d-m-Y h:i:s a");
+    }
+    else {
+      $tasaVenta = '';
+    }
+  /*TASA DOLAR VENTA*/
 
-		if( (!empty($FechaTasaMercado[0])) ){
-	 		$FechaTasaMercado = ($FechaTasaMercado[0]->updated_at);
-			$FechaTasaMercado = new DateTime($FechaTasaMercado);
-			$FechaTasaMercado = $FechaTasaMercado->format('d-m-Y h:i:s a');
-	 	}
-	 	else{
-	 		$FechaTasaMercado = '';
-	 	}
+  /*TASA DOLAR MERCADO*/
+    $FechaTasaMercado = 
+    DB::table('dolars')
+    ->select('updated_at')
+    ->orderBy('fecha','desc')
+    ->take(1)->get();
 
-		$TasaMercado = 
-		DB::table('dolars')
-		->select('tasa')
-		->orderBy('fecha','desc')
-	 	->take(1)->get();
+    if( (!empty($FechaTasaMercado[0])) ) {
+      $FechaTasaMercado = ($FechaTasaMercado[0]->updated_at);
+      $FechaTasaMercado = new DateTime($FechaTasaMercado);
+      $FechaTasaMercado = $FechaTasaMercado->format('d-m-Y h:i:s a');
+    }
+    else {
+      $FechaTasaMercado = '';
+    }
 
-	 	if( (!empty($TasaMercado[0])) ){
-	 		$TasaMercado = ($TasaMercado[0]->tasa);
-			$TasaMercado = number_format($TasaMercado,2,"," ,"." );
-	 	}
-	 	else{
-	 		$TasaMercado = number_format(0.00,2,"," ,"." );
-	 	}
- 	/*TASA DOLAR MERCADO*/
+    $TasaMercado = 
+    DB::table('dolars')
+    ->select('tasa')
+    ->orderBy('fecha','desc')
+    ->take(1)->get();
 
- 	/*REPORTES MAS USADOS Y REPORTES SUGERIDOS*/
-		$FHoy = date("Y-m-d");
-		$FAyer = date("Y-m-d",strtotime($FHoy."-1 days"));
+    if( (!empty($TasaMercado[0])) ) {
+      $TasaMercado = ($TasaMercado[0]->tasa);
+      $TasaMercado = number_format($TasaMercado,2,"," ,"." );
+    }
+    else {
+      $TasaMercado = number_format(0.00,2,"," ,"." );
+    }
+  /*TASA DOLAR MERCADO*/
 
-		$auditorReporte = 
-		DB::table('auditorias')
-		->select('registro')
-		->groupBy('registro')
-		->orderBy(DB::raw('count(*)'),'desc')
-		->where('tabla','reporte')
-		->where('updated_at', '>',$FAyer)
-	 	->take(1)->get();
+  /*REPORTES MAS USADOS Y REPORTES SUGERIDOS*/
+    $FHoy = date("Y-m-d");
+    $FAyer = date("Y-m-d",strtotime($FHoy."-1 days"));
 
-		$auditorUser = 
-		DB::table('auditorias')
-		->select('user')
-		->groupBy('user')
-		->orderBy(DB::raw('count(*)'),'desc')
-		->where('updated_at', '>',$FAyer)
-	 	->take(1)->get();
+    $auditorReporte = 
+    DB::table('auditorias')
+    ->select('registro')
+    ->groupBy('registro')
+    ->orderBy(DB::raw('count(*)'),'desc')
+    ->where('tabla','reporte')
+    ->where('updated_at', '>',$FAyer)
+    ->take(1)->get();
 
-	 	$usuario = Auth::user()->name;
-	 	$auditorReporteFavorito = 
-		DB::table('auditorias')
-		->select('registro')
-		->groupBy('registro')
-		->orderBy(DB::raw('count(*)'),'desc')
-		->where('tabla','reporte')
-		->where('user',$usuario)
-	 	->take(2)->get();
- 	/*REPORTES MAS USADOS Y REPORTES SUGERIDOS*/
-	?>
+    $auditorUser = 
+    DB::table('auditorias')
+    ->select('user')
+    ->groupBy('user')
+    ->orderBy(DB::raw('count(*)'),'desc')
+    ->where('updated_at', '>',$FAyer)
+    ->take(1)->get();
 
-	<h1 class="h5 text-info">
-		<i class="fas fa-columns"></i>
-		Dashboard
-	</h1>
-	<hr class="row align-items-start col-12">
+    $usuario = Auth::user()->name;
+    $auditorReporteFavorito = 
+    DB::table('auditorias')
+    ->select('registro')
+    ->groupBy('registro')
+    ->orderBy(DB::raw('count(*)'),'desc')
+    ->where('tabla','reporte')
+    ->where('user',$usuario)
+    ->take(2)->get();
+  /*REPORTES MAS USADOS Y REPORTES SUGERIDOS*/
+  ?>
+
+  <h1 class="h5 text-info">
+    <i class="fas fa-columns"></i>
+    Dashboard
+  </h1>
+  <hr class="row align-items-start col-12">
 
 <?php
 	if((Auth::user()->departamento != 'VENTAS')&&(Auth::user()->departamento != 'RRHH')){
@@ -836,29 +836,8 @@
 	<!-- Modal RRHH -->
 	<!-- Dashboard RRHH-->
 	<div class="card-deck">
-    <div class="card border-danger mb-3" style="width: 14rem;">
+    <div class="card border-danger mb-3" style="width: 14rem;">      
       <div class="card-body text-left bg-danger">
-        <h2 class="card-title">
-          <span class="card-text text-white">
-            <i class="fas fa-user-check"></i>
-            <?php
-            echo ''.$candidatos;
-          ?>            
-          </span>
-        </h2>
-        <p class="card-text text-white">
-        <?php 
-          echo 'Candidatos registrados';
-        ?>
-        </p>
-      </div>
-      <div class="card-footer bg-transparent border-danger text-right">
-        <a href="/candidatos" class="btn btn-outline-danger btn-sm">Visualizar</a>
-      </div>    
-    </div>
-
-    <div class="card border-success mb-3" style="width: 14rem;">      
-      <div class="card-body text-left bg-success">
         <h3 class="card-title">
           <span class="card-text text-white">
             <i class="fas fa-user-plus"></i>
@@ -873,8 +852,29 @@
         ?>
         </p>
       </div>
+      <div class="card-footer bg-transparent border-danger text-right">
+        <a href="/vacantes" class="btn btn-outline-danger btn-sm">Visualizar</a>
+      </div>    
+    </div>
+
+    <div class="card border-success mb-3" style="width: 14rem;">
+      <div class="card-body text-left bg-success">
+        <h2 class="card-title">
+          <span class="card-text text-white">
+            <i class="fas fa-user-check"></i>
+            <?php
+            echo ''.$candidatos;
+          ?>            
+          </span>
+        </h2>
+        <p class="card-text text-white">
+        <?php 
+          echo 'Candidatos registrados';
+        ?>
+        </p>
+      </div>
       <div class="card-footer bg-transparent border-success text-right">
-        <a href="/vacantes" class="btn btn-outline-success btn-sm">Visualizar</a>
+        <a href="/candidatos" class="btn btn-outline-success btn-sm">Visualizar</a>
       </div>    
     </div>
 
@@ -919,6 +919,27 @@
       </div>
       <div class="card-footer bg-transparent border-warning text-right">
         <a href="/pruebas" class="btn btn-outline-warning btn-sm">Visualizar</a>
+      </div>    
+    </div>
+
+    <div class="card border-secondary mb-3" style="width: 14rem;">
+      <div class="card-body text-left bg-secondary">
+        <h2 class="card-title">
+          <span class="card-text text-white">
+            <i class="fas fa-user-md"></i>
+            <?php
+            echo ''.$examenesm;
+          ?>            
+          </span>
+        </h2>
+        <p class="card-text text-white">
+        <?php 
+          echo 'Examenes médicos registrados';
+        ?>
+        </p>
+      </div>
+      <div class="card-footer bg-transparent border-secondary text-right">
+        <a href="/examenesm" class="btn btn-outline-secondary btn-sm">Visualizar</a>
       </div>    
     </div>
   </div>

@@ -11,7 +11,7 @@ class RH_CandidatoController extends Controller {
     /**
      * Create a new controller instance with auth.
      *
-     * 
+     * @return void
      */
     public function __construct() {
         $this->middleware('auth');
