@@ -13,6 +13,12 @@ class CreateRhEmpresaReferenciasTable extends Migration {
     public function up() {
         Schema::create('rh_empresa_referencias', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('nombre_empresa');
+            $table->string('direccion');
+            $table->string('telefono');
+            $table->string('correo')->unique()->nullable();
+            $table->string('estatus');
+            $table->string('user');
             $table->timestamps();
         });
     }
