@@ -18,9 +18,7 @@
             </button>
           </div>
           <div class="modal-body">
-            <h4 class="h6">
-            Los Registros no fueron almacenados
-            </h4>
+            <h4 class="h6">Los Registros no fueron almacenados</h4>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-outline-success" data-dismiss="modal">Aceptar</button>
@@ -41,6 +39,7 @@
       <i class="fa fa-reply">&nbsp;Regresar</i>
     </button>
   </form>
+
   <br/><br/>
 
   {!! Form::open(['route' => 'examenesm.store', 'method' => 'POST']) !!}
@@ -56,30 +55,31 @@
         <tbody>
           <tr>
             <th scope="row">
-              {!! Form::label('empresa', 'Nombre de la empresa') !!}
+              {!! Form::label('empresa', 'Nombre de la empresa *', ['title' => 'Este campo es requerido']) !!}
             </th>
             <td>
-              {!! Form::text('empresa', null, [ 'class' => 'form-control', 'placeholder' => 'Medisur']) !!}
+              {!! Form::text('empresa', null, [ 'class' => 'form-control', 'placeholder' => 'Medisur', 'required']) !!}
             </td>
           </tr>
 
           <tr>
             <th scope="row">
-              {!! Form::label('representante', 'Representante de la empresa') !!}
+              {!! Form::label('representante', 'Representante de la empresa *', ['title' => 'Este campo es requerido']) !!}
             </th>
             <td>
-              {!! Form::text('representante', null, [ 'class' => 'form-control', 'placeholder' => 'Maria Ramirez']) !!}
+              {!! Form::text('representante', null, [ 'class' => 'form-control', 'placeholder' => 'Maria Ramirez', 'required']) !!}
             </td>
           </tr>
 
           <tr>
-           <th scope="row">{!! Form::label('estado', 'Tipo de Estado') !!}</th>
+           <th scope="row">{!! Form::label('estado', 'Tipo de Estado *', ['title' => 'Este campo es requerido']) !!}</th>
             <td>
               {!! Form::select('estado', [
+                '' => 'Seleccione una opción',
                 'Apto' => 'Apto', 
                 'Rechazado' => 'Rechazado',
                 'Aceptado con Restricciones' => 'Aceptado con Restricciones',
-              ], null, ['class' => 'form-control']) !!}
+              ], null, ['class' => 'form-control', 'required']) !!}
             </td>
           </tr>
 
