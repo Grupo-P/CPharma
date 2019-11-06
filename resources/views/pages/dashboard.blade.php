@@ -20,6 +20,7 @@
     $entrevistas = DB::table('rh_entrevistas')->count();
     $pruebas = DB::table('rh_pruebas')->count();
     $entrevistas = DB::table('rh_entrevistas')->count();
+    $examenesm = DB::table('rh_examenes')->count();
 
   /*TASA DOLAR VENTA*/
     $Tasa = DB::table('tasa_ventas')->where('moneda', 'Dolar')->value('tasa');
@@ -927,7 +928,7 @@
           <span class="card-text text-white">
             <i class="fas fa-user-md"></i>
             <?php
-            echo ''.$pruebas;
+            echo ''.$examenesm;
           ?>            
           </span>
         </h2>
