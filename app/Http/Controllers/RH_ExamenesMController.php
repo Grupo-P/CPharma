@@ -23,8 +23,7 @@ class RH_ExamenesMController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
+    public function index() {
         $examenesm = RH_ExamenesM::all();
         return view('pages.RRHH.examenesm.index', compact('examenesm'));
     }
@@ -34,8 +33,7 @@ class RH_ExamenesMController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
+    public function create() {
         return view('pages.RRHH.examenesm.create');
     }
 
@@ -45,8 +43,7 @@ class RH_ExamenesMController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
+    public function store(Request $request) {
          try {
             $examenesm = new RH_ExamenesM();
             $examenesm->empresa = $request->input('empresa');
@@ -79,8 +76,7 @@ class RH_ExamenesMController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
-    {
+    public function show($id) {
          $examenesm = RH_ExamenesM::find($id);
 
         $Auditoria = new Auditoria();
@@ -99,9 +95,11 @@ class RH_ExamenesMController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
-    {
-        //
+    public function edit($id) {
+        $examenesm = RH_ExamenesM::find($id);
+
+        return view('pages.RRHH.examenesm.edit', compact('examenesm'));
+
     }
 
     /**
@@ -111,8 +109,7 @@ class RH_ExamenesMController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
-    {
+    public function update(Request $request, $id) {
         //
     }
 
@@ -122,8 +119,7 @@ class RH_ExamenesMController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
+    public function destroy($id) {
         //
     }
 }
