@@ -47,29 +47,30 @@ class RH_ExamenesMController extends Controller
      */
     public function store(Request $request)
     {
-       /*  try {
+         try {
             $examenesm = new RH_ExamenesM();
-            $examenesm->empresa = $request->input('tipo_prueba');
-            $examenesm->representante = $request->input('nombre_prueba');
-            $examenesm->estado = $request->input;
-            $examenesm->estado = 'ACTIVO';
+            $examenesm->empresa = $request->input('empresa');
+            $examenesm->representante = $request->input('representante');
+            $examenesm->estado = $request->input('estado');
+             $entrevistas->observaciones = $request->input('observaciones');
+            $examenesm->estatus = 'ACTIVO';
             $pruebas->user = auth()->user()->name;
             $pruebas->save();
 
             $Auditoria = new Auditoria();
             $Auditoria->accion = 'CREAR';
-            $Auditoria->tabla = 'RH_PRUEBAS';
-            $Auditoria->registro = $request->input('nombre_prueba');
+            $Auditoria->tabla = 'RH_ExamenesM';
+            $Auditoria->registro = $request->input('empresa');
             $Auditoria->user = auth()->user()->name;
             $Auditoria->save();
 
             return redirect()
-                ->route('pruebas.index')
+                ->route('examenesm.index')
                 ->with('Saved', ' Informacion');
         }
         catch(\Illuminate\Database\QueryException $e) {
             return back()->with('Error', ' Error');
-        }*/
+        }
     }
 
     /**
