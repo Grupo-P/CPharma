@@ -82,7 +82,7 @@
           <tr>
             <th scope="row">{!! Form::label('observaciones', 'Observaciones') !!}</th>
             <td>
-              {!! Form::textarea('observaciones', null, [ 'class' => 'form-control', 'placeholder' => 'Detalles del entrevistadores', 'rows' => '3']) !!}
+              {!! Form::textarea('observaciones', null, [ 'class' => 'form-control', 'placeholder' => 'Detalles del entrevistado', 'rows' => '3']) !!}
             </td>
           </tr>
         </tbody>
