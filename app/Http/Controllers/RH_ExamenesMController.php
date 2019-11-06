@@ -52,10 +52,10 @@ class RH_ExamenesMController extends Controller
             $examenesm->empresa = $request->input('empresa');
             $examenesm->representante = $request->input('representante');
             $examenesm->estado = $request->input('estado');
-             $entrevistas->observaciones = $request->input('observaciones');
+            $examenesm->observaciones = $request->input('observaciones');
             $examenesm->estatus = 'ACTIVO';
-            $pruebas->user = auth()->user()->name;
-            $pruebas->save();
+            $examenesm->user = auth()->user()->name;
+            $examenesm->save();
 
             $Auditoria = new Auditoria();
             $Auditoria->accion = 'CREAR';
