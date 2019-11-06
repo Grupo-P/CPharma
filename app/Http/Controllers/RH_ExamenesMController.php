@@ -110,7 +110,28 @@ class RH_ExamenesMController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id) {
-        //
+          try {
+            $examenesm = RH_ExamenesM::find($id);
+
+            $examenesm->fill($request->all());
+            $examenesm->user = auth()->user()->name;
+
+            $examenesm->save();
+
+            $Auditoria = new Auditoria();
+            $Auditoria->accion = 'EDITAR';
+            $Auditoria->tabla = 'RH_PRUEBAS';
+            $Auditoria->registro = $examenesm->empresa;
+            $Auditoria->user = auth()->user()->name;
+            $Auditoria->save();
+
+            return redirect()
+                ->route('examenesm.index')
+                ->with('Updated', ' Informacion');
+        }
+        catch(\Illuminate\Database\QueryException $e) {
+            return back()->with('Error', ' Error');
+        }
     }
 
     /**
