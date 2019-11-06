@@ -255,19 +255,21 @@
     </button>
     <div class="dropdown-menu">
       <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="/vacantes">
+          <span data-feather="home"></span>
+          <i class="fas fa-user-plus"></i>
+          Vacantes<span class="sr-only">(current)</span>
+        </a>
+      </li>
+
+      <li class="nav-item">
         <a class="nav-link CP-Links-Menu" href="/candidatos">
           <span data-feather="home"></span>
           <i class="fas fa-user-check"></i>
           Candidatos<span class="sr-only">(current)</span>
         </a>
       </li>
-      <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="/pruebas">
-          <span data-feather="home"></span>
-          <i class="fas fa-tasks"></i>
-          Pruebas<span class="sr-only">(current)</span>
-        </a>
-      </li>
+
       <li class="nav-item">
         <a class="nav-link CP-Links-Menu" href="/entrevistas">
           <span data-feather="home"></span>
@@ -275,18 +277,20 @@
           Entrevistas<span class="sr-only">(current)</span>
         </a>
       </li>
+
       <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="/vacantes">
+        <a class="nav-link CP-Links-Menu" href="/pruebas">
           <span data-feather="home"></span>
-          <i class="fas fa-user-plus"></i>
-          Vacantes<span class="sr-only">(current)</span>
+          <i class="fas fa-tasks"></i>
+          Pruebas<span class="sr-only">(current)</span>
         </a>
       </li>
+      
       <li class="nav-item">
         <a class="nav-link CP-Links-Menu" href="/examenesm">
           <span data-feather="home"></span>
           <i class="fas fa-user-md"></i>
-          Examenes Médicos <span class="sr-only">(current)</span>
+          Examenes Médicos<span class="sr-only">(current)</span>
         </a>
       </li>
     </div>
