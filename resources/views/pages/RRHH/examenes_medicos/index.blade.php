@@ -105,7 +105,7 @@
   @endif
 
   <h1 class="h5 text-info">
-   <i class="fas fa-user-md"></i>&nbsp;Examenes Médicos
+    <i class="fas fa-user-md"></i>&nbsp;Examenes Médicos
   </h1>
   <hr class="row align-items-start col-12">
 
@@ -129,6 +129,7 @@
       </td>
     </tr>
   </table>
+  
   <br/>
 
   <table class="table table-striped table-borderless col-12 sortable" id="myTable">
@@ -141,9 +142,9 @@
         <th scope="col" class="CP-sticky">Estatus</th>
         <th scope="col" class="CP-sticky">Acciones</th>
       </tr>
-    </thead> 
+    </thead>
 
-     <tbody>
+    <tbody>
       @foreach($examenesm as $examen)
       <tr>
         <th>{{$examen->id}}</th>
@@ -209,10 +210,10 @@
         </td>
         <!-- Fin Validacion de ROLES -->
       </tr>
-    @endforeach
+      @endforeach
     </tbody>
-
   </table>
+  
   <script>
     $(document).ready(function() {
         $('[data-toggle="tooltip"]').tooltip();
