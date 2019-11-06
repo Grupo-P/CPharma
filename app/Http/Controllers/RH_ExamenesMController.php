@@ -81,7 +81,16 @@ class RH_ExamenesMController extends Controller
      */
     public function show($id)
     {
-        //
+         $examenesm = RH_ExamenesM::find($id);
+
+        $Auditoria = new Auditoria();
+        $Auditoria->accion = 'CONSULTAR';
+        $Auditoria->tabla = 'RH_ExamenesM';
+        $Auditoria->registro = $examenesm->nombres . " " . $examenesm->apellidos;
+        $Auditoria->user = auth()->user()->name;
+        $Auditoria->save();
+
+        return view('pages.RRHH.examenesm.show', compact('examenesm'));
     }
 
     /**
