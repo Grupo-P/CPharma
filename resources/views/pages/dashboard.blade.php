@@ -74,39 +74,39 @@
   /*TASA DOLAR MERCADO*/
 
   /*REPORTES MAS USADOS Y REPORTES SUGERIDOS*/
-		$FHoy = date("Y-m-d");
-		$FAyer = date("Y-m-d",strtotime($FHoy."-1 days"));
+    $FHoy = date("Y-m-d");
+    $FAyer = date("Y-m-d",strtotime($FHoy."-1 days"));
 
-		$auditorReporte = 
-		DB::table('auditorias')
-		->select('registro')
-		->groupBy('registro')
-		->orderBy(DB::raw('count(*)'),'desc')
-		->where('tabla','reporte')
-		->where('updated_at', '>',$FAyer)
-	 	->take(1)->get();
+    $auditorReporte = 
+    DB::table('auditorias')
+    ->select('registro')
+    ->groupBy('registro')
+    ->orderBy(DB::raw('count(*)'),'desc')
+    ->where('tabla','reporte')
+    ->where('updated_at', '>',$FAyer)
+    ->take(1)->get();
 
-		$auditorUser = 
-		DB::table('auditorias')
-		->select('user')
-		->groupBy('user')
-		->orderBy(DB::raw('count(*)'),'desc')
-		->where('updated_at', '>',$FAyer)
-	 	->take(1)->get();
+    $auditorUser = 
+    DB::table('auditorias')
+    ->select('user')
+    ->groupBy('user')
+    ->orderBy(DB::raw('count(*)'),'desc')
+    ->where('updated_at', '>',$FAyer)
+    ->take(1)->get();
 
-	 	$usuario = Auth::user()->name;
-	 	$auditorReporteFavorito = 
-		DB::table('auditorias')
-		->select('registro')
-		->groupBy('registro')
-		->orderBy(DB::raw('count(*)'),'desc')
-		->where('tabla','reporte')
-		->where('user',$usuario)
-	 	->take(2)->get();
- 	/*REPORTES MAS USADOS Y REPORTES SUGERIDOS*/
-	?>
+    $usuario = Auth::user()->name;
+    $auditorReporteFavorito = 
+    DB::table('auditorias')
+    ->select('registro')
+    ->groupBy('registro')
+    ->orderBy(DB::raw('count(*)'),'desc')
+    ->where('tabla','reporte')
+    ->where('user',$usuario)
+    ->take(2)->get();
+  /*REPORTES MAS USADOS Y REPORTES SUGERIDOS*/
+  ?>
 
-	<h1 class="h5 text-info">
+  <h1 class="h5 text-info">
 		<i class="fas fa-columns"></i>
 		Dashboard
 	</h1>
