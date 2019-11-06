@@ -43,37 +43,37 @@
   /*TASA DOLAR VENTA*/
 
   /*TASA DOLAR MERCADO*/
-		$FechaTasaMercado = 
-		DB::table('dolars')
-		->select('updated_at')
-		->orderBy('fecha','desc')
-	 	->take(1)->get();
+    $FechaTasaMercado = 
+    DB::table('dolars')
+    ->select('updated_at')
+    ->orderBy('fecha','desc')
+    ->take(1)->get();
 
-		if( (!empty($FechaTasaMercado[0])) ){
-	 		$FechaTasaMercado = ($FechaTasaMercado[0]->updated_at);
-			$FechaTasaMercado = new DateTime($FechaTasaMercado);
-			$FechaTasaMercado = $FechaTasaMercado->format('d-m-Y h:i:s a');
-	 	}
-	 	else{
-	 		$FechaTasaMercado = '';
-	 	}
+    if( (!empty($FechaTasaMercado[0])) ) {
+      $FechaTasaMercado = ($FechaTasaMercado[0]->updated_at);
+      $FechaTasaMercado = new DateTime($FechaTasaMercado);
+      $FechaTasaMercado = $FechaTasaMercado->format('d-m-Y h:i:s a');
+    }
+    else {
+      $FechaTasaMercado = '';
+    }
 
-		$TasaMercado = 
-		DB::table('dolars')
-		->select('tasa')
-		->orderBy('fecha','desc')
-	 	->take(1)->get();
+    $TasaMercado = 
+    DB::table('dolars')
+    ->select('tasa')
+    ->orderBy('fecha','desc')
+    ->take(1)->get();
 
-	 	if( (!empty($TasaMercado[0])) ){
-	 		$TasaMercado = ($TasaMercado[0]->tasa);
-			$TasaMercado = number_format($TasaMercado,2,"," ,"." );
-	 	}
-	 	else{
-	 		$TasaMercado = number_format(0.00,2,"," ,"." );
-	 	}
- 	/*TASA DOLAR MERCADO*/
+    if( (!empty($TasaMercado[0])) ) {
+      $TasaMercado = ($TasaMercado[0]->tasa);
+      $TasaMercado = number_format($TasaMercado,2,"," ,"." );
+    }
+    else {
+      $TasaMercado = number_format(0.00,2,"," ,"." );
+    }
+  /*TASA DOLAR MERCADO*/
 
- 	/*REPORTES MAS USADOS Y REPORTES SUGERIDOS*/
+  /*REPORTES MAS USADOS Y REPORTES SUGERIDOS*/
 		$FHoy = date("Y-m-d");
 		$FAyer = date("Y-m-d",strtotime($FHoy."-1 days"));
 
