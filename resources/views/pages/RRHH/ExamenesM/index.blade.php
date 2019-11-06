@@ -1,6 +1,6 @@
 @extends('layouts.model')
 
-@section('title', 'ExamenesMedicos')
+@section('title', 'Examenes Médicos')
 
 @section('scriptsHead')
   <style>
@@ -23,7 +23,7 @@
             </button>
           </div>
           <div class="modal-body">
-            <h4 class="h6">Entrevista almacenada con éxito</h4>
+            <h4 class="h6"> Registro de Examenes almacenado con Éxito</h4>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-outline-success" data-dismiss="modal">Aceptar</button>
@@ -47,7 +47,7 @@
             </button>
           </div>
           <div class="modal-body">
-            <h4 class="h6"> Entrevista modificada con éxito</h4>
+            <h4 class="h6"> Registro de Examenes modificado con éxito</h4>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-outline-success" data-dismiss="modal">Aceptar</button>
@@ -71,7 +71,7 @@
             </button>
           </div>
           <div class="modal-body">
-            <h4 class="h6">Entrevista Reincorporada con éxito</h4>
+            <h4 class="h6"> Registro de Examenes Reincorporado con éxito</h4>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-outline-success" data-dismiss="modal">Aceptar</button>
@@ -94,7 +94,7 @@
             </button>
           </div>
           <div class="modal-body">
-            <h4 class="h6"> Entrevista Desincorporada con Éxito </h4>
+            <h4 class="h6"> Registro de Examenes Desincorporado con Éxito </h4>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-outline-success" data-dismiss="modal">Aceptar</button>
@@ -156,7 +156,7 @@
         <td style="width:140px;">
         <?php
           if(Auth::user()->role == 'MASTER' || Auth::user()->role == 'DEVELOPER') {
-            if($examenen->estatus == 'ACTIVO') {
+            if($examen->estatus == 'ACTIVO') {
         ?>
           <a href="/examenesm/{{$examen->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
             <i class="far fa-eye"></i>
@@ -176,7 +176,7 @@
             else if($examen->estatus == 'INACTIVO') {
           ?>
 
-          <form action="/examen/{{$examenesm->id}}" method="POST" style="display: inline;">
+          <form action="/examenesm/{{$examen->id}}" method="POST" style="display: inline;">
             @method('DELETE')
             @csrf
             <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Reincorporar"><i class="fa fa-share"></i></button>
