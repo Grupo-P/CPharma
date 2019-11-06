@@ -143,39 +143,39 @@
     </thead> 
 
      <tbody>
-      @foreach($entrevistas as $entrevista)
+      @foreach($examenesm as $examen)
       <tr>
-        <th>{{$entrevista->id}}</th>
-        <td>{{date('d-m-Y',strtotime($entrevista->fecha_entrevista))}}</td>
-        <td>{{$entrevista->entrevistadores}}</td>
-        <td>{{$entrevista->lugar}}</td>
-        <td>{{$entrevista->estatus}}</td>
+        <th>{{$examen->id}}</th>
+        <td>{{$examen->empresa}}</td>
+        <td>{{$examen->representante}}</td>
+        <td>{{$examen->estado}}</td>
+        <td>{{$examen->estatus}}</td>
 
         <!-- Inicio Validacion de ROLES -->
         <td style="width:140px;">
         <?php
           if(Auth::user()->role == 'MASTER' || Auth::user()->role == 'DEVELOPER') {
-            if($examenesm->estatus == 'ACTIVO') {
+            if($examenen->estatus == 'ACTIVO') {
         ?>
-          <a href="/examenesm/{{$entrevista->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
+          <a href="/examenesm/{{$examen->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
             <i class="far fa-eye"></i>
           </a>
 
-          <a href="/examenesm/{{$entrevista->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
+          <a href="/examenesm/{{$examen->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
             <i class="fas fa-edit"></i>
           </a>
 
-          <form action="/examenesm/{{$entrevista->id}}" method="POST" style="display: inline;">
+          <form action="/examenesm/{{$examen->id}}" method="POST" style="display: inline;">
             @method('DELETE')
             @csrf
             <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Desincorporar"><i class="fa fa-reply"></i></button>
           </form>
           <?php
             }
-            else if($entrevista->estatus == 'INACTIVO') {
+            else if($examen->estatus == 'INACTIVO') {
           ?>
 
-          <form action="/examen/{{$entrevista->id}}" method="POST" style="display: inline;">
+          <form action="/examen/{{$examenesm->id}}" method="POST" style="display: inline;">
             @method('DELETE')
             @csrf
             <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Reincorporar"><i class="fa fa-share"></i></button>
@@ -186,11 +186,11 @@
           } else if(Auth::user()->role == 'ANALISTA') {
           ?>
 
-          <a href="/entrevistas/{{$entrevista->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
+          <a href="/examenesm/{{$examen->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
             <i class="far fa-eye"></i>
           </a>
 
-          <a href="/entrevistas/{{$entrevista->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
+          <a href="/examenesm/{{$examen->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
             <i class="fas fa-edit"></i>
           </a>
 
@@ -198,7 +198,7 @@
             } else if(Auth::user()->role == 'USUARIO') {
           ?>
 
-          <a href="/entrevistas/{{$entrevista->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
+          <a href="/examenesm/{{$examen->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
             <i class="far fa-eye"></i>
           </a>
 
