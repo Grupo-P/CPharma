@@ -3,6 +3,7 @@
 namespace compras\Http\Controllers;
 
 use Illuminate\Http\Request;
+use compras\RH_EmpresaReferencia;
 use compras\User;
 use compras\Auditoria;
 
