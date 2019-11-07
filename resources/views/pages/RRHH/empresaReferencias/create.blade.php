@@ -41,9 +41,10 @@
       <i class="fa fa-reply">&nbsp;Regresar</i>
     </button>
   </form>
+
   <br/><br/>
 
-  {!! Form::open(['route' => 'vacantes.store', 'method' => 'POST']) !!}
+  {!! Form::open(['route' => 'empresaReferencias.store', 'method' => 'POST']) !!}
     <fieldset>
       <table class="table table-borderless table-striped">
         <thead class="thead-dark">
@@ -56,100 +57,37 @@
         <tbody>
           <tr>
             <th scope="row">
-              {!! Form::label('nombre_vacante', 'Nombre de vacante *', ['title' => 'Éste campo es requerido']) !!}
+              {!! Form::label('nombre_empresa', 'Nombre de la empresa *', ['title' => 'Éste campo es requerido']) !!}
             </th>
             <td>
-              {!! Form::text('nombre_vacante', null, ['class' => 'form-control', 'placeholder' => 'Analista de desarrollo I', 'autofocus', 'pattern' => '^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$', 'required']) !!}
+              {!! Form::text('nombre_empresa', null, ['class' => 'form-control', 'placeholder' => 'Farmacias Saas', 'autofocus', 'required']) !!}
             </td>
           </tr>
 
           <tr>
             <th scope="row">
-              {!! Form::label('departamento', 'Departamento *', ['title' => 'Éste campo es requerido']) !!}
+              {!! Form::label('telefono', 'Teléfono de la empresa *', ['title' => 'Éste campo es requerido']) !!}
             </th>
             <td>
-              {!! Form::text('departamento', null, ['class' => 'form-control', 'placeholder' => 'Tecnología', 'pattern' => '^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$', 'required']) !!}
+              {!! Form::text('telefono', null, ['class' => 'form-control', 'placeholder' => '0261-1234567', 'pattern' => '^0[1246]{3}-[0-9]{7}$', 'title' => 'El formato telefónico es: 0xxx-xxxxxxx', 'required']) !!}
             </td>
           </tr>
 
           <tr>
             <th scope="row">
-              {!! Form::label('turno', 'Turno *', ['title' => 'Éste campo es requerido']) !!}
+              {!! Form::label('correo', 'Correo de la empresa') !!}
             </th>
             <td>
-              {!! Form::text('turno', null, ['class' => 'form-control', 'placeholder' => 'Nocturno', 'pattern' => '^(diurno)$|^(Diurno)$|^(nocturno)$|^(Nocturno)$|^(mixto)$|^(Mixto)$|^(vespertino)$|^(Vespertino)$', 'required']) !!}
+              {!! Form::email('correo', null, ['class' => 'form-control', 'placeholder' => 'medicamentos@farmacia72.com.ve', 'title' => 'El formato de correo es: usuario@proveedor.dominio']) !!}
             </td>
           </tr>
 
           <tr>
             <th scope="row">
-              {!! Form::label('dias_libres', 'Dias libres *', ['title' => 'Éste campo es requerido']) !!}
+              {!! Form::label('direccion', 'Dirección de la empresa *', ['title' => 'Éste campo es requerido']) !!}
             </th>
             <td>
-              {!! Form::text('dias_libres', null, ['class' => 'form-control', 'placeholder' => 'Domingo y lunes', 'pattern' => '^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s,]+$', 'required']) !!}
-            </td>
-          </tr>
-
-          <tr>
-            <th scope="row">
-              {!! Form::label('sede', 'Sede *', ['title' => 'Éste campo es requerido']) !!}
-            </th>
-            <td>
-              {!! Form::text('dias_libres', null, ['class' => 'form-control', 'placeholder' => 'Domingo y lunes', 'pattern' => '^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s,]+$', 'required']) !!}
-            </td>
-          </tr>
-
-          <tr>
-            <th scope="row">
-              {!! Form::label('cantidad', 'Cantidad de vacantes *', ['title' => 'Éste campo es requerido']) !!}
-            </th>
-            <td>
-              {!! Form::number('cantidad', null, ['class' => 'form-control', 'placeholder' => '1', 'min' => '1', 'required']) !!}
-            </td>
-          </tr>
-
-          <tr>
-            <th scope="row">
-              {!! Form::label('fecha_solicitud', 'Fecha de solicitud *', ['title' => 'Éste campo es requerido']) !!}
-            </th>
-            <td>
-              {!! Form::date('fecha_solicitud', null, ['class' => 'form-control', 'required']) !!}
-            </td>
-          </tr>
-
-          <tr>
-            <th scope="row">
-              {!! Form::label('fecha_limite', 'Fecha límite *', ['title' => 'Éste campo es requerido']) !!}
-            </th>
-            <td>
-              {!! Form::date('fecha_limite', null, ['class' => 'form-control', 'required']) !!}
-            </td>
-          </tr>
-
-          <tr>
-            <th scope="row">
-              {!! Form::label('nivel_urgencia', 'Nivel de urgencia *', ['title' => 'Éste campo es requerido']) !!}
-            </th>
-            <td>
-              {!! Form::text('nivel_urgencia', null, ['class' => 'form-control', 'placeholder' => 'Alta, mediana o baja', 'pattern' => '^(alta)$|^(Alta)$|^(Mediana)$|^(mediana)$|^(baja)$|^(Baja)$', 'required']) !!}
-            </td>
-          </tr>
-
-          <tr>
-            <th scope="row">
-              {!! Form::label('solicitante', 'Solicitante *', ['title' => 'Éste campo es requerido']) !!}
-            </th>
-            <td>
-              {!! Form::text('solicitante', null, ['class' => 'form-control', 'placeholder' => 'Manuel Henriquez', 'pattern' => '^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s,]+$', 'required']) !!}
-            </td>
-          </tr>
-
-          <tr>
-            <th scope="row">
-              {!! Form::label('comentarios', 'Comentarios *', ['title' => 'Éste campo es requerido']) !!}
-            </th>
-            <td>
-              {!! Form::textarea('comentarios', null, [ 'class' => 'form-control', 'placeholder' => 'Detalles de la vacante', 'rows' => '3', 'required']) !!}
+              {!! Form::textarea('direccion', null, [ 'class' => 'form-control', 'placeholder' => 'Sector tierra negra con calle 72', 'rows' => '3', 'required']) !!}
             </td>
           </tr>
         </tbody>
