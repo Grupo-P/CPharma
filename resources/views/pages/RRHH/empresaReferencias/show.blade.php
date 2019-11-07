@@ -26,28 +26,13 @@
 
     <tbody>
       <tr>
-        <th scope="row">Nombres</th>
-        <td>{{$empresaReferencias->nombres}}</td>
+        <th scope="row">Nombre de la empresa</th>
+        <td>{{$empresaReferencias->nombre_empresa}}</td>
       </tr>
 
       <tr>
-        <th scope="row">Apellidos</th>
-        <td>{{$empresaReferencias->apellidos}}</td>
-      </tr>
-
-      <tr>
-        <th scope="row">Cédula</th>
-        <td>{{$empresaReferencias->cedula}}</td>
-      </tr>
-
-      <tr>
-        <th scope="row">Teléfono celular</th>
-        <td>{{$empresaReferencias->telefono_celular}}</td>
-      </tr>
-
-      <tr>
-        <th scope="row">Teléfono de habitación</th>
-        <td>{{$empresaReferencias->telefono_habitacion}}</td>
+        <th scope="row">Teléfono</th>
+        <td>{{$empresaReferencias->telefono}}</td>
       </tr>
 
       <tr>
@@ -56,33 +41,8 @@
       </tr>
 
       <tr>
-        <th scope="row">Como nos contactó</th>
-        <td>{{$empresaReferencias->como_nos_contacto}}</td>
-      </tr>
-
-      <tr>
-        <th scope="row">Tipo de relación</th>
-        <td>{{$empresaReferencias->tipo_relacion}}</td>
-      </tr>
-
-      <tr>
-        <th scope="row">Relaciones laborales</th>
-        <td>{{$empresaReferencias->relaciones_laborales}}</td>
-      </tr>
-
-      <tr>
         <th scope="row">Dirección</th>
         <td>{{$empresaReferencias->direccion}}</td>
-      </tr>
-
-      <tr>
-        <th scope="row">Experiencia laboral</th>
-        <td>{{$empresaReferencias->experiencia_laboral}}</td>
-      </tr>
-
-      <tr>
-        <th scope="row">Observaciones</th>
-        <td>{{$empresaReferencias->observaciones}}</td>
       </tr>
 
       <tr>
