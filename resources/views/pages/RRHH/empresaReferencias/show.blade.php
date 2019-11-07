@@ -27,82 +27,82 @@
     <tbody>
       <tr>
         <th scope="row">Nombres</th>
-        <td>{{$candidatos->nombres}}</td>
+        <td>{{$empresaReferencias->nombres}}</td>
       </tr>
 
       <tr>
         <th scope="row">Apellidos</th>
-        <td>{{$candidatos->apellidos}}</td>
+        <td>{{$empresaReferencias->apellidos}}</td>
       </tr>
 
       <tr>
         <th scope="row">Cédula</th>
-        <td>{{$candidatos->cedula}}</td>
+        <td>{{$empresaReferencias->cedula}}</td>
       </tr>
 
       <tr>
         <th scope="row">Teléfono celular</th>
-        <td>{{$candidatos->telefono_celular}}</td>
+        <td>{{$empresaReferencias->telefono_celular}}</td>
       </tr>
 
       <tr>
         <th scope="row">Teléfono de habitación</th>
-        <td>{{$candidatos->telefono_habitacion}}</td>
+        <td>{{$empresaReferencias->telefono_habitacion}}</td>
       </tr>
 
       <tr>
         <th scope="row">Correo</th>
-        <td>{{$candidatos->correo}}</td>
+        <td>{{$empresaReferencias->correo}}</td>
       </tr>
 
       <tr>
         <th scope="row">Como nos contactó</th>
-        <td>{{$candidatos->como_nos_contacto}}</td>
+        <td>{{$empresaReferencias->como_nos_contacto}}</td>
       </tr>
 
       <tr>
         <th scope="row">Tipo de relación</th>
-        <td>{{$candidatos->tipo_relacion}}</td>
+        <td>{{$empresaReferencias->tipo_relacion}}</td>
       </tr>
 
       <tr>
         <th scope="row">Relaciones laborales</th>
-        <td>{{$candidatos->relaciones_laborales}}</td>
+        <td>{{$empresaReferencias->relaciones_laborales}}</td>
       </tr>
 
       <tr>
         <th scope="row">Dirección</th>
-        <td>{{$candidatos->direccion}}</td>
+        <td>{{$empresaReferencias->direccion}}</td>
       </tr>
 
       <tr>
         <th scope="row">Experiencia laboral</th>
-        <td>{{$candidatos->experiencia_laboral}}</td>
+        <td>{{$empresaReferencias->experiencia_laboral}}</td>
       </tr>
 
       <tr>
         <th scope="row">Observaciones</th>
-        <td>{{$candidatos->observaciones}}</td>
+        <td>{{$empresaReferencias->observaciones}}</td>
       </tr>
 
       <tr>
         <th scope="row">Estatus</th>
-        <td>{{$candidatos->estatus}}</td>
+        <td>{{$empresaReferencias->estatus}}</td>
       </tr>
 
       <tr>
         <th scope="row">Creado</th>
-        <td>{{$candidatos->created_at}}</td>
+        <td>{{$empresaReferencias->created_at}}</td>
       </tr>
 
       <tr>
         <th scope="row">Ultima Actualización</th>
-        <td>{{$candidatos->updated_at}}</td>
+        <td>{{$empresaReferencias->updated_at}}</td>
       </tr>
 
       <tr>
         <th scope="row">Actualizado por</th>
-        <td>{{$candidatos->user}}</td>
+        <td>{{$empresaReferencias->user}}</td>
       </tr>
     </tbody>
   </table>
