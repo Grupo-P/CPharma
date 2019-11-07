@@ -139,7 +139,6 @@
             <th scope="col" class="stickyCP">#</th>
             <th scope="col" class="stickyCP">Nombre de la empresa</th>
             <th scope="col" class="stickyCP">Teléfono</th>
-            <th scope="col" class="stickyCP">Correo</th>
             <th scope="col" class="stickyCP">Estatus</th>
             <th scope="col" class="stickyCP">Acciones</th>
         </tr>
@@ -151,7 +150,6 @@
           <th>{{$empresaReferencia->id}}</th>
           <td>{{$empresaReferencia->nombre_empresa}}</td>
           <td>{{$empresaReferencia->telefono}}</td>
-          <td>{{$empresaReferencia->correo}}</td>
           <td>{{$empresaReferencia->estatus}}</td>
 
           <!-- ***************** VALIDACION DE ROLES ***************** -->
@@ -161,15 +159,15 @@
 
               if($empresaReferencia->estatus != 'INACTIVO') {
           ?>
-            <a href="/candidatos/{{$empresaReferencia->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
+            <a href="/empresaReferencias/{{$empresaReferencia->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
               <i class="far fa-eye"></i>
             </a>
 
-            <a href="/candidatos/{{$empresaReferencia->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
+            <a href="/empresaReferencias/{{$empresaReferencia->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
               <i class="fas fa-edit"></i>
             </a>
 
-            <form action="/candidatos/{{$empresaReferencia->id}}" method="POST" style="display: inline;">
+            <form action="/empresaReferencias/{{$empresaReferencia->id}}" method="POST" style="display: inline;">
               @method('DELETE')
               @csrf
               <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Desincorporar">
@@ -180,7 +178,7 @@
           <?php
             } else if($empresaReferencia->estatus == 'INACTIVO') {
           ?>
-            <form action="/candidatos/{{$empresaReferencia->id}}" method="POST" style="display: inline;">
+            <form action="/empresaReferencias/{{$empresaReferencia->id}}" method="POST" style="display: inline;">
               @method('DELETE')
               @csrf
               <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Reincorporar">
@@ -191,17 +189,17 @@
             }
           } else if(Auth::user()->role == 'ANALISTA') {
           ?>
-            <a href="/candidatos/{{$empresaReferencia->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
+            <a href="/empresaReferencias/{{$empresaReferencia->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
               <i class="far fa-eye"></i>
             </a>
 
-            <a href="/candidatos/{{$empresaReferencia->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
+            <a href="/empresaReferencias/{{$empresaReferencia->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
               <i class="fas fa-edit"></i>
             </a>
           <?php
             } else if(Auth::user()->role == 'USUARIO') {
           ?>
-            <a href="/candidatos/{{$empresaReferencia->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
+            <a href="/empresaReferencias/{{$empresaReferencia->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
               <i class="far fa-eye"></i>
             </a>
           <?php
