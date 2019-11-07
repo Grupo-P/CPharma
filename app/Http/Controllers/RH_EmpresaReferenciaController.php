@@ -23,7 +23,12 @@ class RH_EmpresaReferenciaController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function index() {
-        //
+        $empresaReferencias = RH_EmpresaReferencia::all();
+
+        return view(
+            'pages.RRHH.empresaReferencias.index', 
+            compact('empresaReferencias')
+        );
     }
 
     /**
