@@ -11,10 +11,11 @@ class CreateRhCandidatosVacantesTable extends Migration {
      * @return void
      */
     public function up() {
-        Schema::create('rh_candidatos_vacantes', function (Blueprint $table) {
+        Schema::create('rhi_candidatos_vacantes', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('rh_candidatos_id');
             $table->unsignedInteger('rh_vacantes_id');
+            $table->string('user');
             $table->timestamps();
 
             $table->foreign('rh_candidatos_id')
@@ -35,6 +36,6 @@ class CreateRhCandidatosVacantesTable extends Migration {
      * @return void
      */
     public function down() {
-        Schema::dropIfExists('rh_candidatos_vacantes');
+        Schema::dropIfExists('rhi_candidatos_vacantes');
     }
 }
