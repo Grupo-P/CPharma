@@ -138,9 +138,9 @@
 		      <td>{{$ordenCompraDetalle->sede2}}</td>
 		      <td>{{$ordenCompraDetalle->sede3}}</td>
 		      <td>{{$ordenCompraDetalle->sede4}}</td>
-		      <td>{{$ordenCompraDetalle->total_unidades}}</td>
-		      <td>{{$ordenCompraDetalle->costo_unitario}}</td>
-		      <td>{{$ordenCompraDetalle->costo_total}}</td>
+		      <td>{{$ordenCompraDetalle->total_unidades}}</td>		      
+		      <td>{{number_format($ordenCompraDetalle->costo_unitario,2,"," ,"." )}}</td>
+		      <td>{{number_format($ordenCompraDetalle->costo_total,2,"," ,"." )}}</td>
 		      <td>{{$ordenCompraDetalle->existencia_rpt}}</td>
 		      <td>{{$ordenCompraDetalle->dias_restantes_rpt}}</td>
 		      <td>{{$ordenCompraDetalle->origen_rpt}}</td>
