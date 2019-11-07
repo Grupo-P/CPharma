@@ -111,8 +111,8 @@
 	    <tr>
 	    	<?php
 	    		if((Auth::user()->departamento == 'TECNOLOGIA')
-				 			|| (Auth::user()->departamento == 'GERENCIA')
-				 			|| (Auth::user()->departamento == 'COMPRAS')){
+			 			|| (Auth::user()->departamento == 'GERENCIA')
+			 			|| (Auth::user()->departamento == 'COMPRAS')){
 	    	?>
         <td style="width:10%;" align="center">	        	
 					<a href="{{ url('/ordenCompra/create') }}" role="button" class="btn btn-outline-info btn-sm" 
@@ -196,18 +196,22 @@
 		      <td>{{$ordenCompra->fecha_recepcion}}</td>
 		      <td>{{$ordenCompra->fecha_ingreso}}</td>
 
-		    <!-- Inicio Validacion de ROLES -->
-		      <td style="width:300px;">
+    <!-- Inicio Validacion -->
+			<td style="width:300px;">
+
+	    <!--  INICIO Boton generico para impresion de orden de compra -->
 				<?php 
 					if($ordenCompra->estado!='ANULADA'){
 				?>
-				<a href="/ordenCompra/{{$ordenCompra->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Soporte" style="display: inline-block; width: 100%">
+				<a href="/ordenCompra/{{$ordenCompra->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Imprimir Orden" style="display: inline-block; width: 100%">
     			<i class="fas fa-print"></i>			      		
     		</a>
     		<?php
     			}
     		?>
+			<!--  FIN Boton generico para impresion de orden de compra -->
 
+			<!-- INICIO Acciones para el departamento de compra -->
 				<?php
 				if( ($ordenCompra->estado=='EN PROCESO')
 						&&
@@ -218,23 +222,29 @@
 					){
 				?>
 
-					<?php
-						if($ordenCompra->estatus == 'ACTIVO'){
-					?>  
-		      	<a href="/ordenCompra/{{$ordenCompra->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar orden" style="display: inline-block; width: 100%">
-      				<i class="fas fa-edit"></i>			      		
-	      		</a>
+				<?php
+					if($ordenCompra->estatus == 'ACTIVO'){
+				?>  
+	      	<a href="/ordenCompra/{{$ordenCompra->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar Orden" style="display: inline-block; width: 100%">
+    				<i class="fas fa-edit"></i>			      		
+      		</a>
 
-		      	<form action="/ordenCompraDetalle" method="GET">
-					    @csrf					    
-					    <button type="submit" name="Eliminar" role="button" class="btn btn-outline-warning btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar articulos" style="display: inline-block; width: 100%"><i class="fa fa-edit"></i></button>
-						</form>
-					 
-		      	<form action="/ordenCompra/{{$ordenCompra->id}}" method="POST">
-				    @method('DELETE')
+	      	<form action="/ordenCompraDetalle" method="GET">
 				    @csrf					    
-				    <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Pausar" style="display: inline-block; width: 100%"><i class="fa fa-pause"></i></button>
-						</form>
+				    <button type="submit" name="Eliminar" role="button" class="btn btn-outline-warning btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar Detalle" style="display: inline-block; width: 100%"><i class="fa fa-edit"></i></button>
+					</form>
+				 
+	      	<form action="/ordenCompra/{{$ordenCompra->id}}" method="POST">
+			    @method('DELETE')
+			    @csrf					    
+			    	<button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Pausar" style="display: inline-block; width: 100%"><i class="fa fa-pause"></i></button>
+					</form>
+
+					<form action="/AnularOrdenCompra" method="PRE">
+				    <input type="hidden" name="anular" value="solicitud">
+				    <input type="hidden" name="id" value="{{$ordenCompra->id}}">   
+				    <button type="submit"role="button" class="btn btn-outline-dark btn-sm" data-toggle="tooltip" data-placement="top" title="Anular" style="display: inline-block; width: 100%"><i class="fa fa-ban"></i></button>
+					</form>
 
 					<?php
 					}
@@ -245,22 +255,18 @@
 				    @csrf					    
 				    <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Activar" style="display: inline-block; width: 100%"><i class="fa fa-play"></i></button>
 						</form>
-					<?php
-					}
-					?>
-
-					<form action="/AnularOrdenCompra" method="PRE">
-				    <input type="hidden" name="anular" value="solicitud">
-				    <input type="hidden" name="id" value="{{$ordenCompra->id}}">   
-				    <button type="submit"role="button" class="btn btn-outline-dark btn-sm" data-toggle="tooltip" data-placement="top" title="Anular" style="display: inline-block; width: 100%"><i class="fa fa-ban"></i></button>
-					</form>
-		
 				<?php
+					}
+				?>
+			<?php
 				}
-				?>						
-		     </td>
-		    <!-- Fin Validacion de ROLES -->
-		    </tr>
+			?>	
+			<!--  FIN Acciones para el departamento de compra -->
+
+
+   		</td>
+    <!-- Fin Validacion -->
+    </tr>
 		@endforeach
 		</tbody>
 	</table>
