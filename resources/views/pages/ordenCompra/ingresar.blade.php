@@ -140,6 +140,10 @@
             <td>{!! Form::number('montoTotalReal', null, [ 'class' => 'form-control', 'autofocus', 'required', 'step' => '0.01']) !!}</td>
           </tr>
           <tr>
+            <th scope="row">{!! Form::label('numero_factura', 'Numero de Factura') !!}</th>
+            <td>{!! Form::text('numero_factura', null, [ 'class' => 'form-control', 'autofocus', 'required']) !!}</td>
+          </tr>
+          <tr>
             <th scope="row">{!! Form::label('calificacion', 'Calificacion') !!}</th>
             <td>{!! Form::number('calificacion', null, [ 'class' => 'form-control', 'autofocus', 'required']) !!}</td>
           </tr>
