@@ -158,7 +158,7 @@
                {!! Form::hidden('isCDD','SI', ['id'=>'isCDD']) !!}
               <tr>
                 <th scope="row">{!! Form::label('total_unidades', 'Total de Unidades') !!}</th>
-                <td>{!! Form::text('total_unidades', null, [ 'class' => 'form-control', 'autofocus', 'required', 'id' => 'totalUnidades', 'onblur' =>'disponible()']) !!}</td>
+                <td>{!! Form::text('totalUnidades', null, [ 'class' => 'form-control', 'autofocus', 'required', 'id' => 'totalUnidades', 'onblur' =>'disponible()']) !!}</td>
               </tr>
               <tr>
                 <th scope="row">{!! Form::label('disponibles', 'Unidades Disponibles') !!}</th>
