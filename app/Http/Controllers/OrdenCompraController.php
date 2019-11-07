@@ -249,6 +249,15 @@ class OrdenCompraController extends Controller
         $OrdenCompra->save();
         return redirect()->route('ordenCompra.index')->with('Updated', ' Informacion');
       }
+      else if($request->input('Cerrar')=='solicitud'){
+        $OrdenCompra->fill($request->all());
+        $OrdenCompra->estado = 'CERRADA';
+        $OrdenCompra->estatus = 'CERRADA';
+        $OrdenCompra->fecha_cierre = date('Y-m-d H:i:s');
+        $OrdenCompra->operador_cierre = auth()->user()->name;
+        $OrdenCompra->save();
+        return redirect()->route('ordenCompra.index')->with('Updated', ' Informacion');
+      }
       else{
 
         if($OrdenCompra->estatus == 'ACTIVO'){

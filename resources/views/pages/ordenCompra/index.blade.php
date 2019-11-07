@@ -327,6 +327,31 @@
 				<?php
 					}
 				?>
+
+				<?php
+				if( ($ordenCompra->estado=='INGRESADA')
+						&&
+						( (Auth::user()->departamento == 'ADMINISTRACION')
+					 		|| (Auth::user()->departamento == 'TECNOLOGIA')
+					 		|| (Auth::user()->departamento == 'GERENCIA')
+				 		)
+					){
+				?>
+
+				<?php
+					if($ordenCompra->estatus == 'EN ESPERA'){
+				?>  
+					<form action="/ordenCompra/{{$ordenCompra->id}}" method="POST">
+			    @method('DELETE')
+			    @csrf					    
+			    	<button type="submit" name="Cerrar" value="solicitud" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Cerrar" style="display: inline-block; width: 100%"><i class="fas fa-check"></i></button>
+					</form>
+					<?php
+						}
+					?>  
+				<?php
+					}
+				?>
 			<!--  FIN Acciones para el departamento de administracion -->
 
 			<!-- INICIO Acciones para el departamento de recepcion -->
