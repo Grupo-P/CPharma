@@ -294,6 +294,65 @@
 			<!--  FIN Acciones para el departamento de compra -->
 
 
+			<!-- INICIO Acciones para el departamento de administracion -->
+				<?php
+				if( ($ordenCompra->estado=='EN PROCESO')
+						&&
+						( ($ordenCompra->user==Auth::user()->name)
+					 		|| (Auth::user()->departamento == 'TECNOLOGIA')
+					 		|| (Auth::user()->departamento == 'GERENCIA')
+				 		)
+					){
+				?>
+
+				<?php
+					if($ordenCompra->estatus == 'ACTIVO'){
+				?>  
+	      	<a href="/ordenCompra/{{$ordenCompra->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar Orden" style="display: inline-block; width: 100%">
+    				<i class="fas fa-edit"></i>			      		
+      		</a>
+
+	      	<form action="/ordenCompraDetalle" method="GET">
+				    @csrf					    
+				    <button type="submit" name="Eliminar" role="button" class="btn btn-outline-warning btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar Detalle" style="display: inline-block; width: 100%"><i class="fa fa-edit"></i></button>
+					</form>
+				 
+	      	<form action="/ordenCompra/{{$ordenCompra->id}}" method="POST">
+			    @method('DELETE')
+			    @csrf					    
+			    	<button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Pausar" style="display: inline-block; width: 100%"><i class="fa fa-pause"></i></button>
+					</form>
+
+					<form action="/AnularOrdenCompra" method="PRE">
+				    <input type="hidden" name="anular" value="solicitud">
+				    <input type="hidden" name="id" value="{{$ordenCompra->id}}">   
+				    <button type="submit"role="button" class="btn btn-outline-dark btn-sm" data-toggle="tooltip" data-placement="top" title="Anular" style="display: inline-block; width: 100%"><i class="fa fa-ban"></i></button>
+					</form>
+
+					<form action="/ordenCompra/{{$ordenCompra->id}}" method="POST">
+			    @method('DELETE')
+			    @csrf					    
+			    	<button type="submit" name="PorAprobar" value="solicitud" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Pausar" style="display: inline-block; width: 100%"><i class="fas fa-angle-double-right"></i></button>
+					</form>
+
+					<?php
+					}
+					else if($ordenCompra->estatus == 'EN ESPERA'){
+					?>  
+		      	<form action="/ordenCompra/{{$ordenCompra->id}}" method="POST">
+				    @method('DELETE')
+				    @csrf					    
+				    <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Activar" style="display: inline-block; width: 100%"><i class="fa fa-play"></i></button>
+						</form>
+				<?php
+					}
+				?>
+			<?php
+				}
+			?>	
+			<!--  FIN Acciones para el departamento de administracion -->
+
+
    		</td>
     <!-- Fin Validacion -->
     </tr>
