@@ -56,33 +56,33 @@
         <tbody>
           <tr>
             <th scope="row">
-              {!! Form::label('fecha_entrevista', 'Fecha de Entrevista') !!}
+              {!! Form::label('fecha_entrevista', 'Fecha de Entrevista *', ['title' => 'Este campo es requerido']) !!}
             </th>
             <td>
-              {!! Form::date('fecha_entrevista', null, [ 'class' => 'form-control', 'autofocus']) !!}
+              {!! Form::date('fecha_entrevista', null, [ 'class' => 'form-control', 'autofocus', 'required']) !!}
             </td>
           </tr>
 
           <tr>
             <th scope="row">
-              {!! Form::label('entrevistadores', 'Nombre de Entrevistadores') !!}
+              {!! Form::label('entrevistadores', 'Nombre de Entrevistadores *', ['title' => 'Este campo es requerido']) !!}
             </th>
             <td>
-              {!! Form::text('entrevistadores', null, [ 'class' => 'form-control', 'placeholder' => 'Ashley Caldera']) !!}
+              {!! Form::text('entrevistadores', null, [ 'class' => 'form-control', 'placeholder' => 'Ashley Caldera', 'required']) !!}
             </td>
           </tr>
 
           <tr>
-            <th scope="row">{!! Form::label('lugar', 'Lugar de Entrevista') !!}</th>
+            <th scope="row">{!! Form::label('lugar', 'Lugar de Entrevista *', ['title' => 'Este campo es requerido']) !!}</th>
             <td>
-              {!! Form::text('lugar', null, [ 'class' => 'form-control', 'placeholder' => 'Delicias']) !!}
+              {!! Form::text('lugar', null, [ 'class' => 'form-control', 'placeholder' => 'Delicias', 'required']) !!}
             </td>
           </tr>
 
           <tr>
-            <th scope="row">{!! Form::label('observaciones', 'Observaciones') !!}</th>
+            <th scope="row">{!! Form::label('observaciones', 'Observaciones *', ['title' => 'Este campo es requerido']) !!}</th>
             <td>
-              {!! Form::textarea('observaciones', null, [ 'class' => 'form-control', 'placeholder' => 'Detalles del entrevistado', 'rows' => '3']) !!}
+              {!! Form::textarea('observaciones', null, [ 'class' => 'form-control', 'placeholder' => 'Detalles del entrevistado', 'rows' => '3', 'required']) !!}
             </td>
           </tr>
         </tbody>
