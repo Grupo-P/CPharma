@@ -21,6 +21,7 @@
     $pruebas = DB::table('rh_pruebas')->count();
     $entrevistas = DB::table('rh_entrevistas')->count();
     $examenesm = DB::table('rh_examenes')->count();
+    $empresaReferencias = DB::table('rh_empresaRef')->count();
 
   /*TASA DOLAR VENTA*/
     $Tasa = DB::table('tasa_ventas')->where('moneda', 'Dolar')->value('tasa');
@@ -926,6 +927,27 @@
       <div class="card-body text-left bg-secondary">
         <h2 class="card-title">
           <span class="card-text text-white">
+            <i class="far fa-address-card"></i>
+            <?php
+            echo ''.$empresaReferencias;
+          ?>            
+          </span>
+        </h2>
+        <p class="card-text text-white">
+        <?php 
+          echo 'Empresas de referencias laborales registradas';
+        ?>
+        </p>
+      </div>
+      <div class="card-footer bg-transparent border-secondary text-right">
+        <a href="/empresaReferencias" class="btn btn-outline-secondary btn-sm">Visualizar</a>
+      </div>    
+    </div>
+
+    <div class="card border-dark mb-3" style="width: 14rem;">
+      <div class="card-body text-left bg-dark">
+        <h2 class="card-title">
+          <span class="card-text text-white">
             <i class="fas fa-user-md"></i>
             <?php
             echo ''.$examenesm;
@@ -938,8 +960,8 @@
         ?>
         </p>
       </div>
-      <div class="card-footer bg-transparent border-secondary text-right">
-        <a href="/examenesm" class="btn btn-outline-secondary btn-sm">Visualizar</a>
+      <div class="card-footer bg-transparent border-dark text-right">
+        <a href="/examenesm" class="btn btn-outline-dark btn-sm">Visualizar</a>
       </div>    
     </div>
   </div>
