@@ -80,7 +80,19 @@ class RH_EmpresaReferenciaController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function show($id) {
-        //
+        $empresaReferencias = RH_EmpresaReferencia::find($id);
+
+        $Auditoria = new Auditoria();
+        $Auditoria->accion = 'CONSULTAR';
+        $Auditoria->tabla = 'RH_EMPRESA_REFERENCIAS';
+        $Auditoria->registro = $empresaReferencias->nombre_empresa;
+        $Auditoria->user = auth()->user()->name;
+        $Auditoria->save();
+
+        return view(
+            'pages.RRHH.empresaReferencias.show', 
+            compact('empresaReferencias')
+        );
     }
 
     /**
