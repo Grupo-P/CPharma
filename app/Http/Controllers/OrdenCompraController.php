@@ -206,6 +206,13 @@ class OrdenCompraController extends Controller
         $OrdenCompra->save();
         return redirect()->route('ordenCompra.index')->with('Updated', ' Informacion');
       }
+      if($request->input('PorAprobar')=='solicitud'){
+        $OrdenCompra->fill($request->all());
+        $OrdenCompra->estado = 'POR APROBAR';
+        $OrdenCompra->estatus = 'EN ESPERA';
+        $OrdenCompra->save();
+        return redirect()->route('ordenCompra.index')->with('Updated', ' Informacion');
+      }
       else{
 
         if($OrdenCompra->estatus == 'ACTIVO'){

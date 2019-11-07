@@ -270,6 +270,12 @@
 				    <button type="submit"role="button" class="btn btn-outline-dark btn-sm" data-toggle="tooltip" data-placement="top" title="Anular" style="display: inline-block; width: 100%"><i class="fa fa-ban"></i></button>
 					</form>
 
+					<form action="/ordenCompra/{{$ordenCompra->id}}" method="POST">
+			    @method('DELETE')
+			    @csrf					    
+			    	<button type="submit" name="PorAprobar" value="solicitud" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Pausar" style="display: inline-block; width: 100%"><i class="fas fa-angle-double-right"></i></button>
+					</form>
+
 					<?php
 					}
 					else if($ordenCompra->estatus == 'EN ESPERA'){
