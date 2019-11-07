@@ -148,6 +148,36 @@ class RH_EmpresaReferenciaController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function destroy($id) {
-        //
+        $empresaReferencias = RH_Entrevista::find($id);
+
+        $Auditoria = new Auditoria();
+        $Auditoria->tabla = 'RH_EMPRESA_REFERENCIAS';
+        $Auditoria->registro = $empresaReferencias->nombre_empresa;
+        $Auditoria->user = auth()->user()->name;
+
+        if($empresaReferencias->estatus == 'ACTIVO'){
+            $empresaReferencias->estatus = 'INACTIVO';
+            $Auditoria->accion = 'DESINCORPORAR';
+        }
+        else if($empresaReferencias->estatus == 'INACTIVO'){
+            $empresaReferencias->estatus = 'ACTIVO';
+            $Auditoria->accion = 'REINCORPORAR';
+        }
+
+        $empresaReferencias->user = auth()->user()->name;        
+        $empresaReferencias->save();
+
+        $Auditoria->save();
+
+        if($empresaReferencias->estatus == 'ACTIVO'){
+            return redirect()
+                ->route('empresaReferencias.index')
+                ->with('Deleted', ' Informacion');
+        }
+
+        return redirect()
+            ->route('empresaReferencias.index')
+            ->with('Deleted1', ' Informacion');
+    }
     }
 }
