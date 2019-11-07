@@ -74,7 +74,7 @@
 		    </tr>
 		    <tr>
 	      	<td colspan="4" class="alinear-der">Destino:</td>
-	      	<td colspan="9" class="alinear-izq">{{$OrdenCompra->sede_destino}}</td>
+	      	<td colspan="9" class="alinear-izq">{{$OrdenCompra->sede_origen}}</td>
 		    </tr>
 		    <tr>
 	      	<td colspan="4" class="alinear-der">Proveedor:</td>
