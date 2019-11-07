@@ -166,6 +166,30 @@
 	  	<tbody>
 		@foreach($OrdenCompra as $ordenCompra)
 			<?php 
+				$connCPharma = FG_Conectar_CPharma();
+				$sql = MySQL_Buscar_Orden_Detalle($ordenCompra->codigo);
+				$result = mysqli_query($connCPharma,$sql);
+
+				$total_unidades = 0;
+				$costo_total = 0;
+
+				while($row = $result->fetch_assoc()) {
+					$total_unidades += floatval($row['total_unidades']);
+					$costo_total += floatval($row['costo_total']);
+				}
+				mysqli_close($connCPharma);
+
+				$costo_total = number_format ($costo_total,2,"," ,"." );
+
+				if($ordenCompra->moneda==SigDolar){
+					$costo_total_dolar = $costo_total;
+					$costo_total_ve = '0,00';
+				}
+				else{
+					$costo_total_dolar = '0,00';
+					$costo_total_ve = $costo_total;
+				}
+
 				if($ordenCompra->estado=='CERRADA'){
 					$Dias = FG_Rango_Dias($ordenCompra->created_at,$ordenCompra->updated_at);
 				}
@@ -182,9 +206,9 @@
 		      <td>{{$ordenCompra->created_at}}</td>
 		      <td>{{$ordenCompra->fecha_estimada_despacho}}</td>
 		      <td>{{$Dias}}</td>
-		      <td>{{$ordenCompra->montoTotalBs}}</td>
-		      <td>{{$ordenCompra->montoTotalUsd}}</td>
-		      <td>{{$ordenCompra->totalUnidades}}</td>
+		      <td>{{$costo_total_ve}}</td>
+		      <td>{{$costo_total_dolar}}</td>
+		      <td>{{$total_unidades}}</td>
 		      <td>{{$ordenCompra->condicion_crediticia}}</td>
 		      <td>{{$ordenCompra->dias_credito}}</td>
 		      <td>{{$ordenCompra->estado}}</td>
