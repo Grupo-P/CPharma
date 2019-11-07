@@ -240,6 +240,15 @@ class OrdenCompraController extends Controller
         $OrdenCompra->save();
         return redirect()->route('ordenCompra.index')->with('Updated', ' Informacion');
       }
+      else if($request->input('Ingresar')=='valido'){
+        $OrdenCompra->fill($request->all());
+        $OrdenCompra->estado = 'INGRESADA';
+        $OrdenCompra->estatus = 'EN ESPERA';        
+        $OrdenCompra->fecha_ingreso = date('Y-m-d H:i:s');
+        $OrdenCompra->operador_ingreso = auth()->user()->name;
+        $OrdenCompra->save();
+        return redirect()->route('ordenCompra.index')->with('Updated', ' Informacion');
+      }
       else{
 
         if($OrdenCompra->estatus == 'ACTIVO'){

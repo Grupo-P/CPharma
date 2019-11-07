@@ -145,6 +145,10 @@ Route::get('/RechazarOrdenCompra', function() {
     return view('pages.ordenCompra.rechazar');
 });
 
+Route::get('/IngresarOrdenCompra', function() {
+    return view('pages.ordenCompra.ingresar');
+});
+
 Route::get('home', 'HomeController@index')->name('home');
 
 Route::resource('dolar', 'DolarController');
