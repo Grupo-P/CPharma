@@ -11,7 +11,7 @@ class CreateRhEmpresaReferenciasTable extends Migration {
      * @return void
      */
     public function up() {
-        Schema::create('rh_empresa_referencias', function (Blueprint $table) {
+        Schema::create('rh_empresaRef', function (Blueprint $table) {
             $table->increments('id');
             $table->string('nombre_empresa');
             $table->string('direccion');
@@ -29,6 +29,6 @@ class CreateRhEmpresaReferenciasTable extends Migration {
      * @return void
      */
     public function down() {
-        Schema::dropIfExists('rh_empresa_referencias');
+        Schema::dropIfExists('rh_empresaRef');
     }
 }
