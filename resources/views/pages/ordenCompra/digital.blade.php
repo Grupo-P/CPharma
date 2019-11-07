@@ -63,48 +63,83 @@
 	<table>
 		<thead>
 		    <tr>
-		    		<th scope="row" colspan="3">
+		    		<th scope="row" colspan="7">
 		    			<span class="navbar-brand text-info CP-title-NavBar">
 		    				<b><i class="fas fa-syringe text-success"></i>CPharma</b>
   						</span>
 		    		</th>
-		    		<th scope="row" colspan="3" class="aumento">Soporte de orden de compra</th>
+		    		<th scope="row" colspan="7" class="aumento">Soporte de orden de compra</th>
 		    </tr>
   	</thead>
 	  	<tbody>
 		    <tr>
-	      	<td colspan="3" class="alinear-der">Codigo:</td>
-	      	<td colspan="3" class="alinear-izq">{{$OrdenCompra->codigo}}</td>
+	      	<td colspan="7" class="alinear-der">Codigo:</td>
+	      	<td colspan="7" class="alinear-izq">{{$OrdenCompra->codigo}}</td>
 		    </tr>
 		    <tr>
-	      	<td colspan="3" class="alinear-der">Fecha de orden:</td>
-	      	<td colspan="3" class="alinear-izq">{{$OrdenCompra->created_at}}</td>
+	      	<td colspan="7" class="alinear-der">Fecha De Orden:</td>
+	      	<td colspan="7" class="alinear-izq">{{$OrdenCompra->created_at}}</td>
 		    </tr>
 		    <tr>
-	      	<td colspan="3" class="alinear-der">Destino:</td>
-	      	<td colspan="3" class="alinear-izq">{{$OrdenCompra->sede_origen}}</td>
+	      	<td colspan="7" class="alinear-der">Destino:</td>
+	      	<td colspan="7" class="alinear-izq">{{$OrdenCompra->sede_destino}}</td>
 		    </tr>
 		    <tr>
-	      	<td colspan="3" class="alinear-der">Proveedor:</td>
-	      	<td colspan="3" class="alinear-izq">{{$OrdenCompra->proveedor}}</td>
+	      	<td colspan="7" class="alinear-der">Proveedor:</td>
+	      	<td colspan="7" class="alinear-izq">{{$OrdenCompra->proveedor}}</td>
 		    </tr>
 		    <tr>
-	      	<td colspan="3" class="alinear-der">Fecha Despacho:</td>
-	      	<td colspan="3" class="alinear-izq">{{$OrdenCompra->fecha_estimada_despacho}}</td>
+	      	<td colspan="7" class="alinear-der">Fecha Despacho:</td>
+	      	<td colspan="7" class="alinear-izq">{{$OrdenCompra->fecha_estimada_despacho}}</td>
 		    </tr>
 		    <tr>
-	      	<td colspan="3" class="alinear-der">Condicion crediticia:</td>
-	      	<td colspan="3" class="alinear-izq">{{$OrdenCompra->condicion_crediticia}}</td>
+	      	<td colspan="7" class="alinear-der">Condicion Crediticia:</td>
+	      	<td colspan="7" class="alinear-izq">{{$OrdenCompra->condicion_crediticia}}</td>
 		    </tr>
 		    <tr>
-	      	<td colspan="3" class="alinear-der">Dias credito:</td>
-	      	<td colspan="3" class="alinear-izq">{{$OrdenCompra->dias_credito}}</td>
+	      	<td colspan="7" class="alinear-der">Dias Credito:</td>
+	      	<td colspan="7" class="alinear-izq">{{$OrdenCompra->dias_credito}}</td>
 		    </tr>
 		    <tr>
-	      	<td colspan="3" class="alinear-der">Operador:</td>
-	      	<td colspan="3" class="alinear-izq">{{$OrdenCompra->user}}</td>
+	      	<td colspan="7" class="alinear-der">Operador Orden:</td>
+	      	<td colspan="7" class="alinear-izq">{{$OrdenCompra->user}}</td>
 		    </tr>
-	  	
+	  		<tr>
+	      	<td colspan="7" class="alinear-der">Estatus:</td>
+	      	<td colspan="7" class="alinear-izq">{{$OrdenCompra->estado}}</td>
+		    </tr>
+		    <tr>
+	      	<td colspan="7" class="alinear-der">Fecha De Aprobacion:</td>
+	      	<td colspan="7" class="alinear-izq">{{$OrdenCompra->fecha_aprobacion}}</td>
+		    </tr>
+		    <tr>
+	      	<td colspan="7" class="alinear-der">Operador De Aprobacion:</td>
+	      	<td colspan="7" class="alinear-izq">{{$OrdenCompra->operador_aprobacion}}</td>
+		    </tr>
+		    <tr>
+	      	<td colspan="7" class="alinear-der">Fecha De Recepcion:</td>
+	      	<td colspan="7" class="alinear-izq">{{$OrdenCompra->fecha_recepcion}}</td>
+		    </tr>
+		    <tr>
+	      	<td colspan="7" class="alinear-der">Operador De Recepcion:</td>
+	      	<td colspan="7" class="alinear-izq">{{$OrdenCompra->operador_recepcion}}</td>
+		    </tr>
+		    <tr>
+	      	<td colspan="7" class="alinear-der">Fecha De Ingreso:</td>
+	      	<td colspan="7" class="alinear-izq">{{$OrdenCompra->fecha_ingreso}}</td>
+		    </tr>
+		    <tr>
+	      	<td colspan="7" class="alinear-der">Operador De Ingreso:</td>
+	      	<td colspan="7" class="alinear-izq">{{$OrdenCompra->operador_ingreso}}</td>
+		    </tr>
+		    <tr>
+	      	<td colspan="7" class="alinear-der">Calificacion:</td>
+	      	<td colspan="7" class="alinear-izq">{{$OrdenCompra->calificacion}}</td>
+		    </tr>
+		    <tr>
+	      	<th colspan="7" class="alinear-der">Monto Real:</th>
+	      	<th colspan="7" class="alinear-izq">{{number_format($OrdenCompra->montoTotalReal,2,"," ,"." )}} {{$OrdenCompra->moneda}}</th>
+		    </tr>
 			<thead>
 		    <tr>
 		    		<th scope="row">#</th>
@@ -113,6 +148,14 @@
 		    		<th scope="row">Unidades</th>
 		    		<th scope="row">Costo {{$OrdenCompra->moneda}}</th>
 		    		<th scope="row">Total {{$OrdenCompra->moneda}}</th>
+		    		<th scope="row">FTN</th>
+		    		<th scope="row">FLL</th>
+		    		<th scope="row">FAU</th>
+		    		<th scope="row">MC</th>
+		    		<th scope="row">Reporte Origen</th>
+		    		<th scope="row">Existencia Origen</th>
+		    		<th scope="row">Dias Restantes Origen</th>
+		    		<th scope="row">Rango Origen</th>
 		    </tr>
 	    </thead>
 			<?php
@@ -128,8 +171,7 @@
 	* Para cualquier aclaratoria llamar al 0412-1217294 o escribir al correo compras@farmacia72.com.ve 
 	<br/>
 	* Para cualquier informacion de pagos contactar al 0412-7646518 o escribir al correo administracion@farmacia72.com.ve
-	<br/>
-	* Antes de imprimir este documento piensa en tu responsabilidad con el medio ambiente</span>
+	</span>
 @endsection
 
 <?php
@@ -152,6 +194,10 @@
 
 			$total_unidades = 0;
 			$costo_total = 0;
+			$total_sede1 = 0;
+			$total_sede2 = 0;
+			$total_sede3 = 0;
+			$total_sede4 = 0;
 			$cont = 1;
 
 			while($row = $result->fetch_assoc()) {
@@ -162,10 +208,22 @@
 				echo '<td>'.$row['total_unidades'].'</td>';
 				echo '<td>'.number_format(floatval($row['costo_unitario']),2,"," ,"." ).'</td>';
 				echo '<td>'.number_format(floatval($row['costo_total']),2,"," ,"." ).'</td>';
+				echo '<td>'.$row['sede1'].'</td>';
+				echo '<td>'.$row['sede2'].'</td>';
+				echo '<td>'.$row['sede3'].'</td>';
+				echo '<td>'.$row['sede4'].'</td>';
+				echo '<td>'.$row['origen_rpt'].'</td>';
+				echo '<td>'.$row['existencia_rpt'].'</td>';
+				echo '<td>'.$row['dias_restantes_rpt'].'</td>';
+				echo '<td>'.$row['rango_rpt'].'</td>';
 				echo '</tr>';
 
 				$total_unidades += floatval($row['total_unidades']);
 				$costo_total += floatval($row['costo_total']);
+				$total_sede1 += floatval($row['sede1']);
+				$total_sede2 += floatval($row['sede2']);
+				$total_sede3 += floatval($row['sede3']);
+				$total_sede4 += floatval($row['sede4']);
 				$cont++;
 	  	}
 	  	
@@ -174,7 +232,11 @@
 	  	echo '<td><strong>'.$total_unidades.'</strong></td>';
 	  	echo '<td><strong></strong></td>';
 	  	echo '<td><strong>'.number_format($costo_total,2,"," ,"." ).' '.$moneda.'</strong></td>';
-	  	
+	  	echo '<td><strong>'.$total_sede1.'</strong></td>';
+	  	echo '<td><strong>'.$total_sede2.'</strong></td>';
+	  	echo '<td><strong>'.$total_sede3.'</strong></td>';
+	  	echo '<td><strong>'.$total_sede4.'</strong></td>';
+	  	echo '</tr>';
 			mysqli_close($connCPharma);
 	}
 ?>
