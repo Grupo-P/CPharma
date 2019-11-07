@@ -210,7 +210,7 @@
         <!-- INCIO DE CALCULOS DE COSTOS CONTRA UNIDADES -->
             <tr>
                 <th scope="row">{!! Form::label('costo_unitario', 'Costo Unitario') !!}</th>
-                <td>{!! Form::number('costo_unitario', null, [ 'class' => 'form-control', 'autofocus', 'required', 'id'=>'CostoUnitario', 'onblur' =>'costoTotal()']) !!}</td>
+                <td>{!! Form::number('costo_unitario', null, [ 'class' => 'form-control', 'autofocus', 'required', 'id'=>'CostoUnitario', 'onblur' =>'costoTotal()', 'step' => '0.01']) !!}</td>
             </tr>
             <tr>
                 <th scope="row">{!! Form::label('costo_total', 'Costo Total') !!}</th>
@@ -290,7 +290,7 @@
         }
 
         function costoTotal(){
-            CostoUnitario = parseInt(document.getElementById('CostoUnitario').value);
+            CostoUnitario = parseFloat(document.getElementById('CostoUnitario').value);
             TotalUnidades = parseInt(document.getElementById('totalUnidades').value);
 
             CostoTotal = CostoUnitario*TotalUnidades;
@@ -299,7 +299,7 @@
 
         function GuardarCDD(){
 
-          CostoUnitario = parseInt(document.getElementById('CostoUnitario').value);
+          CostoUnitario = parseFloat(document.getElementById('CostoUnitario').value);
           TotalUnidades = parseInt(document.getElementById('totalUnidades').value);
           unidadesDispon = parseInt(document.getElementById('unidadesDisponibles').value);
 
