@@ -47,7 +47,30 @@ class RH_EmpresaReferenciaController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request) {
-        return $request;
+        try {
+            $empresaReferencias = new RH_EmpresaReferencia();
+            $empresaReferencias->nombre_empresa = $request->input('nombre_empresa');
+            $empresaReferencias->telefono = $request->input('telefono');
+            $empresaReferencias->correo = $request->input('correo');
+            $empresaReferencias->direccion = $request->input('direccion');
+            $empresaReferencias->estatus = 'ACTIVO';
+            $empresaReferencias->user = auth()->user()->name;
+            $empresaReferencias->save();
+
+            $Auditoria = new Auditoria();
+            $Auditoria->accion = 'CREAR';
+            $Auditoria->tabla = 'RH_EMPRESA_REFERENCIAS';
+            $Auditoria->registro = $request->input('nombre_empresa');
+            $Auditoria->user = auth()->user()->name;
+            $Auditoria->save();
+
+            return redirect()
+                ->route('empresaReferencias.index')
+                ->with('Saved', ' Informacion');
+        }
+        catch(\Illuminate\Database\QueryException $e) {
+            return back()->with('Error', ' Error');
+        }
     }
 
     /**
