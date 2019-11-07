@@ -86,7 +86,7 @@
 	<table style="width:100%;">
 		<tr>
 				<td style="width:10%;">
-					<form action="/ordenCompra/" method="POST">                  
+					<form action="/ordenCompraDetalle/" method="POST">                  
 			        <button type="submit" role="button" class="btn btn-outline-success btn-sm"data-placement="top" style="display: inline;"><i class="fa fa-reply">&nbsp;Regresar</i></button>
 			    </form>
 				</td>
