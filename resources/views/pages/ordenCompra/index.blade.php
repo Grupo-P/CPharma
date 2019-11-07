@@ -226,15 +226,9 @@
 			<td style="width:300px;">
 
 	    <!--  INICIO Boton generico para impresion de orden de compra -->
-				<?php 
-					if($ordenCompra->estado!='ANULADA'){
-				?>
 				<a href="/ordenCompra/{{$ordenCompra->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Imprimir Orden" style="display: inline-block; width: 100%">
     			<i class="fas fa-print"></i>			      		
     		</a>
-    		<?php
-    			}
-    		?>
 			<!--  FIN Boton generico para impresion de orden de compra -->
 
 			<!-- INICIO Acciones para el departamento de compra -->
