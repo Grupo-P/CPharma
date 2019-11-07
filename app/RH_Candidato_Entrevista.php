@@ -10,5 +10,5 @@ class RH_Candidato_Entrevista extends Model {
      *
      * @var string
      */
-    protected $table = 'rh_candidatos_entrevistas';
+    protected $table = 'rhi_candidatos_entrevistas';
 }
