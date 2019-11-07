@@ -57,19 +57,19 @@
         <tbody>
           <tr>
             <th scope="row">
-              {!! Form::label('tipo_prueba', 'Tipo de prueba') !!}
+              {!! Form::label('tipo_prueba', 'Tipo de prueba *', ['title' => 'Este campo es requerido']) !!}
             </th>
             <td>
-              {!! Form::text('tipo_prueba', null, [ 'class' => 'form-control', 'placeholder' => 'Proyectiva', 'autofocus']) !!}
+              {!! Form::text('tipo_prueba', null, [ 'class' => 'form-control', 'placeholder' => 'Proyectiva', 'autofocus', 'required']) !!}
             </td>
           </tr>
 
           <tr>
             <th scope="row">
-              {!! Form::label('nombre_prueba', 'Nombre de prueba') !!}
+              {!! Form::label('nombre_prueba', 'Nombre de prueba *', ['title' => 'Este campo es requerido']) !!}
             </th>
             <td>
-              {!! Form::text('nombre_prueba', null, [ 'class' => 'form-control', 'placeholder' => 'Zavic']) !!}
+              {!! Form::text('nombre_prueba', null, [ 'class' => 'form-control', 'placeholder' => 'Zavic', 'required']) !!}
             </td>
           </tr>
         </tbody>
