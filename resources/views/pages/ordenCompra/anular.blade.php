@@ -116,7 +116,19 @@
               <td><label><?php echo($OrdenCompra->codigo); ?></label></td>
           </tr>
           <tr>
-              <th scope="row">{!! Form::label('fecha_actual)', 'Fecha Actual') !!}</th>
+              <th scope="row">{!! Form::label('proveedor)', 'Proveedor') !!}</th>
+              <td><label><?php echo($OrdenCompra->proveedor); ?></label></td>
+          </tr>
+          <tr>
+              <th scope="row">{!! Form::label('condicion)', 'Condicion crediticia') !!}</th>
+              <td><label><?php echo($OrdenCompra->condicion_crediticia); ?></label></td>
+          </tr>
+          <tr>
+              <th scope="row">{!! Form::label('destino)', 'Destino') !!}</th>
+              <td><label><?php echo($OrdenCompra->sede_destino); ?></label></td>
+          </tr>
+          <tr>
+              <th scope="row">{!! Form::label('fecha_actual)', 'Fecha Orden') !!}</th>
               <td><label><?php echo($OrdenCompra->created_at); ?></label></td>
           </tr>
           <tr>
