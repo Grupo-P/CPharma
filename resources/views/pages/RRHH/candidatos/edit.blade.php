@@ -51,15 +51,15 @@
 
         <tbody>
           <tr>
-            <th scope="row">{!! Form::label('nombres', 'Nombres') !!}</th>
+            <th scope="row">{!! Form::label('nombres', 'Nombres *', ['title' => 'Este campo es requerido']) !!}</th>
             <td>{!! Form::text('nombres', null, [ 'class' => 'form-control', 'placeholder' => 'Maria Raquel', 'autofocus', 'pattern' => '^[A-Za-zñÑáéíóúÁÉÍÓÚ]+\s?[A-Za-zñÑáéíóúÁÉÍÓÚ]+\s?[A-Za-zñÑáéíóúÁÉÍÓÚ]+$', 'title' => 'El nombre solo debe contener letras', 'required']) !!}</td>
           </tr>
           <tr>
-              <th scope="row">{!! Form::label('apellidos', 'Apellidos') !!}</th>
+              <th scope="row">{!! Form::label('apellidos', 'Apellidos *', ['title' => 'Este campo es requerido']) !!}</th>
               <td>{!! Form::text('apellidos', null, [ 'class' => 'form-control', 'placeholder' => 'Herrera Perez', 'pattern' => '^[A-Za-zñÑáéíóúÁÉÍÓÚ]+\s?[A-Za-zñÑáéíóúÁÉÍÓÚ]+$', 'title' => 'El apellido solo debe contener letras', 'required']) !!}</td>
           </tr>
           <tr>
-            <th scope="row">{!! Form::label('cedula', 'Cédula') !!}</th>
+            <th scope="row">{!! Form::label('cedula', 'Cédula *', ['title' => 'Este campo es requerido']) !!}</th>
             <td>
               <table style="width: 100%;">
                 <tr style="background-color: transparent;">
@@ -88,37 +88,40 @@
           </tr>
 
           <tr>
-            <th scope="row">{!! Form::label('tipo_relacion', 'Tipo de relación') !!}</th>
+            <th scope="row">{!! Form::label('tipo_relacion', 'Tipo de relación *', ['title' => 'Este campo es requerido']) !!}</th>
             <td>
               {!! Form::select('tipo_relacion', [
+                '' => 'Seleccione una opción',
                 'Ince' => 'Ince', 
                 'Pasante' => 'Pasante',
                 'Trabajador regular' => 'Trabajador regular',
-              ], null, ['class' => 'form-control']) !!}
+              ], null, ['class' => 'form-control', 'required']) !!}
             </td>
           </tr>
 
           <tr>
-            <th scope="row">{!! Form::label('relaciones_laborales', 'Relaciones con trabajadores') !!}</th>
+            <th scope="row">{!! Form::label('relaciones_laborales', 'Relaciones con trabajadores *', ['title' => 'Este campo es requerido']) !!}</th>
             <td>
               {!! Form::select('relaciones_laborales', [
+                '' => 'Seleccione una opción',
                 'Si' => 'Si', 
                 'No' => 'No',
-              ], 'No', ['class' => 'form-control']) !!}
+              ], 'No', ['class' => 'form-control', 'required']) !!}
             </td>
           </tr>
 
           <tr>
-            <th scope="row">{!! Form::label('como_nos_contacto', 'Como nos contactó') !!}</th>
+            <th scope="row">{!! Form::label('como_nos_contacto', 'Como nos contactó *', ['title' => 'Este campo es requerido']) !!}</th>
             <td>
               {!! Form::select('como_nos_contacto', [
+                '' => 'Seleccione una opción',
                 'Computrabajo' => 'Computrabajo', 
                 'Bumeran' => 'Bumeran',
                 'Redes sociales' => 'Redes sociales',
                 'Instagram' => 'Instagram',
                 'Radio' => 'Radio',
                 'Recomendado' => 'Recomendado',
-              ], null, ['class' => 'form-control']) !!}
+              ], null, ['class' => 'form-control', 'required']) !!}
             </td>
           </tr>
 
@@ -128,7 +131,7 @@
           </tr>
 
           <tr>
-              <th scope="row">{!! Form::label('direccion', 'Dirección') !!}</th>
+              <th scope="row">{!! Form::label('direccion', 'Dirección *', ['title' => 'Este campo es requerido']) !!}</th>
               <td>{!! Form::textarea('direccion', null, [ 'class' => 'form-control', 'placeholder' => 'Av. 15 delicias con calle 72', 'rows' => '3', 'required']) !!}</td>
           </tr>
           <tr>

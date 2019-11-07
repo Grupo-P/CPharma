@@ -164,37 +164,40 @@
           </tr>
 
           <tr>
-            <th scope="row">{!! Form::label('tipo_relacion', 'Tipo de relación') !!}</th>
+            <th scope="row">{!! Form::label('tipo_relacion', 'Tipo de relación *', ['title' => 'Este campo es requerido']) !!}</th>
             <td>
               {!! Form::select('tipo_relacion', [
+                '' => 'Seleccione una opción',
                 'Ince' => 'Ince', 
                 'Pasante' => 'Pasante',
                 'Trabajador regular' => 'Trabajador regular',
-              ], null, ['class' => 'form-control']) !!}
+              ], null, ['class' => 'form-control', 'required']) !!}
             </td>
           </tr>
 
           <tr>
-            <th scope="row">{!! Form::label('relaciones_laborales', 'Relaciones con trabajadores') !!}</th>
+            <th scope="row">{!! Form::label('relaciones_laborales', 'Relaciones con trabajadores *', ['title' => 'Este campo es requerido']) !!}</th>
             <td>
               {!! Form::select('relaciones_laborales', [
+                '' => 'Seleccione una opción',
                 'Si' => 'Si', 
                 'No' => 'No',
-              ], 'No', ['class' => 'form-control']) !!}
+              ], null, ['class' => 'form-control', 'required']) !!}
             </td>
           </tr>
 
           <tr>
-            <th scope="row">{!! Form::label('como_nos_contacto', 'Como nos contactó') !!}</th>
+            <th scope="row">{!! Form::label('como_nos_contacto', 'Como nos contactó *', ['title' => 'Este campo es requerido']) !!}</th>
             <td>
               {!! Form::select('como_nos_contacto', [
+                '' => 'Seleccione una opción',
                 'Computrabajo' => 'Computrabajo', 
                 'Bumeran' => 'Bumeran',
                 'Redes sociales' => 'Redes sociales',
                 'Instagram' => 'Instagram',
                 'Radio' => 'Radio',
                 'Recomendado' => 'Recomendado',
-              ], null, ['class' => 'form-control']) !!}
+              ], null, ['class' => 'form-control', 'required']) !!}
             </td>
           </tr>
 

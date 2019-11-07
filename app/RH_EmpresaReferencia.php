@@ -11,4 +11,13 @@ class RH_EmpresaReferencia extends Model {
      * @var string
      */
     protected $table = 'rh_empresa_referencias';
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+    	'nombre_empresa', 'telefono', 'correo', 'direccion', 'user'
+    ];
 }

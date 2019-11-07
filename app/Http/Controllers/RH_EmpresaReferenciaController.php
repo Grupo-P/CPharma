@@ -23,7 +23,12 @@ class RH_EmpresaReferenciaController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function index() {
-        //
+        $empresaReferencias = RH_EmpresaReferencia::all();
+
+        return view(
+            'pages.RRHH.empresaReferencias.index', 
+            compact('empresaReferencias')
+        );
     }
 
     /**
@@ -32,7 +37,7 @@ class RH_EmpresaReferenciaController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function create() {
-        //
+        return view('pages.RRHH.empresaReferencias.create');
     }
 
     /**
@@ -42,7 +47,30 @@ class RH_EmpresaReferenciaController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request) {
-        //
+        try {
+            $empresaReferencias = new RH_EmpresaReferencia();
+            $empresaReferencias->nombre_empresa = $request->input('nombre_empresa');
+            $empresaReferencias->telefono = $request->input('telefono');
+            $empresaReferencias->correo = $request->input('correo');
+            $empresaReferencias->direccion = $request->input('direccion');
+            $empresaReferencias->estatus = 'ACTIVO';
+            $empresaReferencias->user = auth()->user()->name;
+            $empresaReferencias->save();
+
+            $Auditoria = new Auditoria();
+            $Auditoria->accion = 'CREAR';
+            $Auditoria->tabla = 'RH_EMPRESA_REFERENCIAS';
+            $Auditoria->registro = $request->input('nombre_empresa');
+            $Auditoria->user = auth()->user()->name;
+            $Auditoria->save();
+
+            return redirect()
+                ->route('empresaReferencias.index')
+                ->with('Saved', ' Informacion');
+        }
+        catch(\Illuminate\Database\QueryException $e) {
+            return back()->with('Error', ' Error');
+        }
     }
 
     /**
@@ -52,7 +80,19 @@ class RH_EmpresaReferenciaController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function show($id) {
-        //
+        $empresaReferencias = RH_EmpresaReferencia::find($id);
+
+        $Auditoria = new Auditoria();
+        $Auditoria->accion = 'CONSULTAR';
+        $Auditoria->tabla = 'RH_EMPRESA_REFERENCIAS';
+        $Auditoria->registro = $empresaReferencias->nombre_empresa;
+        $Auditoria->user = auth()->user()->name;
+        $Auditoria->save();
+
+        return view(
+            'pages.RRHH.empresaReferencias.show', 
+            compact('empresaReferencias')
+        );
     }
 
     /**
@@ -62,7 +102,12 @@ class RH_EmpresaReferenciaController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function edit($id) {
-        //
+        $empresaReferencias = RH_EmpresaReferencia::find($id);
+
+        return view(
+            'pages.RRHH.empresaReferencias.edit', 
+            compact('empresaReferencias')
+        );
     }
 
     /**
@@ -73,7 +118,27 @@ class RH_EmpresaReferenciaController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id) {
-        //
+        try {
+            $empresaReferencias = RH_EmpresaReferencia::find($id);
+            $empresaReferencias->fill($request->all());
+
+            $empresaReferencias->user = auth()->user()->name;
+            $empresaReferencias->save();
+
+            $Auditoria = new Auditoria();
+            $Auditoria->accion = 'EDITAR';
+            $Auditoria->tabla = 'RH_EMPRESA_REFERENCIAS';
+            $Auditoria->registro = $empresaReferencias->nombre_empresa;
+            $Auditoria->user = auth()->user()->name;
+            $Auditoria->save();
+
+            return redirect()
+                ->route('empresaReferencias.index')
+                ->with('Updated', ' Informacion');
+        }
+        catch(\Illuminate\Database\QueryException $e){
+            return back()->with('Error', ' Error');
+        }
     }
 
     /**
@@ -83,6 +148,35 @@ class RH_EmpresaReferenciaController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function destroy($id) {
-        //
+        $empresaReferencias = RH_EmpresaReferencia::find($id);
+
+        $Auditoria = new Auditoria();
+        $Auditoria->tabla = 'RH_EMPRESA_REFERENCIAS';
+        $Auditoria->registro = $empresaReferencias->nombre_empresa;
+        $Auditoria->user = auth()->user()->name;
+
+        if($empresaReferencias->estatus == 'ACTIVO'){
+            $empresaReferencias->estatus = 'INACTIVO';
+            $Auditoria->accion = 'DESINCORPORAR';
+        }
+        else if($empresaReferencias->estatus == 'INACTIVO'){
+            $empresaReferencias->estatus = 'ACTIVO';
+            $Auditoria->accion = 'REINCORPORAR';
+        }
+
+        $empresaReferencias->user = auth()->user()->name;        
+        $empresaReferencias->save();
+
+        $Auditoria->save();
+
+        if($empresaReferencias->estatus == 'ACTIVO'){
+            return redirect()
+                ->route('empresaReferencias.index')
+                ->with('Deleted1', ' Informacion');
+        }
+
+        return redirect()
+            ->route('empresaReferencias.index')
+            ->with('Deleted', ' Informacion');
     }
 }

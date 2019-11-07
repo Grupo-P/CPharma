@@ -1,6 +1,6 @@
 @extends('layouts.model')
 
-@section('title', 'Modificar prueba')
+@section('title', 'Modificar referencia lab.')
 
 @section('content')
   <!-- Modal Guardar -->
@@ -15,7 +15,7 @@
             </button>
           </div>
           <div class="modal-body">
-            <h4 class="h6"> Prueba no registrada </h4>
+            <h4 class="h6">La empresa no fue almacenada</h4>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-outline-success" data-dismiss="modal">Aceptar</button>
@@ -27,18 +27,18 @@
 
   <h1 class="h5 text-info">
     <i class="fas fa-edit"></i>
-    Modificar Prueba
+    Modificar empresa de referencia laboral
   </h1>
   <hr class="row align-items-start col-12">
 
-  <form action="/pruebas/" method="POST" style="display: inline;">  
+  <form action="/empresaReferencias/" method="POST" style="display: inline;">  
     @csrf
     <button type="submit" name="Regresar" role="button" class="btn btn-outline-info btn-sm"data-placement="top"><i class="fa fa-reply">&nbsp;Regresar</i></button>
   </form>
 
   <br/><br/>
 
-  {!! Form::model($pruebas, ['route' => ['pruebas.update', $pruebas], 'method' => 'PUT']) !!}
+  {!! Form::model($empresaReferencias, ['route' => ['empresaReferencias.update', $empresaReferencias], 'method' => 'PUT']) !!}
     <fieldset>
       <table class="table table-borderless table-striped">
         <thead class="thead-dark">
@@ -50,17 +50,38 @@
 
         <tbody>
           <tr>
-            <th scope="row">{!! Form::label('tipo_prueba', 'Tipo de prueba *', ['title' => 'Este campo es requerido']) !!}</th>
-            <td>
-              {!! Form::text('tipo_prueba', null, [ 'class' => 'form-control', 'placeholder' => 'Proyectiva', 'autofocus', 'required']) !!}
-            </td>
-          </tr>
-          <tr>
             <th scope="row">
-              {!! Form::label('nombre_prueba', 'Nombre de prueba *', ['title' => 'Este campo es requerido']) !!}
+              {!! Form::label('nombre_empresa', 'Nombre de la empresa *', ['title' => 'Éste campo es requerido']) !!}
             </th>
             <td>
-              {!! Form::text('nombre_prueba', null, [ 'class' => 'form-control', 'placeholder' => 'Zavic', 'required']) !!}
+              {!! Form::text('nombre_empresa', null, ['class' => 'form-control', 'placeholder' => 'Farmacias Saas', 'autofocus', 'required']) !!}
+            </td>
+          </tr>
+
+          <tr>
+            <th scope="row">
+              {!! Form::label('telefono', 'Teléfono de la empresa *', ['title' => 'Éste campo es requerido']) !!}
+            </th>
+            <td>
+              {!! Form::text('telefono', null, ['class' => 'form-control', 'placeholder' => '0261-1234567', 'pattern' => '^0[1246]{3}-[0-9]{7}$', 'title' => 'El formato telefónico es: 0xxx-xxxxxxx', 'required']) !!}
+            </td>
+          </tr>
+
+          <tr>
+            <th scope="row">
+              {!! Form::label('correo', 'Correo de la empresa') !!}
+            </th>
+            <td>
+              {!! Form::email('correo', null, ['class' => 'form-control', 'placeholder' => 'medicamentos@farmacia72.com.ve', 'title' => 'El formato de correo es: usuario@proveedor.dominio']) !!}
+            </td>
+          </tr>
+
+          <tr>
+            <th scope="row">
+              {!! Form::label('direccion', 'Dirección de la empresa *', ['title' => 'Éste campo es requerido']) !!}
+            </th>
+            <td>
+              {!! Form::textarea('direccion', null, [ 'class' => 'form-control', 'placeholder' => 'Sector tierra negra con calle 72', 'rows' => '3', 'required']) !!}
             </td>
           </tr>
         </tbody>
