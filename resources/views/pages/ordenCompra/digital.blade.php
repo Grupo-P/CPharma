@@ -41,15 +41,23 @@
 	}
 </style>
 
+	<?php
+    use Illuminate\Http\Request;
+    use compras\OrdenCompra;
+    
+    $id = $_GET['id'];
+
+    $OrdenCompra = OrdenCompra::find($id);
+  ?>
+
  	<h1 class="h5 text-info" style="display: inline;">
-		<i class="fas fa-print"></i>
+		<i class="fa fa-search"></i>
 		Soporte de orden de compra
 	</h1>
 	<form action="/ordenCompra/" method="POST" style="display: inline; margin-left: 50px;">  
 	    @csrf					    
 	    <button type="submit" name="Regresar" role="button" class="btn btn-outline-info btn-sm"data-placement="top"><i class="fa fa-reply">&nbsp;Regresar</i></button>
 	</form>
-	<input type="button" name="imprimir" value="Imprimir" class="btn btn-outline-success btn-sm" onclick="window.print();" style="display: inline; margin-left: 10px;">
 
 	<hr class="row align-items-start col-12">
 	<table>

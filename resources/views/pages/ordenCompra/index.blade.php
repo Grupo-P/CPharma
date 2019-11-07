@@ -229,6 +229,12 @@
 				<a href="/ordenCompra/{{$ordenCompra->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Imprimir Orden" style="display: inline-block; width: 100%">
     			<i class="fas fa-print"></i>			      		
     		</a>
+
+    		<form action="/DigitalOrdenCompra" method="GET">
+				    @csrf					
+				    <input type="hidden" name="id" value="{{$ordenCompra->id}}"> 
+				    <button type="submit" name="Eliminar" role="button" class="btn btn-outline-dark btn-sm" data-toggle="tooltip" data-placement="top" title="Consultar" style="display: inline-block; width: 100%"><i class="fa fa-search"></i></button>
+					</form>
 			<!--  FIN Boton generico para impresion de orden de compra -->
 
 			<!-- INICIO Acciones para el departamento de compra -->
