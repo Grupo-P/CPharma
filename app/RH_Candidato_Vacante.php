@@ -10,5 +10,5 @@ class RH_Candidato_Vacante extends Model {
      *
      * @var string
      */
-    protected $table = 'rh_candidatos_vacantes';
+    protected $table = 'rhi_candidatos_vacantes';
 }

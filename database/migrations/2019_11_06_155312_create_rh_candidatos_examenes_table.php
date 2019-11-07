@@ -11,7 +11,7 @@ class CreateRhCandidatosExamenesTable extends Migration {
      * @return void
      */
     public function up() {
-        Schema::create('rh_candidatos_examenes', function (Blueprint $table) {
+        Schema::create('rhi_candidatos_examenes', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('rh_candidatos_id');
             $table->unsignedInteger('rh_examenes_id');
@@ -36,6 +36,6 @@ class CreateRhCandidatosExamenesTable extends Migration {
      * @return void
      */
     public function down() {
-        Schema::dropIfExists('rh_candidatos_examenes');
+        Schema::dropIfExists('rhi_candidatos_examenes');
     }
 }

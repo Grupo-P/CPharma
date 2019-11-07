@@ -10,7 +10,7 @@ class RH_EmpresaReferencia extends Model {
      *
      * @var string
      */
-    protected $table = 'rh_empresa_referencias';
+    protected $table = 'rh_empresaRef';
 
     /**
      * The attributes that are mass assignable.

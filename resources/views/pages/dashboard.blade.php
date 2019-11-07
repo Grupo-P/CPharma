@@ -21,7 +21,7 @@
     $pruebas = DB::table('rh_pruebas')->count();
     $entrevistas = DB::table('rh_entrevistas')->count();
     $examenesm = DB::table('rh_examenes')->count();
-    $empresaReferencias = DB::table('rh_empresa_referencias')->count();
+    $empresaReferencias = DB::table('rh_empresaRef')->count();
 
   /*TASA DOLAR VENTA*/
     $Tasa = DB::table('tasa_ventas')->where('moneda', 'Dolar')->value('tasa');
