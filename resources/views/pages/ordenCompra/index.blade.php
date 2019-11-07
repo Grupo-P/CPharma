@@ -111,8 +111,8 @@
 	    <tr>
 	    	<?php
 	    		if((Auth::user()->departamento == 'TECNOLOGIA')
-				 			|| (Auth::user()->departamento == 'GERENCIA')
-				 			|| (Auth::user()->departamento == 'COMPRAS')){
+			 			|| (Auth::user()->departamento == 'GERENCIA')
+			 			|| (Auth::user()->departamento == 'COMPRAS')){
 	    	?>
         <td style="width:10%;" align="center">	        	
 					<a href="{{ url('/ordenCompra/create') }}" role="button" class="btn btn-outline-info btn-sm" 
@@ -166,12 +166,38 @@
 	  	<tbody>
 		@foreach($OrdenCompra as $ordenCompra)
 			<?php 
+				$connCPharma = FG_Conectar_CPharma();
+				$sql = MySQL_Buscar_Orden_Detalle($ordenCompra->codigo);
+				$result = mysqli_query($connCPharma,$sql);
+
+				$total_unidades = 0;
+				$costo_total = 0;
+
+				while($row = $result->fetch_assoc()) {
+					$total_unidades += floatval($row['total_unidades']);
+					$costo_total += floatval($row['costo_total']);
+				}
+				mysqli_close($connCPharma);
+
+				$costo_total = number_format ($costo_total,2,"," ,"." );
+
+				if($ordenCompra->moneda==SigDolar){
+					$costo_total_dolar = $costo_total;
+					$costo_total_ve = '0,00';
+				}
+				else{
+					$costo_total_dolar = '0,00';
+					$costo_total_ve = $costo_total;
+				}
+
 				if($ordenCompra->estado=='CERRADA'){
 					$Dias = FG_Rango_Dias($ordenCompra->created_at,$ordenCompra->updated_at);
 				}
 				else{
 					$Dias = FG_Rango_Dias($ordenCompra->created_at,date('Y-m-d H:i:s'));
 				}
+
+				$costo_total_real = number_format ($ordenCompra->montoTotalReal,2,"," ,"." );
 			?>
 
 		    <tr>
@@ -182,32 +208,36 @@
 		      <td>{{$ordenCompra->created_at}}</td>
 		      <td>{{$ordenCompra->fecha_estimada_despacho}}</td>
 		      <td>{{$Dias}}</td>
-		      <td>{{$ordenCompra->montoTotalBs}}</td>
-		      <td>{{$ordenCompra->montoTotalUsd}}</td>
-		      <td>{{$ordenCompra->totalUnidades}}</td>
+		      <td>{{$costo_total_ve}}</td>
+		      <td>{{$costo_total_dolar}}</td>
+		      <td>{{$total_unidades}}</td>
 		      <td>{{$ordenCompra->condicion_crediticia}}</td>
 		      <td>{{$ordenCompra->dias_credito}}</td>
 		      <td>{{$ordenCompra->estado}}</td>
 		      <td>{{$ordenCompra->estatus}}</td>
 		      <td>{{$ordenCompra->user}}</td>
-		      <td>{{$ordenCompra->montoTotalReal}}</td>
+		      <td>{{$costo_total_real}}</td>
 		      <td>{{$ordenCompra->fecha_aprobacion}}</td>
 		      <td>{{$ordenCompra->calificacion}}</td>
 		      <td>{{$ordenCompra->fecha_recepcion}}</td>
 		      <td>{{$ordenCompra->fecha_ingreso}}</td>
 
-		    <!-- Inicio Validacion de ROLES -->
-		      <td style="width:300px;">
-				<?php 
-					if($ordenCompra->estado!='ANULADA'){
-				?>
-				<a href="/ordenCompra/{{$ordenCompra->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Soporte" style="display: inline-block; width: 100%">
+    <!-- Inicio Validacion -->
+			<td style="width:300px;">
+
+	    <!--  INICIO Boton generico para impresion de orden de compra -->
+				<a href="/ordenCompra/{{$ordenCompra->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Imprimir Orden" style="display: inline-block; width: 100%">
     			<i class="fas fa-print"></i>			      		
     		</a>
-    		<?php
-    			}
-    		?>
 
+    		<form action="/DigitalOrdenCompra" method="GET">
+				    @csrf					
+				    <input type="hidden" name="id" value="{{$ordenCompra->id}}"> 
+				    <button type="submit" name="Eliminar" role="button" class="btn btn-outline-dark btn-sm" data-toggle="tooltip" data-placement="top" title="Consultar" style="display: inline-block; width: 100%"><i class="fa fa-search"></i></button>
+					</form>
+			<!--  FIN Boton generico para impresion de orden de compra -->
+
+			<!-- INICIO Acciones para el departamento de compra -->
 				<?php
 				if( ($ordenCompra->estado=='EN PROCESO')
 						&&
@@ -218,23 +248,35 @@
 					){
 				?>
 
-					<?php
-						if($ordenCompra->estatus == 'ACTIVO'){
-					?>  
-		      	<a href="/ordenCompra/{{$ordenCompra->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar orden" style="display: inline-block; width: 100%">
-      				<i class="fas fa-edit"></i>			      		
-	      		</a>
+				<?php
+					if($ordenCompra->estatus == 'ACTIVO'){
+				?>  
+	      	<a href="/ordenCompra/{{$ordenCompra->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar Orden" style="display: inline-block; width: 100%">
+    				<i class="fas fa-edit"></i>			      		
+      		</a>
 
-		      	<form action="/ordenCompraDetalle" method="GET">
-					    @csrf					    
-					    <button type="submit" name="Eliminar" role="button" class="btn btn-outline-warning btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar articulos" style="display: inline-block; width: 100%"><i class="fa fa-edit"></i></button>
-						</form>
-					 
-		      	<form action="/ordenCompra/{{$ordenCompra->id}}" method="POST">
-				    @method('DELETE')
+	      	<form action="/ordenCompraDetalle" method="GET">
 				    @csrf					    
-				    <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Pausar" style="display: inline-block; width: 100%"><i class="fa fa-pause"></i></button>
-						</form>
+				    <button type="submit" name="Eliminar" role="button" class="btn btn-outline-warning btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar Detalle" style="display: inline-block; width: 100%"><i class="fa fa-edit"></i></button>
+					</form>
+				 
+	      	<form action="/ordenCompra/{{$ordenCompra->id}}" method="POST">
+			    @method('DELETE')
+			    @csrf					    
+			    	<button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Pausar" style="display: inline-block; width: 100%"><i class="fa fa-pause"></i></button>
+					</form>
+
+					<form action="/AnularOrdenCompra" method="PRE">
+				    <input type="hidden" name="anular" value="solicitud">
+				    <input type="hidden" name="id" value="{{$ordenCompra->id}}">   
+				    <button type="submit"role="button" class="btn btn-outline-dark btn-sm" data-toggle="tooltip" data-placement="top" title="Anular" style="display: inline-block; width: 100%"><i class="fa fa-ban"></i></button>
+					</form>
+
+					<form action="/ordenCompra/{{$ordenCompra->id}}" method="POST">
+			    @method('DELETE')
+			    @csrf					    
+			    	<button type="submit" name="PorAprobar" value="solicitud" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Pausar" style="display: inline-block; width: 100%"><i class="fas fa-angle-double-right"></i></button>
+					</form>
 
 					<?php
 					}
@@ -245,22 +287,129 @@
 				    @csrf					    
 				    <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Activar" style="display: inline-block; width: 100%"><i class="fa fa-play"></i></button>
 						</form>
-					<?php
-					}
-					?>
-
-					<form action="/AnularOrdenCompra" method="PRE">
-				    <input type="hidden" name="anular" value="solicitud">
-				    <input type="hidden" name="id" value="{{$ordenCompra->id}}">   
-				    <button type="submit"role="button" class="btn btn-outline-dark btn-sm" data-toggle="tooltip" data-placement="top" title="Anular" style="display: inline-block; width: 100%"><i class="fa fa-ban"></i></button>
-					</form>
-		
 				<?php
-				}
-				?>						
-		     </td>
-		    <!-- Fin Validacion de ROLES -->
-		    </tr>
+					}
+				?>
+				<?php
+					}
+				?>	
+			<!--  FIN Acciones para el departamento de compra -->
+
+
+			<!-- INICIO Acciones para el departamento de administracion -->
+				<?php
+				if( ($ordenCompra->estado=='POR APROBAR')
+						&&
+						( (Auth::user()->departamento == 'ADMINISTRACION')
+					 		|| (Auth::user()->departamento == 'TECNOLOGIA')
+					 		|| (Auth::user()->departamento == 'GERENCIA')
+				 		)
+					){
+				?>
+
+				<?php
+					if($ordenCompra->estatus == 'EN ESPERA'){
+				?>  
+					<form action="/ordenCompra/{{$ordenCompra->id}}" method="POST">
+			    @method('DELETE')
+			    @csrf					    
+			    	<button type="submit" name="Aprobar" value="solicitud" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Aprobar" style="display: inline-block; width: 100%"><i class="fas fa-check"></i></button>
+					</form>
+
+					<form action="/RechazarOrdenCompra" method="PRE">
+				    <input type="hidden" name="rechazar" value="solicitud">
+				    <input type="hidden" name="id" value="{{$ordenCompra->id}}">   
+				    <button type="submit"role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Rechazar" style="display: inline-block; width: 100%"><i class="fa fa-ban"></i></button>
+					</form>
+					<?php
+						}
+					?>  
+				<?php
+					}
+				?>
+
+				<?php
+				if( ($ordenCompra->estado=='INGRESADA')
+						&&
+						( (Auth::user()->departamento == 'ADMINISTRACION')
+					 		|| (Auth::user()->departamento == 'TECNOLOGIA')
+					 		|| (Auth::user()->departamento == 'GERENCIA')
+				 		)
+					){
+				?>
+
+				<?php
+					if($ordenCompra->estatus == 'EN ESPERA'){
+				?>  
+					<form action="/ordenCompra/{{$ordenCompra->id}}" method="POST">
+			    @method('DELETE')
+			    @csrf					    
+			    	<button type="submit" name="Cerrar" value="solicitud" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Cerrar" style="display: inline-block; width: 100%"><i class="fas fa-check"></i></button>
+					</form>
+					<?php
+						}
+					?>  
+				<?php
+					}
+				?>
+			<!--  FIN Acciones para el departamento de administracion -->
+
+			<!-- INICIO Acciones para el departamento de recepcion -->
+				<?php
+				if( ($ordenCompra->estado=='APROBADA')
+						&&
+						( (Auth::user()->departamento == 'RECEPCION')
+					 		|| (Auth::user()->departamento == 'TECNOLOGIA')
+					 		|| (Auth::user()->departamento == 'GERENCIA')
+				 		)
+					){
+				?>
+
+				<?php
+					if($ordenCompra->estatus == 'EN ESPERA'){
+				?>  
+					<form action="/ordenCompra/{{$ordenCompra->id}}" method="POST">
+			    @method('DELETE')
+			    @csrf					    
+			    	<button type="submit" name="Recibir" value="solicitud" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Recibir" style="display: inline-block; width: 100%"><i class="fas fa-check"></i></button>
+					</form>
+					<?php
+						}
+					?>  
+				<?php
+					}
+				?>
+			<!--  FIN Acciones para el departamento de recepcion -->
+
+			<!-- INICIO Acciones para el departamento de recepcion -->
+				<?php
+				if( ($ordenCompra->estado=='RECIBIDA')
+						&&
+						( (Auth::user()->departamento == 'OPERACIONES')
+					 		|| (Auth::user()->departamento == 'TECNOLOGIA')
+					 		|| (Auth::user()->departamento == 'GERENCIA')
+				 		)
+					){
+				?>
+
+				<?php
+					if($ordenCompra->estatus == 'EN ESPERA'){
+				?>  
+					<form action="/IngresarOrdenCompra" method="PRE">
+				    <input type="hidden" name="Ingresar" value="solicitud">
+				    <input type="hidden" name="id" value="{{$ordenCompra->id}}">   
+				    <button type="submit"role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Ingresar" style="display: inline-block; width: 100%"><i class="fas fa-check"></i></button>
+					</form>
+					<?php
+						}
+					?>  
+				<?php
+					}
+				?>
+			<!--  FIN Acciones para el departamento de recepcion -->
+   		</td>
+    <!-- Fin Validacion -->
+    </tr>
 		@endforeach
 		</tbody>
 	</table>

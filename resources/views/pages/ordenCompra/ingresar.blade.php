@@ -73,8 +73,8 @@
         </div>
     @endif
     <h1 class="h5 text-info">
-        <i class="fas fa-ban"></i>
-        Anular orden de compra
+        <i class="fas fa-check"></i>
+        Ingresar orden de compra
     </h1>
 
     <hr class="row align-items-start col-12">
@@ -100,7 +100,7 @@
     @method('DELETE')
     @csrf 
 
-    {!! Form::hidden('anular','valido') !!}
+    {!! Form::hidden('Ingresar','valido') !!}
     <fieldset>
 
         <table class="table table-borderless table-striped">
@@ -136,9 +136,17 @@
               <td><label><?php echo($OrdenCompra->user); ?></label></td>
           </tr>
           <tr>
-            <th scope="row">{!! Form::label('observacion', 'Motivo de anulacion') !!}</th>
-            <td>{!! Form::textarea('observacion', null, [ 'class' => 'form-control', 'placeholder' => 'Detalles importantes', 'rows' => '3', 'value' => '', 'required' => 'required']) !!}</td>
-        </tr>
+            <th scope="row">{!! Form::label('montoTotalReal', 'Monto Total Real') !!}</th>
+            <td>{!! Form::number('montoTotalReal', null, [ 'class' => 'form-control', 'autofocus', 'required', 'step' => '0.01']) !!}</td>
+          </tr>
+          <tr>
+            <th scope="row">{!! Form::label('numero_factura', 'Numero de Factura') !!}</th>
+            <td>{!! Form::text('numero_factura', null, [ 'class' => 'form-control', 'autofocus', 'required']) !!}</td>
+          </tr>
+          <tr>
+            <th scope="row">{!! Form::label('calificacion', 'Calificacion') !!}</th>
+            <td>{!! Form::number('calificacion', null, [ 'class' => 'form-control', 'autofocus', 'required']) !!}</td>
+          </tr>
         </tbody>
         </table>
         {!! Form::submit('Guardar', ['class' => 'btn btn-outline-success btn-md']) !!}

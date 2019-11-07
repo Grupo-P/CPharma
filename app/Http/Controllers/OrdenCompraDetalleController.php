@@ -131,11 +131,17 @@ class OrdenCompraDetalleController extends Controller
      */
     public function update(Request $request, $id)
     {
-        try{
+      try{
           $ordenCompraDetalles = OrdenCompraDetalle::find($id);
           $ordenCompraDetalles->fill($request->all());
-          $ordenCompraDetalles->save();
-          return redirect()->route('ordenCompraDetalle.index')->with('Updated', ' Informacion');
+          $ordenCompraDetalles->total_unidades = $request->input('totalUnidades');
+          $ordenCompraDetalles->costo_unitario = $request->input('costo_unitario');
+          $ordenCompraDetalles->costo_total = ( 
+          ($request->input('totalUnidades')) * ($request->input('costo_unitario')) 
+        );
+
+        $ordenCompraDetalles->save();
+        return redirect()->route('ordenCompraDetalle.index')->with('Updated', ' Informacion');
         }
         catch(\Illuminate\Database\QueryException $e){
             return back()->with('Error', ' Error');

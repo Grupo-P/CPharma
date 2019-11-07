@@ -141,6 +141,18 @@ Route::get('/AnularOrdenCompra', function() {
     return view('pages.ordenCompra.anular');
 });
 
+Route::get('/RechazarOrdenCompra', function() {
+    return view('pages.ordenCompra.rechazar');
+});
+
+Route::get('/IngresarOrdenCompra', function() {
+    return view('pages.ordenCompra.ingresar');
+});
+
+Route::get('/DigitalOrdenCompra', function() {
+    return view('pages.ordenCompra.digital');
+});
+
 Route::get('home', 'HomeController@index')->name('home');
 
 Route::resource('dolar', 'DolarController');

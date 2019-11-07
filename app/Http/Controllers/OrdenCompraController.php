@@ -85,13 +85,13 @@ class OrdenCompraController extends Controller
         /*FIN DE SEDE DESTINO*/
 
         /*INICIO DE CONDICION*/
-          if(($request->input('condicion'))=='CREDITO'){
+          if(($request->input('condicion_crediticia'))=='CREDITO'){
             $dias_credito = intval($request->input('dias_credito'));
           }
           else{
             $dias_credito = 0;
           }
-          $OrdenCompra->condicion_crediticia = $request->input('condicion');
+          $OrdenCompra->condicion_crediticia = $request->input('condicion_crediticia');
           $OrdenCompra->dias_credito = $dias_credito;
         /*FIN DE CONDICION*/
 
@@ -160,11 +160,32 @@ class OrdenCompraController extends Controller
        try{
           $OrdenCompra = OrdenCompra::find($id);
           $OrdenCompra->fill($request->all());
+
+        /*INICIO DE SEDE DESTINO*/
+          if(($request->input('CDD'))=='SI'){
+            $OrdenCompra->sede_destino = 'CENTRO DE DISTRIBUCION';
+          }
+          else{
+            $OrdenCompra->sede_destino = $request->input('SedeDestino');
+          }
+        /*FIN DE SEDE DESTINO*/
+
+        /*INICIO DE CONDICION*/
+          if(($request->input('condicion_crediticia'))=='CREDITO'){
+            $dias_credito = intval($request->input('dias_credito'));
+          }
+          else{
+            $dias_credito = 0;
+          }
+          $OrdenCompra->condicion_crediticia = $request->input('condicion_crediticia');
+          $OrdenCompra->dias_credito = $dias_credito;
+        /*FIN DE CONDICION*/
+
           $OrdenCompra->save();
           return redirect()->route('ordenCompra.index')->with('Updated', ' Informacion');
         }
         catch(\Illuminate\Database\QueryException $e){
-            return back()->with('Error', ' Error');
+          return back()->with('Error', ' Error');
         }
     }
 
@@ -182,6 +203,58 @@ class OrdenCompraController extends Controller
         $OrdenCompra->fill($request->all());
         $OrdenCompra->estado = 'ANULADA';
         $OrdenCompra->estatus = 'ANULADA';
+        $OrdenCompra->save();
+        return redirect()->route('ordenCompra.index')->with('Updated', ' Informacion');
+      }
+      else if($request->input('PorAprobar')=='solicitud'){
+        $OrdenCompra->fill($request->all());
+        $OrdenCompra->estado = 'POR APROBAR';
+        $OrdenCompra->estatus = 'EN ESPERA';
+        $OrdenCompra->save();
+        return redirect()->route('ordenCompra.index')->with('Updated', ' Informacion');
+      }
+      else if($request->input('rechazar')=='valido'){
+        $OrdenCompra->fill($request->all());
+        $OrdenCompra->estado = 'RECHAZADA';
+        $OrdenCompra->estatus = 'RECHAZADA';        
+        $OrdenCompra->fecha_aprobacion = date('Y-m-d H:i:s');
+        $OrdenCompra->operador_aprobacion = auth()->user()->name;
+        $OrdenCompra->save();
+        return redirect()->route('ordenCompra.index')->with('Updated', ' Informacion');
+      }
+      else if($request->input('Aprobar')=='solicitud'){
+        $OrdenCompra->fill($request->all());
+        $OrdenCompra->estado = 'APROBADA';
+        $OrdenCompra->estatus = 'EN ESPERA';
+        $OrdenCompra->fecha_aprobacion = date('Y-m-d H:i:s');
+        $OrdenCompra->operador_aprobacion = auth()->user()->name;
+        $OrdenCompra->save();
+        return redirect()->route('ordenCompra.index')->with('Updated', ' Informacion');
+      }
+      else if($request->input('Recibir')=='solicitud'){
+        $OrdenCompra->fill($request->all());
+        $OrdenCompra->estado = 'RECIBIDA';
+        $OrdenCompra->estatus = 'EN ESPERA';
+        $OrdenCompra->fecha_recepcion = date('Y-m-d H:i:s');
+        $OrdenCompra->operador_recepcion = auth()->user()->name;
+        $OrdenCompra->save();
+        return redirect()->route('ordenCompra.index')->with('Updated', ' Informacion');
+      }
+      else if($request->input('Ingresar')=='valido'){
+        $OrdenCompra->fill($request->all());
+        $OrdenCompra->estado = 'INGRESADA';
+        $OrdenCompra->estatus = 'EN ESPERA';        
+        $OrdenCompra->fecha_ingreso = date('Y-m-d H:i:s');
+        $OrdenCompra->operador_ingreso = auth()->user()->name;
+        $OrdenCompra->save();
+        return redirect()->route('ordenCompra.index')->with('Updated', ' Informacion');
+      }
+      else if($request->input('Cerrar')=='solicitud'){
+        $OrdenCompra->fill($request->all());
+        $OrdenCompra->estado = 'CERRADA';
+        $OrdenCompra->estatus = 'CERRADA';
+        $OrdenCompra->fecha_cierre = date('Y-m-d H:i:s');
+        $OrdenCompra->operador_cierre = auth()->user()->name;
         $OrdenCompra->save();
         return redirect()->route('ordenCompra.index')->with('Updated', ' Informacion');
       }

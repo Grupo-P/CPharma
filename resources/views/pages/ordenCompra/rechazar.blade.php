@@ -74,7 +74,7 @@
     @endif
     <h1 class="h5 text-info">
         <i class="fas fa-ban"></i>
-        Anular orden de compra
+        Rechazar orden de compra
     </h1>
 
     <hr class="row align-items-start col-12">
@@ -100,7 +100,7 @@
     @method('DELETE')
     @csrf 
 
-    {!! Form::hidden('anular','valido') !!}
+    {!! Form::hidden('rechazar','valido') !!}
     <fieldset>
 
         <table class="table table-borderless table-striped">
@@ -136,7 +136,7 @@
               <td><label><?php echo($OrdenCompra->user); ?></label></td>
           </tr>
           <tr>
-            <th scope="row">{!! Form::label('observacion', 'Motivo de anulacion') !!}</th>
+            <th scope="row">{!! Form::label('observacion', 'Motivo de rechazo') !!}</th>
             <td>{!! Form::textarea('observacion', null, [ 'class' => 'form-control', 'placeholder' => 'Detalles importantes', 'rows' => '3', 'value' => '', 'required' => 'required']) !!}</td>
         </tr>
         </tbody>

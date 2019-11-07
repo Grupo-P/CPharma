@@ -85,4 +85,16 @@
 		";
 		return $sql;
 	}
+	/**********************************************************************************/
+	/*
+		TITULO: MySQL_Buscar_Orden_Detalle
+		FUNCION: Buscar todos los detalles de una orden
+		RETORNO: articulos que conforman la orden de compra
+		DESARROLLADO POR: SERGIO COVA
+	 */
+	function MySQL_Buscar_Orden_Detalle($codigo_orden) {
+		$sql = "SELECT * FROM orden_compra_detalles 
+		WHERE codigo_orden = '$codigo_orden' AND estatus = 'ACTIVO'";
+		return $sql;
+	}
 ?>

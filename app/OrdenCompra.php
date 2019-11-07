@@ -12,6 +12,6 @@ class OrdenCompra extends Model
      * @var array
      */
     protected $fillable = [
-        'codigo','moneda','condicion_crediticia','dias_credito','sede_origen','sede_destino','proveedor','fecha_estimada_despacho','montoTotalBs','montoTotalUsd','totalUnidades','observacion','calificacion','montoTotalReal','operador_aprobacion','fecha_aprobacion','operador_recepcion','fecha_recepcion','operador_ingreso','fecha_ingreso','operador_cierre','fecha_cierre','estatus','estado','user'
+        'codigo','moneda','condicion_crediticia','dias_credito','sede_origen','sede_destino','proveedor','fecha_estimada_despacho','numero_factura','observacion','calificacion','montoTotalReal','operador_aprobacion','fecha_aprobacion','operador_recepcion','fecha_recepcion','operador_ingreso','fecha_ingreso','operador_cierre','fecha_cierre','estatus','estado','user'
     ];
 }
