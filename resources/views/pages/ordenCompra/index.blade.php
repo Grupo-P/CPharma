@@ -288,9 +288,9 @@
 				<?php
 					}
 				?>
-			<?php
-				}
-			?>	
+				<?php
+					}
+				?>	
 			<!--  FIN Acciones para el departamento de compra -->
 
 
@@ -327,7 +327,32 @@
 				?>
 			<!--  FIN Acciones para el departamento de administracion -->
 
+			<!-- INICIO Acciones para el departamento de recepcion -->
+				<?php
+				if( ($ordenCompra->estado=='APROBADA')
+						&&
+						( (Auth::user()->departamento == 'RECEPCION')
+					 		|| (Auth::user()->departamento == 'TECNOLOGIA')
+					 		|| (Auth::user()->departamento == 'GERENCIA')
+				 		)
+					){
+				?>
 
+				<?php
+					if($ordenCompra->estatus == 'EN ESPERA'){
+				?>  
+					<form action="/ordenCompra/{{$ordenCompra->id}}" method="POST">
+			    @method('DELETE')
+			    @csrf					    
+			    	<button type="submit" name="Recibir" value="solicitud" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Recibir" style="display: inline-block; width: 100%"><i class="fas fa-check"></i></button>
+					</form>
+					<?php
+						}
+					?>  
+				<?php
+					}
+				?>
+			<!--  FIN Acciones para el departamento de recepcion -->
    		</td>
     <!-- Fin Validacion -->
     </tr>
