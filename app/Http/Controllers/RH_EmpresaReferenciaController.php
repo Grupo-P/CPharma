@@ -37,7 +37,7 @@ class RH_EmpresaReferenciaController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function create() {
-        //
+        return view('pages.RRHH.empresaReferencias.create');
     }
 
     /**
