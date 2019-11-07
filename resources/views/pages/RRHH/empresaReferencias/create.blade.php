@@ -1,6 +1,6 @@
 @extends('layouts.model')
 
-@section('title', 'Crear vacante')
+@section('title', 'Crear referencias Lab.')
 
 @section('content')
   <!-- Modal Guardar -->
@@ -19,7 +19,7 @@
           </div>
           <div class="modal-body">
             <h4 class="h6">
-             La vacante no pudo ser almacenada
+             La empresa no pudo ser almacenada
             </h4>
           </div>
           <div class="modal-footer">
@@ -31,11 +31,11 @@
   @endif
 
   <h1 class="h5 text-info">
-    <i class="fas fa-plus"></i>&nbsp;Crear vacante
+    <i class="fas fa-plus"></i>&nbsp;Crear empresa de referencia lab.
   </h1>
   <hr class="row align-items-start col-12">
 
-  <form action="/vacantes/" method="POST" style="display: inline;">  
+  <form action="/empresaReferencias/" method="POST" style="display: inline;">  
     @csrf
     <button type="submit" name="Regresar" role="button" class="btn btn-outline-info btn-sm"data-placement="top">
       <i class="fa fa-reply">&nbsp;Regresar</i>
