@@ -85,13 +85,13 @@ class OrdenCompraController extends Controller
         /*FIN DE SEDE DESTINO*/
 
         /*INICIO DE CONDICION*/
-          if(($request->input('condicion'))=='CREDITO'){
+          if(($request->input('condicion_crediticia'))=='CREDITO'){
             $dias_credito = intval($request->input('dias_credito'));
           }
           else{
             $dias_credito = 0;
           }
-          $OrdenCompra->condicion_crediticia = $request->input('condicion');
+          $OrdenCompra->condicion_crediticia = $request->input('condicion_crediticia');
           $OrdenCompra->dias_credito = $dias_credito;
         /*FIN DE CONDICION*/
 
@@ -160,11 +160,32 @@ class OrdenCompraController extends Controller
        try{
           $OrdenCompra = OrdenCompra::find($id);
           $OrdenCompra->fill($request->all());
+
+        /*INICIO DE SEDE DESTINO*/
+          if(($request->input('CDD'))=='SI'){
+            $OrdenCompra->sede_destino = 'CENTRO DE DISTRIBUCION';
+          }
+          else{
+            $OrdenCompra->sede_destino = $request->input('SedeDestino');
+          }
+        /*FIN DE SEDE DESTINO*/
+
+        /*INICIO DE CONDICION*/
+          if(($request->input('condicion_crediticia'))=='CREDITO'){
+            $dias_credito = intval($request->input('dias_credito'));
+          }
+          else{
+            $dias_credito = 0;
+          }
+          $OrdenCompra->condicion_crediticia = $request->input('condicion_crediticia');
+          $OrdenCompra->dias_credito = $dias_credito;
+        /*FIN DE CONDICION*/
+
           $OrdenCompra->save();
           return redirect()->route('ordenCompra.index')->with('Updated', ' Informacion');
         }
         catch(\Illuminate\Database\QueryException $e){
-            return back()->with('Error', ' Error');
+          return back()->with('Error', ' Error');
         }
     }
 

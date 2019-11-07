@@ -128,7 +128,7 @@
               <td><label><?php echo($OrdenCompra->codigo); ?></label></td>
           </tr>
           <tr>
-              <th scope="row">{!! Form::label('fecha_actual)', 'Fecha Actual') !!}</th>
+              <th scope="row">{!! Form::label('fecha_actual)', 'Fecha Orden') !!}</th>
               <td><label><?php echo($OrdenCompra->created_at); ?></label></td>
           </tr>
           <tr>
@@ -171,7 +171,7 @@
               <th scope="row">{!! Form::label('condicion','Condicion crediticia') !!}
               </th>
               <td>
-                <select name="condicion" id="condicion" class="form-control" onchange="condicion_case()">
+                <select name="condicion_crediticia" id="condicion" class="form-control" onchange="condicion_case()">
                   <option value="CONTADO">CONTADO</option>
                   <option value="CREDITO">CREDITO</option>
                   <option value="PRE PAGADO">PRE PAGADO</option>
