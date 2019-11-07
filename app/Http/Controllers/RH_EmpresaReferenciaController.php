@@ -118,7 +118,27 @@ class RH_EmpresaReferenciaController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id) {
-        return $request;
+        try {
+            $empresaReferencias = RH_EmpresaReferencia::find($id);
+            $empresaReferencias->fill($request->all());
+
+            $empresaReferencias->user = auth()->user()->name;
+            $empresaReferencias->save();
+
+            $Auditoria = new Auditoria();
+            $Auditoria->accion = 'EDITAR';
+            $Auditoria->tabla = 'RH_EMPRESA_REFERENCIAS';
+            $Auditoria->registro = $empresaReferencias->nombre_empresa;
+            $Auditoria->user = auth()->user()->name;
+            $Auditoria->save();
+
+            return redirect()
+                ->route('empresaReferencias.index')
+                ->with('Updated', ' Informacion');
+        }
+        catch(\Illuminate\Database\QueryException $e){
+            return back()->with('Error', ' Error');
+        }
     }
 
     /**
