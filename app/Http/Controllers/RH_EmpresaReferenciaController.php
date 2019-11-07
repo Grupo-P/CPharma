@@ -102,7 +102,12 @@ class RH_EmpresaReferenciaController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function edit($id) {
-        //
+        $empresaReferencias = RH_EmpresaReferencia::find($id);
+
+        return view(
+            'pages.RRHH.empresaReferencias.edit', 
+            compact('empresaReferencias')
+        );
     }
 
     /**
