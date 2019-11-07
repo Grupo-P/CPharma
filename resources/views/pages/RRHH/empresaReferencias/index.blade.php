@@ -137,55 +137,39 @@
       <thead class="thead-dark">
         <tr>
             <th scope="col" class="stickyCP">#</th>
-            <th scope="col" class="stickyCP">Nombres</th>
-            <th scope="col" class="stickyCP">Apellidos</th>
-            <th scope="col" class="stickyCP">Cédula</th>
+            <th scope="col" class="stickyCP">Nombre de la empresa</th>
             <th scope="col" class="stickyCP">Teléfono</th>
+            <th scope="col" class="stickyCP">Correo</th>
             <th scope="col" class="stickyCP">Estatus</th>
             <th scope="col" class="stickyCP">Acciones</th>
         </tr>
       </thead>
 
       <tbody>
-      @foreach($candidatos as $candidato)
+      @foreach($empresaReferencias as $empresaReferencia)
         <tr>
-          <th>{{$candidato->id}}</th>
-          <td>{{$candidato->nombres}}</td>
-          <td>{{$candidato->apellidos}}</td>
-          <td>{{$candidato->cedula}}</td>
-          
-          <?php if($candidato->telefono_celular == '') { ?>
-            <td>{{$candidato->telefono_habitacion}}</td>
-          <?php 
-            } else if($candidato->telefono_habitacion == '') { 
-          ?>
-            <td>{{$candidato->telefono_celular}}</td>
-          <?php 
-            } else {
-          ?>
-            <td>{{$candidato->telefono_celular}}</td>
-          <?php
-            }
-          ?>
-
-          <td>{{$candidato->estatus}}</td>
+          <th>{{$empresaReferencia->id}}</th>
+          <td>{{$empresaReferencia->nombre_empresa}}</td>
+          <td>{{$empresaReferencia->telefono}}</td>
+          <td>{{$empresaReferencia->correo}}</td>
+          <td>{{$empresaReferencia->estatus}}</td>
 
           <!-- ***************** VALIDACION DE ROLES ***************** -->
           <td style="width:140px;">
           <?php
             if(Auth::user()->role == 'MASTER' || Auth::user()->role == 'DEVELOPER') {
 
-              if($candidato->estatus != 'RECHAZADO') {
+              if($empresaReferencia->estatus != 'INACTIVO') {
           ?>
-            <a href="/candidatos/{{$candidato->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
+            <a href="/candidatos/{{$empresaReferencia->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
               <i class="far fa-eye"></i>
             </a>
 
-            <a href="/candidatos/{{$candidato->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
+            <a href="/candidatos/{{$empresaReferencia->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
               <i class="fas fa-edit"></i>
             </a>
 
-            <form action="/candidatos/{{$candidato->id}}" method="POST" style="display: inline;">
+            <form action="/candidatos/{{$empresaReferencia->id}}" method="POST" style="display: inline;">
               @method('DELETE')
               @csrf
               <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Desincorporar">
@@ -194,9 +178,9 @@
             </form>
 
           <?php
-            } else if($candidato->estatus == 'RECHAZADO') {
+            } else if($empresaReferencia->estatus == 'INACTIVO') {
           ?>
-            <form action="/candidatos/{{$candidato->id}}" method="POST" style="display: inline;">
+            <form action="/candidatos/{{$empresaReferencia->id}}" method="POST" style="display: inline;">
               @method('DELETE')
               @csrf
               <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Reincorporar">
@@ -207,17 +191,17 @@
             }
           } else if(Auth::user()->role == 'ANALISTA') {
           ?>
-            <a href="/candidatos/{{$candidato->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
+            <a href="/candidatos/{{$empresaReferencia->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
               <i class="far fa-eye"></i>
             </a>
 
-            <a href="/candidatos/{{$candidato->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
+            <a href="/candidatos/{{$empresaReferencia->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
               <i class="fas fa-edit"></i>
             </a>
           <?php
             } else if(Auth::user()->role == 'USUARIO') {
           ?>
-            <a href="/candidatos/{{$candidato->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
+            <a href="/candidatos/{{$empresaReferencia->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
               <i class="far fa-eye"></i>
             </a>
           <?php
