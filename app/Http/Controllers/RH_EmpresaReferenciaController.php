@@ -148,7 +148,7 @@ class RH_EmpresaReferenciaController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function destroy($id) {
-        $empresaReferencias = RH_Entrevista::find($id);
+        $empresaReferencias = RH_EmpresaReferencia::find($id);
 
         $Auditoria = new Auditoria();
         $Auditoria->tabla = 'RH_EMPRESA_REFERENCIAS';
@@ -172,12 +172,11 @@ class RH_EmpresaReferenciaController extends Controller {
         if($empresaReferencias->estatus == 'ACTIVO'){
             return redirect()
                 ->route('empresaReferencias.index')
-                ->with('Deleted', ' Informacion');
+                ->with('Deleted1', ' Informacion');
         }
 
         return redirect()
             ->route('empresaReferencias.index')
-            ->with('Deleted1', ' Informacion');
-    }
+            ->with('Deleted', ' Informacion');
     }
 }
