@@ -98,8 +98,8 @@
           </tr>
           
           <tr>
-              <th scope="row">{!! Form::label('correo', 'Correo') !!}</th>
-              <td>{!! Form::text('correo', null, [ 'class' => 'form-control', 'placeholder' => 'mherrera@farmacia72.com.ve', 'pattern' => '^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$', 'title' => 'El formato de correo es: usuario@proveedor.dominio']) !!}</td>
+            <th scope="row">{!! Form::label('correo', 'Correo') !!}</th>
+            <td>{!! Form::email('correo', null, [ 'class' => 'form-control', 'placeholder' => 'mherrera@farmacia72.com']) !!}</td>
           </tr>
 
           <tr>
