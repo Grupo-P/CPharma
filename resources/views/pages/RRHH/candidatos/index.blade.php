@@ -148,83 +148,83 @@
 
     <tbody>
       @foreach($candidatos as $candidato)
-      <tr>
-        <th>{{$candidato->id}}</th>
-        <td>{{$candidato->nombres}}</td>
-        <td>{{$candidato->apellidos}}</td>
-        <td>{{$candidato->cedula}}</td>
-          
-        <?php if($candidato->telefono_celular == '') { ?>
-          <td>{{$candidato->telefono_habitacion}}</td>
-        <?php 
-          } else if($candidato->telefono_habitacion == '') { 
-        ?>
-          <td>{{$candidato->telefono_celular}}</td>
-        <?php 
-          } else {
-        ?>
-          <td>{{$candidato->telefono_celular}}</td>
-        <?php
-          }
-        ?>
+        <tr>
+          <th>{{$candidato->id}}</th>
+          <td>{{$candidato->nombres}}</td>
+          <td>{{$candidato->apellidos}}</td>
+          <td>{{$candidato->cedula}}</td>
+            
+          <?php if($candidato->telefono_celular == '') { ?>
+            <td>{{$candidato->telefono_habitacion}}</td>
+          <?php 
+            } else if($candidato->telefono_habitacion == '') { 
+          ?>
+            <td>{{$candidato->telefono_celular}}</td>
+          <?php 
+            } else {
+          ?>
+            <td>{{$candidato->telefono_celular}}</td>
+          <?php
+            }
+          ?>
 
-        <td>{{$candidato->estatus}}</td>
+          <td>{{$candidato->estatus}}</td>
 
-        <!-- ***************** VALIDACION DE ROLES ***************** -->
-        <td style="width:140px;">
-        <?php
-          if(Auth::user()->role == 'MASTER' || Auth::user()->role == 'DEVELOPER') {
+          <!-- ***************** VALIDACION DE ROLES ***************** -->
+          <td style="width:140px;">
+          <?php
+            if(Auth::user()->role == 'MASTER' || Auth::user()->role == 'DEVELOPER') {
 
-            if($candidato->estatus != 'RECHAZADO') {
-        ?>
-          <a href="/candidatos/{{$candidato->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
-            <i class="far fa-eye"></i>
-          </a>
+              if($candidato->estatus != 'RECHAZADO') {
+          ?>
+            <a href="/candidatos/{{$candidato->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
+              <i class="far fa-eye"></i>
+            </a>
 
-          <a href="/candidatos/{{$candidato->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
-            <i class="fas fa-edit"></i>
-          </a>
+            <a href="/candidatos/{{$candidato->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
+              <i class="fas fa-edit"></i>
+            </a>
 
-          <form action="/candidatos/{{$candidato->id}}" method="POST" style="display: inline;">
-            @method('DELETE')
-            @csrf
-            <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Desincorporar">
-              <i class="fa fa-reply"></i>
-            </button>
-          </form>
+            <form action="/candidatos/{{$candidato->id}}" method="POST" style="display: inline;">
+              @method('DELETE')
+              @csrf
+              <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Desincorporar">
+                <i class="fa fa-reply"></i>
+              </button>
+            </form>
 
-        <?php
-          } else if($candidato->estatus == 'RECHAZADO') {
-        ?>
-          <form action="/candidatos/{{$candidato->id}}" method="POST" style="display: inline;">
-            @method('DELETE')
-            @csrf
-            <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Reincorporar">
-              <i class="fa fa-share"></i>
-            </button>
-          </form>
-        <?php
-          }
-        } else if(Auth::user()->role == 'ANALISTA') {
-        ?>
-          <a href="/candidatos/{{$candidato->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
-            <i class="far fa-eye"></i>
-          </a>
+          <?php
+            } else if($candidato->estatus == 'RECHAZADO') {
+          ?>
+            <form action="/candidatos/{{$candidato->id}}" method="POST" style="display: inline;">
+              @method('DELETE')
+              @csrf
+              <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Reincorporar">
+                <i class="fa fa-share"></i>
+              </button>
+            </form>
+          <?php
+            }
+          } else if(Auth::user()->role == 'ANALISTA') {
+          ?>
+            <a href="/candidatos/{{$candidato->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
+              <i class="far fa-eye"></i>
+            </a>
 
-          <a href="/candidatos/{{$candidato->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
-            <i class="fas fa-edit"></i>
-          </a>
-        <?php
-          } else if(Auth::user()->role == 'USUARIO') {
-        ?>
-          <a href="/candidatos/{{$candidato->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
-            <i class="far fa-eye"></i>
-          </a>
-        <?php
-          }
-        ?>
-        </td>
-      </tr>
+            <a href="/candidatos/{{$candidato->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
+              <i class="fas fa-edit"></i>
+            </a>
+          <?php
+            } else if(Auth::user()->role == 'USUARIO') {
+          ?>
+            <a href="/candidatos/{{$candidato->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
+              <i class="far fa-eye"></i>
+            </a>
+          <?php
+            }
+          ?>
+          </td>
+        </tr>
       @endforeach
     </tbody>
   </table>
