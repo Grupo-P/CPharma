@@ -137,8 +137,13 @@
           </tr>
 
           <tr>
-            <th scope="row">{!! Form::label('telefono_celular', 'Teléfono celular') !!}</th>
-            <td>{!! Form::text('telefono_celular', null, [ 'class' => 'form-control', 'placeholder' => '0414-1234567', 'pattern' => '^0[1246]{3}-[0-9]{7}$']) !!}</td>
+            <th scope="row">
+              <label for="telefono_celular">Teléfono celular</label>
+            </th>
+            
+            <td>
+              <input type="tel" class="form-control" name="telefono_celular" id="telefono_celular" placeholder="0414-1234567" pattern="^0[1246]{3}-[0-9]{7}$">
+            </td>
           </tr>
 
           <tr>
