@@ -225,21 +225,27 @@
       $('[data-toggle="tooltip"]').tooltip();
 
       var nombres = document.querySelector('#nombres');
-      var apellidos = $('#apellidos');
-      var cedula = $('#cedula');
-      var telefono_celular = $('#telefono_celular');
-      var telefono_habitacion = $('#telefono_habitacion');
-      var correo = $('#correo');
-      var direccion = $('#direccion');
+      var apellidos = document.querySelector('#apellidos');
+      var cedula = document.querySelector('#cedula');
+      var telefono_celular = document.querySelector('#telefono_celular');
+      var telefono_habitacion = document.querySelector('#telefono_habitacion');
+      /*var correo = document.querySelector('#correo');
+      var direccion = document.querySelector('#direccion');*/
       var enviar = $('#enviar');
       var crear_candidato = $('#crear_candidato');
-      var clasesError = 'border border-danger campoNulo';
-      var telefonoNulo = 'Debe indicar al menos un teléfono';
 
-      enviar.click(function(e) {
+      /*enviar.click(function(e) {
         e.preventDefault();
-
+        
         alert(nombres.validity.patternMismatch);
+        alert(apellidos.validity.patternMismatch);
+        alert(cedula.validity.patternMismatch);
+        alert(telefono_celular.validity.patternMismatch);
+        alert(telefono_habitacion.validity.patternMismatch);
+      });*/
+
+      crear_candidato.submit(function(e) {
+
       });
     });
     $('#exampleModalCenter').modal('show');
