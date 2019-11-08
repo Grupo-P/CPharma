@@ -76,15 +76,27 @@
               </table>
             </td>
           </tr>
+
+          <tr>
+            <th scope="row">
+              <label for="telefono_celular">Teléfono celular</label>
+            </th>
+            
+            <td>
+              <input type="tel" class="form-control" name="telefono_celular" id="telefono_celular" placeholder="0414-1234567" pattern="^0[1246]{3}-[0-9]{7}$">
+            </td>
+          </tr>
+
+          <tr>
+            <th scope="row">
+              <label for="telefono_habitacion">Teléfono de habitación</label>
+            </th>
+            
+            <td>
+              <input type="tel" class="form-control" name="telefono_habitacion" id="telefono_habitacion" placeholder="0261-1234567" pattern="^0[1246]{3}-[0-9]{7}$">
+            </td>
+          </tr>
           
-          <tr>
-              <th scope="row">{!! Form::label('telefono_celular', 'Teléfono celular') !!}</th>
-              <td>{!! Form::text('telefono_celular', null, [ 'class' => 'form-control', 'placeholder' => '0414-1234567', 'pattern' => '^0[1246]{3}-[0-9]{7}$', 'title' => 'El formato telefónico es: 0xxx-xxxxxxx']) !!}</td>
-          </tr>
-          <tr>
-              <th scope="row">{!! Form::label('telefono_habitacion', 'Teléfono de habitación') !!}</th>
-              <td>{!! Form::text('telefono_habitacion', null, [ 'class' => 'form-control', 'placeholder' => '0261-1234567', 'pattern' => '^0[1246]{3}-[0-9]{7}$', 'title' => 'El formato telefónico es: 0xxx-xxxxxxx']) !!}</td>
-          </tr>
           <tr>
               <th scope="row">{!! Form::label('correo', 'Correo') !!}</th>
               <td>{!! Form::text('correo', null, [ 'class' => 'form-control', 'placeholder' => 'mherrera@farmacia72.com.ve', 'pattern' => '^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$', 'title' => 'El formato de correo es: usuario@proveedor.dominio']) !!}</td>
