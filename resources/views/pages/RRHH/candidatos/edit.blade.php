@@ -59,7 +59,7 @@
             <th scope="row">{!! Form::label('apellidos', 'Apellidos *', ['title' => 'Este campo es requerido']) !!}</th>
             <td>{!! Form::text('apellidos', null, [ 'class' => 'form-control', 'placeholder' => 'Herrera Perez', 'pattern' => '^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s\']+$', 'required']) !!}</td>
           </tr>
-          
+
           <tr>
             <th scope="row">{!! Form::label('cedula', 'Cédula *', ['title' => 'Este campo es requerido']) !!}</th>
             <td>
@@ -70,12 +70,13 @@
                   </td>
 
                   <td>
-                    {!! Form::text('cedula', null, [ 'class' => 'form-control', 'placeholder' => '24921001', 'pattern' => '^[0-9]{7,}$', 'title' => 'La cédula debe ser un valor numérico', 'required']) !!}
+                    {!! Form::text('cedula', null, [ 'class' => 'form-control', 'placeholder' => '24921001', 'pattern' => '^[0-9]{7,}$', 'required']) !!}
                   </td>
                 </tr>
               </table>
             </td>
           </tr>
+          
           <tr>
               <th scope="row">{!! Form::label('telefono_celular', 'Teléfono celular') !!}</th>
               <td>{!! Form::text('telefono_celular', null, [ 'class' => 'form-control', 'placeholder' => '0414-1234567', 'pattern' => '^0[1246]{3}-[0-9]{7}$', 'title' => 'El formato telefónico es: 0xxx-xxxxxxx']) !!}</td>
