@@ -225,9 +225,6 @@
       $('[data-toggle="tooltip"]').tooltip();
 
       //Objetos DOM JavaScript
-      var nombres = document.querySelector('#nombres');
-      var apellidos = document.querySelector('#apellidos');
-      var cedula = document.querySelector('#cedula');
       var telefono_celular = document.querySelector('#telefono_celular');
       var telefono_habitacion = document.querySelector('#telefono_habitacion');
 
@@ -260,7 +257,7 @@
           telefono_celular.setCustomValidity('');
           telefono_habitacion.setCustomValidity('');
         }
-        
+
       });
     });
     $('#exampleModalCenter').modal('show');
