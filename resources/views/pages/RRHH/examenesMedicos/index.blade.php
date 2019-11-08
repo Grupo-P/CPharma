@@ -23,7 +23,7 @@
             </button>
           </div>
           <div class="modal-body">
-            <h4 class="h6">Registro de Examenes almacenado con Éxito</h4>
+            <h4 class="h6">Registro de Examenes almacenado con éxito</h4>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-outline-success" data-dismiss="modal">Aceptar</button>
@@ -94,7 +94,7 @@
             </button>
           </div>
           <div class="modal-body">
-            <h4 class="h6">Registro de Examenes Desincorporado con Éxito </h4>
+            <h4 class="h6">Registro de Examenes Desincorporado con éxito</h4>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-outline-success" data-dismiss="modal">Aceptar</button>
@@ -146,70 +146,70 @@
 
     <tbody>
       @foreach($examenesm as $examen)
-      <tr>
-        <th>{{$examen->id}}</th>
-        <td>{{$examen->empresa}}</td>
-        <td>{{$examen->representante}}</td>
-        <td>{{$examen->estado}}</td>
-        <td>{{$examen->estatus}}</td>
+        <tr>
+          <th>{{$examen->id}}</th>
+          <td>{{$examen->empresa}}</td>
+          <td>{{$examen->representante}}</td>
+          <td>{{$examen->estado}}</td>
+          <td>{{$examen->estatus}}</td>
 
-        <!-- Inicio Validacion de ROLES -->
-        <td style="width:140px;">
-        <?php
-          if(Auth::user()->role == 'MASTER' || Auth::user()->role == 'DEVELOPER') {
-            if($examen->estatus == 'ACTIVO') {
-        ?>
-          <a href="/examenesm/{{$examen->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
-            <i class="far fa-eye"></i>
-          </a>
-
-          <a href="/examenesm/{{$examen->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
-            <i class="fas fa-edit"></i>
-          </a>
-
-          <form action="/examenesm/{{$examen->id}}" method="POST" style="display: inline;">
-            @method('DELETE')
-            @csrf
-            <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Desincorporar"><i class="fa fa-reply"></i></button>
-          </form>
+          <!-- Inicio Validacion de ROLES -->
+          <td style="width:140px;">
           <?php
-            }
-            else if($examen->estatus == 'INACTIVO') {
+            if(Auth::user()->role == 'MASTER' || Auth::user()->role == 'DEVELOPER') {
+              if($examen->estatus == 'ACTIVO') {
           ?>
+            <a href="/examenesm/{{$examen->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
+              <i class="far fa-eye"></i>
+            </a>
 
-          <form action="/examenesm/{{$examen->id}}" method="POST" style="display: inline;">
-            @method('DELETE')
-            @csrf
-            <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Reincorporar"><i class="fa fa-share"></i></button>
-          </form>
+            <a href="/examenesm/{{$examen->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
+              <i class="fas fa-edit"></i>
+            </a>
 
-          <?php
-            }
-          } else if(Auth::user()->role == 'ANALISTA') {
-          ?>
+            <form action="/examenesm/{{$examen->id}}" method="POST" style="display: inline;">
+              @method('DELETE')
+              @csrf
+              <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Desincorporar"><i class="fa fa-reply"></i></button>
+            </form>
+            <?php
+              }
+              else if($examen->estatus == 'INACTIVO') {
+            ?>
 
-          <a href="/examenesm/{{$examen->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
-            <i class="far fa-eye"></i>
-          </a>
+            <form action="/examenesm/{{$examen->id}}" method="POST" style="display: inline;">
+              @method('DELETE')
+              @csrf
+              <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Reincorporar"><i class="fa fa-share"></i></button>
+            </form>
 
-          <a href="/examenesm/{{$examen->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
-            <i class="fas fa-edit"></i>
-          </a>
+            <?php
+              }
+            } else if(Auth::user()->role == 'ANALISTA') {
+            ?>
 
-          <?php
-            } else if(Auth::user()->role == 'USUARIO') {
-          ?>
+            <a href="/examenesm/{{$examen->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
+              <i class="far fa-eye"></i>
+            </a>
 
-          <a href="/examenesm/{{$examen->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
-            <i class="far fa-eye"></i>
-          </a>
+            <a href="/examenesm/{{$examen->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
+              <i class="fas fa-edit"></i>
+            </a>
 
-          <?php
-            }
-          ?>
-        </td>
-        <!-- Fin Validacion de ROLES -->
-      </tr>
+            <?php
+              } else if(Auth::user()->role == 'USUARIO') {
+            ?>
+
+            <a href="/examenesm/{{$examen->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
+              <i class="far fa-eye"></i>
+            </a>
+
+            <?php
+              }
+            ?>
+          </td>
+          <!-- Fin Validacion de ROLES -->
+        </tr>
       @endforeach
     </tbody>
   </table>

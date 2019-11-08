@@ -134,17 +134,17 @@
   <br/>
 
   <table class="table table-striped table-borderless col-12 sortable" id="myTable">
-      <thead class="thead-dark">
-        <tr>
-            <th scope="col" class="stickyCP">#</th>
-            <th scope="col" class="stickyCP">Nombre de la empresa</th>
-            <th scope="col" class="stickyCP">Teléfono</th>
-            <th scope="col" class="stickyCP">Estatus</th>
-            <th scope="col" class="stickyCP">Acciones</th>
-        </tr>
-      </thead>
+    <thead class="thead-dark">
+      <tr>
+        <th scope="col" class="stickyCP">#</th>
+        <th scope="col" class="stickyCP">Nombre de la empresa</th>
+        <th scope="col" class="stickyCP">Teléfono</th>
+        <th scope="col" class="stickyCP">Estatus</th>
+        <th scope="col" class="stickyCP">Acciones</th>
+      </tr>
+    </thead>
 
-      <tbody>
+    <tbody>
       @foreach($empresaReferencias as $empresaReferencia)
         <tr>
           <th>{{$empresaReferencia->id}}</th>
@@ -205,9 +205,9 @@
           <?php
             }
           ?>
-        </td>
-      </tr>
-    @endforeach
+          </td>
+        </tr>
+      @endforeach
     </tbody>
   </table>
 

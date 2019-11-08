@@ -25,7 +25,7 @@
             </button>
           </div>
           <div class="modal-body">
-            <h4 class="h6">Vacante almacenada con exito</h4>
+            <h4 class="h6">Vacante almacenada con éxito</h4>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-outline-success" data-dismiss="modal">Aceptar</button>
@@ -49,7 +49,7 @@
             </button>
           </div>
           <div class="modal-body">
-            <h4 class="h6">Vacante modificada con exito</h4>
+            <h4 class="h6">Vacante modificada con éxito</h4>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-outline-success" data-dismiss="modal">Aceptar</button>
@@ -136,21 +136,21 @@
   <br/>
 
   <table class="table table-striped table-borderless col-12 sortable" id="myTable">
-      <thead class="thead-dark">
-        <tr>
-            <th scope="col" class="stickyCP">#</th>
-            <th scope="col" class="stickyCP">Sede</th>
-            <th scope="col" class="stickyCP">Nombre de la vacante</th>
-            <th scope="col" class="stickyCP">Departamento</th>
-            <th scope="col" class="stickyCP">Turno</th>
-            <th scope="col" class="stickyCP">Nivel de urgencia</th>
-            <th scope="col" class="stickyCP">Cantidad requerida</th>
-            <th scope="col" class="stickyCP">Estatus</th>
-            <th scope="col" class="stickyCP">Acciones</th>
-        </tr>
-      </thead>
+    <thead class="thead-dark">
+      <tr>
+        <th scope="col" class="stickyCP">#</th>
+        <th scope="col" class="stickyCP">Sede</th>
+        <th scope="col" class="stickyCP">Nombre de la vacante</th>
+        <th scope="col" class="stickyCP">Departamento</th>
+        <th scope="col" class="stickyCP">Turno</th>
+        <th scope="col" class="stickyCP">Nivel de urgencia</th>
+        <th scope="col" class="stickyCP">Cantidad requerida</th>
+        <th scope="col" class="stickyCP">Estatus</th>
+        <th scope="col" class="stickyCP">Acciones</th>
+      </tr>
+    </thead>
 
-      <tbody>
+    <tbody>
       @foreach($vacantes as $vacante)
         <tr>
           <th>{{$vacante->id}}</th>
@@ -215,9 +215,9 @@
           <?php
             }
           ?>
-        </td>
-      </tr>
-    @endforeach
+          </td>
+        </tr>
+      @endforeach
     </tbody>
   </table>
 
