@@ -23,7 +23,7 @@
             </button>
           </div>
           <div class="modal-body">
-            <h4 class="h6">Registro de Examenes almacenado con Éxito</h4>
+            <h4 class="h6">Registro de Examenes almacenado con éxito</h4>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-outline-success" data-dismiss="modal">Aceptar</button>
@@ -94,7 +94,7 @@
             </button>
           </div>
           <div class="modal-body">
-            <h4 class="h6">Registro de Examenes Desincorporado con Éxito </h4>
+            <h4 class="h6">Registro de Examenes Desincorporado con éxito</h4>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-outline-success" data-dismiss="modal">Aceptar</button>
