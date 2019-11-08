@@ -43,6 +43,7 @@
       <i class="fa fa-reply">&nbsp;Regresar</i>
     </button>
   </form>
+  
   <br/><br/>
 
   {!! Form::open(['route' => 'vacantes.store', 'method' => 'POST']) !!}
