@@ -26,15 +26,15 @@
   @endif
 
   <h1 class="h5 text-info">
-    <i class="fas fa-edit"></i>
-    Modificar candidato
+    <i class="fas fa-edit"></i>&nbsp;Modificar candidato
   </h1>
-
   <hr class="row align-items-start col-12">
 
   <form action="/candidatos/" method="POST" style="display: inline;">  
     @csrf
-    <button type="submit" name="Regresar" role="button" class="btn btn-outline-info btn-sm" data-placement="top"><i class="fa fa-reply">&nbsp;Regresar</i></button>
+    <button type="submit" name="Regresar" role="button" class="btn btn-outline-info btn-sm" data-placement="top">
+      <i class="fa fa-reply">&nbsp;Regresar</i>
+    </button>
   </form>
 
   <br/><br/>
