@@ -39,7 +39,7 @@
 
   <br/><br/>
 
-  {!! Form::model($candidatos, ['route' => ['candidatos.update', $candidatos], 'method' => 'PUT']) !!}
+  {!! Form::model($candidatos, ['route' => ['candidatos.update', $candidatos], 'method' => 'PUT', 'id' => 'crear_candidato']) !!}
     <fieldset>
       <table class="table table-borderless table-striped">
         <thead class="thead-dark">
@@ -79,24 +79,24 @@
 
           <tr>
             <th scope="row">
-              <label for="telefono_celular">Teléfono celular</label>
+              {!! Form::label('telefono_celular', 'Teléfono celular') !!}
             </th>
             
             <td>
-              <input type="tel" class="form-control" name="telefono_celular" id="telefono_celular" placeholder="0414-1234567" pattern="^0[1246]{3}-[0-9]{7}$">
+              {!! Form::tel('telefono_celular', null, [ 'class' => 'form-control', 'placeholder' => '0414-1234567']) !!}
             </td>
           </tr>
 
           <tr>
             <th scope="row">
-              <label for="telefono_habitacion">Teléfono de habitación</label>
+              {!! Form::label('telefono_habitacion', 'Teléfono de habitación') !!}
             </th>
             
             <td>
-              <input type="tel" class="form-control" name="telefono_habitacion" id="telefono_habitacion" placeholder="0261-1234567" pattern="^0[1246]{3}-[0-9]{7}$">
+              {!! Form::tel('telefono_habitacion', null, [ 'class' => 'form-control', 'placeholder' => '0261-1234567']) !!}
             </td>
           </tr>
-          
+
           <tr>
             <th scope="row">{!! Form::label('correo', 'Correo') !!}</th>
             <td>{!! Form::email('correo', null, [ 'class' => 'form-control', 'placeholder' => 'mherrera@farmacia72.com']) !!}</td>
@@ -156,7 +156,7 @@
           </tr>
         </tbody>
       </table>
-      {!! Form::submit('Guardar', ['class' => 'btn btn-outline-success btn-md']) !!}
+      {!! Form::submit('Guardar', ['class' => 'btn btn-outline-success btn-md', 'id' => 'enviar']) !!}
     </fieldset>
   {!! Form::close()!!}
 
@@ -164,9 +164,60 @@
     $(document).ready(function(){
       $('[data-toggle="tooltip"]').tooltip();
 
+      //Objetos DOM JavaScript
+      var telefono_celular = document.querySelector('#telefono_celular');
+      var telefono_habitacion = document.querySelector('#telefono_habitacion');
+
+      //Objetos DOM JQuery
+      var enviar = $('#enviar');
+      var crear_candidato = $('#crear_candidato');
       var cedula = $('#cedula');
 
+      //Expresiones regulares
+      var regExp = /^0[1246]{3}-[0-9]{7}$/;
+
       cedula.val(cedula.val().substring(2));
+
+      enviar.click(function() {
+
+        if((telefono_celular.value == '') && (telefono_habitacion.value == '')) {
+
+          telefono_celular.setCustomValidity('Debe ingresar al menos un Teléfono');
+          telefono_habitacion.setCustomValidity('Debe ingresar al menos un Teléfono');
+        }
+
+      });
+
+      crear_candidato.submit(function(e) {
+
+        if((telefono_celular.value == '') && (telefono_habitacion.value == '')) {
+          
+          e.preventDefault();
+        }
+        else if(!regExp.test(telefono_celular.value)) {
+          
+          e.preventDefault();
+
+          telefono_celular.setCustomValidity('Ingrese un teléfono con el patrón especificado 0xxx-xxxxxxx');
+        }
+        else if(!regExp.test(telefono_habitacion.value)) {
+          
+          e.preventDefault();
+
+          telefono_habitacion.setCustomValidity('Ingrese un teléfono con el patrón especificado 0xxx-xxxxxxx');
+        }
+
+      });
+
+      $('#telefono_celular, #telefono_habitacion').on({
+        
+        keydown: function(e) {
+
+          telefono_celular.setCustomValidity('');
+          telefono_habitacion.setCustomValidity('');
+        }
+
+      });
     });
     $('#exampleModalCenter').modal('show');
   </script>
