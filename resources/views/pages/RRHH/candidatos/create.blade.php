@@ -235,13 +235,32 @@
       var enviar = $('#enviar');
       var crear_candidato = $('#crear_candidato');
 
-      crear_candidato.submit(function(e) {
+      enviar.click(function() {
 
         if((telefono_celular.value == '') && (telefono_habitacion.value == '')) {
 
-          e.preventDefault();
-          //nombres.validity.patternMismatch
+          telefono_celular.setCustomValidity('Debe ingresar al menos un Teléfono');
+          telefono_habitacion.setCustomValidity('Debe ingresar al menos un Teléfono');
         }
+
+      });
+
+      crear_candidato.submit(function(e) {
+
+        if((telefono_celular.value == '') && (telefono_habitacion.value == '')) {
+          e.preventDefault();
+        }
+
+      });
+
+      $('#telefono_celular, #telefono_habitacion').on({
+        
+        keydown: function(e) {
+
+          telefono_celular.setCustomValidity('');
+          telefono_habitacion.setCustomValidity('');
+        }
+        
       });
     });
     $('#exampleModalCenter').modal('show');
