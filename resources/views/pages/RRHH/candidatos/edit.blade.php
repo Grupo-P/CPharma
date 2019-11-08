@@ -185,6 +185,14 @@
           telefono_celular.setCustomValidity('Debe ingresar al menos un Teléfono');
           telefono_habitacion.setCustomValidity('Debe ingresar al menos un Teléfono');
         }
+        else if((telefono_celular.value != '') && (!regExp.test(telefono_celular.value))) {
+
+          telefono_celular.setCustomValidity('Ingrese un teléfono con el patrón especificado 0xxx-xxxxxxx');
+        }
+        else if((telefono_habitacion.value != '') && (!regExp.test(telefono_habitacion.value))) {
+
+          telefono_habitacion.setCustomValidity('Ingrese un teléfono con el patrón especificado 0xxx-xxxxxxx');
+        }
 
       });
 
@@ -194,17 +202,13 @@
           
           e.preventDefault();
         }
-        else if(!regExp.test(telefono_celular.value)) {
+        else if((telefono_celular.value != '') && (!regExp.test(telefono_celular.value))) {
           
           e.preventDefault();
-
-          telefono_celular.setCustomValidity('Ingrese un teléfono con el patrón especificado 0xxx-xxxxxxx');
         }
-        else if(!regExp.test(telefono_habitacion.value)) {
+        else if((telefono_habitacion.value != '') && (!regExp.test(telefono_habitacion.value))) {
           
           e.preventDefault();
-
-          telefono_habitacion.setCustomValidity('Ingrese un teléfono con el patrón especificado 0xxx-xxxxxxx');
         }
 
       });
