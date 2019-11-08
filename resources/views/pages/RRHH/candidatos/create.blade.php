@@ -224,28 +224,24 @@
     $(document).ready(function() {
       $('[data-toggle="tooltip"]').tooltip();
 
+      //Objetos DOM JavaScript
       var nombres = document.querySelector('#nombres');
       var apellidos = document.querySelector('#apellidos');
       var cedula = document.querySelector('#cedula');
       var telefono_celular = document.querySelector('#telefono_celular');
       var telefono_habitacion = document.querySelector('#telefono_habitacion');
-      /*var correo = document.querySelector('#correo');
-      var direccion = document.querySelector('#direccion');*/
+
+      //Objetos DOM JQuery
       var enviar = $('#enviar');
       var crear_candidato = $('#crear_candidato');
 
-      /*enviar.click(function(e) {
-        e.preventDefault();
-        
-        alert(nombres.validity.patternMismatch);
-        alert(apellidos.validity.patternMismatch);
-        alert(cedula.validity.patternMismatch);
-        alert(telefono_celular.validity.patternMismatch);
-        alert(telefono_habitacion.validity.patternMismatch);
-      });*/
-
       crear_candidato.submit(function(e) {
 
+        if((telefono_celular.value == '') && (telefono_habitacion.value == '')) {
+
+          e.preventDefault();
+          //nombres.validity.patternMismatch
+        }
       });
     });
     $('#exampleModalCenter').modal('show');
