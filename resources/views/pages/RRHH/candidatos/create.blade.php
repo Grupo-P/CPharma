@@ -147,8 +147,13 @@
           </tr>
 
           <tr>
-            <th scope="row">{!! Form::label('telefono_habitacion', 'Teléfono de habitación') !!}</th>
-            <td>{!! Form::text('telefono_habitacion', null, [ 'class' => 'form-control', 'placeholder' => '0261-1234567', 'pattern' => '^0[1246]{3}-[0-9]{7}$']) !!}</td>
+            <th scope="row">
+              <label for="telefono_habitacion">Teléfono de habitación</label>
+            </th>
+            
+            <td>
+              <input type="tel" class="form-control" name="telefono_habitacion" id="telefono_habitacion" placeholder="0261-1234567" pattern="^0[1246]{3}-[0-9]{7}$">
+            </td>
           </tr>
 
           <tr>
