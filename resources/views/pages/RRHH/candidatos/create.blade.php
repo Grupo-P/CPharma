@@ -98,7 +98,9 @@
     </div>
   @endif
 
-  <h1 class="h5 text-info"><i class="fas fa-plus"></i>&nbsp;Agregar candidato</h1>
+  <h1 class="h5 text-info">
+    <i class="fas fa-plus"></i>&nbsp;Agregar candidato
+  </h1>
   <hr class="row align-items-start col-12">
 
   <form action="/candidatos/" method="POST" style="display: inline;">  
