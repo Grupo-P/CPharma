@@ -223,6 +223,24 @@
   <script>
     $(document).ready(function() {
       $('[data-toggle="tooltip"]').tooltip();
+
+      var nombres = document.querySelector('#nombres');
+      var apellidos = $('#apellidos');
+      var cedula = $('#cedula');
+      var telefono_celular = $('#telefono_celular');
+      var telefono_habitacion = $('#telefono_habitacion');
+      var correo = $('#correo');
+      var direccion = $('#direccion');
+      var enviar = $('#enviar');
+      var crear_candidato = $('#crear_candidato');
+      var clasesError = 'border border-danger campoNulo';
+      var telefonoNulo = 'Debe indicar al menos un teléfono';
+
+      enviar.click(function(e) {
+        e.preventDefault();
+
+        alert(nombres.validity.patternMismatch);
+      });
     });
     $('#exampleModalCenter').modal('show');
   </script>
