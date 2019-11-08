@@ -23,7 +23,7 @@
             </button>
           </div>
           <div class="modal-body">
-            <h4 class="h6">Candidato almacenado con exito</h4>
+            <h4 class="h6">Candidato almacenado con éxito</h4>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-outline-success" data-dismiss="modal">Aceptar</button>
@@ -47,7 +47,7 @@
             </button>
           </div>
           <div class="modal-body">
-            <h4 class="h6">Candidato modificado con exito</h4>
+            <h4 class="h6">Candidato modificado con éxito</h4>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-outline-success" data-dismiss="modal">Aceptar</button>
@@ -107,7 +107,6 @@
   <h1 class="h5 text-info">
     <i class="fas fa-user-check"></i>&nbsp;Candidatos
   </h1>
-
   <hr class="row align-items-start col-12">
 
   <table style="width:100%;">
@@ -134,26 +133,26 @@
   <br/>
 
   <table class="table table-striped table-borderless col-12 sortable" id="myTable">
-      <thead class="thead-dark">
-        <tr>
-            <th scope="col" class="stickyCP">#</th>
-            <th scope="col" class="stickyCP">Nombres</th>
-            <th scope="col" class="stickyCP">Apellidos</th>
-            <th scope="col" class="stickyCP">Cédula</th>
-            <th scope="col" class="stickyCP">Teléfono</th>
-            <th scope="col" class="stickyCP">Estatus</th>
-            <th scope="col" class="stickyCP">Acciones</th>
-        </tr>
-      </thead>
+    <thead class="thead-dark">
+      <tr>
+        <th scope="col" class="stickyCP">#</th>
+        <th scope="col" class="stickyCP">Nombres</th>
+        <th scope="col" class="stickyCP">Apellidos</th>
+        <th scope="col" class="stickyCP">Cédula</th>
+        <th scope="col" class="stickyCP">Teléfono</th>
+        <th scope="col" class="stickyCP">Estatus</th>
+        <th scope="col" class="stickyCP">Acciones</th>
+      </tr>
+    </thead>
 
-      <tbody>
+    <tbody>
       @foreach($candidatos as $candidato)
         <tr>
           <th>{{$candidato->id}}</th>
           <td>{{$candidato->nombres}}</td>
           <td>{{$candidato->apellidos}}</td>
           <td>{{$candidato->cedula}}</td>
-          
+            
           <?php if($candidato->telefono_celular == '') { ?>
             <td>{{$candidato->telefono_habitacion}}</td>
           <?php 
@@ -223,9 +222,9 @@
           <?php
             }
           ?>
-        </td>
-      </tr>
-    @endforeach
+          </td>
+        </tr>
+      @endforeach
     </tbody>
   </table>
 
