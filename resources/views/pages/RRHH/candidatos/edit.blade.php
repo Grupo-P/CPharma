@@ -121,7 +121,7 @@
                 '' => 'Seleccione una opción',
                 'Si' => 'Si', 
                 'No' => 'No',
-              ], 'No', ['class' => 'form-control', 'required']) !!}
+              ], null, ['class' => 'form-control', 'required']) !!}
             </td>
           </tr>
 
@@ -146,12 +146,13 @@
           </tr>
 
           <tr>
-              <th scope="row">{!! Form::label('direccion', 'Dirección *', ['title' => 'Este campo es requerido']) !!}</th>
-              <td>{!! Form::textarea('direccion', null, [ 'class' => 'form-control', 'placeholder' => 'Av. 15 delicias con calle 72', 'rows' => '3', 'required']) !!}</td>
+            <th scope="row">{!! Form::label('direccion', 'Dirección *', ['title' => 'Este campo es requerido']) !!}</th>
+            <td>{!! Form::textarea('direccion', null, [ 'class' => 'form-control', 'placeholder' => 'Av. 15 Delicias con calle 72', 'rows' => '3', 'required']) !!}</td>
           </tr>
+
           <tr>
-              <th scope="row">{!! Form::label('observaciones', 'Observaciones') !!}</th>
-              <td>{!! Form::textarea('observaciones', null, [ 'class' => 'form-control', 'placeholder' => 'Detalles importantes del candidato', 'rows' => '3']) !!}</td>
+            <th scope="row">{!! Form::label('observaciones', 'Observaciones') !!}</th>
+            <td>{!! Form::textarea('observaciones', null, [ 'class' => 'form-control', 'placeholder' => 'Detalles importantes del candidato', 'rows' => '3']) !!}</td>
           </tr>
         </tbody>
       </table>
