@@ -136,6 +136,82 @@
 	    </tr>
 	</table>
 	<br/>
+	
+	<table class="table table-striped table-borderless col-12 sortable">
+  	<thead class="thead-dark">
+	    <tr>
+	      	<th scope="col" colspan="7" style="text-align: center;">CLASIFICACION</th>
+	    </tr>
+		</thead>
+		<tbody>
+	  	<tr>
+	  	<td style="width:14%;" align="center">
+	  		<?php
+	  			$tipo = 0;
+	  		?>
+				<form action="/ordenCompra?Tipo={{$tipo}}" method="GET" style="display: inline;">
+			    <button type="submit" name="Tipo" role="button" class="btn btn-outline-success btn-sm" value="0">EN PROCESO</button>
+				</form>
+	    </td>
+
+	  	<td style="width:14%;" align="center">
+	  		<?php
+	  			$tipo = 1;
+	  		?>
+				<form action="/ordenCompra?Tipo={{$tipo}}" method="GET" style="display: inline;">
+			    <button type="submit" name="Tipo" role="button" class="btn btn-outline-success btn-sm" value="1">POR APROBAR</button>
+				</form>
+	    </td>
+
+	    <td style="width:14%;" align="center">
+	      	<?php
+	  			$tipo = 2;
+	  		?>
+				<form action="/ordenCompra?Tipo={{$tipo}}" method="GET" style="display: inline;">
+			    <button type="submit" name="Tipo" role="button" class="btn btn-outline-danger btn-sm" value="2">ANULADA</button>
+					</form>	
+			</td>
+
+	    <td style="width:14%;" align="center">
+	      	<?php
+	  			$tipo = 3;
+	  		?>
+				<form action="/ordenCompra?Tipo={{$tipo}}" method="GET" style="display: inline;">
+			    <button type="submit" name="Tipo" role="button" class="btn btn-outline-danger btn-sm" value="3">RECHAZADA</button>
+				</form>						
+	    </td>
+
+	    <td style="width:14%;" align="center">
+	      	<?php
+	  			$tipo = 4;
+	  		?>
+				<form action="/ordenCompra?Tipo={{$tipo}}" method="GET" style="display: inline;">
+			    <button type="submit" name="Tipo" role="button" class="btn btn-outline-info btn-sm" value="4">RECIBIDA</button>
+				</form>						
+	    </td>
+
+	    <td style="width:14%;" align="center">
+	      	<?php
+	  			$tipo = 5;
+	  		?>
+				<form action="/ordenCompra?Tipo={{$tipo}}" method="GET" style="display: inline;">
+			    <button type="submit" name="Tipo" role="button" class="btn btn-outline-info btn-sm" value="5">INGRESADA</button>
+				</form>						
+	    </td>
+
+	    <td style="width:14%;" align="center">
+	      	<?php
+	  			$tipo = 6;
+	  		?>
+				<form action="/ordenCompra?Tipo={{$tipo}}" method="GET" style="display: inline;">
+			    <button type="submit" name="Tipo" role="button" class="btn btn-outline-dark btn-sm" value="6">CERRADA</button>
+				</form>						
+	    </td>
+
+	    </tr>
+		</tbody>
+	</table>
+	<br/>
 
 	<table class="table table-striped table-borderless col-12 sortable" id="myTable">
 	  	<thead class="thead-dark">

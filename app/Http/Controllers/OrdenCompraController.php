@@ -27,7 +27,54 @@ class OrdenCompraController extends Controller
      */
     public function index()
     { 
-      $OrdenCompra =  OrdenCompra::all();
+      if(isset($_GET['Tipo'])){
+        $Tipo = $_GET['Tipo'];
+      }
+      else{
+          $Tipo = 8;
+      }
+        
+      switch ($Tipo) {
+          case 0:
+              $OrdenCompra =  
+              OrdenCompra::orderBy('id', 'asc')->
+              where('estado','EN PROCESO')->get();
+          break;
+          case 1:
+              $OrdenCompra =  
+              OrdenCompra::orderBy('id', 'asc')->
+              where('estado','POR APROBAR')->get();            
+          break;
+          case 2:
+              $OrdenCompra =  
+              OrdenCompra::orderBy('id', 'asc')->
+              where('estado','ANULADA')->get();
+          break;
+          case 3:
+              $OrdenCompra =  
+              OrdenCompra::orderBy('id', 'asc')->
+              where('estado','RECHAZADA')->get();
+          break;
+          case 4:
+              $OrdenCompra =  
+              OrdenCompra::orderBy('id', 'asc')->
+              where('estado','RECIBIDA')->get();
+          break;
+          case 5:
+              $OrdenCompra =  
+              OrdenCompra::orderBy('id', 'asc')->
+              where('estado','INGRESADA')->get();
+          break;
+          case 6:
+              $OrdenCompra =  
+              OrdenCompra::orderBy('id', 'asc')->
+              where('estado','CERRADA')->get();
+          break;
+          default:
+              $OrdenCompra =  OrdenCompra::all();
+              return view('pages.ordenCompra.index', compact('OrdenCompra'));
+          break;
+      }
       return view('pages.ordenCompra.index', compact('OrdenCompra'));
     }
 
