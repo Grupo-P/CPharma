@@ -109,6 +109,10 @@
 	      	<td colspan="7" class="alinear-izq">{{$OrdenCompra->estado}}</td>
 		    </tr>
 		    <tr>
+	      	<td colspan="7" class="alinear-der">Observacion:</td>
+	      	<td colspan="7" class="alinear-izq">{{$OrdenCompra->observacion}}</td>
+		    </tr>
+		    <tr>
 	      	<td colspan="7" class="alinear-der">Fecha De Aprobacion:</td>
 	      	<td colspan="7" class="alinear-izq">{{$OrdenCompra->fecha_aprobacion}}</td>
 		    </tr>
