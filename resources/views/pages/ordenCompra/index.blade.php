@@ -275,7 +275,7 @@
 					<form action="/ordenCompra/{{$ordenCompra->id}}" method="POST">
 			    @method('DELETE')
 			    @csrf					    
-			    	<button type="submit" name="PorAprobar" value="solicitud" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Pausar" style="display: inline-block; width: 100%"><i class="fas fa-angle-double-right"></i></button>
+			    	<button type="submit" name="PorAprobar" value="solicitud" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Por Aprobar" style="display: inline-block; width: 100%"><i class="fas fa-angle-double-right"></i></button>
 					</form>
 
 					<?php
