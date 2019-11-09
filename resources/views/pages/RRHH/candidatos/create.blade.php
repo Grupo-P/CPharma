@@ -2,20 +2,6 @@
 
 @section('title', 'Crear candidato')
 
-@section('scriptsHead')
-  <style>
-    .campoNulo {border-width: 3px !important;}
-    .campoNulo::placeholder {color: #dc3545; font-weight: bold;}
-  </style>
-
-  <script>
-    var activarDangerRequerido = (Input) => {
-      Input.addClass('border border-danger campoNulo');
-      Input.attr('placeholder', 'Este campo es requerido');
-    };
-  </script>
-@endsection
-
 @section('content')
   <!-- Modal Guardar -->
   @if(session('Error'))
@@ -98,7 +84,9 @@
     </div>
   @endif
 
-  <h1 class="h5 text-info"><i class="fas fa-plus"></i>&nbsp;Agregar candidato</h1>
+  <h1 class="h5 text-info">
+    <i class="fas fa-plus"></i>&nbsp;Agregar candidato
+  </h1>
   <hr class="row align-items-start col-12">
 
   <form action="/candidatos/" method="POST" style="display: inline;">  
@@ -123,12 +111,12 @@
         <tbody>
           <tr>
             <th scope="row">{!! Form::label('nombres', 'Nombres *', ['title' => 'Este campo es requerido']) !!}</th>
-            <td>{!! Form::text('nombres', null, [ 'class' => 'form-control', 'placeholder' => 'Maria Raquel', 'autofocus']) !!}</td>
+            <td>{!! Form::text('nombres', null, [ 'class' => 'form-control', 'placeholder' => 'Maria Raquel', 'pattern' => '^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s\']+$', 'autofocus', 'required']) !!}</td>
           </tr>
 
           <tr>
             <th scope="row">{!! Form::label('apellidos', 'Apellidos *', ['title' => 'Este campo es requerido']) !!}</th>
-            <td>{!! Form::text('apellidos', null, [ 'class' => 'form-control', 'placeholder' => 'Herrera Perez']) !!}</td>
+            <td>{!! Form::text('apellidos', null, [ 'class' => 'form-control', 'placeholder' => 'Herrera Perez', 'pattern' => '^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s\']+$', 'required']) !!}</td>
           </tr>
 
           <tr>
@@ -141,7 +129,7 @@
                   </td>
 
                   <td>
-                    {!! Form::text('cedula', null, [ 'class' => 'form-control', 'placeholder' => '24921001']) !!}
+                    {!! Form::text('cedula', null, [ 'class' => 'form-control', 'placeholder' => '24921001', 'pattern' => '^[0-9]{7,}$', 'required']) !!}
                   </td>
                 </tr>
               </table>
@@ -149,13 +137,23 @@
           </tr>
 
           <tr>
-            <th scope="row">{!! Form::label('telefono_celular', 'Teléfono celular') !!}</th>
-            <td>{!! Form::text('telefono_celular', null, [ 'class' => 'form-control', 'placeholder' => '0414-1234567']) !!}</td>
+            <th scope="row">
+              <label for="telefono_celular">Teléfono celular</label>
+            </th>
+            
+            <td>
+              <input type="tel" class="form-control" name="telefono_celular" id="telefono_celular" placeholder="0414-1234567" pattern="^0[1246]{3}-[0-9]{7}$">
+            </td>
           </tr>
 
           <tr>
-            <th scope="row">{!! Form::label('telefono_habitacion', 'Teléfono de habitación') !!}</th>
-            <td>{!! Form::text('telefono_habitacion', null, [ 'class' => 'form-control', 'placeholder' => '0261-1234567']) !!}</td>
+            <th scope="row">
+              <label for="telefono_habitacion">Teléfono de habitación</label>
+            </th>
+            
+            <td>
+              <input type="tel" class="form-control" name="telefono_habitacion" id="telefono_habitacion" placeholder="0261-1234567" pattern="^0[1246]{3}-[0-9]{7}$">
+            </td>
           </tr>
 
           <tr>
@@ -208,7 +206,7 @@
 
           <tr>
             <th scope="row">{!! Form::label('direccion', 'Dirección *', ['title' => 'Este campo es requerido']) !!}</th>
-            <td>{!! Form::textarea('direccion', null, [ 'class' => 'form-control', 'placeholder' => 'Av. 15 Delicias con calle 72', 'rows' => '3']) !!}</td>
+            <td>{!! Form::textarea('direccion', null, [ 'class' => 'form-control', 'placeholder' => 'Av. 15 Delicias con calle 72', 'rows' => '3', 'required']) !!}</td>
           </tr>
 
           <tr>
@@ -226,299 +224,41 @@
     $(document).ready(function() {
       $('[data-toggle="tooltip"]').tooltip();
 
-      var nombres = $('#nombres');
-      var apellidos = $('#apellidos');
-      var cedula = $('#cedula');
-      var telefono_celular = $('#telefono_celular');
-      var telefono_habitacion = $('#telefono_habitacion');
-      var correo = $('#correo');
-      var direccion = $('#direccion');
+      //Objetos DOM JavaScript
+      var telefono_celular = document.querySelector('#telefono_celular');
+      var telefono_habitacion = document.querySelector('#telefono_habitacion');
+
+      //Objetos DOM JQuery
       var enviar = $('#enviar');
       var crear_candidato = $('#crear_candidato');
-      var clasesError = 'border border-danger campoNulo';
-      var telefonoNulo = 'Debe indicar al menos un teléfono';
 
-      enviar.click(function(e) {
-        e.preventDefault();
+      enviar.click(function() {
 
-        var regExp = /^0[1246]{3}-[0-9]{7}$/;//Numero
-        var regExp1 = /^[A-Za-zñÑáéíóúÁÉÍÓÚ]+\s?[A-Za-zñÑáéíóúÁÉÍÓÚ]+\s?[A-Za-zñÑáéíóúÁÉÍÓÚ]+$/;//Nombre
-        var regExp2 = /^[0-9]{7,}$/;//Cedula
-        var regExp3 = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;//Correo
+        if((telefono_celular.value == '') && (telefono_habitacion.value == '')) {
 
-        var enviar = false;
-
-        //En caso de cumplir las validaciones enviar el formulario
-        if((regExp1.test(nombres.val())) 
-          && (regExp1.test(apellidos.val())) 
-          && (regExp2.test(cedula.val()))
-          && (direccion.val() != '')
-        ) {
-          if(
-            (telefono_celular.val() != '') 
-            && (telefono_habitacion.val() != '') 
-            && (correo.val() != '') 
-          ) {
-            if((regExp.test(telefono_celular.val())) 
-              && (regExp.test(telefono_habitacion.val()))
-              && (regExp3.test(correo.val()))
-            ) {
-              enviar = true;
-              crear_candidato.submit();
-            }
-            else {
-              enviar = false;
-              if(!regExp.test(telefono_celular.val())) {
-                telefono_celular.val('');
-                telefono_celular.addClass(clasesError);
-                telefono_celular.attr('placeholder', 'El formato telefónico es: 0xxx-xxxxxxx');
-              }
-
-              if(!regExp.test(telefono_habitacion.val())) {
-                telefono_habitacion.val('');
-                telefono_habitacion.addClass(clasesError);
-                telefono_habitacion.attr('placeholder', 'El formato telefónico es: 0xxx-xxxxxxx');
-              }
-
-              if(!regExp3.test(correo.val())) {
-                correo.val('');
-                correo.addClass(clasesError);
-                correo.attr('placeholder', 'El formato de correo es: xxxxxxx\@xxxxxx.xxx');
-              }
-            }
-          }//Validacion de telefonos y correo
-          else if(
-            (telefono_celular.val() == '') 
-            && (telefono_habitacion.val() == '')) {
-
-            enviar = false;
-            telefono_celular.addClass(clasesError);
-            telefono_celular.attr('placeholder', telefonoNulo);
-
-            telefono_habitacion.addClass(clasesError);
-                telefono_habitacion.attr('placeholder', telefonoNulo);
-          }//Telefonos vacios
-          else if(
-            (telefono_celular.val() != '') 
-            || (telefono_habitacion.val() != '')) {
-
-            if((regExp.test(telefono_celular.val())) 
-              && (regExp.test(telefono_habitacion.val()))) {
-
-              enviar = true;
-              crear_candidato.submit();
-            }
-            
-            if(regExp.test(telefono_celular.val())) {
-
-              if((regExp3.test(correo.val())) || (correo.val() == '')) {
-                enviar = true;
-                crear_candidato.submit();
-              }
-              else {
-                correo.val('');
-                correo.addClass(clasesError);
-                correo.attr('placeholder', 'El formato de correo es: xxxxxxx\@xxxxxx.xxx');
-
-                enviar = false;
-              }
-              
-            }
-            else {
-
-              if(!enviar) {
-                telefono_celular.val('');
-                telefono_celular.addClass(clasesError);
-                telefono_celular.attr('placeholder', 'El formato telefónico es: 0xxx-xxxxxxx');
-              }
-
-              enviar = false;
-            }
-
-            if(regExp.test(telefono_habitacion.val())) {
-
-              if((regExp3.test(correo.val())) || (correo.val() == '')) {
-                enviar = true;
-                crear_candidato.submit();
-              }
-              else {
-                correo.val('');
-                correo.addClass(clasesError);
-                correo.attr('placeholder', 'El formato de correo es: xxxxxxx\@xxxxxx.xxx');
-
-                enviar = false;
-              }
-            }
-            else {
-
-              if(!enviar) {
-                telefono_habitacion.val('');
-                telefono_habitacion.addClass(clasesError);
-                telefono_habitacion.attr('placeholder', 'El formato telefónico es: 0xxx-xxxxxxx');
-              }
-
-              enviar = false;
-            }
-          }
-        }//Validacion total
-        else if(
-          (nombres.val() == '')
-          || (apellidos.val() == '')
-          || (cedula.val() == '')
-          || (direccion.val() == '')
-        ) {
-          if(nombres.val() == '') {
-            activarDangerRequerido(nombres);
-          }
-
-          if(apellidos.val() == '') {
-            activarDangerRequerido(apellidos);
-          }
-
-          if(cedula.val() == '') {
-            activarDangerRequerido(cedula);
-          }
-
-          if(direccion.val() == '') {
-            activarDangerRequerido(direccion);
-          }
-        }//Campos requeridos
-        else if(!regExp1.test(nombres.val())) {
-
-          nombres.val('');
-          nombres.addClass(clasesError);
-          nombres.attr('placeholder', 'El formato del nombre no es el adecuado');
-
-          enviar = false;
-        }
-        else if(!regExp1.test(apellidos.val())) {
-
-          apellidos.val('');
-          apellidos.addClass(clasesError);
-          apellidos.attr('placeholder', 'El formato del apellido no es el adecuado');
-
-          enviar = false;
-        }
-        else if(!regExp2.test(cedula.val())) {
-
-          cedula.val('');
-          cedula.addClass(clasesError);
-          cedula.attr('placeholder', 'El formato de la cedula admite solo números');
-
-          enviar = false;
+          telefono_celular.setCustomValidity('Debe ingresar al menos un Teléfono');
+          telefono_habitacion.setCustomValidity('Debe ingresar al menos un Teléfono');
         }
 
       });
 
-      $('#nombres, #apellidos, #cedula, #telefono_celular, #telefono_habitacion, ' 
-      + '#correo, #direccion').on({
+      crear_candidato.submit(function(e) {
+
+        if((telefono_celular.value == '') && (telefono_habitacion.value == '')) {
+          e.preventDefault();
+        }
+
+      });
+
+      $('#telefono_celular, #telefono_habitacion').on({
+        
         keydown: function(e) {
 
-          if(e.keyCode == 13) e.preventDefault();
+          telefono_celular.setCustomValidity('');
+          telefono_habitacion.setCustomValidity('');
+        }
 
-          switch(e.target.id) {
-            case 'nombres':
-              if(e.keyCode == 8) {
-                if(nombres.val().length == 1) {
-
-                  activarDangerRequerido(nombres);
-                }
-              }
-              else if(nombres.hasClass(clasesError)) {
-
-                if((e.keyCode != 9) && (e.keyCode != 16) && (e.keyCode != 20)) {
-                  nombres.removeClass(clasesError);
-                  nombres.attr('placeholder', 'Maria Raquel');
-                }
-              }
-            break;
-
-            case 'apellidos':
-              if(e.keyCode == 8) {
-                if(apellidos.val().length == 1) {
-
-                  activarDangerRequerido(apellidos);
-                }
-              }
-              else if(apellidos.hasClass(clasesError)) {
-
-                if((e.keyCode != 9) && (e.keyCode != 16) && (e.keyCode != 20)) {
-                  apellidos.removeClass(clasesError);
-                  apellidos.attr('placeholder', 'Herrera Perez');
-                }
-              }
-            break;
-
-            case 'cedula':
-              if(e.keyCode == 8) {
-                if(cedula.val().length == 1) {
-
-                  activarDangerRequerido(cedula);
-                }
-              }
-              else if(cedula.hasClass(clasesError)) {
-
-                if((e.keyCode != 9) && (e.keyCode != 16) && (e.keyCode != 20)) {
-                  cedula.removeClass(clasesError);
-                  cedula.attr('placeholder', '24921001');
-                }
-              }
-            break;
-
-            case 'direccion':
-              if(e.keyCode == 8) {
-                if(direccion.val().length == 1) {
-
-                  activarDangerRequerido(direccion);
-                }
-              }
-              else if(direccion.hasClass(clasesError)) {
-
-                if((e.keyCode != 9) && (e.keyCode != 16) && (e.keyCode != 20)) {
-                  direccion.removeClass(clasesError);
-                  direccion.attr('placeholder', 'Av. 15 Delicias con calle 72');
-                }
-              }
-            break;
-
-            case 'telefono_celular':
-              if((e.keyCode != 9) && (e.keyCode != 16) && (e.keyCode != 20)) {
-
-                if(telefono_celular.attr('placeholder') == telefonoNulo) {
-
-                  telefono_habitacion.removeClass(clasesError);
-                  telefono_habitacion.attr('placeholder', '0261-1234567');
-                }
-
-                telefono_celular.removeClass(clasesError);
-                telefono_celular.attr('placeholder', '0414-1234567');
-              }
-            break;
-
-            case 'telefono_habitacion':
-              if((e.keyCode != 9) && (e.keyCode != 16) && (e.keyCode != 20)) {
-
-                if(telefono_habitacion.attr('placeholder') == telefonoNulo) {
-
-                  telefono_celular.removeClass(clasesError);
-                  telefono_celular.attr('placeholder', '0414-1234567');
-                }
-
-                telefono_habitacion.removeClass(clasesError);
-                telefono_habitacion.attr('placeholder', '0261-1234567');
-              }
-            break;
-
-            case 'correo':
-              if((e.keyCode != 9) && (e.keyCode != 16) && (e.keyCode != 20)) {
-                correo.removeClass(clasesError);
-                correo.attr('placeholder', 'mherrera@farmacia72.com');
-              }
-            break;
-          }//switch
-        }//keydown
       });
-
     });
     $('#exampleModalCenter').modal('show');
   </script>

@@ -59,7 +59,7 @@ class RH_EmpresaReferenciaController extends Controller {
 
             $Auditoria = new Auditoria();
             $Auditoria->accion = 'CREAR';
-            $Auditoria->tabla = 'RH_EMPRESA_REFERENCIAS';
+            $Auditoria->tabla = 'RH_EMPRESAREF';
             $Auditoria->registro = $request->input('nombre_empresa');
             $Auditoria->user = auth()->user()->name;
             $Auditoria->save();
@@ -84,7 +84,7 @@ class RH_EmpresaReferenciaController extends Controller {
 
         $Auditoria = new Auditoria();
         $Auditoria->accion = 'CONSULTAR';
-        $Auditoria->tabla = 'RH_EMPRESA_REFERENCIAS';
+        $Auditoria->tabla = 'RH_EMPRESAREF';
         $Auditoria->registro = $empresaReferencias->nombre_empresa;
         $Auditoria->user = auth()->user()->name;
         $Auditoria->save();
@@ -127,7 +127,7 @@ class RH_EmpresaReferenciaController extends Controller {
 
             $Auditoria = new Auditoria();
             $Auditoria->accion = 'EDITAR';
-            $Auditoria->tabla = 'RH_EMPRESA_REFERENCIAS';
+            $Auditoria->tabla = 'RH_EMPRESAREF';
             $Auditoria->registro = $empresaReferencias->nombre_empresa;
             $Auditoria->user = auth()->user()->name;
             $Auditoria->save();
@@ -151,7 +151,7 @@ class RH_EmpresaReferenciaController extends Controller {
         $empresaReferencias = RH_EmpresaReferencia::find($id);
 
         $Auditoria = new Auditoria();
-        $Auditoria->tabla = 'RH_EMPRESA_REFERENCIAS';
+        $Auditoria->tabla = 'RH_EMPRESAREF';
         $Auditoria->registro = $empresaReferencias->nombre_empresa;
         $Auditoria->user = auth()->user()->name;
 
