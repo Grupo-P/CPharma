@@ -144,6 +144,7 @@
         <th scope="col" class="stickyCP">Departamento</th>
         <th scope="col" class="stickyCP">Turno</th>
         <th scope="col" class="stickyCP">Nivel de urgencia</th>
+        <th scope="col" class="stickyCP">Solicitante</th>
         <th scope="col" class="stickyCP">Cantidad requerida</th>
         <th scope="col" class="stickyCP">Estatus</th>
         <th scope="col" class="stickyCP">Acciones</th>
@@ -159,6 +160,7 @@
           <td>{{$vacante->departamento}}</td>
           <td>{{$vacante->turno}}</td>
           <td>{{$vacante->nivel_urgencia}}</td>
+          <td>{{$vacante->solicitante}}</td>
           <td>{{$vacante->cantidad}}</td>
           <td>{{$vacante->estatus}}</td>
 
