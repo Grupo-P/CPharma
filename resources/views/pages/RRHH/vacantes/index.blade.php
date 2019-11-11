@@ -146,6 +146,8 @@
         <th scope="col" class="stickyCP">Nivel de urgencia</th>
         <th scope="col" class="stickyCP">Solicitante</th>
         <th scope="col" class="stickyCP">Cantidad requerida</th>
+        <th scope="col" class="stickyCP">Fecha inicio solicitud</th>
+        <th scope="col" class="stickyCP">Fecha tope solicitud</th>
         <th scope="col" class="stickyCP">Estatus</th>
         <th scope="col" class="stickyCP">Acciones</th>
       </tr>
@@ -162,6 +164,8 @@
           <td>{{$vacante->nivel_urgencia}}</td>
           <td>{{$vacante->solicitante}}</td>
           <td>{{$vacante->cantidad}}</td>
+          <td>{{date('d-m-Y', strtotime($vacante->fecha_solicitud))}}</td>
+          <td>{{date('d-m-Y', strtotime($vacante->fecha_limite))}}</td>
           <td>{{$vacante->estatus}}</td>
 
           <!-- ***************** VALIDACION DE ROLES ***************** -->
