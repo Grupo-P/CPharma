@@ -221,11 +221,6 @@
     while($row = sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC)) {
       $IdArticulo = $row["InvArticuloId"];
 
-      $sqlDetalleOrden = "SELECT COUNT(*) AS CuentaOr FROM orden_compra_detalles WHERE id_articulo = '$IdArticulo'";
-      $resultDetalleOrden = mysqli_query($connCPharma,$sqlDetalleOrden);
-      $rowDetalleOrden = $resultDetalleOrden->fetch_assoc();
-      $cuentaArticuloOrden = $rowDetalleOrden['CuentaOr'];
-
       $sql2 = MySQL_Cuenta_Veces_Dias_Cero($IdArticulo,$FInicial,$FFinal);
       $result2 = mysqli_query($connCPharma,$sql2);
       $row2 = $result2->fetch_assoc();
@@ -285,6 +280,12 @@
       echo '<td align="center" class="bg-danger text-white">'.round($DiasRestantesQuiebre,2).'</td>';
       
       /*BOTON PARA AGREGAR A LA ORDEN DE COMPRA*/
+
+      $sqlDetalleOrden = "SELECT COUNT(*) AS CuentaOr FROM orden_compra_detalles WHERE id_articulo = '$IdArticulo'";
+      $resultDetalleOrden = mysqli_query($connCPharma,$sqlDetalleOrden);
+      $rowDetalleOrden = $resultDetalleOrden->fetch_assoc();
+      $cuentaArticuloOrden = $rowDetalleOrden['CuentaOr'];
+
       echo'
       <td style="width:140px;">
         <form action="/ordenCompraDetalle/create" method="PRE" style="display: block; width:100%;" target="_blank">
