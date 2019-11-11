@@ -140,12 +140,21 @@
 	<table class="table table-striped table-borderless col-12 sortable">
   	<thead class="thead-dark">
 	    <tr>
-	      	<th scope="col" colspan="7" style="text-align: center;">CLASIFICACION</th>
+	      	<th scope="col" colspan="9" style="text-align: center;">CLASIFICACION</th>
 	    </tr>
 		</thead>
 		<tbody>
 	  	<tr>
-	  	<td style="width:14%;" align="center">
+	  	<td style="width:11%;" align="center">
+	  		<?php
+	  			$tipo = 8;
+	  		?>
+				<form action="/ordenCompra?Tipo={{$tipo}}" method="GET" style="display: inline;">
+			    <button type="submit" name="Tipo" role="button" class="btn btn-outline-success btn-sm" value="8">TODO</button>
+				</form>
+	    </td>
+
+	  	<td style="width:11%;" align="center">
 	  		<?php
 	  			$tipo = 0;
 	  		?>
@@ -154,7 +163,7 @@
 				</form>
 	    </td>
 
-	  	<td style="width:14%;" align="center">
+	  	<td style="width:11%;" align="center">
 	  		<?php
 	  			$tipo = 1;
 	  		?>
@@ -163,7 +172,7 @@
 				</form>
 	    </td>
 
-	    <td style="width:14%;" align="center">
+	    <td style="width:11%;" align="center">
 	      	<?php
 	  			$tipo = 2;
 	  		?>
@@ -172,7 +181,7 @@
 					</form>	
 			</td>
 
-	    <td style="width:14%;" align="center">
+	    <td style="width:11%;" align="center">
 	      	<?php
 	  			$tipo = 3;
 	  		?>
@@ -181,7 +190,16 @@
 				</form>						
 	    </td>
 
-	    <td style="width:14%;" align="center">
+	    <td style="width:11%;" align="center">
+	      	<?php
+	  			$tipo = 7;
+	  		?>
+				<form action="/ordenCompra?Tipo={{$tipo}}" method="GET" style="display: inline;">
+			    <button type="submit" name="Tipo" role="button" class="btn btn-outline-info btn-sm" value="7">POR RECIBIR</button>
+				</form>						
+	    </td>
+
+	    <td style="width:11%;" align="center">
 	      	<?php
 	  			$tipo = 4;
 	  		?>
@@ -190,7 +208,7 @@
 				</form>						
 	    </td>
 
-	    <td style="width:14%;" align="center">
+	    <td style="width:11%;" align="center">
 	      	<?php
 	  			$tipo = 5;
 	  		?>
@@ -199,7 +217,7 @@
 				</form>						
 	    </td>
 
-	    <td style="width:14%;" align="center">
+	    <td style="width:11%;" align="center">
 	      	<?php
 	  			$tipo = 6;
 	  		?>
@@ -216,27 +234,27 @@
 	<table class="table table-striped table-borderless col-12 sortable" id="myTable">
 	  	<thead class="thead-dark">
 		    <tr>
-		      	<th scope="col" class="stickyCP">#</th>
-		      	<th scope="col" class="stickyCP">Orden compra</th>
-		      	<th scope="col" class="stickyCP">Sede Destino</th>
-		      	<th scope="col" class="stickyCP">Proveedor</th>
-		      	<th scope="col" class="stickyCP">Fecha de la orden</th>
-		      	<th scope="col" class="stickyCP">Fecha estimada de despacho</th>
-		      	<th scope="col" class="stickyCP">Dias transcurridos</th>
-		      	<th scope="col" class="stickyCP">Monto total Bs</th>
-		      	<th scope="col" class="stickyCP">Monto total $</th>
-		      	<th scope="col" class="stickyCP">Unidades</th>
-		      	<th scope="col" class="stickyCP">Condicion crediticia</th>
-		      	<th scope="col" class="stickyCP">Dias de credito</th>
-		      	<th scope="col" class="stickyCP">Estatus</th>
-		      	<th scope="col" class="stickyCP">Estado Actual</th>
-		      	<th scope="col" class="stickyCP">Operador</th>
-		      	<th scope="col" class="stickyCP">Monto real</th>
-		      	<th scope="col" class="stickyCP">Fecha de aprobacion</th>
-		      	<th scope="col" class="stickyCP">Calificacion</th>
-		      	<th scope="col" class="stickyCP">Fecha de recepcion</th>
-		      	<th scope="col" class="stickyCP">Fecha de ingreso</th>
-		      	<th scope="col" class="stickyCP">Acciones</th>
+		      	<th scope="col" class="CP-sticky">#</th>
+		      	<th scope="col" class="CP-sticky">Orden compra</th>
+		      	<th scope="col" class="CP-sticky">Sede Destino</th>
+		      	<th scope="col" class="CP-sticky">Proveedor</th>
+		      	<th scope="col" class="CP-sticky">Fecha de la orden</th>
+		      	<th scope="col" class="CP-sticky">Fecha estimada de despacho</th>
+		      	<th scope="col" class="CP-sticky">Dias transcurridos</th>
+		      	<th scope="col" class="CP-sticky">Monto total Bs</th>
+		      	<th scope="col" class="CP-sticky">Monto total $</th>
+		      	<th scope="col" class="CP-sticky">Unidades</th>
+		      	<th scope="col" class="CP-sticky">Condicion crediticia</th>
+		      	<th scope="col" class="CP-sticky">Dias de credito</th>
+		      	<th scope="col" class="CP-sticky">Estatus</th>
+		      	<th scope="col" class="CP-sticky">Estado Actual</th>
+		      	<th scope="col" class="CP-sticky">Operador</th>
+		      	<th scope="col" class="CP-sticky">Monto real</th>
+		      	<th scope="col" class="CP-sticky">Fecha de aprobacion</th>
+		      	<th scope="col" class="CP-sticky">Calificacion</th>
+		      	<th scope="col" class="CP-sticky">Fecha de recepcion</th>
+		      	<th scope="col" class="CP-sticky">Fecha de ingreso</th>
+		      	<th scope="col" class="CP-sticky">Acciones</th>
 		    </tr>
 	  	</thead>
 	  	<tbody>

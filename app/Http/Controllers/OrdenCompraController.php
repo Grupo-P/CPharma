@@ -70,6 +70,11 @@ class OrdenCompraController extends Controller
               OrdenCompra::orderBy('id', 'asc')->
               where('estado','CERRADA')->get();
           break;
+          case 7:
+              $OrdenCompra =  
+              OrdenCompra::orderBy('id', 'asc')->
+              where('estado','APROBADA')->get();            
+          break;
           default:
               $OrdenCompra =  OrdenCompra::all();
               return view('pages.ordenCompra.index', compact('OrdenCompra'));
