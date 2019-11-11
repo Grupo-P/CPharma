@@ -246,7 +246,8 @@
               <th scope="col" class="CP-sticky">Ultima Venta (En Rango)</th>
               <th scope="col" class="CP-sticky">Ultima Venta</th>
               <th scope="col" class="CP-sticky">Pedir</th> 
-              <th scope="col" class="CP-sticky bg-danger text-white">Pedir (Real)</th>        
+              <th scope="col" class="CP-sticky bg-danger text-white">Pedir (Real)</th>  
+              <th scope="col" class="CP-sticky">Acciones</th>      
             </tr>
           </thead>
           <tbody>
@@ -353,6 +354,45 @@
 
         echo '<td align="center">'.intval($CantidadPedido).'</td>';
          echo '<td align="center" class="bg-danger text-white">'.round($CantidadPedidoQuiebre,2).'</td>';
+
+      /*BOTON PARA AGREGAR A LA ORDEN DE COMPRA*/
+
+      $sqlDetalleOrden = "SELECT COUNT(*) AS CuentaOr FROM orden_compra_detalles WHERE id_articulo = '$IdArticulo'";
+      $resultDetalleOrden = mysqli_query($connCPharma,$sqlDetalleOrden);
+      $rowDetalleOrden = $resultDetalleOrden->fetch_assoc();
+      $cuentaArticuloOrden = $rowDetalleOrden['CuentaOr'];
+
+      echo'
+      <td style="width:140px;">
+        <form action="/ordenCompraDetalle/create" method="PRE" style="display: block; width:100%;" target="_blank">
+      ';
+      echo'<input type="hidden" name="id_articulo" value="'.$IdArticulo.'">';
+      echo'<input type="hidden" name="codigo_articulo" value="'.$CodigoArticulo.'">';
+      echo'<input type="hidden" name="codigo_barra" value="'.$CodigoBarra.'">';
+      echo'<input type="hidden" name="descripcion" value="'.$Descripcion.'">';
+      echo'<input type="hidden" name="existencia_rpt" value="'.$Existencia.'">';
+      echo'<input type="hidden" name="dias_restantes_rpt" value="'.$DiasRestantesQuiebre.'">';
+      echo'<input type="hidden" name="origen_rpt" value="Pedido de productos">';
+      echo'<input type="hidden" name="rango_rpt" value="Del: '.$FInicialImp.' Al: '.$FFinalImp.'">';
+      echo'
+          <button type="submit" name="Reporte" role="button" class="btn btn-outline-success btn-sm" value="SI" style="width:100%;">Agregar</button>
+        </form>
+      ';
+      if( $cuentaArticuloOrden!=0 ) {
+        echo'
+          <br/> 
+          <form action="/ordenCompraDetalle/0" method="PRE" style="display: block; width:100%;" target="_blank">';
+        echo'<input type="hidden" name="id_articulo" value="'.$IdArticulo.'">';
+        echo'
+          <button type="submit" role="button" class="btn btn-outline-danger btn-sm" style="width:100%;">En Transito</button>
+        </form>
+      ';
+      }
+      echo'
+      </td>
+      ';
+      /*BOTON PARA AGREGAR A LA ORDEN DE COMPRA*/
+
         echo '</tr>';
         $contador++;
       }
@@ -494,6 +534,45 @@
         }
         echo '<td align="center">'.intval($CantidadPedido).'</td>';
         echo '<td align="center" class="bg-danger text-white">'.round($CantidadPedidoQuiebre,2).'</td>';
+
+        /*BOTON PARA AGREGAR A LA ORDEN DE COMPRA*/
+
+      $sqlDetalleOrden = "SELECT COUNT(*) AS CuentaOr FROM orden_compra_detalles WHERE id_articulo = '$IdArticulo'";
+      $resultDetalleOrden = mysqli_query($connCPharma,$sqlDetalleOrden);
+      $rowDetalleOrden = $resultDetalleOrden->fetch_assoc();
+      $cuentaArticuloOrden = $rowDetalleOrden['CuentaOr'];
+
+      echo'
+      <td style="width:140px;">
+        <form action="/ordenCompraDetalle/create" method="PRE" style="display: block; width:100%;" target="_blank">
+      ';
+      echo'<input type="hidden" name="id_articulo" value="'.$IdArticulo.'">';
+      echo'<input type="hidden" name="codigo_articulo" value="'.$CodigoArticulo.'">';
+      echo'<input type="hidden" name="codigo_barra" value="'.$CodigoBarra.'">';
+      echo'<input type="hidden" name="descripcion" value="'.$Descripcion.'">';
+      echo'<input type="hidden" name="existencia_rpt" value="'.$Existencia.'">';
+      echo'<input type="hidden" name="dias_restantes_rpt" value="'.$DiasRestantesQuiebre.'">';
+      echo'<input type="hidden" name="origen_rpt" value="Pedido de productos">';
+      echo'<input type="hidden" name="rango_rpt" value="Del: '.$FInicialImp.' Al: '.$FFinalImp.'">';
+      echo'
+          <button type="submit" name="Reporte" role="button" class="btn btn-outline-success btn-sm" value="SI" style="width:100%;">Agregar</button>
+        </form>
+      ';
+      if( $cuentaArticuloOrden!=0 ) {
+        echo'
+          <br/> 
+          <form action="/ordenCompraDetalle/0" method="PRE" style="display: block; width:100%;" target="_blank">';
+        echo'<input type="hidden" name="id_articulo" value="'.$IdArticulo.'">';
+        echo'
+          <button type="submit" role="button" class="btn btn-outline-danger btn-sm" style="width:100%;">En Transito</button>
+        </form>
+      ';
+      }
+      echo'
+      </td>
+      ';
+      /*BOTON PARA AGREGAR A LA ORDEN DE COMPRA*/
+      
         echo '</tr>';
         echo '
           </tbody>
