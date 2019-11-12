@@ -432,6 +432,12 @@
 			    	<button type="submit" name="Aprobar" value="solicitud" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Aprobar" style="display: inline-block; width: 100%"><i class="fas fa-check"></i></button>
 					</form>
 
+					<form action="/ordenCompra/{{$ordenCompra->id}}" method="POST">
+			    @method('DELETE')
+			    @csrf					    
+			    	<button type="submit" name="Devolver" value="solicitud" role="button" class="btn btn-outline-warning btn-sm" data-toggle="tooltip" data-placement="top" title="Devolver" style="display: inline-block; width: 100%"><i class="fas fa-angle-double-left"></i></button>
+					</form>
+
 					<form action="/RechazarOrdenCompra" method="PRE">
 				    <input type="hidden" name="rechazar" value="solicitud">
 				    <input type="hidden" name="id" value="{{$ordenCompra->id}}">   
