@@ -439,11 +439,32 @@
 
       /*BOTON PARA AGREGAR A LA ORDEN DE COMPRA*/
 
-      $sqlDetalleOrden = "SELECT COUNT(*) AS CuentaOr FROM orden_compra_detalles WHERE id_articulo = '$IdArticulo'";
+      $sqlDetalleOrden = "SELECT COUNT(*) AS Cuenta,codigo_orden FROM orden_compra_detalles WHERE id_articulo = '$IdArticulo' AND estatus = 'ACTIVO'";
       $resultDetalleOrden = mysqli_query($connCPharma,$sqlDetalleOrden);
-      $rowDetalleOrden = $resultDetalleOrden->fetch_assoc();
-      $cuentaArticuloOrden = $rowDetalleOrden['CuentaOr'];
+      
+      $flag = false;
+      while($rowDetalleOrden = $resultDetalleOrden->fetch_assoc()){
+        $Cuenta = $rowDetalleOrden['Cuenta'];
+        $codigo_orden = $rowDetalleOrden['codigo_orden'];
 
+        if($Cuenta==0){
+          $flag = true;
+        }
+        else{
+          $sqlOrden = "SELECT estado FROM orden_compras WHERE codigo = '$codigo_orden'";
+        $resultOrden = mysqli_query($connCPharma,$sqlOrden);
+        $rowOrden = $resultOrden->fetch_assoc();
+
+         if( ($rowOrden['estado']=='INGRESADA') 
+            || ($rowOrden['estado']=='CERRADA')
+            || ($rowOrden['estado']=='RECHAZADA')
+            || ($rowOrden['estado']=='ANULADA') 
+          ){
+            $flag = true;
+         }
+        }
+      }
+        
       echo'
       <td style="width:140px;">
         <form action="/ordenCompraDetalle/create" method="PRE" style="display: block; width:100%;" target="_blank">
@@ -459,17 +480,18 @@
       echo'
           <button type="submit" name="Reporte" role="button" class="btn btn-outline-success btn-sm" value="SI" style="width:100%;">Agregar</button>
         </form>
-      ';
-      if( $cuentaArticuloOrden!=0 ) {
-        echo'
+        ';
+
+        if($flag != true){
+          echo'
           <br/> 
           <form action="/ordenCompraDetalle/0" method="PRE" style="display: block; width:100%;" target="_blank">';
-        echo'<input type="hidden" name="id_articulo" value="'.$IdArticulo.'">';
-        echo'
-          <button type="submit" role="button" class="btn btn-outline-danger btn-sm" style="width:100%;">En Transito</button>
-        </form>
-      ';
-      }
+          echo'<input type="hidden" name="id_articulo" value="'.$IdArticulo.'">';
+          echo'
+            <button type="submit" role="button" class="btn btn-outline-danger btn-sm" style="width:100%;">En Transito</button>
+          </form>
+          ';
+        }
       echo'
       </td>
       ';
