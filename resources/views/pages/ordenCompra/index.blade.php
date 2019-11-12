@@ -9,6 +9,10 @@
   include(app_path().'\functions\functions.php');
   include(app_path().'\functions\querys_mysql.php');
   include(app_path().'\functions\querys_sqlserver.php');
+
+  $pie_unidades = 0;
+  $pie_dolares = 0;
+  $pie_ve = 0;
 ?>
 
 @section('content')
@@ -289,22 +293,36 @@
 				$total_unidades = 0;
 				$costo_total = 0;
 
+				$costo_interno = 0;
+				$costo_interno_dolar = 0;
+				$costo_interno_ve = 0;
+
 				while($row = $result->fetch_assoc()) {
 					$total_unidades += floatval($row['total_unidades']);
 					$costo_total += floatval($row['costo_total']);
 				}
 				mysqli_close($connCPharma);
 
+				$costo_interno = $costo_total;
+				$unidades_internas = $total_unidades;
+
 				$costo_total = number_format ($costo_total,2,"," ,"." );
+				$total_unidades = number_format ($total_unidades,0,"," ,"." );
 
 				if($ordenCompra->moneda==SigDolar){
+					$costo_interno_dolar = $costo_interno;
 					$costo_total_dolar = $costo_total;
 					$costo_total_ve = '0,00';
 				}
 				else{
+					$costo_interno_ve = $costo_interno;
 					$costo_total_dolar = '0,00';
 					$costo_total_ve = $costo_total;
 				}
+
+				$pie_unidades += $unidades_internas;
+				$pie_dolares += $costo_interno_dolar;
+				$pie_ve += $costo_interno_ve;
 
 				if($ordenCompra->estado=='CERRADA'){
 					$Dias = FG_Rango_Dias($ordenCompra->created_at,$ordenCompra->updated_at);
@@ -536,9 +554,17 @@
 				?>
 			<!--  FIN Acciones para el departamento de recepcion -->
    		</td>
-    <!-- Fin Validacion -->
+    <!-- Fin Validacion --> 
     </tr>
 		@endforeach
+
+		<tr>
+		 <th colspan="7" class="text-right">Totales</th>
+		 <th><?php echo(number_format ($pie_ve,2,"," ,"." )) ?></th>
+		 <th><?php echo(number_format($pie_dolares,2,"," ,"." )) ?></th>
+		 <th><?php echo(number_format ($pie_unidades,0,"," ,"." )) ?></th>
+		 <th colspan="11"></th>
+		</tr>
 		</tbody>
 	</table>
 
