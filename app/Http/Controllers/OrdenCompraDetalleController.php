@@ -36,10 +36,10 @@ class OrdenCompraDetalleController extends Controller
         if(!empty($OrdenActiva[0]->codigo)) {
            $ordenCompraDetalles =  OrdenCompraDetalle::all()
            ->where('codigo_orden',$OrdenActiva[0]->codigo);
-             return view('pages.ordenCompraDetalle.index', compact('ordenCompraDetalles'));
+           return view('pages.ordenCompraDetalle.index', compact('ordenCompraDetalles'));
         }
         else if(empty($OrdenActiva[0]->codigo)) {
-             return back();
+          return back();
         }
     }
 
@@ -50,7 +50,18 @@ class OrdenCompraDetalleController extends Controller
      */
     public function create()
     {
+      $usuario = auth()->user()->name;
+        $OrdenActiva = 
+        OrdenCompra::where('user',$usuario)
+        ->where('estatus','ACTIVO')
+        ->get();
+
+      if(!empty($OrdenActiva[0]->codigo)) {
         return view('pages.ordenCompraDetalle.create');
+      }
+      else if(empty($OrdenActiva[0]->codigo)) {
+        return redirect()->route('ordenCompra.index')->with('NoOrdenActiva','NoOrdenActiva');
+      }
     }
 
     /**
