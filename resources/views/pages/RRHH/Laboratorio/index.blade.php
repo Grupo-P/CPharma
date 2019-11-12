@@ -135,82 +135,17 @@
     <thead class="thead-dark">
       <tr>
         <th scope="col" class="CP-sticky">#</th>
-        <th scope="col" class="CP-sticky">Fecha</th>
-        <th scope="col" class="CP-sticky">Entrevistadores</th>
-        <th scope="col" class="CP-sticky">Lugar</th>
+        <th scope="col" class="CP-sticky">Rif</th>
+        <th scope="col" class="CP-sticky">Nombre del Laboratorio</th>
+        <th scope="col" class="CP-sticky">Dirección</th>
+        <th scope="col" class="CP-sticky">Fecha de Evaluación</th>
+        <th scope="col" class="CP-sticky">user</th>
         <th scope="col" class="CP-sticky">Estatus</th>
         <th scope="col" class="CP-sticky">Acciones</th>
       </tr>
     </thead>
 
-    <tbody>
-      @foreach($entrevistas as $entrevista)
-        <tr>
-          <th>{{$entrevista->id}}</th>
-          <td>{{date('d-m-Y',strtotime($entrevista->fecha_entrevista))}}</td>
-          <td>{{$entrevista->entrevistadores}}</td>
-          <td>{{$entrevista->lugar}}</td>
-          <td>{{$entrevista->estatus}}</td>
-
-          <!-- Inicio Validacion de ROLES -->
-          <td style="width:140px;">
-          <?php
-            if(Auth::user()->role == 'MASTER' || Auth::user()->role == 'DEVELOPER') {
-              if($entrevista->estatus == 'ACTIVO') {
-          ?>
-            <a href="/entrevistas/{{$entrevista->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
-              <i class="far fa-eye"></i>
-            </a>
-
-            <a href="/entrevistas/{{$entrevista->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
-              <i class="fas fa-edit"></i>
-            </a>
-
-            <form action="/entrevistas/{{$entrevista->id}}" method="POST" style="display: inline;">
-              @method('DELETE')
-              @csrf
-              <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Desincorporar"><i class="fa fa-reply"></i></button>
-            </form>
-            <?php
-              }
-              else if($entrevista->estatus == 'INACTIVO') {
-            ?>
-
-            <form action="/entrevistas/{{$entrevista->id}}" method="POST" style="display: inline;">
-              @method('DELETE')
-              @csrf
-              <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Reincorporar"><i class="fa fa-share"></i></button>
-            </form>
-
-            <?php
-              }
-            } else if(Auth::user()->role == 'ANALISTA') {
-            ?>
-
-            <a href="/entrevistas/{{$entrevista->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
-              <i class="far fa-eye"></i>
-            </a>
-
-            <a href="/entrevistas/{{$entrevista->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
-              <i class="fas fa-edit"></i>
-            </a>
-
-            <?php
-              } else if(Auth::user()->role == 'USUARIO') {
-            ?>
-
-            <a href="/entrevistas/{{$entrevista->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
-              <i class="far fa-eye"></i>
-            </a>
-
-            <?php
-              }
-            ?>
-          </td>
-          <!-- Fin Validacion de ROLES -->
-        </tr>
-      @endforeach
-    </tbody>
+  
   </table>
 
   <script>
