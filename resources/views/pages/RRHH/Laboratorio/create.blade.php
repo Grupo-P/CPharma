@@ -115,41 +115,6 @@
     $(document).ready(function() {
       $('[data-toggle="tooltip"]').tooltip();
 
-      //Objetos DOM JavaScript
-      var telefono_celular = document.querySelector('#telefono_celular');
-      var telefono_habitacion = document.querySelector('#telefono_habitacion');
-
-      //Objetos DOM JQuery
-      var enviar = $('#enviar');
-      var crear_candidato = $('#crear_candidato');
-
-      enviar.click(function() {
-
-        if((telefono_celular.value == '') && (telefono_habitacion.value == '')) {
-
-          telefono_celular.setCustomValidity('Debe ingresar al menos un Teléfono');
-          telefono_habitacion.setCustomValidity('Debe ingresar al menos un Teléfono');
-        }
-
-      });
-
-      crear_candidato.submit(function(e) {
-
-        if((telefono_celular.value == '') && (telefono_habitacion.value == '')) {
-          e.preventDefault();
-        }
-
-      });
-
-      $('#telefono_celular, #telefono_habitacion').on({
-        
-        keydown: function(e) {
-
-          telefono_celular.setCustomValidity('');
-          telefono_habitacion.setCustomValidity('');
-        }
-
-      });
     });
     $('#exampleModalCenter').modal('show');
   </script>
