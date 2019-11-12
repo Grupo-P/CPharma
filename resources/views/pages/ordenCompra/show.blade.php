@@ -96,7 +96,10 @@
 	      	<td colspan="3" class="alinear-der">Operador:</td>
 	      	<td colspan="3" class="alinear-izq">{{$OrdenCompra->user}}</td>
 		    </tr>
-	  	
+	  		<tr>
+	      	<th colspan="3" class="alinear-der">Estatus:</th>
+	      	<th colspan="3" class="alinear-izq">{{$OrdenCompra->estatus}}</th>
+		    </tr>
 			<thead>
 		    <tr>
 		    		<th scope="row">#</th>
