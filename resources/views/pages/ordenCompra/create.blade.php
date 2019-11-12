@@ -108,6 +108,7 @@
 
     $Operador = auth()->user()->name;
     $FHoy = date('Y-m-d H:i:s');
+    $Fmin = date('Y-m-d');
     ?>
 
     {!! Form::open(['route' => 'ordenCompra.store', 'method' => 'POST']) !!}
@@ -161,7 +162,11 @@
           <tr>
             <th>Fecha estimada de despacho</th>
             <td>
-              <input id="fecha_estimada_despacho" type="date" name="fecha_estimada_despacho" required style="width:100%;" class="form-control">
+              <?php
+                echo'
+                  <input id="fecha_estimada_despacho" type="date" name="fecha_estimada_despacho" required style="width:100%;" class="form-control" min="'.$Fmin.'">
+                ';
+              ?>
             </td>
           </tr>
           <tr>
