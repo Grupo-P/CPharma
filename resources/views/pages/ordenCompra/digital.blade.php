@@ -141,6 +141,10 @@
 	      	<td colspan="8" class="alinear-izq">{{$OrdenCompra->calificacion}}</td>
 		    </tr>
 		    <tr>
+	      	<td colspan="7" class="alinear-der">Factura:</td>
+	      	<td colspan="8" class="alinear-izq">{{$OrdenCompra->numero_factura}}</td>
+		    </tr>
+		    <tr>
 	      	<th colspan="7" class="alinear-der">Monto Real:</th>
 	      	<th colspan="8" class="alinear-izq">{{number_format($OrdenCompra->montoTotalReal,2,"," ,"." )}} {{$OrdenCompra->moneda}}</th>
 		    </tr>
