@@ -76,7 +76,16 @@ class RH_LaboratorioController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function show($id) {
-        //
+        $laboratorio = RH_Laboratorio::find($id);
+
+        $Auditoria = new Auditoria();
+        $Auditoria->accion = 'CONSULTAR';
+        $Auditoria->tabla = 'RH_LABORATORIO';
+        $Auditoria->registro = $laboratorio->nombre;
+        $Auditoria->user = auth()->user()->name;
+        $Auditoria->save();
+
+        return view('pages.RRHH.laboratorio.show', compact('laboratorio'));
     }
 
     /**
