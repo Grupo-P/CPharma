@@ -303,9 +303,9 @@
       </li>
 
       <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="/examenesm">
+        <a class="nav-link CP-Links-Menu" href="/laboratorio">
           <span data-feather="home"></span>
-          <i class="fad fa-vials"></i>
+         <i class="fas fa-vials"></i>
           Laboratorios<span class="sr-only">(current)</span>
         </a>
       </li>

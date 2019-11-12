@@ -104,7 +104,7 @@
     </div>
   @endif
  <h1 class="h5 text-info">
-    <i class="fad fa-vials"></i>&nbsp;Laboratorio
+    <i class="fas fa-vials"></i>&nbsp;Laboratorios
   </h1>
   <hr class="row align-items-start col-12">
 
