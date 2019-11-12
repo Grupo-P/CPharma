@@ -23,7 +23,8 @@ class RH_LaboratorioController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function index() {
-        
+       $laboratorio = RH_Laboratorio::all();
+       return view('pages.RRHH.laboratorio.index', compact('pruebas'));
     }
 
     /**
