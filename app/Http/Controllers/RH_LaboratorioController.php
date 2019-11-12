@@ -24,7 +24,7 @@ class RH_LaboratorioController extends Controller {
      */
     public function index() {
        $laboratorio = RH_Laboratorio::all();
-       return view('pages.RRHH.laboratorio.index', compact('pruebas'));
+       return view('pages.RRHH.laboratorio.index', compact('laboratorio'));
     }
 
     /**

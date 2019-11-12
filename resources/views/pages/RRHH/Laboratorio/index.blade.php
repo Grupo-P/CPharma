@@ -139,14 +139,80 @@
         <th scope="col" class="CP-sticky">Nombre del Laboratorio</th>
         <th scope="col" class="CP-sticky">Dirección</th>
         <th scope="col" class="CP-sticky">Fecha de Valoración</th>
-        <th scope="col" class="CP-sticky">Teléfono</th>
-        <th scope="col" class="CP-sticky">user</th>
         <th scope="col" class="CP-sticky">Estatus</th>
         <th scope="col" class="CP-sticky">Acciones</th>
       </tr>
     </thead>
 
-  
+   <tbody>
+      @foreach($laboratorio as $lab)
+        <tr>
+          <th>{{$lab->id}}</th>
+          <td>{{$lab->rif}}</td>
+          <td>{{$lab->nombre}}</td>
+          <td>{{$lab->direccion}}</td>
+          <td>{{$lab->fecha}}</td>
+          <td>{{$lab->estatus}}</td>
+
+          <!-- ***************** VALIDACION DE ROLES ***************** -->
+          <td style="width:140px;">
+          <?php
+            if(Auth::user()->role == 'MASTER' || Auth::user()->role == 'DEVELOPER') {
+
+              if($lab->estatus != 'RECHAZADO') {
+          ?>
+            <a href="/laboratorio/{{$lab->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
+              <i class="far fa-eye"></i>
+            </a>
+
+            <a href="/laboratorio/{{$lab->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
+              <i class="fas fa-edit"></i>
+            </a>
+
+            <form action="/laboratorio/{{$lab->id}}" method="POST" style="display: inline;">
+              @method('DELETE')
+              @csrf
+              <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Desincorporar">
+                <i class="fa fa-reply"></i>
+              </button>
+            </form>
+
+          <?php
+            } else if($lab->estatus == 'RECHAZADO') {
+          ?>
+            <form action="/laboratorio/{{$lab->id}}" method="POST" style="display: inline;">
+              @method('DELETE')
+              @csrf
+              <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Reincorporar">
+                <i class="fa fa-share"></i>
+              </button>
+            </form>
+          <?php
+            }
+          } else if(Auth::user()->role == 'ANALISTA') {
+          ?>
+            <a href="/laboratorio/{{$lab->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
+              <i class="far fa-eye"></i>
+            </a>
+
+            <a href="/laboratorio/{{$lab->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
+              <i class="fas fa-edit"></i>
+            </a>
+          <?php
+            } else if(Auth::user()->role == 'USUARIO') {
+          ?>
+            <a href="/laboratorio/{{$lab->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
+              <i class="far fa-eye"></i>
+            </a>
+          <?php
+            }
+          ?>
+          </td>
+        </tr>
+      @endforeach
+    </tbody>
+  </table>
+
   </table>
 
   <script>
