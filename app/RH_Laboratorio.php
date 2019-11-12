@@ -4,8 +4,7 @@ namespace compras;
 
 use Illuminate\Database\Eloquent\Model;
 
-class RH_Laboratorio extends Model
-{
+class RH_Laboratorio extends Model {
      /**
      * The table associated with the model.
      *
@@ -19,6 +18,7 @@ class RH_Laboratorio extends Model
      * @var array
      */
     protected $fillable = [
-    	
+
+    'rif', 'nombre', 'direccion', 'fecha', 'user', 'estatus'
     ];
 }
