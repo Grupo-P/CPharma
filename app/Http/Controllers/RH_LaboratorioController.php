@@ -95,7 +95,9 @@ class RH_LaboratorioController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function edit($id) {
-        //
+         $laboratorio = RH_Laboratorio::find($id);
+
+        return view('pages.RRHH.laboratorio.edit', compact('laboratorio'));
     }
 
     /**
@@ -106,8 +108,7 @@ class RH_LaboratorioController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id) {
-        //
-    }
+            }
 
     /**
      * Remove the specified resource from storage.
