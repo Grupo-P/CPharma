@@ -56,7 +56,7 @@
           <tr>
             <th scope="row">{!! Form::label('rif', 'RIF *', ['title' => 'Este campo es requerido']) !!}</th>
             <td>
-              <table style="width: 60%;">
+              <table style="width: 100%;">
                 <tr style="background-color: transparent;">
                   <td>
                     {!! Form::select('tipo', ['J' => 'J', 'G' => 'G'], null, [ 'class' => 'form-control']) !!}
@@ -89,63 +89,19 @@
               <input type="tel" class="form-control" name="telefono_habitacion" id="telefono_habitacion" placeholder="0261-1234567" pattern="^0[1246]{3}-[0-9]{7}$">
             </td>
           </tr>
-
           <tr>
-            <th scope="row">{!! Form::label('correo', 'Correo') !!}</th>
-            <td>{!! Form::email('correo', null, [ 'class' => 'form-control', 'placeholder' => 'mherrera@farmacia72.com']) !!}</td>
-          </tr>
-
-          <tr>
-            <th scope="row">{!! Form::label('tipo_relacion', 'Tipo de relación *', ['title' => 'Este campo es requerido']) !!}</th>
-            <td>
-              {!! Form::select('tipo_relacion', [
-                '' => 'Seleccione una opción',
-                'Ince' => 'Ince', 
-                'Pasante' => 'Pasante',
-                'Trabajador regular' => 'Trabajador regular',
-              ], null, ['class' => 'form-control', 'required']) !!}
-            </td>
-          </tr>
-
-          <tr>
-            <th scope="row">{!! Form::label('relaciones_laborales', 'Relaciones con trabajadores *', ['title' => 'Este campo es requerido']) !!}</th>
-            <td>
-              {!! Form::select('relaciones_laborales', [
-                '' => 'Seleccione una opción',
-                'Si' => 'Si', 
-                'No' => 'No',
-              ], null, ['class' => 'form-control', 'required']) !!}
-            </td>
-          </tr>
-
-          <tr>
-            <th scope="row">{!! Form::label('como_nos_contacto', 'Como nos contactó *', ['title' => 'Este campo es requerido']) !!}</th>
-            <td>
-              {!! Form::select('como_nos_contacto', [
-                '' => 'Seleccione una opción',
-                'Computrabajo' => 'Computrabajo', 
-                'Bumeran' => 'Bumeran',
-                'Redes sociales' => 'Redes sociales',
-                'Instagram' => 'Instagram',
-                'Radio' => 'Radio',
-                'Recomendado' => 'Recomendado',
-              ], null, ['class' => 'form-control', 'required']) !!}
-            </td>
-          </tr>
-
-          <tr>
-            <th scope="row">{!! Form::label('experiencia_laboral', 'Experiencia laboral') !!}</th>
-            <td>{!! Form::textarea('experiencia_laboral', null, [ 'class' => 'form-control', 'placeholder' => 'Experiencia laboral previa del candidato', 'rows' => '3']) !!}</td>
+            <th scope="row">{!! Form::label('nombre', 'Nombre del Laboratorio *') !!}</th>
+            <td>{!! Form::textarea('nombre', null, [ 'class' => 'form-control', 'placeholder' => 'Las monjitas', 'rows' => '2']) !!}</td>
           </tr>
 
           <tr>
             <th scope="row">{!! Form::label('direccion', 'Dirección *', ['title' => 'Este campo es requerido']) !!}</th>
-            <td>{!! Form::textarea('direccion', null, [ 'class' => 'form-control', 'placeholder' => 'Av. 15 Delicias con calle 72', 'rows' => '3', 'required']) !!}</td>
+            <td>{!! Form::textarea('direccion', null, [ 'class' => 'form-control', 'placeholder' => 'Av. 15 Delicias con calle 74', 'rows' => '3', 'required']) !!}</td>
           </tr>
 
           <tr>
-            <th scope="row">{!! Form::label('observaciones', 'Observaciones') !!}</th>
-            <td>{!! Form::textarea('observaciones', null, [ 'class' => 'form-control', 'placeholder' => 'Detalles importantes del candidato', 'rows' => '3']) !!}</td>
+            <th scope="row">{!! Form::label('fecha', 'Fecha de Valoración') !!}</th>
+            <td>{!! Form::date('fecha', null, [ 'class' => 'form-control','autofocus']) !!}</td>
           </tr>
         </tbody>
       </table>
