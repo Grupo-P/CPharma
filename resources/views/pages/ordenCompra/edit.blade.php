@@ -149,6 +149,7 @@
               </th>
               <td>
                 <select name="CDD" id="CDD" class="form-control" required="required" onchange="sede_case()">
+                  <option value="">Seleccione una opción...</option>
                   <option value="NO">NO</option>
                   <option value="SI">SI</option>
                 </select>
@@ -171,7 +172,8 @@
               <th scope="row">{!! Form::label('condicion','Condicion crediticia') !!}
               </th>
               <td>
-                <select name="condicion_crediticia" id="condicion" class="form-control" onchange="condicion_case()">
+                <select name="condicion_crediticia" id="condicion" class="form-control" onchange="condicion_case()" required="required">
+                  <option value="">Seleccione una opción...</option>
                   <option value="CONTADO">CONTADO</option>
                   <option value="CREDITO">CREDITO</option>
                   <option value="PRE PAGADO">PRE PAGADO</option>
@@ -188,7 +190,8 @@
               <th scope="row">{!! Form::label('moneda','Moneda') !!}
               </th>
               <td>
-                <select name="moneda" id="moneda" class="form-control">
+                <select name="moneda" id="moneda" class="form-control" required="required">
+                  <option value="">Seleccione una opción...</option>
                   <option value="<?php echo(SigVe); ?>"><?php echo(SigVe); ?></option>
                   <option value="<?php echo(SigDolar); ?>"><?php echo(SigDolar); ?></option>
                 </select>
