@@ -43,7 +43,30 @@ class RH_LaboratorioController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request) {
-        //
+        try {
+            $laboratorio = new RH_Laboratorio();
+            $laboratorio->rif = $request->input('rif');
+            $laboratorio->nombre = $request->input('nombre');
+            $laboratorio->direccion = $request->input('direccion');
+            $laboratorio->fecha = $request->input('fecha');
+            $laboratorio->estatus = 'ACTIVO';
+            $laboratorio->user = auth()->user()->name;
+            $laboratorio->save();
+
+            $Auditoria = new Auditoria();
+            $Auditoria->accion = 'CREAR';
+            $Auditoria->tabla = 'RH_Laboratorio';
+            $Auditoria->registro = $request->input('nombre');
+            $Auditoria->user = auth()->user()->name;
+            $Auditoria->save();
+
+            return redirect()
+                ->route('laboratorio.index')
+                ->with('Saved', ' Informacion');
+        }
+        catch(\Illuminate\Database\QueryException $e) {
+            return back()->with('Error', ' Error');
+        }
     }
 
     /**
