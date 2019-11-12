@@ -135,7 +135,7 @@
     <thead class="thead-dark">
       <tr>
         <th scope="col" class="CP-sticky">#</th>
-        <th scope="col" class="CP-sticky">Rif</th>
+        <th scope="col" class="CP-sticky">RIF</th>
         <th scope="col" class="CP-sticky">Nombre del Laboratorio</th>
         <th scope="col" class="CP-sticky">Dirección</th>
         <th scope="col" class="CP-sticky">Fecha de Evaluación</th>
