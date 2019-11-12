@@ -63,11 +63,25 @@
                   </td>
 
                   <td>
-                    {!! Form::text('rif', null, [ 'class' => 'form-control', 'placeholder' => '249210010-8', 'pattern' => '^[0-9]{7,}$', 'required']) !!}
+                    {!! Form::text('rif', null, [ 'class' => 'form-control', 'placeholder' => '249210010-8', 'pattern' => '^[0-9]{9,}$', 'required']) !!}
                   </td>
                 </tr>
               </table>
             </td>
+          </tr>
+           <tr>
+            <th scope="row">{!! Form::label('nombre', 'Nombre del Laboratorio *') !!}</th>
+            <td>{!! Form::textarea('nombre', null, [ 'class' => 'form-control', 'placeholder' => 'Las monjitas', 'rows' => '2']) !!}</td>
+          </tr>
+
+          <tr>
+            <th scope="row">{!! Form::label('direccion', 'Dirección *', ['title' => 'Este campo es requerido']) !!}</th>
+            <td>{!! Form::textarea('direccion', null, [ 'class' => 'form-control', 'placeholder' => 'Av. 15 Delicias con calle 74', 'rows' => '3', 'required']) !!}</td>
+          </tr>
+
+          <tr>
+            <th scope="row">{!! Form::label('fecha', 'Fecha de Valoración') !!}</th>
+            <td>{!! Form::date('fecha', null, [ 'class' => 'form-control','autofocus']) !!}</td>
           </tr>
 
           <tr>
@@ -89,20 +103,7 @@
               <input type="tel" class="form-control" name="telefono_habitacion" id="telefono_habitacion" placeholder="0261-1234567" pattern="^0[1246]{3}-[0-9]{7}$">
             </td>
           </tr>
-          <tr>
-            <th scope="row">{!! Form::label('nombre', 'Nombre del Laboratorio *') !!}</th>
-            <td>{!! Form::textarea('nombre', null, [ 'class' => 'form-control', 'placeholder' => 'Las monjitas', 'rows' => '2']) !!}</td>
-          </tr>
-
-          <tr>
-            <th scope="row">{!! Form::label('direccion', 'Dirección *', ['title' => 'Este campo es requerido']) !!}</th>
-            <td>{!! Form::textarea('direccion', null, [ 'class' => 'form-control', 'placeholder' => 'Av. 15 Delicias con calle 74', 'rows' => '3', 'required']) !!}</td>
-          </tr>
-
-          <tr>
-            <th scope="row">{!! Form::label('fecha', 'Fecha de Valoración') !!}</th>
-            <td>{!! Form::date('fecha', null, [ 'class' => 'form-control','autofocus']) !!}</td>
-          </tr>
+         
         </tbody>
       </table>
 
