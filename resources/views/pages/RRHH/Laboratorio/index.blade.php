@@ -138,7 +138,8 @@
         <th scope="col" class="CP-sticky">RIF</th>
         <th scope="col" class="CP-sticky">Nombre del Laboratorio</th>
         <th scope="col" class="CP-sticky">Dirección</th>
-        <th scope="col" class="CP-sticky">Fecha de Evaluación</th>
+        <th scope="col" class="CP-sticky">Fecha de Valoración</th>
+        <th scope="col" class="CP-sticky">Teléfono</th>
         <th scope="col" class="CP-sticky">user</th>
         <th scope="col" class="CP-sticky">Estatus</th>
         <th scope="col" class="CP-sticky">Acciones</th>
