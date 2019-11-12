@@ -282,20 +282,30 @@
 
       /*BOTON PARA AGREGAR A LA ORDEN DE COMPRA*/
 
-      $sqlDetalleOrden = "SELECT codigo_orden FROM orden_compra_detalles WHERE id_articulo = '$IdArticulo' AND estatus = 'ACTIVO'";
+      $sqlDetalleOrden = "SELECT COUNT(*) AS Cuenta,codigo_orden FROM orden_compra_detalles WHERE id_articulo = '$IdArticulo' AND estatus = 'ACTIVO'";
       $resultDetalleOrden = mysqli_query($connCPharma,$sqlDetalleOrden);
       
       $flag = false;
       while($rowDetalleOrden = $resultDetalleOrden->fetch_assoc()){
+        $Cuenta = $rowDetalleOrden['Cuenta'];
         $codigo_orden = $rowDetalleOrden['codigo_orden'];
-        $sqlOrden = "SELECT estado FROM orden_compras WHERE codigo =  '$codigo_orden'";
+
+        if($Cuenta==0){
+          $flag = true;
+        }
+        else{
+          $sqlOrden = "SELECT estado FROM orden_compras WHERE codigo = '$codigo_orden'";
         $resultOrden = mysqli_query($connCPharma,$sqlOrden);
         $rowOrden = $resultOrden->fetch_assoc();
 
          if( ($rowOrden['estado']=='INGRESADA') 
-            || ($rowOrden['estado']=='CERRADA') ){
+            || ($rowOrden['estado']=='CERRADA')
+            || ($rowOrden['estado']=='RECHAZADA')
+            || ($rowOrden['estado']=='ANULADA') 
+          ){
             $flag = true;
          }
+        }
       }
         
       echo'
