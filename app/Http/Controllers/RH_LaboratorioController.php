@@ -3,16 +3,26 @@
 namespace compras\Http\Controllers;
 
 use Illuminate\Http\Request;
+use compras\RH_Laboratorio;
+use compras\User;
+use compras\Auditoria;
 
-class RH_LaboratorioController extends Controller
-{
+class RH_LaboratorioController extends Controller { 
+	/**
+     * Create a new controller instance with auth.
+     *
+     * 
+     */
+    public function __construct() {
+        $this->middleware('auth');
+    }
+
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
+    public function index() {
         //
     }
 
@@ -21,8 +31,7 @@ class RH_LaboratorioController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
+    public function create() {
         //
     }
 
