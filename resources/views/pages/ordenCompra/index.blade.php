@@ -495,6 +495,12 @@
 			    @csrf					    
 			    	<button type="submit" name="Recibir" value="solicitud" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Recibir" style="display: inline-block; width: 100%"><i class="fas fa-check"></i></button>
 					</form>
+
+					<form action="/RechazarOrdenCompra" method="PRE">
+				    <input type="hidden" name="rechazar" value="solicitud">
+				    <input type="hidden" name="id" value="{{$ordenCompra->id}}">   
+				    <button type="submit"role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Rechazar" style="display: inline-block; width: 100%"><i class="fa fa-ban"></i></button>
+					</form>
 					<?php
 						}
 					?>  
