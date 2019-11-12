@@ -42,7 +42,7 @@
     </button>
   </form>
   <br/><br/>
-{!! Form::open(['route' => 'laboratorio.store', 'method' => 'POST', 'id' => 'crear_candidato']) !!}
+{!! Form::open(['route' => 'laboratorio.store', 'method' => 'POST', 'id' => 'crear_laboratorio']) !!}
     <fieldset>
       <table class="table table-borderless table-striped">
         <thead class="thead-dark">
@@ -100,7 +100,7 @@
             </th>
             
             <td>
-              <input type="tel" class="form-control" name="telefono_habitacion" id="telefono_habitacion" placeholder="0261-1234567" pattern="^0[1246]{3}-[0-9]{7}$">
+              <input type="tel" class="form-control" name="telefono_habitacion" id="telefono_habitacion" placeholder="0261-1234567" pattern="^0[1246]{3}-[0-9]{9,}$">
             </td>
           </tr>
          
