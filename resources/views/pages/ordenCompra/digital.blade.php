@@ -144,6 +144,14 @@
 	      	<th colspan="7" class="alinear-der">Monto Real:</th>
 	      	<th colspan="8" class="alinear-izq">{{number_format($OrdenCompra->montoTotalReal,2,"," ,"." )}} {{$OrdenCompra->moneda}}</th>
 		    </tr>
+		    <tr>
+	      	<td colspan="7" class="alinear-der">Fecha De Cierre:</td>
+	      	<td colspan="8" class="alinear-izq">{{$OrdenCompra->fecha_cierre}}</td>
+		    </tr>
+		    <tr>
+	      	<td colspan="7" class="alinear-der">Operador De Cierre:</td>
+	      	<td colspan="8" class="alinear-izq">{{$OrdenCompra->operador_cierre}}</td>
+		    </tr>
 			<thead>
 		    <tr>
 		    		<th scope="row">#</th>
