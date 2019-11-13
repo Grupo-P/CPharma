@@ -29,47 +29,42 @@
     <tbody>
       <tr>
         <th scope="row">RIF</th>
-        <td>{{$candidatos->rif}}</td>
+        <td>{{$laboratorio->rif}}</td>
       </tr>
 
       <tr>
         <th scope="row">Nombre del Laboratorio</th>
-        <td>{{$candidatos->nombre}}</td>
-      </tr>
-
-      <tr>
-        <th scope="row">Teléfono celular</th>
-        <td>{{$candidatos->telefono_celular}}</td>
+        <td>{{$laboratorio->nombre}}</td>
       </tr>
 
       <tr>
         <th scope="row">Dirección</th>
-        <td>{{$candidatos->direccion}}</td>
+        <td>{{$laboratorio->direccion}}</td>
       </tr>
 
       <tr>
         <th scope="row">Fecha de la Valoración</th>
-        <td>{{$candidatos->fecha}}</td>
+        <td>{{$laboratorio->fecha}}</td>
       </tr>
 
       <tr>
         <th scope="row">Estatus</th>
-        <td>{{$candidatos->estatus}}</td>
+        <td>{{$laboratorio->estatus}}</td>
       </tr>
 
       <tr>
         <th scope="row">Creado</th>
-        <td>{{$candidatos->created_at}}</td>
+        <td>{{$laboratorio->created_at}}</td>
       </tr>
 
       <tr>
         <th scope="row">Ultima Actualización</th>
-        <td>{{$candidatos->updated_at}}</td>
+        <td>{{$laboratorio->updated_at}}</td>
       </tr>
 
       <tr>
         <th scope="row">Actualizado por</th>
-        <td>{{$candidatos->user}}</td>
+        <td>{{$laboratorio->user}}</td>
       </tr>
     </tbody>
   </table>
