@@ -108,6 +108,7 @@
 		    <tr>
 		      	<th scope="col" class="stickyCP">#</th>
 		      	<th scope="col" class="stickyCP">Codigo Orden</th>
+		      	<th scope="col" class="stickyCP">Estatus Orden</th>
 		      	<th scope="col" class="stickyCP">Operador Orden</th>
 		      	<th scope="col" class="stickyCP">Proveedor Orden</th>
 		      	<th scope="col" class="stickyCP">Codigo Interno</th>	
@@ -124,7 +125,6 @@
 		      	<th scope="col" class="stickyCP">Dias Restantes (Origen)</th>	
 		      	<th scope="col" class="stickyCP">Reporte (Origen)</th>	
 		      	<th scope="col" class="stickyCP">Rango (Origen)</th>	
-		      	<th scope="col" class="stickyCP">Estatus</th>
 		    </tr>
 	  	</thead>
 	  	<tbody>
@@ -132,6 +132,7 @@
 	    <tr>
 	      <th>{{$ordenCompraDetalle->id}}</th>
 	      <td>{{$ordenCompraDetalle->codigo_orden}}</td>
+	      <td>{{$ordenCompraDetalle->estatus}}</td>
 				
 				<?php
 					$OrdenCompra = 
@@ -142,7 +143,7 @@
 				  echo'<td>'.$OrdenCompra[$i]->user.'</td>';
 				  echo'<td>'.$OrdenCompra[$i]->proveedor.'</td>';
 				?>
-
+				
 	      <td>{{$ordenCompraDetalle->codigo_articulo}}</td>
 	      <td>{{$ordenCompraDetalle->codigo_barra}}</td>
 	      <td>{{$ordenCompraDetalle->descripcion}}</td>
@@ -157,7 +158,6 @@
 	      <td>{{$ordenCompraDetalle->dias_restantes_rpt}}</td>
 	      <td>{{$ordenCompraDetalle->origen_rpt}}</td>
 	      <td>{{$ordenCompraDetalle->rango_rpt}}</td>
-	      <td>{{$ordenCompraDetalle->estatus}}</td>
 	    </tr>
 	    <?php $i++; ?>
 		@endforeach
