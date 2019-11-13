@@ -38,7 +38,7 @@
 
   <br/><br/>
 
-  {!! Form::open(['route' => 'laboratorio.store', 'method' => 'POST', 'id' => 'crear_laboratorio']) !!}
+ {!! Form::open(['route' => 'laboratorio.store', 'method' => 'POST', 'id' => 'crear_laboratorio']) !!}
     <fieldset>
       <table class="table table-borderless table-striped">
         <thead class="thead-dark">
@@ -59,25 +59,29 @@
                   </td>
 
                   <td>
-                    {!! Form::text('rif', null, [ 'class' => 'form-control', 'placeholder' => '249210010-8', 'pattern' => '^[0-9]{9,}$', 'required']) !!}
+                    {!! Form::text('rif', null, [ 'class' => 'form-control', 'placeholder' => '40014517-1', 'pattern' => '^[0-9]{7,}-[0-9]{1}$', 'required']) !!}
                   </td>
                 </tr>
               </table>
             </td>
           </tr>
+          
            <tr>
-            <th scope="row">{!! Form::label('nombre', 'Nombre del Laboratorio *') !!}</th>
-            <td>{!! Form::textarea('nombre', null, [ 'class' => 'form-control', 'placeholder' => 'Las monjitas', 'rows' => '2']) !!}</td>
+            <th scope="row">{!! Form::label('nombre', 'Nombre del Laboratorio *', ['title' => 'Este campo es requerido']) !!}</th>
+
+            <td>{!! Form::text('nombre', null, [ 'class' => 'form-control', 'placeholder' => 'Consultorio Santa Mónica', 'required']) !!}</td>
           </tr>
 
           <tr>
             <th scope="row">{!! Form::label('direccion', 'Dirección *', ['title' => 'Este campo es requerido']) !!}</th>
+
             <td>{!! Form::textarea('direccion', null, [ 'class' => 'form-control', 'placeholder' => 'Av. 15 Delicias con calle 74', 'rows' => '3', 'required']) !!}</td>
           </tr>
 
           <tr>
-            <th scope="row">{!! Form::label('fecha', 'Fecha de Valoración') !!}</th>
-            <td>{!! Form::date('fecha', null, [ 'class' => 'form-control','autofocus']) !!}</td>
+            <th scope="row">{!! Form::label('fecha', 'Fecha de Valoración *', ['title' => 'Este campo es requerido']) !!}</th>
+
+            <td>{!! Form::date('fecha', null, [ 'class' => 'form-control', 'required']) !!}</td>
           </tr>
 
           <tr>
@@ -92,11 +96,11 @@
 
           <tr>
             <th scope="row">
-              <label for="telefono_habitacion">Teléfono de habitación</label>
+              <label for="telefono_fijo">Teléfono fijo</label>
             </th>
             
             <td>
-              <input type="tel" class="form-control" name="telefono_habitacion" id="telefono_habitacion" placeholder="0261-1234567" pattern="^0[1246]{3}-[0-9]{9,}$">
+              <input type="tel" class="form-control" name="telefono_fijo" id="telefono_fijo" placeholder="0261-1234567" pattern="^0[1246]{3}-[0-9]{7}$">
             </td>
           </tr>
          
@@ -106,8 +110,7 @@
       {!! Form::submit('Guardar', ['class' => 'btn btn-outline-success btn-md', 'id' => 'enviar']) !!}
     </fieldset>
   {!! Form::close()!!}
-
-
+  
   <script>
     $(document).ready(function() {
       $('[data-toggle="tooltip"]').tooltip();
