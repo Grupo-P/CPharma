@@ -108,6 +108,28 @@ class RH_LaboratorioController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id) {
+        try {
+            $laboratorio = RH_Laboratorio::find($id);
+
+            $laboratorio->fill($request->all());
+            $laboratorio->user = auth()->user()->name;
+
+            $laboratorio->save();
+
+            $Auditoria = new Auditoria();
+            $Auditoria->accion = 'EDITAR';
+            $Auditoria->tabla = 'RH_LABORATORIO';
+            $Auditoria->registro = $laboratorio->nombre;
+            $Auditoria->user = auth()->user()->name;
+            $Auditoria->save();
+
+            return redirect()
+                ->route('laboratorio.index')
+                ->with('Updated', ' Informacion');
+        }
+        catch(\Illuminate\Database\QueryException $e) {
+            return back()->with('Error', ' Error');
+        }
             }
 
     /**
