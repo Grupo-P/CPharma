@@ -43,9 +43,15 @@ class RH_LaboratorioController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request) {
+
+        $rif = $request->input('tipo') . "-" . $request->input('rif');
+
+        if(RH_Candidato::where('rif', '=', $rif)->exists()) {
+            return back()->with('Error1', ' Error');
+        }
+
         try {
             $fecha = $request->input('fecha');
-            $rif = $request->input('tipo') . "-" . $request->input('rif');
 
             $laboratorio = new RH_Laboratorio();
 
