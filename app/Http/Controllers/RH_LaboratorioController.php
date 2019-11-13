@@ -139,6 +139,36 @@ class RH_LaboratorioController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function destroy($id) {
-        //
+              $laboratorio = RH_Laboratorio::find($id);
+
+        $Auditoria = new Auditoria();
+        $Auditoria->tabla = 'RH_LABORATORIO';
+        $Auditoria->registro = $laboratorio->nombre;
+        $Auditoria->user = auth()->user()->name;
+
+        if($laboratorio->estatus == 'ACTIVO'){
+            $laboratorio->estatus = 'INACTIVO';
+            $laboratorio->accion = 'DESINCORPORAR';
+        }
+        else if($laboratorio->estatus == 'INACTIVO'){
+            $laboratorio->estatus = 'ACTIVO';
+            $Auditoria->accion = 'REINCORPORAR';
+        }
+
+        $laboratorio->user = auth()->user()->name;        
+        $laboratorio->save();
+
+        $Auditoria->save();
+
+        if($laboratorio->estatus == 'ACTIVO'){
+            return redirect()
+                ->route('laboratorio.index')
+                ->with('Deleted', ' Informacion');
+        }
+
+        return redirect()
+            ->route('laboratorio.index')
+            ->with('Deleted1', ' Informacion');
+    }
     }
 }
