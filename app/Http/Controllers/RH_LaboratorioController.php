@@ -139,7 +139,7 @@ class RH_LaboratorioController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function destroy($id) {
-              $laboratorio = RH_Laboratorio::find($id);
+        $laboratorio = RH_Laboratorio::find($id);
 
         $Auditoria = new Auditoria();
         $Auditoria->tabla = 'RH_LABORATORIO';
@@ -148,7 +148,7 @@ class RH_LaboratorioController extends Controller {
 
         if($laboratorio->estatus == 'ACTIVO'){
             $laboratorio->estatus = 'INACTIVO';
-            $laboratorio->accion = 'DESINCORPORAR';
+            $Auditoria->accion = 'DESINCORPORAR';
         }
         else if($laboratorio->estatus == 'INACTIVO'){
             $laboratorio->estatus = 'ACTIVO';
@@ -169,6 +169,7 @@ class RH_LaboratorioController extends Controller {
         return redirect()
             ->route('laboratorio.index')
             ->with('Deleted1', ' Informacion');
-    
     }
+             
+
 }
