@@ -145,7 +145,12 @@
               {!! Form::label('nivel_urgencia', 'Nivel de urgencia *', ['title' => 'Éste campo es requerido']) !!}
             </th>
             <td>
-              {!! Form::text('nivel_urgencia', null, ['class' => 'form-control', 'placeholder' => 'Alta, mediana o baja', 'pattern' => '^(alta)$|^(Alta)$|^(Mediana)$|^(mediana)$|^(baja)$|^(Baja)$', 'required']) !!}
+              {!! Form::select('nivel_urgencia', [
+                '' => 'Seleccione una opción',
+                'Alta' => 'Alta', 
+                'Mediana' => 'Mediana', 
+                'Baja' => 'Baja'
+              ], null, ['class' => 'form-control', 'required']) !!}
             </td>
           </tr>
 
