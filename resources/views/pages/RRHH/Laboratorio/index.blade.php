@@ -138,6 +138,7 @@
         <th scope="col" class="CP-sticky">RIF</th>
         <th scope="col" class="CP-sticky">Nombre del Laboratorio</th>
         <th scope="col" class="CP-sticky">Dirección</th>
+        <th scope="col" class="CP-sticky">Teléfono</th>
         <th scope="col" class="CP-sticky">Fecha de Valoración</th>
         <th scope="col" class="CP-sticky">Estatus</th>
         <th scope="col" class="CP-sticky">Acciones</th>
@@ -151,6 +152,8 @@
           <td>{{$lab->rif}}</td>
           <td>{{$lab->nombre}}</td>
           <td>{{$lab->direccion}}</td>
+          <td>{{$lab->telefono_fijo}}</td>
+          <td>{{$lab->telefono_celular}}</td>
           <td>{{$lab->fecha}}</td>
           <td>{{$lab->estatus}}</td>
 
