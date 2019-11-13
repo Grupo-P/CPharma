@@ -46,7 +46,7 @@ class RH_LaboratorioController extends Controller {
 
         $rif = $request->input('tipo') . "-" . $request->input('rif');
 
-        if(RH_Candidato::where('rif', '=', $rif)->exists()) {
+        if(RH_Laboratorio::where('rif', '=', $rif)->exists()) {
             return back()->with('Error1', ' Error');
         }
 
