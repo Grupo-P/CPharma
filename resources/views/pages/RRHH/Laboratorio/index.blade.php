@@ -167,7 +167,7 @@
             }
           ?>
 
-          <td>{{$lab->fecha}}</td>
+          <td>{{date("d-m-Y", strtotime($lab->fecha))}}</td>
           <td>{{$lab->estatus}}</td>
 
           <!-- ***************** VALIDACION DE ROLES ***************** -->

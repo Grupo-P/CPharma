@@ -45,10 +45,11 @@ class RH_LaboratorioController extends Controller {
     public function store(Request $request) {
         try {
             $fecha = $request->input('fecha');
+            $rif = $request->input('tipo') . "-" . $request->input('rif');
 
             $laboratorio = new RH_Laboratorio();
 
-            $laboratorio->rif = $request->input('rif');
+            $laboratorio->rif = $rif;
             $laboratorio->nombre = $request->input('nombre');
             $laboratorio->direccion = $request->input('direccion');
             $laboratorio->telefono_celular = $request->input('telefono_celular');
@@ -60,7 +61,7 @@ class RH_LaboratorioController extends Controller {
 
             $Auditoria = new Auditoria();
             $Auditoria->accion = 'CREAR';
-            $Auditoria->tabla = 'RH_Laboratorio';
+            $Auditoria->tabla = 'RH_LABORATORIO';
             $Auditoria->registro = $request->input('nombre');
             $Auditoria->user = auth()->user()->name;
             $Auditoria->save();
