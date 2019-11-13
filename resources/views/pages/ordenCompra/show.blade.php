@@ -98,7 +98,7 @@
 		    </tr>
 	  		<tr>
 	      	<th colspan="4" class="alinear-der">Estatus:</th>
-	      	<th colspan="3" class="alinear-izq">{{$OrdenCompra->estatus}}</th>
+	      	<th colspan="3" class="alinear-izq">{{$OrdenCompra->estado}}</th>
 		    </tr>
 			<thead>
 		    <tr>
