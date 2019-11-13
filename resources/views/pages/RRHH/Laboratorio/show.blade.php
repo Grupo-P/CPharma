@@ -43,6 +43,15 @@
       </tr>
 
       <tr>
+        <th scope="row">Teléfono Celular</th>
+        <td>{{$laboratorio->Telefono_celular}}</td>
+      </tr>
+      <tr>
+        <th scope="row">Teléfono Fijo</th>
+        <td>{{$laboratorio->Telefono_Fijo}}</td>
+      </tr>
+
+      <tr>
         <th scope="row">Fecha de la Valoración</th>
         <td>{{$laboratorio->fecha}}</td>
       </tr>
