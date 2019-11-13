@@ -55,22 +55,10 @@
         <tbody>
           <tr>
             <th scope="row">{!! Form::label('rif', 'RIF *', ['title' => 'Este campo es requerido']) !!}</th>
-            <td>
-              <table style="width: 100%;">
-                <tr style="background-color: transparent;">
-                  <td>
-                    {!! Form::select('tipo', ['J' => 'J', 'G' => 'G'], null, [ 'class' => 'form-control']) !!}
-                  </td>
-
-                  <td>
-                    {!! Form::text('rif', null, [ 'class' => 'form-control', 'placeholder' => '249210010-8', 'pattern' => '^[0-9]{9,}$', 'required']) !!}
-                  </td>
-                </tr>
-              </table>
-            </td>
           </tr>
+          
            <tr>
-            <th scope="row">{!! Form::label('nombre', 'Nombre del Laboratorio *') !!}</th>
+            <th scope="row">{!! Form::label('nombre', 'Nombre del Laboratorio *', ['title' => 'Este campo es requerido']) !!}</th>
             <td>{!! Form::textarea('nombre', null, [ 'class' => 'form-control', 'placeholder' => 'Las monjitas', 'rows' => '2']) !!}</td>
           </tr>
 
@@ -80,8 +68,8 @@
           </tr>
 
           <tr>
-            <th scope="row">{!! Form::label('fecha', 'Fecha de Valoración') !!}</th>
-            <td>{!! Form::date('fecha', null, [ 'class' => 'form-control','autofocus']) !!}</td>
+            <th scope="row">{!! Form::label('fecha', 'Fecha de Valoración *', ['title' => 'Este campo es requerido']) !!}</th>
+            <td>{!! Form::date('fecha', null, [ 'class' => 'form-control', 'required']) !!}</td>
           </tr>
 
           <tr>

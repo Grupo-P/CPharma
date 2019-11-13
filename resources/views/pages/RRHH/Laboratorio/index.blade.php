@@ -159,7 +159,7 @@
           <?php
             if(Auth::user()->role == 'MASTER' || Auth::user()->role == 'DEVELOPER') {
 
-              if($lab->estatus != 'RECHAZADO') {
+              if($lab->estatus != 'INACTIVO') {
           ?>
             <a href="/laboratorio/{{$lab->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
               <i class="far fa-eye"></i>
@@ -178,7 +178,7 @@
             </form>
 
           <?php
-            } else if($lab->estatus == 'RECHAZADO') {
+            } else if($lab->estatus == 'INACTIVO') {
           ?>
             <form action="/laboratorio/{{$lab->id}}" method="POST" style="display: inline;">
               @method('DELETE')
