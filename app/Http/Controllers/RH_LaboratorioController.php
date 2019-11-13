@@ -169,6 +169,6 @@ class RH_LaboratorioController extends Controller {
         return redirect()
             ->route('laboratorio.index')
             ->with('Deleted1', ' Informacion');
-    }
+    
     }
 }
