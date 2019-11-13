@@ -63,7 +63,7 @@
                   </td>
 
                   <td>
-                    {!! Form::text('rif', null, [ 'class' => 'form-control', 'placeholder' => '40014517-1', 'pattern' => '^[0-9]{8}[-][0-9]$', 'required']) !!}
+                    {!! Form::text('rif', null, [ 'class' => 'form-control', 'placeholder' => '40014517-1', 'pattern' => '^[0-9]{7,}-[0-9]{1}$', 'required']) !!}
                   </td>
                 </tr>
               </table>
