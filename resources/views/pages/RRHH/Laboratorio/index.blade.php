@@ -152,7 +152,6 @@
           <td>{{$lab->rif}}</td>
           <td>{{$lab->nombre}}</td>
           <td>{{$lab->direccion}}</td>
-          <td>{{$lab->telefono_fijo}}</td>
           <td>{{$lab->telefono_celular}}</td>
           <td>{{$lab->fecha}}</td>
           <td>{{$lab->estatus}}</td>

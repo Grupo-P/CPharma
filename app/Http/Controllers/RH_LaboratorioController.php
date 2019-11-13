@@ -48,6 +48,8 @@ class RH_LaboratorioController extends Controller {
             $laboratorio->rif = $request->input('rif');
             $laboratorio->nombre = $request->input('nombre');
             $laboratorio->direccion = $request->input('direccion');
+            $laboratorio->telefono_celular =$request->input('telefono_celular');
+            $laboratorio->telefono_fijo = $request->input('telefono_fijo');
             $laboratorio->fecha = $request->input('fecha');
             $laboratorio->estatus = 'ACTIVO';
             $laboratorio->user = auth()->user()->name;
