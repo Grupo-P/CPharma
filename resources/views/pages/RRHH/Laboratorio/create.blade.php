@@ -100,11 +100,11 @@
 
           <tr>
             <th scope="row">
-              <label for="telefono_habitacion">Teléfono de habitación</label>
+              <label for="telefono_fijo">Teléfono fijo</label>
             </th>
             
             <td>
-              <input type="tel" class="form-control" name="telefono_habitacion" id="telefono_habitacion" placeholder="0261-1234567" pattern="^0[1246]{3}-[0-9]{9,}$">
+              <input type="tel" class="form-control" name="telefono_fijo" id="telefono_fijo" placeholder="0261-1234567" pattern="^0[1246]{3}-[0-9]{7}$">
             </td>
           </tr>
          
@@ -114,11 +114,46 @@
       {!! Form::submit('Guardar', ['class' => 'btn btn-outline-success btn-md', 'id' => 'enviar']) !!}
     </fieldset>
   {!! Form::close()!!}
-
+  
   <script>
     $(document).ready(function() {
       $('[data-toggle="tooltip"]').tooltip();
 
+      //Objetos DOM JavaScript
+      var telefono_celular = document.querySelector('#telefono_celular');
+      var telefono_fijo = document.querySelector('#telefono_fijo');
+
+      //Objetos DOM JQuery
+      var enviar = $('#enviar');
+      var crear_laboratorio = $('#crear_laboratorio');
+
+      enviar.click(function() {
+
+        if((telefono_celular.value == '') && (telefono_fijo.value == '')) {
+
+          telefono_celular.setCustomValidity('Debe ingresar al menos un Teléfono');
+          telefono_fijo.setCustomValidity('Debe ingresar al menos un Teléfono');
+        }
+
+      });
+
+      crear_laboratorio.submit(function(e) {
+
+        if((telefono_celular.value == '') && (telefono_fijo.value == '')) {
+          e.preventDefault();
+        }
+
+      });
+
+      $('#telefono_celular, #telefono_fijo').on({
+        
+        keydown: function(e) {
+
+          telefono_celular.setCustomValidity('');
+          telefono_fijo.setCustomValidity('');
+        }
+
+      });
     });
     $('#exampleModalCenter').modal('show');
   </script>

@@ -152,7 +152,21 @@
           <td>{{$lab->rif}}</td>
           <td>{{$lab->nombre}}</td>
           <td>{{$lab->direccion}}</td>
-          <td>{{$lab->telefono_celular}}</td>
+          
+          <?php if($lab->telefono_celular == '') { ?>
+            <td>{{$lab->telefono_fijo}}</td>
+          <?php 
+            } else if($lab->telefono_fijo == '') { 
+          ?>
+            <td>{{$lab->telefono_celular}}</td>
+          <?php 
+            } else {
+          ?>
+            <td>{{$lab->telefono_celular}}</td>
+          <?php
+            }
+          ?>
+
           <td>{{$lab->fecha}}</td>
           <td>{{$lab->estatus}}</td>
 
