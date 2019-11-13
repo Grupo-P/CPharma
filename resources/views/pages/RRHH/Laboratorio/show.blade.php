@@ -44,11 +44,11 @@
 
       <tr>
         <th scope="row">Teléfono Celular</th>
-        <td>{{$laboratorio->Telefono_celular}}</td>
+        <td>{{$laboratorio->telefono_celular}}</td>
       </tr>
       <tr>
         <th scope="row">Teléfono Fijo</th>
-        <td>{{$laboratorio->Telefono_Fijo}}</td>
+        <td>{{$laboratorio->telefono_fijo}}</td>
       </tr>
 
       <tr>

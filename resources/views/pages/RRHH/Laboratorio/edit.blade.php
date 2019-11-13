@@ -26,8 +26,7 @@
   @endif
 
   <h1 class="h5 text-info">
-    <i class="fas fa-edit"></i>
-    Modificar Laboratorios
+    <i class="fas fa-edit"></i> &nbsp;Modificar Laboratorios
   </h1>
   <hr class="row align-items-start col-12">
 
@@ -38,7 +37,7 @@
 
   <br/><br/>
 
- {!! Form::open(['route' => 'laboratorio.store', 'method' => 'POST', 'id' => 'crear_laboratorio']) !!}
+ {!! Form::model($laboratorio, ['route' => ['laboratorio.update', $laboratorio], 'method' => 'PUT', 'id' => 'crear_laboratorio']) !!}
     <fieldset>
       <table class="table table-borderless table-striped">
         <thead class="thead-dark">
