@@ -56,7 +56,6 @@
     </div>
   @endif
 
-
   <h1 class="h5 text-info">
     <i class="fas fa-plus"></i>&nbsp;Agregar Laboratorios
   </h1>

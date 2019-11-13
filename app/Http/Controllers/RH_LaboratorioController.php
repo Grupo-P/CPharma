@@ -120,10 +120,15 @@ class RH_LaboratorioController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id) {
+
+        $rif = $request->input('tipo') . "-" . $request->input('rif');
+
         try {
             $laboratorio = RH_Laboratorio::find($id);
 
             $laboratorio->fill($request->all());
+            
+            $laboratorio->rif = $rif;
             $laboratorio->user = auth()->user()->name;
 
             $laboratorio->save();
