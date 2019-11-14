@@ -205,8 +205,8 @@
       include(app_path().'\functions\functions.php');
       include(app_path().'\functions\querys_mysql.php');
       include(app_path().'\functions\querys_sqlserver.php');
-
-      $conn = FG_Conectar_Smartpharma('FTN');
+      
+      $conn = FG_Conectar_Smartpharma(MiUbicacion());
 			$connCPharma = FG_Conectar_CPharma();
 			$sql = MySQL_Buscar_Orden_Detalle($codigo_orden);
 			$result = mysqli_query($connCPharma,$sql);
