@@ -10,5 +10,5 @@ class RHI_Examen_Laboratorio extends Model {
      *
      * @var string
      */
-    protected $table = 'rh_examenes_lab';
+    protected $table = 'rhi_examenes_lab';
 }
