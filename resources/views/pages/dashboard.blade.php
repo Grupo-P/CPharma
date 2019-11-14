@@ -585,14 +585,7 @@
         	<li class="card-text text-dark" style="display: inline;">
 					<i class="far fa-check-circle text-info" style="display: inline;"></i>
 					Desde ya esta disponible el modulo: 
-					<b class="text-info">Traslado</b>!!
-  				</li>
-  			</ul>
-  			<ul style="list-style:none">
-        	<li class="card-text text-dark" style="display: inline;">
-					<i class="far fa-check-circle text-info" style="display: inline;"></i>
-					Se actualizaron las busquedas por 
-					<b class="text-info">Codigo de Barra</b>!!
+					<b class="text-info">Orden de compra</b>!!
   				</li>
   			</ul>
 	      </div>

@@ -198,6 +198,13 @@
           Traslado<span class="sr-only">(current)</span>
         </a>
       </li>
+      <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('/ordenCompra') }}">     
+          <span data-feather="home"></span>
+          <i class="far fa-file-alt"></i>
+          Orden de compra<span class="sr-only">(current)</span>
+        </a>
+      </li>
     </div>
   </div>
 <?php
