@@ -13,6 +13,13 @@ class CreateRhContactosEmpresasTable extends Migration {
     public function up() {
         Schema::create('rh_contactos_empresas', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('nombre');
+            $table->string('apellido');
+            $table->string('telefono');
+            $table->string('correo');
+            $table->string('cargo');
+            $table->string('user');
+            $table->string('estatus');
             $table->timestamps();
         });
     }
