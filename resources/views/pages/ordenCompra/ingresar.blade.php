@@ -145,7 +145,7 @@
           </tr>
           <tr>
             <th scope="row">{!! Form::label('calificacion', 'Calificacion') !!}</th>
-            <td>{!! Form::number('calificacion', null, [ 'class' => 'form-control', 'autofocus', 'required']) !!}</td>
+            <td>{!! Form::number('calificacion', null, [ 'class' => 'form-control', 'autofocus', 'required', 'max'=>'20', 'min'=>'0']) !!}</td>
           </tr>
         </tbody>
         </table>

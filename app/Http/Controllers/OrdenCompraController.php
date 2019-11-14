@@ -27,7 +27,59 @@ class OrdenCompraController extends Controller
      */
     public function index()
     { 
-      $OrdenCompra =  OrdenCompra::all();
+      if(isset($_GET['Tipo'])){
+        $Tipo = $_GET['Tipo'];
+      }
+      else{
+          $Tipo = 8;
+      }
+        
+      switch ($Tipo) {
+          case 0:
+              $OrdenCompra =  
+              OrdenCompra::orderBy('id', 'asc')->
+              where('estado','EN PROCESO')->get();
+          break;
+          case 1:
+              $OrdenCompra =  
+              OrdenCompra::orderBy('id', 'asc')->
+              where('estado','POR APROBAR')->get();            
+          break;
+          case 2:
+              $OrdenCompra =  
+              OrdenCompra::orderBy('id', 'asc')->
+              where('estado','ANULADA')->get();
+          break;
+          case 3:
+              $OrdenCompra =  
+              OrdenCompra::orderBy('id', 'asc')->
+              where('estado','RECHAZADA')->get();
+          break;
+          case 4:
+              $OrdenCompra =  
+              OrdenCompra::orderBy('id', 'asc')->
+              where('estado','RECIBIDA')->get();
+          break;
+          case 5:
+              $OrdenCompra =  
+              OrdenCompra::orderBy('id', 'asc')->
+              where('estado','INGRESADA')->get();
+          break;
+          case 6:
+              $OrdenCompra =  
+              OrdenCompra::orderBy('id', 'asc')->
+              where('estado','CERRADA')->get();
+          break;
+          case 7:
+              $OrdenCompra =  
+              OrdenCompra::orderBy('id', 'asc')->
+              where('estado','APROBADA')->get();            
+          break;
+          default:
+              $OrdenCompra =  OrdenCompra::all();
+              return view('pages.ordenCompra.index', compact('OrdenCompra'));
+          break;
+      }
       return view('pages.ordenCompra.index', compact('OrdenCompra'));
     }
 
@@ -217,6 +269,15 @@ class OrdenCompraController extends Controller
         $OrdenCompra->fill($request->all());
         $OrdenCompra->estado = 'RECHAZADA';
         $OrdenCompra->estatus = 'RECHAZADA';        
+        $OrdenCompra->fecha_aprobacion = date('Y-m-d H:i:s');
+        $OrdenCompra->operador_aprobacion = auth()->user()->name;
+        $OrdenCompra->save();
+        return redirect()->route('ordenCompra.index')->with('Updated', ' Informacion');
+      }
+      else if($request->input('Devolver')=='solicitud'){
+        $OrdenCompra->fill($request->all());
+        $OrdenCompra->estado = 'EN PROCESO';
+        $OrdenCompra->estatus = 'EN ESPERA';
         $OrdenCompra->fecha_aprobacion = date('Y-m-d H:i:s');
         $OrdenCompra->operador_aprobacion = auth()->user()->name;
         $OrdenCompra->save();

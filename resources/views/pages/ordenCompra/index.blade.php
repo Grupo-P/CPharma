@@ -9,6 +9,10 @@
   include(app_path().'\functions\functions.php');
   include(app_path().'\functions\querys_mysql.php');
   include(app_path().'\functions\querys_sqlserver.php');
+
+  $pie_unidades = 0;
+  $pie_dolares = 0;
+  $pie_ve = 0;
 ?>
 
 @section('content')
@@ -101,6 +105,28 @@
 		</div>
 	@endif
 
+	<!-- Modal OrdenActiva -->
+  @if (session('NoOrdenActiva'))
+    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title text-danger" id="exampleModalCenterTitle"><i class="fas fa-info text-danger"></i> Orden de compra</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <h4 class="h6">Usted NO posee una orden de compra activa</h4>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline-success" data-dismiss="modal">Aceptar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  @endif
+
 	<h1 class="h5 text-info">
 		<i class="far fa-file-alt"></i>
 		Orden de compra
@@ -136,31 +162,125 @@
 	    </tr>
 	</table>
 	<br/>
+	
+	<table class="table table-striped table-borderless col-12 sortable">
+  	<thead class="thead-dark">
+	    <tr>
+	      	<th scope="col" colspan="9" style="text-align: center;">CLASIFICACION</th>
+	    </tr>
+		</thead>
+		<tbody>
+	  	<tr>
+	  	<td style="width:11%;" align="center">
+	  		<?php
+	  			$tipo = 8;
+	  		?>
+				<form action="/ordenCompra?Tipo={{$tipo}}" method="GET" style="display: inline;">
+			    <button type="submit" name="Tipo" role="button" class="btn btn-outline-success btn-sm" value="8">TODO</button>
+				</form>
+	    </td>
+
+	  	<td style="width:11%;" align="center">
+	  		<?php
+	  			$tipo = 0;
+	  		?>
+				<form action="/ordenCompra?Tipo={{$tipo}}" method="GET" style="display: inline;">
+			    <button type="submit" name="Tipo" role="button" class="btn btn-outline-success btn-sm" value="0">EN PROCESO</button>
+				</form>
+	    </td>
+
+	  	<td style="width:11%;" align="center">
+	  		<?php
+	  			$tipo = 1;
+	  		?>
+				<form action="/ordenCompra?Tipo={{$tipo}}" method="GET" style="display: inline;">
+			    <button type="submit" name="Tipo" role="button" class="btn btn-outline-success btn-sm" value="1">POR APROBAR</button>
+				</form>
+	    </td>
+
+	    <td style="width:11%;" align="center">
+	      	<?php
+	  			$tipo = 2;
+	  		?>
+				<form action="/ordenCompra?Tipo={{$tipo}}" method="GET" style="display: inline;">
+			    <button type="submit" name="Tipo" role="button" class="btn btn-outline-danger btn-sm" value="2">ANULADA</button>
+					</form>	
+			</td>
+
+	    <td style="width:11%;" align="center">
+	      	<?php
+	  			$tipo = 3;
+	  		?>
+				<form action="/ordenCompra?Tipo={{$tipo}}" method="GET" style="display: inline;">
+			    <button type="submit" name="Tipo" role="button" class="btn btn-outline-danger btn-sm" value="3">RECHAZADA</button>
+				</form>						
+	    </td>
+
+	    <td style="width:11%;" align="center">
+	      	<?php
+	  			$tipo = 7;
+	  		?>
+				<form action="/ordenCompra?Tipo={{$tipo}}" method="GET" style="display: inline;">
+			    <button type="submit" name="Tipo" role="button" class="btn btn-outline-info btn-sm" value="7">POR RECIBIR</button>
+				</form>						
+	    </td>
+
+	    <td style="width:11%;" align="center">
+	      	<?php
+	  			$tipo = 4;
+	  		?>
+				<form action="/ordenCompra?Tipo={{$tipo}}" method="GET" style="display: inline;">
+			    <button type="submit" name="Tipo" role="button" class="btn btn-outline-info btn-sm" value="4">RECIBIDA</button>
+				</form>						
+	    </td>
+
+	    <td style="width:11%;" align="center">
+	      	<?php
+	  			$tipo = 5;
+	  		?>
+				<form action="/ordenCompra?Tipo={{$tipo}}" method="GET" style="display: inline;">
+			    <button type="submit" name="Tipo" role="button" class="btn btn-outline-info btn-sm" value="5">INGRESADA</button>
+				</form>						
+	    </td>
+
+	    <td style="width:11%;" align="center">
+	      	<?php
+	  			$tipo = 6;
+	  		?>
+				<form action="/ordenCompra?Tipo={{$tipo}}" method="GET" style="display: inline;">
+			    <button type="submit" name="Tipo" role="button" class="btn btn-outline-dark btn-sm" value="6">CERRADA</button>
+				</form>						
+	    </td>
+
+	    </tr>
+		</tbody>
+	</table>
+	<br/>
 
 	<table class="table table-striped table-borderless col-12 sortable" id="myTable">
 	  	<thead class="thead-dark">
 		    <tr>
-		      	<th scope="col" class="stickyCP">#</th>
-		      	<th scope="col" class="stickyCP">Orden compra</th>
-		      	<th scope="col" class="stickyCP">Sede Destino</th>
-		      	<th scope="col" class="stickyCP">Proveedor</th>
-		      	<th scope="col" class="stickyCP">Fecha de la orden</th>
-		      	<th scope="col" class="stickyCP">Fecha estimada de despacho</th>
-		      	<th scope="col" class="stickyCP">Dias transcurridos</th>
-		      	<th scope="col" class="stickyCP">Monto total Bs</th>
-		      	<th scope="col" class="stickyCP">Monto total $</th>
-		      	<th scope="col" class="stickyCP">Unidades</th>
-		      	<th scope="col" class="stickyCP">Condicion crediticia</th>
-		      	<th scope="col" class="stickyCP">Dias de credito</th>
-		      	<th scope="col" class="stickyCP">Estatus</th>
-		      	<th scope="col" class="stickyCP">Estado Actual</th>
-		      	<th scope="col" class="stickyCP">Operador</th>
-		      	<th scope="col" class="stickyCP">Monto real</th>
-		      	<th scope="col" class="stickyCP">Fecha de aprobacion</th>
-		      	<th scope="col" class="stickyCP">Calificacion</th>
-		      	<th scope="col" class="stickyCP">Fecha de recepcion</th>
-		      	<th scope="col" class="stickyCP">Fecha de ingreso</th>
-		      	<th scope="col" class="stickyCP">Acciones</th>
+		      	<th scope="col" class="CP-sticky">#</th>
+		      	<th scope="col" class="CP-sticky">Orden compra</th>
+		      	<th scope="col" class="CP-sticky">Sede Destino</th>
+		      	<th scope="col" class="CP-sticky">Proveedor</th>
+		      	<th scope="col" class="CP-sticky">Fecha de la orden</th>
+		      	<th scope="col" class="CP-sticky">Fecha estimada de despacho</th>
+		      	<th scope="col" class="CP-sticky">Dias transcurridos</th>
+		      	<th scope="col" class="CP-sticky">Monto total Bs</th>
+		      	<th scope="col" class="CP-sticky">Monto total $</th>
+		      	<th scope="col" class="CP-sticky">Unidades</th>
+		      	<th scope="col" class="CP-sticky">Condicion crediticia</th>
+		      	<th scope="col" class="CP-sticky">Dias de credito</th>
+		      	<th scope="col" class="CP-sticky">Estatus</th>
+		      	<th scope="col" class="CP-sticky">Estado Actual</th>
+		      	<th scope="col" class="CP-sticky">Operador</th>
+		      	<th scope="col" class="CP-sticky">Monto real</th>
+		      	<th scope="col" class="CP-sticky">Fecha de aprobacion</th>
+		      	<th scope="col" class="CP-sticky">Calificacion</th>
+		      	<th scope="col" class="CP-sticky">Fecha de recepcion</th>
+		      	<th scope="col" class="CP-sticky">Fecha de ingreso</th>
+		      	<th scope="col" class="CP-sticky">Acciones</th>
 		    </tr>
 	  	</thead>
 	  	<tbody>
@@ -173,22 +293,36 @@
 				$total_unidades = 0;
 				$costo_total = 0;
 
+				$costo_interno = 0;
+				$costo_interno_dolar = 0;
+				$costo_interno_ve = 0;
+
 				while($row = $result->fetch_assoc()) {
 					$total_unidades += floatval($row['total_unidades']);
 					$costo_total += floatval($row['costo_total']);
 				}
 				mysqli_close($connCPharma);
 
+				$costo_interno = $costo_total;
+				$unidades_internas = $total_unidades;
+
 				$costo_total = number_format ($costo_total,2,"," ,"." );
+				$total_unidades = number_format ($total_unidades,0,"," ,"." );
 
 				if($ordenCompra->moneda==SigDolar){
+					$costo_interno_dolar = $costo_interno;
 					$costo_total_dolar = $costo_total;
 					$costo_total_ve = '0,00';
 				}
 				else{
+					$costo_interno_ve = $costo_interno;
 					$costo_total_dolar = '0,00';
 					$costo_total_ve = $costo_total;
 				}
+
+				$pie_unidades += $unidades_internas;
+				$pie_dolares += $costo_interno_dolar;
+				$pie_ve += $costo_interno_ve;
 
 				if($ordenCompra->estado=='CERRADA'){
 					$Dias = FG_Rango_Dias($ordenCompra->created_at,$ordenCompra->updated_at);
@@ -275,7 +409,7 @@
 					<form action="/ordenCompra/{{$ordenCompra->id}}" method="POST">
 			    @method('DELETE')
 			    @csrf					    
-			    	<button type="submit" name="PorAprobar" value="solicitud" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Pausar" style="display: inline-block; width: 100%"><i class="fas fa-angle-double-right"></i></button>
+			    	<button type="submit" name="PorAprobar" value="solicitud" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Por Aprobar" style="display: inline-block; width: 100%"><i class="fas fa-angle-double-right"></i></button>
 					</form>
 
 					<?php
@@ -314,6 +448,12 @@
 			    @method('DELETE')
 			    @csrf					    
 			    	<button type="submit" name="Aprobar" value="solicitud" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Aprobar" style="display: inline-block; width: 100%"><i class="fas fa-check"></i></button>
+					</form>
+
+					<form action="/ordenCompra/{{$ordenCompra->id}}" method="POST">
+			    @method('DELETE')
+			    @csrf					    
+			    	<button type="submit" name="Devolver" value="solicitud" role="button" class="btn btn-outline-warning btn-sm" data-toggle="tooltip" data-placement="top" title="Devolver" style="display: inline-block; width: 100%"><i class="fas fa-angle-double-left"></i></button>
 					</form>
 
 					<form action="/RechazarOrdenCompra" method="PRE">
@@ -373,6 +513,12 @@
 			    @csrf					    
 			    	<button type="submit" name="Recibir" value="solicitud" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Recibir" style="display: inline-block; width: 100%"><i class="fas fa-check"></i></button>
 					</form>
+
+					<form action="/RechazarOrdenCompra" method="PRE">
+				    <input type="hidden" name="rechazar" value="solicitud">
+				    <input type="hidden" name="id" value="{{$ordenCompra->id}}">   
+				    <button type="submit"role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Rechazar" style="display: inline-block; width: 100%"><i class="fa fa-ban"></i></button>
+					</form>
 					<?php
 						}
 					?>  
@@ -408,9 +554,17 @@
 				?>
 			<!--  FIN Acciones para el departamento de recepcion -->
    		</td>
-    <!-- Fin Validacion -->
+    <!-- Fin Validacion --> 
     </tr>
 		@endforeach
+
+		<tr>
+		 <th colspan="7" class="text-right">Totales</th>
+		 <th><?php echo(number_format ($pie_ve,2,"," ,"." )) ?></th>
+		 <th><?php echo(number_format($pie_dolares,2,"," ,"." )) ?></th>
+		 <th><?php echo(number_format ($pie_unidades,0,"," ,"." )) ?></th>
+		 <th colspan="11"></th>
+		</tr>
 		</tbody>
 	</table>
 

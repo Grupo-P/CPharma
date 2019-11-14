@@ -221,11 +221,6 @@
     while($row = sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC)) {
       $IdArticulo = $row["InvArticuloId"];
 
-      $sqlDetalleOrden = "SELECT COUNT(*) AS CuentaOr FROM orden_compra_detalles WHERE id_articulo = '$IdArticulo'";
-      $resultDetalleOrden = mysqli_query($connCPharma,$sqlDetalleOrden);
-      $rowDetalleOrden = $resultDetalleOrden->fetch_assoc();
-      $cuentaArticuloOrden = $rowDetalleOrden['CuentaOr'];
-
       $sql2 = MySQL_Cuenta_Veces_Dias_Cero($IdArticulo,$FInicial,$FFinal);
       $result2 = mysqli_query($connCPharma,$sql2);
       $row2 = $result2->fetch_assoc();
@@ -283,8 +278,40 @@
       echo '<td align="center" class="bg-danger text-white">'.round($VentaDiariaQuiebre,2).'</td>';
       echo '<td align="center">'.round($DiasRestantes,2).'</td>';
       echo '<td align="center" class="bg-danger text-white">'.round($DiasRestantesQuiebre,2).'</td>';
-      
+
+
       /*BOTON PARA AGREGAR A LA ORDEN DE COMPRA*/
+
+      $sqlCuentaOrden = "SELECT COUNT(*) AS Cuenta FROM orden_compra_detalles WHERE id_articulo = '$IdArticulo' AND estatus = 'ACTIVO'";
+      $resultCuentaOrden = mysqli_query($connCPharma,$sqlCuentaOrden);
+      $rowCuentaOrden = $resultCuentaOrden->fetch_assoc();
+
+      $sqlDetalleOrden = "SELECT codigo_orden FROM orden_compra_detalles WHERE id_articulo = '$IdArticulo' AND estatus = 'ACTIVO'";
+      $resultDetalleOrden = mysqli_query($connCPharma,$sqlDetalleOrden);
+      
+      $flag = false;
+      if($rowCuentaOrden['Cuenta']==0){
+        $flag = true;
+      }
+      
+      while($rowDetalleOrden = $resultDetalleOrden->fetch_assoc()){
+        $codigo_orden = $rowDetalleOrden['codigo_orden'];
+        $sqlOrden = "SELECT estado FROM orden_compras WHERE codigo = '$codigo_orden'";
+        $resultOrden = mysqli_query($connCPharma,$sqlOrden);
+        $rowOrden = $resultOrden->fetch_assoc();
+
+        if( ($rowOrden['estado']=='INGRESADA') 
+          || ($rowOrden['estado']=='CERRADA')
+          || ($rowOrden['estado']=='RECHAZADA')
+          || ($rowOrden['estado']=='ANULADA') 
+        ){
+          $flag = true;
+        }
+        else{
+          $flag = false;
+        }
+      }
+     
       echo'
       <td style="width:140px;">
         <form action="/ordenCompraDetalle/create" method="PRE" style="display: block; width:100%;" target="_blank">
@@ -300,21 +327,23 @@
       echo'
           <button type="submit" name="Reporte" role="button" class="btn btn-outline-success btn-sm" value="SI" style="width:100%;">Agregar</button>
         </form>
-      ';
-      if( $cuentaArticuloOrden!=0 ) {
-        echo'
+        ';
+
+        if($flag != true){
+          echo'
           <br/> 
           <form action="/ordenCompraDetalle/0" method="PRE" style="display: block; width:100%;" target="_blank">';
-        echo'<input type="hidden" name="id_articulo" value="'.$IdArticulo.'">';
-        echo'
-          <button type="submit" role="button" class="btn btn-outline-danger btn-sm" style="width:100%;">En Transito</button>
-        </form>
-      ';
-      }
+          echo'<input type="hidden" name="id_articulo" value="'.$IdArticulo.'">';
+          echo'
+            <button type="submit" role="button" class="btn btn-outline-danger btn-sm" style="width:100%;">En Transito</button>
+          </form>
+          ';
+        }
       echo'
       </td>
       ';
       /*BOTON PARA AGREGAR A LA ORDEN DE COMPRA*/
+
       echo '</tr>';
       $contador++;
     }

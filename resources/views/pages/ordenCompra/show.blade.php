@@ -55,7 +55,7 @@
 	<table>
 		<thead>
 		    <tr>
-		    		<th scope="row" colspan="3">
+		    		<th scope="row" colspan="4">
 		    			<span class="navbar-brand text-info CP-title-NavBar">
 		    				<b><i class="fas fa-syringe text-success"></i>CPharma</b>
   						</span>
@@ -65,42 +65,46 @@
   	</thead>
 	  	<tbody>
 		    <tr>
-	      	<td colspan="3" class="alinear-der">Codigo:</td>
+	      	<td colspan="4" class="alinear-der">Codigo:</td>
 	      	<td colspan="3" class="alinear-izq">{{$OrdenCompra->codigo}}</td>
 		    </tr>
 		    <tr>
-	      	<td colspan="3" class="alinear-der">Fecha de orden:</td>
+	      	<td colspan="4" class="alinear-der">Fecha de orden:</td>
 	      	<td colspan="3" class="alinear-izq">{{$OrdenCompra->created_at}}</td>
 		    </tr>
 		    <tr>
-	      	<td colspan="3" class="alinear-der">Destino:</td>
+	      	<td colspan="4" class="alinear-der">Destino:</td>
 	      	<td colspan="3" class="alinear-izq">{{$OrdenCompra->sede_origen}}</td>
 		    </tr>
 		    <tr>
-	      	<td colspan="3" class="alinear-der">Proveedor:</td>
+	      	<td colspan="4" class="alinear-der">Proveedor:</td>
 	      	<td colspan="3" class="alinear-izq">{{$OrdenCompra->proveedor}}</td>
 		    </tr>
 		    <tr>
-	      	<td colspan="3" class="alinear-der">Fecha Despacho:</td>
+	      	<td colspan="4" class="alinear-der">Fecha Despacho:</td>
 	      	<td colspan="3" class="alinear-izq">{{$OrdenCompra->fecha_estimada_despacho}}</td>
 		    </tr>
 		    <tr>
-	      	<td colspan="3" class="alinear-der">Condicion crediticia:</td>
+	      	<td colspan="4" class="alinear-der">Condicion crediticia:</td>
 	      	<td colspan="3" class="alinear-izq">{{$OrdenCompra->condicion_crediticia}}</td>
 		    </tr>
 		    <tr>
-	      	<td colspan="3" class="alinear-der">Dias credito:</td>
+	      	<td colspan="4" class="alinear-der">Dias credito:</td>
 	      	<td colspan="3" class="alinear-izq">{{$OrdenCompra->dias_credito}}</td>
 		    </tr>
 		    <tr>
-	      	<td colspan="3" class="alinear-der">Operador:</td>
+	      	<td colspan="4" class="alinear-der">Operador:</td>
 	      	<td colspan="3" class="alinear-izq">{{$OrdenCompra->user}}</td>
 		    </tr>
-	  	
+	  		<tr>
+	      	<th colspan="4" class="alinear-der">Estatus:</th>
+	      	<th colspan="3" class="alinear-izq">{{$OrdenCompra->estado}}</th>
+		    </tr>
 			<thead>
 		    <tr>
 		    		<th scope="row">#</th>
 		    		<th scope="row">Codigo Interno</th>
+		    		<th scope="row">Codigo Barra</th>
 		    		<th scope="row">Descripcion</th>
 		    		<th scope="row">Unidades</th>
 		    		<th scope="row">Costo {{$OrdenCompra->moneda}}</th>
@@ -150,6 +154,7 @@
 				echo '<tr>';
 				echo '<th>'.intval($cont).'</th>';
 				echo '<td>'.$row['codigo_articulo'].'</td>';
+				echo '<td>'.$row['codigo_barra'].'</td>';
 				echo '<td>'.$row['descripcion'].'</td>';
 				echo '<td>'.$row['total_unidades'].'</td>';
 				echo '<td>'.number_format(floatval($row['costo_unitario']),2,"," ,"." ).'</td>';
@@ -162,7 +167,7 @@
 	  	}
 	  	
 	  	echo '<tr>';
-	  	echo '<td colspan="3" class="alinear-der"><strong>Totales</strong></td>';
+	  	echo '<td colspan="4" class="alinear-der"><strong>Totales</strong></td>';
 	  	echo '<td><strong>'.$total_unidades.'</strong></td>';
 	  	echo '<td><strong></strong></td>';
 	  	echo '<td><strong>'.number_format($costo_total,2,"," ,"." ).' '.$moneda.'</strong></td>';
