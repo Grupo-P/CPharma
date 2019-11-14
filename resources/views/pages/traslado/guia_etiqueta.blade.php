@@ -7,6 +7,7 @@
 @section('content')
 <style>
 	table{
+		display: inline;
 		border-collapse: collapse;
 		text-align: center;
 	}
@@ -30,25 +31,25 @@
 	}
 	.alinear-der{
 		text-align: right;
-		padding-right: 20px;
+		padding-right: 10px;
 	}
 	.alinear-izq{
 		text-align: left;
-		padding-left: 20px;
+		padding-left: 10px;
 	}
 	.aumento{
-		font-size: 1.2em;
+		font-size: 1em;
 		text-transform: uppercase;
 	}
 	.aumentoT{
-		font-size: 1.8em;
+		font-size: 1.2em;
 		text-transform: uppercase;
 	}
 	.espacioT{
-		padding-top: 20px;
-		padding-bottom: 20px;
+		padding-top: 5px;
+		padding-bottom: 5px;
 	}
-	@page {size: landscape}
+	/*@page {size: landscape}*/
 
 	@media print{
 		.saltoDePagina{
@@ -92,6 +93,7 @@
 	<input type="button" name="imprimir" value="Imprimir" class="btn btn-outline-success btn-sm" onclick="window.print();" style="display: inline; margin-left: 10px;">
 
 	<hr class="row align-items-start col-12">
+	
 	<table>
 		<thead>
 		    <tr>
@@ -161,6 +163,9 @@
 		    </thead>
 	  	</tbody>
 	</table>
+	<br><br>
+	<div class="saltoDePagina"></div> 
+	
 	<?php
 		Etiquetas_Traslado($numero_ajuste,$fecha_ajuste,$sede_emisora,$sede_destino,$bultos,$fecha_embalaje,$operador_embalaje);
 	?>
@@ -178,14 +183,14 @@
  function Etiquetas_Traslado($numero_ajuste,$fecha_ajuste,$sede_emisora,$sede_destino,$bultos,$fecha_embalaje,$operador_embalaje){
 
 	$Contador = 1;
+	$CuentaEtiqueta = 0;
+
 	while($Contador<=$bultos){
 		echo'
-		<div class="saltoDePagina"></div>
-		<br/>
-		<table class="table-borderless" style="width:82%;">
+		<table class="table-borderless" style="display: inline;">
 			<thead>
 		    <tr>
-		    		<th scope="row" colspan="8" class="espacioT">
+		    		<th scope="row" class="espacioT">
 		    			<span class="navbar-brand text-info CP-title-NavBar">
 		    				<b><i class="fas fa-syringe text-success"></i>CPharma</b>
   						</span>
@@ -195,28 +200,34 @@
 	  	</thead>
 	  	<tbody>
 		    <tr>
-	      	<td colspan="8" class="aumento espacioT">Soporte #'.$numero_ajuste.' del '.$fecha_ajuste.'</td>
+	      	<td class="aumento espacioT">Soporte #'.$numero_ajuste.' del '.$fecha_ajuste.'</td>
 		    </tr>
 		    <tr>
-	      	<td colspan="8" class="aumentoT espacioT"><strong>De: '.$sede_emisora.'</strong></td>
+	      	<td class="aumentoT espacioT"><strong>De: '.$sede_emisora.'</strong></td>
 		    </tr>
 		    <tr>
-	      	<td colspan="8" class="aumentoT espacioT"><strong>Para: '.$sede_destino.'</strong></td>
+	      	<td class="aumentoT espacioT"><strong>Para: '.$sede_destino.'</strong></td>
 		    </tr>
 		    <tr>
-	      	<td colspan="8" class="alinear-der aumento espacioT">Preparado el '.$fecha_embalaje.' por '.$operador_embalaje.'</td>
+	      	<td class="alinear-der aumento espacioT">Preparado el '.$fecha_embalaje.' por '.$operador_embalaje.'</td>
 		    </tr>
 		    <tr>
-	      	<td colspan="8" class="aumento espacioT">Favor no aplilar demasiadas cajas y contemplar que el contenido es fragil para el momento de su movilizacion</td>
+	      	<td class="aumento espacioT">Favor no aplilar demasiadas cajas y contemplar que el contenido es fragil para el momento de su movilizacion</td>
 		    </tr>
 		    <tr>
-	      	<td colspan="8" class="alinear-der aumento espacioT"><strong>Bulto '.$Contador.' de '.$bultos.'</strong></td>
+	      	<td class="alinear-der aumento espacioT"><strong>Bulto '.$Contador.' de '.$bultos.'</strong></td>
 		    </tr>
 	  	</tbody>
 		</table>
+		<br/><br/>
 		';
 		$Contador++;
+		$CuentaEtiqueta++;
+
+		if($CuentaEtiqueta == 4){
+			echo'<br/>';
+			$CuentaEtiqueta=0;
+		}
 	}
-		echo'<br/>';
  }
 ?>
