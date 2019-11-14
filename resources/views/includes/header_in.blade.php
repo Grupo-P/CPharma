@@ -290,7 +290,7 @@
         <a class="nav-link CP-Links-Menu" href="/empresaReferencias">
           <span data-feather="home"></span>
           <i class="far fa-address-card"></i>
-          Empresas de referencias lab.<span class="sr-only">(current)</span>
+          Empresas de referencias<span class="sr-only">(current)</span>
         </a>
       </li>
 
