@@ -290,7 +290,7 @@
         <a class="nav-link CP-Links-Menu" href="/empresaReferencias">
           <span data-feather="home"></span>
           <i class="far fa-address-card"></i>
-          Empresas de referencias lab.<span class="sr-only">(current)</span>
+          Empresas de referencias<span class="sr-only">(current)</span>
         </a>
       </li>
 
@@ -309,7 +309,14 @@
           Laboratorios<span class="sr-only">(current)</span>
         </a>
       </li>
-      
+
+      <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="/contactos">
+          <span data-feather="home"></span>
+         <i class="fas fa-phone"></i>
+          Contactos de empresas<span class="sr-only">(current)</span>
+        </a>
+      </li>
     </div>
   </div>
 <?php

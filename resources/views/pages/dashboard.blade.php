@@ -22,6 +22,8 @@
     $entrevistas = DB::table('rh_entrevistas')->count();
     $examenesm = DB::table('rh_examenes')->count();
     $empresaReferencias = DB::table('rh_empresaRef')->count();
+    $laboratorios = DB::table('rh_laboratorio')->count();
+    $contactos = DB::table('rh_contactos_empresas')->count();
 
   /*TASA DOLAR VENTA*/
     $Tasa = DB::table('tasa_ventas')->where('moneda', 'Dolar')->value('tasa');
@@ -962,6 +964,50 @@
       </div>
       <div class="card-footer bg-transparent border-dark text-right">
         <a href="/examenesm" class="btn btn-outline-dark btn-sm">Visualizar</a>
+      </div>    
+    </div>
+  </div>
+
+  <div class="card-deck">
+    <div class="card border-danger mb-3" style="width: 14rem;">      
+      <div class="card-body text-left bg-danger">
+        <h3 class="card-title">
+          <span class="card-text text-white">
+            <i class="fas fa-vials"></i>
+            <?php
+            echo ''.$laboratorios;
+          ?>            
+          </span>
+        </h3>
+        <p class="card-text text-white">
+        <?php 
+          echo 'Laboratorios registrados';
+        ?>
+        </p>
+      </div>
+      <div class="card-footer bg-transparent border-danger text-right">
+        <a href="/laboratorio" class="btn btn-outline-danger btn-sm">Visualizar</a>
+      </div>    
+    </div>
+
+    <div class="card border-success mb-3" style="width: 14rem;">
+      <div class="card-body text-left bg-success">
+        <h2 class="card-title">
+          <span class="card-text text-white">
+            <i class="fas fa-phone"></i>
+            <?php
+            echo ''.$contactos;
+          ?>            
+          </span>
+        </h2>
+        <p class="card-text text-white">
+        <?php 
+          echo 'Contactos de empresas registrados';
+        ?>
+        </p>
+      </div>
+      <div class="card-footer bg-transparent border-success text-right">
+        <a href="/contactos" class="btn btn-outline-success btn-sm">Visualizar</a>
       </div>    
     </div>
   </div>
