@@ -23,6 +23,7 @@
     $examenesm = DB::table('rh_examenes')->count();
     $empresaReferencias = DB::table('rh_empresaRef')->count();
     $laboratorios = DB::table('rh_laboratorio')->count();
+    $contactos = DB::table('rh_contactos_empresas')->count();
 
   /*TASA DOLAR VENTA*/
     $Tasa = DB::table('tasa_ventas')->where('moneda', 'Dolar')->value('tasa');
@@ -993,20 +994,20 @@
       <div class="card-body text-left bg-success">
         <h2 class="card-title">
           <span class="card-text text-white">
-            <i class="fas fa-user-check"></i>
+            <i class="fas fa-phone"></i>
             <?php
-            echo ''.$candidatos;
+            echo ''.$contactos;
           ?>            
           </span>
         </h2>
         <p class="card-text text-white">
         <?php 
-          echo 'Candidatos registrados';
+          echo 'Contactos de empresas registrados';
         ?>
         </p>
       </div>
       <div class="card-footer bg-transparent border-success text-right">
-        <a href="/candidatos" class="btn btn-outline-success btn-sm">Visualizar</a>
+        <a href="/contactos" class="btn btn-outline-success btn-sm">Visualizar</a>
       </div>    
     </div>
   </div>
