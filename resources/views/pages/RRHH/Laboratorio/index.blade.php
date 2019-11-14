@@ -1,8 +1,6 @@
 @extends('layouts.model')
 
-@section('title')
-  Vacantes
-@endsection
+@section('title', 'Laboratorio')
 
 @section('scriptsHead')
   <style>
@@ -25,7 +23,7 @@
             </button>
           </div>
           <div class="modal-body">
-            <h4 class="h6">Vacante almacenada con éxito</h4>
+            <h4 class="h6">Laboratorio almacenado con éxito</h4>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-outline-success" data-dismiss="modal">Aceptar</button>
@@ -49,7 +47,7 @@
             </button>
           </div>
           <div class="modal-body">
-            <h4 class="h6">Vacante modificada con éxito</h4>
+            <h4 class="h6">Laboratorio modificado con éxito</h4>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-outline-success" data-dismiss="modal">Aceptar</button>
@@ -73,7 +71,7 @@
             </button>
           </div>
           <div class="modal-body">
-            <h4 class="h6">Vacante desincorporada con éxito</h4>
+            <h4 class="h6">Laboratorio Reincorporado con éxito</h4>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-outline-success" data-dismiss="modal">Aceptar</button>
@@ -96,7 +94,7 @@
             </button>
           </div>
           <div class="modal-body">
-            <h4 class="h6">Vacante reincorporada con éxito</h4>
+            <h4 class="h6">Laboratorio Desincorporado con éxito</h4>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-outline-success" data-dismiss="modal">Aceptar</button>
@@ -105,17 +103,15 @@
       </div>
     </div>
   @endif
-
-  <h1 class="h5 text-info">
-    <i class="fas fa-user-plus"></i>&nbsp;Vacantes
+ <h1 class="h5 text-info">
+    <i class="fas fa-vials"></i>&nbsp;Laboratorios
   </h1>
-
   <hr class="row align-items-start col-12">
 
   <table style="width:100%;">
     <tr>
       <td style="width:10%;" align="center">
-        <a href="{{ url('/vacantes/create') }}" role="button" class="btn btn-outline-info btn-sm" style="display: inline; text-align: left;">
+        <a href="/laboratorio/create" role="button" class="btn btn-outline-info btn-sm" style="display: inline; text-align: left;">
           <i class="fa fa-plus"></i>&nbsp;Agregar
         </a>
       </td>
@@ -138,52 +134,58 @@
   <table class="table table-striped table-borderless col-12 sortable" id="myTable">
     <thead class="thead-dark">
       <tr>
-        <th scope="col" class="stickyCP">#</th>
-        <th scope="col" class="stickyCP">Sede</th>
-        <th scope="col" class="stickyCP">Nombre de la vacante</th>
-        <th scope="col" class="stickyCP">Departamento</th>
-        <th scope="col" class="stickyCP">Turno</th>
-        <th scope="col" class="stickyCP">Nivel de urgencia</th>
-        <th scope="col" class="stickyCP">Solicitante</th>
-        <th scope="col" class="stickyCP">Cantidad requerida</th>
-        <th scope="col" class="stickyCP">Fecha inicio solicitud</th>
-        <th scope="col" class="stickyCP">Fecha tope solicitud</th>
-        <th scope="col" class="stickyCP">Estatus</th>
-        <th scope="col" class="stickyCP">Acciones</th>
+        <th scope="col" class="CP-sticky">#</th>
+        <th scope="col" class="CP-sticky">RIF</th>
+        <th scope="col" class="CP-sticky">Nombre del Laboratorio</th>
+        <th scope="col" class="CP-sticky">Dirección</th>
+        <th scope="col" class="CP-sticky">Teléfono</th>
+        <th scope="col" class="CP-sticky">Fecha de Valoración</th>
+        <th scope="col" class="CP-sticky">Estatus</th>
+        <th scope="col" class="CP-sticky">Acciones</th>
       </tr>
     </thead>
 
-    <tbody>
-      @foreach($vacantes as $vacante)
+   <tbody>
+      @foreach($laboratorio as $lab)
         <tr>
-          <th>{{$vacante->id}}</th>
-          <td>{{$vacante->sede}}</td>
-          <td>{{$vacante->nombre_vacante}}</td>
-          <td>{{$vacante->departamento}}</td>
-          <td>{{$vacante->turno}}</td>
-          <td>{{$vacante->nivel_urgencia}}</td>
-          <td>{{$vacante->solicitante}}</td>
-          <td>{{$vacante->cantidad}}</td>
-          <td>{{date('d-m-Y', strtotime($vacante->fecha_solicitud))}}</td>
-          <td>{{date('d-m-Y', strtotime($vacante->fecha_limite))}}</td>
-          <td>{{$vacante->estatus}}</td>
+          <th>{{$lab->id}}</th>
+          <td>{{$lab->rif}}</td>
+          <td>{{$lab->nombre}}</td>
+          <td>{{$lab->direccion}}</td>
+          
+          <?php if($lab->telefono_celular == '') { ?>
+            <td>{{$lab->telefono_fijo}}</td>
+          <?php 
+            } else if($lab->telefono_fijo == '') { 
+          ?>
+            <td>{{$lab->telefono_celular}}</td>
+          <?php 
+            } else {
+          ?>
+            <td>{{$lab->telefono_celular}}</td>
+          <?php
+            }
+          ?>
+
+          <td>{{date("d-m-Y", strtotime($lab->fecha))}}</td>
+          <td>{{$lab->estatus}}</td>
 
           <!-- ***************** VALIDACION DE ROLES ***************** -->
           <td style="width:140px;">
           <?php
             if(Auth::user()->role == 'MASTER' || Auth::user()->role == 'DEVELOPER') {
 
-              if($vacante->estatus != 'INACTIVO') {
+              if($lab->estatus != 'INACTIVO') {
           ?>
-            <a href="/vacantes/{{$vacante->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
+            <a href="/laboratorio/{{$lab->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
               <i class="far fa-eye"></i>
             </a>
 
-            <a href="/vacantes/{{$vacante->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
+            <a href="/laboratorio/{{$lab->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
               <i class="fas fa-edit"></i>
             </a>
 
-            <form action="/vacantes/{{$vacante->id}}" method="POST" style="display: inline;">
+            <form action="/laboratorio/{{$lab->id}}" method="POST" style="display: inline;">
               @method('DELETE')
               @csrf
               <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Desincorporar">
@@ -192,9 +194,9 @@
             </form>
 
           <?php
-            } else if($vacante->estatus == 'INACTIVO') {
+            } else if($lab->estatus == 'INACTIVO') {
           ?>
-            <form action="/vacantes/{{$vacante->id}}" method="POST" style="display: inline;">
+            <form action="/laboratorio/{{$lab->id}}" method="POST" style="display: inline;">
               @method('DELETE')
               @csrf
               <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Reincorporar">
@@ -205,17 +207,17 @@
             }
           } else if(Auth::user()->role == 'ANALISTA') {
           ?>
-            <a href="/vacantes/{{$vacante->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
+            <a href="/laboratorio/{{$lab->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
               <i class="far fa-eye"></i>
             </a>
 
-            <a href="/vacantes/{{$vacante->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
+            <a href="/laboratorio/{{$lab->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
               <i class="fas fa-edit"></i>
             </a>
           <?php
             } else if(Auth::user()->role == 'USUARIO') {
           ?>
-            <a href="/vacantes/{{$vacante->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
+            <a href="/laboratorio/{{$lab->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
               <i class="far fa-eye"></i>
             </a>
           <?php
@@ -227,9 +229,11 @@
     </tbody>
   </table>
 
+  </table>
+
   <script>
     $(document).ready(function() {
-      $('[data-toggle="tooltip"]').tooltip();
+        $('[data-toggle="tooltip"]').tooltip();
     });
     $('#exampleModalCenter').modal('show');
   </script>

@@ -301,6 +301,15 @@
           Examenes médicos<span class="sr-only">(current)</span>
         </a>
       </li>
+
+      <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="/laboratorio">
+          <span data-feather="home"></span>
+         <i class="fas fa-vials"></i>
+          Laboratorios<span class="sr-only">(current)</span>
+        </a>
+      </li>
+      
     </div>
   </div>
 <?php
