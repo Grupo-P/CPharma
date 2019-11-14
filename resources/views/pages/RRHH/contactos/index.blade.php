@@ -138,8 +138,7 @@
         <th scope="col" class="stickyCP">#</th>
         <th scope="col" class="stickyCP">Nombres</th>
         <th scope="col" class="stickyCP">Apellidos</th>
-        <th scope="col" class="stickyCP">Cédula</th>
-        <th scope="col" class="stickyCP">Teléfono</th>
+        <th scope="col" class="stickyCP">Cargo</th>
         <th scope="col" class="stickyCP">Estatus</th>
         <th scope="col" class="stickyCP">Acciones</th>
       </tr>
@@ -149,24 +148,9 @@
       @foreach($contactos as $contacto)
         <tr>
           <th>{{$contacto->id}}</th>
-          <td>{{$contacto->nombres}}</td>
-          <td>{{$contacto->apellidos}}</td>
-          <td>{{$contacto->cedula}}</td>
-            
-          <?php if($contacto->telefono_celular == '') { ?>
-            <td>{{$contacto->telefono_habitacion}}</td>
-          <?php 
-            } else if($contacto->telefono_habitacion == '') { 
-          ?>
-            <td>{{$contacto->telefono_celular}}</td>
-          <?php 
-            } else {
-          ?>
-            <td>{{$contacto->telefono_celular}}</td>
-          <?php
-            }
-          ?>
-
+          <td>{{$contacto->nombre}}</td>
+          <td>{{$contacto->apellido}}</td>
+          <td>{{$contacto->cargo}}</td>
           <td>{{$contacto->estatus}}</td>
 
           <!-- ***************** VALIDACION DE ROLES ***************** -->
