@@ -742,21 +742,19 @@
 <!-------------------------------------------------------------------------------->
 <!-- DEVELOPER -->
 <?php
-  if(Auth::user()->departamento == 'TECNOLOGIA'
-    || Auth::user()->role == 'DEVELOPER'){
+  if( 
+      (
+        Auth::user()->departamento == 'TECNOLOGIA' 
+        ||Auth::user()->departamento == 'GERENCIA'
+      )
+    && Auth::user()->role == 'DEVELOPER'
+  ){
 ?>
   <div class="btn-group navbar-brand">
     <button type="button" class="btn btn-outline-info dropdown-toggle textoI" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
       <i class="fas fa-user-secret"></i> Developer
     </button>
     <div class="dropdown-menu">
-      <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="{{ url('/ordenCompra') }}">     
-          <span data-feather="home"></span>
-          <i class="far fa-file-alt"></i>
-          Test Orden Compra<span class="sr-only">(current)</span>
-        </a>
-      </li>
       <li class="nav-item">
         <a class="nav-link CP-Links-Menu" href="{{ url('/testS') }}">     
           <span data-feather="home"></span>
