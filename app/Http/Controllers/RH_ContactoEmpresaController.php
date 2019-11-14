@@ -33,7 +33,7 @@ class RH_ContactoEmpresaController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function create() {
-        return 'hola';
+        return view('pages.RRHH.contactos.create');
     }
 
     /**
