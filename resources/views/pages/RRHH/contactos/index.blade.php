@@ -105,14 +105,14 @@
   @endif
 
   <h1 class="h5 text-info">
-    <i class="fas fa-user-check"></i>&nbsp;Candidatos
+    <i class="fas fa-phone"></i>&nbsp;Contactos de empresas
   </h1>
   <hr class="row align-items-start col-12">
 
   <table style="width:100%;">
     <tr>
       <td style="width:10%;" align="center">
-        <a href="{{ url('/candidatos/create') }}" role="button" class="btn btn-outline-info btn-sm" style="display: inline; text-align: left;">
+        <a href="{{ url('/contactos/create') }}" role="button" class="btn btn-outline-info btn-sm" style="display: inline; text-align: left;">
           <i class="fa fa-plus"></i>&nbsp;Agregar
         </a>
       </td>
@@ -146,45 +146,45 @@
     </thead>
 
     <tbody>
-      @foreach($candidatos as $candidato)
+      @foreach($contactos as $contacto)
         <tr>
-          <th>{{$candidato->id}}</th>
-          <td>{{$candidato->nombres}}</td>
-          <td>{{$candidato->apellidos}}</td>
-          <td>{{$candidato->cedula}}</td>
+          <th>{{$contacto->id}}</th>
+          <td>{{$contacto->nombres}}</td>
+          <td>{{$contacto->apellidos}}</td>
+          <td>{{$contacto->cedula}}</td>
             
-          <?php if($candidato->telefono_celular == '') { ?>
-            <td>{{$candidato->telefono_habitacion}}</td>
+          <?php if($contacto->telefono_celular == '') { ?>
+            <td>{{$contacto->telefono_habitacion}}</td>
           <?php 
-            } else if($candidato->telefono_habitacion == '') { 
+            } else if($contacto->telefono_habitacion == '') { 
           ?>
-            <td>{{$candidato->telefono_celular}}</td>
+            <td>{{$contacto->telefono_celular}}</td>
           <?php 
             } else {
           ?>
-            <td>{{$candidato->telefono_celular}}</td>
+            <td>{{$contacto->telefono_celular}}</td>
           <?php
             }
           ?>
 
-          <td>{{$candidato->estatus}}</td>
+          <td>{{$contacto->estatus}}</td>
 
           <!-- ***************** VALIDACION DE ROLES ***************** -->
           <td style="width:140px;">
           <?php
             if(Auth::user()->role == 'MASTER' || Auth::user()->role == 'DEVELOPER') {
 
-              if($candidato->estatus != 'RECHAZADO') {
+              if($contacto->estatus != 'INACTIVO') {
           ?>
-            <a href="/candidatos/{{$candidato->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
+            <a href="/contactos/{{$contacto->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
               <i class="far fa-eye"></i>
             </a>
 
-            <a href="/candidatos/{{$candidato->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
+            <a href="/contactos/{{$contacto->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
               <i class="fas fa-edit"></i>
             </a>
 
-            <form action="/candidatos/{{$candidato->id}}" method="POST" style="display: inline;">
+            <form action="/contactos/{{$contacto->id}}" method="POST" style="display: inline;">
               @method('DELETE')
               @csrf
               <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Desincorporar">
@@ -193,9 +193,9 @@
             </form>
 
           <?php
-            } else if($candidato->estatus == 'RECHAZADO') {
+            } else if($contacto->estatus == 'INACTIVO') {
           ?>
-            <form action="/candidatos/{{$candidato->id}}" method="POST" style="display: inline;">
+            <form action="/contactos/{{$contacto->id}}" method="POST" style="display: inline;">
               @method('DELETE')
               @csrf
               <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Reincorporar">
@@ -206,17 +206,17 @@
             }
           } else if(Auth::user()->role == 'ANALISTA') {
           ?>
-            <a href="/candidatos/{{$candidato->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
+            <a href="/contactos/{{$contacto->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
               <i class="far fa-eye"></i>
             </a>
 
-            <a href="/candidatos/{{$candidato->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
+            <a href="/contactos/{{$contacto->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
               <i class="fas fa-edit"></i>
             </a>
           <?php
             } else if(Auth::user()->role == 'USUARIO') {
           ?>
-            <a href="/candidatos/{{$candidato->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
+            <a href="/contactos/{{$contacto->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
               <i class="far fa-eye"></i>
             </a>
           <?php
