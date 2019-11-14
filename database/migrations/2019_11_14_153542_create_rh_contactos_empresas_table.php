@@ -13,6 +13,7 @@ class CreateRhContactosEmpresasTable extends Migration {
     public function up() {
         Schema::create('rh_contactos_empresas', function (Blueprint $table) {
             $table->increments('id');
+            $table->unsignedInteger('rh_empresaRef_id');
             $table->string('nombre');
             $table->string('apellido');
             $table->string('telefono');
@@ -21,6 +22,11 @@ class CreateRhContactosEmpresasTable extends Migration {
             $table->string('user');
             $table->string('estatus');
             $table->timestamps();
+
+            $table->foreign('rh_empresaRef_id')
+            ->references('id')
+            ->on('rh_empresaRef')
+            ->onDelete('cascade');
         });
     }
 
