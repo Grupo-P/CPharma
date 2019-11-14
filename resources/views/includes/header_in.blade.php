@@ -178,7 +178,7 @@
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="{{ url('/cartaCompromiso') }}">     
+        <a class="nav-link CP-Links-Menu" href="{{ url('/cartaCompromiso') }}">   
           <span data-feather="home"></span>
           <i class="fas fa-list"></i>
           Compromisos<span class="sr-only">(current)</span>
@@ -250,6 +250,29 @@
   }
 ?>
 <!-- VENTAS -->
+<!-------------------------------------------------------------------------------->
+<!-- RECEPCION -->
+<?php
+  if(Auth::user()->departamento == 'RECEPCION'){
+?>
+  <div class="btn-group navbar-brand">
+    <button type="button" class="btn btn-outline-info dropdown-toggle textoI" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      <i class="fas fa-dolly-flatbed"></i> Recepcion
+    </button>
+    <div class="dropdown-menu">
+      <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('/ordenCompra') }}">     
+          <span data-feather="home"></span>
+          <i class="far fa-file-alt"></i>
+          Orden de compra<span class="sr-only">(current)</span>
+        </a>
+      </li>
+    </div>
+  </div>
+<?php
+  }
+?>
+<!-- RECEPCION -->
 <!-------------------------------------------------------------------------------->
 <!-- RRHH -->
 <?php
