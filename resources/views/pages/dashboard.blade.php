@@ -22,6 +22,7 @@
     $entrevistas = DB::table('rh_entrevistas')->count();
     $examenesm = DB::table('rh_examenes')->count();
     $empresaReferencias = DB::table('rh_empresaRef')->count();
+    $laboratorios = DB::table('rh_laboratorio')->count();
 
   /*TASA DOLAR VENTA*/
     $Tasa = DB::table('tasa_ventas')->where('moneda', 'Dolar')->value('tasa');
@@ -971,20 +972,20 @@
       <div class="card-body text-left bg-danger">
         <h3 class="card-title">
           <span class="card-text text-white">
-            <i class="fas fa-user-plus"></i>
+            <i class="fas fa-vials"></i>
             <?php
-            echo ''.$vacantes;
+            echo ''.$laboratorios;
           ?>            
           </span>
         </h3>
         <p class="card-text text-white">
         <?php 
-          echo 'Vacantes registradas';
+          echo 'Laboratorios registrados';
         ?>
         </p>
       </div>
       <div class="card-footer bg-transparent border-danger text-right">
-        <a href="/vacantes" class="btn btn-outline-danger btn-sm">Visualizar</a>
+        <a href="/laboratorio" class="btn btn-outline-danger btn-sm">Visualizar</a>
       </div>    
     </div>
 
