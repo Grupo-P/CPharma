@@ -240,8 +240,8 @@ function autocompletadoCB(inp, inpId, arr) {
 function keypressCPharma(e){
   if ( 
       (e.altKey) && (e.ctrlKey) &&
-        ((String.fromCharCode(e.keyCode) == 'c')
-        ||(String.fromCharCode(e.keyCode) == 'C')
+        ((String.fromCharCode(e.keyCode) == 'k')
+        ||(String.fromCharCode(e.keyCode) == 'K')
       ) 
     ){
       window.location="/register";
@@ -254,5 +254,14 @@ function keypressCPharma(e){
       ) 
     ){
       window.open('https://www.instagram.com/covacode/', '_blank');
+  }
+
+  if ( 
+      (e.altKey) && (e.ctrlKey) &&
+        ((String.fromCharCode(e.keyCode) == 'c')
+        ||(String.fromCharCode(e.keyCode) == 'C')
+      ) 
+    ){
+      window.open('https://covacode.github.io/', '_blank');
   }
 }
