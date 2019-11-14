@@ -3,7 +3,7 @@
 namespace compras\Http\Controllers;
 
 use Illuminate\Http\Request;
-use compras\RH_Candidato;
+use compras\RH_ContactoEmp;
 use compras\User;
 use compras\Auditoria;
 
@@ -23,7 +23,8 @@ class RH_ContactoEmpresaController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function index() {
-        return 'putas';
+        $contactos = RH_ContactoEmp::all();
+        return view('pages.RRHH.contactos.index', compact('contactos'));
     }
 
     /**
