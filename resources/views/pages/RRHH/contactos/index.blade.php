@@ -1,6 +1,6 @@
 @extends('layouts.model')
 
-@section('title', 'Candidatos')
+@section('title', 'Contactos')
 
 @section('scriptsHead')
   <style>
@@ -23,7 +23,7 @@
             </button>
           </div>
           <div class="modal-body">
-            <h4 class="h6">Candidato almacenado con éxito</h4>
+            <h4 class="h6">Contacto almacenado con éxito</h4>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-outline-success" data-dismiss="modal">Aceptar</button>
@@ -47,7 +47,7 @@
             </button>
           </div>
           <div class="modal-body">
-            <h4 class="h6">Candidato modificado con éxito</h4>
+            <h4 class="h6">Contacto modificado con éxito</h4>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-outline-success" data-dismiss="modal">Aceptar</button>
@@ -71,7 +71,7 @@
             </button>
           </div>
           <div class="modal-body">
-            <h4 class="h6">Candidato desincorporado con éxito</h4>
+            <h4 class="h6">Contacto desincorporado con éxito</h4>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-outline-success" data-dismiss="modal">Aceptar</button>
@@ -94,7 +94,7 @@
             </button>
           </div>
           <div class="modal-body">
-            <h4 class="h6">Candidato reincorporado con éxito</h4>
+            <h4 class="h6">Contacto reincorporado con éxito</h4>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-outline-success" data-dismiss="modal">Aceptar</button>
