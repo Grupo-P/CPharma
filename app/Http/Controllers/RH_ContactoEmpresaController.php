@@ -43,7 +43,31 @@ class RH_ContactoEmpresaController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request) {
-        //
+        try {
+            $contactos = new RH_ContactoEmp();
+            $contactos->nombre = $request->input('nombres');
+            $contactos->apellido = $request->input('apellidos');
+            $contactos->telefono = $request->input('telefono');
+            $contactos->correo = $request->input('correo');
+            $contactos->cargo = $request->input('cargo');
+            $contactos->estatus = 'ACTIVO';
+            $contactos->user = auth()->user()->name;
+            $contactos->save();
+
+            $Auditoria = new Auditoria();
+            $Auditoria->accion = 'CREAR';
+            $Auditoria->tabla = 'RH_CONTACTOS_EMPRESAS';
+            $Auditoria->registro = $request->input('nombres') . " " . $request->input('apellidos');
+            $Auditoria->user = auth()->user()->name;
+            $Auditoria->save();
+
+            return redirect()
+                ->route('contactos.index')
+                ->with('Saved', ' Informacion');
+        }
+        catch(\Illuminate\Database\QueryException $e) {
+            return back()->with('Error', ' Error');
+        }
     }
 
     /**

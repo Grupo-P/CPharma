@@ -67,11 +67,11 @@
 
           <tr>
             <th scope="row">
-              <label for="telefono_celular">Teléfono</label>
+              <label for="telefono">Teléfono</label>
             </th>
             
             <td>
-              <input type="tel" class="form-control" name="telefono_celular" id="telefono_celular" placeholder="0414-1234567" pattern="^0[1246]{3}-[0-9]{7}$">
+              <input type="tel" class="form-control" name="telefono" id="telefono" placeholder="0414-1234567" pattern="^0[1246]{3}-[0-9]{7}$">
             </td>
           </tr>
 
