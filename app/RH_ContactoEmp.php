@@ -11,4 +11,13 @@ class RH_ContactoEmp extends Model {
      * @var string
      */
     protected $table = 'rh_contactos_empresas';
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+    	'nombre', 'apellido', 'telefono', 'correo', 'cargo', 'user'
+    ];
 }
