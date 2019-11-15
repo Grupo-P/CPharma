@@ -1,6 +1,6 @@
 @extends('layouts.model')
 
-@section('title', 'Modificar candidato')
+@section('title', 'Modificar contacto')
 
 @section('content')
   <!-- Modal Guardar -->
@@ -15,7 +15,7 @@
             </button>
           </div>
           <div class="modal-body">
-            <h4 class="h6">El candidato no fue almacenado</h4>
+            <h4 class="h6">El contacto no fue almacenado</h4>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-outline-success" data-dismiss="modal">Aceptar</button>
@@ -26,11 +26,11 @@
   @endif
 
   <h1 class="h5 text-info">
-    <i class="fas fa-edit"></i>&nbsp;Modificar candidato
+    <i class="fas fa-edit"></i>&nbsp;Modificar contacto
   </h1>
   <hr class="row align-items-start col-12">
 
-  <form action="/candidatos/" method="POST" style="display: inline;">  
+  <form action="/contactos/" method="POST" style="display: inline;">  
     @csrf
     <button type="submit" name="Regresar" role="button" class="btn btn-outline-info btn-sm" data-placement="top">
       <i class="fa fa-reply">&nbsp;Regresar</i>
@@ -39,7 +39,7 @@
 
   <br/><br/>
 
-  {!! Form::model($candidatos, ['route' => ['candidatos.update', $candidatos], 'method' => 'PUT', 'id' => 'crear_candidato']) !!}
+  {!! Form::model($contactos, ['route' => ['contactos.update', $contactos], 'method' => 'PUT', 'id' => 'crear_contacto']) !!}
     <fieldset>
       <table class="table table-borderless table-striped">
         <thead class="thead-dark">
@@ -142,7 +142,7 @@
 
           <tr>
             <th scope="row">{!! Form::label('experiencia_laboral', 'Experiencia laboral') !!}</th>
-            <td>{!! Form::textarea('experiencia_laboral', null, [ 'class' => 'form-control', 'placeholder' => 'Experiencia laboral previa del candidato', 'rows' => '3']) !!}</td>
+            <td>{!! Form::textarea('experiencia_laboral', null, [ 'class' => 'form-control', 'placeholder' => 'Experiencia laboral previa del contacto', 'rows' => '3']) !!}</td>
           </tr>
 
           <tr>
@@ -152,7 +152,7 @@
 
           <tr>
             <th scope="row">{!! Form::label('observaciones', 'Observaciones') !!}</th>
-            <td>{!! Form::textarea('observaciones', null, [ 'class' => 'form-control', 'placeholder' => 'Detalles importantes del candidato', 'rows' => '3']) !!}</td>
+            <td>{!! Form::textarea('observaciones', null, [ 'class' => 'form-control', 'placeholder' => 'Detalles importantes del contacto', 'rows' => '3']) !!}</td>
           </tr>
         </tbody>
       </table>
@@ -170,7 +170,7 @@
 
       //Objetos DOM JQuery
       var enviar = $('#enviar');
-      var crear_candidato = $('#crear_candidato');
+      var crear_contacto = $('#crear_contacto');
       var cedula = $('#cedula');
 
       //Expresiones regulares
@@ -196,7 +196,7 @@
 
       });
 
-      crear_candidato.submit(function(e) {
+      crear_contacto.submit(function(e) {
 
         if((telefono_celular.value == '') && (telefono_habitacion.value == '')) {
           
