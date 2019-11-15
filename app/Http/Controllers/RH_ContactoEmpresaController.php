@@ -96,7 +96,9 @@ class RH_ContactoEmpresaController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function edit($id) {
-        //
+        $contactos = RH_ContactoEmp::find($id);
+
+        return view('pages.RRHH.contactos.edit', compact('contactos'));
     }
 
     /**
