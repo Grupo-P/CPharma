@@ -109,7 +109,26 @@ class RH_ContactoEmpresaController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id) {
-        return $request;
+        try {
+            $contactos = RH_ContactoEmp::find($id);
+            $contactos->fill($request->all());
+            $contactos->user = auth()->user()->name;
+            $contactos->save();
+
+            $Auditoria = new Auditoria();
+            $Auditoria->accion = 'EDITAR';
+            $Auditoria->tabla = 'RH_CONTACTOS_EMPRESAS';
+            $Auditoria->registro = $contactos->nombre . " " . $contactos->apellido;
+            $Auditoria->user = auth()->user()->name;
+            $Auditoria->save();
+
+            return redirect()
+                ->route('contactos.index')
+                ->with('Updated', ' Informacion');
+        }
+        catch(\Illuminate\Database\QueryException $e) {
+            return back()->with('Error', ' Error');
+        }
     }
 
     /**
