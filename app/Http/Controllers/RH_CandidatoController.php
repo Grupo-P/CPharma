@@ -187,9 +187,13 @@ class RH_CandidatoController extends Controller {
         $Auditoria->save();
 
         if($candidatos->estatus == 'POSTULADO') {
-            return redirect()->route('candidatos.index')->with('Deleted1', ' Informacion');
+            return redirect()
+                ->route('candidatos.index')
+                ->with('Deleted1', ' Informacion');
         }
 
-        return redirect()->route('candidatos.index')->with('Deleted', ' Informacion');
+        return redirect()
+            ->route('candidatos.index')
+            ->with('Deleted', ' Informacion');
     }
 }
