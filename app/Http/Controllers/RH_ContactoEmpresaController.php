@@ -77,7 +77,16 @@ class RH_ContactoEmpresaController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function show($id) {
-        //
+        $contactos = RH_ContactoEmp::find($id);
+
+        $Auditoria = new Auditoria();
+        $Auditoria->accion = 'CONSULTAR';
+        $Auditoria->tabla = 'RH_CONTACTOS_EMPRESAS';
+        $Auditoria->registro = $contactos->nombre . " " . $contactos->apellido;
+        $Auditoria->user = auth()->user()->name;
+        $Auditoria->save();
+
+        return view('pages.RRHH.contactos.show', compact('contactos'));
     }
 
     /**
