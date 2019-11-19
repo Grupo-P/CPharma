@@ -15,6 +15,11 @@ class CreateRhConvocatoriaTable extends Migration
     {
         Schema::create('rh_convocatoria', function (Blueprint $table) {
             $table->increments('id');
+            $table->date('fecha');
+            $table->string('lugar');
+            $table->string('cargo_reclutar');
+            $table->string('user');
+            $table->string('estatus');
             $table->timestamps();
         });
     }
