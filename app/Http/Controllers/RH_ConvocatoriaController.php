@@ -24,7 +24,7 @@ class RH_ConvocatoriaController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function index() {
-        //
+        
     }
 
     /**
@@ -87,4 +87,5 @@ class RH_ConvocatoriaController extends Controller {
         //
     }
 }
-}
+
+
