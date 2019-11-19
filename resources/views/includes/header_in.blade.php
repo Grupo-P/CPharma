@@ -361,13 +361,11 @@
           Contactos de empresas<span class="sr-only">(current)</span>
         </a>
       </li>
-    </div>
-  </div>
 
       <li class="nav-item">
         <a class="nav-link CP-Links-Menu" href="/convocatoria">
           <span data-feather="home"></span>
-         <i class="fas fa-user-edit"></i>
+        <i class="fas fa-user-edit"></i>
           Convocatoria<span class="sr-only">(current)</span>
         </a>
       </li>
