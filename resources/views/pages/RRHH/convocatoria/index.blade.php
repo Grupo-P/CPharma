@@ -141,7 +141,70 @@
       </tr>
     </thead>
    <tbody>
-     
+       @foreach($convocatoria as $conv)
+        <tr>
+          <th>{{$conv->id}}</th>
+          <td>{{date('d-m-Y', strtotime($conv->fecha))}}</td>
+          <td>{{$conv->cargo_reclutar}}</td>
+          <td>{{$conv->estatus}}</td>
+
+
+          <!-- ***************** VALIDACION DE ROLES ***************** -->
+          <td style="width:140px;">
+          <?php
+            if(Auth::user()->role == 'MASTER' || Auth::user()->role == 'DEVELOPER') {
+
+              if($conv->estatus != 'RECHAZADO') {
+          ?>
+            <a href="/convocatoria/{{$conv->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
+              <i class="far fa-eye"></i>
+            </a>
+
+            <a href="/convocatoria/{{$conv->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
+              <i class="fas fa-edit"></i>
+            </a>
+
+            <form action="/convocatoria/{{$conv->id}}" method="POST" style="display: inline;">
+              @method('DELETE')
+              @csrf
+              <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Desincorporar">
+                <i class="fa fa-reply"></i>
+              </button>
+            </form>
+
+          <?php
+            } else if($convocatoria->estatus == 'RECHAZADO') {
+          ?>
+            <form action="/convocatoria/{{$conv->id}}" method="POST" style="display: inline;">
+              @method('DELETE')
+              @csrf
+              <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Reincorporar">
+                <i class="fa fa-share"></i>
+              </button>
+            </form>
+          <?php
+            }
+          } else if(Auth::user()->role == 'ANALISTA') {
+          ?>
+            <a href="/convocatoria/{{$conv->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
+              <i class="far fa-eye"></i>
+            </a>
+
+            <a href="/convocatoria/{{$conv->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
+              <i class="fas fa-edit"></i>
+            </a>
+          <?php
+            } else if(Auth::user()->role == 'USUARIO') {
+          ?>
+            <a href="/convocatoria/{{$conv->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
+              <i class="far fa-eye"></i>
+            </a>
+          <?php
+            }
+          ?>
+          </td>
+        </tr>
+      @endforeach
     </tbody>
   </table>
 

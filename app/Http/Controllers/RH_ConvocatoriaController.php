@@ -24,7 +24,7 @@ class RH_ConvocatoriaController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function index() {
-         $convocatoria = RH_Convocatoria::all();
+        $convocatoria = RH_Convocatoria::all();
         return view('pages.RRHH.convocatoria.index', compact('convocatoria'));
     }
 
