@@ -3,6 +3,9 @@
 namespace compras\Http\Controllers;
 
 use Illuminate\Http\Request;
+use compras\RH_Convocatoria;
+use compras\User;
+use compras\Auditoria;
 
 
 class RH_ConvocatoriaController extends Controller {
