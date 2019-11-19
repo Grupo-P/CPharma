@@ -142,6 +142,7 @@
         <th scope="col" class="stickyCP">Teléfono</th>
         <th scope="col" class="stickyCP">Estatus</th>
         <th scope="col" class="stickyCP">Acciones</th>
+        <th scope="col" class="stickyCP">Fase</th>
       </tr>
     </thead>
 
@@ -221,6 +222,20 @@
             </a>
           <?php
             }
+          ?>
+          </td>
+
+          <td>
+          <?php
+            switch($candidato->estatus) {
+              case 'POSTULADO':
+          ?>
+            <a href="{{ url('/entrevistas/create?' . $candidato->id) }}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="bottom" title="Ir a la fase">
+              Entrevista
+            </a>
+          <?php
+            break;
+          }
           ?>
           </td>
         </tr>
