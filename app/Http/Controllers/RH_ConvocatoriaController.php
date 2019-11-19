@@ -34,7 +34,7 @@ class RH_ConvocatoriaController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function create() {
-        //
+        return view('pages.RRHH.convocatoria.create');
     }
 
     /**
