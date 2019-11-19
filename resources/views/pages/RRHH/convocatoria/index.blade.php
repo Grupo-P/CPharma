@@ -109,7 +109,7 @@
   <table style="width:100%;">
     <tr>
       <td style="width:10%;" align="center">
-        <a href="{{ url('/convocarotia/create') }}" role="button" class="btn btn-outline-info btn-sm" style="display: inline; text-align: left;">
+        <a href="{{ url('/convocatoria/create') }}" role="button" class="btn btn-outline-info btn-sm" style="display: inline; text-align: left;">
           <i class="fa fa-plus"></i>&nbsp;Agregar
         </a>
       </td>
@@ -140,3 +140,15 @@
         <th scope="col" class="stickyCP">Acciones</th>
       </tr>
     </thead>
+   <tbody>
+     
+    </tbody>
+  </table>
+
+  <script>
+    $(document).ready(function() {
+      $('[data-toggle="tooltip"]').tooltip();
+    });
+    $('#exampleModalCenter').modal('show');
+  </script>
+@endsection
