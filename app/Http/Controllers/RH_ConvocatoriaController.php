@@ -20,14 +20,7 @@ class RH_ConvocatoriaController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-{
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
+    public function index() {
         //
     }
 
@@ -36,8 +29,7 @@ class RH_ConvocatoriaController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
+    public function create() {
         //
     }
 
@@ -47,8 +39,7 @@ class RH_ConvocatoriaController extends Controller {
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
+    public function store(Request $request) {
         //
     }
 
@@ -58,8 +49,7 @@ class RH_ConvocatoriaController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
-    {
+    public function show($id) {
         //
     }
 
@@ -69,8 +59,7 @@ class RH_ConvocatoriaController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
-    {
+    public function edit($id) {
         //
     }
 
@@ -81,8 +70,7 @@ class RH_ConvocatoriaController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
-    {
+    public function update(Request $request, $id) {
         //
     }
 
@@ -92,8 +80,8 @@ class RH_ConvocatoriaController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
+    public function destroy($id) {
         //
     }
+}
 }
