@@ -25,6 +25,7 @@ class CreateRhVacantesTable extends Migration {
             $table->string('solicitante');
             $table->text('comentarios');
             $table->string('user');
+            $table->string('estatus');
             $table->timestamps();
         });
     }
