@@ -203,3 +203,5 @@ Route::resource('empresaReferencias', 'RH_EmpresaReferenciaController');
 Route::resource('laboratorio', 'RH_LaboratorioController');
 
 Route::resource('contactos', 'RH_ContactoEmpresaController');
+
+Route::resource('convocatoria', 'RH_ConvocatoriaController');
