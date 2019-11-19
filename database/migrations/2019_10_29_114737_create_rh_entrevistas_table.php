@@ -4,17 +4,16 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateRhEntrevistasTable extends Migration
-{
+class CreateRhEntrevistasTable extends Migration {
     /**
      * Run the migrations.
      *
      * @return void
      */
-    public function up()
-    {
+    public function up() {
         Schema::create('rh_entrevistas', function (Blueprint $table) {
             $table->increments('id');
+            $table->unsignedInteger('rh_candidatos_id');
             $table->date('fecha_entrevista');
             $table->string('entrevistadores');
             $table->string('lugar');
@@ -22,6 +21,10 @@ class CreateRhEntrevistasTable extends Migration
             $table->string('estatus');
             $table->string('user');
             $table->timestamps();
+
+            $table->foreign('rh_candidatos_id')
+            ->references('id')
+            ->on('rh_candidatos');
         });
     }
 
@@ -30,8 +33,7 @@ class CreateRhEntrevistasTable extends Migration
      *
      * @return void
      */
-    public function down()
-    {
+    public function down() {
         Schema::dropIfExists('rh_entrevistas');
     }
 }
