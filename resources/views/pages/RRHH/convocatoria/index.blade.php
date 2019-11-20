@@ -155,7 +155,7 @@
           <?php
             if(Auth::user()->role == 'MASTER' || Auth::user()->role == 'DEVELOPER') {
 
-              if($conv->estatus != 'RECHAZADO') {
+              if($conv->estatus != 'INACTIVO') {
           ?>
             <a href="/convocatoria/{{$conv->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
               <i class="far fa-eye"></i>
@@ -174,7 +174,7 @@
             </form>
 
           <?php
-            } else if($convocatoria->estatus == 'RECHAZADO') {
+            } else if($conv->estatus == 'INACTIVO') {
           ?>
             <form action="/convocatoria/{{$conv->id}}" method="POST" style="display: inline;">
               @method('DELETE')

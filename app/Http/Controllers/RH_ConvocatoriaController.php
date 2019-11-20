@@ -139,7 +139,7 @@ class RH_ConvocatoriaController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function destroy($id) {
-          $convocatoria = RH_Convocatoria::find($id);
+        $convocatoria = RH_Convocatoria::find($id);
 
         $Auditoria = new Auditoria();
         $Auditoria->tabla = 'RH_CONVOCATORIA';
@@ -163,12 +163,12 @@ class RH_ConvocatoriaController extends Controller {
         if($convocatoria->estatus == 'ACTIVO'){
             return redirect()
                 ->route('convocatoria.index')
-                ->with('Deleted', ' Informacion');
+                ->with('Deleted1', ' Informacion');
         }
 
         return redirect()
             ->route('convocatoria.index')
-            ->with('Deleted1', ' Informacion');
+            ->with('Deleted', ' Informacion');
     }
 }
 
