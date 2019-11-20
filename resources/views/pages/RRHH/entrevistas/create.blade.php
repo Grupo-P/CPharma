@@ -58,9 +58,32 @@
             <th scope="row">
               <label for="nombres">Nombre del candidato</label>
             </th>
+
             <td>
               <input type="text" id="nombres" name="nombres" class="form-control" value="{{$candidato->nombres . ' ' . $candidato->apellidos}}" disabled>
+              
               <input type="hidden" name="CandidatoId" id="CandidatoId" value="{{$candidato->id}}">
+            </td>
+          </tr>
+
+          <tr>
+            <th scope="row">
+              {!! Form::label('vacantes', 'Vacante asociada *', ['title' => 'Éste campo es requerido']) !!}
+            </th>
+            <td>
+              <select name="vacantes" id="vacantes" class="form-control" required>
+                <option value="">Seleccione una opción</option>
+
+                <?php
+                  foreach ($vacantes as $vacante) {
+                ?>
+
+                <option value="{{$vacantes}}">{{$vacante}}</option>
+
+                <?php
+                  }
+                ?>
+              </select>
             </td>
           </tr>
 
