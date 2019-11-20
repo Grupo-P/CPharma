@@ -108,7 +108,28 @@ class RH_ConvocatoriaController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id) {
-        //
+        try {
+            $convocatoria = RH_Convocatoria::find($id);
+
+            $convocatoria->fill($request->all());
+            $convocatoria->user = auth()->user()->name;
+
+            $convocatoria->save();
+
+            $Auditoria = new Auditoria();
+            $Auditoria->accion = 'EDITAR';
+            $Auditoria->tabla = 'RH_CONVOCATORIA';
+            $Auditoria->registro = $convocatoria->lugar;
+            $Auditoria->user = auth()->user()->name;
+            $Auditoria->save();
+
+            return redirect()
+                ->route('convocatoria.index')
+                ->with('Updated', ' Informacion');
+        }
+        catch(\Illuminate\Database\QueryException $e) {
+            return back()->with('Error', ' Error');
+        }
     }
 
     /**
