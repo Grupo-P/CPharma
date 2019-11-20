@@ -68,10 +68,10 @@
 
           <tr>
             <th scope="row">
-              {!! Form::label('vacantes', 'Vacante asociada *', ['title' => 'Éste campo es requerido']) !!}
+              {!! Form::label('VacanteId', 'Vacante asociada *', ['title' => 'Éste campo es requerido']) !!}
             </th>
             <td>
-              <select name="vacantes" id="vacantes" class="form-control" required>
+              <select name="VacanteId" id="VacanteId" class="form-control" required>
                 <option value="">Seleccione una opción</option>
 
                 <?php

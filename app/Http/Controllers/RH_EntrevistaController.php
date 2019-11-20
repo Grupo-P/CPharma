@@ -60,6 +60,8 @@ class RH_EntrevistaController extends Controller {
 
             $entrevistas = new RH_Entrevista();
 
+            $entrevistas->rh_candidatos_id = $request->input('CandidatoId');
+            $entrevistas->rh_vacantes_id = $request->input('VacanteId');
             $entrevistas->fecha_entrevista = date('Y-m-d', strtotime($fecha_entrevista));
             $entrevistas->entrevistadores = $request->input('entrevistadores');
             $entrevistas->lugar = $request->input('lugar');
@@ -76,7 +78,7 @@ class RH_EntrevistaController extends Controller {
             $Auditoria->save();
 
             return redirect()
-                ->route('entrevistas.index')
+                ->route('candidatos.index')
                 ->with('Saved', ' Informacion');
         }
         catch(\Illuminate\Database\QueryException $e) {
