@@ -56,6 +56,16 @@
         <tbody>
           <tr>
             <th scope="row">
+              <label for="nombres">Nombre del candidato</label>
+            </th>
+            <td>
+              <input type="text" id="nombres" name="nombres" class="form-control" value="{{$candidato->nombres . ' ' . $candidato->apellidos}}" disabled>
+              <input type="hidden" name="CandidatoId" id="CandidatoId" value="{{$candidato->id}}">
+            </td>
+          </tr>
+
+          <tr>
+            <th scope="row">
               {!! Form::label('fecha_entrevista', 'Fecha de Entrevista *', ['title' => 'Este campo es requerido']) !!}
             </th>
             <td>

@@ -42,8 +42,9 @@ class RH_EntrevistaController extends Controller {
         $id_candidato = $request->input("CandidatoId");
         $candidato = RH_Candidato::find($id_candidato);
 
-        return $candidato;
-        //return view('pages.RRHH.entrevistas.create');
+        $vacantes = RH_Vacante::pluck('nombre_vacante');
+
+        return view('pages.RRHH.entrevistas.create', compact('candidato', 'vacantes'));
     }
 
     /**
