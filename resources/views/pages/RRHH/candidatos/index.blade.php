@@ -231,7 +231,7 @@
               case 'POSTULADO':
           ?>
             <form action="/entrevistas/create" method="GET">
-              <input type="hidden" name="CandidatoId{{$candidato->id}}" id="CandidatoId{{$candidato->id}}" value="{{$candidato->id}}">
+              <input type="hidden" name="CandidatoId" value="{{$candidato->id}}">
 
               <button type="submit" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="bottom" title="Ir a la fase">
                 <i class="fas fa-users"></i>&nbsp;Entrevista
