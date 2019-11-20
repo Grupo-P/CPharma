@@ -78,7 +78,7 @@
                   foreach ($vacantes as $vacante) {
                 ?>
 
-                <option value="{{$vacantes}}">{{$vacante}}</option>
+                <option value="{{$vacante->id}}">{{$vacante->nombre_vacante}}</option>
 
                 <?php
                   }

@@ -42,7 +42,7 @@ class RH_EntrevistaController extends Controller {
         $id_candidato = $request->input("CandidatoId");
         $candidato = RH_Candidato::find($id_candidato);
 
-        $vacantes = RH_Vacante::pluck('nombre_vacante');
+        $vacantes = RH_Vacante::all();
 
         return view('pages.RRHH.entrevistas.create', compact('candidato', 'vacantes'));
     }
@@ -55,7 +55,7 @@ class RH_EntrevistaController extends Controller {
      */
     public function store(Request $request) {
 
-        /*try {
+        try {
             $fecha_entrevista = $request->input('fecha_entrevista');
 
             $entrevistas = new RH_Entrevista();
@@ -81,7 +81,7 @@ class RH_EntrevistaController extends Controller {
         }
         catch(\Illuminate\Database\QueryException $e) {
             return back()->with('Error', ' Error');
-        }*/
+        }
     }
 
     /**
