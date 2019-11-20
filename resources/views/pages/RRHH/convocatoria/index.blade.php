@@ -145,6 +145,7 @@
         <tr>
           <th>{{$conv->id}}</th>
           <td>{{date('d-m-Y', strtotime($conv->fecha))}}</td>
+          <td>{{$conv->lugar}}</td>
           <td>{{$conv->cargo_reclutar}}</td>
           <td>{{$conv->estatus}}</td>
 
