@@ -35,8 +35,10 @@ class RH_EntrevistaController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function create() {
-        return view('pages.RRHH.entrevistas.create');
+    public function create(Request $request) {
+
+        return $request->input("CandidatoId");
+        //return view('pages.RRHH.entrevistas.create');
     }
 
     /**
@@ -74,7 +76,6 @@ class RH_EntrevistaController extends Controller {
         catch(\Illuminate\Database\QueryException $e) {
             return back()->with('Error', ' Error');
         }*/
-        return $request;
     }
 
     /**

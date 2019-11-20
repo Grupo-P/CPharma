@@ -230,9 +230,13 @@
             switch($candidato->estatus) {
               case 'POSTULADO':
           ?>
-            <a href="{{ url('/entrevistas/create?id=' . $candidato->id) }}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="bottom" title="Ir a la fase">
-              Entrevista
-            </a>
+            <form action="/entrevistas/create" method="GET">
+              <input type="hidden" name="CandidatoId{{$candidato->id}}" id="CandidatoId{{$candidato->id}}" value="{{$candidato->id}}">
+
+              <button type="submit" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="bottom" title="Ir a la fase">
+                <i class="fas fa-users"></i>&nbsp;Entrevista
+              </button>
+            </form>
           <?php
               break;
           ?>
