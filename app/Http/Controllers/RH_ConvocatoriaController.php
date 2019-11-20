@@ -44,7 +44,29 @@ class RH_ConvocatoriaController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request) {
-        //
+         try {
+            $convocatoria = new RH_Convocatoria();
+            $convocatoria->fecha = $request->input('fecha');
+            $convocatoria->lugar = $request->input('lugar');
+            $convocatoria->cargo_reclutar = $request->input('cargo_reclutar');
+            $convocatoria->estatus = 'ACTIVO';
+            $convocatoria->user = auth()->user()->name;
+            $convocatoria->save();
+
+            $Auditoria = new Auditoria();
+            $Auditoria->accion = 'CREAR';
+            $Auditoria->tabla = 'RH_CONVOCATORIA';
+            $Auditoria->registro = $request->input('cargo_reclutar');
+            $Auditoria->user = auth()->user()->name;
+            $Auditoria->save();
+
+            return redirect()
+                ->route('convocatoria.index')
+                ->with('Saved', ' Informacion');
+        }
+        catch(\Illuminate\Database\QueryException $e) {
+            return back()->with('Error', ' Error');
+        }
     }
 
     /**
