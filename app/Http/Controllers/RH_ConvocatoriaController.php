@@ -76,7 +76,16 @@ class RH_ConvocatoriaController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function show($id) {
-        //
+         $convocatoria = RH_CONVOCATORIA::find($id);
+
+        $Auditoria = new Auditoria();
+        $Auditoria->accion = 'CONSULTAR';
+        $Auditoria->tabla = 'RH_CONVOCATORIA';
+        $Auditoria->registro = $convocatoria->lugar;
+        $Auditoria->user = auth()->user()->name;
+        $Auditoria->save();
+
+        return view('pages.RRHH.convocatoria.show', compact('convocatoria'));
     }
 
     /**
