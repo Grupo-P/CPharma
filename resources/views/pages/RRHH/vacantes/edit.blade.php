@@ -79,7 +79,12 @@
               {!! Form::label('turno', 'Turno *', ['title' => 'Éste campo es requerido']) !!}
             </th>
             <td>
-              {!! Form::text('turno', null, ['class' => 'form-control', 'placeholder' => 'Nocturno', 'pattern' => '^(diurno)$|^(Diurno)$|^(nocturno)$|^(Nocturno)$|^(mixto)$|^(Mixto)$|^(vespertino)$|^(Vespertino)$', 'required']) !!}
+              {!! Form::select('turno', [
+                '' => 'Seleccione una opción',
+                'Diurno' => 'Diurno', 
+                'Nocturno' => 'Nocturno', 
+                'Mixto' => 'Mixto'
+              ], null, ['class' => 'form-control', 'required']) !!}
             </td>
           </tr>
 
