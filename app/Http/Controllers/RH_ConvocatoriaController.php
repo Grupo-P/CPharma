@@ -139,7 +139,36 @@ class RH_ConvocatoriaController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function destroy($id) {
-        //
+          $convocatoria = RH_Convocatoria::find($id);
+
+        $Auditoria = new Auditoria();
+        $Auditoria->tabla = 'RH_CONVOCATORIA';
+        $Auditoria->registro = $convocatoria->lugar;
+        $Auditoria->user = auth()->user()->name;
+
+        if($convocatoria->estatus == 'ACTIVO'){
+            $convocatoria->estatus = 'INACTIVO';
+            $Auditoria->accion = 'DESINCORPORAR';
+        }
+        else if($convocatoria->estatus == 'INACTIVO'){
+            $convocatoria->estatus = 'ACTIVO';
+            $Auditoria->accion = 'REINCORPORAR';
+        }
+
+        $convocatoria->user = auth()->user()->name;        
+        $convocatoria->save();
+
+        $Auditoria->save();
+
+        if($convocatoria->estatus == 'ACTIVO'){
+            return redirect()
+                ->route('convocatoria.index')
+                ->with('Deleted', ' Informacion');
+        }
+
+        return redirect()
+            ->route('convocatoria.index')
+            ->with('Deleted1', ' Informacion');
     }
 }
 
