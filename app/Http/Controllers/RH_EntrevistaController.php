@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use compras\RH_Entrevista;
 use compras\User;
 use compras\Auditoria;
+use compras\RH_Candidato;
+use compras\RH_Vacante;
 
 class RH_EntrevistaController extends Controller {
     /**
@@ -37,7 +39,10 @@ class RH_EntrevistaController extends Controller {
      */
     public function create(Request $request) {
 
-        return $request->input("CandidatoId");
+        $id_candidato = $request->input("CandidatoId");
+        $candidato = RH_Candidato::find($id_candidato);
+
+        return $candidato;
         //return view('pages.RRHH.entrevistas.create');
     }
 
