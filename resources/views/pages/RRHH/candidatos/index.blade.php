@@ -142,6 +142,7 @@
         <th scope="col" class="stickyCP">Teléfono</th>
         <th scope="col" class="stickyCP">Estatus</th>
         <th scope="col" class="stickyCP">Acciones</th>
+        <th scope="col" class="stickyCP">Fase</th>
       </tr>
     </thead>
 
@@ -221,6 +222,30 @@
             </a>
           <?php
             }
+          ?>
+          </td>
+
+          <td>
+          <?php
+            switch($candidato->estatus) {
+              case 'POSTULADO':
+          ?>
+            <form action="/entrevistas/create" method="GET">
+              <input type="hidden" name="CandidatoId{{$candidato->id}}" id="CandidatoId{{$candidato->id}}" value="{{$candidato->id}}">
+
+              <button type="submit" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="bottom" title="Ir a la fase">
+                <i class="fas fa-users"></i>&nbsp;Entrevista
+              </button>
+            </form>
+          <?php
+              break;
+          ?>
+
+          <?php
+              default: 
+                echo "-";
+              break;
+            }//switch
           ?>
           </td>
         </tr>
