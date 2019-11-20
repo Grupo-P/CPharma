@@ -95,7 +95,9 @@ class RH_ConvocatoriaController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function edit($id) {
-        //
+         $convocatoria = RH_Convocatoria::find($id);
+
+        return view('pages.RRHH.convocatoria.edit', compact('convocatoria'));
     }
 
     /**
