@@ -230,12 +230,18 @@
             switch($candidato->estatus) {
               case 'POSTULADO':
           ?>
-            <a href="{{ url('/entrevistas/create?' . $candidato->id) }}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="bottom" title="Ir a la fase">
+            <a href="{{ url('/entrevistas/create?id=' . $candidato->id) }}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="bottom" title="Ir a la fase">
               Entrevista
             </a>
           <?php
-            break;
-          }
+              break;
+          ?>
+
+          <?php
+              default: 
+                echo "-";
+              break;
+            }//switch
           ?>
           </td>
         </tr>

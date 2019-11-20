@@ -47,7 +47,7 @@ class RH_EntrevistaController extends Controller {
      */
     public function store(Request $request) {
 
-        try {
+        /*try {
             $fecha_entrevista = $request->input('fecha_entrevista');
 
             $entrevistas = new RH_Entrevista();
@@ -73,7 +73,8 @@ class RH_EntrevistaController extends Controller {
         }
         catch(\Illuminate\Database\QueryException $e) {
             return back()->with('Error', ' Error');
-        }
+        }*/
+        return $request;
     }
 
     /**
