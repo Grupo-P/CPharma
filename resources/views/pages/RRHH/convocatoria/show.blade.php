@@ -29,7 +29,7 @@
     <tbody>
       <tr>
         <th scope="row">Fecha de la convocatoria</th>
-        <td>{{$convocatoria->fecha}}</td>
+        <td>{{date('d-m-Y', strtotime($convocatoria->fecha))}}</td>
       </tr>
 
       <tr>
