@@ -131,6 +131,7 @@ class RH_EntrevistaController extends Controller {
             $entrevistas = RH_Entrevista::find($id);
             $entrevistas->fill($request->all());
 
+            $entrevistas->rh_vacantes_id = $request->input('VacanteId');
             $entrevistas->fecha_entrevista = date('Y-m-d', strtotime($fecha_entrevista));
 
             $entrevistas->user = auth()->user()->name;

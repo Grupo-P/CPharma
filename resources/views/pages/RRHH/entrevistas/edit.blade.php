@@ -51,6 +51,47 @@
         <tbody>
           <tr>
             <th scope="row">
+              <label for="nombres">Nombre del candidato</label>
+            </th>
+
+            <td>
+              <?php
+                $candidato = compras\RH_Candidato::find($entrevistas->rh_candidatos_id);
+              ?>
+
+              <input type="text" id="nombres" name="nombres" class="form-control" value="{{$candidato->nombres . ' ' . $candidato->apellidos}}" disabled>
+              
+              <input type="hidden" name="CandidatoId" id="CandidatoId" value="{{$candidato->id}}">
+            </td>
+          </tr>
+
+          <tr>
+            <th scope="row">
+              {!! Form::label('VacanteId', 'Vacante asociada *', ['title' => 'Éste campo es requerido']) !!}
+            </th>
+            <td>
+              <?php
+                $vacantes = compras\RH_Vacante::all();
+              ?>
+
+              <select name="VacanteId" id="VacanteId" class="form-control" required>
+                <option value="">Seleccione una opción</option>
+
+                <?php
+                  foreach ($vacantes as $vacante) {
+                ?>
+
+                <option value="{{$vacante->id}}">{{$vacante->nombre_vacante}}</option>
+
+                <?php
+                  }
+                ?>
+              </select>
+            </td>
+          </tr>
+
+          <tr>
+            <th scope="row">
               {!! Form::label('fecha_entrevista', 'Fecha de Entrevista *', ['title' => 'Este campo es requerido']) !!}
             </th>
             <td>
