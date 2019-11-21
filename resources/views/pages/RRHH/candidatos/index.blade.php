@@ -142,7 +142,7 @@
         <th scope="col" class="stickyCP">Teléfono</th>
         <th scope="col" class="stickyCP">Estatus</th>
         <th scope="col" class="stickyCP">Acciones</th>
-        <th scope="col" class="stickyCP">Fase</th>
+        <th scope="col" class="stickyCP">Próxima Fase</th>
       </tr>
     </thead>
 
