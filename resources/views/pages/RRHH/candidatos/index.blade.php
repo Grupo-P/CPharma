@@ -239,6 +239,18 @@
             </form>
           <?php
               break;
+
+              case 'ENTREVISTADO':
+          ?>
+            <form action="/pruebas/create" method="GET">
+              <input type="hidden" name="CandidatoId" value="{{$candidato->id}}">
+
+              <button type="submit" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="bottom" title="Ir a la fase" disabled>
+                <i class="fas fa-tasks"></i>&nbsp;Prueba
+              </button>
+            </form>
+          <?php
+              break;
           ?>
 
           <?php
