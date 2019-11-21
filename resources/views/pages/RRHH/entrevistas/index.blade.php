@@ -136,9 +136,11 @@
     <thead class="thead-dark">
       <tr>
         <th scope="col" class="CP-sticky">#</th>
+        <th scope="col" class="CP-sticky">Candidato</th>
         <th scope="col" class="CP-sticky">Fecha</th>
         <th scope="col" class="CP-sticky">Entrevistadores</th>
         <th scope="col" class="CP-sticky">Lugar</th>
+        <th scope="col" class="CP-sticky">Vacante asociada</th>
         <th scope="col" class="CP-sticky">Estatus</th>
         <th scope="col" class="CP-sticky">Acciones</th>
       </tr>
@@ -148,9 +150,17 @@
       @foreach($entrevistas as $entrevista)
         <tr>
           <th>{{$entrevista->id}}</th>
+          <td>
+            <?php
+              $candidato = compras\RH_Candidato::find($entrevista->rh_candidatos_id);
+            ?>
+
+            {{$candidato->nombres . " " . $candidato->apellidos}}
+          </td>
           <td>{{date('d-m-Y',strtotime($entrevista->fecha_entrevista))}}</td>
           <td>{{$entrevista->entrevistadores}}</td>
           <td>{{$entrevista->lugar}}</td>
+          <td>{{compras\RH_Vacante::find($entrevista->rh_vacantes_id)->nombre_vacante}}</td>
           <td>{{$entrevista->estatus}}</td>
 
           <!-- Inicio Validacion de ROLES -->
