@@ -67,6 +67,10 @@ class RH_EntrevistaController extends Controller {
             $entrevistas->user = auth()->user()->name;
             $entrevistas->save();
 
+            $candidato = RH_Candidato::find($request->input('CandidatoId'));
+            $candidato->estatus = 'ENTREVISTADO';
+            $candidato->save();
+
             $Auditoria = new Auditoria();
             $Auditoria->accion = 'CREAR';
             $Auditoria->tabla = 'RH_ENTREVISTAS';
