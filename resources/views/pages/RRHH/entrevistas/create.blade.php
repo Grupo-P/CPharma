@@ -113,9 +113,9 @@
           </tr>
 
           <tr>
-            <th scope="row">{!! Form::label('observaciones', 'Observaciones *', ['title' => 'Este campo es requerido']) !!}</th>
+            <th scope="row">{!! Form::label('observaciones', 'Observaciones') !!}</th>
             <td>
-              {!! Form::textarea('observaciones', null, [ 'class' => 'form-control', 'placeholder' => 'Detalles del entrevistado', 'rows' => '3', 'required']) !!}
+              {!! Form::textarea('observaciones', null, [ 'class' => 'form-control', 'placeholder' => 'Detalles del entrevistado', 'rows' => '3']) !!}
             </td>
           </tr>
         </tbody>
