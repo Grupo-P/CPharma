@@ -170,10 +170,10 @@
 
           <tr>
             <th scope="row">
-              {!! Form::label('comentarios', 'Comentarios *', ['title' => 'Éste campo es requerido']) !!}
+              {!! Form::label('comentarios', 'Comentarios') !!}
             </th>
             <td>
-              {!! Form::textarea('comentarios', null, [ 'class' => 'form-control', 'placeholder' => 'Detalles de la vacante', 'rows' => '3', 'required']) !!}
+              {!! Form::textarea('comentarios', null, [ 'class' => 'form-control', 'placeholder' => 'Detalles de la vacante', 'rows' => '3']) !!}
             </td>
           </tr>
         </tbody>
