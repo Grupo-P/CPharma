@@ -27,6 +27,11 @@
     </thead>
     <tbody>
       <tr>
+        <th scope="row">Candidato</th>
+        <td>{{$candidato->nombres . " " . $candidato->apellidos}}</td>
+      </tr>
+
+      <tr>
         <th scope="row">Fecha de Entrevista</th>
         <td>{{date('d-m-Y',strtotime($entrevistas->fecha_entrevista))}}</td>
       </tr>
@@ -44,6 +49,11 @@
       <tr>
         <th scope="row">Observaciones</th>
         <td>{{$entrevistas->observaciones}}</td>
+      </tr>
+
+      <tr>
+        <th scope="row">Vacante asociada</th>
+        <td>{{$vacante->nombre_vacante}}</td>
       </tr>
 
       <tr>

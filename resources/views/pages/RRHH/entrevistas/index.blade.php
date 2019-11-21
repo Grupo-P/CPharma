@@ -137,7 +137,7 @@
       <tr>
         <th scope="col" class="CP-sticky">#</th>
         <th scope="col" class="CP-sticky">Candidato</th>
-        <th scope="col" class="CP-sticky">Fecha</th>
+        <th scope="col" class="CP-sticky">Fecha de entrevista</th>
         <th scope="col" class="CP-sticky">Entrevistadores</th>
         <th scope="col" class="CP-sticky">Lugar</th>
         <th scope="col" class="CP-sticky">Vacante asociada</th>

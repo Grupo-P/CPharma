@@ -92,6 +92,8 @@ class RH_EntrevistaController extends Controller {
     public function show($id) {
 
         $entrevistas = RH_Entrevista::find($id);
+        $candidato = RH_Candidato::find($entrevistas->rh_candidatos_id);
+        $vacante = RH_Vacante::find($entrevistas->rh_vacantes_id);
 
         $Auditoria = new Auditoria();
         $Auditoria->accion = 'CONSULTAR';
@@ -100,7 +102,7 @@ class RH_EntrevistaController extends Controller {
         $Auditoria->user = auth()->user()->name;
         $Auditoria->save();
 
-        return view('pages.RRHH.entrevistas.show', compact('entrevistas'));
+        return view('pages.RRHH.entrevistas.show', compact('entrevistas', 'candidato', 'vacante'));
     }
 
     /**
