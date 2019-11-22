@@ -24,6 +24,7 @@
     $empresaReferencias = DB::table('rh_empresaRef')->count();
     $laboratorios = DB::table('rh_laboratorio')->count();
     $contactos = DB::table('rh_contactos_empresas')->count();
+    $convocatoria = DB::table('rh_convocatoria')->count();
 
   /*TASA DOLAR VENTA*/
     $Tasa = DB::table('tasa_ventas')->where('moneda', 'Dolar')->value('tasa');
@@ -959,6 +960,27 @@
       </div>
       <div class="card-footer bg-transparent border-success text-right">
         <a href="/contactos" class="btn btn-outline-success btn-sm">Visualizar</a>
+      </div>    
+    </div>
+
+    <div class="card border-info mb-3" style="width: 14rem;">      
+      <div class="card-body text-left bg-info">
+        <h3 class="card-title">
+          <span class="card-text text-white">
+            <i class="fas fa-user-edit"></i>
+            <?php
+            echo ''.$convocatoria;
+          ?>
+          </span>
+        </h3>
+        <p class="card-text text-white">
+        <?php 
+          echo 'Convocatorias registradas';
+        ?>
+        </p>
+      </div>
+      <div class="card-footer bg-transparent border-info text-right">
+        <a href="/convocatoria" class="btn btn-outline-info btn-sm">Visualizar</a>
       </div>    
     </div>
   </div>

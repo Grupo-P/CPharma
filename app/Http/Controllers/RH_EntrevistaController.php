@@ -2,11 +2,12 @@
 
 namespace compras\Http\Controllers;
 
-
 use Illuminate\Http\Request;
 use compras\RH_Entrevista;
 use compras\User;
 use compras\Auditoria;
+use compras\RH_Candidato;
+use compras\RH_Vacante;
 
 class RH_EntrevistaController extends Controller {
     /**
@@ -28,15 +29,19 @@ class RH_EntrevistaController extends Controller {
         return view('pages.RRHH.entrevistas.index', compact('entrevistas'));
     }
 
-
-
     /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function create() {
-        return view('pages.RRHH.entrevistas.create');
+    public function create(Request $request) {
+
+        $id_candidato = $request->input("CandidatoId");
+        $candidato = RH_Candidato::find($id_candidato);
+
+        $vacantes = RH_Vacante::all();
+
+        return view('pages.RRHH.entrevistas.create', compact('candidato', 'vacantes'));
     }
 
     /**
@@ -52,6 +57,8 @@ class RH_EntrevistaController extends Controller {
 
             $entrevistas = new RH_Entrevista();
 
+            $entrevistas->rh_candidatos_id = $request->input('CandidatoId');
+            $entrevistas->rh_vacantes_id = $request->input('VacanteId');
             $entrevistas->fecha_entrevista = date('Y-m-d', strtotime($fecha_entrevista));
             $entrevistas->entrevistadores = $request->input('entrevistadores');
             $entrevistas->lugar = $request->input('lugar');
@@ -59,6 +66,10 @@ class RH_EntrevistaController extends Controller {
             $entrevistas->estatus = 'ACTIVO';
             $entrevistas->user = auth()->user()->name;
             $entrevistas->save();
+
+            $candidato = RH_Candidato::find($request->input('CandidatoId'));
+            $candidato->estatus = 'ENTREVISTADO';
+            $candidato->save();
 
             $Auditoria = new Auditoria();
             $Auditoria->accion = 'CREAR';
@@ -68,8 +79,8 @@ class RH_EntrevistaController extends Controller {
             $Auditoria->save();
 
             return redirect()
-                ->route('entrevistas.index')
-                ->with('Saved', ' Informacion');
+                ->route('candidatos.index')
+                ->with('Saved1', ' Informacion');
         }
         catch(\Illuminate\Database\QueryException $e) {
             return back()->with('Error', ' Error');
@@ -85,6 +96,8 @@ class RH_EntrevistaController extends Controller {
     public function show($id) {
 
         $entrevistas = RH_Entrevista::find($id);
+        $candidato = RH_Candidato::find($entrevistas->rh_candidatos_id);
+        $vacante = RH_Vacante::find($entrevistas->rh_vacantes_id);
 
         $Auditoria = new Auditoria();
         $Auditoria->accion = 'CONSULTAR';
@@ -93,7 +106,7 @@ class RH_EntrevistaController extends Controller {
         $Auditoria->user = auth()->user()->name;
         $Auditoria->save();
 
-        return view('pages.RRHH.entrevistas.show', compact('entrevistas'));
+        return view('pages.RRHH.entrevistas.show', compact('entrevistas', 'candidato', 'vacante'));
     }
 
     /**
@@ -122,6 +135,7 @@ class RH_EntrevistaController extends Controller {
             $entrevistas = RH_Entrevista::find($id);
             $entrevistas->fill($request->all());
 
+            $entrevistas->rh_vacantes_id = $request->input('VacanteId');
             $entrevistas->fecha_entrevista = date('Y-m-d', strtotime($fecha_entrevista));
 
             $entrevistas->user = auth()->user()->name;

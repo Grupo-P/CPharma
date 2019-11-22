@@ -28,11 +28,6 @@
 
     <tbody>
       <tr>
-        <th scope="row">Sede</th>
-        <td>{{$vacantes->sede}}</td>
-      </tr>
-
-      <tr>
         <th scope="row">Nombre de la vacante</th>
         <td>{{$vacantes->nombre_vacante}}</td>
       </tr>
@@ -53,8 +48,13 @@
       </tr>
 
       <tr>
-        <th scope="row">Nivel de urgencia</th>
-        <td>{{$vacantes->nivel_urgencia}}</td>
+        <th scope="row">Sede</th>
+        <td>{{$vacantes->sede}}</td>
+      </tr>
+
+      <tr>
+        <th scope="row">Cantidad requerida</th>
+        <td>{{$vacantes->cantidad}}</td>
       </tr>
 
       <tr>
@@ -68,8 +68,18 @@
       </tr>
 
       <tr>
-        <th scope="row">Cantidad requerida</th>
-        <td>{{$vacantes->cantidad}}</td>
+        <th scope="row">Nivel de urgencia</th>
+        <td>{{$vacantes->nivel_urgencia}}</td>
+      </tr>
+
+      <tr>
+        <th scope="row">Solicitante</th>
+        <td>{{$vacantes->solicitante}}</td>
+      </tr>
+
+      <tr>
+        <th scope="row">Comentarios</th>
+        <td>{{$vacantes->comentarios}}</td>
       </tr>
 
       <tr>

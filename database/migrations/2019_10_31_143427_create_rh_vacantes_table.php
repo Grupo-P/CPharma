@@ -23,8 +23,9 @@ class CreateRhVacantesTable extends Migration {
             $table->date('fecha_limite');
             $table->string('nivel_urgencia');
             $table->string('solicitante');
-            $table->text('comentarios');
+            $table->text('comentarios')->nullable();
             $table->string('user');
+            $table->string('estatus');
             $table->timestamps();
         });
     }

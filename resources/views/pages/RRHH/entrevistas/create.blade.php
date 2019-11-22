@@ -35,7 +35,7 @@
   </h1>
   <hr class="row align-items-start col-12">
 
-  <form action="/entrevistas/" method="POST" style="display: inline;">  
+  <form action="/candidatos/" method="POST" style="display: inline;">  
     @csrf
     <button type="submit" name="Regresar" role="button" class="btn btn-outline-info btn-sm"data-placement="top">
       <i class="fa fa-reply">&nbsp;Regresar</i>
@@ -54,6 +54,48 @@
         </thead>
 
         <tbody>
+          <tr>
+            <th scope="row">
+              <label for="nombres">Nombre del candidato</label>
+            </th>
+
+            <td>
+              <input type="text" id="nombres" name="nombres" class="form-control" value="{{$candidato->nombres . ' ' . $candidato->apellidos}}" disabled>
+              
+              <input type="hidden" name="CandidatoId" id="CandidatoId" value="{{$candidato->id}}">
+            </td>
+          </tr>
+
+          <tr>
+            <th scope="row">
+              {!! Form::label('VacanteId', 'Vacante asociada *', ['title' => 'Éste campo es requerido']) !!}
+            </th>
+            <td>
+              <select name="VacanteId" id="VacanteId" class="form-control" required>
+                <option value="">Seleccione una opción</option>
+
+                <?php
+                  foreach ($vacantes as $vacante) {
+                    if($vacante->estatus == "ACTIVO") {
+                ?>
+
+                <option value="{{$vacante->id}}">{{
+                    $vacante->nombre_vacante 
+                    . " - " . $vacante->departamento
+                    . " - " . $vacante->turno
+                    . " - " . $vacante->dias_libres
+                    . " - " . $vacante->sede
+                  }}
+                </option>
+
+                <?php
+                    }//if
+                  }//foreach
+                ?>
+              </select>
+            </td>
+          </tr>
+
           <tr>
             <th scope="row">
               {!! Form::label('fecha_entrevista', 'Fecha de Entrevista *', ['title' => 'Este campo es requerido']) !!}
@@ -80,9 +122,9 @@
           </tr>
 
           <tr>
-            <th scope="row">{!! Form::label('observaciones', 'Observaciones *', ['title' => 'Este campo es requerido']) !!}</th>
+            <th scope="row">{!! Form::label('observaciones', 'Observaciones') !!}</th>
             <td>
-              {!! Form::textarea('observaciones', null, [ 'class' => 'form-control', 'placeholder' => 'Detalles del entrevistado', 'rows' => '3', 'required']) !!}
+              {!! Form::textarea('observaciones', null, [ 'class' => 'form-control', 'placeholder' => 'Detalles del entrevistado', 'rows' => '3']) !!}
             </td>
           </tr>
         </tbody>

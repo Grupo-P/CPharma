@@ -1,6 +1,6 @@
 @extends('layouts.model')
 
-@section('title', 'Contactos')
+@section('title', 'Convocatoria')
 
 @section('scriptsHead')
   <style>
@@ -23,7 +23,7 @@
             </button>
           </div>
           <div class="modal-body">
-            <h4 class="h6">Contacto almacenado con éxito</h4>
+            <h4 class="h6">Convocatoria almacenada con éxito</h4>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-outline-success" data-dismiss="modal">Aceptar</button>
@@ -32,8 +32,7 @@
       </div>
     </div>
   @endif
-
-  <!-- Modal Editar -->
+ <!-- Modal Editar -->
   @if(session('Updated'))
     <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered" role="document">
@@ -47,7 +46,7 @@
             </button>
           </div>
           <div class="modal-body">
-            <h4 class="h6">Contacto modificado con éxito</h4>
+            <h4 class="h6">Convocatoria modificada con éxito</h4>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-outline-success" data-dismiss="modal">Aceptar</button>
@@ -56,7 +55,6 @@
       </div>
     </div>
   @endif
-
   <!-- Modal Eliminar -->
   @if(session('Deleted'))
     <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -71,7 +69,7 @@
             </button>
           </div>
           <div class="modal-body">
-            <h4 class="h6">Contacto desincorporado con éxito</h4>
+            <h4 class="h6">Convocatoria desincorporada con éxito</h4>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-outline-success" data-dismiss="modal">Aceptar</button>
@@ -80,8 +78,7 @@
       </div>
     </div>
   @endif
-
-  @if(session('Deleted1'))
+ @if(session('Deleted1'))
     <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
@@ -94,7 +91,7 @@
             </button>
           </div>
           <div class="modal-body">
-            <h4 class="h6">Contacto reincorporado con éxito</h4>
+            <h4 class="h6">Convocatoria reincorporada con éxito</h4>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-outline-success" data-dismiss="modal">Aceptar</button>
@@ -104,18 +101,18 @@
     </div>
   @endif
 
-  <h1 class="h5 text-info">
-    <i class="fas fa-phone"></i>&nbsp;Contactos de empresas
+   <h1 class="h5 text-info">
+    <i class="fas fa-user-edit"></i>&nbsp;Convocatoria
   </h1>
   <hr class="row align-items-start col-12">
 
   <table style="width:100%;">
-    {{-- <tr>
+    <tr>
       <td style="width:10%;" align="center">
-        <a href="{{ url('/contactos/create') }}" role="button" class="btn btn-outline-info btn-sm" style="display: inline; text-align: left;">
+        <a href="{{ url('/convocatoria/create') }}" role="button" class="btn btn-outline-info btn-sm" style="display: inline; text-align: left;">
           <i class="fa fa-plus"></i>&nbsp;Agregar
         </a>
-      </td> --}}
+      </td>
 
       <td style="width:90%;">
         <div class="input-group md-form form-sm form-1 pl-0">
@@ -128,7 +125,7 @@
         </div>
       </td>
     </tr>
-  </table> 
+  </table>
 
   <br/>
 
@@ -136,39 +133,39 @@
     <thead class="thead-dark">
       <tr>
         <th scope="col" class="stickyCP">#</th>
-        <th scope="col" class="stickyCP">Nombres</th>
-        <th scope="col" class="stickyCP">Apellidos</th>
-        <th scope="col" class="stickyCP">Cargo</th>
+        <th scope="col" class="stickyCP">Fecha</th>
+        <th scope="col" class="stickyCP">Lugar</th>
+        <th scope="col" class="stickyCP">Cargos a Reclutar</th>
         <th scope="col" class="stickyCP">Estatus</th>
         <th scope="col" class="stickyCP">Acciones</th>
       </tr>
     </thead>
-
-    <tbody>
-      @foreach($contactos as $contacto)
+   <tbody>
+       @foreach($convocatoria as $conv)
         <tr>
-          <th>{{$contacto->id}}</th>
-          <td>{{$contacto->nombre}}</td>
-          <td>{{$contacto->apellido}}</td>
-          <td>{{$contacto->cargo}}</td>
-          <td>{{$contacto->estatus}}</td>
+          <th>{{$conv->id}}</th>
+          <td>{{date('d-m-Y', strtotime($conv->fecha))}}</td>
+          <td>{{$conv->lugar}}</td>
+          <td>{{$conv->cargo_reclutar}}</td>
+          <td>{{$conv->estatus}}</td>
+
 
           <!-- ***************** VALIDACION DE ROLES ***************** -->
           <td style="width:140px;">
           <?php
             if(Auth::user()->role == 'MASTER' || Auth::user()->role == 'DEVELOPER') {
 
-              if($contacto->estatus != 'INACTIVO') {
+              if($conv->estatus != 'INACTIVO') {
           ?>
-            <a href="/contactos/{{$contacto->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
+            <a href="/convocatoria/{{$conv->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
               <i class="far fa-eye"></i>
             </a>
 
-            <a href="/contactos/{{$contacto->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
+            <a href="/convocatoria/{{$conv->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
               <i class="fas fa-edit"></i>
             </a>
 
-            <form action="/contactos/{{$contacto->id}}" method="POST" style="display: inline;">
+            <form action="/convocatoria/{{$conv->id}}" method="POST" style="display: inline;">
               @method('DELETE')
               @csrf
               <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Desincorporar">
@@ -177,9 +174,9 @@
             </form>
 
           <?php
-            } else if($contacto->estatus == 'INACTIVO') {
+            } else if($conv->estatus == 'INACTIVO') {
           ?>
-            <form action="/contactos/{{$contacto->id}}" method="POST" style="display: inline;">
+            <form action="/convocatoria/{{$conv->id}}" method="POST" style="display: inline;">
               @method('DELETE')
               @csrf
               <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Reincorporar">
@@ -190,17 +187,17 @@
             }
           } else if(Auth::user()->role == 'ANALISTA') {
           ?>
-            <a href="/contactos/{{$contacto->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
+            <a href="/convocatoria/{{$conv->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
               <i class="far fa-eye"></i>
             </a>
 
-            <a href="/contactos/{{$contacto->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
+            <a href="/convocatoria/{{$conv->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
               <i class="fas fa-edit"></i>
             </a>
           <?php
             } else if(Auth::user()->role == 'USUARIO') {
           ?>
-            <a href="/contactos/{{$contacto->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
+            <a href="/convocatoria/{{$conv->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
               <i class="far fa-eye"></i>
             </a>
           <?php
