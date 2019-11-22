@@ -79,12 +79,21 @@
 
                 <?php
                   foreach ($vacantes as $vacante) {
+                    if($vacante->estatus == "ACTIVO") {
                 ?>
 
-                <option value="{{$vacante->id}}">{{$vacante->nombre_vacante}}</option>
+                <option value="{{$vacante->id}}">{{
+                    $vacante->nombre_vacante 
+                    . " - " . $vacante->departamento
+                    . " - " . $vacante->turno
+                    . " - " . $vacante->dias_libres
+                    . " - " . $vacante->sede
+                  }}
+                </option>
 
                 <?php
-                  }
+                    }//if
+                  }//foreach
                 ?>
               </select>
             </td>
