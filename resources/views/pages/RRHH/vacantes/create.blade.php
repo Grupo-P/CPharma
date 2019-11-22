@@ -107,10 +107,10 @@
                 <option value="">Seleccione una opción</option>
 
                 <?php
-                  foreach ($sedes as $sede) {
+                  foreach ($sedes as $sede => $s) {
                 ?>
 
-                <option value="{{$sede}}">{{$sede}}</option>
+                <option value="{{$sede}}">{{$s}}</option>
 
                 <?php
                   }

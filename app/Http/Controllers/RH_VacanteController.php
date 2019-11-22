@@ -35,7 +35,7 @@ class RH_VacanteController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function create() {
-        $sedes = Sede::pluck('razon_social');
+        $sedes = Sede::pluck('razon_social', 'siglas');
 
         return view('pages.RRHH.vacantes.create', compact('sedes'));
     }
