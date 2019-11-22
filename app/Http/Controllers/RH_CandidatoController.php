@@ -172,13 +172,13 @@ class RH_CandidatoController extends Controller {
         $Auditoria->registro = $candidatos->nombres . " " . $candidatos->apellidos;
         $Auditoria->user = auth()->user()->name;
 
-        if($candidatos->estatus == 'POSTULADO') {
-            $candidatos->estatus = 'RECHAZADO';
-            $Auditoria->accion = 'DESINCORPORAR';
-        }
-        else if($candidatos->estatus == 'RECHAZADO') {
+        if($candidatos->estatus == 'RECHAZADO') {
             $candidatos->estatus = 'POSTULADO';
             $Auditoria->accion = 'REINCORPORAR';
+        }
+        else {
+            $candidatos->estatus = 'RECHAZADO';
+            $Auditoria->accion = 'DESINCORPORAR';
         }
 
         $candidatos->user = auth()->user()->name;
