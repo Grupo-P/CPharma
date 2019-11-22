@@ -76,6 +76,7 @@
 
                 <?php
                   foreach ($vacantes as $vacante) {
+                    if($vacante->estatus == "ACTIVO") {
                 ?>
 
                 <option value="{{$vacante->id}}">{{
@@ -88,7 +89,8 @@
                 </option>
 
                 <?php
-                  }
+                    }//if
+                  }//foreach
                 ?>
               </select>
             </td>
