@@ -33,7 +33,15 @@
 
       <tr>
         <th scope="row">Vacante asociada</th>
-        <td>{{$vacante->nombre_vacante}}</td>
+        <td>
+          {{
+            $vacante->nombre_vacante 
+            . " - " . $vacante->departamento
+            . " - " . $vacante->turno
+            . " - " . $vacante->dias_libres
+            . " - " . $vacante->sede
+          }}
+        </td>
       </tr>
 
       <tr>
