@@ -111,11 +111,11 @@
 
   <table style="width:100%;">
     <tr>
-      <td style="width:10%;" align="center">
+      {{-- <td style="width:10%;" align="center">
         <a href="/entrevistas/create" role="button" class="btn btn-outline-info btn-sm" style="display: inline; text-align: left;">
           <i class="fa fa-plus"></i>&nbsp;Agregar
         </a>
-      </td>
+      </td> --}}
 
       <td style="width:90%;">
         <div class="input-group md-form form-sm form-1 pl-0">
@@ -136,9 +136,11 @@
     <thead class="thead-dark">
       <tr>
         <th scope="col" class="CP-sticky">#</th>
-        <th scope="col" class="CP-sticky">Fecha</th>
+        <th scope="col" class="CP-sticky">Candidato</th>
+        <th scope="col" class="CP-sticky">Fecha de entrevista</th>
         <th scope="col" class="CP-sticky">Entrevistadores</th>
         <th scope="col" class="CP-sticky">Lugar</th>
+        <th scope="col" class="CP-sticky">Vacante asociada</th>
         <th scope="col" class="CP-sticky">Estatus</th>
         <th scope="col" class="CP-sticky">Acciones</th>
       </tr>
@@ -148,9 +150,23 @@
       @foreach($entrevistas as $entrevista)
         <tr>
           <th>{{$entrevista->id}}</th>
+          <td>
+            <?php
+              $candidato = compras\RH_Candidato::find($entrevista->rh_candidatos_id);
+            ?>
+
+            {{$candidato->nombres . " " . $candidato->apellidos}}
+          </td>
           <td>{{date('d-m-Y',strtotime($entrevista->fecha_entrevista))}}</td>
           <td>{{$entrevista->entrevistadores}}</td>
           <td>{{$entrevista->lugar}}</td>
+          <td>
+            <?php
+              $ent = compras\RH_Vacante::find($entrevista->rh_vacantes_id);
+            ?>
+
+            {{$ent->nombre_vacante . " - " . $ent->departamento . " - " . $ent->sede}}
+          </td>
           <td>{{$entrevista->estatus}}</td>
 
           <!-- Inicio Validacion de ROLES -->
