@@ -160,7 +160,13 @@
           <td>{{date('d-m-Y',strtotime($entrevista->fecha_entrevista))}}</td>
           <td>{{$entrevista->entrevistadores}}</td>
           <td>{{$entrevista->lugar}}</td>
-          <td>{{compras\RH_Vacante::find($entrevista->rh_vacantes_id)->nombre_vacante}}</td>
+          <td>
+            <?php
+              $ent = compras\RH_Vacante::find($entrevista->rh_vacantes_id);
+            ?>
+
+            {{$ent->nombre_vacante . " - " . $ent->departamento . " - " . $ent->sede}}
+          </td>
           <td>{{$entrevista->estatus}}</td>
 
           <!-- Inicio Validacion de ROLES -->
