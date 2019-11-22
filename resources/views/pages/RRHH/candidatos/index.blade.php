@@ -33,6 +33,29 @@
     </div>
   @endif
 
+  @if(session('Saved1'))
+    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title text-info" id="exampleModalCenterTitle">
+              <i class="fas fa-info text-info"></i>{{ session('Saved1') }}
+            </h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <h4 class="h6">La entrevista fue almacenada con éxito</h4>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline-success" data-dismiss="modal">Aceptar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  @endif
+
   <!-- Modal Editar -->
   @if(session('Updated'))
     <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -142,7 +165,7 @@
         <th scope="col" class="stickyCP">Teléfono</th>
         <th scope="col" class="stickyCP">Estatus</th>
         <th scope="col" class="stickyCP">Acciones</th>
-        <th scope="col" class="stickyCP">Fase</th>
+        <th scope="col" class="stickyCP">Próxima Fase</th>
       </tr>
     </thead>
 
@@ -231,10 +254,22 @@
               case 'POSTULADO':
           ?>
             <form action="/entrevistas/create" method="GET">
-              <input type="hidden" name="CandidatoId{{$candidato->id}}" id="CandidatoId{{$candidato->id}}" value="{{$candidato->id}}">
+              <input type="hidden" name="CandidatoId" value="{{$candidato->id}}">
 
               <button type="submit" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="bottom" title="Ir a la fase">
                 <i class="fas fa-users"></i>&nbsp;Entrevista
+              </button>
+            </form>
+          <?php
+              break;
+
+              case 'ENTREVISTADO':
+          ?>
+            <form action="/pruebas/create" method="GET">
+              <input type="hidden" name="CandidatoId" value="{{$candidato->id}}">
+
+              <button type="submit" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="bottom" title="Ir a la fase" disabled>
+                <i class="fas fa-tasks"></i>&nbsp;Prueba
               </button>
             </form>
           <?php

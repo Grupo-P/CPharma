@@ -17,7 +17,7 @@ class CreateRhEntrevistasTable extends Migration {
             $table->date('fecha_entrevista');
             $table->string('entrevistadores');
             $table->string('lugar');
-            $table->string('observaciones');
+            $table->string('observaciones')->nullable();
             $table->string('estatus');
             $table->string('user');
             $table->timestamps();

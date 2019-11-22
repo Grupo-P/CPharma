@@ -51,6 +51,56 @@
         <tbody>
           <tr>
             <th scope="row">
+              <label for="nombres">Nombre del candidato</label>
+            </th>
+
+            <td>
+              <?php
+                $candidato = compras\RH_Candidato::find($entrevistas->rh_candidatos_id);
+              ?>
+
+              <input type="text" id="nombres" name="nombres" class="form-control" value="{{$candidato->nombres . ' ' . $candidato->apellidos}}" disabled>
+              
+              <input type="hidden" name="CandidatoId" id="CandidatoId" value="{{$candidato->id}}">
+            </td>
+          </tr>
+
+          <tr>
+            <th scope="row">
+              {!! Form::label('VacanteId', 'Vacante asociada *', ['title' => 'Éste campo es requerido']) !!}
+            </th>
+            <td>
+              <?php
+                $vacantes = compras\RH_Vacante::all();
+              ?>
+
+              <select name="VacanteId" id="VacanteId" class="form-control" required>
+                <option value="">Seleccione una opción</option>
+
+                <?php
+                  foreach ($vacantes as $vacante) {
+                    if($vacante->estatus == "ACTIVO") {
+                ?>
+
+                <option value="{{$vacante->id}}">{{
+                    $vacante->nombre_vacante 
+                    . " - " . $vacante->departamento
+                    . " - " . $vacante->turno
+                    . " - " . $vacante->dias_libres
+                    . " - " . $vacante->sede
+                  }}
+                </option>
+
+                <?php
+                    }//if
+                  }//foreach
+                ?>
+              </select>
+            </td>
+          </tr>
+
+          <tr>
+            <th scope="row">
               {!! Form::label('fecha_entrevista', 'Fecha de Entrevista *', ['title' => 'Este campo es requerido']) !!}
             </th>
             <td>
@@ -77,8 +127,8 @@
           </tr>
 
           <tr>
-            <th scope="row">{!! Form::label('observaciones', 'Observaciones *', ['title' => 'Este campo es requerido']) !!}</th>
-            <td>{!! Form::textarea('observaciones', null, [ 'class' => 'form-control', 'placeholder' => 'Detalles del entrevistadores', 'rows' => '3', 'required']) !!}</td>
+            <th scope="row">{!! Form::label('observaciones', 'Observaciones') !!}</th>
+            <td>{!! Form::textarea('observaciones', null, [ 'class' => 'form-control', 'placeholder' => 'Detalles del entrevistadores', 'rows' => '3']) !!}</td>
           </tr>
         </tbody>
       </table>
