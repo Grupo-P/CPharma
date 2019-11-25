@@ -52,7 +52,7 @@ class DolarController extends Controller
             $dolar = new Dolar();
             $dolar->tasa = $request->input('tasa');
             $dolar->fecha = $request->input('fecha');
-            $dolar->fecha = date('Y-m-d',strtotime($dolar->fecha));
+            $dolar->fecha = date('Y-m-d 00:00:00',strtotime($dolar->fecha));
             $dolar->estatus = 'ACTIVO';
             $dolar->user = auth()->user()->name;
             $dolar->save();
@@ -115,7 +115,7 @@ class DolarController extends Controller
         try{
             $dolar = Dolar::find($id);
             $dolar->fill($request->all());
-            $dolar->fecha = date('Y-m-d',strtotime($dolar->fecha));
+            $dolar->fecha = date('Y-m-d 00:00:00',strtotime($dolar->fecha));
             $dolar->user = auth()->user()->name;
             $dolar->save();
 

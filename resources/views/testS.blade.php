@@ -4,11 +4,11 @@
 		include(app_path().'\functions\querys_mysql.php');
 		include(app_path().'\functions\querys_sqlserver.php');
 
-		Prueba_Precio_Articulo('49601');
+		Prueba_Precio_Articulo('112955','CON_EXISTENCIA');
 ?>
 
 <?php 
-	function Prueba_Precio_Articulo($CodigoInterno){
+	function Prueba_Precio_Articulo($CodigoInterno,$CondicionExistencia){
 		$conn = FG_Conectar_Smartpharma('FAU');
 		$sql = Query_Test_Precio($CodigoInterno);
     $result = sqlsrv_query($conn,$sql);
@@ -16,7 +16,6 @@
 
     $CodigoArticulo = $row["CodigoInterno"];
     $Descripcion = FG_Limpiar_Texto($row["Descripcion"]);
-
     $Existencia = $row["Existencia"];
     $ExistenciaAlmacen1 = $row["ExistenciaAlmacen1"];
     $ExistenciaAlmacen2 = $row["ExistenciaAlmacen2"];
@@ -29,7 +28,6 @@
     $TroquelAlmacen2 = $row["TroquelAlmacen2"];
     $PrecioCompraBrutoAlmacen2 = $row["PrecioCompraBrutoAlmacen2"];
     $PrecioCompraBruto = $row["PrecioCompraBruto"];
-    $CondicionExistencia = 'CON_EXISTENCIA';
 
     $Precio = FG_Calculo_Precio_Alfa($Existencia,$ExistenciaAlmacen1,$ExistenciaAlmacen2,$IsTroquelado,$UtilidadArticulo,$UtilidadCategoria,$TroquelAlmacen1,$PrecioCompraBrutoAlmacen1,$TroquelAlmacen2,
 		$PrecioCompraBrutoAlmacen2,$PrecioCompraBruto,$IsIVA,$CondicionExistencia);
