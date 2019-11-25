@@ -4,31 +4,13 @@
 		include(app_path().'\functions\querys_mysql.php');
 		include(app_path().'\functions\querys_sqlserver.php');
 
-		
-		Prueba_Precio_Articulo('49600');
 		Prueba_Precio_Articulo('49601');
-		Prueba_Precio_Articulo('49602');
-		Prueba_Precio_Articulo('49603');
-        Prueba_Precio_Articulo('49604');
-        Prueba_Precio_Articulo('49605');
-        Prueba_Precio_Articulo('59685');
-        Prueba_Precio_Articulo('59686');
-        Prueba_Precio_Articulo('59687');
-        Prueba_Precio_Articulo('59688');
-        Prueba_Precio_Articulo('59689');
-        Prueba_Precio_Articulo('59690');
-        Prueba_Precio_Articulo('59691');
-        Prueba_Precio_Articulo('59692');
-        Prueba_Precio_Articulo('59693');
-        Prueba_Precio_Articulo('59694');
-        Prueba_Precio_Articulo('59695');
-        Prueba_Precio_Articulo('59697');
 ?>
 
 <?php 
-	function Prueba_Precio_Articulo($IdArticulo){
-		$conn = FG_Conectar_Smartpharma('FTN');
-		$sql = Query_Test_Precio($IdArticulo);
+	function Prueba_Precio_Articulo($CodigoInterno){
+		$conn = FG_Conectar_Smartpharma('FAU');
+		$sql = Query_Test_Precio($CodigoInterno);
     $result = sqlsrv_query($conn,$sql);
     $row = sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC);
 
@@ -47,14 +29,15 @@
     $TroquelAlmacen2 = $row["TroquelAlmacen2"];
     $PrecioCompraBrutoAlmacen2 = $row["PrecioCompraBrutoAlmacen2"];
     $PrecioCompraBruto = $row["PrecioCompraBruto"];
+    $CondicionExistencia = 'CON_EXISTENCIA';
 
     $Precio = FG_Calculo_Precio_Alfa($Existencia,$ExistenciaAlmacen1,$ExistenciaAlmacen2,$IsTroquelado,$UtilidadArticulo,$UtilidadCategoria,$TroquelAlmacen1,$PrecioCompraBrutoAlmacen1,$TroquelAlmacen2,
-		$PrecioCompraBrutoAlmacen2,$PrecioCompraBruto,$IsIVA);
+		$PrecioCompraBrutoAlmacen2,$PrecioCompraBruto,$IsIVA,$CondicionExistencia);
 
 		echo'<br/><br/>Para el articulo: '.$Descripcion.', el precio final de venta es: '.number_format($Precio,2,"," ,"." );
 	}
 
-	function Query_Test_Precio($IdArticulo){
+	function Query_Test_Precio($CodigoInterno){
 		$sql = "
 			SELECT
 --Id Articulo
@@ -240,7 +223,7 @@
     LEFT JOIN InvArticuloAtributo ON InvArticuloAtributo.InvArticuloId = InvArticulo.Id
     LEFT JOIN InvAtributo ON InvAtributo.Id = InvArticuloAtributo.InvAtributoId 
 --Condicionales
-    WHERE InvArticulo.Id = '$IdArticulo'
+    WHERE InvArticulo.CodigoArticulo = '$CodigoInterno'
 --Agrupamientos
     GROUP BY InvArticulo.Id, InvArticulo.CodigoArticulo, InvArticulo.Descripcion, InvArticulo.FinConceptoImptoIdCompra, InvArticulo.InvCategoriaId
 --Ordanamiento
