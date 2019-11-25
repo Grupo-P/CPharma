@@ -914,6 +914,28 @@
 			}
 		return $PrecioCalculado;
 	}
+	/**********************************************************************************/
+	/*
+		TITULO: FG_Utilidad_Alfa
+		FUNCION: Decide la utilidad a usar para la regresion o calculo de precio
+		RETORNO: retorna la utilidad
+		DESARROLLADO POR: SERGIO COVA
+	 */
+	function FG_Utilidad_Alfa($UtilidadArticulo,$UtilidadCategoria){
+		if($UtilidadArticulo!=1) {
+			$utilidad = $UtilidadArticulo;
+		}
+		else if($UtilidadArticulo==1){
+
+			if($UtilidadCategoria!=1){
+				$utilidad = $UtilidadCategoria;
+			}
+			else if($UtilidadCategoria==1){
+				$utilidad = Utilidad;
+			}
+		}
+		return $utilidad;
+	}
   /**********************************************************************************/
   /*
 		TITULO: FG_Ruta_Reporte
