@@ -658,38 +658,57 @@
       $IdLote = $row["lote"];
       $IdTraslado = $NumeroAjuste;
 
-      $sql1 = QG_Detalle_Articulo($IdArticulo);
+      $sql1 = SQG_Detalle_Articulo($IdArticulo);
       $result1 = sqlsrv_query($conn,$sql1);
       $row1 = sqlsrv_fetch_array($result1,SQLSRV_FETCH_ASSOC);
 
       $CodigoArticulo = $row1["CodigoInterno"];
       $CodigoBarra = $row1["CodigoBarra"];
       $Descripcion = FG_Limpiar_Texto($row1["Descripcion"]);
-      $Existencia = $row1["Existencia"];
+      $Existencia = $row["Existencia"];
+	    $ExistenciaAlmacen1 = $row["ExistenciaAlmacen1"];
+	    $ExistenciaAlmacen2 = $row["ExistenciaAlmacen2"];
+	    $IsTroquelado = $row["Troquelado"];
+	    $IsIVA = $row["Impuesto"];
+	    $UtilidadArticulo = $row["UtilidadArticulo"];
+	    $UtilidadCategoria = $row["UtilidadCategoria"];
+	    $TroquelAlmacen1 = $row["TroquelAlmacen1"];
+	    $PrecioCompraBrutoAlmacen1 = $row["PrecioCompraBrutoAlmacen1"];
+	    $TroquelAlmacen2 = $row["TroquelAlmacen2"];
+	    $PrecioCompraBrutoAlmacen2 = $row["PrecioCompraBrutoAlmacen2"];
+	    $PrecioCompraBruto = $row["PrecioCompraBruto"];
       $Dolarizado = $row1["Dolarizado"];
-      $IsIVA = $row1["Impuesto"];
-      $Utilidad = $row1["Utilidad"];
-      $TroquelAlmacen1 = $row1["TroquelAlmacen1"];
-      $TroquelAlmacen2 = $row1["TroquelAlmacen2"];
-      $PrecioCompraBruto = $row1["PrecioCompraBruto"];
       $Gravado = FG_Producto_Gravado($IsIVA);
       $Dolarizado = FG_Producto_Dolarizado($Dolarizado);
+      $CondicionExistencia = 'CON_EXISTENCIA';
+
+      $Utilidad = FG_Utilidad_Alfa($UtilidadArticulo,$UtilidadCategoria);
 
       if($Existencia==0){
 
-      	$sql3 = QG_Lote_Sin_Existencia($IdLote,$IdArticulo);
+      	$sql3 = SQG_Detalle_Articulo_Lote($IdLote,$IdArticulo);
 	      $result3 = sqlsrv_query($conn,$sql3);
 	      $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
 
-	      $IsIVASE = $row3["Impuesto"];
-	      $UtilidadSE = $row3["Utilidad"];
-	      $TroquelAlmacen1SE = $row3["TroquelAlmacen1"];
-	      $TroquelAlmacen2SE = $row3["TroquelAlmacen2"];
-	      $PrecioCompraBrutoSE = $row3["PrecioCompraBruto"];
+	      $ExistenciaSE = $row3["Existencia"];
+		    $ExistenciaAlmacen1SE = $row3["ExistenciaAlmacen1"];
+		    $ExistenciaAlmacen2SE = $row3["ExistenciaAlmacen2"];
+		    $IsTroqueladoSE = $row3["Troquelado"];
+		    $IsIVASE = $row3["Impuesto"];
+		    $UtilidadArticuloSE = $row3["UtilidadArticulo"];
+		    $UtilidadCategoriaSE = $row3["UtilidadCategoria"];
+		    $TroquelAlmacen1SE = $row3["TroquelAlmacen1"];
+		    $PrecioCompraBrutoAlmacen1SE = $row3["PrecioCompraBrutoAlmacen1"];
+		    $TroquelAlmacen2SE = $row3["TroquelAlmacen2"];
+		    $PrecioCompraBrutoAlmacen2SE = $row3["PrecioCompraBrutoAlmacen2"];
+		    $PrecioCompraBrutoSE = $row3["PrecioCompraBruto"];
+		    $CondicionExistenciaSE = 'SIN_EXISTENCIA';
+
+		    $UtilidadSE = FG_Utilidad_Alfa($UtilidadArticuloSE,$UtilidadCategoriaSE);
 
       	if($Dolarizado=='SI') {
-	        	$TasaActualSE = FG_Tasa_Fecha($connCPharma,date('Y-m-d'));
-	        	$PrecioSE = FG_Calculo_Precio_Sin_Existencia($TroquelAlmacen1SE,$PrecioCompraBrutoSE,$UtilidadSE,$IsIVASE,$TroquelAlmacen2SE);
+        	$TasaActualSE = FG_Tasa_Fecha($connCPharma,date('Y-m-d'));
+        	$PrecioSE = FG_Calculo_Precio_Alfa($ExistenciaSE,$ExistenciaAlmacen1SE,$ExistenciaAlmacen2SE,$IsTroqueladoSE,$UtilidadArticuloSE,$UtilidadCategoriaSE,$TroquelAlmacen1SE,$PrecioCompraBrutoAlmacen1SE,$TroquelAlmacen2SE, $PrecioCompraBrutoAlmacen2SE,$PrecioCompraBrutoSE,$IsIVASE,$CondicionExistenciaSE);
 
 	        if($Gravado=='SI' && $UtilidadSE!= 1){
 	          $costo_unit_bs_sin_iva = ($PrecioSE/Impuesto)*$UtilidadSE;
@@ -728,20 +747,31 @@
       }
       else{
 
-      	$sql3 = QG_Lote_Sin_Existencia($IdLote,$IdArticulo);
+      	$sql3 = SQG_Detalle_Articulo_Lote($IdLote,$IdArticulo);
 	      $result3 = sqlsrv_query($conn,$sql3);
 	      $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
-	      $IsIVASE = $row3["Impuesto"];
-	      $UtilidadSE = $row3["Utilidad"];
-	      $TroquelAlmacen1SE = $row3["TroquelAlmacen1"];
-	      $TroquelAlmacen2SE = $row3["TroquelAlmacen2"];
-	      $PrecioCompraBrutoSE = $row3["PrecioCompraBruto"];
+
+	      $ExistenciaSE = $row3["Existencia"];
+		    $ExistenciaAlmacen1SE = $row3["ExistenciaAlmacen1"];
+		    $ExistenciaAlmacen2SE = $row3["ExistenciaAlmacen2"];
+		    $IsTroqueladoSE = $row3["Troquelado"];
+		    $IsIVASE = $row3["Impuesto"];
+		    $UtilidadArticuloSE = $row3["UtilidadArticulo"];
+		    $UtilidadCategoriaSE = $row3["UtilidadCategoria"];
+		    $TroquelAlmacen1SE = $row3["TroquelAlmacen1"];
+		    $PrecioCompraBrutoAlmacen1SE = $row3["PrecioCompraBrutoAlmacen1"];
+		    $TroquelAlmacen2SE = $row3["TroquelAlmacen2"];
+		    $PrecioCompraBrutoAlmacen2SE = $row3["PrecioCompraBrutoAlmacen2"];
+		    $PrecioCompraBrutoSE = $row3["PrecioCompraBruto"];
+		    $CondicionExistenciaSE = 'SIN_EXISTENCIA';
+
+		    $UtilidadSE = FG_Utilidad_Alfa($UtilidadArticuloSE,$UtilidadCategoriaSE);
 
 	      if( $PrecioCompraBrutoSE > $PrecioCompraBruto ){
 
 	      	if($Dolarizado=='SI') {
 	        	$TasaActualSE = FG_Tasa_Fecha($connCPharma,date('Y-m-d'));
-	        	$PrecioSE = FG_Calculo_Precio_Sin_Existencia($TroquelAlmacen1SE,$PrecioCompraBrutoSE,$UtilidadSE,$IsIVASE,$TroquelAlmacen2SE);
+	        	$PrecioSE = FG_Calculo_Precio_Alfa($ExistenciaSE,$ExistenciaAlmacen1SE,$ExistenciaAlmacen2SE,$IsTroqueladoSE,$UtilidadArticuloSE,$UtilidadCategoriaSE,$TroquelAlmacen1SE,$PrecioCompraBrutoAlmacen1SE,$TroquelAlmacen2SE, $PrecioCompraBrutoAlmacen2SE,$PrecioCompraBrutoSE,$IsIVASE,$CondicionExistenciaSE);
 
 	        if($Gravado=='SI' && $UtilidadSE!= 1){
 	          $costo_unit_bs_sin_iva = ($PrecioSE/Impuesto)*$UtilidadSE;
@@ -782,7 +812,7 @@
 
 	      	if($Dolarizado=='SI') {
 	        $TasaActual = FG_Tasa_Fecha($connCPharma,date('Y-m-d'));
-	        $Precio = FG_Calculo_Precio($Existencia,$TroquelAlmacen1,$PrecioCompraBruto,$Utilidad,$IsIVA,$TroquelAlmacen2);
+	        $Precio = FG_Calculo_Precio_Alfa($Existencia,$ExistenciaAlmacen1,$ExistenciaAlmacen2,$IsTroquelado,$UtilidadArticulo,$UtilidadCategoria,$TroquelAlmacen1,$PrecioCompraBrutoAlmacen1,$TroquelAlmacen2,$PrecioCompraBrutoAlmacen2,$PrecioCompraBruto,$IsIVA,$CondicionExistencia);
 
 	        if($Gravado=='SI' && $Utilidad!= 1){
 	          $costo_unit_bs_sin_iva = ($Precio/Impuesto)*$Utilidad;
