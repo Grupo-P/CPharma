@@ -832,14 +832,17 @@
 		DESARROLLADO POR: SERGIO COVA
 	 */
 	function FG_Calculo_Precio_Alfa($Existencia,$ExistenciaAlmacen1,$ExistenciaAlmacen2,$IsTroquelado,$UtilidadArticulo,$UtilidadCategoria,$TroquelAlmacen1,$PrecioCompraBrutoAlmacen1,$TroquelAlmacen2,
-		$PrecioCompraBrutoAlmacen2,$PrecioCompraBruto,$IsIVA) {		
-
+		$PrecioCompraBrutoAlmacen2,$PrecioCompraBruto,$IsIVA,$CondicionExistencia) {		
 		$FlagPrecio = FALSE;
 
-		if($Existencia==0) {
+		if( ($Existencia==0) && ($CondicionExistencia=='CON_EXISTENCIA') ) {
 			$Precio = 0;
 		}
-		else if($Existencia!=0) {
+		else if( 
+			(($Existencia!=0) && ($CondicionExistencia=='CON_EXISTENCIA')) 
+			|| 
+			(($Existencia==0) && ($CondicionExistencia=='SIN_EXISTENCIA'))
+		) {
 			
 			if($IsTroquelado!=0) {
 				/*CASO 1: Cuando el articulo tiene el atributo troquelado*/
@@ -888,7 +891,8 @@
 						$PrecioCalculado = ($PrecioCompraBruto/$UtilidadCategoria)*Impuesto;
 					}
 					else if($UtilidadCategoria==1){
-						$PrecioCalculado = 0;
+						/*$PrecioCalculado = 0;*/
+						$PrecioCalculado = ($PrecioCompraBruto/Utilidad)*Impuesto;
 					}
 				}
 			}
@@ -903,7 +907,8 @@
 						$PrecioCalculado = ($PrecioCompraBruto/$UtilidadCategoria);
 					}
 					else if($UtilidadCategoria==1){
-						$PrecioCalculado = 0;
+						/*$PrecioCalculado = 0;*/
+						$PrecioCalculado = ($PrecioCompraBruto/Utilidad);
 					}
 				}
 			}
