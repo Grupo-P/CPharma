@@ -149,7 +149,7 @@
 		    			'.$usuarioAct.'	
 		    		</span>
 	    		</h4>
-	    		<p class="card-text text-white">Reporte Favorito</p>
+	    		<p class="card-text text-white">Usuario mas activo</p>
 	  		</div>	
 			</div>
 		</div>
