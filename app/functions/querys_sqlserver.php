@@ -402,7 +402,7 @@
     RETORNO: Detalle del articulo
     DESAROLLADO POR: SERGIO COVA
   */
-  function SQG_Detalle_Articulo_Lote($IdLote,$IdArticulo) {
+  function SQG_Detalle_Articulo_Lote($Idlote,$IdArticulo) {
     $sql = " 
     SELECT
   --Id Articulo
@@ -487,7 +487,7 @@
     FROM InvLoteAlmacen
     INNER JOIN InvLote ON InvLote.Id = InvLoteAlmacen.InvLoteId
     WHERE (InvLoteAlmacen.InvArticuloId = InvArticulo.Id)
-    AAND (InvLote.id = '$Idlote')
+    AND (InvLote.id = '$Idlote')
     ORDER BY invlote.M_PrecioCompraBruto DESC)AS DECIMAL(38,2)),2,0)) AS PrecioCompraBruto,
   --Existencia (Segun el almacen del filtro)
     (ROUND(CAST((SELECT SUM (InvLoteAlmacen.Existencia) As Existencia
