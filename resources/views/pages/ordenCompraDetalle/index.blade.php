@@ -151,7 +151,9 @@
 		      <td style="width:140px;">
 				
 				<?php
-				if(Auth::user()->role == 'MASTER' || Auth::user()->role == 'DEVELOPER'){
+				if(Auth::user()->role == 'MASTER' 
+					|| Auth::user()->role == 'DEVELOPER'
+					|| Auth::user()->departamento == 'COMPRAS'){
 				?>
 
 					<?php
