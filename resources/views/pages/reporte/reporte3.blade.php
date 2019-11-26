@@ -165,11 +165,11 @@
     $connCPharma = FG_Conectar_CPharma();
 
   /*INCIO PARA CALCULOS CON DIAS EN CERO*/
-    $sql = MySQL_Rango_Dias_Cero();
-    $result = mysqli_query($connCPharma,$sql);
-    $row = $result->fetch_assoc();
-    $DC_FInicialImp = date("d-m-Y", strtotime($row['Inicio']));
-    $DC_FFinalImp = date("d-m-Y", strtotime($row['Fin']));
+    $sqlDC = MySQL_Rango_Dias_Cero();
+    $resultDC = mysqli_query($connCPharma,$sqlDC);
+    $rowDC = $resultDC->fetch_assoc();
+    $DC_FInicialImp = date("d-m-Y", strtotime($rowDC['Inicio']));
+    $DC_FFinalImp = date("d-m-Y", strtotime($rowDC['Fin']));
  /*FIN PARA CALCULOS CON DIAS EN CERO*/
 
     $FInicialImp = date("d-m-Y", strtotime($FInicial));
@@ -182,14 +182,14 @@
     $result = sqlsrv_query($conn,$sql5);
 
     echo '
-    <div class="input-group md-form form-sm form-1 pl-0">
+    <div class="input-group md-form form-sm form-1 pl-0 CP-stickyBar">
       <div class="input-group-prepend">
         <span class="input-group-text purple lighten-3" id="basic-text1">
           <i class="fas fa-search text-white"
             aria-hidden="true"></i>
         </span>
       </div>
-      <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterAllTable()">
+      <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterAllTable()" autofocus="autofocus">
     </div>
     <br/>
     ';

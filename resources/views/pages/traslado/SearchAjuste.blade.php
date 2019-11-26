@@ -63,7 +63,7 @@
     include(app_path().'\functions\querys_sqlserver.php');
 
     $ArtJson = "";
-    
+
     $_GET['SEDE'] = MiUbicacion();
     //$_GET['SEDE'] = 'FTN';
 

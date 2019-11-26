@@ -28,7 +28,7 @@ class CapturaDiasCero extends Command
      */
     public function __construct()
     {
-        parent::__construct();
+      parent::__construct();
     }
 
     /**
@@ -38,19 +38,20 @@ class CapturaDiasCero extends Command
      */
     public function handle()
     {
-        include(app_path().'\functions\config.php');
-        include(app_path().'\functions\querys.php');
-        include(app_path().'\functions\funciones.php');
+      include(app_path().'\functions\config.php');
+      include(app_path().'\functions\functions.php');
+      include(app_path().'\functions\querys_mysql.php');
+      include(app_path().'\functions\querys_sqlserver.php');
 
-        FG_Dias_EnCero();
+      FG_Dias_EnCero();
 
-        $Auditoria = new Auditoria();
-        $Auditoria->accion = 'CAPTURAR';
-        $Auditoria->tabla = 'DIAS CERO';
-        $Auditoria->registro = 'CPHARMA';
-        $Auditoria->user = 'SYSTEM';
-        $Auditoria->save();
+      $Auditoria = new Auditoria();
+      $Auditoria->accion = 'CAPTURAR';
+      $Auditoria->tabla = 'DIAS CERO';
+      $Auditoria->registro = 'CPHARMA';
+      $Auditoria->user = 'SYSTEM';
+      $Auditoria->save();
 
-        $this->info('La captura de la data de dias en cero fue ejecutada satisfactoriamente!');
+      $this->info('La captura de la data de dias en cero fue ejecutada satisfactoriamente!');
     }
 }

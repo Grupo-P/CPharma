@@ -658,7 +658,7 @@
       $IdLote = $row["lote"];
       $IdTraslado = $NumeroAjuste;
 
-      $sql1 = QG_Detalle_Articulo($IdArticulo);
+      $sql1 = SQG_Detalle_Articulo($IdArticulo);
       $result1 = sqlsrv_query($conn,$sql1);
       $row1 = sqlsrv_fetch_array($result1,SQLSRV_FETCH_ASSOC);
 
@@ -666,30 +666,49 @@
       $CodigoBarra = $row1["CodigoBarra"];
       $Descripcion = FG_Limpiar_Texto($row1["Descripcion"]);
       $Existencia = $row1["Existencia"];
+	    $ExistenciaAlmacen1 = $row1["ExistenciaAlmacen1"];
+	    $ExistenciaAlmacen2 = $row1["ExistenciaAlmacen2"];
+	    $IsTroquelado = $row1["Troquelado"];
+	    $IsIVA = $row1["Impuesto"];
+	    $UtilidadArticulo = $row1["UtilidadArticulo"];
+	    $UtilidadCategoria = $row1["UtilidadCategoria"];
+	    $TroquelAlmacen1 = $row1["TroquelAlmacen1"];
+	    $PrecioCompraBrutoAlmacen1 = $row1["PrecioCompraBrutoAlmacen1"];
+	    $TroquelAlmacen2 = $row1["TroquelAlmacen2"];
+	    $PrecioCompraBrutoAlmacen2 = $row1["PrecioCompraBrutoAlmacen2"];
+	    $PrecioCompraBruto = $row1["PrecioCompraBruto"];
       $Dolarizado = $row1["Dolarizado"];
-      $IsIVA = $row1["Impuesto"];
-      $Utilidad = $row1["Utilidad"];
-      $TroquelAlmacen1 = $row1["TroquelAlmacen1"];
-      $TroquelAlmacen2 = $row1["TroquelAlmacen2"];
-      $PrecioCompraBruto = $row1["PrecioCompraBruto"];
       $Gravado = FG_Producto_Gravado($IsIVA);
       $Dolarizado = FG_Producto_Dolarizado($Dolarizado);
+      $CondicionExistencia = 'CON_EXISTENCIA';
+
+      $Utilidad = FG_Utilidad_Alfa($UtilidadArticulo,$UtilidadCategoria);
 
       if($Existencia==0){
 
-      	$sql3 = QG_Lote_Sin_Existencia($IdLote,$IdArticulo);
+      	$sql3 = SQG_Detalle_Articulo_Lote($IdLote,$IdArticulo);
 	      $result3 = sqlsrv_query($conn,$sql3);
 	      $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
 
-	      $IsIVASE = $row3["Impuesto"];
-	      $UtilidadSE = $row3["Utilidad"];
-	      $TroquelAlmacen1SE = $row3["TroquelAlmacen1"];
-	      $TroquelAlmacen2SE = $row3["TroquelAlmacen2"];
-	      $PrecioCompraBrutoSE = $row3["PrecioCompraBruto"];
+	      $ExistenciaSE = $row3["Existencia"];
+		    $ExistenciaAlmacen1SE = $row3["ExistenciaAlmacen1"];
+		    $ExistenciaAlmacen2SE = $row3["ExistenciaAlmacen2"];
+		    $IsTroqueladoSE = $row3["Troquelado"];
+		    $IsIVASE = $row3["Impuesto"];
+		    $UtilidadArticuloSE = $row3["UtilidadArticulo"];
+		    $UtilidadCategoriaSE = $row3["UtilidadCategoria"];
+		    $TroquelAlmacen1SE = $row3["TroquelAlmacen1"];
+		    $PrecioCompraBrutoAlmacen1SE = $row3["PrecioCompraBrutoAlmacen1"];
+		    $TroquelAlmacen2SE = $row3["TroquelAlmacen2"];
+		    $PrecioCompraBrutoAlmacen2SE = $row3["PrecioCompraBrutoAlmacen2"];
+		    $PrecioCompraBrutoSE = $row3["PrecioCompraBruto"];
+		    $CondicionExistenciaSE = 'SIN_EXISTENCIA';
+
+		    $UtilidadSE = FG_Utilidad_Alfa($UtilidadArticuloSE,$UtilidadCategoriaSE);
 
       	if($Dolarizado=='SI') {
-	        	$TasaActualSE = FG_Tasa_Fecha($connCPharma,date('Y-m-d'));
-	        	$PrecioSE = FG_Calculo_Precio_Sin_Existencia($TroquelAlmacen1SE,$PrecioCompraBrutoSE,$UtilidadSE,$IsIVASE,$TroquelAlmacen2SE);
+        	$TasaActualSE = FG_Tasa_Fecha($connCPharma,date('Y-m-d'));
+        	$PrecioSE = FG_Calculo_Precio_Alfa($ExistenciaSE,$ExistenciaAlmacen1SE,$ExistenciaAlmacen2SE,$IsTroqueladoSE,$UtilidadArticuloSE,$UtilidadCategoriaSE,$TroquelAlmacen1SE,$PrecioCompraBrutoAlmacen1SE,$TroquelAlmacen2SE, $PrecioCompraBrutoAlmacen2SE,$PrecioCompraBrutoSE,$IsIVASE,$CondicionExistenciaSE);
 
 	        if($Gravado=='SI' && $UtilidadSE!= 1){
 	          $costo_unit_bs_sin_iva = ($PrecioSE/Impuesto)*$UtilidadSE;
@@ -728,20 +747,31 @@
       }
       else{
 
-      	$sql3 = QG_Lote_Sin_Existencia($IdLote,$IdArticulo);
+      	$sql3 = SQG_Detalle_Articulo_Lote($IdLote,$IdArticulo);
 	      $result3 = sqlsrv_query($conn,$sql3);
 	      $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
-	      $IsIVASE = $row3["Impuesto"];
-	      $UtilidadSE = $row3["Utilidad"];
-	      $TroquelAlmacen1SE = $row3["TroquelAlmacen1"];
-	      $TroquelAlmacen2SE = $row3["TroquelAlmacen2"];
-	      $PrecioCompraBrutoSE = $row3["PrecioCompraBruto"];
+
+	      $ExistenciaSE = $row3["Existencia"];
+		    $ExistenciaAlmacen1SE = $row3["ExistenciaAlmacen1"];
+		    $ExistenciaAlmacen2SE = $row3["ExistenciaAlmacen2"];
+		    $IsTroqueladoSE = $row3["Troquelado"];
+		    $IsIVASE = $row3["Impuesto"];
+		    $UtilidadArticuloSE = $row3["UtilidadArticulo"];
+		    $UtilidadCategoriaSE = $row3["UtilidadCategoria"];
+		    $TroquelAlmacen1SE = $row3["TroquelAlmacen1"];
+		    $PrecioCompraBrutoAlmacen1SE = $row3["PrecioCompraBrutoAlmacen1"];
+		    $TroquelAlmacen2SE = $row3["TroquelAlmacen2"];
+		    $PrecioCompraBrutoAlmacen2SE = $row3["PrecioCompraBrutoAlmacen2"];
+		    $PrecioCompraBrutoSE = $row3["PrecioCompraBruto"];
+		    $CondicionExistenciaSE = 'SIN_EXISTENCIA';
+
+		    $UtilidadSE = FG_Utilidad_Alfa($UtilidadArticuloSE,$UtilidadCategoriaSE);
 
 	      if( $PrecioCompraBrutoSE > $PrecioCompraBruto ){
 
 	      	if($Dolarizado=='SI') {
 	        	$TasaActualSE = FG_Tasa_Fecha($connCPharma,date('Y-m-d'));
-	        	$PrecioSE = FG_Calculo_Precio_Sin_Existencia($TroquelAlmacen1SE,$PrecioCompraBrutoSE,$UtilidadSE,$IsIVASE,$TroquelAlmacen2SE);
+	        	$PrecioSE = FG_Calculo_Precio_Alfa($ExistenciaSE,$ExistenciaAlmacen1SE,$ExistenciaAlmacen2SE,$IsTroqueladoSE,$UtilidadArticuloSE,$UtilidadCategoriaSE,$TroquelAlmacen1SE,$PrecioCompraBrutoAlmacen1SE,$TroquelAlmacen2SE, $PrecioCompraBrutoAlmacen2SE,$PrecioCompraBrutoSE,$IsIVASE,$CondicionExistenciaSE);
 
 	        if($Gravado=='SI' && $UtilidadSE!= 1){
 	          $costo_unit_bs_sin_iva = ($PrecioSE/Impuesto)*$UtilidadSE;
@@ -782,7 +812,7 @@
 
 	      	if($Dolarizado=='SI') {
 	        $TasaActual = FG_Tasa_Fecha($connCPharma,date('Y-m-d'));
-	        $Precio = FG_Calculo_Precio($Existencia,$TroquelAlmacen1,$PrecioCompraBruto,$Utilidad,$IsIVA,$TroquelAlmacen2);
+	        $Precio = FG_Calculo_Precio_Alfa($Existencia,$ExistenciaAlmacen1,$ExistenciaAlmacen2,$IsTroquelado,$UtilidadArticulo,$UtilidadCategoria,$TroquelAlmacen1,$PrecioCompraBrutoAlmacen1,$TroquelAlmacen2,$PrecioCompraBrutoAlmacen2,$PrecioCompraBruto,$IsIVA,$CondicionExistencia);
 
 	        if($Gravado=='SI' && $Utilidad!= 1){
 	          $costo_unit_bs_sin_iva = ($Precio/Impuesto)*$Utilidad;
@@ -832,15 +862,14 @@
 		DESARROLLADO POR: SERGIO COVA
 	 */
 	function FG_Calculo_Precio_Alfa($Existencia,$ExistenciaAlmacen1,$ExistenciaAlmacen2,$IsTroquelado,$UtilidadArticulo,$UtilidadCategoria,$TroquelAlmacen1,$PrecioCompraBrutoAlmacen1,$TroquelAlmacen2,
-		$PrecioCompraBrutoAlmacen2,$PrecioCompraBruto,$IsIVA) {		
-
+		$PrecioCompraBrutoAlmacen2,$PrecioCompraBruto,$IsIVA,$CondicionExistencia) {		
 		$FlagPrecio = FALSE;
 
-		if($Existencia==0) {
+		if( ($Existencia==0) && ($CondicionExistencia=='CON_EXISTENCIA') ) {
 			$Precio = 0;
 		}
-		else if($Existencia!=0) {
-			
+		else if(($Existencia!=0) && ($CondicionExistencia=='CON_EXISTENCIA')) {
+
 			if($IsTroquelado!=0) {
 				/*CASO 1: Cuando el articulo tiene el atributo troquelado*/
 				if( ($TroquelAlmacen1!=NULL) && ($FlagPrecio==FALSE) ){
@@ -867,6 +896,39 @@
 				$Precio = max($PrecioCalculado,$TroquelAlmacen1,$TroquelAlmacen2);
 			}
 		}
+		else if(($Existencia==0) && ($CondicionExistencia=='SIN_EXISTENCIA')) {
+
+			if($IsTroquelado!=0) {
+				/*CASO 1: Cuando el articulo tiene el atributo troquelado*/
+				if( ($TroquelAlmacen1!=NULL) && ($FlagPrecio==FALSE) ){
+					$Precio = $TroquelAlmacen1;
+					$FlagPrecio=TRUE;
+				}
+				else if( ($TroquelAlmacen1==NULL) && ($ExistenciaAlmacen1!=0) && ($FlagPrecio==FALSE)) {
+					$Precio = FG_Precio_Calculado_Alfa($UtilidadArticulo,$UtilidadCategoria,$IsIVA,$PrecioCompraBrutoAlmacen1);
+					$FlagPrecio=TRUE;
+				}
+				else if( ($TroquelAlmacen2!=NULL) && ($FlagPrecio==FALSE) ){
+					$Precio = $TroquelAlmacen2;
+					$FlagPrecio=TRUE;
+				}
+				else if( ($TroquelAlmacen2==NULL) && ($ExistenciaAlmacen2!=0) && ($FlagPrecio==FALSE) ) {
+					$Precio = FG_Precio_Calculado_Alfa($UtilidadArticulo,$UtilidadCategoria,$IsIVA,$PrecioCompraBrutoAlmacen2);
+					$FlagPrecio=TRUE;
+				}
+			}
+			else if($IsTroquelado==0) {
+				/*CASO 2: Cuando el articulo NO tiene el atributo troquelado*/
+				$PrecioCalculado = FG_Precio_Calculado_Alfa($UtilidadArticulo,$UtilidadCategoria,$IsIVA,$PrecioCompraBruto);
+
+				$Precio = max($PrecioCalculado,$TroquelAlmacen1,$TroquelAlmacen2);
+			}
+		}
+
+		if(!isset($Precio)){
+			$Precio = 0.01;
+		}
+
 		return $Precio;
 	}
 	/**********************************************************************************/
@@ -888,7 +950,8 @@
 						$PrecioCalculado = ($PrecioCompraBruto/$UtilidadCategoria)*Impuesto;
 					}
 					else if($UtilidadCategoria==1){
-						$PrecioCalculado = 0;
+						/*$PrecioCalculado = 0;*/
+						$PrecioCalculado = ($PrecioCompraBruto/Utilidad)*Impuesto;
 					}
 				}
 			}
@@ -903,11 +966,34 @@
 						$PrecioCalculado = ($PrecioCompraBruto/$UtilidadCategoria);
 					}
 					else if($UtilidadCategoria==1){
-						$PrecioCalculado = 0;
+						/*$PrecioCalculado = 0;*/
+						$PrecioCalculado = ($PrecioCompraBruto/Utilidad);
 					}
 				}
 			}
 		return $PrecioCalculado;
+	}
+	/**********************************************************************************/
+	/*
+		TITULO: FG_Utilidad_Alfa
+		FUNCION: Decide la utilidad a usar para la regresion o calculo de precio
+		RETORNO: retorna la utilidad
+		DESARROLLADO POR: SERGIO COVA
+	 */
+	function FG_Utilidad_Alfa($UtilidadArticulo,$UtilidadCategoria){
+		if($UtilidadArticulo!=1) {
+			$utilidad = $UtilidadArticulo;
+		}
+		else if($UtilidadArticulo==1){
+
+			if($UtilidadCategoria!=1){
+				$utilidad = $UtilidadCategoria;
+			}
+			else if($UtilidadCategoria==1){
+				$utilidad = Utilidad;
+			}
+		}
+		return $utilidad;
 	}
   /**********************************************************************************/
   /*
@@ -1029,4 +1115,90 @@
 		}
 		return $Flag;
   }
+  /**********************************************************************************/
+  /*
+		TITULO: FG_Dias_EnCero
+		PARAMETROS: no aplica
+		FUNCION: Captura y almacena la data para dias en cero
+		RETORNO: no aplica
+	 */
+	function FG_Dias_EnCero() {
+		//$SedeConnection = MiUbicacion();
+		$SedeConnection = 'FTN';
+		$conn = FG_Conectar_Smartpharma($SedeConnection);
+		$connCPharma = FG_Conectar_CPharma();
+
+		$sql = QG_Dias_EnCero();
+		$result = sqlsrv_query($conn,$sql);
+
+		$FechaCaptura = new DateTime("now");
+		$FechaCaptura = $FechaCaptura->format('Y-m-d');
+		$user = 'SYSTEM';
+		$date = '';
+
+		while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
+			$IdArticulo = $row["IdArticulo"];
+			$CodigoInterno = $row["CodigoInterno"];
+			$CodigoBarra = $row["CodigoBarra"];
+      $Descripcion = FG_Limpiar_Texto($row["Descripcion"]);
+      $Existencia = $row["Existencia"];
+	    $ExistenciaAlmacen1 = $row["ExistenciaAlmacen1"];
+	    $ExistenciaAlmacen2 = $row["ExistenciaAlmacen2"];
+	    $IsTroquelado = $row["Troquelado"];
+	    $IsIVA = $row["Impuesto"];
+	    $UtilidadArticulo = $row["UtilidadArticulo"];
+	    $UtilidadCategoria = $row["UtilidadCategoria"];
+	    $TroquelAlmacen1 = $row["TroquelAlmacen1"];
+	    $PrecioCompraBrutoAlmacen1 = $row["PrecioCompraBrutoAlmacen1"];
+	    $TroquelAlmacen2 = $row["TroquelAlmacen2"];
+	    $PrecioCompraBrutoAlmacen2 = $row["PrecioCompraBrutoAlmacen2"];
+	    $PrecioCompraBruto = $row["PrecioCompraBruto"];
+      $Dolarizado = $row["Dolarizado"];
+      $Gravado = FG_Producto_Gravado($IsIVA);
+      $Dolarizado = FG_Producto_Dolarizado($Dolarizado);
+      $CondicionExistencia = 'CON_EXISTENCIA';
+
+     	$Precio = FG_Calculo_Precio_Alfa($Existencia,$ExistenciaAlmacen1,$ExistenciaAlmacen2,$IsTroquelado,$UtilidadArticulo,$UtilidadCategoria,$TroquelAlmacen1,$PrecioCompraBrutoAlmacen1,$TroquelAlmacen2,$PrecioCompraBrutoAlmacen2,$PrecioCompraBruto,$IsIVA,$CondicionExistencia);
+     	
+			$date = date('Y-m-d h:i:s',time());
+			
+			$sqlCPharma = QG_Guardar_Dias_EnCero($IdArticulo,$CodigoInterno,$Descripcion,$Existencia,$Precio,$FechaCaptura,$user,$date);
+			mysqli_query($connCPharma,$sqlCPharma);
+		}
+		FG_Guardar_Captura_Diaria($connCPharma,$FechaCaptura,$date);
+
+		$sqlCC = QG_Validar_Captura_Diaria($FechaCaptura);
+		$resultCC = mysqli_query($connCPharma,$sqlCC);
+		$rowCC = mysqli_fetch_assoc($resultCC);
+		$CuentaCaptura = $rowCC["CuentaCaptura"];
+
+		if($CuentaCaptura == 0){
+			$sqlB = QG_Borrar_DiasCero($FechaCaptura);
+			mysqli_query($connCPharma,$sqlB);
+			mysqli_close($connCPharma);
+			sqlsrv_close($conn);
+			FG_Dias_EnCero();
+		}
+		else{
+			mysqli_close($connCPharma);
+			sqlsrv_close($conn);
+		}
+	}
+	/**********************************************************************************/
+	/*
+		TITULO: FG_Guardar_Captura_Diaria
+		PARAMETROS: [$FechaCaptura] El dia de hoy
+					[$date] valor para creacion y actualizacion
+		FUNCION: crea una conexion con la base de datos cpharma e ingresa datos
+		RETORNO: no aplica
+	 */
+	function FG_Guardar_Captura_Diaria($connCPharma,$FechaCaptura,$date) {
+		$sql = QG_Captura_Diaria($FechaCaptura);
+		$result = mysqli_query($connCPharma,$sql);
+		$row = mysqli_fetch_assoc($result);
+		$TotalRegistros = $row["TotalRegistros"];
+
+		$sql1 = QG_Guardar_Captura_Diaria($TotalRegistros,$FechaCaptura,$date);
+		mysqli_query($connCPharma,$sql1);
+	}
 ?>
