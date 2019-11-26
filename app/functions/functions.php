@@ -924,6 +924,11 @@
 				$Precio = max($PrecioCalculado,$TroquelAlmacen1,$TroquelAlmacen2);
 			}
 		}
+
+		if(!isset($Precio)){
+			$Precio = 0.01;
+		}
+
 		return $Precio;
 	}
 	/**********************************************************************************/
