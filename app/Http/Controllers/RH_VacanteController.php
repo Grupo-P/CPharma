@@ -36,7 +36,6 @@ class RH_VacanteController extends Controller {
      */
     public function create() {
         $sedes = Sede::pluck('razon_social', 'siglas');
-
         return view('pages.RRHH.vacantes.create', compact('sedes'));
     }
 
@@ -111,7 +110,7 @@ class RH_VacanteController extends Controller {
      */
     public function edit($id) {
         $vacantes = RH_Vacante::find($id);
-        $sedes = Sede::pluck('razon_social');
+        $sedes = Sede::pluck('razon_social', 'siglas');
 
         return view('pages.RRHH.vacantes.edit', compact('vacantes', 'sedes'));
     }
