@@ -143,8 +143,7 @@
 	.CP-sticky {
   	position: -webkit-sticky; /* Safari */
 	 	position: sticky;
-  	/*top: 36px;*/
-  	top: 0;
+  	top: 36px;
 	}
 	.CP-barrido {
 		text-decoration: none;

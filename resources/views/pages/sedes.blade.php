@@ -10,8 +10,8 @@
 		include(app_path().'\functions\config.php');
 		include(app_path().'\functions\Querys.php');
 		include(app_path().'\functions\funciones.php');
-		$SedeConnection = MiUbicacion();
-		//$SedeConnection = 'FTN';
+		//$SedeConnection = MiUbicacion();
+		$SedeConnection = 'FTN';
 	?>
 
 	<h1 class="h5 text-info">
