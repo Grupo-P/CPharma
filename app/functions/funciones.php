@@ -2265,7 +2265,7 @@
 		PARAMETROS: no aplica
 		FUNCION: Captura y almacena la data para dias en cero
 		RETORNO: no aplica
-	 */
+	 *//*
 	function FG_Dias_EnCero() {
 		$SedeConnection = MiUbicacion();
 		//$SedeConnection = 'FTN';
@@ -2310,7 +2310,7 @@
 			mysqli_close($connCPharma);
 			sqlsrv_close($conn);
 		}
-	}
+	}*/
 	/*
 		TITULO: FG_Calculo_Precio_Dias_EnCero
 		PARAMETROS: [$conn] Cadena de conexion para la base de datos
@@ -2321,6 +2321,7 @@
 		RETORNO: Precio del articulo
 		DESARROLLADO POR: SERGIO COVA
 	 */
+	/*
 	function FG_Calculo_Precio_Dias_EnCero($conn,$IdArticulo,$IsIVA,$Existencia) {
 		if($Existencia==0) {
 			$Precio = 0;
@@ -2377,14 +2378,14 @@
 			}
 		}
 		return $Precio;
-	}
+		//}
 	/*
 		TITULO: FG_Guardar_Captura_Diaria
 		PARAMETROS: [$FechaCaptura] El dia de hoy
 					[$date] valor para creacion y actualizacion
 		FUNCION: crea una conexion con la base de datos cpharma e ingresa datos
 		RETORNO: no aplica
-	 */
+	 *//*
 	function FG_Guardar_Captura_Diaria($connCPharma,$FechaCaptura,$date) {
 		$sql = QG_Captura_Diaria($FechaCaptura);
 		$result = mysqli_query($connCPharma,$sql);
@@ -2393,7 +2394,7 @@
 
 		$sql1 = QG_Guardar_Captura_Diaria($TotalRegistros,$FechaCaptura,$date);
 		mysqli_query($connCPharma,$sql1);
-	}
+	}*/
 	/*
 		TITULO: FG_Prouctos_EnCaida
 		PARAMETROS: no aplica
