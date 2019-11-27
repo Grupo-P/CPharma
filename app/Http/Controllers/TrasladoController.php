@@ -208,7 +208,7 @@ class TrasladoController extends Controller
         $Auditoria->registro = $traslado->numero_ajuste;
         $Auditoria->user = auth()->user()->name;        
 
-         if($traslado->estatus == 'EMBALADO'){
+        if($traslado->estatus == 'EMBALADO' || $traslado->estatus == 'ENTREGADO'){
             $traslado->estatus = 'ENTREGADO';
             $Auditoria->accion = 'FINALIZADO';
          }   
