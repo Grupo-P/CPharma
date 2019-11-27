@@ -1123,8 +1123,8 @@
 		RETORNO: no aplica
 	 */
 	function FG_Dias_EnCero() {
-		//$SedeConnection = MiUbicacion();
-		$SedeConnection = 'FTN';
+		$SedeConnection = MiUbicacion();
+		//$SedeConnection = 'FTN';
 		$conn = FG_Conectar_Smartpharma($SedeConnection);
 		$connCPharma = FG_Conectar_CPharma();
 
