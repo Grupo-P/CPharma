@@ -1,5 +1,19 @@
 <?php
 /*Querys que son ejecutadas en el manejador de base de datos SQL Server*/
+/**********************************************************************************/
+/*
+    TITULO: QCleanTable
+    PARAMETROS: [$NombreTabla] Nombre de la tabla para preparar
+    FUNCION: Prepara la tabla para su uso
+    RETORNO: Tabla preparada para usar
+   */
+  function QCleanTable($NombreTabla) {    
+    $sql = "
+      IF OBJECT_ID ('".$NombreTabla."', 'U') IS NOT NULL
+        DROP TABLE ".$NombreTabla.";
+    ";          
+    return $sql;
+  }
 	/**********************************************************************************/
 	/*
 		TITULO: QG_Provedor_Unico
@@ -798,4 +812,141 @@
     ";
     return $sql;
   }
+  /**********************************************************************************/
+  /*
+    TITULO: QG_VecesVendida_ProductoCaida
+    PARAMETROS: [$FInicial] Fecha inicial del rango a consultar
+          [$FFinal] Fecha final del rango a consutar
+    FUNCION: Consulta las Veces reclamo a proveedores y las unidades reclamo
+    RETORNO: Tabla con los articulos, las veces reclamo y las unidades reclamo
+   */
+  function QG_ArtVendidos_ProductoCaida($FInicial,$FFinal) {
+    $sql = "
+    SELECT
+    VenFacturaDetalle.InvArticuloId,
+    ISNULL(COUNT(*),CAST(0 AS INT)) AS VecesVendidas,
+    (ROUND(CAST(SUM(VenFacturaDetalle.Cantidad) AS DECIMAL(38,0)),2,0)) as UnidadesVendidas
+    INTO CP_QG_Unidades_Vendidas
+    FROM VenFacturaDetalle
+    INNER JOIN VenFactura ON VenFactura.Id = VenFacturaDetalle.VenFacturaId
+    WHERE
+    (VenFactura.FechaDocumento > '$FInicial' AND VenFactura.FechaDocumento < '$FFinal')
+    GROUP BY VenFacturaDetalle.InvArticuloId
+    ORDER BY UnidadesVendidas DESC
+    ";
+    return $sql;
+  }
+  /**********************************************************************************/
+  /*
+    TITULO: QG_ArtDevueltos_ProductoCaida
+    PARAMETROS: [$FInicial] Fecha inicial del rango a consultar
+          [$FFinal] Fecha final del rango a consutar
+    FUNCION: Consulta las Veces reclamo a proveedores y las unidades reclamo
+    RETORNO: Tabla con los articulos, las veces reclamo y las unidades reclamo
+   */
+  function QG_ArtDevueltos_ProductoCaida($FInicial,$FFinal) {
+    $sql = "
+    SELECT
+    VenDevolucionDetalle.InvArticuloId,
+    ISNULL(COUNT(*),CAST(0 AS INT)) AS VecesDevueltas,
+    (ROUND(CAST(SUM(VenDevolucionDetalle.Cantidad) AS DECIMAL(38,0)),2,0)) as UnidadesDevueltas
+    INTO CP_QG_Unidades_Devueltas
+    FROM VenDevolucionDetalle
+    INNER JOIN VenDevolucion ON VenDevolucion.Id = VenDevolucionDetalle.VenDevolucionId
+    WHERE
+    (VenDevolucion.FechaDocumento > '$FInicial' AND VenDevolucion.FechaDocumento < '$FFinal')
+    GROUP BY VenDevolucionDetalle.InvArticuloId
+    ORDER BY UnidadesDevueltas DESC
+    ";
+    return $sql;
+  }
+  /**********************************************************************************/
+  /*
+    TITULO: QG_ArtComprados_ProductoCaida
+    PARAMETROS: [$FInicial] Fecha inicial del rango a consultar
+          [$FFinal] Fecha final del rango a consutar
+    FUNCION: Consulta las Veces reclamo a proveedores y las unidades reclamo
+    RETORNO: Tabla con los articulos, las veces reclamo y las unidades reclamo
+   */
+  function QG_ArtComprados_ProductoCaida($FInicial,$FFinal) {
+    $sql = "
+    SELECT
+    ComFacturaDetalle.InvArticuloId,
+    ISNULL(COUNT(*),CAST(0 AS INT)) AS VecesCompradas,
+    (ROUND(CAST(SUM(ComFacturaDetalle.CantidadFacturada) AS DECIMAL(38,0)),2,0)) as UnidadesCompradas
+    INTO CP_QG_Unidades_Compradas
+    FROM ComFacturaDetalle      
+    INNER JOIN ComFactura ON  ComFactura.Id = ComFacturaDetalle.ComFacturaId
+    WHERE
+    (ComFactura.FechaRegistro > '$FInicial' AND ComFactura.FechaRegistro < '$FFinal')
+    GROUP BY ComFacturaDetalle.InvArticuloId
+    ORDER BY UnidadesCompradas DESC
+    ";
+    return $sql;
+  }
+  /**********************************************************************************/
+  /*
+    TITULO: QG_ArtReclamados_ProductoCaida
+    PARAMETROS: [$FInicial] Fecha inicial del rango a consultar
+          [$FFinal] Fecha final del rango a consutar
+    FUNCION: Consulta las Veces reclamo a proveedores y las unidades reclamo
+    RETORNO: Tabla con los articulos, las veces reclamo y las unidades reclamo
+   */
+  function QG_ArtReclamados_ProductoCaida($FInicial,$FFinal) {
+    $sql = "
+    SELECT
+    ComReclamoDetalle.InvArticuloId,
+    ISNULL(COUNT(*),CAST(0 AS INT)) AS VecesReclamadas,
+    (ROUND(CAST(SUM(ComReclamoDetalle.Cantidad) AS DECIMAL(38,0)),2,0)) as UnidadesReclamadas
+    INTO CP_QG_Unidades_Reclamadas
+    FROM ComReclamoDetalle
+    INNER JOIN ComReclamo ON ComReclamo.Id = ComReclamoDetalle.ComReclamoId
+    WHERE
+    (ComReclamo.FechaRegistro > '$FInicial' AND ComReclamo.FechaRegistro < '$FFinal')
+    GROUP BY ComReclamoDetalle.InvArticuloId
+    ORDER BY UnidadesReclamadas DESC
+    ";
+    return $sql;
+  }
+  /**********************************************************************************/
+  /*
+    TITULO: QG_Integracion_ProductoCaida
+    PARAMETROS: [$RangoDias] rango del dia para el pre filtrado
+    FUNCION: Ubicar el top de productos mas vendidos
+    RETORNO: Lista de productos mas vendidos
+   */
+  function QG_Integracion_ProductoCaida($RangoDias) {
+      $sql = "
+        SELECT
+    CP_QG_Unidades_Vendidas.InvArticuloId,
+    ((ISNULL(CP_QG_Unidades_Vendidas.VecesVendidas,CAST(0 AS INT))) - 
+    (ISNULL(CP_QG_Unidades_Devueltas.VecesDevueltas,CAST(0 AS INT))) 
+    ) AS VecesVendidas,
+    ((ISNULL(CP_QG_Unidades_Vendidas.UnidadesVendidas,CAST(0 AS INT))) -
+    (ISNULL(CP_QG_Unidades_Devueltas.UnidadesDevueltas,CAST(0 AS INT))) 
+    ) AS UnidadesVendidas,
+    ((ISNULL(CP_QG_Unidades_Compradas.VecesCompradas,CAST(0 AS INT))) -
+    (ISNULL(CP_QG_Unidades_Reclamadas.VecesReclamadas,CAST(0 AS INT))) 
+    ) AS VecesCompradas,
+    ((ISNULL(CP_QG_Unidades_Compradas.UnidadesCompradas,CAST(0 AS INT))) -
+    (ISNULL(CP_QG_Unidades_Reclamadas.UnidadesReclamadas,CAST(0 AS INT))) 
+    ) AS UnidadesCompradas,
+    (SELECT (ROUND(CAST(SUM (InvLoteAlmacen.Existencia) AS DECIMAL(38,0)),2,0)) As Existencia
+      FROM InvLoteAlmacen
+      WHERE(InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
+      AND (InvLoteAlmacen.InvArticuloId = CP_QG_Unidades_Vendidas.InvArticuloId)) AS Existencia
+    FROM CP_QG_Unidades_Vendidas
+    LEFT JOIN CP_QG_Unidades_Devueltas ON CP_QG_Unidades_Devueltas.InvArticuloId = CP_QG_Unidades_Vendidas.InvArticuloId
+    LEFT JOIN CP_QG_Unidades_Compradas ON CP_QG_Unidades_Compradas.InvArticuloId = CP_QG_Unidades_Vendidas.InvArticuloId
+    LEFT JOIN CP_QG_Unidades_Reclamadas ON CP_QG_Unidades_Reclamadas.InvArticuloId = CP_QG_Unidades_Vendidas.InvArticuloId
+    WHERE (VecesVendidas >= '$RangoDias') AND  (ISNULL(VecesCompradas,CAST(0 AS INT)) = 0) 
+    AND ((SELECT (ROUND(CAST(SUM (InvLoteAlmacen.Existencia) AS DECIMAL(38,0)),2,0)) As Existencia
+      FROM InvLoteAlmacen
+      WHERE(InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
+      AND (InvLoteAlmacen.InvArticuloId = CP_QG_Unidades_Vendidas.InvArticuloId))>0)
+    ORDER BY VecesVendidas DESC
+    ";
+    return $sql;
+  }
+  /**********************************************************************************/
 ?>

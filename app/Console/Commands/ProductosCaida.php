@@ -39,11 +39,11 @@ class ProductosCaida extends Command
     public function handle()
     {
         include(app_path().'\functions\config.php');
-        include(app_path().'\functions\querys.php');
-        include(app_path().'\functions\funciones.php');
+        include(app_path().'\functions\functions.php');
+        include(app_path().'\functions\querys_mysql.php');
+        include(app_path().'\functions\querys_sqlserver.php');
 
         FG_Prouctos_EnCaida();
-        //UpdateDiasCero();
 
         $Auditoria = new Auditoria();
         $Auditoria->accion = 'CAPTURAR';

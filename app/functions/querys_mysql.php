@@ -177,4 +177,128 @@
 		$sql = "DELETE FROM dias_ceros WHERE fecha_captura = '$FechaCaptura'";
 		return $sql;
 	}
+	/**********************************************************************************/
+	/*
+		TITULO: QG_Borrar_ProductosCaida
+		PARAMETROS: [$FechaCaptura] fecha de la captura
+		FUNCION: borra los registros de dias en cero de la fecha seleccionada
+		RETORNO: no aplica
+	 */
+	function QG_Borrar_ProductosCaida() {
+		$sql = "DELETE FROM productos_caida";
+		return $sql;
+	}
+	/**********************************************************************************/
+	/*
+		TITULO: QGuardarProductosCaida
+		PARAMETROS: Todos los campos
+		FUNCION: guardar en la tabla productos en caida
+		RETORNO: no aplica
+	 */
+	function QGuardarProductosCaida($IdArticulo,$CodigoArticulo,$Descripcion,$Precio,$Existencia,$Dia10,$Dia9,$Dia8,$Dia7,$Dia6,$Dia5,$Dia4,$Dia3,$Dia2,$Dia1,$UnidadesVendidas,$DiasRestantes,$fecha_captura,$user,$created_at,$updated_at) {
+		$sql = "
+		INSERT INTO productos_caida
+		(IdArticulo,CodigoArticulo,Descripcion,Precio,Existencia,Dia10,Dia9,Dia8,Dia7,Dia6,Dia5,Dia4,Dia3,Dia2,Dia1,UnidadesVendidas,DiasRestantes,fecha_captura,user,created_at,updated_at)
+		VALUES 
+		('$IdArticulo','$CodigoArticulo','$Descripcion','$Precio','$Existencia','$Dia10','$Dia9','$Dia8','$Dia7','$Dia6','$Dia5','$Dia4','$Dia3','$Dia2','$Dia1','$UnidadesVendidas','$DiasRestantes','$fecha_captura','$user','$created_at','$updated_at')
+		";
+		return $sql;
+	}
+	 /**********************************************************************************/
+	/*
+		TITULO: QCapturaCaida
+		PARAMETROS: [$FechaCaptura] El dia de hoy
+		FUNCION: cuenta el total de registos de productos en caida
+		RETORNO: no aplica
+	 */
+	function QCapturaCaida($FechaCaptura) {
+		$sql = "SELECT COUNT(*) AS TotalRegistros
+		FROM productos_caida 
+		WHERE productos_caida.fecha_captura = '$FechaCaptura'
+		";
+		return $sql;
+	}
+	 /**********************************************************************************/
+	/*
+		TITULO: QGuardarCapturaCaida
+		PARAMETROS: [$FechaCaptura] El dia de hoy
+					[$date] valor para creacion y actualizacion
+		FUNCION: crea una conexion con la base de datos cpharma e ingresa datos
+		RETORNO: no aplica
+	 */
+	function QGuardarCapturaCaida($TotalRegistros,$FechaCaptura,$date) {
+		$sql = "
+		INSERT INTO captura_caida 
+		(total_registros,fecha_captura,created_at,updated_at)
+		VALUES 
+		('$TotalRegistros','$FechaCaptura','$date','$date')
+		";
+		return $sql;
+	}
+	 /**********************************************************************************/
+	/*
+		TITULO: QValidarCapturaCaida
+		PARAMETROS: [$FechaCaptura] El dia de hoy
+		FUNCION: valida que la fecha exista en la tabla captura diaria
+		RETORNO: no aplica
+	 */
+	function QValidarCapturaCaida($FechaCaptura) {
+		$sql = "SELECT count(*) AS CuentaCaptura
+		FROM captura_caida WHERE fecha_captura = '$FechaCaptura'";
+		return $sql;
+	}
+	 /**********************************************************************************/
+	 /*
+		TITULO: QCuentaExistencia
+		PARAMETROS: [$IdArticulo] Id del articulo a buscar
+		FUNCION: cuenta el total de repeticiones de un articulo en dias en cero
+		RETORNO: no aplica
+	 */
+	function QCuentaExistencia($IdArticulo,$FInicial,$FFinal) {
+		$sql = "
+			SELECT 
+			COUNT(*) AS Cuenta 
+			FROM dias_ceros 
+			WHERE dias_ceros.id_articulo = '$IdArticulo' AND (fecha_captura >= '$FInicial' AND `fecha_captura` < '$FFinal')
+		";
+		return $sql;
+	}
+	/**********************************************************************************/
+	/*
+		TITULO: QCuentaVenta
+		PARAMETROS: $IdArticulo,$FInicial,$FFinal
+		FUNCION: cuenta la cantidad de veces que se vendio un producto en una fecha
+		RETORNO: no aplica
+		//
+	 */
+	function QCuentaVenta($IdArticulo,$FInicial,$FFinal) {
+		$sql = "
+			SELECT
+			COUNT(*) AS Cuenta
+			FROM VenFacturaDetalle
+			INNER JOIN InvArticulo ON InvArticulo.Id = VenFacturaDetalle.InvArticuloId
+			INNER JOIN VenFactura ON VenFactura.Id = VenFacturaDetalle.VenFacturaId
+			WHERE
+			(VenFactura.FechaDocumento > '$FInicial' AND VenFactura.FechaDocumento < '$FFinal')
+			AND (InvArticulo.Id = '$IdArticulo')
+		";
+		return $sql;
+	}
+	/**********************************************************************************/
+	/*
+		TITULO: QExistenciaDiasCero
+		PARAMETROS: [$IdArticulo] Id del articulo a buscar
+		FUNCION: cuenta el total de repeticiones de un articulo en dias en cero
+		RETORNO: no aplica
+		//
+	 */
+	function QExistenciaDiasCero($IdArticulo,$FechaCaptura) {
+		$sql = "
+			SELECT existencia 
+			FROM dias_ceros 
+			WHERE dias_ceros.id_articulo = '$IdArticulo' 
+			AND `fecha_captura` = '$FechaCaptura'
+		";
+		return $sql;
+	}
 ?>
