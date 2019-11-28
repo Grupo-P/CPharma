@@ -899,31 +899,8 @@
       </div>    
     </div>
 
-    <div class="card border-dark mb-3" style="width: 14rem;">
+    <div class="card border-dark mb-3" style="width: 14rem;">      
       <div class="card-body text-left bg-dark">
-        <h2 class="card-title">
-          <span class="card-text text-white">
-            <i class="fas fa-user-md"></i>
-            <?php
-            echo ''.$examenesm;
-          ?>            
-          </span>
-        </h2>
-        <p class="card-text text-white">
-        <?php 
-          echo 'Examenes médicos registrados';
-        ?>
-        </p>
-      </div>
-      <div class="card-footer bg-transparent border-dark text-right">
-        <a href="/examenesm" class="btn btn-outline-dark btn-sm">Visualizar</a>
-      </div>    
-    </div>
-  </div>
-
-  <div class="card-deck">
-    <div class="card border-danger mb-3" style="width: 14rem;">      
-      <div class="card-body text-left bg-danger">
         <h3 class="card-title">
           <span class="card-text text-white">
             <i class="fas fa-vials"></i>
@@ -938,8 +915,31 @@
         ?>
         </p>
       </div>
+      <div class="card-footer bg-transparent border-dark text-right">
+        <a href="/laboratorio" class="btn btn-outline-dark btn-sm">Visualizar</a>
+      </div>    
+    </div>
+  </div>
+
+  <div class="card-deck">
+    <div class="card border-danger mb-3" style="width: 14rem;">
+      <div class="card-body text-left bg-danger">
+        <h2 class="card-title">
+          <span class="card-text text-white">
+            <i class="fas fa-user-md"></i>
+            <?php
+            echo ''.$examenesm;
+          ?>            
+          </span>
+        </h2>
+        <p class="card-text text-white">
+        <?php 
+          echo 'Examenes médicos registrados';
+        ?>
+        </p>
+      </div>
       <div class="card-footer bg-transparent border-danger text-right">
-        <a href="/laboratorio" class="btn btn-outline-danger btn-sm">Visualizar</a>
+        <a href="/examenesm" class="btn btn-outline-danger btn-sm">Visualizar</a>
       </div>    
     </div>
 
