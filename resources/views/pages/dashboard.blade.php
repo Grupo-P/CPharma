@@ -834,24 +834,24 @@
       </div>    
     </div>
 
-    <div class="card border-info mb-3" style="width: 14rem;">      
+    <div class="card border-info mb-3" style="width: 14rem;">
       <div class="card-body text-left bg-info">
-        <h3 class="card-title">
+        <h2 class="card-title">
           <span class="card-text text-white">
-            <i class="fas fa-users"></i>
+            <i class="fas fa-sort-amount-up-alt"></i>
             <?php
-            echo ''.$entrevistas;
+            echo ''.$fases;
           ?>            
           </span>
-        </h3>
+        </h2>
         <p class="card-text text-white">
         <?php 
-          echo 'Entrevistas registradas';
+          echo 'Fases registradas';
         ?>
         </p>
       </div>
       <div class="card-footer bg-transparent border-info text-right">
-        <a href="/entrevistas" class="btn btn-outline-info btn-sm">Visualizar</a>
+        <a href="/fases" class="btn btn-outline-info btn-sm">Visualizar</a>
       </div>    
     </div>
   </div>
@@ -987,24 +987,24 @@
   </div>
 
   <div class="card-deck">
-    <div class="card border-warning mb-3" style="width: 14rem;">
+    <div class="card border-warning mb-3" style="width: 14rem;">      
       <div class="card-body text-left bg-warning">
-        <h2 class="card-title">
+        <h3 class="card-title">
           <span class="card-text text-white">
-            <i class="fas fa-sort-amount-up-alt"></i>
+            <i class="fas fa-users"></i>
             <?php
-            echo ''.$fases;
+            echo ''.$entrevistas;
           ?>            
           </span>
-        </h2>
+        </h3>
         <p class="card-text text-white">
         <?php 
-          echo 'Fases registradas';
+          echo 'Entrevistas registradas';
         ?>
         </p>
       </div>
       <div class="card-footer bg-transparent border-warning text-right">
-        <a href="/fases" class="btn btn-outline-warning btn-sm">Visualizar</a>
+        <a href="/entrevistas" class="btn btn-outline-warning btn-sm">Visualizar</a>
       </div>    
     </div>
   </div>
