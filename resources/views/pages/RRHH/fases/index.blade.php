@@ -23,7 +23,7 @@
             </button>
           </div>
           <div class="modal-body">
-            <h4 class="h6">Candidato almacenado con éxito</h4>
+            <h4 class="h6">Fase almacenada con éxito</h4>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-outline-success" data-dismiss="modal">Aceptar</button>
@@ -47,7 +47,7 @@
             </button>
           </div>
           <div class="modal-body">
-            <h4 class="h6">Candidato modificado con éxito</h4>
+            <h4 class="h6">Fase modificada con éxito</h4>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-outline-success" data-dismiss="modal">Aceptar</button>
@@ -71,7 +71,7 @@
             </button>
           </div>
           <div class="modal-body">
-            <h4 class="h6">Candidato desincorporado con éxito</h4>
+            <h4 class="h6">Fase desincorporada con éxito</h4>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-outline-success" data-dismiss="modal">Aceptar</button>
@@ -94,7 +94,7 @@
             </button>
           </div>
           <div class="modal-body">
-            <h4 class="h6">Candidato reincorporado con éxito</h4>
+            <h4 class="h6">Fase reincorporada con éxito</h4>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-outline-success" data-dismiss="modal">Aceptar</button>
@@ -147,45 +147,45 @@
     </thead>
 
     <tbody>
-      @foreach($fases as $candidato)
+      @foreach($fases as $fase)
         <tr>
-          <th>{{$candidato->id}}</th>
-          <td>{{$candidato->nombres}}</td>
-          <td>{{$candidato->apellidos}}</td>
-          <td>{{$candidato->cedula}}</td>
+          <th>{{$fase->id}}</th>
+          <td>{{$fase->nombres}}</td>
+          <td>{{$fase->apellidos}}</td>
+          <td>{{$fase->cedula}}</td>
             
-          <?php if($candidato->telefono_celular == '') { ?>
-            <td>{{$candidato->telefono_habitacion}}</td>
+          <?php if($fase->telefono_celular == '') { ?>
+            <td>{{$fase->telefono_habitacion}}</td>
           <?php 
-            } else if($candidato->telefono_habitacion == '') { 
+            } else if($fase->telefono_habitacion == '') { 
           ?>
-            <td>{{$candidato->telefono_celular}}</td>
+            <td>{{$fase->telefono_celular}}</td>
           <?php 
             } else {
           ?>
-            <td>{{$candidato->telefono_celular}}</td>
+            <td>{{$fase->telefono_celular}}</td>
           <?php
             }
           ?>
 
-          <td>{{$candidato->estatus}}</td>
+          <td>{{$fase->estatus}}</td>
 
           <!-- ***************** VALIDACION DE ROLES ***************** -->
           <td style="width:140px;">
           <?php
             if(Auth::user()->role == 'MASTER' || Auth::user()->role == 'DEVELOPER') {
 
-              if($candidato->estatus != 'RECHAZADO') {
+              if($fase->estatus != 'RECHAZADO') {
           ?>
-            <a href="/fases/{{$candidato->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
+            <a href="/fases/{{$fase->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
               <i class="far fa-eye"></i>
             </a>
 
-            <a href="/fases/{{$candidato->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
+            <a href="/fases/{{$fase->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
               <i class="fas fa-edit"></i>
             </a>
 
-            <form action="/fases/{{$candidato->id}}" method="POST" style="display: inline;">
+            <form action="/fases/{{$fase->id}}" method="POST" style="display: inline;">
               @method('DELETE')
               @csrf
               <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Desincorporar">
@@ -194,9 +194,9 @@
             </form>
 
           <?php
-            } else if($candidato->estatus == 'RECHAZADO') {
+            } else if($fase->estatus == 'RECHAZADO') {
           ?>
-            <form action="/fases/{{$candidato->id}}" method="POST" style="display: inline;">
+            <form action="/fases/{{$fase->id}}" method="POST" style="display: inline;">
               @method('DELETE')
               @csrf
               <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Reincorporar">
@@ -207,17 +207,17 @@
             }
           } else if(Auth::user()->role == 'ANALISTA') {
           ?>
-            <a href="/fases/{{$candidato->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
+            <a href="/fases/{{$fase->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
               <i class="far fa-eye"></i>
             </a>
 
-            <a href="/fases/{{$candidato->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
+            <a href="/fases/{{$fase->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
               <i class="fas fa-edit"></i>
             </a>
           <?php
             } else if(Auth::user()->role == 'USUARIO') {
           ?>
-            <a href="/fases/{{$candidato->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
+            <a href="/fases/{{$fase->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
               <i class="far fa-eye"></i>
             </a>
           <?php
@@ -227,11 +227,11 @@
 
           <td>
           <?php
-            switch($candidato->estatus) {
+            switch($fase->estatus) {
               case 'POSTULADO':
           ?>
             <form action="/entrevistas/create" method="GET">
-              <input type="hidden" name="CandidatoId" value="{{$candidato->id}}">
+              <input type="hidden" name="faseId" value="{{$fase->id}}">
 
               <button type="submit" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="bottom" title="Ir a la fase">
                 <i class="fas fa-users"></i>&nbsp;Entrevista
@@ -243,7 +243,7 @@
               case 'ENTREVISTADO':
           ?>
             <form action="/pruebas/create" method="GET">
-              <input type="hidden" name="CandidatoId" value="{{$candidato->id}}">
+              <input type="hidden" name="faseId" value="{{$fase->id}}">
 
               <button type="submit" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="bottom" title="Ir a la fase" disabled>
                 <i class="fas fa-tasks"></i>&nbsp;Prueba
