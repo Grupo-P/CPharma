@@ -290,8 +290,7 @@
 <!-------------------------------------------------------------------------------->
 <!-- RRHH -->
 <?php
-  if(Auth::user()->departamento == 'RRHH' 
-    || Auth::user()->departamento == 'TECNOLOGIA'){
+  if(Auth::user()->departamento == 'RRHH'){
 ?>
   <div class="btn-group navbar-brand">
     <button type="button" class="btn btn-outline-info dropdown-toggle textoI" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -315,10 +314,10 @@
       </li>
 
       <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="/entrevistas">
+        <a class="nav-link CP-Links-Menu" href="/fases">
           <span data-feather="home"></span>
-          <i class="fas fa-users"></i>
-          Entrevistas<span class="sr-only">(current)</span>
+          <i class="fas fa-sort-amount-up-alt"></i>
+          Fases<span class="sr-only">(current)</span>
         </a>
       </li>
 
@@ -329,12 +328,36 @@
           Pruebas<span class="sr-only">(current)</span>
         </a>
       </li>
+
+      <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="/convocatoria">
+          <span data-feather="home"></span>
+        <i class="fas fa-user-edit"></i>
+          Convocatoria<span class="sr-only">(current)</span>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="/entrevistas">
+          <span data-feather="home"></span>
+          <i class="fas fa-users"></i>
+          Entrevistas<span class="sr-only">(current)</span>
+        </a>
+      </li>
       
       <li class="nav-item">
         <a class="nav-link CP-Links-Menu" href="/empresaReferencias">
           <span data-feather="home"></span>
           <i class="far fa-address-card"></i>
           Empresas de referencias<span class="sr-only">(current)</span>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="/contactos">
+          <span data-feather="home"></span>
+         <i class="fas fa-phone"></i>
+          Contactos de empresas<span class="sr-only">(current)</span>
         </a>
       </li>
 
@@ -351,22 +374,6 @@
           <span data-feather="home"></span>
          <i class="fas fa-vials"></i>
           Laboratorios<span class="sr-only">(current)</span>
-        </a>
-      </li>
-
-      <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="/contactos">
-          <span data-feather="home"></span>
-         <i class="fas fa-phone"></i>
-          Contactos de empresas<span class="sr-only">(current)</span>
-        </a>
-      </li>
-
-      <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="/convocatoria">
-          <span data-feather="home"></span>
-        <i class="fas fa-user-edit"></i>
-          Convocatoria<span class="sr-only">(current)</span>
         </a>
       </li>
     </div>
