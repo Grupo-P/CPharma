@@ -25,6 +25,7 @@
     $laboratorios = DB::table('rh_laboratorio')->count();
     $contactos = DB::table('rh_contactos_empresas')->count();
     $convocatoria = DB::table('rh_convocatoria')->count();
+    $fases = DB::table('rh_fases')->count();
 
   /*TASA DOLAR VENTA*/
     $Tasa = DB::table('tasa_ventas')->where('moneda', 'Dolar')->value('tasa');
@@ -981,6 +982,29 @@
       </div>
       <div class="card-footer bg-transparent border-info text-right">
         <a href="/convocatoria" class="btn btn-outline-info btn-sm">Visualizar</a>
+      </div>    
+    </div>
+  </div>
+
+  <div class="card-deck">
+    <div class="card border-warning mb-3" style="width: 14rem;">
+      <div class="card-body text-left bg-warning">
+        <h2 class="card-title">
+          <span class="card-text text-white">
+            <i class="fas fa-sort-amount-up-alt"></i>
+            <?php
+            echo ''.$fases;
+          ?>            
+          </span>
+        </h2>
+        <p class="card-text text-white">
+        <?php 
+          echo 'Fases registradas';
+        ?>
+        </p>
+      </div>
+      <div class="card-footer bg-transparent border-warning text-right">
+        <a href="/fases" class="btn btn-outline-warning btn-sm">Visualizar</a>
       </div>    
     </div>
   </div>
