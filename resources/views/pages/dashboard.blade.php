@@ -922,73 +922,8 @@
   </div>
 
   <div class="card-deck">
-    <div class="card border-danger mb-3" style="width: 14rem;">
+    <div class="card border-danger mb-3" style="width: 14rem;">      
       <div class="card-body text-left bg-danger">
-        <h2 class="card-title">
-          <span class="card-text text-white">
-            <i class="fas fa-user-md"></i>
-            <?php
-            echo ''.$examenesm;
-          ?>            
-          </span>
-        </h2>
-        <p class="card-text text-white">
-        <?php 
-          echo 'Examenes médicos registrados';
-        ?>
-        </p>
-      </div>
-      <div class="card-footer bg-transparent border-danger text-right">
-        <a href="/examenesm" class="btn btn-outline-danger btn-sm">Visualizar</a>
-      </div>    
-    </div>
-
-    <div class="card border-success mb-3" style="width: 14rem;">
-      <div class="card-body text-left bg-success">
-        <h2 class="card-title">
-          <span class="card-text text-white">
-            <i class="fas fa-phone"></i>
-            <?php
-            echo ''.$contactos;
-          ?>            
-          </span>
-        </h2>
-        <p class="card-text text-white">
-        <?php 
-          echo 'Contactos de empresas registrados';
-        ?>
-        </p>
-      </div>
-      <div class="card-footer bg-transparent border-success text-right">
-        <a href="/contactos" class="btn btn-outline-success btn-sm">Visualizar</a>
-      </div>    
-    </div>
-
-    <div class="card border-info mb-3" style="width: 14rem;">      
-      <div class="card-body text-left bg-info">
-        <h3 class="card-title">
-          <span class="card-text text-white">
-            <i class="fas fa-user-edit"></i>
-            <?php
-            echo ''.$convocatoria;
-          ?>
-          </span>
-        </h3>
-        <p class="card-text text-white">
-        <?php 
-          echo 'Convocatorias registradas';
-        ?>
-        </p>
-      </div>
-      <div class="card-footer bg-transparent border-info text-right">
-        <a href="/convocatoria" class="btn btn-outline-info btn-sm">Visualizar</a>
-      </div>    
-    </div>
-  </div>
-
-  <div class="card-deck">
-    <div class="card border-warning mb-3" style="width: 14rem;">      
-      <div class="card-body text-left bg-warning">
         <h3 class="card-title">
           <span class="card-text text-white">
             <i class="fas fa-users"></i>
@@ -1003,8 +938,73 @@
         ?>
         </p>
       </div>
+      <div class="card-footer bg-transparent border-danger text-right">
+        <a href="/entrevistas" class="btn btn-outline-danger btn-sm">Visualizar</a>
+      </div>    
+    </div>
+
+    <div class="card border-success mb-3" style="width: 14rem;">      
+      <div class="card-body text-left bg-success">
+        <h3 class="card-title">
+          <span class="card-text text-white">
+            <i class="fas fa-user-edit"></i>
+            <?php
+            echo ''.$convocatoria;
+          ?>
+          </span>
+        </h3>
+        <p class="card-text text-white">
+        <?php 
+          echo 'Convocatorias registradas';
+        ?>
+        </p>
+      </div>
+      <div class="card-footer bg-transparent border-success text-right">
+        <a href="/convocatoria" class="btn btn-outline-success btn-sm">Visualizar</a>
+      </div>    
+    </div>
+
+    <div class="card border-info mb-3" style="width: 14rem;">
+      <div class="card-body text-left bg-info">
+        <h2 class="card-title">
+          <span class="card-text text-white">
+            <i class="fas fa-phone"></i>
+            <?php
+            echo ''.$contactos;
+          ?>            
+          </span>
+        </h2>
+        <p class="card-text text-white">
+        <?php 
+          echo 'Contactos de empresas registrados';
+        ?>
+        </p>
+      </div>
+      <div class="card-footer bg-transparent border-info text-right">
+        <a href="/contactos" class="btn btn-outline-info btn-sm">Visualizar</a>
+      </div>    
+    </div>
+  </div>
+
+  <div class="card-deck">
+    <div class="card border-warning mb-3" style="width: 14rem;">
+      <div class="card-body text-left bg-warning">
+        <h2 class="card-title">
+          <span class="card-text text-white">
+            <i class="fas fa-user-md"></i>
+            <?php
+            echo ''.$examenesm;
+          ?>            
+          </span>
+        </h2>
+        <p class="card-text text-white">
+        <?php 
+          echo 'Examenes médicos registrados';
+        ?>
+        </p>
+      </div>
       <div class="card-footer bg-transparent border-warning text-right">
-        <a href="/entrevistas" class="btn btn-outline-warning btn-sm">Visualizar</a>
+        <a href="/examenesm" class="btn btn-outline-warning btn-sm">Visualizar</a>
       </div>    
     </div>
   </div>
