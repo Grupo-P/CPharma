@@ -17,6 +17,16 @@ class CreateRhiCandidatosFasesTable extends Migration {
             $table->unsignedInteger('rh_fases_id');
             $table->string('user');
             $table->timestamps();
+
+            $table->foreign('rh_candidatos_id')
+            ->references('id')
+            ->on('rh_candidatos')
+            ->onDelete('cascade')
+            ->onUpdate('cascade');
+
+            $table->foreign('rh_fases_id')
+            ->references('id')
+            ->on('rh_fases');
         });
     }
 
