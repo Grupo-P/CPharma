@@ -899,24 +899,24 @@
       </div>    
     </div>
 
-    <div class="card border-dark mb-3" style="width: 14rem;">
+    <div class="card border-dark mb-3" style="width: 14rem;">      
       <div class="card-body text-left bg-dark">
-        <h2 class="card-title">
+        <h3 class="card-title">
           <span class="card-text text-white">
-            <i class="far fa-address-card"></i>
+            <i class="fas fa-user-edit"></i>
             <?php
-            echo ''.$empresaReferencias;
-          ?>            
+            echo ''.$convocatoria;
+          ?>
           </span>
-        </h2>
+        </h3>
         <p class="card-text text-white">
         <?php 
-          echo 'Empresas de referencias laborales registradas';
+          echo 'Convocatorias registradas';
         ?>
         </p>
       </div>
       <div class="card-footer bg-transparent border-dark text-right">
-        <a href="/empresaReferencias" class="btn btn-outline-dark btn-sm">Visualizar</a>
+        <a href="/convocatoria" class="btn btn-outline-dark btn-sm">Visualizar</a>
       </div>    
     </div>
   </div>
@@ -943,24 +943,24 @@
       </div>    
     </div>
 
-    <div class="card border-success mb-3" style="width: 14rem;">      
+    <div class="card border-success mb-3" style="width: 14rem;">
       <div class="card-body text-left bg-success">
-        <h3 class="card-title">
+        <h2 class="card-title">
           <span class="card-text text-white">
-            <i class="fas fa-user-edit"></i>
+            <i class="far fa-address-card"></i>
             <?php
-            echo ''.$convocatoria;
-          ?>
+            echo ''.$empresaReferencias;
+          ?>            
           </span>
-        </h3>
+        </h2>
         <p class="card-text text-white">
         <?php 
-          echo 'Convocatorias registradas';
+          echo 'Empresas de referencias laborales registradas';
         ?>
         </p>
       </div>
       <div class="card-footer bg-transparent border-success text-right">
-        <a href="/convocatoria" class="btn btn-outline-success btn-sm">Visualizar</a>
+        <a href="/empresaReferencias" class="btn btn-outline-success btn-sm">Visualizar</a>
       </div>    
     </div>
 
