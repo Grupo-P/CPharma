@@ -73,7 +73,16 @@ class RH_FaseController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function show($id) {
-        //
+        $fases = RH_Fase::find($id);
+
+        $Auditoria = new Auditoria();
+        $Auditoria->accion = 'CONSULTAR';
+        $Auditoria->tabla = 'RH_FASES';
+        $Auditoria->registro = $fases->nombre_fase;
+        $Auditoria->user = auth()->user()->name;
+        $Auditoria->save();
+
+        return view('pages.RRHH.fases.show', compact('fases'));
     }
 
     /**
