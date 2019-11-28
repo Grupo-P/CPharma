@@ -105,11 +105,11 @@
     $connCPharma = FG_Conectar_CPharma();
 
   /*INCIO PARA CALCULOS CON DIAS EN CERO*/
-    $sql = MySQL_Rango_Dias_Cero();
-    $result = mysqli_query($connCPharma,$sql);
-    $row = $result->fetch_assoc();
-    $DC_FInicialImp = date("d-m-Y", strtotime($row['Inicio']));
-    $DC_FFinalImp = date("d-m-Y", strtotime($row['Fin']));
+    $sqlDC = MySQL_Rango_Dias_Cero();
+    $resultDC = mysqli_query($connCPharma,$sqlDC);
+    $rowDC = $resultDC->fetch_assoc();
+    $DC_FInicialImp = date("d-m-Y", strtotime($rowDC['Inicio']));
+    $DC_FFinalImp = date("d-m-Y", strtotime($rowDC['Fin']));
  /*FIN PARA CALCULOS CON DIAS EN CERO*/
 
     $FFinal = date("Y-m-d");
@@ -129,7 +129,7 @@
             aria-hidden="true"></i>
         </span>
       </div>
-      <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterAllTable()">
+      <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterAllTable()" autofocus="autofocus">
     </div>
     <br/>
     ';
