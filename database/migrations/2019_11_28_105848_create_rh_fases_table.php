@@ -13,6 +13,9 @@ class CreateRhFasesTable extends Migration {
     public function up() {
         Schema::create('rh_fases', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('nombre_fase');
+            $table->string('user');
+            $table->string('estatus');
             $table->timestamps();
         });
     }
