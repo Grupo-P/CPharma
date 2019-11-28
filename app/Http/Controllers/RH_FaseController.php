@@ -3,6 +3,9 @@
 namespace compras\Http\Controllers;
 
 use Illuminate\Http\Request;
+use compras\RH_Fase;
+use compras\User;
+use compras\Auditoria;
 
 class RH_FaseController extends Controller {
     /**
@@ -13,14 +16,15 @@ class RH_FaseController extends Controller {
     public function __construct() {
         $this->middleware('auth');
     }
-    
+
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
     public function index() {
-        //
+        $fases = RH_Fase::all();
+        return view('pages.RRHH.fases.index', compact('fases'));
     }
 
     /**
