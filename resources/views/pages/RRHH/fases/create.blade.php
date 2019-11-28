@@ -19,61 +19,7 @@
           </div>
           <div class="modal-body">
             <h4 class="h6">
-              El fase no fue almacenado
-            </h4>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-outline-success" data-dismiss="modal">Aceptar</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  @endif
-
-  <!-- Modal Cedula duplicada -->
-  @if(session('Error1'))
-    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title text-danger" id="exampleModalCenterTitle">
-              <i class="fas fa-exclamation-triangle text-danger"></i>
-              {{ session('Error') }}
-            </h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <h4 class="h6">
-              El fase no fue almacenado, la cédula ya esta registrada
-            </h4>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-outline-success" data-dismiss="modal">Aceptar</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  @endif
-
-  <!-- Modal Correo duplicado -->
-  @if(session('Error2'))
-    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title text-danger" id="exampleModalCenterTitle">
-              <i class="fas fa-exclamation-triangle text-danger"></i>
-              {{ session('Error') }}
-            </h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <h4 class="h6">
-              El fase no fue almacenado, el correo ya esta registrado
+              La fase no fue almacenada
             </h4>
           </div>
           <div class="modal-footer">
