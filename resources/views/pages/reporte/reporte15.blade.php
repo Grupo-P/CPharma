@@ -175,15 +175,23 @@
           if($Diferencia < 0) {
 
             $Existencia = $row2["Existencia"];
+            $ExistenciaAlmacen1 = $row2["ExistenciaAlmacen1"];
+            $ExistenciaAlmacen2 = $row2["ExistenciaAlmacen2"];
+            $IsTroquelado = $row2["Troquelado"];
+            $IsIVA = $row2["Impuesto"];
+            $UtilidadArticulo = $row2["UtilidadArticulo"];
+            $UtilidadCategoria = $row2["UtilidadCategoria"];
             $TroquelAlmacen1 = $row2["TroquelAlmacen1"];
-            $PrecioCompraBruto = $row2["PrecioCompraBruto"];
-            $Utilidad = $row2["Utilidad"];
-            $IsIVA = $row2["ConceptoImpuesto"];
+            $PrecioCompraBrutoAlmacen1 = $row2["PrecioCompraBrutoAlmacen1"];
             $TroquelAlmacen2 = $row2["TroquelAlmacen2"];
+            $PrecioCompraBrutoAlmacen2 = $row2["PrecioCompraBrutoAlmacen2"];
+            $PrecioCompraBruto = $row2["PrecioCompraBruto"];
+            $CondicionExistencia = 'CON_EXISTENCIA';
 
-            $Precio = FG_Calculo_Precio($Existencia,$TroquelAlmacen1,$PrecioCompraBruto,$Utilidad,$IsIVA,$TroquelAlmacen2);
+            $Precio = FG_Calculo_Precio_Alfa($Existencia,$ExistenciaAlmacen1,$ExistenciaAlmacen2,$IsTroquelado,$UtilidadArticulo,$UtilidadCategoria,$TroquelAlmacen1,$PrecioCompraBrutoAlmacen1,$TroquelAlmacen2,
+    $PrecioCompraBrutoAlmacen2,$PrecioCompraBruto,$IsIVA,$CondicionExistencia);
+
             $ValorLote = $Precio * intval($Existencia);
-
             $Tasa = FG_Tasa_Fecha($connCPharma,$UltimoLote);
             $Descripcion = FG_Limpiar_Texto($row2["Descripcion"]);
 
@@ -283,43 +291,6 @@
         OR  InvAtributo.Descripcion = 'giordany') 
       AND InvArticuloAtributo.InvArticuloId = InvArticulo.Id),CAST(0 AS INT))) AS Dolarizado,
 
-      --Utilidad (Utilidad del articulo, Utilidad es 1.00 NO considerar la utilidad para el calculo de precio)
-      ROUND(CAST(1-((ISNULL(ROUND(CAST((SELECT VenCondicionVenta.PorcentajeUtilidad
-          FROM VenCondicionVenta 
-          WHERE VenCondicionVenta.Id = (
-            SELECT VenCondicionVenta_VenCondicionVentaArticulo.Id
-            FROM VenCondicionVenta_VenCondicionVentaArticulo 
-            WHERE VenCondicionVenta_VenCondicionVentaArticulo.InvArticuloId = InvArticulo.Id)) AS DECIMAL(38,4)),2,0),CAST(0 AS INT)))/100)AS DECIMAL(38,2)),2,0) AS Utilidad,
-
-      --Precio Troquel Almacen 1
-      (ROUND(CAST((SELECT TOP 1
-      InvLote.M_PrecioTroquelado
-      FROM InvLoteAlmacen
-      INNER JOIN InvLote ON InvLote.Id = InvLoteAlmacen.InvLoteId
-      WHERE(InvLoteAlmacen.InvAlmacenId = '1')
-      AND (InvLoteAlmacen.InvArticuloId = InvArticulo.Id)
-      AND (InvLoteAlmacen.Existencia>0)
-      ORDER BY invlote.M_PrecioTroquelado DESC)AS DECIMAL(38,2)),2,0)) AS TroquelAlmacen1,
-
-      --Precio Compra Bruto
-      (ROUND(CAST((SELECT TOP 1
-      InvLote.M_PrecioCompraBruto
-      FROM InvLoteAlmacen
-      INNER JOIN InvLote ON InvLote.Id = InvLoteAlmacen.InvLoteId
-      WHERE (InvLoteAlmacen.InvArticuloId = InvArticulo.Id)
-      AND (InvLoteAlmacen.Existencia>0)
-      ORDER BY invlote.M_PrecioCompraBruto DESC)AS DECIMAL(38,2)),2,0)) AS PrecioCompraBruto,
-
-      --Precio Troquel Almacen 2
-      (ROUND(CAST((SELECT TOP 1
-      InvLote.M_PrecioTroquelado
-      FROM InvLoteAlmacen
-      INNER JOIN InvLote ON InvLote.Id = InvLoteAlmacen.InvLoteId
-      WHERE(InvLoteAlmacen.InvAlmacenId = '2')
-      AND (InvLoteAlmacen.InvArticuloId = InvArticulo.Id)
-      AND (InvLoteAlmacen.Existencia>0)
-      ORDER BY invlote.M_PrecioTroquelado DESC)AS DECIMAL(38,2)),2,0)) AS TroquelAlmacen2,
-
       CONVERT(DATE, 
       (SELECT TOP 1
       InvLote.Auditoria_FechaCreacion
@@ -329,13 +300,94 @@
       AND (InvLoteAlmacen.Existencia > 0)
       AND (InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
       ORDER BY InvLote.Auditoria_FechaCreacion DESC)) AS FechaLote,--Fecha de creacion del lote
-
-      (SELECT SUM(InvLoteAlmacen.Existencia)
-      FROM InvLoteAlmacen
-      WHERE (InvLoteAlmacen.InvArticuloId = InvArticulo.Id)
-      AND (InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)) AS Existencia,--Existencia
-
-      InvArticulo.FinConceptoImptoIdCompra AS ConceptoImpuesto,
+  
+    --Impuesto (1 SI aplica impuesto, 0 NO aplica impuesto)
+    (ISNULL(InvArticulo.FinConceptoImptoIdCompra,CAST(0 AS INT))) AS Impuesto,
+--Troquelado (0 NO es Troquelado, Id Articulo SI es Troquelado)
+    (ISNULL((SELECT
+    InvArticuloAtributo.InvArticuloId
+    FROM InvArticuloAtributo 
+    WHERE InvArticuloAtributo.InvAtributoId = 
+    (SELECT InvAtributo.Id
+    FROM InvAtributo 
+    WHERE 
+    InvAtributo.Descripcion = 'Troquelados'
+    OR  InvAtributo.Descripcion = 'troquelados') 
+    AND InvArticuloAtributo.InvArticuloId = InvArticulo.Id),CAST(0 AS INT))) AS Troquelado,
+--UtilidadArticulo (Utilidad del articulo, Utilidad es 1.00 NO considerar la utilidad para el calculo de precio)
+    ROUND(CAST(1-((ISNULL(ROUND(CAST((SELECT VenCondicionVenta.PorcentajeUtilidad
+        FROM VenCondicionVenta 
+        WHERE VenCondicionVenta.Id = (
+        SELECT VenCondicionVenta_VenCondicionVentaArticulo.Id
+        FROM VenCondicionVenta_VenCondicionVentaArticulo 
+        WHERE VenCondicionVenta_VenCondicionVentaArticulo.InvArticuloId = InvArticulo.Id)) AS DECIMAL(38,4)),2,0),CAST(0 AS INT)))/100)AS DECIMAL(38,2)),2,0) AS UtilidadArticulo,
+--UtilidadCategoria (Utilidad de la categoria, Utilidad es 1.00 NO considerar la utilidad para el calculo de precio)
+    ROUND(CAST(1-((ISNULL(ROUND(CAST((SELECT VenCondicionVenta.PorcentajeUtilidad 
+  FROM VenCondicionVenta 
+  WHERE VenCondicionVenta.id = (
+    SELECT VenCondicionVenta_VenCondicionVentaCategoria.Id 
+    FROM VenCondicionVenta_VenCondicionVentaCategoria 
+    WHERE VenCondicionVenta_VenCondicionVentaCategoria.InvCategoriaId = InvArticulo.InvCategoriaId)) AS DECIMAL(38,4)),2,0),CAST(0 AS INT)))/100)AS DECIMAL(38,2)),2,0) AS UtilidadCategoria,
+--Precio Troquel Almacen 1
+    (ROUND(CAST((SELECT TOP 1
+    InvLote.M_PrecioTroquelado
+    FROM InvLoteAlmacen
+    INNER JOIN InvLote ON InvLote.Id = InvLoteAlmacen.InvLoteId
+    WHERE(InvLoteAlmacen.InvAlmacenId = '1')
+    AND (InvLoteAlmacen.InvArticuloId = InvArticulo.Id)
+    AND (InvLoteAlmacen.Existencia>0)
+    ORDER BY invlote.M_PrecioTroquelado DESC)AS DECIMAL(38,2)),2,0)) AS TroquelAlmacen1,
+--Precio Compra Bruto Almacen 1
+    (ROUND(CAST((SELECT TOP 1
+    InvLote.M_PrecioCompraBruto
+    FROM InvLoteAlmacen
+    INNER JOIN InvLote ON InvLote.Id = InvLoteAlmacen.InvLoteId
+    WHERE (InvLoteAlmacen.InvArticuloId = InvArticulo.Id)
+    AND (InvLoteAlmacen.Existencia>0)
+  AND (InvLoteAlmacen.InvAlmacenId = '1')
+    ORDER BY invlote.M_PrecioCompraBruto DESC)AS DECIMAL(38,2)),2,0)) AS PrecioCompraBrutoAlmacen1,
+--Precio Troquel Almacen 2
+    (ROUND(CAST((SELECT TOP 1
+    InvLote.M_PrecioTroquelado
+    FROM InvLoteAlmacen
+    INNER JOIN InvLote ON InvLote.Id = InvLoteAlmacen.InvLoteId
+    WHERE(InvLoteAlmacen.InvAlmacenId = '2')
+    AND (InvLoteAlmacen.InvArticuloId = InvArticulo.Id)
+    AND (InvLoteAlmacen.Existencia>0)
+    ORDER BY invlote.M_PrecioTroquelado DESC)AS DECIMAL(38,2)),2,0)) AS TroquelAlmacen2,
+--Precio Compra Bruto Almacen 2
+    (ROUND(CAST((SELECT TOP 1
+    InvLote.M_PrecioCompraBruto
+    FROM InvLoteAlmacen
+    INNER JOIN InvLote ON InvLote.Id = InvLoteAlmacen.InvLoteId
+    WHERE (InvLoteAlmacen.InvArticuloId = InvArticulo.Id)
+    AND (InvLoteAlmacen.Existencia>0)
+  AND (InvLoteAlmacen.InvAlmacenId = '2')
+    ORDER BY invlote.M_PrecioCompraBruto DESC)AS DECIMAL(38,2)),2,0)) AS PrecioCompraBrutoAlmacen2,
+--Precio Compra Bruto
+    (ROUND(CAST((SELECT TOP 1
+    InvLote.M_PrecioCompraBruto
+    FROM InvLoteAlmacen
+    INNER JOIN InvLote ON InvLote.Id = InvLoteAlmacen.InvLoteId
+    WHERE (InvLoteAlmacen.InvArticuloId = InvArticulo.Id)
+    AND (InvLoteAlmacen.Existencia>0)
+    ORDER BY invlote.M_PrecioCompraBruto DESC)AS DECIMAL(38,2)),2,0)) AS PrecioCompraBruto,
+--Existencia (Segun el almacen del filtro)
+    (ROUND(CAST((SELECT SUM (InvLoteAlmacen.Existencia) As Existencia
+                FROM InvLoteAlmacen
+                WHERE(InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
+                AND (InvLoteAlmacen.InvArticuloId = InvArticulo.Id)) AS DECIMAL(38,0)),2,0))  AS Existencia,
+--ExistenciaAlmacen1 (Segun el almacen del filtro)
+    (ROUND(CAST((SELECT SUM (InvLoteAlmacen.Existencia) As Existencia
+                FROM InvLoteAlmacen
+                WHERE(InvLoteAlmacen.InvAlmacenId = 1)
+                AND (InvLoteAlmacen.InvArticuloId = InvArticulo.Id)) AS DECIMAL(38,0)),2,0))  AS ExistenciaAlmacen1,
+--ExistenciaAlmacen2 (Segun el almacen del filtro)
+    (ROUND(CAST((SELECT SUM (InvLoteAlmacen.Existencia) As Existencia
+                FROM InvLoteAlmacen
+                WHERE(InvLoteAlmacen.InvAlmacenId = 2)
+                AND (InvLoteAlmacen.InvArticuloId = InvArticulo.Id)) AS DECIMAL(38,0)),2,0))  AS ExistenciaAlmacen2,
+      
       InvArticulo.Descripcion,
       -- Ultimo Proveedor (Id Proveedor)
       (SELECT TOP 1
