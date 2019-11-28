@@ -304,7 +304,7 @@
     $NumeroFactura = $rowNFact["NumeroFactura"];
 
     echo '
-    <div class="input-group md-form form-sm form-1 pl-0">
+    <div class="input-group md-form form-sm form-1 pl-0 CP-stickyBar">
       <div class="input-group-prepend">
         <span class="input-group-text purple lighten-3" id="basic-text1">
           <i class="fas fa-search text-white"
@@ -437,7 +437,7 @@
     $NumeroFactura = $rowNFact["NumeroFactura"];
 
     echo '
-    <div class="input-group md-form form-sm form-1 pl-0">
+    <div class="input-group md-form form-sm form-1 pl-0 CP-stickyBar">
       <div class="input-group-prepend">
         <span class="input-group-text purple lighten-3" id="basic-text1">
           <i class="fas fa-search text-white"
@@ -582,7 +582,7 @@
     $NumeroFactura = $rowNFact["NumeroFactura"];
 
     echo '
-    <div class="input-group md-form form-sm form-1 pl-0">
+    <div class="input-group md-form form-sm form-1 pl-0 CP-stickyBar">
       <div class="input-group-prepend">
         <span class="input-group-text purple lighten-3" id="basic-text1"><i class="fas fa-search text-white"
             aria-hidden="true"></i></span>

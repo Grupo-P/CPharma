@@ -104,7 +104,7 @@
 			case '12':
 				return 'FAU';
 			break;
-		/*INICIO BLOQUE DE FAU*/	
+		/*INICIO BLOQUE DE FAU*/
 			default:
 				return ''.$Octeto[2];
 			break;
@@ -1199,6 +1199,334 @@
 		$TotalRegistros = $row["TotalRegistros"];
 
 		$sql1 = QG_Guardar_Captura_Diaria($TotalRegistros,$FechaCaptura,$date);
+		mysqli_query($connCPharma,$sql1);
+	}
+	/**********************************************************************************/
+	/*
+		TITULO: FG_Prouctos_EnCaida
+		PARAMETROS: no aplica
+		FUNCION: Captura y almacena la data para productos en caida
+		RETORNO: no aplica
+	 */
+	function FG_Prouctos_EnCaida() {
+		$SedeConnection = MiUbicacion();
+		$conn = FG_Conectar_Smartpharma($SedeConnection);
+		$connCPharma = FG_Conectar_CPharma();
+
+		$sqlB = QG_Borrar_ProductosCaida();
+		mysqli_query($connCPharma,$sqlB);
+
+		$FechaCaptura = new DateTime("now");
+		$FechaCaptura = $FechaCaptura->format('Y-m-d');
+		$user = 'SYSTEM';
+		$date = date('Y-m-d h:i:s',time());
+
+		/* Rangos de Fecha */
+  		$FFinal = date("Y-m-d");
+	  	$FInicial = date("Y-m-d",strtotime($FFinal."-10 days"));
+	  	$RangoDias = intval(FG_Rango_Dias($FInicial,$FFinal));
+
+		/* FILTRO 1:
+		*  Articulos con veces vendidas en el rango
+		*  Articulos sin compra en el rango
+		*/
+		$sql = QCleanTable('CP_QG_Unidades_Vendidas');
+		sqlsrv_query($conn,$sql);
+		$sql = QCleanTable('CP_QG_Unidades_Devueltas');
+		sqlsrv_query($conn,$sql);
+		$sql = QCleanTable('CP_QG_Unidades_Compradas');
+		sqlsrv_query($conn,$sql);
+		$sql = QCleanTable('CP_QG_Unidades_Reclamadas');
+		sqlsrv_query($conn,$sql);
+		
+		$sql1 = QG_ArtVendidos_ProductoCaida($FInicial,$FFinal);
+		sqlsrv_query($conn,$sql1);
+		$sql1 = QG_ArtDevueltos_ProductoCaida($FInicial,$FFinal);
+		sqlsrv_query($conn,$sql1);
+		$sql1 = QG_ArtComprados_ProductoCaida($FInicial,$FFinal);
+		sqlsrv_query($conn,$sql1);
+		$sql1 = QG_ArtReclamados_ProductoCaida($FInicial,$FFinal);
+		sqlsrv_query($conn,$sql1);
+
+		$sql3 = QG_Integracion_ProductoCaida($RangoDias);
+		$result = sqlsrv_query($conn,$sql3);
+
+		$sql = QCleanTable('CP_QG_Unidades_Vendidas');
+		sqlsrv_query($conn,$sql);
+		$sql = QCleanTable('CP_QG_Unidades_Devueltas');
+		sqlsrv_query($conn,$sql);
+		$sql = QCleanTable('CP_QG_Unidades_Compradas');
+		sqlsrv_query($conn,$sql);
+		$sql = QCleanTable('CP_QG_Unidades_Reclamadas');
+		sqlsrv_query($conn,$sql);
+
+		/* Inicio while que itera en los articulos con existencia actual > 0*/
+		while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
+
+			/*COMANDOS PARA TEST
+    	$IdArticulo = 54806;
+			$flag = FALSE;
+			while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
+				$IdArticuloR = $row['InvArticuloId'];
+				if($IdArticuloR == $IdArticulo){
+					$flag = TRUE;
+				}
+			}
+
+			if($flag==TRUE){
+				echo'----Filtro 1 * Sin compra rango * Con venta en rango: SI----';
+			}
+			else{
+				echo'----Filtro 1 * Sin compra rango * Con venta en rango: NO----';
+			}
+			COMANDOS PARA TEST*/	
+			
+			$IdArticulo = $row["InvArticuloId"];
+			$sql1 = SQG_Detalle_Articulo($IdArticulo);
+    	$result1 = sqlsrv_query($conn,$sql1);
+    	$row1 = sqlsrv_fetch_array($result1,SQLSRV_FETCH_ASSOC);
+
+    	$CodigoArticulo = $row1["CodigoInterno"];
+      $CodigoBarra = $row1["CodigoBarra"];
+      $Descripcion = FG_Limpiar_Texto($row1["Descripcion"]);
+      $Existencia = $row1["Existencia"];
+      $ExistenciaAlmacen1 = $row1["ExistenciaAlmacen1"];
+      $ExistenciaAlmacen2 = $row1["ExistenciaAlmacen2"];
+      $IsTroquelado = $row1["Troquelado"];
+      $IsIVA = $row1["Impuesto"];
+      $UtilidadArticulo = $row1["UtilidadArticulo"];
+      $UtilidadCategoria = $row1["UtilidadCategoria"];
+      $TroquelAlmacen1 = $row1["TroquelAlmacen1"];
+      $PrecioCompraBrutoAlmacen1 = $row1["PrecioCompraBrutoAlmacen1"];
+      $TroquelAlmacen2 = $row1["TroquelAlmacen2"];
+      $PrecioCompraBrutoAlmacen2 = $row1["PrecioCompraBrutoAlmacen2"];
+      $PrecioCompraBruto = $row1["PrecioCompraBruto"];
+      $CondicionExistencia = 'CON_EXISTENCIA';
+
+    	$UnidadesVendidas = $row["UnidadesVendidas"];
+    	$VentaDiaria = FG_Venta_Diaria($UnidadesVendidas,$RangoDias);
+    	$DiasRestantes = FG_Dias_Restantes($Existencia,$VentaDiaria);
+
+    	/*COMANDOS PARA TEST*/
+    	//echo'----- Articulo: '.$Descripcion.' -----';
+    	/*COMANDOS PARA TEST*/
+
+			/* FILTRO 2: 
+			*	Dias restantes
+			*	si dias restantes es menor de 10 entra en el rango sino es rechazado
+			*/
+			if($DiasRestantes<11){
+
+				/*COMANDOS PARA TEST*/
+				//echo'----Filtro 2 * Dias restantes < 11: SI '.$DiasRestantes.' ----';
+				/*COMANDOS PARA TEST*/
+
+				/* FILTRO 3:
+				*	Mantuvo Existencia en rango
+				*	se cuenta las apariciones del articulo en la tabla de dias
+				*	en cero, la misma debe ser igual la diferencia de dias +1 
+				*/
+				$CuentaExistencia = CuentaExistencia($connCPharma,$IdArticulo,$FInicial,$FFinal);
+				
+				if($CuentaExistencia==$RangoDias){
+
+					/*COMANDOS PARA TEST*/
+					//echo'----Filtro 3 * Existencia en rango: SI '.$CuentaExistencia.' ----';
+					/*COMANDOS PARA TEST*/
+
+					/*  FILTRO 4: 
+					*	Venta en dia, esta se acumula 
+					*	El articulo debe tener venta al menos la mita de dias del rango 
+					*/
+					$CuentaVenta = CuentaVenta($conn,$IdArticulo,$FInicial,$FFinal);
+
+					if($CuentaVenta>=($RangoDias/2)){
+
+						/*COMANDOS PARA TEST*/
+						//echo'----Filtro 4 * Venta en dias: SI '.$CuentaVenta.' ----';
+						/*COMANDOS PARA TEST*/		
+
+						$ExistenciaDecreciente = ExistenciaDecreciente($connCPharma,$IdArticulo,$FInicial,$FFinal,$RangoDias);
+
+						$CuentaDecreciente = array_pop($ExistenciaDecreciente);
+
+						/*  FILTRO 5: 
+						*	Si el articulo decrece su existencia rango 
+						*/
+						if($CuentaDecreciente==TRUE){
+
+							/*COMANDOS PARA TEST*/
+							//echo'----Filtro 5 * Decrece su existencia: SI ----';
+							/*COMANDOS PARA TEST*/
+
+							$Precio = FG_Calculo_Precio_Alfa($Existencia,$ExistenciaAlmacen1,$ExistenciaAlmacen2,$IsTroquelado,$UtilidadArticulo,$UtilidadCategoria,$TroquelAlmacen1,$PrecioCompraBrutoAlmacen1,$TroquelAlmacen2,
+    $PrecioCompraBrutoAlmacen2,$PrecioCompraBruto,$IsIVA,$CondicionExistencia);
+
+							$Dia1 = array_pop($ExistenciaDecreciente);
+							$Dia2 = array_pop($ExistenciaDecreciente);
+							$Dia3 = array_pop($ExistenciaDecreciente);
+							$Dia4 = array_pop($ExistenciaDecreciente);
+							$Dia5 = array_pop($ExistenciaDecreciente);
+							$Dia6 = array_pop($ExistenciaDecreciente);
+							$Dia7 = array_pop($ExistenciaDecreciente);
+							$Dia8 = array_pop($ExistenciaDecreciente);
+							$Dia9 = array_pop($ExistenciaDecreciente);
+							$Dia10 = array_pop($ExistenciaDecreciente);
+
+							$sqlCPharma = QGuardarProductosCaida($IdArticulo,$CodigoArticulo,$Descripcion,$Precio,$Existencia,$Dia10,$Dia9,$Dia8,$Dia7,$Dia6,$Dia5,$Dia4,$Dia3,$Dia2,$Dia1,$UnidadesVendidas,$DiasRestantes,$FechaCaptura,$user,$date,$date);
+
+							mysqli_query($connCPharma,$sqlCPharma);
+						}	
+						//else{
+							/*COMANDOS PARA TEST*/
+							//echo'----Filtro 5 * Decrece su existencia: NO ----';
+							/*COMANDOS PARA TEST*/
+						//}					
+					}
+					//else{
+						/*COMANDOS PARA TEST*/
+						//echo'----Filtro 4 * Venta en dias: NO '.$CuentaVenta.' ----';
+						/*COMANDOS PARA TEST*/
+					//}	
+				}
+				//else{
+					/*COMANDOS PARA TEST*/
+					//echo'----Filtro 3 * Existencia en rango: NO '.$CuentaExistencia.' ----';
+					/*COMANDOS PARA TEST*/
+				//}
+			}
+			//else{
+				/*COMANDOS PARA TEST*/
+				//echo'----Filtro 2 * Dias restantes < 11: NO '.$DiasRestantes.' ----';
+				/*COMANDOS PARA TEST*/
+			//}	
+		}
+		GuardarCapturaCaida($connCPharma,$FechaCaptura,$date);
+		
+		$sqlCC = QValidarCapturaCaida($FechaCaptura);
+		$resultCC = mysqli_query($connCPharma,$sqlCC);
+		$rowCC = mysqli_fetch_assoc($resultCC);
+		$CuentaCaptura = $rowCC["CuentaCaptura"];
+
+		if($CuentaCaptura == 0){
+			mysqli_close($connCPharma);
+			sqlsrv_close($conn);
+			FG_Prouctos_EnCaida();
+		}
+		else{
+			mysqli_close($connCPharma);
+			sqlsrv_close($conn);
+		}
+	}
+	/**********************************************************************************/
+	/*
+		TITULO: CuentaExistencia
+		PARAMETROS: 
+		FUNCION: 
+		RETORNO: 
+ 	*/
+	function CuentaExistencia($connCPharma,$IdArticulo,$FInicial,$FFinal) {
+		$sql = QCuentaExistencia($IdArticulo,$FInicial,$FFinal);
+		$result = mysqli_query($connCPharma,$sql);
+		$row = mysqli_fetch_assoc($result);
+		$Cuenta = $row["Cuenta"];
+		return $Cuenta;
+	}
+	/**********************************************************************************/
+	/*
+		TITULO: CuentaVenta
+		PARAMETROS: 
+		FUNCION: 
+		RETORNO: 
+ 	*/
+	function CuentaVenta($conn,$IdArticulo,$FInicial,$FFinal) {
+		
+		$FFinalPivote = date("Y-m-d",strtotime($FInicial."+1 days"));
+		$FFinal = date("Y-m-d",strtotime($FFinal."+1 days"));
+		$CuentaVenta = 0;
+
+		while($FFinalPivote!=$FFinal){
+
+			$sql = QCuentaVenta($IdArticulo,$FInicial,$FFinalPivote);
+			$result = sqlsrv_query($conn,$sql);
+			$row = sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC);
+			$VecesVendida = $row["Cuenta"];
+
+			if($VecesVendida>0){
+				$CuentaVenta++;
+			}
+
+			$FInicial = date("Y-m-d",strtotime($FInicial."+1 days"));
+  		$FFinalPivote = date("Y-m-d",strtotime($FFinalPivote."+1 days"));
+		}
+		return $CuentaVenta;
+	}
+	/**********************************************************************************/
+	/*
+		TITULO: ExistenciaDecreciente
+		PARAMETROS: 
+		FUNCION: 
+		RETORNO: 
+ 	*/
+	function ExistenciaDecreciente($connCPharma,$IdArticulo,$FInicial,$FFinal,$RangoDias) {
+		
+		$PrimerCiclo = TRUE;
+		$ExistenciaAyer = 0;
+		$CuentaDecreciente = TRUE;
+		$CuentaDecrece = 0;
+		$ExistenciaDecreciente = array();
+
+		while( ($FInicial!=$FFinal) && ($CuentaDecreciente==TRUE) ) {
+
+			$sql = QExistenciaDiasCero($IdArticulo,$FInicial);
+			$result = mysqli_query($connCPharma,$sql);
+			$row = mysqli_fetch_assoc($result);
+			$ExistenciaHoy = $row["existencia"];
+
+			if($PrimerCiclo == TRUE){
+				$PrimerCiclo = FALSE;
+				$ExistenciaAyer = $ExistenciaHoy;
+			}
+
+			if($ExistenciaAyer>=$ExistenciaHoy){
+				$CuentaDecreciente = TRUE;
+				array_push($ExistenciaDecreciente,$ExistenciaHoy);
+
+				if($ExistenciaAyer>$ExistenciaHoy){
+					$CuentaDecrece++;
+				}
+			}
+			else{
+				$CuentaDecreciente = FALSE;
+			}
+
+			$FInicial = date("Y-m-d",strtotime($FInicial."+1 days"));
+		}
+
+		if(($CuentaDecrece>=($RangoDias/2))&&($CuentaDecreciente==TRUE)){
+			$CuentaDecreciente = TRUE;
+		}
+		else{
+			$CuentaDecreciente = FALSE;
+		}
+		array_push($ExistenciaDecreciente,$CuentaDecreciente);
+		return $ExistenciaDecreciente;
+	}
+	/**********************************************************************************/
+	/*
+		TITULO: GuardarCapturaDiaria
+		PARAMETROS: [$FechaCaptura] El dia de hoy
+					[$date] valor para creacion y actualizacion
+		FUNCION: crea una conexion con la base de datos cpharma e ingresa datos
+		RETORNO: no aplica
+	 */
+	function GuardarCapturaCaida($connCPharma,$FechaCaptura,$date) {
+		$sql = QCapturaCaida($FechaCaptura);
+		$result = mysqli_query($connCPharma,$sql);
+		$row = mysqli_fetch_assoc($result);
+		$TotalRegistros = $row["TotalRegistros"];
+
+		$sql1 = QGuardarCapturaCaida($TotalRegistros,$FechaCaptura,$date);
 		mysqli_query($connCPharma,$sql1);
 	}
 ?>
