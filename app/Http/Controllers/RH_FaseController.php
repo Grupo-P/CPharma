@@ -133,6 +133,35 @@ class RH_FaseController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function destroy($id) {
-        //
+        $fases = RH_Fase::find($id);
+
+        $Auditoria = new Auditoria();
+        $Auditoria->tabla = 'RH_FASES';
+        $Auditoria->registro = $fases->nombre_fase;
+        $Auditoria->user = auth()->user()->name;
+
+        if($fases->estatus == 'INACTIVO') {
+            $fases->estatus = 'ACTIVO';
+            $Auditoria->accion = 'REINCORPORAR';
+        }
+        else {
+            $fases->estatus = 'INACTIVO';
+            $Auditoria->accion = 'DESINCORPORAR';
+        }
+
+        $fases->user = auth()->user()->name;
+        $fases->save();
+
+        $Auditoria->save();
+
+        if($fases->estatus == 'ACTIVO') {
+            return redirect()
+                ->route('fases.index')
+                ->with('Deleted1', ' Informacion');
+        }
+
+        return redirect()
+            ->route('fases.index')
+            ->with('Deleted', ' Informacion');
     }
 }
