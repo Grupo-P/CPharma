@@ -11,4 +11,13 @@ class RH_Fase extends Model {
      * @var string
      */
     protected $table = 'rh_fases';
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+    	'nombre_fase'
+    ];
 }
