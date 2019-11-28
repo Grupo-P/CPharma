@@ -1,6 +1,6 @@
 @extends('layouts.model')
 
-@section('title', 'Crear candidato')
+@section('title', 'Crear fase')
 
 @section('content')
   <!-- Modal Guardar -->
@@ -19,7 +19,7 @@
           </div>
           <div class="modal-body">
             <h4 class="h6">
-              El candidato no fue almacenado
+              El fase no fue almacenado
             </h4>
           </div>
           <div class="modal-footer">
@@ -46,7 +46,7 @@
           </div>
           <div class="modal-body">
             <h4 class="h6">
-              El candidato no fue almacenado, la cédula ya esta registrada
+              El fase no fue almacenado, la cédula ya esta registrada
             </h4>
           </div>
           <div class="modal-footer">
@@ -73,7 +73,7 @@
           </div>
           <div class="modal-body">
             <h4 class="h6">
-              El candidato no fue almacenado, el correo ya esta registrado
+              El fase no fue almacenado, el correo ya esta registrado
             </h4>
           </div>
           <div class="modal-footer">
@@ -85,11 +85,11 @@
   @endif
 
   <h1 class="h5 text-info">
-    <i class="fas fa-plus"></i>&nbsp;Agregar candidato
+    <i class="fas fa-plus"></i>&nbsp;Agregar fase
   </h1>
   <hr class="row align-items-start col-12">
 
-  <form action="/candidatos/" method="POST" style="display: inline;">  
+  <form action="/fases/" method="POST" style="display: inline;">  
     @csrf
     <button type="submit" name="Regresar" role="button" class="btn btn-outline-info btn-sm"data-placement="top">
       <i class="fa fa-reply">&nbsp;Regresar</i>
@@ -98,7 +98,7 @@
 
   <br/><br/>
 
-  {!! Form::open(['route' => 'candidatos.store', 'method' => 'POST', 'id' => 'crear_candidato']) !!}
+  {!! Form::open(['route' => 'fases.store', 'method' => 'POST', 'id' => 'crear_fase']) !!}
     <fieldset>
       <table class="table table-borderless table-striped">
         <thead class="thead-dark">
@@ -201,7 +201,7 @@
 
           <tr>
             <th scope="row">{!! Form::label('experiencia_laboral', 'Experiencia laboral') !!}</th>
-            <td>{!! Form::textarea('experiencia_laboral', null, [ 'class' => 'form-control', 'placeholder' => 'Experiencia laboral previa del candidato', 'rows' => '3']) !!}</td>
+            <td>{!! Form::textarea('experiencia_laboral', null, [ 'class' => 'form-control', 'placeholder' => 'Experiencia laboral previa del fase', 'rows' => '3']) !!}</td>
           </tr>
 
           <tr>
@@ -211,7 +211,7 @@
 
           <tr>
             <th scope="row">{!! Form::label('observaciones', 'Observaciones') !!}</th>
-            <td>{!! Form::textarea('observaciones', null, [ 'class' => 'form-control', 'placeholder' => 'Detalles importantes del candidato', 'rows' => '3']) !!}</td>
+            <td>{!! Form::textarea('observaciones', null, [ 'class' => 'form-control', 'placeholder' => 'Detalles importantes del fase', 'rows' => '3']) !!}</td>
           </tr>
         </tbody>
       </table>
@@ -230,7 +230,7 @@
 
       //Objetos DOM JQuery
       var enviar = $('#enviar');
-      var crear_candidato = $('#crear_candidato');
+      var crear_fase = $('#crear_fase');
 
       enviar.click(function() {
 
@@ -242,7 +242,7 @@
 
       });
 
-      crear_candidato.submit(function(e) {
+      crear_fase.submit(function(e) {
 
         if((telefono_celular.value == '') && (telefono_habitacion.value == '')) {
           e.preventDefault();
