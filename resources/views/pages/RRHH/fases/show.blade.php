@@ -28,63 +28,8 @@
 
     <tbody>
       <tr>
-        <th scope="row">Nombres</th>
-        <td>{{$fases->nombres}}</td>
-      </tr>
-
-      <tr>
-        <th scope="row">Apellidos</th>
-        <td>{{$fases->apellidos}}</td>
-      </tr>
-
-      <tr>
-        <th scope="row">Cédula</th>
-        <td>{{$fases->cedula}}</td>
-      </tr>
-
-      <tr>
-        <th scope="row">Teléfono celular</th>
-        <td>{{$fases->telefono_celular}}</td>
-      </tr>
-
-      <tr>
-        <th scope="row">Teléfono de habitación</th>
-        <td>{{$fases->telefono_habitacion}}</td>
-      </tr>
-
-      <tr>
-        <th scope="row">Correo</th>
-        <td>{{$fases->correo}}</td>
-      </tr>
-
-      <tr>
-        <th scope="row">Como nos contactó</th>
-        <td>{{$fases->como_nos_contacto}}</td>
-      </tr>
-
-      <tr>
-        <th scope="row">Tipo de relación</th>
-        <td>{{$fases->tipo_relacion}}</td>
-      </tr>
-
-      <tr>
-        <th scope="row">Relaciones laborales</th>
-        <td>{{$fases->relaciones_laborales}}</td>
-      </tr>
-
-      <tr>
-        <th scope="row">Dirección</th>
-        <td>{{$fases->direccion}}</td>
-      </tr>
-
-      <tr>
-        <th scope="row">Experiencia laboral</th>
-        <td>{{$fases->experiencia_laboral}}</td>
-      </tr>
-
-      <tr>
-        <th scope="row">Observaciones</th>
-        <td>{{$fases->observaciones}}</td>
+        <th scope="row">Nombre de la fase</th>
+        <td>{{$fases->nombre_fase}}</td>
       </tr>
 
       <tr>
