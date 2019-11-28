@@ -104,7 +104,26 @@ class RH_FaseController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id) {
-        
+        try {
+            $fases = RH_Fase::find($id);
+            $fases->fill($request->all());
+            $fases->user = auth()->user()->name;
+            $fases->save();
+
+            $Auditoria = new Auditoria();
+            $Auditoria->accion = 'EDITAR';
+            $Auditoria->tabla = 'RH_FASES';
+            $Auditoria->registro = $fases->nombre_fase;
+            $Auditoria->user = auth()->user()->name;
+            $Auditoria->save();
+
+            return redirect()
+                ->route('fases.index')
+                ->with('Updated', ' Informacion');
+        }
+        catch(\Illuminate\Database\QueryException $e) {
+            return back()->with('Error', ' Error');
+        }
     }
 
     /**
