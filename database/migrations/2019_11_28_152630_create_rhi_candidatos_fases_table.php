@@ -13,6 +13,9 @@ class CreateRhiCandidatosFasesTable extends Migration {
     public function up() {
         Schema::create('rhi_candidatos_fases', function (Blueprint $table) {
             $table->increments('id');
+            $table->unsignedInteger('rh_candidatos_id');
+            $table->unsignedInteger('rh_fases_id');
+            $table->string('user');
             $table->timestamps();
         });
     }
