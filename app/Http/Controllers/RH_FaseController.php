@@ -92,7 +92,8 @@ class RH_FaseController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function edit($id) {
-        //
+        $fases = RH_Fase::find($id);
+        return view('pages.RRHH.fases.edit', compact('fases'));
     }
 
     /**
