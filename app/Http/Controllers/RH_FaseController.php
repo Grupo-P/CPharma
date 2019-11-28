@@ -43,7 +43,27 @@ class RH_FaseController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request) {
-        //
+        try {
+            $fases = new RH_Fase();
+            $fases->nombre_fase = $request->input('nombre_fase');
+            $fases->estatus = 'ACTIVO';
+            $fases->user = auth()->user()->name;
+            $fases->save();
+
+            $Auditoria = new Auditoria();
+            $Auditoria->accion = 'CREAR';
+            $Auditoria->tabla = 'RH_FASES';
+            $Auditoria->registro = $request->input('nombre_fase');
+            $Auditoria->user = auth()->user()->name;
+            $Auditoria->save();
+
+            return redirect()
+                ->route('fases.index')
+                ->with('Saved', ' Informacion');
+        }
+        catch(\Illuminate\Database\QueryException $e) {
+            return back()->with('Error', ' Error');
+        }
     }
 
     /**
