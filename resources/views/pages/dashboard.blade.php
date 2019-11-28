@@ -878,29 +878,8 @@
       </div>    
     </div>
 
-    <div class="card border-secondary mb-3" style="width: 14rem;">
+    <div class="card border-secondary mb-3" style="width: 14rem;">      
       <div class="card-body text-left bg-secondary">
-        <h2 class="card-title">
-          <span class="card-text text-white">
-            <i class="far fa-address-card"></i>
-            <?php
-            echo ''.$empresaReferencias;
-          ?>            
-          </span>
-        </h2>
-        <p class="card-text text-white">
-        <?php 
-          echo 'Empresas de referencias laborales registradas';
-        ?>
-        </p>
-      </div>
-      <div class="card-footer bg-transparent border-secondary text-right">
-        <a href="/empresaReferencias" class="btn btn-outline-secondary btn-sm">Visualizar</a>
-      </div>    
-    </div>
-
-    <div class="card border-dark mb-3" style="width: 14rem;">      
-      <div class="card-body text-left bg-dark">
         <h3 class="card-title">
           <span class="card-text text-white">
             <i class="fas fa-vials"></i>
@@ -915,8 +894,29 @@
         ?>
         </p>
       </div>
+      <div class="card-footer bg-transparent border-secondary text-right">
+        <a href="/laboratorio" class="btn btn-outline-secondary btn-sm">Visualizar</a>
+      </div>    
+    </div>
+
+    <div class="card border-dark mb-3" style="width: 14rem;">
+      <div class="card-body text-left bg-dark">
+        <h2 class="card-title">
+          <span class="card-text text-white">
+            <i class="far fa-address-card"></i>
+            <?php
+            echo ''.$empresaReferencias;
+          ?>            
+          </span>
+        </h2>
+        <p class="card-text text-white">
+        <?php 
+          echo 'Empresas de referencias laborales registradas';
+        ?>
+        </p>
+      </div>
       <div class="card-footer bg-transparent border-dark text-right">
-        <a href="/laboratorio" class="btn btn-outline-dark btn-sm">Visualizar</a>
+        <a href="/empresaReferencias" class="btn btn-outline-dark btn-sm">Visualizar</a>
       </div>    
     </div>
   </div>
