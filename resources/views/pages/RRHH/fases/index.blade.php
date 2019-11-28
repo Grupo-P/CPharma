@@ -105,7 +105,7 @@
   @endif
 
   <h1 class="h5 text-info">
-    <i class="fas fa-user-check"></i>&nbsp;Fases
+    <i class="fas fa-sort-amount-up-alt"></i>&nbsp;Fases
   </h1>
   <hr class="row align-items-start col-12">
 
@@ -136,13 +136,10 @@
     <thead class="thead-dark">
       <tr>
         <th scope="col" class="stickyCP">#</th>
-        <th scope="col" class="stickyCP">Nombres</th>
-        <th scope="col" class="stickyCP">Apellidos</th>
-        <th scope="col" class="stickyCP">Cédula</th>
-        <th scope="col" class="stickyCP">Teléfono</th>
+        <th scope="col" class="stickyCP">Nombre de la fase</th>
+        <th scope="col" class="stickyCP">Creada por</th>
         <th scope="col" class="stickyCP">Estatus</th>
         <th scope="col" class="stickyCP">Acciones</th>
-        <th scope="col" class="stickyCP">Próxima Fase</th>
       </tr>
     </thead>
 
@@ -150,24 +147,8 @@
       @foreach($fases as $fase)
         <tr>
           <th>{{$fase->id}}</th>
-          <td>{{$fase->nombres}}</td>
-          <td>{{$fase->apellidos}}</td>
-          <td>{{$fase->cedula}}</td>
-            
-          <?php if($fase->telefono_celular == '') { ?>
-            <td>{{$fase->telefono_habitacion}}</td>
-          <?php 
-            } else if($fase->telefono_habitacion == '') { 
-          ?>
-            <td>{{$fase->telefono_celular}}</td>
-          <?php 
-            } else {
-          ?>
-            <td>{{$fase->telefono_celular}}</td>
-          <?php
-            }
-          ?>
-
+          <td>{{$fase->nombre_fase}}</td>
+          <td>{{$fase->user}}</td>
           <td>{{$fase->estatus}}</td>
 
           <!-- ***************** VALIDACION DE ROLES ***************** -->
@@ -175,7 +156,7 @@
           <?php
             if(Auth::user()->role == 'MASTER' || Auth::user()->role == 'DEVELOPER') {
 
-              if($fase->estatus != 'RECHAZADO') {
+              if($fase->estatus == 'ACTIVO') {
           ?>
             <a href="/fases/{{$fase->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
               <i class="far fa-eye"></i>
@@ -194,7 +175,7 @@
             </form>
 
           <?php
-            } else if($fase->estatus == 'RECHAZADO') {
+            } else if($fase->estatus == 'INACTIVO') {
           ?>
             <form action="/fases/{{$fase->id}}" method="POST" style="display: inline;">
               @method('DELETE')
@@ -222,42 +203,6 @@
             </a>
           <?php
             }
-          ?>
-          </td>
-
-          <td>
-          <?php
-            switch($fase->estatus) {
-              case 'POSTULADO':
-          ?>
-            <form action="/entrevistas/create" method="GET">
-              <input type="hidden" name="faseId" value="{{$fase->id}}">
-
-              <button type="submit" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="bottom" title="Ir a la fase">
-                <i class="fas fa-users"></i>&nbsp;Entrevista
-              </button>
-            </form>
-          <?php
-              break;
-
-              case 'ENTREVISTADO':
-          ?>
-            <form action="/pruebas/create" method="GET">
-              <input type="hidden" name="faseId" value="{{$fase->id}}">
-
-              <button type="submit" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="bottom" title="Ir a la fase" disabled>
-                <i class="fas fa-tasks"></i>&nbsp;Prueba
-              </button>
-            </form>
-          <?php
-              break;
-          ?>
-
-          <?php
-              default: 
-                echo "-";
-              break;
-            }//switch
           ?>
           </td>
         </tr>
