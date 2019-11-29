@@ -17,7 +17,7 @@
 	include(app_path().'\functions\config.php');
 	include(app_path().'\functions\querys.php');
 	include(app_path().'\functions\funciones.php');
-	include(app_path().'\functions\reportes.php');
+	//include(app_path().'\functions\reportes.php');
 
 	$connCPharma = ConectarXampp();
 	$sqlCPharma = "SELECT * FROM captura_caida order by fecha_captura desc";
