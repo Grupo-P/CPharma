@@ -1447,7 +1447,7 @@
 
 		while($FFinalPivote!=$FFinal){
 
-			$sql = QCuentaVenta($IdArticulo,$FInicial,$FFinalPivote);
+			$sql = QG_CuentaVenta($IdArticulo,$FInicial,$FFinalPivote);
 			$result = sqlsrv_query($conn,$sql);
 			$row = sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC);
 			$VecesVendida = $row["Cuenta"];
@@ -1527,6 +1527,83 @@
 		$TotalRegistros = $row["TotalRegistros"];
 
 		$sql1 = QGuardarCapturaCaida($TotalRegistros,$FechaCaptura,$date);
+		mysqli_query($connCPharma,$sql1);
+	}
+	/**********************************************************************************/
+	/*
+		TITULO: FG_Validar_Etiquetas
+		PARAMETROS: [$conn,$IdArticulo,$IdProveedor] conecion, id del articulo, id del provedor
+		FUNCION: determinar si un prducto es unico
+		RETORNO: SI o NO segun sea el caso
+	 */
+	function FG_Validar_Etiquetas() {
+			$SedeConnection = MiUbicacion();
+	    $conn = FG_Conectar_Smartpharma($SedeConnection);
+	    $connCPharma = FG_Conectar_CPharma();
+
+	    $sql = QG_Existencia_Actual();
+	    $result = sqlsrv_query($conn,$sql);
+
+	    $FechaCaptura = new DateTime("now");
+		$FechaCaptura = $FechaCaptura->format('Y-m-d');
+		$date = '';
+	    
+	    while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
+	        $IdArticulo = $row["IdArticulo"];
+	        $CodigoInterno = $row["CodigoInterno"];
+	        $Descripcion=$row["Descripcion"];
+	 
+	        $sqlCPharma = QG_Etiqueta_Articulo($IdArticulo);
+	        $ResultCPharma = mysqli_query($connCPharma,$sqlCPharma);
+	        $RowCPharma = mysqli_fetch_assoc($ResultCPharma);
+	        $IdArticuloCPharma = $RowCPharma['id_articulo'];
+
+	        if(is_null($IdArticuloCPharma)){
+
+	            $condicion = 'NO CLASIFICADO';
+	            $clasificacion = 'PENDIENTE';
+	            $estatus = 'ACTIVO';
+	            $user = 'SYSTEM';
+	            $date = new DateTime('now');
+	            $date = $date->format("Y-m-d H:i:s");
+
+	            $sqlCP = QG_Guardar_Etiqueta_Articulo($IdArticulo,$CodigoInterno,$Descripcion,$condicion,$clasificacion,$estatus,$user,$date);
+	            mysqli_query($connCPharma,$sqlCP);
+	        }
+	    }
+	    FG_Guardar_Captura_Etiqueta($connCPharma,$FechaCaptura,$date);
+		$sqlCC = QG_Validar_Captura_Etiqueta($FechaCaptura);
+		$resultCC = mysqli_query($connCPharma,$sqlCC);
+		$rowCC = mysqli_fetch_assoc($resultCC);
+		$CuentaCaptura = $rowCC["CuentaCaptura"];
+
+		if($CuentaCaptura == 0){
+			$sqlB = QG_Borrar_Captura_Etiqueta($FechaCaptura);
+			mysqli_query($connCPharma,$sqlB);			
+			mysqli_close($connCPharma);
+			sqlsrv_close($conn);
+			FG_Validar_Etiquetas();
+		}
+		else{
+			mysqli_close($connCPharma);
+			sqlsrv_close($conn);
+		}
+	}
+	/**********************************************************************************/
+	/*
+		TITULO: FG_Guardar_Captura_Etiqueta
+		PARAMETROS: [$FechaCaptura] El dia de hoy
+					[$date] valor para creacion y actualizacion
+		FUNCION: crea una conexion con la base de datos cpharma e ingresa datos
+		RETORNO: no aplica
+ 	*/
+	function FG_Guardar_Captura_Etiqueta($connCPharma,$FechaCaptura,$date) {
+		$sql = QG_Captura_Etiqueta($FechaCaptura);
+		$result = mysqli_query($connCPharma,$sql);
+		$row = mysqli_fetch_assoc($result);
+		$TotalRegistros = $row["TotalRegistros"];
+
+		$sql1 = QG_Guardar_Captura_Etiqueta($TotalRegistros,$FechaCaptura,$date);
 		mysqli_query($connCPharma,$sql1);
 	}
 ?>

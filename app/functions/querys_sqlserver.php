@@ -949,4 +949,60 @@
     return $sql;
   }
   /**********************************************************************************/
+  /*
+    TITULO: QG_Existencia_Actual
+    PARAMETROS: no aplica
+    FUNCION: busca los articulos en existencia hoy
+    RETORNO: no aplica
+  */
+  function QG_Existencia_Actual() {
+    $sql = "
+      SELECT
+      InvArticulo.Id AS IdArticulo,
+      InvArticulo.CodigoArticulo AS CodigoInterno,
+      InvArticulo.Descripcion
+      FROM InvArticulo
+      INNER JOIN InvLoteAlmacen ON InvArticulo.Id=InvLoteAlmacen.InvArticuloId
+      WHERE InvLoteAlmacen.Existencia > 0
+      AND (InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
+      GROUP BY InvArticulo.Id, InvArticulo.CodigoArticulo, InvArticulo.Descripcion, InvArticulo.FinConceptoImptoIdCompra
+      ORDER BY InvArticulo.Id ASC
+    ";
+    return $sql;
+  }
+  /**********************************************************************************/
+  /*
+    TITULO: QG_Etiqueta_Articulo
+    PARAMETROS: [$IdArticulo] Id del articulo a buscar
+    FUNCION: regresa los datos del articulo
+    RETORNO: no aplica
+  */
+  function QG_Etiqueta_Articulo($IdArticulo) {
+    $sql = "
+      SELECT * FROM etiquetas
+      WHERE etiquetas.id_articulo = '$IdArticulo'
+    ";
+    return $sql;
+  }
+  /**********************************************************************************/
+  /*
+    TITULO: QG_CuentaVenta
+    PARAMETROS: $IdArticulo,$FInicial,$FFinal
+    FUNCION: cuenta la cantidad de veces que se vendio un producto en una fecha
+    RETORNO: no aplica
+    //
+   */
+  function QG_CuentaVenta($IdArticulo,$FInicial,$FFinal) {
+    $sql = "
+      SELECT
+      COUNT(*) AS Cuenta
+      FROM VenFacturaDetalle
+      INNER JOIN InvArticulo ON InvArticulo.Id = VenFacturaDetalle.InvArticuloId
+      INNER JOIN VenFactura ON VenFactura.Id = VenFacturaDetalle.VenFacturaId
+      WHERE
+      (VenFactura.FechaDocumento > '$FInicial' AND VenFactura.FechaDocumento < '$FFinal')
+      AND (InvArticulo.Id = '$IdArticulo')
+    ";
+    return $sql;
+  }
 ?>

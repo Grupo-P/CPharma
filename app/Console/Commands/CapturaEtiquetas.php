@@ -39,11 +39,12 @@ class CapturaEtiquetas extends Command
     public function handle()
     {
         include(app_path().'\functions\config.php');
-        include(app_path().'\functions\querys.php');
-        include(app_path().'\functions\funciones.php');
+        include(app_path().'\functions\functions.php');
+        include(app_path().'\functions\querys_mysql.php');
+        include(app_path().'\functions\querys_sqlserver.php');
 
         FG_Validar_Etiquetas();
-
+ 
         $Auditoria = new Auditoria();
         $Auditoria->accion = 'CAPTURAR';
         $Auditoria->tabla = 'ETIQUETAS';
