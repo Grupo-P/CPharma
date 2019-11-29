@@ -351,4 +351,20 @@
 		$sql = "DELETE FROM captura_etiqueta WHERE fecha_captura = '$FechaCaptura'";
 		return $sql;
 	}
+	/**********************************************************************************/
+	/*
+    TITULO: QG_DiasCero_PrecioAyer
+    PARAMETROS: [$IdArticulo] $IdArticulo del articulo a buscar
+    FUNCION: Query que genera el detalle del articulo solicitado
+    RETORNO: Detalle del articulo
+   */
+  	function QG_DiasCero_PrecioAyer($IdArticulo,$FechaCaptura) {
+			$sql = "
+				SELECT precio
+				FROM dias_ceros 
+				WHERE dias_ceros.id_articulo = '$IdArticulo' 
+				AND `fecha_captura` = '$FechaCaptura'
+			";
+			return $sql;
+		}
 ?>
