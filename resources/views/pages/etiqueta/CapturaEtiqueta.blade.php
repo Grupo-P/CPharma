@@ -15,11 +15,11 @@
 
 <?php
 	include(app_path().'\functions\config.php');
-	include(app_path().'\functions\querys.php');
-	include(app_path().'\functions\funciones.php');
-	//include(app_path().'\functions\reportes.php');
+  include(app_path().'\functions\functions.php');
+  include(app_path().'\functions\querys_mysql.php');
+  include(app_path().'\functions\querys_sqlserver.php');
 
-	$connCPharma = ConectarXampp();
+	$connCPharma = FG_Conectar_CPharma();
 	$sqlCPharma = "SELECT * FROM captura_etiqueta order by fecha_captura desc";
 	$result = mysqli_query($connCPharma,$sqlCPharma);
 ?>
