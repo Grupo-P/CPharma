@@ -186,8 +186,8 @@
             <?php
               }
             } else if(Auth::user()->role == 'ANALISTA') {
-            ?>
-
+              if($examen->estatus == 'ACTIVO') {
+          ?>
             <a href="/examenesm/{{$examen->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
               <i class="far fa-eye"></i>
             </a>
@@ -196,8 +196,25 @@
               <i class="fas fa-edit"></i>
             </a>
 
+            <form action="/examenesm/{{$examen->id}}" method="POST" style="display: inline;">
+              @method('DELETE')
+              @csrf
+              <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Desincorporar"><i class="fa fa-reply"></i></button>
+            </form>
             <?php
-              } else if(Auth::user()->role == 'USUARIO') {
+              }
+              else if($examen->estatus == 'INACTIVO') {
+            ?>
+
+            <form action="/examenesm/{{$examen->id}}" method="POST" style="display: inline;">
+              @method('DELETE')
+              @csrf
+              <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Reincorporar"><i class="fa fa-share"></i></button>
+            </form>
+
+            <?php
+              }
+            } else if(Auth::user()->role == 'USUARIO') {
             ?>
 
             <a href="/examenesm/{{$examen->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
