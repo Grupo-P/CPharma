@@ -61,7 +61,7 @@ class RH_ExamenesMController extends Controller {
             $Auditoria->save();
 
             return redirect()
-                ->route('examenesm.index')
+                ->route('candidatos.index')
                 ->with('Saved', ' Informacion');
         }
         catch(\Illuminate\Database\QueryException $e) {
