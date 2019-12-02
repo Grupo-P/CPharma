@@ -158,7 +158,7 @@
           <?php
             if(Auth::user()->role == 'MASTER' || Auth::user()->role == 'DEVELOPER') {
 
-              if($contacto->estatus != 'INACTIVO') {
+              if($contacto->estatus == 'ACTIVO') {
           ?>
             <a href="/contactos/{{$contacto->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
               <i class="far fa-eye"></i>
@@ -188,7 +188,9 @@
             </form>
           <?php
             }
-          } else if(Auth::user()->role == 'ANALISTA') {
+          } 
+          else if(Auth::user()->role == 'ANALISTA') {
+            if($contacto->estatus == 'ACTIVO') {
           ?>
             <a href="/contactos/{{$contacto->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
               <i class="far fa-eye"></i>
@@ -197,8 +199,28 @@
             <a href="/contactos/{{$contacto->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
               <i class="fas fa-edit"></i>
             </a>
+
+            <form action="/contactos/{{$contacto->id}}" method="POST" style="display: inline;">
+              @method('DELETE')
+              @csrf
+              <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Desincorporar">
+                <i class="fa fa-reply"></i>
+              </button>
+            </form>
+
           <?php
-            } else if(Auth::user()->role == 'USUARIO') {
+            } else if($contacto->estatus == 'INACTIVO') {
+          ?>
+            <form action="/contactos/{{$contacto->id}}" method="POST" style="display: inline;">
+              @method('DELETE')
+              @csrf
+              <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Reincorporar">
+                <i class="fa fa-share"></i>
+              </button>
+            </form>
+          <?php
+            }
+          } else if(Auth::user()->role == 'USUARIO') {
           ?>
             <a href="/contactos/{{$contacto->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
               <i class="far fa-eye"></i>
