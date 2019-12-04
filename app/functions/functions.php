@@ -1203,9 +1203,9 @@
 	/**********************************************************************************/
 	/*
 		TITULO: FG_Prouctos_EnCaida
-		PARAMETROS: no aplica
 		FUNCION: Captura y almacena la data para productos en caida
 		RETORNO: no aplica
+		DESAROLLADO POR: SERGIO COVA
 	 */
 	function FG_Prouctos_EnCaida() {
 		$SedeConnection = MiUbicacion();
@@ -1358,8 +1358,7 @@
 							//echo'----Filtro 5 * Decrece su existencia: SI ----';
 							/*COMANDOS PARA TEST*/
 
-							$Precio = FG_Calculo_Precio_Alfa($Existencia,$ExistenciaAlmacen1,$ExistenciaAlmacen2,$IsTroquelado,$UtilidadArticulo,$UtilidadCategoria,$TroquelAlmacen1,$PrecioCompraBrutoAlmacen1,$TroquelAlmacen2,
-    $PrecioCompraBrutoAlmacen2,$PrecioCompraBruto,$IsIVA,$CondicionExistencia);
+							$Precio = FG_Calculo_Precio_Alfa($Existencia,$ExistenciaAlmacen1,$ExistenciaAlmacen2,$IsTroquelado,$UtilidadArticulo,$UtilidadCategoria,$TroquelAlmacen1,$PrecioCompraBrutoAlmacen1,$TroquelAlmacen2,$PrecioCompraBrutoAlmacen2,$PrecioCompraBruto,$IsIVA,$CondicionExistencia);
 
 							$Dia1 = array_pop($ExistenciaDecreciente);
 							$Dia2 = array_pop($ExistenciaDecreciente);
