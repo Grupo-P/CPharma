@@ -949,4 +949,229 @@
     return $sql;
   }
   /**********************************************************************************/
+  /*
+    TITULO: QG_Existencia_Actual
+    PARAMETROS: no aplica
+    FUNCION: busca los articulos en existencia hoy
+    RETORNO: no aplica
+  */
+  function QG_Existencia_Actual() {
+    $sql = "
+      SELECT
+      InvArticulo.Id AS IdArticulo,
+      InvArticulo.CodigoArticulo AS CodigoInterno,
+      InvArticulo.Descripcion
+      FROM InvArticulo
+      INNER JOIN InvLoteAlmacen ON InvArticulo.Id=InvLoteAlmacen.InvArticuloId
+      WHERE InvLoteAlmacen.Existencia > 0
+      AND (InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
+      GROUP BY InvArticulo.Id, InvArticulo.CodigoArticulo, InvArticulo.Descripcion, InvArticulo.FinConceptoImptoIdCompra
+      ORDER BY InvArticulo.Id ASC
+    ";
+    return $sql;
+  }
+  /**********************************************************************************/
+  /*
+    TITULO: QG_Etiqueta_Articulo
+    PARAMETROS: [$IdArticulo] Id del articulo a buscar
+    FUNCION: regresa los datos del articulo
+    RETORNO: no aplica
+  */
+  function QG_Etiqueta_Articulo($IdArticulo) {
+    $sql = "
+      SELECT * FROM etiquetas
+      WHERE etiquetas.id_articulo = '$IdArticulo'
+    ";
+    return $sql;
+  }
+  /**********************************************************************************/
+  /*
+    TITULO: QG_CuentaVenta
+    PARAMETROS: $IdArticulo,$FInicial,$FFinal
+    FUNCION: cuenta la cantidad de veces que se vendio un producto en una fecha
+    RETORNO: no aplica
+    //
+   */
+  function QG_CuentaVenta($IdArticulo,$FInicial,$FFinal) {
+    $sql = "
+      SELECT
+      COUNT(*) AS Cuenta
+      FROM VenFacturaDetalle
+      INNER JOIN InvArticulo ON InvArticulo.Id = VenFacturaDetalle.InvArticuloId
+      INNER JOIN VenFactura ON VenFactura.Id = VenFacturaDetalle.VenFacturaId
+      WHERE
+      (VenFactura.FechaDocumento > '$FInicial' AND VenFactura.FechaDocumento < '$FFinal')
+      AND (InvArticulo.Id = '$IdArticulo')
+    ";
+    return $sql;
+  }
+  /**********************************************************************************/
+  /*
+    TITULO: QG_CP_Etiqueta_C1
+    PARAMETROS: 
+    FUNCION: 
+    RETORNO: 
+    */
+    function QG_CP_Etiqueta_C1($FHoy,$FManana){
+      $sql = " 
+      SELECT 
+      InvMovimiento.InvArticuloId AS IdArticulo,
+      --Dolarizado (0 NO es dolarizado, Id Articulo SI es dolarizado)
+            (ISNULL((SELECT
+            InvArticuloAtributo.InvArticuloId
+            FROM InvArticuloAtributo 
+            WHERE InvArticuloAtributo.InvAtributoId = 
+              (SELECT InvAtributo.Id
+              FROM InvAtributo 
+              WHERE 
+              InvAtributo.Descripcion = 'Dolarizados'
+              OR  InvAtributo.Descripcion = 'Giordany'
+              OR  InvAtributo.Descripcion = 'giordany') 
+            AND InvArticuloAtributo.InvArticuloId = InvMovimiento.InvArticuloId),CAST(0 AS INT))) AS Dolarizado
+      --Tabla Principal and Tabla Temporal
+      INTO CP_Etiqueta_C1
+      FROM InvMovimiento
+      --Condicionales
+      WHERE(
+        (InvMovimiento.InvCausaId<>3)
+        AND (InvMovimiento.Auditoria_FechaActualizacion > '$FHoy')
+        AND (InvMovimiento.Auditoria_FechaActualizacion < '$FManana')
+        AND((SELECT (ROUND(CAST(SUM (InvLoteAlmacen.Existencia) AS DECIMAL(38,0)),2,0))
+            FROM InvLoteAlmacen
+            WHERE(InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
+            AND (InvLoteAlmacen.InvArticuloId = InvMovimiento.InvArticuloId)) > 0)
+      )
+      --Ordenamiento
+      GROUP BY InvMovimiento.InvArticuloId
+      ORDER BY InvMovimiento.InvArticuloId ASC
+      ";
+    return $sql;
+    }
+     /**********************************************************************************/
+    /*
+    TITULO: QG_CP_Etiqueta_C2
+    PARAMETROS: 
+    FUNCION: 
+    RETORNO: 
+    */
+    function QG_CP_Etiqueta_C2($FHoy,$FManana){
+      $sql = " 
+      SELECT
+      VenCondicionVenta_VenCondicionVentaArticulo.InvArticuloId AS IdArticulo,
+      --Dolarizado (0 NO es dolarizado, Id Articulo SI es dolarizado)
+            (ISNULL((SELECT
+            InvArticuloAtributo.InvArticuloId
+            FROM InvArticuloAtributo 
+            WHERE InvArticuloAtributo.InvAtributoId = 
+              (SELECT InvAtributo.Id
+              FROM InvAtributo 
+              WHERE 
+              InvAtributo.Descripcion = 'Dolarizados'
+              OR  InvAtributo.Descripcion = 'Giordany'
+              OR  InvAtributo.Descripcion = 'giordany') 
+            AND InvArticuloAtributo.InvArticuloId = VenCondicionVenta_VenCondicionVentaArticulo.InvArticuloId),CAST(0 AS INT))) AS Dolarizado
+      --Tabla Principal and Tabla Temporal
+      INTO CP_Etiqueta_C2
+      FROM VenCondicionVenta
+      --Joins
+      INNER JOIN VenCondicionVenta_VenCondicionVentaArticulo ON VenCondicionVenta_VenCondicionVentaArticulo.Id = VenCondicionVenta.Id
+      --Condicionales
+      WHERE(
+        (VenCondicionVenta.Auditoria_FechaActualizacion > '$FHoy')
+        AND (VenCondicionVenta.Auditoria_FechaActualizacion < '$FManana')
+        AND((SELECT (ROUND(CAST(SUM (InvLoteAlmacen.Existencia) AS DECIMAL(38,0)),2,0))
+            FROM InvLoteAlmacen
+            WHERE(InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
+            AND (InvLoteAlmacen.InvArticuloId = VenCondicionVenta_VenCondicionVentaArticulo.InvArticuloId)) > 0)
+      )
+      UNION
+      SELECT CP_Etiqueta_C1.IdArticulo,CP_Etiqueta_C1.Dolarizado
+      FROM CP_Etiqueta_C1
+      ORDER BY IdArticulo
+      ";
+    return $sql;
+    }
+    /**********************************************************************************/
+    /*
+    TITULO: QG_CP_Etiqueta_C3
+    PARAMETROS: 
+    FUNCION: 
+    RETORNO: 
+    */
+    function QG_CP_Etiqueta_C3($FHoy,$FManana){
+      $sql = " 
+      SELECT
+      InvLoteAlmacen.InvArticuloId AS IdArticulo,
+      --Dolarizado (0 NO es dolarizado, Id Articulo SI es dolarizado)
+            (ISNULL((SELECT
+            InvArticuloAtributo.InvArticuloId
+            FROM InvArticuloAtributo 
+            WHERE InvArticuloAtributo.InvAtributoId = 
+              (SELECT InvAtributo.Id
+              FROM InvAtributo 
+              WHERE 
+              InvAtributo.Descripcion = 'Dolarizados'
+              OR  InvAtributo.Descripcion = 'Giordany'
+              OR  InvAtributo.Descripcion = 'giordany') 
+            AND InvArticuloAtributo.InvArticuloId = InvLoteAlmacen.InvArticuloId),CAST(0 AS INT))) AS Dolarizado
+      --Tabla Principal and Tabla Temporal
+      INTO CP_Etiqueta_C3
+      FROM InvLoteAlmacen
+      --Condicionales
+      WHERE(
+        (InvLoteAlmacen.Auditoria_FechaActualizacion > '$FHoy')
+        AND (InvLoteAlmacen.Auditoria_FechaActualizacion < '$FManana')
+        AND(InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
+        AND (InvLoteAlmacen.Existencia = 0) 
+      )
+      UNION
+      SELECT CP_Etiqueta_C2.IdArticulo,CP_Etiqueta_C2.Dolarizado
+      FROM CP_Etiqueta_C2
+      ORDER BY IdArticulo
+      ";
+    return $sql;
+    }
+    /**********************************************************************************/
+    /*
+    TITULO: QG_CP_Etiqueta_C4
+    PARAMETROS: 
+    FUNCION: 
+    RETORNO: 
+    */
+    function QG_CP_Etiqueta_C4($FHoy,$FManana){
+      $sql = " 
+      SELECT
+      InvLote.InvArticuloId AS IdArticulo,
+      --Dolarizado (0 NO es dolarizado, Id Articulo SI es dolarizado)
+            (ISNULL((SELECT
+            InvArticuloAtributo.InvArticuloId
+            FROM InvArticuloAtributo 
+            WHERE InvArticuloAtributo.InvAtributoId = 
+              (SELECT InvAtributo.Id
+              FROM InvAtributo 
+              WHERE 
+              InvAtributo.Descripcion = 'Dolarizados'
+              OR  InvAtributo.Descripcion = 'Giordany'
+              OR  InvAtributo.Descripcion = 'giordany') 
+            AND InvArticuloAtributo.InvArticuloId = InvLote.InvArticuloId),CAST(0 AS INT))) AS Dolarizado
+      --Tabla Prinipal and Tabla Temporal
+      INTO CP_Etiqueta_C4
+      FROM InvLote 
+      --Condicionales
+      WHERE(
+        (InvLote.Auditoria_FechaActualizacion > '$FHoy')
+        AND (InvLote.Auditoria_FechaActualizacion < '$FManana')
+        AND((SELECT (ROUND(CAST(SUM (InvLoteAlmacen.Existencia) AS DECIMAL(38,0)),2,0))
+            FROM InvLoteAlmacen
+            WHERE(InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
+            AND (InvLoteAlmacen.InvArticuloId = InvLote.InvArticuloId)) > 0)
+      )
+      UNION
+      SELECT CP_Etiqueta_C3.IdArticulo,CP_Etiqueta_C3.Dolarizado
+      FROM CP_Etiqueta_C3
+      ORDER BY IdArticulo
+      ";
+    return $sql;
+    }
+    /**********************************************************************************/
 ?>

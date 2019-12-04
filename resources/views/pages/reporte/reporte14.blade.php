@@ -101,7 +101,7 @@
     DESAROLLADO POR: SERGIO COVA
   */
   function R14_Productos_EnCaida($SedeConnection) {
-    $conn = FG_Conectar_Smartpharma('FTN');
+    $conn = FG_Conectar_Smartpharma($SedeConnection);
     $connCPharma = FG_Conectar_CPharma();
 
   /*INCIO PARA CALCULOS CON DIAS EN CERO*/

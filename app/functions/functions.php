@@ -1447,7 +1447,7 @@
 
 		while($FFinalPivote!=$FFinal){
 
-			$sql = QCuentaVenta($IdArticulo,$FInicial,$FFinalPivote);
+			$sql = QG_CuentaVenta($IdArticulo,$FInicial,$FFinalPivote);
 			$result = sqlsrv_query($conn,$sql);
 			$row = sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC);
 			$VecesVendida = $row["Cuenta"];
@@ -1528,5 +1528,880 @@
 
 		$sql1 = QGuardarCapturaCaida($TotalRegistros,$FechaCaptura,$date);
 		mysqli_query($connCPharma,$sql1);
+	}
+	/**********************************************************************************/
+	/*
+		TITULO: FG_Validar_Etiquetas
+		PARAMETROS: [$conn,$IdArticulo,$IdProveedor] conecion, id del articulo, id del provedor
+		FUNCION: determinar si un prducto es unico
+		RETORNO: SI o NO segun sea el caso
+	 */
+	function FG_Validar_Etiquetas() {
+			$SedeConnection = MiUbicacion();
+	    $conn = FG_Conectar_Smartpharma($SedeConnection);
+	    $connCPharma = FG_Conectar_CPharma();
+
+	    $sql = QG_Existencia_Actual();
+	    $result = sqlsrv_query($conn,$sql);
+
+	    $FechaCaptura = new DateTime("now");
+		$FechaCaptura = $FechaCaptura->format('Y-m-d');
+		$date = '';
+	    
+	    while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
+	        $IdArticulo = $row["IdArticulo"];
+	        $CodigoInterno = $row["CodigoInterno"];
+	        $Descripcion=$row["Descripcion"];
+	 
+	        $sqlCPharma = QG_Etiqueta_Articulo($IdArticulo);
+	        $ResultCPharma = mysqli_query($connCPharma,$sqlCPharma);
+	        $RowCPharma = mysqli_fetch_assoc($ResultCPharma);
+	        $IdArticuloCPharma = $RowCPharma['id_articulo'];
+
+	        if(is_null($IdArticuloCPharma)){
+
+	            $condicion = 'NO CLASIFICADO';
+	            $clasificacion = 'PENDIENTE';
+	            $estatus = 'ACTIVO';
+	            $user = 'SYSTEM';
+	            $date = new DateTime('now');
+	            $date = $date->format("Y-m-d H:i:s");
+
+	            $sqlCP = QG_Guardar_Etiqueta_Articulo($IdArticulo,$CodigoInterno,$Descripcion,$condicion,$clasificacion,$estatus,$user,$date);
+	            mysqli_query($connCPharma,$sqlCP);
+	        }
+	    }
+	    FG_Guardar_Captura_Etiqueta($connCPharma,$FechaCaptura,$date);
+		$sqlCC = QG_Validar_Captura_Etiqueta($FechaCaptura);
+		$resultCC = mysqli_query($connCPharma,$sqlCC);
+		$rowCC = mysqli_fetch_assoc($resultCC);
+		$CuentaCaptura = $rowCC["CuentaCaptura"];
+
+		if($CuentaCaptura == 0){
+			$sqlB = QG_Borrar_Captura_Etiqueta($FechaCaptura);
+			mysqli_query($connCPharma,$sqlB);			
+			mysqli_close($connCPharma);
+			sqlsrv_close($conn);
+			FG_Validar_Etiquetas();
+		}
+		else{
+			mysqli_close($connCPharma);
+			sqlsrv_close($conn);
+		}
+	}
+	/**********************************************************************************/
+	/*
+		TITULO: FG_Guardar_Captura_Etiqueta
+		PARAMETROS: [$FechaCaptura] El dia de hoy
+					[$date] valor para creacion y actualizacion
+		FUNCION: crea una conexion con la base de datos cpharma e ingresa datos
+		RETORNO: no aplica
+ 	*/
+	function FG_Guardar_Captura_Etiqueta($connCPharma,$FechaCaptura,$date) {
+		$sql = QG_Captura_Etiqueta($FechaCaptura);
+		$result = mysqli_query($connCPharma,$sql);
+		$row = mysqli_fetch_assoc($result);
+		$TotalRegistros = $row["TotalRegistros"];
+
+		$sql1 = QG_Guardar_Captura_Etiqueta($TotalRegistros,$FechaCaptura,$date);
+		mysqli_query($connCPharma,$sql1);
+	}
+	/**********************************************************************************/
+	/*
+		TITULO: FG_Generer_Etiquetas_Todo
+		PARAMETROS: [$clasificacion] Parametro que indica el tipo de clasificacion, solo puede recibir ETIQUETABLE o OBLIGATORIO ETIQUETAR
+					[$tipo] Parametro que indica la dolarizacion, solo pude recibir DOLARIZADO, NO DOLARIZADO o TODO
+		FUNCION: crea una conexion con la base de datos cpharma e ingresa datos
+		RETORNO: no aplica
+ 	*/
+	function FG_Generer_Etiquetas_Todo($clasificacion,$tipo) {
+		$SedeConnection = MiUbicacion();
+  	$conn = FG_Conectar_Smartpharma($SedeConnection);
+  	$connCPharma = FG_Conectar_CPharma();	
+
+		$CuentaCard = 0;
+		$CuentaEtiqueta = 0;
+
+		$result = $connCPharma->query("SELECT id_articulo FROM etiquetas WHERE clasificacion = '$clasificacion'");
+
+		while($row = $result->fetch_assoc()){
+			$IdArticulo = $row['id_articulo'];
+			$Dolarizado = FG_Producto_Dolarizado($conn,$IdArticulo);
+
+			if(($Dolarizado=='SI')&&($tipo=='DOLARIZADO')){
+
+				$sql2 = SQG_Detalle_Articulo($IdArticulo);
+				$result2 = sqlsrv_query($conn,$sql2);
+				$row2 = sqlsrv_fetch_array($result2,SQLSRV_FETCH_ASSOC);
+
+				$CodigoArticulo = $row2["CodigoInterno"];
+	      $CodigoBarra = $row2["CodigoBarra"];
+	      $Descripcion = FG_Limpiar_Texto($row2["Descripcion"]);
+	      $Existencia = $row2["Existencia"];
+		    $ExistenciaAlmacen1 = $row2["ExistenciaAlmacen1"];
+		    $ExistenciaAlmacen2 = $row2["ExistenciaAlmacen2"];
+		    $IsTroquelado = $row2["Troquelado"];
+		    $IsIVA = $row2["Impuesto"];
+		    $UtilidadArticulo = $row2["UtilidadArticulo"];
+		    $UtilidadCategoria = $row2["UtilidadCategoria"];
+		    $TroquelAlmacen1 = $row2["TroquelAlmacen1"];
+		    $PrecioCompraBrutoAlmacen1 = $row2["PrecioCompraBrutoAlmacen1"];
+		    $TroquelAlmacen2 = $row2["TroquelAlmacen2"];
+		    $PrecioCompraBrutoAlmacen2 = $row2["PrecioCompraBrutoAlmacen2"];
+		    $PrecioCompraBruto = $row2["PrecioCompraBruto"];
+	      $Dolarizado = $row2["Dolarizado"];
+	      $Gravado = FG_Producto_Gravado($IsIVA);
+	      $Dolarizado = FG_Producto_Dolarizado($conn,$Dolarizado);
+	      $CondicionExistencia = 'CON_EXISTENCIA';
+
+				if(intval($Existencia)>0){
+
+					$PrecioHoy = FG_Calculo_Precio_Alfa($Existencia,$ExistenciaAlmacen1,$ExistenciaAlmacen2,$IsTroquelado,$UtilidadArticulo,$UtilidadCategoria,$TroquelAlmacen1,$PrecioCompraBrutoAlmacen1,$TroquelAlmacen2,$PrecioCompraBrutoAlmacen2,$PrecioCompraBruto,$IsIVA,$CondicionExistencia);
+
+					if($IsIVA == 1){
+						$PMVP = $PrecioHoy/Impuesto;
+						$IVA = $PrecioHoy-$PMVP;
+					}
+					else{
+						$PMVP = $PrecioHoy;
+						$IVA = 0;
+					}
+
+					$simbolo = '*';
+					
+					echo'
+						<table>
+							<thead>
+								<tr>
+									<td class="centrado titulo rowCenter" colspan="2">
+										Código: '.$CodigoBarra.'
+									</td>
+								</tr>	
+							</thead>
+							<tbody>
+								<tr rowspan="2">
+									<td class="centrado descripcion aumento rowCenter" colspan="2">
+										<strong>'.$Descripcion.'</strong> 
+									</td>
+								</tr>
+								<tr>
+									<td class="izquierda rowIzq rowIzqA">
+										PMVP Bs.
+									</td>
+									<td class="derecha rowDer rowDerA rowDer rowDerA">
+										'.number_format ($PMVP,2,"," ,"." ).'
+									</td>
+								</tr>
+								<tr>
+									<td class="izquierda rowIzq rowIzqA">
+										IVA 16% Bs.
+									</td>
+									<td class="derecha rowDer rowDerA">
+										'.number_format ($IVA,2,"," ,"." ).'
+									</td>
+								</tr>
+								<tr>
+									<td class="izquierda rowIzq rowIzqA aumento">
+										<strong>Total a Pagar Bs.</strong>
+									</td>
+									<td class="derecha rowDer rowDerA aumento">
+										<strong>
+										'.number_format ($PrecioHoy,2,"," ,"." ).'
+										</strong>
+									</td>
+								</tr>
+								<tr>
+									<td class="izquierda dolarizado rowIzq rowIzqA">
+										<strong>'.$simbolo.'</strong>
+									</td>
+									<td class="derecha rowDer rowDerA">
+										'.date("d-m-Y").'
+									</td>
+								</tr>				
+							</tbody>
+						</table>
+					';
+					$CuentaCard++;
+					$CuentaEtiqueta++;
+					if($CuentaCard == 3){
+						echo'<br>';
+						$CuentaCard=0;
+					}
+				}
+			}
+			else if(($Dolarizado=='NO')&&($tipo=='NO DOLARIZADO')){
+
+				$sql2 = SQG_Detalle_Articulo($IdArticulo);
+				$result2 = sqlsrv_query($conn,$sql2);
+				$row2 = sqlsrv_fetch_array($result2,SQLSRV_FETCH_ASSOC);
+
+				$CodigoArticulo = $row2["CodigoInterno"];
+	      $CodigoBarra = $row2["CodigoBarra"];
+	      $Descripcion = FG_Limpiar_Texto($row2["Descripcion"]);
+	      $Existencia = $row2["Existencia"];
+		    $ExistenciaAlmacen1 = $row2["ExistenciaAlmacen1"];
+		    $ExistenciaAlmacen2 = $row2["ExistenciaAlmacen2"];
+		    $IsTroquelado = $row2["Troquelado"];
+		    $IsIVA = $row2["Impuesto"];
+		    $UtilidadArticulo = $row2["UtilidadArticulo"];
+		    $UtilidadCategoria = $row2["UtilidadCategoria"];
+		    $TroquelAlmacen1 = $row2["TroquelAlmacen1"];
+		    $PrecioCompraBrutoAlmacen1 = $row2["PrecioCompraBrutoAlmacen1"];
+		    $TroquelAlmacen2 = $row2["TroquelAlmacen2"];
+		    $PrecioCompraBrutoAlmacen2 = $row2["PrecioCompraBrutoAlmacen2"];
+		    $PrecioCompraBruto = $row2["PrecioCompraBruto"];
+	      $Dolarizado = $row2["Dolarizado"];
+	      $Gravado = FG_Producto_Gravado($IsIVA);
+	      $Dolarizado = FG_Producto_Dolarizado($conn,$Dolarizado);
+	      $CondicionExistencia = 'CON_EXISTENCIA';
+
+				if(intval($Existencia)>0){
+
+					$PrecioHoy = FG_Calculo_Precio_Alfa($Existencia,$ExistenciaAlmacen1,$ExistenciaAlmacen2,$IsTroquelado,$UtilidadArticulo,$UtilidadCategoria,$TroquelAlmacen1,$PrecioCompraBrutoAlmacen1,$TroquelAlmacen2,$PrecioCompraBrutoAlmacen2,$PrecioCompraBruto,$IsIVA,$CondicionExistencia);
+
+					if($IsIVA == 1){
+						$PMVP = $PrecioHoy/Impuesto;
+						$IVA = $PrecioHoy-$PMVP;
+					}
+					else{
+						$PMVP = $PrecioHoy;
+						$IVA = 0;
+					}
+
+					$simbolo = '';
+					
+					echo'
+						<table>
+							<thead>
+								<tr>
+									<td class="centrado titulo rowCenter" colspan="2">
+										Código: '.$CodigoBarra.'
+									</td>
+								</tr>	
+							</thead>
+							<tbody>
+								<tr rowspan="2">
+									<td class="centrado descripcion aumento rowCenter" colspan="2">
+										<strong>'.$Descripcion.'</strong> 
+									</td>
+								</tr>
+								<tr>
+									<td class="izquierda rowIzq rowIzqA">
+										PMVP Bs.
+									</td>
+									<td class="derecha rowDer rowDerA rowDer rowDerA">
+										'.number_format ($PMVP,2,"," ,"." ).'
+									</td>
+								</tr>
+								<tr>
+									<td class="izquierda rowIzq rowIzqA">
+										IVA 16% Bs.
+									</td>
+									<td class="derecha rowDer rowDerA">
+										'.number_format ($IVA,2,"," ,"." ).'
+									</td>
+								</tr>
+								<tr>
+									<td class="izquierda rowIzq rowIzqA aumento">
+										<strong>Total a Pagar Bs.</strong>
+									</td>
+									<td class="derecha rowDer rowDerA aumento">
+										<strong>
+										'.number_format ($PrecioHoy,2,"," ,"." ).'
+										</strong>
+									</td>
+								</tr>
+								<tr>
+									<td class="izquierda dolarizado rowIzq rowIzqA">
+										<strong>'.$simbolo.'</strong>
+									</td>
+									<td class="derecha rowDer rowDerA">
+										'.date("d-m-Y").'
+									</td>
+								</tr>				
+							</tbody>
+						</table>
+					';
+					$CuentaCard++;
+					$CuentaEtiqueta++;
+					if($CuentaCard == 3){
+						echo'<br>';
+						$CuentaCard=0;
+					}
+				}
+			}
+			else if($tipo=='TODO'){
+
+				$sql2 = SQG_Detalle_Articulo($IdArticulo);
+				$result2 = sqlsrv_query($conn,$sql2);
+				$row2 = sqlsrv_fetch_array($result2,SQLSRV_FETCH_ASSOC);
+
+				$CodigoArticulo = $row2["CodigoInterno"];
+	      $CodigoBarra = $row2["CodigoBarra"];
+	      $Descripcion = FG_Limpiar_Texto($row2["Descripcion"]);
+	      $Existencia = $row2["Existencia"];
+		    $ExistenciaAlmacen1 = $row2["ExistenciaAlmacen1"];
+		    $ExistenciaAlmacen2 = $row2["ExistenciaAlmacen2"];
+		    $IsTroquelado = $row2["Troquelado"];
+		    $IsIVA = $row2["Impuesto"];
+		    $UtilidadArticulo = $row2["UtilidadArticulo"];
+		    $UtilidadCategoria = $row2["UtilidadCategoria"];
+		    $TroquelAlmacen1 = $row2["TroquelAlmacen1"];
+		    $PrecioCompraBrutoAlmacen1 = $row2["PrecioCompraBrutoAlmacen1"];
+		    $TroquelAlmacen2 = $row2["TroquelAlmacen2"];
+		    $PrecioCompraBrutoAlmacen2 = $row2["PrecioCompraBrutoAlmacen2"];
+		    $PrecioCompraBruto = $row2["PrecioCompraBruto"];
+	      $Dolarizado = $row2["Dolarizado"];
+	      $Gravado = FG_Producto_Gravado($IsIVA);
+	      $Dolarizado = FG_Producto_Dolarizado($conn,$Dolarizado);
+	      $CondicionExistencia = 'CON_EXISTENCIA';
+
+				if(intval($Existencia)>0){
+
+					$PrecioHoy = FG_Calculo_Precio_Alfa($Existencia,$ExistenciaAlmacen1,$ExistenciaAlmacen2,$IsTroquelado,$UtilidadArticulo,$UtilidadCategoria,$TroquelAlmacen1,$PrecioCompraBrutoAlmacen1,$TroquelAlmacen2,$PrecioCompraBrutoAlmacen2,$PrecioCompraBruto,$IsIVA,$CondicionExistencia);
+
+					if($IsIVA == 1){
+						$PMVP = $PrecioHoy/Impuesto;
+						$IVA = $PrecioHoy-$PMVP;
+					}
+					else{
+						$PMVP = $PrecioHoy;
+						$IVA = 0;
+					}
+
+					if($Dolarizado=='SI'){
+						$simbolo = '*';
+					}
+					else{
+						$simbolo = '';
+					}
+					
+					echo'
+						<table>
+							<thead>
+								<tr>
+									<td class="centrado titulo rowCenter" colspan="2">
+										Código: '.$CodigoBarra.'
+									</td>
+								</tr>	
+							</thead>
+							<tbody>
+								<tr rowspan="2">
+									<td class="centrado descripcion aumento rowCenter" colspan="2">
+										<strong>'.$Descripcion.'</strong> 
+									</td>
+								</tr>
+								<tr>
+									<td class="izquierda rowIzq rowIzqA">
+										PMVP Bs.
+									</td>
+									<td class="derecha rowDer rowDerA rowDer rowDerA">
+										'.number_format ($PMVP,2,"," ,"." ).'
+									</td>
+								</tr>
+								<tr>
+									<td class="izquierda rowIzq rowIzqA">
+										IVA 16% Bs.
+									</td>
+									<td class="derecha rowDer rowDerA">
+										'.number_format ($IVA,2,"," ,"." ).'
+									</td>
+								</tr>
+								<tr>
+									<td class="izquierda rowIzq rowIzqA aumento">
+										<strong>Total a Pagar Bs.</strong>
+									</td>
+									<td class="derecha rowDer rowDerA aumento">
+										<strong>
+										'.number_format ($PrecioHoy,2,"," ,"." ).'
+										</strong>
+									</td>
+								</tr>
+								<tr>
+									<td class="izquierda dolarizado rowIzq rowIzqA">
+										<strong>'.$simbolo.'</strong>
+									</td>
+									<td class="derecha rowDer rowDerA">
+										'.date("d-m-Y").'
+									</td>
+								</tr>				
+							</tbody>
+						</table>
+					';
+					$CuentaCard++;
+					$CuentaEtiqueta++;
+					if($CuentaCard == 3){
+						echo'<br>';
+						$CuentaCard=0;
+					}
+				}
+			}
+		}
+		echo "<br/>Se imprimiran ".$CuentaEtiqueta." etiquetas<br/>";
+		mysqli_close($connCPharma);
+    sqlsrv_close($conn);
+	}
+	/**********************************************************************************/
+	/*
+		TITULO: FG_Generer_Etiquetas
+		PARAMETROS: [$clasificacion] Parametro que indica el tipo de clasificacion, solo puede recibir ETIQUETABLE o OBLIGATORIO ETIQUETAR
+					[$tipo] Parametro que indica la dolarizacion, solo pude recibir DOLARIZADO, NO DOLARIZADO o TODO
+		FUNCION: crea una conexion con la base de datos cpharma e ingresa datos
+		RETORNO: no aplica
+ 	*/
+	function FG_Generer_Etiquetas($clasificacion,$tipo,$dia) {
+		$SedeConnection = MiUbicacion();
+  	$conn = FG_Conectar_Smartpharma($SedeConnection);
+  	$connCPharma = FG_Conectar_CPharma();	
+
+  	$FHoy = date("Y-m-d");
+		$FManana = date("Y-m-d",strtotime($FHoy."+1 days"));
+		$FAyer = date("Y-m-d",strtotime($FHoy."-1 days"));
+
+		$sql = QCleanTable('CP_Etiqueta_C1');
+		sqlsrv_query($conn,$sql);
+		$sql = QCleanTable('CP_Etiqueta_C2');
+		sqlsrv_query($conn,$sql);
+		$sql = QCleanTable('CP_Etiqueta_C3');
+		sqlsrv_query($conn,$sql);
+		$sql = QCleanTable('CP_Etiqueta_C4');
+		sqlsrv_query($conn,$sql);
+
+  	if($dia=='HOY'){
+  		$sql1 = QG_CP_Etiqueta_C1($FHoy,$FManana);
+			sqlsrv_query($conn,$sql1);
+			$sql2 = QG_CP_Etiqueta_C2($FHoy,$FManana);
+			sqlsrv_query($conn,$sql2);
+			$sql2 = QG_CP_Etiqueta_C3($FHoy,$FManana);
+			sqlsrv_query($conn,$sql2);
+			$sql2 = QG_CP_Etiqueta_C4($FHoy,$FManana);
+			sqlsrv_query($conn,$sql2);
+			$FchaCambio = $FHoy;
+  	}
+  	else if($dia=='AYER'){
+  		$sql1 = QG_CP_Etiqueta_C1($FAyer,$FHoy);
+			sqlsrv_query($conn,$sql1);
+			$sql2 = QG_CP_Etiqueta_C2($FAyer,$FHoy);
+			sqlsrv_query($conn,$sql2);
+			$sql2 = QG_CP_Etiqueta_C3($FAyer,$FHoy);
+			sqlsrv_query($conn,$sql2);
+			$sql2 = QG_CP_Etiqueta_C4($FAyer,$FHoy);
+			sqlsrv_query($conn,$sql2);
+			$FchaCambio = $FAyer;
+  	}
+
+  	if ($tipo=='NO DOLARIZADO'){
+  		$result = sqlsrv_query($conn,"SELECT * FROM CP_Etiqueta_C4 WHERE CP_Etiqueta_C4.Dolarizado = 0 ORDER BY IdArticulo ASC");
+  	}
+  	else if ($tipo=='DOLARIZADO'){
+  		$result = sqlsrv_query($conn,"SELECT * FROM CP_Etiqueta_C4 WHERE CP_Etiqueta_C4.Dolarizado <> 0 ORDER BY IdArticulo ASC");
+  	}
+  	else {
+  		$result = sqlsrv_query($conn,"SELECT * FROM CP_Etiqueta_C4 ORDER BY IdArticulo ASC");
+  	}
+
+		
+		$sql = QCleanTable('CP_Etiqueta_C1');
+		sqlsrv_query($conn,$sql);
+		$sql = QCleanTable('CP_Etiqueta_C2');
+		sqlsrv_query($conn,$sql);
+		$sql = QCleanTable('CP_Etiqueta_C3');
+		sqlsrv_query($conn,$sql);
+		$sql = QCleanTable('CP_Etiqueta_C4');
+		sqlsrv_query($conn,$sql);
+
+		$CuentaCard = 0;
+		$CuentaEtiqueta = 0;
+
+		while( $row = sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC) ){
+			$IdArticulo = $row['IdArticulo'];
+			
+			$result1 = $connCPharma->query("SELECT id_articulo FROM etiquetas WHERE id_articulo = '$IdArticulo' AND clasificacion = '$clasificacion'");
+			$row1= $result1->fetch_assoc();
+			$IdArticuloP = $row1['id_articulo'];
+
+			if(!is_null($IdArticuloP)){
+
+				$Dolarizado = FG_Producto_Dolarizado($conn,$IdArticulo);
+
+				if(($Dolarizado=='SI')&&($tipo=='DOLARIZADO')){
+
+					$sql2 = SQG_Detalle_Articulo($IdArticulo);
+					$result2 = sqlsrv_query($conn,$sql2);
+					$row2 = sqlsrv_fetch_array($result2,SQLSRV_FETCH_ASSOC);
+
+					$CodigoArticulo = $row2["CodigoInterno"];
+		      $CodigoBarra = $row2["CodigoBarra"];
+		      $Descripcion = FG_Limpiar_Texto($row2["Descripcion"]);
+		      $Existencia = $row2["Existencia"];
+			    $ExistenciaAlmacen1 = $row2["ExistenciaAlmacen1"];
+			    $ExistenciaAlmacen2 = $row2["ExistenciaAlmacen2"];
+			    $IsTroquelado = $row2["Troquelado"];
+			    $IsIVA = $row2["Impuesto"];
+			    $UtilidadArticulo = $row2["UtilidadArticulo"];
+			    $UtilidadCategoria = $row2["UtilidadCategoria"];
+			    $TroquelAlmacen1 = $row2["TroquelAlmacen1"];
+			    $PrecioCompraBrutoAlmacen1 = $row2["PrecioCompraBrutoAlmacen1"];
+			    $TroquelAlmacen2 = $row2["TroquelAlmacen2"];
+			    $PrecioCompraBrutoAlmacen2 = $row2["PrecioCompraBrutoAlmacen2"];
+			    $PrecioCompraBruto = $row2["PrecioCompraBruto"];
+		      $Dolarizado = $row2["Dolarizado"];
+		      $Gravado = FG_Producto_Gravado($IsIVA);
+		      $Dolarizado = FG_Producto_Dolarizado($conn,$Dolarizado);
+		      $CondicionExistencia = 'CON_EXISTENCIA';
+
+					if(intval($Existencia)>0){
+
+						$PrecioHoy = FG_Calculo_Precio_Alfa($Existencia,$ExistenciaAlmacen1,$ExistenciaAlmacen2,$IsTroquelado,$UtilidadArticulo,$UtilidadCategoria,$TroquelAlmacen1,$PrecioCompraBrutoAlmacen1,$TroquelAlmacen2,$PrecioCompraBrutoAlmacen2,$PrecioCompraBruto,$IsIVA,$CondicionExistencia);
+
+						$sqlCC = QG_DiasCero_PrecioAyer($IdArticulo,$FchaCambio);
+						$resultCC = mysqli_query($connCPharma,$sqlCC);
+						$rowCC = mysqli_fetch_assoc($resultCC);
+						$PrecioAyer = $rowCC["precio"];
+
+						if( floatval(round($PrecioHoy,2)) != floatval($PrecioAyer) ){
+							if($IsIVA == 1){
+								$PMVP = $PrecioHoy/Impuesto;
+								$IVA = $PrecioHoy-$PMVP;
+							}
+							else{
+								$PMVP = $PrecioHoy;
+								$IVA = 0;
+							}
+
+							$simbolo = '*';
+							
+							echo'
+								<table>
+									<thead>
+										<tr>
+											<td class="centrado titulo rowCenter" colspan="2">
+												Código: '.$CodigoBarra.'
+											</td>
+										</tr>	
+									</thead>
+									<tbody>
+										<tr rowspan="2">
+											<td class="centrado descripcion aumento rowCenter" colspan="2">
+												<strong>'.$Descripcion.'</strong> 
+											</td>
+										</tr>
+										<tr>
+											<td class="izquierda rowIzq rowIzqA">
+												PMVP Bs.
+											</td>
+											<td class="derecha rowDer rowDerA rowDer rowDerA">
+												'.number_format ($PMVP,2,"," ,"." ).'
+											</td>
+										</tr>
+										<tr>
+											<td class="izquierda rowIzq rowIzqA">
+												IVA 16% Bs.
+											</td>
+											<td class="derecha rowDer rowDerA">
+												'.number_format ($IVA,2,"," ,"." ).'
+											</td>
+										</tr>';
+										if( floatval(round($PrecioHoy,2)) < floatval($PrecioAyer) ){
+											echo'
+												<tr>
+													<td class="izquierda rowIzq rowIzqA" style="color:red;">
+														Precio Bs. Antes
+													</td>
+													<td class="derecha rowDer rowDerA" style="color:red;">
+														<del>
+														'.number_format ($PrecioAyer,2,"," ,"." ).'
+														</del>
+													</td>
+												</tr>
+											';
+										}
+										echo'
+										<tr>
+											<td class="izquierda rowIzq rowIzqA aumento">
+												<strong>Total a Pagar Bs.</strong>
+											</td>
+											<td class="derecha rowDer rowDerA aumento">
+												<strong>
+												'.number_format ($PrecioHoy,2,"," ,"." ).'
+												</strong>
+											</td>
+										</tr>
+										<tr>
+											<td class="izquierda dolarizado rowIzq rowIzqA">
+												<strong>'.$simbolo.'</strong>
+											</td>
+											<td class="derecha rowDer rowDerA">
+												'.date("d-m-Y").'
+											</td>
+										</tr>				
+									</tbody>
+								</table>
+							';
+							$CuentaCard++;
+							$CuentaEtiqueta++;
+							if($CuentaCard == 3){
+								echo'<br>';
+								$CuentaCard=0;
+							}
+						}
+					}
+				}
+				else if(($Dolarizado=='NO')&&($tipo=='NO DOLARIZADO')){
+
+					$sql2 = SQG_Detalle_Articulo($IdArticulo);
+					$result2 = sqlsrv_query($conn,$sql2);
+					$row2 = sqlsrv_fetch_array($result2,SQLSRV_FETCH_ASSOC);
+
+					$CodigoArticulo = $row2["CodigoInterno"];
+		      $CodigoBarra = $row2["CodigoBarra"];
+		      $Descripcion = FG_Limpiar_Texto($row2["Descripcion"]);
+		      $Existencia = $row2["Existencia"];
+			    $ExistenciaAlmacen1 = $row2["ExistenciaAlmacen1"];
+			    $ExistenciaAlmacen2 = $row2["ExistenciaAlmacen2"];
+			    $IsTroquelado = $row2["Troquelado"];
+			    $IsIVA = $row2["Impuesto"];
+			    $UtilidadArticulo = $row2["UtilidadArticulo"];
+			    $UtilidadCategoria = $row2["UtilidadCategoria"];
+			    $TroquelAlmacen1 = $row2["TroquelAlmacen1"];
+			    $PrecioCompraBrutoAlmacen1 = $row2["PrecioCompraBrutoAlmacen1"];
+			    $TroquelAlmacen2 = $row2["TroquelAlmacen2"];
+			    $PrecioCompraBrutoAlmacen2 = $row2["PrecioCompraBrutoAlmacen2"];
+			    $PrecioCompraBruto = $row2["PrecioCompraBruto"];
+		      $Dolarizado = $row2["Dolarizado"];
+		      $Gravado = FG_Producto_Gravado($IsIVA);
+		      $Dolarizado = FG_Producto_Dolarizado($conn,$Dolarizado);
+		      $CondicionExistencia = 'CON_EXISTENCIA';
+
+					if(intval($Existencia)>0){
+
+						$PrecioHoy = FG_Calculo_Precio_Alfa($Existencia,$ExistenciaAlmacen1,$ExistenciaAlmacen2,$IsTroquelado,$UtilidadArticulo,$UtilidadCategoria,$TroquelAlmacen1,$PrecioCompraBrutoAlmacen1,$TroquelAlmacen2,$PrecioCompraBrutoAlmacen2,$PrecioCompraBruto,$IsIVA,$CondicionExistencia);
+
+						$sqlCC = QG_DiasCero_PrecioAyer($IdArticulo,$FchaCambio);
+						$resultCC = mysqli_query($connCPharma,$sqlCC);
+						$rowCC = mysqli_fetch_assoc($resultCC);
+						$PrecioAyer = $rowCC["precio"];
+
+						if( floatval(round($PrecioHoy,2)) != floatval($PrecioAyer) ){
+							if($IsIVA == 1){
+								$PMVP = $PrecioHoy/Impuesto;
+								$IVA = $PrecioHoy-$PMVP;
+							}
+							else{
+								$PMVP = $PrecioHoy;
+								$IVA = 0;
+							}
+
+							$simbolo = '';
+							
+							echo'
+								<table>
+									<thead>
+										<tr>
+											<td class="centrado titulo rowCenter" colspan="2">
+												Código: '.$CodigoBarra.'
+											</td>
+										</tr>	
+									</thead>
+									<tbody>
+										<tr rowspan="2">
+											<td class="centrado descripcion aumento rowCenter" colspan="2">
+												<strong>'.$Descripcion.'</strong> 
+											</td>
+										</tr>
+										<tr>
+											<td class="izquierda rowIzq rowIzqA">
+												PMVP Bs.
+											</td>
+											<td class="derecha rowDer rowDerA rowDer rowDerA">
+												'.number_format ($PMVP,2,"," ,"." ).'
+											</td>
+										</tr>
+										<tr>
+											<td class="izquierda rowIzq rowIzqA">
+												IVA 16% Bs.
+											</td>
+											<td class="derecha rowDer rowDerA">
+												'.number_format ($IVA,2,"," ,"." ).'
+											</td>
+										</tr>';
+										if( floatval(round($PrecioHoy,2)) < floatval($PrecioAyer) ){
+											echo'
+												<tr>
+													<td class="izquierda rowIzq rowIzqA" style="color:red;">
+														Precio Bs. Antes
+													</td>
+													<td class="derecha rowDer rowDerA" style="color:red;">
+														<del>
+														'.number_format ($PrecioAyer,2,"," ,"." ).'
+														</del>
+													</td>
+												</tr>
+											';
+										}
+										echo'
+										<tr>
+											<td class="izquierda rowIzq rowIzqA aumento">
+												<strong>Total a Pagar Bs.</strong>
+											</td>
+											<td class="derecha rowDer rowDerA aumento">
+												<strong>
+												'.number_format ($PrecioHoy,2,"," ,"." ).'
+												</strong>
+											</td>
+										</tr>
+										<tr>
+											<td class="izquierda dolarizado rowIzq rowIzqA">
+												<strong>'.$simbolo.'</strong>
+											</td>
+											<td class="derecha rowDer rowDerA">
+												'.date("d-m-Y").'
+											</td>
+										</tr>				
+									</tbody>
+								</table>
+							';
+							$CuentaCard++;
+							$CuentaEtiqueta++;
+							if($CuentaCard == 3){
+								echo'<br>';
+								$CuentaCard=0;
+							}
+						}
+					}
+				}
+				else if($tipo=='TODO'){
+
+					$sql2 = SQG_Detalle_Articulo($IdArticulo);
+					$result2 = sqlsrv_query($conn,$sql2);
+					$row2 = sqlsrv_fetch_array($result2,SQLSRV_FETCH_ASSOC);
+
+					$CodigoArticulo = $row2["CodigoInterno"];
+		      $CodigoBarra = $row2["CodigoBarra"];
+		      $Descripcion = FG_Limpiar_Texto($row2["Descripcion"]);
+		      $Existencia = $row2["Existencia"];
+			    $ExistenciaAlmacen1 = $row2["ExistenciaAlmacen1"];
+			    $ExistenciaAlmacen2 = $row2["ExistenciaAlmacen2"];
+			    $IsTroquelado = $row2["Troquelado"];
+			    $IsIVA = $row2["Impuesto"];
+			    $UtilidadArticulo = $row2["UtilidadArticulo"];
+			    $UtilidadCategoria = $row2["UtilidadCategoria"];
+			    $TroquelAlmacen1 = $row2["TroquelAlmacen1"];
+			    $PrecioCompraBrutoAlmacen1 = $row2["PrecioCompraBrutoAlmacen1"];
+			    $TroquelAlmacen2 = $row2["TroquelAlmacen2"];
+			    $PrecioCompraBrutoAlmacen2 = $row2["PrecioCompraBrutoAlmacen2"];
+			    $PrecioCompraBruto = $row2["PrecioCompraBruto"];
+		      $Dolarizado = $row2["Dolarizado"];
+		      $Gravado = FG_Producto_Gravado($IsIVA);
+		      $Dolarizado = FG_Producto_Dolarizado($conn,$Dolarizado);
+		      $CondicionExistencia = 'CON_EXISTENCIA';
+
+					if(intval($Existencia)>0){
+
+						$PrecioHoy = FG_Calculo_Precio_Alfa($Existencia,$ExistenciaAlmacen1,$ExistenciaAlmacen2,$IsTroquelado,$UtilidadArticulo,$UtilidadCategoria,$TroquelAlmacen1,$PrecioCompraBrutoAlmacen1,$TroquelAlmacen2,$PrecioCompraBrutoAlmacen2,$PrecioCompraBruto,$IsIVA,$CondicionExistencia);
+
+						$sqlCC = QG_DiasCero_PrecioAyer($IdArticulo,$FchaCambio);
+						$resultCC = mysqli_query($connCPharma,$sqlCC);
+						$rowCC = mysqli_fetch_assoc($resultCC);
+						$PrecioAyer = $rowCC["precio"];
+
+						if( floatval(round($PrecioHoy,2)) != floatval($PrecioAyer) ){
+							if($IsIVA == 1){
+								$PMVP = $PrecioHoy/Impuesto;
+								$IVA = $PrecioHoy-$PMVP;
+							}
+							else{
+								$PMVP = $PrecioHoy;
+								$IVA = 0;
+							}
+
+							if($Dolarizado=='SI'){
+								$simbolo = '*';
+							}
+							else{
+								$simbolo = '';
+							}
+							
+							echo'
+								<table>
+									<thead>
+										<tr>
+											<td class="centrado titulo rowCenter" colspan="2">
+												Código: '.$CodigoBarra.'
+											</td>
+										</tr>	
+									</thead>
+									<tbody>
+										<tr rowspan="2">
+											<td class="centrado descripcion aumento rowCenter" colspan="2">
+												<strong>'.$Descripcion.'</strong> 
+											</td>
+										</tr>
+										<tr>
+											<td class="izquierda rowIzq rowIzqA">
+												PMVP Bs.
+											</td>
+											<td class="derecha rowDer rowDerA rowDer rowDerA">
+												'.number_format ($PMVP,2,"," ,"." ).'
+											</td>
+										</tr>
+										<tr>
+											<td class="izquierda rowIzq rowIzqA">
+												IVA 16% Bs.
+											</td>
+											<td class="derecha rowDer rowDerA">
+												'.number_format ($IVA,2,"," ,"." ).'
+											</td>
+										</tr>';
+										if( floatval(round($PrecioHoy,2)) < floatval($PrecioAyer) ){
+											echo'
+												<tr>
+													<td class="izquierda rowIzq rowIzqA" style="color:red;">
+														Precio Bs. Antes
+													</td>
+													<td class="derecha rowDer rowDerA" style="color:red;">
+														<del>
+														'.number_format ($PrecioAyer,2,"," ,"." ).'
+														</del>
+													</td>
+												</tr>
+											';
+										}
+										echo'
+										<tr>
+											<td class="izquierda rowIzq rowIzqA aumento">
+												<strong>Total a Pagar Bs.</strong>
+											</td>
+											<td class="derecha rowDer rowDerA aumento">
+												<strong>
+												'.number_format ($PrecioHoy,2,"," ,"." ).'
+												</strong>
+											</td>
+										</tr>
+										<tr>
+											<td class="izquierda dolarizado rowIzq rowIzqA">
+												<strong>'.$simbolo.'</strong>
+											</td>
+											<td class="derecha rowDer rowDerA">
+												'.date("d-m-Y").'
+											</td>
+										</tr>				
+									</tbody>
+								</table>
+							';
+							$CuentaCard++;
+							$CuentaEtiqueta++;
+							if($CuentaCard == 3){
+								echo'<br>';
+								$CuentaCard=0;
+							}
+						}
+					}
+				}
+			}
+		}
+		echo "<br/>Se imprimiran ".$CuentaEtiqueta." etiquetas<br/>";
+		mysqli_close($connCPharma);
+    sqlsrv_close($conn);
 	}
 ?>

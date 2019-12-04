@@ -265,27 +265,6 @@
 	}
 	/**********************************************************************************/
 	/*
-		TITULO: QCuentaVenta
-		PARAMETROS: $IdArticulo,$FInicial,$FFinal
-		FUNCION: cuenta la cantidad de veces que se vendio un producto en una fecha
-		RETORNO: no aplica
-		//
-	 */
-	function QCuentaVenta($IdArticulo,$FInicial,$FFinal) {
-		$sql = "
-			SELECT
-			COUNT(*) AS Cuenta
-			FROM VenFacturaDetalle
-			INNER JOIN InvArticulo ON InvArticulo.Id = VenFacturaDetalle.InvArticuloId
-			INNER JOIN VenFactura ON VenFactura.Id = VenFacturaDetalle.VenFacturaId
-			WHERE
-			(VenFactura.FechaDocumento > '$FInicial' AND VenFactura.FechaDocumento < '$FFinal')
-			AND (InvArticulo.Id = '$IdArticulo')
-		";
-		return $sql;
-	}
-	/**********************************************************************************/
-	/*
 		TITULO: QExistenciaDiasCero
 		PARAMETROS: [$IdArticulo] Id del articulo a buscar
 		FUNCION: cuenta el total de repeticiones de un articulo en dias en cero
@@ -301,4 +280,91 @@
 		";
 		return $sql;
 	}
+	/**********************************************************************************/
+	/*
+		TITULO: QG_Guardar_Etiqueta_Articulo
+		PARAMETROS: $id_articulo,$codigo_articulo,$descripcion,$condicion,$clasificacion,$estatus,$user,$date
+		FUNCION: guarda la informacion en la tabla etiquetas
+		RETORNO: no aplica
+	 */
+	function QG_Guardar_Etiqueta_Articulo($id_articulo,$codigo_articulo,$descripcion,$condicion,$clasificacion,$estatus,$user,$date) {
+		$sql = "
+		INSERT INTO etiquetas
+		(id_articulo,codigo_articulo,descripcion,condicion,clasificacion,estatus,user,created_at,updated_at)
+		VALUES 
+		('$id_articulo','$codigo_articulo','$descripcion','$condicion','$clasificacion','$estatus','$user','$date','$date')
+		";
+		return $sql;
+	}
+	/**********************************************************************************/
+	/*
+		TITULO: QG_Captura_Etiqueta
+		PARAMETROS: [$FechaCaptura] El dia de hoy
+		FUNCION: cuenta el total de registos de dias en cero
+		RETORNO: no aplica
+	 */
+	function QG_Captura_Etiqueta($FechaCaptura) {
+		$sql = "SELECT COUNT(*) AS TotalRegistros 
+		FROM etiquetas 
+		WHERE CONVERT(etiquetas.created_at,date) = '$FechaCaptura'
+		";
+		return $sql;
+	}
+	/**********************************************************************************/
+	/*
+		TITULO: QG_Guardar_Captura_Etiqueta
+		PARAMETROS: [$FechaCaptura] El dia de hoy
+					[$date] valor para creacion y actualizacion
+		FUNCION: crea una conexion con la base de datos cpharma e ingresa datos
+		RETORNO: no aplica
+	 */
+
+	function QG_Guardar_Captura_Etiqueta($TotalRegistros,$FechaCaptura,$date) {
+		$sql = "
+		INSERT INTO captura_etiqueta
+		(total_registros,fecha_captura,created_at,updated_at)
+		VALUES 
+		('$TotalRegistros','$FechaCaptura','$date','$date')
+		";
+		return $sql;
+	}
+	/**********************************************************************************/
+	/*
+		TITULO: QG_Validar_Captura_Etiqueta
+		PARAMETROS: [$FechaCaptura] El dia de hoy
+		FUNCION: valida que la fecha exista en la tabla captura diaria
+		RETORNO: no aplica
+	 */
+	function QG_Validar_Captura_Etiqueta($FechaCaptura) {
+		$sql = "SELECT count(*) AS CuentaCaptura 
+		FROM captura_etiqueta WHERE fecha_captura = '$FechaCaptura'";
+		return $sql;
+	}
+	/**********************************************************************************/
+	/*
+		TITULO: QG_Borrar_Captura_Etiqueta
+		PARAMETROS: [$FechaCaptura] fecha de la captura
+		FUNCION: borra los registros de dias en cero de la fecha seleccionada
+		RETORNO: no aplica
+	 */
+	function QG_Borrar_Captura_Etiqueta($FechaCaptura) {
+		$sql = "DELETE FROM captura_etiqueta WHERE fecha_captura = '$FechaCaptura'";
+		return $sql;
+	}
+	/**********************************************************************************/
+	/*
+    TITULO: QG_DiasCero_PrecioAyer
+    PARAMETROS: [$IdArticulo] $IdArticulo del articulo a buscar
+    FUNCION: Query que genera el detalle del articulo solicitado
+    RETORNO: Detalle del articulo
+   */
+  	function QG_DiasCero_PrecioAyer($IdArticulo,$FechaCaptura) {
+			$sql = "
+				SELECT precio
+				FROM dias_ceros 
+				WHERE dias_ceros.id_articulo = '$IdArticulo' 
+				AND `fecha_captura` = '$FechaCaptura'
+			";
+			return $sql;
+		}
 ?>
