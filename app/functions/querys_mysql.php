@@ -341,6 +341,7 @@
 	/*
 		TITULO: MySQL_RangoMinTasaVenta
 		FUNCION: Armar la logica necesaria para ejecutar la query
+		DESARROLLADO POR: MANUEL HENRIQUEZ
 	 */
 	function MySQL_RangoMinTasaVenta() {
 		$sql = "
@@ -354,6 +355,7 @@
 	/*
 		TITULO: MySQL_RangoMaxTasaVenta
 		FUNCION: Armar la logica necesaria para ejecutar la query
+		DESARROLLADO POR: MANUEL HENRIQUEZ
 	 */
 	function MySQL_RangoMaxTasaVenta() {
 		$sql = "
@@ -367,6 +369,7 @@
 	/*
 		TITULO: MySQL_Tasa_Conversion
 		FUNCION: Buscar el valor de la tasa en un dia especifico
+		DESARROLLADO POR: MANUEL HENRIQUEZ
 	 */
 	function MySQL_Tasa_Conversion($Fecha,$Moneda) {
 		$conCP = FG_Conectar_CPharma();

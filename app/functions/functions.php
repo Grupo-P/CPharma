@@ -77,7 +77,7 @@
 	 */
 	function LastRestoreDB($nameDataBase,$SedeConnection){
 		$conn = FG_Conectar_Smartpharma($SedeConnection);
-		$sql = QLastRestoreDB($nameDataBase);
+		$sql = SQL_Last_RestoreDB($nameDataBase);
 		$result = sqlsrv_query($conn,$sql);
 		$row = sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC);
 		$FechaRestauracion = $row["FechaRestauracion"]->format("Y-m-d h:i:s a");
@@ -645,7 +645,7 @@
 		DESARROLLADO POR: SERGIO COVA
 	 */
 	function FG_Producto_Unico($conn,$IdArticulo,$IdProveedor) {
-		$sql = QG_Provedor_Unico($IdProveedor,$IdArticulo);
+		$sql = SQL_Provedor_Unico($IdProveedor,$IdArticulo);
 		$params = array();
 		$options =  array("Scrollable"=>SQLSRV_CURSOR_KEYSET);
 		$result = sqlsrv_query($conn,$sql,$params,$options);
@@ -689,7 +689,7 @@
     $conn = FG_Conectar_Smartpharma($SedeConnection);
     $connCPharma = FG_Conectar_CPharma();
 
-    $sql = QG_Articulos_Ajuste($IdAjuste);
+    $sql = SQL_Articulos_Ajuste($IdAjuste);
     $result = sqlsrv_query($conn,$sql);
    
     while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
@@ -1167,7 +1167,7 @@
 		$conn = FG_Conectar_Smartpharma($SedeConnection);
 		$connCPharma = FG_Conectar_CPharma();
 
-		$sql = QG_Dias_EnCero();
+		$sql = SQL_Dias_EnCero();
 		$result = sqlsrv_query($conn,$sql);
 
 		$FechaCaptura = new DateTime("now");
@@ -1269,34 +1269,34 @@
 		*  Articulos con veces vendidas en el rango
 		*  Articulos sin compra en el rango
 		*/
-		$sql = QCleanTable('CP_QG_Unidades_Vendidas');
+		$sql = SQL_Clean_Table('CP_QG_Unidades_Vendidas');
 		sqlsrv_query($conn,$sql);
-		$sql = QCleanTable('CP_QG_Unidades_Devueltas');
+		$sql = SQL_Clean_Table('CP_QG_Unidades_Devueltas');
 		sqlsrv_query($conn,$sql);
-		$sql = QCleanTable('CP_QG_Unidades_Compradas');
+		$sql = SQL_Clean_Table('CP_QG_Unidades_Compradas');
 		sqlsrv_query($conn,$sql);
-		$sql = QCleanTable('CP_QG_Unidades_Reclamadas');
+		$sql = SQL_Clean_Table('CP_QG_Unidades_Reclamadas');
 		sqlsrv_query($conn,$sql);
 		
-		$sql1 = QG_ArtVendidos_ProductoCaida($FInicial,$FFinal);
+		$sql1 = SQL_ArtVendidos_ProductoCaida($FInicial,$FFinal);
 		sqlsrv_query($conn,$sql1);
-		$sql1 = QG_ArtDevueltos_ProductoCaida($FInicial,$FFinal);
+		$sql1 = SQL_ArtDevueltos_ProductoCaida($FInicial,$FFinal);
 		sqlsrv_query($conn,$sql1);
-		$sql1 = QG_ArtComprados_ProductoCaida($FInicial,$FFinal);
+		$sql1 = SQL_ArtComprados_ProductoCaida($FInicial,$FFinal);
 		sqlsrv_query($conn,$sql1);
-		$sql1 = QG_ArtReclamados_ProductoCaida($FInicial,$FFinal);
+		$sql1 = SQL_ArtReclamados_ProductoCaida($FInicial,$FFinal);
 		sqlsrv_query($conn,$sql1);
 
-		$sql3 = QG_Integracion_ProductoCaida($RangoDias);
+		$sql3 = SQL_Integracion_ProductoCaida($RangoDias);
 		$result = sqlsrv_query($conn,$sql3);
 
-		$sql = QCleanTable('CP_QG_Unidades_Vendidas');
+		$sql = SQL_Clean_Table('CP_QG_Unidades_Vendidas');
 		sqlsrv_query($conn,$sql);
-		$sql = QCleanTable('CP_QG_Unidades_Devueltas');
+		$sql = SQL_Clean_Table('CP_QG_Unidades_Devueltas');
 		sqlsrv_query($conn,$sql);
-		$sql = QCleanTable('CP_QG_Unidades_Compradas');
+		$sql = SQL_Clean_Table('CP_QG_Unidades_Compradas');
 		sqlsrv_query($conn,$sql);
-		$sql = QCleanTable('CP_QG_Unidades_Reclamadas');
+		$sql = SQL_Clean_Table('CP_QG_Unidades_Reclamadas');
 		sqlsrv_query($conn,$sql);
 
 		/* Inicio while que itera en los articulos con existencia actual > 0*/
@@ -1485,7 +1485,7 @@
 
 		while($FFinalPivote!=$FFinal){
 
-			$sql = QG_CuentaVenta($IdArticulo,$FInicial,$FFinalPivote);
+			$sql = SQL_CuentaVenta($IdArticulo,$FInicial,$FFinalPivote);
 			$result = sqlsrv_query($conn,$sql);
 			$row = sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC);
 			$VecesVendida = $row["Cuenta"];
@@ -1579,7 +1579,7 @@
 	    $conn = FG_Conectar_Smartpharma($SedeConnection);
 	    $connCPharma = FG_Conectar_CPharma();
 
-	    $sql = QG_Existencia_Actual();
+	    $sql = SQL_Existencia_Actual();
 	    $result = sqlsrv_query($conn,$sql);
 
 	    $FechaCaptura = new DateTime("now");
@@ -1591,7 +1591,7 @@
 	        $CodigoInterno = $row["CodigoInterno"];
 	        $Descripcion=$row["Descripcion"];
 	 
-	        $sqlCPharma = QG_Etiqueta_Articulo($IdArticulo);
+	        $sqlCPharma = SQL_Etiqueta_Articulo($IdArticulo);
 	        $ResultCPharma = mysqli_query($connCPharma,$sqlCPharma);
 	        $RowCPharma = mysqli_fetch_assoc($ResultCPharma);
 	        $IdArticuloCPharma = $RowCPharma['id_articulo'];
@@ -1996,34 +1996,34 @@
 		$FManana = date("Y-m-d",strtotime($FHoy."+1 days"));
 		$FAyer = date("Y-m-d",strtotime($FHoy."-1 days"));
 
-		$sql = QCleanTable('CP_Etiqueta_C1');
+		$sql = SQL_Clean_Table('CP_Etiqueta_C1');
 		sqlsrv_query($conn,$sql);
-		$sql = QCleanTable('CP_Etiqueta_C2');
+		$sql = SQL_Clean_Table('CP_Etiqueta_C2');
 		sqlsrv_query($conn,$sql);
-		$sql = QCleanTable('CP_Etiqueta_C3');
+		$sql = SQL_Clean_Table('CP_Etiqueta_C3');
 		sqlsrv_query($conn,$sql);
-		$sql = QCleanTable('CP_Etiqueta_C4');
+		$sql = SQL_Clean_Table('CP_Etiqueta_C4');
 		sqlsrv_query($conn,$sql);
 
   	if($dia=='HOY'){
-  		$sql1 = QG_CP_Etiqueta_C1($FHoy,$FManana);
+  		$sql1 = SQL_CP_Etiqueta_C1($FHoy,$FManana);
 			sqlsrv_query($conn,$sql1);
-			$sql2 = QG_CP_Etiqueta_C2($FHoy,$FManana);
+			$sql2 = SQL_CP_Etiqueta_C2($FHoy,$FManana);
 			sqlsrv_query($conn,$sql2);
-			$sql2 = QG_CP_Etiqueta_C3($FHoy,$FManana);
+			$sql2 = SQL_CP_Etiqueta_C3($FHoy,$FManana);
 			sqlsrv_query($conn,$sql2);
-			$sql2 = QG_CP_Etiqueta_C4($FHoy,$FManana);
+			$sql2 = SQL_CP_Etiqueta_C4($FHoy,$FManana);
 			sqlsrv_query($conn,$sql2);
 			$FchaCambio = $FHoy;
   	}
   	else if($dia=='AYER'){
-  		$sql1 = QG_CP_Etiqueta_C1($FAyer,$FHoy);
+  		$sql1 = SQL_CP_Etiqueta_C1($FAyer,$FHoy);
 			sqlsrv_query($conn,$sql1);
-			$sql2 = QG_CP_Etiqueta_C2($FAyer,$FHoy);
+			$sql2 = SQL_CP_Etiqueta_C2($FAyer,$FHoy);
 			sqlsrv_query($conn,$sql2);
-			$sql2 = QG_CP_Etiqueta_C3($FAyer,$FHoy);
+			$sql2 = SQL_CP_Etiqueta_C3($FAyer,$FHoy);
 			sqlsrv_query($conn,$sql2);
-			$sql2 = QG_CP_Etiqueta_C4($FAyer,$FHoy);
+			$sql2 = SQL_CP_Etiqueta_C4($FAyer,$FHoy);
 			sqlsrv_query($conn,$sql2);
 			$FchaCambio = $FAyer;
   	}
@@ -2039,13 +2039,13 @@
   	}
 
 		
-		$sql = QCleanTable('CP_Etiqueta_C1');
+		$sql = SQL_Clean_Table('CP_Etiqueta_C1');
 		sqlsrv_query($conn,$sql);
-		$sql = QCleanTable('CP_Etiqueta_C2');
+		$sql = SQL_Clean_Table('CP_Etiqueta_C2');
 		sqlsrv_query($conn,$sql);
-		$sql = QCleanTable('CP_Etiqueta_C3');
+		$sql = SQL_Clean_Table('CP_Etiqueta_C3');
 		sqlsrv_query($conn,$sql);
-		$sql = QCleanTable('CP_Etiqueta_C4');
+		$sql = SQL_Clean_Table('CP_Etiqueta_C4');
 		sqlsrv_query($conn,$sql);
 
 		$CuentaCard = 0;
