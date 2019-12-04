@@ -7,10 +7,11 @@
 @section('content')
     <?php
         include(app_path().'\functions\config.php');
-        include(app_path().'\functions\querys.php');
-        include(app_path().'\functions\funciones.php');
+        include(app_path().'\functions\functions.php');
+        include(app_path().'\functions\querys_mysql.php');
+        include(app_path().'\functions\querys_sqlserver.php');
 
-        $conCP = ConectarXampp();
+        $conCP = FG_Conectar_CPharma();
         
         $sql1 = QG_RangoMinTasaVenta();
         $result1 = mysqli_query($conCP, $sql1);
