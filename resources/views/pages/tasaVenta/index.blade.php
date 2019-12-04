@@ -107,7 +107,7 @@
 				    <span class="input-group-text purple lighten-3" id="basic-text1"><i class="fas fa-search text-white"
 				        aria-hidden="true"></i></span>
 				  </div>
-				  <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterFirsTable()">
+				  <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterAllTable()">
 				</div>
 	        </td>
 	    </tr>

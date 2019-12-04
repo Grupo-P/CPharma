@@ -78,7 +78,7 @@
 	</h1>
 
 	<hr class="row align-items-start col-12">
-	<table style="width:100%;">
+	<table style="width:100%;" class="CP-stickyBar">
 		<tr>
 				<td style="width:7%;">
 					<form action="/ordenCompra/" method="POST">                  
@@ -96,7 +96,7 @@
 				    <span class="input-group-text purple lighten-3" id="basic-text1"><i class="fas fa-search text-white"
 				        aria-hidden="true"></i></span>
 				  </div>
-				  <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterFirsTable()">
+				  <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterAllTable()" autofocus="autofocus">
 				</div>
 	        </td>
 	    </tr>
@@ -106,24 +106,24 @@
 	<table class="table table-striped table-borderless col-12 sortable" id="myTable">
 	  	<thead class="thead-dark">
 		    <tr>
-		      	<th scope="col" class="stickyCP">#</th>
-		      	<th scope="col" class="stickyCP">Codigo Orden</th>
-		      	<th scope="col" class="stickyCP">Codigo Interno</th>	
-		      	<th scope="col" class="stickyCP">Codigo Barra</th>	
-		      	<th scope="col" class="stickyCP">Descripcion</th>		      		
-		      	<th scope="col" class="stickyCP">Cantidad FTN</th>	
-		      	<th scope="col" class="stickyCP">Cantidad FLL</th>	
-		      	<th scope="col" class="stickyCP">Cantidad FAU</th>		
-		      	<th scope="col" class="stickyCP">Cantidad MC</th>	
-		      	<th scope="col" class="stickyCP">Total Unidades</th>
-		      	<th scope="col" class="stickyCP">Costo Unitario</th>	
-		      	<th scope="col" class="stickyCP">Costo Total</th>
-		      	<th scope="col" class="stickyCP">Existencia (Origen)</th>		
-		      	<th scope="col" class="stickyCP">Dias Restantes (Origen)</th>	
-		      	<th scope="col" class="stickyCP">Reporte (Origen)</th>	
-		      	<th scope="col" class="stickyCP">Rango (Origen)</th>	
-		      	<th scope="col" class="stickyCP">Estatus</th>
-		      	<th scope="col" class="stickyCP">Acciones</th>
+		      	<th scope="col" class="CP-sticky">#</th>
+		      	<th scope="col" class="CP-sticky">Codigo Orden</th>
+		      	<th scope="col" class="CP-sticky">Codigo Interno</th>	
+		      	<th scope="col" class="CP-sticky">Codigo Barra</th>	
+		      	<th scope="col" class="CP-sticky">Descripcion</th>		      		
+		      	<th scope="col" class="CP-sticky">Cantidad FTN</th>	
+		      	<th scope="col" class="CP-sticky">Cantidad FLL</th>	
+		      	<th scope="col" class="CP-sticky">Cantidad FAU</th>		
+		      	<th scope="col" class="CP-sticky">Cantidad MC</th>	
+		      	<th scope="col" class="CP-sticky">Total Unidades</th>
+		      	<th scope="col" class="CP-sticky">Costo Unitario</th>	
+		      	<th scope="col" class="CP-sticky">Costo Total</th>
+		      	<th scope="col" class="CP-sticky">Existencia (Origen)</th>		
+		      	<th scope="col" class="CP-sticky">Dias Restantes (Origen)</th>	
+		      	<th scope="col" class="CP-sticky">Reporte (Origen)</th>	
+		      	<th scope="col" class="CP-sticky">Rango (Origen)</th>	
+		      	<th scope="col" class="CP-sticky">Estatus</th>
+		      	<th scope="col" class="CP-sticky">Acciones</th>
 		    </tr>
 	  	</thead>
 	  	<tbody>

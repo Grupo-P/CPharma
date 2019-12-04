@@ -133,7 +133,7 @@
 	</h1>
 
 	<hr class="row align-items-start col-12">
-	<table style="width:100%;">
+	<table style="width:100%;" class="CP-stickyBar">
 	    <tr>
 	    	<?php
 	    		if((Auth::user()->departamento == 'TECNOLOGIA')
@@ -156,7 +156,7 @@
 				    <span class="input-group-text purple lighten-3" id="basic-text1"><i class="fas fa-search text-white"
 				        aria-hidden="true"></i></span>
 				  </div>
-				  <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterAllTable()">
+				  <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterAllTable()" autofocus="autofocus">
 				</div>
 	        </td>
 	    </tr>
