@@ -367,4 +367,15 @@
 			";
 			return $sql;
 		}
+		/**********************************************************************************/
+		/*
+		TITULO: QVerCapturaDiaria
+		PARAMETROS: [$FechaCaptura] El dia de hoy
+		FUNCION: consulta todos los datos de la captura diaria
+		RETORNO: no aplica
+	 */
+	function QVerCapturaDiaria() {
+		$sql = "SELECT * FROM capturas_diarias order by fecha_captura desc";
+		return $sql;
+	}
 ?>
