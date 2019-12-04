@@ -1118,13 +1118,12 @@
   /**********************************************************************************/
   /*
 		TITULO: FG_Dias_EnCero
-		PARAMETROS: no aplica
 		FUNCION: Captura y almacena la data para dias en cero
 		RETORNO: no aplica
+		DESARROLLADO POR: SERGIO COVA
 	 */
 	function FG_Dias_EnCero() {
 		$SedeConnection = MiUbicacion();
-		//$SedeConnection = 'FTN';
 		$conn = FG_Conectar_Smartpharma($SedeConnection);
 		$connCPharma = FG_Conectar_CPharma();
 
