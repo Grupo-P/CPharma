@@ -68,7 +68,7 @@ class RH_EntrevistaController extends Controller {
             $entrevistas->save();
 
             $candidato = RH_Candidato::find($request->input('CandidatoId'));
-            $candidato->estatus = 'ENTREVISTADO';
+            $candidato->estatus = 'EN_PROCESO';
             $candidato->save();
 
             $Auditoria = new Auditoria();
@@ -140,6 +140,10 @@ class RH_EntrevistaController extends Controller {
 
             $entrevistas->user = auth()->user()->name;
             $entrevistas->save();
+
+            $candidato = RH_Candidato::find($request->input('CandidatoId'));
+            $candidato->estatus = 'EN_PROCESO';
+            $candidato->save();
 
             $Auditoria = new Auditoria();
             $Auditoria->accion = 'EDITAR';
