@@ -483,7 +483,7 @@
 	  		<div class="card-body text-left bg-danger">
 	    		<h5 class="card-title">
 		    		<span class="card-text text-white">
-		    			<?php echo "".SedeFTNOFF."<br/>".LastRestoreDB(nameFTNOFF,$SedeConnection);?>
+		    			<?php echo "".SedeFTNOFF."<br/>".FG_LastRestoreDB(nameFTNOFF,$SedeConnection);?>
 		    		</span>
 	    		</h5>	    	    
 	  		</div>
@@ -499,7 +499,7 @@
 	  		<div class="card-body text-left bg-success">
 	    		<h5 class="card-title">
 		    		<span class="card-text text-white">
-		    			<?php echo "".SedeFLLOFF."<br/>".LastRestoreDB(nameFLLOFF,$SedeConnection);?>
+		    			<?php echo "".SedeFLLOFF."<br/>".FG_LastRestoreDB(nameFLLOFF,$SedeConnection);?>
 		    		</span>
 	    		</h5>	    	    
 	  		</div>
@@ -515,7 +515,7 @@
 	  		<div class="card-body text-left bg-info">
 	    		<h5 class="card-title">
 		    		<span class="card-text text-white">
-		    			<?php echo "".SedeFAUOFF."<br/>".LastRestoreDB(nameFAUOFF,$SedeConnection);?>
+		    			<?php echo "".SedeFAUOFF."<br/>".FG_LastRestoreDB(nameFAUOFF,$SedeConnection);?>
 		    		</span>
 	    		</h5>	    	    
 	  		</div>
@@ -539,7 +539,7 @@
 	  		<div class="card-body text-left bg-success">
 	    		<h5 class="card-title">
 		    		<span class="card-text text-white">
-		    			<?php echo "".SedeFLLOFF."<br/>".LastRestoreDB(nameFLLOFF,$SedeConnection);?>
+		    			<?php echo "".SedeFLLOFF."<br/>".FG_LastRestoreDB(nameFLLOFF,$SedeConnection);?>
 		    		</span>
 	    		</h5>	    	    
 	  		</div>
@@ -555,7 +555,7 @@
 	  		<div class="card-body text-left bg-info">
 	    		<h5 class="card-title">
 		    		<span class="card-text text-white">
-		    			<?php echo "".SedeFAUOFF."<br/>".LastRestoreDB(nameFAUOFF,$SedeConnection);?>
+		    			<?php echo "".SedeFAUOFF."<br/>".FG_LastRestoreDB(nameFAUOFF,$SedeConnection);?>
 		    		</span>
 	    		</h5>	    	    
 	  		</div>
@@ -579,7 +579,7 @@
 	  		<div class="card-body text-left bg-danger">
 	    		<h5 class="card-title">
 		    		<span class="card-text text-white">
-		    			<?php echo "".SedeFTNOFF."<br/>".LastRestoreDB(nameFTNOFF,$SedeConnection);?>
+		    			<?php echo "".SedeFTNOFF."<br/>".FG_LastRestoreDB(nameFTNOFF,$SedeConnection);?>
 		    		</span>
 	    		</h5>	    	    
 	  		</div>
@@ -595,7 +595,7 @@
 	  		<div class="card-body text-left bg-info">
 	    		<h5 class="card-title">
 		    		<span class="card-text text-white">
-		    			<?php echo "".SedeFAUOFF."<br/>".LastRestoreDB(nameFAUOFF,$SedeConnection);?>
+		    			<?php echo "".SedeFAUOFF."<br/>".FG_LastRestoreDB(nameFAUOFF,$SedeConnection);?>
 		    		</span>
 	    		</h5>	    	    
 	  		</div>
@@ -619,7 +619,7 @@
 	  		<div class="card-body text-left bg-danger">
 	    		<h5 class="card-title">
 		    		<span class="card-text text-white">
-		    			<?php echo "".SedeFTNOFF."<br/>".LastRestoreDB(nameFTNOFF,$SedeConnection);?>
+		    			<?php echo "".SedeFTNOFF."<br/>".FG_LastRestoreDB(nameFTNOFF,$SedeConnection);?>
 		    		</span>
 	    		</h5>	    	    
 	  		</div>
@@ -635,7 +635,7 @@
 	  		<div class="card-body text-left bg-success">
 	    		<h5 class="card-title">
 		    		<span class="card-text text-white">
-		    			<?php echo "".SedeFLLOFF."<br/>".LastRestoreDB(nameFLLOFF,$SedeConnection);?>
+		    			<?php echo "".SedeFLLOFF."<br/>".FG_LastRestoreDB(nameFLLOFF,$SedeConnection);?>
 		    		</span>
 	    		</h5>	    	    
 	  		</div>
