@@ -13,7 +13,7 @@
 	include(app_path().'\functions\querys_sqlserver.php');
 
 	$connCPharma = FG_Conectar_CPharma();
-	$sqlCPharma = QG_Ver_CapturaDiaria();
+	$sqlCPharma = MySQL_Ver_CapturaDiaria();
 	$result = mysqli_query($connCPharma,$sqlCPharma);
 ?>
 

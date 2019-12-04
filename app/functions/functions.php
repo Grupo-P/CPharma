@@ -1201,18 +1201,18 @@
      	
 			$date = date('Y-m-d h:i:s',time());
 			
-			$sqlCPharma = QG_Guardar_Dias_EnCero($IdArticulo,$CodigoInterno,$Descripcion,$Existencia,$Precio,$FechaCaptura,$user,$date);
+			$sqlCPharma = MySQL_Guardar_Dias_EnCero($IdArticulo,$CodigoInterno,$Descripcion,$Existencia,$Precio,$FechaCaptura,$user,$date);
 			mysqli_query($connCPharma,$sqlCPharma);
 		}
 		FG_Guardar_Captura_Diaria($connCPharma,$FechaCaptura,$date);
 
-		$sqlCC = QG_Validar_Captura_Diaria($FechaCaptura);
+		$sqlCC = MySQL_Validar_Captura_Diaria($FechaCaptura);
 		$resultCC = mysqli_query($connCPharma,$sqlCC);
 		$rowCC = mysqli_fetch_assoc($resultCC);
 		$CuentaCaptura = $rowCC["CuentaCaptura"];
 
 		if($CuentaCaptura == 0){
-			$sqlB = QG_Borrar_DiasCero($FechaCaptura);
+			$sqlB = MySQL_Borrar_DiasCero($FechaCaptura);
 			mysqli_query($connCPharma,$sqlB);
 			mysqli_close($connCPharma);
 			sqlsrv_close($conn);
@@ -1232,12 +1232,12 @@
 		RETORNO: no aplica
 	 */
 	function FG_Guardar_Captura_Diaria($connCPharma,$FechaCaptura,$date) {
-		$sql = QG_Captura_Diaria($FechaCaptura);
+		$sql = MySQL_Captura_Diaria($FechaCaptura);
 		$result = mysqli_query($connCPharma,$sql);
 		$row = mysqli_fetch_assoc($result);
 		$TotalRegistros = $row["TotalRegistros"];
 
-		$sql1 = QG_Guardar_Captura_Diaria($TotalRegistros,$FechaCaptura,$date);
+		$sql1 = MySQL_Guardar_Captura_Diaria($TotalRegistros,$FechaCaptura,$date);
 		mysqli_query($connCPharma,$sql1);
 	}
 	/**********************************************************************************/
@@ -1252,7 +1252,7 @@
 		$conn = FG_Conectar_Smartpharma($SedeConnection);
 		$connCPharma = FG_Conectar_CPharma();
 
-		$sqlB = QG_Borrar_ProductosCaida();
+		$sqlB = MySQL_Borrar_ProductosCaida();
 		mysqli_query($connCPharma,$sqlB);
 
 		$FechaCaptura = new DateTime("now");
@@ -1411,7 +1411,7 @@
 							$Dia9 = array_pop($ExistenciaDecreciente);
 							$Dia10 = array_pop($ExistenciaDecreciente);
 
-							$sqlCPharma = QGuardarProductosCaida($IdArticulo,$CodigoArticulo,$Descripcion,$Precio,$Existencia,$Dia10,$Dia9,$Dia8,$Dia7,$Dia6,$Dia5,$Dia4,$Dia3,$Dia2,$Dia1,$UnidadesVendidas,$DiasRestantes,$FechaCaptura,$user,$date,$date);
+							$sqlCPharma = MySQL_Guardar_Productos_Caida($IdArticulo,$CodigoArticulo,$Descripcion,$Precio,$Existencia,$Dia10,$Dia9,$Dia8,$Dia7,$Dia6,$Dia5,$Dia4,$Dia3,$Dia2,$Dia1,$UnidadesVendidas,$DiasRestantes,$FechaCaptura,$user,$date,$date);
 
 							mysqli_query($connCPharma,$sqlCPharma);
 						}	
@@ -1441,7 +1441,7 @@
 		}
 		GuardarCapturaCaida($connCPharma,$FechaCaptura,$date);
 		
-		$sqlCC = QValidarCapturaCaida($FechaCaptura);
+		$sqlCC = MySQL_Validar_Captura_Caida($FechaCaptura);
 		$resultCC = mysqli_query($connCPharma,$sqlCC);
 		$rowCC = mysqli_fetch_assoc($resultCC);
 		$CuentaCaptura = $rowCC["CuentaCaptura"];
@@ -1464,7 +1464,7 @@
 		RETORNO: 
  	*/
 	function CuentaExistencia($connCPharma,$IdArticulo,$FInicial,$FFinal) {
-		$sql = QCuentaExistencia($IdArticulo,$FInicial,$FFinal);
+		$sql = MySQL_Cuenta_Existencia($IdArticulo,$FInicial,$FFinal);
 		$result = mysqli_query($connCPharma,$sql);
 		$row = mysqli_fetch_assoc($result);
 		$Cuenta = $row["Cuenta"];
@@ -1516,7 +1516,7 @@
 
 		while( ($FInicial!=$FFinal) && ($CuentaDecreciente==TRUE) ) {
 
-			$sql = QExistenciaDiasCero($IdArticulo,$FInicial);
+			$sql = MySQL_Existencia_Dias_Cero($IdArticulo,$FInicial);
 			$result = mysqli_query($connCPharma,$sql);
 			$row = mysqli_fetch_assoc($result);
 			$ExistenciaHoy = $row["existencia"];
@@ -1559,12 +1559,12 @@
 		RETORNO: no aplica
 	 */
 	function GuardarCapturaCaida($connCPharma,$FechaCaptura,$date) {
-		$sql = QCapturaCaida($FechaCaptura);
+		$sql = MySQL_Captura_Caida($FechaCaptura);
 		$result = mysqli_query($connCPharma,$sql);
 		$row = mysqli_fetch_assoc($result);
 		$TotalRegistros = $row["TotalRegistros"];
 
-		$sql1 = QGuardarCapturaCaida($TotalRegistros,$FechaCaptura,$date);
+		$sql1 = MySQL_Guardar_Captura_Caida($TotalRegistros,$FechaCaptura,$date);
 		mysqli_query($connCPharma,$sql1);
 	}
 	/**********************************************************************************/
@@ -1605,18 +1605,18 @@
 	            $date = new DateTime('now');
 	            $date = $date->format("Y-m-d H:i:s");
 
-	            $sqlCP = QG_Guardar_Etiqueta_Articulo($IdArticulo,$CodigoInterno,$Descripcion,$condicion,$clasificacion,$estatus,$user,$date);
+	            $sqlCP = MySQL_Guardar_Etiqueta_Articulo($IdArticulo,$CodigoInterno,$Descripcion,$condicion,$clasificacion,$estatus,$user,$date);
 	            mysqli_query($connCPharma,$sqlCP);
 	        }
 	    }
 	    FG_Guardar_Captura_Etiqueta($connCPharma,$FechaCaptura,$date);
-		$sqlCC = QG_Validar_Captura_Etiqueta($FechaCaptura);
+		$sqlCC = MySQL_Validar_Captura_Etiqueta($FechaCaptura);
 		$resultCC = mysqli_query($connCPharma,$sqlCC);
 		$rowCC = mysqli_fetch_assoc($resultCC);
 		$CuentaCaptura = $rowCC["CuentaCaptura"];
 
 		if($CuentaCaptura == 0){
-			$sqlB = QG_Borrar_Captura_Etiqueta($FechaCaptura);
+			$sqlB = MySQL_Borrar_Captura_Etiqueta($FechaCaptura);
 			mysqli_query($connCPharma,$sqlB);			
 			mysqli_close($connCPharma);
 			sqlsrv_close($conn);
@@ -1636,12 +1636,12 @@
 		RETORNO: no aplica
  	*/
 	function FG_Guardar_Captura_Etiqueta($connCPharma,$FechaCaptura,$date) {
-		$sql = QG_Captura_Etiqueta($FechaCaptura);
+		$sql = MySQL_Captura_Etiqueta($FechaCaptura);
 		$result = mysqli_query($connCPharma,$sql);
 		$row = mysqli_fetch_assoc($result);
 		$TotalRegistros = $row["TotalRegistros"];
 
-		$sql1 = QG_Guardar_Captura_Etiqueta($TotalRegistros,$FechaCaptura,$date);
+		$sql1 = MySQL_Guardar_Captura_Etiqueta($TotalRegistros,$FechaCaptura,$date);
 		mysqli_query($connCPharma,$sql1);
 	}
 	/**********************************************************************************/
@@ -2092,7 +2092,7 @@
 
 						$PrecioHoy = FG_Calculo_Precio_Alfa($Existencia,$ExistenciaAlmacen1,$ExistenciaAlmacen2,$IsTroquelado,$UtilidadArticulo,$UtilidadCategoria,$TroquelAlmacen1,$PrecioCompraBrutoAlmacen1,$TroquelAlmacen2,$PrecioCompraBrutoAlmacen2,$PrecioCompraBruto,$IsIVA,$CondicionExistencia);
 
-						$sqlCC = QG_DiasCero_PrecioAyer($IdArticulo,$FchaCambio);
+						$sqlCC = MySQL_DiasCero_PrecioAyer($IdArticulo,$FchaCambio);
 						$resultCC = mysqli_query($connCPharma,$sqlCC);
 						$rowCC = mysqli_fetch_assoc($resultCC);
 						$PrecioAyer = $rowCC["precio"];
@@ -2215,7 +2215,7 @@
 
 						$PrecioHoy = FG_Calculo_Precio_Alfa($Existencia,$ExistenciaAlmacen1,$ExistenciaAlmacen2,$IsTroquelado,$UtilidadArticulo,$UtilidadCategoria,$TroquelAlmacen1,$PrecioCompraBrutoAlmacen1,$TroquelAlmacen2,$PrecioCompraBrutoAlmacen2,$PrecioCompraBruto,$IsIVA,$CondicionExistencia);
 
-						$sqlCC = QG_DiasCero_PrecioAyer($IdArticulo,$FchaCambio);
+						$sqlCC = MySQL_DiasCero_PrecioAyer($IdArticulo,$FchaCambio);
 						$resultCC = mysqli_query($connCPharma,$sqlCC);
 						$rowCC = mysqli_fetch_assoc($resultCC);
 						$PrecioAyer = $rowCC["precio"];
@@ -2338,7 +2338,7 @@
 
 						$PrecioHoy = FG_Calculo_Precio_Alfa($Existencia,$ExistenciaAlmacen1,$ExistenciaAlmacen2,$IsTroquelado,$UtilidadArticulo,$UtilidadCategoria,$TroquelAlmacen1,$PrecioCompraBrutoAlmacen1,$TroquelAlmacen2,$PrecioCompraBrutoAlmacen2,$PrecioCompraBruto,$IsIVA,$CondicionExistencia);
 
-						$sqlCC = QG_DiasCero_PrecioAyer($IdArticulo,$FchaCambio);
+						$sqlCC = MySQL_DiasCero_PrecioAyer($IdArticulo,$FchaCambio);
 						$resultCC = mysqli_query($connCPharma,$sqlCC);
 						$rowCC = mysqli_fetch_assoc($resultCC);
 						$PrecioAyer = $rowCC["precio"];
@@ -2450,7 +2450,7 @@
 		RETORNO: Valor de la tasa
 	 */
 	function TasaFechaConversion($Fecha,$Moneda) {
-		$resultTasaConversion = QTasaConversion($Fecha,$Moneda);
+		$resultTasaConversion = MySQL_Tasa_Conversion($Fecha,$Moneda);
 		$resultTasaConversion = mysqli_fetch_assoc($resultTasaConversion);
 		$Tasa = $resultTasaConversion['tasa'];
 		return $Tasa;

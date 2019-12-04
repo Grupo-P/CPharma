@@ -13,12 +13,12 @@
 
     $conCP = FG_Conectar_CPharma();
     
-    $sql1 = QG_RangoMinTasaVenta();
+    $sql1 = MySQL_RangoMinTasaVenta();
     $result1 = mysqli_query($conCP, $sql1);
     $row1 = mysqli_fetch_assoc($result1);
     $minimo = floatval($row1['valor']);
 
-    $sql2 = QG_RangoMaxTasaVenta();
+    $sql2 = MySQL_RangoMaxTasaVenta();
     $result2 = mysqli_query($conCP, $sql2);
     $row2 = mysqli_fetch_assoc($result2);
     $maximo = floatval($row2['valor']);
