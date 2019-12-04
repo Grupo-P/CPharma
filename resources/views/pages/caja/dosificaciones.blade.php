@@ -9,15 +9,6 @@
   include(app_path().'\functions\functions.php');
   include(app_path().'\functions\querys_mysql.php');
   include(app_path().'\functions\querys_sqlserver.php');
-
-  function ValidarFecha($FechaActual){
-    $arrayValidaciones = array(2);
-    $FechaActual = date("Y-m-d",strtotime($FechaActual."- 1 days"));
-    $TasaActual = TasaFechaConversion($FechaActual,'USD $.');
-    $arrayValidaciones[0] = $FechaActual;
-    $arrayValidaciones[1] = $TasaActual;
-    return $arrayValidaciones;
-  }
 ?>
 
 <style>
