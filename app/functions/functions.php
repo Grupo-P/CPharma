@@ -70,6 +70,46 @@
 	}
 	/**********************************************************************************/
 	/*
+		TITULO: QLastRestoreDB
+		PARAMETROS: [$nameDataBase] Nombre de la base de datos a buscar
+		FUNCION: Busca la fecha de la ultima restauracion de la base de datos
+		RETORNO: Fecha de ultima restauracion
+	 */
+	function LastRestoreDB($nameDataBase,$SedeConnection){
+		$conn = FG_Conectar_Smartpharma($SedeConnection);
+		$sql = QLastRestoreDB($nameDataBase);
+		$result = sqlsrv_query($conn,$sql);
+		$row = sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC);
+		$FechaRestauracion = $row["FechaRestauracion"]->format("Y-m-d h:i:s a");
+		return $FechaRestauracion;
+	}
+	/**********************************************************************************/
+	/*
+		TITULO: ValidarConectividad
+		PARAMETROS: [$conn] $conexion con la sede
+		FUNCION: Valida la conexion con un servidor definido
+		RETORNO: Estatus de la conectividad
+	 */
+	function FG_Validar_Conectividad($SedeConnection){
+		$InicioCarga = new DateTime("now");
+
+		$NombreSede = FG_Nombre_Sede($SedeConnection);
+		$conn = FG_Conectar_Smartpharma($SedeConnection);
+		echo('Sede: '.$NombreSede.'<br/>');
+
+		if($conn) {
+		     echo "Conexión establecida<br/>";
+		}else{
+		     echo "Conexión no se pudo establecer<br/>";
+		     die( print_r( sqlsrv_errors(), true));
+		}
+
+		$FinCarga = new DateTime("now");
+    	$IntervalCarga = $InicioCarga->diff($FinCarga);
+    	echo'Tiempo de carga: '.$IntervalCarga->format("%Y-%M-%D %H:%I:%S");
+	}
+	/**********************************************************************************/
+	/*
 		TITULO: MiUbicacion
 		FUNCION: Descifrar desde que sede estoy entrando a la aplicacion
 		RETORNO: Sede en la que me encuentro
@@ -2401,5 +2441,18 @@
 		echo "<br/>Se imprimiran ".$CuentaEtiqueta." etiquetas<br/>";
 		mysqli_close($connCPharma);
     sqlsrv_close($conn);
+	}
+	/**********************************************************************************/
+	/*
+		TITULO: TasaFechaConversion
+		PARAMETROS: [$Fecha] Fecha de la que se buscara la tasa
+		FUNCION: Buscar el valor de la tasa
+		RETORNO: Valor de la tasa
+	 */
+	function TasaFechaConversion($Fecha,$Moneda) {
+		$resultTasaConversion = QTasaConversion($Fecha,$Moneda);
+		$resultTasaConversion = mysqli_fetch_assoc($resultTasaConversion);
+		$Tasa = $resultTasaConversion['tasa'];
+		return $Tasa;
 	}
 ?>

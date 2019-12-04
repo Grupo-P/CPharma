@@ -14,6 +14,22 @@
     ";          
     return $sql;
   }
+  /**********************************************************************************/
+  /*
+    TITULO: QLastRestoreDB
+    PARAMETROS: [$nameDataBase] Nombre de la base de datos a buscar
+    FUNCION: Busca la fecha de la ultima restauracion de la base de datos
+    RETORNO: Fecha de ultima restauracion
+   */
+  function QLastRestoreDB($nameDataBase){
+    $sql = "
+      SELECT 
+      CONVERT (smalldatetime,sys.sysdatabases.crdate) As FechaRestauracion
+      FROM sys.sysdatabases
+      WHERE sys.sysdatabases.name LIKE '%$nameDataBase%'
+    ";
+    return $sql;
+  }
 	/**********************************************************************************/
 	/*
 		TITULO: QG_Provedor_Unico

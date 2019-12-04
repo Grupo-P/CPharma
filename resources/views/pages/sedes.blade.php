@@ -8,8 +8,9 @@
 
 	<?php
 		include(app_path().'\functions\config.php');
-		include(app_path().'\functions\Querys.php');
-		include(app_path().'\functions\funciones.php');
+    include(app_path().'\functions\functions.php');
+    include(app_path().'\functions\querys_mysql.php');
+    include(app_path().'\functions\querys_sqlserver.php');
 		$SedeConnection = MiUbicacion();
 	?>
 

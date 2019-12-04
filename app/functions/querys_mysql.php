@@ -369,12 +369,12 @@
 		}
 		/**********************************************************************************/
 		/*
-		TITULO: QVerCapturaDiaria
+		TITULO: QG_Ver_CapturaDiaria
 		PARAMETROS: [$FechaCaptura] El dia de hoy
 		FUNCION: consulta todos los datos de la captura diaria
 		RETORNO: no aplica
 	 */
-	function QVerCapturaDiaria() {
+	function QG_Ver_CapturaDiaria() {
 		$sql = "SELECT * FROM capturas_diarias order by fecha_captura desc";
 		return $sql;
 	}
@@ -407,5 +407,24 @@
 			WHERE configuracions.variable = 'RangoMaxDolar'
 		";
 		return $sql;
+	}
+	/**********************************************************************************/
+	/*
+		TITULO: QTasaConversion
+		PARAMETROS: [$QFecha] Fecha de la que se quiere la tasa
+		FUNCION: Buscar el valor de la tasa en un dia especifico
+		RETORNO: Valor de la tasa al dia que se solicito
+	 */
+	function QTasaConversion($Fecha,$Moneda) {
+		$conCP = FG_Conectar_CPharma();
+		$consulta = "
+			SELECT tasa 
+			FROM tasa_ventas 
+			WHERE fecha = '$Fecha'
+			AND moneda = '$Moneda'
+			AND estatus = 'ACTIVO'
+		";
+		$resultado = mysqli_query($conCP,$consulta);
+		return $resultado;
 	}
 ?>
