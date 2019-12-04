@@ -3,6 +3,11 @@
 namespace compras\Http\Controllers;
 
 use Illuminate\Http\Request;
+use compras\RH_Candidato_Prueba;
+use compras\User;
+use compras\Auditoria;
+use compras\RH_Candidato;
+use compras\RH_Prueba;
 
 class RH_CandidatoPruebaController extends Controller {
     /**
@@ -19,8 +24,13 @@ class RH_CandidatoPruebaController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function create() {
-        //
+    public function create(Request $request) {
+        $id_candidato = $request->input("CandidatoId");
+        $candidato = RH_Candidato::find($id_candidato);
+
+        $pruebas = RH_Prueba::all();
+
+        return view('pages.RRHH.candidatos_pruebas.create', compact('candidato', 'pruebas'));
     }
 
     /**

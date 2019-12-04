@@ -273,7 +273,7 @@
           <?php 
           if($candidato->estatus == 'POSTULADO') {
           ?>
-            <form action="/entrevistas/create" method="GET">
+            <form action="/candidatos_pruebas/create" method="GET">
               <input type="hidden" name="CandidatoId" value="{{$candidato->id}}">
 
               <button type="submit" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="bottom" title="Ir a la fase">
