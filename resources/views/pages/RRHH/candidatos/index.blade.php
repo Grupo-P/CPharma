@@ -346,13 +346,6 @@
           <?php 
           if($candidato->estatus == 'POSTULADO') {
           ?>
-            {{-- <form action="/candidatos_pruebas/create" method="GET">
-              <input type="hidden" name="CandidatoId" value="{{$candidato->id}}">
-
-              <button type="submit" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="bottom" title="Ir a la fase">
-                <i class="far fa-play-circle"></i>&nbsp;Iniciar proceso
-              </button>
-            </form> --}}
             <form action="/gestor_fases" method="POST">
               @csrf
               <input type="hidden" name="CandidatoId" value="{{$candidato->id}}">
@@ -365,18 +358,27 @@
 
           <?php
           } else {
-            //$fase = compras\RHI_Candidato_Fase::where('rh_candidatos_id', $candidato->id);
-            //$nombre_fase = compras\RH_Fase::find($fase->rh_fases_id);
+            $fase = DB::table('rhi_candidatos_fases')->where('rh_candidatos_id', $candidato->id)->value('rh_fases_id');
 
-            /*switch ($nombre_fase->nombre_fase) {
+            $nombre_fase = DB::table('rh_fases')->where('id', $fase)->value('nombre_fase');
+
+            switch ($nombre_fase) {
               case 'Pruebas Psicológicas':
+          ?>
+            <form action="/candidatos_pruebas/create" method="GET">
+              <input type="hidden" name="CandidatoId" value="{{$candidato->id}}">
 
+              <button type="submit" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="bottom" title="Ir a la fase">
+                <i class="far fa-play-circle"></i>&nbsp;Iniciar proceso
+              </button>
+            </form>
+          <?php
               break;
               
               default:
                 echo '-';
               break;
-            }*/
+            }
           ?>
           <?php
           }//else
