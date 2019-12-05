@@ -12,7 +12,9 @@ class AddFechaFacilitadorResultadoToRhiCandidatosPruebasTable extends Migration 
      */
     public function up() {
         Schema::table('rhi_candidatos_pruebas', function (Blueprint $table) {
-            //
+            $table->date('fecha')->after('rh_pruebas_id');
+            $table->string('facilitador')->after('fecha');
+            $table->double('puntuacion', 8, 2)->after('facilitador');
         });
     }
 
@@ -23,7 +25,11 @@ class AddFechaFacilitadorResultadoToRhiCandidatosPruebasTable extends Migration 
      */
     public function down() {
         Schema::table('rhi_candidatos_pruebas', function (Blueprint $table) {
-            //
+            $table->dropColumn([
+                'fecha', 
+                'facilitador', 
+                'puntuacion'
+            ]);
         });
     }
 }
