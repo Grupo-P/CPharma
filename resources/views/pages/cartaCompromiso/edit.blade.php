@@ -28,10 +28,11 @@
   @endif
 
   <?php 
-    include(app_path().'\functions\config.php'); 
-    include(app_path().'\functions\Querys.php');
-    include(app_path().'\functions\funciones.php');
-    $_GET['SEDE'] = MiUbicacion();
+    include(app_path().'\functions\config.php');
+    include(app_path().'\functions\functions.php');
+    include(app_path().'\functions\querys_mysql.php');
+    include(app_path().'\functions\querys_sqlserver.php');
+    $_GET['SEDE'] = FG_Mi_Ubicacion();
   ?>
 
   <h1 class="h5 text-info">

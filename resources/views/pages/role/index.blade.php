@@ -4,13 +4,6 @@
     Rol
 @endsection
 
-@section('scriptsHead')
-    <script src="{{ asset('assets/js/sortTable.js') }}">	
-    </script>
-    <script src="{{ asset('assets/js/filter.js') }}">	
-    </script>
-@endsection
-
 @section('content')
 
 	<!-- Modal Guardar -->
@@ -85,7 +78,7 @@
 	</h1>
 
 	<hr class="row align-items-start col-12">
-	<table style="width:100%;">
+	<table style="width:100%;" class="CP-stickyBar">
 	    <tr>
 	        <td style="width:10%;" align="center">	        	
 				<a href="{{ url('/rol/create') }}" role="button" class="btn btn-outline-info btn-sm" 
@@ -100,7 +93,7 @@
 				    <span class="input-group-text purple lighten-3" id="basic-text1"><i class="fas fa-search text-white"
 				        aria-hidden="true"></i></span>
 				  </div>
-				  <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterFirsTable()">
+				  <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterAllTable()" autofocus="autofocus">
 				</div>
 	        </td>
 	    </tr>
@@ -110,14 +103,14 @@
 	<table class="table table-striped table-borderless col-12 sortable" id="myTable">
 	  	<thead class="thead-dark">
 		    <tr>
-		      	<th scope="col" class="stickyCP">#</th>
-		      	<th scope="col" class="stickyCP">Nombre</th>
-		      	<th scope="col" class="stickyCP">¿Lee?</th>
-		      	<th scope="col" class="stickyCP">¿Agrega?</th>
-		      	<th scope="col" class="stickyCP">¿Modifica?</th>
-		      	<th scope="col" class="stickyCP">¿Elimina?</th>
-		      	<th scope="col" class="stickyCP">Estatus</th>
-		      	<th scope="col" class="stickyCP">Acciones</th>
+		      	<th scope="col" class="CP-sticky">#</th>
+		      	<th scope="col" class="CP-sticky">Nombre</th>
+		      	<th scope="col" class="CP-sticky">¿Lee?</th>
+		      	<th scope="col" class="CP-sticky">¿Agrega?</th>
+		      	<th scope="col" class="CP-sticky">¿Modifica?</th>
+		      	<th scope="col" class="CP-sticky">¿Elimina?</th>
+		      	<th scope="col" class="CP-sticky">Estatus</th>
+		      	<th scope="col" class="CP-sticky">Acciones</th>
 		    </tr>
 	  	</thead>
 	  	<tbody>

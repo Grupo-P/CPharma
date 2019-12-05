@@ -94,17 +94,12 @@
     include(app_path().'\functions\querys_sqlserver.php');
 
     $sql = Lista_Proveedores();
-    $ArtJson = FG_Armar_Json($sql,MiUbicacion());
-    //$ArtJson = FG_Armar_Json($sql,'FTN');
+    $SedeConnection = FG_Mi_Ubicacion();
 
-    $SedeDestino = FG_Nombre_Sede(MiUbicacion());
-    //$SedeDestino = FG_Nombre_Sede('FTN');
-
-    $SedeOrigen = FG_Nombre_Sede(MiUbicacion());
-    //$SedeOrigen = FG_Nombre_Sede('FTN');
-
-    $SiglasOrigen = MiUbicacion();
-    //$SiglasOrigen = 'FTN';
+    $ArtJson = FG_Armar_Json($sql,$SedeConnection);
+    $SedeDestino = FG_Nombre_Sede($SedeConnection);   
+    $SedeOrigen = FG_Nombre_Sede($SedeConnection);    
+    $SiglasOrigen = $SedeConnection;
 
     $Operador = auth()->user()->name;
     $FHoy = date('Y-m-d H:i:s');

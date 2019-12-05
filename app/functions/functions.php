@@ -70,18 +70,58 @@
 	}
 	/**********************************************************************************/
 	/*
-		TITULO: MiUbicacion
+		TITULO: FG_LastRestoreDB
+		FUNCION: Busca la fecha de la ultima restauracion de la base de datos
+		RETORNO: Fecha de ultima restauracion
+		DESAROLLADO POR: SERGIO COVA
+	 */
+	function FG_LastRestoreDB($nameDataBase,$SedeConnection){
+		$conn = FG_Conectar_Smartpharma($SedeConnection);
+		$sql = SQL_Last_RestoreDB($nameDataBase);
+		$result = sqlsrv_query($conn,$sql);
+		$row = sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC);
+		$FechaRestauracion = $row["FechaRestauracion"]->format("Y-m-d h:i:s a");
+		return $FechaRestauracion;
+	}
+	/**********************************************************************************/
+	/*
+		TITULO: FG_Validar_Conectividad		
+		FUNCION: Valida la conexion con un servidor definido
+		RETORNO: Estatus de la conectividad
+		DESAROLLADO POR: SERGIO COVA
+	 */
+	function FG_Validar_Conectividad($SedeConnection){
+		$InicioCarga = new DateTime("now");
+
+		$NombreSede = FG_Nombre_Sede($SedeConnection);
+		$conn = FG_Conectar_Smartpharma($SedeConnection);
+		echo('Sede: '.$NombreSede.'<br/>');
+
+		if($conn) {
+		     echo "Conexión establecida<br/>";
+		}else{
+		     echo "Conexión no se pudo establecer<br/>";
+		     die( print_r( sqlsrv_errors(), true));
+		}
+
+		$FinCarga = new DateTime("now");
+    	$IntervalCarga = $InicioCarga->diff($FinCarga);
+    	echo'Tiempo de carga: '.$IntervalCarga->format("%Y-%M-%D %H:%I:%S");
+	}
+	/**********************************************************************************/
+	/*
+		TITULO: FG_Mi_Ubicacion
 		FUNCION: Descifrar desde que sede estoy entrando a la aplicacion
 		RETORNO: Sede en la que me encuentro
 		DESAROLLADO POR: SERGIO COVA
 	 */
-	function MiUbicacion(){
+	function FG_Mi_Ubicacion(){
 		$NombreCliente = gethostname();
 		$IpCliente = gethostbyname($NombreCliente);
 		$Octeto = explode(".", $IpCliente);
 		
 		switch ($Octeto[2]) {
-		/*INICIO BLOQUE DE FTN*/
+		//INICIO BLOQUE DE FTN
 			case '1':
 				return 'FTN';
 			break;
@@ -89,22 +129,22 @@
 			case '2':
 				return 'FTN';
 			break;
-		/*FIN BLOQUE DE FTN*/
-		/*INICIO BLOQUE DE GP*/
+		//FIN BLOQUE DE FTN
+		//INICIO BLOQUE DE GP
 			case '10':
 				return 'GP';
 			break;
-		/*FIN BLOQUE DE GP*/
-		/*INICIO BLOQUE DE FLL*/
+		//FIN BLOQUE DE GP
+		//INICIO BLOQUE DE FLL
 			case '7':
 				return 'FLL';
 			break;
-		/*FIN BLOQUE DE FLL*/
-		/*INICIO BLOQUE DE FAU*/
+		//FIN BLOQUE DE FLL
+		//INICIO BLOQUE DE FAU
 			case '12':
 				return 'FAU';
 			break;
-		/*INICIO BLOQUE DE FAU*/
+		//INICIO BLOQUE DE FAU
 			default:
 				return ''.$Octeto[2];
 			break;
@@ -119,7 +159,7 @@
 	 */
 	function FG_Nombre_Sede($SedeConnection) {
 		switch($SedeConnection) {
-		/*INICIO BLOQUE DE FTN*/
+		//INICIO BLOQUE DE FTN
 			case 'FTN':
 				$sede = SedeFTN;
 				return $sede;
@@ -132,8 +172,8 @@
 				$sede = SedeFAUOFF;
 				return $sede;
 			break;
-		/*FIN BLOQUE DE FTN*/
-		/*INICIO BLOQUE DE FLL*/
+		//FIN BLOQUE DE FTN
+		//INICIO BLOQUE DE FLL
 			case 'FLL':
 				$sede = SedeFLL;
 				return $sede;
@@ -146,8 +186,8 @@
 				$sede = SedeFAUOFF;
 				return $sede;
 			break;
-		/*FIN BLOQUE DE FLL*/
-		/*INICIO BLOQUE DE FAU*/
+		//FIN BLOQUE DE FLL
+		//INICIO BLOQUE DE FAU
 			case 'FAU':
 				$sede = SedeFAU;
 				return $sede;
@@ -160,8 +200,8 @@
 				$sede = SedeFLLOFF;
 				return $sede;
 			break;
-		/*FIN BLOQUE DE FAU*/
-		/*INICIO BLOQUE DE GRUPO P*/ 
+		//FIN BLOQUE DE FAU
+		//INICIO BLOQUE DE GRUPO P 
 			case 'GP':
 				$sede = SedeGP;
 				return $sede;
@@ -178,8 +218,8 @@
 				$sede = SedeFAUOFF;
 				return $sede;
 			break;
-		/*FIN BLOQUE DE GRUPO P*/
-		/*INICIO BLOQUE DE TEST*/  
+		//FIN BLOQUE DE GRUPO P
+		//INICIO BLOQUE DE TEST  
 			case 'DBs':
 				$sede = SedeDBs;
 				return $sede;
@@ -188,7 +228,7 @@
 				$sede = SedeDBm;
 				return $sede;
 			break;
-		/*FIN BLOQUE DE TEST*/
+		//FIN BLOQUE DE TEST
 		}
 	}
 	/**********************************************************************************/
@@ -200,7 +240,7 @@
 	 */
 	function FG_Conectar_Smartpharma($SedeConnection) {
 		switch($SedeConnection) {
-		/*INICIO BLOQUE DE FTN*/
+		//INICIO BLOQUE DE FTN
 			case 'FTN':
 				$connectionInfo = array(
 					"Database"=>nameFTN,
@@ -228,8 +268,8 @@
 				$conn = sqlsrv_connect(serverFTN,$connectionInfo);
 				return $conn;
 			break;
-		/*FIN BLOQUE DE FTN*/
-		/*INICIO BLOQUE DE FLL*/
+		//FIN BLOQUE DE FTN
+		//INICIO BLOQUE DE FLL
 			case 'FLL':
 				$connectionInfo = array(
 					"Database"=>nameFLL,
@@ -257,8 +297,8 @@
 				$conn = sqlsrv_connect(serverFLL,$connectionInfo);
 				return $conn;
 			break;
-		/*FIN BLOQUE DE FLL*/
-		/*INICIO BLOQUE DE FAU*/
+		//FIN BLOQUE DE FLL
+		//INICIO BLOQUE DE FAU
 			case 'FAU':
 				$connectionInfo = array(
 					"Database"=>nameFAU,
@@ -286,8 +326,8 @@
 				$conn = sqlsrv_connect(serverFAU,$connectionInfo);
 				return $conn;
 			break;
-		/*FIN BLOQUE DE FAU*/ 
-		/*INICIO BLOQUE DE GRUPO P*/
+		//FIN BLOQUE DE FAU 
+		//INICIO BLOQUE DE GRUPO P
 			case 'GP':
 				$connectionInfo = array(
 					"Database"=>nameGP,
@@ -324,8 +364,8 @@
 				$conn = sqlsrv_connect(serverGP,$connectionInfo);
 				return $conn;
 			break;
-		/*FIN BLOQUE DE GRUPO P*/ 
-		/*INICIO BLOQUE DE TEST*/ 
+		//FIN BLOQUE DE GRUPO P 
+		//INICIO BLOQUE DE TEST 
 			case 'DBs':
 				$connectionInfo = array(
 					"Database"=>nameDBs,
@@ -344,7 +384,7 @@
 				$conn = sqlsrv_connect(serverDBm,$connectionInfo);
 				return $conn;
 			break;
-			/*FIN BLOQUE DE TEST*/
+			//FIN BLOQUE DE TEST
 		}
 	}
 	/**********************************************************************************/
@@ -452,98 +492,6 @@
 	}
 	/**********************************************************************************/
 	/*
-		TITULO: FG_Calculo_Precio
-		FUNCION: Calcular el precio del articulo
-		RETORNO: Precio del articulo
-		DESARROLLADO POR: SERGIO COVA
-	 */
-	function FG_Calculo_Precio($Existencia,$TroquelAlmacen1,$PrecioCompraBruto,$Utilidad,$IsIVA,$TroquelAlmacen2) {		
-		if($Existencia==0) {
-			$Precio = 0;
-		}
-		else {
-		/*CASO ALMACEN 1*/
-			/*PRECIO TROQUELADO ALMACEN 1*/
-			if($TroquelAlmacen1!=NULL){
-				$Precio = $TroquelAlmacen1;
-			}
-			/*PRECIO CALCULADO*/
-			else{
-				if($PrecioCompraBruto!=NULL){
-
-					if($Utilidad==1){
-						$Precio = 0;
-					}
-					else{					
-						if($IsIVA == 1){
-							$PrecioCalculado = ($PrecioCompraBruto/$Utilidad)*Impuesto;
-							$Precio = $PrecioCalculado;
-						}
-						else {
-							$PrecioCalculado = ($PrecioCompraBruto/$Utilidad);
-							$Precio = $PrecioCalculado;
-						}
-					}
-				}
-				else{
-					/*PRECIO TROQUELADO ALMACEN 2*/
-					if($TroquelAlmacen2!=NULL){
-						$Precio = $TroquelAlmacen2;
-					}
-					else{
-						$Precio = 0;
-					}
-				}
-			}
-		}
-		return $Precio;
-	}
-	/**********************************************************************************/
-	/*
-		TITULO: FG_Calculo_Precio_Sin_Existencia
-		FUNCION: Calcular el precio del articulo
-		RETORNO: Precio del articulo
-		DESARROLLADO POR: SERGIO COVA
-	 */
-	function FG_Calculo_Precio_Sin_Existencia($TroquelAlmacen1,$PrecioCompraBruto,$Utilidad,$IsIVA,$TroquelAlmacen2) {		
-		
-		/*CASO ALMACEN 1*/
-			/*PRECIO TROQUELADO ALMACEN 1*/
-			if($TroquelAlmacen1!=NULL){
-				$Precio = $TroquelAlmacen1;
-			}
-			/*PRECIO CALCULADO*/
-			else{
-				if($PrecioCompraBruto!=NULL){
-
-					if($Utilidad==1){
-						$Precio = 0;
-					}
-					else{					
-						if($IsIVA == 1){
-							$PrecioCalculado = ($PrecioCompraBruto/$Utilidad)*Impuesto;
-							$Precio = $PrecioCalculado;
-						}
-						else {
-							$PrecioCalculado = ($PrecioCompraBruto/$Utilidad);
-							$Precio = $PrecioCalculado;
-						}
-					}
-				}
-				else{
-					/*PRECIO TROQUELADO ALMACEN 2*/
-					if($TroquelAlmacen2!=NULL){
-						$Precio = $TroquelAlmacen2;
-					}
-					else{
-						$Precio = 0;
-					}
-				}
-			}
-		return $Precio;
-	}
-	/**********************************************************************************/
-	/*
 		TITULO: FG_Rango_Dias
 		FUNCION: Calcular el rango de diferencia de dias entre el las fechas
 		RETORNO: rango de dias
@@ -605,7 +553,7 @@
 		DESARROLLADO POR: SERGIO COVA
 	 */
 	function FG_Producto_Unico($conn,$IdArticulo,$IdProveedor) {
-		$sql = QG_Provedor_Unico($IdProveedor,$IdArticulo);
+		$sql = SQL_Provedor_Unico($IdProveedor,$IdArticulo);
 		$params = array();
 		$options =  array("Scrollable"=>SQLSRV_CURSOR_KEYSET);
 		$result = sqlsrv_query($conn,$sql,$params,$options);
@@ -642,14 +590,13 @@
   /*
 		TITULO: FG_Traslado_Detalle
 		FUNCION: Ejecuta las validaciones para el traslado detalle
-		RETORNO: no aplica
 		DESARROLLADO POR: SERGIO COVA
 	 */
 	function FG_Traslado_Detalle($SedeConnection,$NumeroAjuste,$IdAjuste) {
     $conn = FG_Conectar_Smartpharma($SedeConnection);
     $connCPharma = FG_Conectar_CPharma();
 
-    $sql = QG_Articulos_Ajuste($IdAjuste);
+    $sql = SQL_Articulos_Ajuste($IdAjuste);
     $result = sqlsrv_query($conn,$sql);
    
     while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
@@ -999,7 +946,6 @@
   /*
 		TITULO: FG_Ruta_Reporte
 		FUNCION:Busca la ruta que le pertenece al nombre del reporte
-		RETORNO: url
 		DESARROLLADO POR: SERGIO COVA
  	*/
 	function FG_Ruta_Reporte($NombreReporte){
@@ -1053,7 +999,6 @@
 	/*
 		TITULO: FG_Reportes_Departamento
 		FUNCION: Consigue el numero de reportes disponibles para el departamento
-		RETORNO: cantidad de reportes
 		DESAROLLADO POR: SERGIO COVA
 	 */
 	function FG_Reportes_Departamento($Departamento) {
@@ -1095,7 +1040,6 @@
 	/*
 		TITULO: FG_Sede_OnLine
 		FUNCION: Determina si la sede es on-line
-		RETORNO: verdadero o falso
 		DESAROLLADO POR: SERGIO COVA
 	 */
 	function FG_Sede_OnLine($Sede) {
@@ -1118,17 +1062,15 @@
   /**********************************************************************************/
   /*
 		TITULO: FG_Dias_EnCero
-		PARAMETROS: no aplica
 		FUNCION: Captura y almacena la data para dias en cero
-		RETORNO: no aplica
+		DESARROLLADO POR: SERGIO COVA
 	 */
 	function FG_Dias_EnCero() {
-		$SedeConnection = MiUbicacion();
-		//$SedeConnection = 'FTN';
+		$SedeConnection = FG_Mi_Ubicacion();
 		$conn = FG_Conectar_Smartpharma($SedeConnection);
 		$connCPharma = FG_Conectar_CPharma();
 
-		$sql = QG_Dias_EnCero();
+		$sql = SQL_Dias_EnCero();
 		$result = sqlsrv_query($conn,$sql);
 
 		$FechaCaptura = new DateTime("now");
@@ -1162,18 +1104,18 @@
      	
 			$date = date('Y-m-d h:i:s',time());
 			
-			$sqlCPharma = QG_Guardar_Dias_EnCero($IdArticulo,$CodigoInterno,$Descripcion,$Existencia,$Precio,$FechaCaptura,$user,$date);
+			$sqlCPharma = MySQL_Guardar_Dias_EnCero($IdArticulo,$CodigoInterno,$Descripcion,$Existencia,$Precio,$FechaCaptura,$user,$date);
 			mysqli_query($connCPharma,$sqlCPharma);
 		}
 		FG_Guardar_Captura_Diaria($connCPharma,$FechaCaptura,$date);
 
-		$sqlCC = QG_Validar_Captura_Diaria($FechaCaptura);
+		$sqlCC = MySQL_Validar_Captura_Diaria($FechaCaptura);
 		$resultCC = mysqli_query($connCPharma,$sqlCC);
 		$rowCC = mysqli_fetch_assoc($resultCC);
 		$CuentaCaptura = $rowCC["CuentaCaptura"];
 
 		if($CuentaCaptura == 0){
-			$sqlB = QG_Borrar_DiasCero($FechaCaptura);
+			$sqlB = MySQL_Borrar_DiasCero($FechaCaptura);
 			mysqli_query($connCPharma,$sqlB);
 			mysqli_close($connCPharma);
 			sqlsrv_close($conn);
@@ -1186,34 +1128,31 @@
 	}
 	/**********************************************************************************/
 	/*
-		TITULO: FG_Guardar_Captura_Diaria
-		PARAMETROS: [$FechaCaptura] El dia de hoy
-					[$date] valor para creacion y actualizacion
+		TITULO: FG_Guardar_Captura_Diaria		
 		FUNCION: crea una conexion con la base de datos cpharma e ingresa datos
-		RETORNO: no aplica
+		DESARROLLADO POR: SERGIO COVA
 	 */
 	function FG_Guardar_Captura_Diaria($connCPharma,$FechaCaptura,$date) {
-		$sql = QG_Captura_Diaria($FechaCaptura);
+		$sql = MySQL_Captura_Diaria($FechaCaptura);
 		$result = mysqli_query($connCPharma,$sql);
 		$row = mysqli_fetch_assoc($result);
 		$TotalRegistros = $row["TotalRegistros"];
 
-		$sql1 = QG_Guardar_Captura_Diaria($TotalRegistros,$FechaCaptura,$date);
+		$sql1 = MySQL_Guardar_Captura_Diaria($TotalRegistros,$FechaCaptura,$date);
 		mysqli_query($connCPharma,$sql1);
 	}
 	/**********************************************************************************/
 	/*
 		TITULO: FG_Prouctos_EnCaida
-		PARAMETROS: no aplica
 		FUNCION: Captura y almacena la data para productos en caida
-		RETORNO: no aplica
+		DESAROLLADO POR: SERGIO COVA
 	 */
 	function FG_Prouctos_EnCaida() {
-		$SedeConnection = MiUbicacion();
+		$SedeConnection = FG_Mi_Ubicacion();
 		$conn = FG_Conectar_Smartpharma($SedeConnection);
 		$connCPharma = FG_Conectar_CPharma();
 
-		$sqlB = QG_Borrar_ProductosCaida();
+		$sqlB = MySQL_Borrar_ProductosCaida();
 		mysqli_query($connCPharma,$sqlB);
 
 		$FechaCaptura = new DateTime("now");
@@ -1230,34 +1169,34 @@
 		*  Articulos con veces vendidas en el rango
 		*  Articulos sin compra en el rango
 		*/
-		$sql = QCleanTable('CP_QG_Unidades_Vendidas');
+		$sql = SQL_Clean_Table('CP_QG_Unidades_Vendidas');
 		sqlsrv_query($conn,$sql);
-		$sql = QCleanTable('CP_QG_Unidades_Devueltas');
+		$sql = SQL_Clean_Table('CP_QG_Unidades_Devueltas');
 		sqlsrv_query($conn,$sql);
-		$sql = QCleanTable('CP_QG_Unidades_Compradas');
+		$sql = SQL_Clean_Table('CP_QG_Unidades_Compradas');
 		sqlsrv_query($conn,$sql);
-		$sql = QCleanTable('CP_QG_Unidades_Reclamadas');
+		$sql = SQL_Clean_Table('CP_QG_Unidades_Reclamadas');
 		sqlsrv_query($conn,$sql);
 		
-		$sql1 = QG_ArtVendidos_ProductoCaida($FInicial,$FFinal);
+		$sql1 = SQL_ArtVendidos_ProductoCaida($FInicial,$FFinal);
 		sqlsrv_query($conn,$sql1);
-		$sql1 = QG_ArtDevueltos_ProductoCaida($FInicial,$FFinal);
+		$sql1 = SQL_ArtDevueltos_ProductoCaida($FInicial,$FFinal);
 		sqlsrv_query($conn,$sql1);
-		$sql1 = QG_ArtComprados_ProductoCaida($FInicial,$FFinal);
+		$sql1 = SQL_ArtComprados_ProductoCaida($FInicial,$FFinal);
 		sqlsrv_query($conn,$sql1);
-		$sql1 = QG_ArtReclamados_ProductoCaida($FInicial,$FFinal);
+		$sql1 = SQL_ArtReclamados_ProductoCaida($FInicial,$FFinal);
 		sqlsrv_query($conn,$sql1);
 
-		$sql3 = QG_Integracion_ProductoCaida($RangoDias);
+		$sql3 = SQL_Integracion_ProductoCaida($RangoDias);
 		$result = sqlsrv_query($conn,$sql3);
 
-		$sql = QCleanTable('CP_QG_Unidades_Vendidas');
+		$sql = SQL_Clean_Table('CP_QG_Unidades_Vendidas');
 		sqlsrv_query($conn,$sql);
-		$sql = QCleanTable('CP_QG_Unidades_Devueltas');
+		$sql = SQL_Clean_Table('CP_QG_Unidades_Devueltas');
 		sqlsrv_query($conn,$sql);
-		$sql = QCleanTable('CP_QG_Unidades_Compradas');
+		$sql = SQL_Clean_Table('CP_QG_Unidades_Compradas');
 		sqlsrv_query($conn,$sql);
-		$sql = QCleanTable('CP_QG_Unidades_Reclamadas');
+		$sql = SQL_Clean_Table('CP_QG_Unidades_Reclamadas');
 		sqlsrv_query($conn,$sql);
 
 		/* Inicio while que itera en los articulos con existencia actual > 0*/
@@ -1326,7 +1265,7 @@
 				*	se cuenta las apariciones del articulo en la tabla de dias
 				*	en cero, la misma debe ser igual la diferencia de dias +1 
 				*/
-				$CuentaExistencia = CuentaExistencia($connCPharma,$IdArticulo,$FInicial,$FFinal);
+				$CuentaExistencia = FG_Cuenta_Existencia($connCPharma,$IdArticulo,$FInicial,$FFinal);
 				
 				if($CuentaExistencia==$RangoDias){
 
@@ -1338,7 +1277,7 @@
 					*	Venta en dia, esta se acumula 
 					*	El articulo debe tener venta al menos la mita de dias del rango 
 					*/
-					$CuentaVenta = CuentaVenta($conn,$IdArticulo,$FInicial,$FFinal);
+					$CuentaVenta = FG_Cuenta_Venta($conn,$IdArticulo,$FInicial,$FFinal);
 
 					if($CuentaVenta>=($RangoDias/2)){
 
@@ -1346,7 +1285,7 @@
 						//echo'----Filtro 4 * Venta en dias: SI '.$CuentaVenta.' ----';
 						/*COMANDOS PARA TEST*/		
 
-						$ExistenciaDecreciente = ExistenciaDecreciente($connCPharma,$IdArticulo,$FInicial,$FFinal,$RangoDias);
+						$ExistenciaDecreciente = FG_Existencia_Decreciente($connCPharma,$IdArticulo,$FInicial,$FFinal,$RangoDias);
 
 						$CuentaDecreciente = array_pop($ExistenciaDecreciente);
 
@@ -1359,8 +1298,7 @@
 							//echo'----Filtro 5 * Decrece su existencia: SI ----';
 							/*COMANDOS PARA TEST*/
 
-							$Precio = FG_Calculo_Precio_Alfa($Existencia,$ExistenciaAlmacen1,$ExistenciaAlmacen2,$IsTroquelado,$UtilidadArticulo,$UtilidadCategoria,$TroquelAlmacen1,$PrecioCompraBrutoAlmacen1,$TroquelAlmacen2,
-    $PrecioCompraBrutoAlmacen2,$PrecioCompraBruto,$IsIVA,$CondicionExistencia);
+							$Precio = FG_Calculo_Precio_Alfa($Existencia,$ExistenciaAlmacen1,$ExistenciaAlmacen2,$IsTroquelado,$UtilidadArticulo,$UtilidadCategoria,$TroquelAlmacen1,$PrecioCompraBrutoAlmacen1,$TroquelAlmacen2,$PrecioCompraBrutoAlmacen2,$PrecioCompraBruto,$IsIVA,$CondicionExistencia);
 
 							$Dia1 = array_pop($ExistenciaDecreciente);
 							$Dia2 = array_pop($ExistenciaDecreciente);
@@ -1373,7 +1311,7 @@
 							$Dia9 = array_pop($ExistenciaDecreciente);
 							$Dia10 = array_pop($ExistenciaDecreciente);
 
-							$sqlCPharma = QGuardarProductosCaida($IdArticulo,$CodigoArticulo,$Descripcion,$Precio,$Existencia,$Dia10,$Dia9,$Dia8,$Dia7,$Dia6,$Dia5,$Dia4,$Dia3,$Dia2,$Dia1,$UnidadesVendidas,$DiasRestantes,$FechaCaptura,$user,$date,$date);
+							$sqlCPharma = MySQL_Guardar_Productos_Caida($IdArticulo,$CodigoArticulo,$Descripcion,$Precio,$Existencia,$Dia10,$Dia9,$Dia8,$Dia7,$Dia6,$Dia5,$Dia4,$Dia3,$Dia2,$Dia1,$UnidadesVendidas,$DiasRestantes,$FechaCaptura,$user,$date,$date);
 
 							mysqli_query($connCPharma,$sqlCPharma);
 						}	
@@ -1401,9 +1339,9 @@
 				/*COMANDOS PARA TEST*/
 			//}	
 		}
-		GuardarCapturaCaida($connCPharma,$FechaCaptura,$date);
+		FG_Guardar_Captura_Caida($connCPharma,$FechaCaptura,$date);
 		
-		$sqlCC = QValidarCapturaCaida($FechaCaptura);
+		$sqlCC = MySQL_Validar_Captura_Caida($FechaCaptura);
 		$resultCC = mysqli_query($connCPharma,$sqlCC);
 		$rowCC = mysqli_fetch_assoc($resultCC);
 		$CuentaCaptura = $rowCC["CuentaCaptura"];
@@ -1420,13 +1358,11 @@
 	}
 	/**********************************************************************************/
 	/*
-		TITULO: CuentaExistencia
-		PARAMETROS: 
-		FUNCION: 
-		RETORNO: 
+		TITULO: FG_Cuenta_Existencia
+		DESARROLLADO POR: SERGIO COVA
  	*/
-	function CuentaExistencia($connCPharma,$IdArticulo,$FInicial,$FFinal) {
-		$sql = QCuentaExistencia($IdArticulo,$FInicial,$FFinal);
+	function FG_Cuenta_Existencia($connCPharma,$IdArticulo,$FInicial,$FFinal) {
+		$sql = MySQL_Cuenta_Existencia($IdArticulo,$FInicial,$FFinal);
 		$result = mysqli_query($connCPharma,$sql);
 		$row = mysqli_fetch_assoc($result);
 		$Cuenta = $row["Cuenta"];
@@ -1434,12 +1370,10 @@
 	}
 	/**********************************************************************************/
 	/*
-		TITULO: CuentaVenta
-		PARAMETROS: 
-		FUNCION: 
-		RETORNO: 
+		TITULO: FG_Cuenta_Venta
+		DESARROLLADO POR: SERGIO COVA
  	*/
-	function CuentaVenta($conn,$IdArticulo,$FInicial,$FFinal) {
+	function FG_Cuenta_Venta($conn,$IdArticulo,$FInicial,$FFinal) {
 		
 		$FFinalPivote = date("Y-m-d",strtotime($FInicial."+1 days"));
 		$FFinal = date("Y-m-d",strtotime($FFinal."+1 days"));
@@ -1447,7 +1381,7 @@
 
 		while($FFinalPivote!=$FFinal){
 
-			$sql = QG_CuentaVenta($IdArticulo,$FInicial,$FFinalPivote);
+			$sql = SQL_CuentaVenta($IdArticulo,$FInicial,$FFinalPivote);
 			$result = sqlsrv_query($conn,$sql);
 			$row = sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC);
 			$VecesVendida = $row["Cuenta"];
@@ -1463,12 +1397,10 @@
 	}
 	/**********************************************************************************/
 	/*
-		TITULO: ExistenciaDecreciente
-		PARAMETROS: 
-		FUNCION: 
-		RETORNO: 
+		TITULO: FG_Existencia_Decreciente
+		DESARROLLADO POR: SERGIO COVA
  	*/
-	function ExistenciaDecreciente($connCPharma,$IdArticulo,$FInicial,$FFinal,$RangoDias) {
+	function FG_Existencia_Decreciente($connCPharma,$IdArticulo,$FInicial,$FFinal,$RangoDias) {
 		
 		$PrimerCiclo = TRUE;
 		$ExistenciaAyer = 0;
@@ -1478,7 +1410,7 @@
 
 		while( ($FInicial!=$FFinal) && ($CuentaDecreciente==TRUE) ) {
 
-			$sql = QExistenciaDiasCero($IdArticulo,$FInicial);
+			$sql = MySQL_Existencia_Dias_Cero($IdArticulo,$FInicial);
 			$result = mysqli_query($connCPharma,$sql);
 			$row = mysqli_fetch_assoc($result);
 			$ExistenciaHoy = $row["existencia"];
@@ -1514,34 +1446,31 @@
 	}
 	/**********************************************************************************/
 	/*
-		TITULO: GuardarCapturaDiaria
-		PARAMETROS: [$FechaCaptura] El dia de hoy
-					[$date] valor para creacion y actualizacion
+		TITULO: FG_Guardar_Captura_Caida
 		FUNCION: crea una conexion con la base de datos cpharma e ingresa datos
-		RETORNO: no aplica
+		DESARROLLADO POR: SERGIO COVA
 	 */
-	function GuardarCapturaCaida($connCPharma,$FechaCaptura,$date) {
-		$sql = QCapturaCaida($FechaCaptura);
+	function FG_Guardar_Captura_Caida($connCPharma,$FechaCaptura,$date) {
+		$sql = MySQL_Captura_Caida($FechaCaptura);
 		$result = mysqli_query($connCPharma,$sql);
 		$row = mysqli_fetch_assoc($result);
 		$TotalRegistros = $row["TotalRegistros"];
 
-		$sql1 = QGuardarCapturaCaida($TotalRegistros,$FechaCaptura,$date);
+		$sql1 = MySQL_Guardar_Captura_Caida($TotalRegistros,$FechaCaptura,$date);
 		mysqli_query($connCPharma,$sql1);
 	}
 	/**********************************************************************************/
 	/*
 		TITULO: FG_Validar_Etiquetas
-		PARAMETROS: [$conn,$IdArticulo,$IdProveedor] conecion, id del articulo, id del provedor
 		FUNCION: determinar si un prducto es unico
-		RETORNO: SI o NO segun sea el caso
+		DESARROLLADO POR: SERGIO COVA
 	 */
 	function FG_Validar_Etiquetas() {
-			$SedeConnection = MiUbicacion();
+			$SedeConnection = FG_Mi_Ubicacion();
 	    $conn = FG_Conectar_Smartpharma($SedeConnection);
 	    $connCPharma = FG_Conectar_CPharma();
 
-	    $sql = QG_Existencia_Actual();
+	    $sql = SQL_Existencia_Actual();
 	    $result = sqlsrv_query($conn,$sql);
 
 	    $FechaCaptura = new DateTime("now");
@@ -1553,7 +1482,7 @@
 	        $CodigoInterno = $row["CodigoInterno"];
 	        $Descripcion=$row["Descripcion"];
 	 
-	        $sqlCPharma = QG_Etiqueta_Articulo($IdArticulo);
+	        $sqlCPharma = SQL_Etiqueta_Articulo($IdArticulo);
 	        $ResultCPharma = mysqli_query($connCPharma,$sqlCPharma);
 	        $RowCPharma = mysqli_fetch_assoc($ResultCPharma);
 	        $IdArticuloCPharma = $RowCPharma['id_articulo'];
@@ -1567,18 +1496,18 @@
 	            $date = new DateTime('now');
 	            $date = $date->format("Y-m-d H:i:s");
 
-	            $sqlCP = QG_Guardar_Etiqueta_Articulo($IdArticulo,$CodigoInterno,$Descripcion,$condicion,$clasificacion,$estatus,$user,$date);
+	            $sqlCP = MySQL_Guardar_Etiqueta_Articulo($IdArticulo,$CodigoInterno,$Descripcion,$condicion,$clasificacion,$estatus,$user,$date);
 	            mysqli_query($connCPharma,$sqlCP);
 	        }
 	    }
 	    FG_Guardar_Captura_Etiqueta($connCPharma,$FechaCaptura,$date);
-		$sqlCC = QG_Validar_Captura_Etiqueta($FechaCaptura);
+		$sqlCC = MySQL_Validar_Captura_Etiqueta($FechaCaptura);
 		$resultCC = mysqli_query($connCPharma,$sqlCC);
 		$rowCC = mysqli_fetch_assoc($resultCC);
 		$CuentaCaptura = $rowCC["CuentaCaptura"];
 
 		if($CuentaCaptura == 0){
-			$sqlB = QG_Borrar_Captura_Etiqueta($FechaCaptura);
+			$sqlB = MySQL_Borrar_Captura_Etiqueta($FechaCaptura);
 			mysqli_query($connCPharma,$sqlB);			
 			mysqli_close($connCPharma);
 			sqlsrv_close($conn);
@@ -1592,30 +1521,26 @@
 	/**********************************************************************************/
 	/*
 		TITULO: FG_Guardar_Captura_Etiqueta
-		PARAMETROS: [$FechaCaptura] El dia de hoy
-					[$date] valor para creacion y actualizacion
 		FUNCION: crea una conexion con la base de datos cpharma e ingresa datos
-		RETORNO: no aplica
+		DESARROLLADO POR: SERGIO COVA
  	*/
 	function FG_Guardar_Captura_Etiqueta($connCPharma,$FechaCaptura,$date) {
-		$sql = QG_Captura_Etiqueta($FechaCaptura);
+		$sql = MySQL_Captura_Etiqueta($FechaCaptura);
 		$result = mysqli_query($connCPharma,$sql);
 		$row = mysqli_fetch_assoc($result);
 		$TotalRegistros = $row["TotalRegistros"];
 
-		$sql1 = QG_Guardar_Captura_Etiqueta($TotalRegistros,$FechaCaptura,$date);
+		$sql1 = MySQL_Guardar_Captura_Etiqueta($TotalRegistros,$FechaCaptura,$date);
 		mysqli_query($connCPharma,$sql1);
 	}
 	/**********************************************************************************/
 	/*
 		TITULO: FG_Generer_Etiquetas_Todo
-		PARAMETROS: [$clasificacion] Parametro que indica el tipo de clasificacion, solo puede recibir ETIQUETABLE o OBLIGATORIO ETIQUETAR
-					[$tipo] Parametro que indica la dolarizacion, solo pude recibir DOLARIZADO, NO DOLARIZADO o TODO
 		FUNCION: crea una conexion con la base de datos cpharma e ingresa datos
-		RETORNO: no aplica
+		DESARROLLADO POR: SERGIO COVA
  	*/
 	function FG_Generer_Etiquetas_Todo($clasificacion,$tipo) {
-		$SedeConnection = MiUbicacion();
+		$SedeConnection = FG_Mi_Ubicacion();
   	$conn = FG_Conectar_Smartpharma($SedeConnection);
   	$connCPharma = FG_Conectar_CPharma();	
 
@@ -1944,13 +1869,11 @@
 	/**********************************************************************************/
 	/*
 		TITULO: FG_Generer_Etiquetas
-		PARAMETROS: [$clasificacion] Parametro que indica el tipo de clasificacion, solo puede recibir ETIQUETABLE o OBLIGATORIO ETIQUETAR
-					[$tipo] Parametro que indica la dolarizacion, solo pude recibir DOLARIZADO, NO DOLARIZADO o TODO
 		FUNCION: crea una conexion con la base de datos cpharma e ingresa datos
-		RETORNO: no aplica
+		DESARROLLADO POR: SERGIO COVA
  	*/
 	function FG_Generer_Etiquetas($clasificacion,$tipo,$dia) {
-		$SedeConnection = MiUbicacion();
+		$SedeConnection = FG_Mi_Ubicacion();
   	$conn = FG_Conectar_Smartpharma($SedeConnection);
   	$connCPharma = FG_Conectar_CPharma();	
 
@@ -1958,34 +1881,34 @@
 		$FManana = date("Y-m-d",strtotime($FHoy."+1 days"));
 		$FAyer = date("Y-m-d",strtotime($FHoy."-1 days"));
 
-		$sql = QCleanTable('CP_Etiqueta_C1');
+		$sql = SQL_Clean_Table('CP_Etiqueta_C1');
 		sqlsrv_query($conn,$sql);
-		$sql = QCleanTable('CP_Etiqueta_C2');
+		$sql = SQL_Clean_Table('CP_Etiqueta_C2');
 		sqlsrv_query($conn,$sql);
-		$sql = QCleanTable('CP_Etiqueta_C3');
+		$sql = SQL_Clean_Table('CP_Etiqueta_C3');
 		sqlsrv_query($conn,$sql);
-		$sql = QCleanTable('CP_Etiqueta_C4');
+		$sql = SQL_Clean_Table('CP_Etiqueta_C4');
 		sqlsrv_query($conn,$sql);
 
   	if($dia=='HOY'){
-  		$sql1 = QG_CP_Etiqueta_C1($FHoy,$FManana);
+  		$sql1 = SQL_CP_Etiqueta_C1($FHoy,$FManana);
 			sqlsrv_query($conn,$sql1);
-			$sql2 = QG_CP_Etiqueta_C2($FHoy,$FManana);
+			$sql2 = SQL_CP_Etiqueta_C2($FHoy,$FManana);
 			sqlsrv_query($conn,$sql2);
-			$sql2 = QG_CP_Etiqueta_C3($FHoy,$FManana);
+			$sql2 = SQL_CP_Etiqueta_C3($FHoy,$FManana);
 			sqlsrv_query($conn,$sql2);
-			$sql2 = QG_CP_Etiqueta_C4($FHoy,$FManana);
+			$sql2 = SQL_CP_Etiqueta_C4($FHoy,$FManana);
 			sqlsrv_query($conn,$sql2);
 			$FchaCambio = $FHoy;
   	}
   	else if($dia=='AYER'){
-  		$sql1 = QG_CP_Etiqueta_C1($FAyer,$FHoy);
+  		$sql1 = SQL_CP_Etiqueta_C1($FAyer,$FHoy);
 			sqlsrv_query($conn,$sql1);
-			$sql2 = QG_CP_Etiqueta_C2($FAyer,$FHoy);
+			$sql2 = SQL_CP_Etiqueta_C2($FAyer,$FHoy);
 			sqlsrv_query($conn,$sql2);
-			$sql2 = QG_CP_Etiqueta_C3($FAyer,$FHoy);
+			$sql2 = SQL_CP_Etiqueta_C3($FAyer,$FHoy);
 			sqlsrv_query($conn,$sql2);
-			$sql2 = QG_CP_Etiqueta_C4($FAyer,$FHoy);
+			$sql2 = SQL_CP_Etiqueta_C4($FAyer,$FHoy);
 			sqlsrv_query($conn,$sql2);
 			$FchaCambio = $FAyer;
   	}
@@ -2000,14 +1923,13 @@
   		$result = sqlsrv_query($conn,"SELECT * FROM CP_Etiqueta_C4 ORDER BY IdArticulo ASC");
   	}
 
-		
-		$sql = QCleanTable('CP_Etiqueta_C1');
+		$sql = SQL_Clean_Table('CP_Etiqueta_C1');
 		sqlsrv_query($conn,$sql);
-		$sql = QCleanTable('CP_Etiqueta_C2');
+		$sql = SQL_Clean_Table('CP_Etiqueta_C2');
 		sqlsrv_query($conn,$sql);
-		$sql = QCleanTable('CP_Etiqueta_C3');
+		$sql = SQL_Clean_Table('CP_Etiqueta_C3');
 		sqlsrv_query($conn,$sql);
-		$sql = QCleanTable('CP_Etiqueta_C4');
+		$sql = SQL_Clean_Table('CP_Etiqueta_C4');
 		sqlsrv_query($conn,$sql);
 
 		$CuentaCard = 0;
@@ -2054,7 +1976,7 @@
 
 						$PrecioHoy = FG_Calculo_Precio_Alfa($Existencia,$ExistenciaAlmacen1,$ExistenciaAlmacen2,$IsTroquelado,$UtilidadArticulo,$UtilidadCategoria,$TroquelAlmacen1,$PrecioCompraBrutoAlmacen1,$TroquelAlmacen2,$PrecioCompraBrutoAlmacen2,$PrecioCompraBruto,$IsIVA,$CondicionExistencia);
 
-						$sqlCC = QG_DiasCero_PrecioAyer($IdArticulo,$FchaCambio);
+						$sqlCC = MySQL_DiasCero_PrecioAyer($IdArticulo,$FchaCambio);
 						$resultCC = mysqli_query($connCPharma,$sqlCC);
 						$rowCC = mysqli_fetch_assoc($resultCC);
 						$PrecioAyer = $rowCC["precio"];
@@ -2177,7 +2099,7 @@
 
 						$PrecioHoy = FG_Calculo_Precio_Alfa($Existencia,$ExistenciaAlmacen1,$ExistenciaAlmacen2,$IsTroquelado,$UtilidadArticulo,$UtilidadCategoria,$TroquelAlmacen1,$PrecioCompraBrutoAlmacen1,$TroquelAlmacen2,$PrecioCompraBrutoAlmacen2,$PrecioCompraBruto,$IsIVA,$CondicionExistencia);
 
-						$sqlCC = QG_DiasCero_PrecioAyer($IdArticulo,$FchaCambio);
+						$sqlCC = MySQL_DiasCero_PrecioAyer($IdArticulo,$FchaCambio);
 						$resultCC = mysqli_query($connCPharma,$sqlCC);
 						$rowCC = mysqli_fetch_assoc($resultCC);
 						$PrecioAyer = $rowCC["precio"];
@@ -2300,7 +2222,7 @@
 
 						$PrecioHoy = FG_Calculo_Precio_Alfa($Existencia,$ExistenciaAlmacen1,$ExistenciaAlmacen2,$IsTroquelado,$UtilidadArticulo,$UtilidadCategoria,$TroquelAlmacen1,$PrecioCompraBrutoAlmacen1,$TroquelAlmacen2,$PrecioCompraBrutoAlmacen2,$PrecioCompraBruto,$IsIVA,$CondicionExistencia);
 
-						$sqlCC = QG_DiasCero_PrecioAyer($IdArticulo,$FchaCambio);
+						$sqlCC = MySQL_DiasCero_PrecioAyer($IdArticulo,$FchaCambio);
 						$resultCC = mysqli_query($connCPharma,$sqlCC);
 						$rowCC = mysqli_fetch_assoc($resultCC);
 						$PrecioAyer = $rowCC["precio"];
@@ -2403,5 +2325,17 @@
 		echo "<br/>Se imprimiran ".$CuentaEtiqueta." etiquetas<br/>";
 		mysqli_close($connCPharma);
     sqlsrv_close($conn);
+	}
+	/**********************************************************************************/
+	/*
+		TITULO: FG_Tasa_FechaConversion
+		FUNCION: Buscar el valor de la tasa
+		DESARROLLADO POR: SERGIO COVA
+	 */
+	function FG_Tasa_FechaConversion($Fecha,$Moneda) {
+		$resultTasaConversion = MySQL_Tasa_Conversion($Fecha,$Moneda);
+		$resultTasaConversion = mysqli_fetch_assoc($resultTasaConversion);
+		$Tasa = $resultTasaConversion['tasa'];
+		return $Tasa;
 	}
 ?>

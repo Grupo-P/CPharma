@@ -4,7 +4,6 @@
 	/*
 		TITULO: MySQL_Guardar_Auditoria
 		FUNCION: capturar y guardar el evento en la auditoria
-		RETORNO: query para almacenar la auditoria
 		DESARROLLADO POR: SERGIO COVA
 	 */
 	function MySQL_Guardar_Auditoria($accion,$tabla,$registro,$user,$date) {
@@ -20,7 +19,6 @@
 	/*
 		TITULO: MySQL_Tasa_Fecha
 		FUNCION: Buscar el valor de la tasa en un dia especifico
-		RETORNO: Valor de la tasa al dia que se solicito
 		DESARROLLADO POR: SERGIO COVA
 	 */
 	function MySQL_Tasa_Fecha($Fecha) {
@@ -31,7 +29,6 @@
 	/*
 		TITULO: MySQL_Guardar_Traslado_Detalle
 		FUNCION: capturar y guardar el detalle del traslado
-		RETORNO: query para almacenar el traslado
 		DESARROLLADO POR: SERGIO COVA
 	 */
 	function MySQL_Guardar_Traslado_Detalle($id_traslado,$id_articulo,$codigo_interno,$codigo_barra,$descripcion,$gravado,$dolarizado,$cantidad,$costo_unit_bs_sin_iva,$costo_unit_usd_sin_iva,$total_imp_bs,$total_imp_usd,$total_bs,$total_usd,$date) {
@@ -47,7 +44,6 @@
 	/*
 		TITULO: MySQL_Buscar_Traslado_Detalle
 		FUNCION: Buscar el valor de la tasa en un dia especifico
-		RETORNO: Valor de la tasa al dia que se solicito
 		DESARROLLADO POR: SERGIO COVA
 	 */
 	function MySQL_Buscar_Traslado_Detalle($id_traslado) {
@@ -58,7 +54,6 @@
 	/*
 		TITULO: MySQL_Rango_Dias_Cero
 		FUNCION: Busca la fecha mas recien y la mas antigua en dias en cero
-		RETORNO: fecha mas antigua y mas recien
 		DESARROLLADO POR: SERGIO COVA
 	 */
 	function MySQL_Rango_Dias_Cero() {
@@ -73,7 +68,6 @@
 	/*
 		TITULO: MySQL_Cuenta_Veces_Dias_Cero
 		FUNCION: Contar las veces que esta un articulo en dias en cero en un rango de terminado
-		RETORNO: Numero de veces de apariciones en el rango
 		DESARROLLADO POR: SERGIO COVA
 	 */
 	function MySQL_Cuenta_Veces_Dias_Cero($IdArticulo,$FInicial,$FFinal) {
@@ -89,7 +83,6 @@
 	/*
 		TITULO: MySQL_Buscar_Orden_Detalle
 		FUNCION: Buscar todos los detalles de una orden
-		RETORNO: articulos que conforman la orden de compra
 		DESARROLLADO POR: SERGIO COVA
 	 */
 	function MySQL_Buscar_Orden_Detalle($codigo_orden) {
@@ -99,22 +92,11 @@
 	}
 	/**********************************************************************************/
 	/*
-		TITULO: QG_Guardar_Dias_EnCero
-		PARAMETROS: [$proveedor] Id del provedor solicitado
-			[$articulo] Descripcion del articulo
-			[$lote] Lote al que pertenece el articulo
-			[$fecha_documento] Fecha de la factura
-			[$fecha_recepcion] Fecha de recepcion del articulo
-			[$fecha_vencimiento] Fecha de vencimiento del articulo
-			[$fecha_tope] Fecha tope del compromiso
-			[$causa] Causa del compromiso
-			[$nota] Notas adicionales
-			[$user] Usuario responsable
-			[$date] Fecha de creacion del compromiso
+		TITULO: MySQL_Guardar_Dias_EnCero
 		FUNCION: Construir las columnas correspondientes al reporte
-		RETORNO: Un String con la query
+		DESARROLLADO POR: SERGIO COVA
 	 */
-	function QG_Guardar_Dias_EnCero($IdArticulo,$CodigoInterno,$Descripcion,$Existencia,$Precio,$FechaCaptura,$user,$date) {
+	function MySQL_Guardar_Dias_EnCero($IdArticulo,$CodigoInterno,$Descripcion,$Existencia,$Precio,$FechaCaptura,$user,$date) {
 		$sql = "
 		INSERT INTO dias_ceros 
 		(id_articulo,codigo_articulo,descripcion,existencia,precio,fecha_captura,user,created_at,updated_at)
@@ -125,12 +107,11 @@
 	}
 	/**********************************************************************************/
 	/*
-		TITULO: QG_Captura_Diaria
-		PARAMETROS: [$FechaCaptura] El dia de hoy
+		TITULO: MySQL_Captura_Diaria
 		FUNCION: cuenta el total de registos de dias en cero
-		RETORNO: no aplica
+		DESARROLLADO POR: SERGIO COVA
  	*/
-	function QG_Captura_Diaria($FechaCaptura) {
+	function MySQL_Captura_Diaria($FechaCaptura) {
 		$sql = "SELECT COUNT(*) AS TotalRegistros
 		FROM dias_ceros 
 		WHERE dias_ceros.fecha_captura = '$FechaCaptura'
@@ -139,13 +120,11 @@
 	}
 	/**********************************************************************************/
 	/*
-		TITULO: QG_Guardar_Captura_Diaria
-		PARAMETROS: [$FechaCaptura] El dia de hoy
-					[$date] valor para creacion y actualizacion
+		TITULO: MySQL_Guardar_Captura_Diaria
 		FUNCION: crea una conexion con la base de datos cpharma e ingresa datos
-		RETORNO: no aplica
+		DESARROLLADO POR: SERGIO COVA
 	 */
-	function QG_Guardar_Captura_Diaria($TotalRegistros,$FechaCaptura,$date) {
+	function MySQL_Guardar_Captura_Diaria($TotalRegistros,$FechaCaptura,$date) {
 		$sql = "
 		INSERT INTO capturas_diarias 
 		(total_registros,fecha_captura,created_at,updated_at)
@@ -156,46 +135,42 @@
 	}
 	/**********************************************************************************/
 	/*
-		TITULO: QG_Validar_Captura_Diaria
-		PARAMETROS: [$FechaCaptura] El dia de hoy
+		TITULO: MySQL_Validar_Captura_Diaria
 		FUNCION: valida que la fecha exista en la tabla captura diaria
-		RETORNO: no aplica
+		DESARROLLADO POR: SERGIO COVA
 	*/
-	function QG_Validar_Captura_Diaria($FechaCaptura) {
+	function MySQL_Validar_Captura_Diaria($FechaCaptura) {
 		$sql = "SELECT count(*) AS CuentaCaptura 
 		FROM capturas_diarias WHERE fecha_captura = '$FechaCaptura'";
 		return $sql;
 	}
 	/**********************************************************************************/
 	/*
-		TITULO: QG_Borrar_DiasCero
-		PARAMETROS: [$FechaCaptura] fecha de la captura
+		TITULO: MySQL_Borrar_DiasCero
 		FUNCION: borra los registros de dias en cero de la fecha seleccionada
-		RETORNO: no aplica
+		DESARROLLADO POR: SERGIO COVA
 	*/
-	function QG_Borrar_DiasCero($FechaCaptura) {
+	function MySQL_Borrar_DiasCero($FechaCaptura) {
 		$sql = "DELETE FROM dias_ceros WHERE fecha_captura = '$FechaCaptura'";
 		return $sql;
 	}
 	/**********************************************************************************/
 	/*
-		TITULO: QG_Borrar_ProductosCaida
-		PARAMETROS: [$FechaCaptura] fecha de la captura
+		TITULO: MySQL_Borrar_ProductosCaida
 		FUNCION: borra los registros de dias en cero de la fecha seleccionada
-		RETORNO: no aplica
+		DESARROLLADO POR: SERGIO COVA
 	 */
-	function QG_Borrar_ProductosCaida() {
+	function MySQL_Borrar_ProductosCaida() {
 		$sql = "DELETE FROM productos_caida";
 		return $sql;
 	}
 	/**********************************************************************************/
 	/*
-		TITULO: QGuardarProductosCaida
-		PARAMETROS: Todos los campos
+		TITULO: MySQL_Guardar_Productos_Caida
 		FUNCION: guardar en la tabla productos en caida
-		RETORNO: no aplica
+		DESARROLLADO POR: SERGIO COVA
 	 */
-	function QGuardarProductosCaida($IdArticulo,$CodigoArticulo,$Descripcion,$Precio,$Existencia,$Dia10,$Dia9,$Dia8,$Dia7,$Dia6,$Dia5,$Dia4,$Dia3,$Dia2,$Dia1,$UnidadesVendidas,$DiasRestantes,$fecha_captura,$user,$created_at,$updated_at) {
+	function MySQL_Guardar_Productos_Caida($IdArticulo,$CodigoArticulo,$Descripcion,$Precio,$Existencia,$Dia10,$Dia9,$Dia8,$Dia7,$Dia6,$Dia5,$Dia4,$Dia3,$Dia2,$Dia1,$UnidadesVendidas,$DiasRestantes,$fecha_captura,$user,$created_at,$updated_at) {
 		$sql = "
 		INSERT INTO productos_caida
 		(IdArticulo,CodigoArticulo,Descripcion,Precio,Existencia,Dia10,Dia9,Dia8,Dia7,Dia6,Dia5,Dia4,Dia3,Dia2,Dia1,UnidadesVendidas,DiasRestantes,fecha_captura,user,created_at,updated_at)
@@ -206,12 +181,11 @@
 	}
 	 /**********************************************************************************/
 	/*
-		TITULO: QCapturaCaida
-		PARAMETROS: [$FechaCaptura] El dia de hoy
+		TITULO: MySQL_Captura_Caida
 		FUNCION: cuenta el total de registos de productos en caida
-		RETORNO: no aplica
+		DESARROLLADO POR: SERGIO COVA
 	 */
-	function QCapturaCaida($FechaCaptura) {
+	function MySQL_Captura_Caida($FechaCaptura) {
 		$sql = "SELECT COUNT(*) AS TotalRegistros
 		FROM productos_caida 
 		WHERE productos_caida.fecha_captura = '$FechaCaptura'
@@ -220,13 +194,11 @@
 	}
 	 /**********************************************************************************/
 	/*
-		TITULO: QGuardarCapturaCaida
-		PARAMETROS: [$FechaCaptura] El dia de hoy
-					[$date] valor para creacion y actualizacion
+		TITULO: MySQL_Guardar_Captura_Caida
 		FUNCION: crea una conexion con la base de datos cpharma e ingresa datos
-		RETORNO: no aplica
+		DESARROLLADO POR: SERGIO COVA
 	 */
-	function QGuardarCapturaCaida($TotalRegistros,$FechaCaptura,$date) {
+	function MySQL_Guardar_Captura_Caida($TotalRegistros,$FechaCaptura,$date) {
 		$sql = "
 		INSERT INTO captura_caida 
 		(total_registros,fecha_captura,created_at,updated_at)
@@ -237,24 +209,22 @@
 	}
 	 /**********************************************************************************/
 	/*
-		TITULO: QValidarCapturaCaida
-		PARAMETROS: [$FechaCaptura] El dia de hoy
+		TITULO: MySQL_Validar_Captura_Caida
 		FUNCION: valida que la fecha exista en la tabla captura diaria
-		RETORNO: no aplica
+		DESARROLLADO POR: SERGIO COVA
 	 */
-	function QValidarCapturaCaida($FechaCaptura) {
+	function MySQL_Validar_Captura_Caida($FechaCaptura) {
 		$sql = "SELECT count(*) AS CuentaCaptura
 		FROM captura_caida WHERE fecha_captura = '$FechaCaptura'";
 		return $sql;
 	}
 	 /**********************************************************************************/
 	 /*
-		TITULO: QCuentaExistencia
-		PARAMETROS: [$IdArticulo] Id del articulo a buscar
+		TITULO: MySQL_Cuenta_Existencia
 		FUNCION: cuenta el total de repeticiones de un articulo en dias en cero
-		RETORNO: no aplica
+		DESARROLLADO POR: SERGIO COVA
 	 */
-	function QCuentaExistencia($IdArticulo,$FInicial,$FFinal) {
+	function MySQL_Cuenta_Existencia($IdArticulo,$FInicial,$FFinal) {
 		$sql = "
 			SELECT 
 			COUNT(*) AS Cuenta 
@@ -265,13 +235,11 @@
 	}
 	/**********************************************************************************/
 	/*
-		TITULO: QExistenciaDiasCero
-		PARAMETROS: [$IdArticulo] Id del articulo a buscar
+		TITULO: MySQL_Existencia_Dias_Cero
 		FUNCION: cuenta el total de repeticiones de un articulo en dias en cero
-		RETORNO: no aplica
-		//
+		DESARROLLADO POR: SERGIO COVA
 	 */
-	function QExistenciaDiasCero($IdArticulo,$FechaCaptura) {
+	function MySQL_Existencia_Dias_Cero($IdArticulo,$FechaCaptura) {
 		$sql = "
 			SELECT existencia 
 			FROM dias_ceros 
@@ -282,12 +250,11 @@
 	}
 	/**********************************************************************************/
 	/*
-		TITULO: QG_Guardar_Etiqueta_Articulo
-		PARAMETROS: $id_articulo,$codigo_articulo,$descripcion,$condicion,$clasificacion,$estatus,$user,$date
+		TITULO: MySQL_Guardar_Etiqueta_Articulo
 		FUNCION: guarda la informacion en la tabla etiquetas
-		RETORNO: no aplica
+		DESARROLLADO POR: SERGIO COVA
 	 */
-	function QG_Guardar_Etiqueta_Articulo($id_articulo,$codigo_articulo,$descripcion,$condicion,$clasificacion,$estatus,$user,$date) {
+	function MySQL_Guardar_Etiqueta_Articulo($id_articulo,$codigo_articulo,$descripcion,$condicion,$clasificacion,$estatus,$user,$date) {
 		$sql = "
 		INSERT INTO etiquetas
 		(id_articulo,codigo_articulo,descripcion,condicion,clasificacion,estatus,user,created_at,updated_at)
@@ -298,12 +265,11 @@
 	}
 	/**********************************************************************************/
 	/*
-		TITULO: QG_Captura_Etiqueta
-		PARAMETROS: [$FechaCaptura] El dia de hoy
+		TITULO: MySQL_Captura_Etiqueta
 		FUNCION: cuenta el total de registos de dias en cero
-		RETORNO: no aplica
+		DESARROLLADO POR: SERGIO COVA
 	 */
-	function QG_Captura_Etiqueta($FechaCaptura) {
+	function MySQL_Captura_Etiqueta($FechaCaptura) {
 		$sql = "SELECT COUNT(*) AS TotalRegistros 
 		FROM etiquetas 
 		WHERE CONVERT(etiquetas.created_at,date) = '$FechaCaptura'
@@ -312,14 +278,11 @@
 	}
 	/**********************************************************************************/
 	/*
-		TITULO: QG_Guardar_Captura_Etiqueta
-		PARAMETROS: [$FechaCaptura] El dia de hoy
-					[$date] valor para creacion y actualizacion
+		TITULO: MySQL_Guardar_Captura_Etiqueta
 		FUNCION: crea una conexion con la base de datos cpharma e ingresa datos
-		RETORNO: no aplica
+		DESARROLLADO POR: SERGIO COVA
 	 */
-
-	function QG_Guardar_Captura_Etiqueta($TotalRegistros,$FechaCaptura,$date) {
+	function MySQL_Guardar_Captura_Etiqueta($TotalRegistros,$FechaCaptura,$date) {
 		$sql = "
 		INSERT INTO captura_etiqueta
 		(total_registros,fecha_captura,created_at,updated_at)
@@ -330,35 +293,32 @@
 	}
 	/**********************************************************************************/
 	/*
-		TITULO: QG_Validar_Captura_Etiqueta
-		PARAMETROS: [$FechaCaptura] El dia de hoy
+		TITULO: MySQL_Validar_Captura_Etiqueta
 		FUNCION: valida que la fecha exista en la tabla captura diaria
-		RETORNO: no aplica
+		DESARROLLADO POR: SERGIO COVA
 	 */
-	function QG_Validar_Captura_Etiqueta($FechaCaptura) {
+	function MySQL_Validar_Captura_Etiqueta($FechaCaptura) {
 		$sql = "SELECT count(*) AS CuentaCaptura 
 		FROM captura_etiqueta WHERE fecha_captura = '$FechaCaptura'";
 		return $sql;
 	}
 	/**********************************************************************************/
 	/*
-		TITULO: QG_Borrar_Captura_Etiqueta
-		PARAMETROS: [$FechaCaptura] fecha de la captura
+		TITULO: MySQL_Borrar_Captura_Etiqueta
 		FUNCION: borra los registros de dias en cero de la fecha seleccionada
-		RETORNO: no aplica
+		DESARROLLADO POR: SERGIO COVA
 	 */
-	function QG_Borrar_Captura_Etiqueta($FechaCaptura) {
+	function MySQL_Borrar_Captura_Etiqueta($FechaCaptura) {
 		$sql = "DELETE FROM captura_etiqueta WHERE fecha_captura = '$FechaCaptura'";
 		return $sql;
 	}
 	/**********************************************************************************/
 	/*
-    TITULO: QG_DiasCero_PrecioAyer
-    PARAMETROS: [$IdArticulo] $IdArticulo del articulo a buscar
+    TITULO: MySQL_DiasCero_PrecioAyer
     FUNCION: Query que genera el detalle del articulo solicitado
-    RETORNO: Detalle del articulo
+    DESARROLLADO POR: SERGIO COVA
    */
-  	function QG_DiasCero_PrecioAyer($IdArticulo,$FechaCaptura) {
+  	function MySQL_DiasCero_PrecioAyer($IdArticulo,$FechaCaptura) {
 			$sql = "
 				SELECT precio
 				FROM dias_ceros 
@@ -367,4 +327,60 @@
 			";
 			return $sql;
 		}
+	/****************************************************************************/
+	/*
+		TITULO: MySQL_Ver_CapturaDiaria
+		FUNCION: consulta todos los datos de la captura diaria
+		DESARROLLADO POR: SERGIO COVA
+	 */
+	function MySQL_Ver_CapturaDiaria() {
+		$sql = "SELECT * FROM capturas_diarias order by fecha_captura desc";
+		return $sql;
+	}
+	/**********************************************************************************/
+	/*
+		TITULO: MySQL_RangoMinTasaVenta
+		FUNCION: Armar la logica necesaria para ejecutar la query
+		DESARROLLADO POR: MANUEL HENRIQUEZ
+	 */
+	function MySQL_RangoMinTasaVenta() {
+		$sql = "
+			SELECT * 
+			FROM configuracions 
+			WHERE configuracions.variable = 'RangoMinDolar'
+		";
+		return $sql;
+	}
+	/**********************************************************************************/
+	/*
+		TITULO: MySQL_RangoMaxTasaVenta
+		FUNCION: Armar la logica necesaria para ejecutar la query
+		DESARROLLADO POR: MANUEL HENRIQUEZ
+	 */
+	function MySQL_RangoMaxTasaVenta() {
+		$sql = "
+			SELECT * 
+			FROM configuracions 
+			WHERE configuracions.variable = 'RangoMaxDolar'
+		";
+		return $sql;
+	}
+	/**********************************************************************************/
+	/*
+		TITULO: MySQL_Tasa_Conversion
+		FUNCION: Buscar el valor de la tasa en un dia especifico
+		DESARROLLADO POR: MANUEL HENRIQUEZ
+	 */
+	function MySQL_Tasa_Conversion($Fecha,$Moneda) {
+		$conCP = FG_Conectar_CPharma();
+		$consulta = "
+			SELECT tasa 
+			FROM tasa_ventas 
+			WHERE fecha = '$Fecha'
+			AND moneda = '$Moneda'
+			AND estatus = 'ACTIVO'
+		";
+		$resultado = mysqli_query($conCP,$consulta);
+		return $resultado;
+	}
 ?>

@@ -433,9 +433,9 @@
 
 <?php
     include(app_path().'\functions\config.php');
-    include(app_path().'\functions\querys.php');
-    include(app_path().'\functions\funciones.php');
-    //include(app_path().'\functions\reportes.php');
+    include(app_path().'\functions\functions.php');
+    include(app_path().'\functions\querys_mysql.php');
+    include(app_path().'\functions\querys_sqlserver.php');
 
     /*
         TITULO: ValidarFecha
@@ -448,7 +448,7 @@
     function ValidarFecha($FechaTasaDolar,$Moneda) {
         $arrayValidaciones = array(2);
         $FechaTasaDolar = date("Y-m-d",strtotime($FechaTasaDolar."- 1 days"));
-        $TasaDolar = TasaFechaConversion($FechaTasaDolar,$Moneda);
+        $TasaDolar = FG_Tasa_FechaConversion($FechaTasaDolar,$Moneda);
         $arrayValidaciones[0] = $FechaTasaDolar;
         $arrayValidaciones[1] = $TasaDolar;
         return $arrayValidaciones;
@@ -457,7 +457,7 @@
     $Moneda = 'Dolar';
     $FechaTasaDolar = new DateTime("now");
     $FechaActual = $FechaTasaDolar = $FechaTasaDolar->format("Y-m-d");
-    $TasaDolar = TasaFechaConversion($FechaTasaDolar,$Moneda);
+    $TasaDolar = FG_Tasa_FechaConversion($FechaTasaDolar,$Moneda);
 
     while(is_null($TasaDolar)) {
         $arrayResult =  ValidarFecha($FechaTasaDolar,$Moneda);

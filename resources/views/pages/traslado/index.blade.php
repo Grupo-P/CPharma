@@ -86,7 +86,7 @@
 	
 	<hr class="row align-items-start col-12">
 	<br/>
-	<table style="width:100%;">
+	<table style="width:100%;" class="CP-stickyBar">
 	    <tr>
 	        <td style="width:10%;" align="center">        	
 				<a href="{{ url('/SearchAjuste') }}" role="button" class="btn btn-outline-info btn-sm" 
@@ -101,7 +101,7 @@
 				    <span class="input-group-text purple lighten-3" id="basic-text1"><i class="fas fa-search text-white"
 				        aria-hidden="true"></i></span>
 				  </div>
-				  <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterFirsTable()">
+				  <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterAllTable()" autofocus="autofocus">
 				</div>
 	        </td>
 	    </tr>
