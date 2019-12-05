@@ -269,6 +269,7 @@
             }
           ?>
           </td>
+
           <td>
           <?php 
           if($candidato->estatus == 'POSTULADO') {
@@ -281,7 +282,15 @@
               </button>
             </form>
           <?php
-          }
+          }//if
+          ?>
+
+          <?php 
+          else {
+          ?>
+            -
+          <?php
+          }//else
           ?>
           </td>
         </tr>

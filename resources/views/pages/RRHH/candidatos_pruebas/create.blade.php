@@ -44,7 +44,7 @@
 
   <br/><br/>
 
-  {!! Form::open(['route' => 'candidatos.store', 'method' => 'POST', 'id' => 'crear_candidato']) !!}
+  {!! Form::open(['route' => 'candidatos_pruebas.store', 'method' => 'POST', 'id' => 'crear_candidato']) !!}
     <fieldset>
       <table class="table table-borderless table-striped">
         <thead class="thead-dark">
@@ -106,7 +106,9 @@
           <tr>
             <th scope="row">{!! Form::label('puntuacion', 'Puntuación *', ['title' => 'Éste campo es requerido']) !!}</th>
             
-            <td>{!! Form::number('puntuacion', null, ['class' => 'form-control', 'placeholder' => '12.5', 'required']) !!}</td>
+            <td>
+              <input type="number" step="0.01" min="0" max="100" name="puntuacion" id="puntuacion" placeholder="12.5" class="form-control">
+            </td>
           </tr>
         </tbody>
       </table>
