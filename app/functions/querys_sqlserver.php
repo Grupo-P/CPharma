@@ -1008,5 +1008,32 @@
       ";
     return $sql;
     }
-    /********************************************************************************/
+    /**********************************************************************************/
+    /*
+        TITULO: FG_Es_Dolarizado
+        FUNCION: Busca si el producto es dolarizado o no
+        DESARROLLADO POR: SERGIO COVA
+    */
+    function SQL_Es_Dolarizado($IdArticulo){
+      $sql = " 
+      SELECT
+      --Dolarizado (0 NO es dolarizado, Id Articulo SI es dolarizado)
+      (ISNULL((SELECT
+      InvArticuloAtributo.InvArticuloId
+      FROM InvArticuloAtributo 
+      WHERE InvArticuloAtributo.InvAtributoId = 
+      (SELECT InvAtributo.Id
+      FROM InvAtributo 
+      WHERE 
+      InvAtributo.Descripcion = 'Dolarizados'
+      OR  InvAtributo.Descripcion = 'Giordany'
+      OR  InvAtributo.Descripcion = 'giordany') 
+      AND InvArticuloAtributo.InvArticuloId = InvArticulo.Id),CAST(0 AS INT))) AS Dolarizado
+      --Tabla principal
+      FROM InvArticulo
+      --Condicionales
+      WHERE InvArticulo.Id = '$IdArticulo'
+      ";
+    return $sql;
+    }
 ?>
