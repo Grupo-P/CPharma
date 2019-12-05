@@ -58,44 +58,37 @@
           <tr>
             <th scope="row">{!! Form::label('nombres', 'Nombre del candidato') !!}</th>
 
-            <td>{!! Form::text('nombres', $candidato->nombres . " " . $candidato->apellidos, [ 'class' => 'form-control', 'disabled']) !!}</td>
-          </tr>
-
-          <tr>
-            <th scope="row">{!! Form::label('tipo_relacion', 'Tipo de relación *', ['title' => 'Este campo es requerido']) !!}</th>
             <td>
-              {!! Form::select('tipo_relacion', [
-                '' => 'Seleccione una opción',
-                'Ince' => 'Ince', 
-                'Pasante' => 'Pasante',
-                'Trabajador regular' => 'Trabajador regular',
-              ], null, ['class' => 'form-control', 'required']) !!}
+              {!! Form::text('nombres', $candidato->nombres . " " . $candidato->apellidos, [ 'class' => 'form-control', 'disabled']) !!}
+
+              {!! Form::hidden('CandidatoId', $candidato->id, ['id' => 'CandidatoId']) !!}
             </td>
           </tr>
 
           <tr>
-            <th scope="row">{!! Form::label('relaciones_laborales', 'Relaciones con trabajadores *', ['title' => 'Este campo es requerido']) !!}</th>
+            <th scope="row">
+              {!! Form::label('PruebaId', 'Prueba asociada *', ['title' => 'Éste campo es requerido']) !!}
+            </th>
             <td>
-              {!! Form::select('relaciones_laborales', [
-                '' => 'Seleccione una opción',
-                'Si' => 'Si', 
-                'No' => 'No',
-              ], null, ['class' => 'form-control', 'required']) !!}
-            </td>
-          </tr>
+              <select name="PruebaId" id="PruebaId" class="form-control" required>
+                <option value="">Seleccione una opción</option>
 
-          <tr>
-            <th scope="row">{!! Form::label('como_nos_contacto', 'Como nos contactó *', ['title' => 'Este campo es requerido']) !!}</th>
-            <td>
-              {!! Form::select('como_nos_contacto', [
-                '' => 'Seleccione una opción',
-                'Computrabajo' => 'Computrabajo', 
-                'Bumeran' => 'Bumeran',
-                'Redes sociales' => 'Redes sociales',
-                'Instagram' => 'Instagram',
-                'Radio' => 'Radio',
-                'Recomendado' => 'Recomendado',
-              ], null, ['class' => 'form-control', 'required']) !!}
+                <?php
+                  foreach ($pruebas as $prueba) {
+                    if($prueba->estatus == "ACTIVO") {
+                ?>
+
+                <option value="{{$prueba->id}}">{{
+                    $prueba->nombre_prueba 
+                    . " - " . $prueba->tipo_prueba
+                  }}
+                </option>
+
+                <?php
+                    }//if
+                  }//foreach
+                ?>
+              </select>
             </td>
           </tr>
 
