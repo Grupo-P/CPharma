@@ -218,7 +218,7 @@
 	  		</div>
 	  		<div class="card-footer bg-transparent border-secondary text-right">
 		  		<form action="'.$Ruta1.'" style="display: inline;">
-				    <input id="SEDE" name="SEDE" type="hidden" value="'.MiUbicacion().'">
+				    <input id="SEDE" name="SEDE" type="hidden" value="'.FG_Mi_Ubicacion().'">
 				    <button type="submit" name="Reporte" role="button" class="btn btn-outline-secondary btn-sm"></i>Visualizar</button>
 					</form>
 	  		</div>
@@ -235,7 +235,7 @@
 	  		</div>
 	  		<div class="card-footer bg-transparent border-secondary text-right">
 		  		<form action="'.$Ruta2.'" style="display: inline;">
-				    <input id="SEDE" name="SEDE" type="hidden" value="'.MiUbicacion().'">
+				    <input id="SEDE" name="SEDE" type="hidden" value="'.FG_Mi_Ubicacion().'">
 				    <button type="submit" name="Reporte" role="button" class="btn btn-outline-secondary btn-sm"></i>Visualizar</button>
 					</form>
 	  		</div>
@@ -263,7 +263,7 @@
 	  		</div>
 	  		<div class="card-footer bg-transparent border-secondary text-right">
 		  		<form action="'.$Ruta1.'" style="display: inline;">
-				    <input id="SEDE" name="SEDE" type="hidden" value="'.MiUbicacion().'">
+				    <input id="SEDE" name="SEDE" type="hidden" value="'.FG_Mi_Ubicacion().'">
 				    <button type="submit" name="Reporte" role="button" class="btn btn-outline-secondary btn-sm"></i>Visualizar</button>
 					</form>
 	  		</div>
@@ -291,7 +291,7 @@
 	  		</div>
 	  		<div class="card-footer bg-transparent border-secondary text-right">
 		  		<form action="'.$Ruta2.'" style="display: inline;">
-				    <input id="SEDE" name="SEDE" type="hidden" value="'.MiUbicacion().'">
+				    <input id="SEDE" name="SEDE" type="hidden" value="'.FG_Mi_Ubicacion().'">
 				    <button type="submit" name="Reporte" role="button" class="btn btn-outline-secondary btn-sm"></i>Visualizar</button>
 					</form>
 	  		</div>

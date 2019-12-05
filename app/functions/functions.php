@@ -110,12 +110,12 @@
 	}
 	/**********************************************************************************/
 	/*
-		TITULO: MiUbicacion
+		TITULO: FG_Mi_Ubicacion
 		FUNCION: Descifrar desde que sede estoy entrando a la aplicacion
 		RETORNO: Sede en la que me encuentro
 		DESAROLLADO POR: SERGIO COVA
 	 */
-	function MiUbicacion(){
+	function FG_Mi_Ubicacion(){
 		$NombreCliente = gethostname();
 		$IpCliente = gethostbyname($NombreCliente);
 		$Octeto = explode(".", $IpCliente);
@@ -1066,7 +1066,7 @@
 		DESARROLLADO POR: SERGIO COVA
 	 */
 	function FG_Dias_EnCero() {
-		$SedeConnection = MiUbicacion();
+		$SedeConnection = FG_Mi_Ubicacion();
 		$conn = FG_Conectar_Smartpharma($SedeConnection);
 		$connCPharma = FG_Conectar_CPharma();
 
@@ -1148,7 +1148,7 @@
 		DESAROLLADO POR: SERGIO COVA
 	 */
 	function FG_Prouctos_EnCaida() {
-		$SedeConnection = MiUbicacion();
+		$SedeConnection = FG_Mi_Ubicacion();
 		$conn = FG_Conectar_Smartpharma($SedeConnection);
 		$connCPharma = FG_Conectar_CPharma();
 
@@ -1466,7 +1466,7 @@
 		DESARROLLADO POR: SERGIO COVA
 	 */
 	function FG_Validar_Etiquetas() {
-			$SedeConnection = MiUbicacion();
+			$SedeConnection = FG_Mi_Ubicacion();
 	    $conn = FG_Conectar_Smartpharma($SedeConnection);
 	    $connCPharma = FG_Conectar_CPharma();
 
@@ -1540,7 +1540,7 @@
 		DESARROLLADO POR: SERGIO COVA
  	*/
 	function FG_Generer_Etiquetas_Todo($clasificacion,$tipo) {
-		$SedeConnection = MiUbicacion();
+		$SedeConnection = FG_Mi_Ubicacion();
   	$conn = FG_Conectar_Smartpharma($SedeConnection);
   	$connCPharma = FG_Conectar_CPharma();	
 
@@ -1873,7 +1873,7 @@
 		DESARROLLADO POR: SERGIO COVA
  	*/
 	function FG_Generer_Etiquetas($clasificacion,$tipo,$dia) {
-		$SedeConnection = MiUbicacion();
+		$SedeConnection = FG_Mi_Ubicacion();
   	$conn = FG_Conectar_Smartpharma($SedeConnection);
   	$connCPharma = FG_Conectar_CPharma();	
 

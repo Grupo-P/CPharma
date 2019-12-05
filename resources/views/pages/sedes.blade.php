@@ -11,7 +11,7 @@
     include(app_path().'\functions\functions.php');
     include(app_path().'\functions\querys_mysql.php');
     include(app_path().'\functions\querys_sqlserver.php');
-		$SedeConnection = MiUbicacion();
+		$SedeConnection = FG_Mi_Ubicacion();
 	?>
 
 	<h1 class="h5 text-info">
