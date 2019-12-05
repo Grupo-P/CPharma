@@ -369,7 +369,7 @@
               <input type="hidden" name="CandidatoId" value="{{$candidato->id}}">
 
               <button type="submit" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="bottom" title="Ir a la fase">
-                <i class="far fa-play-circle"></i>&nbsp;Iniciar proceso
+                <i class="fas fa-tasks"></i>&nbsp;Pruebas
               </button>
             </form>
           <?php
