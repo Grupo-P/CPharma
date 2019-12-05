@@ -1512,15 +1512,6 @@
 				$PrecioAyer = $rowCC["precio"];
 			}
 
-			if($IsIVA == 1){
-				$PMVP = $PrecioHoy/Impuesto;
-				$IVA = $PrecioHoy-$PMVP;
-			}
-			else{
-				$PMVP = $PrecioHoy;
-				$IVA = 0;
-			}
-
 			if($Dolarizado=='SI'){
 				$simbolo = '*';
 			}
@@ -1541,22 +1532,6 @@
 						<tr rowspan="2">
 							<td class="centrado descripcion aumento rowCenter" colspan="2">
 								<strong>'.$Descripcion.'</strong> 
-							</td>
-						</tr>
-						<tr>
-							<td class="izquierda rowIzq rowIzqA">
-								PMVP Bs.
-							</td>
-							<td class="derecha rowDer rowDerA rowDer rowDerA">
-								'.number_format ($PMVP,2,"," ,"." ).'
-							</td>
-						</tr>
-						<tr>
-							<td class="izquierda rowIzq rowIzqA">
-								IVA 16% Bs.
-							</td>
-							<td class="derecha rowDer rowDerA">
-								'.number_format ($IVA,2,"," ,"." ).'
 							</td>
 						</tr>
 						';
@@ -1589,10 +1564,9 @@
 						</tr>
 						<tr>
 							<td class="izquierda dolarizado rowIzq rowIzqA">
-								<strong>'.$simbolo.'</strong>
 							</td>
 							<td class="derecha rowDer rowDerA">
-								'.date("d-m-Y").'
+								<strong>'.$simbolo.'</strong> '.date("d-m-Y").'
 							</td>
 						</tr>				
 					</tbody>
@@ -1645,7 +1619,7 @@
 					$CuentaEtiqueta++;
 				}
 			}
-			
+
 			if($CuentaCard == 3){
 				echo'<br>';
 				$CuentaCard = 0;
