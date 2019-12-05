@@ -209,3 +209,5 @@ Route::resource('convocatoria', 'RH_ConvocatoriaController');
 Route::resource('fases', 'RH_FaseController');
 
 Route::resource('candidatos_pruebas', 'RH_CandidatoPruebaController');
+
+Route::resource('gestor_fases', 'RH_GestorFaseController');

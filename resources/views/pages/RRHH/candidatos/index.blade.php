@@ -297,17 +297,29 @@
           <?php 
           if($candidato->estatus == 'POSTULADO') {
           ?>
-            <form action="/candidatos_pruebas/create" method="GET">
+            {{-- <form action="/candidatos_pruebas/create" method="GET">
               <input type="hidden" name="CandidatoId" value="{{$candidato->id}}">
 
               <button type="submit" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="bottom" title="Ir a la fase">
                 <i class="far fa-play-circle"></i>&nbsp;Iniciar proceso
               </button>
-            </form>
+            </form> --}}
+            
           <?php
           } else {
+            //$fase = compras\RHI_Candidato_Fase::where('rh_candidatos_id', $candidato->id);
+            //$nombre_fase = compras\RH_Fase::find($fase->rh_fases_id);
+
+            /*switch ($nombre_fase->nombre_fase) {
+              case 'Pruebas Psicológicas':
+
+              break;
+              
+              default:
+                echo '-';
+              break;
+            }*/
           ?>
-            -
           <?php
           }//else
           ?>
