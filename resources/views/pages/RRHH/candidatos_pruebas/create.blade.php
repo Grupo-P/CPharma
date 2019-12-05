@@ -70,7 +70,7 @@
               {!! Form::label('PruebaId', 'Prueba asociada *', ['title' => 'Éste campo es requerido']) !!}
             </th>
             <td>
-              <select name="PruebaId" id="PruebaId" class="form-control" required>
+              <select name="PruebaId" id="PruebaId" class="form-control" required autofocus>
                 <option value="">Seleccione una opción</option>
 
                 <?php
@@ -93,18 +93,20 @@
           </tr>
 
           <tr>
-            <th scope="row">{!! Form::label('experiencia_laboral', 'Experiencia laboral') !!}</th>
-            <td>{!! Form::textarea('experiencia_laboral', null, [ 'class' => 'form-control', 'placeholder' => 'Experiencia laboral previa del candidato', 'rows' => '3']) !!}</td>
+            <th scope="row">{!! Form::label('fecha', 'Fecha de la prueba *', ['title' => 'Éste campo es requerido']) !!}</th>
+            <td>{!! Form::date('fecha', null, ['class' => 'form-control', 'required']) !!}</td>
           </tr>
 
           <tr>
-            <th scope="row">{!! Form::label('direccion', 'Dirección *', ['title' => 'Este campo es requerido']) !!}</th>
-            <td>{!! Form::textarea('direccion', null, [ 'class' => 'form-control', 'placeholder' => 'Av. 15 Delicias con calle 72', 'rows' => '3', 'required']) !!}</td>
+            <th scope="row">{!! Form::label('facilitador', 'Facilitador *', ['title' => 'Éste campo es requerido']) !!}</th>
+            
+            <td>{!! Form::text('facilitador', null, [ 'class' => 'form-control', 'placeholder' => 'Genesis Albornoz', 'pattern' => '^[a-zA-ZáéíóúÁÉÍÓÚñÑ,\s\']+$', 'required']) !!}</td>
           </tr>
 
           <tr>
-            <th scope="row">{!! Form::label('observaciones', 'Observaciones') !!}</th>
-            <td>{!! Form::textarea('observaciones', null, [ 'class' => 'form-control', 'placeholder' => 'Detalles importantes del candidato', 'rows' => '3']) !!}</td>
+            <th scope="row">{!! Form::label('puntuacion', 'Puntuación *', ['title' => 'Éste campo es requerido']) !!}</th>
+            
+            <td>{!! Form::number('puntuacion', null, ['class' => 'form-control', 'placeholder' => '12.5', 'required']) !!}</td>
           </tr>
         </tbody>
       </table>
