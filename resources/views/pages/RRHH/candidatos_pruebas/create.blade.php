@@ -31,7 +31,7 @@
   @endif
 
   <h1 class="h5 text-info">
-    <i class="fas fa-plus"></i>&nbsp;Agregar candidato
+    <i class="fas fa-plus"></i>&nbsp;Agregar Fase #1
   </h1>
   <hr class="row align-items-start col-12">
 
@@ -56,55 +56,9 @@
 
         <tbody>
           <tr>
-            <th scope="row">{!! Form::label('nombres', 'Nombres *', ['title' => 'Este campo es requerido']) !!}</th>
-            <td>{!! Form::text('nombres', null, [ 'class' => 'form-control', 'placeholder' => 'Maria Raquel', 'pattern' => '^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s\']+$', 'autofocus', 'required']) !!}</td>
-          </tr>
+            <th scope="row">{!! Form::label('nombres', 'Nombre del candidato') !!}</th>
 
-          <tr>
-            <th scope="row">{!! Form::label('apellidos', 'Apellidos *', ['title' => 'Este campo es requerido']) !!}</th>
-            <td>{!! Form::text('apellidos', null, [ 'class' => 'form-control', 'placeholder' => 'Herrera Perez', 'pattern' => '^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s\']+$', 'required']) !!}</td>
-          </tr>
-
-          <tr>
-            <th scope="row">{!! Form::label('cedula', 'Cédula *', ['title' => 'Este campo es requerido']) !!}</th>
-            <td>
-              <table style="width: 100%;">
-                <tr style="background-color: transparent;">
-                  <td>
-                    {!! Form::select('tipo', ['V' => 'V', 'E' => 'E'], null, [ 'class' => 'form-control']) !!}
-                  </td>
-
-                  <td>
-                    {!! Form::text('cedula', null, [ 'class' => 'form-control', 'placeholder' => '24921001', 'pattern' => '^[0-9]{7,}$', 'required']) !!}
-                  </td>
-                </tr>
-              </table>
-            </td>
-          </tr>
-
-          <tr>
-            <th scope="row">
-              <label for="telefono_celular">Teléfono celular</label>
-            </th>
-            
-            <td>
-              <input type="tel" class="form-control" name="telefono_celular" id="telefono_celular" placeholder="0414-1234567" pattern="^0[1246]{3}-[0-9]{7}$">
-            </td>
-          </tr>
-
-          <tr>
-            <th scope="row">
-              <label for="telefono_habitacion">Teléfono de habitación</label>
-            </th>
-            
-            <td>
-              <input type="tel" class="form-control" name="telefono_habitacion" id="telefono_habitacion" placeholder="0261-1234567" pattern="^0[1246]{3}-[0-9]{7}$">
-            </td>
-          </tr>
-
-          <tr>
-            <th scope="row">{!! Form::label('correo', 'Correo') !!}</th>
-            <td>{!! Form::email('correo', null, [ 'class' => 'form-control', 'placeholder' => 'mherrera@farmacia72.com']) !!}</td>
+            <td>{!! Form::text('nombres', $candidato->nombres . " " . $candidato->apellidos, [ 'class' => 'form-control', 'disabled']) !!}</td>
           </tr>
 
           <tr>
@@ -169,42 +123,6 @@
   <script>
     $(document).ready(function() {
       $('[data-toggle="tooltip"]').tooltip();
-
-      //Objetos DOM JavaScript
-      var telefono_celular = document.querySelector('#telefono_celular');
-      var telefono_habitacion = document.querySelector('#telefono_habitacion');
-
-      //Objetos DOM JQuery
-      var enviar = $('#enviar');
-      var crear_candidato = $('#crear_candidato');
-
-      enviar.click(function() {
-
-        if((telefono_celular.value == '') && (telefono_habitacion.value == '')) {
-
-          telefono_celular.setCustomValidity('Debe ingresar al menos un Teléfono');
-          telefono_habitacion.setCustomValidity('Debe ingresar al menos un Teléfono');
-        }
-
-      });
-
-      crear_candidato.submit(function(e) {
-
-        if((telefono_celular.value == '') && (telefono_habitacion.value == '')) {
-          e.preventDefault();
-        }
-
-      });
-
-      $('#telefono_celular, #telefono_habitacion').on({
-        
-        keydown: function(e) {
-
-          telefono_celular.setCustomValidity('');
-          telefono_habitacion.setCustomValidity('');
-        }
-
-      });
     });
     $('#exampleModalCenter').modal('show');
   </script>
