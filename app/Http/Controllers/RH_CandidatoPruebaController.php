@@ -40,7 +40,37 @@ class RH_CandidatoPruebaController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request) {
-        return $request->all();
+        try {
+            $fecha = $request->input('fecha');
+
+            $candidatos_pruebas = new RH_Candidato_Prueba();
+
+            $candidatos_pruebas->rh_candidatos_id = $request->input('CandidatoId');
+            $candidatos_pruebas->rh_pruebas_id = $request->input('PruebaId');
+            $candidatos_pruebas->fecha = date('Y-m-d', strtotime($fecha));
+            $candidatos_pruebas->facilitador = $request->input('facilitador');
+            $candidatos_pruebas->puntuacion = floatval($request->input('puntuacion'));
+            $candidatos_pruebas->user = auth()->user()->name;
+            $candidatos_pruebas->save();
+
+            $candidato = RH_Candidato::find($request->input('CandidatoId'));
+            $candidato->estatus = 'EN_PROCESO';
+            $candidato->save();
+
+            $Auditoria = new Auditoria();
+            $Auditoria->accion = 'CREAR';
+            $Auditoria->tabla = 'RHI_CANDIDATOS_PRUEBAS';
+            $Auditoria->registro = $request->input('facilitador');
+            $Auditoria->user = auth()->user()->name;
+            $Auditoria->save();
+
+            return redirect()
+                ->route('candidatos.index')
+                ->with('Saved1', ' Informacion');
+        }
+        catch(\Illuminate\Database\QueryException $e) {
+            return back()->with('Error', ' Error');
+        }
     }
 
     /**
