@@ -1164,7 +1164,6 @@
   		$FFinal = date("Y-m-d");
 	  	$FInicial = date("Y-m-d",strtotime($FFinal."-10 days"));
 	  	$RangoDias = intval(FG_Rango_Dias($FInicial,$FFinal));
-
 		/* FILTRO 1:
 		*  Articulos con veces vendidas en el rango
 		*  Articulos sin compra en el rango
@@ -1202,24 +1201,6 @@
 		/* Inicio while que itera en los articulos con existencia actual > 0*/
 		while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
 
-			/*COMANDOS PARA TEST
-    	$IdArticulo = 54806;
-			$flag = FALSE;
-			while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
-				$IdArticuloR = $row['InvArticuloId'];
-				if($IdArticuloR == $IdArticulo){
-					$flag = TRUE;
-				}
-			}
-
-			if($flag==TRUE){
-				echo'----Filtro 1 * Sin compra rango * Con venta en rango: SI----';
-			}
-			else{
-				echo'----Filtro 1 * Sin compra rango * Con venta en rango: NO----';
-			}
-			COMANDOS PARA TEST*/	
-			
 			$IdArticulo = $row["InvArticuloId"];
 			$sql1 = SQG_Detalle_Articulo($IdArticulo);
     	$result1 = sqlsrv_query($conn,$sql1);
@@ -1245,21 +1226,11 @@
     	$UnidadesVendidas = $row["UnidadesVendidas"];
     	$VentaDiaria = FG_Venta_Diaria($UnidadesVendidas,$RangoDias);
     	$DiasRestantes = FG_Dias_Restantes($Existencia,$VentaDiaria);
-
-    	/*COMANDOS PARA TEST*/
-    	//echo'----- Articulo: '.$Descripcion.' -----';
-    	/*COMANDOS PARA TEST*/
-
 			/* FILTRO 2: 
 			*	Dias restantes
 			*	si dias restantes es menor de 10 entra en el rango sino es rechazado
 			*/
 			if($DiasRestantes<11){
-
-				/*COMANDOS PARA TEST*/
-				//echo'----Filtro 2 * Dias restantes < 11: SI '.$DiasRestantes.' ----';
-				/*COMANDOS PARA TEST*/
-
 				/* FILTRO 3:
 				*	Mantuvo Existencia en rango
 				*	se cuenta las apariciones del articulo en la tabla de dias
@@ -1268,22 +1239,13 @@
 				$CuentaExistencia = FG_Cuenta_Existencia($connCPharma,$IdArticulo,$FInicial,$FFinal);
 				
 				if($CuentaExistencia==$RangoDias){
-
-					/*COMANDOS PARA TEST*/
-					//echo'----Filtro 3 * Existencia en rango: SI '.$CuentaExistencia.' ----';
-					/*COMANDOS PARA TEST*/
-
 					/*  FILTRO 4: 
 					*	Venta en dia, esta se acumula 
 					*	El articulo debe tener venta al menos la mita de dias del rango 
 					*/
 					$CuentaVenta = FG_Cuenta_Venta($conn,$IdArticulo,$FInicial,$FFinal);
 
-					if($CuentaVenta>=($RangoDias/2)){
-
-						/*COMANDOS PARA TEST*/
-						//echo'----Filtro 4 * Venta en dias: SI '.$CuentaVenta.' ----';
-						/*COMANDOS PARA TEST*/		
+					if($CuentaVenta>=($RangoDias/2)){	
 
 						$ExistenciaDecreciente = FG_Existencia_Decreciente($connCPharma,$IdArticulo,$FInicial,$FFinal,$RangoDias);
 
@@ -1293,10 +1255,6 @@
 						*	Si el articulo decrece su existencia rango 
 						*/
 						if($CuentaDecreciente==TRUE){
-
-							/*COMANDOS PARA TEST*/
-							//echo'----Filtro 5 * Decrece su existencia: SI ----';
-							/*COMANDOS PARA TEST*/
 
 							$Precio = FG_Calculo_Precio_Alfa($Existencia,$ExistenciaAlmacen1,$ExistenciaAlmacen2,$IsTroquelado,$UtilidadArticulo,$UtilidadCategoria,$TroquelAlmacen1,$PrecioCompraBrutoAlmacen1,$TroquelAlmacen2,$PrecioCompraBrutoAlmacen2,$PrecioCompraBruto,$IsIVA,$CondicionExistencia);
 
@@ -1314,30 +1272,10 @@
 							$sqlCPharma = MySQL_Guardar_Productos_Caida($IdArticulo,$CodigoArticulo,$Descripcion,$Precio,$Existencia,$Dia10,$Dia9,$Dia8,$Dia7,$Dia6,$Dia5,$Dia4,$Dia3,$Dia2,$Dia1,$UnidadesVendidas,$DiasRestantes,$FechaCaptura,$user,$date,$date);
 
 							mysqli_query($connCPharma,$sqlCPharma);
-						}	
-						//else{
-							/*COMANDOS PARA TEST*/
-							//echo'----Filtro 5 * Decrece su existencia: NO ----';
-							/*COMANDOS PARA TEST*/
-						//}					
-					}
-					//else{
-						/*COMANDOS PARA TEST*/
-						//echo'----Filtro 4 * Venta en dias: NO '.$CuentaVenta.' ----';
-						/*COMANDOS PARA TEST*/
-					//}	
+						}						
+					}	
 				}
-				//else{
-					/*COMANDOS PARA TEST*/
-					//echo'----Filtro 3 * Existencia en rango: NO '.$CuentaExistencia.' ----';
-					/*COMANDOS PARA TEST*/
-				//}
 			}
-			//else{
-				/*COMANDOS PARA TEST*/
-				//echo'----Filtro 2 * Dias restantes < 11: NO '.$DiasRestantes.' ----';
-				/*COMANDOS PARA TEST*/
-			//}	
 		}
 		FG_Guardar_Captura_Caida($connCPharma,$FechaCaptura,$date);
 		
