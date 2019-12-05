@@ -374,6 +374,18 @@
             </form>
           <?php
               break;
+
+              case 'Entrevista':
+          ?>
+            <form action="/entrevistas/create" method="GET">
+              <input type="hidden" name="CandidatoId" value="{{$candidato->id}}">
+
+              <button type="submit" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="bottom" title="Ir a la fase">
+                <i class="fas fa-users"></i>&nbsp;Entrevista
+              </button>
+            </form>
+          <?php
+              break;
               
               default:
                 echo '-';
