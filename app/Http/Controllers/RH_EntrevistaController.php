@@ -3,11 +3,13 @@
 namespace compras\Http\Controllers;
 
 use Illuminate\Http\Request;
-use compras\RH_Entrevista;
+use Illuminate\Support\Facades\DB;
+
 use compras\User;
 use compras\Auditoria;
 use compras\RH_Candidato;
 use compras\RH_Vacante;
+use compras\RH_Entrevista;
 
 class RH_EntrevistaController extends Controller {
     /**
@@ -36,10 +38,10 @@ class RH_EntrevistaController extends Controller {
      */
     public function create(Request $request) {
 
-        $id_candidato = $request->input("CandidatoId");
-        $candidato = RH_Candidato::find($id_candidato);
-
-        $vacantes = RH_Vacante::all();
+        $candidato = RH_Candidato::find($request->input("CandidatoId"));
+        $vacantes = DB::table('rh_vacantes')
+            ->orderBy('sede', 'asc')
+            ->get();
 
         return view('pages.RRHH.entrevistas.create', compact('candidato', 'vacantes'));
     }

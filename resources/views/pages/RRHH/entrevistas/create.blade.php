@@ -80,11 +80,11 @@
                 ?>
 
                 <option value="{{$vacante->id}}">{{
-                    $vacante->nombre_vacante 
+                    $vacante->sede
+                    . " - " . $vacante->nombre_vacante 
                     . " - " . $vacante->departamento
                     . " - " . $vacante->turno
                     . " - " . $vacante->dias_libres
-                    . " - " . $vacante->sede
                   }}
                 </option>
 
