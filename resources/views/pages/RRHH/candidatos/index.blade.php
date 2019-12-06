@@ -33,20 +33,66 @@
     </div>
   @endif
 
-  @if(session('Saved1'))
+  @if(session('Saved0'))
     <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title text-info" id="exampleModalCenterTitle">
-              <i class="fas fa-info text-info"></i>{{ session('Saved1') }}
+              <i class="fas fa-info text-info"></i>{{ session('Saved') }}
             </h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
           <div class="modal-body">
-            <h4 class="h6">La entrevista fue almacenada con éxito</h4>
+            <h4 class="h6">Inicio del proceso exitosamente</h4>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline-success" data-dismiss="modal">Aceptar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  @endif
+
+  @if(session('Saved1'))
+    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title text-info" id="exampleModalCenterTitle">
+              <i class="fas fa-info text-info"></i>{{ session('Saved') }}
+            </h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <h4 class="h6">Fase #1 agregada con éxito</h4>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline-success" data-dismiss="modal">Aceptar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  @endif
+
+  @if(session('Saved2'))
+    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title text-info" id="exampleModalCenterTitle">
+              <i class="fas fa-info text-info"></i>{{ session('Saved') }}
+            </h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <h4 class="h6">Fase #2 agregada con éxito</h4>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-outline-success" data-dismiss="modal">Aceptar</button>
@@ -118,6 +164,32 @@
           </div>
           <div class="modal-body">
             <h4 class="h6">Candidato reincorporado con éxito</h4>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline-success" data-dismiss="modal">Aceptar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  @endif
+
+  @if(session('Error'))
+    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title text-danger" id="exampleModalCenterTitle">
+              <i class="fas fa-exclamation-triangle text-danger"></i>
+              {{ session('Error') }}
+            </h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <h4 class="h6">
+             Error al iniciar el proceso
+            </h4>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-outline-success" data-dismiss="modal">Aceptar</button>
@@ -228,7 +300,9 @@
             </form>
           <?php
             }
-          } else if(Auth::user()->role == 'ANALISTA') {
+          } 
+          else if(Auth::user()->role == 'ANALISTA') {
+            if($candidato->estatus != 'RECHAZADO') {
           ?>
             <a href="/candidatos/{{$candidato->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
               <i class="far fa-eye"></i>
@@ -237,8 +311,28 @@
             <a href="/candidatos/{{$candidato->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
               <i class="fas fa-edit"></i>
             </a>
+
+            <form action="/candidatos/{{$candidato->id}}" method="POST" style="display: inline;">
+              @method('DELETE')
+              @csrf
+              <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Desincorporar">
+                <i class="fa fa-reply"></i>
+              </button>
+            </form>
           <?php
-            } else if(Auth::user()->role == 'USUARIO') {
+            } else if($candidato->estatus == 'RECHAZADO') {
+          ?>
+            <form action="/candidatos/{{$candidato->id}}" method="POST" style="display: inline;">
+              @method('DELETE')
+              @csrf
+              <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Reincorporar">
+                <i class="fa fa-share"></i>
+              </button>
+            </form>
+
+          <?php
+            }
+          } else if(Auth::user()->role == 'USUARIO') {
           ?>
             <a href="/candidatos/{{$candidato->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
               <i class="far fa-eye"></i>
@@ -249,38 +343,85 @@
           </td>
 
           <td>
-          <?php
-            switch($candidato->estatus) {
-              case 'POSTULADO':
+          <?php 
+          if($candidato->estatus == 'POSTULADO') {
           ?>
-            <form action="/entrevistas/create" method="GET">
+            <form action="/gestor_fases" method="POST">
+              @csrf
               <input type="hidden" name="CandidatoId" value="{{$candidato->id}}">
+              <input type="hidden" name="FaseId" value="1">
 
               <button type="submit" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="bottom" title="Ir a la fase">
+                <i class="far fa-play-circle"></i>&nbsp;Iniciar proceso
+              </button>
+            </form>
+
+          <?php
+          } else if(
+              ($candidato->estatus == 'RECHAZADO' )
+              || ($candidato->estatus == 'FUTURO')
+            ) { 
+            echo '-';
+          }
+          else if($candidato->estatus == 'EN_PROCESO') {
+
+            $candidatos_fases = DB::table('rhi_candidatos_fases')
+            ->where('rh_candidatos_id', $candidato->id)
+            ->orderBy('id', 'desc')
+            ->first();
+
+            $nombre_fase = compras\RH_Fase::find($candidatos_fases->rh_fases_id)
+            ->nombre_fase;
+
+            switch($nombre_fase) {
+              case 'Pruebas Psicológicas':
+          ?>
+            <form action="/candidatos_pruebas/create" method="GET">
+              <input type="hidden" name="CandidatoId" value="{{$candidato->id}}">
+              <input type="hidden" name="CandidatoFaseId" value="{{$candidatos_fases->id}}">
+
+              <button type="submit" role="button" class="btn btn-outline-warning btn-sm" data-toggle="tooltip" data-placement="bottom" title="Ir a la fase">
+                <i class="fas fa-tasks"></i>&nbsp;Pruebas
+              </button>
+            </form>
+          <?php
+              break;
+
+              case 'Entrevista':
+          ?>
+            <form action="/entrevistas/create" method="GET" style="display: inline-block;">
+              <input type="hidden" name="CandidatoId" value="{{$candidato->id}}">
+              <input type="hidden" name="CandidatoFaseId" value="{{$candidatos_fases->id}}">
+
+              <button type="submit" role="button" class="btn btn-outline-primary btn-sm" data-toggle="tooltip" data-placement="bottom" title="Ir a la fase">
                 <i class="fas fa-users"></i>&nbsp;Entrevista
               </button>
             </form>
-          <?php
-              break;
 
-              case 'ENTREVISTADO':
-          ?>
-            <form action="/pruebas/create" method="GET">
+            <form action="/candidatos_pruebas/create" method="GET" style="display: inline-block;">
               <input type="hidden" name="CandidatoId" value="{{$candidato->id}}">
+              <input type="hidden" name="CandidatoFaseId" value="{{$candidatos_fases->id}}">
 
-              <button type="submit" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="bottom" title="Ir a la fase" disabled>
-                <i class="fas fa-tasks"></i>&nbsp;Prueba
+              <button type="submit" role="button" class="btn btn-outline-warning btn-sm" data-toggle="tooltip" data-placement="bottom" title="Ir a la fase">
+                <i class="fas fa-tasks"></i>&nbsp;Pruebas
               </button>
             </form>
           <?php
               break;
-          ?>
 
+              case 'Práctica':
+          ?>
+            <form action="#" method="GET" style="display: inline-block;">
+              <input type="hidden" name="CandidatoId" value="{{$candidato->id}}">
+              <input type="hidden" name="CandidatoFaseId" value="{{$candidatos_fases->id}}">
+
+              <button type="button" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="bottom" title="Ir a la fase">
+                <i class="fas fa-users-cog"></i>&nbsp;Práctica
+              </button>
+            </form>
           <?php
-              default: 
-                echo "-";
-              break;
             }//switch
+          }//else
           ?>
           </td>
         </tr>

@@ -63,6 +63,8 @@
               <input type="text" id="nombres" name="nombres" class="form-control" value="{{$candidato->nombres . ' ' . $candidato->apellidos}}" disabled>
               
               <input type="hidden" name="CandidatoId" id="CandidatoId" value="{{$candidato->id}}">
+
+              <input type="hidden" name="CandidatoFaseId" id="CandidatoFaseId" value="{{$candidato_fase->id}}">
             </td>
           </tr>
 
@@ -80,11 +82,11 @@
                 ?>
 
                 <option value="{{$vacante->id}}">{{
-                    $vacante->nombre_vacante 
+                    $vacante->sede
+                    . " - " . $vacante->nombre_vacante 
                     . " - " . $vacante->departamento
                     . " - " . $vacante->turno
                     . " - " . $vacante->dias_libres
-                    . " - " . $vacante->sede
                   }}
                 </option>
 

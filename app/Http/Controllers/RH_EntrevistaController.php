@@ -3,11 +3,14 @@
 namespace compras\Http\Controllers;
 
 use Illuminate\Http\Request;
-use compras\RH_Entrevista;
+use Illuminate\Support\Facades\DB;
+
 use compras\User;
 use compras\Auditoria;
 use compras\RH_Candidato;
 use compras\RH_Vacante;
+use compras\RH_Entrevista;
+use compras\RHI_Candidato_Fase;
 
 class RH_EntrevistaController extends Controller {
     /**
@@ -36,12 +39,13 @@ class RH_EntrevistaController extends Controller {
      */
     public function create(Request $request) {
 
-        $id_candidato = $request->input("CandidatoId");
-        $candidato = RH_Candidato::find($id_candidato);
+        $candidato = RH_Candidato::find($request->input("CandidatoId"));
+        $candidato_fase = RHI_Candidato_Fase::find($request->input("CandidatoFaseId"));
+        $vacantes = DB::table('rh_vacantes')
+            ->orderByRaw('sede ASC, nombre_vacante ASC')
+            ->get();
 
-        $vacantes = RH_Vacante::all();
-
-        return view('pages.RRHH.entrevistas.create', compact('candidato', 'vacantes'));
+        return view('pages.RRHH.entrevistas.create', compact('candidato', 'candidato_fase', 'vacantes'));
     }
 
     /**
@@ -67,10 +71,17 @@ class RH_EntrevistaController extends Controller {
             $entrevistas->user = auth()->user()->name;
             $entrevistas->save();
 
+            //-------------------- CANDIDATO --------------------//
             $candidato = RH_Candidato::find($request->input('CandidatoId'));
-            $candidato->estatus = 'ENTREVISTADO';
+            $candidato->estatus = 'EN_PROCESO';
             $candidato->save();
 
+            //-------------------- FASE ASOCIADA --------------------//
+            $fase_asociada = RHI_Candidato_Fase::find($request->input('CandidatoFaseId'));
+            $fase_asociada->rh_fases_id = 3;
+            $fase_asociada->save();
+
+            //-------------------- AUDITORIA --------------------//
             $Auditoria = new Auditoria();
             $Auditoria->accion = 'CREAR';
             $Auditoria->tabla = 'RH_ENTREVISTAS';
@@ -80,7 +91,7 @@ class RH_EntrevistaController extends Controller {
 
             return redirect()
                 ->route('candidatos.index')
-                ->with('Saved1', ' Informacion');
+                ->with('Saved2', ' Informacion');
         }
         catch(\Illuminate\Database\QueryException $e) {
             return back()->with('Error', ' Error');
@@ -140,6 +151,10 @@ class RH_EntrevistaController extends Controller {
 
             $entrevistas->user = auth()->user()->name;
             $entrevistas->save();
+
+            $candidato = RH_Candidato::find($request->input('CandidatoId'));
+            $candidato->estatus = 'EN_PROCESO';
+            $candidato->save();
 
             $Auditoria = new Auditoria();
             $Auditoria->accion = 'EDITAR';
