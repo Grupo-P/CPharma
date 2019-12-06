@@ -374,7 +374,7 @@
               <input type="hidden" name="CandidatoId" value="{{$candidato->id}}">
               <input type="hidden" name="CandidatoFaseId" value="{{$candidatos_fases->id}}">
 
-              <button type="submit" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="bottom" title="Ir a la fase">
+              <button type="submit" role="button" class="btn btn-outline-warning btn-sm" data-toggle="tooltip" data-placement="bottom" title="Ir a la fase">
                 <i class="fas fa-tasks"></i>&nbsp;Pruebas
               </button>
             </form>
@@ -383,11 +383,20 @@
 
               case 'Entrevista':
           ?>
-            <form action="/entrevistas/create" method="GET">
+            <form action="/entrevistas/create" method="GET" style="display: inline-block;">
               <input type="hidden" name="CandidatoId" value="{{$candidato->id}}">
 
-              <button type="submit" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="bottom" title="Ir a la fase">
+              <button type="submit" role="button" class="btn btn-outline-primary btn-sm" data-toggle="tooltip" data-placement="bottom" title="Ir a la fase">
                 <i class="fas fa-users"></i>&nbsp;Entrevista
+              </button>
+            </form>
+
+            <form action="/candidatos_pruebas/create" method="GET" style="display: inline-block;">
+              <input type="hidden" name="CandidatoId" value="{{$candidato->id}}">
+              <input type="hidden" name="CandidatoFaseId" value="{{$candidatos_fases->id}}">
+
+              <button type="submit" role="button" class="btn btn-outline-warning btn-sm" data-toggle="tooltip" data-placement="bottom" title="Ir a la fase">
+                <i class="fas fa-tasks"></i>&nbsp;Pruebas
               </button>
             </form>
           <?php
