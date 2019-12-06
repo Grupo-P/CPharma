@@ -37,46 +37,46 @@ class OrdenCompraController extends Controller
       switch ($Tipo) {
           case 0:
               $OrdenCompra =  
-              OrdenCompra::orderBy('id', 'asc')->
+              OrdenCompra::orderBy('created_at', 'desc')->
               where('estado','EN PROCESO')->get();
           break;
           case 1:
               $OrdenCompra =  
-              OrdenCompra::orderBy('id', 'asc')->
+              OrdenCompra::orderBy('created_at', 'desc')->
               where('estado','POR APROBAR')->get();            
           break;
           case 2:
               $OrdenCompra =  
-              OrdenCompra::orderBy('id', 'asc')->
+              OrdenCompra::orderBy('created_at', 'desc')->
               where('estado','ANULADA')->get();
           break;
           case 3:
               $OrdenCompra =  
-              OrdenCompra::orderBy('id', 'asc')->
+              OrdenCompra::orderBy('created_at', 'desc')->
               where('estado','RECHAZADA')->get();
           break;
           case 4:
               $OrdenCompra =  
-              OrdenCompra::orderBy('id', 'asc')->
+              OrdenCompra::orderBy('created_at', 'desc')->
               where('estado','RECIBIDA')->get();
           break;
           case 5:
               $OrdenCompra =  
-              OrdenCompra::orderBy('id', 'asc')->
+              OrdenCompra::orderBy('created_at', 'desc')->
               where('estado','INGRESADA')->get();
           break;
           case 6:
               $OrdenCompra =  
-              OrdenCompra::orderBy('id', 'asc')->
+              OrdenCompra::orderBy('created_at', 'desc')->
               where('estado','CERRADA')->get();
           break;
           case 7:
               $OrdenCompra =  
-              OrdenCompra::orderBy('id', 'asc')->
-              where('estado','APROBADA')->get();            
+              OrdenCompra::orderBy('created_at', 'desc')->
+              where('estado','APROBADA')->get();          
           break;
           default:
-              $OrdenCompra =  OrdenCompra::all();
+              $OrdenCompra =  OrdenCompra::orderBy('created_at', 'desc')->get();
               return view('pages.ordenCompra.index', compact('OrdenCompra'));
           break;
       }
