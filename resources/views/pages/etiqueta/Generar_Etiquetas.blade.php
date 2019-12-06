@@ -36,7 +36,7 @@
 		font-size: 0.8em;
 	}
 	.descripcion{
-		height: 1.5cm;
+		height: 2cm;
 	}
 	.rowDer{
 		height: 1cm;
@@ -57,7 +57,7 @@
 		text-transform: uppercase;
 	}
 	.aumento{
-		font-size: 1.2em;
+		font-size: 1.1em;
 	}
 </style>
 <?php
