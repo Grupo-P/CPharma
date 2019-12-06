@@ -62,6 +62,8 @@
               {!! Form::text('nombres', $candidato->nombres . " " . $candidato->apellidos, [ 'class' => 'form-control', 'disabled']) !!}
 
               {!! Form::hidden('CandidatoId', $candidato->id, ['id' => 'CandidatoId']) !!}
+
+              {!! Form::hidden('CandidatoFaseId', $candidato_fase->id, ['id' => 'CandidatoFaseId']) !!}
             </td>
           </tr>
 

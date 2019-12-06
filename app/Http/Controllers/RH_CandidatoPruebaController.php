@@ -3,11 +3,14 @@
 namespace compras\Http\Controllers;
 
 use Illuminate\Http\Request;
-use compras\RH_Candidato_Prueba;
+use Illuminate\Support\Facades\DB;
+
 use compras\User;
 use compras\Auditoria;
 use compras\RH_Candidato;
 use compras\RH_Prueba;
+use compras\RH_Candidato_Prueba;
+use compras\RHI_Candidato_Fase;
 
 class RH_CandidatoPruebaController extends Controller {
     /**
@@ -25,12 +28,12 @@ class RH_CandidatoPruebaController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function create(Request $request) {
-        $id_candidato = $request->input("CandidatoId");
-        $candidato = RH_Candidato::find($id_candidato);
+        $candidato = RH_Candidato::find($request->input("CandidatoId"));
+        $candidato_fase = RHI_Candidato_Fase::find($request->input("CandidatoFaseId"));
 
         $pruebas = RH_Prueba::all();
 
-        return view('pages.RRHH.candidatos_pruebas.create', compact('candidato', 'pruebas'));
+        return view('pages.RRHH.candidatos_pruebas.create', compact('candidato', 'candidato_fase', 'pruebas'));
     }
 
     /**
@@ -41,7 +44,7 @@ class RH_CandidatoPruebaController extends Controller {
      */
     public function store(Request $request) {
         try {
-            $fecha = $request->input('fecha');
+            /*$fecha = $request->input('fecha');
 
             $candidatos_pruebas = new RH_Candidato_Prueba();
 
@@ -55,7 +58,11 @@ class RH_CandidatoPruebaController extends Controller {
 
             $candidato = RH_Candidato::find($request->input('CandidatoId'));
             $candidato->estatus = 'EN_PROCESO';
-            $candidato->save();
+            $candidato->save();*/
+
+            return RHI_Candidato_Fase::find($request->input('CandidatoFaseId'));
+            /*$fase_asociada->estatus = 'EN_PROCESO';
+            $fase_asociada->save();
 
             $Auditoria = new Auditoria();
             $Auditoria->accion = 'CREAR';
@@ -66,7 +73,7 @@ class RH_CandidatoPruebaController extends Controller {
 
             return redirect()
                 ->route('candidatos.index')
-                ->with('Saved1', ' Informacion');
+                ->with('Saved1', ' Informacion');*/
         }
         catch(\Illuminate\Database\QueryException $e) {
             return back()->with('Error', ' Error');

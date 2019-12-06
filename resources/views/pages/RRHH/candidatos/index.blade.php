@@ -358,15 +358,21 @@
 
           <?php
           } else {
-            $fase = DB::table('rhi_candidatos_fases')->where('rh_candidatos_id', $candidato->id)->value('rh_fases_id');
 
-            $nombre_fase = DB::table('rh_fases')->where('id', $fase)->value('nombre_fase');
+            $candidatos_fases = DB::table('rhi_candidatos_fases')
+            ->where('rh_candidatos_id', $candidato->id)
+            ->orderBy('id', 'desc')
+            ->first();
 
-            switch ($nombre_fase) {
+            $nombre_fase = compras\RH_Fase::find($candidatos_fases->rh_fases_id)
+            ->nombre_fase;
+
+            switch($nombre_fase) {
               case 'Pruebas Psicológicas':
           ?>
             <form action="/candidatos_pruebas/create" method="GET">
               <input type="hidden" name="CandidatoId" value="{{$candidato->id}}">
+              <input type="hidden" name="CandidatoFaseId" value="{{$candidatos_fases->id}}">
 
               <button type="submit" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="bottom" title="Ir a la fase">
                 <i class="fas fa-tasks"></i>&nbsp;Pruebas
