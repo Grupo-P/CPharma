@@ -40,7 +40,7 @@ class RH_EntrevistaController extends Controller {
 
         $candidato = RH_Candidato::find($request->input("CandidatoId"));
         $vacantes = DB::table('rh_vacantes')
-            ->orderBy('sede', 'asc')
+            ->orderByRaw('sede ASC, nombre_vacante ASC')
             ->get();
 
         return view('pages.RRHH.entrevistas.create', compact('candidato', 'vacantes'));
