@@ -44,7 +44,7 @@ class RH_CandidatoPruebaController extends Controller {
      */
     public function store(Request $request) {
         try {
-            /*$fecha = $request->input('fecha');
+            $fecha = $request->input('fecha');
 
             $candidatos_pruebas = new RH_Candidato_Prueba();
 
@@ -56,14 +56,17 @@ class RH_CandidatoPruebaController extends Controller {
             $candidatos_pruebas->user = auth()->user()->name;
             $candidatos_pruebas->save();
 
+            //-------------------- CANDIDATO --------------------//
             $candidato = RH_Candidato::find($request->input('CandidatoId'));
             $candidato->estatus = 'EN_PROCESO';
-            $candidato->save();*/
+            $candidato->save();
 
-            return RHI_Candidato_Fase::find($request->input('CandidatoFaseId'));
-            /*$fase_asociada->estatus = 'EN_PROCESO';
+            //-------------------- FASE ASOCIADA --------------------//
+            $fase_asociada = RHI_Candidato_Fase::find($request->input('CandidatoFaseId'));
+            $fase_asociada->rh_fases_id = 2;
             $fase_asociada->save();
 
+            //-------------------- AUDITORIA --------------------//
             $Auditoria = new Auditoria();
             $Auditoria->accion = 'CREAR';
             $Auditoria->tabla = 'RHI_CANDIDATOS_PRUEBAS';
@@ -73,7 +76,7 @@ class RH_CandidatoPruebaController extends Controller {
 
             return redirect()
                 ->route('candidatos.index')
-                ->with('Saved1', ' Informacion');*/
+                ->with('Saved1', ' Informacion');
         }
         catch(\Illuminate\Database\QueryException $e) {
             return back()->with('Error', ' Error');

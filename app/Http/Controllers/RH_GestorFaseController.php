@@ -56,7 +56,7 @@ class RH_GestorFaseController extends Controller {
 
             return redirect()
                 ->route('candidatos.index')
-                ->with('Saved3', ' Informacion');
+                ->with('Saved0', ' Informacion');
         }
         catch(\Illuminate\Database\QueryException $e) {
             return back()->with('Error', ' Error');

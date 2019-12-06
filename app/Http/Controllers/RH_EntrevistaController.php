@@ -80,7 +80,7 @@ class RH_EntrevistaController extends Controller {
 
             return redirect()
                 ->route('candidatos.index')
-                ->with('Saved1', ' Informacion');
+                ->with('Saved2', ' Informacion');
         }
         catch(\Illuminate\Database\QueryException $e) {
             return back()->with('Error', ' Error');

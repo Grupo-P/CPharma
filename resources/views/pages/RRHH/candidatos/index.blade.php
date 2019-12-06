@@ -33,7 +33,7 @@
     </div>
   @endif
 
-  @if(session('Saved1'))
+  @if(session('Saved0'))
     <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
@@ -46,7 +46,7 @@
             </button>
           </div>
           <div class="modal-body">
-            <h4 class="h6">Fase #2 agregada con éxito</h4>
+            <h4 class="h6">Inicio del proceso exitosamente</h4>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-outline-success" data-dismiss="modal">Aceptar</button>
@@ -56,7 +56,7 @@
     </div>
   @endif
 
-  @if(session('Saved2'))
+  @if(session('Saved1'))
     <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
@@ -79,7 +79,7 @@
     </div>
   @endif
 
-  @if(session('Saved3'))
+  @if(session('Saved2'))
     <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
@@ -92,7 +92,7 @@
             </button>
           </div>
           <div class="modal-body">
-            <h4 class="h6">Inicio del proceso exitosamente</h4>
+            <h4 class="h6">Fase #2 agregada con éxito</h4>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-outline-success" data-dismiss="modal">Aceptar</button>
