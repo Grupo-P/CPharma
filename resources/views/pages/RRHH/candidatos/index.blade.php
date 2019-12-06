@@ -357,7 +357,13 @@
             </form>
 
           <?php
-          } else {
+          } else if(
+              ($candidato->estatus == 'RECHAZADO' )
+              || ($candidato->estatus == 'FUTURO')
+            ) { 
+            echo '-';
+          }
+          else if($candidato->estatus == 'EN_PROCESO') {
 
             $candidatos_fases = DB::table('rhi_candidatos_fases')
             ->where('rh_candidatos_id', $candidato->id)
@@ -401,13 +407,7 @@
             </form>
           <?php
               break;
-              
-              default:
-                echo '-';
-              break;
-            }
-          ?>
-          <?php
+            }//switch
           }//else
           ?>
           </td>
