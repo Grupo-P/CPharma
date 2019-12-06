@@ -10,6 +10,7 @@ use compras\Auditoria;
 use compras\RH_Candidato;
 use compras\RH_Vacante;
 use compras\RH_Entrevista;
+use compras\RHI_Candidato_Fase;
 
 class RH_EntrevistaController extends Controller {
     /**
@@ -39,11 +40,12 @@ class RH_EntrevistaController extends Controller {
     public function create(Request $request) {
 
         $candidato = RH_Candidato::find($request->input("CandidatoId"));
+        $candidato_fase = RHI_Candidato_Fase::find($request->input("CandidatoFaseId"));
         $vacantes = DB::table('rh_vacantes')
             ->orderByRaw('sede ASC, nombre_vacante ASC')
             ->get();
 
-        return view('pages.RRHH.entrevistas.create', compact('candidato', 'vacantes'));
+        return view('pages.RRHH.entrevistas.create', compact('candidato', 'candidato_fase', 'vacantes'));
     }
 
     /**
@@ -69,10 +71,17 @@ class RH_EntrevistaController extends Controller {
             $entrevistas->user = auth()->user()->name;
             $entrevistas->save();
 
+            //-------------------- CANDIDATO --------------------//
             $candidato = RH_Candidato::find($request->input('CandidatoId'));
             $candidato->estatus = 'EN_PROCESO';
             $candidato->save();
 
+            //-------------------- FASE ASOCIADA --------------------//
+            $fase_asociada = RHI_Candidato_Fase::find($request->input('CandidatoFaseId'));
+            $fase_asociada->rh_fases_id = 3;
+            $fase_asociada->save();
+
+            //-------------------- AUDITORIA --------------------//
             $Auditoria = new Auditoria();
             $Auditoria->accion = 'CREAR';
             $Auditoria->tabla = 'RH_ENTREVISTAS';

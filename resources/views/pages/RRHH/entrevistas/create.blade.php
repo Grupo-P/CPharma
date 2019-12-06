@@ -63,6 +63,8 @@
               <input type="text" id="nombres" name="nombres" class="form-control" value="{{$candidato->nombres . ' ' . $candidato->apellidos}}" disabled>
               
               <input type="hidden" name="CandidatoId" id="CandidatoId" value="{{$candidato->id}}">
+
+              <input type="hidden" name="CandidatoFaseId" id="CandidatoFaseId" value="{{$candidato_fase->id}}">
             </td>
           </tr>
 
