@@ -276,10 +276,10 @@
 		      	<th scope="col" class="CP-sticky">Estado Actual</th>
 		      	<th scope="col" class="CP-sticky">Operador</th>
 		      	<th scope="col" class="CP-sticky">Monto real</th>
-		      	<th scope="col" class="CP-sticky">Fecha de aprobacion</th>
+		      	<!-- <th scope="col" class="CP-sticky">Fecha de aprobacion</th> -->
 		      	<th scope="col" class="CP-sticky">Calificacion</th>
-		      	<th scope="col" class="CP-sticky">Fecha de recepcion</th>
-		      	<th scope="col" class="CP-sticky">Fecha de ingreso</th>
+		      	<!-- <th scope="col" class="CP-sticky">Fecha de recepcion</th>
+		      	<th scope="col" class="CP-sticky">Fecha de ingreso</th> -->
 		      	<th scope="col" class="CP-sticky">Acciones</th>
 		    </tr>
 	  	</thead>
@@ -351,10 +351,10 @@
 		      <td>{{$ordenCompra->estatus}}</td>
 		      <td>{{$ordenCompra->user}}</td>
 		      <td>{{$costo_total_real}}</td>
-		      <td>{{$ordenCompra->fecha_aprobacion}}</td>
+		      <!-- <td>{{$ordenCompra->fecha_aprobacion}}</td> -->
 		      <td>{{$ordenCompra->calificacion}}</td>
-		      <td>{{$ordenCompra->fecha_recepcion}}</td>
-		      <td>{{$ordenCompra->fecha_ingreso}}</td>
+		      <!-- <td>{{$ordenCompra->fecha_recepcion}}</td>
+		      <td>{{$ordenCompra->fecha_ingreso}}</td> -->
 
     <!-- Inicio Validacion -->
 			<td style="width:300px;">
