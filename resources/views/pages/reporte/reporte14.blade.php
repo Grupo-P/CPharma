@@ -104,14 +104,6 @@
     $conn = FG_Conectar_Smartpharma($SedeConnection);
     $connCPharma = FG_Conectar_CPharma();
 
-  /*INCIO PARA CALCULOS CON DIAS EN CERO*/
-    $sqlDC = MySQL_Rango_Dias_Cero();
-    $resultDC = mysqli_query($connCPharma,$sqlDC);
-    $rowDC = $resultDC->fetch_assoc();
-    $DC_FInicialImp = date("d-m-Y", strtotime($rowDC['Inicio']));
-    $DC_FFinalImp = date("d-m-Y", strtotime($rowDC['Fin']));
- /*FIN PARA CALCULOS CON DIAS EN CERO*/
-
     $FFinal = date("Y-m-d");
     $FInicial = date("Y-m-d",strtotime($FFinal."-10 days"));
 
@@ -134,7 +126,6 @@
     <br/>
     ';
     echo'<h6 align="center">Periodo desde el '.$FInicialImp.' al '.$FFinalImp.' </h6>';
-    echo'<h6 align="center">La data recolectada para el calculo <span style="color:red;">(Real)</span> va desde el <span style="color:red;">'.$DC_FInicialImp.'</span> al <span style="color:red;">'.$DC_FFinalImp.'</span> </h6>';
     echo'<h6 align="center">Los productos de este reporte cumplen con los siguientes criterios</h6>';
 
     echo '
@@ -190,8 +181,8 @@
               <th scope="col" class="CP-sticky">Dia 2</td>
               <th scope="col" class="CP-sticky">Dia 1</td>
               <th scope="col" class="CP-sticky">Unidades Vendidas</td>
-              <th scope="col" class="CP-sticky">Dias Restantes</td> 
-              <th scope="col" class="CP-sticky bg-danger text-white">Dias restantes (Real)</th>
+              <th scope="col" class="CP-sticky">Dias Restantes</td>
+              <th scope="col" class="CP-sticky">Ultimo Proveedor</td>
               <th scope="col" class="CP-sticky">Acciones</th>                  
           </tr>
         </thead>
@@ -222,13 +213,7 @@
       $result1 = sqlsrv_query($conn,$sql1);
       $row1 = sqlsrv_fetch_array($result1,SQLSRV_FETCH_ASSOC);
       $CodigoBarra = $row1["CodigoBarra"];
-
-      $sql2 = MySQL_Cuenta_Veces_Dias_Cero($IdArticulo,$FInicial,$FFinal);
-      $result2 = mysqli_query($connCPharma,$sql2);
-      $row2 = $result2->fetch_assoc();
-      $RangoDiasQuiebre = $row2['Cuenta'];
-      $VentaDiariaQuiebre = FG_Venta_Diaria($UnidadesVendidas,$RangoDiasQuiebre);
-      $DiasRestantesQuiebre = FG_Dias_Restantes($Existencia,$VentaDiariaQuiebre);
+      $UltimoProveedor = FG_Limpiar_Texto($row1["UltimoProveedorNombre"]); 
 
       echo '<tr>';
       echo '<td align="center"><strong>'.intval($contador).'</strong></td>';
@@ -262,7 +247,7 @@
       </td>';
 
       echo '<td align="center">'.round($DiasRestantes,2).'</td>';
-      echo '<td align="center" class="bg-danger text-white">'.round($DiasRestantesQuiebre,2).'</td>';
+      echo '<td align="center">'.$UltimoProveedor.'</td>';
 
       /*BOTON PARA AGREGAR A LA ORDEN DE COMPRA*/
 
@@ -305,7 +290,7 @@
       echo'<input type="hidden" name="codigo_barra" value="'.$CodigoBarra.'">';
       echo'<input type="hidden" name="descripcion" value="'.$Descripcion.'">';
       echo'<input type="hidden" name="existencia_rpt" value="'.$Existencia.'">';
-      echo'<input type="hidden" name="dias_restantes_rpt" value="'.$DiasRestantesQuiebre.'">';
+      echo'<input type="hidden" name="dias_restantes_rpt" value="'.$DiasRestantes.'">';
       echo'<input type="hidden" name="origen_rpt" value="Productos en Caida">';
       echo'<input type="hidden" name="rango_rpt" value="Del: '.$FInicialImp.' Al: '.$FFinalImp.'">';
       echo'
