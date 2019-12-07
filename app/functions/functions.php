@@ -989,6 +989,9 @@
 			case 'Articulos Devaluados':
 				$ruta = '/reporte15';
 			break;
+			case 'Articulos Estrella':
+				$ruta = '/reporte16';
+			break;
 			default:
 				$ruta = '#';
 			break;
@@ -1004,7 +1007,7 @@
 	function FG_Reportes_Departamento($Departamento) {
 		switch ($Departamento) {
 			case 'COMPRAS':
-				$Numero_Reportes = 12;
+				$Numero_Reportes = 13;
 			break;
 			case 'OPERACIONES':
 				$Numero_Reportes = 3;
@@ -1022,13 +1025,13 @@
 				$Numero_Reportes = 1;
 			break;
 			case 'LÍDER DE TIENDA':
-				$Numero_Reportes = 13;
+				$Numero_Reportes = 14;
 			break;
 			case 'GERENCIA':
-				$Numero_Reportes = 13;
+				$Numero_Reportes = 14;
 			break;
 			case 'TECNOLOGIA':
-				$Numero_Reportes = 13;
+				$Numero_Reportes = 14;
 			break;
 			default:
 				$Numero_Reportes = 0;
@@ -1755,4 +1758,155 @@
 		$Tasa = $resultTasaConversion['tasa'];
 		return $Tasa;
 	}
+	/**********************************************************************************/
+  /*
+    TITULO: R16_Acticulos_Estrella_Top
+    FUNCION: Arma el reporte de articulos estrellas
+    RETORNO: Lista de articulos estrella y su comportamiento
+    DESAROLLADO POR: SERGIO COVA
+  */
+  function R16_Acticulos_Estrella_Top($SedeConnection) {
+    $conn = FG_Conectar_Smartpharma($SedeConnection);
+    $connCPharma = FG_Conectar_CPharma();
+
+    $sql = R16Q_Detalle_Articulo_Estrella_Top(5);
+    $result = sqlsrv_query($conn,$sql);
+
+    $FFinal = $FFinalEn = date("Y-m-d");
+    $FInicial = $FInicialEn = date("Y-m-d",strtotime($FFinal."-5 days"));
+    $RangoDias = FG_Rango_Dias($FInicial,$FFinal)+1;
+
+    $DiasPedido = 20;
+
+    $FInicialImp = date("d-m-Y", strtotime($FInicial));
+    $FFinalImp= date("d-m-Y", strtotime($FFinal));
+
+    echo '
+    <div class="input-group md-form form-sm form-1 pl-0 CP-stickyBar">
+      <div class="input-group-prepend">
+        <span class="input-group-text purple lighten-3" id="basic-text1">
+          <i class="fas fa-search text-white"
+            aria-hidden="true"></i>
+        </span>
+      </div>
+      <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterAllTable()" autofocus="autofocus">
+    </div>
+    <br/>
+    ';
+    echo'<h6 align="center">Periodo desde el '.$FInicialImp.' al '.$FFinalImp.' </h6>';
+    echo'<h6 align="center">El calculo de dias a pedir se esta calculando en pedidos para 20 dias de inventario</h6>';
+    echo'
+    <table class="table table-striped table-bordered col-12 sortable" id="myTable">
+      <thead class="thead-dark">
+        <tr>  
+          <th scope="col" class="CP-sticky">#</th>
+          <th scope="col" class="CP-sticky">Codigo Interno</th>
+          <th scope="col" class="CP-sticky">Descripcion</th>
+          <th scope="col" class="CP-sticky">Precio (Con IVA)</th>
+          <th scope="col" class="CP-sticky">Existencia</th>
+    ';
+    while($FFinalEn!=$FInicialEn){
+      $Dia = date("D", strtotime($FInicialEn));
+      $FImpresion = date("d-m-Y", strtotime($FInicialEn));
+      echo'<th scope="col" class="CP-sticky">'.$Dia.' '.$FImpresion.'</th>';
+      $FInicialEn = date("Y-m-d",strtotime($FInicialEn."+1 days"));
+    }
+         
+    echo'
+          <th scope="col" class="CP-sticky">Ventas Hoy</th> 
+          <th scope="col" class="CP-sticky">Ventas Totales</th> 
+          <th scope="col" class="CP-sticky">Dias en Quiebre</th> 
+          <th scope="col" class="CP-sticky">Dias Restantes</th>
+          <th scope="col" class="CP-sticky">Cantidad a Pedir</th>          
+        </tr>
+      </thead>
+      <tbody>
+    ';
+    $contador = 1;
+    while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
+
+      $FInicialBo = $FInicial;
+      $FFinalBo = $FFinal;
+
+      $IdArticulo = $row["IdArticulo"];
+      $Descripcion = FG_Limpiar_Texto($row["Descripcion"]);
+      $Existencia = $row["Existencia"];
+      $ExistenciaAlmacen1 = $row["ExistenciaAlmacen1"];
+      $ExistenciaAlmacen2 = $row["ExistenciaAlmacen2"];
+      $IsTroquelado = $row["Troquelado"];
+      $IsIVA = $row["Impuesto"];
+      $UtilidadArticulo = $row["UtilidadArticulo"];
+      $UtilidadCategoria = $row["UtilidadCategoria"];
+      $TroquelAlmacen1 = $row["TroquelAlmacen1"];
+      $PrecioCompraBrutoAlmacen1 = $row["PrecioCompraBrutoAlmacen1"];
+      $TroquelAlmacen2 = $row["TroquelAlmacen2"];
+      $PrecioCompraBrutoAlmacen2 = $row["PrecioCompraBrutoAlmacen2"];
+      $PrecioCompraBruto = $row["PrecioCompraBruto"];
+      $Dolarizado = $row["Dolarizado"];
+      $CondicionExistencia = 'CON_EXISTENCIA';
+
+      $Precio = FG_Calculo_Precio_Alfa($Existencia,$ExistenciaAlmacen1,$ExistenciaAlmacen2,$IsTroquelado,$UtilidadArticulo,$UtilidadCategoria,$TroquelAlmacen1,$PrecioCompraBrutoAlmacen1,$TroquelAlmacen2,
+    $PrecioCompraBrutoAlmacen2,$PrecioCompraBruto,$IsIVA,$CondicionExistencia);
+
+      echo '<tr>';
+      echo '<td align="center"><strong>'.intval($contador).'</strong></td>';
+      echo '<td align="left">'.$row['CodigoInterno'].'</td>';
+      echo 
+      '<td align="left" class="CP-barrido">
+      <a href="/reporte2?Id='.$IdArticulo.'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
+        .$Descripcion.
+      '</a>
+      </td>';
+      echo '<td align="center">'.number_format($Precio,2,"," ,"." ).'</td>';
+      echo '<td align="center">'.intval($Existencia).'</td>';
+
+      while($FFinalBo!=$FInicialBo){
+        $FPivoteBo = date("Y-m-d",strtotime($FInicialBo."+1 days"));
+        $sql1 = R16Q_Detalle_Venta_Top($IdArticulo,$FInicialBo,$FPivoteBo);
+        $result1 = sqlsrv_query($conn,$sql1);
+        $row1= sqlsrv_fetch_array($result1, SQLSRV_FETCH_ASSOC);
+        $TotalUnidadesVendidas = $row1['TotalUnidadesVendidas'];
+        echo '<td align="center">'.intval($TotalUnidadesVendidas).'</td>';
+        $FInicialBo = date("Y-m-d",strtotime($FInicialBo."+1 days"));
+      }
+
+      $FPivoteBo = date("Y-m-d",strtotime($FInicialBo."+1 days"));
+      $sql1 = R16Q_Detalle_Venta_Top($IdArticulo,$FInicialBo,$FPivoteBo);
+      $result1 = sqlsrv_query($conn,$sql1);
+      $row1= sqlsrv_fetch_array($result1, SQLSRV_FETCH_ASSOC);
+      $TotalUnidadesVendidas = $row1['TotalUnidadesVendidas'];
+      echo '<td align="center">'.intval($TotalUnidadesVendidas).'</td>';
+
+      $FPivoteBo = date("Y-m-d",strtotime($FFinal."+1 days"));
+      $sql1 = R16Q_Detalle_Venta_Top($IdArticulo,$FInicial,$FPivoteBo);
+      $result1 = sqlsrv_query($conn,$sql1);
+      $row1= sqlsrv_fetch_array($result1, SQLSRV_FETCH_ASSOC);
+      $TotalUnidadesVendidasG = $row1['TotalUnidadesVendidas'];
+      echo '<td align="center">'.intval($TotalUnidadesVendidasG).'</td>';
+
+      $FPivoteIDC = date("Y-m-d",strtotime($FInicial."-1 days"));
+      $FPivoteFDC = date("Y-m-d",strtotime($FFinal."+1 days"));
+
+      $sql2 = "SELECT COUNT(*) AS Cuenta FROM `dias_ceros` WHERE `fecha_captura` > '$FPivoteIDC' AND `fecha_captura` < '$FPivoteFDC' AND `id_articulo` = '$IdArticulo'";
+      $result2 = mysqli_query($connCPharma,$sql2);
+      $row2 = mysqli_fetch_assoc($result2);
+      $Cuenta = $row2['Cuenta'];
+      $DiasEnQuiebre = $RangoDias - $Cuenta;
+
+      echo '<td align="center">'.intval($DiasEnQuiebre).'</td>';
+
+      $VentaDiaria = FG_Venta_Diaria($TotalUnidadesVendidasG,$RangoDias);
+      $DiasRestantes = FG_Dias_Restantes($Existencia,$VentaDiaria);
+      $CantidadPedido = FG_Cantidad_Pedido($VentaDiaria,$DiasPedido,$Existencia);
+
+      echo '<td align="center">'.round($DiasRestantes,2).'</td>';
+      echo '<td align="center">'.intval($CantidadPedido).'</td>';
+
+      echo '</tr>';
+      $contador++;
+    }
+    echo '
+        </tbody>
+      </table>';
+  }
 ?>

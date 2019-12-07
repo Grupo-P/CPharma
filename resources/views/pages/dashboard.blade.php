@@ -11,6 +11,8 @@
     include(app_path().'\functions\querys_mysql.php');
     include(app_path().'\functions\querys_sqlserver.php');
 
+    $CPharmaVersion = ' CPharma v.5.1';
+
     $empresas = DB::table('empresas')->count();
     $proveedores = DB::table('proveedors')->count();
     $usuarios = DB::table('users')->count();
@@ -379,12 +381,12 @@
 	      <div class="modal-body">
 	      	<label>Hola <b class="text-info">{{ Auth::user()->name }}</b>.</label>
 	      	<br/>
-	      	Estas usando<b class="text-info"> CPharma v.5.0</b>, para el departamento de <b class="text-info">{{ Auth::user()->departamento }}</b>, esta version incluye las siguientes mejoras:<br/><br/></label>
+	      	Estas usando<b class="text-info">{{$CPharmaVersion}}</b>, para el departamento de <b class="text-info">{{ Auth::user()->departamento }}</b>, esta version incluye las siguientes mejoras:<br/><br/></label>
   			<ul style="list-style:none">
         	<li class="card-text text-dark" style="display: inline;">
 					<i class="far fa-check-circle text-info" style="display: inline;"></i>
-					Desde ya esta disponible el modulo: 
-					<b class="text-info">Orden de compra</b>!!
+					Desde ya esta disponible el reporte: 
+					<b class="text-info">Articulos Estrella</b>!!
   				</li>
   			</ul>
 	      </div>
@@ -395,6 +397,30 @@
   	</div>
 	</div>
 	<!-- Modal COMPRAS -->
+	
+	<!-- Dashboard Articulo Estrella-->
+	<div class="card-deck">
+		<div class="card border-secondary mb-3" style="width: 14rem;">	  	
+  		<div class="card-body text-left bg-light">
+    		<h3 class="card-title">
+	    		<span class="card-text text-dark">
+	    			<i class="fas fa-credit-card"></i>
+	    			Articulos Estrella					
+	    		</span>
+    		</h3>
+    		<p class="card-text text-dark">
+    			<?php
+						R16_Acticulos_Estrella_Top(FG_Mi_Ubicacion());
+					?>
+    		</p>
+  		</div>
+	  	<div class="card-footer bg-transparent border-secondary text-right">
+	  		<a href="/reporte16/" class="btn btn-outline-secondary btn-sm">Visualizar</a>
+	  	</div>
+		</div>	
+	</div>
+	<!-- Dashboard Articulo Estrella -->
+
 	<!-- Dashboard COMPRAS-->
 	<div class="card-deck">
 	<!-- Tasa Venta -->
@@ -439,7 +465,7 @@
 	      <div class="modal-body">
 	      	<label>Hola <b class="text-info">{{ Auth::user()->name }}</b>.</label>
 	      	<br/>
-	      	Estas usando<b class="text-info"> CPharma v.5.0</b>, para el departamento de <b class="text-info">{{ Auth::user()->departamento }}</b>, esta version incluye las siguientes mejoras:<br/><br/></label>
+	      	Estas usando<b class="text-info">{{$CPharmaVersion}}</b>, para el departamento de <b class="text-info">{{ Auth::user()->departamento }}</b>, esta version incluye las siguientes mejoras:<br/><br/></label>
   			<ul style="list-style:none">
         	<li class="card-text text-dark" style="display: inline;">
 					<i class="far fa-check-circle text-info" style="display: inline;"></i>
@@ -517,7 +543,7 @@
 	      <div class="modal-body">
 	      	<label>Hola <b class="text-info">{{ Auth::user()->name }}</b>.</label>
 	      	<br/>
-	      	Estas usando<b class="text-info"> CPharma v.5.0</b>, para el departamento de <b class="text-info">{{ Auth::user()->departamento }}</b>, esta version incluye las siguientes mejoras:<br/><br/></label>
+	      	Estas usando<b class="text-info">{{$CPharmaVersion}}</b>, para el departamento de <b class="text-info">{{ Auth::user()->departamento }}</b>, esta version incluye las siguientes mejoras:<br/><br/></label>
   			<ul style="list-style:none">
         	<li class="card-text text-dark" style="display: inline;">
 					<i class="far fa-check-circle text-info" style="display: inline;"></i>
@@ -584,7 +610,7 @@
 	      <div class="modal-body">
 	      	<label>Hola <b class="text-info">{{ Auth::user()->name }}</b>.</label>
 	      	<br/>
-	      	Estas usando<b class="text-info"> CPharma v.5.0</b>, para el departamento de <b class="text-info">{{ Auth::user()->departamento }}</b>, esta version incluye las siguientes mejoras:<br/><br/></label>
+	      	Estas usando<b class="text-info">{{$CPharmaVersion}}</b>, para el departamento de <b class="text-info">{{ Auth::user()->departamento }}</b>, esta version incluye las siguientes mejoras:<br/><br/></label>
   			<ul style="list-style:none">
         	<li class="card-text text-dark" style="display: inline;">
 					<i class="far fa-check-circle text-info" style="display: inline;"></i>
@@ -644,7 +670,7 @@
 	      <div class="modal-body">
 	      	<label>Hola <b class="text-info">{{ Auth::user()->name }}</b>.</label>
 	      	<br/>
-	      	Estas usando<b class="text-info"> CPharma v.5.0</b>, para el departamento de <b class="text-info">{{ Auth::user()->departamento }}</b>, esta version incluye las siguientes mejoras:<br/><br/></label>
+	      	Estas usando<b class="text-info">{{$CPharmaVersion}}</b>, para el departamento de <b class="text-info">{{ Auth::user()->departamento }}</b>, esta version incluye las siguientes mejoras:<br/><br/></label>
   			<ul style="list-style:none">
         	<li class="card-text text-dark" style="display: inline;">
 					<i class="far fa-check-circle text-info" style="display: inline;"></i>
@@ -711,7 +737,7 @@
 	      <div class="modal-body">
 	      	<label>Hola <b class="text-info">{{ Auth::user()->name }}</b>.</label>
 	      	<br/>
-	      	Estas usando<b class="text-info"> CPharma v.5.0</b>, para el departamento de <b class="text-info">{{ Auth::user()->departamento }}</b>
+	      	Estas usando<b class="text-info">{{$CPharmaVersion}}</b>, para el departamento de <b class="text-info">{{ Auth::user()->departamento }}</b>
 	      </div>
 	      <div class="modal-footer">
 	        <button type="button" class="btn btn-outline-info" data-dismiss="modal">Aceptar</button>
@@ -767,7 +793,7 @@
         <div class="modal-body">
           <label>Hola <b class="text-info">{{ Auth::user()->name }}</b>.</label>
           <br/>
-          Estas usando<b class="text-info"> CPharma v.5.0</b>, para el departamento de <b class="text-info">{{ Auth::user()->departamento }}</b><br/><br/>
+          Estas usando<b class="text-info">{{$CPharmaVersion}}</b>, para el departamento de <b class="text-info">{{ Auth::user()->departamento }}</b><br/><br/>
 	      	<ul style="list-style:none">
             <li class="card-text text-dark" style="display: inline;">
               <i class="far fa-check-circle text-info" style="display: inline;"></i>
@@ -1031,7 +1057,7 @@
 	      <div class="modal-body">
 	      	<label>Hola <b class="text-info">{{ Auth::user()->name }}</b>.</label>
 	      	<br/>
-	      	Estas usando<b class="text-info"> CPharma v.5.0</b>, para el departamento de <b class="text-info">{{ Auth::user()->departamento }}</b>, esta version incluye las siguientes mejoras:<br/><br/></label>
+	      	Estas usando<b class="text-info">{{$CPharmaVersion}}</b>, para el departamento de <b class="text-info">{{ Auth::user()->departamento }}</b>, esta version incluye las siguientes mejoras:<br/><br/></label>
   			<ul style="list-style:none">
         	<li class="card-text text-dark" style="display: inline;">
 					<i class="far fa-check-circle text-info" style="display: inline;"></i>
@@ -1071,7 +1097,7 @@
 	      <div class="modal-body">
 	      	<label>Hola <b class="text-info">{{ Auth::user()->name }}</b>.</label>
 	      	<br/>
-	      	Estas usando<b class="text-info"> CPharma v.5.0</b>, para el departamento de <b class="text-info">{{ Auth::user()->departamento }}</b>, esta version incluye las siguientes mejoras:<br/><br/></label>
+	      	Estas usando<b class="text-info">{{$CPharmaVersion}}</b>, para el departamento de <b class="text-info">{{ Auth::user()->departamento }}</b>, esta version incluye las siguientes mejoras:<br/><br/></label>
   			<ul style="list-style:none">
         	<li class="card-text text-dark" style="display: inline;">
 					<i class="far fa-check-circle text-info" style="display: inline;"></i>
@@ -1133,19 +1159,12 @@
 	      <div class="modal-body">
 	      	<label>Hola <b class="text-info">{{ Auth::user()->name }}</b>.</label>
 	      	<br/>
-	      	Estas usando<b class="text-info"> CPharma v.5.0</b>, para el departamento de <b class="text-info">{{ Auth::user()->departamento }}</b>, esta version incluye las siguientes mejoras:<br/><br/></label>
+	      	Estas usando<b class="text-info">{{$CPharmaVersion}}</b>, para el departamento de <b class="text-info">{{ Auth::user()->departamento }}</b>, esta version incluye las siguientes mejoras:<br/><br/></label>
   			<ul style="list-style:none">
         	<li class="card-text text-dark" style="display: inline;">
 					<i class="far fa-check-circle text-info" style="display: inline;"></i>
-					Desde ya esta disponible el modulo: 
-					<b class="text-info">Traslado</b>!!
-  				</li>
-  			</ul>
-  			<ul style="list-style:none">
-        	<li class="card-text text-dark" style="display: inline;">
-					<i class="far fa-check-circle text-info" style="display: inline;"></i>
-					Se actualizaron las busquedas por 
-					<b class="text-info">Codigo de Barra</b>!!
+					Desde ya esta disponible el reporte: 
+					<b class="text-info">Articulos Estrella</b>!!
   				</li>
   			</ul>
 	      </div>
@@ -1199,12 +1218,12 @@
 	      <div class="modal-body">
 	      	<label>Hola <b class="text-info">{{ Auth::user()->name }}</b>.</label>
 	      	<br/>
-	      	Estas usando<b class="text-info"> CPharma v.5.0</b>, para el departamento de <b class="text-info">{{ Auth::user()->departamento }}</b>, esta version incluye las siguientes mejoras:<br/><br/></label>
+	      	Estas usando<b class="text-info">{{$CPharmaVersion}}</b>, para el departamento de <b class="text-info">{{ Auth::user()->departamento }}</b>, esta version incluye las siguientes mejoras:<br/><br/></label>
   			<ul style="list-style:none">
         	<li class="card-text text-dark" style="display: inline;">
 					<i class="far fa-check-circle text-info" style="display: inline;"></i>
-					Desde ya esta disponible el modulo: 
-					<b class="text-info">Orden de compra</b>!!
+					Desde ya esta disponible el reporte: 
+					<b class="text-info">Articulos Estrella</b>!!
   				</li>
   			</ul>
 	      </div>
@@ -1300,12 +1319,12 @@
 	      <div class="modal-body">
 	      	<label>Hola <b class="text-info">{{ Auth::user()->name }}</b>.</label>
 	      	<br/>
-	      	Estas usando<b class="text-info"> CPharma v.5.0</b>, para el departamento de <b class="text-info">{{ Auth::user()->departamento }}</b>, esta version incluye las siguientes mejoras:<br/><br/></label>
+	      	Estas usando<b class="text-info">{{$CPharmaVersion}}</b>, para el departamento de <b class="text-info">{{ Auth::user()->departamento }}</b>, esta version incluye las siguientes mejoras:<br/><br/></label>
   			<ul style="list-style:none">
         	<li class="card-text text-dark" style="display: inline;">
 					<i class="far fa-check-circle text-info" style="display: inline;"></i>
-					Desde ya esta disponible el modulo: 
-					<b class="text-info">Orden de compra</b>!!
+					Desde ya esta disponible el reporte: 
+					<b class="text-info">Articulos Estrella</b>!!
   				</li>
   			</ul>
 	      </div>
@@ -1316,6 +1335,30 @@
   	</div>
 	</div>
 	<!-- Modal TECNOLOGIA -->
+	
+	<!-- Dashboard Articulo Estrella-->
+	<!-- <div class="card-deck">		
+		<div class="card border-secondary mb-3" style="width: 14rem;">	  	
+  		<div class="card-body text-left bg-light">
+    		<h3 class="card-title">
+	    		<span class="card-text text-dark">
+	    			<i class="fas fa-credit-card"></i>
+	    			Articulos Estrella					
+	    		</span>
+    		</h3>
+    		<p class="card-text text-dark">
+    			<?php
+						//R16_Acticulos_Estrella_Top('FTN');
+					?>
+    		</p>
+  		</div>
+	  	<div class="card-footer bg-transparent border-secondary text-right">
+	  		<a href="/reporte16/" class="btn btn-outline-secondary btn-sm">Visualizar</a>
+	  	</div>
+		</div>	
+	</div> -->
+	<!-- Dashboard Articulo Estrella -->
+
 	<!-- Dashboard TECNOLOGIA-->
 	<div class="card-deck">		
 		<!-- Usuario -->
