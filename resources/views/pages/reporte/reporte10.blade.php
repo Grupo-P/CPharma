@@ -186,6 +186,9 @@
     $Precio = FG_Calculo_Precio_Alfa($Existencia,$ExistenciaAlmacen1,$ExistenciaAlmacen2,$IsTroquelado,$UtilidadArticulo,$UtilidadCategoria,$TroquelAlmacen1,$PrecioCompraBrutoAlmacen1,$TroquelAlmacen2,
     $PrecioCompraBrutoAlmacen2,$PrecioCompraBruto,$IsIVA,$CondicionExistencia);
 
+    $Utilidad = FG_Utilidad_Alfa($UtilidadArticulo,$UtilidadCategoria);
+    $Utilidad = (1 - $Utilidad)*100;
+
     echo '
       <div class="input-group md-form form-sm form-1 pl-0 CP-stickyBar">
         <div class="input-group-prepend">
@@ -204,7 +207,9 @@
             <th scope="col">Codigo de barra</td>
             <th scope="col">Descripcion</th>
             <th scope="col">Existencia</th>
-            <th scope="col">Precio</br>(Con IVA) '.SigVe.'</td>  
+            <th scope="col">Precio</br>(Con IVA) '.SigVe.'</td>
+            <th scope="col">Utilidad Configurada</td>
+            <th scope="col">Troquel</td>  
             <th scope="col">Dolarizado?</th>
             <th scope="col">Tasa actual '.SigVe.'</th>
             <th scope="col">Precio en divisa</br>(Con IVA) '.SigDolar.'</td>
@@ -223,8 +228,21 @@
           </td>
           <td align="center">'.intval($Existencia).'</td>
           <td align="center">'.number_format($Precio,2,"," ,"." ).'</td>
-          <td align="center">'.$Dolarizado.'</td>
       ';
+
+      echo '<td align="center">'.number_format($Utilidad,2,"," ,"." ).' %</td>';
+
+      if($TroquelAlmacen1!=NULL){
+        echo '<td align="center">'.number_format($TroquelAlmacen1,2,"," ,"." ).'</td>';
+      }
+      else if($TroquelAlmacen2!=NULL){
+        echo '<td align="center">'.number_format($TroquelAlmacen2,2,"," ,"." ).'</td>';
+      }
+      else{
+        echo '<td align="center"> - </td>';
+      }
+
+      echo'<td align="center">'.$Dolarizado.'</td>';
 
       if($TasaActual != 0) {
         $PrecioDolar = $Precio / $TasaActual;
@@ -286,7 +304,11 @@
           $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
 
           echo '
-            <td align="center">'.FG_Limpiar_Texto($row3["Nombre"]).'</td>
+            <td align="left" class="CP-barrido">
+            <a href="/reporte7?Nombre='.FG_Limpiar_Texto($row3["Nombre"]).'&Id='.$row3["Id"].'&SEDE='.$SedeConnection.'" target="_blank" style="text-decoration: none; color: black;">'
+              .FG_Limpiar_Texto($row3["Nombre"]).
+            '</a>
+            </td>
             <td align="center">'.$row2["FechaLote"]->format("d-m-Y").'</td>
             <td align="center">'.intval($row2["CantidadRecibida"]).'</td>
           ';
@@ -651,6 +673,7 @@
   function R10Q_Proveedores($IdArticulo,$IdFactura) {
     $sql = "
       SELECT 
+      ComProveedor.Id,
       GenPersona.Nombre
       FROM ComFacturaDetalle
       INNER JOIN ComFactura ON ComFactura.Id = ComFacturaDetalle.ComFacturaId
