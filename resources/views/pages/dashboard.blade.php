@@ -397,6 +397,30 @@
   	</div>
 	</div>
 	<!-- Modal COMPRAS -->
+	
+	<!-- Dashboard Articulo Estrella-->
+	<div class="card-deck">
+		<div class="card border-secondary mb-3" style="width: 14rem;">	  	
+  		<div class="card-body text-left bg-light">
+    		<h3 class="card-title">
+	    		<span class="card-text text-dark">
+	    			<i class="fas fa-credit-card"></i>
+	    			Articulos Estrella					
+	    		</span>
+    		</h3>
+    		<p class="card-text text-dark">
+    			<?php
+						R16_Acticulos_Estrella_Top(FG_Mi_Ubicacion());
+					?>
+    		</p>
+  		</div>
+	  	<div class="card-footer bg-transparent border-secondary text-right">
+	  		<a href="/reporte16/" class="btn btn-outline-secondary btn-sm">Visualizar</a>
+	  	</div>
+		</div>	
+	</div>
+	<!-- Dashboard Articulo Estrella -->
+
 	<!-- Dashboard COMPRAS-->
 	<div class="card-deck">
 	<!-- Tasa Venta -->
@@ -1311,6 +1335,30 @@
   	</div>
 	</div>
 	<!-- Modal TECNOLOGIA -->
+	
+	<!-- Dashboard Articulo Estrella-->
+	<!-- <div class="card-deck">		
+		<div class="card border-secondary mb-3" style="width: 14rem;">	  	
+  		<div class="card-body text-left bg-light">
+    		<h3 class="card-title">
+	    		<span class="card-text text-dark">
+	    			<i class="fas fa-credit-card"></i>
+	    			Articulos Estrella					
+	    		</span>
+    		</h3>
+    		<p class="card-text text-dark">
+    			<?php
+						//R16_Acticulos_Estrella_Top('FTN');
+					?>
+    		</p>
+  		</div>
+	  	<div class="card-footer bg-transparent border-secondary text-right">
+	  		<a href="/reporte16/" class="btn btn-outline-secondary btn-sm">Visualizar</a>
+	  	</div>
+		</div>	
+	</div> -->
+	<!-- Dashboard Articulo Estrella -->
+
 	<!-- Dashboard TECNOLOGIA-->
 	<div class="card-deck">		
 		<!-- Usuario -->
