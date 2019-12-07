@@ -776,9 +776,10 @@
     <button type="button" class="btn btn-outline-info dropdown-toggle textoI" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
       <i class="fas fa-user-secret"></i> Developer
     </button>
+   <!--  {{ url('/testS') }} -->
     <div class="dropdown-menu">
       <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="{{ url('/testS') }}">     
+        <a class="nav-link CP-Links-Menu" href="{{ url('/reporte16') }}">     
           <span data-feather="home"></span>
           <i class="fa fa-box"></i>
           Test Sergio<span class="sr-only">(current)</span>
