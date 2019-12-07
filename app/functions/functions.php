@@ -989,6 +989,9 @@
 			case 'Articulos Devaluados':
 				$ruta = '/reporte15';
 			break;
+			case 'Articulos Estrella':
+				$ruta = '/reporte16';
+			break;
 			default:
 				$ruta = '#';
 			break;
@@ -1004,7 +1007,7 @@
 	function FG_Reportes_Departamento($Departamento) {
 		switch ($Departamento) {
 			case 'COMPRAS':
-				$Numero_Reportes = 12;
+				$Numero_Reportes = 13;
 			break;
 			case 'OPERACIONES':
 				$Numero_Reportes = 3;
@@ -1022,13 +1025,13 @@
 				$Numero_Reportes = 1;
 			break;
 			case 'LÍDER DE TIENDA':
-				$Numero_Reportes = 13;
+				$Numero_Reportes = 14;
 			break;
 			case 'GERENCIA':
-				$Numero_Reportes = 13;
+				$Numero_Reportes = 14;
 			break;
 			case 'TECNOLOGIA':
-				$Numero_Reportes = 13;
+				$Numero_Reportes = 14;
 			break;
 			default:
 				$Numero_Reportes = 0;

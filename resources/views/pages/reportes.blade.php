@@ -237,6 +237,25 @@
 	  	</div>
 		</div>
  	</div>
+
+ 	<div class="card-deck">
+ 		<div class="card border-danger mb-3" style="width: 14rem;">	  	
+  		<div class="card-body text-left bg-danger">
+    		<h5 class="card-title">
+	    		<span class="card-text text-white">
+	    			Articulos Estrella
+	    		</span>
+    		</h5>	    	    
+  		</div>
+	  	<div class="card-footer bg-transparent border-danger text-right">
+	  		<form action="/reporte16/" style="display: inline;">
+			    @csrf
+			    <input id="SEDE" name="SEDE" type="hidden" value="<?php print_r($_GET['SEDE']); ?>">			   
+			    <button type="submit" name="Reporte" role="button" class="btn btn-outline-danger btn-sm"></i>Visualizar</button>
+				</form>
+	  	</div>
+		</div>
+ 	</div>
 <?php
   }
 ?>
@@ -729,6 +748,22 @@
 				</form>
 	  	</div>
 		</div>
+		<div class="card border-success mb-3" style="width: 14rem;">	  	
+  		<div class="card-body text-left bg-success">
+    		<h5 class="card-title">
+	    		<span class="card-text text-white">
+	    			Articulos Estrella
+	    		</span>
+    		</h5>	    	    
+  		</div>
+	  	<div class="card-footer bg-transparent border-success text-right">
+	  		<form action="/reporte16/" style="display: inline;">
+			    @csrf
+			    <input id="SEDE" name="SEDE" type="hidden" value="<?php print_r($_GET['SEDE']); ?>">			   
+			    <button type="submit" name="Reporte" role="button" class="btn btn-outline-success btn-sm"></i>Visualizar</button>
+				</form>
+	  	</div>
+		</div>
 	</div>
 <?php
   }
@@ -967,6 +1002,22 @@
 				</form>
 	  	</div>
 		</div>
+		<div class="card border-success mb-3" style="width: 14rem;">	  	
+  		<div class="card-body text-left bg-success">
+    		<h5 class="card-title">
+	    		<span class="card-text text-white">
+	    			Articulos Estrella
+	    		</span>
+    		</h5>	    	    
+  		</div>
+	  	<div class="card-footer bg-transparent border-success text-right">
+	  		<form action="/reporte16/" style="display: inline;">
+			    @csrf
+			    <input id="SEDE" name="SEDE" type="hidden" value="<?php print_r($_GET['SEDE']); ?>">			   
+			    <button type="submit" name="Reporte" role="button" class="btn btn-outline-success btn-sm"></i>Visualizar</button>
+				</form>
+	  	</div>
+		</div>
 	</div>
 <?php
   }
@@ -1202,6 +1253,22 @@
 			    @csrf
 			    <input id="SEDE" name="SEDE" type="hidden" value="<?php print_r($_GET['SEDE']); ?>">			   
 			    <button type="submit" name="Reporte" role="button" class="btn btn-outline-danger btn-sm"></i>Visualizar</button>
+				</form>
+	  	</div>
+		</div>
+		<div class="card border-success mb-3" style="width: 14rem;">	  	
+  		<div class="card-body text-left bg-success">
+    		<h5 class="card-title">
+	    		<span class="card-text text-white">
+	    			Articulos Estrella
+	    		</span>
+    		</h5>	    	    
+  		</div>
+	  	<div class="card-footer bg-transparent border-success text-right">
+	  		<form action="/reporte16/" style="display: inline;">
+			    @csrf
+			    <input id="SEDE" name="SEDE" type="hidden" value="<?php print_r($_GET['SEDE']); ?>">			   
+			    <button type="submit" name="Reporte" role="button" class="btn btn-outline-success btn-sm"></i>Visualizar</button>
 				</form>
 	  	</div>
 		</div>
