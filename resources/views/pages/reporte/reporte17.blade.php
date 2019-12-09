@@ -85,7 +85,7 @@
       R17_Tri_Tienda_Articulo($_GET['SEDE'],$_GET['IdCB'],$_GET['fechaInicio'],$_GET['fechaFin'],$_GET['pedido'],'CodBar');
     }
   
-    //FG_Guardar_Auditoria('CONSULTAR','REPORTE','Pedido de productos');
+    FG_Guardar_Auditoria('CONSULTAR','REPORTE','Tri Tienda Por Articulo');
 
     $FinCarga = new DateTime("now");
     $IntervalCarga = $InicioCarga->diff($FinCarga);
