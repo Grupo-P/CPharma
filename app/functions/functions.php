@@ -707,7 +707,7 @@
 
 		    $UtilidadSE = FG_Utilidad_Alfa($UtilidadArticuloSE,$UtilidadCategoriaSE);
 
-	      if( $PrecioCompraBrutoSE > $PrecioCompraBruto ){
+	      if( ($PrecioCompraBrutoSE * 0.75) > $PrecioCompraBruto ){
 
 	      	if($Dolarizado=='SI') {
 	        	$TasaActualSE = FG_Tasa_Fecha($connCPharma,date('Y-m-d'));
