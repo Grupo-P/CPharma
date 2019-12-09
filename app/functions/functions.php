@@ -991,6 +991,9 @@
 			case 'Consulta Compras':
 				$ruta = '/reporte18';
 			break;
+			case 'Ventas Cruzadas':
+				$ruta = '/reporte19';
+			break;
 			default:
 				$ruta = '#';
 			break;
@@ -1006,10 +1009,10 @@
 	function FG_Reportes_Departamento($Departamento) {
 		switch ($Departamento) {
 			case 'COMPRAS':
-				$Numero_Reportes = 15;
+				$Numero_Reportes = 16;
 			break;
 			case 'OPERACIONES':
-				$Numero_Reportes = 3;
+				$Numero_Reportes = 4;
 			break;
 			case 'ALMACEN':
 				$Numero_Reportes = 3;
@@ -1027,10 +1030,10 @@
 				$Numero_Reportes = 14;
 			break;
 			case 'GERENCIA':
-				$Numero_Reportes = 16;
+				$Numero_Reportes = 17;
 			break;
 			case 'TECNOLOGIA':
-				$Numero_Reportes = 16;
+				$Numero_Reportes = 17;
 			break;
 			default:
 				$Numero_Reportes = 0;
