@@ -236,8 +236,6 @@
               <th scope="col" class="CP-sticky">Descripcion</th>              
               <th scope="col" class="CP-sticky">Existencia</th>
               <th scope="col" class="CP-sticky">Unidades vendidas</th>
-              <th scope="col" class="CP-sticky">Unidades compradas</th>
-              <th scope="col" class="CP-sticky">Venta diaria</th>
               <th scope="col" class="CP-sticky">Pedir</th> 
               <th scope="col" class="CP-sticky bg-danger text-white">Pedir (Real)</th>  
               <th scope="col" class="CP-sticky">Acciones</th>      
