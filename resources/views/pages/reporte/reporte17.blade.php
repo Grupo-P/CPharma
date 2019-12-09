@@ -238,14 +238,6 @@
               <th scope="col" class="CP-sticky">Unidades vendidas</th>
               <th scope="col" class="CP-sticky">Unidades compradas</th>
               <th scope="col" class="CP-sticky">Venta diaria</th>
-              <th scope="col" class="CP-sticky bg-danger text-white">Venta diaria (Real)</th>
-              <th scope="col" class="CP-sticky">Dias restantes</th>
-              <th scope="col" class="CP-sticky bg-danger text-white">Dias restantes (Real)</th>
-              <th scope="col" class="CP-sticky">Precio (Con IVA) '.SigVe.'</th>
-              <th scope="col" class="CP-sticky">Ultimo Precio (Sin IVA) '.SigVe.'</th>
-              <th scope="col" class="CP-sticky">Ultimo Lote</th>
-              <th scope="col" class="CP-sticky">Ultima Venta (En Rango)</th>
-              <th scope="col" class="CP-sticky">Ultima Venta</th>
               <th scope="col" class="CP-sticky">Pedir</th> 
               <th scope="col" class="CP-sticky bg-danger text-white">Pedir (Real)</th>  
               <th scope="col" class="CP-sticky">Acciones</th>      
@@ -267,8 +259,6 @@
         $row1 = sqlsrv_fetch_array($result1, SQLSRV_FETCH_ASSOC);
 
         $UnidadesVendidas = intval($row1["TotalUnidadesVendidas"]);
-        $UnidadesCompradas = intval($row1["TotalUnidadesCompradas"]);
-        $UltimaVentaRango = $row1["UltimaVentaRango"];
 
         $sql2 = R17Q_Detalle_Articulo($IdArticulo);
         $result2 = sqlsrv_query($conn,$sql2);
@@ -278,29 +268,8 @@
         $CodigoBarra = $row2["CodigoBarra"];
         $Descripcion = FG_Limpiar_Texto($row2["Descripcion"]);
         $Existencia = $row2["Existencia"];
-        $ExistenciaAlmacen1 = $row2["ExistenciaAlmacen1"];
-        $ExistenciaAlmacen2 = $row2["ExistenciaAlmacen2"];
-        $IsTroquelado = $row2["Troquelado"];
-        $IsIVA = $row2["Impuesto"];
-        $UtilidadArticulo = $row2["UtilidadArticulo"];
-        $UtilidadCategoria = $row2["UtilidadCategoria"];
-        $TroquelAlmacen1 = $row2["TroquelAlmacen1"];
-        $PrecioCompraBrutoAlmacen1 = $row2["PrecioCompraBrutoAlmacen1"];
-        $TroquelAlmacen2 = $row2["TroquelAlmacen2"];
-        $PrecioCompraBrutoAlmacen2 = $row2["PrecioCompraBrutoAlmacen2"];
-        $PrecioCompraBruto = $row2["PrecioCompraBruto"];
-        $Dolarizado = $row2["Dolarizado"];
-        $CondicionExistencia = 'CON_EXISTENCIA';
-        $UltimoLote = $row2["UltimoLote"]; 
-        $UltimoPrecio = $row2["UltimoPrecio"];
-        $UltimaVenta = $row2["UltimaVenta"];
         
         $VentaDiaria = FG_Venta_Diaria($UnidadesVendidas,$RangoDias);
-        $DiasRestantes = FG_Dias_Restantes($Existencia,$VentaDiaria);
-
-        $Precio = FG_Calculo_Precio_Alfa($Existencia,$ExistenciaAlmacen1,$ExistenciaAlmacen2,$IsTroquelado,$UtilidadArticulo,$UtilidadCategoria,$TroquelAlmacen1,$PrecioCompraBrutoAlmacen1,$TroquelAlmacen2,
-    $PrecioCompraBrutoAlmacen2,$PrecioCompraBruto,$IsIVA,$CondicionExistencia);
-
         $CantidadPedido = FG_Cantidad_Pedido($VentaDiaria,$DiasPedido,$Existencia);
 
         $VentaDiariaQuiebre = FG_Venta_Diaria($UnidadesVendidas,$RangoDiasQuiebre);
@@ -324,46 +293,6 @@
           .intval($UnidadesVendidas).
         '</a>
         </td>';
-        echo
-        '<td align="center" class="CP-barrido">
-        <a href="reporte12?fechaInicio='.$FInicial.'&fechaFin='.$FFinalImp.'&SEDE='.$SedeConnection.'&Descrip='.$Descripcion.'&Id='.$IdArticulo.'" style="text-decoration: none; color: black;" target="_blank">'
-          .intval($UnidadesCompradas).
-        '</a>
-        </td>';
-        echo '<td align="center">'.round($VentaDiaria,2).'</td>';
-        echo '<td align="center" class="bg-danger text-white">'.round($VentaDiariaQuiebre,2).'</td>';
-        echo '<td align="center">'.round($DiasRestantes,2).'</td>';
-        echo '<td align="center" class="bg-danger text-white">'.round($DiasRestantesQuiebre,2).'</td>';
-        echo '<td align="center">'.number_format($Precio,2,"," ,"." ).'</td>';
-
-        if( ($Existencia==0) && (!is_null($UltimaVenta)) ){
-          echo '<td align="center">'.number_format($UltimoPrecio,2,"," ,"." ).'</td>';
-        }
-        else{
-          echo '<td align="center"> - </td>';
-        }
-        
-        if(($UltimoLote)){
-          echo '<td align="center">'.$UltimoLote->format('d-m-Y').'</td>';
-        }
-        else{
-          echo '<td align="center"> - </td>';
-        }
-
-        if(!is_null($UltimaVentaRango)){
-          echo '<td align="center">'.$UltimaVentaRango->format('d-m-Y').'</td>';
-        }
-        else{
-          echo '<td align="center"> - </td>';
-        }
-
-        if(!is_null($UltimaVenta)){
-          echo '<td align="center">'.$UltimaVenta->format('d-m-Y').'</td>';
-        }
-        else{
-          echo '<td align="center"> - </td>';
-        }
-
         echo '<td align="center">'.intval($CantidadPedido).'</td>';
          echo '<td align="center" class="bg-danger text-white">'.round($CantidadPedidoQuiebre,2).'</td>';
 
@@ -465,18 +394,9 @@
               <th scope="col" class="CP-sticky">Descripcion</th>              
               <th scope="col" class="CP-sticky">Existencia</th>
               <th scope="col" class="CP-sticky">Unidades vendidas</th>
-              <th scope="col" class="CP-sticky">Unidades compradas</th>
-              <th scope="col" class="CP-sticky">Venta diaria</th>
-              <th scope="col" class="CP-sticky bg-danger text-white">Venta diaria (Real)</th>
-              <th scope="col" class="CP-sticky">Dias restantes</th>
-              <th scope="col" class="CP-sticky bg-danger text-white">Dias restantes (Real)</th>
-              <th scope="col" class="CP-sticky">Precio (Con IVA) '.SigVe.'</th>
-              <th scope="col" class="CP-sticky">Ultimo Lote</th>
-              <th scope="col" class="CP-sticky">Ultima Venta (En Rango)</th>
-              <th scope="col" class="CP-sticky">Ultima Venta</th>
-              <th scope="col" class="CP-sticky">Pedir</th>
-              <th scope="col" class="CP-sticky bg-danger text-white">Pedir (Real)</th> 
-              <th scope="col" class="CP-sticky">Acciones</th>         
+              <th scope="col" class="CP-sticky">Pedir</th> 
+              <th scope="col" class="CP-sticky bg-danger text-white">Pedir (Real)</th>  
+              <th scope="col" class="CP-sticky">Acciones</th>      
             </tr>
           </thead>
           <tbody>
@@ -489,13 +409,11 @@
         $row2 = $result2->fetch_assoc();
         $RangoDiasQuiebre = $row2['Cuenta'];
 
-        $sql1 = R6Q_Integracion_Pedido_Productos($IdArticulo,$FInicial,$FFinal);
+        $sql1 = R17Q_Integracion_Pedido_Productos($IdArticulo,$FInicial,$FFinal);
         $result1 = sqlsrv_query($conn,$sql1);
         $row1 = sqlsrv_fetch_array($result1, SQLSRV_FETCH_ASSOC);
 
         $UnidadesVendidas = intval($row1["TotalUnidadesVendidas"]);
-        $UnidadesCompradas = intval($row1["TotalUnidadesCompradas"]);
-        $UltimaVentaRango = $row1["UltimaVentaRango"];
 
         $sql2 = R17Q_Detalle_Articulo($IdArticulo);
         $result2 = sqlsrv_query($conn,$sql2);
@@ -505,29 +423,8 @@
         $CodigoBarra = $row2["CodigoBarra"];
         $Descripcion = FG_Limpiar_Texto($row2["Descripcion"]);
         $Existencia = $row2["Existencia"];
-        $ExistenciaAlmacen1 = $row2["ExistenciaAlmacen1"];
-        $ExistenciaAlmacen2 = $row2["ExistenciaAlmacen2"];
-        $IsTroquelado = $row2["Troquelado"];
-        $IsIVA = $row2["Impuesto"];
-        $UtilidadArticulo = $row2["UtilidadArticulo"];
-        $UtilidadCategoria = $row2["UtilidadCategoria"];
-        $TroquelAlmacen1 = $row2["TroquelAlmacen1"];
-        $PrecioCompraBrutoAlmacen1 = $row2["PrecioCompraBrutoAlmacen1"];
-        $TroquelAlmacen2 = $row2["TroquelAlmacen2"];
-        $PrecioCompraBrutoAlmacen2 = $row2["PrecioCompraBrutoAlmacen2"];
-        $PrecioCompraBruto = $row2["PrecioCompraBruto"];
-        $Dolarizado = $row2["Dolarizado"];
-        $CondicionExistencia = 'CON_EXISTENCIA';
-        $UltimoLote = $row2["UltimoLote"]; 
-        $UltimoPrecio = $row2["UltimoPrecio"];
-        $UltimaVenta = $row2["UltimaVenta"];
-
-        $Precio = FG_Calculo_Precio_Alfa($Existencia,$ExistenciaAlmacen1,$ExistenciaAlmacen2,$IsTroquelado,$UtilidadArticulo,$UtilidadCategoria,$TroquelAlmacen1,$PrecioCompraBrutoAlmacen1,$TroquelAlmacen2,
-    $PrecioCompraBrutoAlmacen2,$PrecioCompraBruto,$IsIVA,$CondicionExistencia);
-
+        
         $VentaDiaria = FG_Venta_Diaria($UnidadesVendidas,$RangoDias);
-        $DiasRestantes = FG_Dias_Restantes($Existencia,$VentaDiaria);
-
         $CantidadPedido = FG_Cantidad_Pedido($VentaDiaria,$DiasPedido,$Existencia);
 
         $VentaDiariaQuiebre = FG_Venta_Diaria($UnidadesVendidas,$RangoDiasQuiebre);
@@ -551,40 +448,8 @@
           .intval($UnidadesVendidas).
         '</a>
         </td>';
-        echo
-        '<td align="center" class="CP-barrido">
-        <a href="reporte12?fechaInicio='.$FInicial.'&fechaFin='.$FFinalImp.'&SEDE='.$SedeConnection.'&Descrip='.$Descripcion.'&Id='.$IdArticulo.'" style="text-decoration: none; color: black;" target="_blank">'
-          .intval($UnidadesCompradas).
-        '</a>
-        </td>';
-        echo '<td align="center">'.round($VentaDiaria,2).'</td>';
-        echo '<td align="center" class="bg-danger text-white">'.round($VentaDiariaQuiebre,2).'</td>';
-        echo '<td align="center">'.round($DiasRestantes,2).'</td>';
-        echo '<td align="center" class="bg-danger text-white">'.round($DiasRestantesQuiebre,2).'</td>';
-        echo '<td align="center">'.number_format($Precio,2,"," ,"." ).'</td>';
-        
-        if(!is_null($UltimoLote)){
-          echo '<td align="center">'.$UltimoLote->format('d-m-Y').'</td>';
-        }
-        else{
-          echo '<td align="center"> - </td>';
-        }
-
-        if(!is_null($UltimaVentaRango)){
-          echo '<td align="center">'.$UltimaVentaRango->format('d-m-Y').'</td>';
-        }
-        else{
-          echo '<td align="center"> - </td>';
-        }
-
-        if(($UltimaVenta)){
-          echo '<td align="center">'.$UltimaVenta->format('d-m-Y').'</td>';
-        }
-        else{
-          echo '<td align="center"> - </td>';
-        }
         echo '<td align="center">'.intval($CantidadPedido).'</td>';
-        echo '<td align="center" class="bg-danger text-white">'.round($CantidadPedidoQuiebre,2).'</td>';
+         echo '<td align="center" class="bg-danger text-white">'.round($CantidadPedidoQuiebre,2).'</td>';
 
         /*BOTON PARA AGREGAR A LA ORDEN DE COMPRA*/
 
