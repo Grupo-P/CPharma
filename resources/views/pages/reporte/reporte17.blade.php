@@ -94,10 +94,10 @@
   else{
     $InicioCarga = new DateTime("now");
 
-    $sql = R6Q_Lista_Articulos();
+    $sql = R17Q_Lista_Articulos();
     $ArtJson = FG_Armar_Json($sql,$_GET['SEDE']);
 
-    $sql1 = R6Q_Lista_Articulos_CodBarra();
+    $sql1 = R17Q_Lista_Articulos_CodBarra();
     $CodJson = FG_Armar_Json($sql1,$_GET['SEDE']);
 
     echo '
@@ -395,12 +395,12 @@
   }
   /**********************************************************************************/
   /*
-    TITULO: R6Q_Lista_Articulos
+    TITULO: R17Q_Lista_Articulos
     FUNCION: Armar una lista de articulos
     RETORNO: Lista de articulos
     DESAROLLADO POR: SERGIO COVA
   */
-  function R6Q_Lista_Articulos() {
+  function R17Q_Lista_Articulos() {
     $sql = "
       SELECT
       InvArticulo.Descripcion,
@@ -412,12 +412,12 @@
   }
   /**********************************************************************************/
   /*
-    TITULO: R6Q_Lista_Articulos_CodBarra
+    TITULO: R17Q_Lista_Articulos_CodBarra
     FUNCION: Armar una lista de articulos con descripcion e id
     RETORNO: Lista de articulos con descripcion e id
     DESAROLLADO POR: SERGIO COVA
   */
-  function R6Q_Lista_Articulos_CodBarra() {
+  function R17Q_Lista_Articulos_CodBarra() {
     $sql = "
       SELECT
       (SELECT CodigoBarra

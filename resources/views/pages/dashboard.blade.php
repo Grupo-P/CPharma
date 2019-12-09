@@ -11,7 +11,7 @@
     include(app_path().'\functions\querys_mysql.php');
     include(app_path().'\functions\querys_sqlserver.php');
 
-    $CPharmaVersion = ' CPharma v.5.3';
+    $CPharmaVersion = ' CPharma v.5.4';
 
     $empresas = DB::table('empresas')->count();
     $proveedores = DB::table('proveedors')->count();
@@ -403,6 +403,13 @@
 					<b class="text-info">Consulta compras</b>!!
   				</li>
   			</ul>
+  			<ul style="list-style:none">
+        	<li class="card-text text-dark" style="display: inline;">
+					<i class="far fa-check-circle text-info" style="display: inline;"></i>
+					Desde ya esta disponible el reporte: 
+					<b class="text-info">Ventas cruzadas</b>!!
+  				</li>
+  			</ul>
 	      </div>
 	      <div class="modal-footer">
 	        <button type="button" class="btn btn-outline-info" data-dismiss="modal">Aceptar</button>
@@ -485,6 +492,13 @@
 					<i class="far fa-check-circle text-info" style="display: inline;"></i>
 					Desde ya esta disponible el modulo: 
 					<b class="text-info">Orden de compra</b>!!
+  				</li>
+  			</ul>
+  			<ul style="list-style:none">
+        	<li class="card-text text-dark" style="display: inline;">
+					<i class="far fa-check-circle text-info" style="display: inline;"></i>
+					Desde ya esta disponible el reporte: 
+					<b class="text-info">Ventas cruzadas</b>!!
   				</li>
   			</ul>
 	      </div>
@@ -1254,6 +1268,13 @@
 					<b class="text-info">Consulta compras</b>!!
   				</li>
   			</ul>
+  			<ul style="list-style:none">
+        	<li class="card-text text-dark" style="display: inline;">
+					<i class="far fa-check-circle text-info" style="display: inline;"></i>
+					Desde ya esta disponible el reporte: 
+					<b class="text-info">Ventas cruzadas</b>!!
+  				</li>
+  			</ul>
 	      </div>
 	      <div class="modal-footer">
 	        <button type="button" class="btn btn-outline-info" data-dismiss="modal">Aceptar</button>
@@ -1367,6 +1388,13 @@
 					<i class="far fa-check-circle text-info" style="display: inline;"></i>
 					Desde ya esta disponible el reporte: 
 					<b class="text-info">Consulta compras</b>!!
+  				</li>
+  			</ul>
+  			<ul style="list-style:none">
+        	<li class="card-text text-dark" style="display: inline;">
+					<i class="far fa-check-circle text-info" style="display: inline;"></i>
+					Desde ya esta disponible el reporte: 
+					<b class="text-info">Ventas cruzadas</b>!!
   				</li>
   			</ul>
 	      </div>
