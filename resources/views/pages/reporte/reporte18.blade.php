@@ -62,7 +62,7 @@
   include(app_path().'\functions\functions.php');
   include(app_path().'\functions\querys_mysql.php');
   include(app_path().'\functions\querys_sqlserver.php');
-  $_GET['SEDE'] = 'FTN';//FG_Mi_Ubicacion();
+  $_GET['SEDE'] = FG_Mi_Ubicacion();
 
   $ArtJson = "";
 
@@ -88,7 +88,7 @@
     $InicioCarga = new DateTime("now");
 
     R18_Factura_Articulo($_GET['SEDE'],$_GET['IdProv'],$_GET['NombreProv'],$_GET['IdFact']);
-    //FG_Guardar_Auditoria('CONSULTAR','REPORTE','Actualizar Troquel');
+    FG_Guardar_Auditoria('CONSULTAR','REPORTE','Consulta Compras');
 
     $FinCarga = new DateTime("now");
     $IntervalCarga = $InicioCarga->diff($FinCarga);
@@ -345,7 +345,14 @@
       echo '<td align="center">'.intval($row["CantidadRecibidaFactura"]).'</td>';
       echo '<td align="center">'.number_format($row["M_PrecioCompraBruto"],2,"," ,"." ).'</td>';
       echo '<td align="center">'.$row["NumeroLoteFabricante"].'</td>';
-      echo '<td align="center">'.$row["FechaVencimiento"]->format('d-m-Y').'</td>';
+
+      if($row["FechaVencimiento"]!=NULL){
+        echo '<td align="center">'.$row["FechaVencimiento"]->format('d-m-Y').'</td>';
+      }
+      else{
+        echo '<td align="center">-</td>';
+      }
+      
       echo '</tr>';
     $contador++;
     }
