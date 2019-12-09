@@ -68,6 +68,7 @@
 
   $ArtJson = "";
   $CodJson = "";
+  $_GET['SEDE'] = 'FTN';
 
   if (isset($_GET['SEDE'])){      
     echo '<h1 class="h5 text-success"  align="left"> <i class="fas fa-prescription"></i> '.FG_Nombre_Sede($_GET['SEDE']).'</h1>';
@@ -79,13 +80,13 @@
     $InicioCarga = new DateTime("now");
 
     if((isset($_GET['Descrip']))&&(!empty($_GET['Descrip']))) {
-      R6_Pedido_Productos($_GET['SEDE'],$_GET['Descrip'],$_GET['fechaInicio'],$_GET['fechaFin'],$_GET['pedido'],'Descrip');
+      R17_Tri_Tienda_Articulo($_GET['SEDE'],$_GET['Descrip'],$_GET['fechaInicio'],$_GET['fechaFin'],$_GET['pedido'],'Descrip');
     }
     else if(isset($_GET['CodBar'])&&(!empty($_GET['CodBar']))){
-      R6_Pedido_Productos($_GET['SEDE'],$_GET['IdCB'],$_GET['fechaInicio'],$_GET['fechaFin'],$_GET['pedido'],'CodBar');
+      R17_Tri_Tienda_Articulo($_GET['SEDE'],$_GET['IdCB'],$_GET['fechaInicio'],$_GET['fechaFin'],$_GET['pedido'],'CodBar');
     }
   
-    FG_Guardar_Auditoria('CONSULTAR','REPORTE','Pedido de productos');
+    //FG_Guardar_Auditoria('CONSULTAR','REPORTE','Pedido de productos');
 
     $FinCarga = new DateTime("now");
     $IntervalCarga = $InicioCarga->diff($FinCarga);
@@ -180,12 +181,12 @@
 <?php
   /********************************************************************************/ 
   /*
-    TITULO: R6_Pedido_Productos
+    TITULO: R17_Tri_Tienda_Articulo
     FUNCION: Arma una lista para el pedido de productos
     RETORNO: No aplica
     DESAROLLADO POR: SERGIO COVA
   */
-  function R6_Pedido_Productos($SedeConnection,$Valor,$FInicial,$FFinal,$DiasPedido,$Flag){
+  function R17_Tri_Tienda_Articulo($SedeConnection,$Valor,$FInicial,$FFinal,$DiasPedido,$Flag){
 
     $conn = FG_Conectar_Smartpharma($SedeConnection);
     $connCPharma = FG_Conectar_CPharma();
@@ -207,7 +208,7 @@
     $DiasPedido = intval($DiasPedido);
 
     if($Flag=='Descrip') {
-      $sql = R6Q_Descripcion_Like($Valor);
+      $sql = R17Q_Descripcion_Like($Valor);
       $result = sqlsrv_query($conn,$sql);
 
       echo '
@@ -261,7 +262,7 @@
         $row2 = $result2->fetch_assoc();
         $RangoDiasQuiebre = $row2['Cuenta'];
 
-        $sql1 = R6Q_Integracion_Pedido_Productos($IdArticulo,$FInicial,$FFinal);
+        $sql1 = R17Q_Integracion_Pedido_Productos($IdArticulo,$FInicial,$FFinal);
         $result1 = sqlsrv_query($conn,$sql1);
         $row1 = sqlsrv_fetch_array($result1, SQLSRV_FETCH_ASSOC);
 
@@ -269,7 +270,7 @@
         $UnidadesCompradas = intval($row1["TotalUnidadesCompradas"]);
         $UltimaVentaRango = $row1["UltimaVentaRango"];
 
-        $sql2 = R6Q_Detalle_Articulo($IdArticulo);
+        $sql2 = R17Q_Detalle_Articulo($IdArticulo);
         $result2 = sqlsrv_query($conn,$sql2);
         $row2 = sqlsrv_fetch_array($result2, SQLSRV_FETCH_ASSOC);
 
@@ -496,7 +497,7 @@
         $UnidadesCompradas = intval($row1["TotalUnidadesCompradas"]);
         $UltimaVentaRango = $row1["UltimaVentaRango"];
 
-        $sql2 = R6Q_Detalle_Articulo($IdArticulo);
+        $sql2 = R17Q_Detalle_Articulo($IdArticulo);
         $result2 = sqlsrv_query($conn,$sql2);
         $row2 = sqlsrv_fetch_array($result2, SQLSRV_FETCH_ASSOC);
 
@@ -669,12 +670,12 @@
   }
   /**********************************************************************************/
   /*
-    TITULO: R6Q_Descripcion_Like
+    TITULO: R17Q_Descripcion_Like
     FUNCION: Consulta los articulos que conindicen con la palabra buscada
     RETORNO: lista de id de articulos en coincidencia
     DESAROLLADO POR: SERGIO COVA
   */
-  function R6Q_Descripcion_Like($DescripLike) {   
+  function R17Q_Descripcion_Like($DescripLike) {   
     $sql = "
       SELECT
       InvArticulo.Id AS InvArticuloId
@@ -685,12 +686,12 @@
   }
   /**********************************************************************************/
   /*
-    TITULO: R6Q_Integracion_Pedido_Productos
+    TITULO: R17Q_Integracion_Pedido_Productos
     FUNCION: Ubicar el top de productos mas vendidos
     RETORNO: Lista de productos mas vendidos
     DESAROLLADO POR: SERGIO COVA
   */
-  function R6Q_Integracion_Pedido_Productos($IdArticulo,$FInicial,$FFinal) {
+  function R17Q_Integracion_Pedido_Productos($IdArticulo,$FInicial,$FFinal) {
     $sql = "
       SELECT
     -- Id Articulo
@@ -864,12 +865,12 @@
   }
   /**********************************************************************************/
   /*
-    TITULO: R6Q_Detalle_Articulo
+    TITULO: R17Q_Detalle_Articulo
     FUNCION: Query que genera el detalle del articulo solicitado
     RETORNO: Detalle del articulo
     DESAROLLADO POR: SERGIO COVA
   */
-  function R6Q_Detalle_Articulo($IdArticulo) {
+  function R17Q_Detalle_Articulo($IdArticulo) {
     $sql = " 
       SELECT
 --Id Articulo
