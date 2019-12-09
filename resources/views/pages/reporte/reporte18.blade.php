@@ -62,7 +62,7 @@
   include(app_path().'\functions\functions.php');
   include(app_path().'\functions\querys_mysql.php');
   include(app_path().'\functions\querys_sqlserver.php');
-  $_GET['SEDE'] = FG_Mi_Ubicacion();
+  $_GET['SEDE'] = 'FTN';//FG_Mi_Ubicacion();
 
   $ArtJson = "";
 
@@ -76,7 +76,7 @@
   //se pasa a la carga de las facturas del proveedor 
     $InicioCarga = new DateTime("now");
     
-    R8_Proveedor_Factura($_GET['SEDE'],$_GET['Id'],$_GET['Nombre']);
+    R18_Proveedor_Factura($_GET['SEDE'],$_GET['Id'],$_GET['Nombre']);
     
     $FinCarga = new DateTime("now");
     $IntervalCarga = $InicioCarga->diff($FinCarga);
@@ -87,8 +87,8 @@
   //se pasa a mostrar el resultado de actualizar el troquel
     $InicioCarga = new DateTime("now");
 
-    R8_Troquel($_GET['SEDE'],$_GET['IdProv'],$_GET['NombreProv'],$_GET['IdFact'],$_GET['IdArt'],$_GET['TroquelN']);
-    FG_Guardar_Auditoria('CONSULTAR','REPORTE','Actualizar Troquel');
+    R18_Troquel($_GET['SEDE'],$_GET['IdProv'],$_GET['NombreProv'],$_GET['IdFact'],$_GET['IdArt'],$_GET['TroquelN']);
+    //FG_Guardar_Auditoria('CONSULTAR','REPORTE','Actualizar Troquel');
 
     $FinCarga = new DateTime("now");
     $IntervalCarga = $InicioCarga->diff($FinCarga);
@@ -99,7 +99,7 @@
   //se pasa a la actualizacion del troquel
     $InicioCarga = new DateTime("now");
 
-    R8_Articulo_Troquel($_GET['SEDE'],$_GET['IdProv'],$_GET['NombreProv'],$_GET['IdFact'],$_GET['IdArt']);
+    R18_Articulo_Troquel($_GET['SEDE'],$_GET['IdProv'],$_GET['NombreProv'],$_GET['IdFact'],$_GET['IdArt']);
 
     $FinCarga = new DateTime("now");
     $IntervalCarga = $InicioCarga->diff($FinCarga);
@@ -110,7 +110,7 @@
   //se pasa a la seleccion del articulo
     $InicioCarga = new DateTime("now");
 
-    R8_Factura_Articulo($_GET['SEDE'],$_GET['IdProv'],$_GET['NombreProv'],$_GET['IdFact']);
+    R18_Factura_Articulo($_GET['SEDE'],$_GET['IdProv'],$_GET['NombreProv'],$_GET['IdFact']);
 
     $FinCarga = new DateTime("now");
     $IntervalCarga = $InicioCarga->diff($FinCarga);
@@ -121,7 +121,7 @@
   //Se pasa a la seleccion del proveedor
     $InicioCarga = new DateTime("now");
 
-    $sql = R8Q_Lista_Proveedores();
+    $sql = R18Q_Lista_Proveedores();
     $ArtJson = FG_Armar_Json($sql,$_GET['SEDE']);
 
     echo '
@@ -162,12 +162,12 @@
 <?php
   /**********************************************************************************/
   /*
-    TITULO: R8Q_Lista_Proveedores
+    TITULO: R18Q_Lista_Proveedores
     FUNCION: Armar una lista de proveedores
     RETORNO: Lista de proveedores
     DESAROLLADO POR: SERGIO COVA
   */
-  function R8Q_Lista_Proveedores() {
+  function R18Q_Lista_Proveedores() {
     $sql = "
       SELECT
       GenPersona.Nombre,
@@ -182,15 +182,15 @@
   }
   /**********************************************************************************/
   /*
-    TITULO: R8_Proveedor_Factura
+    TITULO: R18_Proveedor_Factura
     FUNCION:  Arma la lista de factura por proveedores
     RETORNO: no aplica
     DESAROLLADO POR: SERGIO COVA
   */
-  function R8_Proveedor_Factura($SedeConnection,$IdProveedor,$NombreProveedor){
+  function R18_Proveedor_Factura($SedeConnection,$IdProveedor,$NombreProveedor){
     
     $conn = FG_Conectar_Smartpharma($SedeConnection);
-    $sql1 = R8Q_Factura_Proveedor_Toquel($IdProveedor);
+    $sql1 = R18Q_Factura_Proveedor_Toquel($IdProveedor);
     $result = sqlsrv_query($conn,$sql1);
 
     echo '
@@ -227,8 +227,11 @@
         <thead class="thead-dark">
           <tr>
             <th scope="col" class="CP-sticky">#</th>
+            <th scope="col" class="CP-sticky">Numero de Control</th>
             <th scope="col" class="CP-sticky">Numero de Factura</th>
             <th scope="col" class="CP-sticky">Fecha Documento</th>
+            <th scope="col" class="CP-sticky">Fecha Registro</th>
+            <th scope="col" class="CP-sticky">Total (Con IVA)</th>
             <th scope="col" class="CP-sticky">Usuario Auditor</th>
             <th scope="col" class="CP-sticky">Seleccion</th>
           </tr>
@@ -239,8 +242,11 @@
     while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
       echo '<tr>';
       echo '<td align="left"><strong>'.intval($contador).'</strong></td>';
+      echo '<td align="center">'.$row["NumeroControl"].'</td>';
       echo '<td align="center">'.$row["NumeroFactura"].'</td>';
       echo '<td align="center">'.$row["FechaDocumento"]->format('d-m-Y').'</td>';
+      echo '<td align="center">'.$row["FechaRegistro"]->format('d-m-Y').'</td>';
+      echo '<td align="center">'.number_format($row["Total"],2,"," ,"." ).'</td>';
       echo '<td align="center">'.$row["Auditoria_Usuario"].'</td>';
       echo '
       <td align="center">
@@ -267,38 +273,41 @@
   }
   /**********************************************************************************/
   /*
-    TITULO: R8Q_Factura_Proveedor_Toquel
+    TITULO: R18Q_Factura_Proveedor_Toquel
     FUNCION: Buscar la lista de facturas donde interviene el proveedor
     RETORNO: lista de facturas
     DESAROLLADO POR: SERGIO COVA
   */
-  function R8Q_Factura_Proveedor_Toquel($IdProveedor) {
+  function R18Q_Factura_Proveedor_Toquel($IdProveedor) {
     $sql = "
     SELECT
     ComFactura.Id AS FacturaId,
     ComFactura.NumeroFactura,
+    ComFactura.NumeroControl,
     CONVERT(DATE,ComFactura.FechaDocumento) AS FechaDocumento,
+    CONVERT(DATE,ComFactura.FechaRegistro) AS FechaRegistro,
+    ComFactura.M_MontoTotalNeto AS Total,
     ComFactura.Auditoria_Usuario
     FROM ComFactura
     WHERE ComFactura.ComProveedorId = '$IdProveedor'
-    ORDER BY FacturaId ASC
+    ORDER BY FechaDocumento DESC
     ";
     return $sql;
   }
   /**********************************************************************************/
   /*
-    TITULO: R8_Factura_Articulo
+    TITULO: R18_Factura_Articulo
     FUNCION: arma la lista de articulos por factura
     RETORNO: no aplica
     DESAROLLADO POR: SERGIO COVA
   */
-  function R8_Factura_Articulo($SedeConnection,$IdProveedor,$NombreProveedor,$IdFatura){
+  function R18_Factura_Articulo($SedeConnection,$IdProveedor,$NombreProveedor,$IdFatura){
     
     $conn = FG_Conectar_Smartpharma($SedeConnection);
-    $sql1 = R8Q_Factura_Articulo($IdFatura);
+    $sql1 = R18Q_Factura_Articulo($IdFatura);
     $result = sqlsrv_query($conn,$sql1);
 
-    $sqlNFact = R8Q_Numero_Factura($IdFatura);
+    $sqlNFact = R18Q_Numero_Factura($IdFatura);
     $resultNFact = sqlsrv_query($conn,$sqlNFact);
     $rowNFact = sqlsrv_fetch_array($resultNFact,SQLSRV_FETCH_ASSOC);
     $NumeroFactura = $rowNFact["NumeroFactura"];
@@ -378,12 +387,12 @@
   }
   /**********************************************************************************/
   /*
-    TITULO: R8Q_Factura_Articulo
+    TITULO: R18Q_Factura_Articulo
     FUNCION: busca los articulos que intervienen en una factura
     RETORNO: lista de articulos
     DESAROLLADO POR: SERGIO COVA
   */
-  function R8Q_Factura_Articulo($IdFatura) {
+  function R18Q_Factura_Articulo($IdFatura) {
     $sql = "
     SELECT
     ComFacturaDetalle.ComFacturaId AS FacturaId,
@@ -400,12 +409,12 @@
   }
   /**********************************************************************************/
   /*
-    TITULO: R8Q_Numero_Factura
+    TITULO: R18Q_Numero_Factura
     FUNCION:
     RETORNO:
     DESAROLLADO POR: SERGIO COVA
   */
-  function R8Q_Numero_Factura($IdFactura) {
+  function R18Q_Numero_Factura($IdFactura) {
     $sql = "
       SELECT ComFactura.NumeroFactura AS NumeroFactura
       FROM ComFactura 
@@ -415,23 +424,23 @@
   }
   /**********************************************************************************/
   /*
-    TITULO: R8_Articulo_Troquel
+    TITULO: R18_Articulo_Troquel
     FUNCION: arma la lista del troquel segun el articulo
     RETORNO: no aplica
     DESAROLLADO POR: SERGIO COVA
   */
-  function R8_Articulo_Troquel($SedeConnection,$IdProveedor,$NombreProveedor,$IdFatura,$IdArticulo){
+  function R18_Articulo_Troquel($SedeConnection,$IdProveedor,$NombreProveedor,$IdFatura,$IdArticulo){
     
     $conn = FG_Conectar_Smartpharma($SedeConnection);
 
-    $sql1 = R8Q_Articulo($IdArticulo);
+    $sql1 = R18Q_Articulo($IdArticulo);
     $result = sqlsrv_query($conn,$sql1);
 
-    $sql2 = R8Q_Troquel_Articulo_Factura($IdFatura,$IdArticulo);
+    $sql2 = R18Q_Troquel_Articulo_Factura($IdFatura,$IdArticulo);
     $result2 = sqlsrv_query($conn,$sql2);
     $row2 = sqlsrv_fetch_array( $result2, SQLSRV_FETCH_ASSOC);
 
-    $sqlNFact = R8Q_Numero_Factura($IdFatura);
+    $sqlNFact = R18Q_Numero_Factura($IdFatura);
     $resultNFact = sqlsrv_query($conn,$sqlNFact);
     $rowNFact = sqlsrv_fetch_array($resultNFact,SQLSRV_FETCH_ASSOC);
     $NumeroFactura = $rowNFact["NumeroFactura"];
@@ -520,12 +529,12 @@
   }
   /**********************************************************************************/
   /*
-    TITULO: R8Q_Articulo
+    TITULO: R18Q_Articulo
     FUNCION: Buscar informacion del articulo
     RETORNO: Datos del articulo
     DESAROLLADO POR: SERGIO COVA
   */
-  function R8Q_Articulo($IdArticulo) {
+  function R18Q_Articulo($IdArticulo) {
     $sql = "
       SELECT
       InvArticulo.Id,
@@ -539,12 +548,12 @@
   }
   /**********************************************************************************/
   /*
-    TITULO: R8Q_Troquel_Articulo_Factura
+    TITULO: R18Q_Troquel_Articulo_Factura
     FUNCION: busca el troquel del articulo de la factura
     RETORNO: retora en valor del troquel del articulo
     DESAROLLADO POR: SERGIO COVA
   */
-  function R8Q_Troquel_Articulo_Factura($IdFatura,$IdArticulo) {
+  function R18Q_Troquel_Articulo_Factura($IdFatura,$IdArticulo) {
     $sql = "
     SELECT
     ComFacturaDetalle.ComFacturaId,
@@ -557,26 +566,26 @@
   }
   /**********************************************************************************/
   /*
-    TITULO: R8_Troquel
+    TITULO: R18_Troquel
     FUNCION: arma la lista definitiva con el troquel actualizado
     RETORNO: no aplica
     DESAROLLADO POR: SERGIO COVA
   */
-  function R8_Troquel($SedeConnection,$IdProveedor,$NombreProveedor,$IdFatura,$IdArticulo,$PrecioTroquel){
+  function R18_Troquel($SedeConnection,$IdProveedor,$NombreProveedor,$IdFatura,$IdArticulo,$PrecioTroquel){
     
     $conn = FG_Conectar_Smartpharma($SedeConnection);
 
-    $sql2 = R8Q_Actualizar_Troquel($IdFatura,$IdArticulo,$PrecioTroquel);
+    $sql2 = R18Q_Actualizar_Troquel($IdFatura,$IdArticulo,$PrecioTroquel);
     sqlsrv_query($conn,$sql2);
     
-    $sql1 = R8Q_Articulo($IdArticulo);
+    $sql1 = R18Q_Articulo($IdArticulo);
     $result = sqlsrv_query($conn,$sql1);
 
-    $sql3 = R8Q_Troquel_Articulo_Factura($IdFatura,$IdArticulo);
+    $sql3 = R18Q_Troquel_Articulo_Factura($IdFatura,$IdArticulo);
     $result3 = sqlsrv_query($conn,$sql3);
     $row3 = sqlsrv_fetch_array($result3, SQLSRV_FETCH_ASSOC);
 
-    $sqlNFact = R8Q_Numero_Factura($IdFatura);
+    $sqlNFact = R18Q_Numero_Factura($IdFatura);
     $resultNFact = sqlsrv_query($conn,$sqlNFact);
     $rowNFact = sqlsrv_fetch_array($resultNFact,SQLSRV_FETCH_ASSOC);
     $NumeroFactura = $rowNFact["NumeroFactura"];
@@ -636,12 +645,12 @@
   }
   /**********************************************************************************/
   /*
-    TITULO: R8Q_Actualizar_Troquel
+    TITULO: R18Q_Actualizar_Troquel
     FUNCION: actualiza el precio del troquel del articulo
     RETORNO: precio actualizado del troquel
     DESAROLLADO POR: SERGIO COVA
   */
-  function R8Q_Actualizar_Troquel($IdFatura,$IdArticulo,$PrecioTroquel) {
+  function R18Q_Actualizar_Troquel($IdFatura,$IdArticulo,$PrecioTroquel) {
     $sql = "
     UPDATE ComFacturaDetalle
     SET M_PrecioTroquelado = '$PrecioTroquel'
