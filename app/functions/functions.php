@@ -91,22 +91,15 @@
 		DESAROLLADO POR: SERGIO COVA
 	 */
 	function FG_Validar_Conectividad($SedeConnection){
-		$InicioCarga = new DateTime("now");
-
-		$NombreSede = FG_Nombre_Sede($SedeConnection);
 		$conn = FG_Conectar_Smartpharma($SedeConnection);
-		echo('Sede: '.$NombreSede.'<br/>');
+		$Conectividad = false;
 
 		if($conn) {
-		     echo "Conexión establecida<br/>";
+     $Conectividad = true;
 		}else{
-		     echo "Conexión no se pudo establecer<br/>";
-		     die( print_r( sqlsrv_errors(), true));
+     $Conectividad = false;
 		}
-
-		$FinCarga = new DateTime("now");
-    	$IntervalCarga = $InicioCarga->diff($FinCarga);
-    	echo'Tiempo de carga: '.$IntervalCarga->format("%Y-%M-%D %H:%I:%S");
+  	return $Conectividad;
 	}
 	/**********************************************************************************/
 	/*
@@ -992,6 +985,9 @@
 			case 'Articulos Estrella':
 				$ruta = '/reporte16';
 			break;
+			case 'Tri Tienda Por Articulo':
+				$ruta = '/reporte17';
+			break;
 			default:
 				$ruta = '#';
 			break;
@@ -1007,7 +1003,7 @@
 	function FG_Reportes_Departamento($Departamento) {
 		switch ($Departamento) {
 			case 'COMPRAS':
-				$Numero_Reportes = 13;
+				$Numero_Reportes = 14;
 			break;
 			case 'OPERACIONES':
 				$Numero_Reportes = 3;
@@ -1028,10 +1024,10 @@
 				$Numero_Reportes = 14;
 			break;
 			case 'GERENCIA':
-				$Numero_Reportes = 14;
+				$Numero_Reportes = 15;
 			break;
 			case 'TECNOLOGIA':
-				$Numero_Reportes = 14;
+				$Numero_Reportes = 15;
 			break;
 			default:
 				$Numero_Reportes = 0;
