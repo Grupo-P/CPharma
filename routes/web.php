@@ -27,6 +27,10 @@ Route::get('/conversionDosis', function() {
     return view('pages.caja.conversionDosis');
 });
 
+Route::get('/ConsultaPrecio', function() { 
+    return view('pages.consultorP.consultaPrecio');
+});
+
 Route::get('/ACI', function() {
     return view('pages.ACI.ProximamenteACI');
 });
@@ -171,10 +175,6 @@ Route::get('/IngresarOrdenCompra', function() {
 
 Route::get('/DigitalOrdenCompra', function() {
     return view('pages.ordenCompra.digital');
-});
-
-Route::get('/ConsultaPrecio', function() { 
-    return view('pages.consultorP.consultaPrecio');
 });
 
 Route::get('home', 'HomeController@index')->name('home');
