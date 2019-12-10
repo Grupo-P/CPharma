@@ -284,6 +284,7 @@
             <th scope="col" class="CP-sticky">Codigo Interno</th>
             <th scope="col" class="CP-sticky">Codido de Barra</th>
             <th scope="col" class="CP-sticky">Descripcion</th>
+            <th scope="col" class="CP-sticky">Tipo</th>
             <th scope="col" class="CP-sticky">Cantidad</th>
             <th scope="col" class="CP-sticky">Apariciones</th>
             <th scope="col" class="CP-sticky">Precio (En factura)</br>'.SigVe.'</th>
@@ -299,6 +300,8 @@
     $Total_Factura = 0;
     $Total_Unidades = 0;
     $Total_Unidades_Articulo_Evaluado = 0;
+    $Cuenta_Medicina = 0;
+    $Cuenta_Miscelaneo = 0;
     
     while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
       $IdVenta = $row['IdVenta'];
@@ -319,6 +322,14 @@
         $CodigoArticulo = $row3["CodigoInterno"];
         $CodigoBarra = $row3["CodigoBarra"];
         $Descripcion = FG_Limpiar_Texto($row3["Descripcion"]);
+        $Tipo = FG_Tipo_Producto($row3["Tipo"]);
+
+        if($Tipo=='MEDICINA'){
+          $Cuenta_Medicina++;
+        }
+        else{
+          $Cuenta_Miscelaneo++;
+        }
 
         $sql3 = R19Q_Detalle_Articulo($row2['InvArticuloId']);
         $result3 = sqlsrv_query($conn,$sql3); 
@@ -348,6 +359,7 @@
             .$Descripcion.
           '</a>
           </td>';
+          echo '<td align="center">'.$Tipo.'</td>';
           echo '<td align="center">'.intval($row2['Cantidad']).'</td>';
           echo '<td align="center">'.intval($Arr_Apariciones[$row2['InvArticuloId']]).'</td>';
           echo '<td align="center">'.number_format($row2['M_PrecioNeto'],2,"," ,"." ).'</td>';
@@ -370,6 +382,7 @@
             .$Descripcion.
           '</a>
           </td>';
+          echo '<td align="center" style="background-color: #989b9e;">'.$Tipo.'</td>';
           echo '<td align="center" style="background-color: #989b9e;">'.intval($row2['Cantidad']).'</td>';
           echo '<td align="center" style="background-color: #989b9e;">'.intval($Arr_Apariciones[$row2['InvArticuloId']]).'</td>';
           echo '<td align="center" style="background-color: #989b9e;">'.number_format($row2['M_PrecioNeto'],2,"," ,"." ).'</td>';
@@ -401,7 +414,9 @@
             <th scope="col" class="CP-sticky">Total de</br>SKU Articulo (Promedio)</th>
             <th scope="col" class="CP-sticky">Total de unidades</br>facturadas</th>
             <th scope="col" class="CP-sticky">Total de unidades</br>Promedio</th>
-            <th scope="col" class="CP-sticky">Total de unidades</br>(Articulo Evaluado)</th>                  
+            <th scope="col" class="CP-sticky">Total de unidades</br>(Articulo Evaluado)</th> 
+            <th scope="col" class="CP-sticky">Total de Medicinas</th>  
+            <th scope="col" class="CP-sticky">Total de Miscelaneos</th>               
           </tr>
         </thead>
         <tbody>
@@ -417,6 +432,8 @@
     echo '<td align="center">'.$Total_Unidades.'</td>'; 
     echo '<td align="center">'.number_format(($Total_Unidades/$Total_Factura),2,"," ,"." ).'</td>'; 
     echo '<td align="center">'.$Total_Unidades_Articulo_Evaluado.'</td>'; 
+    echo '<td align="center">'.$Cuenta_Medicina.'</td>';
+    echo '<td align="center">'.$Cuenta_Miscelaneo.'</td>';
     echo '</tr>';
     echo '
       </tbody>
