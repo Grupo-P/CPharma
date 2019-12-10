@@ -38,7 +38,7 @@
 
   <br/><br/>
 
-  {!! Form::model($entrevistas, ['route' => ['entrevistas.update', $entrevistas], 'method' => 'PUT']) !!}
+  {!! Form::model($entrevistas, ['route' => ['entrevistas.update', $entrevistas], 'method' => 'PUT', 'class' => 'form-group']) !!}
     <fieldset>
       <table class="table table-borderless table-striped">
         <thead class="thead-dark">
@@ -123,6 +123,21 @@
             </th>
             <td>
               {!! Form::text('lugar', null, [ 'class' => 'form-control', 'placeholder' => 'Delicias', 'required']) !!}
+            </td>
+          </tr>
+
+          <tr>
+            <th scope="row">{!! Form::label('practica', 'Práctica pre-empleto *', ['title' => 'Este campo es requerido']) !!}</th>
+            <td>
+              <div class="custom-control custom-radio custom-control-inline">
+                <input type="radio" class="custom-control-input" id="practica1" name="practica" value="Si" required>
+                <label class="custom-control-label" for="practica1">Si</label>
+              </div>
+
+              <div class="custom-control custom-radio custom-control-inline">
+                <input type="radio" class="custom-control-input" id="practica2" name="practica" value="No">
+                <label class="custom-control-label" for="practica2">No</label>
+              </div>
             </td>
           </tr>
 

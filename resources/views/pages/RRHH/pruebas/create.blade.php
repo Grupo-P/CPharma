@@ -42,7 +42,7 @@
 
   <br/><br/>
 
-  {!! Form::open(['route' => 'pruebas.store', 'method' => 'POST']) !!}
+  {!! Form::open(['route' => 'pruebas.store', 'method' => 'POST', 'class' => 'form-group']) !!}
     <fieldset>
       <table class="table table-borderless table-striped">
         <thead class="thead-dark">

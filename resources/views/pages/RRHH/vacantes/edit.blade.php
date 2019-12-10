@@ -45,7 +45,7 @@
   </form>
   <br/><br/>
 
-  {!! Form::model($vacantes, ['route' => ['vacantes.update', $vacantes], 'method' => 'PUT']) !!}
+  {!! Form::model($vacantes, ['route' => ['vacantes.update', $vacantes], 'method' => 'PUT', 'class' => 'form-group']) !!}
     <fieldset>
       <table class="table table-borderless table-striped">
         <thead class="thead-dark">

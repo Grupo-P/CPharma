@@ -44,7 +44,7 @@
 
   <br/><br/>
 
-  {!! Form::open(['route' => 'empresaReferencias.store', 'method' => 'POST']) !!}
+  {!! Form::open(['route' => 'empresaReferencias.store', 'method' => 'POST', 'class' => 'form-group']) !!}
     <fieldset>
       <table class="table table-borderless table-striped">
         <thead class="thead-dark">

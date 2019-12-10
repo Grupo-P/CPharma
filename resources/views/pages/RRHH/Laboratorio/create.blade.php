@@ -68,7 +68,7 @@
     </button>
   </form>
   <br/><br/>
-{!! Form::open(['route' => 'laboratorio.store', 'method' => 'POST', 'id' => 'crear_laboratorio']) !!}
+{!! Form::open(['route' => 'laboratorio.store', 'method' => 'POST', 'id' => 'crear_laboratorio', 'class' => 'form-group']) !!}
     <fieldset>
       <table class="table table-borderless table-striped">
         <thead class="thead-dark">
