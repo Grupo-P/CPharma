@@ -39,7 +39,7 @@
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title text-info" id="exampleModalCenterTitle">
-              <i class="fas fa-info text-info"></i>{{ session('Saved') }}
+              <i class="fas fa-info text-info"></i>{{ session('Saved0') }}
             </h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
@@ -62,7 +62,7 @@
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title text-info" id="exampleModalCenterTitle">
-              <i class="fas fa-info text-info"></i>{{ session('Saved') }}
+              <i class="fas fa-info text-info"></i>{{ session('Saved1') }}
             </h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
@@ -85,7 +85,7 @@
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title text-info" id="exampleModalCenterTitle">
-              <i class="fas fa-info text-info"></i>{{ session('Saved') }}
+              <i class="fas fa-info text-info"></i>{{ session('Saved2') }}
             </h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
