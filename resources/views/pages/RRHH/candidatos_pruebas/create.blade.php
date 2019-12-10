@@ -44,7 +44,7 @@
 
   <br/><br/>
 
-  {!! Form::open(['route' => 'candidatos_pruebas.store', 'method' => 'POST', 'id' => 'crear_candidato']) !!}
+  {!! Form::open(['route' => 'candidatos_pruebas.store', 'method' => 'POST', 'id' => 'crear_candidato', 'class' => 'form-group']) !!}
     <fieldset>
       <table class="table table-borderless table-striped">
         <thead class="thead-dark">

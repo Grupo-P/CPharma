@@ -38,7 +38,7 @@
 
   <br/><br/>
 
-  {!! Form::model($empresaReferencias, ['route' => ['empresaReferencias.update', $empresaReferencias], 'method' => 'PUT']) !!}
+  {!! Form::model($empresaReferencias, ['route' => ['empresaReferencias.update', $empresaReferencias], 'method' => 'PUT', 'class' => 'form-group']) !!}
     <fieldset>
       <table class="table table-borderless table-striped">
         <thead class="thead-dark">

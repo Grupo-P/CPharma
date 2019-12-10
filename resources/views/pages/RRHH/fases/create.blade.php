@@ -44,7 +44,7 @@
 
   <br/><br/>
 
-  {!! Form::open(['route' => 'fases.store', 'method' => 'POST', 'id' => 'crear_fase']) !!}
+  {!! Form::open(['route' => 'fases.store', 'method' => 'POST', 'id' => 'crear_fase', 'class' => 'form-group']) !!}
     <fieldset>
       <table class="table table-borderless table-striped">
         <thead class="thead-dark">

@@ -39,7 +39,7 @@
 
   <br/><br/>
 
-  {!! Form::model($candidatos, ['route' => ['candidatos.update', $candidatos], 'method' => 'PUT', 'id' => 'crear_candidato']) !!}
+  {!! Form::model($candidatos, ['route' => ['candidatos.update', $candidatos], 'method' => 'PUT', 'id' => 'crear_candidato', 'class' => 'form-group']) !!}
     <fieldset>
       <table class="table table-borderless table-striped">
         <thead class="thead-dark">

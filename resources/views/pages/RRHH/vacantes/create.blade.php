@@ -46,7 +46,7 @@
   
   <br/><br/>
 
-  {!! Form::open(['route' => 'vacantes.store', 'method' => 'POST']) !!}
+  {!! Form::open(['route' => 'vacantes.store', 'method' => 'POST', 'class' => 'form-group']) !!}
     <fieldset>
       <table class="table table-borderless table-striped">
         <thead class="thead-dark">

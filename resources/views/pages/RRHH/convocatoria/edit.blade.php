@@ -38,7 +38,7 @@
 
   <br/><br/>
 
-  {!! Form::model($convocatoria, ['route' => ['convocatoria.update', $convocatoria], 'method' => 'PUT']) !!}
+  {!! Form::model($convocatoria, ['route' => ['convocatoria.update', $convocatoria], 'method' => 'PUT', 'class' => 'form-group']) !!}
     <fieldset>
       <table class="table table-borderless table-striped">
         <thead class="thead-dark">
