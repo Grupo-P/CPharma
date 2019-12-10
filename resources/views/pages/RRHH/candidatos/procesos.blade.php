@@ -1,6 +1,6 @@
 @extends('layouts.model')
 
-@section('title', 'Candidatos')
+@section('title', 'Fases y procesos')
 
 @section('scriptsHead')
   <style>
@@ -106,7 +106,7 @@
   @endif
 
   <h1 class="h5 text-info">
-    <i class="fas fa-user-check"></i>&nbsp;Candidatos
+    <i class="fas fa-cogs"></i>&nbsp;Fases y procesos
   </h1>
   <hr class="row align-items-start col-12">
 
