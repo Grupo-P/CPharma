@@ -21,12 +21,14 @@ class CreateRhCandidatosPruebasTable extends Migration {
             $table->foreign('rh_candidatos_id')
             ->references('id')
             ->on('rh_candidatos')
-            ->onDelete('cascade');
+            ->onDelete('cascade')
+            ->onUpdate('cascade');
 
             $table->foreign('rh_pruebas_id')
             ->references('id')
             ->on('rh_pruebas')
-            ->onDelete('cascade');
+            ->onDelete('cascade')
+            ->onUpdate('cascade');
         });
     }
 
