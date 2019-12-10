@@ -234,9 +234,9 @@
         <th scope="col" class="stickyCP">Nombres</th>
         <th scope="col" class="stickyCP">Apellidos</th>
         <th scope="col" class="stickyCP">Teléfono</th>
+        <th scope="col" class="stickyCP">Relación laboral</th>
         <th scope="col" class="stickyCP">Estatus</th>
         <th scope="col" class="stickyCP">Acciones</th>
-        <th scope="col" class="stickyCP">Próxima Fase</th>
       </tr>
     </thead>
 
@@ -261,6 +261,7 @@
             }
           ?>
 
+          <td>{{$candidato->tipo_relacion}}</td>
           <td>{{$candidato->estatus}}</td>
 
           <!-- ***************** VALIDACION DE ROLES ***************** -->
@@ -337,120 +338,6 @@
             </a>
           <?php
             }
-          ?>
-          </td>
-
-          <td>
-          <?php 
-          if($candidato->estatus == 'POSTULADO') {
-          ?>
-            <form action="/gestor_fases" method="POST">
-              @csrf
-              <input type="hidden" name="CandidatoId" value="{{$candidato->id}}">
-              <input type="hidden" name="FaseId" value="1">
-
-              <button type="submit" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="bottom" title="Ir a la fase">
-                <i class="far fa-play-circle"></i>&nbsp;Iniciar proceso
-              </button>
-            </form>
-
-          <?php
-          } else if(
-              ($candidato->estatus == 'RECHAZADO' )
-              || ($candidato->estatus == 'FUTURO')
-            ) { 
-            echo '-';
-          }
-          else if($candidato->estatus == 'EN_PROCESO') {
-
-            $candidatos_fases = DB::table('rhi_candidatos_fases')
-            ->where('rh_candidatos_id', $candidato->id)
-            ->orderBy('id', 'desc')
-            ->first();
-
-            $nombre_fase = compras\RH_Fase::find($candidatos_fases->rh_fases_id)
-            ->nombre_fase;
-
-            switch($nombre_fase) {
-              case 'Pruebas Psicológicas':
-          ?>
-            <form action="/candidatos_pruebas/create" method="GET">
-              <input type="hidden" name="CandidatoId" value="{{$candidato->id}}">
-              <input type="hidden" name="CandidatoFaseId" value="{{$candidatos_fases->id}}">
-
-              <button type="submit" role="button" class="btn btn-outline-warning btn-sm" data-toggle="tooltip" data-placement="bottom" title="Ir a la fase">
-                <i class="fas fa-tasks"></i>&nbsp;Pruebas
-              </button>
-            </form>
-          <?php
-              break;
-
-              case 'Entrevista':
-          ?>
-            <form action="/entrevistas/create" method="GET" style="display: inline-block;">
-              <input type="hidden" name="CandidatoId" value="{{$candidato->id}}">
-              <input type="hidden" name="CandidatoFaseId" value="{{$candidatos_fases->id}}">
-
-              <button type="submit" role="button" class="btn btn-outline-primary btn-sm" data-toggle="tooltip" data-placement="bottom" title="Ir a la fase">
-                <i class="fas fa-users"></i>&nbsp;Entrevista
-              </button>
-            </form>
-
-            <form action="/candidatos_pruebas/create" method="GET" style="display: inline-block;">
-              <input type="hidden" name="CandidatoId" value="{{$candidato->id}}">
-              <input type="hidden" name="CandidatoFaseId" value="{{$candidatos_fases->id}}">
-
-              <button type="submit" role="button" class="btn btn-outline-warning btn-sm" data-toggle="tooltip" data-placement="bottom" title="Ir a la fase">
-                <i class="fas fa-tasks"></i>&nbsp;Pruebas
-              </button>
-            </form>
-          <?php
-              break;
-
-              case 'Práctica':
-          ?>
-            <form action="#" method="GET" style="display: inline-block;">
-              <input type="hidden" name="CandidatoId" value="{{$candidato->id}}">
-              <input type="hidden" name="CandidatoFaseId" value="{{$candidatos_fases->id}}">
-
-              <button type="button" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="bottom" title="Ir a la fase">
-                <i class="fas fa-users-cog"></i>&nbsp;Práctica
-              </button>
-            </form>
-
-            <form action="/entrevistas/create" method="GET" style="display: inline-block;">
-              <input type="hidden" name="CandidatoId" value="{{$candidato->id}}">
-              <input type="hidden" name="CandidatoFaseId" value="{{$candidatos_fases->id}}">
-
-              <button type="submit" role="button" class="btn btn-outline-primary btn-sm" data-toggle="tooltip" data-placement="bottom" title="Ir a la fase">
-                <i class="fas fa-users"></i>&nbsp;Entrevista
-              </button>
-            </form>
-          <?php
-              break;
-
-              case 'Referencias laborales':
-          ?>
-            <form action="#" method="GET" style="display: inline-block;">
-              <input type="hidden" name="CandidatoId" value="{{$candidato->id}}">
-              <input type="hidden" name="CandidatoFaseId" value="{{$candidatos_fases->id}}">
-
-              <button type="button" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="bottom" title="Ir a la fase">
-                <i class="far fa-address-card"></i>&nbsp;Referencias
-              </button>
-            </form>
-
-            <form action="/entrevistas/create" method="GET" style="display: inline-block;">
-              <input type="hidden" name="CandidatoId" value="{{$candidato->id}}">
-              <input type="hidden" name="CandidatoFaseId" value="{{$candidatos_fases->id}}">
-
-              <button type="submit" role="button" class="btn btn-outline-primary btn-sm" data-toggle="tooltip" data-placement="bottom" title="Ir a la fase">
-                <i class="fas fa-users"></i>&nbsp;Entrevista
-              </button>
-            </form>
-          <?php
-            }//switch
-          }//else
           ?>
           </td>
         </tr>
