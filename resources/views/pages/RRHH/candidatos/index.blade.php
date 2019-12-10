@@ -233,7 +233,6 @@
         <th scope="col" class="stickyCP">#</th>
         <th scope="col" class="stickyCP">Nombres</th>
         <th scope="col" class="stickyCP">Apellidos</th>
-        <th scope="col" class="stickyCP">Cédula</th>
         <th scope="col" class="stickyCP">Teléfono</th>
         <th scope="col" class="stickyCP">Estatus</th>
         <th scope="col" class="stickyCP">Acciones</th>
@@ -247,7 +246,6 @@
           <th>{{$candidato->id}}</th>
           <td>{{$candidato->nombres}}</td>
           <td>{{$candidato->apellidos}}</td>
-          <td>{{$candidato->cedula}}</td>
             
           <?php if($candidato->telefono_celular == '') { ?>
             <td>{{$candidato->telefono_habitacion}}</td>
