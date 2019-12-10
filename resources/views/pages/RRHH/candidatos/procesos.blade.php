@@ -10,29 +10,6 @@
 
 @section('content')
   <!-- Modal Guardar -->
-  @if(session('Saved'))
-    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title text-info" id="exampleModalCenterTitle">
-              <i class="fas fa-info text-info"></i>{{ session('Saved') }}
-            </h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <h4 class="h6">Candidato almacenado con éxito</h4>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-outline-success" data-dismiss="modal">Aceptar</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  @endif
-
   @if(session('Saved0'))
     <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered" role="document">
@@ -102,77 +79,6 @@
     </div>
   @endif
 
-  <!-- Modal Editar -->
-  @if(session('Updated'))
-    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title text-info" id="exampleModalCenterTitle">
-              <i class="fas fa-info text-info"></i>{{ session('Updated') }}
-            </h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <h4 class="h6">Candidato modificado con éxito</h4>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-outline-success" data-dismiss="modal">Aceptar</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  @endif
-
-  <!-- Modal Eliminar -->
-  @if(session('Deleted'))
-    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title text-info" id="exampleModalCenterTitle">
-              <i class="fas fa-info text-info"></i>{{ session('Deleted') }}
-            </h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <h4 class="h6">Candidato desincorporado con éxito</h4>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-outline-success" data-dismiss="modal">Aceptar</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  @endif
-
-  @if(session('Deleted1'))
-    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title text-info" id="exampleModalCenterTitle">
-              <i class="fas fa-info text-info"></i>{{ session('Deleted1') }}
-            </h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <h4 class="h6">Candidato reincorporado con éxito</h4>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-outline-success" data-dismiss="modal">Aceptar</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  @endif
-
   @if(session('Error'))
     <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered" role="document">
@@ -206,13 +112,7 @@
 
   <table style="width:100%;">
     <tr>
-      <td style="width:10%;" align="center">
-        <a href="{{ url('/candidatos/create') }}" role="button" class="btn btn-outline-info btn-sm" style="display: inline; text-align: left;">
-          <i class="fa fa-plus"></i>&nbsp;Agregar
-        </a>
-      </td>
-
-      <td style="width:90%;">
+      <td>
         <div class="input-group md-form form-sm form-1 pl-0">
           <div class="input-group-prepend">
             <span class="input-group-text purple lighten-3" id="basic-text1">
