@@ -9,6 +9,9 @@
   <a class="navbar-brand CP-Menu-titleIcon" href="{{ url('/conversionDosis') }}"><b><i class="fas fa-pills" data-toggle="tooltip" data-placement="top" title="CONVERSIÓN DE DOSIFICACIONES"></i></b>
   </a>
   &nbsp;&nbsp;
+  <a class="navbar-brand CP-Menu-titleIcon" href="{{ url('/ConsultaPrecio') }}"><b><i class="fas fa-barcode" data-toggle="tooltip" data-placement="top" title="CONSULTOR DE PRECIOS"></i></b>
+  </a>
+  &nbsp;&nbsp;
   <a class="navbar-brand" href="/ACI">
     <image src="{{ asset('assets/img/ACI.png') }}" data-toggle="tooltip" data-placement="top" title="ACADEMIA DE CAPACITACION INTEGRAL" width="60px"/>
   </a>
