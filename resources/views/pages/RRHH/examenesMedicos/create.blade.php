@@ -42,7 +42,7 @@
 
   <br/><br/>
 
-  {!! Form::open(['route' => 'examenesm.store', 'method' => 'POST']) !!}
+  {!! Form::open(['route' => 'examenesm.store', 'method' => 'POST', 'class' => 'form-group']) !!}
     <fieldset>
       <table class="table table-borderless table-striped">
         <thead class="thead-dark">

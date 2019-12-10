@@ -39,7 +39,7 @@
 
   <br/><br/>
 
-  {!! Form::model($contactos, ['route' => ['contactos.update', $contactos], 'method' => 'PUT', 'id' => 'crear_contacto']) !!}
+  {!! Form::model($contactos, ['route' => ['contactos.update', $contactos], 'method' => 'PUT', 'id' => 'crear_contacto', 'class' => 'form-group']) !!}
     <fieldset>
       <table class="table table-borderless table-striped">
         <thead class="thead-dark">

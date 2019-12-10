@@ -37,7 +37,7 @@
 
   <br/><br/>
 
- {!! Form::model($laboratorio, ['route' => ['laboratorio.update', $laboratorio], 'method' => 'PUT', 'id' => 'crear_laboratorio']) !!}
+ {!! Form::model($laboratorio, ['route' => ['laboratorio.update', $laboratorio], 'method' => 'PUT', 'id' => 'crear_laboratorio', 'class' => 'form-group']) !!}
     <fieldset>
       <table class="table table-borderless table-striped">
         <thead class="thead-dark">

@@ -77,8 +77,14 @@ class RH_EntrevistaController extends Controller {
             $candidato->save();
 
             //-------------------- FASE ASOCIADA --------------------//
+            
             $fase_asociada = RHI_Candidato_Fase::find($request->input('CandidatoFaseId'));
-            $fase_asociada->rh_fases_id = 3;
+
+            switch($request->input('practica')) {
+                case 'Si': $fase_asociada->rh_fases_id = 3; break;
+                case 'No': $fase_asociada->rh_fases_id = 4; break;
+            }
+            
             $fase_asociada->save();
 
             //-------------------- AUDITORIA --------------------//

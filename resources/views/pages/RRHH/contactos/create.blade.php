@@ -44,7 +44,7 @@
 
   <br/><br/>
 
-  {!! Form::open(['route' => 'contactos.store', 'method' => 'POST', 'id' => 'crear_contacto']) !!}
+  {!! Form::open(['route' => 'contactos.store', 'method' => 'POST', 'id' => 'crear_contacto', 'class' => 'form-group']) !!}
     <fieldset>
       <table class="table table-borderless table-striped">
         <thead class="thead-dark">

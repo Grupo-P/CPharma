@@ -71,7 +71,7 @@
 
   <br/><br/>
 
-  {!! Form::open(['route' => 'convocatoria.store', 'method' => 'POST', 'id' => 'crear_candidato']) !!}
+  {!! Form::open(['route' => 'convocatoria.store', 'method' => 'POST', 'id' => 'crear_candidato', 'class' => 'form-group']) !!}
     <fieldset>
       <table class="table table-borderless table-striped">
         <thead class="thead-dark">

@@ -21,12 +21,14 @@ class CreateRhiExamenesLabTable extends Migration {
             $table->foreign('rh_examenes_id')
             ->references('id')
             ->on('rh_examenes')
-            ->onDelete('cascade');
+            ->onDelete('cascade')
+            ->onUpdate('cascade');
 
             $table->foreign('rh_laboratorio_id')
             ->references('id')
             ->on('rh_laboratorio')
-            ->onDelete('cascade');
+            ->onDelete('cascade')
+            ->onUpdate('cascade');
         });
     }
 

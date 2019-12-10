@@ -4,29 +4,27 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateRhCandidatosExamenesTable extends Migration {
+class CreateRhPracticasTable extends Migration {
     /**
      * Run the migrations.
      *
      * @return void
      */
     public function up() {
-        Schema::create('rhi_candidatos_examenes', function (Blueprint $table) {
+        Schema::create('rh_practicas', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('rh_candidatos_id');
-            $table->unsignedInteger('rh_examenes_id');
+            $table->string('lider');
+            $table->string('lugar');
+            $table->double('duracion', 8, 2);
+            $table->text('observaciones')->nullable();
             $table->string('user');
+            $table->string('estatus');
             $table->timestamps();
 
             $table->foreign('rh_candidatos_id')
             ->references('id')
             ->on('rh_candidatos')
-            ->onDelete('cascade')
-            ->onUpdate('cascade');
-
-            $table->foreign('rh_examenes_id')
-            ->references('id')
-            ->on('rh_examenes')
             ->onDelete('cascade')
             ->onUpdate('cascade');
         });
@@ -38,6 +36,6 @@ class CreateRhCandidatosExamenesTable extends Migration {
      * @return void
      */
     public function down() {
-        Schema::dropIfExists('rhi_candidatos_examenes');
+        Schema::dropIfExists('rh_practicas');
     }
 }

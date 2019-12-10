@@ -39,7 +39,7 @@
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title text-info" id="exampleModalCenterTitle">
-              <i class="fas fa-info text-info"></i>{{ session('Saved') }}
+              <i class="fas fa-info text-info"></i>{{ session('Saved0') }}
             </h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
@@ -62,7 +62,7 @@
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title text-info" id="exampleModalCenterTitle">
-              <i class="fas fa-info text-info"></i>{{ session('Saved') }}
+              <i class="fas fa-info text-info"></i>{{ session('Saved1') }}
             </h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
@@ -85,7 +85,7 @@
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title text-info" id="exampleModalCenterTitle">
-              <i class="fas fa-info text-info"></i>{{ session('Saved') }}
+              <i class="fas fa-info text-info"></i>{{ session('Saved2') }}
             </h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
@@ -233,7 +233,6 @@
         <th scope="col" class="stickyCP">#</th>
         <th scope="col" class="stickyCP">Nombres</th>
         <th scope="col" class="stickyCP">Apellidos</th>
-        <th scope="col" class="stickyCP">Cédula</th>
         <th scope="col" class="stickyCP">Teléfono</th>
         <th scope="col" class="stickyCP">Estatus</th>
         <th scope="col" class="stickyCP">Acciones</th>
@@ -247,7 +246,6 @@
           <th>{{$candidato->id}}</th>
           <td>{{$candidato->nombres}}</td>
           <td>{{$candidato->apellidos}}</td>
-          <td>{{$candidato->cedula}}</td>
             
           <?php if($candidato->telefono_celular == '') { ?>
             <td>{{$candidato->telefono_habitacion}}</td>
@@ -417,6 +415,37 @@
 
               <button type="button" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="bottom" title="Ir a la fase">
                 <i class="fas fa-users-cog"></i>&nbsp;Práctica
+              </button>
+            </form>
+
+            <form action="/entrevistas/create" method="GET" style="display: inline-block;">
+              <input type="hidden" name="CandidatoId" value="{{$candidato->id}}">
+              <input type="hidden" name="CandidatoFaseId" value="{{$candidatos_fases->id}}">
+
+              <button type="submit" role="button" class="btn btn-outline-primary btn-sm" data-toggle="tooltip" data-placement="bottom" title="Ir a la fase">
+                <i class="fas fa-users"></i>&nbsp;Entrevista
+              </button>
+            </form>
+          <?php
+              break;
+
+              case 'Referencias laborales':
+          ?>
+            <form action="#" method="GET" style="display: inline-block;">
+              <input type="hidden" name="CandidatoId" value="{{$candidato->id}}">
+              <input type="hidden" name="CandidatoFaseId" value="{{$candidatos_fases->id}}">
+
+              <button type="button" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="bottom" title="Ir a la fase">
+                <i class="far fa-address-card"></i>&nbsp;Referencias
+              </button>
+            </form>
+
+            <form action="/entrevistas/create" method="GET" style="display: inline-block;">
+              <input type="hidden" name="CandidatoId" value="{{$candidato->id}}">
+              <input type="hidden" name="CandidatoFaseId" value="{{$candidatos_fases->id}}">
+
+              <button type="submit" role="button" class="btn btn-outline-primary btn-sm" data-toggle="tooltip" data-placement="bottom" title="Ir a la fase">
+                <i class="fas fa-users"></i>&nbsp;Entrevista
               </button>
             </form>
           <?php
