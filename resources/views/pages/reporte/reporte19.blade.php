@@ -228,6 +228,36 @@
 
     $sql = R19Q_Lista_Factura($IdArticulo,$FInicial,$FFinal);
     $result = sqlsrv_query($conn,$sql);
+    $resultLV = sqlsrv_query($conn,$sql);
+
+    $Total_Facturas_Articulo_Unico = 0;
+    $Arr_Factura_Detalle = array();
+    $Arr_Apariciones = array();
+
+    while($rowLV = sqlsrv_fetch_array($resultLV, SQLSRV_FETCH_ASSOC)) {
+      $IdVentaLV = $rowLV['IdVenta'];
+
+      $sqlCF = "SELECT * from VenVenta WHERE VenVenta.Id = '$IdVentaLV'";
+      $resultCF = sqlsrv_query($conn,$sqlCF); 
+      $rowCF = sqlsrv_fetch_array($resultCF, SQLSRV_FETCH_ASSOC);
+
+      $sqlDF = "SELECT * FROM VenVentaDetalle WHERE VenVentaDetalle.VenVentaId = '$IdVentaLV'";
+      $resultDF = sqlsrv_query($conn,$sqlDF);
+
+      $sqlCDF = "SELECT COUNT(*) AS Cuenta  FROM VenVentaDetalle WHERE VenVentaDetalle.VenVentaId = '$IdVentaLV'";
+      $resultCDF = sqlsrv_query($conn,$sqlCDF);
+      $rowCDF = sqlsrv_fetch_array($resultCDF, SQLSRV_FETCH_ASSOC);
+
+      if($rowCDF['Cuenta']==1){
+        $Total_Facturas_Articulo_Unico++;
+      }
+
+      while($rowDF = sqlsrv_fetch_array($resultDF, SQLSRV_FETCH_ASSOC)) {
+        array_push($Arr_Factura_Detalle,$rowDF['InvArticuloId']);
+      }
+    }
+
+    $Arr_Apariciones = array_count_values($Arr_Factura_Detalle);
 
     echo '
     <div class="input-group md-form form-sm form-1 pl-0 CP-stickyBar">
@@ -243,7 +273,7 @@
     ';
     echo'<h6 align="center">Periodo desde el '.$FInicialImp.' al '.$FFinalImp.' </h6>';
     echo'
-    <table class="table table-striped table-bordered col-12 sortable" id="myTable">
+    <table class="table table-bordered col-12 sortable" id="myTable">
         <thead class="thead-dark">
           <tr>
             <th scope="col" class="CP-sticky">#</th>
@@ -255,6 +285,7 @@
             <th scope="col" class="CP-sticky">Codido de Barra</th>
             <th scope="col" class="CP-sticky">Descripcion</th>
             <th scope="col" class="CP-sticky">Cantidad</th>
+            <th scope="col" class="CP-sticky">Apariciones</th>
             <th scope="col" class="CP-sticky">Precio (En factura)</br>'.SigVe.'</th>
             <th scope="col" class="CP-sticky">Caja</th>
             <th scope="col" class="CP-sticky">Cliente</th>     
@@ -301,27 +332,52 @@
         if($row2['InvArticuloId']==$IdArticulo){
           $Total_Unidades_Articulo_Evaluado +=  intval($row2['Cantidad']);
         }
-        
-        echo '<tr>';
-        echo '<td align="center"><strong>'.intval($contador).'</strong></td>';
-        echo '<td align="center">'.$row1['FechaDocumentoVenta']->format('d-m-Y').'</td>';
-        echo '<td align="center">'.$row1['FechaDocumentoVenta']->format('h:i:s A').'</td>';
-        echo '<td align="center">'.$row1['ConsecutivoVentaSistema'].'</td>';
-        echo '<td align="center">'.number_format($row1['M_MontoTotalVenta'],2,"," ,"." ).'</td>';
-        echo '<td align="center">'.$CodigoArticulo.'</td>';
-        echo '<td align="center">'.$CodigoBarra.'</td>';
-        echo 
-        '<td align="left" class="CP-barrido">
-        <a href="/reporte2?Id='.$IdArticulo.'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
-          .$Descripcion.
-        '</a>
-        </td>';
-        echo '<td align="center">'.intval($row2['Cantidad']).'</td>';
-        echo '<td align="center">'.number_format($row2['M_PrecioNeto'],2,"," ,"." ).'</td>';
-        echo'</td>';
-        echo '<td align="left">'.$row1['Auditoria_Usuario'].'</td>';
-        echo '<td align="left">'.$NombreCliente.'</td>';
 
+        if(($Total_Factura%2)==0){
+          echo '<tr>';
+          echo '<td align="center"><strong>'.intval($contador).'</strong></td>';
+          echo '<td align="center">'.$row1['FechaDocumentoVenta']->format('d-m-Y').'</td>';
+          echo '<td align="center">'.$row1['FechaDocumentoVenta']->format('h:i:s A').'</td>';
+          echo '<td align="center">'.$row1['ConsecutivoVentaSistema'].'</td>';
+          echo '<td align="center">'.number_format($row1['M_MontoTotalVenta'],2,"," ,"." ).'</td>';
+          echo '<td align="center">'.$CodigoArticulo.'</td>';
+          echo '<td align="center">'.$CodigoBarra.'</td>';
+          echo 
+          '<td align="left" class="CP-barrido">
+          <a href="/reporte2?Id='.$row2['InvArticuloId'].'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
+            .$Descripcion.
+          '</a>
+          </td>';
+          echo '<td align="center">'.intval($row2['Cantidad']).'</td>';
+          echo '<td align="center">'.intval($Arr_Apariciones[$row2['InvArticuloId']]).'</td>';
+          echo '<td align="center">'.number_format($row2['M_PrecioNeto'],2,"," ,"." ).'</td>';
+          echo'</td>';
+          echo '<td align="left">'.$row1['Auditoria_Usuario'].'</td>';
+          echo '<td align="left">'.$NombreCliente.'</td>';
+        }
+        else{
+          echo '<tr>';
+          echo '<td align="center" style="background-color: #989b9e;"><strong>'.intval($contador).'</strong></td>';
+          echo '<td align="center" style="background-color: #989b9e;">'.$row1['FechaDocumentoVenta']->format('d-m-Y').'</td>';
+          echo '<td align="center" style="background-color: #989b9e;">'.$row1['FechaDocumentoVenta']->format('h:i:s A').'</td>';
+          echo '<td align="center" style="background-color: #989b9e;">'.$row1['ConsecutivoVentaSistema'].'</td>';
+          echo '<td align="center" style="background-color: #989b9e;">'.number_format($row1['M_MontoTotalVenta'],2,"," ,"." ).'</td>';
+          echo '<td align="center" style="background-color: #989b9e;">'.$CodigoArticulo.'</td>';
+          echo '<td align="center" style="background-color: #989b9e;">'.$CodigoBarra.'</td>';
+          echo 
+          '<td align="left" class="CP-barrido" style="background-color: #989b9e;">
+          <a href="/reporte2?Id='.$row2['InvArticuloId'].'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
+            .$Descripcion.
+          '</a>
+          </td>';
+          echo '<td align="center" style="background-color: #989b9e;">'.intval($row2['Cantidad']).'</td>';
+          echo '<td align="center" style="background-color: #989b9e;">'.intval($Arr_Apariciones[$row2['InvArticuloId']]).'</td>';
+          echo '<td align="center" style="background-color: #989b9e;">'.number_format($row2['M_PrecioNeto'],2,"," ,"." ).'</td>';
+          echo'</td>';
+          echo '<td align="left" style="background-color: #989b9e;">'.$row1['Auditoria_Usuario'].'</td>';
+          echo '<td align="left" style="background-color: #989b9e;">'.$NombreCliente.'</td>';
+        }
+      
         $contador++;
         $Total_Unidades += $row2['Cantidad'];
       }
@@ -337,8 +393,14 @@
         <thead class="thead-dark">
           <tr>
             <th scope="col" class="CP-sticky">Total de facturas</th>
-            <th scope="col" class="CP-sticky">Total en ventas '.SigVe.'</th>
-            <th scope="col" class="CP-sticky">Total de unidades facturadas</th>
+            <th scope="col" class="CP-sticky">Total de facturas</br>(Solo Con Articulo Evaluado)</th>
+            <th scope="col" class="CP-sticky">Total en ventas<br>'.SigVe.'</th>
+            <th scope="col" class="CP-sticky">Total en ventas<br>Promedio '.SigVe.'</th>
+            <th scope="col" class="CP-sticky">Precio Promedio '.SigVe.'</th>
+            <th scope="col" class="CP-sticky">Total de</br>SKU Articulo</th>
+            <th scope="col" class="CP-sticky">Total de</br>SKU Articulo (Promedio)</th>
+            <th scope="col" class="CP-sticky">Total de unidades</br>facturadas</th>
+            <th scope="col" class="CP-sticky">Total de unidades</br>Promedio</th>
             <th scope="col" class="CP-sticky">Total de unidades</br>(Articulo Evaluado)</th>                  
           </tr>
         </thead>
@@ -346,8 +408,14 @@
     ';
     echo '<tr>';
     echo '<td align="center">'.$Total_Factura.'</td>';
+    echo '<td align="center">'.$Total_Facturas_Articulo_Unico.'</td>';
     echo '<td align="center">'.number_format($Total_Bs_Factura,2,"," ,"." ).'</td>';
+    echo '<td align="center">'.number_format(($Total_Bs_Factura/$Total_Factura),2,"," ,"." ).'</td>';
+    echo '<td align="center">'.number_format(($Total_Bs_Factura/$Total_Unidades),2,"," ,"." ).'</td>';
+    echo '<td align="center">'.COUNT($Arr_Apariciones).'</td>'; 
+    echo '<td align="center">'.number_format(($contador/$Total_Factura),2,"," ,"." ).'</td>'; 
     echo '<td align="center">'.$Total_Unidades.'</td>'; 
+    echo '<td align="center">'.number_format(($Total_Unidades/$Total_Factura),2,"," ,"." ).'</td>'; 
     echo '<td align="center">'.$Total_Unidades_Articulo_Evaluado.'</td>'; 
     echo '</tr>';
     echo '
