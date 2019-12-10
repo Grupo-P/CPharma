@@ -135,7 +135,6 @@
         <th scope="col" class="stickyCP">Apellidos</th>
         <th scope="col" class="stickyCP">Teléfono</th>
         <th scope="col" class="stickyCP">Estatus</th>
-        <th scope="col" class="stickyCP">Acciones</th>
         <th scope="col" class="stickyCP">Próxima Fase</th>
       </tr>
     </thead>
@@ -162,83 +161,6 @@
           ?>
 
           <td>{{$candidato->estatus}}</td>
-
-          <!-- ***************** VALIDACION DE ROLES ***************** -->
-          <td style="width:140px;">
-          <?php
-            if(Auth::user()->role == 'MASTER' || Auth::user()->role == 'DEVELOPER') {
-
-              if($candidato->estatus != 'RECHAZADO') {
-          ?>
-            <a href="/candidatos/{{$candidato->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
-              <i class="far fa-eye"></i>
-            </a>
-
-            <a href="/candidatos/{{$candidato->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
-              <i class="fas fa-edit"></i>
-            </a>
-
-            <form action="/candidatos/{{$candidato->id}}" method="POST" style="display: inline;">
-              @method('DELETE')
-              @csrf
-              <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Desincorporar">
-                <i class="fa fa-reply"></i>
-              </button>
-            </form>
-
-          <?php
-            } else if($candidato->estatus == 'RECHAZADO') {
-          ?>
-            <form action="/candidatos/{{$candidato->id}}" method="POST" style="display: inline;">
-              @method('DELETE')
-              @csrf
-              <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Reincorporar">
-                <i class="fa fa-share"></i>
-              </button>
-            </form>
-          <?php
-            }
-          } 
-          else if(Auth::user()->role == 'ANALISTA') {
-            if($candidato->estatus != 'RECHAZADO') {
-          ?>
-            <a href="/candidatos/{{$candidato->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
-              <i class="far fa-eye"></i>
-            </a>
-
-            <a href="/candidatos/{{$candidato->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
-              <i class="fas fa-edit"></i>
-            </a>
-
-            <form action="/candidatos/{{$candidato->id}}" method="POST" style="display: inline;">
-              @method('DELETE')
-              @csrf
-              <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Desincorporar">
-                <i class="fa fa-reply"></i>
-              </button>
-            </form>
-          <?php
-            } else if($candidato->estatus == 'RECHAZADO') {
-          ?>
-            <form action="/candidatos/{{$candidato->id}}" method="POST" style="display: inline;">
-              @method('DELETE')
-              @csrf
-              <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Reincorporar">
-                <i class="fa fa-share"></i>
-              </button>
-            </form>
-
-          <?php
-            }
-          } else if(Auth::user()->role == 'USUARIO') {
-          ?>
-            <a href="/candidatos/{{$candidato->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
-              <i class="far fa-eye"></i>
-            </a>
-          <?php
-            }
-          ?>
-          </td>
 
           <td>
           <?php 
