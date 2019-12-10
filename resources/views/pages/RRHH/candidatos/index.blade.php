@@ -419,6 +419,37 @@
                 <i class="fas fa-users-cog"></i>&nbsp;Práctica
               </button>
             </form>
+
+            <form action="/entrevistas/create" method="GET" style="display: inline-block;">
+              <input type="hidden" name="CandidatoId" value="{{$candidato->id}}">
+              <input type="hidden" name="CandidatoFaseId" value="{{$candidatos_fases->id}}">
+
+              <button type="submit" role="button" class="btn btn-outline-primary btn-sm" data-toggle="tooltip" data-placement="bottom" title="Ir a la fase">
+                <i class="fas fa-users"></i>&nbsp;Entrevista
+              </button>
+            </form>
+          <?php
+              break;
+
+              case 'Referencias laborales':
+          ?>
+            <form action="#" method="GET" style="display: inline-block;">
+              <input type="hidden" name="CandidatoId" value="{{$candidato->id}}">
+              <input type="hidden" name="CandidatoFaseId" value="{{$candidatos_fases->id}}">
+
+              <button type="button" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="bottom" title="Ir a la fase">
+                <i class="far fa-address-card"></i>&nbsp;Referencias
+              </button>
+            </form>
+
+            <form action="/entrevistas/create" method="GET" style="display: inline-block;">
+              <input type="hidden" name="CandidatoId" value="{{$candidato->id}}">
+              <input type="hidden" name="CandidatoFaseId" value="{{$candidatos_fases->id}}">
+
+              <button type="submit" role="button" class="btn btn-outline-primary btn-sm" data-toggle="tooltip" data-placement="bottom" title="Ir a la fase">
+                <i class="fas fa-users"></i>&nbsp;Entrevista
+              </button>
+            </form>
           <?php
             }//switch
           }//else
