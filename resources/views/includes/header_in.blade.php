@@ -779,7 +779,7 @@
    <!--  {{ url('/testS') }} -->
     <div class="dropdown-menu">
       <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="{{ url('/reporte19') }}">     
+        <a class="nav-link CP-Links-Menu" href="{{ url('/reporte20') }}">     
           <span data-feather="home"></span>
           <i class="fa fa-box"></i>
           Test Sergio<span class="sr-only">(current)</span>
