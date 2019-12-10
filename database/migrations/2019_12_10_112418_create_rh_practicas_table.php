@@ -14,12 +14,12 @@ class CreateRhPracticasTable extends Migration {
         Schema::create('rh_practicas', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('rh_candidatos_id');
-            $table->string('lider')->nullable();
-            $table->string('lugar')->nullable();
-            $table->double('duracion', 8, 2)->nullable();
+            $table->string('lider');
+            $table->string('lugar');
+            $table->double('duracion', 8, 2);
             $table->text('observaciones')->nullable();
-            $table->string('user')->nullable();
-            $table->string('estatus')->nullable();
+            $table->string('user');
+            $table->string('estatus');
             $table->timestamps();
 
             $table->foreign('rh_candidatos_id')
