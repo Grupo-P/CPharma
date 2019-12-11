@@ -28,6 +28,9 @@
     $contactos = DB::table('rh_contactos_empresas')->count();
     $convocatoria = DB::table('rh_convocatoria')->count();
     $fases = DB::table('rh_fases')->count();
+    $procesos_candidato = DB::table('rh_candidatos')
+    	->where('estatus', '<>', 'RECHAZADO')
+    	->count();
 
   /*TASA DOLAR VENTA*/
     $Tasa = DB::table('tasa_ventas')->where('moneda', 'Dolar')->value('tasa');
@@ -845,6 +848,29 @@
 	</div>
 	<!-- Modal RRHH -->
 	<!-- Dashboard RRHH-->
+	<div class="card-deck">
+    <div class="card border-dark mb-3" style="width: 14rem;">
+      <div class="card-body text-left bg-dark">
+        <h2 class="card-title">
+          <span class="card-text text-white">
+            <i class="fas fa-user-md"></i>
+            <?php
+            echo ''.$procesos_candidato;
+          ?>            
+          </span>
+        </h2>
+        <p class="card-text text-white">
+        <?php 
+          echo 'Examenes médicos registrados';
+        ?>
+        </p>
+      </div>
+      <div class="card-footer bg-transparent border-dark text-right">
+        <a href="/examenesm" class="btn btn-outline-dark btn-sm">Visualizar</a>
+      </div>    
+    </div>
+  </div>
+
 	<div class="card-deck">
     <div class="card border-danger mb-3" style="width: 14rem;">      
       <div class="card-body text-left bg-danger">
