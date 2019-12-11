@@ -54,7 +54,8 @@ class RH_GestorFaseController extends Controller {
             $Auditoria->user = auth()->user()->name;
             $Auditoria->save();
 
-            return redirect('procesos_candidatos')
+            return redirect()
+            ->action('RH_CandidatoController@procesos')
             ->with('Saved0', ' Informacion');
                 
         }
