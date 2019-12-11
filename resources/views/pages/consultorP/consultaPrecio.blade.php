@@ -21,9 +21,13 @@
     }
     input[type=text] {
     	text-align: center;
-    	font-size: 2em;
+    	font-size: 1.8em;
       background-color: #fff;
       width: 100%;
+      height: 76px;
+    }
+    input[type=text]:focus {
+		 	outline: 0;
     }
     .autocomplete-items {
       position: absolute;
@@ -45,13 +49,17 @@
       background-color: #e9e9e9; 
     }
     .autocomplete-active {
-      background-color: DodgerBlue !important; 
+      background-color: #17a2b8 !important; 
       color: #ffffff; 
     }
-	.center th {
-    vertical-align: middle;
-    text-align: center;
-  }
+		.center th {
+	    vertical-align: middle;
+	    text-align: center;
+	  }
+	  .aum-icon {
+    	text-align: center;
+    	font-size: 1.8em;
+    }
 </style>
 
 @section('content')
@@ -75,7 +83,7 @@
       //$CodJson = FG_Armar_Json($sql1,'FTN');
 
 			echo'
-		  <table class="table table-bordered col-12 sortable">
+		  <table class="table table-borderless col-12">
 				<thead class="center">
 					<tr>
 						<th scope="col" colspan="3">
@@ -84,12 +92,12 @@
 					</tr>
 				</thead>
 				<tbody>
-					<tr>
-						<td align="center"><h1><i class="fas fa-pills"</i></h1></td>
-						<td align="center">
-							<input id="myInputCB" type="text" name="CodBar" placeholder="Haga scan del codigo de barra" onkeyup="conteoCB()">
+					<tr class="bg-white" style="border: 4px solid #17a2b8;">
+						<td align="center" class="text-info"><h1><i class="fas fa-barcode aum-icon"</i></h1></td>
+						<td align="center" style="border: 4px solid #17a2b8;">
+							<input id="myInputCB" type="text" name="CodBar" placeholder="Haga scan del codigo de barra">
 						</td>
-						<td align="center"><h1><i class="fas fa-pills"</i></h1></td>
+						<td align="center" class="text-info"><h1><i class="fas fa-search aum-icon"</i></h1></td>
 					</tr>
 				</tbody>
 			</table>
@@ -148,4 +156,15 @@
     	<!-- Barra de consulta -->
 		</td>
  	*/
+ 
+
+ /*
+ <tr class="bg-info">
+						<td align="center" class="text-white bg-info" style="border-radius: 25px 0px 0px 25px;"><h1><i class="fas fa-barcode aum-icon"</i></h1></td>
+						<td align="center" class="bg-white">
+							<input id="myInputCB" type="text" name="CodBar" placeholder="Haga scan del codigo de barra">
+						</td>
+						<td align="center" class="text-white bg-info" style="border-radius: 0px 25px 25px 0px;"><h1><i class="fas fa-search aum-icon"</i></h1></td>
+					</tr>
+  */
 ?>
