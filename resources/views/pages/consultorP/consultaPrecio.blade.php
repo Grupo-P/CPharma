@@ -74,7 +74,8 @@
 	  include(app_path().'\functions\querys_mysql.php');
 	  include(app_path().'\functions\querys_sqlserver.php');
 
-    $SedeConnection = FG_Mi_Ubicacion();
+    $SedeConnection = 'FTN';//FG_Mi_Ubicacion();
+    $RutaUrl = FG_Mi_Ubicacion();
 
 	  $CodJson = '';
 
@@ -117,7 +118,7 @@
             <b><p id="PDescripScan"></p></b>
           </td>
           <td align="center" class="text-black">
-            <b><p id="PPrecioScan"></b>
+            <b><p id="PPrecioScan"></p></b>
           </td>
         </tr>
       </tbody>
@@ -160,13 +161,13 @@
 
 @section('scriptsPie')
   <script type="text/javascript">
-    const SedeConnectionJs = '<?php echo $SedeConnection;?>'
+    const SedeConnectionJs = '<?php echo $RutaUrl;?>'
   </script>
 
   <script>
-    function dominio(SedeConnection){
+    function dominio(SedeConnectionJs){
       var dominio = '';
-      switch(SedeConnection) {
+      switch(SedeConnectionJs) {
         case 'FTN':
           dominio = 'http://cpharmaftn.com/';
           return dominio;
@@ -184,6 +185,27 @@
           return dominio;
         break;
       }
+    }
+    function formateoPrecio(cantidad, decimales) {
+      //Transformamos el numero en string
+      cantidad += ''; 
+      //Eliminar cualquier caracter diferente a (.) o numeros
+      cantidad = parseFloat(cantidad.replace(/[^0-9\.]/g, '')); 
+      //Validar los decimales
+      decimales = decimales || 0; 
+      //Si el numero es cero o texto alphanumerico retornamos cero
+      if(isNaN(cantidad) || cantidad === 0)  {
+          return parseFloat(0).toFixed(decimales);
+      }
+      //Si el valor es mayor o menor que cero formateamos a moneda
+      cantidad = '' + cantidad.toFixed(decimales);
+      var cantidad_parts = cantidad.split('.'),
+      regexp = /(\d+)(\d{3})/;
+      while(regexp.test(cantidad_parts[0])) {
+          cantidad_parts[0] = cantidad_parts[0].replace(regexp, '$1' + '.' + '$2');
+      }
+      //Retornamos el valor formateado
+      return cantidad_parts.join(',');
     }
   </script>
 
@@ -213,7 +235,7 @@
           type: "POST",
           success: function(data) {
             /*$('#PPrecioScan').html('BsS. '+data);*/
-            var precio = new Intl.NumberFormat("de-DE").format(data);
+            var precio = formateoPrecio(data,2);
             $('#PPrecioScan').html('BsS. '+precio);
           }
          });

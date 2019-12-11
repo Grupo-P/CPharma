@@ -1922,7 +1922,7 @@
     DESAROLLADO POR: SERGIO COVA
   */
   function FG_Precio_Consultor($IdArticulo) {
-  	$SedeConnection = FG_Mi_Ubicacion();
+  	$SedeConnection = 'FTN';//FG_Mi_Ubicacion();
   	$conn = FG_Conectar_Smartpharma($SedeConnection);
 
   	$sql = SQG_Lite_Detalle_Articulo($IdArticulo);
