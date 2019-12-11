@@ -298,6 +298,14 @@
     </button>
     <div class="dropdown-menu">
       <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="/procesos_candidatos">
+          <span data-feather="home"></span>
+          <i class="fas fa-cogs"></i>
+          Fases y procesos<span class="sr-only">(current)</span>
+        </a>
+      </li>
+
+      <li class="nav-item">
         <a class="nav-link CP-Links-Menu" href="/vacantes">
           <span data-feather="home"></span>
           <i class="fas fa-user-plus"></i>
