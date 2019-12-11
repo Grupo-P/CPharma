@@ -137,8 +137,7 @@
         </tr>
       </tbody>
     </table>
-  
-    </br>
+
     <table class="table table-borderless table-striped col-12" id="tablaSugerido">
       <thead class="center">
         <th class="bg-secondary text-white border border-white" colspan="3"><h5>Articulos sugeridos</h5></th>
@@ -158,11 +157,6 @@
           <td align="center" class="text-black"><b>7591062900894</b></td>
           <td align="center" class="text-black"><b>OFAFLAN SUSP GTA 15 MG/ML X 30 ML</b></td>
           <td align="center" class="text-black"><b>BsS. 709,74</b></td>
-        </tr>
-        <tr>
-          <td align="center" class="text-black"><b>7730698007243</b></td>
-          <td align="center" class="text-black"><b>ABRETIA CAP 60MG X 14</b></td>
-          <td align="center" class="text-black"><b>BsS. 163.140,14</b></td>
         </tr>
         <tr>
           <td align="center" class="text-black"><b>7730698007243</b></td>
@@ -271,7 +265,7 @@
           $('#PCodBarrScan').html(ArrJsCB[indiceCodBarScan]);
           $('#PDescripScan').html(ArrJs[indiceScanDesc]); 
           $('#inputCodBar').val(''); 
-          setTimeout(limpiarPantalla,7000);
+          setTimeout(limpiarPantalla,15000);
         }
         else {
           $('#tablaSugerido').hide();
