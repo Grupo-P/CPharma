@@ -1,7 +1,7 @@
 @extends('layouts.modelUser')
 
 @section('title')
-  Dosificaciones
+  Consulta de precio
 @endsection
 
 <style>
@@ -21,10 +21,10 @@
     }
     input[type=text] {
     	text-align: center;
-    	font-size: 1.8em;
+    	font-size: 1.6em;
       background-color: #fff;
       width: 100%;
-      height: 76px;
+      height: 50px;
     }
     input[type=text]:focus {
 		 	outline: 0;
@@ -56,9 +56,13 @@
 	    vertical-align: middle;
 	    text-align: center;
 	  }
-	  .aum-icon {
+	  .aum-icon-lup {
     	text-align: center;
-    	font-size: 1.8em;
+    	font-size: 1em;
+    }
+    .aum-icon-cod {
+      text-align: center;
+      font-size: 1.2em;
     }
 </style>
 
@@ -70,9 +74,12 @@
 	  include(app_path().'\functions\querys_mysql.php');
 	  include(app_path().'\functions\querys_sqlserver.php');
 
+    $URL = app_path().'\functions\functionConsultaPrecio.php';
+
 	  $CodJson = '';
-		//$sql1 = RCPQ_Lista_Articulos_CodBarra();
-    //$CodJson = FG_Armar_Json($sql1,'FTN');
+
+		$sql1 = RCPQ_Lista_Articulos_CodBarra();
+    $CodJson = FG_Armar_Json($sql1,'FTN');
 
 			echo'
 		  <table class="table table-borderless col-12">
@@ -85,37 +92,117 @@
 				</thead>
 				<tbody>
 					<tr class="bg-white" style="border: 4px solid #17a2b8;">
-						<td align="center" class="text-info"><h1><i class="fas fa-barcode aum-icon"</i></h1></td>
+						<td align="center" class="text-info"><h1><i class="fas fa-barcode aum-icon-cod"</i></h1></td>
 						<td align="center" style="border: 4px solid #17a2b8;">
 							<input id="inputCodBar" type="text" name="CodBar" autofocus="autofocus">
 						</td>
-						<td align="center" class="text-info"><h1><i class="fas fa-search aum-icon"</i></h1></td>
-					</tr>
-					<tr>
-						<td>
-							<p id="PCodBarr"></p>
-						</td>
+						<td align="center" class="text-info"><h1><i class="fas fa-search aum-icon-lup"</i></h1></td>
 					</tr>
 				</tbody>
 			</table>
 		';
 	?>
+    <table class="table table-borderless col-12">
+      <thead class="center">
+        <th class="bg-info text-white border border-white"><h5>Código de barra</h5></th>
+        <th class="bg-info text-white border border-white"><h5>Descripción</h5></th>
+        <th class="bg-info text-white border border-white"><h5>Precio   BsS</h5></th>
+      </thead>
+      <tbody>
+        <tr>
+          <td align="center" class="text-black">
+            <b><p id="PCodBarrScan"></p></b>
+          </td>
+          <td align="center" class="text-black">
+            <b><p id="PDescripScan"></p></b>
+          </td>
+          <td align="center" class="text-black">
+            <b>BsS. 70.601,85</b>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  
+    </br>
+    <table class="table table-borderless table-striped col-12">
+      <thead class="center">
+        <th class="bg-secondary text-white border border-white" colspan="3"><h5>Articulos sugeridos</h5></th>
+      </thead>
+      <thead class="center">
+        <th class="bg-secondary text-white border border-white"><h5>Código de barra</h5></th>
+        <th class="bg-secondary text-white border border-white"><h5>Descripción</h5></th>
+        <th class="bg-secondary text-white border border-white"><h5>Precio  BsS</h5></th>
+      </thead>
+      <tbody>
+        <tr>
+          <td align="center" class="text-black"><b>7591585111050</b></td>
+          <td align="center" class="text-black"><b>CARIBAN COMPR 10MG X 30</b></td>
+          <td align="center" class="text-black"><b>BsS. 70.601,85</b></td>
+        </tr>
+        <tr>
+          <td align="center" class="text-black"><b>7591062900894</b></td>
+          <td align="center" class="text-black"><b>OFAFLAN SUSP GTA 15 MG/ML X 30 ML</b></td>
+          <td align="center" class="text-black"><b>BsS. 709,74</b></td>
+        </tr>
+        <tr>
+          <td align="center" class="text-black"><b>7730698007243</b></td>
+          <td align="center" class="text-black"><b>ABRETIA CAP 60MG X 14</b></td>
+          <td align="center" class="text-black"><b>BsS. 163.140,14</b></td>
+        </tr>
+        <tr>
+          <td align="center" class="text-black"><b>7730698007243</b></td>
+          <td align="center" class="text-black"><b>ABRETIA CAP 60MG X 14</b></td>
+          <td align="center" class="text-black"><b>BsS. 163.140,14</b></td>
+        </tr>
+      </tbody>
+    </table>
 @endsection
 
 @section('scriptsPie')
-
 	<script>
+    const URL =  'http://localhost/CPharma/app/functions/functionConsultaPrecio.php';
+
 		$('#inputCodBar').attr("placeholder", "Haga scan del codigo de barra");
 		$('#inputCodBar').attr("onblur", "this.placeholder = 'Haga scan del codigo de barra'");
 		$('#inputCodBar').attr("onfocus", "this.placeholder = ''");
-	</script>
 
+		$('#inputCodBar').keyup(function(e){
+	    if(e.keyCode == 13) {
+        var CodBarrScan = $('#inputCodBar').val();
+       
+        var indiceCodBarScan = ArrJsCB.indexOf(CodBarrScan);
+        var indiceDescScan = indiceCodBarScan+1;
+        var indiceIdScan = indiceCodBarScan+2;
+
+        var parametro = {
+          "IdArticulo":ArrJsCB[indiceIdScan]
+        };
+
+        $.ajax({
+          data: parametro,
+          url: URL,
+          type: "POST",
+          success: function(data) {
+            console.log(data);
+          }
+         });
+      
+        $('#PCodBarrScan').html(ArrJsCB[indiceCodBarScan]);
+        $('#PDescripScan').html(ArrJsCB[indiceDescScan]);
+        $('#inputCodBar').val(''); 
+
+        console.log('CodigoBarra: '+ArrJsCB[indiceCodBarScan]);
+        console.log('Descripcion: '+ArrJsCB[indiceDescScan]);
+        console.log('Id: '+ArrJsCB[indiceIdScan]);
+      }   
+    });
+	</script>
+     
   <?php
     if($CodJson!=""){
   ?>
     <script type="text/javascript">
-      ArrJsCB = eval(<?php echo $CodJson ?>);
-      autocompletadoCB(document.getElementById("myInputCB"),document.getElementById("myIdCB"), ArrJsCB);
+      const ArrJsCB = eval(<?php echo $CodJson ?>);
     </script> 
   <?php
     }
@@ -132,14 +219,11 @@
   */
   function RCPQ_Lista_Articulos_CodBarra() {
     $sql = "
-      SELECT
-      (SELECT CodigoBarra
-      FROM InvCodigoBarra 
-      WHERE InvCodigoBarra.InvArticuloId = InvArticulo.Id
-      AND InvCodigoBarra.EsPrincipal = 1) AS CodigoBarra,
+      SELECT CodigoBarra,
+      InvArticulo.Descripcion,
       InvArticulo.Id
-      FROM InvArticulo
-      ORDER BY CodigoBarra ASC
+      FROM InvCodigoBarra
+      INNER JOIN InvArticulo ON InvArticulo.Id = InvCodigoBarra.InvArticuloId
     ";
     return $sql;
   }
