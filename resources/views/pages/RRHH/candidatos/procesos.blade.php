@@ -133,8 +133,9 @@
         <th scope="col" class="stickyCP">#</th>
         <th scope="col" class="stickyCP">Nombres</th>
         <th scope="col" class="stickyCP">Apellidos</th>
+        <th scope="col" class="stickyCP">Cédula</th>
         <th scope="col" class="stickyCP">Teléfono</th>
-        <th scope="col" class="stickyCP">Estatus</th>
+        <th scope="col" class="stickyCP">Fase actual</th>
         <th scope="col" class="stickyCP">Próxima Fase</th>
       </tr>
     </thead>
@@ -145,6 +146,7 @@
           <th>{{$candidato->id}}</th>
           <td>{{$candidato->nombres}}</td>
           <td>{{$candidato->apellidos}}</td>
+          <td>{{$candidato->cedula}}</td>
             
           <?php if($candidato->telefono_celular == '') { ?>
             <td>{{$candidato->telefono_habitacion}}</td>
@@ -158,9 +160,17 @@
             <td>{{$candidato->telefono_celular}}</td>
           <?php
             }
+
+            $candidatos_fases = DB::table('rhi_candidatos_fases')
+            ->where('rh_candidatos_id', $candidato->id)
+            ->orderBy('id', 'desc')
+            ->first();
+
+            $nombre_fase = compras\RH_Fase::find($candidatos_fases->rh_fases_id)
+            ->nombre_fase;
           ?>
 
-          <td>{{$candidato->estatus}}</td>
+          <td>{{$nombre_fase}}</td>
 
           <td>
           <?php 
@@ -184,14 +194,6 @@
             echo '-';
           }
           else if($candidato->estatus == 'EN_PROCESO') {
-
-            $candidatos_fases = DB::table('rhi_candidatos_fases')
-            ->where('rh_candidatos_id', $candidato->id)
-            ->orderBy('id', 'desc')
-            ->first();
-
-            $nombre_fase = compras\RH_Fase::find($candidatos_fases->rh_fases_id)
-            ->nombre_fase;
 
             switch($nombre_fase) {
               case 'Pruebas Psicológicas':
