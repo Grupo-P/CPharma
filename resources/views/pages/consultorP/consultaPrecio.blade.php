@@ -130,6 +130,11 @@
             <b><p id="PPrecioScan"></p></b>
           </td>
         </tr>
+        <tr>
+          <td align="center" class="text-info" colspan="3">
+            <b><p>* Los precios aqui expresados contienen IVA (En caso de que aplique)</p></b>
+          </td>
+        </tr>
       </tbody>
     </table>
   
@@ -216,6 +221,11 @@
       //Retornamos el valor formateado
       return cantidad_parts.join(',');
     }
+    function limpiarPantalla(){
+      $('#tablaError').hide();
+      $('#tablaResuldado').hide();
+      $('#tablaSugerido').hide();
+    }
   </script>
 
 	<script>
@@ -226,10 +236,7 @@
 		$('#inputCodBar').attr("onblur", "this.placeholder = 'Haga scan del codigo de barra'");
 		$('#inputCodBar').attr("onfocus", "this.placeholder = ''");
 
-    //Ocultar Tablas
-    $('#tablaError').hide();
-    $('#tablaResuldado').hide();
-    $('#tablaSugerido').hide();
+    limpiarPantalla();
 
 		$('#inputCodBar').keyup(function(e){
 	    if(e.keyCode == 13) {
@@ -264,6 +271,7 @@
           $('#PCodBarrScan').html(ArrJsCB[indiceCodBarScan]);
           $('#PDescripScan').html(ArrJs[indiceScanDesc]); 
           $('#inputCodBar').val(''); 
+          setTimeout(limpiarPantalla,7000);
         }
         else {
           $('#tablaSugerido').hide();
@@ -273,6 +281,7 @@
           $('#PDescripScan').html('');
           $('#PPrecioScan').html(''); 
           $('#inputCodBar').val('');
+          setTimeout(limpiarPantalla,5000);
         }
       }   
     });
