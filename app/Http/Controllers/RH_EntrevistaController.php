@@ -96,8 +96,8 @@ class RH_EntrevistaController extends Controller {
             $Auditoria->save();
 
             return redirect()
-                ->route('candidatos.index')
-                ->with('Saved2', ' Informacion');
+            ->action('RH_CandidatoController@procesos')
+            ->with('Saved2', ' Informacion');
         }
         catch(\Illuminate\Database\QueryException $e) {
             return back()->with('Error', ' Error');
@@ -158,10 +158,27 @@ class RH_EntrevistaController extends Controller {
             $entrevistas->user = auth()->user()->name;
             $entrevistas->save();
 
+            //-------------------- CANDIDATO --------------------//
             $candidato = RH_Candidato::find($request->input('CandidatoId'));
             $candidato->estatus = 'EN_PROCESO';
             $candidato->save();
 
+            //-------------------- FASE ASOCIADA --------------------//
+            $candidatos_fases = DB::table('rhi_candidatos_fases')
+            ->where('rh_candidatos_id', $candidato->id)
+            ->orderBy('id', 'desc')
+            ->first();
+
+            $fase_asociada = RHI_Candidato_Fase::find($candidatos_fases->id);
+
+            switch($request->input('practica')) {
+                case 'Si': $fase_asociada->rh_fases_id = 3; break;
+                case 'No': $fase_asociada->rh_fases_id = 4; break;
+            }
+            
+            $fase_asociada->save();
+
+            //-------------------- AUDITORIA --------------------//
             $Auditoria = new Auditoria();
             $Auditoria->accion = 'EDITAR';
             $Auditoria->tabla = 'RH_ENTREVISTAS';

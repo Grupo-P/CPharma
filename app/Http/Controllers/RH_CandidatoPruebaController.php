@@ -75,8 +75,8 @@ class RH_CandidatoPruebaController extends Controller {
             $Auditoria->save();
 
             return redirect()
-                ->route('candidatos.index')
-                ->with('Saved1', ' Informacion');
+            ->action('RH_CandidatoController@procesos')
+            ->with('Saved1', ' Informacion');
         }
         catch(\Illuminate\Database\QueryException $e) {
             return back()->with('Error', ' Error');

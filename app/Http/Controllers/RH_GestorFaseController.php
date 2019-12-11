@@ -55,8 +55,9 @@ class RH_GestorFaseController extends Controller {
             $Auditoria->save();
 
             return redirect()
-                ->route('candidatos.index')
-                ->with('Saved0', ' Informacion');
+            ->action('RH_CandidatoController@procesos')
+            ->with('Saved0', ' Informacion');
+                
         }
         catch(\Illuminate\Database\QueryException $e) {
             return back()->with('Error', ' Error');
