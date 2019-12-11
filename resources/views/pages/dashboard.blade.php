@@ -28,7 +28,7 @@
     $contactos = DB::table('rh_contactos_empresas')->count();
     $convocatoria = DB::table('rh_convocatoria')->count();
     $fases = DB::table('rh_fases')->count();
-    $procesos_candidato = DB::table('rh_candidatos')
+    $procesos_candidatos = DB::table('rh_candidatos')
     	->where('estatus', '<>', 'RECHAZADO')
     	->count();
 
@@ -853,20 +853,20 @@
       <div class="card-body text-left bg-dark">
         <h2 class="card-title">
           <span class="card-text text-white">
-            <i class="fas fa-user-md"></i>
+            <i class="fas fa-cogs"></i>
             <?php
-            echo ''.$procesos_candidato;
+            echo ''.$procesos_candidatos;
           ?>            
           </span>
         </h2>
         <p class="card-text text-white">
         <?php 
-          echo 'Examenes médicos registrados';
+          echo 'Fases y procesos en tránsito';
         ?>
         </p>
       </div>
       <div class="card-footer bg-transparent border-dark text-right">
-        <a href="/examenesm" class="btn btn-outline-dark btn-sm">Visualizar</a>
+        <a href="/procesos_candidatos" class="btn btn-outline-dark btn-sm">Visualizar</a>
       </div>    
     </div>
   </div>
