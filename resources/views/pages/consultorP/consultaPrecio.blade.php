@@ -71,16 +71,8 @@
 	  include(app_path().'\functions\querys_sqlserver.php');
 
 	  $CodJson = '';
-
-  	if (isset($_GET['Id'])) {
-      echo'</br>El codigo de barra es: '.$_GET['CodBar'];
-     	echo'</br>El id del articulo es: '.$_GET['Id'];
-      //R2_Historico_Producto($_GET['SEDE'],$_GET['Id']);
-      //FG_Guardar_Auditoria('CONSULTAR','REPORTE','Historico de productos');
-  	} 
-  	else {
-  		//$sql1 = RCPQ_Lista_Articulos_CodBarra();
-      //$CodJson = FG_Armar_Json($sql1,'FTN');
+		//$sql1 = RCPQ_Lista_Articulos_CodBarra();
+    //$CodJson = FG_Armar_Json($sql1,'FTN');
 
 			echo'
 		  <table class="table table-borderless col-12">
@@ -95,18 +87,29 @@
 					<tr class="bg-white" style="border: 4px solid #17a2b8;">
 						<td align="center" class="text-info"><h1><i class="fas fa-barcode aum-icon"</i></h1></td>
 						<td align="center" style="border: 4px solid #17a2b8;">
-							<input id="myInputCB" type="text" name="CodBar" placeholder="Haga scan del codigo de barra">
+							<input id="inputCodBar" type="text" name="CodBar" autofocus="autofocus">
 						</td>
 						<td align="center" class="text-info"><h1><i class="fas fa-search aum-icon"</i></h1></td>
 					</tr>
+					<tr>
+						<td>
+							<p id="PCodBarr"></p>
+						</td>
+					</tr>
 				</tbody>
 			</table>
-			';
-  	}
+		';
 	?>
 @endsection
 
 @section('scriptsPie')
+
+	<script>
+		$('#inputCodBar').attr("placeholder", "Haga scan del codigo de barra");
+		$('#inputCodBar').attr("onblur", "this.placeholder = 'Haga scan del codigo de barra'");
+		$('#inputCodBar').attr("onfocus", "this.placeholder = ''");
+	</script>
+
   <?php
     if($CodJson!=""){
   ?>
@@ -140,31 +143,4 @@
     ";
     return $sql;
   }
-  /*
-  	<td>
-			<!-- Barra de consulta -->
-      <form autocomplete="off" action="">
-        <div class="autocomplete" style="width:90%;">
-          <input id="myInputCB" type="text" name="CodBar" placeholder="Haga scan del codigo de barra" onkeyup="conteoCB()">
-          <input id="myIdCB" name="Id" type="hidden">
-        </div>
-        <input id="SEDE" name="SEDE" type="hidden" value="';
-          print_r(FG_Mi_Ubicacion());
-        echo'">
-        <input type="submit" value="Buscar" class="btn btn-outline-info">
-    	</form>
-    	<!-- Barra de consulta -->
-		</td>
- 	*/
- 
-
- /*
- <tr class="bg-info">
-						<td align="center" class="text-white bg-info" style="border-radius: 25px 0px 0px 25px;"><h1><i class="fas fa-barcode aum-icon"</i></h1></td>
-						<td align="center" class="bg-white">
-							<input id="myInputCB" type="text" name="CodBar" placeholder="Haga scan del codigo de barra">
-						</td>
-						<td align="center" class="text-white bg-info" style="border-radius: 0px 25px 25px 0px;"><h1><i class="fas fa-search aum-icon"</i></h1></td>
-					</tr>
-  */
 ?>
