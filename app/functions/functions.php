@@ -1922,7 +1922,7 @@
     DESAROLLADO POR: SERGIO COVA
   */
   function FG_Precio_Consultor($IdArticulo) {
-  	$SedeConnection = 'FTN';//FG_Mi_Ubicacion();
+  	$SedeConnection = FG_Mi_Ubicacion();
   	$conn = FG_Conectar_Smartpharma($SedeConnection);
 
   	$sql = SQG_Lite_Detalle_Articulo($IdArticulo);
@@ -1948,4 +1948,32 @@
 
     return $Precio;
   }
+  /**********************************************************************************/
+	/*
+		TITULO: FG_Dominio_Sede
+		FUNCION: Retornar el nombre de la sede con la que se esta conectando
+		RETORNO: Nombre de la sede conectada
+		DESAROLLADO POR: SERGIO COVA
+	 */
+	function FG_Dominio_Sede($SedeConnection) {
+		switch($SedeConnection) {
+			case 'FTN':
+				$dominio = 'http://cpharmaftn.com/';
+				return $dominio;
+			break;
+			case 'FLL':
+				$dominio = 'http://cpharmafll.com/';
+				return $dominio;
+			break;
+			case 'FAU':
+				$dominio = 'http://cpharmafau.com/';
+				return $dominio;
+			break;
+			case 'GP':
+				$dominio = 'http://cpharmade.com/';
+				return $dominio;
+			break;
+		}
+		return $dominio;
+	}
 ?>

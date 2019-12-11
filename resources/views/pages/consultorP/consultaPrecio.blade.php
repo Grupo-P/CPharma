@@ -74,12 +74,12 @@
 	  include(app_path().'\functions\querys_mysql.php');
 	  include(app_path().'\functions\querys_sqlserver.php');
 
-    $URL = app_path().'\functions\functionConsultaPrecio.php';
+    $SedeConnection = FG_Mi_Ubicacion();
 
 	  $CodJson = '';
 
 		$sql1 = RCPQ_Lista_Articulos_CodBarra();
-    $CodJson = FG_Armar_Json($sql1,'FTN');
+    $CodJson = FG_Armar_Json($sql1,$SedeConnection);
 
 			echo'
 		  <table class="table table-borderless col-12">
@@ -159,8 +159,37 @@
 @endsection
 
 @section('scriptsPie')
+  <script type="text/javascript">
+    const SedeConnectionJs = '<?php echo $SedeConnection;?>'
+  </script>
+
+  <script>
+    function dominio(SedeConnection){
+      var dominio = '';
+      switch(SedeConnection) {
+        case 'FTN':
+          dominio = 'http://cpharmaftn.com/';
+          return dominio;
+        break;
+        case 'FLL':
+          dominio = 'http://cpharmafll.com/';
+          return dominio;
+        break;
+        case 'FAU':
+          dominio = 'http://cpharmafau.com/';
+          return dominio;
+        break;
+        case 'GP':
+          dominio = 'http://cpharmade.com/';
+          return dominio;
+        break;
+      }
+    }
+  </script>
+
 	<script>
-    const URL =  'http://localhost/CPharma/app/functions/functionConsultaPrecio.php';
+    var dominio = dominio(SedeConnectionJs);
+    const URL = ''+dominio+'assets/functions/functionConsultaPrecio.php';
 
 		$('#inputCodBar').attr("placeholder", "Haga scan del codigo de barra");
 		$('#inputCodBar').attr("onblur", "this.placeholder = 'Haga scan del codigo de barra'");
