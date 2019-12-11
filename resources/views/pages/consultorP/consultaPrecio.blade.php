@@ -78,9 +78,13 @@
     $RutaUrl = FG_Mi_Ubicacion();
 
 	  $CodJson = '';
+    $ArtJson = '';
 
 		$sql1 = RCPQ_Lista_Articulos_CodBarra();
     $CodJson = FG_Armar_Json($sql1,$SedeConnection);
+
+    $sql1 = RCPQ_Lista_Articulos_Descripcion();
+    $ArtJson = FG_Armar_Json($sql1,$SedeConnection);
 
 			echo'
 		  <table class="table table-borderless col-12">
@@ -219,34 +223,39 @@
 
 		$('#inputCodBar').keyup(function(e){
 	    if(e.keyCode == 13) {
+
         var CodBarrScan = $('#inputCodBar').val();
-       
         var indiceCodBarScan = ArrJsCB.indexOf(CodBarrScan);
-        var indiceDescScan = indiceCodBarScan+1;
-        var indiceIdScan = indiceCodBarScan+2;
+        var indiceIdScan = indiceCodBarScan+1;
 
-        var parametro = {
+        var indiceIdScanDesc = ArrJs.indexOf(ArrJsCB[indiceIdScan]);
+        var indiceScanDesc = indiceIdScanDesc-1;
+        
+        if( (indiceCodBarScan>0) && (indiceScanDesc)>0 ) {
+          var parametro = {
           "IdArticulo":ArrJsCB[indiceIdScan]
-        };
+          };
 
-        $.ajax({
-          data: parametro,
-          url: URL,
-          type: "POST",
-          success: function(data) {
-            /*$('#PPrecioScan').html('BsS. '+data);*/
-            var precio = formateoPrecio(data,2);
-            $('#PPrecioScan').html('BsS. '+precio);
-          }
-         });
-      
-        $('#PCodBarrScan').html(ArrJsCB[indiceCodBarScan]);
-        $('#PDescripScan').html(ArrJsCB[indiceDescScan]); 
-        $('#inputCodBar').val(''); 
+          $.ajax({
+            data: parametro,
+            url: URL,
+            type: "POST",
+            success: function(data) {
+              var precio = formateoPrecio(data,2);
+              $('#PPrecioScan').html('BsS. '+precio);
+            }
+           });
 
-        /*console.log('CodigoBarra: '+ArrJsCB[indiceCodBarScan]);
-        console.log('Descripcion: '+ArrJsCB[indiceDescScan]);
-        console.log('Id: '+ArrJsCB[indiceIdScan]);*/
+          $('#PCodBarrScan').html(ArrJsCB[indiceCodBarScan]);
+          $('#PDescripScan').html(ArrJs[indiceScanDesc]); 
+          $('#inputCodBar').val(''); 
+        }
+        else {
+          $('#PCodBarrScan').html('');
+          $('#PDescripScan').html('');
+          $('#PPrecioScan').html(''); 
+          $('#inputCodBar').val('');
+        }
       }   
     });
 	</script>
@@ -260,6 +269,15 @@
   <?php
     }
   ?>  
+   <?php
+    if($ArtJson!=""){
+  ?>
+    <script type="text/javascript">
+      const ArrJs = eval(<?php echo $ArtJson ?>);
+    </script> 
+  <?php
+    }
+  ?>
 @endsection
 
 <?php
@@ -273,10 +291,25 @@
   function RCPQ_Lista_Articulos_CodBarra() {
     $sql = "
       SELECT CodigoBarra,
-      InvArticulo.Descripcion,
       InvArticulo.Id
       FROM InvCodigoBarra
       INNER JOIN InvArticulo ON InvArticulo.Id = InvCodigoBarra.InvArticuloId
+    ";
+    return $sql;
+  }
+  /**********************************************************************************/
+  /*
+    TITULO: RCPQ_Lista_Articulos_Descripcion
+    FUNCION: Armar una lista de articulos con descripcion e id
+    RETORNO: Lista de articulos con descripcion e id
+    DESAROLLADO POR: SERGIO COVA
+  */
+  function RCPQ_Lista_Articulos_Descripcion() {
+    $sql = "
+      SELECT
+      InvArticulo.Descripcion,
+      InvArticulo.Id
+      FROM InvArticulo
     ";
     return $sql;
   }
