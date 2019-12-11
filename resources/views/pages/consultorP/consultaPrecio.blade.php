@@ -117,7 +117,7 @@
             <b><p id="PDescripScan"></p></b>
           </td>
           <td align="center" class="text-black">
-            <b>BsS. 70.601,85</b>
+            <b><p id="PPrecioScan"></b>
           </td>
         </tr>
       </tbody>
@@ -212,17 +212,19 @@
           url: URL,
           type: "POST",
           success: function(data) {
-            console.log(data);
+            /*$('#PPrecioScan').html('BsS. '+data);*/
+            var precio = new Intl.NumberFormat("de-DE").format(data);
+            $('#PPrecioScan').html('BsS. '+precio);
           }
          });
       
         $('#PCodBarrScan').html(ArrJsCB[indiceCodBarScan]);
-        $('#PDescripScan').html(ArrJsCB[indiceDescScan]);
+        $('#PDescripScan').html(ArrJsCB[indiceDescScan]); 
         $('#inputCodBar').val(''); 
 
-        console.log('CodigoBarra: '+ArrJsCB[indiceCodBarScan]);
+        /*console.log('CodigoBarra: '+ArrJsCB[indiceCodBarScan]);
         console.log('Descripcion: '+ArrJsCB[indiceDescScan]);
-        console.log('Id: '+ArrJsCB[indiceIdScan]);
+        console.log('Id: '+ArrJsCB[indiceIdScan]);*/
       }   
     });
 	</script>
