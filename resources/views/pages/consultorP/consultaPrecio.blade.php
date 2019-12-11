@@ -85,29 +85,34 @@
 
     $sql1 = RCPQ_Lista_Articulos_Descripcion();
     $ArtJson = FG_Armar_Json($sql1,$SedeConnection);
-
-			echo'
-		  <table class="table table-borderless col-12">
-				<thead class="center">
-					<tr>
-						<th scope="col" colspan="3">
-							<h1 class="text-info">CONSULTE EL PRECIO AQUI</h1>
-						</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr class="bg-white" style="border: 4px solid #17a2b8;">
-						<td align="center" class="text-info"><h1><i class="fas fa-barcode aum-icon-cod"</i></h1></td>
-						<td align="center" style="border: 4px solid #17a2b8;">
-							<input id="inputCodBar" type="text" name="CodBar" autofocus="autofocus">
-						</td>
-						<td align="center" class="text-info"><h1><i class="fas fa-search aum-icon-lup"</i></h1></td>
-					</tr>
-				</tbody>
-			</table>
-		';
 	?>
     <table class="table table-borderless col-12">
+      <thead class="center">
+        <tr>
+          <th scope="col" colspan="3">
+            <h1 class="text-info">CONSULTE EL PRECIO AQUI</h1>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="bg-white" style="border: 4px solid #17a2b8;">
+          <td align="center" class="text-info"><h1><i class="fas fa-barcode aum-icon-cod"></i></h1></td>
+          <td align="center" style="border: 4px solid #17a2b8;">
+            <input id="inputCodBar" type="text" name="CodBar" autofocus="autofocus">
+          </td>
+          <td align="center" class="text-info"><h1><i class="fas fa-search aum-icon-lup"></i></h1></td>
+        </tr>
+      </tbody>
+    </table>
+    
+    <table class="table table-borderless col-12" id="tablaError">
+      <thead class="center">
+        <th class="bg-white text-dark border border-white">
+          <h3>NO SE ENCONTRARON RESULTADOS</h3></th>
+      </thead>
+    </table>
+
+    <table class="table table-borderless col-12" id="tablaResuldado">
       <thead class="center">
         <th class="bg-info text-white border border-white"><h5>Código de barra</h5></th>
         <th class="bg-info text-white border border-white"><h5>Descripción</h5></th>
@@ -129,7 +134,7 @@
     </table>
   
     </br>
-    <table class="table table-borderless table-striped col-12">
+    <table class="table table-borderless table-striped col-12" id="tablaSugerido">
       <thead class="center">
         <th class="bg-secondary text-white border border-white" colspan="3"><h5>Articulos sugeridos</h5></th>
       </thead>
@@ -221,6 +226,11 @@
 		$('#inputCodBar').attr("onblur", "this.placeholder = 'Haga scan del codigo de barra'");
 		$('#inputCodBar').attr("onfocus", "this.placeholder = ''");
 
+    //Ocultar Tablas
+    $('#tablaError').hide();
+    $('#tablaResuldado').hide();
+    $('#tablaSugerido').hide();
+
 		$('#inputCodBar').keyup(function(e){
 	    if(e.keyCode == 13) {
 
@@ -232,6 +242,11 @@
         var indiceScanDesc = indiceIdScanDesc-1;
         
         if( (indiceCodBarScan>0) && (indiceScanDesc)>0 ) {
+
+          $('#tablaError').hide();
+          $('#tablaResuldado').show();
+          $('#tablaSugerido').show();
+
           var parametro = {
           "IdArticulo":ArrJsCB[indiceIdScan]
           };
@@ -251,6 +266,9 @@
           $('#inputCodBar').val(''); 
         }
         else {
+          $('#tablaSugerido').hide();
+          $('#tablaResuldado').hide();
+          $('#tablaError').show();
           $('#PCodBarrScan').html('');
           $('#PDescripScan').html('');
           $('#PPrecioScan').html(''); 
