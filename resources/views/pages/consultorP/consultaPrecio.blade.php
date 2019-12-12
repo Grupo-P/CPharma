@@ -170,6 +170,7 @@
   </script>
 
   <script>
+    /************************************************************************/
     function dominio(SedeConnectionJs){
       var dominio = '';
       switch(SedeConnectionJs) {
@@ -191,6 +192,7 @@
         break;
       }
     }
+    /************************************************************************/
     function formateoPrecio(cantidad, decimales) {
       //Transformamos el numero en string
       cantidad += ''; 
@@ -212,14 +214,14 @@
       //Retornamos el valor formateado
       return cantidad_parts.join(',');
     }
+    /************************************************************************/
     function limpiarPantalla(){
-      $('#divPromocion').html('');
-      $('#carouselExampleIndicators').hide();
       $('#tablaError').hide();
       $('#tablaResuldado').hide();
       $('#tablaSugerido').hide();
       mostrarCarousel();
     }
+    /************************************************************************/
     function mostrarCarousel(){
       $.ajax({
         data: '',
@@ -231,7 +233,7 @@
             var respuesta = JSON.parse(data);
             var limiteRespuesta = respuesta.length;
             /*Armado del elemento del carousel*/
-            var contenedor = $("#divPromocion").html();
+            var contenedor = $("#divPromocion").html('');
             var nuevaFila = '';
             
             var j = 0;
@@ -387,8 +389,10 @@
       }   
     });
 
-    $('#carouselExampleIndicators').carousel({
-      interval: 3000
+    $(document).ready(function(){
+      $('#carouselExampleIndicators').carousel({
+          interval: 3000
+      });
     });
 	</script>
      
