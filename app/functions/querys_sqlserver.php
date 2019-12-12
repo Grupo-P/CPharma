@@ -1430,6 +1430,13 @@
     SELECT
     --Id Articulo
     InvArticulo.Id AS IdArticulo,
+    --Descripcrion
+    InvArticulo.Descripcion,
+    --Codigo de Barra
+    (SELECT CodigoBarra
+    FROM InvCodigoBarra 
+    WHERE InvCodigoBarra.InvArticuloId = InvArticulo.Id
+    AND InvCodigoBarra.EsPrincipal = 1) AS CodigoBarra,
     --Impuesto (1 SI aplica impuesto, 0 NO aplica impuesto)
     (ISNULL(InvArticulo.FinConceptoImptoIdCompra,CAST(0 AS INT))) AS Impuesto,
     --Troquelado (0 NO es Troquelado, Id Articulo SI es Troquelado)

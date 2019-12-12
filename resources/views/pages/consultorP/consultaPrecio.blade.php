@@ -153,16 +153,6 @@
           <td align="center" class="text-black"><b>CARIBAN COMPR 10MG X 30</b></td>
           <td align="center" class="text-black"><b>BsS. 70.601,85</b></td>
         </tr>
-        <tr>
-          <td align="center" class="text-black"><b>7591062900894</b></td>
-          <td align="center" class="text-black"><b>OFAFLAN SUSP GTA 15 MG/ML X 30 ML</b></td>
-          <td align="center" class="text-black"><b>BsS. 709,74</b></td>
-        </tr>
-        <tr>
-          <td align="center" class="text-black"><b>7730698007243</b></td>
-          <td align="center" class="text-black"><b>ABRETIA CAP 60MG X 14</b></td>
-          <td align="center" class="text-black"><b>BsS. 163.140,14</b></td>
-        </tr>
       </tbody>
     </table>
 @endsection
@@ -224,7 +214,8 @@
 
 	<script>
     var dominio = dominio(SedeConnectionJs);
-    const URL = ''+dominio+'assets/functions/functionConsultaPrecio.php';
+    const URLTablaResuldado = ''+dominio+'assets/functions/functionConsultaPrecio.php';
+    const URLTablaSugerido = ''+dominio+'assets/functions/functionConsultaSugerido.php';
 
 		$('#inputCodBar').attr("placeholder", "Haga scan del codigo de barra");
 		$('#inputCodBar').attr("onblur", "this.placeholder = 'Haga scan del codigo de barra'");
@@ -252,9 +243,10 @@
           "IdArticulo":ArrJsCB[indiceIdScan]
           };
 
+          //Incio Armado tablaResuldado
           $.ajax({
             data: parametro,
-            url: URL,
+            url: URLTablaResuldado,
             type: "POST",
             success: function(data) {
               var precio = formateoPrecio(data,2);
@@ -265,6 +257,22 @@
           $('#PCodBarrScan').html(ArrJsCB[indiceCodBarScan]);
           $('#PDescripScan').html(ArrJs[indiceScanDesc]); 
           $('#inputCodBar').val(''); 
+          //Fin Armado tablaResuldado
+          
+          //Incio Armado tablaSugerido
+          /*
+          $.ajax({
+            data: parametro,
+            url: URLTablaSugerido,
+            type: "POST",
+            success: function(data) {
+              var precio = formateoPrecio(data,2);
+              $('#PPrecioScan').html('BsS. '+precio);
+            }
+           });
+          */
+          //Fin Armado tablaSugerido
+          
           setTimeout(limpiarPantalla,15000);
         }
         else {
