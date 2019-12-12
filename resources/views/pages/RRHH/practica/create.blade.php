@@ -1,6 +1,6 @@
 @extends('layouts.model')
 
-@section('title', 'Crear práctica')
+@section('title', 'Crear fase #3')
 
 @section('content')
   <!-- Modal Guardar -->
@@ -19,7 +19,7 @@
           </div>
           <div class="modal-body">
             <h4 class="h6">
-              La práctica no fue almacenada
+             La práctica no fue almacenada
             </h4>
           </div>
           <div class="modal-footer">
@@ -41,10 +41,9 @@
       <i class="fa fa-reply">&nbsp;Regresar</i>
     </button>
   </form>
-
   <br/><br/>
 
-  {!! Form::open(['route' => 'practicas.store', 'method' => 'POST', 'id' => 'crear_candidato', 'class' => 'form-group']) !!}
+  {!! Form::open(['route' => 'entrevistas.store', 'method' => 'POST', 'class' => 'form-group']) !!}
     <fieldset>
       <table class="table table-borderless table-striped">
         <thead class="thead-dark">
@@ -56,155 +55,86 @@
 
         <tbody>
           <tr>
-            <th scope="row">{!! Form::label('nombres', 'Nombres *', ['title' => 'Este campo es requerido']) !!}</th>
-            <td>{!! Form::text('nombres', null, [ 'class' => 'form-control', 'placeholder' => 'Maria Raquel', 'pattern' => '^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s\']+$', 'autofocus', 'required']) !!}</td>
-          </tr>
+            <th scope="row">
+              <label for="nombres">Nombre del candidato</label>
+            </th>
 
-          <tr>
-            <th scope="row">{!! Form::label('apellidos', 'Apellidos *', ['title' => 'Este campo es requerido']) !!}</th>
-            <td>{!! Form::text('apellidos', null, [ 'class' => 'form-control', 'placeholder' => 'Herrera Perez', 'pattern' => '^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s\']+$', 'required']) !!}</td>
-          </tr>
-
-          <tr>
-            <th scope="row">{!! Form::label('cedula', 'Cédula *', ['title' => 'Este campo es requerido']) !!}</th>
             <td>
-              <table style="width: 100%;">
-                <tr style="background-color: transparent;">
-                  <td>
-                    {!! Form::select('tipo', ['V' => 'V', 'E' => 'E'], null, [ 'class' => 'form-control']) !!}
-                  </td>
+              <input type="text" id="nombres" name="nombres" class="form-control" value="{{$candidato->nombres . ' ' . $candidato->apellidos}}" disabled>
+              
+              <input type="hidden" name="CandidatoId" id="CandidatoId" value="{{$candidato->id}}">
 
-                  <td>
-                    {!! Form::text('cedula', null, [ 'class' => 'form-control', 'placeholder' => '24921001', 'pattern' => '^[0-9]{7,}$', 'required']) !!}
-                  </td>
-                </tr>
-              </table>
+              <input type="hidden" name="CandidatoFaseId" id="CandidatoFaseId" value="{{$candidato_fase->id}}">
             </td>
           </tr>
 
           <tr>
             <th scope="row">
-              <label for="telefono_celular">Teléfono celular</label>
+              {!! Form::label('VacanteId', 'Vacante asociada *', ['title' => 'Éste campo es requerido']) !!}
             </th>
-            
             <td>
-              <input type="tel" class="form-control" name="telefono_celular" id="telefono_celular" placeholder="0414-1234567" pattern="^0[1246]{3}-[0-9]{7}$">
+              <select name="VacanteId" id="VacanteId" class="form-control" required>
+                <option value="">Seleccione una opción</option>
+              </select>
             </td>
           </tr>
 
           <tr>
             <th scope="row">
-              <label for="telefono_habitacion">Teléfono de habitación</label>
+              {!! Form::label('fecha_entrevista', 'Fecha de Entrevista *', ['title' => 'Este campo es requerido']) !!}
             </th>
-            
             <td>
-              <input type="tel" class="form-control" name="telefono_habitacion" id="telefono_habitacion" placeholder="0261-1234567" pattern="^0[1246]{3}-[0-9]{7}$">
+              {!! Form::date('fecha_entrevista', null, [ 'class' => 'form-control', 'autofocus', 'required']) !!}
             </td>
           </tr>
 
           <tr>
-            <th scope="row">{!! Form::label('correo', 'Correo') !!}</th>
-            <td>{!! Form::email('correo', null, [ 'class' => 'form-control', 'placeholder' => 'mherrera@farmacia72.com']) !!}</td>
-          </tr>
-
-          <tr>
-            <th scope="row">{!! Form::label('tipo_relacion', 'Tipo de relación *', ['title' => 'Este campo es requerido']) !!}</th>
+            <th scope="row">
+              {!! Form::label('entrevistadores', 'Nombre de Entrevistadores *', ['title' => 'Este campo es requerido']) !!}
+            </th>
             <td>
-              {!! Form::select('tipo_relacion', [
-                '' => 'Seleccione una opción',
-                'Ince' => 'Ince', 
-                'Pasante' => 'Pasante',
-                'Trabajador regular' => 'Trabajador regular',
-              ], null, ['class' => 'form-control', 'required']) !!}
+              {!! Form::text('entrevistadores', null, [ 'class' => 'form-control', 'placeholder' => 'Ashley Caldera', 'required']) !!}
             </td>
           </tr>
 
           <tr>
-            <th scope="row">{!! Form::label('relaciones_laborales', 'Relaciones con trabajadores *', ['title' => 'Este campo es requerido']) !!}</th>
+            <th scope="row">{!! Form::label('lugar', 'Lugar de Entrevista *', ['title' => 'Este campo es requerido']) !!}</th>
             <td>
-              {!! Form::select('relaciones_laborales', [
-                '' => 'Seleccione una opción',
-                'Si' => 'Si', 
-                'No' => 'No',
-              ], null, ['class' => 'form-control', 'required']) !!}
+              {!! Form::text('lugar', null, [ 'class' => 'form-control', 'placeholder' => 'Delicias', 'required']) !!}
             </td>
           </tr>
 
           <tr>
-            <th scope="row">{!! Form::label('como_nos_contacto', 'Como nos contactó *', ['title' => 'Este campo es requerido']) !!}</th>
+            <th scope="row">{!! Form::label('practica', 'Práctica pre-empleto *', ['title' => 'Este campo es requerido']) !!}</th>
             <td>
-              {!! Form::select('como_nos_contacto', [
-                '' => 'Seleccione una opción',
-                'Computrabajo' => 'Computrabajo', 
-                'Bumeran' => 'Bumeran',
-                'Redes sociales' => 'Redes sociales',
-                'Instagram' => 'Instagram',
-                'Radio' => 'Radio',
-                'Recomendado' => 'Recomendado',
-              ], null, ['class' => 'form-control', 'required']) !!}
+              <div class="custom-control custom-radio custom-control-inline">
+                <input type="radio" class="custom-control-input" id="practica1" name="practica" value="Si" required>
+                <label class="custom-control-label" for="practica1">Si</label>
+              </div>
+
+              <div class="custom-control custom-radio custom-control-inline">
+                <input type="radio" class="custom-control-input" id="practica2" name="practica" value="No">
+                <label class="custom-control-label" for="practica2">No</label>
+              </div>
             </td>
-          </tr>
-
-          <tr>
-            <th scope="row">{!! Form::label('experiencia_laboral', 'Experiencia laboral') !!}</th>
-            <td>{!! Form::textarea('experiencia_laboral', null, [ 'class' => 'form-control', 'placeholder' => 'Experiencia laboral previa del candidato', 'rows' => '3']) !!}</td>
-          </tr>
-
-          <tr>
-            <th scope="row">{!! Form::label('direccion', 'Dirección *', ['title' => 'Este campo es requerido']) !!}</th>
-            <td>{!! Form::textarea('direccion', null, [ 'class' => 'form-control', 'placeholder' => 'Av. 15 Delicias con calle 72', 'rows' => '3', 'required']) !!}</td>
           </tr>
 
           <tr>
             <th scope="row">{!! Form::label('observaciones', 'Observaciones') !!}</th>
-            <td>{!! Form::textarea('observaciones', null, [ 'class' => 'form-control', 'placeholder' => 'Detalles importantes del candidato', 'rows' => '3']) !!}</td>
+            <td>
+              {!! Form::textarea('observaciones', null, [ 'class' => 'form-control', 'placeholder' => 'Detalles del entrevistado', 'rows' => '3']) !!}
+            </td>
           </tr>
         </tbody>
       </table>
 
-      {!! Form::submit('Guardar', ['class' => 'btn btn-outline-success btn-md', 'id' => 'enviar']) !!}
+      {!! Form::submit('Guardar', ['class' => 'btn btn-outline-success btn-md']) !!}
     </fieldset>
   {!! Form::close()!!}
 
   <script>
     $(document).ready(function() {
       $('[data-toggle="tooltip"]').tooltip();
-
-      //Objetos DOM JavaScript
-      var telefono_celular = document.querySelector('#telefono_celular');
-      var telefono_habitacion = document.querySelector('#telefono_habitacion');
-
-      //Objetos DOM JQuery
-      var enviar = $('#enviar');
-      var crear_candidato = $('#crear_candidato');
-
-      enviar.click(function() {
-
-        if((telefono_celular.value == '') && (telefono_habitacion.value == '')) {
-
-          telefono_celular.setCustomValidity('Debe ingresar al menos un Teléfono');
-          telefono_habitacion.setCustomValidity('Debe ingresar al menos un Teléfono');
-        }
-
-      });
-
-      crear_candidato.submit(function(e) {
-
-        if((telefono_celular.value == '') && (telefono_habitacion.value == '')) {
-          e.preventDefault();
-        }
-
-      });
-
-      $('#telefono_celular, #telefono_habitacion').on({
-        
-        keydown: function(e) {
-
-          telefono_celular.setCustomValidity('');
-          telefono_habitacion.setCustomValidity('');
-        }
-
-      });
     });
     $('#exampleModalCenter').modal('show');
   </script>
