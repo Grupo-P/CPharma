@@ -147,46 +147,7 @@
         <th class="bg-secondary text-white border border-white"><h5>Descripción</h5></th>
         <th class="bg-secondary text-white border border-white"><h5>Precio  BsS</h5></th>
       </thead>
-      <tbody>
-        <tr>
-          <td align="center" class="text-black">
-            <b><p id="PCodBarrSug0"></p></b>
-          </td>
-          <td align="center" class="text-black">
-            <b><p id="PDescripSug0"></p></b>
-          </td>
-          <td align="center" class="text-black">
-            <b><p id="PPrecioSug0"></p></b>
-          </td>
-        </tr>
-        <tr>
-          <td align="center" class="text-black">
-            <b><p id="PCodBarrSug1"></p></b>
-          </td>
-          <td align="center" class="text-black">
-            <b><p id="PDescripSug1"></p></b>
-          </td>
-          <td align="center" class="text-black">
-            <b><p id="PPrecioSug1"></p></b>
-          </td>
-        </tr>
-        <tr>
-          <td align="center" class="text-black">
-            <b><p id="PCodBarrSug2"></p></b>
-          </td>
-          <td align="center" class="text-black">
-            <b><p id="PDescripSug2"></p></b>
-          </td>
-          <td align="center" class="text-black">
-            <b><p id="PPrecioSug2"></p></b>
-          </td>
-        </tr>
-        <tr>
-          <td align="center" class="text-info" colspan="3">
-            <b><p>* Los precios aqui expresados contienen IVA (En caso de que aplique)</p></b>
-          </td>
-        </tr>
-      </tbody>
+      <tbody id="bodySugerido"></tbody>
     </table>
 @endsection
 
@@ -298,13 +259,33 @@
             url: URLTablaSugerido,
             type: "POST",
             success: function(data) {
-              for (var i = 0; i < 3; i++) {
-                var respuesta = $.parseJSON(data);
+              var respuesta = JSON.parse(data);
+              var limite = 3;
+              var limiteRespuesta = respuesta.length;
+              console.log(respuesta);
+              /*Armado de la fila*/
+              var contenedor = $("#bodySugerido").html('');
+              var nuevaFila = '<tr>';
+
+              var i = 0;
+              while (i<limite && i<=limiteRespuesta){
                 var precio = formateoPrecio(respuesta[i]['Precio'],2);
-                $('#PCodBarrSug'+i).html(''+respuesta[i]['CodigoBarra']);
-                $('#PDescripSug'+i).html(''+respuesta[i]['Descripcion']);
-                $('#PPrecioSug'+i).html('BsS. '+precio)
-                console.log(respuesta[i]);
+                /*Armado Fila PCodBarrSug*/
+                nuevaFila += '<td align="center" class="text-black">';
+                nuevaFila += '<b><p>'+respuesta[i]['CodigoBarra']+'</p></b>';
+                nuevaFila += '</td>';
+                /*Armado Fila PDescripSug*/
+                nuevaFila += '<td align="center" class="text-black">';
+                nuevaFila += '<b><p>'+respuesta[i]['Descripcion']+'</p></b>';
+                nuevaFila += '</td>';
+                /*Armado Fila PPrecioSug*/
+                nuevaFila += '<td align="center" class="text-black">';
+                nuevaFila += '<b><p>BsS. '+precio+'</p></b>';
+                nuevaFila += '</td>';
+                nuevaFila += '</tr>';
+                /*Ingreso de la fila a la tabla*/
+                $("#bodySugerido").html(contenedor+nuevaFila);
+                i++;
               }
             }
            });

@@ -53,9 +53,10 @@
  	function FG_Articulos_Sugeridos($IdArticulo){
  		$arraySugeridos = array();
  		$arrayIteracion = array();
-    $arrayAtributo = array("Arroz","JabonEnPolvo","Azucar");
+    $arrayAtributo = array("Arroz","JabonEnPolvo","Azucar","Harina");
     $AtributoSugerido = '';
     $AtributoSugeridoId = '';
+    $ExistenciaMinima = 20;
 
     $SedeConnection = 'FTN';//FG_Mi_Ubicacion();
   	$conn = FG_Conectar_Smartpharma($SedeConnection);
@@ -88,16 +89,18 @@
     		$row2 = sqlsrv_fetch_array($result2,SQLSRV_FETCH_ASSOC);
     		$DescripcionSugerido = FG_Limpiar_Texto($row2['Descripcion']);
     		$CodigoBarraSugerido = $row2['CodigoBarra'];
+        $ExistenciaSugerida = $row2['Existencia'];
 
-    		$PrecioSugerido = FG_Precio_Consultor($IdArticuloSugerido);
+        if($ExistenciaSugerida>$ExistenciaMinima){
+          $PrecioSugerido = FG_Precio_Consultor($IdArticuloSugerido);
 
-    		$arrayIteracion["CodigoBarra"]=$CodigoBarraSugerido;
-    		$arrayIteracion["Descripcion"]=$DescripcionSugerido;
-    		$arrayIteracion["Precio"]=floatval($PrecioSugerido);
+          $arrayIteracion["CodigoBarra"]=$CodigoBarraSugerido;
+          $arrayIteracion["Descripcion"]=$DescripcionSugerido;
+          $arrayIteracion["Precio"]=floatval($PrecioSugerido);
 
-    		$arraySugeridos[]=$arrayIteracion;
+          $arraySugeridos[]=$arrayIteracion;
+        }
     	}
-
     }
     return $arraySugeridos;
   }
