@@ -136,11 +136,10 @@
     <thead class="thead-dark">
       <tr>
         <th scope="col" class="CP-sticky">#</th>
+        <th scope="col" class="CP-sticky">Líder de práctica</th>
         <th scope="col" class="CP-sticky">Candidato</th>
-        <th scope="col" class="CP-sticky">Fecha de entrevista</th>
-        <th scope="col" class="CP-sticky">Entrevistadores</th>
         <th scope="col" class="CP-sticky">Lugar</th>
-        <th scope="col" class="CP-sticky">Vacante asociada</th>
+        <th scope="col" class="CP-sticky">Tiempo en horas</th>
         <th scope="col" class="CP-sticky">Estatus</th>
         <th scope="col" class="CP-sticky">Acciones</th>
       </tr>
@@ -150,23 +149,16 @@
       @foreach($practicas as $practica)
         <tr>
           <th>{{$practica->id}}</th>
+          <td>{{$practica->lider}}</td>
           <td>
             <?php
               $candidato = compras\RH_Candidato::find($practica->rh_candidatos_id);
-            ?>
 
-            {{$candidato->nombres . " " . $candidato->apellidos}}
+              echo $candidato->nombres . " " . $candidato->apellidos;
+            ?>
           </td>
-          <td>{{date('d-m-Y',strtotime($practica->fecha_entrevista))}}</td>
-          <td>{{$practica->entrevistadores}}</td>
           <td>{{$practica->lugar}}</td>
-          <td>
-            <?php
-              $ent = compras\RH_Vacante::find($practica->rh_vacantes_id);
-            ?>
-
-            {{$ent->nombre_vacante . " - " . $ent->departamento . " - " . $ent->sede}}
-          </td>
+          <td>{{$practica->duracion}}</td>
           <td>{{$practica->estatus}}</td>
 
           <!-- Inicio Validacion de ROLES -->
