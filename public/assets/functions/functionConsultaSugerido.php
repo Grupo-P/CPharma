@@ -4,9 +4,14 @@
   include('C:\xampp\htdocs\CPharma\app\functions\querys_mysql.php');
   include('C:\xampp\htdocs\CPharma\app\functions\querys_sqlserver.php');
 
-	//$IdArticulo = $_POST["IdArticulo"];
-	$IdArticulo = 542;
-  print_r(json_encode(FG_Articulos_Sugeridos($IdArticulo)));
+	$IdArticulo = $_POST["IdArticulo"];
+	$resultado = array();
+	$resultado = FG_Ordenar_Array(FG_Articulos_Sugeridos($IdArticulo));
+	print_r($resultadoE);
+  /*foreach ($resultado as $resultadoE) {
+  	echo'<br>';
+  	print_r($resultadoE);
+  }*/
 ?>
 
 <?php
@@ -51,6 +56,7 @@
   */
  	function FG_Articulos_Sugeridos($IdArticulo){
  		$arraySugeridos = array();
+ 		$arrayIteracion = array();
     $arrayAtributo = array("Arroz","JabonEnPolvo","Azucar");
     $AtributoSugerido = '';
     $AtributoSugeridoId = '';
@@ -73,7 +79,6 @@
     }
 
     if($AtributoSugerido!=''){
-    	echo'El atributo sugerido es: '.$AtributoSugerido.', y su Id es: '.$AtributoSugeridoId;
 
     	$sql1 = SQL_Articulos_Sugeridos($IdArticulo,$AtributoSugeridoId);
     	$result1 = sqlsrv_query($conn,$sql1);
@@ -90,12 +95,38 @@
 
     		$PrecioSugerido = FG_Precio_Consultor($IdArticuloSugerido);
 
-    		array_push($arraySugeridos,$CodigoBarraSugerido);
-    		array_push($arraySugeridos,$DescripcionSugerido);
-    		array_push($arraySugeridos,$PrecioSugerido);
+    		$arrayIteracion["CodigoBarra"]=$CodigoBarraSugerido;
+    		$arrayIteracion["Descripcion"]=$DescripcionSugerido;
+    		$arrayIteracion["Precio"]=$PrecioSugerido;
+
+    		$arraySugeridos[]=$arrayIteracion;
     	}
 
     }
     return $arraySugeridos;
+  }
+  /**********************************************************************************/
+  /*
+    TITULO: FG_Ordenar_Array
+    FUNCION: ordena el array
+    DESAROLLADO POR: SERGIO COVA
+  */
+  function FG_Ordenar_Array($ArrayDes){
+  	$sortArray = array();
+
+		foreach($ArrayDes as $ArrayDesElem){
+		    foreach($ArrayDesElem as $key=>$value){
+		        if(!isset($sortArray[$key])){
+		            $sortArray[$key] = array();
+		        }
+		        $sortArray[$key][] = $value;
+		    }
+		}
+
+		$orderby = "Precio";
+
+		array_multisort($sortArray[$orderby],SORT_ASC,$ArrayDes);
+
+		return $ArrayDes;
   }
 ?>
