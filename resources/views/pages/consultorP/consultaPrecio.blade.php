@@ -80,11 +80,11 @@
 	  $CodJson = '';
     $ArtJson = '';
 
-		//$sql1 = RCPQ_Lista_Articulos_CodBarra();
-    //$CodJson = FG_Armar_Json($sql1,$SedeConnection);
+		$sql1 = RCPQ_Lista_Articulos_CodBarra();
+    $CodJson = FG_Armar_Json($sql1,$SedeConnection);
 
-    //$sql1 = RCPQ_Lista_Articulos_Descripcion();
-    //$ArtJson = FG_Armar_Json($sql1,$SedeConnection);
+    $sql1 = RCPQ_Lista_Articulos_Descripcion();
+    $ArtJson = FG_Armar_Json($sql1,$SedeConnection);
 	?>
     <table class="table table-borderless col-12">
       <thead class="center">
