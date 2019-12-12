@@ -149,9 +149,42 @@
       </thead>
       <tbody>
         <tr>
-          <td align="center" class="text-black"><b>7591585111050</b></td>
-          <td align="center" class="text-black"><b>CARIBAN COMPR 10MG X 30</b></td>
-          <td align="center" class="text-black"><b>BsS. 70.601,85</b></td>
+          <td align="center" class="text-black">
+            <b><p id="PCodBarrSug0"></p></b>
+          </td>
+          <td align="center" class="text-black">
+            <b><p id="PDescripSug0"></p></b>
+          </td>
+          <td align="center" class="text-black">
+            <b><p id="PPrecioSug0"></p></b>
+          </td>
+        </tr>
+        <tr>
+          <td align="center" class="text-black">
+            <b><p id="PCodBarrSug1"></p></b>
+          </td>
+          <td align="center" class="text-black">
+            <b><p id="PDescripSug1"></p></b>
+          </td>
+          <td align="center" class="text-black">
+            <b><p id="PPrecioSug1"></p></b>
+          </td>
+        </tr>
+        <tr>
+          <td align="center" class="text-black">
+            <b><p id="PCodBarrSug2"></p></b>
+          </td>
+          <td align="center" class="text-black">
+            <b><p id="PDescripSug2"></p></b>
+          </td>
+          <td align="center" class="text-black">
+            <b><p id="PPrecioSug2"></p></b>
+          </td>
+        </tr>
+        <tr>
+          <td align="center" class="text-info" colspan="3">
+            <b><p>* Los precios aqui expresados contienen IVA (En caso de que aplique)</p></b>
+          </td>
         </tr>
       </tbody>
     </table>
@@ -260,19 +293,24 @@
           //Fin Armado tablaResuldado
           
           //Incio Armado tablaSugerido
-          
           $.ajax({
             data: parametro,
             url: URLTablaSugerido,
             type: "POST",
             success: function(data) {
-              console.log(data);
+              for (var i = 0; i < 3; i++) {
+                var respuesta = $.parseJSON(data);
+                var precio = formateoPrecio(respuesta[i]['Precio'],2);
+                $('#PCodBarrSug'+i).html(''+respuesta[i]['CodigoBarra']);
+                $('#PDescripSug'+i).html(''+respuesta[i]['Descripcion']);
+                $('#PPrecioSug'+i).html('BsS. '+precio)
+                console.log(respuesta[i]);
+              }
             }
            });
-          
           //Fin Armado tablaSugerido
           
-          setTimeout(limpiarPantalla,15000);
+          //setTimeout(limpiarPantalla,15000);
         }
         else {
           $('#tablaSugerido').hide();

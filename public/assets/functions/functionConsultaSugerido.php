@@ -7,11 +7,7 @@
 	$IdArticulo = $_POST["IdArticulo"];
 	$resultado = array();
 	$resultado = FG_Ordenar_Array(FG_Articulos_Sugeridos($IdArticulo));
-	print_r($resultado);
-  /*foreach ($resultado as $resultadoE) {
-  	echo'<br>';
-  	print_r($resultadoE);
-  }*/
+  echo json_encode($resultado);
 ?>
 
 <?php
@@ -97,7 +93,7 @@
 
     		$arrayIteracion["CodigoBarra"]=$CodigoBarraSugerido;
     		$arrayIteracion["Descripcion"]=$DescripcionSugerido;
-    		$arrayIteracion["Precio"]=$PrecioSugerido;
+    		$arrayIteracion["Precio"]=floatval($PrecioSugerido);
 
     		$arraySugeridos[]=$arrayIteracion;
     	}
