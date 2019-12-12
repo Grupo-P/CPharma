@@ -166,8 +166,13 @@
             ->orderBy('id', 'desc')
             ->first();
 
-            $nombre_fase = compras\RH_Fase::find($candidatos_fases->rh_fases_id)
-            ->nombre_fase;
+            $nombre_fase = '-';
+
+            if(!is_null($candidatos_fases)) {
+              $nombre_fase = compras\RH_Fase::find($candidatos_fases->rh_fases_id)
+              ->nombre_fase;
+            }
+            
           ?>
 
           <td>{{$nombre_fase}}</td>
@@ -273,6 +278,9 @@
               </button>
             </form>
           <?php
+              break;
+
+              default: echo $nombre_fase;
             }//switch
           }//else
           ?>

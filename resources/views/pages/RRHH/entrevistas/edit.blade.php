@@ -71,7 +71,9 @@
             </th>
             <td>
               <?php
-                $vacantes = compras\RH_Vacante::all();
+                $vacantes = DB::table('rh_vacantes')
+                ->orderByRaw('sede ASC, nombre_vacante ASC')
+                ->get();
               ?>
 
               <select name="VacanteId" id="VacanteId" class="form-control" required>
@@ -83,11 +85,11 @@
                 ?>
 
                 <option value="{{$vacante->id}}">{{
-                    $vacante->nombre_vacante 
+                    $vacante->sede
+                    . " - " . $vacante->nombre_vacante 
                     . " - " . $vacante->departamento
                     . " - " . $vacante->turno
                     . " - " . $vacante->dias_libres
-                    . " - " . $vacante->sede
                   }}
                 </option>
 

@@ -3,8 +3,13 @@
 namespace compras\Http\Controllers;
 
 use Illuminate\Http\Request;
-use compras\User;
-use compras\Auditoria;
+use Illuminate\Support\Facades\DB;
+
+use compras\RH_Candidato;
+use compras\RH_Vacante;
+use compras\RH_Entrevista;
+use compras\RH_Practica;
+use compras\RHI_Candidato_Fase;
 
 class RH_PracticaController extends Controller {
     /**
