@@ -152,11 +152,6 @@
     
     <div class="row justify-content-center">
       <div id="carouselExampleIndicators" class="carousel slide d-block w-75 bg-white" data-ride="carousel">
-        <ol class="carousel-indicators">
-          <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
-          <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
-          <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
-        </ol>
         <div class="carousel-inner" id="divPromocion">
         </div>
         <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
@@ -260,10 +255,10 @@
                 nuevaFila += '<div class="carousel-item">';
               }
               nuevaFila += '<div class="row justify-content-center">';
-              nuevaFila += '<img class="d-block w-75" src="'+URLImag+'"></br></br></br>';
+              nuevaFila += '<img class="d-block w-50" src="'+URLImag+'"></br></br></br>';
               nuevaFila += '</div>';
 
-              nuevaFila += '<div class="carousel-caption d-none d-md-block" style="background-color:rgba(0, 0, 0,0.5)">';
+              nuevaFila += '<div class="carousel-caption d-none d-md-block h-25" style="background-color:rgba(0, 0, 0,0.6)">';
               nuevaFila += '<h1 class="text-white">Bs.S '+precio+'</h1>';
               nuevaFila += '<h3 class="text-white">'+descripcion+'</h3>';
               nuevaFila += '</div>';
