@@ -260,17 +260,16 @@
           //Fin Armado tablaResuldado
           
           //Incio Armado tablaSugerido
-          /*
+          
           $.ajax({
             data: parametro,
             url: URLTablaSugerido,
             type: "POST",
             success: function(data) {
-              var precio = formateoPrecio(data,2);
-              $('#PPrecioScan').html('BsS. '+precio);
+              console.log(data);
             }
            });
-          */
+          
           //Fin Armado tablaSugerido
           
           setTimeout(limpiarPantalla,15000);

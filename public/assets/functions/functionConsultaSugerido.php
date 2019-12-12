@@ -7,7 +7,7 @@
 	$IdArticulo = $_POST["IdArticulo"];
 	$resultado = array();
 	$resultado = FG_Ordenar_Array(FG_Articulos_Sugeridos($IdArticulo));
-	print_r($resultadoE);
+	print_r($resultado);
   /*foreach ($resultado as $resultadoE) {
   	echo'<br>';
   	print_r($resultadoE);
