@@ -80,11 +80,11 @@
 	  $CodJson = '';
     $ArtJson = '';
 
-		//$sql1 = RCPQ_Lista_Articulos_CodBarra();
-    //$CodJson = FG_Armar_Json($sql1,$SedeConnection);
+		/*$sql1 = RCPQ_Lista_Articulos_CodBarra();
+    $CodJson = FG_Armar_Json($sql1,$SedeConnection);
 
-    //$sql1 = RCPQ_Lista_Articulos_Descripcion();
-    //$ArtJson = FG_Armar_Json($sql1,$SedeConnection);
+    $sql1 = RCPQ_Lista_Articulos_Descripcion();
+    $ArtJson = FG_Armar_Json($sql1,$SedeConnection);*/
 	?>
     <table class="table table-borderless col-12">
       <thead class="center">
@@ -149,18 +149,24 @@
       </thead>
       <tbody id="bodySugerido"></tbody>
     </table>
-
-    <table class="table table-borderless table-striped col-12" id="tablaPromocion">
-      <thead class="center">
-        <th class="bg-white text-danger border border-white" colspan="3"><h5>ARTICULO EN PROMOCION</h5></th>
-      </thead>
-      <thead class="center">
-        <th class="bg-secondary text-white border border-white"><h5>Código de barra</h5></th>
-        <th class="bg-secondary text-white border border-white"><h5>Descripción</h5></th>
-        <th class="bg-secondary text-white border border-white"><h5>Precio  BsS</h5></th>
-      </thead>
-      <tbody id="bodySugerido"></tbody>
-    </table>
+  
+    <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel" style="height:55%;">
+      <ol class="carousel-indicators">
+        <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+        <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+        <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+      </ol>
+      <div class="carousel-inner" id="divPromocion"></div>
+      <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="sr-only">Previous</span>
+      </a>
+      <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="sr-only">Next</span>
+      </a>
+    </div>
+    
 @endsection
 
 @section('scriptsPie')
@@ -212,9 +218,62 @@
       return cantidad_parts.join(',');
     }
     function limpiarPantalla(){
+      $('#carouselExampleIndicators').hide();
       $('#tablaError').hide();
       $('#tablaResuldado').hide();
       $('#tablaSugerido').hide();
+      promocion();
+    }
+
+    function promocion(){
+      var dominio = dominio(SedeConnectionJs);
+      const URLTablaPromocion = ''+dominio+'assets/functions/functionConsultaPromo.php';
+      //Incio Armado del carousel
+      $.ajax({
+        data: parametro,
+        url: URLTablaPromocion,
+        type: "POST",
+        success: function(data) {
+        
+          if(JSON.parse(data)!="UNICO"){
+            var respuesta = JSON.parse(data);
+            var limiteRespuesta = respuesta.length;
+            /*Armado del elemento del carousel*/
+            var contenedor = $("#divPromocion").html('');
+            var nuevaFila = '';
+
+            var i = 0;
+            while (i<=limiteRespuesta){
+              var precio = formateoPrecio(respuesta[i]['Precio'],2);
+              var descripcion = respuesta[i]['Descripcion'];
+              var codigo = respuesta[i]['CodigoBarra'];
+              var URLImagen = ''+dominio+'assets/promocion/'+codigo+'.jpg';
+
+              /*Armado del elemento del carousel*/
+              if(i==0){
+                nuevaFila += '<div class="carousel-item active">';
+              }
+              else{
+                nuevaFila += '<div class="carousel-item">';
+              }
+              nuevaFila += '<img class="d-block w-100" src=""'+URLImagen+'>';
+              nuevaFila += '<div class="carousel-caption d-none d-md-block">';
+              nuevaFila += '<h2 class="text-dark">'+precio+'</h2>';
+              nuevaFila += '<h5 class="text-dark">'+descripcion+'</h5>';
+
+              /*Ingreso del al carousel*/
+              $("#divPromocion").html(contenedor+nuevaFila);
+              i++;
+            }
+            $('#carouselExampleIndicators').show();
+            $('#carouselExampleIndicators').carousel();
+          }
+          else{
+            $('#carouselExampleIndicators').hide();
+          }
+        }
+      });
+      //Fin Armado del carousel
     }
   </script>
 
@@ -242,6 +301,7 @@
         if( (indiceCodBarScan>0) && (indiceScanDesc)>0 ) {
 
           $('#tablaError').hide();
+          $('#carouselExampleIndicators').hide();
           $('#tablaResuldado').show();
 
           var parametro = {
