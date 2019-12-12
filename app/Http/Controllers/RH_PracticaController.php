@@ -95,7 +95,17 @@ class RH_PracticaController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function show($id) {
-        //
+        $practicas = RH_Practica::find($id);
+        $candidato = RH_Candidato::find($practicas->rh_candidatos_id);
+
+        $Auditoria = new Auditoria();
+        $Auditoria->accion = 'CONSULTAR';
+        $Auditoria->tabla = 'RH_PRACTICAS';
+        $Auditoria->registro = $practicas->lider;
+        $Auditoria->user = auth()->user()->name;
+        $Auditoria->save();
+
+        return view('pages.RRHH.practicas.show', compact('practicas', 'candidato'));
     }
 
     /**
