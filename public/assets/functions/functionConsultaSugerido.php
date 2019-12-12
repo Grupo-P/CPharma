@@ -6,10 +6,15 @@
 
 	$IdArticulo = $_POST["IdArticulo"];
 	$resultado = array();
-	$resultado = FG_Ordenar_Array(FG_Articulos_Sugeridos($IdArticulo));
-  echo json_encode($resultado);
+  $respuesta = FG_Articulos_Sugeridos($IdArticulo);
+    if( (is_array($respuesta)) && (!empty($respuesta)) ){
+      $resultado = FG_Ordenar_Array($respuesta);
+      echo json_encode($resultado);
+    }
+    else{
+      echo json_encode('UNICO');
+    }
 ?>
-
 <?php
 	/**********************************************************************************/
   /*

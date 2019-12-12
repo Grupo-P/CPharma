@@ -231,7 +231,6 @@
 
           $('#tablaError').hide();
           $('#tablaResuldado').show();
-          $('#tablaSugerido').show();
 
           var parametro = {
           "IdArticulo":ArrJsCB[indiceIdScan]
@@ -259,39 +258,51 @@
             url: URLTablaSugerido,
             type: "POST",
             success: function(data) {
-              var respuesta = JSON.parse(data);
-              var limite = 3;
-              var limiteRespuesta = respuesta.length;
-              console.log(respuesta);
-              /*Armado de la fila*/
-              var contenedor = $("#bodySugerido").html('');
-              var nuevaFila = '<tr>';
+              if(JSON.parse(data)!="UNICO"){
+                $('#tablaSugerido').show();
+                var respuesta = JSON.parse(data);
+                var limite = 3;
+                var limiteRespuesta = respuesta.length;
+                /*Armado de la fila*/
+                var contenedor = $("#bodySugerido").html('');
+                var nuevaFila = '<tr>';
 
-              var i = 0;
-              while (i<limite && i<=limiteRespuesta){
-                var precio = formateoPrecio(respuesta[i]['Precio'],2);
-                /*Armado Fila PCodBarrSug*/
-                nuevaFila += '<td align="center" class="text-black">';
-                nuevaFila += '<b><p>'+respuesta[i]['CodigoBarra']+'</p></b>';
-                nuevaFila += '</td>';
-                /*Armado Fila PDescripSug*/
-                nuevaFila += '<td align="center" class="text-black">';
-                nuevaFila += '<b><p>'+respuesta[i]['Descripcion']+'</p></b>';
-                nuevaFila += '</td>';
-                /*Armado Fila PPrecioSug*/
-                nuevaFila += '<td align="center" class="text-black">';
-                nuevaFila += '<b><p>BsS. '+precio+'</p></b>';
+                var i = 0;
+                while (i<limite && i<=limiteRespuesta){
+                  var precio = formateoPrecio(respuesta[i]['Precio'],2);
+                  /*Armado Fila PCodBarrSug*/
+                  nuevaFila += '<td align="center" class="text-black">';
+                  nuevaFila += '<b><p>'+respuesta[i]['CodigoBarra']+'</p></b>';
+                  nuevaFila += '</td>';
+                  /*Armado Fila PDescripSug*/
+                  nuevaFila += '<td align="center" class="text-black">';
+                  nuevaFila += '<b><p>'+respuesta[i]['Descripcion']+'</p></b>';
+                  nuevaFila += '</td>';
+                  /*Armado Fila PPrecioSug*/
+                  nuevaFila += '<td align="center" class="text-black">';
+                  nuevaFila += '<b><p>BsS. '+precio+'</p></b>';
+                  nuevaFila += '</td>';
+                  nuevaFila += '</tr>';
+                  /*Ingreso de la fila a la tabla*/
+                  $("#bodySugerido").html(contenedor+nuevaFila);
+                  i++;
+                }
+                nuevaFila += '<tr>';
+                nuevaFila += '<td align="center" class="text-info" colspan="3">';
+                nuevaFila += '<b><p>* Los precios aqui expresados contienen IVA (En caso de que aplique)</p></b>';
                 nuevaFila += '</td>';
                 nuevaFila += '</tr>';
                 /*Ingreso de la fila a la tabla*/
-                $("#bodySugerido").html(contenedor+nuevaFila);
-                i++;
+                  $("#bodySugerido").html(contenedor+nuevaFila);
+              }
+              else{
+                $('#tablaSugerido').hide();
               }
             }
-           });
+          });
           //Fin Armado tablaSugerido
           
-          //setTimeout(limpiarPantalla,15000);
+          setTimeout(limpiarPantalla,15000);
         }
         else {
           $('#tablaSugerido').hide();
