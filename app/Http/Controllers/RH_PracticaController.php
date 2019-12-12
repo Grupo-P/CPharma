@@ -115,7 +115,8 @@ class RH_PracticaController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function edit($id) {
-        //
+        $practicas = RH_Practica::find($id);
+        return view('pages.RRHH.practicas.edit', compact('practicas'));
     }
 
     /**
