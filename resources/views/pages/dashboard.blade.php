@@ -31,6 +31,7 @@
     $procesos_candidatos = DB::table('rh_candidatos')
     	->where('estatus', '<>', 'RECHAZADO')
     	->count();
+    $practicas = DB::table('rh_practicas')->count();
 
   /*TASA DOLAR VENTA*/
     $Tasa = DB::table('tasa_ventas')->where('moneda', 'Dolar')->value('tasa');
@@ -1034,6 +1035,27 @@
       <div class="card-body text-left bg-success">
         <h2 class="card-title">
           <span class="card-text text-white">
+            <i class="fas fa-users-cog"></i>
+            <?php
+            echo ''.$practicas;
+          ?>            
+          </span>
+        </h2>
+        <p class="card-text text-white">
+        <?php 
+          echo 'Prácticas registradas';
+        ?>
+        </p>
+      </div>
+      <div class="card-footer bg-transparent border-success text-right">
+        <a href="/practicas" class="btn btn-outline-success btn-sm">Visualizar</a>
+      </div>    
+    </div>
+
+    <div class="card border-info mb-3" style="width: 14rem;">
+      <div class="card-body text-left bg-info">
+        <h2 class="card-title">
+          <span class="card-text text-white">
             <i class="far fa-address-card"></i>
             <?php
             echo ''.$empresaReferencias;
@@ -1046,13 +1068,15 @@
         ?>
         </p>
       </div>
-      <div class="card-footer bg-transparent border-success text-right">
-        <a href="/empresaReferencias" class="btn btn-outline-success btn-sm">Visualizar</a>
+      <div class="card-footer bg-transparent border-info text-right">
+        <a href="/empresaReferencias" class="btn btn-outline-info btn-sm">Visualizar</a>
       </div>    
     </div>
+  </div>
 
-    <div class="card border-info mb-3" style="width: 14rem;">
-      <div class="card-body text-left bg-info">
+  <div class="card-deck">
+  	<div class="card border-warning mb-3" style="width: 14rem;">
+      <div class="card-body text-left bg-warning">
         <h2 class="card-title">
           <span class="card-text text-white">
             <i class="fas fa-phone"></i>
@@ -1067,15 +1091,13 @@
         ?>
         </p>
       </div>
-      <div class="card-footer bg-transparent border-info text-right">
-        <a href="/contactos" class="btn btn-outline-info btn-sm">Visualizar</a>
+      <div class="card-footer bg-transparent border-warning text-right">
+        <a href="/contactos" class="btn btn-outline-warning btn-sm">Visualizar</a>
       </div>    
     </div>
-  </div>
 
-  <div class="card-deck">
-    <div class="card border-warning mb-3" style="width: 14rem;">
-      <div class="card-body text-left bg-warning">
+    <div class="card border-secondary mb-3" style="width: 14rem;">
+      <div class="card-body text-left bg-secondary">
         <h2 class="card-title">
           <span class="card-text text-white">
             <i class="fas fa-user-md"></i>
@@ -1090,8 +1112,8 @@
         ?>
         </p>
       </div>
-      <div class="card-footer bg-transparent border-warning text-right">
-        <a href="/examenesm" class="btn btn-outline-warning btn-sm">Visualizar</a>
+      <div class="card-footer bg-transparent border-secondary text-right">
+        <a href="/examenesm" class="btn btn-outline-secondary btn-sm">Visualizar</a>
       </div>    
     </div>
   </div>

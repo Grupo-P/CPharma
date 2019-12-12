@@ -79,6 +79,29 @@
     </div>
   @endif
 
+  @if(session('Saved3'))
+    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title text-info" id="exampleModalCenterTitle">
+              <i class="fas fa-info text-info"></i>{{ session('Saved3') }}
+            </h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <h4 class="h6">Fase #3 agregada con éxito</h4>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline-success" data-dismiss="modal">Aceptar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  @endif
+
   @if(session('Error'))
     <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered" role="document">
@@ -166,8 +189,13 @@
             ->orderBy('id', 'desc')
             ->first();
 
-            $nombre_fase = compras\RH_Fase::find($candidatos_fases->rh_fases_id)
-            ->nombre_fase;
+            $nombre_fase = '-';
+
+            if(!is_null($candidatos_fases)) {
+              $nombre_fase = compras\RH_Fase::find($candidatos_fases->rh_fases_id)
+              ->nombre_fase;
+            }
+            
           ?>
 
           <td>{{$nombre_fase}}</td>
@@ -233,11 +261,11 @@
 
               case 'Práctica':
           ?>
-            <form action="#" method="GET" style="display: inline-block;">
+            <form action="/practicas/create" method="GET" style="display: inline-block;">
               <input type="hidden" name="CandidatoId" value="{{$candidato->id}}">
               <input type="hidden" name="CandidatoFaseId" value="{{$candidatos_fases->id}}">
 
-              <button type="button" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="bottom" title="Ir a la fase">
+              <button type="submit" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="bottom" title="Ir a la fase">
                 <i class="fas fa-users-cog"></i>&nbsp;Práctica
               </button>
             </form>
@@ -260,7 +288,7 @@
               <input type="hidden" name="CandidatoFaseId" value="{{$candidatos_fases->id}}">
 
               <button type="button" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="bottom" title="Ir a la fase">
-                <i class="far fa-address-card"></i>&nbsp;Referencias
+                <i class="far fa-address-card"></i>&nbsp;Empresa ref.
               </button>
             </form>
 
@@ -273,6 +301,9 @@
               </button>
             </form>
           <?php
+              break;
+
+              default: echo $nombre_fase;
             }//switch
           }//else
           ?>

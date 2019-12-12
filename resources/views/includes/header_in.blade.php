@@ -352,6 +352,14 @@
           Entrevistas<span class="sr-only">(current)</span>
         </a>
       </li>
+
+      <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="/practicas">
+          <span data-feather="home"></span>
+          <i class="fas fa-users-cog"></i>
+          Prácticas<span class="sr-only">(current)</span>
+        </a>
+      </li>
       
       <li class="nav-item">
         <a class="nav-link CP-Links-Menu" href="/empresaReferencias">
