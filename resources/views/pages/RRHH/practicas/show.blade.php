@@ -28,58 +28,23 @@
 
     <tbody>
       <tr>
-        <th scope="row">Nombres</th>
-        <td>{{$practicas->nombres}}</td>
+        <th scope="row">Candidato</th>
+        <td>{{$candidato->nombres . " " . $candidato->apellidos}}</td>
       </tr>
 
       <tr>
-        <th scope="row">Apellidos</th>
-        <td>{{$practicas->apellidos}}</td>
+        <th scope="row">Líder de práctica</th>
+        <td>{{$practicas->lider}}</td>
       </tr>
 
       <tr>
-        <th scope="row">Cédula</th>
-        <td>{{$practicas->cedula}}</td>
+        <th scope="row">Lugar</th>
+        <td>{{$practicas->lugar}}</td>
       </tr>
 
       <tr>
-        <th scope="row">Teléfono celular</th>
-        <td>{{$practicas->telefono_celular}}</td>
-      </tr>
-
-      <tr>
-        <th scope="row">Teléfono de habitación</th>
-        <td>{{$practicas->telefono_habitacion}}</td>
-      </tr>
-
-      <tr>
-        <th scope="row">Correo</th>
-        <td>{{$practicas->correo}}</td>
-      </tr>
-
-      <tr>
-        <th scope="row">Como nos contactó</th>
-        <td>{{$practicas->como_nos_contacto}}</td>
-      </tr>
-
-      <tr>
-        <th scope="row">Tipo de relación</th>
-        <td>{{$practicas->tipo_relacion}}</td>
-      </tr>
-
-      <tr>
-        <th scope="row">Relaciones laborales</th>
-        <td>{{$practicas->relaciones_laborales}}</td>
-      </tr>
-
-      <tr>
-        <th scope="row">Dirección</th>
-        <td>{{$practicas->direccion}}</td>
-      </tr>
-
-      <tr>
-        <th scope="row">Experiencia laboral</th>
-        <td>{{$practicas->experiencia_laboral}}</td>
+        <th scope="row">Tiempo de horas</th>
+        <td>{{$practicas->duracion}}</td>
       </tr>
 
       <tr>
