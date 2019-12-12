@@ -11,4 +11,13 @@ class RH_Practica extends Model {
      * @var string
      */
     protected $table = 'rh_practicas';
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+    	'lider', 'lugar', 'duracion', 'observaciones'
+    ];
 }

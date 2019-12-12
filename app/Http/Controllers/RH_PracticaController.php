@@ -132,7 +132,39 @@ class RH_PracticaController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id) {
-        //
+        try {
+            $practicas = RH_Practica::find($id);
+            $practicas->fill($request->all());
+
+            $practicas->rh_candidatos_id = $request->input('CandidatoId');
+            $practicas->user = auth()->user()->name;
+            $practicas->save();
+
+            //-------------------- CANDIDATO --------------------//
+            $candidato = RH_Candidato::find($request->input('CandidatoId'));
+            $candidato->estatus = 'EN_PROCESO';
+            $candidato->save();
+
+            //-------------------- FASE ASOCIADA --------------------//
+            $fase_asociada = RHI_Candidato_Fase::find($request->input('CandidatoFaseId'));
+            $fase_asociada->rh_fases_id = 4;
+            $fase_asociada->save();
+
+            //-------------------- AUDITORIA --------------------//
+            $Auditoria = new Auditoria();
+            $Auditoria->accion = 'EDITAR';
+            $Auditoria->tabla = 'RH_PRACTICAS';
+            $Auditoria->registro = $practicas->lider;
+            $Auditoria->user = auth()->user()->name;
+            $Auditoria->save();
+
+            return redirect()
+                ->route('practicas.index')
+                ->with('Updated', ' Informacion');
+        }
+        catch(\Illuminate\Database\QueryException $e) {
+            return back()->with('Error', ' Error');
+        }
     }
 
     /**
