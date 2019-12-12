@@ -27,7 +27,7 @@ class RH_PracticaController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function index() {
-        //
+        return 'Te amo Raquel';
     }
 
     /**
