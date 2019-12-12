@@ -251,12 +251,13 @@
           /*Armado del elemento del carousel*/
           var contenedor = $("#divPromocion").html();
           var nuevaFila = '';
-          console.log(respuesta[0]['Precio']);
+          
           var j = 0;
-          while (j<=limiteRespuesta){
-            var precio = '20';//formateoPrecio(respuesta[j]['Precio'],2);
-            var descripcion = 'Hola';//respuesta[j]['Descripcion'];
-            var codigo = '009800800056';//respuesta[j]['CodigoBarra'];
+          while (j<limiteRespuesta){
+            var pop = respuesta.pop();
+            var precio = formateoPrecio(pop['Precio'],2);
+            var descripcion = pop['Descripcion'];
+            var codigo = pop['CodigoBarra'];
             var URLImag = URLImagen+codigo+'.jpg';
              
             /*Armado del elemento del carousel*/
@@ -267,9 +268,9 @@
               nuevaFila += '<div class="carousel-item">';
             }
             nuevaFila += '<img class="d-block w-100" src="'+URLImag+'" style="height:90%; width:auto;">';
-            nuevaFila += '<div class="carousel-caption d-none d-md-block">';
-            nuevaFila += '<h2 class="text-dark">'+precio+'</h2>';
-            nuevaFila += '<h5 class="text-dark">'+descripcion+'</h5>';
+            nuevaFila += '<div class="carousel-caption d-none d-md-block" style="background-color:rgba(0, 0, 0,0.5)">';
+            nuevaFila += '<h1 class="text-white">Bs.S '+precio+'</h1>';
+            nuevaFila += '<h3 class="text-white">'+descripcion+'</h3>';
             nuevaFila += '</div>';
             nuevaFila += '</div>';
 
