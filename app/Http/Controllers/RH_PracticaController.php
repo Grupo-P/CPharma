@@ -116,7 +116,12 @@ class RH_PracticaController extends Controller {
      */
     public function edit($id) {
         $practicas = RH_Practica::find($id);
-        return view('pages.RRHH.practicas.edit', compact('practicas'));
+        $candidato = RH_Candidato::find($practicas->rh_candidatos_id);
+        $candidato_fase = RHI_Candidato_Fase::where('rh_candidatos_id', $candidato->id)
+        ->orderBy('id', 'desc')
+        ->first();
+
+        return view('pages.RRHH.practicas.edit', compact('practicas', 'candidato', 'candidato_fase'));
     }
 
     /**
