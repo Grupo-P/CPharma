@@ -1,6 +1,6 @@
 @extends('layouts.model')
 
-@section('title', 'Entrevistas')
+@section('title', 'Prácticas')
 
 @section('scriptsHead')
   <style>
@@ -23,7 +23,7 @@
             </button>
           </div>
           <div class="modal-body">
-            <h4 class="h6">Entrevista almacenada con éxito</h4>
+            <h4 class="h6">Práctica almacenada con éxito</h4>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-outline-success" data-dismiss="modal">Aceptar</button>
@@ -47,7 +47,7 @@
             </button>
           </div>
           <div class="modal-body">
-            <h4 class="h6">Entrevista modificada con éxito</h4>
+            <h4 class="h6">Práctica modificada con éxito</h4>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-outline-success" data-dismiss="modal">Aceptar</button>
@@ -71,7 +71,7 @@
             </button>
           </div>
           <div class="modal-body">
-            <h4 class="h6">Entrevista Reincorporada con éxito</h4>
+            <h4 class="h6">Práctica Reincorporada con éxito</h4>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-outline-success" data-dismiss="modal">Aceptar</button>
@@ -94,7 +94,7 @@
             </button>
           </div>
           <div class="modal-body">
-            <h4 class="h6">Entrevista Desincorporada con éxito</h4>
+            <h4 class="h6">Práctica Desincorporada con éxito</h4>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-outline-success" data-dismiss="modal">Aceptar</button>
@@ -105,19 +105,19 @@
   @endif
 
   <h1 class="h5 text-info">
-    <i class="fas fa-users"></i>&nbsp;Entrevistas
+    <i class="fas fa-users"></i>&nbsp;Prácticas
   </h1>
   <hr class="row align-items-start col-12">
 
   <table style="width:100%;">
     <tr>
       {{-- <td style="width:10%;" align="center">
-        <a href="/entrevistas/create" role="button" class="btn btn-outline-info btn-sm" style="display: inline; text-align: left;">
+        <a href="/practicas/create" role="button" class="btn btn-outline-info btn-sm" style="display: inline; text-align: left;">
           <i class="fa fa-plus"></i>&nbsp;Agregar
         </a>
       </td> --}}
 
-      <td style="width:90%;">
+      <td>
         <div class="input-group md-form form-sm form-1 pl-0">
           <div class="input-group-prepend">
             <span class="input-group-text purple lighten-3" id="basic-text1">
@@ -147,53 +147,53 @@
     </thead>
 
     <tbody>
-      @foreach($entrevistas as $entrevista)
+      @foreach($practicas as $practica)
         <tr>
-          <th>{{$entrevista->id}}</th>
+          <th>{{$practica->id}}</th>
           <td>
             <?php
-              $candidato = compras\RH_Candidato::find($entrevista->rh_candidatos_id);
+              $candidato = compras\RH_Candidato::find($practica->rh_candidatos_id);
             ?>
 
             {{$candidato->nombres . " " . $candidato->apellidos}}
           </td>
-          <td>{{date('d-m-Y',strtotime($entrevista->fecha_entrevista))}}</td>
-          <td>{{$entrevista->entrevistadores}}</td>
-          <td>{{$entrevista->lugar}}</td>
+          <td>{{date('d-m-Y',strtotime($practica->fecha_entrevista))}}</td>
+          <td>{{$practica->entrevistadores}}</td>
+          <td>{{$practica->lugar}}</td>
           <td>
             <?php
-              $ent = compras\RH_Vacante::find($entrevista->rh_vacantes_id);
+              $ent = compras\RH_Vacante::find($practica->rh_vacantes_id);
             ?>
 
             {{$ent->nombre_vacante . " - " . $ent->departamento . " - " . $ent->sede}}
           </td>
-          <td>{{$entrevista->estatus}}</td>
+          <td>{{$practica->estatus}}</td>
 
           <!-- Inicio Validacion de ROLES -->
           <td style="width:140px;">
           <?php
             if(Auth::user()->role == 'MASTER' || Auth::user()->role == 'DEVELOPER') {
-              if($entrevista->estatus == 'ACTIVO') {
+              if($practica->estatus == 'ACTIVO') {
           ?>
-            <a href="/entrevistas/{{$entrevista->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
+            <a href="/practicas/{{$practica->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
               <i class="far fa-eye"></i>
             </a>
 
-            <a href="/entrevistas/{{$entrevista->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
+            <a href="/practicas/{{$practica->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
               <i class="fas fa-edit"></i>
             </a>
 
-            <form action="/entrevistas/{{$entrevista->id}}" method="POST" style="display: inline;">
+            <form action="/practicas/{{$practica->id}}" method="POST" style="display: inline;">
               @method('DELETE')
               @csrf
               <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Desincorporar"><i class="fa fa-reply"></i></button>
             </form>
             <?php
               }
-              else if($entrevista->estatus == 'INACTIVO') {
+              else if($practica->estatus == 'INACTIVO') {
             ?>
 
-            <form action="/entrevistas/{{$entrevista->id}}" method="POST" style="display: inline;">
+            <form action="/practicas/{{$practica->id}}" method="POST" style="display: inline;">
               @method('DELETE')
               @csrf
               <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Reincorporar"><i class="fa fa-share"></i></button>
@@ -203,27 +203,27 @@
               }
             } 
             else if(Auth::user()->role == 'ANALISTA') {
-              if($entrevista->estatus == 'ACTIVO') {
+              if($practica->estatus == 'ACTIVO') {
           ?>
-            <a href="/entrevistas/{{$entrevista->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
+            <a href="/practicas/{{$practica->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
               <i class="far fa-eye"></i>
             </a>
 
-            <a href="/entrevistas/{{$entrevista->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
+            <a href="/practicas/{{$practica->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
               <i class="fas fa-edit"></i>
             </a>
 
-            <form action="/entrevistas/{{$entrevista->id}}" method="POST" style="display: inline;">
+            <form action="/practicas/{{$practica->id}}" method="POST" style="display: inline;">
               @method('DELETE')
               @csrf
               <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Desincorporar"><i class="fa fa-reply"></i></button>
             </form>
             <?php
               }
-              else if($entrevista->estatus == 'INACTIVO') {
+              else if($practica->estatus == 'INACTIVO') {
             ?>
 
-            <form action="/entrevistas/{{$entrevista->id}}" method="POST" style="display: inline;">
+            <form action="/practicas/{{$practica->id}}" method="POST" style="display: inline;">
               @method('DELETE')
               @csrf
               <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Reincorporar"><i class="fa fa-share"></i></button>
@@ -234,7 +234,7 @@
             } else if(Auth::user()->role == 'USUARIO') {
             ?>
 
-            <a href="/entrevistas/{{$entrevista->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
+            <a href="/practicas/{{$practica->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
               <i class="far fa-eye"></i>
             </a>
 
