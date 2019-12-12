@@ -6,8 +6,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 use compras\RH_Candidato;
-use compras\RH_Vacante;
-use compras\RH_Entrevista;
 use compras\RH_Practica;
 use compras\RHI_Candidato_Fase;
 
@@ -35,8 +33,10 @@ class RH_PracticaController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function create() {
-        //
+    public function create(Request $request) {
+        $candidato = RH_Candidato::find($request->input("CandidatoId"));
+        $candidato_fase = RHI_Candidato_Fase::find($request->input("CandidatoFaseId"));
+        return view('pages.RRHH.practica.create', compact('candidato', 'candidato_fase'));
     }
 
     /**
