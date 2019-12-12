@@ -43,7 +43,7 @@
   </form>
   <br/><br/>
 
-  {!! Form::open(['route' => 'entrevistas.store', 'method' => 'POST', 'class' => 'form-group']) !!}
+  {!! Form::open(['route' => 'practicas.store', 'method' => 'POST', 'class' => 'form-group']) !!}
     <fieldset>
       <table class="table table-borderless table-striped">
         <thead class="thead-dark">
@@ -70,52 +70,37 @@
 
           <tr>
             <th scope="row">
-              {!! Form::label('VacanteId', 'Vacante asociada *', ['title' => 'Éste campo es requerido']) !!}
+              {!! Form::label('lider', 'Líder de práctica *', ['title' => 'Este campo es requerido']) !!}
             </th>
             <td>
-              <select name="VacanteId" id="VacanteId" class="form-control" required>
+              {!! Form::text('lider', null, [ 'class' => 'form-control', 'placeholder' => 'Maria Raquel', 'pattern' => '^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s\']+$', 'autofocus', 'required']) !!}
+            </td>
+          </tr>
+
+          <tr>
+            <?php
+              $sedes = compras\Sede::where('siglas', '<>', 'GP')
+              ->where('siglas', '<>', 'MC')
+              ->get();
+            ?>
+
+            <th scope="row">
+              {!! Form::label('lugar', 'Lugar *', ['title' => 'Éste campo es requerido']) !!}
+            </th>
+            <td>
+              <select name="lugar" id="lugar" class="form-control" required>
                 <option value="">Seleccione una opción</option>
+
+                <?php
+                  foreach ($sedes as $sede) {
+                ?>
+
+                <option value="{{$sede->siglas}}">{{$sede->siglas}}</option>
+
+                <?php
+                  }//foreach
+                ?>
               </select>
-            </td>
-          </tr>
-
-          <tr>
-            <th scope="row">
-              {!! Form::label('fecha_entrevista', 'Fecha de Entrevista *', ['title' => 'Este campo es requerido']) !!}
-            </th>
-            <td>
-              {!! Form::date('fecha_entrevista', null, [ 'class' => 'form-control', 'autofocus', 'required']) !!}
-            </td>
-          </tr>
-
-          <tr>
-            <th scope="row">
-              {!! Form::label('entrevistadores', 'Nombre de Entrevistadores *', ['title' => 'Este campo es requerido']) !!}
-            </th>
-            <td>
-              {!! Form::text('entrevistadores', null, [ 'class' => 'form-control', 'placeholder' => 'Ashley Caldera', 'required']) !!}
-            </td>
-          </tr>
-
-          <tr>
-            <th scope="row">{!! Form::label('lugar', 'Lugar de Entrevista *', ['title' => 'Este campo es requerido']) !!}</th>
-            <td>
-              {!! Form::text('lugar', null, [ 'class' => 'form-control', 'placeholder' => 'Delicias', 'required']) !!}
-            </td>
-          </tr>
-
-          <tr>
-            <th scope="row">{!! Form::label('practica', 'Práctica pre-empleto *', ['title' => 'Este campo es requerido']) !!}</th>
-            <td>
-              <div class="custom-control custom-radio custom-control-inline">
-                <input type="radio" class="custom-control-input" id="practica1" name="practica" value="Si" required>
-                <label class="custom-control-label" for="practica1">Si</label>
-              </div>
-
-              <div class="custom-control custom-radio custom-control-inline">
-                <input type="radio" class="custom-control-input" id="practica2" name="practica" value="No">
-                <label class="custom-control-label" for="practica2">No</label>
-              </div>
             </td>
           </tr>
 
