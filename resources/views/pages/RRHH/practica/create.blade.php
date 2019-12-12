@@ -105,6 +105,15 @@
           </tr>
 
           <tr>
+            <th scope="row">
+              {!! Form::label('duracion', 'Duración *', ['title' => 'Este campo es requerido']) !!}
+            </th>
+            <td>
+              <input type="number" name="duracion" id="duracion" placeholder="0,5" min="0" max="14" step="0.1" class="form-control">
+            </td>
+          </tr>
+
+          <tr>
             <th scope="row">{!! Form::label('observaciones', 'Observaciones') !!}</th>
             <td>
               {!! Form::textarea('observaciones', null, [ 'class' => 'form-control', 'placeholder' => 'Detalles del entrevistado', 'rows' => '3']) !!}
