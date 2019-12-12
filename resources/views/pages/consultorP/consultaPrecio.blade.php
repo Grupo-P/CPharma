@@ -96,27 +96,27 @@
       </thead>
       <tbody>
         <tr class="bg-white" style="border: 4px solid #17a2b8;">
-          <td align="center" class="text-info"><h1><i class="fas fa-barcode aum-icon-cod"></i></h1></td>
+          <td align="center" class="text-success"><h1><i class="fas fa-barcode aum-icon-cod"></i></h1></td>
           <td align="center" style="border: 4px solid #17a2b8;">
             <input id="inputCodBar" type="text" name="CodBar" autofocus="autofocus">
           </td>
-          <td align="center" class="text-info"><h1><i class="fas fa-search aum-icon-lup"></i></h1></td>
+          <td align="center" class="text-success"><h1><i class="fas fa-search aum-icon-lup"></i></h1></td>
         </tr>
       </tbody>
     </table>
     
     <table class="table table-borderless col-12" id="tablaError">
       <thead class="center">
-        <th class="bg-white text-dark border border-white">
+        <th class="bg-white text-danger border border-white">
           <h3>NO SE ENCONTRARON RESULTADOS</h3></th>
       </thead>
     </table>
 
     <table class="table table-borderless col-12" id="tablaResuldado">
       <thead class="center">
-        <th class="bg-info text-white border border-white"><h5>Código de barra</h5></th>
-        <th class="bg-info text-white border border-white"><h5>Descripción</h5></th>
-        <th class="bg-info text-white border border-white"><h5>Precio   BsS</h5></th>
+        <th class="bg-success text-white border border-white"><h5>Código de barra</h5></th>
+        <th class="bg-success text-white border border-white"><h5>Descripción</h5></th>
+        <th class="bg-success text-white border border-white"><h5>Precio BsS</h5></th>
       </thead>
       <tbody>
         <tr>
@@ -127,12 +127,12 @@
             <b><p id="PDescripScan"></p></b>
           </td>
           <td align="center" class="text-black">
-            <b><p id="PPrecioScan"></p></b>
+            <h4><b><p id="PPrecioScan"></p></b></h4>
           </td>
         </tr>
         <tr>
-          <td align="center" class="text-info" colspan="3">
-            <b><p>* Los precios aqui expresados contienen IVA (En caso de que aplique)</p></b>
+          <td align="center" class="text-danger" colspan="3">
+            <b><p>Nuestros precios incluyen IVA (En caso de aplicar)</p></b>
           </td>
         </tr>
       </tbody>
@@ -140,12 +140,12 @@
 
     <table class="table table-borderless table-striped col-12" id="tablaSugerido">
       <thead class="center">
-        <th class="bg-secondary text-white border border-white" colspan="3"><h5>Articulos sugeridos</h5></th>
+        <th class="bg-info text-white border border-white" colspan="3"><h4>Articulos sugeridos</h4></th>
       </thead>
       <thead class="center">
-        <th class="bg-secondary text-white border border-white"><h5>Código de barra</h5></th>
-        <th class="bg-secondary text-white border border-white"><h5>Descripción</h5></th>
-        <th class="bg-secondary text-white border border-white"><h5>Precio  BsS</h5></th>
+        <th class="bg-info text-white border border-white"><h5>Código de barra</h5></th>
+        <th class="bg-info text-white border border-white"><h5>Descripción</h5></th>
+        <th class="bg-info text-white border border-white"><h5>Precio  BsS</h5></th>
       </thead>
       <tbody id="bodySugerido"></tbody>
     </table>
@@ -286,6 +286,8 @@
     const URLTablaPromocion = ''+dominio+'assets/functions/functionConsultaPromo.php';
     const URLImagen = ''+dominio+'assets/promocion/';
 
+    var timeOut;
+
 		$('#inputCodBar').attr("placeholder", "Haga scan del codigo de barra");
 		$('#inputCodBar').attr("onblur", "this.placeholder = 'Haga scan del codigo de barra'");
 		$('#inputCodBar').attr("onfocus", "this.placeholder = ''");
@@ -357,7 +359,7 @@
                   nuevaFila += '</td>';
                   /*Armado Fila PPrecioSug*/
                   nuevaFila += '<td align="center" class="text-black">';
-                  nuevaFila += '<b><p>BsS. '+precio+'</p></b>';
+                  nuevaFila += '<h4><b><p>BsS. '+precio+'</p></b></h4>';
                   nuevaFila += '</td>';
                   nuevaFila += '</tr>';
                   /*Ingreso de la fila a la tabla*/
@@ -365,8 +367,8 @@
                   i++;
                 }
                 nuevaFila += '<tr>';
-                nuevaFila += '<td align="center" class="text-info" colspan="3">';
-                nuevaFila += '<b><p>* Los precios aqui expresados contienen IVA (En caso de que aplique)</p></b>';
+                nuevaFila += '<td align="center" class="text-danger" colspan="3">';
+                nuevaFila += '<b><p>Nuestros precios incluyen IVA (En caso de aplicar)</p></b>';
                 nuevaFila += '</td>';
                 nuevaFila += '</tr>';
                 /*Ingreso de la fila a la tabla*/
@@ -378,7 +380,10 @@
             }
           });
           //Fin Armado tablaSugerido
-          setTimeout(limpiarPantalla,10000);
+          if(timeOut!=0){
+            clearTimeout(timeOut);
+          }
+          timeOut = setTimeout(limpiarPantalla,10000);
         }
         else {
           $('#divPromocion').html('');
@@ -390,7 +395,10 @@
           $('#PDescripScan').html('');
           $('#PPrecioScan').html(''); 
           $('#inputCodBar').val('');
-          setTimeout(limpiarPantalla,5000);
+          if(timeOut!=0){
+            clearTimeout(timeOut);
+          }
+          timeOut = setTimeout(limpiarPantalla,5000);
         }
       }   
     });
