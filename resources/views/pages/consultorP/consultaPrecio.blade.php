@@ -156,11 +156,9 @@
       <div class="carousel-inner" id="divPromocion"></div>
       <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-        <!-- <span class="sr-only">Previous</span> -->
       </a>
       <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
         <span class="carousel-control-next-icon" aria-hidden="true"></span>
-       <!--  <span class="sr-only">Next</span> -->
       </a>
     </div>
     
@@ -215,11 +213,61 @@
       return cantidad_parts.join(',');
     }
     function limpiarPantalla(){
+      $('#divPromocion').html('');
       $('#carouselExampleIndicators').hide();
       $('#tablaError').hide();
       $('#tablaResuldado').hide();
       $('#tablaSugerido').hide();
-      return true;
+      mostrarCarousel();
+    }
+    function mostrarCarousel(){
+      $.ajax({
+        data: '',
+        url: URLTablaPromocion,
+        type: "POST",
+        success: function(data) {
+        
+          if(JSON.parse(data)!="UNICO"){
+            var respuesta = JSON.parse(data);
+            var limiteRespuesta = respuesta.length;
+            /*Armado del elemento del carousel*/
+            var contenedor = $("#divPromocion").html();
+            var nuevaFila = '';
+            
+            var j = 0;
+            while (j<limiteRespuesta){
+              var pop = respuesta.pop();
+              var precio = formateoPrecio(pop['Precio'],2);
+              var descripcion = pop['Descripcion'];
+              var codigo = pop['CodigoBarra'];
+              var URLImag = URLImagen+codigo+'.jpg';
+               
+              /*Armado del elemento del carousel*/
+              if(j==0){
+                nuevaFila += '<div class="carousel-item active">';
+              }
+              else{
+                nuevaFila += '<div class="carousel-item">';
+              }
+              nuevaFila += '<img class="d-block w-100" src="'+URLImag+'" style="height:90%; width:auto;"></br></br></br>';
+              nuevaFila += '<div class="carousel-caption d-none d-md-block" style="background-color:rgba(0, 0, 0,0.5)">';
+              nuevaFila += '<h1 class="text-white">Bs.S '+precio+'</h1>';
+              nuevaFila += '<h3 class="text-white">'+descripcion+'</h3>';
+              nuevaFila += '</div>';
+              nuevaFila += '</div>';
+
+              /*Ingreso del al carousel*/
+              $("#divPromocion").html(contenedor+nuevaFila);
+              j++;
+            }
+            $('#carouselExampleIndicators').show();
+          }
+          else{
+            $('#divPromocion').html('');
+            $('#carouselExampleIndicators').hide();
+          }
+        }
+      });
     }
   </script>
 
@@ -236,56 +284,6 @@
 
     limpiarPantalla();
 
-    $.ajax({
-      data: '',
-      url: URLTablaPromocion,
-      type: "POST",
-      success: function(data) {
-      
-        if(JSON.parse(data)!="UNICO"){
-          var respuesta = JSON.parse(data);
-          var limiteRespuesta = respuesta.length;
-          /*Armado del elemento del carousel*/
-          var contenedor = $("#divPromocion").html();
-          var nuevaFila = '';
-          
-          var j = 0;
-          while (j<limiteRespuesta){
-            var pop = respuesta.pop();
-            var precio = formateoPrecio(pop['Precio'],2);
-            var descripcion = pop['Descripcion'];
-            var codigo = pop['CodigoBarra'];
-            var URLImag = URLImagen+codigo+'.jpg';
-             
-            /*Armado del elemento del carousel*/
-            if(j==0){
-              nuevaFila += '<div class="carousel-item active">';
-            }
-            else{
-              nuevaFila += '<div class="carousel-item">';
-            }
-            nuevaFila += '<img class="d-block w-100" src="'+URLImag+'" style="height:90%; width:auto;"></br></br></br>';
-            nuevaFila += '<div class="carousel-caption d-none d-md-block" style="background-color:rgba(0, 0, 0,0.5)">';
-            nuevaFila += '<h1 class="text-white">Bs.S '+precio+'</h1>';
-            nuevaFila += '<h3 class="text-white">'+descripcion+'</h3>';
-            nuevaFila += '</div>';
-            nuevaFila += '</div>';
-
-            /*Ingreso del al carousel*/
-            $("#divPromocion").html(contenedor+nuevaFila);
-            j++;
-          }
-          $('#carouselExampleIndicators').show();
-          $('#carouselExampleIndicators').carousel({
-            interval: 3000
-          })
-        }
-        else{
-          $('#carouselExampleIndicators').hide();
-        }
-      }
-    });
-
 		$('#inputCodBar').keyup(function(e){
 	    if(e.keyCode == 13) {
 
@@ -299,6 +297,7 @@
         if( (indiceCodBarScan>0) && (indiceScanDesc)>0 ) {
 
           $('#tablaError').hide();
+          $('#divPromocion').html('');
           $('#carouselExampleIndicators').hide();
           $('#tablaResuldado').show();
 
@@ -337,7 +336,6 @@
                 var contenedor = $("#bodySugerido").html('');
                 var nuevaFila = '<tr>';
 
-                console.log(JSON.parse(data));
                 var i = 0;
                 while (i<limite && i<=limiteRespuesta){
                   var precio = formateoPrecio(respuesta[i]['Precio'],2);
@@ -364,7 +362,7 @@
                 nuevaFila += '</td>';
                 nuevaFila += '</tr>';
                 /*Ingreso de la fila a la tabla*/
-                  $("#bodySugerido").html(contenedor+nuevaFila);
+                $("#bodySugerido").html(contenedor+nuevaFila);
               }
               else{
                 $('#tablaSugerido').hide();
@@ -372,8 +370,11 @@
             }
           });
           //Fin Armado tablaSugerido
+          setTimeout(limpiarPantalla,10000);
         }
         else {
+          $('#divPromocion').html('');
+          $('#carouselExampleIndicators').hide();
           $('#tablaSugerido').hide();
           $('#tablaResuldado').hide();
           $('#tablaError').show();
@@ -384,6 +385,10 @@
           setTimeout(limpiarPantalla,5000);
         }
       }   
+    });
+
+    $('#carouselExampleIndicators').carousel({
+      interval: 3000
     });
 	</script>
      
