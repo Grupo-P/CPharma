@@ -80,11 +80,11 @@
 	  $CodJson = '';
     $ArtJson = '';
 
-		$sql1 = RCPQ_Lista_Articulos_CodBarra();
-    $CodJson = FG_Armar_Json($sql1,$SedeConnection);
+		//$sql1 = RCPQ_Lista_Articulos_CodBarra();
+    //$CodJson = FG_Armar_Json($sql1,$SedeConnection);
 
-    $sql1 = RCPQ_Lista_Articulos_Descripcion();
-    $ArtJson = FG_Armar_Json($sql1,$SedeConnection);
+    //$sql1 = RCPQ_Lista_Articulos_Descripcion();
+    //$ArtJson = FG_Armar_Json($sql1,$SedeConnection);
 	?>
     <table class="table table-borderless col-12">
       <thead class="center">
@@ -141,6 +141,18 @@
     <table class="table table-borderless table-striped col-12" id="tablaSugerido">
       <thead class="center">
         <th class="bg-secondary text-white border border-white" colspan="3"><h5>Articulos sugeridos</h5></th>
+      </thead>
+      <thead class="center">
+        <th class="bg-secondary text-white border border-white"><h5>Código de barra</h5></th>
+        <th class="bg-secondary text-white border border-white"><h5>Descripción</h5></th>
+        <th class="bg-secondary text-white border border-white"><h5>Precio  BsS</h5></th>
+      </thead>
+      <tbody id="bodySugerido"></tbody>
+    </table>
+
+    <table class="table table-borderless table-striped col-12" id="tablaPromocion">
+      <thead class="center">
+        <th class="bg-white text-danger border border-white" colspan="3"><h5>ARTICULO EN PROMOCION</h5></th>
       </thead>
       <thead class="center">
         <th class="bg-secondary text-white border border-white"><h5>Código de barra</h5></th>
