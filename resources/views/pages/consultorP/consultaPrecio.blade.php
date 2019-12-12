@@ -80,11 +80,11 @@
 	  $CodJson = '';
     $ArtJson = '';
 
-		$sql1 = RCPQ_Lista_Articulos_CodBarra();
-    $CodJson = FG_Armar_Json($sql1,$SedeConnection);
+		//$sql1 = RCPQ_Lista_Articulos_CodBarra();
+    //$CodJson = FG_Armar_Json($sql1,$SedeConnection);
 
-    $sql1 = RCPQ_Lista_Articulos_Descripcion();
-    $ArtJson = FG_Armar_Json($sql1,$SedeConnection);
+    //$sql1 = RCPQ_Lista_Articulos_Descripcion();
+    //$ArtJson = FG_Armar_Json($sql1,$SedeConnection);
 	?>
     <table class="table table-borderless col-12">
       <thead class="center">
@@ -150,16 +150,8 @@
       <tbody id="bodySugerido"></tbody>
     </table>
   
-    <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel" style="height:50%;">
-      <ol class="carousel-indicators">
-      </ol>
+    <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel" style="height:90%; width:100%;">
       <div class="carousel-inner" id="divPromocion"></div>
-      <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
-        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-      </a>
-      <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
-        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-      </a>
     </div>
     
 @endsection
@@ -251,7 +243,7 @@
               else{
                 nuevaFila += '<div class="carousel-item">';
               }
-              nuevaFila += '<img class="d-block w-100" src="'+URLImag+'" style="height:90%; width:auto;"></br></br></br>';
+              nuevaFila += '<img class="d-block w-100" src="'+URLImag+'" style="height:60%; width:10%"></br></br></br>';
               nuevaFila += '<div class="carousel-caption d-none d-md-block" style="background-color:rgba(0, 0, 0,0.5)">';
               nuevaFila += '<h1 class="text-white">Bs.S '+precio+'</h1>';
               nuevaFila += '<h3 class="text-white">'+descripcion+'</h3>';
