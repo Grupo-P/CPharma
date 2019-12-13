@@ -8,8 +8,6 @@ use Illuminate\Support\Facades\DB;
 use compras\User;
 use compras\Auditoria;
 use compras\RH_Candidato;
-use compras\RHI_Candidato_Fase;
-use compras\RH_EmpresaReferencia;
 
 class RH_CandidatoController extends Controller {
     /**
