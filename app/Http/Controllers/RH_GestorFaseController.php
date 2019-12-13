@@ -36,6 +36,7 @@ class RH_GestorFaseController extends Controller {
      */
     public function store(Request $request) {
         try {
+            //-------------------- FASE ASOCIADA --------------------//
             $candidatos_fases = new RHI_Candidato_Fase();
 
             $candidatos_fases->rh_candidatos_id = $request->input('CandidatoId');
@@ -43,10 +44,12 @@ class RH_GestorFaseController extends Controller {
             $candidatos_fases->user = auth()->user()->name;
             $candidatos_fases->save();
 
+            //-------------------- CANDIDATO --------------------//
             $candidato = RH_Candidato::find($request->input('CandidatoId'));
             $candidato->estatus = 'EN_PROCESO';
             $candidato->save();
 
+            //-------------------- AUDITORIA --------------------//
             $Auditoria = new Auditoria();
             $Auditoria->accion = 'CREAR';
             $Auditoria->tabla = 'RHI_CANDIDATOS_FASES';

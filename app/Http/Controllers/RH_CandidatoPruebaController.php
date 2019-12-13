@@ -56,11 +56,6 @@ class RH_CandidatoPruebaController extends Controller {
             $candidatos_pruebas->user = auth()->user()->name;
             $candidatos_pruebas->save();
 
-            //-------------------- CANDIDATO --------------------//
-            $candidato = RH_Candidato::find($request->input('CandidatoId'));
-            $candidato->estatus = 'EN_PROCESO';
-            $candidato->save();
-
             //-------------------- FASE ASOCIADA --------------------//
             $fase_asociada = RHI_Candidato_Fase::find($request->input('CandidatoFaseId'));
             $fase_asociada->rh_fases_id = 2;
