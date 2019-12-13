@@ -28,11 +28,21 @@ class RH_CandidatoController extends Controller {
     }
 
     /**
-     * Display a listing of the resource.
+     * Display a listing of the active resource.
      *
      * @return \Illuminate\Http\Response
      */
     public function procesos() {
+        $candidatos = RH_Candidato::where('estatus', '<>', 'RECHAZADO')->get();
+        return view('pages.RRHH.candidatos.procesos', compact('candidatos'));
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function referencias(Request $request) {
         $candidatos = RH_Candidato::where('estatus', '<>', 'RECHAZADO')->get();
         return view('pages.RRHH.candidatos.procesos', compact('candidatos'));
     }
