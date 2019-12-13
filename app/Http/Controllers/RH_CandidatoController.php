@@ -3,9 +3,13 @@
 namespace compras\Http\Controllers;
 
 use Illuminate\Http\Request;
-use compras\RH_Candidato;
+use Illuminate\Support\Facades\DB;
+
 use compras\User;
 use compras\Auditoria;
+use compras\RH_Candidato;
+use compras\RHI_Candidato_Fase;
+use compras\RH_EmpresaReferencia;
 
 class RH_CandidatoController extends Controller {
     /**
@@ -43,8 +47,12 @@ class RH_CandidatoController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function referencias(Request $request) {
-        $candidatos = RH_Candidato::where('estatus', '<>', 'RECHAZADO')->get();
-        return view('pages.RRHH.candidatos.procesos', compact('candidatos'));
+        $candidato = RH_Candidato::find($request->input("CandidatoId"));
+        $candidato_fase = RHI_Candidato_Fase::find($request->input("CandidatoFaseId"));
+        $empresa_ref = RH_EmpresaReferencia::orderBy('nombre_empresa', 'asc')
+        ->get();
+
+        return view('pages.RRHH.candidatos.referencias', compact('candidato', 'candidato_fase', 'empresa_ref'));
     }
 
     /**

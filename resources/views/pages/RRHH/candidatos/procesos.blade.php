@@ -287,7 +287,7 @@
               <input type="hidden" name="CandidatoId" value="{{$candidato->id}}">
               <input type="hidden" name="CandidatoFaseId" value="{{$candidatos_fases->id}}">
 
-              <button type="button" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="bottom" title="Ir a la fase">
+              <button type="submit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="bottom" title="Ir a la fase">
                 <i class="far fa-address-card"></i>&nbsp;Empresa ref.
               </button>
             </form>
