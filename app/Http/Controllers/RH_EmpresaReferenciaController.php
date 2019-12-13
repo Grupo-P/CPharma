@@ -3,9 +3,11 @@
 namespace compras\Http\Controllers;
 
 use Illuminate\Http\Request;
-use compras\RH_EmpresaReferencia;
+use Illuminate\Support\Facades\DB;
+
 use compras\User;
 use compras\Auditoria;
+use compras\RH_EmpresaReferencia;
 
 class RH_EmpresaReferenciaController extends Controller {
     /**

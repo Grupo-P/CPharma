@@ -215,6 +215,8 @@ Route::resource('ordenCompraDetalle', 'OrdenCompraDetalleController');
 Route::resource('candidatos', 'RH_CandidatoController');
 Route::get('/procesos_candidatos', 'RH_CandidatoController@procesos');
 
+Route::resource('procesos_referencias', 'RH_CandidatoEmpresaController');
+
 Route::resource('pruebas', 'RH_PruebaController');
 
 Route::resource('entrevistas', 'RH_EntrevistaController');

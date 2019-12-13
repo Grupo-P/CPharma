@@ -71,13 +71,7 @@ class RH_EntrevistaController extends Controller {
             $entrevistas->user = auth()->user()->name;
             $entrevistas->save();
 
-            //-------------------- CANDIDATO --------------------//
-            $candidato = RH_Candidato::find($request->input('CandidatoId'));
-            $candidato->estatus = 'EN_PROCESO';
-            $candidato->save();
-
             //-------------------- FASE ASOCIADA --------------------//
-            
             $fase_asociada = RHI_Candidato_Fase::find($request->input('CandidatoFaseId'));
 
             switch($request->input('practica')) {
@@ -134,7 +128,6 @@ class RH_EntrevistaController extends Controller {
      */
     public function edit($id) {
         $entrevistas = RH_Entrevista::find($id);
-
         return view('pages.RRHH.entrevistas.edit', compact('entrevistas'));
     }
 
@@ -158,14 +151,9 @@ class RH_EntrevistaController extends Controller {
             $entrevistas->user = auth()->user()->name;
             $entrevistas->save();
 
-            //-------------------- CANDIDATO --------------------//
-            $candidato = RH_Candidato::find($request->input('CandidatoId'));
-            $candidato->estatus = 'EN_PROCESO';
-            $candidato->save();
-
             //-------------------- FASE ASOCIADA --------------------//
             $candidatos_fases = DB::table('rhi_candidatos_fases')
-            ->where('rh_candidatos_id', $candidato->id)
+            ->where('rh_candidatos_id', $request->input('CandidatoId'))
             ->orderBy('id', 'desc')
             ->first();
 

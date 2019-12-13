@@ -39,7 +39,7 @@ class RH_PracticaController extends Controller {
     public function create(Request $request) {
         $candidato = RH_Candidato::find($request->input("CandidatoId"));
         $candidato_fase = RHI_Candidato_Fase::find($request->input("CandidatoFaseId"));
-        return view('pages.RRHH.practica.create', compact('candidato', 'candidato_fase'));
+        return view('pages.RRHH.practicas.create', compact('candidato', 'candidato_fase'));
     }
 
     /**

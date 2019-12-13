@@ -1,6 +1,6 @@
 @extends('layouts.model')
 
-@section('title', 'Crear fase #5')
+@section('title', 'Crear fase #4')
 
 @section('content')
   <!-- Modal Guardar -->
@@ -19,7 +19,7 @@
           </div>
           <div class="modal-body">
             <h4 class="h6">
-              El contacto no fue almacenado
+              La empresa no fue asignada
             </h4>
           </div>
           <div class="modal-footer">
@@ -31,7 +31,7 @@
   @endif
 
   <h1 class="h5 text-info">
-    <i class="fas fa-plus"></i>&nbsp;Agregar fase #5
+    <i class="fas fa-plus"></i>&nbsp;Agregar Fase #4
   </h1>
   <hr class="row align-items-start col-12">
 
@@ -44,7 +44,7 @@
 
   <br/><br/>
 
-  {!! Form::open(['route' => 'contactos.store', 'method' => 'POST', 'id' => 'crear_contacto', 'class' => 'form-group']) !!}
+  {!! Form::open(['route' => 'procesos_referencias.store', 'method' => 'POST', 'id' => 'crear_candidato', 'class' => 'form-group']) !!}
     <fieldset>
       <table class="table table-borderless table-striped">
         <thead class="thead-dark">
@@ -77,10 +77,10 @@
 
                 <?php
                   foreach ($empresa_ref as $emp) {
-                    if($emp->estatus_empresa == "ACTIVO") {
+                    if($emp->estatus == "ACTIVO") {
                 ?>
 
-                <option value="{{$emp->id_empresa}}">{{$emp->nombre_empresa}}</option>
+                <option value="{{$emp->id}}">{{$emp->nombre_empresa}}</option>
 
                 <?php
                     }//if
@@ -88,36 +88,6 @@
                 ?>
               </select>
             </td>
-          </tr>
-
-          <tr>
-            <th scope="row">{!! Form::label('nombres', 'Nombres *', ['title' => 'Este campo es requerido']) !!}</th>
-            <td>{!! Form::text('nombres', null, [ 'class' => 'form-control', 'placeholder' => 'Maria Raquel', 'pattern' => '^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s\']+$', 'required']) !!}</td>
-          </tr>
-
-          <tr>
-            <th scope="row">{!! Form::label('apellidos', 'Apellidos *', ['title' => 'Este campo es requerido']) !!}</th>
-            <td>{!! Form::text('apellidos', null, [ 'class' => 'form-control', 'placeholder' => 'Herrera Perez', 'pattern' => '^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s\']+$', 'required']) !!}</td>
-          </tr>
-
-          <tr>
-            <th scope="row">
-              <label for="telefono">Teléfono</label>
-            </th>
-            
-            <td>
-              <input type="tel" class="form-control" name="telefono" id="telefono" placeholder="0414-1234567" pattern="^0[1246]{3}-[0-9]{7}$">
-            </td>
-          </tr>
-
-          <tr>
-            <th scope="row">{!! Form::label('correo', 'Correo') !!}</th>
-            <td>{!! Form::email('correo', null, [ 'class' => 'form-control', 'placeholder' => 'mherrera@farmacia72.com']) !!}</td>
-          </tr>
-
-          <tr>
-            <th scope="row">{!! Form::label('cargo', 'Cargo *', ['title' => 'Este campo es requerido']) !!}</th>
-            <td>{!! Form::text('cargo', null, [ 'class' => 'form-control', 'placeholder' => 'Gerente de RRHH', 'required']) !!}</td>
           </tr>
         </tbody>
       </table>

@@ -3,9 +3,11 @@
 namespace compras\Http\Controllers;
 
 use Illuminate\Http\Request;
-use compras\RH_Candidato;
+use Illuminate\Support\Facades\DB;
+
 use compras\User;
 use compras\Auditoria;
+use compras\RH_Candidato;
 
 class RH_CandidatoController extends Controller {
     /**
@@ -28,7 +30,7 @@ class RH_CandidatoController extends Controller {
     }
 
     /**
-     * Display a listing of the resource.
+     * Display a listing of the active resource.
      *
      * @return \Illuminate\Http\Response
      */

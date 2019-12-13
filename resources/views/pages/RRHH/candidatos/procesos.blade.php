@@ -102,6 +102,52 @@
     </div>
   @endif
 
+  @if(session('Saved4'))
+    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title text-info" id="exampleModalCenterTitle">
+              <i class="fas fa-info text-info"></i>{{ session('Saved4') }}
+            </h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <h4 class="h6">Fase #4 agregada con éxito</h4>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline-success" data-dismiss="modal">Aceptar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  @endif
+
+  @if(session('Saved5'))
+    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title text-info" id="exampleModalCenterTitle">
+              <i class="fas fa-info text-info"></i>{{ session('Saved5') }}
+            </h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <h4 class="h6">Fase #5 agregada con éxito</h4>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline-success" data-dismiss="modal">Aceptar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  @endif
+
   @if(session('Error'))
     <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered" role="document">
@@ -283,11 +329,11 @@
 
               case 'Referencias laborales':
           ?>
-            <form action="#" method="GET" style="display: inline-block;">
+            <form action="/procesos_referencias/create" method="GET" style="display: inline-block;">
               <input type="hidden" name="CandidatoId" value="{{$candidato->id}}">
               <input type="hidden" name="CandidatoFaseId" value="{{$candidatos_fases->id}}">
 
-              <button type="button" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="bottom" title="Ir a la fase">
+              <button type="submit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="bottom" title="Ir a la fase">
                 <i class="far fa-address-card"></i>&nbsp;Empresa ref.
               </button>
             </form>
@@ -298,6 +344,50 @@
 
               <button type="submit" role="button" class="btn btn-outline-primary btn-sm" data-toggle="tooltip" data-placement="bottom" title="Ir a la fase">
                 <i class="fas fa-users"></i>&nbsp;Entrevista
+              </button>
+            </form>
+          <?php
+              break;
+
+              case 'Validar referencia':
+          ?>
+            <form action="/contactos/create" method="GET" style="display: inline-block;">
+              <input type="hidden" name="CandidatoId" value="{{$candidato->id}}">
+              <input type="hidden" name="CandidatoFaseId" value="{{$candidatos_fases->id}}">
+
+              <button type="submit" role="button" class="btn btn-outline-dark btn-sm" data-toggle="tooltip" data-placement="bottom" title="Ir a la fase">
+                <i class="fas fa-phone"></i>&nbsp;Validar ref.
+              </button>
+            </form>
+
+            <form action="/procesos_referencias/create" method="GET" style="display: inline-block;">
+              <input type="hidden" name="CandidatoId" value="{{$candidato->id}}">
+              <input type="hidden" name="CandidatoFaseId" value="{{$candidatos_fases->id}}">
+
+              <button type="submit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="bottom" title="Ir a la fase">
+                <i class="far fa-address-card"></i>&nbsp;Empresa ref.
+              </button>
+            </form>
+          <?php
+              break;
+
+              case 'Exámenes médicos':
+          ?>
+            <form action="#" method="GET" style="display: inline-block;">
+              <input type="hidden" name="CandidatoId" value="{{$candidato->id}}">
+              <input type="hidden" name="CandidatoFaseId" value="{{$candidatos_fases->id}}">
+
+              <button type="submit" role="button" class="btn btn-outline-secondary btn-sm" data-toggle="tooltip" data-placement="bottom" title="Ir a la fase">
+                <i class="fas fa-user-md"></i>&nbsp;Exámenes med.
+              </button>
+            </form>
+
+            <form action="/contactos/create" method="GET" style="display: inline-block;">
+              <input type="hidden" name="CandidatoId" value="{{$candidato->id}}">
+              <input type="hidden" name="CandidatoFaseId" value="{{$candidatos_fases->id}}">
+
+              <button type="submit" role="button" class="btn btn-outline-dark btn-sm" data-toggle="tooltip" data-placement="bottom" title="Ir a la fase">
+                <i class="fas fa-phone"></i>&nbsp;Validar ref.
               </button>
             </form>
           <?php

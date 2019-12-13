@@ -3,9 +3,15 @@
 namespace compras\Http\Controllers;
 
 use Illuminate\Http\Request;
-use compras\RH_ContactoEmp;
+use Illuminate\Support\Facades\DB;
+
 use compras\User;
 use compras\Auditoria;
+use compras\RH_Candidato;
+use compras\RHI_Candidato_Fase;
+use compras\RH_EmpresaReferencia;
+use compras\RH_Candidato_EmpresaReferencia;
+use compras\RH_ContactoEmp;
 
 class RH_ContactoEmpresaController extends Controller {
     /**
@@ -32,8 +38,31 @@ class RH_ContactoEmpresaController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function create() {
-        return view('pages.RRHH.contactos.create');
+    public function create(Request $request) {
+        $candidato = RH_Candidato::find($request->input("CandidatoId"));
+        $candidato_fase = RHI_Candidato_Fase::find($request->input("CandidatoFaseId"));
+        $empresa_ref = DB::table('rhi_candidatos_empresaref')
+        ->join(
+            'rh_candidatos', 'rh_candidatos.id', 
+            '=', 'rhi_candidatos_empresaref.rh_candidatos_id'
+        )
+        ->join(
+            'rh_empresaref', 'rh_empresaref.id', 
+            '=', 'rhi_candidatos_empresaref.rh_empresaref_id'
+        )
+        ->select(
+            'rh_candidatos.id AS id_candidato',
+            'rh_empresaref.id AS id_empresa',
+            'rh_candidatos.nombres',
+            'rh_candidatos.apellidos',
+            'rh_candidatos.cedula',
+            'rh_empresaref.nombre_empresa',
+            'rh_empresaref.estatus AS estatus_empresa'
+        )
+        ->where('rhi_candidatos_empresaref.rh_candidatos_id', $candidato->id)
+        ->get();
+
+        return view('pages.RRHH.contactos.create', compact('candidato', 'candidato_fase', 'empresa_ref'));
     }
 
     /**
@@ -45,6 +74,7 @@ class RH_ContactoEmpresaController extends Controller {
     public function store(Request $request) {
         try {
             $contactos = new RH_ContactoEmp();
+            $contactos->rh_emprf_id = $request->input('EmpresaId');
             $contactos->nombre = $request->input('nombres');
             $contactos->apellido = $request->input('apellidos');
             $contactos->telefono = $request->input('telefono');
@@ -54,6 +84,12 @@ class RH_ContactoEmpresaController extends Controller {
             $contactos->user = auth()->user()->name;
             $contactos->save();
 
+            //-------------------- FASE ASOCIADA --------------------//
+            $fase_asociada = RHI_Candidato_Fase::find($request->input('CandidatoFaseId'));
+            $fase_asociada->rh_fases_id = 6;
+            $fase_asociada->save();
+
+            //-------------------- AUDITORIA --------------------//
             $Auditoria = new Auditoria();
             $Auditoria->accion = 'CREAR';
             $Auditoria->tabla = 'RH_CONTACTOS_EMPRESAS';
@@ -62,8 +98,8 @@ class RH_ContactoEmpresaController extends Controller {
             $Auditoria->save();
 
             return redirect()
-                ->route('contactos.index')
-                ->with('Saved', ' Informacion');
+            ->action('RH_CandidatoController@procesos')
+            ->with('Saved5', ' Informacion');
         }
         catch(\Illuminate\Database\QueryException $e) {
             return back()->with('Error', ' Error');
