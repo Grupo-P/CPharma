@@ -84,6 +84,11 @@ class RH_ContactoEmpresaController extends Controller {
             $contactos->user = auth()->user()->name;
             $contactos->save();
 
+            //-------------------- FASE ASOCIADA --------------------//
+            $fase_asociada = RHI_Candidato_Fase::find($request->input('CandidatoFaseId'));
+            $fase_asociada->rh_fases_id = 6;
+            $fase_asociada->save();
+
             //-------------------- AUDITORIA --------------------//
             $Auditoria = new Auditoria();
             $Auditoria->accion = 'CREAR';
@@ -93,8 +98,8 @@ class RH_ContactoEmpresaController extends Controller {
             $Auditoria->save();
 
             return redirect()
-                ->route('contactos.index')
-                ->with('Saved5', ' Informacion');
+            ->action('RH_CandidatoController@procesos')
+            ->with('Saved5', ' Informacion');
         }
         catch(\Illuminate\Database\QueryException $e) {
             return back()->with('Error', ' Error');
