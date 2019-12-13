@@ -371,6 +371,28 @@
           <?php
               break;
 
+              case 'Exámenes médicos':
+          ?>
+            <form action="#" method="GET" style="display: inline-block;">
+              <input type="hidden" name="CandidatoId" value="{{$candidato->id}}">
+              <input type="hidden" name="CandidatoFaseId" value="{{$candidatos_fases->id}}">
+
+              <button type="submit" role="button" class="btn btn-outline-secondary btn-sm" data-toggle="tooltip" data-placement="bottom" title="Ir a la fase">
+                <i class="fas fa-user-md"></i>&nbsp;Exámenes med.
+              </button>
+            </form>
+
+            <form action="/contactos/create" method="GET" style="display: inline-block;">
+              <input type="hidden" name="CandidatoId" value="{{$candidato->id}}">
+              <input type="hidden" name="CandidatoFaseId" value="{{$candidatos_fases->id}}">
+
+              <button type="submit" role="button" class="btn btn-outline-dark btn-sm" data-toggle="tooltip" data-placement="bottom" title="Ir a la fase">
+                <i class="fas fa-phone"></i>&nbsp;Validar ref.
+              </button>
+            </form>
+          <?php
+              break;
+
               default: echo $nombre_fase;
             }//switch
           }//else
