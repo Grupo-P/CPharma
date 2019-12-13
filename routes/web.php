@@ -210,7 +210,8 @@ Route::resource('ordenCompraDetalle', 'OrdenCompraDetalleController');
 //***************************** RRHH routing *****************************//
 Route::resource('candidatos', 'RH_CandidatoController');
 Route::get('/procesos_candidatos', 'RH_CandidatoController@procesos');
-Route::get('/procesos_referencias', 'RH_CandidatoController@referencias');
+
+Route::resource('procesos_referencias', 'RH_CandidatoEmpresaController');
 
 Route::resource('pruebas', 'RH_PruebaController');
 

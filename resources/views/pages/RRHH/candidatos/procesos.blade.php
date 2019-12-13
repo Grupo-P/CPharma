@@ -283,7 +283,7 @@
 
               case 'Referencias laborales':
           ?>
-            <form action="/procesos_referencias" method="GET" style="display: inline-block;">
+            <form action="/procesos_referencias/create" method="GET" style="display: inline-block;">
               <input type="hidden" name="CandidatoId" value="{{$candidato->id}}">
               <input type="hidden" name="CandidatoFaseId" value="{{$candidatos_fases->id}}">
 

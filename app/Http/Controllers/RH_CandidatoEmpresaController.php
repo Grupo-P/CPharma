@@ -20,7 +20,7 @@ class RH_CandidatoEmpresaController extends Controller {
     public function __construct() {
         $this->middleware('auth');
     }
-    
+
     /**
      * Display a listing of the resource.
      *
@@ -41,7 +41,7 @@ class RH_CandidatoEmpresaController extends Controller {
         $empresa_ref = RH_EmpresaReferencia::orderBy('nombre_empresa', 'asc')
         ->get();
 
-        return view('pages.RRHH.candidatos.referencias', compact('candidato', 'candidato_fase', 'empresa_ref'));
+        return view('pages.RRHH.candidatos_emp.create', compact('candidato', 'candidato_fase', 'empresa_ref'));
     }
 
     /**

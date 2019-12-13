@@ -44,7 +44,7 @@
 
   <br/><br/>
 
-  {!! Form::open(['route' => 'rhi_candidatos_empresaref.store', 'method' => 'POST', 'id' => 'crear_candidato', 'class' => 'form-group']) !!}
+  {!! Form::open(['route' => 'procesos_referencias.store', 'method' => 'POST', 'id' => 'crear_candidato', 'class' => 'form-group']) !!}
     <fieldset>
       <table class="table table-borderless table-striped">
         <thead class="thead-dark">
