@@ -56,13 +56,13 @@ class RH_ContactoEmpresaController extends Controller {
             'rh_candidatos.nombres',
             'rh_candidatos.apellidos',
             'rh_candidatos.cedula',
-            'rh_empresaref.nombre_empresa'
+            'rh_empresaref.nombre_empresa',
+            'rh_empresaref.estatus AS estatus_empresa'
         )
         ->where('rhi_candidatos_empresaref.rh_candidatos_id', $candidato->id)
         ->get();
 
-        return $empresa_ref;
-        //return view('pages.RRHH.contactos.create');
+        return view('pages.RRHH.contactos.create', compact('candidato', 'candidato_fase', 'empresa_ref'));
     }
 
     /**
@@ -74,6 +74,7 @@ class RH_ContactoEmpresaController extends Controller {
     public function store(Request $request) {
         try {
             $contactos = new RH_ContactoEmp();
+            $contactos->rh_emprf_id = $request->input('EmpresaId');
             $contactos->nombre = $request->input('nombres');
             $contactos->apellido = $request->input('apellidos');
             $contactos->telefono = $request->input('telefono');
@@ -83,6 +84,7 @@ class RH_ContactoEmpresaController extends Controller {
             $contactos->user = auth()->user()->name;
             $contactos->save();
 
+            //-------------------- AUDITORIA --------------------//
             $Auditoria = new Auditoria();
             $Auditoria->accion = 'CREAR';
             $Auditoria->tabla = 'RH_CONTACTOS_EMPRESAS';
@@ -92,7 +94,7 @@ class RH_ContactoEmpresaController extends Controller {
 
             return redirect()
                 ->route('contactos.index')
-                ->with('Saved', ' Informacion');
+                ->with('Saved5', ' Informacion');
         }
         catch(\Illuminate\Database\QueryException $e) {
             return back()->with('Error', ' Error');

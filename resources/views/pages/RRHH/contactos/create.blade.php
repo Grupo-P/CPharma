@@ -56,8 +56,43 @@
 
         <tbody>
           <tr>
+            <th scope="row">{!! Form::label('nombres', 'Nombre del candidato') !!}</th>
+
+            <td>
+              {!! Form::text('nombres', $candidato->nombres . " " . $candidato->apellidos, [ 'class' => 'form-control', 'disabled']) !!}
+
+              {!! Form::hidden('CandidatoId', $candidato->id, ['id' => 'CandidatoId']) !!}
+
+              {!! Form::hidden('CandidatoFaseId', $candidato_fase->id, ['id' => 'CandidatoFaseId']) !!}
+            </td>
+          </tr>
+
+          <tr>
+            <th scope="row">
+              {!! Form::label('EmpresaId', 'Empresa asociada *', ['title' => 'Éste campo es requerido']) !!}
+            </th>
+            <td>
+              <select name="EmpresaId" id="EmpresaId" class="form-control" required autofocus>
+                <option value="">Seleccione una opción</option>
+
+                <?php
+                  foreach ($empresa_ref as $emp) {
+                    if($emp->estatus_empresa == "ACTIVO") {
+                ?>
+
+                <option value="{{$emp->id_empresa}}">{{$emp->nombre_empresa}}</option>
+
+                <?php
+                    }//if
+                  }//foreach
+                ?>
+              </select>
+            </td>
+          </tr>
+
+          <tr>
             <th scope="row">{!! Form::label('nombres', 'Nombres *', ['title' => 'Este campo es requerido']) !!}</th>
-            <td>{!! Form::text('nombres', null, [ 'class' => 'form-control', 'placeholder' => 'Maria Raquel', 'pattern' => '^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s\']+$', 'autofocus', 'required']) !!}</td>
+            <td>{!! Form::text('nombres', null, [ 'class' => 'form-control', 'placeholder' => 'Maria Raquel', 'pattern' => '^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s\']+$', 'required']) !!}</td>
           </tr>
 
           <tr>
