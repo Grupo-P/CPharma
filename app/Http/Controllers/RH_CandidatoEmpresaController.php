@@ -10,6 +10,7 @@ use compras\Auditoria;
 use compras\RH_Candidato;
 use compras\RHI_Candidato_Fase;
 use compras\RH_EmpresaReferencia;
+use compras\RH_Candidato_EmpresaReferencia;
 
 class RH_CandidatoEmpresaController extends Controller {
     /**
@@ -51,7 +52,34 @@ class RH_CandidatoEmpresaController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request) {
-        //
+        try {
+            $candidatos_emp = new RH_Candidato_EmpresaReferencia();
+            $candidatos_emp->rh_candidatos_id = $request->input('CandidatoId');
+            $candidatos_emp->rh_empresaref_id = $request->input('EmpresaId');
+            $candidatos_emp->user = auth()->user()->name;
+            $candidatos_emp->save();
+
+            //-------------------- FASE ASOCIADA --------------------//
+            $fase_asociada = RHI_Candidato_Fase::find($request->input('CandidatoFaseId'));
+            $fase_asociada->rh_fases_id = 5;
+            $fase_asociada->save();
+
+            //-------------------- AUDITORIA --------------------//
+            $Auditoria = new Auditoria();
+            $Auditoria->accion = 'CREAR';
+            $Auditoria->tabla = 'RHI_CANDIDATOS_EMPRESAREF';
+            $Auditoria->registro = RH_EmpresaReferencia::where('id', $request->input('EmpresaId'))
+            ->value('nombre_empresa');
+            $Auditoria->user = auth()->user()->name;
+            $Auditoria->save();
+
+            return redirect()
+            ->action('RH_CandidatoController@procesos')
+            ->with('Saved4', ' Informacion');
+        }
+        catch(\Illuminate\Database\QueryException $e) {
+            return back()->with('Error', ' Error');
+        }
     }
 
     /**
