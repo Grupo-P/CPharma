@@ -27,6 +27,10 @@ Route::get('/conversionDosis', function() {
     return view('pages.caja.conversionDosis');
 });
 
+Route::get('/ConsultaPrecio', function() { 
+    return view('pages.consultorP.consultaPrecio');
+});
+
 Route::get('/ACI', function() {
     return view('pages.ACI.ProximamenteACI');
 });

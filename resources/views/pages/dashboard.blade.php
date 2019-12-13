@@ -442,7 +442,7 @@
     		</h3>
     		<p class="card-text text-dark">
     			<?php
-						R16_Acticulos_Estrella_Top(FG_Mi_Ubicacion());
+						FG_Acticulos_Estrella_Top(FG_Mi_Ubicacion());
 					?>
     		</p>
   		</div>
@@ -1487,7 +1487,7 @@
     		</h3>
     		<p class="card-text text-dark">
     			<?php
-						//R16_Acticulos_Estrella_Top('FTN');
+						//FG_Acticulos_Estrella_Top('FTN');
 					?>
     		</p>
   		</div>

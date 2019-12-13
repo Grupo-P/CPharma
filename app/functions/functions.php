@@ -1765,12 +1765,12 @@
 	}
 	/**********************************************************************************/
   /*
-    TITULO: R16_Acticulos_Estrella_Top
+    TITULO: FG_Acticulos_Estrella_Top
     FUNCION: Arma el reporte de articulos estrellas
     RETORNO: Lista de articulos estrella y su comportamiento
     DESAROLLADO POR: SERGIO COVA
   */
-  function R16_Acticulos_Estrella_Top($SedeConnection) {
+  function FG_Acticulos_Estrella_Top($SedeConnection) {
     $conn = FG_Conectar_Smartpharma($SedeConnection);
     $connCPharma = FG_Conectar_CPharma();
 
@@ -1914,4 +1914,66 @@
         </tbody>
       </table>';
   }
+  /**********************************************************************************/
+  /*
+    TITULO: FG_Precio_Consultor
+    FUNCION: Armma el precio para el consultor
+    RETORNO: precio con IVA del articulo
+    DESAROLLADO POR: SERGIO COVA
+  */
+  function FG_Precio_Consultor($IdArticulo) {
+  	$SedeConnection = FG_Mi_Ubicacion();
+  	$conn = FG_Conectar_Smartpharma($SedeConnection);
+
+  	$sql = SQG_Lite_Detalle_Articulo($IdArticulo);
+    $result = sqlsrv_query($conn,$sql);
+    $row = sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC);
+
+    $Existencia = $row["Existencia"];
+    $ExistenciaAlmacen1 = $row["ExistenciaAlmacen1"];
+    $ExistenciaAlmacen2 = $row["ExistenciaAlmacen2"];
+    $IsTroquelado = $row["Troquelado"];
+    $UtilidadArticulo = $row["UtilidadArticulo"];
+    $UtilidadCategoria = $row["UtilidadCategoria"];
+    $TroquelAlmacen1 = $row["TroquelAlmacen1"];
+    $PrecioCompraBrutoAlmacen1 = $row["PrecioCompraBrutoAlmacen1"];
+    $TroquelAlmacen2 = $row["TroquelAlmacen2"];
+    $PrecioCompraBrutoAlmacen2 = $row["PrecioCompraBrutoAlmacen2"];
+    $PrecioCompraBruto = $row["PrecioCompraBruto"];
+    $IsIVA = $row["Impuesto"];
+    $CondicionExistencia = 'CON_EXISTENCIA';
+
+    $Precio = FG_Calculo_Precio_Alfa($Existencia,$ExistenciaAlmacen1,$ExistenciaAlmacen2,$IsTroquelado,$UtilidadArticulo,$UtilidadCategoria,$TroquelAlmacen1,$PrecioCompraBrutoAlmacen1,$TroquelAlmacen2,
+    $PrecioCompraBrutoAlmacen2,$PrecioCompraBruto,$IsIVA,$CondicionExistencia);
+
+    return $Precio;
+  }
+  /**********************************************************************************/
+	/*
+		TITULO: FG_Dominio_Sede
+		FUNCION: Retornar el nombre de la sede con la que se esta conectando
+		RETORNO: Nombre de la sede conectada
+		DESAROLLADO POR: SERGIO COVA
+	 */
+	function FG_Dominio_Sede($SedeConnection) {
+		switch($SedeConnection) {
+			case 'FTN':
+				$dominio = 'http://cpharmaftn.com/';
+				return $dominio;
+			break;
+			case 'FLL':
+				$dominio = 'http://cpharmafll.com/';
+				return $dominio;
+			break;
+			case 'FAU':
+				$dominio = 'http://cpharmafau.com/';
+				return $dominio;
+			break;
+			case 'GP':
+				$dominio = 'http://cpharmade.com/';
+				return $dominio;
+			break;
+		}
+		return $dominio;
+	}
 ?>
