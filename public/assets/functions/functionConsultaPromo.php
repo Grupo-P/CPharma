@@ -53,7 +53,7 @@
     DESAROLLADO POR: SERGIO COVA
   */
  	function FG_Articulos_Promocion(){
-    $SedeConnection = 'FTN';//FG_Mi_Ubicacion();
+    $SedeConnection = FG_Mi_Ubicacion();
   	$conn = FG_Conectar_Smartpharma($SedeConnection);
     $ExistenciaMinima = 20;
     $arraySugeridos = array();
