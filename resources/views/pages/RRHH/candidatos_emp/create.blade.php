@@ -69,10 +69,10 @@
 
           <tr>
             <th scope="row">
-              {!! Form::label('PruebaId', 'Prueba asociada *', ['title' => 'Éste campo es requerido']) !!}
+              {!! Form::label('EmpresaId', 'Empresa asociada *', ['title' => 'Éste campo es requerido']) !!}
             </th>
             <td>
-              <select name="PruebaId" id="PruebaId" class="form-control" required autofocus>
+              <select name="EmpresaId" id="EmpresaId" class="form-control" required autofocus>
                 <option value="">Seleccione una opción</option>
 
                 <?php
@@ -87,25 +87,6 @@
                   }//foreach
                 ?>
               </select>
-            </td>
-          </tr>
-
-          <tr>
-            <th scope="row">{!! Form::label('fecha', 'Fecha de la prueba *', ['title' => 'Éste campo es requerido']) !!}</th>
-            <td>{!! Form::date('fecha', null, ['class' => 'form-control', 'required']) !!}</td>
-          </tr>
-
-          <tr>
-            <th scope="row">{!! Form::label('facilitador', 'Facilitador *', ['title' => 'Éste campo es requerido']) !!}</th>
-            
-            <td>{!! Form::text('facilitador', null, [ 'class' => 'form-control', 'placeholder' => 'Genesis Albornoz', 'pattern' => '^[a-zA-ZáéíóúÁÉÍÓÚñÑ,\s\']+$', 'required']) !!}</td>
-          </tr>
-
-          <tr>
-            <th scope="row">{!! Form::label('puntuacion', 'Puntuación *', ['title' => 'Éste campo es requerido']) !!}</th>
-            
-            <td>
-              <input type="number" step="0.01" min="0" max="100" name="puntuacion" id="puntuacion" placeholder="12.5" class="form-control">
             </td>
           </tr>
         </tbody>
