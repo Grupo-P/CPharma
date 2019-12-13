@@ -12,7 +12,8 @@ class AddNullablesToRhContactosEmpresasTable extends Migration {
      */
     public function up() {
         Schema::table('rh_contactos_empresas', function (Blueprint $table) {
-            //
+            $table->string('telefono')->nullable()->change();
+            $table->string('correo')->nullable()->change();
         });
     }
 
@@ -23,7 +24,8 @@ class AddNullablesToRhContactosEmpresasTable extends Migration {
      */
     public function down() {
         Schema::table('rh_contactos_empresas', function (Blueprint $table) {
-            //
+            $table->string('telefono')->change();
+            $table->string('correo')->change();
         });
     }
 }
