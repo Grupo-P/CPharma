@@ -3,9 +3,15 @@
 namespace compras\Http\Controllers;
 
 use Illuminate\Http\Request;
-use compras\RH_ContactoEmp;
+use Illuminate\Support\Facades\DB;
+
 use compras\User;
 use compras\Auditoria;
+use compras\RH_Candidato;
+use compras\RHI_Candidato_Fase;
+use compras\RH_EmpresaReferencia;
+use compras\RH_Candidato_EmpresaReferencia;
+use compras\RH_ContactoEmp;
 
 class RH_ContactoEmpresaController extends Controller {
     /**
@@ -32,7 +38,15 @@ class RH_ContactoEmpresaController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function create() {
+    public function create(Request $request) {
+        $candidato = RH_Candidato::find($request->input("CandidatoId"));
+        $candidato_fase = RHI_Candidato_Fase::find($request->input("CandidatoFaseId"));
+        $empresa_ref = DB::table('users')
+        ->join('contacts', 'users.id', '=', 'contacts.user_id')
+        ->join('orders', 'users.id', '=', 'orders.user_id')
+        ->select('users.*', 'contacts.phone', 'orders.price')
+        ->get();
+
         return view('pages.RRHH.contactos.create');
     }
 

@@ -326,6 +326,28 @@
           <?php
               break;
 
+              case 'Validar referencia':
+          ?>
+            <form action="/contactos/create" method="GET" style="display: inline-block;">
+              <input type="hidden" name="CandidatoId" value="{{$candidato->id}}">
+              <input type="hidden" name="CandidatoFaseId" value="{{$candidatos_fases->id}}">
+
+              <button type="submit" role="button" class="btn btn-outline-dark btn-sm" data-toggle="tooltip" data-placement="bottom" title="Ir a la fase">
+                <i class="fas fa-phone"></i>&nbsp;Validar ref.
+              </button>
+            </form>
+
+            <form action="/procesos_referencias/create" method="GET" style="display: inline-block;">
+              <input type="hidden" name="CandidatoId" value="{{$candidato->id}}">
+              <input type="hidden" name="CandidatoFaseId" value="{{$candidatos_fases->id}}">
+
+              <button type="submit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="bottom" title="Ir a la fase">
+                <i class="far fa-address-card"></i>&nbsp;Empresa ref.
+              </button>
+            </form>
+          <?php
+              break;
+
               default: echo $nombre_fase;
             }//switch
           }//else
