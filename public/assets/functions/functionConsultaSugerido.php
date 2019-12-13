@@ -63,7 +63,7 @@
     $AtributoSugeridoId = '';
     $ExistenciaMinima = 20;
 
-    $SedeConnection = 'FTN';//FG_Mi_Ubicacion();
+    $SedeConnection = FG_Mi_Ubicacion();
   	$conn = FG_Conectar_Smartpharma($SedeConnection);
 
   	$sql = SQL_Atributo_Articulo($IdArticulo);

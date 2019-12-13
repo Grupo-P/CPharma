@@ -17,5 +17,6 @@
             @include('includes.footer')
             @yield('scriptsPie')
         </footer>
+        @yield('scriptsFoot')
     </body>
 </html>

@@ -74,7 +74,7 @@
 	  include(app_path().'\functions\querys_mysql.php');
 	  include(app_path().'\functions\querys_sqlserver.php');
 
-    $SedeConnection = 'FTN';//FG_Mi_Ubicacion();
+    $SedeConnection = FG_Mi_Ubicacion();
     $RutaUrl = FG_Mi_Ubicacion();
 
 	  $CodJson = '';
