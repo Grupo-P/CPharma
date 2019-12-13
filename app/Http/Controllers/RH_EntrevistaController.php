@@ -153,7 +153,7 @@ class RH_EntrevistaController extends Controller {
 
             //-------------------- FASE ASOCIADA --------------------//
             $candidatos_fases = DB::table('rhi_candidatos_fases')
-            ->where('rh_candidatos_id', $candidato->id)
+            ->where('rh_candidatos_id', $request->input('CandidatoId'))
             ->orderBy('id', 'desc')
             ->first();
 
