@@ -41,13 +41,28 @@ class RH_ContactoEmpresaController extends Controller {
     public function create(Request $request) {
         $candidato = RH_Candidato::find($request->input("CandidatoId"));
         $candidato_fase = RHI_Candidato_Fase::find($request->input("CandidatoFaseId"));
-        $empresa_ref = DB::table('users')
-        ->join('contacts', 'users.id', '=', 'contacts.user_id')
-        ->join('orders', 'users.id', '=', 'orders.user_id')
-        ->select('users.*', 'contacts.phone', 'orders.price')
+        $empresa_ref = DB::table('rhi_candidatos_empresaref')
+        ->join(
+            'rh_candidatos', 'rh_candidatos.id', 
+            '=', 'rhi_candidatos_empresaref.rh_candidatos_id'
+        )
+        ->join(
+            'rh_empresaref', 'rh_empresaref.id', 
+            '=', 'rhi_candidatos_empresaref.rh_empresaref_id'
+        )
+        ->select(
+            'rh_candidatos.id AS id_candidato',
+            'rh_empresaref.id AS id_empresa',
+            'rh_candidatos.nombres',
+            'rh_candidatos.apellidos',
+            'rh_candidatos.cedula',
+            'rh_empresaref.nombre_empresa'
+        )
+        ->where('rhi_candidatos_empresaref.rh_candidatos_id', $candidato->id)
         ->get();
 
-        return view('pages.RRHH.contactos.create');
+        return $empresa_ref;
+        //return view('pages.RRHH.contactos.create');
     }
 
     /**
