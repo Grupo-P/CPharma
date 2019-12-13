@@ -13,6 +13,15 @@ use compras\RH_EmpresaReferencia;
 
 class RH_CandidatoEmpresaController extends Controller {
     /**
+     * Create a new controller instance with auth.
+     *
+     * @return void
+     */
+    public function __construct() {
+        $this->middleware('auth');
+    }
+    
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
@@ -26,8 +35,13 @@ class RH_CandidatoEmpresaController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function create() {
-        //
+    public function create(Request $request) {
+        $candidato = RH_Candidato::find($request->input("CandidatoId"));
+        $candidato_fase = RHI_Candidato_Fase::find($request->input("CandidatoFaseId"));
+        $empresa_ref = RH_EmpresaReferencia::orderBy('nombre_empresa', 'asc')
+        ->get();
+
+        return view('pages.RRHH.candidatos.referencias', compact('candidato', 'candidato_fase', 'empresa_ref'));
     }
 
     /**
