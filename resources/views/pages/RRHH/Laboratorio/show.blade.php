@@ -52,11 +52,6 @@
       </tr>
 
       <tr>
-        <th scope="row">Fecha de la Valoración</th>
-        <td>{{$laboratorio->fecha}}</td>
-      </tr>
-
-      <tr>
         <th scope="row">Estatus</th>
         <td>{{$laboratorio->estatus}}</td>
       </tr>

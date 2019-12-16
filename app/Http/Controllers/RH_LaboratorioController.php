@@ -51,8 +51,6 @@ class RH_LaboratorioController extends Controller {
         }
 
         try {
-            $fecha = $request->input('fecha');
-
             $laboratorio = new RH_Laboratorio();
 
             $laboratorio->rif = $rif;
@@ -60,7 +58,6 @@ class RH_LaboratorioController extends Controller {
             $laboratorio->direccion = $request->input('direccion');
             $laboratorio->telefono_celular = $request->input('telefono_celular');
             $laboratorio->telefono_fijo = $request->input('telefono_fijo');
-            $laboratorio->fecha = date('Y-m-d', strtotime($fecha));
             $laboratorio->estatus = 'ACTIVO';
             $laboratorio->user = auth()->user()->name;
             $laboratorio->save();
@@ -107,7 +104,7 @@ class RH_LaboratorioController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function edit($id) {
-         $laboratorio = RH_Laboratorio::find($id);
+        $laboratorio = RH_Laboratorio::find($id);
 
         return view('pages.RRHH.laboratorio.edit', compact('laboratorio'));
     }
