@@ -268,11 +268,15 @@
             <th scope="col" class="CP-sticky">#</th>
             <th scope="col" class="CP-sticky">Proveedor</th>
             <th scope="col" class="CP-sticky">Fecha de documento</th>
+            <th scope="col" class="CP-sticky bg-danger text-white">Fecha de registro</th>
             <th scope="col" class="CP-sticky">Cantidad recibida</th>
             <th scope="col" class="CP-sticky">Costo bruto</br>(Sin IVA) '.SigVe.'</th>
-            <th scope="col" class="CP-sticky">Tasa en historico '.SigVe.'</th>
-            <th scope="col" class="CP-sticky">Costo bruto</br>HOY (Sin IVA) '.SigVe.'</th>
-          <th scope="col" class="CP-sticky">Costo en divisa</br>(Sin IVA) '.SigDolar.'</th>
+            <th scope="col" class="CP-sticky">Tasa en historico '.SigVe.'</br>(fecha documento)</th>
+            <th scope="col" class="CP-sticky bg-danger text-white">Tasa en historico '.SigVe.'</br>(fecha registro)</th>
+            <th scope="col" class="CP-sticky">Costo bruto</br>HOY (Sin IVA) '.SigVe.'</br>(fecha documento)</th>
+            <th scope="col" class="CP-sticky bg-danger text-white">Costo bruto</br>HOY (Sin IVA) '.SigVe.'</br>(fecha registro)</th>
+          <th scope="col" class="CP-sticky">Costo en divisa</br>(Sin IVA) '.SigDolar.'</br>(fecha documento)</th>
+          <th scope="col" class="CP-sticky bg-danger text-white">Costo en divisa</br>(Sin IVA) '.SigDolar.'</br>(fecha registro)</th>
           </tr>
         </thead>
         <tbody>
@@ -289,30 +293,46 @@
         '</a>
         </td>';
         echo '<td align="center">'.$row2["FechaDocumento"]->format('d-m-Y').'</td>';
+        echo '<td align="center" class="bg-danger text-white">'.$row2["FechaRegistro"]->format('d-m-Y').'</td>';
         echo '<td align="center">'.intval($row2['CantidadRecibidaFactura']).'</td>';
         echo '<td align="center">'.number_format($row2["M_PrecioCompraBruto"],2,"," ,"." ).'</td>';
 
-        $FechaHist = $row2["FechaDocumento"]->format('Y-m-d');
-        $Tasa = FG_Tasa_Fecha($connCPharma,$FechaHist);
+        $FechaHistDoc = $row2["FechaDocumento"]->format('Y-m-d');
+        $TasaDoc = FG_Tasa_Fecha($connCPharma,$FechaHistDoc);
+
+        $FechaHistFR = $row2["FechaRegistro"]->format('Y-m-d');
+        $TasaFR = FG_Tasa_Fecha($connCPharma,$FechaHistFR);
          
-        if($Tasa != 0) {
-          $CostoDivisa = $row2["M_PrecioCompraBruto"]/$Tasa;
-          echo '<td align="center">'.number_format($Tasa,2,"," ,"." ).'</td>';
+        if( ($TasaDoc != 0) && ($TasaFR != 0) ) {
+          
+          echo '<td align="center">'.number_format($TasaDoc,2,"," ,"." ).'</td>';
+          echo '<td align="center" class="bg-danger text-white">'.number_format($TasaFR,2,"," ,"." ).'</td>';
+
+          $CostoDivisaDoc = $row2["M_PrecioCompraBruto"]/$TasaDoc;
+          $CostoDivisaFR = $row2["M_PrecioCompraBruto"]/$TasaFR;
 
           if($TasaActual!=0){
-            $CostoBrutoHoy = $CostoDivisa*$TasaActual;
-            echo '<td align="center">'.number_format($CostoBrutoHoy,2,"," ,"." ).'</td>';
+            $CostoBrutoHoyDoc = $CostoDivisaDoc*$TasaActual;
+            echo '<td align="center">'.number_format($CostoBrutoHoyDoc,2,"," ,"." ).'</td>';
+
+            $CostoBrutoHoyFR = $CostoDivisaFR*$TasaActual;
+            echo '<td align="center" class="bg-danger text-white">'.number_format($CostoBrutoHoyFR,2,"," ,"." ).'</td>';
           }
           else{
             echo '<td align="center">0,00</td>';
+            echo '<td align="center" class="bg-danger text-white">0,00</td>';
           }
 
-          echo '<td align="center">'.number_format($CostoDivisa,2,"," ,"." ).'</td>';
+          echo '<td align="center">'.number_format($CostoDivisaDoc,2,"," ,"." ).'</td>';
+          echo '<td align="center" class="bg-danger text-white">'.number_format($CostoDivisaFR,2,"," ,"." ).'</td>';
         }
         else{
           echo '<td align="center">0,00</td>';
+          echo '<td align="center" class="bg-danger text-white">0,00</td>';
           echo '<td align="center">0,00</td>';
+          echo '<td align="center" class="bg-danger text-white">0,00</td>';
           echo '<td align="center">0,00</td>';
+          echo '<td align="center" class="bg-danger text-white">0,00</td>';
         }
         echo '</tr>';
       $contador++;
