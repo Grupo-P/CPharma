@@ -149,7 +149,12 @@
         <tr>
           <th>{{$examen->id}}</th>
           <td>{{$examen->empresa}}</td>
-          <td>-</td>
+          <td>
+            {{
+              compras\RHI_Examen_Laboratorio::where('rh_examenes_id', $examen->id)
+              ->value('representante')
+            }}
+          </td>
           <td>{{$examen->estado}}</td>
           <td>{{$examen->estatus}}</td>
 

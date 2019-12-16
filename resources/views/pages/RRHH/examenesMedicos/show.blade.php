@@ -33,7 +33,12 @@
 
       <tr>
         <th scope="row">Representante de Empresa</th>
-        <td>{{$examenesm->representante}}</td>
+        <td>
+          {{
+            compras\RHI_Examen_Laboratorio::where('rh_examenes_id', $examenesm->id)
+            ->value('representante')
+          }}
+        </td>
       </tr>
 
       <tr>

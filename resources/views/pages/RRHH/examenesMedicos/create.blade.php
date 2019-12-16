@@ -72,7 +72,7 @@
               {!! Form::label('empresa', 'Nombre del laboratorio *', ['title' => 'Éste campo es requerido']) !!}
             </th>
             <td>
-              <select name="empresa" id="empresa" class="form-control" required>
+              <select name="empresa" id="empresa" class="form-control" required autofocus>
                 <option value="">Seleccione una opción</option>
 
                 <?php

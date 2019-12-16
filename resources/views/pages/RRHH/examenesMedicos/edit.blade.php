@@ -51,10 +51,49 @@
         <tbody>
           <tr>
             <th scope="row">
-              {!! Form::label('empresa', 'Nombre de la empresa *', ['title' => 'Este campo es requerido']) !!}
+              <label for="nombres">Nombre del candidato</label>
+            </th>
+
+            <td>
+              <?php
+                $candidato = compras\RH_Candidato::find($examenesm->rh_candidatos_id);
+                $candidato_fase = DB::table('rhi_candidatos_fases')
+                ->where('rh_candidatos_id', $examenesm->rh_candidatos_id)
+                ->orderBy('id', 'desc')
+                ->first();
+                $laboratorios = compras\RH_Laboratorio::where('estatus', 'ACTIVO')
+                ->get();
+              ?>
+
+              <input type="text" id="nombres" name="nombres" class="form-control" value="{{$candidato->nombres . ' ' . $candidato->apellidos}}" disabled>
+              
+              <input type="hidden" name="CandidatoId" id="CandidatoId" value="{{$candidato->id}}">
+
+              <input type="hidden" name="CandidatoFaseId" id="CandidatoFaseId" value="{{$candidato_fase->id}}">
+            </td>
+          </tr>
+
+          <tr>
+            <th scope="row">
+              {!! Form::label('empresa', 'Nombre del laboratorio *', ['title' => 'Éste campo es requerido']) !!}
             </th>
             <td>
-              {!! Form::text('empresa', null, [ 'class' => 'form-control', 'placeholder' => 'Medisur', 'required']) !!}
+              <select name="empresa" id="empresa" class="form-control" required autofocus>
+                <option value="">Seleccione una opción</option>
+
+                <?php
+                  foreach ($laboratorios as $laboratorio) {
+                ?>
+
+                <option value="{{$laboratorio->id}}">{{
+                    $laboratorio->nombre
+                  }}
+                </option>
+
+                <?php
+                  }//foreach
+                ?>
+              </select>
             </td>
           </tr>
 
@@ -64,6 +103,15 @@
             </th>
             <td>
               {!! Form::text('representante', null, [ 'class' => 'form-control', 'placeholder' => 'Maria Ramirez', 'required']) !!}
+            </td>
+          </tr>
+
+          <tr>
+            <th scope="row">
+              {!! Form::label('cargo', 'Cargo del representante *', ['title' => 'Este campo es requerido']) !!}
+            </th>
+            <td>
+              {!! Form::text('cargo', null, [ 'class' => 'form-control', 'placeholder' => 'Médico regente', 'required']) !!}
             </td>
           </tr>
 

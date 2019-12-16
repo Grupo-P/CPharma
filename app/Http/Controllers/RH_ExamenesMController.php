@@ -157,13 +157,18 @@ class RH_ExamenesMController extends Controller {
      */
     public function update(Request $request, $id) {
         try {
+            //-------------------- LABORATORIO --------------------//
+            $laboratorio = RH_Laboratorio::find($request->input('empresa'));
+
+            //-------------------- EXAMENES --------------------//
             $examenesm = RH_ExamenesM::find($id);
-
             $examenesm->fill($request->all());
+            $examenesm->rh_candidatos_id = $request->input('CandidatoId');
+            $examenesm->empresa = $laboratorio->nombre;
             $examenesm->user = auth()->user()->name;
-
             $examenesm->save();
 
+            //-------------------- AUDITORIA --------------------//
             $Auditoria = new Auditoria();
             $Auditoria->accion = 'EDITAR';
             $Auditoria->tabla = 'RH_EXAMENESM';

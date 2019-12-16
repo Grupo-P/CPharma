@@ -18,7 +18,7 @@ class RH_ExamenesM extends Model
      * @var array
      */
     protected $fillable = [
-    	'empresa', 'estado', 'observaciones'
+    	'estado', 'observaciones'
     ];
 
 }
