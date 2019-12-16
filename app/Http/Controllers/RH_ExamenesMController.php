@@ -9,6 +9,8 @@ use compras\User;
 use compras\Auditoria;
 use compras\RH_ExamenesM;
 use compras\RH_Candidato;
+use compras\RH_Entrevista;
+use compras\RH_Vacante;
 use compras\RH_Laboratorio;
 use compras\RHI_Candidato_Fase;
 use compras\RHI_Examen_Laboratorio;
@@ -85,6 +87,17 @@ class RH_ExamenesMController extends Controller {
             $examenes_lab->cargo = $request->input('cargo');
             $examenes_lab->user = auth()->user()->name;
             $examenes_lab->save();
+
+            //-------------------- ENTREVISTA --------------------//
+            $entrevista = DB::table('rh_entrevistas')
+            ->where('rh_candidatos_id', $candidato->id)
+            ->orderBy('id', 'desc')
+            ->first();
+
+            //-------------------- VACANTE --------------------//
+            $vacante = RH_Vacante::find($entrevista->rh_vacantes_id);
+            $vacante->cantidad = $vacante->cantidad - 1;
+            $vacante->save();
 
             //-------------------- AUDITORIA --------------------//
             $Auditoria = new Auditoria();
