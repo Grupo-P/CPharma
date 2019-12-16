@@ -54,9 +54,13 @@ class RH_ExamenesMController extends Controller {
      */
     public function store(Request $request) {
         try {
+            //-------------------- LABORATORIO --------------------//
+            $laboratorio = RH_Laboratorio::find($request->input('empresa'));
+
+            //-------------------- EXAMENES --------------------//
             $examenesm = new RH_ExamenesM();
             $examenesm->rh_candidatos_id = $request->input('CandidatoId');
-            $examenesm->empresa = $request->input('empresa');
+            $examenesm->empresa = $laboratorio->nombre;
             $examenesm->estado = $request->input('estado');
             $examenesm->observaciones = $request->input('observaciones');
             $examenesm->estatus = 'ACTIVO';
@@ -73,17 +77,26 @@ class RH_ExamenesMController extends Controller {
             $fase_asociada->rh_fases_id = 7;
             $fase_asociada->save();
 
+            //-------------------- EXAMENES LAB --------------------//
+            $examenes_lab = new RHI_Examen_Laboratorio();
+            $examenes_lab->rh_examenes_id = $examenesm->id;
+            $examenes_lab->rh_laboratorio_id = $laboratorio->id;
+            $examenes_lab->representante = $request->input('representante');
+            $examenes_lab->cargo = $request->input('cargo');
+            $examenes_lab->user = auth()->user()->name;
+            $examenes_lab->save();
+
             //-------------------- AUDITORIA --------------------//
             $Auditoria = new Auditoria();
             $Auditoria->accion = 'CREAR';
             $Auditoria->tabla = 'RH_EXAMENESM';
-            $Auditoria->registro = $request->input('empresa');
+            $Auditoria->registro = $request->input('representante');
             $Auditoria->user = auth()->user()->name;
             $Auditoria->save();
 
             return redirect()
-                ->route('candidatos.index')
-                ->with('Saved', ' Informacion');
+            ->action('RH_CandidatoController@procesos')
+            ->with('Saved6', ' Informacion');
         }
         catch(\Illuminate\Database\QueryException $e) {
             return back()->with('Error', ' Error');
