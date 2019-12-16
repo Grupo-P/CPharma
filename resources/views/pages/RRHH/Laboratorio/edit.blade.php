@@ -78,31 +78,24 @@
           </tr>
 
           <tr>
-            <th scope="row">{!! Form::label('fecha', 'Fecha de Valoración *', ['title' => 'Este campo es requerido']) !!}</th>
-
-            <td>{!! Form::date('fecha', null, [ 'class' => 'form-control', 'required']) !!}</td>
-          </tr>
-
-          <tr>
             <th scope="row">
-              <label for="telefono_celular">Teléfono celular</label>
+              {!! Form::label('telefono_celular', 'Teléfono celular') !!}
             </th>
             
             <td>
-              <input type="tel" class="form-control" name="telefono_celular" id="telefono_celular" placeholder="0414-1234567" pattern="^0[1246]{3}-[0-9]{7}$">
+              {!! Form::tel('telefono_celular', null, [ 'class' => 'form-control', 'placeholder' => '0414-1234567']) !!}
             </td>
           </tr>
 
           <tr>
             <th scope="row">
-              <label for="telefono_fijo">Teléfono fijo</label>
+              {!! Form::label('telefono_fijo', 'Teléfono fijo') !!}
             </th>
             
             <td>
-              <input type="tel" class="form-control" name="telefono_fijo" id="telefono_fijo" placeholder="0261-1234567" pattern="^0[1246]{3}-[0-9]{7}$">
+              {!! Form::tel('telefono_fijo', null, [ 'class' => 'form-control', 'placeholder' => '0261-1234567']) !!}
             </td>
           </tr>
-         
         </tbody>
       </table>
 
@@ -111,8 +104,67 @@
   {!! Form::close()!!}
   
   <script>
-    $(document).ready(function() {
+    $(document).ready(function(){
       $('[data-toggle="tooltip"]').tooltip();
+
+      //Objetos DOM JavaScript
+      var telefono_celular = document.querySelector('#telefono_celular');
+      var telefono_fijo = document.querySelector('#telefono_fijo');
+
+      //Objetos DOM JQuery
+      var enviar = $('#enviar');
+      var crear_laboratorio = $('#crear_laboratorio');
+      var rif = $('#rif');
+
+      //Expresiones regulares
+      var regExp = /^0[1246]{3}-[0-9]{7}$/;
+
+      rif.val(rif.val().substring(2));
+
+      enviar.click(function() {
+
+        if((telefono_celular.value == '') && (telefono_fijo.value == '')) {
+
+          telefono_celular.setCustomValidity('Debe ingresar al menos un Teléfono');
+          telefono_fijo.setCustomValidity('Debe ingresar al menos un Teléfono');
+        }
+        else if((telefono_celular.value != '') && (!regExp.test(telefono_celular.value))) {
+
+          telefono_celular.setCustomValidity('Ingrese un teléfono con el patrón especificado 0xxx-xxxxxxx');
+        }
+        else if((telefono_fijo.value != '') && (!regExp.test(telefono_fijo.value))) {
+
+          telefono_fijo.setCustomValidity('Ingrese un teléfono con el patrón especificado 0xxx-xxxxxxx');
+        }
+
+      });
+
+      crear_laboratorio.submit(function(e) {
+
+        if((telefono_celular.value == '') && (telefono_fijo.value == '')) {
+          
+          e.preventDefault();
+        }
+        else if((telefono_celular.value != '') && (!regExp.test(telefono_celular.value))) {
+          
+          e.preventDefault();
+        }
+        else if((telefono_fijo.value != '') && (!regExp.test(telefono_fijo.value))) {
+          
+          e.preventDefault();
+        }
+
+      });
+
+      $('#telefono_celular, #telefono_fijo').on({
+        
+        keydown: function(e) {
+
+          telefono_celular.setCustomValidity('');
+          telefono_fijo.setCustomValidity('');
+        }
+
+      });
     });
     $('#exampleModalCenter').modal('show');
   </script>

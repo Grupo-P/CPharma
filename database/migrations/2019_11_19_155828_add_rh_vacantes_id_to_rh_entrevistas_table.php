@@ -16,7 +16,9 @@ class AddRhVacantesIdToRhEntrevistasTable extends Migration {
 
             $table->foreign('rh_vacantes_id')
                   ->references('id')
-                  ->on('rh_vacantes');
+                  ->on('rh_vacantes')
+                  ->onDelete('cascade')
+                  ->onUpdate('cascade');
         });
     }
 
@@ -28,6 +30,7 @@ class AddRhVacantesIdToRhEntrevistasTable extends Migration {
     public function down() {
         Schema::table('rh_entrevistas', function (Blueprint $table) {
             $table->dropForeign('rh_entrevistas_rh_vacantes_id_foreign');
+            $table->dropColumn('rh_vacantes_id');
         });
     }
 }

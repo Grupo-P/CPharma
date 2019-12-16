@@ -3,9 +3,17 @@
 namespace compras\Http\Controllers;
 
 use Illuminate\Http\Request;
-use compras\RH_ExamenesM;
+use Illuminate\Support\Facades\DB;
+
 use compras\User;
 use compras\Auditoria;
+use compras\RH_ExamenesM;
+use compras\RH_Candidato;
+use compras\RH_Entrevista;
+use compras\RH_Vacante;
+use compras\RH_Laboratorio;
+use compras\RHI_Candidato_Fase;
+use compras\RHI_Examen_Laboratorio;
 
 class RH_ExamenesMController extends Controller {
     /**
@@ -32,8 +40,12 @@ class RH_ExamenesMController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function create() {
-        return view('pages.RRHH.examenesMedicos.create');
+    public function create(Request $request) {
+        $candidato = RH_Candidato::find($request->input("CandidatoId"));
+        $candidato_fase = RHI_Candidato_Fase::find($request->input("CandidatoFaseId"));
+        $laboratorios = RH_Laboratorio::where('estatus', 'ACTIVO')->get();
+
+        return view('pages.RRHH.examenesMedicos.create', compact('candidato', 'candidato_fase', 'laboratorios'));
     }
 
     /**
@@ -43,26 +55,61 @@ class RH_ExamenesMController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request) {
-         try {
+        try {
+            //-------------------- LABORATORIO --------------------//
+            $laboratorio = RH_Laboratorio::find($request->input('empresa'));
+
+            //-------------------- EXAMENES --------------------//
             $examenesm = new RH_ExamenesM();
-            $examenesm->empresa = $request->input('empresa');
-            $examenesm->representante = $request->input('representante');
+            $examenesm->rh_candidatos_id = $request->input('CandidatoId');
+            $examenesm->empresa = $laboratorio->nombre;
             $examenesm->estado = $request->input('estado');
             $examenesm->observaciones = $request->input('observaciones');
             $examenesm->estatus = 'ACTIVO';
             $examenesm->user = auth()->user()->name;
             $examenesm->save();
 
+            //-------------------- CANDIDATO --------------------//
+            $candidato = RH_Candidato::find($request->input('CandidatoId'));
+            $candidato->estatus = 'CONTRATADO';
+            $candidato->save();
+
+            //-------------------- FASE ASOCIADA --------------------//
+            $fase_asociada = RHI_Candidato_Fase::find($request->input('CandidatoFaseId'));
+            $fase_asociada->rh_fases_id = 7;
+            $fase_asociada->save();
+
+            //-------------------- EXAMENES LAB --------------------//
+            $examenes_lab = new RHI_Examen_Laboratorio();
+            $examenes_lab->rh_examenes_id = $examenesm->id;
+            $examenes_lab->rh_laboratorio_id = $laboratorio->id;
+            $examenes_lab->representante = $request->input('representante');
+            $examenes_lab->cargo = $request->input('cargo');
+            $examenes_lab->user = auth()->user()->name;
+            $examenes_lab->save();
+
+            //-------------------- ENTREVISTA --------------------//
+            $entrevista = DB::table('rh_entrevistas')
+            ->where('rh_candidatos_id', $candidato->id)
+            ->orderBy('id', 'desc')
+            ->first();
+
+            //-------------------- VACANTE --------------------//
+            $vacante = RH_Vacante::find($entrevista->rh_vacantes_id);
+            $vacante->cantidad = $vacante->cantidad - 1;
+            $vacante->save();
+
+            //-------------------- AUDITORIA --------------------//
             $Auditoria = new Auditoria();
             $Auditoria->accion = 'CREAR';
             $Auditoria->tabla = 'RH_EXAMENESM';
-            $Auditoria->registro = $request->input('empresa');
+            $Auditoria->registro = $request->input('representante');
             $Auditoria->user = auth()->user()->name;
             $Auditoria->save();
 
             return redirect()
-                ->route('candidatos.index')
-                ->with('Saved', ' Informacion');
+            ->action('RH_CandidatoController@procesos')
+            ->with('Saved6', ' Informacion');
         }
         catch(\Illuminate\Database\QueryException $e) {
             return back()->with('Error', ' Error');
@@ -110,13 +157,18 @@ class RH_ExamenesMController extends Controller {
      */
     public function update(Request $request, $id) {
         try {
+            //-------------------- LABORATORIO --------------------//
+            $laboratorio = RH_Laboratorio::find($request->input('empresa'));
+
+            //-------------------- EXAMENES --------------------//
             $examenesm = RH_ExamenesM::find($id);
-
             $examenesm->fill($request->all());
+            $examenesm->rh_candidatos_id = $request->input('CandidatoId');
+            $examenesm->empresa = $laboratorio->nombre;
             $examenesm->user = auth()->user()->name;
-
             $examenesm->save();
 
+            //-------------------- AUDITORIA --------------------//
             $Auditoria = new Auditoria();
             $Auditoria->accion = 'EDITAR';
             $Auditoria->tabla = 'RH_EXAMENESM';

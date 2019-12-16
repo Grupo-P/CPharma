@@ -18,6 +18,6 @@ class RH_Laboratorio extends Model {
      * @var array
      */
     protected $fillable = [
-        'rif', 'nombre', 'direccion', 'telefono_fijo', 'telefono_celular', 'fecha', 'user'
+        'rif', 'nombre', 'direccion', 'telefono_fijo', 'telefono_celular', 'user'
     ];
 }

@@ -139,7 +139,6 @@
         <th scope="col" class="CP-sticky">Nombre del Laboratorio</th>
         <th scope="col" class="CP-sticky">Dirección</th>
         <th scope="col" class="CP-sticky">Teléfono</th>
-        <th scope="col" class="CP-sticky">Fecha de Valoración</th>
         <th scope="col" class="CP-sticky">Estatus</th>
         <th scope="col" class="CP-sticky">Acciones</th>
       </tr>
@@ -167,7 +166,6 @@
             }
           ?>
 
-          <td>{{date("d-m-Y", strtotime($lab->fecha))}}</td>
           <td>{{$lab->estatus}}</td>
 
           <!-- ***************** VALIDACION DE ROLES ***************** -->

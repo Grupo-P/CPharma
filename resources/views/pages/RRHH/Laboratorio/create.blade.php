@@ -109,12 +109,6 @@
           </tr>
 
           <tr>
-            <th scope="row">{!! Form::label('fecha', 'Fecha de Valoración *', ['title' => 'Este campo es requerido']) !!}</th>
-
-            <td>{!! Form::date('fecha', null, [ 'class' => 'form-control', 'required']) !!}</td>
-          </tr>
-
-          <tr>
             <th scope="row">
               <label for="telefono_celular">Teléfono celular</label>
             </th>

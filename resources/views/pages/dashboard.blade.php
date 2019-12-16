@@ -30,6 +30,7 @@
     $fases = DB::table('rh_fases')->count();
     $procesos_candidatos = DB::table('rh_candidatos')
     	->where('estatus', '<>', 'RECHAZADO')
+    	->where('estatus', '<>', 'CONTRATADO')
     	->count();
     $practicas = DB::table('rh_practicas')->count();
 
