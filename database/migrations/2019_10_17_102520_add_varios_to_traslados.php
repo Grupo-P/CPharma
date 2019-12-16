@@ -29,7 +29,7 @@ class AddVariosToTraslados extends Migration
     public function down()
     {
         Schema::table('traslados', function (Blueprint $table) {
-            //
+            $table->dropUnique('numero_ajuste');
         });
     }
 }

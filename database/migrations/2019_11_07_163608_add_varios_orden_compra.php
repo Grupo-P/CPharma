@@ -28,7 +28,7 @@ class AddVariosOrdenCompra extends Migration
     public function down()
     {
         Schema::table('orden_compras', function (Blueprint $table) {
-            //
+            Schema::dropIfExists('orden_compras');
         });
     }
 }
