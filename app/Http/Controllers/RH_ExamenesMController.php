@@ -41,8 +41,9 @@ class RH_ExamenesMController extends Controller {
     public function create(Request $request) {
         $candidato = RH_Candidato::find($request->input("CandidatoId"));
         $candidato_fase = RHI_Candidato_Fase::find($request->input("CandidatoFaseId"));
+        $laboratorios = RH_Laboratorio::where('estatus', 'ACTIVO')->get();
 
-        return view('pages.RRHH.examenesMedicos.create', compact('candidato', 'candidato_fase'));
+        return view('pages.RRHH.examenesMedicos.create', compact('candidato', 'candidato_fase', 'laboratorios'));
     }
 
     /**
@@ -52,7 +53,7 @@ class RH_ExamenesMController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request) {
-         try {
+        /*try {
             $examenesm = new RH_ExamenesM();
             $examenesm->empresa = $request->input('empresa');
             $examenesm->representante = $request->input('representante');
@@ -75,7 +76,8 @@ class RH_ExamenesMController extends Controller {
         }
         catch(\Illuminate\Database\QueryException $e) {
             return back()->with('Error', ' Error');
-        }
+        }*/
+        return $request;
     }
 
     /**
