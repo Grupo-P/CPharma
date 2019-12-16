@@ -1430,6 +1430,8 @@
     SELECT
     --Id Articulo
     InvArticulo.Id AS IdArticulo,
+    --Codigo Interno
+    InvArticulo.CodigoArticulo AS CodigoInterno,
     --Descripcrion
     InvArticulo.Descripcion,
     --Codigo de Barra

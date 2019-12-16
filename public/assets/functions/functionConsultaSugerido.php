@@ -58,10 +58,15 @@
  	function FG_Articulos_Sugeridos($IdArticulo){
  		$arraySugeridos = array();
  		$arrayIteracion = array();
-    $arrayAtributo = array("Arroz","JabonEnPolvo","Azucar","Harina");
     $AtributoSugerido = '';
     $AtributoSugeridoId = '';
     $ExistenciaMinima = 20;
+    $arrayAtributo = array(
+      "Arroz","Azucar","JabonEnPolvo","Harina",
+      "EnjuagueDental","CremaDental","Champu","Pan",
+      "Refreco","Panal","Chocolate","Preservativo",
+      "Leche"
+    );
 
     $SedeConnection = FG_Mi_Ubicacion();
   	$conn = FG_Conectar_Smartpharma($SedeConnection);
