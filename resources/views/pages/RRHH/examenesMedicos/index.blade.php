@@ -149,7 +149,7 @@
         <tr>
           <th>{{$examen->id}}</th>
           <td>{{$examen->empresa}}</td>
-          <td>{{$examen->representante}}</td>
+          <td>-</td>
           <td>{{$examen->estado}}</td>
           <td>{{$examen->estatus}}</td>
 

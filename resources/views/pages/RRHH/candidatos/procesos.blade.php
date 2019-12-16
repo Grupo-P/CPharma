@@ -373,7 +373,7 @@
 
               case 'Exámenes médicos':
           ?>
-            <form action="#" method="GET" style="display: inline-block;">
+            <form action="/examenesm/create" method="GET" style="display: inline-block;">
               <input type="hidden" name="CandidatoId" value="{{$candidato->id}}">
               <input type="hidden" name="CandidatoFaseId" value="{{$candidatos_fases->id}}">
 

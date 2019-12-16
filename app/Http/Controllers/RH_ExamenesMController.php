@@ -3,9 +3,15 @@
 namespace compras\Http\Controllers;
 
 use Illuminate\Http\Request;
-use compras\RH_ExamenesM;
+use Illuminate\Support\Facades\DB;
+
 use compras\User;
 use compras\Auditoria;
+use compras\RH_ExamenesM;
+use compras\RH_Candidato;
+use compras\RH_Laboratorio;
+use compras\RHI_Candidato_Fase;
+use compras\RHI_Examen_Laboratorio;
 
 class RH_ExamenesMController extends Controller {
     /**
@@ -32,8 +38,11 @@ class RH_ExamenesMController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function create() {
-        return view('pages.RRHH.examenesMedicos.create');
+    public function create(Request $request) {
+        $candidato = RH_Candidato::find($request->input("CandidatoId"));
+        $candidato_fase = RHI_Candidato_Fase::find($request->input("CandidatoFaseId"));
+
+        return view('pages.RRHH.examenesMedicos.create', compact('candidato', 'candidato_fase'));
     }
 
     /**

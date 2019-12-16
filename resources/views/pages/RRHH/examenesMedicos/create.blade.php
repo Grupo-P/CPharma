@@ -1,6 +1,6 @@
 @extends('layouts.model')
 
-@section('title', 'Crear Examenes Médicos')
+@section('title', 'Crear Fase #6')
 
 @section('content')
   <!-- Modal Guardar -->
@@ -29,11 +29,11 @@
   @endif
 
   <h1 class="h5 text-info">
-    <i class="fas fa-plus"></i>&nbsp;Agregar Examenes Médicos
+    <i class="fas fa-plus"></i>&nbsp;Agregar Fase #6
   </h1>
   <hr class="row align-items-start col-12">
 
-  <form action="/examenesm/" method="POST" style="display: inline;">  
+  <form action="/procesos_candidatos/" method="POST" style="display: inline;">  
     @csrf
     <button type="submit" name="Regresar" role="button" class="btn btn-outline-info btn-sm"data-placement="top">
       <i class="fa fa-reply">&nbsp;Regresar</i>
