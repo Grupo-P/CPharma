@@ -53,16 +53,27 @@ class RH_ExamenesMController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request) {
-        /*try {
+        try {
             $examenesm = new RH_ExamenesM();
+            $examenesm->rh_candidatos_id = $request->input('CandidatoId');
             $examenesm->empresa = $request->input('empresa');
-            $examenesm->representante = $request->input('representante');
             $examenesm->estado = $request->input('estado');
             $examenesm->observaciones = $request->input('observaciones');
             $examenesm->estatus = 'ACTIVO';
             $examenesm->user = auth()->user()->name;
             $examenesm->save();
 
+            //-------------------- CANDIDATO --------------------//
+            $candidato = RH_Candidato::find($request->input('CandidatoId'));
+            $candidato->estatus = 'CONTRATADO';
+            $candidato->save();
+
+            //-------------------- FASE ASOCIADA --------------------//
+            $fase_asociada = RHI_Candidato_Fase::find($request->input('CandidatoFaseId'));
+            $fase_asociada->rh_fases_id = 7;
+            $fase_asociada->save();
+
+            //-------------------- AUDITORIA --------------------//
             $Auditoria = new Auditoria();
             $Auditoria->accion = 'CREAR';
             $Auditoria->tabla = 'RH_EXAMENESM';
@@ -76,8 +87,7 @@ class RH_ExamenesMController extends Controller {
         }
         catch(\Illuminate\Database\QueryException $e) {
             return back()->with('Error', ' Error');
-        }*/
-        return $request;
+        }
     }
 
     /**

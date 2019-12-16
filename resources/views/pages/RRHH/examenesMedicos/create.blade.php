@@ -101,6 +101,15 @@
           </tr>
 
           <tr>
+            <th scope="row">
+              {!! Form::label('cargo', 'Cargo del representante *', ['title' => 'Este campo es requerido']) !!}
+            </th>
+            <td>
+              {!! Form::text('cargo', null, [ 'class' => 'form-control', 'placeholder' => 'Médico regente', 'required']) !!}
+            </td>
+          </tr>
+
+          <tr>
            <th scope="row">{!! Form::label('estado', 'Tipo de Estado *', ['title' => 'Este campo es requerido']) !!}</th>
             <td>
               {!! Form::select('estado', [
