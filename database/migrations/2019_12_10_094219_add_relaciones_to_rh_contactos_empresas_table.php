@@ -29,6 +29,7 @@ class AddRelacionesToRhContactosEmpresasTable extends Migration {
      */
     public function down() {
         Schema::table('rh_contactos_empresas', function (Blueprint $table) {
+            $table->dropForeign('rh_contactos_empresas_rh_emprf_id_foreign');
             $table->dropColumn('rh_emprf_id');
         });
     }

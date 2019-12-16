@@ -23,7 +23,7 @@ class AddUniqueToRhLaboratorioTable extends Migration {
      */
     public function down() {
         Schema::table('rh_laboratorio', function (Blueprint $table) {
-            $table->string('rif')->change();
+            $table->dropUnique('rh_laboratorio_rif_unique');
         });
     }
 }
