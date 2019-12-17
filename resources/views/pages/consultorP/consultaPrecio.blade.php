@@ -259,8 +259,8 @@
               nuevaFila += '</div>';
 
               nuevaFila += '<div class="carousel-caption d-none d-md-block h-25" style="background-color:rgba(0, 0, 0,0.6)">';
-              nuevaFila += '<h1 class="text-white">Bs.S '+precio+'</h1>';
-              nuevaFila += '<h3 class="text-white">'+descripcion+'</h3>';
+              nuevaFila += '<h2 class="text-white">Bs.S '+precio+'</h2>';
+              nuevaFila += '<h4 class="text-white">'+descripcion+'</h4>';
               nuevaFila += '</div>';
               nuevaFila += '</div>';
 
