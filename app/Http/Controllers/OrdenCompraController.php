@@ -76,7 +76,11 @@ class OrdenCompraController extends Controller
               where('estado','APROBADA')->get();          
           break;
           default:
-              $OrdenCompra =  OrdenCompra::orderBy('created_at', 'desc')->get();
+              $OrdenCompra =  OrdenCompra::orderBy('created_at', 'desc')
+              ->where('estado','EN PROCESO')
+              ->orWhere('estado','POR APROBAR')
+              ->orWhere('estado','APROBADA')
+              ->get(); 
               return view('pages.ordenCompra.index', compact('OrdenCompra'));
           break;
       }

@@ -255,9 +255,44 @@
 	    </tr>
 		</tbody>
 	</table>
-	<br/>
 
-	<table class="table table-striped table-borderless col-12 sortable" id="myTable">
+  <table class="table table-bordered col-12 sortable">
+    <thead class="thead-dark">
+      <tr>
+        <th scope="col" colspan="2">LEYENDA DE COLORES SEGUN LOS DIAS EN TRANSITO</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td scope="col" class="bg-white text-dark">
+          <ul>
+            <li>
+            	<span>Las columnas en color blanco o gris representan el rango entre 0 y 5 dias trascurridos</span>
+          	</li>
+          </ul>
+          <ul class="bg-success text-white">
+            <li>
+            	<span>Las columnas en color verde representan el rango entre 6 y 10 dias trascurridos</span>
+          	</li>
+          </ul>
+        </td>
+        <td>
+        	<ul class="bg-warning text-white">
+            <li>
+            	<span>Las columnas en color amarillo representan el rango entre 11 y 15 dias trascurridos</span>
+          	</li>
+          </ul>
+          <ul class="bg-danger text-white">
+            <li>
+            	<span>Las columnas en color rojo representan el rango con mas de 15 dias trascurridos</span>
+          	</li>
+          </ul>
+        </td>
+      </tr>
+    </tbody
+ 	</table>
+
+	<table class="table table-striped col-12 sortable" id="myTable">
 	  	<thead class="thead-dark">
 		    <tr>
 		      	<th scope="col" class="CP-sticky">#</th>
@@ -334,30 +369,51 @@
 				$costo_total_real = number_format ($ordenCompra->montoTotalReal,2,"," ,"." );
 			?>
 
-		    <tr>
-		      <th>{{$ordenCompra->id}}</th>
-		      <td>{{$ordenCompra->codigo}}</td>
-		       <td>{{$ordenCompra->sede_destino}}</td>
-		      <td>{{$ordenCompra->proveedor}}</td>
-		      <td>{{$ordenCompra->created_at}}</td>
-		      <td>{{$ordenCompra->fecha_estimada_despacho}}</td>
-		      <td>{{$Dias}}</td>
-		      <td>{{$costo_total_ve}}</td>
-		      <td>{{$costo_total_dolar}}</td>
-		      <td>{{$total_unidades}}</td>
-		      <td>{{$ordenCompra->condicion_crediticia}}</td>
-		      <td>{{$ordenCompra->dias_credito}}</td>
-		      <td>{{$ordenCompra->estado}}</td>
-		      <td>{{$ordenCompra->estatus}}</td>
-		      <td>{{$ordenCompra->user}}</td>
-		      <td>{{$costo_total_real}}</td>
-		      <!-- <td>{{$ordenCompra->fecha_aprobacion}}</td> -->
-		      <td>{{$ordenCompra->calificacion}}</td>
-		      <!-- <td>{{$ordenCompra->fecha_recepcion}}</td>
-		      <td>{{$ordenCompra->fecha_ingreso}}</td> -->
+			<?php
+			if( ($ordenCompra->estado=='EN PROCESO')
+				|| ($ordenCompra->estado=='POR APROBAR')
+				|| ($ordenCompra->estado=='APROBADA')
+			){
+				if($Dias>=0 && $Dias<=5){
+					echo'<tr style="border: 1px solid #fff">';
+				}
+				else if($Dias>=6 && $Dias<=10){
+					echo'<tr class="bg-success text-white" style="border: 1px solid #fff">';
+				}
+				else if($Dias>=11 && $Dias<=15){
+					echo'<tr class="bg-warning text-white" style="border: 1px solid #fff">';
+				}
+				else if($Dias>15){
+					echo'<tr class="bg-danger text-white" style="border: 1px solid #fff">';
+				}
+			}
+			else{
+				echo'<tr style="border: 1px solid #fff">';
+			}
+			?>
+	      <th>{{$ordenCompra->id}}</th>
+	      <td>{{$ordenCompra->codigo}}</td>
+       	<td>{{$ordenCompra->sede_destino}}</td>
+	      <td>{{$ordenCompra->proveedor}}</td>
+	      <td>{{$ordenCompra->created_at}}</td>
+	      <td>{{$ordenCompra->fecha_estimada_despacho}}</td>
+	      <td>{{$Dias}}</td>
+	      <td>{{$costo_total_ve}}</td>
+	      <td>{{$costo_total_dolar}}</td>
+	      <td>{{$total_unidades}}</td>
+	      <td>{{$ordenCompra->condicion_crediticia}}</td>
+	      <td>{{$ordenCompra->dias_credito}}</td>
+	      <td>{{$ordenCompra->estado}}</td>
+	      <td>{{$ordenCompra->estatus}}</td>
+	      <td>{{$ordenCompra->user}}</td>
+	      <td>{{$costo_total_real}}</td>
+	      <!-- <td>{{$ordenCompra->fecha_aprobacion}}</td> -->
+	      <td>{{$ordenCompra->calificacion}}</td>
+	      <!-- <td>{{$ordenCompra->fecha_recepcion}}</td>
+	      <td>{{$ordenCompra->fecha_ingreso}}</td> -->
 
     <!-- Inicio Validacion -->
-			<td style="width:300px;">
+			<td style="width:300px;" class="bg-white">
 
 	    <!--  INICIO Boton generico para impresion de orden de compra -->
 				<a href="/ordenCompra/{{$ordenCompra->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Imprimir Orden" style="display: inline-block; width: 100%">
