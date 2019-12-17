@@ -133,6 +133,10 @@ Route::get('/reporte20', function() {
     return view('pages.reporte.reporte20');
 });
 
+Route::get('/reporte21', function() {
+    return view('pages.reporte.reporte21');
+});
+
 Route::get('/diascero', function() {
     return view('pages.diascero.index'); 
 });

@@ -11,7 +11,7 @@
     include(app_path().'\functions\querys_mysql.php');
     include(app_path().'\functions\querys_sqlserver.php');
 
-    $CPharmaVersion = ' CPharma v.5.7';
+    $CPharmaVersion = ' CPharma v.5.8';
 
     $empresas = DB::table('empresas')->count();
     $proveedores = DB::table('proveedors')->count();
@@ -391,35 +391,7 @@
         	<li class="card-text text-dark" style="display: inline;">
 					<i class="far fa-check-circle text-info" style="display: inline;"></i>
 					Desde ya esta disponible el reporte: 
-					<b class="text-info">Articulos estrella</b>!!
-  				</li>
-  			</ul>
-  			<ul style="list-style:none">
-        	<li class="card-text text-dark" style="display: inline;">
-					<i class="far fa-check-circle text-info" style="display: inline;"></i>
-					Desde ya esta disponible el reporte: 
-					<b class="text-info">Tri tienda por articulo</b>!!
-  				</li>
-  			</ul>
-  			<ul style="list-style:none">
-        	<li class="card-text text-dark" style="display: inline;">
-					<i class="far fa-check-circle text-info" style="display: inline;"></i>
-					Desde ya esta disponible el reporte: 
-					<b class="text-info">Consulta compras</b>!!
-  				</li>
-  			</ul>
-  			<ul style="list-style:none">
-        	<li class="card-text text-dark" style="display: inline;">
-					<i class="far fa-check-circle text-info" style="display: inline;"></i>
-					Desde ya esta disponible el reporte: 
-					<b class="text-info">Ventas cruzadas</b>!!
-  				</li>
-  			</ul>
-  			<ul style="list-style:none">
-        	<li class="card-text text-dark" style="display: inline;">
-					<i class="far fa-check-circle text-info" style="display: inline;"></i>
-					Desde ya esta disponible el reporte: 
-					<b class="text-info">Tri tienda por proveedor</b>!!
+					<b class="text-info">Consultor de Precios</b>!!
   				</li>
   			</ul>
 	      </div>
@@ -1307,35 +1279,7 @@
         	<li class="card-text text-dark" style="display: inline;">
 					<i class="far fa-check-circle text-info" style="display: inline;"></i>
 					Desde ya esta disponible el reporte: 
-					<b class="text-info">Articulos Estrella</b>!!
-  				</li>
-  			</ul>
-  			<ul style="list-style:none">
-        	<li class="card-text text-dark" style="display: inline;">
-					<i class="far fa-check-circle text-info" style="display: inline;"></i>
-					Desde ya esta disponible el reporte: 
-					<b class="text-info">Tri tienda por articulo</b>!!
-  				</li>
-  			</ul>
-  			<ul style="list-style:none">
-        	<li class="card-text text-dark" style="display: inline;">
-					<i class="far fa-check-circle text-info" style="display: inline;"></i>
-					Desde ya esta disponible el reporte: 
-					<b class="text-info">Consulta compras</b>!!
-  				</li>
-  			</ul>
-  			<ul style="list-style:none">
-        	<li class="card-text text-dark" style="display: inline;">
-					<i class="far fa-check-circle text-info" style="display: inline;"></i>
-					Desde ya esta disponible el reporte: 
-					<b class="text-info">Ventas cruzadas</b>!!
-  				</li>
-  			</ul>
-  			<ul style="list-style:none">
-        	<li class="card-text text-dark" style="display: inline;">
-					<i class="far fa-check-circle text-info" style="display: inline;"></i>
-					Desde ya esta disponible el reporte: 
-					<b class="text-info">Tri tienda por proveedor</b>!!
+					<b class="text-info">Consultor de Precios</b>!!
   				</li>
   			</ul>
 	      </div>
@@ -1436,35 +1380,7 @@
         	<li class="card-text text-dark" style="display: inline;">
 					<i class="far fa-check-circle text-info" style="display: inline;"></i>
 					Desde ya esta disponible el reporte: 
-					<b class="text-info">Articulos Estrella</b>!!
-  				</li>
-  			</ul>
-  			<ul style="list-style:none">
-        	<li class="card-text text-dark" style="display: inline;">
-					<i class="far fa-check-circle text-info" style="display: inline;"></i>
-					Desde ya esta disponible el reporte: 
-					<b class="text-info">Tri tienda por articulo</b>!!
-  				</li>
-  			</ul>
-  			<ul style="list-style:none">
-        	<li class="card-text text-dark" style="display: inline;">
-					<i class="far fa-check-circle text-info" style="display: inline;"></i>
-					Desde ya esta disponible el reporte: 
-					<b class="text-info">Consulta compras</b>!!
-  				</li>
-  			</ul>
-  			<ul style="list-style:none">
-        	<li class="card-text text-dark" style="display: inline;">
-					<i class="far fa-check-circle text-info" style="display: inline;"></i>
-					Desde ya esta disponible el reporte: 
-					<b class="text-info">Ventas cruzadas</b>!!
-  				</li>
-  			</ul>
-  			<ul style="list-style:none">
-        	<li class="card-text text-dark" style="display: inline;">
-					<i class="far fa-check-circle text-info" style="display: inline;"></i>
-					Desde ya esta disponible el reporte: 
-					<b class="text-info">Tri tienda por proveedor</b>!!
+					<b class="text-info">Consultor de Precios</b>!!
   				</li>
   			</ul>
 	      </div>
