@@ -1540,4 +1540,175 @@
     ";
     return $sql;
   }
+   /**********************************************************************************/
+  /*
+    TITULO: R16Q_Detalle_Venta_Top
+    FUNCION: Busca los datos de las ventas para el articulo seleccionado
+    RETORNO: Detalle de la venta del articulo
+    DESAROLLADO POR: SERGIO COVA
+  */
+  function SQG_Detalle_Venta($IdArticulo,$FInicial,$FFinal){
+    $sql="
+    SELECT
+    -- Id Articulo
+    VenFacturaDetalle.InvArticuloId,
+    --Veces Vendidas (En Rango)
+    ISNULL(COUNT(*),CAST(0 AS INT)) AS VecesVendidas,
+    --Unidades Vendidas (En Rango)
+    (ROUND(CAST(SUM(VenFacturaDetalle.Cantidad) AS DECIMAL(38,0)),2,0)) as UnidadesVendidas,
+    --Veces Devueltas (En Rango)
+    ISNULL((SELECT
+    ISNULL(COUNT(*),CAST(0 AS INT))
+    FROM VenDevolucionDetalle
+    INNER JOIN VenDevolucion ON VenDevolucion.Id = VenDevolucionDetalle.VenDevolucionId
+    WHERE VenDevolucionDetalle.InvArticuloId = VenFacturaDetalle.InvArticuloId
+    AND(VenDevolucion.FechaDocumento > '$FInicial' AND VenDevolucion.FechaDocumento < '$FFinal')
+    GROUP BY VenDevolucionDetalle.InvArticuloId
+    ),CAST(0 AS INT)) AS VecesDevueltas,
+    --Unidades Devueltas (En Rango)
+    ISNULL((SELECT
+    (ROUND(CAST(SUM(VenDevolucionDetalle.Cantidad) AS DECIMAL(38,0)),2,0))
+    FROM VenDevolucionDetalle
+    INNER JOIN VenDevolucion ON VenDevolucion.Id = VenDevolucionDetalle.VenDevolucionId
+    WHERE VenDevolucionDetalle.InvArticuloId = VenFacturaDetalle.InvArticuloId
+    AND(VenDevolucion.FechaDocumento > '$FInicial' AND VenDevolucion.FechaDocumento < '$FFinal')
+    GROUP BY VenDevolucionDetalle.InvArticuloId
+    ),CAST(0 AS INT)) AS UnidadesDevueltas,
+    --Total Veces Vendidas (En Rango)
+    ((ISNULL(COUNT(*),CAST(0 AS INT)))
+    -
+    (ISNULL((SELECT
+    ISNULL(COUNT(*),CAST(0 AS INT))
+    FROM VenDevolucionDetalle
+    INNER JOIN VenDevolucion ON VenDevolucion.Id = VenDevolucionDetalle.VenDevolucionId
+    WHERE VenDevolucionDetalle.InvArticuloId = VenFacturaDetalle.InvArticuloId
+    AND(VenDevolucion.FechaDocumento > '$FInicial' AND VenDevolucion.FechaDocumento < '$FFinal')
+    GROUP BY VenDevolucionDetalle.InvArticuloId
+    ),CAST(0 AS INT)))) AS TotalVecesVendidas,
+    --Total Unidades Vendidas (En Rango)
+    (((ROUND(CAST(SUM(VenFacturaDetalle.Cantidad) AS DECIMAL(38,0)),2,0)))
+    -
+    (ISNULL((SELECT
+    (ROUND(CAST(SUM(VenDevolucionDetalle.Cantidad) AS DECIMAL(38,0)),2,0))
+    FROM VenDevolucionDetalle
+    INNER JOIN VenDevolucion ON VenDevolucion.Id = VenDevolucionDetalle.VenDevolucionId
+    WHERE VenDevolucionDetalle.InvArticuloId = VenFacturaDetalle.InvArticuloId
+    AND(VenDevolucion.FechaDocumento > '$FInicial' AND VenDevolucion.FechaDocumento < '$FFinal')
+    GROUP BY VenDevolucionDetalle.InvArticuloId
+    ),CAST(0 AS INT)))) AS TotalUnidadesVendidas,
+    --Veces Conpradas (En Rango) 
+    ISNULL((SELECT
+    ISNULL(COUNT(*),CAST(0 AS INT))
+    FROM ComFacturaDetalle
+    INNER JOIN ComFactura ON  ComFactura.Id = ComFacturaDetalle.ComFacturaId
+    WHERE ComFacturaDetalle.InvArticuloId = VenFacturaDetalle.InvArticuloId
+    AND(ComFactura.FechaRegistro > '$FInicial' AND ComFactura.FechaRegistro < '$FFinal')
+    GROUP BY ComFacturaDetalle.InvArticuloId
+    ),CAST(0 AS INT)) AS VecesCompradas,
+    --Unidades Conpradas (En Rango) 
+    ISNULL((SELECT
+    (ROUND(CAST(SUM(ComFacturaDetalle.CantidadFacturada) AS DECIMAL(38,0)),2,0))
+    FROM ComFacturaDetalle
+    INNER JOIN ComFactura ON  ComFactura.Id = ComFacturaDetalle.ComFacturaId
+    WHERE ComFacturaDetalle.InvArticuloId = VenFacturaDetalle.InvArticuloId
+    AND(ComFactura.FechaRegistro > '$FInicial' AND ComFactura.FechaRegistro < '$FFinal')
+    GROUP BY ComFacturaDetalle.InvArticuloId
+    ),CAST(0 AS INT)) AS UnidadesCompradas,
+    --Veces Reclamadas (En Rango) 
+    ISNULL((SELECT
+    ISNULL(COUNT(*),CAST(0 AS INT))
+    FROM ComReclamoDetalle
+    INNER JOIN ComReclamo ON ComReclamo.Id = ComReclamoDetalle.ComReclamoId
+    WHERE ComReclamoDetalle.InvArticuloId = VenFacturaDetalle.InvArticuloId
+    AND(ComReclamo.FechaRegistro > '$FInicial' AND ComReclamo.FechaRegistro < '$FFinal')
+    GROUP BY ComReclamoDetalle.InvArticuloId
+    ),CAST(0 AS INT)) AS VecesReclamadas,
+    --Unidades Reclamadas (En Rango) 
+    ISNULL((SELECT
+    (ROUND(CAST(SUM(ComReclamoDetalle.Cantidad) AS DECIMAL(38,0)),2,0))
+    FROM ComReclamoDetalle
+    INNER JOIN ComReclamo ON ComReclamo.Id = ComReclamoDetalle.ComReclamoId
+    WHERE ComReclamoDetalle.InvArticuloId = VenFacturaDetalle.InvArticuloId
+    AND(ComReclamo.FechaRegistro > '$FInicial' AND ComReclamo.FechaRegistro < '$FFinal')
+    GROUP BY ComReclamoDetalle.InvArticuloId
+    ),CAST(0 AS INT)) AS UnidadesReclamadas,
+    --Total Veces Compradas (En Rango)
+    ((ISNULL((SELECT
+    ISNULL(COUNT(*),CAST(0 AS INT))
+    FROM ComFacturaDetalle
+    INNER JOIN ComFactura ON  ComFactura.Id = ComFacturaDetalle.ComFacturaId
+    WHERE ComFacturaDetalle.InvArticuloId = VenFacturaDetalle.InvArticuloId
+    AND(ComFactura.FechaRegistro > '$FInicial' AND ComFactura.FechaRegistro < '$FFinal')
+    GROUP BY ComFacturaDetalle.InvArticuloId
+    ),CAST(0 AS INT)))
+    -
+    (ISNULL((SELECT
+    ISNULL(COUNT(*),CAST(0 AS INT))
+    FROM ComReclamoDetalle
+    INNER JOIN ComReclamo ON ComReclamo.Id = ComReclamoDetalle.ComReclamoId
+    WHERE ComReclamoDetalle.InvArticuloId = VenFacturaDetalle.InvArticuloId
+    AND(ComReclamo.FechaRegistro > '$FInicial' AND ComReclamo.FechaRegistro < '$FFinal')
+    GROUP BY ComReclamoDetalle.InvArticuloId
+    ),CAST(0 AS INT)))) AS TotalVecesCompradas,
+    --Total de Unidades Compradas (En Rango)
+    ((ISNULL((SELECT
+    (ROUND(CAST(SUM(ComFacturaDetalle.CantidadFacturada) AS DECIMAL(38,0)),2,0))
+    FROM ComFacturaDetalle
+    INNER JOIN ComFactura ON  ComFactura.Id = ComFacturaDetalle.ComFacturaId
+    WHERE ComFacturaDetalle.InvArticuloId = VenFacturaDetalle.InvArticuloId
+    AND(ComFactura.FechaRegistro > '$FInicial' AND ComFactura.FechaRegistro < '$FFinal')
+    GROUP BY ComFacturaDetalle.InvArticuloId
+    ),CAST(0 AS INT)))
+    -
+    (ISNULL((SELECT
+    (ROUND(CAST(SUM(ComReclamoDetalle.Cantidad) AS DECIMAL(38,0)),2,0))
+    FROM ComReclamoDetalle
+    INNER JOIN ComReclamo ON ComReclamo.Id = ComReclamoDetalle.ComReclamoId
+    WHERE ComReclamoDetalle.InvArticuloId = VenFacturaDetalle.InvArticuloId
+    AND(ComReclamo.FechaRegistro > '$FInicial' AND ComReclamo.FechaRegistro < '$FFinal')
+    GROUP BY ComReclamoDetalle.InvArticuloId
+    ),CAST(0 AS INT)))) AS TotalUnidadesCompradas,
+    -- SubTotal Venta (En Rango)
+    ISNULL((SELECT
+    (ROUND(CAST(SUM (VenVentaDetalle.PrecioBruto * VenVentaDetalle.Cantidad) AS DECIMAL(38,2)),2,0)) 
+    FROM VenVentaDetalle
+    INNER JOIN VenVenta ON VenVenta.Id = VenVentaDetalle.VenVentaId 
+    WHERE (VenVenta.FechaDocumentoVenta > '$FInicial' AND VenVenta.FechaDocumentoVenta < '$FFinal')
+    AND VenVentaDetalle.InvArticuloId = VenFacturaDetalle.InvArticuloId),CAST(0 AS INT)) AS SubTotalVenta,
+    --SubTotal Devolucion (En Rango)
+    ISNULL((SELECT
+    (ROUND(CAST(SUM (VenDevolucionDetalle.PrecioBruto * VenDevolucionDetalle.Cantidad) AS DECIMAL(38,2)),2,0)) as SubTotalDevolucion
+    FROM VenDevolucionDetalle
+    INNER JOIN VenDevolucion ON VenDevolucion.Id = VenDevolucionDetalle.VenDevolucionId 
+    WHERE (VenDevolucion.FechaDocumento > '$FInicial' AND VenDevolucion.FechaDocumento < '$FFinal') 
+    AND VenDevolucionDetalle.InvArticuloId = VenFacturaDetalle.InvArticuloId),CAST(0 AS INT)) as SubTotalDevolucion,
+    --TotalVenta (En Rango)
+    ((ISNULL((SELECT
+    (ROUND(CAST(SUM (VenVentaDetalle.PrecioBruto * VenVentaDetalle.Cantidad) AS DECIMAL(38,2)),2,0)) 
+    FROM VenVentaDetalle
+    INNER JOIN VenVenta ON VenVenta.Id = VenVentaDetalle.VenVentaId 
+    WHERE (VenVenta.FechaDocumentoVenta > '$FInicial' AND VenVenta.FechaDocumentoVenta < '$FFinal')
+    AND VenVentaDetalle.InvArticuloId = VenFacturaDetalle.InvArticuloId),CAST(0 AS INT)))
+    -
+    (ISNULL((SELECT
+    (ROUND(CAST(SUM (VenDevolucionDetalle.PrecioBruto * VenDevolucionDetalle.Cantidad) AS DECIMAL(38,2)),2,0)) as SubTotalDevolucion
+    FROM VenDevolucionDetalle
+    INNER JOIN VenDevolucion ON VenDevolucion.Id = VenDevolucionDetalle.VenDevolucionId 
+    WHERE (VenDevolucion.FechaDocumento > '$FInicial' AND VenDevolucion.FechaDocumento < '$FFinal') 
+    AND VenDevolucionDetalle.InvArticuloId = VenFacturaDetalle.InvArticuloId),CAST(0 AS INT)))) AS TotalVenta
+    --Tabla Principal
+    FROM VenFacturaDetalle
+    --Joins
+    INNER JOIN VenFactura ON VenFactura.Id = VenFacturaDetalle.VenFacturaId
+    --Condicionales
+    WHERE
+    (VenFactura.FechaDocumento > '$FInicial' AND VenFactura.FechaDocumento < '$FFinal')
+    AND VenFacturaDetalle.InvArticuloId = '$IdArticulo'
+    --Agrupamientos
+    GROUP BY VenFacturaDetalle.InvArticuloId 
+    --Ordenamientos
+    ORDER BY UnidadesVendidas DESC
+    ";
+    return $sql;
+  }
 ?>
