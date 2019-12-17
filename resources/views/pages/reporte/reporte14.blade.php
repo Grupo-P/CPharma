@@ -320,6 +320,7 @@
         </tbody>
     </table>';
     mysqli_close($connCPharma);
+    sqlsrv_close($conn);
   }
 ?>
 
