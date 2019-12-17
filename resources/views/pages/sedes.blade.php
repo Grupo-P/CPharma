@@ -12,6 +12,7 @@
     include(app_path().'\functions\querys_mysql.php');
     include(app_path().'\functions\querys_sqlserver.php');
 		$SedeConnection = FG_Mi_Ubicacion();
+		//$SedeConnection = 'FTN';
 	?>
 
 	<h1 class="h5 text-info">

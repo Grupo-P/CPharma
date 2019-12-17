@@ -1000,6 +1000,9 @@
 			case 'Consultor de Precios':
 				$ruta = '/reporte21';
 			break;
+			case 'Reporte de Atributos':
+				$ruta = '/reporte22';
+			break;
 			default:
 				$ruta = '#';
 			break;
@@ -1018,7 +1021,7 @@
 				$Numero_Reportes = 18;
 			break;
 			case 'OPERACIONES':
-				$Numero_Reportes = 4;
+				$Numero_Reportes = 5;
 			break;
 			case 'ALMACEN':
 				$Numero_Reportes = 3;
@@ -1036,10 +1039,10 @@
 				$Numero_Reportes = 14;
 			break;
 			case 'GERENCIA':
-				$Numero_Reportes = 19;
+				$Numero_Reportes = 20;
 			break;
 			case 'TECNOLOGIA':
-				$Numero_Reportes = 19;
+				$Numero_Reportes = 20;
 			break;
 			default:
 				$Numero_Reportes = 0;

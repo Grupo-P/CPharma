@@ -63,8 +63,6 @@
   include(app_path().'\functions\querys_mysql.php');
   include(app_path().'\functions\querys_sqlserver.php');
 
-  $_GET['SEDE']='FTN';
-
   if (isset($_GET['SEDE'])){      
     echo '<h1 class="h5 text-success"  align="left"> <i class="fas fa-prescription"></i> '.FG_Nombre_Sede($_GET['SEDE']).'</h1>';
   }
@@ -75,7 +73,7 @@
     $InicioCarga = new DateTime("now");
 
     R22_Articulos_Atributo($_GET['SEDE'],$_GET['atributo']);
-    //FG_Guardar_Auditoria('CONSULTAR','REPORTE','Reporte de Atributos');
+    FG_Guardar_Auditoria('CONSULTAR','REPORTE','Reporte de Atributos');
 
     $FinCarga = new DateTime("now");
     $IntervalCarga = $InicioCarga->diff($FinCarga);
