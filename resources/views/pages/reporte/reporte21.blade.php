@@ -211,6 +211,10 @@
       else{
         $PromedioFactura = 0;
       }
+
+      if($TotalUnidadesVendidas==''){
+        $TotalUnidadesVendidas = 0;
+      }
       
       echo '<tr>';
       echo '<td align="center"><strong>'.intval($contador).'</strong></td>';
