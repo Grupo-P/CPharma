@@ -81,6 +81,13 @@ class RH_EntrevistaController extends Controller {
             
             $fase_asociada->save();
 
+            //-------------------- CANDIDATO FUTURO --------------------//
+            if($request->input('futuro') == 'Si') {
+                $candidato = RH_Candidato::find($request->input('CandidatoId'));
+                $candidato->estatus = 'FUTURO';
+                $candidato->save();
+            }
+
             //-------------------- AUDITORIA --------------------//
             $Auditoria = new Auditoria();
             $Auditoria->accion = 'CREAR';
