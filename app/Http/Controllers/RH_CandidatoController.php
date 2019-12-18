@@ -47,9 +47,9 @@ class RH_CandidatoController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function expediente() {
-        return 'putos';
-        //return view('pages.RRHH.candidatos.expediente', compact('candidatos'));
+    public function expediente(Request $request) {
+        $candidatos = RH_Candidato::find($request->input("CandidatoId"));
+        return view('pages.RRHH.candidatos.expediente', compact('candidatos'));
     }
 
     /**
