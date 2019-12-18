@@ -176,7 +176,10 @@
           <?php
             if(Auth::user()->role == 'MASTER' || Auth::user()->role == 'DEVELOPER') {
 
-              if($candidato->estatus != 'RECHAZADO') {
+              if(
+                ($candidato->estatus != 'RECHAZADO')
+                && ($candidato->estatus != 'FUTURO')
+              ) {
           ?>
             <a href="/candidatos/{{$candidato->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
               <i class="far fa-eye"></i>
@@ -195,7 +198,10 @@
             </form>
 
           <?php
-            } else if($candidato->estatus == 'RECHAZADO') {
+            } else if(
+                ($candidato->estatus == 'RECHAZADO')
+                || ($candidato->estatus == 'FUTURO')
+              ) {
           ?>
             <form action="/candidatos/{{$candidato->id}}" method="POST" style="display: inline;">
               @method('DELETE')
@@ -208,7 +214,10 @@
             }
           } 
           else if(Auth::user()->role == 'ANALISTA') {
-            if($candidato->estatus != 'RECHAZADO') {
+            if(
+              ($candidato->estatus != 'RECHAZADO')
+              && ($candidato->estatus != 'FUTURO')
+            ) {
           ?>
             <a href="/candidatos/{{$candidato->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
               <i class="far fa-eye"></i>
@@ -226,8 +235,10 @@
               </button>
             </form>
           <?php
-            } else if($candidato->estatus == 'RECHAZADO') {
-          ?>
+            } else if(
+                ($candidato->estatus == 'RECHAZADO')
+                || ($candidato->estatus == 'FUTURO')
+              ) {          ?>
             <form action="/candidatos/{{$candidato->id}}" method="POST" style="display: inline;">
               @method('DELETE')
               @csrf
