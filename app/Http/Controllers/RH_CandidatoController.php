@@ -189,7 +189,7 @@ class RH_CandidatoController extends Controller {
 
         if(
             ($candidatos->estatus == 'RECHAZADO') 
-            || ($candidato->estatus == 'FUTURO')
+            || ($candidatos->estatus == 'FUTURO')
         ) {
             $candidatos->estatus = 'POSTULADO';
             $Auditoria->accion = 'REINCORPORAR';
