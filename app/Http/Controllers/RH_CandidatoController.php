@@ -43,6 +43,16 @@ class RH_CandidatoController extends Controller {
     }
 
     /**
+     * Display a listing of the active resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function expediente() {
+        return 'putos';
+        //return view('pages.RRHH.candidatos.expediente', compact('candidatos'));
+    }
+
+    /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response

@@ -142,7 +142,9 @@
         <th scope="col" class="stickyCP">Teléfono</th>
         <th scope="col" class="stickyCP">Relación laboral</th>
         <th scope="col" class="stickyCP">Estatus</th>
+        <th scope="col" class="stickyCP">Fase actual</th>
         <th scope="col" class="stickyCP">Acciones</th>
+        <th scope="col" class="stickyCP">Expediente</th>
       </tr>
     </thead>
 
@@ -170,6 +172,24 @@
 
           <td>{{$candidato->tipo_relacion}}</td>
           <td>{{$candidato->estatus}}</td>
+
+          <td>
+            <?php
+              $candidatos_fases = DB::table('rhi_candidatos_fases')
+              ->where('rh_candidatos_id', $candidato->id)
+              ->orderBy('id', 'desc')
+              ->first();
+
+              $nombre_fase = '-';
+
+              if(!is_null($candidatos_fases)) {
+                $nombre_fase = compras\RH_Fase::find($candidatos_fases->rh_fases_id)
+                ->nombre_fase;
+              }
+              
+            ?>
+            {{$nombre_fase}}
+          </td>
 
           <!-- ***************** VALIDACION DE ROLES ***************** -->
           <td style="width:140px;">
@@ -257,6 +277,31 @@
           <?php
             }
           ?>
+          </td>
+
+          <td>
+            <?php
+              $candidatos_fases = DB::table('rhi_candidatos_fases')
+              ->where('rh_candidatos_id', $candidato->id)
+              ->orderBy('id', 'desc')
+              ->first();
+
+              $nombre_fase = '-';
+
+              if(!is_null($candidatos_fases)) {
+                $nombre_fase = compras\RH_Fase::find($candidatos_fases->rh_fases_id)
+                ->nombre_fase;
+              }
+              
+            ?>
+
+            <form action="/expediente_candidatos" method="GET" style="display: inline-block;">
+              <input type="hidden" name="CandidatoId" value="{{$candidato->id}}">
+
+              <button type="submit" role="button" class="btn btn-outline-primary btn-sm" data-toggle="tooltip" data-placement="bottom" title="Ir al expediente">
+                <i class="fas fa-search"></i>&nbsp;Detalle
+              </button>
+            </form>
           </td>
         </tr>
       @endforeach
