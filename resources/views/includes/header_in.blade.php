@@ -97,10 +97,17 @@
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="{{ url('/reporte8/') }}">     
+        <a class="nav-link CP-Links-Menu" href="{{ url('/reporte8/') }}">    
           <span data-feather="home"></span>
           <i class="fas fa-stamp"></i>
           Troquel<span class="sr-only">(current)</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('/reporte23/') }}">    
+          <span data-feather="home"></span>
+          <i class="fas fa-calendar-alt"></i>
+          Fecha de Vencimiento<span class="sr-only">(current)</span>
         </a>
       </li>
       <li class="nav-item">
@@ -553,6 +560,13 @@
         </a>
       </li>
       <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('/reporte23/') }}">    
+          <span data-feather="home"></span>
+          <i class="fas fa-calendar-alt"></i>
+          Fecha de Vencimiento<span class="sr-only">(current)</span>
+        </a>
+      </li>
+      <li class="nav-item">
         <a class="nav-link CP-Links-Menu" href="{{ url('/cartaCompromiso') }}">     
           <span data-feather="home"></span>
           <i class="fas fa-list"></i>
@@ -657,6 +671,13 @@
           <span data-feather="home"></span>
           <i class="fas fa-stamp"></i>
           Troquel<span class="sr-only">(current)</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('/reporte23/') }}">    
+          <span data-feather="home"></span>
+          <i class="fas fa-calendar-alt"></i>
+          Fecha de Vencimiento<span class="sr-only">(current)</span>
         </a>
       </li>
       <li class="nav-item">

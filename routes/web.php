@@ -141,6 +141,10 @@ Route::get('/reporte22', function() {
     return view('pages.reporte.reporte22');
 });
 
+Route::get('/reporte23', function() {
+    return view('pages.reporte.reporte23');
+});
+
 Route::get('/diascero', function() {
     return view('pages.diascero.index'); 
 });
