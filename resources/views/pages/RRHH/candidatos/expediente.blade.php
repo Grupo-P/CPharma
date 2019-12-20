@@ -105,93 +105,26 @@
   </table>
 
   <?php
-    $candidato_fases = compras\RHI_Candidato_Fase::where('rh_candidatos_id', $candidatos->id)
-      ->orderBy('id', 'desc')
-      ->first();
-
-    $fase = 1;
-
-    if(!is_null($candidato_fases)) {
-      $fase = $candidato_fases->rh_fases_id;
-    }
-
+    //-------------------- PRUEBAS DEL CANDIDATO --------------------//
     $candidato_pruebas = compras\RH_Candidato_Prueba::where('rh_candidatos_id', $candidatos->id)
     ->orderBy('id', 'desc')
     ->first();
 
-    $prueba = compras\RH_Prueba::find($candidato_pruebas->rh_pruebas_id);
-
+    //-------------------- ENTREVISTAS DEL CANDIDATO --------------------//
     $entrevista = compras\RH_Entrevista::where('rh_candidatos_id', $candidatos->id)
     ->orderBy('id', 'desc')
     ->first();
 
-    $vacante = compras\RH_Vacante::find($entrevista->rh_vacantes_id);
-
-    switch($fase) {
-      case 2:
+    //-------------------- PRACTICAS DEL CANDIDATO --------------------//
+    $practicas = compras\RH_Practica::where('rh_candidatos_id', $candidatos->id)
+    ->orderBy('id', 'desc')
+    ->first();
   ?>
-
-  <table class="table table-borderless table-striped">
-    <thead class="thead-dark">
-      <tr>
-        <th scope="row" colspan="2">Fase #1</th>
-      </tr>
-    </thead>
-
-    <tbody>
-      <tr>
-        <th scope="row">Facilitador</th>
-        <td>{{$candidato_pruebas->facilitador}}</td>
-      </tr>
-
-      <tr>
-        <th scope="row">Fecha de prueba</th>
-        <td>{{date("d-m-Y", strtotime($candidato_pruebas->fecha))}}</td>
-      </tr>
-
-      <tr>
-        <th scope="row">Tipo de prueba</th>
-        <td>{{$prueba->tipo_prueba}}</td>
-      </tr>
-
-      <tr>
-        <th scope="row">Nombre de prueba</th>
-        <td>{{$prueba->nombre_prueba}}</td>
-      </tr>
-
-      <tr>
-        <th scope="row">Resultado de prueba</th>
-        <td>{{$candidato_pruebas->resultado}}</td>
-      </tr>
-
-      <tr>
-        <th scope="row">Observaciones</th>
-        <td>{{$candidato_pruebas->observaciones}}</td>
-      </tr>
-
-      <tr>
-        <th scope="row">Creado</th>
-        <td>{{$candidato_pruebas->created_at}}</td>
-      </tr>
-
-      <tr>
-        <th scope="row">Ultima Actualización</th>
-        <td>{{$candidato_pruebas->updated_at}}</td>
-      </tr>
-
-      <tr>
-        <th scope="row">Actualizado por</th>
-        <td>{{$candidato_pruebas->user}}</td>
-      </tr>
-    </tbody>
-  </table>
 
   <?php
-      break;
-      
-      case 3: 
+    if(!is_null($candidato_pruebas)) {
+      $prueba = compras\RH_Prueba::find($candidato_pruebas->rh_pruebas_id);
   ?>
-
   <table class="table table-borderless table-striped">
     <thead class="thead-dark">
       <tr>
@@ -246,7 +179,14 @@
       </tr>
     </tbody>
   </table>
+  <?php
+    }
+  ?>
 
+  <?php
+    if(!is_null($entrevista)) {
+      $vacante = compras\RH_Vacante::find($entrevista->rh_vacantes_id);
+  ?>
   <table class="table table-borderless table-striped">
     <thead class="thead-dark">
       <tr>
@@ -304,25 +244,71 @@
       </tr>
     </tbody>
   </table>
+  <?php
+    }
+  ?>
 
-    <?php
-      break;
+  <?php
+    if(!is_null($practicas)) {
+  ?>
+  <table class="table table-borderless table-striped">
+    <thead class="thead-dark">
+      <tr>
+        <th scope="row" colspan="2">Fase #3</th>
+      </tr>
+    </thead>
 
-      case 4: 
+    <tbody>
+      <tr>
+        <th scope="row">Líder de práctica</th>
+        <td>{{$practicas->lider}}</td>
+      </tr>
 
-      break;
-      
-      case 5: 
+      <tr>
+        <th scope="row">Fecha de entrevista</th>
+        <td>{{date("d-m-Y", strtotime($entrevista->fecha_entrevista))}}</td>
+      </tr>
 
-      break;
-      
-      case 6: 
+      <tr>
+        <th scope="row">Lugar de entrevista</th>
+        <td>{{$entrevista->lugar}}</td>
+      </tr>
 
-      break;
-      
-      case 7: 
+      <tr>
+        <th scope="row">Vacante asociada</th>
+        <td>
+          {{
+            $vacante->sede
+            . " - " . $vacante->nombre_vacante 
+            . " - " . $vacante->departamento
+            . " - " . $vacante->turno
+            . " - " . $vacante->dias_libres
+          }}
+        </td>
+      </tr>
 
-      break;
+      <tr>
+        <th scope="row">Observaciones</th>
+        <td>{{$entrevista->observaciones}}</td>
+      </tr>
+
+      <tr>
+        <th scope="row">Creado</th>
+        <td>{{$entrevista->created_at}}</td>
+      </tr>
+
+      <tr>
+        <th scope="row">Ultima Actualización</th>
+        <td>{{$entrevista->updated_at}}</td>
+      </tr>
+
+      <tr>
+        <th scope="row">Actualizado por</th>
+        <td>{{$entrevista->user}}</td>
+      </tr>
+    </tbody>
+  </table>
+  <?php
     }
   ?>
 @endsection
