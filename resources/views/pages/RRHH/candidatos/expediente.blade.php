@@ -115,14 +115,20 @@
       $fase = $candidato_fases->rh_fases_id;
     }
 
+    $candidato_pruebas = compras\RH_Candidato_Prueba::where('rh_candidatos_id', $candidatos->id)
+    ->orderBy('id', 'desc')
+    ->first();
+
+    $prueba = compras\RH_Prueba::find($candidato_pruebas->rh_pruebas_id);
+
+    $entrevista = compras\RH_Entrevista::where('rh_candidatos_id', $candidatos->id)
+    ->orderBy('id', 'desc')
+    ->first();
+
+    $vacante = compras\RH_Vacante::find($entrevista->rh_vacantes_id);
+
     switch($fase) {
       case 2:
-
-        $candidato_pruebas = compras\RH_Candidato_Prueba::where('rh_candidatos_id', $candidatos->id)
-        ->orderBy('id', 'desc')
-        ->first();
-
-        $prueba = compras\RH_Prueba::find($candidato_pruebas->rh_pruebas_id);
   ?>
 
   <table class="table table-borderless table-striped">
@@ -139,7 +145,7 @@
       </tr>
 
       <tr>
-        <th scope="row">Fecha</th>
+        <th scope="row">Fecha de prueba</th>
         <td>{{date("d-m-Y", strtotime($candidato_pruebas->fecha))}}</td>
       </tr>
 
@@ -154,7 +160,7 @@
       </tr>
 
       <tr>
-        <th scope="row">Resultado</th>
+        <th scope="row">Resultado de prueba</th>
         <td>{{$candidato_pruebas->resultado}}</td>
       </tr>
 
@@ -175,7 +181,7 @@
 
       <tr>
         <th scope="row">Actualizado por</th>
-        <td>{{$candidatos->user}}</td>
+        <td>{{$candidato_pruebas->user}}</td>
       </tr>
     </tbody>
   </table>
@@ -184,7 +190,122 @@
       break;
       
       case 3: 
+  ?>
 
+  <table class="table table-borderless table-striped">
+    <thead class="thead-dark">
+      <tr>
+        <th scope="row" colspan="2">Fase #1</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr>
+        <th scope="row">Facilitador</th>
+        <td>{{$candidato_pruebas->facilitador}}</td>
+      </tr>
+
+      <tr>
+        <th scope="row">Fecha de prueba</th>
+        <td>{{date("d-m-Y", strtotime($candidato_pruebas->fecha))}}</td>
+      </tr>
+
+      <tr>
+        <th scope="row">Tipo de prueba</th>
+        <td>{{$prueba->tipo_prueba}}</td>
+      </tr>
+
+      <tr>
+        <th scope="row">Nombre de prueba</th>
+        <td>{{$prueba->nombre_prueba}}</td>
+      </tr>
+
+      <tr>
+        <th scope="row">Resultado de prueba</th>
+        <td>{{$candidato_pruebas->resultado}}</td>
+      </tr>
+
+      <tr>
+        <th scope="row">Observaciones</th>
+        <td>{{$candidato_pruebas->observaciones}}</td>
+      </tr>
+
+      <tr>
+        <th scope="row">Creado</th>
+        <td>{{$candidato_pruebas->created_at}}</td>
+      </tr>
+
+      <tr>
+        <th scope="row">Ultima Actualización</th>
+        <td>{{$candidato_pruebas->updated_at}}</td>
+      </tr>
+
+      <tr>
+        <th scope="row">Actualizado por</th>
+        <td>{{$candidato_pruebas->user}}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <table class="table table-borderless table-striped">
+    <thead class="thead-dark">
+      <tr>
+        <th scope="row" colspan="2">Fase #2</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr>
+        <th scope="row">Entrevistadores</th>
+        <td>{{$entrevista->entrevistadores}}</td>
+      </tr>
+
+      <tr>
+        <th scope="row">Fecha de entrevista</th>
+        <td>{{date("d-m-Y", strtotime($entrevista->fecha_entrevista))}}</td>
+      </tr>
+
+      <tr>
+        <th scope="row">Lugar de entrevista</th>
+        <td>{{$entrevista->lugar}}</td>
+      </tr>
+
+      <tr>
+        <th scope="row">Vacante asociada</th>
+        <td>
+          {{
+            $vacante->sede
+            . " - " . $vacante->nombre_vacante 
+            . " - " . $vacante->departamento
+            . " - " . $vacante->turno
+            . " - " . $vacante->dias_libres
+          }}
+        </td>
+      </tr>
+
+      <tr>
+        <th scope="row">Observaciones</th>
+        <td>{{$entrevista->observaciones}}</td>
+      </tr>
+
+      <tr>
+        <th scope="row">Creado</th>
+        <td>{{$entrevista->created_at}}</td>
+      </tr>
+
+      <tr>
+        <th scope="row">Ultima Actualización</th>
+        <td>{{$entrevista->updated_at}}</td>
+      </tr>
+
+      <tr>
+        <th scope="row">Actualizado por</th>
+        <td>{{$entrevista->user}}</td>
+      </tr>
+    </tbody>
+  </table>
+
+    <?php
       break;
 
       case 4: 
