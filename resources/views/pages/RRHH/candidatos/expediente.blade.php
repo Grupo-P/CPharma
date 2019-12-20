@@ -119,6 +119,16 @@
     $practicas = compras\RH_Practica::where('rh_candidatos_id', $candidatos->id)
     ->orderBy('id', 'desc')
     ->first();
+
+    //-------------------- REFERENCIAS DEL CANDIDATO --------------------//
+    $referencias = compras\RH_Candidato_EmpresaReferencia::where('rh_candidatos_id', $candidatos->id)
+    ->orderBy('id', 'desc')
+    ->first();
+
+    //-------------------- CONTACTOS DE EMPRESAS --------------------//
+    $contacto_emp = compras\RH_Practica::where('rh_candidatos_id', $candidatos->id)
+    ->orderBy('id', 'desc')
+    ->first();
   ?>
 
   <?php
@@ -292,6 +302,109 @@
       <tr>
         <th scope="row">Actualizado por</th>
         <td>{{$practicas->user}}</td>
+      </tr>
+    </tbody>
+  </table>
+  <?php
+    }
+  ?>
+
+  <?php
+    if(!is_null($referencias)) {
+      $empresa = compras\RH_EmpresaReferencia::find($referencias->rh_empresaref_id);
+  ?>
+  <table class="table table-borderless table-striped">
+    <thead class="thead-dark">
+      <tr>
+        <th scope="row" colspan="2">Fase #4</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr>
+        <th scope="row">Nombre de la empresa</th>
+        <td>{{$empresa->nombre_empresa}}</td>
+      </tr>
+
+      <tr>
+        <th scope="row">Dirección de la empresa</th>
+        <td>{{$empresa->direccion}}</td>
+      </tr>
+
+      <tr>
+        <th scope="row">Teléfono de la empresa</th>
+        <td>{{$empresa->telefono}}</td>
+      </tr>
+
+      <tr>
+        <th scope="row">Correo de la empresa</th>
+        <td>{{$empresa->correo}}</td>
+      </tr>
+
+      <tr>
+        <th scope="row">Creado</th>
+        <td>{{$empresa->created_at}}</td>
+      </tr>
+
+      <tr>
+        <th scope="row">Ultima Actualización</th>
+        <td>{{$empresa->updated_at}}</td>
+      </tr>
+
+      <tr>
+        <th scope="row">Actualizado por</th>
+        <td>{{$empresa->user}}</td>
+      </tr>
+    </tbody>
+  </table>
+  <?php
+    }
+  ?>
+
+  <?php
+    if(!is_null($contacto_emp)) {
+  ?>
+  <table class="table table-borderless table-striped">
+    <thead class="thead-dark">
+      <tr>
+        <th scope="row" colspan="2">Fase #3</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr>
+        <th scope="row">Líder de práctica</th>
+        <td>{{$contacto_emp->lider}}</td>
+      </tr>
+
+      <tr>
+        <th scope="row">Lugar de práctica</th>
+        <td>{{$contacto_emp->lugar}}</td>
+      </tr>
+
+      <tr>
+        <th scope="row">Tiempo de práctica (horas)</th>
+        <td>{{$contacto_emp->duracion}}</td>
+      </tr>
+
+      <tr>
+        <th scope="row">Observaciones</th>
+        <td>{{$contacto_emp->observaciones}}</td>
+      </tr>
+
+      <tr>
+        <th scope="row">Creado</th>
+        <td>{{$contacto_emp->created_at}}</td>
+      </tr>
+
+      <tr>
+        <th scope="row">Ultima Actualización</th>
+        <td>{{$contacto_emp->updated_at}}</td>
+      </tr>
+
+      <tr>
+        <th scope="row">Actualizado por</th>
+        <td>{{$contacto_emp->user}}</td>
       </tr>
     </tbody>
   </table>
