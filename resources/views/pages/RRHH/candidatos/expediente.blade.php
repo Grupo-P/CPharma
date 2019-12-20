@@ -265,46 +265,33 @@
       </tr>
 
       <tr>
-        <th scope="row">Fecha de entrevista</th>
-        <td>{{date("d-m-Y", strtotime($entrevista->fecha_entrevista))}}</td>
+        <th scope="row">Lugar de práctica</th>
+        <td>{{$practicas->lugar}}</td>
       </tr>
 
       <tr>
-        <th scope="row">Lugar de entrevista</th>
-        <td>{{$entrevista->lugar}}</td>
-      </tr>
-
-      <tr>
-        <th scope="row">Vacante asociada</th>
-        <td>
-          {{
-            $vacante->sede
-            . " - " . $vacante->nombre_vacante 
-            . " - " . $vacante->departamento
-            . " - " . $vacante->turno
-            . " - " . $vacante->dias_libres
-          }}
-        </td>
+        <th scope="row">Tiempo de práctica (horas)</th>
+        <td>{{$practicas->duracion}}</td>
       </tr>
 
       <tr>
         <th scope="row">Observaciones</th>
-        <td>{{$entrevista->observaciones}}</td>
+        <td>{{$practicas->observaciones}}</td>
       </tr>
 
       <tr>
         <th scope="row">Creado</th>
-        <td>{{$entrevista->created_at}}</td>
+        <td>{{$practicas->created_at}}</td>
       </tr>
 
       <tr>
         <th scope="row">Ultima Actualización</th>
-        <td>{{$entrevista->updated_at}}</td>
+        <td>{{$practicas->updated_at}}</td>
       </tr>
 
       <tr>
         <th scope="row">Actualizado por</th>
-        <td>{{$entrevista->user}}</td>
+        <td>{{$practicas->user}}</td>
       </tr>
     </tbody>
   </table>
