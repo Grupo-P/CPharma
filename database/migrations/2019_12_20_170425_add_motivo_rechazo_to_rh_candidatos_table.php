@@ -12,7 +12,7 @@ class AddMotivoRechazoToRhCandidatosTable extends Migration {
      */
     public function up() {
         Schema::table('rh_candidatos', function (Blueprint $table) {
-            
+            $table->string('motivo_rechazo')->nullable()->after('user');
         });
     }
 
@@ -23,7 +23,7 @@ class AddMotivoRechazoToRhCandidatosTable extends Migration {
      */
     public function down() {
         Schema::table('rh_candidatos', function (Blueprint $table) {
-            
+            $table->dropColumn('motivo_rechazo');
         });
     }
 }
