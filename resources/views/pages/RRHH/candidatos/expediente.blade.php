@@ -133,6 +133,11 @@
       ->orderBy('id', 'desc')
       ->first();
     }
+
+    //-------------------- EXAMENES MEDICOS DEL CANDIDATO --------------------//
+    $examenes = compras\RH_ExamenesM::where('rh_candidatos_id', $candidatos->id)
+    ->orderBy('id', 'desc')
+    ->first();
   ?>
 
   <?php
@@ -414,5 +419,83 @@
   </table>
   <?php
     }
+  ?>
+
+  <?php
+    if(!is_null($examenes)) {
+      $examen_lab = compras\RHI_Examen_Laboratorio::where('rh_examenes_id', $examenes->id)
+      ->orderBy('id', 'desc')
+      ->first();
+
+      if(!is_null($examen_lab)) {
+        $laboratorio = compras\RH_Laboratorio::find($examen_lab->rh_laboratorio_id);
+  ?>
+  <table class="table table-borderless table-striped">
+    <thead class="thead-dark">
+      <tr>
+        <th scope="row" colspan="2">Fase #6</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr>
+        <th scope="row">Nombre del consultorio</th>
+        <td>{{$laboratorio->nombre}}</td>
+      </tr>
+
+      <tr>
+        <th scope="row">Dirección del consultorio</th>
+        <td>{{$laboratorio->direccion}}</td>
+      </tr>
+
+      <tr>
+        <th scope="row">Teléfono fijo</th>
+        <td>{{$laboratorio->telefono_fijo}}</td>
+      </tr>
+
+      <tr>
+        <th scope="row">Teléfono celular</th>
+        <td>{{$laboratorio->telefono_celular}}</td>
+      </tr>
+
+      <tr>
+        <th scope="row">Representante del consultorio</th>
+        <td>{{$examen_lab->representante}}</td>
+      </tr>
+
+      <tr>
+        <th scope="row">Cargo del representante</th>
+        <td>{{$examen_lab->cargo}}</td>
+      </tr>
+
+      <tr>
+        <th scope="row">Estado del candidato</th>
+        <td>{{$examenes->estado}}</td>
+      </tr>
+
+      <tr>
+        <th scope="row">Observaciones</th>
+        <td>{{$examenes->observaciones}}</td>
+      </tr>
+
+      <tr>
+        <th scope="row">Creado</th>
+        <td>{{$examen_lab->created_at}}</td>
+      </tr>
+
+      <tr>
+        <th scope="row">Ultima Actualización</th>
+        <td>{{$examen_lab->updated_at}}</td>
+      </tr>
+
+      <tr>
+        <th scope="row">Actualizado por</th>
+        <td>{{$examen_lab->user}}</td>
+      </tr>
+    </tbody>
+  </table>
+  <?php
+    }
+  }
   ?>
 @endsection
