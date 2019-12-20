@@ -88,6 +88,11 @@
       </tr>
 
       <tr>
+        <th scope="row">Motivo de rechazo</th>
+        <td>{{$candidatos->motivo_rechazo}}</td>
+      </tr>
+
+      <tr>
         <th scope="row">Creado</th>
         <td>{{$candidatos->created_at}}</td>
       </tr>

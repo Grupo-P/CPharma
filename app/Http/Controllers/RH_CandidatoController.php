@@ -184,8 +184,10 @@ class RH_CandidatoController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id) {
+    public function destroy(Request $request, $id) {
         $candidatos = RH_Candidato::find($id);
+        $candidatos->motivo_rechazo = $request->input('motivo_rechazo');
+        $candidatos->save();
 
         $Auditoria = new Auditoria();
         $Auditoria->tabla = 'RH_CANDIDATOS';
