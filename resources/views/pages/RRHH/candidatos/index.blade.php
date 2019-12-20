@@ -209,10 +209,11 @@
               <i class="fas fa-edit"></i>
             </a>
 
-            <form action="/candidatos/{{$candidato->id}}" method="POST" style="display: inline;">
-              @method('DELETE')
-              @csrf
-              <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Desincorporar">
+            <form action="/motivo_rechazo" method="GET" style="display: inline;">
+              
+              <input type="hidden" id="CandidatoId" name="CandidatoId" value="{{$candidato->id}}">
+
+              <button type="submit" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Desincorporar">
                 <i class="fa fa-reply"></i>
               </button>
             </form>
@@ -247,10 +248,11 @@
               <i class="fas fa-edit"></i>
             </a>
 
-            <form action="/candidatos/{{$candidato->id}}" method="POST" style="display: inline;">
-              @method('DELETE')
-              @csrf
-              <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Desincorporar">
+            <form action="/motivo_rechazo" method="GET" style="display: inline;">
+              
+              <input type="hidden" id="CandidatoId" name="CandidatoId" value="{{$candidato->id}}">
+
+              <button type="submit" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Desincorporar">
                 <i class="fa fa-reply"></i>
               </button>
             </form>
