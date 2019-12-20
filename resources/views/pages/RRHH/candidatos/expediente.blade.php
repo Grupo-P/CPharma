@@ -18,11 +18,11 @@
 
   <br/><br/>
 
+  {{-- ******************* CANDIDATO ******************* --}}
   <table class="table table-borderless table-striped">
     <thead class="thead-dark">
       <tr>
-        <th scope="row"></th>
-        <th scope="row"></th>
+        <th scope="row" colspan="2">Candidato</th>
       </tr>
     </thead>
 
@@ -101,12 +101,56 @@
         <th scope="row">Actualizado por</th>
         <td>{{$candidatos->user}}</td>
       </tr>
-
-      <?php
-        $fase_pruebas = compras\RH_Candidato_Prueba::where('rh_candidatos_id', $candidatos->id)
-        ->orderBy('id', 'desc')
-        ->first();
-      ?>
     </tbody>
   </table>
+
+  <?php
+    $candidato_fases = compras\RHI_Candidato_Fase::where('rh_candidatos_id', $candidatos->id)
+      ->orderBy('id', 'desc')
+      ->first();
+
+    $fase = 1;
+
+    if(!is_null($candidato_fases)) {
+      $fase = $candidato_fases->rh_fases_id;
+    }
+
+    switch($fase) {
+      case 2:
+
+        $candidato_pruebas = compras\RH_Candidato_Prueba::where('rh_candidatos_id', $candidatos->id)
+        ->orderBy('id', 'desc')
+        ->first();
+  ?>
+
+  
+
+  <?php
+      break;
+      
+      case 2: 
+
+      break;
+      
+      case 3: 
+
+      break;
+
+      case 4: 
+
+      break;
+      
+      case 5: 
+
+      break;
+      
+      case 6: 
+
+      break;
+      
+      case 7: 
+
+      break;
+    }
+  ?>
 @endsection
