@@ -121,15 +121,66 @@
         $candidato_pruebas = compras\RH_Candidato_Prueba::where('rh_candidatos_id', $candidatos->id)
         ->orderBy('id', 'desc')
         ->first();
+
+        $prueba = compras\RH_Prueba::find($candidato_pruebas->rh_pruebas_id);
   ?>
 
-  
+  <table class="table table-borderless table-striped">
+    <thead class="thead-dark">
+      <tr>
+        <th scope="row" colspan="2">Fase #1</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr>
+        <th scope="row">Facilitador</th>
+        <td>{{$candidato_pruebas->facilitador}}</td>
+      </tr>
+
+      <tr>
+        <th scope="row">Fecha</th>
+        <td>{{date("d-m-Y", strtotime($candidato_pruebas->fecha))}}</td>
+      </tr>
+
+      <tr>
+        <th scope="row">Tipo de prueba</th>
+        <td>{{$prueba->tipo_prueba}}</td>
+      </tr>
+
+      <tr>
+        <th scope="row">Nombre de prueba</th>
+        <td>{{$prueba->nombre_prueba}}</td>
+      </tr>
+
+      <tr>
+        <th scope="row">Resultado</th>
+        <td>{{$candidato_pruebas->resultado}}</td>
+      </tr>
+
+      <tr>
+        <th scope="row">Observaciones</th>
+        <td>{{$candidato_pruebas->observaciones}}</td>
+      </tr>
+
+      <tr>
+        <th scope="row">Creado</th>
+        <td>{{$candidato_pruebas->created_at}}</td>
+      </tr>
+
+      <tr>
+        <th scope="row">Ultima Actualización</th>
+        <td>{{$candidato_pruebas->updated_at}}</td>
+      </tr>
+
+      <tr>
+        <th scope="row">Actualizado por</th>
+        <td>{{$candidatos->user}}</td>
+      </tr>
+    </tbody>
+  </table>
 
   <?php
-      break;
-      
-      case 2: 
-
       break;
       
       case 3: 
