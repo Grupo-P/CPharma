@@ -29,11 +29,6 @@ class RH_CandidatoController extends Controller {
         return view('pages.RRHH.candidatos.index', compact('candidatos'));
     }
 
-    /**
-     * Display a listing of the active resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function procesos() {
         $candidatos = RH_Candidato::where('estatus', '<>', 'RECHAZADO')
         ->where('estatus', '<>', 'CONTRATADO')
@@ -42,14 +37,14 @@ class RH_CandidatoController extends Controller {
         return view('pages.RRHH.candidatos.procesos', compact('candidatos'));
     }
 
-    /**
-     * Display a listing of the active resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function expediente(Request $request) {
         $candidatos = RH_Candidato::find($request->input("CandidatoId"));
         return view('pages.RRHH.candidatos.expediente', compact('candidatos'));
+    }
+
+    public function motivo_rechazo(Request $request) {
+        $candidatos = RH_Candidato::find($request->input("CandidatoId"));
+        return view('pages.RRHH.candidatos.motivo_rechazo', compact('candidatos'));
     }
 
     /**
