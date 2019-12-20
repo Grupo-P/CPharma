@@ -223,7 +223,7 @@ Route::resource('ordenCompraDetalle', 'OrdenCompraDetalleController');
 Route::resource('candidatos', 'RH_CandidatoController');
 Route::get('/procesos_candidatos', 'RH_CandidatoController@procesos');
 Route::get('/expediente_candidatos', 'RH_CandidatoController@expediente');
-Route::get('/candidatos/motivo_rechazo', 'RH_CandidatoController@motivo_rechazo');
+Route::get('/motivo_rechazo', 'RH_CandidatoController@motivo_rechazo');
 
 Route::resource('procesos_referencias', 'RH_CandidatoEmpresaController');
 
