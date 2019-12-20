@@ -126,9 +126,13 @@
     ->first();
 
     //-------------------- CONTACTOS DE EMPRESAS --------------------//
-    $contacto_emp = compras\RH_Practica::where('rh_candidatos_id', $candidatos->id)
-    ->orderBy('id', 'desc')
-    ->first();
+    $contacto_emp = null;
+
+    if(!is_null($referencias)) {
+      $contacto_emp = compras\RH_ContactoEmp::where('rh_emprf_id', $referencias->rh_empresaref_id)
+      ->orderBy('id', 'desc')
+      ->first();
+    }
   ?>
 
   <?php
@@ -367,29 +371,29 @@
   <table class="table table-borderless table-striped">
     <thead class="thead-dark">
       <tr>
-        <th scope="row" colspan="2">Fase #3</th>
+        <th scope="row" colspan="2">Fase #5</th>
       </tr>
     </thead>
 
     <tbody>
       <tr>
-        <th scope="row">Líder de práctica</th>
-        <td>{{$contacto_emp->lider}}</td>
+        <th scope="row">Representante de empresa</th>
+        <td>{{$contacto_emp->nombre . " " . $contacto_emp->apellido}}</td>
       </tr>
 
       <tr>
-        <th scope="row">Lugar de práctica</th>
-        <td>{{$contacto_emp->lugar}}</td>
+        <th scope="row">Teléfono del representante</th>
+        <td>{{$contacto_emp->telefono}}</td>
       </tr>
 
       <tr>
-        <th scope="row">Tiempo de práctica (horas)</th>
-        <td>{{$contacto_emp->duracion}}</td>
+        <th scope="row">Correo del representante</th>
+        <td>{{$contacto_emp->correo}}</td>
       </tr>
 
       <tr>
-        <th scope="row">Observaciones</th>
-        <td>{{$contacto_emp->observaciones}}</td>
+        <th scope="row">Cargo del representante</th>
+        <td>{{$contacto_emp->cargo}}</td>
       </tr>
 
       <tr>
