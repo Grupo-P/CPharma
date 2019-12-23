@@ -142,7 +142,9 @@
         <th scope="col" class="stickyCP">Teléfono</th>
         <th scope="col" class="stickyCP">Relación laboral</th>
         <th scope="col" class="stickyCP">Estatus</th>
+        <th scope="col" class="stickyCP">Fase actual</th>
         <th scope="col" class="stickyCP">Acciones</th>
+        <th scope="col" class="stickyCP">Expediente</th>
       </tr>
     </thead>
 
@@ -171,12 +173,33 @@
           <td>{{$candidato->tipo_relacion}}</td>
           <td>{{$candidato->estatus}}</td>
 
+          <td>
+            <?php
+              $candidatos_fases = DB::table('rhi_candidatos_fases')
+              ->where('rh_candidatos_id', $candidato->id)
+              ->orderBy('id', 'desc')
+              ->first();
+
+              $nombre_fase = '-';
+
+              if(!is_null($candidatos_fases)) {
+                $nombre_fase = compras\RH_Fase::find($candidatos_fases->rh_fases_id)
+                ->nombre_fase;
+              }
+              
+            ?>
+            {{$nombre_fase}}
+          </td>
+
           <!-- ***************** VALIDACION DE ROLES ***************** -->
           <td style="width:140px;">
           <?php
             if(Auth::user()->role == 'MASTER' || Auth::user()->role == 'DEVELOPER') {
 
-              if($candidato->estatus != 'RECHAZADO') {
+              if(
+                ($candidato->estatus != 'RECHAZADO')
+                && ($candidato->estatus != 'FUTURO')
+              ) {
           ?>
             <a href="/candidatos/{{$candidato->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
               <i class="far fa-eye"></i>
@@ -186,16 +209,20 @@
               <i class="fas fa-edit"></i>
             </a>
 
-            <form action="/candidatos/{{$candidato->id}}" method="POST" style="display: inline;">
-              @method('DELETE')
-              @csrf
-              <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Desincorporar">
+            <form action="/motivo_rechazo" method="GET" style="display: inline;">
+              
+              <input type="hidden" id="CandidatoId" name="CandidatoId" value="{{$candidato->id}}">
+
+              <button type="submit" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Desincorporar">
                 <i class="fa fa-reply"></i>
               </button>
             </form>
 
           <?php
-            } else if($candidato->estatus == 'RECHAZADO') {
+            } else if(
+                ($candidato->estatus == 'RECHAZADO')
+                || ($candidato->estatus == 'FUTURO')
+              ) {
           ?>
             <form action="/candidatos/{{$candidato->id}}" method="POST" style="display: inline;">
               @method('DELETE')
@@ -208,7 +235,10 @@
             }
           } 
           else if(Auth::user()->role == 'ANALISTA') {
-            if($candidato->estatus != 'RECHAZADO') {
+            if(
+              ($candidato->estatus != 'RECHAZADO')
+              && ($candidato->estatus != 'FUTURO')
+            ) {
           ?>
             <a href="/candidatos/{{$candidato->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
               <i class="far fa-eye"></i>
@@ -218,16 +248,19 @@
               <i class="fas fa-edit"></i>
             </a>
 
-            <form action="/candidatos/{{$candidato->id}}" method="POST" style="display: inline;">
-              @method('DELETE')
-              @csrf
-              <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Desincorporar">
+            <form action="/motivo_rechazo" method="GET" style="display: inline;">
+              
+              <input type="hidden" id="CandidatoId" name="CandidatoId" value="{{$candidato->id}}">
+
+              <button type="submit" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Desincorporar">
                 <i class="fa fa-reply"></i>
               </button>
             </form>
           <?php
-            } else if($candidato->estatus == 'RECHAZADO') {
-          ?>
+            } else if(
+                ($candidato->estatus == 'RECHAZADO')
+                || ($candidato->estatus == 'FUTURO')
+              ) {          ?>
             <form action="/candidatos/{{$candidato->id}}" method="POST" style="display: inline;">
               @method('DELETE')
               @csrf
@@ -246,6 +279,31 @@
           <?php
             }
           ?>
+          </td>
+
+          <td>
+            <?php
+              $candidatos_fases = DB::table('rhi_candidatos_fases')
+              ->where('rh_candidatos_id', $candidato->id)
+              ->orderBy('id', 'desc')
+              ->first();
+
+              $nombre_fase = '-';
+
+              if(!is_null($candidatos_fases)) {
+                $nombre_fase = compras\RH_Fase::find($candidatos_fases->rh_fases_id)
+                ->nombre_fase;
+              }
+              
+            ?>
+
+            <form action="/expediente_candidatos" method="GET" style="display: inline-block;">
+              <input type="hidden" name="CandidatoId" value="{{$candidato->id}}">
+
+              <button type="submit" role="button" class="btn btn-outline-primary btn-sm" data-toggle="tooltip" data-placement="bottom" title="Ir al expediente">
+                <i class="fas fa-search"></i>&nbsp;Detalle
+              </button>
+            </form>
           </td>
         </tr>
       @endforeach

@@ -31,6 +31,7 @@
     $procesos_candidatos = DB::table('rh_candidatos')
     	->where('estatus', '<>', 'RECHAZADO')
     	->where('estatus', '<>', 'CONTRATADO')
+    	->where('estatus', '<>', 'FUTURO')
     	->count();
     $practicas = DB::table('rh_practicas')->count();
 

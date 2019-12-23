@@ -29,16 +29,22 @@ class RH_CandidatoController extends Controller {
         return view('pages.RRHH.candidatos.index', compact('candidatos'));
     }
 
-    /**
-     * Display a listing of the active resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function procesos() {
         $candidatos = RH_Candidato::where('estatus', '<>', 'RECHAZADO')
         ->where('estatus', '<>', 'CONTRATADO')
+        ->where('estatus', '<>', 'FUTURO')
         ->get();
         return view('pages.RRHH.candidatos.procesos', compact('candidatos'));
+    }
+
+    public function expediente(Request $request) {
+        $candidatos = RH_Candidato::find($request->input("CandidatoId"));
+        return view('pages.RRHH.candidatos.expediente', compact('candidatos'));
+    }
+
+    public function motivo_rechazo(Request $request) {
+        $candidatos = RH_Candidato::find($request->input("CandidatoId"));
+        return view('pages.RRHH.candidatos.motivo_rechazo', compact('candidatos'));
     }
 
     /**
@@ -178,15 +184,20 @@ class RH_CandidatoController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id) {
+    public function destroy(Request $request, $id) {
         $candidatos = RH_Candidato::find($id);
+        $candidatos->motivo_rechazo = $request->input('motivo_rechazo');
+        $candidatos->save();
 
         $Auditoria = new Auditoria();
         $Auditoria->tabla = 'RH_CANDIDATOS';
         $Auditoria->registro = $candidatos->nombres . " " . $candidatos->apellidos;
         $Auditoria->user = auth()->user()->name;
 
-        if($candidatos->estatus == 'RECHAZADO') {
+        if(
+            ($candidatos->estatus == 'RECHAZADO') 
+            || ($candidatos->estatus == 'FUTURO')
+        ) {
             $candidatos->estatus = 'POSTULADO';
             $Auditoria->accion = 'REINCORPORAR';
         }

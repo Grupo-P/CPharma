@@ -106,11 +106,22 @@
           </tr>
 
           <tr>
-            <th scope="row">{!! Form::label('puntuacion', 'Puntuación *', ['title' => 'Éste campo es requerido']) !!}</th>
-            
+            <th scope="row">
+              {!! Form::label('resultado', 'Resultado *', ['title' => 'Éste campo es requerido']) !!}
+            </th>
             <td>
-              <input type="number" step="0.01" min="0" max="100" name="puntuacion" id="puntuacion" placeholder="12.5" class="form-control">
+              {!! Form::select('resultado', [
+                '' => 'Seleccione una opción',
+                'Si' => 'Si', 
+                'SiR' => 'Si con restricciones',
+                'No' => 'No',
+              ], null, ['class' => 'form-control', 'required']) !!}
             </td>
+          </tr>
+
+          <tr>
+            <th scope="row">{!! Form::label('observaciones', 'Observaciones') !!}</th>
+            <td>{!! Form::textarea('observaciones', null, [ 'class' => 'form-control', 'placeholder' => 'Detalles referentes al resultado', 'rows' => '3']) !!}</td>
           </tr>
         </tbody>
       </table>

@@ -52,7 +52,8 @@ class RH_CandidatoPruebaController extends Controller {
             $candidatos_pruebas->rh_pruebas_id = $request->input('PruebaId');
             $candidatos_pruebas->fecha = date('Y-m-d', strtotime($fecha));
             $candidatos_pruebas->facilitador = $request->input('facilitador');
-            $candidatos_pruebas->puntuacion = floatval($request->input('puntuacion'));
+            $candidatos_pruebas->resultado = $request->input('resultado');
+            $candidatos_pruebas->observaciones = $request->input('observaciones');
             $candidatos_pruebas->user = auth()->user()->name;
             $candidatos_pruebas->save();
 
