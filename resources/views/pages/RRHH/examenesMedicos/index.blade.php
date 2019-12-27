@@ -138,6 +138,9 @@
         <th scope="col" class="CP-sticky">#</th>
         <th scope="col" class="CP-sticky">Nombre de la empresa</th>
         <th scope="col" class="CP-sticky">Representante de Empresa</th>
+        {{-- <th scope="col" class="CP-sticky">Cargo del representante</th> --}}
+        <th scope="col" class="CP-sticky">Candidato</th>
+        <th scope="col" class="CP-sticky">Cedula</th>
         <th scope="col" class="CP-sticky">Estado</th>
         <th scope="col" class="CP-sticky">Estatus</th>
         <th scope="col" class="CP-sticky">Acciones</th>
@@ -149,12 +152,10 @@
         <tr>
           <th>{{$examen->id}}</th>
           <td>{{$examen->empresa}}</td>
-          <td>
-            {{
-              compras\RHI_Examen_Laboratorio::where('rh_examenes_id', $examen->id)
-              ->value('representante')
-            }}
-          </td>
+          <td>{{$examen->representante}}</td>
+          {{-- <td>{{$examen->cargo}}</td> --}}
+          <td>{{$examen->nombres . " " . $examen->apellidos}}</td>
+          <td>{{$examen->cedula}}</td>
           <td>{{$examen->estado}}</td>
           <td>{{$examen->estatus}}</td>
 

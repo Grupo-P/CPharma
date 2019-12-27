@@ -31,7 +31,24 @@ class RH_ExamenesMController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function index() {
-        $examenesm = RH_ExamenesM::all();
+        //$examenesm = RH_ExamenesM::all();
+        $examenesm = RH_ExamenesM::join(
+            'rh_candidatos',
+            'rh_examenes.rh_candidatos_id', '=', 'rh_candidatos.id'
+        )
+        ->join(
+            'rhi_examenes_lab',
+            'rh_examenes.id', '=', 'rhi_examenes_lab.rh_examenes_id'
+        )
+        ->select(
+            'rh_examenes.*',
+            'rh_candidatos.nombres',
+            'rh_candidatos.apellidos',
+            'rh_candidatos.cedula',
+            'rhi_examenes_lab.representante',
+            'rhi_examenes_lab.cargo'
+        )
+        ->get();
         return view('pages.RRHH.examenesMedicos.index', compact('examenesm'));
     }
 
