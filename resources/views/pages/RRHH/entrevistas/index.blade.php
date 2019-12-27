@@ -137,6 +137,7 @@
       <tr>
         <th scope="col" class="CP-sticky">#</th>
         <th scope="col" class="CP-sticky">Candidato</th>
+        <th scope="col" class="CP-sticky">Cédula del candidato</th>
         <th scope="col" class="CP-sticky">Fecha de entrevista</th>
         <th scope="col" class="CP-sticky">Entrevistadores</th>
         <th scope="col" class="CP-sticky">Lugar</th>
@@ -150,22 +151,17 @@
       @foreach($entrevistas as $entrevista)
         <tr>
           <th>{{$entrevista->id}}</th>
-          <td>
-            <?php
-              $candidato = compras\RH_Candidato::find($entrevista->rh_candidatos_id);
-            ?>
-
-            {{$candidato->nombres . " " . $candidato->apellidos}}
-          </td>
+          <td>{{$entrevista->nombres . " " . $entrevista->apellidos}}</td>
+          <td>{{$entrevista->cedula}}</td>
           <td>{{date('d-m-Y',strtotime($entrevista->fecha_entrevista))}}</td>
           <td>{{$entrevista->entrevistadores}}</td>
           <td>{{$entrevista->lugar}}</td>
           <td>
-            <?php
-              $ent = compras\RH_Vacante::find($entrevista->rh_vacantes_id);
-            ?>
-
-            {{$ent->nombre_vacante . " - " . $ent->departamento . " - " . $ent->sede}}
+            {{
+              $entrevista->nombre_vacante
+              . " - " . $entrevista->departamento
+              . " - " . $entrevista->sede
+            }}
           </td>
           <td>{{$entrevista->estatus}}</td>
 
