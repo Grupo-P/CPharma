@@ -109,6 +109,7 @@
 		      	<th scope="col" class="stickyCP">#</th>
 		      	<th scope="col" class="stickyCP">Codigo Orden</th>
 		      	<th scope="col" class="stickyCP">Estatus Orden</th>
+		      	<th scope="col" class="stickyCP">Estado Orden</th>
 		      	<th scope="col" class="stickyCP">Fecha de la orden</th>
 		      	<th scope="col" class="stickyCP">Operador Orden</th>
 		      	<th scope="col" class="stickyCP">Proveedor Orden</th>
@@ -133,7 +134,6 @@
 	    <tr>
 	      <th>{{$ordenCompraDetalle->id}}</th>
 	      <td>{{$ordenCompraDetalle->codigo_orden}}</td>
-	      <td>{{$ordenCompraDetalle->estatus}}</td>
 				
 				<?php
 					$OrdenCompra = 
@@ -141,6 +141,8 @@
 				  ->get();
 				  $i = 0;
 
+				  echo'<td>'.$OrdenCompra[$i]->estatus.'</td>';
+			   	echo'<td>'.$OrdenCompra[$i]->estado.'</td>';
 				  echo'<td>'.$OrdenCompra[$i]->created_at.'</td>';
 				  echo'<td>'.$OrdenCompra[$i]->user.'</td>';
 				  echo'<td>'.$OrdenCompra[$i]->proveedor.'</td>';
