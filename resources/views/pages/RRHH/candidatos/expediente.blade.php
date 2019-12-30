@@ -126,7 +126,7 @@
     //-------------------- ENTREVISTAS DEL CANDIDATO --------------------//
     $entrevista = compras\RH_Entrevista::where('rh_candidatos_id', $candidatos->id)
     ->orderBy('id', 'desc')
-    ->first();
+    ->get();
 
     //-------------------- PRACTICAS DEL CANDIDATO --------------------//
     $practicas = compras\RH_Practica::where('rh_candidatos_id', $candidatos->id)
@@ -174,7 +174,7 @@
     if(!is_null($candidato_pruebas)) {
 
       foreach($candidato_pruebas as $cp) {
-        
+
       $prueba = compras\RH_Prueba::find($cp->rh_pruebas_id);
   ?>
   <table class="table table-borderless table-striped">
@@ -238,7 +238,8 @@
 
   <?php
     if(!is_null($entrevista)) {
-      $vacante = compras\RH_Vacante::find($entrevista->rh_vacantes_id);
+      foreach($entrevista as $ent) {
+      $vacante = compras\RH_Vacante::find($ent->rh_vacantes_id);
   ?>
   <table class="table table-borderless table-striped">
     <thead class="thead-dark">
@@ -250,17 +251,17 @@
     <tbody>
       <tr>
         <th scope="row">Entrevistadores</th>
-        <td>{{$entrevista->entrevistadores}}</td>
+        <td>{{$ent->entrevistadores}}</td>
       </tr>
 
       <tr>
         <th scope="row">Fecha de entrevista</th>
-        <td>{{date("d-m-Y", strtotime($entrevista->fecha_entrevista))}}</td>
+        <td>{{date("d-m-Y", strtotime($ent->fecha_entrevista))}}</td>
       </tr>
 
       <tr>
         <th scope="row">Lugar de entrevista</th>
-        <td>{{$entrevista->lugar}}</td>
+        <td>{{$ent->lugar}}</td>
       </tr>
 
       <tr>
@@ -278,27 +279,28 @@
 
       <tr>
         <th scope="row">Observaciones</th>
-        <td>{{$entrevista->observaciones}}</td>
+        <td>{{$ent->observaciones}}</td>
       </tr>
 
       <tr>
         <th scope="row">Creado</th>
-        <td>{{$entrevista->created_at}}</td>
+        <td>{{$ent->created_at}}</td>
       </tr>
 
       <tr>
         <th scope="row">Ultima Actualización</th>
-        <td>{{$entrevista->updated_at}}</td>
+        <td>{{$ent->updated_at}}</td>
       </tr>
 
       <tr>
         <th scope="row">Actualizado por</th>
-        <td>{{$entrevista->user}}</td>
+        <td>{{$ent->user}}</td>
       </tr>
     </tbody>
   </table>
   <?php
-    }
+    }//foreach
+  }//if
   ?>
 
   <?php
