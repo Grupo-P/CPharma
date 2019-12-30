@@ -12,7 +12,7 @@ class AddUniqueToRhPruebasTable extends Migration {
      */
     public function up() {
         Schema::table('rh_pruebas', function (Blueprint $table) {
-            //
+            $table->unique('nombre_prueba');
         });
     }
 
@@ -23,7 +23,7 @@ class AddUniqueToRhPruebasTable extends Migration {
      */
     public function down() {
         Schema::table('rh_pruebas', function (Blueprint $table) {
-            //
+            $table->dropUnique('rh_pruebas_nombre_prueba_unique');
         });
     }
 }
