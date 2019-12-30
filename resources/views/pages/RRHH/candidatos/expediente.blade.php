@@ -131,7 +131,7 @@
     //-------------------- PRACTICAS DEL CANDIDATO --------------------//
     $practicas = compras\RH_Practica::where('rh_candidatos_id', $candidatos->id)
     ->orderBy('id', 'desc')
-    ->first();
+    ->get();
 
     //-------------------- REFERENCIAS DEL CANDIDATO --------------------//
     $referencias = compras\RH_Candidato_EmpresaReferencia::where('rh_candidatos_id', $candidatos->id)
@@ -305,6 +305,7 @@
 
   <?php
     if(!is_null($practicas)) {
+      foreach($practicas as $practica) {
   ?>
   <table class="table table-borderless table-striped">
     <thead class="thead-dark">
@@ -316,42 +317,43 @@
     <tbody>
       <tr>
         <th scope="row">Líder de práctica</th>
-        <td>{{$practicas->lider}}</td>
+        <td>{{$practica->lider}}</td>
       </tr>
 
       <tr>
         <th scope="row">Lugar de práctica</th>
-        <td>{{$practicas->lugar}}</td>
+        <td>{{$practica->lugar}}</td>
       </tr>
 
       <tr>
         <th scope="row">Tiempo de práctica (horas)</th>
-        <td>{{$practicas->duracion}}</td>
+        <td>{{$practica->duracion}}</td>
       </tr>
 
       <tr>
         <th scope="row">Observaciones</th>
-        <td>{{$practicas->observaciones}}</td>
+        <td>{{$practica->observaciones}}</td>
       </tr>
 
       <tr>
         <th scope="row">Creado</th>
-        <td>{{$practicas->created_at}}</td>
+        <td>{{$practica->created_at}}</td>
       </tr>
 
       <tr>
         <th scope="row">Ultima Actualización</th>
-        <td>{{$practicas->updated_at}}</td>
+        <td>{{$practica->updated_at}}</td>
       </tr>
 
       <tr>
         <th scope="row">Actualizado por</th>
-        <td>{{$practicas->user}}</td>
+        <td>{{$practica->user}}</td>
       </tr>
     </tbody>
   </table>
   <?php
-    }
+    }//foreach
+  }//if
   ?>
 
   <?php
