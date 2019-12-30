@@ -121,7 +121,7 @@
     //-------------------- PRUEBAS DEL CANDIDATO --------------------//
     $candidato_pruebas = compras\RH_Candidato_Prueba::where('rh_candidatos_id', $candidatos->id)
     ->orderBy('id', 'desc')
-    ->first();
+    ->get();
 
     //-------------------- ENTREVISTAS DEL CANDIDATO --------------------//
     $entrevista = compras\RH_Entrevista::where('rh_candidatos_id', $candidatos->id)
@@ -172,7 +172,10 @@
 
   <?php
     if(!is_null($candidato_pruebas)) {
-      $prueba = compras\RH_Prueba::find($candidato_pruebas->rh_pruebas_id);
+
+      foreach($candidato_pruebas as $cp) {
+        
+      $prueba = compras\RH_Prueba::find($cp->rh_pruebas_id);
   ?>
   <table class="table table-borderless table-striped">
     <thead class="thead-dark">
@@ -184,12 +187,12 @@
     <tbody>
       <tr>
         <th scope="row">Facilitador</th>
-        <td>{{$candidato_pruebas->facilitador}}</td>
+        <td>{{$cp->facilitador}}</td>
       </tr>
 
       <tr>
         <th scope="row">Fecha de prueba</th>
-        <td>{{date("d-m-Y", strtotime($candidato_pruebas->fecha))}}</td>
+        <td>{{date("d-m-Y", strtotime($cp->fecha))}}</td>
       </tr>
 
       <tr>
@@ -204,32 +207,33 @@
 
       <tr>
         <th scope="row">Resultado de prueba</th>
-        <td>{{$candidato_pruebas->resultado}}</td>
+        <td>{{$cp->resultado}}</td>
       </tr>
 
       <tr>
         <th scope="row">Observaciones</th>
-        <td>{{$candidato_pruebas->observaciones}}</td>
+        <td>{{$cp->observaciones}}</td>
       </tr>
 
       <tr>
         <th scope="row">Creado</th>
-        <td>{{$candidato_pruebas->created_at}}</td>
+        <td>{{$cp->created_at}}</td>
       </tr>
 
       <tr>
         <th scope="row">Ultima Actualización</th>
-        <td>{{$candidato_pruebas->updated_at}}</td>
+        <td>{{$cp->updated_at}}</td>
       </tr>
 
       <tr>
         <th scope="row">Actualizado por</th>
-        <td>{{$candidato_pruebas->user}}</td>
+        <td>{{$cp->user}}</td>
       </tr>
     </tbody>
   </table>
   <?php
-    }
+    }//foreach
+  }//if
   ?>
 
   <?php
