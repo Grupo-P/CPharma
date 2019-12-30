@@ -106,11 +106,11 @@ class RH_EntrevistaController extends Controller {
                 $candidato->estatus = 'FUTURO';
                 $candidato->save();
             }
-            else {
-                $candidato = RH_Candidato::find($request->input('CandidatoId'));
-                $candidato->estatus = 'EN_PROCESO';
-                $candidato->save();
-            }
+            // else {
+            //     $candidato = RH_Candidato::find($request->input('CandidatoId'));
+            //     $candidato->estatus = 'EN_PROCESO';
+            //     $candidato->save();
+            // }
 
             //-------------------- AUDITORIA --------------------//
             $Auditoria = new Auditoria();
@@ -205,7 +205,7 @@ class RH_EntrevistaController extends Controller {
             }
             else {
                 $candidato = RH_Candidato::find($request->input('CandidatoId'));
-                $candidato->estatus = 'POSTULADO';
+                $candidato->estatus = 'EN_PROCESO';
                 $candidato->save();
             }
 
