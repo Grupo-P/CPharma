@@ -113,7 +113,7 @@
               {!! Form::select('resultado', [
                 '' => 'Seleccione una opción',
                 'Si' => 'Si', 
-                'SiR' => 'Si con restricciones',
+                'Si con restricciones' => 'Si con restricciones',
                 'No' => 'No',
               ], null, ['class' => 'form-control', 'required']) !!}
             </td>
