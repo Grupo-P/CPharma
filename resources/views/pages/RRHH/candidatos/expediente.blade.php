@@ -365,17 +365,17 @@
 
       <tr>
         <th scope="row">Creado</th>
-        <td>{{$empresa->created_at}}</td>
+        <td>{{$referencias->created_at}}</td>
       </tr>
 
       <tr>
         <th scope="row">Ultima Actualización</th>
-        <td>{{$empresa->updated_at}}</td>
+        <td>{{$referencias->updated_at}}</td>
       </tr>
 
       <tr>
         <th scope="row">Actualizado por</th>
-        <td>{{$empresa->user}}</td>
+        <td>{{$referencias->user}}</td>
       </tr>
     </tbody>
   </table>
