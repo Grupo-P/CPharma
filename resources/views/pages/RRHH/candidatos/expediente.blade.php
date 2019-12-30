@@ -2,6 +2,14 @@
 
 @section('title', 'Mostrar candidato')
 
+@section('estilosInternos')
+  <style>
+    td {
+      width: 50%;
+    }
+  </style>
+@endsection
+
 @section('content')
   <h1 class="h5 text-info">
     <i class="far fa-eye"></i>
