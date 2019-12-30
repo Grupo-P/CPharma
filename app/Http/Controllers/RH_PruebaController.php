@@ -43,10 +43,16 @@ class RH_PruebaController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request) {
+        $nombre_prueba = $request->input('nombre_prueba');
+
+        if(RH_Prueba::where('nombre_prueba', '=', $nombre_prueba)->exists()) {
+            return back()->with('Error1', ' Error');
+        }
+        
         try {
             $pruebas = new RH_Prueba();
             $pruebas->tipo_prueba = $request->input('tipo_prueba');
-            $pruebas->nombre_prueba = $request->input('nombre_prueba');
+            $pruebas->nombre_prueba = $nombre_prueba;
             $pruebas->estatus = 'ACTIVO';
             $pruebas->user = auth()->user()->name;
             $pruebas->save();
