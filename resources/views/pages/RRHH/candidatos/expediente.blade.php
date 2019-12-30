@@ -153,7 +153,12 @@
 
     $contacto_emp = null;
 
-    if(!is_null($referencias) && $nombre_fase == 'Exámenes médicos') {
+    if(
+      (!is_null($referencias)) 
+      && (
+        $nombre_fase == 'Exámenes médicos'
+        || $nombre_fase == 'Contrato'
+      )) {
       $contacto_emp = compras\RH_ContactoEmp::where('rh_emprf_id', $referencias->rh_empresaref_id)
       ->orderBy('id', 'desc')
       ->first();
