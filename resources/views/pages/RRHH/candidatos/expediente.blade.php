@@ -139,9 +139,21 @@
     ->first();
 
     //-------------------- CONTACTOS DE EMPRESAS --------------------//
+    $candidatos_fases = DB::table('rhi_candidatos_fases')
+    ->where('rh_candidatos_id', $candidatos->id)
+    ->orderBy('id', 'desc')
+    ->first();
+
+    $nombre_fase = '-';
+
+    if(!is_null($candidatos_fases)) {
+      $nombre_fase = compras\RH_Fase::find($candidatos_fases->rh_fases_id)
+      ->nombre_fase;
+    }
+
     $contacto_emp = null;
 
-    if(!is_null($referencias)) {
+    if(!is_null($referencias) && $nombre_fase == 'Exámenes médicos') {
       $contacto_emp = compras\RH_ContactoEmp::where('rh_emprf_id', $referencias->rh_empresaref_id)
       ->orderBy('id', 'desc')
       ->first();
@@ -160,7 +172,7 @@
   <table class="table table-borderless table-striped">
     <thead class="thead-dark">
       <tr>
-        <th scope="row" colspan="2">Fase #1</th>
+        <th scope="row" colspan="2">Fase #1 (Pruebas Psicológicas)</th>
       </tr>
     </thead>
 
@@ -222,7 +234,7 @@
   <table class="table table-borderless table-striped">
     <thead class="thead-dark">
       <tr>
-        <th scope="row" colspan="2">Fase #2</th>
+        <th scope="row" colspan="2">Fase #2 (Entrevista)</th>
       </tr>
     </thead>
 
@@ -286,7 +298,7 @@
   <table class="table table-borderless table-striped">
     <thead class="thead-dark">
       <tr>
-        <th scope="row" colspan="2">Fase #3</th>
+        <th scope="row" colspan="2">Fase #3 (Práctica)</th>
       </tr>
     </thead>
 
@@ -338,7 +350,7 @@
   <table class="table table-borderless table-striped">
     <thead class="thead-dark">
       <tr>
-        <th scope="row" colspan="2">Fase #4</th>
+        <th scope="row" colspan="2">Fase #4 (Referencias laborales)</th>
       </tr>
     </thead>
 
@@ -389,7 +401,7 @@
   <table class="table table-borderless table-striped">
     <thead class="thead-dark">
       <tr>
-        <th scope="row" colspan="2">Fase #5</th>
+        <th scope="row" colspan="2">Fase #5 (Validar referencia)</th>
       </tr>
     </thead>
 
@@ -446,7 +458,7 @@
   <table class="table table-borderless table-striped">
     <thead class="thead-dark">
       <tr>
-        <th scope="row" colspan="2">Fase #6</th>
+        <th scope="row" colspan="2">Fase #6 (Exámenes médicos)</th>
       </tr>
     </thead>
 
