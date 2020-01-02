@@ -49,11 +49,24 @@ class RH_EmpresaReferenciaController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request) {
+        $correo = $request->input('correo');
+        $nombre_empresa = $request->input('nombre_empresa');
+
+        if($correo != '') {
+            if(RH_EmpresaReferencia::where('correo', '=', $correo)->exists()) {
+                return back()->with('Error1', ' Error');
+            }
+        }
+
+        if(RH_EmpresaReferencia::where('nombre_empresa', '=', $nombre_empresa)->exists()) {
+            return back()->with('Error2', ' Error');
+        }
+
         try {
             $empresaReferencias = new RH_EmpresaReferencia();
-            $empresaReferencias->nombre_empresa = $request->input('nombre_empresa');
+            $empresaReferencias->nombre_empresa = $nombre_empresa;
             $empresaReferencias->telefono = $request->input('telefono');
-            $empresaReferencias->correo = $request->input('correo');
+            $empresaReferencias->correo = $correo;
             $empresaReferencias->direccion = $request->input('direccion');
             $empresaReferencias->estatus = 'ACTIVO';
             $empresaReferencias->user = auth()->user()->name;

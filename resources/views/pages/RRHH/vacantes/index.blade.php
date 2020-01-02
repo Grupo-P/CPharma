@@ -167,8 +167,14 @@
           <td>{{$vacante->cantidad}}</td>
           <td>
             {{
-              DB::table('rh_entrevistas')
+              compras\RH_Entrevista::join(
+                'rh_candidatos', 
+                'rh_entrevistas.rh_candidatos_id', '=', 'rh_candidatos.id'
+              )
               ->where('rh_vacantes_id', $vacante->id)
+              ->where('rh_candidatos.estatus', '<>', 'RECHAZADO')
+              ->where('rh_candidatos.estatus', '<>', 'FUTURO')
+              ->where('rh_candidatos.estatus', '<>', 'CONTRATADO')
               ->count()
             }}
           </td>

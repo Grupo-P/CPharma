@@ -2,6 +2,14 @@
 
 @section('title', 'Mostrar candidato')
 
+@section('estilosInternos')
+  <style>
+    td {
+      width: 50%;
+    }
+  </style>
+@endsection
+
 @section('content')
   <h1 class="h5 text-info">
     <i class="far fa-eye"></i>
@@ -113,17 +121,17 @@
     //-------------------- PRUEBAS DEL CANDIDATO --------------------//
     $candidato_pruebas = compras\RH_Candidato_Prueba::where('rh_candidatos_id', $candidatos->id)
     ->orderBy('id', 'desc')
-    ->first();
+    ->get();
 
     //-------------------- ENTREVISTAS DEL CANDIDATO --------------------//
     $entrevista = compras\RH_Entrevista::where('rh_candidatos_id', $candidatos->id)
     ->orderBy('id', 'desc')
-    ->first();
+    ->get();
 
     //-------------------- PRACTICAS DEL CANDIDATO --------------------//
     $practicas = compras\RH_Practica::where('rh_candidatos_id', $candidatos->id)
     ->orderBy('id', 'desc')
-    ->first();
+    ->get();
 
     //-------------------- REFERENCIAS DEL CANDIDATO --------------------//
     $referencias = compras\RH_Candidato_EmpresaReferencia::where('rh_candidatos_id', $candidatos->id)
@@ -131,9 +139,26 @@
     ->first();
 
     //-------------------- CONTACTOS DE EMPRESAS --------------------//
+    $candidatos_fases = DB::table('rhi_candidatos_fases')
+    ->where('rh_candidatos_id', $candidatos->id)
+    ->orderBy('id', 'desc')
+    ->first();
+
+    $nombre_fase = '-';
+
+    if(!is_null($candidatos_fases)) {
+      $nombre_fase = compras\RH_Fase::find($candidatos_fases->rh_fases_id)
+      ->nombre_fase;
+    }
+
     $contacto_emp = null;
 
-    if(!is_null($referencias)) {
+    if(
+      (!is_null($referencias)) 
+      && (
+        $nombre_fase == 'Exámenes médicos'
+        || $nombre_fase == 'Contrato'
+      )) {
       $contacto_emp = compras\RH_ContactoEmp::where('rh_emprf_id', $referencias->rh_empresaref_id)
       ->orderBy('id', 'desc')
       ->first();
@@ -147,24 +172,27 @@
 
   <?php
     if(!is_null($candidato_pruebas)) {
-      $prueba = compras\RH_Prueba::find($candidato_pruebas->rh_pruebas_id);
+
+      foreach($candidato_pruebas as $cp) {
+
+      $prueba = compras\RH_Prueba::find($cp->rh_pruebas_id);
   ?>
   <table class="table table-borderless table-striped">
     <thead class="thead-dark">
       <tr>
-        <th scope="row" colspan="2">Fase #1</th>
+        <th scope="row" colspan="2">Fase #1 (Pruebas Psicológicas)</th>
       </tr>
     </thead>
 
     <tbody>
       <tr>
         <th scope="row">Facilitador</th>
-        <td>{{$candidato_pruebas->facilitador}}</td>
+        <td>{{$cp->facilitador}}</td>
       </tr>
 
       <tr>
         <th scope="row">Fecha de prueba</th>
-        <td>{{date("d-m-Y", strtotime($candidato_pruebas->fecha))}}</td>
+        <td>{{date("d-m-Y", strtotime($cp->fecha))}}</td>
       </tr>
 
       <tr>
@@ -179,59 +207,61 @@
 
       <tr>
         <th scope="row">Resultado de prueba</th>
-        <td>{{$candidato_pruebas->resultado}}</td>
+        <td>{{$cp->resultado}}</td>
       </tr>
 
       <tr>
         <th scope="row">Observaciones</th>
-        <td>{{$candidato_pruebas->observaciones}}</td>
+        <td>{{$cp->observaciones}}</td>
       </tr>
 
       <tr>
         <th scope="row">Creado</th>
-        <td>{{$candidato_pruebas->created_at}}</td>
+        <td>{{$cp->created_at}}</td>
       </tr>
 
       <tr>
         <th scope="row">Ultima Actualización</th>
-        <td>{{$candidato_pruebas->updated_at}}</td>
+        <td>{{$cp->updated_at}}</td>
       </tr>
 
       <tr>
         <th scope="row">Actualizado por</th>
-        <td>{{$candidato_pruebas->user}}</td>
+        <td>{{$cp->user}}</td>
       </tr>
     </tbody>
   </table>
   <?php
-    }
+    }//foreach
+  }//if
   ?>
 
   <?php
     if(!is_null($entrevista)) {
-      $vacante = compras\RH_Vacante::find($entrevista->rh_vacantes_id);
+      foreach($entrevista as $ent) {
+      $vacante = compras\RH_Vacante::find($ent->rh_vacantes_id);
   ?>
   <table class="table table-borderless table-striped">
     <thead class="thead-dark">
       <tr>
-        <th scope="row" colspan="2">Fase #2</th>
+        <th scope="row" colspan="2">Fase #2 (Entrevista)</th>
       </tr>
     </thead>
 
     <tbody>
       <tr>
         <th scope="row">Entrevistadores</th>
-        <td>{{$entrevista->entrevistadores}}</td>
+        <td>{{$ent->entrevistadores}}</td>
       </tr>
 
       <tr>
         <th scope="row">Fecha de entrevista</th>
-        <td>{{date("d-m-Y", strtotime($entrevista->fecha_entrevista))}}</td>
+        <td>{{date("d-m-Y", strtotime($ent->fecha_entrevista))}}</td>
       </tr>
 
       <tr>
         <th scope="row">Lugar de entrevista</th>
-        <td>{{$entrevista->lugar}}</td>
+        <td>{{$ent->lugar}}</td>
       </tr>
 
       <tr>
@@ -249,78 +279,81 @@
 
       <tr>
         <th scope="row">Observaciones</th>
-        <td>{{$entrevista->observaciones}}</td>
+        <td>{{$ent->observaciones}}</td>
       </tr>
 
       <tr>
         <th scope="row">Creado</th>
-        <td>{{$entrevista->created_at}}</td>
+        <td>{{$ent->created_at}}</td>
       </tr>
 
       <tr>
         <th scope="row">Ultima Actualización</th>
-        <td>{{$entrevista->updated_at}}</td>
+        <td>{{$ent->updated_at}}</td>
       </tr>
 
       <tr>
         <th scope="row">Actualizado por</th>
-        <td>{{$entrevista->user}}</td>
+        <td>{{$ent->user}}</td>
       </tr>
     </tbody>
   </table>
   <?php
-    }
+    }//foreach
+  }//if
   ?>
 
   <?php
     if(!is_null($practicas)) {
+      foreach($practicas as $practica) {
   ?>
   <table class="table table-borderless table-striped">
     <thead class="thead-dark">
       <tr>
-        <th scope="row" colspan="2">Fase #3</th>
+        <th scope="row" colspan="2">Fase #3 (Práctica)</th>
       </tr>
     </thead>
 
     <tbody>
       <tr>
         <th scope="row">Líder de práctica</th>
-        <td>{{$practicas->lider}}</td>
+        <td>{{$practica->lider}}</td>
       </tr>
 
       <tr>
         <th scope="row">Lugar de práctica</th>
-        <td>{{$practicas->lugar}}</td>
+        <td>{{$practica->lugar}}</td>
       </tr>
 
       <tr>
         <th scope="row">Tiempo de práctica (horas)</th>
-        <td>{{$practicas->duracion}}</td>
+        <td>{{$practica->duracion}}</td>
       </tr>
 
       <tr>
         <th scope="row">Observaciones</th>
-        <td>{{$practicas->observaciones}}</td>
+        <td>{{$practica->observaciones}}</td>
       </tr>
 
       <tr>
         <th scope="row">Creado</th>
-        <td>{{$practicas->created_at}}</td>
+        <td>{{$practica->created_at}}</td>
       </tr>
 
       <tr>
         <th scope="row">Ultima Actualización</th>
-        <td>{{$practicas->updated_at}}</td>
+        <td>{{$practica->updated_at}}</td>
       </tr>
 
       <tr>
         <th scope="row">Actualizado por</th>
-        <td>{{$practicas->user}}</td>
+        <td>{{$practica->user}}</td>
       </tr>
     </tbody>
   </table>
   <?php
-    }
+    }//foreach
+  }//if
   ?>
 
   <?php
@@ -330,7 +363,7 @@
   <table class="table table-borderless table-striped">
     <thead class="thead-dark">
       <tr>
-        <th scope="row" colspan="2">Fase #4</th>
+        <th scope="row" colspan="2">Fase #4 (Referencias laborales)</th>
       </tr>
     </thead>
 
@@ -357,17 +390,17 @@
 
       <tr>
         <th scope="row">Creado</th>
-        <td>{{$empresa->created_at}}</td>
+        <td>{{$referencias->created_at}}</td>
       </tr>
 
       <tr>
         <th scope="row">Ultima Actualización</th>
-        <td>{{$empresa->updated_at}}</td>
+        <td>{{$referencias->updated_at}}</td>
       </tr>
 
       <tr>
         <th scope="row">Actualizado por</th>
-        <td>{{$empresa->user}}</td>
+        <td>{{$referencias->user}}</td>
       </tr>
     </tbody>
   </table>
@@ -381,7 +414,7 @@
   <table class="table table-borderless table-striped">
     <thead class="thead-dark">
       <tr>
-        <th scope="row" colspan="2">Fase #5</th>
+        <th scope="row" colspan="2">Fase #5 (Validar referencia)</th>
       </tr>
     </thead>
 
@@ -438,7 +471,7 @@
   <table class="table table-borderless table-striped">
     <thead class="thead-dark">
       <tr>
-        <th scope="row" colspan="2">Fase #6</th>
+        <th scope="row" colspan="2">Fase #6 (Exámenes médicos)</th>
       </tr>
     </thead>
 

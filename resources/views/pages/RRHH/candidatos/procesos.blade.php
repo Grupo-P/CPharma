@@ -227,6 +227,7 @@
         <th scope="col" class="stickyCP">Apellidos</th>
         <th scope="col" class="stickyCP">Cédula</th>
         <th scope="col" class="stickyCP">Teléfono</th>
+        <th scope="col" class="stickyCP">Vacante asociada</th>
         <th scope="col" class="stickyCP">Fase actual</th>
         <th scope="col" class="stickyCP">Próxima Fase</th>
       </tr>
@@ -265,8 +266,19 @@
               ->nombre_fase;
             }
             
+            $entrevista = compras\RH_Entrevista::where('rh_candidatos_id', $candidato->id)
+            ->orderBy('id', 'desc')
+            ->first();
+
+            $vacante = '-';
+
+            if(!is_null($entrevista)) {
+              $vacante = compras\RH_Vacante::where('id', $entrevista->rh_vacantes_id)
+              ->value('nombre_vacante');
+            }
           ?>
 
+          <td>{{$vacante}}</td>
           <td>{{$nombre_fase}}</td>
 
           <td>

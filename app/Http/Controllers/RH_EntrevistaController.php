@@ -28,7 +28,26 @@ class RH_EntrevistaController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function index() {
-        $entrevistas = RH_Entrevista::all();
+        //$entrevistas = RH_Entrevista::all();
+        $entrevistas = RH_Entrevista::join(
+            'rh_candidatos',
+            'rh_entrevistas.rh_candidatos_id', '=', 'rh_candidatos.id'
+        )
+        ->join(
+            'rh_vacantes',
+            'rh_entrevistas.rh_vacantes_id', '=', 'rh_vacantes.id'
+        )
+        ->select(
+            'rh_entrevistas.*',
+            'rh_candidatos.nombres',
+            'rh_candidatos.apellidos',
+            'rh_candidatos.cedula',
+            'rh_vacantes.nombre_vacante',
+            'rh_vacantes.departamento',
+            'rh_vacantes.sede'
+        )
+        ->orderBy('rh_entrevistas.id', 'asc')
+        ->get();
         return view('pages.RRHH.entrevistas.index', compact('entrevistas'));
     }
 
@@ -87,11 +106,11 @@ class RH_EntrevistaController extends Controller {
                 $candidato->estatus = 'FUTURO';
                 $candidato->save();
             }
-            else {
-                $candidato = RH_Candidato::find($request->input('CandidatoId'));
-                $candidato->estatus = 'EN_PROCESO';
-                $candidato->save();
-            }
+            // else {
+            //     $candidato = RH_Candidato::find($request->input('CandidatoId'));
+            //     $candidato->estatus = 'EN_PROCESO';
+            //     $candidato->save();
+            // }
 
             //-------------------- AUDITORIA --------------------//
             $Auditoria = new Auditoria();
@@ -186,7 +205,7 @@ class RH_EntrevistaController extends Controller {
             }
             else {
                 $candidato = RH_Candidato::find($request->input('CandidatoId'));
-                $candidato->estatus = 'POSTULADO';
+                $candidato->estatus = 'EN_PROCESO';
                 $candidato->save();
             }
 
