@@ -65,7 +65,8 @@
       "Arroz","Azucar","JabonEnPolvo","Harina",
       "EnjuagueDental","CremaDental","Champu","Pan",
       "Refreco","Panal","Chocolate","Preservativo",
-      "Leche"
+      "Leche","Pasta","Perrarina","Gatarina","ToallaSanitaria",
+      "Mayonesa","SalsaTomate","PapelSanitario","FormulaInfantil"
     );
 
     $SedeConnection = FG_Mi_Ubicacion();
