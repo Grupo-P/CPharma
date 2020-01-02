@@ -816,7 +816,7 @@
    <!--  {{ url('/testS') }} -->
     <div class="dropdown-menu">
       <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="{{ url('/testS') }}">     
+        <a class="nav-link CP-Links-Menu" href="{{ url('/ConsultorCompra') }}">     
           <span data-feather="home"></span>
           <i class="fa fa-box"></i>
           Test Sergio<span class="sr-only">(current)</span>
