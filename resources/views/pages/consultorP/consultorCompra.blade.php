@@ -78,8 +78,7 @@
       padding: 8px;
     }
     .link-opc:hover{
-      background-color: #17a2b8;
-      color: #fff;
+      color: #17a2b8;
     }
 </style>
 
@@ -107,7 +106,7 @@
       <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
           <div class="modal-header text-white bg-info">
-            <h2 class="modal-title" id="exampleModalCenterTitle">Modo de busqueda</h2>
+            <h2 class="modal-title" id="exampleModalCenterTitle"><i class="fas fa-search"></i> Modo de busqueda</h2>
             <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
@@ -144,7 +143,9 @@
       </thead>
       <tbody>
         <tr class="bg-white" style="border: 4px solid #17a2b8;">
-          <td align="center" class="boton-tabla"><h1><i class="fas fa-language aum-icon-cod" id="btn_selector"></i></h1></td>
+          <td align="center" class="boton-tabla" id="btn_selector">
+            <h1><p id="icon-btn"></p></h1>
+          </td>
           <td align="center" style="border: 4px solid #17a2b8;">
             <input id="inputCodBar" type="text" name="CodBar" autofocus="autofocus">
           </td>
@@ -156,23 +157,96 @@
 
 @section('scriptsPie')
   <script type="text/javascript">
-    const SedeConnectionJs = '<?php echo $RutaUrl;?>'
-    
+    function updateModalBox(modo_selec) {
+      if (modo_selec == 1) {
+        $("#icon-btn").html('');
+        $("#icon-btn").html('<i class="fas fa-language aum-icon-cod" ></i>');
+        $('#inputCodBar').attr("placeholder", "Ingrese el nombre del producto");
+        $('#inputCodBar').attr("onblur", "this.placeholder = 'Ingrese el nombre del producto'");
+        $('#inputCodBar').attr("onfocus", "this.placeholder = ''");
+      }
+      else if (modo_selec == 2) {
+        $("#icon-btn").html('');
+        $("#icon-btn").html('<i class="fas fa-dna aum-icon-cod" ></i>');
+        $('#inputCodBar').attr("placeholder", "Ingrese el principio activo o componente");
+        $('#inputCodBar').attr("onblur", "this.placeholder = 'Ingrese el principio activo o componente'");
+        $('#inputCodBar').attr("onfocus", "this.placeholder = ''");
+      }
+      else if (modo_selec == 3) {
+        $("#icon-btn").html('');
+        $("#icon-btn").html('<i class="fas fa-barcode aum-icon-cod" ></i>');
+        $('#inputCodBar').attr("placeholder", "Haga scan del codigo de barra");
+        $('#inputCodBar').attr("onblur", "this.placeholder = 'Haga scan del codigo de barra'");
+        $('#inputCodBar').attr("onfocus", "this.placeholder = ''");
+      }
+      else if (modo_selec == 4) {
+       $("#icon-btn").html('');
+        $("#icon-btn").html('<i class="fas fa-pills aum-icon-cod" ></i>');
+        $('#inputCodBar').attr("placeholder", "Ingrese el uso terapéutico");
+        $('#inputCodBar').attr("onblur", "this.placeholder = 'Ingrese el uso terapéutico'");
+        $('#inputCodBar').attr("onfocus", "this.placeholder = ''");
+      }
+    }
+
+    const SedeConnectionJs = '<?php echo $RutaUrl;?>';
+
     var modal = document.getElementById('exampleModalCenter');
     var btn = document.getElementById("btn_selector");
     var span = document.getElementsByClassName("close")[0];
+    var opc_selec = 1;
+    updateModalBox(opc_selec);
 
     btn.onclick = function() {
-      $('#exampleModalCenter').modal('show')
+      $('#exampleModalCenter').modal('show');
     }
     span.onclick = function() {
-      $('#exampleModalCenter').modal('hide')
+      $('#exampleModalCenter').modal('hide');
     }
     window.onclick = function(event) {
       if (event.target == modal) {
-        $('#exampleModalCenter').modal('hide')
+        $('#exampleModalCenter').modal('hide');
       }
     }
+    $('#opc_1').click(function(e) {
+      if (opc_selec != 1){
+        opc_selec = 1;
+        $('#exampleModalCenter').modal('hide');
+        updateModalBox(opc_selec);
+      }
+      else {
+        $('#exampleModalCenter').modal('hide');
+      }
+    });
+    $('#opc_2').click(function(e) {
+      if (opc_selec != 2){
+        opc_selec = 2;
+        $('#exampleModalCenter').modal('hide');
+        updateModalBox(opc_selec);
+      }
+      else {
+        $('#exampleModalCenter').modal('hide');
+      }
+    });
+    $('#opc_3').click(function(e) {
+      if (opc_selec != 3){
+        opc_selec = 3;
+        $('#exampleModalCenter').modal('hide');
+        updateModalBox(opc_selec);
+      }
+      else {
+        $('#exampleModalCenter').modal('hide');
+      }
+    });
+    $('#opc_4').click(function(e) {
+      if (opc_selec != 4){
+        opc_selec = 4;
+        $('#exampleModalCenter').modal('hide');
+        updateModalBox(opc_selec);
+      }
+      else {
+        $('#exampleModalCenter').modal('hide');
+      }
+    });
 
     $(document).ready(function(){
         $('[data-toggle="tooltip"]').tooltip();   
