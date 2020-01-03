@@ -66,7 +66,8 @@
       "EnjuagueDental","CremaDental","Champu","Pan",
       "Refreco","Panal","Chocolate","Preservativo",
       "Leche","Pasta","Perrarina","Gatarina","ToallaSanitaria",
-      "Mayonesa","SalsaTomate","PapelSanitario","FormulaInfantil"
+      "Mayonesa","SalsaTomate","PapelSanitario","FormulaInfantil",
+      "Cafe","Toallin"
     );
 
     $SedeConnection = FG_Mi_Ubicacion();

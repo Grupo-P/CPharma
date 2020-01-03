@@ -189,6 +189,10 @@ Route::get('/DigitalOrdenCompra', function() {
     return view('pages.ordenCompra.digital');
 });
 
+Route::get('/ConsultorCompra', function() { 
+    return view('pages.consultorP.consultorCompra');
+});
+
 Route::get('home', 'HomeController@index')->name('home');
 
 Route::resource('dolar', 'DolarController');
