@@ -6,80 +6,80 @@
 
 <style>
 	* {
-      box-sizing: border-box;
-    }
-    .autocomplete {
-      position: relative;
-      display: inline-block;
-    }
-    input {
-      border: 1px solid transparent;
-      background-color: #fff;
-      border-radius: 5px;
-      padding: 10px;
-      font-size: 16px;
-    }
-    input[type=text] {
-    	text-align: center;
-    	font-size: 1.6em;
-      background-color: #fff;
-      width: 100%;
-      height: 50px;
-    }
-    input[type=text]:focus {
-		 	outline: 0;
-    }
-    .autocomplete-items {
-      position: absolute;
-      border: 1px solid #d4d4d4;
-      border-bottom: none;
-      border-top: none;
-      z-index: 99;
-      top: 100%;
-      left: 0;
-      right: 0;
-    }
-    .autocomplete-items div {
-      padding: 10px;
-      cursor: pointer;
-      background-color: #fff; 
-      border-bottom: 1px solid #d4d4d4; 
-    }
-    .autocomplete-items div:hover {
-      background-color: #e9e9e9; 
-    }
-    .autocomplete-active {
-      background-color: #17a2b8 !important; 
-      color: #ffffff; 
-    }
-		.center th {
-	    vertical-align: middle;
-	    text-align: center;
-	  }
-	  .aum-icon-lup {
-    	text-align: center;
-    	font-size: 1em;
-    }
-    .aum-icon-cod {
-      text-align: center;
-      font-size: 1.2em;
-    }
-    .boton-tabla{
-      background-color: #fff;
-      color: #17a2b8;
-    }
-    .boton-tabla:hover{
-      background-color: #17a2b8;
-      color: #fff;
-    }
-    .link-opc{
-      background-color: #fff;
-      color: #000;
-      padding: 8px;
-    }
-    .link-opc:hover{
-      color: #17a2b8;
-    }
+    box-sizing: border-box;
+  }
+  .autocomplete {
+    position: relative;
+    display: inline-block;
+  }
+  input {
+    border: 1px solid transparent;
+    background-color: #fff;
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 16px;
+  }
+  input[type=text] {
+  	text-align: center;
+  	font-size: 1.6em;
+    background-color: #fff;
+    width: 100%;
+    height: 50px;
+  }
+  input[type=text]:focus {
+	 	outline: 0;
+  }
+  .autocomplete-items {
+    position: absolute;
+    border: 1px solid #d4d4d4;
+    border-bottom: none;
+    border-top: none;
+    z-index: 99;
+    top: 100%;
+    left: 0;
+    right: 0;
+  }
+  .autocomplete-items div {
+    padding: 10px;
+    cursor: pointer;
+    background-color: #fff; 
+    border-bottom: 1px solid #d4d4d4; 
+  }
+  .autocomplete-items div:hover {
+    background-color: #e9e9e9; 
+  }
+  .autocomplete-active {
+    background-color: #17a2b8 !important; 
+    color: #ffffff; 
+  }
+	.center th {
+    vertical-align: middle;
+    text-align: center;
+  }
+  .aum-icon-lup {
+  	text-align: center;
+  	font-size: 1em;
+  }
+  .aum-icon-cod {
+    text-align: center;
+    font-size: 1.2em;
+  }
+  .boton-tabla{
+    background-color: #fff;
+    color: #17a2b8;
+  }
+  .boton-tabla:hover{
+    background-color: #17a2b8;
+    color: #fff;
+  }
+  .link-opc{
+    background-color: #fff;
+    color: #000;
+    padding: 8px;
+  }
+  .link-opc:hover{
+    color: #17a2b8;
+  }
 </style>
 
 @section('content')
