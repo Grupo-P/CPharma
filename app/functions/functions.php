@@ -1676,16 +1676,13 @@
 		$row1= $result1->fetch_assoc();
 		$CuentaCPharma = $row1['Cuenta'];
 		$CuentaSmart = count($ArrayUnique);
-		echo 'CuentaCPharma: '.$CuentaCPharma.'<br>';
-		echo 'CuentaSmart: '.$CuentaSmart.'<br>';
-
+		
 		/*Caso 1
 			El tamano de cambios en el smart es MENOR
 			al total de elementos en la clasificacion solicitada
 		*/
 		if($CuentaCPharma>$CuentaSmart){
-			echo'Busco entonces cada elemtnto del smart en el cpharma<br><br>';
-
+			
 			foreach ($ArrayUnique as $Array) {
 		    $IdArticulo = $Array['IdArticulo'];
 		    $Dolarizado = FG_Producto_Dolarizado($Array['Dolarizado']);
@@ -1730,66 +1727,48 @@
 			al total de elementos en la clasificacion solicitada
 		*/
 		else if($CuentaCPharma<$CuentaSmart){
-			echo'<br>Busco entonces cada elemtnto del cpharma en el smart';
-		}
-
-/*
-		foreach ($ArrayUnique as $Array) {
-			if (in_array("829", $Array)) {
-	    	echo "<br><br>Existe 829?<br>";
-	    	print_r($Array);
-			}	
-		}*/
-
-		
-
-	 /************************/
-		/*
-  	
-		/*
-		while( $row = sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC) ){
-			$IdArticulo = $row['IdArticulo'];
+			$result = $connCPharma->query("SELECT * FROM etiquetas WHERE clasificacion = '$clasificacion'");
 			
-			$result1 = $connCPharma->query("SELECT COUNT(*) AS Cuenta FROM etiquetas WHERE id_articulo = '$IdArticulo' AND clasificacion = '$clasificacion'");
-			$row1= $result1->fetch_assoc();
-			$Cuenta = $row1['Cuenta'];
+			while($row = $result->fetch_assoc()){
+				$IdArticulo = $row['id_articulo'];
 
-			if($Cuenta==1){
+				foreach ($ArrayUnique as $Array) {
+					if (in_array($IdArticulo,$Array)) {
+			    	$Dolarizado = FG_Producto_Dolarizado($Array['Dolarizado']);
+			    	
+			    	if(($Dolarizado=='SI')&&($tipo=='DOLARIZADO')){
+							$flag = FG_Etiquetas($conn,$connCPharma,$IdArticulo,$Dolarizado,true,$FechaCambio);
+							if($flag==true){
+								$CuentaCard++;
+								$CuentaEtiqueta++;
+							}
+						}
+						else if(($Dolarizado=='NO')&&($tipo!='DOLARIZADO')){
+							$flag = FG_Etiquetas($conn,$connCPharma,$IdArticulo,$Dolarizado,true,$FechaCambio);
+							if($flag==true){
+								$CuentaCard++;
+								$CuentaEtiqueta++;
+							}
+						}
+						else if($tipo=='TODO'){
+							$flag = FG_Etiquetas($conn,$connCPharma,$IdArticulo,$Dolarizado,true,$FechaCambio);
+							if($flag==true){
+								$CuentaCard++;
+								$CuentaEtiqueta++;
+							}
+						}
 
-				$sql3 = SQL_Es_Dolarizado($IdArticulo);
-				$result3 = sqlsrv_query($conn,$sql3);
-				$row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
-				$Dolarizado = FG_Producto_Dolarizado($row3['Dolarizado']);
-
-				if(($Dolarizado=='SI')&&($tipo=='DOLARIZADO')){
-					$flag = FG_Etiquetas($conn,$connCPharma,$IdArticulo,$Dolarizado,true,$FechaCambio);
-					if($flag==true){
-						$CuentaCard++;
-						$CuentaEtiqueta++;
-					}
-				}
-				else if(($Dolarizado=='NO')&&($tipo!='DOLARIZADO')){
-					$flag = FG_Etiquetas($conn,$connCPharma,$IdArticulo,$Dolarizado,true,$FechaCambio);
-					if($flag==true){
-						$CuentaCard++;
-						$CuentaEtiqueta++;
-					}
-				}
-				else if($tipo=='TODO'){
-					$flag = FG_Etiquetas($conn,$connCPharma,$IdArticulo,$Dolarizado,true,$FechaCambio);
-					if($flag==true){
-						$CuentaCard++;
-						$CuentaEtiqueta++;
-					}
-				}
-
-				if($CuentaCard == 3){
-					echo'<br>';
-					$CuentaCard = 0;
+						if($CuentaCard == 3){
+							echo'<br>';
+							$CuentaCard = 0;
+						}
+					}	
 				}
 			}
-		}*/
+		}
 		echo "<br/><br/>Se imprimiran ".$CuentaEtiqueta." etiquetas<br/>";
+		echo 'CuentaCPharma: '.$CuentaCPharma.'<br>';
+		echo 'CuentaSmart: '.$CuentaSmart.'<br>';
 		mysqli_close($connCPharma);
     sqlsrv_close($conn);
 	}
