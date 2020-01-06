@@ -855,32 +855,31 @@
     */
     function SQL_CP_Etiqueta_C1($FHoy,$FManana){
       $sql = " 
-      SELECT 
+      SELECT
       InvMovimiento.InvArticuloId AS IdArticulo,
       --Dolarizado (0 NO es dolarizado, Id Articulo SI es dolarizado)
-            (ISNULL((SELECT
-            InvArticuloAtributo.InvArticuloId
-            FROM InvArticuloAtributo 
-            WHERE InvArticuloAtributo.InvAtributoId = 
+          (ISNULL((SELECT
+          InvArticuloAtributo.InvArticuloId
+          FROM InvArticuloAtributo 
+          WHERE InvArticuloAtributo.InvAtributoId = 
               (SELECT InvAtributo.Id
               FROM InvAtributo 
               WHERE 
               InvAtributo.Descripcion = 'Dolarizados'
               OR  InvAtributo.Descripcion = 'Giordany'
               OR  InvAtributo.Descripcion = 'giordany') 
-            AND InvArticuloAtributo.InvArticuloId = InvMovimiento.InvArticuloId),CAST(0 AS INT))) AS Dolarizado
+          AND InvArticuloAtributo.InvArticuloId = InvMovimiento.InvArticuloId),CAST(0 AS INT))) AS Dolarizado
       --Tabla Principal and Tabla Temporal
-      INTO CP_Etiqueta_C1
       FROM InvMovimiento
       --Condicionales
       WHERE(
-        (InvMovimiento.InvCausaId<>3)
-        AND (InvMovimiento.Auditoria_FechaActualizacion > '$FHoy')
-        AND (InvMovimiento.Auditoria_FechaActualizacion < '$FManana')
-        AND((SELECT (ROUND(CAST(SUM (InvLoteAlmacen.Existencia) AS DECIMAL(38,0)),2,0))
-            FROM InvLoteAlmacen
-            WHERE(InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
-            AND (InvLoteAlmacen.InvArticuloId = InvMovimiento.InvArticuloId)) > 0)
+      (InvMovimiento.InvCausaId<>3)
+      AND (InvMovimiento.Auditoria_FechaActualizacion > '$FHoy')
+      AND (InvMovimiento.Auditoria_FechaActualizacion < '$FManana')
+      AND((SELECT (ROUND(CAST(SUM (InvLoteAlmacen.Existencia) AS DECIMAL(38,0)),2,0))
+          FROM InvLoteAlmacen
+          WHERE(InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
+          AND (InvLoteAlmacen.InvArticuloId = InvMovimiento.InvArticuloId)) > 0)
       )
       --Ordenamiento
       GROUP BY InvMovimiento.InvArticuloId

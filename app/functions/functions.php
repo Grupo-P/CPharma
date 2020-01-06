@@ -1650,25 +1650,43 @@
 		DESARROLLADO POR: SERGIO COVA
  	*/
 	function FG_Generer_Etiquetas($clasificacion,$tipo,$dia) {
-		$SedeConnection = FG_Mi_Ubicacion();
+		$SedeConnection = 'FTN';//FG_Mi_Ubicacion();
   	$conn = FG_Conectar_Smartpharma($SedeConnection);
   	$connCPharma = FG_Conectar_CPharma();
   	$CuentaCard = 0;
 		$CuentaEtiqueta = 0;	
 
-  	$FHoy = date("Y-m-d");
+  	//$FHoy = date("Y-m-d");
+  	$FHoy = date("2020-01-05");
 		$FManana = date("Y-m-d",strtotime($FHoy."+1 days"));
 		$FAyer = date("Y-m-d",strtotime($FHoy."-1 days"));
 
-		$sql = SQL_Clean_Table('CP_Etiqueta_C1');
+		/*$sql = SQL_Clean_Table('CP_Etiqueta_C1');
 		sqlsrv_query($conn,$sql);
 		$sql = SQL_Clean_Table('CP_Etiqueta_C2');
 		sqlsrv_query($conn,$sql);
 		$sql = SQL_Clean_Table('CP_Etiqueta_C3');
 		sqlsrv_query($conn,$sql);
 		$sql = SQL_Clean_Table('CP_Etiqueta_C4');
-		sqlsrv_query($conn,$sql);
+		sqlsrv_query($conn,$sql);*/
 
+		$arraySugeridos = array();
+ 		$arrayIteracion = array();
+
+		$sql = SQL_CP_Etiqueta_C1($FHoy,$FManana);
+		$result = sqlsrv_query($conn,$sql);
+		
+		while( $row = sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC) ){
+			$arrayIteracion["IdArticulo"]=$row['IdArticulo'];
+	    $arrayIteracion["Dolarizado"]=$row['Dolarizado'];
+	    $arraySugeridos[]=$arrayIteracion;
+	  }
+
+	 echo json_encode($arraySugeridos);
+	 echo '<br><br>Totalde registros: '.count($arraySugeridos);
+
+
+		/*
   	if($dia=='HOY'){
   		$sql1 = SQL_CP_Etiqueta_C1($FHoy,$FManana);
 			sqlsrv_query($conn,$sql1);
@@ -1709,8 +1727,8 @@
 		$sql = SQL_Clean_Table('CP_Etiqueta_C3');
 		sqlsrv_query($conn,$sql);
 		$sql = SQL_Clean_Table('CP_Etiqueta_C4');
-		sqlsrv_query($conn,$sql);
-
+		sqlsrv_query($conn,$sql);*/
+		/*
 		while( $row = sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC) ){
 			$IdArticulo = $row['IdArticulo'];
 			
@@ -1752,7 +1770,7 @@
 					$CuentaCard = 0;
 				}
 			}
-		}
+		}*/
 		echo "<br/>Se imprimiran ".$CuentaEtiqueta." etiquetas<br/>";
 		mysqli_close($connCPharma);
     sqlsrv_close($conn);
