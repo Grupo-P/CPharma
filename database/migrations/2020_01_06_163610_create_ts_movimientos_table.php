@@ -13,6 +13,12 @@ class CreateTsMovimientosTable extends Migration {
     public function up() {
         Schema::create('ts_movimientos', function (Blueprint $table) {
             $table->increments('id');
+            $table->double('ingresos', 16, 2)->nullable();
+            $table->double('egresos', 16, 2)->nullable();
+            $table->double('saldo_anterior', 16, 2);
+            $table->double('saldo_actual', 16, 2);
+            $table->string('concepto');
+            $table->string('user');
             $table->timestamps();
         });
     }
