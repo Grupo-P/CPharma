@@ -1650,7 +1650,7 @@
 		DESARROLLADO POR: SERGIO COVA
  	*/
 	function FG_Generer_Etiquetas($clasificacion,$tipo,$dia) {
-		$SedeConnection = 'FTN';//FG_Mi_Ubicacion();
+		$SedeConnection = FG_Mi_Ubicacion();
   	$conn = FG_Conectar_Smartpharma($SedeConnection);
   	$connCPharma = FG_Conectar_CPharma();
   	$arraySugeridos = array();
@@ -1767,8 +1767,8 @@
 			}
 		}
 		echo "<br/><br/>Se imprimiran ".$CuentaEtiqueta." etiquetas<br/>";
-		echo 'CuentaCPharma: '.$CuentaCPharma.'<br>';
-		echo 'CuentaSmart: '.$CuentaSmart.'<br>';
+		echo 'Cuenta CPharma: '.$CuentaCPharma.'<br>';
+		echo 'Cuenta Smart: '.$CuentaSmart.'<br>';
 		mysqli_close($connCPharma);
     sqlsrv_close($conn);
 	}
