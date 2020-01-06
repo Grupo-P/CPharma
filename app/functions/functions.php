@@ -1684,16 +1684,46 @@
 			al total de elementos en la clasificacion solicitada
 		*/
 		if($CuentaCPharma>$CuentaSmart){
-			echo'<br>Busco entonces cada elemtnto del smart en el cpharma';
+			echo'Busco entonces cada elemtnto del smart en el cpharma<br><br>';
 
-			$contador = 0;
 			foreach ($ArrayUnique as $Array) {
 		    $IdArticulo = $Array['IdArticulo'];
-		    echo''.$IdArticulo;
-		    echo'<br>';
-		    $contador++;
+		    $Dolarizado = FG_Producto_Dolarizado($Array['Dolarizado']);
+		   
+		    $result1 = $connCPharma->query("SELECT COUNT(*) AS Cuenta FROM etiquetas WHERE id_articulo = '$IdArticulo' AND clasificacion = '$clasificacion'");
+				$row1= $result1->fetch_assoc();
+				$Cuenta = $row1['Cuenta'];
+
+				if($Cuenta==1){
+
+					if(($Dolarizado=='SI')&&($tipo=='DOLARIZADO')){
+						$flag = FG_Etiquetas($conn,$connCPharma,$IdArticulo,$Dolarizado,true,$FechaCambio);
+						if($flag==true){
+							$CuentaCard++;
+							$CuentaEtiqueta++;
+						}
+					}
+					else if(($Dolarizado=='NO')&&($tipo!='DOLARIZADO')){
+						$flag = FG_Etiquetas($conn,$connCPharma,$IdArticulo,$Dolarizado,true,$FechaCambio);
+						if($flag==true){
+							$CuentaCard++;
+							$CuentaEtiqueta++;
+						}
+					}
+					else if($tipo=='TODO'){
+						$flag = FG_Etiquetas($conn,$connCPharma,$IdArticulo,$Dolarizado,true,$FechaCambio);
+						if($flag==true){
+							$CuentaCard++;
+							$CuentaEtiqueta++;
+						}
+					}
+
+					if($CuentaCard == 3){
+						echo'<br>';
+						$CuentaCard = 0;
+					}
+				}
 			}
-			echo'<br>El total es: '.$contador;
 		}
 		/*Caso 2
 			El tamano de cambios en el smart es MAYOR
