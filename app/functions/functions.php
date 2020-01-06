@@ -1685,6 +1685,15 @@
 		*/
 		if($CuentaCPharma>$CuentaSmart){
 			echo'<br>Busco entonces cada elemtnto del smart en el cpharma';
+
+			$contador = 0;
+			foreach ($ArrayUnique as $Array) {
+		    $IdArticulo = $Array['IdArticulo'];
+		    echo''.$IdArticulo;
+		    echo'<br>';
+		    $contador++;
+			}
+			echo'<br>El total es: '.$contador;
 		}
 		/*Caso 2
 			El tamano de cambios en el smart es MAYOR
@@ -1694,13 +1703,13 @@
 			echo'<br>Busco entonces cada elemtnto del cpharma en el smart';
 		}
 
-
+/*
 		foreach ($ArrayUnique as $Array) {
 			if (in_array("829", $Array)) {
 	    	echo "<br><br>Existe 829?<br>";
 	    	print_r($Array);
 			}	
-		}
+		}*/
 
 		
 
