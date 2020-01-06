@@ -13,6 +13,7 @@ class CreateTsMovimientosTable extends Migration {
     public function up() {
         Schema::create('ts_movimientos', function (Blueprint $table) {
             $table->increments('id');
+            $table->unsignedInteger('tasa_ventas_id');
             $table->double('ingresos', 16, 2)->nullable();
             $table->double('egresos', 16, 2)->nullable();
             $table->double('saldo_anterior', 16, 2);
@@ -20,6 +21,12 @@ class CreateTsMovimientosTable extends Migration {
             $table->string('concepto');
             $table->string('user');
             $table->timestamps();
+
+            $table->foreign('tasa_ventas_id')
+            ->references('id')
+            ->on('tasa_ventas')
+            ->onDelete('cascade')
+            ->onUpdate('cascade');
         });
     }
 
