@@ -1653,62 +1653,37 @@
 		$SedeConnection = 'FTN';//FG_Mi_Ubicacion();
   	$conn = FG_Conectar_Smartpharma($SedeConnection);
   	$connCPharma = FG_Conectar_CPharma();
+  	$arraySugeridos = array();
   	$CuentaCard = 0;
 		$CuentaEtiqueta = 0;	
 
-  	//$FHoy = date("Y-m-d");
-  	$FHoy = date("2020-01-05");
+  	$FHoy = date("Y-m-d");
 		$FManana = date("Y-m-d",strtotime($FHoy."+1 days"));
 		$FAyer = date("Y-m-d",strtotime($FHoy."-1 days"));
 
-		/*$sql = SQL_Clean_Table('CP_Etiqueta_C1');
-		sqlsrv_query($conn,$sql);
-		$sql = SQL_Clean_Table('CP_Etiqueta_C2');
-		sqlsrv_query($conn,$sql);
-		$sql = SQL_Clean_Table('CP_Etiqueta_C3');
-		sqlsrv_query($conn,$sql);
-		$sql = SQL_Clean_Table('CP_Etiqueta_C4');
-		sqlsrv_query($conn,$sql);*/
-
-		$arraySugeridos = array();
- 		$arrayIteracion = array();
-
-		$sql = SQL_CP_Etiqueta_C1($FHoy,$FManana);
-		$result = sqlsrv_query($conn,$sql);
-		
-		while( $row = sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC) ){
-			$arrayIteracion["IdArticulo"]=$row['IdArticulo'];
-	    $arrayIteracion["Dolarizado"]=$row['Dolarizado'];
-	    $arraySugeridos[]=$arrayIteracion;
-	  }
-
-	 echo json_encode($arraySugeridos);
-	 echo '<br><br>Totalde registros: '.count($arraySugeridos);
-
-
-		/*
-  	if($dia=='HOY'){
-  		$sql1 = SQL_CP_Etiqueta_C1($FHoy,$FManana);
-			sqlsrv_query($conn,$sql1);
-			$sql2 = SQL_CP_Etiqueta_C2($FHoy,$FManana);
-			sqlsrv_query($conn,$sql2);
-			$sql2 = SQL_CP_Etiqueta_C3($FHoy,$FManana);
-			sqlsrv_query($conn,$sql2);
-			$sql2 = SQL_CP_Etiqueta_C4($FHoy,$FManana);
-			sqlsrv_query($conn,$sql2);
+		if($dia=='HOY'){
+			$arraySugeridos = FG_Obtener_Casos_Etiqueta($conn,$FHoy,$FManana);
 			$FechaCambio = $FHoy;
   	}
   	else if($dia=='AYER'){
-  		$sql1 = SQL_CP_Etiqueta_C1($FAyer,$FHoy);
-			sqlsrv_query($conn,$sql1);
-			$sql2 = SQL_CP_Etiqueta_C2($FAyer,$FHoy);
-			sqlsrv_query($conn,$sql2);
-			$sql2 = SQL_CP_Etiqueta_C3($FAyer,$FHoy);
-			sqlsrv_query($conn,$sql2);
-			$sql2 = SQL_CP_Etiqueta_C4($FAyer,$FHoy);
-			sqlsrv_query($conn,$sql2);
+  		$arraySugeridos = FG_Obtener_Casos_Etiqueta($conn,$FAyer,$FHoy);
 			$FechaCambio = $FAyer;
   	}
+
+		$arraySugeridos = FG_Obtener_Casos_Etiqueta($conn,$FHoy,$FManana);
+
+	 	echo '<br><br>Array Unique<br>';
+	 	$ArryUnique = unique_multidim_array($arraySugeridos,'IdArticulo');
+	 	echo '<br><br>Totalde registros: '.count($ArryUnique);
+		echo '<br><br>array_unique: <br>'.json_encode($ArryUnique);
+
+		$ArryUnique = unique_multidim_array($arraySugeridos,'Dolarizado');
+	 	echo '<br><br>Totalde registros Dolarizado: '.count($ArryUnique);
+		echo '<br><br>array_unique_Dolarizado: <br>'.json_encode($ArryUnique);
+
+	 /************************/
+		/*
+  	
 
   	if ($tipo!='DOLARIZADO'){
   		$result = sqlsrv_query($conn,"SELECT * FROM CP_Etiqueta_C4 WHERE CP_Etiqueta_C4.Dolarizado = 0 ORDER BY IdArticulo ASC");
@@ -1771,9 +1746,55 @@
 				}
 			}
 		}*/
-		echo "<br/>Se imprimiran ".$CuentaEtiqueta." etiquetas<br/>";
+		echo "<br/><br/>Se imprimiran ".$CuentaEtiqueta." etiquetas<br/>";
 		mysqli_close($connCPharma);
     sqlsrv_close($conn);
+	}
+	/**********************************************************************************/
+	/*
+		TITULO: FG_Obtener_Casos_Etiqueta
+		FUNCION: Arma un array con los articulos que entran en los filtros
+		DESARROLLADO POR: SERGIO COVA
+ 	*/
+	function FG_Obtener_Casos_Etiqueta($conn,$FechaI,$FechaF) {
+		$arraySugeridos = array();
+		/*Obtener datos del caso 1*/
+ 		$arrayIteracion = array();
+		$sql = SQL_CP_Etiqueta_C1($FechaI,$FechaF);
+		$result = sqlsrv_query($conn,$sql);
+		while( $row = sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC) ){
+			$arrayIteracion["IdArticulo"]=$row['IdArticulo'];
+	    $arrayIteracion["Dolarizado"]=$row['Dolarizado'];
+	    $arraySugeridos[]=$arrayIteracion;
+	  }
+	 	/*Obtener datos del caso 2*/
+		$arrayIteracion = array();
+		$sql = SQL_CP_Etiqueta_C2($FechaI,$FechaF);
+		$result = sqlsrv_query($conn,$sql);
+		while( $row = sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC) ){
+			$arrayIteracion["IdArticulo"]=$row['IdArticulo'];
+	    $arrayIteracion["Dolarizado"]=$row['Dolarizado'];
+	    $arraySugeridos[]=$arrayIteracion;
+	  }
+	 	/*Obtener datos del caso 3*/	 
+		$arrayIteracion = array();
+		$sql = SQL_CP_Etiqueta_C3($FechaI,$FechaF);
+		$result = sqlsrv_query($conn,$sql);		
+		while( $row = sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC) ){
+			$arrayIteracion["IdArticulo"]=$row['IdArticulo'];
+	    $arrayIteracion["Dolarizado"]=$row['Dolarizado'];
+	    $arraySugeridos[]=$arrayIteracion;
+	  }
+	 	/*Obtener datos del caso 4*/
+		$arrayIteracion = array();
+		$sql = SQL_CP_Etiqueta_C4($FechaI,$FechaF);
+		$result = sqlsrv_query($conn,$sql);		
+		while( $row = sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC) ){
+			$arrayIteracion["IdArticulo"]=$row['IdArticulo'];
+	    $arrayIteracion["Dolarizado"]=$row['Dolarizado'];
+	    $arraySugeridos[]=$arrayIteracion;
+	  }
+		return $arraySugeridos;
 	}
 	/**********************************************************************************/
 	/*
@@ -1999,5 +2020,25 @@
 			break;
 		}
 		return $dominio;
+	}
+	/**********************************************************************************/
+	/*
+		TITULO: unique_multidim_array
+		FUNCION: Create multidimensional array unique for any single key index.
+		DESAROLLADO POR: Ghanshyam Katriya
+ 	*/
+ 	function unique_multidim_array($array, $key) {
+    $temp_array = array();
+    $i = 0;
+    $key_array = array();
+   
+    foreach($array as $val) {
+        if (!in_array($val[$key], $key_array)) {
+            $key_array[$i] = $val[$key];
+            $temp_array[$i] = $val;
+        }
+        $i++;
+    }
+    return $temp_array;
 	}
 ?>

@@ -885,7 +885,7 @@
       GROUP BY InvMovimiento.InvArticuloId
       ORDER BY InvMovimiento.InvArticuloId ASC
       ";
-    return $sql;
+      return $sql;
     }
     /********************************************************************************/
     /*
@@ -897,37 +897,35 @@
       SELECT
       VenCondicionVenta_VenCondicionVentaArticulo.InvArticuloId AS IdArticulo,
       --Dolarizado (0 NO es dolarizado, Id Articulo SI es dolarizado)
-            (ISNULL((SELECT
-            InvArticuloAtributo.InvArticuloId
-            FROM InvArticuloAtributo 
-            WHERE InvArticuloAtributo.InvAtributoId = 
+          (ISNULL((SELECT
+          InvArticuloAtributo.InvArticuloId
+          FROM InvArticuloAtributo 
+          WHERE InvArticuloAtributo.InvAtributoId = 
               (SELECT InvAtributo.Id
               FROM InvAtributo 
               WHERE 
               InvAtributo.Descripcion = 'Dolarizados'
               OR  InvAtributo.Descripcion = 'Giordany'
               OR  InvAtributo.Descripcion = 'giordany') 
-            AND InvArticuloAtributo.InvArticuloId = VenCondicionVenta_VenCondicionVentaArticulo.InvArticuloId),CAST(0 AS INT))) AS Dolarizado
+          AND InvArticuloAtributo.InvArticuloId = VenCondicionVenta_VenCondicionVentaArticulo.InvArticuloId),CAST(0 AS INT))) AS Dolarizado
       --Tabla Principal and Tabla Temporal
-      INTO CP_Etiqueta_C2
       FROM VenCondicionVenta
       --Joins
       INNER JOIN VenCondicionVenta_VenCondicionVentaArticulo ON VenCondicionVenta_VenCondicionVentaArticulo.Id = VenCondicionVenta.Id
       --Condicionales
       WHERE(
-        (VenCondicionVenta.Auditoria_FechaActualizacion > '$FHoy')
-        AND (VenCondicionVenta.Auditoria_FechaActualizacion < '$FManana')
-        AND((SELECT (ROUND(CAST(SUM (InvLoteAlmacen.Existencia) AS DECIMAL(38,0)),2,0))
-            FROM InvLoteAlmacen
-            WHERE(InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
-            AND (InvLoteAlmacen.InvArticuloId = VenCondicionVenta_VenCondicionVentaArticulo.InvArticuloId)) > 0)
+      (VenCondicionVenta.Auditoria_FechaActualizacion > '$FHoy')
+      AND (VenCondicionVenta.Auditoria_FechaActualizacion < '$FManana')
+      AND((SELECT (ROUND(CAST(SUM (InvLoteAlmacen.Existencia) AS DECIMAL(38,0)),2,0))
+          FROM InvLoteAlmacen
+          WHERE(InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
+          AND (InvLoteAlmacen.InvArticuloId = VenCondicionVenta_VenCondicionVentaArticulo.InvArticuloId)) > 0)
       )
-      UNION
-      SELECT CP_Etiqueta_C1.IdArticulo,CP_Etiqueta_C1.Dolarizado
-      FROM CP_Etiqueta_C1
-      ORDER BY IdArticulo
+      --Ordenamiento
+      GROUP BY InvArticuloId
+      ORDER BY InvArticuloId ASC
       ";
-    return $sql;
+      return $sql;
     }
     /********************************************************************************/
     /*
@@ -939,33 +937,30 @@
       SELECT
       InvLoteAlmacen.InvArticuloId AS IdArticulo,
       --Dolarizado (0 NO es dolarizado, Id Articulo SI es dolarizado)
-            (ISNULL((SELECT
-            InvArticuloAtributo.InvArticuloId
-            FROM InvArticuloAtributo 
-            WHERE InvArticuloAtributo.InvAtributoId = 
+          (ISNULL((SELECT
+          InvArticuloAtributo.InvArticuloId
+          FROM InvArticuloAtributo 
+          WHERE InvArticuloAtributo.InvAtributoId = 
               (SELECT InvAtributo.Id
               FROM InvAtributo 
               WHERE 
               InvAtributo.Descripcion = 'Dolarizados'
               OR  InvAtributo.Descripcion = 'Giordany'
               OR  InvAtributo.Descripcion = 'giordany') 
-            AND InvArticuloAtributo.InvArticuloId = InvLoteAlmacen.InvArticuloId),CAST(0 AS INT))) AS Dolarizado
+          AND InvArticuloAtributo.InvArticuloId = InvLoteAlmacen.InvArticuloId),CAST(0 AS INT))) AS Dolarizado
       --Tabla Principal and Tabla Temporal
-      INTO CP_Etiqueta_C3
       FROM InvLoteAlmacen
       --Condicionales
       WHERE(
-        (InvLoteAlmacen.Auditoria_FechaActualizacion > '$FHoy')
-        AND (InvLoteAlmacen.Auditoria_FechaActualizacion < '$FManana')
-        AND(InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
-        AND (InvLoteAlmacen.Existencia = 0) 
+      (InvLoteAlmacen.Auditoria_FechaActualizacion > '$FHoy')
+      AND (InvLoteAlmacen.Auditoria_FechaActualizacion < '$FManana')
+      AND(InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
+      AND (InvLoteAlmacen.Existencia = 0) 
       )
-      UNION
-      SELECT CP_Etiqueta_C2.IdArticulo,CP_Etiqueta_C2.Dolarizado
-      FROM CP_Etiqueta_C2
-      ORDER BY IdArticulo
+      GROUP BY InvArticuloId
+      ORDER BY InvArticuloId ASC
       ";
-    return $sql;
+      return $sql;
     }
     /**********************************************************************************/
     /*
@@ -977,35 +972,32 @@
       SELECT
       InvLote.InvArticuloId AS IdArticulo,
       --Dolarizado (0 NO es dolarizado, Id Articulo SI es dolarizado)
-            (ISNULL((SELECT
-            InvArticuloAtributo.InvArticuloId
-            FROM InvArticuloAtributo 
-            WHERE InvArticuloAtributo.InvAtributoId = 
+          (ISNULL((SELECT
+          InvArticuloAtributo.InvArticuloId
+          FROM InvArticuloAtributo 
+          WHERE InvArticuloAtributo.InvAtributoId = 
               (SELECT InvAtributo.Id
               FROM InvAtributo 
               WHERE 
               InvAtributo.Descripcion = 'Dolarizados'
               OR  InvAtributo.Descripcion = 'Giordany'
               OR  InvAtributo.Descripcion = 'giordany') 
-            AND InvArticuloAtributo.InvArticuloId = InvLote.InvArticuloId),CAST(0 AS INT))) AS Dolarizado
+          AND InvArticuloAtributo.InvArticuloId = InvLote.InvArticuloId),CAST(0 AS INT))) AS Dolarizado
       --Tabla Prinipal and Tabla Temporal
-      INTO CP_Etiqueta_C4
       FROM InvLote 
       --Condicionales
       WHERE(
-        (InvLote.Auditoria_FechaActualizacion > '$FHoy')
-        AND (InvLote.Auditoria_FechaActualizacion < '$FManana')
-        AND((SELECT (ROUND(CAST(SUM (InvLoteAlmacen.Existencia) AS DECIMAL(38,0)),2,0))
-            FROM InvLoteAlmacen
-            WHERE(InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
-            AND (InvLoteAlmacen.InvArticuloId = InvLote.InvArticuloId)) > 0)
+      (InvLote.Auditoria_FechaActualizacion > '$FHoy')
+      AND (InvLote.Auditoria_FechaActualizacion < '$FManana')
+      AND((SELECT (ROUND(CAST(SUM (InvLoteAlmacen.Existencia) AS DECIMAL(38,0)),2,0))
+          FROM InvLoteAlmacen
+          WHERE(InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
+          AND (InvLoteAlmacen.InvArticuloId = InvLote.InvArticuloId)) > 0)
       )
-      UNION
-      SELECT CP_Etiqueta_C3.IdArticulo,CP_Etiqueta_C3.Dolarizado
-      FROM CP_Etiqueta_C3
-      ORDER BY IdArticulo
+      GROUP BY InvArticuloId
+      ORDER BY InvArticuloId ASC
       ";
-    return $sql;
+      return $sql;
     }
     /**********************************************************************************/
     /*
