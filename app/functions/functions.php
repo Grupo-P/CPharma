@@ -1663,23 +1663,25 @@
 
 		if($dia=='HOY'){
 			$arraySugeridos = FG_Obtener_Casos_Etiqueta($conn,$FHoy,$FManana);
+			$ArrayUnique = unique_multidim_array($arraySugeridos,'IdArticulo');
 			$FechaCambio = $FHoy;
   	}
   	else if($dia=='AYER'){
   		$arraySugeridos = FG_Obtener_Casos_Etiqueta($conn,$FAyer,$FHoy);
+  		$ArrayUnique = unique_multidim_array($arraySugeridos,'IdArticulo');
 			$FechaCambio = $FAyer;
   	}
 
-		$arraySugeridos = FG_Obtener_Casos_Etiqueta($conn,$FHoy,$FManana);
+	 	echo 'Totalde registros: '.count($ArrayUnique).'<br>';
 
-	 	echo '<br><br>Array Unique<br>';
-	 	$ArryUnique = unique_multidim_array($arraySugeridos,'IdArticulo');
-	 	echo '<br><br>Totalde registros: '.count($ArryUnique);
-		echo '<br><br>array_unique: <br>'.json_encode($ArryUnique);
+		foreach ($ArrayUnique as $Array) {
+			if (in_array("829", $Array)) {
+	    	echo "Existe 829?<br>";
+	    	print_r($Array);
+			}	
+		}
 
-		$ArryUnique = unique_multidim_array($arraySugeridos,'Dolarizado');
-	 	echo '<br><br>Totalde registros Dolarizado: '.count($ArryUnique);
-		echo '<br><br>array_unique_Dolarizado: <br>'.json_encode($ArryUnique);
+		
 
 	 /************************/
 		/*
