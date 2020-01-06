@@ -1672,11 +1672,32 @@
 			$FechaCambio = $FAyer;
   	}
 
-	 	echo 'Totalde registros: '.count($ArrayUnique).'<br>';
+  	$result1 = $connCPharma->query("SELECT COUNT(*) AS Cuenta FROM etiquetas WHERE clasificacion = '$clasificacion'");
+		$row1= $result1->fetch_assoc();
+		$CuentaCPharma = $row1['Cuenta'];
+		$CuentaSmart = count($ArrayUnique);
+		echo 'CuentaCPharma: '.$CuentaCPharma.'<br>';
+		echo 'CuentaSmart: '.$CuentaSmart.'<br>';
+
+		/*Caso 1
+			El tamano de cambios en el smart es MENOR
+			al total de elementos en la clasificacion solicitada
+		*/
+		if($CuentaCPharma>$CuentaSmart){
+			echo'<br>Busco entonces cada elemtnto del smart en el cpharma';
+		}
+		/*Caso 2
+			El tamano de cambios en el smart es MAYOR
+			al total de elementos en la clasificacion solicitada
+		*/
+		else if($CuentaCPharma<$CuentaSmart){
+			echo'<br>Busco entonces cada elemtnto del cpharma en el smart';
+		}
+
 
 		foreach ($ArrayUnique as $Array) {
 			if (in_array("829", $Array)) {
-	    	echo "Existe 829?<br>";
+	    	echo "<br><br>Existe 829?<br>";
 	    	print_r($Array);
 			}	
 		}
@@ -1686,25 +1707,6 @@
 	 /************************/
 		/*
   	
-
-  	if ($tipo!='DOLARIZADO'){
-  		$result = sqlsrv_query($conn,"SELECT * FROM CP_Etiqueta_C4 WHERE CP_Etiqueta_C4.Dolarizado = 0 ORDER BY IdArticulo ASC");
-  	}
-  	else if ($tipo=='DOLARIZADO'){
-  		$result = sqlsrv_query($conn,"SELECT * FROM CP_Etiqueta_C4 WHERE CP_Etiqueta_C4.Dolarizado <> 0 ORDER BY IdArticulo ASC");
-  	}
-  	else if($tipo=='TODO'){
-  		$result = sqlsrv_query($conn,"SELECT * FROM CP_Etiqueta_C4 ORDER BY IdArticulo ASC");
-  	}
-
-		$sql = SQL_Clean_Table('CP_Etiqueta_C1');
-		sqlsrv_query($conn,$sql);
-		$sql = SQL_Clean_Table('CP_Etiqueta_C2');
-		sqlsrv_query($conn,$sql);
-		$sql = SQL_Clean_Table('CP_Etiqueta_C3');
-		sqlsrv_query($conn,$sql);
-		$sql = SQL_Clean_Table('CP_Etiqueta_C4');
-		sqlsrv_query($conn,$sql);*/
 		/*
 		while( $row = sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC) ){
 			$IdArticulo = $row['IdArticulo'];
