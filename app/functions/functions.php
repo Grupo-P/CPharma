@@ -1520,73 +1520,121 @@
 			$PrecioHoy = FG_Calculo_Precio_Alfa($Existencia,$ExistenciaAlmacen1,$ExistenciaAlmacen2,$IsTroquelado,$UtilidadArticulo,$UtilidadCategoria,$TroquelAlmacen1,$PrecioCompraBrutoAlmacen1,$TroquelAlmacen2,$PrecioCompraBrutoAlmacen2,$PrecioCompraBruto,$IsIVA,$CondicionExistencia);
 
 			if($IsPrecioAyer==true){
+
 				$sqlCC = MySQL_DiasCero_PrecioAyer($IdArticulo,$FechaCambio);
 				$resultCC = mysqli_query($connCPharma,$sqlCC);
 				$rowCC = mysqli_fetch_assoc($resultCC);
 				$PrecioAyer = $rowCC["precio"];
-			}
 
-			if($Dolarizado=='SI'){
-				$simbolo = '*';
-			}
-			else{
-				$simbolo = '';
-			}
-			
-			echo'
-				<table>
-					<thead>
-						<tr>
-							<td class="centrado titulo rowCenter" colspan="2">
-								Código: '.$CodigoBarra.'
-							</td>
-						</tr>	
-					</thead>
-					<tbody>
-						<tr rowspan="2">
-							<td class="centrado descripcion aumento rowCenter" colspan="2">
-								<strong>'.$Descripcion.'</strong> 
-							</td>
-						</tr>
-						';
-						if($IsPrecioAyer==true){
-							if( floatval(round($PrecioHoy,2)) < floatval($PrecioAyer) ){
-							echo'
+				if( floatval(round($PrecioHoy,2)) != floatval($PrecioAyer) ){
+
+					if($Dolarizado=='SI'){
+						$simbolo = '*';
+					}
+					else{
+						$simbolo = '';
+					}
+					
+					echo'
+						<table>
+							<thead>
 								<tr>
-									<td class="izquierda rowIzq rowIzqA" style="color:red;">
-										Precio Bs. Antes
+									<td class="centrado titulo rowCenter" colspan="2">
+										Código: '.$CodigoBarra.'
 									</td>
-									<td class="derecha rowDer rowDerA" style="color:red;">
-										<del>
-										'.number_format ($PrecioAyer,2,"," ,"." ).'
-										</del>
+								</tr>	
+							</thead>
+							<tbody>
+								<tr rowspan="2">
+									<td class="centrado descripcion aumento rowCenter" colspan="2">
+										<strong>'.$Descripcion.'</strong> 
 									</td>
 								</tr>
-							';
-							}
-						}
-						echo'
-						<tr>
-							<td class="izquierda rowIzq rowIzqA aumento">
-								<strong>Total a Pagar Bs.</strong>
-							</td>
-							<td class="derecha rowDer rowDerA aumento">
-								<strong>
-								'.number_format ($PrecioHoy,2,"," ,"." ).'
-								</strong>
-							</td>
-						</tr>
-						<tr>
-							<td class="izquierda dolarizado rowIzq rowIzqA">
-							</td>
-							<td class="derecha rowDer rowDerA">
-								<strong>'.$simbolo.'</strong> '.date("d-m-Y").'
-							</td>
-						</tr>				
-					</tbody>
-				</table>
-			';
-			$flag = true;
+								';
+									if( floatval(round($PrecioHoy,2)) < floatval($PrecioAyer) ){
+									echo'
+										<tr>
+											<td class="izquierda rowIzq rowIzqA" style="color:red;">
+												Precio Bs. Antes
+											</td>
+											<td class="derecha rowDer rowDerA" style="color:red;">
+												<del>
+												'.number_format ($PrecioAyer,2,"," ,"." ).'
+												</del>
+											</td>
+										</tr>
+									';
+									}
+								echo'
+								<tr>
+									<td class="izquierda rowIzq rowIzqA aumento">
+										<strong>Total a Pagar Bs.</strong>
+									</td>
+									<td class="derecha rowDer rowDerA aumento">
+										<strong>
+										'.number_format ($PrecioHoy,2,"," ,"." ).'
+										</strong>
+									</td>
+								</tr>
+								<tr>
+									<td class="izquierda dolarizado rowIzq rowIzqA">
+									</td>
+									<td class="derecha rowDer rowDerA">
+										<strong>'.$simbolo.'</strong> '.date("d-m-Y").'
+									</td>
+								</tr>				
+							</tbody>
+						</table>
+					';
+					$flag = true;
+				}
+			}
+			else if($IsPrecioAyer==false){
+
+				if($Dolarizado=='SI'){
+					$simbolo = '*';
+				}
+				else{
+					$simbolo = '';
+				}
+				
+				echo'
+					<table>
+						<thead>
+							<tr>
+								<td class="centrado titulo rowCenter" colspan="2">
+									Código: '.$CodigoBarra.'
+								</td>
+							</tr>	
+						</thead>
+						<tbody>
+							<tr rowspan="2">
+								<td class="centrado descripcion aumento rowCenter" colspan="2">
+									<strong>'.$Descripcion.'</strong> 
+								</td>
+							</tr>
+							<tr>
+								<td class="izquierda rowIzq rowIzqA aumento">
+									<strong>Total a Pagar Bs.</strong>
+								</td>
+								<td class="derecha rowDer rowDerA aumento">
+									<strong>
+									'.number_format ($PrecioHoy,2,"," ,"." ).'
+									</strong>
+								</td>
+							</tr>
+							<tr>
+								<td class="izquierda dolarizado rowIzq rowIzqA">
+								</td>
+								<td class="derecha rowDer rowDerA">
+									<strong>'.$simbolo.'</strong> '.date("d-m-Y").'
+								</td>
+							</tr>				
+						</tbody>
+					</table>
+				';
+				$flag = true;
+			}	
 		}
 		return $flag;
  	}
@@ -1653,6 +1701,7 @@
 		$SedeConnection = FG_Mi_Ubicacion();
   	$conn = FG_Conectar_Smartpharma($SedeConnection);
   	$connCPharma = FG_Conectar_CPharma();
+  	$arraySugeridos = array();
   	$CuentaCard = 0;
 		$CuentaEtiqueta = 0;	
 
@@ -1660,102 +1709,162 @@
 		$FManana = date("Y-m-d",strtotime($FHoy."+1 days"));
 		$FAyer = date("Y-m-d",strtotime($FHoy."-1 days"));
 
-		$sql = SQL_Clean_Table('CP_Etiqueta_C1');
-		sqlsrv_query($conn,$sql);
-		$sql = SQL_Clean_Table('CP_Etiqueta_C2');
-		sqlsrv_query($conn,$sql);
-		$sql = SQL_Clean_Table('CP_Etiqueta_C3');
-		sqlsrv_query($conn,$sql);
-		$sql = SQL_Clean_Table('CP_Etiqueta_C4');
-		sqlsrv_query($conn,$sql);
-
-  	if($dia=='HOY'){
-  		$sql1 = SQL_CP_Etiqueta_C1($FHoy,$FManana);
-			sqlsrv_query($conn,$sql1);
-			$sql2 = SQL_CP_Etiqueta_C2($FHoy,$FManana);
-			sqlsrv_query($conn,$sql2);
-			$sql2 = SQL_CP_Etiqueta_C3($FHoy,$FManana);
-			sqlsrv_query($conn,$sql2);
-			$sql2 = SQL_CP_Etiqueta_C4($FHoy,$FManana);
-			sqlsrv_query($conn,$sql2);
+		if($dia=='HOY'){
+			$arraySugeridos = FG_Obtener_Casos_Etiqueta($conn,$FHoy,$FManana);
+			$ArrayUnique = unique_multidim_array($arraySugeridos,'IdArticulo');
 			$FechaCambio = $FHoy;
   	}
   	else if($dia=='AYER'){
-  		$sql1 = SQL_CP_Etiqueta_C1($FAyer,$FHoy);
-			sqlsrv_query($conn,$sql1);
-			$sql2 = SQL_CP_Etiqueta_C2($FAyer,$FHoy);
-			sqlsrv_query($conn,$sql2);
-			$sql2 = SQL_CP_Etiqueta_C3($FAyer,$FHoy);
-			sqlsrv_query($conn,$sql2);
-			$sql2 = SQL_CP_Etiqueta_C4($FAyer,$FHoy);
-			sqlsrv_query($conn,$sql2);
+  		$arraySugeridos = FG_Obtener_Casos_Etiqueta($conn,$FAyer,$FHoy);
+  		$ArrayUnique = unique_multidim_array($arraySugeridos,'IdArticulo');
 			$FechaCambio = $FAyer;
   	}
 
-  	if ($tipo!='DOLARIZADO'){
-  		$result = sqlsrv_query($conn,"SELECT * FROM CP_Etiqueta_C4 WHERE CP_Etiqueta_C4.Dolarizado = 0 ORDER BY IdArticulo ASC");
-  	}
-  	else if ($tipo=='DOLARIZADO'){
-  		$result = sqlsrv_query($conn,"SELECT * FROM CP_Etiqueta_C4 WHERE CP_Etiqueta_C4.Dolarizado <> 0 ORDER BY IdArticulo ASC");
-  	}
-  	else if($tipo=='TODO'){
-  		$result = sqlsrv_query($conn,"SELECT * FROM CP_Etiqueta_C4 ORDER BY IdArticulo ASC");
-  	}
-
-		$sql = SQL_Clean_Table('CP_Etiqueta_C1');
-		sqlsrv_query($conn,$sql);
-		$sql = SQL_Clean_Table('CP_Etiqueta_C2');
-		sqlsrv_query($conn,$sql);
-		$sql = SQL_Clean_Table('CP_Etiqueta_C3');
-		sqlsrv_query($conn,$sql);
-		$sql = SQL_Clean_Table('CP_Etiqueta_C4');
-		sqlsrv_query($conn,$sql);
-
-		while( $row = sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC) ){
-			$IdArticulo = $row['IdArticulo'];
+  	$result1 = $connCPharma->query("SELECT COUNT(*) AS Cuenta FROM etiquetas WHERE clasificacion = '$clasificacion'");
+		$row1= $result1->fetch_assoc();
+		$CuentaCPharma = $row1['Cuenta'];
+		$CuentaSmart = count($ArrayUnique);
+		
+		/*Caso 1
+			El tamano de cambios en el smart es MENOR
+			al total de elementos en la clasificacion solicitada
+		*/
+		if($CuentaCPharma>$CuentaSmart){
 			
-			$result1 = $connCPharma->query("SELECT COUNT(*) AS Cuenta FROM etiquetas WHERE id_articulo = '$IdArticulo' AND clasificacion = '$clasificacion'");
-			$row1= $result1->fetch_assoc();
-			$Cuenta = $row1['Cuenta'];
+			foreach ($ArrayUnique as $Array) {
+		    $IdArticulo = $Array['IdArticulo'];
+		    $Dolarizado = FG_Producto_Dolarizado($Array['Dolarizado']);
+		   
+		    $result1 = $connCPharma->query("SELECT COUNT(*) AS Cuenta FROM etiquetas WHERE id_articulo = '$IdArticulo' AND clasificacion = '$clasificacion'");
+				$row1= $result1->fetch_assoc();
+				$Cuenta = $row1['Cuenta'];
 
-			if($Cuenta==1){
+				if($Cuenta==1){
 
-				$sql3 = SQL_Es_Dolarizado($IdArticulo);
-				$result3 = sqlsrv_query($conn,$sql3);
-				$row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
-				$Dolarizado = FG_Producto_Dolarizado($row3['Dolarizado']);
-
-				if(($Dolarizado=='SI')&&($tipo=='DOLARIZADO')){
-					$flag = FG_Etiquetas($conn,$connCPharma,$IdArticulo,$Dolarizado,true,$FechaCambio);
-					if($flag==true){
-						$CuentaCard++;
-						$CuentaEtiqueta++;
+					if(($Dolarizado=='SI')&&($tipo=='DOLARIZADO')){
+						$flag = FG_Etiquetas($conn,$connCPharma,$IdArticulo,$Dolarizado,true,$FechaCambio);
+						if($flag==true){
+							$CuentaCard++;
+							$CuentaEtiqueta++;
+						}
 					}
-				}
-				else if(($Dolarizado=='NO')&&($tipo!='DOLARIZADO')){
-					$flag = FG_Etiquetas($conn,$connCPharma,$IdArticulo,$Dolarizado,true,$FechaCambio);
-					if($flag==true){
-						$CuentaCard++;
-						$CuentaEtiqueta++;
+					else if(($Dolarizado=='NO')&&($tipo!='DOLARIZADO')){
+						$flag = FG_Etiquetas($conn,$connCPharma,$IdArticulo,$Dolarizado,true,$FechaCambio);
+						if($flag==true){
+							$CuentaCard++;
+							$CuentaEtiqueta++;
+						}
 					}
-				}
-				else if($tipo=='TODO'){
-					$flag = FG_Etiquetas($conn,$connCPharma,$IdArticulo,$Dolarizado,true,$FechaCambio);
-					if($flag==true){
-						$CuentaCard++;
-						$CuentaEtiqueta++;
+					else if($tipo=='TODO'){
+						$flag = FG_Etiquetas($conn,$connCPharma,$IdArticulo,$Dolarizado,true,$FechaCambio);
+						if($flag==true){
+							$CuentaCard++;
+							$CuentaEtiqueta++;
+						}
 					}
-				}
 
-				if($CuentaCard == 3){
-					echo'<br>';
-					$CuentaCard = 0;
+					if($CuentaCard == 3){
+						echo'<br>';
+						$CuentaCard = 0;
+					}
 				}
 			}
 		}
-		echo "<br/>Se imprimiran ".$CuentaEtiqueta." etiquetas<br/>";
+		/*Caso 2
+			El tamano de cambios en el smart es MAYOR
+			al total de elementos en la clasificacion solicitada
+		*/
+		else if($CuentaCPharma<$CuentaSmart){
+			$result = $connCPharma->query("SELECT * FROM etiquetas WHERE clasificacion = '$clasificacion'");
+			
+			while($row = $result->fetch_assoc()){
+				$IdArticulo = $row['id_articulo'];
+
+				foreach ($ArrayUnique as $Array) {
+					if (in_array($IdArticulo,$Array)) {
+			    	$Dolarizado = FG_Producto_Dolarizado($Array['Dolarizado']);
+			    	
+			    	if(($Dolarizado=='SI')&&($tipo=='DOLARIZADO')){
+							$flag = FG_Etiquetas($conn,$connCPharma,$IdArticulo,$Dolarizado,true,$FechaCambio);
+							if($flag==true){
+								$CuentaCard++;
+								$CuentaEtiqueta++;
+							}
+						}
+						else if(($Dolarizado=='NO')&&($tipo!='DOLARIZADO')){
+							$flag = FG_Etiquetas($conn,$connCPharma,$IdArticulo,$Dolarizado,true,$FechaCambio);
+							if($flag==true){
+								$CuentaCard++;
+								$CuentaEtiqueta++;
+							}
+						}
+						else if($tipo=='TODO'){
+							$flag = FG_Etiquetas($conn,$connCPharma,$IdArticulo,$Dolarizado,true,$FechaCambio);
+							if($flag==true){
+								$CuentaCard++;
+								$CuentaEtiqueta++;
+							}
+						}
+
+						if($CuentaCard == 3){
+							echo'<br>';
+							$CuentaCard = 0;
+						}
+					}	
+				}
+			}
+		}
+		echo "<br/><br/>Se imprimiran ".$CuentaEtiqueta." etiquetas<br/>";
+		echo 'Cuenta CPharma: '.$CuentaCPharma.'<br>';
+		echo 'Cuenta Smart: '.$CuentaSmart.'<br>';
 		mysqli_close($connCPharma);
     sqlsrv_close($conn);
+	}
+	/**********************************************************************************/
+	/*
+		TITULO: FG_Obtener_Casos_Etiqueta
+		FUNCION: Arma un array con los articulos que entran en los filtros
+		DESARROLLADO POR: SERGIO COVA
+ 	*/
+	function FG_Obtener_Casos_Etiqueta($conn,$FechaI,$FechaF) {
+		$arraySugeridos = array();
+		/*Obtener datos del caso 1*/
+ 		$arrayIteracion = array();
+		$sql = SQL_CP_Etiqueta_C1($FechaI,$FechaF);
+		$result = sqlsrv_query($conn,$sql);
+		while( $row = sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC) ){
+			$arrayIteracion["IdArticulo"]=$row['IdArticulo'];
+	    $arrayIteracion["Dolarizado"]=$row['Dolarizado'];
+	    $arraySugeridos[]=$arrayIteracion;
+	  }
+	 	/*Obtener datos del caso 2*/
+		$arrayIteracion = array();
+		$sql = SQL_CP_Etiqueta_C2($FechaI,$FechaF);
+		$result = sqlsrv_query($conn,$sql);
+		while( $row = sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC) ){
+			$arrayIteracion["IdArticulo"]=$row['IdArticulo'];
+	    $arrayIteracion["Dolarizado"]=$row['Dolarizado'];
+	    $arraySugeridos[]=$arrayIteracion;
+	  }
+	 	/*Obtener datos del caso 3*/	 
+		$arrayIteracion = array();
+		$sql = SQL_CP_Etiqueta_C3($FechaI,$FechaF);
+		$result = sqlsrv_query($conn,$sql);		
+		while( $row = sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC) ){
+			$arrayIteracion["IdArticulo"]=$row['IdArticulo'];
+	    $arrayIteracion["Dolarizado"]=$row['Dolarizado'];
+	    $arraySugeridos[]=$arrayIteracion;
+	  }
+	 	/*Obtener datos del caso 4*/
+		$arrayIteracion = array();
+		$sql = SQL_CP_Etiqueta_C4($FechaI,$FechaF);
+		$result = sqlsrv_query($conn,$sql);		
+		while( $row = sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC) ){
+			$arrayIteracion["IdArticulo"]=$row['IdArticulo'];
+	    $arrayIteracion["Dolarizado"]=$row['Dolarizado'];
+	    $arraySugeridos[]=$arrayIteracion;
+	  }
+		return $arraySugeridos;
 	}
 	/**********************************************************************************/
 	/*
@@ -1981,5 +2090,25 @@
 			break;
 		}
 		return $dominio;
+	}
+	/**********************************************************************************/
+	/*
+		TITULO: unique_multidim_array
+		FUNCION: Create multidimensional array unique for any single key index.
+		DESAROLLADO POR: Ghanshyam Katriya
+ 	*/
+ 	function unique_multidim_array($array, $key) {
+    $temp_array = array();
+    $i = 0;
+    $key_array = array();
+   
+    foreach($array as $val) {
+        if (!in_array($val[$key], $key_array)) {
+            $key_array[$i] = $val[$key];
+            $temp_array[$i] = $val;
+        }
+        $i++;
+    }
+    return $temp_array;
 	}
 ?>
