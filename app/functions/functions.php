@@ -1520,73 +1520,121 @@
 			$PrecioHoy = FG_Calculo_Precio_Alfa($Existencia,$ExistenciaAlmacen1,$ExistenciaAlmacen2,$IsTroquelado,$UtilidadArticulo,$UtilidadCategoria,$TroquelAlmacen1,$PrecioCompraBrutoAlmacen1,$TroquelAlmacen2,$PrecioCompraBrutoAlmacen2,$PrecioCompraBruto,$IsIVA,$CondicionExistencia);
 
 			if($IsPrecioAyer==true){
+
 				$sqlCC = MySQL_DiasCero_PrecioAyer($IdArticulo,$FechaCambio);
 				$resultCC = mysqli_query($connCPharma,$sqlCC);
 				$rowCC = mysqli_fetch_assoc($resultCC);
 				$PrecioAyer = $rowCC["precio"];
-			}
 
-			if($Dolarizado=='SI'){
-				$simbolo = '*';
-			}
-			else{
-				$simbolo = '';
-			}
-			
-			echo'
-				<table>
-					<thead>
-						<tr>
-							<td class="centrado titulo rowCenter" colspan="2">
-								Código: '.$CodigoBarra.'
-							</td>
-						</tr>	
-					</thead>
-					<tbody>
-						<tr rowspan="2">
-							<td class="centrado descripcion aumento rowCenter" colspan="2">
-								<strong>'.$Descripcion.'</strong> 
-							</td>
-						</tr>
-						';
-						if($IsPrecioAyer==true){
-							if( floatval(round($PrecioHoy,2)) < floatval($PrecioAyer) ){
-							echo'
+				if( floatval(round($PrecioHoy,2)) != floatval($PrecioAyer) ){
+
+					if($Dolarizado=='SI'){
+						$simbolo = '*';
+					}
+					else{
+						$simbolo = '';
+					}
+					
+					echo'
+						<table>
+							<thead>
 								<tr>
-									<td class="izquierda rowIzq rowIzqA" style="color:red;">
-										Precio Bs. Antes
+									<td class="centrado titulo rowCenter" colspan="2">
+										Código: '.$CodigoBarra.'
 									</td>
-									<td class="derecha rowDer rowDerA" style="color:red;">
-										<del>
-										'.number_format ($PrecioAyer,2,"," ,"." ).'
-										</del>
+								</tr>	
+							</thead>
+							<tbody>
+								<tr rowspan="2">
+									<td class="centrado descripcion aumento rowCenter" colspan="2">
+										<strong>'.$Descripcion.'</strong> 
 									</td>
 								</tr>
-							';
-							}
-						}
-						echo'
-						<tr>
-							<td class="izquierda rowIzq rowIzqA aumento">
-								<strong>Total a Pagar Bs.</strong>
-							</td>
-							<td class="derecha rowDer rowDerA aumento">
-								<strong>
-								'.number_format ($PrecioHoy,2,"," ,"." ).'
-								</strong>
-							</td>
-						</tr>
-						<tr>
-							<td class="izquierda dolarizado rowIzq rowIzqA">
-							</td>
-							<td class="derecha rowDer rowDerA">
-								<strong>'.$simbolo.'</strong> '.date("d-m-Y").'
-							</td>
-						</tr>				
-					</tbody>
-				</table>
-			';
-			$flag = true;
+								';
+									if( floatval(round($PrecioHoy,2)) < floatval($PrecioAyer) ){
+									echo'
+										<tr>
+											<td class="izquierda rowIzq rowIzqA" style="color:red;">
+												Precio Bs. Antes
+											</td>
+											<td class="derecha rowDer rowDerA" style="color:red;">
+												<del>
+												'.number_format ($PrecioAyer,2,"," ,"." ).'
+												</del>
+											</td>
+										</tr>
+									';
+									}
+								echo'
+								<tr>
+									<td class="izquierda rowIzq rowIzqA aumento">
+										<strong>Total a Pagar Bs.</strong>
+									</td>
+									<td class="derecha rowDer rowDerA aumento">
+										<strong>
+										'.number_format ($PrecioHoy,2,"," ,"." ).'
+										</strong>
+									</td>
+								</tr>
+								<tr>
+									<td class="izquierda dolarizado rowIzq rowIzqA">
+									</td>
+									<td class="derecha rowDer rowDerA">
+										<strong>'.$simbolo.'</strong> '.date("d-m-Y").'
+									</td>
+								</tr>				
+							</tbody>
+						</table>
+					';
+					$flag = true;
+				}
+			}
+			else if($IsPrecioAyer==false){
+
+				if($Dolarizado=='SI'){
+					$simbolo = '*';
+				}
+				else{
+					$simbolo = '';
+				}
+				
+				echo'
+					<table>
+						<thead>
+							<tr>
+								<td class="centrado titulo rowCenter" colspan="2">
+									Código: '.$CodigoBarra.'
+								</td>
+							</tr>	
+						</thead>
+						<tbody>
+							<tr rowspan="2">
+								<td class="centrado descripcion aumento rowCenter" colspan="2">
+									<strong>'.$Descripcion.'</strong> 
+								</td>
+							</tr>
+							<tr>
+								<td class="izquierda rowIzq rowIzqA aumento">
+									<strong>Total a Pagar Bs.</strong>
+								</td>
+								<td class="derecha rowDer rowDerA aumento">
+									<strong>
+									'.number_format ($PrecioHoy,2,"," ,"." ).'
+									</strong>
+								</td>
+							</tr>
+							<tr>
+								<td class="izquierda dolarizado rowIzq rowIzqA">
+								</td>
+								<td class="derecha rowDer rowDerA">
+									<strong>'.$simbolo.'</strong> '.date("d-m-Y").'
+								</td>
+							</tr>				
+						</tbody>
+					</table>
+				';
+				$flag = true;
+			}	
 		}
 		return $flag;
  	}
