@@ -39,6 +39,7 @@
     $practicas = DB::table('rh_practicas')->count();
 
     //-------------------- VARIABLES TESORERIA --------------------//
+    $movimientos = DB::table('ts_movimientos')->count();
 
   /*TASA DOLAR VENTA*/
     $Tasa = DB::table('tasa_ventas')->where('moneda', 'Dolar')->value('tasa');
@@ -827,7 +828,31 @@
   	</div>
 	</div>
 	<!-- Modal TESORERIA -->
+
 	<!-- Dashboard TESORERIA-->
+	<div class="card-deck">
+    <div class="card border-success mb-3" style="width: 14rem;">      
+      <div class="card-body text-left bg-success">
+        <h3 class="card-title">
+          <span class="card-text text-white">
+            <i class="fas fa-balance-scale"></i>
+            <?php
+            echo ''.$movimientos;
+          ?>            
+          </span>
+        </h3>
+        <p class="card-text text-white">
+        <?php 
+          echo 'Movimientos registrados';
+        ?>
+        </p>
+      </div>
+      <div class="card-footer bg-transparent border-success text-right">
+        <a href="/movimientos" class="btn btn-outline-success btn-sm">Visualizar</a>
+      </div>    
+    </div>
+  </div>
+
 	<div class="card-deck">
 	<!-- Tasa Mercado -->
 		<div class="card border-secondary mb-3" style="width: 14rem;">	  	
