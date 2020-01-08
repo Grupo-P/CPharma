@@ -19,6 +19,7 @@ class CreateTsMovimientosTable extends Migration {
             $table->double('saldo_anterior', 16, 2);
             $table->double('saldo_actual', 16, 2);
             $table->string('concepto');
+            $table->date('fecha');
             $table->string('user');
             $table->timestamps();
 

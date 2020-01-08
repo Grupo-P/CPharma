@@ -2,9 +2,7 @@
 
 @section('title', 'Movimientos')
 
-
 @section('content')
-
   <!-- Modal Guardar -->
   @if (session('Saved'))
     <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -50,30 +48,30 @@
   @endif
 
   <h1 class="h5 text-info">
-    <i class="fas fa-industry"></i>
+    <i class="fas fa-balance-scale"></i>
     Movimientos
   </h1>
 
   <hr class="row align-items-start col-12">
   <table style="width:100%;" class="CP-stickyBar">
-      <tr>
-          <td style="width:10%;" align="center">  
-        <a href="{{ url('/movimientos/create') }}" role="button" class="btn btn-outline-info btn-sm" 
-        style="display: inline; text-align: left;">
-        <i class="fa fa-plus"></i>
-          Agregar
-        </a>
-          </td>
-          <td style="width:90%;">
-            <div class="input-group md-form form-sm form-1 pl-0 CP-stickyBar">
-          <div class="input-group-prepend">
-            <span class="input-group-text purple lighten-3" id="basic-text1"><i class="fas fa-search text-white"
-                aria-hidden="true"></i></span>
-          </div>
-          <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterAllTable()" autofocus="autofocus">
+    <tr>
+        <td style="width:10%;" align="center">  
+      <a href="{{ url('/movimientos/create') }}" role="button" class="btn btn-outline-info btn-sm" 
+      style="display: inline; text-align: left;">
+      <i class="fa fa-plus"></i>
+        Agregar
+      </a>
+        </td>
+        <td style="width:90%;">
+          <div class="input-group md-form form-sm form-1 pl-0 CP-stickyBar">
+        <div class="input-group-prepend">
+          <span class="input-group-text purple lighten-3" id="basic-text1"><i class="fas fa-search text-white"
+              aria-hidden="true"></i></span>
         </div>
-          </td>
-      </tr>
+        <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterAllTable()" autofocus="autofocus">
+      </div>
+        </td>
+    </tr>
   </table>
   <br/>
   
@@ -81,10 +79,12 @@
       <thead class="thead-dark">
         <tr>
             <th scope="col" class="CP-sticky">#</th>
-            <th scope="col" class="CP-sticky">Nombre</th>
-            <th scope="col" class="CP-sticky">RIF</th>
-            <th scope="col" class="CP-sticky">Teléfono</th>           
-            <th scope="col" class="CP-sticky">Estatus</th>
+            <th scope="col" class="CP-sticky">Ingresos</th>
+            <th scope="col" class="CP-sticky">Egresos</th>
+            <th scope="col" class="CP-sticky">Saldo anterior</th>
+            <th scope="col" class="CP-sticky">Saldo actual</th>
+            <th scope="col" class="CP-sticky">Moneda</th>
+            <th scope="col" class="CP-sticky">Fecha</th>
             <th scope="col" class="CP-sticky">Acciones</th>
         </tr>
       </thead>
@@ -92,10 +92,12 @@
     @foreach($movimientos as $movimiento)
         <tr>
           <th>{{$movimiento->id}}</th>
-          <td>{{$movimiento->nombre}}</td>
-          <td>{{$movimiento->rif}}</td>
-          <td>{{$movimiento->telefono}}</td>         
-          <td>{{$movimiento->estatus}}</td>
+          <td>{{$movimiento->ingresos}}</td>
+          <td>{{$movimiento->egresos}}</td>
+          <td>{{$movimiento->saldo_anterior}}</td>         
+          <td>{{$movimiento->saldo_actual}}</td>
+          <td>{{$movimiento->tasa_ventas_id}}</td>
+          <td>{{$movimiento->fecha}}</td>
           
         <!-- Inicio Validacion de ROLES -->
           <td style="width:140px;">
@@ -103,51 +105,15 @@
         <?php
         if(Auth::user()->role == 'MASTER' || Auth::user()->role == 'DEVELOPER'){
         ?>
-
-          <?php
-          if($movimiento->estatus == 'ACTIVO'){
-          ?>
-            <a href="/movimientos/{{$movimiento->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
-                  <i class="far fa-eye"></i>                
-                </a>
-
-                <a href="/movimientos/{{$movimiento->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
-                  <i class="fas fa-edit"></i>               
-                </a>
-                    
-                <form action="/movimientos/{{$movimiento->id}}" method="POST" style="display: inline;">
-                @method('DELETE')
-                @csrf             
-                <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Desincorporar"><i class="fa fa-reply"></i></button>
-            </form>
-          <?php
-          }
-          else if($movimiento->estatus == 'INACTIVO'){
-          ?>    
-              <form action="/movimientos/{{$movimiento->id}}" method="POST" style="display: inline;">
-              @method('DELETE')
-              @csrf             
-              <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Reincorporar"><i class="fa fa-share"></i></button>
-          </form>
-          <?php
-          }         
-          ?>
-        <?php 
-        } else if(Auth::user()->role == 'SUPERVISOR' || Auth::user()->role == 'ADMINISTRADOR' || Auth::user()->role == 'SUPERVISOR CAJA'){ 
-        ?>
           <a href="/movimientos/{{$movimiento->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
-                <i class="far fa-eye"></i>                
-              </a>
-
-              <a href="/movimientos/{{$movimiento->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
-                <i class="fas fa-edit"></i>
-              </a>
+            <i class="far fa-eye"></i>
+          </a>
         <?php
         } else if(Auth::user()->role == 'USUARIO'){
         ?>
           <a href="/movimientos/{{$movimiento->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
-                <i class="far fa-eye"></i>                
-              </a>    
+            <i class="far fa-eye"></i>
+          </a>
         <?php
         }
         ?>
@@ -163,6 +129,6 @@
     $(document).ready(function(){
         $('[data-toggle="tooltip"]').tooltip();   
     });
-    $('#exampleModalCenter').modal('show')
+    $('#exampleModalCenter').modal('show');
   </script>
 @endsection
