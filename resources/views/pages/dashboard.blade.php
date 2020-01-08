@@ -13,10 +13,13 @@
 
     $CPharmaVersion = ' CPharma v.6.0.1';
 
+    //-------------------- VARIABLES COMPRAS --------------------//
     $empresas = DB::table('empresas')->count();
     $proveedores = DB::table('proveedors')->count();
     $usuarios = DB::table('users')->count();
     $dolar = DB::table('dolars')->count();
+
+    //-------------------- VARIABLES RRHH --------------------//
     $candidatos = DB::table('rh_candidatos')->count();
     $vacantes = DB::table('rh_vacantes')->count();
     $entrevistas = DB::table('rh_entrevistas')->count();
@@ -34,6 +37,8 @@
     	->where('estatus', '<>', 'FUTURO')
     	->count();
     $practicas = DB::table('rh_practicas')->count();
+
+    //-------------------- VARIABLES TESORERIA --------------------//
 
   /*TASA DOLAR VENTA*/
     $Tasa = DB::table('tasa_ventas')->where('moneda', 'Dolar')->value('tasa');
