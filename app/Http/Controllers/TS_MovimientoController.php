@@ -4,6 +4,8 @@ namespace compras\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use compras\TS_Movimiento;
+
 class TS_MovimientoController extends Controller {
     /**
      * Display a listing of the resource.
@@ -11,7 +13,8 @@ class TS_MovimientoController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function index() {
-        return view('pages.TS.movimiento.index');
+        $movimientos = TS_Movimiento::all();
+        return view('pages.TS.movimiento.index', compact('movimientos'));
     }
 
     /**
