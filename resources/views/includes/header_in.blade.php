@@ -535,6 +535,29 @@
   }
 ?>
 <!-- LÍDER DE TIENDA -->
+
+<!-- TESORERIA -->
+<?php
+  if((Auth::user()->departamento == 'TESORERIA') || (Auth::user()->departamento == 'TECNOLOGIA')) {
+?>
+  <div class="btn-group navbar-brand">
+    <button type="button" class="btn btn-outline-info dropdown-toggle textoI" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      <i class="fas fa-donate"></i> Tesorería
+    </button>
+    <div class="dropdown-menu">
+      <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('/movimientos') }}">     
+          <span data-feather="home"></span>
+          <i class="far fa-file-alt"></i>
+          Movimientos<span class="sr-only">(current)</span>
+        </a>
+      </li>
+    </div>
+  </div>
+<?php
+  }
+?>
+
 <!-------------------------------------------------------------------------------->
 <!-- GERENCIA -->
 <?php

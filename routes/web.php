@@ -259,5 +259,5 @@ Route::resource('gestor_fases', 'RH_GestorFaseController');
 
 Route::resource('practicas', 'RH_PracticaController');
 
-//***************************** TESORERIA routing *****************************//
+//*************************** TESORERIA routing ***************************//
 Route::resource('movimientos', 'TS_MovimientoController');
