@@ -55,52 +55,55 @@
   <hr class="row align-items-start col-12">
   <table style="width:100%;" class="CP-stickyBar">
     <tr>
-        <td style="width:10%;" align="center">  
-      <a href="{{ url('/movimientos/create') }}" role="button" class="btn btn-outline-info btn-sm" 
-      style="display: inline; text-align: left;">
-      <i class="fa fa-plus"></i>
-        Agregar
-      </a>
-        </td>
-        <td style="width:90%;">
-          <div class="input-group md-form form-sm form-1 pl-0 CP-stickyBar">
-        <div class="input-group-prepend">
-          <span class="input-group-text purple lighten-3" id="basic-text1"><i class="fas fa-search text-white"
-              aria-hidden="true"></i></span>
+      <td style="width:10%;" align="center">
+        <a href="{{ url('/movimientos/create') }}" role="button" class="btn btn-outline-info btn-sm" 
+        style="display: inline; text-align: left;">
+        <i class="fa fa-plus"></i>
+          Agregar
+        </a>
+      </td>
+
+      <td style="width:90%;">
+        <div class="input-group md-form form-sm form-1 pl-0 CP-stickyBar">
+          <div class="input-group-prepend">
+            <span class="input-group-text purple lighten-3" id="basic-text1">
+              <i class="fas fa-search text-white" aria-hidden="true"></i>
+            </span>
+          </div>
+          <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterAllTable()" autofocus="autofocus">
         </div>
-        <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterAllTable()" autofocus="autofocus">
-      </div>
-        </td>
+      </td>
     </tr>
   </table>
   <br/>
   
   <table class="table table-striped table-borderless col-12 sortable" id="myTable">
-      <thead class="thead-dark">
-        <tr>
-            <th scope="col" class="CP-sticky">#</th>
-            <th scope="col" class="CP-sticky">Ingresos</th>
-            <th scope="col" class="CP-sticky">Egresos</th>
-            <th scope="col" class="CP-sticky">Saldo anterior</th>
-            <th scope="col" class="CP-sticky">Saldo actual</th>
-            <th scope="col" class="CP-sticky">Moneda</th>
-            <th scope="col" class="CP-sticky">Fecha</th>
-            <th scope="col" class="CP-sticky">Acciones</th>
-        </tr>
-      </thead>
-      <tbody>
+    <thead class="thead-dark">
+      <tr>
+        <th scope="col" class="CP-sticky">#</th>
+        <th scope="col" class="CP-sticky">Ingresos</th>
+        <th scope="col" class="CP-sticky">Egresos</th>
+        <th scope="col" class="CP-sticky">Saldo anterior</th>
+        <th scope="col" class="CP-sticky">Saldo actual</th>
+        <th scope="col" class="CP-sticky">Moneda</th>
+        <th scope="col" class="CP-sticky">Fecha</th>
+        <th scope="col" class="CP-sticky">Acciones</th>
+      </tr>
+    </thead>
+
+    <tbody>
     @foreach($movimientos as $movimiento)
-        <tr>
-          <th>{{$movimiento->id}}</th>
-          <td>{{$movimiento->ingresos}}</td>
-          <td>{{$movimiento->egresos}}</td>
-          <td>{{$movimiento->saldo_anterior}}</td>         
-          <td>{{$movimiento->saldo_actual}}</td>
-          <td>{{$movimiento->tasa_ventas_id}}</td>
-          <td>{{$movimiento->fecha}}</td>
+      <tr>
+        <th>{{$movimiento->id}}</th>
+        <td>{{$movimiento->ingresos}}</td>
+        <td>{{$movimiento->egresos}}</td>
+        <td>{{$movimiento->saldo_anterior}}</td>         
+        <td>{{$movimiento->saldo_actual}}</td>
+        <td>{{$movimiento->tasa_ventas_id}}</td>
+        <td>{{$movimiento->fecha}}</td>
           
         <!-- Inicio Validacion de ROLES -->
-          <td style="width:140px;">
+        <td style="width:140px;">
         
         <?php
         if(Auth::user()->role == 'MASTER' || Auth::user()->role == 'DEVELOPER'){
@@ -118,9 +121,9 @@
         }
         ?>
                     
-          </td>
+        </td>
         <!-- Fin Validacion de ROLES -->
-        </tr>
+      </tr>
     @endforeach
     </tbody>
   </table>
