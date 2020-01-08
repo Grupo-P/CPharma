@@ -132,7 +132,7 @@
   <hr class="row align-items-start col-12">
 
 <?php
-	if((Auth::user()->departamento != 'VENTAS')&&(Auth::user()->departamento != 'RRHH')){
+	if((Auth::user()->departamento != 'VENTAS')&&(Auth::user()->departamento != 'RRHH')&&(Auth::user()->departamento != 'TESORERIA')){
 ?>
 <!-------------------------------------------------------------------------------->
 <!-- DESTACADOS -->

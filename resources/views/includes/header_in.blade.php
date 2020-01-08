@@ -15,7 +15,7 @@
 <!-------------------------------------------------------------------------------->
 <!-- AGENDA -->
 <?php
-  if((Auth::user()->departamento != 'VENTAS')&&(Auth::user()->departamento != 'RRHH')){
+  if((Auth::user()->departamento != 'VENTAS')&&(Auth::user()->departamento != 'RRHH')&&(Auth::user()->departamento != 'TESORERIA')){
 ?>
   <div class="btn-group navbar-brand">
     <button type="button" class="btn btn-outline-info dropdown-toggle textoI" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
