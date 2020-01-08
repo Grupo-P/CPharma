@@ -794,6 +794,84 @@
 ?>
 <!-- VENTAS -->
 <!-------------------------------------------------------------------------------->
+<!-- TESORERIA -->
+<?php
+  if(Auth::user()->departamento == 'TESORERIA'){
+?>
+	<!-- Modal TESORERIA -->
+	<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  	<div class="modal-dialog modal-dialog-centered" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <h5 class="modal-title text-info" id="exampleModalCenterTitle"><i class="fas fa-bell text-info CP-beep"></i> Novedades</h5>
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	          <span aria-hidden="true">&times;</span>
+	        </button>
+	      </div>
+	      <div class="modal-body">
+	      	<label>Hola <b class="text-info">{{ Auth::user()->name }}</b>.</label>
+	      	<br/>
+	      	Estas usando<b class="text-info">{{$CPharmaVersion}}</b>, para el departamento de <b class="text-info">{{ Auth::user()->departamento }}</b>, esta version incluye las siguientes mejoras:<br/><br/></label>
+  			<ul style="list-style:none">
+        	<li class="card-text text-dark" style="display: inline;">
+					<i class="far fa-check-circle text-info" style="display: inline;"></i>
+					Desde ya esta disponible el modulo: 
+					<b class="text-info">Movimientos</b>!!
+  				</li>
+  			</ul>
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-outline-info" data-dismiss="modal">Aceptar</button>
+	      </div>
+	    </div>
+  	</div>
+	</div>
+	<!-- Modal TESORERIA -->
+	<!-- Dashboard TESORERIA-->
+	<div class="card-deck">
+	<!-- Tasa Mercado -->
+		<div class="card border-secondary mb-3" style="width: 14rem;">	  	
+  		<div class="card-body text-left bg-secondary">
+	    		<h3 class="card-title">
+		    		<span class="card-text text-white">
+		    			<i class="fas fa-credit-card"></i>
+		    			<?php
+								echo 'Tasa Mercado: '.$TasaMercado.' '.SigVe;
+							?>						
+		    		</span>
+	    		</h3>
+	    		<p class="card-text text-white">
+					<?php 
+						echo 'Ultima Actualizacion: '.$FechaTasaMercado;
+					?>
+	    		</p>
+  		</div>
+		</div>
+	<!-- Tasa Venta -->
+		<div class="card border-dark mb-3" style="width: 14rem;">	  	
+			<div class="card-body text-left bg-dark">
+	  		<h3 class="card-title">
+	    		<span class="card-text text-white">
+	    			<i class="fas fa-credit-card"></i>
+	    			<?php
+						echo 'Tasa Venta: '.$Tasa;
+					?>						
+	    		</span>
+	  		</h3>
+	  		<p class="card-text text-white">
+				<?php 
+					echo 'Ultima Actualizacion: '.$tasaVenta;
+				?>
+	  		</p>
+			</div>		
+		</div>
+	</div>
+	<!-- Dashboard TESORERIA-->
+<?php
+  }
+?>
+<!-- TESORERIA -->
+<!-------------------------------------------------------------------------------->
 <!-- RRHH -->
 <?php
   if(Auth::user()->departamento == 'RRHH'){
