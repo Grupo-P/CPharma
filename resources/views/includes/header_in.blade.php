@@ -548,7 +548,7 @@
       <li class="nav-item">
         <a class="nav-link CP-Links-Menu" href="{{ url('/movimientos') }}">     
           <span data-feather="home"></span>
-          <i class="far fa-file-alt"></i>
+          <i class="fas fa-balance-scale"></i>
           Movimientos<span class="sr-only">(current)</span>
         </a>
       </li>
@@ -557,6 +557,7 @@
 <?php
   }
 ?>
+<!-- TESORERIA -->
 
 <!-------------------------------------------------------------------------------->
 <!-- GERENCIA -->
