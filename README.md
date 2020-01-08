@@ -1,4 +1,4 @@
-# CPharma v.6.0.1
+# CPharma v.6.0.1 Latest commit Server 37923ab
 
 ***
 
@@ -69,6 +69,7 @@
 ## 6. Estándar para la asignación de nombres (Caso GIT)
 
 * Master: **QUEDA PROHIBIDO** trabajar sobre la rama **MASTER**.
+* MasterDP: **DP**_ Nombre_Rama()
 * Ramas: **DP**_ Nombre_Rama()
 
 ##### Observación: 
