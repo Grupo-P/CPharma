@@ -90,11 +90,15 @@
       </tr>
     </thead>
 
+    @php
+      include(app_path().'\functions\functions.php');
+    @endphp
+
     <tbody>
     @foreach($movimientos as $movimiento)
       <tr>
         <th class="text-center">{{$movimiento->id}}</th>
-        <td class="text-center">{{$movimiento->concepto}}</td>
+        <td class="text-center">{{FG_Limpiar_Texto($movimiento->concepto)}}</td>
         <td class="text-center">{{number_format($movimiento->ingresos, 2, ',', '.')}}</td>
         <td class="text-center">{{number_format($movimiento->egresos, 2, ',', '.')}}</td>
         <td class="text-center">{{number_format($movimiento->saldo_actual, 2, ',', '.')}}</td>
