@@ -831,8 +831,8 @@
 
 	<!-- Dashboard TESORERIA-->
 	<div class="card-deck">
-    <div class="card border-success mb-3" style="width: 14rem;">      
-      <div class="card-body text-left bg-success">
+    <div class="card border-danger mb-3" style="width: 14rem;">      
+      <div class="card-body text-left bg-danger">
         <h3 class="card-title">
           <span class="card-text text-white">
             <i class="fas fa-balance-scale"></i>
@@ -847,16 +847,14 @@
         ?>
         </p>
       </div>
-      <div class="card-footer bg-transparent border-success text-right">
-        <a href="/movimientos" class="btn btn-outline-success btn-sm">Visualizar</a>
+      <div class="card-footer bg-transparent border-danger text-right">
+        <a href="/movimientos" class="btn btn-outline-danger btn-sm">Visualizar</a>
       </div>    
     </div>
-  </div>
 
-	<div class="card-deck">
-		<!-- Tasa Venta -->
-		<div class="card border-dark mb-3" style="width: 14rem;">	  	
-  		<div class="card-body text-left bg-dark">
+    <!-- Tasa Venta -->
+		<div class="card border-success mb-3" style="width: 14rem;">	  	
+  		<div class="card-body text-left bg-success">
     		<h3 class="card-title">
 	    		<span class="card-text text-white">
 	    			<i class="fas fa-credit-card"></i>
@@ -871,11 +869,11 @@
 				?>
     		</p>
   		</div>
-	  	<div class="card-footer bg-transparent border-dark text-right">
-	  		<a href="/tasaVenta/" class="btn btn-outline-dark btn-sm">Visualizar</a>
+	  	<div class="card-footer bg-transparent border-success text-right">
+	  		<a href="/tasaVenta/" class="btn btn-outline-success btn-sm">Visualizar</a>
 	  	</div>
-		</div>	
-	</div>
+		</div>
+  </div>
 	<!-- Dashboard TESORERIA-->
 <?php
   }
