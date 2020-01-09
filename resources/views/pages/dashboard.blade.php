@@ -843,13 +843,13 @@
           <span class="card-text text-white">
             <i class="fas fa-balance-scale-left"></i>
             <?php
-            echo ''.$movimientosBs;
+            echo 'Saldo actual: '. number_format($movimientosBs, 2, ',', '.');
           ?>            
           </span>
         </h3>
         <p class="card-text text-white">
         <?php 
-          echo 'Movimientos en bolivares registrados';
+          echo 'Movimientos en bolivares registrados: ' . $movimientosBs;
         ?>
         </p>
       </div>
@@ -864,13 +864,13 @@
           <span class="card-text text-white">
             <i class="fas fa-balance-scale"></i>
             <?php
-            echo ''.$movimientosDs;
+            echo 'Saldo actual: ' . number_format($movimientosDs, 2, ',', '.');
           ?>            
           </span>
         </h3>
         <p class="card-text text-white">
         <?php 
-          echo 'Movimientos en dolares registrados';
+          echo 'Movimientos en dolares registrados: ' . $movimientosDs;
         ?>
         </p>
       </div>
