@@ -80,26 +80,26 @@
   <table class="table table-striped table-borderless col-12 sortable" id="myTable">
     <thead class="thead-dark">
       <tr>
-        <th scope="col" class="CP-sticky">#</th>
-        <th scope="col" class="CP-sticky">Concepto</th>
-        <th scope="col" class="CP-sticky">Ingresos</th>
-        <th scope="col" class="CP-sticky">Egresos</th>
-        <th scope="col" class="CP-sticky">Saldo</th>
-        <th scope="col" class="CP-sticky">Fecha y hora</th>
-        <th scope="col" class="CP-sticky">Usuario</th>
+        <th scope="col" class="stickyCP">#</th>
+        <th scope="col" class="stickyCP">Concepto</th>
+        <th scope="col" class="stickyCP">Ingresos</th>
+        <th scope="col" class="stickyCP">Egresos</th>
+        <th scope="col" class="stickyCP">Saldo</th>
+        <th scope="col" class="stickyCP">Fecha y hora</th>
+        <th scope="col" class="stickyCP">Usuario</th>
       </tr>
     </thead>
 
     <tbody>
     @foreach($movimientos as $movimiento)
       <tr>
-        <th>{{$movimiento->id}}</th>
-        <th>{{$movimiento->concepto}}</th>
-        <td>{{$movimiento->ingresos}}</td>
-        <td>{{$movimiento->egresos}}</td>
-        <td>{{$movimiento->saldo_actual}}</td>
-        <td>{{$movimiento->created_at}}</td>
-        <td>{{$movimiento->user}}</td>
+        <th class="text-center">{{$movimiento->id}}</th>
+        <td class="text-center">{{$movimiento->concepto}}</td>
+        <td class="text-center">{{$movimiento->ingresos}}</td>
+        <td class="text-center">{{$movimiento->egresos}}</td>
+        <td class="text-center">{{$movimiento->saldo_actual}}</td>
+        <td class="text-center">{{$movimiento->created_at}}</td>
+        <td class="text-center">{{$movimiento->user}}</td>
       </tr>
     @endforeach
     </tbody>

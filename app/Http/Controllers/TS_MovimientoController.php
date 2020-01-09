@@ -23,7 +23,7 @@ class TS_MovimientoController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function create() {
-        //
+        return view('pages.TS.movimiento.create');
     }
 
     /**
