@@ -98,13 +98,13 @@
 		font-size: 1.1em;
 	}
 	.descripcion{
-		height: 2.5cm;
+		height: 3.5cm;
 	}
 	.rowDer{
-		height: 1.5cm;
+		height: 2.5cm;
 	}
 	.rowIzq{
-		height: 1.5cm;
+		height: 2.5cm;
 	}
 	.centrado{
 		text-align: center;
@@ -119,7 +119,7 @@
 		text-transform: uppercase;
 	}
 	.aumento{
-		font-size: 1.6em;
+		font-size: 1.9em;
 	}
   .preciopromo{
     color: #dc3545;
