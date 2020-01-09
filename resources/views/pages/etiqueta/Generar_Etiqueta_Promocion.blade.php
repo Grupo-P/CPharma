@@ -67,40 +67,41 @@
 	.etq table{
 		display: inline;
 		margin:-2px;
+    border-radius: 25px;
 	}
 	.etq thead{
-		border-top: 5px solid red;
-		border-right: 5px solid red;
-		border-left: 5px solid red;
+		border-top: 5px solid #17a2b8;
+		border-right: 5px solid #17a2b8;
+		border-left: 5px solid #17a2b8;
 		border-radius: 25px;
 	}
 	.etq tbody{
-		border-bottom: 5px solid red;
-		border-right: 5px solid red;
-		border-left: 5px solid red;
+		border-bottom: 5px solid #17a2b8;
+		border-right: 5px solid #17a2b8;
+		border-left: 5px solid #17a2b8;
 		border-radius: 25px;
 	}
 	.rowCenter{
-		width: 14cm;
+		width: 16cm;
 	}
 	.rowIzqA{
 		width: 7cm;
 	}
 	.rowDerA{
-		width: 7cm;
+		width: 9cm;
 	}
 	.titulo{
-		height: 0.5cm;
-		font-size: 0.8em;
+		height: 1cm;
+		font-size: 1.1em;
 	}
 	.descripcion{
-		height: 2cm;
+		height: 3cm;
 	}
 	.rowDer{
-		height: 1cm;
+		height: 2cm;
 	}
 	.rowIzq{
-		height: 1cm;
+		height: 2cm;
 	}
 	.centrado{
 		text-align: center;
@@ -115,7 +116,7 @@
 		text-transform: uppercase;
 	}
 	.aumento{
-		font-size: 1.1em;
+		font-size: 1.8em;
 	}
 </style>
 
