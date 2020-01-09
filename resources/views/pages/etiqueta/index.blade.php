@@ -161,12 +161,22 @@
 	<table class="table table-striped table-borderless col-12 sortable">
   	<thead class="thead-dark">
 	    <tr>
-	      	<th scope="col" colspan="6" style="text-align: center;">GENERAR ETIQUETAS DE HOY</th>
+      	<th scope="col" colspan="5" style="text-align: center;">GENERAR ETIQUETAS DE HOY</th>
 	    </tr>
 		</thead>
+		<thead>
+			<tr>
+				<th scope="col"></th>
+      	<th scope="col" colspan="2" style="text-align: center;">OBLIGATORIAS</th>
+      	<th scope="col" colspan="2" style="text-align: center;">ETIQUETABLES</th>
+	    </tr>
+    </thead>
 		<tbody>
 	  	<tr>
-        <td style="width:16%;" align="center">	
+	  		<td style="width:10%;" align="left">
+	  			<strong class="text-dark">TODO</strong>
+	  		</td>
+        <td style="width:20%;" align="center">	
 					<form action="{{ url('/Generar_Etiquetas') }}" method="PRE" style="display: inline;" target="_blank">
 				  
 				    <input id="clasificacion" name="clasificacion" type="hidden" value="OBLIGATORIO ETIQUETAR">
@@ -176,30 +186,7 @@
 				    <button type="submit" name="Generar" role="button" class="btn btn-outline-success btn-sm" value="SI">Obliagtorias (Todo)</button>
 					</form>
 	      </td>
-
-	      <td style="width:16%;" align="center">
-					<form action="{{ url('/Generar_Etiquetas') }}" method="PRE" style="display: inline;" target="_blank">
-				  
-				    <input id="clasificacion" name="clasificacion" type="hidden" value="OBLIGATORIO ETIQUETAR">
-				    <input id="tipo" name="tipo" type="hidden" value="DOLARIZADO">
-				    <input id="dia" name="dia" type="hidden" value="HOY">
-
-				    <button type="submit" name="Generar" role="button" class="btn btn-outline-success btn-sm" value="SI">Obliagtorias ($)</button>
-					</form>
-	      </td>
 	      <td style="width:16%;" align="center">	
-					<form action="{{ url('/Generar_Etiquetas') }}" method="PRE" style="display: inline;" target="_blank">
-				  
-				    <input id="clasificacion" name="clasificacion" type="hidden" value="OBLIGATORIO ETIQUETAR">
-				    <input id="tipo" name="tipo" type="hidden" value="NO DOLARIZADO">
-				    <input id="dia" name="dia" type="hidden" value="HOY">
-
-				    <button type="submit" name="Generar" role="button" class="btn btn-outline-success btn-sm" value="SI">Obliagtorias (NO $)</button>
-					</form>
-	      </td>
-			</tr>
-			<tr>
-        <td style="width:16%;" align="center">	
 					<form action="{{ url('/Generar_Etiqueta_Unica') }}" method="PRE" style="display: inline;" target="_blank">
 				  
 				    <input id="clasificacion" name="clasificacion" type="hidden" value="OBLIGATORIO ETIQUETAR">
@@ -209,7 +196,41 @@
 				    <button type="submit" name="Generar" role="button" class="btn btn-outline-danger btn-sm" value="SI">Unica Obliagtorias (Todo)</button>
 					</form>
 	      </td>
+	      <td style="width:20%;" align="center">	
+					<form action="{{ url('/Generar_Etiquetas') }}" method="PRE" style="display: inline;" target="_blank">
+				  
+				    <input id="clasificacion" name="clasificacion" type="hidden" value="ETIQUETABLE">
+				    <input id="tipo" name="tipo" type="hidden" value="TODO">
+				    <input id="dia" name="dia" type="hidden" value="HOY">
 
+				    <button type="submit" name="Generar" role="button" class="btn btn-outline-info btn-sm" value="SI">Etiquetables (Todo)</button>
+					</form>
+	      </td>
+	      <td style="width:20%;" align="center">	
+					<form action="{{ url('/Generar_Etiqueta_Unica') }}" method="PRE" style="display: inline;" target="_blank">
+				  
+				    <input id="clasificacion" name="clasificacion" type="hidden" value="ETIQUETABLE">
+				    <input id="tipo" name="tipo" type="hidden" value="TODO">
+				    <input id="dia" name="dia" type="hidden" value="HOY">
+
+				    <button type="submit" name="Generar" role="button" class="btn btn-outline-danger btn-sm" value="SI">Unica Etiquetables (Todo)</button>
+					</form>
+	      </td>
+     	</tr>
+     	<tr>
+	  		<td style="width:10%;" align="left">
+	  			<strong class="text-dark">DOLARIZADAS</strong>
+	  		</td>
+        <td style="width:16%;" align="center">
+					<form action="{{ url('/Generar_Etiquetas') }}" method="PRE" style="display: inline;" target="_blank">
+				  
+				    <input id="clasificacion" name="clasificacion" type="hidden" value="OBLIGATORIO ETIQUETAR">
+				    <input id="tipo" name="tipo" type="hidden" value="DOLARIZADO">
+				    <input id="dia" name="dia" type="hidden" value="HOY">
+
+				    <button type="submit" name="Generar" role="button" class="btn btn-outline-success btn-sm" value="SI">Obliagtorias ($)</button>
+					</form>
+	      </td>
 	      <td style="width:16%;" align="center">
 					<form action="{{ url('/Generar_Etiqueta_Unica') }}" method="PRE" style="display: inline;" target="_blank">
 				  
@@ -218,6 +239,41 @@
 				    <input id="dia" name="dia" type="hidden" value="HOY">
 
 				    <button type="submit" name="Generar" role="button" class="btn btn-outline-danger btn-sm" value="SI">Unica Obliagtorias ($)</button>
+					</form>
+	      </td>
+	      <td style="width:16%;" align="center">	
+					<form action="{{ url('/Generar_Etiquetas') }}" method="PRE" style="display: inline;" target="_blank">
+				  
+				    <input id="clasificacion" name="clasificacion" type="hidden" value="ETIQUETABLE">
+				    <input id="tipo" name="tipo" type="hidden" value="DOLARIZADO">
+				    <input id="dia" name="dia" type="hidden" value="HOY">
+
+				    <button type="submit" name="Generar" role="button" class="btn btn-outline-info btn-sm" value="SI">Etiquetables ($)</button>
+					</form>
+	      </td>
+	      <td style="width:16%;" align="center">	
+					<form action="{{ url('/Generar_Etiqueta_Unica') }}" method="PRE" style="display: inline;" target="_blank">
+				  
+				    <input id="clasificacion" name="clasificacion" type="hidden" value="ETIQUETABLE">
+				    <input id="tipo" name="tipo" type="hidden" value="DOLARIZADO">
+				    <input id="dia" name="dia" type="hidden" value="HOY">
+
+				    <button type="submit" name="Generar" role="button" class="btn btn-outline-danger btn-sm" value="SI">Unica Etiquetables ($)</button>
+					</form>
+	      </td>
+     	</tr>
+     	<tr>
+	  		<td style="width:10%;" align="left">
+	  			<strong class="text-dark">NO DOLARIZADAS</strong>
+	  		</td>
+        <td style="width:16%;" align="center">	
+					<form action="{{ url('/Generar_Etiquetas') }}" method="PRE" style="display: inline;" target="_blank">
+				  
+				    <input id="clasificacion" name="clasificacion" type="hidden" value="OBLIGATORIO ETIQUETAR">
+				    <input id="tipo" name="tipo" type="hidden" value="NO DOLARIZADO">
+				    <input id="dia" name="dia" type="hidden" value="HOY">
+
+				    <button type="submit" name="Generar" role="button" class="btn btn-outline-success btn-sm" value="SI">Obliagtorias (NO $)</button>
 					</form>
 	      </td>
 	      <td style="width:16%;" align="center">	
@@ -230,29 +286,7 @@
 				    <button type="submit" name="Generar" role="button" class="btn btn-outline-danger btn-sm" value="SI">Unica Obliagtorias (NO $)</button>
 					</form>
 	      </td>
-			</tr>
-			<tr>
-	      <td style="width:16%;" align="center">	
-					<form action="{{ url('/Generar_Etiquetas') }}" method="PRE" style="display: inline;" target="_blank">
-				  
-				    <input id="clasificacion" name="clasificacion" type="hidden" value="ETIQUETABLE">
-				    <input id="tipo" name="tipo" type="hidden" value="TODO">
-				    <input id="dia" name="dia" type="hidden" value="HOY">
-
-				    <button type="submit" name="Generar" role="button" class="btn btn-outline-info btn-sm" value="SI">Etiquetables (Todo)</button>
-					</form>
-	      </td>
-        <td style="width:16%;" align="center">	
-					<form action="{{ url('/Generar_Etiquetas') }}" method="PRE" style="display: inline;" target="_blank">
-				  
-				    <input id="clasificacion" name="clasificacion" type="hidden" value="ETIQUETABLE">
-				    <input id="tipo" name="tipo" type="hidden" value="DOLARIZADO">
-				    <input id="dia" name="dia" type="hidden" value="HOY">
-
-				    <button type="submit" name="Generar" role="button" class="btn btn-outline-info btn-sm" value="SI">Etiquetables ($)</button>
-					</form>
-	      </td>
-	      <td style="width:16%;" align="center">	
+	     	<td style="width:16%;" align="center">	
 					<form action="{{ url('/Generar_Etiquetas') }}" method="PRE" style="display: inline;" target="_blank">
 				  
 				    <input id="clasificacion" name="clasificacion" type="hidden" value="ETIQUETABLE">
@@ -260,28 +294,6 @@
 				    <input id="dia" name="dia" type="hidden" value="HOY">
 
 				    <button type="submit" name="Generar" role="button" class="btn btn-outline-info btn-sm" value="SI">Etiquetables (NO $)</button>
-					</form>
-	      </td>
-			</tr>
-			<tr>
-	      <td style="width:16%;" align="center">	
-					<form action="{{ url('/Generar_Etiqueta_Unica') }}" method="PRE" style="display: inline;" target="_blank">
-				  
-				    <input id="clasificacion" name="clasificacion" type="hidden" value="ETIQUETABLE">
-				    <input id="tipo" name="tipo" type="hidden" value="TODO">
-				    <input id="dia" name="dia" type="hidden" value="HOY">
-
-				    <button type="submit" name="Generar" role="button" class="btn btn-outline-danger btn-sm" value="SI">Unica Etiquetables (Todo)</button>
-					</form>
-	      </td>
-        <td style="width:16%;" align="center">	
-					<form action="{{ url('/Generar_Etiqueta_Unica') }}" method="PRE" style="display: inline;" target="_blank">
-				  
-				    <input id="clasificacion" name="clasificacion" type="hidden" value="ETIQUETABLE">
-				    <input id="tipo" name="tipo" type="hidden" value="DOLARIZADO">
-				    <input id="dia" name="dia" type="hidden" value="HOY">
-
-				    <button type="submit" name="Generar" role="button" class="btn btn-outline-danger btn-sm" value="SI">Unica Etiquetables ($)</button>
 					</form>
 	      </td>
 	      <td style="width:16%;" align="center">	
@@ -294,7 +306,7 @@
 				    <button type="submit" name="Generar" role="button" class="btn btn-outline-danger btn-sm" value="SI">Unica Etiquetables (NO $)</button>
 					</form>
 	      </td>
-			</tr>
+     	</tr>
 		</tbody>
 	</table>
 	<table class="table table-striped table-borderless col-12 sortable">
