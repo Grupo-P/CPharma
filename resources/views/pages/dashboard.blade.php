@@ -843,7 +843,7 @@
         </h3>
         <p class="card-text text-white">
         <?php 
-          echo 'Movimientos registrados';
+          echo 'Movimientos en bolivares registrados';
         ?>
         </p>
       </div>
@@ -852,9 +852,30 @@
       </div>    
     </div>
 
+    <div class="card border-success mb-3" style="width: 14rem;">      
+      <div class="card-body text-left bg-success">
+        <h3 class="card-title">
+          <span class="card-text text-white">
+            <i class="fas fa-balance-scale"></i>
+            <?php
+            echo ''.$movimientos;
+          ?>            
+          </span>
+        </h3>
+        <p class="card-text text-white">
+        <?php 
+          echo 'Movimientos en dolares registrados';
+        ?>
+        </p>
+      </div>
+      <div class="card-footer bg-transparent border-success text-right">
+        <a href="/movimientos" class="btn btn-outline-success btn-sm">Visualizar</a>
+      </div>    
+    </div>
+
     <!-- Tasa Venta -->
-		<div class="card border-success mb-3" style="width: 14rem;">	  	
-  		<div class="card-body text-left bg-success">
+		<div class="card border-info mb-3" style="width: 14rem;">	  	
+  		<div class="card-body text-left bg-info">
     		<h3 class="card-title">
 	    		<span class="card-text text-white">
 	    			<i class="fas fa-credit-card"></i>
@@ -869,8 +890,8 @@
 				?>
     		</p>
   		</div>
-	  	<div class="card-footer bg-transparent border-success text-right">
-	  		<a href="/tasaVenta/" class="btn btn-outline-success btn-sm">Visualizar</a>
+	  	<div class="card-footer bg-transparent border-info text-right">
+	  		<a href="/tasaVenta/" class="btn btn-outline-info btn-sm">Visualizar</a>
 	  	</div>
 		</div>
   </div>
