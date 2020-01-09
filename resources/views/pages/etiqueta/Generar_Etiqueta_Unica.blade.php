@@ -202,7 +202,6 @@
 	<script>
     var dominio = dominio(SedeConnectionJs);
     const URLEtiquetaUnica = ''+dominio+'assets/functions/functionEtiquetaUnica.php';
-    var CuentaCard = 0;
 
 		$('#inputCodBar').attr("placeholder", "Haga scan o escriba el codigo de barra");
 		$('#inputCodBar').attr("onblur", "this.placeholder = 'Haga scan o escriba el codigo de barra'");
@@ -226,7 +225,6 @@
 
           var parametro = {
           	"IdArticulo":ArrJsCB[indiceIdScan],
-          	"CuentaCard":CuentaCard
           };
 
           //Incio Armado tablaResuldado
@@ -242,16 +240,8 @@
               	$("#MsnError").html(respuesta);
               }
               else{
-            	 	var contenedor = $("#DivEtiquetas").html();
- 							
- 								if(CuentaCard==3){
- 									$("#DivEtiquetas").html(contenedor+respuesta+'<br>');
- 									CuentaCard=0;
- 								}
- 								else{
- 									$("#DivEtiquetas").html(contenedor+respuesta);
- 								}
- 								CuentaCard++;
+            	 	var contenedor = $("#DivEtiquetas").html();	
+								$("#DivEtiquetas").html(contenedor+respuesta);
               }
             }
            });
