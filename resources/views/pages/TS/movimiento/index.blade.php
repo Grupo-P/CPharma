@@ -95,10 +95,10 @@
       <tr>
         <th class="text-center">{{$movimiento->id}}</th>
         <td class="text-center">{{$movimiento->concepto}}</td>
-        <td class="text-center">{{$movimiento->ingresos}}</td>
-        <td class="text-center">{{$movimiento->egresos}}</td>
-        <td class="text-center">{{$movimiento->saldo_actual}}</td>
-        <td class="text-center">{{$movimiento->created_at}}</td>
+        <td class="text-center">{{number_format($movimiento->ingresos, 2, ',', '.')}}</td>
+        <td class="text-center">{{number_format($movimiento->egresos, 2, ',', '.')}}</td>
+        <td class="text-center">{{number_format($movimiento->saldo_actual, 2, ',', '.')}}</td>
+        <td class="text-center">{{date("d-m-Y h:i a", strtotime($movimiento->created_at))}}</td>
         <td class="text-center">{{$movimiento->user}}</td>
       </tr>
     @endforeach
