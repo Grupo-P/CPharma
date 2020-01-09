@@ -176,9 +176,7 @@
 @section('scriptsPie')
   <script type="text/javascript">
     const SedeConnectionJs = '<?php echo $RutaUrl;?>'
-    const clasificacion = '<?php echo $clasificacion;?>'
     const tipo = '<?php echo $tipo;?>'
-    const dia = '<?php echo $dia;?>'
   </script>
 
   <script>
@@ -232,9 +230,7 @@
 
           var parametro = {
           	"IdArticulo":ArrJsCB[indiceIdScan],
-          	"clasificacion":clasificacion,
-          	"tipo":tipo,
-          	"dia":dia
+          	"tipo":tipo
           };
 
           //Incio Armado tablaResuldado

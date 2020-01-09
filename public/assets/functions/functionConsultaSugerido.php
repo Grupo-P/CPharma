@@ -67,7 +67,7 @@
       "Refreco","Panal","Chocolate","Preservativo",
       "Leche","Pasta","Perrarina","Gatarina","ToallaSanitaria",
       "Mayonesa","SalsaTomate","PapelSanitario","FormulaInfantil",
-      "Cafe","Toallin"
+      "Cafe","Toallin","PanalAdulto"
     );
 
     $SedeConnection = FG_Mi_Ubicacion();

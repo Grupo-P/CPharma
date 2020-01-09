@@ -5,10 +5,8 @@
   include('C:\xampp\htdocs\CPharma\app\functions\querys_sqlserver.php');
 
   $IdArticulo = $_POST["IdArticulo"];
-  $clasificacion = $_POST["clasificacion"];
   $tipo = $_POST["tipo"];
-  $dia = $_POST["dia"];
-  $Etiqueta = FG_Generer_Etiqueta_Unica($IdArticulo,$clasificacion,$tipo,$dia);
+  $Etiqueta = FG_Generer_Etiqueta_Unica($IdArticulo,$tipo);
   echo''.$Etiqueta;
 ?>
 <?php
@@ -18,7 +16,7 @@
 		FUNCION: crea una conexion con la base de datos cpharma e ingresa datos
 		DESARROLLADO POR: SERGIO COVA
  	*/
-	function FG_Generer_Etiqueta_Unica($IdArticulo,$clasificacion,$tipo,$dia) {
+	function FG_Generer_Etiqueta_Unica($IdArticulo,$tipo) {
 		$SedeConnection = 'FTN';//FG_Mi_Ubicacion();
   	$conn = FG_Conectar_Smartpharma($SedeConnection);
   	$connCPharma = FG_Conectar_CPharma();
@@ -27,43 +25,34 @@
 
   	$FHoy = date("Y-m-d");
 		$FManana = date("Y-m-d",strtotime($FHoy."+1 days"));
-		$FAyer = date("Y-m-d",strtotime($FHoy."-1 days"));
 
-		if($dia=='HOY'){
-			$arraySugeridos = FG_Obtener_Casos_Etiqueta($conn,$FHoy,$FManana);
-			$ArrayUnique = unique_multidim_array($arraySugeridos,'IdArticulo');
-			$FechaCambio = $FHoy;
-  	}
-  	else if($dia=='AYER'){
-  		$arraySugeridos = FG_Obtener_Casos_Etiqueta($conn,$FAyer,$FHoy);
-  		$ArrayUnique = unique_multidim_array($arraySugeridos,'IdArticulo');
-			$FechaCambio = $FAyer;
-  	}
-
-  	$result1 = $connCPharma->query("SELECT COUNT(*) AS Cuenta FROM etiquetas WHERE id_articulo = '$IdArticulo' AND clasificacion = '$clasificacion'");
+  	$result1 = $connCPharma->query("SELECT COUNT(*) AS Cuenta FROM etiquetas WHERE id_articulo = '$IdArticulo' AND clasificacion = 'OBLIGATORIO ETIQUETAR'");
 		$row1= $result1->fetch_assoc();
-		$Cuenta = $row1['Cuenta'];
+		$CuentaObligatoria = $row1['Cuenta'];
 
-		if($Cuenta==1){
+		$result1 = $connCPharma->query("SELECT COUNT(*) AS Cuenta FROM etiquetas WHERE id_articulo = '$IdArticulo' AND clasificacion = 'ETIQUETABLE'");
+		$row1= $result1->fetch_assoc();
+		$CuentaEtiquetable = $row1['Cuenta'];
 
-			foreach ($ArrayUnique as $Array) {
-		    if (in_array($IdArticulo,$Array)) {
-		    	$Dolarizado = FG_Producto_Dolarizado($Array['Dolarizado']);
+		if( ($CuentaObligatoria==1) || ($CuentaEtiquetable==1) ){
 
-		    	if(($Dolarizado=='SI')&&($tipo=='DOLARIZADO')){
-						$Etiqueta = FG_Etiqueta_Unica($conn,$connCPharma,$IdArticulo,$Dolarizado,true,$FechaCambio);
-					}
-					else if(($Dolarizado=='NO')&&($tipo!='DOLARIZADO')){
-						$Etiqueta = FG_Etiqueta_Unica($conn,$connCPharma,$IdArticulo,$Dolarizado,true,$FechaCambio);
-					}
-					else if($tipo=='TODO'){
-						$Etiqueta = FG_Etiqueta_Unica($conn,$connCPharma,$IdArticulo,$Dolarizado,true,$FechaCambio);
-					}
-					else{
-						$Etiqueta = 'EL ARTICULO NO PERTENECE A LA CATEGORIA SELECCIONADA';
-					}
-		    }
-	   	}
+			$sql3 = SQL_Es_Dolarizado($IdArticulo);
+			$result3 = sqlsrv_query($conn,$sql3);
+			$row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
+			$Dolarizado = FG_Producto_Dolarizado($row3['Dolarizado']);
+
+    	if(($Dolarizado=='SI')&&($tipo=='DOLARIZADO')){
+				$Etiqueta = FG_Etiqueta_Unica($conn,$connCPharma,$IdArticulo,$Dolarizado,false,false);
+			}
+			else if(($Dolarizado=='NO')&&($tipo!='DOLARIZADO')){
+				$Etiqueta = FG_Etiqueta_Unica($conn,$connCPharma,$IdArticulo,$Dolarizado,false,false);
+			}
+			else if($tipo=='TODO'){
+				$Etiqueta = FG_Etiqueta_Unica($conn,$connCPharma,$IdArticulo,$Dolarizado,false,false);
+			}
+			else{
+				$Etiqueta = 'EL ARTICULO NO PERTENECE A LA CATEGORIA SELECCIONADA';
+			} 
 		}
 		else{
 			$Etiqueta = 'EL ARTICULO NO PERTENECE A LA CATEGORIA SELECCIONADA';
@@ -223,7 +212,10 @@
 						</tbody>
 					</table>
 				';
-			}	
+			}
+			else{
+			$Etiqueta = 'EL ARTICULO PRESENTO CAMBIO DE PRECIO';
+			}
 		}
 		else{
 			$Etiqueta = 'EL ARTICULO NO POSEE EXISTENCIA';
