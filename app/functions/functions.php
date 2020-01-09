@@ -1698,7 +1698,7 @@
 		DESARROLLADO POR: SERGIO COVA
  	*/
 	function FG_Generer_Etiquetas($clasificacion,$tipo,$dia) {
-		$SedeConnection = FG_Mi_Ubicacion();
+		$SedeConnection = 'FTN';//FG_Mi_Ubicacion();
   	$conn = FG_Conectar_Smartpharma($SedeConnection);
   	$connCPharma = FG_Conectar_CPharma();
   	$arraySugeridos = array();

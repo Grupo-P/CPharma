@@ -100,7 +100,7 @@
           <td align="center" style="border: 4px solid #17a2b8;">
             <input id="inputCodBar" type="text" name="CodBar" autofocus="autofocus">
           </td>
-          <td align="center" class="text-success"><h1><i class="fas fa-search aum-icon-lup"></i></h1></td>
+          <td align="center" class="text-success"><h1><i class="fas fa-print aum-icon-lup" onclick="window.print();"></i></h1></td>
         </tr>
       </tbody>
     </table>
@@ -171,8 +171,7 @@
         if( (indiceCodBarScan>0) && (indiceScanDesc)>0 ) {
 
           var parametro = {
-          //"IdArticulo":ArrJsCB[indiceIdScan]
-          "IdArticulo":CodBarrScan
+          	"IdArticulo":ArrJsCB[indiceIdScan]
           };
 
           //Incio Armado tablaResuldado
