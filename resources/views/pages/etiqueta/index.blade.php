@@ -445,6 +445,41 @@
 			</table>
 		</div>
 	</div>
+	<div class="dropdown" style="display: inline; width: 25%;">
+		<button class="btn btn-dark btn-lg btn-lg dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    	ETIQUETAS PROMOCION
+  	</button>
+  	<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+			<table class="dropdown-item table table-striped table-borderless col-12 sortable" style="width: 100%;">
+		  	<thead class="thead-dark">
+			    <tr>
+			      	<th scope="col" colspan="6" style="text-align: center;">GENERAR ETIQUETAS DE PROMOCION</th>
+			    </tr>
+				</thead>
+				<tbody>
+			  	<tr>
+		        <td style="width:40%;" align="center">
+							<form action="{{ url('/Generar_Etiqueta_Promocion') }}" method="PRE" style="display: inline;" target="_blank">
+						  
+						    <input id="tipo" name="tipo" type="hidden" value="DOLARIZADO">
+
+						    <button type="submit" name="Generar" role="button" class="btn btn-outline-success btn-sm" value="SI">Dolarizadas ($)</button>
+							</form>
+			      </td>
+
+			      <td style="width:40%;" align="center">	
+							<form action="{{ url('/Generar_Etiqueta_Promocion') }}" method="PRE" style="display: inline;" target="_blank">
+						  
+						    <input id="tipo" name="tipo" type="hidden" value="NO DOLARIZADO">
+
+						    <button type="submit" name="Generar" role="button" class="btn btn-outline-info btn-sm" value="SI">No Dolarizadas (NO $)</button>
+							</form>
+			      </td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
 	<br/><br/>
 	<table class="table table-striped table-borderless col-12 sortable" id="myTable">
 	  	<thead class="thead-dark">
