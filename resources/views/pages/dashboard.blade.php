@@ -843,7 +843,7 @@
           <span class="card-text text-white">
             <i class="fas fa-balance-scale-left"></i>
             <?php
-            echo 'Saldo actual: '. number_format($movimientosBs, 2, ',', '.');
+            echo 'Saldo actual: '. number_format($movimientosBs, 2, ',', '.') . " " . SigVe;
           ?>            
           </span>
         </h3>
@@ -864,7 +864,7 @@
           <span class="card-text text-white">
             <i class="fas fa-balance-scale"></i>
             <?php
-            echo 'Saldo actual: ' . number_format($movimientosDs, 2, ',', '.');
+            echo 'Saldo actual: ' . number_format($movimientosDs, 2, ',', '.') . " " . SigDolar;
           ?>            
           </span>
         </h3>
