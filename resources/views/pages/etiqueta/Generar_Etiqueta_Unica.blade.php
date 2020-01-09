@@ -127,9 +127,7 @@
 	  include(app_path().'\functions\querys_mysql.php');
 	  include(app_path().'\functions\querys_sqlserver.php');
 
-	  $clasificacion = $_GET['clasificacion'];
 		$tipo = $_GET['tipo'];
-		$dia = $_GET['dia'];
 
     $SedeConnection = 'FTN';//FG_Mi_Ubicacion();
     $RutaUrl = FG_Mi_Ubicacion();
