@@ -854,42 +854,27 @@
   </div>
 
 	<div class="card-deck">
-	<!-- Tasa Mercado -->
-		<div class="card border-secondary mb-3" style="width: 14rem;">	  	
-  		<div class="card-body text-left bg-secondary">
-	    		<h3 class="card-title">
-		    		<span class="card-text text-white">
-		    			<i class="fas fa-credit-card"></i>
-		    			<?php
-								echo 'Tasa Mercado: '.$TasaMercado.' '.SigVe;
-							?>						
-		    		</span>
-	    		</h3>
-	    		<p class="card-text text-white">
-					<?php 
-						echo 'Ultima Actualizacion: '.$FechaTasaMercado;
-					?>
-	    		</p>
-  		</div>
-		</div>
-	<!-- Tasa Venta -->
+		<!-- Tasa Venta -->
 		<div class="card border-dark mb-3" style="width: 14rem;">	  	
-			<div class="card-body text-left bg-dark">
-	  		<h3 class="card-title">
+  		<div class="card-body text-left bg-dark">
+    		<h3 class="card-title">
 	    		<span class="card-text text-white">
 	    			<i class="fas fa-credit-card"></i>
 	    			<?php
-						echo 'Tasa Venta: '.$Tasa;
-					?>						
+							echo 'Tasa Venta: '.$Tasa.' '.SigVe;
+						?>						
 	    		</span>
-	  		</h3>
-	  		<p class="card-text text-white">
+    		</h3>
+    		<p class="card-text text-white">
 				<?php 
 					echo 'Ultima Actualizacion: '.$tasaVenta;
 				?>
-	  		</p>
-			</div>		
-		</div>
+    		</p>
+  		</div>
+	  	<div class="card-footer bg-transparent border-dark text-right">
+	  		<a href="/tasaVenta/" class="btn btn-outline-dark btn-sm">Visualizar</a>
+	  	</div>
+		</div>	
 	</div>
 	<!-- Dashboard TESORERIA-->
 <?php

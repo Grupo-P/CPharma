@@ -81,13 +81,12 @@
     <thead class="thead-dark">
       <tr>
         <th scope="col" class="CP-sticky">#</th>
+        <th scope="col" class="CP-sticky">Concepto</th>
         <th scope="col" class="CP-sticky">Ingresos</th>
         <th scope="col" class="CP-sticky">Egresos</th>
-        <th scope="col" class="CP-sticky">Saldo anterior</th>
-        <th scope="col" class="CP-sticky">Saldo actual</th>
-        <th scope="col" class="CP-sticky">Moneda</th>
-        <th scope="col" class="CP-sticky">Fecha</th>
-        <th scope="col" class="CP-sticky">Acciones</th>
+        <th scope="col" class="CP-sticky">Saldo</th>
+        <th scope="col" class="CP-sticky">Fecha y hora</th>
+        <th scope="col" class="CP-sticky">Usuario</th>
       </tr>
     </thead>
 
@@ -95,34 +94,12 @@
     @foreach($movimientos as $movimiento)
       <tr>
         <th>{{$movimiento->id}}</th>
+        <th>{{$movimiento->concepto}}</th>
         <td>{{$movimiento->ingresos}}</td>
         <td>{{$movimiento->egresos}}</td>
-        <td>{{$movimiento->saldo_anterior}}</td>         
         <td>{{$movimiento->saldo_actual}}</td>
-        <td>{{$movimiento->tasa_ventas_id}}</td>
-        <td>{{$movimiento->fecha}}</td>
-          
-        <!-- Inicio Validacion de ROLES -->
-        <td style="width:140px;">
-        
-        <?php
-        if(Auth::user()->role == 'MASTER' || Auth::user()->role == 'DEVELOPER'){
-        ?>
-          <a href="/movimientos/{{$movimiento->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
-            <i class="far fa-eye"></i>
-          </a>
-        <?php
-        } else if(Auth::user()->role == 'USUARIO'){
-        ?>
-          <a href="/movimientos/{{$movimiento->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
-            <i class="far fa-eye"></i>
-          </a>
-        <?php
-        }
-        ?>
-                    
-        </td>
-        <!-- Fin Validacion de ROLES -->
+        <td>{{$movimiento->created_at}}</td>
+        <td>{{$movimiento->user}}</td>
       </tr>
     @endforeach
     </tbody>
