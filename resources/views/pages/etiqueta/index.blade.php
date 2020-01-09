@@ -185,7 +185,7 @@
 						    <input id="clasificacion" name="clasificacion" type="hidden" value="OBLIGATORIO ETIQUETAR">
 						    <input id="tipo" name="tipo" type="hidden" value="TODO">
 
-						    <button type="submit" name="Generar" role="button" class="btn btn-outline-success btn-sm" value="SI">Obliagtorias (Todo)</button>
+						    <button type="submit" name="Generar" role="button" class="btn btn-outline-success btn-sm" value="SI">Obligatorias (Todo)</button>
 							</form>
 			      </td>
 
@@ -195,7 +195,7 @@
 						    <input id="clasificacion" name="clasificacion" type="hidden" value="OBLIGATORIO ETIQUETAR">
 						    <input id="tipo" name="tipo" type="hidden" value="DOLARIZADO">
 
-						    <button type="submit" name="Generar" role="button" class="btn btn-outline-success btn-sm" value="SI">Obliagtorias ($)</button>
+						    <button type="submit" name="Generar" role="button" class="btn btn-outline-success btn-sm" value="SI">Obligatorias ($)</button>
 							</form>
 			      </td>
 
@@ -205,7 +205,7 @@
 						    <input id="clasificacion" name="clasificacion" type="hidden" value="OBLIGATORIO ETIQUETAR">
 						    <input id="tipo" name="tipo" type="hidden" value="NO DOLARIZADO">
 
-						    <button type="submit" name="Generar" role="button" class="btn btn-outline-success btn-sm" value="SI">Obliagtorias (NO $)</button>
+						    <button type="submit" name="Generar" role="button" class="btn btn-outline-success btn-sm" value="SI">Obligatorias (NO $)</button>
 							</form>
 			      </td>
 
@@ -274,7 +274,7 @@
 						    <input id="tipo" name="tipo" type="hidden" value="TODO">
 						    <input id="dia" name="dia" type="hidden" value="HOY">
 
-						    <button type="submit" name="Generar" role="button" class="btn btn-outline-success btn-sm" value="SI">Obliagtorias (Todo)</button>
+						    <button type="submit" name="Generar" role="button" class="btn btn-outline-success btn-sm" value="SI">Obligatorias (Todo)</button>
 							</form>
 			      </td>
 			      <td style="width:16%;" align="center">	
@@ -284,7 +284,7 @@
 						    <input id="tipo" name="tipo" type="hidden" value="TODO">
 						    <input id="dia" name="dia" type="hidden" value="HOY">
 
-						    <button type="submit" name="Generar" role="button" class="btn btn-outline-danger btn-sm" value="SI">Unica Obliagtorias (Todo)</button>
+						    <button type="submit" name="Generar" role="button" class="btn btn-outline-danger btn-sm" value="SI">Unica Obligatorias (Todo)</button>
 							</form>
 			      </td>
 			      <td style="width:20%;" align="center">	
@@ -319,7 +319,7 @@
 						    <input id="tipo" name="tipo" type="hidden" value="DOLARIZADO">
 						    <input id="dia" name="dia" type="hidden" value="HOY">
 
-						    <button type="submit" name="Generar" role="button" class="btn btn-outline-success btn-sm" value="SI">Obliagtorias ($)</button>
+						    <button type="submit" name="Generar" role="button" class="btn btn-outline-success btn-sm" value="SI">Obligatorias ($)</button>
 							</form>
 			      </td>
 			      <td style="width:16%;" align="center">
@@ -329,7 +329,7 @@
 						    <input id="tipo" name="tipo" type="hidden" value="DOLARIZADO">
 						    <input id="dia" name="dia" type="hidden" value="HOY">
 
-						    <button type="submit" name="Generar" role="button" class="btn btn-outline-danger btn-sm" value="SI">Unica Obliagtorias ($)</button>
+						    <button type="submit" name="Generar" role="button" class="btn btn-outline-danger btn-sm" value="SI">Unica Obligatorias ($)</button>
 							</form>
 			      </td>
 			      <td style="width:16%;" align="center">	
@@ -364,7 +364,7 @@
 						    <input id="tipo" name="tipo" type="hidden" value="NO DOLARIZADO">
 						    <input id="dia" name="dia" type="hidden" value="HOY">
 
-						    <button type="submit" name="Generar" role="button" class="btn btn-outline-success btn-sm" value="SI">Obliagtorias (NO $)</button>
+						    <button type="submit" name="Generar" role="button" class="btn btn-outline-success btn-sm" value="SI">Obligatorias (NO $)</button>
 							</form>
 			      </td>
 			      <td style="width:16%;" align="center">	
@@ -374,7 +374,7 @@
 						    <input id="tipo" name="tipo" type="hidden" value="NO DOLARIZADO">
 						    <input id="dia" name="dia" type="hidden" value="HOY">
 
-						    <button type="submit" name="Generar" role="button" class="btn btn-outline-danger btn-sm" value="SI">Unica Obliagtorias (NO $)</button>
+						    <button type="submit" name="Generar" role="button" class="btn btn-outline-danger btn-sm" value="SI">Unica Obligatorias (NO $)</button>
 							</form>
 			      </td>
 			     	<td style="width:16%;" align="center">	
@@ -432,7 +432,7 @@
 						    <input id="tipo" name="tipo" type="hidden" value="TODO">
 						    <input id="dia" name="dia" type="hidden" value="AYER">
 
-						    <button type="submit" name="Generar" role="button" class="btn btn-outline-success btn-sm" value="SI">Obliagtorias (Todo)</button>
+						    <button type="submit" name="Generar" role="button" class="btn btn-outline-success btn-sm" value="SI">Obligatorias (Todo)</button>
 							</form>
 			      </td>
 			      <td style="width:16%;" align="center">	
@@ -442,7 +442,7 @@
 						    <input id="tipo" name="tipo" type="hidden" value="TODO">
 						    <input id="dia" name="dia" type="hidden" value="AYER">
 
-						    <button type="submit" name="Generar" role="button" class="btn btn-outline-danger btn-sm" value="SI">Unica Obliagtorias (Todo)</button>
+						    <button type="submit" name="Generar" role="button" class="btn btn-outline-danger btn-sm" value="SI">Unica Obligatorias (Todo)</button>
 							</form>
 			      </td>
 			      <td style="width:20%;" align="center">	
@@ -477,7 +477,7 @@
 						    <input id="tipo" name="tipo" type="hidden" value="DOLARIZADO">
 						    <input id="dia" name="dia" type="hidden" value="AYER">
 
-						    <button type="submit" name="Generar" role="button" class="btn btn-outline-success btn-sm" value="SI">Obliagtorias ($)</button>
+						    <button type="submit" name="Generar" role="button" class="btn btn-outline-success btn-sm" value="SI">Obligatorias ($)</button>
 							</form>
 			      </td>
 			      <td style="width:16%;" align="center">
@@ -487,7 +487,7 @@
 						    <input id="tipo" name="tipo" type="hidden" value="DOLARIZADO">
 						    <input id="dia" name="dia" type="hidden" value="AYER">
 
-						    <button type="submit" name="Generar" role="button" class="btn btn-outline-danger btn-sm" value="SI">Unica Obliagtorias ($)</button>
+						    <button type="submit" name="Generar" role="button" class="btn btn-outline-danger btn-sm" value="SI">Unica Obligatorias ($)</button>
 							</form>
 			      </td>
 			      <td style="width:16%;" align="center">	
@@ -522,7 +522,7 @@
 						    <input id="tipo" name="tipo" type="hidden" value="NO DOLARIZADO">
 						    <input id="dia" name="dia" type="hidden" value="AYER">
 
-						    <button type="submit" name="Generar" role="button" class="btn btn-outline-success btn-sm" value="SI">Obliagtorias (NO $)</button>
+						    <button type="submit" name="Generar" role="button" class="btn btn-outline-success btn-sm" value="SI">Obligatorias (NO $)</button>
 							</form>
 			      </td>
 			      <td style="width:16%;" align="center">	
@@ -532,7 +532,7 @@
 						    <input id="tipo" name="tipo" type="hidden" value="NO DOLARIZADO">
 						    <input id="dia" name="dia" type="hidden" value="AYER">
 
-						    <button type="submit" name="Generar" role="button" class="btn btn-outline-danger btn-sm" value="SI">Unica Obliagtorias (NO $)</button>
+						    <button type="submit" name="Generar" role="button" class="btn btn-outline-danger btn-sm" value="SI">Unica Obligatorias (NO $)</button>
 							</form>
 			      </td>
 			     	<td style="width:16%;" align="center">	
