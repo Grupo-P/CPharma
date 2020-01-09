@@ -68,18 +68,21 @@
 		display: inline;
 		margin:-2px;
     border-radius: 25px;
+    background-color: white;
 	}
 	.etq thead{
-		border-top: 5px solid #17a2b8;
-		border-right: 5px solid #17a2b8;
-		border-left: 5px solid #17a2b8;
+		border-top: 5px solid #dc3545;
+		border-right: 5px solid #dc3545;
+		border-left: 5px solid #dc3545;
 		border-radius: 25px;
+    background-color: white;
 	}
 	.etq tbody{
-		border-bottom: 5px solid #17a2b8;
-		border-right: 5px solid #17a2b8;
-		border-left: 5px solid #17a2b8;
+		border-bottom: 5px solid #dc3545;
+		border-right: 5px solid #dc3545;
+		border-left: 5px solid #dc3545;
 		border-radius: 25px;
+    background-color: white;
 	}
 	.rowCenter{
 		width: 16cm;
@@ -95,13 +98,13 @@
 		font-size: 1.1em;
 	}
 	.descripcion{
-		height: 3cm;
+		height: 2.5cm;
 	}
 	.rowDer{
-		height: 2cm;
+		height: 1.5cm;
 	}
 	.rowIzq{
-		height: 2cm;
+		height: 1.5cm;
 	}
 	.centrado{
 		text-align: center;
@@ -116,15 +119,23 @@
 		text-transform: uppercase;
 	}
 	.aumento{
-		font-size: 1.8em;
+		font-size: 1.6em;
 	}
   .preciopromo{
-    color: red;
+    color: #dc3545;
   }
   .divPromo{
     width: 15cm;
-    border: 15px solid #17a2b8;
+    border: 15px solid #dc3545;
     border-radius: 25px;
+    background-color: #dc3545;
+  }
+  .MensajePromo{
+    color: white;
+    background-color: #dc3545;
+    width: 100%;
+    font-size: 2em;
+    text-align: center;
   }
 </style>
 
@@ -254,10 +265,11 @@
               }
               else{
                 var nuevoDiv = '<div class="divPromo">';
+                nuevoDiv += '<p class="MensajePromo"><strong>PRECIO ESPECIAL</strong></p>';
                 nuevoDiv += respuesta
                 nuevoDiv += '</div>';
             	 	var contenedor = $("#DivEtiquetas").html();
-								$("#DivEtiquetas").html(contenedor+nuevoDiv);
+								$("#DivEtiquetas").html(contenedor+nuevoDiv+'<br>');
               }
             }
            });
