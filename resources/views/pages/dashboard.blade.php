@@ -835,7 +835,7 @@
       <div class="card-body text-left bg-danger">
         <h3 class="card-title">
           <span class="card-text text-white">
-            <i class="fas fa-balance-scale"></i>
+            <i class="fas fa-balance-scale-left"></i>
             <?php
             echo ''.$movimientos;
           ?>            
