@@ -127,6 +127,10 @@
 	  include(app_path().'\functions\querys_mysql.php');
 	  include(app_path().'\functions\querys_sqlserver.php');
 
+	  $clasificacion='OBLIGATORIO ETIQUETAR';
+	  $tipo = 'DOLARIZADO';
+	  $dia = 'AYER';
+
     $SedeConnection = 'FTN';//FG_Mi_Ubicacion();
     $RutaUrl = FG_Mi_Ubicacion();
 
@@ -172,6 +176,9 @@
 @section('scriptsPie')
   <script type="text/javascript">
     const SedeConnectionJs = '<?php echo $RutaUrl;?>'
+    const clasificacion = '<?php echo $clasificacion;?>'
+    const tipo = '<?php echo $tipo;?>'
+    const dia = '<?php echo $dia;?>'
   </script>
 
   <script>
@@ -225,6 +232,9 @@
 
           var parametro = {
           	"IdArticulo":ArrJsCB[indiceIdScan],
+          	"clasificacion":clasificacion,
+          	"tipo":tipo,
+          	"dia":dia
           };
 
           //Incio Armado tablaResuldado

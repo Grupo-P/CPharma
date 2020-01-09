@@ -5,7 +5,10 @@
   include('C:\xampp\htdocs\CPharma\app\functions\querys_sqlserver.php');
 
   $IdArticulo = $_POST["IdArticulo"];
-  $Etiqueta = FG_Generer_Etiqueta_Unica($IdArticulo,'OBLIGATORIO ETIQUETAR','DOLARIZADO','AYER');
+  $clasificacion = $_POST["clasificacion"];
+  $tipo = $_POST["tipo"];
+  $dia = $_POST["dia"];
+  $Etiqueta = FG_Generer_Etiqueta_Unica($IdArticulo,$clasificacion,$tipo,$dia);
   echo''.$Etiqueta;
 ?>
 <?php
