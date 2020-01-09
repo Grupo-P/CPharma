@@ -161,6 +161,35 @@
     $sql1 = RCPQ_Lista_Articulos_Descripcion();
     $ArtJson = FG_Armar_Json($sql1,$SedeConnection);
 	?>
+    <!-- Modal Box -->
+    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header text-white bg-info">
+            <h2 class="modal-title" id="exampleModalCenterTitle"><i class="fas fa-tag"></i> Frase de promocion</h2>
+            <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="modo_opciones link-opc" id="opc_1">
+              <h3><i class="fas fa-tag aum-icon-lup"></i> PRECIO ESPECIAL</h3>
+            </div>
+            <div class="modo_opciones link-opc" id="opc_2">
+              <h3><i class="fas fa-tag aum-icon-lup"></i> ARTICULO NUEVO</h3>
+            </div>
+            <div class="modo_opciones link-opc" id="opc_3">
+              <h3><i class="fas fa-tag aum-icon-lup"></i> PRECIO OFERTA</h3>
+            </div>
+            <div class="modo_opciones link-opc" id="opc_4">
+              <h3><i class="fas fa-tag aum-icon-lup"></i> ARTICULO EN PROMOCION</h3>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- / Modal Box -->
+
     <table class="table table-borderless col-12">
       <thead class="center">
         <tr>
@@ -171,7 +200,7 @@
       </thead>
       <tbody>
         <tr class="bg-white" style="border: 4px solid #17a2b8;">
-          <td align="center" class="text-success"><h1><i class="fas fa-tag aum-icon-cod"></i></h1></td>
+          <td align="center" class="text-success"><h1><i class="fas fa-tag aum-icon-cod" id="btn_selector"></i></h1></td>
           <td align="center" style="border: 4px solid #17a2b8;">
             <input id="inputCodBar" type="text" name="CodBar" autofocus="autofocus">
           </td>
@@ -195,6 +224,7 @@
   <script type="text/javascript">
     const SedeConnectionJs = '<?php echo $RutaUrl;?>'
     const tipo = '<?php echo $tipo;?>'
+    var FrasePromo = '';
   </script>
 
   <script>
@@ -220,6 +250,21 @@
         break;
       }
     }
+
+    function updateModalBox(modo_selec) {
+      if (modo_selec == 1) {
+        FrasePromo = 'PRECIO ESPECIAL';
+      }
+      else if (modo_selec == 2) {
+        FrasePromo = 'ARTICULO NUEVO';
+      }
+      else if (modo_selec == 3) {
+        FrasePromo = 'PRECIO OFERTA';
+      }
+      else if (modo_selec == 4) {
+        FrasePromo = 'ARTICULO EN PROMOCION';
+      }
+    }
   </script>
 
 	<script>
@@ -229,6 +274,64 @@
 		$('#inputCodBar').attr("placeholder", "Haga scan o escriba el codigo de barra");
 		$('#inputCodBar').attr("onblur", "this.placeholder = 'Haga scan o escriba el codigo de barra'");
 		$('#inputCodBar').attr("onfocus", "this.placeholder = ''");
+
+    var modal = document.getElementById('exampleModalCenter');
+    var btn = document.getElementById("btn_selector");
+    var span = document.getElementsByClassName("close")[0];
+    var opc_selec = 1;
+    updateModalBox(opc_selec);
+
+    btn.onclick = function() {
+      $('#exampleModalCenter').modal('show');
+    }
+    span.onclick = function() {
+      $('#exampleModalCenter').modal('hide');
+    }
+    window.onclick = function(event) {
+      if (event.target == modal) {
+        $('#exampleModalCenter').modal('hide');
+      }
+    }
+    $('#opc_1').click(function(e) {
+      if (opc_selec != 1){
+        opc_selec = 1;
+        $('#exampleModalCenter').modal('hide');
+        updateModalBox(opc_selec);
+      }
+      else {
+        $('#exampleModalCenter').modal('hide');
+      }
+    });
+    $('#opc_2').click(function(e) {
+      if (opc_selec != 2){
+        opc_selec = 2;
+        $('#exampleModalCenter').modal('hide');
+        updateModalBox(opc_selec);
+      }
+      else {
+        $('#exampleModalCenter').modal('hide');
+      }
+    });
+    $('#opc_3').click(function(e) {
+      if (opc_selec != 3){
+        opc_selec = 3;
+        $('#exampleModalCenter').modal('hide');
+        updateModalBox(opc_selec);
+      }
+      else {
+        $('#exampleModalCenter').modal('hide');
+      }
+    });
+    $('#opc_4').click(function(e) {
+      if (opc_selec != 4){
+        opc_selec = 4;
+        $('#exampleModalCenter').modal('hide');
+        updateModalBox(opc_selec);
+      }
+      else {
+        $('#exampleModalCenter').modal('hide');
+      }
+    });
 
 		$('#inputCodBar').keyup(function(e){
 	    if(e.keyCode == 13) {
@@ -265,7 +368,7 @@
               }
               else{
                 var nuevoDiv = '<div class="divPromo">';
-                nuevoDiv += '<p class="MensajePromo"><strong>PRECIO ESPECIAL</strong></p>';
+                nuevoDiv += '<p class="MensajePromo"><strong>'+FrasePromo+'</strong></p>';
                 nuevoDiv += respuesta
                 nuevoDiv += '</div>';
             	 	var contenedor = $("#DivEtiquetas").html();
