@@ -20,8 +20,6 @@
   	$conn = FG_Conectar_Smartpharma($SedeConnection);
   	$connCPharma = FG_Conectar_CPharma();
   	$arraySugeridos = array();
-  	$CuentaCard = 0;
-		$CuentaEtiqueta = 0;
 		$Etiqueta = '';	
 
   	$FHoy = date("Y-m-d");
@@ -51,29 +49,12 @@
 
 		    	if(($Dolarizado=='SI')&&($tipo=='DOLARIZADO')){
 						$Etiqueta = FG_Etiqueta_Unica($conn,$connCPharma,$IdArticulo,$Dolarizado,true,$FechaCambio);
-						if( !empty($Etiqueta) ){
-							$CuentaCard++;
-							$CuentaEtiqueta++;
-						}
 					}
 					else if(($Dolarizado=='NO')&&($tipo!='DOLARIZADO')){
 						$Etiqueta = FG_Etiqueta_Unica($conn,$connCPharma,$IdArticulo,$Dolarizado,true,$FechaCambio);
-						if( !empty($Etiqueta) ){
-							$CuentaCard++;
-							$CuentaEtiqueta++;
-						}
 					}
 					else if($tipo=='TODO'){
 						$Etiqueta = FG_Etiqueta_Unica($conn,$connCPharma,$IdArticulo,$Dolarizado,true,$FechaCambio);
-						if( !empty($Etiqueta) ){
-							$CuentaCard++;
-							$CuentaEtiqueta++;
-						}
-					}
-
-					if($CuentaCard == 3){
-						echo'<br>';
-						$CuentaCard = 0;
 					}
 		    }
 	   	}
@@ -137,7 +118,7 @@
 					}
 					
 					$Etiqueta = $Etiqueta.'
-						<table class="etq">
+						<table class="etq" style="display: inline;">
 							<thead class="etq">
 								<tr>
 									<td class="centrado titulo rowCenter" colspan="2">
@@ -202,7 +183,7 @@
 				}
 				
 				$Etiqueta = $Etiqueta.'
-					<table class="etq">
+					<table class="etq" style="display: inline;">
 						<thead class="etq">
 							<tr>
 								<td class="centrado titulo rowCenter" colspan="2">
