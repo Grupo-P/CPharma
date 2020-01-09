@@ -147,7 +147,7 @@
 									<td class="izquierda rowIzq rowIzqA aumento">
 										<strong>Total a Pagar Bs.</strong>
 									</td>
-									<td class="derecha rowDer rowDerA aumento">
+									<td class="derecha rowDer rowDerA aumento preciopromo">
 										<strong>
 										'.number_format ($PrecioHoy,2,"," ,"." ).'
 										</strong>
@@ -196,7 +196,7 @@
 								<td class="izquierda rowIzq rowIzqA aumento">
 									<strong>Total a Pagar Bs.</strong>
 								</td>
-								<td class="derecha rowDer rowDerA aumento">
+								<td class="derecha rowDer rowDerA aumento preciopromo">
 									<strong>
 									'.number_format ($PrecioHoy,2,"," ,"." ).'
 									</strong>

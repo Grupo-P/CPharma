@@ -118,6 +118,14 @@
 	.aumento{
 		font-size: 1.8em;
 	}
+  .preciopromo{
+    color: red;
+  }
+  .divPromo{
+    width: 15cm;
+    border: 15px solid #17a2b8;
+    border-radius: 25px;
+  }
 </style>
 
 @section('content')
@@ -245,8 +253,11 @@
               	$("#MsnError").html(respuesta);
               }
               else{
-            	 	var contenedor = $("#DivEtiquetas").html();	
-								$("#DivEtiquetas").html(contenedor+respuesta);
+                var nuevoDiv = '<div class="divPromo">';
+                nuevoDiv += respuesta
+                nuevoDiv += '</div>';
+            	 	var contenedor = $("#DivEtiquetas").html();
+								$("#DivEtiquetas").html(contenedor+nuevoDiv);
               }
             }
            });
