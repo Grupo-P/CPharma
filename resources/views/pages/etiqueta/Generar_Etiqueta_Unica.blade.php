@@ -6,64 +6,117 @@
 
 <style>
 	* {
-      box-sizing: border-box;
-    }
-    .autocomplete {
-      position: relative;
-      display: inline-block;
-    }
-    input {
-      border: 1px solid transparent;
-      background-color: #fff;
-      border-radius: 5px;
-      padding: 10px;
-      font-size: 16px;
-    }
-    input[type=text] {
-    	text-align: center;
-    	font-size: 1.6em;
-      background-color: #fff;
-      width: 100%;
-      height: 50px;
-    }
-    input[type=text]:focus {
-		 	outline: 0;
-    }
-    .autocomplete-items {
-      position: absolute;
-      border: 1px solid #d4d4d4;
-      border-bottom: none;
-      border-top: none;
-      z-index: 99;
-      top: 100%;
-      left: 0;
-      right: 0;
-    }
-    .autocomplete-items div {
-      padding: 10px;
-      cursor: pointer;
-      background-color: #fff; 
-      border-bottom: 1px solid #d4d4d4; 
-    }
-    .autocomplete-items div:hover {
-      background-color: #e9e9e9; 
-    }
-    .autocomplete-active {
-      background-color: #17a2b8 !important; 
-      color: #ffffff; 
-    }
-		.center th {
-	    vertical-align: middle;
-	    text-align: center;
-	  }
-	  .aum-icon-lup {
-    	text-align: center;
-    	font-size: 1em;
-    }
-    .aum-icon-cod {
-      text-align: center;
-      font-size: 1.2em;
-    }
+    box-sizing: border-box;
+  }
+  .autocomplete {
+    position: relative;
+    display: inline-block;
+  }
+  input {
+    border: 1px solid transparent;
+    background-color: #fff;
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 16px;
+  }
+  input[type=text] {
+  	text-align: center;
+  	font-size: 1.6em;
+    background-color: #fff;
+    width: 100%;
+    height: 50px;
+  }
+  input[type=text]:focus {
+	 	outline: 0;
+  }
+  .autocomplete-items {
+    position: absolute;
+    border: 1px solid #d4d4d4;
+    border-bottom: none;
+    border-top: none;
+    z-index: 99;
+    top: 100%;
+    left: 0;
+    right: 0;
+  }
+  .autocomplete-items div {
+    padding: 10px;
+    cursor: pointer;
+    background-color: #fff; 
+    border-bottom: 1px solid #d4d4d4; 
+  }
+  .autocomplete-items div:hover {
+    background-color: #e9e9e9; 
+  }
+  .autocomplete-active {
+    background-color: #17a2b8 !important; 
+    color: #ffffff; 
+  }
+	.center th {
+    vertical-align: middle;
+    text-align: center;
+  }
+  .aum-icon-lup {
+  	text-align: center;
+  	font-size: 1em;
+  }
+  .aum-icon-cod {
+    text-align: center;
+    font-size: 1.2em;
+  }
+	.etq table{
+		display: inline;
+		margin:-2px;
+	}
+	.etq thead{
+		border-top: 1px solid black;
+		border-right: 1px solid black;
+		border-left: 1px solid black;
+		border-radius: 0px;
+	}
+	.etq tbody{
+		border-bottom: 1px solid black;
+		border-right: 1px solid black;
+		border-left: 1px solid black;
+		border-radius: 0px;
+	}
+	.rowCenter{
+		width: 8cm;
+	}
+	.rowIzqA{
+		width: 5cm;
+	}
+	.rowDerA{
+		width: 3cm;
+	}
+	.titulo{
+		height: 0.5cm;
+		font-size: 0.8em;
+	}
+	.descripcion{
+		height: 2cm;
+	}
+	.rowDer{
+		height: 1cm;
+	}
+	.rowIzq{
+		height: 1cm;
+	}
+	.centrado{
+		text-align: center;
+		text-transform: uppercase;
+	}
+	.derecha{
+		text-align: right;
+		text-transform: uppercase;
+	}
+	.izquierda{
+		text-align: left;
+		text-transform: uppercase;
+	}
+	.aumento{
+		font-size: 1.1em;
+	}
 </style>
 
 @section('content')
@@ -181,13 +234,21 @@
             type: "POST",
             success: function(data) {
               var respuesta = data;
-              $("#MsnError").html(respuesta);
+              var letras = respuesta.substr(0,2);
+
+              if(letras=='EL'){
+              	$("#MsnError").html(respuesta);
+              }
+              else{
+            	 	var contenedor = $("#DivEtiquetas").html();
+ 								$("#DivEtiquetas").html(contenedor+respuesta);
+              }
             }
            });
           //Fin Armado tablaResuldado
         }
         else {
-          
+          $("#MsnError").html('NO SE ENCONTRARON RESULTADOS');
         }
       }   
     });

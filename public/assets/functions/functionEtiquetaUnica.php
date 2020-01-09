@@ -4,8 +4,7 @@
   include('C:\xampp\htdocs\CPharma\app\functions\querys_mysql.php');
   include('C:\xampp\htdocs\CPharma\app\functions\querys_sqlserver.php');
 
-  //$IdArticulo = $_POST["IdArticulo"];
-  $IdArticulo = '56258';
+  $IdArticulo = $_POST["IdArticulo"];
   $Etiqueta = FG_Generer_Etiqueta_Unica($IdArticulo,'OBLIGATORIO ETIQUETAR','DOLARIZADO','AYER');
   echo''.$Etiqueta;
 ?>
@@ -138,15 +137,15 @@
 					}
 					
 					$Etiqueta = $Etiqueta.'
-						<table>
-							<thead>
+						<table class="etq">
+							<thead class="etq">
 								<tr>
 									<td class="centrado titulo rowCenter" colspan="2">
 										Código: '.$CodigoBarra.'
 									</td>
 								</tr>	
 							</thead>
-							<tbody>
+							<tbody class="etq">
 								<tr rowspan="2">
 									<td class="centrado descripcion aumento rowCenter" colspan="2">
 										<strong>'.$Descripcion.'</strong> 
@@ -203,15 +202,15 @@
 				}
 				
 				$Etiqueta = $Etiqueta.'
-					<table>
-						<thead>
+					<table class="etq">
+						<thead class="etq">
 							<tr>
 								<td class="centrado titulo rowCenter" colspan="2">
 									Código: '.$CodigoBarra.'
 								</td>
 							</tr>	
 						</thead>
-						<tbody>
+						<tbody class="etq">
 							<tr rowspan="2">
 								<td class="centrado descripcion aumento rowCenter" colspan="2">
 									<strong>'.$Descripcion.'</strong> 
