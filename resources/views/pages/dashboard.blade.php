@@ -843,7 +843,10 @@
           <span class="card-text text-white">
             <i class="fas fa-balance-scale-left"></i>
             <?php
-            echo 'Saldo actual: '. number_format($movimientosBs, 2, ',', '.') . " " . SigVe;
+            echo 'Saldo actual: '. number_format(DB::table('ts_movimientos')
+              ->where('tasa_ventas_id', 1)
+              ->orderBy('id', 'desc')
+              ->value('saldo_actual'), 2, ',', '.') . " " . SigVe;
           ?>            
           </span>
         </h3>
@@ -864,7 +867,10 @@
           <span class="card-text text-white">
             <i class="fas fa-balance-scale"></i>
             <?php
-            echo 'Saldo actual: ' . number_format($movimientosDs, 2, ',', '.') . " " . SigDolar;
+            echo 'Saldo actual: ' . number_format(DB::table('ts_movimientos')
+              ->where('tasa_ventas_id', 2)
+              ->orderBy('id', 'desc')
+              ->value('saldo_actual'), 2, ',', '.') . " " . SigDolar;
           ?>            
           </span>
         </h3>
