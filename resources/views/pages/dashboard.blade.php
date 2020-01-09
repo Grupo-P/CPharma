@@ -846,7 +846,8 @@
             echo 'Saldo actual: '. number_format(DB::table('ts_movimientos')
               ->where('tasa_ventas_id', 1)
               ->orderBy('id', 'desc')
-              ->value('saldo_actual'), 2, ',', '.') . " " . SigVe;
+              ->first()
+              ->saldo_actual, 2, ',', '.') . " " . SigVe;
           ?>            
           </span>
         </h3>
@@ -870,7 +871,8 @@
             echo 'Saldo actual: ' . number_format(DB::table('ts_movimientos')
               ->where('tasa_ventas_id', 2)
               ->orderBy('id', 'desc')
-              ->value('saldo_actual'), 2, ',', '.') . " " . SigDolar;
+              ->first()
+              ->saldo_actual, 2, ',', '.') . " " . SigDolar;
           ?>            
           </span>
         </h3>
