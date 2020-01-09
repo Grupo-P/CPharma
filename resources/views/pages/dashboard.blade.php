@@ -39,7 +39,13 @@
     $practicas = DB::table('rh_practicas')->count();
 
     //-------------------- VARIABLES TESORERIA --------------------//
-    $movimientos = DB::table('ts_movimientos')->count();
+    $movimientosBs = DB::table('ts_movimientos')
+    ->where('tasa_ventas_id', 1)
+    ->count();
+
+    $movimientosDs = DB::table('ts_movimientos')
+    ->where('tasa_ventas_id', 2)
+    ->count();
 
   /*TASA DOLAR VENTA*/
     $Tasa = DB::table('tasa_ventas')->where('moneda', 'Dolar')->value('tasa');
@@ -837,7 +843,7 @@
           <span class="card-text text-white">
             <i class="fas fa-balance-scale-left"></i>
             <?php
-            echo ''.$movimientos;
+            echo ''.$movimientosBs;
           ?>            
           </span>
         </h3>
@@ -848,7 +854,7 @@
         </p>
       </div>
       <div class="card-footer bg-transparent border-danger text-right">
-        <a href="/movimientos" class="btn btn-outline-danger btn-sm">Visualizar</a>
+        <a href="/movimientos?tasa_ventas_id=1" class="btn btn-outline-danger btn-sm">Visualizar</a>
       </div>    
     </div>
 
@@ -858,7 +864,7 @@
           <span class="card-text text-white">
             <i class="fas fa-balance-scale"></i>
             <?php
-            echo ''.$movimientos;
+            echo ''.$movimientosDs;
           ?>            
           </span>
         </h3>
@@ -869,7 +875,7 @@
         </p>
       </div>
       <div class="card-footer bg-transparent border-success text-right">
-        <a href="/movimientos" class="btn btn-outline-success btn-sm">Visualizar</a>
+        <a href="/movimientos?tasa_ventas_id=2" class="btn btn-outline-success btn-sm">Visualizar</a>
       </div>    
     </div>
 

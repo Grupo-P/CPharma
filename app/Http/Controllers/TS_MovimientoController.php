@@ -12,8 +12,8 @@ class TS_MovimientoController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function index() {
-        $movimientos = TS_Movimiento::all();
+    public function index(Request $request) {
+        $movimientos = TS_Movimiento::where('tasa_ventas_id', $request->tasa_ventas_id)->get();
         return view('pages.TS.movimiento.index', compact('movimientos'));
     }
 

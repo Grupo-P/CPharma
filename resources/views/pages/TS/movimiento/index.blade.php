@@ -2,6 +2,12 @@
 
 @section('title', 'Movimientos')
 
+@section('scriptsHead')
+  <style>
+    th, td {text-align: center;}
+  </style>
+@endsection
+
 @section('content')
   <!-- Modal Guardar -->
   @if (session('Saved'))
@@ -92,18 +98,19 @@
 
     @php
       include(app_path().'\functions\functions.php');
+      $cont = 0;
     @endphp
 
     <tbody>
     @foreach($movimientos as $movimiento)
       <tr>
-        <th class="text-center">{{$movimiento->id}}</th>
-        <td class="text-center">{{FG_Limpiar_Texto($movimiento->concepto)}}</td>
-        <td class="text-center">{{number_format($movimiento->ingresos, 2, ',', '.')}}</td>
-        <td class="text-center">{{number_format($movimiento->egresos, 2, ',', '.')}}</td>
-        <td class="text-center">{{number_format($movimiento->saldo_actual, 2, ',', '.')}}</td>
-        <td class="text-center">{{date("d-m-Y h:i a", strtotime($movimiento->created_at))}}</td>
-        <td class="text-center">{{$movimiento->user}}</td>
+        <th>{{intval(++$cont)}}</th>
+        <td>{{FG_Limpiar_Texto($movimiento->concepto)}}</td>
+        <td>{{number_format($movimiento->ingresos, 2, ',', '.')}}</td>
+        <td>{{number_format($movimiento->egresos, 2, ',', '.')}}</td>
+        <td>{{number_format($movimiento->saldo_actual, 2, ',', '.')}}</td>
+        <td>{{date("d-m-Y h:i a", strtotime($movimiento->created_at))}}</td>
+        <td>{{$movimiento->user}}</td>
       </tr>
     @endforeach
     </tbody>
