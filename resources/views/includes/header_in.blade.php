@@ -538,7 +538,7 @@
 
 <!-- TESORERIA -->
 <?php
-  if((Auth::user()->departamento == 'TESORERIA') || (Auth::user()->departamento == 'TECNOLOGIA')) {
+  if(Auth::user()->departamento == 'TESORERIA') {
 ?>
   <div class="btn-group navbar-brand">
     <button type="button" class="btn btn-outline-info dropdown-toggle textoI" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
