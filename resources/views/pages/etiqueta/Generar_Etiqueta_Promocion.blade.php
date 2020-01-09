@@ -134,7 +134,7 @@
     color: white;
     background-color: #dc3545;
     width: 100%;
-    font-size: 2em;
+    font-size: 2.5em;
     text-align: center;
   }
 </style>
