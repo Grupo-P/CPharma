@@ -59,6 +59,9 @@
 					else if($tipo=='TODO'){
 						$Etiqueta = FG_Etiqueta_Unica($conn,$connCPharma,$IdArticulo,$Dolarizado,true,$FechaCambio);
 					}
+					else{
+						$Etiqueta = 'EL ARTICULO NO PERTENECE A LA CATEGORIA SELECCIONADA';
+					}
 		    }
 	   	}
 		}
