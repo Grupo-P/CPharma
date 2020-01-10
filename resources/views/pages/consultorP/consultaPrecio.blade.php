@@ -151,7 +151,7 @@
     </table>
     
     <div class="row justify-content-center">
-      <div id="carouselExampleIndicators" class="carousel slide d-block w-75 bg-white" data-ride="carousel">
+      <div id="carouselExampleIndicators" class="carousel slide d-block w-75 bg-white" data-ride="carousel" data-wrap="true" data-interval="3000" data-pause="false">
         <div class="carousel-inner" id="divPromocion">
         </div>
         <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
@@ -405,7 +405,9 @@
 
     $(document).ready(function(){
       $('#carouselExampleIndicators').carousel({
-          interval: 3000
+          interval: 3000,
+          cycle: true,
+          pause: null
       });
     });
 	</script>
