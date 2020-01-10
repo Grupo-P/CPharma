@@ -141,6 +141,9 @@
 
     $sql1 = RCPQ_Lista_Articulos_Descripcion();
     $ArtJson = FG_Armar_Json($sql1,$SedeConnection);
+
+    $concatedado = ''.$clasificacion.' '.$tipo.' UNICA';
+    FG_Guardar_Auditoria('GENERAR','ETIQUETA',$concatedado);
 	?>
     <table class="table table-borderless col-12">
       <thead class="center">

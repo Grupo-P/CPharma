@@ -161,6 +161,9 @@
 
     $sql1 = RCPQ_Lista_Articulos_Descripcion();
     $ArtJson = FG_Armar_Json($sql1,$SedeConnection);
+
+    $concatedado = ''.$clasificacion.' '.$tipo.' PROMOCION';
+    FG_Guardar_Auditoria('GENERAR','ETIQUETA',$concatedado);
 	?>
     <!-- Modal Box -->
     <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
