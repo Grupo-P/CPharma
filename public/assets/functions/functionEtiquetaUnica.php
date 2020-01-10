@@ -6,7 +6,8 @@
 
   $IdArticulo = $_POST["IdArticulo"];
   $tipo = $_POST["tipo"];
-  $Etiqueta = FG_Generer_Etiqueta_Unica($IdArticulo,$tipo);
+ 	$clasificacion = $_POST["clasificacion"];
+  $Etiqueta = FG_Generer_Etiqueta_Unica($IdArticulo,$clasificacion,$tipo);
   echo''.$Etiqueta;
 ?>
 <?php
@@ -16,7 +17,7 @@
 		FUNCION: crea una conexion con la base de datos cpharma e ingresa datos
 		DESARROLLADO POR: SERGIO COVA
  	*/
-	function FG_Generer_Etiqueta_Unica($IdArticulo,$tipo) {
+	function FG_Generer_Etiqueta_Unica($IdArticulo,$clasificacion,$tipo) {
 		$SedeConnection = 'FTN';//FG_Mi_Ubicacion();
   	$conn = FG_Conectar_Smartpharma($SedeConnection);
   	$connCPharma = FG_Conectar_CPharma();
@@ -26,15 +27,11 @@
   	$FHoy = date("Y-m-d");
 		$FManana = date("Y-m-d",strtotime($FHoy."+1 days"));
 
-  	$result1 = $connCPharma->query("SELECT COUNT(*) AS Cuenta FROM etiquetas WHERE id_articulo = '$IdArticulo' AND clasificacion = 'OBLIGATORIO ETIQUETAR'");
+  	$result1 = $connCPharma->query("SELECT COUNT(*) AS Cuenta FROM etiquetas WHERE id_articulo = '$IdArticulo' AND clasificacion = '$clasificacion'");
 		$row1= $result1->fetch_assoc();
-		$CuentaObligatoria = $row1['Cuenta'];
+		$Cuenta = $row1['Cuenta'];
 
-		$result1 = $connCPharma->query("SELECT COUNT(*) AS Cuenta FROM etiquetas WHERE id_articulo = '$IdArticulo' AND clasificacion = 'ETIQUETABLE'");
-		$row1= $result1->fetch_assoc();
-		$CuentaEtiquetable = $row1['Cuenta'];
-
-		if( ($CuentaObligatoria==1) || ($CuentaEtiquetable==1) ){
+		if($Cuenta==1){
 
 			$sql3 = SQL_Es_Dolarizado($IdArticulo);
 			$result3 = sqlsrv_query($conn,$sql3);

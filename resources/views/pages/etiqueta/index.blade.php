@@ -414,7 +414,7 @@
 		<button class="btn btn-secondary btn-lg btn-lg dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
     	ETIQUETAS UNICAS
   	</button>
-  	<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+  	<div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
 			<table class="dropdown-item table table-striped table-borderless col-12 sortable" style="width: 100%;">
 		  	<thead class="thead-dark">
 			    <tr>
@@ -423,21 +423,43 @@
 				</thead>
 				<tbody>
 			  	<tr>
-		        <td style="width:40%;" align="center">
+		        <td style="width:16%;" align="center">
 							<form action="{{ url('/Generar_Etiqueta_Unica') }}" method="PRE" style="display: inline;" target="_blank">
 						  
+						    <input id="clasificacion" name="clasificacion" type="hidden" value="OBLIGATORIO ETIQUETAR">
 						    <input id="tipo" name="tipo" type="hidden" value="DOLARIZADO">
 
-						    <button type="submit" name="Generar" role="button" class="btn btn-outline-success btn-sm" value="SI">Dolarizadas ($)</button>
+						    <button type="submit" name="Generar" role="button" class="btn btn-outline-success btn-sm" value="SI">Obligatorias ($)</button>
 							</form>
 			      </td>
 
-			      <td style="width:40%;" align="center">	
+			      <td style="width:16%;" align="center">	
 							<form action="{{ url('/Generar_Etiqueta_Unica') }}" method="PRE" style="display: inline;" target="_blank">
 						  
+						    <input id="clasificacion" name="clasificacion" type="hidden" value="OBLIGATORIO ETIQUETAR">
 						    <input id="tipo" name="tipo" type="hidden" value="NO DOLARIZADO">
 
-						    <button type="submit" name="Generar" role="button" class="btn btn-outline-info btn-sm" value="SI">No Dolarizadas (NO $)</button>
+						    <button type="submit" name="Generar" role="button" class="btn btn-outline-success btn-sm" value="SI">Obligatorias (NO $)</button>
+							</form>
+			      </td>
+
+		        <td style="width:16%;" align="center">	
+							<form action="{{ url('/Generar_Etiqueta_Unica') }}" method="PRE" style="display: inline;" target="_blank">
+						  
+						    <input id="clasificacion" name="clasificacion" type="hidden" value="ETIQUETABLE">
+						    <input id="tipo" name="tipo" type="hidden" value="DOLARIZADO">
+						    
+						    <button type="submit" name="Generar" role="button" class="btn btn-outline-info btn-sm" value="SI">Etiquetables ($)</button>
+							</form>
+			      </td>
+
+			      <td style="width:16%;" align="center">	
+							<form action="{{ url('/Generar_Etiqueta_Unica') }}" method="PRE" style="display: inline;" target="_blank">
+						  
+						    <input id="clasificacion" name="clasificacion" type="hidden" value="ETIQUETABLE">
+						    <input id="tipo" name="tipo" type="hidden" value="NO DOLARIZADO">
+						    
+						    <button type="submit" name="Generar" role="button" class="btn btn-outline-info btn-sm" value="SI">Etiquetables (NO $)</button>
 							</form>
 			      </td>
 					</tr>

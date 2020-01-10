@@ -128,6 +128,7 @@
 	  include(app_path().'\functions\querys_sqlserver.php');
 
 		$tipo = $_GET['tipo'];
+    $clasificacion = $_GET['clasificacion'];
 
     $SedeConnection = 'FTN';//FG_Mi_Ubicacion();
     $RutaUrl = FG_Mi_Ubicacion();
@@ -175,6 +176,7 @@
   <script type="text/javascript">
     const SedeConnectionJs = '<?php echo $RutaUrl;?>'
     const tipo = '<?php echo $tipo;?>'
+    const clasificacion = '<?php echo $clasificacion;?>'
   </script>
 
   <script>
@@ -228,7 +230,8 @@
 
           var parametro = {
           	"IdArticulo":ArrJsCB[indiceIdScan],
-          	"tipo":tipo
+          	"tipo":tipo,
+            "clasificacion":clasificacion
           };
 
           //Incio Armado tablaResuldado
