@@ -814,9 +814,10 @@
       <i class="fas fa-user-secret"></i> Developer
     </button>
    <!--  {{ url('/testS') }} -->
+   <!-- {{ url('/ConsultorCompra') }} -->
     <div class="dropdown-menu">
       <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="{{ url('/ConsultorCompra') }}">     
+        <a class="nav-link CP-Links-Menu" href="{{ url('/Generar_Etiqueta_Unica') }}">  
           <span data-feather="home"></span>
           <i class="fa fa-box"></i>
           Test Sergio<span class="sr-only">(current)</span>

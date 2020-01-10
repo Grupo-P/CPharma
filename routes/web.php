@@ -165,6 +165,14 @@ Route::get('/Generar_Etiquetas_Todo', function() {
     return view('pages.etiqueta.Generar_Etiquetas_Todo');
 });
 
+Route::get('/Generar_Etiqueta_Unica', function() {
+    return view('pages.etiqueta.Generar_Etiqueta_Unica');
+});
+
+Route::get('/Generar_Etiqueta_Promocion', function() {
+    return view('pages.etiqueta.Generar_Etiqueta_Promocion');
+});
+
 Route::get('/SearchAjuste', function() {
     return view('pages.traslado.SearchAjuste');
 });

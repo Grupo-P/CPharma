@@ -82,6 +82,8 @@
 	';
 
 	FG_Generer_Etiquetas($clasificacion,$tipo,$dia);
+	$concatedado = ''.$clasificacion.' '.$tipo.' '.$dia;
+	FG_Guardar_Auditoria('GENERAR','ETIQUETA',$concatedado);
 	$FinCarga = new DateTime("now");
     $IntervalCarga = $InicioCarga->diff($FinCarga);
     echo'Tiempo de carga: '.$IntervalCarga->format("%Y-%M-%D %H:%I:%S");
