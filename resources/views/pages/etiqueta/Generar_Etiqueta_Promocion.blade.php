@@ -150,7 +150,7 @@
 		$tipo = $_GET['tipo'];
     $clasificacion = $_GET['clasificacion'];
 
-    $SedeConnection = 'FTN';//FG_Mi_Ubicacion();
+    $SedeConnection = FG_Mi_Ubicacion();
     $RutaUrl = FG_Mi_Ubicacion();
 
 	  $CodJson = '';
