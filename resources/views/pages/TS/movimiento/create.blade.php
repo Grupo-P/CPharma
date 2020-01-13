@@ -35,9 +35,9 @@
   </h1>
   <hr class="row align-items-start col-12">
 
-  <form action="/movimientos/?tasa_ventas_id={{$_GET["tasa_ventas_id"]}}" method="POST" style="display: inline;">  
-    @csrf
-    <button type="submit" name="Regresar" role="button" class="btn btn-outline-info btn-sm"data-placement="top">
+  <form action="/movimientos/" method="GET" style="display: inline;">  
+    <input type="hidden" name="tasa_ventas_id" value="{{$_GET["tasa_ventas_id"]}}">
+    <button type="submit" role="button" class="btn btn-outline-info btn-sm"data-placement="top">
       <i class="fa fa-reply">&nbsp;Regresar</i>
     </button>
   </form>
