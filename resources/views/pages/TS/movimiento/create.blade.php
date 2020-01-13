@@ -1,6 +1,6 @@
 @extends('layouts.model')
 
-@section('title', 'Crear candidato')
+@section('title', 'Crear movimiento')
 
 @section('content')
   <!-- Modal Guardar -->
@@ -19,61 +19,7 @@
           </div>
           <div class="modal-body">
             <h4 class="h6">
-              El candidato no fue almacenado
-            </h4>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-outline-success" data-dismiss="modal">Aceptar</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  @endif
-
-  <!-- Modal Cedula duplicada -->
-  @if(session('Error1'))
-    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title text-danger" id="exampleModalCenterTitle">
-              <i class="fas fa-exclamation-triangle text-danger"></i>
-              {{ session('Error') }}
-            </h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <h4 class="h6">
-              El candidato no fue almacenado, la cédula ya esta registrada
-            </h4>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-outline-success" data-dismiss="modal">Aceptar</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  @endif
-
-  <!-- Modal Correo duplicado -->
-  @if(session('Error2'))
-    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title text-danger" id="exampleModalCenterTitle">
-              <i class="fas fa-exclamation-triangle text-danger"></i>
-              {{ session('Error') }}
-            </h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <h4 class="h6">
-              El candidato no fue almacenado, el correo ya esta registrado
+              El movimiento no fue almacenado
             </h4>
           </div>
           <div class="modal-footer">
@@ -85,11 +31,11 @@
   @endif
 
   <h1 class="h5 text-info">
-    <i class="fas fa-plus"></i>&nbsp;Agregar candidato
+    <i class="fas fa-plus"></i>&nbsp;Agregar movimiento
   </h1>
   <hr class="row align-items-start col-12">
 
-  <form action="/candidatos/" method="POST" style="display: inline;">  
+  <form action="/movimientos/?tasa_ventas_id={{$_GET["tasa_ventas_id"]}}" method="POST" style="display: inline;">  
     @csrf
     <button type="submit" name="Regresar" role="button" class="btn btn-outline-info btn-sm"data-placement="top">
       <i class="fa fa-reply">&nbsp;Regresar</i>
@@ -98,7 +44,7 @@
 
   <br/><br/>
 
-  {!! Form::open(['route' => 'candidatos.store', 'method' => 'POST', 'id' => 'crear_candidato', 'class' => 'form-group']) !!}
+  {!! Form::open(['route' => 'movimientos.store', 'method' => 'POST', 'id' => 'crear_movimientos', 'class' => 'form-group']) !!}
     <fieldset>
       <table class="table table-borderless table-striped">
         <thead class="thead-dark">
@@ -216,7 +162,7 @@
 
           <tr>
             <th scope="row">{!! Form::label('experiencia_laboral', 'Experiencia laboral') !!}</th>
-            <td>{!! Form::textarea('experiencia_laboral', null, [ 'class' => 'form-control', 'placeholder' => 'Experiencia laboral previa del candidato', 'rows' => '3']) !!}</td>
+            <td>{!! Form::textarea('experiencia_laboral', null, [ 'class' => 'form-control', 'placeholder' => 'Experiencia laboral previa del movimientos', 'rows' => '3']) !!}</td>
           </tr>
 
           <tr>
@@ -226,7 +172,7 @@
 
           <tr>
             <th scope="row">{!! Form::label('observaciones', 'Observaciones') !!}</th>
-            <td>{!! Form::textarea('observaciones', null, [ 'class' => 'form-control', 'placeholder' => 'Detalles importantes del candidato', 'rows' => '3']) !!}</td>
+            <td>{!! Form::textarea('observaciones', null, [ 'class' => 'form-control', 'placeholder' => 'Detalles importantes del movimientos', 'rows' => '3']) !!}</td>
           </tr>
         </tbody>
       </table>
@@ -245,7 +191,7 @@
 
       //Objetos DOM JQuery
       var enviar = $('#enviar');
-      var crear_candidato = $('#crear_candidato');
+      var crear_movimientos = $('#crear_movimientos');
 
       enviar.click(function() {
 
@@ -257,7 +203,7 @@
 
       });
 
-      crear_candidato.submit(function(e) {
+      crear_movimientos.submit(function(e) {
 
         if((telefono_celular.value == '') && (telefono_habitacion.value == '')) {
           e.preventDefault();
