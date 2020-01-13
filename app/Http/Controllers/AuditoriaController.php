@@ -25,7 +25,7 @@ class AuditoriaController extends Controller
      */
     public function index()
     {
-        $auditorias =  Auditoria::orderBy('updated_at', 'desc')->get();
+        $auditorias =  Auditoria::orderBy('updated_at', 'desc')->take(500)->get();
         return view('pages.auditoria.index', compact('auditorias'));
     }
 

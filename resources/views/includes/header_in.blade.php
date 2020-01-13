@@ -242,6 +242,19 @@
           Etiquetas<span class="sr-only">(current)</span>
         </a>
       </li>
+      <?php
+        if(Auth::user()->role == 'SUPERVISOR'){
+      ?>
+        <li class="nav-item">
+          <a class="nav-link CP-Links-Menu" href="{{ url('/auditoria') }}">
+            <span data-feather="home"></span>
+            <i class="fas fa-search"></i>
+            Auditoria<span class="sr-only">(current)</span>
+          </a>
+        </li>
+      <?php
+        }
+      ?>
     </div>
   </div>
 <?php
