@@ -137,6 +137,14 @@
     font-size: 2.5em;
     text-align: center;
   }
+  /* cuando vayamos a imprimir ... */
+  @media print{
+    /* indicamos el salto de pagina */
+    .saltoDePagina{
+      display:block;
+      page-break-before:always;
+    }
+  }
 </style>
 
 @section('content')
@@ -230,6 +238,7 @@
     const tipo = '<?php echo $tipo;?>'
     const clasificacion = '<?php echo $clasificacion;?>'
     var FrasePromo = '';
+    var contador = 0;
   </script>
 
   <script>
@@ -373,12 +382,23 @@
               	$("#MsnError").html(respuesta);
               }
               else{
+                
                 var nuevoDiv = '<div class="divPromo">';
                 nuevoDiv += '<p class="MensajePromo"><strong>'+FrasePromo+'</strong></p>';
                 nuevoDiv += respuesta
                 nuevoDiv += '</div>';
             	 	var contenedor = $("#DivEtiquetas").html();
 								$("#DivEtiquetas").html(contenedor+nuevoDiv+'<br>');
+                
+                if(contador==1){
+                  var contenedor = $("#DivEtiquetas").html();
+                  var nuevoDiv = '<div class="saltoDePagina"></div>';
+                  $("#DivEtiquetas").html(contenedor+nuevoDiv);
+                  contador=0;
+                }
+                else{
+                  contador++;
+                }  
               }
             }
            });
