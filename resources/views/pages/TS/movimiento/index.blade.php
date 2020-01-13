@@ -62,7 +62,7 @@
   <table style="width:100%;" class="CP-stickyBar">
     <tr>
       <td style="width:10%;" align="center">
-        <a href="{{ url('/movimientos/create') }}" role="button" class="btn btn-outline-info btn-sm" 
+        <a href="{{ url('/movimientos/create?tasa_ventas_id=' . $_GET["tasa_ventas_id"]) }}" role="button" class="btn btn-outline-info btn-sm" 
         style="display: inline; text-align: left;">
         <i class="fa fa-plus"></i>
           Agregar
