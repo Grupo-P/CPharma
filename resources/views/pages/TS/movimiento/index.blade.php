@@ -90,7 +90,8 @@
         <th scope="col" class="stickyCP">Concepto</th>
         <th scope="col" class="stickyCP">Ingresos</th>
         <th scope="col" class="stickyCP">Egresos</th>
-        <th scope="col" class="stickyCP">Saldo</th>
+        <th scope="col" class="stickyCP">Saldo anterior</th>
+        <th scope="col" class="stickyCP">Saldo actual</th>
         <th scope="col" class="stickyCP">Fecha y hora</th>
         <th scope="col" class="stickyCP">Usuario</th>
       </tr>
@@ -108,6 +109,7 @@
         <td>{{FG_Limpiar_Texto($movimiento->concepto)}}</td>
         <td>{{number_format($movimiento->ingresos, 2, ',', '.')}}</td>
         <td>{{number_format($movimiento->egresos, 2, ',', '.')}}</td>
+        <td>{{number_format($movimiento->saldo_anterior, 2, ',', '.')}}</td>
         <td>{{number_format($movimiento->saldo_actual, 2, ',', '.')}}</td>
         <td>{{date("d-m-Y h:i a", strtotime($movimiento->created_at))}}</td>
         <td>{{$movimiento->user}}</td>
