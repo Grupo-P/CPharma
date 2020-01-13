@@ -39,6 +39,13 @@
     $practicas = DB::table('rh_practicas')->count();
 
     //-------------------- VARIABLES TESORERIA --------------------//
+    $movimientosBs = DB::table('ts_movimientos')
+    ->where('tasa_ventas_id', 1)
+    ->count();
+
+    $movimientosDs = DB::table('ts_movimientos')
+    ->where('tasa_ventas_id', 2)
+    ->count();
 
   /*TASA DOLAR VENTA*/
     $Tasa = DB::table('tasa_ventas')->where('moneda', 'Dolar')->value('tasa');
@@ -132,7 +139,7 @@
   <hr class="row align-items-start col-12">
 
 <?php
-	if((Auth::user()->departamento != 'VENTAS')&&(Auth::user()->departamento != 'RRHH')){
+	if((Auth::user()->departamento != 'VENTAS')&&(Auth::user()->departamento != 'RRHH')&&(Auth::user()->departamento != 'TESORERIA')){
 ?>
 <!-------------------------------------------------------------------------------->
 <!-- DESTACADOS -->
@@ -793,6 +800,132 @@
   }
 ?>
 <!-- VENTAS -->
+<!-------------------------------------------------------------------------------->
+<!-- TESORERIA -->
+<?php
+  if(Auth::user()->departamento == 'TESORERIA'){
+?>
+	<!-- Modal TESORERIA -->
+	<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  	<div class="modal-dialog modal-dialog-centered" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <h5 class="modal-title text-info" id="exampleModalCenterTitle"><i class="fas fa-bell text-info CP-beep"></i> Novedades</h5>
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	          <span aria-hidden="true">&times;</span>
+	        </button>
+	      </div>
+	      <div class="modal-body">
+	      	<label>Hola <b class="text-info">{{ Auth::user()->name }}</b>.</label>
+	      	<br/>
+	      	Estas usando<b class="text-info">{{$CPharmaVersion}}</b>, para el departamento de <b class="text-info">{{ Auth::user()->departamento }}</b>, esta version incluye las siguientes mejoras:<br/><br/></label>
+  			<ul style="list-style:none">
+        	<li class="card-text text-dark" style="display: inline;">
+					<i class="far fa-check-circle text-info" style="display: inline;"></i>
+					Desde ya esta disponible el modulo: 
+					<b class="text-info">Movimientos</b>!!
+  				</li>
+  			</ul>
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-outline-info" data-dismiss="modal">Aceptar</button>
+	      </div>
+	    </div>
+  	</div>
+	</div>
+	<!-- Modal TESORERIA -->
+
+	<!-- Dashboard TESORERIA-->
+	<div class="card-deck">
+    <div class="card border-danger mb-3" style="width: 14rem;">      
+      <div class="card-body text-left bg-danger">
+        <h3 class="card-title">
+          <span class="card-text text-white">
+            <i class="fas fa-balance-scale-left"></i>
+            <?php
+            $saldo_actualBs = DB::table('ts_movimientos')
+              ->where('tasa_ventas_id', 1)
+              ->orderBy('id', 'desc')
+              ->first();
+            
+            if(empty($saldo_actualBs)) {
+              	echo 'Saldo actual: '. number_format(0, 2, ',', '.') . " " . SigVe;
+              }
+              else {
+              	echo 'Saldo actual: '. number_format($saldo_actualBs->saldo_actual, 2, ',', '.') . " " . SigVe;
+              }
+          ?>            
+          </span>
+        </h3>
+        <p class="card-text text-white">
+        <?php 
+          echo 'Movimientos en bolivares registrados: ' . $movimientosBs;
+        ?>
+        </p>
+      </div>
+      <div class="card-footer bg-transparent border-danger text-right">
+        <a href="/movimientos?tasa_ventas_id=1" class="btn btn-outline-danger btn-sm">Visualizar</a>
+      </div>    
+    </div>
+
+    <div class="card border-success mb-3" style="width: 14rem;">      
+      <div class="card-body text-left bg-success">
+        <h3 class="card-title">
+          <span class="card-text text-white">
+            <i class="fas fa-balance-scale"></i>
+            <?php	
+            $saldo_actualDs = DB::table('ts_movimientos')
+              ->where('tasa_ventas_id', 2)
+              ->orderBy('id', 'desc')
+              ->first();
+
+              if(empty($saldo_actualDs)) {
+              	echo 'Saldo actual: ' . number_format(0, 2, ',', '.') . " " . SigDolar;
+              }
+              else {
+              	echo 'Saldo actual: ' . number_format($saldo_actualDs->saldo_actual, 2, ',', '.') . " " . SigDolar;
+              }
+          ?>            
+          </span>
+        </h3>
+        <p class="card-text text-white">
+        <?php 
+          echo 'Movimientos en dolares registrados: ' . $movimientosDs;
+        ?>
+        </p>
+      </div>
+      <div class="card-footer bg-transparent border-success text-right">
+        <a href="/movimientos?tasa_ventas_id=2" class="btn btn-outline-success btn-sm">Visualizar</a>
+      </div>    
+    </div>
+
+    <!-- Tasa Venta -->
+		<div class="card border-info mb-3" style="width: 14rem;">	  	
+  		<div class="card-body text-left bg-info">
+    		<h3 class="card-title">
+	    		<span class="card-text text-white">
+	    			<i class="fas fa-credit-card"></i>
+	    			<?php
+							echo 'Tasa Venta: '.$Tasa.' '.SigVe;
+						?>						
+	    		</span>
+    		</h3>
+    		<p class="card-text text-white">
+				<?php 
+					echo 'Ultima Actualizacion: '.$tasaVenta;
+				?>
+    		</p>
+  		</div>
+	  	<div class="card-footer bg-transparent border-info text-right">
+	  		<a href="/tasaVenta/" class="btn btn-outline-info btn-sm">Visualizar</a>
+	  	</div>
+		</div>
+  </div>
+	<!-- Dashboard TESORERIA-->
+<?php
+  }
+?>
+<!-- TESORERIA -->
 <!-------------------------------------------------------------------------------->
 <!-- RRHH -->
 <?php

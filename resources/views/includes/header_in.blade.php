@@ -15,7 +15,7 @@
 <!-------------------------------------------------------------------------------->
 <!-- AGENDA -->
 <?php
-  if((Auth::user()->departamento != 'VENTAS')&&(Auth::user()->departamento != 'RRHH')){
+  if((Auth::user()->departamento != 'VENTAS')&&(Auth::user()->departamento != 'RRHH')&&(Auth::user()->departamento != 'TESORERIA')){
 ?>
   <div class="btn-group navbar-brand">
     <button type="button" class="btn btn-outline-info dropdown-toggle textoI" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -548,6 +548,7 @@
   }
 ?>
 <!-- LÍDER DE TIENDA -->
+
 <!-------------------------------------------------------------------------------->
 <!-- GERENCIA -->
 <?php
@@ -662,6 +663,37 @@
   }
 ?>
 <!-- GERENCIA -->
+
+<!-- TESORERIA -->
+<?php
+  if((Auth::user()->departamento == 'TESORERIA') || (Auth::user()->departamento == 'GERENCIA')) {
+?>
+  <div class="btn-group navbar-brand">
+    <button type="button" class="btn btn-outline-info dropdown-toggle textoI" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      <i class="fas fa-donate"></i> Tesorería
+    </button>
+    <div class="dropdown-menu">
+      <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('/movimientos') }}">     
+          <span data-feather="home"></span>
+          <i class="fas fa-balance-scale"></i>
+          Movimientos<span class="sr-only">(current)</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('/tasaVenta') }}">
+          <span data-feather="home"></span>
+          <i class="fas fa-credit-card"></i>
+          Tasa de venta<span class="sr-only">(current)</span>
+        </a>
+      </li>
+    </div>
+  </div>
+<?php
+  }
+?>
+<!-- TESORERIA -->
+
 <!------------------------------------------------------------------------------->
 <!-- TECNOLOGIA -->
 <?php
