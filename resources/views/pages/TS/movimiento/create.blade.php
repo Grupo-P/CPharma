@@ -72,7 +72,10 @@
 
           <tr>
             <th scope="row">{!! Form::label('monto', 'Monto *', ['title' => 'Este campo es requerido']) !!}</th>
-            <td><input type="number" min="1" step="0.01" class="form-control" placeholder="2500.55" required autofocus></td>
+            <td>
+              <input type="number" name="monto" min="1" step="0.01" class="form-control" placeholder="2500.55" required autofocus>
+              <input type="hidden" name="tasa_ventas_id" value="{{$_GET["tasa_ventas_id"]}}">
+            </td>
           </tr>
 
           <tr>
