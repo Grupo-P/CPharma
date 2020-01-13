@@ -843,11 +843,17 @@
           <span class="card-text text-white">
             <i class="fas fa-balance-scale-left"></i>
             <?php
-            echo 'Saldo actual: '. number_format(DB::table('ts_movimientos')
+            $saldo_actualBs = DB::table('ts_movimientos')
               ->where('tasa_ventas_id', 1)
               ->orderBy('id', 'desc')
-              ->first()
-              ->saldo_actual, 2, ',', '.') . " " . SigVe;
+              ->first();
+            
+            if(empty($saldo_actualBs)) {
+              	echo 'Saldo actual: '. number_format(0, 2, ',', '.') . " " . SigVe;
+              }
+              else {
+              	echo 'Saldo actual: '. number_format($saldo_actualBs->saldo_actual, 2, ',', '.') . " " . SigVe;
+              }
           ?>            
           </span>
         </h3>
@@ -867,12 +873,18 @@
         <h3 class="card-title">
           <span class="card-text text-white">
             <i class="fas fa-balance-scale"></i>
-            <?php
-            echo 'Saldo actual: ' . number_format(DB::table('ts_movimientos')
+            <?php	
+            $saldo_actualDs = DB::table('ts_movimientos')
               ->where('tasa_ventas_id', 2)
               ->orderBy('id', 'desc')
-              ->first()
-              ->saldo_actual, 2, ',', '.') . " " . SigDolar;
+              ->first();
+
+              if(empty($saldo_actualDs)) {
+              	echo 'Saldo actual: ' . number_format(0, 2, ',', '.') . " " . SigDolar;
+              }
+              else {
+              	echo 'Saldo actual: ' . number_format($saldo_actualDs->saldo_actual, 2, ',', '.') . " " . SigDolar;
+              }
           ?>            
           </span>
         </h3>
