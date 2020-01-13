@@ -1,501 +1,72 @@
 @extends('layouts.model')
 
 @section('title')
-  Reporte
-@endsection
-
-@section('scriptsHead')
-    <style>
-    * {
-      box-sizing: border-box;
-    }
-    .autocomplete {
-      position: relative;
-      display: inline-block;
-    }
-    input {
-      border: 1px solid transparent;
-      background-color: #f1f1f1;
-      border-radius: 5px;
-      padding: 10px;
-      font-size: 16px;
-    }
-    input[type=text] {
-      background-color: #f1f1f1;
-      width: 100%;
-    }
-    .autocomplete-items {
-      position: absolute;
-      border: 1px solid #d4d4d4;
-      border-bottom: none;
-      border-top: none;
-      z-index: 99;
-      top: 100%;
-      left: 0;
-      right: 0;
-    }
-    .autocomplete-items div {
-      padding: 10px;
-      cursor: pointer;
-      background-color: #fff; 
-      border-bottom: 1px solid #d4d4d4; 
-    }
-    .autocomplete-items div:hover {
-      background-color: #e9e9e9; 
-    }
-    .autocomplete-active {
-      background-color: DodgerBlue !important; 
-      color: #ffffff; 
-    }
-    </style>
+  GALAC
 @endsection
 
 @section('content')
-  <h1 class="h5 text-info">
-    <i class="fas fa-file-invoice"></i>
-    Actualizar Fecha de Vencimiento
-  </h1>
-  <hr class="row align-items-start col-12">
+	<h1 class="h5 text-info">
+		<i class="fas fa-file-invoice"></i>
+		Conexion con Galac
+	</h1>
+	<hr class="row align-items-start col-12">
 
-<?php 
-  include(app_path().'\functions\config.php');
-  include(app_path().'\functions\functions.php');
-  include(app_path().'\functions\querys_mysql.php');
-  include(app_path().'\functions\querys_sqlserver.php');
-  $_GET['SEDE'] = FG_Mi_Ubicacion();
+	<?php	
+		include(app_path().'\functions\config.php');
+		include(app_path().'\functions\functions.php');
+		include(app_path().'\functions\querys_mysql.php');
+		include(app_path().'\functions\querys_sqlserver.php');
 
-  $ArtJson = "";
+		$InicioCarga = new DateTime("now");
 
-  if (isset($_GET['SEDE'])){      
-    echo '<h1 class="h5 text-success"  align="left"> <i class="fas fa-prescription"></i> '.FG_Nombre_Sede($_GET['SEDE']).'</h1>';
-  }
-  echo '<hr class="row align-items-start col-12">';
-  
-  if (isset($_GET['Id'])){
-  //CASO 2: CARGA AL HABER SELECCIONADO UN PROVEEDOR
-  //se pasa a la carga de los lotes del articulo seleccionado 
-    $InicioCarga = new DateTime("now");
+		if (isset($_GET['SEDE'])){			
+			echo '<h1 class="h5 text-success"  align="left"> <i class="fas fa-prescription"></i> '.FG_Nombre_Sede($_GET['SEDE']).'</h1>';
+		}
+		echo '<hr class="row align-items-start col-12">';
 
-    R23_Articulo_Lote($_GET['SEDE'],$_GET['Id'],$_GET['Nombre']);
-    
-    $FinCarga = new DateTime("now");
+		Galac_Nomina('NOMINA');
+		Galac_SAW('SAW');
+
+		$FinCarga = new DateTime("now");
     $IntervalCarga = $InicioCarga->diff($FinCarga);
     echo'Tiempo de carga: '.$IntervalCarga->format("%Y-%M-%D %H:%I:%S");
-  }
-  else if(isset($_GET['fechaVenActualizada'])){
-  //CASO 4: CARGA AL HABER SELECCIONADO UNA FACTURA
-  //se pasa a la seleccion del articulo
-    $InicioCarga = new DateTime("now");
-
-    R23_Actualizar_Fecha($_GET['SEDE'],$_GET['IdLote'],$_GET['fechaVenActualizada'],$_GET['IdArti'],$_GET['Nombre']);
-
-    $FinCarga = new DateTime("now");
-    $IntervalCarga = $InicioCarga->diff($FinCarga);
-    echo'Tiempo de carga: '.$IntervalCarga->format("%Y-%M-%D %H:%I:%S");
-  }
-  else if(isset($_GET['IdLote'])){
-  //CASO 3: CARGA AL HABER SELECCIONADO UNA FACTURA
-  //se pasa a la seleccion del articulo
-    $InicioCarga = new DateTime("now");
-
-    R23_Actualizar_Lote($_GET['SEDE'],$_GET['IdLote'],$_GET['IdArti'],$_GET['Nombre']);
-
-    $FinCarga = new DateTime("now");
-    $IntervalCarga = $InicioCarga->diff($FinCarga);
-    echo'Tiempo de carga: '.$IntervalCarga->format("%Y-%M-%D %H:%I:%S");
-  }
-  else{
-  //CASO 1: AL CARGAR EL REPORTE DESDE EL MENU
-  //Se pasa a la seleccion del articulo
-    $InicioCarga = new DateTime("now");
-
-    $sql = R23Q_Lista_Articulos();
-    $ArtJson = FG_Armar_Json($sql,$_GET['SEDE']);
-
-    echo '
-    <form autocomplete="off" action="">
-      <div class="autocomplete" style="width:90%;">
-        <input id="myInput" type="text" name="Nombre" placeholder="Ingrese el nombre del articulo " onkeyup="conteo()" required>
-        <input id="myId" name="Id" type="hidden">
-        <td>
-        <input id="SEDE" name="SEDE" type="hidden" value="';
-        print_r($_GET['SEDE']);
-        echo'">
-        </td>
-      </div>
-      <input type="submit" value="Buscar" class="btn btn-outline-success">
-    </form>
-    ';
-
-    $FinCarga = new DateTime("now");
-    $IntervalCarga = $InicioCarga->diff($FinCarga);
-    echo'Tiempo de carga: '.$IntervalCarga->format("%Y-%M-%D %H:%I:%S");
-  } 
-?>
-@endsection
-
-@section('scriptsFoot')
-<?php
-  if($ArtJson!=""){
-?>
-    <script type="text/javascript">
-      ArrJs = eval(<?php echo $ArtJson ?>);
-      autocompletado(document.getElementById("myInput"),document.getElementById("myId"), ArrJs);
-    </script> 
-<?php
-  }
-?>  
+	?>
 @endsection
 
 <?php
-/**********************************************************************************/
-  /*
-    TITULO: R23Q_Lista_Articulos
-    FUNCION: Armar una lista de articulos con descripcion e id
-    RETORNO: Lista de articulos con descripcion e id
-    DESAROLLADO POR: SERGIO COVA
-  */
-  function R23Q_Lista_Articulos() {
-    $sql = "
-      SELECT
-      InvArticulo.Descripcion,
-      InvArticulo.Id
-      FROM InvArticulo
-      ORDER BY InvArticulo.Descripcion ASC
-    ";
-    return $sql;
-  }
-  /**********************************************************************************/
-  /*
-    TITULO: R23Q_Lista_Lotes_Artiulos
-    FUNCION: Armar una lista de articulos con descripcion e id
-    RETORNO: Lista de articulos con descripcion e id
-    DESAROLLADO POR: SERGIO COVA
-  */
-  function R23Q_Lista_Lotes_Artiulos($IdArticulo) {
-    $sql = "
-    SELECT
-    InvLote.Id,
-    InvLote.Numero,
-    InvLote.LoteFabricante,
-    InvLote.FechaVencimiento
-    FROM InvLote
-    INNER JOIN InvLoteAlmacen ON InvLoteAlmacen.InvArticuloId = InvLote.InvArticuloId
-    INNER JOIN InvArticulo ON InvArticulo.Id = InvLote.InvArticuloId
-    WHERE 
-    (InvLote.InvArticuloId = '$IdArticulo')
-    AND (InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
-    AND (InvLoteAlmacen.Existencia > 0)
-    ORDER BY InvLote.FechaVencimiento DESC
-    ";
-    return $sql;
-  }
-  /**********************************************************************************/
-  /*
-    TITULO: R23Q_Lista_Lotes_IdLote
-    FUNCION: Armar una lista de articulos con descripcion e id
-    RETORNO: Lista de articulos con descripcion e id
-    DESAROLLADO POR: SERGIO COVA
-  */
-  function R23Q_Lista_Lotes_Lote($IdLote) {
-    $sql = "
-    SELECT
-    InvLote.Id,
-    InvLote.Numero,
-    InvLote.LoteFabricante,
-    InvLote.FechaVencimiento
-    FROM InvLote
-    INNER JOIN InvLoteAlmacen ON InvLoteAlmacen.InvArticuloId = InvLote.InvArticuloId
-    INNER JOIN InvArticulo ON InvArticulo.Id = InvLote.InvArticuloId
-    WHERE 
-    (InvLote.Id = '$IdLote')
-    AND (InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
-    AND (InvLoteAlmacen.Existencia > 0)
-    ORDER BY InvLote.FechaVencimiento DESC
-    ";
-    return $sql;
-  }
-  /**********************************************************************************/
-  /*
-    TITULO: R23Q_Actualizar_Fecha
-    FUNCION: Armar una lista de articulos con descripcion e id
-    RETORNO: Lista de articulos con descripcion e id
-    DESAROLLADO POR: SERGIO COVA
-  */
-  function R23Q_Actualizar_Fecha($FechaVencimiento,$IdArticulo,$IdLote) {
-    $sql = "
-    UPDATE InvLote 
-    SET FechaVencimiento = '$FechaVencimiento' 
-    FROM InvLote
-    WHERE 
-    (InvArticuloId = '$IdArticulo') 
-    AND (id = '$IdLote')
-    ";
-    return $sql;
-  }
-  /**********************************************************************************/
-  /*
-    TITULO: R22_Articulo_Lote
-    FUNCION:  Arma la lista de los lotes del articulo
-    RETORNO: no aplica
-    DESAROLLADO POR: SERGIO COVA
-  */
-  function R23_Articulo_Lote($SedeConnection,$IdArticulo,$Descripcion){
-    
-    $conn = FG_Conectar_Smartpharma($SedeConnection);
-    $sql1 = R23Q_Lista_Lotes_Artiulos($IdArticulo);
-    $result = sqlsrv_query($conn,$sql1);
-
-    echo '
-    <div class="input-group md-form form-sm form-1 pl-0 CP-stickyBar">
-      <div class="input-group-prepend">
-        <span class="input-group-text purple lighten-3" id="basic-text1">
-          <i class="fas fa-search text-white"
-            aria-hidden="true"></i>
-        </span>
-      </div>
-      <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterAllTable()">
-    </div>
-    <br/>
-    ';
-
-    echo '
-    <table class="table table-striped table-bordered col-12 sortable">
-      <thead class="thead-dark">
-          <tr>
-            <th scope="col">Articulo</th>
-          </tr>
-        </thead>
-        <tbody>
-        <tr>
-      ';
-    echo '<td>'.FG_Limpiar_Texto($Descripcion).'</td>';
-      echo '
-        </tr>
-        </tbody>
-    </table>';
-
-    echo'
-    <table class="table table-striped table-bordered col-12 sortable" id="myTable">
-        <thead class="thead-dark">
-          <tr>
-            <th scope="col" class="CP-sticky">#</th>
-            <th scope="col" class="CP-sticky">Numero de Lote</th>
-            <th scope="col" class="CP-sticky">Lote de Fabricante</th>
-            <th scope="col" class="CP-sticky">Fecha de Vencimiento</th>
-            <th scope="col" class="CP-sticky">Seleccion</th>
-          </tr>
-        </thead>
-        <tbody>
-     ';
-    $contador = 1;
-    while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
-      echo '<tr>';
-      echo '<td align="left"><strong>'.intval($contador).'</strong></td>';
-      echo '<td align="center">'.$row["Numero"].'</td>';
-      echo '<td align="center">'.$row["LoteFabricante"].'</td>';
-
-      if($row["FechaVencimiento"]!=NULL){
-         echo '<td align="center">'.$row["FechaVencimiento"]->format('d-m-Y').'</td>';
-      }
-      else{
-        echo '<td align="center">-</td>';
-      }
-     
-      echo '
-      <td align="center">
-        <form autocomplete="off" action="">
-            <input id="SEDE" name="SEDE" type="hidden" value="';
-                print_r($SedeConnection);
-                echo'">
-             
-              <input type="submit" value="Selecionar" class="btn btn-outline-success">
-              
-              <input id="IdLote" name="IdLote" type="hidden" value="'.intval($row["Id"]).'">
-
-              <input id="IdArti" name="IdArti" type="hidden" value="'.$IdArticulo.'">
-
-              <input id="Nombre" name="Nombre" type="hidden" value="'.$Descripcion.'">
-          </form>
-          <br>
-        ';
-      echo '</tr>';
-    $contador++;
-    }
-      echo '
-        </tbody>
-    </table>';
-    sqlsrv_close($conn);
-  }
-  /**********************************************************************************/
-  /*
-    TITULO: R22_Articulo_Lote
-    FUNCION:  Arma la lista de los lotes del articulo
-    RETORNO: no aplica
-    DESAROLLADO POR: SERGIO COVA
-  */
-  function R23_Actualizar_Lote($SedeConnection,$IdLote,$IdArticulo,$Descripcion){
-    
-    $conn = FG_Conectar_Smartpharma($SedeConnection);
-    $sql1 = R23Q_Lista_Lotes_Lote($IdLote);
-    $result = sqlsrv_query($conn,$sql1);
-
-    echo '
-    <div class="input-group md-form form-sm form-1 pl-0 CP-stickyBar">
-      <div class="input-group-prepend">
-        <span class="input-group-text purple lighten-3" id="basic-text1">
-          <i class="fas fa-search text-white"
-            aria-hidden="true"></i>
-        </span>
-      </div>
-      <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterAllTable()">
-    </div>
-    <br/>
-    ';
-
-    echo '
-    <table class="table table-striped table-bordered col-12 sortable">
-      <thead class="thead-dark">
-          <tr>
-            <th scope="col">Articulo</th>
-          </tr>
-        </thead>
-        <tbody>
-        <tr>
-      ';
-    echo '<td>'.FG_Limpiar_Texto($Descripcion).'</td>';
-      echo '
-        </tr>
-        </tbody>
-    </table>';
-
-    echo'
-    <table class="table table-striped table-bordered col-12 sortable" id="myTable">
-        <thead class="thead-dark">
-          <tr>
-            <th scope="col" class="CP-sticky">#</th>
-            <th scope="col" class="CP-sticky">Numero de Lote</th>
-            <th scope="col" class="CP-sticky">Lote de Fabricante</th>
-            <th scope="col" class="CP-sticky">Fecha de Vencimiento</th>
-            <th scope="col" class="CP-sticky">Fecha de Vencimiento</br>(Nueva)</th>
-            <th scope="col" class="CP-sticky">Seleccion</th>
-          </tr>
-        </thead>
-        <tbody>
-     ';
-    $contador = 1;
-    while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
-      echo '<tr>';
-      echo '<td align="left"><strong>'.intval($contador).'</strong></td>';
-      echo '<td align="center">'.$row["Numero"].'</td>';
-      echo '<td align="center">'.$row["LoteFabricante"].'</td>';
-
-      if($row["FechaVencimiento"]!=NULL){
-         echo '<td align="center">'.$row["FechaVencimiento"]->format('d-m-Y').'</td>';
-      }
-      else{
-        echo '<td align="center">-</td>';
-      }
-     
-      echo '
-        <form autocomplete="off" action=""> 
-          <td align="center">
-            <input id="fechaInicio" type="date" name="fechaVenActualizada" required style="width:100%;">
-          </td>
-          <td align="center">
-            <input id="SEDE" name="SEDE" type="hidden" value="';
-                print_r($SedeConnection);
-                echo'">
-            <input type="submit" value="Selecionar" class="btn btn-outline-success">
-            <input id="IdLote" name="IdLote" type="hidden" value="'.intval($row["Id"]).'">
-            <input id="IdArti" name="IdArti" type="hidden" value="'.$IdArticulo.'">
-            <input id="Nombre" name="Nombre" type="hidden" value="'.$Descripcion.'">
-          </td>       
-          </form>
-          <br>
-        ';
-      echo '</tr>';
-    $contador++;
-    }
-      echo '
-        </tbody>
-    </table>';
-    sqlsrv_close($conn);
-  }
-  /**********************************************************************************/
-  /*
-    TITULO: R22_Articulo_Lote
-    FUNCION:  Arma la lista de los lotes del articulo
-    RETORNO: no aplica
-    DESAROLLADO POR: SERGIO COVA
-  */
-  function R23_Actualizar_Fecha($SedeConnection,$IdLote,$FechaVencimiento,$IdArticulo,$Descripcion){
-    
-    $conn = FG_Conectar_Smartpharma($SedeConnection);
-    $sql1 = R23Q_Lista_Lotes_Lote($IdLote);
-    $result = sqlsrv_query($conn,$sql1);
-
-    echo '
-    <div class="input-group md-form form-sm form-1 pl-0 CP-stickyBar">
-      <div class="input-group-prepend">
-        <span class="input-group-text purple lighten-3" id="basic-text1">
-          <i class="fas fa-search text-white"
-            aria-hidden="true"></i>
-        </span>
-      </div>
-      <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterAllTable()">
-    </div>
-    <br/>
-    ';
-
-    echo '
-    <table class="table table-striped table-bordered col-12 sortable">
-      <thead class="thead-dark">
-          <tr>
-            <th scope="col">Articulo</th>
-          </tr>
-        </thead>
-        <tbody>
-        <tr>
-      ';
-    echo '<td>'.FG_Limpiar_Texto($Descripcion).'</td>';
-      echo '
-        </tr>
-        </tbody>
-    </table>';
-
-    echo'
-    <table class="table table-striped table-bordered col-12 sortable" id="myTable">
-        <thead class="thead-dark">
-          <tr>
-            <th scope="col" class="CP-sticky">#</th>
-            <th scope="col" class="CP-sticky">Numero de Lote</th>
-            <th scope="col" class="CP-sticky">Lote de Fabricante</th>
-            <th scope="col" class="CP-sticky">Fecha de Vencimiento</th>
-          </tr>
-        </thead>
-        <tbody>
-     ';
-    $contador = 1;
-    $FechaVencimiento = new DateTime($FechaVencimiento);
-    $FechaVenActualizar = $FechaVencimiento->format('Y-m-d 00:00:00.0000000');
-    $FechaVenMostrar = $FechaVencimiento->format('d-m-Y');
-
-    $sql2 = R23Q_Actualizar_Fecha($FechaVenActualizar,$IdArticulo,$IdLote);
-    sqlsrv_query($conn,$sql2);
-    
-    while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
-      echo '<tr>';
-      echo '<td align="left"><strong>'.intval($contador).'</strong></td>';
-      echo '<td align="center">'.$row["Numero"].'</td>';
-      echo '<td align="center">'.$row["LoteFabricante"].'</td>';
-      echo '<td align="center">'.$FechaVencimiento->format('d-m-Y').'</td>';
-      echo '</tr>';
-    $contador++;
-    }
-      echo '
-        </tbody>
-    </table>';
-    sqlsrv_close($conn);
-  }
+	/**********************************************************************************/
+	/*
+		TITULO: Galac_Nomina
+		DESAROLLADO POR: SERGIO COVA
+ 	*/
+	function Galac_Nomina($SedeConnection) {
+		$conn = FG_Conectar_GALAC($SedeConnection);
+		$sql = "SELECT * FROM IGNom_Trabajador WHERE IGNom_Trabajador.Apellidos LIKE 'COVA BARRIOS'";
+		$result = sqlsrv_query($conn,$sql);
+		$row = sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC);
+		echo'* * * Esta data viene de GALAC NOMINA * * *';
+		echo'<br><br>Nombres: '.$row['Nombres'];
+		echo'<br>Apellidos: '.$row['Apellidos'];
+		echo'<br>Cedula: '.$row['NumeroDeRIF'];
+		echo'<br><br>';
+		sqlsrv_close($conn);
+	}
+	/**********************************************************************************/
+	/*
+		TITULO: Galac_SAW
+		DESAROLLADO POR: SERGIO COVA
+ 	*/
+	function Galac_SAW($SedeConnection) {
+		$conn = FG_Conectar_GALAC($SedeConnection);
+		$sql = "SELECT TOP 1 * FROM [SAWDB].[dbo].[factura] ORDER BY Fecha DESC";
+		$result = sqlsrv_query($conn,$sql);
+		$row = sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC);
+		echo'* * * Esta data viene de GALAC SAW * * *';
+		echo'<br><br>Numero: '.$row['Numero'];
+		echo'<br>Fecha: '.$row['Fecha']->format('Y-m-d');
+		echo'<br>Moneda: '.$row['Moneda'];
+		echo'<br><br>';
+		sqlsrv_close($conn);
+	}
+	
 ?>

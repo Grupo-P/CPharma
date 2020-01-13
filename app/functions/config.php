@@ -46,6 +46,18 @@ define ("passFAU" , "Soporte123");
 define ("nameFAU" , "smartfau");
 define ("nameFAUOFF" , "cpharmafau");
 /**********************************************************************************/
+/************* CONEXION GALAC NOMINA *******************/
+define ("serverGN" , "10.100.0.2\SMARTPHARMA,1450");
+define ("userGN" , "sa");
+define ("passGN" , "Soporte123");
+define ("nameGN" , "NOMDB");
+/**********************************************************************************/
+/************* CONEXION GALAC SAW (Administrativo)*******************/
+define ("serverGS" , "10.100.0.2\SMARTPHARMA,1450");
+define ("userGS" , "sa");
+define ("passGS" , "Soporte123");
+define ("nameGS" , "SAWDB");
+/**********************************************************************************/
 /********************* CONEXION SERVER DESARROLLO DE MANUEL **********************/
  define ("serverDBm" , "DESKTOP-AGKHTEB");
  define ("userDBm" , "sa");

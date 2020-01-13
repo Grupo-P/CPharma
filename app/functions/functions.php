@@ -2111,4 +2111,33 @@
     }
     return $temp_array;
 	}
+	/**********************************************************************************/
+	/*
+		TITULO: FG_Conectar_Smartpharma
+		FUNCION: Conectar el sistema con la sede que se desea
+		RETORNO: Conexion a Smartpharma
+		DESAROLLADO POR: SERGIO COVA
+	 */
+	function FG_Conectar_GALAC($SedeConnection) {
+		switch($SedeConnection) {
+			case 'NOMINA':
+				$connectionInfo = array(
+					"Database"=>nameGN,
+					"UID"=>userGN,
+					"PWD"=>passGN
+				);
+				$conn = sqlsrv_connect(serverGN,$connectionInfo);
+				return $conn;
+			break;
+			case 'SAW':
+				$connectionInfo = array(
+					"Database"=>nameGS,
+					"UID"=>userGS,
+					"PWD"=>passGS
+				);
+				$conn = sqlsrv_connect(serverGS,$connectionInfo);
+				return $conn;
+			break;
+		}
+	}
 ?>
