@@ -5,7 +5,6 @@
   include('C:\xampp\htdocs\CPharma\app\functions\querys_sqlserver.php');
 
   $sede = $_POST["sede"];
-  //$sede = 'FTN';
   $fechaFin = date("Y-m-d");
   $fechaInicio = date("Y-m-d",strtotime($fechaFin."- 14 days"));
 
