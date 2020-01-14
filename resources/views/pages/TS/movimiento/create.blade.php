@@ -31,7 +31,15 @@
   @endif
 
   <h1 class="h5 text-info">
-    <i class="fas fa-plus"></i>&nbsp;Agregar movimiento
+    <i class="fas fa-plus"></i>&nbsp;
+
+    @if(isset($_GET["tasa_ventas_id"])) 
+      @if($_GET["tasa_ventas_id"] == 1) 
+        Agregar movimiento en bolívares
+      @elseif($_GET["tasa_ventas_id"] == 2)
+        Agregar movimiento en dolares 
+      @endif
+    @endif
   </h1>
   <hr class="row align-items-start col-12">
 
@@ -80,7 +88,7 @@
 
           <tr>
             <th scope="row">{!! Form::label('concepto', 'Concepto *', ['title' => 'Este campo es requerido']) !!}</th>
-            <td>{!! Form::text('concepto', null, [ 'class' => 'form-control', 'placeholder' => 'Pago de proveedores']) !!}</td>
+            <td>{!! Form::text('concepto', null, [ 'class' => 'form-control', 'placeholder' => 'Pago de proveedores', 'required', 'title' => 'Debe colocar mínimo 10 caracteres', 'pattern' => '.{10,}']) !!}</td>
           </tr>
         </tbody>
       </table>
