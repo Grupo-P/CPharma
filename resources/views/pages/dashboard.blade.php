@@ -860,7 +860,7 @@
         <p class="card-text text-white">
         <?php 
           echo 'Movimientos en bolivares registrados: ' . $movimientosBs;
-          echo '<br>Fecha y hora actual: ' . date("d-m-Y H:i a", time());
+          echo '<br>Fecha y hora actual: ' . date("d-m-Y h:i:s a", time());
         ?>
         </p>
       </div>
@@ -892,7 +892,7 @@
         <p class="card-text text-white">
         <?php 
           echo 'Movimientos en dolares registrados: ' . $movimientosDs;
-          echo '<br>Fecha y hora actual: ' . date("d-m-Y H:i a", time());
+          echo '<br>Fecha y hora actual: ' . date("d-m-Y h:i:s a", time());
         ?>
         </p>
       </div>

@@ -118,7 +118,7 @@
         <td>{{number_format($movimiento->egresos, 2, ',', '.')}}</td>
         <td>{{number_format($movimiento->saldo_anterior, 2, ',', '.')}}</td>
         <td>{{number_format($movimiento->saldo_actual, 2, ',', '.')}}</td>
-        <td>{{date("d-m-Y h:i a", strtotime($movimiento->created_at))}}</td>
+        <td>{{date("d-m-Y h:i:s a", strtotime($movimiento->created_at))}}</td>
         <td>{{$movimiento->user}}</td>
       </tr>
     @endforeach
