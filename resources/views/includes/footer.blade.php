@@ -9,6 +9,11 @@
 </div>
 
 @section('scriptsFoot')
+    <!-- Page level plugins -->
+    <script src="{{asset('assets/chart.js/Chart.min.js')}}"></script>
+    <!-- Page level custom scripts -->
+    <script src="{{asset('assets/js/chart-pie-demo.js')}}"></script>
+
     <script type="text/javascript">
       $(document).keydown(function (e) {
         e = e || event;

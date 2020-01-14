@@ -969,6 +969,36 @@
   	</div>
 	</div>
 	<!-- Modal RRHH -->
+	<!-- Dashboard Metricas-->
+	<div class="card-deck">
+		<!-- Pie Chart FTN-->
+    <div class="col-xl-4 col-lg-5">
+      <div class="card shadow mb-4">
+        <!-- Card Header - Dropdown -->
+        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+          <h6 class="m-0 font-weight-bold text-info">FARMACIA TIERRA NEGRA, C.A.</h6>
+        </div>
+        <!-- Card Body -->
+        <div class="card-body">
+          <div class="chart-pie pt-4 pb-2">
+            <canvas id="ChartFTN"></canvas>
+          </div>
+          <div class="mt-4 text-center small">
+            <span class="mr-2">
+              <i class="fas fa-circle text-primary"></i> Activos
+            </span>
+            <span class="mr-2">
+              <i class="fas fa-circle text-success"></i> Ingresos
+            </span>
+            <span class="mr-2">
+              <i class="fas fa-circle text-danger"></i> Egresos
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+	</div>
+	<!-- Dashboard Metricas-->
 	<!-- Dashboard RRHH-->
 	<div class="card-deck">
     <div class="card border-dark mb-3" style="width: 14rem;">
