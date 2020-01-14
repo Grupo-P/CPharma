@@ -31,7 +31,15 @@
   @endif
 
   <h1 class="h5 text-info">
-    <i class="fas fa-plus"></i>&nbsp;Agregar movimiento
+    <i class="fas fa-plus"></i>&nbsp;
+
+    @if(isset($_GET["tasa_ventas_id"])) 
+      @if($_GET["tasa_ventas_id"] == 1) 
+        Agregar movimiento en bolívares
+      @elseif($_GET["tasa_ventas_id"] == 2)
+        Agregar movimiento en dolares 
+      @endif
+    @endif
   </h1>
   <hr class="row align-items-start col-12">
 
