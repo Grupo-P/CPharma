@@ -2,6 +2,29 @@
 Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
 Chart.defaults.global.defaultFontColor = '#858796';
 
+var CuentaIngreso = 0;
+var CuentaEgreso = 0;
+var CuentaActivo = 0;
+
+var URL = 'http://cpharmade.com/assets/functions/functionRHDash.php';
+
+//Incio Armado del chart de FTN
+var paramFTN = {
+  "sede":'FTN'
+};
+$.ajax({
+  data: paramFTN,
+  url: URL,
+  type: "POST",
+  success: function(data) {
+    var respuesta = JSON.parse(data);
+    console.log(data);
+    CuentaIngreso = respuesta['CuentaIngreso'];
+    CuentaEgreso = respuesta['CuentaEgreso'];
+    CuentaActivo = respuesta['CuentaActivo'];
+  }
+ });
+
 // Pie Chart Example myPieChart
 var ctx = document.getElementById("ChartFTN");
 var ChartFTN = new Chart(ctx, {
@@ -9,7 +32,7 @@ var ChartFTN = new Chart(ctx, {
   data: {
     labels: ["Activos", "Ingresos", "Egresos"],
     datasets: [{
-      data: [4, 4, 84],
+      data: [CuentaActivo,CuentaIngreso,CuentaEgreso],
       backgroundColor: ['#4e73df', '#1cc88a', '#dc3545'],
       hoverBackgroundColor: ['#2e59d9', '#17a673', '#c62f3e'],
       hoverBorderColor: "rgba(234, 236, 244, 1)",

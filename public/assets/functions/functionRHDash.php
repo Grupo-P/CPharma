@@ -4,13 +4,10 @@
   include('C:\xampp\htdocs\CPharma\app\functions\querys_mysql.php');
   include('C:\xampp\htdocs\CPharma\app\functions\querys_sqlserver.php');
 
-  //$sede = $_POST["sede"];
-  //$fechaInicio = $_POST["fechaInicio"];
-  //$fechaFin = $_POST["fechaFin"];
- 
-  $sede = 'FTN';
-  $fechaInicio = '2020-01-01';
-  $fechaFin = '2020-01-14';
+  $sede = $_POST["sede"];
+  //$sede = 'FTN';
+  $fechaFin = date("Y-m-d");
+  $fechaInicio = date("Y-m-d",strtotime($fechaFin."- 14 days"));
 
   $resultado = array();
   $resultado = FG_Conteo_Sedes($sede,$fechaInicio,$fechaFin);
@@ -43,7 +40,6 @@
     $result = sqlsrv_query($conn,$sql);
     $row = sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC);
     $CuentaIngreso = $row['CuentaIngreso'];
-    echo'<br>CuentaIngreso: '.$CuentaIngreso;
 
     if($CuentaIngreso==NULL){
     	$CuentaIngreso=0;
@@ -54,7 +50,6 @@
     $result1 = sqlsrv_query($conn,$sql1);
     $row1 = sqlsrv_fetch_array($result1,SQLSRV_FETCH_ASSOC);
     $CuentaEgreso = $row1['CuentaEgreso'];
-    echo'<br>CuentaEgreso: '.$CuentaEgreso;
 
     if($CuentaEgreso==NULL){
     	$CuentaEgreso=0;
@@ -65,7 +60,6 @@
     $result2 = sqlsrv_query($conn,$sql2);
     $row2 = sqlsrv_fetch_array($result2,SQLSRV_FETCH_ASSOC);
     $CuentaActivo = $row2['CuentaActivo'];
-    echo'<br>CuentaActivo: '.$CuentaActivo;
 
     if($CuentaActivo==NULL){
     	$CuentaActivo=0;
