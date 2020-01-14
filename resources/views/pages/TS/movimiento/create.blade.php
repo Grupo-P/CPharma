@@ -80,7 +80,7 @@
 
           <tr>
             <th scope="row">{!! Form::label('concepto', 'Concepto *', ['title' => 'Este campo es requerido']) !!}</th>
-            <td>{!! Form::text('concepto', null, [ 'class' => 'form-control', 'placeholder' => 'Pago de proveedores']) !!}</td>
+            <td>{!! Form::text('concepto', null, [ 'class' => 'form-control', 'placeholder' => 'Pago de proveedores', 'required']) !!}</td>
           </tr>
         </tbody>
       </table>
