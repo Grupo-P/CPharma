@@ -83,7 +83,7 @@
   </table>
   <br/>
   
-  <table class="table table-striped table-borderless col-12 sortable" id="myTable">
+  <table class="table table-striped table-borderless col-12" id="myTable">
     <thead class="thead-dark">
       <tr>
         <th scope="col" class="stickyCP">#</th>
