@@ -6,7 +6,7 @@
 
   $sede = $_POST["sede"];
   $fechaFin = date("Y-m-d");
-  $fechaInicio = date("Y-m-d",strtotime($fechaFin."- 14 days"));
+  $fechaInicio = date("Y-m-d",strtotime($fechaFin."-30 days"));
 
   $resultado = array();
   $resultado = FG_Conteo_Sedes($sede,$fechaInicio,$fechaFin);
