@@ -972,16 +972,94 @@
 	<!-- Dashboard Metricas-->
 	<div class="card-deck">
 		<!-- Pie Chart FTN-->
-    <div class="col-xl-4 col-lg-5">
+    <div class="col-xl-3 col-lg-5">
       <div class="card shadow mb-4">
         <!-- Card Header - Dropdown -->
         <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-          <h6 class="m-0 font-weight-bold text-info">FARMACIA TIERRA NEGRA, C.A.</h6>
+          <h6 class="m-0 font-weight-bold text-info">FARMACIA TIERRA NEGRA, C.A</h6>
         </div>
         <!-- Card Body -->
         <div class="card-body">
           <div class="chart-pie pt-4 pb-2">
             <canvas id="ChartFTN"></canvas>
+          </div>
+          <div class="mt-4 text-center small">
+            <span class="mr-2">
+              <i class="fas fa-circle text-primary"></i> Activos
+            </span>
+            <span class="mr-2">
+              <i class="fas fa-circle text-success"></i> Ingresos
+            </span>
+            <span class="mr-2">
+              <i class="fas fa-circle text-danger"></i> Egresos
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Pie Chart FLL-->
+    <div class="col-xl-3 col-lg-5">
+      <div class="card shadow mb-4">
+        <!-- Card Header - Dropdown -->
+        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+          <h6 class="m-0 font-weight-bold text-info">FARMACIA LA LAGO, C.A</h6>
+        </div>
+        <!-- Card Body -->
+        <div class="card-body">
+          <div class="chart-pie pt-4 pb-2">
+            <canvas id="ChartFLL"></canvas>
+          </div>
+          <div class="mt-4 text-center small">
+            <span class="mr-2">
+              <i class="fas fa-circle text-primary"></i> Activos
+            </span>
+            <span class="mr-2">
+              <i class="fas fa-circle text-success"></i> Ingresos
+            </span>
+            <span class="mr-2">
+              <i class="fas fa-circle text-danger"></i> Egresos
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Pie Chart FAU-->
+    <div class="col-xl-3 col-lg-5">
+      <div class="card shadow mb-4">
+        <!-- Card Header - Dropdown -->
+        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+          <h6 class="m-0 font-weight-bold text-info">FARMACIA AV. UNIVERSIDAD, C.A</h6>
+        </div>
+        <!-- Card Body -->
+        <div class="card-body">
+          <div class="chart-pie pt-4 pb-2">
+            <canvas id="ChartFAU"></canvas>
+          </div>
+          <div class="mt-4 text-center small">
+            <span class="mr-2">
+              <i class="fas fa-circle text-primary"></i> Activos
+            </span>
+            <span class="mr-2">
+              <i class="fas fa-circle text-success"></i> Ingresos
+            </span>
+            <span class="mr-2">
+              <i class="fas fa-circle text-danger"></i> Egresos
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Pie Chart MC-->
+    <div class="col-xl-3 col-lg-5">
+      <div class="card shadow mb-4">
+        <!-- Card Header - Dropdown -->
+        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+          <h6 class="m-0 font-weight-bold text-info">MULATA CAFE, C.A.</h6>
+        </div>
+        <!-- Card Body -->
+        <div class="card-body">
+          <div class="chart-pie pt-4 pb-2">
+            <canvas id="ChartMC"></canvas>
           </div>
           <div class="mt-4 text-center small">
             <span class="mr-2">
