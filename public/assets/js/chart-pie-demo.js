@@ -21,7 +21,13 @@ var URL = 'http://cpharmade.com/assets/functions/functionRHDash.php';
       CuentaIngreso = respuesta['CuentaIngreso'];
       CuentaEgreso = respuesta['CuentaEgreso'];
       CuentaActivo = respuesta['CuentaActivo'];
-      
+      fechaInicio = respuesta['fechaInicio'];
+      fechaFin = respuesta['fechaFin'];
+      $("#ActFTN").html(CuentaActivo);
+      $("#IngFTN").html(CuentaIngreso);
+      $("#EgrFTN").html(CuentaEgreso);
+      $("#FInicioFTN").html(fechaInicio);
+      $("#FFinFTN").html(fechaFin);
       // Pie Chart Example myPieChart
       var ctx = document.getElementById("ChartFTN");
       var ChartFTN = new Chart(ctx, {
@@ -70,7 +76,13 @@ var URL = 'http://cpharmade.com/assets/functions/functionRHDash.php';
       CuentaIngreso = respuesta['CuentaIngreso'];
       CuentaEgreso = respuesta['CuentaEgreso'];
       CuentaActivo = respuesta['CuentaActivo'];
-      
+      fechaInicio = respuesta['fechaInicio'];
+      fechaFin = respuesta['fechaFin'];
+      $("#ActFLL").html(CuentaActivo);
+      $("#IngFLL").html(CuentaIngreso);
+      $("#EgrFLL").html(CuentaEgreso);
+      $("#FInicioFLL").html(fechaInicio);
+      $("#FFinFLL").html(fechaFin);
       // Pie Chart Example myPieChart
       var ctx = document.getElementById("ChartFLL");
       var ChartFLL = new Chart(ctx, {
@@ -119,7 +131,13 @@ var URL = 'http://cpharmade.com/assets/functions/functionRHDash.php';
       CuentaIngreso = respuesta['CuentaIngreso'];
       CuentaEgreso = respuesta['CuentaEgreso'];
       CuentaActivo = respuesta['CuentaActivo'];
-      
+      fechaInicio = respuesta['fechaInicio'];
+      fechaFin = respuesta['fechaFin'];
+      $("#ActFAU").html(CuentaActivo);
+      $("#IngFAU").html(CuentaIngreso);
+      $("#EgrFAU").html(CuentaEgreso);
+      $("#FInicioFAU").html(fechaInicio);
+      $("#FFinFAU").html(fechaFin);
       // Pie Chart Example myPieChart
       var ctx = document.getElementById("ChartFAU");
       var ChartFAU = new Chart(ctx, {
@@ -168,7 +186,13 @@ var URL = 'http://cpharmade.com/assets/functions/functionRHDash.php';
       CuentaIngreso = respuesta['CuentaIngreso'];
       CuentaEgreso = respuesta['CuentaEgreso'];
       CuentaActivo = respuesta['CuentaActivo'];
-      
+      fechaInicio = respuesta['fechaInicio'];
+      fechaFin = respuesta['fechaFin'];
+      $("#ActMC").html(CuentaActivo);
+      $("#IngMC").html(CuentaIngreso);
+      $("#EgrMC").html(CuentaEgreso);
+      $("#FInicioMC").html(fechaInicio);
+      $("#FFinMC").html(fechaFin);
       // Pie Chart Example myPieChart
       var ctx = document.getElementById("ChartMC");
       var ChartMC = new Chart(ctx, {

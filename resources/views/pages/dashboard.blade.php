@@ -985,15 +985,19 @@
           </div>
           <div class="mt-4 text-center small">
             <span class="mr-2">
-              <i class="fas fa-circle text-primary"></i> Activos
+              <i class="fas fa-circle text-primary"></i> Activos:
+              <label id="ActFTN"></label>
             </span>
             <span class="mr-2">
-              <i class="fas fa-circle text-success"></i> Ingresos
+              <i class="fas fa-circle text-success"></i> Ingresos:
+              <label id="IngFTN"></label>
             </span>
             <span class="mr-2">
-              <i class="fas fa-circle text-danger"></i> Egresos
+              <i class="fas fa-circle text-danger"></i> Egresos:
+              <label id="EgrFTN"></label>
             </span>
           </div>
+          <span class="mt-4 text-center small">Desde el <label id="FInicioFTN"></label> hasta el <label id="FFinFTN"></label></span>
         </div>
       </div>
     </div>
@@ -1011,15 +1015,19 @@
           </div>
           <div class="mt-4 text-center small">
             <span class="mr-2">
-              <i class="fas fa-circle text-primary"></i> Activos
+              <i class="fas fa-circle text-primary"></i> Activos:
+              <label id="ActFLL"></label>
             </span>
             <span class="mr-2">
-              <i class="fas fa-circle text-success"></i> Ingresos
+              <i class="fas fa-circle text-success"></i> Ingresos:
+              <label id="IngFLL"></label>
             </span>
             <span class="mr-2">
-              <i class="fas fa-circle text-danger"></i> Egresos
+              <i class="fas fa-circle text-danger"></i> Egresos:
+              <label id="EgrFLL"></label>
             </span>
           </div>
+          <span class="mt-4 text-center small">Desde el <label id="FInicioFLL"></label> hasta el <label id="FFinFLL"></label></span>
         </div>
       </div>
     </div>
@@ -1037,15 +1045,19 @@
           </div>
           <div class="mt-4 text-center small">
             <span class="mr-2">
-              <i class="fas fa-circle text-primary"></i> Activos
+              <i class="fas fa-circle text-primary"></i> Activos:
+              <label id="ActFAU"></label>
             </span>
             <span class="mr-2">
-              <i class="fas fa-circle text-success"></i> Ingresos
+              <i class="fas fa-circle text-success"></i> Ingresos:
+              <label id="IngFAU"></label>
             </span>
             <span class="mr-2">
-              <i class="fas fa-circle text-danger"></i> Egresos
+              <i class="fas fa-circle text-danger"></i> Egresos:
+              <label id="EgrFAU"></label>
             </span>
           </div>
+          <span class="mt-4 text-center small">Desde el <label id="FInicioFAU"></label> hasta el <label id="FFinFAU"></label></span>
         </div>
       </div>
     </div>
@@ -1063,15 +1075,19 @@
           </div>
           <div class="mt-4 text-center small">
             <span class="mr-2">
-              <i class="fas fa-circle text-primary"></i> Activos
+              <i class="fas fa-circle text-primary"></i> Activos:
+              <label id="ActMC"></label>
             </span>
             <span class="mr-2">
-              <i class="fas fa-circle text-success"></i> Ingresos
+              <i class="fas fa-circle text-success"></i> Ingresos:
+              <label id="IngMC"></label>
             </span>
             <span class="mr-2">
-              <i class="fas fa-circle text-danger"></i> Egresos
+              <i class="fas fa-circle text-danger"></i> Egresos:
+              <label id="EgrMC"></label>
             </span>
           </div>
+          <span class="mt-4 text-center small">Desde el <label id="FInicioMC"></label> hasta el <label id="FFinMC"></label></span>
         </div>
       </div>
     </div>

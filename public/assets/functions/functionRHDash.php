@@ -65,6 +65,9 @@
     }
     $arrayIteracion["CuentaActivo"]=$CuentaActivo;
 
+    $arrayIteracion["fechaInicio"]=$fechaInicio;
+    $arrayIteracion["fechaFin"]=$fechaFin;
+
     return $arrayIteracion;
 	}
 /****************************************************************/
