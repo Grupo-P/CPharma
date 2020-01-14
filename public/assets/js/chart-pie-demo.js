@@ -6,7 +6,7 @@ var CuentaIngreso = 0;
 var CuentaEgreso = 0;
 var CuentaActivo = 0;
 
-var URL = 'http://cpharmade.com/assets/functions/functionRHDash.php';
+var URL = 'http://cpharmaftn.com/assets/functions/functionRHDash.php';
 
 //Incio Armado del chart de FTN
   var paramFTN = {
