@@ -1,5 +1,5 @@
 <div class="p-3 mb-2 bg-white text-info footer-copyright text-center py-3">
-	<span>CPharma v.6.0.1 © 2018 - <?php echo''.date('Y'); ?> Copyright Grupo P</span>
+	<span>CPharma v.6.1 © 2018 - <?php echo''.date('Y'); ?> Copyright Grupo P</span>
 	<br>
   Developed by
 	<a href="https://www.instagram.com/covacode/" target="blank" class="text-info CP-Links-No-Style">Sergio Cova</a>,

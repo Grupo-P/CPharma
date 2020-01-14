@@ -11,7 +11,7 @@
     include(app_path().'\functions\querys_mysql.php');
     include(app_path().'\functions\querys_sqlserver.php');
 
-    $CPharmaVersion = ' CPharma v.6.0.1';
+    $CPharmaVersion = ' CPharma v.6.1';
 
     //-------------------- VARIABLES COMPRAS --------------------//
     $empresas = DB::table('empresas')->count();
