@@ -54,8 +54,15 @@
   @endif
 
   <h1 class="h5 text-info">
-    <i class="fas fa-balance-scale"></i>
-    Movimientos
+    @if(isset($_GET["tasa_ventas_id"])) 
+      @if($_GET["tasa_ventas_id"] == 1) 
+        <i class="fas fa-balance-scale-left"></i>
+        Movimientos en bolívares
+      @elseif($_GET["tasa_ventas_id"] == 2)
+        <i class="fas fa-balance-scale"></i>
+        Movimientos en dolares 
+      @endif
+    @endif
   </h1>
 
   <hr class="row align-items-start col-12">
@@ -86,14 +93,14 @@
   <table class="table table-striped table-borderless col-12" id="myTable">
     <thead class="thead-dark">
       <tr>
-        <th scope="col" class="stickyCP">#</th>
-        <th scope="col" class="stickyCP">Concepto</th>
-        <th scope="col" class="stickyCP">Ingresos</th>
-        <th scope="col" class="stickyCP">Egresos</th>
-        <th scope="col" class="stickyCP">Saldo anterior</th>
-        <th scope="col" class="stickyCP">Saldo actual</th>
-        <th scope="col" class="stickyCP">Fecha y hora</th>
-        <th scope="col" class="stickyCP">Usuario</th>
+        <th scope="col" class="CP-sticky">#</th>
+        <th scope="col" class="CP-sticky">Concepto</th>
+        <th scope="col" class="CP-sticky">Ingresos</th>
+        <th scope="col" class="CP-sticky">Egresos</th>
+        <th scope="col" class="CP-sticky">Saldo anterior</th>
+        <th scope="col" class="CP-sticky">Saldo actual</th>
+        <th scope="col" class="CP-sticky">Fecha y hora</th>
+        <th scope="col" class="CP-sticky">Usuario</th>
       </tr>
     </thead>
 
