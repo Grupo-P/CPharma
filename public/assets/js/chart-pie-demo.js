@@ -9,9 +9,9 @@ var ChartFTN = new Chart(ctx, {
   data: {
     labels: ["Activos", "Ingresos", "Egresos"],
     datasets: [{
-      data: [55, 30, 15],
+      data: [4, 4, 84],
       backgroundColor: ['#4e73df', '#1cc88a', '#dc3545'],
-      hoverBackgroundColor: ['#2e59d9', '#17a673', '#2c9faf'],
+      hoverBackgroundColor: ['#2e59d9', '#17a673', '#c62f3e'],
       hoverBorderColor: "rgba(234, 236, 244, 1)",
     }],
   },
