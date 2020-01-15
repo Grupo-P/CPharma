@@ -127,17 +127,15 @@
   </div>
 
   <!-- buscar en externo -->
-  <div class="consultaE" id="consultaE">
+  <!-- <div class="consultaE" id="consultaE">
     <img src="css/images/cargando.gif" class="cargando">
     <img src="css/images/listo.png" class="listo">
     <img src="css/images/cancel.png" class="cancel">
     <div class="consultaEInfo" ></div>
-  </div>
+  </div> -->
     
-
-
   <!-- lista de items seleccionados -->
-  <div class="Dash">
+  <!-- <div class="Dash">
     <div class="tituPri tituPriList"> 
         <div class="tituPri3">ARTICULOS A VENDER </div>
         <div class="flecha"><img src='css/images/flechaCarrito.png' height='30px' width='30px'/>  </div>
@@ -148,18 +146,16 @@
         <div class="clear"></div>
     </div>
     <div class="contItems ItemSelec">   
-      
     </div>
-    
-  </div>
+  </div> -->
 
   <!-- nombre de la farmacia -->
-  <div class="nombreF">
+  <!-- <div class="nombreF">
   ACI
   <div class="ocultarExistencia"> 
   <input id="ocultarExistencia" type="checkbox" name="ocultar" value="1" > <div> Ocultar existencia en 0</div>
   </div>
-  </div>
+  </div> -->
 
   <script type="text/javascript">
   $(document).on('ready',function(){
