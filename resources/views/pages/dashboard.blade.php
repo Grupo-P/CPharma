@@ -1436,6 +1436,70 @@
 	<!-- Modal ADMINISTRACION -->
 	<!-- Dashboard ADMINISTRACION-->
 	<div class="card-deck">
+    <div class="card border-warning mb-3" style="width: 14rem;">      
+      <div class="card-body text-left bg-warning">
+        <h3 class="card-title">
+          <span class="card-text text-white">
+            <i class="fas fa-balance-scale-left"></i>
+            <?php
+            $saldo_actualBs = DB::table('ts_movimientos')
+              ->where('tasa_ventas_id', 1)
+              ->orderBy('id', 'desc')
+              ->first();
+            
+            if(empty($saldo_actualBs)) {
+                echo 'Saldo actual: '. number_format(0, 2, ',', '.') . " " . SigVe;
+              }
+              else {
+                echo 'Saldo actual: '. number_format($saldo_actualBs->saldo_actual, 2, ',', '.') . " " . SigVe;
+              }
+          ?>            
+          </span>
+        </h3>
+        <p class="card-text text-white">
+        <?php 
+          echo 'Movimientos en bolivares registrados: ' . $movimientosBs;
+          echo '<br>Fecha y hora actual: ' . date("d-m-Y h:i:s a", time());
+        ?>
+        </p>
+      </div>
+      <div class="card-footer bg-transparent border-warning text-right">
+        <a href="/movimientos?tasa_ventas_id=1" class="btn btn-outline-warning btn-sm">Visualizar</a>
+      </div>    
+    </div>
+
+    <div class="card border-secondary mb-3" style="width: 14rem;">      
+      <div class="card-body text-left bg-secondary">
+        <h3 class="card-title">
+          <span class="card-text text-white">
+            <i class="fas fa-balance-scale"></i>
+            <?php 
+            $saldo_actualDs = DB::table('ts_movimientos')
+              ->where('tasa_ventas_id', 2)
+              ->orderBy('id', 'desc')
+              ->first();
+
+              if(empty($saldo_actualDs)) {
+                echo 'Saldo actual: ' . number_format(0, 2, ',', '.') . " " . SigDolar;
+              }
+              else {
+                echo 'Saldo actual: ' . number_format($saldo_actualDs->saldo_actual, 2, ',', '.') . " " . SigDolar;
+              }
+          ?>            
+          </span>
+        </h3>
+        <p class="card-text text-white">
+        <?php 
+          echo 'Movimientos en dolares registrados: ' . $movimientosDs;
+          echo '<br>Fecha y hora actual: ' . date("d-m-Y h:i:s a", time());
+        ?>
+        </p>
+      </div>
+      <div class="card-footer bg-transparent border-secondary text-right">
+        <a href="/movimientos?tasa_ventas_id=2" class="btn btn-outline-secondary btn-sm">Visualizar</a>
+      </div>    
+    </div>
+
 		<div class="card border-dark mb-3" style="width: 14rem;">	  	
   		<div class="card-body text-left bg-dark">
 	    		<h3 class="card-title">
