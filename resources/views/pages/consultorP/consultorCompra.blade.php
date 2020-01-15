@@ -76,9 +76,7 @@
 
     <div class="busq_container">
       <div class="boton_modo busq_child">
-        <div class="busq_dina_modo" tabindex="2">
-          <span id="ImgBarra"></span>
-        </div>
+        <p class="busq_dina_modo" id="btn_selector" style="font-size: 2em; text-align: center; vertical-align: middle;"><i class="fas fa-language"></i></p>
       </div>
       <div class="barra_busq busq_child">
         <input type="text" id="input_busq"  tabindex="1" 
@@ -88,9 +86,7 @@
         </input>
       </div>
       <div class="boton_busq busq_child">
-        <div class="busq_dina_boton" tabindex="2">
-          <img src="css/images/buscar.png"  class="busq_dina_img" />
-        </div>
+        <p class="busq_dina_modo" id="btn_selector" style="font-size: 2em; text-align: center; vertical-align: middle;"><i class="fas fa-search"></i></p>
       </div>
     </div>
 
@@ -186,7 +182,6 @@
     var btn = document.getElementById("btn_selector");
     var span = document.getElementsByClassName("close")[0];
     var opc_selec = 1;
-    updateModalBoxAP(opc_selec);
     llenarAutoComplete(opc_selec);
     /* 
         la variable 'opc_selec' siempre inicia por defecto con valor de 1 
@@ -213,7 +208,7 @@
       if (opc_selec != 1){
         opc_selec = 1;
         modal.style.display = "none";
-        updateModalBoxAP(opc_selec);
+        updateModalBox(opc_selec);
       }
       else {
         modal.style.display = "none";
@@ -223,7 +218,7 @@
       if (opc_selec != 2){
         opc_selec = 2;
         modal.style.display = "none";
-        updateModalBoxAP(opc_selec);
+        updateModalBox(opc_selec);
       }
       else {
         modal.style.display = "none";
@@ -233,7 +228,7 @@
       if (opc_selec != 3){
         opc_selec = 3;
         modal.style.display = "none";
-        updateModalBoxAP(opc_selec);
+        updateModalBox(opc_selec);
       }
       else {
         modal.style.display = "none";
@@ -243,7 +238,7 @@
       if (opc_selec != 4){
         opc_selec = 4;
         modal.style.display = "none";
-        updateModalBoxAP(opc_selec);
+        updateModalBox(opc_selec);
       }
       else {
         modal.style.display = "none";
@@ -537,11 +532,14 @@
 
 
 
-    function updateModalBoxAP(modo_selec) {
+    function updateModalBox(modo_selec) {
       
       if (modo_selec == 1) {
-        $('#ImgBarra').HTML('<i class="fas fa-language text-dark"></i>');
-        
+        $('#opc_1').css("background-image", "url(css/images/letras_activa.png)");
+        $('#opc_2').css("background-image", "url(css/images/comp_no_activa.png)");
+        $('#opc_3').css("background-image", "url(css/images/codigo_no_activa.png)");
+        $('#opc_4').css("background-image", "url(css/images/pato_no_activa.png)");
+
         $('#opc_1').find(".opc_texto").css("color", "#7bd1ef");
         $('#opc_2').find(".opc_texto").css("color", "#231f20");
         $('#opc_3').find(".opc_texto").css("color", "#231f20");
@@ -551,7 +549,6 @@
         $('#btn_selector').attr("src", "css/images/letras.png");
         $('#input_busq').attr("onblur", "this.placeholder = 'Ingrese nombre del producto'");
         $('#input_busq').val("");
-
         llenarAutoComplete (modo_selec);
       }
       else if (modo_selec == 2) {
