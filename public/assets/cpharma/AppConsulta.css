@@ -1,0 +1,852 @@
+.nombreF {
+    POSITION: absolute;
+    top: 0.5%;
+    left: 0.5%;
+    font-size: 2.8em;
+    color: #8C8B8B;
+}
+
+.ocultarExistencia {
+	font-size: 0.25em;
+}
+
+.ocultarExistencia div {
+	float: right;
+    margin-top: 4px;
+}
+
+.consultaE td.Descr {
+    padding: 3px 0;
+}
+
+.cargando, .cancel,  .listo  {
+    height: 50px;
+    width: 50px;
+	display: none;
+}
+
+.consultaEInfo {
+	display: none;
+}
+
+
+.consultar {
+	text-align: center;
+    font-size: 2.5em;
+    margin: 2% 0;
+    font-weight: bold;
+    color: #8C8B8B;
+}
+
+.tablaResultado {
+    background-color: #fff;
+    margin: 10px 0;
+}
+
+.tablaResultado th:hover {
+    background: #b3e8ff !important;
+    cursor: auto !important;
+	background-image: none;
+}
+
+.tiRe {
+	width: 75%;
+    padding: 0.35em 0;
+    font-size: 1em;
+    font-weight: bold;
+    float: left;
+    background-color: #fff;
+    color: #8b8b8b;
+}
+
+.tiFa{
+	width: 25%;
+    padding: 3px 0;
+    font-size: 1.2em;
+    font-weight: bold;
+    float: left;
+	background-color: #7bd1ef;
+}
+
+.flecha {
+    float: left;
+}
+
+.Descr {
+	text-align:left !important;
+}
+
+.NuCantidad, .bsCantidad {
+    color: #c6c6c6;
+    float: left;
+    margin-left: 30px;
+    margin-top: 3px;
+	    font-size: 1em;
+    font-weight: 400;
+}
+
+.textCantidad {
+    color: #c6c6c6;
+    float: left;
+    margin-left: 5px;
+    margin-top: 3px;
+	    font-size: 1em;
+    font-weight: 400;
+}
+
+.cantPe {
+	box-shadow:none;
+	width:40px;
+	padding: 0;
+}
+
+.barraHistorial {
+	width: 90%;
+    min-height: 5%;
+	text-align: center;
+    font-weight: bold;
+	font-size: 1em;
+	margin: 5px auto 10px auto;
+}
+
+.historia.hOrigen {
+    background-color: #7bd1ef;
+    color: #fff;
+    padding: 5px 15px;
+	vertical-align:middle;
+}
+
+.sepHist {
+    margin: 0px 15px;
+    display: inline-block;
+    color: #8b8b8b;
+	vertical-align:middle;
+}
+
+.historia {
+	color: #8b8b8b;
+	margin: 2px 0px;
+	display:inline-block;
+	vertical-align:middle;
+}
+
+.imgHist_Comp:hover, .imgHist_Comp:focus, .imgHist_Tera:hover, .imgHist_Tera:focus, .imgHist_Nom:hover, .imgHist_Nom:focus {
+	background-color: #efefef;
+	cursor: pointer;
+}
+
+.borrarComps {
+	float: left;
+    margin-left: 10px;
+}
+
+.ListaCompo {
+	width: 57%;
+    height: 5%;
+    text-align: center;
+    margin: 5px auto;
+	display: none;
+}
+
+#log {
+    margin-top: 4px;
+    color: #7bc7ef;
+    font-size: 1em;
+    line-height: 1em;
+	float: left;
+	max-width: 96%;
+}
+
+
+.busqueda_div_principal {
+	height:10%;
+	overflow:none;
+}
+
+#opc_1{
+	background:URL("/consulta/css/images/letras_activa.png") no-repeat 0 center;
+	color:#7bd1ef;
+}
+
+#opc_1:hover{
+	background:URL("/consulta/css/images/letras_activa.png") no-repeat 0 center !important;
+	color:#7bd1ef !important;
+}
+
+#opc_3{
+	background:URL("/consulta/css/images/codigo_no_activa.png") no-repeat 0 center;
+}
+
+#opc_3:hover{
+	background:URL("/consulta/css/images/codigo_activa.png") no-repeat 0 center !important;
+	color:#7bd1ef !important;
+}
+
+#opc_2{
+	background:URL("/consulta/css/images/comp_no_activa.png") no-repeat 0 center;
+}
+
+#opc_2:hover{
+	background:URL("/consulta/css/images/comp_activa.png") no-repeat 0 center !important;
+	color:#7bd1ef !important;
+}
+
+#opc_4{
+	background:URL("/consulta/css/images/past_no_activa.png") no-repeat 0 center;
+}
+
+#opc_4:hover{
+	background:URL("/consulta/css/images/past_activa.png") no-repeat 0 center !important;
+	color:#7bd1ef !important;
+}
+
+.busq_dina_img:hover {
+	background-color:#7bd1ef;
+}
+
+.busq_dina_modo {
+    height: 100%;
+}
+
+.iva {
+    font-size: 0.62em;
+    float: right;
+    color: red;
+    font-weight: unset;
+}
+
+.borrar, .borrarCo {
+	cursor:pointer;
+}
+
+.clicerror {
+	background-color: #ff0000 !important;
+}
+
+#ui-id-1 {
+	position: fixed !important;
+}
+
+.tituPri3 {
+	float:left;
+	margin-right: 10px;
+}
+
+.borrar {
+	width: 30px;
+	float:right;
+}
+
+.borrarCo {
+	width: 20px;
+	float: left;
+}
+
+.GeTitu {
+	border-style: solid;
+	border-width: 0 0 1px 0;
+} 
+
+.botonMas:hover, .botonMenos:hover {
+	cursor: pointer;
+}
+
+body {
+	font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;
+	font-size:1em;
+	overflow-y: hidden;
+}
+
+.ui-autocomplete {
+    background-color: #efefef;
+    opacity: 0.9;
+	filter: alpha(opacity=90);
+	padding-left: 0px;
+	padding-right: 1px;
+	max-height: 340px;
+	overflow-x: hidden;
+    overflow-y: auto;
+	margin: auto 0;
+	border: 2px;
+	border-style: solid;
+	border-color: #CDCDCD;
+}
+
+.ui-helper-hidden-accessible {
+	display: none !important;
+}
+
+.ui-menu-item {
+	opacity: 1;
+	filter: alpha(opacity=100);
+	color: #898989;
+	text-align: left;
+	padding-left: 0.7em;
+	padding-top: 2px;
+	padding-bottom: 2px;
+	list-style-type: none;
+	cursor: hand;
+	font-size: 1em;
+}
+
+#ui-id-1.ui-menu-item:hover.ui-state-focus {
+	background-color:#B3E8FF !important;
+	cursor: default !important;
+}
+
+.ui-menu-item:hover, .ui-state-focus {
+	background-color:#B3E8FF !important;
+	cursor: hand !important;
+}
+
+
+.contCompo:hover, .contCompo:focus  {
+	cursor: default;
+	background-color:#00703f;
+	color:#ffffff;
+	width:150px;
+}
+
+.contCompo div {
+	padding: 2px 0px;
+}
+
+.tituPri, .tituPri2, .tituPri3 {
+	font-weight: bold;
+	font-size: 1.23em;
+}
+
+.titulo .grid_12 {
+	width: 466px;
+	height: 70px;
+}
+
+.menuMe {
+	font-weight: bold;
+	font-size: 1em;
+	margin-top:15px;
+	text-align: center;
+}
+
+.odd {
+	background-color: #efefef;
+}
+
+.even {
+	background: #fff;	
+}
+
+
+.even td, .opWi td, .odd td {
+	padding: 0.3em;
+	font-size: 0.9em;
+}
+
+.Color3 {
+	
+	background-color: #dbdbdb;
+	color: #000;
+}
+
+.Color4 {
+	background: #858580;
+	color: #ffffff;
+
+}
+
+
+.infoNu {
+	text-align: right !important;
+}
+
+.infoFe {
+	text-align: center !important;
+}
+
+.infoDes {
+	text-align: left !important;
+}
+
+.contCompo, .compo, .patos {
+	border-style: none !important;
+	;
+}
+
+.opMe , .opWi {
+	font-size: 1em;
+	text-align: center;
+	min-height: 20px;
+}
+
+.opWi {
+	background-color: #fff;
+} 
+
+.opMe div , .opWi div {
+	height:100%;
+}
+
+.set1m {
+	width: 45px !important;
+}
+
+.tituPri2 {
+	text-align: center;
+}
+
+#busquedaComponente {
+	margin-top: 5px;
+    width: 290px;
+	border-width:2px;
+}
+
+#medicina {
+	width: 290px;
+	margin-top: 5px;
+}
+
+
+/* Codigo nuevo de Javi */
+.busq_container {
+	width: 60%;
+    display: flex;
+    overflow: hidden;
+    border: 3px solid #B3E8FF;
+    box-shadow: 3px 3px 3px 3px #EEE;
+    margin: 0 auto;
+    height: 90%;
+}
+
+.busq_child{
+	overflow:hidden;
+}
+
+.boton_modo{
+	float: left;
+	z-index: 2;
+	width: 10%;
+	background-color: #B3E8FF;
+}
+
+.barra_busq {
+	float: center;
+	width: 87%;
+	z-index: 1;
+}
+
+.boton_busq {
+	float: right;
+	z-index: 2;
+	width: 10%;
+	background-color: #B3E8FF;
+}
+
+#input_busq {
+	width: 100%;
+	height: 95%;
+	text-align: center;
+	border-color: #B3E8FF;
+	border: 1px;
+	font-size: 1.5em;
+	font-weight: normal;
+	color: #8C8B8B;
+}
+
+.busq_dina_boton {
+    background-repeat: no-repeat;
+    background-position: right top;
+    padding-top:0px;
+    margin-bottom:0px;
+	width:100%;
+	height:100%;
+}
+
+.busq_dina_img {
+    background-repeat: no-repeat;
+    background-position: right top;
+    padding-top:0px;
+    margin-bottom:0px;
+	width:100%;
+	height:100%;
+	
+}
+
+.busq_dina_boton:hover, .busq_dina_boton:focus {
+	cursor: pointer;
+}
+
+.busq_dina_boton:active {
+	position:relative;
+	top:1px;
+}
+
+.busq_dina_modo:hover, .busq_dina_modo:focus {
+	cursor: pointer;
+}
+
+.busq_dina_modo:active {
+	position:relative;
+	top:1px;
+}
+
+input[type="text"].busq_dina::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+  color: #8C8B8B;
+  text-align: center;
+}
+input[type="text"].busq_dina::-moz-placeholder { /* Firefox 19+ */
+  color: #8C8B8B;
+  text-align: center;
+}
+input[type="text"].busq_dina:-ms-input-placeholder { /* IE 10+ */
+  color: #8C8B8B;
+  text-align: center;
+}
+input[type="text"].busq_dina:-moz-placeholder { /* Firefox 18- */
+  color: #8C8B8B;
+  text-align: center;
+}
+
+ /* The Modal (background) */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 6; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content/Box */
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto; /* 15% from the top and centered */
+    padding: 20px;
+    border: 1px solid #888;
+	top: 10%;
+    width: 35%; /* Could be more or less, depending on screen size */
+}
+
+ /* Modal Header */
+.modal-header {
+    padding: 2px 16px;
+    background-color: #ecebeb;
+    color: #8C8B8B;
+	font-style: oblique;
+}
+
+/* Modal Body */
+.modal-body {padding: 2px 16px;}
+
+/* Modal Content */
+.modal-content {
+    position: relative;
+    background-color: #fefefe;
+    margin: auto;
+    padding: 0;
+    border: 1px solid #888;
+    width: 35%;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+    -webkit-animation-name: animatetop;
+    -webkit-animation-duration: 0.4s;
+    animation-name: animatetop;
+    animation-duration: 0.4s;
+}
+
+.modo_opciones {
+	display: flex;
+	margin: 1em;
+}
+.modo_opciones:hover,
+.modo_opciones:focus {
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.opc_img {
+	float:left;
+	width: 55px;
+	height: 60px; 
+}
+.opc_texto {
+   /* color: #8c8b8b; */
+    font-size: 1.1em;
+    font-style: oblique;
+    margin-left: 25%;
+}
+
+/* Add Animation */
+@-webkit-keyframes animatetop {
+    from {top: -300px; opacity: 0}
+    to {top: 10%; opacity: 1}
+}
+
+@keyframes animatetop {
+    from {top: -300px; opacity: 0}
+    to {top: 10%; opacity: 1}
+}
+
+/* The Close Button */
+.close {
+    color: #A3D8FF;
+    float: right;
+    font-size: 2.15em;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+/* Se acabo el codigo nuevo de Javi */
+
+
+.espere {
+	display:none;
+	font-size:1em;
+}
+
+.fongoBoton {
+	-moz-box-shadow:inset -1px -1px 0px 1px #00703f;
+	-webkit-box-shadow:inset -1px -1px 0px 1px #00703f;
+	box-shadow:inset -1px -1px 0px 1px #00703f;
+	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #00a560), color-stop(1, #00a560) );
+	background:-moz-linear-gradient( center top, #00a560 5%, #00a560 100% );
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#00a560', endColorstr='#00a560');
+	background-color:#00a560;
+	-webkit-border-top-left-radius:20px;
+	-moz-border-radius-topleft:20px;
+	border-top-left-radius:20px;
+	-webkit-border-top-right-radius:20px;
+	-moz-border-radius-topright:20px;
+	border-top-right-radius:20px;
+	-webkit-border-bottom-right-radius:20px;
+	-moz-border-radius-bottomright:20px;
+	border-bottom-right-radius:20px;
+	-webkit-border-bottom-left-radius:20px;
+	-moz-border-radius-bottomleft:20px;
+	border-bottom-left-radius:20px;
+	text-indent:0;
+	border:1px solid #059e5c;
+	display:inline-block;
+	color:#ffffff;
+	font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;
+	font-size:1.23em;
+	font-weight:bold;
+	font-style:normal;
+	height:40px;
+	line-height:40px;
+	width:100px;
+	text-decoration:none;
+	text-align:center;
+	text-shadow:1px 1px 0px #00703f;
+	margin-top: 3px;
+	margin-left: 6px;
+}
+.fongoBoton:hover, .fongoBoton:focus {
+	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #00703f), color-stop(1, #00703f) );
+	background:-moz-linear-gradient( center top, #00703f 5%, #00703f 100% );
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#00703f', endColorstr='#00703f');
+	background-color:#00703f;
+	cursor: pointer;
+	
+}.fongoBoton:active {
+	position:relative;
+	top:1px;
+}
+
+#search-btn
+{
+	width: 87px;
+	height: 30px;
+	background: url('img/search-button.png') 0px 0px no-repeat;
+    margin-top: 10px;
+	margin-left: auto;
+	margin-right: auto;
+	margin-bottom: 10px;
+	cursor: hand;
+}
+
+#search-btn:hover
+{
+	background: url('img/search-button.png') 0px 0px no-repeat;
+
+}
+
+
+.err {
+	color: red;
+    font-size: 1.61em;
+    line-height: 1em;
+    margin-left: 55px;
+    margin-right: 1px;
+    margin-top: 15px;
+    text-align: center;
+    width: 222px;
+}
+
+#error, .error  {
+	color: red;
+    font-size: 1.61em;
+    line-height: 1em;
+}
+
+
+
+.botonMas  img, .botonMenos  img {
+padding-left: 15px;
+padding-top: 5px;
+}
+
+.advertenciaM {
+	color: #fff;
+	background-color: red;
+	font-size: 1.61em;
+    line-height: 1em;
+	margin-top: 15px;
+    padding: 10px 0px;
+	font-weight: bold;
+	text-align: center;
+}
+
+/* Codigo nuevo de kink */
+
+.TituloTabla th {
+	font-weight: bold;
+	font-size: 1em;
+	text-align: center;
+	background-color: #b3e8ff;
+	height:30px;
+	border: 0.2em solid #fff;
+	border-top: none;
+	border-bottom: none;
+}
+
+.TituloTabla th:hover {
+	background: url('images/flecha.png') center 0.2em no-repeat;
+	background-color: #7bd1ef;
+	cursor: pointer;
+}
+
+.primero {
+	border-left: none !important;
+	padding-left:0em !important;
+}
+
+.ultimo {
+	border-right:none !important;
+	padding-right:0em !important;
+	
+}
+
+.TituloTabla {
+    width: 100%;
+}
+
+table {
+	width:100%;
+}
+
+.paCompo:hover, .paCompo:focus, .paPato:hover, .paPato:focus {
+	background-color: #7bd1ef;
+	cursor: pointer;
+}
+
+.contPrincipal {
+	height:80%;
+	overflow:none;
+}
+
+
+
+.Dash {
+    position: fixed;
+    min-height: 6%;
+	width: 97%;
+	max-height:25%;
+
+}
+
+.contItems {
+	overflow-y:scroll;
+}
+
+.contApp {
+    overflow-y: scroll;
+    height: 76%;
+    width: 97%;
+    margin: 0 auto 0 auto;
+}
+
+.consultaE {
+	position: absolute;
+    width: 50px;
+    height: 50px;
+    top: 0;
+    right: 0;
+	background: #B3E8FF;
+	overflow-y:auto;
+	box-shadow: 3px 3px 3px 3px #EEE;
+	z-index: 5;
+	padding: 3px 0px 3px 3px;
+}
+
+
+.tituPriList {
+	background-color:#686868;
+	margin-top: 2px;
+	padding: 8px 10px 5px 10px;
+	color:#fff;
+	
+}
+
+html,body{
+
+margin:0px;
+
+height:100%;
+
+}
+
+/* `Clear Floated Elements
+----------------------------------------------------------------------------------------------------*/
+
+/* http://sonspring.com/journal/clearing-floats */
+
+.clear {
+	clear: both;
+	display: block;
+	overflow: hidden;
+	visibility: hidden;
+	width: 0;
+	height: 0;
+}
+
+/* http://perishablepress.com/press/2009/12/06/new-clearfix-hack */
+
+.clearfix:after {
+	clear: both;
+	content: ' ';
+	display: block;
+	font-size: 0;
+	line-height: 0;
+	visibility: hidden;
+	width: 0;
+	height: 0;
+}
+
+/*
+	The following zoom:1 rule is specifically for IE6 + IE7.
+	Move to separate stylesheet if invalid CSS is a problem.
+*/
+* html .clearfix,
+*:first-child+html .clearfix {
+	zoom: 1;
+}
+
+/* cierre Codigo nuevo de kink */
