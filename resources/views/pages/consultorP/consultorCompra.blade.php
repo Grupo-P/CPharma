@@ -115,15 +115,15 @@
             <div class="modo_opciones link-opc" id="opc_1">
               <h3><i class="fas fa-language aum-icon-lup"></i> Nombre del producto</h3>
             </div>
-            <div class="modo_opciones link-opc" id="opc_2">
+            <!-- <div class="modo_opciones link-opc" id="opc_2">
               <h3><i class="fas fa-dna aum-icon-lup"></i> Principio Activo o Componente</h3>
-            </div>
+            </div> -->
             <div class="modo_opciones link-opc" id="opc_3">
               <h3><i class="fas fa-barcode aum-icon-lup"></i> Código de barra</h3>
             </div>
-            <div class="modo_opciones link-opc" id="opc_4">
+            <!-- <div class="modo_opciones link-opc" id="opc_4">
               <h3><i class="fas fa-pills aum-icon-lup"></i> Uso terapéutico</h3>
-            </div>
+            </div> -->
           </div>
         </div>
       </div>
@@ -147,7 +147,7 @@
             <h1><p id="icon-btn"></p></h1>
           </td>
           <td align="center" style="border: 4px solid #17a2b8;">
-            <input id="inputCodBar" type="text" name="CodBar" autofocus="autofocus">
+            <input id="input_busq" type="text" name="CodBar" autofocus="autofocus">
           </td>
           <td align="center" class="boton-tabla"><h1><i class="fas fa-search aum-icon-lup"></i></h1></td>
         </tr>
@@ -156,35 +156,58 @@
 @endsection
 
 @section('scriptsPie')
+  <?php
+    if($CodJson!=""){
+  ?>
+    <script type="text/javascript">
+      const ArrJsCB = eval(<?php echo $CodJson ?>);
+    </script> 
+  <?php
+    }
+  ?>  
+   <?php
+    if($ArtJson!=""){
+  ?>
+    <script type="text/javascript">
+      const ArrJs = eval(<?php echo $ArtJson ?>);
+    </script> 
+  <?php
+    }
+  ?>
+  
   <script type="text/javascript">
     function updateModalBox(modo_selec) {
       if (modo_selec == 1) {
         $("#icon-btn").html('');
         $("#icon-btn").html('<i class="fas fa-language aum-icon-cod" ></i>');
-        $('#inputCodBar').attr("placeholder", "Ingrese el nombre del producto");
-        $('#inputCodBar').attr("onblur", "this.placeholder = 'Ingrese el nombre del producto'");
-        $('#inputCodBar').attr("onfocus", "this.placeholder = ''");
+        $('#input_busq').attr("placeholder", "Ingrese el nombre del producto");
+        $('#input_busq').attr("onblur", "this.placeholder = 'Ingrese el nombre del producto'");
+        $('#input_busq').attr("onfocus", "this.placeholder = ''");
+        llenarAutoComplete (modo_selec);
       }
       else if (modo_selec == 2) {
         $("#icon-btn").html('');
         $("#icon-btn").html('<i class="fas fa-dna aum-icon-cod" ></i>');
-        $('#inputCodBar').attr("placeholder", "Ingrese el principio activo o componente");
-        $('#inputCodBar').attr("onblur", "this.placeholder = 'Ingrese el principio activo o componente'");
-        $('#inputCodBar').attr("onfocus", "this.placeholder = ''");
+        $('#input_busq').attr("placeholder", "Ingrese el principio activo o componente");
+        $('#input_busq').attr("onblur", "this.placeholder = 'Ingrese el principio activo o componente'");
+        $('#input_busq').attr("onfocus", "this.placeholder = ''");
+        llenarAutoComplete (modo_selec);
       }
       else if (modo_selec == 3) {
         $("#icon-btn").html('');
         $("#icon-btn").html('<i class="fas fa-barcode aum-icon-cod" ></i>');
-        $('#inputCodBar').attr("placeholder", "Haga scan del codigo de barra");
-        $('#inputCodBar').attr("onblur", "this.placeholder = 'Haga scan del codigo de barra'");
-        $('#inputCodBar').attr("onfocus", "this.placeholder = ''");
+        $('#input_busq').attr("placeholder", "Haga scan del codigo de barra");
+        $('#input_busq').attr("onblur", "this.placeholder = 'Haga scan del codigo de barra'");
+        $('#input_busq').attr("onfocus", "this.placeholder = ''");
+        llenarAutoComplete (modo_selec);
       }
       else if (modo_selec == 4) {
        $("#icon-btn").html('');
         $("#icon-btn").html('<i class="fas fa-pills aum-icon-cod" ></i>');
-        $('#inputCodBar').attr("placeholder", "Ingrese el uso terapéutico");
-        $('#inputCodBar').attr("onblur", "this.placeholder = 'Ingrese el uso terapéutico'");
-        $('#inputCodBar').attr("onfocus", "this.placeholder = ''");
+        $('#input_busq').attr("placeholder", "Ingrese el uso terapéutico");
+        $('#input_busq').attr("onblur", "this.placeholder = 'Ingrese el uso terapéutico'");
+        $('#input_busq').attr("onfocus", "this.placeholder = ''");
+        llenarAutoComplete (modo_selec);
       }
     }
 
@@ -195,7 +218,9 @@
     var span = document.getElementsByClassName("close")[0];
     var opc_selec = 1;
     updateModalBox(opc_selec);
+    llenarAutoComplete(opc_selec);
 
+    /* Inicio de OnClicks referentes al Modal Box */
     btn.onclick = function() {
       $('#exampleModalCenter').modal('show');
     }
@@ -247,31 +272,55 @@
         $('#exampleModalCenter').modal('hide');
       }
     });
+    /* Final de OnClicks referentes al Modal Box */
 
+    //Autocomplete para la busqueda por nombre medicamento
+    function llenarAutoComplete (modo_selec) {
+      switch (modo_selec) {
+        case 1:
+          $( "#input_busq" ).autocomplete({
+            source: ArrJs,
+            delay: 150,
+            minLength: 3,
+            open: function(e, ui) {
+              //using the 'open' event to capture the originally typed text
+              var self = $(this),
+              val = self.val();
+              //saving original search term in 'data'.
+              self.data('searchTerm', val);
+            },
+            focus: function(e, ui) {
+              return false;
+            },
+            select: function( e, ui ) {
+              var self = $(this),
+                keyPressed = e.keyCode,
+                keyWasEnter = e.keyCode === 13,
+                useSelection = false,
+                val = self.data('searchTerm');
+              if (keyPressed) {
+                if (keyWasEnter) {
+                  e.preventDefault();
+                }
+              }
+              return useSelection;
+            }
+          });
+          $("#input_busq").autocomplete( "enable" );
+          break;
+        case 3:
+          //Este tipo de busqueda no requiere de un modulo .autoComplete
+          $("#input_busq").autocomplete( "disable" );
+          break;
+      }
+    }
+
+    /*Despliegue del modal*/
     $(document).ready(function(){
         $('[data-toggle="tooltip"]').tooltip();   
     });
     
 	</script>
-     
-  <?php
-    if($CodJson!=""){
-  ?>
-    <script type="text/javascript">
-      const ArrJsCB = eval(<?php echo $CodJson ?>);
-    </script> 
-  <?php
-    }
-  ?>  
-   <?php
-    if($ArtJson!=""){
-  ?>
-    <script type="text/javascript">
-      const ArrJs = eval(<?php echo $ArtJson ?>);
-    </script> 
-  <?php
-    }
-  ?>
 @endsection
 
 <?php

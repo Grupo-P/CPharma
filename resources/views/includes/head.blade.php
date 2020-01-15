@@ -13,6 +13,7 @@
 <link rel="stylesheet" href="{{asset('assets/bootstrap/css/bootstrap.css')}}">
 <link rel="stylesheet" href="{{asset('assets/bootstrap/css/bootstrap-grid.css')}}">
 <link rel="stylesheet" href="{{asset('assets/bootstrap/css/bootstrap-reboot.css')}}">
+<link rel="stylesheet" href="{{asset('assets/jquery/jquery-ui.css')}}">
 <!-- CPharma Style -->
 <link rel="stylesheet" href="{{asset('assets/cpharma/cpharmastyle.css')}}">
 @yield('estilosInternos')
@@ -23,6 +24,7 @@
 <script type="text/javascript" src="{{ asset('assets/js/functions.js') }}"> </script>
 <!-- Jquery -->
 <script src="{{asset('assets/jquery/jquery-3.3.1.slim.min.js')}}"></script>
+<script src="{{asset('assets/jquery/jquery-ui.js')}}"></script>
 <!-- Popper -->
 <script src="{{asset('assets/popper/popper.min.js')}}"></script>
 <!-- Bootstrap -->
