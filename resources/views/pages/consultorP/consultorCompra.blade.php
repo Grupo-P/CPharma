@@ -26,29 +26,22 @@
 
   <!-- Modal Box -->
   <div id="selector_modo_busq" class="modal">
-    
     <div class="modal-content">
-      
       <div class="modal-header">
-        <span class="close">×</span>
-        <h2>Modo de busqueda</h2>
+        <h2 style="text-align: left;">Modo de busqueda</h2>
+        <span class="close" style="text-align: right;">×</span> 
       </div>
-      
       <div class="modal-body">
         <div class="modo_opciones" id="opc_1">
-          <!-- <img src="css/images/pato_no_activa.png" class="opc_img" /> -->
           <p class="opc_texto">Nombre del medicamento (producto)</p>
         </div>
         <div class="modo_opciones" id="opc_2">
-          <!-- <img src="css/images/comp_no_activa.png" class="opc_img" /> -->
           <p class="opc_texto">Principio Activo o Componente</p>
         </div>
         <div class="modo_opciones" id="opc_3">
-          <!--  <img src="css/images/codigo_no_activa.png" class="opc_img" /> -->
           <p class="opc_texto">Código de barra</p>
         </div>
         <div class="modo_opciones" id="opc_4">
-          <!-- <img src="css/images/pato_no_activa.png" class="opc_img" /> -->
           <p class="opc_texto">Uso terapéutico</p>
         </div>
       </div>
@@ -84,7 +77,7 @@
     <div class="busq_container">
       <div class="boton_modo busq_child">
         <div class="busq_dina_modo" tabindex="2">
-          <img src="css/images/letras.png" id="btn_selector" class="busq_dina_img" />
+          <span id="ImgBarra"></span>
         </div>
       </div>
       <div class="barra_busq busq_child">
@@ -193,6 +186,7 @@
     var btn = document.getElementById("btn_selector");
     var span = document.getElementsByClassName("close")[0];
     var opc_selec = 1;
+    updateModalBoxAP(opc_selec);
     llenarAutoComplete(opc_selec);
     /* 
         la variable 'opc_selec' siempre inicia por defecto con valor de 1 
@@ -219,7 +213,7 @@
       if (opc_selec != 1){
         opc_selec = 1;
         modal.style.display = "none";
-        updateModalBox(opc_selec);
+        updateModalBoxAP(opc_selec);
       }
       else {
         modal.style.display = "none";
@@ -229,7 +223,7 @@
       if (opc_selec != 2){
         opc_selec = 2;
         modal.style.display = "none";
-        updateModalBox(opc_selec);
+        updateModalBoxAP(opc_selec);
       }
       else {
         modal.style.display = "none";
@@ -239,7 +233,7 @@
       if (opc_selec != 3){
         opc_selec = 3;
         modal.style.display = "none";
-        updateModalBox(opc_selec);
+        updateModalBoxAP(opc_selec);
       }
       else {
         modal.style.display = "none";
@@ -249,7 +243,7 @@
       if (opc_selec != 4){
         opc_selec = 4;
         modal.style.display = "none";
-        updateModalBox(opc_selec);
+        updateModalBoxAP(opc_selec);
       }
       else {
         modal.style.display = "none";
@@ -543,14 +537,11 @@
 
 
 
-    function updateModalBox(modo_selec) {
+    function updateModalBoxAP(modo_selec) {
       
       if (modo_selec == 1) {
-        $('#opc_1').css("background-image", "url(css/images/letras_activa.png)");
-        $('#opc_2').css("background-image", "url(css/images/comp_no_activa.png)");
-        $('#opc_3').css("background-image", "url(css/images/codigo_no_activa.png)");
-        $('#opc_4').css("background-image", "url(css/images/pato_no_activa.png)");
-
+        $('#ImgBarra').HTML('<i class="fas fa-language text-dark"></i>');
+        
         $('#opc_1').find(".opc_texto").css("color", "#7bd1ef");
         $('#opc_2').find(".opc_texto").css("color", "#231f20");
         $('#opc_3').find(".opc_texto").css("color", "#231f20");
@@ -560,6 +551,7 @@
         $('#btn_selector').attr("src", "css/images/letras.png");
         $('#input_busq').attr("onblur", "this.placeholder = 'Ingrese nombre del producto'");
         $('#input_busq').val("");
+
         llenarAutoComplete (modo_selec);
       }
       else if (modo_selec == 2) {
