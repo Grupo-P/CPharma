@@ -533,8 +533,8 @@ input[type="text"].busq_dina:-moz-placeholder { /* Firefox 18- */
  /* Modal Header */
 .modal-header {
   padding: 2px 16px;
-  background-color: #ecebeb;
-  color: #8C8B8B;
+  background-color: #17a2b8 ;
+  color: #343a40;
   text-align: left;
 	font-style: oblique;
 }
@@ -592,7 +592,7 @@ input[type="text"].busq_dina:-moz-placeholder { /* Firefox 18- */
 
 /* The Close Button */
 .close {
-    color: #A3D8FF;
+    color: #343a40;
     float: right;
     font-size: 2.15em;
     font-weight: bold;
@@ -600,7 +600,7 @@ input[type="text"].busq_dina:-moz-placeholder { /* Firefox 18- */
 
 .close:hover,
 .close:focus {
-    color: black;
+    color: #343a40;
     text-decoration: none;
     cursor: pointer;
 }

@@ -28,7 +28,7 @@
   <div id="selector_modo_busq" class="modal">
     <div class="modal-content">
       <div class="modal-header">
-        <h2 style="text-align: left;">Modo de busqueda</h2>
+        <h3 style="text-align: left;">Modo de busqueda</h3>
         <span class="close" style="text-align: right;">×</span> 
       </div>
       <div class="modal-body">
@@ -57,6 +57,7 @@
     <?php
       $SedeConnection = 'FTN';//FG_Mi_Ubicacion();
       $conn = FG_Conectar_Smartpharma($SedeConnection);
+      $NobreSede = FG_Nombre_Sede($SedeConnection);
 
       $sql_01 = "SELECT Descripcion FROM InvArticulo";
       $medicamentos = ConsultaDB($sql_01,$SedeConnection);
@@ -73,16 +74,16 @@
       $temp_patologia  = FG_array_flatten_recursive($patologias);
       $patologiaJson = json_encode($temp_patologia);
     ?>
-
+    <h1 class="text-info"><p id="NobreSede"></p></h1>
     <div class="busq_container">
       <div class="boton_modo busq_child">
         <p class="busq_dina_modo" id="btn_selector" style="font-size: 2em; text-align: center; vertical-align: middle;"><i class="fas fa-language"></i></p>
       </div>
       <div class="barra_busq busq_child">
         <input type="text" id="input_busq"  tabindex="1" 
-          placeholder="Ingrese nombre del producto" 
+          placeholder="Ingrese el nombre del producto" 
           onfocus="this.placeholder = ''" 
-          onblur="this.placeholder = 'Ingrese nombre del producto'">
+          onblur="this.placeholder = 'Ingrese el nombre del producto'">
         </input>
       </div>
       <div class="boton_busq busq_child">
@@ -170,9 +171,11 @@
     var obj_com = eval(<?php echo $compoJson ?>);
     var obj_med = eval(<?php echo $medJson ?>);
     var obj_pat = eval(<?php echo $patologiaJson ?>);
+    var NobreSede = ''+eval(<?php echo $NobreSede ?>);
+    $('#NobreSede').HTML(NobreSede);
 
-    $('#input_busq').attr("placeholder", "Ingrese nombre del producto");
-    $('#input_busq').attr("onblur", "this.placeholder = 'Ingrese nombre del producto'");
+    $('#input_busq').attr("placeholder", "Ingrese el nombre del producto");
+    $('#input_busq').attr("onblur", "this.placeholder = 'Ingrese el nombre del producto'");
     $('#input_busq').val("");
     
     var barraWidth = $('#input_busq').css("width");
@@ -545,9 +548,9 @@
         $('#opc_3').find(".opc_texto").css("color", "#231f20");
         $('#opc_4').find(".opc_texto").css("color", "#231f20");
 
-        $('#input_busq').attr("placeholder", "Ingrese nombre del producto");
+        $('#input_busq').attr("placeholder", "Ingrese el nombre del producto");
         $('#btn_selector').attr("src", "css/images/letras.png");
-        $('#input_busq').attr("onblur", "this.placeholder = 'Ingrese nombre del producto'");
+        $('#input_busq').attr("onblur", "this.placeholder = 'Ingrese el nombre del producto'");
         $('#input_busq').val("");
         llenarAutoComplete (modo_selec);
       }
@@ -562,9 +565,9 @@
         $('#opc_3').find(".opc_texto").css("color", "#231f20");
         $('#opc_4').find(".opc_texto").css("color", "#231f20");
 
-        $('#input_busq').attr("placeholder", "Ingrese principio activo (componentes)");
+        $('#input_busq').attr("placeholder", "Ingrese el principio activo (componentes)");
         $('#btn_selector').attr("src", "css/images/componente.png");
-        $('#input_busq').attr("onblur", "this.placeholder = 'Ingrese principio activo (componentes)'");
+        $('#input_busq').attr("onblur", "this.placeholder = 'Ingrese el principio activo (componentes)'");
         $('#input_busq').val("");
         llenarAutoComplete (modo_selec);
       }
@@ -596,9 +599,9 @@
         $('#opc_3').find(".opc_texto").css("color", "#231f20");
         $('#opc_4').find(".opc_texto").css("color", "#7bd1ef");
 
-        $('#input_busq').attr("placeholder", "Ingrese uso terapéutico");
+        $('#input_busq').attr("placeholder", "Ingrese el uso terapéutico");
         $('#btn_selector').attr("src", "css/images/pastilla.png");
-        $('#input_busq').attr("onblur", "this.placeholder = 'Ingrese uso terapéutico'");
+        $('#input_busq').attr("onblur", "this.placeholder = 'Ingrese el uso terapéutico'");
         $('#input_busq').val("");
         llenarAutoComplete (modo_selec);
       }
