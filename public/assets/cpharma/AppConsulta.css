@@ -165,12 +165,12 @@
 
 #opc_1{
 	background:URL("/consulta/css/images/letras_activa.png") no-repeat 0 center;
-	color:#7bd1ef;
+	color:#17A2B8;
 }
 
 #opc_1:hover{
 	background:URL("/consulta/css/images/letras_activa.png") no-repeat 0 center !important;
-	color:#7bd1ef !important;
+	color:#17A2B8 !important;
 }
 
 #opc_3{
@@ -179,7 +179,7 @@
 
 #opc_3:hover{
 	background:URL("/consulta/css/images/codigo_activa.png") no-repeat 0 center !important;
-	color:#7bd1ef !important;
+	color:#17A2B8 !important;
 }
 
 #opc_2{
@@ -188,7 +188,7 @@
 
 #opc_2:hover{
 	background:URL("/consulta/css/images/comp_activa.png") no-repeat 0 center !important;
-	color:#7bd1ef !important;
+	color:#17A2B8 !important;
 }
 
 #opc_4{
@@ -197,7 +197,7 @@
 
 #opc_4:hover{
 	background:URL("/consulta/css/images/past_activa.png") no-repeat 0 center !important;
-	color:#7bd1ef !important;
+	color:#17A2B8 !important;
 }
 
 .busq_dina_img:hover {
@@ -573,10 +573,13 @@ input[type="text"].busq_dina:-moz-placeholder { /* Firefox 18- */
 	height: 60px; 
 }
 .opc_texto {
-   /* color: #8c8b8b; */
-    font-size: 1.1em;
-    font-style: oblique;
-    margin-left: 5%;
+  font-size: 1.1em;
+  margin-left: 5%;
+}
+
+.opc_texto:hover,
+.opc_texto:active {
+	color: #17a2b8;
 }
 
 /* Add Animation */

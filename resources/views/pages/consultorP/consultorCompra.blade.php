@@ -33,18 +33,19 @@
       </div>
       <div class="modal-body">
         <div class="modo_opciones" id="opc_1">
-          <p class="opc_texto">
-          <i class="fas fa-language"></i>
-          Nombre del medicamento (producto)</p>
+          <i class="fas fa-language opc_texto"></i>
+          <p class="opc_texto">Nombre del medicamento (producto)</p>
         </div>
         <div class="modo_opciones" id="opc_2">
-          <i class="fas fa-language"></i>
+          <i class="fas fa-dna opc_texto"></i>
           <p class="opc_texto">Principio Activo o Componente</p>
         </div>
         <div class="modo_opciones" id="opc_3">
+          <i class="fas fa-barcode opc_texto"></i>
           <p class="opc_texto">Código de barra</p>
         </div>
         <div class="modo_opciones" id="opc_4">
+          <i class="fas fa-pills opc_texto"></i>
           <p class="opc_texto">Uso terapéutico</p>
         </div>
       </div>
