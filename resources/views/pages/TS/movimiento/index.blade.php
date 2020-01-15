@@ -68,13 +68,16 @@
   <hr class="row align-items-start col-12">
   <table style="width:100%;" class="CP-stickyBar">
     <tr>
-      <td style="width:10%;" align="center">
-        <a href="{{ url('/movimientos/create?tasa_ventas_id=' . $_GET["tasa_ventas_id"]) }}" role="button" class="btn btn-outline-info btn-sm" 
-        style="display: inline; text-align: left;">
-        <i class="fa fa-plus"></i>
-          Agregar
-        </a>
-      </td>
+
+      @if(auth()->user()->departamento == 'TESORERIA')
+        <td style="width:10%;" align="center">
+          <a href="{{ url('/movimientos/create?tasa_ventas_id=' . $_GET["tasa_ventas_id"]) }}" role="button" class="btn btn-outline-info btn-sm" 
+          style="display: inline; text-align: left;">
+          <i class="fa fa-plus"></i>
+            Agregar
+          </a>
+        </td>
+      @endif
 
       <td style="width:90%;">
         <div class="input-group md-form form-sm form-1 pl-0 CP-stickyBar">
