@@ -33,9 +33,12 @@
       </div>
       <div class="modal-body">
         <div class="modo_opciones" id="opc_1">
-          <p class="opc_texto">Nombre del medicamento (producto)</p>
+          <p class="opc_texto">
+          <i class="fas fa-language"></i>
+          Nombre del medicamento (producto)</p>
         </div>
         <div class="modo_opciones" id="opc_2">
+          <i class="fas fa-language"></i>
           <p class="opc_texto">Principio Activo o Componente</p>
         </div>
         <div class="modo_opciones" id="opc_3">
@@ -45,9 +48,7 @@
           <p class="opc_texto">Uso terapéutico</p>
         </div>
       </div>
-
     </div>
-
   </div>
   <!-- / Modal Box -->
 
@@ -57,7 +58,6 @@
     <?php
       $SedeConnection = 'FTN';//FG_Mi_Ubicacion();
       $conn = FG_Conectar_Smartpharma($SedeConnection);
-      $NobreSede = FG_Nombre_Sede($SedeConnection);
 
       $sql_01 = "SELECT Descripcion FROM InvArticulo";
       $medicamentos = ConsultaDB($sql_01,$SedeConnection);
@@ -74,7 +74,7 @@
       $temp_patologia  = FG_array_flatten_recursive($patologias);
       $patologiaJson = json_encode($temp_patologia);
     ?>
-    <h1 class="text-info"><p id="NobreSede"></p></h1>
+    <h4 class="text-info" style="text-align: center;">{{FG_Nombre_Sede('FTN')}}</h4>
     <div class="busq_container">
       <div class="boton_modo busq_child">
         <p class="busq_dina_modo" id="btn_selector" style="font-size: 2em; text-align: center; vertical-align: middle;"><i class="fas fa-language"></i></p>
@@ -171,8 +171,6 @@
     var obj_com = eval(<?php echo $compoJson ?>);
     var obj_med = eval(<?php echo $medJson ?>);
     var obj_pat = eval(<?php echo $patologiaJson ?>);
-    var NobreSede = ''+eval(<?php echo $NobreSede ?>);
-    $('#NobreSede').HTML(NobreSede);
 
     $('#input_busq').attr("placeholder", "Ingrese el nombre del producto");
     $('#input_busq').attr("onblur", "this.placeholder = 'Ingrese el nombre del producto'");

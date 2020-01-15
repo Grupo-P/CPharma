@@ -532,15 +532,15 @@ input[type="text"].busq_dina:-moz-placeholder { /* Firefox 18- */
 
  /* Modal Header */
 .modal-header {
-  padding: 2px 16px;
+  padding: 10px;
   background-color: #17a2b8 ;
-  color: #343a40;
+  color: #fff;
   text-align: left;
 	font-style: oblique;
 }
 
 /* Modal Body */
-.modal-body {padding: 2px 16px;}
+.modal-body {padding: 2px 5px;}
 
 /* Modal Content */
 .modal-content {
@@ -576,7 +576,7 @@ input[type="text"].busq_dina:-moz-placeholder { /* Firefox 18- */
    /* color: #8c8b8b; */
     font-size: 1.1em;
     font-style: oblique;
-    margin-left: 25%;
+    margin-left: 5%;
 }
 
 /* Add Animation */
