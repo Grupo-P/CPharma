@@ -88,7 +88,7 @@
 
           <tr>
             <th scope="row">{!! Form::label('concepto', 'Concepto *', ['title' => 'Este campo es requerido']) !!}</th>
-            <td>{!! Form::text('concepto', null, [ 'class' => 'form-control', 'placeholder' => 'Pago de proveedores', 'required', 'title' => 'Debe colocar mínimo 10 caracteres', 'pattern' => '.{10,}']) !!}</td>
+            <td>{!! Form::textarea('concepto', null, [ 'class' => 'form-control', 'placeholder' => 'Pago de proveedores', 'required', 'title' => 'Debe colocar mínimo 10 caracteres', 'rows' => '3', 'pattern' => '.{10,}']) !!}</td>
           </tr>
         </tbody>
       </table>
