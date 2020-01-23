@@ -16,6 +16,7 @@ class AddCamposToTsMovimientosTable extends Migration
         Schema::table('ts_movimientos', function (Blueprint $table) {
             $table->string('user_up')->after('user')->nullable();
             $table->string('estatus')->after('user_up')->nullable();
+            $table->double('diferido', 16, 2)->after('egresos')->nullable();
             $table->double('diferido_anterior', 16, 2)->after('saldo_actual')->nullable();
             $table->double('diferido_actual', 16, 2)->after('diferido_anterior')->nullable();
         });
@@ -32,6 +33,7 @@ class AddCamposToTsMovimientosTable extends Migration
             $table->dropColumn([
                 'user_up', 
                 'estatus', 
+                'diferido', 
                 'diferido_anterior', 
                 'diferido_actual'
             ]);

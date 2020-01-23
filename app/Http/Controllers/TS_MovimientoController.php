@@ -36,9 +36,6 @@ class TS_MovimientoController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request) {
-
-        return $request;
-
         try {
             $movimiento = new TS_Movimiento();
 
@@ -56,7 +53,6 @@ class TS_MovimientoController extends Controller {
             }
 
             $movimiento->saldo_anterior = $configuracion->valor;
-            $movimiento->diferido_anterior = $configuracion2->valor;
 
             switch($request->movimiento) {
                 case "Ingreso":
@@ -68,7 +64,13 @@ class TS_MovimientoController extends Controller {
                     $configuracion->valor -= $request->input('monto');
                     break;
                 case "Diferido":
+                    $movimiento->diferido_anterior = $configuracion2->valor;
+
+                    $movimiento->diferido = $request->input('monto');
+                    $configuracion->valor -= $request->input('monto');
+                    $configuracion2->valor += $request->input('monto');
                     
+                    $movimiento->diferido_actual = $configuracion2->valor;
                     break;
             }
 
