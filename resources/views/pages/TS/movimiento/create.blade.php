@@ -75,6 +75,11 @@
                 <input type="radio" class="custom-control-input" id="movimiento2" name="movimiento" value="Egreso">
                 <label class="custom-control-label" for="movimiento2">Egreso</label>
               </div>
+
+              <div class="custom-control custom-radio custom-control-inline">
+                <input type="radio" class="custom-control-input" id="movimiento3" name="movimiento" value="Diferido">
+                <label class="custom-control-label" for="movimiento3">Diferido</label>
+              </div>
             </td>
           </tr>
 

@@ -37,6 +37,8 @@ class TS_MovimientoController extends Controller {
      */
     public function store(Request $request) {
 
+        return $request;
+
         try {
             $movimiento = new TS_Movimiento();
 
