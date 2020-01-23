@@ -116,7 +116,11 @@
     @foreach($movimientos as $movimiento)
       <tr>
         <th>{{intval(++$cont)}}</th>
-        <td>{{FG_Limpiar_Texto($movimiento->concepto)}}</td>
+        <td>
+          <span class="d-inline-block " style="max-width: 250px;">
+            {{FG_Limpiar_Texto($movimiento->concepto)}}
+          </span>
+        </td>
         <td>{{number_format($movimiento->ingresos, 2, ',', '.')}}</td>
         <td>{{number_format($movimiento->egresos, 2, ',', '.')}}</td>
         <td>{{number_format($movimiento->saldo_anterior, 2, ',', '.')}}</td>
