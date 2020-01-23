@@ -47,13 +47,16 @@ class TS_MovimientoController extends Controller {
             switch($request->input('tasa_ventas_id')) {
                 case 1:
                     $configuracion = Configuracion::find(7);
+                    $configuracion2 = Configuracion::find(9);
                     break;
                 case 2:
                     $configuracion = Configuracion::find(8);
+                    $configuracion2 = Configuracion::find(10);
                     break;
             }
 
             $movimiento->saldo_anterior = $configuracion->valor;
+            $movimiento->diferido_anterior = $configuracion2->valor;
 
             switch($request->movimiento) {
                 case "Ingreso":
@@ -64,13 +67,17 @@ class TS_MovimientoController extends Controller {
                     $movimiento->egresos = $request->input('monto');
                     $configuracion->valor -= $request->input('monto');
                     break;
+                case "Diferido":
+                    
+                    break;
             }
-            $configuracion->save();
 
             $movimiento->saldo_actual = $configuracion->valor;
             $movimiento->concepto = $request->input('concepto');
             $movimiento->user = auth()->user()->name;
+            
             $movimiento->save();
+            $configuracion->save();
 
             //-------------------- AUDITORIA --------------------//
             $Auditoria = new Auditoria();
