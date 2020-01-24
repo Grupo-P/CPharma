@@ -859,7 +859,12 @@
         </h3>
         <p class="card-text text-white">
         <?php
-          $ultimoMovimientoBs = $saldo_actualBs->updated_at;
+          if(empty($saldo_actualBs)) {
+            $ultimoMovimientoBs = '';
+          }
+          else {
+            $ultimoMovimientoBs = $saldo_actualBs->updated_at;
+          }
 
           echo 'Movimientos en bolivares registrados: ' . $movimientosBs;
           echo '<br>Fecha y hora actual: ' . date("d-m-Y h:i:s a");
@@ -894,7 +899,12 @@
         </h3>
         <p class="card-text text-white">
         <?php 
-          $ultimoMovimientoDs = $saldo_actualDs->updated_at;
+          if(empty($saldo_actualDs)) {
+            $ultimoMovimientoDs = '';
+          }
+          else {
+            $ultimoMovimientoDs = $saldo_actualDs->updated_at;
+          }
 
           echo 'Movimientos en dolares registrados: ' . $movimientosDs;
           echo '<br>Fecha y hora actual: ' . date("d-m-Y h:i:s a");
@@ -954,7 +964,12 @@
         </h3>
         <p class="card-text text-white">
         <?php
-          $ultimoMovimientoBs = $saldo_actualBs->updated_at;
+          if(empty($saldo_actualBs)) {
+            $ultimoMovimientoBs = '';
+          }
+          else {
+            $ultimoMovimientoBs = $saldo_actualBs->updated_at;
+          }
 
           echo 'Movimientos en bolivares registrados: ' . $movimientosBs;
           echo '<br>Fecha y hora actual: ' . date("d-m-Y h:i:s a");
@@ -989,7 +1004,12 @@
         </h3>
         <p class="card-text text-white">
         <?php 
-          $ultimoMovimientoDs = $saldo_actualDs->updated_at;
+          if(empty($saldo_actualDs)) {
+            $ultimoMovimientoDs = '';
+          }
+          else {
+            $ultimoMovimientoDs = $saldo_actualDs->updated_at;
+          }
 
           echo 'Movimientos en dolares registrados: ' . $movimientosDs;
           echo '<br>Fecha y hora actual: ' . date("d-m-Y h:i:s a");
