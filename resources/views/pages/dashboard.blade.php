@@ -929,6 +929,79 @@
 	  	</div>
 		</div>
   </div>
+
+  <!-- DIFERIDOS -->
+  <div class="card-deck">
+    <div class="card border-warning mb-3" style="width: 14rem;">      
+      <div class="card-body text-left bg-warning">
+        <h3 class="card-title">
+          <span class="card-text text-white">
+            <i class="fas fa-lock"></i>
+            <?php
+            $saldo_actualBs = DB::table('ts_movimientos')
+              ->where('tasa_ventas_id', 1)
+              ->orderBy('id', 'desc')
+              ->first();
+            
+            if(empty($saldo_actualBs)) {
+                echo 'Diferido actual: '. number_format(0, 2, ',', '.') . " " . SigVe;
+              }
+              else {
+                echo 'Diferido actual: '. number_format($saldo_actualBs->saldo_actual, 2, ',', '.') . " " . SigVe;
+              }
+          ?>            
+          </span>
+        </h3>
+        <p class="card-text text-white">
+        <?php
+          $ultimoMovimientoBs = $saldo_actualBs->updated_at;
+
+          echo 'Movimientos en bolivares registrados: ' . $movimientosBs;
+          echo '<br>Fecha y hora actual: ' . date("d-m-Y h:i:s a");
+          echo '<br>Ultimo movimiento: ' . date("d-m-Y h:i:s a", strtotime($ultimoMovimientoBs));
+        ?>
+        </p>
+      </div>
+      <div class="card-footer bg-transparent border-warning text-right">
+        <a href="/movimientos?tasa_ventas_id=1" class="btn btn-outline-warning btn-sm">Visualizar</a>
+      </div>    
+    </div>
+
+    <div class="card border-secondary mb-3" style="width: 14rem;">      
+      <div class="card-body text-left bg-secondary">
+        <h3 class="card-title">
+          <span class="card-text text-white">
+            <i class="fas fa-lock"></i>
+            <?php 
+            $saldo_actualDs = DB::table('ts_movimientos')
+              ->where('tasa_ventas_id', 2)
+              ->orderBy('id', 'desc')
+              ->first();
+
+              if(empty($saldo_actualDs)) {
+                echo 'Diferido actual: ' . number_format(0, 2, ',', '.') . " " . SigDolar;
+              }
+              else {
+                echo 'Diferido actual: ' . number_format($saldo_actualDs->saldo_actual, 2, ',', '.') . " " . SigDolar;
+              }
+          ?>            
+          </span>
+        </h3>
+        <p class="card-text text-white">
+        <?php 
+          $ultimoMovimientoDs = $saldo_actualDs->updated_at;
+
+          echo 'Movimientos en dolares registrados: ' . $movimientosDs;
+          echo '<br>Fecha y hora actual: ' . date("d-m-Y h:i:s a");
+          echo '<br>Ultimo movimiento: ' . date("d-m-Y h:i:s a", strtotime($ultimoMovimientoDs));
+        ?>
+        </p>
+      </div>
+      <div class="card-footer bg-transparent border-secondary text-right">
+        <a href="/movimientos?tasa_ventas_id=2" class="btn btn-outline-secondary btn-sm">Visualizar</a>
+      </div>    
+    </div>
+  </div>
 	<!-- Dashboard TESORERIA-->
 <?php
   }
