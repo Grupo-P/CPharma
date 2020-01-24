@@ -80,6 +80,7 @@ class TS_MovimientoController extends Controller {
             
             $movimiento->save();
             $configuracion->save();
+            $configuracion2->save();
 
             //-------------------- AUDITORIA --------------------//
             $Auditoria = new Auditoria();
