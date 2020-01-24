@@ -991,7 +991,7 @@
         </p>
       </div>
       <div class="card-footer bg-transparent border-warning text-right">
-        <a href="/movimientos?tasa_ventas_id=1" class="btn btn-outline-warning btn-sm">Visualizar</a>
+        <a href="/diferidos?tasa_ventas_id=1" class="btn btn-outline-warning btn-sm">Visualizar</a>
       </div>    
     </div>
 
@@ -1032,7 +1032,7 @@
         </p>
       </div>
       <div class="card-footer bg-transparent border-secondary text-right">
-        <a href="/movimientos?tasa_ventas_id=2" class="btn btn-outline-secondary btn-sm">Visualizar</a>
+        <a href="/diferidos?tasa_ventas_id=2" class="btn btn-outline-secondary btn-sm">Visualizar</a>
       </div>    
     </div>
   </div>
