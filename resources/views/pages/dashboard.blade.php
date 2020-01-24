@@ -41,10 +41,22 @@
     //-------------------- VARIABLES TESORERIA --------------------//
     $movimientosBs = DB::table('ts_movimientos')
     ->where('tasa_ventas_id', 1)
+    ->whereNull('diferido')
+    ->count();
+
+    $diferidosBs = DB::table('ts_movimientos')
+    ->where('tasa_ventas_id', 1)
+    ->whereNotNull('diferido')
     ->count();
 
     $movimientosDs = DB::table('ts_movimientos')
     ->where('tasa_ventas_id', 2)
+    ->whereNull('diferido')
+    ->count();
+
+    $diferidosDs = DB::table('ts_movimientos')
+    ->where('tasa_ventas_id', 2)
+    ->whereNotNull('diferido')
     ->count();
 
   /*TASA DOLAR VENTA*/
@@ -948,32 +960,33 @@
           <span class="card-text text-white">
             <i class="fas fa-lock"></i>
             <?php
-            $saldo_actualBs = DB::table('ts_movimientos')
+            $diferido_actualBs = DB::table('ts_movimientos')
               ->where('tasa_ventas_id', 1)
+              ->whereNotNull('diferido')
               ->orderBy('id', 'desc')
               ->first();
             
-            if(empty($saldo_actualBs)) {
+            if(empty($diferido_actualBs)) {
                 echo 'Diferido actual: '. number_format(0, 2, ',', '.') . " " . SigVe;
               }
               else {
-                echo 'Diferido actual: '. number_format($saldo_actualBs->saldo_actual, 2, ',', '.') . " " . SigVe;
+                echo 'Diferido actual: '. number_format($diferido_actualBs->diferido_actual, 2, ',', '.') . " " . SigVe;
               }
           ?>            
           </span>
         </h3>
         <p class="card-text text-white">
         <?php
-          if(empty($saldo_actualBs)) {
-            $ultimoMovimientoBs = '';
+          if(empty($diferido_actualBs)) {
+            $ultimoDiferidoBs = '';
           }
           else {
-            $ultimoMovimientoBs = $saldo_actualBs->updated_at;
+            $ultimoDiferidoBs = $diferido_actualBs->updated_at;
           }
 
-          echo 'Movimientos en bolivares registrados: ' . $movimientosBs;
+          echo 'Diferidos en bolivares registrados: ' . $diferidosBs;
           echo '<br>Fecha y hora actual: ' . date("d-m-Y h:i:s a");
-          echo '<br>Ultimo movimiento: ' . date("d-m-Y h:i:s a", strtotime($ultimoMovimientoBs));
+          echo '<br>Ultimo diferido: ' . date("d-m-Y h:i:s a", strtotime($ultimoDiferidoBs));
         ?>
         </p>
       </div>
