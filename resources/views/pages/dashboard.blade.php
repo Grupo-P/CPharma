@@ -963,7 +963,7 @@
             $diferido_actualBs = DB::table('ts_movimientos')
               ->where('tasa_ventas_id', 1)
               ->whereNotNull('diferido')
-              ->orderBy('id', 'desc')
+              ->orderBy('updated_at', 'desc')
               ->first();
             
             if(empty($diferido_actualBs)) {
@@ -1004,7 +1004,7 @@
             $diferido_actualDs = DB::table('ts_movimientos')
               ->where('tasa_ventas_id', 2)
               ->whereNotNull('diferido')
-              ->orderBy('id', 'desc')
+              ->orderBy('updated_at', 'desc')
               ->first();
 
               if(empty($diferido_actualDs)) {
