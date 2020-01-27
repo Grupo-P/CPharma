@@ -102,6 +102,12 @@ class TS_MovimientoController extends Controller {
         }
     }
 
+    public function diferidos(Request $request) {
+        return view('pages.TS.movimiento.diferidos');
+    }
+
+    /********************* NO UTILIZADO *********************/
+
     /**
      * Display the specified resource.
      *
@@ -131,10 +137,6 @@ class TS_MovimientoController extends Controller {
      */
     public function update(Request $request, $id) {
         //
-    }
-
-    public function diferidos(Request $request) {
-        return $request;
     }
 
     /**
