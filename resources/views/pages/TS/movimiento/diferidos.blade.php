@@ -65,12 +65,13 @@
       <tr>
         <th scope="col" class="CP-sticky">#</th>
         <th scope="col" class="CP-sticky">Concepto</th>
-        <th scope="col" class="CP-sticky">Ingresos</th>
-        <th scope="col" class="CP-sticky">Egresos</th>
-        <th scope="col" class="CP-sticky">Saldo anterior</th>
-        <th scope="col" class="CP-sticky">Saldo actual</th>
+        <th scope="col" class="CP-sticky">Diferido</th>
+        <th scope="col" class="CP-sticky">Diferido anterior</th>
+        <th scope="col" class="CP-sticky">Diferido actual</th>
         <th scope="col" class="CP-sticky">Fecha y hora</th>
         <th scope="col" class="CP-sticky">Usuario</th>
+        <th scope="col" class="CP-sticky">Estatus</th>
+        <th scope="col" class="CP-sticky">Acciones</th>
       </tr>
     </thead>
 
@@ -88,12 +89,21 @@
             {{FG_Limpiar_Texto($diferido->concepto)}}
           </span>
         </td>
-        <td>{{number_format($diferido->ingresos, 2, ',', '.')}}</td>
-        <td>{{number_format($diferido->egresos, 2, ',', '.')}}</td>
-        <td>{{number_format($diferido->saldo_anterior, 2, ',', '.')}}</td>
-        <td>{{number_format($diferido->saldo_actual, 2, ',', '.')}}</td>
-        <td>{{date("d-m-Y h:i:s a", strtotime($diferido->created_at))}}</td>
-        <td>{{$diferido->user}}</td>
+        <td>{{number_format($diferido->diferido, 2, ',', '.')}}</td>
+        <td>{{number_format($diferido->diferido_anterior, 2, ',', '.')}}</td>
+        <td>{{number_format($diferido->diferido_actual, 2, ',', '.')}}</td>
+        <td>{{date("d-m-Y h:i:s a", strtotime($diferido->updated_at))}}</td>
+        <td>{{$diferido->user_up}}</td>
+        <td>{{$diferido->estatus}}</td>
+        <td>
+          @if(auth()->user()->departamento == 'TESORERIA')
+            <a href="/movimientos/{{$diferido->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
+              <i class="fas fa-edit"></i>
+            </a>
+          @else
+            {{'-'}}
+          @endif
+        </td>
       </tr>
     @endforeach
     </tbody>

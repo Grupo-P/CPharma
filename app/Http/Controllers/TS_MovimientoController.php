@@ -113,6 +113,17 @@ class TS_MovimientoController extends Controller {
         return view('pages.TS.movimiento.diferidos', compact('diferidos'));
     }
 
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id) {
+        $diferidos = TS_Movimiento::find($id);
+        return $diferidos;
+    }
+
     /********************* NO UTILIZADO *********************/
 
     /**
@@ -122,16 +133,6 @@ class TS_MovimientoController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function show($id) {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id) {
         //
     }
 
