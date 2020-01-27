@@ -41,10 +41,22 @@
     //-------------------- VARIABLES TESORERIA --------------------//
     $movimientosBs = DB::table('ts_movimientos')
     ->where('tasa_ventas_id', 1)
+    ->whereNull('diferido')
+    ->count();
+
+    $diferidosBs = DB::table('ts_movimientos')
+    ->where('tasa_ventas_id', 1)
+    ->whereNotNull('diferido')
     ->count();
 
     $movimientosDs = DB::table('ts_movimientos')
     ->where('tasa_ventas_id', 2)
+    ->whereNull('diferido')
+    ->count();
+
+    $diferidosDs = DB::table('ts_movimientos')
+    ->where('tasa_ventas_id', 2)
+    ->whereNotNull('diferido')
     ->count();
 
   /*TASA DOLAR VENTA*/
@@ -845,6 +857,7 @@
             <?php
             $saldo_actualBs = DB::table('ts_movimientos')
               ->where('tasa_ventas_id', 1)
+              ->whereNull('diferido')
               ->orderBy('id', 'desc')
               ->first();
             
@@ -858,9 +871,17 @@
           </span>
         </h3>
         <p class="card-text text-white">
-        <?php 
+        <?php
+          if(empty($saldo_actualBs)) {
+            $ultimoMovimientoBs = '';
+          }
+          else {
+            $ultimoMovimientoBs = $saldo_actualBs->updated_at;
+          }
+
           echo 'Movimientos en bolivares registrados: ' . $movimientosBs;
-          echo '<br>Fecha y hora actual: ' . date("d-m-Y h:i:s a", time());
+          echo '<br>Fecha y hora actual: ' . date("d-m-Y h:i:s a");
+          echo '<br>Ultimo movimiento: ' . date("d-m-Y h:i:s a", strtotime($ultimoMovimientoBs));
         ?>
         </p>
       </div>
@@ -877,6 +898,7 @@
             <?php	
             $saldo_actualDs = DB::table('ts_movimientos')
               ->where('tasa_ventas_id', 2)
+              ->whereNull('diferido')
               ->orderBy('id', 'desc')
               ->first();
 
@@ -891,8 +913,16 @@
         </h3>
         <p class="card-text text-white">
         <?php 
+          if(empty($saldo_actualDs)) {
+            $ultimoMovimientoDs = '';
+          }
+          else {
+            $ultimoMovimientoDs = $saldo_actualDs->updated_at;
+          }
+
           echo 'Movimientos en dolares registrados: ' . $movimientosDs;
-          echo '<br>Fecha y hora actual: ' . date("d-m-Y h:i:s a", time());
+          echo '<br>Fecha y hora actual: ' . date("d-m-Y h:i:s a");
+          echo '<br>Ultimo movimiento: ' . date("d-m-Y h:i:s a", strtotime($ultimoMovimientoDs));
         ?>
         </p>
       </div>
@@ -922,6 +952,91 @@
 	  		<a href="/tasaVenta/" class="btn btn-outline-info btn-sm">Visualizar</a>
 	  	</div>
 		</div>
+  </div>
+
+  <!-- DIFERIDOS -->
+  <div class="card-deck">
+    <div class="card border-warning mb-3" style="width: 14rem;">      
+      <div class="card-body text-left bg-warning">
+        <h3 class="card-title">
+          <span class="card-text text-white">
+            <i class="fas fa-lock"></i>
+            <?php
+            $diferido_actualBs = DB::table('ts_movimientos')
+              ->where('tasa_ventas_id', 1)
+              ->whereNotNull('diferido')
+              ->orderBy('updated_at', 'desc')
+              ->first();
+            
+            if(empty($diferido_actualBs)) {
+                echo 'Diferido actual: '. number_format(0, 2, ',', '.') . " " . SigVe;
+              }
+              else {
+                echo 'Diferido actual: '. number_format($diferido_actualBs->diferido_actual, 2, ',', '.') . " " . SigVe;
+              }
+          ?>            
+          </span>
+        </h3>
+        <p class="card-text text-white">
+        <?php
+          if(empty($diferido_actualBs)) {
+            $ultimoDiferidoBs = '';
+          }
+          else {
+            $ultimoDiferidoBs = $diferido_actualBs->updated_at;
+          }
+
+          echo 'Diferidos en bolivares registrados: ' . $diferidosBs;
+          echo '<br>Fecha y hora actual: ' . date("d-m-Y h:i:s a");
+          echo '<br>Ultimo diferido: ' . date("d-m-Y h:i:s a", strtotime($ultimoDiferidoBs));
+        ?>
+        </p>
+      </div>
+      <div class="card-footer bg-transparent border-warning text-right">
+        <a href="/diferidos?tasa_ventas_id=1" class="btn btn-outline-warning btn-sm">Visualizar</a>
+      </div>    
+    </div>
+
+    <div class="card border-secondary mb-3" style="width: 14rem;">      
+      <div class="card-body text-left bg-secondary">
+        <h3 class="card-title">
+          <span class="card-text text-white">
+            <i class="fas fa-lock"></i>
+            <?php 
+            $diferido_actualDs = DB::table('ts_movimientos')
+              ->where('tasa_ventas_id', 2)
+              ->whereNotNull('diferido')
+              ->orderBy('updated_at', 'desc')
+              ->first();
+
+              if(empty($diferido_actualDs)) {
+                echo 'Diferido actual: ' . number_format(0, 2, ',', '.') . " " . SigDolar;
+              }
+              else {
+                echo 'Diferido actual: ' . number_format($diferido_actualDs->diferido_actual, 2, ',', '.') . " " . SigDolar;
+              }
+          ?>            
+          </span>
+        </h3>
+        <p class="card-text text-white">
+        <?php 
+          if(empty($diferido_actualDs)) {
+            $ultimoDiferidoDs = '';
+          }
+          else {
+            $ultimoDiferidoDs = $diferido_actualDs->updated_at;
+          }
+
+          echo 'Diferidos en dolares registrados: ' . $diferidosDs;
+          echo '<br>Fecha y hora actual: ' . date("d-m-Y h:i:s a");
+          echo '<br>Ultimo diferido: ' . date("d-m-Y h:i:s a", strtotime($ultimoDiferidoDs));
+        ?>
+        </p>
+      </div>
+      <div class="card-footer bg-transparent border-secondary text-right">
+        <a href="/diferidos?tasa_ventas_id=2" class="btn btn-outline-secondary btn-sm">Visualizar</a>
+      </div>    
+    </div>
   </div>
 	<!-- Dashboard TESORERIA-->
 <?php

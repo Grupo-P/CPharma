@@ -1,6 +1,6 @@
 @extends('layouts.model')
 
-@section('title', 'Crear movimiento')
+@section('title', 'Modificar movimiento')
 
 @section('content')
   <!-- Modal Guardar -->
@@ -31,20 +31,13 @@
   @endif
 
   <h1 class="h5 text-info">
-    <i class="fas fa-plus"></i>&nbsp;
-
-    @if(isset($_GET["tasa_ventas_id"])) 
-      @if($_GET["tasa_ventas_id"] == 1) 
-        Agregar movimiento en bolívares
-      @elseif($_GET["tasa_ventas_id"] == 2)
-        Agregar movimiento en dolares 
-      @endif
-    @endif
+    <i class="fas fa-edit"></i>
+    Modificar diferido
   </h1>
   <hr class="row align-items-start col-12">
 
-  <form action="/movimientos/" method="GET" style="display: inline;">  
-    <input type="hidden" name="tasa_ventas_id" value="{{$_GET["tasa_ventas_id"]}}">
+  <form action="/diferidos" method="GET" style="display: inline;">  
+    <input type="hidden" name="tasa_ventas_id" value="{{$diferidos->tasa_ventas_id}}">
     <button type="submit" role="button" class="btn btn-outline-info btn-sm"data-placement="top">
       <i class="fa fa-reply">&nbsp;Regresar</i>
     </button>
@@ -52,7 +45,7 @@
 
   <br/><br/>
 
-  {!! Form::open(['route' => 'movimientos.store', 'method' => 'POST', 'id' => 'crear_movimientos', 'class' => 'form-group']) !!}
+  {!! Form::model($diferidos, ['route' => ['movimientos.update', $diferidos], 'method' => 'PUT', 'class' => 'form-group']) !!}
     <fieldset>
       <table class="table table-borderless table-striped">
         <thead class="thead-dark">
@@ -75,19 +68,15 @@
                 <input type="radio" class="custom-control-input" id="movimiento2" name="movimiento" value="Egreso">
                 <label class="custom-control-label" for="movimiento2">Egreso</label>
               </div>
-
-              <div class="custom-control custom-radio custom-control-inline">
-                <input type="radio" class="custom-control-input" id="movimiento3" name="movimiento" value="Diferido">
-                <label class="custom-control-label" for="movimiento3">Diferido</label>
-              </div>
             </td>
           </tr>
 
           <tr>
-            <th scope="row">{!! Form::label('monto', 'Monto *', ['title' => 'Este campo es requerido']) !!}</th>
+            <th scope="row">{!! Form::label('diferido', 'Diferido') !!}</th>
             <td>
-              <input type="number" name="monto" min="1" step="0.01" class="form-control" placeholder="2500.55" required autofocus>
-              <input type="hidden" name="tasa_ventas_id" value="{{$_GET["tasa_ventas_id"]}}">
+              <input type="text" class="form-control" value="{{number_format($diferidos->diferido, 2, ',', '.')}}" disabled>
+              <input type="hidden" name="monto" value="{{$diferidos->diferido}}">
+              <input type="hidden" name="tasa_ventas_id" value="{{$diferidos->tasa_ventas_id}}">
             </td>
           </tr>
 
