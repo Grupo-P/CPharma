@@ -72,6 +72,8 @@ class TS_MovimientoController extends Controller {
                     $movimiento->diferido = $request->input('monto');
                     $configuracion->valor -= $request->input('monto');
                     $configuracion2->valor += $request->input('monto');
+                    $movimiento->estatus = 'DIFERIDO';
+                    $movimiento->user_up = auth()->user()->name;
                     
                     $movimiento->diferido_actual = $configuracion2->valor;
                     break;

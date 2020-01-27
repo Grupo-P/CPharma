@@ -32,13 +32,13 @@
   @endif
 
   <h1 class="h5 text-info">
+    <i class="fas fa-lock"></i>
+
     @if(isset($_GET["tasa_ventas_id"])) 
-      @if($_GET["tasa_ventas_id"] == 1) 
-        <i class="fas fa-balance-scale-left"></i>
-        Movimientos en bolívares
+      @if($_GET["tasa_ventas_id"] == 1)
+        Diferidos en bolívares
       @elseif($_GET["tasa_ventas_id"] == 2)
-        <i class="fas fa-balance-scale"></i>
-        Movimientos en dolares 
+        Diferidos en dolares 
       @endif
     @endif
   </h1>
@@ -46,17 +46,6 @@
   <hr class="row align-items-start col-12">
   <table style="width:100%;" class="CP-stickyBar">
     <tr>
-
-      @if(auth()->user()->departamento == 'TESORERIA')
-        <td style="width:10%;" align="center">
-          <a href="{{ url('/movimientos/create?tasa_ventas_id=' . $_GET["tasa_ventas_id"]) }}" role="button" class="btn btn-outline-info btn-sm" 
-          style="display: inline; text-align: left;">
-          <i class="fa fa-plus"></i>
-            Agregar
-          </a>
-        </td>
-      @endif
-
       <td style="width:90%;">
         <div class="input-group md-form form-sm form-1 pl-0 CP-stickyBar">
           <div class="input-group-prepend">
