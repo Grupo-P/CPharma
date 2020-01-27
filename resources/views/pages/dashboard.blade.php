@@ -834,8 +834,15 @@
   			<ul style="list-style:none">
         	<li class="card-text text-dark" style="display: inline;">
 					<i class="far fa-check-circle text-info" style="display: inline;"></i>
-					Desde ya esta disponible el modulo: 
-					<b class="text-info">Movimientos</b>!!
+					Desde ya estan disponibles los modulos: 
+					<b class="text-info">
+            <ul>
+  						<li>Movimientos en bolivares</li>
+  						<li>Movimientos en dolares</li>
+  						<li>Diferidos en bolivares</li>
+  						<li>Diferidos en dolares</li>
+            </ul>
+          </b>
   				</li>
   			</ul>
 	      </div>
