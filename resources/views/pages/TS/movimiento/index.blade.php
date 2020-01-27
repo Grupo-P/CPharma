@@ -79,7 +79,7 @@
         <th scope="col" class="CP-sticky">Ingresos</th>
         <th scope="col" class="CP-sticky">Egresos</th>
         <th scope="col" class="CP-sticky">Saldo anterior</th>
-        <th scope="col" class="CP-sticky">Saldo actual</th>
+        <th scope="col" class="CP-sticky">Saldo posterior</th>
         <th scope="col" class="CP-sticky">Fecha y hora</th>
         <th scope="col" class="CP-sticky">Usuario</th>
       </tr>

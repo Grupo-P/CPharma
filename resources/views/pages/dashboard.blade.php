@@ -857,6 +857,7 @@
             <?php
             $saldo_actualBs = DB::table('ts_movimientos')
               ->where('tasa_ventas_id', 1)
+              ->whereNull('diferido')
               ->orderBy('id', 'desc')
               ->first();
             
@@ -897,6 +898,7 @@
             <?php	
             $saldo_actualDs = DB::table('ts_movimientos')
               ->where('tasa_ventas_id', 2)
+              ->whereNull('diferido')
               ->orderBy('id', 'desc')
               ->first();
 
