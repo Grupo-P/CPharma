@@ -269,4 +269,4 @@ Route::resource('practicas', 'RH_PracticaController');
 
 //*************************** TESORERIA routing ***************************//
 Route::resource('movimientos', 'TS_MovimientoController');
-Route::get('/diferidos', 'TS_MovimientoController@diferidos');
+Route::get('/diferidos', 'TS_MovimientoController@diferidos')->name('diferidos');

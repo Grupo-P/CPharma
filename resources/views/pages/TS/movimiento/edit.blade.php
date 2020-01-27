@@ -1,6 +1,6 @@
 @extends('layouts.model')
 
-@section('title', 'Crear movimiento')
+@section('title', 'Modificar movimiento')
 
 @section('content')
   <!-- Modal Guardar -->
@@ -75,7 +75,7 @@
             <th scope="row">{!! Form::label('diferido', 'Diferido') !!}</th>
             <td>
               <input type="text" class="form-control" value="{{number_format($diferidos->diferido, 2, ',', '.')}}" disabled>
-              <input type="hidden" name="diferido" value="{{$diferidos->diferido}}">
+              <input type="hidden" name="monto" value="{{$diferidos->diferido}}">
               <input type="hidden" name="tasa_ventas_id" value="{{$diferidos->tasa_ventas_id}}">
             </td>
           </tr>
