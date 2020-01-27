@@ -108,7 +108,7 @@ class TS_MovimientoController extends Controller {
     public function diferidos(Request $request) {
         $diferidos = TS_Movimiento::where('tasa_ventas_id', $request->tasa_ventas_id)
         ->whereNotNull('diferido')
-        ->orderBy('updated_at', 'desc')
+        ->orderByRaw('estatus ASC, id DESC')
         ->get();
         return view('pages.TS.movimiento.diferidos', compact('diferidos'));
     }

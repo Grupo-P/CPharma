@@ -96,7 +96,7 @@
         <td>{{$diferido->user_up}}</td>
         <td>{{$diferido->estatus}}</td>
         <td>
-          @if(auth()->user()->departamento == 'TESORERIA')
+          @if((auth()->user()->departamento == 'TESORERIA') && ($diferido->estatus == 'DIFERIDO'))
             <a href="/movimientos/{{$diferido->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
               <i class="fas fa-edit"></i>
             </a>
