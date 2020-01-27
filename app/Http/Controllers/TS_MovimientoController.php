@@ -18,7 +18,8 @@ class TS_MovimientoController extends Controller {
     public function index(Request $request) {
         $movimientos = TS_Movimiento::where('tasa_ventas_id', $request->tasa_ventas_id)
         ->whereNull('diferido')
-        ->orderBy('created_at', 'desc')->get();
+        ->orderBy('created_at', 'desc')
+        ->get();
         return view('pages.TS.movimiento.index', compact('movimientos'));
     }
 
@@ -103,7 +104,11 @@ class TS_MovimientoController extends Controller {
     }
 
     public function diferidos(Request $request) {
-        return view('pages.TS.movimiento.diferidos');
+        $diferidos = TS_Movimiento::where('tasa_ventas_id', $request->tasa_ventas_id)
+        ->whereNotNull('diferido')
+        ->orderBy('updated_at', 'desc')
+        ->get();
+        return view('pages.TS.movimiento.diferidos', compact('diferidos'));
     }
 
     /********************* NO UTILIZADO *********************/
