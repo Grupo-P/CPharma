@@ -78,6 +78,7 @@
         <th scope="col" class="CP-sticky">Concepto</th>
         <th scope="col" class="CP-sticky">Ingresos</th>
         <th scope="col" class="CP-sticky">Egresos</th>
+        <th scope="col" class="CP-sticky">Diferidos</th>
         <th scope="col" class="CP-sticky">Saldo anterior</th>
         <th scope="col" class="CP-sticky">Saldo posterior</th>
         <th scope="col" class="CP-sticky">Fecha y hora</th>
@@ -101,6 +102,7 @@
         </td>
         <td>{{number_format($movimiento->ingresos, 2, ',', '.')}}</td>
         <td>{{number_format($movimiento->egresos, 2, ',', '.')}}</td>
+        <td>{{number_format($movimiento->diferido, 2, ',', '.')}}</td>
         <td>{{number_format($movimiento->saldo_anterior, 2, ',', '.')}}</td>
         <td>{{number_format($movimiento->saldo_actual, 2, ',', '.')}}</td>
         <td>{{date("d-m-Y h:i:s a", strtotime($movimiento->created_at))}}</td>
