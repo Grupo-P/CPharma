@@ -66,8 +66,6 @@
         <th scope="col" class="CP-sticky">#</th>
         <th scope="col" class="CP-sticky">Concepto</th>
         <th scope="col" class="CP-sticky">Diferido</th>
-        <th scope="col" class="CP-sticky">Diferido anterior</th>
-        <th scope="col" class="CP-sticky">Diferido actual</th>
         <th scope="col" class="CP-sticky">Fecha y hora</th>
         <th scope="col" class="CP-sticky">Usuario</th>
         <th scope="col" class="CP-sticky">Estatus</th>
@@ -90,8 +88,6 @@
           </span>
         </td>
         <td>{{number_format($diferido->diferido, 2, ',', '.')}}</td>
-        <td>{{number_format($diferido->diferido_anterior, 2, ',', '.')}}</td>
-        <td>{{number_format($diferido->diferido_actual, 2, ',', '.')}}</td>
         <td>{{date("d-m-Y h:i:s a", strtotime($diferido->updated_at))}}</td>
         <td>{{$diferido->user_up}}</td>
         <td>{{$diferido->estatus}}</td>
