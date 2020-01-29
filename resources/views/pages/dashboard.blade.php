@@ -868,12 +868,9 @@
               ->orderBy('id', 'desc')
               ->first();
             
-            if(empty($saldo_actualBs)) {
-              	echo 'Saldo actual: '. number_format(0, 2, ',', '.') . " " . SigVe;
-              }
-              else {
-              	echo 'Saldo actual: '. number_format($saldo_actualBs->saldo_actual, 2, ',', '.') . " " . SigVe;
-              }
+            echo 'Saldo actual: '. number_format(DB::table('configuracions')
+            ->where('id', 7)
+            ->value('valor'), 2, ',', '.') . " " . SigVe;
           ?>            
           </span>
         </h3>
