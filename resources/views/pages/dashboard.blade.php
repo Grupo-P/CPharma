@@ -868,7 +868,7 @@
               ->orderBy('id', 'desc')
               ->first();
             
-            echo 'Saldo actual: '. number_format(DB::table('configuracions')
+            echo 'Saldo disponible: '. number_format(DB::table('configuracions')
             ->where('id', 7)
             ->value('valor'), 2, ',', '.') . " " . SigVe;
           ?>            
@@ -906,7 +906,7 @@
               ->orderBy('id', 'desc')
               ->first();
 
-              echo 'Saldo actual: ' . number_format(DB::table('configuracions')
+              echo 'Saldo disponible: ' . number_format(DB::table('configuracions')
             ->where('id', 8)
             ->value('valor'), 2, ',', '.') . " " . SigDolar;
           ?>            
