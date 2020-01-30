@@ -643,6 +643,22 @@
       </li>
 
       <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('/diferidos?tasa_ventas_id=1') }}">     
+          <span data-feather="home"></span>
+          <i class="fas fa-lock"></i>
+          Diferidos en bolívares<span class="sr-only">(current)</span>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('/diferidos?tasa_ventas_id=2') }}">     
+          <span data-feather="home"></span>
+          <i class="fas fa-lock"></i>
+          Diferidos en dolares<span class="sr-only">(current)</span>
+        </a>
+      </li>
+
+      <li class="nav-item">
         <a class="nav-link CP-Links-Menu" href="{{ url('/tasaVenta') }}">
           <span data-feather="home"></span>
           <i class="fas fa-credit-card"></i>
