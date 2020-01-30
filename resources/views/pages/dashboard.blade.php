@@ -1822,22 +1822,28 @@
             <?php
             $saldo_actualBs = DB::table('ts_movimientos')
               ->where('tasa_ventas_id', 1)
+              ->whereNull('diferido')
               ->orderBy('id', 'desc')
               ->first();
             
-            if(empty($saldo_actualBs)) {
-                echo 'Saldo actual: '. number_format(0, 2, ',', '.') . " " . SigVe;
-              }
-              else {
-                echo 'Saldo actual: '. number_format($saldo_actualBs->saldo_actual, 2, ',', '.') . " " . SigVe;
-              }
+            echo 'Saldo disponible: '. number_format(DB::table('configuracions')
+            ->where('id', 7)
+            ->value('valor'), 2, ',', '.') . " " . SigVe;
           ?>            
           </span>
         </h3>
         <p class="card-text text-white">
-        <?php 
+        <?php
+          if(empty($saldo_actualBs)) {
+            $ultimoMovimientoBs = '';
+          }
+          else {
+            $ultimoMovimientoBs = $saldo_actualBs->updated_at;
+          }
+
           echo 'Movimientos en bolivares registrados: ' . $movimientosBs;
-          echo '<br>Fecha y hora actual: ' . date("d-m-Y h:i:s a", time());
+          echo '<br>Fecha y hora actual: ' . date("d-m-Y h:i:s a");
+          echo '<br>Ultimo movimiento: ' . date("d-m-Y h:i:s a", strtotime($ultimoMovimientoBs));
         ?>
         </p>
       </div>
@@ -1854,22 +1860,28 @@
             <?php 
             $saldo_actualDs = DB::table('ts_movimientos')
               ->where('tasa_ventas_id', 2)
+              ->whereNull('diferido')
               ->orderBy('id', 'desc')
               ->first();
 
-              if(empty($saldo_actualDs)) {
-                echo 'Saldo actual: ' . number_format(0, 2, ',', '.') . " " . SigDolar;
-              }
-              else {
-                echo 'Saldo actual: ' . number_format($saldo_actualDs->saldo_actual, 2, ',', '.') . " " . SigDolar;
-              }
+              echo 'Saldo disponible: ' . number_format(DB::table('configuracions')
+            ->where('id', 8)
+            ->value('valor'), 2, ',', '.') . " " . SigDolar;
           ?>            
           </span>
         </h3>
         <p class="card-text text-white">
         <?php 
+          if(empty($saldo_actualDs)) {
+            $ultimoMovimientoDs = '';
+          }
+          else {
+            $ultimoMovimientoDs = $saldo_actualDs->updated_at;
+          }
+
           echo 'Movimientos en dolares registrados: ' . $movimientosDs;
-          echo '<br>Fecha y hora actual: ' . date("d-m-Y h:i:s a", time());
+          echo '<br>Fecha y hora actual: ' . date("d-m-Y h:i:s a");
+          echo '<br>Ultimo movimiento: ' . date("d-m-Y h:i:s a", strtotime($ultimoMovimientoDs));
         ?>
         </p>
       </div>
