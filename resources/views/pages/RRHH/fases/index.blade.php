@@ -187,37 +187,14 @@
           <?php
             }
           } else if(Auth::user()->role == 'ANALISTA') {
-            if($fase->estatus == 'ACTIVO') {
           ?>
+            
             <a href="/fases/{{$fase->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
               <i class="far fa-eye"></i>
             </a>
 
-            <a href="/fases/{{$fase->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
-              <i class="fas fa-edit"></i>
-            </a>
-
-            <form action="/fases/{{$fase->id}}" method="POST" style="display: inline;">
-              @method('DELETE')
-              @csrf
-              <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Desincorporar">
-                <i class="fa fa-reply"></i>
-              </button>
-            </form>
-
           <?php
-            } else if($fase->estatus == 'INACTIVO') {
-          ?>
-            <form action="/fases/{{$fase->id}}" method="POST" style="display: inline;">
-              @method('DELETE')
-              @csrf
-              <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Reincorporar">
-                <i class="fa fa-share"></i>
-              </button>
-            </form>
-          <?php
-            }
-          } else if(Auth::user()->role == 'USUARIO') {
+            } else if(Auth::user()->role == 'USUARIO') {
           ?>
             <a href="/fases/{{$fase->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
               <i class="far fa-eye"></i>
