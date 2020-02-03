@@ -143,6 +143,7 @@
         <th scope="col" class="stickyCP">Nombre de la vacante</th>
         <th scope="col" class="stickyCP">Departamento</th>
         <th scope="col" class="stickyCP">Turno</th>
+        <th scope="col" class="stickyCP">Dias libres</th>
         <th scope="col" class="stickyCP">Nivel de urgencia</th>
         <th scope="col" class="stickyCP">Solicitante</th>
         <th scope="col" class="stickyCP">Cantidad requerida</th>
@@ -162,6 +163,7 @@
           <td>{{$vacante->nombre_vacante}}</td>
           <td>{{$vacante->departamento}}</td>
           <td>{{$vacante->turno}}</td>
+          <td>{{$vacante->dias_libres}}</td>
           <td>{{$vacante->nivel_urgencia}}</td>
           <td>{{$vacante->solicitante}}</td>
           <td>{{$vacante->cantidad}}</td>
