@@ -171,7 +171,12 @@
           ?>
 
           <td>{{$candidato->tipo_relacion}}</td>
-          <td>{{$candidato->estatus}}</td>
+
+          @if($candidato->estatus == "FUTURO")
+            <td>ELEGIBLE</td>
+          @else
+            <td>{{$candidato->estatus}}</td>
+          @endif
 
           <td>
             <?php
