@@ -247,7 +247,8 @@
             <a href="/candidatos/{{$candidato->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
               <i class="fas fa-edit"></i>
             </a>
-
+          
+          @if($candidato->estatus != "POSTULADO")
             <form action="/motivo_rechazo" method="GET" style="display: inline;">
               
               <input type="hidden" id="CandidatoId" name="CandidatoId" value="{{$candidato->id}}">
@@ -256,6 +257,8 @@
                 <i class="fa fa-reply"></i>
               </button>
             </form>
+          @endif
+
           <?php
             } else if(
                 ($candidato->estatus == 'RECHAZADO')
