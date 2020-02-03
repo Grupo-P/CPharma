@@ -2,6 +2,12 @@
 
 @section('title', 'Pruebas')
 
+@section('scriptsHead')
+  <style>
+    th, td {text-align: center;}
+  </style>
+@endsection
+
 @section('content')
   <!-- Modal Guardar -->
   @if(session('Saved'))
