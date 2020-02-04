@@ -1303,6 +1303,27 @@
       <div class="card-body text-left bg-warning">
         <h2 class="card-title">
           <span class="card-text text-white">
+            <i class="fas fa-user-check"></i>
+            <?php
+            echo ''.$candidatos;
+          ?>            
+          </span>
+        </h2>
+        <p class="card-text text-white">
+        <?php 
+          echo 'Candidatos registrados';
+        ?>
+        </p>
+      </div>
+      <div class="card-footer bg-transparent border-warning text-right">
+        <a href="/candidatos" class="btn btn-outline-warning btn-sm">Visualizar</a>
+      </div>    
+    </div>
+
+    <div class="card border-secondary mb-3" style="width: 14rem;">
+      <div class="card-body text-left bg-secondary">
+        <h2 class="card-title">
+          <span class="card-text text-white">
             <i class="fas fa-tasks"></i>
             <?php
             echo ''.$pruebas;
@@ -1315,13 +1336,13 @@
         ?>
         </p>
       </div>
-      <div class="card-footer bg-transparent border-warning text-right">
-        <a href="/pruebas" class="btn btn-outline-warning btn-sm">Visualizar</a>
+      <div class="card-footer bg-transparent border-secondary text-right">
+        <a href="/pruebas" class="btn btn-outline-secondary btn-sm">Visualizar</a>
       </div>    
     </div>
 
-    <div class="card border-secondary mb-3" style="width: 14rem;">      
-      <div class="card-body text-left bg-secondary">
+    <div class="card border-dark mb-3" style="width: 14rem;">      
+      <div class="card-body text-left bg-dark">
         <h3 class="card-title">
           <span class="card-text text-white">
             <i class="fas fa-vials"></i>
@@ -1336,29 +1357,8 @@
         ?>
         </p>
       </div>
-      <div class="card-footer bg-transparent border-secondary text-right">
-        <a href="/laboratorio" class="btn btn-outline-secondary btn-sm">Visualizar</a>
-      </div>    
-    </div>
-
-    <div class="card border-dark mb-3" style="width: 14rem;">
-      <div class="card-body text-left bg-dark">
-        <h2 class="card-title">
-          <span class="card-text text-white">
-            <i class="fas fa-user-check"></i>
-            <?php
-            echo ''.$candidatos;
-          ?>            
-          </span>
-        </h2>
-        <p class="card-text text-white">
-        <?php 
-          echo 'Candidatos registrados';
-        ?>
-        </p>
-      </div>
       <div class="card-footer bg-transparent border-dark text-right">
-        <a href="/candidatos" class="btn btn-outline-dark btn-sm">Visualizar</a>
+        <a href="/laboratorio" class="btn btn-outline-dark btn-sm">Visualizar</a>
       </div>    
     </div>
   </div>
