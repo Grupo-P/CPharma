@@ -82,6 +82,7 @@ class RH_CandidatoController extends Controller {
             $candidatos->nombres = $request->input('nombres');
             $candidatos->apellidos = $request->input('apellidos');
             $candidatos->cedula = $cedula;
+            $candidatos->genero = $request->input('genero');
             $candidatos->direccion = $request->input('direccion');
             $candidatos->telefono_celular = $request->input('telefono_celular');
             $candidatos->telefono_habitacion = $request->input('telefono_habitacion');
