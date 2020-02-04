@@ -116,7 +116,7 @@
                 '' => 'Seleccione una opción',
                 'Apto' => 'Apto', 
                 'Rechazado' => 'Rechazado',
-                'Aceptado con Restricciones' => 'Aceptado con Restricciones',
+                'Apto con Restricciones' => 'Apto con Restricciones',
               ], null, ['class' => 'form-control', 'required']) !!}
             </td>
           </tr>
