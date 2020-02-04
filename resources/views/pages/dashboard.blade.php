@@ -1276,24 +1276,24 @@
       </div>    
     </div>
 
-    <div class="card border-info mb-3" style="width: 14rem;">
+    <div class="card border-info mb-3" style="width: 14rem;">      
       <div class="card-body text-left bg-info">
-        <h2 class="card-title">
+        <h3 class="card-title">
           <span class="card-text text-white">
-            <i class="fas fa-user-check"></i>
+            <i class="fas fa-user-edit"></i>
             <?php
-            echo ''.$candidatos;
-          ?>            
+            echo ''.$convocatoria;
+          ?>
           </span>
-        </h2>
+        </h3>
         <p class="card-text text-white">
         <?php 
-          echo 'Candidatos registrados';
+          echo 'Convocatorias registradas';
         ?>
         </p>
       </div>
       <div class="card-footer bg-transparent border-info text-right">
-        <a href="/candidatos" class="btn btn-outline-info btn-sm">Visualizar</a>
+        <a href="/convocatoria" class="btn btn-outline-info btn-sm">Visualizar</a>
       </div>    
     </div>
   </div>
@@ -1341,24 +1341,24 @@
       </div>    
     </div>
 
-    <div class="card border-dark mb-3" style="width: 14rem;">      
+    <div class="card border-dark mb-3" style="width: 14rem;">
       <div class="card-body text-left bg-dark">
-        <h3 class="card-title">
+        <h2 class="card-title">
           <span class="card-text text-white">
-            <i class="fas fa-user-edit"></i>
+            <i class="fas fa-user-check"></i>
             <?php
-            echo ''.$convocatoria;
-          ?>
+            echo ''.$candidatos;
+          ?>            
           </span>
-        </h3>
+        </h2>
         <p class="card-text text-white">
         <?php 
-          echo 'Convocatorias registradas';
+          echo 'Candidatos registrados';
         ?>
         </p>
       </div>
       <div class="card-footer bg-transparent border-dark text-right">
-        <a href="/convocatoria" class="btn btn-outline-dark btn-sm">Visualizar</a>
+        <a href="/candidatos" class="btn btn-outline-dark btn-sm">Visualizar</a>
       </div>    
     </div>
   </div>
