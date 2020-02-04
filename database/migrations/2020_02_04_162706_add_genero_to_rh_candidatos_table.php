@@ -12,7 +12,7 @@ class AddGeneroToRhCandidatosTable extends Migration {
      */
     public function up() {
         Schema::table('rh_candidatos', function (Blueprint $table) {
-            //
+            $table->string('genero')->after('cedula')->nullable();
         });
     }
 
@@ -23,7 +23,7 @@ class AddGeneroToRhCandidatosTable extends Migration {
      */
     public function down() {
         Schema::table('rh_candidatos', function (Blueprint $table) {
-            //
+            $table->dropColumn('genero');
         });
     }
 }
