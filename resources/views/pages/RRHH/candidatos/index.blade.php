@@ -139,6 +139,7 @@
         <th scope="col" class="stickyCP">Nombres</th>
         <th scope="col" class="stickyCP">Apellidos</th>
         <th scope="col" class="stickyCP">Cédula</th>
+        <th scope="col" class="stickyCP">Género</th>
         <th scope="col" class="stickyCP">Teléfono</th>
         <th scope="col" class="stickyCP">Relación laboral</th>
         <th scope="col" class="stickyCP">Estatus</th>
@@ -155,6 +156,11 @@
           <td>{{$candidato->nombres}}</td>
           <td>{{$candidato->apellidos}}</td>
           <td>{{$candidato->cedula}}</td>
+          @if(empty($candidato->genero))
+          <td>-</td>
+          @else
+          <td>{{$candidato->genero}}</td>
+          @endif
             
           <?php if($candidato->telefono_celular == '') { ?>
             <td>{{$candidato->telefono_habitacion}}</td>
