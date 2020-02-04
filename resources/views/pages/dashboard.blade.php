@@ -1345,29 +1345,6 @@
       <div class="card-body text-left bg-dark">
         <h3 class="card-title">
           <span class="card-text text-white">
-            <i class="fas fa-vials"></i>
-            <?php
-            echo ''.$laboratorios;
-          ?>            
-          </span>
-        </h3>
-        <p class="card-text text-white">
-        <?php 
-          echo 'Laboratorios registrados';
-        ?>
-        </p>
-      </div>
-      <div class="card-footer bg-transparent border-dark text-right">
-        <a href="/laboratorio" class="btn btn-outline-dark btn-sm">Visualizar</a>
-      </div>    
-    </div>
-  </div>
-
-  <div class="card-deck">
-    <div class="card border-danger mb-3" style="width: 14rem;">      
-      <div class="card-body text-left bg-danger">
-        <h3 class="card-title">
-          <span class="card-text text-white">
             <i class="fas fa-users"></i>
             <?php
             echo ''.$entrevistas;
@@ -1380,8 +1357,31 @@
         ?>
         </p>
       </div>
+      <div class="card-footer bg-transparent border-dark text-right">
+        <a href="/entrevistas" class="btn btn-outline-dark btn-sm">Visualizar</a>
+      </div>    
+    </div>
+  </div>
+
+  <div class="card-deck">
+    <div class="card border-danger mb-3" style="width: 14rem;">      
+      <div class="card-body text-left bg-danger">
+        <h3 class="card-title">
+          <span class="card-text text-white">
+            <i class="fas fa-vials"></i>
+            <?php
+            echo ''.$laboratorios;
+          ?>            
+          </span>
+        </h3>
+        <p class="card-text text-white">
+        <?php 
+          echo 'Laboratorios registrados';
+        ?>
+        </p>
+      </div>
       <div class="card-footer bg-transparent border-danger text-right">
-        <a href="/entrevistas" class="btn btn-outline-danger btn-sm">Visualizar</a>
+        <a href="/laboratorio" class="btn btn-outline-danger btn-sm">Visualizar</a>
       </div>    
     </div>
 
