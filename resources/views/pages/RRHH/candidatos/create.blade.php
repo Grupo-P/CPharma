@@ -137,6 +137,21 @@
           </tr>
 
           <tr>
+            <th scope="row">{!! Form::label('genero', 'Género *', ['title' => 'Este campo es requerido']) !!}</th>
+            <td>
+              <div class="custom-control custom-radio custom-control-inline">
+                <input type="radio" class="custom-control-input" id="genero1" name="genero" value="Masculino" required>
+                <label class="custom-control-label" for="genero1">Masculino</label>
+              </div>
+
+              <div class="custom-control custom-radio custom-control-inline">
+                <input type="radio" class="custom-control-input" id="genero2" name="genero" value="Femenino">
+                <label class="custom-control-label" for="genero2">Femenino</label>
+              </div>
+            </td>
+          </tr>
+
+          <tr>
             <th scope="row">
               <label for="telefono_celular">Teléfono celular</label>
             </th>
