@@ -1429,29 +1429,8 @@
   </div>
 
   <div class="card-deck">
-    <div class="card border-warning mb-3" style="width: 14rem;">      
+    <div class="card border-warning mb-3" style="width: 14rem;">
       <div class="card-body text-left bg-warning">
-        <h3 class="card-title">
-          <span class="card-text text-white">
-            <i class="fas fa-vials"></i>
-            <?php
-            echo ''.$laboratorios;
-          ?>            
-          </span>
-        </h3>
-        <p class="card-text text-white">
-        <?php 
-          echo 'Laboratorios registrados';
-        ?>
-        </p>
-      </div>
-      <div class="card-footer bg-transparent border-warning text-right">
-        <a href="/laboratorio" class="btn btn-outline-warning btn-sm">Visualizar</a>
-      </div>    
-    </div>
-
-    <div class="card border-secondary mb-3" style="width: 14rem;">
-      <div class="card-body text-left bg-secondary">
         <h2 class="card-title">
           <span class="card-text text-white">
             <i class="far fa-address-card"></i>
@@ -1466,8 +1445,29 @@
         ?>
         </p>
       </div>
+      <div class="card-footer bg-transparent border-warning text-right">
+        <a href="/empresaReferencias" class="btn btn-outline-warning btn-sm">Visualizar</a>
+      </div>    
+    </div>
+
+    <div class="card border-secondary mb-3" style="width: 14rem;">      
+      <div class="card-body text-left bg-secondary">
+        <h3 class="card-title">
+          <span class="card-text text-white">
+            <i class="fas fa-vials"></i>
+            <?php
+            echo ''.$laboratorios;
+          ?>            
+          </span>
+        </h3>
+        <p class="card-text text-white">
+        <?php 
+          echo 'Laboratorios registrados';
+        ?>
+        </p>
+      </div>
       <div class="card-footer bg-transparent border-secondary text-right">
-        <a href="/empresaReferencias" class="btn btn-outline-secondary btn-sm">Visualizar</a>
+        <a href="/laboratorio" class="btn btn-outline-secondary btn-sm">Visualizar</a>
       </div>    
     </div>
   </div>
