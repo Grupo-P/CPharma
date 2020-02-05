@@ -35,7 +35,18 @@ class RH_CandidatoEmpresaController extends Controller {
     }
 
     public function primer_empleo(Request $request) {
-        return $request;
+        try {
+            $fase_asociada = RHI_Candidato_Fase::find($request->input('CandidatoFaseId'));
+            $fase_asociada->rh_fases_id = 6;
+            $fase_asociada->save();
+
+            return redirect()
+            ->action('RH_CandidatoController@procesos')
+            ->with('Saved7', ' Informacion');
+        }
+        catch(\Illuminate\Database\QueryException $e) {
+            return back()->with('Error', ' Error');
+        }
     }
 
     /**
