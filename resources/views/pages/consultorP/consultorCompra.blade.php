@@ -320,18 +320,18 @@
       }
 
       //Darle click al boton de busqueda
-      $('.busq_dina_boton').click(function(e) { 
+      $('#btn_search').click(function(e) { 
         switch (opc_selec) {
           case 1:
             //buscar cuando el modo de busqueda hace referencia al nombre de productos
-            if ( $('#input_busq').val() != "" ) {         
-              
+            if ( $('#input_busq').val() != "" ) {  
+     
               $('.barraHistorial').empty();
               var historia_origen = $('<div class="historia hOrigen"><div class="imgHist_Nom">'+$('#input_busq').val()+'</div></div>');
               $('.barraHistorial').append(historia_origen);
 
               //Inicio de la busqueda y el armado de la tabla
-                var busq = $('#input_busq').val();
+               var busq = $('#input_busq').val();
                 var parametro = {
                 "Descripcion":busq
                 };
@@ -341,8 +341,7 @@
                   url: URLConsulMed,
                   type: "POST",
                   success: function(data) {
-                    var precio = formateoPrecio(data,2);
-                    $('#PPrecioScan').html('BsS. '+precio);
+                    alert(data);
                   }
                  });
               //Fin de la busqueda y el armado de la tabla
