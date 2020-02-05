@@ -197,15 +197,9 @@ class RH_CandidatoController extends Controller {
 
         if(
             ($candidatos->estatus == 'RECHAZADO') 
-            || ($candidatos->estatus == 'FUTURO')
+            || ($candidatos->estatus == 'ELEGIBLE')
         ) {
-            if($candidatos->estatus == 'FUTURO') {
-                $candidatos->estatus = 'EN_PROCESO';
-            }
-            else {
-                $candidatos->estatus = 'POSTULADO';
-            }
-            
+            $candidatos->estatus = 'POSTULADO';
             $Auditoria->accion = 'REINCORPORAR';
         }
         else {

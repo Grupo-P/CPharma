@@ -321,7 +321,7 @@
           <?php
           } else if(
               ($candidato->estatus == 'RECHAZADO' )
-              || ($candidato->estatus == 'FUTURO')
+              || ($candidato->estatus == 'ELEGIBLE')
             ) { 
             echo '-';
           }

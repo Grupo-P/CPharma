@@ -204,7 +204,7 @@
 
               if(
                 ($candidato->estatus != 'RECHAZADO')
-                && ($candidato->estatus != 'FUTURO')
+                && ($candidato->estatus != 'ELEGIBLE')
               ) {
           ?>
             <a href="/candidatos/{{$candidato->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
@@ -227,7 +227,7 @@
           <?php
             } else if(
                 ($candidato->estatus == 'RECHAZADO')
-                || ($candidato->estatus == 'FUTURO')
+                || ($candidato->estatus == 'ELEGIBLE')
               ) {
           ?>
             <form action="/candidatos/{{$candidato->id}}" method="POST" style="display: inline;">
@@ -243,7 +243,7 @@
           else if(Auth::user()->role == 'ANALISTA') {
             if(
               ($candidato->estatus != 'RECHAZADO')
-              && ($candidato->estatus != 'FUTURO')
+              && ($candidato->estatus != 'ELEGIBLE')
             ) {
           ?>
             <a href="/candidatos/{{$candidato->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
@@ -268,7 +268,7 @@
           <?php
             } else if(
                 ($candidato->estatus == 'RECHAZADO')
-                || ($candidato->estatus == 'FUTURO')
+                || ($candidato->estatus == 'ELEGIBLE')
               ) {          ?>
             <form action="/candidatos/{{$candidato->id}}" method="POST" style="display: inline;">
               @method('DELETE')
