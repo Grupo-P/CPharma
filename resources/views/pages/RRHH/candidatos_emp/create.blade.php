@@ -35,9 +35,10 @@
   </h1>
   <hr class="row align-items-start col-12">
 
-  <form action="/procesos_candidatos/" method="POST" style="display: inline;">  
-    @csrf
-    <button type="submit" name="Regresar" role="button" class="btn btn-outline-info btn-sm"data-placement="top">
+  <form action="/procesos_referencias/" method="GET" style="display: inline;">
+    <input type="hidden" name="CandidatoId" value="{{$candidato->id}}">
+    <input type="hidden" name="CandidatoFaseId" value="{{$candidato_fase->id}}">
+    <button type="submit" role="button" class="btn btn-outline-info btn-sm"data-placement="top">
       <i class="fa fa-reply">&nbsp;Regresar</i>
     </button>
   </form>
