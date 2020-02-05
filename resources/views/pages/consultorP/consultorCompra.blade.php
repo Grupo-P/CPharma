@@ -57,7 +57,7 @@
   <div class="busqueda_div_principal">
 
     <?php
-      $SedeConnection = 'FTN';//FG_Mi_Ubicacion();
+      $SedeConnection = 'ARG';//FG_Mi_Ubicacion();
       $conn = FG_Conectar_Smartpharma($SedeConnection);
 
       $sql_01 = "SELECT Descripcion FROM InvArticulo";
@@ -78,7 +78,7 @@
     <h4 class="text-info" style="text-align: center;">{{FG_Nombre_Sede('FTN')}}</h4>
     <div class="busq_container">
       <div class="boton_modo busq_child">
-        <p class="busq_dina_modo" id="btn_selector" style="font-size: 2em; text-align: center; vertical-align: middle;"><i class="fas fa-language"></i></p>
+        <p class="busq_dina_modo" id="btn_selector" style="font-size: 2em; text-align: center; vertical-align: middle;"><i id="icon_selector" class="fas fa-language"></i></p>
       </div>
       <div class="barra_busq busq_child">
         <input type="text" id="input_busq"  tabindex="1" 
@@ -88,7 +88,7 @@
         </input>
       </div>
       <div class="boton_busq busq_child">
-        <p class="busq_dina_modo" id="btn_selector" style="font-size: 2em; text-align: center; vertical-align: middle;"><i class="fas fa-search"></i></p>
+        <p class="busq_dina_modo" id="btn_search" style="font-size: 2em; text-align: center; vertical-align: middle;"><i class="fas fa-search"></i></p>
       </div>
     </div>
 
@@ -182,6 +182,7 @@
 
     var modal = document.getElementById('selector_modo_busq');
     var btn = document.getElementById("btn_selector");
+    var icon = document.getElementById("icon_selector");
     var span = document.getElementsByClassName("close")[0];
     var opc_selec = 1;
     llenarAutoComplete(opc_selec);
@@ -535,34 +536,25 @@
 
 
     function updateModalBox(modo_selec) {
-      
-      if (modo_selec == 1) {
-        $('#opc_1').css("background-image", "url(css/images/letras_activa.png)");
-        $('#opc_2').css("background-image", "url(css/images/comp_no_activa.png)");
-        $('#opc_3').css("background-image", "url(css/images/codigo_no_activa.png)");
-        $('#opc_4').css("background-image", "url(css/images/pato_no_activa.png)");
 
-        $('#opc_1').find(".opc_texto").css("color", "#7bd1ef");
-        $('#opc_2').find(".opc_texto").css("color", "#231f20");
-        $('#opc_3').find(".opc_texto").css("color", "#231f20");
-        $('#opc_4').find(".opc_texto").css("color", "#231f20");
+      if (modo_selec == 1) {
+        $("#icon_selector").removeClass("fas fa-language");
+        $("#icon_selector").removeClass("fas fa-dna");
+        $("#icon_selector").removeClass("fas fa-barcode");
+        $("#icon_selector").removeClass("fas fa-pills");
+        $("#icon_selector").addClass("fas fa-language");
 
         $('#input_busq').attr("placeholder", "Ingrese el nombre del producto");
-        $('#btn_selector').attr("src", "css/images/letras.png");
         $('#input_busq').attr("onblur", "this.placeholder = 'Ingrese el nombre del producto'");
         $('#input_busq').val("");
         llenarAutoComplete (modo_selec);
       }
       else if (modo_selec == 2) {
-        $('#opc_1').css("background-image", "url(css/images/letras_no_activa.png)");
-        $('#opc_2').css("background-image", "url(css/images/comp_activa.png)");
-        $('#opc_3').css("background-image", "url(css/images/codigo_no_activa.png)");
-        $('#opc_4').css("background-image", "url(css/images/pato_no_activa.png)");
-
-        $('#opc_1').find(".opc_texto").css("color", "#231f20");
-        $('#opc_2').find(".opc_texto").css("color", "#7bd1ef");
-        $('#opc_3').find(".opc_texto").css("color", "#231f20");
-        $('#opc_4').find(".opc_texto").css("color", "#231f20");
+        $("#icon_selector").removeClass("fas fa-language");
+        $("#icon_selector").removeClass("fas fa-dna");
+        $("#icon_selector").removeClass("fas fa-barcode");
+        $("#icon_selector").removeClass("fas fa-pills");
+        $("#icon_selector").addClass("fas fa-dna");
 
         $('#input_busq').attr("placeholder", "Ingrese el principio activo (componentes)");
         $('#btn_selector').attr("src", "css/images/componente.png");
@@ -571,15 +563,11 @@
         llenarAutoComplete (modo_selec);
       }
       else if (modo_selec == 3) {
-        $('#opc_1').css("background-image", "url(css/images/letras_no_activa.png)");
-        $('#opc_2').css("background-image", "url(css/images/comp_no_activa.png)");
-        $('#opc_3').css("background-image", "url(css/images/codigo_activa.png)");
-        $('#opc_4').css("background-image", "url(css/images/pato_no_activa.png)");
-
-        $('#opc_1').find(".opc_texto").css("color", "#231f20");
-        $('#opc_2').find(".opc_texto").css("color", "#231f20");
-        $('#opc_3').find(".opc_texto").css("color", "#7bd1ef");
-        $('#opc_4').find(".opc_texto").css("color", "#231f20");
+        $("#icon_selector").removeClass("fas fa-language");
+        $("#icon_selector").removeClass("fas fa-dna");
+        $("#icon_selector").removeClass("fas fa-barcode");
+        $("#icon_selector").removeClass("fas fa-pills");
+        $("#icon_selector").addClass("fas fa-barcode");
 
         $('#input_busq').attr("placeholder", "Haga scan del codigo de barra");
         $('#btn_selector').attr("src", "css/images/codigo.png");
@@ -588,15 +576,11 @@
         llenarAutoComplete (modo_selec);
       }
       else if (modo_selec == 4) {
-        $('#opc_1').css("background-image", "url(css/images/letras_no_activa.png)");
-        $('#opc_2').css("background-image", "url(css/images/comp_no_activa.png)");
-        $('#opc_3').css("background-image", "url(css/images/codigo_no_activa.png)");
-        $('#opc_4').css("background-image", "url(css/images/past_activa.png)");
-        
-        $('#opc_1').find(".opc_texto").css("color", "#231f20");
-        $('#opc_2').find(".opc_texto").css("color", "#231f20");
-        $('#opc_3').find(".opc_texto").css("color", "#231f20");
-        $('#opc_4').find(".opc_texto").css("color", "#7bd1ef");
+        $("#icon_selector").removeClass("fas fa-language");
+        $("#icon_selector").removeClass("fas fa-dna");
+        $("#icon_selector").removeClass("fas fa-barcode");
+        $("#icon_selector").removeClass("fas fa-pills");
+        $("#icon_selector").addClass("fas fa-pills");
 
         $('#input_busq').attr("placeholder", "Ingrese el uso terapéutico");
         $('#btn_selector').attr("src", "css/images/pastilla.png");
