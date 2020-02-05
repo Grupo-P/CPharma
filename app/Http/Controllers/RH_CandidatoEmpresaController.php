@@ -27,8 +27,11 @@ class RH_CandidatoEmpresaController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function index() {
-        //
+    public function index(Request $request) {
+        $candidato = RH_Candidato::find($request->input("CandidatoId"));
+        $candidato_fase = RHI_Candidato_Fase::find($request->input("CandidatoFaseId"));
+
+        return view('pages.RRHH.candidatos_emp.index', compact('candidato', 'candidato_fase'));
     }
 
     /**
