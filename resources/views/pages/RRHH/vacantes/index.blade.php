@@ -175,7 +175,8 @@
               )
               ->where('rh_vacantes_id', $vacante->id)
               ->where('rh_candidatos.estatus', '<>', 'RECHAZADO')
-              ->where('rh_candidatos.estatus', '<>', 'FUTURO')
+              ->where('rh_candidatos.estatus', '<>', 'ELEGIBLE')
+              ->where('rh_candidatos.estatus', '<>', 'DESERTOR')
               ->where('rh_candidatos.estatus', '<>', 'CONTRATADO')
               ->count()
             }}
