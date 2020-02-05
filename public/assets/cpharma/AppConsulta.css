@@ -1,5 +1,5 @@
 .nombreF {
-    POSITION: absolute;
+    position: absolute;
     top: 0.5%;
     left: 0.5%;
     font-size: 2.8em;
@@ -110,7 +110,7 @@
 }
 
 .historia.hOrigen {
-    background-color: #7bd1ef;
+    background-color: #17A2B8;
     color: #fff;
     padding: 5px 15px;
 	vertical-align:middle;
@@ -404,7 +404,6 @@ body {
 	margin-top: 5px;
 }
 
-
 /* Codigo nuevo de Javi */
 .busq_container {
 	width: 100%;
@@ -414,7 +413,6 @@ body {
     border-radius: 5px;
     box-shadow: 3px 3px 3px 3px #dad7d7;
     margin: 0 auto;
-    height: 90%;
 }
 
 .busq_child{
@@ -612,6 +610,7 @@ input[type="text"].busq_dina:-moz-placeholder { /* Firefox 18- */
 .espere {
 	display:none;
 	font-size:1em;
+	text-align: center;
 }
 
 .fongoBoton {
@@ -695,8 +694,9 @@ input[type="text"].busq_dina:-moz-placeholder { /* Firefox 18- */
 
 #error, .error  {
 	color: red;
-    font-size: 1.61em;
+    font-size: 1.5em;
     line-height: 1em;
+    text-align: center;
 }
 
 
@@ -780,9 +780,9 @@ table {
 }
 
 .contApp {
-    overflow-y: scroll;
-    height: 76%;
-    width: 97%;
+	overflow: scroll;
+    height: 450px;
+    width: 100%;
     margin: 0 auto 0 auto;
 }
 

@@ -5,13 +5,13 @@
 @endsection
 
 @section('scriptsCabecera')
-<script src="{{asset('assets/jquery/jquery-2.2.2.min.js')}}"></script>
-<script src="{{asset('assets/jquery/jquery-ui.js')}}"></script>
-<script src="{{asset('assets/jquery/jquery.number.js')}}"></script>
-<script src="{{asset('assets/jquery/funciones.js')}}"></script>
-<script src="{{asset('assets/jquery/jquery.tablesorter.js')}}"></script>
-<link rel="stylesheet" href="{{asset('assets/jquery/jquery-ui.css')}}">
-<link rel="stylesheet" href="{{asset('assets/cpharma/AppConsulta.css')}}">
+  <script src="{{asset('assets/jquery/jquery-2.2.2.min.js')}}"></script>
+  <script src="{{asset('assets/jquery/jquery-ui.js')}}"></script>
+  <script src="{{asset('assets/jquery/jquery.number.js')}}"></script>
+  <script src="{{asset('assets/jquery/funciones.js')}}"></script>
+  <script src="{{asset('assets/jquery/jquery.tablesorter.js')}}"></script>
+  <link rel="stylesheet" href="{{asset('assets/jquery/jquery-ui.css')}}"/>
+  <link rel="stylesheet" href="{{asset('assets/cpharma/AppConsulta.css')}}"/>
 @endsection
 
 @section('content')
@@ -111,10 +111,171 @@
   <!-- despliegue de info -->
 
   <div class="espere"> Espere un momento por favor... </div>
-  <div id="error">  </div>
-  <div id="correcto">  </div> 
-  <div class="contApp" id="contApp">
-    
+  <div id="error"></div>
+  <div id="correcto"></div>
+  <div class="contApp" id="contApp" style="background-color: red;">
+    <p>
+      5465464654
+Estándar para la estructura en general
+Layouts
+Includes
+Styles (Internos)
+Logica de programacion (Frontend - Backend)
+Funciones (Internas)
+Querys (Internos)
+2. Tratamiento para variables
+Variables de tipo int: intval($variable);
+Precios: number_format($variable,2,"," ,"." );
+Fechas: format('d-m-Y');
+Descripciones: FG_Limpiar_Texto($variable);
+3. Estándar para la asignación de nombres (Caso General)
+Para Funciones: FG_ Nombre_Funcion()
+Para Querys: QG_ Nombre_Query()
+Observación:
+Se debe respetar estrictamente las siglas marcadas como XX.
+Se debe respetar estrictamente el símbolo (_) para separa cada palabra que conforma el nombre de la función.
+Se debe respetar estrictamente la letra en MAYÚSCULA al inicio de cada palabra.
+d1513fd1sf321
+Estándar para la estructura en general
+Layouts
+Includes
+Styles (Internos)
+Logica de programacion (Frontend - Backend)
+Funciones (Internas)
+Querys (Internos)
+2. Tratamiento para variables
+Variables de tipo int: intval($variable);
+Precios: number_format($variable,2,"," ,"." );
+Fechas: format('d-m-Y');
+Descripciones: FG_Limpiar_Texto($variable);
+3. Estándar para la asignación de nombres (Caso General)
+Para Funciones: FG_ Nombre_Funcion()
+Para Querys: QG_ Nombre_Query()
+Observación:
+Se debe respetar estrictamente las siglas marcadas como XX.
+Se debe respetar estrictamente el símbolo (_) para separa cada palabra que conforma el nombre de la función.
+Se debe respetar estrictamente la letra en MAYÚSCULA al inicio de cada palabra.
+5465464654
+Estándar para la estructura en general
+Layouts
+Includes
+Styles (Internos)
+Logica de programacion (Frontend - Backend)
+Funciones (Internas)
+Querys (Internos)
+2. Tratamiento para variables
+Variables de tipo int: intval($variable);
+Precios: number_format($variable,2,"," ,"." );
+Fechas: format('d-m-Y');
+Descripciones: FG_Limpiar_Texto($variable);
+3. Estándar para la asignación de nombres (Caso General)
+Para Funciones: FG_ Nombre_Funcion()
+Para Querys: QG_ Nombre_Query()
+Observación:
+Se debe respetar estrictamente las siglas marcadas como XX.
+Se debe respetar estrictamente el símbolo (_) para separa cada palabra que conforma el nombre de la función.
+Se debe respetar estrictamente la letra en MAYÚSCULA al inicio de cada palabra.
+d1513fd1sf321
+Estándar para la estructura en general
+Layouts
+Includes
+Styles (Internos)
+Logica de programacion (Frontend - Backend)
+Funciones (Internas)
+Querys (Internos)
+2. Tratamiento para variables
+Variables de tipo int: intval($variable);
+Precios: number_format($variable,2,"," ,"." );
+Fechas: format('d-m-Y');
+Descripciones: FG_Limpiar_Texto($variable);
+3. Estándar para la asignación de nombres (Caso General)
+Para Funciones: FG_ Nombre_Funcion()
+Para Querys: QG_ Nombre_Query()
+Observación:
+Se debe respetar estrictamente las siglas marcadas como XX.
+Se debe respetar estrictamente el símbolo (_) para separa cada palabra que conforma el nombre de la función.
+Se debe respetar estrictamente la letra en MAYÚSCULA al inicio de cada palabra.
+5465464654
+Estándar para la estructura en general
+Layouts
+Includes
+Styles (Internos)
+Logica de programacion (Frontend - Backend)
+Funciones (Internas)
+Querys (Internos)
+2. Tratamiento para variables
+Variables de tipo int: intval($variable);
+Precios: number_format($variable,2,"," ,"." );
+Fechas: format('d-m-Y');
+Descripciones: FG_Limpiar_Texto($variable);
+3. Estándar para la asignación de nombres (Caso General)
+Para Funciones: FG_ Nombre_Funcion()
+Para Querys: QG_ Nombre_Query()
+Observación:
+Se debe respetar estrictamente las siglas marcadas como XX.
+Se debe respetar estrictamente el símbolo (_) para separa cada palabra que conforma el nombre de la función.
+Se debe respetar estrictamente la letra en MAYÚSCULA al inicio de cada palabra.
+d1513fd1sf321
+Estándar para la estructura en general
+Layouts
+Includes
+Styles (Internos)
+Logica de programacion (Frontend - Backend)
+Funciones (Internas)
+Querys (Internos)
+2. Tratamiento para variables
+Variables de tipo int: intval($variable);
+Precios: number_format($variable,2,"," ,"." );
+Fechas: format('d-m-Y');
+Descripciones: FG_Limpiar_Texto($variable);
+3. Estándar para la asignación de nombres (Caso General)
+Para Funciones: FG_ Nombre_Funcion()
+Para Querys: QG_ Nombre_Query()
+Observación:
+Se debe respetar estrictamente las siglas marcadas como XX.
+Se debe respetar estrictamente el símbolo (_) para separa cada palabra que conforma el nombre de la función.
+Se debe respetar estrictamente la letra en MAYÚSCULA al inicio de cada palabra.
+5465464654
+Estándar para la estructura en general
+Layouts
+Includes
+Styles (Internos)
+Logica de programacion (Frontend - Backend)
+Funciones (Internas)
+Querys (Internos)
+2. Tratamiento para variables
+Variables de tipo int: intval($variable);
+Precios: number_format($variable,2,"," ,"." );
+Fechas: format('d-m-Y');
+Descripciones: FG_Limpiar_Texto($variable);
+3. Estándar para la asignación de nombres (Caso General)
+Para Funciones: FG_ Nombre_Funcion()
+Para Querys: QG_ Nombre_Query()
+Observación:
+Se debe respetar estrictamente las siglas marcadas como XX.
+Se debe respetar estrictamente el símbolo (_) para separa cada palabra que conforma el nombre de la función.
+Se debe respetar estrictamente la letra en MAYÚSCULA al inicio de cada palabra.
+d1513fd1sf321
+Estándar para la estructura en general
+Layouts
+Includes
+Styles (Internos)
+Logica de programacion (Frontend - Backend)
+Funciones (Internas)
+Querys (Internos)
+2. Tratamiento para variables
+Variables de tipo int: intval($variable);
+Precios: number_format($variable,2,"," ,"." );
+Fechas: format('d-m-Y');
+Descripciones: FG_Limpiar_Texto($variable);
+3. Estándar para la asignación de nombres (Caso General)
+Para Funciones: FG_ Nombre_Funcion()
+Para Querys: QG_ Nombre_Query()
+Observación:
+Se debe respetar estrictamente las siglas marcadas como XX.
+Se debe respetar estrictamente el símbolo (_) para separa cada palabra que conforma el nombre de la función.
+Se debe respetar estrictamente la letra en MAYÚSCULA al inicio de cada palabra.
+    </p> 
   </div>
 
   <!-- buscar en externo -->
