@@ -331,7 +331,8 @@
               $('.barraHistorial').append(historia_origen);
 
               //Inicio de la busqueda y el armado de la tabla
-               var busq = $('#input_busq').val();
+                var busq = $('#input_busq').val();
+                alert(busq);
                 var parametro = {
                 "Descripcion":busq
                 };
