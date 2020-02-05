@@ -12,6 +12,7 @@ define ("SedeFLL","FARMACIA LA LAGO,C.A.");
 define ("SedeFAU","FARMACIA AVENIDA UNIVERSIDAD, C.A.");
 define ("SedeGP","GRUPO P, C.A");
 define ("SedeDBs","Servidor de Desarrollo Sergio");
+define ("SedeDBsa","Servidor de Desarrollo Sergio ARG");
 define ("SedeDBm","Servidor de Desarrollo Manuel");
 /**********************************************************************************/
 /************************ NOMBRES SEDES OFF-LINE *********************************/
@@ -69,6 +70,12 @@ define ("serverDBs" , "SERGIO-PC");
 define ("userDBs" , "sa");
 define ("passDBs" , "soporte123");
 define ("nameDBs" , "cpharmaftn");
+/**********************************************************************************/
+/********************* CONEXION SERVER DESARROLLO DE SERGIO ARG **********************/
+define ("serverDBsa" , "SCOVA-PC");
+define ("userDBsa" , "sa");
+define ("passDBsa" , "soporte123");
+define ("nameDBsa" , "cpharmaftn");
 /**********************************************************************************/
 /********************* CONEXION SERVER DESARROLLO GRUPO P **********************/
 define ("serverGP" , "SERGIO-PC");

@@ -118,7 +118,6 @@
 			case '1':
 				return 'FTN';
 			break;
-
 			case '2':
 				return 'FTN';
 			break;
@@ -137,9 +136,10 @@
 			case '12':
 				return 'FAU';
 			break;
-		//INICIO BLOQUE DE FAU
+		//FIN BLOQUE DE FAU
 			default:
-				return ''.$Octeto[2];
+				return 'ARG';
+				//return ''.$Octeto[2];
 			break;
 		}
 	}
@@ -219,6 +219,10 @@
 			break;
 			case 'DBm':
 				$sede = SedeDBm;
+				return $sede;
+			break;
+			case 'ARG':
+				$sede = SedeDBsa;
 				return $sede;
 			break;
 		//FIN BLOQUE DE TEST
@@ -375,6 +379,15 @@
 					"PWD"=>passDBm
 				);
 				$conn = sqlsrv_connect(serverDBm,$connectionInfo);
+				return $conn;
+			break;
+			case 'ARG':
+				$connectionInfo = array(
+					"Database"=>nameDBsa,
+					"UID"=>userDBsa,
+					"PWD"=>passDBsa
+				);
+				$conn = sqlsrv_connect(serverDBsa,$connectionInfo);
 				return $conn;
 			break;
 			//FIN BLOQUE DE TEST
