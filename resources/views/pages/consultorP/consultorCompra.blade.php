@@ -55,7 +55,6 @@
 
   <!-- Barra de Busqueda -->
   <div class="busqueda_div_principal">
-
     <?php
       $SedeConnection = 'ARG';//FG_Mi_Ubicacion();
       $conn = FG_Conectar_Smartpharma($SedeConnection);
@@ -91,18 +90,16 @@
         <p class="busq_dina_modo text-white" id="btn_search" style="font-size: 2em; text-align: center; vertical-align: middle;"><i class="fas fa-search"></i></p>
       </div>
     </div>
-
-    
-  <div class="clear"> </div>  
   </div>
-  <!-- / Barra de Busqueda -->
 
+  <!-- / Barra de Busqueda -->
     <div class="ListaCompo">
       <div id="log"></div>
-      <div class="borrarComps"><img src='css/images/ic_delete_black_36dp_2x.png' height='20px' width='20px'/>  </div>
+      <div class="borrarComps text-info">
+        <i id="icon_selector" class="fas fa-trash text-info"></i>
+      </div>
       <div class="clear"> </div>
-    </div>  
-    
+    </div>
   <!-- barra historial -->
     <div class="barraHistorial"></div>
   <!-- / barra historial -->
@@ -113,223 +110,13 @@
   <div class="espere"> Espere un momento por favor... </div>
   <div id="error"></div>
   <div id="correcto"></div>
-  <div class="contApp" id="contApp" style="background-color: red;">
-    <p>
-      5465464654
-Estándar para la estructura en general
-Layouts
-Includes
-Styles (Internos)
-Logica de programacion (Frontend - Backend)
-Funciones (Internas)
-Querys (Internos)
-2. Tratamiento para variables
-Variables de tipo int: intval($variable);
-Precios: number_format($variable,2,"," ,"." );
-Fechas: format('d-m-Y');
-Descripciones: FG_Limpiar_Texto($variable);
-3. Estándar para la asignación de nombres (Caso General)
-Para Funciones: FG_ Nombre_Funcion()
-Para Querys: QG_ Nombre_Query()
-Observación:
-Se debe respetar estrictamente las siglas marcadas como XX.
-Se debe respetar estrictamente el símbolo (_) para separa cada palabra que conforma el nombre de la función.
-Se debe respetar estrictamente la letra en MAYÚSCULA al inicio de cada palabra.
-d1513fd1sf321
-Estándar para la estructura en general
-Layouts
-Includes
-Styles (Internos)
-Logica de programacion (Frontend - Backend)
-Funciones (Internas)
-Querys (Internos)
-2. Tratamiento para variables
-Variables de tipo int: intval($variable);
-Precios: number_format($variable,2,"," ,"." );
-Fechas: format('d-m-Y');
-Descripciones: FG_Limpiar_Texto($variable);
-3. Estándar para la asignación de nombres (Caso General)
-Para Funciones: FG_ Nombre_Funcion()
-Para Querys: QG_ Nombre_Query()
-Observación:
-Se debe respetar estrictamente las siglas marcadas como XX.
-Se debe respetar estrictamente el símbolo (_) para separa cada palabra que conforma el nombre de la función.
-Se debe respetar estrictamente la letra en MAYÚSCULA al inicio de cada palabra.
-5465464654
-Estándar para la estructura en general
-Layouts
-Includes
-Styles (Internos)
-Logica de programacion (Frontend - Backend)
-Funciones (Internas)
-Querys (Internos)
-2. Tratamiento para variables
-Variables de tipo int: intval($variable);
-Precios: number_format($variable,2,"," ,"." );
-Fechas: format('d-m-Y');
-Descripciones: FG_Limpiar_Texto($variable);
-3. Estándar para la asignación de nombres (Caso General)
-Para Funciones: FG_ Nombre_Funcion()
-Para Querys: QG_ Nombre_Query()
-Observación:
-Se debe respetar estrictamente las siglas marcadas como XX.
-Se debe respetar estrictamente el símbolo (_) para separa cada palabra que conforma el nombre de la función.
-Se debe respetar estrictamente la letra en MAYÚSCULA al inicio de cada palabra.
-d1513fd1sf321
-Estándar para la estructura en general
-Layouts
-Includes
-Styles (Internos)
-Logica de programacion (Frontend - Backend)
-Funciones (Internas)
-Querys (Internos)
-2. Tratamiento para variables
-Variables de tipo int: intval($variable);
-Precios: number_format($variable,2,"," ,"." );
-Fechas: format('d-m-Y');
-Descripciones: FG_Limpiar_Texto($variable);
-3. Estándar para la asignación de nombres (Caso General)
-Para Funciones: FG_ Nombre_Funcion()
-Para Querys: QG_ Nombre_Query()
-Observación:
-Se debe respetar estrictamente las siglas marcadas como XX.
-Se debe respetar estrictamente el símbolo (_) para separa cada palabra que conforma el nombre de la función.
-Se debe respetar estrictamente la letra en MAYÚSCULA al inicio de cada palabra.
-5465464654
-Estándar para la estructura en general
-Layouts
-Includes
-Styles (Internos)
-Logica de programacion (Frontend - Backend)
-Funciones (Internas)
-Querys (Internos)
-2. Tratamiento para variables
-Variables de tipo int: intval($variable);
-Precios: number_format($variable,2,"," ,"." );
-Fechas: format('d-m-Y');
-Descripciones: FG_Limpiar_Texto($variable);
-3. Estándar para la asignación de nombres (Caso General)
-Para Funciones: FG_ Nombre_Funcion()
-Para Querys: QG_ Nombre_Query()
-Observación:
-Se debe respetar estrictamente las siglas marcadas como XX.
-Se debe respetar estrictamente el símbolo (_) para separa cada palabra que conforma el nombre de la función.
-Se debe respetar estrictamente la letra en MAYÚSCULA al inicio de cada palabra.
-d1513fd1sf321
-Estándar para la estructura en general
-Layouts
-Includes
-Styles (Internos)
-Logica de programacion (Frontend - Backend)
-Funciones (Internas)
-Querys (Internos)
-2. Tratamiento para variables
-Variables de tipo int: intval($variable);
-Precios: number_format($variable,2,"," ,"." );
-Fechas: format('d-m-Y');
-Descripciones: FG_Limpiar_Texto($variable);
-3. Estándar para la asignación de nombres (Caso General)
-Para Funciones: FG_ Nombre_Funcion()
-Para Querys: QG_ Nombre_Query()
-Observación:
-Se debe respetar estrictamente las siglas marcadas como XX.
-Se debe respetar estrictamente el símbolo (_) para separa cada palabra que conforma el nombre de la función.
-Se debe respetar estrictamente la letra en MAYÚSCULA al inicio de cada palabra.
-5465464654
-Estándar para la estructura en general
-Layouts
-Includes
-Styles (Internos)
-Logica de programacion (Frontend - Backend)
-Funciones (Internas)
-Querys (Internos)
-2. Tratamiento para variables
-Variables de tipo int: intval($variable);
-Precios: number_format($variable,2,"," ,"." );
-Fechas: format('d-m-Y');
-Descripciones: FG_Limpiar_Texto($variable);
-3. Estándar para la asignación de nombres (Caso General)
-Para Funciones: FG_ Nombre_Funcion()
-Para Querys: QG_ Nombre_Query()
-Observación:
-Se debe respetar estrictamente las siglas marcadas como XX.
-Se debe respetar estrictamente el símbolo (_) para separa cada palabra que conforma el nombre de la función.
-Se debe respetar estrictamente la letra en MAYÚSCULA al inicio de cada palabra.
-d1513fd1sf321
-Estándar para la estructura en general
-Layouts
-Includes
-Styles (Internos)
-Logica de programacion (Frontend - Backend)
-Funciones (Internas)
-Querys (Internos)
-2. Tratamiento para variables
-Variables de tipo int: intval($variable);
-Precios: number_format($variable,2,"," ,"." );
-Fechas: format('d-m-Y');
-Descripciones: FG_Limpiar_Texto($variable);
-3. Estándar para la asignación de nombres (Caso General)
-Para Funciones: FG_ Nombre_Funcion()
-Para Querys: QG_ Nombre_Query()
-Observación:
-Se debe respetar estrictamente las siglas marcadas como XX.
-Se debe respetar estrictamente el símbolo (_) para separa cada palabra que conforma el nombre de la función.
-Se debe respetar estrictamente la letra en MAYÚSCULA al inicio de cada palabra.
-    </p> 
-  </div>
-
-  <!-- buscar en externo -->
-  <!-- <div class="consultaE" id="consultaE">
-    <img src="css/images/cargando.gif" class="cargando">
-    <img src="css/images/listo.png" class="listo">
-    <img src="css/images/cancel.png" class="cancel">
-    <div class="consultaEInfo" ></div>
-  </div> -->
-    
-  <!-- lista de items seleccionados -->
-  <!-- <div class="Dash">
-    <div class="tituPri tituPriList"> 
-        <div class="tituPri3">ARTICULOS A VENDER </div>
-        <div class="flecha"><img src='css/images/flechaCarrito.png' height='30px' width='30px'/>  </div>
-        <div class="NuCantidad"> 0 </div>
-        <div class="textCantidad"> articulos(s) &nbsp &nbsp - &nbsp &nbsp Bs. </div>
-        <div class="bsCantidad"> 0.00 </div>
-        <div class="borrar"><img src='css/images/borrar.png' height='30px' width='30px'/>  </div>
-        <div class="clear"></div>
-    </div>
-    <div class="contItems ItemSelec">   
-    </div>
-  </div> -->
-
-  <!-- nombre de la farmacia -->
-  <!-- <div class="nombreF">
-  ACI
-  <div class="ocultarExistencia"> 
-  <input id="ocultarExistencia" type="checkbox" name="ocultar" value="1" > <div> Ocultar existencia en 0</div>
-  </div>
-  </div> -->
+  <div class="contApp" id="contApp"></div>
 
   <script type="text/javascript">
-  $(document).on('ready',function(){
+    $(document).on('ready',function(){
+
+    $('#contApp').hide();
     
-    var mostrar = 0;
-    $('#consultaE').click(function(e) {
-      if( mostrar == 0 ) {
-        jQuery('.listo').css('display' , 'none' );
-        jQuery('.cancel').css('display' , 'none' );
-        $('.consultaEInfo').css('display' , 'block' );
-        $('#consultaE').animate({ width: "30%" , height: "60%" }, 500 );
-        mostrar = 1;
-      } else {
-        $('#consultaE').animate({ width: "50px" , height: "50px"  }, 500 );
-        mostrar = 0;
-        $('.consultaEInfo').empty();
-        $('.consultaEInfo').css('display' , 'none' );
-      }
-      
-    });
-    
-    var tempCant = 0; //guarda la cantidad antes de ser modificada en el carrito de compras
     var obj_com = eval(<?php echo $compoJson ?>);
     var obj_med = eval(<?php echo $medJson ?>);
     var obj_pat = eval(<?php echo $patologiaJson ?>);
@@ -355,7 +142,6 @@ Se debe respetar estrictamente la letra en MAYÚSCULA al inicio de cada palabra.
         4 = uso terapéutico 
     */
     
-
     /* Inicio de OnClicks referentes al Modal Box */
     btn.onclick = function() {
       modal.style.display = "block";

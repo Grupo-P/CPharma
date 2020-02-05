@@ -56,7 +56,7 @@
     font-weight: bold;
     float: left;
     background-color: #fff;
-    color: #8b8b8b;
+    color: #17A2B8;
 }
 
 .tiFa{
@@ -119,12 +119,12 @@
 .sepHist {
     margin: 0px 15px;
     display: inline-block;
-    color: #8b8b8b;
+    color: #17A2B8;
 	vertical-align:middle;
 }
 
 .historia {
-	color: #8b8b8b;
+	color: #17A2B8;
 	margin: 2px 0px;
 	display:inline-block;
 	vertical-align:middle;
@@ -150,7 +150,7 @@
 
 #log {
     margin-top: 4px;
-    color: #7bc7ef;
+    color: #17A2B8;
     font-size: 1em;
     line-height: 1em;
 	float: left;
