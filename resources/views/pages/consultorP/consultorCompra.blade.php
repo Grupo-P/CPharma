@@ -56,7 +56,8 @@
   <!-- Barra de Busqueda -->
   <div class="busqueda_div_principal">
     <?php
-      $SedeConnection = 'ARG';//FG_Mi_Ubicacion();
+      $RutaUrl = 'ARG';//FG_Mi_Ubicacion();
+      $SedeConnection = $RutaUrl;
       $conn = FG_Conectar_Smartpharma($SedeConnection);
 
       $sql_01 = "SELECT Descripcion FROM InvArticulo";
@@ -113,6 +114,36 @@
 
   <script type="text/javascript">
     $('#contApp').hide();
+
+    function dominio(SedeConnectionJs){
+      var dominio = '';
+      switch(SedeConnectionJs) {
+        case 'FTN':
+          dominio = 'http://cpharmaftn.com/';
+          return dominio;
+        break;
+        case 'FLL':
+          dominio = 'http://cpharmafll.com/';
+          return dominio;
+        break;
+        case 'FAU':
+          dominio = 'http://cpharmafau.com/';
+          return dominio;
+        break;
+        case 'GP':
+          dominio = 'http://cpharmade.com/';
+          return dominio;
+        break;
+        case 'ARG':
+          dominio = 'http://cpharmade.com/';
+          return dominio;
+        break;
+      }
+    }
+  
+    var SedeConnectionJs = '<?php echo $RutaUrl;?>';
+    var dominio = dominio(SedeConnectionJs);
+    const URLConsulMed = ''+dominio+'assets/functions/funConsCompMed.php';
 
     $(document).on('ready',function(){
 
@@ -299,9 +330,25 @@
               var historia_origen = $('<div class="historia hOrigen"><div class="imgHist_Nom">'+$('#input_busq').val()+'</div></div>');
               $('.barraHistorial').append(historia_origen);
 
-              consultaAjax( "op="+$('#input_busq').val() , "lib/busquedaM.php", 1 , '.contApp' );
+              //Inicio de la busqueda y el armado de la tabla
+                var busq = $('#input_busq').val();
+                var parametro = {
+                "Descripcion":busq
+                };
+
+                $.ajax({
+                  data: parametro,
+                  url: URLConsulMed,
+                  type: "POST",
+                  success: function(data) {
+                    var precio = formateoPrecio(data,2);
+                    $('#PPrecioScan').html('BsS. '+precio);
+                  }
+                 });
+              //Fin de la busqueda y el armado de la tabla
+
               $("#input_busq").val('');
-              ajustarTamano();
+              //ajustarTamano();
             }
           break;
           case 2:
