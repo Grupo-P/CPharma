@@ -165,7 +165,6 @@
 
 #opc_1{
 	background:URL("/consulta/css/images/letras_activa.png") no-repeat 0 center;
-	color:#17A2B8;
 }
 
 #opc_1:hover{
@@ -408,11 +407,12 @@ body {
 
 /* Codigo nuevo de Javi */
 .busq_container {
-	width: 60%;
+	width: 100%;
     display: flex;
     overflow: hidden;
-    border: 3px solid #B3E8FF;
-    box-shadow: 3px 3px 3px 3px #EEE;
+    border: 4px solid #17a2b8;
+    border-radius: 5px;
+    box-shadow: 3px 3px 3px 3px #dad7d7;
     margin: 0 auto;
     height: 90%;
 }
@@ -424,21 +424,21 @@ body {
 .boton_modo{
 	float: left;
 	z-index: 2;
-	width: 10%;
-	background-color: #B3E8FF;
+	width: 15%;
+	background-color: #17a2b8;
 }
 
 .barra_busq {
 	float: center;
-	width: 87%;
+	width: 70%;
 	z-index: 1;
 }
 
 .boton_busq {
 	float: right;
 	z-index: 2;
-	width: 10%;
-	background-color: #B3E8FF;
+	width: 15%;
+	background-color: #17a2b8;
 }
 
 #input_busq {
@@ -577,8 +577,7 @@ input[type="text"].busq_dina:-moz-placeholder { /* Firefox 18- */
   margin-left: 5%;
 }
 
-.opc_texto:hover,
-.opc_texto:active {
+.opc_texto:hover {
 	color: #17a2b8;
 }
 

@@ -75,10 +75,10 @@
       $temp_patologia  = FG_array_flatten_recursive($patologias);
       $patologiaJson = json_encode($temp_patologia);
     ?>
-    <h4 class="text-info" style="text-align: center;">{{FG_Nombre_Sede('FTN')}}</h4>
+    <h2 class="text-info" style="text-align: center;">{{FG_Nombre_Sede('ARG')}}</h2>
     <div class="busq_container">
       <div class="boton_modo busq_child">
-        <p class="busq_dina_modo" id="btn_selector" style="font-size: 2em; text-align: center; vertical-align: middle;"><i id="icon_selector" class="fas fa-language"></i></p>
+        <p class="busq_dina_modo text-white" id="btn_selector" style="font-size: 2em; text-align: center; vertical-align: middle;"><i id="icon_selector" class="fas fa-language"></i></p>
       </div>
       <div class="barra_busq busq_child">
         <input type="text" id="input_busq"  tabindex="1" 
@@ -88,7 +88,7 @@
         </input>
       </div>
       <div class="boton_busq busq_child">
-        <p class="busq_dina_modo" id="btn_search" style="font-size: 2em; text-align: center; vertical-align: middle;"><i class="fas fa-search"></i></p>
+        <p class="busq_dina_modo text-white" id="btn_search" style="font-size: 2em; text-align: center; vertical-align: middle;"><i class="fas fa-search"></i></p>
       </div>
     </div>
 
