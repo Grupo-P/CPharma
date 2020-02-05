@@ -413,7 +413,7 @@ body {
     border: 4px solid #17a2b8;
     border-radius: 5px;
     box-shadow: 3px 3px 3px 3px #dad7d7;
-    margin: 0 auto;
+    margin: 0 5%;
 }
 
 .busq_child{
@@ -444,7 +444,7 @@ body {
 	width: 100%;
 	height: 95%;
 	text-align: center;
-	border-color: #B3E8FF;
+	border-color: #17a2b8;
 	border: 1px;
 	font-size: 1.5em;
 	font-weight: normal;
@@ -784,7 +784,7 @@ table {
 	overflow: scroll;
     height: 450px;
     width: 100%;
-    margin: 0 auto 0 auto;
+    margin: 0 5%;
 }
 
 .consultaE {

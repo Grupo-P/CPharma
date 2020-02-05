@@ -1,4 +1,4 @@
-@extends('layouts.modelUser')
+@extends('layouts.modelConsultor')
 
 @section('title')
   Consulta de precio
@@ -22,6 +22,25 @@
     include(app_path().'\functions\querys_mysql.php');
     include(app_path().'\functions\querys_sqlserver.php');
     include(app_path().'\functions\functApp.php');
+
+    $RutaUrl = 'ARG';//FG_Mi_Ubicacion();
+    $SedeConnection = $RutaUrl;
+    $conn = FG_Conectar_Smartpharma($SedeConnection);
+
+    $sql_01 = "SELECT Descripcion FROM InvArticulo";
+    $medicamentos = ConsultaDB($sql_01,$SedeConnection);
+    $temp_med = FG_array_flatten_recursive($medicamentos);
+    $medJson = json_encode($temp_med);
+
+    $sql_02 = "SELECT Nombre FROM InvComponente";
+    $componentes = ConsultaDB($sql_02,$SedeConnection);
+    $temp_compo  = FG_array_flatten_recursive($componentes);
+    $compoJson = json_encode($temp_compo);
+
+    $sql_03 = "SELECT Descripcion FROM InvUso";
+    $patologias = ConsultaDB($sql_03,$SedeConnection);
+    $temp_patologia  = FG_array_flatten_recursive($patologias);
+    $patologiaJson = json_encode($temp_patologia);
   ?>
 
   <!-- Modal Box -->
@@ -54,27 +73,7 @@
   <!-- / Modal Box -->
 
   <!-- Barra de Busqueda -->
-  <div class="busqueda_div_principal">
-    <?php
-      $RutaUrl = 'ARG';//FG_Mi_Ubicacion();
-      $SedeConnection = $RutaUrl;
-      $conn = FG_Conectar_Smartpharma($SedeConnection);
-
-      $sql_01 = "SELECT Descripcion FROM InvArticulo";
-      $medicamentos = ConsultaDB($sql_01,$SedeConnection);
-      $temp_med = FG_array_flatten_recursive($medicamentos);
-      $medJson = json_encode($temp_med);
-
-      $sql_02 = "SELECT Nombre FROM InvComponente";
-      $componentes = ConsultaDB($sql_02,$SedeConnection);
-      $temp_compo  = FG_array_flatten_recursive($componentes);
-      $compoJson = json_encode($temp_compo);
-
-      $sql_03 = "SELECT Descripcion FROM InvUso";
-      $patologias = ConsultaDB($sql_03,$SedeConnection);
-      $temp_patologia  = FG_array_flatten_recursive($patologias);
-      $patologiaJson = json_encode($temp_patologia);
-    ?>
+  <div class="busqueda_div_principal" style="text-align: center;">
     <h2 class="text-info" style="text-align: center;">{{FG_Nombre_Sede('ARG')}}</h2>
     <div class="busq_container">
       <div class="boton_modo busq_child">
@@ -342,7 +341,11 @@
                   url: URLConsulMed,
                   type: "POST",
                   success: function(data) {
-                    alert(data);
+                    //alert(data);
+                    var contenedor = $("#contApp").html();
+                    contenedor = '';
+                    $("#contApp").html(contenedor+data);
+                    $('#contApp').show();
                   }
                  });
               //Fin de la busqueda y el armado de la tabla
