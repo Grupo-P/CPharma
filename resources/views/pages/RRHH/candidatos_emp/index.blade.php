@@ -1,6 +1,6 @@
 @extends('layouts.model')
 
-@section('title', 'Crear fase #4')
+@section('title', 'Inicio fase #4')
 
 @section('content')
   <!-- Modal Guardar -->
@@ -19,7 +19,7 @@
           </div>
           <div class="modal-body">
             <h4 class="h6">
-              La empresa no fue asignada
+              Error al ejecutar las acciones
             </h4>
           </div>
           <div class="modal-footer">
@@ -31,7 +31,7 @@
   @endif
 
   <h1 class="h5 text-info">
-    <i class="fas fa-plus"></i>&nbsp;Agregar Fase #4
+    <i class="fas fa-plus"></i>&nbsp;Inicio Fase #4
   </h1>
   <hr class="row align-items-start col-12">
 
@@ -44,57 +44,31 @@
 
   <br/><br/>
 
-  {!! Form::open(['route' => 'procesos_referencias.store', 'method' => 'POST', 'id' => 'crear_candidato', 'class' => 'form-group']) !!}
-    <fieldset>
-      <table class="table table-borderless table-striped">
-        <thead class="thead-dark">
-          <tr>
-            <th scope="row"></th>
-            <th scope="row"></th>
-          </tr>
-        </thead>
+  <table class="table table-borderless table-striped">
+    <thead class="thead-dark">
+      <tr>
+        <th scope="row"></th>
+        <th scope="row"></th>
+      </tr>
+    </thead>
 
-        <tbody>
-          <tr>
-            <th scope="row">{!! Form::label('nombres', 'Nombre del candidato') !!}</th>
+    <tbody>
+      <tr>
+        <th scope="row">{!! Form::label('nombres', 'Nombre del candidato') !!}</th>
 
-            <td>
-              {!! Form::text('nombres', $candidato->nombres . " " . $candidato->apellidos, [ 'class' => 'form-control', 'disabled']) !!}
+        <td>
+          {!! Form::text('nombres', $candidato->nombres . " " . $candidato->apellidos, [ 'class' => 'form-control', 'disabled']) !!}
 
-              {!! Form::hidden('CandidatoId', $candidato->id, ['id' => 'CandidatoId']) !!}
+          {!! Form::hidden('CandidatoId', $candidato->id, ['id' => 'CandidatoId']) !!}
 
-              {!! Form::hidden('CandidatoFaseId', $candidato_fase->id, ['id' => 'CandidatoFaseId']) !!}
-            </td>
-          </tr>
+          {!! Form::hidden('CandidatoFaseId', $candidato_fase->id, ['id' => 'CandidatoFaseId']) !!}
+        </td>
+      </tr>
+    </tbody>
+  </table>
 
-          <tr>
-            <th scope="row">
-              {!! Form::label('EmpresaId', 'Empresa asociada *', ['title' => 'Éste campo es requerido']) !!}
-            </th>
-            <td>
-              <select name="EmpresaId" id="EmpresaId" class="form-control" required autofocus>
-                <option value="">Seleccione una opción</option>
-
-                <?php
-                  foreach ($empresa_ref as $emp) {
-                    if($emp->estatus == "ACTIVO") {
-                ?>
-
-                <option value="{{$emp->id}}">{{$emp->nombre_empresa}}</option>
-
-                <?php
-                    }//if
-                  }//foreach
-                ?>
-              </select>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-
-      {!! Form::submit('Guardar', ['class' => 'btn btn-outline-success btn-md', 'id' => 'enviar']) !!}
-    </fieldset>
-  {!! Form::close()!!}
+  <a href="/primer_empleo?CandidatoId={{$candidato->id}}&CandidatoFaseId={{$candidato_fase->id}}" class="btn btn-outline-success btn-md">Primer empleo</a>
+  <a href="/procesos_referencias/create?CandidatoId={{$candidato->id}}&CandidatoFaseId={{$candidato_fase->id}}" class="btn btn-outline-success btn-md">Asignar empresa</a>
 
   <script>
     $(document).ready(function() {

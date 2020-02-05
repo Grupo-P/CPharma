@@ -34,6 +34,10 @@ class RH_CandidatoEmpresaController extends Controller {
         return view('pages.RRHH.candidatos_emp.index', compact('candidato', 'candidato_fase'));
     }
 
+    public function primer_empleo(Request $request) {
+        return $request;
+    }
+
     /**
      * Show the form for creating a new resource.
      *
