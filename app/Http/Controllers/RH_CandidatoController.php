@@ -30,10 +30,8 @@ class RH_CandidatoController extends Controller {
     }
 
     public function procesos() {
-        $candidatos = RH_Candidato::where('estatus', '<>', 'RECHAZADO')
-        ->where('estatus', '<>', 'CONTRATADO')
-        ->where('estatus', '<>', 'ELEGIBLE')
-        ->where('estatus', '<>', 'DESERTOR')
+        $candidatos = RH_Candidato::where('estatus', '=', 'EN_PROCESO')
+        ->orWhere('estatus', '=', 'POSTULADO')
         ->get();
         return view('pages.RRHH.candidatos.procesos', compact('candidatos'));
     }

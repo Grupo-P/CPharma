@@ -32,9 +32,8 @@
     $convocatoria = DB::table('rh_convocatoria')->count();
     $fases = DB::table('rh_fases')->count();
     $procesos_candidatos = DB::table('rh_candidatos')
-    	->where('estatus', '<>', 'RECHAZADO')
-    	->where('estatus', '<>', 'CONTRATADO')
-    	->where('estatus', '<>', 'FUTURO')
+    	->where('estatus', '=', 'EN_PROCESO')
+        ->orWhere('estatus', '=', 'POSTULADO')
     	->count();
     $practicas = DB::table('rh_practicas')->count();
 
