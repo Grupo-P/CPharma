@@ -205,6 +205,7 @@
               if(
                 ($candidato->estatus != 'RECHAZADO')
                 && ($candidato->estatus != 'ELEGIBLE')
+                && ($candidato->estatus != 'DESERTOR')
               ) {
           ?>
             <a href="/candidatos/{{$candidato->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
@@ -228,6 +229,7 @@
             } else if(
                 ($candidato->estatus == 'RECHAZADO')
                 || ($candidato->estatus == 'ELEGIBLE')
+                || ($candidato->estatus == 'DESERTOR')
               ) {
           ?>
             <form action="/candidatos/{{$candidato->id}}" method="POST" style="display: inline;">
@@ -244,6 +246,7 @@
             if(
               ($candidato->estatus != 'RECHAZADO')
               && ($candidato->estatus != 'ELEGIBLE')
+              && ($candidato->estatus != 'DESERTOR')
             ) {
           ?>
             <a href="/candidatos/{{$candidato->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
@@ -269,6 +272,7 @@
             } else if(
                 ($candidato->estatus == 'RECHAZADO')
                 || ($candidato->estatus == 'ELEGIBLE')
+                || ($candidato->estatus == 'DESERTOR')
               ) {          ?>
             <form action="/candidatos/{{$candidato->id}}" method="POST" style="display: inline;">
               @method('DELETE')

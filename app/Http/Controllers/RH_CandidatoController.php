@@ -33,6 +33,7 @@ class RH_CandidatoController extends Controller {
         $candidatos = RH_Candidato::where('estatus', '<>', 'RECHAZADO')
         ->where('estatus', '<>', 'CONTRATADO')
         ->where('estatus', '<>', 'ELEGIBLE')
+        ->where('estatus', '<>', 'DESERTOR')
         ->get();
         return view('pages.RRHH.candidatos.procesos', compact('candidatos'));
     }
@@ -198,12 +199,18 @@ class RH_CandidatoController extends Controller {
         if(
             ($candidatos->estatus == 'RECHAZADO') 
             || ($candidatos->estatus == 'ELEGIBLE')
+            || ($candidatos->estatus == 'DESERTOR')
         ) {
             $candidatos->estatus = 'POSTULADO';
             $Auditoria->accion = 'REINCORPORAR';
         }
         else {
-            $candidatos->estatus = 'RECHAZADO';
+            if($request->causa == 'Desertor') {
+                $candidatos->estatus = 'DESERTOR';
+            }
+            else {
+                $candidatos->estatus = 'RECHAZADO';
+            }
             $Auditoria->accion = 'DESINCORPORAR';
         }
 
