@@ -109,7 +109,7 @@
   </h1>
   <hr class="row align-items-start col-12">
 
-  <table style="width:100%;">
+  <table style="width:100%;" class="CP-stickyBar">
     <tr>
       <td style="width:10%;" align="center">
         <a href="{{ url('/candidatos/create') }}" role="button" class="btn btn-outline-info btn-sm" style="display: inline; text-align: left;">
@@ -135,16 +135,17 @@
   <table class="table table-striped table-borderless col-12 sortable" id="myTable">
     <thead class="thead-dark">
       <tr>
-        <th scope="col" class="stickyCP">#</th>
-        <th scope="col" class="stickyCP">Nombres</th>
-        <th scope="col" class="stickyCP">Apellidos</th>
-        <th scope="col" class="stickyCP">Cédula</th>
-        <th scope="col" class="stickyCP">Teléfono</th>
-        <th scope="col" class="stickyCP">Relación laboral</th>
-        <th scope="col" class="stickyCP">Estatus</th>
-        <th scope="col" class="stickyCP">Fase actual</th>
-        <th scope="col" class="stickyCP">Acciones</th>
-        <th scope="col" class="stickyCP">Expediente</th>
+        <th scope="col" class="CP-sticky">#</th>
+        <th scope="col" class="CP-sticky">Nombres</th>
+        <th scope="col" class="CP-sticky">Apellidos</th>
+        <th scope="col" class="CP-sticky">Cédula</th>
+        <th scope="col" class="CP-sticky">Género</th>
+        <th scope="col" class="CP-sticky">Teléfono</th>
+        <th scope="col" class="CP-sticky">Relación laboral</th>
+        <th scope="col" class="CP-sticky">Estatus</th>
+        <th scope="col" class="CP-sticky">Fase actual</th>
+        <th scope="col" class="CP-sticky">Acciones</th>
+        <th scope="col" class="CP-sticky">Expediente</th>
       </tr>
     </thead>
 
@@ -155,6 +156,11 @@
           <td>{{$candidato->nombres}}</td>
           <td>{{$candidato->apellidos}}</td>
           <td>{{$candidato->cedula}}</td>
+          @if(empty($candidato->genero))
+          <td>-</td>
+          @else
+          <td>{{$candidato->genero}}</td>
+          @endif
             
           <?php if($candidato->telefono_celular == '') { ?>
             <td>{{$candidato->telefono_habitacion}}</td>
@@ -198,7 +204,8 @@
 
               if(
                 ($candidato->estatus != 'RECHAZADO')
-                && ($candidato->estatus != 'FUTURO')
+                && ($candidato->estatus != 'ELEGIBLE')
+                && ($candidato->estatus != 'DESERTOR')
               ) {
           ?>
             <a href="/candidatos/{{$candidato->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
@@ -221,7 +228,8 @@
           <?php
             } else if(
                 ($candidato->estatus == 'RECHAZADO')
-                || ($candidato->estatus == 'FUTURO')
+                || ($candidato->estatus == 'ELEGIBLE')
+                || ($candidato->estatus == 'DESERTOR')
               ) {
           ?>
             <form action="/candidatos/{{$candidato->id}}" method="POST" style="display: inline;">
@@ -237,7 +245,8 @@
           else if(Auth::user()->role == 'ANALISTA') {
             if(
               ($candidato->estatus != 'RECHAZADO')
-              && ($candidato->estatus != 'FUTURO')
+              && ($candidato->estatus != 'ELEGIBLE')
+              && ($candidato->estatus != 'DESERTOR')
             ) {
           ?>
             <a href="/candidatos/{{$candidato->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
@@ -247,7 +256,8 @@
             <a href="/candidatos/{{$candidato->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
               <i class="fas fa-edit"></i>
             </a>
-
+          
+          @if($candidato->estatus != "POSTULADO")
             <form action="/motivo_rechazo" method="GET" style="display: inline;">
               
               <input type="hidden" id="CandidatoId" name="CandidatoId" value="{{$candidato->id}}">
@@ -256,10 +266,13 @@
                 <i class="fa fa-reply"></i>
               </button>
             </form>
+          @endif
+
           <?php
             } else if(
                 ($candidato->estatus == 'RECHAZADO')
-                || ($candidato->estatus == 'FUTURO')
+                || ($candidato->estatus == 'ELEGIBLE')
+                || ($candidato->estatus == 'DESERTOR')
               ) {          ?>
             <form action="/candidatos/{{$candidato->id}}" method="POST" style="display: inline;">
               @method('DELETE')

@@ -68,6 +68,21 @@
           </tr>
 
           <tr>
+            <th scope="row">{!! Form::label('causa', 'Causa *', ['title' => 'Este campo es requerido']) !!}</th>
+            <td>
+              <div class="custom-control custom-radio custom-control-inline">
+                <input type="radio" class="custom-control-input" id="causa1" name="causa" value="Desertor" required>
+                <label class="custom-control-label" for="causa1">Desertor</label>
+              </div>
+
+              <div class="custom-control custom-radio custom-control-inline">
+                <input type="radio" class="custom-control-input" id="causa2" name="causa" value="Otras">
+                <label class="custom-control-label" for="causa2">Otras</label>
+              </div>
+            </td>
+          </tr>
+
+          <tr>
             <th scope="row">{!! Form::label('motivo_rechazo', 'Motivo de rechazo *', ['title' => 'Este campo es requerido']) !!}</th>
             <td>{!! Form::textarea('motivo_rechazo', null, [ 'class' => 'form-control', 'placeholder' => 'Colocar detalles relevantes del rechazo', 'rows' => '3', 'required']) !!}</td>
           </tr>

@@ -242,6 +242,7 @@ Route::get('/expediente_candidatos', 'RH_CandidatoController@expediente');
 Route::get('/motivo_rechazo', 'RH_CandidatoController@motivo_rechazo');
 
 Route::resource('procesos_referencias', 'RH_CandidatoEmpresaController');
+Route::get('/primer_empleo', 'RH_CandidatoEmpresaController@primer_empleo');
 
 Route::resource('pruebas', 'RH_PruebaController');
 

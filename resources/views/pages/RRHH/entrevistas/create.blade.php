@@ -139,16 +139,16 @@
           </tr>
 
           <tr>
-            <th scope="row">{!! Form::label('futuro', 'Guardar a futuro *', ['title' => 'Este campo es requerido']) !!}</th>
+            <th scope="row">{!! Form::label('elegible', 'Guardar como elegible *', ['title' => 'Este campo es requerido']) !!}</th>
             <td>
               <div class="custom-control custom-radio custom-control-inline">
-                <input type="radio" class="custom-control-input" id="futuro1" name="futuro" value="Si" required>
-                <label class="custom-control-label" for="futuro1">Si</label>
+                <input type="radio" class="custom-control-input" id="elegible1" name="elegible" value="Si" required>
+                <label class="custom-control-label" for="elegible1">Si</label>
               </div>
 
               <div class="custom-control custom-radio custom-control-inline">
-                <input type="radio" class="custom-control-input" id="futuro2" name="futuro" value="No">
-                <label class="custom-control-label" for="futuro2">No</label>
+                <input type="radio" class="custom-control-input" id="elegible2" name="elegible" value="No">
+                <label class="custom-control-label" for="elegible2">No</label>
               </div>
             </td>
           </tr>

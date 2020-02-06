@@ -30,9 +30,8 @@ class RH_CandidatoController extends Controller {
     }
 
     public function procesos() {
-        $candidatos = RH_Candidato::where('estatus', '<>', 'RECHAZADO')
-        ->where('estatus', '<>', 'CONTRATADO')
-        ->where('estatus', '<>', 'FUTURO')
+        $candidatos = RH_Candidato::where('estatus', '=', 'EN_PROCESO')
+        ->orWhere('estatus', '=', 'POSTULADO')
         ->get();
         return view('pages.RRHH.candidatos.procesos', compact('candidatos'));
     }
@@ -82,6 +81,7 @@ class RH_CandidatoController extends Controller {
             $candidatos->nombres = $request->input('nombres');
             $candidatos->apellidos = $request->input('apellidos');
             $candidatos->cedula = $cedula;
+            $candidatos->genero = $request->input('genero');
             $candidatos->direccion = $request->input('direccion');
             $candidatos->telefono_celular = $request->input('telefono_celular');
             $candidatos->telefono_habitacion = $request->input('telefono_habitacion');
@@ -196,19 +196,19 @@ class RH_CandidatoController extends Controller {
 
         if(
             ($candidatos->estatus == 'RECHAZADO') 
-            || ($candidatos->estatus == 'FUTURO')
+            || ($candidatos->estatus == 'ELEGIBLE')
+            || ($candidatos->estatus == 'DESERTOR')
         ) {
-            if($candidatos->estatus == 'FUTURO') {
-                $candidatos->estatus = 'EN_PROCESO';
-            }
-            else {
-                $candidatos->estatus = 'POSTULADO';
-            }
-            
+            $candidatos->estatus = 'POSTULADO';
             $Auditoria->accion = 'REINCORPORAR';
         }
         else {
-            $candidatos->estatus = 'RECHAZADO';
+            if($request->causa == 'Desertor') {
+                $candidatos->estatus = 'DESERTOR';
+            }
+            else {
+                $candidatos->estatus = 'RECHAZADO';
+            }
             $Auditoria->accion = 'DESINCORPORAR';
         }
 

@@ -100,10 +100,10 @@ class RH_EntrevistaController extends Controller {
             
             $fase_asociada->save();
 
-            //-------------------- CANDIDATO FUTURO --------------------//
-            if($request->input('futuro') == 'Si') {
+            //-------------------- CANDIDATO ELEGIBLE --------------------//
+            if($request->input('elegible') == 'Si') {
                 $candidato = RH_Candidato::find($request->input('CandidatoId'));
-                $candidato->estatus = 'FUTURO';
+                $candidato->estatus = 'ELEGIBLE';
                 $candidato->save();
             }
             // else {
