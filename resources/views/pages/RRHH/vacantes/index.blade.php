@@ -112,7 +112,7 @@
 
   <hr class="row align-items-start col-12">
 
-  <table style="width:100%;">
+  <table style="width:100%;" class="CP-stickyBar">
     <tr>
       <td style="width:10%;" align="center">
         <a href="{{ url('/vacantes/create') }}" role="button" class="btn btn-outline-info btn-sm" style="display: inline; text-align: left;">
@@ -138,20 +138,20 @@
   <table class="table table-striped table-borderless col-12 sortable" id="myTable">
     <thead class="thead-dark">
       <tr>
-        <th scope="col" class="stickyCP">#</th>
-        <th scope="col" class="stickyCP">Sede</th>
-        <th scope="col" class="stickyCP">Nombre de la vacante</th>
-        <th scope="col" class="stickyCP">Departamento</th>
-        <th scope="col" class="stickyCP">Turno</th>
-        <th scope="col" class="stickyCP">Dias libres</th>
-        <th scope="col" class="stickyCP">Nivel de urgencia</th>
-        <th scope="col" class="stickyCP">Solicitante</th>
-        <th scope="col" class="stickyCP">Cantidad requerida</th>
-        <th scope="col" class="stickyCP">Cantidad en tránsito</th>
-        <th scope="col" class="stickyCP">Fecha inicio solicitud</th>
-        <th scope="col" class="stickyCP">Fecha tope solicitud</th>
-        <th scope="col" class="stickyCP">Estatus</th>
-        <th scope="col" class="stickyCP">Acciones</th>
+        <th scope="col" class="CP-sticky">#</th>
+        <th scope="col" class="CP-sticky">Sede</th>
+        <th scope="col" class="CP-sticky">Nombre de la vacante</th>
+        <th scope="col" class="CP-sticky">Departamento</th>
+        <th scope="col" class="CP-sticky">Turno</th>
+        <th scope="col" class="CP-sticky">Dias libres</th>
+        <th scope="col" class="CP-sticky">Nivel de urgencia</th>
+        <th scope="col" class="CP-sticky">Solicitante</th>
+        <th scope="col" class="CP-sticky">Cantidad requerida</th>
+        <th scope="col" class="CP-sticky">Cantidad en tránsito</th>
+        <th scope="col" class="CP-sticky">Fecha inicio solicitud</th>
+        <th scope="col" class="CP-sticky">Fecha tope solicitud</th>
+        <th scope="col" class="CP-sticky">Estatus</th>
+        <th scope="col" class="CP-sticky">Acciones</th>
       </tr>
     </thead>
 

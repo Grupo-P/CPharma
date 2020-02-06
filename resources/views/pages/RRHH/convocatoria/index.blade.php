@@ -106,7 +106,7 @@
   </h1>
   <hr class="row align-items-start col-12">
 
-  <table style="width:100%;">
+  <table style="width:100%;" class="CP-stickyBar">
     <tr>
       <td style="width:10%;" align="center">
         <a href="{{ url('/convocatoria/create') }}" role="button" class="btn btn-outline-info btn-sm" style="display: inline; text-align: left;">
@@ -132,12 +132,12 @@
   <table class="table table-striped table-borderless col-12 sortable" id="myTable">
     <thead class="thead-dark">
       <tr>
-        <th scope="col" class="stickyCP">#</th>
-        <th scope="col" class="stickyCP">Fecha</th>
-        <th scope="col" class="stickyCP">Lugar</th>
-        <th scope="col" class="stickyCP">Cargos a Reclutar</th>
-        <th scope="col" class="stickyCP">Estatus</th>
-        <th scope="col" class="stickyCP">Acciones</th>
+        <th scope="col" class="CP-sticky">#</th>
+        <th scope="col" class="CP-sticky">Fecha</th>
+        <th scope="col" class="CP-sticky">Lugar</th>
+        <th scope="col" class="CP-sticky">Cargos a Reclutar</th>
+        <th scope="col" class="CP-sticky">Estatus</th>
+        <th scope="col" class="CP-sticky">Acciones</th>
       </tr>
     </thead>
    <tbody>

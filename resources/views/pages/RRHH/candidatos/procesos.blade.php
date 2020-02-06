@@ -225,7 +225,7 @@
   </h1>
   <hr class="row align-items-start col-12">
 
-  <table style="width:100%;">
+  <table style="width:100%;" class="CP-stickyBar">
     <tr>
       <td>
         <div class="input-group md-form form-sm form-1 pl-0">
@@ -245,14 +245,14 @@
   <table class="table table-striped table-borderless col-12 sortable" id="myTable">
     <thead class="thead-dark">
       <tr>
-        <th scope="col" class="stickyCP">#</th>
-        <th scope="col" class="stickyCP">Nombres</th>
-        <th scope="col" class="stickyCP">Apellidos</th>
-        <th scope="col" class="stickyCP">Cédula</th>
-        <th scope="col" class="stickyCP">Teléfono</th>
-        <th scope="col" class="stickyCP">Vacante asociada</th>
-        <th scope="col" class="stickyCP">Fase actual</th>
-        <th scope="col" class="stickyCP">Próxima Fase</th>
+        <th scope="col" class="CP-sticky">#</th>
+        <th scope="col" class="CP-sticky">Nombres</th>
+        <th scope="col" class="CP-sticky">Apellidos</th>
+        <th scope="col" class="CP-sticky">Cédula</th>
+        <th scope="col" class="CP-sticky">Teléfono</th>
+        <th scope="col" class="CP-sticky">Vacante asociada</th>
+        <th scope="col" class="CP-sticky">Fase actual</th>
+        <th scope="col" class="CP-sticky">Próxima Fase</th>
       </tr>
     </thead>
 
