@@ -326,10 +326,26 @@
       </li>
 
       <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="/fases">
+          <span data-feather="home"></span>
+          <i class="fas fa-sort-amount-up-alt"></i>
+          Fases<span class="sr-only">(current)</span>
+        </a>
+      </li>
+
+      <li class="nav-item">
         <a class="nav-link CP-Links-Menu" href="/vacantes">
           <span data-feather="home"></span>
           <i class="fas fa-user-plus"></i>
           Vacantes<span class="sr-only">(current)</span>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="/convocatoria">
+          <span data-feather="home"></span>
+        <i class="fas fa-user-edit"></i>
+          Convocatoria<span class="sr-only">(current)</span>
         </a>
       </li>
 
@@ -342,26 +358,10 @@
       </li>
 
       <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="/fases">
-          <span data-feather="home"></span>
-          <i class="fas fa-sort-amount-up-alt"></i>
-          Fases<span class="sr-only">(current)</span>
-        </a>
-      </li>
-
-      <li class="nav-item">
         <a class="nav-link CP-Links-Menu" href="/pruebas">
           <span data-feather="home"></span>
           <i class="fas fa-tasks"></i>
           Pruebas<span class="sr-only">(current)</span>
-        </a>
-      </li>
-
-      <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="/convocatoria">
-          <span data-feather="home"></span>
-        <i class="fas fa-user-edit"></i>
-          Convocatoria<span class="sr-only">(current)</span>
         </a>
       </li>
 
@@ -382,14 +382,6 @@
       </li>
       
       <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="/empresaReferencias">
-          <span data-feather="home"></span>
-          <i class="far fa-address-card"></i>
-          Empresas de referencias<span class="sr-only">(current)</span>
-        </a>
-      </li>
-
-      <li class="nav-item">
         <a class="nav-link CP-Links-Menu" href="/contactos">
           <span data-feather="home"></span>
          <i class="fas fa-phone"></i>
@@ -405,6 +397,14 @@
         </a>
       </li>
 
+      <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="/empresaReferencias">
+          <span data-feather="home"></span>
+          <i class="far fa-address-card"></i>
+          Empresas de referencias<span class="sr-only">(current)</span>
+        </a>
+      </li>
+      
       <li class="nav-item">
         <a class="nav-link CP-Links-Menu" href="/laboratorio">
           <span data-feather="home"></span>
