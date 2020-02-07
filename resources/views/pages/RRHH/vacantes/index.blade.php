@@ -178,6 +178,7 @@
               ->where('rh_candidatos.estatus', '<>', 'ELEGIBLE')
               ->where('rh_candidatos.estatus', '<>', 'DESERTOR')
               ->where('rh_candidatos.estatus', '<>', 'CONTRATADO')
+              ->where('rh_entrevistas.estatus', '=', 'ACTIVO')
               ->count()
             }}
           </td>
