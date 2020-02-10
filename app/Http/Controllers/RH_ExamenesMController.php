@@ -106,10 +106,13 @@ class RH_ExamenesMController extends Controller {
             $examenes_lab->save();
 
             //-------------------- ENTREVISTA --------------------//
-            // $entrevista = DB::table('rh_entrevistas')
-            // ->where('rh_candidatos_id', $candidato->id)
-            // ->orderBy('id', 'desc')
-            // ->first();
+            $ultima_entrevista = RH_Entrevista::where('rh_candidatos_id', $candidato->id)
+            ->orderBy('id', 'desc')
+            ->first();
+
+            $entrevista = RH_Entrevista::find($ultima_entrevista->id);
+            $entrevista->estatus = 'INACTIVO';
+            $entrevista->save();
 
             //-------------------- VACANTE --------------------//
             // $vacante = RH_Vacante::find($entrevista->rh_vacantes_id);

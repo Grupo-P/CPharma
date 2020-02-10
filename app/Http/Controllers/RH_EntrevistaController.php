@@ -74,9 +74,17 @@ class RH_EntrevistaController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request) {
-
         try {
             $fecha_entrevista = $request->input('fecha_entrevista');
+
+            if(
+                RH_Entrevista::where('rh_candidatos_id', $request->CandidatoId)
+                ->count() > 0
+            ) {
+                
+                RH_Entrevista::where('rh_candidatos_id', $request->CandidatoId)
+                ->update(['estatus' => 'INACTIVO']);
+            }
 
             $entrevistas = new RH_Entrevista();
 

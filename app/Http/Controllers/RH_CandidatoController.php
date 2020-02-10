@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 use compras\User;
 use compras\Auditoria;
 use compras\RH_Candidato;
+use compras\RH_Entrevista;
 
 class RH_CandidatoController extends Controller {
     /**
@@ -210,6 +211,15 @@ class RH_CandidatoController extends Controller {
                 $candidatos->estatus = 'RECHAZADO';
             }
             $Auditoria->accion = 'DESINCORPORAR';
+
+            if(
+                RH_Entrevista::where('rh_candidatos_id', $request->CandidatoId)
+                ->count() > 0
+            ) {
+                
+                RH_Entrevista::where('rh_candidatos_id', $request->CandidatoId)
+                ->update(['estatus' => 'INACTIVO']);
+            }
         }
 
         $candidatos->user = auth()->user()->name;
