@@ -87,6 +87,8 @@
           $UltimoProveedorNombre = '-';
         }
 
+        $Componente = FG_Limpiar_Texto(FG_Componente_Articulo($conn,$IdArticulo));
+        $Aplicacion = FG_Limpiar_Texto(FG_Aplicacion_Articulo($conn,$IdArticulo));
         $Dolarizado = FG_Producto_Dolarizado($Dolarizado);
         $TasaMercado = FG_Tasa_Fecha($connCPharma,date('Y-m-d'));
         $TasaVenta = FG_Tasa_Fecha_Venta($connCPharma,date('Y-m-d'));
@@ -124,8 +126,8 @@
         }
         $tableResponse = $tableResponse. '<td align="center">'.intval($Existencia).'</td>';
         $tableResponse = $tableResponse. '<td>'.$UltimoLote.'</td>';
-        $tableResponse = $tableResponse. '<td>aaa</td>';
-        $tableResponse = $tableResponse. '<td>aaa</td>';
+        $tableResponse = $tableResponse. '<td>'.$Componente.'</td>';
+        $tableResponse = $tableResponse. '<td>'.$Aplicacion.'</td>';
         $tableResponse = $tableResponse. '<td>'.$UltimaVenta.'</td>'; 
 	      $tableResponse = $tableResponse. '<td>'.$UltimoProveedorNombre.'</td>'; 
         $tableResponse = $tableResponse. '</tr>';

@@ -2167,4 +2167,48 @@
 			break;
 		}
 	}
+	/**********************************************************************************/
+	/*
+		TITULO: FG_Componente_Articulo
+		FUNCION: Buscar el componente de un articulo
+		RETORNO: Valor de la tasa
+		DESARROLLADO POR: SERGIO COVA
+	 */
+	function FG_Componente_Articulo($conn,$IdArticulo) {
+		$componentes = '';
+		$sql = SQL_Componente_Articulo($IdArticulo);
+    	$result = sqlsrv_query($conn,$sql);
+    	
+    	while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
+    		$IdComponentes = $row['InvComponenteId'];
+
+    		$sql1 = SQL_Componente($IdComponentes);
+    		$result1 = sqlsrv_query($conn,$sql1);
+    		$row1 = sqlsrv_fetch_array($result1, SQLSRV_FETCH_ASSOC);
+    		$componentes = $componentes.' '.$row1['Nombre'];
+    	}
+		return $componentes;
+	}
+	/**********************************************************************************/
+	/*
+		TITULO: FG_Aplicacion_Articulo
+		FUNCION: Buscar la aplicacion o uso de un articulo
+		RETORNO: Valor de la tasa
+		DESARROLLADO POR: SERGIO COVA
+	 */
+	function FG_Aplicacion_Articulo($conn,$IdArticulo) {
+		$aplicacion = '';
+		$sql = SQL_Aplicacion_Articulo($IdArticulo);
+    	$result = sqlsrv_query($conn,$sql);
+    	
+    	while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
+    		$IdAplicacion = $row['InvUsoId'];
+
+    		$sql1 = SQL_Aplicacion($IdAplicacion);
+    		$result1 = sqlsrv_query($conn,$sql1);
+    		$row1 = sqlsrv_fetch_array($result1, SQLSRV_FETCH_ASSOC);
+    		$aplicacion = $aplicacion.' '.$row1['Descripcion'];
+    	}
+		return $aplicacion;
+	}
 ?>

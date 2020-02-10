@@ -1531,7 +1531,7 @@
     ";
     return $sql;
   }
-   /**********************************************************************************/
+  /**********************************************************************************/
   /*
     TITULO: R16Q_Detalle_Venta_Top
     FUNCION: Busca los datos de las ventas para el articulo seleccionado
@@ -1699,6 +1699,54 @@
     GROUP BY VenFacturaDetalle.InvArticuloId 
     --Ordenamientos
     ORDER BY UnidadesVendidas DESC
+    ";
+    return $sql;
+  }
+  /**********************************************************************************/
+  /*
+    TITULO: SQL_Componente_Articulo
+    FUNCION: regresa los componentes del articulo
+    DESAROLLADO POR: SERGIO COVA
+  */
+  function SQL_Componente_Articulo($IdArticulo) {
+    $sql = "
+    SELECT InvArticuloComponente.InvComponenteId FROM InvArticuloComponente WHERE InvArticuloComponente.InvArticuloId = '$IdArticulo'
+    ";
+    return $sql;
+  }
+  /**********************************************************************************/
+  /*
+    TITULO: SQL_Componente
+    FUNCION: regresa los componentes
+    DESAROLLADO POR: SERGIO COVA
+  */
+  function SQL_Componente($IdComponente) {
+    $sql = "
+    SELECT InvComponente.Nombre FROM InvComponente WHERE InvComponente.Id = '$IdComponente'
+    ";
+    return $sql;
+  }
+  /**********************************************************************************/
+  /*
+    TITULO: SQL_Aplicacion_Articulo
+    FUNCION: regresa las aplicaciones o usos del articulo
+    DESAROLLADO POR: SERGIO COVA
+  */
+  function SQL_Aplicacion_Articulo($IdArticulo) {
+    $sql = "
+    SELECT InvArticuloUso.InvUsoId FROM InvArticuloUso where InvArticuloUso.InvArticuloId =  '$IdArticulo'
+    ";
+    return $sql;
+  }
+  /**********************************************************************************/
+  /*
+    TITULO: SQL_Aplicacion
+    FUNCION: regresa las aplicaciones o usos
+    DESAROLLADO POR: SERGIO COVA
+  */
+  function SQL_Aplicacion($IdAplicacion) {
+    $sql = "
+    SELECT InvUso.Descripcion FROM InvUso WHERE InvUso.Id = '$IdAplicacion'
     ";
     return $sql;
   }
