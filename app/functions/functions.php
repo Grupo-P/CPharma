@@ -498,6 +498,20 @@
 	}
 	/**********************************************************************************/
 	/*
+		TITULO: FG_Tasa_Fecha
+		FUNCION: Buscar el valor de la tasa
+		RETORNO: Valor de la tasa
+		DESARROLLADO POR: SERGIO COVA
+	 */
+	function FG_Tasa_Fecha_Venta($connCPharma,$Fecha) {
+		$sql = MySQL_Tasa_Fecha_Venta($Fecha);
+		$result = mysqli_query($connCPharma,$sql);
+		$row = mysqli_fetch_assoc($result);
+		$Tasa = $row['tasa'];
+		return $Tasa;
+	}
+	/**********************************************************************************/
+	/*
 		TITULO: FG_Rango_Dias
 		FUNCION: Calcular el rango de diferencia de dias entre el las fechas
 		RETORNO: rango de dias
