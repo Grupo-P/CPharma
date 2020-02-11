@@ -11,7 +11,7 @@
     include(app_path().'\functions\querys_mysql.php');
     include(app_path().'\functions\querys_sqlserver.php');
 
-    $CPharmaVersion = ' CPharma v.6.1';
+    $CPharmaVersion = ' CPharma v.6.1.1';
 
     //-------------------- VARIABLES COMPRAS --------------------//
     $empresas = DB::table('empresas')->count();
@@ -413,10 +413,10 @@
 	      	<br/>
 	      	Estas usando<b class="text-info">{{$CPharmaVersion}}</b>, para el departamento de <b class="text-info">{{ Auth::user()->departamento }}</b>, esta version incluye las siguientes mejoras:<br/><br/></label>
   			<ul style="list-style:none">
-        	<li class="card-text text-dark" style="display: inline;">
+  			<li class="card-text text-dark" style="display: inline;">
 					<i class="far fa-check-circle text-info" style="display: inline;"></i>
-					Desde ya esta disponible el reporte: 
-					<b class="text-info">Consultor de Precios</b>!!
+					Desde ya esta disponible el modulo: 
+					<b class="text-info">Buscador de articulos</b>!!
   				</li>
   			</ul>
 	      </div>
@@ -1721,24 +1721,10 @@
 	      	<br/>
 	      	Estas usando<b class="text-info">{{$CPharmaVersion}}</b>, para el departamento de <b class="text-info">{{ Auth::user()->departamento }}</b>, esta version incluye las siguientes mejoras:<br/><br/></label>
   			<ul style="list-style:none">
-        	<li class="card-text text-dark" style="display: inline;">
-					<i class="far fa-check-circle text-info" style="display: inline;"></i>
-					Desde ya esta disponible el reporte: 
-					<b class="text-info">Consultor de Precios</b>!!
-  				</li>
-  			</ul>
-  			<ul style="list-style:none">
-        	<li class="card-text text-dark" style="display: inline;">
-					<i class="far fa-check-circle text-info" style="display: inline;"></i>
-					Desde ya esta disponible el reporte: 
-					<b class="text-info">Reporte de Atributos</b>!!
-  				</li>
-  			</ul>
-  			<ul style="list-style:none">
-        	<li class="card-text text-dark" style="display: inline;">
+  			<li class="card-text text-dark" style="display: inline;">
 					<i class="far fa-check-circle text-info" style="display: inline;"></i>
 					Desde ya esta disponible el modulo: 
-					<b class="text-info">Fecha de Vencimiento</b>!!
+					<b class="text-info">Buscador de articulos</b>!!
   				</li>
   			</ul>
 	      </div>
@@ -1889,7 +1875,9 @@
         <a href="/movimientos?tasa_ventas_id=2" class="btn btn-outline-success btn-sm">Visualizar</a>
       </div>    
     </div>
-
+	</div>
+	<!-- DIFERIDOS -->
+  	<div class="card-deck"> 
     <div class="card border-info mb-3" style="width: 14rem;">      
       <div class="card-body text-left bg-info">
         <h3 class="card-title">
@@ -1930,10 +1918,7 @@
         <a href="/diferidos?tasa_ventas_id=1" class="btn btn-outline-info btn-sm">Visualizar</a>
       </div>    
     </div>
-  </div>
 
-  <!-- DIFERIDOS -->
-  <div class="card-deck">
     <div class="card border-warning mb-3" style="width: 14rem;">      
       <div class="card-body text-left bg-warning">
         <h3 class="card-title">
@@ -2000,24 +1985,10 @@
 	      	<br/>
 	      	Estas usando<b class="text-info">{{$CPharmaVersion}}</b>, para el departamento de <b class="text-info">{{ Auth::user()->departamento }}</b>, esta version incluye las siguientes mejoras:<br/><br/></label>
   			<ul style="list-style:none">
-        	<li class="card-text text-dark" style="display: inline;">
-					<i class="far fa-check-circle text-info" style="display: inline;"></i>
-					Desde ya esta disponible el reporte: 
-					<b class="text-info">Consultor de Precios</b>!!
-  				</li>
-  			</ul>
-  			<ul style="list-style:none">
-        	<li class="card-text text-dark" style="display: inline;">
-					<i class="far fa-check-circle text-info" style="display: inline;"></i>
-					Desde ya esta disponible el reporte: 
-					<b class="text-info">Reporte de Atributos</b>!!
-  				</li>
-  			</ul>
-  			<ul style="list-style:none">
-        	<li class="card-text text-dark" style="display: inline;">
+  			<li class="card-text text-dark" style="display: inline;">
 					<i class="far fa-check-circle text-info" style="display: inline;"></i>
 					Desde ya esta disponible el modulo: 
-					<b class="text-info">Fecha de Vencimiento</b>!!
+					<b class="text-info">Buscador de articulos</b>!!
   				</li>
   			</ul>
 	      </div>

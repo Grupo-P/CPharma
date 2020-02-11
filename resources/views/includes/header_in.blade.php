@@ -73,6 +73,13 @@
           Orden de compra<span class="sr-only">(current)</span>
         </a>
       </li>
+      <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('/ConsultorCompra') }}" target="_blank">     
+          <span data-feather="home"></span>
+          <i class="fas fa-search"></i>
+          Buscador de articulos<span class="sr-only">(current)</span>
+        </a>
+      </li>
     </div>
   </div>
 <?php
@@ -625,7 +632,13 @@
           Orden de compra<span class="sr-only">(current)</span>
         </a>
       </li>
-
+      <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('/ConsultorCompra') }}" target="_blank">     
+          <span data-feather="home"></span>
+          <i class="fas fa-search"></i>
+          Buscador de articulos<span class="sr-only">(current)</span>
+        </a>
+      </li>
       <li class="nav-item">
         <a class="nav-link CP-Links-Menu" href="{{ url('/movimientos?tasa_ventas_id=1') }}">     
           <span data-feather="home"></span>
@@ -826,6 +839,13 @@
           <span data-feather="home"></span>
           <i class="far fa-file-alt"></i>
           Orden de compra<span class="sr-only">(current)</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('/ConsultorCompra') }}" target="_blank">     
+          <span data-feather="home"></span>
+          <i class="fas fa-search"></i>
+          Buscador de articulos<span class="sr-only">(current)</span>
         </a>
       </li>
       <li class="nav-item">
