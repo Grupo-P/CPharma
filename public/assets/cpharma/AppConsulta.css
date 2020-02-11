@@ -1,5 +1,5 @@
 .nombreF {
-    POSITION: absolute;
+    position: absolute;
     top: 0.5%;
     left: 0.5%;
     font-size: 2.8em;
@@ -56,7 +56,7 @@
     font-weight: bold;
     float: left;
     background-color: #fff;
-    color: #8b8b8b;
+    color: #17A2B8;
 }
 
 .tiFa{
@@ -110,21 +110,22 @@
 }
 
 .historia.hOrigen {
-    background-color: #7bd1ef;
+    background-color: #17A2B8;
     color: #fff;
     padding: 5px 15px;
 	vertical-align:middle;
+	border-radius: 5px;
 }
 
 .sepHist {
     margin: 0px 15px;
     display: inline-block;
-    color: #8b8b8b;
+    color: #17A2B8;
 	vertical-align:middle;
 }
 
 .historia {
-	color: #8b8b8b;
+	color: #17A2B8;
 	margin: 2px 0px;
 	display:inline-block;
 	vertical-align:middle;
@@ -150,7 +151,7 @@
 
 #log {
     margin-top: 4px;
-    color: #7bc7ef;
+    color: #17A2B8;
     font-size: 1em;
     line-height: 1em;
 	float: left;
@@ -165,7 +166,6 @@
 
 #opc_1{
 	background:URL("/consulta/css/images/letras_activa.png") no-repeat 0 center;
-	color:#17A2B8;
 }
 
 #opc_1:hover{
@@ -405,16 +405,15 @@ body {
 	margin-top: 5px;
 }
 
-
 /* Codigo nuevo de Javi */
 .busq_container {
-	width: 60%;
+	width: 100%;
     display: flex;
     overflow: hidden;
-    border: 3px solid #B3E8FF;
-    box-shadow: 3px 3px 3px 3px #EEE;
-    margin: 0 auto;
-    height: 90%;
+    border: 4px solid #17a2b8;
+    border-radius: 5px;
+    box-shadow: 3px 3px 3px 3px #dad7d7;
+    margin: 0 5%;
 }
 
 .busq_child{
@@ -424,28 +423,28 @@ body {
 .boton_modo{
 	float: left;
 	z-index: 2;
-	width: 10%;
-	background-color: #B3E8FF;
+	width: 15%;
+	background-color: #17a2b8;
 }
 
 .barra_busq {
 	float: center;
-	width: 87%;
+	width: 70%;
 	z-index: 1;
 }
 
 .boton_busq {
 	float: right;
 	z-index: 2;
-	width: 10%;
-	background-color: #B3E8FF;
+	width: 15%;
+	background-color: #17a2b8;
 }
 
 #input_busq {
 	width: 100%;
 	height: 95%;
 	text-align: center;
-	border-color: #B3E8FF;
+	border-color: #17a2b8;
 	border: 1px;
 	font-size: 1.5em;
 	font-weight: normal;
@@ -577,8 +576,7 @@ input[type="text"].busq_dina:-moz-placeholder { /* Firefox 18- */
   margin-left: 5%;
 }
 
-.opc_texto:hover,
-.opc_texto:active {
+.opc_texto:hover {
 	color: #17a2b8;
 }
 
@@ -613,6 +611,7 @@ input[type="text"].busq_dina:-moz-placeholder { /* Firefox 18- */
 .espere {
 	display:none;
 	font-size:1em;
+	text-align: center;
 }
 
 .fongoBoton {
@@ -696,8 +695,9 @@ input[type="text"].busq_dina:-moz-placeholder { /* Firefox 18- */
 
 #error, .error  {
 	color: red;
-    font-size: 1.61em;
+    font-size: 1.5em;
     line-height: 1em;
+    text-align: center;
 }
 
 
@@ -781,10 +781,10 @@ table {
 }
 
 .contApp {
-    overflow-y: scroll;
-    height: 76%;
-    width: 97%;
-    margin: 0 auto 0 auto;
+	overflow: scroll;
+    height: 450px;
+    width: 100%;
+    margin: 0 5%;
 }
 
 .consultaE {

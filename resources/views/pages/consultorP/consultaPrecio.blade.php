@@ -278,7 +278,7 @@
       });
     }
   </script>
-
+  
 	<script>
     var dominio = dominio(SedeConnectionJs);
     const URLTablaResuldado = ''+dominio+'assets/functions/functionConsultaPrecio.php';
