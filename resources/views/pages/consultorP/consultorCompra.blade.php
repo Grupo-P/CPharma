@@ -23,7 +23,7 @@
     include(app_path().'\functions\querys_sqlserver.php');
     include(app_path().'\functions\functApp.php');
 
-    $RutaUrl = 'ARG';//FG_Mi_Ubicacion();
+    $RutaUrl = FG_Mi_Ubicacion();
     $SedeConnection = $RutaUrl;
     $conn = FG_Conectar_Smartpharma($SedeConnection);
 
@@ -75,7 +75,7 @@
   <!-- Barra de Busqueda -->
   <div class="busqueda_div_principal" style="text-align: center;">
     <!-- <h2 class="text-info" style="text-align: center;">{{FG_Nombre_Sede(FG_Mi_Ubicacion())}}</h2> -->
-    <h2 class="text-info" style="text-align: center;">{{FG_Nombre_Sede('ARG')}}</h2>
+    <h2 class="text-info" style="text-align: center;">{{FG_Nombre_Sede(FG_Mi_Ubicacion())}}</h2>
     <div class="busq_container">
       <div class="boton_modo busq_child">
         <p class="busq_dina_modo text-white" id="btn_selector" style="font-size: 2em; text-align: center; vertical-align: middle;"><i id="icon_selector" class="fas fa-language"></i></p>
@@ -497,7 +497,7 @@
           case 1:
             //cuando el modo de busqueda hace referencia al nombre de productos
             if(e.keyCode == 13) {
-              
+
               if ( $('#input_busq').val() != "" ) {  
      
                 $('.barraHistorial').empty();
