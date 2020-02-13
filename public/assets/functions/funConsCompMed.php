@@ -12,7 +12,7 @@
 ?>
 <?php
 	function consultaMedicamento($Descripcion){ 
-		$SedeConnection = FG_Mi_Ubicacion();
+		$SedeConnection = 'ARG';//FG_Mi_Ubicacion();
   	$conn = FG_Conectar_Smartpharma($SedeConnection);
     $connCPharma = FG_Conectar_CPharma();
 
@@ -23,13 +23,15 @@
     <table class="table table-striped table-bordered col-12 sortable" id="myTable">
         <thead class="thead-dark">
           <tr>
+            <th scope="col" class="CP-stickyBar">Codigo interno</th>
             <th scope="col" class="CP-stickyBar">Codigo de barra</th>             
             <th scope="col" class="CP-stickyBar">Descripcion</th>
             <th scope="col" class="CP-stickyBar">Precio</br>(Con IVA) '.SigVe.'</td>
             <th scope="col" class="CP-stickyBar">Precio</br>(Con IVA) '.SigDolar.'</td>
             <th scope="col" class="CP-stickyBar">Dolarizado?</td>
+            <th scope="col" class="CP-stickyBar">Gravado?</td>
             <th scope="col" class="CP-stickyBar">Costo '.SigVe.'</td>
-            <th scope="col" class="CP-stickyBar">Costo '.SigDolar.'</td>
+            <th scope="col" class="CP-stickyBar">Costo '.SigDolar.'</br>aprox.</td>
             <th scope="col" class="CP-stickyBar">Existencia</td>
             <th scope="col" class="CP-stickyBar">Ultimo Lote</td>
             <th scope="col" class="CP-stickyBar">Componente</td>
@@ -80,15 +82,18 @@
         }
 
         if($row1["UltimoProveedorNombre"]!=''){
-          $UltimoProveedorNombre = $row1["UltimoProveedorNombre"];
+          $NombreProveedor = $row1["UltimoProveedorNombre"];
+          $IdProveedor = $row1["UltimoProveedorID"];
         }
         else{
-          $UltimoProveedorNombre = '-';
+          $NombreProveedor = '-';
+          $IdProveedor = 0;
         }
 
         $Componente = FG_Limpiar_Texto(FG_Componente_Articulo($conn,$IdArticulo));
         $Aplicacion = FG_Limpiar_Texto(FG_Aplicacion_Articulo($conn,$IdArticulo));
         $Dolarizado = FG_Producto_Dolarizado($Dolarizado);
+        $Gravado = FG_Producto_Gravado($IsIVA);
         $TasaMercado = FG_Tasa_Fecha($connCPharma,date('Y-m-d'));
         $TasaVenta = FG_Tasa_Fecha_Venta($connCPharma,date('Y-m-d'));
         $Utilidad = FG_Utilidad_Alfa($UtilidadArticulo,$UtilidadCategoria);
@@ -96,16 +101,18 @@
         $PrecioCompraBrutoAlmacen2,$PrecioCompraBruto,$IsIVA,$CondicionExistencia);
 
       	$tableResponse = $tableResponse. '<tr>';
+        $tableResponse = $tableResponse. '<td>'.$CodigoArticulo.'</td>';
 	      $tableResponse = $tableResponse. '<td>'.$CodigoBarra.'</td>';
 	      $tableResponse = $tableResponse.
 	      '<td align="left" class="CP-barrido">
-	      <a href="/reporte10?Descrip='.$Descripcion.'&Id='.$IdArticulo.'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
-	        .$Descripcion.
-	      '</a>
-	      </td>';
+          <a href="/reporte2?Id='.$IdArticulo.'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
+              .$Descripcion
+          .'</a>
+        </td>';
         $tableResponse = $tableResponse. '<td align="center">'.number_format($Precio,2,"," ,"." ).'</td>'; 
         $tableResponse = $tableResponse. '<td align="center">'.number_format($Precio/$TasaVenta,2,"," ,"." ).'</td>';
 	      $tableResponse = $tableResponse. '<td align="center">'.$Dolarizado.'</td>';
+        $tableResponse = $tableResponse. '<td align="center">'.$Gravado.'</td>';
 
         if($Dolarizado=='NO'){
           $tableResponse = $tableResponse. '<td align="center">'.number_format($PrecioCompraBruto,2,"," ,"." ).'</td>';
@@ -128,7 +135,12 @@
         $tableResponse = $tableResponse. '<td>'.$Componente.'</td>';
         $tableResponse = $tableResponse. '<td>'.$Aplicacion.'</td>';
         $tableResponse = $tableResponse. '<td>'.$UltimaVenta.'</td>'; 
-	      $tableResponse = $tableResponse. '<td>'.$UltimoProveedorNombre.'</td>'; 
+	      $tableResponse = $tableResponse. 
+        '<td align="left" class="CP-barrido">
+          <a href="/reporte7?Nombre='.$NombreProveedor.'&Id='.$IdProveedor.'&SEDE='.$SedeConnection.'" target="_blank" style="text-decoration: none; color: black;">'
+            .$NombreProveedor.
+          '</a>
+        </td>'; 
         $tableResponse = $tableResponse. '</tr>';
     	}
     }
