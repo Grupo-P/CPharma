@@ -402,19 +402,39 @@
       });
 
       //Presionar Enter sobre el boton de busqueda (tabulado)
-      $('.busq_dina_boton').keyup(function(e) { 
+      $('#input_busq').keyup(function(e) { 
         switch (opc_selec) {
           case 1:
             //buscar cuando el modo de busqueda hace referencia al nombre de productos
             if(e.keyCode == 13) {
-              if ( $('#input_busq').val() != "" ) {         
+               if ( $('#input_busq').val() != "" ) {  
+     
                 $('.barraHistorial').empty();
                 var historia_origen = $('<div class="historia hOrigen"><div class="imgHist_Nom">'+$('#input_busq').val()+'</div></div>');
                 $('.barraHistorial').append(historia_origen);
-                
-                consultaAjax( "op="+$('#input_busq').val() , "lib/busquedaM.php", 1 , '.contApp' );
+
+                //Inicio de la busqueda y el armado de la tabla
+                  var busq = $('#input_busq').val();
+                  var parametro = {
+                  "Descripcion":busq
+                  };
+
+                  $.ajax({
+                    data: parametro,
+                    url: URLConsulMed,
+                    type: "POST",
+                    success: function(data) {
+                      //alert(data);
+                      var contenedor = $("#contApp").html();
+                      contenedor = '';
+                      $("#contApp").html(contenedor+data);
+                      $('#contApp').show();
+                    }
+                   });
+                //Fin de la busqueda y el armado de la tabla
+
                 $("#input_busq").val('');
-                ajustarTamano();
+                //ajustarTamano();
               }
             }
             break;
@@ -477,15 +497,35 @@
           case 1:
             //cuando el modo de busqueda hace referencia al nombre de productos
             if(e.keyCode == 13) {
-              if ( $('#input_busq').val() != "" ) {         
+              
+              if ( $('#input_busq').val() != "" ) {  
+     
                 $('.barraHistorial').empty();
                 var historia_origen = $('<div class="historia hOrigen"><div class="imgHist_Nom">'+$('#input_busq').val()+'</div></div>');
                 $('.barraHistorial').append(historia_origen);
 
-                consultaAjax( "op="+$('#input_busq').val() , "lib/busquedaM.php", 1 , '.contApp' );
+                //Inicio de la busqueda y el armado de la tabla
+                  var busq = $('#input_busq').val();
+                  var parametro = {
+                  "Descripcion":busq
+                  };
+
+                  $.ajax({
+                    data: parametro,
+                    url: URLConsulMed,
+                    type: "POST",
+                    success: function(data) {
+                      //alert(data);
+                      var contenedor = $("#contApp").html();
+                      contenedor = '';
+                      $("#contApp").html(contenedor+data);
+                      $('#contApp').show();
+                    }
+                   });
+                //Fin de la busqueda y el armado de la tabla
+
                 $("#input_busq").val('');
-                $("#input_busq").blur();
-                ajustarTamano();
+                //ajustarTamano();
               }
             }
             break;
