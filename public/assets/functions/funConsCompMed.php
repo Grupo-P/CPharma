@@ -19,29 +19,7 @@
   	$sql = Descripcion_Like($Descripcion);
     $result = sqlsrv_query($conn,$sql);
 
-    $tableResponse = '
-    <table class="table table-striped table-bordered col-12 sortable" id="myTable">
-        <thead class="thead-dark">
-          <tr>
-            <th scope="col" class="CP-stickyBar">Codigo interno</th>
-            <th scope="col" class="CP-stickyBar">Codigo de barra</th>             
-            <th scope="col" class="CP-stickyBar">Descripcion</th>
-            <th scope="col" class="CP-stickyBar">Precio</br>(Con IVA) '.SigVe.'</td>
-            <th scope="col" class="CP-stickyBar">Precio</br>(Con IVA) '.SigDolar.'</td>
-            <th scope="col" class="CP-stickyBar">Dolarizado?</td>
-            <th scope="col" class="CP-stickyBar">Gravado?</td>
-            <th scope="col" class="CP-stickyBar">Costo '.SigVe.'</td>
-            <th scope="col" class="CP-stickyBar">Costo '.SigDolar.'</br>aprox.</td>
-            <th scope="col" class="CP-stickyBar">Existencia</td>
-            <th scope="col" class="CP-stickyBar">Ultimo Lote</td>
-            <th scope="col" class="CP-stickyBar">Componente</td>
-            <th scope="col" class="CP-stickyBar">Aplicacion</td>
-            <th scope="col" class="CP-stickyBar">Ultima Venta</td>
-            <th scope="col" class="CP-stickyBar">Ultimo Proveedor</td>
-          </tr>
-        </thead>
-        <tbody>
-    ';
+    $tableResponse = '';
 
     while($row = sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC)) {
     	$IdArticulo = $row['IdArticulo'];
@@ -144,22 +122,40 @@
         $tableResponse = $tableResponse. '</tr>';
     	}
     }
-    $tableResponse = $tableResponse. '
-      </tbody>
-    </table>';
-
+    
     mysqli_close($connCPharma);
     sqlsrv_close($conn);
     return $tableResponse;
 	}
 	/**********************************************************************/
-	function Descripcion_Like($DescripLike) {   
-    $sql = "
-      SELECT
-      InvArticulo.Id AS IdArticulo
-      FROM InvArticulo
-      WHERE InvArticulo.Descripcion LIKE '%$DescripLike%'
-    ";          
+	function Descripcion_Like($DescripLike) {
+
+    $palabras = array();
+    $palabras = explode(" ", $DescripLike);
+
+    if(count($palabras)>1){
+      $sql = "
+        SELECT
+        InvArticulo.Id AS IdArticulo
+        FROM InvArticulo";
+
+      for($i = 0; $i<count($palabras); $i++ ){
+        if($i == 0){
+          $sql = $sql." WHERE InvArticulo.Descripcion LIKE '%$palabras[$i]%'";
+        }
+        else{
+          $sql = $sql." AND InvArticulo.Descripcion LIKE '%$palabras[$i]%'";
+        }
+      }
+    }
+    else{
+      $sql = "
+        SELECT
+        InvArticulo.Id AS IdArticulo
+        FROM InvArticulo
+        WHERE InvArticulo.Descripcion LIKE '%$DescripLike%'
+      ";   
+    }
     return $sql;
   }
 ?>
