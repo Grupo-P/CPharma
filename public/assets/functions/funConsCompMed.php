@@ -12,7 +12,7 @@
 ?>
 <?php
 	function consultaMedicamento($Descripcion){ 
-		$SedeConnection = 'ARG';//FG_Mi_Ubicacion();
+		$SedeConnection = FG_Mi_Ubicacion();
   	$conn = FG_Conectar_Smartpharma($SedeConnection);
     $connCPharma = FG_Conectar_CPharma();
 
@@ -128,13 +128,34 @@
     return $tableResponse;
 	}
 	/**********************************************************************/
-	function Descripcion_Like($DescripLike) {   
-    $sql = "
-      SELECT
-      InvArticulo.Id AS IdArticulo
-      FROM InvArticulo
-      WHERE InvArticulo.Descripcion LIKE '%$DescripLike%'
-    ";          
+	function Descripcion_Like($DescripLike) {
+
+    $palabras = array();
+    $palabras = explode(" ", $DescripLike);
+
+    if(count($palabras)>1){
+      $sql = "
+        SELECT
+        InvArticulo.Id AS IdArticulo
+        FROM InvArticulo";
+
+      for($i = 0; $i<count($palabras); $i++ ){
+        if($i == 0){
+          $sql = $sql." WHERE InvArticulo.Descripcion LIKE '%$palabras[$i]%'";
+        }
+        else{
+          $sql = $sql." AND InvArticulo.Descripcion LIKE '%$palabras[$i]%'";
+        }
+      }
+    }
+    else{
+      $sql = "
+        SELECT
+        InvArticulo.Id AS IdArticulo
+        FROM InvArticulo
+        WHERE InvArticulo.Descripcion LIKE '%$DescripLike%'
+      ";   
+    }
     return $sql;
   }
 ?>
