@@ -23,7 +23,7 @@
     include(app_path().'\functions\querys_sqlserver.php');
     include(app_path().'\functions\functApp.php');
 
-    $RutaUrl = FG_Mi_Ubicacion();
+    $RutaUrl = 'ARG';//FG_Mi_Ubicacion();
     $SedeConnection = $RutaUrl;
     $conn = FG_Conectar_Smartpharma($SedeConnection);
 
@@ -75,7 +75,7 @@
   <!-- Barra de Busqueda -->
   <div class="busqueda_div_principal" style="text-align: center;">
     <!-- <h2 class="text-info" style="text-align: center;">{{FG_Nombre_Sede(FG_Mi_Ubicacion())}}</h2> -->
-    <h2 class="text-info" style="text-align: center;">{{FG_Nombre_Sede(FG_Mi_Ubicacion())}}</h2>
+    <h2 class="text-info" style="text-align: center;">{{FG_Nombre_Sede('ARG')}}</h2>
     <div class="busq_container">
       <div class="boton_modo busq_child">
         <p class="busq_dina_modo text-white" id="btn_selector" style="font-size: 2em; text-align: center; vertical-align: middle;"><i id="icon_selector" class="fas fa-language"></i></p>
@@ -110,9 +110,45 @@
 
   <div class="espere"> Espere un momento por favor... </div>
   <div id="error" class="txt-danger"></div>
-  <div class="contApp" id="contApp"></div>
+  <div class="contApp" id="contApp">
+
+    <div class="input-group md-form form-sm form-1 pl-0 CP-stickyBar">
+      <div class="input-group-prepend">
+        <span class="input-group-text purple lighten-3" id="basic-text1">
+          <i class="fas fa-search text-white"
+            aria-hidden="true"></i>
+        </span>
+      </div>
+      <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterAllTable()" autofocus="autofocus">
+    </div>
+    <br/>
+    <table class="table table-striped table-bordered col-12 sortable" id="myTable">
+      <thead class="thead-dark">
+        <tr>
+          <th scope="col" class="CP-sticky">Codigo interno</th>
+          <th scope="col" class="CP-sticky">Codigo de barra</th>             
+          <th scope="col" class="CP-sticky">Descripcion</th>
+          <th scope="col" class="CP-sticky">Precio</br>(Con IVA) <?php echo SigVe?></td>
+          <th scope="col" class="CP-sticky">Precio</br>(Con IVA) <?php echo SigDolar?></td>
+          <th scope="col" class="CP-sticky">Dolarizado?</td>
+          <th scope="col" class="CP-sticky">Gravado?</td>
+          <th scope="col" class="CP-sticky">Costo <?php echo SigVe?></td>
+          <th scope="col" class="CP-sticky">Costo <?php echo SigDolar?></br>aprox.</td>
+          <th scope="col" class="CP-sticky">Existencia</td>
+          <th scope="col" class="CP-sticky">Ultimo Lote</td>
+          <th scope="col" class="CP-sticky">Componente</td>
+          <th scope="col" class="CP-sticky">Aplicacion</td>
+          <th scope="col" class="CP-sticky">Ultima Venta</td>
+          <th scope="col" class="CP-sticky">Ultimo Proveedor</td>
+        </tr>
+      </thead>
+      <tbody id="tbodyapp">
+      </tbody>  
+    </table> 
+  </div>
 
   <script type="text/javascript">
+    $('#tbodyapp').hide();
     $('#contApp').hide();
 
     function dominio(SedeConnectionJs){
@@ -342,10 +378,11 @@
                   type: "POST",
                   success: function(data) {
                     //alert(data);
-                    var contenedor = $("#contApp").html();
+                    var contenedor = $("#tbodyapp").html();
                     contenedor = '';
-                    $("#contApp").html(contenedor+data);
+                    $("#tbodyapp").html(contenedor+data);
                     $('#contApp').show();
+                    $('#tbodyapp').show();
                   }
                  });
               //Fin de la busqueda y el armado de la tabla
@@ -425,10 +462,11 @@
                     type: "POST",
                     success: function(data) {
                       //alert(data);
-                      var contenedor = $("#contApp").html();
+                      var contenedor = $("#tbodyapp").html();
                       contenedor = '';
-                      $("#contApp").html(contenedor+data);
+                      $("#tbodyapp").html(contenedor+data);
                       $('#contApp').show();
+                      $('#tbodyapp').show();
                     }
                    });
                 //Fin de la busqueda y el armado de la tabla
