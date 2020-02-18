@@ -16,6 +16,8 @@
 		include(app_path().'\functions\config.php'); 
 		include(app_path().'\functions\functions.php');
 
+		$_GET['SEDE'] = 'ARG';
+
 		if (isset($_GET['SEDE'])){					
 			echo '<h1 class="h5 text-success"  align="left"> <i class="fas fa-prescription"></i> '.FG_Nombre_Sede($_GET['SEDE']).'</h1>';
 		}		
@@ -590,6 +592,41 @@
 			    @csrf
 			    <input id="SEDE" name="SEDE" type="hidden" value="<?php print_r($_GET['SEDE']); ?>">
 			    <button type="submit" name="Reporte" role="button" class="btn btn-outline-info btn-sm"></i>Visualizar</button>
+				</form>
+	  	</div>
+		</div>
+	</div>
+
+	<div class="card-deck">
+		<div class="card border-warning mb-3" style="width: 14rem;">	  	
+	  		<div class="card-body text-left bg-warning">
+	    		<h5 class="card-title">
+		    		<span class="card-text text-white">
+		    			Productos mas vendidos
+		    		</span>
+	    		</h5>	    	    
+	  		</div>
+		  	<div class="card-footer bg-transparent border-warning text-right">
+		  		<form action="/reporte3/" style="display: inline;">
+				    @csrf
+				    <input id="SEDE" name="SEDE" type="hidden" value="<?php print_r($_GET['SEDE']); ?>">				   
+				    <button type="submit" name="Reporte" role="button" class="btn btn-outline-warning btn-sm"></i>Visualizar</button>
+					</form>
+		  	</div>
+		</div>
+		<div class="card border-secondary mb-3" style="width: 14rem;">	  	
+  		<div class="card-body text-left bg-secondary">
+    		<h5 class="card-title">
+	    		<span class="card-text text-white">
+	    			Consultor de Precio
+	    		</span>
+    		</h5>	    	    
+  		</div>
+	  	<div class="card-footer bg-transparent border-secondary text-right">
+	  		<form action="/reporte21/" style="display: inline;">
+			    @csrf
+			    <input id="SEDE" name="SEDE" type="hidden" value="<?php print_r($_GET['SEDE']); ?>">			   
+			    <button type="submit" name="Reporte" role="button" class="btn btn-outline-secondary btn-sm"></i>Visualizar</button>
 				</form>
 	  	</div>
 		</div>

@@ -1057,7 +1057,7 @@
 				$Numero_Reportes = 2;
 			break;
 			case 'SURTIDO':
-				$Numero_Reportes = 3;
+				$Numero_Reportes = 5;
 			break;
 			case 'ADMINISTRACION':
 				$Numero_Reportes = 1;
