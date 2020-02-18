@@ -5,6 +5,7 @@ define("SigDolar","$");
 define("SigVe","Bs.S");
 define("Utilidad",0.77);
 define("Impuesto",1.16);
+define("Version","CPharma v.6.2");
 /**********************************************************************************/
 /************************* NOMBRES SEDES ON-LINE *********************************/
 define ("SedeFTN","FARMACIA TIERRA NEGRA, C.A.");

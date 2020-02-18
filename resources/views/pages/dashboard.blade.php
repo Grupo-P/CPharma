@@ -11,7 +11,7 @@
     include(app_path().'\functions\querys_mysql.php');
     include(app_path().'\functions\querys_sqlserver.php');
 
-    $CPharmaVersion = ' CPharma v.6.1.1';
+    $CPharmaVersion = ' '.Version;
 
     //-------------------- VARIABLES COMPRAS --------------------//
     $empresas = DB::table('empresas')->count();
@@ -499,14 +499,7 @@
         	<li class="card-text text-dark" style="display: inline;">
 					<i class="far fa-check-circle text-info" style="display: inline;"></i>
 					Desde ya esta disponible el reporte: 
-					<b class="text-info">Reporte de Atributos</b>!!
-  				</li>
-  			</ul>
-  			<ul style="list-style:none">
-        	<li class="card-text text-dark" style="display: inline;">
-					<i class="far fa-check-circle text-info" style="display: inline;"></i>
-					Desde ya esta disponible el modulo: 
-					<b class="text-info">Fecha de Vencimiento</b>!!
+					<b class="text-info">Articulos Devaluados</b>!!
   				</li>
   			</ul>
 	      </div>
@@ -710,15 +703,15 @@
   			<ul style="list-style:none">
         	<li class="card-text text-dark" style="display: inline;">
 					<i class="far fa-check-circle text-info" style="display: inline;"></i>
-					Desde ya esta disponible el modulo: 
-					<b class="text-info">Etiquetas</b>!!
+					Desde ya esta disponible el reporte: 
+					<b class="text-info">Productos mas vendidos</b>!!
   				</li>
   			</ul>
   			<ul style="list-style:none">
-        	<li class="card-text text-dark" style="display: inline;">
+  			<li class="card-text text-dark" style="display: inline;">
 					<i class="far fa-check-circle text-info" style="display: inline;"></i>
-					Se actualizaron las busquedas por 
-					<b class="text-info">Codigo de Barra</b>!!
+					Desde ya esta disponible el reporte: 
+					<b class="text-info">Consultor de Precio</b>!!
   				</li>
   			</ul>
 	      </div>
