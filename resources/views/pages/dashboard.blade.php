@@ -499,14 +499,7 @@
         	<li class="card-text text-dark" style="display: inline;">
 					<i class="far fa-check-circle text-info" style="display: inline;"></i>
 					Desde ya esta disponible el reporte: 
-					<b class="text-info">Reporte de Atributos</b>!!
-  				</li>
-  			</ul>
-  			<ul style="list-style:none">
-        	<li class="card-text text-dark" style="display: inline;">
-					<i class="far fa-check-circle text-info" style="display: inline;"></i>
-					Desde ya esta disponible el modulo: 
-					<b class="text-info">Fecha de Vencimiento</b>!!
+					<b class="text-info">Articulos Devaluados</b>!!
   				</li>
   			</ul>
 	      </div>

@@ -1,11 +1,10 @@
+<?php include_once(app_path().'\functions\config.php');  ?>
+
 <div class="p-3 mb-2 bg-white text-info footer-copyright text-center py-3">
 	<span><?php echo Version?> © 2018 - <?php echo''.date('Y'); ?> Copyright Grupo P</span>
 	<br>
   Developed and designed by
 	<a href="https://www.instagram.com/covacode/" target="blank" class="text-info CP-Links-No-Style">Sergio Cova</a>
-  <!-- <a href="https://api.whatsapp.com/send?phone=584246827377&text=&source=&data=" target="blank" class="text-info CP-Links-No-Style">Manuel Henriquez</a>
-  and 
-  <a href="#" class="text-info CP-Links-No-Style">Rubmary Vielma</a> -->
 </div>
 
 @section('scriptsFoot')
