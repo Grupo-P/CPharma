@@ -192,6 +192,9 @@
         case 'GP':
           dominio = 'http://cpharmade.com/';
           return dominio;
+        case 'ARG':
+          dominio = 'http://cpharmade.com/';
+        return dominio;
         break;
       }
     }
@@ -287,6 +290,7 @@
     const URLImagen = ''+dominio+'assets/promocion/';
 
     var timeOut;
+    var precio;
 
 		$('#inputCodBar').attr("placeholder", "Haga scan del codigo de barra");
 		$('#inputCodBar').attr("onblur", "this.placeholder = 'Haga scan del codigo de barra'");
@@ -296,6 +300,8 @@
 
 		$('#inputCodBar').keyup(function(e){
 	    if(e.keyCode == 13) {
+
+        precio = '';
 
         var CodBarrScan = $('#inputCodBar').val();
         var indiceCodBarScan = ArrJsCB.indexOf(CodBarrScan);
@@ -321,7 +327,7 @@
             url: URLTablaResuldado,
             type: "POST",
             success: function(data) {
-              var precio = formateoPrecio(data,2);
+              precio = formateoPrecio(data,2);
               $('#PPrecioScan').html('BsS. '+precio);
             }
            });
@@ -348,7 +354,7 @@
 
                 var i = 0;
                 while (i<limite && i<=limiteRespuesta){
-                  var precio = formateoPrecio(respuesta[i]['Precio'],2);
+                  var precioI = formateoPrecio(respuesta[i]['Precio'],2);
                   /*Armado Fila PCodBarrSug*/
                   nuevaFila += '<td align="center" class="text-black">';
                   nuevaFila += '<b><p>'+respuesta[i]['CodigoBarra']+'</p></b>';
@@ -359,7 +365,7 @@
                   nuevaFila += '</td>';
                   /*Armado Fila PPrecioSug*/
                   nuevaFila += '<td align="center" class="text-black">';
-                  nuevaFila += '<h4><b><p>BsS. '+precio+'</p></b></h4>';
+                  nuevaFila += '<h4><b><p>BsS. '+precioI+'</p></b></h4>';
                   nuevaFila += '</td>';
                   nuevaFila += '</tr>';
                   /*Ingreso de la fila a la tabla*/
