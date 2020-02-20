@@ -141,17 +141,15 @@
 									}
 								$Etiqueta = $Etiqueta.'
 								<tr>
-									<td class="izquierda rowIzq rowIzqA aumento">
-										<strong>Total a Pagar Bs.</strong>
-									</td>
-									<td class="derecha rowDer rowDerA aumento preciopromo">
+									<td class="centrado rowDer rowDerA aumento preciopromo" colspan="2">
 										<strong>
 										'.number_format ($PrecioHoy,2,"," ,"." ).'
 										</strong>
 									</td>
 								</tr>
 								<tr>
-									<td class="izquierda dolarizado rowIzq rowIzqA">
+									<td class="izquierda rowIzq rowIzqA">
+										<strong>Total a Pagar Bs.</strong>
 									</td>
 									<td class="derecha rowDer rowDerA">
 										<strong>'.$simbolo.'</strong> '.date("d-m-Y").'
@@ -190,17 +188,15 @@
 								</td>
 							</tr>
 							<tr>
-								<td class="izquierda rowIzq rowIzqA aumento">
-									<strong>Total a Pagar Bs.</strong>
-								</td>
-								<td class="derecha rowDer rowDerA aumento preciopromo">
+								<td class="centrado rowDer rowDerA aumento preciopromo" colspan="2">
 									<strong>
 									'.number_format ($PrecioHoy,2,"," ,"." ).'
 									</strong>
 								</td>
 							</tr>
 							<tr>
-								<td class="izquierda dolarizado rowIzq rowIzqA">
+								<td class="izquierda rowIzq rowIzqA">
+									<strong>Total a Pagar Bs.</strong>
 								</td>
 								<td class="derecha rowDer rowDerA">
 									<strong>'.$simbolo.'</strong> '.date("d-m-Y").'
