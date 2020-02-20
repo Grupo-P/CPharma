@@ -119,10 +119,11 @@
 		text-transform: uppercase;
 	}
 	.aumento{
-		font-size: 1.9em;
+		font-size: 2.2em;
 	}
   .preciopromo{
     color: #dc3545;
+    font-size: 4em;
   }
   .divPromo{
     width: 15cm;
@@ -259,6 +260,9 @@
           return dominio;
         break;
         case 'GP':
+          dominio = 'http://cpharmade.com/';
+          return dominio;
+        case 'ARG':
           dominio = 'http://cpharmade.com/';
           return dominio;
         break;
