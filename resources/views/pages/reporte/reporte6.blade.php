@@ -68,20 +68,21 @@
 
   $ArtJson = "";
   $CodJson = "";
+  $_GET['SEDE'] = 'ARG';
 
   if (isset($_GET['SEDE'])){      
     echo '<h1 class="h5 text-success"  align="left"> <i class="fas fa-prescription"></i> '.FG_Nombre_Sede($_GET['SEDE']).'</h1>';
   }
-  echo '<hr class="row align-items-start col-12">';
+  echo '<hr class="row align-items-start col-12">'; 
 
   if ((isset($_GET['Descrip']))OR(isset($_GET['CodBar']))){
 
     $InicioCarga = new DateTime("now");
 
-    if((isset($_GET['Descrip']))&&(!empty($_GET['Descrip']))) {
+    if((isset($_GET['Descrip']))&&(!empty($_GET['Descrip']))&&($_GET['flag']=='BsqDescrip')) {
       R6_Pedido_Productos($_GET['SEDE'],$_GET['Descrip'],$_GET['fechaInicio'],$_GET['fechaFin'],$_GET['pedido'],'Descrip');
     }
-    else if(isset($_GET['CodBar'])&&(!empty($_GET['CodBar']))){
+    else if(isset($_GET['CodBar'])&&(!empty($_GET['CodBar']))&&($_GET['flag']=='BsqCodBar')){
       R6_Pedido_Productos($_GET['SEDE'],$_GET['IdCB'],$_GET['fechaInicio'],$_GET['fechaFin'],$_GET['pedido'],'CodBar');
     }
   
@@ -101,7 +102,7 @@
     $CodJson = FG_Armar_Json($sql1,$_GET['SEDE']);
 
     echo '
-    <form id="form" autocomplete="off" action="" target="_blank">
+    <form id="Bsqform" autocomplete="off" action="" target="_blank">
         <table style="width:100%;">
           <tr>
           <td align="center">
@@ -124,6 +125,7 @@
               <input id="SEDE" name="SEDE" type="hidden" value="';
               print_r($_GET['SEDE']);
               echo'">
+              <input id="flag" name="flag" type="hidden" value="">
             </td>
           </tr>
           <tr>
@@ -132,7 +134,7 @@
               <input id="myInput" type="text" name="Descrip" placeholder="Ingrese el nombre del articulo " onkeyup="conteo()">
               <input id="myId" name="IdD" type="hidden">
               </div>
-              <input type="submit" value="Buscar" class="btn btn-outline-success">
+              <input type="submit" value="Buscar" class="btn btn-outline-success" id="BtnDescrip">
             </td>
           </tr>
           <tr>
@@ -141,7 +143,7 @@
               <input id="myInputCB" type="text" name="CodBar" placeholder="Ingrese el codigo de barra del articulo " onkeyup="conteoCB()">
               <input id="myIdCB" name="IdCB" type="hidden">
               </div>
-              <input type="submit" value="Buscar" class="btn btn-outline-success">
+              <input type="submit" value="Buscar" class="btn btn-outline-success" id="BtnCodBar">
             </td>
           </tr>
         </table>
@@ -175,6 +177,26 @@
   <?php
     }
   ?>  
+  <script type="text/javascript">
+    var btnClick='';
+
+    $("#BtnDescrip").click(function(){
+      btnClick = 'BtnDescrip';
+    });
+
+    $("#BtnCodBar").click(function(){
+      btnClick = 'BtnCodBar';
+    });
+
+    $( "#Bsqform" ).submit(function( event ) {
+      if( btnClick=='BtnDescrip' ){
+        $("#flag").val('BsqDescrip');
+      }
+      else if( btnClick=='BtnCodBar' ){
+        $("#flag").val('BsqCodBar');
+      }
+    });
+  </script>
 @endsection
 
 <?php
