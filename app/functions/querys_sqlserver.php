@@ -100,7 +100,7 @@
     FROM InvAtributo 
     WHERE 
     InvAtributo.Descripcion = 'Troquelados'
-    OR  InvAtributo.Descripcion = 'troquelados') 
+    OR  InvAtributo.Descripcion = 'troquelados')
     AND InvArticuloAtributo.InvArticuloId = InvArticulo.Id),CAST(0 AS INT))) AS Troquelado,
     --UtilidadArticulo (Utilidad del articulo, Utilidad es 1.00 NO considerar la utilidad para el calculo de precio)
     ROUND(CAST(1-((ISNULL(ROUND(CAST((SELECT VenCondicionVenta.PorcentajeUtilidad
@@ -108,14 +108,14 @@
     WHERE VenCondicionVenta.Id = (
     SELECT VenCondicionVenta_VenCondicionVentaArticulo.Id
     FROM VenCondicionVenta_VenCondicionVentaArticulo 
-    WHERE VenCondicionVenta_VenCondicionVentaArticulo.InvArticuloId = InvArticulo.Id)) AS DECIMAL(38,4)),2,0),CAST(0 AS INT)))/100)AS DECIMAL(38,2)),2,0) AS UtilidadArticulo,
+    WHERE VenCondicionVenta_VenCondicionVentaArticulo.InvArticuloId = InvArticulo.Id)) AS DECIMAL(38,4)),2,0),CAST(0 AS INT)))/100)AS DECIMAL(38,4)),2,0) AS UtilidadArticulo,
     --UtilidadCategoria (Utilidad de la categoria, Utilidad es 1.00 NO considerar la utilidad para el calculo de precio)
     ROUND(CAST(1-((ISNULL(ROUND(CAST((SELECT VenCondicionVenta.PorcentajeUtilidad 
     FROM VenCondicionVenta 
     WHERE VenCondicionVenta.id = (
     SELECT VenCondicionVenta_VenCondicionVentaCategoria.Id 
     FROM VenCondicionVenta_VenCondicionVentaCategoria 
-    WHERE VenCondicionVenta_VenCondicionVentaCategoria.InvCategoriaId = InvArticulo.InvCategoriaId)) AS DECIMAL(38,4)),2,0),CAST(0 AS INT)))/100)AS DECIMAL(38,2)),2,0) AS UtilidadCategoria,
+    WHERE VenCondicionVenta_VenCondicionVentaCategoria.InvCategoriaId = InvArticulo.InvCategoriaId)) AS DECIMAL(38,4)),2,0),CAST(0 AS INT)))/100)AS DECIMAL(38,4)),2,0) AS UtilidadCategoria,
     --Precio Troquel Almacen 1
     (ROUND(CAST((SELECT TOP 1
     InvLote.M_PrecioTroquelado
@@ -308,14 +308,14 @@
     WHERE VenCondicionVenta.Id = (
     SELECT VenCondicionVenta_VenCondicionVentaArticulo.Id
     FROM VenCondicionVenta_VenCondicionVentaArticulo 
-    WHERE VenCondicionVenta_VenCondicionVentaArticulo.InvArticuloId = InvArticulo.Id)) AS DECIMAL(38,4)),2,0),CAST(0 AS INT)))/100)AS DECIMAL(38,2)),2,0) AS UtilidadArticulo,
+    WHERE VenCondicionVenta_VenCondicionVentaArticulo.InvArticuloId = InvArticulo.Id)) AS DECIMAL(38,4)),2,0),CAST(0 AS INT)))/100)AS DECIMAL(38,4)),2,0) AS UtilidadArticulo,
     --UtilidadCategoria (Utilidad de la categoria, Utilidad es 1.00 NO considerar la utilidad para el calculo de precio)
     ROUND(CAST(1-((ISNULL(ROUND(CAST((SELECT VenCondicionVenta.PorcentajeUtilidad 
     FROM VenCondicionVenta 
     WHERE VenCondicionVenta.id = (
     SELECT VenCondicionVenta_VenCondicionVentaCategoria.Id 
     FROM VenCondicionVenta_VenCondicionVentaCategoria 
-    WHERE VenCondicionVenta_VenCondicionVentaCategoria.InvCategoriaId = InvArticulo.InvCategoriaId)) AS DECIMAL(38,4)),2,0),CAST(0 AS INT)))/100)AS DECIMAL(38,2)),2,0) AS UtilidadCategoria,
+    WHERE VenCondicionVenta_VenCondicionVentaCategoria.InvCategoriaId = InvArticulo.InvCategoriaId)) AS DECIMAL(38,4)),2,0),CAST(0 AS INT)))/100)AS DECIMAL(38,4)),2,0) AS UtilidadCategoria,
     --Precio Troquel Almacen 1
     (ROUND(CAST((SELECT TOP 1
     InvLote.M_PrecioTroquelado
@@ -508,14 +508,14 @@
     WHERE VenCondicionVenta.Id = (
     SELECT VenCondicionVenta_VenCondicionVentaArticulo.Id
     FROM VenCondicionVenta_VenCondicionVentaArticulo 
-    WHERE VenCondicionVenta_VenCondicionVentaArticulo.InvArticuloId = InvArticulo.Id)) AS DECIMAL(38,4)),2,0),CAST(0 AS INT)))/100)AS DECIMAL(38,2)),2,0) AS UtilidadArticulo,
+    WHERE VenCondicionVenta_VenCondicionVentaArticulo.InvArticuloId = InvArticulo.Id)) AS DECIMAL(38,4)),2,0),CAST(0 AS INT)))/100)AS DECIMAL(38,4)),2,0) AS UtilidadArticulo,
     --UtilidadCategoria (Utilidad de la categoria, Utilidad es 1.00 NO considerar la utilidad para el calculo de precio)
     ROUND(CAST(1-((ISNULL(ROUND(CAST((SELECT VenCondicionVenta.PorcentajeUtilidad 
     FROM VenCondicionVenta 
     WHERE VenCondicionVenta.id = (
     SELECT VenCondicionVenta_VenCondicionVentaCategoria.Id 
     FROM VenCondicionVenta_VenCondicionVentaCategoria 
-    WHERE VenCondicionVenta_VenCondicionVentaCategoria.InvCategoriaId = InvArticulo.InvCategoriaId)) AS DECIMAL(38,4)),2,0),CAST(0 AS INT)))/100)AS DECIMAL(38,2)),2,0) AS UtilidadCategoria,
+    WHERE VenCondicionVenta_VenCondicionVentaCategoria.InvCategoriaId = InvArticulo.InvCategoriaId)) AS DECIMAL(38,4)),2,0),CAST(0 AS INT)))/100)AS DECIMAL(38,4)),2,0) AS UtilidadCategoria,
     --Precio Troquel Almacen 1
     (ROUND(CAST((SELECT TOP 1
     InvLote.M_PrecioTroquelado
@@ -1069,14 +1069,14 @@
     WHERE VenCondicionVenta.Id = (
     SELECT VenCondicionVenta_VenCondicionVentaArticulo.Id
     FROM VenCondicionVenta_VenCondicionVentaArticulo 
-    WHERE VenCondicionVenta_VenCondicionVentaArticulo.InvArticuloId = InvArticulo.Id)) AS DECIMAL(38,4)),2,0),CAST(0 AS INT)))/100)AS DECIMAL(38,2)),2,0) AS UtilidadArticulo,
+    WHERE VenCondicionVenta_VenCondicionVentaArticulo.InvArticuloId = InvArticulo.Id)) AS DECIMAL(38,4)),2,0),CAST(0 AS INT)))/100)AS DECIMAL(38,4)),2,0) AS UtilidadArticulo,
     --UtilidadCategoria (Utilidad de la categoria, Utilidad es 1.00 NO considerar la utilidad para el calculo de precio)
     ROUND(CAST(1-((ISNULL(ROUND(CAST((SELECT VenCondicionVenta.PorcentajeUtilidad 
     FROM VenCondicionVenta 
     WHERE VenCondicionVenta.id = (
     SELECT VenCondicionVenta_VenCondicionVentaCategoria.Id 
     FROM VenCondicionVenta_VenCondicionVentaCategoria 
-    WHERE VenCondicionVenta_VenCondicionVentaCategoria.InvCategoriaId = InvArticulo.InvCategoriaId)) AS DECIMAL(38,4)),2,0),CAST(0 AS INT)))/100)AS DECIMAL(38,2)),2,0) AS UtilidadCategoria,
+    WHERE VenCondicionVenta_VenCondicionVentaCategoria.InvCategoriaId = InvArticulo.InvCategoriaId)) AS DECIMAL(38,4)),2,0),CAST(0 AS INT)))/100)AS DECIMAL(38,4)),2,0) AS UtilidadCategoria,
     --Precio Troquel Almacen 1
     (ROUND(CAST((SELECT TOP 1
     InvLote.M_PrecioTroquelado
@@ -1449,14 +1449,14 @@
     WHERE VenCondicionVenta.Id = (
     SELECT VenCondicionVenta_VenCondicionVentaArticulo.Id
     FROM VenCondicionVenta_VenCondicionVentaArticulo 
-    WHERE VenCondicionVenta_VenCondicionVentaArticulo.InvArticuloId = InvArticulo.Id)) AS DECIMAL(38,4)),2,0),CAST(0 AS INT)))/100)AS DECIMAL(38,2)),2,0) AS UtilidadArticulo,
+    WHERE VenCondicionVenta_VenCondicionVentaArticulo.InvArticuloId = InvArticulo.Id)) AS DECIMAL(38,4)),2,0),CAST(0 AS INT)))/100)AS DECIMAL(38,4)),2,0) AS UtilidadArticulo,
     --UtilidadCategoria (Utilidad de la categoria, Utilidad es 1.00 NO considerar la utilidad para el calculo de precio)
     ROUND(CAST(1-((ISNULL(ROUND(CAST((SELECT VenCondicionVenta.PorcentajeUtilidad 
     FROM VenCondicionVenta 
     WHERE VenCondicionVenta.id = (
     SELECT VenCondicionVenta_VenCondicionVentaCategoria.Id 
     FROM VenCondicionVenta_VenCondicionVentaCategoria 
-    WHERE VenCondicionVenta_VenCondicionVentaCategoria.InvCategoriaId = InvArticulo.InvCategoriaId)) AS DECIMAL(38,4)),2,0),CAST(0 AS INT)))/100)AS DECIMAL(38,2)),2,0) AS UtilidadCategoria,
+    WHERE VenCondicionVenta_VenCondicionVentaCategoria.InvCategoriaId = InvArticulo.InvCategoriaId)) AS DECIMAL(38,4)),2,0),CAST(0 AS INT)))/100)AS DECIMAL(38,4)),2,0) AS UtilidadCategoria,
     --Precio Troquel Almacen 1
     (ROUND(CAST((SELECT TOP 1
     InvLote.M_PrecioTroquelado
