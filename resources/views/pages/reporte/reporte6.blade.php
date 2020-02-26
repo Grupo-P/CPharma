@@ -72,17 +72,17 @@
   if (isset($_GET['SEDE'])){      
     echo '<h1 class="h5 text-success"  align="left"> <i class="fas fa-prescription"></i> '.FG_Nombre_Sede($_GET['SEDE']).'</h1>';
   }
-  echo '<hr class="row align-items-start col-12">';
+  echo '<hr class="row align-items-start col-12">'; 
 
   if ((isset($_GET['Descrip']))OR(isset($_GET['CodBar']))){
 
     $InicioCarga = new DateTime("now");
 
-    if((isset($_GET['Descrip']))&&(!empty($_GET['Descrip']))) {
+    if((isset($_GET['Descrip']))&&(!empty($_GET['Descrip']))&&($_GET['flag']=='BsqDescrip')) {
       R6_Pedido_Productos($_GET['SEDE'],$_GET['Descrip'],$_GET['fechaInicio'],$_GET['fechaFin'],$_GET['pedido'],'Descrip');
     }
-    else if(isset($_GET['CodBar'])&&(!empty($_GET['CodBar']))){
-      R6_Pedido_Productos($_GET['SEDE'],$_GET['IdCB'],$_GET['fechaInicio'],$_GET['fechaFin'],$_GET['pedido'],'CodBar');
+    else if(isset($_GET['CodBar'])&&(!empty($_GET['CodBar']))&&($_GET['flag']=='BsqCodBar')){
+      R6_Pedido_Productos($_GET['SEDE'],$_GET['CodBar'],$_GET['fechaInicio'],$_GET['fechaFin'],$_GET['pedido'],'CodBar');
     }
   
     FG_Guardar_Auditoria('CONSULTAR','REPORTE','Pedido de productos');
@@ -101,7 +101,7 @@
     $CodJson = FG_Armar_Json($sql1,$_GET['SEDE']);
 
     echo '
-    <form id="form" autocomplete="off" action="" target="_blank">
+    <form id="Bsqform" autocomplete="off" action="" target="_blank">
         <table style="width:100%;">
           <tr>
           <td align="center">
@@ -124,6 +124,7 @@
               <input id="SEDE" name="SEDE" type="hidden" value="';
               print_r($_GET['SEDE']);
               echo'">
+              <input id="flag" name="flag" type="hidden" value="">
             </td>
           </tr>
           <tr>
@@ -132,16 +133,16 @@
               <input id="myInput" type="text" name="Descrip" placeholder="Ingrese el nombre del articulo " onkeyup="conteo()">
               <input id="myId" name="IdD" type="hidden">
               </div>
-              <input type="submit" value="Buscar" class="btn btn-outline-success">
+              <input type="submit" value="Buscar" class="btn btn-outline-success" id="BtnDescrip">
             </td>
           </tr>
           <tr>
             <td colspan="6">
               <div class="autocomplete" style="width:90%;">
-              <input id="myInputCB" type="text" name="CodBar" placeholder="Ingrese el codigo de barra del articulo " onkeyup="conteoCB()">
+              <input id="myInputCB" type="text" name="CodBar" placeholder="Ingrese el codigo de barra del articulo o varios codigos de barra separados con comas" onkeyup="conteoCB()">
               <input id="myIdCB" name="IdCB" type="hidden">
               </div>
-              <input type="submit" value="Buscar" class="btn btn-outline-success">
+              <input type="submit" value="Buscar" class="btn btn-outline-success" id="BtnCodBar">
             </td>
           </tr>
         </table>
@@ -175,6 +176,26 @@
   <?php
     }
   ?>  
+  <script type="text/javascript">
+    var btnClick='';
+
+    $("#BtnDescrip").click(function(){
+      btnClick = 'BtnDescrip';
+    });
+
+    $("#BtnCodBar").click(function(){
+      btnClick = 'BtnCodBar';
+    });
+
+    $( "#Bsqform" ).submit(function( event ) {
+      if( btnClick=='BtnDescrip' ){
+        $("#flag").val('BsqDescrip');
+      }
+      else if( btnClick=='BtnCodBar' ){
+        $("#flag").val('BsqCodBar');
+      }
+    });
+  </script>
 @endsection
 
 <?php
@@ -481,149 +502,159 @@
           <tbody>
       ';
         $contador = 1;
-        $IdArticulo = $Valor;
-
-        $sql2 = MySQL_Cuenta_Veces_Dias_Cero($IdArticulo,$FInicial,$FFinal);
-        $result2 = mysqli_query($connCPharma,$sql2);
-        $row2 = $result2->fetch_assoc();
-        $RangoDiasQuiebre = $row2['Cuenta'];
-
-        $sql1 = R6Q_Integracion_Pedido_Productos($IdArticulo,$FInicial,$FFinal);
-        $result1 = sqlsrv_query($conn,$sql1);
-        $row1 = sqlsrv_fetch_array($result1, SQLSRV_FETCH_ASSOC);
-
-        $UnidadesVendidas = intval($row1["TotalUnidadesVendidas"]);
-        $UnidadesCompradas = intval($row1["TotalUnidadesCompradas"]);
-        $UltimaVentaRango = $row1["UltimaVentaRango"];
-
-        $sql2 = R6Q_Detalle_Articulo($IdArticulo);
-        $result2 = sqlsrv_query($conn,$sql2);
-        $row2 = sqlsrv_fetch_array($result2, SQLSRV_FETCH_ASSOC);
-
-        $CodigoArticulo = $row2["CodigoInterno"];
-        $CodigoBarra = $row2["CodigoBarra"];
-        $Descripcion = FG_Limpiar_Texto($row2["Descripcion"]);
-        $Existencia = $row2["Existencia"];
-        $ExistenciaAlmacen1 = $row2["ExistenciaAlmacen1"];
-        $ExistenciaAlmacen2 = $row2["ExistenciaAlmacen2"];
-        $IsTroquelado = $row2["Troquelado"];
-        $IsIVA = $row2["Impuesto"];
-        $UtilidadArticulo = $row2["UtilidadArticulo"];
-        $UtilidadCategoria = $row2["UtilidadCategoria"];
-        $TroquelAlmacen1 = $row2["TroquelAlmacen1"];
-        $PrecioCompraBrutoAlmacen1 = $row2["PrecioCompraBrutoAlmacen1"];
-        $TroquelAlmacen2 = $row2["TroquelAlmacen2"];
-        $PrecioCompraBrutoAlmacen2 = $row2["PrecioCompraBrutoAlmacen2"];
-        $PrecioCompraBruto = $row2["PrecioCompraBruto"];
-        $Dolarizado = $row2["Dolarizado"];
-        $CondicionExistencia = 'CON_EXISTENCIA';
-        $UltimoLote = $row2["UltimoLote"]; 
-        $UltimoPrecio = $row2["UltimoPrecio"];
-        $UltimaVenta = $row2["UltimaVenta"];
-
-        $Precio = FG_Calculo_Precio_Alfa($Existencia,$ExistenciaAlmacen1,$ExistenciaAlmacen2,$IsTroquelado,$UtilidadArticulo,$UtilidadCategoria,$TroquelAlmacen1,$PrecioCompraBrutoAlmacen1,$TroquelAlmacen2,
-        $PrecioCompraBrutoAlmacen2,$PrecioCompraBruto,$IsIVA,$CondicionExistencia);
-
-        $VentaDiaria = FG_Venta_Diaria($UnidadesVendidas,$RangoDias);
-        $DiasRestantes = FG_Dias_Restantes($Existencia,$VentaDiaria);
-
-        $CantidadPedido = FG_Cantidad_Pedido($VentaDiaria,$DiasPedido,$Existencia);
-
-        $VentaDiariaQuiebre = FG_Venta_Diaria($UnidadesVendidas,$RangoDiasQuiebre);
-        $DiasRestantesQuiebre = FG_Dias_Restantes($Existencia,$VentaDiariaQuiebre);
-        $CantidadPedidoQuiebre = FG_Cantidad_Pedido($VentaDiariaQuiebre,$DiasPedido,$Existencia);
-
-        echo '<tr>';
-        echo '<td align="center"><strong>'.intval($contador).'</strong></td>';
-        echo '<td align="left">'.$CodigoArticulo.'</td>';
-        echo '<td align="center">'.$CodigoBarra.'</td>';
-        echo 
-        '<td align="left" class="CP-barrido">
-        <a href="/reporte2?Id='.$IdArticulo.'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
-          .$Descripcion.
-        '</a>
-        </td>';
-        echo '<td align="center">'.intval($Existencia).'</td>';
-        echo
-        '<td align="center" class="CP-barrido">
-        <a href="reporte12?fechaInicio='.$FInicial.'&fechaFin='.$FFinalImp.'&SEDE='.$SedeConnection.'&Descrip='.$Descripcion.'&Id='.$IdArticulo.'" style="text-decoration: none; color: black;" target="_blank">'
-          .intval($UnidadesVendidas).
-        '</a>
-        </td>';
-        echo
-        '<td align="center" class="CP-barrido">
-        <a href="reporte12?fechaInicio='.$FInicial.'&fechaFin='.$FFinalImp.'&SEDE='.$SedeConnection.'&Descrip='.$Descripcion.'&Id='.$IdArticulo.'" style="text-decoration: none; color: black;" target="_blank">'
-          .intval($UnidadesCompradas).
-        '</a>
-        </td>';
-        echo '<td align="center">'.round($VentaDiaria,2).'</td>';
-        echo '<td align="center" class="bg-danger text-white">'.round($VentaDiariaQuiebre,2).'</td>';
-        echo '<td align="center">'.round($DiasRestantes,2).'</td>';
-        echo '<td align="center" class="bg-danger text-white">'.round($DiasRestantesQuiebre,2).'</td>';
-        echo '<td align="center">'.number_format($Precio,2,"," ,"." ).'</td>';
+        $codigosBarra = explode(",", $Valor);
+        $i=0;
         
-        if(!is_null($UltimoLote)){
-          echo '<td align="center">'.$UltimoLote->format('d-m-Y').'</td>';
-        }
-        else{
-          echo '<td align="center"> - </td>';
-        }
+        while ( ($i<count($codigosBarra)) && ($codigosBarra[$i]!='') ){
+          $sql3 = R6Q_IdArticulo_CodigoBarra($codigosBarra[$i]);
+          $result3 =  sqlsrv_query($conn,$sql3);
+          $row3 = sqlsrv_fetch_array($result3, SQLSRV_FETCH_ASSOC);
+          $IdArticulo = $row3['InvArticuloId'];
+        
+          $sql2 = MySQL_Cuenta_Veces_Dias_Cero($IdArticulo,$FInicial,$FFinal);
+          $result2 = mysqli_query($connCPharma,$sql2);
+          $row2 = $result2->fetch_assoc();
+          $RangoDiasQuiebre = $row2['Cuenta'];
 
-        if(!is_null($UltimaVentaRango)){
-          echo '<td align="center">'.$UltimaVentaRango->format('d-m-Y').'</td>';
-        }
-        else{
-          echo '<td align="center"> - </td>';
-        }
+          $sql1 = R6Q_Integracion_Pedido_Productos($IdArticulo,$FInicial,$FFinal);
+          $result1 = sqlsrv_query($conn,$sql1);
+          $row1 = sqlsrv_fetch_array($result1, SQLSRV_FETCH_ASSOC);
 
-        if(($UltimaVenta)){
-          echo '<td align="center">'.$UltimaVenta->format('d-m-Y').'</td>';
+          $UnidadesVendidas = intval($row1["TotalUnidadesVendidas"]);
+          $UnidadesCompradas = intval($row1["TotalUnidadesCompradas"]);
+          $UltimaVentaRango = $row1["UltimaVentaRango"];
+
+          $sql2 = R6Q_Detalle_Articulo($IdArticulo);
+          $result2 = sqlsrv_query($conn,$sql2);
+          $row2 = sqlsrv_fetch_array($result2, SQLSRV_FETCH_ASSOC);
+
+          $CodigoArticulo = $row2["CodigoInterno"];
+          $CodigoBarra = $row2["CodigoBarra"];
+          $Descripcion = FG_Limpiar_Texto($row2["Descripcion"]);
+          $Existencia = $row2["Existencia"];
+          $ExistenciaAlmacen1 = $row2["ExistenciaAlmacen1"];
+          $ExistenciaAlmacen2 = $row2["ExistenciaAlmacen2"];
+          $IsTroquelado = $row2["Troquelado"];
+          $IsIVA = $row2["Impuesto"];
+          $UtilidadArticulo = $row2["UtilidadArticulo"];
+          $UtilidadCategoria = $row2["UtilidadCategoria"];
+          $TroquelAlmacen1 = $row2["TroquelAlmacen1"];
+          $PrecioCompraBrutoAlmacen1 = $row2["PrecioCompraBrutoAlmacen1"];
+          $TroquelAlmacen2 = $row2["TroquelAlmacen2"];
+          $PrecioCompraBrutoAlmacen2 = $row2["PrecioCompraBrutoAlmacen2"];
+          $PrecioCompraBruto = $row2["PrecioCompraBruto"];
+          $Dolarizado = $row2["Dolarizado"];
+          $CondicionExistencia = 'CON_EXISTENCIA';
+          $UltimoLote = $row2["UltimoLote"]; 
+          $UltimoPrecio = $row2["UltimoPrecio"];
+          $UltimaVenta = $row2["UltimaVenta"];
+
+          $Precio = FG_Calculo_Precio_Alfa($Existencia,$ExistenciaAlmacen1,$ExistenciaAlmacen2,$IsTroquelado,$UtilidadArticulo,$UtilidadCategoria,$TroquelAlmacen1,$PrecioCompraBrutoAlmacen1,$TroquelAlmacen2,
+          $PrecioCompraBrutoAlmacen2,$PrecioCompraBruto,$IsIVA,$CondicionExistencia);
+
+          $VentaDiaria = FG_Venta_Diaria($UnidadesVendidas,$RangoDias);
+          $DiasRestantes = FG_Dias_Restantes($Existencia,$VentaDiaria);
+
+          $CantidadPedido = FG_Cantidad_Pedido($VentaDiaria,$DiasPedido,$Existencia);
+
+          $VentaDiariaQuiebre = FG_Venta_Diaria($UnidadesVendidas,$RangoDiasQuiebre);
+          $DiasRestantesQuiebre = FG_Dias_Restantes($Existencia,$VentaDiariaQuiebre);
+          $CantidadPedidoQuiebre = FG_Cantidad_Pedido($VentaDiariaQuiebre,$DiasPedido,$Existencia);
+
+          echo '<tr>';
+          echo '<td align="center"><strong>'.intval($contador).'</strong></td>';
+          echo '<td align="left">'.$CodigoArticulo.'</td>';
+          echo '<td align="center">'.$CodigoBarra.'</td>';
+          echo 
+          '<td align="left" class="CP-barrido">
+          <a href="/reporte2?Id='.$IdArticulo.'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
+            .$Descripcion.
+          '</a>
+          </td>';
+          echo '<td align="center">'.intval($Existencia).'</td>';
+          echo
+          '<td align="center" class="CP-barrido">
+          <a href="reporte12?fechaInicio='.$FInicial.'&fechaFin='.$FFinalImp.'&SEDE='.$SedeConnection.'&Descrip='.$Descripcion.'&Id='.$IdArticulo.'" style="text-decoration: none; color: black;" target="_blank">'
+            .intval($UnidadesVendidas).
+          '</a>
+          </td>';
+          echo
+          '<td align="center" class="CP-barrido">
+          <a href="reporte12?fechaInicio='.$FInicial.'&fechaFin='.$FFinalImp.'&SEDE='.$SedeConnection.'&Descrip='.$Descripcion.'&Id='.$IdArticulo.'" style="text-decoration: none; color: black;" target="_blank">'
+            .intval($UnidadesCompradas).
+          '</a>
+          </td>';
+          echo '<td align="center">'.round($VentaDiaria,2).'</td>';
+          echo '<td align="center" class="bg-danger text-white">'.round($VentaDiariaQuiebre,2).'</td>';
+          echo '<td align="center">'.round($DiasRestantes,2).'</td>';
+          echo '<td align="center" class="bg-danger text-white">'.round($DiasRestantesQuiebre,2).'</td>';
+          echo '<td align="center">'.number_format($Precio,2,"," ,"." ).'</td>';
+          
+          if(!is_null($UltimoLote)){
+            echo '<td align="center">'.$UltimoLote->format('d-m-Y').'</td>';
+          }
+          else{
+            echo '<td align="center"> - </td>';
+          }
+
+          if(!is_null($UltimaVentaRango)){
+            echo '<td align="center">'.$UltimaVentaRango->format('d-m-Y').'</td>';
+          }
+          else{
+            echo '<td align="center"> - </td>';
+          }
+
+          if(($UltimaVenta)){
+            echo '<td align="center">'.$UltimaVenta->format('d-m-Y').'</td>';
+          }
+          else{
+            echo '<td align="center"> - </td>';
+          }
+          echo '<td align="center">'.intval($CantidadPedido).'</td>';
+          echo '<td align="center" class="bg-danger text-white">'.round($CantidadPedidoQuiebre,2).'</td>';
+
+          
+
+          $sqlDetalleOrden = "SELECT COUNT(*) AS CuentaOr FROM orden_compra_detalles WHERE id_articulo = '$IdArticulo'";
+          $resultDetalleOrden = mysqli_query($connCPharma,$sqlDetalleOrden);
+          $rowDetalleOrden = $resultDetalleOrden->fetch_assoc();
+          $cuentaArticuloOrden = $rowDetalleOrden['CuentaOr'];
+
+          echo'
+          <td style="width:140px;">
+            <form action="/ordenCompraDetalle/create" method="PRE" style="display: block; width:100%;" target="_blank">
+          ';
+          echo'<input type="hidden" name="id_articulo" value="'.$IdArticulo.'">';
+          echo'<input type="hidden" name="codigo_articulo" value="'.$CodigoArticulo.'">';
+          echo'<input type="hidden" name="codigo_barra" value="'.$CodigoBarra.'">';
+          echo'<input type="hidden" name="descripcion" value="'.$Descripcion.'">';
+          echo'<input type="hidden" name="existencia_rpt" value="'.$Existencia.'">';
+          echo'<input type="hidden" name="dias_restantes_rpt" value="'.$DiasRestantesQuiebre.'">';
+          echo'<input type="hidden" name="origen_rpt" value="Pedido de productos">';
+          echo'<input type="hidden" name="rango_rpt" value="Del: '.$FInicialImp.' Al: '.$FFinalImp.'">';
+          echo'
+              <button type="submit" name="Reporte" role="button" class="btn btn-outline-success btn-sm" value="SI" style="width:100%;">Agregar</button>
+            </form>
+          ';
+          if( $cuentaArticuloOrden!=0 ) {
+            echo'
+              <br/> 
+              <form action="/ordenCompraDetalle/0" method="PRE" style="display: block; width:100%;" target="_blank">';
+            echo'<input type="hidden" name="id_articulo" value="'.$IdArticulo.'">';
+            echo'
+              <button type="submit" role="button" class="btn btn-outline-danger btn-sm" style="width:100%;">En Transito</button>
+            </form>
+          ';
+          }
+          echo'
+          </td>
+          ';
+         
+          
+          echo '</tr>';
+        $i++;
+        $contador++;
         }
-        else{
-          echo '<td align="center"> - </td>';
-        }
-        echo '<td align="center">'.intval($CantidadPedido).'</td>';
-        echo '<td align="center" class="bg-danger text-white">'.round($CantidadPedidoQuiebre,2).'</td>';
-
-        /*BOTON PARA AGREGAR A LA ORDEN DE COMPRA*/
-
-      $sqlDetalleOrden = "SELECT COUNT(*) AS CuentaOr FROM orden_compra_detalles WHERE id_articulo = '$IdArticulo'";
-      $resultDetalleOrden = mysqli_query($connCPharma,$sqlDetalleOrden);
-      $rowDetalleOrden = $resultDetalleOrden->fetch_assoc();
-      $cuentaArticuloOrden = $rowDetalleOrden['CuentaOr'];
-
-      echo'
-      <td style="width:140px;">
-        <form action="/ordenCompraDetalle/create" method="PRE" style="display: block; width:100%;" target="_blank">
-      ';
-      echo'<input type="hidden" name="id_articulo" value="'.$IdArticulo.'">';
-      echo'<input type="hidden" name="codigo_articulo" value="'.$CodigoArticulo.'">';
-      echo'<input type="hidden" name="codigo_barra" value="'.$CodigoBarra.'">';
-      echo'<input type="hidden" name="descripcion" value="'.$Descripcion.'">';
-      echo'<input type="hidden" name="existencia_rpt" value="'.$Existencia.'">';
-      echo'<input type="hidden" name="dias_restantes_rpt" value="'.$DiasRestantesQuiebre.'">';
-      echo'<input type="hidden" name="origen_rpt" value="Pedido de productos">';
-      echo'<input type="hidden" name="rango_rpt" value="Del: '.$FInicialImp.' Al: '.$FFinalImp.'">';
-      echo'
-          <button type="submit" name="Reporte" role="button" class="btn btn-outline-success btn-sm" value="SI" style="width:100%;">Agregar</button>
-        </form>
-      ';
-      if( $cuentaArticuloOrden!=0 ) {
-        echo'
-          <br/> 
-          <form action="/ordenCompraDetalle/0" method="PRE" style="display: block; width:100%;" target="_blank">';
-        echo'<input type="hidden" name="id_articulo" value="'.$IdArticulo.'">';
-        echo'
-          <button type="submit" role="button" class="btn btn-outline-danger btn-sm" style="width:100%;">En Transito</button>
-        </form>
-      ';
-      }
-      echo'
-      </td>
-      ';
-      /*BOTON PARA AGREGAR A LA ORDEN DE COMPRA*/
-      
-        echo '</tr>';
         echo '
           </tbody>
       </table>';
@@ -681,6 +712,19 @@
       FROM InvArticulo
       WHERE InvArticulo.Descripcion LIKE '%$DescripLike%'
     ";          
+    return $sql;
+  }
+  /**********************************************************************************/
+  /*
+    TITULO: R6Q_IdArticulo_CodigoBarra
+    FUNCION: Busca el id del articulo dado el codigo de barra
+    RETORNO: id del articulo
+    DESAROLLADO POR: SERGIO COVA
+  */
+  function R6Q_IdArticulo_CodigoBarra($CodigoBarra) {
+    $sql = "
+      SELECT InvCodigoBarra.InvArticuloId FROM InvCodigoBarra WHERE InvCodigoBarra.CodigoBarra = '$CodigoBarra' 
+    ";
     return $sql;
   }
   /**********************************************************************************/
