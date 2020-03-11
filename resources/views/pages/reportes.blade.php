@@ -669,6 +669,34 @@
 ?>
 <!-- SURTIDO -->
 <!-------------------------------------------------------------------------------->
+<!-- RECEPCION -->
+<?php
+  if(Auth::user()->departamento == 'RECEPCION'){
+?>
+	<div class="card-deck">
+		<div class="card border-danger mb-3" style="width: 14rem;">	  	
+  		<div class="card-body text-left bg-danger">
+    		<h5 class="card-title">
+	    		<span class="card-text text-white">
+	    			Historico de productos
+	    		</span>
+    		</h5>	    	    
+  		</div>
+	  	<div class="card-footer bg-transparent border-danger text-right">
+	  		<form action="/reporte2/" style="display: inline;">
+			    @csrf
+			    <input id="SEDE" name="SEDE" type="hidden" value="<?php print_r($_GET['SEDE']); ?>">				   				   
+			    <button type="submit" name="Reporte" role="button" class="btn btn-outline-danger btn-sm"></i>Visualizar</button>
+				</form>
+	  	</div>
+		</div>
+	</div>
+<?php
+  }
+?>
+<!-- RECEPCION -->
+<!-------------------------------------------------------------------------------->
+<!-------------------------------------------------------------------------------->
 <!-- VENTAS -->
 		<!-- ESTE DEPARTAMENTOS NO POSEE REPORTES -->
 <!-- VENTAS -->

@@ -1071,6 +1071,9 @@
 			case 'TECNOLOGIA':
 				$Numero_Reportes = 20;
 			break;
+			case 'RECEPCION':
+				$Numero_Reportes = 1;
+			break;
 			default:
 				$Numero_Reportes = 0;
 			break;

@@ -1501,6 +1501,13 @@
 					<b class="text-info">Orden de compra</b>!!
   				</li>
   			</ul>
+  			<ul style="list-style:none">
+        	<li class="card-text text-dark" style="display: inline;">
+					<i class="far fa-check-circle text-info" style="display: inline;"></i>
+					Desde ya esta disponible el reporte: 
+					<b class="text-info">Historico de productos</b>!!
+  				</li>
+  			</ul>
 	      </div>
 	      <div class="modal-footer">
 	        <button type="button" class="btn btn-outline-info" data-dismiss="modal">Aceptar</button>
