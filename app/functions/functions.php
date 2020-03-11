@@ -1048,7 +1048,7 @@
 				$Numero_Reportes = 18;
 			break;
 			case 'OPERACIONES':
-				$Numero_Reportes = 6;
+				$Numero_Reportes = 7;
 			break;
 			case 'ALMACEN':
 				$Numero_Reportes = 3;
