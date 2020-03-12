@@ -506,6 +506,7 @@
         $i=0;
         
         while ( ($i<count($codigosBarra)) && ($codigosBarra[$i]!='') ){
+          $CodigoBarra = $codigosBarra[$i];
           $sql3 = R6Q_IdArticulo_CodigoBarra($codigosBarra[$i]);
           $result3 =  sqlsrv_query($conn,$sql3);
           $row3 = sqlsrv_fetch_array($result3, SQLSRV_FETCH_ASSOC);
@@ -529,7 +530,6 @@
           $row2 = sqlsrv_fetch_array($result2, SQLSRV_FETCH_ASSOC);
 
           $CodigoArticulo = $row2["CodigoInterno"];
-          $CodigoBarra = $row2["CodigoBarra"];
           $Descripcion = FG_Limpiar_Texto($row2["Descripcion"]);
           $Existencia = $row2["Existencia"];
           $ExistenciaAlmacen1 = $row2["ExistenciaAlmacen1"];
@@ -560,6 +560,9 @@
           $VentaDiariaQuiebre = FG_Venta_Diaria($UnidadesVendidas,$RangoDiasQuiebre);
           $DiasRestantesQuiebre = FG_Dias_Restantes($Existencia,$VentaDiariaQuiebre);
           $CantidadPedidoQuiebre = FG_Cantidad_Pedido($VentaDiariaQuiebre,$DiasPedido,$Existencia);
+
+          $CodigoArticulo = ($CodigoArticulo)?$CodigoArticulo:'N/A';
+          $Descripcion = ($Descripcion)?$Descripcion:'NO REGISTRADO';
 
           echo '<tr>';
           echo '<td align="center"><strong>'.intval($contador).'</strong></td>';
