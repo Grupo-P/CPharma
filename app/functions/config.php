@@ -73,7 +73,7 @@ define ("passDBs" , "soporte123");
 define ("nameDBs" , "cpharmaftn");
 /**********************************************************************************/
 /********************* CONEXION SERVER DESARROLLO DE SERGIO ARG **********************/
-define ("serverDBsa" , "SCOVA-PC");
+define ("serverDBsa" , "SERGIO-PC");
 define ("userDBsa" , "sa");
 define ("passDBsa" , "soporte123");
 define ("nameDBsa" , "cpharmaftn");
