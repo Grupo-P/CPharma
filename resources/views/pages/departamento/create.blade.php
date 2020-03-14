@@ -41,6 +41,75 @@
     <br>
     <br>
 
+    <table class="table table-bordered table-striped col-12">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col" class="CP-sticky text-left">#</th>
+                <th scope="col" class="CP-sticky text-left">Reporte</th>
+                <th scope="col" class="CP-sticky text-left">#</th>
+                <th scope="col" class="CP-sticky text-left">Reporte</th>
+                <th scope="col" class="CP-sticky text-left">#</th>
+                <th scope="col" class="CP-sticky text-left">Reporte</th>
+                <th scope="col" class="CP-sticky text-left">#</th>
+                <th scope="col" class="CP-sticky text-left">Reporte</th>
+                <th scope="col" class="CP-sticky text-left">#</th>
+                <th scope="col" class="CP-sticky text-left">Reporte</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th scope="col">1</th>
+                <td scope="col">Activacion de proveedores</td>
+                <th scope="col">2</th>
+                <td scope="col">Historico de productos</td>
+                <th scope="col">3</th>
+                <td scope="col">Productos mas vendidos</td>
+                <th scope="col">4</th>
+                <td scope="col">Productos menos vendidos</td>
+                <th scope="col">5</th>
+                <td scope="col">Productos en falla</td>
+            </tr>
+            <tr>
+                <th scope="col">6</th>
+                <td scope="col">Pedido de productos</td>
+                <th scope="col">7</th>
+                <td scope="col">Catalogo de proveedor</td>
+                <th scope="col">9</th>
+                <td scope="col">Productos para surtir</td>
+                <th scope="col">10</th>
+                <td scope="col">Analitico de precios</td>
+                <th scope="col">12</th>
+                <td scope="col">Detalle de movimientos</td>
+            </tr>
+            <tr>
+                <th scope="col">13</th>
+                <td scope="col">Productos Por Fallar</td>
+                <th scope="col">14</th>
+                <td scope="col">Productos en Caida</td>
+                <th scope="col">15</th>
+                <td scope="col">Articulos Devaluados</td>
+                <th scope="col">16</th>
+                <td scope="col">Articulos Estrella</td>
+                <th scope="col">17</th>
+                <td scope="col">Tri Tienda Por Articulo</td>
+            </tr>
+            <tr>
+                <th scope="col">18</th>
+                <td scope="col">Consulta Compras</td>
+                <th scope="col">19</th>
+                <td scope="col">Ventas Cruzadas</td>
+                <th scope="col">20</th>
+                <td scope="col">Tri Tienda Por Proveedor</td>
+                <th scope="col">21</th>
+                <td scope="col">Consultor de Precios</td>
+                <th scope="col">22</th>
+                <td scope="col">Reporte de Atributos</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <br>
+
     {!! Form::open(['route' => 'departamento.store', 'method' => 'POST']) !!}
     <fieldset>
 
@@ -58,7 +127,7 @@
             </tr>
             <tr>
                 <th scope="row">{!! Form::label('descripcion', 'Descripcion') !!}</th>
-                <td>{!! Form::textarea('descripcion', null, [ 'class' => 'form-control', 'placeholder' => 'Detalles importantes del departamento', 'rows' => '2', 'required']) !!}</td>
+                <td>{!! Form::textarea('descripcion', null, [ 'class' => 'form-control', 'placeholder' => 'Ingrese el numero correspondiente al reporte separado con comas. Ej.: 1,2,3', 'rows' => '2', 'required']) !!}</td>
             </tr>            
         </tbody>
         </table>

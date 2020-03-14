@@ -105,7 +105,7 @@
 		    <tr>
 		      	<th scope="col" class="CP-sticky">#</th>
 		      	<th scope="col" class="CP-sticky">Nombre</th>
-		      	<th scope="col" class="CP-sticky">Descripcion</th>		      	
+		      	<th scope="col" class="CP-sticky">Reportes</th>		      	
 		      	<th scope="col" class="CP-sticky">Estatus</th>
 		      	<th scope="col" class="CP-sticky">Acciones</th>
 		    </tr>
