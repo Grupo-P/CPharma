@@ -150,7 +150,22 @@
   <hr class="row align-items-start col-12">
 
 <?php
-	if((Auth::user()->departamento != 'VENTAS')&&(Auth::user()->departamento != 'RRHH')&&(Auth::user()->departamento != 'TESORERIA')){
+	use compras\Departamento;
+	$reportes = 0;
+	$departamento = 
+	DB::table('departamentos')
+	->select('descripcion')
+	->where('nombre', '=', Auth::user()->departamento )
+    ->get();
+
+    if( (!empty($departamento[0])) ) {
+    	$descripcion = ($departamento[0]->descripcion);
+    	$reportes = explode(",", $descripcion);
+    }
+
+	/*if((Auth::user()->departamento != 'VENTAS')&&(Auth::user()->departamento != 'RRHH')&&(Auth::user()->departamento != 'TESORERIA')){*/
+
+	if(in_array(0,$reportes)!=true){ 
 ?>
 <!-------------------------------------------------------------------------------->
 <!-- DESTACADOS -->
@@ -377,7 +392,7 @@
 		    		<span class="card-text text-white">
 		    			<i class="fas fa-file-invoice"></i>
 		    			<?php
-		    				echo''.FG_Reportes_Departamento(Auth::user()->departamento);
+		    				echo''.count($reportes);
 		    			?>  			
 		    		</span>
 	    		</h2>
