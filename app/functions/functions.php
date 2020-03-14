@@ -1044,6 +1044,9 @@
  	*/
 	function FG_Nombre_Reporte($NumeroReporte){
 		switch ($NumeroReporte) {
+			case 0:
+				$nombre = 'No posee reportes';
+			break;
 			case 1:
 				$nombre = 'Activacion de proveedores';
 			break;
@@ -1105,7 +1108,7 @@
 				$nombre = 'Reporte de Atributos';
 			break;
 			default:
-				$nombre = 'Reporte Desconocido';
+				$nombre = 'Reporte desconocido';
 			break;
 		}
 		return $nombre;
