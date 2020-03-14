@@ -150,7 +150,22 @@
   <hr class="row align-items-start col-12">
 
 <?php
-	if((Auth::user()->departamento != 'VENTAS')&&(Auth::user()->departamento != 'RRHH')&&(Auth::user()->departamento != 'TESORERIA')){
+	use compras\Departamento;
+	$reportes = 0;
+	$departamento = 
+	DB::table('departamentos')
+	->select('descripcion')
+	->where('nombre', '=', Auth::user()->departamento )
+    ->get();
+
+    if( (!empty($departamento[0])) ) {
+    	$descripcion = ($departamento[0]->descripcion);
+    	$reportes = explode(",", $descripcion);
+    }
+
+	/*if((Auth::user()->departamento != 'VENTAS')&&(Auth::user()->departamento != 'RRHH')&&(Auth::user()->departamento != 'TESORERIA')){*/
+
+	if(in_array(0,$reportes)!=true){ 
 ?>
 <!-------------------------------------------------------------------------------->
 <!-- DESTACADOS -->
@@ -377,7 +392,7 @@
 		    		<span class="card-text text-white">
 		    			<i class="fas fa-file-invoice"></i>
 		    			<?php
-		    				echo''.FG_Reportes_Departamento(Auth::user()->departamento);
+		    				echo''.count($reportes);
 		    			?>  			
 		    		</span>
 	    		</h2>
@@ -2004,32 +2019,7 @@
 	    </div>
   	</div>
 	</div>
-	<!-- Modal TECNOLOGIA -->
 	
-	<!-- Dashboard Articulo Estrella-->
-	<!-- <div class="card-deck">		
-		<div class="card border-secondary mb-3" style="width: 14rem;">	  	
-  		<div class="card-body text-left bg-light">
-    		<h3 class="card-title">
-	    		<span class="card-text text-dark">
-	    			<i class="fas fa-credit-card"></i>
-	    			Articulos Estrella					
-	    		</span>
-    		</h3>
-    		<p class="card-text text-dark">
-    			<?php
-						//FG_Acticulos_Estrella_Top('FTN');
-					?>
-    		</p>
-  		</div>
-	  	<div class="card-footer bg-transparent border-secondary text-right">
-	  		<a href="/reporte16/" class="btn btn-outline-secondary btn-sm">Visualizar</a>
-	  	</div>
-		</div>	
-	</div> -->
-	<!-- Dashboard Articulo Estrella -->
-
-	<!-- Dashboard TECNOLOGIA-->
 	<div class="card-deck">		
 		<!-- Usuario -->
 		<div class="card border-warning mb-3" style="width: 14rem;">	  	

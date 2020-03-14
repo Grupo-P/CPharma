@@ -1037,6 +1037,83 @@
 		return $ruta;
 	}
 	/**********************************************************************************/
+  /*
+		TITULO: FG_Ruta_Reporte
+		FUNCION:Busca la ruta que le pertenece al nombre del reporte
+		DESARROLLADO POR: SERGIO COVA
+ 	*/
+	function FG_Nombre_Reporte($NumeroReporte){
+		switch ($NumeroReporte) {
+			case 0:
+				$nombre = 'No posee reportes';
+			break;
+			case 1:
+				$nombre = 'Activacion de proveedores';
+			break;
+			case 2:
+				$nombre = 'Historico de productos';
+			break;
+			case 3:
+				$nombre = 'Productos mas vendidos';
+			break;
+			case 4:
+				$nombre = 'Productos menos vendidos';
+			break;
+			case 5:
+				$nombre = 'Productos en falla';
+			break;
+			case 6:
+				$nombre = 'Pedido de productos';
+			break;
+			case 7:
+				$nombre = 'Catalogo de proveedor';
+			break;
+			case 9:
+				$nombre = 'Productos para surtir';
+			break;
+			case 10:
+				$nombre = 'Analitico de precios';
+			break;
+			case 12:
+				$nombre = 'Detalle de movimientos';
+			break;
+			case 13:
+				$nombre = 'Productos Por Fallar';
+			break;
+			case 14:
+				$nombre = 'Productos en Caida';
+			break;
+			case 15:
+				$nombre = 'Articulos Devaluados';
+			break;
+			case 16:
+				$nombre = 'Articulos Estrella';
+			break;
+			case 17:
+				$nombre = 'Tri Tienda Por Articulo';
+			break;
+			case 18:
+				$nombre = 'Consulta Compras';
+			break;
+			case 19:
+				$nombre = 'Ventas Cruzadas';
+			break;
+			case 20:
+				$nombre = 'Tri Tienda Por Proveedor';
+			break;
+			case 21:
+				$nombre = 'Consultor de Precios';
+			break;
+			case 22:
+				$nombre = 'Reporte de Atributos';
+			break;
+			default:
+				$nombre = 'Reporte desconocido';
+			break;
+		}
+		return $nombre;
+	}
+	/**********************************************************************************/
 	/*
 		TITULO: FG_Reportes_Departamento
 		FUNCION: Consigue el numero de reportes disponibles para el departamento

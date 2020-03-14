@@ -29,7 +29,7 @@
 	  	</thead>
 	  	<tbody>
 		    <tr>
-		      	<th scope="row">Descripcion</th>
+		      	<th scope="row">Reportes</th>
 	    	  	<td>{{$departamentos->descripcion}}</td>
 		    </tr>		 
 		    <tr>
