@@ -126,7 +126,7 @@
                 <td>{!! Form::text('nombre', null, [ 'class' => 'form-control', 'placeholder' => 'TECNOLOGIA', 'autofocus', 'required']) !!}</td>
             </tr>
             <tr>
-                <th scope="row">{!! Form::label('descripcion', 'Descripcion') !!}</th>
+                <th scope="row">{!! Form::label('descripcion', 'Reportes') !!}</th>
                 <td>{!! Form::textarea('descripcion', null, [ 'class' => 'form-control', 'placeholder' => 'Ingrese el numero correspondiente al reporte separado con comas. Ej.: 1,2,3', 'rows' => '2', 'required']) !!}</td>
             </tr>            
         </tbody>

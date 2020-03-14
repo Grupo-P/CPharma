@@ -115,7 +115,7 @@
 		    <tr>
 		      <th>{{$departamento->id}}</th>
 		      <td>{{$departamento->nombre}}</td>
-		      <td>{{$departamento->descripcion}}</td>
+		      <td>{{reportesPorDepartamento($departamento->descripcion)}}</td>
 		      <td>{{$departamento->estatus}}</td>
 		      
 		    <!-- Inicio Validacion de ROLES -->
@@ -189,3 +189,45 @@
 	</script>
 
 @endsection
+
+<?php
+	function reportesPorDepartamento($arrayNumerosReportes){
+		include_once(app_path().'\functions\functions.php');
+		$NumerosReportes = explode(",", $arrayNumerosReportes);
+		$cont = 0;
+		$flagTr = true;
+		echo"
+			<table>
+				<tbody>
+					<tr>
+		";
+		for ($i=0; $i<count($NumerosReportes); $i++){
+
+			if($cont==5){
+				$flagTr = false;
+				echo"</tr>";
+				$cont=0;
+			}
+			
+			if($flagTr == true){
+				echo"<td style='background-color:#FFF; border: 1px solid black;'>".FG_Nombre_Reporte($NumerosReportes[$i])."</td>";
+			}
+			else if($flagTr == false){
+				$flagTr = true;
+				echo"<tr>";
+				echo"<td style='background-color:#FFF; border: 1px solid black;'>".FG_Nombre_Reporte($NumerosReportes[$i])."</td>";
+			}
+			
+			$cont++;
+		}
+
+		if($flagTr == true){
+			echo"</tr>";
+		} 
+
+		echo "
+				<tbody>
+			</table
+		";
+	}
+?>

@@ -1043,7 +1043,7 @@
 		DESARROLLADO POR: SERGIO COVA
  	*/
 	function FG_Nombre_Reporte($NumeroReporte){
-		switch ($NombreReporte) {
+		switch ($NumeroReporte) {
 			case 1:
 				$nombre = 'Activacion de proveedores';
 			break;
