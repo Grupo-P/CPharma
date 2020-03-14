@@ -13,9 +13,23 @@
 	<hr class="row align-items-start col-12">
 
 	<?php
+		use Illuminate\Http\Request;
+		use compras\Departamento;
+
 		include(app_path().'\functions\config.php'); 
 		include(app_path().'\functions\functions.php');
+		
+		$departamento = 
+		DB::table('departamentos')
+		->select('descripcion')
+    	->where('nombre', '=', Auth::user()->departamento )
+        ->get();
 
+        if( (!empty($departamento[0])) ) {
+        	$descripcion = ($departamento[0]->descripcion);
+        	$reportes = explode(",", $descripcion);
+	    }
+	     
 		if (isset($_GET['SEDE'])){					
 			echo '<h1 class="h5 text-success"  align="left"> <i class="fas fa-prescription"></i> '.FG_Nombre_Sede($_GET['SEDE']).'</h1>';
 		}		
