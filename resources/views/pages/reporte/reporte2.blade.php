@@ -65,6 +65,8 @@
     $ArtJson = "";
     $CodJson = "";
 
+    //$_GET['SEDE'] = 'ARG';
+
     if (isset($_GET['SEDE'])) {     
       echo '<h1 class="h5 text-success"  align="left"> <i class="fas fa-prescription"></i> '.FG_Nombre_Sede($_GET['SEDE']).'</h1>';
       }
@@ -190,6 +192,10 @@
     $Utilidad = FG_Utilidad_Alfa($UtilidadArticulo,$UtilidadCategoria);
     $Utilidad = (1 - $Utilidad)*100;
 
+     
+    $fechaActual = new DateTime('now');
+    $fechaActual = date_format($fechaActual,'Y-m-d');
+
     echo '
     <div class="input-group md-form form-sm form-1 pl-0 CP-stickyBar">
       <div class="input-group-prepend">
@@ -285,16 +291,26 @@
     while($row2 = sqlsrv_fetch_array($result2, SQLSRV_FETCH_ASSOC)) {
         echo '<tr>';
         echo '<td align="center"><strong>'.intval($contador).'</strong></td>';
-        // echo '<td>'.FG_Limpiar_Texto($row2["Nombre"]).'</td>';
         echo 
         '<td align="left" class="CP-barrido">
         <a href="/reporte7?Nombre='.FG_Limpiar_Texto($row2["Nombre"]).'&Id='.$row2["Id"].'&SEDE='.$SedeConnection.'" target="_blank" style="text-decoration: none; color: black;">'
           .FG_Limpiar_Texto($row2["Nombre"]).
         '</a>
         </td>';
-        echo '<td align="center">'.$row2["FechaDocumento"]->format('d-m-Y').'</td>';
+        $fechaDocumento = $row2["FechaDocumento"];
+        $fechaDocumentoMostrar = $fechaDocumento->format('d-m-Y');
+        $fechaDocumentoLink = $fechaDocumento->format('Y-m-d');
+
+        echo '<td align="center">'.$fechaDocumentoMostrar.'</td>';
         echo '<td align="center" class="bg-danger text-white">'.$row2["FechaRegistro"]->format('d-m-Y').'</td>';
-        echo '<td align="center">'.intval($row2['CantidadRecibidaFactura']).'</td>';
+
+       echo
+        '<td align="center">
+        <a href="/reporte6?pedido=15&fechaInicio='.$fechaDocumentoLink.'&fechaFin='.$fechaActual.'&SEDE='.$SedeConnection.'&flag=BsqDescrip&Descrip='.$Descripcion.'&IdD='.$IdArticulo.'&CodBar=&IdCB=" style="text-decoration: none; color: black;" target="_blank">'
+          .intval($row2['CantidadRecibidaFactura']).
+        '</a>
+        </td>';
+
         echo '<td align="center">'.number_format($row2["M_PrecioCompraBruto"],2,"," ,"." ).'</td>';
 
         $FechaHistDoc = $row2["FechaDocumento"]->format('Y-m-d');
