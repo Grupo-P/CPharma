@@ -37,15 +37,15 @@
     .autocomplete-items div {
       padding: 10px;
       cursor: pointer;
-      background-color: #fff; 
-      border-bottom: 1px solid #d4d4d4; 
+      background-color: #fff;
+      border-bottom: 1px solid #d4d4d4;
     }
     .autocomplete-items div:hover {
-      background-color: #e9e9e9; 
+      background-color: #e9e9e9;
     }
     .autocomplete-active {
-      background-color: DodgerBlue !important; 
-      color: #ffffff; 
+      background-color: DodgerBlue !important;
+      color: #ffffff;
     }
   </style>
 @endsection
@@ -56,7 +56,7 @@
 		Historico de productos
 	</h1>
 	<hr class="row align-items-start col-12">
-  <?php	
+  <?php
   	include(app_path().'\functions\config.php');
     include(app_path().'\functions\functions.php');
     include(app_path().'\functions\querys_mysql.php');
@@ -65,23 +65,21 @@
     $ArtJson = "";
     $CodJson = "";
 
-    //$_GET['SEDE'] = 'ARG';
-
-    if (isset($_GET['SEDE'])) {     
+    if (isset($_GET['SEDE'])) {
       echo '<h1 class="h5 text-success"  align="left"> <i class="fas fa-prescription"></i> '.FG_Nombre_Sede($_GET['SEDE']).'</h1>';
       }
       echo '<hr class="row align-items-start col-12">';
-  	
+
   	if (isset($_GET['Id'])) {
       $InicioCarga = new DateTime("now");
-      
+
       R2_Historico_Producto($_GET['SEDE'],$_GET['Id']);
       FG_Guardar_Auditoria('CONSULTAR','REPORTE','Historico de productos');
 
       $FinCarga = new DateTime("now");
       $IntervalCarga = $InicioCarga->diff($FinCarga);
       echo'Tiempo de carga: '.$IntervalCarga->format("%Y-%M-%D %H:%I:%S");
-  	} 
+  	}
   	else {
       $InicioCarga = new DateTime("now");
 
@@ -118,7 +116,7 @@
       $FinCarga = new DateTime("now");
       $IntervalCarga = $InicioCarga->diff($FinCarga);
       echo'Tiempo de carga: '.$IntervalCarga->format("%Y-%M-%D %H:%I:%S");
-  	} 
+  	}
   ?>
 @endsection
 
@@ -129,20 +127,20 @@
     <script type="text/javascript">
       ArrJs = eval(<?php echo $ArtJson ?>);
       autocompletado(document.getElementById("myInput"),document.getElementById("myId"), ArrJs);
-    </script> 
+    </script>
   <?php
     }
-  ?> 
+  ?>
   <?php
     if($CodJson!=""){
   ?>
     <script type="text/javascript">
       ArrJsCB = eval(<?php echo $CodJson ?>);
       autocompletadoCB(document.getElementById("myInputCB"),document.getElementById("myIdCB"), ArrJsCB);
-    </script> 
+    </script>
   <?php
     }
-  ?>  
+  ?>
 @endsection
 
 <?php
@@ -154,7 +152,7 @@
     DESAROLLADO POR: SERGIO COVA
   */
   function R2_Historico_Producto($SedeConnection,$IdArticulo) {
-    
+
     $conn = FG_Conectar_Smartpharma($SedeConnection);
     $connCPharma = FG_Conectar_CPharma();
 
@@ -192,7 +190,7 @@
     $Utilidad = FG_Utilidad_Alfa($UtilidadArticulo,$UtilidadCategoria);
     $Utilidad = (1 - $Utilidad)*100;
 
-     
+
     $fechaActual = new DateTime('now');
     $fechaActual = date_format($fechaActual,'Y-m-d');
 
@@ -215,7 +213,7 @@
           <th scope="col">Codigo de barra</td>
           <th scope="col">Descripcion</td>
           <th scope="col">Existencia</td>
-          <th scope="col">Precio</br>(Con IVA) '.SigVe.'</td>         
+          <th scope="col">Precio</br>(Con IVA) '.SigVe.'</td>
           <th scope="col">Gravado?</td>
           <th scope="col">Utilidad Configurada</td>
           <th scope="col">Troquel</td>
@@ -229,14 +227,14 @@
     echo '<tr>';
     echo '<td>'.$CodigoArticulo.'</td>';
     echo '<td align="center">'.$CodigoBarra.'</td>';
-    echo 
+    echo
       '<td align="left" class="CP-barrido">
       <a href="/reporte10?Descrip='.$Descripcion.'&Id='.$IdArticulo.'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
         .$Descripcion.
       '</a>
       </td>';
     echo '<td align="center">'.intval($Existencia).'</td>';
-    echo '<td align="center">'.number_format($Precio,2,"," ,"." ).'</td>'; 
+    echo '<td align="center">'.number_format($Precio,2,"," ,"." ).'</td>';
     echo '<td align="center">'.$Gravado.'</td>';
     echo '<td align="center">'.number_format($Utilidad,2,"," ,"." ).' %</td>';
 
@@ -291,7 +289,7 @@
     while($row2 = sqlsrv_fetch_array($result2, SQLSRV_FETCH_ASSOC)) {
         echo '<tr>';
         echo '<td align="center"><strong>'.intval($contador).'</strong></td>';
-        echo 
+        echo
         '<td align="left" class="CP-barrido">
         <a href="/reporte7?Nombre='.FG_Limpiar_Texto($row2["Nombre"]).'&Id='.$row2["Id"].'&SEDE='.$SedeConnection.'" target="_blank" style="text-decoration: none; color: black;">'
           .FG_Limpiar_Texto($row2["Nombre"]).
@@ -301,11 +299,18 @@
         $fechaDocumentoMostrar = $fechaDocumento->format('d-m-Y');
         $fechaDocumentoLink = $fechaDocumento->format('Y-m-d');
 
-        echo '<td align="center">'.$fechaDocumentoMostrar.'</td>';
+        echo
+        '<td align="center" class="CP-barrido">
+        <a href="/reporte12?fechaInicio='.$fechaDocumentoLink.'&fechaFin='.$fechaActual.'&SEDE='.$SedeConnection.'&Descrip='.$Descripcion.'&Id='.$IdArticulo.'&CodBar=&IdCB=&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
+          .$fechaDocumentoMostrar.
+        '</a>
+        </td>';
+
+
         echo '<td align="center" class="bg-danger text-white">'.$row2["FechaRegistro"]->format('d-m-Y').'</td>';
 
        echo
-        '<td align="center">
+        '<td align="center" class="CP-barrido">
         <a href="/reporte6?pedido=15&fechaInicio='.$fechaDocumentoLink.'&fechaFin='.$fechaActual.'&SEDE='.$SedeConnection.'&flag=BsqDescrip&Descrip='.$Descripcion.'&IdD='.$IdArticulo.'&CodBar=&IdCB=" style="text-decoration: none; color: black;" target="_blank">'
           .intval($row2['CantidadRecibidaFactura']).
         '</a>
@@ -318,9 +323,9 @@
 
         $FechaHistFR = $row2["FechaRegistro"]->format('Y-m-d');
         $TasaFR = FG_Tasa_Fecha($connCPharma,$FechaHistFR);
-         
+
         if( ($TasaDoc != 0) && ($TasaFR != 0) ) {
-          
+
           echo '<td align="center">'.number_format($TasaDoc,2,"," ,"." ).'</td>';
           echo '<td align="center" class="bg-danger text-white">'.number_format($TasaFR,2,"," ,"." ).'</td>';
 
@@ -387,7 +392,7 @@
     $sql = "
       SELECT
       (SELECT CodigoBarra
-      FROM InvCodigoBarra 
+      FROM InvCodigoBarra
       WHERE InvCodigoBarra.InvArticuloId = InvArticulo.Id
       AND InvCodigoBarra.EsPrincipal = 1) AS CodigoBarra,
       InvArticulo.Id
@@ -404,7 +409,7 @@
     DESAROLLADO POR: SERGIO COVA
   */
   function R2Q_Detalle_Articulo($IdArticulo) {
-    $sql = " 
+    $sql = "
       SELECT
 --Id Articulo
     InvArticulo.Id AS IdArticulo,
@@ -414,7 +419,7 @@
     InvArticulo.CodigoArticulo AS CodigoInterno,
 --Codigo de Barra
     (SELECT CodigoBarra
-    FROM InvCodigoBarra 
+    FROM InvCodigoBarra
     WHERE InvCodigoBarra.InvArticuloId = InvArticulo.Id
     AND InvCodigoBarra.EsPrincipal = 1) AS CodigoBarra,
 --Descripcion
@@ -424,27 +429,27 @@
 --Troquelado (0 NO es Troquelado, Id Articulo SI es Troquelado)
     (ISNULL((SELECT
     InvArticuloAtributo.InvArticuloId
-    FROM InvArticuloAtributo 
-    WHERE InvArticuloAtributo.InvAtributoId = 
+    FROM InvArticuloAtributo
+    WHERE InvArticuloAtributo.InvAtributoId =
     (SELECT InvAtributo.Id
-    FROM InvAtributo 
-    WHERE 
+    FROM InvAtributo
+    WHERE
     InvAtributo.Descripcion = 'Troquelados'
-    OR  InvAtributo.Descripcion = 'troquelados') 
+    OR  InvAtributo.Descripcion = 'troquelados')
     AND InvArticuloAtributo.InvArticuloId = InvArticulo.Id),CAST(0 AS INT))) AS Troquelado,
 --UtilidadArticulo (Utilidad del articulo, Utilidad es 1.00 NO considerar la utilidad para el calculo de precio)
     ROUND(CAST(1-((ISNULL(ROUND(CAST((SELECT VenCondicionVenta.PorcentajeUtilidad
-        FROM VenCondicionVenta 
+        FROM VenCondicionVenta
         WHERE VenCondicionVenta.Id = (
         SELECT VenCondicionVenta_VenCondicionVentaArticulo.Id
-        FROM VenCondicionVenta_VenCondicionVentaArticulo 
+        FROM VenCondicionVenta_VenCondicionVentaArticulo
         WHERE VenCondicionVenta_VenCondicionVentaArticulo.InvArticuloId = InvArticulo.Id)) AS DECIMAL(38,4)),2,0),CAST(0 AS INT)))/100)AS DECIMAL(38,4)),2,0) AS UtilidadArticulo,
 --UtilidadCategoria (Utilidad de la categoria, Utilidad es 1.00 NO considerar la utilidad para el calculo de precio)
-    ROUND(CAST(1-((ISNULL(ROUND(CAST((SELECT VenCondicionVenta.PorcentajeUtilidad 
-  FROM VenCondicionVenta 
+    ROUND(CAST(1-((ISNULL(ROUND(CAST((SELECT VenCondicionVenta.PorcentajeUtilidad
+  FROM VenCondicionVenta
   WHERE VenCondicionVenta.id = (
-    SELECT VenCondicionVenta_VenCondicionVentaCategoria.Id 
-    FROM VenCondicionVenta_VenCondicionVentaCategoria 
+    SELECT VenCondicionVenta_VenCondicionVentaCategoria.Id
+    FROM VenCondicionVenta_VenCondicionVentaCategoria
     WHERE VenCondicionVenta_VenCondicionVentaCategoria.InvCategoriaId = InvArticulo.InvCategoriaId)) AS DECIMAL(38,4)),2,0),CAST(0 AS INT)))/100)AS DECIMAL(38,4)),2,0) AS UtilidadCategoria,
 --Precio Troquel Almacen 1
     (ROUND(CAST((SELECT TOP 1
@@ -508,34 +513,34 @@
 --Dolarizado (0 NO es dolarizado, Id Articulo SI es dolarizado)
     (ISNULL((SELECT
     InvArticuloAtributo.InvArticuloId
-    FROM InvArticuloAtributo 
-    WHERE InvArticuloAtributo.InvAtributoId = 
+    FROM InvArticuloAtributo
+    WHERE InvArticuloAtributo.InvAtributoId =
     (SELECT InvAtributo.Id
-    FROM InvAtributo 
-    WHERE 
+    FROM InvAtributo
+    WHERE
     InvAtributo.Descripcion = 'Dolarizados'
     OR  InvAtributo.Descripcion = 'Giordany'
-    OR  InvAtributo.Descripcion = 'giordany') 
+    OR  InvAtributo.Descripcion = 'giordany')
     AND InvArticuloAtributo.InvArticuloId = InvArticulo.Id),CAST(0 AS INT))) AS Dolarizado,
 --Tipo Producto (0 Miscelaneos, Id Articulo Medicinas)
     (ISNULL((SELECT
-    InvArticuloAtributo.InvArticuloId 
-    FROM InvArticuloAtributo 
-    WHERE InvArticuloAtributo.InvAtributoId = 
+    InvArticuloAtributo.InvArticuloId
+    FROM InvArticuloAtributo
+    WHERE InvArticuloAtributo.InvAtributoId =
     (SELECT InvAtributo.Id
-    FROM InvAtributo 
-    WHERE 
-    InvAtributo.Descripcion = 'Medicina') 
+    FROM InvAtributo
+    WHERE
+    InvAtributo.Descripcion = 'Medicina')
     AND InvArticuloAtributo.InvArticuloId = InvArticulo.Id),CAST(0 AS INT))) AS Tipo,
 --Articulo Estrella (0 NO es Articulo Estrella , Id SI es Articulo Estrella)
     (ISNULL((SELECT
-    InvArticuloAtributo.InvArticuloId 
-    FROM InvArticuloAtributo 
-    WHERE InvArticuloAtributo.InvAtributoId = 
+    InvArticuloAtributo.InvArticuloId
+    FROM InvArticuloAtributo
+    WHERE InvArticuloAtributo.InvAtributoId =
     (SELECT InvAtributo.Id
-    FROM InvAtributo 
-    WHERE 
-    InvAtributo.Descripcion = 'Articulo Estrella') 
+    FROM InvAtributo
+    WHERE
+    InvAtributo.Descripcion = 'Articulo Estrella')
     AND InvArticuloAtributo.InvArticuloId = InvArticulo.Id),CAST(0 AS INT))) AS ArticuloEstrella,
 -- Ultima Venta (Fecha)
     (SELECT TOP 1
@@ -558,9 +563,9 @@
     WHERE InvLote.InvArticuloId  = InvArticulo.Id
     ORDER BY UltimoLote DESC) AS UltimoLote,
 --Tiempo Tienda (En dias)
-    (SELECT TOP 1 
+    (SELECT TOP 1
     DATEDIFF(DAY,CONVERT(DATE,InvLote.FechaEntrada),GETDATE())
-    FROM InvLoteAlmacen 
+    FROM InvLoteAlmacen
     INNER JOIN invlote on invlote.id = InvLoteAlmacen.InvLoteId
     WHERE InvLotealmacen.InvArticuloId = InvArticulo.Id
     ORDER BY InvLote.Auditoria_FechaCreacion DESC) AS TiempoTienda,
@@ -587,13 +592,13 @@
 --Joins
     LEFT JOIN InvLoteAlmacen ON InvLoteAlmacen.InvArticuloId = InvArticulo.Id
     LEFT JOIN InvArticuloAtributo ON InvArticuloAtributo.InvArticuloId = InvArticulo.Id
-    LEFT JOIN InvAtributo ON InvAtributo.Id = InvArticuloAtributo.InvAtributoId 
+    LEFT JOIN InvAtributo ON InvAtributo.Id = InvArticuloAtributo.InvAtributoId
 --Condicionales
     WHERE InvArticulo.Id = '$IdArticulo'
 --Agrupamientos
     GROUP BY InvArticulo.Id, InvArticulo.CodigoArticulo, InvArticulo.Descripcion, InvArticulo.FinConceptoImptoIdCompra, InvArticulo.InvCategoriaId
 --Ordanamiento
-    ORDER BY InvArticulo.Id ASC 
+    ORDER BY InvArticulo.Id ASC
     ";
     return $sql;
   }
