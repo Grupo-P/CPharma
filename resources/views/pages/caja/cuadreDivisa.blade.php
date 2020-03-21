@@ -733,6 +733,7 @@
 
                     <td>
                       <select id="cajaActual" class="form-control bg-info text-white" style="display:inline;">
+                        <option value="0">Seleccione una caja</option>
                           <?php
                             while($row = sqlsrv_fetch_array($result1, SQLSRV_FETCH_ASSOC)) {
                           ?>
