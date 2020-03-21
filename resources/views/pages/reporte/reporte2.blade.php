@@ -273,6 +273,8 @@
             <th scope="col" class="CP-sticky">Proveedor</th>
             <th scope="col" class="CP-sticky">Fecha de documento</th>
             <th scope="col" class="CP-sticky bg-danger text-white">Fecha de registro</th>
+            <th scope="col" class="CP-sticky bg-warning text-dark">Fecha de vencimiento</th>
+            <th scope="col" class="CP-sticky bg-success text-white">Vida util<br>(Dias)</th>
             <th scope="col" class="CP-sticky">Cantidad recibida</th>
             <th scope="col" class="CP-sticky">Costo bruto</br>(Sin IVA) '.SigVe.'</th>
             <th scope="col" class="CP-sticky">Tasa en historico '.SigVe.'</br>(fecha documento)</th>
@@ -287,6 +289,14 @@
     ';
     $contador = 1;
     while($row2 = sqlsrv_fetch_array($result2, SQLSRV_FETCH_ASSOC)) {
+
+        $fechaDocumento = $row2["FechaDocumento"];
+        $fechaDocumentoMostrar = $fechaDocumento->format('d-m-Y');
+        $fechaDocumentoLink = $fechaDocumento->format('Y-m-d');
+
+        $fechaVencimiento = ($row2["FechaVencimiento"]!=NULL)?$row2["FechaVencimiento"]->format('d-m-Y'):'-';
+        $vidaUtil = ($row2['VidaUtil']!=NULL)?$row2['VidaUtil']:'-';
+
         echo '<tr>';
         echo '<td align="center"><strong>'.intval($contador).'</strong></td>';
         echo
@@ -295,9 +305,6 @@
           .FG_Limpiar_Texto($row2["Nombre"]).
         '</a>
         </td>';
-        $fechaDocumento = $row2["FechaDocumento"];
-        $fechaDocumentoMostrar = $fechaDocumento->format('d-m-Y');
-        $fechaDocumentoLink = $fechaDocumento->format('Y-m-d');
 
         echo
         '<td align="center" class="CP-barrido">
@@ -306,8 +313,9 @@
         '</a>
         </td>';
 
-
         echo '<td align="center" class="bg-danger text-white">'.$row2["FechaRegistro"]->format('d-m-Y').'</td>';
+        echo '<td align="center" class="bg-warning text-dark">'.$fechaVencimiento.'</td>';
+        echo '<td align="center" class="bg-success text-white">'.$vidaUtil.'</td>';
 
        echo
         '<td align="center" class="CP-barrido">
@@ -616,6 +624,8 @@
       GenPersona.Nombre,
       CONVERT(DATE,ComFactura.FechaRegistro) As FechaRegistro,
       CONVERT(DATE,ComFactura.FechaDocumento) As FechaDocumento,
+      CONVERT(DATE,ComFacturaDetalle.FechaVencimiento) As FechaVencimiento,
+      DATEDIFF(DAY,CONVERT(DATE,ComFactura.FechaRegistro),CONVERT(DATE,ComFacturaDetalle.FechaVencimiento)) as VidaUtil,
       ComFacturaDetalle.CantidadRecibidaFactura,
       ComFacturaDetalle.M_PrecioCompraBruto
       FROM InvArticulo
