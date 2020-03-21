@@ -12,7 +12,6 @@
 
 @section('scriptsCabecera')
     <script>
-
         /********************* FACTURAS DEL CLIENTE *********************/
 
         //Variables globales para almacenar valores numericos de facturas y totales
@@ -34,7 +33,7 @@
             FUNCION: Realizar los calculos para conectar una o las tres facturas en un resultado dado en bolivares o divisas
             RETORNO: No aplica
         */
-        
+
         function calcularFactura(fac1, fac2, fac3, totalFacBs, totalFacDs, tasa, decimales, tolerancia, saldoRestanteBs, saldoRestanteDs, resultado) {
 
             //Variables para guardar el valor numerico de las facturas fac1, fac2 y fac3
@@ -178,13 +177,13 @@
         */
         function separarMiles(cantidad, decimales) {
             //Transformamos el numero en string
-            cantidad += ''; 
+            cantidad += '';
 
             //Eliminar cualquier caracter diferente a (.) o numeros
-            cantidad = parseFloat(cantidad.replace(/[^0-9\.]/g, '')); 
+            cantidad = parseFloat(cantidad.replace(/[^0-9\.]/g, ''));
 
             //Validar los decimales
-            decimales = decimales || 0; 
+            decimales = decimales || 0;
 
             //Si el numero es cero o texto alphanumerico retornamos cero
             if(isNaN(cantidad) || cantidad === 0)  {
@@ -302,7 +301,7 @@
             else if((restanteBs == 0) && (totalBs > 0)) {
                 resultado.val('-').removeClass('bg-danger text-white');
             }
-          
+
             formatearVariables();
         }
 
@@ -330,10 +329,9 @@
         }
 
         /********************* INICIO DE LA EJECUCION DEL SCRIPT *********************/
-
         $(document).ready(function() {
             $('[data-toggle="tooltip"]').tooltip();
-            
+
             //Identificamos los objetos del DOM con objetos JQuery
             var botonLimpiar = $('#btn-borrarN');
             var resultado = $('#resultado');
@@ -358,7 +356,7 @@
             var tasa = $('#tasa').val(); //Tasa de venta
             var decimales = $('#decimales').val(); //Numero de decimales de la factura
             var tolerancia = $('#tolerancia').val(); //Tolerancia de vuelto al cliente
-            
+
             //Tasa con formato para el usuario
             var tasaM = $('#tasaM');
             tasaM.attr('value', separarMiles(tasa, decimales));
@@ -367,7 +365,7 @@
             botonLimpiar.click(function() {
                 //Borra el resultado, elimina las clases existentes y pasa el foco a la factura 1
                 resultado.removeClass('bg-danger text-white').val('-');
-                
+
                 fac1.focus();
 
                 //Formateo de variables auxiliares
@@ -437,6 +435,11 @@
     include(app_path().'\functions\querys_mysql.php');
     include(app_path().'\functions\querys_sqlserver.php');
 
+    //FG_Mi_Ubicacion()
+    $conn = FG_Conectar_Smartpharma("ARG");
+    $sql1 = "SELECT id,CodigoCaja FROM VenCaja WHERE estadoCaja = 2 ORDER BY CodigoCaja ASC";
+    $result1 = sqlsrv_query($conn,$sql1);
+
     /*
         TITULO: ValidarFecha
         PARAMETROS: [$FechaTasaDolar] fecha actual
@@ -444,7 +447,7 @@
         FUNCION: Realizar la busqueda de la tasa segun la fecha, en caso de no ser la fecha del dia, se haran tantas iteraciones hacia atras como sean necesarias hasta encontrar una tasa valida
         RETORNO: Un array conteniendo la fecha y la tasa encontrada
     */
-    
+
     function ValidarFecha($FechaTasaDolar,$Moneda) {
         $arrayValidaciones = array(2);
         $FechaTasaDolar = date("Y-m-d",strtotime($FechaTasaDolar."- 1 days"));
@@ -551,8 +554,47 @@
     <h5 class="text-info">
         <i class="fas fa-money-bill-alt"></i>
         C&Aacute;LCULO DE FACTURA EN DIVISA
+        <button  onclick="actualizar();" style="display:inline; float:right;" role="button" class="btn btn-outline-success btn-sm"data-placement="top"><i class="fa fa-sync">&nbsp;Actualizar</i></button>
     </h5>
     <hr class="row align-items-start col-12">
+
+    <table id="tablaSugerencia" class="table table-borderless table-hover">
+        <thead class="thead-dark" align="center">
+            <th scope="col" colspan="4"><b>PAGOS SUGERIDOS</b></th>
+        </thead>
+        <tbody align="right">
+          <tr>
+            <td style="width:25%">Caja:</td>
+            <td>
+              <input id="nombreCaja" type="text" class="form-control" disabled>
+            </td>
+            <td style="width:25%">Clinte:</td>
+            <td>
+              <input id="nombreCliente" type="text" class="form-control" disabled>
+            </td>
+          </tr>
+          <tr>
+            <td>Total Factura <?php echo SigDolar?>:</td>
+            <td>
+              <input id="TotalFacBsSug" type="text" class="form-control" disabled>
+            </td>
+            <td>Total Factura <?php echo SigVe?>:</td>
+            <td>
+              <input id="TotalFacDsSug" type="text" class="form-control" disabled>
+            </td>
+          </tr>
+          <tr>
+            <td>Parte en <?php echo SigDolar?>:</td>
+            <td>
+              <input id="ParteBsSug" type="text" class="form-control" disabled>
+            </td>
+            <td>Parte en <?php echo SigVe?>:</td>
+            <td>
+              <input id="ParteDsSug" type="text" class="form-control" disabled>
+            </td>
+          </tr>
+        </tbody>
+    </table>
 
     <form name="cuadre" class="form-group">
         <table class="table table-borderless table-hover">
@@ -590,7 +632,7 @@
                         <input type="hidden" value="{{$TasaDolar}}" id="tasa">
                     </td>
 
-                    <?php   
+                    <?php
                         }
                     ?>
                 </tr>
@@ -621,7 +663,7 @@
                         <input type="text" value="{{date('d-m-Y',strtotime($FechaTasaDolar))}}" id="fecha" class="form-control bg-success text-white" disabled>
                     </td>
 
-                    <?php   
+                    <?php
                         }
                     ?>
                 </tr>
@@ -661,7 +703,19 @@
                         <input type="text" placeholder="0,00" id="totalFacDs" class="form-control" disabled>
                     </td>
 
-                    <td colspan="2">&nbsp;</td>
+                    <td > Caja Actual: </td>
+
+                    <td>
+                      <select id="cajaActual" class="form-control bg-warning" style="display:inline;">
+                          <?php
+                            while($row = sqlsrv_fetch_array($result1, SQLSRV_FETCH_ASSOC)) {
+                          ?>
+                          <option value="<?php echo $row['id']; ?>"><?php echo $row['CodigoCaja'];?></option>
+                          <?php
+                          }
+                          ?>
+                      </select>
+                    </td>
                 </tr>
             </tbody>
 
@@ -784,6 +838,13 @@
 
 @section('scriptsPie')
     <script type="text/javascript">
+        $('#tablaSugerencia').hide();
+
         $('#exampleModalCenter').modal('show');
+
+        function actualizar(){
+          $('#tablaSugerencia').show();
+        }
+
     </script>
 @endsection
