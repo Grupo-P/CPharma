@@ -435,8 +435,9 @@
     include(app_path().'\functions\querys_mysql.php');
     include(app_path().'\functions\querys_sqlserver.php');
 
-    //FG_Mi_Ubicacion()
-    $conn = FG_Conectar_Smartpharma("ARG");
+    $RutaUrl = "ARG";//FG_Mi_Ubicacion();
+    $SedeConnection = $RutaUrl;
+    $conn = FG_Conectar_Smartpharma($SedeConnection);
     $sql1 = "SELECT id,CodigoCaja FROM VenCaja WHERE estadoCaja = 2 ORDER BY CodigoCaja ASC";
     $result1 = sqlsrv_query($conn,$sql1);
 
@@ -549,6 +550,31 @@
         </div>
     </div>
 
+    <!-- Modal Error Sin Factura Temporal -->
+    <div class="modal fade" id="errorModalFacturaTemp" tabindex="-1" role="dialog" aria-labelledby="errorModalRangoTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title text-danger" id="errorModalRangoTitle">
+                        <i class="fas fa-exclamation-circle"></i>&nbsp;Error
+                    </h5>
+
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <div class="modal-body">
+                    <h4 class="h6">Usted no posee facturas en transito</h4>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Aceptar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <a name="Inicio"></a>
     <hr class="row align-items-start col-12">
     <h5 class="text-info">
@@ -574,21 +600,21 @@
             </td>
           </tr>
           <tr>
-            <td>Total Factura <?php echo SigDolar?>:</td>
+            <td>Total Factura <?php echo SigVe?>:</td>
             <td>
               <input id="TotalFacBsSug" type="text" class="form-control" disabled>
             </td>
-            <td>Total Factura <?php echo SigVe?>:</td>
+            <td>Total Factura <?php echo SigDolar?>:</td>
             <td>
               <input id="TotalFacDsSug" type="text" class="form-control" disabled>
             </td>
           </tr>
           <tr>
-            <td>Parte en <?php echo SigDolar?>:</td>
+            <td>Parte en <?php echo SigVe?>:</td>
             <td>
               <input id="ParteBsSug" type="text" class="form-control" disabled>
             </td>
-            <td>Parte en <?php echo SigVe?>:</td>
+            <td>Parte en <?php echo SigDolar?>:</td>
             <td>
               <input id="ParteDsSug" type="text" class="form-control" disabled>
             </td>
@@ -706,7 +732,7 @@
                     <td > Caja Actual: </td>
 
                     <td>
-                      <select id="cajaActual" class="form-control bg-warning" style="display:inline;">
+                      <select id="cajaActual" class="form-control bg-info text-white" style="display:inline;">
                           <?php
                             while($row = sqlsrv_fetch_array($result1, SQLSRV_FETCH_ASSOC)) {
                           ?>
@@ -838,13 +864,78 @@
 
 @section('scriptsPie')
     <script type="text/javascript">
-        $('#tablaSugerencia').hide();
+      $('#tablaSugerencia').hide();
+      $('#exampleModalCenter').modal('show');
 
-        $('#exampleModalCenter').modal('show');
-
-        function actualizar(){
-          $('#tablaSugerencia').show();
+      function dominio(SedeConnectionJs){
+        var dominio = '';
+        switch(SedeConnectionJs) {
+          case 'FTN':
+            dominio = 'http://cpharmaftn.com/';
+            return dominio;
+          break;
+          case 'FLL':
+            dominio = 'http://cpharmafll.com/';
+            return dominio;
+          break;
+          case 'FAU':
+            dominio = 'http://cpharmafau.com/';
+            return dominio;
+          break;
+          case 'GP':
+            dominio = 'http://cpharmade.com/';
+            return dominio;
+          break;
+          case 'ARG':
+            dominio = 'http://cpharmade.com/';
+            return dominio;
+          break;
         }
+      }
 
+      var SedeConnectionJs = '<?php echo $RutaUrl;?>';
+      var dominio = dominio(SedeConnectionJs);
+      const URLConsulFac = ''+dominio+'assets/functions/funConsFactDivisa.php';
+
+      function actualizar(){
+        //Inicio de la busqueda y el armado de la tabla
+          var cajaId =  parseInt($('#cajaActual').val());
+          var parametro = {
+          "cajaId":cajaId
+          };
+
+          //Incio Armado tablaFactura
+          $.ajax({
+            data: parametro,
+            url: URLConsulFac,
+            type: "POST",
+            success: function(data) {
+              var respuesta = JSON.parse(data);
+              if(respuesta['NombreCaja']!=null){
+                var nombreCaja = respuesta['NombreCaja'];
+                var nombreCliente = respuesta['NombreCliente'];
+                var TotalFacBsSug = respuesta['TotalFactura'];
+                var TasaDolar = '<?php echo $TasaDolar;?>';
+                var TotalFacDsSug = (TotalFacBsSug/TasaDolar);
+                var ParteDsSug = (Math.trunc((TotalFacDsSug/5))*5);
+                var ParteBsSug = ((TotalFacDsSug%5)*TasaDolar);
+
+                $('#nombreCaja').val(nombreCaja);
+                $('#nombreCliente').val(nombreCliente);
+                $('#TotalFacBsSug').val(separarMiles(TotalFacBsSug,2));
+                $('#TotalFacDsSug').val(separarMiles(TotalFacDsSug,2));
+                $('#ParteDsSug').val(separarMiles(ParteDsSug,2));
+                $('#ParteBsSug').val(separarMiles(ParteBsSug,2));
+                $('#tablaSugerencia').show();
+              }
+              else{
+                $('#tablaSugerencia').hide();
+                $('#errorModalFacturaTemp').modal('show');
+              }
+            }
+          });
+          //Fin Armado tablaFactura
+        //Fin de la busqueda y el armado de la tabla
+      }
     </script>
 @endsection
