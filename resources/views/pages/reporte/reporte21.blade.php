@@ -37,15 +37,15 @@
   .autocomplete-items div {
     padding: 10px;
     cursor: pointer;
-    background-color: #fff; 
-    border-bottom: 1px solid #d4d4d4; 
+    background-color: #fff;
+    border-bottom: 1px solid #d4d4d4;
   }
   .autocomplete-items div:hover {
-    background-color: #e9e9e9; 
+    background-color: #e9e9e9;
   }
   .autocomplete-active {
-    background-color: DodgerBlue !important; 
-    color: #ffffff; 
+    background-color: DodgerBlue !important;
+    color: #ffffff;
   }
   </style>
 @endsection
@@ -56,14 +56,14 @@
         Consultor de Precios
     </h1>
     <hr class="row align-items-start col-12">
-    
-<?php   
+
+<?php
   include(app_path().'\functions\config.php');
   include(app_path().'\functions\functions.php');
   include(app_path().'\functions\querys_mysql.php');
   include(app_path().'\functions\querys_sqlserver.php');
 
-  if (isset($_GET['SEDE'])){      
+  if (isset($_GET['SEDE'])){
     echo '<h1 class="h5 text-success"  align="left"> <i class="fas fa-prescription"></i> '.FG_Nombre_Sede($_GET['SEDE']).'</h1>';
   }
   echo '<hr class="row align-items-start col-12">';
@@ -78,7 +78,7 @@
     $FinCarga = new DateTime("now");
     $IntervalCarga = $InicioCarga->diff($FinCarga);
     echo'Tiempo de carga: '.$IntervalCarga->format("%Y-%M-%D %H:%I:%S");
-    } 
+    }
     else{
         echo '
         <form autocomplete="off" action="" target="_blank">
@@ -106,7 +106,7 @@
             </table>
         </form>
     ';
-    } 
+    }
 ?>
 @endsection
 
@@ -148,18 +148,20 @@
     <table class="table table-striped table-bordered col-12 sortable" id="myTable">
       <thead class="thead-dark">
           <tr>
-            <th scope="col" class="CP-sticky">#</th>      
+            <th scope="col" class="CP-sticky">#</th>
             <th scope="col" class="CP-sticky">Codigo Interno</th>
             <th scope="col" class="CP-sticky">Codigo de Barra</th>
             <th scope="col" class="CP-sticky">Descripcion</td>
             <th scope="col" class="CP-sticky">Precio</br>(Con IVA) '.SigVe.'</td>
+            <th scope="col" class="CP-sticky">Dolarizado</td>
+            <th scope="col" class="CP-sticky">Clasificacion</td>
             <th scope="col" class="CP-sticky">Existencia</td>
             <th scope="col" class="CP-sticky">Veces Escaneadas</td>
             <th scope="col" class="CP-sticky">Veces Facturadas</td>
             <th scope="col" class="CP-sticky">Contraste</td>
             <th scope="col" class="CP-sticky">Unidades Facturadas</td>
             <th scope="col" class="CP-sticky">Promedio por Factura</td>
-            <th scope="col" class="CP-sticky">Ultimo Proveedor</th> 
+            <th scope="col" class="CP-sticky">Ultimo Proveedor</th>
           </tr>
         </thead>
         <tbody>
@@ -170,12 +172,18 @@
       $IdArticulo = $row['id_articulo'];
       $codigo_interno = $row['codigo_interno'];
       $codigo_barra = $row['codigo_barra'];
-      $Descripcion = $row['descripcion'];
+      $Descripcion = FG_Limpiar_Texto($row["descripcion"]);
       $VecesEscaneadas = $row['VecesEscaneadas'];
 
       $sql1 = SQG_Detalle_Articulo($IdArticulo);
       $result1 = sqlsrv_query($conn,$sql1);
       $row1 = sqlsrv_fetch_array($result1,SQLSRV_FETCH_ASSOC);
+
+      $sqlCPharma = SQL_Etiqueta_Articulo($IdArticulo);
+      $ResultCPharma = mysqli_query($connCPharma,$sqlCPharma);
+      $RowCPharma = mysqli_fetch_assoc($ResultCPharma);
+      $clasificacion = $RowCPharma['clasificacion'];
+      $clasificacion = ($clasificacion!="")?$clasificacion:"NO CLASIFICADO";
 
       $Existencia = $row1["Existencia"];
       $ExistenciaAlmacen1 = $row1["ExistenciaAlmacen1"];
@@ -192,8 +200,9 @@
       $Dolarizado = $row1["Dolarizado"];
       $CondicionExistencia = 'CON_EXISTENCIA';
       $UltimoProveedorId = $row1['UltimoProveedorID'];
-      $UltimoProveedor = $row1['UltimoProveedorNombre'];
+      $UltimoProveedor = FG_Limpiar_Texto($row1['UltimoProveedorNombre']);
 
+      $Dolarizado = FG_Producto_Dolarizado($Dolarizado);
       $Precio = FG_Calculo_Precio_Alfa($Existencia,$ExistenciaAlmacen1,$ExistenciaAlmacen2,$IsTroquelado,$UtilidadArticulo,$UtilidadCategoria,$TroquelAlmacen1,$PrecioCompraBrutoAlmacen1,$TroquelAlmacen2,$PrecioCompraBrutoAlmacen2,$PrecioCompraBruto,$IsIVA,$CondicionExistencia);
 
       $sql2 = SQG_Detalle_Venta($IdArticulo,$FInicial,$FFinal);
@@ -215,31 +224,33 @@
       if($TotalUnidadesVendidas==''){
         $TotalUnidadesVendidas = 0;
       }
-      
+
       echo '<tr>';
       echo '<td align="center"><strong>'.intval($contador).'</strong></td>';
       echo '<td align="center">'.$codigo_interno.'</td>';
       echo '<td align="center">'.$codigo_barra.'</td>';
-      echo 
+      echo
       '<td align="left" class="CP-barrido">
       <a href="/reporte10?Descrip='.$Descripcion.'&Id='.$IdArticulo.'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
         .$Descripcion.
       '</a>
       </td>';
        echo '<td align="center">'.number_format($Precio,2,"," ,"." ).'</td>';
-      echo '<td align="center">'.intval($Existencia).'</td>';
-      echo '<td align="center">'.intval($VecesEscaneadas).'</td>';
-      echo '<td align="center">'.intval($TotalVecesVendidas).'</td>';
-      echo '<td align="center">'.intval($Contraste).'</td>';
-      echo '<td align="center">'.$TotalUnidadesVendidas.'</td>';
-      echo '<td align="center">'.$PromedioFactura.'</td>';
-      echo 
-      '<td align="left" class="CP-barrido">
-      <a href="/reporte7?Nombre='.$UltimoProveedor.'&Id='.$UltimoProveedorId.'&SEDE='.$SedeConnection.'" target="_blank" style="text-decoration: none; color: black;">'
-        .$UltimoProveedor.
-      '</a>
-      </td>';
-      echo '</tr>';
+       echo '<td align="center">'.$Dolarizado.'</td>';
+       echo '<td align="center">'.$clasificacion.'</td>';
+       echo '<td align="center">'.intval($Existencia).'</td>';
+       echo '<td align="center">'.intval($VecesEscaneadas).'</td>';
+       echo '<td align="center">'.intval($TotalVecesVendidas).'</td>';
+       echo '<td align="center">'.intval($Contraste).'</td>';
+       echo '<td align="center">'.$TotalUnidadesVendidas.'</td>';
+       echo '<td align="center">'.$PromedioFactura.'</td>';
+       echo
+        '<td align="left" class="CP-barrido">
+        <a href="/reporte7?Nombre='.$UltimoProveedor.'&Id='.$UltimoProveedorId.'&SEDE='.$SedeConnection.'" target="_blank" style="text-decoration: none; color: black;">'
+          .$UltimoProveedor.
+        '</a>
+        </td>';
+        echo '</tr>';
       $contador++;
     }
     echo '
@@ -258,13 +269,13 @@
  function Q21_Data_Consultor($FInicial,$FFinal){
   $sql = "
     SELECT
-    id_articulo, 
-    codigo_interno, 
-    codigo_barra, 
-    descripcion, 
+    id_articulo,
+    codigo_interno,
+    codigo_barra,
+    descripcion,
     COUNT(*) AS VecesEscaneadas
-    FROM consultor 
-    WHERE (fecha_captura >= '$FInicial') AND (fecha_captura < '$FFinal') 
+    FROM consultor
+    WHERE (fecha_captura >= '$FInicial') AND (fecha_captura < '$FFinal')
     GROUP BY id_articulo,codigo_interno,codigo_barra,descripcion
     ORDER BY VecesEscaneadas DESC
   ";
