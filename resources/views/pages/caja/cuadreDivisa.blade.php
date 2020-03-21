@@ -435,7 +435,7 @@
     include(app_path().'\functions\querys_mysql.php');
     include(app_path().'\functions\querys_sqlserver.php');
 
-    $RutaUrl = "ARG";//FG_Mi_Ubicacion();
+    $RutaUrl = FG_Mi_Ubicacion();
     $SedeConnection = $RutaUrl;
     $conn = FG_Conectar_Smartpharma($SedeConnection);
     $sql1 = "SELECT id,CodigoCaja FROM VenCaja WHERE estadoCaja = 2 ORDER BY CodigoCaja ASC";
