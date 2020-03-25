@@ -435,7 +435,7 @@
     include(app_path().'\functions\querys_mysql.php');
     include(app_path().'\functions\querys_sqlserver.php');
 
-    $RutaUrl = FG_Mi_Ubicacion();
+    $RutaUrl = "ARG";//FG_Mi_Ubicacion();
     $SedeConnection = $RutaUrl;
     $conn = FG_Conectar_Smartpharma($SedeConnection);
     $sql1 = "SELECT id,CodigoCaja FROM VenCaja WHERE estadoCaja = 2 ORDER BY CodigoCaja ASC";
@@ -600,9 +600,11 @@
             </td>
           </tr>
           <tr>
-            <td>Total Factura <?php echo SigVe?>:</td>
-            <td>
-              <input id="TotalFacBsSug" type="text" class="form-control" disabled>
+            <td>Total Factura Bs (Con IVA): </td>
+            <td align="left">
+              <input id="TotalFacBsSug" type="text" class="form-control" disabled style="display: inline; width:75%;">
+              <input type="button" onclick="copiar();" id="btn-copiar" value="Copiar" class="btn btn-outline-success btn-sm form-control" style="display: inline; width: 20%;">
+              <input type="hidden" value="" id="totalBsCopy">
             </td>
             <td>Total Factura <?php echo SigDolar?>:</td>
             <td>
@@ -868,6 +870,13 @@
       $('#tablaSugerencia').hide();
       $('#exampleModalCenter').modal('show');
 
+
+      function copiar(){
+        var totalBsCopy = $('#totalBsCopy').val();
+        $('#fac1').val(totalBsCopy); 
+        $('#fac1').focus();
+      }
+
       function dominio(SedeConnectionJs){
         var dominio = '';
         switch(SedeConnectionJs) {
@@ -915,14 +924,15 @@
               if(respuesta['NombreCaja']!=null){
                 var nombreCaja = respuesta['NombreCaja'];
                 var nombreCliente = respuesta['NombreCliente'];
-                var TotalFacBsSug = respuesta['TotalFactura'];
+                var TotalFacBsSug = redondearArriba(respuesta['TotalFactura']);
                 var TasaDolar = '<?php echo $TasaDolar;?>';
-                var TotalFacDsSug = (TotalFacBsSug/TasaDolar);
+                var TotalFacDsSug = (Math.ceil((TotalFacBsSug/TasaDolar) * 100)) / 100;
                 var ParteDsSug = (Math.trunc((TotalFacDsSug/5))*5);
                 var ParteBsSug = ((TotalFacDsSug%5)*TasaDolar);
-
+               
                 $('#nombreCaja').val(nombreCaja);
                 $('#nombreCliente').val(nombreCliente);
+                $('#totalBsCopy').val(TotalFacBsSug);
                 $('#TotalFacBsSug').val(separarMiles(TotalFacBsSug,2));
                 $('#TotalFacDsSug').val(separarMiles(TotalFacDsSug,2));
                 $('#ParteDsSug').val(separarMiles(ParteDsSug,2));

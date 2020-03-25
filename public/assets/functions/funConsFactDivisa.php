@@ -34,7 +34,7 @@
     WHERE
     (VenCaja.Id = '$cajaId')
     AND (estadoVenta = 1)
-    ORDER BY VenVenta.FechaDocumentoVenta ASC
+    ORDER BY VenVenta.FechaDocumentoVenta DESC
     ";
     return $sql;
   }
@@ -47,7 +47,7 @@
   function FG_Articulos_Sugeridos($cajaId){
     $arrayFactura = array();
 
-    $SedeConnection = FG_Mi_Ubicacion();
+    $SedeConnection = "ARG";//FG_Mi_Ubicacion();
   	$conn = FG_Conectar_Smartpharma($SedeConnection);
 
   	$sql = SQL_Consulta_Caja($cajaId);
