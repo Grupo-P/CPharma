@@ -734,7 +734,7 @@
                     <td > Caja Actual: </td>
 
                     <td>
-                      <select id="cajaActual" class="form-control bg-info text-white" style="display:inline;">
+                      <select id="cajaActual" class="form-control bg-info text-white" style="display:inline; width: 65%">
                         <option value="0">Seleccione una caja</option>
                           <?php
                             while($row = sqlsrv_fetch_array($result1, SQLSRV_FETCH_ASSOC)) {
@@ -744,6 +744,8 @@
                           }
                           ?>
                       </select>
+                      <input type="button" onclick="protegido();" id="btn-proteger" value="Proteger" class="btn btn-outline-success btn-sm form-control" style="display: inline; width: 30%;">
+                      <input type="hidden" value="0" id="proteger">
                     </td>
                 </tr>
             </tbody>
@@ -870,12 +872,35 @@
       $('#tablaSugerencia').hide();
       $('#exampleModalCenter').modal('show');
 
+      let cajaActualPro = "";
+
 
       function copiar(){
         var totalBsCopy = $('#totalBsCopy').val();
         $('#fac1').val(totalBsCopy); 
         $('#fac1').focus();
       }
+
+      function protegido(){
+        var proteger = $('#proteger').val();
+        if(proteger==0){
+            $('#cajaActual').attr('disabled','disabled');
+            $('#proteger').val(1);
+            $('#btn-proteger').val("Desproteger");
+            cajaActualPro = $('#cajaActual').val();
+        }
+        else if(proteger==1){
+            $('#cajaActual').removeAttr('disabled');
+            $('#proteger').val(0);
+            $('#btn-proteger').val("Proteger");
+            cajaActualPro = $('#cajaActual').val();
+        }
+      }
+
+      $("#btn-borrarN").click(function(){
+        $("#cajaActual option[value='"+ cajaActualPro +"']").attr("selected",true);
+        $('#tablaSugerencia').hide();
+      });
 
       function dominio(SedeConnectionJs){
         var dominio = '';
