@@ -106,6 +106,10 @@
                 <th scope="col">22</th>
                 <td scope="col">Reporte de Atributos</td>
             </tr>
+            <tr>
+                <th scope="col">24</th>
+                <td scope="col">Articulos Nuevos</td>
+            </tr>
         </tbody>
     </table>
 

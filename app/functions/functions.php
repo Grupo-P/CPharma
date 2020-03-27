@@ -1030,6 +1030,9 @@
 			case 'Reporte de Atributos':
 				$ruta = '/reporte22';
 			break;
+			case 'Articulos Nuevos':
+				$ruta = '/reporte24';
+			break;
 			default:
 				$ruta = '#';
 			break;
@@ -1107,6 +1110,9 @@
 			case 22:
 				$nombre = 'Reporte de Atributos';
 			break;
+			case 24:
+				$nombre = 'Articulos Nuevos';
+			break;
 			default:
 				$nombre = 'Reporte desconocido';
 			break;
@@ -1122,10 +1128,10 @@
 	function FG_Reportes_Departamento($Departamento) {
 		switch ($Departamento) {
 			case 'COMPRAS':
-				$Numero_Reportes = 18;
+				$Numero_Reportes = 19;
 			break;
 			case 'OPERACIONES':
-				$Numero_Reportes = 7;
+				$Numero_Reportes = 8;
 			break;
 			case 'ALMACEN':
 				$Numero_Reportes = 3;
@@ -1134,7 +1140,7 @@
 				$Numero_Reportes = 2;
 			break;
 			case 'SURTIDO':
-				$Numero_Reportes = 5;
+				$Numero_Reportes = 6;
 			break;
 			case 'ADMINISTRACION':
 				$Numero_Reportes = 1;
@@ -1143,10 +1149,10 @@
 				$Numero_Reportes = 14;
 			break;
 			case 'GERENCIA':
-				$Numero_Reportes = 20;
+				$Numero_Reportes = 21;
 			break;
 			case 'TECNOLOGIA':
-				$Numero_Reportes = 20;
+				$Numero_Reportes = 21;
 			break;
 			case 'RECEPCION':
 				$Numero_Reportes = 1;
