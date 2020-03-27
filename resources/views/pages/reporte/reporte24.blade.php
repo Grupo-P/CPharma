@@ -152,6 +152,7 @@
             <th scope="col" class="CP-sticky">Descripcion</th>
             <th scope="col" class="CP-sticky">Tipo</th>
             <th scope="col" class="CP-sticky">Dolarizado?</td>
+            <th scope="col" class="CP-sticky">Fecha de  creacion</th>
             <th scope="col" class="CP-sticky">Cantidad recibida</td>
             <th scope="col" class="CP-sticky">Existencia</th>
             <th scope="col" class="CP-sticky">Precio</br>(Con IVA) '.SigVe.'</td>
@@ -160,7 +161,7 @@
         <tbody>
     ';
     $contador = 1;
-    while($row = sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC)) {
+    while($row = sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC)) { 
 
       $CodigoArticulo = $row["CodigoInterno"];
       $CodigoBarra = $row["CodigoBarra"];
@@ -182,6 +183,7 @@
       $Tipo = FG_Tipo_Producto($row["Tipo"]);
       $Dolarizado = FG_Producto_Dolarizado($row["Dolarizado"]);
       $Gravado = FG_Producto_Gravado($IsIVA);
+      $fechaCreacion = $row["fechaCreacion"];
       
       $Precio = FG_Calculo_Precio_Alfa($Existencia,$ExistenciaAlmacen1,$ExistenciaAlmacen2,$IsTroquelado,$UtilidadArticulo,$UtilidadCategoria,$TroquelAlmacen1,$PrecioCompraBrutoAlmacen1,$TroquelAlmacen2,
       $PrecioCompraBrutoAlmacen2,$PrecioCompraBruto,$IsIVA,$CondicionExistencia);
@@ -194,6 +196,7 @@
       echo '<td>'.$Descripcion.'</td>';
       echo '<td>'.$Tipo.'</td>';
       echo '<td>'.$Dolarizado.'</td>';
+      echo '<td>'.$fechaCreacion->format('d-m-Y').'</td>';
       echo '<td>'.$CantidadRecibida.'</td>';
       echo '<td align="center">'.intval($Existencia).'</td>';
       echo '<td align="center">'.number_format($Precio,2,"," ,"." ).'</td>';
@@ -397,7 +400,15 @@
   inner join ComFactura on ComFactura.Id = ComFacturaDetalle.ComFacturaId
   WHERE (ComFactura.FechaRegistro > '$FInicial') 
   AND (ComFactura.FechaRegistro < '$FFinal')
-  AND (ComFacturaDetalle.InvArticuloId = InvArticulo.Id)) AS DECIMAL(38,0)),2,0)) AS CantidadRecibida
+  AND (ComFacturaDetalle.InvArticuloId = InvArticulo.Id)) AS DECIMAL(38,0)),2,0)) AS CantidadRecibida,
+  --Fecha de creacion
+  (SELECT TOP 1
+  InvArticulo.Auditoria_FechaCreacion
+  FROM InvArticulo
+  WHERE (InvArticulo.Auditoria_FechaCreacion > '$FInicial') 
+  AND (InvArticulo.Auditoria_FechaCreacion < '$FFinal')
+  AND InvArticulo.Id = InvArticulo.Id
+  ORDER BY InvArticulo.Auditoria_FechaCreacion DESC) AS fechaCreacion
     --Tabla principal
     FROM InvArticulo
     --Joins
