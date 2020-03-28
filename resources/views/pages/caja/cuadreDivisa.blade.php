@@ -949,11 +949,12 @@
               if(respuesta['NombreCaja']!=null){
                 var nombreCaja = respuesta['NombreCaja'];
                 var nombreCliente = respuesta['NombreCliente'];
-                var TotalFacBsSug = redondearArriba(respuesta['TotalFactura']);
+                var TotalFacBsSug = respuesta['TotalFactura'];
                 var TasaDolar = '<?php echo $TasaDolar;?>';
                 var TotalFacDsSug = (Math.ceil((TotalFacBsSug/TasaDolar) * 100)) / 100;
                 var ParteDsSug = (Math.trunc((TotalFacDsSug/5))*5);
-                var ParteBsSug = ((TotalFacDsSug%5)*TasaDolar);
+                var ParteBsSug = (TotalFacBsSug-(ParteDsSug*TasaDolar));
+                //var ParteBsSug = ((TotalFacDsSug%5)*TasaDolar);
                
                 $('#nombreCaja').val(nombreCaja);
                 $('#nombreCliente').val(nombreCliente);

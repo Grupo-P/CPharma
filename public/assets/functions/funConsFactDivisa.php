@@ -26,7 +26,8 @@
     SELECT TOP 1
     VenCaja.CodigoCaja AS NombreCaja,
     (ROUND(CAST((VenVenta.M_MontoTotalVenta) AS DECIMAL(38,2)),2,0)) AS TotalFactura,
-    CONCAT(GenPersona.Nombre,GenPersona.Apellido) AS NombreCliente
+    GenPersona.Nombre AS NombreCliente,
+    GenPersona.Apellido AS ApellidoCliente
     FROM VenCaja
     INNER JOIN VenVenta ON VenVenta.VenCajaId = VenCaja.Id
     LEFT JOIN VenCliente ON VenCliente.Id = VenVenta.VenClienteId
@@ -53,10 +54,11 @@
   	$sql = SQL_Consulta_Caja($cajaId);
     $result = sqlsrv_query($conn,$sql);
     $row = sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC);
+    $NombreCompleto = "".FG_Limpiar_Texto($row['NombreCliente'])." ".FG_Limpiar_Texto($row['ApellidoCliente']);
 
-    $arrayFactura["NombreCaja"] = $row['NombreCaja'];
+    $arrayFactura["NombreCaja"] = $row['NombreCaja']; 
     $arrayFactura["TotalFactura"] = $row['TotalFactura'];
-    $arrayFactura["NombreCliente"] = $row['NombreCliente'];
+    $arrayFactura["NombreCliente"] = $NombreCompleto;
 
     return $arrayFactura;
   }
