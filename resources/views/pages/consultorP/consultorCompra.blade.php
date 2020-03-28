@@ -44,7 +44,7 @@
   ?>
 
   <!-- Modal Box -->
-  <div id="selector_modo_busq" class="modal">
+  <div id="selector_modo_busq" class="modal" style="z-index: 100;">
     <div class="modal-content">
       <div class="modal-header">
         <h3 style="text-align: left;">Modo de busqueda</h3>
@@ -179,7 +179,7 @@
   
     var SedeConnectionJs = '<?php echo $RutaUrl;?>';
     var dominio = dominio(SedeConnectionJs);
-    const URLConsulMed = ''+dominio+'assets/functions/funConsCompMed.php';
+    const URLConsulMed = ''+dominio+'assets/functions/funConsCompNomb.php';
 
     $(document).on('ready',function(){
 
