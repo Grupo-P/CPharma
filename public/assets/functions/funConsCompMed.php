@@ -46,14 +46,14 @@
         $CondicionExistencia = 'CON_EXISTENCIA';
 
         if($row1["UltimoLote"]!=''){
-          $UltimoLote = $row1["UltimoLote"]->format('d-m-Y');
+          $UltimoLote = $row1["UltimoLote"]->format('Y-m-d');
         }
         else{
           $UltimoLote = '-';
         }
 
         if($row1["UltimaVenta"]!=''){
-          $UltimaVenta = $row1["UltimaVenta"]->format('d-m-Y');
+          $UltimaVenta = $row1["UltimaVenta"]->format('Y-m-d');
         }
         else{
           $UltimaVenta = '-';
@@ -80,7 +80,7 @@
         $PrecioDolares = ($TasaVenta)?number_format($Precio/$TasaVenta,2,"," ,"." ):"0,00";
 
       	$tableResponse = $tableResponse. '<tr>';
-        $tableResponse = $tableResponse. '<td>'.$CodigoArticulo.'</td>';
+        $tableResponse = $tableResponse. '<td>'.intval($CodigoArticulo).'</td>';
 	      $tableResponse = $tableResponse. '<td>'.$CodigoBarra.'</td>';
 	      $tableResponse = $tableResponse.
 	      '<td align="left" class="CP-barrido">
@@ -89,7 +89,7 @@
           .'</a>
         </td>';
         $tableResponse = $tableResponse. '<td align="center">'.number_format($Precio,2,"," ,"." ).'</td>'; 
-        $tableResponse = $tableResponse. '<td align="center">'.$PrecioDolares.'</td>';
+        $tableResponse = $tableResponse. '<td align="center">'.intval($PrecioDolares).'</td>';
 	      $tableResponse = $tableResponse. '<td align="center">'.$Dolarizado.'</td>';
         $tableResponse = $tableResponse. '<td align="center">'.$Gravado.'</td>';
 
