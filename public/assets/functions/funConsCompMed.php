@@ -11,8 +11,8 @@
  	}
 ?>
 <?php
-	function consultaMedicamento($Descripcion){ 
-		$SedeConnection = FG_Mi_Ubicacion();
+	function consultaMedicamento($Descripcion){
+		$SedeConnection = "ARG";//FG_Mi_Ubicacion();
   	$conn = FG_Conectar_Smartpharma($SedeConnection);
     $connCPharma = FG_Conectar_CPharma();
 
@@ -77,6 +77,7 @@
         $Utilidad = FG_Utilidad_Alfa($UtilidadArticulo,$UtilidadCategoria);
         $Precio = FG_Calculo_Precio_Alfa($Existencia,$ExistenciaAlmacen1,$ExistenciaAlmacen2,$IsTroquelado,$UtilidadArticulo,$UtilidadCategoria,$TroquelAlmacen1,$PrecioCompraBrutoAlmacen1,$TroquelAlmacen2,
         $PrecioCompraBrutoAlmacen2,$PrecioCompraBruto,$IsIVA,$CondicionExistencia);
+        $PrecioDolares = ($TasaVenta)?number_format($Precio/$TasaVenta,2,"," ,"." ):"0,00";
 
       	$tableResponse = $tableResponse. '<tr>';
         $tableResponse = $tableResponse. '<td>'.$CodigoArticulo.'</td>';
@@ -88,7 +89,7 @@
           .'</a>
         </td>';
         $tableResponse = $tableResponse. '<td align="center">'.number_format($Precio,2,"," ,"." ).'</td>'; 
-        $tableResponse = $tableResponse. '<td align="center">'.number_format($Precio/$TasaVenta,2,"," ,"." ).'</td>';
+        $tableResponse = $tableResponse. '<td align="center">'.$PrecioDolares.'</td>';
 	      $tableResponse = $tableResponse. '<td align="center">'.$Dolarizado.'</td>';
         $tableResponse = $tableResponse. '<td align="center">'.$Gravado.'</td>';
 
@@ -98,12 +99,12 @@
         }
         else if($Dolarizado=='SI'){
           if($IsIVA==1){
-            $Costo = (($Precio/Impuesto) * $Utilidad) / $TasaMercado;
+            $Costo = ($TasaMercado)?(($Precio/Impuesto) * $Utilidad) / $TasaMercado:"0";
             $tableResponse = $tableResponse. '<td>-</td>';
             $tableResponse = $tableResponse. '<td align="center">'.number_format($Costo,2,"," ,"." ).'</td>';
           }
           else{
-            $Costo = ($Precio * $Utilidad) / $TasaMercado;
+            $Costo = ($TasaMercado)?($Precio * $Utilidad) / $TasaMercado:"0";
             $tableResponse = $tableResponse. '<td>-</td>';
             $tableResponse = $tableResponse. '<td align="center">'.number_format($Costo,2,"," ,"." ).'</td>';
           }
