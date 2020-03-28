@@ -119,6 +119,7 @@
   */
   function R24_Articulos_Nuevos($SedeConnection,$FInicial,$FFinal){
     $conn = FG_Conectar_Smartpharma($SedeConnection);
+    $connCPharma = FG_Conectar_CPharma();
     
     $FInicialImp = date("d-m-Y", strtotime($FInicial));
     $FFinalImp= date("d-m-Y", strtotime($FFinal));
@@ -152,6 +153,7 @@
             <th scope="col" class="CP-sticky">Descripcion</th>
             <th scope="col" class="CP-sticky">Tipo</th>
             <th scope="col" class="CP-sticky">Dolarizado?</td>
+            <th scope="col" class="CP-sticky">Clasificacion</td>
             <th scope="col" class="CP-sticky">Fecha de  creacion</th>
             <th scope="col" class="CP-sticky">Cantidad recibida</td>
             <th scope="col" class="CP-sticky">Existencia</th>
@@ -163,6 +165,7 @@
     $contador = 1;
     while($row = sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC)) { 
 
+      $IdArticulo = $row["IdArticulo"];
       $CodigoArticulo = $row["CodigoInterno"];
       $CodigoBarra = $row["CodigoBarra"];
       $Descripcion = FG_Limpiar_Texto($row["Descripcion"]);
@@ -187,17 +190,32 @@
       
       $Precio = FG_Calculo_Precio_Alfa($Existencia,$ExistenciaAlmacen1,$ExistenciaAlmacen2,$IsTroquelado,$UtilidadArticulo,$UtilidadCategoria,$TroquelAlmacen1,$PrecioCompraBrutoAlmacen1,$TroquelAlmacen2,
       $PrecioCompraBrutoAlmacen2,$PrecioCompraBruto,$IsIVA,$CondicionExistencia);
+
+      $sqlCPharma = SQL_Etiqueta_Articulo($IdArticulo);
+      $ResultCPharma = mysqli_query($connCPharma,$sqlCPharma);
+      $RowCPharma = mysqli_fetch_assoc($ResultCPharma);
+      $clasificacion = $RowCPharma['clasificacion'];
+      $clasificacion = ($clasificacion!="")?$clasificacion:"NO CLASIFICADO";
       
 
       echo '<tr>';
       echo '<td align="center"><strong>'.intval($contador).'</strong></td>';
       echo '<td>'.$CodigoArticulo.'</td>';
       echo '<td>'.$CodigoBarra.'</td>';
-      echo '<td>'.$Descripcion.'</td>';
-      echo '<td>'.$Tipo.'</td>';
-      echo '<td>'.$Dolarizado.'</td>';
-      echo '<td>'.$fechaCreacion->format('d-m-Y').'</td>';
-      echo '<td>'.$CantidadRecibida.'</td>';
+      
+      echo '
+        <td align="left" class="CP-barrido">
+          <a href="/reporte2?Id='.$IdArticulo.'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
+            .$Descripcion
+          .'</a>
+        </td>
+      ';
+
+      echo '<td align="center">'.$Tipo.'</td>';
+      echo '<td align="center">'.$Dolarizado.'</td>';
+      echo '<td align="center">'.$clasificacion.'</td>';
+      echo '<td align="center">'.$fechaCreacion->format('d-m-Y').'</td>';
+      echo '<td align="center">'.$CantidadRecibida.'</td>';
       echo '<td align="center">'.intval($Existencia).'</td>';
       echo '<td align="center">'.number_format($Precio,2,"," ,"." ).'</td>';
       echo '</tr>';
@@ -206,6 +224,7 @@
     echo '
       </tbody>
     </table>';
+    mysqli_close($connCPharma);
     sqlsrv_close($conn);
   }
   /**********************************************************************************/
