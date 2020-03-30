@@ -179,7 +179,8 @@
   
     var SedeConnectionJs = '<?php echo $RutaUrl;?>';
     var dominio = dominio(SedeConnectionJs);
-    const URLConsulMed = ''+dominio+'assets/functions/funConsCompNomb.php';
+    const URLConsulNomb = ''+dominio+'assets/functions/funConsCompNomb.php';
+    const URLConsulCod = ''+dominio+'assets/functions/funConsCompCod.php';
 
     $(document).on('ready',function(){
 
@@ -374,7 +375,7 @@
 
                 $.ajax({
                   data: parametro,
-                  url: URLConsulMed,
+                  url: URLConsulNomb,
                   type: "POST",
                   success: function(data) {
                     //alert(data);
@@ -383,12 +384,11 @@
                     $("#tbodyapp").html(contenedor+data);
                     $('#contApp').show();
                     $('#tbodyapp').show();
+                    $('#error').hide();
                   }
                  });
-              //Fin de la busqueda y el armado de la tabla
-
-              $("#input_busq").val('');
-              //ajustarTamano();
+              //Fin de la busqueda y el armado de la tabla 
+             $("#input_busq").val('');
             }
           break;
           case 2:
@@ -409,13 +409,7 @@
           case 3:
             //buscar cuando el modo de busqueda hace referencia al codigo de barra especifico de un producto
             if ( $('#input_busq').val() != "" ) {         
-              consultaAjax( "op="+$('#input_busq').val() , "lib/busquedaB.php", 1 , '.contApp' );
-
-              $('.barraHistorial').empty();
-              var historia_origen = $('<div class="historia hOrigen"><div class="imgHist_Cod">'+$('#input_busq').val()+'</div></div>');
-              $('.barraHistorial').append(historia_origen);
-              $("#input_busq").val('');
-              ajustarTamano();
+             alert("Busqueda por codigo de barra");
             }
           break;
           case 4:
@@ -458,7 +452,7 @@
 
                   $.ajax({
                     data: parametro,
-                    url: URLConsulMed,
+                    url: URLConsulNomb,
                     type: "POST",
                     success: function(data) {
                       //alert(data);
@@ -467,12 +461,11 @@
                       $("#tbodyapp").html(contenedor+data);
                       $('#contApp').show();
                       $('#tbodyapp').show();
+                      $('#error').hide();
                     }
                    });
                 //Fin de la busqueda y el armado de la tabla
-
                 $("#input_busq").val('');
-                //ajustarTamano();
               }
             }
             break;
@@ -497,13 +490,7 @@
             //buscar cuando el modo de busqueda hace referencia al codigo de barra especifico de un producto
             if (e.keyCode == 13) {
               if ( $('#input_busq').val() != "" ) {         
-                consultaAjax( "op="+$('#input_busq').val() , "lib/busquedaB.php", 1 , '.contApp' );
-
-                $('.barraHistorial').empty();
-                var historia_origen = $('<div class="historia hOrigen"><div class="imgHist_Cod">'+$('#input_busq').val()+'</div></div>');
-                $('.barraHistorial').append(historia_origen);
-                $("#input_busq").val('');
-                ajustarTamano();
+                alert("Busqueda por codigo de barra");
               }
             }
             break;
@@ -550,7 +537,7 @@
 
                   $.ajax({
                     data: parametro,
-                    url: URLConsulMed,
+                    url: URLConsulNomb,
                     type: "POST",
                     success: function(data) {
                       //alert(data);
@@ -561,9 +548,7 @@
                     }
                    });
                 //Fin de la busqueda y el armado de la tabla
-
                 $("#input_busq").val('');
-                //ajustarTamano();
               }
             }
             break;
