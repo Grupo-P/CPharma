@@ -11,7 +11,7 @@
  	}
 ?>
 <?php
-	function consultaMedicamento($Descripcion){ 
+	function consultaMedicamento($Descripcion){
 		$SedeConnection = FG_Mi_Ubicacion();
   	$conn = FG_Conectar_Smartpharma($SedeConnection);
     $connCPharma = FG_Conectar_CPharma();
@@ -46,14 +46,14 @@
         $CondicionExistencia = 'CON_EXISTENCIA';
 
         if($row1["UltimoLote"]!=''){
-          $UltimoLote = $row1["UltimoLote"]->format('d-m-Y');
+          $UltimoLote = $row1["UltimoLote"]->format('Y-m-d');
         }
         else{
           $UltimoLote = '-';
         }
 
         if($row1["UltimaVenta"]!=''){
-          $UltimaVenta = $row1["UltimaVenta"]->format('d-m-Y');
+          $UltimaVenta = $row1["UltimaVenta"]->format('Y-m-d');
         }
         else{
           $UltimaVenta = '-';
@@ -77,9 +77,10 @@
         $Utilidad = FG_Utilidad_Alfa($UtilidadArticulo,$UtilidadCategoria);
         $Precio = FG_Calculo_Precio_Alfa($Existencia,$ExistenciaAlmacen1,$ExistenciaAlmacen2,$IsTroquelado,$UtilidadArticulo,$UtilidadCategoria,$TroquelAlmacen1,$PrecioCompraBrutoAlmacen1,$TroquelAlmacen2,
         $PrecioCompraBrutoAlmacen2,$PrecioCompraBruto,$IsIVA,$CondicionExistencia);
+        $PrecioDolares = ($TasaVenta)?number_format($Precio/$TasaVenta,2,"," ,"." ):"0,00";
 
       	$tableResponse = $tableResponse. '<tr>';
-        $tableResponse = $tableResponse. '<td>'.$CodigoArticulo.'</td>';
+        $tableResponse = $tableResponse. '<td>'.intval($CodigoArticulo).'</td>';
 	      $tableResponse = $tableResponse. '<td>'.$CodigoBarra.'</td>';
 	      $tableResponse = $tableResponse.
 	      '<td align="left" class="CP-barrido">
@@ -88,7 +89,7 @@
           .'</a>
         </td>';
         $tableResponse = $tableResponse. '<td align="center">'.number_format($Precio,2,"," ,"." ).'</td>'; 
-        $tableResponse = $tableResponse. '<td align="center">'.number_format($Precio/$TasaVenta,2,"," ,"." ).'</td>';
+        $tableResponse = $tableResponse. '<td align="center">'.intval($PrecioDolares).'</td>';
 	      $tableResponse = $tableResponse. '<td align="center">'.$Dolarizado.'</td>';
         $tableResponse = $tableResponse. '<td align="center">'.$Gravado.'</td>';
 
@@ -98,12 +99,12 @@
         }
         else if($Dolarizado=='SI'){
           if($IsIVA==1){
-            $Costo = (($Precio/Impuesto) * $Utilidad) / $TasaMercado;
+            $Costo = ($TasaMercado)?(($Precio/Impuesto) * $Utilidad) / $TasaMercado:"0";
             $tableResponse = $tableResponse. '<td>-</td>';
             $tableResponse = $tableResponse. '<td align="center">'.number_format($Costo,2,"," ,"." ).'</td>';
           }
           else{
-            $Costo = ($Precio * $Utilidad) / $TasaMercado;
+            $Costo = ($TasaMercado)?($Precio * $Utilidad) / $TasaMercado:"0";
             $tableResponse = $tableResponse. '<td>-</td>';
             $tableResponse = $tableResponse. '<td align="center">'.number_format($Costo,2,"," ,"." ).'</td>';
           }

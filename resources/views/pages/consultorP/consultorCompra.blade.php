@@ -44,7 +44,7 @@
   ?>
 
   <!-- Modal Box -->
-  <div id="selector_modo_busq" class="modal">
+  <div id="selector_modo_busq" class="modal" style="z-index: 100;">
     <div class="modal-content">
       <div class="modal-header">
         <h3 style="text-align: left;">Modo de busqueda</h3>
@@ -179,7 +179,8 @@
   
     var SedeConnectionJs = '<?php echo $RutaUrl;?>';
     var dominio = dominio(SedeConnectionJs);
-    const URLConsulMed = ''+dominio+'assets/functions/funConsCompMed.php';
+    const URLConsulNomb = ''+dominio+'assets/functions/funConsCompNomb.php';
+    const URLConsulCod = ''+dominio+'assets/functions/funConsCompCod.php';
 
     $(document).on('ready',function(){
 
@@ -374,7 +375,7 @@
 
                 $.ajax({
                   data: parametro,
-                  url: URLConsulMed,
+                  url: URLConsulNomb,
                   type: "POST",
                   success: function(data) {
                     //alert(data);
@@ -383,12 +384,11 @@
                     $("#tbodyapp").html(contenedor+data);
                     $('#contApp').show();
                     $('#tbodyapp').show();
+                    $('#error').hide();
                   }
                  });
-              //Fin de la busqueda y el armado de la tabla
-
-              $("#input_busq").val('');
-              //ajustarTamano();
+              //Fin de la busqueda y el armado de la tabla 
+             $("#input_busq").val('');
             }
           break;
           case 2:
@@ -408,14 +408,34 @@
           break;
           case 3:
             //buscar cuando el modo de busqueda hace referencia al codigo de barra especifico de un producto
-            if ( $('#input_busq').val() != "" ) {         
-              consultaAjax( "op="+$('#input_busq').val() , "lib/busquedaB.php", 1 , '.contApp' );
-
+            if ( $('#input_busq').val() != "" ) {  
+     
               $('.barraHistorial').empty();
-              var historia_origen = $('<div class="historia hOrigen"><div class="imgHist_Cod">'+$('#input_busq').val()+'</div></div>');
+              var historia_origen = $('<div class="historia hOrigen"><div class="imgHist_Nom">'+$('#input_busq').val()+'</div></div>');
               $('.barraHistorial').append(historia_origen);
-              $("#input_busq").val('');
-              ajustarTamano();
+
+              //Inicio de la busqueda y el armado de la tabla
+                var busq = $('#input_busq').val();
+                var parametro = {
+                "codbar":busq
+                };
+
+                $.ajax({
+                  data: parametro,
+                  url: URLConsulCod,
+                  type: "POST",
+                  success: function(data) {
+                    //alert(data);
+                    var contenedor = $("#tbodyapp").html();
+                    contenedor = '';
+                    $("#tbodyapp").html(contenedor+data);
+                    $('#contApp').show();
+                    $('#tbodyapp').show();
+                    $('#error').hide();
+                  }
+                 });
+              //Fin de la busqueda y el armado de la tabla 
+             $("#input_busq").val('');
             }
           break;
           case 4:
@@ -458,7 +478,7 @@
 
                   $.ajax({
                     data: parametro,
-                    url: URLConsulMed,
+                    url: URLConsulNomb,
                     type: "POST",
                     success: function(data) {
                       //alert(data);
@@ -467,12 +487,11 @@
                       $("#tbodyapp").html(contenedor+data);
                       $('#contApp').show();
                       $('#tbodyapp').show();
+                      $('#error').hide();
                     }
                    });
                 //Fin de la busqueda y el armado de la tabla
-
                 $("#input_busq").val('');
-                //ajustarTamano();
               }
             }
             break;
@@ -496,14 +515,34 @@
           case 3:
             //buscar cuando el modo de busqueda hace referencia al codigo de barra especifico de un producto
             if (e.keyCode == 13) {
-              if ( $('#input_busq').val() != "" ) {         
-                consultaAjax( "op="+$('#input_busq').val() , "lib/busquedaB.php", 1 , '.contApp' );
-
+              if ( $('#input_busq').val() != "" ) {  
+     
                 $('.barraHistorial').empty();
-                var historia_origen = $('<div class="historia hOrigen"><div class="imgHist_Cod">'+$('#input_busq').val()+'</div></div>');
+                var historia_origen = $('<div class="historia hOrigen"><div class="imgHist_Nom">'+$('#input_busq').val()+'</div></div>');
                 $('.barraHistorial').append(historia_origen);
-                $("#input_busq").val('');
-                ajustarTamano();
+
+                //Inicio de la busqueda y el armado de la tabla
+                  var busq = $('#input_busq').val();
+                  var parametro = {
+                  "codbar":busq
+                  };
+
+                  $.ajax({
+                    data: parametro,
+                    url: URLConsulCod,
+                    type: "POST",
+                    success: function(data) {
+                      //alert(data);
+                      var contenedor = $("#tbodyapp").html();
+                      contenedor = '';
+                      $("#tbodyapp").html(contenedor+data);
+                      $('#contApp').show();
+                      $('#tbodyapp').show();
+                      $('#error').hide();
+                    }
+                   });
+                //Fin de la busqueda y el armado de la tabla 
+               $("#input_busq").val('');
               }
             }
             break;
@@ -550,7 +589,7 @@
 
                   $.ajax({
                     data: parametro,
-                    url: URLConsulMed,
+                    url: URLConsulNomb,
                     type: "POST",
                     success: function(data) {
                       //alert(data);
@@ -561,9 +600,7 @@
                     }
                    });
                 //Fin de la busqueda y el armado de la tabla
-
                 $("#input_busq").val('');
-                //ajustarTamano();
               }
             }
             break;
