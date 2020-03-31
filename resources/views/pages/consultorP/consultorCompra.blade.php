@@ -23,7 +23,7 @@
     include(app_path().'\functions\querys_sqlserver.php');
     include(app_path().'\functions\functApp.php');
 
-    $RutaUrl = "ARG";//FG_Mi_Ubicacion();
+    $RutaUrl = FG_Mi_Ubicacion();
     $SedeConnection = $RutaUrl;
     $conn = FG_Conectar_Smartpharma($SedeConnection);
 
@@ -408,8 +408,34 @@
           break;
           case 3:
             //buscar cuando el modo de busqueda hace referencia al codigo de barra especifico de un producto
-            if ( $('#input_busq').val() != "" ) {         
-             alert("Busqueda por codigo de barra");
+            if ( $('#input_busq').val() != "" ) {  
+     
+              $('.barraHistorial').empty();
+              var historia_origen = $('<div class="historia hOrigen"><div class="imgHist_Nom">'+$('#input_busq').val()+'</div></div>');
+              $('.barraHistorial').append(historia_origen);
+
+              //Inicio de la busqueda y el armado de la tabla
+                var busq = $('#input_busq').val();
+                var parametro = {
+                "codbar":busq
+                };
+
+                $.ajax({
+                  data: parametro,
+                  url: URLConsulCod,
+                  type: "POST",
+                  success: function(data) {
+                    //alert(data);
+                    var contenedor = $("#tbodyapp").html();
+                    contenedor = '';
+                    $("#tbodyapp").html(contenedor+data);
+                    $('#contApp').show();
+                    $('#tbodyapp').show();
+                    $('#error').hide();
+                  }
+                 });
+              //Fin de la busqueda y el armado de la tabla 
+             $("#input_busq").val('');
             }
           break;
           case 4:
@@ -489,8 +515,34 @@
           case 3:
             //buscar cuando el modo de busqueda hace referencia al codigo de barra especifico de un producto
             if (e.keyCode == 13) {
-              if ( $('#input_busq').val() != "" ) {         
-                alert("Busqueda por codigo de barra");
+              if ( $('#input_busq').val() != "" ) {  
+     
+                $('.barraHistorial').empty();
+                var historia_origen = $('<div class="historia hOrigen"><div class="imgHist_Nom">'+$('#input_busq').val()+'</div></div>');
+                $('.barraHistorial').append(historia_origen);
+
+                //Inicio de la busqueda y el armado de la tabla
+                  var busq = $('#input_busq').val();
+                  var parametro = {
+                  "codbar":busq
+                  };
+
+                  $.ajax({
+                    data: parametro,
+                    url: URLConsulCod,
+                    type: "POST",
+                    success: function(data) {
+                      //alert(data);
+                      var contenedor = $("#tbodyapp").html();
+                      contenedor = '';
+                      $("#tbodyapp").html(contenedor+data);
+                      $('#contApp').show();
+                      $('#tbodyapp').show();
+                      $('#error').hide();
+                    }
+                   });
+                //Fin de la busqueda y el armado de la tabla 
+               $("#input_busq").val('');
               }
             }
             break;

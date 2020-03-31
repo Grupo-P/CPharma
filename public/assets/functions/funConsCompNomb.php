@@ -12,7 +12,7 @@
 ?>
 <?php
 	function consultaMedicamento($Descripcion){
-		$SedeConnection = "ARG";//FG_Mi_Ubicacion();
+		$SedeConnection = FG_Mi_Ubicacion();
   	$conn = FG_Conectar_Smartpharma($SedeConnection);
     $connCPharma = FG_Conectar_CPharma();
 

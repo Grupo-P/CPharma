@@ -4,19 +4,19 @@
   include('C:\xampp\htdocs\CPharma\app\functions\querys_mysql.php');
   include('C:\xampp\htdocs\CPharma\app\functions\querys_sqlserver.php');
 
-  $CodigoBarra = $_POST["codigoBarra"];
- 	if ($Descripcion!='') {
- 		$respuesta = consultaMedicamento($Descripcion);
+  $CodigoBarra = $_POST["codbar"];
+ 	if ($CodigoBarra!='') {
+ 		$respuesta = consultaMedicamentoCod($CodigoBarra);
 	  echo $respuesta;
  	}
 ?>
 <?php
-	function consultaMedicamento($Descripcion){
-		$SedeConnection = "ARG";//FG_Mi_Ubicacion();
+	function consultaMedicamentoCod($CodigoBarra){
+		$SedeConnection = FG_Mi_Ubicacion();
   	$conn = FG_Conectar_Smartpharma($SedeConnection);
     $connCPharma = FG_Conectar_CPharma();
 
-  	$sql = Descripcion_Like($Descripcion);
+  	$sql = IdArticulo_CodigoBarra($CodigoBarra);
     $result = sqlsrv_query($conn,$sql);
 
     $tableResponse = '';
@@ -128,35 +128,17 @@
     sqlsrv_close($conn);
     return $tableResponse;
 	}
-	/**********************************************************************/
-	function Descripcion_Like($DescripLike) {
-
-    $palabras = array();
-    $palabras = explode(" ", $DescripLike);
-
-    if(count($palabras)>1){
-      $sql = "
-        SELECT
-        InvArticulo.Id AS IdArticulo
-        FROM InvArticulo";
-
-      for($i = 0; $i<count($palabras); $i++ ){
-        if($i == 0){
-          $sql = $sql." WHERE InvArticulo.Descripcion LIKE '%$palabras[$i]%'";
-        }
-        else{
-          $sql = $sql." AND InvArticulo.Descripcion LIKE '%$palabras[$i]%'";
-        }
-      }
-    }
-    else{
-      $sql = "
-        SELECT
-        InvArticulo.Id AS IdArticulo
-        FROM InvArticulo
-        WHERE InvArticulo.Descripcion LIKE '%$DescripLike%'
-      ";   
-    }
+	/**********************************************************************************/
+  /*
+    TITULO: R6Q_IdArticulo_CodigoBarra
+    FUNCION: Busca el id del articulo dado el codigo de barra
+    RETORNO: id del articulo
+    DESAROLLADO POR: SERGIO COVA
+  */
+  function IdArticulo_CodigoBarra($CodigoBarra) {
+    $sql = "
+      SELECT InvCodigoBarra.InvArticuloId AS IdArticulo FROM InvCodigoBarra WHERE InvCodigoBarra.CodigoBarra = '$CodigoBarra' 
+    ";
     return $sql;
   }
 ?>
