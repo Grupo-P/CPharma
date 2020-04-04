@@ -89,7 +89,7 @@
           .'</a>
         </td>';
         $tableResponse = $tableResponse. '<td align="center">'.number_format($Precio,2,"," ,"." ).'</td>'; 
-        $tableResponse = $tableResponse. '<td align="center">'.intval($PrecioDolares).'</td>';
+        $tableResponse = $tableResponse. '<td align="center">'.$PrecioDolares.'</td>';
 	      $tableResponse = $tableResponse. '<td align="center">'.$Dolarizado.'</td>';
         $tableResponse = $tableResponse. '<td align="center">'.$Gravado.'</td>';
 

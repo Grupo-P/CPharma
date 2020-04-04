@@ -89,7 +89,7 @@
           .'</a>
         </td>';
         $tableResponse = $tableResponse. '<td align="center">'.number_format($Precio,2,"," ,"." ).'</td>'; 
-        $tableResponse = $tableResponse. '<td align="center">'.intval($PrecioDolares).'</td>';
+        $tableResponse = $tableResponse. '<td align="center">'.$PrecioDolares.'</td>';
 	      $tableResponse = $tableResponse. '<td align="center">'.$Dolarizado.'</td>';
         $tableResponse = $tableResponse. '<td align="center">'.$Gravado.'</td>';
 
@@ -113,7 +113,7 @@
         $tableResponse = $tableResponse. '<td>'.$UltimoLote.'</td>';
         $tableResponse = $tableResponse. '<td>'.$Componente.'</td>';
         $tableResponse = $tableResponse. '<td>'.$Aplicacion.'</td>';
-        $tableResponse = $tableResponse. '<td>'.$UltimaVenta.'</td>'; 
+        $tableResponse = $tableResponse. '<td>'.$UltimaVenta.'</td>';
 	      $tableResponse = $tableResponse. 
         '<td align="left" class="CP-barrido">
           <a href="/reporte7?Nombre='.$NombreProveedor.'&Id='.$IdProveedor.'&SEDE='.$SedeConnection.'" target="_blank" style="text-decoration: none; color: black;">'
