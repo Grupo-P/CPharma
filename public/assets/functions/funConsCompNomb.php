@@ -45,6 +45,9 @@
         $Dolarizado = $row1["Dolarizado"];
         $CondicionExistencia = 'CON_EXISTENCIA';
 
+        $fechaActual = new DateTime('now');
+        $fechaActual = date_format($fechaActual,'Y-m-d');
+
         if($row1["UltimoLote"]!=''){
           $UltimoLote = $row1["UltimoLote"]->format('Y-m-d');
         }
@@ -89,7 +92,7 @@
           .'</a>
         </td>';
         $tableResponse = $tableResponse. '<td align="center">'.number_format($Precio,2,"," ,"." ).'</td>'; 
-        $tableResponse = $tableResponse. '<td align="center">'.intval($PrecioDolares).'</td>';
+        $tableResponse = $tableResponse. '<td align="center">'.$PrecioDolares.'</td>';
 	      $tableResponse = $tableResponse. '<td align="center">'.$Dolarizado.'</td>';
         $tableResponse = $tableResponse. '<td align="center">'.$Gravado.'</td>';
 
@@ -109,11 +112,24 @@
             $tableResponse = $tableResponse. '<td align="center">'.number_format($Costo,2,"," ,"." ).'</td>';
           }
         }
-        $tableResponse = $tableResponse. '<td align="center">'.intval($Existencia).'</td>';
-        $tableResponse = $tableResponse. '<td>'.$UltimoLote.'</td>';
+        
+        $tableResponse = $tableResponse.
+        '<td align="center" class="CP-barrido">
+        <a href="/reporte6?pedido=15&fechaInicio='.$UltimoLote.'&fechaFin='.$fechaActual.'&SEDE='.$SedeConnection.'&flag=BsqDescrip&Descrip='.$Descripcion.'&IdD='.$IdArticulo.'&CodBar=&IdCB=" style="text-decoration: none; color: black;" target="_blank">'
+          .intval($Existencia).
+        '</a>
+        </td>';
+        
+        $tableResponse = $tableResponse.
+        '<td align="center" class="CP-barrido">
+        <a href="/reporte12?fechaInicio='.$UltimoLote.'&fechaFin='.$fechaActual.'&SEDE='.$SedeConnection.'&Descrip='.$Descripcion.'&Id='.$IdArticulo.'&CodBar=&IdCB=&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
+          .$UltimoLote.
+        '</a>
+        </td>';
+
         $tableResponse = $tableResponse. '<td>'.$Componente.'</td>';
         $tableResponse = $tableResponse. '<td>'.$Aplicacion.'</td>';
-        $tableResponse = $tableResponse. '<td>'.$UltimaVenta.'</td>'; 
+        $tableResponse = $tableResponse. '<td>'.$UltimaVenta.'</td>';
 	      $tableResponse = $tableResponse. 
         '<td align="left" class="CP-barrido">
           <a href="/reporte7?Nombre='.$NombreProveedor.'&Id='.$IdProveedor.'&SEDE='.$SedeConnection.'" target="_blank" style="text-decoration: none; color: black;">'
