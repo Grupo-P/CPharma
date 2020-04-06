@@ -12,7 +12,7 @@
 ?>
 <?php
 	function consultaMedicamento($Descripcion){
-		$SedeConnection = FG_Mi_Ubicacion();
+		$SedeConnection = "ARG";//FG_Mi_Ubicacion();
   	$conn = FG_Conectar_Smartpharma($SedeConnection);
     $connCPharma = FG_Conectar_CPharma();
 
@@ -44,6 +44,9 @@
         $PrecioCompraBruto = $row1["PrecioCompraBruto"];
         $Dolarizado = $row1["Dolarizado"];
         $CondicionExistencia = 'CON_EXISTENCIA';
+
+        $fechaActual = new DateTime('now');
+        $fechaActual = date_format($fechaActual,'Y-m-d');
 
         if($row1["UltimoLote"]!=''){
           $UltimoLote = $row1["UltimoLote"]->format('Y-m-d');
@@ -110,7 +113,14 @@
           }
         }
         $tableResponse = $tableResponse. '<td align="center">'.intval($Existencia).'</td>';
-        $tableResponse = $tableResponse. '<td>'.$UltimoLote.'</td>';
+        
+        $tableResponse = $tableResponse.
+        '<td align="center" class="CP-barrido">
+        <a href="/reporte12?fechaInicio='.$UltimoLote.'&fechaFin='.$fechaActual.'&SEDE='.$SedeConnection.'&Descrip='.$Descripcion.'&Id='.$IdArticulo.'&CodBar=&IdCB=&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
+          .$UltimoLote.
+        '</a>
+        </td>';
+
         $tableResponse = $tableResponse. '<td>'.$Componente.'</td>';
         $tableResponse = $tableResponse. '<td>'.$Aplicacion.'</td>';
         $tableResponse = $tableResponse. '<td>'.$UltimaVenta.'</td>';
