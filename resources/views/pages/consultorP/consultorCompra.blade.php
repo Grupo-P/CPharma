@@ -23,7 +23,7 @@
     include(app_path().'\functions\querys_sqlserver.php');
     include(app_path().'\functions\functApp.php');
 
-    $RutaUrl = "ARG";//FG_Mi_Ubicacion();
+    $RutaUrl = FG_Mi_Ubicacion();
     $SedeConnection = $RutaUrl;
     $conn = FG_Conectar_Smartpharma($SedeConnection);
 
