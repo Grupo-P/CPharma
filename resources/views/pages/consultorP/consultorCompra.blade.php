@@ -136,9 +136,6 @@
           <th scope="col" class="CP-sticky">Costo <?php echo SigDolar?></br>aprox.</td>
           <th scope="col" class="CP-sticky">Existencia</td>
           <th scope="col" class="CP-sticky">Ultimo Lote</td>
-
-            <th scope="col" class="CP-sticky">Ultimo Lote link</td>
-
           <th scope="col" class="CP-sticky">Componente</td>
           <th scope="col" class="CP-sticky">Aplicacion</td>
           <th scope="col" class="CP-sticky">Ultima Venta</td>

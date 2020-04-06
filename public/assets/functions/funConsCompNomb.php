@@ -112,7 +112,13 @@
             $tableResponse = $tableResponse. '<td align="center">'.number_format($Costo,2,"," ,"." ).'</td>';
           }
         }
-        $tableResponse = $tableResponse. '<td align="center">'.intval($Existencia).'</td>';
+        
+        $tableResponse = $tableResponse.
+        '<td align="center" class="CP-barrido">
+        <a href="/reporte6?pedido=15&fechaInicio='.$UltimoLote.'&fechaFin='.$fechaActual.'&SEDE='.$SedeConnection.'&flag=BsqDescrip&Descrip='.$Descripcion.'&IdD='.$IdArticulo.'&CodBar=&IdCB=" style="text-decoration: none; color: black;" target="_blank">'
+          .intval($Existencia).
+        '</a>
+        </td>';
         
         $tableResponse = $tableResponse.
         '<td align="center" class="CP-barrido">
