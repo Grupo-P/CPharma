@@ -174,19 +174,21 @@
   */
   function SC1Q_Lista_Lotes_Artiulos($IdArticulo) {
     $sql = "
-    SELECT
-    InvLote.Id,
-    InvLote.Numero,
-    InvLote.LoteFabricante,
-    InvLote.FechaVencimiento
-    FROM InvLote
-    INNER JOIN InvLoteAlmacen ON InvLoteAlmacen.InvArticuloId = InvLote.InvArticuloId
-    INNER JOIN InvArticulo ON InvArticulo.Id = InvLote.InvArticuloId
-    WHERE 
-    (InvLote.InvArticuloId = '$IdArticulo')
-    AND (InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
-    AND (InvLoteAlmacen.Existencia > 0)
-    ORDER BY InvLote.FechaVencimiento DESC
+    SELECT InvLote.Id, 
+    InvLote.M_PrecioCompraBruto, 
+    InvLote.M_PrecioTroquelado, 
+    InvLoteAlmacen.Existencia, 
+    InvLote.Numero,  
+    InvLote.FechaVencimiento, 
+    InvLote.FechaEntrada, 
+    InvLote.Numero, 
+    InvLote.LoteFabricante
+    FROM InvLote, invlotealmacen, InvArticulo 
+    WHERE InvArticulo.id = InvLote.InvArticuloId 
+    AND invlote.id = invlotealmacen.InvLoteId 
+    AND InvLoteAlmacen.existencia > 0 
+    AND InvLoteAlmacen.InvAlmacenId = 1 
+    AND InvArticulo.id = '$IdArticulo'
     ";
     return $sql;
   }
@@ -344,6 +346,7 @@
             <th scope="col" class="CP-sticky">Numero de Lote</th>
             <th scope="col" class="CP-sticky">Lote de Fabricante</th>
             <th scope="col" class="CP-sticky">Fecha de Vencimiento</th>
+            <th scope="col">Existencia</td>
             <th scope="col" class="CP-sticky">Seleccion</th>
           </tr>
         </thead>
@@ -362,6 +365,8 @@
       else{
         echo '<td align="center">-</td>';
       }
+
+      echo '<td align="center">'.intval($row['Existencia']).'</td>';
      
       echo '
       <td align="center">
@@ -401,6 +406,37 @@
     $sql1 = SC1Q_Lista_Lotes_Lote($IdLote);
     $result = sqlsrv_query($conn,$sql1);
 
+    $sql2 = SQG_Detalle_Articulo($IdArticulo);
+    $result2 = sqlsrv_query($conn,$sql2);
+    $row2 = sqlsrv_fetch_array($result2, SQLSRV_FETCH_ASSOC);
+
+
+    $CodigoArticulo = $row2["CodigoInterno"];
+    $CodigoBarra = $row2["CodigoBarra"];
+    $Descripcion = FG_Limpiar_Texto($row2["Descripcion"]);
+    $Existencia = $row2["Existencia"];
+    $ExistenciaAlmacen1 = $row2["ExistenciaAlmacen1"];
+    $ExistenciaAlmacen2 = $row2["ExistenciaAlmacen2"];
+    $IsTroquelado = $row2["Troquelado"];
+    $IsIVA = $row2["Impuesto"];
+    $UtilidadArticulo = $row2["UtilidadArticulo"];
+    $UtilidadCategoria = $row2["UtilidadCategoria"];
+    $TroquelAlmacen1 = $row2["TroquelAlmacen1"];
+    $PrecioCompraBrutoAlmacen1 = $row2["PrecioCompraBrutoAlmacen1"];
+    $TroquelAlmacen2 = $row2["TroquelAlmacen2"];
+    $PrecioCompraBrutoAlmacen2 = $row2["PrecioCompraBrutoAlmacen2"];
+    $PrecioCompraBruto = $row2["PrecioCompraBruto"];
+    $Dolarizado = $row2["Dolarizado"];
+    $CondicionExistencia = 'CON_EXISTENCIA';
+
+    $Gravado = FG_Producto_Gravado($IsIVA);
+    $Dolarizado = FG_Producto_Dolarizado($Dolarizado);
+    $Precio = FG_Calculo_Precio_Alfa($Existencia,$ExistenciaAlmacen1,$ExistenciaAlmacen2,$IsTroquelado,$UtilidadArticulo,$UtilidadCategoria,$TroquelAlmacen1,$PrecioCompraBrutoAlmacen1,$TroquelAlmacen2,
+    $PrecioCompraBrutoAlmacen2,$PrecioCompraBruto,$IsIVA,$CondicionExistencia);
+
+    $Utilidad = FG_Utilidad_Alfa($UtilidadArticulo,$UtilidadCategoria);
+    $Utilidad = (1 - $Utilidad)*100;
+
     echo '
     <div class="input-group md-form form-sm form-1 pl-0 CP-stickyBar">
       <div class="input-group-prepend">
@@ -409,25 +445,55 @@
             aria-hidden="true"></i>
         </span>
       </div>
-      <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterAllTable()">
+      <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterAllTable()" autofocus="autofocus">
     </div>
     <br/>
-    ';
 
-    echo '
     <table class="table table-striped table-bordered col-12 sortable">
       <thead class="thead-dark">
-          <tr>
-            <th scope="col">Articulo</th>
-          </tr>
-        </thead>
-        <tbody>
         <tr>
-      ';
-    echo '<td>'.FG_Limpiar_Texto($Descripcion).'</td>';
-      echo '
+          <th scope="col">Codigo</th>
+          <th scope="col">Codigo de barra</td>
+          <th scope="col">Descripcion</td>
+          <th scope="col">Existencia</td>
+          <th scope="col">Precio</br>(Con IVA) '.SigVe.'</td>
+          <th scope="col">Gravado?</td>
+          <th scope="col">Utilidad Configurada</td>
+          <th scope="col">Troquel</td>
+          <th scope="col">Dolarizado?</td>
         </tr>
-        </tbody>
+      </thead>
+      <tbody>
+    ';
+    echo '<tr>';
+    echo '<td>'.$CodigoArticulo.'</td>';
+    echo '<td align="center">'.$CodigoBarra.'</td>';
+    echo
+      '<td align="left" class="CP-barrido">
+      <a href="/reporte10?Descrip='.$Descripcion.'&Id='.$IdArticulo.'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
+        .$Descripcion.
+      '</a>
+      </td>';
+    echo '<td align="center">'.intval($Existencia).'</td>';
+    echo '<td align="center">'.number_format($Precio,2,"," ,"." ).'</td>';
+    echo '<td align="center">'.$Gravado.'</td>';
+    echo '<td align="center">'.number_format($Utilidad,2,"," ,"." ).' %</td>';
+
+    if($TroquelAlmacen1!=NULL){
+      echo '<td align="center">'.number_format($TroquelAlmacen1,2,"," ,"." ).'</td>';
+    }
+    else if($TroquelAlmacen2!=NULL){
+      echo '<td align="center">'.number_format($TroquelAlmacen2,2,"," ,"." ).'</td>';
+    }
+    else{
+      echo '<td align="center"> - </td>';
+    }
+
+    echo '<td align="center">'.$Dolarizado.'</td>';
+
+    echo '
+      </tr>
+      </tbody>
     </table>';
 
     echo'
