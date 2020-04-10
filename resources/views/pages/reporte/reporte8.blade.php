@@ -1,7 +1,7 @@
 @extends('layouts.model')
 
 @section('title')
-  Reporte
+  Actualizar Troquel
 @endsection
 
 @section('scriptsHead')
@@ -53,7 +53,7 @@
 @section('content')
   <h1 class="h5 text-info">
     <i class="fas fa-file-invoice"></i>
-    Actualizar Troquel
+    Actualizar Troquel (Proveedor)
   </h1>
   <hr class="row align-items-start col-12">
 
