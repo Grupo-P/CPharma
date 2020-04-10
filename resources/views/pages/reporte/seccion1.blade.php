@@ -199,21 +199,23 @@
     RETORNO: Lista de articulos con descripcion e id
     DESAROLLADO POR: SERGIO COVA
   */
-  function SC1Q_Lista_Lotes_Lote($IdLote) {
+  function SC1Q_Lista_Lotes_Lote($IdLote,$IdArticulo) {
     $sql = "
-    SELECT
-    InvLote.Id,
-    InvLote.Numero,
-    InvLote.LoteFabricante,
-    InvLote.FechaVencimiento
-    FROM InvLote
-    INNER JOIN InvLoteAlmacen ON InvLoteAlmacen.InvArticuloId = InvLote.InvArticuloId
-    INNER JOIN InvArticulo ON InvArticulo.Id = InvLote.InvArticuloId
-    WHERE 
-    (InvLote.Id = '$IdLote')
-    AND (InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
-    AND (InvLoteAlmacen.Existencia > 0)
-    ORDER BY InvLote.FechaVencimiento DESC
+    SELECT InvLote.Id, 
+    InvLote.M_PrecioCompraBruto, 
+    InvLote.M_PrecioTroquelado, 
+    InvLoteAlmacen.Existencia, 
+    InvLote.Numero,  
+    InvLote.FechaVencimiento, 
+    InvLote.FechaEntrada, 
+    InvLote.Numero, 
+    InvLote.LoteFabricante
+    FROM InvLote, invlotealmacen, InvArticulo 
+    WHERE InvArticulo.id = InvLote.InvArticuloId 
+    AND invlote.id = '$IdLote'
+    AND InvLoteAlmacen.existencia > 0 
+    AND InvLoteAlmacen.InvAlmacenId = 1
+    AND InvArticulo.id = '$IdArticulo'
     ";
     return $sql;
   }
@@ -403,8 +405,9 @@
   function SC1_Actualizar_Lote($SedeConnection,$IdLote,$IdArticulo,$Descripcion){
     
     $conn = FG_Conectar_Smartpharma($SedeConnection);
-    $sql1 = SC1Q_Lista_Lotes_Lote($IdLote);
+    $sql1 = SC1Q_Lista_Lotes_Lote($IdLote,$IdArticulo);
     $result = sqlsrv_query($conn,$sql1);
+    $row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC);
 
     $sql2 = SQG_Detalle_Articulo($IdArticulo);
     $result2 = sqlsrv_query($conn,$sql2);
@@ -445,7 +448,7 @@
             aria-hidden="true"></i>
         </span>
       </div>
-      <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterAllTable()" autofocus="autofocus">
+      <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterAllTable()">
     </div>
     <br/>
 
@@ -504,14 +507,16 @@
             <th scope="col" class="CP-sticky">Numero de Lote</th>
             <th scope="col" class="CP-sticky">Lote de Fabricante</th>
             <th scope="col" class="CP-sticky">Fecha de Vencimiento</th>
-            <th scope="col" class="CP-sticky">Fecha de Vencimiento</br>(Nueva)</th>
+            <th scope="col" class="CP-sticky">Precio Compra Bruto</th>
+            <th scope="col" class="CP-sticky">Precio Troquelado</th>
+            <th scope="col" class="CP-sticky">Precio Troquelado<br>(Nuevo)</th>
             <th scope="col" class="CP-sticky">Seleccion</th>
           </tr>
         </thead>
         <tbody>
      ';
     $contador = 1;
-    while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
+    
       echo '<tr>';
       echo '<td align="left"><strong>'.intval($contador).'</strong></td>';
       echo '<td align="center">'.$row["Numero"].'</td>';
@@ -523,11 +528,14 @@
       else{
         echo '<td align="center">-</td>';
       }
+
+      echo '<td align="center">'.$row["M_PrecioCompraBruto"].'</td>';
+      echo '<td align="center">'.$row["M_PrecioTroquelado"].'</td>';
      
       echo '
         <form autocomplete="off" action=""> 
           <td align="center">
-            <input id="fechaInicio" type="date" name="fechaVenActualizada" required style="width:100%;">
+            <input id="fechaInicio" type="text" name="fechaVenActualizada" required style="width:100%;" autofocus="autofocus">
           </td>
           <td align="center">
             <input id="SEDE" name="SEDE" type="hidden" value="';
@@ -542,8 +550,7 @@
           <br>
         ';
       echo '</tr>';
-    $contador++;
-    }
+    
       echo '
         </tbody>
     </table>';
