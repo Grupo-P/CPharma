@@ -189,6 +189,7 @@
     AND InvLoteAlmacen.existencia > 0 
     AND InvLoteAlmacen.InvAlmacenId = 1 
     AND InvArticulo.id = '$IdArticulo'
+    ORDER BY InvLote.Numero ASC
     ";
     return $sql;
   }
@@ -201,7 +202,7 @@
   */
   function SC1Q_Lista_Lotes_Lote($IdLote,$IdArticulo) {
     $sql = "
-    SELECT InvLote.Id, 
+    SELECT InvLote.Id,
     InvLote.M_PrecioCompraBruto, 
     InvLote.M_PrecioTroquelado, 
     InvLoteAlmacen.Existencia, 
@@ -216,6 +217,7 @@
     AND InvLoteAlmacen.existencia > 0 
     AND InvLoteAlmacen.InvAlmacenId = 1
     AND InvArticulo.id = '$IdArticulo'
+    ORDER BY InvLote.Numero ASC
     ";
     return $sql;
   }
@@ -323,7 +325,7 @@
           <th scope="col">Precio</br>(Con IVA) '.SigVe.'</td>
           <th scope="col">Gravado?</td>
           <th scope="col">Utilidad Configurada</td>
-          <th scope="col">Troquel</td>
+          <th scope="col">Troquel '.SigVe.'</td>
           <th scope="col">Dolarizado?</td>
         </tr>
       </thead>
@@ -367,8 +369,11 @@
             <th scope="col" class="CP-sticky">#</th>
             <th scope="col" class="CP-sticky">Numero de Lote</th>
             <th scope="col" class="CP-sticky">Lote de Fabricante</th>
+            <th scope="col" class="CP-sticky">Fecha de Entrada</th>
             <th scope="col" class="CP-sticky">Fecha de Vencimiento</th>
             <th scope="col">Existencia</td>
+            <th scope="col">Costo Bruto '.SigVe.'</td>
+            <th scope="col">Troquel '.SigVe.'</td>
             <th scope="col" class="CP-sticky">Seleccion</th>
           </tr>
         </thead>
@@ -381,6 +386,13 @@
       echo '<td align="center">'.$row["Numero"].'</td>';
       echo '<td align="center">'.$row["LoteFabricante"].'</td>';
 
+      if($row["FechaEntrada"]!=NULL){
+         echo '<td align="center">'.$row["FechaEntrada"]->format('d-m-Y').'</td>';
+      }
+      else{
+        echo '<td align="center">-</td>';
+      }
+
       if($row["FechaVencimiento"]!=NULL){
          echo '<td align="center">'.$row["FechaVencimiento"]->format('d-m-Y').'</td>';
       }
@@ -389,6 +401,22 @@
       }
 
       echo '<td align="center">'.intval($row['Existencia']).'</td>';
+
+      $costoBruto = $row["M_PrecioCompraBruto"];
+      if($costoBruto!=NULL){
+        echo '<td align="center">'.number_format($costoBruto,2,"," ,"." ).'</td>';
+      }
+      else{
+        echo '<td align="center"> - </td>';
+      }
+
+      $costoTroquel = $row["M_PrecioTroquelado"];
+      if($costoTroquel!=NULL){
+        echo '<td align="center">'.number_format($costoTroquel,2,"," ,"." ).'</td>';
+      }
+      else{
+        echo '<td align="center"> - </td>';
+      }
      
       echo '
       <td align="center">
@@ -482,7 +510,7 @@
           <th scope="col">Precio</br>(Con IVA) '.SigVe.'</td>
           <th scope="col">Gravado?</td>
           <th scope="col">Utilidad Configurada</td>
-          <th scope="col">Troquel</td>
+          <th scope="col">Troquel '.SigVe.'</td>
           <th scope="col">Dolarizado?</td>
         </tr>
       </thead>
@@ -555,7 +583,7 @@
       echo '
         <form autocomplete="off" action=""> 
           <td align="center">
-            <input id="fechaInicio" type="text" name="troquelactual" style="width:100%;" autofocus="autofocus">
+            <input id="fechaInicio" type="number" min="0.00" step="any" name="troquelactual" style="width:100%;" autofocus="autofocus">
           </td>
           <td align="center">
             <input id="SEDE" name="SEDE" type="hidden" value="';
@@ -584,14 +612,23 @@
     DESAROLLADO POR: SERGIO COVA
   */
   function SC1_Actualizar_Fecha($SedeConnection,$IdLote,$Troquel,$IdArticulo,$Descripcion){
-
+    $msn = "";
     $conn = FG_Conectar_Smartpharma($SedeConnection);
-    if($Troquel==""){
-      $sql2 = SC1Q_Actualizar_Troquel(false,$Troquel,$IdArticulo,$IdLote);
-    }
-    else{
+
+    if( (intval($Troquel)>0) ){
       $sql2 = SC1Q_Actualizar_Troquel(true,$Troquel,$IdArticulo,$IdLote);
+      $msn = '<h4 class="h5 text-success" align="center">Troquel actualizado con exito</h4>';
     }
+    else if( ($Troquel=="NULL") || ($Troquel=="null") || ($Troquel=="") ){
+      $sql2 = SC1Q_Actualizar_Troquel(false,$Troquel,$IdArticulo,$IdLote);
+      $msn = '<h4 class="h5 text-warning" align="center">Troquel actualizado a NULL</h4>';
+    }
+    else if( (intval($Troquel)<=0) ){
+      $sql2 = SC1Q_Actualizar_Troquel(false,$Troquel,$IdArticulo,$IdLote);
+      $msn = '<h4 class="h5 text-danger" align="center">Verifique los datos</h4>';
+    }
+    
+    
     sqlsrv_query($conn,$sql2);
 
     $sql1 = SC1Q_Lista_Lotes_Lote($IdLote,$IdArticulo);
@@ -628,6 +665,7 @@
     $Utilidad = FG_Utilidad_Alfa($UtilidadArticulo,$UtilidadCategoria);
     $Utilidad = (1 - $Utilidad)*100;
 
+    echo ($msn);
     echo '
     <div class="input-group md-form form-sm form-1 pl-0 CP-stickyBar">
       <div class="input-group-prepend">
