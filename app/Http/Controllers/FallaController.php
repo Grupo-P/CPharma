@@ -3,9 +3,19 @@
 namespace compras\Http\Controllers;
 
 use Illuminate\Http\Request;
+use compras\Falla;
 
 class FallaController extends Controller
 {
+    /**
+     * Create a new controller instance with auth.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -13,7 +23,8 @@ class FallaController extends Controller
      */
     public function index()
     {
-        //
+        $fallas =  Falla::all();
+        return view('pages.falla.index', compact('fallas'));
     }
 
     /**
@@ -23,7 +34,7 @@ class FallaController extends Controller
      */
     public function create()
     {
-        //
+        return view('pages.falla.create');
     }
 
     /**
@@ -34,7 +45,18 @@ class FallaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+       try{
+            $falla = new Falla();
+            $falla->falla = $request->input('falla');
+            $falla->usuario = $request->input('usuario');
+            $falla->estacion = $request->input('estacion');
+            $falla->save();
+
+            return back()->with('Saved', ' Informacion');
+        }
+        catch(\Illuminate\Database\QueryException $e){
+            return back()->with('Error', ' Error');
+        }
     }
 
     /**

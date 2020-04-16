@@ -1033,6 +1033,9 @@
 			case 'Articulos Nuevos':
 				$ruta = '/reporte24';
 			break;
+			case 'Registro de Fallas':
+				$ruta = '/falla';
+			break;
 			default:
 				$ruta = '#';
 			break;
@@ -1112,6 +1115,9 @@
 			break;
 			case 24:
 				$nombre = 'Articulos Nuevos';
+			break;
+			case 99:
+				$nombre = 'Registro de Fallas';
 			break;
 			default:
 				$nombre = 'Reporte desconocido';

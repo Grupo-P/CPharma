@@ -109,6 +109,8 @@
             <tr>
                 <th scope="col">24</th>
                 <td scope="col">Articulos Nuevos</td>
+                <th scope="col">99</th>
+                <td scope="col">Registro de Fallas</td>
             </tr>
         </tbody>
     </table>

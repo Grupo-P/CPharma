@@ -12,6 +12,9 @@
   <a class="navbar-brand CP-Menu-titleIcon" href="{{ url('/ConsultaPrecio') }}"><b><i class="fas fa-barcode" data-toggle="tooltip" data-placement="top" title="CONSULTOR DE PRECIOS"></i></b>
   </a>
   &nbsp;&nbsp;
+  <a class="navbar-brand CP-Menu-titleIcon" href="{{ url('/falla/create') }}"><b><i class="fas fa-cart-arrow-down" data-toggle="tooltip" data-placement="top" title="REGISTRO DE FALLAS"></i></b>
+  </a>
+  &nbsp;&nbsp;
   <a class="navbar-brand" href="/ACI">
     <image src="{{ asset('assets/img/ACI.png') }}" data-toggle="tooltip" data-placement="top" title="ACADEMIA DE CAPACITACION INTEGRAL" width="60px"/>
   </a>
