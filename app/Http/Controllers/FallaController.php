@@ -8,22 +8,18 @@ use compras\Falla;
 class FallaController extends Controller
 {
     /**
-     * Create a new controller instance with auth.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
-    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $fallas =  Falla::all();
+        $FInicio =  $request->input('fechaInicio');
+        $FFin =  $request->input('fechaFin');
+        $fallas =  
+        Falla::orderBy('created_at', 'desc')->
+        whereBetween('created_at',[$FInicio,$FFin])->get();
+
         return view('pages.falla.index', compact('fallas'));
     }
 

@@ -17,6 +17,10 @@ Route::get('/', function() {
 
 Route::resource('falla', 'FallaController');
 
+Route::get('/reporteFalla', function() {
+    return view('pages.falla.reporteFalla');
+});
+
 Route::get('/cuadreDivisa', function() {
     return view('pages.caja.cuadreDivisa');
 });

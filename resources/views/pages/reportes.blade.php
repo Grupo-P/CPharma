@@ -555,7 +555,7 @@
 	    		</h5>	    	    
 	  		</div>
 		  	<div class="card-footer bg-transparent border-warning text-right">
-		  		<form action="/falla" style="display: inline;">
+		  		<form action="/reporteFalla" style="display: inline;">
 				    @csrf
 				    <input id="SEDE" name="SEDE" type="hidden" value="<?php print_r($_GET['SEDE']); ?>">			   
 				    <button type="submit" name="Reporte" role="button" class="btn btn-outline-warning btn-sm"></i>Visualizar</button>
