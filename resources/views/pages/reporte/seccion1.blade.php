@@ -62,7 +62,7 @@
   include(app_path().'\functions\functions.php');
   include(app_path().'\functions\querys_mysql.php');
   include(app_path().'\functions\querys_sqlserver.php');
-  $_GET['SEDE'] = FG_Mi_Ubicacion();
+  $_GET['SEDE'] = "ARG";//FG_Mi_Ubicacion();
 
   $ArtJson = "";
 
@@ -87,7 +87,10 @@
   //se pasa a la seleccion del articulo
     $InicioCarga = new DateTime("now");
 
-    SC1_Actualizar_Fecha($_GET['SEDE'],$_GET['IdLote'],$_GET['troquelactual'],$_GET['IdArti'],$_GET['Nombre']);
+    $registro = "Se actualizo el troquel del articulo: ".$_GET['Descripcion']." del troquel: ".$_GET['troquelanterior']." al troquel: ".$_GET['troquelactual']." por el motivo: ".$_GET['Motivo']; 
+
+    SC1_Actualizar_Fecha($_GET['SEDE'],$_GET['IdLote'],$_GET['troquelactual'],$_GET['IdArti'],$_GET['Descripcion']);
+    FG_Guardar_Auditoria('ACTUALIZAR','TROQUEL CLIENTE',$registro);
 
     $FinCarga = new DateTime("now");
     $IntervalCarga = $InicioCarga->diff($FinCarga);
@@ -558,6 +561,7 @@
             <th scope="col" class="CP-sticky">Precio Compra Bruto</th>
             <th scope="col" class="CP-sticky">Precio Troquelado</th>
             <th scope="col" class="CP-sticky">Precio Troquelado<br>(Nuevo)</th>
+            <th scope="col" class="CP-sticky">Motivo</th>
             <th scope="col" class="CP-sticky">Seleccion</th>
           </tr>
         </thead>
@@ -585,14 +589,16 @@
           <td align="center">
             <input id="fechaInicio" type="number" min="0.00" step="any" name="troquelactual" style="width:100%;" autofocus="autofocus">
           </td>
-          <td align="center">
+          <td><input id="Motivo" name="Motivo" type="text"></td>
+          <td align="center">            
             <input id="SEDE" name="SEDE" type="hidden" value="';
                 print_r($SedeConnection);
                 echo'">
             <input type="submit" value="Selecionar" class="btn btn-outline-success">
             <input id="IdLote" name="IdLote" type="hidden" value="'.intval($row["Id"]).'">
             <input id="IdArti" name="IdArti" type="hidden" value="'.$IdArticulo.'">
-            <input id="Nombre" name="Nombre" type="hidden" value="'.$Descripcion.'">
+            <input id="Descripcion" name="Descripcion" type="hidden" value="'.$Descripcion.'">
+            <input id="troquelanterior" name="troquelanterior" type="hidden" value="'.$row["M_PrecioTroquelado"].'">
           </td>       
           </form>
           <br>
@@ -627,7 +633,6 @@
       $sql2 = SC1Q_Actualizar_Troquel(false,$Troquel,$IdArticulo,$IdLote);
       $msn = '<h4 class="h5 text-danger" align="center">Verifique los datos</h4>';
     }
-    
     
     sqlsrv_query($conn,$sql2);
 
