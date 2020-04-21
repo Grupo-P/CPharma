@@ -62,7 +62,7 @@
   include(app_path().'\functions\functions.php');
   include(app_path().'\functions\querys_mysql.php');
   include(app_path().'\functions\querys_sqlserver.php');
-  $_GET['SEDE'] = "ARG";//FG_Mi_Ubicacion();
+  $_GET['SEDE'] = FG_Mi_Ubicacion();
 
   $ArtJson = "";
 
