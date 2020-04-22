@@ -249,6 +249,12 @@ Route::resource('ordenCompra', 'OrdenCompraController');
 
 Route::resource('ordenCompraDetalle', 'OrdenCompraDetalleController');
 
+Route::resource('unidad', 'UnidadController');
+
+Route::get('articuloUnidad', function() {
+    return view('pages.unidad.articuloUnidad');
+});
+
 //***************************** RRHH routing *****************************//
 Route::resource('candidatos', 'RH_CandidatoController');
 Route::get('/procesos_candidatos', 'RH_CandidatoController@procesos');

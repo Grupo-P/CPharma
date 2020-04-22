@@ -3,9 +3,21 @@
 namespace compras\Http\Controllers;
 
 use Illuminate\Http\Request;
+use compras\Unidad;
+use compras\Auditoria;
 
 class UnidadController extends Controller
 {
+    /**
+     * Create a new controller instance with auth.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -13,7 +25,8 @@ class UnidadController extends Controller
      */
     public function index()
     {
-        //
+        $unidades =  Unidad::all();
+        return view('pages.unidad.index', compact('unidades'));
     }
 
     /**
@@ -23,7 +36,7 @@ class UnidadController extends Controller
      */
     public function create()
     {
-        //
+        return view('pages.unidad.create');
     }
 
     /**
@@ -34,7 +47,29 @@ class UnidadController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try{
+            $unidad = new Unidad();
+            $unidad->id_articulo = $request->input('id_articulo');
+            $unidad->codigo_interno= $request->input('codigo_interno');
+            $unidad->codigo_barra = $request->input('codigo_barra');
+            $unidad->divisor = $request->input('divisor');
+            $unidad->unidad_minima = $request->input('unidad_minima');
+            $unidad->estatus = 'ACTIVO';
+            $unidad->user = auth()->user()->name;
+            $unidad->save();
+
+            $Auditoria = new Auditoria();
+            $Auditoria->accion = 'CREAR';
+            $Auditoria->tabla = 'UNIDAD';
+            $Auditoria->registro = "".$request->input('divisor')." ".$request->input('unidad_minima');
+            $Auditoria->user = auth()->user()->name;
+            $Auditoria->save();
+
+            return redirect()->route('unidad.index')->with('Saved', ' Informacion');
+        }
+        catch(\Illuminate\Database\QueryException $e){
+            return back()->with('Error', ' Error');
+        }
     }
 
     /**

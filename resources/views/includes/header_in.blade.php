@@ -821,6 +821,13 @@
         </a>
       </li>
       <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('/unidad') }}">
+          <span data-feather="home"></span>
+          <i class="fas fa-less-than-equal"></i>
+          Unidad Minima<span class="sr-only">(current)</span>
+        </a>
+      </li>
+      <li class="nav-item">
         <a class="nav-link CP-Links-Menu" href="{{ url('/reporte23/') }}">    
           <span data-feather="home"></span>
           <i class="fas fa-calendar-alt"></i>
