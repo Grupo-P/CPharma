@@ -65,11 +65,10 @@
     {!! Form::hidden('articulo', $row['Descripcion']) !!}
     <fieldset>
 
-        <table class="table table-borderless table-striped">
+        <table class="table table-borderless table-striped">            
         <thead class="thead-dark">
             <tr>
-                <th scope="row"></th>
-                <th scope="row"></th>
+                <th scope="row" colspan="2">{{$row['Descripcion']}}</th>
             </tr>
         </thead>
         <tbody>
