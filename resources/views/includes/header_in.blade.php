@@ -103,11 +103,18 @@
           Reportes<span class="sr-only">(current)</span>
         </a>
       </li>
-      <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="{{ url('/reporte8/') }}">    
+     <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('/reporte8/') }}">     
           <span data-feather="home"></span>
           <i class="fas fa-stamp"></i>
-          Troquel<span class="sr-only">(current)</span>
+          Troquel (Proveedor)<span class="sr-only">(current)</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('/seccion1/') }}">     
+          <span data-feather="home"></span>
+          <i class="fas fa-stamp"></i>
+          Troquel (Cliente)<span class="sr-only">(current)</span>
         </a>
       </li>
       <li class="nav-item">
@@ -535,7 +542,14 @@
         <a class="nav-link CP-Links-Menu" href="{{ url('/reporte8/') }}">     
           <span data-feather="home"></span>
           <i class="fas fa-stamp"></i>
-          Troquel<span class="sr-only">(current)</span>
+          Troquel (Proveedor)<span class="sr-only">(current)</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('/seccion1/') }}">     
+          <span data-feather="home"></span>
+          <i class="fas fa-stamp"></i>
+          Troquel (Cliente)<span class="sr-only">(current)</span>
         </a>
       </li>
       <li class="nav-item">
@@ -818,6 +832,13 @@
           <span data-feather="home"></span>
           <i class="fas fa-stamp"></i>
           Troquel (Cliente)<span class="sr-only">(current)</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('/unidad') }}">
+          <span data-feather="home"></span>
+          <i class="fas fa-less-than-equal"></i>
+          Unidad Minima<span class="sr-only">(current)</span>
         </a>
       </li>
       <li class="nav-item">
