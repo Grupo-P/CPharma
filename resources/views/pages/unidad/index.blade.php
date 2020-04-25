@@ -106,6 +106,7 @@
 		      	<th scope="col" class="CP-sticky">#</th>
 		      	<th scope="col" class="CP-sticky">Codigo interno</th>
 		      	<th scope="col" class="CP-sticky">Codido de barra</th>
+		      	<th scope="col" class="CP-sticky">Descripcion</th>
 		      	<th scope="col" class="CP-sticky">Divisor</th>		      	
 		      	<th scope="col" class="CP-sticky">Unidad minima</th>
 		      	<th scope="col" class="CP-sticky">Acciones</th>
@@ -117,6 +118,7 @@
 		      <th>{{$unidad->id}}</th>
 		      <td>{{$unidad->codigo_interno}}</td>
 		      <td>{{$unidad->codigo_barra}}</td>
+		      <td>{{$unidad->articulo}}</td>
 		      <td>{{$unidad->divisor}}</td>		      
 		      <td>{{$unidad->unidad_minima}}</td>
 		      

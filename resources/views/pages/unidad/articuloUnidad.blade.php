@@ -65,7 +65,7 @@
     $ArtJson = "";
     $CodJson = "";
 
-    $_GET['SEDE'] = "ARG";//FG_Mi_Ubicacion();
+    $_GET['SEDE'] = FG_Mi_Ubicacion();
     
     $sql = R2Q_Lista_Articulos();
     $ArtJson = FG_Armar_Json($sql,$_GET['SEDE']);

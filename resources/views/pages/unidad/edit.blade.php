@@ -4,22 +4,6 @@
     Unidad Minima
 @endsection
 
-<?php
-    include(app_path().'\functions\config.php');
-    include(app_path().'\functions\functions.php');
-    include(app_path().'\functions\querys_mysql.php');
-    include(app_path().'\functions\querys_sqlserver.php');
-
-    $IdArticulo = $_GET['Id'];
-    $SedeConnection = $_GET['SEDE'];
-    $conn = FG_Conectar_Smartpharma($SedeConnection);
-    $connCPharma = FG_Conectar_CPharma();
-
-    $sql = SQG_Detalle_Articulo($IdArticulo);
-    $result = sqlsrv_query($conn,$sql);
-    $row = sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC);    
-?>
-
 @section('content')
 <!-- Modal Guardar -->
     @if (session('Error'))
@@ -57,12 +41,8 @@
     <br>
     <br>
 
-    {!! Form::open(['route' => 'unidad.store', 'method' => 'POST']) !!}
+    {!! Form::model($unidad, ['route' => ['unidad.update', $unidad], 'method' => 'PUT']) !!}
 
-    {!! Form::hidden('id_articulo', $row['IdArticulo']) !!}
-    {!! Form::hidden('codigo_interno', $row['CodigoInterno']) !!}
-    {!! Form::hidden('codigo_barra', $row['CodigoBarra']) !!}
-    {!! Form::hidden('articulo', $row['Descripcion']) !!}
     <fieldset>
 
         <table class="table table-borderless table-striped">

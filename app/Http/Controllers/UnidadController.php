@@ -54,6 +54,7 @@ class UnidadController extends Controller
             $unidad->codigo_barra = $request->input('codigo_barra');
             $unidad->divisor = $request->input('divisor');
             $unidad->unidad_minima = $request->input('unidad_minima');
+            $unidad->articulo = $request->input('articulo');
             $unidad->estatus = 'ACTIVO';
             $unidad->user = auth()->user()->name;
             $unidad->save();
@@ -61,7 +62,7 @@ class UnidadController extends Controller
             $Auditoria = new Auditoria();
             $Auditoria->accion = 'CREAR';
             $Auditoria->tabla = 'UNIDAD';
-            $Auditoria->registro = "".$request->input('divisor')." ".$request->input('unidad_minima');
+            $Auditoria->registro = $request->input('articulo');
             $Auditoria->user = auth()->user()->name;
             $Auditoria->save();
 
@@ -80,7 +81,16 @@ class UnidadController extends Controller
      */
     public function show($id)
     {
-        //
+       $unidad = Unidad::find($id); 
+
+        $Auditoria = new Auditoria();
+        $Auditoria->accion = 'CONSULTAR';
+        $Auditoria->tabla = 'UNIDAD';
+        $Auditoria->registro = $unidad->articulo;
+        $Auditoria->user = auth()->user()->name;
+        $Auditoria->save();
+
+        return view('pages.unidad.show', compact('unidad'));
     }
 
     /**
@@ -91,7 +101,8 @@ class UnidadController extends Controller
      */
     public function edit($id)
     {
-        //
+        $unidad = Unidad::find($id);
+        return view('pages.unidad.edit', compact('unidad'));
     }
 
     /**
@@ -103,7 +114,24 @@ class UnidadController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        try{
+            $unidad = Unidad::find($id);
+            $unidad->fill($request->all());
+            $unidad->user = auth()->user()->name;
+            $unidad->save();
+
+            $Auditoria = new Auditoria();
+            $Auditoria->accion = 'EDITAR';
+            $Auditoria->tabla = 'UNIDAD';
+            $Auditoria->registro = $unidad->articulo;
+            $Auditoria->user = auth()->user()->name;
+            $Auditoria->save();
+
+            return redirect()->route('unidad.index')->with('Updated', ' Informacion');
+        }
+        catch(\Illuminate\Database\QueryException $e){
+            return back()->with('Error', ' Error');
+        }
     }
 
     /**
@@ -114,6 +142,27 @@ class UnidadController extends Controller
      */
     public function destroy($id)
     {
-        //
+       $unidad = Unidad::find($id);
+
+        $Auditoria = new Auditoria();
+        $Auditoria->tabla = 'UNIDAD';
+        $Auditoria->registro = $unidad->articulo;
+        $Auditoria->user = auth()->user()->name;
+
+        if($unidad->estatus == 'ACTIVO'){
+            $unidad->estatus = 'INACTIVO';
+            $Auditoria->accion = 'DESINCORPORAR';
+        }
+        else if($unidad->estatus == 'INACTIVO'){
+            $unidad->estatus = 'ACTIVO';
+            $Auditoria->accion = 'REINCORPORAR';
+        }
+
+        $unidad->user = auth()->user()->name;        
+        $unidad->save();
+
+        $Auditoria->save();
+
+        return redirect()->route('unidad.index')->with('Deleted', ' Informacion');
     }
 }
