@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddArticuloToUnidadsTable extends Migration
+class AddClientesToFallasTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,9 @@ class AddArticuloToUnidadsTable extends Migration
      */
     public function up()
     {
-        Schema::table('unidads', function (Blueprint $table) {
-            $table->text('articulo');
+        Schema::table('fallas', function (Blueprint $table) {
+            $table->string('cliente',80)->nullable();
+            $table->string('telefono',80)->nullable();
         });
     }
 
@@ -25,8 +26,9 @@ class AddArticuloToUnidadsTable extends Migration
      */
     public function down()
     {
-        Schema::table('unidads', function (Blueprint $table) {
-            $table->dropColumn('articulo');
+        Schema::table('fallas', function (Blueprint $table) {
+            $table->dropColumn('cliente');
+            $table->dropColumn('telefono');
         });
     }
 }

@@ -12,6 +12,6 @@ class Unidad extends Model
      * @var array
      */
     protected $fillable = [
-        'id_articulo', 'codigo_interno', 'codigo_barra','divisor','unidad_minima','estatus','user'
+        'id_articulo', 'codigo_interno', 'codigo_barra','divisor','unidad_minima','estatus','user','articulo'
     ];
 }

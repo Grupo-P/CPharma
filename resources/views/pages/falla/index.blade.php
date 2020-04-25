@@ -108,7 +108,9 @@
 		      	<th scope="col" class="CP-sticky">Fecha</th>
 		      	<th scope="col" class="CP-sticky">Hora</th>
 		      	<th scope="col" class="CP-sticky">Estacion</th>	
-		      	<th scope="col" class="CP-sticky">Usuario</th>		      		    
+		      	<th scope="col" class="CP-sticky">Usuario</th>
+		      	<th scope="col" class="CP-sticky">Cliente</th>		      		    
+		      	<th scope="col" class="CP-sticky">Telefono de cliente</th>
 		      	{{-- <th scope="col" class="CP-sticky">Acciones</th> --}}
 		    </tr>
 	  	</thead>
@@ -121,6 +123,8 @@
 		      <td>{{$falla->created_at->format("h:i:s a")}}</td>
 		      <td>{{$falla->estacion}}</td>	
 		      <td>{{$falla->usuario}}</td>
+		      <td>{{$falla->cliente}}</td>
+		      <td>{{$falla->telefono}}</td>
 		    </tr>
 		@endforeach
 		</tbody>

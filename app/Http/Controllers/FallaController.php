@@ -16,6 +16,7 @@ class FallaController extends Controller
     {
         $FInicio =  $request->input('fechaInicio');
         $FFin =  $request->input('fechaFin');
+        $FFin = date("Y-m-d",strtotime($FFin."+ 1 days"));
         $fallas =  
         Falla::orderBy('created_at', 'desc')->
         whereBetween('created_at',[$FInicio,$FFin])->get();
@@ -46,6 +47,8 @@ class FallaController extends Controller
             $falla->falla = $request->input('falla');
             $falla->usuario = $request->input('usuario');
             $falla->estacion = $request->input('estacion');
+            $falla->cliente = $request->input('cliente');
+            $falla->telefono = $request->input('telefono');
             $falla->save();
 
             return back()->with('Saved', ' Informacion');

@@ -67,12 +67,20 @@
         </thead>
         <tbody>
             <tr>
-                <th scope="row">{!! Form::label('usuario', 'Nombre Completo') !!}</th>
+                <th scope="row">{!! Form::label('usuario', 'Nombre de cajero') !!}</th>
                 <td>{!! Form::text('usuario', null, [ 'class' => 'form-control', 'placeholder' => 'Sergio Cova', 'autofocus', 'required']) !!}</td>
             </tr>
             <tr>
                 <th scope="row">{!! Form::label('falla', 'Falla') !!}</th>
                 <td>{!! Form::textarea('falla', null, [ 'class' => 'form-control', 'placeholder' => 'ACETAMINOFEN JARABE 120ML', 'rows' => '2', 'required']) !!}</td>
+            </tr>
+            <tr>
+                <th scope="row">{!! Form::label('cliente', 'Nombre de cliente') !!}</th>
+                <td>{!! Form::text('cliente', null, [ 'class' => 'form-control', 'placeholder' => 'Pedro Perez', 'autofocus', 'required']) !!}</td>
+            </tr>
+            <tr>
+                <th scope="row">{!! Form::label('telefono', 'Telefono de cliente') !!}</th>
+                <td>{!! Form::text('telefono', null, [ 'class' => 'form-control', 'placeholder' => '04XX-XXXXXXX', 'autofocus', 'required']) !!}</td>
             </tr>
             <input type="hidden" name="estacion" value="<?php echo(gethostbyaddr($_SERVER['REMOTE_ADDR']));?>">
         </tbody>

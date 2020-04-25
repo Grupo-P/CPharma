@@ -12,6 +12,6 @@ class Falla extends Model
      * @var array
      */
     protected $fillable = [
-        'falla', 'usuario','estacion'
+        'falla', 'usuario','estacion','cliente','telefono'
     ];
 }
