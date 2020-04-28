@@ -155,6 +155,10 @@ Route::get('/reporte24', function() {
     return view('pages.reporte.reporte24');
 });
 
+Route::get('/reporte25', function() {
+    return view('pages.reporte.reporte25');
+});
+
 Route::get('/seccion1', function() {
     return view('pages.reporte.seccion1');
 });

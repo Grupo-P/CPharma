@@ -407,6 +407,171 @@
 	}
 	/**********************************************************************************/
 	/*
+		TITULO: FG_Conectar_Mod_Atte_Clientes
+		FUNCION: Conectar el sistema con la sede que se desea
+		RETORNO: Conexion a Smartpharma
+		DESAROLLADO POR: SERGIO COVA
+	 */
+	function FG_Conectar_Mod_Atte_Clientes($SedeConnection) {
+		switch($SedeConnection) {
+		//INICIO BLOQUE DE FTN
+			case 'FTN':
+				$connectionInfo = array(
+					"Database"=>"Mod_Atte_Cliente",
+					"UID"=>userFTN,
+					"PWD"=>passFTN
+				);
+				$conn = sqlsrv_connect(serverFTN,$connectionInfo);
+				return $conn;
+			break;
+			case 'FTNFLL':
+				$connectionInfo = array(
+					"Database"=>"Mod_Atte_Cliente",
+					"UID"=>userFTN,
+					"PWD"=>passFTN
+				);
+				$conn = sqlsrv_connect(serverFTN,$connectionInfo);
+				return $conn;
+			break;
+			case 'FTNFAU':
+				$connectionInfo = array(
+					"Database"=>"Mod_Atte_Cliente",
+					"UID"=>userFTN,
+					"PWD"=>passFTN
+				);
+				$conn = sqlsrv_connect(serverFTN,$connectionInfo);
+				return $conn;
+			break;
+		//FIN BLOQUE DE FTN
+		//INICIO BLOQUE DE FLL
+			case 'FLL':
+				$connectionInfo = array(
+					"Database"=>"Mod_Atte_Cliente",
+					"UID"=>userFLL,
+					"PWD"=>passFLL
+				);
+				$conn = sqlsrv_connect(serverFLL,$connectionInfo);
+				return $conn;
+			break;
+			case 'FLLFTN':
+				$connectionInfo = array(
+					"Database"=>"Mod_Atte_Cliente",
+					"UID"=>userFLL,
+					"PWD"=>passFLL
+				);
+				$conn = sqlsrv_connect(serverFLL,$connectionInfo);
+				return $conn;
+			break;
+			case 'FLLFAU':
+				$connectionInfo = array(
+					"Database"=>"Mod_Atte_Cliente",
+					"UID"=>userFLL,
+					"PWD"=>passFLL
+				);
+				$conn = sqlsrv_connect(serverFLL,$connectionInfo);
+				return $conn;
+			break;
+		//FIN BLOQUE DE FLL
+		//INICIO BLOQUE DE FAU
+			case 'FAU':
+				$connectionInfo = array(
+					"Database"=>"Mod_Atte_Cliente",
+					"UID"=>userFAU,
+					"PWD"=>passFAU
+				);
+				$conn = sqlsrv_connect(serverFAU,$connectionInfo);
+				return $conn;
+			break;
+			case 'FAUFTN':
+				$connectionInfo = array(
+					"Database"=>"Mod_Atte_Cliente",
+					"UID"=>userFAU,
+					"PWD"=>passFAU
+				);
+				$conn = sqlsrv_connect(serverFAU,$connectionInfo);
+				return $conn;
+			break;
+			case 'FAUFLL':
+				$connectionInfo = array(
+					"Database"=>"Mod_Atte_Cliente",
+					"UID"=>userFAU,
+					"PWD"=>passFAU
+				);
+				$conn = sqlsrv_connect(serverFAU,$connectionInfo);
+				return $conn;
+			break;
+		//FIN BLOQUE DE FAU 
+		//INICIO BLOQUE DE GRUPO P
+			case 'GP':
+				$connectionInfo = array(
+					"Database"=>"Mod_Atte_Cliente",
+					"UID"=>userGP,
+					"PWD"=>passGP
+				);
+				$conn = sqlsrv_connect(serverGP,$connectionInfo);
+				return $conn;
+			break;
+			case 'GPFTN':
+				$connectionInfo = array(
+					"Database"=>"Mod_Atte_Cliente",
+					"UID"=>userGP,
+					"PWD"=>passGP
+				);
+				$conn = sqlsrv_connect(serverGP,$connectionInfo);
+				return $conn;
+			break;
+			case 'GPFLL':
+				$connectionInfo = array(
+					"Database"=>"Mod_Atte_Cliente",
+					"UID"=>userGP,
+					"PWD"=>passGP
+				);
+				$conn = sqlsrv_connect(serverGP,$connectionInfo);
+				return $conn;
+			break;
+			case 'GPFAU':
+				$connectionInfo = array(
+					"Database"=>"Mod_Atte_Cliente",
+					"UID"=>userGP,
+					"PWD"=>passGP
+				);
+				$conn = sqlsrv_connect(serverGP,$connectionInfo);
+				return $conn;
+			break;
+		//FIN BLOQUE DE GRUPO P 
+		//INICIO BLOQUE DE TEST 
+			case 'DBs':
+				$connectionInfo = array(
+					"Database"=>"Mod_Atte_Cliente",
+					"UID"=>userDBs,
+					"PWD"=>passDBs
+				);
+				$conn = sqlsrv_connect(serverDBs,$connectionInfo);
+				return $conn;
+			break;
+			case 'DBm':
+				$connectionInfo = array(
+					"Database"=>"Mod_Atte_Cliente",
+					"UID"=>userDBm,
+					"PWD"=>passDBm
+				);
+				$conn = sqlsrv_connect(serverDBm,$connectionInfo);
+				return $conn;
+			break;
+			case 'ARG':
+				$connectionInfo = array(
+					"Database"=>"Mod_Atte_Cliente",
+					"UID"=>userDBsa,
+					"PWD"=>passDBsa
+				);
+				$conn = sqlsrv_connect(serverDBsa,$connectionInfo);
+				return $conn;
+			break;
+			//FIN BLOQUE DE TEST
+		}
+	}
+	/**********************************************************************************/
+	/*
 		TITULO: FG_Limpiar_Texto
 		FUNCION: limpia el texto de caracteres no imprimibles
 		RETORNO: Texto limpio
@@ -1033,6 +1198,9 @@
 			case 'Articulos Nuevos':
 				$ruta = '/reporte24';
 			break;
+			case 'Articulos en Cero':
+				$ruta = '/reporte25';
+			break;
 			case 'Registro de Fallas':
 				$ruta = '/falla';
 			break;
@@ -1115,6 +1283,9 @@
 			break;
 			case 24:
 				$nombre = 'Articulos Nuevos';
+			break;
+			case 25:
+				$nombre = 'Articulos en Cero';
 			break;
 			case 99:
 				$nombre = 'Registro de Fallas';
