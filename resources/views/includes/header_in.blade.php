@@ -152,6 +152,20 @@
           Tasa de venta<span class="sr-only">(current)</span>
         </a>
       </li>
+      <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('/ConsultorCompra') }}" target="_blank">     
+          <span data-feather="home"></span>
+          <i class="fas fa-search"></i>
+          Buscador de articulos<span class="sr-only">(current)</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('/unidad') }}">
+          <span data-feather="home"></span>
+          <i class="fas fa-less-than-equal"></i>
+          Unidad Minima<span class="sr-only">(current)</span>
+        </a>
+      </li>
     </div>
   </div>
 <?php
@@ -254,6 +268,20 @@
           <span data-feather="home"></span>
           <i class="fas fa-tag"></i>
           Etiquetas<span class="sr-only">(current)</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('/ConsultorCompra') }}" target="_blank">     
+          <span data-feather="home"></span>
+          <i class="fas fa-search"></i>
+          Buscador de articulos<span class="sr-only">(current)</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('/unidad') }}">
+          <span data-feather="home"></span>
+          <i class="fas fa-less-than-equal"></i>
+          Unidad Minima<span class="sr-only">(current)</span>
         </a>
       </li>
       <?php
