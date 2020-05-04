@@ -208,7 +208,7 @@
         <tbody>
         <tr>
       ';
-    echo '<td>'.FG_Limpiar_Texto($NombreProveedor).'</td>';
+    echo '<td>'.($NombreProveedor).'</td>';
       echo '
         </tr>
         </tbody>
@@ -307,7 +307,7 @@
         <tbody>
         <tr>
       ';
-    echo '<td>'.FG_Limpiar_Texto($NombreProveedor).'</td>';
+    echo '<td>'.($NombreProveedor).'</td>';
       echo '
         </tr>
         </tbody>
