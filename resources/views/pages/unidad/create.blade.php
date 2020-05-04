@@ -62,13 +62,13 @@
     {!! Form::hidden('id_articulo', $row['IdArticulo']) !!}
     {!! Form::hidden('codigo_interno', $row['CodigoInterno']) !!}
     {!! Form::hidden('codigo_barra', $row['CodigoBarra']) !!}
-    {!! Form::hidden('articulo', $row['Descripcion']) !!}
+    {!! Form::hidden('articulo', FG_Limpiar_Texto($row['Descripcion'])) !!}
     <fieldset>
 
         <table class="table table-borderless table-striped">            
         <thead class="thead-dark">
             <tr>
-                <th scope="row" colspan="2">{{$row['Descripcion']}}</th>
+                <th scope="row" colspan="2">{{FG_Limpiar_Texto($row['Descripcion'])}}</th>
             </tr>
         </thead>
         <tbody>
