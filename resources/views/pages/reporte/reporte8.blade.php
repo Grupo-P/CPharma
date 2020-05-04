@@ -216,7 +216,7 @@
         <tbody>
         <tr>
       ';
-    echo '<td>'.FG_Limpiar_Texto($NombreProveedor).'</td>';
+    echo '<td>'.($NombreProveedor).'</td>';
       echo '
         </tr>
         </tbody>
@@ -253,7 +253,7 @@
               
               <input id="IdFact" name="IdFact" type="hidden" value="'.intval($row["FacturaId"]).'">
             <input id="IdProv" name="IdProv" type="hidden" value="'.$IdProveedor.'">
-            <input id="NombreProv" name="NombreProv" type="hidden" value="'.FG_Limpiar_Texto($NombreProveedor).'">
+            <input id="NombreProv" name="NombreProv" type="hidden" value="'.($NombreProveedor).'">
           </form>
           <br>
         ';
@@ -328,7 +328,7 @@
         <tr>
       ';
       echo '<td>'.$NumeroFactura.'</td>';
-    echo '<td>'.FG_Limpiar_Texto($NombreProveedor).'</td>';
+    echo '<td>'.($NombreProveedor).'</td>';
       echo '
         </tr>
         </tbody>
@@ -351,7 +351,7 @@
       echo '<tr>';
       echo '<td align="center"><strong>'.intval($contador).'</strong></td>';
       echo '<td align="center">'.$row["CodigoArticulo"].'</td>';
-      echo '<td align="center">'.FG_Limpiar_Texto($row["Descripcion"]).'</td>';
+      echo '<td align="center">'.($row["Descripcion"]).'</td>';
       echo '
       <td align="center">
         <form autocomplete="off" action="">
@@ -364,7 +364,7 @@
               <input id="IdArt" name="IdArt" type="hidden" value="'.$row["Id"].'">
               <input id="IdFact" name="IdFact" type="hidden" value="'.$IdFatura.'">
             <input id="IdProv" name="IdProv" type="hidden" value="'.$IdProveedor.'">
-            <input id="NombreProv" name="NombreProv" type="hidden" value="'.FG_Limpiar_Texto($NombreProveedor).'">
+            <input id="NombreProv" name="NombreProv" type="hidden" value="'.($NombreProveedor).'">
           </form>
           <br>
         ';
@@ -461,7 +461,7 @@
         <tr>
       ';
       echo '<td>'.$NumeroFactura.'</td>';
-    echo '<td>'.FG_Limpiar_Texto($NombreProveedor).'</td>';
+    echo '<td>'.($NombreProveedor).'</td>';
     echo '
       </tr>
       </tbody>
@@ -485,7 +485,7 @@
       
       echo '<tr>';
       echo '<td align="center">'.$row["CodigoArticulo"].'</td>';
-      echo '<td align="center">'.FG_Limpiar_Texto($row["Descripcion"]).'</td>';
+      echo '<td align="center">'.($row["Descripcion"]).'</td>';
       echo '<td align="center">'.number_format($row2["M_PrecioTroquelado"],2,"," ,"." ).'</td>';
 
 
@@ -506,7 +506,7 @@
               <input id="IdArt" name="IdArt" type="hidden" value="'.$row["Id"].'">
               <input id="IdFact" name="IdFact" type="hidden" value="'.$IdFatura.'">
             <input id="IdProv" name="IdProv" type="hidden" value="'.$IdProveedor.'">
-            <input id="NombreProv" name="NombreProv" type="hidden" value="'.FG_Limpiar_Texto($NombreProveedor).'">
+            <input id="NombreProv" name="NombreProv" type="hidden" value="'.($NombreProveedor).'">
         </td>
           </form>
           <br>
@@ -604,7 +604,7 @@
         <tr>
       ';
       echo '<td>'.$NumeroFactura.'</td>';
-    echo '<td>'.FG_Limpiar_Texto($NombreProveedor).'</td>';
+    echo '<td>'.($NombreProveedor).'</td>';
       echo '
         </tr>
         </tbody>
