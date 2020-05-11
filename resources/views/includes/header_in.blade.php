@@ -288,6 +288,20 @@
         if(Auth::user()->role == 'SUPERVISOR'){
       ?>
         <li class="nav-item">
+          <a class="nav-link CP-Links-Menu" href="{{ url('/ordenCompra') }}">     
+            <span data-feather="home"></span>
+            <i class="far fa-file-alt"></i>
+            Orden de compra<span class="sr-only">(current)</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link CP-Links-Menu" href="{{ url('/traslado') }}">     
+            <span data-feather="home"></span>
+            <i class="fas fa-people-carry"></i>
+            Traslado<span class="sr-only">(current)</span>
+          </a>
+        </li>
+        <li class="nav-item">
           <a class="nav-link CP-Links-Menu" href="{{ url('/auditoria') }}">
             <span data-feather="home"></span>
             <i class="fas fa-search"></i>
