@@ -267,7 +267,9 @@
 					if(($traslado->estatus=='EMBALADO') && 
 						(Auth::user()->departamento == 'ADMINISTRACION'
 				    || Auth::user()->departamento == 'GERENCIA'
-				    || Auth::user()->departamento == 'TECNOLOGIA')
+				    || Auth::user()->departamento == 'TECNOLOGIA'
+				    || (Auth::user()->departamento == 'SURTIDO' && Auth::user()->role == 'SUPERVISOR')
+				  )
 						){
 					?>
 						<form action="/traslado/{{$traslado->id}}" method="POST" style="display: inline;">
