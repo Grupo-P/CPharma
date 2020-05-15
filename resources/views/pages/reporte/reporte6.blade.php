@@ -255,6 +255,9 @@
               <th scope="col" class="CP-sticky">Codigo de Barra</th>
               <th scope="col" class="CP-sticky">Descripcion</th>              
               <th scope="col" class="CP-sticky">Existencia</th>
+              <th scope="col" class="CP-sticky">Dolarizado?</td>
+              <th scope="col" class="CP-sticky">Gravado?</td>
+              <th scope="col" class="CP-sticky">Clasificacion</td>
               <th scope="col" class="CP-sticky">Unidades vendidas</th>
               <th scope="col" class="CP-sticky">Unidades compradas</th>
               <th scope="col" class="CP-sticky">Venta diaria</th>
@@ -266,6 +269,7 @@
               <th scope="col" class="CP-sticky">Ultimo Lote</th>
               <th scope="col" class="CP-sticky">Ultima Venta (En Rango)</th>
               <th scope="col" class="CP-sticky">Ultima Venta</th>
+              <th scope="col" class="CP-sticky">Ultimo Proveedor</th>
               <th scope="col" class="CP-sticky">Pedir</th> 
               <th scope="col" class="CP-sticky bg-danger text-white">Pedir (Real)</th>  
               <th scope="col" class="CP-sticky">Acciones</th>      
@@ -281,6 +285,12 @@
         $result2 = mysqli_query($connCPharma,$sql2);
         $row2 = $result2->fetch_assoc();
         $RangoDiasQuiebre = $row2['Cuenta'];
+
+        $sqlCPharma = SQL_Etiqueta_Articulo($IdArticulo);
+        $ResultCPharma = mysqli_query($connCPharma,$sqlCPharma);
+        $RowCPharma = mysqli_fetch_assoc($ResultCPharma);
+        $clasificacion = $RowCPharma['clasificacion'];
+        $clasificacion = ($clasificacion!="")?$clasificacion:"NO CLASIFICADO";
 
         $sql1 = R6Q_Integracion_Pedido_Productos($IdArticulo,$FInicial,$FFinal);
         $result1 = sqlsrv_query($conn,$sql1);
@@ -314,9 +324,13 @@
         $UltimoLote = $row2["UltimoLote"]; 
         $UltimoPrecio = $row2["UltimoPrecio"];
         $UltimaVenta = $row2["UltimaVenta"];
+        $UltimoProveedorNombre = $row2["UltimoProveedorNombre"];
         
         $VentaDiaria = FG_Venta_Diaria($UnidadesVendidas,$RangoDias);
         $DiasRestantes = FG_Dias_Restantes($Existencia,$VentaDiaria);
+
+        $Dolarizado = FG_Producto_Dolarizado($Dolarizado);
+        $Gravado = FG_Producto_Gravado($IsIVA);
 
         $Precio = FG_Calculo_Precio_Alfa($Existencia,$ExistenciaAlmacen1,$ExistenciaAlmacen2,$IsTroquelado,$UtilidadArticulo,$UtilidadCategoria,$TroquelAlmacen1,$PrecioCompraBrutoAlmacen1,$TroquelAlmacen2,
         $PrecioCompraBrutoAlmacen2,$PrecioCompraBruto,$IsIVA,$CondicionExistencia);
@@ -338,6 +352,11 @@
         '</a>
         </td>';
         echo '<td align="center">'.intval($Existencia).'</td>';
+
+        echo '<td align="center">'.$Dolarizado.'</td>';
+        echo '<td align="center">'.$Gravado.'</td>';
+        echo '<td align="center">'.$clasificacion.'</td>';
+
         echo
         '<td align="center" class="CP-barrido">
         <a href="reporte12?fechaInicio='.$FInicial.'&fechaFin='.$FFinalImp.'&SEDE='.$SedeConnection.'&Descrip='.$Descripcion.'&Id='.$IdArticulo.'" style="text-decoration: none; color: black;" target="_blank">'
@@ -384,8 +403,15 @@
           echo '<td align="center"> - </td>';
         }
 
+        if(!is_null($UltimoProveedorNombre)){
+          echo '<td align="center">'.$UltimoProveedorNombre.'</td>';
+        }
+        else{
+          echo '<td align="center"> - </td>';
+        }
+
         echo '<td align="center">'.intval($CantidadPedido).'</td>';
-         echo '<td align="center" class="bg-danger text-white">'.round($CantidadPedidoQuiebre,2).'</td>';
+        echo '<td align="center" class="bg-danger text-white">'.round($CantidadPedidoQuiebre,2).'</td>';
 
       /*BOTON PARA AGREGAR A LA ORDEN DE COMPRA*/
 
@@ -484,6 +510,9 @@
               <th scope="col" class="CP-sticky">Codigo de Barra</th>
               <th scope="col" class="CP-sticky">Descripcion</th>              
               <th scope="col" class="CP-sticky">Existencia</th>
+              <th scope="col" class="CP-sticky">Dolarizado?</td>
+              <th scope="col" class="CP-sticky">Gravado?</td>
+              <th scope="col" class="CP-sticky">Clasificacion</td>
               <th scope="col" class="CP-sticky">Unidades vendidas</th>
               <th scope="col" class="CP-sticky">Unidades compradas</th>
               <th scope="col" class="CP-sticky">Venta diaria</th>
@@ -491,9 +520,11 @@
               <th scope="col" class="CP-sticky">Dias restantes</th>
               <th scope="col" class="CP-sticky bg-danger text-white">Dias restantes (Real)</th>
               <th scope="col" class="CP-sticky">Precio (Con IVA) '.SigVe.'</th>
+              <th scope="col" class="CP-sticky">Ultimo Precio (Sin IVA) '.SigVe.'</th>
               <th scope="col" class="CP-sticky">Ultimo Lote</th>
               <th scope="col" class="CP-sticky">Ultima Venta (En Rango)</th>
               <th scope="col" class="CP-sticky">Ultima Venta</th>
+              <th scope="col" class="CP-sticky">Ultimo Proveedor</th>
               <th scope="col" class="CP-sticky">Pedir</th>
               <th scope="col" class="CP-sticky bg-danger text-white">Pedir (Real)</th> 
               <th scope="col" class="CP-sticky">Acciones</th>         
@@ -511,6 +542,12 @@
           $result3 =  sqlsrv_query($conn,$sql3);
           $row3 = sqlsrv_fetch_array($result3, SQLSRV_FETCH_ASSOC);
           $IdArticulo = $row3['InvArticuloId'];
+
+          $sqlCPharma = SQL_Etiqueta_Articulo($IdArticulo);
+          $ResultCPharma = mysqli_query($connCPharma,$sqlCPharma);
+          $RowCPharma = mysqli_fetch_assoc($ResultCPharma);
+          $clasificacion = $RowCPharma['clasificacion'];
+          $clasificacion = ($clasificacion!="")?$clasificacion:"NO CLASIFICADO";
         
           $sql2 = MySQL_Cuenta_Veces_Dias_Cero($IdArticulo,$FInicial,$FFinal);
           $result2 = mysqli_query($connCPharma,$sql2);
@@ -548,6 +585,10 @@
           $UltimoLote = $row2["UltimoLote"]; 
           $UltimoPrecio = $row2["UltimoPrecio"];
           $UltimaVenta = $row2["UltimaVenta"];
+          $UltimoProveedorNombre = $row2["UltimoProveedorNombre"];
+
+          $Dolarizado = FG_Producto_Dolarizado($Dolarizado);
+          $Gravado = FG_Producto_Gravado($IsIVA);
 
           $Precio = FG_Calculo_Precio_Alfa($Existencia,$ExistenciaAlmacen1,$ExistenciaAlmacen2,$IsTroquelado,$UtilidadArticulo,$UtilidadCategoria,$TroquelAlmacen1,$PrecioCompraBrutoAlmacen1,$TroquelAlmacen2,
           $PrecioCompraBrutoAlmacen2,$PrecioCompraBruto,$IsIVA,$CondicionExistencia);
@@ -575,6 +616,11 @@
           '</a>
           </td>';
           echo '<td align="center">'.intval($Existencia).'</td>';
+
+          echo '<td align="center">'.$Dolarizado.'</td>';
+          echo '<td align="center">'.$Gravado.'</td>';
+          echo '<td align="center">'.$clasificacion.'</td>';
+          
           echo
           '<td align="center" class="CP-barrido">
           <a href="reporte12?fechaInicio='.$FInicial.'&fechaFin='.$FFinalImp.'&SEDE='.$SedeConnection.'&Descrip='.$Descripcion.'&Id='.$IdArticulo.'" style="text-decoration: none; color: black;" target="_blank">'
@@ -592,6 +638,13 @@
           echo '<td align="center">'.round($DiasRestantes,2).'</td>';
           echo '<td align="center" class="bg-danger text-white">'.round($DiasRestantesQuiebre,2).'</td>';
           echo '<td align="center">'.number_format($Precio,2,"," ,"." ).'</td>';
+
+          if( ($Existencia==0) && (!is_null($UltimaVenta)) ){
+            echo '<td align="center">'.number_format($UltimoPrecio,2,"," ,"." ).'</td>';
+          }
+          else{
+            echo '<td align="center"> - </td>';
+          }
           
           if(!is_null($UltimoLote)){
             echo '<td align="center">'.$UltimoLote->format('d-m-Y').'</td>';
@@ -613,6 +666,14 @@
           else{
             echo '<td align="center"> - </td>';
           }
+
+          if(!is_null($UltimoProveedorNombre)){
+            echo '<td align="center">'.$UltimoProveedorNombre.'</td>';
+          }
+          else{
+            echo '<td align="center"> - </td>';
+          }
+
           echo '<td align="center">'.intval($CantidadPedido).'</td>';
           echo '<td align="center" class="bg-danger text-white">'.round($CantidadPedidoQuiebre,2).'</td>';
 
