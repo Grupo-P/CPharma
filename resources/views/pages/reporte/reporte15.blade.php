@@ -145,6 +145,7 @@
             <th scope="col" class="CP-sticky">Existencia</th>
             <th scope="col" class="CP-sticky">Gravado?</td>
             <th scope="col" class="CP-sticky">Clasificacion</td>
+            <th scope="col" class="CP-sticky">Costo Bruto '.SigVe.'</td>
             <th scope="col" class="CP-sticky">Valor lote '.SigVe.'</th>
             <th scope="col" class="CP-sticky">Ultimo lote</th>
             <th scope="col" class="CP-sticky">Tasa historico  '.SigVe.'</th>
@@ -198,6 +199,8 @@
             $PrecioCompraBruto = $row2["PrecioCompraBruto"];
             $CondicionExistencia = 'CON_EXISTENCIA';
 
+            $costo_bruto_max = max($PrecioCompraBrutoAlmacen1,$PrecioCompraBrutoAlmacen2,$PrecioCompraBruto);
+
             $Gravado = FG_Producto_Gravado($IsIVA);
 
             $Precio = FG_Calculo_Precio_Alfa($Existencia,$ExistenciaAlmacen1,$ExistenciaAlmacen2,$IsTroquelado,$UtilidadArticulo,$UtilidadCategoria,$TroquelAlmacen1,$PrecioCompraBrutoAlmacen1,$TroquelAlmacen2,
@@ -221,6 +224,7 @@
                   <td align="center">'.intval($Existencia).'</td>
                   <td align="center">'.$Gravado.'</td>
                   <td align="center">'.$clasificacion.'</td>
+                  <td align="center">'.$costo_bruto_max.'</td>
                   <td align="center">'.number_format($ValorLote,2,"," ,"." ).'</td>
                   <td align="center">'.$row2['FechaLote']->format('d-m-Y').'</td>
             ';
