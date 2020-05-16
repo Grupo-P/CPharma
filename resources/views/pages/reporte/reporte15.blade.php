@@ -139,9 +139,12 @@
           <tr>
             <th scope="col" class="CP-sticky">#</th>
             <th scope="col" class="CP-sticky">Codigo</th>
+            <th scope="col" class="CP-sticky">Codigo de Barra</th>
             <th scope="col" class="CP-sticky">Descripcion</th>
             <th scope="col" class="CP-sticky">Precio '.SigVe.'</th>
             <th scope="col" class="CP-sticky">Existencia</th>
+            <th scope="col" class="CP-sticky">Gravado?</td>
+            <th scope="col" class="CP-sticky">Clasificacion</td>
             <th scope="col" class="CP-sticky">Valor lote '.SigVe.'</th>
             <th scope="col" class="CP-sticky">Ultimo lote</th>
             <th scope="col" class="CP-sticky">Tasa historico  '.SigVe.'</th>
@@ -174,6 +177,13 @@
 
           if($Diferencia < 0) {
 
+            $sqlCPharma = SQL_Etiqueta_Articulo($IdArticulo);
+            $ResultCPharma = mysqli_query($connCPharma,$sqlCPharma);
+            $RowCPharma = mysqli_fetch_assoc($ResultCPharma);
+            $clasificacion = $RowCPharma['clasificacion'];
+            $clasificacion = ($clasificacion!="")?$clasificacion:"NO CLASIFICADO";
+
+            $CodigoBarra = $row2["CodigoBarra"];
             $Existencia = $row2["Existencia"];
             $ExistenciaAlmacen1 = $row2["ExistenciaAlmacen1"];
             $ExistenciaAlmacen2 = $row2["ExistenciaAlmacen2"];
@@ -188,17 +198,20 @@
             $PrecioCompraBruto = $row2["PrecioCompraBruto"];
             $CondicionExistencia = 'CON_EXISTENCIA';
 
+            $Gravado = FG_Producto_Gravado($IsIVA);
+
             $Precio = FG_Calculo_Precio_Alfa($Existencia,$ExistenciaAlmacen1,$ExistenciaAlmacen2,$IsTroquelado,$UtilidadArticulo,$UtilidadCategoria,$TroquelAlmacen1,$PrecioCompraBrutoAlmacen1,$TroquelAlmacen2,
     $PrecioCompraBrutoAlmacen2,$PrecioCompraBruto,$IsIVA,$CondicionExistencia);
 
             $ValorLote = $Precio * intval($Existencia);
             $Tasa = FG_Tasa_Fecha($connCPharma,$UltimoLote);
             $Descripcion = FG_Limpiar_Texto($row2["Descripcion"]);
-
+          
             echo '
               <tr>
                 <td align="center"><strong>'.intval($contador).'</strong></td>
                   <td align="center">'.$row2["CodigoArticulo"].'</td>
+                  <td align="center">'.$CodigoBarra.'</td>
                   <td align="left" class="CP-barrido">
                     <a href="/reporte10?Descrip='.$Descripcion.'&Id='.$IdArticulo.'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
                       .$Descripcion
@@ -206,6 +219,8 @@
                   </td>
                   <td align="center">'.number_format($Precio,2,"," ,"." ).'</td>
                   <td align="center">'.intval($Existencia).'</td>
+                  <td align="center">'.$Gravado.'</td>
+                  <td align="center">'.$clasificacion.'</td>
                   <td align="center">'.number_format($ValorLote,2,"," ,"." ).'</td>
                   <td align="center">'.$row2['FechaLote']->format('d-m-Y').'</td>
             ';
@@ -277,6 +292,12 @@
 
       InvArticulo.Id AS InvArticuloId,--Id del articulo
       InvArticulo.CodigoArticulo,--Codigo interno
+
+      --Codigo de Barra
+      (SELECT CodigoBarra
+      FROM InvCodigoBarra 
+      WHERE InvCodigoBarra.InvArticuloId = InvArticulo.Id
+      AND InvCodigoBarra.EsPrincipal = 1) AS CodigoBarra,
 
       --Dolarizado (0 NO es dolarizado, Id Articulo SI es dolarizado)
       (ISNULL((SELECT
