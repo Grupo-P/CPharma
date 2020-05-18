@@ -177,6 +177,7 @@
                   <option value="CONTADO">CONTADO</option>
                   <option value="CREDITO">CREDITO</option>
                   <option value="PRE PAGADO">PRE PAGADO</option>
+                  <option value="A CONSIGNACION">A CONSIGNACION</option>
                 </select>
               </td>
           </tr>
