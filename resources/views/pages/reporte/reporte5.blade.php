@@ -120,6 +120,7 @@
   */
   function R5_Productos_Falla($SedeConnection,$FInicial,$FFinal){
     $conn = FG_Conectar_Smartpharma($SedeConnection);
+    $connCPharma = FG_Conectar_CPharma();
 
     $FInicialImp = date("d-m-Y", strtotime($FInicial));
     $FFinalImp= date("d-m-Y", strtotime($FFinal));
@@ -148,13 +149,18 @@
         <tr>  
           <th scope="col" class="CP-sticky">#</th>
           <th scope="col" class="CP-sticky">Codigo</th>
+          <th scope="col" class="CP-sticky">Codigo de Barra</th>
           <th scope="col" class="CP-sticky">Descripcion</th>
           <th scope="col" class="CP-sticky">Tipo</th>
           <th scope="col" class="CP-sticky">Existencia</th>
+          <th scope="col" class="CP-sticky">Dolarizado?</td>
+          <th scope="col" class="CP-sticky">Gravado?</td>
+          <th scope="col" class="CP-sticky">Clasificacion</td>
           <th scope="col" class="CP-sticky">Unidades vendidas</th>
           <th scope="col" class="CP-sticky">Total de Venta '.SigVe.'</th>
           <th scope="col" class="CP-sticky">Ultima Venta</th>
           <th scope="col" class="CP-sticky">Dias en Falla</th>
+          <th scope="col" class="CP-sticky">Ultimo Lote</th>
           <th scope="col" class="CP-sticky">Ultimo Proveedor</th>             
         </tr>
       </thead>
@@ -171,6 +177,7 @@
       $row1 = sqlsrv_fetch_array($result1,SQLSRV_FETCH_ASSOC);
 
       $CodigoArticulo = $row1["CodigoInterno"];
+      $CodigoBarra = $row1["CodigoBarra"];
       $Descripcion = FG_Limpiar_Texto($row1["Descripcion"]);
       $Existencia = $row1["Existencia"];
       $Tipo = FG_Tipo_Producto($row1["Tipo"]);
@@ -178,10 +185,23 @@
       $UltimoProveedorId =  $row1["UltimoProveedorID"];
       $UltimoProveedor =  FG_Limpiar_Texto($row1["UltimoProveedorNombre"]);
       $DiasEnFalla = $row1["TiempoSinVenta"];
+      $Dolarizado = $row1["Dolarizado"];
+      $IsIVA = $row1["Impuesto"];
+      $UltimoLote = $row1["UltimoLote"];
+
+      $Dolarizado = FG_Producto_Dolarizado($Dolarizado);
+      $Gravado = FG_Producto_Gravado($IsIVA);
+
+      $sqlCPharma = SQL_Etiqueta_Articulo($IdArticulo);
+      $ResultCPharma = mysqli_query($connCPharma,$sqlCPharma);
+      $RowCPharma = mysqli_fetch_assoc($ResultCPharma);
+      $clasificacion = $RowCPharma['clasificacion'];
+      $clasificacion = ($clasificacion!="")?$clasificacion:"NO CLASIFICADO";
 
       echo '<tr>';
       echo '<td align="center"><strong>'.intval($contador).'</strong></td>';
       echo '<td align="left">'.$CodigoArticulo.'</td>';
+      echo '<td align="center">'.$CodigoBarra.'</td>';
       echo 
       '<td align="left" class="CP-barrido">
       <a href="/reporte2?Id='.$IdArticulo.'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
@@ -190,6 +210,9 @@
       </td>';
       echo '<td align="center">'.$Tipo.'</td>';
       echo '<td align="center">'.intval($Existencia).'</td>';
+      echo '<td align="center">'.$Dolarizado.'</td>';
+      echo '<td align="center">'.$Gravado.'</td>';
+      echo '<td align="center">'.$clasificacion.'</td>';
       echo
       '<td align="center" class="CP-barrido">
       <a href="reporte12?fechaInicio='.$FInicial.'&fechaFin='.$FFinalImp.'&SEDE='.$SedeConnection.'&Descrip='.$Descripcion.'&Id='.$IdArticulo.'" style="text-decoration: none; color: black;" target="_blank">'
@@ -206,6 +229,14 @@
       }
 
       echo '<td align="center">'.intval($DiasEnFalla).'</td>';
+
+      if(!is_null($UltimoLote)){
+        echo '<td align="center">'.$UltimoLote->format('d-m-Y').'</td>';
+      }
+      else{
+        echo '<td align="center"> - </td>';
+      }
+
       echo 
       '<td align="left" class="CP-barrido">
       <a href="/reporte7?Nombre='.$UltimoProveedor.'&Id='.$UltimoProveedorId.'&SEDE='.$SedeConnection.'" target="_blank" style="text-decoration: none; color: black;">'

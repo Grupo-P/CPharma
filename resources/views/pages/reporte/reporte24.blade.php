@@ -152,6 +152,7 @@
             <th scope="col" class="CP-sticky">Codigo de barra</th>            
             <th scope="col" class="CP-sticky">Descripcion</th>
             <th scope="col" class="CP-sticky">Tipo</th>
+            <th scope="col" class="CP-sticky">Gravado?</td>
             <th scope="col" class="CP-sticky">Dolarizado?</td>
             <th scope="col" class="CP-sticky">Clasificacion</td>
             <th scope="col" class="CP-sticky">Fecha de  creacion</th>
@@ -212,6 +213,7 @@
       ';
 
       echo '<td align="center">'.$Tipo.'</td>';
+      echo '<td align="center">'.$Gravado.'</td>';
       echo '<td align="center">'.$Dolarizado.'</td>';
       echo '<td align="center">'.$clasificacion.'</td>';
       echo '<td align="center">'.$fechaCreacion->format('d-m-Y').'</td>';

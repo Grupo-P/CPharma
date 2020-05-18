@@ -322,6 +322,9 @@
             <th scope="col" class="CP-sticky">Codigo de Barra</td>
             <th scope="col" class="CP-sticky">Descripcion</th>              
             <th scope="col" class="CP-sticky">Producto Unico</th>
+            <th scope="col" class="CP-sticky">Dolarizado?</td>
+            <th scope="col" class="CP-sticky">Gravado?</td>
+            <th scope="col" class="CP-sticky">Clasificacion</td>
             <th scope="col" class="CP-sticky">Precio (Con IVA) '.SigVe.'</th>
             <th scope="col" class="CP-sticky">Ultimo Precio (Sin IVA) '.SigVe.'</th>
             <th scope="col" class="CP-sticky">Existencia</th>
@@ -333,6 +336,8 @@
             <th scope="col" class="CP-sticky bg-danger text-white">Dias restantes (Real)</th>
             <th scope="col" class="CP-sticky">Ultima Venta (En rango)</th>
             <th scope="col" class="CP-sticky">Ultima Venta</th>
+            <th scope="col" class="CP-sticky">Ultimo Lote</th>
+            <th scope="col" class="CP-sticky">Ultimo Proveedor</th>
             <th scope="col" class="CP-sticky">Pedir</th>
             <th scope="col" class="CP-sticky bg-danger text-white">Pedir (Real)</th> 
             <th scope="col" class="CP-sticky">Acciones</th>
@@ -349,6 +354,12 @@
       $result3 = mysqli_query($connCPharma,$sql3);
       $row3 = $result3->fetch_assoc();
       $RangoDiasQuiebre = $row3['Cuenta'];
+
+      $sqlCPharma = SQL_Etiqueta_Articulo($IdArticulo);
+      $ResultCPharma = mysqli_query($connCPharma,$sqlCPharma);
+      $RowCPharma = mysqli_fetch_assoc($ResultCPharma);
+      $clasificacion = $RowCPharma['clasificacion'];
+      $clasificacion = ($clasificacion!="")?$clasificacion:"NO CLASIFICADO";
 
       $sql2 = R7Q_Detalle_Articulo($IdArticulo);
       $result2 = sqlsrv_query($conn,$sql2);
@@ -375,6 +386,10 @@
       $UltimoPrecio = $row2["UltimoPrecio"];
       $UltimaVenta = $row2["UltimaVenta"];
       $Unico = FG_Producto_Unico($conn,$IdArticulo,$IdProveedor);
+      $UltimoProveedorNombre = $row2["UltimoProveedorNombre"];
+
+      $Dolarizado = FG_Producto_Dolarizado($Dolarizado);
+      $Gravado = FG_Producto_Gravado($IsIVA);
       
       $sql1 = R7Q_Integracion_Catalogo($IdArticulo,$FInicial,$FFinal);
       $result1 = sqlsrv_query($conn,$sql1);
@@ -404,6 +419,11 @@
       '</a>
       </td>';     
       echo '<td align="center">'.$Unico.'</td>';
+      
+      echo '<td align="center">'.$Dolarizado.'</td>';
+      echo '<td align="center">'.$Gravado.'</td>';
+      echo '<td align="center">'.$clasificacion.'</td>';
+
       echo '<td align="center">'.number_format($Precio,2,"," ,"." ).'</td>';
 
       if( ($Existencia==0) && (!is_null($UltimaVenta)) ){
@@ -444,6 +464,23 @@
       else{
         echo '<td align="center"> - </td>';
       }
+
+      if(($UltimoLote)){
+        echo '<td align="center">'.$UltimoLote->format('d-m-Y').'</td>';
+      }
+      else{
+        echo '<td align="center"> - </td>';
+      }
+
+      if(!is_null($UltimoProveedorNombre)){
+        echo '<td align="center">'.$UltimoProveedorNombre.'</td>';
+      }
+      else{
+        echo '<td align="center"> - </td>';
+      }
+
+
+
       echo '<td align="center">'.intval($CantidadPedido).'</td>';
       echo '<td align="center" class="bg-danger text-white">'.round($CantidadPedidoQuiebre,2).'</td>';
 

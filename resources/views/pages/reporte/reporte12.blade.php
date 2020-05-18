@@ -234,6 +234,13 @@
     $conn = FG_Conectar_Smartpharma($SedeConnection);
     $connCPharma = FG_Conectar_CPharma();
 
+
+    $sqlCPharma = SQL_Etiqueta_Articulo($IdArticulo);
+    $ResultCPharma = mysqli_query($connCPharma,$sqlCPharma);
+    $RowCPharma = mysqli_fetch_assoc($ResultCPharma);
+    $clasificacion = $RowCPharma['clasificacion'];
+    $clasificacion = ($clasificacion!="")?$clasificacion:"NO CLASIFICADO";
+
     $sql = R12Q_Detalle_Articulo($IdArticulo);
     $result = sqlsrv_query($conn,$sql);
     $row = sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC);
@@ -255,6 +262,9 @@
     $PrecioCompraBruto = $row["PrecioCompraBruto"];
     $Dolarizado = $row["Dolarizado"];
     $CondicionExistencia = 'CON_EXISTENCIA';
+    $UltimaVenta = $row["UltimaVenta"];
+
+    $Gravado = FG_Producto_Gravado($IsIVA);
 
     $Dolarizado = FG_Producto_Dolarizado($Dolarizado);
     $TasaActual = FG_Tasa_Fecha($connCPharma,date('Y-m-d'));
@@ -301,8 +311,11 @@
             <th scope="col">Dias restantes</th>
             <th scope="col">Precio</br>(Con IVA) '.SigVe.'</th>
             <th scope="col">Dolarizado</th>
+            <th scope="col">Gravado?</td>
+            <th scope="col">Clasificacion</td>
             <th scope="col">Tasa actual '.SigVe.'</th>
             <th scope="col">Precio en divisa</br>(Con IVA) '.SigDolar.'</th>
+            <th scope="col">Ultima Venta</th>
           </tr>
         </thead>
 
@@ -323,6 +336,8 @@
         <td align="center">'.$DiasRestantes.'</td>
         <td align="center">'.number_format($Precio,2,"," ,"." ).'</td>
         <td align="center">'.$Dolarizado.'</td>
+        <td align="center">'.$Gravado.'</td>
+        <td align="center">'.$clasificacion.'</td>
     ';
 
     if($TasaActual != 0) {
@@ -339,6 +354,13 @@
         <td align="center">0,00</td>
         <td align="center">0,00</td>
       ';
+    }
+
+    if(!is_null($UltimaVenta)){
+      echo '<td align="center">'.$UltimaVenta->format('d-m-Y').'</td>';
+    }
+    else{
+      echo '<td align="center"> - </td>';
     }
 
     echo '

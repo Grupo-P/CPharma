@@ -170,6 +170,9 @@
               <th scope="col" class="CP-sticky">Descripcion</td>
               <th scope="col" class="CP-sticky">Precio</br>(Con IVA) '.SigVe.'</td>
               <th scope="col" class="CP-sticky">Existencia</td>
+              <th scope="col" class="CP-sticky">Dolarizado?</td>
+              <th scope="col" class="CP-sticky">Gravado?</td>
+              <th scope="col" class="CP-sticky">Clasificacion</td>
               <th scope="col" class="CP-sticky">Dia 10</td>
               <th scope="col" class="CP-sticky">Dia 9</td>
               <th scope="col" class="CP-sticky">Dia 8</td>
@@ -213,7 +216,18 @@
       $result1 = sqlsrv_query($conn,$sql1);
       $row1 = sqlsrv_fetch_array($result1,SQLSRV_FETCH_ASSOC);
       $CodigoBarra = $row1["CodigoBarra"];
-      $UltimoProveedor = FG_Limpiar_Texto($row1["UltimoProveedorNombre"]); 
+      $UltimoProveedor = FG_Limpiar_Texto($row1["UltimoProveedorNombre"]);
+      $IsIVA = $row1["Impuesto"];
+      $Dolarizado = $row1["Dolarizado"]; 
+
+      $Dolarizado = FG_Producto_Dolarizado($Dolarizado);
+      $Gravado = FG_Producto_Gravado($IsIVA);
+
+      $sqlCPharma = SQL_Etiqueta_Articulo($IdArticulo);
+      $ResultCPharma = mysqli_query($connCPharma,$sqlCPharma);
+      $RowCPharma = mysqli_fetch_assoc($ResultCPharma);
+      $clasificacion = $RowCPharma['clasificacion'];
+      $clasificacion = ($clasificacion!="")?$clasificacion:"NO CLASIFICADO";
 
       echo '<tr>';
       echo '<td align="center"><strong>'.intval($contador).'</strong></td>';
@@ -228,6 +242,9 @@
 
       echo '<td align="center">'.number_format($Precio,2,"," ,"." ).'</td>';
       echo '<td align="center">'.intval($Existencia).'</td>';
+      echo '<td align="center">'.$Dolarizado.'</td>';
+      echo '<td align="center">'.$Gravado.'</td>';
+      echo '<td align="center">'.$clasificacion.'</td>';
       echo '<td align="center">'.intval($Dia10).'</td>';
       echo '<td align="center">'.intval($Dia9).'</td>';
       echo '<td align="center">'.intval($Dia8).'</td>';
