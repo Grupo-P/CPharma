@@ -24,7 +24,7 @@ define ("SedeFAUOFF","Farmacia Avenida Universidad (OFF-LINE)");
 /********* CADENA DE CONEXION CON LA BASE DE DATOS LOCAL DEL CPHARMA *************/
 define ("serverCP","localhost:3306");	
 define ("userCP","root");
-define ("passCP",""); //.JR@2ZUS8m2M*gW
+define ("passCP",".JR@2ZUS8m2M*gW"); //.JR@2ZUS8m2M*gW
 define ("nameCP","cpharma");
 /**********************************************************************************/
 /************************* CONEXION ON LINE FTN **********************************/

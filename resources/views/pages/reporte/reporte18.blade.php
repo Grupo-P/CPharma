@@ -280,6 +280,8 @@
     DESAROLLADO POR: SERGIO COVA
   */
   function R18_Factura_Articulo($SedeConnection,$IdProveedor,$NombreProveedor,$IdFatura){
+
+    $connCPharma = FG_Conectar_CPharma();
     
     $conn = FG_Conectar_Smartpharma($SedeConnection);
     $sql1 = R18Q_Factura_Articulo($IdFatura);
@@ -327,21 +329,77 @@
           <tr>
             <th scope="col" class="CP-sticky">#</th>
             <th scope="col" class="CP-sticky">Codigo</th>
+            <th scope="col" class="CP-sticky">Codigo de Barra</th>
             <th scope="col" class="CP-sticky">Descripcion</th>
+            <th scope="col" class="CP-sticky">Existencia (Actual)</th>
+            <th scope="col" class="CP-sticky">Dolarizado?</td>
+            <th scope="col" class="CP-sticky">Gravado?</td>
+            <th scope="col" class="CP-sticky">Clasificacion</td>
+            <th scope="col" class="CP-sticky">Precio de venta '.SigVe.'</th>
             <th scope="col" class="CP-sticky">Cantidad Recibida</th>
             <th scope="col" class="CP-sticky">Costo Bruto (Sin IVA)</th>
             <th scope="col" class="CP-sticky">Lote del fabricante</th>
             <th scope="col" class="CP-sticky">Fecha de vencimiento</th>
+            <th scope="col" class="CP-sticky">Ultimo Lote</th>
+            <th scope="col" class="CP-sticky">Ultima Venta</th>
+            <th scope="col" class="CP-sticky">Ultimo Proveedor</th>
           </tr>
         </thead>
         <tbody>
      ';
     $contador = 1;
     while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
+      $IdArticulo = $row["Id"];
+
+      $sql2 = SQG_Detalle_Articulo($IdArticulo);
+      $result2 = sqlsrv_query($conn,$sql2);
+      $row2 = sqlsrv_fetch_array($result2, SQLSRV_FETCH_ASSOC);
+      
+      $CodigoBarra = $row2["CodigoBarra"];
+      $Existencia = $row2["Existencia"];
+      $ExistenciaAlmacen1 = $row2["ExistenciaAlmacen1"];
+      $ExistenciaAlmacen2 = $row2["ExistenciaAlmacen2"];
+      $IsTroquelado = $row2["Troquelado"];
+      $IsIVA = $row2["Impuesto"];
+      $UtilidadArticulo = $row2["UtilidadArticulo"];
+      $UtilidadCategoria = $row2["UtilidadCategoria"];
+      $TroquelAlmacen1 = $row2["TroquelAlmacen1"];
+      $PrecioCompraBrutoAlmacen1 = $row2["PrecioCompraBrutoAlmacen1"];
+      $TroquelAlmacen2 = $row2["TroquelAlmacen2"];
+      $PrecioCompraBrutoAlmacen2 = $row2["PrecioCompraBrutoAlmacen2"];
+      $PrecioCompraBruto = $row2["PrecioCompraBruto"];
+      $Dolarizado = $row2["Dolarizado"];
+      $CondicionExistencia = 'CON_EXISTENCIA';
+      $UltimoLote = $row2["UltimoLote"]; 
+      $UltimaVenta = $row2["UltimaVenta"];
+      $UltimoProveedorNombre = $row2["UltimoProveedorNombre"];
+      $UltimoProveedorId = $row2["UltimoProveedorID"];
+      
+      $Dolarizado = FG_Producto_Dolarizado($Dolarizado);
+      $Gravado = FG_Producto_Gravado($IsIVA);
+
+      $Precio = FG_Calculo_Precio_Alfa($Existencia,$ExistenciaAlmacen1,$ExistenciaAlmacen2,$IsTroquelado,$UtilidadArticulo,$UtilidadCategoria,$TroquelAlmacen1,$PrecioCompraBrutoAlmacen1,$TroquelAlmacen2,
+      $PrecioCompraBrutoAlmacen2,$PrecioCompraBruto,$IsIVA,$CondicionExistencia);
+
+      $Dolarizado = FG_Producto_Dolarizado($Dolarizado);
+      $Gravado = FG_Producto_Gravado($IsIVA);
+
+      $sqlCPharma = SQL_Etiqueta_Articulo($IdArticulo);
+      $ResultCPharma = mysqli_query($connCPharma,$sqlCPharma);
+      $RowCPharma = mysqli_fetch_assoc($ResultCPharma);
+      $clasificacion = $RowCPharma['clasificacion'];
+      $clasificacion = ($clasificacion!="")?$clasificacion:"NO CLASIFICADO";
+
       echo '<tr>';
       echo '<td align="center"><strong>'.intval($contador).'</strong></td>';
       echo '<td align="center">'.$row["CodigoArticulo"].'</td>';
+      echo '<td align="center">'.$CodigoBarra.'</td>';
       echo '<td align="center">'.FG_Limpiar_Texto($row["Descripcion"]).'</td>';
+      echo '<td align="center">'.intval($Existencia).'</td>';
+      echo '<td align="center">'.$Dolarizado.'</td>';
+      echo '<td align="center">'.$Gravado.'</td>';
+      echo '<td align="center">'.$clasificacion.'</td>';
+      echo '<td align="center">'.number_format($Precio,2,"," ,"." ).'</td>';
       echo '<td align="center">'.intval($row["CantidadRecibidaFactura"]).'</td>';
       echo '<td align="center">'.number_format($row["M_PrecioCompraBruto"],2,"," ,"." ).'</td>';
       echo '<td align="center">'.$row["NumeroLoteFabricante"].'</td>';
@@ -352,6 +410,27 @@
       else{
         echo '<td align="center">-</td>';
       }
+
+      if(($UltimoLote)){
+        echo '<td align="center">'.$UltimoLote->format('d-m-Y').'</td>';
+      }
+      else{
+        echo '<td align="center"> - </td>';
+      }
+
+      if(!is_null($UltimaVenta)){
+        echo '<td align="center">'.$UltimaVenta->format('d-m-Y').'</td>';
+      }
+      else{
+        echo '<td align="center"> - </td>';
+      }
+
+      if(!is_null($UltimoProveedorNombre)){
+          echo '<td align="center">'.$UltimoProveedorNombre.'</td>';
+        }
+        else{
+          echo '<td align="center"> - </td>';
+        }
       
       echo '</tr>';
     $contador++;
