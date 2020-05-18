@@ -291,6 +291,15 @@
     $resultNFact = sqlsrv_query($conn,$sqlNFact);
     $rowNFact = sqlsrv_fetch_array($resultNFact,SQLSRV_FETCH_ASSOC);
     $NumeroFactura = $rowNFact["NumeroFactura"];
+    
+    $fechaDocumento = $rowNFact["FechaDocumento"];
+    $fechaDocumentoMostrar = $fechaDocumento->format('d-m-Y');
+    $fechaDocumentoLink = $fechaDocumento->format('Y-m-d');
+
+    $fechaActual = new DateTime('now');
+    $fechaActual = date_format($fechaActual,'Y-m-d');
+
+    $NombreProveedor = FG_Limpiar_Texto($NombreProveedor);
 
     echo '
     <div class="input-group md-form form-sm form-1 pl-0 CP-stickyBar">
@@ -317,7 +326,14 @@
         <tr>
       ';
       echo '<td>'.$NumeroFactura.'</td>';
-    echo '<td>'.FG_Limpiar_Texto($NombreProveedor).'</td>';
+      
+      echo 
+        '<td align="left" class="CP-barrido">
+        <a href="/reporte7?Nombre='.$NombreProveedor.'&Id='.$IdProveedor.'&SEDE='.$SedeConnection.'" target="_blank" style="text-decoration: none; color: black;">'
+          .$NombreProveedor.
+        '</a>
+        </td>';
+
       echo '
         </tr>
         </tbody>
@@ -331,18 +347,17 @@
             <th scope="col" class="CP-sticky">Codigo</th>
             <th scope="col" class="CP-sticky">Codigo de Barra</th>
             <th scope="col" class="CP-sticky">Descripcion</th>
-            <th scope="col" class="CP-sticky">Existencia (Actual)</th>
+            <th scope="col" class="CP-sticky">Existencia</th>
             <th scope="col" class="CP-sticky">Dolarizado?</td>
             <th scope="col" class="CP-sticky">Gravado?</td>
             <th scope="col" class="CP-sticky">Clasificacion</td>
-            <th scope="col" class="CP-sticky">Precio de venta '.SigVe.'</th>
+            <th scope="col" class="CP-sticky">Precio </br> (Con IVA) '.SigVe.'</th>
             <th scope="col" class="CP-sticky">Cantidad Recibida</th>
-            <th scope="col" class="CP-sticky">Costo Bruto (Sin IVA)</th>
+            <th scope="col" class="CP-sticky">Costo Bruto </br> (Sin IVA)</th>
             <th scope="col" class="CP-sticky">Lote del fabricante</th>
             <th scope="col" class="CP-sticky">Fecha de vencimiento</th>
             <th scope="col" class="CP-sticky">Ultimo Lote</th>
             <th scope="col" class="CP-sticky">Ultima Venta</th>
-            <th scope="col" class="CP-sticky">Ultimo Proveedor</th>
           </tr>
         </thead>
         <tbody>
@@ -356,6 +371,7 @@
       $row2 = sqlsrv_fetch_array($result2, SQLSRV_FETCH_ASSOC);
       
       $CodigoBarra = $row2["CodigoBarra"];
+      $Descripcion = FG_Limpiar_Texto($row2["Descripcion"]);
       $Existencia = $row2["Existencia"];
       $ExistenciaAlmacen1 = $row2["ExistenciaAlmacen1"];
       $ExistenciaAlmacen2 = $row2["ExistenciaAlmacen2"];
@@ -372,8 +388,6 @@
       $CondicionExistencia = 'CON_EXISTENCIA';
       $UltimoLote = $row2["UltimoLote"]; 
       $UltimaVenta = $row2["UltimaVenta"];
-      $UltimoProveedorNombre = $row2["UltimoProveedorNombre"];
-      $UltimoProveedorId = $row2["UltimoProveedorID"];
       
       $Dolarizado = FG_Producto_Dolarizado($Dolarizado);
       $Gravado = FG_Producto_Gravado($IsIVA);
@@ -394,13 +408,27 @@
       echo '<td align="center"><strong>'.intval($contador).'</strong></td>';
       echo '<td align="center">'.$row["CodigoArticulo"].'</td>';
       echo '<td align="center">'.$CodigoBarra.'</td>';
-      echo '<td align="center">'.FG_Limpiar_Texto($row["Descripcion"]).'</td>';
+
+      echo 
+        '<td align="left" class="CP-barrido">
+        <a href="/reporte2?Id='.$IdArticulo.'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
+          .$Descripcion.
+        '</a>
+        </td>';
+
       echo '<td align="center">'.intval($Existencia).'</td>';
       echo '<td align="center">'.$Dolarizado.'</td>';
       echo '<td align="center">'.$Gravado.'</td>';
       echo '<td align="center">'.$clasificacion.'</td>';
       echo '<td align="center">'.number_format($Precio,2,"," ,"." ).'</td>';
-      echo '<td align="center">'.intval($row["CantidadRecibidaFactura"]).'</td>';
+      
+      echo
+        '<td align="center" class="CP-barrido">
+        <a href="/reporte6?pedido=15&fechaInicio='.$fechaDocumentoLink.'&fechaFin='.$fechaActual.'&SEDE='.$SedeConnection.'&flag=BsqDescrip&Descrip='.$Descripcion.'&IdD='.$IdArticulo.'&CodBar=&IdCB=" style="text-decoration: none; color: black;" target="_blank">'
+          .intval($row['CantidadRecibidaFactura']).
+        '</a>
+        </td>';
+
       echo '<td align="center">'.number_format($row["M_PrecioCompraBruto"],2,"," ,"." ).'</td>';
       echo '<td align="center">'.$row["NumeroLoteFabricante"].'</td>';
 
@@ -424,13 +452,6 @@
       else{
         echo '<td align="center"> - </td>';
       }
-
-      if(!is_null($UltimoProveedorNombre)){
-          echo '<td align="center">'.$UltimoProveedorNombre.'</td>';
-        }
-        else{
-          echo '<td align="center"> - </td>';
-        }
       
       echo '</tr>';
     $contador++;
@@ -475,7 +496,8 @@
   */
   function R18Q_Numero_Factura($IdFactura) {
     $sql = "
-      SELECT ComFactura.NumeroFactura AS NumeroFactura
+      SELECT ComFactura.NumeroFactura AS NumeroFactura,
+      CONVERT(DATE,ComFactura.FechaDocumento) As FechaDocumento
       FROM ComFactura 
       WHERE ComFactura.Id = '$IdFactura'
     ";
