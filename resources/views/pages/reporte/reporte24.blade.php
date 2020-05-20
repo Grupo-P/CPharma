@@ -159,6 +159,8 @@
             <th scope="col" class="CP-sticky">Cantidad recibida</td>
             <th scope="col" class="CP-sticky">Existencia</th>
             <th scope="col" class="CP-sticky">Precio</br>(Con IVA) '.SigVe.'</td>
+            <th scope="col" class="CP-sticky">Ultima Venta</th>
+            <th scope="col" class="CP-sticky">Ultimo Proveedor</th>
           </tr>
         </thead>
         <tbody>
@@ -188,6 +190,8 @@
       $Dolarizado = FG_Producto_Dolarizado($row["Dolarizado"]);
       $Gravado = FG_Producto_Gravado($IsIVA);
       $fechaCreacion = $row["fechaCreacion"];
+      $UltimaVenta = $row["UltimaVenta"];
+      $UltimoProveedorNombre = $row["UltimoProveedorNombre"];
       
       $Precio = FG_Calculo_Precio_Alfa($Existencia,$ExistenciaAlmacen1,$ExistenciaAlmacen2,$IsTroquelado,$UtilidadArticulo,$UtilidadCategoria,$TroquelAlmacen1,$PrecioCompraBrutoAlmacen1,$TroquelAlmacen2,
       $PrecioCompraBrutoAlmacen2,$PrecioCompraBruto,$IsIVA,$CondicionExistencia);
@@ -220,6 +224,21 @@
       echo '<td align="center">'.$CantidadRecibida.'</td>';
       echo '<td align="center">'.intval($Existencia).'</td>';
       echo '<td align="center">'.number_format($Precio,2,"," ,"." ).'</td>';
+
+      if(!is_null($UltimaVenta)){
+        echo '<td align="center">'.$UltimaVenta->format('d-m-Y').'</td>';
+      }
+      else{
+        echo '<td align="center"> - </td>';
+      }
+
+      if(!is_null($UltimoProveedorNombre)){
+        echo '<td align="center">'.$UltimoProveedorNombre.'</td>';
+      }
+      else{
+        echo '<td align="center"> - </td>';
+      }
+
       echo '</tr>';
       $contador++;
     }

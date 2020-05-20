@@ -395,9 +395,6 @@
       $Precio = FG_Calculo_Precio_Alfa($Existencia,$ExistenciaAlmacen1,$ExistenciaAlmacen2,$IsTroquelado,$UtilidadArticulo,$UtilidadCategoria,$TroquelAlmacen1,$PrecioCompraBrutoAlmacen1,$TroquelAlmacen2,
       $PrecioCompraBrutoAlmacen2,$PrecioCompraBruto,$IsIVA,$CondicionExistencia);
 
-      $Dolarizado = FG_Producto_Dolarizado($Dolarizado);
-      $Gravado = FG_Producto_Gravado($IsIVA);
-
       $sqlCPharma = SQL_Etiqueta_Articulo($IdArticulo);
       $ResultCPharma = mysqli_query($connCPharma,$sqlCPharma);
       $RowCPharma = mysqli_fetch_assoc($ResultCPharma);

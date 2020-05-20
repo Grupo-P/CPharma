@@ -203,6 +203,9 @@
             <th scope="col" class="CP-sticky">Codigo</th>            
             <th scope="col" class="CP-sticky">Descripcion</th>
             <th scope="col" class="CP-sticky">Existencia</th>
+            <th scope="col" class="CP-sticky">Dolarizado?</td>
+            <th scope="col" class="CP-sticky">Gravado?</td>
+            <th scope="col" class="CP-sticky">Clasificacion</td>
             <th scope="col" class="CP-sticky">Tipo</th>
             <th scope="col" class="CP-sticky">Total de Venta '.SigVe.'</th>
             <th scope="col" class="CP-sticky">Veces Facturado</th>            
@@ -212,6 +215,7 @@
             <th scope="col" class="CP-sticky bg-danger text-white">Venta diaria (Real)</th>
             <th scope="col" class="CP-sticky">Dias restantes</th>
             <th scope="col" class="CP-sticky bg-danger text-white">Dias restantes (Real)</th>
+            <th scope="col" class="CP-sticky">Ultimo Proveedor</th>
             <th scope="col" class="CP-sticky">Acciones</th>
           </tr>
         </thead>
@@ -237,12 +241,24 @@
       $Tipo = FG_Tipo_Producto($row1["Tipo"]);
       $TotalVenta = $row["TotalVenta"];
       $Venta = $row["TotalUnidadesVendidas"];
+      $IsIVA = $row1["Impuesto"];
+      $Dolarizado = $row1["Dolarizado"];
+      $UltimoProveedorNombre = $row1["UltimoProveedorNombre"];
+
+      $Dolarizado = FG_Producto_Dolarizado($Dolarizado);
+      $Gravado = FG_Producto_Gravado($IsIVA);
       
       $VentaDiaria = FG_Venta_Diaria($Venta,$RangoDias);
       $DiasRestantes = FG_Dias_Restantes($Existencia,$VentaDiaria);
 
       $VentaDiariaQuiebre = FG_Venta_Diaria($Venta,$RangoDiasQuiebre);
       $DiasRestantesQuiebre = FG_Dias_Restantes($Existencia,$VentaDiariaQuiebre);
+
+      $sqlCPharma = SQL_Etiqueta_Articulo($IdArticulo);
+      $ResultCPharma = mysqli_query($connCPharma,$sqlCPharma);
+      $RowCPharma = mysqli_fetch_assoc($ResultCPharma);
+      $clasificacion = $RowCPharma['clasificacion'];
+      $clasificacion = ($clasificacion!="")?$clasificacion:"NO CLASIFICADO";
 
       echo '<tr>';
       echo '<td align="center"><strong>'.intval($contador).'</strong></td>';
@@ -254,6 +270,9 @@
       '</a>
       </td>';
       echo '<td align="center">'.intval($Existencia).'</td>';
+      echo '<td align="center">'.$Dolarizado.'</td>';
+      echo '<td align="center">'.$Gravado.'</td>';
+      echo '<td align="center">'.$clasificacion.'</td>';
       echo '<td align="center">'.$Tipo.'</td>';
       echo '<td align="center">'.number_format($TotalVenta,2,"," ,"." ).'</td>';
       echo 
@@ -279,6 +298,12 @@
       echo '<td align="center">'.round($DiasRestantes,2).'</td>';
       echo '<td align="center" class="bg-danger text-white">'.round($DiasRestantesQuiebre,2).'</td>';
 
+      if(!is_null($UltimoProveedorNombre)){
+        echo '<td align="center">'.$UltimoProveedorNombre.'</td>';
+      }
+      else{
+        echo '<td align="center"> - </td>';
+      }
 
       /*BOTON PARA AGREGAR A LA ORDEN DE COMPRA*/
 
