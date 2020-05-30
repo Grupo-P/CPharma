@@ -20,7 +20,6 @@
 
 		while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
 			
-		  $CodigoArticulo = $row["CodigoInterno"];
 	    $CodigoBarra = $row["CodigoBarra"];
 	    $Descripcion = FG_Limpiar_Texto($row["Descripcion"]);
 	    $Existencia = $row["Existencia"];
@@ -81,10 +80,6 @@
 			SELECT
 --Id Articulo
     InvArticulo.Id AS IdArticulo,
---Categoria Articulo
-  InvArticulo.InvCategoriaId ,
---Codigo Interno
-    InvArticulo.CodigoArticulo AS CodigoInterno,
 --Codigo de Barra
     (SELECT CodigoBarra
     FROM InvCodigoBarra
@@ -178,18 +173,6 @@
                 FROM InvLoteAlmacen
                 WHERE(InvLoteAlmacen.InvAlmacenId = 2)
                 AND (InvLoteAlmacen.InvArticuloId = InvArticulo.Id)) AS DECIMAL(38,0)),2,0))  AS ExistenciaAlmacen2,
---Dolarizado (0 NO es dolarizado, Id Articulo SI es dolarizado)
-    (ISNULL((SELECT
-    InvArticuloAtributo.InvArticuloId
-    FROM InvArticuloAtributo
-    WHERE InvArticuloAtributo.InvAtributoId =
-    (SELECT InvAtributo.Id
-    FROM InvAtributo
-    WHERE
-    InvAtributo.Descripcion = 'Dolarizados'
-    OR  InvAtributo.Descripcion = 'Giordany'
-    OR  InvAtributo.Descripcion = 'giordany')
-    AND InvArticuloAtributo.InvArticuloId = InvArticulo.Id),CAST(0 AS INT))) AS Dolarizado,
 --PaginaWEB  (0 NO es PaginaWEB , Id Articulo SI es PaginaWEB )
     (ISNULL((SELECT
     InvArticuloAtributo.InvArticuloId
@@ -201,72 +184,7 @@
     InvAtributo.Descripcion = 'PaginaWEB '
     OR  InvAtributo.Descripcion = 'PAGINAWEB '
     OR  InvAtributo.Descripcion = 'paginaweb ')
-    AND InvArticuloAtributo.InvArticuloId = InvArticulo.Id),CAST(0 AS INT))) AS PaginaWEB,
---Tipo Producto (0 Miscelaneos, Id Articulo Medicinas)
-    (ISNULL((SELECT
-    InvArticuloAtributo.InvArticuloId
-    FROM InvArticuloAtributo
-    WHERE InvArticuloAtributo.InvAtributoId =
-    (SELECT InvAtributo.Id
-    FROM InvAtributo
-    WHERE
-    InvAtributo.Descripcion = 'Medicina')
-    AND InvArticuloAtributo.InvArticuloId = InvArticulo.Id),CAST(0 AS INT))) AS Tipo,
---Articulo Estrella (0 NO es Articulo Estrella , Id SI es Articulo Estrella)
-    (ISNULL((SELECT
-    InvArticuloAtributo.InvArticuloId
-    FROM InvArticuloAtributo
-    WHERE InvArticuloAtributo.InvAtributoId =
-    (SELECT InvAtributo.Id
-    FROM InvAtributo
-    WHERE
-    InvAtributo.Descripcion = 'Articulo Estrella')
-    AND InvArticuloAtributo.InvArticuloId = InvArticulo.Id),CAST(0 AS INT))) AS ArticuloEstrella,
--- Ultima Venta (Fecha)
-    (SELECT TOP 1
-    CONVERT(DATE,VenFactura.FechaDocumento)
-    FROM VenFactura
-    INNER JOIN VenFacturaDetalle ON VenFacturaDetalle.VenFacturaId = VenFactura.Id
-    WHERE VenFacturaDetalle.InvArticuloId = InvArticulo.Id
-    ORDER BY FechaDocumento DESC) AS UltimaVenta,
---Tiempo sin Venta (En dias)
-    (SELECT TOP 1
-    DATEDIFF(DAY,CONVERT(DATE,VenFactura.FechaDocumento),GETDATE())
-    FROM VenFactura
-    INNER JOIN VenFacturaDetalle ON VenFacturaDetalle.VenFacturaId = VenFactura.Id
-    WHERE VenFacturaDetalle.InvArticuloId = InvArticulo.Id
-    ORDER BY FechaDocumento DESC) AS TiempoSinVenta,
---Ultimo Lote (Fecha)
-    (SELECT TOP 1
-    CONVERT(DATE,InvLote.FechaEntrada) AS UltimoLote
-    FROM InvLote
-    WHERE InvLote.InvArticuloId  = InvArticulo.Id
-    ORDER BY UltimoLote DESC) AS UltimoLote,
---Tiempo Tienda (En dias)
-    (SELECT TOP 1
-    DATEDIFF(DAY,CONVERT(DATE,InvLote.FechaEntrada),GETDATE())
-    FROM InvLoteAlmacen
-    INNER JOIN invlote on invlote.id = InvLoteAlmacen.InvLoteId
-    WHERE InvLotealmacen.InvArticuloId = InvArticulo.Id
-    ORDER BY InvLote.Auditoria_FechaCreacion DESC) AS TiempoTienda,
--- Ultimo Proveedor (Id Proveedor)
-    (SELECT TOP 1
-    ComProveedor.Id
-    FROM ComFacturaDetalle
-    INNER JOIN ComFactura ON ComFactura.Id = ComFacturaDetalle.ComFacturaId
-    INNER JOIN ComProveedor ON ComProveedor.Id = ComFactura.ComProveedorId
-    INNER JOIN GenPersona ON GenPersona.Id = ComProveedor.GenPersonaId
-    WHERE ComFacturaDetalle.InvArticuloId = InvArticulo.Id
-    ORDER BY ComFactura.FechaDocumento DESC) AS  UltimoProveedorID,
--- Ultimo Proveedor (Nombre Proveedor)
-    (SELECT TOP 1
-    GenPersona.Nombre
-    FROM ComFacturaDetalle
-    INNER JOIN ComFactura ON ComFactura.Id = ComFacturaDetalle.ComFacturaId
-    INNER JOIN ComProveedor ON ComProveedor.Id = ComFactura.ComProveedorId
-    INNER JOIN GenPersona ON GenPersona.Id = ComProveedor.GenPersonaId
-    WHERE ComFacturaDetalle.InvArticuloId = InvArticulo.Id
-    ORDER BY ComFactura.FechaDocumento DESC) AS  UltimoProveedorNombre
+    AND InvArticuloAtributo.InvArticuloId = InvArticulo.Id),CAST(0 AS INT))) AS PaginaWEB
 --Tabla principal
     FROM InvArticulo
 --Joins
