@@ -219,6 +219,10 @@ Route::get('/ConsultorCompra', function() {
     return view('pages.consultorP.consultorCompra');
 });
 
+Route::get('/ArticulosExcel', function() { 
+    return view('pages.articulosExcel.articulosExcel');
+});
+
 Route::get('home', 'HomeController@index')->name('home');
 
 Route::resource('dolar', 'DolarController');

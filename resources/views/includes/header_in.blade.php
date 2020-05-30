@@ -640,6 +640,13 @@
     </button>
     <div class="dropdown-menu">
       <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('/ArticulosExcel') }}">
+          <span data-feather="home"></span>
+          <i class="fas fa-file-excel"></i>
+          Articulos Pagina Web<span class="sr-only">(current)</span>
+        </a>
+      </li>
+      <li class="nav-item">
         <a class="nav-link CP-Links-Menu" href="{{ url('/sedes_reporte') }}">
           <span data-feather="home"></span>
           <i class="fas fa-file-invoice"></i>
@@ -855,6 +862,13 @@
       <i class="fas fa-user-cog"></i> Tecnologia
     </button>
     <div class="dropdown-menu" style="width:200px;">
+      <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('/ArticulosExcel') }}">
+          <span data-feather="home"></span>
+          <i class="fas fa-file-excel"></i>
+          Articulos Pagina Web<span class="sr-only">(current)</span>
+        </a>
+      </li>
       <li class="nav-item">
         <a class="nav-link CP-Links-Menu" href="{{ url('/sedes_reporte') }}">
           <span data-feather="home"></span>
