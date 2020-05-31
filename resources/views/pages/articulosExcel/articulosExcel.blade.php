@@ -56,7 +56,7 @@
 	  sqlsrv_close($conn);
   /* CPHARMA */
 
-  $nombreDelDocumento = "PaginaWEB_Cpharma_".date('Ymd').".xlsx";
+    $nombreDelDocumento = "PaginaWEB_CPharma_".date('Ymd_h-i-A').".xlsx";
 
 	/*EXCEL*/
 		header('Content-Type: application/vnd.ms-excel');
