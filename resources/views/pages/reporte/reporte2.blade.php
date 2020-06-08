@@ -160,6 +160,17 @@
     $result = sqlsrv_query($conn,$sql);
     $row = sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC);
 
+    $ResultCPharma = mysqli_query($connCPharma,"SELECT * FROM unidads WHERE id_articulo = '$IdArticulo'");
+    $RowCPharma = mysqli_fetch_assoc($ResultCPharma);
+    $unidadminima = $RowCPharma['divisor']." ".$RowCPharma['unidad_minima'];
+    $unidadminima = ($unidadminima)?$unidadminima:"-";
+
+    $sqlCPharma = SQL_Etiqueta_Articulo($IdArticulo);
+    $ResultCPharma = mysqli_query($connCPharma,$sqlCPharma);
+    $RowCPharma = mysqli_fetch_assoc($ResultCPharma);
+    $clasificacion = $RowCPharma['clasificacion'];
+    $clasificacion = ($clasificacion!="")?$clasificacion:"NO CLASIFICADO";
+
     $sql2 = R2Q_Historico_Articulo($IdArticulo);
     $result2 = sqlsrv_query($conn,$sql2);
 
@@ -180,6 +191,8 @@
     $PrecioCompraBruto = $row["PrecioCompraBruto"];
     $Dolarizado = $row["Dolarizado"];
     $CondicionExistencia = 'CON_EXISTENCIA';
+    $UltimaVenta = $row["UltimaVenta"];
+    $UltimoPrecio = $row["UltimoPrecio"];
 
     $Gravado = FG_Producto_Gravado($IsIVA);
     $Dolarizado = FG_Producto_Dolarizado($Dolarizado);
@@ -213,6 +226,7 @@
           <th scope="col">Codigo de barra</td>
           <th scope="col">Descripcion</td>
           <th scope="col">Existencia</td>
+          <th scope="col">Clasificacion</td>
           <th scope="col">Precio</br>(Con IVA) '.SigVe.'</td>
           <th scope="col">Gravado?</td>
           <th scope="col">Utilidad Configurada</td>
@@ -220,6 +234,10 @@
           <th scope="col">Dolarizado?</td>
           <th scope="col">Tasa actual '.SigVe.'</td>
           <th scope="col">Precio en divisa</br>(Con IVA) '.SigDolar.'</td>
+          <th scope="col">Ultima Venta</th>
+          <th scope="col">Unidad Minima</th>
+          <th scope="col">Ultimo Conteo</th>
+          <th scope="col">Ultimo Precio (Sin IVA) '.SigVe.'</th>
         </tr>
       </thead>
       <tbody>
@@ -234,6 +252,7 @@
       '</a>
       </td>';
     echo '<td align="center">'.intval($Existencia).'</td>';
+    echo '<td align="center"> '.$clasificacion.'</td>';
     echo '<td align="center">'.number_format($Precio,2,"," ,"." ).'</td>';
     echo '<td align="center">'.$Gravado.'</td>';
     echo '<td align="center">'.number_format($Utilidad,2,"," ,"." ).' %</td>';
@@ -260,6 +279,25 @@
       echo '<td align="center">0,00</td>';
       echo '<td align="center">0,00</td>';
     }
+
+    if(!is_null($UltimaVenta)){
+      echo '<td align="center">'.$UltimaVenta->format('d-m-Y').'</td>';
+    }
+    else{
+      echo '<td align="center"> - </td>';
+    }
+
+    echo '<td>'.$unidadminima.'</td>';
+
+    echo '<td>Proximamente</td>';
+
+    if( ($Existencia==0) && (!is_null($UltimaVenta)) ){
+      echo '<td align="center">'.number_format($UltimoPrecio,2,"," ,"." ).'</td>';
+    }
+    else{
+      echo '<td align="center"> - </td>';
+    }
+
     echo '
       </tr>
       </tbody>
@@ -577,6 +615,13 @@
     INNER JOIN invlote on invlote.id = InvLoteAlmacen.InvLoteId
     WHERE InvLotealmacen.InvArticuloId = InvArticulo.Id
     ORDER BY InvLote.Auditoria_FechaCreacion DESC) AS TiempoTienda,
+--Ultimo Precio Sin Iva
+    (SELECT TOP 1
+    (ROUND(CAST((VenVentaDetalle.M_PrecioNeto) AS DECIMAL(38,2)),2,0))
+    FROM VenVenta
+    INNER JOIN VenVentaDetalle ON VenVentaDetalle.VenVentaId = VenVenta.Id
+    WHERE VenVentaDetalle.InvArticuloId = InvArticulo.Id
+    ORDER BY VenVenta.FechaDocumentoVenta DESC) AS UltimoPrecio,
 -- Ultimo Proveedor (Id Proveedor)
     (SELECT TOP 1
     ComProveedor.Id
