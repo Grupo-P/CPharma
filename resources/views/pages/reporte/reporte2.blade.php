@@ -321,6 +321,9 @@
             <th scope="col" class="CP-sticky bg-danger text-white">Costo bruto</br>HOY (Sin IVA) '.SigVe.'</br>(fecha registro)</th>
           <th scope="col" class="CP-sticky">Costo en divisa</br>(Sin IVA) '.SigDolar.'</br>(fecha documento)</th>
           <th scope="col" class="CP-sticky bg-danger text-white">Costo en divisa</br>(Sin IVA) '.SigDolar.'</br>(fecha registro)</th>
+          <th scope="col" class="CP-sticky bg-warning text-dark">Precio Lote en '.SigVe.'</th>
+          <th scope="col" class="CP-sticky bg-warning text-dark">Precio Lote en '.SigVe.'<br>Historico</th>
+          <th scope="col" class="CP-sticky bg-warning text-dark">Precio Lote en '.SigDolar.'</th>
           </tr>
         </thead>
         <tbody>
@@ -392,6 +395,16 @@
 
           echo '<td align="center">'.number_format($CostoDivisaDoc,2,"," ,"." ).'</td>';
           echo '<td align="center" class="bg-danger text-white">'.number_format($CostoDivisaFR,2,"," ,"." ).'</td>';
+
+          $preciolote = FG_Precio_Calculado_Alfa($UtilidadArticulo,$UtilidadCategoria,$IsIVA,$row2["M_PrecioCompraBruto"]);
+          echo '<td align="center" class="bg-warning text-dark">'.number_format($preciolote,2,"," ,"." ).'</td>';
+
+          $preciolotehist = FG_Precio_Calculado_Alfa($UtilidadArticulo,$UtilidadCategoria,$IsIVA,$CostoBrutoHoyFR);
+          echo '<td align="center" class="bg-warning text-dark">'.number_format($preciolotehist,2,"," ,"." ).'</td>';
+
+          $preciolotediv = FG_Precio_Calculado_Alfa($UtilidadArticulo,$UtilidadCategoria,$IsIVA,$CostoDivisaFR);
+          echo '<td align="center" class="bg-warning text-dark">'.number_format($preciolotehist,2,"," ,"." ).'</td>';
+
         }
         else{
           echo '<td align="center">0,00</td>';
@@ -400,7 +413,13 @@
           echo '<td align="center" class="bg-danger text-white">0,00</td>';
           echo '<td align="center">0,00</td>';
           echo '<td align="center" class="bg-danger text-white">0,00</td>';
+          echo '<td align="center" class="bg-warning text-dark">0,00</td>';
+          echo '<td align="center" class="bg-warning text-dark">0,00</td>';
+          echo '<td align="center" class="bg-warning text-dark">0,00</td>';
         }
+
+
+
         echo '</tr>';
       $contador++;
       }
