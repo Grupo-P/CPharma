@@ -398,12 +398,19 @@
 
           $preciolote = FG_Precio_Calculado_Alfa($UtilidadArticulo,$UtilidadCategoria,$IsIVA,$row2["M_PrecioCompraBruto"]);
           echo '<td align="center" class="bg-warning text-dark">'.number_format($preciolote,2,"," ,"." ).'</td>';
+        
+          if($TasaActual!=0){
+            $preciolotehist = FG_Precio_Calculado_Alfa($UtilidadArticulo,$UtilidadCategoria,$IsIVA,$CostoBrutoHoyFR);
+            echo '<td align="center" class="bg-warning text-dark">'.number_format($preciolotehist,2,"," ,"." ).'</td>';
 
-          $preciolotehist = FG_Precio_Calculado_Alfa($UtilidadArticulo,$UtilidadCategoria,$IsIVA,$CostoBrutoHoyFR);
-          echo '<td align="center" class="bg-warning text-dark">'.number_format($preciolotehist,2,"," ,"." ).'</td>';
-
-          $preciolotediv = FG_Precio_Calculado_Alfa($UtilidadArticulo,$UtilidadCategoria,$IsIVA,$CostoDivisaFR);
-          echo '<td align="center" class="bg-warning text-dark">'.number_format($preciolotehist,2,"," ,"." ).'</td>';
+            $preciolotediv = FG_Precio_Calculado_Alfa($UtilidadArticulo,$UtilidadCategoria,$IsIVA,$CostoDivisaFR);           
+            echo '<td align="center" class="bg-warning text-dark">'.number_format($preciolotediv,2,"," ,"." ).'</td>';
+          }
+          else{            
+            echo '<td align="center" class="bg-warning text-dark">0,00a</td>';
+            echo '<td align="center" class="bg-warning text-dark">0,00a</td>';
+            echo '<td align="center" class="bg-warning text-dark">0,00a</td>';
+          }
 
         }
         else{
