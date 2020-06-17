@@ -85,6 +85,10 @@
 
     $sql1 = RCPQ_Lista_Articulos_Descripcion();
     $ArtJson = FG_Armar_Json($sql1,$SedeConnection);
+
+    $connCPharma = FG_Conectar_CPharma();
+    $TasaVenta = FG_Tasa_Fecha_Venta($connCPharma,date('Y-m-d'));
+    mysqli_close($connCPharma);
 	?>
     <table class="table table-borderless col-12">
       <thead class="center">
@@ -117,6 +121,11 @@
         <th class="bg-success text-white border border-white"><h5>Código de barra</h5></th>
         <th class="bg-success text-white border border-white"><h5>Descripción</h5></th>
         <th class="bg-success text-white border border-white"><h5>Precio BsS</h5></th>
+        <?php
+          if (_ConsultorDolar_ == "SI") {
+           echo '<th class="bg-success text-white border border-white"><h5>Precio $</h5></th>';
+          }      
+        ?>
       </thead>
       <tbody>
         <tr>
@@ -129,10 +138,19 @@
           <td align="center" class="text-black">
             <h4><b><p id="PPrecioScan"></p></b></h4>
           </td>
+          <?php
+          if (_ConsultorDolar_ == "SI") {
+             echo '
+              <td align="center" class="text-black">
+                <h4><b><p id="PPrecioDolarScan"></p></b></h4>
+              </td>
+             ';
+            }      
+          ?>          
         </tr>
         <tr>
-          <td align="center" class="text-danger" colspan="3">
-            <b><p>Nuestros precios incluyen IVA (En caso de aplicar)</p></b>
+          <td align="center" class="text-danger" colspan="4">
+            <b><p>Nuestros precios incluyen IVA (En caso de aplicar)</p></b> 
           </td>
         </tr>
       </tbody>
@@ -145,10 +163,20 @@
       <thead class="center">
         <th class="bg-info text-white border border-white"><h5>Código de barra</h5></th>
         <th class="bg-info text-white border border-white"><h5>Descripción</h5></th>
-        <th class="bg-info text-white border border-white"><h5>Precio  BsS</h5></th>
+        <th class="bg-info text-white border border-white"><h5>Precio BsS</h5></th>        
       </thead>
       <tbody id="bodySugerido"></tbody>
     </table>
+    
+    <?php
+      if (_ConsultorDolar_ == "SI") {
+       echo ' <div clas="text-center bg-success">
+          <label class="text-danger text-center" style="font-size:1.2rem; margin-left:40%;">
+            <strong>Tasa del dia: '.SigVe.' '.$TasaVenta.'</strong>
+          </label>
+        </div>';
+      }      
+    ?>
     
     <div class="row justify-content-center">
       <div id="carouselExampleIndicators" class="carousel slide d-block w-75 bg-white" data-ride="carousel" data-wrap="true" data-interval="3000" data-pause="false">
@@ -329,6 +357,9 @@
             success: function(data) {
               precio = formateoPrecio(data,2);
               $('#PPrecioScan').html('BsS. '+precio);
+              const TasaVentaD = eval(<?php echo $TasaVenta ?>);
+              precioDolar = formateoPrecio(data/TasaVentaD,2);
+              $('#PPrecioDolarScan').html('$. '+precioDolar);
             }
            });
 
