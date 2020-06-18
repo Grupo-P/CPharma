@@ -407,9 +407,8 @@
             echo '<td align="center" class="bg-warning text-dark">'.number_format($preciolotediv,2,"," ,"." ).'</td>';
           }
           else{            
-            echo '<td align="center" class="bg-warning text-dark">0,00a</td>';
-            echo '<td align="center" class="bg-warning text-dark">0,00a</td>';
-            echo '<td align="center" class="bg-warning text-dark">0,00a</td>';
+            echo '<td align="center" class="bg-warning text-dark">0,00</td>';
+            echo '<td align="center" class="bg-warning text-dark">0,00</td>';           
           }
 
         }
