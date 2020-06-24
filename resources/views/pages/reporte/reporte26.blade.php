@@ -202,7 +202,12 @@
         $UltimoProveedorNombre = $row["UltimoProveedorNombre"];
         $ultimaCompra = $row["UltimaCompra"];
 
-        $diasFalla = FG_Rango_Dias($UltimaVentaFueraRango->format('y-m-d'),date('y-m-d'));
+        if(!is_null($UltimaVentaFueraRango)){
+          $diasFalla = FG_Rango_Dias($UltimaVentaFueraRango->format('y-m-d'),date('y-m-d'));
+        }
+        else{
+          $diasFalla = "-";
+        }
         
         $Precio = FG_Calculo_Precio_Alfa($Existencia,$ExistenciaAlmacen1,$ExistenciaAlmacen2,$IsTroquelado,$UtilidadArticulo,$UtilidadCategoria,$TroquelAlmacen1,$PrecioCompraBrutoAlmacen1,$TroquelAlmacen2,
         $PrecioCompraBrutoAlmacen2,$PrecioCompraBruto,$IsIVA,$CondicionExistencia);
