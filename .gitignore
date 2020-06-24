@@ -14,3 +14,4 @@ yarn-error.log
 .env
 .phpunit.result.cache
 /public/assets/promocion/*.jpg
+/app/functions/config.php

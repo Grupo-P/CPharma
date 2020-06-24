@@ -111,6 +111,8 @@
                 <td scope="col">Articulos Nuevos</td>
                 <th scope="col">25</th>
                 <td scope="col">Articulos en Cero</td>
+                <th scope="col">26</th>
+                <td scope="col">Ultimas Entradas en Cero</td>
                 <th scope="col">99</th>
                 <td scope="col">Registro de Fallas</td>
             </tr>

@@ -1201,6 +1201,9 @@
 			case 'Articulos en Cero':
 				$ruta = '/reporte25';
 			break;
+			case 'Ultimas Entradas en Cero':
+				$ruta = '/reporte26';
+			break;
 			case 'Registro de Fallas':
 				$ruta = '/falla';
 			break;
@@ -1286,6 +1289,9 @@
 			break;
 			case 25:
 				$nombre = 'Articulos en Cero';
+			break;
+			case 26:
+				$nombre = 'Ultimas Entradas en Cero';
 			break;
 			case 99:
 				$nombre = 'Registro de Fallas';
