@@ -1043,31 +1043,15 @@
   <div class="btn-group navbar-brand">
     <button type="button" class="btn btn-outline-info dropdown-toggle textoI" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
       <i class="fas fa-user-secret"></i> Developer
-    </button>
-   <!--  {{ url('/testS') }} -->
-   <!-- {{ url('/ConsultorCompra') }} -->
+    </button>   
     <div class="dropdown-menu">
       <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="{{ url('/ConsultorCompra') }}">  
+        <a class="nav-link CP-Links-Menu" href="{{ url('/inventario') }}">  
           <span data-feather="home"></span>
-          <i class="fa fa-box"></i>
-          Test Sergio<span class="sr-only">(current)</span>
+          <i class="fa fa-boxes"></i>
+          Inventario<span class="sr-only">(current)</span>
         </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="{{ url('/testM') }}">
-          <span data-feather="home"></span>
-          <i class="fas fa-box"></i>
-          Test Manuel<span class="sr-only">(current)</span>
-        </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="{{ url('/testR') }}">
-          <span data-feather="home"></span>
-          <i class="fas fa-box"></i>
-          Test Rubmary<span class="sr-only">(current)</span>
-        </a>
-      </li>
+      </li>      
     </div>
   </div>
 <?php

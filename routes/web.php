@@ -267,6 +267,12 @@ Route::get('articuloUnidad', function() {
     return view('pages.unidad.articuloUnidad');
 });
 
+Route::resource('inventario', 'InventarioController');
+
+Route::get('/inventarioProveedor', function() {
+    return view('pages.inventario.por_proveedor');
+});
+
 //***************************** RRHH routing *****************************//
 Route::resource('candidatos', 'RH_CandidatoController');
 Route::get('/procesos_candidatos', 'RH_CandidatoController@procesos');
