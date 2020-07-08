@@ -273,6 +273,9 @@ Route::get('/inventarioProveedor', function() {
     return view('pages.inventario.por_proveedor');
 });
 
+Route::resource('inventarioDetalle', 'InventarioDetalleController');
+
+
 //***************************** RRHH routing *****************************//
 Route::resource('candidatos', 'RH_CandidatoController');
 Route::get('/procesos_candidatos', 'RH_CandidatoController@procesos');

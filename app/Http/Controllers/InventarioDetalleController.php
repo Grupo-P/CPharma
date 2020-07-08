@@ -3,9 +3,23 @@
 namespace compras\Http\Controllers;
 
 use Illuminate\Http\Request;
+use compras\Inventario;
+use compras\InventarioDetalle;
+use compras\User;
+use compras\Auditoria;
 
 class InventarioDetalleController extends Controller
 {
+    /**
+     * Create a new controller instance with auth.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -13,7 +27,7 @@ class InventarioDetalleController extends Controller
      */
     public function index()
     {
-        //
+        // Se arma desde el inventario edit
     }
 
     /**
@@ -23,7 +37,7 @@ class InventarioDetalleController extends Controller
      */
     public function create()
     {
-        //
+        // Se crea desde el inventario create
     }
 
     /**
@@ -34,7 +48,7 @@ class InventarioDetalleController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // Se guarda desde el inventario create
     }
 
     /**
@@ -45,7 +59,7 @@ class InventarioDetalleController extends Controller
      */
     public function show($id)
     {
-        //
+        // No pposeee show no es necesario
     }
 
     /**
@@ -56,7 +70,8 @@ class InventarioDetalleController extends Controller
      */
     public function edit($id)
     {
-        //
+        $inventarioDetalle = InventarioDetalle::find($id);
+        return view('pages.inventarioDetalle.edit', compact('inventarioDetalle'));
     }
 
     /**
@@ -79,6 +94,6 @@ class InventarioDetalleController extends Controller
      */
     public function destroy($id)
     {
-        //
+        // No utiliza destroy no es necesario
     }
 }

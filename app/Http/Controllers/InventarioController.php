@@ -120,9 +120,7 @@ class InventarioController extends Controller
      */
     public function store(Request $request)
     {
-       // echo($request->input('articulosContar'));
-        //$inventarios =  Inventario::all();
-        //return view('pages.inventario.index', compact('inventarios'));
+        // No lo necesita se guarda desde el create y no se edita
     }
 
     /**
@@ -144,7 +142,8 @@ class InventarioController extends Controller
      */
     public function edit($id)
     {
-        //
+        $inventarioDetalle =  InventarioDetalle::all();
+        return view('pages.inventarioDetalle.index', compact('inventarioDetalle'));
     }
 
     /**
