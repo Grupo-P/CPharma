@@ -277,6 +277,10 @@ Route::get('/inventarioDescripcion', function() {
     return view('pages.inventario.por_descripcion');
 }); 
 
+Route::get('/inventarioAleatorio', function() {
+    return view('pages.inventario.por_aleatorio');
+}); 
+
 Route::resource('inventarioDetalle', 'InventarioDetalleController');
 
 

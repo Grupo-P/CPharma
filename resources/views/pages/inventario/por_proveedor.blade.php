@@ -122,11 +122,9 @@
       <div class="autocomplete" style="width:90%;">
         <input id="myInput" type="text" name="Nombre" placeholder="Ingrese el nombre del proveedor " onkeyup="conteo()" required>
         <input id="myId" name="Id" type="hidden">
-        <td>
         <input id="SEDE" name="SEDE" type="hidden" value="';
         print_r($_GET['SEDE']);
         echo'">
-        </td>
       </div>
       <input type="submit" value="Buscar" class="btn btn-outline-success">
     </form>

@@ -53,7 +53,7 @@
 @section('content')
   <h1 class="h5 text-info">
     <i class="fas fa-boxes"></i>
-    Inventario por descripcion
+    Inventario aleatorio
   </h1>
   <hr class="row align-items-start col-12">
 
@@ -71,7 +71,7 @@
     }
     echo '<hr class="row align-items-start col-12">';
   
-  if (isset($_GET['Nombre'])){
+  if (isset($_GET['cantidad'])){
   //CASO 2: CARGA AL HABER SELECCIONADO UN PROVEEDOR 
     $InicioCarga = new DateTime("now");
     
@@ -85,17 +85,17 @@
           echo'">
           </td>
           <td>
-          <input id="origen" name="origen" type="hidden" value="Descripcion">
+          <input id="origen" name="origen" type="hidden" value="Aleatorio">
           </td>
           <td align="right">
             <input type="submit" value="Contar" class="btn btn-outline-success">
           </td>
         </tr>
       </table>
-      <input id="motivo" name="motivo" type="hidden" value="'.$_GET['Nombre'].'">   
+      <input id="motivo" name="motivo" type="hidden" value="'.$_GET['condVent'].'">   
     <br>
     ';
-    Iventario_Descripcion_C2($_GET['SEDE'],$_GET['Id'],$_GET['Nombre']);
+    Iventario_Aleatorio_C2($_GET['SEDE'],$_GET['cantidad'],$_GET['condVent']);
     echo'</form>';
     
     $FinCarga = new DateTime("now");
@@ -118,15 +118,36 @@
     $ArtJson = FG_Armar_Json($sql,$_GET['SEDE']);
 
     echo '
-    <form autocomplete="off" action="">
-      <div class="autocomplete" style="width:90%;">
-        <input id="myInput" type="text" name="Nombre" placeholder="Ingrese el nombre del articulo " onkeyup="conteo()" required>
-        <input id="myId" name="Id" type="hidden">
-        <input id="SEDE" name="SEDE" type="hidden" value="';
-        print_r($_GET['SEDE']);
-        echo'">
-      </div>
-      <input type="submit" value="Buscar" class="btn btn-outline-success">
+    <form autocomplete="off" action="">      
+      <table style="width:100%;">
+        <tr>          
+          <td>
+            <span><strong>Cant. a generar</strong></span>
+          </td>
+          <td>
+            <input type="number" name="cantidad" placeholder="Ingrese la cantidad" step="1" required min="1" class"ml-10">
+          </td>
+
+          <td>
+            <span><strong>Condicion de venta</strong></span>
+          </td>
+          <td>
+            <select name="condVent" class="form-control" required="required" style="width:50%;display:inline;">
+              <option value=""></option> 
+              <option value="ConVenta">Con Ventas</option>
+              <option value="SinVenta">Sin Ventas</option>
+            </select>
+          </td>
+          <td>
+            <input id="SEDE" name="SEDE" type="hidden" value="';
+            print_r($_GET['SEDE']);
+            echo'">
+          </td>
+          <td>
+            <input type="submit" value="Buscar" class="btn btn-outline-success">
+          </td>
+        </tr>
+      </table>
     </form>
     ';
 
@@ -158,15 +179,15 @@
     RETORNO: No aplica
     DESAROLLADO POR: SERGIO COVA
   */
-  function Iventario_Descripcion_C2($SedeConnection,$IdArticulo,$NombreArticulo){
+  function Iventario_Aleatorio_C2($SedeConnection,$Cantidad,$CondicionVenta){
 
     $conn = FG_Conectar_Smartpharma($SedeConnection);
 
-    if($IdArticulo!=""){
+    if($CondicionVenta=="ConVenta"){
       $sql = Inv_Descripcion($IdArticulo);
       $result = sqlsrv_query($conn,$sql);  
     }
-    else{
+    else if($CondicionVenta=="SinVenta"){
       $sql = Inv_Descripcion_Like($NombreArticulo);
       $result = sqlsrv_query($conn,$sql);
     }

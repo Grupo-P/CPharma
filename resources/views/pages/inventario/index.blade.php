@@ -94,8 +94,8 @@
 						Por Descripcion
 					</a>
         </td>
-        <td style="width:6%;" align="center">	
-					<a href="{{ url('/inventario/create') }}" role="button" class="btn btn-outline-warning btn-sm" 
+        <td style="width:6%;" align="center">
+					<a href="{{ url('/inventarioAleatorio') }}" role="button" class="btn btn-outline-warning btn-sm" 
 					style="display: inline; text-align: left;">
 					<i class="fa fa-plus"></i>
 						Aleatorio
