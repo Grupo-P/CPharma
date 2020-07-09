@@ -273,6 +273,10 @@ Route::get('/inventarioProveedor', function() {
     return view('pages.inventario.por_proveedor');
 });
 
+Route::get('/inventarioDescripcion', function() {
+    return view('pages.inventario.por_descripcion');
+}); 
+
 Route::resource('inventarioDetalle', 'InventarioDetalleController');
 
 

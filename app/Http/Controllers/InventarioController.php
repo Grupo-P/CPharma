@@ -143,7 +143,8 @@ class InventarioController extends Controller
      */
     public function edit($id)
     {
-        $inventarioDetalle =  InventarioDetalle::all();
+        $inventario = Inventario::find($id);
+        $inventarioDetalle =  InventarioDetalle::where('codigo_conteo',$inventario->codigo)->get();
         return view('pages.inventarioDetalle.index', compact('inventarioDetalle'));
     }
 

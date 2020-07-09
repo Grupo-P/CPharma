@@ -81,21 +81,21 @@
 	<table style="width:100%;" class="CP-stickyBar">
 	    <tr>
         <td style="width:8%;" align="center">	
-					<a href="{{ url('/inventarioProveedor') }}" role="button" class="btn btn-outline-info btn-sm" 
+					<a href="{{ url('/inventarioProveedor') }}" role="button" class="btn btn-outline-success btn-sm" 
 					style="display: inline; text-align: left;">
 					<i class="fa fa-plus"></i>
 						Por Proveedor
 					</a>
         </td>
         <td style="width:8%;" align="center">	
-					<a href="{{ url('/inventario/create') }}" role="button" class="btn btn-outline-info btn-sm" 
+					<a href="{{ url('/inventarioDescripcion') }}" role="button" class="btn btn-outline-info btn-sm" 
 					style="display: inline; text-align: left;">
 					<i class="fa fa-plus"></i>
 						Por Descripcion
 					</a>
         </td>
         <td style="width:6%;" align="center">	
-					<a href="{{ url('/inventario/create') }}" role="button" class="btn btn-outline-info btn-sm" 
+					<a href="{{ url('/inventario/create') }}" role="button" class="btn btn-outline-warning btn-sm" 
 					style="display: inline; text-align: left;">
 					<i class="fa fa-plus"></i>
 						Aleatorio
