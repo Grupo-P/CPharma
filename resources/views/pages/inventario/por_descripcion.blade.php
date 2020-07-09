@@ -192,7 +192,7 @@
         <tbody>
         <tr>
       ';
-    echo '<td>'.($NombreArticulo).'</td>';
+    echo '<td align="center">'.($NombreArticulo).'</td>';
       echo '
         </tr>
         </tbody>

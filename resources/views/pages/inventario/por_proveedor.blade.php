@@ -186,7 +186,7 @@
         <tbody>
         <tr>
       ';
-    echo '<td>'.($NombreProveedor).'</td>';
+    echo '<td align="center">'.($NombreProveedor).'</td>';
       echo '
         </tr>
         </tbody>

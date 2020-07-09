@@ -114,9 +114,6 @@
   //CASO 1: AL CARGAR EL REPORTE DESDE EL MENU
     $InicioCarga = new DateTime("now");
 
-    $sql = Inv_Lista_Articulos();
-    $ArtJson = FG_Armar_Json($sql,$_GET['SEDE']);
-
     echo '
     <form autocomplete="off" action="">      
       <table style="width:100%;">
@@ -183,12 +180,18 @@
 
     $conn = FG_Conectar_Smartpharma($SedeConnection);
 
+    //$FFin= date("Y-m-d");
+    //$FInicio = date("Y-m-d",strtotime($FFin."- 20 days"));
+
+    $FFin= date("2018-12-12");
+    $FInicio = date("Y-m-d",strtotime($FFin."- 1 days"));
+
     if($CondicionVenta=="ConVenta"){
-      $sql = Inv_Descripcion($IdArticulo);
+      $sql = Inv_ConVenta($FInicio,$FFin);
       $result = sqlsrv_query($conn,$sql);  
     }
     else if($CondicionVenta=="SinVenta"){
-      $sql = Inv_Descripcion_Like($NombreArticulo);
+      $sql = Inv_SinVenta($FInicio,$FFin);
       $result = sqlsrv_query($conn,$sql);
     }
 
@@ -207,13 +210,13 @@
     <table class="table table-striped table-bordered col-12 sortable">
       <thead class="thead-dark">
           <tr>
-            <th scope="col">Articulo</th>
+            <th scope="col">Condicion de Venta</th>
           </tr>
         </thead>
         <tbody>
         <tr>
       ';
-    echo '<td>'.($NombreArticulo).'</td>';
+    echo '<td align="center">'.($CondicionVenta).'</td>';
       echo '
         </tr>
         </tbody>
@@ -264,29 +267,12 @@
   }
   /**********************************************************************************/
   /*
-    TITULO: R6Q_Lista_Articulos
-    FUNCION: Armar una lista de articulos
-    RETORNO: Lista de articulos
-    DESAROLLADO POR: SERGIO COVA
-  */
-  function Inv_Lista_Articulos() {
-    $sql = "
-      SELECT
-      InvArticulo.Descripcion,
-      InvArticulo.Id
-      FROM InvArticulo
-      ORDER BY InvArticulo.Descripcion ASC
-    ";
-    return $sql;
-  }
-  /**********************************************************************************/
-  /*
     TITULO: R6Q_Descripcion_Like
     FUNCION: Consulta los articulos que conindicen con la palabra buscada
     RETORNO: lista de id de articulos en coincidencia
     DESAROLLADO POR: SERGIO COVA
   */
-  function Inv_Descripcion_Like($DescripLike) {   
+  function Inv_SinVenta($FInicio,$FFin) {
     $sql = "
       SELECT
       InvArticulo.Id,
@@ -300,11 +286,17 @@
           FROM InvLoteAlmacen
           WHERE(InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
           AND (InvLoteAlmacen.InvArticuloId = InvArticulo.Id)) AS Existencia
-      FROM InvArticulo
-      WHERE InvArticulo.Descripcion LIKE '%$DescripLike%'
+      FROM VenVenta
+      INNER JOIN VenVentaDetalle ON VenVentaDetalle.VenVentaId = VenVenta.Id
+      INNER JOIN InvArticulo ON InvArticulo.Id = VenVentaDetalle.InvArticuloId
+      WHERE  VenVenta.FechaDocumentoVenta NOT BETWEEN '$FInicio' AND '$FFin'
+      AND (SELECT (ROUND(CAST(SUM (InvLoteAlmacen.Existencia) AS DECIMAL(38,0)),2,0)) As Existencia
+      FROM InvLoteAlmacen
+      WHERE(InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
+      AND (InvLoteAlmacen.InvArticuloId = InvArticulo.Id)) > 0
       GROUP BY InvArticulo.Id,InvArticulo.CodigoArticulo,InvArticulo.Descripcion,InvArticulo.FinConceptoImptoIdCompra
       ORDER BY InvArticulo.Id ASC
-    ";          
+    ";
     return $sql;
   }
   /**********************************************************************************/
@@ -314,7 +306,7 @@
     RETORNO: Lista de proveedores
     DESAROLLADO POR: SERGIO COVA
   */
-  function Inv_Descripcion($IdArticulo) {
+  function Inv_ConVenta($FInicio,$FFin) {
     $sql = "
       SELECT
       InvArticulo.Id,
@@ -328,8 +320,14 @@
           FROM InvLoteAlmacen
           WHERE(InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
           AND (InvLoteAlmacen.InvArticuloId = InvArticulo.Id)) AS Existencia
-      FROM InvArticulo
-      WHERE InvArticulo.Id = '$IdArticulo'
+      FROM VenVenta
+      INNER JOIN VenVentaDetalle ON VenVentaDetalle.VenVentaId = VenVenta.Id
+      INNER JOIN InvArticulo ON InvArticulo.Id = VenVentaDetalle.InvArticuloId
+      WHERE  VenVenta.FechaDocumentoVenta BETWEEN '$FInicio' AND '$FFin'
+      AND (SELECT (ROUND(CAST(SUM (InvLoteAlmacen.Existencia) AS DECIMAL(38,0)),2,0)) As Existencia
+      FROM InvLoteAlmacen
+      WHERE(InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
+      AND (InvLoteAlmacen.InvArticuloId = InvArticulo.Id)) > 0
       GROUP BY InvArticulo.Id,InvArticulo.CodigoArticulo,InvArticulo.Descripcion,InvArticulo.FinConceptoImptoIdCompra
       ORDER BY InvArticulo.Id ASC
     ";
