@@ -98,9 +98,10 @@ class InventarioDetalleController extends Controller
                 $InventarioDetalle->fecha_reconteo = date('Y-m-d H:i:m');
             }
             
-            $InventarioDetalle->save(); 
+            $InventarioDetalle->save();
 
-            return redirect()->route('inventario.index')->with('Updated', ' Informacion');
+            $inventarioDetalle =  InventarioDetalle::where('codigo_conteo',$InventarioDetalle->codigo_conteo)->get();
+            return view('pages.inventarioDetalle.index', compact('inventarioDetalle'));
         }
         catch(\Illuminate\Database\QueryException $e){
             return back()->with('Error', ' Error');

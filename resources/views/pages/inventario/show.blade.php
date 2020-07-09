@@ -65,13 +65,12 @@
 	</form>
 	<input type="button" name="imprimir" value="Imprimir" class="btn btn-outline-success btn-sm" onclick="window.print();" style="display: inline; margin-left: 10px;">
 
-	<br>
-	<br>
+	<br><br>
 
 	<table>
 		<thead>
 				<tr>
-					<th scope="row" colspan="4">
+					<th scope="row" colspan="4" width="20%">
 	    			<span class="navbar-brand text-info CP-title-NavBar">
 	    				<b><i class="fas fa-syringe text-success"></i>CPharma</b>
 						</span>
@@ -136,12 +135,12 @@
 	  	</tbody>
 	</table>
 
-	<br><br>
+	<br>
 
 	<table>
 		<thead>
 				<tr>
-					<th scope="row" colspan="4">
+					<th scope="row" colspan="4" width="20%">
 	    			<span class="navbar-brand text-info CP-title-NavBar">
 	    				<b><i class="fas fa-syringe text-success"></i>CPharma</b>
 						</span>
@@ -236,5 +235,125 @@
 
 	  	</tbody>
 	</table>
+
+	<br>
+
+		<table class="col-md-6">
+			<thead>
+				<tr>
+					<th scope="row" colspan="1">
+		    			<span class="navbar-brand text-info CP-title-NavBar">
+		    				<b><i class="fas fa-syringe text-success"></i>CPharma</b>
+							</span>
+		    		</th>
+					<th scope="row" colspan="1" width="70%">ALMACEN (CONTEO)</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<th>Fecha</th>
+					<td></td>
+				</tr>
+				<tr>
+					<th>Hora de inicio</th>
+					<td></td>
+				</tr>
+				<tr>
+					<th>Hora de finalizacion</th>
+					<td></td>
+				</tr>
+				<tr>
+					<th>Operador</th>
+					<td></td>
+				</tr>
+			</tbody>
+		</table>
+	
+	<br>		
+
+		<table class="col-md-6">
+			<thead>
+				<tr>
+					<th scope="row" colspan="1">
+		    			<span class="navbar-brand text-info CP-title-NavBar">
+		    				<b><i class="fas fa-syringe text-success"></i>CPharma</b>
+							</span>
+		    		</th>
+					<th scope="row" colspan="1" width="70%">ALMACEN (RECONTEO)</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<th>Fecha</th>
+					<td></td>
+				</tr>
+				<tr>
+					<th>Hora de inicio</th>
+					<td></td>
+				</tr>
+				<tr>
+					<th>Hora de finalizacion</th>
+					<td></td>
+				</tr>
+				<tr>
+					<th>Operador</th>
+					<td></td>
+				</tr>
+			</tbody>
+		</table>
+
+	<br>
+
+		<table class="col-md-6">
+			<thead>
+				<tr>
+					<th scope="row" colspan="1">
+		    			<span class="navbar-brand text-info CP-title-NavBar">
+		    				<b><i class="fas fa-syringe text-success"></i>CPharma</b>
+							</span>
+		    		</th>
+					<th scope="row" colspan="1" width="70%">OPERACIONES</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<th>Fecha</th>
+					<td></td>
+				</tr>
+				<tr>
+					<th>Hora</th>
+					<td></td>
+				</tr>
+				<tr>
+					<th>Operador</th>
+					<td></td>
+				</tr>
+				<tr>
+					<th>Comentarios</th>
+					<td>
+						<br>
+						<br>
+						<br>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	
+	</div></div>
+
+	<p>
+		<ul>
+			<li><strong>Todas las anotaciones deben hacerce en boligrafo. Esta prohibido el uso del lapiz y las enmiendas o tachaduras</strong></li>
+			<li>Los articulos que no se encuentren por favor dejarlos en blanco, colocar un cero en señal de que el fisico no existe</li>
+			<li>Usar los codigos de barra como guia en los articulos que sean parecidos para evitar confusiones de conteo entre articulos parecidos</li>
+			<li>Adjuntar con este formato el soporte de ajuste y guardar todo en la carpeta respectiva</li>
+			<li>Los articulos deben bucarse en todas las ubicaciones posibles: recepcion, piso de venta, gaveta, almacen, alta rotacion, vencidos, etc.</li>
+			<li>Es valido anotar la sumatoria a medida que vayan encontrando, ejemplo: en vez de anotar 12 unidades, se puede colocar 8 + 4 segun como se iba encontrando</li>
+			<li>Los conteos deben tener prioridad para evitar defases entre los productos contados y la venta que se esta dando en simultaneo</li>
+			<li>El re-conteo debe hacerlo una persona distinta al que realizo en conteo original</li>
+			<li>El re-conteo lo pedira el departamento de operaciones despues de analizar el primer conteo y no necesariamente sera para todas las referencias</li>
+			<li>Todas las anotaciones de numeros en el re-conteo deben ser las cantidades contadas y no los diferenciales. Ejemplos: 12 (Correcto), -2 (Incorrecto)</li>
+		</ul>
+	</p>
 
 @endsection

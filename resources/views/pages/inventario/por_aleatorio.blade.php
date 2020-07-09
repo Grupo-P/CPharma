@@ -187,11 +187,11 @@
     $FInicio = date("Y-m-d",strtotime($FFin."- 1 days"));
 
     if($CondicionVenta=="ConVenta"){
-      $sql = Inv_ConVenta($FInicio,$FFin);
+      $sql = Inv_ConVenta($FInicio,$FFin,$Cantidad);
       $result = sqlsrv_query($conn,$sql);  
     }
     else if($CondicionVenta=="SinVenta"){
-      $sql = Inv_SinVenta($FInicio,$FFin);
+      $sql = Inv_SinVenta($FInicio,$FFin,$Cantidad);
       $result = sqlsrv_query($conn,$sql);
     }
 
@@ -272,9 +272,9 @@
     RETORNO: lista de id de articulos en coincidencia
     DESAROLLADO POR: SERGIO COVA
   */
-  function Inv_SinVenta($FInicio,$FFin) {
+  function Inv_SinVenta($FInicio,$FFin,$Cantidad) {
     $sql = "
-      SELECT
+      SELECT TOP $Cantidad
       InvArticulo.Id,
       InvArticulo.CodigoArticulo,
       (SELECT CodigoBarra
@@ -295,7 +295,7 @@
       WHERE(InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
       AND (InvLoteAlmacen.InvArticuloId = InvArticulo.Id)) > 0
       GROUP BY InvArticulo.Id,InvArticulo.CodigoArticulo,InvArticulo.Descripcion,InvArticulo.FinConceptoImptoIdCompra
-      ORDER BY InvArticulo.Id ASC
+      ORDER BY NEWID()
     ";
     return $sql;
   }
@@ -306,9 +306,9 @@
     RETORNO: Lista de proveedores
     DESAROLLADO POR: SERGIO COVA
   */
-  function Inv_ConVenta($FInicio,$FFin) {
+  function Inv_ConVenta($FInicio,$FFin,$Cantidad) {
     $sql = "
-      SELECT
+      SELECT TOP $Cantidad
       InvArticulo.Id,
       InvArticulo.CodigoArticulo,
       (SELECT CodigoBarra
@@ -329,7 +329,7 @@
       WHERE(InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
       AND (InvLoteAlmacen.InvArticuloId = InvArticulo.Id)) > 0
       GROUP BY InvArticulo.Id,InvArticulo.CodigoArticulo,InvArticulo.Descripcion,InvArticulo.FinConceptoImptoIdCompra
-      ORDER BY InvArticulo.Id ASC
+      ORDER BY NEWID()
     ";
     return $sql;
   }
