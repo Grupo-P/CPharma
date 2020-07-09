@@ -213,7 +213,7 @@
 						    @method('DELETE')
 						    @csrf
 						    <input type="hidden" name="action" value="Revisar">			    
-						    <button type="submit" name="Eliminar" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Revisado"><i class="fa fa-check"></i></button>
+						    <button type="submit" name="Eliminar" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Aprobar"><i class="fa fa-check"></i></button>
 				 			</form>
 
 			      	<form action="/inventario/{{$inventario->id}}" method="POST" style="display: inline;">
