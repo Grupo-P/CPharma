@@ -152,7 +152,7 @@
 		      <td>{{$inventario->estatus}}</td>
 		      
 		    <!-- Inicio Validacion de ROLES -->
-		      <td style="width:140px;">
+		      <td style="width:200px;">
 				
 				<?php
 				if(Auth::user()->role == 'MASTER' || Auth::user()->role == 'DEVELOPER'){
@@ -168,34 +168,72 @@
 			      		<a href="/inventario/{{$inventario->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
 			      			<i class="fas fa-edit"></i>		      		
 				      	</a>
-				 					  
-				      	<form action="/inventario/{{$inventario->id}}" method="POST" style="display: inline;">
+
+			      	<form action="/inventario/{{$inventario->id}}" method="POST" style="display: inline;">
 						    @method('DELETE')
-						    @csrf					    
-						    <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Desincorporar"><i class="fa fa-reply"></i></button>
-						</form>
+						    @csrf
+						    <input type="hidden" name="action" value="Revisar">			    
+						    <button type="submit" name="Eliminar" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Revisado"><i class="fa fa-check"></i></button>
+				 			</form>
+
+			      	<form action="/inventario/{{$inventario->id}}" method="POST" style="display: inline;">
+						    @method('DELETE')
+						    @csrf
+						    <input type="hidden" name="action" value="Anular">				    
+						    <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Anular"><i class="fa fa-ban"></i></button>
+							</form>
 					<?php
 					}
-					else if($inventario->estatus == 'INACTIVO'){
+					else if($inventario->estatus == 'ANULADO' || $inventario->estatus == 'REVISADO'){ 
 					?>		
-			      	<form action="/inventario/{{$inventario->id}}" method="POST" style="display: inline;">
-					    @method('DELETE')
-					    @csrf					    
-					    <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Reincorporar"><i class="fa fa-share"></i></button>
+			      	<a href="/inventario/{{$inventario->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
+			      			<i class="far fa-eye"></i>			      		
+		      		</a>			      		
 					</form>
 					<?php
 					}					
 					?>
+
 				<?php	
 				} else if(Auth::user()->role == 'SUPERVISOR' || Auth::user()->role == 'ADMINISTRADOR' || Auth::user()->role == 'SUPERVISOR CAJA'){ 
 				?>
-					<a href="/inventario/{{$inventario->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
-		      			<i class="far fa-eye"></i>			      		
-		      		</a>
+					
+					<?php
+					if($inventario->estatus == 'GENERADO'){
+					?>
+						<a href="/inventario/{{$inventario->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
+			      			<i class="far fa-eye"></i>			      		
+			      		</a>
 
-		      		<a href="/inventario/{{$inventario->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
-		      			<i class="fas fa-edit"></i>
-	      			</a>
+			      		<a href="/inventario/{{$inventario->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
+			      			<i class="fas fa-edit"></i>		      		
+				      	</a>
+
+			      	<form action="/inventario/{{$inventario->id}}" method="POST" style="display: inline;">
+						    @method('DELETE')
+						    @csrf
+						    <input type="hidden" name="action" value="Revisar">			    
+						    <button type="submit" name="Eliminar" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Revisado"><i class="fa fa-check"></i></button>
+				 			</form>
+
+			      	<form action="/inventario/{{$inventario->id}}" method="POST" style="display: inline;">
+						    @method('DELETE')
+						    @csrf
+						    <input type="hidden" name="action" value="Anular">				    
+						    <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Anular"><i class="fa fa-ban"></i></button>
+							</form>
+					<?php
+					}
+					else if($inventario->estatus == 'ANULADO' || $inventario->estatus == 'REVISADO'){
+					?>		
+			      	<a href="/inventario/{{$inventario->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
+			      			<i class="far fa-eye"></i>			      		
+		      		</a>			      		
+					</form>
+					<?php
+					}					
+					?>
+
 				<?php
 				} else if(Auth::user()->role == 'USUARIO'){
 				?>

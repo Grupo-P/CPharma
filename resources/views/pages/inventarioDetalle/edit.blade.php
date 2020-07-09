@@ -33,23 +33,23 @@
         <tbody>
             <tr>
                 <th scope="row">{!! Form::label('inventarioDetalle', 'Codigo de Inventario') !!}</th>
-                <td>{!! Form::text('codigo_conteo', null, [ 'class' => 'form-control', 'placeholder' => '', 'autofocus', 'required','disabled']) !!}</td>
+                <td>{!! Form::text('codigo_conteo', null, [ 'class' => 'form-control', 'placeholder' => '', 'autofocus','disabled']) !!}</td>
             </tr>
             <tr>
                 <th scope="row">{!! Form::label('codigo_articulo', 'Codigo Interno') !!}</th>
-                <td>{!! Form::text('codigo_articulo', null, [ 'class' => 'form-control', 'placeholder' => '', 'autofocus', 'required','disabled']) !!}</td>
+                <td>{!! Form::text('codigo_articulo', null, [ 'class' => 'form-control', 'placeholder' => '', 'autofocus','disabled']) !!}</td>
             </tr>
             <tr>
                 <th scope="row">{!! Form::label('codigo_barra', 'Codigo de Barra') !!}</th>
-                <td>{!! Form::text('codigo_barra', null, [ 'class' => 'form-control', 'placeholder' => '', 'autofocus', 'required','disabled']) !!}</td>
+                <td>{!! Form::text('codigo_barra', null, [ 'class' => 'form-control', 'placeholder' => '', 'autofocus','disabled']) !!}</td>
             </tr>
             <tr>
                 <th scope="row">{!! Form::label('descripcion', 'Descripcion') !!}</th>
-                <td>{!! Form::text('descripcion', null, [ 'class' => 'form-control', 'placeholder' => '', 'autofocus', 'required','disabled']) !!}</td>
+                <td>{!! Form::text('descripcion', null, [ 'class' => 'form-control', 'placeholder' => '', 'autofocus','disabled']) !!}</td>
             </tr>
             <tr>
                 <th scope="row">{!! Form::label('existencia_actual', 'Existencia Sistema') !!}</th>
-                <td>{!! Form::text('existencia_actual', null, [ 'class' => 'form-control', 'placeholder' => '', 'autofocus', 'required','disabled']) !!}</td>
+                <td>{!! Form::text('existencia_actual', null, [ 'class' => 'form-control', 'placeholder' => '', 'autofocus','disabled']) !!}</td>
             </tr>
             <tr>
                 <th scope="row">{!! Form::label('conteo', 'Conteo') !!}</th>

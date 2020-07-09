@@ -78,8 +78,15 @@
 	</h1>
 
 	<hr class="row align-items-start col-12">
+		
 	<table style="width:100%;" class="CP-stickyBar">
 	    <tr>
+	    	<td style="width:10%;">
+	    		<form action="/inventario/" method="POST" style="display: inline;">
+        	@csrf                       
+        		<button type="submit" name="Regresar" role="button" class="btn btn-outline-info btn-sm"data-placement="top"><i class="fa fa-reply">&nbsp;Regresar</i></button>
+    			</form>
+	    	</td>
 	       <td style="width:90%;">
 	        	<div class="input-group md-form form-sm form-1 pl-0 CP-stickyBar">
 				  <div class="input-group-prepend">

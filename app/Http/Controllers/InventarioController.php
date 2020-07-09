@@ -131,7 +131,8 @@ class InventarioController extends Controller
      */
     public function show($id)
     {
-        //
+        $inventario = Inventario::find($id); 
+        return view('pages.inventario.show', compact('inventario'));
     }
 
     /**
@@ -164,8 +165,23 @@ class InventarioController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
-        //
+       $Inventario = Inventario::find($id);
+
+      if($request->input('action')=='Revisar'){
+        $Inventario->estatus = 'REVISADO';
+        $Inventario->operador_revisado = auth()->user()->name;
+        $Inventario->fecha_revisado = date('y-m-d H:i:s');
+        $Inventario->save();
+        return redirect()->route('inventario.index')->with('Updated', ' Informacion');
+      }
+      else if($request->input('action')=='Anular'){
+        $Inventario->estatus = 'ANULADO';
+        $Inventario->operador_anulado = auth()->user()->name;
+        $Inventario->fecha_anulado = date('y-m-d H:i:s');
+        $Inventario->save();
+        return redirect()->route('inventario.index')->with('Updated', ' Informacion');
+      }
     }
 }

@@ -83,7 +83,28 @@ class InventarioDetalleController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        try{
+            $InventarioDetalle = InventarioDetalle::find($id);
+            $InventarioDetalle->conteo = $request->input('conteo');
+            $InventarioDetalle->re_conteo = $request->input('re_conteo');
+
+            if($request->input('conteo')!=NULL && $InventarioDetalle->operador_conteo==""){
+                $InventarioDetalle->operador_conteo = auth()->user()->name;
+                $InventarioDetalle->fecha_conteo = date('Y-m-d H:i:m');
+            }
+
+            if($request->input('re_conteo')!=NULL && $InventarioDetalle->operador_reconteo==""){
+                $InventarioDetalle->operador_reconteo = auth()->user()->name;
+                $InventarioDetalle->fecha_reconteo = date('Y-m-d H:i:m');
+            }
+            
+            $InventarioDetalle->save(); 
+
+            return redirect()->route('inventario.index')->with('Updated', ' Informacion');
+        }
+        catch(\Illuminate\Database\QueryException $e){
+            return back()->with('Error', ' Error');
+        }
     }
 
     /**
