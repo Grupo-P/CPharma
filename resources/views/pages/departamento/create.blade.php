@@ -112,8 +112,14 @@
                 <td scope="col">Articulos en Cero</td>
                 <th scope="col">26</th>
                 <td scope="col">Ultimas Entradas en Cero</td>
+                <th scope="col">27</th>
+                <td scope="col">Artículos por Vencer</td>
                 <th scope="col">99</th>
                 <td scope="col">Registro de Fallas</td>
+            </tr>
+            <tr>
+                <th scope="col">28</th>
+                <td scope="col">Artículos sin fecha de vencimiento</td>            
             </tr>
         </tbody>
     </table>

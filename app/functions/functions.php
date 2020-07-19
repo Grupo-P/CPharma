@@ -1293,6 +1293,12 @@
 			case 26:
 				$nombre = 'Ultimas Entradas en Cero';
 			break;
+			case 27:
+				$nombre = 'Artículos por Vencer';
+			break;
+			case 28:
+				$nombre = 'Artículos sin fecha de vencimiento';
+			break;
 			case 99:
 				$nombre = 'Registro de Fallas';
 			break;

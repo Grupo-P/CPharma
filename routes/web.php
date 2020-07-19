@@ -163,6 +163,14 @@ Route::get('/reporte26', function() {
     return view('pages.reporte.reporte26');
 });
 
+Route::get('/reporte27', function() {
+    return view('pages.reporte.reporte27');
+});
+
+Route::get('/reporte28', function() {
+    return view('pages.reporte.reporte28');
+});
+
 Route::get('/seccion1', function() {
     return view('pages.reporte.seccion1');
 });
