@@ -464,7 +464,7 @@
     INNER JOIN InvArticulo ON InvArticulo.Id = InvLoteAlmacen.InvArticuloId
     WHERE InvLote.FechaVencimiento < '$FInicial'
     AND InvLote.FechaVencimiento <> ''
-    AND (InvLoteAlmacen.Id = 1 OR  InvLoteAlmacen.Id = 2)
+    AND (InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
     AND InvLoteAlmacen.Existencia > 0
     ORDER BY InvLote.FechaVencimiento DESC
     ";
