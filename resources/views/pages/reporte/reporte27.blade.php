@@ -239,7 +239,13 @@
       echo '<td align="center">'.$Dolarizado.'</td>';
       echo '<td align="center">'.$Gravado.'</td>';
       echo '<td align="center">'.$clasificacion.'</td>';
-      echo '<td align="center">'.$row["UltimaVenta"]->format('d-m-Y').'</td>';
+      
+      if($row["UltimaVenta"]!=null){
+        echo '<td align="center">'.$row["UltimaVenta"]->format('d-m-Y').'</td>';
+      }
+      else{
+        echo '<td align="center"> - </td>';
+      }
       
       if(!is_null($UltimoProveedorNombre)){
         echo 
