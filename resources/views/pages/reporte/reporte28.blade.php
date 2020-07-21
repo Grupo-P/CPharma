@@ -436,7 +436,7 @@
     FROM InvLote
     INNER JOIN InvLoteAlmacen ON InvLoteAlmacen.InvLoteId = InvLote.Id
     INNER JOIN InvArticulo ON InvArticulo.Id = InvLoteAlmacen.InvArticuloId
-    WHERE InvLote.FechaVencimiento = ''
+    WHERE (CONVERT(char(25), ISNULL(CONVERT(varchar(10), InvLote.FechaVencimiento, 126), 'NULL')) = 'NULL')
     AND (InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
     AND InvLoteAlmacen.Existencia > 0
     ORDER BY InvLote.FechaVencimiento DESC
