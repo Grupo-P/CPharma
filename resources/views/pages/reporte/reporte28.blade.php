@@ -120,7 +120,7 @@
             <th scope="col" class="CP-sticky">Codigo</th>            
             <th scope="col" class="CP-sticky">Codigo de barra</th>
             <th scope="col" class="CP-sticky">Descripcion</th>
-            <th scope="col">Precio</br>(Con IVA) '.SigVe.'</td>
+            <th scope="col" class="CP-sticky">Precio</br>(Con IVA) '.SigVe.'</td>
             <th scope="col" class="CP-sticky">Fecha Lote</th>
             <th scope="col" class="CP-sticky">Existencia Total</th>
             <th scope="col" class="CP-sticky">Existencia Lote</th>
