@@ -852,6 +852,52 @@
 ?>
 <!-- TESORERIA -->
 
+<!-------------------------------------------------------------------------------->
+<!-- INVENTARIO -->
+<?php
+  if(Auth::user()->departamento == 'INVENTARIO'){
+?>
+  <div class="btn-group navbar-brand">
+    <button type="button" class="btn btn-outline-info dropdown-toggle textoI" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      <i class="fas fa-dolly-flatbed"></i> Inventario
+    </button>
+    <div class="dropdown-menu">
+      <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('/inventario') }}">  
+          <span data-feather="home"></span>
+          <i class="fa fa-boxes"></i>
+          Inventario<span class="sr-only">(current)</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('/ConsultorCompra') }}" target="_blank">
+          <span data-feather="home"></span>
+          <i class="fas fa-search"></i>
+          Buscador de articulos<span class="sr-only">(current)</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('/traslado') }}">     
+          <span data-feather="home"></span>
+          <i class="fas fa-people-carry"></i>
+          Traslado<span class="sr-only">(current)</span>
+        </a>
+      </li> 
+      <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('/ordenCompra') }}">     
+          <span data-feather="home"></span>
+          <i class="far fa-file-alt"></i>
+          Orden de compra<span class="sr-only">(current)</span>
+        </a>
+      </li> 
+    </div>
+  </div>
+<?php
+  }
+?>
+<!-- INVENTARIO -->
+<!-------------------------------------------------------------------------------->
+
 <!------------------------------------------------------------------------------->
 <!-- TECNOLOGIA -->
 <?php
@@ -1051,7 +1097,7 @@
           <i class="fa fa-boxes"></i>
           Inventario<span class="sr-only">(current)</span>
         </a>
-      </li>      
+      </li>
     </div>
   </div>
 <?php
