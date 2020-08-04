@@ -208,26 +208,26 @@
         .$Descripcion.
       '</a>
       </td>';
-      echo '<td align="center">'.number_format($Precio,2,"," ,"." ).'</td>';
+      echo '<td align="center">'.(number_format($Precio,2,"," ,"." )).'</td>';
       echo '<td align="center">'.$row["FechaLote"]->format('d-m-Y').'</td>';
       echo '<td align="center">'.$row["FechaVencimiento"]->format('d-m-Y').'</td>';
 
       $vidaUtil = FG_Rango_Dias($row["FechaVencimiento"]->format('d-m-Y'),$row["FechaLote"]->format('d-m-Y'));
       echo '<td align="center">'.$vidaUtil.'</td>';
 
-      $diasVencer = FG_Rango_Dias($FInicial,date('Y-m-d H:i:s'));
+      $diasVencer = FG_Validar_Fechas(date('Y-m-d H:i:s'),$row["FechaVencimiento"]->format('d-m-Y'));
       echo '<td align="center">'.$diasVencer.'</td>';
 
       echo '<td align="center">'.intval($Existencia).'</td>';
       echo '<td align="center">'.intval($row["ExistenciaLote"]).'</td>';
       
       $precioLoteVE = intval($row["ExistenciaLote"]) * $Precio;
-      echo '<td align="center">'.number_format($precioLoteVE,2,"," ,"." ).'</td>';
+      echo '<td align="center">'.(number_format($precioLoteVE,2,"," ,"." )).'</td>';
 
       if($TasaActual!=0){
         $PrecioDolar = $Precio/$TasaActual;
         $precioLoteDolar = intval($row["ExistenciaLote"]) * $PrecioDolar;
-        echo '<td align="center">'.number_format($precioLoteDolar,2,"," ,"." ).'</td>';
+        echo '<td align="center">'.(number_format($precioLoteDolar,2,"," ,"." )).'</td>';
       }
       else{
         echo '<td align="center">0,00</td>';
@@ -460,7 +460,7 @@
     INNER JOIN GenPersona ON GenPersona.Id = ComProveedor.GenPersonaId
     WHERE ComFacturaDetalle.InvArticuloId = InvArticulo.Id
     ORDER BY ComFactura.FechaDocumento DESC) AS  UltimoProveedorNombre,
-    InvLote.Auditoria_FechaActualizacion as FechaLote,
+    InvLote.Auditoria_FechaCreacion as FechaLote,
     InvLote.FechaVencimiento as FechaVencimiento,
     InvLote.Numero,
     InvLote.LoteFabricante,

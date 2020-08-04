@@ -428,7 +428,7 @@
     INNER JOIN GenPersona ON GenPersona.Id = ComProveedor.GenPersonaId
     WHERE ComFacturaDetalle.InvArticuloId = InvArticulo.Id
     ORDER BY ComFactura.FechaDocumento DESC) AS  UltimoProveedorNombre,
-    InvLote.Auditoria_FechaActualizacion as FechaLote,
+    InvLote.Auditoria_FechaCreacion as FechaLote,
     InvLote.FechaVencimiento as FechaVencimiento,
     InvLote.Numero,
     InvLote.LoteFabricante,
