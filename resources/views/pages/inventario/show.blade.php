@@ -158,10 +158,12 @@
       		<th scope="row" colspan="1">Ultima venta</th>
       		<th scope="row" colspan="1">Conteo anterior</th>
       		<th scope="row" colspan="1">Existencia Sistema<br>(A conteo)</th>
-      		<th scope="row" colspan="1">Conteo</th> 
+      		<th scope="row" colspan="1">Conteo</th>
+      		<th scope="col" colspan="1">Diferencia Conteo</th> 
       		<th scope="row" colspan="1">Operador Conteo</th> 
       		<th scope="row" colspan="1">Fecha Conteo</th> 
       		<th scope="row" colspan="1">Reconteo</th>
+      		<th scope="col" colspan="1">Diferencia Reconteo</th>
       		<th scope="row" colspan="1">Operador Reconteo</th> 
       		<th scope="row" colspan="1">Fecha Reconteo</th> 
 		    </tr>
@@ -225,9 +227,11 @@
 	      		<td scope="row" colspan="1">{{$ultimoConteo}}</td>
 	      		<td scope="row" colspan="1">{{$inventarioDetalle->existencia_actual}}</td>
 	      		<td scope="row" colspan="1">{{$inventarioDetalle->conteo}}</td>
+	      		<td scope="row" colspan="1">{{$inventarioDetalle->existencia_actual - $inventarioDetalle->conteo}}</td>
 						<td scope="row" colspan="1">{{$inventarioDetalle->operador_conteo}}</td>
 						<td scope="row" colspan="1">{{$inventarioDetalle->fecha_conteo}}</td>
 	      		<td scope="row" colspan="1">{{$inventarioDetalle->re_conteo}}</td>
+	      		<td scope="row" colspan="1">{{$inventarioDetalle->existencia_actual - $inventarioDetalle->re_conteo}}</td>
 	      		<td scope="row" colspan="1">{{$inventarioDetalle->operador_reconteo}}</td>
 	      		<td scope="row" colspan="1">{{$inventarioDetalle->fecha_reconteo}}</td>
 			    </tr>

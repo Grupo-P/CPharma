@@ -110,7 +110,9 @@
 		      	<th scope="col" class="CP-sticky">Descripcion</th>
 		      	<th scope="col" class="CP-sticky">Existencia Sistema</th>
 		      	<th scope="col" class="CP-sticky">Conteo</th>
+		      	<th scope="col" class="CP-sticky">Diferencia Conteo</th>
 		      	<th scope="col" class="CP-sticky">Reconteo</th>
+		      	<th scope="col" class="CP-sticky">Diferencia Reconteo</th>
 		      	<th scope="col" class="CP-sticky">Acciones</th>
 		    </tr>
 	  	</thead>
@@ -124,7 +126,9 @@
 	      	<td>{{$inventario->descripcion}}</td>
 	      	<td>{{$inventario->existencia_actual}}</td>
 	      	<td>{{$inventario->conteo}}</td>
+	      	<td>{{$inventario->existencia_actual - $inventario->conteo}}</td>
 	      	<td>{{$inventario->re_conteo}}</td>
+	      	<td>{{$inventario->existencia_actual - $inventario->re_conteo}}</td>
 		    <!-- Inicio Validacion de ROLES -->
 		      <td style="width:140px;">
 				
