@@ -180,11 +180,11 @@
 
     $conn = FG_Conectar_Smartpharma($SedeConnection);
 
-    //$FFin= date("Y-m-d");
-    //$FInicio = date("Y-m-d",strtotime($FFin."- 20 days"));
+    $FFin= date("Y-m-d");
+    $FInicio = date("Y-m-d",strtotime($FFin."- 20 days"));
 
-    $FFin= date("2018-12-12");
-    $FInicio = date("Y-m-d",strtotime($FFin."- 1 days"));
+    //$FFin= date("2018-12-12");
+    //$FInicio = date("Y-m-d",strtotime($FFin."- 1 days"));
 
     if($CondicionVenta=="ConVenta"){
       $sql = Inv_ConVenta($FInicio,$FFin,$Cantidad);
