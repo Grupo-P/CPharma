@@ -183,11 +183,27 @@ class InventarioController extends Controller
        $inventario = Inventario::find($id);
 
       if($request->input('action')=='Revisar'){
-        $inventario->estatus = 'REVISADO';
-        $inventario->operador_revisado = auth()->user()->name;
-        $inventario->fecha_revisado = date('y-m-d H:i:s');
-        $inventario->save();
-        return redirect()->route('inventario.index')->with('Updated', ' Informacion');
+
+        $inventarioDetalle =  InventarioDetalle::where('codigo_conteo',$inventario->codigo)->get();
+
+        $flag = true;
+        foreach ($inventarioDetalle as $detalle) {
+            if($detalle->conteo=="" || $detalle->re_conteo==""){
+                $flag = false;
+            }
+        }
+
+        if($flag == true){
+            $inventario->estatus = 'REVISADO';
+            $inventario->operador_revisado = auth()->user()->name;
+            $inventario->fecha_revisado = date('y-m-d H:i:s');
+            $inventario->save();
+            return redirect()->route('inventario.index')->with('Updated', ' Informacion');
+        }
+        else{
+            return redirect()->route('inventario.index')->with('Contar', ' Informacion');
+        }
+        
       }
       else if($request->input('action')=='Anular'){        
         return view('pages.inventario.edit', compact('inventario'));
