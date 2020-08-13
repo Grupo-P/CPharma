@@ -145,7 +145,7 @@
 	    				<b><i class="fas fa-syringe text-success"></i>CPharma</b>
 						</span>
 	    		</th>
-					<th colspan="14">DETALLES DEL INVENTARIO</th>
+					<th colspan="16">DETALLES DEL INVENTARIO</th>
 				</tr>
 		    <tr>
       		<th scope="row" colspan="1">#</th>
@@ -166,6 +166,8 @@
       		<th scope="col" colspan="1">Diferencia Reconteo</th>
       		<th scope="row" colspan="1">Operador Reconteo</th> 
       		<th scope="row" colspan="1">Fecha Reconteo</th> 
+      		<th scope="row" colspan="1">Diferencia<br>(Generado-Conteo)<br>dias</th> 
+      		<th scope="row" colspan="1">Diferencia<br>(Generado-Reconteo)<br>dias</th> 
 		    </tr>
 	  	</thead>
 
@@ -218,7 +220,11 @@
 
 			    $ResultCPharma = mysqli_query($connCPharma,$sqlUltimoConteo);
 			    $RowCPharma = mysqli_fetch_assoc($ResultCPharma);
-			    $ultimoConteo = $RowCPharma['fecha_conteo'];			    
+			    $ultimoConteo = $RowCPharma['fecha_conteo'];	
+
+			    $generado_conteo = FG_Rango_Dias($inventario->fecha_generado,$inventarioDetalle->fecha_conteo);
+
+			    $generado_reconteo = FG_Rango_Dias($inventario->fecha_generado,$inventarioDetalle->fecha_reconteo);
 					?>
 
 			    <tr>
@@ -239,7 +245,9 @@
 	      		<td scope="row" colspan="1">{{$inventarioDetalle->re_conteo}}</td>
 	      		<td scope="row" colspan="1">{{$inventarioDetalle->existencia_actual - $inventarioDetalle->re_conteo}}</td>
 	      		<td scope="row" colspan="1">{{$inventarioDetalle->operador_reconteo}}</td>
-	      		<td scope="row" colspan="1">{{$inventarioDetalle->fecha_reconteo}}</td>
+	      		<td scope="row" colspan="1">{{$inventarioDetalle->fecha_reconteo}}</td>	      		
+	      		<td scope="row" colspan="1">{{$generado_conteo}}</td>
+	      		<td scope="row" colspan="1">{{$generado_reconteo}}</td>
 			    </tr>
 				@endforeach
 
