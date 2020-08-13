@@ -207,6 +207,14 @@
     $fechaActual = new DateTime('now');
     $fechaActual = date_format($fechaActual,'Y-m-d');
 
+    $sqlUltimoConteo = "
+    SELECT fecha_conteo FROM inventario_detalles WHERE id_articulo = '$IdArticulo' ORDER BY fecha_conteo DESC LIMIT 1;
+   ";
+
+    $ResultCPharma = mysqli_query($connCPharma,$sqlUltimoConteo);
+    $RowCPharma = mysqli_fetch_assoc($ResultCPharma);
+    $ultimoConteo = $RowCPharma['fecha_conteo'];
+
     echo '
     <div class="input-group md-form form-sm form-1 pl-0 CP-stickyBar">
       <div class="input-group-prepend">
@@ -289,7 +297,7 @@
 
     echo '<td>'.$unidadminima.'</td>';
 
-    echo '<td>Proximamente</td>';
+    echo '<td align="center">'.$ultimoConteo.'</td>';
 
     if( ($Existencia==0) && (!is_null($UltimaVenta)) ){
       echo '<td align="center">'.number_format($UltimoPrecio,2,"," ,"." ).'</td>';
