@@ -145,7 +145,7 @@
 	    				<b><i class="fas fa-syringe text-success"></i>CPharma</b>
 						</span>
 	    		</th>
-					<th colspan="12">DETALLES DEL INVENTARIO</th>
+					<th colspan="14">DETALLES DEL INVENTARIO</th>
 				</tr>
 		    <tr>
       		<th scope="row" colspan="1">#</th>
@@ -210,7 +210,13 @@
 				    $Precio = FG_Calculo_Precio_Alfa($Existencia,$ExistenciaAlmacen1,$ExistenciaAlmacen2,$IsTroquelado,$UtilidadArticulo,$UtilidadCategoria,$TroquelAlmacen1,$PrecioCompraBrutoAlmacen1,$TroquelAlmacen2,
     $PrecioCompraBrutoAlmacen2,$PrecioCompraBruto,$IsIVA,$CondicionExistencia);
 
-			    $ResultCPharma = mysqli_query($connCPharma,"SELECT fecha_conteo FROM inventario_detalles WHERE id_articulo = '$inventarioDetalle->id_articulo' ORDER BY fecha_conteo DESC LIMIT 1");
+				   $sqlUltimoConteo = "
+				   	SELECT fecha_conteo FROM inventario_detalles WHERE id_articulo = '$inventarioDetalle->id_articulo' 
+						AND fecha_conteo <> (SELECT fecha_conteo FROM inventario_detalles WHERE id_articulo = '$inventarioDetalle->id_articulo' ORDER BY fecha_conteo DESC LIMIT 1)
+						ORDER BY fecha_conteo DESC LIMIT 1;
+				   ";
+
+			    $ResultCPharma = mysqli_query($connCPharma,$sqlUltimoConteo);
 			    $RowCPharma = mysqli_fetch_assoc($ResultCPharma);
 			    $ultimoConteo = $RowCPharma['fecha_conteo'];			    
 					?>
