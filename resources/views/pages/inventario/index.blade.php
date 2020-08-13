@@ -99,6 +99,45 @@
 	</h1>
 
 	<hr class="row align-items-start col-12">
+	
+	<table class="table table-striped table-borderless col-12 sortable">
+  	<thead class="thead-dark">
+	    <tr>
+	      	<th scope="col" colspan="4" style="text-align: center;">CLASIFICACION</th>
+	    </tr>
+		</thead>
+		<tbody>
+	  	<tr>
+
+  		<td style="width:11%;" align="center"> 		
+				<form action="/inventario" method="GET" style="display: inline;">
+			    <button type="submit" name="Tipo" role="button" class="btn btn-outline-dark btn-sm" value="3">TODOS</button>
+				</form>
+	    </td>
+
+	  	<td style="width:11%;" align="center">	  		
+				<form action="/inventario" method="GET" style="display: inline;">
+			    <button type="submit" name="Tipo" role="button" class="btn btn-outline-info btn-sm" value="0">GENERADO</button>
+				</form>
+	    </td>
+
+	  	<td style="width:11%;" align="center">
+				<form action="/inventario" method="GET" style="display: inline;">
+			    <button type="submit" name="Tipo" role="button" class="btn btn-outline-success btn-sm" value="1">REVISADO</button>
+				</form>
+	    </td>
+
+	    <td style="width:11%;" align="center">    	
+				<form action="/inventario" method="GET" style="display: inline;">
+			    <button type="submit" name="Tipo" role="button" class="btn btn-outline-danger btn-sm" value="2">ANULADO</button>
+					</form>	
+			</td>
+
+	    </tr>
+		</tbody>
+	</table>
+	<br>
+
 	<table style="width:100%;" class="CP-stickyBar">
 	    <tr>
         <td style="width:8%;" align="center">	

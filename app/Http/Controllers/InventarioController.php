@@ -27,8 +27,39 @@ class InventarioController extends Controller
      */
     public function index()
     {
-        $inventarios =  Inventario::all();
-        return view('pages.inventario.index', compact('inventarios'));
+        if(isset($_GET['Tipo'])){
+            $Tipo = $_GET['Tipo'];
+        }
+        else{
+            $Tipo = 3;
+        }
+
+        switch ($Tipo) {
+          case 0:
+              $inventarios =  
+              Inventario::orderBy('created_at', 'desc')->
+              where('estatus','GENERADO')->get();
+          break;
+          case 1:
+              $inventarios =  
+              Inventario::orderBy('created_at', 'desc')->
+              where('estatus','REVISADO')->get();            
+          break;
+          case 2:
+              $inventarios =  
+              Inventario::orderBy('created_at', 'desc')->
+              where('estatus','ANULADO')->get();
+          break;
+          default:
+              $inventarios =  Inventario::orderBy('created_at', 'desc')
+              ->where('estatus','GENERADO')
+              ->orWhere('estatus','REVISADO')
+              ->orWhere('estatus','ANULADO')
+              ->get(); 
+              return view('pages.inventario.index', compact('inventarios'));
+          break;
+      }
+      return view('pages.inventario.index', compact('inventarios'));
     }
 
     /**
