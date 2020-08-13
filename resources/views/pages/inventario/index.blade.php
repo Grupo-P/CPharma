@@ -61,7 +61,7 @@
 		        </button>
 		      </div>
 		      <div class="modal-body">
-		        <h4 class="h6">Debe cargar la informacion del conteo y reconteo</h4>
+		        <h4 class="h6">Debe cargar la informacion del conteo</h4>
 		      </div>
 		      <div class="modal-footer">
 		        <button type="button" class="btn btn-outline-success" data-dismiss="modal">Aceptar</button>
@@ -194,7 +194,7 @@
 						    @method('DELETE')
 						    @csrf
 						    <input type="hidden" name="action" value="Revisar">			    
-						    <button type="submit" name="Eliminar" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Revisado"><i class="fa fa-check"></i></button>
+						    <button type="submit" name="Eliminar" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Aprobar"><i class="fa fa-check"></i></button>
 				 			</form>
 
 			      	<form action="/inventario/{{$inventario->id}}" method="POST" style="display: inline;">

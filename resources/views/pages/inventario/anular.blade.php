@@ -22,7 +22,7 @@
 
     {!! Form::model($inventario, ['route' => ['inventario.update', $inventario], 'method' => 'PUT']) !!}
     <fieldset>
-
+        {!! Form::hidden('action','Anular') !!}
         <table class="table table-borderless table-striped">
         <thead class="thead-dark">
             <tr>
