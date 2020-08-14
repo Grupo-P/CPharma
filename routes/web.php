@@ -285,6 +285,10 @@ Route::get('/inventarioDescripcion', function() {
     return view('pages.inventario.por_descripcion');
 }); 
 
+Route::get('/inventarioCodigoBarra', function() {
+    return view('pages.inventario.por_codigobarra');
+});
+
 Route::get('/inventarioAleatorio', function() {
     return view('pages.inventario.por_aleatorio');
 }); 

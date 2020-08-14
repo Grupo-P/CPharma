@@ -154,6 +154,13 @@
 						Por Descripcion
 					</a>
         </td>
+        <td style="width:8%;" align="center">
+					<a href="{{ url('/inventarioCodigoBarra') }}" role="button" class="btn btn-outline-dark btn-sm" 
+					style="display: inline; text-align: left;">
+					<i class="fa fa-plus"></i>
+						Por Codigo de Barra
+					</a>
+        </td>
         <td style="width:6%;" align="center">
 					<a href="{{ url('/inventarioAleatorio') }}" role="button" class="btn btn-outline-warning btn-sm" 
 					style="display: inline; text-align: left;">
@@ -161,7 +168,7 @@
 						Aleatorio
 					</a>
         </td>
-	        <td style="width:70%;">
+	        <td style="width:65%;">
 	        	<div class="input-group md-form form-sm form-1 pl-0 CP-stickyBar">
 				  <div class="input-group-prepend">
 				    <span class="input-group-text purple lighten-3" id="basic-text1"><i class="fas fa-search text-white"
