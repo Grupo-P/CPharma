@@ -162,15 +162,6 @@
 
     $conn = FG_Conectar_Smartpharma($SedeConnection);
 
-    if($IdArticulo!=""){
-      $sql = Inv_Descripcion($IdArticulo);
-      $result = sqlsrv_query($conn,$sql);  
-    }
-    else{
-      $sql = Inv_Descripcion_Like($NombreArticulo);
-      $result = sqlsrv_query($conn,$sql);
-    }
-
     echo '
     <div class="input-group md-form form-sm form-1 pl-0 CP-stickyBar">
       <div class="input-group-prepend">
@@ -212,32 +203,78 @@
         </thead>
         <tbody>
     ';
-    $contador = 1;
-    while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
-      $IdArticulo = $row["Id"];
-      $CodigoArticulo = $row["CodigoArticulo"];
-      $CodigoBarra = $row["CodigoBarra"];
-      $Existencia = $row["Existencia"];
-      $Descripcion = FG_Limpiar_Texto($row["Descripcion"]);
 
-      echo '<tr>';
-      echo '<td align="left"><strong>'.intval($contador).'</strong></td>';
-      echo '<td align="left">'.$CodigoArticulo.'</td>';
-      echo '<td align="center">'.$CodigoBarra.'</td>';
-      echo 
-      '<td align="left" class="CP-barrido">
-      <a href="/reporte2?Id='.$IdArticulo.'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
-        .$Descripcion.
-      '</a>
-      </td>';
-      echo '<td align="center">'.intval($Existencia).'</td>';
-      echo'<td align="center"><input type="checkbox" name="articulosContar[]" value="'.$IdArticulo.'"/></td>';
-      echo '</tr>';
-    $contador++;
+    if($IdArticulo!=""){
+      $sql = Inv_Descripcion($IdArticulo);
+      $result = sqlsrv_query($conn,$sql);
+
+      $contador = 1;
+      while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
+        $IdArticulo = $row["Id"];
+        $CodigoArticulo = $row["CodigoArticulo"];
+        $CodigoBarra = $row["CodigoBarra"];
+        $Existencia = $row["Existencia"];
+        $Descripcion = FG_Limpiar_Texto($row["Descripcion"]);
+
+        echo '<tr>';
+        echo '<td align="left"><strong>'.intval($contador).'</strong></td>';
+        echo '<td align="left">'.$CodigoArticulo.'</td>';
+        echo '<td align="center">'.$CodigoBarra.'</td>';
+        echo 
+        '<td align="left" class="CP-barrido">
+        <a href="/reporte2?Id='.$IdArticulo.'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
+          .$Descripcion.
+        '</a>
+        </td>';
+        echo '<td align="center">'.intval($Existencia).'</td>';
+        echo'<td align="center"><input type="checkbox" name="articulosContar[]" value="'.$IdArticulo.'"/></td>';
+        echo '</tr>';
+        $contador++;
       }
       echo '
         </tbody>
     </table>';
+
+    }
+    else{
+      $descripcionArticulo = explode(",", $NombreArticulo);
+
+      $contador = 1;
+      $i=0;
+        
+      while ( ($i<count($descripcionArticulo)) && ($descripcionArticulo[$i]!='') ){
+        $NombreArticulo = $descripcionArticulo[$i];
+
+        $sql = Inv_Descripcion_Like($NombreArticulo);
+        $result = sqlsrv_query($conn,$sql);
+        $row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC);
+
+        $IdArticulo = $row["Id"];
+        $CodigoArticulo = $row["CodigoArticulo"];
+        $CodigoBarra = $row["CodigoBarra"];
+        $Existencia = $row["Existencia"];
+        $Descripcion = FG_Limpiar_Texto($row["Descripcion"]);
+
+        echo '<tr>';
+        echo '<td align="left"><strong>'.intval($contador).'</strong></td>';
+        echo '<td align="left">'.$CodigoArticulo.'</td>';
+        echo '<td align="center">'.$CodigoBarra.'</td>';
+        echo 
+        '<td align="left" class="CP-barrido">
+        <a href="/reporte2?Id='.$IdArticulo.'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
+          .$Descripcion.
+        '</a>
+        </td>';
+        echo '<td align="center">'.intval($Existencia).'</td>';
+        echo'<td align="center"><input type="checkbox" name="articulosContar[]" value="'.$IdArticulo.'"/></td>';
+        echo '</tr>';
+      $i++;
+      $contador++;
+      }
+        echo '
+          </tbody>
+      </table>';
+    }
 
     sqlsrv_close($conn);
   }
