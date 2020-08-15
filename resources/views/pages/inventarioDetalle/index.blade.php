@@ -126,9 +126,20 @@
 	      	<td>{{$inventario->descripcion}}</td>
 	      	<td>{{$inventario->existencia_actual}}</td>
 	      	<td>{{$inventario->conteo}}</td>
-	      	<td>{{$inventario->existencia_actual - $inventario->conteo}}</td>
+	      	
+	      	@if($inventario->conteo!="")
+						<td>{{$inventario->existencia_actual - $inventario->conteo}}</td>
+	      	@else
+						<td></td>
+	      	@endif
+	      	
 	      	<td>{{$inventario->re_conteo}}</td>
-	      	<td>{{$inventario->existencia_actual - $inventario->re_conteo}}</td>
+
+	      	@if($inventario->re_conteo!="")
+						<td>{{$inventario->existencia_actual - $inventario->re_conteo}}</td>
+	      	@else
+						<td></td>
+	      	@endif
 		    <!-- Inicio Validacion de ROLES -->
 		      <td style="width:140px;">
 				

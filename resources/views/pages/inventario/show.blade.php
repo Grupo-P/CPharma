@@ -239,11 +239,23 @@
 	      		<td scope="row" colspan="1">{{$ultimoConteo}}</td>
 	      		<td scope="row" colspan="1">{{$inventarioDetalle->existencia_actual}}</td>
 	      		<td scope="row" colspan="1">{{$inventarioDetalle->conteo}}</td>
-	      		<td scope="row" colspan="1">{{$inventarioDetalle->existencia_actual - $inventarioDetalle->conteo}}</td>
+						
+						@if($inventarioDetalle->conteo!="")
+							<td scope="row" colspan="1">{{$inventarioDetalle->existencia_actual - $inventarioDetalle->conteo}}</td>
+		      	@else
+							<td scope="row" colspan="1"></td>
+		      	@endif
+
 						<td scope="row" colspan="1">{{$inventarioDetalle->operador_conteo}}</td>
 						<td scope="row" colspan="1">{{$inventarioDetalle->fecha_conteo}}</td>
 	      		<td scope="row" colspan="1">{{$inventarioDetalle->re_conteo}}</td>
-	      		<td scope="row" colspan="1">{{$inventarioDetalle->existencia_actual - $inventarioDetalle->re_conteo}}</td>
+
+	      		@if($inventarioDetalle->re_conteo!="")
+							<td scope="row" colspan="1">{{$inventarioDetalle->existencia_actual - $inventarioDetalle->re_conteo}}</td>
+		      	@else
+							<td scope="row" colspan="1"></td>
+		      	@endif
+
 	      		<td scope="row" colspan="1">{{$inventarioDetalle->operador_reconteo}}</td>
 	      		<td scope="row" colspan="1">{{$inventarioDetalle->fecha_reconteo}}</td>	      		
 	      		<td scope="row" colspan="1">{{$generado_conteo}}</td>
