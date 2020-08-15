@@ -112,8 +112,9 @@
     <br>
     ';
 
-    R7_Catalogo_Proveedor_C2($_GET['SEDE'],$_GET['Id'],$_GET['Nombre']);
+    $cadenaCodigosBarra = R7_Catalogo_Proveedor_C2($_GET['SEDE'],$_GET['Id'],$_GET['Nombre']);
     
+    echo '<pre><strong>Codigos de Barra<br>'.$cadenaCodigosBarra.'<br></strong></pre>';
     $FinCarga = new DateTime("now");
     $IntervalCarga = $InicioCarga->diff($FinCarga);
     echo'Tiempo de carga: '.$IntervalCarga->format("%Y-%M-%D %H:%I:%S");
@@ -187,6 +188,8 @@
     $sql = R7Q_Catalogo_Proveedor($IdProveedor);
     $result = sqlsrv_query($conn,$sql);
 
+    $cadenaCodigosBarra = "";
+
     echo '
     <div class="input-group md-form form-sm form-1 pl-0 CP-stickyBar">
       <div class="input-group-prepend">
@@ -226,11 +229,23 @@
         </thead>
         <tbody>
     ';
-    $contador = 1;
+    $contador = $conteo = 1;
+
     while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
       $IdArticulo = $row["Id"];
       $CodigoArticulo = $row["CodigoArticulo"];
+
       $CodigoBarra = $row["CodigoBarra"];
+
+      if($conteo==15){
+        $cadenaCodigosBarra = $cadenaCodigosBarra.$CodigoBarra.",<br>";
+        $conteo = 1;
+      }
+      else{        
+        $cadenaCodigosBarra = $cadenaCodigosBarra.$CodigoBarra.",";
+        $conteo++;
+      }
+      
       $Descripcion = FG_Limpiar_Texto($row["Descripcion"]);
 
       echo '<tr>';
@@ -252,6 +267,8 @@
     </table>';
 
     sqlsrv_close($conn);
+
+    return $cadenaCodigosBarra;
   }
   /**********************************************************************************/
   /*
