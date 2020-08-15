@@ -1,3 +1,4 @@
+/app/functions/config.php
 /node_modules
 /public/hot
 /public/storage
@@ -14,4 +15,3 @@ yarn-error.log
 .env
 .phpunit.result.cache
 /public/assets/promocion/*.jpg
-/app/functions/config.php
