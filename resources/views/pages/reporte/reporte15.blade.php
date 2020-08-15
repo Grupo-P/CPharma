@@ -148,6 +148,7 @@
             <th scope="col" class="CP-sticky">Costo Bruto '.SigVe.'</td>
             <th scope="col" class="CP-sticky">Valor lote '.SigVe.'</th>
             <th scope="col" class="CP-sticky">Ultimo lote</th>
+            <th scope="col" class="CP-sticky bg-warning">Ultima Compra</th>
             <th scope="col" class="CP-sticky">Tasa historico  '.SigVe.'</th>
             <th scope="col" class="CP-sticky">Precio en  '.SigDolar.'</th>
             <th scope="col" class="CP-sticky">Valor lote  '.SigDolar.'</th>
@@ -168,6 +169,7 @@
 
       $IdArticulo = $row2["InvArticuloId"];
       $Dolarizado = FG_Producto_Dolarizado($row2["Dolarizado"]);
+      $UltimaCompra = $row2["UltimaCompra"];
       
       if($Dolarizado == 'NO') {
         $UltimoLote = $row2['FechaLote'];
@@ -228,6 +230,13 @@
                   <td align="center">'.number_format($ValorLote,2,"," ,"." ).'</td>
                   <td align="center">'.$row2['FechaLote']->format('d-m-Y').'</td>
             ';
+
+            if(!is_null($UltimaCompra)){
+              echo '<td align="center" class="bg-warning">'.$UltimaCompra->format('d-m-Y').'</td>';
+            }
+            else{
+              echo '<td align="center" class="bg-warning"> - </td>';
+            }
 
             if($Tasa != 0) {
               $PrecioDolarizado = round(($Precio/$Tasa),2);
@@ -431,7 +440,15 @@
       INNER JOIN ComProveedor ON ComProveedor.Id = ComFactura.ComProveedorId
       INNER JOIN GenPersona ON GenPersona.Id = ComProveedor.GenPersonaId
       WHERE ComFacturaDetalle.InvArticuloId = InvArticulo.Id
-      ORDER BY ComFactura.FechaDocumento DESC) AS  UltimoProveedorNombre
+      ORDER BY ComFactura.FechaDocumento DESC) AS  UltimoProveedorNombre,
+    -- Ultima Compra (Fecha de ultima compra)
+      (SELECT TOP 1
+      CONVERT(DATE,ComFactura.FechaRegistro)
+      FROM ComFacturaDetalle
+      INNER JOIN ComFactura ON ComFactura.Id = ComFacturaDetalle.ComFacturaId
+      INNER JOIN ComProveedor ON ComProveedor.Id = ComFactura.ComProveedorId
+      WHERE ComFacturaDetalle.InvArticuloId = InvArticulo.Id
+      ORDER BY ComFactura.FechaRegistro DESC) AS  UltimaCompra
       --Tabla de origen
       FROM InvLote
       --Tablas relacionadas

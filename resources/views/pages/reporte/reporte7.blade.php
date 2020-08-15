@@ -354,6 +354,7 @@
             <th scope="col" class="CP-sticky">Ultima Venta (En rango)</th>
             <th scope="col" class="CP-sticky">Ultima Venta</th>
             <th scope="col" class="CP-sticky">Ultimo Lote</th>
+            <th scope="col" class="CP-sticky bg-warning">Ultima Compra</th>
             <th scope="col" class="CP-sticky">Ultimo Proveedor</th>
             <th scope="col" class="CP-sticky">Pedir</th>
             <th scope="col" class="CP-sticky bg-danger text-white">Pedir (Real)</th> 
@@ -404,6 +405,7 @@
       $UltimaVenta = $row2["UltimaVenta"];
       $Unico = FG_Producto_Unico($conn,$IdArticulo,$IdProveedor);
       $UltimoProveedorNombre = $row2["UltimoProveedorNombre"];
+      $UltimaCompra = $row2["UltimaCompra"];
 
       $Dolarizado = FG_Producto_Dolarizado($Dolarizado);
       $Gravado = FG_Producto_Gravado($IsIVA);
@@ -487,6 +489,13 @@
       }
       else{
         echo '<td align="center"> - </td>';
+      }
+
+      if(!is_null($UltimaCompra)){
+        echo '<td align="center" class="bg-warning">'.$UltimaCompra->format('d-m-Y').'</td>';
+      }
+      else{
+        echo '<td align="center" class="bg-warning"> - </td>';
       }
 
       if(!is_null($UltimoProveedorNombre)){
@@ -816,7 +825,15 @@
     INNER JOIN ComProveedor ON ComProveedor.Id = ComFactura.ComProveedorId
     INNER JOIN GenPersona ON GenPersona.Id = ComProveedor.GenPersonaId
     WHERE ComFacturaDetalle.InvArticuloId = InvArticulo.Id
-    ORDER BY ComFactura.FechaDocumento DESC) AS  UltimoProveedorNombre
+    ORDER BY ComFactura.FechaDocumento DESC) AS  UltimoProveedorNombre,
+  -- Ultima Compra (Fecha de ultima compra)
+    (SELECT TOP 1
+    CONVERT(DATE,ComFactura.FechaRegistro)
+    FROM ComFacturaDetalle
+    INNER JOIN ComFactura ON ComFactura.Id = ComFacturaDetalle.ComFacturaId
+    INNER JOIN ComProveedor ON ComProveedor.Id = ComFactura.ComProveedorId
+    WHERE ComFacturaDetalle.InvArticuloId = InvArticulo.Id
+    ORDER BY ComFactura.FechaRegistro DESC) AS  UltimaCompra
 --Tabla principal
     FROM InvArticulo
 --Joins
@@ -995,7 +1012,7 @@
       INNER JOIN VenFacturaDetalle ON VenFacturaDetalle.VenFacturaId = VenFactura.Id
       WHERE (VenFacturaDetalle.InvArticuloId = '$IdArticulo')
       AND (VenFactura.FechaDocumento > '$FInicial' AND VenFactura.FechaDocumento < '$FFinal')
-      ORDER BY FechaDocumento DESC) AS UltimaVentaRango
+      ORDER BY FechaDocumento DESC) AS UltimaVentaRango    
     --Tabla Principal
       FROM VenFacturaDetalle
     --Joins
