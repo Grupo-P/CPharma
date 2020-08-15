@@ -532,8 +532,33 @@
   	</div>
 	</div>
 	<!-- Modal OPERACIONES -->
-	<!-- Dashboard OPERACIONES-->
+	<!-- Dashboard OPERACIONES-->	
 	<div class="card-deck">
+		<!-- Tasa Mercado -->
+		<?php
+			$conn = FG_Conectar_Smartpharma(FG_Mi_Ubicacion());
+			$sql = "SELECT TOP 1 InvArticulo.CodigoArticulo FROM InvArticulo ORDER BY InvArticulo.CodigoArticulo DESC";
+			$result = sqlsrv_query($conn,$sql);
+    	$row = sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC);
+    	$codigoInterno = intval($row["CodigoArticulo"])+1;
+		?>
+		<div class="card border-warning mb-3" style="width: 14rem;">	  	
+  		<div class="card-body text-left bg-warning">
+	    		<h3 class="card-title">
+		    		<span class="card-text text-white">
+		    			<i class="fas fa-credit-card"></i>
+		    			<?php
+								echo 'Proximo Codigo Interno a Crear: '.$codigoInterno;
+							?>						
+		    		</span>
+	    		</h3>
+	    		<p class="card-text text-white">
+					<?php
+						echo 'Ultima Actualizacion: '.date('d/m/Y H:i:s A');
+					?>
+	    		</p>
+  		</div>
+		</div>
 	<!-- Tasa Mercado -->
 		<div class="card border-secondary mb-3" style="width: 14rem;">	  	
   		<div class="card-body text-left bg-secondary">
