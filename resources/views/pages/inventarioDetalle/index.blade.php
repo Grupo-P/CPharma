@@ -128,7 +128,7 @@
 	      	<td>{{$inventario->conteo}}</td>
 	      	
 	      	@if($inventario->conteo!="")
-						<td>{{$inventario->existencia_actual - $inventario->conteo}}</td>
+						<td>{{$inventario->conteo - $inventario->existencia_actual}}</td>
 	      	@else
 						<td></td>
 	      	@endif
@@ -136,7 +136,7 @@
 	      	<td>{{$inventario->re_conteo}}</td>
 
 	      	@if($inventario->re_conteo!="")
-						<td>{{$inventario->existencia_actual - $inventario->re_conteo}}</td>
+						<td>{{$inventario->re_conteo - $inventario->existencia_actual}}</td>
 	      	@else
 						<td></td>
 	      	@endif

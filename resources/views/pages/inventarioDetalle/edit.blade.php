@@ -53,11 +53,11 @@
             </tr>
             <tr>
                 <th scope="row">{!! Form::label('conteo', 'Conteo') !!}</th>
-                <td>{!! Form::number('conteo', null, [ 'class' => 'form-control', 'placeholder' => '', 'autofocus']) !!}</td>
+                <td>{!! Form::number('conteo', null, [ 'class' => 'form-control', 'placeholder' => '', 'autofocus', 'min' => '0', 'step' => '1']) !!}</td>
             </tr>
             <tr>
                 <th scope="row">{!! Form::label('re_conteo', 'Reconteo') !!}</th>
-                <td>{!! Form::number('re_conteo', null, [ 'class' => 'form-control', 'placeholder' => '', 'autofocus']) !!}</td>
+                <td>{!! Form::number('re_conteo', null, [ 'class' => 'form-control', 'placeholder' => '', 'autofocus', 'min' => '0', 'step' => '1']) !!}</td>
             </tr>
         </tbody>
         </table>

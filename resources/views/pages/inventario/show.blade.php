@@ -241,7 +241,7 @@
 	      		<td scope="row" colspan="1">{{$inventarioDetalle->conteo}}</td>
 						
 						@if($inventarioDetalle->conteo!="")
-							<td scope="row" colspan="1">{{$inventarioDetalle->existencia_actual - $inventarioDetalle->conteo}}</td>
+							<td scope="row" colspan="1">{{$inventarioDetalle->conteo - $inventarioDetalle->existencia_actual}}</td>
 		      	@else
 							<td scope="row" colspan="1"></td>
 		      	@endif
@@ -251,7 +251,7 @@
 	      		<td scope="row" colspan="1">{{$inventarioDetalle->re_conteo}}</td>
 
 	      		@if($inventarioDetalle->re_conteo!="")
-							<td scope="row" colspan="1">{{$inventarioDetalle->existencia_actual - $inventarioDetalle->re_conteo}}</td>
+							<td scope="row" colspan="1">{{$inventarioDetalle->re_conteo - $inventarioDetalle->existencia_actual}}</td>
 		      	@else
 							<td scope="row" colspan="1"></td>
 		      	@endif
