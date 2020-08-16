@@ -537,10 +537,11 @@
 		<!-- Tasa Mercado -->
 		<?php
 			$conn = FG_Conectar_Smartpharma(FG_Mi_Ubicacion());
-			$sql = "SELECT TOP 1 InvArticulo.CodigoArticulo FROM InvArticulo ORDER BY InvArticulo.CodigoArticulo DESC";
+			$sql = "SELECT TOP 1 InvArticulo.CodigoArticulo, InvArticulo.Auditoria_Usuario FROM InvArticulo ORDER BY InvArticulo.Auditoria_FechaCreacion DESC";
 			$result = sqlsrv_query($conn,$sql);
     	$row = sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC);
-    	$codigoInterno = intval($row["CodigoArticulo"])+1;
+    	$codigoInterno = intval($row["CodigoArticulo"]);
+    	$operador = ($row["Auditoria_Usuario"]);
 		?>
 		<div class="card border-warning mb-3" style="width: 14rem;">	  	
   		<div class="card-body text-left bg-warning">
@@ -548,13 +549,14 @@
 		    		<span class="card-text text-white">
 		    			<i class="fas fa-credit-card"></i>
 		    			<?php
-								echo 'Proximo Codigo Interno a Crear: '.$codigoInterno;
+								echo 'Ultimo Codigo Interno a Creado: '.$codigoInterno;
 							?>						
 		    		</span>
 	    		</h3>
 	    		<p class="card-text text-white">
 					<?php
 						echo 'Ultima Actualizacion: '.date('d/m/Y H:i:s A');
+						echo '<br>Actualizado por: '.$operador;
 					?>
 	    		</p>
   		</div>
