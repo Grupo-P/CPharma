@@ -160,6 +160,7 @@
             <th scope="col" class="CP-sticky">Existencia</th>
             <th scope="col" class="CP-sticky">Precio</br>(Con IVA) '.SigVe.'</td>
             <th scope="col" class="CP-sticky">Ultima Venta</th>
+            <th scope="col" class="CP-sticky bg-warning">Ultima Compra</th>
             <th scope="col" class="CP-sticky">Ultimo Proveedor</th>
           </tr>
         </thead>
@@ -192,6 +193,7 @@
       $fechaCreacion = $row["fechaCreacion"];
       $UltimaVenta = $row["UltimaVenta"];
       $UltimoProveedorNombre = $row["UltimoProveedorNombre"];
+      $UltimaCompra = $row["UltimaCompra"];
       
       $Precio = FG_Calculo_Precio_Alfa($Existencia,$ExistenciaAlmacen1,$ExistenciaAlmacen2,$IsTroquelado,$UtilidadArticulo,$UtilidadCategoria,$TroquelAlmacen1,$PrecioCompraBrutoAlmacen1,$TroquelAlmacen2,
       $PrecioCompraBrutoAlmacen2,$PrecioCompraBruto,$IsIVA,$CondicionExistencia);
@@ -230,6 +232,13 @@
       }
       else{
         echo '<td align="center"> - </td>';
+      }
+
+      if(!is_null($UltimaCompra)){
+        echo '<td align="center" class="bg-warning">'.$UltimaCompra->format('d-m-Y').'</td>';
+      }
+      else{
+        echo '<td align="center" class="bg-warning"> - </td>';
       }
 
       if(!is_null($UltimoProveedorNombre)){
@@ -409,6 +418,14 @@
     FROM InvLote
     WHERE InvLote.InvArticuloId  = InvArticulo.Id
     ORDER BY UltimoLote DESC) AS UltimoLote,
+    -- Ultima Compra (Fecha de ultima compra)
+    (SELECT TOP 1
+    CONVERT(DATE,ComFactura.FechaRegistro)
+    FROM ComFacturaDetalle
+    INNER JOIN ComFactura ON ComFactura.Id = ComFacturaDetalle.ComFacturaId
+    INNER JOIN ComProveedor ON ComProveedor.Id = ComFactura.ComProveedorId
+    WHERE ComFacturaDetalle.InvArticuloId = InvArticulo.Id
+    ORDER BY ComFactura.FechaRegistro DESC) AS  UltimaCompra,
     --Tiempo Tienda (En dias)
     (SELECT TOP 1 
     DATEDIFF(DAY,CONVERT(DATE,InvLote.FechaEntrada),GETDATE())
