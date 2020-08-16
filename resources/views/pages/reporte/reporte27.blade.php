@@ -143,6 +143,7 @@
             <th scope="col" class="CP-sticky">Codigo de barra</th>
             <th scope="col" class="CP-sticky">Descripcion</th>
             <th scope="col" class="CP-sticky">Precio</br>(Con IVA) '.SigVe.'</td>
+            <th scope="col" class="CP-sticky bg-warning">Ultima Compra</th>
             <th scope="col" class="CP-sticky">Fecha Lote</th>
             <th scope="col" class="CP-sticky">Fecha de <br> Vencimiento</th>
             <th scope="col" class="CP-sticky">Vida Util <br> (Dias)</th>
@@ -186,6 +187,7 @@
       $UltimoProveedorNombre = $row["UltimoProveedorNombre"];
       $UltimoProveedorID = $row["UltimoProveedorID"];
       $Tipo = FG_Tipo_Producto($row["Tipo"]);
+      $UltimaCompra = $row["UltimaCompra"];
 
       $Dolarizado = FG_Producto_Dolarizado($Dolarizado);
       $Gravado = FG_Producto_Gravado($IsIVA);
@@ -209,6 +211,14 @@
       '</a>
       </td>';
       echo '<td align="center">'.(number_format($Precio,2,"," ,"." )).'</td>';
+      
+      if(!is_null($UltimaCompra)){
+        echo '<td align="center" class="bg-warning">'.$UltimaCompra->format('d-m-Y').'</td>';
+      }
+      else{
+        echo '<td align="center" class="bg-warning"> - </td>';
+      }
+
       echo '<td align="center">'.$row["FechaLote"]->format('d-m-Y').'</td>';
       echo '<td align="center">'.$row["FechaVencimiento"]->format('d-m-Y').'</td>';
 
@@ -435,6 +445,14 @@
     FROM InvLote
     WHERE InvLote.InvArticuloId  = InvArticulo.Id
     ORDER BY UltimoLote DESC) AS UltimoLote,
+    -- Ultima Compra (Fecha de ultima compra)
+    (SELECT TOP 1
+    CONVERT(DATE,ComFactura.FechaRegistro)
+    FROM ComFacturaDetalle
+    INNER JOIN ComFactura ON ComFactura.Id = ComFacturaDetalle.ComFacturaId
+    INNER JOIN ComProveedor ON ComProveedor.Id = ComFactura.ComProveedorId
+    WHERE ComFacturaDetalle.InvArticuloId = InvArticulo.Id
+    ORDER BY ComFactura.FechaRegistro DESC) AS  UltimaCompra,
     --Tiempo Tienda (En dias)
     (SELECT TOP 1 
     DATEDIFF(DAY,CONVERT(DATE,InvLote.FechaEntrada),GETDATE())
