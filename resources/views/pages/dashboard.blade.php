@@ -549,7 +549,7 @@
 		    		<span class="card-text text-white">
 		    			<i class="fas fa-credit-card"></i>
 		    			<?php
-								echo 'Ultimo Codigo Interno a Creado: '.$codigoInterno;
+								echo 'Ultimo Codigo Interno Creado: '.$codigoInterno;
 							?>						
 		    		</span>
 	    		</h3>
