@@ -122,6 +122,7 @@
             <th scope="col" class="CP-sticky">Descripcion</th>
             <th scope="col" class="CP-sticky">Precio</br>(Con IVA) '.SigVe.'</td>
             <th scope="col" class="CP-sticky">Fecha Lote</th>
+            <th scope="col" class="CP-sticky bg-warning">Ultima Compra</th>
             <th scope="col" class="CP-sticky">Existencia Total</th>
             <th scope="col" class="CP-sticky">Existencia Lote</th>
             <th scope="col" class="CP-sticky">Valor Lote '.SigVe.'</th>
@@ -161,6 +162,7 @@
       $UltimoProveedorNombre = $row["UltimoProveedorNombre"];
       $UltimoProveedorID = $row["UltimoProveedorID"];
       $Tipo = FG_Tipo_Producto($row["Tipo"]);
+      $UltimaCompra = $row["UltimaCompra"];
 
       $Dolarizado = FG_Producto_Dolarizado($Dolarizado);
       $Gravado = FG_Producto_Gravado($IsIVA);
@@ -185,6 +187,13 @@
       </td>';
       echo '<td align="center">'.number_format($Precio,2,"," ,"." ).'</td>';
       echo '<td align="center">'.$row["FechaLote"]->format('d-m-Y').'</td>';
+
+      if(!is_null($UltimaCompra)){
+        echo '<td align="center" class="bg-warning">'.$UltimaCompra->format('d-m-Y').'</td>';
+      }
+      else{
+        echo '<td align="center" class="bg-warning"> - </td>';
+      }
       
       echo '<td align="center">'.intval($Existencia).'</td>';
       echo '<td align="center">'.intval($row["ExistenciaLote"]).'</td>';
@@ -403,6 +412,14 @@
     FROM InvLote
     WHERE InvLote.InvArticuloId  = InvArticulo.Id
     ORDER BY UltimoLote DESC) AS UltimoLote,
+    -- Ultima Compra (Fecha de ultima compra)
+    (SELECT TOP 1
+    CONVERT(DATE,ComFactura.FechaRegistro)
+    FROM ComFacturaDetalle
+    INNER JOIN ComFactura ON ComFactura.Id = ComFacturaDetalle.ComFacturaId
+    INNER JOIN ComProveedor ON ComProveedor.Id = ComFactura.ComProveedorId
+    WHERE ComFacturaDetalle.InvArticuloId = InvArticulo.Id
+    ORDER BY ComFactura.FechaRegistro DESC) AS  UltimaCompra,
     --Tiempo Tienda (En dias)
     (SELECT TOP 1 
     DATEDIFF(DAY,CONVERT(DATE,InvLote.FechaEntrada),GETDATE())
