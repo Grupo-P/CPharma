@@ -161,6 +161,7 @@
           <th scope="col" class="CP-sticky">Ultima Venta</th>
           <th scope="col" class="CP-sticky">Dias en Falla</th>
           <th scope="col" class="CP-sticky">Ultimo Lote</th>
+          <th scope="col" class="CP-sticky bg-warning">Ultima Compra</th>
           <th scope="col" class="CP-sticky">Ultimo Proveedor</th>             
         </tr>
       </thead>
@@ -188,6 +189,7 @@
       $Dolarizado = $row1["Dolarizado"];
       $IsIVA = $row1["Impuesto"];
       $UltimoLote = $row1["UltimoLote"];
+      $UltimaCompra = $row1["UltimaCompra"];
 
       $Dolarizado = FG_Producto_Dolarizado($Dolarizado);
       $Gravado = FG_Producto_Gravado($IsIVA);
@@ -235,6 +237,13 @@
       }
       else{
         echo '<td align="center"> - </td>';
+      }
+
+      if(!is_null($UltimaCompra)){
+        echo '<td align="center" class="bg-warning">'.$UltimaCompra->format('d-m-Y').'</td>';
+      }
+      else{
+        echo '<td align="center" class="bg-warning"> - </td>';
       }
 
       echo 
@@ -563,7 +572,15 @@
       INNER JOIN ComProveedor ON ComProveedor.Id = ComFactura.ComProveedorId
       INNER JOIN GenPersona ON GenPersona.Id = ComProveedor.GenPersonaId
       WHERE ComFacturaDetalle.InvArticuloId = InvArticulo.Id
-      ORDER BY ComFactura.FechaDocumento DESC) AS  UltimoProveedorNombre
+      ORDER BY ComFactura.FechaDocumento DESC) AS  UltimoProveedorNombre,
+    -- Ultima Compra (Fecha de ultima compra)
+      (SELECT TOP 1
+      CONVERT(DATE,ComFactura.FechaRegistro)
+      FROM ComFacturaDetalle
+      INNER JOIN ComFactura ON ComFactura.Id = ComFacturaDetalle.ComFacturaId
+      INNER JOIN ComProveedor ON ComProveedor.Id = ComFactura.ComProveedorId
+      WHERE ComFacturaDetalle.InvArticuloId = InvArticulo.Id
+      ORDER BY ComFactura.FechaRegistro DESC) AS  UltimaCompra
     --Tabla principal
       FROM InvArticulo
     --Joins
