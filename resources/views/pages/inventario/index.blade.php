@@ -161,6 +161,13 @@
 						Por Codigo de Barra
 					</a>
         </td>
+        <td style="width:8%;" align="center">
+					<a href="{{ url('/inventarioMarca') }}" role="button" class="btn btn-outline-danger btn-sm" 
+					style="display: inline; text-align: left;">
+					<i class="fa fa-plus"></i>
+						Por Marca
+					</a>
+        </td>
         <td style="width:6%;" align="center">
 					<a href="{{ url('/inventarioAleatorio') }}" role="button" class="btn btn-outline-warning btn-sm" 
 					style="display: inline; text-align: left;">
