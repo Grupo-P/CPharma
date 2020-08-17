@@ -193,6 +193,7 @@
     $CondicionExistencia = 'CON_EXISTENCIA';
     $UltimaVenta = $row["UltimaVenta"];
     $UltimoPrecio = $row["UltimoPrecio"];
+    $Marca = $row["Marca"];
 
     $Gravado = FG_Producto_Gravado($IsIVA);
     $Dolarizado = FG_Producto_Dolarizado($Dolarizado);
@@ -239,6 +240,7 @@
           <th scope="col">Gravado?</td>
           <th scope="col">Utilidad Configurada</td>
           <th scope="col">Troquel</td>
+          <th scope="col">Marca</td>
           <th scope="col">Dolarizado?</td>
           <th scope="col">Tasa actual '.SigVe.'</td>
           <th scope="col">Precio en divisa</br>(Con IVA) '.SigDolar.'</td>
@@ -275,6 +277,7 @@
       echo '<td align="center"> - </td>';
     }
 
+    echo '<td align="center">'.$Marca.'</td>';
 
     echo '<td align="center">'.$Dolarizado.'</td>';
 
@@ -621,6 +624,8 @@
     WHERE
     InvAtributo.Descripcion = 'Articulo Estrella')
     AND InvArticuloAtributo.InvArticuloId = InvArticulo.Id),CAST(0 AS INT))) AS ArticuloEstrella,
+--Marca    
+    InvMarca.Nombre as Marca,
 -- Ultima Venta (Fecha)
     (SELECT TOP 1
     CONVERT(DATE,VenFactura.FechaDocumento)
@@ -679,10 +684,11 @@
     LEFT JOIN InvLoteAlmacen ON InvLoteAlmacen.InvArticuloId = InvArticulo.Id
     LEFT JOIN InvArticuloAtributo ON InvArticuloAtributo.InvArticuloId = InvArticulo.Id
     LEFT JOIN InvAtributo ON InvAtributo.Id = InvArticuloAtributo.InvAtributoId
+    LEFT JOIN InvMarca ON InvMarca.Id = InvArticulo.InvMarcaId
 --Condicionales
     WHERE InvArticulo.Id = '$IdArticulo'
 --Agrupamientos
-    GROUP BY InvArticulo.Id, InvArticulo.CodigoArticulo, InvArticulo.Descripcion, InvArticulo.FinConceptoImptoIdCompra, InvArticulo.InvCategoriaId
+    GROUP BY InvArticulo.Id, InvArticulo.CodigoArticulo, InvArticulo.Descripcion, InvArticulo.FinConceptoImptoIdCompra, InvArticulo.InvCategoriaId, InvMarca.Nombre
 --Ordanamiento
     ORDER BY InvArticulo.Id ASC
     ";
