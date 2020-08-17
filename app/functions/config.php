@@ -6,7 +6,7 @@ define("SigVe","Bs.S");
 define("Utilidad",0.77);
 define("Impuesto",1.16);
 define("Version","CPharma v.6.2");
-define("_ConsultorDolar_","NO");
+define("_ConsultorDolar_","SI");
 /**********************************************************************************/
 /************************* NOMBRES SEDES ON-LINE *********************************/
 define ("SedeFTN","FARMACIA TIERRA NEGRA, C.A.");
@@ -25,7 +25,7 @@ define ("SedeFAUOFF","Farmacia Avenida Universidad (OFF-LINE)");
 /********* CADENA DE CONEXION CON LA BASE DE DATOS LOCAL DEL CPHARMA *************/
 define ("serverCP","localhost:3306");	
 define ("userCP","root");
-define ("passCP",".JR@2ZUS8m2M*gW"); //.JR@2ZUS8m2M*gW
+define ("passCP",""); //.JR@2ZUS8m2M*gW
 define ("nameCP","cpharma");
 /**********************************************************************************/
 /************************* CONEXION ON LINE FTN **********************************/
