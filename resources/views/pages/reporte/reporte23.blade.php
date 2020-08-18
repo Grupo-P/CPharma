@@ -82,12 +82,12 @@
     $IntervalCarga = $InicioCarga->diff($FinCarga);
     echo'Tiempo de carga: '.$IntervalCarga->format("%Y-%M-%D %H:%I:%S");
   }
-  else if(isset($_GET['fechaVenActualizada'])){
+  else if(isset($_GET['ActualizaFecha'])){
   //CASO 4: CARGA AL HABER SELECCIONADO UNA FACTURA
   //se pasa a la seleccion del articulo
     $InicioCarga = new DateTime("now");
 
-    R23_Actualizar_Fecha($_GET['SEDE'],$_GET['IdLote'],$_GET['fechaVenActualizada'],$_GET['IdArti'],$_GET['Nombre']);
+    R23_Actualizar_Fecha($_GET['SEDE'],$_GET['IdLote'],$_GET['fechaVenActualizada'],$_GET['IdArti'],$_GET['Nombre'],$_GET['ActualizaFecha']);
 
     $FinCarga = new DateTime("now");
     $IntervalCarga = $InicioCarga->diff($FinCarga);
@@ -178,7 +178,10 @@
     InvLote.Id,
     InvLote.Numero,
     InvLote.LoteFabricante,
-    InvLote.FechaVencimiento
+    InvLote.FechaVencimiento,
+    InvLote.M_PrecioCompraBruto,
+    InvLote.M_PrecioTroquelado,
+    InvLote.FechaEntrada
     FROM InvLote
     INNER JOIN InvLoteAlmacen ON InvLoteAlmacen.InvArticuloId = InvLote.InvArticuloId
     INNER JOIN InvArticulo ON InvArticulo.Id = InvLote.InvArticuloId
@@ -186,7 +189,8 @@
     (InvLote.InvArticuloId = '$IdArticulo')
     AND (InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
     AND (InvLoteAlmacen.Existencia > 0)
-    ORDER BY InvLote.FechaVencimiento DESC
+    GROUP BY InvLote.Id,InvLote.Numero,InvLote.LoteFabricante,InvLote.FechaVencimiento,InvLote.M_PrecioCompraBruto,InvLote.M_PrecioTroquelado,InvLote.FechaEntrada
+    ORDER BY InvLote.Numero DESC
     ";
     return $sql;
   }
@@ -203,7 +207,10 @@
     InvLote.Id,
     InvLote.Numero,
     InvLote.LoteFabricante,
-    InvLote.FechaVencimiento
+    InvLote.FechaVencimiento,
+    InvLote.M_PrecioCompraBruto,
+    InvLote.M_PrecioTroquelado,
+    InvLote.FechaEntrada
     FROM InvLote
     INNER JOIN InvLoteAlmacen ON InvLoteAlmacen.InvArticuloId = InvLote.InvArticuloId
     INNER JOIN InvArticulo ON InvArticulo.Id = InvLote.InvArticuloId
@@ -211,6 +218,7 @@
     (InvLote.Id = '$IdLote')
     AND (InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
     AND (InvLoteAlmacen.Existencia > 0)
+    GROUP BY InvLote.Id,InvLote.Numero,InvLote.LoteFabricante,InvLote.FechaVencimiento,InvLote.M_PrecioCompraBruto,InvLote.M_PrecioTroquelado,InvLote.FechaEntrada
     ORDER BY InvLote.FechaVencimiento DESC
     ";
     return $sql;
@@ -282,6 +290,9 @@
             <th scope="col" class="CP-sticky">#</th>
             <th scope="col" class="CP-sticky">Numero de Lote</th>
             <th scope="col" class="CP-sticky">Lote de Fabricante</th>
+            <th scope="col" class="CP-sticky">Precio Compra Bruto '.SigVe.'</th>
+            <th scope="col" class="CP-sticky">Precio Troquelado '.SigVe.'</th>
+            <th scope="col" class="CP-sticky">Fecha de Entrada</th>
             <th scope="col" class="CP-sticky">Fecha de Vencimiento</th>
             <th scope="col" class="CP-sticky">Seleccion</th>
           </tr>
@@ -294,6 +305,15 @@
       echo '<td align="left"><strong>'.intval($contador).'</strong></td>';
       echo '<td align="center">'.$row["Numero"].'</td>';
       echo '<td align="center">'.$row["LoteFabricante"].'</td>';
+
+      echo '<td align="center">'.number_format($row["M_PrecioCompraBruto"],2,"," ,"." ).'</td>';
+      echo '<td align="center">'.number_format($row["M_PrecioTroquelado"],2,"," ,"." ).'</td>';
+      if($row["FechaEntrada"]!=NULL){
+         echo '<td align="center">'.$row["FechaEntrada"]->format('d-m-Y').'</td>';
+      }
+      else{
+        echo '<td align="center">-</td>';
+      }
 
       if($row["FechaVencimiento"]!=NULL){
          echo '<td align="center">'.$row["FechaVencimiento"]->format('d-m-Y').'</td>';
@@ -376,6 +396,9 @@
             <th scope="col" class="CP-sticky">#</th>
             <th scope="col" class="CP-sticky">Numero de Lote</th>
             <th scope="col" class="CP-sticky">Lote de Fabricante</th>
+            <th scope="col" class="CP-sticky">Precio Compra Bruto '.SigVe.'</th>
+            <th scope="col" class="CP-sticky">Precio Troquelado '.SigVe.'</th>
+            <th scope="col" class="CP-sticky">Fecha de Entrada</th>
             <th scope="col" class="CP-sticky">Fecha de Vencimiento</th>
             <th scope="col" class="CP-sticky">Fecha de Vencimiento</br>(Nueva)</th>
             <th scope="col" class="CP-sticky">Seleccion</th>
@@ -390,6 +413,15 @@
       echo '<td align="center">'.$row["Numero"].'</td>';
       echo '<td align="center">'.$row["LoteFabricante"].'</td>';
 
+      echo '<td align="center">'.number_format($row["M_PrecioCompraBruto"],2,"," ,"." ).'</td>';
+      echo '<td align="center">'.number_format($row["M_PrecioTroquelado"],2,"," ,"." ).'</td>';
+      if($row["FechaEntrada"]!=NULL){
+         echo '<td align="center">'.$row["FechaEntrada"]->format('d-m-Y').'</td>';
+      }
+      else{
+        echo '<td align="center">-</td>';
+      }
+
       if($row["FechaVencimiento"]!=NULL){
          echo '<td align="center">'.$row["FechaVencimiento"]->format('d-m-Y').'</td>';
       }
@@ -400,13 +432,14 @@
       echo '
         <form autocomplete="off" action=""> 
           <td align="center">
-            <input id="fechaInicio" type="date" name="fechaVenActualizada" required style="width:100%;">
+            <input id="fechaInicio" type="date" name="fechaVenActualizada" style="width:100%;">
           </td>
           <td align="center">
             <input id="SEDE" name="SEDE" type="hidden" value="';
                 print_r($SedeConnection);
                 echo'">
-            <input type="submit" value="Selecionar" class="btn btn-outline-success">
+            <input type="submit" value="Actualizar" name="ActualizaFecha" class="btn btn-outline-success">
+            <input type="submit" value="Quitar" name="ActualizaFecha" class="btn btn-outline-danger">
             <input id="IdLote" name="IdLote" type="hidden" value="'.intval($row["Id"]).'">
             <input id="IdArti" name="IdArti" type="hidden" value="'.$IdArticulo.'">
             <input id="Nombre" name="Nombre" type="hidden" value="'.$Descripcion.'">
@@ -429,7 +462,7 @@
     RETORNO: no aplica
     DESAROLLADO POR: SERGIO COVA
   */
-  function R23_Actualizar_Fecha($SedeConnection,$IdLote,$FechaVencimiento,$IdArticulo,$Descripcion){
+  function R23_Actualizar_Fecha($SedeConnection,$IdLote,$FechaVencimiento,$IdArticulo,$Descripcion,$flagActualizacion){
     
     $conn = FG_Conectar_Smartpharma($SedeConnection);
     $sql1 = R23Q_Lista_Lotes_Lote($IdLote);
@@ -481,7 +514,13 @@
     $FechaVenActualizar = $FechaVencimiento->format('Y-m-d 00:00:00.0000000');
     $FechaVenMostrar = $FechaVencimiento->format('d-m-Y');
 
-    $sql2 = R23Q_Actualizar_Fecha($FechaVenActualizar,$IdArticulo,$IdLote);
+    if($flagActualizacion=="Actualizar"){
+      $sql2 = R23Q_Actualizar_Fecha($FechaVenActualizar,$IdArticulo,$IdLote);
+    }
+    else if($flagActualizacion=="Quitar"){
+      $sql2 = R23Q_Actualizar_Fecha(NULL,$IdArticulo,$IdLote);
+    }
+    
     sqlsrv_query($conn,$sql2);
     
     while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
