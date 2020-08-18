@@ -439,7 +439,7 @@
                 print_r($SedeConnection);
                 echo'">
             <input type="submit" value="Actualizar" name="ActualizaFecha" class="btn btn-outline-success">
-            <input type="submit" value="Quitar" name="ActualizaFecha" class="btn btn-outline-danger">
+            <input type="submit" value="No vence" name="ActualizaFecha" class="btn btn-outline-danger">
             <input id="IdLote" name="IdLote" type="hidden" value="'.intval($row["Id"]).'">
             <input id="IdArti" name="IdArti" type="hidden" value="'.$IdArticulo.'">
             <input id="Nombre" name="Nombre" type="hidden" value="'.$Descripcion.'">
@@ -517,8 +517,8 @@
     if($flagActualizacion=="Actualizar"){
       $sql2 = R23Q_Actualizar_Fecha($FechaVenActualizar,$IdArticulo,$IdLote);
     }
-    else if($flagActualizacion=="Quitar"){
-      $sql2 = R23Q_Actualizar_Fecha(NULL,$IdArticulo,$IdLote);
+    else if($flagActualizacion=="No vence"){
+      $sql2 = R23Q_Actualizar_Fecha("9999-12-31 00:00:00.0000000",$IdArticulo,$IdLote);
     }
     
     sqlsrv_query($conn,$sql2);
@@ -528,7 +528,14 @@
       echo '<td align="left"><strong>'.intval($contador).'</strong></td>';
       echo '<td align="center">'.$row["Numero"].'</td>';
       echo '<td align="center">'.$row["LoteFabricante"].'</td>';
-      echo '<td align="center">'.$FechaVencimiento->format('d-m-Y').'</td>';
+
+      if($flagActualizacion=="Actualizar"){
+        echo '<td align="center">'.$FechaVencimiento->format('d-m-Y').'</td>';
+      }
+      else if($flagActualizacion=="No vence"){
+        echo '<td align="center">No vence</td>';
+      }
+
       echo '</tr>';
     $contador++;
     }
