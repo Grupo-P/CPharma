@@ -326,6 +326,7 @@
         $UltimoPrecio = $row2["UltimoPrecio"];
         $UltimaVenta = $row2["UltimaVenta"];
         $UltimoProveedorNombre = $row2["UltimoProveedorNombre"];
+        $UltimoProveedorID = $row2["UltimoProveedorID"];
         $UltimaCompra = $row2["UltimaCompra"];
         
         $VentaDiaria = FG_Venta_Diaria($UnidadesVendidas,$RangoDias);
@@ -413,7 +414,12 @@
         }
 
         if(!is_null($UltimoProveedorNombre)){
-          echo '<td align="center">'.$UltimoProveedorNombre.'</td>';
+          echo
+          '<td align="left" class="CP-barrido">
+          <a href="/reporte7?Nombre='.$UltimoProveedorNombre.'&Id='.$UltimoProveedorID.'&SEDE='.$SedeConnection.'" target="_blank" style="text-decoration: none; color: black;">'
+            .$UltimoProveedorNombre.
+          '</a>
+          </td>';
         }
         else{
           echo '<td align="center"> - </td>';
@@ -596,6 +602,7 @@
           $UltimoPrecio = $row2["UltimoPrecio"];
           $UltimaVenta = $row2["UltimaVenta"];
           $UltimoProveedorNombre = $row2["UltimoProveedorNombre"];
+          $UltimoProveedorID = $row2["UltimoProveedorID"];
           $UltimaCompra = $row2["UltimaCompra"];
 
           $Dolarizado = FG_Producto_Dolarizado($Dolarizado);
@@ -686,7 +693,12 @@
           }
 
           if(!is_null($UltimoProveedorNombre)){
-            echo '<td align="center">'.$UltimoProveedorNombre.'</td>';
+            echo
+            '<td align="left" class="CP-barrido">
+            <a href="/reporte7?Nombre='.$UltimoProveedorNombre.'&Id='.$UltimoProveedorID.'&SEDE='.$SedeConnection.'" target="_blank" style="text-decoration: none; color: black;">'
+              .$UltimoProveedorNombre.
+            '</a>
+            </td>';
           }
           else{
             echo '<td align="center"> - </td>';

@@ -1097,14 +1097,7 @@
           <i class="fa fa-boxes"></i>
           Inventario<span class="sr-only">(current)</span>
         </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="{{ url('/reporte29') }}">  
-          <span data-feather="home"></span>
-          <i class="fa fa-file"></i>
-          Compra por Marca<span class="sr-only">(current)</span>
-        </a>
-      </li>
+      </li>      
     </div>
   </div>
 <?php
