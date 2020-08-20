@@ -1298,6 +1298,8 @@
 			break;
 			case 28:
 				$nombre = 'Artículos sin fecha de vencimiento';
+			case 29:
+				$nombre = 'Compra por Marca';
 			break;
 			case 99:
 				$nombre = 'Registro de Fallas';

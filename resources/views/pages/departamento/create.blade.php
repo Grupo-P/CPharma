@@ -119,7 +119,9 @@
             </tr>
             <tr>
                 <th scope="col">28</th>
-                <td scope="col">Artículos sin fecha de vencimiento</td>            
+                <td scope="col">Artículos sin fecha de vencimiento</td>
+                <th scope="col">29</th>
+                <td scope="col">Compra por Marca</td>            
             </tr>
         </tbody>
     </table>
