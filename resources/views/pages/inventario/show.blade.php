@@ -206,8 +206,8 @@
 				    $UltimaVenta = $row["UltimaVenta"];
 				    $UltimoLote = $row["UltimoLote"];
 
-				    $UltimaVenta = $UltimaVenta->format('d-m-Y');
-				    $UltimoLote = $UltimoLote->format('d-m-Y');
+				    ($UltimaVenta) ? $UltimaVenta = $UltimaVenta->format('d-m-Y') : $UltimaVenta = "-";
+				    ($UltimoLote) ? $UltimoLote = $UltimoLote->format('d-m-Y') : $UltimoLote = "-";
 
 				    $Precio = FG_Calculo_Precio_Alfa($Existencia,$ExistenciaAlmacen1,$ExistenciaAlmacen2,$IsTroquelado,$UtilidadArticulo,$UtilidadCategoria,$TroquelAlmacen1,$PrecioCompraBrutoAlmacen1,$TroquelAlmacen2,
     $PrecioCompraBrutoAlmacen2,$PrecioCompraBruto,$IsIVA,$CondicionExistencia);
