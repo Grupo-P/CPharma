@@ -216,7 +216,8 @@
       $result1 = sqlsrv_query($conn,$sql1);
       $row1 = sqlsrv_fetch_array($result1,SQLSRV_FETCH_ASSOC);
       $CodigoBarra = $row1["CodigoBarra"];
-      $UltimoProveedor = FG_Limpiar_Texto($row1["UltimoProveedorNombre"]);
+      $UltimoProveedorNombre = FG_Limpiar_Texto($row1["UltimoProveedorNombre"]);
+      $UltimoProveedorID = $row1["UltimoProveedorID"];
       $IsIVA = $row1["Impuesto"];
       $Dolarizado = $row1["Dolarizado"]; 
 
@@ -264,7 +265,18 @@
       </td>';
 
       echo '<td align="center">'.round($DiasRestantes,2).'</td>';
-      echo '<td align="center">'.$UltimoProveedor.'</td>';
+      
+      if(!is_null($UltimoProveedorNombre)){
+        echo
+        '<td align="left" class="CP-barrido">
+        <a href="/reporte7?Nombre='.$UltimoProveedorNombre.'&Id='.$UltimoProveedorID.'&SEDE='.$SedeConnection.'" target="_blank" style="text-decoration: none; color: black;">'
+          .$UltimoProveedorNombre.
+        '</a>
+        </td>';
+      }
+      else{
+        echo '<td align="center"> - </td>';
+      }
 
       /*BOTON PARA AGREGAR A LA ORDEN DE COMPRA*/
 
