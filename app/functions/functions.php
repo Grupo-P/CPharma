@@ -1204,6 +1204,15 @@
 			case 'Ultimas Entradas en Cero':
 				$ruta = '/reporte26';
 			break;
+			case 'Artículos por Vencer':
+				$ruta = '/reporte27';
+			break;
+			case 'Artículos sin fecha de vencimiento':
+				$ruta = '/reporte28';
+			break;
+			case 'Compra por Marca':
+				$ruta = '/reporte29';
+			break;
 			case 'Registro de Fallas':
 				$ruta = '/falla';
 			break;
@@ -1298,6 +1307,7 @@
 			break;
 			case 28:
 				$nombre = 'Artículos sin fecha de vencimiento';
+				break;
 			case 29:
 				$nombre = 'Compra por Marca';
 			break;
