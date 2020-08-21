@@ -247,29 +247,31 @@
 
         $sql = Inv_Descripcion_Like($NombreArticulo);
         $result = sqlsrv_query($conn,$sql);
-        $row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC);
 
-        $IdArticulo = $row["Id"];
-        $CodigoArticulo = $row["CodigoArticulo"];
-        $CodigoBarra = $row["CodigoBarra"];
-        $Existencia = $row["Existencia"];
-        $Descripcion = FG_Limpiar_Texto($row["Descripcion"]);
+        while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
+          $IdArticulo = $row["Id"];
+          $CodigoArticulo = $row["CodigoArticulo"];
+          $CodigoBarra = $row["CodigoBarra"];
+          $Existencia = $row["Existencia"];
+          $Descripcion = FG_Limpiar_Texto($row["Descripcion"]);
 
-        echo '<tr>';
-        echo '<td align="left"><strong>'.intval($contador).'</strong></td>';
-        echo '<td align="left">'.$CodigoArticulo.'</td>';
-        echo '<td align="center">'.$CodigoBarra.'</td>';
-        echo 
-        '<td align="left" class="CP-barrido">
-        <a href="/reporte2?Id='.$IdArticulo.'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
-          .$Descripcion.
-        '</a>
-        </td>';
-        echo '<td align="center">'.intval($Existencia).'</td>';
-        echo'<td align="center"><input type="checkbox" name="articulosContar[]" value="'.$IdArticulo.'"/></td>';
-        echo '</tr>';
+          echo '<tr>';
+          echo '<td align="left"><strong>'.intval($contador).'</strong></td>';
+          echo '<td align="left">'.$CodigoArticulo.'</td>';
+          echo '<td align="center">'.$CodigoBarra.'</td>';
+          echo 
+          '<td align="left" class="CP-barrido">
+          <a href="/reporte2?Id='.$IdArticulo.'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
+            .$Descripcion.
+          '</a>
+          </td>';
+          echo '<td align="center">'.intval($Existencia).'</td>';
+          echo'<td align="center"><input type="checkbox" name="articulosContar[]" value="'.$IdArticulo.'"/></td>';
+          echo '</tr>';
+          $contador++;
+        }
+        
       $i++;
-      $contador++;
       }
         echo '
           </tbody>
