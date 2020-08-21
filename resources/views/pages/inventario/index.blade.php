@@ -1,3 +1,7 @@
+<?php
+	use compras\InventarioDetalle;
+	$totalSKU = $totalUnidades = $totalResultado = $totalDiferencia = 0;
+?>
 @extends('layouts.model')
 
 @section('title')
@@ -198,20 +202,22 @@
 		      	<th scope="col" class="CP-sticky">Origen</th>
 		      	<th scope="col" class="CP-sticky">Motivo</th>
 		      	<th scope="col" class="CP-sticky">Cantidad SKU</th>
-		      	<th scope="col" class="CP-sticky">Unidades</th>
-		      	<th scope="col" class="CP-sticky">Operador</th>	
+		      	<th scope="col" class="CP-sticky">Unidades</th>		      	
+		      	<th scope="col" class="CP-sticky">Resultado</th>		      	
+		      	<th scope="col" class="CP-sticky">Diferencia Resultado</th>			      	
+		      	<th scope="col" class="CP-sticky">Operador</th>
 		      	<th scope="col" class="CP-sticky">Estatus</th>
 		      	<th scope="col" class="CP-sticky">Acciones</th>
 		    </tr>
 	  	</thead>
 	  	<tbody>
 		@foreach($inventarios as $inventario)
-				<?php
+				<?php					
 					$fecha = new DateTime($inventario->fecha_generado);
 					$fecha = $fecha->format('d-m-Y');
 
 					$hora = new DateTime($inventario->fecha_generado);
-					$hora = $hora->format('h:i A');
+					$hora = $hora->format('h:i A');					
 				?>
 		    <tr>
 		      <th>{{$inventario->id}}</th>
@@ -222,6 +228,41 @@
 		      <td>{{$inventario->motivo_conteo}}</td>
 		      <td>{{$inventario->cantidades_conteo}}</td>
 		      <td>{{$inventario->unidades_conteo}}</td>
+
+		      <?php
+		      $totalUnidades += $inventario->unidades_conteo;
+		      $totalSKU += $inventario->cantidades_conteo;
+
+					if($inventario->estatus == "REVISADO"){
+
+							$resultado = $difResultado = 0;
+
+							$inventarioDetalles =  
+							InventarioDetalle::where('codigo_conteo',$inventario->codigo)->get();
+
+							foreach ($inventarioDetalles as $inventarioDetalle) {	
+								
+								if($inventarioDetalle->conteo != "" && $inventarioDetalle->re_conteo == ""){
+									$resultado += $inventarioDetalle->conteo;
+								}														
+								else if($inventarioDetalle->re_conteo != ""){
+									$resultado += $inventarioDetalle->re_conteo;
+								}
+								
+							}
+											
+						echo "<td>".$resultado."</td>";					
+						echo "<td>".($resultado - $inventario->unidades_conteo)."</td>";
+						
+						$totalResultado += $resultado;
+						$totalDiferencia += ($resultado - $inventario->unidades_conteo);
+
+					}else{												
+						echo "<td>-</td>";
+						echo "<td>-</td>";
+					}
+					?>
+
 		      <td>{{$inventario->operador_generado}}</td>		
 		      <td>{{$inventario->estatus}}</td>
 		      
@@ -322,6 +363,15 @@
 		    <!-- Fin Validacion de ROLES -->
 		    </tr>
 		@endforeach
+		
+		<tr>
+		 <th colspan="6" class="text-right">Totales</th>
+		 <th><?php echo($totalSKU) ?></th>
+		 <th><?php echo($totalUnidades) ?></th>
+		 <th><?php echo($totalResultado) ?></th>
+		 <th><?php echo($totalDiferencia) ?></th>
+		 <th colspan="3"></th>
+		</tr>
 		</tbody>
 	</table>
 
