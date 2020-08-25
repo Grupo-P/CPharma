@@ -176,6 +176,8 @@
           InventarioDetalle::orderBy('id','asc')
           ->where('codigo_conteo',$inventario->codigo)
           ->get();
+
+          $totalExistencia = $totalConteo = $totalDifConteo = $totalReConteo = $totalDifReConteo =0;
 			?>
 	  	<tbody>
 			
@@ -225,6 +227,20 @@
 			    $generado_conteo = FG_Rango_Dias($inventario->fecha_generado,$inventarioDetalle->fecha_conteo);
 
 			    $generado_reconteo = FG_Rango_Dias($inventario->fecha_generado,$inventarioDetalle->fecha_reconteo);
+
+			    $totalExistencia += $inventarioDetalle->existencia_actual;
+			    $totalConteo += $inventarioDetalle->conteo;
+
+			    if($inventarioDetalle->conteo!=""){
+			    	$totalDifConteo += $inventarioDetalle->conteo - $inventarioDetalle->existencia_actual;
+			    }
+
+			    $totalReConteo += $inventarioDetalle->re_conteo;
+
+			    if($inventarioDetalle->re_conteo!=""){
+			    	$totalDifReConteo += $inventarioDetalle->re_conteo - $inventarioDetalle->existencia_actual;
+			    }			    
+
 					?>
 
 			    <tr>
@@ -263,7 +279,17 @@
 			    </tr>
 				@endforeach
 
-	  	</tbody>
+	  	<tr>
+		 <th colspan="9" class="text-right">Totales</th>
+		 <th><?php echo($totalExistencia) ?></th>
+		 <th><?php echo($totalConteo) ?></th>
+		 <th><?php echo($totalDifConteo) ?></th>
+		 <th colspan="2"></th>
+		 <th><?php echo($totalReConteo) ?></th>
+		 <th><?php echo($totalDifReConteo) ?></th>
+		 <th colspan="4"></th>
+		</tr>
+		</tbody>
 	</table>
 
 	<br>
