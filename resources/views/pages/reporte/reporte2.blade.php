@@ -320,10 +320,12 @@
           <tr>
             <th scope="col" class="CP-sticky">#</th>
             <th scope="col" class="CP-sticky">Proveedor</th>
+            <th scope="col" class="CP-sticky bg-info">N° Factura</th>
             <th scope="col" class="CP-sticky">Fecha de documento</th>
             <th scope="col" class="CP-sticky bg-danger text-white">Fecha de registro</th>
             <th scope="col" class="CP-sticky bg-warning text-dark">Fecha de vencimiento</th>
             <th scope="col" class="CP-sticky bg-success text-white">Vida util<br>(Dias)</th>
+            <th scope="col" class="CP-sticky bg-info text-white">Dias para vencer<br>(Dias)</th>
             <th scope="col" class="CP-sticky">Cantidad recibida</th>
             <th scope="col" class="CP-sticky">Costo bruto</br>(Sin IVA) '.SigVe.'</th>
             <th scope="col" class="CP-sticky">Tasa en historico '.SigVe.'</br>(fecha documento)</th>
@@ -335,6 +337,7 @@
           <th scope="col" class="CP-sticky bg-warning text-dark">Precio Lote en '.SigVe.'</th>
           <th scope="col" class="CP-sticky bg-warning text-dark">Precio Lote en '.SigVe.'<br>Historico</th>
           <th scope="col" class="CP-sticky bg-warning text-dark">Precio Lote en '.SigDolar.'</th>
+          <th scope="col" class="CP-sticky bg-info">Operador</th>
           </tr>
         </thead>
         <tbody>
@@ -348,6 +351,7 @@
 
         $fechaVencimiento = ($row2["FechaVencimiento"]!=NULL)?$row2["FechaVencimiento"]->format('d-m-Y'):'-';
         $vidaUtil = ($row2['VidaUtil']!=NULL)?$row2['VidaUtil']:'-';
+        $diasVencer = ($row2['DiasVecer']!=NULL)?$row2['DiasVecer']:'-';
 
         echo '<tr>';
         echo '<td align="center"><strong>'.intval($contador).'</strong></td>';
@@ -357,6 +361,8 @@
           .FG_Limpiar_Texto($row2["Nombre"]).
         '</a>
         </td>';
+
+        echo '<td align="center" class="bg-info text-white">'.$row2["numero"].'</td>';
 
         echo
         '<td align="center" class="CP-barrido">
@@ -368,6 +374,8 @@
         echo '<td align="center" class="bg-danger text-white">'.$row2["FechaRegistro"]->format('d-m-Y').'</td>';
         echo '<td align="center" class="bg-warning text-dark">'.$fechaVencimiento.'</td>';
         echo '<td align="center" class="bg-success text-white">'.$vidaUtil.'</td>';
+
+        echo '<td align="center" class="bg-info text-white">'.$diasVencer.'</td>';
 
        echo
         '<td align="center" class="CP-barrido">
@@ -435,7 +443,7 @@
           echo '<td align="center" class="bg-warning text-dark">0,00</td>';
         }
 
-
+        echo '<td align="center" class="bg-info text-white">'.$row2["operador"].'</td>';
 
         echo '</tr>';
       $contador++;
@@ -710,8 +718,11 @@
       CONVERT(DATE,ComFactura.FechaDocumento) As FechaDocumento,
       CONVERT(DATE,ComFacturaDetalle.FechaVencimiento) As FechaVencimiento,
       DATEDIFF(DAY,CONVERT(DATE,ComFactura.FechaRegistro),CONVERT(DATE,ComFacturaDetalle.FechaVencimiento)) as VidaUtil,
+      DATEDIFF(DAY,CONVERT(DATE,GETDATE()),CONVERT(DATE,ComFacturaDetalle.FechaVencimiento)) as DiasVecer,      
       ComFacturaDetalle.CantidadRecibidaFactura,
-      ComFacturaDetalle.M_PrecioCompraBruto
+      ComFacturaDetalle.M_PrecioCompraBruto,
+      ComFactura.auditoria_usuario as operador,
+      ComFactura.NumeroFactura as numero
       FROM InvArticulo
       INNER JOIN ComFacturaDetalle ON InvArticulo.Id = ComFacturaDetalle.InvArticuloId
       INNER JOIN ComFactura ON ComFactura.Id = ComFacturaDetalle.ComFacturaId
