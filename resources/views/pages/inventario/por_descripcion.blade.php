@@ -304,9 +304,41 @@
     RETORNO: lista de id de articulos en coincidencia
     DESAROLLADO POR: SERGIO COVA
   */
-  function Inv_Descripcion_Like($DescripLike) {   
-    $sql = "
-      SELECT
+  function Inv_Descripcion_Like($DescripLike) {  
+
+    $palabras = array();
+    $palabras = explode(" ", $DescripLike);
+
+    if(count($palabras)>0){
+      $sql = "
+        SELECT
+      InvArticulo.Id,
+      InvArticulo.CodigoArticulo,
+      (SELECT CodigoBarra
+          FROM InvCodigoBarra 
+          WHERE InvCodigoBarra.InvArticuloId = InvArticulo.Id
+          AND InvCodigoBarra.EsPrincipal = 1) As CodigoBarra,
+      InvArticulo.Descripcion,
+      (SELECT (ROUND(CAST(SUM (InvLoteAlmacen.Existencia) AS DECIMAL(38,0)),2,0)) As Existencia
+          FROM InvLoteAlmacen
+          WHERE(InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
+          AND (InvLoteAlmacen.InvArticuloId = InvArticulo.Id)) AS Existencia
+      FROM InvArticulo";
+
+      for($i = 0; $i<count($palabras); $i++ ){
+        if($i == 0){
+          $sql = $sql." WHERE InvArticulo.Descripcion LIKE '%$palabras[$i]%'";
+        }
+        else{
+          $sql = $sql." AND InvArticulo.Descripcion LIKE '%$palabras[$i]%'";
+        }
+      }
+      $sql = $sql." GROUP BY InvArticulo.Id,InvArticulo.CodigoArticulo,InvArticulo.Descripcion,InvArticulo.FinConceptoImptoIdCompra
+      ORDER BY InvArticulo.Id ASC";
+    }
+    else{
+      $sql = "
+        SELECT
       InvArticulo.Id,
       InvArticulo.CodigoArticulo,
       (SELECT CodigoBarra
@@ -322,7 +354,8 @@
       WHERE InvArticulo.Descripcion LIKE '%$DescripLike%'
       GROUP BY InvArticulo.Id,InvArticulo.CodigoArticulo,InvArticulo.Descripcion,InvArticulo.FinConceptoImptoIdCompra
       ORDER BY InvArticulo.Id ASC
-    ";          
+      ";   
+    }         
     return $sql;
   }
   /**********************************************************************************/
