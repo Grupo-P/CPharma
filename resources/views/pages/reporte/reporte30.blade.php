@@ -295,7 +295,8 @@
     $NumeroControl = $rowNFact["NumeroControl"];
     $Estado = $rowNFact["Estado"];
     $TasaActual = FG_Tasa_Fecha($connCPharma,date('Y-m-d'));
-    $TasaActual = ($TasaActual!="" && $TasaActual!=null)?$TasaActual:"0";    
+    $TasaActual = ($TasaActual!="" && $TasaActual!=null)?$TasaActual:"0";
+    $FechaRegistro = $rowNFact["FechaRegistro"];
 
     switch ($Estado) {
       case '1':
@@ -384,12 +385,15 @@
             <th scope="col" class="CP-sticky">Gravado?</td>
             <th scope="col" class="CP-sticky">Marca</td>
             <th scope="col" class="CP-sticky">Nuevo?</td>
-
-            <th scope="col" class="CP-sticky">Precio </br> (Con IVA) '.SigVe.'</th>
             <th scope="col" class="CP-sticky">Cantidad Recibida</th>
-            <th scope="col" class="CP-sticky">Costo Bruto </br> (Sin IVA)</th>
             <th scope="col" class="CP-sticky">Lote del fabricante</th>
             <th scope="col" class="CP-sticky">Fecha de vencimiento</th>
+            <th scope="col" class="CP-sticky">Vida Util</th>
+            <th scope="col" class="CP-sticky">Precio </br> (Con IVA) '.SigVe.'</th>
+            
+            <th scope="col" class="CP-sticky">Costo Bruto </br> (Sin IVA)</th>
+            
+            
             <th scope="col" class="CP-sticky">Ultimo Lote</th>
             <th scope="col" class="CP-sticky">Ultima Venta</th>
           </tr>
@@ -456,8 +460,6 @@
       echo '<td align="center">'.$Gravado.'</td>';
       echo '<td align="center">'.$Marca.'</td>';
       echo '<td align="center">'.$nuevo.'</td>';
-
-      echo '<td align="center">'.number_format($Precio,2,"," ,"." ).'</td>';
       
       echo
         '<td align="center" class="CP-barrido">
@@ -466,7 +468,6 @@
         '</a>
         </td>';
 
-      echo '<td align="center">'.number_format($row["M_PrecioCompraBruto"],2,"," ,"." ).'</td>';
       echo '<td align="center">'.$row["NumeroLoteFabricante"].'</td>';
 
       if($row["FechaVencimiento"]!=NULL){
@@ -475,6 +476,23 @@
       else{
         echo '<td align="center">-</td>';
       }
+
+      if($row["FechaVencimiento"]!=NULL && $FechaRegistro!=NULL){
+        $VidaUtil = FG_Rango_Dias($row["FechaVencimiento"]->format('Y-m-d'),$FechaRegistro->format('Y-m-d'));  
+        echo '<td align="center">'.$VidaUtil.'</td>';
+      }
+      else{
+        echo '<td align="center">-</td>';
+      }
+
+      echo '<td align="center">'.number_format($Precio,2,"," ,"." ).'</td>';
+      
+      
+
+      echo '<td align="center">'.number_format($row["M_PrecioCompraBruto"],2,"," ,"." ).'</td>';
+     
+
+      
 
       if(($UltimoLote)){
         echo '<td align="center">'.$UltimoLote->format('d-m-Y').'</td>';
@@ -537,6 +555,7 @@
       ComFactura.Estado as Estado,
       ComFactura.Auditoria_Usuario as Operador,
       ComFactura.NumeroControl as NumeroControl,
+      CONVERT(DATE,ComFactura.FechaRegistro) as FechaRegistro,
       CONVERT(DATE,ComFactura.FechaDocumento) As FechaDocumento
       FROM ComFactura 
       WHERE ComFactura.Id = '$IdFactura'
