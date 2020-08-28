@@ -696,6 +696,13 @@
         </a>
       </li>
       <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('/inventario') }}">  
+          <span data-feather="home"></span>
+          <i class="fa fa-boxes"></i>
+          Inventario<span class="sr-only">(current)</span>
+        </a>
+      </li>
+      <li class="nav-item">
         <a class="nav-link CP-Links-Menu" href="{{ url('/ordenCompra') }}">     
           <span data-feather="home"></span>
           <i class="far fa-file-alt"></i>
@@ -972,6 +979,13 @@
         </a>
       </li>
       <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('/inventario') }}">  
+          <span data-feather="home"></span>
+          <i class="fa fa-boxes"></i>
+          Inventario<span class="sr-only">(current)</span>
+        </a>
+      </li>
+      <li class="nav-item">
         <a class="nav-link CP-Links-Menu" href="{{ url('/ordenCompra') }}">     
           <span data-feather="home"></span>
           <i class="far fa-file-alt"></i>
@@ -1090,14 +1104,14 @@
     <button type="button" class="btn btn-outline-info dropdown-toggle textoI" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
       <i class="fas fa-user-secret"></i> Developer
     </button>   
-    <div class="dropdown-menu">
+    <div class="dropdown-menu">      
       <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="{{ url('/inventario') }}">  
+        <a class="nav-link CP-Links-Menu" href="{{ url('reporte30') }}">  
           <span data-feather="home"></span>
-          <i class="fa fa-boxes"></i>
-          Inventario<span class="sr-only">(current)</span>
+          <i class="fa fa-file-alt"></i>
+          Registro de Compras<span class="sr-only">(current)</span>
         </a>
-      </li>      
+      </li>     
     </div>
   </div>
 <?php
