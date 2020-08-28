@@ -371,14 +371,20 @@
     <table class="table table-striped table-bordered col-12 sortable" id="myTable">
         <thead class="thead-dark">
           <tr>
+            <th scope="col" class="CP-sticky" colspan="9">#</th>
+            <th scope="col" class="CP-sticky">#</th>
+            <th scope="col" class="CP-sticky">#</th>
+          </tr>
+          <tr>
             <th scope="col" class="CP-sticky">#</th>
             <th scope="col" class="CP-sticky">Codigo</th>
             <th scope="col" class="CP-sticky">Codigo de Barra</th>
-            <th scope="col" class="CP-sticky">Descripcion</th>
-            <th scope="col" class="CP-sticky">Existencia</th>
+            <th scope="col" class="CP-sticky">Descripcion</th>            
             <th scope="col" class="CP-sticky">Dolarizado?</td>
             <th scope="col" class="CP-sticky">Gravado?</td>
-            <th scope="col" class="CP-sticky">Clasificacion</td>
+            <th scope="col" class="CP-sticky">Marca</td>
+            <th scope="col" class="CP-sticky">Nuevo?</td>
+
             <th scope="col" class="CP-sticky">Precio </br> (Con IVA) '.SigVe.'</th>
             <th scope="col" class="CP-sticky">Cantidad Recibida</th>
             <th scope="col" class="CP-sticky">Costo Bruto </br> (Sin IVA)</th>
@@ -416,6 +422,11 @@
       $CondicionExistencia = 'CON_EXISTENCIA';
       $UltimoLote = $row2["UltimoLote"]; 
       $UltimaVenta = $row2["UltimaVenta"];
+      $Marca = ($row2["Marca"])?$row2["Marca"]:"-";
+      $FechaCreacion = ($row2["FechaCreacion"])?$row2["FechaCreacion"]:"-";
+
+      $nuevo = FG_Rango_Dias($FechaCreacion->format('Y-m-d'),date('Y-m-d'));      
+      $nuevo = ($nuevo==0)?"SI":"NO";
       
       $Dolarizado = FG_Producto_Dolarizado($Dolarizado);
       $Gravado = FG_Producto_Gravado($IsIVA);
@@ -440,11 +451,12 @@
           .$Descripcion.
         '</a>
         </td>';
-
-      echo '<td align="center">'.intval($Existencia).'</td>';
+    
       echo '<td align="center">'.$Dolarizado.'</td>';
       echo '<td align="center">'.$Gravado.'</td>';
-      echo '<td align="center">'.$clasificacion.'</td>';
+      echo '<td align="center">'.$Marca.'</td>';
+      echo '<td align="center">'.$nuevo.'</td>';
+
       echo '<td align="center">'.number_format($Precio,2,"," ,"." ).'</td>';
       
       echo

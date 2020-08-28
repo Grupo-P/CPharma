@@ -89,6 +89,10 @@
     AND InvCodigoBarra.EsPrincipal = 1) AS CodigoBarra,
     --Descripcion
     InvArticulo.Descripcion,
+    --Marca
+     (SELECT InvMarca.Nombre FROM InvMarca WHERE InvMarca.Id = InvArticulo.InvMarcaId) as Marca,
+     --Fecha Creacion
+     InvArticulo.Auditoria_FechaCreacion as FechaCreacion,
     --Impuesto (1 SI aplica impuesto, 0 NO aplica impuesto)
     (ISNULL(InvArticulo.FinConceptoImptoIdCompra,CAST(0 AS INT))) AS Impuesto,
     --Troquelado (0 NO es Troquelado, Id Articulo SI es Troquelado)
@@ -261,7 +265,7 @@
     --Condicionales
     WHERE InvArticulo.Id = '$IdArticulo'
     --Agrupamientos
-    GROUP BY InvArticulo.Id, InvArticulo.CodigoArticulo, InvArticulo.Descripcion, InvArticulo.FinConceptoImptoIdCompra, InvArticulo.InvCategoriaId
+    GROUP BY InvArticulo.Id, InvArticulo.CodigoArticulo, InvArticulo.Descripcion, InvArticulo.FinConceptoImptoIdCompra, InvArticulo.InvCategoriaId,InvArticulo.InvMarcaId,InvArticulo.Auditoria_FechaCreacion
     --Ordanamiento
     ORDER BY InvArticulo.Id ASC 
     ";
