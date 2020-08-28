@@ -370,12 +370,7 @@
 
     echo'
     <table class="table table-striped table-bordered col-12 sortable" id="myTable">
-        <thead class="thead-dark">
-          <tr>
-            <th scope="col" class="CP-sticky" colspan="9">#</th>
-            <th scope="col" class="CP-sticky">#</th>
-            <th scope="col" class="CP-sticky">#</th>
-          </tr>
+        <thead class="thead-dark">          
           <tr>
             <th scope="col" class="CP-sticky">#</th>
             <th scope="col" class="CP-sticky">Codigo</th>
@@ -390,12 +385,6 @@
             <th scope="col" class="CP-sticky">Fecha de vencimiento</th>
             <th scope="col" class="CP-sticky">Vida Util</th>
             <th scope="col" class="CP-sticky">Precio </br> (Con IVA) '.SigVe.'</th>
-            
-            <th scope="col" class="CP-sticky">Costo Bruto </br> (Sin IVA)</th>
-            
-            
-            <th scope="col" class="CP-sticky">Ultimo Lote</th>
-            <th scope="col" class="CP-sticky">Ultima Venta</th>
           </tr>
         </thead>
         <tbody>
@@ -486,28 +475,9 @@
       }
 
       echo '<td align="center">'.number_format($Precio,2,"," ,"." ).'</td>';
-      
-      
-
-      echo '<td align="center">'.number_format($row["M_PrecioCompraBruto"],2,"," ,"." ).'</td>';
+          
+      //echo '<td align="center">'.number_format($row["M_PrecioCompraBruto"],2,"," ,"." ).'</td>';
      
-
-      
-
-      if(($UltimoLote)){
-        echo '<td align="center">'.$UltimoLote->format('d-m-Y').'</td>';
-      }
-      else{
-        echo '<td align="center"> - </td>';
-      }
-
-      if(!is_null($UltimaVenta)){
-        echo '<td align="center">'.$UltimaVenta->format('d-m-Y').'</td>';
-      }
-      else{
-        echo '<td align="center"> - </td>';
-      }
-      
       echo '</tr>';
     $contador++;
     }
