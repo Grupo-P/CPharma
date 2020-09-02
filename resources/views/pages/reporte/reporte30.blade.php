@@ -47,6 +47,14 @@
       background-color: DodgerBlue !important; 
       color: #ffffff; 
     }
+
+    @page {size: landscape}
+
+    @media print{
+      .saltoDePagina{
+        display:block;
+        page-break-before:always;
+      }
     </style>
 @endsection
 
@@ -320,8 +328,8 @@
 
     $NombreProveedor = FG_Limpiar_Texto($NombreProveedor);
 
-    echo '
-    <div class="input-group md-form form-sm form-1 pl-0 CP-stickyBar">
+    echo '  
+    <div class="input-group md-form form-sm form-1 pl-0 CP-stickyBar" style="width:95%;">
       <div class="input-group-prepend">
         <span class="input-group-text purple lighten-3" id="basic-text1">
           <i class="fas fa-search text-white"
@@ -329,12 +337,13 @@
         </span>
       </div>
       <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterAllTable()">
-    </div>
+      <input type="button" name="imprimir" value="Imprimir" class="btn btn-outline-success btn-sm" onclick="window.print();" style="display: inline; margin-left: 10px;">
+    </div>    
     <br/>
     ';
 
     echo '
-    <table class="table table-striped table-bordered col-12 sortable">
+    <table class="table table-striped table-bordered col-12 sortable" style="width:70%;">
       <thead class="thead-dark">
           <tr>
             <th scope="col">Estatus Factura</th>
@@ -345,7 +354,7 @@
             <th scope="col">Tasa Mercado '.SigVe.'</th>
             <th scope="col">Fecha Factura</th>
             <th scope="col">Fecha</th>
-          </tr>
+          </tr>          
         </thead>
         <tbody>
         <tr>
@@ -365,12 +374,24 @@
       echo '<td align="center">'.$fechaActualMostrar.'</td>';
       echo '
         </tr>
+        <tr>
+          <td scope="col" align="center"><input type="checkbox"></td> 
+          <td></td>           
+          <td scope="col" align="center"><input type="checkbox"></td>
+          <td scope="col" align="center"><input type="checkbox"></td>
+          <td colspan="4"></td>           
+        </tr>
         </tbody>
     </table>';
 
     echo'
     <table class="table table-striped table-bordered col-12 sortable" id="myTable">
-        <thead class="thead-dark">          
+        <thead class="thead-dark">
+          <tr>
+            <th colspan="14 bg-dark CP-sticky"></th>
+            <th colspan="6" scope="col" class="CP-sticky bg-info">Relacion en '.SigVe.'</th>
+            <th colspan="6" scope="col" class="CP-sticky bg-success">Relacion en '.SigDolar.'</th>
+          </tr>          
           <tr>
             <th scope="col" class="CP-sticky">#</th>
             <th scope="col" class="CP-sticky">Codigo</th>
@@ -385,14 +406,39 @@
             <th scope="col" class="CP-sticky">Fecha de vencimiento</th>
             <th scope="col" class="CP-sticky">Vida Util</th>
             <th scope="col" class="CP-sticky">Precio </br> (Con IVA) '.SigVe.'</th>
+            <th scope="col" class="CP-sticky">Troquel </br> (Con IVA) '.SigVe.'</th>
+
+            <th scope="col" class="CP-sticky bg-info">Costo Bruto </br> (Sin IVA) '.SigVe.'</th>
+            <th scope="col" class="CP-sticky bg-info">Costo Neto </br> (Sin IVA) '.SigVe.'</th>
+            <th scope="col" class="CP-sticky bg-info">Subtotal </br> (Sin IVA) '.SigVe.'</th>
+            <th scope="col" class="CP-sticky bg-info">Impuesto '.SigVe.'</th>
+            <th scope="col" class="CP-sticky bg-info">Descuento Especifico <br> y Global '.SigVe.'</th>
+            <th scope="col" class="CP-sticky bg-info">Total '.SigVe.'</th>
+
+            <th scope="col" class="CP-sticky bg-success">Costo Bruto </br> (Sin IVA) '.SigDolar.'</th>
+            <th scope="col" class="CP-sticky bg-success">Costo Neto </br> (Sin IVA) '.SigDolar.'</th>
+            <th scope="col" class="CP-sticky bg-success">Subtotal </br> (Sin IVA) '.SigDolar.'</th>
+            <th scope="col" class="CP-sticky bg-success">Impuesto '.SigDolar.'</th>
+            <th scope="col" class="CP-sticky bg-success">Descuento Especifico <br> y Global '.SigDolar.'</th>
+            <th scope="col" class="CP-sticky bg-success">Total '.SigDolar.'</th>
           </tr>
         </thead>
         <tbody>
      ';
     $contador = 1;
-    while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
-      $IdArticulo = $row["Id"];
+    $SumImpuestoBs = $SumDescBs = $SumTotalBs = $SumImpuestoDol = $SumDescDol = $SumTotalDol = $SumCantidad = $SumSKU = 0;
 
+    while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
+
+      $IdArticulo = $row["Id"];
+      $TroqueladoGen = ($row["M_PrecioTroquelado"])?$row["M_PrecioTroquelado"]:"0";
+      $CostoBrutoGen = ($row["M_PrecioCompraBruto"])?$row["M_PrecioCompraBruto"]:"0";
+      $CostoNetoGen = ($row["M_PrecioCompraNeto"])?$row["M_PrecioCompraNeto"]:"0";
+      $CantidadRecibida = intval($row['CantidadRecibidaFactura']);
+      $PorcentajeDescuentoGlobal = ($row["PorcentajeDescuentoGlobal"])?$row["PorcentajeDescuentoGlobal"]:"0";
+
+      $SumCantidad += $CantidadRecibida;
+      
       $sql2 = SQG_Detalle_Articulo($IdArticulo);
       $result2 = sqlsrv_query($conn,$sql2);
       $row2 = sqlsrv_fetch_array($result2, SQLSRV_FETCH_ASSOC);
@@ -453,7 +499,7 @@
       echo
         '<td align="center" class="CP-barrido">
         <a href="/reporte6?pedido=15&fechaInicio='.$fechaDocumentoLink.'&fechaFin='.$fechaActual.'&SEDE='.$SedeConnection.'&flag=BsqDescrip&Descrip='.$Descripcion.'&IdD='.$IdArticulo.'&CodBar=&IdCB=" style="text-decoration: none; color: black;" target="_blank">'
-          .intval($row['CantidadRecibidaFactura']).
+          .$CantidadRecibida.
         '</a>
         </td>';
 
@@ -475,16 +521,154 @@
       }
 
       echo '<td align="center">'.number_format($Precio,2,"," ,"." ).'</td>';
+
+      echo '<td align="center">'.number_format($TroqueladoGen,2,"," ,"." ).'</td>';
+
+      $descuento = ($CostoBrutoGen-$CostoNetoGen)*$CantidadRecibida;
+      $subtotal = $CantidadRecibida * $CostoBrutoGen;
+      $impuesto = (Impuesto-1)*($subtotal-$descuento);
+      $impuesto = ($IsIVA==1)?$impuesto:"0";
+      $Total = ($subtotal+$impuesto)-$descuento;
+
+      if($TasaActual){
+        $descuentoD = $descuento/$TasaActual;
+        $subtotalD = $subtotal/$TasaActual;
+        $impuestoD = $impuesto/$TasaActual;      
+        $TotalD = $Total/$TasaActual;  
+
+        $SumImpuestoDol += $impuestoD;
+        $SumDescDol += $descuentoD;
+        $SumTotalDol += $TotalD;
+      }
+      
+      $SumImpuestoBs += $impuesto;
+      $SumDescBs += $descuento;
+      $SumTotalBs += $Total;      
+
+      //Seccion en bolivares
+      echo '<td align="center" class="bg-info text-white">'.number_format($CostoBrutoGen,2,"," ,"." ).'</td>';
+      echo '<td align="center" class="bg-info text-white">'.number_format($CostoNetoGen,2,"," ,"." ).'</td>';
+      echo '<td align="center" class="bg-info text-white">'.number_format($subtotal,2,"," ,"." ).'</td>';
+      echo '<td align="center" class="bg-info text-white">'.number_format($impuesto,2,"," ,"." ).'</td>';
+      echo '<td align="center" class="bg-info text-white">'.number_format($descuento,2,"," ,"." ).'</td>';
+      echo '<td align="center" class="bg-info text-white">'.number_format($Total,2,"," ,"." ).'</td>';
+
+      //Seccion en dolares
+      if($Dolarizado=="SI" && $TasaActual!=0){
+        echo '<td align="center" class="bg-info text-white">'.number_format($CostoBrutoGen/$TasaActual,2,"," ,"." ).'</td>';
+      echo '<td align="center" class="bg-info text-white">'.number_format($CostoNetoGen/$TasaActual,2,"," ,"." ).'</td>';
+        echo '<td align="center" class="bg-info text-white">'.number_format($subtotalD,2,"," ,"." ).'</td>';
+        echo '<td align="center" class="bg-info text-white">'.number_format($impuestoD,2,"," ,"." ).'</td>';
+        echo '<td align="center" class="bg-info text-white">'.number_format($descuentoD,2,"," ,"." ).'</td>';
+        echo '<td align="center" class="bg-info text-white">'.number_format($TotalD,2,"," ,"." ).'</td>';
+      }
+      else{
+        echo '<td align="center" class="bg-success text-white">-</td>';
+        echo '<td align="center" class="bg-success text-white">-</td>';
+        echo '<td align="center" class="bg-success text-white">-</td>';
+        echo '<td align="center" class="bg-success text-white">-</td>';
+        echo '<td align="center" class="bg-success text-white">-</td>';
+        echo '<td align="center" class="bg-success text-white">-</td>';
+      }
           
-      //echo '<td align="center">'.number_format($row["M_PrecioCompraBruto"],2,"," ,"." ).'</td>';
-     
+      echo'<td scope="col" align="center"><input type="checkbox"></td>';
       echo '</tr>';
     $contador++;
+    $SumSKU++;
     }
+
+    echo'
+    <tr>
+      <td colspan="17" align="right"><strong>Totales</strong></td>
+      <td align="center">'.number_format($SumImpuestoBs,2,"," ,"." ).'</td>
+      <td align="center">'.number_format($SumDescBs,2,"," ,"." ).'</td>
+      <td align="center">'.number_format($SumTotalBs,2,"," ,"." ).'</td>
+      <td colspan="3" align="right"></td>
+      <td align="center">'.number_format($SumImpuestoDol,2,"," ,"." ).'</td>
+      <td align="center">'.number_format($SumDescDol,2,"," ,"." ).'</td>
+      <td align="center">'.number_format($SumTotalDol,2,"," ,"." ).'</td>
+    </tr>
+    <tr>
+      <td colspan="17" align="right"></td>
+      <td scope="col" align="center"><input type="checkbox"></td>
+      <td scope="col" align="center"><input type="checkbox"></td>
+      <td scope="col" align="center"><input type="checkbox"></td>  
+      <td colspan="3" align="right"></td>
+      <td scope="col" align="center"><input type="checkbox"></td>
+      <td scope="col" align="center"><input type="checkbox"></td>
+      <td scope="col" align="center"><input type="checkbox"></td>
+    </tr>
+    ';
+
     echo '
       </tbody>
     </table>';
     sqlsrv_close($conn);
+
+    echo "<strong>Fecha de Impresion: ".date('d/m/Y')." a las ".date('h:i a')."</strong><br><br>";
+
+    echo'
+      <table class="table table-striped table-bordered col-12 sortable" id="myTable" style="width:40%;">
+        <thead class="thead-dark">              
+          <tr>
+            <th scope="col" class="CP-sticky">Total SKU</th>
+            <th scope="col" class="CP-sticky">Total Unidades</th>
+            <th scope="col" class="CP-sticky">Descuento Global</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td align="center">'.$SumSKU.'</td>
+            <td align="center">'.$SumCantidad.'</td>
+            <td align="center">'.($PorcentajeDescuentoGlobal*100).' %</td>
+          </tr>
+        </tbody>
+      </table>
+    ';
+
+    echo'
+      <table class="table table-striped table-bordered col-12 sortable" id="myTable" style="width:40%;">
+        <thead class="thead-dark">              
+          <tr>
+            <th scope="col" class="CP-sticky" colspan="2">Departamento de almacen</th>
+            <th scope="col" class="CP-sticky" colspan="2">Departamento de administracion</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td align="center">Nombre</td>
+            <td align="center">__________________</td>
+            <td align="center">Nombre</td>
+            <td align="center">__________________</td>            
+          </tr>
+          <tr>
+            <td align="center">Apellido</td>
+            <td align="center">__________________</td>
+            <td align="center">Apellido</td>
+            <td align="center">__________________</td>            
+          </tr>
+          <tr>
+            <td align="center">Fecha</td>
+            <td align="center">__________________</td>
+            <td align="center">Fecha</td>
+            <td align="center">__________________</td>            
+          </tr>
+          <tr>
+            <td align="center">Hora</td>
+            <td align="center">__________________</td>
+            <td align="center">Hora</td>
+            <td align="center">__________________</td>            
+          </tr>
+          <tr>
+            <td align="center">Firma</td>
+            <td align="center">__________________</td>
+            <td align="center">Firma</td>
+            <td align="center">__________________</td>            
+          </tr>
+        </tbody>
+      </table>
+      <div class="saltoDePagina"></div>
+    ';
   }
   /**********************************************************************************/
   /*
@@ -503,6 +687,9 @@
     InvArticulo.FinConceptoImptoIdCompra AS ConceptoImpuesto,
     (ROUND(CAST((ComFacturaDetalle.CantidadRecibidaFactura) AS DECIMAL(38,0)),2,0))  AS CantidadRecibidaFactura,
     (ROUND(CAST((ComFacturaDetalle.M_PrecioCompraBruto) AS DECIMAL(38,2)),2,0))  AS M_PrecioCompraBruto,
+    (ROUND(CAST((ComFacturaDetalle.M_PrecioCompraNeto) AS DECIMAL(38,2)),2,0))  AS M_PrecioCompraNeto,
+    (ROUND(CAST((ComFacturaDetalle.M_PrecioTroquelado) AS DECIMAL(38,2)),2,0))  AS M_PrecioTroquelado,
+    ComFacturaDetalle.PorcentajeDescuentoGlobal as PorcentajeDescuentoGlobal,
     ComFacturaDetalle.NumeroLoteFabricante AS NumeroLoteFabricante,
     CONVERT(DATE,ComFacturaDetalle.FechaVencimiento) AS FechaVencimiento
     FROM ComFacturaDetalle
