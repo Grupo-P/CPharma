@@ -360,9 +360,13 @@
         <a href="/reporte7?Nombre='.FG_Limpiar_Texto($row2["Nombre"]).'&Id='.$row2["Id"].'&SEDE='.$SedeConnection.'" target="_blank" style="text-decoration: none; color: black;">'
           .FG_Limpiar_Texto($row2["Nombre"]).
         '</a>
-        </td>';
+        </td>';        
 
-        echo '<td align="center" class="bg-info text-white">'.$row2["numero"].'</td>';
+        echo '<td align="center" class="bg-info text-white">
+        <a class="CP-barrido" href="/reporte30?SEDE='.$SedeConnection.'&IdFact='.$row2["idFactura"].'&IdProv='.$row2["Id"].'&NombreProv='.FG_Limpiar_Texto($row2["Nombre"]).'" style="text-decoration: none; color: white;" target="_blank">'
+          .$row2["numero"].
+        '</a>          
+        </td>'; 
 
         echo
         '<td align="center" class="CP-barrido">
@@ -722,7 +726,8 @@
       ComFacturaDetalle.CantidadRecibidaFactura,
       ComFacturaDetalle.M_PrecioCompraBruto,
       ComFactura.auditoria_usuario as operador,
-      ComFactura.NumeroFactura as numero
+      ComFactura.NumeroFactura as numero,
+      ComFactura.Id as idFactura
       FROM InvArticulo
       INNER JOIN ComFacturaDetalle ON InvArticulo.Id = ComFacturaDetalle.InvArticuloId
       INNER JOIN ComFactura ON ComFactura.Id = ComFacturaDetalle.ComFacturaId
