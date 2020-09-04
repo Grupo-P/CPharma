@@ -353,7 +353,7 @@
             <th scope="col">Numero de Control</th>
             <th scope="col">Tasa Mercado '.SigVe.'</th>
             <th scope="col">Fecha Factura</th>
-            <th scope="col">Fecha</th>
+            <th scope="col">Fecha de Registro</th>
           </tr>          
         </thead>
         <tbody>
