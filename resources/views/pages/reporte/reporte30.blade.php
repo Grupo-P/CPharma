@@ -343,7 +343,7 @@
     ';
 
     echo '
-    <table class="table table-striped table-bordered col-12 sortable" style="width:70%;">
+    <table class="table table-striped table-bordered col-12" style="width:70%;">
       <thead class="thead-dark">
           <tr>
             <th scope="col">Estatus Factura</th>
@@ -612,7 +612,7 @@
     echo "<strong>Fecha de Impresion: ".date('d/m/Y')." a las ".date('h:i a')."</strong><br><br>";
 
     echo'
-      <table class="table table-striped table-bordered col-12 sortable" id="myTable" style="width:40%;">
+      <table class="table table-striped table-bordered col-12" style="width:40%;">
         <thead class="thead-dark">              
           <tr>
             <th scope="col" class="CP-sticky">Total SKU</th>
@@ -631,7 +631,7 @@
     ';
 
     echo'
-      <table class="table table-striped table-bordered col-12 sortable" id="myTable" style="width:40%;">
+      <table class="table table-striped table-bordered col-12" style="width:40%;">
         <thead class="thead-dark">              
           <tr>
             <th scope="col" class="CP-sticky" colspan="2">Departamento de almacen</th>
