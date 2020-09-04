@@ -276,7 +276,7 @@
     ComFactura.Auditoria_Usuario
     FROM ComFactura
     WHERE ComFactura.ComProveedorId = '$IdProveedor'
-    ORDER BY FechaDocumento DESC
+    ORDER BY FechaRegistro DESC
     ";
     return $sql;
   }
