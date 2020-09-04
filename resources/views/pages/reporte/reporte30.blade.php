@@ -699,7 +699,7 @@
     FROM ComFacturaDetalle
     INNER JOIN InvArticulo ON InvArticulo.Id = ComFacturaDetalle.InvArticuloId
     WHERE ComFacturaDetalle.ComFacturaId = '$IdFatura'
-    ORDER BY FacturaId,InvArticulo.Id ASC
+    ORDER BY ComFacturaDetalle.Secuencia ASC
     ";
     return $sql;
   }
