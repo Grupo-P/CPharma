@@ -302,9 +302,11 @@
     $Operador = ($rowNFact["Operador"])?$rowNFact["Operador"]:"-";
     $NumeroControl = $rowNFact["NumeroControl"];
     $Estado = $rowNFact["Estado"];
-    $TasaActual = FG_Tasa_Fecha($connCPharma,date('Y-m-d'));
-    $TasaActual = ($TasaActual!="" && $TasaActual!=null)?$TasaActual:"0";
+    
     $FechaRegistro = $rowNFact["FechaRegistro"];
+
+    $TasaActual = FG_Tasa_Fecha($connCPharma,$FechaRegistro->format('Y-m-d'));
+    $TasaActual = ($TasaActual!="" && $TasaActual!=null)?$TasaActual:"0";
 
     switch ($Estado) {
       case '1':
@@ -351,7 +353,7 @@
             <th scope="col">Proveedor</th>
             <th scope="col">Numero de Factura</th>
             <th scope="col">Numero de Control</th>
-            <th scope="col">Tasa Mercado '.SigVe.'</th>
+            <th scope="col">Tasa Mercado <br> (Fecha de Registro de Factura) <br>'.SigVe.'</th>
             <th scope="col">Fecha Factura</th>
             <th scope="col">Fecha de Registro</th>
           </tr>          
@@ -670,8 +672,7 @@
             <td align="center">__________________</td>            
           </tr>
         </tbody>
-      </table>
-      <div class="saltoDePagina"></div>
+      </table>      
     ';
   }
   /**********************************************************************************/
