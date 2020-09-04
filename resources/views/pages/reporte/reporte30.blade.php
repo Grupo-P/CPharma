@@ -426,7 +426,7 @@
         <tbody>
      ';
     $contador = 1;
-    $SumImpuestoBs = $SumDescBs = $SumTotalBs = $SumImpuestoDol = $SumDescDol = $SumTotalDol = $SumCantidad = $SumSKU = 0;
+    $SumImpuestoBs = $SumDescBs = $SumTotalBs = $SumImpuestoDol = $SumDescDol = $SumTotalDol = $SumCantidad = $SumSKU = $SumSubTotalBs = $SumSubTotalDol = 0;
 
     while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
 
@@ -530,17 +530,19 @@
       $impuesto = ($IsIVA==1)?$impuesto:"0";
       $Total = ($subtotal+$impuesto)-$descuento;
 
-      if($TasaActual){
+      if($TasaActual!=0){
         $descuentoD = $descuento/$TasaActual;
         $subtotalD = $subtotal/$TasaActual;
         $impuestoD = $impuesto/$TasaActual;      
         $TotalD = $Total/$TasaActual;  
 
+        $SumSubTotalDol += $subtotalD;
         $SumImpuestoDol += $impuestoD;
         $SumDescDol += $descuentoD;
         $SumTotalDol += $TotalD;
       }
       
+      $SumSubTotalBs += $subtotal;
       $SumImpuestoBs += $impuesto;
       $SumDescBs += $descuento;
       $SumTotalBs += $Total;      
@@ -579,11 +581,13 @@
 
     echo'
     <tr>
-      <td colspan="17" align="right"><strong>Totales</strong></td>
+      <td colspan="16" align="right"><strong>Totales</strong></td>
+      <td align="center">'.number_format($SumSubTotalBs,2,"," ,"." ).'</td>
       <td align="center">'.number_format($SumImpuestoBs,2,"," ,"." ).'</td>
       <td align="center">'.number_format($SumDescBs,2,"," ,"." ).'</td>
       <td align="center">'.number_format($SumTotalBs,2,"," ,"." ).'</td>
-      <td colspan="3" align="right"></td>
+      <td colspan="2" align="right"></td>
+      <td align="center">'.number_format($SumSubTotalDol,2,"," ,"." ).'</td>
       <td align="center">'.number_format($SumImpuestoDol,2,"," ,"." ).'</td>
       <td align="center">'.number_format($SumDescDol,2,"," ,"." ).'</td>
       <td align="center">'.number_format($SumTotalDol,2,"," ,"." ).'</td>
