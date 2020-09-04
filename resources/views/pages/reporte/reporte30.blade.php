@@ -530,7 +530,7 @@
       $impuesto = ($IsIVA==1)?$impuesto:"0";
       $Total = ($subtotal+$impuesto)-$descuento;
 
-      if($TasaActual!=0){
+      if($Dolarizado=="SI" && $TasaActual!=0){
         $descuentoD = $descuento/$TasaActual;
         $subtotalD = $subtotal/$TasaActual;
         $impuestoD = $impuesto/$TasaActual;      
