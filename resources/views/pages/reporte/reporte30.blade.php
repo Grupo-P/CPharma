@@ -266,7 +266,7 @@
   */
   function R30Q_Factura_Proveedor_Toquel($IdProveedor) {
     $sql = "
-    SELECT
+    SELECT TOP 30
     ComFactura.Id AS FacturaId,    
     ComFactura.NumeroFactura,
     ComFactura.NumeroControl,
