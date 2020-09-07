@@ -123,7 +123,9 @@
       </div>
       <input type="submit" value="Buscar" class="btn btn-outline-success">
     </form>
-    ';
+    <br><br>';
+
+    R30_Proveedor_Factura_Top30($_GET['SEDE']);
 
     $FinCarga = new DateTime("now");
     $IntervalCarga = $InicioCarga->diff($FinCarga);
@@ -165,6 +167,74 @@
       ORDER BY ComProveedor.Id ASC
     ";
     return $sql;
+  }
+  function R30_Proveedor_Factura_Top30($SedeConnection){
+    
+    $conn = FG_Conectar_Smartpharma($SedeConnection);
+    $sql1 = R30Q_Factura_Proveedor_Top30();
+    $result = sqlsrv_query($conn,$sql1);
+
+    echo '
+    <div class="input-group md-form form-sm form-1 pl-0 CP-stickyBar">
+      <div class="input-group-prepend">
+        <span class="input-group-text purple lighten-3" id="basic-text1">
+          <i class="fas fa-search text-white"
+            aria-hidden="true"></i>
+        </span>
+      </div>
+      <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterAllTable()">
+    </div>
+    <br/>
+    ';
+  
+    echo'
+    <table class="table table-striped table-bordered col-12 sortable" id="myTable">
+        <thead class="thead-dark">
+          <tr>
+            <th scope="col" class="CP-sticky">#</th>
+            <th scope="col" class="CP-sticky">Numero de Control</th>
+            <th scope="col" class="CP-sticky">Numero de Factura</th>
+            <th scope="col" class="CP-sticky">Fecha Documento</th>
+            <th scope="col" class="CP-sticky">Fecha Registro</th>
+            <th scope="col" class="CP-sticky">Total (Con IVA)</th>
+            <th scope="col" class="CP-sticky">Usuario Auditor</th>
+            <th scope="col" class="CP-sticky">Seleccion</th>
+          </tr>
+        </thead>
+        <tbody>
+     ';
+    $contador = 1;
+    while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
+      echo '<tr>';
+      echo '<td align="left"><strong>'.intval($contador).'</strong></td>';
+      echo '<td align="center">'.$row["NumeroControl"].'</td>';
+      echo '<td align="center">'.$row["NumeroFactura"].'</td>';
+      echo '<td align="center">'.$row["FechaDocumento"]->format('d-m-Y').'</td>';
+      echo '<td align="center">'.$row["FechaRegistro"]->format('d-m-Y').'</td>';
+      echo '<td align="center">'.number_format($row["Total"],2,"," ,"." ).'</td>';
+      echo '<td align="center">'.$row["Auditoria_Usuario"].'</td>';
+      echo '
+      <td align="center">
+        <form autocomplete="off" action="">
+            <input id="SEDE" name="SEDE" type="hidden" value="';
+                print_r($SedeConnection);
+                echo'">
+             
+              <input type="submit" value="Selecionar" class="btn btn-outline-success">
+              
+              <input id="IdFact" name="IdFact" type="hidden" value="'.intval($row["FacturaId"]).'">
+            <input id="IdProv" name="IdProv" type="hidden" value="'.$row["IdProveedor"].'">
+            <input id="NombreProv" name="NombreProv" type="hidden" value="'.FG_Limpiar_Texto($row["nombreProveedor"]).'">
+          </form>
+          <br>
+        ';
+      echo '</tr>';
+    $contador++;
+    }
+      echo '
+        </tbody>
+    </table>';
+    sqlsrv_close($conn);
   }
   /**********************************************************************************/
   /*
@@ -259,6 +329,33 @@
   }
   /**********************************************************************************/
   /*
+    TITULO: R30Q_Factura_Proveedor_Top30
+    FUNCION: Buscar la lista de facturas donde interviene el proveedor
+    RETORNO: lista de facturas
+    DESAROLLADO POR: SERGIO COVA
+  */
+  function R30Q_Factura_Proveedor_Top30() {
+    $sql = "
+    SELECT TOP 30
+    ComFactura.Id AS FacturaId,    
+    ComFactura.NumeroFactura,
+    ComFactura.NumeroControl,
+    CONVERT(DATE,ComFactura.FechaDocumento) AS FechaDocumento,
+    CONVERT(DATE,ComFactura.FechaRegistro) AS FechaRegistro,
+    ComFactura.M_MontoTotalNeto AS Total,
+    ComFactura.Auditoria_Usuario,
+    GenPersona.Nombre as nombreProveedor,
+    ComProveedor.Id as IdProveedor
+    FROM ComFactura
+    INNER JOIN ComProveedor ON ComProveedor.Id = ComFactura.ComProveedorId
+    INNER JOIN GenPersona ON ComProveedor.GenPersonaId = GenPersona.Id
+    ORDER BY FechaRegistro DESC
+    ";
+    return $sql;
+  }
+
+  /**********************************************************************************/
+  /*
     TITULO: R30Q_Factura_Proveedor_Toquel
     FUNCION: Buscar la lista de facturas donde interviene el proveedor
     RETORNO: lista de facturas
@@ -266,7 +363,7 @@
   */
   function R30Q_Factura_Proveedor_Toquel($IdProveedor) {
     $sql = "
-    SELECT TOP 30
+    SELECT
     ComFactura.Id AS FacturaId,    
     ComFactura.NumeroFactura,
     ComFactura.NumeroControl,
