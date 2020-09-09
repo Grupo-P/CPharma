@@ -1213,6 +1213,9 @@
 			case 'Compra por Marca':
 				$ruta = '/reporte29';
 			break;
+			case 'Registro de Compras':
+				$ruta = '/reporte30';
+			break;
 			case 'Registro de Fallas':
 				$ruta = '/falla';
 			break;
@@ -1310,6 +1313,9 @@
 				break;
 			case 29:
 				$nombre = 'Compra por Marca';
+			break;
+			case 30:
+				$nombre = 'Registro de Compras';
 			break;
 			case 99:
 				$nombre = 'Registro de Fallas';

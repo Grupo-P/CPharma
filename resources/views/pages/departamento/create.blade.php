@@ -121,7 +121,9 @@
                 <th scope="col">28</th>
                 <td scope="col">Artículos sin fecha de vencimiento</td>
                 <th scope="col">29</th>
-                <td scope="col">Compra por Marca</td>            
+                <td scope="col">Compra por Marca</td>
+                <th scope="col">30</th>
+                <td scope="col">Registro de Compras</td>          
             </tr>
         </tbody>
     </table>

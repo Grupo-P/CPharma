@@ -1104,14 +1104,16 @@
     <button type="button" class="btn btn-outline-info dropdown-toggle textoI" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
       <i class="fas fa-user-secret"></i> Developer
     </button>   
-    <div class="dropdown-menu">      
-      <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="{{ url('reporte30') }}">  
-          <span data-feather="home"></span>
-          <i class="fa fa-file-alt"></i>
-          Registro de Compras<span class="sr-only">(current)</span>
-        </a>
-      </li>     
+    <div class="dropdown-menu">
+      <!--      
+        <li class="nav-item">
+          <a class="nav-link CP-Links-Menu" href="{{ url('reporte30') }}">  
+            <span data-feather="home"></span>
+            <i class="fa fa-file-alt"></i>
+            Registro de Compras<span class="sr-only">(current)</span>
+          </a>
+        </li>  
+        -->   
     </div>
   </div>
 <?php
