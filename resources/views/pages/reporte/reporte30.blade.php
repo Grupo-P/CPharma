@@ -191,7 +191,9 @@
     <table class="table table-striped table-bordered col-12 sortable" id="myTable">
         <thead class="thead-dark">
           <tr>
-            <th scope="col" class="CP-sticky">#</th>
+            <th scope="col" class="CP-sticky">#</th>            
+            <th scope="col" class="CP-sticky">Proveedor</th> 
+            <th scope="col" class="CP-sticky">Estatus Factura</th>
             <th scope="col" class="CP-sticky">Numero de Control</th>
             <th scope="col" class="CP-sticky">Numero de Factura</th>
             <th scope="col" class="CP-sticky">Fecha Documento</th>
@@ -205,8 +207,24 @@
      ';
     $contador = 1;
     while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
+      $Estado = $row["Estado"];
+
+      switch ($Estado) {
+      case '1':
+        $Estado = "En proceso";
+      break;
+      case '2':
+        $Estado = "Procesada";
+      break;
+      default:
+        $Estado = "Desconocido: ".$Estado;
+      break;
+    }
+
       echo '<tr>';
-      echo '<td align="left"><strong>'.intval($contador).'</strong></td>';
+      echo '<td align="left"><strong>'.intval($contador).'</strong></td>';            
+      echo '<td align="left">'.FG_Limpiar_Texto($row["nombreProveedor"]).'</td>';
+      echo '<td align="center">'.$Estado.'</td>';
       echo '<td align="center">'.$row["NumeroControl"].'</td>';
       echo '<td align="center">'.$row["NumeroFactura"].'</td>';
       echo '<td align="center">'.$row["FechaDocumento"]->format('d-m-Y').'</td>';
@@ -340,6 +358,7 @@
     ComFactura.Id AS FacturaId,    
     ComFactura.NumeroFactura,
     ComFactura.NumeroControl,
+    ComFactura.Estado as Estado,
     CONVERT(DATE,ComFactura.FechaDocumento) AS FechaDocumento,
     CONVERT(DATE,ComFactura.FechaRegistro) AS FechaRegistro,
     ComFactura.M_MontoTotalNeto AS Total,
