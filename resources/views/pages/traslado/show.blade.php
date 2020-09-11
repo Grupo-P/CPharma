@@ -55,7 +55,7 @@
 	<table>
 		<thead>
 		    <tr>
-		    		<th scope="row" colspan="4">
+		    		<th scope="row" colspan="6">
 		    			<span class="navbar-brand text-info CP-title-NavBar">
 		    				<b><i class="fas fa-syringe text-success"></i>CPharma</b>
   						</span>
@@ -65,31 +65,31 @@
   	</thead>
 	  	<tbody>
 		    <tr>
-	      	<td colspan="4" class="alinear-der"># de Ajuste:</td>
+	      	<td colspan="6" class="alinear-der"># de Ajuste:</td>
 	      	<td colspan="9" class="alinear-izq">{{$traslado->numero_ajuste}}</td>
 		    </tr>
 		    <tr>
-	      	<td colspan="4" class="alinear-der">Fecha de Ajuste:</td>
+	      	<td colspan="6" class="alinear-der">Fecha de Ajuste:</td>
 	      	<td colspan="9" class="alinear-izq">{{$traslado->fecha_ajuste}}</td>
 		    </tr>
 		    <tr>
-	      	<td colspan="4" class="alinear-der">Fecha de Traslado:</td>
+	      	<td colspan="6" class="alinear-der">Fecha de Traslado:</td>
 	      	<td colspan="9" class="alinear-izq">{{$traslado->fecha_traslado}}</td>
 		    </tr>
 		    <tr>
-	      	<td colspan="4" class="alinear-der">Sede Emisora:</td>
+	      	<td colspan="6" class="alinear-der">Sede Emisora:</td>
 	      	<td colspan="9" class="alinear-izq">{{$traslado->sede_emisora}}</td>
 		    </tr>
 		    <tr>
-	      	<td colspan="4" class="alinear-der">Sede Destino:</td>
+	      	<td colspan="6" class="alinear-der">Sede Destino:</td>
 	      	<td colspan="9" class="alinear-izq">{{$traslado->sede_destino}}</td>
 		    </tr>
 		    <tr>
-	      	<td colspan="4" class="alinear-der">Operador emisor del ajuste:</td>
+	      	<td colspan="6" class="alinear-der">Operador emisor del ajuste:</td>
 	      	<td colspan="9" class="alinear-izq">{{$traslado->operador_ajuste}}</td>
 		    </tr>
 		    <tr>
-	      	<td colspan="4" class="alinear-der">Operador emisor del traslado:</td>
+	      	<td colspan="6" class="alinear-der">Operador emisor del traslado:</td>
 	      	<td colspan="9" class="alinear-izq">{{$traslado->operador_traslado}}</td>
 		    </tr>
 		    <thead>
@@ -107,6 +107,8 @@
 		    		<th scope="row">Total Impuesto $.</th>
 		    		<th scope="row">Total Bs.</th>
 		    		<th scope="row">Total $.</th>
+		    		<th scope="row">Conteo Origen</th>
+		    		<th scope="row">Conteo Destino</th>
 		    </tr>
 		    </thead>
 					<?php
@@ -158,6 +160,8 @@
 				echo '<td>'.number_format(floatval($row['total_imp_usd']),2,"," ,"." ).'</td>';
 				echo '<td>'.number_format(floatval($row['total_bs']),2,"," ,"." ).'</td>';
 				echo '<td>'.number_format(floatval($row['total_usd']),2,"," ,"." ).'</td>';
+				echo '<td></td>';
+				echo '<td></td>';
 				echo '</tr>';
 
 				$Total_Cantidad += floatval($row['cantidad']);
@@ -174,7 +178,8 @@
 	  	echo '<td><strong>'.number_format($Total_Impuesto_Bs,2,"," ,"." ).'</strong></td>';
 	  	echo '<td><strong>'.number_format($Total_Impuesto_Usd,2,"," ,"." ).'</strong></td>';
 	  	echo '<td><strong>'.number_format($Total_Bs,2,"," ,"." ).'</strong></td>';
-	  	echo '<td><strong>'.number_format($Total_Usd,2,"," ,"." ).'</strong></td>';
+	  	echo '<td><strong>'.number_format($Total_Usd,2,"," ,"." ).'</strong></td>';	  	
+	  	echo '<td colspan="2"></td>';
 	  	echo '</tr>';
 
 			mysqli_close($connCPharma);
