@@ -125,7 +125,7 @@
     </form>
     <br><br>';
 
-    R30_Proveedor_Factura_Top30($_GET['SEDE']);
+    R30_Proveedor_Factura_Top50($_GET['SEDE']);
 
     $FinCarga = new DateTime("now");
     $IntervalCarga = $InicioCarga->diff($FinCarga);
@@ -168,10 +168,10 @@
     ";
     return $sql;
   }
-  function R30_Proveedor_Factura_Top30($SedeConnection){
+  function R30_Proveedor_Factura_Top50($SedeConnection){
     
     $conn = FG_Conectar_Smartpharma($SedeConnection);
-    $sql1 = R30Q_Factura_Proveedor_Top30();
+    $sql1 = R30Q_Factura_Proveedor_Top50();
     $result = sqlsrv_query($conn,$sql1);
 
     echo '
@@ -182,7 +182,7 @@
             aria-hidden="true"></i>
         </span>
       </div>
-      <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterAllTable()">
+      <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myFilter" onkeyup="FilterAllTableConflicto()">
     </div>
     <br/>
     ';
@@ -347,14 +347,14 @@
   }
   /**********************************************************************************/
   /*
-    TITULO: R30Q_Factura_Proveedor_Top30
+    TITULO: R30Q_Factura_Proveedor_Top50
     FUNCION: Buscar la lista de facturas donde interviene el proveedor
     RETORNO: lista de facturas
     DESAROLLADO POR: SERGIO COVA
   */
-  function R30Q_Factura_Proveedor_Top30() {
+  function R30Q_Factura_Proveedor_Top50() {
     $sql = "
-    SELECT TOP 30
+    SELECT TOP 50
     ComFactura.Id AS FacturaId,    
     ComFactura.NumeroFactura,
     ComFactura.NumeroControl,
