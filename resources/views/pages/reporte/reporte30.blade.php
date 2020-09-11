@@ -368,7 +368,7 @@
     FROM ComFactura
     INNER JOIN ComProveedor ON ComProveedor.Id = ComFactura.ComProveedorId
     INNER JOIN GenPersona ON ComProveedor.GenPersonaId = GenPersona.Id
-    ORDER BY FechaRegistro DESC
+    ORDER BY CONVERT(DATE,ComFactura.FechaRegistro)DESC , CONVERT(DATE,ComFactura.FechaDocumento) DESC
     ";
     return $sql;
   }
