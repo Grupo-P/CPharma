@@ -60,10 +60,12 @@ class TS_MovimientoController extends Controller {
                 case "Ingreso":
                     $movimiento->ingresos = $request->input('monto');
                     $configuracion->valor += $request->input('monto');
+                    $movimiento->concepto = $request->input('concepto');
                     break;
                 case "Egreso":
                     $movimiento->egresos = $request->input('monto');
                     $configuracion->valor -= $request->input('monto');
+                    $movimiento->concepto = $request->input('concepto');
                     break;
                 case "Diferido":
                     $movimiento->diferido_anterior = $configuracion2->valor;
@@ -75,11 +77,11 @@ class TS_MovimientoController extends Controller {
                     $movimiento->user_up = auth()->user()->name;
                     
                     $movimiento->diferido_actual = $configuracion2->valor;
+                    $movimiento->concepto = $request->input('concepto')." - DIFERIDO";
                     break;
             }
 
-            $movimiento->saldo_actual = $configuracion->valor;
-            $movimiento->concepto = $request->input('concepto');
+            $movimiento->saldo_actual = $configuracion->valor;            
             $movimiento->user = auth()->user()->name;
             
             $movimiento->save();
