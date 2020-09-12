@@ -666,29 +666,29 @@
       $SumTotalBs += $Total;      
 
       //Seccion en bolivares
-      echo '<td align="center" class="bg-info text-white">'.number_format($CostoBrutoGen,2,"," ,"." ).'</td>';
-      echo '<td align="center" class="bg-info text-white">'.number_format($CostoNetoGen,2,"," ,"." ).'</td>';
-      echo '<td align="center" class="bg-info text-white">'.number_format($subtotal,2,"," ,"." ).'</td>';
-      echo '<td align="center" class="bg-info text-white">'.number_format($impuesto,2,"," ,"." ).'</td>';
-      echo '<td align="center" class="bg-info text-white">'.number_format($descuento,2,"," ,"." ).'</td>';
-      echo '<td align="center" class="bg-info text-white">'.number_format($Total,2,"," ,"." ).'</td>';
+      echo '<td align="center" class="bg-info">'.number_format($CostoBrutoGen,2,"," ,"." ).'</td>';
+      echo '<td align="center" class="bg-info">'.number_format($CostoNetoGen,2,"," ,"." ).'</td>';
+      echo '<td align="center" class="bg-info">'.number_format($subtotal,2,"," ,"." ).'</td>';
+      echo '<td align="center" class="bg-info">'.number_format($impuesto,2,"," ,"." ).'</td>';
+      echo '<td align="center" class="bg-info">'.number_format($descuento,2,"," ,"." ).'</td>';
+      echo '<td align="center" class="bg-info">'.number_format($Total,2,"," ,"." ).'</td>';
 
       //Seccion en dolares
       if($Dolarizado=="SI" && $TasaActual!=0){
-        echo '<td align="center" class="bg-info text-white">'.number_format($CostoBrutoGen/$TasaActual,2,"," ,"." ).'</td>';
-      echo '<td align="center" class="bg-info text-white">'.number_format($CostoNetoGen/$TasaActual,2,"," ,"." ).'</td>';
-        echo '<td align="center" class="bg-info text-white">'.number_format($subtotalD,2,"," ,"." ).'</td>';
-        echo '<td align="center" class="bg-info text-white">'.number_format($impuestoD,2,"," ,"." ).'</td>';
-        echo '<td align="center" class="bg-info text-white">'.number_format($descuentoD,2,"," ,"." ).'</td>';
-        echo '<td align="center" class="bg-info text-white">'.number_format($TotalD,2,"," ,"." ).'</td>';
+        echo '<td align="center" class="bg-success">'.number_format($CostoBrutoGen/$TasaActual,2,"," ,"." ).'</td>';
+      echo '<td align="center" class="bg-success">'.number_format($CostoNetoGen/$TasaActual,2,"," ,"." ).'</td>';
+        echo '<td align="center" class="bg-success">'.number_format($subtotalD,2,"," ,"." ).'</td>';
+        echo '<td align="center" class="bg-success">'.number_format($impuestoD,2,"," ,"." ).'</td>';
+        echo '<td align="center" class="bg-success">'.number_format($descuentoD,2,"," ,"." ).'</td>';
+        echo '<td align="center" class="bg-success">'.number_format($TotalD,2,"," ,"." ).'</td>';
       }
       else{
-        echo '<td align="center" class="bg-success text-white">-</td>';
-        echo '<td align="center" class="bg-success text-white">-</td>';
-        echo '<td align="center" class="bg-success text-white">-</td>';
-        echo '<td align="center" class="bg-success text-white">-</td>';
-        echo '<td align="center" class="bg-success text-white">-</td>';
-        echo '<td align="center" class="bg-success text-white">-</td>';
+        echo '<td align="center" class="bg-success">-</td>';
+        echo '<td align="center" class="bg-success">-</td>';
+        echo '<td align="center" class="bg-success">-</td>';
+        echo '<td align="center" class="bg-success">-</td>';
+        echo '<td align="center" class="bg-success">-</td>';
+        echo '<td align="center" class="bg-success">-</td>';
       }
           
       echo'<td scope="col" align="center"><input type="checkbox"></td>';
