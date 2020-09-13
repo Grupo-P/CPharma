@@ -3,9 +3,22 @@
 namespace compras\Http\Controllers;
 
 use Illuminate\Http\Request;
+use compras\Categoria;
+use compras\User;
+use compras\Auditoria;
 
 class CategoriaController extends Controller
 {
+    /**
+     * Create a new controller instance with auth.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -13,7 +26,8 @@ class CategoriaController extends Controller
      */
     public function index()
     {
-        //
+        $categorias =  Categoria::all();
+        return view('pages.categoria.index', compact('categorias'));
     }
 
     /**

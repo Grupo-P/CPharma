@@ -307,6 +307,11 @@ Route::get('/inventarioAleatorio', function() {
 
 Route::resource('inventarioDetalle', 'InventarioDetalleController');
 
+Route::resource('categoria', 'CategoriaController');
+
+Route::resource('subcategoria', 'SubcategoriaController');
+
+Route::resource('categorizacion', 'CategorizacionController');
 
 //***************************** RRHH routing *****************************//
 Route::resource('candidatos', 'RH_CandidatoController');
