@@ -78,7 +78,16 @@ class CategoriaController extends Controller
      */
     public function show($id)
     {
-        //
+        $categoria = Categoria::find($id); 
+
+        $Auditoria = new Auditoria();
+        $Auditoria->accion = 'CONSULTAR';
+        $Auditoria->tabla = 'CATEGORIA';
+        $Auditoria->registro = $categoria->nombre;
+        $Auditoria->user = auth()->user()->name;
+        $Auditoria->save();
+
+        return view('pages.categoria.show', compact('categoria'));
     }
 
     /**
