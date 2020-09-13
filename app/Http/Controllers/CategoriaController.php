@@ -37,7 +37,7 @@ class CategoriaController extends Controller
      */
     public function create()
     {
-        //
+        return view('pages.categoria.create');
     }
 
     /**
@@ -48,7 +48,26 @@ class CategoriaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try{
+            $categoria = new categoria();
+            $categoria->codigo = $request->input('codigo'); 
+            $categoria->nombre = $request->input('nombre');
+            $categoria->estatus = 'ACTIVO';            
+            $categoria->user = auth()->user()->name;
+            $categoria->save();
+
+            $Auditoria = new Auditoria();
+            $Auditoria->accion = 'CREAR';
+            $Auditoria->tabla = 'CATEGORIA';
+            $Auditoria->registro = $request->input('nombre');
+            $Auditoria->user = auth()->user()->name;
+            $Auditoria->save();
+
+            return redirect()->route('categoria.index')->with('Saved', ' Informacion');
+        }
+        catch(\Illuminate\Database\QueryException $e){
+            return back()->with('Error', ' Error');
+        }
     }
 
     /**

@@ -916,6 +916,13 @@
     </button>
     <div class="dropdown-menu" style="width:200px;">
       <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('categoria') }}">     
+          <span data-feather="home"></span>
+          <i class="fas fa-tag"></i>
+          Categoria<span class="sr-only">(current)</span>
+        </a>
+      </li>
+      <li class="nav-item">
         <a class="nav-link CP-Links-Menu" href="{{ url('/ArticulosExcel') }}">
           <span data-feather="home"></span>
           <i class="fas fa-file-excel"></i>

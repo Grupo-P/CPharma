@@ -113,10 +113,10 @@
 	  	<tbody>
 		@foreach($categorias as $categoria)
 		    <tr>
-		      <th>{{$categoria->id}}</th>
-		      <td>{{$categoria->codigo}}</td>
-		      <td>{{$categoria->nombre}}</td>		      
-		      <td>{{$categoria->estatus}}</td>
+		      <th class="text-center">{{$categoria->id}}</th>
+		      <td class="text-center">{{$categoria->codigo}}</td>
+		      <td class="text-center">{{$categoria->nombre}}</td>		      
+		      <td class="text-center">{{$categoria->estatus}}</td>
 		      
 		    <!-- Inicio Validacion de ROLES -->
 		      <td style="width:140px;">
