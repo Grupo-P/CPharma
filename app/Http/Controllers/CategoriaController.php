@@ -89,7 +89,8 @@ class CategoriaController extends Controller
      */
     public function edit($id)
     {
-        //
+        $categoria = Categoria::find($id);
+        return view('pages.categoria.edit', compact('categoria'));
     }
 
     /**
@@ -101,7 +102,24 @@ class CategoriaController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        try{
+            $categoria = Categoria::find($id);
+            $categoria->fill($request->all());
+            $categoria->user = auth()->user()->name;            
+            $categoria->save();
+
+            $Auditoria = new Auditoria();
+            $Auditoria->accion = 'EDITAR';
+            $Auditoria->tabla = 'CATEGORIA';
+            $Auditoria->registro = $categoria->nombre;
+            $Auditoria->user = auth()->user()->name;
+            $Auditoria->save();
+
+            return redirect()->route('categoria.index')->with('Updated', ' Informacion');
+        }
+        catch(\Illuminate\Database\QueryException $e){
+            return back()->with('Error', ' Error');
+        }
     }
 
     /**
@@ -112,6 +130,27 @@ class CategoriaController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $categoria = Categoria::find($id);
+
+        $Auditoria = new Auditoria();
+        $Auditoria->tabla = 'CATEGORIA';
+        $Auditoria->registro = $categoria->nombre;
+        $Auditoria->user = auth()->user()->name;
+
+        if($categoria->estatus == 'ACTIVO'){
+            $categoria->estatus = 'INACTIVO';
+            $Auditoria->accion = 'DESINCORPORAR';
+        }
+        else if($categoria->estatus == 'INACTIVO'){
+            $categoria->estatus = 'ACTIVO';
+            $Auditoria->accion = 'REINCORPORAR';
+        }
+
+        $categoria->user = auth()->user()->name;        
+        $categoria->save();
+
+        $Auditoria->save();
+
+        return redirect()->route('categoria.index')->with('Deleted', ' Informacion');
     }
 }
