@@ -101,7 +101,9 @@ class SubcategoriaController extends Controller
      */
     public function edit($id)
     {
-        //
+        $subcategoria = Subcategoria::find($id);
+        $categorias = Categoria::pluck('codigo','nombre');
+        return view('pages.subcategoria.edit', compact('subcategoria','categorias'));
     }
 
     /**
@@ -113,7 +115,24 @@ class SubcategoriaController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        try{
+            $subcategoria = Subcategoria::find($id);
+            $subcategoria->fill($request->all());
+            $subcategoria->user = auth()->user()->name;            
+            $subcategoria->save();
+
+            $Auditoria = new Auditoria();
+            $Auditoria->accion = 'EDITAR';
+            $Auditoria->tabla = 'SUBCATEGORIA';
+            $Auditoria->registro = $subcategoria->nombre;
+            $Auditoria->user = auth()->user()->name;
+            $Auditoria->save();
+
+            return redirect()->route('subcategoria.index')->with('Updated', ' Informacion');
+        }
+        catch(\Illuminate\Database\QueryException $e){
+            return back()->with('Error', ' Error');
+        }
     }
 
     /**
