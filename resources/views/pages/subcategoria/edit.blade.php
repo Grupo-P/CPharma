@@ -1,13 +1,7 @@
-<?php
-    use Illuminate\Http\Request;
-    use compras\Subcategoria;
-    use compras\Categoria;
-?>
-
 @extends('layouts.model')
 
 @section('title')
-    Subategoria
+    Categoria
 @endsection
 
 @section('content')
@@ -23,7 +17,7 @@
                 </button>
               </div>
               <div class="modal-body">
-                <h4 class="h6">La subcategoria no fue almacenada, el codigo ya esta registrado</h4>
+                <h4 class="h6">La categoria no fue almacenada, el codigo ya esta registrado</h4>
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-outline-success" data-dismiss="modal">Aceptar</button>
@@ -32,14 +26,15 @@
           </div>
         </div>
     @endif
+
     <h1 class="h5 text-info">
-        <i class="fas fa-plus"></i>
-        Agregar Subcategoria
+        <i class="fas fa-edit"></i>
+        Modificar categoria
     </h1>
 
     <hr class="row align-items-start col-12">
 
-    <form action="/subcategoria/" method="POST" style="display: inline;">  
+    <form action="/categoria/" method="POST" style="display: inline;">  
         @csrf                       
         <button type="submit" name="Regresar" role="button" class="btn btn-outline-info btn-sm"data-placement="top"><i class="fa fa-reply">&nbsp;Regresar</i></button>
     </form>
@@ -47,7 +42,7 @@
     <br>
     <br>
 
-    {!! Form::open(['route' => 'subcategoria.store', 'method' => 'POST']) !!}
+    {!! Form::model($categoria, ['route' => ['categoria.update', $categoria], 'method' => 'PUT']) !!}
     <fieldset>
 
         <table class="table table-borderless table-striped">
@@ -59,35 +54,19 @@
         </thead>
         <tbody>
             <tr>
-                <th scope="row">{!! Form::label('codigo_categoria', 'Categoria') !!}
-                </th>
-                <td>
-                    <select name="codigo_categoria" class="form-control">
-                        <?php
-                        foreach($categorias as $categoria){
-                            $cat = Categoria::where('codigo',$categoria)->get();
-                        ?>                       
-                        <option value="<?php echo $categoria; ?>">
-                            <?php echo $categoria." - ".$cat[0]->nombre; ?></option>
-                        <?php
-                        }
-                        ?>
-                    </select>
-                </td>
-            </tr>
-            <tr>
                 <th scope="row">{!! Form::label('codigo', 'Codigo') !!}</th>
-                <td>{!! Form::text('codigo', null, [ 'class' => 'form-control', 'autofocus','required']) !!}</td>
+                <td>{!! Form::text('codigo', null, [ 'class' => 'form-control' , 'required', 'autofocus']) !!}</td>
             </tr>
             <tr>
                 <th scope="row">{!! Form::label('nombre', 'Nombre') !!}</th>
                 <td>{!! Form::text('nombre', null, [ 'class' => 'form-control', 'required']) !!}</td>
-            </tr>                                
+            </tr>          
         </tbody>
         </table>
         {!! Form::submit('Guardar', ['class' => 'btn btn-outline-success btn-md']) !!}
     </fieldset>
     {!! Form::close()!!} 
+
     <script>
         $(document).ready(function(){
             $('[data-toggle="tooltip"]').tooltip();   

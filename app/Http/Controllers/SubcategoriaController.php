@@ -38,7 +38,7 @@ class SubcategoriaController extends Controller
      */
     public function create()
     {
-        $categorias = Categoria::pluck('nombre','codigo');
+        $categorias = Categoria::pluck('codigo','nombre');
         return view('pages.subcategoria.create', compact('categorias'));        
     }
 
@@ -81,7 +81,16 @@ class SubcategoriaController extends Controller
      */
     public function show($id)
     {
-        //
+        $subcategoria = Subcategoria::find($id); 
+
+        $Auditoria = new Auditoria();
+        $Auditoria->accion = 'CONSULTAR';
+        $Auditoria->tabla = 'SUBCATEGORIA';
+        $Auditoria->registro = $subcategoria->nombre;
+        $Auditoria->user = auth()->user()->name;
+        $Auditoria->save();
+
+        return view('pages.subcategoria.show', compact('subcategoria'));
     }
 
     /**
@@ -115,6 +124,27 @@ class SubcategoriaController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $subcategoria = Subcategoria::find($id);
+
+        $Auditoria = new Auditoria();
+        $Auditoria->tabla = 'SUBCATEGORIA';
+        $Auditoria->registro = $subcategoria->nombre;
+        $Auditoria->user = auth()->user()->name;
+
+        if($subcategoria->estatus == 'ACTIVO'){
+            $subcategoria->estatus = 'INACTIVO';
+            $Auditoria->accion = 'DESINCORPORAR';
+        }
+        else if($subcategoria->estatus == 'INACTIVO'){
+            $subcategoria->estatus = 'ACTIVO';
+            $Auditoria->accion = 'REINCORPORAR';
+        }
+
+        $subcategoria->user = auth()->user()->name;        
+        $subcategoria->save();
+
+        $Auditoria->save();
+
+        return redirect()->route('subcategoria.index')->with('Deleted', ' Informacion');
     }
 }

@@ -120,14 +120,13 @@
 	  	</thead>
 	  	<tbody>
 		@foreach($subcategorias as $subcategoria)
-			<?php				
-				$i = 0;
-				$categoria = Categoria::where('nombre',$subcategoria->codigo_categoria)->get();
+			<?php								
+				$categoria = Categoria::where('codigo',$subcategoria->codigo_categoria)->get();
 			?>
 		    <tr>
 		    	<th class="text-center">{{$subcategoria->id}}</th>
-		    	<td class="text-center">{{$categoria[$i]->codigo}}</td>		      
-		      <td class="text-center">{{$subcategoria->codigo_categoria}}</td>
+		    	<td class="text-center">{{$subcategoria->codigo_categoria}}</td>
+		    	<td class="text-center">{{$categoria[0]->nombre}}</td>		      		      
 		      <td class="text-center">{{$subcategoria->codigo}}</td>
 		      <td class="text-center">{{$subcategoria->nombre}}</td>		      
 		      <td class="text-center">{{$subcategoria->estatus}}</td>
@@ -161,7 +160,7 @@
 					?>		
 			      	<form action="/subcategoria/{{$subcategoria->id}}" method="POST" style="display: inline;">
 					    @method('DELETE')
-					    @csrf					    
+					    @csrf					   
 					    <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Reincorporar"><i class="fa fa-share"></i></button>
 					</form>
 					<?php
@@ -189,8 +188,7 @@
 										
 		      </td>
 		    <!-- Fin Validacion de ROLES -->
-		    </tr>
-		    <?php $i++; ?>
+		    </tr>		    
 		@endforeach
 		</tbody>
 	</table>
