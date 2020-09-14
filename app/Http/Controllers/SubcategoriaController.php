@@ -3,9 +3,23 @@
 namespace compras\Http\Controllers;
 
 use Illuminate\Http\Request;
+use compras\Subcategoria;
+use compras\Categoria;
+use compras\User;
+use compras\Auditoria;
 
 class SubcategoriaController extends Controller
 {
+    /**
+     * Create a new controller instance with auth.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -13,7 +27,8 @@ class SubcategoriaController extends Controller
      */
     public function index()
     {
-        //
+        $subcategorias =  Subcategoria::all();
+        return view('pages.subcategoria.index', compact('subcategorias'));
     }
 
     /**
@@ -23,7 +38,8 @@ class SubcategoriaController extends Controller
      */
     public function create()
     {
-        //
+        $categorias = Categoria::pluck('nombre','codigo');
+        return view('pages.subcategoria.create', compact('categorias'));        
     }
 
     /**
@@ -34,7 +50,27 @@ class SubcategoriaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try{
+            $subcategoria = new Subcategoria();
+            $subcategoria->codigo_categoria = $request->input('codigo_categoria');
+            $subcategoria->codigo = $request->input('codigo');
+            $subcategoria->nombre = $request->input('nombre');
+            $subcategoria->estatus = 'ACTIVO';            
+            $subcategoria->user = auth()->user()->name;
+            $subcategoria->save();
+
+            $Auditoria = new Auditoria();
+            $Auditoria->accion = 'CREAR';
+            $Auditoria->tabla = 'SUBCATEGORIA';
+            $Auditoria->registro = $request->input('nombre');
+            $Auditoria->user = auth()->user()->name;
+            $Auditoria->save();
+
+            return redirect()->route('subcategoria.index')->with('Saved', ' Informacion');
+        }
+        catch(\Illuminate\Database\QueryException $e){
+            return back()->with('Error', ' Error');
+        }
     }
 
     /**
