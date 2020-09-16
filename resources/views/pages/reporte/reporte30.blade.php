@@ -511,20 +511,20 @@
             <th colspan="6" scope="col" class="CP-sticky bg-success">Relacion en '.SigDolar.'</th>
           </tr>          
           <tr>
-            <th scope="col" class="CP-sticky">#</th>
-            <th scope="col" class="CP-sticky">Codigo</th>
-            <th scope="col" class="CP-sticky">Codigo de Barra</th>
-            <th scope="col" class="CP-sticky">Descripcion</th>            
-            <th scope="col" class="CP-sticky">Dolarizado?</td>
-            <th scope="col" class="CP-sticky">Gravado?</td>
-            <th scope="col" class="CP-sticky">Marca</td>
-            <th scope="col" class="CP-sticky">Nuevo?</td>
-            <th scope="col" class="CP-sticky">Cantidad Recibida</th>
-            <th scope="col" class="CP-sticky">Lote del fabricante</th>
-            <th scope="col" class="CP-sticky">Fecha de vencimiento</th>
-            <th scope="col" class="CP-sticky">Vida Util</th>
-            <th scope="col" class="CP-sticky">Precio </br> (Con IVA) '.SigVe.'</th>
-            <th scope="col" class="CP-sticky">Troquel </br> (Con IVA) '.SigVe.'</th>
+            <th scope="col">#</th>
+            <th scope="col">Codigo</th>
+            <th scope="col">Codigo de Barra</th>
+            <th scope="col">Descripcion</th>            
+            <th scope="col">Dolarizado?</td>
+            <th scope="col">Gravado?</td>
+            <th scope="col">Marca</td>
+            <th scope="col">Nuevo?</td>
+            <th scope="col">Cantidad Recibida</th>
+            <th scope="col">Lote del fabricante</th>
+            <th scope="col">Fecha de vencimiento</th>
+            <th scope="col">Vida Util</th>
+            <th scope="col">Precio </br> (Con IVA) '.SigVe.'</th>
+            <th scope="col">Troquel </br> (Con IVA) '.SigVe.'</th>
 
             <th scope="col" class="CP-sticky bg-info">Costo Bruto </br> (Sin IVA) '.SigVe.'</th>
             <th scope="col" class="CP-sticky bg-info">Costo Neto </br> (Sin IVA) '.SigVe.'</th>
@@ -733,9 +733,9 @@
       <table class="table table-striped table-bordered col-12" style="width:40%;">
         <thead class="thead-dark">              
           <tr>
-            <th scope="col" class="CP-sticky">Total SKU</th>
-            <th scope="col" class="CP-sticky">Total Unidades</th>
-            <th scope="col" class="CP-sticky">Descuento Global</th>
+            <th scope="col">Total SKU</th>
+            <th scope="col">Total Unidades</th>
+            <th scope="col">Descuento Global</th>
           </tr>
         </thead>
         <tbody>
@@ -752,8 +752,8 @@
       <table class="table table-striped table-bordered col-12" style="width:40%;">
         <thead class="thead-dark">              
           <tr>
-            <th scope="col" class="CP-sticky" colspan="2">Departamento de almacen</th>
-            <th scope="col" class="CP-sticky" colspan="2">Departamento de administracion</th>
+            <th scope="col" colspan="2">Departamento de almacen</th>
+            <th scope="col" colspan="2">Departamento de administracion</th>
           </tr>
         </thead>
         <tbody>
