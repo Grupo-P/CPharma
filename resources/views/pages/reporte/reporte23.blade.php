@@ -181,7 +181,11 @@
     InvLote.FechaVencimiento,
     InvLote.M_PrecioCompraBruto,
     InvLote.M_PrecioTroquelado,
-    InvLote.FechaEntrada
+    InvLote.FechaEntrada,
+    (SELECT SUM (InvLoteAlmacen.Existencia) As Existencia
+    FROM InvLoteAlmacen
+    WHERE(InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
+    AND (InvLoteAlmacen.InvArticuloId = '$IdArticulo') AND (InvLoteAlmacen.InvLoteId = InvLote.Id)) as Existencia
     FROM InvLote
     INNER JOIN InvLoteAlmacen ON InvLoteAlmacen.InvArticuloId = InvLote.InvArticuloId
     INNER JOIN InvArticulo ON InvArticulo.Id = InvLote.InvArticuloId
@@ -210,7 +214,11 @@
     InvLote.FechaVencimiento,
     InvLote.M_PrecioCompraBruto,
     InvLote.M_PrecioTroquelado,
-    InvLote.FechaEntrada
+    InvLote.FechaEntrada,
+    (SELECT SUM (InvLoteAlmacen.Existencia) As Existencia
+    FROM InvLoteAlmacen
+    WHERE(InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
+    AND (InvLoteAlmacen.InvLoteId = InvLote.Id)) as Existencia
     FROM InvLote
     INNER JOIN InvLoteAlmacen ON InvLoteAlmacen.InvArticuloId = InvLote.InvArticuloId
     INNER JOIN InvArticulo ON InvArticulo.Id = InvLote.InvArticuloId
@@ -288,8 +296,9 @@
         <thead class="thead-dark">
           <tr>
             <th scope="col" class="CP-sticky">#</th>
-            <th scope="col" class="CP-sticky">Numero de Lote</th>
+            <th scope="col" class="CP-sticky">Numero de Lote</th>            
             <th scope="col" class="CP-sticky">Lote de Fabricante</th>
+            <th scope="col" class="CP-sticky">Existencia</th>
             <th scope="col" class="CP-sticky">Precio Compra Bruto '.SigVe.'</th>
             <th scope="col" class="CP-sticky">Precio Troquelado '.SigVe.'</th>
             <th scope="col" class="CP-sticky">Fecha de Entrada</th>
@@ -305,6 +314,7 @@
       echo '<td align="left"><strong>'.intval($contador).'</strong></td>';
       echo '<td align="center">'.$row["Numero"].'</td>';
       echo '<td align="center">'.$row["LoteFabricante"].'</td>';
+      echo '<td align="center">'.intval($row["Existencia"]).'</td>';
 
       echo '<td align="center">'.number_format($row["M_PrecioCompraBruto"],2,"," ,"." ).'</td>';
       echo '<td align="center">'.number_format($row["M_PrecioTroquelado"],2,"," ,"." ).'</td>';
@@ -396,6 +406,7 @@
             <th scope="col" class="CP-sticky">#</th>
             <th scope="col" class="CP-sticky">Numero de Lote</th>
             <th scope="col" class="CP-sticky">Lote de Fabricante</th>
+            <th scope="col" class="CP-sticky">Existencia</th>
             <th scope="col" class="CP-sticky">Precio Compra Bruto '.SigVe.'</th>
             <th scope="col" class="CP-sticky">Precio Troquelado '.SigVe.'</th>
             <th scope="col" class="CP-sticky">Fecha de Entrada</th>
@@ -412,6 +423,7 @@
       echo '<td align="left"><strong>'.intval($contador).'</strong></td>';
       echo '<td align="center">'.$row["Numero"].'</td>';
       echo '<td align="center">'.$row["LoteFabricante"].'</td>';
+      echo '<td align="center">'.intval($row["Existencia"]).'</td>';
 
       echo '<td align="center">'.number_format($row["M_PrecioCompraBruto"],2,"," ,"." ).'</td>';
       echo '<td align="center">'.number_format($row["M_PrecioTroquelado"],2,"," ,"." ).'</td>';
