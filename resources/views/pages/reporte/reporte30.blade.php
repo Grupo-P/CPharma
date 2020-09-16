@@ -489,7 +489,7 @@
       echo '<td align="center">'.$NumeroControl.'</td>';          
       echo '<td align="center">'.number_format($TasaActual,2,"," ,"." ).'</td>';      
       echo '<td align="center">'.$fechaDocumentoMostrar.'</td>';
-      echo '<td align="center">'.$fechaActualMostrar.'</td>';
+      echo '<td align="center">'.$FechaRegistro->format('d-m-Y').'</td>';
       echo '
         </tr>
         <tr>
