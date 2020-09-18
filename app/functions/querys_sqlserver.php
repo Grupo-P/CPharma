@@ -810,12 +810,18 @@
       SELECT
       InvArticulo.Id AS IdArticulo,
       InvArticulo.CodigoArticulo AS CodigoInterno,
-      InvArticulo.Descripcion
+      InvArticulo.Descripcion,
+        (SELECT CodigoBarra
+        FROM InvCodigoBarra 
+        WHERE InvCodigoBarra.InvArticuloId = InvArticulo.Id
+        AND InvCodigoBarra.EsPrincipal = 1) AS CodigoBarra,
+      InvMarca.Nombre as Marca
       FROM InvArticulo
       INNER JOIN InvLoteAlmacen ON InvArticulo.Id=InvLoteAlmacen.InvArticuloId
+      LEFT JOIN InvMarca ON InvMarca.Id = InvArticulo.InvMarcaId
       WHERE InvLoteAlmacen.Existencia > 0
       AND (InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
-      GROUP BY InvArticulo.Id, InvArticulo.CodigoArticulo, InvArticulo.Descripcion, InvArticulo.FinConceptoImptoIdCompra
+      GROUP BY InvArticulo.Id, InvArticulo.CodigoArticulo, InvArticulo.Descripcion, InvArticulo.FinConceptoImptoIdCompra,InvMarca.Nombre
       ORDER BY InvArticulo.Id ASC
     ";
     return $sql;
@@ -1751,6 +1757,19 @@
   function SQL_Aplicacion($IdAplicacion) {
     $sql = "
     SELECT InvUso.Descripcion FROM InvUso WHERE InvUso.Id = '$IdAplicacion'
+    ";
+    return $sql;
+  }
+  /**********************************************************************************/
+  /*
+    TITULO: SQL_Categoria_Articulo
+    FUNCION: regresa los datos del articulo
+    DESAROLLADO POR: SERGIO COVA
+  */
+  function SQL_Categoria_Articulo($IdArticulo) {
+    $sql = "
+      SELECT * FROM categorizacions
+      WHERE categorizacions.id_articulo = '$IdArticulo'
     ";
     return $sql;
   }

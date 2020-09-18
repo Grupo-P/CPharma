@@ -5,21 +5,21 @@ namespace compras\Console\Commands;
 use Illuminate\Console\Command;
 use compras\Auditoria;
 
-class CapturaEtiquetas extends Command
+class CapturaCategorias extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'Capturar:Etiquetas';
+    protected $signature = 'Capturar:Categorias';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Este comando ejecuta la captura automatica de la data necesaria para clasificar la etiquetas';
+    protected $description = 'Este comando ejecuta la captura automatica de la data necesaria para categorizar';
 
     /**
      * Create a new command instance.
@@ -43,15 +43,15 @@ class CapturaEtiquetas extends Command
         include(app_path().'\functions\querys_mysql.php');
         include(app_path().'\functions\querys_sqlserver.php');
 
-        FG_Validar_Etiquetas();
+        FG_Validar_Categorias();
  
         $Auditoria = new Auditoria();
         $Auditoria->accion = 'CAPTURAR';
-        $Auditoria->tabla = 'ETIQUETAS';
+        $Auditoria->tabla = 'CATEGORIAS';
         $Auditoria->registro = 'CPHARMA';
         $Auditoria->user = 'SYSTEM';
         $Auditoria->save();
 
-        $this->info('La captura de la data necesaria para las etiquetas fue ejecutada satisfactoriamente!');
+        $this->info('La captura de la data necesaria para categorizar los articulos fue ejecutada satisfactoriamente!');
     }
 }

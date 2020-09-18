@@ -2504,4 +2504,80 @@
     	}
 		return $aplicacion;
 	}
+	/**********************************************************************************/
+	/*
+		TITULO: FG_Validar_Categorias
+		FUNCION: determinar si un prducto es unico
+		DESARROLLADO POR: SERGIO COVA
+	 */
+	function FG_Validar_Categorias() {
+			$SedeConnection = FG_Mi_Ubicacion();
+	    $conn = FG_Conectar_Smartpharma($SedeConnection);
+	    $connCPharma = FG_Conectar_CPharma();
+
+	    $sql = SQL_Existencia_Actual();
+	    $result = sqlsrv_query($conn,$sql);
+
+	    $FechaCaptura = new DateTime("now");
+			$FechaCaptura = $FechaCaptura->format('Y-m-d');
+			$date = '';
+	    
+	    while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
+	        $IdArticulo = $row["IdArticulo"];
+	        $CodigoInterno = $row["CodigoInterno"];
+	        $CodigoBarra = $row["CodigoBarra"];
+	        $Descripcion = $row["Descripcion"];	       
+	        $Marca = $row["Marca"];
+	 
+	        $sqlCPharma = SQL_Categoria_Articulo($IdArticulo);
+	        $ResultCPharma = mysqli_query($connCPharma,$sqlCPharma);
+	        $RowCPharma = mysqli_fetch_assoc($ResultCPharma);
+	        $IdArticuloCPharma = $RowCPharma['id_articulo'];
+
+	        if(is_null($IdArticuloCPharma)){
+
+	            $codigo_categoria = '1';
+	            $codigo_subcategoria = '1.1';
+	            $estatus = 'ACTIVO';
+	            $user = 'SYSTEM';
+	            $date = new DateTime('now');
+	            $date = $date->format("Y-m-d H:i:s");
+
+	            $sqlCP = MySQL_Guardar_Catagoria_Articulo($IdArticulo,$CodigoInterno,$CodigoBarra,$Descripcion,$Marca,$codigo_categoria,$codigo_subcategoria,$estatus,$user,$date);
+	            mysqli_query($connCPharma,$sqlCP);
+	        }
+	    }
+	    FG_Guardar_Captura_Categoria($connCPharma,$FechaCaptura,$date);
+		$sqlCC = MySQL_Validar_Captura_Categoria($FechaCaptura);
+		$resultCC = mysqli_query($connCPharma,$sqlCC);
+		$rowCC = mysqli_fetch_assoc($resultCC);
+		$CuentaCaptura = $rowCC["CuentaCaptura"];
+
+		if($CuentaCaptura == 0){
+			$sqlB = MySQL_Borrar_Captura_Categoria($FechaCaptura);
+			mysqli_query($connCPharma,$sqlB);			
+			mysqli_close($connCPharma);
+			sqlsrv_close($conn);
+			FG_Validar_Categorias();
+		}
+		else{
+			mysqli_close($connCPharma);
+			sqlsrv_close($conn);
+		}
+	}
+	/**********************************************************************************/
+	/*
+		TITULO: FG_Guardar_Captura_Categoria
+		FUNCION: crea una conexion con la base de datos cpharma e ingresa datos
+		DESARROLLADO POR: SERGIO COVA
+ 	*/
+	function FG_Guardar_Captura_Categoria($connCPharma,$FechaCaptura,$date) {
+		$sql = MySQL_Captura_Categoria($FechaCaptura);
+		$result = mysqli_query($connCPharma,$sql);
+		$row = mysqli_fetch_assoc($result);
+		$TotalRegistros = $row["TotalRegistros"];
+
+		$sql1 = MySQL_Guardar_Captura_Categoria($TotalRegistros,$FechaCaptura,$date);
+		mysqli_query($connCPharma,$sql1);
+	}
 ?>

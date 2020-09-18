@@ -393,4 +393,68 @@
 		$resultado = mysqli_query($conCP,$consulta);
 		return $resultado;
 	}
+	/**********************************************************************************/
+	/*
+		TITULO: MySQL_Guardar_Catagoria_Articulo
+		FUNCION: guarda la informacion en la tabla categorizacions
+		DESARROLLADO POR: SERGIO COVA
+	 */
+	function MySQL_Guardar_Catagoria_Articulo($IdArticulo,$CodigoInterno,$CodigoBarra,$Descripcion,$Marca,$codigo_categoria,$codigo_subcategoria,$estatus,$user,$date) {
+		$sql = "
+		INSERT INTO categorizacions
+		(id_articulo,codigo_interno,codigo_barra,descripcion,marca,codigo_categoria,codigo_subcategoria,estatus,user,created_at,updated_at)
+		VALUES 
+		('$IdArticulo','$CodigoInterno','$CodigoBarra','$Descripcion','$Marca','$codigo_categoria','$codigo_subcategoria','$estatus','$user','$date','$date')
+		";
+		return $sql;
+	}
+	/**********************************************************************************/
+	/*
+		TITULO: MySQL_Captura_Categoria
+		FUNCION: cuenta el total de registos de dias en cero
+		DESARROLLADO POR: SERGIO COVA
+	 */
+	function MySQL_Captura_Categoria($FechaCaptura) {
+		$sql = "SELECT COUNT(*) AS TotalRegistros 
+		FROM categorizacions 
+		WHERE CONVERT(categorizacions.created_at,date) = '$FechaCaptura'
+		";
+		return $sql;
+	}
+	/**********************************************************************************/
+	/*
+		TITULO: MySQL_Guardar_Captura_Categoria
+		FUNCION: crea una conexion con la base de datos cpharma e ingresa datos
+		DESARROLLADO POR: SERGIO COVA
+	 */
+	function MySQL_Guardar_Captura_Categoria($TotalRegistros,$FechaCaptura,$date) {
+		$sql = "
+		INSERT INTO captura_categoria
+		(total_registros,fecha_captura,created_at,updated_at)
+		VALUES 
+		('$TotalRegistros','$FechaCaptura','$date','$date')
+		";
+		return $sql;
+	}
+	/**********************************************************************************/
+	/*
+		TITULO: MySQL_Validar_Captura_Categoria
+		FUNCION: valida que la fecha exista en la tabla captura diaria
+		DESARROLLADO POR: SERGIO COVA
+	 */
+	function MySQL_Validar_Captura_Categoria($FechaCaptura) {
+		$sql = "SELECT count(*) AS CuentaCaptura 
+		FROM captura_categoria WHERE fecha_captura = '$FechaCaptura'";
+		return $sql;
+	}
+	/**********************************************************************************/
+	/*
+		TITULO: MySQL_Borrar_Captura_Categoria
+		FUNCION: borra los registros de dias en cero de la fecha seleccionada
+		DESARROLLADO POR: SERGIO COVA
+	 */
+	function MySQL_Borrar_Captura_Categoria($FechaCaptura) {
+		$sql = "DELETE FROM captura_categoria WHERE fecha_captura = '$FechaCaptura'";
+		return $sql;
+	}
 ?>
