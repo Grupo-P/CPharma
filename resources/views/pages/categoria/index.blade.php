@@ -126,7 +126,7 @@
 				?>
 
 					<?php
-					if($categoria->estatus == 'ACTIVO'){
+					if($categoria->estatus == 'ACTIVO' && $categoria->id!=1){
 					?>
 						<a href="/categoria/{{$categoria->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
 			      			<i class="far fa-eye"></i>			      		
@@ -143,7 +143,7 @@
 						</form>
 					<?php
 					}
-					else if($categoria->estatus == 'INACTIVO'){
+					else if($categoria->estatus == 'INACTIVO' && $categoria->id!=1){
 					?>		
 			      	<form action="/categoria/{{$categoria->id}}" method="POST" style="display: inline;">
 					    @method('DELETE')
@@ -154,7 +154,7 @@
 					}					
 					?>
 				<?php	
-				} else if(Auth::user()->role == 'SUPERVISOR' || Auth::user()->role == 'ADMINISTRADOR' || Auth::user()->role == 'SUPERVISOR CAJA'){ 
+				} else if(Auth::user()->role == 'SUPERVISOR' || Auth::user()->role == 'ADMINISTRADOR' || Auth::user()->role == 'SUPERVISOR CAJA' && $categoria->id!=1){ 
 				?>
 					<a href="/categoria/{{$categoria->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
 		      			<i class="far fa-eye"></i>			      		
@@ -164,7 +164,7 @@
 		      			<i class="fas fa-edit"></i>
 	      			</a>
 				<?php
-				} else if(Auth::user()->role == 'USUARIO'){
+				} else if(Auth::user()->role == 'USUARIO' && $categoria->id!=1){
 				?>
 					<a href="/categoria/{{$categoria->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
 		      			<i class="far fa-eye"></i>			      		
