@@ -124,12 +124,12 @@
 		      <td>{{$categorizacion->marca}}</td>
 		      
 		      <td>
-            <select name="<?php echo"categoria".$categorizacion->id; ?>" id="<?php echo"categoria".$categorizacion->id; ?>" class="form-control">            		
+            <select name="<?php echo"categoria".$categorizacion->id; ?>" id="<?php echo"categoria".$categorizacion->id; ?>" class="form-control" onchange="eligioCategoria(<?php echo $categorizacion->id; ?>);">     		
                 <?php
                 	$cont = count($categorias);
                 	for($i=0;$i<$cont;$i++){
                 ?>
-                	<option value="<?php echo $categorias[$i]->codigo_categoria; ?>">
+                	<option value="<?php echo $categorias[$i]->codigo; ?>">
                 		<?php echo $categorias[$i]->nombre; ?></option>
                 <?php	                	
 	                }
@@ -143,7 +143,7 @@
                 	$cont = count($subcategorias);
                 	for($i=0;$i<$cont;$i++){
                 ?>
-                	<option value="<?php echo $subcategorias[$i]->codigo_subcategoria; ?>">
+                	<option value="<?php echo $subcategorias[$i]->codigo; ?>">
                 		<?php echo $subcategorias[$i]->nombre; ?></option>
                 <?php	                	
 	                }
@@ -165,6 +165,12 @@
 		    $('[data-toggle="tooltip"]').tooltip();   
 		});
 		$('#exampleModalCenter').modal('show')
+
+		function eligioCategoria(id){			
+			let seleccion = $('#categoria'+id).val();		
+			console.log(seleccion);	
+		}
+
 	</script>
 
 @endsection
