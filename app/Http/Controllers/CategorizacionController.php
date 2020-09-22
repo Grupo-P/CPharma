@@ -29,9 +29,7 @@ class CategorizacionController extends Controller
     public function index()
     {
         $categorizaciones =  
-        Categorizacion::orderBy('id', 'asc')->
-        where('codigo_categoria', '1')->take(50)->get();
-
+        Categorizacion::orderBy('id', 'asc')->where('codigo_categoria', '1')->take(50)->get();
         return view('pages.categorizacion.index', compact('categorizaciones'));
     }
 

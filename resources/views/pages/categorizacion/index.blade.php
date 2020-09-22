@@ -1,3 +1,11 @@
+<?php	
+	use compras\Categoria;
+	use compras\Subcategoria;
+
+	$categorias =  Categoria::all();
+	$subcategorias =  Subcategoria::all();
+?>
+
 @extends('layouts.model')
 
 @section('title')
@@ -113,8 +121,34 @@
 		      <td>{{$categorizacion->codigo_barra}}</td>
 		      <td>{{$categorizacion->descripcion}}</td>
 		      <td>{{$categorizacion->marca}}</td>
-		      <td>{{$categorizacion->codigo_categoria}}</td>		     		   
-		      <td>{{$categorizacion->codigo_subcategoria}}</td>		     		   
+		      
+		      <td>
+            <select name="<?php echo"categoria".$categorizacion->id; ?>" id="<?php echo"categoria".$categorizacion->id; ?>" class="form-control">            		
+                <?php
+                	$cont = count($categorias);
+                	for($i=0;$i<$cont;$i++){
+                ?>
+                	<option value="<?php echo $categorias[$i]->codigo_categoria; ?>">
+                		<?php echo $categorias[$i]->nombre; ?></option>
+                <?php	                	
+	                }
+                ?>
+            </select>
+        	</td>
+
+        	<td>
+            <select name="<?php echo"subcategoria".$categorizacion->id; ?>" id="<?php echo"subcategoria".$categorizacion->id; ?>" class="form-control" disabled>            		
+                <?php
+                	$cont = count($subcategorias);
+                	for($i=0;$i<$cont;$i++){
+                ?>
+                	<option value="<?php echo $subcategorias[$i]->codigo_subcategoria; ?>">
+                		<?php echo $subcategorias[$i]->nombre; ?></option>
+                <?php	                	
+	                }
+                ?>
+            </select>
+        	</td>  
 		    <!-- Fin Validacion de ROLES -->
 
 		    </tr>
