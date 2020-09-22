@@ -101,8 +101,8 @@
 		      	<th scope="col" class="CP-sticky">Codigo Barra </th>
 		      	<th scope="col" class="CP-sticky">Descripcion</th>
 		      	<th scope="col" class="CP-sticky">Marca</th>	
-		      	<th scope="col" class="CP-sticky">Estatus</th>	      			      	
-		      	<th scope="col" class="CP-sticky">Acciones</th>
+		      	<th scope="col" class="CP-sticky">Categoria</th>
+		      	<th scope="col" class="CP-sticky">Subcategoria</th>	      			      			      	
 		    </tr>
 	  	</thead>
 	  	<tbody>
@@ -113,7 +113,8 @@
 		      <td>{{$categorizacion->codigo_barra}}</td>
 		      <td>{{$categorizacion->descripcion}}</td>
 		      <td>{{$categorizacion->marca}}</td>
-		      <td>{{$categorizacion->estatus}}</td>		     		   
+		      <td>{{$categorizacion->codigo_categoria}}</td>		     		   
+		      <td>{{$categorizacion->codigo_subcategoria}}</td>		     		   
 		    <!-- Fin Validacion de ROLES -->
 
 		    </tr>
