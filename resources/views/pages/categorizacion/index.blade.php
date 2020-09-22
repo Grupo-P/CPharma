@@ -110,7 +110,8 @@
 		      	<th scope="col" class="CP-sticky">Descripcion</th>
 		      	<th scope="col" class="CP-sticky">Marca</th>	
 		      	<th scope="col" class="CP-sticky">Categoria</th>
-		      	<th scope="col" class="CP-sticky">Subcategoria</th>	      			      			      	
+		      	<th scope="col" class="CP-sticky">Subcategoria</th>	
+		      	<th scope="col" class="CP-sticky">Marcar</th>      			      			      	
 		    </tr>
 	  	</thead>
 	  	<tbody>
@@ -149,7 +150,10 @@
                 ?>
             </select>
         	</td>  
-		    <!-- Fin Validacion de ROLES -->
+		    	
+		    	<td>
+		    		<input type="checkbox" name="<?php echo"guardar".$categorizacion->id; ?>" id="<?php echo"guardar".$categorizacion->id; ?>" style="width:100%; height:calc(1em + 0.20rem + 2px); margin-top: 8px;">            
+        	</td>
 
 		    </tr>
 		@endforeach
