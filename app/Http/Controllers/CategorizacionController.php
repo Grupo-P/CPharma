@@ -3,9 +3,24 @@
 namespace compras\Http\Controllers;
 
 use Illuminate\Http\Request;
+use compras\Categorizacion;
+use compras\User;
+use compras\Auditoria;
+use compras\Categoria;
+use compras\Subcategoria;
 
 class CategorizacionController extends Controller
 {
+    /**
+     * Create a new controller instance with auth.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -13,7 +28,11 @@ class CategorizacionController extends Controller
      */
     public function index()
     {
-        //
+        $categorizaciones =  
+        Categorizacion::orderBy('id', 'asc')->
+        where('codigo_categoria', '1')->take(50)->get();
+
+        return view('pages.categorizacion.index', compact('categorizaciones'));
     }
 
     /**

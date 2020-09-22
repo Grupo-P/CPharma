@@ -1119,6 +1119,13 @@
           Subcategoria<span class="sr-only">(current)</span>
         </a>
       </li>
+      <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('categorizacion') }}">     
+          <span data-feather="home"></span>
+          <i class="fas fa-tag"></i>
+          Categorizacion<span class="sr-only">(current)</span>
+        </a>
+      </li>
       <!--      
         <li class="nav-item">
           <a class="nav-link CP-Links-Menu" href="{{ url('reporte30') }}">  
