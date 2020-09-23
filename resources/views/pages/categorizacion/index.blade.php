@@ -4,6 +4,13 @@
 
 	$categorias =  Categoria::all();
 	$subcategorias =  Subcategoria::all();
+
+	include(app_path().'\functions\config.php');
+  include(app_path().'\functions\functions.php');
+  include(app_path().'\functions\querys_mysql.php');
+  include(app_path().'\functions\querys_sqlserver.php');
+
+	$RutaUrl = FG_Mi_Ubicacion();
 ?>
 
 @extends('layouts.model')
@@ -138,7 +145,7 @@
         	</td>
 
         	<td>
-            <select name="<?php echo"subcategoria".$categorizacion->id; ?>" id="<?php echo"subcategoria".$categorizacion->id; ?>" class="form-control" disabled>            		
+            <select name="<?php echo"subcategoria".$categorizacion->id; ?>" id="<?php echo"subcategoria".$categorizacion->id; ?>" class="form-control" disabled="disabled">            		
                 <?php
                 	$cont = count($subcategorias);
                 	for($i=0;$i<$cont;$i++){
@@ -161,14 +168,68 @@
 	</table>
 
 	<script>
+		const SedeConnectionJs = '<?php echo $RutaUrl;?>';
+
+		function dominio(SedeConnectionJs){
+      var dominio = '';
+      switch(SedeConnectionJs) {
+        case 'FTN':
+          dominio = 'http://cpharmaftn.com/';
+          return dominio;
+        break;
+        case 'FLL':
+          dominio = 'http://cpharmafll.com/';
+          return dominio;
+        break;
+        case 'FAU':
+          dominio = 'http://cpharmafau.com/';
+          return dominio;
+        break;
+        case 'GP':
+          dominio = 'http://cpharmade.com/';
+          return dominio;
+        case 'ARG':
+          dominio = 'http://cpharmade.com/';
+        return dominio;
+        break;
+      }
+    }
+
+		var dominio = dominio(SedeConnectionJs);
+    const URLConsultaCategoria = ''+dominio+'assets/functions/ConsultaSubcategorias.php';
+
 		$(document).ready(function(){
 		    $('[data-toggle="tooltip"]').tooltip();   
 		});
 		$('#exampleModalCenter').modal('show')
 
-		function eligioCategoria(id){			
+		function eligioCategoria(id){		
+
 			let categoria = $('#categoria'+id).val();		
 			console.log("Categoria: "+categoria);
+
+			let subcategoria = $('#subcategoria'+id).val();		
+			console.log("subcategoria: "+subcategoria);
+
+			if(categoria == 1){
+				$('#subcategoria'+id+' option').remove();
+				$('#subcategoria'+id).append('<option value="1.1" selected>SIN SUBCATEGORIA</option>');
+				$('#subcategoria'+id).attr("disabled","disabled");								
+			}
+			else{
+				$('#subcategoria'+id).removeAttr("disabled");
+
+				var parametro = {"categoria":id};
+
+				$.ajax({
+	        data: parametro,
+	        url: URLConsultaCategoria,
+	        type: "POST",
+	        success: function(data) {
+	          console.log("Consulta:"+data);
+	        }
+	       });
+			}
 		}
 
 		function marcaGuardar(id){			
