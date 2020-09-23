@@ -152,7 +152,7 @@
         	</td>  
 		    	
 		    	<td>
-		    		<input type="checkbox" name="<?php echo"guardar".$categorizacion->id; ?>" id="<?php echo"guardar".$categorizacion->id; ?>" style="width:100%; height:calc(1em + 0.20rem + 2px); margin-top: 8px;">            
+		    		<input type="checkbox" name="articulosCategorizar[]" id="<?php echo"guardar".$categorizacion->id; ?>" value="" onchange="marcaGuardar(<?php echo $categorizacion->id; ?>)" style="width:100%; height:calc(1em + 0.20rem + 2px); margin-top: 8px;">            
         	</td>
 
 		    </tr>
@@ -167,8 +167,17 @@
 		$('#exampleModalCenter').modal('show')
 
 		function eligioCategoria(id){			
-			let seleccion = $('#categoria'+id).val();		
-			console.log(seleccion);	
+			let categoria = $('#categoria'+id).val();		
+			console.log("Categoria: "+categoria);
+		}
+
+		function marcaGuardar(id){			
+			let categoria = $('#categoria'+id).val();		
+			console.log("CategoriaGuardar: "+categoria);
+
+			$('#guardar'+id).val($('#categoria'+id).val());
+			let seleccion = $('#guardar'+id).val();
+			console.log("Hola pues:"+seleccion);
 		}
 
 	</script>
