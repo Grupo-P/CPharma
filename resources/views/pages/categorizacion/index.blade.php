@@ -124,6 +124,8 @@
 	  	<tbody>
 		@foreach($categorizaciones as $categorizacion)
 		    <tr>
+		    	<input type="hidden" name="<?php echo"articulo".$categorizacion->id; ?>" id="<?php echo"articulo".$categorizacion->id; ?>" value="<?php echo $categorizacion->id; ?>">
+		      
 		      <th>{{$categorizacion->id}}</th>
 		      <td>{{$categorizacion->codigo_interno}}</td>
 		      <td>{{$categorizacion->codigo_barra}}</td>
@@ -205,11 +207,8 @@
 
 		function eligioCategoria(id){		
 
-			let categoria = $('#categoria'+id).val();		
-			console.log("Categoria: "+categoria);
-
+			let categoria = $('#categoria'+id).val();					
 			let subcategoria = $('#subcategoria'+id).val();		
-			console.log("subcategoria: "+subcategoria);
 
 			if(categoria == 1){
 				$('#subcategoria'+id+' option').remove();
@@ -217,28 +216,53 @@
 				$('#subcategoria'+id).attr("disabled","disabled");								
 			}
 			else{
-				$('#subcategoria'+id).removeAttr("disabled");
-
-				var parametro = {"categoria":id};
+				
+				var parametro = {"categoria":categoria};
 
 				$.ajax({
 	        data: parametro,
 	        url: URLConsultaCategoria,
 	        type: "POST",
 	        success: function(data) {
-	          console.log("Consulta:"+data);
-	        }
-	       });
-			}
+	          if(JSON.parse(data)!="SIN SUBCATEGORIA"){	          	
+	          	var respuesta = JSON.parse(data);
+            	var limite = respuesta.length;
+
+              $('#subcategoria'+id+' option').remove();
+              $('#subcategoria'+id).append('<option value="1.1" selected>SIN SUBCATEGORIA</option>');
+
+              var i = 0;
+              while (i<limite){                  
+                var codigo = respuesta[i]['codigo'];
+                var nombre = respuesta[i]['nombre'];
+
+                $('#subcategoria'+id).append('<option value="'+codigo+'">'+nombre+'</option>');
+              	$('#subcategoria'+id).removeAttr("disabled");
+              	i++;
+              }
+            }
+            else{
+              $('#subcategoria'+id+' option').remove();
+							$('#subcategoria'+id).append('<option value="1.1" selected>SIN SUBCATEGORIA</option>');
+							$('#subcategoria'+id).attr("disabled","disabled");
+            }
+        	}
+      	});
+			}			
 		}
 
-		function marcaGuardar(id){			
-			let categoria = $('#categoria'+id).val();		
-			console.log("CategoriaGuardar: "+categoria);
+		function marcaGuardar(id){
+			let articulo = $('#articulo'+id).val();				
+			let categoria = $('#categoria'+id).val();					
+			let subcategoria = $('#subcategoria'+id).val();			
+			
+			console.log("articulo: "+articulo);
+			console.log("categoria: "+categoria);
+			console.log("subcategoria: "+subcategoria);
 
 			$('#guardar'+id).val($('#categoria'+id).val());
 			let seleccion = $('#guardar'+id).val();
-			console.log("Hola pues:"+seleccion);
+			console.log(articulo+"/"+categoria+"/"+subcategoria);
 		}
 
 	</script>
