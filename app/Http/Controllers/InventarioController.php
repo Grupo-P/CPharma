@@ -110,7 +110,7 @@ class InventarioController extends Controller
             $inventario->save();
             
             $articulosContar = $request->input('articulosContar');
-            print_r($articulosContar);
+            //print_r($articulosContar);
         
             foreach ($articulosContar as $articulo) {
                 $sql = SQG_Detalle_Articulo($articulo);

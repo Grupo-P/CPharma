@@ -108,6 +108,7 @@
   </table>
   <br/>
 	<br/>
+	{!! Form::open(['route' => 'categorizacion.store', 'method' => 'POST']) !!}
 	<table class="table table-striped table-borderless col-12 sortable" id="myTable">
 	  	<thead class="thead-dark">
 		    <tr>
@@ -168,6 +169,8 @@
 		@endforeach
 		</tbody>
 	</table>
+	{!! Form::submit('Guardar', ['class' => 'btn btn-outline-success btn-md']) !!}
+	{!! Form::close()!!} 
 
 	<script>
 		const SedeConnectionJs = '<?php echo $RutaUrl;?>';
@@ -256,13 +259,8 @@
 			let categoria = $('#categoria'+id).val();					
 			let subcategoria = $('#subcategoria'+id).val();			
 			
-			console.log("articulo: "+articulo);
-			console.log("categoria: "+categoria);
-			console.log("subcategoria: "+subcategoria);
-
-			$('#guardar'+id).val($('#categoria'+id).val());
-			let seleccion = $('#guardar'+id).val();
-			console.log(articulo+"/"+categoria+"/"+subcategoria);
+			$('#guardar'+id).val(articulo+"/"+categoria+"/"+subcategoria);
+			let seleccion = $('#guardar'+id).val();			
 		}
 
 	</script>

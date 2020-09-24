@@ -51,7 +51,8 @@ class CategorizacionController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $articulosContar = $request->input('articulosCategorizar');
+        print_r($articulosContar);
     }
 
     /**
