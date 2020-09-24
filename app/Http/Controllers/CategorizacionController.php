@@ -28,9 +28,23 @@ class CategorizacionController extends Controller
      */
     public function index()
     {
-        $categorizaciones =  
-        Categorizacion::orderBy('id', 'asc')->where('codigo_categoria', '1')->take(50)->get();
-        return view('pages.categorizacion.index', compact('categorizaciones'));
+        if(isset($_GET['Tipo'])){
+            $tipo = $_GET['Tipo'];
+        }
+        else{
+            $tipo = 0;
+        }
+
+        switch ($tipo) {
+            case 0:
+                $categorizaciones = Categorizacion::orderBy('id', 'asc')->where('codigo_categoria', '1')->take(50)->get();
+                return view('pages.categorizacion.index', compact('categorizaciones','tipo'));
+          break;
+          case 1:
+                $categorizaciones = Categorizacion::orderBy('id', 'asc')->where('codigo_categoria','!=', '1')->take(50)->get();
+                return view('pages.categorizacion.index', compact('categorizaciones','tipo'));            
+          break;          
+        }        
     }
 
     /**
@@ -51,6 +65,7 @@ class CategorizacionController extends Controller
      */
     public function store(Request $request)
     {
+        $tipo = 0;
         try{
 
             $articulosCategorizar = $request->input('articulosCategorizar');
@@ -75,13 +90,13 @@ class CategorizacionController extends Controller
 
             $categorizaciones =  
             Categorizacion::orderBy('id', 'asc')->where('codigo_categoria', '1')->take(50)->get();
-            return view('pages.categorizacion.index', compact('categorizaciones')); 
+            return view('pages.categorizacion.index', compact('categorizaciones','tipo')); 
         }
         catch(\Illuminate\Database\QueryException $e){
             //return back()->with('Error', ' Error');
             $categorizaciones =  
             Categorizacion::orderBy('id', 'asc')->where('codigo_categoria', '1')->take(50)->get();
-            return view('pages.categorizacion.index', compact('categorizaciones'));
+            return view('pages.categorizacion.index', compact('categorizaciones','tipo'));
         }
     }
 

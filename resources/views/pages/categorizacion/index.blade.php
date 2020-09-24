@@ -95,7 +95,17 @@
 	<hr class="row align-items-start col-12">
 	<table style="width:100%;" class="CP-stickyBar">
 		<tr>
-      <td style="width:100%;">
+			<td style="width:7%;" align="center">	  		
+				<form action="/categorizacion?Tipo=0" method="GET" style="display: inline;">
+			    <button type="submit" name="Tipo" role="button" class="btn btn-outline-dark btn-sm" value="0">Por Caregorizar</button>
+				</form>
+	    </td>
+	    <td style="width:7%;" align="center">	  		
+				<form action="/categorizacion?Tipo=1" method="GET" style="display: inline;">
+			    <button type="submit" name="Tipo" role="button" class="btn btn-outline-success btn-sm" value="1">Caregorizado</button>
+				</form>
+	    </td>
+      <td style="width:85%;">
         	<div class="input-group md-form form-sm form-1 pl-0">
 			  <div class="input-group-prepend">
 			    <span class="input-group-text purple lighten-3" id="basic-text1"><i class="fas fa-search text-white"
@@ -116,14 +126,22 @@
 		      	<th scope="col" class="CP-sticky">Codigo Interno</th>
 		      	<th scope="col" class="CP-sticky">Codigo Barra </th>
 		      	<th scope="col" class="CP-sticky">Descripcion</th>
-		      	<th scope="col" class="CP-sticky">Marca</th>	
-		      	<th scope="col" class="CP-sticky">Categoria</th>
-		      	<th scope="col" class="CP-sticky">Subcategoria</th>	
+		      	<th scope="col" class="CP-sticky">Marca</th>
+		      	<?php 
+		      		if($tipo==1){
+		      	?>
+		      		<th scope="col" class="CP-sticky">Categoria Actual</th>
+		      		<th scope="col" class="CP-sticky">Subcategoria Actual</th>
+		      	<?php
+		      		}
+		      	?>	
+		      	<th scope="col" class="CP-sticky">Nueva Categoria</th>
+		      	<th scope="col" class="CP-sticky">Nueva Subcategoria</th>	
 		      	<th scope="col" class="CP-sticky">Marcar</th>      			      			      	
 		    </tr>
 	  	</thead>
-	  	<tbody>
-		@foreach($categorizaciones as $categorizacion)
+	  	<tbody>	  		
+		@foreach($categorizaciones as $categorizacion)			
 		    <tr>
 		    	<input type="hidden" name="<?php echo"articulo".$categorizacion->id; ?>" id="<?php echo"articulo".$categorizacion->id; ?>" value="<?php echo $categorizacion->id; ?>">
 		      
@@ -132,6 +150,18 @@
 		      <td>{{$categorizacion->codigo_barra}}</td>
 		      <td>{{$categorizacion->descripcion}}</td>
 		      <td>{{$categorizacion->marca}}</td>
+
+		      <?php 
+		      		if($tipo==1){
+		      			$categoria_actual = Categoria::where('codigo',$categorizacion->codigo_categoria)->get();
+		      			
+		      			$subcategoria_actual = Subcategoria::where('codigo',$categorizacion->codigo_subcategoria)->get();		      			
+		      	?>
+		      		<td>{{$categoria_actual[0]->nombre}}</td>
+		      		<td>{{$subcategoria_actual[0]->nombre}}</td>
+		      	<?php
+		      		}
+		      	?>
 		      
 		      <td>
             <select name="<?php echo"categoria".$categorizacion->id; ?>" id="<?php echo"categoria".$categorizacion->id; ?>" class="form-control" onchange="eligioCategoria(<?php echo $categorizacion->id; ?>);">     		
