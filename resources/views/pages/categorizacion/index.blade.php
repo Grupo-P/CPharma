@@ -169,8 +169,10 @@
 		@endforeach
 		</tbody>
 	</table>
-	{!! Form::submit('Guardar', ['class' => 'btn btn-outline-success btn-md']) !!}
-	{!! Form::close()!!} 
+	<div class="text-center">
+		{!! Form::submit('Guardar', ['class' => 'btn btn-outline-success btn-md']) !!}
+	</div>
+	{!! Form::close()!!}
 
 	<script>
 		const SedeConnectionJs = '<?php echo $RutaUrl;?>';

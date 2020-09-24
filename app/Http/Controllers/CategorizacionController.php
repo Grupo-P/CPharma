@@ -51,8 +51,38 @@ class CategorizacionController extends Controller
      */
     public function store(Request $request)
     {
-        $articulosContar = $request->input('articulosCategorizar');
-        print_r($articulosContar);
+        try{
+
+            $articulosCategorizar = $request->input('articulosCategorizar');
+            //print_r($articulosContar);
+            
+            foreach ($articulosCategorizar as $articulo) {
+                
+                $partes = explode("/",$articulo);               
+                
+                $categorizacion = Categorizacion::find($partes[0]);
+                $categorizacion->codigo_categoria = $partes[1];
+                $categorizacion->codigo_subcategoria = $partes[2];
+                $categorizacion->save();  
+
+                $Auditoria = new Auditoria();
+                $Auditoria->accion = 'CATEGORIZAR';
+                $Auditoria->tabla = 'CATEGORIZACION';
+                $Auditoria->registro = $articulo;
+                $Auditoria->user = auth()->user()->name;
+                $Auditoria->save();             
+            }
+
+            $categorizaciones =  
+            Categorizacion::orderBy('id', 'asc')->where('codigo_categoria', '1')->take(50)->get();
+            return view('pages.categorizacion.index', compact('categorizaciones')); 
+        }
+        catch(\Illuminate\Database\QueryException $e){
+            //return back()->with('Error', ' Error');
+            $categorizaciones =  
+            Categorizacion::orderBy('id', 'asc')->where('codigo_categoria', '1')->take(50)->get();
+            return view('pages.categorizacion.index', compact('categorizaciones'));
+        }
     }
 
     /**
