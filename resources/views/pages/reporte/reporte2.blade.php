@@ -216,6 +216,21 @@
     $RowCPharma = mysqli_fetch_assoc($ResultCPharma);
     $ultimoConteo = $RowCPharma['fecha_conteo'];
 
+    $sqlCategorizacion = "
+    SELECT 
+    categorias.nombre as categoria,
+    subcategorias.nombre as subcategoria
+    FROM categorizacions
+    INNER JOIN categorias ON categorias.codigo = codigo_categoria
+    INNER JOIN subcategorias ON subcategorias.codigo = codigo_subcategoria
+    WHERE id_articulo = '$IdArticulo';
+   ";
+
+    $ResultCategorizacion = mysqli_query($connCPharma,$sqlCategorizacion);
+    $RowCategorizacion = mysqli_fetch_assoc($ResultCategorizacion);
+    $categoria = $RowCategorizacion['categoria'];
+    $subcategoria = $RowCategorizacion['subcategoria'];
+
     echo '
     <div class="input-group md-form form-sm form-1 pl-0 CP-stickyBar">
       <div class="input-group-prepend">
@@ -241,6 +256,8 @@
           <th scope="col">Utilidad Configurada</td>
           <th scope="col">Troquel</td>
           <th scope="col">Marca</td>
+          <th scope="col">Categoria</td>
+          <th scope="col">Subcategoria</td>
           <th scope="col">Dolarizado?</td>
           <th scope="col">Tasa actual '.SigVe.'</td>
           <th scope="col">Precio en divisa</br>(Con IVA) '.SigDolar.'</td>
@@ -278,6 +295,10 @@
     }
 
     echo '<td align="center">'.$Marca.'</td>';
+
+    echo '<td align="center">'.$categoria.'</td>';
+
+    echo '<td align="center">'.$subcategoria.'</td>';
 
     echo '<td align="center">'.$Dolarizado.'</td>';
 
