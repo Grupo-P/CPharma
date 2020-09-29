@@ -2,7 +2,7 @@
 	use compras\Categoria;
 	use compras\Subcategoria;
 
-	$categorias =  Categoria::all();
+	$categorias =  Categoria::where('estatus','ACTIVO')->get();
 	$subcategorias =  Subcategoria::all();
 
 	include(app_path().'\functions\config.php');
