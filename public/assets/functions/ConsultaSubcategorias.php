@@ -30,7 +30,7 @@
     $arraySubcategorias = array();
     $arrayIteracion = array();
 
-  	$result = $connCPharma->query("SELECT codigo,nombre FROM subcategorias WHERE codigo_categoria = '$categoria'");  
+  	$result = $connCPharma->query("SELECT codigo,nombre FROM subcategorias WHERE codigo_categoria = '$categoria' AND estatus = 'ACTIVO'");
     
     while($row = $result->fetch_assoc()){
       
