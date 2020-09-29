@@ -55,7 +55,7 @@
         <thead class="thead-dark">
             <tr>
                 <th scope="row"></th>
-                <th scope="row"></th>
+                <th scope="row"><?php echo $subcategoria->codigo_categoria; ?></th>
             </tr>
         </thead>
        <tbody>
@@ -67,10 +67,21 @@
                         <?php
                         foreach($categorias as $categoria){
                             $cat = Categoria::where('codigo',$categoria)->get();
-                        ?>                       
-                        <option value="<?php echo $categoria; ?>">
+                        ?>  
+                            <?php 
+                                if($subcategoria->codigo_categoria == $categoria){
+                            ?>
+                                <option value="<?php echo $categoria; ?>" selected="selected">
                             <?php echo $categoria." - ".$cat[0]->nombre; ?></option>
+
+                            <?php
+
+                                } else { 
+                            ?>
+                                <option value="<?php echo $categoria; ?>">
+                                    <?php echo $categoria." - ".$cat[0]->nombre; ?></option>
                         <?php
+                                }
                         }
                         ?>
                     </select>
