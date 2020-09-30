@@ -116,6 +116,12 @@
 			?>
 		</tbody>
 	</table>
+	</br>
+	<table style="width:53.5%;">
+		<tr><thead><th>Observacion</th></thead></tr>
+		<tr><td align="left">{{($OrdenCompra->observacion)?$OrdenCompra->observacion:"-"}}</td></tr>
+	</table>	
+	<br/>
 	<br/>
 	<span>Nota: 
 	<br/>
