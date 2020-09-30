@@ -14,6 +14,7 @@
 	/* CPHARMA */
 		$SedeConnection = FG_Mi_Ubicacion();
 		$conn = FG_Conectar_Smartpharma($SedeConnection);
+        $connCPharma = FG_Conectar_CPharma();
 		$sql = RQ_Articulos_PaginaWEB();
 		$result = sqlsrv_query($conn,$sql);
 		$contador = 1;
@@ -77,14 +78,28 @@
         	    $TroquelAlmacen2 = $row["TroquelAlmacen2"];
         	    $PrecioCompraBrutoAlmacen2 = $row["PrecioCompraBrutoAlmacen2"];
         	    $PrecioCompraBruto = $row["PrecioCompraBruto"];
-        	    $CondicionExistencia = 'CON_EXISTENCIA';
-                $categoria = FG_Tipo_Producto($row["Tipo"]);
+        	    $CondicionExistencia = 'CON_EXISTENCIA';                
 
         	    $Precio = FG_Calculo_Precio_Alfa($Existencia,$ExistenciaAlmacen1,$ExistenciaAlmacen2,$IsTroquelado,$UtilidadArticulo,$UtilidadCategoria,$TroquelAlmacen1,$PrecioCompraBrutoAlmacen1,$TroquelAlmacen2,
             		$PrecioCompraBrutoAlmacen2,$PrecioCompraBruto,$IsIVA,$CondicionExistencia);
         		
         	    $Precio = number_format($Precio,2,"," ,"." );
         	    if($Existencia == ""){ $Existencia = '0'; }
+
+                $sqlCategorizacion = "
+                SELECT 
+                categorias.nombre as categoria,
+                subcategorias.nombre as subcategoria
+                FROM categorizacions
+                INNER JOIN categorias ON categorias.codigo = codigo_categoria
+                INNER JOIN subcategorias ON subcategorias.codigo = codigo_subcategoria
+                WHERE id_articulo = '$IdArticulo';
+               ";
+
+                $ResultCategorizacion = mysqli_query($connCPharma,$sqlCategorizacion);
+                $RowCategorizacion = mysqli_fetch_assoc($ResultCategorizacion);
+                $categoria = ($RowCategorizacion['categoria']) ? $RowCategorizacion['categoria'] : "SIN CATEGORIA";                
+                $subcategoria = ($RowCategorizacion['subcategoria']) ? $RowCategorizacion['subcategoria'] : "SIN SUBCATEGORIA";
  	/* CPHARMA */
 
 	    /*EXCEL*/
@@ -132,7 +147,8 @@
 
 	/* CPHARMA */
     			$contador++;
-          	}
+          	}        
+        mysqli_close($connCPharma);
         sqlsrv_close($conn);
     /* CPHARMA */
 
