@@ -97,6 +97,34 @@
     </button>
     <div class="dropdown-menu">
       <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('/ArticulosExcel') }}">
+          <span data-feather="home"></span>
+          <i class="fas fa-file-excel"></i>
+          Articulos Pagina Web<span class="sr-only">(current)</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('categoria') }}">     
+          <span data-feather="home"></span>
+          <i class="fas fa-tag"></i>
+          Categoria<span class="sr-only">(current)</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('subcategoria') }}">     
+          <span data-feather="home"></span>
+          <i class="fas fa-tag"></i>
+          Subcategoria<span class="sr-only">(current)</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('categorizacion') }}">     
+          <span data-feather="home"></span>
+          <i class="fas fa-tag"></i>
+          Categorizacion<span class="sr-only">(current)</span>
+        </a>
+      </li>
+      <li class="nav-item">
         <a class="nav-link CP-Links-Menu" href="{{ url('/sedes_reporte') }}">
           <span data-feather="home"></span>
           <i class="fas fa-file-invoice"></i>
@@ -256,6 +284,34 @@
       <i class="fas fa-dolly-flatbed"></i> Surtido
     </button>
     <div class="dropdown-menu">
+      <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('/ArticulosExcel') }}">
+          <span data-feather="home"></span>
+          <i class="fas fa-file-excel"></i>
+          Articulos Pagina Web<span class="sr-only">(current)</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('categoria') }}">     
+          <span data-feather="home"></span>
+          <i class="fas fa-tag"></i>
+          Categoria<span class="sr-only">(current)</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('subcategoria') }}">     
+          <span data-feather="home"></span>
+          <i class="fas fa-tag"></i>
+          Subcategoria<span class="sr-only">(current)</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('categorizacion') }}">     
+          <span data-feather="home"></span>
+          <i class="fas fa-tag"></i>
+          Categorizacion<span class="sr-only">(current)</span>
+        </a>
+      </li>
       <li class="nav-item">
         <a class="nav-link CP-Links-Menu" href="{{ url('/sedes_reporte') }}">
           <span data-feather="home"></span>
@@ -574,6 +630,34 @@
     </button>
     <div class="dropdown-menu">
       <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('/ArticulosExcel') }}">
+          <span data-feather="home"></span>
+          <i class="fas fa-file-excel"></i>
+          Articulos Pagina Web<span class="sr-only">(current)</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('categoria') }}">     
+          <span data-feather="home"></span>
+          <i class="fas fa-tag"></i>
+          Categoria<span class="sr-only">(current)</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('subcategoria') }}">     
+          <span data-feather="home"></span>
+          <i class="fas fa-tag"></i>
+          Subcategoria<span class="sr-only">(current)</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('categorizacion') }}">     
+          <span data-feather="home"></span>
+          <i class="fas fa-tag"></i>
+          Categorizacion<span class="sr-only">(current)</span>
+        </a>
+      </li>
+      <li class="nav-item">
         <a class="nav-link CP-Links-Menu" href="{{ url('/sedes_reporte') }}">
           <span data-feather="home"></span>
           <i class="fas fa-file-invoice"></i>
@@ -644,6 +728,27 @@
           <span data-feather="home"></span>
           <i class="fas fa-file-excel"></i>
           Articulos Pagina Web<span class="sr-only">(current)</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('categoria') }}">     
+          <span data-feather="home"></span>
+          <i class="fas fa-tag"></i>
+          Categoria<span class="sr-only">(current)</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('subcategoria') }}">     
+          <span data-feather="home"></span>
+          <i class="fas fa-tag"></i>
+          Subcategoria<span class="sr-only">(current)</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('categorizacion') }}">     
+          <span data-feather="home"></span>
+          <i class="fas fa-tag"></i>
+          Categorizacion<span class="sr-only">(current)</span>
         </a>
       </li>
       <li class="nav-item">
@@ -804,6 +909,7 @@
 ?>
 <!-- GERENCIA -->
 
+<!-------------------------------------------------------------------------------->
 <!-- TESORERIA -->
 <?php
   if(Auth::user()->departamento == 'TESORERIA') {
@@ -905,6 +1011,52 @@
 <!-- INVENTARIO -->
 <!-------------------------------------------------------------------------------->
 
+<!-------------------------------------------------------------------------------->
+<!-- MERCADEO -->
+<?php
+  if(Auth::user()->departamento == 'MERCADEO'){
+?>
+  <div class="btn-group navbar-brand">
+    <button type="button" class="btn btn-outline-info dropdown-toggle textoI" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      <i class="fas fa-store"></i> Mercadeo
+    </button>
+    <div class="dropdown-menu">
+      <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('/ArticulosExcel') }}">
+          <span data-feather="home"></span>
+          <i class="fas fa-file-excel"></i>
+          Articulos Pagina Web<span class="sr-only">(current)</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('categoria') }}">     
+          <span data-feather="home"></span>
+          <i class="fas fa-tag"></i>
+          Categoria<span class="sr-only">(current)</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('subcategoria') }}">     
+          <span data-feather="home"></span>
+          <i class="fas fa-tag"></i>
+          Subcategoria<span class="sr-only">(current)</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('categorizacion') }}">     
+          <span data-feather="home"></span>
+          <i class="fas fa-tag"></i>
+          Categorizacion<span class="sr-only">(current)</span>
+        </a>
+      </li>
+    </div>
+  </div>
+<?php
+  }
+?>
+<!-- MERCADEO -->
+<!-------------------------------------------------------------------------------->
+
 <!------------------------------------------------------------------------------->
 <!-- TECNOLOGIA -->
 <?php
@@ -920,6 +1072,27 @@
           <span data-feather="home"></span>
           <i class="fas fa-file-excel"></i>
           Articulos Pagina Web<span class="sr-only">(current)</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('categoria') }}">     
+          <span data-feather="home"></span>
+          <i class="fas fa-tag"></i>
+          Categoria<span class="sr-only">(current)</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('subcategoria') }}">     
+          <span data-feather="home"></span>
+          <i class="fas fa-tag"></i>
+          Subcategoria<span class="sr-only">(current)</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('categorizacion') }}">     
+          <span data-feather="home"></span>
+          <i class="fas fa-tag"></i>
+          Categorizacion<span class="sr-only">(current)</span>
         </a>
       </li>
       <li class="nav-item">
@@ -1105,6 +1278,7 @@
       <i class="fas fa-user-secret"></i> Developer
     </button>   
     <div class="dropdown-menu">
+      <!--
       <li class="nav-item">
         <a class="nav-link CP-Links-Menu" href="{{ url('categoria') }}">     
           <span data-feather="home"></span>
@@ -1125,15 +1299,14 @@
           <i class="fas fa-tag"></i>
           Categorizacion<span class="sr-only">(current)</span>
         </a>
-      </li>
-      <!--      
-        <li class="nav-item">
-          <a class="nav-link CP-Links-Menu" href="{{ url('reporte30') }}">  
-            <span data-feather="home"></span>
-            <i class="fa fa-file-alt"></i>
-            Registro de Compras<span class="sr-only">(current)</span>
-          </a>
-        </li>  
+      </li>        
+      <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('reporte30') }}">  
+          <span data-feather="home"></span>
+          <i class="fa fa-file-alt"></i>
+          Registro de Compras<span class="sr-only">(current)</span>
+        </a>
+      </li>  
         -->   
     </div>
   </div>
