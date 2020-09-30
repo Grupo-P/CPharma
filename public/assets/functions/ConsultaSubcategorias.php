@@ -5,15 +5,14 @@
   include('C:\xampp\htdocs\CPharma\app\functions\querys_sqlserver.php');
 
 	$resultado = array();
-	$categoria = $_POST["categoria"];	
+	$categoria = $_POST["categoria"];
 		
   $respuesta = FG_buscar_subcategoria($categoria);
 
     if( (is_array($respuesta)) && (!empty($respuesta)) ){      
       echo json_encode($respuesta);
     }
-    else{
-    	echo("entre aca");
+    else{    	
       echo json_encode('SIN SUBCATEGORIA');
     }
 ?>
