@@ -2,6 +2,7 @@
 	use PhpOffice\PhpSpreadsheet\IOFactory;
 	use PhpOffice\PhpSpreadsheet\Spreadsheet;
 	use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+    use compras\Configuracion;
 
 	include(app_path().'\functions\config.php');
 	include(app_path().'\functions\functions.php');
@@ -18,6 +19,8 @@
 		$sql = RQ_Articulos_PaginaWEB();
 		$result = sqlsrv_query($conn,$sql);
 		$contador = 1;
+
+        $configuracion =  Configuracion::select('valor')->where('variable','URL_externa')->get();
 
         $sheet->setCellValue('A'.$contador,"ID");
         $sheet->setCellValue('B'.$contador,"Tipo");
@@ -139,7 +142,7 @@
                 $sheet->setCellValue('AH'.$contador,"");
                 $sheet->setCellValue('AI'.$contador,"");
                 $sheet->setCellValue('AJ'.$contador,"");
-                $sheet->setCellValue('AK'.$contador,"");
+                $sheet->setCellValue('AK'.$contador,$configuracion[0]->valor.$CodigoBarra.".jpg");
                 $sheet->setCellValue('AL'.$contador,"");
                 $sheet->setCellValue('AM'.$contador,"0");
     	    	
