@@ -132,6 +132,9 @@
     $sql5 = R31Q_Monitoreo_Inventarios($FInicial,$FFinal);
     $result = sqlsrv_query($conn,$sql5);
 
+    $sql6 = R31Q_Monitoreo_Correcciones($FInicial,$FFinal);    
+    $result1 = sqlsrv_query($conn,$sql6);
+
     echo '
     <div class="input-group md-form form-sm form-1 pl-0 CP-stickyBar">
       <div class="input-group-prepend">
@@ -145,6 +148,91 @@
     <br/>
     ';
     echo'<h6 align="center">Periodo desde el '.$FInicialImp.' al '.$FFinalImp.' </h6>';
+
+    echo'
+    <table class="table table-striped table-bordered col-12 sortable" id="myTable">
+      <thead class="thead-dark">
+        <tr>  
+          <th scope="col" class="CP-sticky">#</th>
+          <th scope="col" class="CP-sticky">Tipo de Movimiento</th>
+          <th scope="col" class="CP-sticky">Origen de Movimiento</th>
+          <th scope="col" class="CP-sticky">Numero de Movimiento</th>
+          <th scope="col" class="CP-sticky">Fecha de Movimiento</th>
+          <th scope="col" class="CP-sticky">Codigo Interno</th>
+          <th scope="col" class="CP-sticky">Codigo de Barra</th>
+          <th scope="col" class="CP-sticky">Descripcion</th>
+          <th scope="col" class="CP-sticky">Cantidad (CC -)</th>
+          <th scope="col" class="CP-sticky">Cantidad (CC +)</th>
+          <th scope="col" class="CP-sticky">Numero de Lote (CC -)</th>
+          <th scope="col" class="CP-sticky">Numero de Lote (CC +)</th>
+          <th scope="col" class="CP-sticky">Almacen (CC -)</td>
+          <th scope="col" class="CP-sticky">Almacen (CC +)</td>
+          <th scope="col" class="CP-sticky">Costo Uniario (CC -)'.SigVe.'</td>
+          <th scope="col" class="CP-sticky">Costo Uniario (CC +)'.SigVe.'</td>          
+          <th scope="col" class="CP-sticky">Operador</th>         
+        </tr>
+      </thead>
+      <tbody>
+    ';
+
+    $contador = 1;
+    while($row = sqlsrv_fetch_array($result1, SQLSRV_FETCH_ASSOC)) {
+      $TipoMovimiento = FG_Limpiar_Texto($row["TipoMovimiento"]);
+      $NumeroMovimiento = $row["NumeroMovimiento"];      
+      $CostoUniario = $row["CostoUniario"];
+      
+      if($TipoMovimiento == 'Corrección costo -'){
+        $NumeroMovCCNeg = $NumeroMovimiento;
+        $CantidadCCNeg = $row["Cantidad"];
+        $LoteCCNeg = $row["Lote"];
+        $AlmacenCCNeg = $row["Almacen"];
+        $CostoUniarioCCNeg = $CostoUniario;
+      }
+      else if( ($TipoMovimiento=='Corrección costo +') && ($NumeroMovimiento == $NumeroMovCCNeg) &&($CostoUniarioCCNeg >= $CostoUniario) ) {
+
+        $IdArticulo = $row["IdArticulo"];        
+        $OrigenMovimiento = $row["OrigenMovimiento"];
+        $OrigenMovimiento = determminar_Origen_Movimiento($OrigenMovimiento);        
+        $FechaMovimiento = $row["FechaMovimiento"];
+        $CodigoArticulo = $row["CodigoInterno"];
+        $CodigoBarra = $row["CodigoBarra"];
+        $Descripcion = FG_Limpiar_Texto($row["Descripcion"]);
+        $Cantidad = $row["Cantidad"];
+        $Lote = $row["Lote"];
+        $Almacen = $row["Almacen"];        
+        $Operador = $row["Operador"];
+                        
+        echo '<tr>';
+        echo '<td align="center"><strong>'.intval($contador).'</strong></td>';
+        echo '<td align="left">'.($TipoMovimiento).'</td>';
+        echo '<td align="left">'.FG_Limpiar_Texto($OrigenMovimiento).'</td>';
+        echo '<td align="left">'.$NumeroMovimiento.'</td>';
+        echo '<td align="center">'.$FechaMovimiento->format('d-m-Y').'</td>';
+        echo '<td align="left">'.$CodigoArticulo.'</td>';
+        echo '<td align="center">'.$CodigoBarra.'</td>';
+        echo 
+        '<td align="left" class="CP-barrido">
+        <a href="/reporte2?Id='.$IdArticulo.'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
+          .$Descripcion.
+        '</a>
+        </td>';
+        echo '<td align="center">'.intval($CantidadCCNeg).'</td>';
+        echo '<td align="center">'.intval($Cantidad).'</td>';
+        echo '<td align="center">'.$LoteCCNeg.'</td>';
+        echo '<td align="center">'.$Lote.'</td>';
+        echo '<td align="center">'.FG_Limpiar_Texto($AlmacenCCNeg).'</td>';
+        echo '<td align="center">'.FG_Limpiar_Texto($Almacen).'</td>';
+        echo '<td align="center">'.number_format($CostoUniarioCCNeg,2,"," ,"." ).'</td>';        
+        echo '<td align="center">'.number_format($CostoUniario,2,"," ,"." ).'</td>'; 
+        echo '<td align="center">'.$Operador.'</td>';      
+        echo '</tr>';
+        $contador++;
+      }       
+    }
+    echo '
+      </tbody>
+    </table>';
+
     echo'
     <table class="table table-striped table-bordered col-12 sortable" id="myTable">
       <thead class="thead-dark">
@@ -278,8 +366,7 @@
     INNER JOIN InvLote ON InvLote.id = InvMovimiento.InvLoteId
     INNER JOIN InvAlmacen ON InvAlmacen.id = InvMovimiento.InvAlmacenId
     WHERE (InvMovimiento.InvCausaId = '14' OR InvMovimiento.InvCausaId = '15' 
-    OR InvMovimiento.InvCausaId = '5' OR InvMovimiento.InvCausaId = '6'
-    OR InvMovimiento.InvCausaId = '11' OR InvMovimiento.InvCausaId = '12' )
+    OR InvMovimiento.InvCausaId = '5' OR InvMovimiento.InvCausaId = '6')
     AND(InvMovimiento.FechaMovimiento > '$FInicial' AND InvMovimiento.FechaMovimiento < '$FFinal')
     ORDER BY InvMovimiento.FechaMovimiento ASC
     ";
@@ -323,5 +410,42 @@
       break;
     }
     return $nombreMovimiento;
+  }
+  /**********************************************************************************/
+  /*
+    TITULO: R31Q_Monitoreo_Inventarios
+    FUNCION: Ubicar el top de productos mas vendidos
+    RETORNO: Lista de productos mas vendidos
+    DESAROLLADO POR: SERGIO COVA
+  */
+  function R31Q_Monitoreo_Correcciones($FInicial,$FFinal) {
+    $sql = "
+    SELECT 
+    InvArticulo.id as IdArticulo,
+    InvArticulo.CodigoArticulo AS CodigoInterno,
+    (SELECT CodigoBarra
+    FROM InvCodigoBarra 
+    WHERE InvCodigoBarra.InvArticuloId = InvArticulo.Id
+    AND InvCodigoBarra.EsPrincipal = 1) AS CodigoBarra,
+    InvArticulo.Descripcion,
+    InvMovimiento.origenMovimiento as OrigenMovimiento,
+    InvMovimiento.DocumentoOrigen as NumeroMovimiento,
+    InvCausa.Descripcion as TipoMovimiento,          
+    InvMovimiento.Cantidad as Cantidad,
+    InvLote.Numero as Lote,
+    InvAlmacen.Descripcion as Almacen,
+    InvMovimiento.M_CostoUnitario as CostoUniario,
+    InvMovimiento.Auditoria_Usuario as Operador,
+    InvMovimiento.FechaMovimiento  as FechaMovimiento
+    FROM InvMovimiento
+    INNER JOIN InvCausa ON InvCausa.id = InvMovimiento.InvCausaId
+    INNER JOIN InvArticulo ON InvArticulo.id = InvMovimiento.InvArticuloId
+    INNER JOIN InvLote ON InvLote.id = InvMovimiento.InvLoteId
+    INNER JOIN InvAlmacen ON InvAlmacen.id = InvMovimiento.InvAlmacenId
+    WHERE (InvMovimiento.InvCausaId = '11' or InvMovimiento.InvCausaId = '12')
+    AND(InvMovimiento.FechaMovimiento > '$FInicial' AND InvMovimiento.FechaMovimiento < '$FFinal')
+    ORDER BY InvMovimiento.FechaMovimiento ASC, InvMovimiento.M_CostoUnitario ASC
+    ";
+    return $sql;
   }
 ?>
