@@ -161,12 +161,10 @@
           <th scope="col" class="CP-sticky">Codigo Interno</th>
           <th scope="col" class="CP-sticky">Codigo de Barra</th>
           <th scope="col" class="CP-sticky">Descripcion</th>
-          <th scope="col" class="CP-sticky">Cantidad (CC -)</th>
-          <th scope="col" class="CP-sticky">Cantidad (CC +)</th>
+          <th scope="col" class="CP-sticky">Cantidad</th>          
           <th scope="col" class="CP-sticky">Numero de Lote (CC -)</th>
           <th scope="col" class="CP-sticky">Numero de Lote (CC +)</th>
-          <th scope="col" class="CP-sticky">Almacen (CC -)</td>
-          <th scope="col" class="CP-sticky">Almacen (CC +)</td>
+          <th scope="col" class="CP-sticky">Almacen</td>          
           <th scope="col" class="CP-sticky">Costo Uniario (CC -)'.SigVe.'</td>
           <th scope="col" class="CP-sticky">Costo Uniario (CC +)'.SigVe.'</td>          
           <th scope="col" class="CP-sticky">Operador</th>         
@@ -182,13 +180,11 @@
       $CostoUniario = $row["CostoUniario"];
       
       if($TipoMovimiento == 'Corrección costo -'){
-        $NumeroMovCCNeg = $NumeroMovimiento;
-        $CantidadCCNeg = $row["Cantidad"];
-        $LoteCCNeg = $row["Lote"];
-        $AlmacenCCNeg = $row["Almacen"];
+        $NumeroMovCCNeg = $NumeroMovimiento;        
+        $LoteCCNeg = $row["Lote"];        
         $CostoUniarioCCNeg = $CostoUniario;
       }
-      else if( ($TipoMovimiento=='Corrección costo +') && ($NumeroMovimiento == $NumeroMovCCNeg) &&($CostoUniarioCCNeg >= $CostoUniario) ) {
+      else if( ($TipoMovimiento=='Corrección costo +') && ($NumeroMovimiento == $NumeroMovCCNeg) &&($CostoUniarioCCNeg > $CostoUniario) ) {
 
         $IdArticulo = $row["IdArticulo"];        
         $OrigenMovimiento = $row["OrigenMovimiento"];
@@ -207,7 +203,7 @@
         echo '<td align="left">'.($TipoMovimiento).'</td>';
         echo '<td align="left">'.FG_Limpiar_Texto($OrigenMovimiento).'</td>';
         echo '<td align="left">'.$NumeroMovimiento.'</td>';
-        echo '<td align="center">'.$FechaMovimiento->format('d-m-Y').'</td>';
+        echo '<td align="center">'.$FechaMovimiento->format('d-m-Y h:i:s A').'</td>';
         echo '<td align="left">'.$CodigoArticulo.'</td>';
         echo '<td align="center">'.$CodigoBarra.'</td>';
         echo 
@@ -215,12 +211,10 @@
         <a href="/reporte2?Id='.$IdArticulo.'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
           .$Descripcion.
         '</a>
-        </td>';
-        echo '<td align="center">'.intval($CantidadCCNeg).'</td>';
+        </td>';        
         echo '<td align="center">'.intval($Cantidad).'</td>';
         echo '<td align="center">'.$LoteCCNeg.'</td>';
         echo '<td align="center">'.$Lote.'</td>';
-        echo '<td align="center">'.FG_Limpiar_Texto($AlmacenCCNeg).'</td>';
         echo '<td align="center">'.FG_Limpiar_Texto($Almacen).'</td>';
         echo '<td align="center">'.number_format($CostoUniarioCCNeg,2,"," ,"." ).'</td>';        
         echo '<td align="center">'.number_format($CostoUniario,2,"," ,"." ).'</td>'; 
@@ -290,7 +284,7 @@
       echo '<td align="left">'.FG_Limpiar_Texto($TipoMovimiento).'</td>';
       echo '<td align="left">'.FG_Limpiar_Texto($OrigenMovimiento).'</td>';
       echo '<td align="left">'.$NumeroMovimiento.'</td>';
-      echo '<td align="center">'.$FechaMovimiento->format('d-m-Y').'</td>';
+      echo '<td align="center">'.$FechaMovimiento->format('d-m-Y h:i:s A').'</td>';
       echo '<td align="left">'.$CodigoArticulo.'</td>';
       echo '<td align="center">'.$CodigoBarra.'</td>';
       echo 
