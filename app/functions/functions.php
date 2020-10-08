@@ -1216,6 +1216,9 @@
 			case 'Registro de Compras':
 				$ruta = '/reporte30';
 			break;
+			case 'Monitoreo de Inventarios':
+				$ruta = '/reporte31';
+			break;
 			case 'Registro de Fallas':
 				$ruta = '/falla';
 			break;
@@ -1316,6 +1319,9 @@
 			break;
 			case 30:
 				$nombre = 'Registro de Compras';
+			break;
+			case 31:
+				$nombre = 'Monitoreo de Inventarios';
 			break;
 			case 99:
 				$nombre = 'Registro de Fallas';
