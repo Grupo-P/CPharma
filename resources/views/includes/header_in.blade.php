@@ -902,6 +902,13 @@
           Auditoria<span class="sr-only">(current)</span>
         </a>
       </li>
+      <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('/configuracion') }}">      
+          <span data-feather="home"></span>
+          <i class="fas fa-cogs"></i>
+          Configuracion<span class="sr-only">(current)</span>
+        </a>
+      </li>
     </div>
   </div>
 <?php
@@ -1279,35 +1286,12 @@
     </button>   
     <div class="dropdown-menu">    
       <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="{{ url('/reporte31') }}">     
+        <a class="nav-link CP-Links-Menu" href="{{ url('/CorridaPrecios') }}">     
           <span data-feather="home"></span>
-          <i class="fas fa-file-invoice"></i>
-          Monitoreo de Inventarios<span class="sr-only">(current)</span>
+          <i class="fas fa-money-bill-alt"></i>
+          Corrida de Precios<span class="sr-only">(current)</span>
         </a>
-      </li>
-      <!--
-      <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="{{ url('subcategoria') }}">     
-          <span data-feather="home"></span>
-          <i class="fas fa-tag"></i>
-          Subcategoria<span class="sr-only">(current)</span>
-        </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="{{ url('categorizacion') }}">     
-          <span data-feather="home"></span>
-          <i class="fas fa-tag"></i>
-          Categorizacion<span class="sr-only">(current)</span>
-        </a>
-      </li>        
-      <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="{{ url('reporte30') }}">  
-          <span data-feather="home"></span>
-          <i class="fa fa-file-alt"></i>
-          Registro de Compras<span class="sr-only">(current)</span>
-        </a>
-      </li>  
-        -->   
+      </li>      
     </div>
   </div>
 <?php

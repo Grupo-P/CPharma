@@ -247,6 +247,10 @@ Route::get('/ArticulosExcel', function() {
     return view('pages.articulosExcel.articulosExcel');
 });
 
+Route::get('/CorridaPrecios', function() { 
+    return view('pages.corridas.corridaPrecio');
+});
+
 Route::get('home', 'HomeController@index')->name('home');
 
 Route::resource('dolar', 'DolarController');
