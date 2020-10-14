@@ -114,7 +114,7 @@
         
 	}else{
 		echo '
-      <h6 align="center" style="margin-top:50px; margin-bottom:150px;">Ussted NO tiene permisos para acceder a este modulo</h6>';
+      <h6 align="center" style="margin-top:50px; margin-bottom:150px;">Usted NO tiene permisos para acceder a este modulo</h6>';
 	}
 ?>
 @endsection
