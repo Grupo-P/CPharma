@@ -2586,4 +2586,13 @@
 		$sql1 = MySQL_Guardar_Captura_Categoria($TotalRegistros,$FechaCaptura,$date);
 		mysqli_query($connCPharma,$sql1);
 	}
+	/**********************************************************************************/
+	/*
+		TITULO: FG_Corrida_Precio
+		FUNCION: crea la etiqueta para el caso que corresponda
+		DESARROLLADO POR: SERGIO COVA
+ 	*/
+ 	function FG_Corrida_Precio($tipoCorrida){
+ 		echo "Desde la funcion, el tipo de corrida es: ".$tipoCorrida;
+ 	}
 ?>
