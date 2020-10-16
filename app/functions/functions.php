@@ -2593,6 +2593,166 @@
 		DESARROLLADO POR: SERGIO COVA
  	*/
  	function FG_Corrida_Precio($tipoCorrida){
- 		echo "Desde la funcion, el tipo de corrida es: ".$tipoCorrida;
+ 		
+ 		echo "* * * Desde la funcion, el tipo de corrida es: ".$tipoCorrida."* * * <br><br>";
+
+ 		$SedeConnection = FG_Mi_Ubicacion();
+    $conn = FG_Conectar_Smartpharma($SedeConnection);
+    $connCPharma = FG_Conectar_CPharma();
+
+    $sql = sql_articulos_corrida();
+    $result = sqlsrv_query($conn,$sql);
+
+    while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
+      $IdArticulo = $row["IdArticulo"];
+      $CodigoInterno = $row["CodigoInterno"];
+      $CodigoBarra = $row["CodigoBarra"];
+      $Descripcion = $row["Descripcion"];
+      $Existencia = $row["Existencia"];
+      $Impuesto = $row["Impuesto"];
+      $UtilidadArticulo = $row["UtilidadArticulo"];
+      $UtilidadCategoria = $row["UtilidadCategoria"];	
+
+      echo "# # # ".json_encode($row)." # # #";                    
+
+	    $sql1 = sql_lotes_corrida($IdArticulo);
+	    $result1 = sqlsrv_query($conn,$sql1);
+
+	    $IdArticuloMayor =  "";
+	    $CodigoArticuloMayor =  "";
+     	$DescripcionMayor =  "";
+  		$ExistenciaMayor =  "";
+     	$loteMayor =  "";
+    	$fechaMayor =  "";	   
+	    $CostoMayor = 0;
+
+	    while($row1 = sqlsrv_fetch_array($result1, SQLSRV_FETCH_ASSOC)) {
+
+	    	if($row1["M_PrecioCompraBruto"]>$CostoMayor){
+
+	    		$IdArticuloMayor = $row1["id"];
+	    		$CodigoArticuloMayor = $row1["CodigoArticulo"];
+	    		$DescripcionMayor = $row1["Descripcion"];
+	    		$ExistenciaMayor = $row1["Existencia"];
+	    		$loteMayor = $row1["InvLoteId"];
+	    		$fechaMayor = $row1["Auditoria_FechaCreacion"];
+	    		$CostoMayor = $row1["M_PrecioCompraBruto"];
+	    	}  	  			 
+	    }
+	    	echo "<br> $ $ $ $ $ $ $ $ $";
+	    	echo "<br> El mayor es: ";     
+  			echo "<br>".$IdArticuloMayor;
+  			echo "<br>".$CodigoArticuloMayor;
+  			echo "<br>".$DescripcionMayor;
+  			echo "<br>".$ExistenciaMayor;
+  			echo "<br>".$loteMayor;
+  			echo "<br>".$fechaMayor->format('Y-m-d');
+  			echo "<br>".$CostoMayor;
+  			echo "<br> $ $ $ $ $ $ $ $ $ <br>";	
+
+  			echo "<br> * * * * * * * * * * * * * * * * * * * * * * * * * ";      
+    }
+
+    mysqli_close($connCPharma);
+		sqlsrv_close($conn);
  	}
+?>
+
+<?php
+  function sql_articulos_corrida(){
+    $sql ="
+    SELECT
+    --Id Articulo
+    InvArticulo.Id AS IdArticulo,    
+    --Codigo Interno
+    InvArticulo.CodigoArticulo AS CodigoInterno,
+    --Codigo de Barra
+    (SELECT CodigoBarra
+    FROM InvCodigoBarra 
+    WHERE InvCodigoBarra.InvArticuloId = InvArticulo.Id
+    AND InvCodigoBarra.EsPrincipal = 1) AS CodigoBarra,
+    --Descripcion
+    InvArticulo.Descripcion,    
+    --Existencia (Segun el almacen del filtro)
+    (ROUND(CAST((SELECT SUM (InvLoteAlmacen.Existencia) As Existencia
+    FROM InvLoteAlmacen
+    WHERE(InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
+    AND (InvLoteAlmacen.InvArticuloId = InvArticulo.Id)) AS DECIMAL(38,0)),2,0))  AS Existencia,
+  	--Impuesto (1 SI aplica impuesto, 0 NO aplica impuesto)
+    (ISNULL(InvArticulo.FinConceptoImptoIdCompra,CAST(0 AS INT))) AS Impuesto,
+  	--UtilidadArticulo (Utilidad del articulo, Utilidad es 1.00 NO considerar la utilidad para el calculo de precio)
+    ROUND(CAST(1-((ISNULL(ROUND(CAST((SELECT VenCondicionVenta.PorcentajeUtilidad
+    FROM VenCondicionVenta 
+    WHERE VenCondicionVenta.Id = (
+    SELECT VenCondicionVenta_VenCondicionVentaArticulo.Id
+    FROM VenCondicionVenta_VenCondicionVentaArticulo 
+    WHERE VenCondicionVenta_VenCondicionVentaArticulo.InvArticuloId = InvArticulo.Id)) AS DECIMAL(38,4)),2,0),CAST(0 AS INT)))/100)AS DECIMAL(38,4)),2,0) AS UtilidadArticulo,
+    --UtilidadCategoria (Utilidad de la categoria, Utilidad es 1.00 NO considerar la utilidad para el calculo de precio)
+    ROUND(CAST(1-((ISNULL(ROUND(CAST((SELECT VenCondicionVenta.PorcentajeUtilidad 
+    FROM VenCondicionVenta 
+    WHERE VenCondicionVenta.id = (
+    SELECT VenCondicionVenta_VenCondicionVentaCategoria.Id 
+    FROM VenCondicionVenta_VenCondicionVentaCategoria 
+    WHERE VenCondicionVenta_VenCondicionVentaCategoria.InvCategoriaId = InvArticulo.InvCategoriaId)) AS DECIMAL(38,4)),2,0),CAST(0 AS INT)))/100)AS DECIMAL(38,4)),2,0) AS UtilidadCategoria
+    --Tabla principal
+    FROM InvArticulo
+    --Joins
+    LEFT JOIN InvLoteAlmacen ON InvLoteAlmacen.InvArticuloId = InvArticulo.Id
+    LEFT JOIN InvArticuloAtributo ON InvArticuloAtributo.InvArticuloId = InvArticulo.Id
+    LEFT JOIN InvAtributo ON InvAtributo.Id = InvArticuloAtributo.InvAtributoId 
+    --Condicionales
+    WHERE InvLoteAlmacen.Existencia > 0
+    AND (InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
+  	AND
+  	(ISNULL((SELECT
+    InvArticuloAtributo.InvArticuloId
+    FROM InvArticuloAtributo 
+    WHERE InvArticuloAtributo.InvAtributoId = 
+    (SELECT InvAtributo.Id
+    FROM InvAtributo 
+    WHERE 
+    InvAtributo.Descripcion = 'Dolarizados'
+    OR  InvAtributo.Descripcion = 'Giordany'
+    OR  InvAtributo.Descripcion = 'giordany') 
+    AND InvArticuloAtributo.InvArticuloId = InvArticulo.Id),CAST(0 AS INT))) <> 0
+  	--Esto lo borramos despues
+  	and InvArticulo.id = 30
+    --Agrupamientos
+    GROUP BY InvArticulo.Id, InvArticulo.CodigoArticulo, InvArticulo.Descripcion, InvArticulo.InvCategoriaId,InvArticulo.FinConceptoImptoIdCompra
+    --Ordanamiento
+    ORDER BY InvArticulo.Id ASC
+    ";
+    return $sql;
+  }
+  /******************************************************************************/
+  function sql_lotes_corrida($IdArticulo){
+    $sql ="
+    SELECT 
+    InvArticulo.id,
+		InvArticulo.CodigoArticulo,  
+		InvArticulo.Descripcion, 
+		InvLoteAlmacen.Existencia,
+		InvLoteAlmacen.InvLoteId, InvLote.Auditoria_FechaCreacion, 
+		InvLote.M_PrecioCompraBruto, InvLote.M_PrecioTroquelado
+		from InvLoteAlmacen, InvLote, InvArticulo
+		where InvAlmacenId = 1 
+		and InvLoteAlmacen.InvLoteId = InvLote.id and InvArticulo.Id = InvLote.InvArticuloId 
+		and InvLoteAlmacen.existencia > 0
+		and 
+		(ISNULL((SELECT
+		InvArticuloAtributo.InvArticuloId
+		FROM InvArticuloAtributo 
+		WHERE InvArticuloAtributo.InvAtributoId = 
+		(SELECT InvAtributo.Id
+		FROM InvAtributo 
+		WHERE 
+		InvAtributo.Descripcion = 'Dolarizados'
+		OR  InvAtributo.Descripcion = 'Giordany'
+		OR  InvAtributo.Descripcion = 'giordany') 
+		AND InvArticuloAtributo.InvArticuloId = InvArticulo.Id),CAST(0 AS INT))) <> 0		
+		AND InvArticulo.id = '$IdArticulo'
+		order by InvLote.M_PrecioTroquelado desc, InvLote.M_PrecioCompraBruto desc;
+    ";
+    return $sql;
+  }
 ?>

@@ -104,7 +104,13 @@
         ';    
 
       }else{
+        $InicioCarga = new DateTime("now");
+
         FG_Corrida_Precio($_GET['tipoCorrida']);
+
+        $FinCarga = new DateTime("now");
+        $IntervalCarga = $InicioCarga->diff($FinCarga);
+        echo'<br>Tiempo de carga: '.$IntervalCarga->format("%Y-%M-%D %H:%I:%S");
       }
     }else{
       mostrar_formulario($configuracion);
