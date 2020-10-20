@@ -2624,30 +2624,44 @@
   		$ExistenciaMayor =  "";
      	$loteMayor =  "";
     	$fechaMayor =  "";	   
-	    $CostoMayor = 0;
+	    $CostoMayor = $CostoMayorD = $TasaCambio = 0;
 
-	    while($row1 = sqlsrv_fetch_array($result1, SQLSRV_FETCH_ASSOC)) {
+	    while($row1 = sqlsrv_fetch_array($result1, SQLSRV_FETCH_ASSOC)) { 
+	    
+	    	$TasaMercado = FG_Tasa_Fecha($connCPharma,$row1["Auditoria_FechaCreacion"]->format('Y-m-d'));
 
-	    	if($row1["M_PrecioCompraBruto"]>$CostoMayor){
+	    	if($TasaMercado!=0){
+	    	
+		    	$CostoDolar = ($row1["M_PrecioCompraBruto"]/$TasaMercado);
 
-	    		$IdArticuloMayor = $row1["id"];
-	    		$CodigoArticuloMayor = $row1["CodigoArticulo"];
-	    		$DescripcionMayor = $row1["Descripcion"];
-	    		$ExistenciaMayor = $row1["Existencia"];
-	    		$loteMayor = $row1["InvLoteId"];
-	    		$fechaMayor = $row1["Auditoria_FechaCreacion"];
-	    		$CostoMayor = $row1["M_PrecioCompraBruto"];
-	    	}  	  			 
+		    	if($CostoDolar>$CostoMayorD){
+
+		    		$IdArticuloMayor = $row1["id"];
+		    		$CodigoArticuloMayor = $row1["CodigoArticulo"];
+		    		$DescripcionMayor = $row1["Descripcion"];
+		    		$ExistenciaMayor = $row1["Existencia"];
+		    		$loteMayor = $row1["InvLoteId"];
+		    		$fechaMayor = $row1["Auditoria_FechaCreacion"]->format('d-m-Y');
+		    		$CostoMayor = $row1["M_PrecioCompraBruto"];	
+		    		$CostoMayorD = $CostoDolar; 
+		    		$TasaCambio = $TasaMercado;   		
+		    	} 
+		    } 
+		    else{
+		    	$fechaMayor = $row1["Auditoria_FechaCreacion"]->format('d-m-Y');
+		    }	  			 
 	    }
 	    	echo "<br> $ $ $ $ $ $ $ $ $";
-	    	echo "<br> El mayor es: ";     
-  			echo "<br>".$IdArticuloMayor;
-  			echo "<br>".$CodigoArticuloMayor;
-  			echo "<br>".$DescripcionMayor;
-  			echo "<br>".$ExistenciaMayor;
-  			echo "<br>".$loteMayor;
-  			echo "<br>".$fechaMayor->format('Y-m-d');
-  			echo "<br>".$CostoMayor;
+	    	echo "<br> El mayor es: ";    
+  			echo "<br>IdArticuloMayor: ".$IdArticuloMayor;
+  			echo "<br>CodigoArticuloMayor: ".$CodigoArticuloMayor;
+  			echo "<br>DescripcionMayor: ".$DescripcionMayor;
+  			echo "<br>ExistenciaMayor: ".$ExistenciaMayor;
+  			echo "<br>loteMayor: ".$loteMayor;
+  			echo "<br>fechaMayor: ".$fechaMayor;
+  			echo "<br>CostoMayor: ".$CostoMayor;
+  			echo "<br>CostoMayorD: ".$CostoMayorD;
+  			echo "<br>TasaCambio: ".$TasaCambio;
   			echo "<br> $ $ $ $ $ $ $ $ $ <br>";	
 
   			echo "<br> * * * * * * * * * * * * * * * * * * * * * * * * * ";      
@@ -2716,7 +2730,7 @@
     OR  InvAtributo.Descripcion = 'giordany') 
     AND InvArticuloAtributo.InvArticuloId = InvArticulo.Id),CAST(0 AS INT))) <> 0
   	--Esto lo borramos despues
-  	and InvArticulo.id = 30
+  	--and InvArticulo.id = 30
     --Agrupamientos
     GROUP BY InvArticulo.Id, InvArticulo.CodigoArticulo, InvArticulo.Descripcion, InvArticulo.InvCategoriaId,InvArticulo.FinConceptoImptoIdCompra
     --Ordanamiento
