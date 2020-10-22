@@ -2592,7 +2592,7 @@
 		FUNCION: crea la etiqueta para el caso que corresponda
 		DESARROLLADO POR: SERGIO COVA
  	*/
- 	function FG_Corrida_Precio($tipoCorrida){
+ 	function FG_Corrida_Precio($tipoCorrida,$tasaCalculo){
  		
  		echo "* * * Desde la funcion, el tipo de corrida es: ".$tipoCorrida."* * * <br><br>";
 
@@ -2609,9 +2609,9 @@
       $CodigoBarra = $row["CodigoBarra"];
       $Descripcion = $row["Descripcion"];
       $Existencia = $row["Existencia"];
-      $Impuesto = $row["Impuesto"];
-      $UtilidadArticulo = $row["UtilidadArticulo"];
-      $UtilidadCategoria = $row["UtilidadCategoria"];	
+  		$IsIVA = $row["Impuesto"];
+			$UtilidadArticulo = $row["UtilidadArticulo"];
+			$UtilidadCategoria = $row["UtilidadCategoria"];
 
       echo "# # # ".json_encode($row)." # # #";                    
 
@@ -2644,7 +2644,7 @@
 		    		$fechaMayor = $row1["Auditoria_FechaCreacion"]->format('d-m-Y');
 		    		$CostoMayor = $row1["M_PrecioCompraBruto"];	
 		    		$CostoMayorD = $CostoDolar; 
-		    		$TasaCambio = $TasaMercado;   		
+		    		$TasaCambio = $TasaMercado;  		
 		    	} 
 		    } 
 		    else{
@@ -2659,10 +2659,21 @@
   			echo "<br>ExistenciaMayor: ".$ExistenciaMayor;
   			echo "<br>loteMayor: ".$loteMayor;
   			echo "<br>fechaMayor: ".$fechaMayor;
-  			echo "<br>CostoMayor: ".$CostoMayor;
+  			echo "<br>CostoMayorBolivar: ".$CostoMayor;
+  			echo "<br>CostoMayorDolar: ".$CostoMayorD;
+  			echo "<br>TasaMercadoFechaReg: ".$TasaCambio;
+  			echo "<br> ---------------------------------- <br>";	
+
+  			$costoBs = $CostoMayorD * $tasaCalculo;
+  			$precio = FG_Precio_Calculado_Alfa($UtilidadArticulo,$UtilidadCategoria,$IsIVA,$costoBs);
+
   			echo "<br>CostoMayorD: ".$CostoMayorD;
-  			echo "<br>TasaCambio: ".$TasaCambio;
-  			echo "<br> $ $ $ $ $ $ $ $ $ <br>";	
+  			echo "<br>tasaCalculo: ".$tasaCalculo;  		
+  			echo "<br>costoBs: ".$costoBs;
+  			echo "<br>UtilidadArticulo: ".$UtilidadArticulo;
+  			echo "<br>UtilidadCategoria: ".$UtilidadCategoria;
+  			echo "<br>IsIVA: ".$IsIVA;
+  			echo "<br>precio: ".$precio;
 
   			echo "<br> * * * * * * * * * * * * * * * * * * * * * * * * * ";      
     }

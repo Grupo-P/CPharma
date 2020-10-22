@@ -106,7 +106,7 @@
       }else{
         $InicioCarga = new DateTime("now");
 
-        FG_Corrida_Precio($_GET['tipoCorrida']);
+        FG_Corrida_Precio($_GET['tipoCorrida'],$configuracion[0]->valor);
 
         $FinCarga = new DateTime("now");
         $IntervalCarga = $InicioCarga->diff($FinCarga);
