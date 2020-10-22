@@ -2662,7 +2662,7 @@
   			echo "<br>CostoMayorBolivar: ".$CostoMayor;
   			echo "<br>CostoMayorDolar: ".$CostoMayorD;
   			echo "<br>TasaMercadoFechaReg: ".$TasaCambio;
-  			echo "<br> ---------------------------------- <br>";	
+  			echo "<br> ---------------------------------- <br>";
 
   			$costoBs = $CostoMayorD * $tasaCalculo;
   			$precio = FG_Precio_Calculado_Alfa($UtilidadArticulo,$UtilidadCategoria,$IsIVA,$costoBs);
@@ -2674,6 +2674,7 @@
   			echo "<br>UtilidadCategoria: ".$UtilidadCategoria;
   			echo "<br>IsIVA: ".$IsIVA;
   			echo "<br>precio: ".$precio;
+  			echo "<br>precio Ajustado al 0.01: ".(ceil($precio)+DecimalCorrida);
 
   			echo "<br> * * * * * * * * * * * * * * * * * * * * * * * * * ";      
     }
