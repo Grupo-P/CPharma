@@ -5,6 +5,7 @@ define("SigDolar","$");
 define("SigVe","Bs.S");
 define("Utilidad",0.77);
 define("Impuesto",1.16);
+define("DecimalCorrida",0.01);
 define("Version","CPharma v.6.2");
 define("_ConsultorDolar_","SI");
 /**********************************************************************************/
