@@ -6,6 +6,7 @@
 
 @section('content')
   <?php
+  	use compras\Configuracion;
     include(app_path().'\functions\config.php');
     include(app_path().'\functions\functions.php');
     include(app_path().'\functions\querys_mysql.php');
@@ -1565,6 +1566,70 @@
 ?>
 <!-- RECEPCION -->
 <!-------------------------------------------------------------------------------->
+<!-------------------------------------------------------------------------------->
+<!-- COSTOS -->
+<?php
+  if(Auth::user()->departamento == 'COSTOS'){
+?>
+	<!-- Modal COSTOS -->
+	<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  	<div class="modal-dialog modal-dialog-centered" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <h5 class="modal-title text-info" id="exampleModalCenterTitle"><i class="fas fa-bell text-info CP-beep"></i> Novedades</h5>
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	          <span aria-hidden="true">&times;</span>
+	        </button>
+	      </div>
+	      <div class="modal-body">
+	      	<label>Hola <b class="text-info">{{ Auth::user()->name }}</b>.</label>
+	      	<br/>
+	      	Estas usando<b class="text-info">{{$CPharmaVersion}}</b>, para el departamento de <b class="text-info">{{ Auth::user()->departamento }}</b>, esta version incluye las siguientes mejoras:<br/><br/></label>
+  			<ul style="list-style:none">
+        	<li class="card-text text-dark" style="display: inline;">
+					<i class="far fa-check-circle text-info" style="display: inline;"></i>
+					Desde ya esta disponible el modulo: 
+					<b class="text-info">Tasa Mercado</b>!!
+  				</li>
+  			</ul>  			
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-outline-info" data-dismiss="modal">Aceptar</button>
+	      </div>
+	    </div>
+  	</div>
+	</div>
+	<!-- Modal COSTOS -->
+	<!-- Dashboard COSTOS-->
+	<!-- Dolar -->
+	<div class="card-deck">
+		<div class="card border-secondary mb-3" style="width: 10rem;">	  	
+  		<div class="card-body text-left bg-secondary">
+	    		<h3 class="card-title">
+		    		<span class="card-text text-white">
+		    			<i class="fas fa-money-bill-alt"></i>
+		    			<?php
+								echo 'Tasa Mercado: '.$TasaMercado.' '.SigVe;
+							?>						
+		    		</span>
+	    		</h3>
+	    		<p class="card-text text-white">
+					<?php 
+						echo 'Ultima Actualizacion: '.$FechaTasaMercado;
+					?>
+	    		</p>
+  		</div>
+	  	<div class="card-footer bg-transparent border-secondary text-right">
+	  		<a href="/dolar/" class="btn btn-outline-secondary btn-sm">Visualizar</a>
+	  	</div>	
+		</div>
+	</div>
+	<!-- Dashboard COSTOS-->
+<?php
+  }
+?>
+<!-- COSTOS -->
+<!-------------------------------------------------------------------------------->
 <!-- ADMINISTRACION -->
 <?php
   if(Auth::user()->departamento == 'ADMINISTRACION'){
@@ -1752,7 +1817,8 @@
 <!-------------------------------------------------------------------------------->
 <!-- GERENCIA -->
 <?php
-  if(Auth::user()->departamento == 'GERENCIA'){
+  if(Auth::user()->departamento == 'GERENCIA'){  	
+  	$configuracion = Configuracion::where('variable','DolarCalculo')->get();  	
 ?>
 	<!-- Modal GERENCIA -->
 	<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -1786,7 +1852,7 @@
 	<!-- Dashboard GERENCIA-->
 	<div class="card-deck">		
 		<!-- Usuario -->
-		<div class="card border-warning mb-3" style="width: 14rem;">	  	
+		<div class="card border-warning mb-3" style="width: 10rem;">	  	
   		<div class="card-body text-left bg-warning">
     		<h2 class="card-title">
 	    		<span class="card-text text-white">	
@@ -1803,11 +1869,11 @@
 	  	</div>
 		</div>
 		<!-- Dolar -->
-		<div class="card border-secondary mb-3" style="width: 14rem;">	  	
+		<div class="card border-secondary mb-3" style="width: 10rem;">	  	
   		<div class="card-body text-left bg-secondary">
 	    		<h3 class="card-title">
 		    		<span class="card-text text-white">
-		    			<i class="fas fa-credit-card"></i>
+		    			<i class="fas fa-money-bill-alt"></i>
 		    			<?php
 								echo 'Tasa Mercado: '.$TasaMercado.' '.SigVe;
 							?>						
@@ -1824,7 +1890,7 @@
 	  	</div>	
 		</div>
 		<!-- Tasa Venta -->
-		<div class="card border-dark mb-3" style="width: 14rem;">	  	
+		<div class="card border-dark mb-3" style="width: 10em;">	  	
   		<div class="card-body text-left bg-dark">
     		<h3 class="card-title">
 	    		<span class="card-text text-white">
@@ -1844,6 +1910,28 @@
 	  		<a href="/tasaVenta/" class="btn btn-outline-dark btn-sm">Visualizar</a>
 	  	</div>
 		</div>	
+		<!-- Tasa Calculo -->
+		<div class="card border-dark mb-3" style="width: 10rem;">	  	
+	  		<div class="card-body text-left" style="background: #000;">
+	    		<h3 class="card-title">
+		    		<span class="card-text text-white">
+		    			<i class="fas fa-calculator"></i>
+		    			<?php
+							echo 'Tasa Calculo: '.number_format($configuracion[0]->valor,2,"," ,"." );
+						?>						
+		    		</span>
+	    		</h3>
+	    		<p class="card-text text-white">
+					<?php 
+						echo 'Ultima Actualizacion: '.$configuracion[0]->updated_at->format("d-m-Y h:i:s a");
+					?>
+	    		</p>
+	  		</div>
+		  	<div class="card-footer bg-transparent border-dark text-right">
+		  		<a href="/configuracion/" class="btn btn-outline-dark btn-sm">Visualizar</a>
+		  	</div>
+			</div>	
+		</div>
 	</div>
 
   <!-- MOVIMIENTOS -->
