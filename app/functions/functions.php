@@ -2593,21 +2593,21 @@
 		DESARROLLADO POR: SERGIO COVA
  	*/
  	function FG_Corrida_Precio($tipoCorrida,$tasaCalculo){
- 		
- 		echo "* * * Desde la funcion, el tipo de corrida es: ".$tipoCorrida."* * * <br><br>";
-
+ 		 		
  		$SedeConnection = FG_Mi_Ubicacion();
     $conn = FG_Conectar_Smartpharma($SedeConnection);
     $connCPharma = FG_Conectar_CPharma();
 
     $sql = sql_articulos_corrida();
     $result = sqlsrv_query($conn,$sql);
+
+    $fallas = "";
     
     while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
       $IdArticulo = $row["IdArticulo"];
       $CodigoInterno = $row["CodigoInterno"];
       $CodigoBarra = $row["CodigoBarra"];
-      $Descripcion = $row["Descripcion"];
+      $Descripcion = FG_Limpiar_Texto($row["Descripcion"]);
 			$Existencia = $row["Existencia"];
 	    $ExistenciaAlmacen1 = $row["ExistenciaAlmacen1"];
 	    $ExistenciaAlmacen2 = $row["ExistenciaAlmacen2"];
@@ -2621,22 +2621,11 @@
 	    $PrecioCompraBrutoAlmacen2 = $row["PrecioCompraBrutoAlmacen2"];
 	    $PrecioCompraBruto = $row["PrecioCompraBruto"];
 	    $CondicionExistencia = 'CON_EXISTENCIA';
-
-	    $PrecioActual = FG_Calculo_Precio_Alfa($Existencia,$ExistenciaAlmacen1,$ExistenciaAlmacen2,$IsTroquelado,$UtilidadArticulo,$UtilidadCategoria,$TroquelAlmacen1,$PrecioCompraBrutoAlmacen1,$TroquelAlmacen2,
-    	$PrecioCompraBrutoAlmacen2,$PrecioCompraBruto,$IsIVA,$CondicionExistencia);
-
-      echo "# # # ".json_encode($row)." # # #";                    
-
+	         
 	    $sql1 = sql_lotes_corrida($IdArticulo);
 	    $result1 = sqlsrv_query($conn,$sql1);
-
-	    $IdArticuloMayor =  "";
-	    $CodigoArticuloMayor =  "";
-     	$DescripcionMayor =  "";
-  		$ExistenciaMayor =  "";
-     	$loteMayor =  "";
-    	$fechaMayor =  "";	   
-	    $CostoMayor = $CostoMayorD = $TasaCambio = 0;
+	    
+	   $CostoMayorD = 0;
 
 	    while($row1 = sqlsrv_fetch_array($result1, SQLSRV_FETCH_ASSOC)) { 
 	    
@@ -2646,51 +2635,24 @@
 	    	
 		    	$CostoDolar = ($row1["M_PrecioCompraBruto"]/$TasaMercado);
 
-		    	if($CostoDolar>$CostoMayorD){
-
-		    		$IdArticuloMayor = $row1["id"];
-		    		$CodigoArticuloMayor = $row1["CodigoArticulo"];
-		    		$DescripcionMayor = $row1["Descripcion"];
-		    		$ExistenciaMayor = $row1["Existencia"];
-		    		$loteMayor = $row1["InvLoteId"];
-		    		$fechaMayor = $row1["Auditoria_FechaCreacion"]->format('d-m-Y');
-		    		$CostoMayor = $row1["M_PrecioCompraBruto"];	
-		    		$CostoMayorD = $CostoDolar; 
-		    		$TasaCambio = $TasaMercado;  		
+		    	if($CostoDolar>$CostoMayorD){		    	
+		    		$CostoMayorD = $CostoDolar; 		    	 		
 		    	} 
 		    } 
 		    else{
-		    	$fechaMayor = $row1["Auditoria_FechaCreacion"]->format('d-m-Y');
+		    	$fallas = $fallas."<br>No se logro actualizar el articulo: ".$Descripcion.
+		    	"Motivo: Fallo la tasa de mercado del dia ".$row1["Auditoria_FechaCreacion"]->format('d-m-Y');		    	
 		    }	  			 
-	    }
-	    	echo "<br> $ $ $ $ $ $ $ $ $";
-	    	echo "<br> El mayor es: ";    
-  			echo "<br>IdArticuloMayor: ".$IdArticuloMayor;
-  			echo "<br>CodigoArticuloMayor: ".$CodigoArticuloMayor;
-  			echo "<br>DescripcionMayor: ".$DescripcionMayor;
-  			echo "<br>ExistenciaMayor: ".$ExistenciaMayor;
-  			echo "<br>loteMayor: ".$loteMayor;
-  			echo "<br>fechaMayor: ".$fechaMayor;
-  			echo "<br>CostoMayorBolivar: ".$CostoMayor;
-  			echo "<br>CostoMayorDolar: ".$CostoMayorD;
-  			echo "<br>TasaMercadoFechaReg: ".$TasaCambio;
-  			echo "<br> ---------------------------------- <br>";
+	    }	    	
 
   			$costoBs = $CostoMayorD * $tasaCalculo;
   			$precio = FG_Precio_Calculado_Alfa($UtilidadArticulo,$UtilidadCategoria,$IsIVA,$costoBs);
-
-  			echo "<br>CostoMayorD: ".$CostoMayorD;
-  			echo "<br>tasaCalculo: ".$tasaCalculo;  		
-  			echo "<br>costoBs: ".$costoBs;
-  			echo "<br>UtilidadArticulo: ".$UtilidadArticulo;
-  			echo "<br>UtilidadCategoria: ".$UtilidadCategoria;
-  			echo "<br>IsIVA: ".$IsIVA;
-  			echo "<br>precio: ".$precio;
-  			echo "<br>precio Ajustado al 0.01: ".(ceil($precio)+DecimalCorrida);
-
-  			echo "<br><br>";
-
+  	
   			if($tipoCorrida=='subida'){
+
+  				$PrecioActual = FG_Calculo_Precio_Alfa($Existencia,$ExistenciaAlmacen1,$ExistenciaAlmacen2,$IsTroquelado,$UtilidadArticulo,$UtilidadCategoria,$TroquelAlmacen1,$PrecioCompraBrutoAlmacen1,$TroquelAlmacen2,
+    				$PrecioCompraBrutoAlmacen2,$PrecioCompraBruto,$IsIVA,$CondicionExistencia);
+
 		  		if($precio > $PrecioActual){
 		  				echo "<br>@@@@ El Precio Cambio";
 		  				echo "<br>Precio Nuevo: ".$precio;
@@ -2708,7 +2670,9 @@
 					echo "<br>Precio Nuevo: ".$precio;
 				}   
     }
-          
+
+    echo $fallas;
+
     mysqli_close($connCPharma);
 		sqlsrv_close($conn);
  	}
