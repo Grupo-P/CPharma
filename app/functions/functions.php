@@ -2601,6 +2601,8 @@
     $sql = sql_articulos_corrida();
     $result = sqlsrv_query($conn,$sql);
 
+    $cont_exito = $cont_falla = $cont_cambios = $cont_noCambio = 0;
+
     $fallas = "";
     
     while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
@@ -2640,6 +2642,7 @@
 		    	} 
 		    } 
 		    else{
+		    	$cont_falla++;
 		    	$fallas = $fallas."<br>No se logro actualizar el articulo: ".$Descripcion.
 		    	"Motivo: Fallo la tasa de mercado del dia ".$row1["Auditoria_FechaCreacion"]->format('d-m-Y');		    	
 		    }	  			 
@@ -2648,7 +2651,7 @@
   			$costoBs = $CostoMayorD * $tasaCalculo;
   			$precio = FG_Precio_Calculado_Alfa($UtilidadArticulo,$UtilidadCategoria,$IsIVA,$costoBs);
   	
-  			if($tipoCorrida=='subida'){
+  			if($tipoCorrida=='subida'){  				
 
   				$PrecioActual = FG_Calculo_Precio_Alfa($Existencia,$ExistenciaAlmacen1,$ExistenciaAlmacen2,$IsTroquelado,$UtilidadArticulo,$UtilidadCategoria,$TroquelAlmacen1,$PrecioCompraBrutoAlmacen1,$TroquelAlmacen2,
     				$PrecioCompraBrutoAlmacen2,$PrecioCompraBruto,$IsIVA,$CondicionExistencia);
@@ -2658,23 +2661,34 @@
 		  				echo "<br>Precio Nuevo: ".$precio;
 		  				echo "<br>Precio Anterior: ".$PrecioActual;
 		  				echo "<br> * * * * * * * * * * * * * * * * * * * * * * * * * ";
+		  				$cont_cambios++;
+		  				$cont_exito++;
 		  		}else{
 		  				echo "<br>@@@@ El Precio se mantiene";
 		  				echo "<br>Precio Propuesto: ".$precio;
 		  				echo "<br>Precio: ".$PrecioActual;
 		  				echo "<br> * * * * * * * * * * * * * * * * * * * * * * * * * ";
+		  				$cont_noCambio++;
+		  				$cont_exito++;
 		  		}	
 				} 
 				else if($tipoCorrida=='bajada'){
 					echo "<br>@@@@ El precio se cambia y sin validar";
 					echo "<br>Precio Nuevo: ".$precio;
+					$cont_cambios++;
+		  		$cont_exito++;
 				}   
     }
 
     echo $fallas;
+    echo "<br><br>Total Evaluados: ".($cont_exito+$cont_falla);
+    echo "<br>Exito: ".$cont_exito;
+    echo "<br>Fallas: ".$cont_falla;
+    echo "<br>Cambios: ".$cont_cambios;
+    echo "<br>Sin Cambios: ".$cont_noCambio;   
 
     mysqli_close($connCPharma);
-		sqlsrv_close($conn);
+		sqlsrv_close($conn);		
  	}
 ?>
 
