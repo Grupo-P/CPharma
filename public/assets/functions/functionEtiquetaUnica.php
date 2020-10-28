@@ -48,11 +48,11 @@
 				$Etiqueta = FG_Etiqueta_Unica($conn,$connCPharma,$IdArticulo,$Dolarizado,false,false);
 			}
 			else{
-				$Etiqueta = 'EL ARTICULO NO PERTENECE A LA CATEGORIA SELECCIONADA';
+				//$Etiqueta = 'EL ARTICULO NO PERTENECE A LA CATEGORIA SELECCIONADA';
 			} 
 		}
 		else{
-			$Etiqueta = 'EL ARTICULO NO PERTENECE A LA CATEGORIA SELECCIONADA';
+			//$Etiqueta = 'EL ARTICULO NO PERTENECE A LA CATEGORIA SELECCIONADA';
 		}
 		
 		return $Etiqueta;
