@@ -2685,7 +2685,13 @@
     echo "<br>Exito: ".$cont_exito;
     echo "<br>Fallas: ".$cont_falla;
     echo "<br>Cambios: ".$cont_cambios;
-    echo "<br>Sin Cambios: ".$cont_noCambio;   
+    echo "<br>Sin Cambios: ".$cont_noCambio;  
+
+    echo "<br>Corrida Ejecutada por: ".Auth::user()->name;
+    echo "<br>Corrida de tipo: ".$tipoCorrida;
+    echo "<br>Tasa de Calculo: ".$tasaCalculo;
+    echo "<br>Dia de la corrida: ".date('d-m-Y');
+    echo "<br>Hora de la corrida: ".date('h:i:s a');
 
     mysqli_close($connCPharma);
 		sqlsrv_close($conn);		
