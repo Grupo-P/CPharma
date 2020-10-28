@@ -2643,8 +2643,8 @@
 		    } 
 		    else{
 		    	$cont_falla++;
-		    	$fallas = $fallas."<br>No se logro actualizar el articulo: ".$Descripcion.
-		    	"Motivo: Fallo la tasa de mercado del dia ".$row1["Auditoria_FechaCreacion"]->format('d-m-Y');		    	
+		    	$fallas = $fallas."<br><br>No se logro actualizar el articulo: ".$Descripcion.
+		    	"<br>Motivo: Fallo la tasa de mercado del dia ".$row1["Auditoria_FechaCreacion"]->format('d-m-Y');		    	
 		    }	  			 
 	    }	    	
 
