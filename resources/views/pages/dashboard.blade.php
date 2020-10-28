@@ -2105,6 +2105,7 @@
 <!-- TECNOLOGIA -->
 <?php
   if(Auth::user()->departamento == 'TECNOLOGIA'){
+  	$configuracion = Configuracion::where('variable','DolarCalculo')->get();
 ?>
 	<!-- Modal TECNOLOGIA -->
 	<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -2194,7 +2195,27 @@
 	  	<div class="card-footer bg-transparent border-dark text-right">
 	  		<a href="/tasaVenta/" class="btn btn-outline-dark btn-sm">Visualizar</a>
 	  	</div>
-		</div>	
+		</div>
+		<div class="card border-dark mb-3" style="width: 10rem;">	  	
+	  		<div class="card-body text-left" style="background: #000;">
+	    		<h3 class="card-title">
+		    		<span class="card-text text-white">
+		    			<i class="fas fa-calculator"></i>
+		    			<?php
+							echo 'Tasa Calculo: '.number_format($configuracion[0]->valor,2,"," ,"." );
+						?>						
+		    		</span>
+	    		</h3>
+	    		<p class="card-text text-white">
+					<?php 
+						echo 'Ultima Actualizacion: '.$configuracion[0]->updated_at->format("d-m-Y h:i:s a");
+					?>
+	    		</p>
+	  		</div>
+		  	<div class="card-footer bg-transparent border-dark text-right">
+		  		<a href="/configuracion/" class="btn btn-outline-dark btn-sm">Visualizar</a>
+		  	</div>
+			</div>	
 	</div>
 	<!-- Dashboard TECNOLOGIA-->
 <?php
