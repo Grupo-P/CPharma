@@ -1288,8 +1288,13 @@
       <li class="nav-item">
         <a class="nav-link CP-Links-Menu" href="{{ url('/CorridaPrecios') }}">     
           <span data-feather="home"></span>
-          <i class="fas fa-money-bill-alt"></i>
+          <i class="fas fa-funnel-dollar"></i>
           Corrida de Precios<span class="sr-only">(current)</span>
+        </a>
+        <a class="nav-link CP-Links-Menu" href="{{ url('/AuditoriaCorridaPrecios') }}">     
+          <span data-feather="home"></span>
+          <i class="fas fa-search-dollar"></i>
+          Auditoria Corrida de Precios<span class="sr-only">(current)</span>
         </a>
       </li>      
     </div>

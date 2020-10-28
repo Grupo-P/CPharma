@@ -52,7 +52,7 @@
 
 @section('content')
 <h1 class="h5 text-info">
-        <i class="fas fa-file-invoice"></i>
+        <i class="fas fa-funnel-dollar"></i>
         Corrida de Precios
     </h1>
     <hr class="row align-items-start col-12">
@@ -106,12 +106,15 @@
       }else{
         $InicioCarga = new DateTime("now");
 
-        FG_Corrida_Precio($_GET['tipoCorrida'],$configuracion[0]->valor);
+        //FG_Corrida_Precio($_GET['tipoCorrida'],$configuracion[0]->valor);
 
         $connCPharma = FG_Conectar_CPharma();
         $sql = "SELECT * FROM auditoria_corridas ORDER BY id DESC LIMIT 1";
         $result = mysqli_query($connCPharma,$sql);
-        $row = mysqli_fetch_assoc($result);        
+        $row = mysqli_fetch_assoc($result); 
+
+        $tipocorrida = $row['tipocorrida'];
+        $tipocorrida = ($tipocorrida=='bajada')?'Subida/Bajada':$tipocorrida;
         
         echo'
         <hr class="row align-items-start col-12">
@@ -149,9 +152,10 @@
             </tr>
           </thead>
           <tbody>
+          <tr>
           ';
             echo '<td align="center"><strong>'.$row['id'].'</strong></td>';
-            echo '<td align="center">'.$row['tipocorrida'].'</td>';
+            echo '<td align="center">'.$tipocorrida.'</td>';
             echo '<td align="center">'.$row['operador'].'</td>';
             echo '<td align="center">'.$row['fecha'].'</td>';
             echo '<td align="center">'.$row['hora'].'</td>';
@@ -162,6 +166,7 @@
             echo '<td align="center">'.$row['cambios'].'</td>';
             echo '<td align="center">'.$row['nocambio'].'</td>';            
           echo'
+          </tr>
         </tbody>
       </table>
         ';
