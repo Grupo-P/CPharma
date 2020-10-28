@@ -108,6 +108,14 @@
 
         FG_Corrida_Precio($_GET['tipoCorrida'],$configuracion[0]->valor);
 
+        $connCPharma = FG_Conectar_CPharma();
+        $sql = "SELECT * FROM auditoria_corridas ORDER BY FECHA DESC LIMIT 1";
+        $result = mysqli_query($connCPharma,$sql);
+        $row = mysqli_fetch_assoc($result);
+        $evaluados = $row['evaluados'];
+        
+        
+
         $FinCarga = new DateTime("now");
         $IntervalCarga = $InicioCarga->diff($FinCarga);
         echo'<br>Tiempo de carga: '.$IntervalCarga->format("%Y-%M-%D %H:%I:%S");

@@ -1,4 +1,12 @@
 <?php
+	function MySQL_Guardar_Auditoria_Corrida($evaluados,$cont_exito,$cont_falla,$cont_cambios,$cont_noCambio,$operador,$tipoCorrida,$tasaCalculo,$fecha,$hora,$fallas) {
+		$sql = "
+		INSERT INTO auditoria_corridas (evaluados, exitos, fallas, cambios, nocambio, operador, tipocorrida, tasacalculo, fecha, hora, observacion)
+		VALUES 
+		('$evaluados','$cont_exito','$cont_falla','$cont_cambios','$cont_noCambio','$operador','$tipoCorrida','$tasaCalculo','$fecha','$hora','$fallas')
+		";
+		return $sql;
+	}
 /*Querys que son ejecutadas en el manejador de base de datos MYSQL*/
 	/**********************************************************************************/
 	/*

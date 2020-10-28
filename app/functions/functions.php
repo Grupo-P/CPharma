@@ -2693,6 +2693,12 @@
     echo "<br>Dia de la corrida: ".date('d-m-Y');
     echo "<br>Hora de la corrida: ".date('h:i:s a');
 
+    $evaluados = ($cont_exito+$cont_falla);
+    $operador = Auth::user()->name;
+
+    $sql2 = MySQL_Guardar_Auditoria_Corrida($evaluados,$cont_exito,$cont_falla,$cont_cambios,$cont_noCambio,$operador,$tipoCorrida,$tasaCalculo,date('d-m-Y'),date('h:i:s a'),$fallas);
+
+    mysqli_query($connCPharma,$sql2);
     mysqli_close($connCPharma);
 		sqlsrv_close($conn);		
  	}
