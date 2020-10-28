@@ -2628,6 +2628,7 @@
 	    $result1 = sqlsrv_query($conn,$sql1);
 	    
 	   $CostoMayorD = 0;
+	   $fechaActualizacion = date('Y-m-d h:i:s.0000000');
 
 	    while($row1 = sqlsrv_fetch_array($result1, SQLSRV_FETCH_ASSOC)) { 
 	    
@@ -2650,31 +2651,45 @@
 
   			$costoBs = $CostoMayorD * $tasaCalculo;
   			$precio = FG_Precio_Calculado_Alfa($UtilidadArticulo,$UtilidadCategoria,$IsIVA,$costoBs);
+  			$precio = ceil($precio)+0.01;
   	
   			if($tipoCorrida=='subida'){  				
 
   				$PrecioActual = FG_Calculo_Precio_Alfa($Existencia,$ExistenciaAlmacen1,$ExistenciaAlmacen2,$IsTroquelado,$UtilidadArticulo,$UtilidadCategoria,$TroquelAlmacen1,$PrecioCompraBrutoAlmacen1,$TroquelAlmacen2,
     				$PrecioCompraBrutoAlmacen2,$PrecioCompraBruto,$IsIVA,$CondicionExistencia);
 
-		  		if($precio > $PrecioActual){
-		  				echo "<br>@@@@ El Precio Cambio";
-		  				echo "<br>Precio Nuevo: ".$precio;
-		  				echo "<br>Precio Anterior: ".$PrecioActual;
+		  		if($precio > $PrecioActual){	  				
+	  				$sql_Troquel = SQL_Update_Troquel($IdArticulo,$precio,$fechaActualizacion);
+		  			sqlsrv_query($conn,$sql_Troquel);
+
 		  				echo "<br> * * * * * * * * * * * * * * * * * * * * * * * * * ";
-		  				$cont_cambios++;
-		  				$cont_exito++;
+		  				echo "<br>Articulo: ".$IdArticulo;
+		  				echo "<br>El Precio Cambio";
+		  				echo "<br>Precio Nuevo: ".$precio;
+		  				echo "<br>Precio Anterior: ".$PrecioActual;			  			
+		  				echo "<br> * * * * * * * * * * * * * * * * * * * * * * * * * ";
+	  				$cont_cambios++;
+	  				$cont_exito++;
 		  		}else{
-		  				echo "<br>@@@@ El Precio se mantiene";
+		  				echo "<br> / / / / / / / / / / / / / / / / / / / / / / / / / ";
+		  				echo "<br>Articulo: ".$IdArticulo;
+		  				echo "<br>El Precio se mantiene";
 		  				echo "<br>Precio Propuesto: ".$precio;
 		  				echo "<br>Precio: ".$PrecioActual;
-		  				echo "<br> * * * * * * * * * * * * * * * * * * * * * * * * * ";
+		  				echo "<br> / / / / / / / / / / / / / / / / / / / / / / / / / ";
 		  				$cont_noCambio++;
 		  				$cont_exito++;
 		  		}	
 				} 
-				else if($tipoCorrida=='bajada'){
-					echo "<br>@@@@ El precio se cambia y sin validar";
+				else if($tipoCorrida=='bajada'){					
+					$sql_Troquel = SQL_Update_Troquel($IdArticulo,$precio,$fechaActualizacion);
+		  		sqlsrv_query($conn,$sql_Troquel);
+
+					echo "<br> + + + + + + + + + + + + + + + + + + + + + + + + + + ";
+					echo "<br>Articulo: ".$IdArticulo;
+					echo "<br>El precio se cambia y sin validar";
 					echo "<br>Precio Nuevo: ".$precio;
+					echo "<br> + + + + + + + + + + + + + + + + + + + + + + + + + + ";
 					$cont_cambios++;
 		  		$cont_exito++;
 				}   

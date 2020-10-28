@@ -1773,4 +1773,24 @@
     ";
     return $sql;
   }
+  /**********************************************************************************/
+  /*
+    TITULO: SQL_Update_Troquel
+    FUNCION: actualiza el troquel del articulo
+    DESAROLLADO POR: SERGIO COVA
+  */
+  function SQL_Update_Troquel($IdArticulo,$precio,$fechaActualizacion) {
+    $sql = "
+        UPDATE InvLote 
+        SET M_PrecioTroquelado = '$precio', 
+        InvLote.Auditoria_FechaActualizacion = '$fechaActualizacion' 
+        FROM InvLote, invlotealmacen, InvArticulo
+        WHERE InvArticulo.id = InvLote.InvArticuloId 
+        AND invlote.id = invlotealmacen.InvLoteId 
+        AND InvLoteAlmacen.existencia > 0 
+        AND InvLoteAlmacen.InvAlmacenId = 1 
+        AND InvArticulo.id = '$IdArticulo'
+    ";
+    return $sql;
+  }
 ?>
