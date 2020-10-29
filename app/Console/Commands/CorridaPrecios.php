@@ -4,6 +4,7 @@ namespace compras\Console\Commands;
 
 use Illuminate\Console\Command;
 use compras\Auditoria;
+use compras\Configuracion;
 
 class CorridaPrecios extends Command
 {
@@ -37,8 +38,7 @@ class CorridaPrecios extends Command
      * @return mixed
      */
     public function handle()
-    {
-        use compras\Configuracion;
+    {        
         include(app_path().'\functions\config.php');
         include(app_path().'\functions\functions.php');
         include(app_path().'\functions\querys_mysql.php');
