@@ -2628,7 +2628,7 @@
 	    $result1 = sqlsrv_query($conn,$sql1);
 	    
 	   $CostoMayorD = 0;
-	   $fechaActualizacion = date('Y-m-d h:i:s.0000000');
+	   $fechaActualizacion = date('Y-m-d 07:07:07.0000007');
 
 	    while($row1 = sqlsrv_fetch_array($result1, SQLSRV_FETCH_ASSOC)) { 
 	    
