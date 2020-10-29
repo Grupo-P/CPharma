@@ -106,7 +106,7 @@
       }else{
         $InicioCarga = new DateTime("now");
 
-        FG_Corrida_Precio($_GET['tipoCorrida'],$configuracion[0]->valor);
+        FG_Corrida_Precio($_GET['tipoCorrida'],$configuracion[0]->valor,Auth::user()->name;);
 
         $connCPharma = FG_Conectar_CPharma();
         $sql = "SELECT * FROM auditoria_corridas ORDER BY id DESC LIMIT 1";

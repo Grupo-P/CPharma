@@ -33,12 +33,7 @@ class Kernel extends ConsoleKernel
 
         $schedule->command('Capturar:Categorias')->withoutOverlapping()->timezone('America/Caracas')->between('7:00', '10:10');
 
-        //$schedule->command('Capturar:CorridaPrecios')->withoutOverlapping();
-
-     		//$schedule->command('Capturar:DiasCero')->withoutOverlapping();
-        //$schedule->command('Capturar:Etiquetas')->withoutOverlapping();
-        //$schedule->command('Capturar:ProductosCaida')->withoutOverlapping();
-        //$schedule->command('Capturar:Categorias')->withoutOverlapping();
+        //$schedule->command('Capturar:CorridaPrecios')->withoutOverlapping();   		
     }
 
     /**

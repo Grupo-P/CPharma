@@ -38,12 +38,14 @@ class CorridaPrecios extends Command
      */
     public function handle()
     {
+        use compras\Configuracion;
         include(app_path().'\functions\config.php');
         include(app_path().'\functions\functions.php');
         include(app_path().'\functions\querys_mysql.php');
         include(app_path().'\functions\querys_sqlserver.php');
-
-        //Aqui debe ir el llamado a la funcion de corrida de precios
+    
+        $configuracion = Configuracion::where('variable','DolarCalculo')->get();        
+        FG_Corrida_Precio('subida/bajada',$configuracion[0]->valor,'SYSTEM');
 
         $Auditoria = new Auditoria();
         $Auditoria->accion = 'EJECUTAR';

@@ -2592,7 +2592,7 @@
 		FUNCION: crea la etiqueta para el caso que corresponda
 		DESARROLLADO POR: SERGIO COVA
  	*/
- 	function FG_Corrida_Precio($tipoCorrida,$tasaCalculo){
+ 	function FG_Corrida_Precio($tipoCorrida,$tasaCalculo,$user){
  		 		
  		$SedeConnection = FG_Mi_Ubicacion();
     $conn = FG_Conectar_Smartpharma($SedeConnection);
@@ -2660,58 +2660,25 @@
 
 		  		if($precio > $PrecioActual){	  				
 	  				$sql_Troquel = SQL_Update_Troquel($IdArticulo,$precio,$fechaActualizacion);
-		  			sqlsrv_query($conn,$sql_Troquel);
-
-		  				echo "<br> * * * * * * * * * * * * * * * * * * * * * * * * * ";
-		  				echo "<br>Articulo: ".$IdArticulo;
-		  				echo "<br>El Precio Cambio";
-		  				echo "<br>Precio Nuevo: ".$precio;
-		  				echo "<br>Precio Anterior: ".$PrecioActual;			  			
-		  				echo "<br> * * * * * * * * * * * * * * * * * * * * * * * * * ";
+		  			sqlsrv_query($conn,$sql_Troquel);		  			
 	  				$cont_cambios++;
 	  				$cont_exito++;
-		  		}else{
-		  				echo "<br> / / / / / / / / / / / / / / / / / / / / / / / / / ";
-		  				echo "<br>Articulo: ".$IdArticulo;
-		  				echo "<br>El Precio se mantiene";
-		  				echo "<br>Precio Propuesto: ".$precio;
-		  				echo "<br>Precio: ".$PrecioActual;
-		  				echo "<br> / / / / / / / / / / / / / / / / / / / / / / / / / ";
+		  		}else{		  				
 		  				$cont_noCambio++;
 		  				$cont_exito++;
 		  		}	
 				} 
 				else if($tipoCorrida=='bajada'){					
 					$sql_Troquel = SQL_Update_Troquel($IdArticulo,$precio,$fechaActualizacion);
-		  		sqlsrv_query($conn,$sql_Troquel);
-
-					echo "<br> + + + + + + + + + + + + + + + + + + + + + + + + + + ";
-					echo "<br>Articulo: ".$IdArticulo;
-					echo "<br>El precio se cambia y sin validar";
-					echo "<br>Precio Nuevo: ".$precio;
-					echo "<br> + + + + + + + + + + + + + + + + + + + + + + + + + + ";
+		  		sqlsrv_query($conn,$sql_Troquel);				
 					$cont_cambios++;
 		  		$cont_exito++;
 				}   
-    }
+    }   
 
-    echo $fallas;
-    echo "<br><br>Total Evaluados: ".($cont_exito+$cont_falla);
-    echo "<br>Exito: ".$cont_exito;
-    echo "<br>Fallas: ".$cont_falla;
-    echo "<br>Cambios: ".$cont_cambios;
-    echo "<br>Sin Cambios: ".$cont_noCambio;  
+    $evaluados = ($cont_exito+$cont_falla);   
 
-    echo "<br>Corrida Ejecutada por: ".Auth::user()->name;
-    echo "<br>Corrida de tipo: ".$tipoCorrida;
-    echo "<br>Tasa de Calculo: ".$tasaCalculo;
-    echo "<br>Dia de la corrida: ".date('d-m-Y');
-    echo "<br>Hora de la corrida: ".date('h:i:s a');
-
-    $evaluados = ($cont_exito+$cont_falla);
-    $operador = Auth::user()->name;
-
-    $sql2 = MySQL_Guardar_Auditoria_Corrida($evaluados,$cont_exito,$cont_falla,$cont_cambios,$cont_noCambio,$operador,$tipoCorrida,$tasaCalculo,date('d-m-Y'),date('h:i:s a'),$fallas);
+    $sql2 = MySQL_Guardar_Auditoria_Corrida($evaluados,$cont_exito,$cont_falla,$cont_cambios,$cont_noCambio,$user,$tipoCorrida,$tasaCalculo,date('d-m-Y'),date('h:i:s a'),$fallas);
 
     mysqli_query($connCPharma,$sql2);
     mysqli_close($connCPharma);
