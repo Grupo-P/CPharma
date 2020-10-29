@@ -45,7 +45,7 @@ class CorridaPrecios extends Command
         include(app_path().'\functions\querys_sqlserver.php');
     
         $configuracion = Configuracion::where('variable','DolarCalculo')->get();        
-        FG_Corrida_Precio('subida/bajada',$configuracion[0]->valor,'SYSTEM');
+        FG_Corrida_Precio('bajada',$configuracion[0]->valor,'SYSTEM');
 
         $Auditoria = new Auditoria();
         $Auditoria->accion = 'EJECUTAR';
