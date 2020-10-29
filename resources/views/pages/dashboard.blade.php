@@ -1868,12 +1868,35 @@
 	  		<a href="/usuario/" class="btn btn-outline-warning btn-sm">Visualizar</a>
 	  	</div>
 		</div>
+		
+		<!-- Tasa Venta -->
+		<div class="card border-dark mb-3" style="width: 14rem;">	  	
+  		<div class="card-body text-left bg-dark">
+    		<h3 class="card-title">
+	    		<span class="card-text text-white">
+	    			<i class="fas fa-credit-card"></i>
+	    			<?php
+							echo 'Tasa Venta: '.$Tasa.' '.SigVe;
+						?>						
+	    		</span>
+    		</h3>
+    		<p class="card-text text-white">
+				<?php 
+					echo 'Ultima Actualizacion: '.$tasaVenta;
+				?>
+    		</p>
+  		</div>
+	  	<div class="card-footer bg-transparent border-dark text-right">
+	  		<a href="/tasaVenta/" class="btn btn-outline-dark btn-sm">Visualizar</a>
+	  	</div>
+		</div>
+
 		<!-- Dolar -->
-		<div class="card border-secondary mb-3" style="width: 10rem;">	  	
+		<div class="card border-secondary mb-3" style="width: 14rem;">	  	
   		<div class="card-body text-left bg-secondary">
 	    		<h3 class="card-title">
 		    		<span class="card-text text-white">
-		    			<i class="fas fa-money-bill-alt"></i>
+		    			<i class="fas fa-credit-card"></i>
 		    			<?php
 								echo 'Tasa Mercado: '.$TasaMercado.' '.SigVe;
 							?>						
@@ -1889,27 +1912,7 @@
 	  		<a href="/dolar/" class="btn btn-outline-secondary btn-sm">Visualizar</a>
 	  	</div>	
 		</div>
-		<!-- Tasa Venta -->
-		<div class="card border-dark mb-3" style="width: 10em;">	  	
-  		<div class="card-body text-left bg-dark">
-    		<h3 class="card-title">
-	    		<span class="card-text text-white">
-	    			<i class="fas fa-credit-card"></i>
-	    			<?php
-						echo 'Tasa Venta: '.$Tasa;
-					?>						
-	    		</span>
-    		</h3>
-    		<p class="card-text text-white">
-				<?php 
-					echo 'Ultima Actualizacion: '.$tasaVenta;
-				?>
-    		</p>
-  		</div>
-	  	<div class="card-footer bg-transparent border-dark text-right">
-	  		<a href="/tasaVenta/" class="btn btn-outline-dark btn-sm">Visualizar</a>
-	  	</div>
-		</div>	
+		
 		<!-- Tasa Calculo -->
 		<div class="card border-dark mb-3" style="width: 10rem;">	  	
 	  		<div class="card-body text-left" style="background: #000;">
@@ -1930,7 +1933,8 @@
 		  	<div class="card-footer bg-transparent border-dark text-right">
 		  		<a href="/configuracion/" class="btn btn-outline-dark btn-sm">Visualizar</a>
 		  	</div>
-			</div>	
+			</div>
+
 		</div>
 	</div>
 
@@ -2154,27 +2158,7 @@
 	  		<a href="/usuario/" class="btn btn-outline-warning btn-sm">Visualizar</a>
 	  	</div>
 		</div>
-		<!-- Dolar -->
-		<div class="card border-secondary mb-3" style="width: 14rem;">	  	
-  		<div class="card-body text-left bg-secondary">
-	    		<h3 class="card-title">
-		    		<span class="card-text text-white">
-		    			<i class="fas fa-credit-card"></i>
-		    			<?php
-								echo 'Tasa Mercado: '.$TasaMercado.' '.SigVe;
-							?>						
-		    		</span>
-	    		</h3>
-	    		<p class="card-text text-white">
-					<?php 
-						echo 'Ultima Actualizacion: '.$FechaTasaMercado;
-					?>
-	    		</p>
-  		</div>
-	  	<div class="card-footer bg-transparent border-secondary text-right">
-	  		<a href="/dolar/" class="btn btn-outline-secondary btn-sm">Visualizar</a>
-	  	</div>	
-		</div>
+
 		<!-- Tasa Venta -->
 		<div class="card border-dark mb-3" style="width: 14rem;">	  	
   		<div class="card-body text-left bg-dark">
@@ -2196,6 +2180,30 @@
 	  		<a href="/tasaVenta/" class="btn btn-outline-dark btn-sm">Visualizar</a>
 	  	</div>
 		</div>
+
+		<!-- Dolar -->
+		<div class="card border-secondary mb-3" style="width: 14rem;">	  	
+  		<div class="card-body text-left bg-secondary">
+	    		<h3 class="card-title">
+		    		<span class="card-text text-white">
+		    			<i class="fas fa-credit-card"></i>
+		    			<?php
+								echo 'Tasa Mercado: '.$TasaMercado.' '.SigVe;
+							?>						
+		    		</span>
+	    		</h3>
+	    		<p class="card-text text-white">
+					<?php 
+						echo 'Ultima Actualizacion: '.$FechaTasaMercado;
+					?>
+	    		</p>
+  		</div>
+	  	<div class="card-footer bg-transparent border-secondary text-right">
+	  		<a href="/dolar/" class="btn btn-outline-secondary btn-sm">Visualizar</a>
+	  	</div>	
+		</div>
+		
+		<!-- Tasa Calculo -->
 		<div class="card border-dark mb-3" style="width: 10rem;">	  	
 	  		<div class="card-body text-left" style="background: #000;">
 	    		<h3 class="card-title">
