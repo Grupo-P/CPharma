@@ -2663,9 +2663,21 @@
 		  			sqlsrv_query($conn,$sql_Troquel);		  			
 	  				$cont_cambios++;
 	  				$cont_exito++;
+	  				echo "<br> * * * * * * * * * * * * * * * * * * * * * * * * * ";
+		  				echo "<br>Articulo: ".$IdArticulo;
+		  				echo "<br>El Precio Cambio";
+		  				echo "<br>Precio Nuevo: ".$precio;
+		  				echo "<br>Precio Anterior: ".$PrecioActual;			  			
+		  				echo "<br> * * * * * * * * * * * * * * * * * * * * * * * * * ";
 		  		}else{		  				
 		  				$cont_noCambio++;
 		  				$cont_exito++;
+		  				echo "<br> / / / / / / / / / / / / / / / / / / / / / / / / / ";
+		  				echo "<br>Articulo: ".$IdArticulo;
+		  				echo "<br>El Precio se mantiene";
+		  				echo "<br>Precio Propuesto: ".$precio;
+		  				echo "<br>Precio: ".$PrecioActual;
+		  				echo "<br> / / / / / / / / / / / / / / / / / / / / / / / / / ";
 		  		}	
 				} 
 				else if($tipoCorrida=='bajada'){					
@@ -2673,6 +2685,12 @@
 		  		sqlsrv_query($conn,$sql_Troquel);				
 					$cont_cambios++;
 		  		$cont_exito++;
+		  		echo "<br> / / / / / / / / / / / / / / / / / / / / / / / / / ";
+  				echo "<br>Articulo: ".$IdArticulo;
+  				echo "<br>El Precio se mantiene";
+  				echo "<br>Precio Propuesto: ".$precio;
+  				echo "<br>Precio: ".$PrecioActual;
+  				echo "<br> / / / / / / / / / / / / / / / / / / / / / / / / / ";
 				}   
     }   
 
@@ -2683,6 +2701,19 @@
     mysqli_query($connCPharma,$sql2);
     mysqli_close($connCPharma);
 		sqlsrv_close($conn);		
+
+ 		echo $fallas;
+    echo "<br><br>Total Evaluados: ".($cont_exito+$cont_falla);
+    echo "<br>Exito: ".$cont_exito;
+    echo "<br>Fallas: ".$cont_falla;
+    echo "<br>Cambios: ".$cont_cambios;
+    echo "<br>Sin Cambios: ".$cont_noCambio;  
+
+    echo "<br>Corrida Ejecutada por: ".Auth::user()->name;
+    echo "<br>Corrida de tipo: ".$tipoCorrida;
+    echo "<br>Tasa de Calculo: ".$tasaCalculo;
+    echo "<br>Dia de la corrida: ".date('d-m-Y');
+    echo "<br>Hora de la corrida: ".date('h:i:s a');
  	}
 ?>
 
