@@ -43,8 +43,9 @@ class CorridaPrecios extends Command
         include(app_path().'\functions\functions.php');
         include(app_path().'\functions\querys_mysql.php');
         include(app_path().'\functions\querys_sqlserver.php');
-    
-        /*
+        
+        //Corrida de precio con validacion de rango de fecha
+        /* 
         $configuracion = Configuracion::where('variable','DolarCalculo')->get();
         $rango_dias = (FG_Rango_Dias(date('Y-m-d'),$configuracion[0]->updated_at->format('Y-m-d'))); 
 
@@ -56,7 +57,14 @@ class CorridaPrecios extends Command
             $this->info('La corrida de precios fue ejecutada satisfactoriamente!');
         }
         */
-        
+       
+        //Corrida de precio sin validacion de rango de fecha
+        /*
+        $configuracion = Configuracion::where('variable','DolarCalculo')->get();
+        FG_Corrida_Precio('bajada',$configuracion[0]->valor,'SYSTEM');
+        $this->info('La corrida de precios fue ejecutada satisfactoriamente!');
+        */
+
         $Auditoria = new Auditoria();
         $Auditoria->accion = 'EJECUTAR';
         $Auditoria->tabla = 'CORRIDA DE PRECIOS';
