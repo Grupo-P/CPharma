@@ -2691,8 +2691,7 @@
 		  		echo "<br> / / / / / / / / / / / / / / / / / / / / / / / / / ";
   				echo "<br>Articulo: ".$IdArticulo;
   				echo "<br>El Precio se mantiene";
-  				echo "<br>Precio Propuesto: ".$precio;
-  				echo "<br>Precio: ".$PrecioActual;
+  				echo "<br>Precio Propuesto: ".$precio; 				
   				echo "<br> / / / / / / / / / / / / / / / / / / / / / / / / / ";
 				}   
     }   
