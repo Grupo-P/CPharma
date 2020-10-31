@@ -2636,8 +2636,7 @@
 
 	    	if($TasaMercado!=0){
 	    	
-		    	$CostoDolar = ($row1["M_PrecioCompraBruto"]/$TasaMercado);
-		    	//$CostoDolar = number_format($CostoDolar,2,"." ,"");
+		    	$CostoDolar = ($row1["M_PrecioCompraBruto"]/$TasaMercado);		    	
 		    	$CostoDolar = round($CostoDolar,2);
 
 		    	if($CostoDolar>$CostoMayorD){		    	
@@ -2667,21 +2666,21 @@
 	  				$cont_cambios++;
 	  				$cont_exito++;
 	  				echo "<br> * * * * * * * * * * * * * * * * * * * * * * * * * ";
-		  				echo "<br>Articulo: ".$IdArticulo;
-		  				echo "<br>El Precio Cambio";
-		  				echo "<br>Precio Nuevo: ".$precio;
-		  				echo "<br>Precio Anterior: ".$PrecioActual;			  			
-		  				echo "<br> * * * * * * * * * * * * * * * * * * * * * * * * * ";
+	  				echo "<br>Articulo: ".$IdArticulo;
+	  				echo "<br>El Precio Cambio";
+	  				echo "<br>Precio Nuevo: ".$precio;
+	  				echo "<br>Precio Anterior: ".$PrecioActual;			  			
+	  				echo "<br> * * * * * * * * * * * * * * * * * * * * * * * * * ";
 		  		}else{		  				
-		  				$cont_noCambio++;
-		  				$cont_exito++;
-		  				echo "<br> / / / / / / / / / / / / / / / / / / / / / / / / / ";
-		  				echo "<br>Articulo: ".$IdArticulo;
-		  				echo "<br>El Precio se mantiene";
-		  				echo "<br>Precio Propuesto: ".$precio;
-		  				echo "<br>Precio: ".$PrecioActual;
-		  				echo "<br> / / / / / / / / / / / / / / / / / / / / / / / / / ";
-		  		}	
+	  				$cont_noCambio++;
+	  				$cont_exito++;
+	  				echo "<br> / / / / / / / / / / / / / / / / / / / / / / / / / ";
+	  				echo "<br>Articulo: ".$IdArticulo;
+	  				echo "<br>El Precio se mantiene";
+	  				echo "<br>Precio Propuesto: ".$precio;
+	  				echo "<br>Precio: ".$PrecioActual;
+	  				echo "<br> / / / / / / / / / / / / / / / / / / / / / / / / / ";
+		  		}
 				} 
 				else if($tipoCorrida=='bajada'){					
 					$sql_Troquel = SQL_Update_Troquel($IdArticulo,$precio,$fechaActualizacion);

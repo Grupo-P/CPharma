@@ -44,16 +44,24 @@ class CorridaPrecios extends Command
         include(app_path().'\functions\querys_mysql.php');
         include(app_path().'\functions\querys_sqlserver.php');
     
-        //$configuracion = Configuracion::where('variable','DolarCalculo')->get();        
-        //FG_Corrida_Precio('bajada',$configuracion[0]->valor,'SYSTEM');
+        /*
+        $configuracion = Configuracion::where('variable','DolarCalculo')->get();
+        $rango_dias = (FG_Rango_Dias(date('Y-m-d'),$configuracion[0]->updated_at->format('Y-m-d'))); 
 
+        if($rango_dias>=3){        
+            $this->info('La corrida de precios no fue ejecutada, la tasa de calculo esta desactualizada!');
+        }
+        else{
+            FG_Corrida_Precio('bajada',$configuracion[0]->valor,'SYSTEM');
+            $this->info('La corrida de precios fue ejecutada satisfactoriamente!');
+        }
+        */
+        
         $Auditoria = new Auditoria();
         $Auditoria->accion = 'EJECUTAR';
         $Auditoria->tabla = 'CORRIDA DE PRECIOS';
         $Auditoria->registro = 'CPHARMA';
         $Auditoria->user = 'SYSTEM';
-        $Auditoria->save();
-
-        $this->info('La corrida de precios fue ejecutada satisfactoriamente!');
+        $Auditoria->save();    
     }
 }
