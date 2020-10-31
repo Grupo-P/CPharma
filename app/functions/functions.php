@@ -2637,6 +2637,8 @@
 	    	if($TasaMercado!=0){
 	    	
 		    	$CostoDolar = ($row1["M_PrecioCompraBruto"]/$TasaMercado);
+		    	//$CostoDolar = number_format($CostoDolar,2,"." ,"");
+		    	$CostoDolar = round($CostoDolar,2);
 
 		    	if($CostoDolar>$CostoMayorD){		    	
 		    		$CostoMayorD = $CostoDolar; 		    	 		
@@ -2651,6 +2653,7 @@
 
   			$costoBs = $CostoMayorD * $tasaCalculo;
   			$precio = FG_Precio_Calculado_Alfa($UtilidadArticulo,$UtilidadCategoria,$IsIVA,$costoBs);
+  			$precio = round($precio,2);
   			$precio = ceil($precio)+0.01;
   	
   			if($tipoCorrida=='subida'){  				
