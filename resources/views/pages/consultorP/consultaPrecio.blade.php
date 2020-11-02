@@ -116,7 +116,7 @@
       </thead>
     </table>
 
-    <table class="table table-borderless col-12" id="tablaResuldado">
+    <table class="table table-borderless table-striped col-12" id="tablaResuldado">
       <thead class="center">
         <th class="bg-success text-white border border-white"><h5>Código de barra</h5></th>
         <th class="bg-success text-white border border-white"><h5>Descripción</h5></th>
@@ -129,19 +129,19 @@
       </thead>
       <tbody>
         <tr>
-          <td align="center" class="text-black">
-            <b><p id="PCodBarrScan"></p></b>
+          <td align="center" class="text-danger">
+            <h4><b><p id="PCodBarrScan"></p></b></h4>
           </td>
-          <td align="center" class="text-black">
-            <b><p id="PDescripScan"></p></b>
+          <td align="center" class="text-danger">
+            <h4><b><p id="PDescripScan"></p></b></h4>
           </td>
-          <td align="center" class="text-black">
+          <td align="center" class="text-danger">
             <h4><b><p id="PPrecioScan"></p></b></h4>
           </td>
           <?php
           if (_ConsultorDolar_ == "SI") {
              echo '
-              <td align="center" class="text-black">
+              <td align="center" class="text-danger">
                 <h4><b><p id="PPrecioDolarScan"></p></b></h4>
               </td>
              ';
@@ -149,7 +149,7 @@
           ?>          
         </tr>
         <tr>
-          <td align="center" class="text-danger" colspan="4">
+          <td align="center" class="text-dark" colspan="4">
             <b><p>Nuestros precios incluyen IVA (En caso de aplicar)</p></b> 
           </td>
         </tr>
@@ -171,8 +171,8 @@
     <?php
       if (_ConsultorDolar_ == "SI") {
        echo ' <div clas="text-center bg-success">
-          <label class="text-danger text-center" style="font-size:1.2rem; margin-left:40%;">
-            <strong>Tasa del dia: '.SigVe.' '.$TasaVenta.'</strong>
+          <label class="text-danger text-center" style="font-size:1.5rem; margin-left:40%;">
+            <strong>Tasa del dia: '.SigVe.' '.number_format($TasaVenta,2,"," ,"." ).'</strong>
           </label>
         </div>';
       }      
@@ -404,7 +404,7 @@
                   i++;
                 }
                 nuevaFila += '<tr>';
-                nuevaFila += '<td align="center" class="text-danger" colspan="3">';
+                nuevaFila += '<td align="center" class="text-dark" colspan="3">';
                 nuevaFila += '<b><p>Nuestros precios incluyen IVA (En caso de aplicar)</p></b>';
                 nuevaFila += '</td>';
                 nuevaFila += '</tr>';
