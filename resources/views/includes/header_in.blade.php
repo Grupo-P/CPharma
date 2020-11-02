@@ -724,6 +724,16 @@
     </button>
     <div class="dropdown-menu">
       <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('/CorridaPrecios') }}">     
+          <span data-feather="home"></span>
+          <i class="fas fa-funnel-dollar"></i>
+          Corrida de Precios<span class="sr-only">(current)</span>
+        </a>
+        <a class="nav-link CP-Links-Menu" href="{{ url('/AuditoriaCorridaPrecios') }}">     
+          <span data-feather="home"></span>
+          <i class="fas fa-search-dollar"></i>
+          Auditoria Corrida de Precios<span class="sr-only">(current)</span>
+        </a>
         <a class="nav-link CP-Links-Menu" href="{{ url('/ArticulosExcel') }}">
           <span data-feather="home"></span>
           <i class="fas fa-file-excel"></i>
@@ -1073,8 +1083,18 @@
     <button type="button" class="btn btn-outline-info dropdown-toggle textoI" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
       <i class="fas fa-user-cog"></i> Tecnologia
     </button>
-    <div class="dropdown-menu" style="width:200px;">      
+    <div class="dropdown-menu">      
       <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('/CorridaPrecios') }}">     
+          <span data-feather="home"></span>
+          <i class="fas fa-funnel-dollar"></i>
+          Corrida de Precios<span class="sr-only">(current)</span>
+        </a>
+        <a class="nav-link CP-Links-Menu" href="{{ url('/AuditoriaCorridaPrecios') }}">     
+          <span data-feather="home"></span>
+          <i class="fas fa-search-dollar"></i>
+          Auditoria Corrida de Precios<span class="sr-only">(current)</span>
+        </a>
         <a class="nav-link CP-Links-Menu" href="{{ url('/ArticulosExcel') }}">
           <span data-feather="home"></span>
           <i class="fas fa-file-excel"></i>
@@ -1286,6 +1306,7 @@
     </button>   
     <div class="dropdown-menu">    
       <li class="nav-item">
+        <!--
         <a class="nav-link CP-Links-Menu" href="{{ url('/CorridaPrecios') }}">     
           <span data-feather="home"></span>
           <i class="fas fa-funnel-dollar"></i>
@@ -1296,6 +1317,7 @@
           <i class="fas fa-search-dollar"></i>
           Auditoria Corrida de Precios<span class="sr-only">(current)</span>
         </a>
+        -->
       </li>      
     </div>
   </div>

@@ -180,7 +180,7 @@
     }    
 	}else{
 		echo '
-      <h6 align="center" style="margin-top:50px; margin-bottom:150px;">Usted NO tiene permisos para acceder a este modulo</h6>';
+      <h6 align="center" class="text-danger" style="margin-top:50px; margin-bottom:150px; font-size:2rem;">Usted NO tiene permisos para acceder a este modulo</h6>';
 	}
 ?>
 
