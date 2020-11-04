@@ -2717,7 +2717,7 @@
     echo "<br>Cambios: ".$cont_cambios;
     echo "<br>Sin Cambios: ".$cont_noCambio;  
 
-    echo "<br>Corrida Ejecutada por: ".Auth::user()->name;
+    echo "<br>Corrida Ejecutada por: ".$user;
     echo "<br>Corrida de tipo: ".$tipoCorrida;
     echo "<br>Tasa de Calculo: ".$tasaCalculo;
     echo "<br>Dia de la corrida: ".date('d-m-Y');

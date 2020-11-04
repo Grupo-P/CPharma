@@ -43,27 +43,9 @@ class CorridaPrecios extends Command
         include(app_path().'\functions\functions.php');
         include(app_path().'\functions\querys_mysql.php');
         include(app_path().'\functions\querys_sqlserver.php');
-        
-        //Corrida de precio con validacion de rango de fecha
-        /* 
+                       
         $configuracion = Configuracion::where('variable','DolarCalculo')->get();
-        $rango_dias = (FG_Rango_Dias(date('Y-m-d'),$configuracion[0]->updated_at->format('Y-m-d'))); 
-
-        if($rango_dias>=3){        
-            $this->info('La corrida de precios no fue ejecutada, la tasa de calculo esta desactualizada!');
-        }
-        else{
-            FG_Corrida_Precio('bajada',$configuracion[0]->valor,'SYSTEM');
-            $this->info('La corrida de precios fue ejecutada satisfactoriamente!');
-        }
-        */
-       
-        //Corrida de precio sin validacion de rango de fecha
-        /*
-        $configuracion = Configuracion::where('variable','DolarCalculo')->get();
-        FG_Corrida_Precio('bajada',$configuracion[0]->valor,'SYSTEM');
-        $this->info('La corrida de precios fue ejecutada satisfactoriamente!');
-        */
+        FG_Corrida_Precio('bajada',$configuracion[0]->valor,'SYSTEM');    
 
         $Auditoria = new Auditoria();
         $Auditoria->accion = 'EJECUTAR';
@@ -71,5 +53,7 @@ class CorridaPrecios extends Command
         $Auditoria->registro = 'CPHARMA';
         $Auditoria->user = 'SYSTEM';
         $Auditoria->save();    
+
+        $this->info('La corrida de precios fue ejecutada satisfactoriamente!');
     }
 }
