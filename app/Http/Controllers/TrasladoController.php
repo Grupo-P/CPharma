@@ -110,10 +110,9 @@ class TrasladoController extends Controller
             $traslado->fecha_tasa = date('d-m-Y');
             $traslado->tasa = $tasa;
             $traslado->save();
-        /*FIN ENCABEZADO DEL TRASLADO*/
-        $configuracion = Configuracion::where('variable','DolarCalculo')->get();           
+        /*FIN ENCABEZADO DEL TRASLADO*/                   
         /*INICIO DETALLE DEL TRASLADO*/
-            FG_Traslado_Detalle($SedeConnection,$NumeroAjuste,$IdAjuste,$configuracion[0]->valor);
+            FG_Traslado_Detalle($SedeConnection,$NumeroAjuste,$IdAjuste);
         /*FIN DETALLE DEL TRASLADO*/
         /*INICIO AUDITORIA*/
             $Auditoria = new Auditoria();
