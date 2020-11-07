@@ -1025,7 +1025,7 @@
 
 		      $sqlCP = MySQL_Guardar_Traslado_Detalle($IdTraslado,$IdArticulo,$CodigoArticulo,$CodigoBarra,$Descripcion,$Gravado,$Dolarizado,$Cantidad,$costo_unit_bs_sin_iva,$costo_unit_usd_sin_iva,$total_imp_bs,$total_imp_usd,$total_bs,$total_usd,$date);
 		      mysqli_query($connCPharma,$sqlCP);
-	     // }
+	     	}
 	    }
     }
     sqlsrv_close($conn);
@@ -2769,9 +2769,7 @@
     echo "<br>Hora de la corrida: ".date('h:i:s a');
     */
  	}
-?>
-
-<?php
+ 	/***********************************************************************************/
   function sql_articulos_corrida(){
     $sql ="
     SELECT
@@ -2788,119 +2786,119 @@
     InvArticulo.Descripcion,    
     --Impuesto (1 SI aplica impuesto, 0 NO aplica impuesto)
     (ISNULL(InvArticulo.FinConceptoImptoIdCompra,CAST(0 AS INT))) AS Impuesto,
---Troquelado (0 NO es Troquelado, Id Articulo SI es Troquelado)
-    (ISNULL((SELECT
-    InvArticuloAtributo.InvArticuloId
-    FROM InvArticuloAtributo
-    WHERE InvArticuloAtributo.InvAtributoId =
-    (SELECT InvAtributo.Id
-    FROM InvAtributo
-    WHERE
-    InvAtributo.Descripcion = 'Troquelados'
-    OR  InvAtributo.Descripcion = 'troquelados')
-    AND InvArticuloAtributo.InvArticuloId = InvArticulo.Id),CAST(0 AS INT))) AS Troquelado,
---UtilidadArticulo (Utilidad del articulo, Utilidad es 1.00 NO considerar la utilidad para el calculo de precio)
-    ROUND(CAST(1-((ISNULL(ROUND(CAST((SELECT VenCondicionVenta.PorcentajeUtilidad
-        FROM VenCondicionVenta
-        WHERE VenCondicionVenta.Id = (
-        SELECT VenCondicionVenta_VenCondicionVentaArticulo.Id
-        FROM VenCondicionVenta_VenCondicionVentaArticulo
-        WHERE VenCondicionVenta_VenCondicionVentaArticulo.InvArticuloId = InvArticulo.Id)) AS DECIMAL(38,4)),2,0),CAST(0 AS INT)))/100)AS DECIMAL(38,4)),2,0) AS UtilidadArticulo,
---UtilidadCategoria (Utilidad de la categoria, Utilidad es 1.00 NO considerar la utilidad para el calculo de precio)
-    ROUND(CAST(1-((ISNULL(ROUND(CAST((SELECT VenCondicionVenta.PorcentajeUtilidad
-  FROM VenCondicionVenta
-  WHERE VenCondicionVenta.id = (
-    SELECT VenCondicionVenta_VenCondicionVentaCategoria.Id
-    FROM VenCondicionVenta_VenCondicionVentaCategoria
-    WHERE VenCondicionVenta_VenCondicionVentaCategoria.InvCategoriaId = InvArticulo.InvCategoriaId)) AS DECIMAL(38,4)),2,0),CAST(0 AS INT)))/100)AS DECIMAL(38,4)),2,0) AS UtilidadCategoria,
---Precio Troquel Almacen 1
-    (ROUND(CAST((SELECT TOP 1
-    InvLote.M_PrecioTroquelado
-    FROM InvLoteAlmacen
-    INNER JOIN InvLote ON InvLote.Id = InvLoteAlmacen.InvLoteId
-    WHERE(InvLoteAlmacen.InvAlmacenId = '1')
-    AND (InvLoteAlmacen.InvArticuloId = InvArticulo.Id)
-    AND (InvLoteAlmacen.Existencia>0)
-    ORDER BY invlote.M_PrecioTroquelado DESC)AS DECIMAL(38,2)),2,0)) AS TroquelAlmacen1,
---Precio Compra Bruto Almacen 1
-    (ROUND(CAST((SELECT TOP 1
-    InvLote.M_PrecioCompraBruto
-    FROM InvLoteAlmacen
-    INNER JOIN InvLote ON InvLote.Id = InvLoteAlmacen.InvLoteId
-    WHERE (InvLoteAlmacen.InvArticuloId = InvArticulo.Id)
-    AND (InvLoteAlmacen.Existencia>0)
-  AND (InvLoteAlmacen.InvAlmacenId = '1')
-    ORDER BY invlote.M_PrecioCompraBruto DESC)AS DECIMAL(38,2)),2,0)) AS PrecioCompraBrutoAlmacen1,
---Precio Troquel Almacen 2
-    (ROUND(CAST((SELECT TOP 1
-    InvLote.M_PrecioTroquelado
-    FROM InvLoteAlmacen
-    INNER JOIN InvLote ON InvLote.Id = InvLoteAlmacen.InvLoteId
-    WHERE(InvLoteAlmacen.InvAlmacenId = '2')
-    AND (InvLoteAlmacen.InvArticuloId = InvArticulo.Id)
-    AND (InvLoteAlmacen.Existencia>0)
-    ORDER BY invlote.M_PrecioTroquelado DESC)AS DECIMAL(38,2)),2,0)) AS TroquelAlmacen2,
---Precio Compra Bruto Almacen 2
-    (ROUND(CAST((SELECT TOP 1
-    InvLote.M_PrecioCompraBruto
-    FROM InvLoteAlmacen
-    INNER JOIN InvLote ON InvLote.Id = InvLoteAlmacen.InvLoteId
-    WHERE (InvLoteAlmacen.InvArticuloId = InvArticulo.Id)
-    AND (InvLoteAlmacen.Existencia>0)
-  AND (InvLoteAlmacen.InvAlmacenId = '2')
-    ORDER BY invlote.M_PrecioCompraBruto DESC)AS DECIMAL(38,2)),2,0)) AS PrecioCompraBrutoAlmacen2,
---Precio Compra Bruto
-    (ROUND(CAST((SELECT TOP 1
-    InvLote.M_PrecioCompraBruto
-    FROM InvLoteAlmacen
-    INNER JOIN InvLote ON InvLote.Id = InvLoteAlmacen.InvLoteId
-    WHERE (InvLoteAlmacen.InvArticuloId = InvArticulo.Id)
-    AND (InvLoteAlmacen.Existencia>0)
-    ORDER BY invlote.M_PrecioCompraBruto DESC)AS DECIMAL(38,2)),2,0)) AS PrecioCompraBruto,
---Existencia (Segun el almacen del filtro)
-    (ROUND(CAST((SELECT SUM (InvLoteAlmacen.Existencia) As Existencia
-                FROM InvLoteAlmacen
-                WHERE(InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
-                AND (InvLoteAlmacen.InvArticuloId = InvArticulo.Id)) AS DECIMAL(38,0)),2,0))  AS Existencia,
---ExistenciaAlmacen1 (Segun el almacen del filtro)
-    (ROUND(CAST((SELECT SUM (InvLoteAlmacen.Existencia) As Existencia
-                FROM InvLoteAlmacen
-                WHERE(InvLoteAlmacen.InvAlmacenId = 1)
-                AND (InvLoteAlmacen.InvArticuloId = InvArticulo.Id)) AS DECIMAL(38,0)),2,0))  AS ExistenciaAlmacen1,
---ExistenciaAlmacen2 (Segun el almacen del filtro)
-    (ROUND(CAST((SELECT SUM (InvLoteAlmacen.Existencia) As Existencia
-                FROM InvLoteAlmacen
-                WHERE(InvLoteAlmacen.InvAlmacenId = 2)
-                AND (InvLoteAlmacen.InvArticuloId = InvArticulo.Id)) AS DECIMAL(38,0)),2,0))  AS ExistenciaAlmacen2
-    --Tabla principal
-    FROM InvArticulo
-    --Joins
-    LEFT JOIN InvLoteAlmacen ON InvLoteAlmacen.InvArticuloId = InvArticulo.Id
-    LEFT JOIN InvArticuloAtributo ON InvArticuloAtributo.InvArticuloId = InvArticulo.Id
-    LEFT JOIN InvAtributo ON InvAtributo.Id = InvArticuloAtributo.InvAtributoId 
-    --Condicionales
-    WHERE InvLoteAlmacen.Existencia > 0
-    AND (InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
-  	AND
-  	(ISNULL((SELECT
-    InvArticuloAtributo.InvArticuloId
-    FROM InvArticuloAtributo 
-    WHERE InvArticuloAtributo.InvAtributoId = 
-    (SELECT InvAtributo.Id
-    FROM InvAtributo 
-    WHERE 
-    InvAtributo.Descripcion = 'Dolarizados'
-    OR  InvAtributo.Descripcion = 'Giordany'
-    OR  InvAtributo.Descripcion = 'giordany') 
-    AND InvArticuloAtributo.InvArticuloId = InvArticulo.Id),CAST(0 AS INT))) <> 0
-  	--Esto lo borramos despues
-  	--and InvArticulo.id = 30
-    --Agrupamientos
-    GROUP BY InvArticulo.Id, InvArticulo.CodigoArticulo, InvArticulo.Descripcion, InvArticulo.InvCategoriaId,InvArticulo.FinConceptoImptoIdCompra
-    --Ordanamiento
-    ORDER BY InvArticulo.Id ASC
-    ";
-    return $sql;
+		--Troquelado (0 NO es Troquelado, Id Articulo SI es Troquelado)
+		    (ISNULL((SELECT
+		    InvArticuloAtributo.InvArticuloId
+		    FROM InvArticuloAtributo
+		    WHERE InvArticuloAtributo.InvAtributoId =
+		    (SELECT InvAtributo.Id
+		    FROM InvAtributo
+		    WHERE
+		    InvAtributo.Descripcion = 'Troquelados'
+		    OR  InvAtributo.Descripcion = 'troquelados')
+		    AND InvArticuloAtributo.InvArticuloId = InvArticulo.Id),CAST(0 AS INT))) AS Troquelado,
+		--UtilidadArticulo (Utilidad del articulo, Utilidad es 1.00 NO considerar la utilidad para el calculo de precio)
+		    ROUND(CAST(1-((ISNULL(ROUND(CAST((SELECT VenCondicionVenta.PorcentajeUtilidad
+		        FROM VenCondicionVenta
+		        WHERE VenCondicionVenta.Id = (
+		        SELECT VenCondicionVenta_VenCondicionVentaArticulo.Id
+		        FROM VenCondicionVenta_VenCondicionVentaArticulo
+		        WHERE VenCondicionVenta_VenCondicionVentaArticulo.InvArticuloId = InvArticulo.Id)) AS DECIMAL(38,4)),2,0),CAST(0 AS INT)))/100)AS DECIMAL(38,4)),2,0) AS UtilidadArticulo,
+		--UtilidadCategoria (Utilidad de la categoria, Utilidad es 1.00 NO considerar la utilidad para el calculo de precio)
+		    ROUND(CAST(1-((ISNULL(ROUND(CAST((SELECT VenCondicionVenta.PorcentajeUtilidad
+		  FROM VenCondicionVenta
+		  WHERE VenCondicionVenta.id = (
+		    SELECT VenCondicionVenta_VenCondicionVentaCategoria.Id
+		    FROM VenCondicionVenta_VenCondicionVentaCategoria
+		    WHERE VenCondicionVenta_VenCondicionVentaCategoria.InvCategoriaId = InvArticulo.InvCategoriaId)) AS DECIMAL(38,4)),2,0),CAST(0 AS INT)))/100)AS DECIMAL(38,4)),2,0) AS UtilidadCategoria,
+		--Precio Troquel Almacen 1
+		    (ROUND(CAST((SELECT TOP 1
+		    InvLote.M_PrecioTroquelado
+		    FROM InvLoteAlmacen
+		    INNER JOIN InvLote ON InvLote.Id = InvLoteAlmacen.InvLoteId
+		    WHERE(InvLoteAlmacen.InvAlmacenId = '1')
+		    AND (InvLoteAlmacen.InvArticuloId = InvArticulo.Id)
+		    AND (InvLoteAlmacen.Existencia>0)
+		    ORDER BY invlote.M_PrecioTroquelado DESC)AS DECIMAL(38,2)),2,0)) AS TroquelAlmacen1,
+		--Precio Compra Bruto Almacen 1
+		    (ROUND(CAST((SELECT TOP 1
+		    InvLote.M_PrecioCompraBruto
+		    FROM InvLoteAlmacen
+		    INNER JOIN InvLote ON InvLote.Id = InvLoteAlmacen.InvLoteId
+		    WHERE (InvLoteAlmacen.InvArticuloId = InvArticulo.Id)
+		    AND (InvLoteAlmacen.Existencia>0)
+		  AND (InvLoteAlmacen.InvAlmacenId = '1')
+		    ORDER BY invlote.M_PrecioCompraBruto DESC)AS DECIMAL(38,2)),2,0)) AS PrecioCompraBrutoAlmacen1,
+		--Precio Troquel Almacen 2
+		    (ROUND(CAST((SELECT TOP 1
+		    InvLote.M_PrecioTroquelado
+		    FROM InvLoteAlmacen
+		    INNER JOIN InvLote ON InvLote.Id = InvLoteAlmacen.InvLoteId
+		    WHERE(InvLoteAlmacen.InvAlmacenId = '2')
+		    AND (InvLoteAlmacen.InvArticuloId = InvArticulo.Id)
+		    AND (InvLoteAlmacen.Existencia>0)
+		    ORDER BY invlote.M_PrecioTroquelado DESC)AS DECIMAL(38,2)),2,0)) AS TroquelAlmacen2,
+		--Precio Compra Bruto Almacen 2
+		    (ROUND(CAST((SELECT TOP 1
+		    InvLote.M_PrecioCompraBruto
+		    FROM InvLoteAlmacen
+		    INNER JOIN InvLote ON InvLote.Id = InvLoteAlmacen.InvLoteId
+		    WHERE (InvLoteAlmacen.InvArticuloId = InvArticulo.Id)
+		    AND (InvLoteAlmacen.Existencia>0)
+		  AND (InvLoteAlmacen.InvAlmacenId = '2')
+		    ORDER BY invlote.M_PrecioCompraBruto DESC)AS DECIMAL(38,2)),2,0)) AS PrecioCompraBrutoAlmacen2,
+		--Precio Compra Bruto
+		    (ROUND(CAST((SELECT TOP 1
+		    InvLote.M_PrecioCompraBruto
+		    FROM InvLoteAlmacen
+		    INNER JOIN InvLote ON InvLote.Id = InvLoteAlmacen.InvLoteId
+		    WHERE (InvLoteAlmacen.InvArticuloId = InvArticulo.Id)
+		    AND (InvLoteAlmacen.Existencia>0)
+		    ORDER BY invlote.M_PrecioCompraBruto DESC)AS DECIMAL(38,2)),2,0)) AS PrecioCompraBruto,
+		--Existencia (Segun el almacen del filtro)
+		    (ROUND(CAST((SELECT SUM (InvLoteAlmacen.Existencia) As Existencia
+		                FROM InvLoteAlmacen
+		                WHERE(InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
+		                AND (InvLoteAlmacen.InvArticuloId = InvArticulo.Id)) AS DECIMAL(38,0)),2,0))  AS Existencia,
+		--ExistenciaAlmacen1 (Segun el almacen del filtro)
+		    (ROUND(CAST((SELECT SUM (InvLoteAlmacen.Existencia) As Existencia
+		                FROM InvLoteAlmacen
+		                WHERE(InvLoteAlmacen.InvAlmacenId = 1)
+		                AND (InvLoteAlmacen.InvArticuloId = InvArticulo.Id)) AS DECIMAL(38,0)),2,0))  AS ExistenciaAlmacen1,
+		--ExistenciaAlmacen2 (Segun el almacen del filtro)
+		    (ROUND(CAST((SELECT SUM (InvLoteAlmacen.Existencia) As Existencia
+		                FROM InvLoteAlmacen
+		                WHERE(InvLoteAlmacen.InvAlmacenId = 2)
+		                AND (InvLoteAlmacen.InvArticuloId = InvArticulo.Id)) AS DECIMAL(38,0)),2,0))  AS ExistenciaAlmacen2
+	    --Tabla principal
+	    FROM InvArticulo
+	    --Joins
+	    LEFT JOIN InvLoteAlmacen ON InvLoteAlmacen.InvArticuloId = InvArticulo.Id
+	    LEFT JOIN InvArticuloAtributo ON InvArticuloAtributo.InvArticuloId = InvArticulo.Id
+	    LEFT JOIN InvAtributo ON InvAtributo.Id = InvArticuloAtributo.InvAtributoId 
+	    --Condicionales
+	    WHERE InvLoteAlmacen.Existencia > 0
+	    AND (InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
+	  	AND
+	  	(ISNULL((SELECT
+	    InvArticuloAtributo.InvArticuloId
+	    FROM InvArticuloAtributo 
+	    WHERE InvArticuloAtributo.InvAtributoId = 
+	    (SELECT InvAtributo.Id
+	    FROM InvAtributo 
+	    WHERE 
+	    InvAtributo.Descripcion = 'Dolarizados'
+	    OR  InvAtributo.Descripcion = 'Giordany'
+	    OR  InvAtributo.Descripcion = 'giordany') 
+	    AND InvArticuloAtributo.InvArticuloId = InvArticulo.Id),CAST(0 AS INT))) <> 0
+	  	--Esto lo borramos despues
+	  	--and InvArticulo.id = 30
+	    --Agrupamientos
+	    GROUP BY InvArticulo.Id, InvArticulo.CodigoArticulo, InvArticulo.Descripcion, InvArticulo.InvCategoriaId,InvArticulo.FinConceptoImptoIdCompra
+	    --Ordanamiento
+	    ORDER BY InvArticulo.Id ASC
+	    ";
+	    return $sql;
   }
   /******************************************************************************/
   function sql_lotes_corrida($IdArticulo){
@@ -3009,5 +3007,5 @@
 
 		print_r($array_result);
 		return $array_result;		
-  }
+  }  
 ?>
