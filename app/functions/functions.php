@@ -777,13 +777,14 @@
 		FUNCION: Ejecuta las validaciones para el traslado detalle
 		DESARROLLADO POR: SERGIO COVA
 	 */
-	function FG_Traslado_Detalle($SedeConnection,$NumeroAjuste,$IdAjuste) {
+	function FG_Traslado_Detalle($SedeConnection,$NumeroAjuste,$IdAjuste,$TasaCalculo) {
     $conn = FG_Conectar_Smartpharma($SedeConnection);
     $connCPharma = FG_Conectar_CPharma();
+    $array_result = array();
 
     $sql = SQL_Articulos_Ajuste($IdAjuste);
     $result = sqlsrv_query($conn,$sql);
-   
+  
     while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
       $IdArticulo = $row["InvArticuloId"];
       $Cantidad = $row["Cantidad"];
@@ -838,7 +839,7 @@
 
 		    $UtilidadSE = FG_Utilidad_Alfa($UtilidadArticuloSE,$UtilidadCategoriaSE);
 
-      	if($Dolarizado=='SI') {
+      	if($Dolarizado=='SI') {      	
         	$TasaActualSE = FG_Tasa_Fecha($connCPharma,date('Y-m-d'));
         	$PrecioSE = FG_Calculo_Precio_Alfa($ExistenciaSE,$ExistenciaAlmacen1SE,$ExistenciaAlmacen2SE,$IsTroqueladoSE,$UtilidadArticuloSE,$UtilidadCategoriaSE,$TroquelAlmacen1SE,$PrecioCompraBrutoAlmacen1SE,$TroquelAlmacen2SE, $PrecioCompraBrutoAlmacen2SE,$PrecioCompraBrutoSE,$IsIVASE,$CondicionExistenciaSE);
 
@@ -943,17 +944,27 @@
 	      else{
 
 	      	if($Dolarizado=='SI') {
-	        $TasaActual = FG_Tasa_Fecha($connCPharma,date('Y-m-d'));
-	        $Precio = FG_Calculo_Precio_Alfa($Existencia,$ExistenciaAlmacen1,$ExistenciaAlmacen2,$IsTroquelado,$UtilidadArticulo,$UtilidadCategoria,$TroquelAlmacen1,$PrecioCompraBrutoAlmacen1,$TroquelAlmacen2,$PrecioCompraBrutoAlmacen2,$PrecioCompraBruto,$IsIVA,$CondicionExistencia);
+	      	
+	      		$array_result = FG_costo_mayor($IdArticulo,$IdLote,$CondicionExistenciaSE,$TasaCalculo);
+	      		if($array_result['fallas']==""){
+	      			echo 'Se presento una o varias fallas, a coninuacion se presentan en detalle: <br>'.$array_result['fallas'];
+	      			die;
+	      		}
+	      		else{
+	      			$costo_unit_bs_sin_iva = round($array_result['costo_D'],2);
+	      		}
+
+	        //$TasaActual = FG_Tasa_Fecha($connCPharma,date('Y-m-d'));
+	        //$Precio = FG_Calculo_Precio_Alfa($Existencia,$ExistenciaAlmacen1,$ExistenciaAlmacen2,$IsTroquelado,$UtilidadArticulo,$UtilidadCategoria,$TroquelAlmacen1,$PrecioCompraBrutoAlmacen1,$TroquelAlmacen2,$PrecioCompraBrutoAlmacen2,$PrecioCompraBruto,$IsIVA,$CondicionExistencia);
 
 	        if($Gravado=='SI' && $Utilidad!= 1){
-	          $costo_unit_bs_sin_iva = ($Precio/Impuesto)*$Utilidad;
-	          $costo_unit_usd_sin_iva = round(($costo_unit_bs_sin_iva/$TasaActual),2);
+	          //$costo_unit_bs_sin_iva = ($Precio/Impuesto)*$Utilidad;
+	          //$costo_unit_usd_sin_iva = round(($costo_unit_bs_sin_iva/$TasaActual),2);
 	          $total_imp_usd = round(($costo_unit_usd_sin_iva*$Cantidad)*(Impuesto-1),2);
 	        }
 	        else if($Gravado== 'NO' && $Utilidad!= 1){
-	          $costo_unit_bs_sin_iva = ($Precio)*$Utilidad;
-	          $costo_unit_usd_sin_iva = round(($costo_unit_bs_sin_iva/$TasaActual),2);
+	          //$costo_unit_bs_sin_iva = ($Precio)*$Utilidad;
+	          //$costo_unit_usd_sin_iva = round(($costo_unit_bs_sin_iva/$TasaActual),2);
 	          $total_imp_usd = 0.00;
 	        }
 	        $total_usd = round((($costo_unit_usd_sin_iva*$Cantidad)+$total_imp_usd),2);
@@ -2887,5 +2898,85 @@
 		order by InvLote.M_PrecioTroquelado desc, InvLote.M_PrecioCompraBruto desc;
     ";
     return $sql;
+  }
+  /*****************************************************************************/
+  function sql_lotes_corrida_especifico($IdArticulo,$IdLote){
+    $sql ="
+    SELECT
+    InvArticulo.id,
+		InvArticulo.CodigoArticulo,  
+		InvArticulo.Descripcion, 
+		InvLoteAlmacen.Existencia,
+		InvLoteAlmacen.InvLoteId, InvLote.Auditoria_FechaCreacion, 
+		InvLote.M_PrecioCompraBruto, InvLote.M_PrecioTroquelado
+		from InvLoteAlmacen, InvLote, InvArticulo
+		where InvAlmacenId = 1
+		and InvLoteAlmacen.InvLoteId = InvLote.id and InvArticulo.Id = InvLote.InvArticuloId 		
+		and 
+		(ISNULL((SELECT
+		InvArticuloAtributo.InvArticuloId
+		FROM InvArticuloAtributo 
+		WHERE InvArticuloAtributo.InvAtributoId = 
+		(SELECT InvAtributo.Id
+		FROM InvAtributo 
+		WHERE 
+		InvAtributo.Descripcion = 'Dolarizados'
+		OR  InvAtributo.Descripcion = 'Giordany'
+		OR  InvAtributo.Descripcion = 'giordany') 
+		AND InvArticuloAtributo.InvArticuloId = InvArticulo.Id),CAST(0 AS INT))) <> 0		
+		AND InvArticulo.id = '$IdArticulo'
+		and InvLote.id = '$IdLote'
+		order by InvLote.M_PrecioTroquelado desc, InvLote.M_PrecioCompraBruto desc;
+    ";
+    return $sql;
+  }
+  /******************************************************************************/
+  function FG_costo_mayor($IdArticulo,$IdLote,$condicionExistencia,$tasaCalculo){
+  	$SedeConnection = FG_Mi_Ubicacion();
+    $conn = FG_Conectar_Smartpharma($SedeConnection);
+    $connCPharma = FG_Conectar_CPharma();
+    $fallas = "";
+
+ 		if($condicionExistencia=='CON_EXISTENCIA'){
+ 			$sql1 = sql_lotes_corrida($IdArticulo);
+ 		}
+ 		else if($condicionExistencia=='SIN_EXISTENCIA'){
+ 			$sql1 = sql_lotes_corrida_especifico($IdArticulo,$IdLote);
+ 		}
+ 			
+    $result1 = sqlsrv_query($conn,$sql1);
+	    
+    $array_result = array();
+   	$CostoMayorD = 0;	   
+
+	    while($row1 = sqlsrv_fetch_array($result1, SQLSRV_FETCH_ASSOC)) { 
+	    
+	    	$TasaMercado = FG_Tasa_Fecha($connCPharma,$row1["Auditoria_FechaCreacion"]->format('Y-m-d'));
+
+	    	if($TasaMercado!=0){
+	    	
+		    	$CostoDolar = ($row1["M_PrecioCompraBruto"]/$TasaMercado);		    	
+		    	$CostoDolar = round($CostoDolar,2);
+
+		    	if($CostoDolar>$CostoMayorD){	    	
+		    		$CostoMayorD = $CostoDolar; 		    	 		
+		    	}
+		    } 
+		    else{		    	
+		    	$fallas = $fallas."<br><br>No se logro actualizar el articulo: ".$Descripcion.
+		    	"<br>Motivo: Fallo la tasa de mercado del dia ".$row1["Auditoria_FechaCreacion"]->format('d-m-Y');		    	
+		    }	  			 
+	    }	    	
+
+			$costoBs = $CostoMayorD * $tasaCalculo;
+			$array_result['fallas'] = $fallas;  			
+			$array_result['costo_D'] = $CostoMayorD;
+			$array_result['costo_Bs'] = $costoBs;			
+
+		mysqli_close($connCPharma);
+		sqlsrv_close($conn);
+
+		print_r($array_result);
+		return $array_result;		
   }
 ?>

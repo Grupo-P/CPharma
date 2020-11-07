@@ -7,6 +7,7 @@ use compras\Auditoria;
 use compras\Traslado;
 use compras\Sede;
 use compras\User;
+use compras\Configuracion;
 
 class TrasladoController extends Controller
 {
@@ -110,8 +111,9 @@ class TrasladoController extends Controller
             $traslado->tasa = $tasa;
             $traslado->save();
         /*FIN ENCABEZADO DEL TRASLADO*/
+        $configuracion = Configuracion::where('variable','DolarCalculo')->get();           
         /*INICIO DETALLE DEL TRASLADO*/
-            FG_Traslado_Detalle($SedeConnection,$NumeroAjuste,$IdAjuste);
+            FG_Traslado_Detalle($SedeConnection,$NumeroAjuste,$IdAjuste,$configuracion[0]->valor);
         /*FIN DETALLE DEL TRASLADO*/
         /*INICIO AUDITORIA*/
             $Auditoria = new Auditoria();
