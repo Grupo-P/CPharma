@@ -106,9 +106,9 @@
 		    		<th scope="row">Total Impuesto Bs.</th>
 		    		<th scope="row">Total Impuesto $.</th>
 		    		<th scope="row">Total Bs.</th>
-		    		<th scope="row">Total $.</th>
-		    		<th scope="row">Conteo Origen</th>
-		    		<th scope="row">Conteo Destino</th>
+		    		<th scope="row">Total $.</th>		    		
+		    		<th scope="row">Sede Origen</th>		    			    	
+		    		<th scope="row">Sede Destino</th>
 		    </tr>
 		    </thead>
 					<?php
@@ -118,6 +118,46 @@
 	</table>
 	<?php $tasa = number_format(floatval($traslado->tasa),2,"," ,"." ); ?>
 	<span>Nota: La tasa usada para el calculo fue: <strong>{{$tasa}}</strong> tasa valida para la fecha: <strong>{{$traslado->fecha_tasa}}</strong>.</span>
+
+	<br><br><br>
+	<label><strong>Sede Origen - Comentarios / Apuntes</strong></label>
+	<br>		
+	<div style="width:100%;height:90px;border:1px solid black;"></div>
+	<br><br>
+	<label><strong>Sede Destino - Comentarios / Apuntes</strong></label>
+	<br>		
+	<div style="width:100%;height:90px;border:1px solid black;"></div>	
+	<br><br>
+	<table>
+		<tr>
+			<th style="width:350px;">Sede Origen</th>
+			<th style="width:350px;">Sede Destino</th>
+		</tr>
+		<tr>
+			<th class="text-left">Preparado Por</th>
+			<th class="text-left">Recibido Por</th>
+		</tr>
+		<tr>
+			<td class="text-left">Nombre:</td>
+			<td class="text-left">Nombre:</td>
+		</tr>
+		<tr>
+			<td class="text-left">Apellido:</td>
+			<td class="text-left">Apellido:</td>
+		</tr>
+		<tr>
+			<td class="text-left">Fecha:</td>
+			<td class="text-left">Fecha:</td>
+		</tr>
+		<tr>
+			<td class="text-left">Hora:</td>
+			<td class="text-left">Hora:</td>
+		</tr>
+		<tr>
+			<td class="text-left">Firma:</td>
+			<td class="text-left">Firma:</td>
+		</tr>
+	</table>
 @endsection
 
 <?php
@@ -159,9 +199,9 @@
 				echo '<td>'.number_format(floatval($row['total_imp_bs']),2,"," ,"." ).'</td>';
 				echo '<td>'.number_format(floatval($row['total_imp_usd']),2,"," ,"." ).'</td>';
 				echo '<td>'.number_format(floatval($row['total_bs']),2,"," ,"." ).'</td>';
-				echo '<td>'.number_format(floatval($row['total_usd']),2,"," ,"." ).'</td>';
-				echo '<td></td>';
-				echo '<td></td>';
+				echo '<td>'.number_format(floatval($row['total_usd']),2,"," ,"." ).'</td>';			
+				echo '<td><input type="checkbox"></td>';				
+				echo '<td><input type="checkbox"></td>';
 				echo '</tr>';
 
 				$Total_Cantidad += floatval($row['cantidad']);
@@ -183,5 +223,7 @@
 	  	echo '</tr>';
 
 			mysqli_close($connCPharma);
+
+
 	}
 ?>
