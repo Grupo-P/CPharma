@@ -60,12 +60,14 @@
     ->count();
 
   /*TASA DOLAR VENTA*/
-    $Tasa = DB::table('tasa_ventas')->where('moneda', 'Dolar')->value('tasa');
+    $Tasa = DB::table('tasa_ventas')->where('moneda', 'Dolar')->value('tasa');    
 
     if( (!empty($Tasa)) ) {
+    	$TV = $Tasa;
       $Tasa = number_format($Tasa,2,"," ,"." );
     }
     else {
+    	$TV = 0.00;
       $Tasa = number_format(0.00,2,"," ,"." );
     }
 
@@ -103,10 +105,12 @@
     ->take(1)->get();
 
     if( (!empty($TasaMercado[0])) ) {
+    	$TM = $TasaMercado[0]->tasa;
       $TasaMercado = ($TasaMercado[0]->tasa);
       $TasaMercado = number_format($TasaMercado,2,"," ,"." );
     }
     else {
+    	$TM = 0.00;
       $TasaMercado = number_format(0.00,2,"," ,"." );
     }
   /*TASA DOLAR MERCADO*/
@@ -1819,6 +1823,7 @@
 <?php
   if(Auth::user()->departamento == 'GERENCIA'){  	
   	$configuracion = Configuracion::where('variable','DolarCalculo')->get();  	
+  	$TC = $configuracion[0]->valor;
 ?>
 	<!-- Modal GERENCIA -->
 	<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -1882,12 +1887,26 @@
     		</h3>
     		<p class="card-text text-white">
 				<?php 
-					echo 'Ultima Actualizacion: '.$tasaVenta;
+					echo 'Ultima Actualizacion: '.$tasaVenta;					
 				?>
     		</p>
   		</div>
 	  	<div class="card-footer bg-transparent border-dark text-right">
-	  		<a href="/tasaVenta/" class="btn btn-outline-dark btn-sm">Visualizar</a>
+	  		<table style="width:100%;">
+	  			<tr>
+	  				<td style="float: left;">
+	  					<p class="text-left">	  						
+				  			<strong>Tasa Mercado:</strong>
+				  			<?php echo " ".number_format(((($TM/$TV)-1)*100),2,"," ,"." )." %"; ?>	
+				  			<br><strong>Tasa Calculo:</strong>
+				  			<?php echo " ".number_format(((($TC/$TV)-1)*100),2,"," ,"." )." %"; ?>
+				  		</p>
+	  				</td>
+	  				<td style="float: right;">
+	  					<a href="/tasaVenta/" class="btn btn-outline-dark btn-sm">Visualizar</a>
+	  				</td>
+  				</tr>
+	  		</table>	  			  			 
 	  	</div>
 		</div>
 
@@ -1909,7 +1928,21 @@
 	    		</p>
   		</div>
 	  	<div class="card-footer bg-transparent border-secondary text-right">
-	  		<a href="/dolar/" class="btn btn-outline-secondary btn-sm">Visualizar</a>
+	  		<table style="width:100%;">
+	  			<tr>
+	  				<td style="float: left;">
+	  					<p class="text-left">	  						
+				  			<strong>Tasa Venta:</strong> 
+				  			<?php echo " ".number_format(((($TM/$TV)-1)*100),2,"," ,"." )." %"; ?>	
+				  			<br><strong>Tasa Calculo:</strong>
+				  			<?php echo " ".number_format(((($TC/$TM)-1)*100),2,"," ,"." )." %"; ?>
+				  		</p>
+	  				</td>
+	  				<td style="float: right;">
+	  					<a href="/dolar/" class="btn btn-outline-secondary btn-sm">Visualizar</a>
+	  				</td>
+  				</tr>
+	  		</table>	  		
 	  	</div>	
 		</div>
 		
@@ -1931,9 +1964,23 @@
 	    		</p>
 	  		</div>
 		  	<div class="card-footer bg-transparent border-dark text-right">
-		  		<a href="/configuracion/" class="btn btn-outline-dark btn-sm">Visualizar</a>
+		  		<table style="width:100%;">
+	  			<tr>
+	  				<td style="float: left;">
+	  					<p class="text-left">	  						 	  								  					
+				  			<strong>Tasa Venta:</strong> 
+				  			<?php echo " ".number_format(((($TC/$TV)-1)*100),2,"," ,"." )." %"; ?>	
+				  			<br><strong>Tasa Mercado:</strong>
+				  			<?php echo " ".number_format(((($TC/$TM)-1)*100),2,"," ,"." )." %"; ?>
+				  		</p>
+	  				</td>
+	  				<td style="float: right;">
+	  					<a href="/configuracion/" class="btn btn-outline-dark btn-sm">Visualizar</a>
+	  				</td>
+  				</tr>
+	  		</table>		  	
 		  	</div>
-			</div>
+		</div>
 
 		</div>
 	</div>
@@ -2110,6 +2157,7 @@
 <?php
   if(Auth::user()->departamento == 'TECNOLOGIA'){
   	$configuracion = Configuracion::where('variable','DolarCalculo')->get();
+  	$TC = $configuracion[0]->valor;
 ?>
 	<!-- Modal TECNOLOGIA -->
 	<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -2172,12 +2220,26 @@
     		</h3>
     		<p class="card-text text-white">
 				<?php 
-					echo 'Ultima Actualizacion: '.$tasaVenta;
+					echo 'Ultima Actualizacion: '.$tasaVenta;					
 				?>
     		</p>
   		</div>
 	  	<div class="card-footer bg-transparent border-dark text-right">
-	  		<a href="/tasaVenta/" class="btn btn-outline-dark btn-sm">Visualizar</a>
+	  		<table style="width:100%;">
+	  			<tr>
+	  				<td style="float: left;">
+	  					<p class="text-left">	  						
+				  			<strong>Tasa Mercado:</strong>
+				  			<?php echo " ".number_format(((($TM/$TV)-1)*100),2,"," ,"." )." %"; ?>	
+				  			<br><strong>Tasa Calculo:</strong>
+				  			<?php echo " ".number_format(((($TC/$TV)-1)*100),2,"," ,"." )." %"; ?>
+				  		</p>
+	  				</td>
+	  				<td style="float: right;">
+	  					<a href="/tasaVenta/" class="btn btn-outline-dark btn-sm">Visualizar</a>
+	  				</td>
+  				</tr>
+	  		</table>	  			  			 
 	  	</div>
 		</div>
 
@@ -2199,7 +2261,21 @@
 	    		</p>
   		</div>
 	  	<div class="card-footer bg-transparent border-secondary text-right">
-	  		<a href="/dolar/" class="btn btn-outline-secondary btn-sm">Visualizar</a>
+	  		<table style="width:100%;">
+	  			<tr>
+	  				<td style="float: left;">
+	  					<p class="text-left">	  						
+				  			<strong>Tasa Venta:</strong> 
+				  			<?php echo " ".number_format(((($TM/$TV)-1)*100),2,"," ,"." )." %"; ?>	
+				  			<br><strong>Tasa Calculo:</strong>
+				  			<?php echo " ".number_format(((($TC/$TM)-1)*100),2,"," ,"." )." %"; ?>
+				  		</p>
+	  				</td>
+	  				<td style="float: right;">
+	  					<a href="/dolar/" class="btn btn-outline-secondary btn-sm">Visualizar</a>
+	  				</td>
+  				</tr>
+	  		</table>	  		
 	  	</div>	
 		</div>
 		
@@ -2221,9 +2297,23 @@
 	    		</p>
 	  		</div>
 		  	<div class="card-footer bg-transparent border-dark text-right">
-		  		<a href="/configuracion/" class="btn btn-outline-dark btn-sm">Visualizar</a>
+		  		<table style="width:100%;">
+	  			<tr>
+	  				<td style="float: left;">
+	  					<p class="text-left">	  						 	  								  					
+				  			<strong>Tasa Venta:</strong> 
+				  			<?php echo " ".number_format(((($TC/$TV)-1)*100),2,"," ,"." )." %"; ?>	
+				  			<br><strong>Tasa Mercado:</strong>
+				  			<?php echo " ".number_format(((($TC/$TM)-1)*100),2,"," ,"." )." %"; ?>
+				  		</p>
+	  				</td>
+	  				<td style="float: right;">
+	  					<a href="/configuracion/" class="btn btn-outline-dark btn-sm">Visualizar</a>
+	  				</td>
+  				</tr>
+	  		</table>		  	
 		  	</div>
-			</div>	
+		</div>	
 	</div>
 	<!-- Dashboard TECNOLOGIA-->
 <?php
