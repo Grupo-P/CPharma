@@ -910,7 +910,7 @@
 		    $PrecioCompraBrutoSE = $row3["PrecioCompraBruto"];
 		    $CondicionExistenciaSE = 'SIN_EXISTENCIA';
 
-		   	//$UtilidadSE = FG_Utilidad_Alfa($UtilidadArticuloSE,$UtilidadCategoriaSE);
+		   	$UtilidadSE = FG_Utilidad_Alfa($UtilidadArticuloSE,$UtilidadCategoriaSE);
 
 	      if($ExistenciaSE==0){
 
