@@ -8,6 +8,9 @@ define("Impuesto",1.16);
 define("DecimalCorrida",0.01);
 define("Version","CPharma v.6.2");
 define("_ConsultorDolar_","SI");
+define("_EtiquetaDolar_","SI");
+define("_MensajeDolar_","SI");
+define("_MensajeDolarLegal_","El precio en Bs será calculado a la tasa oficial del BCV");
 /**********************************************************************************/
 /************************* NOMBRES SEDES ON-LINE *********************************/
 define ("SedeFTN","FARMACIA TIERRA NEGRA, C.A.");

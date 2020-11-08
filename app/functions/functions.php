@@ -3005,7 +3005,7 @@
 		mysqli_close($connCPharma);
 		sqlsrv_close($conn);
 
-		print_r($array_result);
+		//print_r($array_result);
 		return $array_result;		
   }  
 ?>
