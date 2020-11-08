@@ -53,7 +53,7 @@ class TrasladoController extends Controller
                 where('estatus','ENTREGADO')->get();
             break;
             default:
-                $traslados =  Traslado::all()->orderBy('fecha_traslado','DESC')->take(100)->get();
+                $traslados =  Traslado::orderBy('fecha_traslado','DESC')->take(100)->get();
                 return view('pages.traslado.index', compact('traslados'));
             break;
         }
