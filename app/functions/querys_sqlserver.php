@@ -367,8 +367,9 @@
     --Existencia (Segun el almacen del filtro)
     (ROUND(CAST((SELECT SUM (InvLoteAlmacen.Existencia) As Existencia
     FROM InvLoteAlmacen
-    WHERE(InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
-    AND (InvLoteAlmacen.InvArticuloId = InvArticulo.Id)) AS DECIMAL(38,0)),2,0))  AS Existencia,
+    WHERE(InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2) 
+    AND InvLoteAlmacen.InvLoteId = '$Idlote'   
+    AND (InvLoteAlmacen.InvArticuloId = InvArticulo.Id)) AS DECIMAL(38,0)),2,0))  AS Existencia,    
     --ExistenciaAlmacen1 (Segun el almacen del filtro)
     (ROUND(CAST((SELECT SUM (InvLoteAlmacen.Existencia) As Existencia
     FROM InvLoteAlmacen
