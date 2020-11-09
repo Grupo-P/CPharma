@@ -1901,6 +1901,18 @@
 
 					if($Dolarizado=='SI'){
 						$simbolo = '*';
+
+						if(_MensajeDolar_== 'SI'){
+							$mensajePie = '
+								<tr>
+									<td class="centrado titulo rowCenter" colspan="2">
+										'._MensajeDolarLegal_.'
+									</td>
+								</tr>
+							';
+						}else{
+							$mensajePie = "";
+						}
 					}
 					else{
 						$simbolo = '';
@@ -1953,7 +1965,8 @@
 									<td class="derecha rowDer rowDerA">
 										<strong>'.$simbolo.'</strong> '.date("d-m-Y").'
 									</td>
-								</tr>				
+								</tr>	
+								'.$mensajePie.'			
 							</tbody>
 						</table>
 					';
@@ -1964,6 +1977,18 @@
 
 				if($Dolarizado=='SI'){
 					$simbolo = '*';
+
+					if(_MensajeDolar_== 'SI'){
+							$mensajePie = '
+								<tr>
+									<td class="centrado titulo rowCenter" colspan="2">
+										'._MensajeDolarLegal_.'
+									</td>
+								</tr>
+							';
+						}else{
+							$mensajePie = "";
+						}
 				}
 				else{
 					$simbolo = '';
@@ -2000,7 +2025,8 @@
 								<td class="derecha rowDer rowDerA">
 									<strong>'.$simbolo.'</strong> '.date("d-m-Y").'
 								</td>
-							</tr>				
+							</tr>		
+							'.$mensajePie.'		
 						</tbody>
 					</table>
 				';
@@ -2074,8 +2100,11 @@
   	$connCPharma = FG_Conectar_CPharma();
   	$arraySugeridos = array();
   	$CuentaCard = 0;
-		$CuentaEtiqueta = 0;	
+		$CuentaEtiqueta = 0;
 
+		//FG_Etiquetas($conn,$connCPharma,'60700','SI',false,false);
+
+	//Aqui
   	$FHoy = date("Y-m-d");
 		$FManana = date("Y-m-d",strtotime($FHoy."+1 days"));
 		$FAyer = date("Y-m-d",strtotime($FHoy."-1 days"));
@@ -2100,6 +2129,7 @@
 			El tamano de cambios en el smart es MENOR
 			al total de elementos en la clasificacion solicitada
 		*/
+	//Aqui
 		if($CuentaCPharma>$CuentaSmart){
 			
 			foreach ($ArrayUnique as $Array) {
@@ -2145,6 +2175,7 @@
 			El tamano de cambios en el smart es MAYOR
 			al total de elementos en la clasificacion solicitada
 		*/
+	//Aqui
 		else if($CuentaCPharma<$CuentaSmart){
 			$result = $connCPharma->query("SELECT * FROM etiquetas WHERE clasificacion = '$clasificacion'");
 			
@@ -2190,6 +2221,8 @@
 		echo 'Cuenta Smart: '.$CuentaSmart.'<br>';
 		mysqli_close($connCPharma);
     sqlsrv_close($conn);
+  //Aqui
+
 	}
 	/**********************************************************************************/
 	/*

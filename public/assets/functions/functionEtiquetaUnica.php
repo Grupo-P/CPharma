@@ -109,7 +109,7 @@
 							$mensajePie = '
 								<tr>
 									<td class="centrado titulo rowCenter" colspan="2">
-										'.$_MensajeDolar_.'
+										'._MensajeDolarLegal_.'
 									</td>
 								</tr>
 							';
