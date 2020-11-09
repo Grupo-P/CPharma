@@ -1889,7 +1889,7 @@
 		if(intval($Existencia)>0){
 
 			$PrecioHoy = FG_Calculo_Precio_Alfa($Existencia,$ExistenciaAlmacen1,$ExistenciaAlmacen2,$IsTroquelado,$UtilidadArticulo,$UtilidadCategoria,$TroquelAlmacen1,$PrecioCompraBrutoAlmacen1,$TroquelAlmacen2,$PrecioCompraBrutoAlmacen2,$PrecioCompraBruto,$IsIVA,$CondicionExistencia);
-
+			
 			if($IsPrecioAyer==true){
 
 				$sqlCC = MySQL_DiasCero_PrecioAyer($IdArticulo,$FechaCambio);
@@ -2102,9 +2102,9 @@
   	$CuentaCard = 0;
 		$CuentaEtiqueta = 0;
 
-		//FG_Etiquetas($conn,$connCPharma,'60700','SI',false,false);
+		FG_Etiquetas($conn,$connCPharma,'60700','SI',true,'2020-11-08');
 
-	//Aqui
+	/*Aqui
   	$FHoy = date("Y-m-d");
 		$FManana = date("Y-m-d",strtotime($FHoy."+1 days"));
 		$FAyer = date("Y-m-d",strtotime($FHoy."-1 days"));
@@ -2129,7 +2129,7 @@
 			El tamano de cambios en el smart es MENOR
 			al total de elementos en la clasificacion solicitada
 		*/
-	//Aqui
+	/*Aqui
 		if($CuentaCPharma>$CuentaSmart){
 			
 			foreach ($ArrayUnique as $Array) {
@@ -2175,7 +2175,7 @@
 			El tamano de cambios en el smart es MAYOR
 			al total de elementos en la clasificacion solicitada
 		*/
-	//Aqui
+	/*Aqui
 		else if($CuentaCPharma<$CuentaSmart){
 			$result = $connCPharma->query("SELECT * FROM etiquetas WHERE clasificacion = '$clasificacion'");
 			
@@ -2221,7 +2221,7 @@
 		echo 'Cuenta Smart: '.$CuentaSmart.'<br>';
 		mysqli_close($connCPharma);
     sqlsrv_close($conn);
-  //Aqui
+  Aqui*/
 
 	}
 	/**********************************************************************************/

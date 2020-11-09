@@ -92,13 +92,15 @@
 		if(intval($Existencia)>0){
 
 			$PrecioHoy = FG_Calculo_Precio_Alfa($Existencia,$ExistenciaAlmacen1,$ExistenciaAlmacen2,$IsTroquelado,$UtilidadArticulo,$UtilidadCategoria,$TroquelAlmacen1,$PrecioCompraBrutoAlmacen1,$TroquelAlmacen2,$PrecioCompraBrutoAlmacen2,$PrecioCompraBruto,$IsIVA,$CondicionExistencia);
-
+			
+			//$IsPrecioAyer=true;
+			//$FechaCambio = '2020-11-08';
 			if($IsPrecioAyer==true){
 
 				$sqlCC = MySQL_DiasCero_PrecioAyer($IdArticulo,$FechaCambio);
 				$resultCC = mysqli_query($connCPharma,$sqlCC);
 				$rowCC = mysqli_fetch_assoc($resultCC);
-				$PrecioAyer = $rowCC["precio"];
+				$PrecioAyer = $rowCC["precio"];				
 
 				if( floatval(round($PrecioHoy,2)) != floatval($PrecioAyer) ){
 
@@ -116,6 +118,7 @@
 						}else{
 							$mensajePie = "";
 						}
+												
 					}
 					else{
 						$simbolo = '';
@@ -180,57 +183,73 @@
 
 				if($Dolarizado=='SI'){
 					$simbolo = '*';
+					$moneda = SigDolar;
 
 					if(_MensajeDolar_== 'SI'){
-							$mensajePie = '
-								<tr>
-									<td class="centrado titulo rowCenter" colspan="2">
-										'._MensajeDolarLegal_.'
-									</td>
-								</tr>
-							';
-						}else{
-							$mensajePie = "";
-						}
+						$mensajePie = '
+							<tr>
+								<td class="centrado titulo rowCenter" colspan="2">
+									'._MensajeDolarLegal_.'
+								</td>
+							</tr>
+						';
+					}else{
+						$mensajePie = "";
+					}
+
+					$precioPartes = explode(".",$PrecioHoy);
+					$TasaActual = FG_Tasa_Fecha_Venta($connCPharma,date('Y-m-d'));
+					$PrecioHoy = $PrecioHoy/$TasaActual;
+
+					if($precioPartes[1]==DecimalEtiqueta){
+						$flag_imprime = true;				
+					}
+					else{
+						$flag_imprime = false;
+					}			
 				}
 				else{
 					$simbolo = '';
+					$moneda = SigVe;
+					$flag_imprime = true;
 				}
 				
-				$Etiqueta = $Etiqueta.'
-					<table class="etq" style="display: inline;">
-						<thead class="etq">
-							<tr>
-								<td class="centrado titulo rowCenter" colspan="2">
-									Código: '.$CodigoBarra.'
-								</td>
-							</tr>	
-						</thead>
-						<tbody class="etq">
-							<tr rowspan="2">
-								<td class="centrado descripcion aumento rowCenter" colspan="2">
-									<strong>'.$Descripcion.'</strong> 
-								</td>
-							</tr>
-							<tr>
-								<td class="centrado rowDer rowDerA aumento preciopromo" colspan="2">
-									<strong>
-									'.number_format ($PrecioHoy,2,"," ,"." ).'
-									</strong>
-								</td>
-							</tr>
-							<tr>
-								<td class="izquierda rowIzq rowIzqA">
-									<strong>Total a Pagar Bs.</strong>
-								</td>
-								<td class="derecha rowDer rowDerA">
-									<strong>'.$simbolo.'</strong> '.date("d-m-Y").'
-								</td>
-							</tr>	
-							'.$mensajePie.'			
-						</tbody>
-					</table>
-				';
+				if($flag_imprime == true){
+					$Etiqueta = $Etiqueta.'
+						<table class="etq" style="display: inline;">
+							<thead class="etq">
+								<tr>
+									<td class="centrado titulo rowCenter" colspan="2">
+										Código: '.$CodigoBarra.'
+									</td>
+								</tr>	
+							</thead>
+							<tbody class="etq">
+								<tr rowspan="2">
+									<td class="centrado descripcion aumento rowCenter" colspan="2">
+										<strong>'.$Descripcion.'</strong> 
+									</td>
+								</tr>
+								<tr>
+									<td class="centrado rowDer rowDerA aumento preciopromo" colspan="2">
+										<strong>
+										'.number_format ($PrecioHoy,2,"," ,"." ).'
+										</strong>
+									</td>
+								</tr>
+								<tr>
+									<td class="izquierda rowIzq rowIzqA">
+										<strong>Total a Pagar '.$moneda.'</strong>
+									</td>
+									<td class="derecha rowDer rowDerA">
+										<strong>'.$simbolo.'</strong> '.date("d-m-Y").'
+									</td>
+								</tr>	
+								'.$mensajePie.'			
+							</tbody>
+						</table>
+					';
+				}					
 			}
 			else{
 			$Etiqueta = 'EL ARTICULO PRESENTO CAMBIO DE PRECIO';
