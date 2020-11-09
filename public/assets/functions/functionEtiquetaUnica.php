@@ -104,6 +104,18 @@
 
 					if($Dolarizado=='SI'){
 						$simbolo = '*';
+
+						if(_MensajeDolar_== 'SI'){
+							$mensajePie = '
+								<tr>
+									<td class="centrado titulo rowCenter" colspan="2">
+										'.$_MensajeDolar_.'
+									</td>
+								</tr>
+							';
+						}else{
+							$mensajePie = "";
+						}
 					}
 					else{
 						$simbolo = '';
@@ -154,7 +166,8 @@
 									<td class="derecha rowDer rowDerA">
 										<strong>'.$simbolo.'</strong> '.date("d-m-Y").'
 									</td>
-								</tr>				
+								</tr>		
+									'.$mensajePie.'
 							</tbody>
 						</table>
 					';
@@ -167,6 +180,18 @@
 
 				if($Dolarizado=='SI'){
 					$simbolo = '*';
+
+					if(_MensajeDolar_== 'SI'){
+							$mensajePie = '
+								<tr>
+									<td class="centrado titulo rowCenter" colspan="2">
+										'._MensajeDolarLegal_.'
+									</td>
+								</tr>
+							';
+						}else{
+							$mensajePie = "";
+						}
 				}
 				else{
 					$simbolo = '';
@@ -201,7 +226,8 @@
 								<td class="derecha rowDer rowDerA">
 									<strong>'.$simbolo.'</strong> '.date("d-m-Y").'
 								</td>
-							</tr>				
+							</tr>	
+							'.$mensajePie.'			
 						</tbody>
 					</table>
 				';
