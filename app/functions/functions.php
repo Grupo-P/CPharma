@@ -1903,7 +1903,7 @@
 						$simbolo = '*';
 						$moneda = SigDolar;
 
-						if(_MensajeDolar_== 'SI'){
+						if(_MensajeDolar_== 'SI' && _EtiquetaDolar_=='SI'){
 							$mensajePie = '
 								<tr>
 									<td class="centrado titulo rowCenter" colspan="2">
@@ -2003,7 +2003,7 @@
 						$simbolo = '*';
 						$moneda = SigDolar;
 
-						if(_MensajeDolar_== 'SI'){
+						if(_MensajeDolar_== 'SI' && _EtiquetaDolar_=='SI'){
 							$mensajePie = '
 								<tr>
 									<td class="centrado titulo rowCenter" colspan="2">
