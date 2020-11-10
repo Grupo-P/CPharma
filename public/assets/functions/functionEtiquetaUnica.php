@@ -66,7 +66,8 @@
 		DESARROLLADO POR: SERGIO COVA
  	*/
  	function FG_Etiqueta_Unica($conn,$connCPharma,$IdArticulo,$Dolarizado,$IsPrecioAyer,$FechaCambio) {
- 		$Etiqueta = ''; 		
+ 		$Etiqueta = ''; 	
+ 		$mensajePie = "";	
 
  		$sql2 = SQG_Detalle_Articulo($IdArticulo);
 		$result2 = sqlsrv_query($conn,$sql2);

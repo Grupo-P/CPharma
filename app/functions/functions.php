@@ -1864,6 +1864,7 @@
  	*/
  	function FG_Etiquetas($conn,$connCPharma,$IdArticulo,$Dolarizado,$IsPrecioAyer,$FechaCambio) {
  		$flag = false;
+ 		$mensajePie = "";
 
  		$sql2 = SQG_Detalle_Articulo($IdArticulo);
 		$result2 = sqlsrv_query($conn,$sql2);
