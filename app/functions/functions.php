@@ -1995,6 +1995,33 @@
 
 						$flag = true;
 					}
+					else{
+						echo'
+							<table class="etq" style="display: inline;">
+								<thead class="etq">
+									<tr>
+										<td class="centrado titulo rowCenter" colspan="2">
+											Código: '.$CodigoBarra.'
+										</td>
+									</tr>	
+								</thead>
+								<tbody class="etq">
+									<tr rowspan="2">
+										<td class="centrado descripcion aumento rowCenter" colspan="2">
+											<strong>'.$Descripcion.'</strong> 
+										</td>
+									</tr>
+									<tr>
+										<td class="centrado rowDer rowDerA aumento preciopromo" colspan="2">
+											<strong class="text-danger">
+											Solicite ayuda al dpto. de procesamiento
+											</strong>
+										</td>
+									</tr>										
+								</tbody>
+							</table>
+						';
+					}
 				}
 			}
 			else if($IsPrecioAyer==false){
@@ -2076,6 +2103,33 @@
 						</table>
 					';
 					$flag = true;
+				}
+				else{
+					echo'
+						<table class="etq" style="display: inline;">
+							<thead class="etq">
+								<tr>
+									<td class="centrado titulo rowCenter" colspan="2">
+										Código: '.$CodigoBarra.'
+									</td>
+								</tr>	
+							</thead>
+							<tbody class="etq">
+								<tr rowspan="2">
+									<td class="centrado descripcion aumento rowCenter" colspan="2">
+										<strong>'.$Descripcion.'</strong> 
+									</td>
+								</tr>
+								<tr>
+									<td class="centrado rowDer rowDerA aumento preciopromo" colspan="2">
+										<strong class="text-danger">
+										Solicite ayuda al dpto. de procesamiento
+										</strong>
+									</td>
+								</tr>										
+							</tbody>
+						</table>
+					';
 				}
 			}	
 		}

@@ -66,7 +66,7 @@
 		DESARROLLADO POR: SERGIO COVA
  	*/
  	function FG_Etiqueta_Unica($conn,$connCPharma,$IdArticulo,$Dolarizado,$IsPrecioAyer,$FechaCambio) {
- 		$Etiqueta = '';
+ 		$Etiqueta = ''; 		
 
  		$sql2 = SQG_Detalle_Articulo($IdArticulo);
 		$result2 = sqlsrv_query($conn,$sql2);
@@ -92,6 +92,8 @@
 		if(intval($Existencia)>0){
 
 			$PrecioHoy = FG_Calculo_Precio_Alfa($Existencia,$ExistenciaAlmacen1,$ExistenciaAlmacen2,$IsTroquelado,$UtilidadArticulo,$UtilidadCategoria,$TroquelAlmacen1,$PrecioCompraBrutoAlmacen1,$TroquelAlmacen2,$PrecioCompraBrutoAlmacen2,$PrecioCompraBruto,$IsIVA,$CondicionExistencia);
+
+			$PrecioHoy += 2.25;
 						
 			if($IsPrecioAyer==true){
 
@@ -128,7 +130,7 @@
 								$flag_imprime = true;				
 							}
 							else{
-								$flag_imprime = false;								
+								$flag_imprime = false;									
 							}						
 						}else if(_EtiquetaDolar_=='NO'){
 							$flag_imprime = true;
@@ -193,6 +195,33 @@
 							</table>
 						';
 					}
+					else{
+						$Etiqueta = $Etiqueta.'
+							<table class="etq" style="display: inline;">
+								<thead class="etq">
+									<tr>
+										<td class="centrado titulo rowCenter" colspan="2">
+											Código: '.$CodigoBarra.'
+										</td>
+									</tr>	
+								</thead>
+								<tbody class="etq">
+									<tr rowspan="2">
+										<td class="centrado descripcion aumento rowCenter" colspan="2">
+											<strong>'.$Descripcion.'</strong> 
+										</td>
+									</tr>
+									<tr>
+										<td class="centrado rowDer rowDerA aumento preciopromo" colspan="2">
+											<strong class="text-danger">
+											Solicite ayuda al dpto. de procesamiento
+											</strong>
+										</td>
+									</tr>										
+								</tbody>
+							</table>
+						';
+					}
 				}
 				else{
 					$Etiqueta = 'EL ARTICULO NO POSEE CAMBIO DE PRECIO';
@@ -225,7 +254,7 @@
 							$flag_imprime = true;				
 						}
 						else{
-							$flag_imprime = false;							
+							$flag_imprime = false;								
 						}						
 					}else if(_EtiquetaDolar_=='NO'){
 						$flag_imprime = true;
@@ -273,6 +302,33 @@
 							</tbody>
 						</table>
 					';
+				}
+				else{
+					$Etiqueta = $Etiqueta.'
+						<table class="etq" style="display: inline;">
+							<thead class="etq">
+								<tr>
+									<td class="centrado titulo rowCenter" colspan="2">
+										Código: '.$CodigoBarra.'
+									</td>
+								</tr>	
+							</thead>
+							<tbody class="etq">
+								<tr rowspan="2">
+									<td class="centrado descripcion aumento rowCenter" colspan="2">
+										<strong>'.$Descripcion.'</strong> 
+									</td>
+								</tr>
+								<tr>
+									<td class="centrado rowDer rowDerA aumento preciopromo" colspan="2">
+										<strong class="text-danger">
+										Solicite ayuda al dpto. de procesamiento
+										</strong>
+									</td>
+								</tr>										
+							</tbody>
+						</table>
+					';
 				}					
 			}
 			else{
@@ -281,7 +337,7 @@
 		}
 		else{
 			$Etiqueta = 'EL ARTICULO NO POSEE EXISTENCIA';
-		}
+		}	
 		return $Etiqueta;
  	}
 ?>
