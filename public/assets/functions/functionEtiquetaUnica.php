@@ -128,8 +128,7 @@
 								$flag_imprime = true;				
 							}
 							else{
-								$flag_imprime = false;
-								echo"Etiqueta invalida";
+								$flag_imprime = false;								
 							}						
 						}else if(_EtiquetaDolar_=='NO'){
 							$flag_imprime = true;
@@ -226,8 +225,7 @@
 							$flag_imprime = true;				
 						}
 						else{
-							$flag_imprime = false;
-							echo"Etiqueta invalida";
+							$flag_imprime = false;							
 						}						
 					}else if(_EtiquetaDolar_=='NO'){
 						$flag_imprime = true;

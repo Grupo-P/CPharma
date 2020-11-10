@@ -1889,7 +1889,7 @@
 		if(intval($Existencia)>0){
 
 			$PrecioHoy = FG_Calculo_Precio_Alfa($Existencia,$ExistenciaAlmacen1,$ExistenciaAlmacen2,$IsTroquelado,$UtilidadArticulo,$UtilidadCategoria,$TroquelAlmacen1,$PrecioCompraBrutoAlmacen1,$TroquelAlmacen2,$PrecioCompraBrutoAlmacen2,$PrecioCompraBruto,$IsIVA,$CondicionExistencia);
-			
+					
 			if($IsPrecioAyer==true){
 
 				$sqlCC = MySQL_DiasCero_PrecioAyer($IdArticulo,$FechaCambio);
@@ -1901,6 +1901,7 @@
 
 					if($Dolarizado=='SI'){
 						$simbolo = '*';
+						$moneda = SigDolar;
 
 						if(_MensajeDolar_== 'SI'){
 							$mensajePie = '
@@ -1913,11 +1914,131 @@
 						}else{
 							$mensajePie = "";
 						}
+
+						if(_EtiquetaDolar_=='SI'){
+							$precioPartes = explode(".",$PrecioHoy);
+							$TasaActual = FG_Tasa_Fecha_Venta($connCPharma,date('Y-m-d'));
+							$PrecioHoy = $PrecioHoy/$TasaActual;
+							$PrecioAyer = $PrecioAyer/$TasaActual;
+
+							if($precioPartes[1]==DecimalEtiqueta){
+								$flag_imprime = true;				
+							}
+							else{
+								$flag_imprime = false;								
+							}						
+						}else if(_EtiquetaDolar_=='NO'){
+							$flag_imprime = true;
+							$moneda = SigVe;
+						}												
 					}
 					else{
 						$simbolo = '';
+						$moneda = SigVe;
+						$flag_imprime = true;
 					}
 					
+					if($flag_imprime == true){
+					
+						echo'
+							<table>
+								<thead>
+									<tr>
+										<td class="centrado titulo rowCenter" colspan="2">
+											Código: '.$CodigoBarra.'
+										</td>
+									</tr>	
+								</thead>
+								<tbody>
+									<tr rowspan="2">
+										<td class="centrado descripcion aumento rowCenter" colspan="2">
+											<strong>'.$Descripcion.'</strong> 
+										</td>
+									</tr>
+									';
+										if( floatval(round($PrecioHoy,2)) < floatval($PrecioAyer) ){
+										echo'
+											<tr>
+												<td class="izquierda rowIzq rowIzqA" style="color:red;">
+													Precio '.$moneda.' Antes
+												</td>
+												<td class="derecha rowDer rowDerA" style="color:red;">
+													<del>
+													'.number_format ($PrecioAyer,2,"," ,"." ).'
+													</del>
+												</td>
+											</tr>
+										';
+										}
+									echo'
+									<tr>
+										<td class="izquierda rowIzq rowIzqA aumento">
+											<strong>Total a Pagar '.$moneda.'</strong>
+										</td>
+										<td class="derecha rowDer rowDerA aumento">
+											<strong>
+											'.number_format ($PrecioHoy,2,"," ,"." ).'
+											</strong>
+										</td>
+									</tr>
+									<tr>
+										<td class="izquierda dolarizado rowIzq rowIzqA">
+										</td>
+										<td class="derecha rowDer rowDerA">
+											<strong>'.$simbolo.'</strong> '.date("d-m-Y").'
+										</td>
+									</tr>	
+									'.$mensajePie.'			
+								</tbody>
+							</table>
+						';
+
+						$flag = true;
+					}
+				}
+			}
+			else if($IsPrecioAyer==false){
+
+				if($Dolarizado=='SI'){
+						$simbolo = '*';
+						$moneda = SigDolar;
+
+						if(_MensajeDolar_== 'SI'){
+							$mensajePie = '
+								<tr>
+									<td class="centrado titulo rowCenter" colspan="2">
+										'._MensajeDolarLegal_.'
+									</td>
+								</tr>
+							';
+						}else{
+							$mensajePie = "";
+						}
+
+						if(_EtiquetaDolar_=='SI'){
+							$precioPartes = explode(".",$PrecioHoy);
+							$TasaActual = FG_Tasa_Fecha_Venta($connCPharma,date('Y-m-d'));
+							$PrecioHoy = $PrecioHoy/$TasaActual;							
+
+							if($precioPartes[1]==DecimalEtiqueta){
+								$flag_imprime = true;				
+							}
+							else{
+								$flag_imprime = false;								
+							}						
+						}else if(_EtiquetaDolar_=='NO'){
+							$flag_imprime = true;
+							$moneda = SigVe;
+						}												
+					}
+					else{
+						$simbolo = '';
+						$moneda = SigVe;
+						$flag_imprime = true;
+					}
+					
+					if($flag_imprime == true){
+				
 					echo'
 						<table>
 							<thead>
@@ -1933,25 +2054,9 @@
 										<strong>'.$Descripcion.'</strong> 
 									</td>
 								</tr>
-								';
-									if( floatval(round($PrecioHoy,2)) < floatval($PrecioAyer) ){
-									echo'
-										<tr>
-											<td class="izquierda rowIzq rowIzqA" style="color:red;">
-												Precio Bs. Antes
-											</td>
-											<td class="derecha rowDer rowDerA" style="color:red;">
-												<del>
-												'.number_format ($PrecioAyer,2,"," ,"." ).'
-												</del>
-											</td>
-										</tr>
-									';
-									}
-								echo'
 								<tr>
 									<td class="izquierda rowIzq rowIzqA aumento">
-										<strong>Total a Pagar Bs.</strong>
+										<strong>Total a Pagar '.$moneda.'</strong>
 									</td>
 									<td class="derecha rowDer rowDerA aumento">
 										<strong>
@@ -1965,72 +2070,13 @@
 									<td class="derecha rowDer rowDerA">
 										<strong>'.$simbolo.'</strong> '.date("d-m-Y").'
 									</td>
-								</tr>	
-								'.$mensajePie.'			
+								</tr>		
+								'.$mensajePie.'		
 							</tbody>
 						</table>
 					';
 					$flag = true;
 				}
-			}
-			else if($IsPrecioAyer==false){
-
-				if($Dolarizado=='SI'){
-					$simbolo = '*';
-
-					if(_MensajeDolar_== 'SI'){
-							$mensajePie = '
-								<tr>
-									<td class="centrado titulo rowCenter" colspan="2">
-										'._MensajeDolarLegal_.'
-									</td>
-								</tr>
-							';
-						}else{
-							$mensajePie = "";
-						}
-				}
-				else{
-					$simbolo = '';
-				}
-				
-				echo'
-					<table>
-						<thead>
-							<tr>
-								<td class="centrado titulo rowCenter" colspan="2">
-									Código: '.$CodigoBarra.'
-								</td>
-							</tr>	
-						</thead>
-						<tbody>
-							<tr rowspan="2">
-								<td class="centrado descripcion aumento rowCenter" colspan="2">
-									<strong>'.$Descripcion.'</strong> 
-								</td>
-							</tr>
-							<tr>
-								<td class="izquierda rowIzq rowIzqA aumento">
-									<strong>Total a Pagar Bs.</strong>
-								</td>
-								<td class="derecha rowDer rowDerA aumento">
-									<strong>
-									'.number_format ($PrecioHoy,2,"," ,"." ).'
-									</strong>
-								</td>
-							</tr>
-							<tr>
-								<td class="izquierda dolarizado rowIzq rowIzqA">
-								</td>
-								<td class="derecha rowDer rowDerA">
-									<strong>'.$simbolo.'</strong> '.date("d-m-Y").'
-								</td>
-							</tr>		
-							'.$mensajePie.'		
-						</tbody>
-					</table>
-				';
-				$flag = true;
 			}	
 		}
 		return $flag;
@@ -2101,10 +2147,7 @@
   	$arraySugeridos = array();
   	$CuentaCard = 0;
 		$CuentaEtiqueta = 0;
-
-		FG_Etiquetas($conn,$connCPharma,'60700','SI',true,'2020-11-08');
-
-	/*Aqui
+		
   	$FHoy = date("Y-m-d");
 		$FManana = date("Y-m-d",strtotime($FHoy."+1 days"));
 		$FAyer = date("Y-m-d",strtotime($FHoy."-1 days"));
@@ -2129,7 +2172,7 @@
 			El tamano de cambios en el smart es MENOR
 			al total de elementos en la clasificacion solicitada
 		*/
-	/*Aqui
+	
 		if($CuentaCPharma>$CuentaSmart){
 			
 			foreach ($ArrayUnique as $Array) {
@@ -2175,7 +2218,7 @@
 			El tamano de cambios en el smart es MAYOR
 			al total de elementos en la clasificacion solicitada
 		*/
-	/*Aqui
+	
 		else if($CuentaCPharma<$CuentaSmart){
 			$result = $connCPharma->query("SELECT * FROM etiquetas WHERE clasificacion = '$clasificacion'");
 			
@@ -2221,8 +2264,6 @@
 		echo 'Cuenta Smart: '.$CuentaSmart.'<br>';
 		mysqli_close($connCPharma);
     sqlsrv_close($conn);
-  Aqui*/
-
 	}
 	/**********************************************************************************/
 	/*
