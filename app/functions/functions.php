@@ -1889,7 +1889,7 @@
 		if(intval($Existencia)>0){
 
 			$PrecioHoy = FG_Calculo_Precio_Alfa($Existencia,$ExistenciaAlmacen1,$ExistenciaAlmacen2,$IsTroquelado,$UtilidadArticulo,$UtilidadCategoria,$TroquelAlmacen1,$PrecioCompraBrutoAlmacen1,$TroquelAlmacen2,$PrecioCompraBrutoAlmacen2,$PrecioCompraBruto,$IsIVA,$CondicionExistencia);
-					
+				
 			if($IsPrecioAyer==true){
 
 				$sqlCC = MySQL_DiasCero_PrecioAyer($IdArticulo,$FechaCambio);
@@ -2204,7 +2204,7 @@
 		
   	$FHoy = date("Y-m-d");
 		$FManana = date("Y-m-d",strtotime($FHoy."+1 days"));
-		$FAyer = date("Y-m-d",strtotime($FHoy."-1 days"));
+		$FAyer = date("Y-m-d",strtotime($FHoy."-1 days"));		
 
 		if($dia=='HOY'){
 			$arraySugeridos = FG_Obtener_Casos_Etiqueta($conn,$FHoy,$FManana);
