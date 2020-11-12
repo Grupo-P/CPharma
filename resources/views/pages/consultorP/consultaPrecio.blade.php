@@ -170,10 +170,11 @@
     
     <?php
       if (_ConsultorDolar_ == "SI") {
-       echo ' <div clas="text-center bg-success">
-          <label class="text-danger text-center" style="font-size:1.5rem; margin-left:40%;">
+       echo ' <div id="DivTasa" clas="text-center bg-success">
+          <label id="TasaVenta" class="text-danger text-center" style="font-size:1.5rem; margin-left:40%;">
             <strong>Tasa del dia: '.SigVe.' '.number_format($TasaVenta,2,"," ,"." ).'</strong>
           </label>
+          <label class="text-danger text-center" style="margin-left:38%;">Nuestra tasa esta sujeta a cambios sin previo aviso</label>
         </div>';
       }      
     ?>
@@ -253,8 +254,9 @@
       $('#tablaError').hide();
       $('#tablaResuldado').hide();
       $('#tablaSugerido').hide();
+      $('#DivTasa').hide();
       mostrarCarousel();
-    }
+    }   
     /************************************************************************/
     function mostrarCarousel(){
       $.ajax({
@@ -316,6 +318,10 @@
     const URLTablaSugerido = ''+dominio+'assets/functions/functionConsultaSugerido.php';
     const URLTablaPromocion = ''+dominio+'assets/functions/functionConsultaPromo.php';
     const URLImagen = ''+dominio+'assets/promocion/';
+    const URLTasaVenta = ''+dominio+'assets/functions/functionActDolar.php';
+
+    var TasaVenta;
+    var TasaVentaMostrar;
 
     var timeOut;
     var precio;
@@ -343,11 +349,24 @@
           $('#tablaError').hide();
           $('#divPromocion').html('');
           $('#carouselExampleIndicators').hide();
-          $('#tablaResuldado').show();
+          $('#tablaResuldado').show();          
 
           var parametro = {
           "IdArticulo":ArrJsCB[indiceIdScan]
           };
+
+          //Incio Actualizacion Tasa Venta
+          $.ajax({
+            data: parametro,
+            url: URLTasaVenta,
+            type: "POST",
+            success: function(data) {
+              TasaVenta = data;
+              TasaVentaMostrar = formateoPrecio(TasaVenta,2);
+              $('#TasaVenta').html('<strong>Tasa del dia: Bs.S '+TasaVentaMostrar+'</strong>'); 
+              $('#DivTasa').show();       
+            }
+           });
 
           //Incio Armado tablaResuldado
           $.ajax({
@@ -357,8 +376,8 @@
             success: function(data) {
               precio = formateoPrecio(data,2);
               $('#PPrecioScan').html('BsS. '+precio);
-              const TasaVentaD = eval(<?php echo $TasaVenta ?>);
-              precioDolar = formateoPrecio(data/TasaVentaD,2);
+              //const TasaVentaD = eval(<?php /*echo $TasaVenta*/ ?>);
+              precioDolar = formateoPrecio(data/TasaVenta,2);
               $('#PPrecioDolarScan').html('$. '+precioDolar);
             }
            });
