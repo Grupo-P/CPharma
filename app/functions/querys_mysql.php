@@ -114,12 +114,12 @@
 		FUNCION: Construir las columnas correspondientes al reporte
 		DESARROLLADO POR: SERGIO COVA
 	 */
-	function MySQL_Guardar_Dias_EnCero($IdArticulo,$CodigoInterno,$Descripcion,$Existencia,$Precio,$FechaCaptura,$user,$date) {
+	function MySQL_Guardar_Dias_EnCero($IdArticulo,$CodigoInterno,$Descripcion,$Existencia,$Precio,$FechaCaptura,$user,$date,$PrecioDolar) {
 		$sql = "
 		INSERT INTO dias_ceros 
-		(id_articulo,codigo_articulo,descripcion,existencia,precio,fecha_captura,user,created_at,updated_at)
+		(id_articulo,codigo_articulo,descripcion,existencia,precio,fecha_captura,user,created_at,updated_at,precio_dolar)
 		VALUES 
-		('$IdArticulo','$CodigoInterno','$Descripcion','$Existencia','$Precio','$FechaCaptura','$user','$date','$date')
+		('$IdArticulo','$CodigoInterno','$Descripcion','$Existencia','$Precio','$FechaCaptura','$user','$date','$date','$PrecioDolar')
 		";
 		return $sql;
 	}

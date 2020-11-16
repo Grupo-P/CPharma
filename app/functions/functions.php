@@ -1486,10 +1486,14 @@
       $CondicionExistencia = 'CON_EXISTENCIA';
 
      	$Precio = FG_Calculo_Precio_Alfa($Existencia,$ExistenciaAlmacen1,$ExistenciaAlmacen2,$IsTroquelado,$UtilidadArticulo,$UtilidadCategoria,$TroquelAlmacen1,$PrecioCompraBrutoAlmacen1,$TroquelAlmacen2,$PrecioCompraBrutoAlmacen2,$PrecioCompraBruto,$IsIVA,$CondicionExistencia);
+
+     	$TasaActual = FG_Tasa_Fecha_Venta($connCPharma,date('Y-m-d'));
+
+     	$PrecioDolar = $Precio/$TasaActual;
      	
 			$date = date('Y-m-d h:i:s',time());
 			
-			$sqlCPharma = MySQL_Guardar_Dias_EnCero($IdArticulo,$CodigoInterno,$Descripcion,$Existencia,$Precio,$FechaCaptura,$user,$date);
+			$sqlCPharma = MySQL_Guardar_Dias_EnCero($IdArticulo,$CodigoInterno,$Descripcion,$Existencia,$Precio,$FechaCaptura,$user,$date,$PrecioDolar);
 			mysqli_query($connCPharma,$sqlCPharma);
 		}
 		FG_Guardar_Captura_Diaria($connCPharma,$FechaCaptura,$date);
