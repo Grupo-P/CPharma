@@ -45,6 +45,16 @@
 	}
 	/**********************************************************************************/
 	/*
+		TITULO: MySQL_Tasa_Fecha_Venta_General
+		FUNCION: Buscar el valor de la tasa en un dia especifico
+		DESARROLLADO POR: SERGIO COVA
+	 */
+	function MySQL_Tasa_Fecha_Venta_General() {
+		$sql = "SELECT tasa FROM tasa_ventas where moneda = 'Dolar'";
+		return $sql;
+	}
+	/**********************************************************************************/
+	/*
 		TITULO: MySQL_Guardar_Traslado_Detalle
 		FUNCION: capturar y guardar el detalle del traslado
 		DESARROLLADO POR: SERGIO COVA

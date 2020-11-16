@@ -677,6 +677,20 @@
 	}
 	/**********************************************************************************/
 	/*
+		TITULO: FG_Tasa_Fecha_Venta_General
+		FUNCION: Buscar el valor de la tasa
+		RETORNO: Valor de la tasa
+		DESARROLLADO POR: SERGIO COVA
+	 */
+	function FG_Tasa_Fecha_Venta_General($connCPharma) {
+		$sql = MySQL_Tasa_Fecha_Venta_General();
+		$result = mysqli_query($connCPharma,$sql);
+		$row = mysqli_fetch_assoc($result);
+		$Tasa = $row['tasa'];
+		return $Tasa;
+	}
+	/**********************************************************************************/
+	/*
 		TITULO: FG_Rango_Dias
 		FUNCION: Calcular el rango de diferencia de dias entre el las fechas
 		RETORNO: rango de dias
@@ -1458,6 +1472,7 @@
 		$sql = SQL_Dias_EnCero();
 		$result = sqlsrv_query($conn,$sql);
 
+		$TasaActual = FG_Tasa_Fecha_Venta_General($connCPharma);
 		$FechaCaptura = new DateTime("now");
 		$FechaCaptura = $FechaCaptura->format('Y-m-d');
 		$user = 'SYSTEM';
@@ -1486,9 +1501,7 @@
       $CondicionExistencia = 'CON_EXISTENCIA';
 
      	$Precio = FG_Calculo_Precio_Alfa($Existencia,$ExistenciaAlmacen1,$ExistenciaAlmacen2,$IsTroquelado,$UtilidadArticulo,$UtilidadCategoria,$TroquelAlmacen1,$PrecioCompraBrutoAlmacen1,$TroquelAlmacen2,$PrecioCompraBrutoAlmacen2,$PrecioCompraBruto,$IsIVA,$CondicionExistencia);
-
-     	$TasaActual = FG_Tasa_Fecha_Venta($connCPharma,date('Y-m-d'));
-
+     
      	$PrecioDolar = $Precio/$TasaActual;
      	
 			$date = date('Y-m-d h:i:s',time());
