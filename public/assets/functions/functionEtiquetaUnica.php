@@ -123,7 +123,11 @@
 							$precioPartes = explode(".",$PrecioHoy);
 							$TasaActual = FG_Tasa_Fecha_Venta($connCPharma,date('Y-m-d'));
 							$PrecioHoy = $PrecioHoy/$TasaActual;
-							$PrecioAyer = $PrecioAyer/$TasaActual;
+							
+							$sqlCC = MySQL_DiasCero_PrecioAyer_Dolar($IdArticulo,$FechaCambio);
+							$resultCC = mysqli_query($connCPharma,$sqlCC);
+							$rowCC = mysqli_fetch_assoc($resultCC);
+							$PrecioAyer = $rowCC["precio_dolar"];
 
 							if($precioPartes[1]==DecimalEtiqueta){
 								$flag_imprime = true;				

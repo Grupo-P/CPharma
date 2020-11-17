@@ -355,6 +355,21 @@
 			";
 			return $sql;
 		}
+		/**********************************************************************************/
+	/*
+    TITULO: MySQL_DiasCero_PrecioAyer
+    FUNCION: Query que genera el detalle del articulo solicitado
+    DESARROLLADO POR: SERGIO COVA
+   */
+  	function MySQL_DiasCero_PrecioAyer_Dolar($IdArticulo,$FechaCaptura) {
+			$sql = "
+				SELECT precio_dolar
+				FROM dias_ceros 
+				WHERE dias_ceros.id_articulo = '$IdArticulo' 
+				AND `fecha_captura` = '$FechaCaptura'
+			";
+			return $sql;
+		}
 	/****************************************************************************/
 	/*
 		TITULO: MySQL_Ver_CapturaDiaria

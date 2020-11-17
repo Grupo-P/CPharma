@@ -1937,7 +1937,11 @@
 							$precioPartes = explode(".",$PrecioHoy);
 							$TasaActual = FG_Tasa_Fecha_Venta($connCPharma,date('Y-m-d'));
 							$PrecioHoy = $PrecioHoy/$TasaActual;
-							$PrecioAyer = $PrecioAyer/$TasaActual;
+							
+							$sqlCC = MySQL_DiasCero_PrecioAyer_Dolar($IdArticulo,$FechaCambio);
+							$resultCC = mysqli_query($connCPharma,$sqlCC);
+							$rowCC = mysqli_fetch_assoc($resultCC);
+							$PrecioAyer = $rowCC["precio_dolar"];
 
 							if($precioPartes[1]==DecimalEtiqueta){
 								$flag_imprime = true;				
@@ -2063,7 +2067,11 @@
 						if(_EtiquetaDolar_=='SI'){
 							$precioPartes = explode(".",$PrecioHoy);
 							$TasaActual = FG_Tasa_Fecha_Venta($connCPharma,date('Y-m-d'));
-							$PrecioHoy = $PrecioHoy/$TasaActual;							
+							
+							$sqlCC = MySQL_DiasCero_PrecioAyer_Dolar($IdArticulo,$FechaCambio);
+							$resultCC = mysqli_query($connCPharma,$sqlCC);
+							$rowCC = mysqli_fetch_assoc($resultCC);
+							$PrecioAyer = $rowCC["precio_dolar"];							
 
 							if($precioPartes[1]==DecimalEtiqueta){
 								$flag_imprime = true;				
@@ -2174,7 +2182,6 @@
 			$result3 = sqlsrv_query($conn,$sql3);
 			$row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
 			$Dolarizado = FG_Producto_Dolarizado($row3['Dolarizado']);
-
 			if(($Dolarizado=='SI')&&($tipo=='DOLARIZADO')){
 				$flag = FG_Etiquetas($conn,$connCPharma,$IdArticulo,$Dolarizado,false,false);
 				if($flag==true){
@@ -2195,7 +2202,7 @@
 					$CuentaCard++;
 					$CuentaEtiqueta++;
 				}
-			}
+			}			
 
 			if($CuentaCard == 3){
 				echo'<br>';
