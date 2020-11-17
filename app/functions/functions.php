@@ -2064,9 +2064,10 @@
 							$mensajePie = "";
 						}
 
-						if(_EtiquetaDolar_=='SI'){
+						if(_EtiquetaDolar_=='SI'){				
 							$precioPartes = explode(".",$PrecioHoy);
 							$TasaActual = FG_Tasa_Fecha_Venta($connCPharma,date('Y-m-d'));
+							$PrecioHoy = $PrecioHoy/$TasaActual;						
 							
 							$sqlCC = MySQL_DiasCero_PrecioAyer_Dolar($IdArticulo,$FechaCambio);
 							$resultCC = mysqli_query($connCPharma,$sqlCC);
