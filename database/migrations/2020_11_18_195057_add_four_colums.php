@@ -14,7 +14,7 @@ class AddFourColums extends Migration
     public function up()
     {
         Schema::table('orden_compra_detalles', function (Blueprint $table) {
-            $table->string('unidades_vendidas')->nullable()->after('updated_at');
+            $table->string('unidades_vendidas')->nullable()->after('user');
             $table->string('venta_diaria_real')->nullable()->after('unidades_vendidas');
             $table->string('pedir_real')->nullable()->after('venta_diaria_real');
             $table->string('dias_pedir')->nullable()->after('pedir_real');
