@@ -94,6 +94,10 @@ class OrdenCompraDetalleController extends Controller
         $ordenCompraDetalles->rango_rpt = $request->input('rango_rpt');
         $ordenCompraDetalles->estatus = 'ACTIVO';
         $ordenCompraDetalles->user = $request->input('usuario');
+        $ordenCompraDetalles->unidades_vendidas = $request->input('unidades_vendidas');
+        $ordenCompraDetalles->venta_diaria_real = $request->input('venta_diaria_real');
+        $ordenCompraDetalles->pedir_real = $request->input('pedir_real');
+        $ordenCompraDetalles->dias_pedir = $request->input('dias_pedir');
 
         $ordenCompraDetalles->save();
         //print_r($ordenCompraDetalles);

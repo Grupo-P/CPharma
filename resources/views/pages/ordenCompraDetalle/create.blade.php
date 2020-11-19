@@ -129,6 +129,10 @@
               {!! Form::hidden('dias_restantes_rpt',NULL) !!}
               {!! Form::hidden('origen_rpt',NULL) !!}
               {!! Form::hidden('rango_rpt',NULL) !!}
+              {!! Form::hidden('unidades_vendidas',NULL) !!}
+              {!! Form::hidden('venta_diaria_real',NULL) !!}
+              {!! Form::hidden('pedir_real',NULL) !!}
+              {!! Form::hidden('dias_pedir',NULL) !!}
               <tr>
                 <th scope="row">{!! Form::label('descripcion', 'Descripcion del articulo') !!}</th>
                 <td>{!! Form::text('descripcion', null, [ 'class' => 'form-control', 'autofocus', 'required'=>'required', 'id'=>'descripcion']) !!}</td>
@@ -149,6 +153,10 @@
               {!! Form::hidden('dias_restantes_rpt',$_GET['dias_restantes_rpt']) !!}
               {!! Form::hidden('origen_rpt',$_GET['origen_rpt']) !!}
               {!! Form::hidden('rango_rpt',$_GET['rango_rpt']) !!}
+              {!! Form::hidden('unidades_vendidas',$_GET['unidades_vendidas']) !!}
+              {!! Form::hidden('venta_diaria_real',$_GET['venta_diaria_real']) !!}
+              {!! Form::hidden('pedir_real',$_GET['pedir_real']) !!}
+              {!! Form::hidden('dias_pedir',$_GET['dias_pedir']) !!}
               <tr>
                 <th scope="row">{!! Form::label('descrip', 'Descripcion del articulo') !!}</th>
                 <td scope="row">{!! Form::label('descrip',$_GET['descripcion']) !!}</td>
