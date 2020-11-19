@@ -318,6 +318,10 @@
       echo'<input type="hidden" name="dias_restantes_rpt" value="'.$DiasRestantesQuiebre.'">';
       echo'<input type="hidden" name="origen_rpt" value="Productos menos vendidos">';
       echo'<input type="hidden" name="rango_rpt" value="Del: '.$FInicialImp.' Al: '.$FFinalImp.'">';
+      echo'<input type="hidden" name="unidades_vendidas" value="'.intval($Venta).'">';
+      echo'<input type="hidden" name="venta_diaria_real" value="'.round($VentaDiariaQuiebre,2).'">';
+      echo'<input type="hidden" name="pedir_real" value="-">';
+      echo'<input type="hidden" name="dias_pedir" value="-">';
       echo'
           <button type="submit" name="Reporte" role="button" class="btn btn-outline-success btn-sm" value="SI" style="width:100%;">Agregar</button>
         </form>
