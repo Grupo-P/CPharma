@@ -322,6 +322,10 @@
       echo'<input type="hidden" name="dias_restantes_rpt" value="'.$DiasRestantes.'">';
       echo'<input type="hidden" name="origen_rpt" value="Productos en Caida">';
       echo'<input type="hidden" name="rango_rpt" value="Del: '.$FInicialImp.' Al: '.$FFinalImp.'">';
+      echo'<input type="hidden" name="unidades_vendidas" value="'.intval($UnidadesVendidas).'">';
+      echo'<input type="hidden" name="venta_diaria_real" value="-">';
+      echo'<input type="hidden" name="pedir_real" value="-">';
+      echo'<input type="hidden" name="dias_pedir" value="-">';
       echo'
           <button type="submit" name="Reporte" role="button" class="btn btn-outline-success btn-sm" value="SI" style="width:100%;">Agregar</button>
         </form>
