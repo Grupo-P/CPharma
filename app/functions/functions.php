@@ -1915,6 +1915,17 @@
 				$rowCC = mysqli_fetch_assoc($resultCC);
 				$PrecioAyer = $rowCC["precio"];
 
+				if($Dolarizado=='SI' && _MensajeDolar_== 'SI' && _EtiquetaDolar_=='SI'){ 
+					$precioPartes = explode(".",$PrecioHoy);
+					$TasaActual = FG_Tasa_Fecha_Venta($connCPharma,date('Y-m-d'));
+					$PrecioHoy = $PrecioHoy/$TasaActual;
+					
+					$sqlCC = MySQL_DiasCero_PrecioAyer_Dolar($IdArticulo,$FechaCambio);
+					$resultCC = mysqli_query($connCPharma,$sqlCC);
+					$rowCC = mysqli_fetch_assoc($resultCC);
+					$PrecioAyer = $rowCC["precio_dolar"];
+				}
+
 				if( floatval(round($PrecioHoy,2)) != floatval($PrecioAyer) ){
 
 					if($Dolarizado=='SI'){
@@ -1933,16 +1944,7 @@
 							$mensajePie = "";
 						}
 
-						if(_EtiquetaDolar_=='SI'){
-							$precioPartes = explode(".",$PrecioHoy);
-							$TasaActual = FG_Tasa_Fecha_Venta($connCPharma,date('Y-m-d'));
-							$PrecioHoy = $PrecioHoy/$TasaActual;
-							
-							$sqlCC = MySQL_DiasCero_PrecioAyer_Dolar($IdArticulo,$FechaCambio);
-							$resultCC = mysqli_query($connCPharma,$sqlCC);
-							$rowCC = mysqli_fetch_assoc($resultCC);
-							$PrecioAyer = $rowCC["precio_dolar"];
-
+						if(_EtiquetaDolar_=='SI'){							
 							if($precioPartes[1]==DecimalEtiqueta){
 								$flag_imprime = true;				
 							}
