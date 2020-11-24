@@ -153,7 +153,7 @@
 							<table class="etq" style="display: inline;">
 								<thead class="etq">
 									<tr>
-										<td class="centrado titulo rowCenter" colspan="2">
+										<td class="centrado titulo rowCenter aumento1" colspan="2">
 											Código: '.$CodigoBarra.'
 										</td>
 									</tr>	
@@ -168,10 +168,10 @@
 										if( floatval(round($PrecioHoy,2)) < floatval($PrecioAyer) ){
 										$Etiqueta = $Etiqueta.'
 											<tr>
-												<td class="izquierda rowIzq rowIzqA" style="color:red;">
+												<td class="izquierda rowIzq rowIzqA aumento1" style="color:red;">
 													Precio '.$moneda.' Antes
 												</td>
-												<td class="derecha rowDer rowDerA" style="color:red;">
+												<td class="derecha rowDer rowDerA aumento1" style="color:red;">
 													<del>
 													'.number_format ($PrecioAyer,2,"," ,"." ).'
 													</del>
@@ -181,17 +181,17 @@
 										}
 									$Etiqueta = $Etiqueta.'
 									<tr>
-										<td class="centrado rowDer rowDerA aumento preciopromo" colspan="2" style="'.$tam_dolar.'">
+										<td class="centrado rowDer rowDerA aumento preciopromo" colspan="2">
 											<strong>
 											'.number_format ($PrecioHoy,2,"," ,"." ).'
 											</strong>
 										</td>
 									</tr>
 									<tr>
-										<td class="izquierda rowIzq rowIzqA">
+										<td class="izquierda rowIzq rowIzqA aumento1">
 											<strong>Total a Pagar '.$moneda.'</strong>
 										</td>
-										<td class="derecha rowDer rowDerA">
+										<td class="derecha rowDer rowDerA aumento1">
 											<strong>'.$simbolo.'</strong> '.date("d-m-Y").'
 										</td>
 									</tr>		
@@ -205,7 +205,7 @@
 							<table class="etq" style="display: inline;">
 								<thead class="etq">
 									<tr>
-										<td class="centrado titulo rowCenter" colspan="2">
+										<td class="centrado titulo rowCenter aumento" colspan="2">
 											Código: '.$CodigoBarra.'
 										</td>
 									</tr>	
@@ -217,7 +217,7 @@
 										</td>
 									</tr>
 									<tr>
-										<td class="centrado rowDer rowDerA aumento preciopromo" colspan="2">
+										<td class="centrado rowDer rowDerA aumento1 preciopromo" colspan="2">
 											<strong class="text-danger">
 											Solicite ayuda al dpto. de procesamiento
 											</strong>
@@ -279,7 +279,7 @@
 						<table class="etq" style="display: inline;">
 							<thead class="etq">
 								<tr>
-									<td class="centrado titulo rowCenter" colspan="2">
+									<td class="centrado titulo rowCenter aumento1" colspan="2">
 										Código: '.$CodigoBarra.'
 									</td>
 								</tr>	
@@ -291,17 +291,17 @@
 									</td>
 								</tr>
 								<tr>
-									<td class="centrado rowDer rowDerA aumento preciopromo" colspan="2" style="'.$tam_dolar.'">
+									<td class="centrado rowDer rowDerA aumento preciopromo" colspan="2">
 										<strong>
 										'.number_format ($PrecioHoy,2,"," ,"." ).'
 										</strong>
 									</td>
 								</tr>
 								<tr>
-									<td class="izquierda rowIzq rowIzqA">
+									<td class="izquierda rowIzq rowIzqA aumento1">
 										<strong>Total a Pagar '.$moneda.'</strong>
 									</td>
-									<td class="derecha rowDer rowDerA">
+									<td class="derecha rowDer rowDerA aumento1">
 										<strong>'.$simbolo.'</strong> '.date("d-m-Y").'
 									</td>
 								</tr>	
@@ -315,19 +315,19 @@
 						<table class="etq" style="display: inline;">
 							<thead class="etq">
 								<tr>
-									<td class="centrado titulo rowCenter" colspan="2">
+									<td class="centrado titulo rowCenter aumento1" colspan="2">
 										Código: '.$CodigoBarra.'
 									</td>
 								</tr>	
 							</thead>
 							<tbody class="etq">
 								<tr rowspan="2">
-									<td class="centrado descripcion aumento rowCenter" colspan="2">
+									<td class="centrado descripcion aumento rowCenter aumento" colspan="2">
 										<strong>'.$Descripcion.'</strong> 
 									</td>
 								</tr>
 								<tr>
-									<td class="centrado rowDer rowDerA aumento preciopromo" colspan="2">
+									<td class="centrado rowDer rowDerA aumento1 preciopromo" colspan="2">
 										<strong class="text-danger">
 										Solicite ayuda al dpto. de procesamiento
 										</strong>

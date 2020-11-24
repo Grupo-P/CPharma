@@ -85,7 +85,7 @@
     background-color: white;
 	}
 	.rowCenter{
-		width: 16cm;
+		width: 25cm;
 	}
 	.rowIzqA{
 		width: 7cm;
@@ -98,7 +98,7 @@
 		font-size: 1.1em;
 	}
 	.descripcion{
-		height: 3.5cm;
+		height: 3.5cm;    
 	}
 	.rowDer{
 		height: 2.5cm;
@@ -119,14 +119,16 @@
 		text-transform: uppercase;
 	}
 	.aumento{
-		font-size: 2.2em;
+		font-size: 4.5em;
 	}
+  .aumento1{
+    font-size: 2.5em;
+  }
   .preciopromo{
-    color: #dc3545;
-    font-size: 4em;
+    color: #dc3545;    
   }
   .divPromo{
-    width: 15cm;
+    width: 25cm;
     border: 15px solid #dc3545;
     border-radius: 25px;
     background-color: #dc3545;
@@ -135,7 +137,7 @@
     color: white;
     background-color: #dc3545;
     width: 100%;
-    font-size: 2.5em;
+    font-size: 4rem;
     text-align: center;
   }
   /* cuando vayamos a imprimir ... */
