@@ -108,6 +108,7 @@
 						$moneda = SigDolar;
 
 						if(_MensajeDolar_== 'SI' && _EtiquetaDolar_=='SI'){
+							$tam_dolar = "font-size:1.7rem;";
 							$mensajePie = '
 								<tr>
 									<td class="centrado titulo rowCenter" colspan="2">
@@ -117,6 +118,7 @@
 							';
 						}else{
 							$mensajePie = "";
+							$tam_dolar = "";
 						}
 
 						if(_EtiquetaDolar_=='SI'){
@@ -179,7 +181,7 @@
 										}
 									$Etiqueta = $Etiqueta.'
 									<tr>
-										<td class="centrado rowDer rowDerA aumento preciopromo" colspan="2">
+										<td class="centrado rowDer rowDerA aumento preciopromo" colspan="2" style="'.$tam_dolar.'">
 											<strong>
 											'.number_format ($PrecioHoy,2,"," ,"." ).'
 											</strong>
@@ -237,6 +239,7 @@
 					$moneda = SigDolar;
 
 					if(_MensajeDolar_== 'SI' && _EtiquetaDolar_=='SI'){
+						$tam_dolar = "font-size:1.7rem;";
 						$mensajePie = '
 							<tr>
 								<td class="centrado titulo rowCenter" colspan="2">
@@ -245,6 +248,7 @@
 							</tr>
 						';
 					}else{
+						$tam_dolar = "";
 						$mensajePie = "";
 					}
 
@@ -287,7 +291,7 @@
 									</td>
 								</tr>
 								<tr>
-									<td class="centrado rowDer rowDerA aumento preciopromo" colspan="2">
+									<td class="centrado rowDer rowDerA aumento preciopromo" colspan="2" style="'.$tam_dolar.'">
 										<strong>
 										'.number_format ($PrecioHoy,2,"," ,"." ).'
 										</strong>
