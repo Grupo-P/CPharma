@@ -8,7 +8,7 @@
 <style>	
 	table{
 		display: inline;
-		margin:-2px;
+		margin:-2px;		
 	}
 	thead{
 		border-top: 1px solid black;
@@ -39,7 +39,7 @@
 		height: 2cm;
 	}
 	.rowDer{
-		height: 1cm;
+		height: 1cm;		
 	}
 	.rowIzq{
 		height: 1cm;
@@ -48,7 +48,7 @@
 		text-align: center;
 		text-transform: uppercase;
 	}
-	.derecha{
+	.derecha{		
 		text-align: right;
 		text-transform: uppercase;
 	}
@@ -81,7 +81,12 @@
 	<hr class="row align-items-start col-12">
 	';
 
-	FG_Generer_Etiquetas($clasificacion,$tipo,$dia);
+	//FG_Generer_Etiquetas($clasificacion,$tipo,$dia);
+	$SedeConnection = FG_Mi_Ubicacion();
+	$conn = FG_Conectar_Smartpharma($SedeConnection);
+	$connCPharma = FG_Conectar_CPharma();
+	FG_Etiquetas($conn,$connCPharma,'11','SI',true,'2020-11-22');
+
 	$concatedado = ''.$clasificacion.' '.$tipo.' '.$dia;
 	FG_Guardar_Auditoria('GENERAR','ETIQUETA',$concatedado);
 	$FinCarga = new DateTime("now");

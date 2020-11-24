@@ -1933,6 +1933,7 @@
 						$moneda = SigDolar;
 
 						if(_MensajeDolar_== 'SI' && _EtiquetaDolar_=='SI'){
+							$tam_dolar = "font-size:1.7rem;";
 							$mensajePie = '
 								<tr>
 									<td class="centrado titulo rowCenter" colspan="2">
@@ -1942,6 +1943,7 @@
 							';
 						}else{
 							$mensajePie = "";
+							$tam_dolar = "";
 						}
 
 						if(_EtiquetaDolar_=='SI'){							
@@ -1976,7 +1978,7 @@
 								<tbody>
 									<tr rowspan="2">
 										<td class="centrado descripcion aumento rowCenter" colspan="2">
-											<strong>'.$Descripcion.'</strong> 
+											<strong>'.$Descripcion.'</strong>
 										</td>
 									</tr>
 									';
@@ -1987,9 +1989,11 @@
 													Precio '.$moneda.' Antes
 												</td>
 												<td class="derecha rowDer rowDerA" style="color:red;">
+												<label style="margin-right:10px;">
 													<del>
 													'.number_format ($PrecioAyer,2,"," ,"." ).'
 													</del>
+												</label>
 												</td>
 											</tr>
 										';
@@ -2000,9 +2004,11 @@
 											<strong>Total a Pagar '.$moneda.'</strong>
 										</td>
 										<td class="derecha rowDer rowDerA aumento">
+										<label style="margin-right:10px;'.$tam_dolar.'">
 											<strong>
 											'.number_format ($PrecioHoy,2,"," ,"." ).'
 											</strong>
+										</label>
 										</td>
 									</tr>
 									<tr>
@@ -2055,6 +2061,7 @@
 						$moneda = SigDolar;
 
 						if(_MensajeDolar_== 'SI' && _EtiquetaDolar_=='SI'){
+							$tam_dolar = "font-size:1.7rem;";
 							$mensajePie = '
 								<tr>
 									<td class="centrado titulo rowCenter" colspan="2">
@@ -2063,6 +2070,7 @@
 								</tr>
 							';
 						}else{
+							$tam_dolar = "";
 							$mensajePie = "";
 						}
 
@@ -2115,9 +2123,11 @@
 										<strong>Total a Pagar '.$moneda.'</strong>
 									</td>
 									<td class="derecha rowDer rowDerA aumento">
+									<label style="margin-right:10px;'.$tam_dolar.'">
 										<strong>
 										'.number_format ($PrecioHoy,2,"," ,"." ).'
 										</strong>
+									</label>
 									</td>
 								</tr>
 								<tr>
