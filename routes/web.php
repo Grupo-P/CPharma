@@ -215,6 +215,10 @@ Route::get('/Generar_Etiqueta_Promocion', function() {
     return view('pages.etiqueta.Generar_Etiqueta_Promocion');
 });
 
+Route::get('/Generar_Etiqueta_Promocion_G', function() {
+    return view('pages.etiqueta.Generar_Etiqueta_Promocion_G');
+});
+
 Route::get('/SearchAjuste', function() {
     return view('pages.traslado.SearchAjuste');
 });
