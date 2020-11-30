@@ -147,8 +147,7 @@
       display:block;
       page-break-before:always;
     }    
-  }
-  @page {size: landscape}
+  }  
 </style>
 
 @section('content')

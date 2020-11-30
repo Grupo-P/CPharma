@@ -147,8 +147,7 @@
       display:block;
       page-break-before:always;
     }    
-  }
-  @page {size: landscape}
+  }  
 </style>
 
 @section('content')
@@ -232,7 +231,7 @@
       </thead>
     </table>
 
-    <div id="DivEtiquetas"></div>
+    <div id="DivEtiquetas">Hola</div>
 
 @endsection
 
