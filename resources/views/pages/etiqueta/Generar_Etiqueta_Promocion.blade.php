@@ -290,7 +290,7 @@
 
 	<script>
     var dominio = dominio(SedeConnectionJs);
-    const URLEtiquetaUnica = ''+dominio+'assets/functions/functionEtiquetaUnica.php';
+    const URLEtiquetaUnica = ''+dominio+'assets/functions/functionEtiquetaPromocion.php';
 
 		$('#inputCodBar').attr("placeholder", "Haga scan o escriba el codigo de barra");
 		$('#inputCodBar').attr("onblur", "this.placeholder = 'Haga scan o escriba el codigo de barra'");
