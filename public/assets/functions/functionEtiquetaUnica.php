@@ -65,9 +65,10 @@
 		FUNCION: crea la etiqueta para el caso que corresponda
 		DESARROLLADO POR: SERGIO COVA
  	*/
- 	function FG_Etiqueta_Unica($conn,$connCPharma,$IdArticulo,$Dolarizado,$IsPrecioAyer,$FechaCambio) {
+ 	function FG_Etiqueta_Unica($conn,$connCPharma,$IdArticulo,$Dolarizado,$IsPrecioAyer,$FechaCambio) 			{
  		$Etiqueta = ''; 	
  		$mensajePie = "";	
+ 		$tam_dolar = "";
 
  		$sql2 = SQG_Detalle_Articulo($IdArticulo);
 		$result2 = sqlsrv_query($conn,$sql2);
@@ -146,6 +147,7 @@
 						$simbolo = '';
 						$moneda = SigVe;
 						$flag_imprime = true;
+						$tam_dolar = "";
 					}
 					
 					if($flag_imprime == true){
@@ -153,7 +155,7 @@
 							<table class="etq" style="display: inline;">
 								<thead class="etq">
 									<tr>
-										<td class="centrado titulo rowCenter aumento1" colspan="2">
+										<td class="centrado titulo rowCenter" colspan="2">
 											Código: '.$CodigoBarra.'
 										</td>
 									</tr>	
@@ -168,10 +170,10 @@
 										if( floatval(round($PrecioHoy,2)) < floatval($PrecioAyer) ){
 										$Etiqueta = $Etiqueta.'
 											<tr>
-												<td class="izquierda rowIzq rowIzqA aumento1" style="color:red;">
+												<td class="izquierda rowIzq rowIzqA" style="color:red;">
 													Precio '.$moneda.' Antes
 												</td>
-												<td class="derecha rowDer rowDerA aumento1" style="color:red;">
+												<td class="derecha rowDer rowDerA" style="color:red;">
 													<del>
 													'.number_format ($PrecioAyer,2,"," ,"." ).'
 													</del>
@@ -181,17 +183,21 @@
 										}
 									$Etiqueta = $Etiqueta.'
 									<tr>
-										<td class="centrado rowDer rowDerA aumento preciopromo" colspan="2">
+										<td class="izquierda rowIzq rowIzqA aumento">
+											<strong>Total a Pagar '.$moneda.'</strong>
+										</td>
+										<td class="derecha rowDer rowDerA aumento">
+										<label style="margin-right:10px;'.$tam_dolar.'">
 											<strong>
 											'.number_format ($PrecioHoy,2,"," ,"." ).'
 											</strong>
+										</label>
 										</td>
 									</tr>
 									<tr>
-										<td class="izquierda rowIzq rowIzqA aumento1">
-											<strong>Total a Pagar '.$moneda.'</strong>
+										<td class="izquierda dolarizado rowIzq rowIzqA">
 										</td>
-										<td class="derecha rowDer rowDerA aumento1">
+										<td class="derecha rowDer rowDerA">
 											<strong>'.$simbolo.'</strong> '.date("d-m-Y").'
 										</td>
 									</tr>		
@@ -205,7 +211,7 @@
 							<table class="etq" style="display: inline;">
 								<thead class="etq">
 									<tr>
-										<td class="centrado titulo rowCenter aumento" colspan="2">
+										<td class="centrado titulo rowCenter" colspan="2">
 											Código: '.$CodigoBarra.'
 										</td>
 									</tr>	
@@ -217,7 +223,7 @@
 										</td>
 									</tr>
 									<tr>
-										<td class="centrado rowDer rowDerA aumento1 preciopromo" colspan="2">
+										<td class="centrado rowDer rowDerA aumento preciopromo" colspan="2">
 											<strong class="text-danger">
 											Solicite ayuda al dpto. de procesamiento
 											</strong>
@@ -279,7 +285,7 @@
 						<table class="etq" style="display: inline;">
 							<thead class="etq">
 								<tr>
-									<td class="centrado titulo rowCenter aumento1" colspan="2">
+									<td class="centrado titulo rowCenter" colspan="2">
 										Código: '.$CodigoBarra.'
 									</td>
 								</tr>	
@@ -291,17 +297,21 @@
 									</td>
 								</tr>
 								<tr>
-									<td class="centrado rowDer rowDerA aumento preciopromo" colspan="2">
+									<td class="izquierda rowIzq rowIzqA aumento">
+										<strong>Total a Pagar '.$moneda.'</strong>
+									</td>
+									<td class="derecha rowDer rowDerA aumento">
+									<label style="margin-right:10px;'.$tam_dolar.'">
 										<strong>
 										'.number_format ($PrecioHoy,2,"," ,"." ).'
 										</strong>
+									</label>
 									</td>
 								</tr>
 								<tr>
-									<td class="izquierda rowIzq rowIzqA aumento1">
-										<strong>Total a Pagar '.$moneda.'</strong>
+									<td class="izquierda dolarizado rowIzq rowIzqA">
 									</td>
-									<td class="derecha rowDer rowDerA aumento1">
+									<td class="derecha rowDer rowDerA">
 										<strong>'.$simbolo.'</strong> '.date("d-m-Y").'
 									</td>
 								</tr>	
@@ -315,19 +325,19 @@
 						<table class="etq" style="display: inline;">
 							<thead class="etq">
 								<tr>
-									<td class="centrado titulo rowCenter aumento1" colspan="2">
+									<td class="centrado titulo rowCenter" colspan="2">
 										Código: '.$CodigoBarra.'
 									</td>
 								</tr>	
 							</thead>
 							<tbody class="etq">
 								<tr rowspan="2">
-									<td class="centrado descripcion aumento rowCenter aumento" colspan="2">
+									<td class="centrado descripcion aumento rowCenter" colspan="2">
 										<strong>'.$Descripcion.'</strong> 
 									</td>
 								</tr>
 								<tr>
-									<td class="centrado rowDer rowDerA aumento1 preciopromo" colspan="2">
+									<td class="centrado rowDer rowDerA aumento preciopromo" colspan="2">
 										<strong class="text-danger">
 										Solicite ayuda al dpto. de procesamiento
 										</strong>

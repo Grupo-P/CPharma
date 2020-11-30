@@ -81,7 +81,12 @@
 	<hr class="row align-items-start col-12">
 	';
 
-	FG_Generer_Etiquetas($clasificacion,$tipo,$dia);	
+	//$SedeConnection = FG_Mi_Ubicacion();
+	//$conn = FG_Conectar_Smartpharma($SedeConnection);
+	//$connCPharma = FG_Conectar_CPharma();
+	//FG_Etiquetas($conn,$connCPharma,"60700","SI",false,false);
+
+	FG_Generer_Etiquetas($clasificacion,$tipo,$dia);
 	$concatedado = ''.$clasificacion.' '.$tipo.' '.$dia;
 	FG_Guardar_Auditoria('GENERAR','ETIQUETA',$concatedado);
 	$FinCarga = new DateTime("now");

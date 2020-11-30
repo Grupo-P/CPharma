@@ -66,57 +66,57 @@
   }
 	.etq table{
 		display: inline;
-		margin:-2px;
+    margin:-2px;
 	}
 	.etq thead{
 		border-top: 1px solid black;
-		border-right: 1px solid black;
-		border-left: 1px solid black;
-		border-radius: 0px;
+    border-right: 1px solid black;
+    border-left: 1px solid black;
+    border-radius: 0px;
 	}
 	.etq tbody{
 		border-bottom: 1px solid black;
-		border-right: 1px solid black;
-		border-left: 1px solid black;
-		border-radius: 0px;
+    border-right: 1px solid black;
+    border-left: 1px solid black;
+    border-radius: 0px;
 	}
 	.rowCenter{
-		width: 8cm;
-	}
-	.rowIzqA{
-		width: 5cm;
-	}
-	.rowDerA{
-		width: 3cm;
-	}
-	.titulo{
-		height: 0.5cm;
-		font-size: 0.8em;
-	}
-	.descripcion{
-		height: 2cm;
-	}
-	.rowDer{
-		height: 1cm;
-	}
-	.rowIzq{
-		height: 1cm;
-	}
-	.centrado{
-		text-align: center;
-		text-transform: uppercase;
-	}
-	.derecha{
-		text-align: right;
-		text-transform: uppercase;
-	}
-	.izquierda{
-		text-align: left;
-		text-transform: uppercase;
-	}
-	.aumento{
-		font-size: 1.1em;
-	}
+    width: 8cm;
+  }
+  .rowIzqA{
+    width: 5cm;
+  }
+  .rowDerA{
+    width: 3cm;
+  }
+  .titulo{
+    height: 0.5cm;
+    font-size: 0.8em;
+  }
+  .descripcion{
+    height: 2cm;
+  }
+  .rowDer{
+    height: 1cm;    
+  }
+  .rowIzq{
+    height: 1cm;
+  }
+  .centrado{
+    text-align: center;
+    text-transform: uppercase;
+  }
+  .derecha{   
+    text-align: right;
+    text-transform: uppercase;
+  }
+  .izquierda{
+    text-align: left;
+    text-transform: uppercase;
+  }
+  .aumento{
+    font-size: 1.1em;
+  }
 </style>
 
 @section('content')
