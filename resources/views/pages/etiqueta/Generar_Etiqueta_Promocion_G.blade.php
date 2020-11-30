@@ -1,4 +1,4 @@
-@extends('layouts.modelUser')
+@extends('layouts.modelUserH')
 
 @section('title')
   Etiqueta
