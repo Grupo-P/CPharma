@@ -231,7 +231,7 @@
       </thead>
     </table>
 
-    <div id="DivEtiquetas">Hola</div>
+    <div id="DivEtiquetas"></div>
 
 @endsection
 
