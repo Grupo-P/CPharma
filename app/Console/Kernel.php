@@ -25,13 +25,13 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('Capturar:DiasCero')->withoutOverlapping()->timezone('America/Caracas')->between('7:00', '10:10');
+        $schedule->command('Capturar:DiasCero')->withoutOverlapping()->timezone('America/Caracas')->between('2:00', '10:00');
 
-        $schedule->command('Capturar:Etiquetas')->withoutOverlapping()->timezone('America/Caracas')->between('7:00', '10:10');
+        $schedule->command('Capturar:Etiquetas')->withoutOverlapping()->timezone('America/Caracas')->between('2:00', '10:00');
 
-        $schedule->command('Capturar:ProductosCaida')->withoutOverlapping()->timezone('America/Caracas')->between('7:00', '10:10');
+        $schedule->command('Capturar:ProductosCaida')->withoutOverlapping()->timezone('America/Caracas')->between('2:00', '10:00');
 
-        $schedule->command('Capturar:Categorias')->withoutOverlapping()->timezone('America/Caracas')->between('7:00', '10:10');
+        $schedule->command('Capturar:Categorias')->withoutOverlapping()->timezone('America/Caracas')->between('2:00', '10:00');
 
         $schedule->command('Capturar:CorridaPrecios')->withoutOverlapping()->timezone('America/Caracas')->between('10:20', '23:00');
     }
