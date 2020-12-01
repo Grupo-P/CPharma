@@ -85,7 +85,7 @@
     background-color: white;
 	}
 	.rowCenter{
-		width: 25cm;
+		width: 40cm;
 	}
 	.rowIzqA{
 		width: 7cm;
@@ -98,13 +98,13 @@
 		font-size: 1.1em;
 	}
 	.descripcion{
-		height: 3.5cm;    
+		height: 8cm;    
 	}
 	.rowDer{
-		height: 2.5cm;
+		height: 6cm;
 	}
 	.rowIzq{
-		height: 2.5cm;
+		height: 6cm;
 	}
 	.centrado{
 		text-align: center;
@@ -119,16 +119,17 @@
 		text-transform: uppercase;
 	}
 	.aumento{
-		font-size: 4.5em;
+		font-size: 6.5em;
 	}
   .aumento1{
-    font-size: 2.5em;
+    font-size: 4.5em;
   }
   .preciopromo{
     color: #dc3545;    
   }
-  .divPromo{
-    width: 25cm;
+  .divPromo{    
+    margin-left: -300px;
+    width: 40cm;
     border: 15px solid #dc3545;
     border-radius: 25px;
     background-color: #dc3545;
@@ -137,7 +138,7 @@
     color: white;
     background-color: #dc3545;
     width: 100%;
-    font-size: 4rem;
+    font-size: 5rem;
     text-align: center;
   }
   /* cuando vayamos a imprimir ... */
