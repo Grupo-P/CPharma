@@ -2092,7 +2092,7 @@
 							$rowCC = mysqli_fetch_assoc($resultCC);
 							$PrecioAyer = $rowCC["precio_dolar"];							
 
-							if(isset($precioPartes)){
+							if(isset($precioPartes) && isset($precioPartes[1])){
 								if($precioPartes[1]==DecimalEtiqueta){
 									$flag_imprime = true;				
 								}
