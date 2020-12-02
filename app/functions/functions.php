@@ -2088,16 +2088,22 @@
 							$rowCC = mysqli_fetch_assoc($resultCC);
 							$PrecioAyer = $rowCC["precio_dolar"];							
 
-							if($precioPartes[1]==DecimalEtiqueta){
-								$flag_imprime = true;				
-							}
-							else{
-								$flag_imprime = false;								
-							}						
+							if(isset($precioPartes) && isset($precioPartes[1])){
+								if($precioPartes[1]==DecimalEtiqueta){
+									$flag_imprime = true;				
+								}
+								else{
+									$flag_imprime = false;								
+								}
+							}else{
+								print_r($$precioPartes);
+							}	
+
 						}else if(_EtiquetaDolar_=='NO'){
 							$flag_imprime = true;
 							$moneda = SigVe;
 						}												
+							}
 					}
 					else{
 						$simbolo = '';
