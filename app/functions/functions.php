@@ -1916,7 +1916,8 @@
 				$rowCC = mysqli_fetch_assoc($resultCC);
 				$PrecioAyer = $rowCC["precio"];
 
-				if($Dolarizado=='SI' && _MensajeDolar_== 'SI' && _EtiquetaDolar_=='SI'){ 
+				//if($Dolarizado=='SI' && _MensajeDolar_== 'SI' && _EtiquetaDolar_=='SI'){ 
+				if($Dolarizado=='SI' && _EtiquetaDolar_=='SI'){
 					$precioPartes = explode(".",$PrecioHoy);
 					$TasaActual = FG_Tasa_Fecha_Venta($connCPharma,date('Y-m-d'));
 					$PrecioHoy = $PrecioHoy/$TasaActual;
@@ -1931,10 +1932,10 @@
 
 					if($Dolarizado=='SI'){
 						$simbolo = '*';
-						$moneda = SigDolar;
+						$moneda = SigDolar;						
 
 						if(_MensajeDolar_== 'SI' && _EtiquetaDolar_=='SI'){
-							$tam_dolar = "font-size:1.7rem;";
+							//$tam_dolar = "font-size:1.7rem;";
 							$mensajePie = '
 								<tr>
 									<td class="centrado titulo rowCenter" colspan="2">
@@ -1947,7 +1948,8 @@
 							$tam_dolar = "";
 						}
 
-						if(_EtiquetaDolar_=='SI'){							
+						if(_EtiquetaDolar_=='SI'){	
+							$tam_dolar = "font-size:1.7rem;";						
 							if($precioPartes[1]==DecimalEtiqueta){
 								$flag_imprime = true;				
 							}
