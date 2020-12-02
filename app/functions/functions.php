@@ -1929,8 +1929,7 @@
 				$resultCC = mysqli_query($connCPharma,$sqlCC);
 				$rowCC = mysqli_fetch_assoc($resultCC);
 				$PrecioAyer = $rowCC["precio"];
-
-				//if($Dolarizado=='SI' && _MensajeDolar_== 'SI' && _EtiquetaDolar_=='SI'){ 
+				
 				if($Dolarizado=='SI' && _EtiquetaDolar_=='SI'){
 					$precioPartes = explode(".",$PrecioHoy);
 					$TasaActual = FG_Tasa_Fecha_Venta($connCPharma,date('Y-m-d'));
@@ -1948,8 +1947,7 @@
 						$simbolo = '*';
 						$moneda = SigDolar;						
 
-						if(_MensajeDolar_== 'SI' && _EtiquetaDolar_=='SI'){
-							//$tam_dolar = "font-size:1.7rem;";
+						if(_MensajeDolar_== 'SI' && _EtiquetaDolar_=='SI'){						
 							$mensajePie = '
 								<tr>
 									<td class="centrado titulo rowCenter" colspan="2">
@@ -1976,6 +1974,10 @@
 								$moneda = SigVe;
 							}
 						}else{
+							print_r($IdArticulo);
+							print_r($CodigoBarra);
+							print_r($Descripcion);
+							print_r($PrecioHoy);
 							print_r($precioPartes);
 						}												
 					}
@@ -2118,8 +2120,7 @@
 								print_r($CodigoBarra);
 								print_r($Descripcion);
 								print_r($PrecioHoy);
-								print_r($precioPartes);
-								die;
+								print_r($precioPartes);								
 							}
 
 						}else if(_EtiquetaDolar_=='NO'){
