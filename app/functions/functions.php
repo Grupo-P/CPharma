@@ -1084,7 +1084,14 @@
 				/*CASO 2: Cuando el articulo NO tiene el atributo troquelado*/
 				$PrecioCalculado = FG_Precio_Calculado_Alfa($UtilidadArticulo,$UtilidadCategoria,$IsIVA,$PrecioCompraBruto);
 
-				$Precio = max($PrecioCalculado,$TroquelAlmacen1,$TroquelAlmacen2);
+				$precioPartes = explode(".",$TroquelAlmacen1);
+
+				if( isset($precioPartes[1]) && $precioPartes[1]==DecimalEtiqueta){
+					$Precio = $TroquelAlmacen1;
+				}else{
+					$Precio = max($PrecioCalculado,$TroquelAlmacen1,$TroquelAlmacen2);
+				}
+	
 			}
 		}
 		else if(($Existencia==0) && ($CondicionExistencia=='SIN_EXISTENCIA')) {
@@ -1112,7 +1119,14 @@
 				/*CASO 2: Cuando el articulo NO tiene el atributo troquelado*/
 				$PrecioCalculado = FG_Precio_Calculado_Alfa($UtilidadArticulo,$UtilidadCategoria,$IsIVA,$PrecioCompraBruto);
 
-				$Precio = max($PrecioCalculado,$TroquelAlmacen1,$TroquelAlmacen2);
+				$precioPartes = explode(".",$TroquelAlmacen1);
+
+				if( isset($precioPartes[1]) && $precioPartes[1]==DecimalEtiqueta){
+					$Precio = $TroquelAlmacen1;
+				}else{
+					$Precio = max($PrecioCalculado,$TroquelAlmacen1,$TroquelAlmacen2);
+				}
+
 			}
 		}
 
