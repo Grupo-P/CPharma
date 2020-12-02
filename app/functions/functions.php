@@ -2100,7 +2100,7 @@
 									$flag_imprime = false;								
 								}
 							}else{
-								prrnt_r($IdArticulo);
+								print_r($IdArticulo);
 								print_r($CodigoBarra);
 								print_r($Descripcion);
 								print_r($PrecioHoy);
