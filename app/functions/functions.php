@@ -1948,17 +1948,21 @@
 							$tam_dolar = "";
 						}
 
-						if(_EtiquetaDolar_=='SI'){	
-							$tam_dolar = "font-size:1.7rem;";						
-							if($precioPartes[1]==DecimalEtiqueta){
-								$flag_imprime = true;				
+						if(isset($precioPartes) && isset($precioPartes[1])){
+							if(_EtiquetaDolar_=='SI'){	
+								$tam_dolar = "font-size:1.7rem;";						
+								if($precioPartes[1]==DecimalEtiqueta){
+									$flag_imprime = true;				
+								}
+								else{
+									$flag_imprime = false;								
+								}						
+							}else if(_EtiquetaDolar_=='NO'){
+								$flag_imprime = true;
+								$moneda = SigVe;
 							}
-							else{
-								$flag_imprime = false;								
-							}						
-						}else if(_EtiquetaDolar_=='NO'){
-							$flag_imprime = true;
-							$moneda = SigVe;
+						}else{
+							print_r($precioPartes);
 						}												
 					}
 					else{
@@ -2096,14 +2100,14 @@
 									$flag_imprime = false;								
 								}
 							}else{
-								print_r($$precioPartes);
-							}	
+								print_r($precioPartes);
+							}
 
 						}else if(_EtiquetaDolar_=='NO'){
 							$flag_imprime = true;
 							$moneda = SigVe;
 						}												
-							}
+							
 					}
 					else{
 						$simbolo = '';
