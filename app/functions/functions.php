@@ -2221,12 +2221,9 @@
 		$CuentaCard = 0;
 		$CuentaEtiqueta = 0;
 
-		//
-		$x = 0;
-
 		$result = $connCPharma->query("SELECT id_articulo FROM etiquetas WHERE clasificacion = '$clasificacion'");
 
-		while($row = $result->fetch_assoc() && $x<1){
+		while($row = $result->fetch_assoc() && $CuentaEtiqueta<1){
 			$IdArticulo = $row['id_articulo'];
 			$sql3 = SQL_Es_Dolarizado($IdArticulo);
 			$result3 = sqlsrv_query($conn,$sql3);
@@ -2236,8 +2233,7 @@
 				$flag = FG_Etiquetas($conn,$connCPharma,$IdArticulo,$Dolarizado,false,false);
 				if($flag==true){
 					$CuentaCard++;
-					$CuentaEtiqueta++;		
-					$x++;
+					$CuentaEtiqueta++;							
 				}
 			}
 			else if(($Dolarizado=='NO')&&($tipo!='DOLARIZADO')){
