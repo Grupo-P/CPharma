@@ -2226,7 +2226,7 @@
 
 		$result = $connCPharma->query("SELECT id_articulo FROM etiquetas WHERE clasificacion = '$clasificacion'");
 
-		while($row = $result->fetch_assoc() && $x==0){
+		while($row = $result->fetch_assoc() && $x<1){
 			$IdArticulo = $row['id_articulo'];
 			$sql3 = SQL_Es_Dolarizado($IdArticulo);
 			$result3 = sqlsrv_query($conn,$sql3);
@@ -2237,7 +2237,7 @@
 				if($flag==true){
 					$CuentaCard++;
 					$CuentaEtiqueta++;		
-					$x = 1;			
+					$x++;
 				}
 			}
 			else if(($Dolarizado=='NO')&&($tipo!='DOLARIZADO')){
