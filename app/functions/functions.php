@@ -2234,6 +2234,7 @@
 				if($flag==true){
 					$CuentaCard++;
 					$CuentaEtiqueta++;
+					die;
 				}
 			}
 			else if(($Dolarizado=='NO')&&($tipo!='DOLARIZADO')){
