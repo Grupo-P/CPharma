@@ -2223,7 +2223,7 @@
 
 		$result = $connCPharma->query("SELECT id_articulo FROM etiquetas WHERE clasificacion = '$clasificacion'");
 
-		while($row = $result->fetch_assoc() && $CuentaEtiqueta<1){
+		while($row = $result->fetch_assoc()){
 			$IdArticulo = $row['id_articulo'];
 			$sql3 = SQL_Es_Dolarizado($IdArticulo);
 			$result3 = sqlsrv_query($conn,$sql3);
