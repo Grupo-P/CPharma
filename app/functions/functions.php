@@ -1973,12 +1973,32 @@
 								$flag_imprime = true;
 								$moneda = SigVe;
 							}
-						}else{
-							print_r($IdArticulo);
-							print_r($CodigoBarra);
-							print_r($Descripcion);
-							print_r($PrecioHoy);
-							print_r($precioPartes);
+						}else{							
+							echo'
+							<table class="etq" style="display: inline;">
+								<thead class="etq">
+									<tr>
+										<td class="centrado titulo rowCenter" colspan="2">
+											Código: '.$CodigoBarra.'
+										</td>
+									</tr>	
+								</thead>
+								<tbody class="etq">
+									<tr rowspan="2">
+										<td class="centrado descripcion aumento rowCenter" colspan="2">
+											<strong>'.$Descripcion.'</strong> 
+										</td>
+									</tr>
+									<tr>
+										<td class="centrado rowDer rowDerA aumento preciopromo" colspan="2">
+											<strong class="text-danger">
+											Solicite ayuda al dpto. de procesamiento
+											</strong>
+										</td>
+									</tr>										
+								</tbody>
+							</table>
+							';
 						}												
 					}
 					else{
@@ -2062,7 +2082,7 @@
 								<tbody class="etq">
 									<tr rowspan="2">
 										<td class="centrado descripcion aumento rowCenter" colspan="2">
-											<strong>'.$Descripcion.'</strong> 
+											<strong>'.$Descripcion.'</strong>
 										</td>
 									</tr>
 									<tr>
@@ -2116,11 +2136,31 @@
 									$flag_imprime = false;								
 								}
 							}else{
-								print_r($IdArticulo);
-								print_r($CodigoBarra);
-								print_r($Descripcion);
-								print_r($PrecioHoy);
-								print_r($precioPartes);								
+								echo'
+								<table class="etq" style="display: inline;">
+									<thead class="etq">
+										<tr>
+											<td class="centrado titulo rowCenter" colspan="2">
+												Código: '.$CodigoBarra.'
+											</td>
+										</tr>	
+									</thead>
+									<tbody class="etq">
+										<tr rowspan="2">
+											<td class="centrado descripcion aumento rowCenter" colspan="2">
+												<strong>'.$Descripcion.'</strong> 
+											</td>
+										</tr>
+										<tr>
+											<td class="centrado rowDer rowDerA aumento preciopromo" colspan="2">
+												<strong class="text-danger">
+												Solicite ayuda al dpto. de procesamiento
+												</strong>
+											</td>
+										</tr>										
+									</tbody>
+								</table>
+								';								
 							}
 
 						}else if(_EtiquetaDolar_=='NO'){
@@ -2426,15 +2466,19 @@
 	    $arrayIteracion["Dolarizado"]=$row['Dolarizado'];
 	    $arraySugeridos[]=$arrayIteracion;
 	  }
-	 	/*Obtener datos del caso 4*/
-		$arrayIteracion = array();
-		$sql = SQL_CP_Etiqueta_C4($FechaI,$FechaF);
-		$result = sqlsrv_query($conn,$sql);		
-		while( $row = sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC) ){
-			$arrayIteracion["IdArticulo"]=$row['IdArticulo'];
-	    $arrayIteracion["Dolarizado"]=$row['Dolarizado'];
-	    $arraySugeridos[]=$arrayIteracion;
+
+	  if(_EtiquetaDolar_=="NO"){
+	  	/*Obtener datos del caso 4*/
+			$arrayIteracion = array();
+			$sql = SQL_CP_Etiqueta_C4($FechaI,$FechaF);
+			$result = sqlsrv_query($conn,$sql);		
+			while( $row = sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC) ){
+				$arrayIteracion["IdArticulo"]=$row['IdArticulo'];
+		    $arrayIteracion["Dolarizado"]=$row['Dolarizado'];
+		    $arraySugeridos[]=$arrayIteracion;
+		  }
 	  }
+	 	
 		return $arraySugeridos;
 	}
 	/**********************************************************************************/
