@@ -1086,7 +1086,7 @@
 
 				$precioPartes = explode(".",$TroquelAlmacen1);
 
-				if( isset($precioPartes[1]) && $precioPartes[1]==DecimalEtiqueta){
+				if( count($precioPartes)>=2 && $precioPartes[1]==DecimalEtiqueta){
 					$Precio = $TroquelAlmacen1;
 				}else{
 					$Precio = max($PrecioCalculado,$TroquelAlmacen1,$TroquelAlmacen2);
@@ -1121,7 +1121,7 @@
 
 				$precioPartes = explode(".",$TroquelAlmacen1);
 
-				if( isset($precioPartes[1]) && $precioPartes[1]==DecimalEtiqueta){
+				if( count($precioPartes)>=2 && $precioPartes[1]==DecimalEtiqueta){
 					$Precio = $TroquelAlmacen1;
 				}else{
 					$Precio = max($PrecioCalculado,$TroquelAlmacen1,$TroquelAlmacen2);
@@ -1961,7 +1961,7 @@
 							$tam_dolar = "";
 						}
 
-						if(isset($precioPartes) && isset($precioPartes[1])){
+						if(isset($precioPartes) && count($precioPartes)>=2){
 							if(_EtiquetaDolar_=='SI'){	
 								$tam_dolar = "font-size:1.7rem;";						
 								if($precioPartes[1]==DecimalEtiqueta){
@@ -2129,7 +2129,7 @@
 							$rowCC = mysqli_fetch_assoc($resultCC);
 							$PrecioAyer = $rowCC["precio_dolar"];							
 
-							if(isset($precioPartes) && isset($precioPartes[1])){
+							if(isset($precioPartes) && count($precioPartes)>=2){
 								if($precioPartes[1]==DecimalEtiqueta){
 									$flag_imprime = true;				
 								}
