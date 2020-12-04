@@ -1897,6 +1897,7 @@
  		$flag = false;
  		$mensajePie = "";
  		$tam_dolar = "";
+ 		$flag_imprime = false;
 
  		$sql2 = SQG_Detalle_Articulo($IdArticulo);
 		$result2 = sqlsrv_query($conn,$sql2);
