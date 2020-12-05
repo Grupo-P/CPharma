@@ -1922,8 +1922,8 @@
 
 		if(intval($Existencia)>0){
 
-			$PrecioHoy = FG_Calculo_Precio_Alfa($Existencia,$ExistenciaAlmacen1,$ExistenciaAlmacen2,$IsTroquelado,$UtilidadArticulo,$UtilidadCategoria,$TroquelAlmacen1,$PrecioCompraBrutoAlmacen1,$TroquelAlmacen2,$PrecioCompraBrutoAlmacen2,$PrecioCompraBruto,$IsIVA,$CondicionExistencia);
-				
+			$PrecioHoy = FG_Calculo_Precio_Alfa($Existencia,$ExistenciaAlmacen1,$ExistenciaAlmacen2,$IsTroquelado,$UtilidadArticulo,$UtilidadCategoria,$TroquelAlmacen1,$PrecioCompraBrutoAlmacen1,$TroquelAlmacen2,$PrecioCompraBrutoAlmacen2,$PrecioCompraBruto,$IsIVA,$CondicionExistencia);	
+
 			if($IsPrecioAyer==true){
 
 				$sqlCC = MySQL_DiasCero_PrecioAyer($IdArticulo,$FechaCambio);
@@ -1993,7 +1993,7 @@
 									<tr>
 										<td class="centrado rowDer rowDerA aumento preciopromo" colspan="2">
 											<strong class="text-danger">
-											Solicite ayuda al dpto. de procesamiento
+											Solicite ayuda al dpto. de procesamiento (Sin Decimal)
 											</strong>
 										</td>
 									</tr>										
@@ -2089,7 +2089,7 @@
 									<tr>
 										<td class="centrado rowDer rowDerA aumento preciopromo" colspan="2">
 											<strong class="text-danger">
-											Solicite ayuda al dpto. de procesamiento
+											Solicite ayuda al dpto. de procesamiento (Decimal Diff. 01)
 											</strong>
 										</td>
 									</tr>										
