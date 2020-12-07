@@ -1893,7 +1893,7 @@
 		FUNCION: crea la etiqueta para el caso que corresponda
 		DESARROLLADO POR: SERGIO COVA
  	*/
- 	function FG_Etiquetas($conn,$connCPharma,$IdArticulo,$Dolarizado,$IsPrecioAyer,$FechaCambio,$TasaActual) {
+ 	function FG_Etiquetas($conn,$connCPharma,$IdArticulo,$Dolarizado,$IsPrecioAyer,$FechaCambio) {
  		$flag = false;
  		$mensajePie = "";
  		$tam_dolar = "";
@@ -1933,7 +1933,7 @@
 				
 				if($Dolarizado=='SI' && _EtiquetaDolar_=='SI'){
 					$precioPartes = explode(".",$PrecioHoy);
-					//$TasaActual = FG_Tasa_Fecha_Venta($connCPharma,date('Y-m-d'));
+					$TasaActual = FG_Tasa_Fecha_Venta($connCPharma,date('Y-m-d'));
 					$PrecioHoy = $PrecioHoy/$TasaActual;
 					
 					$sqlCC = MySQL_DiasCero_PrecioAyer_Dolar($IdArticulo,$FechaCambio);
@@ -2121,9 +2121,14 @@
 
 						if(_EtiquetaDolar_=='SI'){				
 							$precioPartes = explode(".",$PrecioHoy);
-							//$TasaActual = FG_Tasa_Fecha_Venta($connCPharma,date('Y-m-d'));
+							$TasaActual = FG_Tasa_Fecha_Venta($connCPharma,date('Y-m-d'));
 							$PrecioHoy = $PrecioHoy/$TasaActual;						
-																				
+							
+							$sqlCC = MySQL_DiasCero_PrecioAyer_Dolar($IdArticulo,$FechaCambio);
+							$resultCC = mysqli_query($connCPharma,$sqlCC);
+							$rowCC = mysqli_fetch_assoc($resultCC);
+							$PrecioAyer = $rowCC["precio_dolar"];							
+
 							if(isset($precioPartes) && count($precioPartes)>=2){
 								if($precioPartes[1]==DecimalEtiqueta){
 									$flag_imprime = true;				
@@ -2150,7 +2155,7 @@
 										<tr>
 											<td class="centrado rowDer rowDerA aumento preciopromo" colspan="2">
 												<strong class="text-danger">
-												Solicite ayuda al dpto. de procesamiento (Sin Decimal)
+												Solicite ayuda al dpto. de procesamiento
 												</strong>
 											</td>
 										</tr>										
@@ -2232,7 +2237,7 @@
 								<tr>
 									<td class="centrado rowDer rowDerA aumento preciopromo" colspan="2">
 										<strong class="text-danger">
-										Solicite ayuda al dpto. de procesamiento (Decimal Diff. 01)
+										Solicite ayuda al dpto. de procesamiento
 										</strong>
 									</td>
 								</tr>										
@@ -2255,8 +2260,7 @@
   	$conn = FG_Conectar_Smartpharma($SedeConnection);
   	$connCPharma = FG_Conectar_CPharma();	
 		$CuentaCard = 0;
-		$CuentaEtiqueta = 0;		
-		$TasaActual = FG_Tasa_Fecha_Venta($connCPharma,date('Y-m-d'));
+		$CuentaEtiqueta = 0;
 
 		$result = $connCPharma->query("SELECT id_articulo FROM etiquetas WHERE clasificacion = '$clasificacion'");
 
@@ -2267,21 +2271,21 @@
 			$row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
 			$Dolarizado = FG_Producto_Dolarizado($row3['Dolarizado']);
 			if(($Dolarizado=='SI')&&($tipo=='DOLARIZADO')){
-				$flag = FG_Etiquetas($conn,$connCPharma,$IdArticulo,$Dolarizado,false,false,$TasaActual);
+				$flag = FG_Etiquetas($conn,$connCPharma,$IdArticulo,$Dolarizado,false,false);
 				if($flag==true){
 					$CuentaCard++;
 					$CuentaEtiqueta++;							
 				}
 			}
 			else if(($Dolarizado=='NO')&&($tipo!='DOLARIZADO')){
-				$flag = FG_Etiquetas($conn,$connCPharma,$IdArticulo,$Dolarizado,false,false,$TasaActual);
+				$flag = FG_Etiquetas($conn,$connCPharma,$IdArticulo,$Dolarizado,false,false);
 				if($flag==true){
 					$CuentaCard++;
 					$CuentaEtiqueta++;
 				}
 			}
 			else if($tipo=='TODO'){
-				$flag = FG_Etiquetas($conn,$connCPharma,$IdArticulo,$Dolarizado,false,false,$TasaActual);
+				$flag = FG_Etiquetas($conn,$connCPharma,$IdArticulo,$Dolarizado,false,false);
 				if($flag==true){
 					$CuentaCard++;
 					$CuentaEtiqueta++;
@@ -2310,7 +2314,6 @@
   	$arraySugeridos = array();
   	$CuentaCard = 0;
 		$CuentaEtiqueta = 0;
-		$TasaActual = FG_Tasa_Fecha_Venta($connCPharma,date('Y-m-d'));
 		
   	$FHoy = date("Y-m-d");
 		$FManana = date("Y-m-d",strtotime($FHoy."+1 days"));
@@ -2350,21 +2353,21 @@
 				if($Cuenta==1){
 
 					if(($Dolarizado=='SI')&&($tipo=='DOLARIZADO')){
-						$flag = FG_Etiquetas($conn,$connCPharma,$IdArticulo,$Dolarizado,true,$FechaCambio,$TasaActual);
+						$flag = FG_Etiquetas($conn,$connCPharma,$IdArticulo,$Dolarizado,true,$FechaCambio);
 						if($flag==true){
 							$CuentaCard++;
 							$CuentaEtiqueta++;
 						}
 					}
 					else if(($Dolarizado=='NO')&&($tipo!='DOLARIZADO')){
-						$flag = FG_Etiquetas($conn,$connCPharma,$IdArticulo,$Dolarizado,true,$FechaCambio,$TasaActual);
+						$flag = FG_Etiquetas($conn,$connCPharma,$IdArticulo,$Dolarizado,true,$FechaCambio);
 						if($flag==true){
 							$CuentaCard++;
 							$CuentaEtiqueta++;
 						}
 					}
 					else if($tipo=='TODO'){
-						$flag = FG_Etiquetas($conn,$connCPharma,$IdArticulo,$Dolarizado,true,$FechaCambio,$TasaActual);
+						$flag = FG_Etiquetas($conn,$connCPharma,$IdArticulo,$Dolarizado,true,$FechaCambio);
 						if($flag==true){
 							$CuentaCard++;
 							$CuentaEtiqueta++;
@@ -2394,21 +2397,21 @@
 			    	$Dolarizado = FG_Producto_Dolarizado($Array['Dolarizado']);
 			    	
 			    	if(($Dolarizado=='SI')&&($tipo=='DOLARIZADO')){
-							$flag = FG_Etiquetas($conn,$connCPharma,$IdArticulo,$Dolarizado,true,$FechaCambio,$TasaActual);
+							$flag = FG_Etiquetas($conn,$connCPharma,$IdArticulo,$Dolarizado,true,$FechaCambio);
 							if($flag==true){
 								$CuentaCard++;
 								$CuentaEtiqueta++;
 							}
 						}
 						else if(($Dolarizado=='NO')&&($tipo!='DOLARIZADO')){
-							$flag = FG_Etiquetas($conn,$connCPharma,$IdArticulo,$Dolarizado,true,$FechaCambio,$TasaActual);
+							$flag = FG_Etiquetas($conn,$connCPharma,$IdArticulo,$Dolarizado,true,$FechaCambio);
 							if($flag==true){
 								$CuentaCard++;
 								$CuentaEtiqueta++;
 							}
 						}
 						else if($tipo=='TODO'){
-							$flag = FG_Etiquetas($conn,$connCPharma,$IdArticulo,$Dolarizado,true,$FechaCambio,$TasaActual);
+							$flag = FG_Etiquetas($conn,$connCPharma,$IdArticulo,$Dolarizado,true,$FechaCambio);
 							if($flag==true){
 								$CuentaCard++;
 								$CuentaEtiqueta++;
