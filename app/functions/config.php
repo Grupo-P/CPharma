@@ -9,9 +9,9 @@ define("DecimalCorrida",0.01); //Decimal que se concatena al final a los precio 
 define("DecimalEtiqueta",01);	//Decimal que se usa para comparar el precio de las etiquetas
 define("Version","CPharma v.6.2");
 define("_ConsultorDolar_","SI"); //Le indica al consultor si mostrar precios en dolares o no
-define("_EtiquetaDolar_","NO");	//Le indica al etiquetado si mostrar precios en dolares o no
-define("_MensajeDolar_","NO");	//Le indica al etiquetado si mostrar el _MensajeDolarLegal_ o no 
-define("_MensajeDolarLegal_","El precio en Bs será calculado a la tasa oficial del BCV");
+define("_EtiquetaDolar_","SI");	//Le indica al etiquetado si mostrar precios en dolares o no
+define("_MensajeDolar_","SI");	//Le indica al etiquetado si mostrar el _MensajeDolarLegal_ o no 
+define("_MensajeDolarLegal_","");
 /**********************************************************************************/
 /************************* NOMBRES SEDES ON-LINE *********************************/
 define ("SedeFTN","FARMACIA TIERRA NEGRA, C.A.");
