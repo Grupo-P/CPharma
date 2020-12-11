@@ -174,6 +174,9 @@
     $sql2 = R10Q_Analitico_Productos($IdArticulo);
     $result2 = sqlsrv_query($conn,$sql2);
 
+    $sql3 = R10Q_Analitico_Productos_SE($IdArticulo);
+    $result3 = sqlsrv_query($conn,$sql3);
+
     $CodigoArticulo = $row["CodigoInterno"];
     $CodigoBarra = $row["CodigoBarra"];
     $Descripcion = FG_Limpiar_Texto($row["Descripcion"]);
@@ -338,6 +341,7 @@
       </tbody>
     </table>';
 
+    //Tabla Lotes con exitencia
     echo'
     <table class="table table-striped table-bordered col-12 sortable" id="myTable">
         <thead class="thead-dark">
@@ -369,7 +373,7 @@
         $IdLotePivote = $row2["InvLoteId"];
         echo '
           <td align="center"><strong>'.intval($contador).'</strong></td>            
-          <td align="center">'.($row2["Origen"]).'</td>            
+          <td align="center">'.FG_Limpiar_Texto($row2["Origen"]).'</td>            
         ';
 
         if($row2["Origen"]=="COMPRA"){
@@ -379,7 +383,7 @@
           ';
         }else{
            echo '                    
-            <td align="center">'.($row2["Causa"]).'</td>            
+            <td align="center">'.FG_Limpiar_Texto($row2["Causa"]).'</td>            
             <td align="center">'.($row2["NumeroReferencia"]).'</td>  
           ';
         }
@@ -422,6 +426,95 @@
       echo '
       </tbody>
     </table>';
+    //Tabla Lotes con exitencia
+  /******************************************************************/
+    //Tabla Lotes SIN exitencia
+    echo'
+    <table class="table table-striped table-bordered col-12 sortable" id="myTable">
+        <thead class="thead-dark">
+          <tr>
+            <th scope="col" class="CP-sticky">#</th>
+            <th scope="col" class="CP-sticky">Origen</th>
+            <th scope="col" class="CP-sticky">Detalle</th>
+            <th scope="col" class="CP-sticky">Numero<br>Referencia</th>
+            <th scope="col" class="CP-sticky">Fecha de Creacion<br>Lote</th>
+            <th scope="col" class="CP-sticky">Fecha de<br>Vencimiento</th>
+            <th scope="col" class="CP-sticky">Numero Lote</th>
+            <th scope="col" class="CP-sticky">Almacen</th>
+            <th scope="col" class="CP-sticky">Existencia</th>
+            <th scope="col" class="CP-sticky">Costo Bruto Total</br>(Sin IVA) '.SigVe.'</th>
+            <th scope="col" class="CP-sticky">Costo Unitario </br> Bruto (Sin IVA) '.SigVe.'</th>
+            <th scope="col" class="CP-sticky">Tasa Mercado</th>
+            <th scope="col" class="CP-sticky">Costo Unitario </br> Bruto (Sin IVA) '.SigDolar.'</th>
+            <th scope="col" class="CP-sticky">Responsable</th>    
+          </tr>
+        </thead>
+        <tbody>
+    ';
+    $contador = 1;
+    $IdLotePivote = 0;
+
+    while($row3 = sqlsrv_fetch_array($result3, SQLSRV_FETCH_ASSOC)) {
+
+      if($row3["InvLoteId"]!=$IdLotePivote){
+        $IdLotePivote = $row3["InvLoteId"];
+        echo '
+          <td align="center"><strong>'.intval($contador).'</strong></td>            
+          <td align="center">'.FG_Limpiar_Texto($row3["Origen"]).'</td>            
+        ';
+
+        if($row3["Origen"]=="COMPRA"){
+          echo '                    
+            <td align="center">'.FG_Limpiar_Texto($row3["Proveedor"]).'</td>
+            <td align="center">'.($row3["NumeroFactura"]).'</td>            
+          ';
+        }else{
+           echo '                    
+            <td align="center">'.FG_Limpiar_Texto($row3["Causa"]).'</td>            
+            <td align="center">'.($row3["NumeroReferencia"]).'</td>  
+          ';
+        }
+
+        $TasaFecha = FG_Tasa_Fecha($connCPharma,$row3["FechaCreacionLote"]->format("Y-m-d"));
+        if(!isset($TasaFecha)){
+           $TasaFecha = 0;
+        }
+
+        echo '                  
+          <td align="center">'.($row3["FechaCreacionLote"]->format("d-m-Y")).'</td>            
+          <td align="center">'.($row3["FechaVencimiento"]->format("d-m-Y")).'</td>
+          <td align="center">'.intval($row3["NumeroLote"]).'</td>
+          <td align="center">'.($row3["Almacen"]).'</td>
+          <td align="center">'.intval($row3["Existencia"]).'</td>
+          <td align="center">'.number_format($row3["CostoUnitario"],2,"," ,"." ).'</td>
+          <td align="center">'.number_format($row3["CostoTotal"],2,"," ,"." ).'</td>
+          <td align="center">'.number_format($TasaFecha,2,"," ,"." ).'</td>
+        ';
+
+        if($TasaActual!=0){
+          $CostoDivisa = $row3["CostoTotal"] / $TasaFecha;
+          echo '                    
+            <td align="center">'.number_format($CostoDivisa,2,"," ,"." ).'</td>
+          ';
+        }else{
+          echo '                    
+            <td align="center">0.00</td>
+          ';
+        }
+
+        echo '                    
+            <td align="center">'.FG_Limpiar_Texto($row3["Responsable"]).'</td>
+          ';
+
+        echo '</tr>';
+        $contador++;
+      }
+    }
+      echo '
+      </tbody>
+    </table>';
+    //Tabla Lotes SIN exitencia
+
     mysqli_close($connCPharma);
     sqlsrv_close($conn);
   }
@@ -743,6 +836,85 @@
       WHERE 
       InvLoteAlmacen.InvArticuloId = '$IdArticulo'
       AND InvLoteAlmacen.Existencia > 0
+      AND (
+          (InvMovimiento.InvCausaId=1) 
+          OR (InvMovimiento.InvCausaId=5)    
+          OR (InvMovimiento.InvCausaId=11)
+      )
+      ORDER BY invlote.Auditoria_FechaCreacion asc
+    ";
+    return $sql;
+  }
+  /**********************************************************************************/
+  /*
+    TITULO: R10Q_Analitico_Productos
+    FUNCION: Armar la tabla del historico de articulos
+    RETORNO: La tabla de historico del articulo
+    DESAROLLADO POR: SERGIO COVA
+  */
+  function R10Q_Analitico_Productos_SE($IdArticulo) {
+    $sql = "
+      SELECT
+      invlote.Auditoria_FechaCreacion, 
+      InvLoteAlmacen.InvLoteId,
+      (SELECT IIF(InvMovimiento.InvCausaId = 1, 'COMPRA', 'INVENTARIO')) as Origen,
+      InvMovimiento.InvCausaId,
+      InvCausa.Descripcion as Causa,
+      (
+        SELECT 
+        GenPersona.Nombre
+        FROM ComFactura
+        INNER JOIN ComProveedor ON ComProveedor.Id = ComFactura.ComProveedorId
+        INNER JOIN GenPersona ON GenPersona.Id = ComProveedor.GenPersonaId
+        WHERE ComProveedor.Id = (
+          (SELECT ComFactura.ComProveedorId FROM ComFactura WHERE ComFactura.Id = (
+            SELECT ComFacturaEntrada.ComFacturaDetalleComFacturaId FROM ComFacturaEntrada WHERE ComFacturaEntrada.ComEntradaMercanciaId = (
+              SELECT ComEntradaMercancia.id FROM ComEntradaMercancia WHERE ComEntradaMercancia.InvLoteId = invlotealmacen.InvLoteId AND ComEntradaMercancia.InvArticuloId = InvLoteAlmacen.InvArticuloId
+              )
+            )
+          )
+        )
+        AND ComFactura.id = (SELECT ComFacturaEntrada.ComFacturaDetalleComFacturaId FROM ComFacturaEntrada WHERE ComFacturaEntrada.ComEntradaMercanciaId = (
+          SELECT ComEntradaMercancia.id FROM ComEntradaMercancia WHERE ComEntradaMercancia.InvLoteId = invlotealmacen.InvLoteId AND ComEntradaMercancia.InvArticuloId = InvLoteAlmacen.InvArticuloId
+          )
+        )
+      ) AS Proveedor,
+      InvMovimiento.DocumentoOrigen as NumeroReferencia,
+      (
+        SELECT 
+        ComFactura.NumeroFactura
+        FROM ComFactura
+        INNER JOIN ComProveedor ON ComProveedor.Id = ComFactura.ComProveedorId
+        INNER JOIN GenPersona ON GenPersona.Id = ComProveedor.GenPersonaId
+        WHERE ComProveedor.Id = (
+          (SELECT ComFactura.ComProveedorId FROM ComFactura WHERE ComFactura.Id = (
+            SELECT ComFacturaEntrada.ComFacturaDetalleComFacturaId FROM ComFacturaEntrada WHERE ComFacturaEntrada.ComEntradaMercanciaId = (
+              SELECT ComEntradaMercancia.id FROM ComEntradaMercancia WHERE ComEntradaMercancia.InvLoteId = invlotealmacen.InvLoteId AND ComEntradaMercancia.InvArticuloId = InvLoteAlmacen.InvArticuloId
+              )
+            )
+          )
+        )
+        AND ComFactura.id = (SELECT ComFacturaEntrada.ComFacturaDetalleComFacturaId FROM ComFacturaEntrada WHERE ComFacturaEntrada.ComEntradaMercanciaId = (
+          SELECT ComEntradaMercancia.id FROM ComEntradaMercancia WHERE ComEntradaMercancia.InvLoteId = invlotealmacen.InvLoteId AND ComEntradaMercancia.InvArticuloId = InvLoteAlmacen.InvArticuloId
+          )
+        )
+      ) AS NumeroFactura,
+      CONVERT(DATE,invlote.Auditoria_FechaCreacion) as FechaCreacionLote,
+      CONVERT(DATE,invlote.FechaVencimiento) as FechaVencimiento,
+      InvLote.Numero as NumeroLote,
+      InvAlmacen.Descripcion as Almacen,
+      ROUND(CAST(InvLoteAlmacen.Existencia AS DECIMAL(38,0)),2,0) AS Existencia,
+      InvLote.M_PrecioCompraBruto as CostoUnitario,
+      (ROUND(CAST(InvLoteAlmacen.Existencia AS DECIMAL(38,0)),2,0) * InvLote.M_PrecioCompraBruto) as CostoTotal,
+      InvLote.Auditoria_Usuario as Responsable
+      FROM invlotealmacen
+      LEFT JOIN InvLote ON InvLote.id = invlotealmacen.InvLoteId
+      LEFT JOIN InvMovimiento ON InvMovimiento.InvLoteId = InvLote.id
+      LEFT JOIN InvCausa ON  InvCausa.Id = InvMovimiento.InvCausaId
+      LEFT JOIN InvAlmacen ON InvAlmacen.Id = invlotealmacen.InvAlmacenId
+      WHERE 
+      InvLoteAlmacen.InvArticuloId = '$IdArticulo'
+      AND InvLoteAlmacen.Existencia <= 0
       AND (
           (InvMovimiento.InvCausaId=1) 
           OR (InvMovimiento.InvCausaId=5)    
