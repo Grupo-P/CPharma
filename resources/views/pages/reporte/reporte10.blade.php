@@ -398,9 +398,9 @@
           <td align="center">'.($row2["FechaVencimiento"]->format("d-m-Y")).'</td>
           <td align="center">'.intval($row2["NumeroLote"]).'</td>
           <td align="center">'.($row2["Almacen"]).'</td>
-          <td align="center">'.intval($row2["Existencia"]).'</td>
-          <td align="center">'.number_format($row2["CostoUnitario"],2,"," ,"." ).'</td>
+          <td align="center">'.intval($row2["Existencia"]).'</td>          
           <td align="center">'.number_format($row2["CostoTotal"],2,"," ,"." ).'</td>
+          <td align="center">'.number_format($row2["CostoUnitario"],2,"," ,"." ).'</td>
           <td align="center">'.number_format($TasaFecha,2,"," ,"." ).'</td>
         ';
 
@@ -485,9 +485,9 @@
           <td align="center">'.($row3["FechaVencimiento"]->format("d-m-Y")).'</td>
           <td align="center">'.intval($row3["NumeroLote"]).'</td>
           <td align="center">'.($row3["Almacen"]).'</td>
-          <td align="center">'.intval($row3["Existencia"]).'</td>
-          <td align="center">'.number_format($row3["CostoUnitario"],2,"," ,"." ).'</td>
+          <td align="center">'.intval($row3["Existencia"]).'</td>          
           <td align="center">'.number_format($row3["CostoTotal"],2,"," ,"." ).'</td>
+          <td align="center">'.number_format($row3["CostoUnitario"],2,"," ,"." ).'</td>
           <td align="center">'.number_format($TasaFecha,2,"," ,"." ).'</td>
         ';
 
