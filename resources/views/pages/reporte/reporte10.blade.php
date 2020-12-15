@@ -399,7 +399,7 @@
           <td align="center">'.($row2["FechaCreacionLote"]->format("d-m-Y")).'</td>            
           <td align="center">'.($row2["FechaVencimiento"]->format("d-m-Y")).'</td>
           <td align="center">'.($row2["NumeroLote"]).'</td>
-          <td align="center">'.($row3["LoteFabricante"]).'</td>
+          <td align="center">'.($row2["LoteFabricante"]).'</td>
           <td align="center">'.($row2["Almacen"]).'</td>
           <td align="center">'.intval($row2["Existencia"]).'</td>          
           <td align="center">'.number_format($row2["CostoTotal"],2,"," ,"." ).'</td>
