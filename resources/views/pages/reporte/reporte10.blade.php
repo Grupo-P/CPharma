@@ -353,10 +353,12 @@
             <th scope="col" class="CP-sticky">Fecha de Creacion<br>Lote</th>
             <th scope="col" class="CP-sticky">Fecha de<br>Vencimiento</th>
             <th scope="col" class="CP-sticky">Numero Lote</th>
+            <th scope="col" class="CP-sticky">Lote Fabricante</th>
             <th scope="col" class="CP-sticky">Almacen</th>
             <th scope="col" class="CP-sticky">Existencia</th>
             <th scope="col" class="CP-sticky">Costo Bruto Total</br>(Sin IVA) '.SigVe.'</th>
             <th scope="col" class="CP-sticky">Costo Unitario </br> Bruto (Sin IVA) '.SigVe.'</th>
+            <th scope="col" class="CP-sticky">Precio Troquelado </br> Bruto (Sin IVA) '.SigVe.'</th>
             <th scope="col" class="CP-sticky">Tasa Mercado</th>
             <th scope="col" class="CP-sticky">Costo Unitario </br> Bruto (Sin IVA) '.SigDolar.'</th>
             <th scope="col" class="CP-sticky">Responsable</th>    
@@ -396,11 +398,13 @@
         echo '                  
           <td align="center">'.($row2["FechaCreacionLote"]->format("d-m-Y")).'</td>            
           <td align="center">'.($row2["FechaVencimiento"]->format("d-m-Y")).'</td>
-          <td align="center">'.intval($row2["NumeroLote"]).'</td>
+          <td align="center">'.($row2["NumeroLote"]).'</td>
+          <td align="center">'.($row3["LoteFabricante"]).'</td>
           <td align="center">'.($row2["Almacen"]).'</td>
           <td align="center">'.intval($row2["Existencia"]).'</td>          
           <td align="center">'.number_format($row2["CostoTotal"],2,"," ,"." ).'</td>
           <td align="center">'.number_format($row2["CostoUnitario"],2,"," ,"." ).'</td>
+          <td align="center">'.number_format($row2["PrecioTroquelado"],2,"," ,"." ).'</td>
           <td align="center">'.number_format($TasaFecha,2,"," ,"." ).'</td>
         ';
 
@@ -440,10 +444,12 @@
             <th scope="col" class="CP-sticky">Fecha de Creacion<br>Lote</th>
             <th scope="col" class="CP-sticky">Fecha de<br>Vencimiento</th>
             <th scope="col" class="CP-sticky">Numero Lote</th>
+            <th scope="col" class="CP-sticky">Lote Fabricante</th>
             <th scope="col" class="CP-sticky">Almacen</th>
             <th scope="col" class="CP-sticky">Existencia</th>
             <th scope="col" class="CP-sticky">Costo Bruto Total</br>(Sin IVA) '.SigVe.'</th>
             <th scope="col" class="CP-sticky">Costo Unitario </br> Bruto (Sin IVA) '.SigVe.'</th>
+            <th scope="col" class="CP-sticky">Precio Troquelado </br> Bruto (Sin IVA) '.SigVe.'</th>
             <th scope="col" class="CP-sticky">Tasa Mercado</th>
             <th scope="col" class="CP-sticky">Costo Unitario </br> Bruto (Sin IVA) '.SigDolar.'</th>
             <th scope="col" class="CP-sticky">Responsable</th>    
@@ -483,16 +489,18 @@
         echo '                  
           <td align="center">'.($row3["FechaCreacionLote"]->format("d-m-Y")).'</td>            
           <td align="center">'.($row3["FechaVencimiento"]->format("d-m-Y")).'</td>
-          <td align="center">'.intval($row3["NumeroLote"]).'</td>
+          <td align="center">'.($row3["NumeroLote"]).'</td>
+          <td align="center">'.($row3["LoteFabricante"]).'</td>
           <td align="center">'.($row3["Almacen"]).'</td>
           <td align="center">'.intval($row3["Existencia"]).'</td>          
           <td align="center">'.number_format($row3["CostoTotal"],2,"," ,"." ).'</td>
           <td align="center">'.number_format($row3["CostoUnitario"],2,"," ,"." ).'</td>
+          <td align="center">'.number_format($row2["PrecioTroquelado"],2,"," ,"." ).'</td>
           <td align="center">'.number_format($TasaFecha,2,"," ,"." ).'</td>
         ';
 
         if($TasaActual!=0){
-          $CostoDivisa = $row3["CostoTotal"] / $TasaFecha;
+          $CostoDivisa = $row3["CostoUnitario"] / $TasaFecha;
           echo '                    
             <td align="center">'.number_format($CostoDivisa,2,"," ,"." ).'</td>
           ';
@@ -824,8 +832,10 @@
       CONVERT(DATE,invlote.FechaVencimiento) as FechaVencimiento,
       InvLote.Numero as NumeroLote,
       InvAlmacen.Descripcion as Almacen,
+      InvLote.LoteFabricante as LoteFabricante,
       ROUND(CAST(InvLoteAlmacen.Existencia AS DECIMAL(38,0)),2,0) AS Existencia,
       InvLote.M_PrecioCompraBruto as CostoUnitario,
+      InvLote.M_PrecioTroquelado as PrecioTroquelado,
       (ROUND(CAST(InvLoteAlmacen.Existencia AS DECIMAL(38,0)),2,0) * InvLote.M_PrecioCompraBruto) as CostoTotal,
       InvLote.Auditoria_Usuario as Responsable
       FROM invlotealmacen
@@ -903,8 +913,10 @@
       CONVERT(DATE,invlote.FechaVencimiento) as FechaVencimiento,
       InvLote.Numero as NumeroLote,
       InvAlmacen.Descripcion as Almacen,
+      InvLote.LoteFabricante as LoteFabricante,
       ROUND(CAST(InvLoteAlmacen.Existencia AS DECIMAL(38,0)),2,0) AS Existencia,
       InvLote.M_PrecioCompraBruto as CostoUnitario,
+      InvLote.M_PrecioTroquelado as PrecioTroquelado,
       (ROUND(CAST(InvLoteAlmacen.Existencia AS DECIMAL(38,0)),2,0) * InvLote.M_PrecioCompraBruto) as CostoTotal,
       InvLote.Auditoria_Usuario as Responsable
       FROM invlotealmacen
