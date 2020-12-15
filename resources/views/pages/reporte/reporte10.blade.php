@@ -372,8 +372,8 @@
     while($row2 = sqlsrv_fetch_array($result2, SQLSRV_FETCH_ASSOC)) {
 
       if($row2["InvLoteId"]!=$IdLotePivote){
-
-        $fechaVencimiento = ($row2["FechaVencimiento"]!=NULL)?$row2["FechaVencimiento"]->format('d-m-Y'):'-';      
+        
+        $fechaVencimiento = ($row2["FechaVencimiento"]!=NULL)?$row2["FechaVencimiento"]->format('d-m-Y'):'-';            
 
         $IdLotePivote = $row2["InvLoteId"];
         echo '
@@ -399,7 +399,7 @@
         }
 
         echo '                  
-          <td align="center">'.($row2["FechaCreacionLote"]).'</td>        
+          <td align="center">'.($row2["FechaCreacionLote"]->format('d-m-Y')).'</td>        
           <td align="center">'.($fechaVencimiento).'</td>
           <td align="center">'.($row2["NumeroLote"]).'</td>
           <td align="center">'.($row2["LoteFabricante"]).'</td>
@@ -467,7 +467,7 @@
 
       if($row3["InvLoteId"]!=$IdLotePivote){
 
-        $fechaVencimiento = ($row2["FechaVencimiento"]!=NULL)?$row2["FechaVencimiento"]->format('d-m-Y'):'-';  
+        $fechaVencimiento = ($row3["FechaVencimiento"]!=NULL)?$row3["FechaVencimiento"]->format('d-m-Y'):'-';  
 
         $IdLotePivote = $row3["InvLoteId"];
         echo '
@@ -493,7 +493,7 @@
         }
 
         echo '                  
-          <td align="center">'.($row3["FechaCreacionLote"]).'</td>            
+          <td align="center">'.($row3["FechaCreacionLote"]->format('d-m-Y')).'</td>            
           <td align="center">'.($fechaVencimiento).'</td>
           <td align="center">'.($row3["NumeroLote"]).'</td>
           <td align="center">'.($row3["LoteFabricante"]).'</td>
