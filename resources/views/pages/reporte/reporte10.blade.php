@@ -387,10 +387,27 @@
         ';
 
         if($row2["Origen"]=="COMPRA"){
-          echo '                    
-            <td align="center">*</td>
-            <td align="center">*</td>            
-          ';
+
+          $sql4 = R10Q_Caso_Compra($row2["InvLoteId"],$IdArticulo,$row2["LoteAlmacenId"]);
+
+          try {
+            $result4 = sqlsrv_query($conn,$sql4);
+            $row4 = sqlsrv_fetch_array($result4, SQLSRV_FETCH_ASSOC);
+
+            echo '                    
+              <td align="center">'.FG_Limpiar_Texto($row4["Proveedor"]).'</td>
+              <td align="center">'.($row4["NumeroFactura"]).'</td>        
+            ';
+            
+          } catch (Exception $e) {
+
+            echo '                    
+              <td align="center">'.$row2["InvLoteId"].'|'.$IdArticulo.'|'.$row2["LoteAlmacenId"].'</td>
+              <td align="center">*</td>        
+            ';
+            
+          }
+
         }else{
            echo '                    
             <td align="center">'.FG_Limpiar_Texto($row2["Causa"]).'</td>            
@@ -403,7 +420,6 @@
            $TasaFecha = 0;
         }
         
-
         echo '                  
           <td align="center">'.($row2["FechaCreacionLote"]->format('d-m-Y')).'</td>        
           <td align="center">'.($fechaVencimiento).'</td>
@@ -487,10 +503,27 @@
         ';
 
         if($row3["Origen"]=="COMPRA"){
-          echo '                    
-            <td align="center">-</td>
-            <td align="center">-</td>            
-          ';
+
+          $sql4 = R10Q_Caso_Compra($row3["InvLoteId"],$IdArticulo,$row3["LoteAlmacenId"]);
+
+          try {
+            $result4 = sqlsrv_query($conn,$sql4);
+            $row4 = sqlsrv_fetch_array($result4, SQLSRV_FETCH_ASSOC);
+
+            echo '                    
+              <td align="center">'.FG_Limpiar_Texto($row4["Proveedor"]).'</td>
+              <td align="center">'.($row4["NumeroFactura"]).'</td>        
+            ';
+            
+          } catch (Exception $e) {
+
+            echo '                    
+              <td align="center">'.$row3["InvLoteId"].'|'.$IdArticulo.'|'.$row3["LoteAlmacenId"].'</td>
+              <td align="center">*</td>        
+            ';
+            
+          }
+
         }else{
            echo '                    
             <td align="center">'.FG_Limpiar_Texto($row3["Causa"]).'</td>            
@@ -876,6 +909,62 @@
           OR (InvMovimiento.InvCausaId=11)
       )
       ORDER BY invlote.Auditoria_FechaCreacion asc
+    ";
+    return $sql;
+  }
+  /**********************************************************************************/
+  /*
+    TITULO: R10Q_Caso_Compra
+    FUNCION: Armar la tabla del historico de articulos
+    RETORNO: La tabla de historico del articulo
+    DESAROLLADO POR: SERGIO COVA
+  */
+  function R10Q_Caso_Compra($InvLoteId,$InvArticuloId,$InvLoteAlmacenId){
+    $sql="
+    SELECT
+    (
+      SELECT 
+      GenPersona.Nombre
+      FROM ComFactura
+      INNER JOIN ComProveedor ON ComProveedor.Id = ComFactura.ComProveedorId
+      INNER JOIN GenPersona ON GenPersona.Id = ComProveedor.GenPersonaId
+      WHERE ComProveedor.Id = (
+        (SELECT ComFactura.ComProveedorId FROM ComFactura WHERE ComFactura.Id = (
+          SELECT ComFacturaEntrada.ComFacturaDetalleComFacturaId FROM ComFacturaEntrada WHERE ComFacturaEntrada.ComEntradaMercanciaId = (
+            SELECT TOP 1 ComEntradaMercancia.id FROM ComEntradaMercancia WHERE ComEntradaMercancia.InvLoteId = invlotealmacen.InvLoteId AND ComEntradaMercancia.InvArticuloId = InvLoteAlmacen.InvArticuloId
+            )
+          )
+        )
+      )
+      AND ComFactura.id = (SELECT ComFacturaEntrada.ComFacturaDetalleComFacturaId FROM ComFacturaEntrada WHERE ComFacturaEntrada.ComEntradaMercanciaId = (
+        SELECT TOP 1 ComEntradaMercancia.id FROM ComEntradaMercancia WHERE ComEntradaMercancia.InvLoteId = invlotealmacen.InvLoteId AND ComEntradaMercancia.InvArticuloId = InvLoteAlmacen.InvArticuloId
+        )
+      )
+    ) AS Proveedor,
+    (
+      SELECT 
+      ComFactura.NumeroFactura
+      FROM ComFactura
+      INNER JOIN ComProveedor ON ComProveedor.Id = ComFactura.ComProveedorId
+      INNER JOIN GenPersona ON GenPersona.Id = ComProveedor.GenPersonaId
+      WHERE ComProveedor.Id = (
+        (SELECT ComFactura.ComProveedorId FROM ComFactura WHERE ComFactura.Id = (
+          SELECT ComFacturaEntrada.ComFacturaDetalleComFacturaId FROM ComFacturaEntrada WHERE ComFacturaEntrada.ComEntradaMercanciaId = (
+            SELECT TOP 1 ComEntradaMercancia.id FROM ComEntradaMercancia WHERE ComEntradaMercancia.InvLoteId = invlotealmacen.InvLoteId AND ComEntradaMercancia.InvArticuloId = InvLoteAlmacen.InvArticuloId
+            )
+          )
+        )
+      )
+      AND ComFactura.id = (SELECT ComFacturaEntrada.ComFacturaDetalleComFacturaId FROM ComFacturaEntrada WHERE ComFacturaEntrada.ComEntradaMercanciaId = (
+        SELECT TOP 1 ComEntradaMercancia.id FROM ComEntradaMercancia WHERE ComEntradaMercancia.InvLoteId = invlotealmacen.InvLoteId AND ComEntradaMercancia.InvArticuloId = InvLoteAlmacen.InvArticuloId
+        )
+      )
+    ) AS NumeroFactura
+    FROM invlotealmacen
+    WHERE 
+    InvLoteAlmacen.InvLoteId = '$InvLoteId'
+    AND InvLoteAlmacen.InvArticuloId = '$InvArticuloId'
+    AND InvLoteAlmacen.id = '$InvLoteAlmacenId'
     ";
     return $sql;
   }
