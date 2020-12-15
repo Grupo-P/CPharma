@@ -368,14 +368,19 @@
     ';
     $contador = 1;
     $IdLotePivote = 0;
+    $LoteAlmacenIdPivorte = 0;
 
     while($row2 = sqlsrv_fetch_array($result2, SQLSRV_FETCH_ASSOC)) {
 
-      if($row2["InvLoteId"]!=$IdLotePivote){
+      if( ($row2["InvLoteId"]!=$IdLotePivote) || 
+          ($row2["InvLoteId"]==$IdLotePivote && $row2["LoteAlmacenId"]!=$LoteAlmacenIdPivorte) 
+       ){
         
         $fechaVencimiento = ($row2["FechaVencimiento"]!=NULL)?$row2["FechaVencimiento"]->format('d-m-Y'):'-';            
 
         $IdLotePivote = $row2["InvLoteId"];
+        $LoteAlmacenIdPivorte = $row2["LoteAlmacenId"];
+
         echo '
           <td align="center"><strong>'.intval($contador).'</strong></td>            
           <td align="center">'.FG_Limpiar_Texto($row2["Origen"]).'</td>            
@@ -383,8 +388,8 @@
 
         if($row2["Origen"]=="COMPRA"){
           echo '                    
-            <td align="center">'.FG_Limpiar_Texto($row2["Proveedor"]).'</td>
-            <td align="center">'.($row2["NumeroFactura"]).'</td>            
+            <td align="center">*</td>
+            <td align="center">*</td>            
           ';
         }else{
            echo '                    
@@ -397,6 +402,7 @@
         if(!isset($TasaFecha)){
            $TasaFecha = 0;
         }
+        
 
         echo '                  
           <td align="center">'.($row2["FechaCreacionLote"]->format('d-m-Y')).'</td>        
@@ -462,14 +468,19 @@
     ';
     $contador = 1;
     $IdLotePivote = 0;
+    $LoteAlmacenIdPivorte = 0;
 
     while($row3 = sqlsrv_fetch_array($result3, SQLSRV_FETCH_ASSOC)) {
 
-      if($row3["InvLoteId"]!=$IdLotePivote){
-
-        $fechaVencimiento = ($row3["FechaVencimiento"]!=NULL)?$row3["FechaVencimiento"]->format('d-m-Y'):'-';  
+      if( ($row3["InvLoteId"]!=$IdLotePivote) ||
+          ($row3["InvLoteId"]==$IdLotePivote && $row3["LoteAlmacenId"]!=$LoteAlmacenIdPivorte) 
+       ){
+        
+        $fechaVencimiento = ($row3["FechaVencimiento"]!=NULL)?$row3["FechaVencimiento"]->format('d-m-Y'):'-';            
 
         $IdLotePivote = $row3["InvLoteId"];
+        $LoteAlmacenIdPivorte = $row3["LoteAlmacenId"];
+
         echo '
           <td align="center"><strong>'.intval($contador).'</strong></td>            
           <td align="center">'.FG_Limpiar_Texto($row3["Origen"]).'</td>            
@@ -477,8 +488,8 @@
 
         if($row3["Origen"]=="COMPRA"){
           echo '                    
-            <td align="center">'.FG_Limpiar_Texto($row3["Proveedor"]).'</td>
-            <td align="center">'.($row3["NumeroFactura"]).'</td>            
+            <td align="center">-</td>
+            <td align="center">-</td>            
           ';
         }else{
            echo '                    
@@ -486,7 +497,7 @@
             <td align="center">'.($row3["NumeroReferencia"]).'</td>  
           ';
         }
-
+        
         $TasaFecha = FG_Tasa_Fecha($connCPharma,$row3["FechaCreacionLote"]->format("Y-m-d"));
         if(!isset($TasaFecha)){
            $TasaFecha = 0;
@@ -791,49 +802,12 @@
     $sql = "
       SELECT
       invlote.Auditoria_FechaCreacion, 
+      InvLoteAlmacen.id as LoteAlmacenId,
       InvLoteAlmacen.InvLoteId,
       (SELECT IIF(InvMovimiento.InvCausaId = 1, 'COMPRA', 'INVENTARIO')) as Origen,
       InvMovimiento.InvCausaId,
-      InvCausa.Descripcion as Causa,
-      (
-        SELECT 
-        GenPersona.Nombre
-        FROM ComFactura
-        INNER JOIN ComProveedor ON ComProveedor.Id = ComFactura.ComProveedorId
-        INNER JOIN GenPersona ON GenPersona.Id = ComProveedor.GenPersonaId
-        WHERE ComProveedor.Id = (
-          (SELECT ComFactura.ComProveedorId FROM ComFactura WHERE ComFactura.Id = (
-            SELECT ComFacturaEntrada.ComFacturaDetalleComFacturaId FROM ComFacturaEntrada WHERE ComFacturaEntrada.ComEntradaMercanciaId = (
-              SELECT ComEntradaMercancia.id FROM ComEntradaMercancia WHERE ComEntradaMercancia.InvLoteId = invlotealmacen.InvLoteId AND ComEntradaMercancia.InvArticuloId = InvLoteAlmacen.InvArticuloId
-              )
-            )
-          )
-        )
-        AND ComFactura.id = (SELECT ComFacturaEntrada.ComFacturaDetalleComFacturaId FROM ComFacturaEntrada WHERE ComFacturaEntrada.ComEntradaMercanciaId = (
-          SELECT ComEntradaMercancia.id FROM ComEntradaMercancia WHERE ComEntradaMercancia.InvLoteId = invlotealmacen.InvLoteId AND ComEntradaMercancia.InvArticuloId = InvLoteAlmacen.InvArticuloId
-          )
-        )
-      ) AS Proveedor,
-      InvMovimiento.DocumentoOrigen as NumeroReferencia,
-      (
-        SELECT 
-        ComFactura.NumeroFactura
-        FROM ComFactura
-        INNER JOIN ComProveedor ON ComProveedor.Id = ComFactura.ComProveedorId
-        INNER JOIN GenPersona ON GenPersona.Id = ComProveedor.GenPersonaId
-        WHERE ComProveedor.Id = (
-          (SELECT ComFactura.ComProveedorId FROM ComFactura WHERE ComFactura.Id = (
-            SELECT ComFacturaEntrada.ComFacturaDetalleComFacturaId FROM ComFacturaEntrada WHERE ComFacturaEntrada.ComEntradaMercanciaId = (
-              SELECT ComEntradaMercancia.id FROM ComEntradaMercancia WHERE ComEntradaMercancia.InvLoteId = invlotealmacen.InvLoteId AND ComEntradaMercancia.InvArticuloId = InvLoteAlmacen.InvArticuloId
-              )
-            )
-          )
-        )
-        AND ComFactura.id = (SELECT ComFacturaEntrada.ComFacturaDetalleComFacturaId FROM ComFacturaEntrada WHERE ComFacturaEntrada.ComEntradaMercanciaId = (
-          SELECT ComEntradaMercancia.id FROM ComEntradaMercancia WHERE ComEntradaMercancia.InvLoteId = invlotealmacen.InvLoteId AND ComEntradaMercancia.InvArticuloId = InvLoteAlmacen.InvArticuloId
-          )
-        )
-      ) AS NumeroFactura,
+      InvCausa.Descripcion as Causa,      
+      InvMovimiento.DocumentoOrigen as NumeroReferencia,      
       CONVERT(DATE,invlote.Auditoria_FechaCreacion) as FechaCreacionLote,
       CONVERT(DATE,invlote.FechaVencimiento) as FechaVencimiento,
       InvLote.Numero as NumeroLote,
@@ -872,49 +846,12 @@
     $sql = "
       SELECT
       invlote.Auditoria_FechaCreacion, 
+      InvLoteAlmacen.id as LoteAlmacenId,
       InvLoteAlmacen.InvLoteId,
       (SELECT IIF(InvMovimiento.InvCausaId = 1, 'COMPRA', 'INVENTARIO')) as Origen,
       InvMovimiento.InvCausaId,
-      InvCausa.Descripcion as Causa,
-      (
-        SELECT 
-        GenPersona.Nombre
-        FROM ComFactura
-        INNER JOIN ComProveedor ON ComProveedor.Id = ComFactura.ComProveedorId
-        INNER JOIN GenPersona ON GenPersona.Id = ComProveedor.GenPersonaId
-        WHERE ComProveedor.Id = (
-          (SELECT ComFactura.ComProveedorId FROM ComFactura WHERE ComFactura.Id = (
-            SELECT ComFacturaEntrada.ComFacturaDetalleComFacturaId FROM ComFacturaEntrada WHERE ComFacturaEntrada.ComEntradaMercanciaId = (
-              SELECT ComEntradaMercancia.id FROM ComEntradaMercancia WHERE ComEntradaMercancia.InvLoteId = invlotealmacen.InvLoteId AND ComEntradaMercancia.InvArticuloId = InvLoteAlmacen.InvArticuloId
-              )
-            )
-          )
-        )
-        AND ComFactura.id = (SELECT ComFacturaEntrada.ComFacturaDetalleComFacturaId FROM ComFacturaEntrada WHERE ComFacturaEntrada.ComEntradaMercanciaId = (
-          SELECT ComEntradaMercancia.id FROM ComEntradaMercancia WHERE ComEntradaMercancia.InvLoteId = invlotealmacen.InvLoteId AND ComEntradaMercancia.InvArticuloId = InvLoteAlmacen.InvArticuloId
-          )
-        )
-      ) AS Proveedor,
-      InvMovimiento.DocumentoOrigen as NumeroReferencia,
-      (
-        SELECT 
-        ComFactura.NumeroFactura
-        FROM ComFactura
-        INNER JOIN ComProveedor ON ComProveedor.Id = ComFactura.ComProveedorId
-        INNER JOIN GenPersona ON GenPersona.Id = ComProveedor.GenPersonaId
-        WHERE ComProveedor.Id = (
-          (SELECT ComFactura.ComProveedorId FROM ComFactura WHERE ComFactura.Id = (
-            SELECT ComFacturaEntrada.ComFacturaDetalleComFacturaId FROM ComFacturaEntrada WHERE ComFacturaEntrada.ComEntradaMercanciaId = (
-              SELECT ComEntradaMercancia.id FROM ComEntradaMercancia WHERE ComEntradaMercancia.InvLoteId = invlotealmacen.InvLoteId AND ComEntradaMercancia.InvArticuloId = InvLoteAlmacen.InvArticuloId
-              )
-            )
-          )
-        )
-        AND ComFactura.id = (SELECT ComFacturaEntrada.ComFacturaDetalleComFacturaId FROM ComFacturaEntrada WHERE ComFacturaEntrada.ComEntradaMercanciaId = (
-          SELECT ComEntradaMercancia.id FROM ComEntradaMercancia WHERE ComEntradaMercancia.InvLoteId = invlotealmacen.InvLoteId AND ComEntradaMercancia.InvArticuloId = InvLoteAlmacen.InvArticuloId
-          )
-        )
-      ) AS NumeroFactura,
+      InvCausa.Descripcion as Causa,      
+      InvMovimiento.DocumentoOrigen as NumeroReferencia,      
       CONVERT(DATE,invlote.Auditoria_FechaCreacion) as FechaCreacionLote,
       CONVERT(DATE,invlote.FechaVencimiento) as FechaVencimiento,
       InvLote.Numero as NumeroLote,
