@@ -248,7 +248,7 @@
             <i class="fas fa-search text-white" aria-hidden="true"></i>
           </span>
         </div>
-        <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterAllTable()">
+        <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterAllTable()" autofocus="autofocus">
       </div>
       <br/>
     ';
@@ -259,10 +259,10 @@
       <table class="table table-striped table-bordered col-12 sortable">
         <thead class="thead-dark">
           <tr>
-            <th scope="col">#</th>
-            <th scope="col">Tipo de movimiento</td>
-            <th scope="col">Efecto</th>
-            <th scope="col">Cantidad</th>            
+            <th scope="col" class="CP-sticky">#</th>
+            <th scope="col" class="CP-sticky">Tipo de movimiento</td> 
+            <th scope="col" class="CP-sticky">Efecto</th> 
+            <th scope="col" class="CP-sticky">Cantidad</th>             
           </tr>
         </thead>
 
@@ -289,12 +289,12 @@
       <table class="table table-striped table-bordered col-12 sortable">
         <thead class="thead-dark">
           <tr>
-            <th scope="col">#</th>
-            <th scope="col">Fecha</td>
-            <th scope="col">Tipo de movimiento</td>
-            <th scope="col">Efecto</th>
-            <th scope="col">Cantidad</th>
-            <th scope="col">Saldo</th>
+            <th scope="col" class="CP-sticky">#</th>
+            <th scope="col" class="CP-sticky">Fecha</td>
+            <th scope="col" class="CP-sticky">Tipo de movimiento</td>
+            <th scope="col" class="CP-sticky">Efecto</th>
+            <th scope="col" class="CP-sticky">Cantidad</th>
+            <th scope="col" class="CP-sticky">Saldo</th>
           </tr>
         </thead>
 
@@ -329,15 +329,15 @@
     ';
 
     echo '
-      <table class="table table-striped table-bordered col-12 sortable id="myTable">
+      <table class="table table-striped table-bordered col-12 sortable" id="myTable">
         <thead class="thead-dark">
           <tr>
-            <th scope="col">#</th>
-            <th scope="col">Fecha</td>
-            <th scope="col">Tipo de movimiento</td>
-            <th scope="col">Efecto</th>
-            <th scope="col">Cantidad</th>
-            <th scope="col">Saldo</th>
+            <th scope="col" class="CP-sticky">#</th>
+            <th scope="col" class="CP-sticky">Fecha</td>
+            <th scope="col" class="CP-sticky">Tipo de movimiento</td>
+            <th scope="col" class="CP-sticky">Efecto</th>
+            <th scope="col" class="CP-sticky">Cantidad</th>
+            <th scope="col" class="CP-sticky">Saldo</th>
           </tr>
         </thead>
 
