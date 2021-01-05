@@ -236,7 +236,10 @@
     $result = sqlsrv_query($conn,$sql);
 
     $sql2 = R12Q_seccion2($FInicial,$FFinal,$IdArticulo);
-    $result2 = sqlsrv_query($conn,$sql2);    
+    $result2 = sqlsrv_query($conn,$sql2);  
+
+    $sql3 = R12Q_seccion3($FInicial,$FFinal,$IdArticulo);
+    $result3 = sqlsrv_query($conn,$sql3);   
 
     echo '
       <div class="input-group md-form form-sm form-1 pl-0 CP-stickyBar">
@@ -324,6 +327,50 @@
         </tbody>
       </table>
     ';
+
+    echo '
+      <table class="table table-striped table-bordered col-12 sortable id="myTable">
+        <thead class="thead-dark">
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Fecha</td>
+            <th scope="col">Tipo de movimiento</td>
+            <th scope="col">Efecto</th>
+            <th scope="col">Cantidad</th>
+            <th scope="col">Saldo</th>
+          </tr>
+        </thead>
+
+        <tbody>
+    ';
+
+    $contador = 1;
+    $saldo = 0;
+    while($row3 = sqlsrv_fetch_array($result3, SQLSRV_FETCH_ASSOC)) {      
+        echo '<tr>';
+        echo '<td align="center"><strong>'.intval($contador).'</strong></td>';        
+        echo '<td align="center"><strong>'.$row3['Fecha']->format('d-m-Y').'</strong></td>';
+        echo '<td align="center"><strong>'.$row3['TipoMovimiento'].'</strong></td>';
+        echo '<td align="center"><strong>'.$row3['Efecto'].'</strong></td>';      
+        echo '<td align="center"><strong>'.$row3['Cantidad'].'</strong></td>';        
+
+        if($row3['Efecto']=="+"){
+          $saldo = $saldo + $row3['Cantidad'];
+        }else if($row3['Efecto']=="-"){
+          $saldo = $saldo + ((-1)*$row3['Cantidad']);
+        }
+
+        echo '<td align="center"><strong>'.$saldo.'</strong></td>';
+        echo '</tr>';
+
+        $contador++;
+      }
+
+    echo '
+        </tbody>
+      </table>
+    ';
+
     sqlsrv_close($conn);
   }
 /**********************************************************************************/
@@ -379,6 +426,34 @@
         OR (InvMovimiento.InvCausaId=14)OR (InvMovimiento.InvCausaId=15)
       )
       GROUP BY InvCausa.id,InvCausa.Descripcion,InvCausa.EsPositiva,CONVERT(DATE,InvMovimiento.FechaMovimiento)
+      ORDER BY CONVERT(DATE,InvMovimiento.FechaMovimiento) asc
+    ";
+    return $sql;
+  }
+/**********************************************************************************/
+  /*
+    TITULO: R12Q_seccion3
+    FUNCION: 
+    RETORNO: Lista de articulos con descripcion e id
+    DESAROLLADO POR: SERGIO COVA    
+   */
+  function R12Q_seccion3($FInicial,$FFinal,$IdArticulo) {
+    $sql = "
+      SELECT 
+      InvCausa.id as idCausa,
+      CONVERT(DATE,InvMovimiento.FechaMovimiento) AS Fecha, 
+      InvCausa.Descripcion AS TipoMovimiento,
+      (SELECT IIF(InvCausa.EsPositiva = 1, '+', '-')) AS Efecto,
+      ROUND(CAST((InvMovimiento.Cantidad) AS DECIMAL(38,0)),2,0) AS Cantidad
+      FROM InvMovimiento
+      LEFT JOIN InvCausa ON InvCausa.Id = InvMovimiento.InvCausaId
+      WHERE InvMovimiento.InvArticuloId='$IdArticulo'
+      AND(CONVERT(DATE,InvMovimiento.FechaMovimiento) >= '$FInicial' AND CONVERT(DATE,InvMovimiento.FechaMovimiento) <= '$FFinal')
+      AND (
+        (InvMovimiento.InvCausaId=1) OR (InvMovimiento.InvCausaId=2) OR (InvMovimiento.InvCausaId=3) OR (InvMovimiento.InvCausaId=4)
+        OR (InvMovimiento.InvCausaId=5) OR (InvMovimiento.InvCausaId=6) OR (InvMovimiento.InvCausaId=11) OR (InvMovimiento.InvCausaId=12)
+        OR (InvMovimiento.InvCausaId=14)OR (InvMovimiento.InvCausaId=15)
+      )    
       ORDER BY CONVERT(DATE,InvMovimiento.FechaMovimiento) asc
     ";
     return $sql;
