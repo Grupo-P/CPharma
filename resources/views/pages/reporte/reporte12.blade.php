@@ -273,9 +273,9 @@
     while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {      
         echo '<tr>';
         echo '<td align="center"><strong>'.intval($contador).'</strong></td>';        
-        echo '<td align="center"><strong>'.$row['TipoMovimiento'].'</strong></td>';
-        echo '<td align="center"><strong>'.$row['Efecto'].'</strong></td>';      
-        echo '<td align="center"><strong>'.$row['Cantidad'].'</strong></td>';
+        echo '<td align="center">'.$row['TipoMovimiento'].'</td>';
+        echo '<td align="center">'.$row['Efecto'].'</td>';      
+        echo '<td align="center">'.$row['Cantidad'].'</td>';
         echo '</tr>';
         $contador++;
       }
@@ -306,10 +306,10 @@
     while($row2 = sqlsrv_fetch_array($result2, SQLSRV_FETCH_ASSOC)) {      
         echo '<tr>';
         echo '<td align="center"><strong>'.intval($contador).'</strong></td>';        
-        echo '<td align="center"><strong>'.$row2['Fecha']->format('d-m-Y').'</strong></td>';
-        echo '<td align="center"><strong>'.$row2['TipoMovimiento'].'</strong></td>';
-        echo '<td align="center"><strong>'.$row2['Efecto'].'</strong></td>';      
-        echo '<td align="center"><strong>'.$row2['Cantidad'].'</strong></td>';        
+        echo '<td align="center">'.$row2['Fecha']->format('d-m-Y').'</td>';
+        echo '<td align="center">'.$row2['TipoMovimiento'].'</td>';
+        echo '<td align="center">'.$row2['Efecto'].'</td>';      
+        echo '<td align="center">'.$row2['Cantidad'].'</td>';        
 
         if($row2['Efecto']=="+"){
           $saldo = $saldo + $row2['Cantidad'];
@@ -334,10 +334,21 @@
           <tr>
             <th scope="col" class="CP-sticky">#</th>
             <th scope="col" class="CP-sticky">Fecha</td>
+            <th scope="col" class="CP-sticky">Hora</td>
             <th scope="col" class="CP-sticky">Tipo de movimiento</td>
             <th scope="col" class="CP-sticky">Efecto</th>
             <th scope="col" class="CP-sticky">Cantidad</th>
             <th scope="col" class="CP-sticky">Saldo</th>
+            <th scope="col" class="CP-sticky">Almacen</th>
+            <th scope="col" class="CP-sticky">Numero Referencia</th>
+            <th scope="col" class="CP-sticky">Lote</th>
+            <th scope="col" class="CP-sticky">Titular</th>
+            <th scope="col" class="CP-sticky">Operador</th>
+            <th scope="col" class="CP-sticky">Monto Total'.SigVe.'</th>
+            <th scope="col" class="CP-sticky">Monto Unitario'.SigVe.'</th>
+            <th scope="col" class="CP-sticky">Tasa Mercado</th>
+            <th scope="col" class="CP-sticky">Monto Unitario'.SigDolar.'</th>
+            <th scope="col" class="CP-sticky">Comentario</th>
           </tr>
         </thead>
 
@@ -349,10 +360,11 @@
     while($row3 = sqlsrv_fetch_array($result3, SQLSRV_FETCH_ASSOC)) {      
         echo '<tr>';
         echo '<td align="center"><strong>'.intval($contador).'</strong></td>';        
-        echo '<td align="center"><strong>'.$row3['Fecha']->format('d-m-Y').'</strong></td>';
-        echo '<td align="center"><strong>'.$row3['TipoMovimiento'].'</strong></td>';
-        echo '<td align="center"><strong>'.$row3['Efecto'].'</strong></td>';      
-        echo '<td align="center"><strong>'.$row3['Cantidad'].'</strong></td>';        
+        echo '<td align="center">'.$row3['Fecha']->format('d-m-Y').'</td>';
+        echo '<td align="center">'.$row3['Fecha']->format('h:i A').'</td>';
+        echo '<td align="center">'.$row3['TipoMovimiento'].'</td>';
+        echo '<td align="center">'.$row3['Efecto'].'</td>';      
+        echo '<td align="center">'.$row3['Cantidad'].'</td>';        
 
         if($row3['Efecto']=="+"){
           $saldo = $saldo + $row3['Cantidad'];
@@ -360,7 +372,17 @@
           $saldo = $saldo + ((-1)*$row3['Cantidad']);
         }
 
-        echo '<td align="center"><strong>'.$saldo.'</strong></td>';
+        echo '<td align="center">'.$saldo.'</td>';
+        echo '<td align="center">'.$row3['Almacen'].'</td>';
+        echo '<td align="center">'.$row3['NumeroReferencia'].'</td>';
+        echo '<td align="center">'.$row3['Lote'].'</td>';
+        echo '<td align="center">Titular</td>';
+        echo '<td align="center">'.$row3['Operador'].'</td>';
+        echo '<td align="center">'.number_format($row3['MontoTotal'],2,"," ,"." ).'</td>';
+        echo '<td align="center">'.number_format($row3['MontoUnitario'],2,"," ,"." ).'</td>';
+        echo '<td align="center">Tasa Mercado</td>';
+        echo '<td align="center">Monto $</td>';
+        echo '<td align="center">Comentario</td>';
         echo '</tr>';
 
         $contador++;
@@ -438,22 +460,31 @@
     DESAROLLADO POR: SERGIO COVA    
    */
   function R12Q_seccion3($FInicial,$FFinal,$IdArticulo) {
-    $sql = "
-      SELECT 
+    $sql = "    
+      SELECT
+      InvMovimiento.Id AS idMovimiento, 
       InvCausa.id as idCausa,
-      CONVERT(DATE,InvMovimiento.FechaMovimiento) AS Fecha, 
+      InvMovimiento.FechaMovimiento AS Fecha,
       InvCausa.Descripcion AS TipoMovimiento,
       (SELECT IIF(InvCausa.EsPositiva = 1, '+', '-')) AS Efecto,
-      ROUND(CAST((InvMovimiento.Cantidad) AS DECIMAL(38,0)),2,0) AS Cantidad
+      ROUND(CAST((InvMovimiento.Cantidad) AS DECIMAL(38,0)),2,0) AS Cantidad,
+      InvAlmacen.Descripcion as Almacen,
+      InvMovimiento.DocumentoOrigen as NumeroReferencia,
+      InvLote.Numero as Lote,
+      InvMovimiento.Auditoria_Usuario as Operador,
+      InvMovimiento.M_CostoTotal as MontoTotal,
+      InvMovimiento.M_CostoUnitario as MontoUnitario
       FROM InvMovimiento
       LEFT JOIN InvCausa ON InvCausa.Id = InvMovimiento.InvCausaId
-      WHERE InvMovimiento.InvArticuloId='$IdArticulo'
-      AND(CONVERT(DATE,InvMovimiento.FechaMovimiento) >= '$FInicial' AND CONVERT(DATE,InvMovimiento.FechaMovimiento) <= '$FFinal')
+      LEFT JOIN InvAlmacen ON InvAlmacen.id = InvMovimiento.InvAlmacenId
+      LEFT JOIN InvLote ON InvLote.Id = InvMovimiento.InvLoteId
+      WHERE InvMovimiento.InvArticuloId='54'
+      AND(CONVERT(DATE,InvMovimiento.FechaMovimiento) >= '2020-05-01' AND CONVERT(DATE,InvMovimiento.FechaMovimiento) <= '2020-05-04')
       AND (
         (InvMovimiento.InvCausaId=1) OR (InvMovimiento.InvCausaId=2) OR (InvMovimiento.InvCausaId=3) OR (InvMovimiento.InvCausaId=4)
         OR (InvMovimiento.InvCausaId=5) OR (InvMovimiento.InvCausaId=6) OR (InvMovimiento.InvCausaId=11) OR (InvMovimiento.InvCausaId=12)
         OR (InvMovimiento.InvCausaId=14)OR (InvMovimiento.InvCausaId=15)
-      )    
+      )
       ORDER BY CONVERT(DATE,InvMovimiento.FechaMovimiento) asc
     ";
     return $sql;
