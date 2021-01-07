@@ -273,7 +273,7 @@
     while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {      
         echo '<tr>';
         echo '<td align="center"><strong>'.intval($contador).'</strong></td>';        
-        echo '<td align="center">'.$row['TipoMovimiento'].'</td>';
+        echo '<td align="center">'.FG_Limpiar_Texto($row['TipoMovimiento']).'</td>';
         echo '<td align="center">'.$row['Efecto'].'</td>';      
         echo '<td align="center">'.$row['Cantidad'].'</td>';
         echo '</tr>';
@@ -307,7 +307,7 @@
         echo '<tr>';
         echo '<td align="center"><strong>'.intval($contador).'</strong></td>';        
         echo '<td align="center">'.$row2['Fecha']->format('d-m-Y').'</td>';
-        echo '<td align="center">'.$row2['TipoMovimiento'].'</td>';
+        echo '<td align="center">'.FG_Limpiar_Texto($row2['TipoMovimiento']).'</td>';
         echo '<td align="center">'.$row2['Efecto'].'</td>';      
         echo '<td align="center">'.$row2['Cantidad'].'</td>';        
 
@@ -340,18 +340,17 @@
             <th scope="col" class="CP-sticky">Cantidad</th>
             <th scope="col" class="CP-sticky">Saldo</th>
             <th scope="col" class="CP-sticky">Almacen</th>
-            <th scope="col" class="CP-sticky">Numero Referencia</th>
             <th scope="col" class="CP-sticky">Lote</th>
+            <th scope="col" class="CP-sticky">Numero Referencia</th>            
             <th scope="col" class="CP-sticky">Titular</th>
+            <th scope="col" class="CP-sticky">Comentario</th>
             <th scope="col" class="CP-sticky">Operador</th>
             <th scope="col" class="CP-sticky">Monto Total'.SigVe.'</th>
             <th scope="col" class="CP-sticky">Monto Unitario'.SigVe.'</th>
             <th scope="col" class="CP-sticky">Tasa Mercado</th>
-            <th scope="col" class="CP-sticky">Monto Unitario'.SigDolar.'</th>
-            <th scope="col" class="CP-sticky">Comentario</th>
+            <th scope="col" class="CP-sticky">Monto Unitario'.SigDolar.'</th>            
           </tr>
         </thead>
-
         <tbody>
     ';
 
@@ -362,7 +361,7 @@
         echo '<td align="center"><strong>'.intval($contador).'</strong></td>';        
         echo '<td align="center">'.$row3['Fecha']->format('d-m-Y').'</td>';
         echo '<td align="center">'.$row3['Fecha']->format('h:i A').'</td>';
-        echo '<td align="center">'.$row3['TipoMovimiento'].'</td>';
+        echo '<td align="center">'.FG_Limpiar_Texto($row3['TipoMovimiento']).'</td>';
         echo '<td align="center">'.$row3['Efecto'].'</td>';      
         echo '<td align="center">'.$row3['Cantidad'].'</td>';        
 
@@ -374,15 +373,84 @@
 
         echo '<td align="center">'.$saldo.'</td>';
         echo '<td align="center">'.$row3['Almacen'].'</td>';
-        echo '<td align="center">'.$row3['NumeroReferencia'].'</td>';
         echo '<td align="center">'.$row3['Lote'].'</td>';
-        echo '<td align="center">Titular</td>';
+
+        switch ($row3['idCausa']) {
+          case '1':            
+            $sql = R12_Causa_Compra($row3['NumeroReferencia']);
+            $result = sqlsrv_query($conn,$sql);
+            $row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC);
+            echo '<td align="center">'.$row['NumeroFactura'].'</td>';
+            echo '<td align="center">'.$row['Nombre'].'</td>';
+            echo '<td align="center">-</td>';
+          break; 
+          case '2':            
+            $sql = R12_Causa_DevCompra($row3['NumeroReferencia']);
+            $reechosult = sqlsrv_query($conn,$sql);
+            $row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC);
+            echo '<td align="center">'.$row3['NumeroReferencia'].'</td>';
+            echo '<td align="center">'.$row['Nombre'].'</td>';
+            echo '<td align="center">-</td>';
+          break;
+          case '3':            
+            $sql = R12_Causa_Venta($row3['NumeroReferencia']);
+            $result = sqlsrv_query($conn,$sql);
+            $row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC);
+            echo '<td align="center">'.$row3['NumeroReferencia'].'</td>';
+            echo '<td align="center">'.$row['Nombre'].' '.$row['Apellido'].'</td>';
+            echo '<td align="center">-</td>';
+          break; 
+          case '4':           
+            $sql = R12_Causa_DevVenta($row3['NumeroReferencia']);
+            $result = sqlsrv_query($conn,$sql);
+            $row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC);
+            echo '<td align="center">'.$row3['NumeroReferencia'].'</td>';
+            echo '<td align="center">'.$row['Nombre'].' '.$row['Apellido'].'</td>';
+
+            $sql = R12_Coment_DevVenta($row3['NumeroReferencia']);
+            $result = sqlsrv_query($conn,$sql);
+            $row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC);            
+            echo '<td align="center">'.$row['DescripcionOperacion'].'</td>';
+          break;
+          case '5' || '6':           
+            $sql = R12_Coment_Trasferencia($row3['NumeroReferencia']);
+            $result = sqlsrv_query($conn,$sql);
+            $row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC);
+            echo '<td align="center">'.$row3['NumeroReferencia'].'</td>';
+            echo '<td align="center">-</td>';                  
+            echo '<td align="center">'.$row['Observaciones'].'</td>';
+          break;
+          case '14' || '15':           
+            $sql = R12_Coment_Ajuste($row3['NumeroReferencia']);
+            $result = sqlsrv_query($conn,$sql);
+            $row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC);
+            echo '<td align="center">'.$row3['NumeroReferencia'].'</td>';
+            echo '<td align="center">-</td>';                  
+            echo '<td align="center">'.$row['Comentario'].'</td>';
+          break;         
+          default:
+            echo '<td align="center">'.$row3['NumeroReferencia'].'</td>';
+            echo '<td align="center">-</td>'; 
+            echo '<td align="center">-</td>';
+          break;
+        }
+      
         echo '<td align="center">'.$row3['Operador'].'</td>';
         echo '<td align="center">'.number_format($row3['MontoTotal'],2,"," ,"." ).'</td>';
         echo '<td align="center">'.number_format($row3['MontoUnitario'],2,"," ,"." ).'</td>';
-        echo '<td align="center">Tasa Mercado</td>';
-        echo '<td align="center">Monto $</td>';
-        echo '<td align="center">Comentario</td>';
+
+        $Fecha = $row3['Fecha']->format('d-m-Y');
+        $Tasa = FG_Tasa_Fecha($connCPharma,$Fecha);
+
+        if($Tasa!=0){
+          $costoDol = ($row3['MontoUnitario'])*$Tasa;
+          echo '<td align="center">'.$Tasa.'</td>';
+          echo '<td align="center">'.number_format($costoDol,2,"," ,"." ).'</td>';
+        }else{
+          echo '<td align="center">0,00</td>';
+          echo '<td align="center">-</td>';
+        }
+
         echo '</tr>';
 
         $contador++;
@@ -478,14 +546,128 @@
       LEFT JOIN InvCausa ON InvCausa.Id = InvMovimiento.InvCausaId
       LEFT JOIN InvAlmacen ON InvAlmacen.id = InvMovimiento.InvAlmacenId
       LEFT JOIN InvLote ON InvLote.Id = InvMovimiento.InvLoteId
-      WHERE InvMovimiento.InvArticuloId='54'
-      AND(CONVERT(DATE,InvMovimiento.FechaMovimiento) >= '2020-05-01' AND CONVERT(DATE,InvMovimiento.FechaMovimiento) <= '2020-05-04')
+      WHERE InvMovimiento.InvArticuloId='$IdArticulo'
+      AND(CONVERT(DATE,InvMovimiento.FechaMovimiento) >= '$FInicial' AND CONVERT(DATE,InvMovimiento.FechaMovimiento) <= '$FFinal')
       AND (
         (InvMovimiento.InvCausaId=1) OR (InvMovimiento.InvCausaId=2) OR (InvMovimiento.InvCausaId=3) OR (InvMovimiento.InvCausaId=4)
         OR (InvMovimiento.InvCausaId=5) OR (InvMovimiento.InvCausaId=6) OR (InvMovimiento.InvCausaId=11) OR (InvMovimiento.InvCausaId=12)
         OR (InvMovimiento.InvCausaId=14)OR (InvMovimiento.InvCausaId=15)
       )
       ORDER BY CONVERT(DATE,InvMovimiento.FechaMovimiento) asc
+    ";
+    return $sql;
+  }
+/**********************************************************************************/
+  /*
+    TITULO: R12Q_seccion3
+    FUNCION: 
+    RETORNO: Lista de articulos con descripcion e id
+    DESAROLLADO POR: SERGIO COVA    
+   */
+  function R12_Causa_Compra($NumeroReferencia) {
+    $sql = "    
+      SELECT GenPersona.Nombre,ComFactura.NumeroFactura
+      FROM ComEntradaMercancia
+      LEFT JOIN ComProveedor ON ComProveedor.Id = ComEntradaMercancia.ComProveedorId
+      LEFT JOIN GenPersona ON GenPersona.Id = ComProveedor.GenPersonaId
+      LEFT JOIN ComFacturaEntrada ON ComFacturaEntrada.ComEntradaMercanciaId = ComEntradaMercancia.Id
+      LEFT JOIN ComFactura ON ComFactura.id = ComFacturaEntrada.ComFacturaDetalleComFacturaId
+      WHERE ComEntradaMercancia.NumeroEntrada = '$NumeroReferencia'
+    ";
+    return $sql;
+  }
+  /**********************************************************************************/
+  /*
+    TITULO: R12Q_seccion3
+    FUNCION: 
+    RETORNO: Lista de articulos con descripcion e id
+    DESAROLLADO POR: SERGIO COVA    
+   */
+  function R12_Causa_DevCompra($NumeroReferencia) {
+    $sql = "    
+      SELECT GenPersona.Nombre
+      FROM ComSalidaMercancia
+      LEFT JOIN ComProveedor ON ComProveedor.Id = ComSalidaMercancia.ComProveedorId
+      LEFT JOIN GenPersona ON GenPersona.Id = ComProveedor.GenPersonaId 
+      WHERE ComSalidaMercancia.NumeroSalida = '$NumeroReferencia'
+    ";
+    return $sql;
+  }
+  /**********************************************************************************/
+  /*
+    TITULO: R12Q_seccion3
+    FUNCION: 
+    RETORNO: Lista de articulos con descripcion e id
+    DESAROLLADO POR: SERGIO COVA    
+   */
+  function R12_Causa_Venta($NumeroReferencia) {
+    $sql = "    
+      SELECT GenPersona.Nombre, GenPersona.Apellido
+      FROM VenVenta
+      LEFT JOIN VenCliente ON VenCliente.Id = VenVenta.VenClienteId
+      LEFT JOIN GenPersona ON GenPersona.Id = VenCliente.GenPersonaId
+      WHERE  VenVenta.ConsecutivoVentaSistema = '$NumeroReferencia'
+    ";
+    return $sql;
+  }
+  /**********************************************************************************/
+  /*
+    TITULO: R12Q_seccion3
+    FUNCION: 
+    RETORNO: Lista de articulos con descripcion e id
+    DESAROLLADO POR: SERGIO COVA    
+   */
+  function R12_Causa_DevVenta($NumeroReferencia) {
+    $sql = "    
+      SELECT GenPersona.Nombre, GenPersona.Apellido
+      FROM VenDevolucion
+      LEFT JOIN VenFactura ON VenFactura.id = VenDevolucion.VenFacturaId
+      LEFT JOIN VenCliente ON VenCliente.Id = VenFactura.VenClienteId
+      LEFT JOIN GenPersona ON GenPersona.Id = VenCliente.GenPersonaId
+      WHERE  VenDevolucion.ConsecutivoDevolucionSistema = '$NumeroReferencia'
+    ";
+    return $sql;
+  }
+  /**********************************************************************************/
+  /*
+    TITULO: R12Q_seccion3
+    FUNCION: 
+    RETORNO: Lista de articulos con descripcion e id
+    DESAROLLADO POR: SERGIO COVA    
+   */
+  function R12_Coment_DevVenta($NumeroReferencia) {
+    $sql = "    
+      SELECT TOP 1 VenCausaOperacionDevolucion.DescripcionOperacion 
+      FROM VenDevolucion
+      LEFT JOIN VenDevolucionDetalle ON VenDevolucionDetalle.VenDevolucionId = VenDevolucion.Id
+      LEFT JOIN VenCausaOperacionDevolucion ON VenCausaOperacionDevolucion.id = VenDevolucionDetalle.VenCausaOperacionId
+      WHERE VenDevolucion.ConsecutivoDevolucionSistema = '$NumeroReferencia'
+    ";
+    return $sql;
+  }
+  /**********************************************************************************/
+  /*
+    TITULO: R12Q_seccion3
+    FUNCION: 
+    RETORNO: Lista de articulos con descripcion e id
+    DESAROLLADO POR: SERGIO COVA    
+   */
+  function R12_Coment_Trasferencia($NumeroReferencia) {
+    $sql = "    
+      SELECT InvTransferenciaAlmacen.Observaciones FROM InvTransferenciaAlmacen WHERE InvTransferenciaAlmacen.NumeroTransferencia = '$NumeroReferencia'
+    ";
+    return $sql;
+  }
+  /**********************************************************************************/
+  /*
+    TITULO: R12Q_seccion3
+    FUNCION: 
+    RETORNO: Lista de articulos con descripcion e id
+    DESAROLLADO POR: SERGIO COVA    
+   */
+  function R12_Coment_Ajuste($NumeroReferencia) {
+    $sql = "    
+      SELECT InvAjuste.Comentario FROM InvAjuste WHERE InvAjuste.NumeroAjuste = '$NumeroReferencia'
     ";
     return $sql;
   }
