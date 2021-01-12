@@ -412,7 +412,7 @@
             $row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC);            
             echo '<td align="center">'.$row['DescripcionOperacion'].'</td>';
           break;
-          case '5' || '6':           
+          case '5':           
             $sql = R12_Coment_Trasferencia($row3['NumeroReferencia']);
             $result = sqlsrv_query($conn,$sql);
             $row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC);
@@ -420,14 +420,30 @@
             echo '<td align="center">-</td>';                  
             echo '<td align="center">'.$row['Observaciones'].'</td>';
           break;
-          case '14' || '15':           
+          case '6':           
+            $sql = R12_Coment_Trasferencia($row3['NumeroReferencia']);
+            $result = sqlsrv_query($conn,$sql);
+            $row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC);
+            echo '<td align="center">'.$row3['NumeroReferencia'].'</td>';
+            echo '<td align="center">-</td>';                  
+            echo '<td align="center">'.$row['Observaciones'].'</td>';
+          break;
+          case '14':           
             $sql = R12_Coment_Ajuste($row3['NumeroReferencia']);
             $result = sqlsrv_query($conn,$sql);
             $row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC);
             echo '<td align="center">'.$row3['NumeroReferencia'].'</td>';
             echo '<td align="center">-</td>';                  
             echo '<td align="center">'.$row['Comentario'].'</td>';
-          break;         
+          break;  
+          case '15':          
+            $sql = R12_Coment_Ajuste($row3['NumeroReferencia']);
+            $result = sqlsrv_query($conn,$sql);
+            $row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC);
+            echo '<td align="center">'.$row3['NumeroReferencia'].'</td>';
+            echo '<td align="center">-</td>';                  
+            echo '<td align="center">'.$row['Comentario'].'</td>';
+          break;        
           default:
             echo '<td align="center">'.$row3['NumeroReferencia'].'</td>';
             echo '<td align="center">-</td>'; 
@@ -439,7 +455,7 @@
         echo '<td align="center">'.number_format($row3['MontoTotal'],2,"," ,"." ).'</td>';
         echo '<td align="center">'.number_format($row3['MontoUnitario'],2,"," ,"." ).'</td>';
 
-        $Fecha = $row3['Fecha']->format('d-m-Y');
+        $Fecha = $row3['Fecha']->format('Y-m-d');
         $Tasa = FG_Tasa_Fecha($connCPharma,$Fecha);
 
         if($Tasa!=0){
