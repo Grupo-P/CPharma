@@ -575,7 +575,7 @@
         $Tasa = FG_Tasa_Fecha($connCPharma,$Fecha);
 
         if($Tasa!=0){
-          $costoDol = ($row3['MontoUnitario'])*$Tasa;
+          $costoDol = ($row3['MontoUnitario'])/$Tasa;
           echo '<td align="center">'.$Tasa.'</td>';
           echo '<td align="center">'.number_format($costoDol,2,"," ,"." ).'</td>';
         }else{
