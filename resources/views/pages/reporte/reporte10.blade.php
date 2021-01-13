@@ -434,7 +434,7 @@
         ';
 
         if($TasaFecha!=0){
-          $CostoDivisa = $row3["CostoUnitario"] / $TasaFecha;
+          $CostoDivisa = $row2["CostoUnitario"] / $TasaFecha;
           echo '                    
             <td align="center">'.number_format($CostoDivisa,2,"," ,"." ).'</td>
           ';
