@@ -48,7 +48,18 @@ class AuditoriaController extends Controller
     public function create()
     {
         $auditorias =  Auditoria::orderBy('updated_at', 'desc')->take(150)->get();
-        return view('pages.auditoria.index', compact('auditorias'));
+        $users = Auditoria::select('user')->groupBy('user')->get();
+        $tablas = Auditoria::select('tabla')->groupBy('tabla')->get();
+        $acciones = Auditoria::select('accion')->groupBy('accion')->get();
+        $registros = Auditoria::select('registro')->groupBy('registro')->get();
+
+        $departamentos = Auditoria::select('departamentos.nombre')
+        ->leftJoin('users', 'users.name', '=', 'auditorias.user')
+        ->leftJoin('departamentos', 'departamentos.nombre', '=', 'users.departamento')        
+        ->where('departamentos.nombre','!=','')
+        ->groupBy('departamentos.nombre')->get();
+
+        return view('pages.auditoria.index', compact('auditorias','users','departamentos','tablas','acciones','registros'));
     }
 
     /**
@@ -58,9 +69,30 @@ class AuditoriaController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {
-        $auditorias =  Auditoria::orderBy('updated_at', 'desc')->take(150)->get();
-        return view('pages.auditoria.index', compact('auditorias'));
+    {    
+        $auditorias =  Auditoria::
+        leftJoin('users', 'users.name', '=', 'auditorias.user')
+        ->leftJoin('departamentos', 'departamentos.nombre', '=', 'users.departamento')
+        ->where('auditorias.accion','=',$request->accion)
+        ->where('auditorias.tabla','=',$request->tabla)
+        ->where('auditorias.registro','=',$request->registro)
+        ->where('auditorias.user','=',$request->user)
+        ->where('departamentos.nombre','=',$request->departamento)
+        ->whereBetween('auditorias.created_at', [$request->fechadesde, $request->fechahasta])
+        ->orderBy('auditorias.updated_at', 'desc')->take(150)->get();
+
+        $users = Auditoria::select('user')->groupBy('user')->get();
+        $tablas = Auditoria::select('tabla')->groupBy('tabla')->get();
+        $acciones = Auditoria::select('accion')->groupBy('accion')->get();
+        $registros = Auditoria::select('registro')->groupBy('registro')->get();
+
+        $departamentos = Auditoria::select('departamentos.nombre')
+        ->leftJoin('users', 'users.name', '=', 'auditorias.user')
+        ->leftJoin('departamentos', 'departamentos.nombre', '=', 'users.departamento')        
+        ->where('departamentos.nombre','!=','')
+        ->groupBy('departamentos.nombre')->get();
+
+        return view('pages.auditoria.index', compact('auditorias','users','departamentos','tablas','acciones','registros'));
     }
 
     /**
@@ -72,7 +104,18 @@ class AuditoriaController extends Controller
     public function show($id)
     {
         $auditorias =  Auditoria::orderBy('updated_at', 'desc')->take(150)->get();
-        return view('pages.auditoria.index', compact('auditorias'));
+        $users = Auditoria::select('user')->groupBy('user')->get();
+        $tablas = Auditoria::select('tabla')->groupBy('tabla')->get();
+        $acciones = Auditoria::select('accion')->groupBy('accion')->get();
+        $registros = Auditoria::select('registro')->groupBy('registro')->get();
+
+        $departamentos = Auditoria::select('departamentos.nombre')
+        ->leftJoin('users', 'users.name', '=', 'auditorias.user')
+        ->leftJoin('departamentos', 'departamentos.nombre', '=', 'users.departamento')        
+        ->where('departamentos.nombre','!=','')
+        ->groupBy('departamentos.nombre')->get();
+
+        return view('pages.auditoria.index', compact('auditorias','users','departamentos','tablas','acciones','registros'));
     }
 
     /**
@@ -84,7 +127,18 @@ class AuditoriaController extends Controller
     public function edit($id)
     {
         $auditorias =  Auditoria::orderBy('updated_at', 'desc')->take(150)->get();
-        return view('pages.auditoria.index', compact('auditorias'));
+        $users = Auditoria::select('user')->groupBy('user')->get();
+        $tablas = Auditoria::select('tabla')->groupBy('tabla')->get();
+        $acciones = Auditoria::select('accion')->groupBy('accion')->get();
+        $registros = Auditoria::select('registro')->groupBy('registro')->get();
+
+        $departamentos = Auditoria::select('departamentos.nombre')
+        ->leftJoin('users', 'users.name', '=', 'auditorias.user')
+        ->leftJoin('departamentos', 'departamentos.nombre', '=', 'users.departamento')        
+        ->where('departamentos.nombre','!=','')
+        ->groupBy('departamentos.nombre')->get();
+
+        return view('pages.auditoria.index', compact('auditorias','users','departamentos','tablas','acciones','registros'));
     }
 
     /**
@@ -97,7 +151,18 @@ class AuditoriaController extends Controller
     public function update(Request $request, $id)
     {
         $auditorias =  Auditoria::orderBy('updated_at', 'desc')->take(150)->get();
-        return view('pages.auditoria.index', compact('auditorias'));
+        $users = Auditoria::select('user')->groupBy('user')->get();
+        $tablas = Auditoria::select('tabla')->groupBy('tabla')->get();
+        $acciones = Auditoria::select('accion')->groupBy('accion')->get();
+        $registros = Auditoria::select('registro')->groupBy('registro')->get();
+
+        $departamentos = Auditoria::select('departamentos.nombre')
+        ->leftJoin('users', 'users.name', '=', 'auditorias.user')
+        ->leftJoin('departamentos', 'departamentos.nombre', '=', 'users.departamento')        
+        ->where('departamentos.nombre','!=','')
+        ->groupBy('departamentos.nombre')->get();
+
+        return view('pages.auditoria.index', compact('auditorias','users','departamentos','tablas','acciones','registros'));
     }
 
     /**
@@ -109,6 +174,17 @@ class AuditoriaController extends Controller
     public function destroy($id)
     {
         $auditorias =  Auditoria::orderBy('updated_at', 'desc')->take(150)->get();
-        return view('pages.auditoria.index', compact('auditorias'));
+        $users = Auditoria::select('user')->groupBy('user')->get();
+        $tablas = Auditoria::select('tabla')->groupBy('tabla')->get();
+        $acciones = Auditoria::select('accion')->groupBy('accion')->get();
+        $registros = Auditoria::select('registro')->groupBy('registro')->get();
+
+        $departamentos = Auditoria::select('departamentos.nombre')
+        ->leftJoin('users', 'users.name', '=', 'auditorias.user')
+        ->leftJoin('departamentos', 'departamentos.nombre', '=', 'users.departamento')        
+        ->where('departamentos.nombre','!=','')
+        ->groupBy('departamentos.nombre')->get();
+
+        return view('pages.auditoria.index', compact('auditorias','users','departamentos','tablas','acciones','registros'));
     }
 }

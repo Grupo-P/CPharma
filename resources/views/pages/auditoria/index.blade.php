@@ -79,90 +79,94 @@
 
 	<hr class="row align-items-start col-12">
 
-	<table style="width:100%;" class="CP-stickyBar">
-	    <tr>
-			<th class="text-center">Accion</th>
-				<td scope="col">
-					<select name="accion" class="form-control">
-					<?php
-					foreach($acciones as $accion){											
-					?>
-						<option value="<?php echo $accion['accion']; ?>"><?php echo strtoupper($accion['accion']); ?></option>
-					<?php
-					}
-					?>
-				</select>
-			</td>
-
-			<th class="text-center">Reporte/Modulo</th>	
-			<td scope="col">
-				<select name="tabla" class="form-control">
-					<?php
-					foreach($tablas as $tabla){															
-					?>
-						<option value="<?php echo $tabla['tabla']; ?>"><?php echo strtoupper($tabla['tabla']); ?></option>
-					<?php
-					}
-					?>
-				</select>
-			</td>
-
-			<th class="text-center">Registro</th>
-			<td scope="col">
-				<select name="registro" class="form-control">
-					<?php
-					foreach($registros as $registro){
-						if(!intval($registro['registro'])&&!floatval($registro['registro'])){										
-					?>
-						<option value="<?php echo $registro['registro']; ?>"><?php echo strtoupper($registro['registro']); ?></option>
-					<?php
+	{!! Form::open(['route' => 'auditoria.store', 'method' => 'POST']) !!}
+    <fieldset>
+		<table style="width:100%;" class="CP-stickyBar">
+			<tr>
+				<th class="text-center">Accion</th>
+					<td scope="col">
+						<select name="accion" class="form-control">							
+						<?php
+						foreach($acciones as $accion){											
+						?>
+							<option value="<?php echo $accion['accion']; ?>"><?php echo strtoupper($accion['accion']); ?></option>
+						<?php
 						}
-					}
-					?>
-				</select>
-			</td>
+						?>
+					</select>
+				</td>
 
-			<th class="text-center">Usuario</th>
-			<td scope="col">
-				<select name="user" class="form-control">
-					<?php
-					foreach($users as $user){											
-					?>
-						<option value="<?php echo $user['user']; ?>"><?php echo strtoupper($user['user']); ?></option>
-					<?php
-					}
-					?>
-				</select>
-			</td>
-		</tr>
-		<tr>
-			<th class="text-center">Departamento</th>
-			<td>
-				<select name="departamento" class="form-control">
-					<?php
-					foreach($departamentos as $departamento){
-					?>
-						<option value="<?php echo $departamento['nombre']; ?>"><?php echo strtoupper($departamento['nombre']); ?></option>
-					<?php
-					}
-					?>
-				</select>
-			</td>	
+				<th class="text-center">Reporte/Modulo</th>	
+				<td scope="col">
+					<select name="tabla" class="form-control">
+						<?php
+						foreach($tablas as $tabla){															
+						?>
+							<option value="<?php echo $tabla['tabla']; ?>"><?php echo strtoupper($tabla['tabla']); ?></option>
+						<?php
+						}
+						?>
+					</select>
+				</td>
 
-			<th class="text-center">Fecha Desde</th>
-			<td>
-				<input type="date" name="fechadesde" class="form-control">
-			</td>
+				<th class="text-center">Registro</th>
+				<td scope="col">
+					<select name="registro" class="form-control">
+						<?php
+						foreach($registros as $registro){
+							if(!intval($registro['registro'])&&!floatval($registro['registro'])){										
+						?>
+							<option value="<?php echo $registro['registro']; ?>"><?php echo strtoupper($registro['registro']); ?></option>
+						<?php
+							}
+						}
+						?>
+					</select>
+				</td>
 
-			<th class="text-center">Fecha Hasta</th>
-			<td>
-				<input type="date" name="fechahasta" class="form-control">
-			</td>	
-			
-			<td></td>
-			<td><input class="btn btn-sm btn-outline-success" type="submit" name="buscar" value="Buscar"></td>
-		</tr>
-	</table>
+				<th class="text-center">Usuario</th>
+				<td scope="col">
+					<select name="user" class="form-control">
+						<?php
+						foreach($users as $user){											
+						?>
+							<option value="<?php echo $user['user']; ?>"><?php echo strtoupper($user['user']); ?></option>
+						<?php
+						}
+						?>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<th class="text-center">Departamento</th>
+				<td>
+					<select name="departamento" class="form-control">
+						<?php
+						foreach($departamentos as $departamento){
+						?>
+							<option value="<?php echo $departamento['nombre']; ?>"><?php echo strtoupper($departamento['nombre']); ?></option>
+						<?php
+						}
+						?>
+					</select>
+				</td>	
+
+				<th class="text-center">Fecha Desde</th>
+				<td>
+					<input type="date" name="fechadesde" class="form-control">
+				</td>
+
+				<th class="text-center">Fecha Hasta</th>
+				<td>
+					<input type="date" name="fechahasta" class="form-control">
+				</td>	
+				
+				<td></td>
+				<td><input class="btn btn-sm btn-outline-success" type="submit" name="buscar" value="Buscar"></td>
+			</tr>
+		</table>
+	</fieldset>
+    {!! Form::close()!!} 
 	
 	<hr class="row align-items-start col-12">
 	
@@ -181,30 +185,42 @@
 	</table>
 	<br/>
 	
-	<table class="table table-striped table-borderless col-12 sortable" id="myTable">
-	  	<thead class="thead-dark">
-		    <tr>
-		      	<th scope="col" class="CP-sticky">#</th>
-		      	<th scope="col" class="CP-sticky">Accion</th>
-		      	<th scope="col" class="CP-sticky">Reporte/Modulo</th>	
-		      	<th scope="col" class="CP-sticky">Registro</th>
-		      	<th scope="col" class="CP-sticky">Usuario</th>
-		      	<th scope="col" class="CP-sticky">Fecha Actualizacion</th>
-		    </tr>
-	  	</thead>
-	  	<tbody>
-		@foreach($auditorias as $auditoria)
-		    <tr>
-		      <th>{{strtoupper($auditoria->id)}}</th>
-		      <td>{{strtoupper($auditoria->accion)}}</td>
-		      <td>{{strtoupper($auditoria->tabla)}}</td>
-		      <td>{{strtoupper($auditoria->registro)}}</td>
-		      <td>{{strtoupper($auditoria->user)}}</td>
-		      <td>{{strtoupper($auditoria->updated_at)}}</td>
-		    </tr>
-		@endforeach
-		</tbody>
-	</table>
+	<?php
+		if(count($auditorias)>0){			
+	?>	
+		<table class="table table-striped table-borderless col-12 sortable" id="myTable">
+			<thead class="thead-dark">
+				<tr>
+					<th scope="col" class="CP-sticky">#</th>
+					<th scope="col" class="CP-sticky">Accion</th>
+					<th scope="col" class="CP-sticky">Reporte/Modulo</th>	
+					<th scope="col" class="CP-sticky">Registro</th>
+					<th scope="col" class="CP-sticky">Usuario</th>
+					<th scope="col" class="CP-sticky">Fecha Actualizacion</th>
+				</tr>
+			</thead>
+			<tbody>
+			@foreach($auditorias as $auditoria)
+				<tr>
+				<th>{{strtoupper($auditoria->id)}}</th>
+				<td>{{strtoupper($auditoria->accion)}}</td>
+				<td>{{strtoupper($auditoria->tabla)}}</td>
+				<td>{{strtoupper($auditoria->registro)}}</td>
+				<td>{{strtoupper($auditoria->user)}}</td>
+				<td>{{strtoupper($auditoria->updated_at)}}</td>
+				</tr>
+			@endforeach
+			</tbody>
+		</table>
+	<?php 
+		}else{
+	?>
+		<div class="text-center text-danger mb-5 mt-5 text-uppercase">
+			<label><strong>No existen registros para la conbinacion de filtros, por favor utilice una diferente</strong></label>
+		</div>
+	<?php
+		}
+	?>
 
 	<script>
 		$(document).ready(function(){
