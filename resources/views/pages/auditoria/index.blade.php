@@ -78,17 +78,105 @@
 	</h1>
 
 	<hr class="row align-items-start col-12">
+
 	<table style="width:100%;" class="CP-stickyBar">
 	    <tr>
-        <td style="width:90%;">
-        	<div class="input-group md-form form-sm form-1 pl-0">
-				  <div class="input-group-prepend">
-				    <span class="input-group-text purple lighten-3" id="basic-text1"><i class="fas fa-search text-white"
+			<th class="text-center">Accion</th>
+				<td scope="col">
+					<select name="accion" class="form-control">
+					<?php
+					foreach($acciones as $accion){											
+					?>
+						<option value="<?php echo $accion['accion']; ?>"><?php echo strtoupper($accion['accion']); ?></option>
+					<?php
+					}
+					?>
+				</select>
+			</td>
+
+			<th class="text-center">Reporte/Modulo</th>	
+			<td scope="col">
+				<select name="tabla" class="form-control">
+					<?php
+					foreach($tablas as $tabla){															
+					?>
+						<option value="<?php echo $tabla['tabla']; ?>"><?php echo strtoupper($tabla['tabla']); ?></option>
+					<?php
+					}
+					?>
+				</select>
+			</td>
+
+			<th class="text-center">Registro</th>
+			<td scope="col">
+				<select name="registro" class="form-control">
+					<?php
+					foreach($registros as $registro){
+						if(!intval($registro['registro'])&&!floatval($registro['registro'])){										
+					?>
+						<option value="<?php echo $registro['registro']; ?>"><?php echo strtoupper($registro['registro']); ?></option>
+					<?php
+						}
+					}
+					?>
+				</select>
+			</td>
+
+			<th class="text-center">Usuario</th>
+			<td scope="col">
+				<select name="user" class="form-control">
+					<?php
+					foreach($users as $user){											
+					?>
+						<option value="<?php echo $user['user']; ?>"><?php echo strtoupper($user['user']); ?></option>
+					<?php
+					}
+					?>
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<th class="text-center">Departamento</th>
+			<td>
+				<select name="departamento" class="form-control">
+					<?php
+					foreach($departamentos as $departamento){
+					?>
+						<option value="<?php echo $departamento['nombre']; ?>"><?php echo strtoupper($departamento['nombre']); ?></option>
+					<?php
+					}
+					?>
+				</select>
+			</td>	
+
+			<th class="text-center">Fecha Desde</th>
+			<td>
+				<input type="date" name="fechadesde" class="form-control">
+			</td>
+
+			<th class="text-center">Fecha Hasta</th>
+			<td>
+				<input type="date" name="fechahasta" class="form-control">
+			</td>	
+			
+			<td></td>
+			<td><input class="btn btn-sm btn-outline-success" type="submit" name="buscar" value="Buscar"></td>
+		</tr>
+	</table>
+	
+	<hr class="row align-items-start col-12">
+	
+	<table style="width:100%;" class="CP-stickyBar">
+	    <tr>
+        	<td style="width:90%;">
+        		<div class="input-group md-form form-sm form-1 pl-0">
+				  	<div class="input-group-prepend">
+				    	<span class="input-group-text purple lighten-3" id="basic-text1"><i class="fas fa-search text-white"
 				        aria-hidden="true"></i></span>
-				  </div>
-				  <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterAllTable()" autofocus="autofocus">
-					</div>
-        </td>
+				  	</div>
+				  	<input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterAllTable()" autofocus="autofocus">
+				</div>
+        	</td>
 	    </tr>
 	</table>
 	<br/>
@@ -98,7 +186,7 @@
 		    <tr>
 		      	<th scope="col" class="CP-sticky">#</th>
 		      	<th scope="col" class="CP-sticky">Accion</th>
-		      	<th scope="col" class="CP-sticky">Tabla</th>	
+		      	<th scope="col" class="CP-sticky">Reporte/Modulo</th>	
 		      	<th scope="col" class="CP-sticky">Registro</th>
 		      	<th scope="col" class="CP-sticky">Usuario</th>
 		      	<th scope="col" class="CP-sticky">Fecha Actualizacion</th>

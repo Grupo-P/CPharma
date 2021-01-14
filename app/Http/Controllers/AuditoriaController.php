@@ -24,9 +24,20 @@ class AuditoriaController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {
-        $auditorias =  Auditoria::orderBy('updated_at', 'desc')->take(500)->get();
-        return view('pages.auditoria.index', compact('auditorias'));
+    {              
+        $auditorias =  Auditoria::orderBy('updated_at', 'desc')->take(150)->get();
+        $users = Auditoria::select('user')->groupBy('user')->get();
+        $tablas = Auditoria::select('tabla')->groupBy('tabla')->get();
+        $acciones = Auditoria::select('accion')->groupBy('accion')->get();
+        $registros = Auditoria::select('registro')->groupBy('registro')->get();
+
+        $departamentos = Auditoria::select('departamentos.nombre')
+        ->leftJoin('users', 'users.name', '=', 'auditorias.user')
+        ->leftJoin('departamentos', 'departamentos.nombre', '=', 'users.departamento')        
+        ->where('departamentos.nombre','!=','')
+        ->groupBy('departamentos.nombre')->get();
+
+        return view('pages.auditoria.index', compact('auditorias','users','departamentos','tablas','acciones','registros'));
     }
 
     /**
@@ -36,7 +47,7 @@ class AuditoriaController extends Controller
      */
     public function create()
     {
-        $auditorias =  Auditoria::all();
+        $auditorias =  Auditoria::orderBy('updated_at', 'desc')->take(150)->get();
         return view('pages.auditoria.index', compact('auditorias'));
     }
 
@@ -48,7 +59,7 @@ class AuditoriaController extends Controller
      */
     public function store(Request $request)
     {
-        $auditorias =  Auditoria::all();
+        $auditorias =  Auditoria::orderBy('updated_at', 'desc')->take(150)->get();
         return view('pages.auditoria.index', compact('auditorias'));
     }
 
@@ -60,7 +71,7 @@ class AuditoriaController extends Controller
      */
     public function show($id)
     {
-        $auditorias =  Auditoria::all();
+        $auditorias =  Auditoria::orderBy('updated_at', 'desc')->take(150)->get();
         return view('pages.auditoria.index', compact('auditorias'));
     }
 
@@ -72,7 +83,7 @@ class AuditoriaController extends Controller
      */
     public function edit($id)
     {
-        $auditorias =  Auditoria::all();
+        $auditorias =  Auditoria::orderBy('updated_at', 'desc')->take(150)->get();
         return view('pages.auditoria.index', compact('auditorias'));
     }
 
@@ -85,7 +96,7 @@ class AuditoriaController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $auditorias =  Auditoria::all();
+        $auditorias =  Auditoria::orderBy('updated_at', 'desc')->take(150)->get();
         return view('pages.auditoria.index', compact('auditorias'));
     }
 
@@ -97,7 +108,7 @@ class AuditoriaController extends Controller
      */
     public function destroy($id)
     {
-        $auditorias =  Auditoria::all();
+        $auditorias =  Auditoria::orderBy('updated_at', 'desc')->take(150)->get();
         return view('pages.auditoria.index', compact('auditorias'));
     }
 }
