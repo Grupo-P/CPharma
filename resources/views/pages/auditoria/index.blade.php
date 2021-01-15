@@ -86,6 +86,7 @@
 				<th class="text-center">Accion</th>
 					<td scope="col">
 						<select name="accion" class="form-control">							
+						<option value="TODOS">TODOS</option>
 						<?php
 						foreach($acciones as $accion){											
 						?>
@@ -99,6 +100,7 @@
 				<th class="text-center">Reporte/Modulo</th>	
 				<td scope="col">
 					<select name="tabla" class="form-control">
+						<option value="TODOS">TODOS</option>
 						<?php
 						foreach($tablas as $tabla){															
 						?>
@@ -112,6 +114,7 @@
 				<th class="text-center">Registro</th>
 				<td scope="col">
 					<select name="registro" class="form-control">
+						<option value="TODOS">TODOS</option>
 						<?php
 						foreach($registros as $registro){
 							if(!intval($registro['registro'])&&!floatval($registro['registro'])){										
@@ -127,6 +130,7 @@
 				<th class="text-center">Usuario</th>
 				<td scope="col">
 					<select name="user" class="form-control">
+						<option value="TODOS">TODOS</option>
 						<?php
 						foreach($users as $user){											
 						?>
@@ -141,6 +145,7 @@
 				<th class="text-center">Departamento</th>
 				<td>
 					<select name="departamento" class="form-control">
+						<option value="TODOS">TODOS</option>
 						<?php
 						foreach($departamentos as $departamento){
 						?>
