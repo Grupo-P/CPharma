@@ -30,7 +30,7 @@ class AuditoriaController extends Controller
         $users = Auditoria::select('user')->groupBy('user')->get();
         $tablas = Auditoria::select('tabla')->groupBy('tabla')->get();
         $acciones = Auditoria::select('accion')->groupBy('accion')->get();
-        $registros = Auditoria::select('registro')->groupBy('registro')->get();
+        $registros = Auditoria::select('registro')->where('tabla','=','REPORTE')->groupBy('registro')->get();
 
         $departamentos = Auditoria::select('departamentos.nombre')
         ->leftJoin('users', 'users.name', '=', 'auditorias.user')

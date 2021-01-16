@@ -83,8 +83,8 @@
     <fieldset>
 		<table style="width:100%;" class="CP-stickyBar">
 			<tr>
-				<th class="text-center">Accion</th>
-					<td scope="col">
+				<th class="text-center" style="width:10%;">Accion</th>
+					<td scope="col" style="width:15%;">
 						<select name="accion" class="form-control">							
 						<option value="TODOS">TODOS</option>
 						<?php
@@ -97,8 +97,8 @@
 					</select>
 				</td>
 
-				<th class="text-center">Reporte/Modulo</th>	
-				<td scope="col">
+				<th class="text-center" style="width:10%;">Reporte/Modulo</th>	
+				<td scope="col" style="width:15%;">
 					<select name="tabla" class="form-control">
 						<option value="TODOS">TODOS</option>
 						<?php
@@ -111,8 +111,8 @@
 					</select>
 				</td>
 
-				<th class="text-center">Registro</th>
-				<td scope="col">
+				<th class="text-center"style="width:10%;">Registro</th>
+				<td scope="col" style="width:15%;">
 					<select name="registro" class="form-control">
 						<option value="TODOS">TODOS</option>
 						<?php
@@ -127,8 +127,8 @@
 					</select>
 				</td>
 
-				<th class="text-center">Usuario</th>
-				<td scope="col">
+				<th class="text-center" style="width:10%;">Usuario</th>
+				<td scope="col" style="width:15%;">
 					<select name="user" class="form-control">
 						<option value="TODOS">TODOS</option>
 						<?php
