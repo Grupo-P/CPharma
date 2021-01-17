@@ -87,7 +87,10 @@
   //se pasa a la seleccion del articulo
     $InicioCarga = new DateTime("now");
 
+    $registro = "Se actualizo el troquel del articulo: ".$_GET['IdArti'];
+
     R23_Actualizar_Fecha($_GET['SEDE'],$_GET['IdLote'],$_GET['fechaVenActualizada'],$_GET['IdArti'],$_GET['Nombre'],$_GET['ActualizaFecha']);
+    FG_Guardar_Auditoria('ACTUALIZAR','FECHA DE VENCIMIENTO','Actualizar Fecha de Vencimiento');
 
     $FinCarga = new DateTime("now");
     $IntervalCarga = $InicioCarga->diff($FinCarga);

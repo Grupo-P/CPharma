@@ -38,6 +38,13 @@ class AuditoriaController extends Controller
         ->where('departamentos.nombre','!=','')
         ->groupBy('departamentos.nombre')->get();
 
+        $Auditoria = new Auditoria();
+        $Auditoria->accion = 'CONSULTAR';
+        $Auditoria->tabla = 'AUDITORIA';
+        $Auditoria->registro = 'AUDITORIA';
+        $Auditoria->user = auth()->user()->name;
+        $Auditoria->save();
+
         return view('pages.auditoria.index', compact('auditorias','users','departamentos','tablas','acciones','registros'));
     }
 
@@ -118,6 +125,13 @@ class AuditoriaController extends Controller
         ->leftJoin('departamentos', 'departamentos.nombre', '=', 'users.departamento')        
         ->where('departamentos.nombre','!=','')
         ->groupBy('departamentos.nombre')->get();
+
+        $Auditoria = new Auditoria();
+        $Auditoria->accion = 'CONSULTAR';
+        $Auditoria->tabla = 'AUDITORIA';
+        $Auditoria->registro = 'AUDITORIA';
+        $Auditoria->user = auth()->user()->name;
+        $Auditoria->save();
 
         return view('pages.auditoria.index', compact('auditorias','users','departamentos','tablas','acciones','registros'));
     }

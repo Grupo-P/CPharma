@@ -15,6 +15,7 @@
 	$connCPharma = FG_Conectar_CPharma();
 	$sqlCPharma = "SELECT * FROM captura_etiqueta order by fecha_captura desc";
 	$result = mysqli_query($connCPharma,$sqlCPharma);
+	FG_Guardar_Auditoria('CONSULTAR','CAPTURA','ETIQUETAS');
 ?>
 
 	<h1 class="h5 text-info">

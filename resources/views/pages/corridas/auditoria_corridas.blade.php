@@ -8,13 +8,14 @@
 
 <?php
 	include(app_path().'\functions\config.php');
-  include(app_path().'\functions\functions.php');
-  include(app_path().'\functions\querys_mysql.php');
-  include(app_path().'\functions\querys_sqlserver.php');
+	include(app_path().'\functions\functions.php');
+  	include(app_path().'\functions\querys_mysql.php');
+  	include(app_path().'\functions\querys_sqlserver.php');
 
 	$connCPharma = FG_Conectar_CPharma();
 	$sqlCPharma = "SELECT * FROM auditoria_corridas order by id desc";
 	$result = mysqli_query($connCPharma,$sqlCPharma);
+	FG_Guardar_Auditoria('CONSULTAR','CORRIDA DE PRECIOS','CPHARMA');
 ?>
 
 	<h1 class="h5 text-info">

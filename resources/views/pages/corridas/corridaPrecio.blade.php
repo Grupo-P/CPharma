@@ -107,6 +107,7 @@
         $InicioCarga = new DateTime("now");
 
         FG_Corrida_Precio($_GET['tipoCorrida'],$configuracion[0]->valor,Auth::user()->name);
+        FG_Guardar_Auditoria('EJECUTAR','CORRIDA DE PRECIOS','CPHARMA');
 
         $connCPharma = FG_Conectar_CPharma();
         $sql = "SELECT * FROM auditoria_corridas ORDER BY id DESC LIMIT 1";

@@ -174,7 +174,7 @@
     $sql1 = RCPQ_Lista_Articulos_Descripcion();
     $ArtJson = FG_Armar_Json($sql1,$SedeConnection);
 
-    $concatedado = ''.$clasificacion.' '.$tipo.' PROMOCION';
+    $concatedado = ''.$clasificacion.' '.$tipo.' (GRANDE) PROMOCION';
     FG_Guardar_Auditoria('GENERAR','ETIQUETA',$concatedado);
 	?>
     <!-- Modal Box -->

@@ -72,7 +72,7 @@
     $InicioCarga = new DateTime("now");
 
     R26_Ultimas_Entradas($_GET['SEDE'],$_GET['fechaInicio'],$_GET['fechaFin']);
-    //FG_Guardar_Auditoria('CONSULTAR','REPORTE','Ultimas Entradas en Cero');
+    FG_Guardar_Auditoria('CONSULTAR','REPORTE','Ultimas Entradas en Cero');
     
     $FinCarga = new DateTime("now");
     $IntervalCarga = $InicioCarga->diff($FinCarga);

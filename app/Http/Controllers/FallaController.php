@@ -21,6 +21,13 @@ class FallaController extends Controller
         Falla::orderBy('created_at', 'desc')->
         whereBetween('created_at',[$FInicio,$FFin])->get();
 
+        $Auditoria = new Auditoria();
+        $Auditoria->accion = 'CONSULTAR';
+        $Auditoria->tabla = 'REPORTE';
+        $Auditoria->registro = 'Registro de Fallas';
+        $Auditoria->user = auth()->user()->name;
+        $Auditoria->save();
+
         return view('pages.falla.index', compact('fallas'));
     }
 

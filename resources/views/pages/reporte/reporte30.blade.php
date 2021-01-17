@@ -96,7 +96,7 @@
     $InicioCarga = new DateTime("now");
 
     R30_Factura_Articulo($_GET['SEDE'],$_GET['IdProv'],$_GET['NombreProv'],$_GET['IdFact']);
-    FG_Guardar_Auditoria('CONSULTAR','REPORTE','Consulta Compras');
+    FG_Guardar_Auditoria('CONSULTAR','REPORTE','Registro de Compras');
 
     $FinCarga = new DateTime("now");
     $IntervalCarga = $InicioCarga->diff($FinCarga);

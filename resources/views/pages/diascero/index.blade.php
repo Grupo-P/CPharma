@@ -15,6 +15,7 @@
 	$connCPharma = FG_Conectar_CPharma();
 	$sqlCPharma = MySQL_Ver_CapturaDiaria();
 	$result = mysqli_query($connCPharma,$sqlCPharma);
+	FG_Guardar_Auditoria('CONSULTAR','CAPTURA','DIAS CERO');
 ?>
 
 	<h1 class="h5 text-info">

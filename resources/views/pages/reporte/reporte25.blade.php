@@ -72,7 +72,7 @@
     $InicioCarga = new DateTime("now");
 
     R25_Articulos_Cero($_GET['SEDE'],$_GET['fechaInicio'],$_GET['fechaFin']);
-    //FG_Guardar_Auditoria('CONSULTAR','REPORTE','Articulos en Cero');
+    FG_Guardar_Auditoria('CONSULTAR','REPORTE','Articulos en Cero');
 
     $FinCarga = new DateTime("now");
     $IntervalCarga = $InicioCarga->diff($FinCarga);

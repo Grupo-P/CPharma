@@ -74,7 +74,7 @@
       $InicioCarga = new DateTime("now");
 
       R2_Historico_Producto($_GET['SEDE'],$_GET['Id']);
-      FG_Guardar_Auditoria('CONSULTAR','REPORTE','Historico de productos');
+      FG_Guardar_Auditoria('CONSULTAR','REPORTE','Analitico de precios');
 
       $FinCarga = new DateTime("now");
       $IntervalCarga = $InicioCarga->diff($FinCarga);

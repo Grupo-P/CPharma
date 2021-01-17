@@ -61,7 +61,7 @@ class UnidadController extends Controller
 
             $Auditoria = new Auditoria();
             $Auditoria->accion = 'CREAR';
-            $Auditoria->tabla = 'UNIDAD';
+            $Auditoria->tabla = 'UNIDAD MINIMA';
             $Auditoria->registro = $request->input('articulo');
             $Auditoria->user = auth()->user()->name;
             $Auditoria->save();
@@ -85,7 +85,7 @@ class UnidadController extends Controller
 
         $Auditoria = new Auditoria();
         $Auditoria->accion = 'CONSULTAR';
-        $Auditoria->tabla = 'UNIDAD';
+        $Auditoria->tabla = 'UNIDAD MINIMA';
         $Auditoria->registro = $unidad->articulo;
         $Auditoria->user = auth()->user()->name;
         $Auditoria->save();
@@ -122,7 +122,7 @@ class UnidadController extends Controller
 
             $Auditoria = new Auditoria();
             $Auditoria->accion = 'EDITAR';
-            $Auditoria->tabla = 'UNIDAD';
+            $Auditoria->tabla = 'UNIDAD MINIMA';
             $Auditoria->registro = $unidad->articulo;
             $Auditoria->user = auth()->user()->name;
             $Auditoria->save();
@@ -145,7 +145,7 @@ class UnidadController extends Controller
        $unidad = Unidad::find($id);
 
         $Auditoria = new Auditoria();
-        $Auditoria->tabla = 'UNIDAD';
+        $Auditoria->tabla = 'UNIDAD MINIMA';
         $Auditoria->registro = $unidad->articulo;
         $Auditoria->user = auth()->user()->name;
 

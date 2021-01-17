@@ -87,8 +87,10 @@
   //se pasa a mostrar el resultado de actualizar el troquel
     $InicioCarga = new DateTime("now");
 
+    $registro = "Se actualizo el troquel del articulo: ".$_GET['IdArt'];
+
     R8_Troquel($_GET['SEDE'],$_GET['IdProv'],$_GET['NombreProv'],$_GET['IdFact'],$_GET['IdArt'],$_GET['TroquelN']);
-    FG_Guardar_Auditoria('CONSULTAR','REPORTE','Actualizar Troquel');
+    FG_Guardar_Auditoria('ACTUALIZAR','TROQUEL PROVEEDOR',$registro);
 
     $FinCarga = new DateTime("now");
     $IntervalCarga = $InicioCarga->diff($FinCarga);
