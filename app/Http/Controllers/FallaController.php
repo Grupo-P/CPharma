@@ -4,6 +4,8 @@ namespace compras\Http\Controllers;
 
 use Illuminate\Http\Request;
 use compras\Falla;
+use compras\User;
+use compras\Auditoria;
 
 class FallaController extends Controller
 {
