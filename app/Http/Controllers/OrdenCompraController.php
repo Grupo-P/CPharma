@@ -172,6 +172,14 @@ class OrdenCompraController extends Controller
           $OrdenCompra->codigo =  ''.$SiglasOrigen.''.$UltimoId;
         /*FIN DE ASIGNACION DE CODIGO*/
           $OrdenCompra->save();
+
+          $Auditoria = new Auditoria();
+          $Auditoria->accion = 'CREAR';
+          $Auditoria->tabla = 'ORDEN DE COMPRA';
+          $Auditoria->registro = $OrdenCompra->codigo;
+          $Auditoria->user = auth()->user()->name;
+          $Auditoria->save();
+
           return redirect()->route('ordenCompra.index')->with('Saved', ''.$OrdenCompra->codigo);
         }
       }
@@ -189,6 +197,14 @@ class OrdenCompraController extends Controller
     public function show($id)
     {
         $OrdenCompra = OrdenCompra::find($id);
+
+        $Auditoria = new Auditoria();
+        $Auditoria->accion = 'CONSULTAR';
+        $Auditoria->tabla = 'ORDEN DE COMPRA';
+        $Auditoria->registro = $OrdenCompra->codigo;
+        $Auditoria->user = auth()->user()->name;
+        $Auditoria->save();
+
         return view('pages.ordenCompra.show', compact('OrdenCompra'));
     }
 
@@ -238,6 +254,14 @@ class OrdenCompraController extends Controller
         /*FIN DE CONDICION*/
 
           $OrdenCompra->save();
+
+          $Auditoria = new Auditoria();
+          $Auditoria->accion = 'EDITAR';
+          $Auditoria->tabla = 'ORDEN DE COMPRA';
+          $Auditoria->registro = $OrdenCompra->codigo;
+          $Auditoria->user = auth()->user()->name;
+          $Auditoria->save();
+
           return redirect()->route('ordenCompra.index')->with('Updated', ' Informacion');
         }
         catch(\Illuminate\Database\QueryException $e){
@@ -255,11 +279,17 @@ class OrdenCompraController extends Controller
     {
       $OrdenCompra = OrdenCompra::find($id);
 
+      $Auditoria = new Auditoria();        
+      $Auditoria->tabla = 'ORDEN DE COMPRA';
+      $Auditoria->registro = $OrdenCompra->codigo;
+      $Auditoria->user = auth()->user()->name;
+
       if($request->input('anular')=='valido'){
         $OrdenCompra->fill($request->all());
         $OrdenCompra->estado = 'ANULADA';
         $OrdenCompra->estatus = 'ANULADA';
         $OrdenCompra->save();
+        $Auditoria->accion = 'ANULADA';
         return redirect()->route('ordenCompra.index')->with('Updated', ' Informacion');
       }
       else if($request->input('PorAprobar')=='solicitud'){
@@ -267,6 +297,7 @@ class OrdenCompraController extends Controller
         $OrdenCompra->estado = 'POR APROBAR';
         $OrdenCompra->estatus = 'EN ESPERA';
         $OrdenCompra->save();
+        $Auditoria->accion = 'POR APROBAR';
         return redirect()->route('ordenCompra.index')->with('Updated', ' Informacion');
       }
       else if($request->input('rechazar')=='valido'){
@@ -276,6 +307,7 @@ class OrdenCompraController extends Controller
         $OrdenCompra->fecha_aprobacion = date('Y-m-d H:i:s');
         $OrdenCompra->operador_aprobacion = auth()->user()->name;
         $OrdenCompra->save();
+        $Auditoria->accion = 'RECHAZADA';
         return redirect()->route('ordenCompra.index')->with('Updated', ' Informacion');
       }
       else if($request->input('Devolver')=='solicitud'){
@@ -285,6 +317,7 @@ class OrdenCompraController extends Controller
         $OrdenCompra->fecha_aprobacion = date('Y-m-d H:i:s');
         $OrdenCompra->operador_aprobacion = auth()->user()->name;
         $OrdenCompra->save();
+        $Auditoria->accion = 'EN PROCESO';
         return redirect()->route('ordenCompra.index')->with('Updated', ' Informacion');
       }
       else if($request->input('Aprobar')=='solicitud'){
@@ -294,6 +327,7 @@ class OrdenCompraController extends Controller
         $OrdenCompra->fecha_aprobacion = date('Y-m-d H:i:s');
         $OrdenCompra->operador_aprobacion = auth()->user()->name;
         $OrdenCompra->save();
+        $Auditoria->accion = 'APROBADA';
         return redirect()->route('ordenCompra.index')->with('Updated', ' Informacion');
       }
       else if($request->input('Recibir')=='solicitud'){
@@ -303,6 +337,7 @@ class OrdenCompraController extends Controller
         $OrdenCompra->fecha_recepcion = date('Y-m-d H:i:s');
         $OrdenCompra->operador_recepcion = auth()->user()->name;
         $OrdenCompra->save();
+        $Auditoria->accion = 'RECIBIDA';
         return redirect()->route('ordenCompra.index')->with('Updated', ' Informacion');
       }
       else if($request->input('Ingresar')=='valido'){
@@ -312,6 +347,7 @@ class OrdenCompraController extends Controller
         $OrdenCompra->fecha_ingreso = date('Y-m-d H:i:s');
         $OrdenCompra->operador_ingreso = auth()->user()->name;
         $OrdenCompra->save();
+        $Auditoria->accion = 'INGRESADA';
         return redirect()->route('ordenCompra.index')->with('Updated', ' Informacion');
       }
       else if($request->input('Cerrar')=='solicitud'){
@@ -321,12 +357,14 @@ class OrdenCompraController extends Controller
         $OrdenCompra->fecha_cierre = date('Y-m-d H:i:s');
         $OrdenCompra->operador_cierre = auth()->user()->name;
         $OrdenCompra->save();
+        $Auditoria->accion = 'CERRADA';
         return redirect()->route('ordenCompra.index')->with('Updated', ' Informacion');
       }
       else{
 
         if($OrdenCompra->estatus == 'ACTIVO'){
           $OrdenCompra->estatus = 'EN ESPERA';
+          $Auditoria->accion = 'EN ESPERA';
         }   
         else if($OrdenCompra->estatus == 'EN ESPERA'){
           $usuario = auth()->user()->name;
@@ -341,9 +379,11 @@ class OrdenCompraController extends Controller
           }
           else if(empty($OrdenActiva[0]->codigo)) {
             $OrdenCompra->estatus = 'ACTIVO';
+            $Auditoria->accion = 'ACTIVAR';
           }
         }
         $OrdenCompra->save();
+        $Auditoria->save();
         return redirect()->route('ordenCompra.index')->with('Deleted', ' Informacion');
       }
     }

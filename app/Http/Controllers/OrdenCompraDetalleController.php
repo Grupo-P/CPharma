@@ -100,7 +100,13 @@ class OrdenCompraDetalleController extends Controller
         $ordenCompraDetalles->dias_pedir = $request->input('dias_pedir');
 
         $ordenCompraDetalles->save();
-        //print_r($ordenCompraDetalles);
+        
+        $Auditoria = new Auditoria();
+        $Auditoria->accion = 'AGREGAR';
+        $Auditoria->tabla = 'ORDEN DE COMPRA DETALLE';
+        $Auditoria->registro = "ORDEN: ".$ordenCompraDetalles->codigo_orden." ARTICULO: ".$ordenCompraDetalles->descripcion;
+        $Auditoria->user = auth()->user()->name;
+        $Auditoria->save();
 
       return redirect()->route('ordenCompraDetalle.index')->with('Saved', ' Informacion');
       }
@@ -123,6 +129,14 @@ class OrdenCompraDetalleController extends Controller
         ->where('orden_compra_detalles.estatus','ACTIVO')
         ->join('orden_compras','orden_compras.codigo','=','orden_compra_detalles.codigo_orden')
         ->get();
+      
+        $Auditoria = new Auditoria();
+        $Auditoria->accion = 'CONSULTAR';
+        $Auditoria->tabla = 'ORDEN DE COMPRA DETALLE';
+        $Auditoria->registro = "ORDEN: ".$ordenCompraDetalles[0]->codigo_orden." ARTICULO: ".$ordenCompraDetalles[0]->descripcion;
+        $Auditoria->user = auth()->user()->name;
+        $Auditoria->save();
+
         return view('pages.ordenCompraDetalle.show', compact('ordenCompraDetalles'));
     }
 
@@ -157,6 +171,14 @@ class OrdenCompraDetalleController extends Controller
         );
 
         $ordenCompraDetalles->save();
+
+        $Auditoria = new Auditoria();
+        $Auditoria->accion = 'EDITAR';
+        $Auditoria->tabla = 'ORDEN DE COMPRA DETALLE';
+        $Auditoria->registro = 'ORDEN: '.$ordenCompraDetalles->codigo_orden.' ARTICULO: '.$ordenCompraDetalles->descripcion;
+        $Auditoria->user = auth()->user()->name;
+        $Auditoria->save();
+
         return redirect()->route('ordenCompraDetalle.index')->with('Updated', ' Informacion');
         }
         catch(\Illuminate\Database\QueryException $e){
@@ -174,15 +196,24 @@ class OrdenCompraDetalleController extends Controller
     {
         $ordenCompraDetalles = OrdenCompraDetalle::find($id);
 
+        $Auditoria = new Auditoria();        
+        $Auditoria->tabla = 'ORDEN DE COMPRA DETALLE';
+        $Auditoria->registro = "ORDEN: ".$ordenCompraDetalles->codigo_orden." ARTICULO: ".$ordenCompraDetalles->descripcion;
+        $Auditoria->user = auth()->user()->name;
+        
         if($ordenCompraDetalles->estatus == 'ACTIVO'){
             $ordenCompraDetalles->estatus = 'INACTIVO';
+            $Auditoria->accion = 'DESINCORPORAR';
         }
         else if($ordenCompraDetalles->estatus == 'INACTIVO'){
             $ordenCompraDetalles->estatus = 'ACTIVO';
+            $Auditoria->accion = 'REINCORPORAR';
         }
 
         $ordenCompraDetalles->user = auth()->user()->name;        
         $ordenCompraDetalles->save();
+
+        $Auditoria->save();
 
         return redirect()->route('ordenCompraDetalle.index')->with('Deleted', ' Informacion');
     }
