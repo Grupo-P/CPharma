@@ -54,7 +54,7 @@
         <tbody>
             <tr>
                 <th scope="row">{!! Form::label('variable', 'Variable') !!}</th>
-                <td>{!! Form::text('variable', null, [ 'class' => 'form-control', 'placeholder' => 'Impuesto', 'autofocus', 'required']) !!}</td>
+                <td>{!! Form::text('variable', null, [ 'class' => 'form-control', 'placeholder' => 'Impuesto', 'autofocus', 'required','readonly']) !!}</td>
             </tr>
             <tr>
                 <th scope="row">{!! Form::label('descripcion', 'Descripcion') !!}</th>
