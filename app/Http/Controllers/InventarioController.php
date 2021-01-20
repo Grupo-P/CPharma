@@ -134,6 +134,13 @@ class InventarioController extends Controller
             $inventario->unidades_conteo = $cont_unidades;
             $inventario->save();
 
+            $Auditoria = new Auditoria();
+            $Auditoria->accion = 'CREAR';
+            $Auditoria->tabla = 'INVENTARIO';
+            $Auditoria->registro = $inventario->codigo;
+            $Auditoria->user = auth()->user()->name;
+            $Auditoria->save();
+
             sqlsrv_close($conn);
 
             return redirect()->route('inventario.index')->with('Saved', ' Informacion');
@@ -163,6 +170,14 @@ class InventarioController extends Controller
     public function show($id)
     {
         $inventario = Inventario::find($id); 
+        
+        $Auditoria = new Auditoria();
+        $Auditoria->accion = 'CONSULTAR';
+        $Auditoria->tabla = 'INVENTARIO';
+        $Auditoria->registro = $inventario->codigo;
+        $Auditoria->user = auth()->user()->name;
+        $Auditoria->save();
+
         return view('pages.inventario.show', compact('inventario'));
     }
 
@@ -209,6 +224,14 @@ class InventarioController extends Controller
                     $inventario->operador_revisado = auth()->user()->name;
                     $inventario->fecha_revisado = date('y-m-d H:i:s');
                     $inventario->save();
+
+                    $Auditoria = new Auditoria();
+                    $Auditoria->accion = 'REVISADO';
+                    $Auditoria->tabla = 'INVENTARIO';
+                    $Auditoria->registro = $inventario->codigo;
+                    $Auditoria->user = auth()->user()->name;
+                    $Auditoria->save();
+
                     return redirect()->route('inventario.index')->with('Updated', ' Informacion');
                 }
                 else{
@@ -222,6 +245,13 @@ class InventarioController extends Controller
                     $inventario->operador_anulado = auth()->user()->name;
                     $inventario->fecha_anulado = date('y-m-d H:i:s');
                     $inventario->save();
+
+                    $Auditoria = new Auditoria();
+                    $Auditoria->accion = 'ANULADO';
+                    $Auditoria->tabla = 'INVENTARIO';
+                    $Auditoria->registro = $inventario->codigo;
+                    $Auditoria->user = auth()->user()->name;
+                    $Auditoria->save();
 
                     return redirect()->route('inventario.index')->with('Updated', ' Informacion');
                 }

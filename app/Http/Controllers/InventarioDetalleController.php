@@ -100,6 +100,13 @@ class InventarioDetalleController extends Controller
             
             $InventarioDetalle->save();
 
+            $Auditoria = new Auditoria();
+            $Auditoria->accion = 'EDITAR';
+            $Auditoria->tabla = 'INVENTARIO';
+            $Auditoria->registro = $InventarioDetalle->codigo_orden;
+            $Auditoria->user = auth()->user()->name;
+            $Auditoria->save();
+
             $inventarioDetalle =  InventarioDetalle::where('codigo_conteo',$InventarioDetalle->codigo_conteo)->get();
             return view('pages.inventarioDetalle.index', compact('inventarioDetalle'));
         }
