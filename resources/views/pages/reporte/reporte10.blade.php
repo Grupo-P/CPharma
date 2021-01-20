@@ -352,6 +352,7 @@
             <th scope="col" class="CP-sticky">Numero<br>Referencia</th>
             <th scope="col" class="CP-sticky">Fecha de Creacion<br>Lote</th>
             <th scope="col" class="CP-sticky">Fecha de<br>Vencimiento</th>
+            <th scope="col" class="CP-sticky">Fecha de<br>Entrada</th>
             <th scope="col" class="CP-sticky">Numero Lote</th>
             <th scope="col" class="CP-sticky">Lote Fabricante</th>
             <th scope="col" class="CP-sticky">Almacen</th>
@@ -377,6 +378,7 @@
        ){
         
         $fechaVencimiento = ($row2["FechaVencimiento"]!=NULL)?$row2["FechaVencimiento"]->format('d-m-Y'):'-';            
+        $fechaEntrada = ($row2["FechaEntrada"]!=NULL)?$row2["FechaEntrada"]->format('d-m-Y'):'-';            
 
         $IdLotePivote = $row2["InvLoteId"];
         $LoteAlmacenIdPivorte = $row2["LoteAlmacenId"];
@@ -423,6 +425,7 @@
         echo '                  
           <td align="center">'.($row2["FechaCreacionLote"]->format('d-m-Y')).'</td>        
           <td align="center">'.($fechaVencimiento).'</td>
+          <td align="center">'.($fechaEntrada).'</td>
           <td align="center">'.($row2["NumeroLote"]).'</td>
           <td align="center">'.($row2["LoteFabricante"]).'</td>
           <td align="center">'.($row2["Almacen"]).'</td>
@@ -468,6 +471,7 @@
             <th scope="col" class="CP-sticky">Numero<br>Referencia</th>
             <th scope="col" class="CP-sticky">Fecha de Creacion<br>Lote</th>
             <th scope="col" class="CP-sticky">Fecha de<br>Vencimiento</th>
+            <th scope="col" class="CP-sticky">Fecha de<br>Entrada</th>
             <th scope="col" class="CP-sticky">Numero Lote</th>
             <th scope="col" class="CP-sticky">Lote Fabricante</th>
             <th scope="col" class="CP-sticky">Almacen</th>
@@ -493,6 +497,7 @@
        ){
         
         $fechaVencimiento = ($row3["FechaVencimiento"]!=NULL)?$row3["FechaVencimiento"]->format('d-m-Y'):'-';            
+        $fechaEntrada = ($row3["FechaEntrada"]!=NULL)?$row3["FechaEntrada"]->format('d-m-Y'):'-';
 
         $IdLotePivote = $row3["InvLoteId"];
         $LoteAlmacenIdPivorte = $row3["LoteAlmacenId"];
@@ -539,6 +544,7 @@
         echo '                  
           <td align="center">'.($row3["FechaCreacionLote"]->format('d-m-Y')).'</td>            
           <td align="center">'.($fechaVencimiento).'</td>
+          <td align="center">'.($fechaEntrada).'</td>
           <td align="center">'.($row3["NumeroLote"]).'</td>
           <td align="center">'.($row3["LoteFabricante"]).'</td>
           <td align="center">'.($row3["Almacen"]).'</td>
@@ -843,6 +849,7 @@
       InvMovimiento.DocumentoOrigen as NumeroReferencia,      
       CONVERT(DATE,invlote.Auditoria_FechaCreacion) as FechaCreacionLote,
       CONVERT(DATE,invlote.FechaVencimiento) as FechaVencimiento,
+      CONVERT(DATE,invlote.FechaEntrada) as FechaEntrada,
       InvLote.Numero as NumeroLote,
       InvAlmacen.Descripcion as Almacen,
       InvLote.LoteFabricante as LoteFabricante,
@@ -887,6 +894,7 @@
       InvMovimiento.DocumentoOrigen as NumeroReferencia,      
       CONVERT(DATE,invlote.Auditoria_FechaCreacion) as FechaCreacionLote,
       CONVERT(DATE,invlote.FechaVencimiento) as FechaVencimiento,
+      CONVERT(DATE,invlote.FechaEntrada) as FechaEntrada,
       InvLote.Numero as NumeroLote,
       InvAlmacen.Descripcion as Almacen,
       InvLote.LoteFabricante as LoteFabricante,
