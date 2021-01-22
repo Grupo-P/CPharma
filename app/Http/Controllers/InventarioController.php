@@ -132,7 +132,6 @@ class InventarioController extends Controller
 
             $inventario->cantidades_conteo = $cont_articulo;
             $inventario->unidades_conteo = $cont_unidades;
-            $inventario->save();
 
             $Auditoria = new Auditoria();
             $Auditoria->accion = 'CREAR';
@@ -140,6 +139,8 @@ class InventarioController extends Controller
             $Auditoria->registro = $inventario->codigo;
             $Auditoria->user = auth()->user()->name;
             $Auditoria->save();
+
+            $inventario->save();
 
             sqlsrv_close($conn);
 

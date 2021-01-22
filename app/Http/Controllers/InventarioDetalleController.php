@@ -97,15 +97,15 @@ class InventarioDetalleController extends Controller
                 $InventarioDetalle->operador_reconteo = auth()->user()->name;
                 $InventarioDetalle->fecha_reconteo = date('Y-m-d H:i:m');
             }
-            
-            $InventarioDetalle->save();
 
             $Auditoria = new Auditoria();
             $Auditoria->accion = 'EDITAR';
             $Auditoria->tabla = 'INVENTARIO';
-            $Auditoria->registro = $InventarioDetalle->codigo_orden;
+            $Auditoria->registro = $InventarioDetalle->codigo_conteo;
             $Auditoria->user = auth()->user()->name;
-            $Auditoria->save();
+            $Auditoria->save();  
+            
+            $InventarioDetalle->save();    
 
             $inventarioDetalle =  InventarioDetalle::where('codigo_conteo',$InventarioDetalle->codigo_conteo)->get();
             return view('pages.inventarioDetalle.index', compact('inventarioDetalle'));
