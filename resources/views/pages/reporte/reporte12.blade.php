@@ -497,7 +497,7 @@
             $result = sqlsrv_query($conn,$sql);
             $row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC);
             echo '<td align="center">'.$row['NumeroFactura'].'</td>';
-            echo '<td align="center">'.$row['Nombre'].'</td>';
+            echo '<td align="center">'.FG_Limpiar_Texto($row['Nombre']).'</td>';
             echo '<td align="center">-</td>';
             
             echo '<td align="center">'.$row3['Operador'].'</td>';
@@ -522,7 +522,7 @@
             $reechosult = sqlsrv_query($conn,$sql);
             $row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC);
             echo '<td align="center">'.$row3['NumeroReferencia'].'</td>';
-            echo '<td align="center">'.$row['Nombre'].'</td>';
+            echo '<td align="center">'.FG_Limpiar_Texto($row['Nombre']).'</td>';
             echo '<td align="center">-</td>';
 
             echo '<td align="center">'.$row3['Operador'].'</td>';
@@ -544,11 +544,11 @@
             echo '</tr>';
           break;
           case '3':            
-            $sql = R12_Causa_Venta($row3['NumeroReferencia']);
+            $sql = R12_Causa_Venta($row3['NumeroReferencia'],$IdArticulo);
             $result = sqlsrv_query($conn,$sql);
             $row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC);
             echo '<td align="center">'.$row3['NumeroReferencia'].'</td>';
-            echo '<td align="center">'.$row['Nombre'].' '.$row['Apellido'].'</td>';
+            echo '<td align="center">'.FG_Limpiar_Texto($row['Nombre']).' '.FG_Limpiar_Texto($row['Apellido']).'</td>';
             echo '<td align="center">-</td>';
 
             echo '<td align="center">'.$row3['Operador'].'</td>';
@@ -569,11 +569,11 @@
             echo '</tr>';
           break; 
           case '4':           
-            $sql = R12_Causa_DevVenta($row3['NumeroReferencia']);
+            $sql = R12_Causa_DevVenta($row3['NumeroReferencia'],$IdArticulo);
             $result = sqlsrv_query($conn,$sql);
             $row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC);
             echo '<td align="center">'.$row3['NumeroReferencia'].'</td>';
-            echo '<td align="center">'.$row['Nombre'].' '.$row['Apellido'].'</td>';
+            echo '<td align="center">'.FG_Limpiar_Texto($row['Nombre']).' '.FG_Limpiar_Texto($row['Apellido']).'</td>';
 
             $sql = R12_Coment_DevVenta($row3['NumeroReferencia']);
             $result = sqlsrv_query($conn,$sql);
@@ -604,7 +604,7 @@
             $row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC);
             echo '<td align="center">'.$row3['NumeroReferencia'].'</td>';
             echo '<td align="center">-</td>';                  
-            echo '<td align="center">'.$row['Observaciones'].'</td>';
+            echo '<td align="center">'.FG_Limpiar_Texto($row['Observaciones']).'</td>';
 
             echo '<td align="center">'.$row3['Operador'].'</td>';
             echo '<td align="center">'.number_format($row3['MontoTotal'],2,"," ,"." ).'</td>';
@@ -630,7 +630,7 @@
             $row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC);
             echo '<td align="center">'.$row3['NumeroReferencia'].'</td>';
             echo '<td align="center">-</td>';                  
-            echo '<td align="center">'.$row['Observaciones'].'</td>';
+            echo '<td align="center">'.FG_Limpiar_Texto($row['Observaciones']).'</td>';
 
             echo '<td align="center">'.$row3['Operador'].'</td>';
             echo '<td align="center">'.number_format($row3['MontoTotal'],2,"," ,"." ).'</td>';
@@ -656,7 +656,7 @@
             $row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC);
             echo '<td align="center">'.$row3['NumeroReferencia'].'</td>';
             echo '<td align="center">-</td>';                  
-            echo '<td align="center">'.$row['Comentario'].'</td>';
+            echo '<td align="center">'.FG_Limpiar_Texto($row['Comentario']).'</td>';
 
             echo '<td align="center">'.$row3['Operador'].'</td>';
             echo '<td align="center">'.number_format($row3['MontoTotal'],2,"," ,"." ).'</td>';
@@ -682,7 +682,7 @@
             $row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC);
             echo '<td align="center">'.$row3['NumeroReferencia'].'</td>';
             echo '<td align="center">-</td>';                  
-            echo '<td align="center">'.$row['Comentario'].'</td>';
+            echo '<td align="center">'.FG_Limpiar_Texto($row['Comentario']).'</td>';
 
             echo '<td align="center">'.$row3['Operador'].'</td>';
             echo '<td align="center">'.number_format($row3['MontoTotal'],2,"," ,"." ).'</td>';
@@ -773,7 +773,7 @@
       FROM InvMovimiento
       LEFT JOIN InvCausa ON InvCausa.Id = InvMovimiento.InvCausaId
       WHERE InvMovimiento.InvArticuloId='$IdArticulo'
-      AND(CONVERT(DATE,InvMovimiento.FechaMovimiento) >= '$FInicial' AND CONVERT(DATE,InvMovimiento.FechaMovimiento) <= '$FFinal')
+      AND(CONVERT(DATE,InvMovimiento.FechaMovimiento) >= '$FInicial' AND CONVERT(DATE,InvMovimiento.FechaMovimiento) < '$FFinal')
       AND (
         (InvMovimiento.InvCausaId=1) OR (InvMovimiento.InvCausaId=2) OR (InvMovimiento.InvCausaId=3) OR (InvMovimiento.InvCausaId=4)
         OR (InvMovimiento.InvCausaId=5) OR (InvMovimiento.InvCausaId=6) OR (InvMovimiento.InvCausaId=11) OR (InvMovimiento.InvCausaId=12)
@@ -802,7 +802,7 @@
       FROM InvMovimiento
       LEFT JOIN InvCausa ON InvCausa.Id = InvMovimiento.InvCausaId
       WHERE InvMovimiento.InvArticuloId='$IdArticulo'
-      AND(CONVERT(DATE,InvMovimiento.FechaMovimiento) >= '$FInicial' AND CONVERT(DATE,InvMovimiento.FechaMovimiento) <= '$FFinal')
+      AND(CONVERT(DATE,InvMovimiento.FechaMovimiento) >= '$FInicial' AND CONVERT(DATE,InvMovimiento.FechaMovimiento) < '$FFinal')
       AND (
         (InvMovimiento.InvCausaId=1) OR (InvMovimiento.InvCausaId=2) OR (InvMovimiento.InvCausaId=3) OR (InvMovimiento.InvCausaId=4)
         OR (InvMovimiento.InvCausaId=5) OR (InvMovimiento.InvCausaId=6) OR (InvMovimiento.InvCausaId=11) OR (InvMovimiento.InvCausaId=12)
@@ -840,7 +840,7 @@
       LEFT JOIN InvAlmacen ON InvAlmacen.id = InvMovimiento.InvAlmacenId
       LEFT JOIN InvLote ON InvLote.Id = InvMovimiento.InvLoteId
       WHERE InvMovimiento.InvArticuloId='$IdArticulo'
-      AND(CONVERT(DATE,InvMovimiento.FechaMovimiento) >= '$FInicial' AND CONVERT(DATE,InvMovimiento.FechaMovimiento) <= '$FFinal')
+      AND(CONVERT(DATE,InvMovimiento.FechaMovimiento) >= '$FInicial' AND CONVERT(DATE,InvMovimiento.FechaMovimiento) < '$FFinal')
       AND (
         (InvMovimiento.InvCausaId=1) OR (InvMovimiento.InvCausaId=2) OR (InvMovimiento.InvCausaId=3) OR (InvMovimiento.InvCausaId=4)
         OR (InvMovimiento.InvCausaId=5) OR (InvMovimiento.InvCausaId=6) OR (InvMovimiento.InvCausaId=11) OR (InvMovimiento.InvCausaId=12)
@@ -893,7 +893,7 @@
     RETORNO: Lista de articulos con descripcion e id
     DESAROLLADO POR: SERGIO COVA    
    */
-  function R12_Causa_Venta($NumeroReferencia) {
+  function R12_Causa_Venta($NumeroReferencia,$IdArticulo) {
     $sql = "    
     SELECT GenPersona.Nombre, GenPersona.Apellido, VenVentaDetalle.PrecioBruto
     FROM VenVenta
@@ -901,6 +901,7 @@
     LEFT JOIN GenPersona ON GenPersona.Id = VenCliente.GenPersonaId
     LEFT JOIN VenVentaDetalle ON VenVentaDetalle.VenVentaId = VenVenta.Id
     WHERE  VenVenta.ConsecutivoVentaSistema = '$NumeroReferencia'
+    AND VenVentaDetalle.InvArticuloId = '$IdArticulo'
     ";
     return $sql;
   }
@@ -911,7 +912,7 @@
     RETORNO: Lista de articulos con descripcion e id
     DESAROLLADO POR: SERGIO COVA    
    */
-  function R12_Causa_DevVenta($NumeroReferencia) {
+  function R12_Causa_DevVenta($NumeroReferencia,$IdArticulo) {
     $sql = "    
       SELECT GenPersona.Nombre, GenPersona.Apellido, VenDevolucionDetalle.PrecioBruto
       FROM VenDevolucion
@@ -920,6 +921,7 @@
       LEFT JOIN GenPersona ON GenPersona.Id = VenCliente.GenPersonaId
       LEFT JOIN VenDevolucionDetalle ON VenDevolucionDetalle.VenDevolucionId = VenDevolucion.Id
       WHERE  VenDevolucion.ConsecutivoDevolucionSistema = '$NumeroReferencia'
+      AND VenDevolucionDetalle.InvArticuloId = '$IdArticulo'
     ";
     return $sql;
   }
