@@ -126,7 +126,9 @@
                 <th scope="col">30</th>
                 <td scope="col">Registro de Compras</td>
                 <th scope="col">31</th>
-                <td scope="col">Monitoreo de Inventarios</td>          
+                <td scope="col">Monitoreo de Inventarios</td> 
+                <th scope="col">32</th>
+                <td scope="col">Seguimiento de Tienda</td>         
             </tr>
         </tbody>
     </table>
