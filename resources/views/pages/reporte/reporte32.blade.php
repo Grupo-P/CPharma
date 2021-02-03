@@ -22,10 +22,35 @@
 		if (isset($_GET['SEDE'])){			
 			echo '<h1 class="h5 text-success"  align="left"> <i class="fas fa-prescription"></i> '.FG_Nombre_Sede($_GET['SEDE']).'</h1>';
 		}
-		echo '<hr class="row align-items-start col-12">';
+        echo '<hr class="row align-items-start col-12">';                
+        ?>
 
-		R32_Seguimiento_Tienda($_GET['SEDE']);
-		FG_Guardar_Auditoria('CONSULTAR','REPORTE','Seguimiento de Tienda');
+        <form action="/reporte32/" style="display: inline;">
+            @csrf
+            <input id="SEDE" name="SEDE" type="hidden" value="<?php print_r($_GET['SEDE']); ?>">			   
+            <button type="submit" name="Fecha" value="AYER" role="button" class="btn btn-outline-info btn-md">Ayer</button>
+        </form>
+        <form action="/reporte32/" style="display: inline;">
+            @csrf
+            <input id="SEDE" name="SEDE" type="hidden" value="<?php print_r($_GET['SEDE']); ?>">			   
+            <button type="submit" name="Fecha" value="HOY" role="button" class="btn btn-outline-success btn-md">Hoy</button>
+        </form>
+        
+        <?php
+        $hoy = date('Y-m-d');
+        if(isset($_GET['Fecha'])){
+            if($_GET['Fecha']=='AYER'){
+                $fecha = date("Y-m-d",strtotime($hoy."- 1 days"));
+            }
+            else if($_GET['Fecha']=='HOY'){
+                $fecha = $hoy;
+            }
+        }else{
+            $fecha = $hoy;
+        }
+
+            R32_Seguimiento_Tienda($_GET['SEDE'],$fecha);
+            FG_Guardar_Auditoria('CONSULTAR','REPORTE','Seguimiento de Tienda');
 
 		$FinCarga = new DateTime("now");
     $IntervalCarga = $InicioCarga->diff($FinCarga);
@@ -41,17 +66,21 @@
 		RETORNO: Lista de activacio de proveedores
 		DESAROLLADO POR: SERGIO COVA
  	*/
-	function R32_Seguimiento_Tienda($SedeConnection) {
-		$conn = FG_Conectar_Smartpharma($SedeConnection);
-		$sql = R32Q_Venta_Articulos(5,'2020-12-01','2020-12-02','TotalVenta');
+	function R32_Seguimiento_Tienda($SedeConnection,$fecha) {        
+        $conn = FG_Conectar_Smartpharma($SedeConnection);
+        $connCPharma = FG_Conectar_CPharma();
+
+        //$FInicial = $fecha;
+        $FInicial = '2020-12-01';
+        $FFinal = date("Y-m-d",strtotime($FInicial."+ 1 days"));
+        $TasaActual = FG_Tasa_Fecha($connCPharma,$FInicial);
+
+		$sql = R32Q_Venta_Articulos(5,$FInicial,$FFinal,'TotalVenta');
         $result = sqlsrv_query($conn,$sql);
-        $sql1 = R32Q_Venta_Articulos(5,'2020-12-01','2020-12-02','TotalUnidadesVendidas');
-		$result1 = sqlsrv_query($conn,$sql1);        
+        $sql1 = R32Q_Venta_Articulos(5,$FInicial,$FFinal,'TotalUnidadesVendidas');
+        $result1 = sqlsrv_query($conn,$sql1);   
         
-        echo '<h1 class="h5 text-dark" align="left">Dia Ref: 2020-12-01</h1>';
-        echo '<h1 class="h5 text-dark" align="left">Tasa Ref: 1.000.000,00</h1>';
-        
-        echo '</br>';
+        echo '<hr class="row align-items-start col-12">';        
         echo '<h1 class="h5 text-dark" align="left">Ventas por Articulo</h1>';
 
 		echo '		
@@ -74,7 +103,13 @@
 			echo '<td align="center"><strong>'.intval($contador).'</strong></td>';
             echo '<td align="center">'.FG_Limpiar_Texto($row['Descripcion']).'</td>';
             echo '<td align="center">'.number_format($row['TotalVenta'],2,"," ,"." ).'</td>';
-            echo '<td align="center">'.number_format(($row['TotalVenta']/1000000),2,"," ,"." ).'</td>';        			
+            
+            if(isset($TasaActual)&&$TasaActual!=0){
+                echo '<td align="center">'.number_format(($row['TotalVenta']/$TasaActual),2,"," ,"." ).'</td>';        			
+            }else{
+                echo '<td align="center">0,00</td>';
+            }
+            
             echo '<td align="center">'.intval($row['TotalUnidadesVendidas']).'</td>';
             echo '<td align="center">'.intval($row['TotalVecesVendidas']).'</td>';
 			echo '</tr>';
@@ -104,7 +139,13 @@
 			echo '<td align="center"><strong>'.intval($contador).'</strong></td>';
             echo '<td align="center">'.FG_Limpiar_Texto($row1['Descripcion']).'</td>';
             echo '<td align="center">'.number_format($row1['TotalVenta'],2,"," ,"." ).'</td>';
-            echo '<td align="center">'.number_format(($row1['TotalVenta']/1000000),2,"," ,"." ).'</td>';        			
+            
+            if(isset($TasaActual)&&$TasaActual!=0){
+                echo '<td align="center">'.number_format(($row['TotalVenta']/$TasaActual),2,"," ,"." ).'</td>';        			
+            }else{
+                echo '<td align="center">0,00</td>';
+            }
+
             echo '<td align="center">'.intval($row1['TotalUnidadesVendidas']).'</td>';
             echo '<td align="center">'.intval($row1['TotalVecesVendidas']).'</td>';
 			echo '</tr>';
@@ -250,7 +291,8 @@
         FROM VenVentaDetalle
         INNER JOIN VenVenta ON VenVenta.Id = VenVentaDetalle.VenVentaId 
         WHERE (VenVenta.FechaDocumentoVenta > '$FInicial' AND VenVenta.FechaDocumentoVenta < '$FFinal')
-        AND VenVentaDetalle.InvArticuloId = VenFacturaDetalle.InvArticuloId),CAST(0 AS INT)) AS SubTotalVenta,
+        AND VenVentaDetalle.InvArticuloId = VenFacturaDetalle.InvArticuloId
+        AND VenVenta.estadoVenta = 2),CAST(0 AS INT)) AS SubTotalVenta,
         --SubTotal Devolucion (En Rango)
         ISNULL((SELECT
         (ROUND(CAST(SUM (VenDevolucionDetalle.PrecioBruto * VenDevolucionDetalle.Cantidad) AS DECIMAL(38,2)),2,0)) as SubTotalDevolucion
@@ -264,7 +306,8 @@
         FROM VenVentaDetalle
         INNER JOIN VenVenta ON VenVenta.Id = VenVentaDetalle.VenVentaId 
         WHERE (VenVenta.FechaDocumentoVenta > '$FInicial' AND VenVenta.FechaDocumentoVenta < '$FFinal')
-        AND VenVentaDetalle.InvArticuloId = VenFacturaDetalle.InvArticuloId),CAST(0 AS INT)))
+        AND VenVentaDetalle.InvArticuloId = VenFacturaDetalle.InvArticuloId
+        AND VenVenta.estadoVenta = 2),CAST(0 AS INT)))
         -
         (ISNULL((SELECT
         (ROUND(CAST(SUM (VenDevolucionDetalle.PrecioBruto * VenDevolucionDetalle.Cantidad) AS DECIMAL(38,2)),2,0)) as SubTotalDevolucion
