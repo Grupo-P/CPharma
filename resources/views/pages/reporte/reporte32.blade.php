@@ -141,7 +141,7 @@
             echo '<td align="center">'.number_format($row1['TotalVenta'],2,"," ,"." ).'</td>';
             
             if(isset($TasaActual)&&$TasaActual!=0){
-                echo '<td align="center">'.number_format(($row['TotalVenta']/$TasaActual),2,"," ,"." ).'</td>';        			
+                echo '<td align="center">'.number_format(($row1['TotalVenta']/$TasaActual),2,"," ,"." ).'</td>';       			
             }else{
                 echo '<td align="center">0,00</td>';
             }
