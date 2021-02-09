@@ -70,10 +70,11 @@
         $conn = FG_Conectar_Smartpharma($SedeConnection);
         $connCPharma = FG_Conectar_CPharma();
 
-        $FInicial = $fecha;
-        //$FInicial = '2020-12-01';
+        //$FInicial = $fecha;
+        $FInicial = '2020-12-01';
         $FFinal = date("Y-m-d",strtotime($FInicial."+ 1 days"));
-        $TasaActual = FG_Tasa_Fecha($connCPharma,$FInicial);
+        //$TasaActual = FG_Tasa_Fecha($connCPharma,$FInicial);
+        $TasaActual = 10;
 
 		$sql = R32Q_Venta_Articulos(5,$FInicial,$FFinal,'TotalVenta');
         $result = sqlsrv_query($conn,$sql);
@@ -84,7 +85,7 @@
         echo '<h1 class="h5 text-dark" align="left">Ventas por Articulo</h1>';
 
 		echo '		
-		<table class="table table-striped table-bordered col-12 sortable" style="width:50%;">
+		<table class="table table-striped table-bordered col-12 sortable" style="width:60%;">
             <thead class="thead-dark">
                 <tr>
                     <th scope="col" class="CP-sticky">#</th>
@@ -120,7 +121,7 @@
         </table>';
         
         echo '		
-		<table class="table table-striped table-bordered col-12 sortable" style="width:50%;">
+		<table class="table table-striped table-bordered col-12 sortable" style="width:60%;">
             <thead class="thead-dark">
                 <tr>
                     <th scope="col" class="CP-sticky">#</th>
@@ -153,7 +154,96 @@
   	    }
 	  	echo '
   		    </tbody>
-		</table>';
+        </table>';
+        
+        $sql = R32Q_Vent_Cli_Nue_Rec($FInicial,$FFinal);
+        $result = sqlsrv_query($conn,$sql);
+
+        echo '<hr class="row align-items-start col-12">';        
+        echo '<h1 class="h5 text-dark" align="left">Ventas por Clientes</h1>';
+        
+        echo '		
+		<table class="table table-striped table-bordered col-12 sortable" style="width:60%;">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col" class="CP-sticky">#</th>
+                    <th scope="col" class="CP-sticky">Tipo</th>
+                    <th scope="col" class="CP-sticky">'.SigVe.'</th>
+                    <th scope="col" class="CP-sticky">'.SigDolar.'</th>
+                    <th scope="col" class="CP-sticky">%</th>
+                    <th scope="col" class="CP-sticky">Trasacciones</th>
+                    <th scope="col" class="CP-sticky">%</th>
+                    <th scope="col" class="CP-sticky">Unidades</th>
+                    <th scope="col" class="CP-sticky">%</th>
+                </tr>
+            </thead>
+            <tbody>
+        ';
+        
+        $Sum_Monto_Nue = $Sum_Trans_Nue =  $Sum_Unid_Nue = 0;
+        $Sum_Monto_Rec = $Sum_Trans_Rec =  $Sum_Unid_Rec = 0;
+
+		while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
+            if($row['TipoCliente']=='Nuevo'){
+                $Sum_Monto_Nue += $row['MontoFactura'];
+                $Sum_Unid_Nue += $row['Unidades'];
+                $Sum_Trans_Nue ++;
+            }else{
+                $Sum_Monto_Rec += $row['MontoFactura'];
+                $Sum_Unid_Rec += $row['Unidades'];
+                $Sum_Trans_Rec ++;
+            }
+          }
+          	  	
+        $total_p = $Sum_Monto_Nue + $Sum_Monto_Rec;
+        $p_monto_Nue = ($Sum_Monto_Nue*100)/$total_p;
+        $p_monto_Rec = ($Sum_Monto_Rec*100)/$total_p;
+
+        $total_t = $Sum_Trans_Nue + $Sum_Trans_Rec;
+        $p_trans_Nue = ($Sum_Trans_Nue*100)/$total_t;
+        $p_trans_Rec = ($Sum_Trans_Rec*100)/$total_t;
+
+        $total_u = $Sum_Unid_Nue + $Sum_Unid_Rec;
+        $u_trans_Nue = ($Sum_Unid_Nue*100)/$total_u;
+        $u_trans_Rec = ($Sum_Unid_Rec*100)/$total_u;
+          
+        echo '<tr>';
+        echo '<td align="center"><strong>1</strong></td>';
+        echo '<td align="center">Clientes Nuevos</td>';
+        echo '<td align="center">'.number_format($Sum_Monto_Nue,2,"," ,"." ).'</td>';
+        
+        if(isset($TasaActual)&&$TasaActual!=0){
+            echo '<td align="center">'.number_format(($Sum_Monto_Nue/$TasaActual),2,"," ,"." ).'</td>';       			
+        }else{
+            echo '<td align="center">0,00</td>';
+        }
+        echo '<td align="center">'.number_format($p_monto_Nue,2,"," ,"." ).' % </td>';
+        echo '<td align="center">'.intval($Sum_Trans_Nue).'</td>';
+        echo '<td align="center">'.number_format($p_trans_Nue,2,"," ,"." ).' % </td>';
+        echo '<td align="center">'.intval($Sum_Unid_Nue).'</td>';
+        echo '<td align="center">'.number_format($u_trans_Nue,2,"," ,"." ).' % </td>';
+        echo '</tr>';
+        
+        echo '<tr>';
+        echo '<td align="center"><strong>2</strong></td>';
+        echo '<td align="center">Clientes Recurrentes</td>';
+        echo '<td align="center">'.number_format($Sum_Monto_Rec,2,"," ,"." ).'</td>';
+        
+        if(isset($TasaActual)&&$TasaActual!=0){
+            echo '<td align="center">'.number_format(($Sum_Monto_Rec/$TasaActual),2,"," ,"." ).'</td>';       			
+        }else{
+            echo '<td align="center">0,00</td>';
+        }
+        echo '<td align="center">'.number_format($p_monto_Rec,2,"," ,"." ).' % </td>';
+        echo '<td align="center">'.intval($Sum_Trans_Rec).'</td>';
+        echo '<td align="center">'.number_format($p_trans_Rec,2,"," ,"." ).' % </td>';
+        echo '<td align="center">'.intval($Sum_Unid_Rec).'</td>';
+        echo '<td align="center">'.number_format($u_trans_Rec,2,"," ,"." ).' % </td>';
+        echo '</tr>';
+
+        echo '
+  		    </tbody>
+        </table>';
 		sqlsrv_close($conn);
 	}
 	/**********************************************************************************/
@@ -329,5 +419,28 @@
         ORDER BY $ordenarPor DESC
         ";
         return $sql;
-	}
+    }
+    
+    /*
+        TITULO: R32Q_Vent_Cli_Nue_Rec
+    */
+
+    function R32Q_Vent_Cli_Nue_Rec($FInicial,$FFinal){
+        $sql = "
+        SELECT
+        VenFactura.Id,
+        IIF( CONVERT(date,GenPersona.Auditoria_FechaCreacion) = '$FInicial', 'Nuevo' ,'Recurrente') as TipoCliente,
+        VenFactura.M_MontoTotalFactura AS MontoFactura,
+        ((ROUND(CAST(SUM(VenFacturaDetalle.Cantidad) AS DECIMAL(38,0)),2,0))) as Unidades
+        FROM VenFactura
+        LEFT JOIN VenFacturaDetalle ON VenFacturaDetalle.VenFacturaId = VenFactura.Id
+        LEFT JOIN VenCliente ON VenCliente.Id = VenFactura.VenClienteId
+        LEFT JOIN GenPersona ON GenPersona.Id = VenCliente.GenPersonaId
+        WHERE
+        (VenFactura.FechaDocumento > '$FInicial' AND VenFactura.FechaDocumento < '$FFinal')
+        GROUP BY VenFactura.Id,GenPersona.Auditoria_FechaCreacion,VenFactura.M_MontoTotalFactura
+        ORDER BY VenFactura.Id ASC
+        ";
+        return $sql;
+    }
 ?>
