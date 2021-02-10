@@ -70,11 +70,11 @@
         $conn = FG_Conectar_Smartpharma($SedeConnection);
         $connCPharma = FG_Conectar_CPharma();
 
-        //$FInicial = $fecha;
-        $FInicial = '2020-12-01';
+        $FInicial = $fecha;
+        //$FInicial = '2020-12-01';
         $FFinal = date("Y-m-d",strtotime($FInicial."+ 1 days"));
-        //$TasaActual = FG_Tasa_Fecha($connCPharma,$FInicial);
-        $TasaActual = 10;
+        $TasaActual = FG_Tasa_Fecha($connCPharma,$FInicial);
+        //$TasaActual = 10;
 
 		$sql = R32Q_Venta_Articulos(5,$FInicial,$FFinal,'TotalVenta');
         $result = sqlsrv_query($conn,$sql);
