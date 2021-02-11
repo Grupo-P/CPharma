@@ -77,9 +77,7 @@
         //$TasaActual = 10;
 
 		$sql = R32Q_Venta_Articulos(5,$FInicial,$FFinal,'TotalVenta');
-        $result = sqlsrv_query($conn,$sql);
-        $sql1 = R32Q_Venta_Articulos(5,$FInicial,$FFinal,'TotalUnidadesVendidas');
-        $result1 = sqlsrv_query($conn,$sql1);   
+        $result = sqlsrv_query($conn,$sql);          
         
         echo '<hr class="row align-items-start col-12">';        
         echo '<h1 class="h5 text-dark" align="left">Ventas por Articulo</h1>';
@@ -134,6 +132,10 @@
             </thead>
             <tbody>
         ';
+
+        $sql1 = R32Q_Venta_Articulos(5,$FInicial,$FFinal,'TotalUnidadesVendidas');
+        $result1 = sqlsrv_query($conn,$sql1); 
+
         $contador = 1;
 		while($row1 = sqlsrv_fetch_array($result1, SQLSRV_FETCH_ASSOC)) {					
 			echo '<tr>';
@@ -156,9 +158,6 @@
   		    </tbody>
         </table>';
         
-        $sql = R32Q_Vent_Cli_Nue_Rec($FInicial,$FFinal);
-        $result = sqlsrv_query($conn,$sql);
-
         echo '<hr class="row align-items-start col-12">';        
         echo '<h1 class="h5 text-dark" align="left">Ventas por Clientes</h1>';
         
@@ -179,18 +178,21 @@
             </thead>
             <tbody>
         ';
+
+        $sql2 = R32Q_Vent_Cli_Nue_Rec($FInicial,$FFinal);
+        $result2 = sqlsrv_query($conn,$sql2);
         
         $Sum_Monto_Nue = $Sum_Trans_Nue =  $Sum_Unid_Nue = 0;
         $Sum_Monto_Rec = $Sum_Trans_Rec =  $Sum_Unid_Rec = 0;
 
-		while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
-            if($row['TipoCliente']=='Nuevo'){
-                $Sum_Monto_Nue += $row['MontoFactura'];
-                $Sum_Unid_Nue += $row['Unidades'];
+		while($row2 = sqlsrv_fetch_array($result2, SQLSRV_FETCH_ASSOC)) {
+            if($row2['TipoCliente']=='Nuevo'){
+                $Sum_Monto_Nue += $row2['MontoFactura'];
+                $Sum_Unid_Nue += $row2['Unidades'];
                 $Sum_Trans_Nue ++;
             }else{
-                $Sum_Monto_Rec += $row['MontoFactura'];
-                $Sum_Unid_Rec += $row['Unidades'];
+                $Sum_Monto_Rec += $row2['MontoFactura'];
+                $Sum_Unid_Rec += $row2['Unidades'];
                 $Sum_Trans_Rec ++;
             }
           }
@@ -244,6 +246,8 @@
         echo '
   		    </tbody>
         </table>';
+
+        mysqli_close($connCPharma);
 		sqlsrv_close($conn);
 	}
 	/**********************************************************************************/

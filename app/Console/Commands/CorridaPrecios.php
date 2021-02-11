@@ -53,6 +53,9 @@ class CorridaPrecios extends Command
         $Auditoria->registro = 'CPHARMA';
         $Auditoria->user = 'SYSTEM';
         $Auditoria->save();    
+        
+        //Limpieza del cache
+        Artisan::call('cache:clear');
 
         $this->info('La corrida de precios fue ejecutada satisfactoriamente!');
     }
