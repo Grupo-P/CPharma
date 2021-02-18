@@ -777,7 +777,7 @@
       AND (
         (InvMovimiento.InvCausaId=1) OR (InvMovimiento.InvCausaId=2) OR (InvMovimiento.InvCausaId=3) OR (InvMovimiento.InvCausaId=4)
         OR (InvMovimiento.InvCausaId=5) OR (InvMovimiento.InvCausaId=6) OR (InvMovimiento.InvCausaId=11) OR (InvMovimiento.InvCausaId=12)
-        OR (InvMovimiento.InvCausaId=14)OR (InvMovimiento.InvCausaId=15)
+        OR (InvMovimiento.InvCausaId=14) OR (InvMovimiento.InvCausaId=15) OR (InvMovimiento.InvCausaId=16)
       )
       GROUP BY InvCausa.id,InvCausa.Descripcion,InvCausa.EsPositiva
       ORDER BY InvCausa.id asc
@@ -806,7 +806,7 @@
       AND (
         (InvMovimiento.InvCausaId=1) OR (InvMovimiento.InvCausaId=2) OR (InvMovimiento.InvCausaId=3) OR (InvMovimiento.InvCausaId=4)
         OR (InvMovimiento.InvCausaId=5) OR (InvMovimiento.InvCausaId=6) OR (InvMovimiento.InvCausaId=11) OR (InvMovimiento.InvCausaId=12)
-        OR (InvMovimiento.InvCausaId=14)OR (InvMovimiento.InvCausaId=15)
+        OR (InvMovimiento.InvCausaId=14)OR (InvMovimiento.InvCausaId=15) OR (InvMovimiento.InvCausaId=16)
       )
       GROUP BY InvCausa.id,InvCausa.Descripcion,InvCausa.EsPositiva,CONVERT(DATE,InvMovimiento.FechaMovimiento)
       ORDER BY CONVERT(DATE,InvMovimiento.FechaMovimiento) asc
@@ -844,7 +844,7 @@
       AND (
         (InvMovimiento.InvCausaId=1) OR (InvMovimiento.InvCausaId=2) OR (InvMovimiento.InvCausaId=3) OR (InvMovimiento.InvCausaId=4)
         OR (InvMovimiento.InvCausaId=5) OR (InvMovimiento.InvCausaId=6) OR (InvMovimiento.InvCausaId=11) OR (InvMovimiento.InvCausaId=12)
-        OR (InvMovimiento.InvCausaId=14)OR (InvMovimiento.InvCausaId=15)
+        OR (InvMovimiento.InvCausaId=14)OR (InvMovimiento.InvCausaId=15) OR (InvMovimiento.InvCausaId=16)
       )
       ORDER BY CONVERT(DATE,InvMovimiento.FechaMovimiento) asc
     ";
