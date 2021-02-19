@@ -74,7 +74,7 @@
         //$FInicial = '2020-12-01';
         $FFinal = date("Y-m-d",strtotime($FInicial."+ 1 days"));
         $TasaActual = FG_Tasa_Fecha($connCPharma,$FInicial);
-        //$TasaActual = 10;
+        //$TasaActual = 1800000.00;
 
 		$sql = R32Q_Venta_Articulos(5,$FInicial,$FFinal,'TotalVenta');
         $result = sqlsrv_query($conn,$sql);          
@@ -189,11 +189,11 @@
             if($row2['TipoCliente']=='Nuevo'){
                 $Sum_Monto_Nue += $row2['MontoFactura'];
                 $Sum_Unid_Nue += $row2['Unidades'];
-                $Sum_Trans_Nue ++;
+                $Sum_Trans_Nue += $row2['Transacciones'];
             }else{
                 $Sum_Monto_Rec += $row2['MontoFactura'];
                 $Sum_Unid_Rec += $row2['Unidades'];
-                $Sum_Trans_Rec ++;
+                $Sum_Trans_Rec += $row2['Transacciones'];
             }
           }
           	  	
@@ -244,6 +244,131 @@
         echo '</tr>';
 
         echo '
+  		    </tbody>
+        </table>';
+
+        echo '		
+		<table class="table table-striped table-bordered col-12 sortable" style="width:60%;">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col" class="CP-sticky">#</th>
+                    <th scope="col" class="CP-sticky">Tipo</th>
+                    <th scope="col" class="CP-sticky">'.SigVe.'</th>
+                    <th scope="col" class="CP-sticky">'.SigDolar.'</th>
+                    <th scope="col" class="CP-sticky">%</th>
+                    <th scope="col" class="CP-sticky">Trasacciones</th>
+                    <th scope="col" class="CP-sticky">%</th>
+                    <th scope="col" class="CP-sticky">Unidades</th>
+                    <th scope="col" class="CP-sticky">%</th>
+                </tr>
+            </thead>
+            <tbody>
+        ';
+
+        $sql3 = R32Q_Vent_Cli_Nat_Jur($FInicial,$FFinal);
+        $result3 = sqlsrv_query($conn,$sql3);
+        
+        $Sum_Monto_Nat = $Sum_Trans_Nat =  $Sum_Unid_Nat = 0;
+        $Sum_Monto_Jur = $Sum_Trans_Jur =  $Sum_Unid_Jur = 0;
+
+		while($row3 = sqlsrv_fetch_array($result3, SQLSRV_FETCH_ASSOC)) {
+            if($row3['tipoPersona']=='1'){
+                $Sum_Monto_Nat += $row3['MontoFactura'];
+                $Sum_Unid_Nat += $row3['Unidades'];
+                $Sum_Trans_Nat += $row3['Transacciones'];
+            }else{
+                $Sum_Monto_Jur += $row3['MontoFactura'];
+                $Sum_Unid_Jur += $row3['Unidades'];
+                $Sum_Trans_Jur += $row3['Transacciones'];
+            }
+          }
+          	  	
+        $total_p = $Sum_Monto_Nat + $Sum_Monto_Jur;
+        $p_monto_Nat = ($Sum_Monto_Nat*100)/$total_p;
+        $p_monto_Jur = ($Sum_Monto_Jur*100)/$total_p;
+
+        $total_t = $Sum_Trans_Nat + $Sum_Trans_Jur;
+        $p_trans_Nat = ($Sum_Trans_Nat*100)/$total_t;
+        $p_trans_Jur = ($Sum_Trans_Jur*100)/$total_t;
+
+        $total_u = $Sum_Unid_Nat + $Sum_Unid_Jur;
+        $u_trans_Nat = ($Sum_Unid_Nat*100)/$total_u;
+        $u_trans_Jur = ($Sum_Unid_Jur*100)/$total_u;
+          
+        echo '<tr>';
+        echo '<td align="center"><strong>1</strong></td>';
+        echo '<td align="center">Clientes Nuevos</td>';
+        echo '<td align="center">'.number_format($Sum_Monto_Nat,2,"," ,"." ).'</td>';
+        
+        if(isset($TasaActual)&&$TasaActual!=0){
+            echo '<td align="center">'.number_format(($Sum_Monto_Nat/$TasaActual),2,"," ,"." ).'</td>';       			
+        }else{
+            echo '<td align="center">0,00</td>';
+        }
+        echo '<td align="center">'.number_format($p_monto_Nat,2,"," ,"." ).' % </td>';
+        echo '<td align="center">'.intval($Sum_Trans_Nat).'</td>';
+        echo '<td align="center">'.number_format($p_trans_Nat,2,"," ,"." ).' % </td>';
+        echo '<td align="center">'.intval($Sum_Unid_Nat).'</td>';
+        echo '<td align="center">'.number_format($u_trans_Nat,2,"," ,"." ).' % </td>';
+        echo '</tr>';
+        
+        echo '<tr>';
+        echo '<td align="center"><strong>2</strong></td>';
+        echo '<td align="center">Clientes Recurrentes</td>';
+        echo '<td align="center">'.number_format($Sum_Monto_Jur,2,"," ,"." ).'</td>';
+        
+        if(isset($TasaActual)&&$TasaActual!=0){
+            echo '<td align="center">'.number_format(($Sum_Monto_Jur/$TasaActual),2,"," ,"." ).'</td>';       			
+        }else{
+            echo '<td align="center">0,00</td>';
+        }
+        echo '<td align="center">'.number_format($p_monto_Jur,2,"," ,"." ).' % </td>';
+        echo '<td align="center">'.intval($Sum_Trans_Jur).'</td>';
+        echo '<td align="center">'.number_format($p_trans_Jur,2,"," ,"." ).' % </td>';
+        echo '<td align="center">'.intval($Sum_Unid_Jur).'</td>';
+        echo '<td align="center">'.number_format($u_trans_Jur,2,"," ,"." ).' % </td>';
+        echo '</tr>';
+
+        echo '
+  		    </tbody>
+        </table>';
+
+        $sql4 = R32Q_Vent_Cli_Top($FInicial,$FFinal);
+        $result4 = sqlsrv_query($conn,$sql4);          
+        
+		echo '		
+		<table class="table table-striped table-bordered col-12 sortable" style="width:60%;">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col" class="CP-sticky">#</th>
+                    <th scope="col" class="CP-sticky">Nombre</th>
+                    <th scope="col" class="CP-sticky">'.SigVe.'</th>
+                    <th scope="col" class="CP-sticky">'.SigDolar.'</th>
+                    <th scope="col" class="CP-sticky">Trasacciones</th>
+                    <th scope="col" class="CP-sticky">Unidades</th>                     
+                </tr>
+            </thead>
+            <tbody>
+        ';
+        $contador = 1;
+		while($row4 = sqlsrv_fetch_array($result4, SQLSRV_FETCH_ASSOC)) {					
+			echo '<tr>';
+			echo '<td align="center"><strong>'.intval($contador).'</strong></td>';
+            echo '<td align="center">'.FG_Limpiar_Texto($row4['Nombre']." ".$row4['Apellido']).'</td>';
+            echo '<td align="center">'.number_format($row4['MontoFactura'],2,"," ,"." ).'</td>';
+            
+            if(isset($TasaActual)&&$TasaActual!=0){
+                echo '<td align="center">'.number_format(($row4['MontoFactura']/$TasaActual),2,"," ,"." ).'</td>';        			
+            }else{
+                echo '<td align="center">0,00</td>';
+            }
+            
+            echo '<td align="center">'.intval($row4['Transacciones']).'</td>';
+            echo '<td align="center">'.intval($row4['Unidades']).'</td>';
+			echo '</tr>';
+			$contador++;
+  	    }
+	  	echo '
   		    </tbody>
         </table>';
 
@@ -427,14 +552,14 @@
     
     /*
         TITULO: R32Q_Vent_Cli_Nue_Rec
-    */
-
+    */    
     function R32Q_Vent_Cli_Nue_Rec($FInicial,$FFinal){
         $sql = "
+        --Clientes Nuevos y Recurrentes
         SELECT
-        VenFactura.Id,
         IIF( CONVERT(date,GenPersona.Auditoria_FechaCreacion) = '$FInicial', 'Nuevo' ,'Recurrente') as TipoCliente,
-        VenFactura.M_MontoTotalFactura AS MontoFactura,
+        SUM(VenFactura.M_MontoTotalFactura) AS MontoFactura,
+        COUNT(DISTINCT VenFactura.Id) as Transacciones,
         ((ROUND(CAST(SUM(VenFacturaDetalle.Cantidad) AS DECIMAL(38,0)),2,0))) as Unidades
         FROM VenFactura
         LEFT JOIN VenFacturaDetalle ON VenFacturaDetalle.VenFacturaId = VenFactura.Id
@@ -442,8 +567,52 @@
         LEFT JOIN GenPersona ON GenPersona.Id = VenCliente.GenPersonaId
         WHERE
         (VenFactura.FechaDocumento > '$FInicial' AND VenFactura.FechaDocumento < '$FFinal')
-        GROUP BY VenFactura.Id,GenPersona.Auditoria_FechaCreacion,VenFactura.M_MontoTotalFactura
-        ORDER BY VenFactura.Id ASC
+        GROUP BY TipoCliente,CONVERT(date,GenPersona.Auditoria_FechaCreacion)
+        ";
+        return $sql;
+    }
+    /*
+        TITULO: R32Q_Vent_Cli_Nat_Jur
+    */
+    function R32Q_Vent_Cli_Nat_Jur($FInicial,$FFinal){
+        $sql = "
+        --Clientes por Tipo Persona
+        SELECT
+        GenPersona.tipoPersona,
+        SUM(VenFactura.M_MontoTotalFactura) AS MontoFactura,
+        COUNT(DISTINCT VenFactura.Id) as Transacciones,
+        ((ROUND(CAST(SUM(VenFacturaDetalle.Cantidad) AS DECIMAL(38,0)),2,0))) as Unidades
+        FROM VenFactura
+        LEFT JOIN VenFacturaDetalle ON VenFacturaDetalle.VenFacturaId = VenFactura.Id
+        LEFT JOIN VenCliente ON VenCliente.Id = VenFactura.VenClienteId
+        LEFT JOIN GenPersona ON GenPersona.Id = VenCliente.GenPersonaId
+        WHERE
+        (VenFactura.FechaDocumento > '$FInicial' AND VenFactura.FechaDocumento < '$FFinal')
+        GROUP BY GenPersona.tipoPersona
+        ";
+        return $sql;
+    }
+     /*
+        TITULO: R32Q_Vent_Cli_Top
+    */ 
+    function R32Q_Vent_Cli_Top($FInicial,$FFinal){
+        $sql = "
+        --Cliente por Monto Factura
+        SELECT top 5
+        VenCliente.id as IdCliente,
+        GenPersona.Nombre,
+        GenPersona.Apellido,
+        SUM(VenFactura.M_MontoTotalFactura) AS MontoFactura,
+        ((ROUND(CAST(SUM(VenFacturaDetalle.Cantidad) AS DECIMAL(38,0)),2,0))) as Unidades,
+        COUNT(DISTINCT VenFactura.Id) as Transacciones
+        FROM VenFactura
+        LEFT JOIN VenFacturaDetalle ON VenFacturaDetalle.VenFacturaId = VenFactura.Id
+        LEFT JOIN VenCliente ON VenCliente.Id = VenFactura.VenClienteId
+        LEFT JOIN GenPersona ON GenPersona.Id = VenCliente.GenPersonaId
+        WHERE
+        (VenFactura.FechaDocumento > '$FInicial' AND VenFactura.FechaDocumento < '$FFinal')
+        GROUP BY GenPersona.Nombre,GenPersona.Apellido,VenCliente.id
+        ORDER BY MontoFactura DESC
         ";
         return $sql;
     }
