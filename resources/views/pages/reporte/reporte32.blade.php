@@ -297,7 +297,7 @@
           
         echo '<tr>';
         echo '<td align="center"><strong>1</strong></td>';
-        echo '<td align="center">Clientes Nuevos</td>';
+        echo '<td align="center">Clientes Naturales</td>';
         echo '<td align="center">'.number_format($Sum_Monto_Nat,2,"," ,"." ).'</td>';
         
         if(isset($TasaActual)&&$TasaActual!=0){
@@ -314,7 +314,7 @@
         
         echo '<tr>';
         echo '<td align="center"><strong>2</strong></td>';
-        echo '<td align="center">Clientes Recurrentes</td>';
+        echo '<td align="center">Clientes Juridicos</td>';
         echo '<td align="center">'.number_format($Sum_Monto_Jur,2,"," ,"." ).'</td>';
         
         if(isset($TasaActual)&&$TasaActual!=0){
