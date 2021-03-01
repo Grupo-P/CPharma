@@ -76,6 +76,110 @@
         $TasaActual = FG_Tasa_Fecha($connCPharma,$FInicial);
         //$TasaActual = 1800000.00;
 
+        $sql5 = R32Q_Vent_art_cond($FInicial,$FFinal);
+        $result5 = sqlsrv_query($conn,$sql5);
+
+        $result_arr = $arrayPorcentaje = array();
+        $porcent_ante = $product_ant = "";
+        $cont_sku = $sum_unid_porcent = $sum_total_porcent = 0;
+        $sumatoria_unidades = $sumatoria_bs = 0;
+		while($row5 = sqlsrv_fetch_array($result5, SQLSRV_FETCH_ASSOC)) {	
+
+			if( $porcent_ante != $row5['PorcentajeUtilidad'] ){
+                
+                $arrayPorcentaje['Utilidad'] = $porcent_ante;
+                $arrayPorcentaje['TotalUnidadesVendidas'] = $sum_unid_porcent;
+                $arrayPorcentaje['TotalVenta'] = $sum_total_porcent;
+                $arrayPorcentaje['SKU'] = $cont_sku;
+                array_push($result_arr,$arrayPorcentaje);
+
+                $sumatoria_unidades += $sum_unid_porcent;
+                $sumatoria_bs += $sum_total_porcent;
+                
+                $cont_sku = $sum_unid_porcent = $sum_total_porcent = 0;
+                $porcent_ante = $row5['PorcentajeUtilidad']; 
+                
+                if( $product_ant != $row5['id']){
+                    $cont_sku++;
+                    $product_ant = $row5['id'];
+                }
+                
+                $sum_unid_porcent += $row5['TotalUnidadesVendidas'];
+                $sum_total_porcent += $row5['TotalVenta'];
+            }
+            else {
+                
+                if( $product_ant != $row5['id']){
+                    $cont_sku++;
+                    $product_ant = $row5['id'];
+                }
+                
+                $sum_unid_porcent += $row5['TotalUnidadesVendidas'];
+                $sum_total_porcent += $row5['TotalVenta'];
+            }
+  	    }
+
+          $arrayPorcentaje['Utilidad'] = $porcent_ante;
+          $arrayPorcentaje['TotalUnidadesVendidas'] = $sum_unid_porcent;
+          $arrayPorcentaje['TotalVenta'] = $sum_total_porcent;
+          $arrayPorcentaje['SKU'] = $cont_sku;
+          array_push($result_arr,$arrayPorcentaje);
+
+        echo '<hr class="row align-items-start col-12">';        
+        echo '<h1 class="h5 text-dark" align="left">Ventas por Condicion</h1>';
+
+        echo '		
+		<table class="table table-striped table-bordered col-12 sortable" style="width:60%;">
+            <thead class="thead-dark">
+                <tr>                  
+                    <th scope="col" class="CP-sticky">#</th>  
+                    <th scope="col" class="CP-sticky">Condicion</th>
+                    <th scope="col" class="CP-sticky">Unidades</th>
+                    <th scope="col" class="CP-sticky">%</th>
+                    <th scope="col" class="CP-sticky">SKU</th>
+                    <th scope="col" class="CP-sticky">'.SigVe.'</th>
+                    <th scope="col" class="CP-sticky">'.SigDolar.'</th>                    
+                    <th scope="col" class="CP-sticky">%</th>
+                </tr>
+            </thead>
+            <tbody>
+        ';
+          
+        $contador = 0;
+        foreach($result_arr as $result){
+
+            if($contador>0){
+    
+                $p_unid = (intval($result['TotalUnidadesVendidas'])*100)/$sumatoria_unidades;
+                $p_monto = ($result['TotalVenta']*100)/$sumatoria_bs;
+
+                echo '<tr>';
+                echo '<td align="center"><strong>'.intval($contador).'</strong></td>';
+                echo '<td align="center">'.$result['Utilidad'].'</td>';
+                echo '<td align="center">'.intval($result['TotalUnidadesVendidas']).'</td>';            
+                echo '<td align="center">'.number_format($p_unid,2,"," ,"." ).'</td>';
+                echo '<td align="center">'.intval($result['SKU']).'</td>';
+                echo '<td align="center">'.number_format($result['TotalVenta'],2,"," ,"." ).'</td>';
+                
+                if(isset($TasaActual)&&$TasaActual!=0){
+                    echo '<td align="center">'.number_format(($result['TotalVenta']/$TasaActual),2,"," ,"." ).'</td>';        			
+                }else{
+                    echo '<td align="center">0,00</td>';
+                }
+
+                echo '<td align="center">'.number_format($p_monto,2,"," ,"." ).'</td>';
+                
+                echo '</tr>';
+			    $contador++;
+            }else{
+                $contador++;
+            }
+        }        
+        echo '
+            </tbody>
+        </table>';
+
+
 		$sql = R32Q_Venta_Articulos(5,$FInicial,$FFinal,'TotalVenta');
         $result = sqlsrv_query($conn,$sql);          
         
@@ -613,6 +717,50 @@
         (VenFactura.FechaDocumento > '$FInicial' AND VenFactura.FechaDocumento < '$FFinal')
         GROUP BY GenPersona.Nombre,GenPersona.Apellido,VenCliente.id
         ORDER BY MontoFactura DESC
+        ";
+        return $sql;
+    }
+
+    /*
+        TITULO: R32Q_Vent_art_cond
+    */ 
+    function R32Q_Vent_art_cond($FInicial,$FFinal){
+        $sql = "
+            select VenCondicionVenta.PorcentajeUtilidad, InvArticulo.id,
+            --Total Unidades Vendidas (En Rango)
+                (((ROUND(CAST(SUM(VenFacturaDetalle.Cantidad) AS DECIMAL(38,0)),2,0)))
+                -
+                (ISNULL((SELECT
+                (ROUND(CAST(SUM(VenDevolucionDetalle.Cantidad) AS DECIMAL(38,0)),2,0))
+                FROM VenDevolucionDetalle
+                INNER JOIN VenDevolucion ON VenDevolucion.Id = VenDevolucionDetalle.VenDevolucionId
+                WHERE VenDevolucionDetalle.InvArticuloId = VenFacturaDetalle.InvArticuloId
+                AND(VenDevolucion.FechaDocumento > '$FInicial' AND VenDevolucion.FechaDocumento < '$FFinal')
+                GROUP BY VenDevolucionDetalle.InvArticuloId
+                ),CAST(0 AS INT)))) AS TotalUnidadesVendidas,
+            --TotalVenta (En Rango)
+                ((ISNULL((SELECT
+                (ROUND(CAST(SUM (VenVentaDetalle.PrecioBruto * VenVentaDetalle.Cantidad) AS DECIMAL(38,2)),2,0)) 
+                FROM VenVentaDetalle
+                INNER JOIN VenVenta ON VenVenta.Id = VenVentaDetalle.VenVentaId 
+                WHERE (VenVenta.FechaDocumentoVenta > '$FInicial' AND VenVenta.FechaDocumentoVenta < '$FFinal')
+                AND VenVentaDetalle.InvArticuloId = VenFacturaDetalle.InvArticuloId
+                AND VenVenta.estadoVenta = 2),CAST(0 AS INT)))
+                -
+                (ISNULL((SELECT
+                (ROUND(CAST(SUM (VenDevolucionDetalle.PrecioBruto * VenDevolucionDetalle.Cantidad) AS DECIMAL(38,2)),2,0)) as SubTotalDevolucion
+                FROM VenDevolucionDetalle
+                INNER JOIN VenDevolucion ON VenDevolucion.Id = VenDevolucionDetalle.VenDevolucionId 	  
+                WHERE (VenDevolucion.FechaDocumento > '$FInicial' AND VenDevolucion.FechaDocumento < '$FFinal') 
+                AND VenDevolucionDetalle.InvArticuloId = VenFacturaDetalle.InvArticuloId),CAST(0 AS INT)))) AS TotalVenta
+            from VenFactura
+            left join VenFacturaDetalle on VenFacturaDetalle.VenFacturaId = VenFactura.Id
+            left join InvArticulo on InvArticulo.id = VenFacturaDetalle.InvArticuloId
+            left join VenCondicionVenta_VenCondicionVentaCategoria on VenCondicionVenta_VenCondicionVentaCategoria.InvCategoriaId = InvArticulo.InvCategoriaId
+            left join VenCondicionVenta on VenCondicionVenta.id = VenCondicionVenta_VenCondicionVentaCategoria.Id 
+            WHERE (VenFactura.FechaDocumento > '$FInicial' AND VenFactura.FechaDocumento < '$FFinal')
+            group by VenCondicionVenta.PorcentajeUtilidad, InvArticulo.id, InvArticulo.Descripcion, VenFacturaDetalle.InvArticuloId
+            order by VenCondicionVenta.PorcentajeUtilidad desc, InvArticulo.id asc
         ";
         return $sql;
     }
