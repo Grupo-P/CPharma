@@ -76,6 +76,117 @@
         $TasaActual = FG_Tasa_Fecha($connCPharma,$FInicial);
         //$TasaActual = 1800000.00;
 
+        $sql6 = R32Q_Vent_generales($FInicial,$FFinal);
+        $result6 = sqlsrv_query($conn,$sql6);
+
+        $monto_med = $unid_med = $monto_misc = $unid_misc = $trasacciones = 0;
+
+        while($row6 = sqlsrv_fetch_array($result6, SQLSRV_FETCH_ASSOC)) {
+            $trasacciones += $row6['Transacciones'];
+            if($row6['Tipo']==0){
+                $monto_misc += $row6['TotalVenta'];
+                $unid_misc += $row6['TotalUnidadesVendidas'];
+            }
+            else{
+                $monto_med += $row6['TotalVenta'];
+                $unid_med += $row6['TotalUnidadesVendidas'];
+            }
+        }
+
+        $total_monto =  $monto_misc + $monto_med;
+        $total_unid = $unid_misc + $unid_med;
+
+        echo '<hr class="row align-items-start col-12">';        
+        echo '<h1 class="h5 text-dark" align="left">Ventas Generales</h1>';
+
+        echo '		
+		<table class="table table-striped table-bordered col-12 sortable" style="width:60%;">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col" class="CP-sticky bg-white" colspan="5" style="border-color:white;"></th>
+                    <th scope="col" class="CP-sticky" colspan="3">TOTAL</th>
+                    <th scope="col" class="CP-sticky" colspan="3">Promedio Por Factura</th>
+                </tr>
+                <tr>                                      
+                    <th scope="col" class="CP-sticky">Fecha</th>
+                    <th scope="col" class="CP-sticky">Medicinas</th>
+                    <th scope="col" class="CP-sticky">Unidades</th>
+                    <th scope="col" class="CP-sticky">Miscelaneos</th>                                                                    
+                    <th scope="col" class="CP-sticky">Unidades</th>
+                    <th scope="col" class="CP-sticky">Ventas</th>
+                    <th scope="col" class="CP-sticky">Unidades</th>
+                    <th scope="col" class="CP-sticky">Trasaciones</th>
+                    <th scope="col" class="CP-sticky">Ventas</th>
+                    <th scope="col" class="CP-sticky">Unidades</th>
+                    <th scope="col" class="CP-sticky">Valor Unidad</th>                     
+                </tr>
+            </thead>
+            <tbody>
+        ';
+
+            echo '<tr>';            
+            echo '<td align="center">'.$FInicial.'</td>';
+            echo '<td align="center">'.number_format($monto_med,2,"," ,"." ).'</td>';
+            echo '<td align="center">'.intval($unid_med).'</td>';                    
+            echo '<td align="center">'.number_format($monto_misc,2,"," ,"." ).'</td>';
+            echo '<td align="center">'.intval($unid_misc).'</td>';
+            echo '<td align="center">'.number_format($total_monto,2,"," ,"." ).'</td>';
+            echo '<td align="center">'.intval($total_unid).'</td>';              
+            echo '<td align="center">'.intval($trasacciones).'</td>';
+            echo '<td align="center">'.number_format($total_monto/$trasacciones,2,"," ,"." ).'</td>';
+            echo '<td align="center">'.number_format($total_unid/$trasacciones,2,"," ,"." ).'</td>';
+            echo '<td align="center">'.number_format($total_monto/$total_unid,2,"," ,"." ).'</td>';
+            echo '<tr>';
+            echo'
+            </tbody>
+        </table>';
+
+        if(isset($TasaActual)&&$TasaActual!=0){
+            echo '		
+            <table class="table table-striped table-bordered col-12 sortable" style="width:60%;">
+                <thead class="thead-dark">
+                    <tr>
+                        <th scope="col" class="CP-sticky bg-white" colspan="5" style="border-color:white;"></th>
+                        <th scope="col" class="CP-sticky" colspan="3">TOTAL</th>
+                        <th scope="col" class="CP-sticky" colspan="3">Promedio Por Factura</th>
+                    </tr>
+                    <tr>                                      
+                        <th scope="col" class="CP-sticky">Fecha</th>
+                        <th scope="col" class="CP-sticky">Medicinas</th>
+                        <th scope="col" class="CP-sticky">Unidades</th>
+                        <th scope="col" class="CP-sticky">Miscelaneos</th>                                                                    
+                        <th scope="col" class="CP-sticky">Unidades</th>
+                        <th scope="col" class="CP-sticky">Ventas</th>
+                        <th scope="col" class="CP-sticky">Unidades</th>
+                        <th scope="col" class="CP-sticky">Trasaciones</th>
+                        <th scope="col" class="CP-sticky">Ventas</th>
+                        <th scope="col" class="CP-sticky">Unidades</th>
+                        <th scope="col" class="CP-sticky">Valor Unidad</th>
+                        <th scope="col" class="CP-sticky">Tasa Mercado</th> 
+                    </tr>
+                </thead>
+                <tbody>
+            ';
+
+            echo '<tr>';            
+                echo '<td align="center">'.$FInicial.'</td>';
+                echo '<td align="center">'.number_format($monto_med/$TasaActual,2,"," ,"." ).'</td>';
+                echo '<td align="center">'.intval($unid_med).'</td>';                    
+                echo '<td align="center">'.number_format($monto_misc/$TasaActual,2,"," ,"." ).'</td>';
+                echo '<td align="center">'.intval($unid_misc).'</td>';
+                echo '<td align="center">'.number_format($total_monto/$TasaActual,2,"," ,"." ).'</td>';
+                echo '<td align="center">'.intval($total_unid).'</td>';              
+                echo '<td align="center">'.intval($trasacciones).'</td>';
+                echo '<td align="center">'.number_format($total_monto/$trasacciones/$TasaActual,2,"," ,"." ).'</td>';
+                echo '<td align="center">'.number_format($total_unid/$trasacciones,2,"," ,"." ).'</td>';
+                echo '<td align="center">'.number_format( ($total_monto/$total_unid)/$TasaActual,2,"," ,"." ).'</td>';
+                echo '<td align="center">'.number_format($TasaActual,2,"," ,"." ).'</td>';
+                echo '<tr>';
+                echo'
+                </tbody>
+            </table>';
+        }
+    
         $sql5 = R32Q_Vent_art_cond($FInicial,$FFinal);
         $result5 = sqlsrv_query($conn,$sql5);
 
@@ -761,6 +872,78 @@
             WHERE (VenFactura.FechaDocumento > '$FInicial' AND VenFactura.FechaDocumento < '$FFinal')
             group by VenCondicionVenta.PorcentajeUtilidad, InvArticulo.id, InvArticulo.Descripcion, VenFacturaDetalle.InvArticuloId
             order by VenCondicionVenta.PorcentajeUtilidad desc, InvArticulo.id asc
+        ";
+        return $sql;
+    }
+    /*
+    */
+    function R32Q_Vent_generales($FInicial,$FFinal){
+        $sql = "
+        SELECT 
+        -- Id Articulo
+        --VenFacturaDetalle.InvArticuloId,	
+        --InvArticulo.Descripcion,
+        COUNT(DISTINCT VenFactura.Id) as Transacciones,
+        --Dolarizado (0 NO es dolarizado, Id Articulo SI es dolarizado)
+            (ISNULL((SELECT
+            InvArticuloAtributo.InvArticuloId
+            FROM InvArticuloAtributo 
+            WHERE InvArticuloAtributo.InvAtributoId = 
+            (SELECT InvAtributo.Id
+            FROM InvAtributo 
+            WHERE 
+            InvAtributo.Descripcion = 'Dolarizados'
+            OR  InvAtributo.Descripcion = 'Giordany'
+            OR  InvAtributo.Descripcion = 'giordany') 
+            AND InvArticuloAtributo.InvArticuloId = InvArticulo.Id),CAST(0 AS INT))) AS Dolarizado,
+        --Tipo Producto (0 Miscelaneos, Id Articulo Medicinas)
+            (ISNULL((SELECT
+            InvArticuloAtributo.InvArticuloId 
+            FROM InvArticuloAtributo 
+            WHERE InvArticuloAtributo.InvAtributoId = 
+            (SELECT InvAtributo.Id
+            FROM InvAtributo 
+            WHERE 
+            InvAtributo.Descripcion = 'Medicina') 
+            AND InvArticuloAtributo.InvArticuloId = InvArticulo.Id),CAST(0 AS INT))) AS Tipo,
+        --Total Unidades Vendidas (En Rango)
+                (((ROUND(CAST(SUM(VenFacturaDetalle.Cantidad) AS DECIMAL(38,0)),2,0)))
+                -
+                (ISNULL((SELECT
+                (ROUND(CAST(SUM(VenDevolucionDetalle.Cantidad) AS DECIMAL(38,0)),2,0))
+                FROM VenDevolucionDetalle
+                INNER JOIN VenDevolucion ON VenDevolucion.Id = VenDevolucionDetalle.VenDevolucionId
+                WHERE VenDevolucionDetalle.InvArticuloId = VenFacturaDetalle.InvArticuloId
+                AND(VenDevolucion.FechaDocumento > '$FInicial' AND VenDevolucion.FechaDocumento < '$FFinal')
+                GROUP BY VenDevolucionDetalle.InvArticuloId
+                ),CAST(0 AS INT)))) AS TotalUnidadesVendidas,
+        --TotalVenta (En Rango)
+                ((ISNULL((SELECT
+                (ROUND(CAST(SUM (VenVentaDetalle.PrecioBruto * VenVentaDetalle.Cantidad) AS DECIMAL(38,2)),2,0)) 
+                FROM VenVentaDetalle
+                INNER JOIN VenVenta ON VenVenta.Id = VenVentaDetalle.VenVentaId 
+                WHERE (VenVenta.FechaDocumentoVenta > '$FInicial' AND VenVenta.FechaDocumentoVenta < '$FFinal')
+                AND VenVentaDetalle.InvArticuloId = VenFacturaDetalle.InvArticuloId
+                AND VenVenta.estadoVenta = 2),CAST(0 AS INT)))
+                -
+                (ISNULL((SELECT
+                (ROUND(CAST(SUM (VenDevolucionDetalle.PrecioBruto * VenDevolucionDetalle.Cantidad) AS DECIMAL(38,2)),2,0)) as SubTotalDevolucion
+                FROM VenDevolucionDetalle
+                INNER JOIN VenDevolucion ON VenDevolucion.Id = VenDevolucionDetalle.VenDevolucionId 	  
+                WHERE (VenDevolucion.FechaDocumento > '$FInicial' AND VenDevolucion.FechaDocumento < '$FFinal') 
+                AND VenDevolucionDetalle.InvArticuloId = VenFacturaDetalle.InvArticuloId),CAST(0 AS INT)))) AS TotalVenta									 
+        --Tabla Principal
+        FROM VenFacturaDetalle
+        --Joins
+        INNER JOIN VenFactura ON VenFactura.Id = VenFacturaDetalle.VenFacturaId
+        LEFT JOIN InvArticulo on InvArticulo.Id = VenFacturaDetalle.InvArticuloId
+        --Condicionales
+        WHERE
+        (VenFactura.FechaDocumento > '$FInicial' AND VenFactura.FechaDocumento < '$FFinal')
+        --Agrupamientos
+        GROUP BY VenFacturaDetalle.InvArticuloId, InvArticulo.Descripcion, InvArticulo.id
+        --Ordenamientos
+        ORDER BY Tipo desc 
         ";
         return $sql;
     }
