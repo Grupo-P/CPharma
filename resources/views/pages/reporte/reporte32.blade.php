@@ -70,11 +70,11 @@
         $conn = FG_Conectar_Smartpharma($SedeConnection);
         $connCPharma = FG_Conectar_CPharma();
 
-        $FInicial = $fecha;
-        //$FInicial = '2020-12-01';
+        //$FInicial = $fecha;
+        $FInicial = '2020-12-01';
         $FFinal = date("Y-m-d",strtotime($FInicial."+ 1 days"));
-        $TasaActual = FG_Tasa_Fecha($connCPharma,$FInicial);
-        //$TasaActual = 1800000.00;
+        //$TasaActual = FG_Tasa_Fecha($connCPharma,$FInicial);
+        $TasaActual = 1800000.00;
 
         $sql6 = R32Q_Vent_generales($FInicial,$FFinal);
         $result6 = sqlsrv_query($conn,$sql6);
@@ -812,22 +812,21 @@
     */ 
     function R32Q_Vent_Cli_Top($FInicial,$FFinal){
         $sql = "
-        --Cliente por Monto Factura
-        SELECT top 5
+        SELECT top 5 
         VenCliente.id as IdCliente,
         GenPersona.Nombre,
         GenPersona.Apellido,
-        SUM(VenFactura.M_MontoTotalFactura) AS MontoFactura,
+        (VenFactura.M_MontoTotalFactura) AS MontoFactura,
         ((ROUND(CAST(SUM(VenFacturaDetalle.Cantidad) AS DECIMAL(38,0)),2,0))) as Unidades,
         COUNT(DISTINCT VenFactura.Id) as Transacciones
         FROM VenFactura
-        LEFT JOIN VenFacturaDetalle ON VenFacturaDetalle.VenFacturaId = VenFactura.Id
         LEFT JOIN VenCliente ON VenCliente.Id = VenFactura.VenClienteId
         LEFT JOIN GenPersona ON GenPersona.Id = VenCliente.GenPersonaId
+        LEFT JOIN VenFacturaDetalle ON VenFacturaDetalle.VenFacturaId = VenFactura.Id
         WHERE
         (VenFactura.FechaDocumento > '$FInicial' AND VenFactura.FechaDocumento < '$FFinal')
-        GROUP BY GenPersona.Nombre,GenPersona.Apellido,VenCliente.id
-        ORDER BY MontoFactura DESC
+        GROUP BY GenPersona.Nombre,GenPersona.Apellido,VenCliente.id, VenFactura.M_MontoTotalFactura
+        ORDER BY VenFactura.M_MontoTotalFactura DESC
         ";
         return $sql;
     }
