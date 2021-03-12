@@ -486,11 +486,11 @@
 			<!--  FIN Acciones para el departamento de compra -->
 
 
-			<!-- INICIO Acciones para el departamento de administracion -->
+			<!-- INICIO Acciones para el departamento de COMPRAS -->
 				<?php
 				if( ($ordenCompra->estado=='POR APROBAR')
 						&&
-						( (Auth::user()->departamento == 'ADMINISTRACION')
+						( (Auth::user()->departamento == 'COMPRAS')
 					 		|| (Auth::user()->departamento == 'TECNOLOGIA')
 					 		|| (Auth::user()->departamento == 'GERENCIA')
 				 		)
@@ -527,7 +527,7 @@
 				<?php
 				if( ($ordenCompra->estado=='INGRESADA')
 						&&
-						( (Auth::user()->departamento == 'ADMINISTRACION')
+						( (Auth::user()->departamento == 'COMPRAS')
 					 		|| (Auth::user()->departamento == 'TECNOLOGIA')
 					 		|| (Auth::user()->departamento == 'GERENCIA')
 				 		)
@@ -548,7 +548,7 @@
 				<?php
 					}
 				?>
-			<!--  FIN Acciones para el departamento de administracion -->
+			<!--  FIN Acciones para el departamento de COMPRAS -->
 
 			<!-- INICIO Acciones para el departamento de recepcion -->
 				<?php
