@@ -771,18 +771,19 @@
     function R32Q_Vent_Cli_Nue_Rec($FInicial,$FFinal){
         $sql = "
         --Clientes Nuevos y Recurrentes
-        SELECT
+        SELECT 
         IIF( CONVERT(date,GenPersona.Auditoria_FechaCreacion) = '$FInicial', 'Nuevo' ,'Recurrente') as TipoCliente,
-        SUM(VenFactura.M_MontoTotalFactura) AS MontoFactura,
-        COUNT(DISTINCT VenFactura.Id) as Transacciones,
-        ((ROUND(CAST(SUM(VenFacturaDetalle.Cantidad) AS DECIMAL(38,0)),2,0))) as Unidades
+        (VenFactura.M_MontoTotalFactura) AS MontoFactura,
+        ((ROUND(CAST(SUM(VenFacturaDetalle.Cantidad) AS DECIMAL(38,0)),2,0))) as Unidades,
+        COUNT(DISTINCT VenFactura.Id) as Transacciones
         FROM VenFactura
-        LEFT JOIN VenFacturaDetalle ON VenFacturaDetalle.VenFacturaId = VenFactura.Id
         LEFT JOIN VenCliente ON VenCliente.Id = VenFactura.VenClienteId
         LEFT JOIN GenPersona ON GenPersona.Id = VenCliente.GenPersonaId
+        LEFT JOIN VenFacturaDetalle ON VenFacturaDetalle.VenFacturaId = VenFactura.Id
         WHERE
         (VenFactura.FechaDocumento > '$FInicial' AND VenFactura.FechaDocumento < '$FFinal')
-        GROUP BY TipoCliente,CONVERT(date,GenPersona.Auditoria_FechaCreacion)
+        GROUP BY VenFactura.M_MontoTotalFactura,GenPersona.Auditoria_FechaCreacion
+        ORDER BY TipoCliente ASC
         ";
         return $sql;
     }
@@ -792,18 +793,19 @@
     function R32Q_Vent_Cli_Nat_Jur($FInicial,$FFinal){
         $sql = "
         --Clientes por Tipo Persona
-        SELECT
+        SELECT 
         GenPersona.tipoPersona,
-        SUM(VenFactura.M_MontoTotalFactura) AS MontoFactura,
-        COUNT(DISTINCT VenFactura.Id) as Transacciones,
-        ((ROUND(CAST(SUM(VenFacturaDetalle.Cantidad) AS DECIMAL(38,0)),2,0))) as Unidades
+        (VenFactura.M_MontoTotalFactura) AS MontoFactura,
+        ((ROUND(CAST(SUM(VenFacturaDetalle.Cantidad) AS DECIMAL(38,0)),2,0))) as Unidades,
+        COUNT(DISTINCT VenFactura.Id) as Transacciones
         FROM VenFactura
-        LEFT JOIN VenFacturaDetalle ON VenFacturaDetalle.VenFacturaId = VenFactura.Id
         LEFT JOIN VenCliente ON VenCliente.Id = VenFactura.VenClienteId
         LEFT JOIN GenPersona ON GenPersona.Id = VenCliente.GenPersonaId
+        LEFT JOIN VenFacturaDetalle ON VenFacturaDetalle.VenFacturaId = VenFactura.Id
         WHERE
         (VenFactura.FechaDocumento > '$FInicial' AND VenFactura.FechaDocumento < '$FFinal')
-        GROUP BY GenPersona.tipoPersona
+        GROUP BY VenFactura.M_MontoTotalFactura,GenPersona.tipoPersona
+        ORDER BY GenPersona.tipoPersona ASC
         ";
         return $sql;
     }
