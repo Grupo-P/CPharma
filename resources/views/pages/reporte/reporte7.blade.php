@@ -114,7 +114,8 @@
 
     $cadenaCodigosBarra = R7_Catalogo_Proveedor_C2($_GET['SEDE'],$_GET['Id'],$_GET['Nombre']);
     
-    echo '<pre><strong>Codigos de Barra<br>'.$cadenaCodigosBarra.'<br></strong></pre>';
+    echo '<button onclick="copiar_codigo_barras(\'' . $cadenaCodigosBarra . '\')" class="btn btn-outline-success" type="button">Copiar códigos de barra</button></br>';
+    //echo '<pre><strong>Codigos de Barra<br>'.$cadenaCodigosBarra.'<br></strong></pre>';
     $FinCarga = new DateTime("now");
     $IntervalCarga = $InicioCarga->diff($FinCarga);
     echo'Tiempo de carga: '.$IntervalCarga->format("%Y-%M-%D %H:%I:%S");
@@ -171,6 +172,28 @@
 <?php
   }
 ?>  
+
+<script>
+  function copiar_codigo_barras(text) {
+       // Crea un campo de texto "oculto"
+        var aux = document.createElement("input");
+
+        // Asigna el contenido del elemento especificado al valor del campo
+        aux.setAttribute("value", text);
+
+        // Añade el campo a la página
+        document.body.appendChild(aux);
+
+        // Selecciona el contenido del campo
+        aux.select();
+
+        // Copia el texto seleccionado
+        document.execCommand("copy");
+
+        // Elimina el campo de la página
+        document.body.removeChild(aux);
+    }
+</script>
 @endsection
 
 <?php
@@ -238,7 +261,7 @@
       $CodigoBarra = $row["CodigoBarra"];
 
       if($conteo==15){
-        $cadenaCodigosBarra = $cadenaCodigosBarra.$CodigoBarra.",<br>";
+        $cadenaCodigosBarra = $cadenaCodigosBarra.$CodigoBarra.",";
         $conteo = 1;
       }
       else{        
