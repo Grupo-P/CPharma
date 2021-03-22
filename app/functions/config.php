@@ -72,10 +72,10 @@ define ("userDBm" , "sa");
 define ("passDBm" , "soporte123");
 define ("nameDBm" , "SMART");
 /**********************************************************************************/
-/********************* CONEXION SERVER DESARROLLO DE SERGIO **********************/
-define ("serverDBs" , "SERGIO-PC");
-define ("userDBs" , "sa");
-define ("passDBs" , "soporte123");
+/********************* CONEXION SERVER DESARROLLO DE NISAUL **********************/
+define ("serverDBs" , "DESKTOPBPCSVJK");
+define ("userDBs" , "prog");
+define ("passDBs" , "");
 define ("nameDBs" , "cpharmaftn");
 /**********************************************************************************/
 /********************* CONEXION SERVER DESARROLLO DE SERGIO ARG **********************/

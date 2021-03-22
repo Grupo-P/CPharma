@@ -130,6 +130,10 @@
                 <th scope="col">32</th>
                 <td scope="col">Seguimiento de Tienda</td>         
             </tr>
+            <tr>
+                <th scope="col">33</th>
+                <td scope="col">Devoluciones a clientes</td>       
+            </tr>
         </tbody>
     </table>
 

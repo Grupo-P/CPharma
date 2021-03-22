@@ -1405,6 +1405,9 @@
 			case 99:
 				$nombre = 'Registro de Fallas';
 			break;
+			case 33:
+				$nombre = 'Devoluciones a clientes';
+			break;
 			default:
 				$nombre = 'Reporte desconocido';
 			break;
