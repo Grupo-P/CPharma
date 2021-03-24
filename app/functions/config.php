@@ -73,9 +73,9 @@ define ("passDBm" , "soporte123");
 define ("nameDBm" , "SMART");
 /**********************************************************************************/
 /********************* CONEXION SERVER DESARROLLO DE NISAUL **********************/
-define ("serverDBs" , "DESKTOPBPCSVJK");
-define ("userDBs" , "prog");
-define ("passDBs" , "");
+define ("serverDBs" , "DESKTOP-BPCSVJK");
+define ("userDBs" , "sa");
+define ("passDBs" , "123abc");
 define ("nameDBs" , "cpharmaftn");
 /**********************************************************************************/
 /********************* CONEXION SERVER DESARROLLO DE SERGIO ARG **********************/

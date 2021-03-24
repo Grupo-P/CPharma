@@ -1408,6 +1408,9 @@
 			case 33:
 				$nombre = 'Devoluciones a clientes';
 			break;
+			case 34:
+				$nombre = 'Artículos estancados en tienda';
+			break;
 			default:
 				$nombre = 'Reporte desconocido';
 			break;

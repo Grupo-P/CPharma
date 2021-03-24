@@ -73,13 +73,26 @@
     $InicioCarga = new DateTime("now");
 
     R33_Devoluciones_Clientes($_GET['SEDE'],$_GET['fechaInicio'],$_GET['fechaFin']);
-    //FG_Guardar_Auditoria('CONSULTAR','REPORTE','Productos en falla');
+    FG_Guardar_Auditoria('CONSULTAR','REPORTE','Devoluciones de clientes');
 
     $FinCarga = new DateTime("now");
     $IntervalCarga = $InicioCarga->diff($FinCarga);
     echo'Tiempo de carga: '.$IntervalCarga->format("%Y-%M-%D %H:%I:%S");
-	} 
-	else{
+	}
+
+  if (isset($_GET['numeroDevolucion'])) {
+
+    $InicioCarga = new DateTime("now");
+
+    R33_Devoluciones_Clientes_Detalles($_GET['SEDE'],$_GET['numeroDevolucion']);
+    FG_Guardar_Auditoria('CONSULTAR','REPORTE','Devoluciones de clientes');
+
+    $FinCarga = new DateTime("now");
+    $IntervalCarga = $InicioCarga->diff($FinCarga);
+    echo'Tiempo de carga: '.$IntervalCarga->format("%Y-%M-%D %H:%I:%S");
+  } 
+
+	if (!isset($_GET['fechaInicio']) && !isset($_GET['numeroDevolucion'])){
 		echo '
 		<form autocomplete="off" action="" target="_blank">
         <table style="width:100%;">
@@ -176,37 +189,6 @@
     $totalDs = 0;
 
     while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
-      /*$IdArticulo = $row["InvArticuloId"];
-      $UnidadesVendidas = intval($row["TotalUnidadesVendidas"]);
-      $TotalVenta = $row["TotalVenta"];
-
-      $sql1 = R5Q_Detalle_Articulo($IdArticulo);
-      $result1 = sqlsrv_query($conn,$sql1);
-      $row1 = sqlsrv_fetch_array($result1,SQLSRV_FETCH_ASSOC);
-
-      $CodigoArticulo = $row1["CodigoInterno"];
-      $CodigoBarra = $row1["CodigoBarra"];
-      $Descripcion = FG_Limpiar_Texto($row1["Descripcion"]);
-      $Existencia = $row1["Existencia"];
-      $Tipo = FG_Tipo_Producto($row1["Tipo"]);
-      $UltimaVenta = $row1["UltimaVenta"]; 
-      $UltimoProveedorId =  $row1["UltimoProveedorID"];
-      $UltimoProveedor =  FG_Limpiar_Texto($row1["UltimoProveedorNombre"]);
-      $DiasEnFalla = $row1["TiempoSinVenta"];
-      $Dolarizado = $row1["Dolarizado"];
-      $IsIVA = $row1["Impuesto"];
-      $UltimoLote = $row1["UltimoLote"];
-      $UltimaCompra = $row1["UltimaCompra"];
-
-      $Dolarizado = FG_Producto_Dolarizado($Dolarizado);
-      $Gravado = FG_Producto_Gravado($IsIVA);
-
-      $sqlCPharma = SQL_Etiqueta_Articulo($IdArticulo);
-      $ResultCPharma = mysqli_query($connCPharma,$sqlCPharma);
-      $RowCPharma = mysqli_fetch_assoc($ResultCPharma);
-      $clasificacion = $RowCPharma['clasificacion'];
-      $clasificacion = ($clasificacion!="")?$clasificacion:"NO CLASIFICADO";*/
-
       $fecha_factura = $row["fecha_factura"];
       $hora_factura = $row["hora_factura"];
       $nombre_cliente = $row["nombre_cliente"];
@@ -226,6 +208,14 @@
 
       $monto_bs = number_format($row["monto_bs"], 2, ',', '.');
       $totalBs = $totalBs + $row['monto_bs'];
+
+      $query_cantidad_causas = sqlsrv_query($conn, "SELECT COUNT(1) AS quantity FROM VenDevolucionDetalle WHERE VenDevolucionId = (SELECT Id FROM VenDevolucion WHERE ConsecutivoDevolucionSistema = $numero_devolucion) GROUP BY VenCausaOperacionId");
+
+      $cantidad_causas = 0;
+
+      while ($row_cantidad_causas = sqlsrv_fetch_array($query_cantidad_causas, SQLSRV_FETCH_ASSOC)) {
+        $cantidad_causas = $cantidad_causas + 1;
+      }
 
       $TasaMercado = 
         DB::table('dolars')
@@ -261,75 +251,219 @@
       echo '<td align="center">'.$caja_origen.'</td>';
       echo '<td align="center">'.$fecha_devolucion.'</td>';
       echo '<td align="center">'.$hora_devolucion.'</td>';
-      echo '<td align="center">'.$numero_devolucion.'</td>';
+      echo '<td align="center" class="CP-barrido">
+          <a href="/reporte33?SEDE='.$_GET['SEDE'].'&numeroDevolucion='.$numero_devolucion.'" style="text-decoration: none; color: black;" target="_blank">'.$numero_devolucion.'</a>
+        </td>';
       echo '<td align="center">'.$dias.'</td>';
       echo '<td align="center">'.$caja.'</td>';
-      echo '<td align="center">'.$causa.'</td>';
+      if ($cantidad_causas == 1) {
+        echo '<td align="center">'.$causa.'</td>';
+      } else {
+        echo '<td align="center">-</td>';
+      }
       echo '<td align="center">'.$unidades.'</td>';
       echo '<td align="center">'.$sku.'</td>';
-      echo '<td align="center">'.$monto_bs. ' ' . SigVe . '</td>';
-      echo '<td align="center">'.$TasaMercado. ' ' . SigVe . '</td>';
-      echo '<td align="center">'.SigDolar.$montoDolares.'</td>';
-
-      /*echo
-      '<td align="center" class="CP-barrido">
-      <a href="reporte12?fechaInicio='.$FInicial.'&fechaFin='.$FFinalImp.'&SEDE='.$SedeConnection.'&Descrip='.$Descripcion.'&Id='.$IdArticulo.'" style="text-decoration: none; color: black;" target="_blank">'
-        .intval($UnidadesVendidas).
-      '</a>
-      </td>';
-      echo '<td align="center">'.number_format($TotalVenta,2,"," ,"." ).'</td>';
-
-      if(($UltimaVenta)){
-        echo '<td align="center">'.$UltimaVenta->format('d-m-Y').'</td>';
-      }
-      else{
-        echo '<td align="center"> - </td>';
-      }
-
-      echo '<td align="center">'.intval($DiasEnFalla).'</td>';
-
-      if(!is_null($UltimoLote)){
-        echo '<td align="center">'.$UltimoLote->format('d-m-Y').'</td>';
-      }
-      else{
-        echo '<td align="center"> - </td>';
-      }
-
-      if(!is_null($UltimaCompra)){
-        echo '<td align="center" class="bg-warning">'.$UltimaCompra->format('d-m-Y').'</td>';
-      }
-      else{
-        echo '<td align="center" class="bg-warning"> - </td>';
-      }
-
-      echo 
-      '<td align="left" class="CP-barrido">
-      <a href="/reporte7?Nombre='.$UltimoProveedor.'&Id='.$UltimoProveedorId.'&SEDE='.$SedeConnection.'" target="_blank" style="text-decoration: none; color: black;">'
-        .$UltimoProveedor.
-      '</a>
-      </td>';
-      echo '</tr>';*/
+      echo '<td align="center">'.$monto_bs.'</td>';
+      echo '<td align="center">'.$TasaMercado.'</td>';
+      echo '<td align="center">'.$montoDolares.'</td>';
       $contador++;
     }
 
     $totalBs = number_format($totalBs, 2, ',', '.');
     $totalDs = number_format($totalDs, 2, ',', '.');
 
+    echo '
+      </tbody>
+    </table>';
+
+    echo '<table class="table table-striped table-bordered col-12">';
+    echo '<thead>';
+
+    echo '<td align="center"><strong>Totales</strong></td>';
+    echo '<td align="center"><strong>Unidades: '.$totalUnidades.'</strong></td>';
+    echo '<td align="center"><strong>SKU: '.$totalSku.'</strong></td>';
+    echo '<td align="center"><strong>Monto en Bs: '.$totalBs.'</strong></td>';
+    echo '<td align="center"><strong>Monto en $: '.$totalDs.'</strong></td>';
+
+    echo '</table>';
+    echo '</thead>';
+
+    sqlsrv_close($conn);
+  }
+
+  /*********************************************************************************/ 
+  /*
+    TITULO: R33_Devoluciones_Clientes_Detalles
+    FUNCION: Arma una lista de los detalles de las devoluciones de clientes
+    RETORNO: No aplica
+    DESAROLLADO POR: NISAUL DELGADO
+  */
+  function R33_Devoluciones_Clientes_Detalles($SedeConnection,$numeroDevolucion){
+    $conn = FG_Conectar_Smartpharma($SedeConnection);
+    $connCPharma = FG_Conectar_CPharma();
+
+    $sql6 = R33Q_Devoluciones_Clientes_Id($numeroDevolucion);
+    $result6 = sqlsrv_query($conn,$sql6);
+    $row6 = sqlsrv_fetch_array($result6);
+
+    $sql5 = R33Q_Devoluciones_Clientes_Detalles($numeroDevolucion);
+    $result = sqlsrv_query($conn,$sql5);
+
+    echo '
+    <div class="input-group md-form form-sm form-1 pl-0 CP-stickyBar">
+      <div class="input-group-prepend">
+        <span class="input-group-text purple lighten-3" id="basic-text1">
+          <i class="fas fa-search text-white"
+            aria-hidden="true"></i>
+        </span>
+      </div>
+      <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterAllTable()" autofocus="autofocus">
+    </div>
+    <br/>';
+
+    echo'
+    <table class="table table-striped table-bordered col-12">
+      <thead class="thead-dark">
+        <tr>
+          <th scope="col" class="CP-sticky">Fecha Factura</th>
+          <th scope="col" class="CP-sticky">Hora Factura</th>
+          <th scope="col" class="CP-sticky">Nombre Cliente</th>
+          <th scope="col" class="CP-sticky">Nro Factura</th>
+          <th scope="col" class="CP-sticky">Caja Origen</th>
+          <th scope="col" class="CP-sticky">Fecha Devolucion</td>
+          <th scope="col" class="CP-sticky">Hora Devolucion</td>
+          <th scope="col" class="CP-sticky">Numero Devolucion</td>
+          <th scope="col" class="CP-sticky">Dias</td>
+          <th scope="col" class="CP-sticky">Caja</th>
+          <th scope="col" class="CP-sticky">Unidades</th>
+          <th scope="col" class="CP-sticky">SKU</th>
+          <th scope="col" class="CP-sticky">Monto Bs</th>
+          <th scope="col" class="CP-sticky bg-warning">Tasa</th>
+          <th scope="col" class="CP-sticky">Monto $</th>              
+        </tr>
+      </thead>
+      <tbody>';
+
+    $TasaMercado = 
+      DB::table('dolars')
+      ->select('tasa')
+      ->whereDate('fecha', '<=', $row6['fecha_devolucion_sin_formato'])
+      ->orderBy('fecha','desc')
+      ->take(1)->get();
+
+    if( (!empty($TasaMercado[0])) ) {
+      $TM = $TasaMercado[0]->tasa;
+      $TasaMercadoNumber = ($TasaMercado[0]->tasa);
+      $TasaMercado = number_format($TasaMercado[0]->tasa, 2, ",", ".");
+    }
+    else {
+      $TM = 0.00;
+    }
+
+    $montoDolares = floatval($row6["monto_bs"]) / floatval($TasaMercadoNumber);
+    $montoDolares = number_format($montoDolares,2,"," ,"." );
+    $monto_bs = number_format($row6['monto_bs'],2,"," ,"." );
+
+    $unidades = intval($row6['unidades']);
+
     echo '<tr>';
-    echo '<td align="center" colspan="12"><strong>Totales</strong></td>';
-    echo '<td align="center"><strong>'.$totalUnidades.'</strong></td>';
-    echo '<td align="center"><strong>'.$totalSku.'</strong></td>';
-    echo '<td align="center"><strong>'.$totalBs.' '.SigVe.'</strong></td>';
-    echo '<td align="center"><strong></strong></td>';
-    echo '<td align="center"><strong>'.SigDolar.$totalDs.'</strong></td>';
-    
-    echo '<tr>';
+    echo '<td align="center">'.$row6['fecha_factura'].'</td>';
+    echo '<td align="center">'.$row6['hora_factura'].'</td>';
+    echo '<td align="center">'.$row6['nombre_cliente'].'</td>';
+    echo '<td align="center">'.$row6['nro_factura'].'</td>';
+    echo '<td align="center">'.$row6['caja_origen'].'</td>';
+    echo '<td align="center">'.$row6['fecha_devolucion'].'</td>';
+    echo '<td align="center">'.$row6['hora_devolucion'].'</td>';
+    echo '<td align="center" class="CP-barrido">
+        <a href="/reporte33?SEDE='.$_GET['SEDE'].'&numeroDevolucion='.$row6['numero_devolucion'].'" style="text-decoration: none; color: black;" target="_blank">'.$row6['numero_devolucion'].'</a>
+      </td>';
+    echo '<td align="center">'.$row6['dias'].'</td>';
+    echo '<td align="center">'.$row6['caja'].'</td>';
+    echo '<td align="center">'.$unidades.'</td>';
+    echo '<td align="center">'.$row6['sku'].'</td>';
+    echo '<td align="center">'.$monto_bs.'</td>';
+    echo '<td align="center">'.$TasaMercado.'</td>';
+    echo '<td align="center">'.$montoDolares.'</td>';
+
+    echo   
+      '</tbody>
+    </table>
+    ';
+
+    echo'
+    <table class="table table-striped table-bordered col-12 sortable" id="myTable">
+      <thead class="thead-dark">
+        <tr>  
+          <th scope="col" class="CP-sticky">Codigo Articulo</th>
+          <th scope="col" class="CP-sticky">Codigo Barra</th>
+          <th scope="col" class="CP-sticky">Descripcion</th>
+          <th scope="col" class="CP-sticky">Causa</th>
+          <th scope="col" class="CP-sticky">Precio con IVA</th>
+          <th scope="col" class="CP-sticky">Cantidad</th>
+          <th scope="col" class="CP-sticky">Total Bs.</td>
+          <th scope="col" class="CP-sticky">Precio en $</td>
+          <th scope="col" class="CP-sticky">Total en $</td>            
+        </tr>
+      </thead>
+      <tbody>
+    ';
+    $contador = 1;
+
+    $totalSku = 0;
+    $totalBs = 0;
+    $totalUnidades = 0;
+    $totalDs = 0;
+
+    while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
+      $TasaMercado = 
+        DB::table('dolars')
+        ->select('tasa')
+        ->whereDate('fecha', '<=', $row['fecha_devolucion'])
+        ->orderBy('fecha','desc')
+        ->take(1)->get();
+
+      if( (!empty($TasaMercado[0])) ) {
+        $TM = $TasaMercado[0]->tasa;
+        $TasaMercadoNumber = ($TasaMercado[0]->tasa);
+        $TasaMercado = ($TasaMercado[0]->tasa);
+      }
+      else {
+        $TM = 0.00;
+      }
+
+      $codigo_articulo = $row['codigo_articulo'];
+      $codigo_barra = $row['codigo_barra'];
+      $descripcion = FG_Limpiar_Texto($row['descripcion']);
+      $causa = $row['causa'];
+      $precio_iva = number_format($row['precio_iva'], 2, ',', '.');
+      $cantidad = intval($row['cantidad']);
+      $total_bs = number_format($row['precio_iva'] * $cantidad, 2, ',', '.');
+      $precio_ds = number_format($row['precio_iva'] / $TasaMercado, 2, ',', '.');
+      $total_ds = number_format(($row['precio_iva'] * $cantidad) / $TasaMercado, 2, ',', '.');
+      $id_articulo = $row['id_articulo'];
+
+      echo '<tr>';
+      echo '<td align="center">'.$codigo_articulo.'</td>';
+      echo '<td align="center">'.$codigo_barra.'</td>';
+      echo '<td align="center" class="CP-barrido">
+          <a href="/reporte2?SEDE='.$_GET['SEDE'].'&Id='.$id_articulo.'" style="text-decoration: none; color: black;" target="_blank">'.$descripcion.'</a>
+        </td>';
+      echo '<td align="center">'.$causa.'</td>';
+      echo '<td align="center">'.$precio_iva.'</td>';
+      echo '<td align="center">'.$cantidad.'</td>';
+      echo '<td align="center">'.$total_bs.'</td>';
+      echo '<td align="center">'.$precio_ds.'</td>';
+      echo '<td align="center">'.$total_ds.'</td>';
+      echo '</tr>';
+    }
 
     echo '
       </tbody>
     </table>';
+
     sqlsrv_close($conn);
   }
+
   /**********************************************************************************/
   /*
     TITULO: R33Q_Devoluciones_Clientes
@@ -339,186 +473,81 @@
   */
   function R33Q_Devoluciones_Clientes($FInicial,$FFinal) {
     $sql = "
-        SELECT
-          (SELECT FORMAT(VenFactura.FechaDocumento, 'dd/MM/yyyy') FROM VenFactura WHERE VenFactura.Id = VenDevolucion.VenFacturaId) AS fecha_factura,
-          (SELECT FORMAT(VenFactura.FechaDocumento, 'hh:mm tt') FROM VenFactura WHERE VenFactura.Id = VenDevolucion.VenFacturaId) AS hora_factura,
-          (SELECT CONCAT(Nombre, ' ', Apellido) FROM GenPersona WHERE id = ((SELECT GenPersonaId FROM VenCliente WHERE id = (SELECT VenFactura.VenClienteId FROM VenFactura WHERE VenFactura.Id = VenDevolucion.VenFacturaId)))) AS nombre_cliente,
-          (SELECT VenFactura.NumeroFactura FROM VenFactura WHERE VenFactura.Id = VenDevolucion.VenFacturaId) AS nro_factura,
-          (SELECT CodigoCaja FROM VenCaja where id = (SELECT VenCajaId FROM VenFactura WHERE VenFactura.Id = VenDevolucion.VenFacturaId)) AS caja_origen,
-          FORMAT(VenDevolucion.FechaDocumento, 'dd/MM/yyyy') AS fecha_devolucion,
-          VenDevolucion.FechaDocumento AS fecha_devolucion_sin_formato,
-          FORMAT(VenDevolucion.FechaDocumento, 'hh:mm tt') AS hora_devolucion,
-          VenDevolucion.ConsecutivoDevolucionSistema AS numero_devolucion,
-          DATEDIFF(DAY, (SELECT VenFactura.FechaDocumento FROM VenFactura WHERE VenFactura.Id = VenDevolucion.VenFacturaId), VenDevolucion.FechaDocumento) AS dias,
-          (SELECT VenCaja.CodigoCaja FROM VenCaja where id = VenDevolucion.VenCajaId) AS caja,
-          (SELECT VenCausaOperacionDevolucion.DescripcionOperacion FROM VenCausaOperacionDevolucion WHERE id = (SELECT TOP 1 VenCausaOperacionId FROM VenDevolucionDetalle WHERE VenDevolucionDetalle.VenDevolucionId = VenDevolucion.Id)) AS causa,
-          (SELECT SUM(VenDevolucionDetalle.Cantidad) FROM VenDevolucionDetalle WHERE VenDevolucionDetalle.VenDevolucionId = VenDevolucion.Id) AS unidades,
-          (SELECT COUNT(VenDevolucionDetalle.Cantidad) FROM VenDevolucionDetalle WHERE VenDevolucionDetalle.VenDevolucionId = VenDevolucion.Id) AS sku,
-          VenDevolucion.M_MontoTotalDevolucion AS monto_bs
-        FROM VenDevolucion
-        WHERE VenDevolucion.FechaDocumento BETWEEN '$FInicial' AND '$FFinal'
-        ORDER BY numero_devolucion ASC
+      SELECT
+        (SELECT FORMAT(VenFactura.FechaDocumento, 'dd/MM/yyyy') FROM VenFactura WHERE VenFactura.Id = VenDevolucion.VenFacturaId) AS fecha_factura,
+        (SELECT FORMAT(VenFactura.FechaDocumento, 'H:mm') FROM VenFactura WHERE VenFactura.Id = VenDevolucion.VenFacturaId) AS hora_factura,
+        (SELECT CONCAT(Nombre, ' ', Apellido) FROM GenPersona WHERE id = ((SELECT GenPersonaId FROM VenCliente WHERE id = (SELECT VenFactura.VenClienteId FROM VenFactura WHERE VenFactura.Id = VenDevolucion.VenFacturaId)))) AS nombre_cliente,
+        (SELECT VenFactura.NumeroFactura FROM VenFactura WHERE VenFactura.Id = VenDevolucion.VenFacturaId) AS nro_factura,
+        (SELECT CodigoCaja FROM VenCaja where id = (SELECT VenCajaId FROM VenFactura WHERE VenFactura.Id = VenDevolucion.VenFacturaId)) AS caja_origen,
+        FORMAT(VenDevolucion.FechaDocumento, 'dd/MM/yyyy') AS fecha_devolucion,
+        VenDevolucion.FechaDocumento AS fecha_devolucion_sin_formato,
+        FORMAT(VenDevolucion.FechaDocumento, 'H:mm') AS hora_devolucion,
+        VenDevolucion.ConsecutivoDevolucionSistema AS numero_devolucion,
+        DATEDIFF(DAY, (SELECT VenFactura.FechaDocumento FROM VenFactura WHERE VenFactura.Id = VenDevolucion.VenFacturaId), VenDevolucion.FechaDocumento) AS dias,
+        (SELECT VenCaja.CodigoCaja FROM VenCaja where id = VenDevolucion.VenCajaId) AS caja,
+        (SELECT VenCausaOperacionDevolucion.DescripcionOperacion FROM VenCausaOperacionDevolucion WHERE id = (SELECT TOP 1 VenCausaOperacionId FROM VenDevolucionDetalle WHERE VenDevolucionDetalle.VenDevolucionId = VenDevolucion.Id)) AS causa,
+        (SELECT SUM(VenDevolucionDetalle.Cantidad) FROM VenDevolucionDetalle WHERE VenDevolucionDetalle.VenDevolucionId = VenDevolucion.Id) AS unidades,
+        (SELECT COUNT(VenDevolucionDetalle.Cantidad) FROM VenDevolucionDetalle WHERE VenDevolucionDetalle.VenDevolucionId = VenDevolucion.Id) AS sku,
+        VenDevolucion.M_MontoTotalDevolucion AS monto_bs
+      FROM VenDevolucion
+      WHERE VenDevolucion.FechaDocumento BETWEEN '$FInicial' AND '$FFinal' AND VenDevolucion.EstadoDevolucion = 2
+      ORDER BY numero_devolucion ASC
     ";
     return $sql;
   }
+
   /**********************************************************************************/
   /*
-    TITULO: R5Q_Detalle_Articulo   
-    FUNCION: Query que genera el detalle del articulo solicitado
-    RETORNO: Detalle del articulo
-    DESAROLLADO POR: SERGIO COVA
+    TITULO: R33Q_Devoluciones_Clientes_Id
+    FUNCION: Ubica una devolucion buscando por numero de devolucion
+    RETORNO: Lista de devoluciones
+    DESAROLLADO POR: NISAUL DELGADO
   */
-  function R5Q_Detalle_Articulo($IdArticulo) {
-    $sql = " 
+  function R33Q_Devoluciones_Clientes_Id($numero_devolucion) {
+    $sql = "
       SELECT
-    --Id Articulo
-      InvArticulo.Id AS IdArticulo,
-    --Codigo Interno
-      InvArticulo.CodigoArticulo AS CodigoInterno,
-    --Codigo de Barra
-      (SELECT CodigoBarra
-      FROM InvCodigoBarra 
-      WHERE InvCodigoBarra.InvArticuloId = InvArticulo.Id
-      AND InvCodigoBarra.EsPrincipal = 1) AS CodigoBarra,
-    --Descripcion
-      InvArticulo.Descripcion,
-    --Impuesto (1 SI aplica impuesto, 0 NO aplica impuesto)
-      (ISNULL(InvArticulo.FinConceptoImptoIdCompra,CAST(0 AS INT))) AS Impuesto,
-    --Utilidad (Utilidad del articulo, Utilidad es 1.00 NO considerar la utilidad para el calculo de precio)
-      ROUND(CAST(1-((ISNULL(ROUND(CAST((SELECT VenCondicionVenta.PorcentajeUtilidad
-          FROM VenCondicionVenta 
-          WHERE VenCondicionVenta.Id = (
-            SELECT VenCondicionVenta_VenCondicionVentaArticulo.Id
-            FROM VenCondicionVenta_VenCondicionVentaArticulo 
-            WHERE VenCondicionVenta_VenCondicionVentaArticulo.InvArticuloId = InvArticulo.Id)) AS DECIMAL(38,4)),2,0),CAST(0 AS INT)))/100)AS DECIMAL(38,2)),2,0) AS Utilidad,
-    --Precio Troquel Almacen 1
-      (ROUND(CAST((SELECT TOP 1
-      InvLote.M_PrecioTroquelado
-      FROM InvLoteAlmacen
-      INNER JOIN InvLote ON InvLote.Id = InvLoteAlmacen.InvLoteId
-      WHERE(InvLoteAlmacen.InvAlmacenId = '1')
-      AND (InvLoteAlmacen.InvArticuloId = InvArticulo.Id)
-      AND (InvLoteAlmacen.Existencia>0)
-      ORDER BY invlote.M_PrecioTroquelado DESC)AS DECIMAL(38,2)),2,0)) AS TroquelAlmacen1,
-    --Precio Troquel Almacen 2
-      (ROUND(CAST((SELECT TOP 1
-      InvLote.M_PrecioTroquelado
-      FROM InvLoteAlmacen
-      INNER JOIN InvLote ON InvLote.Id = InvLoteAlmacen.InvLoteId
-      WHERE(InvLoteAlmacen.InvAlmacenId = '2')
-      AND (InvLoteAlmacen.InvArticuloId = InvArticulo.Id)
-      AND (InvLoteAlmacen.Existencia>0)
-      ORDER BY invlote.M_PrecioTroquelado DESC)AS DECIMAL(38,2)),2,0)) AS TroquelAlmacen2,
-    --Precio Compra Bruto
-      (ROUND(CAST((SELECT TOP 1
-      InvLote.M_PrecioCompraBruto
-      FROM InvLoteAlmacen
-      INNER JOIN InvLote ON InvLote.Id = InvLoteAlmacen.InvLoteId
-      WHERE (InvLoteAlmacen.InvArticuloId = InvArticulo.Id)
-      AND (InvLoteAlmacen.Existencia>0)
-      ORDER BY invlote.M_PrecioCompraBruto DESC)AS DECIMAL(38,2)),2,0)) AS PrecioCompraBruto,
-    --Existencia (Segun el almacen del filtro)
-      (ROUND(CAST((SELECT SUM (InvLoteAlmacen.Existencia) As Existencia
-                  FROM InvLoteAlmacen
-                  WHERE(InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
-                  AND (InvLoteAlmacen.InvArticuloId = InvArticulo.Id)) AS DECIMAL(38,0)),2,0))  AS Existencia,
-    --Dolarizado (0 NO es dolarizado, Id Articulo SI es dolarizado)
-      (ISNULL((SELECT
-      InvArticuloAtributo.InvArticuloId
-      FROM InvArticuloAtributo 
-      WHERE InvArticuloAtributo.InvAtributoId = 
-        (SELECT InvAtributo.Id
-        FROM InvAtributo 
-        WHERE 
-        InvAtributo.Descripcion = 'Dolarizados'
-        OR  InvAtributo.Descripcion = 'Giordany'
-        OR  InvAtributo.Descripcion = 'giordany') 
-      AND InvArticuloAtributo.InvArticuloId = InvArticulo.Id),CAST(0 AS INT))) AS Dolarizado,
-    --Tipo Producto (0 Miscelaneos, Id Articulo Medicinas)
-      (ISNULL((SELECT
-      InvArticuloAtributo.InvArticuloId 
-      FROM InvArticuloAtributo 
-      WHERE InvArticuloAtributo.InvAtributoId = 
-        (SELECT InvAtributo.Id
-        FROM InvAtributo 
-        WHERE 
-        InvAtributo.Descripcion = 'Medicina') 
-      AND InvArticuloAtributo.InvArticuloId = InvArticulo.Id),CAST(0 AS INT))) AS Tipo,
-    --Articulo Estrella (0 NO es Articulo Estrella , Id SI es Articulo Estrella)
-      (ISNULL((SELECT
-      InvArticuloAtributo.InvArticuloId 
-      FROM InvArticuloAtributo 
-      WHERE InvArticuloAtributo.InvAtributoId = 
-        (SELECT InvAtributo.Id
-        FROM InvAtributo 
-        WHERE 
-        InvAtributo.Descripcion = 'Articulo Estrella') 
-      AND InvArticuloAtributo.InvArticuloId = InvArticulo.Id),CAST(0 AS INT))) AS ArticuloEstrella,
-    -- Ultima Venta (Fecha)
-      (SELECT TOP 1
-      CONVERT(DATE,VenFactura.FechaDocumento)
-      FROM VenFactura
-      INNER JOIN VenFacturaDetalle ON VenFacturaDetalle.VenFacturaId = VenFactura.Id
-      WHERE VenFacturaDetalle.InvArticuloId = InvArticulo.Id
-      ORDER BY FechaDocumento DESC) AS UltimaVenta,
-    --Tiempo sin Venta (En dias)
-      (SELECT TOP 1
-      DATEDIFF(DAY,CONVERT(DATE,VenFactura.FechaDocumento),GETDATE())
-      FROM VenFactura
-      INNER JOIN VenFacturaDetalle ON VenFacturaDetalle.VenFacturaId = VenFactura.Id
-      WHERE VenFacturaDetalle.InvArticuloId = InvArticulo.Id
-      ORDER BY FechaDocumento DESC) AS TiempoSinVenta,
-    --Ultimo Lote (Fecha)
-      (SELECT TOP 1
-      CONVERT(DATE,InvLote.FechaEntrada) AS UltimoLote
-      FROM InvLote
-      WHERE InvLote.InvArticuloId  = InvArticulo.Id
-      ORDER BY UltimoLote DESC) AS UltimoLote,
-    --Tiempo Tienda (En dias)
-      (SELECT TOP 1 
-      DATEDIFF(DAY,CONVERT(DATE,InvLote.FechaEntrada),GETDATE())
-      FROM InvLoteAlmacen 
-      INNER JOIN invlote on invlote.id = InvLoteAlmacen.InvLoteId
-      WHERE InvLotealmacen.InvArticuloId = InvArticulo.Id
-      ORDER BY InvLote.Auditoria_FechaCreacion DESC) AS TiempoTienda,
-    -- Ultimo Proveedor (Id Proveedor)
-      (SELECT TOP 1
-      ComProveedor.Id
-      FROM ComFacturaDetalle
-      INNER JOIN ComFactura ON ComFactura.Id = ComFacturaDetalle.ComFacturaId
-      INNER JOIN ComProveedor ON ComProveedor.Id = ComFactura.ComProveedorId
-      INNER JOIN GenPersona ON GenPersona.Id = ComProveedor.GenPersonaId
-      WHERE ComFacturaDetalle.InvArticuloId = InvArticulo.Id
-      ORDER BY ComFactura.FechaDocumento DESC) AS  UltimoProveedorID,
-    -- Ultimo Proveedor (Nombre Proveedor)
-      (SELECT TOP 1
-      GenPersona.Nombre
-      FROM ComFacturaDetalle
-      INNER JOIN ComFactura ON ComFactura.Id = ComFacturaDetalle.ComFacturaId
-      INNER JOIN ComProveedor ON ComProveedor.Id = ComFactura.ComProveedorId
-      INNER JOIN GenPersona ON GenPersona.Id = ComProveedor.GenPersonaId
-      WHERE ComFacturaDetalle.InvArticuloId = InvArticulo.Id
-      ORDER BY ComFactura.FechaDocumento DESC) AS  UltimoProveedorNombre,
-    -- Ultima Compra (Fecha de ultima compra)
-      (SELECT TOP 1
-      CONVERT(DATE,ComFactura.FechaRegistro)
-      FROM ComFacturaDetalle
-      INNER JOIN ComFactura ON ComFactura.Id = ComFacturaDetalle.ComFacturaId
-      INNER JOIN ComProveedor ON ComProveedor.Id = ComFactura.ComProveedorId
-      WHERE ComFacturaDetalle.InvArticuloId = InvArticulo.Id
-      ORDER BY ComFactura.FechaRegistro DESC) AS  UltimaCompra
-    --Tabla principal
-      FROM InvArticulo
-    --Joins
-      LEFT JOIN InvLoteAlmacen ON InvLoteAlmacen.InvArticuloId = InvArticulo.Id
-      LEFT JOIN InvArticuloAtributo ON InvArticuloAtributo.InvArticuloId = InvArticulo.Id
-      LEFT JOIN InvAtributo ON InvAtributo.Id = InvArticuloAtributo.InvAtributoId 
-    --Condicionales
-      WHERE InvArticulo.Id = '$IdArticulo'
-    --Agrupamientos
-      GROUP BY InvArticulo.Id, InvArticulo.CodigoArticulo, InvArticulo.Descripcion, InvArticulo.FinConceptoImptoIdCompra
-    --Ordanamiento
-      ORDER BY InvArticulo.Id ASC
+        (SELECT FORMAT(VenFactura.FechaDocumento, 'dd/MM/yyyy') FROM VenFactura WHERE VenFactura.Id = VenDevolucion.VenFacturaId) AS fecha_factura,
+        (SELECT FORMAT(VenFactura.FechaDocumento, 'H:mm') FROM VenFactura WHERE VenFactura.Id = VenDevolucion.VenFacturaId) AS hora_factura,
+        (SELECT CONCAT(Nombre, ' ', Apellido) FROM GenPersona WHERE id = ((SELECT GenPersonaId FROM VenCliente WHERE id = (SELECT VenFactura.VenClienteId FROM VenFactura WHERE VenFactura.Id = VenDevolucion.VenFacturaId)))) AS nombre_cliente,
+        (SELECT VenFactura.NumeroFactura FROM VenFactura WHERE VenFactura.Id = VenDevolucion.VenFacturaId) AS nro_factura,
+        (SELECT CodigoCaja FROM VenCaja where id = (SELECT VenCajaId FROM VenFactura WHERE VenFactura.Id = VenDevolucion.VenFacturaId)) AS caja_origen,
+        FORMAT(VenDevolucion.FechaDocumento, 'dd/MM/yyyy') AS fecha_devolucion,
+        VenDevolucion.FechaDocumento AS fecha_devolucion_sin_formato,
+        FORMAT(VenDevolucion.FechaDocumento, 'H:mm') AS hora_devolucion,
+        VenDevolucion.ConsecutivoDevolucionSistema AS numero_devolucion,
+        DATEDIFF(DAY, (SELECT VenFactura.FechaDocumento FROM VenFactura WHERE VenFactura.Id = VenDevolucion.VenFacturaId), VenDevolucion.FechaDocumento) AS dias,
+        (SELECT VenCaja.CodigoCaja FROM VenCaja where id = VenDevolucion.VenCajaId) AS caja,
+        (SELECT VenCausaOperacionDevolucion.DescripcionOperacion FROM VenCausaOperacionDevolucion WHERE id = (SELECT TOP 1 VenCausaOperacionId FROM VenDevolucionDetalle WHERE VenDevolucionDetalle.VenDevolucionId = VenDevolucion.Id)) AS causa,
+        (SELECT SUM(VenDevolucionDetalle.Cantidad) FROM VenDevolucionDetalle WHERE VenDevolucionDetalle.VenDevolucionId = VenDevolucion.Id) AS unidades,
+        (SELECT COUNT(VenDevolucionDetalle.Cantidad) FROM VenDevolucionDetalle WHERE VenDevolucionDetalle.VenDevolucionId = VenDevolucion.Id) AS sku,
+        VenDevolucion.M_MontoTotalDevolucion AS monto_bs
+      FROM VenDevolucion
+      WHERE VenDevolucion.ConsecutivoDevolucionSistema = '$numero_devolucion'
+      ORDER BY numero_devolucion ASC
+    ";
+    return $sql;
+  }
+
+  /*
+    TITULO: R33Q_Devoluciones_Clientes
+    FUNCION: Ubicar el lista de devoluciones
+    RETORNO: Lista de devoluciones
+    DESAROLLADO POR: NISAUL DELGADO
+  */
+  function R33Q_Devoluciones_Clientes_Detalles($numeroDevolucion) {
+    $sql = "
+      SELECT
+        (SELECT InvArticulo.Id FROM InvArticulo WHERE InvArticulo.Id = VenDevolucionDetalle.InvArticuloId) AS id_articulo,
+        (SELECT InvArticulo.CodigoArticulo FROM InvArticulo WHERE InvArticulo.Id = VenDevolucionDetalle.InvArticuloId) AS codigo_articulo,
+        (SELECT InvCodigoBarra.CodigoBarra FROM InvCodigoBarra WHERE InvCodigoBarra.InvArticuloId = VenDevolucionDetalle.InvArticuloId AND InvCodigoBarra.EsPrincipal = 1) AS codigo_barra,
+        (SELECT InvArticulo.DescripcionLarga FROM InvArticulo WHERE InvArticulo.Id = VenDevolucionDetalle.InvArticuloId) AS descripcion,
+        (SELECT VenCausaOperacionDevolucion.DescripcionOperacion FROM VenCausaOperacionDevolucion WHERE id = VenDevolucionDetalle.VenCausaOperacionId) AS causa,
+        VenDevolucionDetalle.PrecioBruto AS precio_iva,
+        VenDevolucionDetalle.Cantidad AS cantidad,
+        (SELECT VenDevolucion.FechaDocumento FROM VenDevolucion WHERE Id = VenDevolucionDetalle.VenDevolucionId) AS fecha_devolucion
+    FROM
+        VenDevolucionDetalle
+    WHERE VenDevolucionId = (SELECT Id FROM VenDevolucion WHERE VenDevolucion.ConsecutivoDevolucionSistema = '$numeroDevolucion')
     ";
     return $sql;
   }

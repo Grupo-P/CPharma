@@ -132,7 +132,9 @@
             </tr>
             <tr>
                 <th scope="col">33</th>
-                <td scope="col">Devoluciones a clientes</td>       
+                <td scope="col">Devoluciones a clientes</td> 
+                <th scope="col">34</th>
+                <td scope="col">Articulos estancados en tienda</td>      
             </tr>
         </tbody>
     </table>
