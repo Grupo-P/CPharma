@@ -129,6 +129,8 @@
       <br/>
     ';
 
+    echo'<h6 align="center">Periodo hasta el '.$fechaLote.'</h6>';
+
     echo '
       <table class="table table-striped table-bordered col-12 sortable" id="myTable">
         <thead class="thead-dark">
@@ -198,6 +200,8 @@
         if ($row2['ultima_venta']) {
           $dias_ultima_venta = date_diff(date_create($row2['ultima_venta']->format('Y-m-d')), date_create(''));
           $dias_ultima_venta = $dias_ultima_venta->format('%a');        
+        } else {
+          $dias_ultima_venta = '-';
         }
 
       	echo '<tr>';
@@ -239,27 +243,21 @@
   function R12_Q_Articulos_Estancados($fechaLote) {
     $sql = "
       SELECT
-  			DISTINCT (SELECT InvArticulo.Id FROM InvArticulo WHERE InvArticulo.Id = InvLoteAlmacen.InvArticuloId) AS id_producto,
-  			(SELECT InvArticulo.CodigoArticulo FROM InvArticulo WHERE InvArticulo.Id = InvLoteAlmacen.InvArticuloId) AS codigo_articulo,
-  			(SELECT InvCodigoBarra.CodigoBarra FROM InvCodigoBarra WHERE InvCodigoBarra.InvArticuloId = InvLoteAlmacen.InvArticuloId AND InvCodigoBarra.EsPrincipal = 1) AS codigo_barra,
-  			(SELECT InvArticulo.DescripcionLarga FROM InvArticulo WHERE InvArticulo.Id = InvLoteAlmacen.InvArticuloId) AS descripcion,
-  			(SELECT SUM(T.Existencia) FROM InvLoteAlmacen T WHERE T.InvAlmacenId IN (1, 2) AND T.InvArticuloId = InvLoteAlmacen.InvArticuloId) AS existencia,
-  			(SELECT TOP 1 T.Auditoria_FechaCreacion FROM InvLoteAlmacen T WHERE T.InvAlmacenId IN (1, 2) AND T.InvArticuloId = InvLoteAlmacen.InvArticuloId) AS lote_mas_antiguo,
-  			(SELECT TOP 1 (SELECT ComFactura.FechaRegistro FROM ComFactura WHERE ComFactura.Id = ComFacturaDetalle.ComFacturaId) FROM ComFacturaDetalle WHERE ComFacturaDetalle.InvArticuloId = InvLoteAlmacen.InvArticuloId) AS ultima_compra,
-  			(SELECT TOP 1 VenFactura.FechaDocumento FROM VenFactura WHERE VenFactura.Id = (SELECT TOP 1 VenFacturaDetalle.VenFacturaId FROM VenFacturaDetalle WHERE VenFacturaDetalle.InvArticuloId = InvLoteAlmacen.InvArticuloId)) AS ultima_venta,
-  			(SELECT TOP 1 ComProveedor.Id FROM ComFacturaDetalle INNER JOIN ComFactura ON ComFactura.Id = ComFacturaDetalle.ComFacturaId INNER JOIN ComProveedor ON ComProveedor.Id = ComFactura.ComProveedorId INNER JOIN GenPersona ON GenPersona.Id = ComProveedor.GenPersonaId WHERE ComFacturaDetalle.InvArticuloId = InvLoteAlmacen.InvArticuloId ORDER BY ComFactura.FechaDocumento DESC) AS  id_ultimo_proveedor,
-  			(SELECT TOP 1 GenPersona.Nombre FROM ComFacturaDetalle INNER JOIN ComFactura ON ComFactura.Id = ComFacturaDetalle.ComFacturaId INNER JOIN ComProveedor ON ComProveedor.Id = ComFactura.ComProveedorId INNER JOIN GenPersona ON GenPersona.Id = ComProveedor.GenPersonaId WHERE ComFacturaDetalle.InvArticuloId = InvLoteAlmacen.InvArticuloId ORDER BY ComFactura.FechaDocumento DESC) AS  nombre_ultimo_proveedor,
-        (SELECT TOP 1
-          ComProveedor.Id
-          FROM ComFacturaDetalle
-          INNER JOIN ComFactura ON ComFactura.Id = ComFacturaDetalle.ComFacturaId
-          INNER JOIN ComProveedor ON ComProveedor.Id = ComFactura.ComProveedorId
-          INNER JOIN GenPersona ON GenPersona.Id = ComProveedor.GenPersonaId
-          WHERE ComFacturaDetalle.InvArticuloId = InvLoteAlmacen.InvArticuloId
-          ORDER BY ComFactura.FechaDocumento DESC) AS  id_ultimo_proveedor
-  		FROM InvLoteAlmacen
-  		WHERE InvLoteAlmacen.Auditoria_FechaCreacion <= '$fechaLote' AND existencia > 0
-  		ORDER BY lote_mas_antiguo ASC
+        DISTINCT (SELECT InvArticulo.Id FROM InvArticulo WHERE InvArticulo.Id = InvLoteAlmacen.InvArticuloId) AS id_producto,
+        (SELECT InvArticulo.CodigoArticulo FROM InvArticulo WHERE InvArticulo.Id = InvLoteAlmacen.InvArticuloId) AS codigo_articulo,
+        (SELECT InvCodigoBarra.CodigoBarra FROM InvCodigoBarra WHERE InvCodigoBarra.InvArticuloId = InvLoteAlmacen.InvArticuloId AND InvCodigoBarra.EsPrincipal = 1) AS codigo_barra,
+        (SELECT InvArticulo.DescripcionLarga FROM InvArticulo WHERE InvArticulo.Id = InvLoteAlmacen.InvArticuloId) AS descripcion,
+        (SELECT SUM(T.Existencia) FROM InvLoteAlmacen T WHERE T.InvAlmacenId IN (1, 2) AND T.InvArticuloId = InvLoteAlmacen.InvArticuloId) AS existencia,
+        (SELECT TOP 1 T.Auditoria_FechaCreacion FROM InvLoteAlmacen T WHERE T.InvAlmacenId IN (1, 2) AND T.InvArticuloId = InvLoteAlmacen.InvArticuloId AND Existencia > 0) AS lote_mas_antiguo,
+        (SELECT TOP 1 (SELECT ComFactura.FechaRegistro FROM ComFactura WHERE ComFactura.Id = ComFacturaDetalle.ComFacturaId) FROM ComFacturaDetalle WHERE ComFacturaDetalle.InvArticuloId = InvLoteAlmacen.InvArticuloId ORDER BY ComFacturaDetalle.ComFacturaId DESC) AS ultima_compra,
+        (SELECT TOP 1 VenFactura.FechaDocumento FROM VenFactura WHERE VenFactura.Id = (SELECT TOP 1 VenFacturaDetalle.VenFacturaId FROM VenFacturaDetalle WHERE VenFacturaDetalle.InvArticuloId = InvLoteAlmacen.InvArticuloId ORDER BY VenFacturaDetalle.VenFacturaId DESC)) AS ultima_venta,
+        (SELECT TOP 1 ComProveedor.Id FROM ComFacturaDetalle INNER JOIN ComFactura ON ComFactura.Id = ComFacturaDetalle.ComFacturaId INNER JOIN ComProveedor ON ComProveedor.Id = ComFactura.ComProveedorId INNER JOIN GenPersona ON GenPersona.Id = ComProveedor.GenPersonaId WHERE ComFacturaDetalle.InvArticuloId = InvLoteAlmacen.InvArticuloId ORDER BY ComFactura.FechaDocumento DESC) AS  id_ultimo_proveedor,
+        (SELECT TOP 1 GenPersona.Nombre FROM ComFacturaDetalle INNER JOIN ComFactura ON ComFactura.Id = ComFacturaDetalle.ComFacturaId INNER JOIN ComProveedor ON ComProveedor.Id = ComFactura.ComProveedorId INNER JOIN GenPersona ON GenPersona.Id = ComProveedor.GenPersonaId WHERE ComFacturaDetalle.InvArticuloId = InvLoteAlmacen.InvArticuloId ORDER BY ComFactura.FechaDocumento DESC) AS  nombre_ultimo_proveedor
+      FROM InvLoteAlmacen
+      WHERE
+        (InvLoteAlmacen.Auditoria_FechaCreacion <= '$fechaLote') AND 
+        (SELECT SUM(T.Existencia) FROM InvLoteAlmacen T WHERE T.InvAlmacenId IN (1, 2) AND T.InvArticuloId = InvLoteAlmacen.InvArticuloId) > 0
+      ORDER BY lote_mas_antiguo ASC
     ";
     return $sql;
   }

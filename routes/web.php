@@ -196,6 +196,10 @@ Route::get('/reporte34', function() {
     return view('pages.reporte.reporte34');
 });
 
+Route::get('/reporte35', function() {
+    return view('pages.reporte.reporte35');
+});
+
 Route::get('/seccion1', function() {
     return view('pages.reporte.seccion1');
 });
