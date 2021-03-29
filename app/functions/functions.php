@@ -1411,6 +1411,9 @@
 			case 34:
 				$nombre = 'Artículos estancados en tienda';
 			break;
+			case 35:
+				$nombre = 'Artículos sin ventas';
+			break;
 			default:
 				$nombre = 'Reporte desconocido';
 			break;

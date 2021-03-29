@@ -150,6 +150,9 @@
     echo'<h6 align="center">Periodo desde el '.$FInicialImp.' al '.$FFinalImp.' </h6>';
 
     echo'
+    <hr>
+    <h4 align="center">Cambios de precios a la baja</h4>
+    <hr>
     <table class="table table-striped table-bordered col-12 sortable" id="myTable">
       <thead class="thead-dark">
         <tr>  
@@ -228,6 +231,10 @@
     </table>';
 
     echo'
+    <br>
+    <hr>
+    <h4 align="center">Entradas y salidas de inventario</h4>
+    <hr>
     <table class="table table-striped table-bordered col-12 sortable" id="myTable">
       <thead class="thead-dark">
         <tr>  
@@ -305,6 +312,62 @@
     echo '
       </tbody>
     </table>';
+
+    echo'
+    <br>
+    <hr>
+    <h4 align="center">Articulos sin fecha de vencimiento</h4>
+    <hr>
+    <table class="table table-striped table-bordered col-12 sortable" id="myTable">
+      <thead class="thead-dark">
+        <tr>  
+          <th scope="col" class="CP-sticky">#</th>
+          <th scope="col" class="CP-sticky">Tipo de Movimiento</th>
+          <th scope="col" class="CP-sticky">Codigo</th>
+          <th scope="col" class="CP-sticky">Codigo de Barra</th>
+          <th scope="col" class="CP-sticky">Descripcion</th>
+          <th scope="col" class="CP-sticky">Fecha de Registro</th>
+          <th scope="col" class="CP-sticky">Fecha de Vencimiento</th>
+          <th scope="col" class="CP-sticky">Cantidad Recibida</th>
+          <th scope="col" class="CP-sticky">Existencia</th>
+          <th scope="col" class="CP-sticky">Operador</th>       
+        </tr>
+      </thead>
+      <tbody>
+    ';
+
+    $query = R31Q_Articulos_Sin_Vencimiento($_GET['fechaInicio'], $_GET['fechaFin']);
+
+    $contador = 1;
+
+    while ($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
+      $codigo = $row['codigo_articulo'];
+      $codigo_barra = $row['codigo_barra'];
+      $descripcion = FG_Limpiar_Texto($row['descripcion']);
+      $fecha_registro = $row['fecha_registro']->format('d/m/Y');
+      $cantidad = $row['cantidad'];
+      $existencia = $row['existencia'];
+      $operador = $row['operador'];
+
+      echo '<tr>';
+      echo '<td>'.$contador.'</td>';
+      echo '<td>Compras</td>';
+      echo '<td>'.$codigo.'</td>';
+      echo '<td>'.$codigo_barra.'</td>';
+      echo '<td>'.$descripcion.'</td>';
+      echo '<td>'.$fecha_registro.'</td>';
+      echo '<td>-</td>';
+      echo '<td>'.$cantidad.'</td>';
+      echo '<td>'.$existencia.'</td>';
+      echo '<td>'.$operador.'</td>';
+      echo '</tr>';
+
+      $contador++;
+    }
+
+    echo '</tbody>';
+    echo '</table>';
+
     sqlsrv_close($conn);
   }
   /**********************************************************************************/
@@ -439,6 +502,32 @@
     WHERE (InvMovimiento.InvCausaId = '11' or InvMovimiento.InvCausaId = '12')
     AND(InvMovimiento.FechaMovimiento > '$FInicial' AND InvMovimiento.FechaMovimiento < '$FFinal')
     ORDER BY InvMovimiento.FechaMovimiento ASC, InvMovimiento.M_CostoUnitario ASC
+    ";
+    return $sql;
+  }
+
+  /**********************************************************************************/
+  /*
+    TITULO: R31Q_Articulos_Sin_Vencimiento
+    FUNCION: Ubicar el top de productos mas vendidos
+    RETORNO: Lista de productos mas vendidos
+    DESAROLLADO POR: SERGIO COVA
+  */
+  function R31Q_Articulos_Sin_Vencimiento($FInicial,$FFinal) {
+    $sql = "
+      SELECT
+        (SELECT InvArticulo.CodigoArticulo FROM InvArticulo WHERE InvArticulo.Id = ComFacturaDetalle.InvArticuloId) AS codigo_articulo,
+        (SELECT InvCodigoBarra.CodigoBarra FROM InvCodigoBarra WHERE InvCodigoBarra.InvArticuloId = ComFacturaDetalle.InvArticuloId AND InvCodigoBarra.EsPrincipal = 1) AS codigo_barra,
+        (SELECT InvArticulo.DescripcionLarga FROM InvArticulo WHERE InvArticulo.Id = ComFacturaDetalle.InvArticuloId) AS descripcion,
+        (SELECT ComFactura.FechaRegistro FROM ComFactura WHERE ComFactura.Id = ComFacturaDetalle.ComFacturaId) AS fecha_registro,
+        ComFacturaDetalle.CantidadRecibidaFactura AS cantidad_recibida,
+        (SELECT SUM(InvLoteAlmacen.Existencia) FROM InvLoteAlmacen WHERE InvLoteAlmacen.InvAlmacenId IN (1, 2) AND InvLoteAlmacen.InvArticuloId = ComFacturaDetalle.InvArticuloId) AS existencia,
+        (SELECT ComFactura.Auditoria_Usuario FROM ComFactura WHERE ComFactura.Id = ComFacturaDetalle.ComFacturaId) AS operador
+      FROM
+        ComFacturaDetalle
+      WHERE
+        ComFacturaDetalle.ComFacturaId IN (SELECT ComFactura.Id FROM ComFactura WHERE ComFactura.FechaRegistro BETWEEN '$FInicial' AND '$FFinal') AND 
+        (ComFacturaDetalle.FechaVencimiento IS NULL OR ComFacturaDetalle.FechaVencimiento = '');
     ";
     return $sql;
   }

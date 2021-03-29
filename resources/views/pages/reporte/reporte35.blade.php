@@ -43,10 +43,29 @@
   </style>
 @endsection
 
+
+@section('scriptsFoot')
+	<script src="https://raw.githubusercontent.com/SamWM/jQuery-Plugins/master/numeric/jquery.numeric.js"></script>
+	<script>
+		$(document).ready(function () {
+			//$('#diasUltimaVenta').numeric();
+
+      $('#diasUltimaVenta').change(function () {
+        value = $('#diasUltimaVenta').val();
+
+        if (value < 0) {
+          alert('Debe ingresar un numero positivo');
+          $('#diasUltimaVenta').val('');
+        }
+      });
+		});
+	</script>
+@endsection
+
 @section('content')
   <h1 class="h5 text-info">
     <i class="fas fa-file-invoice"></i>
-      Artículos estancados en tienda
+      Artículos sin ventas
     </h1>
   <hr class="row align-items-start col-12">
 
@@ -65,10 +84,10 @@
     }
     echo '<hr class="row align-items-start col-12">';
 
-    if(isset($_GET['fechaLote'])) {
+    if(isset($_GET['diasUltimaVenta'])) {
       $InicioCarga = new DateTime("now");
-      R34_Articulos_Estancados($_GET['SEDE'],$_GET['fechaLote']);
-      FG_Guardar_Auditoria('CONSULTAR','REPORTE','Articulos estancados en tienda');
+      R34_Articulos_Sin_Ventas($_GET['SEDE'],$_GET['diasUltimaVenta']);
+      FG_Guardar_Auditoria('CONSULTAR','REPORTE','Artículos sin ventas');
 
       $FinCarga = new DateTime("now");
       $IntervalCarga = $InicioCarga->diff($FinCarga);
@@ -80,11 +99,11 @@
           <table style="width:100%;">
             <tr>
               <td align="center">
-                <label for="fechaLote">Fecha de lote:</label>
+                <label for="diasUltimaVenta">Dias desde ultima venta:</label>
               </td>
 
               <td>
-                <input id="fechaLote" type="date" name="fechaLote" required style="width:100%;">
+                <input id="diasUltimaVenta" type="number" name="diasUltimaVenta" required style="width:100%;">
               </td>
 
               <input id="SEDE" name="SEDE" type="hidden" value="'; 
@@ -104,13 +123,13 @@
 
 <?php
   /*
-    TITULO: R34_Articulos_Estancados
+    TITULO: R34_Articulos_Sin_Ventas
     PARAMETROS: [$SedeConnection] Siglas de la sede para la conexion
-                [$fechaLote] Fecha indica generacion de articulos previos a fecha
+                [$diasUltimaVenta] Fecha indica generacion de articulos previos a fecha
     FUNCION: Arma una lista de productos estancados
     RETORNO: No aplica
   */
-  function R34_Articulos_Estancados($SedeConnection,$fechaLote) {
+  function R34_Articulos_Sin_Ventas($SedeConnection,$diasUltimaVenta) {
     
     $conn = FG_Conectar_Smartpharma($SedeConnection);
     $connCPharma = FG_Conectar_CPharma();
@@ -129,52 +148,49 @@
       <br/>
     ';
 
-    echo'<h6 align="center">Periodo hasta el '.$fechaLote.'</h6>';
+    echo'<h6 align="center">'.$diasUltimaVenta.' o mas dias sin ventas</h6>';
 
     echo '
-
       <table class="table table-striped table-bordered col-12 sortable" id="myTable">
-      <thead class="thead-dark">
-        <tr>  
-          <th scope="col" class="CP-sticky">Nro.</th>
-          <th scope="col" class="CP-sticky">Codigo Articulo</th>
-          <th scope="col" class="CP-sticky">Codigo Barra</th>
-          <th scope="col" class="CP-sticky">Descripcion</th>
-          <th scope="col" class="CP-sticky">Existencia</th>
-          <th scope="col" class="CP-sticky">Precio</th>
-          <th scope="col" class="CP-sticky">Lote Mas Antiguo</td>
-          <th scope="col" class="CP-sticky">Dias de Reposicion</td>
-          <th scope="col" class="CP-sticky">Ultima Compra</td>
-          <th scope="col" class="CP-sticky">Ultima Venta</td>
-          <th scope="col" class="CP-sticky">Dias en Tienda</td>
-          <th scope="col" class="CP-sticky">Dias Ultima Venta</th>
-          <th scope="col" class="CP-sticky">Ultimo Proveedor</th>
-        </tr>
-      </thead>
-      <tbody>
+        <thead class="thead-dark">
+          <tr>
+            <th scope="col" class="CP-sticky">Nro.</th>
+            <th scope="col" class="CP-sticky">Codigo Articulo</th>
+            <th scope="col" class="CP-sticky">Codigo de Barra</th>
+            <th scope="col" class="CP-sticky">Descripcion</th>
+            <th scope="col" class="CP-sticky">Existencia</th>
+            <th scope="col" class="CP-sticky">Precio</td>
+            <th scope="col" class="CP-sticky">Total Lote</td>
+            <th scope="col" class="CP-sticky">Ultima Compra</td>
+            <th scope="col" class="CP-sticky">Ultima Venta</td>
+            <th scope="col" class="CP-sticky">Dias Ultima Compra</td>
+            <th scope="col" class="CP-sticky">Dias Ultima Venta</td>
+            <th scope="col" class="CP-sticky">Ultimo Proveedor</td>
+          </tr>
+        </thead>
+
+        <tbody>
     ';
 
     $contador = 1;
 
-    $sql2 = R12_Q_Articulos_Estancados($fechaLote);
+    $sql2 = R12_Q_Articulos_Sin_Ventas($diasUltimaVenta);
     $result2 = sqlsrv_query($conn,$sql2);
 
     while($row2 = sqlsrv_fetch_array($result2,SQLSRV_FETCH_ASSOC)) {
 
-    	$id_producto = $row2['id_producto'];
+    	$id_articulo = $row2['id_articulo'];
     	$codigo_articulo = $row2['codigo_articulo'];
     	$codigo_barra = $row2['codigo_barra'];
     	$descripcion = FG_Limpiar_Texto($row2['descripcion']);
     	$existencia = intval($row2['existencia']);
-    	$lote_mas_antiguo = $row2['lote_mas_antiguo']->format('d/m/Y');
-    	$ultima_compra = $row2['ultima_compra']->format('d/m/Y');
+    	$ultima_compra = ($row2['ultima_compra']) ? $row2['ultima_compra']->format('d/m/Y') : '';
     	$ultima_venta = ($row2['ultima_venta']) ? $row2['ultima_venta']->format('d/m/Y') : '';
     	$nombre_ultimo_proveedor = FG_Limpiar_Texto($row2['nombre_ultimo_proveedor']);
       $id_ultimo_proveedor = $row2['id_ultimo_proveedor'];
-      $dias_tienda = $row2['dias_tienda'];
 
       if ($existencia > 0) {
-      	$sql = R34Q_Detalle_Articulo($id_producto);
+      	$sql = R34Q_Detalle_Articulo($id_articulo);
   	    $result = sqlsrv_query($conn,$sql);
   	    $row = sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC);
 
@@ -194,23 +210,25 @@
 
   	    $precio = FG_Calculo_Precio_Alfa($Existencia,$ExistenciaAlmacen1,$ExistenciaAlmacen2,$IsTroquelado,$UtilidadArticulo,$UtilidadCategoria,$TroquelAlmacen1,$PrecioCompraBrutoAlmacen1,$TroquelAlmacen2,
   	    $PrecioCompraBrutoAlmacen2,$PrecioCompraBruto,$IsIVA,$CondicionExistencia);
-        $precio = number_format($precio, 2, ".", ",");
+  	    $precio_sin_formato = $precio;
+        $precio = number_format($precio,2,"." ,"," );
 
         /*$precio = 0;
+        $precio_sin_formato = $precio;
         $precio = number_format($precio,2,"," ,"." );*/
 
+        $total_lote = $precio_sin_formato * $existencia;
+        $total_lote = number_format($total_lote, 2, '.', ',');
 
-        if ($row2['lote_mas_antiguo']->format('Y-m-d') < $row2['ultima_compra']->format('Y-m-d')) {
-          $dias_reposicion = date_diff(date_create($row2['ultima_compra']->format('Y-m-d')), date_create($row2['lote_mas_antiguo']->format('Y-m-d')))->format('%a');
+        if ($row2['ultima_compra']) {
+          $dias_ultima_compra = date_diff(date_create($row2['ultima_compra']->format('Y-m-d')), date_create(''));
+          $dias_ultima_compra = $dias_ultima_compra->format('%a');        
+        } else {
+          $dias_ultima_compra = '-';
         }
-
-        if ($row2['lote_mas_antiguo']->format('Y-m-d') >= $row2['ultima_compra']->format('Y-m-d')) {
-          $dias_reposicion = '-';
-        }
-
 
         if ($row2['ultima_venta']) {
-          $dias_ultima_venta = date_diff(date_create($row2['ultima_venta']->format('Y-m-d')), date_create());
+          $dias_ultima_venta = date_diff(date_create($row2['ultima_venta']->format('Y-m-d')), date_create(''));
           $dias_ultima_venta = $dias_ultima_venta->format('%a');        
         } else {
           $dias_ultima_venta = '-';
@@ -220,14 +238,13 @@
         echo '<td align="center"><b>'.$contador.'</b></td>';
       	echo '<td align="center">'.$codigo_articulo.'</td>';
       	echo '<td align="center">'.$codigo_barra.'</td>';
-      	echo '<td align="center" class="CP-barrido"><a href="/reporte2?SEDE='.$_GET['SEDE'].'&Id='.$id_producto.'" style="text-decoration: none; color: black;" target="_blank">'.$descripcion.'</a></td>';
+      	echo '<td align="center" class="CP-barrido"><a href="/reporte2?SEDE='.$_GET['SEDE'].'&Id='.$id_articulo.'" style="text-decoration: none; color: black;" target="_blank">'.$descripcion.'</a></td>';
       	echo '<td align="center">'.$existencia.'</td>';
       	echo '<td align="center">'.$precio.'</td>';
-        echo '<td align="center" class="CP-barrido"><a href="/reporte12?fechaInicio='.$row2['lote_mas_antiguo']->format('Y-m-d').'&fechaFin='.date_create()->format('Y-m-d').'&SEDE='.$_GET['SEDE'].'&Descrip='.$descripcion.'&Id='.$id_producto.'" style="text-decoration: none; color: black;" target="_blank">'.$lote_mas_antiguo.'</a></td>';
-        echo '<td align="center">'.$dias_reposicion.'</td>';
-      	echo '<td align="center">'.$ultima_compra.'</td>';
+      	echo '<td align="center">'.$total_lote.'</td>';
+      	echo '<td align="center" class="CP-barrido"><a href="fechaInicio='.$row2['ultima_compra']->format('Y-m-d').'&fechaFin='.date_create()->format('Y-m-d').'&SEDE='.$_GET['SEDE'].'&Descrip='.$descripcion.'&Id='.$id_articulo.'" style="text-decoration: none; color: black;" target="_blank">'.$ultima_compra.'</a></td>';
       	echo '<td align="center">'.$ultima_venta.'</td>';
-      	echo '<td align="center">'.$dias_tienda.'</td>';
+        echo '<td align="center">'.$dias_ultima_compra.'</td>';
       	echo '<td align="center">'.$dias_ultima_venta.'</td>';
       	echo '<td align="center" class="CP-barrido"><a href="/reporte7?Nombre='.$nombre_ultimo_proveedor.'&SEDE='.$_GET['SEDE'].'&Id='.$id_ultimo_proveedor.'" style="text-decoration: none; color: black;" target="_blank">'.$nombre_ultimo_proveedor.'</a></td>';
       	echo '</tr>';
@@ -249,39 +266,29 @@
   }
 
   /*
-  TITULO: R12_Q_Articulos_Estancados
-  PARAMETROS: [$fechaLote] Fecha indica generacion de articulos previos a fecha
+  TITULO: R12_Q_Articulos_Sin_Ventas
+  PARAMETROS: [$diasUltimaVenta] Dias desde la ultima venta
   RETORNO: Un String con la query pertinente
    */
-  function R12_Q_Articulos_Estancados($fechaLote) {
-    $sql = "
-      SELECT
-        DISTINCT (SELECT InvArticulo.Id FROM InvArticulo WHERE InvArticulo.Id = InvLoteAlmacen.InvArticuloId) AS id_producto,
-        (SELECT InvArticulo.CodigoArticulo FROM InvArticulo WHERE InvArticulo.Id = InvLoteAlmacen.InvArticuloId) AS codigo_articulo,
-        (SELECT InvCodigoBarra.CodigoBarra FROM InvCodigoBarra WHERE InvCodigoBarra.InvArticuloId = InvLoteAlmacen.InvArticuloId AND InvCodigoBarra.EsPrincipal = 1) AS codigo_barra,
-        (SELECT InvArticulo.DescripcionLarga FROM InvArticulo WHERE InvArticulo.Id = InvLoteAlmacen.InvArticuloId) AS descripcion,
-        (SELECT SUM(T.Existencia) FROM InvLoteAlmacen T WHERE T.InvAlmacenId IN (1, 2) AND T.InvArticuloId = InvLoteAlmacen.InvArticuloId) AS existencia,
-        (SELECT TOP 1 T.Auditoria_FechaCreacion FROM InvLoteAlmacen T WHERE T.InvAlmacenId IN (1, 2) AND T.InvArticuloId = InvLoteAlmacen.InvArticuloId AND Existencia > 0) AS lote_mas_antiguo,
-        (SELECT TOP 1 (SELECT ComFactura.FechaRegistro FROM ComFactura WHERE ComFactura.Id = ComFacturaDetalle.ComFacturaId) FROM ComFacturaDetalle WHERE ComFacturaDetalle.InvArticuloId = InvLoteAlmacen.InvArticuloId ORDER BY ComFacturaDetalle.ComFacturaId DESC) AS ultima_compra,
-        (SELECT TOP 1 VenFactura.FechaDocumento FROM VenFactura WHERE VenFactura.Id = (SELECT TOP 1 VenFacturaDetalle.VenFacturaId FROM VenFacturaDetalle WHERE VenFacturaDetalle.InvArticuloId = InvLoteAlmacen.InvArticuloId ORDER BY VenFacturaDetalle.VenFacturaId DESC)) AS ultima_venta,
-        (
-          CASE
-          WHEN ((SELECT TOP 1 T.Auditoria_FechaCreacion FROM InvLoteAlmacen T WHERE T.InvAlmacenId IN (1, 2) AND T.InvArticuloId = InvLoteAlmacen.InvArticuloId AND Existencia > 0) < (SELECT TOP 1 (SELECT ComFactura.FechaRegistro FROM ComFactura WHERE ComFactura.Id = ComFacturaDetalle.ComFacturaId) FROM ComFacturaDetalle WHERE ComFacturaDetalle.InvArticuloId = InvLoteAlmacen.InvArticuloId ORDER BY ComFacturaDetalle.ComFacturaId DESC))
-            THEN (DATEDIFF(DAY, (SELECT TOP 1 T.Auditoria_FechaCreacion FROM InvLoteAlmacen T WHERE T.InvAlmacenId IN (1, 2) AND T.InvArticuloId = InvLoteAlmacen.InvArticuloId AND Existencia > 0), GETDATE()))
-
-          WHEN ((SELECT TOP 1 T.Auditoria_FechaCreacion FROM InvLoteAlmacen T WHERE T.InvAlmacenId IN (1, 2) AND T.InvArticuloId = InvLoteAlmacen.InvArticuloId AND Existencia > 0) > (SELECT TOP 1 (SELECT ComFactura.FechaRegistro FROM ComFactura WHERE ComFactura.Id = ComFacturaDetalle.ComFacturaId) FROM ComFacturaDetalle WHERE ComFacturaDetalle.InvArticuloId = InvLoteAlmacen.InvArticuloId ORDER BY ComFacturaDetalle.ComFacturaId DESC))
-            THEN (DATEDIFF(DAY, (SELECT TOP 1 (SELECT ComFactura.FechaRegistro FROM ComFactura WHERE ComFactura.Id = ComFacturaDetalle.ComFacturaId) FROM ComFacturaDetalle WHERE ComFacturaDetalle.InvArticuloId = InvLoteAlmacen.InvArticuloId ORDER BY ComFacturaDetalle.ComFacturaId DESC), GETDATE()))
-
-          ELSE 0
-        END
-        ) AS dias_tienda,
-        (SELECT TOP 1 ComProveedor.Id FROM ComFacturaDetalle INNER JOIN ComFactura ON ComFactura.Id = ComFacturaDetalle.ComFacturaId INNER JOIN ComProveedor ON ComProveedor.Id = ComFactura.ComProveedorId INNER JOIN GenPersona ON GenPersona.Id = ComProveedor.GenPersonaId WHERE ComFacturaDetalle.InvArticuloId = InvLoteAlmacen.InvArticuloId ORDER BY ComFactura.FechaDocumento DESC) AS  id_ultimo_proveedor,
-        (SELECT TOP 1 GenPersona.Nombre FROM ComFacturaDetalle INNER JOIN ComFactura ON ComFactura.Id = ComFacturaDetalle.ComFacturaId INNER JOIN ComProveedor ON ComProveedor.Id = ComFactura.ComProveedorId INNER JOIN GenPersona ON GenPersona.Id = ComProveedor.GenPersonaId WHERE ComFacturaDetalle.InvArticuloId = InvLoteAlmacen.InvArticuloId ORDER BY ComFactura.FechaDocumento DESC) AS  nombre_ultimo_proveedor
-      FROM InvLoteAlmacen
-      WHERE
-          (((SELECT TOP 1 T.Auditoria_FechaCreacion FROM InvLoteAlmacen T WHERE T.InvAlmacenId IN (1, 2) AND T.InvArticuloId = InvLoteAlmacen.InvArticuloId AND Existencia > 0) <= '$fechaLote') OR ((SELECT TOP 1 (SELECT ComFactura.FechaRegistro FROM ComFactura WHERE ComFactura.Id = ComFacturaDetalle.ComFacturaId) FROM ComFacturaDetalle WHERE ComFacturaDetalle.InvArticuloId = InvLoteAlmacen.InvArticuloId ORDER BY ComFacturaDetalle.ComFacturaId DESC) <= '$fechaLote')) AND 
-          (SELECT SUM(T.Existencia) FROM InvLoteAlmacen T WHERE T.InvAlmacenId IN (1, 2) AND T.InvArticuloId = InvLoteAlmacen.InvArticuloId) > 0
-      ORDER BY dias_tienda DESC
+  function R12_Q_Articulos_Sin_Ventas($diasUltimaVenta) {
+    $sql = "		
+		SELECT
+      DISTINCT (SELECT InvArticulo.Id FROM InvArticulo WHERE InvArticulo.Id = InvLoteAlmacen.InvArticuloId) AS id_articulo,
+      (SELECT InvArticulo.CodigoArticulo FROM InvArticulo WHERE InvArticulo.Id = InvLoteAlmacen.InvArticuloId) AS codigo_articulo,
+      (SELECT InvCodigoBarra.CodigoBarra FROM InvCodigoBarra WHERE InvCodigoBarra.InvArticuloId = InvLoteAlmacen.InvArticuloId AND InvCodigoBarra.EsPrincipal = 1) AS codigo_barra,
+      (SELECT InvArticulo.DescripcionLarga FROM InvArticulo WHERE InvArticulo.Id = InvLoteAlmacen.InvArticuloId) AS descripcion,
+      (SELECT SUM(T.Existencia) FROM InvLoteAlmacen T WHERE T.InvAlmacenId IN (1, 2) AND T.InvArticuloId = InvLoteAlmacen.InvArticuloId) AS existencia,
+      (SELECT TOP 1 (SELECT ComFactura.FechaRegistro FROM ComFactura WHERE ComFactura.Id = ComFacturaDetalle.ComFacturaId) FROM ComFacturaDetalle WHERE ComFacturaDetalle.InvArticuloId = InvLoteAlmacen.InvArticuloId ORDER BY ComFacturaDetalle.ComFacturaId DESC) AS ultima_compra,
+      (SELECT TOP 1 VenFactura.FechaDocumento FROM VenFactura WHERE VenFactura.Id = (SELECT TOP 1 VenFacturaDetalle.VenFacturaId FROM VenFacturaDetalle WHERE VenFacturaDetalle.InvArticuloId = InvLoteAlmacen.InvArticuloId ORDER BY VenFacturaDetalle.VenFacturaId DESC)) AS ultima_venta,
+      (DATEDIFF(DAY, (SELECT TOP 1 (SELECT ComFactura.FechaRegistro FROM ComFactura WHERE ComFactura.Id = ComFacturaDetalle.ComFacturaId) FROM ComFacturaDetalle WHERE ComFacturaDetalle.InvArticuloId = InvLoteAlmacen.InvArticuloId ORDER BY ComFacturaDetalle.ComFacturaId DESC), GETDATE())) AS dias_ultima_compra,
+      (DATEDIFF(DAY, (SELECT TOP 1 VenFactura.FechaDocumento FROM VenFactura WHERE VenFactura.Id = (SELECT TOP 1 VenFacturaDetalle.VenFacturaId FROM VenFacturaDetalle WHERE VenFacturaDetalle.InvArticuloId = InvLoteAlmacen.InvArticuloId ORDER BY VenFacturaDetalle.VenFacturaId DESC)), GETDATE())) AS dias_ultima_venta,
+      (SELECT TOP 1 ComProveedor.Id FROM ComFacturaDetalle INNER JOIN ComFactura ON ComFactura.Id = ComFacturaDetalle.ComFacturaId INNER JOIN ComProveedor ON ComProveedor.Id = ComFactura.ComProveedorId INNER JOIN GenPersona ON GenPersona.Id = ComProveedor.GenPersonaId WHERE ComFacturaDetalle.InvArticuloId = InvLoteAlmacen.InvArticuloId ORDER BY ComFactura.FechaDocumento DESC) AS  id_ultimo_proveedor,
+      (SELECT TOP 1 GenPersona.Nombre FROM ComFacturaDetalle INNER JOIN ComFactura ON ComFactura.Id = ComFacturaDetalle.ComFacturaId INNER JOIN ComProveedor ON ComProveedor.Id = ComFactura.ComProveedorId INNER JOIN GenPersona ON GenPersona.Id = ComProveedor.GenPersonaId WHERE ComFacturaDetalle.InvArticuloId = InvLoteAlmacen.InvArticuloId ORDER BY ComFactura.FechaDocumento DESC) AS  nombre_ultimo_proveedor
+    FROM InvLoteAlmacen
+    WHERE
+      ((SELECT SUM(T.Existencia) FROM InvLoteAlmacen T WHERE T.InvAlmacenId IN (1, 2) AND T.InvArticuloId = InvLoteAlmacen.InvArticuloId) > 0) AND 
+      ((DATEDIFF(DAY, (SELECT TOP 1 VenFactura.FechaDocumento FROM VenFactura WHERE VenFactura.Id = (SELECT TOP 1 VenFacturaDetalle.VenFacturaId FROM VenFacturaDetalle WHERE VenFacturaDetalle.InvArticuloId = InvLoteAlmacen.InvArticuloId ORDER BY VenFacturaDetalle.VenFacturaId DESC)), GETDATE())) >= '$diasUltimaVenta')
+    ORDER BY dias_ultima_venta DESC
     ";
     return $sql;
   }
