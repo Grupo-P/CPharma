@@ -70,8 +70,8 @@
         $conn = FG_Conectar_Smartpharma($SedeConnection);
         $connCPharma = FG_Conectar_CPharma();
 
-        $FInicial = $fecha;
-        //$FInicial = '2020-12-09';
+        //$FInicial = $fecha;
+        $FInicial = '2020-12-15';
         $FFinal = date("Y-m-d",strtotime($FInicial."+ 1 days"));
         $TasaActual = FG_Tasa_Fecha($connCPharma,$FInicial);
         //$TasaActual = 1800000.00;
