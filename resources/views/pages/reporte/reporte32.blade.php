@@ -936,13 +936,17 @@
     */ 
     function R32Q_Vent_Cli_Top($FInicial,$FFinal){
         $sql = "
-        SELECT top 5 
+        SELECT top 5
         VenCliente.id as IdCliente,
         GenPersona.Nombre,
         GenPersona.Apellido,
         (VenFactura.M_MontoTotalFactura) AS MontoFactura,
         ((ROUND(CAST(SUM(VenFacturaDetalle.Cantidad) AS DECIMAL(38,0)),2,0))) as Unidades,
-        COUNT(DISTINCT VenFactura.Id) as Transacciones
+            (select COUNT(DISTINCT VenFactura.Id)
+            FROM VenFactura
+            WHERE
+            (VenFactura.FechaDocumento > '$FInicial' AND VenFactura.FechaDocumento < '$FFinal')
+            and VenFactura.VenClienteId = VenCliente.id) as Transacciones
         FROM VenFactura
         LEFT JOIN VenCliente ON VenCliente.Id = VenFactura.VenClienteId
         LEFT JOIN GenPersona ON GenPersona.Id = VenCliente.GenPersonaId
