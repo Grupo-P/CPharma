@@ -833,7 +833,8 @@
         SUM(Transacciones) AS TransaccionesFactura
         from
         (SELECT 
-        IIF( CONVERT(date,GenPersona.Auditoria_FechaCreacion) = '$FInicial', 'Nuevo' ,'Recurrente') as TipoCliente,
+        VenFactura.Id,
+        IIF( CONVERT(date,VenCliente.Auditoria_FechaCreacion) = '$FInicial', 'Nuevo' ,'Recurrente') as TipoCliente,
         (VenFactura.M_MontoTotalFactura) AS MontoFactura,
         ((ROUND(CAST(SUM(VenFacturaDetalle.Cantidad) AS DECIMAL(38,0)),2,0))) as Unidades,
         COUNT(DISTINCT VenFactura.Id) as Transacciones
@@ -843,7 +844,7 @@
         LEFT JOIN VenFacturaDetalle ON VenFacturaDetalle.VenFacturaId = VenFactura.Id
         WHERE
         (VenFactura.FechaDocumento > '$FInicial' AND VenFactura.FechaDocumento < '$FFinal')
-        GROUP BY VenFactura.M_MontoTotalFactura,GenPersona.Auditoria_FechaCreacion) AS Factura
+        GROUP BY VenFactura.M_MontoTotalFactura,VenCliente.Auditoria_FechaCreacion,VenFactura.Id) AS Factura
         GROUP BY TipoCliente
         ";
         return $sql;
@@ -860,7 +861,8 @@
         SUM(Transacciones) AS TransaccionesDevolucion
         from
         (SELECT 
-        IIF( CONVERT(date,GenPersona.Auditoria_FechaCreacion) = '$FInicial', 'Nuevo' ,'Recurrente') as TipoCliente,
+        VenDevolucion.Id,
+        IIF( CONVERT(date,VenCliente.Auditoria_FechaCreacion) = '$FInicial', 'Nuevo' ,'Recurrente') as TipoCliente,
         (VenDevolucion.M_MontoTotalDevolucion) AS MontoDevolucion,
         ((ROUND(CAST(SUM(VenDevolucionDetalle.Cantidad) AS DECIMAL(38,0)),2,0))) as Unidades,
         COUNT(DISTINCT VenFactura.Id) as Transacciones
@@ -871,7 +873,7 @@
         LEFT JOIN GenPersona ON GenPersona.Id = VenCliente.GenPersonaId
         WHERE
         (VenDevolucion.FechaDocumento > '$FInicial' AND VenDevolucion.FechaDocumento < '$FFinal')
-        GROUP BY VenDevolucion.M_MontoTotalDevolucion,GenPersona.Auditoria_FechaCreacion) AS Devolucion
+        GROUP BY VenDevolucion.M_MontoTotalDevolucion,VenCliente.Auditoria_FechaCreacion,VenDevolucion.Id) AS Devolucion
         GROUP BY TipoCliente
         ";
         return $sql;
@@ -883,13 +885,14 @@
         $sql = "
         --Clientes por Tipo Persona
         select tipoPersona,
-        SUM(MontoFactura) AS MontoFactura,
+        SUM(Monto) AS MontoFactura,
         SUM(Unidades) AS UnidadesFactura,
         SUM(Transacciones) AS TransaccionesFactura
         from
         (SELECT 
+        VenFactura.id,
         GenPersona.tipoPersona,
-        (VenFactura.M_MontoTotalFactura) AS MontoFactura,
+        (VenFactura.M_MontoTotalFactura) AS Monto,
         ((ROUND(CAST(SUM(VenFacturaDetalle.Cantidad) AS DECIMAL(38,0)),2,0))) as Unidades,
         COUNT(DISTINCT VenFactura.Id) as Transacciones
         FROM VenFactura
@@ -898,7 +901,7 @@
         LEFT JOIN VenFacturaDetalle ON VenFacturaDetalle.VenFacturaId = VenFactura.Id
         WHERE
         (VenFactura.FechaDocumento > '$FInicial' AND VenFactura.FechaDocumento < '$FFinal')
-        GROUP BY VenFactura.M_MontoTotalFactura,GenPersona.tipoPersona) AS Factura
+        GROUP BY VenFactura.M_MontoTotalFactura,GenPersona.tipoPersona,VenFactura.id) AS Factura
         GROUP BY tipoPersona
         ";
         return $sql;
@@ -915,6 +918,7 @@
         SUM(Transacciones) AS TransaccionesDevolucion
         from
         (SELECT 
+        VenDevolucion.Id,
         GenPersona.tipoPersona,
         (VenDevolucion.M_MontoTotalDevolucion) AS MontoFactura,
         ((ROUND(CAST(SUM(VenDevolucionDetalle.Cantidad) AS DECIMAL(38,0)),2,0))) as Unidades,
@@ -926,7 +930,7 @@
         LEFT JOIN GenPersona ON GenPersona.Id = VenCliente.GenPersonaId
         WHERE
         (VenDevolucion.FechaDocumento > '$FInicial' AND VenDevolucion.FechaDocumento < '$FFinal')
-        GROUP BY VenDevolucion.M_MontoTotalDevolucion,GenPersona.tipoPersona) AS Devolucion
+        GROUP BY VenDevolucion.M_MontoTotalDevolucion,GenPersona.tipoPersona,VenDevolucion.Id) AS Devolucion
         GROUP BY tipoPersona
         ";
         return $sql;
