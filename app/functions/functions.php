@@ -134,7 +134,8 @@
 		//FIN BLOQUE DE FLL
 		//INICIO BLOQUE DE FAU
 			case '12':
-				return 'FAU';
+				//return 'FAU';
+				return 'DBs';
 			break;
 		//FIN BLOQUE DE FAU
 			default:
@@ -1413,6 +1414,9 @@
 			break;
 			case 35:
 				$nombre = 'Artículos sin ventas';
+			break;
+			case 36:
+				$nombre = 'Lista de precios';
 			break;
 			default:
 				$nombre = 'Reporte desconocido';
@@ -3265,4 +3269,12 @@
 		//print_r($array_result);
 		return $array_result;		
   }  
+
+  function validar_fecha_espanol($fecha){
+		$valores = explode('/', $fecha);
+		if(count($valores) == 3 && checkdate($valores[1], $valores[0], $valores[2])){
+			return true;
+		}
+		return false;
+	}
 ?>

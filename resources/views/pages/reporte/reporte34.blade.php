@@ -166,8 +166,8 @@
     	$codigo_barra = $row2['codigo_barra'];
     	$descripcion = FG_Limpiar_Texto($row2['descripcion']);
     	$existencia = intval($row2['existencia']);
-    	$lote_mas_antiguo = $row2['lote_mas_antiguo']->format('d/m/Y');
-    	$ultima_compra = $row2['ultima_compra']->format('d/m/Y');
+    	$lote_mas_antiguo = ($row2['lote_mas_antiguo']) ? $row2['lote_mas_antiguo']->format('d/m/Y') : '';
+    	$ultima_compra = ($row2['ultima_compra']) ? $row2['ultima_compra']->format('d/m/Y') : '';;
     	$ultima_venta = ($row2['ultima_venta']) ? $row2['ultima_venta']->format('d/m/Y') : '';
     	$nombre_ultimo_proveedor = FG_Limpiar_Texto($row2['nombre_ultimo_proveedor']);
       $id_ultimo_proveedor = $row2['id_ultimo_proveedor'];
@@ -199,12 +199,15 @@
         /*$precio = 0;
         $precio = number_format($precio,2,"," ,"." );*/
 
+        if ($row2['lote_mas_antiguo'] && $row2['ultima_compra']) {
+          if ($row2['lote_mas_antiguo']->format('Y-m-d') < $row2['ultima_compra']->format('Y-m-d')) {
+            $dias_reposicion = date_diff(date_create($row2['ultima_compra']->format('Y-m-d')), date_create($row2['lote_mas_antiguo']->format('Y-m-d')))->format('%a');
+          }
 
-        if ($row2['lote_mas_antiguo']->format('Y-m-d') < $row2['ultima_compra']->format('Y-m-d')) {
-          $dias_reposicion = date_diff(date_create($row2['ultima_compra']->format('Y-m-d')), date_create($row2['lote_mas_antiguo']->format('Y-m-d')))->format('%a');
-        }
-
-        if ($row2['lote_mas_antiguo']->format('Y-m-d') >= $row2['ultima_compra']->format('Y-m-d')) {
+          if ($row2['lote_mas_antiguo']->format('Y-m-d') >= $row2['ultima_compra']->format('Y-m-d')) {
+            $dias_reposicion = '-';
+          }          
+        } else {
           $dias_reposicion = '-';
         }
 

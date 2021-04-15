@@ -1,4 +1,6 @@
-<?php 
+<?php
+  error_reporting(0);
+
 	include('C:\xampp\htdocs\CPharma\app\functions\config.php');
   include('C:\xampp\htdocs\CPharma\app\functions\functions.php');
   include('C:\xampp\htdocs\CPharma\app\functions\querys_mysql.php');
@@ -80,9 +82,14 @@
       if($Existencia>$ExistenciaMinima){
         $Precio = FG_Precio_Consultor($IdArticulo);
 
+        $now = date_format(date_create('now'), 'Y-m-d');
+
+        $tasa = FG_Tasa_Fecha_Venta(FG_Conectar_CPharma(), $now);
+
         $arrayIteracion["CodigoBarra"]=$CodigoBarra;
         $arrayIteracion["Descripcion"]=$Descripcion;
         $arrayIteracion["Precio"]=floatval($Precio);
+        $arrayIteracion["PrecioDolar"]=floatval(number_format($Precio/$tasa, 2));
 
         $arraySugeridos[]=$arrayIteracion;
       }

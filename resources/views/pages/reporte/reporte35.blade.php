@@ -242,7 +242,14 @@
       	echo '<td align="center">'.$existencia.'</td>';
       	echo '<td align="center">'.$precio.'</td>';
       	echo '<td align="center">'.$total_lote.'</td>';
-      	echo '<td align="center" class="CP-barrido"><a href="fechaInicio='.$row2['ultima_compra']->format('Y-m-d').'&fechaFin='.date_create()->format('Y-m-d').'&SEDE='.$_GET['SEDE'].'&Descrip='.$descripcion.'&Id='.$id_articulo.'" style="text-decoration: none; color: black;" target="_blank">'.$ultima_compra.'</a></td>';
+
+        if ($row2['ultima_compra']) {
+      	   echo '<td align="center" class="CP-barrido"><a href="fechaInicio='.$row2['ultima_compra']->format('Y-m-d').'&fechaFin='.date_create()->format('Y-m-d').'&SEDE='.$_GET['SEDE'].'&Descrip='.$descripcion.'&Id='.$id_articulo.'" style="text-decoration: none; color: black;" target="_blank">'.$ultima_compra.'</a></td>';
+        }
+        else {
+          echo '<td align="center">-</td>';
+        }
+
       	echo '<td align="center">'.$ultima_venta.'</td>';
         echo '<td align="center">'.$dias_ultima_compra.'</td>';
       	echo '<td align="center">'.$dias_ultima_venta.'</td>';

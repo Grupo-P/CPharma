@@ -64,6 +64,14 @@
       text-align: center;
       font-size: 1.2em;
     }
+    .CP-Container {
+      width: 95%;
+      margin-left: 2.5%;
+    }
+
+    .ultimasConsultasTable > thead > tr > th, .ultimasConsultasTable > thead > tr > td {
+      vertical-align: middle;
+    }
 </style>
 
 @section('content')
@@ -88,6 +96,11 @@
 
     $connCPharma = FG_Conectar_CPharma();
     $TasaVenta = FG_Tasa_Fecha_Venta($connCPharma,date('Y-m-d'));
+
+    mysqli_query($connCPharma, "SET NAMES utf8");
+
+    $ultimasConsultas = mysqli_query($connCPharma, RCPQ_Articulos_Escaneados());
+
     mysqli_close($connCPharma);
 	?>
     <table class="table table-borderless col-12">
@@ -118,12 +131,12 @@
 
     <table class="table table-borderless table-striped col-12" id="tablaResuldado">
       <thead class="center">
-        <th class="bg-success text-white border border-white"><h5>Código de barra</h5></th>
-        <th class="bg-success text-white border border-white"><h5>Descripción</h5></th>
-        <th class="bg-success text-white border border-white"><h5>Precio BsS</h5></th>
+        <th class="bg-success text-white border border-white"><h4>CÓDIGO DE BARRA</h4></th>
+        <th class="bg-success text-white border border-white"><h4>DESCRIPCIÓN</h4></th>
+        <th class="bg-success text-white border border-white"><h4>PRECIO BSS</h4></th>
         <?php
           if (_ConsultorDolar_ == "SI") {
-           echo '<th class="bg-success text-white border border-white"><h5>Precio $</h5></th>';
+           echo '<th class="bg-success text-white border border-white"><h4>PRECIO $</h4></th>';
           }      
         ?>
       </thead>
@@ -171,7 +184,7 @@
     <?php
       if (_ConsultorDolar_ == "SI") {
        echo ' <div id="DivTasa" clas="text-center bg-success">
-          <label id="TasaVenta" class="text-danger text-center" style="font-size:1.5rem; margin-left:40%;">
+          <label id="TasaVenta" class="text-center" style="font-size:1.5rem; margin-left:40%;">
             <strong>Tasa del dia: '.SigVe.' '.number_format($TasaVenta,2,"," ,"." ).'</strong>
           </label>
           <label class="text-danger text-center" style="margin-left:38%;">Nuestra tasa esta sujeta a cambios sin previo aviso</label>
@@ -179,26 +192,59 @@
       }      
     ?>
     
-    <div class="row justify-content-center">
-      <div id="carouselExampleIndicators" class="carousel slide d-block w-75 bg-white" data-ride="carousel" data-wrap="true" data-interval="3000" data-pause="false">
-        <div class="carousel-inner" id="divPromocion">
+    <div class="row">
+      <div class="col-md-6">
+        <div id="carouselExampleIndicators" class="carousel slide d-block w-100 bg-white" data-ride="carousel" data-wrap="true" data-interval="3000" data-pause="false">
+          <div class="carousel-inner" id="divPromocion">
+          </div>
+          <!--<a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="sr-only">Previous</span>
+          </a>
+          <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+          </a>-->
         </div>
-        <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
-          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-          <span class="sr-only">Previous</span>
-        </a>
-        <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
-          <span class="carousel-control-next-icon" aria-hidden="true"></span>
-          <span class="sr-only">Next</span>
-        </a>
       </div>
-    </div>
+
+      <div class="col-md-6" style="margin-top: 15%" id="ultimasConsultas">
+        <h3 class="text-center">ULTIMOS ESCANEOS</h3>
+
+        <table id="ultimasConsultasTable" class="table table-borderless table-striped col-12">
+          <thead>
+            <th class="align-middle bg-success text-center text-white border border-default p-3">CÓDIGO DE BARRA</th>
+            <th class="align-middle bg-success text-center text-white border border-default p-3">DESCRIPCIÓN</th>
+            <th class="align-middle bg-success text-center text-white border border-default p-3">PRECIO BS</th>
+            <th class="align-middle bg-success text-center text-white border border-default p-3">PRECIO $</th>
+            <th class="align-middle bg-success text-center text-white border border-default p-3">FECHA Y HORA</th>
+          </thead>
+
+          <tbody id="ultimasConsultasTbody">
+            <?php while ($row = mysqli_fetch_assoc($ultimasConsultas)): ?>
+              <tr>
+                <td class="align-middle border border-success p-3"><b><?php echo $row['codigoBarra']; ?></b></td>
+                <td class="align-middle border border-success p-3"><b><?php echo $row['descripcion']; ?></b></td>
+                <td class="align-middle border border-success p-3"><b><?php echo $row['precio_bs']; ?></b></td>
+                <td class="align-middle border border-success p-3"><b><?php echo $row['precio_ds']; ?></b></td>
+                <td class="align-middle border border-success p-3"><b><?php echo $row['fecha']; ?></b></td>
+              </tr>
+            <?php endwhile; ?>
+          </tbody>
+        </table>
+      </div>
 
 @endsection
 
 @section('scriptsPie')
+
+  <script src="https://momentjs.com/downloads/moment.js"></script>
+
+
   <script type="text/javascript">
     const SedeConnectionJs = '<?php echo $RutaUrl;?>'
+
+    document.body.style.zoom="80%";
   </script>
 
   <script>
@@ -222,6 +268,9 @@
           dominio = 'http://cpharmade.com/';
           return dominio;
         case 'ARG':
+          dominio = 'http://cpharmade.com/';
+        return dominio;
+        case 'DBs':
           dominio = 'http://cpharmade.com/';
         return dominio;
         break;
@@ -276,6 +325,7 @@
             while (j<limiteRespuesta){
               var pop = respuesta.pop();
               var precio = formateoPrecio(pop['Precio'],2);
+              var precioDolar = formateoPrecio(pop['PrecioDolar'],2);
               var descripcion = pop['Descripcion'];
               var codigo = pop['CodigoBarra'];
               var URLImag = URLImagen+codigo+'.jpg';
@@ -288,17 +338,18 @@
                 nuevaFila += '<div class="carousel-item">';
               }
               nuevaFila += '<div class="row justify-content-center">';
-              nuevaFila += '<img class="d-block w-50" src="'+URLImag+'"></br></br></br>';
+              nuevaFila += '<img class="d-block w-100" src="'+URLImag+'"></br></br></br>';
               nuevaFila += '</div>';
 
-              nuevaFila += '<div class="carousel-caption d-none d-md-block h-25" style="background-color:rgba(0, 0, 0,0.6)">';
-              nuevaFila += '<h2 class="text-white">Bs.S '+precio+'</h2>';
+              nuevaFila += '<div class="carousel-caption d-none d-md-block h-25 w-100" style="right: 0; left: 0; background-color:rgba(0, 0, 0,0.6)">';
+              nuevaFila += '<h2 class="text-white">Bs.S '+precio+' / $' + precioDolar + '</h2>';
               nuevaFila += '<h4 class="text-white">'+descripcion+'</h4>';
               nuevaFila += '</div>';
               nuevaFila += '</div>';
 
               /*Ingreso del al carousel*/
               $("#divPromocion").html(contenedor+nuevaFila);
+              $("#ultimasConsultas").show();
               j++;
             }
             $('#carouselExampleIndicators').show();
@@ -348,6 +399,7 @@
 
           $('#tablaError').hide();
           $('#divPromocion').html('');
+          $('#ultimasConsultas').hide();
           $('#carouselExampleIndicators').hide();
           $('#tablaResuldado').show();          
 
@@ -379,12 +431,41 @@
               //const TasaVentaD = eval(<?php /*echo $TasaVenta*/ ?>);
               precioDolar = formateoPrecio(data/TasaVenta,2);
               $('#PPrecioDolarScan').html('$. '+precioDolar);
+
+              for (var i = 0; i <= $('#ultimasConsultasTbody').find('tr').length - 1; i++) {
+                console.log($('#ultimasConsultasTbody').find('tr').eq(i).find('td').eq(0).html());
+                console.log(ArrJsCB[indiceCodBarScan]);
+
+                if ($('#ultimasConsultasTbody').find('tr').eq(i).find('td').eq(0).html() == '<b>' + ArrJsCB[indiceCodBarScan] + '</b>') {
+                  $('#ultimasConsultasTbody').find('tr').eq(i).remove();
+                }
+              }
+
+              if ($('#ultimasConsultasTbody').find('tr').length == 3) {
+                $('#ultimasConsultasTbody').find('tr').eq(2).remove();
+              }
+
+              html = `
+                <tr>
+                  <td class="border border-success p-3"><b>${ArrJsCB[indiceCodBarScan]}</b></td>
+                  <td class="border border-success p-3"><b>${ArrJs[indiceScanDesc]}</b></td>
+                  <td class="border border-success p-3"><b>${precio}</b></td>
+                  <td class="border border-success p-3"><b>${precioDolar}</b></td>
+                  <td class="border border-success p-3"><b>${moment().format('DD/MM/YYYY hh:mm A')}</b></td>
+                </tr>
+              `;
+              $('#ultimasConsultasTbody').prepend(html);
             }
            });
 
           $('#PCodBarrScan').html(ArrJsCB[indiceCodBarScan]);
           $('#PDescripScan').html(ArrJs[indiceScanDesc]); 
           $('#inputCodBar').val(''); 
+
+          $('#PPrecioScan').html('');
+          $('#PPrecioDolarScan').html('');
+
+          
           //Fin Armado tablaResuldado
           
           //Incio Armado tablaSugerido
@@ -518,6 +599,30 @@
       InvArticulo.Descripcion,
       InvArticulo.Id
       FROM InvArticulo
+    ";
+    return $sql;
+  }
+
+  /**********************************************************************************/
+  /*
+    TITULO: RCPQ_Articulos_Escaneados
+    FUNCION: Armar una lista de articulos escaneados anteriormente
+    RETORNO: Lista de escaneados anteriormente
+    DESAROLLADO POR: SERGIO COVA
+  */
+  function RCPQ_Articulos_Escaneados() {
+    $sql = "
+      Select codigoBarra, descripcion, 
+        (SELECT DATE_FORMAT(consultor.created_at, '%d/%m/%Y %h:%i %p') from consultor WHERE consultor.codigo_barra = codigoBarra ORDER by consultor.created_at DESC limit 1) as fecha,
+        (SELECT FORMAT(consultor.precio,2,'de_DE') FROM consultor WHERE consultor.codigo_barra = codigoBarra ORDER by consultor.created_at DESC limit 1) as precio_bs,
+        (SELECT FORMAT(consultor.precio/(select dolars.tasa from dolars order BY id DESC limit 1),2,'de_DE') FROM consultor WHERE consultor.codigo_barra = codigoBarra ORDER by consultor.created_at DESC limit 1) as precio_ds
+      FROM
+        (SELECT DISTINCT
+        consultor.codigo_barra as codigoBarra,
+        consultor.descripcion as descripcion
+        FROM consultor
+        order by consultor.id DESC
+        limit 3) as consulta
     ";
     return $sql;
   }

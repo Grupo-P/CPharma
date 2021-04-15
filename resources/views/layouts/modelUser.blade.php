@@ -9,7 +9,7 @@
             @include('includes.header')
         </header>
 
-        <div class="container">
+        <div class="{{ (Request::is('/ConsultaPrecio')) ? 'container' : 'CP-Container' }}">
             @yield('content')
         </div>
 

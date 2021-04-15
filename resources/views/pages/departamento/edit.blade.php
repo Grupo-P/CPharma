@@ -136,7 +136,9 @@
                 <th scope="col">34</th>
                 <td scope="col">Articulos estancados en tienda</td>
                 <th scope="col">35</th>
-                <td scope="col">Articulos sin ventas</td>   
+                <td scope="col">Articulos sin ventas</td>
+                <th scope="col">36</th>
+                <td scope="col">Lista de precios</td>  
             </tr>
         </tbody>
     </table>
