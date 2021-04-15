@@ -135,7 +135,7 @@
 		//INICIO BLOQUE DE FAU
 			case '12':
 				//return 'FAU';
-				return 'DBs';
+				return 'FAU';
 			break;
 		//FIN BLOQUE DE FAU
 			default:
