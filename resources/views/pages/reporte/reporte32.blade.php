@@ -70,8 +70,8 @@
         $conn = FG_Conectar_Smartpharma($SedeConnection);
         $connCPharma = FG_Conectar_CPharma();
 
-        $FInicial = $fecha;
-        //$FInicial = '2020-12-01';
+        //$FInicial = $fecha;
+        $FInicial = '2020-12-15';
         $FFinal = date("Y-m-d",strtotime($FInicial."+ 1 days"));
         $TasaActual = FG_Tasa_Fecha($connCPharma,$FInicial);
         //$TasaActual = 1800000.00;
@@ -189,52 +189,13 @@
     
         $sql5 = R32Q_Vent_art_cond($FInicial,$FFinal);
         $result5 = sqlsrv_query($conn,$sql5);
+        $result5a = sqlsrv_query($conn,$sql5);
 
-        $result_arr = $arrayPorcentaje = array();
-        $porcent_ante = $product_ant = "";
-        $cont_sku = $sum_unid_porcent = $sum_total_porcent = 0;
-        $sumatoria_unidades = $sumatoria_bs = 0;
-		while($row5 = sqlsrv_fetch_array($result5, SQLSRV_FETCH_ASSOC)) {	
-
-			if( $porcent_ante != $row5['PorcentajeUtilidad'] ){
-                
-                $arrayPorcentaje['Utilidad'] = $porcent_ante;
-                $arrayPorcentaje['TotalUnidadesVendidas'] = $sum_unid_porcent;
-                $arrayPorcentaje['TotalVenta'] = $sum_total_porcent;
-                $arrayPorcentaje['SKU'] = $cont_sku;
-                array_push($result_arr,$arrayPorcentaje);
-
-                $sumatoria_unidades += $sum_unid_porcent;
-                $sumatoria_bs += $sum_total_porcent;
-                
-                $cont_sku = $sum_unid_porcent = $sum_total_porcent = 0;
-                $porcent_ante = $row5['PorcentajeUtilidad']; 
-                
-                if( $product_ant != $row5['id']){
-                    $cont_sku++;
-                    $product_ant = $row5['id'];
-                }
-                
-                $sum_unid_porcent += $row5['TotalUnidadesVendidas'];
-                $sum_total_porcent += $row5['TotalVenta'];
-            }
-            else {
-                
-                if( $product_ant != $row5['id']){
-                    $cont_sku++;
-                    $product_ant = $row5['id'];
-                }
-                
-                $sum_unid_porcent += $row5['TotalUnidadesVendidas'];
-                $sum_total_porcent += $row5['TotalVenta'];
-            }
-  	    }
-
-          $arrayPorcentaje['Utilidad'] = $porcent_ante;
-          $arrayPorcentaje['TotalUnidadesVendidas'] = $sum_unid_porcent;
-          $arrayPorcentaje['TotalVenta'] = $sum_total_porcent;
-          $arrayPorcentaje['SKU'] = $cont_sku;
-          array_push($result_arr,$arrayPorcentaje);
+        $sumUnidades = $sumMonto = 0;
+        while($row5a = sqlsrv_fetch_array($result5a, SQLSRV_FETCH_ASSOC)) {
+            $sumUnidades += $row5a['Unidades'];
+            $sumMonto += $row5a['Monto'];
+        }
 
         echo '<hr class="row align-items-start col-12">';        
         echo '<h1 class="h5 text-dark" align="left">Ventas por Condicion</h1>';
@@ -248,43 +209,35 @@
                     <th scope="col" class="CP-sticky">Unidades</th>
                     <th scope="col" class="CP-sticky">%</th>
                     <th scope="col" class="CP-sticky">SKU</th>
-                    <th scope="col" class="CP-sticky">'.SigVe.'</th>
-                    <th scope="col" class="CP-sticky">'.SigDolar.'</th>                    
+                    <th scope="col" class="CP-sticky">'.SigVe.'<br>(Sin IVA)</th>
+                    <th scope="col" class="CP-sticky">'.SigDolar.'<br>(Sin IVA)</th>                     
                     <th scope="col" class="CP-sticky">%</th>
                 </tr>
             </thead>
             <tbody>
         ';
           
-        $contador = 0;
-        foreach($result_arr as $result){
+        $contador = 1;
+		while($row5 = sqlsrv_fetch_array($result5, SQLSRV_FETCH_ASSOC)) {
 
-            if($contador>0){
-    
-                $p_unid = (intval($result['TotalUnidadesVendidas'])*100)/$sumatoria_unidades;
-                $p_monto = ($result['TotalVenta']*100)/$sumatoria_bs;
-
-                echo '<tr>';
-                echo '<td align="center"><strong>'.intval($contador).'</strong></td>';
-                echo '<td align="center">'.$result['Utilidad'].'</td>';
-                echo '<td align="center">'.intval($result['TotalUnidadesVendidas']).'</td>';            
-                echo '<td align="center">'.number_format($p_unid,2,"," ,"." ).'</td>';
-                echo '<td align="center">'.intval($result['SKU']).'</td>';
-                echo '<td align="center">'.number_format($result['TotalVenta'],2,"," ,"." ).'</td>';
-                
-                if(isset($TasaActual)&&$TasaActual!=0){
-                    echo '<td align="center">'.number_format(($result['TotalVenta']/$TasaActual),2,"," ,"." ).'</td>';        			
-                }else{
-                    echo '<td align="center">0,00</td>';
-                }
-
-                echo '<td align="center">'.number_format($p_monto,2,"," ,"." ).'</td>';
-                
-                echo '</tr>';
-			    $contador++;
+            echo '<tr>';
+            echo '<td align="center"><strong>'.intval($contador).'</strong></td>';
+            echo '<td align="center">'.$row5['PorcentajeUtilidad'].'</td>';
+            echo '<td align="center">'.intval($row5['Unidades']).'</td>';            
+            echo '<td align="center">'.number_format((($row5['Unidades']/$sumUnidades)*100),2,"," ,"." ).'</td>';
+            echo '<td align="center">'.intval($row5['sku']).'</td>';
+            echo '<td align="center">'.number_format($row5['Monto'],2,"," ,"." ).'</td>';
+            
+            if(isset($TasaActual)&&$TasaActual!=0){
+                echo '<td align="center">'.number_format(($row5['Monto']/$TasaActual),2,"," ,"." ).'</td>';        			
             }else{
-                $contador++;
+                echo '<td align="center">0,00</td>';
             }
+
+            echo '<td align="center">'.number_format((($row5['Monto']/$sumMonto)*100),2,"," ,"." ).'</td>';
+            
+            echo '</tr>';
+            $contador++;
         }        
         echo '
             </tbody>
@@ -394,23 +347,51 @@
             <tbody>
         ';
 
-        $sql2 = R32Q_Vent_Cli_Nue_Rec($FInicial,$FFinal);
-        $result2 = sqlsrv_query($conn,$sql2);
-        
         $Sum_Monto_Nue = $Sum_Trans_Nue =  $Sum_Unid_Nue = 0;
         $Sum_Monto_Rec = $Sum_Trans_Rec =  $Sum_Unid_Rec = 0;
 
+        $sql2 = R32Q_Vent_Cli_Nue_Rec_venta($FInicial,$FFinal);
+        $result2 = sqlsrv_query($conn,$sql2);
+
+        $Sum_Monto_Nue_Fac = $Sum_Trans_Nue_Fac =  $Sum_Unid_Nue_Fac = 0;
+        $Sum_Monto_Rec_Fac = $Sum_Trans_Rec_Fac =  $Sum_Unid_Rec_Fac = 0;
+
 		while($row2 = sqlsrv_fetch_array($result2, SQLSRV_FETCH_ASSOC)) {
             if($row2['TipoCliente']=='Nuevo'){
-                $Sum_Monto_Nue += $row2['MontoFactura'];
-                $Sum_Unid_Nue += $row2['Unidades'];
-                $Sum_Trans_Nue += $row2['Transacciones'];
+                $Sum_Monto_Nue_Fac += $row2['MontoFactura'];
+                $Sum_Unid_Nue_Fac += $row2['UnidadesFactura'];
+                $Sum_Trans_Nue_Fac += $row2['TransaccionesFactura'];
             }else{
-                $Sum_Monto_Rec += $row2['MontoFactura'];
-                $Sum_Unid_Rec += $row2['Unidades'];
-                $Sum_Trans_Rec += $row2['Transacciones'];
+                $Sum_Monto_Rec_Fac += $row2['MontoFactura'];
+                $Sum_Unid_Rec_Fac += $row2['UnidadesFactura'];
+                $Sum_Trans_Rec_Fac += $row2['TransaccionesFactura'];
             }
-          }
+        }
+          
+        $sql21 = R32Q_Vent_Cli_Nue_Rec_devolucion($FInicial,$FFinal);
+        $result21 = sqlsrv_query($conn,$sql21);
+
+        $Sum_Monto_Nue_Dev = $Sum_Trans_Nue_Dev =  $Sum_Unid_Nue_Dev = 0;
+        $Sum_Monto_Rec_Dev = $Sum_Trans_Rec_Dev =  $Sum_Unid_Rec_Dev = 0;
+
+		while($row21 = sqlsrv_fetch_array($result21, SQLSRV_FETCH_ASSOC)) {
+            if($row21['TipoCliente']=='Nuevo'){
+                $Sum_Monto_Nue_Dev += $row21['MontoDevolucion'];
+                $Sum_Unid_Nue_Dev += $row21['UnidadesDevolucion'];
+                $Sum_Trans_Nue_Dev += $row21['TransaccionesDevolucion'];
+            }else{
+                $Sum_Monto_Rec_Dev += $row21['MontoDevolucion'];
+                $Sum_Unid_Rec_Dev += $row21['UnidadesDevolucion'];
+                $Sum_Trans_Rec_Dev += $row21['TransaccionesDevolucion'];
+            }
+        }
+        
+        $Sum_Monto_Nue = $Sum_Monto_Nue_Fac - $Sum_Monto_Nue_Dev;
+        $Sum_Trans_Nue = $Sum_Trans_Nue_Fac - $Sum_Trans_Nue_Dev; 
+        $Sum_Unid_Nue = $Sum_Unid_Nue_Fac -  $Sum_Unid_Nue_Dev;
+        $Sum_Monto_Rec = $Sum_Monto_Rec_Fac - $Sum_Monto_Rec_Dev;
+        $Sum_Trans_Rec = $Sum_Trans_Rec_Fac - $Sum_Trans_Rec_Dev;
+        $Sum_Unid_Rec = $Sum_Unid_Rec_Fac - $Sum_Unid_Rec_Dev;
           	  	
         $total_p = $Sum_Monto_Nue + $Sum_Monto_Rec;
         $p_monto_Nue = ($Sum_Monto_Nue*100)/$total_p;
@@ -480,23 +461,51 @@
             <tbody>
         ';
 
-        $sql3 = R32Q_Vent_Cli_Nat_Jur($FInicial,$FFinal);
-        $result3 = sqlsrv_query($conn,$sql3);
-        
         $Sum_Monto_Nat = $Sum_Trans_Nat =  $Sum_Unid_Nat = 0;
         $Sum_Monto_Jur = $Sum_Trans_Jur =  $Sum_Unid_Jur = 0;
 
+        $sql3 = R32Q_Vent_Cli_Nat_Jur_venta($FInicial,$FFinal);
+        $result3 = sqlsrv_query($conn,$sql3);
+        
+        $Sum_Monto_Nat_Fac = $Sum_Trans_Nat_Fac =  $Sum_Unid_Nat_Fac = 0;
+        $Sum_Monto_Jur_Fac = $Sum_Trans_Jur_Fac =  $Sum_Unid_Jur_Fac = 0;
+
 		while($row3 = sqlsrv_fetch_array($result3, SQLSRV_FETCH_ASSOC)) {
             if($row3['tipoPersona']=='1'){
-                $Sum_Monto_Nat += $row3['MontoFactura'];
-                $Sum_Unid_Nat += $row3['Unidades'];
-                $Sum_Trans_Nat += $row3['Transacciones'];
+                $Sum_Monto_Nat_Fac += $row3['MontoFactura'];
+                $Sum_Unid_Nat_Fac += $row3['UnidadesFactura'];
+                $Sum_Trans_Nat_Fac += $row3['TransaccionesFactura'];
             }else{
-                $Sum_Monto_Jur += $row3['MontoFactura'];
-                $Sum_Unid_Jur += $row3['Unidades'];
-                $Sum_Trans_Jur += $row3['Transacciones'];
+                $Sum_Monto_Jur_Fac += $row3['MontoFactura'];
+                $Sum_Unid_Jur_Fac += $row3['UnidadesFactura'];
+                $Sum_Trans_Jur_Fac += $row3['TransaccionesFactura'];
             }
           }
+
+        $sql31 = R32Q_Vent_Cli_Nat_Jur_devolucion($FInicial,$FFinal);
+        $result31 = sqlsrv_query($conn,$sql31);
+        
+        $Sum_Monto_Nat_Dev = $Sum_Trans_Nat_Dev =  $Sum_Unid_Nat_Dev = 0;
+        $Sum_Monto_Jur_Dev = $Sum_Trans_Jur_Dev =  $Sum_Unid_Jur_Dev = 0;
+
+		while($row31 = sqlsrv_fetch_array($result31, SQLSRV_FETCH_ASSOC)) {
+            if($row31['tipoPersona']=='1'){
+                $Sum_Monto_Nat_Dev += $row31['MontoDevolucion'];
+                $Sum_Unid_Nat_Dev += $row31['UnidadesDevolucion'];
+                $Sum_Trans_Nat_Dev += $row31['TransaccionesDevolucion'];
+            }else{
+                $Sum_Monto_Jur_Dev += $row31['MontoDevolucion'];
+                $Sum_Unid_Jur_Dev += $row31['UnidadesDevolucion'];
+                $Sum_Trans_Jur_Dev += $row31['TransaccionesDevolucion'];
+            }
+        }
+          
+        $Sum_Monto_Nat = $Sum_Monto_Nat_Fac - $Sum_Monto_Nat_Dev;
+        $Sum_Trans_Nat = $Sum_Trans_Nat_Fac - $Sum_Trans_Nat_Dev;
+        $Sum_Unid_Nat = $Sum_Unid_Nat_Fac - $Sum_Unid_Nat_Dev;
+        $Sum_Monto_Jur = $Sum_Monto_Jur_Fac - $Sum_Monto_Jur_Dev;
+        $Sum_Trans_Jur = $Sum_Trans_Jur_Fac - $Sum_Trans_Jur_Dev;
+        $Sum_Unid_Jur = $Sum_Unid_Jur_Fac - $Sum_Unid_Jur_Dev;
           	  	
         $total_p = $Sum_Monto_Nat + $Sum_Monto_Jur;
         $p_monto_Nat = ($Sum_Monto_Nat*100)/$total_p;
@@ -766,13 +775,19 @@
     }
     
     /*
-        TITULO: R32Q_Vent_Cli_Nue_Rec
+        TITULO: R32Q_Vent_Cli_Nue_Rec_venta
     */    
-    function R32Q_Vent_Cli_Nue_Rec($FInicial,$FFinal){
+    function R32Q_Vent_Cli_Nue_Rec_venta($FInicial,$FFinal){
         $sql = "
         --Clientes Nuevos y Recurrentes
-        SELECT 
-        IIF( CONVERT(date,GenPersona.Auditoria_FechaCreacion) = '$FInicial', 'Nuevo' ,'Recurrente') as TipoCliente,
+        select TipoCliente,
+        SUM(MontoFactura) AS MontoFactura,
+        SUM(Unidades) AS UnidadesFactura,
+        SUM(Transacciones) AS TransaccionesFactura
+        from
+        (SELECT 
+        VenFactura.Id,
+        IIF( CONVERT(date,VenCliente.Auditoria_FechaCreacion) = '$FInicial', 'Nuevo' ,'Recurrente') as TipoCliente,
         (VenFactura.M_MontoTotalFactura) AS MontoFactura,
         ((ROUND(CAST(SUM(VenFacturaDetalle.Cantidad) AS DECIMAL(38,0)),2,0))) as Unidades,
         COUNT(DISTINCT VenFactura.Id) as Transacciones
@@ -782,20 +797,55 @@
         LEFT JOIN VenFacturaDetalle ON VenFacturaDetalle.VenFacturaId = VenFactura.Id
         WHERE
         (VenFactura.FechaDocumento > '$FInicial' AND VenFactura.FechaDocumento < '$FFinal')
-        GROUP BY VenFactura.M_MontoTotalFactura,GenPersona.Auditoria_FechaCreacion
-        ORDER BY TipoCliente ASC
+        GROUP BY VenFactura.M_MontoTotalFactura,VenCliente.Auditoria_FechaCreacion,VenFactura.Id) AS Factura
+        GROUP BY TipoCliente
         ";
         return $sql;
     }
     /*
-        TITULO: R32Q_Vent_Cli_Nat_Jur
+        TITULO: R32Q_Vent_Cli_Nue_Rec_devolucion
+    */    
+    function R32Q_Vent_Cli_Nue_Rec_devolucion($FInicial,$FFinal){
+        $sql = "
+        --Clientes Devolucion Nuevos y Recurrentes
+        select TipoCliente,
+        SUM(MontoDevolucion) AS MontoDevolucion,
+        SUM(Unidades) AS UnidadesDevolucion,
+        SUM(Transacciones) AS TransaccionesDevolucion
+        from
+        (SELECT 
+        VenDevolucion.Id,
+        IIF( CONVERT(date,VenCliente.Auditoria_FechaCreacion) = '$FInicial', 'Nuevo' ,'Recurrente') as TipoCliente,
+        (VenDevolucion.M_MontoTotalDevolucion) AS MontoDevolucion,
+        ((ROUND(CAST(SUM(VenDevolucionDetalle.Cantidad) AS DECIMAL(38,0)),2,0))) as Unidades,
+        COUNT(DISTINCT VenFactura.Id) as Transacciones
+        FROM VenDevolucion
+        LEFT JOIN VenDevolucionDetalle ON VenDevolucionDetalle.VenDevolucionId = VenDevolucion.Id
+        LEFT JOIN VenFactura ON VenFactura.Id = VenDevolucion.VenFacturaId
+        LEFT JOIN VenCliente ON VenCliente.Id = VenFactura.VenClienteId
+        LEFT JOIN GenPersona ON GenPersona.Id = VenCliente.GenPersonaId
+        WHERE
+        (VenDevolucion.FechaDocumento > '$FInicial' AND VenDevolucion.FechaDocumento < '$FFinal')
+        GROUP BY VenDevolucion.M_MontoTotalDevolucion,VenCliente.Auditoria_FechaCreacion,VenDevolucion.Id) AS Devolucion
+        GROUP BY TipoCliente
+        ";
+        return $sql;
+    }
+    /*
+        TITULO: R32Q_Vent_Cli_Nat_Jur_venta
     */
-    function R32Q_Vent_Cli_Nat_Jur($FInicial,$FFinal){
+    function R32Q_Vent_Cli_Nat_Jur_venta($FInicial,$FFinal){
         $sql = "
         --Clientes por Tipo Persona
-        SELECT 
+        select tipoPersona,
+        SUM(Monto) AS MontoFactura,
+        SUM(Unidades) AS UnidadesFactura,
+        SUM(Transacciones) AS TransaccionesFactura
+        from
+        (SELECT 
+        VenFactura.id,
         GenPersona.tipoPersona,
-        (VenFactura.M_MontoTotalFactura) AS MontoFactura,
+        (VenFactura.M_MontoTotalFactura) AS Monto,
         ((ROUND(CAST(SUM(VenFacturaDetalle.Cantidad) AS DECIMAL(38,0)),2,0))) as Unidades,
         COUNT(DISTINCT VenFactura.Id) as Transacciones
         FROM VenFactura
@@ -804,8 +854,37 @@
         LEFT JOIN VenFacturaDetalle ON VenFacturaDetalle.VenFacturaId = VenFactura.Id
         WHERE
         (VenFactura.FechaDocumento > '$FInicial' AND VenFactura.FechaDocumento < '$FFinal')
-        GROUP BY VenFactura.M_MontoTotalFactura,GenPersona.tipoPersona
-        ORDER BY GenPersona.tipoPersona ASC
+        GROUP BY VenFactura.M_MontoTotalFactura,GenPersona.tipoPersona,VenFactura.id) AS Factura
+        GROUP BY tipoPersona
+        ";
+        return $sql;
+    }
+    /*
+        TITULO: R32Q_Vent_Cli_Nat_Jur_devolucion
+    */
+    function R32Q_Vent_Cli_Nat_Jur_devolucion($FInicial,$FFinal){
+        $sql = "
+        --Clientes por Tipo Persona
+        select tipoPersona,
+        SUM(MontoFactura) AS MontoDevolucion,
+        SUM(Unidades) AS UnidadesDevolucion,
+        SUM(Transacciones) AS TransaccionesDevolucion
+        from
+        (SELECT 
+        VenDevolucion.Id,
+        GenPersona.tipoPersona,
+        (VenDevolucion.M_MontoTotalDevolucion) AS MontoFactura,
+        ((ROUND(CAST(SUM(VenDevolucionDetalle.Cantidad) AS DECIMAL(38,0)),2,0))) as Unidades,
+        COUNT(DISTINCT VenDevolucion.Id) as Transacciones
+        FROM VenDevolucion
+        LEFT JOIN VenDevolucionDetalle ON VenDevolucionDetalle.VenDevolucionId = VenDevolucion.Id
+        LEFT JOIN VenFactura ON VenFactura.id = VenDevolucion.VenFacturaId
+        LEFT JOIN VenCliente ON VenCliente.Id = VenFactura.VenClienteId
+        LEFT JOIN GenPersona ON GenPersona.Id = VenCliente.GenPersonaId
+        WHERE
+        (VenDevolucion.FechaDocumento > '$FInicial' AND VenDevolucion.FechaDocumento < '$FFinal')
+        GROUP BY VenDevolucion.M_MontoTotalDevolucion,GenPersona.tipoPersona,VenDevolucion.Id) AS Devolucion
+        GROUP BY tipoPersona
         ";
         return $sql;
     }
@@ -814,13 +893,17 @@
     */ 
     function R32Q_Vent_Cli_Top($FInicial,$FFinal){
         $sql = "
-        SELECT top 5 
+        SELECT top 5
         VenCliente.id as IdCliente,
         GenPersona.Nombre,
         GenPersona.Apellido,
         (VenFactura.M_MontoTotalFactura) AS MontoFactura,
         ((ROUND(CAST(SUM(VenFacturaDetalle.Cantidad) AS DECIMAL(38,0)),2,0))) as Unidades,
-        COUNT(DISTINCT VenFactura.Id) as Transacciones
+            (select COUNT(DISTINCT VenFactura.Id)
+            FROM VenFactura
+            WHERE
+            (VenFactura.FechaDocumento > '$FInicial' AND VenFactura.FechaDocumento < '$FFinal')
+            and VenFactura.VenClienteId = VenCliente.id) as Transacciones
         FROM VenFactura
         LEFT JOIN VenCliente ON VenCliente.Id = VenFactura.VenClienteId
         LEFT JOIN GenPersona ON GenPersona.Id = VenCliente.GenPersonaId
@@ -838,41 +921,89 @@
     */ 
     function R32Q_Vent_art_cond($FInicial,$FFinal){
         $sql = "
-            select VenCondicionVenta.PorcentajeUtilidad, InvArticulo.id,
-            --Total Unidades Vendidas (En Rango)
-                (((ROUND(CAST(SUM(VenFacturaDetalle.Cantidad) AS DECIMAL(38,0)),2,0)))
-                -
-                (ISNULL((SELECT
-                (ROUND(CAST(SUM(VenDevolucionDetalle.Cantidad) AS DECIMAL(38,0)),2,0))
-                FROM VenDevolucionDetalle
-                INNER JOIN VenDevolucion ON VenDevolucion.Id = VenDevolucionDetalle.VenDevolucionId
-                WHERE VenDevolucionDetalle.InvArticuloId = VenFacturaDetalle.InvArticuloId
-                AND(VenDevolucion.FechaDocumento > '$FInicial' AND VenDevolucion.FechaDocumento < '$FFinal')
-                GROUP BY VenDevolucionDetalle.InvArticuloId
-                ),CAST(0 AS INT)))) AS TotalUnidadesVendidas,
-            --TotalVenta (En Rango)
-                ((ISNULL((SELECT
-                (ROUND(CAST(SUM (VenVentaDetalle.PrecioBruto * VenVentaDetalle.Cantidad) AS DECIMAL(38,2)),2,0)) 
-                FROM VenVentaDetalle
-                INNER JOIN VenVenta ON VenVenta.Id = VenVentaDetalle.VenVentaId 
-                WHERE (VenVenta.FechaDocumentoVenta > '$FInicial' AND VenVenta.FechaDocumentoVenta < '$FFinal')
-                AND VenVentaDetalle.InvArticuloId = VenFacturaDetalle.InvArticuloId
-                AND VenVenta.estadoVenta = 2),CAST(0 AS INT)))
-                -
-                (ISNULL((SELECT
-                (ROUND(CAST(SUM (VenDevolucionDetalle.PrecioBruto * VenDevolucionDetalle.Cantidad) AS DECIMAL(38,2)),2,0)) as SubTotalDevolucion
-                FROM VenDevolucionDetalle
-                INNER JOIN VenDevolucion ON VenDevolucion.Id = VenDevolucionDetalle.VenDevolucionId 	  
-                WHERE (VenDevolucion.FechaDocumento > '$FInicial' AND VenDevolucion.FechaDocumento < '$FFinal') 
-                AND VenDevolucionDetalle.InvArticuloId = VenFacturaDetalle.InvArticuloId),CAST(0 AS INT)))) AS TotalVenta
-            from VenFactura
-            left join VenFacturaDetalle on VenFacturaDetalle.VenFacturaId = VenFactura.Id
-            left join InvArticulo on InvArticulo.id = VenFacturaDetalle.InvArticuloId
-            left join VenCondicionVenta_VenCondicionVentaCategoria on VenCondicionVenta_VenCondicionVentaCategoria.InvCategoriaId = InvArticulo.InvCategoriaId
-            left join VenCondicionVenta on VenCondicionVenta.id = VenCondicionVenta_VenCondicionVentaCategoria.Id 
-            WHERE (VenFactura.FechaDocumento > '$FInicial' AND VenFactura.FechaDocumento < '$FFinal')
-            group by VenCondicionVenta.PorcentajeUtilidad, InvArticulo.id, InvArticulo.Descripcion, VenFacturaDetalle.InvArticuloId
-            order by VenCondicionVenta.PorcentajeUtilidad desc, InvArticulo.id asc
+        select PorcentajeUtilidad, sum(TotalUnidadesVendidas) as Unidades, sum(TotalVenta) as Monto, count(*) as sku
+        from
+        (select 
+        VenCondicionVenta.PorcentajeUtilidad as PorcentajeUtilidad, 
+        InvArticulo.id, 
+        InvArticulo.Descripcion,
+        (ISNULL((SELECT
+        (ROUND(CAST(SUM(VenFacturaDetalle.Cantidad) AS DECIMAL(38,0)),2,0))
+        FROM VenFacturaDetalle
+        INNER JOIN VenFactura ON VenFactura.Id = VenFacturaDetalle.VenFacturaId
+        WHERE VenFacturaDetalle.InvArticuloId = InvArticulo.Id
+        AND(VenFactura.FechaDocumento > '$FInicial' AND VenFactura.FechaDocumento < '$FFinal')
+        GROUP BY VenFacturaDetalle.InvArticuloId
+        ),CAST(0 AS INT))) as unidadesVendidas,
+        (ISNULL((SELECT
+        (ROUND(CAST(SUM(VenDevolucionDetalle.Cantidad) AS DECIMAL(38,0)),2,0))
+        FROM VenDevolucionDetalle
+        INNER JOIN VenDevolucion ON VenDevolucion.Id = VenDevolucionDetalle.VenDevolucionId
+        WHERE VenDevolucionDetalle.InvArticuloId = InvArticulo.Id
+        AND(VenDevolucion.FechaDocumento > '$FInicial' AND VenDevolucion.FechaDocumento < '$FFinal')
+        GROUP BY VenDevolucionDetalle.InvArticuloId
+        ),CAST(0 AS INT))) as unidadesDevueltas,
+        --Total Unidades Vendidas (En Rango)
+        (
+        (ISNULL((SELECT
+        (ROUND(CAST(SUM(VenFacturaDetalle.Cantidad) AS DECIMAL(38,0)),2,0))
+        FROM VenFacturaDetalle
+        INNER JOIN VenFactura ON VenFactura.Id = VenFacturaDetalle.VenFacturaId
+        WHERE VenFacturaDetalle.InvArticuloId = InvArticulo.Id
+        AND(VenFactura.FechaDocumento > '$FInicial' AND VenFactura.FechaDocumento < '$FFinal')
+        GROUP BY VenFacturaDetalle.InvArticuloId
+        ),CAST(0 AS INT)))
+        -
+        (ISNULL((SELECT
+        (ROUND(CAST(SUM(VenDevolucionDetalle.Cantidad) AS DECIMAL(38,0)),2,0))
+        FROM VenDevolucionDetalle
+        INNER JOIN VenDevolucion ON VenDevolucion.Id = VenDevolucionDetalle.VenDevolucionId
+        WHERE VenDevolucionDetalle.InvArticuloId = InvArticulo.Id
+        AND(VenDevolucion.FechaDocumento > '$FInicial' AND VenDevolucion.FechaDocumento < '$FFinal')
+        GROUP BY VenDevolucionDetalle.InvArticuloId
+        ),CAST(0 AS INT)))
+        ) AS TotalUnidadesVendidas,
+        (ISNULL((SELECT
+        (ROUND(CAST(SUM (VenVentaDetalle.PrecioBruto * VenVentaDetalle.Cantidad) AS DECIMAL(38,2)),2,0)) 
+        FROM VenVentaDetalle
+        INNER JOIN VenVenta ON VenVenta.Id = VenVentaDetalle.VenVentaId 
+        WHERE (VenVenta.FechaDocumentoVenta > '$FInicial' AND VenVenta.FechaDocumentoVenta < '$FFinal')
+        AND VenVentaDetalle.InvArticuloId = VenFacturaDetalle.InvArticuloId
+        AND VenVenta.estadoVenta = 2),CAST(0 AS INT))) as Venta,
+        (ISNULL((SELECT
+        (ROUND(CAST(SUM (VenDevolucionDetalle.PrecioBruto * VenDevolucionDetalle.Cantidad) AS DECIMAL(38,2)),2,0)) as SubTotalDevolucion
+        FROM VenDevolucionDetalle
+        INNER JOIN VenDevolucion ON VenDevolucion.Id = VenDevolucionDetalle.VenDevolucionId 	  
+        WHERE (VenDevolucion.FechaDocumento > '$FInicial' AND VenDevolucion.FechaDocumento < '$FFinal') 
+        AND VenDevolucionDetalle.InvArticuloId = VenFacturaDetalle.InvArticuloId),CAST(0 AS INT))) as Devolucion,
+        --TotalVenta (En Rango)
+        ((ISNULL((SELECT
+        (ROUND(CAST(SUM (VenVentaDetalle.PrecioBruto * VenVentaDetalle.Cantidad) AS DECIMAL(38,2)),2,0)) 
+        FROM VenVentaDetalle
+        INNER JOIN VenVenta ON VenVenta.Id = VenVentaDetalle.VenVentaId 
+        WHERE (VenVenta.FechaDocumentoVenta > '$FInicial' AND VenVenta.FechaDocumentoVenta < '$FFinal')
+        AND VenVentaDetalle.InvArticuloId = VenFacturaDetalle.InvArticuloId
+        AND VenVenta.estadoVenta = 2),CAST(0 AS INT)))
+        -
+        (ISNULL((SELECT
+        (ROUND(CAST(SUM (VenDevolucionDetalle.PrecioBruto * VenDevolucionDetalle.Cantidad) AS DECIMAL(38,2)),2,0)) as SubTotalDevolucion
+        FROM VenDevolucionDetalle
+        INNER JOIN VenDevolucion ON VenDevolucion.Id = VenDevolucionDetalle.VenDevolucionId 	  
+        WHERE (VenDevolucion.FechaDocumento > '$FInicial' AND VenDevolucion.FechaDocumento < '$FFinal') 
+        AND VenDevolucionDetalle.InvArticuloId = VenFacturaDetalle.InvArticuloId),CAST(0 AS INT)))) AS TotalVenta
+        from VenFactura
+        left join VenFacturaDetalle on VenFacturaDetalle.VenFacturaId = VenFactura.Id
+        left join InvArticulo on InvArticulo.id = VenFacturaDetalle.InvArticuloId
+        left join VenCondicionVenta_VenCondicionVentaCategoria on VenCondicionVenta_VenCondicionVentaCategoria.InvCategoriaId = InvArticulo.InvCategoriaId
+        left join VenCondicionVenta on VenCondicionVenta.id = VenCondicionVenta_VenCondicionVentaCategoria.Id 
+        left join VenDevolucionDetalle on VenDevolucionDetalle.InvArticuloId = InvArticulo.id
+        left join VenDevolucion on VenDevolucion.id = VenDevolucionDetalle.VenDevolucionId
+        WHERE (VenFactura.FechaDocumento > '$FInicial' AND VenFactura.FechaDocumento < '$FFinal')
+        or (VenDevolucion.FechaDocumento > '$FInicial' AND VenDevolucion.FechaDocumento < '$FFinal')
+        group by VenCondicionVenta.PorcentajeUtilidad, VenFacturaDetalle.InvArticuloId, InvArticulo.id, InvArticulo.Descripcion
+        ) as condicion
+        group by PorcentajeUtilidad
+        order by PorcentajeUtilidad asc
         ";
         return $sql;
     }
