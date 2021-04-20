@@ -34,9 +34,35 @@ class UnidadController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
-        return view('pages.unidad.create');
+        $CodBar = $request->input('CodBar');
+        $id_articulo = $request->input('Id');
+
+        if($CodBar!="" || $id_articulo!=""){
+        
+            if($id_articulo!=""){
+                $result = Unidad::where('id_articulo',$id_articulo)->get();                   
+                if(isset($result[0])){
+                    $id = $result[0]->id;
+                    $unidad = Unidad::find($id);            
+                    return view('pages.unidad.edit', compact('unidad'));
+                }
+            }
+            else if($CodBar!=""){               
+                $result = Unidad::where('codigo_barra',$CodBar)->get();
+                if(isset($result[0])){
+                    $id = $result[0]->id;
+                    $unidad = Unidad::find($id);
+                    return view('pages.unidad.edit', compact('unidad'));
+                }
+            }
+            
+            return view('pages.unidad.create');
+
+        }else{
+            return view('pages.unidad.articuloUnidad');
+        }        
     }
 
     /**
@@ -46,7 +72,7 @@ class UnidadController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {
+    {        
         try{
             $unidad = new Unidad();
             $unidad->id_articulo = $request->input('id_articulo');
@@ -57,7 +83,12 @@ class UnidadController extends Controller
             $unidad->articulo = $request->input('articulo');
             $unidad->estatus = 'ACTIVO';
             $unidad->user = auth()->user()->name;
-            $unidad->save();
+            
+            if($unidad->unidad_minima!="Seleccione..."){
+                $unidad->save();
+            }else{
+                return back()->with('Error Unidad', ' Error Unidad');
+            }            
 
             $Auditoria = new Auditoria();
             $Auditoria->accion = 'CREAR';
@@ -68,8 +99,8 @@ class UnidadController extends Controller
 
             return redirect()->route('unidad.index')->with('Saved', ' Informacion');
         }
-        catch(\Illuminate\Database\QueryException $e){
-            return back()->with('Error', ' Error');
+        catch(\Illuminate\Database\QueryException $e){        
+            return back()->with('Error', ' Error');                       
         }
     }
 
@@ -119,6 +150,12 @@ class UnidadController extends Controller
             $unidad->fill($request->all());
             $unidad->user = auth()->user()->name;
             $unidad->save();
+
+            if($unidad->unidad_minima!="Seleccione..."){
+                $unidad->save();
+            }else{
+                return back()->with('Error Unidad', ' Error Unidad');
+            }  
 
             $Auditoria = new Auditoria();
             $Auditoria->accion = 'EDITAR';
