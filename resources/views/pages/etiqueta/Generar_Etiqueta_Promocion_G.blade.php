@@ -268,6 +268,9 @@
         case 'ARG':
           dominio = 'http://cpharmade.com/';
           return dominio;
+        case 'DBs':
+          dominio = 'http://cpharmade.com/';
+          return dominio;
         break;
       }
     }

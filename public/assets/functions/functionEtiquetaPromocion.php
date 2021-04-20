@@ -149,6 +149,25 @@
 					}
 					
 					if($flag_imprime == true){
+						$connCPharma = FG_Conectar_CPharma();
+						$query = $connCPharma->query("SELECT * FROM unidads WHERE codigo_barra = '$CodigoBarra' LIMIT 1");
+
+						if ($query->num_rows) {
+							$unidad= $query->fetch_assoc();
+
+							$unidadMinima = strtolower($unidad['unidad_minima']);
+							$divisor = $unidad['divisor'];
+							$precioUnidadMinima = (($PrecioHoy / $divisor) < 1) ? number_format($PrecioHoy / $divisor, 4, ',', '.') : number_format($PrecioHoy / $divisor, 2, ',', '.');
+
+							$unidadMinima = '
+								<tr>
+									<td style="font-weight: bold; text-align: center; color: red" colspan="2">Precio por '.$unidadMinima.' '.$precioUnidadMinima.'</td>
+								</tr>
+							';
+						} else {
+							$unidadMinima = '';
+						}
+
 						$Etiqueta = $Etiqueta.'
 							<table class="etq" style="display: inline;">
 								<thead class="etq">
@@ -187,6 +206,7 @@
 											</strong>
 										</td>
 									</tr>
+									'.$unidadMinima.'
 									<tr>
 										<td class="izquierda rowIzq rowIzqA aumento1">
 											<strong>Total a Pagar '.$moneda.'</strong>
@@ -275,6 +295,25 @@
 				}
 					
 				if($flag_imprime == true){
+					$connCPharma = FG_Conectar_CPharma();
+					$query = $connCPharma->query("SELECT * FROM unidads WHERE codigo_barra = '$CodigoBarra' LIMIT 1");
+
+					if ($query->num_rows) {
+						$unidad= $query->fetch_assoc();
+
+						$unidadMinima = strtolower($unidad['unidad_minima']);
+						$divisor = $unidad['divisor'];
+						$precioUnidadMinima = (($PrecioHoy / $divisor) < 1) ? number_format($PrecioHoy / $divisor, 4, ',', '.') : number_format($PrecioHoy / $divisor, 2, ',', '.');
+
+						$unidadMinima = '
+							<tr>
+								<td style="font-weight: bold; text-align: center; color: red" colspan="2">Precio por '.$unidadMinima.' '.$precioUnidadMinima.'</td>
+							</tr>
+						';
+					} else {
+						$unidadMinima = '';
+					}
+
 					$Etiqueta = $Etiqueta.'
 						<table class="etq" style="display: inline;">
 							<thead class="etq">
@@ -297,6 +336,7 @@
 										</strong>
 									</td>
 								</tr>
+								'.$unidadMinima.'
 								<tr>
 									<td class="izquierda rowIzq rowIzqA aumento1">
 										<strong>Total a Pagar '.$moneda.'</strong>
