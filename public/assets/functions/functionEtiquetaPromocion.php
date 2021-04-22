@@ -161,7 +161,7 @@
 
 							$unidadMinima = '
 								<tr>
-									<td style="font-weight: bold; text-align: center; color: red" colspan="2">Precio por '.$unidadMinima.' '.$precioUnidadMinima.'</td>
+									<td style="font-size: 2em; text-align: center; color: red" colspan="2">Precio por '.$unidadMinima.' '.$precioUnidadMinima.'</td>
 								</tr>
 							';
 						} else {
@@ -307,7 +307,7 @@
 
 						$unidadMinima = '
 							<tr>
-								<td style="font-weight: bold; text-align: center; color: red" colspan="2">Precio por '.$unidadMinima.' '.$precioUnidadMinima.'</td>
+								<td style="font-size: 2em; text-align: center; color: red" colspan="2">Precio por '.$unidadMinima.' '.$precioUnidadMinima.'</td>
 							</tr>
 						';
 					} else {

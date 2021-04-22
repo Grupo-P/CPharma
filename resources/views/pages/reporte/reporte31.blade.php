@@ -634,33 +634,33 @@
         $VentaDiariaQuiebre = FG_Venta_Diaria($row3['TotalUnidadesVendidas'],$RangoDiasQuiebre);
         $DiasRestantesQuiebre = FG_Dias_Restantes($existencia,$VentaDiariaQuiebre);
 
-        if ($DiasRestantesQuiebre < $_GET['sobreStock']) {
-          continue;
+        if ($DiasRestantesQuiebre >= $_GET['sobreStock']) {
+          echo '<tr>';
+          echo '<td>'.$contador.'</td>';
+          echo '<td>Compras</td>';
+          echo '<td>'.$codigo.'</td>';
+          echo '<td>'.$codigo_barra.'</td>';
+          echo 
+          '<td align="left" class="CP-barrido">
+          <a href="/reporte2?Id='.$id_articulo.'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
+            .$descripcion.
+          '</a>
+          </td>';
+          echo '<td>'.$fecha_registro.'</td>';
+          echo '<td>'.$fecha_vencimiento.'</td>';
+          echo '<td>'.round($DiasRestantesQuiebre,2).'</td>';
+          echo '<td>'.$cantidad_recibida.'</td>';
+          echo '<td>'.$existencia.'</td>';
+          echo '<td>'.$operador.'</td>';
+          echo '<td>'.$proveedor.'</td>';
+          echo '<td>'.$numero_factura.'</td>';
+          echo '<td>'.$ultima_venta.'</td>';
+          echo '</tr>';
+
+          $contador++;
         }
 
-        echo '<tr>';
-        echo '<td>'.$contador.'</td>';
-        echo '<td>Compras</td>';
-        echo '<td>'.$codigo.'</td>';
-        echo '<td>'.$codigo_barra.'</td>';
-        echo 
-        '<td align="left" class="CP-barrido">
-        <a href="/reporte2?Id='.$id_articulo.'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
-          .$descripcion.
-        '</a>
-        </td>';
-        echo '<td>'.$fecha_registro.'</td>';
-        echo '<td>'.$fecha_vencimiento.'</td>';
-        echo '<td>'.round($DiasRestantesQuiebre,2).'</td>';
-        echo '<td>'.$cantidad_recibida.'</td>';
-        echo '<td>'.$existencia.'</td>';
-        echo '<td>'.$operador.'</td>';
-        echo '<td>'.$proveedor.'</td>';
-        echo '<td>'.$numero_factura.'</td>';
-        echo '<td>'.$ultima_venta.'</td>';
-        echo '</tr>';
-
-        $contador++;
+        
       }
 
       echo '</tbody>';
