@@ -259,9 +259,8 @@
             </tbody>
         </table>';
 
-
 		$sql = R32Q_Venta_Articulos(5,$FInicial,$FFinal,'TotalVenta');
-        $result = sqlsrv_query($conn,$sql);          
+        $result = sqlsrv_query($conn,$sql);                  
         
         echo '<hr class="row align-items-start col-12">';        
         echo '<h1 class="h5 text-dark" align="left">Ventas por Articulo</h1>';
@@ -271,20 +270,61 @@
             <thead class="thead-dark">
                 <tr>
                     <th scope="col" class="CP-sticky">#</th>
+                    <th scope="col" class="CP-sticky">Codigo Interno</th>
+                    <th scope="col" class="CP-sticky">Codigo Barra</th>
                     <th scope="col" class="CP-sticky">Articulo</th>
+                    <th scope="col" class="CP-sticky">Existencia</th>
+                    <th scope="col" class="CP-sticky">Precio</th>
                     <th scope="col" class="CP-sticky">'.SigVe.'</th>
                     <th scope="col" class="CP-sticky">'.SigDolar.'</th>
                     <th scope="col" class="CP-sticky">Cantidad</th>
                     <th scope="col" class="CP-sticky">Frecuencia</th>
+                    <th scope="col" class="CP-sticky">Ultimo Proveedor</th>
                 </tr>
             </thead>
             <tbody>
         ';
         $contador = 1;
-		while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {					
+		while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
+                        
+            $IdArticulo = $row["InvArticuloId"];
+
+            $sqlDet = SQG_Detalle_Articulo($IdArticulo);
+            $resultDet = sqlsrv_query($conn,$sqlDet);
+            $rowDet = sqlsrv_fetch_array($resultDet, SQLSRV_FETCH_ASSOC);
+            
+            $CodigoInterno = $rowDet["CodigoInterno"];
+            $CodigoBarra = $rowDet["CodigoBarra"];            
+            $Existencia = $rowDet["Existencia"];
+            $ExistenciaAlmacen1 = $rowDet["ExistenciaAlmacen1"];
+            $ExistenciaAlmacen2 = $rowDet["ExistenciaAlmacen2"];
+            $IsTroquelado = $rowDet["Troquelado"];
+            $IsIVA = $rowDet["Impuesto"];
+            $UtilidadArticulo = $rowDet["UtilidadArticulo"];
+            $UtilidadCategoria = $rowDet["UtilidadCategoria"];
+            $TroquelAlmacen1 = $rowDet["TroquelAlmacen1"];
+            $PrecioCompraBrutoAlmacen1 = $rowDet["PrecioCompraBrutoAlmacen1"];
+            $TroquelAlmacen2 = $rowDet["TroquelAlmacen2"];
+            $PrecioCompraBrutoAlmacen2 = $rowDet["PrecioCompraBrutoAlmacen2"];
+            $PrecioCompraBruto = $rowDet["PrecioCompraBruto"];                        
+            $CondicionExistencia = 'CON_EXISTENCIA';                        
+                                    
+            $Precio = FG_Calculo_Precio_Alfa($Existencia,$ExistenciaAlmacen1,$ExistenciaAlmacen2,$IsTroquelado,$UtilidadArticulo,$UtilidadCategoria,$TroquelAlmacen1,$PrecioCompraBrutoAlmacen1,$TroquelAlmacen2,
+            $PrecioCompraBrutoAlmacen2,$PrecioCompraBruto,$IsIVA,$CondicionExistencia);
+
 			echo '<tr>';
-			echo '<td align="center"><strong>'.intval($contador).'</strong></td>';
-            echo '<td align="center">'.FG_Limpiar_Texto($row['Descripcion']).'</td>';
+			echo '<td align="center"><strong>'.intval($contador).'</strong></td>';            
+            echo '<td align="left">'.$CodigoInterno.'</td>';            
+            echo '<td align="left">'.$CodigoBarra.'</td>';   
+            echo 
+            '<td align="left" class="CP-barrido">
+            <a href="/reporte2?Id='.$IdArticulo.'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
+                .FG_Limpiar_Texto($row['Descripcion']).
+            '</a>
+            </td>';
+            echo '<td align="center">'.intval($Existencia).'</td>';
+            echo '<td align="center">'.number_format($Precio,2,"," ,"." ).'</td>';
+
             echo '<td align="center">'.number_format($row['TotalVenta'],2,"," ,"." ).'</td>';
             
             if(isset($TasaActual)&&$TasaActual!=0){
@@ -295,6 +335,7 @@
             
             echo '<td align="center">'.intval($row['TotalUnidadesVendidas']).'</td>';
             echo '<td align="center">'.intval($row['TotalVecesVendidas']).'</td>';
+            echo '<td align="center">'.FG_Limpiar_Texto($rowDet['UltimoProveedorNombre']).'</td>';  
 			echo '</tr>';
 			$contador++;
   	    }
@@ -307,11 +348,16 @@
             <thead class="thead-dark">
                 <tr>
                     <th scope="col" class="CP-sticky">#</th>
+                    <th scope="col" class="CP-sticky">Codigo Interno</th>
+                    <th scope="col" class="CP-sticky">Codigo Barra</th>
                     <th scope="col" class="CP-sticky">Articulo</th>
+                    <th scope="col" class="CP-sticky">Existencia</th>
+                    <th scope="col" class="CP-sticky">Precio</th>
                     <th scope="col" class="CP-sticky">'.SigVe.'</th>
                     <th scope="col" class="CP-sticky">'.SigDolar.'</th>
                     <th scope="col" class="CP-sticky">Cantidad</th>
                     <th scope="col" class="CP-sticky">Frecuencia</th>
+                    <th scope="col" class="CP-sticky">Ultimo Proveedor</th>
                 </tr>
             </thead>
             <tbody>
@@ -321,10 +367,46 @@
         $result1 = sqlsrv_query($conn,$sql1); 
 
         $contador = 1;
-		while($row1 = sqlsrv_fetch_array($result1, SQLSRV_FETCH_ASSOC)) {					
+		while($row1 = sqlsrv_fetch_array($result1, SQLSRV_FETCH_ASSOC)) {
+            
+            $IdArticulo = $row1["InvArticuloId"];
+
+            $sqlDet = SQG_Detalle_Articulo($IdArticulo);
+            $resultDet = sqlsrv_query($conn,$sqlDet);
+            $rowDet = sqlsrv_fetch_array($resultDet, SQLSRV_FETCH_ASSOC);
+            
+            $CodigoInterno = $rowDet["CodigoInterno"];
+            $CodigoBarra = $rowDet["CodigoBarra"];            
+            $Existencia = $rowDet["Existencia"];
+            $ExistenciaAlmacen1 = $rowDet["ExistenciaAlmacen1"];
+            $ExistenciaAlmacen2 = $rowDet["ExistenciaAlmacen2"];
+            $IsTroquelado = $rowDet["Troquelado"];
+            $IsIVA = $rowDet["Impuesto"];
+            $UtilidadArticulo = $rowDet["UtilidadArticulo"];
+            $UtilidadCategoria = $rowDet["UtilidadCategoria"];
+            $TroquelAlmacen1 = $rowDet["TroquelAlmacen1"];
+            $PrecioCompraBrutoAlmacen1 = $rowDet["PrecioCompraBrutoAlmacen1"];
+            $TroquelAlmacen2 = $rowDet["TroquelAlmacen2"];
+            $PrecioCompraBrutoAlmacen2 = $rowDet["PrecioCompraBrutoAlmacen2"];
+            $PrecioCompraBruto = $rowDet["PrecioCompraBruto"];                        
+            $CondicionExistencia = 'CON_EXISTENCIA';                        
+                                    
+            $Precio = FG_Calculo_Precio_Alfa($Existencia,$ExistenciaAlmacen1,$ExistenciaAlmacen2,$IsTroquelado,$UtilidadArticulo,$UtilidadCategoria,$TroquelAlmacen1,$PrecioCompraBrutoAlmacen1,$TroquelAlmacen2,
+            $PrecioCompraBrutoAlmacen2,$PrecioCompraBruto,$IsIVA,$CondicionExistencia);
+
 			echo '<tr>';
 			echo '<td align="center"><strong>'.intval($contador).'</strong></td>';
-            echo '<td align="center">'.FG_Limpiar_Texto($row1['Descripcion']).'</td>';
+            echo '<td align="left">'.$CodigoInterno.'</td>';            
+            echo '<td align="left">'.$CodigoBarra.'</td>';             
+            echo 
+            '<td align="left" class="CP-barrido">
+            <a href="/reporte2?Id='.$IdArticulo.'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
+                .FG_Limpiar_Texto($row1['Descripcion']).
+            '</a>
+            </td>';
+            echo '<td align="center">'.intval($Existencia).'</td>';
+            echo '<td align="center">'.number_format($Precio,2,"," ,"." ).'</td>';
+
             echo '<td align="center">'.number_format($row1['TotalVenta'],2,"," ,"." ).'</td>';
             
             if(isset($TasaActual)&&$TasaActual!=0){
@@ -335,6 +417,7 @@
 
             echo '<td align="center">'.intval($row1['TotalUnidadesVendidas']).'</td>';
             echo '<td align="center">'.intval($row1['TotalVecesVendidas']).'</td>';
+            echo '<td align="center">'.FG_Limpiar_Texto($rowDet['UltimoProveedorNombre']).'</td>';
 			echo '</tr>';
 			$contador++;
   	    }
