@@ -119,22 +119,22 @@
 		<table class="table table-striped table-bordered col-12 sortable" style="width:60%;">
             <thead class="thead-dark">
                 <tr>
-                    <th scope="col" class="CP-sticky bg-white" colspan="5" style="border-color:white;"></th>
-                    <th scope="col" class="CP-sticky" colspan="3">TOTAL</th>
-                    <th scope="col" class="CP-sticky" colspan="3">Promedio Por Factura</th>
+                    <th scope="col" class="bg-white" colspan="5" style="border-color:white;"></th>
+                    <th scope="col" colspan="3">TOTAL</th>
+                    <th scope="col" colspan="3">Promedio Por Factura</th>
                 </tr>
                 <tr>                                      
-                    <th scope="col" class="CP-sticky">Fecha</th>
-                    <th scope="col" class="CP-sticky">Medicinas</th>
-                    <th scope="col" class="CP-sticky">Unidades</th>
-                    <th scope="col" class="CP-sticky">Miscelaneos</th>                                                                    
-                    <th scope="col" class="CP-sticky">Unidades</th>
-                    <th scope="col" class="CP-sticky">Ventas<br>(Sin IVA)</th>
-                    <th scope="col" class="CP-sticky">Unidades</th>
-                    <th scope="col" class="CP-sticky">Trasaciones</th>
-                    <th scope="col" class="CP-sticky">Ventas<br>(Sin IVA)</th>
-                    <th scope="col" class="CP-sticky">Unidades</th>
-                    <th scope="col" class="CP-sticky">Valor Unidad</th>                     
+                    <th scope="col">Fecha</th>
+                    <th scope="col">Medicinas</th>
+                    <th scope="col">Unidades</th>
+                    <th scope="col">Miscelaneos</th>                                                                    
+                    <th scope="col">Unidades</th>
+                    <th scope="col">Ventas<br>(Sin IVA)</th>
+                    <th scope="col">Unidades</th>
+                    <th scope="col">Trasaciones</th>
+                    <th scope="col">Ventas<br>(Sin IVA)</th>
+                    <th scope="col">Unidades</th>
+                    <th scope="col">Valor Unidad</th>                     
                 </tr>
             </thead>
             <tbody>
@@ -162,23 +162,23 @@
             <table class="table table-striped table-bordered col-12 sortable" style="width:60%;">
                 <thead class="thead-dark">
                     <tr>
-                        <th scope="col" class="CP-sticky bg-white" colspan="5" style="border-color:white;"></th>
-                        <th scope="col" class="CP-sticky" colspan="3">TOTAL</th>
-                        <th scope="col" class="CP-sticky" colspan="3">Promedio Por Factura</th>
+                        <th scope="col" class="bg-white" colspan="5" style="border-color:white;"></th>
+                        <th scope="col" colspan="3">TOTAL</th>
+                        <th scope="col" colspan="3">Promedio Por Factura</th>
                     </tr>
                     <tr>                                      
-                        <th scope="col" class="CP-sticky">Fecha</th>
-                        <th scope="col" class="CP-sticky">Medicinas</th>
-                        <th scope="col" class="CP-sticky">Unidades</th>
-                        <th scope="col" class="CP-sticky">Miscelaneos</th>                                                                    
-                        <th scope="col" class="CP-sticky">Unidades</th>
-                        <th scope="col" class="CP-sticky">Ventas<br>(Sin IVA)</th>
-                        <th scope="col" class="CP-sticky">Unidades</th>
-                        <th scope="col" class="CP-sticky">Trasaciones</th>
-                        <th scope="col" class="CP-sticky">Ventas<br>(Sin IVA)</th>
-                        <th scope="col" class="CP-sticky">Unidades</th>
-                        <th scope="col" class="CP-sticky">Valor Unidad</th>
-                        <th scope="col" class="CP-sticky">Tasa Mercado</th> 
+                        <th scope="col">Fecha</th>
+                        <th scope="col">Medicinas</th>
+                        <th scope="col">Unidades</th>
+                        <th scope="col">Miscelaneos</th>                                                                    
+                        <th scope="col">Unidades</th>
+                        <th scope="col">Ventas<br>(Sin IVA)</th>
+                        <th scope="col">Unidades</th>
+                        <th scope="col">Trasaciones</th>
+                        <th scope="col">Ventas<br>(Sin IVA)</th>
+                        <th scope="col">Unidades</th>
+                        <th scope="col">Valor Unidad</th>
+                        <th scope="col">Tasa Mercado</th> 
                     </tr>
                 </thead>
                 <tbody>
@@ -202,6 +202,48 @@
                 </tbody>
             </table>';
         }
+        
+        $sqlRC = R32Q_resumen_caja($FInicial,$FFinal);
+        $resultRC = sqlsrv_query($conn,$sqlRC);
+
+        echo '<hr class="row align-items-start col-12">';        
+        echo '<h1 class="h5 text-dark" align="left">Ventas por Caja</h1>';
+        echo '		
+		<table class="table table-striped table-bordered col-12 sortable" style="width:60%;">
+            <thead class="thead-dark">
+                <tr>                  
+                    <th scope="col"></th>  
+                    <th scope="col" colspan="2">Primera Transaccion</th>
+                    <th scope="col" colspan="2">Ultima Transaccion</th>
+                </tr>
+            </thead>
+            <thead class="thead-dark">
+                <tr>                  
+                    <th scope="col">Caja</th>  
+                    <th scope="col">Hora</th>
+                    <th scope="col">Monto</th>
+                    <th scope="col">Hora</th>
+                    <th scope="col">Monto</th>
+                </tr>
+            </thead>
+            <tbody>
+        ';
+
+        while($rowRC = sqlsrv_fetch_array($resultRC, SQLSRV_FETCH_ASSOC)) {            
+            $primerMonto = $rowRC['PrimerMonto'];
+            if($primerMonto>null){
+                echo '<tr>';            
+                echo '<td align="center">'.$rowRC['Caja'].'</td>';
+                echo '<td align="center">'.($rowRC['PrimeraHora']->format('h:i A')).'</td>';                        
+                echo '<td align="center">'.number_format($primerMonto,2,"," ,"." ).'</td>';
+                echo '<td align="center">'.($rowRC['UltimaHora']->format('h:i A')).'</td>';                        
+                echo '<td align="center">'.number_format($rowRC['UltimoMonto'],2,"," ,"." ).'</td>';
+                echo '</tr>';  
+            }                      
+        }        
+        echo '
+            </tbody>
+        </table>';
     
         $sql5 = R32Q_Vent_art_cond($FInicial,$FFinal);
         $result5 = sqlsrv_query($conn,$sql5);
@@ -220,14 +262,14 @@
 		<table class="table table-striped table-bordered col-12 sortable" style="width:60%;">
             <thead class="thead-dark">
                 <tr>                  
-                    <th scope="col" class="CP-sticky">#</th>  
-                    <th scope="col" class="CP-sticky">Condicion</th>
-                    <th scope="col" class="CP-sticky">Unidades</th>
-                    <th scope="col" class="CP-sticky">%</th>
-                    <th scope="col" class="CP-sticky">SKU</th>
-                    <th scope="col" class="CP-sticky">'.SigVe.'<br>(Sin IVA)</th>
-                    <th scope="col" class="CP-sticky">'.SigDolar.'<br>(Sin IVA)</th>                     
-                    <th scope="col" class="CP-sticky">%</th>
+                    <th scope="col">#</th>  
+                    <th scope="col">Condicion</th>
+                    <th scope="col">Unidades</th>
+                    <th scope="col">%</th>
+                    <th scope="col">SKU</th>
+                    <th scope="col">'.SigVe.'<br>(Sin IVA)</th>
+                    <th scope="col">'.SigDolar.'<br>(Sin IVA)</th>                     
+                    <th scope="col">%</th>
                 </tr>
             </thead>
             <tbody>
@@ -269,17 +311,17 @@
 		<table class="table table-striped table-bordered col-12 sortable" style="width:60%;">
             <thead class="thead-dark">
                 <tr>
-                    <th scope="col" class="CP-sticky">#</th>
-                    <th scope="col" class="CP-sticky">Codigo Interno</th>
-                    <th scope="col" class="CP-sticky">Codigo Barra</th>
-                    <th scope="col" class="CP-sticky">Articulo</th>
-                    <th scope="col" class="CP-sticky">Existencia</th>
-                    <th scope="col" class="CP-sticky">Precio</th>
-                    <th scope="col" class="CP-sticky">'.SigVe.'</th>
-                    <th scope="col" class="CP-sticky">'.SigDolar.'</th>
-                    <th scope="col" class="CP-sticky">Cantidad</th>
-                    <th scope="col" class="CP-sticky">Frecuencia</th>
-                    <th scope="col" class="CP-sticky">Ultimo Proveedor</th>
+                    <th scope="col">#</th>
+                    <th scope="col">Codigo Interno</th>
+                    <th scope="col">Codigo Barra</th>
+                    <th scope="col">Articulo</th>
+                    <th scope="col">Existencia</th>
+                    <th scope="col">Precio</th>
+                    <th scope="col">'.SigVe.'</th>
+                    <th scope="col">'.SigDolar.'</th>
+                    <th scope="col">Cantidad</th>
+                    <th scope="col">Frecuencia</th>
+                    <th scope="col">Ultimo Proveedor</th>
                 </tr>
             </thead>
             <tbody>
@@ -347,17 +389,17 @@
 		<table class="table table-striped table-bordered col-12 sortable" style="width:60%;">
             <thead class="thead-dark">
                 <tr>
-                    <th scope="col" class="CP-sticky">#</th>
-                    <th scope="col" class="CP-sticky">Codigo Interno</th>
-                    <th scope="col" class="CP-sticky">Codigo Barra</th>
-                    <th scope="col" class="CP-sticky">Articulo</th>
-                    <th scope="col" class="CP-sticky">Existencia</th>
-                    <th scope="col" class="CP-sticky">Precio</th>
-                    <th scope="col" class="CP-sticky">'.SigVe.'</th>
-                    <th scope="col" class="CP-sticky">'.SigDolar.'</th>
-                    <th scope="col" class="CP-sticky">Cantidad</th>
-                    <th scope="col" class="CP-sticky">Frecuencia</th>
-                    <th scope="col" class="CP-sticky">Ultimo Proveedor</th>
+                    <th scope="col">#</th>
+                    <th scope="col">Codigo Interno</th>
+                    <th scope="col">Codigo Barra</th>
+                    <th scope="col">Articulo</th>
+                    <th scope="col">Existencia</th>
+                    <th scope="col">Precio</th>
+                    <th scope="col">'.SigVe.'</th>
+                    <th scope="col">'.SigDolar.'</th>
+                    <th scope="col">Cantidad</th>
+                    <th scope="col">Frecuencia</th>
+                    <th scope="col">Ultimo Proveedor</th>
                 </tr>
             </thead>
             <tbody>
@@ -432,15 +474,15 @@
 		<table class="table table-striped table-bordered col-12 sortable" style="width:60%;">
             <thead class="thead-dark">
                 <tr>
-                    <th scope="col" class="CP-sticky">#</th>
-                    <th scope="col" class="CP-sticky">Tipo</th>
-                    <th scope="col" class="CP-sticky">'.SigVe.'</th>
-                    <th scope="col" class="CP-sticky">'.SigDolar.'</th>
-                    <th scope="col" class="CP-sticky">%</th>
-                    <th scope="col" class="CP-sticky">Trasacciones</th>
-                    <th scope="col" class="CP-sticky">%</th>
-                    <th scope="col" class="CP-sticky">Unidades</th>
-                    <th scope="col" class="CP-sticky">%</th>
+                    <th scope="col">#</th>
+                    <th scope="col">Tipo</th>
+                    <th scope="col">'.SigVe.'</th>
+                    <th scope="col">'.SigDolar.'</th>
+                    <th scope="col">%</th>
+                    <th scope="col">Trasacciones</th>
+                    <th scope="col">%</th>
+                    <th scope="col">Unidades</th>
+                    <th scope="col">%</th>
                 </tr>
             </thead>
             <tbody>
@@ -546,15 +588,15 @@
 		<table class="table table-striped table-bordered col-12 sortable" style="width:60%;">
             <thead class="thead-dark">
                 <tr>
-                    <th scope="col" class="CP-sticky">#</th>
-                    <th scope="col" class="CP-sticky">Tipo</th>
-                    <th scope="col" class="CP-sticky">'.SigVe.'</th>
-                    <th scope="col" class="CP-sticky">'.SigDolar.'</th>
-                    <th scope="col" class="CP-sticky">%</th>
-                    <th scope="col" class="CP-sticky">Trasacciones</th>
-                    <th scope="col" class="CP-sticky">%</th>
-                    <th scope="col" class="CP-sticky">Unidades</th>
-                    <th scope="col" class="CP-sticky">%</th>
+                    <th scope="col">#</th>
+                    <th scope="col">Tipo</th>
+                    <th scope="col">'.SigVe.'</th>
+                    <th scope="col">'.SigDolar.'</th>
+                    <th scope="col">%</th>
+                    <th scope="col">Trasacciones</th>
+                    <th scope="col">%</th>
+                    <th scope="col">Unidades</th>
+                    <th scope="col">%</th>
                 </tr>
             </thead>
             <tbody>
@@ -663,12 +705,12 @@
 		<table class="table table-striped table-bordered col-12 sortable" style="width:60%;">
             <thead class="thead-dark">
                 <tr>
-                    <th scope="col" class="CP-sticky">#</th>
-                    <th scope="col" class="CP-sticky">Nombre</th>
-                    <th scope="col" class="CP-sticky">'.SigVe.'</th>
-                    <th scope="col" class="CP-sticky">'.SigDolar.'</th>
-                    <th scope="col" class="CP-sticky">Trasacciones</th>
-                    <th scope="col" class="CP-sticky">Unidades</th>                     
+                    <th scope="col">#</th>
+                    <th scope="col">Nombre</th>
+                    <th scope="col">'.SigVe.'</th>
+                    <th scope="col">'.SigDolar.'</th>
+                    <th scope="col">Trasacciones</th>
+                    <th scope="col">Unidades</th>                     
                 </tr>
             </thead>
             <tbody>
@@ -1203,6 +1245,48 @@
                 group by VenCondicionVenta.PorcentajeUtilidad, VenFacturaDetalle.InvArticuloId, InvArticulo.id, InvArticulo.Descripcion
         ) as ventaGeneral
         group by Tipo 
+        ";
+        return $sql;
+    }
+
+    /*
+        TITULO: R32Q_Vent_Cli_Top
+    */ 
+    function R32Q_resumen_caja($FInicial,$FFinal){
+        $sql = "
+        select 
+        VenCaja.Id as IdCaja,
+        VenCaja.EstacionTrabajo as Caja,
+        --PrimerMonto
+        (select top 1 
+        VenFactura.M_MontoTotalFactura
+        from VenFactura
+        where VenFactura.FechaDocumento > '$FInicial' and VenFactura.FechaDocumento < '$FFinal'
+        and VenFactura.VenCajaId = VenCaja.Id
+        order by VenFactura.FechaDocumento asc) as PrimerMonto,
+        --PrimeraHora
+        (select top 1 
+        VenFactura.FechaDocumento
+        from VenFactura
+        where VenFactura.FechaDocumento > '$FInicial' and VenFactura.FechaDocumento < '$FFinal'
+        and VenFactura.VenCajaId = VenCaja.Id
+        order by VenFactura.FechaDocumento asc) as PrimeraHora,
+        --UltimoMonto
+        (select top 1 
+        VenFactura.M_MontoTotalFactura
+        from VenFactura
+        where VenFactura.FechaDocumento > '$FInicial' and VenFactura.FechaDocumento < '$FFinal'
+        and VenFactura.VenCajaId = VenCaja.Id
+        order by VenFactura.FechaDocumento desc) as UltimoMonto,
+        --UltimaHora
+        (select top 1 
+        VenFactura.FechaDocumento
+        from VenFactura
+        where VenFactura.FechaDocumento > '$FInicial' and VenFactura.FechaDocumento < '$FFinal'
+        and VenFactura.VenCajaId = VenCaja.Id
+        order by VenFactura.FechaDocumento desc) as UltimaHora
+        from Vencaja
+        order by VenCaja.Id asc
         ";
         return $sql;
     }
