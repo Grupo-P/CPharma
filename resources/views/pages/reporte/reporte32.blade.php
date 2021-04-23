@@ -74,28 +74,44 @@
         $FInicial = '2020-12-15';
         $FFinal = date("Y-m-d",strtotime($FInicial."+ 1 days"));
         $TasaActual = FG_Tasa_Fecha($connCPharma,$FInicial);
-        //$TasaActual = 1800000.00;
+        $TasaActual = 10;
 
         $sql6 = R32Q_Vent_generales($FInicial,$FFinal);
         $result6 = sqlsrv_query($conn,$sql6);
 
-        $monto_med = $unid_med = $monto_misc = $unid_misc = $trasacciones = 0;
+        $total_monto = $total_unid = $total_trans = $Sum_Trans_venta = $Sum_Trans_Dev =  0;
+
+        $unid_med = $unid_misc = $monto_med = $monto_misc = "";
 
         while($row6 = sqlsrv_fetch_array($result6, SQLSRV_FETCH_ASSOC)) {
-            $trasacciones += $row6['Transacciones'];
-            if($row6['Tipo']==0){
-                $monto_misc += $row6['TotalVenta'];
-                $unid_misc += $row6['TotalUnidadesVendidas'];
+            if($row6['Tipo']=='Medicinas'){                
+                $unid_med = $row6['TotalUnidadesVendidas'];
+                $monto_med = $row6['TotalVenta'];
+            } else {                
+                $unid_misc = $row6['TotalUnidadesVendidas'];
+                $monto_misc = $row6['TotalVenta'];
             }
-            else{
-                $monto_med += $row6['TotalVenta'];
-                $unid_med += $row6['TotalUnidadesVendidas'];
-            }
+        }        
+
+        $total_monto = $monto_med + $monto_misc;
+        $total_unid = $unid_med + $unid_misc;
+        
+        $sql2 = R32Q_Vent_Cli_Nue_Rec_venta($FInicial,$FFinal);
+        $result2 = sqlsrv_query($conn,$sql2);
+        
+		while($row2 = sqlsrv_fetch_array($result2, SQLSRV_FETCH_ASSOC)) {
+            $Sum_Trans_venta += $row2['TransaccionesFactura'];
         }
+          
+        $sql21 = R32Q_Vent_Cli_Nue_Rec_devolucion($FInicial,$FFinal);
+        $result21 = sqlsrv_query($conn,$sql21);
 
-        $total_monto =  $monto_misc + $monto_med;
-        $total_unid = $unid_misc + $unid_med;
-
+		while($row21 = sqlsrv_fetch_array($result21, SQLSRV_FETCH_ASSOC)) {
+            $Sum_Trans_Dev += $row21['TransaccionesDevolucion'];
+        }
+        
+        $total_trans = $Sum_Trans_venta - $Sum_Trans_Dev;
+        
         echo '<hr class="row align-items-start col-12">';        
         echo '<h1 class="h5 text-dark" align="left">Ventas Generales</h1>';
 
@@ -103,22 +119,22 @@
 		<table class="table table-striped table-bordered col-12 sortable" style="width:60%;">
             <thead class="thead-dark">
                 <tr>
-                    <th scope="col" class="CP-sticky bg-white" colspan="5" style="border-color:white;"></th>
-                    <th scope="col" class="CP-sticky" colspan="3">TOTAL</th>
-                    <th scope="col" class="CP-sticky" colspan="3">Promedio Por Factura</th>
+                    <th scope="col" class="bg-white" colspan="5" style="border-color:white;"></th>
+                    <th scope="col" colspan="3">TOTAL</th>
+                    <th scope="col" colspan="3">Promedio Por Factura</th>
                 </tr>
                 <tr>                                      
-                    <th scope="col" class="CP-sticky">Fecha</th>
-                    <th scope="col" class="CP-sticky">Medicinas</th>
-                    <th scope="col" class="CP-sticky">Unidades</th>
-                    <th scope="col" class="CP-sticky">Miscelaneos</th>                                                                    
-                    <th scope="col" class="CP-sticky">Unidades</th>
-                    <th scope="col" class="CP-sticky">Ventas</th>
-                    <th scope="col" class="CP-sticky">Unidades</th>
-                    <th scope="col" class="CP-sticky">Trasaciones</th>
-                    <th scope="col" class="CP-sticky">Ventas</th>
-                    <th scope="col" class="CP-sticky">Unidades</th>
-                    <th scope="col" class="CP-sticky">Valor Unidad</th>                     
+                    <th scope="col">Fecha</th>
+                    <th scope="col">Medicinas</th>
+                    <th scope="col">Unidades</th>
+                    <th scope="col">Miscelaneos</th>                                                                    
+                    <th scope="col">Unidades</th>
+                    <th scope="col">Ventas<br>(Sin IVA)</th>
+                    <th scope="col">Unidades</th>
+                    <th scope="col">Trasaciones</th>
+                    <th scope="col">Ventas<br>(Sin IVA)</th>
+                    <th scope="col">Unidades</th>
+                    <th scope="col">Valor Unidad</th>                     
                 </tr>
             </thead>
             <tbody>
@@ -132,9 +148,9 @@
             echo '<td align="center">'.intval($unid_misc).'</td>';
             echo '<td align="center">'.number_format($total_monto,2,"," ,"." ).'</td>';
             echo '<td align="center">'.intval($total_unid).'</td>';              
-            echo '<td align="center">'.intval($trasacciones).'</td>';
-            echo '<td align="center">'.number_format($total_monto/$trasacciones,2,"," ,"." ).'</td>';
-            echo '<td align="center">'.number_format($total_unid/$trasacciones,2,"," ,"." ).'</td>';
+            echo '<td align="center">'.intval($total_trans).'</td>';
+            echo '<td align="center">'.number_format($total_monto/$total_trans,2,"," ,"." ).'</td>';
+            echo '<td align="center">'.number_format($total_unid/$total_trans,2,"," ,"." ).'</td>';
             echo '<td align="center">'.number_format($total_monto/$total_unid,2,"," ,"." ).'</td>';
             echo '<tr>';
             echo'
@@ -146,23 +162,23 @@
             <table class="table table-striped table-bordered col-12 sortable" style="width:60%;">
                 <thead class="thead-dark">
                     <tr>
-                        <th scope="col" class="CP-sticky bg-white" colspan="5" style="border-color:white;"></th>
-                        <th scope="col" class="CP-sticky" colspan="3">TOTAL</th>
-                        <th scope="col" class="CP-sticky" colspan="3">Promedio Por Factura</th>
+                        <th scope="col" class="bg-white" colspan="5" style="border-color:white;"></th>
+                        <th scope="col" colspan="3">TOTAL</th>
+                        <th scope="col" colspan="3">Promedio Por Factura</th>
                     </tr>
                     <tr>                                      
-                        <th scope="col" class="CP-sticky">Fecha</th>
-                        <th scope="col" class="CP-sticky">Medicinas</th>
-                        <th scope="col" class="CP-sticky">Unidades</th>
-                        <th scope="col" class="CP-sticky">Miscelaneos</th>                                                                    
-                        <th scope="col" class="CP-sticky">Unidades</th>
-                        <th scope="col" class="CP-sticky">Ventas</th>
-                        <th scope="col" class="CP-sticky">Unidades</th>
-                        <th scope="col" class="CP-sticky">Trasaciones</th>
-                        <th scope="col" class="CP-sticky">Ventas</th>
-                        <th scope="col" class="CP-sticky">Unidades</th>
-                        <th scope="col" class="CP-sticky">Valor Unidad</th>
-                        <th scope="col" class="CP-sticky">Tasa Mercado</th> 
+                        <th scope="col">Fecha</th>
+                        <th scope="col">Medicinas</th>
+                        <th scope="col">Unidades</th>
+                        <th scope="col">Miscelaneos</th>                                                                    
+                        <th scope="col">Unidades</th>
+                        <th scope="col">Ventas<br>(Sin IVA)</th>
+                        <th scope="col">Unidades</th>
+                        <th scope="col">Trasaciones</th>
+                        <th scope="col">Ventas<br>(Sin IVA)</th>
+                        <th scope="col">Unidades</th>
+                        <th scope="col">Valor Unidad</th>
+                        <th scope="col">Tasa Mercado</th> 
                     </tr>
                 </thead>
                 <tbody>
@@ -176,9 +192,9 @@
                 echo '<td align="center">'.intval($unid_misc).'</td>';
                 echo '<td align="center">'.number_format($total_monto/$TasaActual,2,"," ,"." ).'</td>';
                 echo '<td align="center">'.intval($total_unid).'</td>';              
-                echo '<td align="center">'.intval($trasacciones).'</td>';
-                echo '<td align="center">'.number_format($total_monto/$trasacciones/$TasaActual,2,"," ,"." ).'</td>';
-                echo '<td align="center">'.number_format($total_unid/$trasacciones,2,"," ,"." ).'</td>';
+                echo '<td align="center">'.intval($total_trans).'</td>';
+                echo '<td align="center">'.number_format( ($total_monto/$total_trans)/$TasaActual,2,"," ,"." ).'</td>';
+                echo '<td align="center">'.number_format($total_unid/$total_trans,2,"," ,"." ).'</td>';
                 echo '<td align="center">'.number_format( ($total_monto/$total_unid)/$TasaActual,2,"," ,"." ).'</td>';
                 echo '<td align="center">'.number_format($TasaActual,2,"," ,"." ).'</td>';
                 echo '<tr>';
@@ -186,6 +202,48 @@
                 </tbody>
             </table>';
         }
+        
+        $sqlRC = R32Q_resumen_caja($FInicial,$FFinal);
+        $resultRC = sqlsrv_query($conn,$sqlRC);
+
+        echo '<hr class="row align-items-start col-12">';        
+        echo '<h1 class="h5 text-dark" align="left">Ventas por Caja</h1>';
+        echo '		
+		<table class="table table-striped table-bordered col-12 sortable" style="width:60%;">
+            <thead class="thead-dark">
+                <tr>                  
+                    <th scope="col"></th>  
+                    <th scope="col" colspan="2">Primera Transaccion</th>
+                    <th scope="col" colspan="2">Ultima Transaccion</th>
+                </tr>
+            </thead>
+            <thead class="thead-dark">
+                <tr>                  
+                    <th scope="col">Caja</th>  
+                    <th scope="col">Hora</th>
+                    <th scope="col">Monto</th>
+                    <th scope="col">Hora</th>
+                    <th scope="col">Monto</th>
+                </tr>
+            </thead>
+            <tbody>
+        ';
+
+        while($rowRC = sqlsrv_fetch_array($resultRC, SQLSRV_FETCH_ASSOC)) {            
+            $primerMonto = $rowRC['PrimerMonto'];
+            if($primerMonto>null){
+                echo '<tr>';            
+                echo '<td align="center">'.$rowRC['Caja'].'</td>';
+                echo '<td align="center">'.($rowRC['PrimeraHora']->format('h:i A')).'</td>';                        
+                echo '<td align="center">'.number_format($primerMonto,2,"," ,"." ).'</td>';
+                echo '<td align="center">'.($rowRC['UltimaHora']->format('h:i A')).'</td>';                        
+                echo '<td align="center">'.number_format($rowRC['UltimoMonto'],2,"," ,"." ).'</td>';
+                echo '</tr>';  
+            }                      
+        }        
+        echo '
+            </tbody>
+        </table>';
     
         $sql5 = R32Q_Vent_art_cond($FInicial,$FFinal);
         $result5 = sqlsrv_query($conn,$sql5);
@@ -204,14 +262,14 @@
 		<table class="table table-striped table-bordered col-12 sortable" style="width:60%;">
             <thead class="thead-dark">
                 <tr>                  
-                    <th scope="col" class="CP-sticky">#</th>  
-                    <th scope="col" class="CP-sticky">Condicion</th>
-                    <th scope="col" class="CP-sticky">Unidades</th>
-                    <th scope="col" class="CP-sticky">%</th>
-                    <th scope="col" class="CP-sticky">SKU</th>
-                    <th scope="col" class="CP-sticky">'.SigVe.'<br>(Sin IVA)</th>
-                    <th scope="col" class="CP-sticky">'.SigDolar.'<br>(Sin IVA)</th>                     
-                    <th scope="col" class="CP-sticky">%</th>
+                    <th scope="col">#</th>  
+                    <th scope="col">Condicion</th>
+                    <th scope="col">Unidades</th>
+                    <th scope="col">%</th>
+                    <th scope="col">SKU</th>
+                    <th scope="col">'.SigVe.'<br>(Sin IVA)</th>
+                    <th scope="col">'.SigDolar.'<br>(Sin IVA)</th>                     
+                    <th scope="col">%</th>
                 </tr>
             </thead>
             <tbody>
@@ -243,9 +301,8 @@
             </tbody>
         </table>';
 
-
 		$sql = R32Q_Venta_Articulos(5,$FInicial,$FFinal,'TotalVenta');
-        $result = sqlsrv_query($conn,$sql);          
+        $result = sqlsrv_query($conn,$sql);                  
         
         echo '<hr class="row align-items-start col-12">';        
         echo '<h1 class="h5 text-dark" align="left">Ventas por Articulo</h1>';
@@ -254,21 +311,62 @@
 		<table class="table table-striped table-bordered col-12 sortable" style="width:60%;">
             <thead class="thead-dark">
                 <tr>
-                    <th scope="col" class="CP-sticky">#</th>
-                    <th scope="col" class="CP-sticky">Articulo</th>
-                    <th scope="col" class="CP-sticky">'.SigVe.'</th>
-                    <th scope="col" class="CP-sticky">'.SigDolar.'</th>
-                    <th scope="col" class="CP-sticky">Cantidad</th>
-                    <th scope="col" class="CP-sticky">Frecuencia</th>
+                    <th scope="col">#</th>
+                    <th scope="col">Codigo Interno</th>
+                    <th scope="col">Codigo Barra</th>
+                    <th scope="col">Articulo</th>
+                    <th scope="col">Existencia</th>
+                    <th scope="col">Precio</th>
+                    <th scope="col">'.SigVe.'</th>
+                    <th scope="col">'.SigDolar.'</th>
+                    <th scope="col">Cantidad</th>
+                    <th scope="col">Frecuencia</th>
+                    <th scope="col">Ultimo Proveedor</th>
                 </tr>
             </thead>
             <tbody>
         ';
         $contador = 1;
-		while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {					
+		while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
+                        
+            $IdArticulo = $row["InvArticuloId"];
+
+            $sqlDet = SQG_Detalle_Articulo($IdArticulo);
+            $resultDet = sqlsrv_query($conn,$sqlDet);
+            $rowDet = sqlsrv_fetch_array($resultDet, SQLSRV_FETCH_ASSOC);
+            
+            $CodigoInterno = $rowDet["CodigoInterno"];
+            $CodigoBarra = $rowDet["CodigoBarra"];            
+            $Existencia = $rowDet["Existencia"];
+            $ExistenciaAlmacen1 = $rowDet["ExistenciaAlmacen1"];
+            $ExistenciaAlmacen2 = $rowDet["ExistenciaAlmacen2"];
+            $IsTroquelado = $rowDet["Troquelado"];
+            $IsIVA = $rowDet["Impuesto"];
+            $UtilidadArticulo = $rowDet["UtilidadArticulo"];
+            $UtilidadCategoria = $rowDet["UtilidadCategoria"];
+            $TroquelAlmacen1 = $rowDet["TroquelAlmacen1"];
+            $PrecioCompraBrutoAlmacen1 = $rowDet["PrecioCompraBrutoAlmacen1"];
+            $TroquelAlmacen2 = $rowDet["TroquelAlmacen2"];
+            $PrecioCompraBrutoAlmacen2 = $rowDet["PrecioCompraBrutoAlmacen2"];
+            $PrecioCompraBruto = $rowDet["PrecioCompraBruto"];                        
+            $CondicionExistencia = 'CON_EXISTENCIA';                        
+                                    
+            $Precio = FG_Calculo_Precio_Alfa($Existencia,$ExistenciaAlmacen1,$ExistenciaAlmacen2,$IsTroquelado,$UtilidadArticulo,$UtilidadCategoria,$TroquelAlmacen1,$PrecioCompraBrutoAlmacen1,$TroquelAlmacen2,
+            $PrecioCompraBrutoAlmacen2,$PrecioCompraBruto,$IsIVA,$CondicionExistencia);
+
 			echo '<tr>';
-			echo '<td align="center"><strong>'.intval($contador).'</strong></td>';
-            echo '<td align="center">'.FG_Limpiar_Texto($row['Descripcion']).'</td>';
+			echo '<td align="center"><strong>'.intval($contador).'</strong></td>';            
+            echo '<td align="left">'.$CodigoInterno.'</td>';            
+            echo '<td align="left">'.$CodigoBarra.'</td>';   
+            echo 
+            '<td align="left" class="CP-barrido">
+            <a href="/reporte2?Id='.$IdArticulo.'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
+                .FG_Limpiar_Texto($row['Descripcion']).
+            '</a>
+            </td>';
+            echo '<td align="center">'.intval($Existencia).'</td>';
+            echo '<td align="center">'.number_format($Precio,2,"," ,"." ).'</td>';
+
             echo '<td align="center">'.number_format($row['TotalVenta'],2,"," ,"." ).'</td>';
             
             if(isset($TasaActual)&&$TasaActual!=0){
@@ -279,6 +377,7 @@
             
             echo '<td align="center">'.intval($row['TotalUnidadesVendidas']).'</td>';
             echo '<td align="center">'.intval($row['TotalVecesVendidas']).'</td>';
+            echo '<td align="center">'.FG_Limpiar_Texto($rowDet['UltimoProveedorNombre']).'</td>';  
 			echo '</tr>';
 			$contador++;
   	    }
@@ -290,12 +389,17 @@
 		<table class="table table-striped table-bordered col-12 sortable" style="width:60%;">
             <thead class="thead-dark">
                 <tr>
-                    <th scope="col" class="CP-sticky">#</th>
-                    <th scope="col" class="CP-sticky">Articulo</th>
-                    <th scope="col" class="CP-sticky">'.SigVe.'</th>
-                    <th scope="col" class="CP-sticky">'.SigDolar.'</th>
-                    <th scope="col" class="CP-sticky">Cantidad</th>
-                    <th scope="col" class="CP-sticky">Frecuencia</th>
+                    <th scope="col">#</th>
+                    <th scope="col">Codigo Interno</th>
+                    <th scope="col">Codigo Barra</th>
+                    <th scope="col">Articulo</th>
+                    <th scope="col">Existencia</th>
+                    <th scope="col">Precio</th>
+                    <th scope="col">'.SigVe.'</th>
+                    <th scope="col">'.SigDolar.'</th>
+                    <th scope="col">Cantidad</th>
+                    <th scope="col">Frecuencia</th>
+                    <th scope="col">Ultimo Proveedor</th>
                 </tr>
             </thead>
             <tbody>
@@ -305,10 +409,46 @@
         $result1 = sqlsrv_query($conn,$sql1); 
 
         $contador = 1;
-		while($row1 = sqlsrv_fetch_array($result1, SQLSRV_FETCH_ASSOC)) {					
+		while($row1 = sqlsrv_fetch_array($result1, SQLSRV_FETCH_ASSOC)) {
+            
+            $IdArticulo = $row1["InvArticuloId"];
+
+            $sqlDet = SQG_Detalle_Articulo($IdArticulo);
+            $resultDet = sqlsrv_query($conn,$sqlDet);
+            $rowDet = sqlsrv_fetch_array($resultDet, SQLSRV_FETCH_ASSOC);
+            
+            $CodigoInterno = $rowDet["CodigoInterno"];
+            $CodigoBarra = $rowDet["CodigoBarra"];            
+            $Existencia = $rowDet["Existencia"];
+            $ExistenciaAlmacen1 = $rowDet["ExistenciaAlmacen1"];
+            $ExistenciaAlmacen2 = $rowDet["ExistenciaAlmacen2"];
+            $IsTroquelado = $rowDet["Troquelado"];
+            $IsIVA = $rowDet["Impuesto"];
+            $UtilidadArticulo = $rowDet["UtilidadArticulo"];
+            $UtilidadCategoria = $rowDet["UtilidadCategoria"];
+            $TroquelAlmacen1 = $rowDet["TroquelAlmacen1"];
+            $PrecioCompraBrutoAlmacen1 = $rowDet["PrecioCompraBrutoAlmacen1"];
+            $TroquelAlmacen2 = $rowDet["TroquelAlmacen2"];
+            $PrecioCompraBrutoAlmacen2 = $rowDet["PrecioCompraBrutoAlmacen2"];
+            $PrecioCompraBruto = $rowDet["PrecioCompraBruto"];                        
+            $CondicionExistencia = 'CON_EXISTENCIA';                        
+                                    
+            $Precio = FG_Calculo_Precio_Alfa($Existencia,$ExistenciaAlmacen1,$ExistenciaAlmacen2,$IsTroquelado,$UtilidadArticulo,$UtilidadCategoria,$TroquelAlmacen1,$PrecioCompraBrutoAlmacen1,$TroquelAlmacen2,
+            $PrecioCompraBrutoAlmacen2,$PrecioCompraBruto,$IsIVA,$CondicionExistencia);
+
 			echo '<tr>';
 			echo '<td align="center"><strong>'.intval($contador).'</strong></td>';
-            echo '<td align="center">'.FG_Limpiar_Texto($row1['Descripcion']).'</td>';
+            echo '<td align="left">'.$CodigoInterno.'</td>';            
+            echo '<td align="left">'.$CodigoBarra.'</td>';             
+            echo 
+            '<td align="left" class="CP-barrido">
+            <a href="/reporte2?Id='.$IdArticulo.'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
+                .FG_Limpiar_Texto($row1['Descripcion']).
+            '</a>
+            </td>';
+            echo '<td align="center">'.intval($Existencia).'</td>';
+            echo '<td align="center">'.number_format($Precio,2,"," ,"." ).'</td>';
+
             echo '<td align="center">'.number_format($row1['TotalVenta'],2,"," ,"." ).'</td>';
             
             if(isset($TasaActual)&&$TasaActual!=0){
@@ -319,6 +459,7 @@
 
             echo '<td align="center">'.intval($row1['TotalUnidadesVendidas']).'</td>';
             echo '<td align="center">'.intval($row1['TotalVecesVendidas']).'</td>';
+            echo '<td align="center">'.FG_Limpiar_Texto($rowDet['UltimoProveedorNombre']).'</td>';
 			echo '</tr>';
 			$contador++;
   	    }
@@ -333,15 +474,15 @@
 		<table class="table table-striped table-bordered col-12 sortable" style="width:60%;">
             <thead class="thead-dark">
                 <tr>
-                    <th scope="col" class="CP-sticky">#</th>
-                    <th scope="col" class="CP-sticky">Tipo</th>
-                    <th scope="col" class="CP-sticky">'.SigVe.'</th>
-                    <th scope="col" class="CP-sticky">'.SigDolar.'</th>
-                    <th scope="col" class="CP-sticky">%</th>
-                    <th scope="col" class="CP-sticky">Trasacciones</th>
-                    <th scope="col" class="CP-sticky">%</th>
-                    <th scope="col" class="CP-sticky">Unidades</th>
-                    <th scope="col" class="CP-sticky">%</th>
+                    <th scope="col">#</th>
+                    <th scope="col">Tipo</th>
+                    <th scope="col">'.SigVe.'</th>
+                    <th scope="col">'.SigDolar.'</th>
+                    <th scope="col">%</th>
+                    <th scope="col">Trasacciones</th>
+                    <th scope="col">%</th>
+                    <th scope="col">Unidades</th>
+                    <th scope="col">%</th>
                 </tr>
             </thead>
             <tbody>
@@ -447,15 +588,15 @@
 		<table class="table table-striped table-bordered col-12 sortable" style="width:60%;">
             <thead class="thead-dark">
                 <tr>
-                    <th scope="col" class="CP-sticky">#</th>
-                    <th scope="col" class="CP-sticky">Tipo</th>
-                    <th scope="col" class="CP-sticky">'.SigVe.'</th>
-                    <th scope="col" class="CP-sticky">'.SigDolar.'</th>
-                    <th scope="col" class="CP-sticky">%</th>
-                    <th scope="col" class="CP-sticky">Trasacciones</th>
-                    <th scope="col" class="CP-sticky">%</th>
-                    <th scope="col" class="CP-sticky">Unidades</th>
-                    <th scope="col" class="CP-sticky">%</th>
+                    <th scope="col">#</th>
+                    <th scope="col">Tipo</th>
+                    <th scope="col">'.SigVe.'</th>
+                    <th scope="col">'.SigDolar.'</th>
+                    <th scope="col">%</th>
+                    <th scope="col">Trasacciones</th>
+                    <th scope="col">%</th>
+                    <th scope="col">Unidades</th>
+                    <th scope="col">%</th>
                 </tr>
             </thead>
             <tbody>
@@ -564,12 +705,12 @@
 		<table class="table table-striped table-bordered col-12 sortable" style="width:60%;">
             <thead class="thead-dark">
                 <tr>
-                    <th scope="col" class="CP-sticky">#</th>
-                    <th scope="col" class="CP-sticky">Nombre</th>
-                    <th scope="col" class="CP-sticky">'.SigVe.'</th>
-                    <th scope="col" class="CP-sticky">'.SigDolar.'</th>
-                    <th scope="col" class="CP-sticky">Trasacciones</th>
-                    <th scope="col" class="CP-sticky">Unidades</th>                     
+                    <th scope="col">#</th>
+                    <th scope="col">Nombre</th>
+                    <th scope="col">'.SigVe.'</th>
+                    <th scope="col">'.SigDolar.'</th>
+                    <th scope="col">Trasacciones</th>
+                    <th scope="col">Unidades</th>                     
                 </tr>
             </thead>
             <tbody>
@@ -1010,46 +1151,74 @@
     /*
     */
     function R32Q_Vent_generales($FInicial,$FFinal){
-        $sql = "
-        SELECT 
-        -- Id Articulo
-        --VenFacturaDetalle.InvArticuloId,	
-        --InvArticulo.Descripcion,
-        COUNT(DISTINCT VenFactura.Id) as Transacciones,
-        --Dolarizado (0 NO es dolarizado, Id Articulo SI es dolarizado)
-            (ISNULL((SELECT
-            InvArticuloAtributo.InvArticuloId
-            FROM InvArticuloAtributo 
-            WHERE InvArticuloAtributo.InvAtributoId = 
-            (SELECT InvAtributo.Id
-            FROM InvAtributo 
-            WHERE 
-            InvAtributo.Descripcion = 'Dolarizados'
-            OR  InvAtributo.Descripcion = 'Giordany'
-            OR  InvAtributo.Descripcion = 'giordany') 
-            AND InvArticuloAtributo.InvArticuloId = InvArticulo.Id),CAST(0 AS INT))) AS Dolarizado,
-        --Tipo Producto (0 Miscelaneos, Id Articulo Medicinas)
-            (ISNULL((SELECT
-            InvArticuloAtributo.InvArticuloId 
-            FROM InvArticuloAtributo 
-            WHERE InvArticuloAtributo.InvAtributoId = 
-            (SELECT InvAtributo.Id
-            FROM InvAtributo 
-            WHERE 
-            InvAtributo.Descripcion = 'Medicina') 
-            AND InvArticuloAtributo.InvArticuloId = InvArticulo.Id),CAST(0 AS INT))) AS Tipo,
-        --Total Unidades Vendidas (En Rango)
-                (((ROUND(CAST(SUM(VenFacturaDetalle.Cantidad) AS DECIMAL(38,0)),2,0)))
+        $sql = "        
+        select Tipo, sum(TotalUnidadesVendidas) as TotalUnidadesVendidas, sum(TotalVenta) as TotalVenta
+        from
+        (
+        select 
+                VenCondicionVenta.PorcentajeUtilidad as PorcentajeUtilidad, 
+                InvArticulo.id, 
+                --Tipo Producto (0 Miscelaneos, Id Articulo Medicinas)
+                IIF( (ISNULL((SELECT
+                    InvArticuloAtributo.InvArticuloId 
+                    FROM InvArticuloAtributo 
+                    WHERE InvArticuloAtributo.InvAtributoId = 
+                    (SELECT InvAtributo.Id
+                    FROM InvAtributo 
+                    WHERE 
+                    InvAtributo.Descripcion = 'Medicina') 
+                    AND InvArticuloAtributo.InvArticuloId = InvArticulo.Id),CAST(0 AS INT))) = '0', 'Miscelaneos' ,'Medicinas') AS Tipo,		
+                InvArticulo.Descripcion,		
+                (ISNULL((SELECT
+                (ROUND(CAST(SUM(VenFacturaDetalle.Cantidad) AS DECIMAL(38,0)),2,0))
+                FROM VenFacturaDetalle
+                INNER JOIN VenFactura ON VenFactura.Id = VenFacturaDetalle.VenFacturaId
+                WHERE VenFacturaDetalle.InvArticuloId = InvArticulo.Id
+                AND(VenFactura.FechaDocumento > '$FInicial' AND VenFactura.FechaDocumento < '$FFinal')
+                GROUP BY VenFacturaDetalle.InvArticuloId
+                ),CAST(0 AS INT))) as unidadesVendidas,
+                (ISNULL((SELECT
+                (ROUND(CAST(SUM(VenDevolucionDetalle.Cantidad) AS DECIMAL(38,0)),2,0))
+                FROM VenDevolucionDetalle
+                INNER JOIN VenDevolucion ON VenDevolucion.Id = VenDevolucionDetalle.VenDevolucionId
+                WHERE VenDevolucionDetalle.InvArticuloId = InvArticulo.Id
+                AND(VenDevolucion.FechaDocumento > '$FInicial' AND VenDevolucion.FechaDocumento < '$FFinal')
+                GROUP BY VenDevolucionDetalle.InvArticuloId
+                ),CAST(0 AS INT))) as unidadesDevueltas,
+                --Total Unidades Vendidas (En Rango)
+                (
+                (ISNULL((SELECT
+                (ROUND(CAST(SUM(VenFacturaDetalle.Cantidad) AS DECIMAL(38,0)),2,0))
+                FROM VenFacturaDetalle
+                INNER JOIN VenFactura ON VenFactura.Id = VenFacturaDetalle.VenFacturaId
+                WHERE VenFacturaDetalle.InvArticuloId = InvArticulo.Id
+                AND(VenFactura.FechaDocumento > '$FInicial' AND VenFactura.FechaDocumento < '$FFinal')
+                GROUP BY VenFacturaDetalle.InvArticuloId
+                ),CAST(0 AS INT)))
                 -
                 (ISNULL((SELECT
                 (ROUND(CAST(SUM(VenDevolucionDetalle.Cantidad) AS DECIMAL(38,0)),2,0))
                 FROM VenDevolucionDetalle
                 INNER JOIN VenDevolucion ON VenDevolucion.Id = VenDevolucionDetalle.VenDevolucionId
-                WHERE VenDevolucionDetalle.InvArticuloId = VenFacturaDetalle.InvArticuloId
+                WHERE VenDevolucionDetalle.InvArticuloId = InvArticulo.Id
                 AND(VenDevolucion.FechaDocumento > '$FInicial' AND VenDevolucion.FechaDocumento < '$FFinal')
                 GROUP BY VenDevolucionDetalle.InvArticuloId
-                ),CAST(0 AS INT)))) AS TotalUnidadesVendidas,
-        --TotalVenta (En Rango)
+                ),CAST(0 AS INT)))
+                ) AS TotalUnidadesVendidas,
+                (ISNULL((SELECT
+                (ROUND(CAST(SUM (VenVentaDetalle.PrecioBruto * VenVentaDetalle.Cantidad) AS DECIMAL(38,2)),2,0)) 
+                FROM VenVentaDetalle
+                INNER JOIN VenVenta ON VenVenta.Id = VenVentaDetalle.VenVentaId 
+                WHERE (VenVenta.FechaDocumentoVenta > '$FInicial' AND VenVenta.FechaDocumentoVenta < '$FFinal')
+                AND VenVentaDetalle.InvArticuloId = VenFacturaDetalle.InvArticuloId
+                AND VenVenta.estadoVenta = 2),CAST(0 AS INT))) as Venta,
+                (ISNULL((SELECT
+                (ROUND(CAST(SUM (VenDevolucionDetalle.PrecioBruto * VenDevolucionDetalle.Cantidad) AS DECIMAL(38,2)),2,0)) as SubTotalDevolucion
+                FROM VenDevolucionDetalle
+                INNER JOIN VenDevolucion ON VenDevolucion.Id = VenDevolucionDetalle.VenDevolucionId 	  
+                WHERE (VenDevolucion.FechaDocumento > '$FInicial' AND VenDevolucion.FechaDocumento < '$FFinal') 
+                AND VenDevolucionDetalle.InvArticuloId = VenFacturaDetalle.InvArticuloId),CAST(0 AS INT))) as Devolucion,
+                --TotalVenta (En Rango)
                 ((ISNULL((SELECT
                 (ROUND(CAST(SUM (VenVentaDetalle.PrecioBruto * VenVentaDetalle.Cantidad) AS DECIMAL(38,2)),2,0)) 
                 FROM VenVentaDetalle
@@ -1063,19 +1232,61 @@
                 FROM VenDevolucionDetalle
                 INNER JOIN VenDevolucion ON VenDevolucion.Id = VenDevolucionDetalle.VenDevolucionId 	  
                 WHERE (VenDevolucion.FechaDocumento > '$FInicial' AND VenDevolucion.FechaDocumento < '$FFinal') 
-                AND VenDevolucionDetalle.InvArticuloId = VenFacturaDetalle.InvArticuloId),CAST(0 AS INT)))) AS TotalVenta									 
-        --Tabla Principal
-        FROM VenFacturaDetalle
-        --Joins
-        INNER JOIN VenFactura ON VenFactura.Id = VenFacturaDetalle.VenFacturaId
-        LEFT JOIN InvArticulo on InvArticulo.Id = VenFacturaDetalle.InvArticuloId
-        --Condicionales
-        WHERE
-        (VenFactura.FechaDocumento > '$FInicial' AND VenFactura.FechaDocumento < '$FFinal')
-        --Agrupamientos
-        GROUP BY VenFacturaDetalle.InvArticuloId, InvArticulo.Descripcion, InvArticulo.id
-        --Ordenamientos
-        ORDER BY Tipo desc 
+                AND VenDevolucionDetalle.InvArticuloId = VenFacturaDetalle.InvArticuloId),CAST(0 AS INT)))) AS TotalVenta
+                from VenFactura
+                left join VenFacturaDetalle on VenFacturaDetalle.VenFacturaId = VenFactura.Id
+                left join InvArticulo on InvArticulo.id = VenFacturaDetalle.InvArticuloId
+                left join VenCondicionVenta_VenCondicionVentaCategoria on VenCondicionVenta_VenCondicionVentaCategoria.InvCategoriaId = InvArticulo.InvCategoriaId
+                left join VenCondicionVenta on VenCondicionVenta.id = VenCondicionVenta_VenCondicionVentaCategoria.Id 
+                left join VenDevolucionDetalle on VenDevolucionDetalle.InvArticuloId = InvArticulo.id
+                left join VenDevolucion on VenDevolucion.id = VenDevolucionDetalle.VenDevolucionId
+                WHERE (VenFactura.FechaDocumento > '$FInicial' AND VenFactura.FechaDocumento < '$FFinal')
+                or (VenDevolucion.FechaDocumento > '$FInicial' AND VenDevolucion.FechaDocumento < '$FFinal')
+                group by VenCondicionVenta.PorcentajeUtilidad, VenFacturaDetalle.InvArticuloId, InvArticulo.id, InvArticulo.Descripcion
+        ) as ventaGeneral
+        group by Tipo 
+        ";
+        return $sql;
+    }
+
+    /*
+        TITULO: R32Q_Vent_Cli_Top
+    */ 
+    function R32Q_resumen_caja($FInicial,$FFinal){
+        $sql = "
+        select 
+        VenCaja.Id as IdCaja,
+        VenCaja.EstacionTrabajo as Caja,
+        --PrimerMonto
+        (select top 1 
+        VenFactura.M_MontoTotalFactura
+        from VenFactura
+        where VenFactura.FechaDocumento > '$FInicial' and VenFactura.FechaDocumento < '$FFinal'
+        and VenFactura.VenCajaId = VenCaja.Id
+        order by VenFactura.FechaDocumento asc) as PrimerMonto,
+        --PrimeraHora
+        (select top 1 
+        VenFactura.FechaDocumento
+        from VenFactura
+        where VenFactura.FechaDocumento > '$FInicial' and VenFactura.FechaDocumento < '$FFinal'
+        and VenFactura.VenCajaId = VenCaja.Id
+        order by VenFactura.FechaDocumento asc) as PrimeraHora,
+        --UltimoMonto
+        (select top 1 
+        VenFactura.M_MontoTotalFactura
+        from VenFactura
+        where VenFactura.FechaDocumento > '$FInicial' and VenFactura.FechaDocumento < '$FFinal'
+        and VenFactura.VenCajaId = VenCaja.Id
+        order by VenFactura.FechaDocumento desc) as UltimoMonto,
+        --UltimaHora
+        (select top 1 
+        VenFactura.FechaDocumento
+        from VenFactura
+        where VenFactura.FechaDocumento > '$FInicial' and VenFactura.FechaDocumento < '$FFinal'
+        and VenFactura.VenCajaId = VenCaja.Id
+        order by VenFactura.FechaDocumento desc) as UltimaHora
+        from Vencaja
+        order by VenCaja.Id asc
         ";
         return $sql;
     }
