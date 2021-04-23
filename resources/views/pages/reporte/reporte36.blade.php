@@ -202,13 +202,7 @@
 
         $nombre_ultimo_proveedor = FG_Limpiar_Texto($row2['UltimoProveedorNombre']);
 
-        $tasa = 
-          DB::table('dolars')
-          ->select('tasa')
-          ->orderBy('fecha','desc')
-          ->take(1)->get();
-
-        $tasa = $tasa[0]->tasa;
+        $tasa = compras\TasaVenta::where('moneda', 'Dolar')->first()->tasa;
 
         $precio_ds = number_format($precio_sin_formato / $tasa, 2);
 

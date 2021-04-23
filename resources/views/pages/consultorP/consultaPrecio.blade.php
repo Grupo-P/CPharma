@@ -349,15 +349,17 @@
 
               /*Ingreso del al carousel*/
               $("#divPromocion").html(contenedor+nuevaFila);
-              $("#ultimasConsultas").show();
               j++;
             }
+
             $('#carouselExampleIndicators').show();
           }
           else{
             $('#divPromocion').html('');
             $('#carouselExampleIndicators').hide();
           }
+
+          $("#ultimasConsultas").show();
         }
       });
     }
