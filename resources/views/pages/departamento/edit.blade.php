@@ -138,7 +138,9 @@
                 <th scope="col">35</th>
                 <td scope="col">Articulos sin ventas</td>
                 <th scope="col">36</th>
-                <td scope="col">Lista de precios</td>  
+                <td scope="col">Lista de precios</td>
+                <th scope="col">37</th>
+                <td scope="col">Traslados entre tiendas</td> 
             </tr>
         </tbody>
     </table>

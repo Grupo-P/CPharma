@@ -276,7 +276,7 @@
         $CostoUniario = $row["CostoUniario"];
         
         if($TipoMovimiento == 'Corrección costo -'){
-          $NumeroMovCCNeg = $NumeroMovimiento;        
+          $NumeroMovCCNeg = $NumeroMovimiento;     
           $LoteCCNeg = $row["Lote"];        
           $CostoUniarioCCNeg = $CostoUniario;
         }
