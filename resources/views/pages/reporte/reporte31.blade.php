@@ -799,8 +799,8 @@
     INNER JOIN InvLote ON InvLote.id = InvMovimiento.InvLoteId
     INNER JOIN InvAlmacen ON InvAlmacen.id = InvMovimiento.InvAlmacenId
     WHERE (InvMovimiento.InvCausaId = '11' or InvMovimiento.InvCausaId = '12')
-    AND(InvMovimiento.FechaMovimiento > '$FInicial' AND InvMovimiento.FechaMovimiento < '$FFinal')
-    ORDER BY InvMovimiento.FechaMovimiento ASC, InvMovimiento.M_CostoUnitario ASC
+    AND(InvMovimiento.FechaMovimiento > '$FInicial' AND InvMovimiento.FechaMovimiento < '$FFinal')   
+    ORDER BY InvMovimiento.FechaMovimiento ASC,  InvCausa.Descripcion ASC, InvMovimiento.M_CostoUnitario ASC
     ";
     return $sql;
   }
