@@ -1418,6 +1418,9 @@
 			case 36:
 				$nombre = 'Lista de precios';
 			break;
+			case 37:
+				$nombre = 'Traslados entre tiendas';
+			break;
 			default:
 				$nombre = 'Reporte desconocido';
 			break;

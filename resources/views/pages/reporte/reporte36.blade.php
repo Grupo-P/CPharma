@@ -284,10 +284,6 @@
 
         $contador++;
 
-        if ($contador == 1) {
-          break;
-        }
-
     	}
     }
 
