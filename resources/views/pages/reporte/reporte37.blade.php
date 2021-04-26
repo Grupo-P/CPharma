@@ -185,7 +185,8 @@
 		';
     }
 
-    echo '</tr>
+    echo '<th scope="col" class="CP-sticky">Existencias foraneas totales</td>
+      </tr>
         </thead>
 
         <tbody>
@@ -213,22 +214,92 @@
     	$ultima_venta = ($row2['UltimaVenta']) ? $row2['UltimaVenta']->format('d/m/Y') : '00/00/0000';
 
     	$Existencia = $row2["Existencia"];
-  	    $ExistenciaAlmacen1 = $row2["ExistenciaAlmacen1"];
-  	    $ExistenciaAlmacen2 = $row2["ExistenciaAlmacen2"];
-  	    $IsTroquelado = $row2["Troquelado"];
-      	$IsIVA = $row2["Impuesto"];
-        $UtilidadArticulo = $row2["UtilidadArticulo"];
-        $UtilidadCategoria = $row2["UtilidadCategoria"];
-        $TroquelAlmacen1 = $row2["TroquelAlmacen1"];
-        $PrecioCompraBrutoAlmacen1 = $row2["PrecioCompraBrutoAlmacen1"];
-        $TroquelAlmacen2 = $row2["TroquelAlmacen2"];
-        $PrecioCompraBrutoAlmacen2 = $row2["PrecioCompraBrutoAlmacen2"];
-        $PrecioCompraBruto = $row2["PrecioCompraBruto"];
-        $CondicionExistencia = 'CON_EXISTENCIA';
+	    $ExistenciaAlmacen1 = $row2["ExistenciaAlmacen1"];
+	    $ExistenciaAlmacen2 = $row2["ExistenciaAlmacen2"];
+	    $IsTroquelado = $row2["Troquelado"];
+    	$IsIVA = $row2["Impuesto"];
+      $UtilidadArticulo = $row2["UtilidadArticulo"];
+      $UtilidadCategoria = $row2["UtilidadCategoria"];
+      $TroquelAlmacen1 = $row2["TroquelAlmacen1"];
+      $PrecioCompraBrutoAlmacen1 = $row2["PrecioCompraBrutoAlmacen1"];
+      $TroquelAlmacen2 = $row2["TroquelAlmacen2"];
+      $PrecioCompraBrutoAlmacen2 = $row2["PrecioCompraBrutoAlmacen2"];
+      $PrecioCompraBruto = $row2["PrecioCompraBruto"];
+      $CondicionExistencia = 'CON_EXISTENCIA';
 
-    	$precio = FG_Calculo_Precio_Alfa($Existencia,$ExistenciaAlmacen1,$ExistenciaAlmacen2,$IsTroquelado,$UtilidadArticulo,$UtilidadCategoria,$TroquelAlmacen1,$PrecioCompraBrutoAlmacen1,$TroquelAlmacen2,
-  	    $PrecioCompraBrutoAlmacen2,$PrecioCompraBruto,$IsIVA,$CondicionExistencia);
-  	    $precio_sin_formato = $precio;
+      $existenciaForanea = 0;
+
+      if (isset($_GET['SEDE']) & ($_GET['SEDE'] == 'FAU' || $_GET['SEDE'] == 'DBs')) {
+        if ($conectividad_ftn == 1) {
+          $sql3 = R37_Q_Descripcion_Existencia_Articulo($codigo_barra);
+          $result3 = sqlsrv_query($connFTN,$sql3);
+
+          $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
+
+          $descripcion_ftn = ($row3['descripcion']) ? FG_Limpiar_Texto($row3['descripcion']) : '-';
+          $existencia_ftn = ($row3['existencia']) ? intval($row3['existencia']) : '-';
+          $existenciaForanea = $existenciaForanea + (($row3['existencia']) ? $row3['existencia'] : 0);
+        }
+
+        if ($conectividad_fll == 1) {
+          $sql3 = R37_Q_Descripcion_Existencia_Articulo($codigo_barra);
+          $result3 = sqlsrv_query($connFLL,$sql3);
+          $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
+
+          $descripcion_fll = ($row3['descripcion']) ? FG_Limpiar_Texto($row3['descripcion']) : '-';
+          $existencia_fll = ($row3['existencia']) ? intval($row3['existencia']) : '-';
+          $existenciaForanea = $existenciaForanea + (($row3['existencia']) ? $row3['existencia'] : 0);
+        }
+      }
+
+      if (isset($_GET['SEDE']) & $_GET['SEDE'] == 'FTN') {
+        if ($conectividad_fau == 1) {
+            $sql3 = R37_Q_Descripcion_Existencia_Articulo($codigo_barra);
+            $result3 = sqlsrv_query($connFAU,$sql3);
+            $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
+
+            $descripcion_ftn = ($row3['descripcion']) ? FG_Limpiar_Texto($row3['descripcion']) : '-';
+            $existencia_ftn = ($row3['existencia']) ? intval($row3['existencia']) : '-';
+            $existenciaForanea = $existenciaForanea + (($row3['existencia']) ? $row3['existencia'] : 0);
+          }
+
+          if ($conectividad_fll == 1) {
+            $sql3 = R37_Q_Descripcion_Existencia_Articulo($codigo_barra);
+            $result3 = sqlsrv_query($connFLL,$sql3);
+            $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
+
+            $descripcion_fll = ($row3['descripcion']) ? FG_Limpiar_Texto($row3['descripcion']) : '-';
+            $existencia_fll = ($row3['existencia']) ? intval($row3['existencia']) : '-';
+            $existenciaForanea = $existenciaForanea + (($row3['existencia']) ? $row3['existencia'] : 0);
+          }
+      }
+
+      if (isset($_GET['SEDE']) & $_GET['SEDE'] == 'FLL') {
+         if ($conectividad_ftn == 1) {
+            $sql3 = R37_Q_Descripcion_Existencia_Articulo($codigo_barra);
+            $result3 = sqlsrv_query($connFTN,$sql3);
+            $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
+
+            $descripcion_fll = ($row3['descripcion']) ? FG_Limpiar_Texto($row3['descripcion']) : '-';
+            $existencia_fll = ($row3['existencia']) ? intval($row3['existencia']) : '-';
+            $existenciaForanea = $existenciaForanea + (($row3['existencia']) ? $row3['existencia'] : 0);
+          }
+
+          if ($conectividad_fau == 1) {
+            $sql3 = R37_Q_Descripcion_Existencia_Articulo($codigo_barra);
+            $result3 = sqlsrv_query($connFAU,$sql3);
+            $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
+
+            $descripcion_fau = ($row3['descripcion']) ? FG_Limpiar_Texto($row3['descripcion']) : '-';
+            $existencia_fau = ($row3['existencia']) ? intval($row3['existencia']) : '-';
+            $existenciaForanea = $existenciaForanea + (($row3['existencia']) ? $row3['existencia'] : 0);
+          }
+      }
+
+      if ($existenciaForanea > 0) {
+        $precio = FG_Calculo_Precio_Alfa($Existencia,$ExistenciaAlmacen1,$ExistenciaAlmacen2,$IsTroquelado,$UtilidadArticulo,$UtilidadCategoria,$TroquelAlmacen1,$PrecioCompraBrutoAlmacen1,$TroquelAlmacen2,
+        $PrecioCompraBrutoAlmacen2,$PrecioCompraBruto,$IsIVA,$CondicionExistencia);
+        $precio_sin_formato = $precio;
         $precio = number_format($precio,2,"." ,"," );
 
         echo '<tr>';
@@ -242,110 +313,36 @@
         echo '<td align="center">'.$precio.'</td>';
 
         if (isset($_GET['SEDE']) & ($_GET['SEDE'] == 'FAU' || $_GET['SEDE'] == 'DBs')) {
-        	if ($conectividad_ftn == 1) {
-            $sql3 = R37_Q_Descripcion_Existencia_Articulo($codigo_barra);
-            $result3 = sqlsrv_query($connFAU,$sql3);
+          echo '<td align="center">'.$descripcion_ftn.'</td>
+                <td align="center">'.$existencia_ftn.'</td>
+                <td align="center">'.$descripcion_fll.'</td>
+                <td align="center">'.$existencia_fll.'</td>
+          ';
+        }
 
-            if( $result3=== false ) {
-              dd(sqlsrv_errors(), $contador);
-            }
+        if (isset($_GET['SEDE']) & $_GET['SEDE'] == 'FTN') {
+          echo '<td align="center">'.$descripcion_fau.'</td>
+                <td align="center">'.$existencia_fau.'</td>
+                <td align="center">'.$descripcion_fll.'</td>
+                <td align="center">'.$existencia_fll.'</td>
+          ';
+        }
 
-            $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
+          if (isset($_GET['SEDE']) & $_GET['SEDE'] == 'FLL') {
+            echo '<td align="center">'.$descripcion_ftn.'</td>
+                  <td align="center">'.$existencia_ftn.'</td>
+                  <td align="center">'.$descripcion_fau.'</td>
+                  <td align="center">'.$existencia_fau.'</td>
+            ';
+          }
 
-            $descripcion = ($row3['descripcion']) ? FG_Limpiar_Texto($row3['descripcion']) : '-';
-            $existencia = ($row3['existencia']) ? intval($row3['existencia']) : '-';
-
-        		echo '<td align="center">'.$descripcion.'</td>
-        			  <td align="center">'.$existencia.'</td>';
-        	} else {
-        		echo '<td align="center">-</td>
-        			  <td align="center">-</td>';
-        	}
-
-        	if ($conectividad_fll == 1) {
-        		$sql3 = R37_Q_Descripcion_Existencia_Articulo($codigo_barra);
-            $result3 = sqlsrv_query($connFLL,$sql3);
-            $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
-
-            $descripcion = ($row3['descripcion']) ? FG_Limpiar_Texto($row3['descripcion']) : '-';
-            $existencia = ($row3['existencia']) ? intval($row3['existencia']) : '-';
-
-            echo '<td align="center">'.$descripcion.'</td>
-                <td align="center">'.$existencia.'</td>';
-        	} else {
-        		echo '<td align="center">-</td>
-        			  <td align="center">-</td>';
-        	}
-	    }
-
-	    if (isset($_GET['SEDE']) & $_GET['SEDE'] == 'FTN') {
-	    	if ($conectividad_fau == 1) {
-        		$sql3 = R37_Q_Descripcion_Existencia_Articulo($codigo_barra);
-            $result3 = sqlsrv_query($connFTN,$sql3);
-            $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
-
-            $descripcion = ($row3['descripcion']) ? FG_Limpiar_Texto($row3['descripcion']) : '-';
-            $existencia = ($row3['existencia']) ? intval($row3['existencia']) : '-';
-
-            echo '<td align="center">'.$descripcion.'</td>
-                <td align="center">'.$existencia.'</td>';
-        	} else {
-        		echo '<td align="center">-</td>
-        			  <td align="center">-</td>';
-        	}
-
-        	if ($conectividad_fll == 1) {
-        		$sql3 = R37_Q_Descripcion_Existencia_Articulo($codigo_barra);
-            $result3 = sqlsrv_query($connFLL,$sql3);
-            $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
-
-            $descripcion = ($row3['descripcion']) ? FG_Limpiar_Texto($row3['descripcion']) : '-';
-            $existencia = ($row3['existencia']) ? intval($row3['existencia']) : '-';
-
-            echo '<td align="center">'.$descripcion.'</td>
-                <td align="center">'.$existencia.'</td>';
-        	} else {
-        		echo '<td align="center">-</td>
-        			  <td align="center">-</td>';
-        	}
-	    }
-
-	    if (isset($_GET['SEDE']) & $_GET['SEDE'] == 'FLL') {
-			   if ($conectividad_ftn == 1) {
-        		$sql3 = R37_Q_Descripcion_Existencia_Articulo($codigo_barra);
-            $result3 = sqlsrv_query($connFLL,$sql3);
-            $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
-
-            $descripcion = ($row3['descripcion']) ? FG_Limpiar_Texto($row3['descripcion']) : '-';
-            $existencia = ($row3['existencia']) ? intval($row3['existencia']) : '-';
-
-            echo '<td align="center">'.$descripcion.'</td>
-                <td align="center">'.$existencia.'</td>';
-        	} else {
-        		echo '<td align="center">-</td>
-        			  <td align="center">-</td>';
-        	}
-
-        	if ($conectividad_fau == 1) {
-        		$sql3 = R37_Q_Descripcion_Existencia_Articulo($codigo_barra);
-            $result3 = sqlsrv_query($connFAU,$sql3);
-            $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
-
-            $descripcion = ($row3['descripcion']) ? FG_Limpiar_Texto($row3['descripcion']) : '-';
-            $existencia = ($row3['existencia']) ? intval($row3['existencia']) : '-';
-
-            echo '<td align="center">'.$descripcion.'</td>
-                <td align="center">'.$existencia.'</td>';
-        	} else {
-        		echo '<td align="center">-</td>
-        			  <td align="center">-</td>';
-        	}
-	    }
-
+        echo '<td align="center">'.$existenciaForanea.'</td>';
         echo '</tr>';
 
 
-    	$contador++;
+      	$contador++;        
+      }
+
 
   	}
 
@@ -355,24 +352,6 @@
 	';
 
 	sqlsrv_close($conn);
-  }
-
-  function ms_escape_string($data) {
-      if ( !isset($data) or empty($data) ) return '';
-      if ( is_numeric($data) ) return $data;
-
-      $non_displayables = array(
-          '/%0[0-8bcef]/',            // url encoded 00-08, 11, 12, 14, 15
-          '/%1[0-9a-f]/',             // url encoded 16-31
-          '/[\x00-\x08]/',            // 00-08
-          '/\x0b/',                   // 11
-          '/\x0c/',                   // 12
-          '/[\x0e-\x1f]/'             // 14-31
-      );
-      foreach ( $non_displayables as $regex )
-          $data = preg_replace( $regex, '', $data );
-      $data = str_replace("'", "''", $data );
-      return $data;
   }
 
   function R37_Q_Descripcion_Existencia_Articulo($CodigoBarra)

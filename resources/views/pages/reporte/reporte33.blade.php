@@ -165,10 +165,15 @@
           <th scope="col" class="CP-sticky">Hora Factura</th>
           <th scope="col" class="CP-sticky">Nombre Cliente</th>
           <th scope="col" class="CP-sticky">Nro Factura</th>
+          <th scope="col" class="CP-sticky">Fiscal Factura</th>
+          <th scope="col" class="CP-sticky">Serial Impresora</th>
+          <th scope="col" class="CP-sticky">Corte Z</th>
           <th scope="col" class="CP-sticky">Caja Origen</th>
           <th scope="col" class="CP-sticky">Fecha Devolucion</td>
           <th scope="col" class="CP-sticky">Hora Devolucion</td>
           <th scope="col" class="CP-sticky">Numero Devolucion</td>
+          <th scope="col" class="CP-sticky">Fiscal Devolucion</td>
+          <th scope="col" class="CP-sticky">Serial Impresora</td>
           <th scope="col" class="CP-sticky">Dias</td>
           <th scope="col" class="CP-sticky">Caja</th>
           <th scope="col" class="CP-sticky">Causa</th>
@@ -193,10 +198,15 @@
       $hora_factura = $row["hora_factura"];
       $nombre_cliente = $row["nombre_cliente"];
       $nro_factura = $row["nro_factura"];
+      $fiscal_factura = $row["fiscal_factura"];
+      $serial_impresora_origen = $row["serial_impresora_origen"];
+      $corte_z = $row["corte_z"];
       $caja_origen = $row["caja_origen"];
       $fecha_devolucion = $row["fecha_devolucion"];
       $hora_devolucion = $row["hora_devolucion"];
       $numero_devolucion = $row["numero_devolucion"];
+      $fiscal_devolucion = $row["fiscal_devolucion"];
+      $serial_impresora = $row["serial_impresora"];
       $dias = $row["dias"];
       $caja = $row["caja"];
       $causa = $row["causa"];
@@ -248,12 +258,17 @@
       echo '<td align="center">'.$hora_factura.'</td>';
       echo '<td align="center">'.$nombre_cliente.'</td>';
       echo '<td align="center">'.$nro_factura.'</td>';
+      echo '<td align="center">'.$fiscal_factura.'</td>';
+      echo '<td align="center">'.$serial_impresora.'</td>';
+      echo '<td align="center">'.$corte_z.'</td>';
       echo '<td align="center">'.$caja_origen.'</td>';
       echo '<td align="center">'.$fecha_devolucion.'</td>';
       echo '<td align="center">'.$hora_devolucion.'</td>';
       echo '<td align="center" class="CP-barrido">
           <a href="/reporte33?SEDE='.$_GET['SEDE'].'&numeroDevolucion='.$numero_devolucion.'" style="text-decoration: none; color: black;" target="_blank">'.$numero_devolucion.'</a>
         </td>';
+      echo '<td align="center">'.$fiscal_devolucion.'</td>';
+      echo '<td align="center">'.$serial_impresora.'</td>';
       echo '<td align="center">'.$dias.'</td>';
       echo '<td align="center">'.$caja.'</td>';
       if ($cantidad_causas == 1) {
@@ -329,10 +344,15 @@
           <th scope="col" class="CP-sticky">Hora Factura</th>
           <th scope="col" class="CP-sticky">Nombre Cliente</th>
           <th scope="col" class="CP-sticky">Nro Factura</th>
+          <th scope="col" class="CP-sticky">Fiscal Factura</th>
+          <th scope="col" class="CP-sticky">Serial Impresora</th>
+          <th scope="col" class="CP-sticky">Corte Z</th>
           <th scope="col" class="CP-sticky">Caja Origen</th>
           <th scope="col" class="CP-sticky">Fecha Devolucion</td>
           <th scope="col" class="CP-sticky">Hora Devolucion</td>
           <th scope="col" class="CP-sticky">Numero Devolucion</td>
+          <th scope="col" class="CP-sticky">Fiscal Devolucion</td>
+          <th scope="col" class="CP-sticky">Serial Impresora</td>
           <th scope="col" class="CP-sticky">Dias</td>
           <th scope="col" class="CP-sticky">Caja</th>
           <th scope="col" class="CP-sticky">Unidades</th>
@@ -371,12 +391,17 @@
     echo '<td align="center">'.$row6['hora_factura'].'</td>';
     echo '<td align="center">'.$row6['nombre_cliente'].'</td>';
     echo '<td align="center">'.$row6['nro_factura'].'</td>';
+    echo '<td align="center">'.$row6['fiscal_factura'].'</td>';
+    echo '<td align="center">'.$row6['serial_impresora_origen'].'</td>';
+    echo '<td align="center">'.$row6['corte_z'].'</td>';
     echo '<td align="center">'.$row6['caja_origen'].'</td>';
     echo '<td align="center">'.$row6['fecha_devolucion'].'</td>';
     echo '<td align="center">'.$row6['hora_devolucion'].'</td>';
     echo '<td align="center" class="CP-barrido">
         <a href="/reporte33?SEDE='.$_GET['SEDE'].'&numeroDevolucion='.$row6['numero_devolucion'].'" style="text-decoration: none; color: black;" target="_blank">'.$row6['numero_devolucion'].'</a>
       </td>';
+    echo '<td align="center">'.$row6['fiscal_devolucion'].'</td>';
+    echo '<td align="center">'.$row6['serial_impresora'].'</td>';
     echo '<td align="center">'.$row6['dias'].'</td>';
     echo '<td align="center">'.$row6['caja'].'</td>';
     echo '<td align="center">'.$unidades.'</td>';
@@ -478,11 +503,16 @@
         (SELECT FORMAT(VenFactura.FechaDocumento, 'H:mm') FROM VenFactura WHERE VenFactura.Id = VenDevolucion.VenFacturaId) AS hora_factura,
         (SELECT CONCAT(Nombre, ' ', Apellido) FROM GenPersona WHERE id = ((SELECT GenPersonaId FROM VenCliente WHERE id = (SELECT VenFactura.VenClienteId FROM VenFactura WHERE VenFactura.Id = VenDevolucion.VenFacturaId)))) AS nombre_cliente,
         (SELECT VenFactura.NumeroFactura FROM VenFactura WHERE VenFactura.Id = VenDevolucion.VenFacturaId) AS nro_factura,
+        (SELECT VenFactura.VE_NumeroControlImp FROM VenFactura WHERE VenFactura.Id = VenDevolucion.VenFacturaId) AS fiscal_factura,
+        (SELECT VenFactura.VE_SerialImp FROM VenFactura WHERE VenFactura.Id = VenDevolucion.VenFacturaId) AS serial_impresora_origen,
+        (SELECT VenFactura.VE_CorteZImp FROM VenFactura WHERE VenFactura.Id = VenDevolucion.VenFacturaId) AS corte_z,
         (SELECT CodigoCaja FROM VenCaja where id = (SELECT VenCajaId FROM VenFactura WHERE VenFactura.Id = VenDevolucion.VenFacturaId)) AS caja_origen,
         FORMAT(VenDevolucion.FechaDocumento, 'dd/MM/yyyy') AS fecha_devolucion,
         VenDevolucion.FechaDocumento AS fecha_devolucion_sin_formato,
         FORMAT(VenDevolucion.FechaDocumento, 'H:mm') AS hora_devolucion,
         VenDevolucion.ConsecutivoDevolucionSistema AS numero_devolucion,
+        VenDevolucion.VE_NumeroControlDevolucionImp AS fiscal_devolucion,
+        VenDevolucion.VE_SerialImp AS serial_impresora,
         DATEDIFF(DAY, (SELECT VenFactura.FechaDocumento FROM VenFactura WHERE VenFactura.Id = VenDevolucion.VenFacturaId), VenDevolucion.FechaDocumento) AS dias,
         (SELECT VenCaja.CodigoCaja FROM VenCaja where id = VenDevolucion.VenCajaId) AS caja,
         (SELECT VenCausaOperacionDevolucion.DescripcionOperacion FROM VenCausaOperacionDevolucion WHERE id = (SELECT TOP 1 VenCausaOperacionId FROM VenDevolucionDetalle WHERE VenDevolucionDetalle.VenDevolucionId = VenDevolucion.Id)) AS causa,
@@ -510,11 +540,16 @@
         (SELECT FORMAT(VenFactura.FechaDocumento, 'H:mm') FROM VenFactura WHERE VenFactura.Id = VenDevolucion.VenFacturaId) AS hora_factura,
         (SELECT CONCAT(Nombre, ' ', Apellido) FROM GenPersona WHERE id = ((SELECT GenPersonaId FROM VenCliente WHERE id = (SELECT VenFactura.VenClienteId FROM VenFactura WHERE VenFactura.Id = VenDevolucion.VenFacturaId)))) AS nombre_cliente,
         (SELECT VenFactura.NumeroFactura FROM VenFactura WHERE VenFactura.Id = VenDevolucion.VenFacturaId) AS nro_factura,
+        (SELECT VenFactura.VE_NumeroControlImp FROM VenFactura WHERE VenFactura.Id = VenDevolucion.VenFacturaId) AS fiscal_factura,
+        (SELECT VenFactura.VE_SerialImp FROM VenFactura WHERE VenFactura.Id = VenDevolucion.VenFacturaId) AS serial_impresora_origen,
+        (SELECT VenFactura.VE_CorteZImp FROM VenFactura WHERE VenFactura.Id = VenDevolucion.VenFacturaId) AS corte_z,
         (SELECT CodigoCaja FROM VenCaja where id = (SELECT VenCajaId FROM VenFactura WHERE VenFactura.Id = VenDevolucion.VenFacturaId)) AS caja_origen,
         FORMAT(VenDevolucion.FechaDocumento, 'dd/MM/yyyy') AS fecha_devolucion,
         VenDevolucion.FechaDocumento AS fecha_devolucion_sin_formato,
         FORMAT(VenDevolucion.FechaDocumento, 'H:mm') AS hora_devolucion,
         VenDevolucion.ConsecutivoDevolucionSistema AS numero_devolucion,
+        VenDevolucion.VE_NumeroControlDevolucionImp AS fiscal_devolucion,
+        VenDevolucion.VE_SerialImp AS serial_impresora,
         DATEDIFF(DAY, (SELECT VenFactura.FechaDocumento FROM VenFactura WHERE VenFactura.Id = VenDevolucion.VenFacturaId), VenDevolucion.FechaDocumento) AS dias,
         (SELECT VenCaja.CodigoCaja FROM VenCaja where id = VenDevolucion.VenCajaId) AS caja,
         (SELECT VenCausaOperacionDevolucion.DescripcionOperacion FROM VenCausaOperacionDevolucion WHERE id = (SELECT TOP 1 VenCausaOperacionId FROM VenDevolucionDetalle WHERE VenDevolucionDetalle.VenDevolucionId = VenDevolucion.Id)) AS causa,
@@ -545,9 +580,9 @@
         VenDevolucionDetalle.PrecioBruto AS precio_iva,
         VenDevolucionDetalle.Cantidad AS cantidad,
         (SELECT VenDevolucion.FechaDocumento FROM VenDevolucion WHERE Id = VenDevolucionDetalle.VenDevolucionId) AS fecha_devolucion
-    FROM
-        VenDevolucionDetalle
-    WHERE VenDevolucionId = (SELECT Id FROM VenDevolucion WHERE VenDevolucion.ConsecutivoDevolucionSistema = '$numeroDevolucion')
+      FROM
+          VenDevolucionDetalle
+      WHERE VenDevolucionId = (SELECT Id FROM VenDevolucion WHERE VenDevolucion.ConsecutivoDevolucionSistema = '$numeroDevolucion')
     ";
     return $sql;
   }
