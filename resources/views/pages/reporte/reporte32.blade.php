@@ -49,13 +49,53 @@
             $fecha = $hoy;
         }
 
-            R32_Seguimiento_Tienda($_GET['SEDE'],$fecha);
-            FG_Guardar_Auditoria('CONSULTAR','REPORTE','Seguimiento de Tienda');
+            $fecha = '2020-12-15';
+            $conn = FG_Conectar_Smartpharma($_GET['SEDE']);
+            $FFinal = date("Y-m-d",strtotime($fecha."+ 1 days"));
 
-		$FinCarga = new DateTime("now");
-    $IntervalCarga = $InicioCarga->diff($FinCarga);
-    echo'Tiempo de carga: '.$IntervalCarga->format("%Y-%M-%D %H:%I:%S");
-	?>
+            $sqlDataGRVen = R32Q_data_grafico($fecha,$FFinal);
+            $resultDataGRVen = sqlsrv_query($conn,$sqlDataGRVen);         
+            $MontoArray = $UnidadesArray = $TransaccionesArray = $HoraArray = array();
+
+            while($rowDataGRVen = sqlsrv_fetch_array($resultDataGRVen, SQLSRV_FETCH_ASSOC)) {
+                array_push($MontoArray,$rowDataGRVen['Monto']);
+                array_push($UnidadesArray,$rowDataGRVen['Unidades']);
+                array_push($TransaccionesArray,$rowDataGRVen['Transacciones']);
+                array_push($HoraArray,$rowDataGRVen['Hora']);
+            }
+
+            echo '<hr class="row align-items-start col-12">';        
+            echo '<h1 class="h5 text-dark" align="center">Ventas por Hora</h1>';
+            
+            echo'
+            <div class="col-12">
+                <div class="col-6" style="float:left;">
+                    <canvas id="VentasxHora"></canvas>                     
+                </div>
+                <div class="col-6" style="float:left;">
+                    <canvas id="TransaccionesxHora"></canvas>                     
+                </div>
+            </div>
+            ';
+            echo'<div style="clear:both"></div>';
+            echo'
+            <div class="col-12" style="margin-top:50px;">
+                <div class="col-6" style="float:left;">
+                    <canvas id="UnidadesxHora"></canvas>                     
+                </div>
+                <div class="col-6" style="float:left;">
+                    <canvas id="MixtoxHora"></canvas>                     
+                </div>
+            </div>
+            ';
+            echo'<div style="clear:both"></div>';
+
+            R32_Seguimiento_Tienda($_GET['SEDE'],$fecha);
+            FG_Guardar_Auditoria('CONSULTAR','REPORTE','Seguimiento de Tienda');            
+            $FinCarga = new DateTime("now");
+            $IntervalCarga = $InicioCarga->diff($FinCarga);
+            echo'Tiempo de carga: '.$IntervalCarga->format("%Y-%M-%D %H:%I:%S");
+        ?>
 @endsection
 
 <?php
@@ -70,8 +110,7 @@
         $conn = FG_Conectar_Smartpharma($SedeConnection);
         $connCPharma = FG_Conectar_CPharma();
 
-        //$FInicial = $fecha;
-        $FInicial = '2020-12-15';
+        $FInicial = $fecha;
         $FFinal = date("Y-m-d",strtotime($FInicial."+ 1 days"));
         $TasaActual = FG_Tasa_Fecha($connCPharma,$FInicial);
         $TasaActual = 10;
@@ -113,10 +152,10 @@
         $total_trans = $Sum_Trans_venta - $Sum_Trans_Dev;
         
         echo '<hr class="row align-items-start col-12">';        
-        echo '<h1 class="h5 text-dark" align="left">Ventas Generales</h1>';
+        echo '<h1 class="h5 text-dark" align="center" style="margin-top:50px;">Ventas Generales</h1>';
 
         echo '		
-		<table class="table table-striped table-bordered col-12 sortable" style="width:60%;">
+		<table class="table table-striped table-bordered col-12 sortable" style="width:100%;">
             <thead class="thead-dark">
                 <tr>
                     <th scope="col" class="bg-white" colspan="5" style="border-color:white;"></th>
@@ -159,7 +198,7 @@
 
         if(isset($TasaActual)&&$TasaActual!=0){
             echo '		
-            <table class="table table-striped table-bordered col-12 sortable" style="width:60%;">
+            <table class="table table-striped table-bordered col-12 sortable" style="width:100%;">
                 <thead class="thead-dark">
                     <tr>
                         <th scope="col" class="bg-white" colspan="5" style="border-color:white;"></th>
@@ -207,9 +246,9 @@
         $resultRC = sqlsrv_query($conn,$sqlRC);
 
         echo '<hr class="row align-items-start col-12">';        
-        echo '<h1 class="h5 text-dark" align="left">Ventas por Caja</h1>';
+        echo '<h1 class="h5 text-dark" align="center">Ventas por Caja</h1>';
         echo '		
-		<table class="table table-striped table-bordered col-12 sortable" style="width:60%;">
+		<table class="table table-striped table-bordered col-12 sortable" style="width:100%;">
             <thead class="thead-dark">
                 <tr>                  
                     <th scope="col"></th>  
@@ -256,10 +295,10 @@
         }
 
         echo '<hr class="row align-items-start col-12">';        
-        echo '<h1 class="h5 text-dark" align="left">Ventas por Condicion</h1>';
+        echo '<h1 class="h5 text-dark" align="center">Ventas por Condicion</h1>';
 
         echo '		
-		<table class="table table-striped table-bordered col-12 sortable" style="width:60%;">
+		<table class="table table-striped table-bordered col-12 sortable" style="width:100%;">
             <thead class="thead-dark">
                 <tr>                  
                     <th scope="col">#</th>  
@@ -305,10 +344,10 @@
         $result = sqlsrv_query($conn,$sql);                  
         
         echo '<hr class="row align-items-start col-12">';        
-        echo '<h1 class="h5 text-dark" align="left">Ventas por Articulo</h1>';
+        echo '<h1 class="h5 text-dark" align="center">Ventas por Articulo</h1>';
 
 		echo '		
-		<table class="table table-striped table-bordered col-12 sortable" style="width:60%;">
+		<table class="table table-striped table-bordered col-12 sortable" style="width:100%;">
             <thead class="thead-dark">
                 <tr>
                     <th scope="col">#</th>
@@ -386,7 +425,7 @@
         </table>';
         
         echo '		
-		<table class="table table-striped table-bordered col-12 sortable" style="width:60%;">
+		<table class="table table-striped table-bordered col-12 sortable" style="width:100%;">
             <thead class="thead-dark">
                 <tr>
                     <th scope="col">#</th>
@@ -468,10 +507,10 @@
         </table>';
         
         echo '<hr class="row align-items-start col-12">';        
-        echo '<h1 class="h5 text-dark" align="left">Ventas por Clientes</h1>';
+        echo '<h1 class="h5 text-dark" align="center">Ventas por Clientes</h1>';
         
         echo '		
-		<table class="table table-striped table-bordered col-12 sortable" style="width:60%;">
+		<table class="table table-striped table-bordered col-12 sortable" style="width:100%;">
             <thead class="thead-dark">
                 <tr>
                     <th scope="col">#</th>
@@ -585,7 +624,7 @@
         </table>';
 
         echo '		
-		<table class="table table-striped table-bordered col-12 sortable" style="width:60%;">
+		<table class="table table-striped table-bordered col-12 sortable" style="width:100%;">
             <thead class="thead-dark">
                 <tr>
                     <th scope="col">#</th>
@@ -702,7 +741,7 @@
         $result4 = sqlsrv_query($conn,$sql4);          
         
 		echo '		
-		<table class="table table-striped table-bordered col-12 sortable" style="width:60%;">
+		<table class="table table-striped table-bordered col-12 sortable" style="width:100%;">
             <thead class="thead-dark">
                 <tr>
                     <th scope="col">#</th>
@@ -1290,4 +1329,256 @@
         ";
         return $sql;
     }
+
+    /*
+        TITULO: R32Q_data_grafico
+    */ 
+    function R32Q_data_grafico($FInicial,$FFinal){
+        $sql = "
+        SELECT 
+        ((ISNULL(FAC.MontoFactura,CAST(0 AS INT))) - (ISNULL(DEV.MontoDevolucion,CAST(0 AS INT)))) AS Monto,
+        ((ISNULL(FAC.UnidadesFactura,CAST(0 AS INT))) - (ISNULL(DEV.UnidadesDevolucion,CAST(0 AS INT)))) as Unidades,
+        ((ISNULL(FAC.TransaccionesFactura,CAST(0 AS INT))) - (ISNULL(DEV.TransaccionesDevolucion,CAST(0 AS INT)))) as Transacciones,
+        concat(FAC.hora,':00:00') as Hora
+        FROM
+        (select
+        SUM(MontoFactura) AS MontoFactura,
+        SUM(Unidades) AS UnidadesFactura,
+        SUM(Transacciones) AS TransaccionesFactura,
+        convert(char(2), FechaDocumento, 108) as hora
+        from
+            (SELECT 
+            VenFactura.Id,	
+            (VenFactura.M_MontoTotalFactura) AS MontoFactura,
+            ((ROUND(CAST(SUM(VenFacturaDetalle.Cantidad) AS DECIMAL(38,0)),2,0))) as Unidades,
+            COUNT(DISTINCT VenFactura.Id) as Transacciones,
+            VenFactura.FechaDocumento as FechaDocumento
+            FROM VenFactura	
+            LEFT JOIN VenFacturaDetalle ON VenFacturaDetalle.VenFacturaId = VenFactura.Id
+            WHERE
+            (VenFactura.FechaDocumento > '$FInicial' AND VenFactura.FechaDocumento < '$FFinal')
+            GROUP BY VenFactura.M_MontoTotalFactura,VenFactura.Id,VenFactura.FechaDocumento) AS Factura
+        GROUP BY convert(char(2), FechaDocumento, 108)
+        ) AS FAC
+        LEFT JOIN 
+        (select 
+        SUM(MontoDevolucion) AS MontoDevolucion,
+        SUM(Unidades) AS UnidadesDevolucion,
+        SUM(Transacciones) AS TransaccionesDevolucion,
+        convert(char(2), FechaDocumento, 108) as hora
+            from
+            (SELECT 
+            VenDevolucion.Id,    
+            (VenDevolucion.M_MontoTotalDevolucion) AS MontoDevolucion,
+            ((ROUND(CAST(SUM(VenDevolucionDetalle.Cantidad) AS DECIMAL(38,0)),2,0))) as Unidades,
+            COUNT(DISTINCT VenFactura.Id) as Transacciones,
+            VenDevolucion.FechaDocumento as FechaDocumento
+            FROM VenDevolucion
+            LEFT JOIN VenDevolucionDetalle ON VenDevolucionDetalle.VenDevolucionId = VenDevolucion.Id
+            LEFT JOIN VenFactura ON VenFactura.Id = VenDevolucion.VenFacturaId   
+            WHERE
+            (VenDevolucion.FechaDocumento > '$FInicial' AND VenDevolucion.FechaDocumento < '$FFinal')
+            GROUP BY VenDevolucion.M_MontoTotalDevolucion,VenDevolucion.Id,VenDevolucion.FechaDocumento) AS Devolucion
+        GROUP BY convert(char(2), FechaDocumento, 108)
+        ) AS DEV ON DEV.hora = FAC.hora
+        ORDER BY FAC.hora
+        ";
+        return $sql;
+    }    
 ?>
+
+@section('scriptsFoot')
+<script src="{{asset('assets/chart.js/Chart.min.js')}}"></script>
+
+<?php
+    if(isset($MontoArray) && !empty($MontoArray) && isset($HoraArray) && !empty($HoraArray)){
+?>
+    <script type="text/javascript">
+        ArrMonto = eval(<?php echo json_encode($MontoArray) ?>);      
+        ArrHora = eval(<?php echo json_encode($HoraArray) ?>);
+
+        var VxH = document.getElementById("VentasxHora");
+        var VentasxHora = new Chart(VxH, {
+        type: 'bar',
+        data: {        
+        labels: ArrHora,
+        datasets: [{       
+            label: 'VENTAS',     
+            data: ArrMonto, 
+            backgroundColor : 'rgba(78, 115, 223, 0.7)',
+            borderColor :  '#4e73df',
+            borderWidth: 1,                    
+        }],
+        },
+        options: {
+            scales: {
+                xAxes: [{
+                    stacked: true
+                }],
+                yAxes: [{
+                    stacked: true
+                }]
+            },
+            legend: {
+                display: true
+            }
+        },        
+    });
+    </script>
+<?php
+    }
+?>  
+
+
+<?php
+    if(isset($TransaccionesArray) && !empty($TransaccionesArray) && isset($HoraArray) && !empty($HoraArray)){
+?>
+    <script>    
+        ArrTransacciones = eval(<?php echo json_encode($TransaccionesArray) ?>);      
+        ArrHora = eval(<?php echo json_encode($HoraArray) ?>);
+
+        var TxH = document.getElementById("TransaccionesxHora");
+        var TransaccionesxHora = new Chart(TxH, {
+            type: 'line',
+            data: {
+            labels: ArrHora,
+            datasets: [{
+                label: 'TRANSACCIONES',
+                data: ArrTransacciones,   
+                backgroundColor : 'rgba(0, 0, 0, 0.0)',       
+                borderColor :  '#34ebc0',
+                borderWidth: 4,                    
+            }],
+            },
+            options: {
+                scales: {
+                    xAxes: [{
+                        stacked: true
+                    }],
+                    yAxes: [{
+                        stacked: true
+                    }]
+                },
+                legend: {
+                    display: true
+                },
+                elements: {
+                    line: {
+                        tension: 0,
+                    }
+                },
+            },        
+        });  
+    </script>
+<?php
+    }
+?>  
+
+<?php
+    if(isset($UnidadesArray) && !empty($UnidadesArray) && isset($HoraArray) && !empty($HoraArray)){
+?>
+    <script>    
+        ArrUnidades = eval(<?php echo json_encode($UnidadesArray) ?>);      
+        ArrHora = eval(<?php echo json_encode($HoraArray) ?>);
+
+        var UxH = document.getElementById("UnidadesxHora");
+        var UnidadesxHora = new Chart(UxH, {
+            type: 'line',
+            data: {
+            labels: ArrHora,
+            datasets: [{
+                label: 'UNIDADES',
+                data: ArrUnidades,
+                backgroundColor : 'rgba(0, 0, 0, 0.0)',     
+                borderColor :  '#eb9634',
+                borderWidth: 4,                    
+            }],
+            },
+            options: {
+                scales: {
+                    xAxes: [{
+                        stacked: true
+                    }],
+                    yAxes: [{
+                        stacked: true
+                    }]
+                },
+                legend: {
+                    display: true
+                },
+                elements: {
+                    line: {
+                        tension: 0,
+                    }
+                },
+            },        
+        });  
+    </script>
+<?php
+    }
+?>  
+
+<?php
+    if(
+        (isset($UnidadesArray) && !empty($UnidadesArray) && isset($HoraArray) && !empty($HoraArray))
+        &&(isset($TransaccionesArray) && !empty($TransaccionesArray) && isset($HoraArray) && !empty($HoraArray))
+        &&(isset($TransaccionesArray) && !empty($TransaccionesArray) && isset($HoraArray) && !empty($HoraArray))
+    ){
+?>
+    <script>   
+        ArrMonto = eval(<?php echo json_encode($MontoArray) ?>); 
+        ArrTransacciones = eval(<?php echo json_encode($TransaccionesArray) ?>);
+        ArrUnidades = eval(<?php echo json_encode($UnidadesArray) ?>);      
+        ArrHora = eval(<?php echo json_encode($HoraArray) ?>);
+
+        var MxH = document.getElementById("MixtoxHora");
+        var mixedChart = new Chart(MxH, {
+            type: 'radar',
+            data: {
+                datasets: [{
+                    label: 'VENTAS',
+                    data: ArrMonto,
+                    backgroundColor : 'rgba(78, 115, 223, 0.5)',       
+                    borderColor :  '#4e73df',
+                    borderWidth: 4,
+                },{
+                    label: 'TRANSACCIONES',
+                    data: ArrTransacciones,                    
+                    backgroundColor : 'rgba(0, 0, 0, 0.0)',       
+                    borderColor :  '#34ebc0',
+                    borderWidth: 4,                        
+                    type: 'line'
+                },{
+                    label: 'UNIDADES',
+                    data: ArrUnidades,
+                    backgroundColor : 'rgba(0, 0, 0, 0.0)',     
+                    borderColor :  '#eb9634',
+                    borderWidth: 4,                      
+                    type: 'line'
+                }],
+                labels: ArrHora
+            },
+            options: {
+                scales: {
+                    xAxes: [{
+                        stacked: true
+                    }],
+                    yAxes: [{
+                        stacked: true
+                    }]
+                },
+                legend: {
+                    display: true
+                },
+                elements: {
+                    line: {
+                        tension: 0,
+                    }
+                },
+            },
+        });                
+    </script>
+<?php
+    }
+?> 
+@endsection
