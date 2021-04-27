@@ -5,6 +5,7 @@
 @endsection
 
 @section('scriptsHead')
+<link rel="stylesheet" href="/assets/sweetalert2/sweetalert2.css">
   <style>
   * {
     box-sizing: border-box;
@@ -51,10 +52,55 @@
 @endsection
 
 @section('scriptsFoot')
-  <script src="https://raw.githubusercontent.com/SamWM/jQuery-Plugins/master/numeric/jquery.numeric.js"></script>
+  <script src="/assets/numeric/numeric.js"></script>
+  <script src="/assets/sweetalert2/sweetalert2.js"></script>
+
   <script>
     $(document).ready(function () {
       //$('#diasUltimaVenta').numeric();
+
+      params = new URLSearchParams(window.location.search);
+      if (params.get('seccion') == 'stock') {
+        Swal.showLoading();        
+
+        $.ajax({
+          type: 'GET',
+          url: '/api/sobrestock' + window.location.search,
+          success: function (response) {
+            html = '';
+
+            for (var i = 0; i <= response.resultado.length - 1; i++) {
+              html = html + `
+                <tr>
+                  <td>${response.resultado[i].contador}</td>
+                  <td>${response.resultado[i].tipo_movimiento}</td>
+                  <td>${response.resultado[i].codigo}</td>
+                  <td>${response.resultado[i].codigo_barra}</td>
+                  <td align="left" class="CP-barrido">${response.resultado[i].descripcion}</td>
+                  <td>${response.resultado[i].fecha_registro}</td>
+                  <td>${response.resultado[i].fecha_vencimiento}</td>
+                  <td>${response.resultado[i].dias_restantes}</td>
+                  <td>${response.resultado[i].cantidad_recibida}</td>
+                  <td>${response.resultado[i].existencia}</td>
+                  <td>${response.resultado[i].operador}</td>
+                  <td>${response.resultado[i].proveedor}</td>
+                  <td>${response.resultado[i].numero_factura}</td>
+                  <td>${response.resultado[i].ultima_venta}</td>
+                </tr>
+              `;
+            }
+
+            $('#tbody_sobrestock').html(html);
+            $('#tiempo_carga').html(response.tiempo_carga);
+
+            Swal.hideLoading();
+          },
+          error: function (error) {
+            cosole.log(error.responseText);
+          }
+        });
+      }
+
 
       $('#vidaUtil').change(function () {
         value = $('#vidaUtil').val();
@@ -124,7 +170,7 @@
 
     $FinCarga = new DateTime("now");
     $IntervalCarga = $InicioCarga->diff($FinCarga);
-    echo'Tiempo de carga: '.$IntervalCarga->format("%Y-%M-%D %H:%I:%S");
+    echo'Tiempo de carga: <span id="tiempo_carga">'.$IntervalCarga->format("%Y-%M-%D %H:%I:%S") . '</span>';
 	} 
 	else{
 		echo '
@@ -590,81 +636,9 @@
             <th scope="col" class="CP-sticky">Ultima Venta</th>     
           </tr>
         </thead>
-        <tbody>
-      ';
-
-      $sql9 = R31Q_Articulos_Sobre_Stock($_GET['fechaInicio'], $_GET['fechaFin'], $_GET['sobreStock']);
-      $result9 = sqlsrv_query($conn,$sql9);
-
-      if( $result9 === false ) {
-        dd(sqlsrv_errors());
-      }
-
-      $contador = 1;
-
-      while ($row5 = sqlsrv_fetch_array($result9, SQLSRV_FETCH_ASSOC)) {
-        $codigo = $row5['codigo_articulo'];
-        $codigo_barra = $row5['codigo_barra'];
-        $descripcion = FG_Limpiar_Texto($row5['descripcion']);
-        $fecha_registro = $row5['fecha_registro'] ? $row5['fecha_registro']->format('d/m/Y') : '';
-        $fecha_vencimiento = $row5['fecha_vencimiento'] ? $row5['fecha_vencimiento']->format('d/m/Y') : '';
-        $cantidad_recibida = intval($row5['cantidad_recibida']);
-        $existencia = intval($row5['existencia']);
-        $operador = $row5['operador'];
-        $id_articulo = $row5['id_articulo'];
-        $proveedor = FG_Limpiar_Texto($row5['proveedor']);
-        $numero_factura = $row5['numero_factura'];
-        $ultima_venta = ($row5['ultima_venta']) ? $row5['ultima_venta']->format('d/m/Y') : '-';
-
-        $fechaInicioDiasCero = $row5['fecha_registro']->format('Y-m-d');
-        $fechaInicioDiasCero = date_modify(date_create($fechaInicioDiasCero), '-30day');
-        $fechaInicioDiasCero = date_format($fechaInicioDiasCero, 'Y-m-d');
-
-        $sql2 = MySQL_Cuenta_Veces_Dias_Cero($id_articulo,$fechaInicioDiasCero,$FInicial);
-        $result2 = mysqli_query($connCPharma,$sql2);
-        $row2 = $result2->fetch_assoc();
-        $RangoDiasQuiebre = $row2['Cuenta'];
-
-        $sql3 = R31Q_Total_Venta($id_articulo, $fechaInicioDiasCero, $row5['fecha_registro']->format('Y-m-d'));
-
-        $result3 = sqlsrv_query($conn,$sql3);
-
-        $row3 = sqlsrv_fetch_array($result3, SQLSRV_FETCH_ASSOC);
-
-        $VentaDiariaQuiebre = FG_Venta_Diaria($row3['TotalUnidadesVendidas'],$RangoDiasQuiebre);
-        $DiasRestantesQuiebre = FG_Dias_Restantes($existencia,$VentaDiariaQuiebre);
-
-        if ($DiasRestantesQuiebre >= $_GET['sobreStock']) {
-          echo '<tr>';
-          echo '<td>'.$contador.'</td>';
-          echo '<td>Compras</td>';
-          echo '<td>'.$codigo.'</td>';
-          echo '<td>'.$codigo_barra.'</td>';
-          echo 
-          '<td align="left" class="CP-barrido">
-          <a href="/reporte2?Id='.$id_articulo.'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
-            .$descripcion.
-          '</a>
-          </td>';
-          echo '<td>'.$fecha_registro.'</td>';
-          echo '<td>'.$fecha_vencimiento.'</td>';
-          echo '<td>'.round($DiasRestantesQuiebre,2).'</td>';
-          echo '<td>'.$cantidad_recibida.'</td>';
-          echo '<td>'.$existencia.'</td>';
-          echo '<td>'.$operador.'</td>';
-          echo '<td>'.$proveedor.'</td>';
-          echo '<td>'.$numero_factura.'</td>';
-          echo '<td>'.$ultima_venta.'</td>';
-          echo '</tr>';
-
-          $contador++;
-        }
-
-        
-      }
-
-      echo '</tbody>';
-      echo '</table>';
+        <tbody id="tbody_sobrestock">
+        </tbody>
+      </table>';
     }
 
     sqlsrv_close($conn);
@@ -865,208 +839,6 @@
         ComFacturaDetalle.ComFacturaId IN (SELECT ComFactura.Id FROM ComFactura WHERE ComFactura.FechaRegistro BETWEEN '$FInicial' AND '$FFinal') AND 
         DATEDIFF(DAY, (SELECT ComFactura.FechaRegistro FROM ComFactura WHERE ComFactura.Id = ComFacturaDetalle.ComFacturaId), ComFacturaDetalle.FechaVencimiento) <= '$VUtil'
       ORDER BY (SELECT ComFactura.FechaRegistro FROM ComFactura WHERE ComFactura.Id = ComFacturaDetalle.ComFacturaId) ASC;
-    ";
-    return $sql;
-  }
-
-  /**********************************************************************************/
-  /*
-    TITULO: R31Q_Articulos_Sobre_Stock
-    FUNCION: Ubicar productos con sobre stock
-    RETORNO: Lista de productos con sobre stock
-    DESAROLLADO POR: NISAUL DELGADO
-  */
-  function R31Q_Articulos_Sobre_Stock($FInicial,$FFinal, $sobreStock) {
-    $FInicial = str_replace('-', '', $FInicial);
-    $FFinal = str_replace('-', '', $FFinal);
-
-    $sql = "
-      SELECT
-        (SELECT InvArticulo.Id FROM InvArticulo WHERE InvArticulo.Id = ComFacturaDetalle.InvArticuloId) AS id_articulo,
-        (SELECT InvArticulo.CodigoArticulo FROM InvArticulo WHERE InvArticulo.Id = ComFacturaDetalle.InvArticuloId) AS codigo_articulo,
-        (SELECT InvCodigoBarra.CodigoBarra FROM InvCodigoBarra WHERE InvCodigoBarra.InvArticuloId = ComFacturaDetalle.InvArticuloId AND InvCodigoBarra.EsPrincipal = 1) AS codigo_barra,
-        (SELECT InvArticulo.DescripcionLarga FROM InvArticulo WHERE InvArticulo.Id = ComFacturaDetalle.InvArticuloId) AS descripcion,
-        (SELECT ComFactura.FechaRegistro FROM ComFactura WHERE ComFactura.Id = ComFacturaDetalle.ComFacturaId) AS fecha_registro,
-        ComFacturaDetalle.FechaVencimiento AS fecha_vencimiento,
-        ComFacturaDetalle.CantidadRecibidaFactura AS cantidad_recibida,
-        (SELECT SUM(InvLoteAlmacen.Existencia) FROM InvLoteAlmacen WHERE InvLoteAlmacen.InvAlmacenId IN (1, 2) AND InvLoteAlmacen.InvArticuloId = ComFacturaDetalle.InvArticuloId) AS existencia,
-        (SELECT ComFactura.Auditoria_Usuario FROM ComFactura WHERE ComFactura.Id = ComFacturaDetalle.ComFacturaId) AS operador,
-        (SELECT GenPersona.Nombre FROM GenPersona WHERE GenPersona.Id = (SELECT ComProveedor.GenPersonaId FROM ComProveedor WHERE ComProveedor.Id = (SELECT ComFactura.ComProveedorId FROM ComFactura WHERE ComFactura.Id = ComFacturaDetalle.ComFacturaId))) AS proveedor,
-        (SELECT SUM(VenFacturaDetalle.Cantidad) FROM VenFacturaDetalle WHERE VenFacturaDetalle.InvArticuloId = ComFacturaDetalle.InvArticuloId AND VenFacturaDetalle.VenFacturaId IN (SELECT VenFactura.Id FROM VenFactura WHERE VenFactura.FechaDocumento BETWEEN DATEADD(DAY, -30, (SELECT ComFactura.FechaRegistro FROM ComFactura WHERE ComFactura.Id = ComFacturaDetalle.ComFacturaId)) AND (SELECT ComFactura.FechaRegistro FROM ComFactura WHERE ComFactura.Id = ComFacturaDetalle.ComFacturaId))) AS ventas_totales,
-        (SELECT ComFactura.NumeroFactura FROM ComFactura WHERE ComFactura.Id = ComFacturaDetalle.ComFacturaId) AS numero_factura,
-        (SELECT VenVenta.Auditoria_FechaCreacion FROM VenVenta WHERE VenVenta.Id = (SELECT TOP 1 VenVentaDetalle.VenVentaId FROM VenVentaDetalle WHERE VenVentaDetalle.InvArticuloId = ComFacturaDetalle.InvArticuloId ORDER BY VenVentaDetalle.VenVentaId DESC)) AS ultima_venta
-      FROM
-          ComFacturaDetalle
-      WHERE
-          ComFacturaDetalle.ComFacturaId IN (SELECT ComFactura.Id FROM ComFactura WHERE ComFactura.FechaRegistro BETWEEN '$FInicial' AND '$FFinal') AND 
-          (SELECT SUM(InvLoteAlmacen.Existencia) FROM InvLoteAlmacen WHERE InvLoteAlmacen.InvAlmacenId IN (1, 2) AND InvLoteAlmacen.InvArticuloId = ComFacturaDetalle.InvArticuloId) > ComFacturaDetalle.CantidadRecibidaFactura
-      ORDER BY (SELECT ComFactura.FechaRegistro FROM ComFactura WHERE ComFactura.Id = ComFacturaDetalle.ComFacturaId)
-    ";
-
-    return $sql;
-  }
-
-  function R31Q_Total_Venta($IdArticulo,$FInicial,$FFinal) {
-    $sql = "
-      SELECT
-    -- Id Articulo
-      VenFacturaDetalle.InvArticuloId,
-    --Veces Vendidas (En Rango)
-      ISNULL(COUNT(*),CAST(0 AS INT)) AS VecesVendidas,
-    --Unidades Vendidas (En Rango)
-      (ROUND(CAST(SUM(VenFacturaDetalle.Cantidad) AS DECIMAL(38,0)),2,0)) as UnidadesVendidas,
-    --Veces Devueltas (En Rango)
-      ISNULL((SELECT
-      ISNULL(COUNT(*),CAST(0 AS INT))
-      FROM VenDevolucionDetalle
-      INNER JOIN VenDevolucion ON VenDevolucion.Id = VenDevolucionDetalle.VenDevolucionId
-      WHERE VenDevolucionDetalle.InvArticuloId = VenFacturaDetalle.InvArticuloId
-      AND(VenDevolucion.FechaDocumento > '$FInicial' AND VenDevolucion.FechaDocumento < '$FFinal')
-      GROUP BY VenDevolucionDetalle.InvArticuloId
-      ),CAST(0 AS INT)) AS VecesDevueltas,
-    --Unidades Devueltas (En Rango)
-      ISNULL((SELECT
-      (ROUND(CAST(SUM(VenDevolucionDetalle.Cantidad) AS DECIMAL(38,0)),2,0))
-      FROM VenDevolucionDetalle
-      INNER JOIN VenDevolucion ON VenDevolucion.Id = VenDevolucionDetalle.VenDevolucionId
-      WHERE VenDevolucionDetalle.InvArticuloId = VenFacturaDetalle.InvArticuloId
-      AND(VenDevolucion.FechaDocumento > '$FInicial' AND VenDevolucion.FechaDocumento < '$FFinal')
-      GROUP BY VenDevolucionDetalle.InvArticuloId
-      ),CAST(0 AS INT)) AS UnidadesDevueltas,
-    --Total Veces Vendidas (En Rango)
-      ((ISNULL(COUNT(*),CAST(0 AS INT)))
-      -
-      (ISNULL((SELECT
-      ISNULL(COUNT(*),CAST(0 AS INT))
-      FROM VenDevolucionDetalle
-      INNER JOIN VenDevolucion ON VenDevolucion.Id = VenDevolucionDetalle.VenDevolucionId
-      WHERE VenDevolucionDetalle.InvArticuloId = VenFacturaDetalle.InvArticuloId
-      AND(VenDevolucion.FechaDocumento > '$FInicial' AND VenDevolucion.FechaDocumento < '$FFinal')
-      GROUP BY VenDevolucionDetalle.InvArticuloId
-      ),CAST(0 AS INT)))) AS TotalVecesVendidas,
-    --Total Unidades Vendidas (En Rango)
-      (((ROUND(CAST(SUM(VenFacturaDetalle.Cantidad) AS DECIMAL(38,0)),2,0)))
-      -
-      (ISNULL((SELECT
-      (ROUND(CAST(SUM(VenDevolucionDetalle.Cantidad) AS DECIMAL(38,0)),2,0))
-      FROM VenDevolucionDetalle
-      INNER JOIN VenDevolucion ON VenDevolucion.Id = VenDevolucionDetalle.VenDevolucionId
-      WHERE VenDevolucionDetalle.InvArticuloId = VenFacturaDetalle.InvArticuloId
-      AND(VenDevolucion.FechaDocumento > '$FInicial' AND VenDevolucion.FechaDocumento < '$FFinal')
-      GROUP BY VenDevolucionDetalle.InvArticuloId
-      ),CAST(0 AS INT)))) AS TotalUnidadesVendidas,
-    --Veces Conpradas (En Rango) 
-      ISNULL((SELECT
-      ISNULL(COUNT(*),CAST(0 AS INT))
-      FROM ComFacturaDetalle
-      INNER JOIN ComFactura ON  ComFactura.Id = ComFacturaDetalle.ComFacturaId
-      WHERE ComFacturaDetalle.InvArticuloId = VenFacturaDetalle.InvArticuloId
-      AND(ComFactura.FechaRegistro > '$FInicial' AND ComFactura.FechaRegistro < '$FFinal')
-      GROUP BY ComFacturaDetalle.InvArticuloId
-      ),CAST(0 AS INT)) AS VecesCompradas,
-    --Unidades Conpradas (En Rango) 
-      ISNULL((SELECT
-      (ROUND(CAST(SUM(ComFacturaDetalle.CantidadFacturada) AS DECIMAL(38,0)),2,0))
-      FROM ComFacturaDetalle
-      INNER JOIN ComFactura ON  ComFactura.Id = ComFacturaDetalle.ComFacturaId
-      WHERE ComFacturaDetalle.InvArticuloId = VenFacturaDetalle.InvArticuloId
-      AND(ComFactura.FechaRegistro > '$FInicial' AND ComFactura.FechaRegistro < '$FFinal')
-      GROUP BY ComFacturaDetalle.InvArticuloId
-      ),CAST(0 AS INT)) AS UnidadesCompradas,
-    --Veces Reclamadas (En Rango) 
-      ISNULL((SELECT
-      ISNULL(COUNT(*),CAST(0 AS INT))
-      FROM ComReclamoDetalle
-      INNER JOIN ComReclamo ON ComReclamo.Id = ComReclamoDetalle.ComReclamoId
-      WHERE ComReclamoDetalle.InvArticuloId = VenFacturaDetalle.InvArticuloId
-      AND(ComReclamo.FechaRegistro > '$FInicial' AND ComReclamo.FechaRegistro < '$FFinal')
-      GROUP BY ComReclamoDetalle.InvArticuloId
-      ),CAST(0 AS INT)) AS VecesReclamadas,
-    --Unidades Reclamadas (En Rango) 
-      ISNULL((SELECT
-      (ROUND(CAST(SUM(ComReclamoDetalle.Cantidad) AS DECIMAL(38,0)),2,0))
-      FROM ComReclamoDetalle
-      INNER JOIN ComReclamo ON ComReclamo.Id = ComReclamoDetalle.ComReclamoId
-      WHERE ComReclamoDetalle.InvArticuloId = VenFacturaDetalle.InvArticuloId
-      AND(ComReclamo.FechaRegistro > '$FInicial' AND ComReclamo.FechaRegistro < '$FFinal')
-      GROUP BY ComReclamoDetalle.InvArticuloId
-      ),CAST(0 AS INT)) AS UnidadesReclamadas,
-    --Total Veces Compradas (En Rango)
-      ((ISNULL((SELECT
-      ISNULL(COUNT(*),CAST(0 AS INT))
-      FROM ComFacturaDetalle
-      INNER JOIN ComFactura ON  ComFactura.Id = ComFacturaDetalle.ComFacturaId
-      WHERE ComFacturaDetalle.InvArticuloId = VenFacturaDetalle.InvArticuloId
-      AND(ComFactura.FechaRegistro > '$FInicial' AND ComFactura.FechaRegistro < '$FFinal')
-      GROUP BY ComFacturaDetalle.InvArticuloId
-      ),CAST(0 AS INT)))
-      -
-      (ISNULL((SELECT
-      ISNULL(COUNT(*),CAST(0 AS INT))
-      FROM ComReclamoDetalle
-      INNER JOIN ComReclamo ON ComReclamo.Id = ComReclamoDetalle.ComReclamoId
-      WHERE ComReclamoDetalle.InvArticuloId = VenFacturaDetalle.InvArticuloId
-      AND(ComReclamo.FechaRegistro > '$FInicial' AND ComReclamo.FechaRegistro < '$FFinal')
-      GROUP BY ComReclamoDetalle.InvArticuloId
-      ),CAST(0 AS INT)))) AS TotalVecesCompradas,
-    --Total de Unidades Compradas (En Rango)
-      ((ISNULL((SELECT
-      (ROUND(CAST(SUM(ComFacturaDetalle.CantidadFacturada) AS DECIMAL(38,0)),2,0))
-      FROM ComFacturaDetalle
-      INNER JOIN ComFactura ON  ComFactura.Id = ComFacturaDetalle.ComFacturaId
-      WHERE ComFacturaDetalle.InvArticuloId = VenFacturaDetalle.InvArticuloId
-      AND(ComFactura.FechaRegistro > '$FInicial' AND ComFactura.FechaRegistro < '$FFinal')
-      GROUP BY ComFacturaDetalle.InvArticuloId
-      ),CAST(0 AS INT)))
-      -
-      (ISNULL((SELECT
-      (ROUND(CAST(SUM(ComReclamoDetalle.Cantidad) AS DECIMAL(38,0)),2,0))
-      FROM ComReclamoDetalle
-      INNER JOIN ComReclamo ON ComReclamo.Id = ComReclamoDetalle.ComReclamoId
-      WHERE ComReclamoDetalle.InvArticuloId = VenFacturaDetalle.InvArticuloId
-      AND(ComReclamo.FechaRegistro > '$FInicial' AND ComReclamo.FechaRegistro < '$FFinal')
-      GROUP BY ComReclamoDetalle.InvArticuloId
-      ),CAST(0 AS INT)))) AS TotalUnidadesCompradas,
-    -- SubTotal Venta (En Rango)
-      ISNULL((SELECT
-      (ROUND(CAST(SUM (VenVentaDetalle.PrecioBruto * VenVentaDetalle.Cantidad) AS DECIMAL(38,2)),2,0)) 
-      FROM VenVentaDetalle
-      INNER JOIN VenVenta ON VenVenta.Id = VenVentaDetalle.VenVentaId 
-      WHERE (VenVenta.FechaDocumentoVenta > '$FInicial' AND VenVenta.FechaDocumentoVenta < '$FFinal')
-      AND VenVentaDetalle.InvArticuloId = VenFacturaDetalle.InvArticuloId),CAST(0 AS INT)) AS SubTotalVenta,
-    --SubTotal Devolucion (En Rango)
-      ISNULL((SELECT
-      (ROUND(CAST(SUM (VenDevolucionDetalle.PrecioBruto * VenDevolucionDetalle.Cantidad) AS DECIMAL(38,2)),2,0)) as SubTotalDevolucion
-      FROM VenDevolucionDetalle
-      INNER JOIN VenDevolucion ON VenDevolucion.Id = VenDevolucionDetalle.VenDevolucionId 
-      WHERE (VenDevolucion.FechaDocumento > '$FInicial' AND VenDevolucion.FechaDocumento < '$FFinal') 
-      AND VenDevolucionDetalle.InvArticuloId = VenFacturaDetalle.InvArticuloId),CAST(0 AS INT)) as SubTotalDevolucion,
-    --TotalVenta (En Rango)
-      ((ISNULL((SELECT
-      (ROUND(CAST(SUM (VenVentaDetalle.PrecioBruto * VenVentaDetalle.Cantidad) AS DECIMAL(38,2)),2,0)) 
-      FROM VenVentaDetalle
-      INNER JOIN VenVenta ON VenVenta.Id = VenVentaDetalle.VenVentaId 
-      WHERE (VenVenta.FechaDocumentoVenta > '$FInicial' AND VenVenta.FechaDocumentoVenta < '$FFinal')
-      AND VenVentaDetalle.InvArticuloId = VenFacturaDetalle.InvArticuloId),CAST(0 AS INT)))
-      -
-      (ISNULL((SELECT
-      (ROUND(CAST(SUM (VenDevolucionDetalle.PrecioBruto * VenDevolucionDetalle.Cantidad) AS DECIMAL(38,2)),2,0)) as SubTotalDevolucion
-      FROM VenDevolucionDetalle
-      INNER JOIN VenDevolucion ON VenDevolucion.Id = VenDevolucionDetalle.VenDevolucionId 
-      WHERE (VenDevolucion.FechaDocumento > '$FInicial' AND VenDevolucion.FechaDocumento < '$FFinal') 
-      AND VenDevolucionDetalle.InvArticuloId = VenFacturaDetalle.InvArticuloId),CAST(0 AS INT)))) AS TotalVenta
-    --Tabla Principal
-      FROM VenFacturaDetalle
-    --Joins
-      INNER JOIN VenFactura ON VenFactura.Id = VenFacturaDetalle.VenFacturaId
-    --Condicionales
-      WHERE
-      (VenFactura.FechaDocumento > '$FInicial' AND VenFactura.FechaDocumento < '$FFinal')
-      AND VenFacturaDetalle.InvArticuloId = '$IdArticulo'
-    --Agrupamientos
-      GROUP BY VenFacturaDetalle.InvArticuloId 
-    --Ordenamientos
-      ORDER BY UnidadesVendidas DESC
     ";
     return $sql;
   }
