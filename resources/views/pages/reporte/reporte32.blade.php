@@ -48,8 +48,7 @@
         }else{
             $fecha = $hoy;
         }
-
-            $fecha = '2020-12-15';
+            
             $conn = FG_Conectar_Smartpharma($_GET['SEDE']);
             $FFinal = date("Y-m-d",strtotime($fecha."+ 1 days"));
 
@@ -112,8 +111,7 @@
 
         $FInicial = $fecha;
         $FFinal = date("Y-m-d",strtotime($FInicial."+ 1 days"));
-        $TasaActual = FG_Tasa_Fecha($connCPharma,$FInicial);
-        $TasaActual = 10;
+        $TasaActual = FG_Tasa_Fecha($connCPharma,$FInicial);        
 
         $sql6 = R32Q_Vent_generales($FInicial,$FFinal);
         $result6 = sqlsrv_query($conn,$sql6);
@@ -1533,7 +1531,7 @@
 
         var MxH = document.getElementById("MixtoxHora");
         var mixedChart = new Chart(MxH, {
-            type: 'radar',
+            type: 'bar',
             data: {
                 datasets: [{
                     label: 'VENTAS',
@@ -1541,22 +1539,25 @@
                     backgroundColor : 'rgba(78, 115, 223, 0.5)',       
                     borderColor :  '#4e73df',
                     borderWidth: 4,
+                    yAxisID: 'left-y-axis',
                 },{
                     label: 'TRANSACCIONES',
                     data: ArrTransacciones,                    
                     backgroundColor : 'rgba(0, 0, 0, 0.0)',       
                     borderColor :  '#34ebc0',
                     borderWidth: 4,                        
-                    type: 'line'
+                    type: 'line',
+                    yAxisID: 'top-y-axis',
                 },{
                     label: 'UNIDADES',
                     data: ArrUnidades,
                     backgroundColor : 'rgba(0, 0, 0, 0.0)',     
                     borderColor :  '#eb9634',
                     borderWidth: 4,                      
-                    type: 'line'
+                    type: 'line',
+                    yAxisID: 'right-y-axis',
                 }],
-                labels: ArrHora
+                labels: ArrHora,
             },
             options: {
                 scales: {
@@ -1564,8 +1565,18 @@
                         stacked: true
                     }],
                     yAxes: [{
-                        stacked: true
-                    }]
+                        id: 'left-y-axis',
+                        type: 'linear',
+                        position: 'left',
+                    }, {
+                        id: 'top-y-axis',
+                        type: 'linear',
+                        position: 'right',
+                    },{
+                        id: 'right-y-axis',
+                        type: 'linear',
+                        position: 'right',
+                    }]                  
                 },
                 legend: {
                     display: true
