@@ -150,7 +150,7 @@
 					
 					if($flag_imprime == true){
 						$connCPharma = FG_Conectar_CPharma();
-						$query = $connCPharma->query("SELECT * FROM unidads WHERE codigo_barra = '$CodigoBarra' LIMIT 1");
+						$query = $connCPharma->query("SELECT * FROM unidads WHERE id_articulo = '$IdArticulo'");
 
 						if ($query->num_rows) {
 							$unidad= $query->fetch_assoc();
@@ -296,7 +296,7 @@
 					
 				if($flag_imprime == true){
 					$connCPharma = FG_Conectar_CPharma();
-					$query = $connCPharma->query("SELECT * FROM unidads WHERE codigo_barra = '$CodigoBarra' LIMIT 1");
+					$query = $connCPharma->query("SELECT * FROM unidads WHERE id_articulo = '$IdArticulo'");
 
 					if ($query->num_rows) {
 						$unidad= $query->fetch_assoc();

@@ -142,14 +142,14 @@
 @endsection
 
 @section('content')
-	<h1 class="h5 text-info">
-		<i class="fas fa-file-invoice"></i>
-		Monitoreo de Inventarios
-	</h1>
-	<hr class="row align-items-start col-12">
-	
-<?php	
-	include(app_path().'\functions\config.php');
+  <h1 class="h5 text-info">
+    <i class="fas fa-file-invoice"></i>
+    Monitoreo de Inventarios
+  </h1>
+  <hr class="row align-items-start col-12">
+  
+<?php 
+  include(app_path().'\functions\config.php');
   include(app_path().'\functions\functions.php');
   include(app_path().'\functions\querys_mysql.php');
   include(app_path().'\functions\querys_sqlserver.php');
@@ -171,10 +171,10 @@
     $FinCarga = new DateTime("now");
     $IntervalCarga = $InicioCarga->diff($FinCarga);
     echo'Tiempo de carga: <span id="tiempo_carga">'.$IntervalCarga->format("%Y-%M-%D %H:%I:%S") . '</span>';
-	} 
-	else{
-		echo '
-		<form autocomplete="off" action="" target="_blank">
+  } 
+  else{
+    echo '
+    <form autocomplete="off" action="" target="_blank">
         <table style="width:100%;">
           <tr>
             <td align="center">
@@ -214,10 +214,10 @@
               <input type="submit" value="Buscar" class="btn btn-outline-success">
             </td>
           </tr>
-		    </table>
-	  	</form>
-  	';
-	} 
+        </table>
+      </form>
+    ';
+  } 
 ?>
 @endsection
 
