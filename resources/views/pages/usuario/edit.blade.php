@@ -68,7 +68,7 @@
                         <?php
                         foreach($sedes as $sede){
                         ?>
-                        <option value="<?php echo $sede; ?>"><?php echo $sede; ?></option>
+                        <option <?php echo ($usuario->sede == $sede) ? 'selected' : ''; ?> value="<?php echo $sede; ?>"><?php echo $sede; ?></option>
                         <?php
                         }
                         ?>
@@ -83,7 +83,7 @@
                         <?php
                         foreach($departamentos as $departamento){
                         ?>
-                        <option value="<?php echo $departamento; ?>"><?php echo $departamento; ?></option>
+                        <option <?php echo ($usuario->departamento == $departamento) ? 'selected' : ''; ?> value="<?php echo $departamento; ?>"><?php echo $departamento; ?></option>
                         <?php
                         }
                         ?>
@@ -98,7 +98,7 @@
                         <?php
                         foreach($roles as $rol){
                         ?>
-                        <option value="<?php echo $rol; ?>"><?php echo $rol; ?></option>
+                        <option <?php echo ($usuario->role == $rol) ? 'selected' : ''; ?> value="<?php echo $rol; ?>"><?php echo $rol; ?></option>
                         <?php
                         }
                         ?>
