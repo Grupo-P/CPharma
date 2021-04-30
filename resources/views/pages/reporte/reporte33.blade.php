@@ -6,6 +6,15 @@
 
 @section('scriptsHead')
   <style>
+  @media print {
+    @page {
+      size: landscape;
+    }
+    table {
+      width: 100%;
+      font-size: 9px;
+    }
+  }
   * {
     box-sizing: border-box;
   }
