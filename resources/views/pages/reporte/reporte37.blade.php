@@ -48,12 +48,12 @@
 	<script src="https://raw.githubusercontent.com/SamWM/jQuery-Plugins/master/numeric/jquery.numeric.js"></script>
 	<script>
 		$(document).ready(function () {
-		   $('#diasUltimaVenta').change(function () {
-	        value = $('#diasUltimaVenta').val();
+		   $('#existenciaUsuario').change(function () {
+	        value = $('#existenciaUsuario').val();
 
 	        if (value < 0) {
 	          alert('Debe ingresar un numero positivo');
-	          $('#diasUltimaVenta').val('');
+	          $('#existenciaUsuario').val('');
 	        }
 	      });
 		});
@@ -258,8 +258,8 @@
             $result3 = sqlsrv_query($connFAU,$sql3);
             $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
 
-            $descripcion_ftn = ($row3['descripcion']) ? FG_Limpiar_Texto($row3['descripcion']) : '-';
-            $existencia_ftn = ($row3['existencia']) ? intval($row3['existencia']) : '-';
+            $descripcion_fau = ($row3['descripcion']) ? FG_Limpiar_Texto($row3['descripcion']) : '-';
+            $existencia_fau = ($row3['existencia']) ? intval($row3['existencia']) : '-';
             $existenciaForanea = $existenciaForanea + (($row3['existencia']) ? $row3['existencia'] : 0);
           }
 
@@ -280,8 +280,8 @@
             $result3 = sqlsrv_query($connFTN,$sql3);
             $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
 
-            $descripcion_fll = ($row3['descripcion']) ? FG_Limpiar_Texto($row3['descripcion']) : '-';
-            $existencia_fll = ($row3['existencia']) ? intval($row3['existencia']) : '-';
+            $descripcion_ftn = ($row3['descripcion']) ? FG_Limpiar_Texto($row3['descripcion']) : '-';
+            $existencia_ftn = ($row3['existencia']) ? intval($row3['existencia']) : '-';
             $existenciaForanea = $existenciaForanea + (($row3['existencia']) ? $row3['existencia'] : 0);
           }
 

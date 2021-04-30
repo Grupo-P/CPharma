@@ -44,6 +44,38 @@
   </h1>
 
   <hr class="row align-items-start col-12">
+
+  <form action="">
+    <input type="hidden" name="tasa_ventas_id" value="{{ isset($_GET['tasa_ventas_id']) ? $_GET['tasa_ventas_id'] : '' }}">
+    <div class="row">
+      <div class="col-md-3"></div>
+
+      <div class="col-2">
+        <div class="form-group">
+          <label for="fecha_desde">Fecha desde</label>
+          <input type="date" name="fecha_desde" value="{{ isset($_GET['fecha_desde']) ? $_GET['fecha_desde'] : '' }}" class="form-control" required>
+        </div>
+      </div>
+
+      <div class="col-2">
+        <div class="form-group">
+          <label for="fecha_hasta">Fecha hasta</label>
+          <input type="date" name="fecha_hasta" value="{{ isset($_GET['fecha_hasta']) ? $_GET['fecha_hasta'] : '' }}" class="form-control" required>
+        </div>
+      </div>
+
+      <div class="col-2">
+        <div class="form-group">
+          <label for="">&nbsp;</label>
+          <button class="btn btn-outline-success" style="margin-top: 16%">Buscar</button>
+        </div>
+      </div>
+    </div>
+  </form>
+
+
+
+  <hr class="row align-items-start col-12">
   <table style="width:100%;" class="CP-stickyBar">
     <tr>
 

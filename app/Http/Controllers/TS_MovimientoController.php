@@ -17,8 +17,16 @@ class TS_MovimientoController extends Controller {
      */
     public function index(Request $request) {
         $movimientos = TS_Movimiento::where('tasa_ventas_id', $request->tasa_ventas_id)
-        ->orderBy('created_at', 'desc')
-        ->get();
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        if (isset($_GET['fecha_desde']) && isset($_GET['fecha_hasta'])) {
+            $movimientos = TS_Movimiento::where('tasa_ventas_id', $request->tasa_ventas_id)
+                ->whereBetween('created_at', [$_GET['fecha_desde'], $_GET['fecha_hasta']])
+                ->orderBy('created_at', 'desc')
+                ->get();
+        }
+
         return view('pages.TS.movimiento.index', compact('movimientos'));
     }
 
