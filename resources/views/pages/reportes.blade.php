@@ -877,6 +877,29 @@
 		<?php
 			}
 		?>
+
+		<?php
+		  if(in_array(38,$reportes)){
+		?>
+			<div class="card border-dark mb-3" style="width: 14rem;">	  	
+	  		<div class="card-body text-left bg-dark">
+	    		<h5 class="card-title">
+		    		<span class="card-text text-white">
+		    			Registro de reclamos
+		    		</span>
+	    		</h5>	    	    
+	  		</div>
+		  	<div class="card-footer bg-transparent border-dark text-right">
+		  		<form action="/reporte38/" style="display: inline;">
+				    @csrf
+				    <input id="SEDE" name="SEDE" type="hidden" value="<?php print_r($_GET['SEDE']); ?>">			   
+				    <button type="submit" name="Reporte" role="button" class="btn btn-outline-dark btn-sm"></i>Visualizar</button>
+					</form>
+		  	</div>
+			</div>
+		<?php
+			}
+		?>
 	</div>
 
 

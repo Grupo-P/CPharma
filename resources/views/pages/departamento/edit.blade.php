@@ -142,6 +142,10 @@
                 <th scope="col">37</th>
                 <td scope="col">Traslados entre tiendas</td> 
             </tr>
+            <tr>
+                <th scope="col">38</th>
+                <td scope="col">Registro de reclamos</td> 
+            </tr>
         </tbody>
     </table>
 

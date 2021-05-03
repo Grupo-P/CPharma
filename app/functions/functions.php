@@ -134,7 +134,7 @@
 		//FIN BLOQUE DE FLL
 		//INICIO BLOQUE DE FAU
 			case '12':
-				return 'FAU';
+				return 'DBs';
 				//return 'DBs';
 			break;
 		//FIN BLOQUE DE FAU
@@ -1420,6 +1420,9 @@
 			break;
 			case 37:
 				$nombre = 'Traslados entre tiendas';
+			break;
+			case 38:
+				$nombre = 'Registro de reclamos';
 			break;
 			default:
 				$nombre = 'Reporte desconocido';
