@@ -76,22 +76,27 @@
   //se pasa a mostrar la informacion de la devolucion
     $InicioCarga = new DateTime("now");
 
-    SC2_Devolucion_info($_GET['SEDE'],$_GET['Id'],$_GET['Nombre']);
+    SC2_Devolucion_info($_GET['SEDE'],$_GET['Id'],$_GET['NumeroDevolucion']);
     
     $FinCarga = new DateTime("now");
     $IntervalCarga = $InicioCarga->diff($FinCarga);
     echo'Tiempo de carga: '.$IntervalCarga->format("%Y-%M-%D %H:%I:%S");
   }
-  else if(isset($_GET['troquelnuevo'])){
+  else if(isset($_GET['troquelesnuevos'])){
   //CASO 4: CARGA AL HABER SELECCIONADO UNA DEVOLUCION
   //se pasa a la seleccion del articulo
     $InicioCarga = new DateTime("now");
 
     //$registro = "Se actualizo el troquel del articulo: ".$_GET['Descripcion']." del troquel: ".$_GET['troquelanterior']." al troquel: ".$_GET['troquelactual']." por el motivo: ".$_GET['Motivo']; 
 
-    print_r($_GET['troquelnuevo']);
-    echo"<br><br>";
+    echo"Devolucion:<br>";
+    print_r($_GET['IdDevolucion']);
+    echo"<br><br>Articulos:<br>";
     print_r($_GET['IdArticulos']);
+    echo"<br><br>Lotes:<br>";
+    print_r($_GET['IdLotes']);
+    echo"<br><br>Troqueles:<br>";
+    print_r($_GET['troquelesnuevos']);
 
     //SC2_Actualizar_Fecha($_GET['SEDE'],$_GET['IdLote'],$_GET['troquelactual'],$_GET['IdArti'],$_GET['Descripcion']);
     //FG_Guardar_Auditoria('ACTUALIZAR','TROQUEL CLIENTE',$registro);
@@ -105,7 +110,7 @@
   //se pasa a mostrar los articulos de la devolucion
     $InicioCarga = new DateTime("now");
 
-    SC2_Devolucion_detalle($_GET['SEDE'],$_GET['IdDevolucion'],$_GET['Nombre']);
+    SC2_Devolucion_detalle($_GET['SEDE'],$_GET['IdDevolucion'],$_GET['NumeroDevolucion']);
 
     $FinCarga = new DateTime("now");
     $IntervalCarga = $InicioCarga->diff($FinCarga);
@@ -122,7 +127,7 @@
     echo '
     <form autocomplete="off" action="">
       <div class="autocomplete" style="width:90%;">
-        <input id="myInput" type="text" name="Nombre" placeholder="Ingrese el numero de la devolucion" onkeyup="conteo()" required>
+        <input id="myInput" type="text" name="NumeroDevolucion" placeholder="Ingrese el numero de la devolucion" onkeyup="conteo()" required>
         <input id="myId" name="Id" type="hidden">
         <td>
         <input id="SEDE" name="SEDE" type="hidden" value="';
@@ -231,7 +236,7 @@
               
               <input id="IdDevolucion" name="IdDevolucion" type="hidden" value="'.$IdDevolucion.'">
               
-              <input id="Nombre" name="Nombre" type="hidden" value="'.$NumeroDevolucion.'">
+              <input id="NumeroDevolucion" name="NumeroDevolucion" type="hidden" value="'.$NumeroDevolucion.'">
           </form>        
         ';
 
@@ -332,39 +337,48 @@
           <th scope="col">Dolarizado</td>
           <th scope="col">Numero Lote</td>
           <th scope="col">Existencia</td> 
-          <th scope="col">Toquel Actual '.SigVe.'</td>
-          <th scope="col">Precio Devolucion '.SigVe.'</td>
-          <th scope="col">Toquel Nuevo '.SigVe.'</td>        
+          <th scope="col">Troquel Actual <br> (CON IVA) '.SigVe.'</td>
+          <th scope="col">Precio Devolucion <br> (SIN IVA) '.SigVe.'</td>
+          <th scope="col">Troquel Nuevo <br> (CON IVA) '.SigVe.'</td>        
         </tr>
       </thead>
       <tbody>      
     ';
 
     $contador = 1;
+    $TroquelSugerido = 0;
     while($row1 = sqlsrv_fetch_array($result1, SQLSRV_FETCH_ASSOC)) {
+        $idArticulo = $row1["IdArticulo"];
          
         $Gravado = FG_Producto_Gravado($row1["Impuesto"]);
         $Dolarizado = FG_Producto_Dolarizado($row1["Dolarizado"]);
+        
+        if($Gravado=="SI"){
+          $TroquelSugerido = round($row1["PrecioBrutoDevolucion"]*Impuesto,2,PHP_ROUND_HALF_UP);          
+        }else{
+          $TroquelSugerido = round($row1["PrecioBrutoDevolucion"],2,PHP_ROUND_HALF_UP);
+        }
 
         echo '<tr>';
         echo '<td align="center"><strong>'.intval($contador).'</strong></td>';
         echo '<td align="center">'.$row1["CodigoInterno"].'</td>';
-        echo '<td align="left">'.FG_Limpiar_Texto($row1["Descripcion"]).'</td>';
+        echo '<td align="center">'.FG_Limpiar_Texto($row1["Descripcion"]).'</td>';
         echo '<td align="center">'.intval($row1["CantidadDevolucion"]).'</td>';
-        echo '<td align="left">'.$Gravado.'</td>';
-        echo '<td align="left">'.$Dolarizado.'</td>';
-        echo '<td align="left">'.$row1["NumeroLote"].'</td>';
+        echo '<td align="center">'.$Gravado.'</td>';
+        echo '<td align="center">'.$Dolarizado.'</td>';
+        echo '<td align="center">'.$row1["NumeroLote"].'</td>';
         echo '<td align="center">'.intval($row1["ExistenciaActual"]).'</td>';
         echo '<td align="center">'.number_format($row1["PTroquel"],2,"," ,"." ).'</td>';
         echo '<td align="center">'.number_format($row1["PrecioBrutoDevolucion"],2,"," ,"." ).'</td>';
                 
         echo '         
           <td align="center">
-            <input class="form-group" type="number" min="0.00" step="any" name="troquelnuevo[]" style="width:100%;" autofocus="autofocus">
+            <input value="'.$TroquelSugerido.'" class="form-group" type="number" min="0.00" step="any" name="troquelesnuevos[]" style="width:100%;" autofocus="autofocus">
           </td>                       
             <input id="SEDE" name="SEDE" type="hidden" value="'.$SedeConnection.'">
-            <input id="IdLote" name="IdDevolucion" type="hidden" value="'.$IdDevolucion.'">          
-            <input id="IdArticulo" name="IdArticulos[]" type="hidden" value="'.$row1["IdArticulo"].'">                               
+            <input id="IdDevolucion" name="IdDevolucion" type="hidden" value="'.$IdDevolucion.'">
+            <input id="IdArticulos" name="IdArticulos[]" type="hidden" value="'.$idArticulo.'">                               
+            <input id="IdLotes" name="IdLotes[]" type="hidden" value="'.$row1["IdLote"].'">
         ';
         echo '</tr>';
         $contador++;
@@ -404,6 +418,7 @@
             OR  InvAtributo.Descripcion = 'giordany')
             AND InvArticuloAtributo.InvArticuloId = InvArticulo.Id),CAST(0 AS INT))) AS Dolarizado,
         InvLote.Numero as NumeroLote,
+        InvLote.Id as IdLote,
         InvLoteAlmacen.Existencia as ExistenciaActual,
         InvLote.M_PrecioTroquelado as PTroquel,
         VenDevolucionDetalle.PrecioBruto as PrecioBrutoDevolucion
