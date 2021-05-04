@@ -216,6 +216,10 @@ Route::get('/seccion1', function() {
     return view('pages.reporte.seccion1');
 });
 
+Route::get('/seccion2', function() {
+    return view('pages.reporte.seccion2');
+});
+
 Route::get('/diascero', function() {
     return view('pages.diascero.index'); 
 });
