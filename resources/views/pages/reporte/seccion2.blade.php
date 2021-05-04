@@ -82,15 +82,19 @@
     $IntervalCarga = $InicioCarga->diff($FinCarga);
     echo'Tiempo de carga: '.$IntervalCarga->format("%Y-%M-%D %H:%I:%S");
   }
-  else if(isset($_GET['troquelactual'])){
+  else if(isset($_GET['troquelnuevo'])){
   //CASO 4: CARGA AL HABER SELECCIONADO UNA DEVOLUCION
   //se pasa a la seleccion del articulo
     $InicioCarga = new DateTime("now");
 
-    $registro = "Se actualizo el troquel del articulo: ".$_GET['Descripcion']." del troquel: ".$_GET['troquelanterior']." al troquel: ".$_GET['troquelactual']." por el motivo: ".$_GET['Motivo']; 
+    //$registro = "Se actualizo el troquel del articulo: ".$_GET['Descripcion']." del troquel: ".$_GET['troquelanterior']." al troquel: ".$_GET['troquelactual']." por el motivo: ".$_GET['Motivo']; 
 
-    SC2_Actualizar_Fecha($_GET['SEDE'],$_GET['IdLote'],$_GET['troquelactual'],$_GET['IdArti'],$_GET['Descripcion']);
-    FG_Guardar_Auditoria('ACTUALIZAR','TROQUEL CLIENTE',$registro);
+    print_r($_GET['troquelnuevo']);
+    echo"<br><br>";
+    print_r($_GET['IdArticulos']);
+
+    //SC2_Actualizar_Fecha($_GET['SEDE'],$_GET['IdLote'],$_GET['troquelactual'],$_GET['IdArti'],$_GET['Descripcion']);
+    //FG_Guardar_Auditoria('ACTUALIZAR','TROQUEL CLIENTE',$registro);
 
     $FinCarga = new DateTime("now");
     $IntervalCarga = $InicioCarga->diff($FinCarga);
@@ -315,8 +319,9 @@
     $sql1 = SC2Q_Devolucion_detalle($IdDevolucion);
     $result1 = sqlsrv_query($conn,$sql1);
 
-    echo '
-    <table class="table table-striped table-bordered col-12 sortable">
+    echo '    
+    <form class="form-group" autocomplete="off" action="">
+    <table class="table table-striped table-bordered col-12 sortable form-group">
       <thead class="thead-dark">
         <tr>
           <th scope="col">#</th>
@@ -329,11 +334,10 @@
           <th scope="col">Existencia</td> 
           <th scope="col">Toquel Actual '.SigVe.'</td>
           <th scope="col">Precio Devolucion '.SigVe.'</td>
-          <th scope="col">Toquel Nuevo '.SigVe.'</td>
-          <th scope="col">Seleccion</td>
+          <th scope="col">Toquel Nuevo '.SigVe.'</td>        
         </tr>
       </thead>
-      <tbody>
+      <tbody>      
     ';
 
     $contador = 1;
@@ -353,28 +357,23 @@
         echo '<td align="center">'.intval($row1["ExistenciaActual"]).'</td>';
         echo '<td align="center">'.number_format($row1["PTroquel"],2,"," ,"." ).'</td>';
         echo '<td align="center">'.number_format($row1["PrecioBrutoDevolucion"],2,"," ,"." ).'</td>';
-        echo '
-        <form autocomplete="off" action=""> 
+                
+        echo '         
           <td align="center">
-            <input type="number" min="0.00" step="any" name="troquelnuevo[]" style="width:100%;" autofocus="autofocus">
-          </td>          
-          <td align="center">            
-            <input id="SEDE" name="SEDE" type="hidden" value="';
-                print_r($SedeConnection);
-                echo'">
-            <input type="submit" value="Selecionar" class="btn btn-outline-success">
+            <input class="form-group" type="number" min="0.00" step="any" name="troquelnuevo[]" style="width:100%;" autofocus="autofocus">
+          </td>                       
+            <input id="SEDE" name="SEDE" type="hidden" value="'.$SedeConnection.'">
             <input id="IdLote" name="IdDevolucion" type="hidden" value="'.$IdDevolucion.'">          
-            <input id="IdArticulo" name="IdArticulo[]" type="hidden" value="'.$row1["IdArticulo"].'">            
-          </td>       
-          </form>
-          <br>
+            <input id="IdArticulo" name="IdArticulos[]" type="hidden" value="'.$row1["IdArticulo"].'">                               
         ';
         echo '</tr>';
         $contador++;
     }
-    echo '
-      </tbody>
-    </table>'; 
+    echo '        
+            </tbody>
+        </table>
+    <input type="submit" value="Troquelar" class="btn btn-success btn-md form-group" style="float:right">
+    </form>'; 
 
 
   }
