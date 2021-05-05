@@ -144,7 +144,7 @@
           <i class="fas fa-stamp"></i>
           Troquel (Cliente)<span class="sr-only">(current)</span>
         </a>
-      </li>
+      </li>      
       <li class="nav-item">
         <a class="nav-link CP-Links-Menu" href="{{ url('/reporte23/') }}">    
           <span data-feather="home"></span>
@@ -677,7 +677,7 @@
           <i class="fas fa-stamp"></i>
           Troquel (Cliente)<span class="sr-only">(current)</span>
         </a>
-      </li>
+      </li>      
       <li class="nav-item">
         <a class="nav-link CP-Links-Menu" href="{{ url('/cartaCompromiso') }}">     
           <span data-feather="home"></span>
@@ -780,6 +780,13 @@
           <span data-feather="home"></span>
           <i class="fas fa-stamp"></i>
           Troquel (Cliente)<span class="sr-only">(current)</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('/seccion2/') }}">     
+          <span data-feather="home"></span>
+          <i class="fas fa-stamp"></i>
+          Troquel (Devolucion)<span class="sr-only">(current)</span>
         </a>
       </li>
       <li class="nav-item">
@@ -1141,6 +1148,13 @@
           <span data-feather="home"></span>
           <i class="fas fa-stamp"></i>
           Troquel (Cliente)<span class="sr-only">(current)</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('/seccion2/') }}">     
+          <span data-feather="home"></span>
+          <i class="fas fa-stamp"></i>
+          Troquel (Devolucion)<span class="sr-only">(current)</span>
         </a>
       </li>
       <li class="nav-item">
