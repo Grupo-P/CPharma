@@ -22,8 +22,9 @@ class TS_MovimientoController extends Controller {
 
         if (isset($_GET['fecha_desde']) && isset($_GET['fecha_hasta'])) {
             $movimientos = TS_Movimiento::where('tasa_ventas_id', $request->tasa_ventas_id)
-                ->whereBetween('created_at', [$_GET['fecha_desde'], $_GET['fecha_hasta']])
-                ->orderBy('created_at', 'desc')
+                ->whereDate('created_at', '>=', $_GET['fecha_desde'])
+                ->whereDate('created_at', '<=', $_GET['fecha_hasta'])
+                ->orderBy('created_at', 'DESC')
                 ->get();
         }
 
