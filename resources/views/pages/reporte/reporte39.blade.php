@@ -136,7 +136,7 @@
                   <input id="myInputCB" type="text" name="CodBar" placeholder="Ingrese el codigo de barra del articulo " onkeyup="conteoCB()">
                   <input id="myIdCB" name="IdCB" type="hidden">
                 </div>
-                <input id="SEDE" name="SEDE" type="hidden" value="'; 
+                <input id="SEDE" name="SEDE" type="hidden" value="';
                   print_r($_GET['SEDE']);
                   echo'">
                 <input type="submit" value="Buscar" class="btn btn-outline-success" style="width:9%;">
@@ -153,7 +153,7 @@
                   <input id="myInputCI" type="text" name="CodInt" placeholder="Ingrese el codigo interno del articulo " onkeyup="conteoCI()">
                   <input id="myIdCI" name="IdCI" type="hidden">
                 </div>
-                <input id="SEDE" name="SEDE" type="hidden" value="'; 
+                <input id="SEDE" name="SEDE" type="hidden" value="';
                   print_r($_GET['SEDE']);
                   echo'">
                 <input type="submit" value="Buscar" class="btn btn-outline-success" style="width:9%;">
@@ -224,7 +224,7 @@
     $fechaInicio = date_format(date_create($_GET['fechaInicio']), 'd-m-Y');
     $fechaFin = date_format(date_create($_GET['fechaFin']), 'd-m-Y');
 
-    echo'<h6 align="center">Inventarios del '.$fechaInicio.' al '.$fechaFin.' con '.$descripcion.'</h6>';
+    echo'<h6 align="center">Inventarios del '.$fechaInicio.' al '.$fechaFin.' con el artículo '.$descripcion.'</h6>';
 
     echo '
     <div class="input-group md-form form-sm form-1 pl-0 CP-stickyBar">
@@ -258,23 +258,22 @@
       <tbody>
     ';
 
-    $result2 = mysqli_query($connCPharma, "SELECT inventarios.codigo AS numero_conteo, inventarios.fecha_generado AS fecha, inventarios.origen_conteo AS origen, inventarios.motivo_conteo AS motivo, inventarios.estatus AS estado, inventarios.operador_generado AS operador, IF (inventario_detalles.existencia_actual IS NULL, 0, inventario_detalles.existencia_actual) AS existencia_conteo, IF(inventario_detalles.conteo IS NULL, 0, inventario_detalles.conteo) AS conteo, ((IF(inventario_detalles.existencia_actual IS NULL, 0, inventario_detalles.existencia_actual)) - IF(inventario_detalles.conteo IS NULL, 0, inventario_detalles.conteo)) AS diferencia, IF(inventario_detalles.re_conteo IS NULL, 0, inventario_detalles.re_conteo) AS reconteo FROM inventario_detalles LEFT JOIN inventarios ON inventario_detalles.codigo_conteo = inventarios.codigo WHERE inventario_detalles.id_articulo = '$IdArticulo'");
+    $result2 = mysqli_query($connCPharma, "SELECT inventarios.codigo AS numero_conteo, inventarios.fecha_generado AS fecha, inventarios.origen_conteo AS origen, inventarios.motivo_conteo AS motivo, inventarios.estatus AS estado, inventarios.operador_generado AS operador, inventario_detalles.existencia_actual AS existencia_conteo, inventario_detalles.conteo AS conteo, inventario_detalles.re_conteo AS reconteo FROM inventario_detalles LEFT JOIN inventarios ON inventario_detalles.codigo_conteo = inventarios.codigo WHERE inventario_detalles.id_articulo = '$IdArticulo'");
 
     $contador = intval(1);
 
     while ($row2 = mysqli_fetch_array($result2)) {
       $numero_conteo = $row2['numero_conteo'];
-      $fecha = date_format(date_create($row2['fecha']), 'd-m-Y h:ia');
+      $fecha = date_format(date_create($row2['fecha']), 'd-m-Y h:i:s a');
       $origen = $row2['origen'];
       $motivo = $row2['motivo'];
       $estado = $row2['estado'];
       $operador = $row2['operador'];
       $existencia_conteo = $row2['existencia_conteo'];
       $conteo = $row2['conteo'];
-      $diferencia = $row2['diferencia'];
+      $diferencia = ($row2['conteo'] != '') ? $conteo - $existencia_conteo : '';
       $reconteo = $row2['reconteo'];
-
-
+      $diferencia_reconteo = ($row2['reconteo'] != '') ? $reconteo - $existencia_conteo : '';
 
 
       echo '<tr>';
@@ -290,6 +289,7 @@
       echo '<td align="center">'.$conteo.'</td>';
       echo '<td align="center">'.$diferencia.'</td>';
       echo '<td align="center">'.$reconteo.'</td>';
+      echo '<td align="center">'.$diferencia_reconteo.'</td>';
 
       echo '</tr>';
 
@@ -497,7 +497,7 @@
     WHERE
     InvAtributo.Descripcion = 'Articulo Estrella')
     AND InvArticuloAtributo.InvArticuloId = InvArticulo.Id),CAST(0 AS INT))) AS ArticuloEstrella,
---Marca    
+--Marca
     InvMarca.Nombre as Marca,
 -- Ultima Venta (Fecha)
     (SELECT TOP 1
