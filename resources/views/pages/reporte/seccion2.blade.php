@@ -87,8 +87,7 @@
   //se pasa a la seleccion del articulo
     $InicioCarga = new DateTime("now");
 
-    //$registro = "Se actualizo el troquel del articulo: ".$_GET['Descripcion']." del troquel: ".$_GET['troquelanterior']." al troquel: ".$_GET['troquelactual']." por el motivo: ".$_GET['Motivo']; 
-
+    /*
     echo"Devolucion:<br>";
     print_r($_GET['IdDevolucion']);
     echo"<br><br>Articulos:<br>";
@@ -97,8 +96,11 @@
     print_r($_GET['IdLotes']);
     echo"<br><br>Troqueles:<br>";
     print_r($_GET['troquelesnuevos']);
+    */
 
-    //SC2_Actualizar_Fecha($_GET['SEDE'],$_GET['IdLote'],$_GET['troquelactual'],$_GET['IdArti'],$_GET['Descripcion']);
+    SC2_Actualizar_Troquel($_GET['SEDE'],$_GET['IdDevolucion'],$_GET['IdArticulos'],$_GET['IdLotes'],$_GET['troquelesnuevos']);
+
+    //$registro = "Se actualizo el troquel del articulo: ".$_GET['Descripcion']." del troquel: ".$_GET['troquelanterior']." al troquel: ".$_GET['troquelactual']." por el motivo: ".$_GET['Motivo']; 
     //FG_Guardar_Auditoria('ACTUALIZAR','TROQUEL CLIENTE',$registro);
 
     $FinCarga = new DateTime("now");
@@ -110,7 +112,7 @@
   //se pasa a mostrar los articulos de la devolucion
     $InicioCarga = new DateTime("now");
 
-    SC2_Devolucion_detalle($_GET['SEDE'],$_GET['IdDevolucion'],$_GET['NumeroDevolucion']);
+    SC2_Devolucion_detalle($_GET['SEDE'],$_GET['IdDevolucion'],true);
 
     $FinCarga = new DateTime("now");
     $IntervalCarga = $InicioCarga->diff($FinCarga);
@@ -274,7 +276,7 @@
     TITULO: SC2_Devolucion_detalle   
     DESAROLLADO POR: SERGIO COVA
   */
-  function SC2_Devolucion_detalle($SedeConnection,$IdDevolucion,$NumeroDevolucion){
+  function SC2_Devolucion_detalle($SedeConnection,$IdDevolucion,$flagTroquelNuevo){
 
     $conn = FG_Conectar_Smartpharma($SedeConnection);
     $sql = SC2Q_Devolucion_info($IdDevolucion);
@@ -338,9 +340,13 @@
           <th scope="col">Numero Lote</td>
           <th scope="col">Existencia</td> 
           <th scope="col">Troquel Actual <br> (CON IVA) '.SigVe.'</td>
-          <th scope="col">Precio Devolucion <br> (SIN IVA) '.SigVe.'</td>
-          <th scope="col">Troquel Nuevo <br> (CON IVA) '.SigVe.'</td>        
-        </tr>
+          <th scope="col">Precio Devolucion <br> (SIN IVA) '.SigVe.'</td>';
+          
+          if($flagTroquelNuevo){
+            echo '<th scope="col">Troquel Nuevo <br> (CON IVA) '.SigVe.'</td>';
+          }                
+
+        echo'</tr>
       </thead>
       <tbody>      
     ';
@@ -370,26 +376,30 @@
         echo '<td align="center">'.intval($row1["ExistenciaActual"]).'</td>';
         echo '<td align="center">'.number_format($row1["PTroquel"],2,"," ,"." ).'</td>';
         echo '<td align="center">'.number_format($row1["PrecioBrutoDevolucion"],2,"," ,"." ).'</td>';
-                
-        echo '         
-          <td align="center">
-            <input value="'.$TroquelSugerido.'" class="form-group" type="number" min="0.00" step="any" name="troquelesnuevos[]" style="width:100%;" autofocus="autofocus">
-          </td>                       
-            <input id="SEDE" name="SEDE" type="hidden" value="'.$SedeConnection.'">
-            <input id="IdDevolucion" name="IdDevolucion" type="hidden" value="'.$IdDevolucion.'">
-            <input id="IdArticulos" name="IdArticulos[]" type="hidden" value="'.$idArticulo.'">                               
-            <input id="IdLotes" name="IdLotes[]" type="hidden" value="'.$row1["IdLote"].'">
-        ';
+        
+        if($flagTroquelNuevo){
+          echo '         
+            <td align="center">
+              <input value="'.$TroquelSugerido.'" class="form-group" type="number" min="0.00" step="any" name="troquelesnuevos[]" style="width:100%;" autofocus="autofocus">
+            </td>                       
+              <input id="SEDE" name="SEDE" type="hidden" value="'.$SedeConnection.'">
+              <input id="IdDevolucion" name="IdDevolucion" type="hidden" value="'.$IdDevolucion.'">
+              <input id="IdArticulos" name="IdArticulos[]" type="hidden" value="'.$idArticulo.'">                               
+              <input id="IdLotes" name="IdLotes[]" type="hidden" value="'.$row1["IdLote"].'">
+          ';
+        } 
+        
         echo '</tr>';
         $contador++;
     }
     echo '        
-            </tbody>
-        </table>
-    <input type="submit" value="Troquelar" class="btn btn-success btn-md form-group" style="float:right">
-    </form>'; 
+      </tbody>
+    </table>';
 
-
+      if($flagTroquelNuevo){
+        echo '<input type="submit" value="Troquelar" class="btn btn-success btn-md form-group" style="float:right">
+        </form>';
+      } 
   }
   /**********************************************************************************/
   /*
@@ -429,6 +439,55 @@
         left join InvLote on InvLoteAlmacen.InvLoteId =  InvLote.Id
         where VenDevolucion.Id = '$IdDevolucion'
     ";
+    return $sql;
+  }
+  /**********************************************************************************/
+  /*
+    TITULO: SC2_Actualizar_Troquel    
+    DESAROLLADO POR: SERGIO COVA
+  */
+  function SC2_Actualizar_Troquel($SedeConnection,$IdDevolucion,$Arr_Articulos,$Arr_Lotes,$Arra_Troqueles){
+
+    $conn = FG_Conectar_Smartpharma($SedeConnection);
+    
+    $limit = count($Arr_Articulos);
+    
+    for($i = 0 ; $i < $limit; $i++){
+      $IdArticulo = $Arr_Articulos[$i];
+      $IdLote = $Arr_Lotes[$i];
+      $Troquel = $Arra_Troqueles[$i];
+
+      if( (floatval($Troquel)>0) && ($Troquel!="NULL") && ($Troquel!="null") && ($Troquel!="") ){
+        $sqlTN = SC1Q_Actualizar_Troquel(true,$Troquel,$IdArticulo,$IdLote);
+        sqlsrv_query($conn,$sqlTN);
+      }
+
+    }
+    echo '<h4 class="h5 text-danger" align="center">Troqueles actualizados con exito</h4>';
+    SC2_Devolucion_detalle($SedeConnection,$IdDevolucion,false);
+  }
+  /**********************************************************************************/
+  /*
+    TITULO: SC1Q_Actualizar_Fecha
+    FUNCION: Armar una lista de articulos con descripcion e id
+    RETORNO: Lista de articulos con descripcion e id
+    DESAROLLADO POR: SERGIO COVA
+  */
+  function SC1Q_Actualizar_Troquel($flag,$Troquel,$IdArticulo,$IdLote) {
+    
+    if($flag == true){
+      $sql = "
+      UPDATE InvLote 
+      SET M_PrecioTroquelado = '$Troquel'
+      FROM InvLote, invlotealmacen, InvArticulo 
+      WHERE InvLote.id = '$IdLote' 
+      AND  InvArticulo.id = InvLote.InvArticuloId 
+      AND invlote.id = invlotealmacen.InvLoteId 
+      AND InvLoteAlmacen.existencia >= 0
+      AND InvLoteAlmacen.InvAlmacenId = 1
+      AND InvArticulo.id = '$IdArticulo'
+      ";
+    }    
     return $sql;
   }
 ?>
