@@ -144,7 +144,9 @@
             </tr>
             <tr>
                 <th scope="col">38</th>
-                <td scope="col">Registro de reclamos</td> 
+                <td scope="col">Registro de reclamos</td>
+                <th scope="col">39</th>
+                <td scope="col">Revisión de inventarios físicos</td>
             </tr>
         </tbody>
     </table>

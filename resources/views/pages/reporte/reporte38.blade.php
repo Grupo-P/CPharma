@@ -107,7 +107,7 @@
   //Se pasa a la seleccion del proveedor
     $InicioCarga = new DateTime("now");
 
-    $sql = R30Q_Lista_Proveedores();
+    $sql = R38Q_Lista_Proveedores();
     $ArtJson = FG_Armar_Json($sql,$_GET['SEDE']);
 
     echo '
@@ -150,7 +150,7 @@
 <?php
   /**********************************************************************************/
   /*
-    TITULO: R30Q_Lista_Proveedores
+    TITULO: R38Q_Lista_Proveedores
     FUNCION: Armar una lista de proveedores
     RETORNO: Lista de proveedores
     DESAROLLADO POR: SERGIO COVA

@@ -212,6 +212,10 @@ Route::get('/reporte38', function() {
     return view('pages.reporte.reporte38');
 });
 
+Route::get('/reporte39', function() {
+    return view('pages.reporte.reporte39');
+});
+
 Route::get('/seccion1', function() {
     return view('pages.reporte.seccion1');
 });

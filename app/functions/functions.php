@@ -1424,6 +1424,9 @@
 			case 38:
 				$nombre = 'Registro de reclamos';
 			break;
+			case 39:
+				$nombre = 'Revisión de inventarios físicos';
+			break;
 			default:
 				$nombre = 'Reporte desconocido';
 			break;
