@@ -219,12 +219,10 @@
     $result1 = sqlsrv_query($conn,$sql4);
     $row1 = sqlsrv_fetch_array($result1);
 
+    $codigo_interno = $row1['CodigoInterno'];
+    $codigo_barra = $row1['CodigoBarra'];
     $descripcion = $row1['Descripcion'];
-
-    $fechaInicio = date_format(date_create($_GET['fechaInicio']), 'd-m-Y');
-    $fechaFin = date_format(date_create($_GET['fechaFin']), 'd-m-Y');
-
-    echo'<h6 align="center">Inventarios del '.$fechaInicio.' al '.$fechaFin.' con el artículo '.$descripcion.'</h6>';
+    $existencia = $row1['Existencia'];
 
     echo '
     <div class="input-group md-form form-sm form-1 pl-0 CP-stickyBar">
@@ -239,6 +237,30 @@
     <br/>
 
     <table class="table table-striped table-bordered col-12 sortable">
+      <thead class="thead-dark">
+        <tr>
+          <th scope="col">Código Interno</th>
+          <th scope="col">Código de barra</th>
+          <th scope="col">Descripción</th>
+          <th scope="col">Existencia actual</th>
+          <th scope="col">Rango de búsqueda</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+            <td align="center">'.$codigo_interno.'</td>
+            <td align="center">'.$codigo_barra.'</td>
+            <td align="center">'.$descripcion.'</td>
+            <td align="center">'.$existencia.'</td>
+            <td align="center">'.date_create($_GET['fechaInicio'])->format('d/m/Y').' al '.date_create($_GET['fechaFin'])->format('d/m/Y').'</td>
+        </tr>
+      </tbody>
+    </table>
+
+
+    <br/>
+
+    <table class="table table-striped table-bordered col-12 sortable" id="myTable">
       <thead class="thead-dark">
         <tr>
           <th scope="col">#</th>

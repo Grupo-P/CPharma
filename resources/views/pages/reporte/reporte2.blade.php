@@ -192,6 +192,7 @@
     $Dolarizado = $row["Dolarizado"];
     $CondicionExistencia = 'CON_EXISTENCIA';
     $UltimaVenta = $row["UltimaVenta"];
+    $UltimoLote = $row["UltimoLote"];
     $UltimoPrecio = $row["UltimoPrecio"];
     $Marca = $row["Marca"];
 
@@ -217,7 +218,7 @@
     $ultimoConteo = $RowCPharma['fecha_conteo'];
 
     $sqlCategorizacion = "
-    SELECT 
+    SELECT
     categorias.nombre as categoria,
     subcategorias.nombre as subcategoria
     FROM categorizacions
@@ -261,10 +262,14 @@
           <th scope="col">Dolarizado?</td>
           <th scope="col">Tasa actual '.SigVe.'</td>
           <th scope="col">Precio en divisa</br>(Con IVA) '.SigDolar.'</td>
+          <th scope="col" class="bg-warning text-white">Venta diaria 15</th>
+          <th scope="col" class="bg-warning text-white">Días restantes 15</th>
           <th scope="col">Ultima Venta</th>
+          <th scope="col" class="bg-warning text-white">Ultimo Lote</th>
           <th scope="col">Unidad Minima</th>
           <th scope="col">Ultimo Conteo</th>
           <th scope="col">Ultimo Precio (Sin IVA) '.SigVe.'</th>
+          <th scope="col">Transito</th>
         </tr>
       </thead>
       <tbody>
@@ -302,9 +307,14 @@
 
     echo '<td align="center">'.$Dolarizado.'</td>';
 
+    /*TASA DOLAR VENTA*/
+    $Tasa = DB::table('tasa_ventas')->where('moneda', 'Dolar')->value('tasa');
+
+    $Tasa = ($Tasa) ? $Tasa : 0;
+
     if($TasaActual!=0){
       echo '<td align="center">'.number_format($TasaActual,2,"," ,"." ).'</td>';
-      $PrecioDolar = $Precio/$TasaActual;
+      $PrecioDolar = $Precio/$Tasa;
       echo '<td align="center">'.number_format($PrecioDolar,2,"," ,"." ).'</td>';
     }
     else{
@@ -312,11 +322,37 @@
       echo '<td align="center">0,00</td>';
     }
 
+    $fechaInicioDiasCero = date_modify(date_create(), '-15day');
+    $fechaInicioDiasCero = date_format($fechaInicioDiasCero, 'Y-m-d');
+
+    $sql3 = R31Q_Total_Venta($IdArticulo, $fechaInicioDiasCero, date_create()->format('Y-m-d'));
+
+    $sql2 = MySQL_Cuenta_Veces_Dias_Cero($IdArticulo,$fechaInicioDiasCero,date_create()->format('Y-m-d'));
+    $result22 = mysqli_query($connCPharma,$sql2);
+    $row2 = $result22->fetch_assoc();
+    $RangoDiasQuiebre = $row2['Cuenta'];
+
+    $result3 = sqlsrv_query($conn,$sql3);
+    $row3 = sqlsrv_fetch_array($result3, SQLSRV_FETCH_ASSOC);
+
+    $VentaDiariaQuiebre = FG_Venta_Diaria($row3['TotalUnidadesVendidas'],$RangoDiasQuiebre);
+    $DiasRestantesQuiebre = FG_Dias_Restantes(intval($Existencia),$VentaDiariaQuiebre);
+
+    echo '<td align="center" class="bg-warning text-white">'.$VentaDiariaQuiebre.'</td>';
+    echo '<td align="center" class="bg-warning text-white">'.$DiasRestantesQuiebre.'</td>';
+
     if(!is_null($UltimaVenta)){
       echo '<td align="center">'.$UltimaVenta->format('d-m-Y').'</td>';
     }
     else{
       echo '<td align="center"> - </td>';
+    }
+
+    if(!is_null($UltimoLote)){
+      echo '<td align="center" class="bg-warning text-white">'.$UltimoLote->format('d-m-Y').'</td>';
+    }
+    else{
+      echo '<td align="center" class="bg-warning text-white"> - </td>';
     }
 
     echo '<td>'.$unidadminima.'</td>';
@@ -330,6 +366,50 @@
       echo '<td align="center"> - </td>';
     }
 
+    $sqlCuentaOrden = "SELECT COUNT(*) AS Cuenta FROM orden_compra_detalles WHERE id_articulo = '$IdArticulo' AND estatus = 'ACTIVO'";
+      $resultCuentaOrden = mysqli_query($connCPharma,$sqlCuentaOrden);
+      $rowCuentaOrden = $resultCuentaOrden->fetch_assoc();
+
+      $sqlDetalleOrden = "SELECT codigo_orden FROM orden_compra_detalles WHERE id_articulo = '$IdArticulo' AND estatus = 'ACTIVO'";
+      $resultDetalleOrden = mysqli_query($connCPharma,$sqlDetalleOrden);
+
+      $flag = false;
+      if($rowCuentaOrden['Cuenta']==0){
+        $flag = true;
+      }
+
+      while($rowDetalleOrden = $resultDetalleOrden->fetch_assoc()){
+        $codigo_orden = $rowDetalleOrden['codigo_orden'];
+        $sqlOrden = "SELECT estado FROM orden_compras WHERE codigo = '$codigo_orden'";
+        $resultOrden = mysqli_query($connCPharma,$sqlOrden);
+        $rowOrden = $resultOrden->fetch_assoc();
+
+        if( ($rowOrden['estado']=='INGRESADA')
+          || ($rowOrden['estado']=='CERRADA')
+          || ($rowOrden['estado']=='RECHAZADA')
+          || ($rowOrden['estado']=='ANULADA')
+        ){
+          $flag = true;
+        }
+        else{
+          $flag = false;
+        }
+      }
+
+    if($flag != true){
+      echo'
+      <td align="center">
+          <form action="/ordenCompraDetalle/0" method="PRE" style="display: block; width:100%;" target="_blank">';
+          echo'<input type="hidden" name="id_articulo" value="'.$IdArticulo.'">';
+          echo'
+            <button type="submit" role="button" class="btn btn-outline-danger btn-sm" style="width:100%;">En Transito</button>
+          </form>
+      </tr>
+      ';
+    } else {
+        echo '<td></td>';
+    }
+
     echo '
       </tr>
       </tbody>
@@ -341,29 +421,33 @@
           <tr>
             <th scope="col" class="CP-sticky">#</th>
             <th scope="col" class="CP-sticky">Proveedor</th>
-            <th scope="col" class="CP-sticky bg-info">N° Factura</th>
+            <th scope="col" class="CP-sticky">N° Factura</th>
             <th scope="col" class="CP-sticky">Fecha de documento</th>
-            <th scope="col" class="CP-sticky bg-danger text-white">Fecha de registro</th>
-            <th scope="col" class="CP-sticky bg-warning text-dark">Fecha de vencimiento</th>
-            <th scope="col" class="CP-sticky bg-success text-white">Vida util<br>(Dias)</th>
-            <th scope="col" class="CP-sticky bg-info text-white">Dias para vencer<br>(Dias)</th>
+            <th scope="col" class="CP-sticky">Fecha de registro</th>
+            <th scope="col" class="CP-sticky bg-warning text-dark">Días llegada</th>
+            <th scope="col" class="CP-sticky">Fecha de vencimiento</th>
+            <th scope="col" class="CP-sticky">Vida util<br>(Dias)</th>
+            <th scope="col" class="CP-sticky">Dias para vencer<br>(Dias)</th>
             <th scope="col" class="CP-sticky">Cantidad recibida</th>
+            <th scope="col" class="CP-sticky bg-warning text-dark">Saldo</th>
             <th scope="col" class="CP-sticky">Costo bruto</br>(Sin IVA) '.SigVe.'</th>
             <th scope="col" class="CP-sticky">Tasa en historico '.SigVe.'</br>(fecha documento)</th>
-            <th scope="col" class="CP-sticky bg-danger text-white">Tasa en historico '.SigVe.'</br>(fecha registro)</th>
+            <th scope="col" class="CP-sticky">Tasa en historico '.SigVe.'</br>(fecha registro)</th>
             <th scope="col" class="CP-sticky">Costo bruto</br>HOY (Sin IVA) '.SigVe.'</br>(fecha documento)</th>
-            <th scope="col" class="CP-sticky bg-danger text-white">Costo bruto</br>HOY (Sin IVA) '.SigVe.'</br>(fecha registro)</th>
+            <th scope="col" class="CP-sticky">Costo bruto</br>HOY (Sin IVA) '.SigVe.'</br>(fecha registro)</th>
           <th scope="col" class="CP-sticky">Costo en divisa</br>(Sin IVA) '.SigDolar.'</br>(fecha documento)</th>
           <th scope="col" class="CP-sticky bg-danger text-white">Costo en divisa</br>(Sin IVA) '.SigDolar.'</br>(fecha registro)</th>
-          <th scope="col" class="CP-sticky bg-warning text-dark">Precio Lote en '.SigVe.'</th>
-          <th scope="col" class="CP-sticky bg-warning text-dark">Precio Lote en '.SigVe.'<br>Historico</th>
-          <th scope="col" class="CP-sticky bg-warning text-dark">Precio Lote en '.SigDolar.'</th>
-          <th scope="col" class="CP-sticky bg-info">Operador</th>
+          <th scope="col" class="CP-sticky">Precio Lote en '.SigVe.'</th>
+          <th scope="col" class="CP-sticky">Precio Lote en '.SigVe.'<br>Historico</th>
+          <th scope="col" class="CP-sticky">Precio Lote en '.SigDolar.'</th>
+          <th scope="col" class="CP-sticky">Operador</th>
           </tr>
         </thead>
         <tbody>
     ';
     $contador = 1;
+    $Saldo = 0;
+
     while($row2 = sqlsrv_fetch_array($result2, SQLSRV_FETCH_ASSOC)) {
 
         $fechaDocumento = $row2["FechaDocumento"];
@@ -374,6 +458,8 @@
         $vidaUtil = ($row2['VidaUtil']!=NULL)?$row2['VidaUtil']:'-';
         $diasVencer = ($row2['DiasVecer']!=NULL)?$row2['DiasVecer']:'-';
 
+        $diasLlegada = ($row2['FechaRegistro']) ? date_diff($row2['FechaRegistro'], date_create())->format('%a') : '';
+
         echo '<tr>';
         echo '<td align="center"><strong>'.intval($contador).'</strong></td>';
         echo
@@ -381,13 +467,13 @@
         <a href="/reporte7?Nombre='.FG_Limpiar_Texto($row2["Nombre"]).'&Id='.$row2["Id"].'&SEDE='.$SedeConnection.'" target="_blank" style="text-decoration: none; color: black;">'
           .FG_Limpiar_Texto($row2["Nombre"]).
         '</a>
-        </td>';        
+        </td>';
 
-        echo '<td align="center" class="bg-info text-white">
-        <a class="CP-barrido" href="/reporte30?SEDE='.$SedeConnection.'&IdFact='.$row2["idFactura"].'&IdProv='.$row2["Id"].'&NombreProv='.FG_Limpiar_Texto($row2["Nombre"]).'" style="text-decoration: none; color: white;" target="_blank">'
+        echo '<td align="center">
+        <a class="CP-barrido" href="/reporte30?SEDE='.$SedeConnection.'&IdFact='.$row2["idFactura"].'&IdProv='.$row2["Id"].'&NombreProv='.FG_Limpiar_Texto($row2["Nombre"]).'" style="text-decoration: none; color: black" target="_blank">'
           .$row2["numero"].
-        '</a>          
-        </td>'; 
+        '</a>
+        </td>';
 
         echo
         '<td align="center" class="CP-barrido">
@@ -396,11 +482,12 @@
         '</a>
         </td>';
 
-        echo '<td align="center" class="bg-danger text-white">'.$row2["FechaRegistro"]->format('d-m-Y').'</td>';
-        echo '<td align="center" class="bg-warning text-dark">'.$fechaVencimiento.'</td>';
-        echo '<td align="center" class="bg-success text-white">'.$vidaUtil.'</td>';
+        echo '<td align="center">'.$row2["FechaRegistro"]->format('d-m-Y').'</td>';
+        echo '<td align="center" class="bg-warning">'.$diasLlegada.'</td>';
+        echo '<td align="center">'.$fechaVencimiento.'</td>';
+        echo '<td align="center">'.$vidaUtil.'</td>';
 
-        echo '<td align="center" class="bg-info text-white">'.$diasVencer.'</td>';
+        echo '<td align="center">'.$diasVencer.'</td>';
 
        echo
         '<td align="center" class="CP-barrido">
@@ -408,6 +495,10 @@
           .intval($row2['CantidadRecibidaFactura']).
         '</a>
         </td>';
+
+        $Saldo = $Saldo + $row2['CantidadRecibidaFactura'];
+
+        echo '<td align="center" class="bg-warning">'.$Saldo.'</td>';
 
         echo '<td align="center">'.number_format($row2["M_PrecioCompraBruto"],2,"," ,"." ).'</td>';
 
@@ -420,7 +511,7 @@
         if( ($TasaDoc != 0) && ($TasaFR != 0) ) {
 
           echo '<td align="center">'.number_format($TasaDoc,2,"," ,"." ).'</td>';
-          echo '<td align="center" class="bg-danger text-white">'.number_format($TasaFR,2,"," ,"." ).'</td>';
+          echo '<td align="center">'.number_format($TasaFR,2,"," ,"." ).'</td>';
 
           $CostoDivisaDoc = $row2["M_PrecioCompraBruto"]/$TasaDoc;
           $CostoDivisaFR = $row2["M_PrecioCompraBruto"]/$TasaFR;
@@ -430,45 +521,45 @@
             echo '<td align="center">'.number_format($CostoBrutoHoyDoc,2,"," ,"." ).'</td>';
 
             $CostoBrutoHoyFR = $CostoDivisaFR*$TasaActual;
-            echo '<td align="center" class="bg-danger text-white">'.number_format($CostoBrutoHoyFR,2,"," ,"." ).'</td>';
+            echo '<td align="center">'.number_format($CostoBrutoHoyFR,2,"," ,"." ).'</td>';
           }
           else{
             echo '<td align="center">0,00</td>';
-            echo '<td align="center" class="bg-danger text-white">0,00</td>';
+            echo '<td align="center">0,00</td>';
           }
 
           echo '<td align="center">'.number_format($CostoDivisaDoc,2,"," ,"." ).'</td>';
-          echo '<td align="center" class="bg-danger text-white">'.number_format($CostoDivisaFR,2,"," ,"." ).'</td>';
+          echo '<td class="bg-danger text-white" align="center">'.number_format($CostoDivisaFR,2,"," ,"." ).'</td>';
 
           $preciolote = FG_Precio_Calculado_Alfa($UtilidadArticulo,$UtilidadCategoria,$IsIVA,$row2["M_PrecioCompraBruto"]);
-          echo '<td align="center" class="bg-warning text-dark">'.number_format($preciolote,2,"," ,"." ).'</td>';
-        
+          echo '<td align="center">'.number_format($preciolote,2,"," ,"." ).'</td>';
+
           if($TasaActual!=0){
             $preciolotehist = FG_Precio_Calculado_Alfa($UtilidadArticulo,$UtilidadCategoria,$IsIVA,$CostoBrutoHoyFR);
-            echo '<td align="center" class="bg-warning text-dark">'.number_format($preciolotehist,2,"," ,"." ).'</td>';
+            echo '<td align="center">'.number_format($preciolotehist,2,"," ,"." ).'</td>';
 
-            $preciolotediv = FG_Precio_Calculado_Alfa($UtilidadArticulo,$UtilidadCategoria,$IsIVA,$CostoDivisaFR);           
-            echo '<td align="center" class="bg-warning text-dark">'.number_format($preciolotediv,2,"," ,"." ).'</td>';
+            $preciolotediv = FG_Precio_Calculado_Alfa($UtilidadArticulo,$UtilidadCategoria,$IsIVA,$CostoDivisaFR);
+            echo '<td align="center">'.number_format($preciolotediv,2,"," ,"." ).'</td>';
           }
-          else{            
-            echo '<td align="center" class="bg-warning text-dark">0,00</td>';
-            echo '<td align="center" class="bg-warning text-dark">0,00</td>';           
+          else{
+            echo '<td align="center">0,00</td>';
+            echo '<td align="center">0,00</td>';
           }
 
         }
         else{
           echo '<td align="center">0,00</td>';
-          echo '<td align="center" class="bg-danger text-white">0,00</td>';
           echo '<td align="center">0,00</td>';
-          echo '<td align="center" class="bg-danger text-white">0,00</td>';
           echo '<td align="center">0,00</td>';
-          echo '<td align="center" class="bg-danger text-white">0,00</td>';
-          echo '<td align="center" class="bg-warning text-dark">0,00</td>';
-          echo '<td align="center" class="bg-warning text-dark">0,00</td>';
-          echo '<td align="center" class="bg-warning text-dark">0,00</td>';
+          echo '<td align="center">0,00</td>';
+          echo '<td align="center">0,00</td>';
+          echo '<td align="center">0,00</td>';
+          echo '<td align="center">0,00</td>';
+          echo '<td align="center">0,00</td>';
+          echo '<td align="center">0,00</td>';
         }
 
-        echo '<td align="center" class="bg-info text-white">'.$row2["operador"].'</td>';
+        echo '<td align="center">'.$row2["operador"].'</td>';
 
         echo '</tr>';
       $contador++;
@@ -479,6 +570,7 @@
     mysqli_close($connCPharma);
     sqlsrv_close($conn);
   }
+
   /**********************************************************************************/
   /*
     TITULO: R2Q_Lista_Articulos
@@ -496,6 +588,7 @@
     ";
     return $sql;
   }
+
   /**********************************************************************************/
   /*
     TITULO: R2Q_Lista_Articulos_CodBarra
@@ -516,6 +609,7 @@
     ";
     return $sql;
   }
+
   /**********************************************************************************/
   /*
     TITULO: R2Q_Detalle_Articulo
@@ -657,7 +751,7 @@
     WHERE
     InvAtributo.Descripcion = 'Articulo Estrella')
     AND InvArticuloAtributo.InvArticuloId = InvArticulo.Id),CAST(0 AS INT))) AS ArticuloEstrella,
---Marca    
+--Marca
     InvMarca.Nombre as Marca,
 -- Ultima Venta (Fecha)
     (SELECT TOP 1
@@ -727,6 +821,7 @@
     ";
     return $sql;
   }
+
   /**********************************************************************************/
   /*
     TITULO: R2Q_Historico_Articulo
@@ -743,7 +838,7 @@
       CONVERT(DATE,ComFactura.FechaDocumento) As FechaDocumento,
       CONVERT(DATE,ComFacturaDetalle.FechaVencimiento) As FechaVencimiento,
       DATEDIFF(DAY,CONVERT(DATE,ComFactura.FechaRegistro),CONVERT(DATE,ComFacturaDetalle.FechaVencimiento)) as VidaUtil,
-      DATEDIFF(DAY,CONVERT(DATE,GETDATE()),CONVERT(DATE,ComFacturaDetalle.FechaVencimiento)) as DiasVecer,      
+      DATEDIFF(DAY,CONVERT(DATE,GETDATE()),CONVERT(DATE,ComFacturaDetalle.FechaVencimiento)) as DiasVecer,
       ComFacturaDetalle.CantidadRecibidaFactura,
       ComFacturaDetalle.M_PrecioCompraBruto,
       ComFactura.auditoria_usuario as operador,
@@ -755,7 +850,172 @@
       INNER JOIN ComProveedor ON ComProveedor.Id = ComFactura.ComProveedorId
       INNER JOIN GenPersona ON GenPersona.Id = ComProveedor.GenPersonaId
       WHERE InvArticulo.Id = '$IdArticulo'
-      ORDER BY ComFactura.FechaDocumento DESC
+      ORDER BY ComFactura.FechaRegistro DESC
+    ";
+    return $sql;
+  }
+
+  function R31Q_Total_Venta($IdArticulo,$FInicial,$FFinal) {
+    $sql = "
+      SELECT
+    -- Id Articulo
+      VenFacturaDetalle.InvArticuloId,
+    --Veces Vendidas (En Rango)
+      ISNULL(COUNT(*),CAST(0 AS INT)) AS VecesVendidas,
+    --Unidades Vendidas (En Rango)
+      (ROUND(CAST(SUM(VenFacturaDetalle.Cantidad) AS DECIMAL(38,0)),2,0)) as UnidadesVendidas,
+    --Veces Devueltas (En Rango)
+      ISNULL((SELECT
+      ISNULL(COUNT(*),CAST(0 AS INT))
+      FROM VenDevolucionDetalle
+      INNER JOIN VenDevolucion ON VenDevolucion.Id = VenDevolucionDetalle.VenDevolucionId
+      WHERE VenDevolucionDetalle.InvArticuloId = VenFacturaDetalle.InvArticuloId
+      AND(VenDevolucion.FechaDocumento > '$FInicial' AND VenDevolucion.FechaDocumento < '$FFinal')
+      GROUP BY VenDevolucionDetalle.InvArticuloId
+      ),CAST(0 AS INT)) AS VecesDevueltas,
+    --Unidades Devueltas (En Rango)
+      ISNULL((SELECT
+      (ROUND(CAST(SUM(VenDevolucionDetalle.Cantidad) AS DECIMAL(38,0)),2,0))
+      FROM VenDevolucionDetalle
+      INNER JOIN VenDevolucion ON VenDevolucion.Id = VenDevolucionDetalle.VenDevolucionId
+      WHERE VenDevolucionDetalle.InvArticuloId = VenFacturaDetalle.InvArticuloId
+      AND(VenDevolucion.FechaDocumento > '$FInicial' AND VenDevolucion.FechaDocumento < '$FFinal')
+      GROUP BY VenDevolucionDetalle.InvArticuloId
+      ),CAST(0 AS INT)) AS UnidadesDevueltas,
+    --Total Veces Vendidas (En Rango)
+      ((ISNULL(COUNT(*),CAST(0 AS INT)))
+      -
+      (ISNULL((SELECT
+      ISNULL(COUNT(*),CAST(0 AS INT))
+      FROM VenDevolucionDetalle
+      INNER JOIN VenDevolucion ON VenDevolucion.Id = VenDevolucionDetalle.VenDevolucionId
+      WHERE VenDevolucionDetalle.InvArticuloId = VenFacturaDetalle.InvArticuloId
+      AND(VenDevolucion.FechaDocumento > '$FInicial' AND VenDevolucion.FechaDocumento < '$FFinal')
+      GROUP BY VenDevolucionDetalle.InvArticuloId
+      ),CAST(0 AS INT)))) AS TotalVecesVendidas,
+    --Total Unidades Vendidas (En Rango)
+      (((ROUND(CAST(SUM(VenFacturaDetalle.Cantidad) AS DECIMAL(38,0)),2,0)))
+      -
+      (ISNULL((SELECT
+      (ROUND(CAST(SUM(VenDevolucionDetalle.Cantidad) AS DECIMAL(38,0)),2,0))
+      FROM VenDevolucionDetalle
+      INNER JOIN VenDevolucion ON VenDevolucion.Id = VenDevolucionDetalle.VenDevolucionId
+      WHERE VenDevolucionDetalle.InvArticuloId = VenFacturaDetalle.InvArticuloId
+      AND(VenDevolucion.FechaDocumento > '$FInicial' AND VenDevolucion.FechaDocumento < '$FFinal')
+      GROUP BY VenDevolucionDetalle.InvArticuloId
+      ),CAST(0 AS INT)))) AS TotalUnidadesVendidas,
+    --Veces Conpradas (En Rango)
+      ISNULL((SELECT
+      ISNULL(COUNT(*),CAST(0 AS INT))
+      FROM ComFacturaDetalle
+      INNER JOIN ComFactura ON  ComFactura.Id = ComFacturaDetalle.ComFacturaId
+      WHERE ComFacturaDetalle.InvArticuloId = VenFacturaDetalle.InvArticuloId
+      AND(ComFactura.FechaRegistro > '$FInicial' AND ComFactura.FechaRegistro < '$FFinal')
+      GROUP BY ComFacturaDetalle.InvArticuloId
+      ),CAST(0 AS INT)) AS VecesCompradas,
+    --Unidades Conpradas (En Rango)
+      ISNULL((SELECT
+      (ROUND(CAST(SUM(ComFacturaDetalle.CantidadFacturada) AS DECIMAL(38,0)),2,0))
+      FROM ComFacturaDetalle
+      INNER JOIN ComFactura ON  ComFactura.Id = ComFacturaDetalle.ComFacturaId
+      WHERE ComFacturaDetalle.InvArticuloId = VenFacturaDetalle.InvArticuloId
+      AND(ComFactura.FechaRegistro > '$FInicial' AND ComFactura.FechaRegistro < '$FFinal')
+      GROUP BY ComFacturaDetalle.InvArticuloId
+      ),CAST(0 AS INT)) AS UnidadesCompradas,
+    --Veces Reclamadas (En Rango)
+      ISNULL((SELECT
+      ISNULL(COUNT(*),CAST(0 AS INT))
+      FROM ComReclamoDetalle
+      INNER JOIN ComReclamo ON ComReclamo.Id = ComReclamoDetalle.ComReclamoId
+      WHERE ComReclamoDetalle.InvArticuloId = VenFacturaDetalle.InvArticuloId
+      AND(ComReclamo.FechaRegistro > '$FInicial' AND ComReclamo.FechaRegistro < '$FFinal')
+      GROUP BY ComReclamoDetalle.InvArticuloId
+      ),CAST(0 AS INT)) AS VecesReclamadas,
+    --Unidades Reclamadas (En Rango)
+      ISNULL((SELECT
+      (ROUND(CAST(SUM(ComReclamoDetalle.Cantidad) AS DECIMAL(38,0)),2,0))
+      FROM ComReclamoDetalle
+      INNER JOIN ComReclamo ON ComReclamo.Id = ComReclamoDetalle.ComReclamoId
+      WHERE ComReclamoDetalle.InvArticuloId = VenFacturaDetalle.InvArticuloId
+      AND(ComReclamo.FechaRegistro > '$FInicial' AND ComReclamo.FechaRegistro < '$FFinal')
+      GROUP BY ComReclamoDetalle.InvArticuloId
+      ),CAST(0 AS INT)) AS UnidadesReclamadas,
+    --Total Veces Compradas (En Rango)
+      ((ISNULL((SELECT
+      ISNULL(COUNT(*),CAST(0 AS INT))
+      FROM ComFacturaDetalle
+      INNER JOIN ComFactura ON  ComFactura.Id = ComFacturaDetalle.ComFacturaId
+      WHERE ComFacturaDetalle.InvArticuloId = VenFacturaDetalle.InvArticuloId
+      AND(ComFactura.FechaRegistro > '$FInicial' AND ComFactura.FechaRegistro < '$FFinal')
+      GROUP BY ComFacturaDetalle.InvArticuloId
+      ),CAST(0 AS INT)))
+      -
+      (ISNULL((SELECT
+      ISNULL(COUNT(*),CAST(0 AS INT))
+      FROM ComReclamoDetalle
+      INNER JOIN ComReclamo ON ComReclamo.Id = ComReclamoDetalle.ComReclamoId
+      WHERE ComReclamoDetalle.InvArticuloId = VenFacturaDetalle.InvArticuloId
+      AND(ComReclamo.FechaRegistro > '$FInicial' AND ComReclamo.FechaRegistro < '$FFinal')
+      GROUP BY ComReclamoDetalle.InvArticuloId
+      ),CAST(0 AS INT)))) AS TotalVecesCompradas,
+    --Total de Unidades Compradas (En Rango)
+      ((ISNULL((SELECT
+      (ROUND(CAST(SUM(ComFacturaDetalle.CantidadFacturada) AS DECIMAL(38,0)),2,0))
+      FROM ComFacturaDetalle
+      INNER JOIN ComFactura ON  ComFactura.Id = ComFacturaDetalle.ComFacturaId
+      WHERE ComFacturaDetalle.InvArticuloId = VenFacturaDetalle.InvArticuloId
+      AND(ComFactura.FechaRegistro > '$FInicial' AND ComFactura.FechaRegistro < '$FFinal')
+      GROUP BY ComFacturaDetalle.InvArticuloId
+      ),CAST(0 AS INT)))
+      -
+      (ISNULL((SELECT
+      (ROUND(CAST(SUM(ComReclamoDetalle.Cantidad) AS DECIMAL(38,0)),2,0))
+      FROM ComReclamoDetalle
+      INNER JOIN ComReclamo ON ComReclamo.Id = ComReclamoDetalle.ComReclamoId
+      WHERE ComReclamoDetalle.InvArticuloId = VenFacturaDetalle.InvArticuloId
+      AND(ComReclamo.FechaRegistro > '$FInicial' AND ComReclamo.FechaRegistro < '$FFinal')
+      GROUP BY ComReclamoDetalle.InvArticuloId
+      ),CAST(0 AS INT)))) AS TotalUnidadesCompradas,
+    -- SubTotal Venta (En Rango)
+      ISNULL((SELECT
+      (ROUND(CAST(SUM (VenVentaDetalle.PrecioBruto * VenVentaDetalle.Cantidad) AS DECIMAL(38,2)),2,0))
+      FROM VenVentaDetalle
+      INNER JOIN VenVenta ON VenVenta.Id = VenVentaDetalle.VenVentaId
+      WHERE (VenVenta.FechaDocumentoVenta > '$FInicial' AND VenVenta.FechaDocumentoVenta < '$FFinal')
+      AND VenVentaDetalle.InvArticuloId = VenFacturaDetalle.InvArticuloId),CAST(0 AS INT)) AS SubTotalVenta,
+    --SubTotal Devolucion (En Rango)
+      ISNULL((SELECT
+      (ROUND(CAST(SUM (VenDevolucionDetalle.PrecioBruto * VenDevolucionDetalle.Cantidad) AS DECIMAL(38,2)),2,0)) as SubTotalDevolucion
+      FROM VenDevolucionDetalle
+      INNER JOIN VenDevolucion ON VenDevolucion.Id = VenDevolucionDetalle.VenDevolucionId
+      WHERE (VenDevolucion.FechaDocumento > '$FInicial' AND VenDevolucion.FechaDocumento < '$FFinal')
+      AND VenDevolucionDetalle.InvArticuloId = VenFacturaDetalle.InvArticuloId),CAST(0 AS INT)) as SubTotalDevolucion,
+    --TotalVenta (En Rango)
+      ((ISNULL((SELECT
+      (ROUND(CAST(SUM (VenVentaDetalle.PrecioBruto * VenVentaDetalle.Cantidad) AS DECIMAL(38,2)),2,0))
+      FROM VenVentaDetalle
+      INNER JOIN VenVenta ON VenVenta.Id = VenVentaDetalle.VenVentaId
+      WHERE (VenVenta.FechaDocumentoVenta > '$FInicial' AND VenVenta.FechaDocumentoVenta < '$FFinal')
+      AND VenVentaDetalle.InvArticuloId = VenFacturaDetalle.InvArticuloId),CAST(0 AS INT)))
+      -
+      (ISNULL((SELECT
+      (ROUND(CAST(SUM (VenDevolucionDetalle.PrecioBruto * VenDevolucionDetalle.Cantidad) AS DECIMAL(38,2)),2,0)) as SubTotalDevolucion
+      FROM VenDevolucionDetalle
+      INNER JOIN VenDevolucion ON VenDevolucion.Id = VenDevolucionDetalle.VenDevolucionId
+      WHERE (VenDevolucion.FechaDocumento > '$FInicial' AND VenDevolucion.FechaDocumento < '$FFinal')
+      AND VenDevolucionDetalle.InvArticuloId = VenFacturaDetalle.InvArticuloId),CAST(0 AS INT)))) AS TotalVenta
+    --Tabla Principal
+      FROM VenFacturaDetalle
+    --Joins
+      INNER JOIN VenFactura ON VenFactura.Id = VenFacturaDetalle.VenFacturaId
+    --Condicionales
+      WHERE
+      (VenFactura.FechaDocumento > '$FInicial' AND VenFactura.FechaDocumento < '$FFinal')
+      AND VenFacturaDetalle.InvArticuloId = '$IdArticulo'
+    --Agrupamientos
+      GROUP BY VenFacturaDetalle.InvArticuloId
+    --Ordenamientos
+      ORDER BY UnidadesVendidas DESC
     ";
     return $sql;
   }
