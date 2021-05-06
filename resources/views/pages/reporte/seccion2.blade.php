@@ -86,22 +86,10 @@
   //CASO 4: CARGA AL HABER SELECCIONADO UNA DEVOLUCION
   //se pasa a la seleccion del articulo
     $InicioCarga = new DateTime("now");
-
-    /*
-    echo"Devolucion:<br>";
-    print_r($_GET['IdDevolucion']);
-    echo"<br><br>Articulos:<br>";
-    print_r($_GET['IdArticulos']);
-    echo"<br><br>Lotes:<br>";
-    print_r($_GET['IdLotes']);
-    echo"<br><br>Troqueles:<br>";
-    print_r($_GET['troquelesnuevos']);
-    */
-
-    SC2_Actualizar_Troquel($_GET['SEDE'],$_GET['IdDevolucion'],$_GET['IdArticulos'],$_GET['IdLotes'],$_GET['troquelesnuevos']);
-
-    //$registro = "Se actualizo el troquel del articulo: ".$_GET['Descripcion']." del troquel: ".$_GET['troquelanterior']." al troquel: ".$_GET['troquelactual']." por el motivo: ".$_GET['Motivo']; 
-    //FG_Guardar_Auditoria('ACTUALIZAR','TROQUEL CLIENTE',$registro);
+    
+    SC2_Actualizar_Troquel($_GET['SEDE'],$_GET['IdDevolucion'],$_GET['IdArticulos'],$_GET['IdLotes'],$_GET['troquelesnuevos'],$_GET['Modalidad'],$_GET['troquelesanteriores']);
+    
+    FG_Guardar_Auditoria('ACTUALIZAR','TROQUEL DEVOLUCION',$_GET['IdDevolucion']);
 
     $FinCarga = new DateTime("now");
     $IntervalCarga = $InicioCarga->diff($FinCarga);
@@ -327,7 +315,7 @@
     $result1 = sqlsrv_query($conn,$sql1);
 
     echo '    
-    <form class="form-group" autocomplete="off" action="">
+    <form class="form-group" autocomplete="off" action="" target="_blank">
     <table class="table table-striped table-bordered col-12 sortable form-group">
       <thead class="thead-dark">
         <tr>
@@ -386,6 +374,7 @@
               <input id="IdDevolucion" name="IdDevolucion" type="hidden" value="'.$IdDevolucion.'">
               <input id="IdArticulos" name="IdArticulos[]" type="hidden" value="'.$idArticulo.'">                               
               <input id="IdLotes" name="IdLotes[]" type="hidden" value="'.$row1["IdLote"].'">
+              <input id="troquelesanteriores" name="troquelesanteriores[]" type="hidden" value="'.$row1["PTroquel"].'">
           ';
         } 
         
@@ -396,9 +385,10 @@
       </tbody>
     </table>';
 
-      if($flagTroquelNuevo){
-        echo '<input type="submit" value="Troquelar" class="btn btn-success btn-md form-group" style="float:right">
-        </form>';
+      if($flagTroquelNuevo){        
+        echo '<input type="submit" name="Modalidad" value="Revertir" class="btn btn-danger btn-md form-group" style="float:right">';
+        echo '<input type="submit" name="Modalidad" value="Troquelar" class="btn btn-success btn-md form-group" style="float:right; margin-right:5px;">';        
+        echo '</form>';
       } 
   }
   /**********************************************************************************/
@@ -446,31 +436,51 @@
     TITULO: SC2_Actualizar_Troquel    
     DESAROLLADO POR: SERGIO COVA
   */
-  function SC2_Actualizar_Troquel($SedeConnection,$IdDevolucion,$Arr_Articulos,$Arr_Lotes,$Arra_Troqueles){
+  function SC2_Actualizar_Troquel($SedeConnection,$IdDevolucion,$Arr_Articulos,$Arr_Lotes,$Arra_Troqueles,$Modalidad,$Arra_Troqueles_Anteriores){
 
     $conn = FG_Conectar_Smartpharma($SedeConnection);
     
     $limit = count($Arr_Articulos);
+    $msn = "";
     
     for($i = 0 ; $i < $limit; $i++){
       $IdArticulo = $Arr_Articulos[$i];
       $IdLote = $Arr_Lotes[$i];
       $Troquel = $Arra_Troqueles[$i];
+      $TroquelAnterior = $Arra_Troqueles_Anteriores[$i];
 
-      if( (floatval($Troquel)>0) && ($Troquel!="NULL") && ($Troquel!="null") && ($Troquel!="") ){
-        $sqlTN = SC1Q_Actualizar_Troquel(true,$Troquel,$IdArticulo,$IdLote);
-        sqlsrv_query($conn,$sqlTN);
+      if($Modalidad == "Troquelar"){
+        if( (floatval($Troquel)>0) && ($Troquel!="NULL") && ($Troquel!="null") && ($Troquel!="") ){
+          $sqlTN = SC1Q_Actualizar_Troquel(true,$Troquel,$IdArticulo,$IdLote);          
+          sqlsrv_query($conn,$sqlTN);
+          $msn = '<h4 class="h5 text-success" align="center">Troqueles actualizados con exito</h4>';
+        }
       }
-
+      else if($Modalidad == "Revertir"){
+        if( (intval($TroquelAnterior)>0) ){
+          $sqlTN = SC1Q_Actualizar_Troquel_Nuleable(true,$TroquelAnterior,$IdArticulo,$IdLote);
+          sqlsrv_query($conn,$sqlTN);
+          $msn = '<h4 class="h5 text-success" align="center">Troqueles actualizados con exito</h4>';
+        }
+        else if( ($TroquelAnterior=="NULL") || ($TroquelAnterior=="null") || ($TroquelAnterior=="") ){
+          $sqlTN = SC1Q_Actualizar_Troquel_Nuleable(false,$TroquelAnterior,$IdArticulo,$IdLote);
+          sqlsrv_query($conn,$sqlTN);
+          $msn = '<h4 class="h5 text-warning" align="center">Troqueles actualizados a NULL</h4>';
+        }
+        else if( (intval($TroquelAnterior)<=0) ){
+          $sqlTN = SC1Q_Actualizar_Troquel_Nuleable(false,$TroquelAnterior,$IdArticulo,$IdLote);
+          sqlsrv_query($conn,$sqlTN);
+          $msn = '<h4 class="h5 text-danger" align="center">Verifique los datos ingresados</h4>';
+        }
+      }
     }
-    echo '<h4 class="h5 text-danger" align="center">Troqueles actualizados con exito</h4>';
+
+    echo($msn);
     SC2_Devolucion_detalle($SedeConnection,$IdDevolucion,false);
   }
   /**********************************************************************************/
   /*
-    TITULO: SC1Q_Actualizar_Fecha
-    FUNCION: Armar una lista de articulos con descripcion e id
-    RETORNO: Lista de articulos con descripcion e id
+    TITULO: SC1Q_Actualizar_Fecha  
     DESAROLLADO POR: SERGIO COVA
   */
   function SC1Q_Actualizar_Troquel($flag,$Troquel,$IdArticulo,$IdLote) {
@@ -488,6 +498,42 @@
       AND InvArticulo.id = '$IdArticulo'
       ";
     }    
+    return $sql;
+  }
+  /**********************************************************************************/
+  /*
+    TITULO: SC1Q_Actualizar_Troquel_Nuleable        
+    DESAROLLADO POR: SERGIO COVA
+  */
+  function SC1Q_Actualizar_Troquel_Nuleable($flag,$Troquel,$IdArticulo,$IdLote) {
+    
+    if($flag == true){
+      $sql = "
+      UPDATE InvLote 
+      SET M_PrecioTroquelado = '$Troquel'
+      FROM InvLote, invlotealmacen, InvArticulo 
+      WHERE InvLote.id = '$IdLote' 
+      AND  InvArticulo.id = InvLote.InvArticuloId 
+      AND invlote.id = invlotealmacen.InvLoteId 
+      AND InvLoteAlmacen.existencia > 0 
+      AND InvLoteAlmacen.InvAlmacenId = 1
+      AND InvArticulo.id = '$IdArticulo'
+      ";
+    }
+    else{
+      $sql = "
+      UPDATE InvLote 
+      SET M_PrecioTroquelado = NULL
+      FROM InvLote, invlotealmacen, InvArticulo 
+      WHERE InvLote.id = '$IdLote' 
+      AND  InvArticulo.id = InvLote.InvArticuloId 
+      AND invlote.id = invlotealmacen.InvLoteId 
+      AND InvLoteAlmacen.existencia > 0
+      AND InvLoteAlmacen.InvAlmacenId = 1
+      AND InvArticulo.id = '$IdArticulo'
+    ";
+    }
+
     return $sql;
   }
 ?>
