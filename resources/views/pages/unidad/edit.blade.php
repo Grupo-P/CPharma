@@ -87,6 +87,7 @@
                         <option>GRAMOS (G)</option>
                         <option>KILOGRAMOS (KG)</option>                        
                         <option>CAPSULA</option>
+                        <option>TABLETA</option>
                         <option>UNIDAD</option>
                     </select>
                 </td>

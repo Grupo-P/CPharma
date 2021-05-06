@@ -493,7 +493,7 @@
       WHERE InvLote.id = '$IdLote' 
       AND  InvArticulo.id = InvLote.InvArticuloId 
       AND invlote.id = invlotealmacen.InvLoteId 
-      AND InvLoteAlmacen.existencia >= 0
+      AND InvLoteAlmacen.existencia > 0
       AND InvLoteAlmacen.InvAlmacenId = 1
       AND InvArticulo.id = '$IdArticulo'
       ";
