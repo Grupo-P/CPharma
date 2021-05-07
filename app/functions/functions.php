@@ -85,7 +85,7 @@
 	}
 	/**********************************************************************************/
 	/*
-		TITULO: FG_Validar_Conectividad		
+		TITULO: FG_Validar_Conectividad
 		FUNCION: Valida la conexion con un servidor definido
 		RETORNO: Estatus de la conectividad
 		DESAROLLADO POR: SERGIO COVA
@@ -112,7 +112,7 @@
 		$NombreCliente = gethostname();
 		$IpCliente = gethostbyname($NombreCliente);
 		$Octeto = explode(".", $IpCliente);
-		
+
 		switch ($Octeto[2]) {
 		//INICIO BLOQUE DE FTN
 			case '1':
@@ -195,7 +195,7 @@
 				return $sede;
 			break;
 		//FIN BLOQUE DE FAU
-		//INICIO BLOQUE DE GRUPO P 
+		//INICIO BLOQUE DE GRUPO P
 			case 'GP':
 				$sede = SedeGP;
 				return $sede;
@@ -213,7 +213,7 @@
 				return $sede;
 			break;
 		//FIN BLOQUE DE GRUPO P
-		//INICIO BLOQUE DE TEST  
+		//INICIO BLOQUE DE TEST
 			case 'DBs':
 				$sede = SedeDBs;
 				return $sede;
@@ -324,7 +324,7 @@
 				$conn = sqlsrv_connect(serverFAU,$connectionInfo);
 				return $conn;
 			break;
-		//FIN BLOQUE DE FAU 
+		//FIN BLOQUE DE FAU
 		//INICIO BLOQUE DE GRUPO P
 			case 'GP':
 				$connectionInfo = array(
@@ -362,8 +362,8 @@
 				$conn = sqlsrv_connect(serverGP,$connectionInfo);
 				return $conn;
 			break;
-		//FIN BLOQUE DE GRUPO P 
-		//INICIO BLOQUE DE TEST 
+		//FIN BLOQUE DE GRUPO P
+		//INICIO BLOQUE DE TEST
 			case 'DBs':
 				$connectionInfo = array(
 					"Database"=>nameDBs,
@@ -501,7 +501,7 @@
 				$conn = sqlsrv_connect(serverFAU,$connectionInfo);
 				return $conn;
 			break;
-		//FIN BLOQUE DE FAU 
+		//FIN BLOQUE DE FAU
 		//INICIO BLOQUE DE GRUPO P
 			case 'GP':
 				$connectionInfo = array(
@@ -539,8 +539,8 @@
 				$conn = sqlsrv_connect(serverGP,$connectionInfo);
 				return $conn;
 			break;
-		//FIN BLOQUE DE GRUPO P 
-		//INICIO BLOQUE DE TEST 
+		//FIN BLOQUE DE GRUPO P
+		//INICIO BLOQUE DE TEST
 			case 'DBs':
 				$connectionInfo = array(
 					"Database"=>"Mod_Atte_Cliente",
@@ -580,7 +580,7 @@
 		ACTUALIZADO POR:  MANUEL HENRIQUEZ 07/10/2019
 	 */
 	function FG_Limpiar_Texto($texto) {
-		$texto = utf8_encode($texto);	
+		$texto = utf8_encode($texto);
 		$texto = preg_replace("/[^A-Za-z0-9_\-\&\ñ\Ñ\'\(\)\.\,\s][á|é|í|ó|ú|Á|É|Í|Ó|Ú]/",'',$texto);
 		return $texto;
 	}
@@ -623,7 +623,7 @@
 		RETORNO: Retorna si el producto es miscelaneo o medicina
 		DESARROLLADO POR: SERGIO COVA
  	*/
-	function FG_Tipo_Producto($TipoArticulo) { 
+	function FG_Tipo_Producto($TipoArticulo) {
 		if($TipoArticulo == 0) {
 			$Tipo = 'MISCELANEO';
 		}
@@ -635,11 +635,11 @@
 	/**********************************************************************************/
 	/*
 		TITULO: FG_Producto_Dolarizado
-		FUNCION: Determina si el producto esta dolarizado 
+		FUNCION: Determina si el producto esta dolarizado
 		RETORNO: Retorna si el producto esta dolarizado o no
 		DESARROLLADO POR: SERGIO COVA
  	*/
-	function FG_Producto_Dolarizado($IsDolarizado) { 
+	function FG_Producto_Dolarizado($IsDolarizado) {
 		if($IsDolarizado == 0) {
 			$EsDolarizado = 'NO';
 		}
@@ -771,7 +771,7 @@
 	/*
 		TITULO: FG_Validar_Fechas
 		FUNCION: Calcula la diferencia entre ambas fechas restando la primera a la segunda
-		RETORNO: 
+		RETORNO:
 			- Un numero positivo en caso de que la segunda fecha sea mayor
 			- Un numero negativo en caso de que la segunda fecha sea menor
 			- Cero en caso de que ambas fechas sean iguales
@@ -796,11 +796,11 @@
     $conn = FG_Conectar_Smartpharma($SedeConnection);
     $connCPharma = FG_Conectar_CPharma();
     //TODO: En caso de falla comentar aqui
-    $array_result = array();    
+    $array_result = array();
 
     $sql = SQL_Articulos_Ajuste($IdAjuste);
     $result = sqlsrv_query($conn,$sql);
-  
+
     while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
       $IdArticulo = $row["InvArticuloId"];
       $Cantidad = $row["Cantidad"];
@@ -855,13 +855,13 @@
 
 		    $UtilidadSE = FG_Utilidad_Alfa($UtilidadArticuloSE,$UtilidadCategoriaSE);
 
-      	if($Dolarizado=='SI') { 
+      	if($Dolarizado=='SI') {
 
       		//TODO: En caso de falla comentar aqui
       		$array_result = FG_costo_mayor($IdArticulo,$IdLote,$CondicionExistenciaSE);
 	      		if($array_result['fallas']!=""){
-	      			echo 'Se presento una o varias fallas, a continuacion se presentan en detalle: <br>'.$array_result['fallas'];	      				      			
-	      			$costo_unit_usd_sin_iva = round(0.01,2);			
+	      			echo 'Se presento una o varias fallas, a continuacion se presentan en detalle: <br>'.$array_result['fallas'];
+	      			$costo_unit_usd_sin_iva = round(0.01,2);
 	      		}
 	      		else{
 	      			$costo_unit_usd_sin_iva = round($array_result['costo_D'],2);
@@ -892,7 +892,7 @@
 	          $total_imp_bs = round((($costo_unit_bs_sin_iva*$Cantidad)*(Impuesto-1)),2);
 	        }
 	        else if($Gravado== 'NO' && $UtilidadSE!= 1){
-	          $total_imp_bs = 0.00; 
+	          $total_imp_bs = 0.00;
 	        }
 	        $total_bs = round((($costo_unit_bs_sin_iva*$Cantidad)+$total_imp_bs),2);
 	        $costo_unit_usd_sin_iva = '-';
@@ -936,8 +936,8 @@
 	      		$array_result_normal = FG_costo_mayor($IdArticulo,$IdLote,$CondicionExistencia);
 
 	      		if($array_result['fallas']!=""||$array_result_normal['fallas']!=""){
-	      			echo 'Se presento una o varias fallas, a continuacion se presentan en detalle: <br>'.$array_result['fallas'];	      				      			
-	      			$costo_unit_usd_sin_iva = round(0.01,2);			
+	      			echo 'Se presento una o varias fallas, a continuacion se presentan en detalle: <br>'.$array_result['fallas'];
+	      			$costo_unit_usd_sin_iva = round(0.01,2);
 	      		}
 	      		else{
 	      			$costo_unit_usd_sin_iva = round($array_result['costo_D'],2);
@@ -976,7 +976,7 @@
 		          $total_imp_bs = round((($costo_unit_bs_sin_iva*$Cantidad)*(Impuesto-1)),2);
 		        }
 		        else if($Gravado== 'NO' && $UtilidadSE!= 1){
-		          $total_imp_bs = 0.00; 
+		          $total_imp_bs = 0.00;
 		        }
 		        $total_bs = round((($costo_unit_bs_sin_iva*$Cantidad)+$total_imp_bs),2);
 		        $costo_unit_usd_sin_iva = '-';
@@ -992,12 +992,12 @@
 	      else{
 
 	      	if($Dolarizado=='SI') {
-	      	
+
 	      		//TODO: En caso de falla comentar aqui
 	      		$array_result = FG_costo_mayor($IdArticulo,$IdLote,$CondicionExistencia);
 	      		if($array_result['fallas']!=""){
-	      			echo 'Se presento una o varias fallas, a continuacion se presentan en detalle: <br>'.$array_result['fallas'];	      				      			
-	      			$costo_unit_usd_sin_iva = round(0.01,2);			
+	      			echo 'Se presento una o varias fallas, a continuacion se presentan en detalle: <br>'.$array_result['fallas'];
+	      			$costo_unit_usd_sin_iva = round(0.01,2);
 	      		}
 	      		else{
 	      			$costo_unit_usd_sin_iva = round($array_result['costo_D'],2);
@@ -1044,7 +1044,7 @@
 	    }
     }
     sqlsrv_close($conn);
-    mysqli_close($connCPharma);    
+    mysqli_close($connCPharma);
 	}
 	/**********************************************************************************/
 	/*
@@ -1054,7 +1054,7 @@
 		DESARROLLADO POR: SERGIO COVA
 	 */
 	function FG_Calculo_Precio_Alfa($Existencia,$ExistenciaAlmacen1,$ExistenciaAlmacen2,$IsTroquelado,$UtilidadArticulo,$UtilidadCategoria,$TroquelAlmacen1,$PrecioCompraBrutoAlmacen1,$TroquelAlmacen2,
-		$PrecioCompraBrutoAlmacen2,$PrecioCompraBruto,$IsIVA,$CondicionExistencia) {		
+		$PrecioCompraBrutoAlmacen2,$PrecioCompraBruto,$IsIVA,$CondicionExistencia) {
 		$FlagPrecio = FALSE;
 
 		if( ($Existencia==0) && ($CondicionExistencia=='CON_EXISTENCIA') ) {
@@ -1092,7 +1092,7 @@
 				}else{
 					$Precio = max($PrecioCalculado,$TroquelAlmacen1,$TroquelAlmacen2);
 				}
-	
+
 			}
 		}
 		else if(($Existencia==0) && ($CondicionExistencia=='SIN_EXISTENCIA')) {
@@ -1402,7 +1402,7 @@
 			break;
 			case 32:
 				$nombre = 'Seguimiento de Tienda';
-			break;			
+			break;
 			case 99:
 				$nombre = 'Registro de Fallas';
 			break;
@@ -1543,11 +1543,11 @@
       $CondicionExistencia = 'CON_EXISTENCIA';
 
      	$Precio = FG_Calculo_Precio_Alfa($Existencia,$ExistenciaAlmacen1,$ExistenciaAlmacen2,$IsTroquelado,$UtilidadArticulo,$UtilidadCategoria,$TroquelAlmacen1,$PrecioCompraBrutoAlmacen1,$TroquelAlmacen2,$PrecioCompraBrutoAlmacen2,$PrecioCompraBruto,$IsIVA,$CondicionExistencia);
-     
+
      	$PrecioDolar = $Precio/$TasaActual;
-     	
+
 			$date = date('Y-m-d h:i:s',time());
-			
+
 			$sqlCPharma = MySQL_Guardar_Dias_EnCero($IdArticulo,$CodigoInterno,$Descripcion,$Existencia,$Precio,$FechaCaptura,$user,$date,$PrecioDolar);
 			mysqli_query($connCPharma,$sqlCPharma);
 		}
@@ -1572,7 +1572,7 @@
 	}
 	/**********************************************************************************/
 	/*
-		TITULO: FG_Guardar_Captura_Diaria		
+		TITULO: FG_Guardar_Captura_Diaria
 		FUNCION: crea una conexion con la base de datos cpharma e ingresa datos
 		DESARROLLADO POR: SERGIO COVA
 	 */
@@ -1620,7 +1620,7 @@
 		sqlsrv_query($conn,$sql);
 		$sql = SQL_Clean_Table('CP_QG_Unidades_Reclamadas');
 		sqlsrv_query($conn,$sql);
-		
+
 		$sql1 = SQL_ArtVendidos_ProductoCaida($FInicial,$FFinal);
 		sqlsrv_query($conn,$sql1);
 		$sql1 = SQL_ArtDevueltos_ProductoCaida($FInicial,$FFinal);
@@ -1670,7 +1670,7 @@
     	$UnidadesVendidas = $row["UnidadesVendidas"];
     	$VentaDiaria = FG_Venta_Diaria($UnidadesVendidas,$RangoDias);
     	$DiasRestantes = FG_Dias_Restantes($Existencia,$VentaDiaria);
-			/* FILTRO 2: 
+			/* FILTRO 2:
 			*	Dias restantes
 			*	si dias restantes es menor de 10 entra en el rango sino es rechazado
 			*/
@@ -1678,25 +1678,25 @@
 				/* FILTRO 3:
 				*	Mantuvo Existencia en rango
 				*	se cuenta las apariciones del articulo en la tabla de dias
-				*	en cero, la misma debe ser igual la diferencia de dias +1 
+				*	en cero, la misma debe ser igual la diferencia de dias +1
 				*/
 				$CuentaExistencia = FG_Cuenta_Existencia($connCPharma,$IdArticulo,$FInicial,$FFinal);
-				
+
 				if($CuentaExistencia==$RangoDias){
-					/*  FILTRO 4: 
-					*	Venta en dia, esta se acumula 
-					*	El articulo debe tener venta al menos la mita de dias del rango 
+					/*  FILTRO 4:
+					*	Venta en dia, esta se acumula
+					*	El articulo debe tener venta al menos la mita de dias del rango
 					*/
 					$CuentaVenta = FG_Cuenta_Venta($conn,$IdArticulo,$FInicial,$FFinal);
 
-					if($CuentaVenta>=($RangoDias/2)){	
+					if($CuentaVenta>=($RangoDias/2)){
 
 						$ExistenciaDecreciente = FG_Existencia_Decreciente($connCPharma,$IdArticulo,$FInicial,$FFinal,$RangoDias);
 
 						$CuentaDecreciente = array_pop($ExistenciaDecreciente);
 
-						/*  FILTRO 5: 
-						*	Si el articulo decrece su existencia rango 
+						/*  FILTRO 5:
+						*	Si el articulo decrece su existencia rango
 						*/
 						if($CuentaDecreciente==TRUE){
 
@@ -1716,13 +1716,13 @@
 							$sqlCPharma = MySQL_Guardar_Productos_Caida($IdArticulo,$CodigoArticulo,$Descripcion,$Precio,$Existencia,$Dia10,$Dia9,$Dia8,$Dia7,$Dia6,$Dia5,$Dia4,$Dia3,$Dia2,$Dia1,$UnidadesVendidas,$DiasRestantes,$FechaCaptura,$user,$date,$date);
 
 							mysqli_query($connCPharma,$sqlCPharma);
-						}						
-					}	
+						}
+					}
 				}
 			}
 		}
 		FG_Guardar_Captura_Caida($connCPharma,$FechaCaptura,$date);
-		
+
 		$sqlCC = MySQL_Validar_Captura_Caida($FechaCaptura);
 		$resultCC = mysqli_query($connCPharma,$sqlCC);
 		$rowCC = mysqli_fetch_assoc($resultCC);
@@ -1756,7 +1756,7 @@
 		DESARROLLADO POR: SERGIO COVA
  	*/
 	function FG_Cuenta_Venta($conn,$IdArticulo,$FInicial,$FFinal) {
-		
+
 		$FFinalPivote = date("Y-m-d",strtotime($FInicial."+1 days"));
 		$FFinal = date("Y-m-d",strtotime($FFinal."+1 days"));
 		$CuentaVenta = 0;
@@ -1783,7 +1783,7 @@
 		DESARROLLADO POR: SERGIO COVA
  	*/
 	function FG_Existencia_Decreciente($connCPharma,$IdArticulo,$FInicial,$FFinal,$RangoDias) {
-		
+
 		$PrimerCiclo = TRUE;
 		$ExistenciaAyer = 0;
 		$CuentaDecreciente = TRUE;
@@ -1858,12 +1858,12 @@
 	    $FechaCaptura = new DateTime("now");
 		$FechaCaptura = $FechaCaptura->format('Y-m-d');
 		$date = '';
-	    
+
 	    while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
 	        $IdArticulo = $row["IdArticulo"];
 	        $CodigoInterno = $row["CodigoInterno"];
 	        $Descripcion=$row["Descripcion"];
-	 
+
 	        $sqlCPharma = SQL_Etiqueta_Articulo($IdArticulo);
 	        $ResultCPharma = mysqli_query($connCPharma,$sqlCPharma);
 	        $RowCPharma = mysqli_fetch_assoc($ResultCPharma);
@@ -1890,7 +1890,7 @@
 
 		if($CuentaCaptura == 0){
 			$sqlB = MySQL_Borrar_Captura_Etiqueta($FechaCaptura);
-			mysqli_query($connCPharma,$sqlB);			
+			mysqli_query($connCPharma,$sqlB);
 			mysqli_close($connCPharma);
 			sqlsrv_close($conn);
 			FG_Validar_Etiquetas();
@@ -1950,7 +1950,7 @@
 
 		if(intval($Existencia)>0){
 
-			$PrecioHoy = FG_Calculo_Precio_Alfa($Existencia,$ExistenciaAlmacen1,$ExistenciaAlmacen2,$IsTroquelado,$UtilidadArticulo,$UtilidadCategoria,$TroquelAlmacen1,$PrecioCompraBrutoAlmacen1,$TroquelAlmacen2,$PrecioCompraBrutoAlmacen2,$PrecioCompraBruto,$IsIVA,$CondicionExistencia);	
+			$PrecioHoy = FG_Calculo_Precio_Alfa($Existencia,$ExistenciaAlmacen1,$ExistenciaAlmacen2,$IsTroquelado,$UtilidadArticulo,$UtilidadCategoria,$TroquelAlmacen1,$PrecioCompraBrutoAlmacen1,$TroquelAlmacen2,$PrecioCompraBrutoAlmacen2,$PrecioCompraBruto,$IsIVA,$CondicionExistencia);
 
 			if($IsPrecioAyer==true){
 
@@ -1958,12 +1958,12 @@
 				$resultCC = mysqli_query($connCPharma,$sqlCC);
 				$rowCC = mysqli_fetch_assoc($resultCC);
 				$PrecioAyer = $rowCC["precio"];
-				
+
 				if($Dolarizado=='SI' && _EtiquetaDolar_=='SI'){
 					$precioPartes = explode(".",$PrecioHoy);
 					//$TasaActual = FG_Tasa_Fecha_Venta($connCPharma,date('Y-m-d'));
 					$PrecioHoy = $PrecioHoy/$TasaActual;
-					
+
 					$sqlCC = MySQL_DiasCero_PrecioAyer_Dolar($IdArticulo,$FechaCambio);
 					$resultCC = mysqli_query($connCPharma,$sqlCC);
 					$rowCC = mysqli_fetch_assoc($resultCC);
@@ -1974,9 +1974,9 @@
 
 					if($Dolarizado=='SI'){
 						$simbolo = '*';
-						$moneda = SigDolar;						
+						$moneda = SigDolar;
 
-						if(_MensajeDolar_== 'SI' && _EtiquetaDolar_=='SI'){						
+						if(_MensajeDolar_== 'SI' && _EtiquetaDolar_=='SI'){
 							$mensajePie = '
 								<tr>
 									<td class="centrado titulo rowCenter" colspan="2">
@@ -1990,19 +1990,19 @@
 						}
 
 						if(isset($precioPartes) && count($precioPartes)>=2){
-							if(_EtiquetaDolar_=='SI'){	
-								$tam_dolar = "font-size:1.7rem;";						
+							if(_EtiquetaDolar_=='SI'){
+								$tam_dolar = "font-size:1.7rem;";
 								if($precioPartes[1]==DecimalEtiqueta){
-									$flag_imprime = true;				
+									$flag_imprime = true;
 								}
 								else{
-									$flag_imprime = false;								
-								}						
+									$flag_imprime = false;
+								}
 							}else if(_EtiquetaDolar_=='NO'){
 								$flag_imprime = true;
 								$moneda = SigVe;
 							}
-						}else{							
+						}else{
 							echo'
 							<table class="etq" style="display: inline;">
 								<thead class="etq">
@@ -2010,12 +2010,12 @@
 										<td class="centrado titulo rowCenter" colspan="2">
 											Código: '.$CodigoBarra.'
 										</td>
-									</tr>	
+									</tr>
 								</thead>
 								<tbody class="etq">
 									<tr rowspan="2">
 										<td class="centrado descripcion aumento rowCenter" colspan="2">
-											<strong>'.$Descripcion.'</strong> 
+											<strong>'.$Descripcion.'</strong>
 										</td>
 									</tr>
 									<tr>
@@ -2024,11 +2024,11 @@
 											Solicite ayuda al dpto. de procesamiento (Sin Decimal)
 											</strong>
 										</td>
-									</tr>										
+									</tr>
 								</tbody>
 							</table>
 							';
-						}												
+						}
 					}
 					else{
 						$simbolo = '';
@@ -2057,7 +2057,7 @@
 						} else {
 							$unidadMinima = '';
 						}
-					
+
 						echo'
 							<table>
 								<thead>
@@ -2065,7 +2065,7 @@
 										<td class="centrado titulo rowCenter" colspan="2">
 											Código: '.$CodigoBarra.'
 										</td>
-									</tr>	
+									</tr>
 								</thead>
 								<tbody>
 									<tr rowspan="2">
@@ -2110,8 +2110,8 @@
 										<td class="derecha rowDer rowDerA">
 											<strong>'.$simbolo.'</strong> '.date("d-m-Y").'
 										</td>
-									</tr>	
-									'.$mensajePie.'			
+									</tr>
+									'.$mensajePie.'
 								</tbody>
 							</table>
 						';
@@ -2126,7 +2126,7 @@
 										<td class="centrado titulo rowCenter" colspan="2">
 											Código: '.$CodigoBarra.'
 										</td>
-									</tr>	
+									</tr>
 								</thead>
 								<tbody class="etq">
 									<tr rowspan="2">
@@ -2140,7 +2140,7 @@
 											Solicite ayuda al dpto. de procesamiento (Decimal Diff. 01)
 											</strong>
 										</td>
-									</tr>										
+									</tr>
 								</tbody>
 							</table>
 						';
@@ -2167,17 +2167,17 @@
 							$mensajePie = "";
 						}
 
-						if(_EtiquetaDolar_=='SI'){				
+						if(_EtiquetaDolar_=='SI'){
 							$precioPartes = explode(".",$PrecioHoy);
 							//$TasaActual = FG_Tasa_Fecha_Venta($connCPharma,date('Y-m-d'));
-							$PrecioHoy = $PrecioHoy/$TasaActual;						
-																				
+							$PrecioHoy = $PrecioHoy/$TasaActual;
+
 							if(isset($precioPartes) && count($precioPartes)>=2){
 								if($precioPartes[1]==DecimalEtiqueta){
-									$flag_imprime = true;				
+									$flag_imprime = true;
 								}
 								else{
-									$flag_imprime = false;								
+									$flag_imprime = false;
 								}
 							}else{
 								echo'
@@ -2187,12 +2187,12 @@
 											<td class="centrado titulo rowCenter" colspan="2">
 												Código: '.$CodigoBarra.'
 											</td>
-										</tr>	
+										</tr>
 									</thead>
 									<tbody class="etq">
 										<tr rowspan="2">
 											<td class="centrado descripcion aumento rowCenter" colspan="2">
-												<strong>'.$Descripcion.'</strong> 
+												<strong>'.$Descripcion.'</strong>
 											</td>
 										</tr>
 										<tr>
@@ -2201,24 +2201,24 @@
 												Solicite ayuda al dpto. de procesamiento (Sin Decimal)
 												</strong>
 											</td>
-										</tr>										
+										</tr>
 									</tbody>
 								</table>
-								';								
+								';
 							}
 
 						}else if(_EtiquetaDolar_=='NO'){
 							$flag_imprime = true;
 							$moneda = SigVe;
-						}												
-							
+						}
+
 					}
 					else{
 						$simbolo = '';
 						$moneda = SigVe;
 						$flag_imprime = true;
 					}
-					
+
 					if($flag_imprime == true){
 
 					$connCPharma = FG_Conectar_CPharma();
@@ -2239,7 +2239,7 @@
 					} else {
 						$unidadMinima = '';
 					}
-				
+
 					echo'
 						<table>
 							<thead>
@@ -2247,12 +2247,12 @@
 									<td class="centrado titulo rowCenter" colspan="2">
 										Código: '.$CodigoBarra.'
 									</td>
-								</tr>	
+								</tr>
 							</thead>
 							<tbody>
 								<tr rowspan="2">
 									<td class="centrado descripcion aumento rowCenter" colspan="2">
-										<strong>'.$Descripcion.'</strong> 
+										<strong>'.$Descripcion.'</strong>
 									</td>
 								</tr>
 								<tr>
@@ -2274,8 +2274,8 @@
 									<td class="derecha rowDer rowDerA">
 										<strong>'.$simbolo.'</strong> '.date("d-m-Y").'
 									</td>
-								</tr>		
-								'.$mensajePie.'		
+								</tr>
+								'.$mensajePie.'
 							</tbody>
 						</table>
 					';
@@ -2289,12 +2289,12 @@
 									<td class="centrado titulo rowCenter" colspan="2">
 										Código: '.$CodigoBarra.'
 									</td>
-								</tr>	
+								</tr>
 							</thead>
 							<tbody class="etq">
 								<tr rowspan="2">
 									<td class="centrado descripcion aumento rowCenter" colspan="2">
-										<strong>'.$Descripcion.'</strong> 
+										<strong>'.$Descripcion.'</strong>
 									</td>
 								</tr>
 								<tr>
@@ -2303,12 +2303,12 @@
 										Solicite ayuda al dpto. de procesamiento (Decimal Diff. 01)
 										</strong>
 									</td>
-								</tr>										
+								</tr>
 							</tbody>
 						</table>
 					';
 				}
-			}	
+			}
 		}
 		return $flag;
  	}
@@ -2321,9 +2321,9 @@
 	function FG_Generer_Etiquetas_Todo($clasificacion,$tipo) {
 		$SedeConnection = FG_Mi_Ubicacion();
   	$conn = FG_Conectar_Smartpharma($SedeConnection);
-  	$connCPharma = FG_Conectar_CPharma();	
+  	$connCPharma = FG_Conectar_CPharma();
 		$CuentaCard = 0;
-		$CuentaEtiqueta = 0;		
+		$CuentaEtiqueta = 0;
 		$TasaActual = FG_Tasa_Fecha_Venta($connCPharma,date('Y-m-d'));
 
 		$result = $connCPharma->query("SELECT id_articulo FROM etiquetas WHERE clasificacion = '$clasificacion'");
@@ -2338,7 +2338,7 @@
 				$flag = FG_Etiquetas($conn,$connCPharma,$IdArticulo,$Dolarizado,false,false,$TasaActual);
 				if($flag==true){
 					$CuentaCard++;
-					$CuentaEtiqueta++;							
+					$CuentaEtiqueta++;
 				}
 			}
 			else if(($Dolarizado=='NO')&&($tipo!='DOLARIZADO')){
@@ -2354,7 +2354,7 @@
 					$CuentaCard++;
 					$CuentaEtiqueta++;
 				}
-			}			
+			}
 
 			if($CuentaCard == 3){
 				echo'<br>';
@@ -2379,10 +2379,10 @@
   	$CuentaCard = 0;
 		$CuentaEtiqueta = 0;
 		$TasaActual = FG_Tasa_Fecha_Venta($connCPharma,date('Y-m-d'));
-		
+
   	$FHoy = date("Y-m-d");
 		$FManana = date("Y-m-d",strtotime($FHoy."+1 days"));
-		$FAyer = date("Y-m-d",strtotime($FHoy."-1 days"));		
+		$FAyer = date("Y-m-d",strtotime($FHoy."-1 days"));
 
 		if($dia=='HOY'){
 			$arraySugeridos = FG_Obtener_Casos_Etiqueta($conn,$FHoy,$FManana);
@@ -2399,18 +2399,18 @@
 		$row1= $result1->fetch_assoc();
 		$CuentaCPharma = $row1['Cuenta'];
 		$CuentaSmart = count($ArrayUnique);
-		
+
 		/*Caso 1
 			El tamano de cambios en el smart es MENOR
 			al total de elementos en la clasificacion solicitada
 		*/
-	
+
 		if($CuentaCPharma>$CuentaSmart){
-			
+
 			foreach ($ArrayUnique as $Array) {
 		    $IdArticulo = $Array['IdArticulo'];
 		    $Dolarizado = FG_Producto_Dolarizado($Array['Dolarizado']);
-		   
+
 		    $result1 = $connCPharma->query("SELECT COUNT(*) AS Cuenta FROM etiquetas WHERE id_articulo = '$IdArticulo' AND clasificacion = '$clasificacion'");
 				$row1= $result1->fetch_assoc();
 				$Cuenta = $row1['Cuenta'];
@@ -2450,17 +2450,17 @@
 			El tamano de cambios en el smart es MAYOR
 			al total de elementos en la clasificacion solicitada
 		*/
-	
+
 		else if($CuentaCPharma<$CuentaSmart){
 			$result = $connCPharma->query("SELECT * FROM etiquetas WHERE clasificacion = '$clasificacion'");
-			
+
 			while($row = $result->fetch_assoc()){
 				$IdArticulo = $row['id_articulo'];
 
 				foreach ($ArrayUnique as $Array) {
 					if (in_array($IdArticulo,$Array)) {
 			    	$Dolarizado = FG_Producto_Dolarizado($Array['Dolarizado']);
-			    	
+
 			    	if(($Dolarizado=='SI')&&($tipo=='DOLARIZADO')){
 							$flag = FG_Etiquetas($conn,$connCPharma,$IdArticulo,$Dolarizado,true,$FechaCambio,$TasaActual);
 							if($flag==true){
@@ -2487,7 +2487,7 @@
 							echo'<br>';
 							$CuentaCard = 0;
 						}
-					}	
+					}
 				}
 			}
 		}
@@ -2523,10 +2523,10 @@
 	    $arrayIteracion["Dolarizado"]=$row['Dolarizado'];
 	    $arraySugeridos[]=$arrayIteracion;
 	  }
-	 	/*Obtener datos del caso 3*/	 
+	 	/*Obtener datos del caso 3*/
 		$arrayIteracion = array();
 		$sql = SQL_CP_Etiqueta_C3($FechaI,$FechaF);
-		$result = sqlsrv_query($conn,$sql);		
+		$result = sqlsrv_query($conn,$sql);
 		while( $row = sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC) ){
 			$arrayIteracion["IdArticulo"]=$row['IdArticulo'];
 	    $arrayIteracion["Dolarizado"]=$row['Dolarizado'];
@@ -2537,14 +2537,14 @@
 	  	/*Obtener datos del caso 4*/
 			$arrayIteracion = array();
 			$sql = SQL_CP_Etiqueta_C4($FechaI,$FechaF);
-			$result = sqlsrv_query($conn,$sql);		
+			$result = sqlsrv_query($conn,$sql);
 			while( $row = sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC) ){
 				$arrayIteracion["IdArticulo"]=$row['IdArticulo'];
 		    $arrayIteracion["Dolarizado"]=$row['Dolarizado'];
 		    $arraySugeridos[]=$arrayIteracion;
 		  }
 	  }
-	 	
+
 		return $arraySugeridos;
 	}
 	/**********************************************************************************/
@@ -2599,7 +2599,7 @@
     echo'
     <table class="table table-striped table-bordered col-12 sortable" id="myTable">
       <thead class="thead-dark">
-        <tr>  
+        <tr>
           <th scope="col" class="CP-sticky">#</th>
           <th scope="col" class="CP-sticky">Codigo Interno</th>
           <th scope="col" class="CP-sticky">Descripcion</th>
@@ -2612,13 +2612,13 @@
       echo'<th scope="col" class="CP-sticky">'.$Dia.' '.$FImpresion.'</th>';
       $FInicialEn = date("Y-m-d",strtotime($FInicialEn."+1 days"));
     }
-         
+
     echo'
-          <th scope="col" class="CP-sticky">Ventas Hoy</th> 
-          <th scope="col" class="CP-sticky">Ventas Totales</th> 
-          <th scope="col" class="CP-sticky">Dias en Quiebre</th> 
+          <th scope="col" class="CP-sticky">Ventas Hoy</th>
+          <th scope="col" class="CP-sticky">Ventas Totales</th>
+          <th scope="col" class="CP-sticky">Dias en Quiebre</th>
           <th scope="col" class="CP-sticky">Dias Restantes</th>
-          <th scope="col" class="CP-sticky">Cantidad a Pedir</th>          
+          <th scope="col" class="CP-sticky">Cantidad a Pedir</th>
         </tr>
       </thead>
       <tbody>
@@ -2652,7 +2652,7 @@
       echo '<tr>';
       echo '<td align="center"><strong>'.intval($contador).'</strong></td>';
       echo '<td align="left">'.$row['CodigoInterno'].'</td>';
-      echo 
+      echo
       '<td align="left" class="CP-barrido">
       <a href="/reporte2?Id='.$IdArticulo.'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
         .$Descripcion.
@@ -2782,7 +2782,7 @@
     $temp_array = array();
     $i = 0;
     $key_array = array();
-   
+
     foreach($array as $val) {
         if (!in_array($val[$key], $key_array)) {
             $key_array[$i] = $val[$key];
@@ -2832,7 +2832,7 @@
 		$componentes = '';
 		$sql = SQL_Componente_Articulo($IdArticulo);
     	$result = sqlsrv_query($conn,$sql);
-    	
+
     	while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
     		$IdComponentes = $row['InvComponenteId'];
 
@@ -2854,7 +2854,7 @@
 		$aplicacion = '';
 		$sql = SQL_Aplicacion_Articulo($IdArticulo);
     	$result = sqlsrv_query($conn,$sql);
-    	
+
     	while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
     		$IdAplicacion = $row['InvUsoId'];
 
@@ -2882,14 +2882,14 @@
 	    $FechaCaptura = new DateTime("now");
 			$FechaCaptura = $FechaCaptura->format('Y-m-d');
 			$date = '';
-	    
+
 	    while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
 	        $IdArticulo = $row["IdArticulo"];
 	        $CodigoInterno = $row["CodigoInterno"];
 	        $CodigoBarra = $row["CodigoBarra"];
-	        $Descripcion = $row["Descripcion"];	       
+	        $Descripcion = $row["Descripcion"];
 	        $Marca = $row["Marca"];
-	 
+
 	        $sqlCPharma = SQL_Categoria_Articulo($IdArticulo);
 	        $ResultCPharma = mysqli_query($connCPharma,$sqlCPharma);
 	        $RowCPharma = mysqli_fetch_assoc($ResultCPharma);
@@ -2916,7 +2916,7 @@
 
 		if($CuentaCaptura == 0){
 			$sqlB = MySQL_Borrar_Captura_Categoria($FechaCaptura);
-			mysqli_query($connCPharma,$sqlB);			
+			mysqli_query($connCPharma,$sqlB);
 			mysqli_close($connCPharma);
 			sqlsrv_close($conn);
 			FG_Validar_Categorias();
@@ -2948,7 +2948,7 @@
 		DESARROLLADO POR: SERGIO COVA
  	*/
  	function FG_Corrida_Precio($tipoCorrida,$tasaCalculo,$user){
- 		 		
+
  		$SedeConnection = FG_Mi_Ubicacion();
     $conn = FG_Conectar_Smartpharma($SedeConnection);
     $connCPharma = FG_Conectar_CPharma();
@@ -2959,7 +2959,7 @@
     $cont_exito = $cont_falla = $cont_cambios = $cont_noCambio = 0;
 
     $fallas = "";
-    
+
     while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
       $IdArticulo = $row["IdArticulo"];
       $CodigoInterno = $row["CodigoInterno"];
@@ -2978,46 +2978,46 @@
 	    $PrecioCompraBrutoAlmacen2 = $row["PrecioCompraBrutoAlmacen2"];
 	    $PrecioCompraBruto = $row["PrecioCompraBruto"];
 	    $CondicionExistencia = 'CON_EXISTENCIA';
-	         
+
 	    $sql1 = sql_lotes_corrida($IdArticulo);
 	    $result1 = sqlsrv_query($conn,$sql1);
-	    
+
 	   $CostoMayorD = 0;
 	   $fechaActualizacion = date('Y-m-d 07:07:07.0000007');
 
-	    while($row1 = sqlsrv_fetch_array($result1, SQLSRV_FETCH_ASSOC)) { 
-	    
+	    while($row1 = sqlsrv_fetch_array($result1, SQLSRV_FETCH_ASSOC)) {
+
 	    	$TasaMercado = FG_Tasa_Fecha($connCPharma,$row1["Auditoria_FechaCreacion"]->format('Y-m-d'));
 
 	    	if($TasaMercado!=0){
-	    	
-		    	$CostoDolar = ($row1["M_PrecioCompraBruto"]/$TasaMercado);		    	
+
+		    	$CostoDolar = ($row1["M_PrecioCompraBruto"]/$TasaMercado);
 		    	$CostoDolar = round($CostoDolar,2);
 
-		    	if($CostoDolar>$CostoMayorD){		    	
-		    		$CostoMayorD = $CostoDolar; 		    	 		
-		    	} 
-		    } 
+		    	if($CostoDolar>$CostoMayorD){
+		    		$CostoMayorD = $CostoDolar;
+		    	}
+		    }
 		    else{
 		    	$cont_falla++;
 		    	$fallas = $fallas."<br><br>No se logro actualizar el articulo: ".$Descripcion.
-		    	"<br>Motivo: Fallo la tasa de mercado del dia ".$row1["Auditoria_FechaCreacion"]->format('d-m-Y');		    	
-		    }	  			 
-	    }	    	
+		    	"<br>Motivo: Fallo la tasa de mercado del dia ".$row1["Auditoria_FechaCreacion"]->format('d-m-Y');
+		    }
+	    }
 
   			$costoBs = $CostoMayorD * $tasaCalculo;
   			$precio = FG_Precio_Calculado_Alfa($UtilidadArticulo,$UtilidadCategoria,$IsIVA,$costoBs);
   			$precio = round($precio,2);
   			$precio = ceil($precio)+0.01;
-  	
-  			if($tipoCorrida=='subida'){  				
+
+  			if($tipoCorrida=='subida'){
 
   				$PrecioActual = FG_Calculo_Precio_Alfa($Existencia,$ExistenciaAlmacen1,$ExistenciaAlmacen2,$IsTroquelado,$UtilidadArticulo,$UtilidadCategoria,$TroquelAlmacen1,$PrecioCompraBrutoAlmacen1,$TroquelAlmacen2,
     				$PrecioCompraBrutoAlmacen2,$PrecioCompraBruto,$IsIVA,$CondicionExistencia);
 
-		  		if($precio > $PrecioActual){	  				
+		  		if($precio > $PrecioActual){
 	  				$sql_Troquel = SQL_Update_Troquel($IdArticulo,$precio,$fechaActualizacion);
-		  			sqlsrv_query($conn,$sql_Troquel);		  			
+		  			sqlsrv_query($conn,$sql_Troquel);
 	  				$cont_cambios++;
 	  				$cont_exito++;
 	  				/*
@@ -3025,10 +3025,10 @@
 	  				echo "<br>Articulo: ".$IdArticulo;
 	  				echo "<br>El Precio Cambio";
 	  				echo "<br>Precio Nuevo: ".$precio;
-	  				echo "<br>Precio Anterior: ".$PrecioActual;			  			
+	  				echo "<br>Precio Anterior: ".$PrecioActual;
 	  				echo "<br> * * * * * * * * * * * * * * * * * * * * * * * * * ";
 	  				*/
-		  		}else{		  				
+		  		}else{
 	  				$cont_noCambio++;
 	  				$cont_exito++;
 	  				/*
@@ -3040,29 +3040,29 @@
 	  				echo "<br> / / / / / / / / / / / / / / / / / / / / / / / / / ";
 	  				*/
 		  		}
-				} 
-				else if($tipoCorrida=='bajada'){					
+				}
+				else if($tipoCorrida=='bajada'){
 					$sql_Troquel = SQL_Update_Troquel($IdArticulo,$precio,$fechaActualizacion);
-		  		sqlsrv_query($conn,$sql_Troquel);				
+		  		sqlsrv_query($conn,$sql_Troquel);
 					$cont_cambios++;
 		  		$cont_exito++;
 		  		/*
 		  		echo "<br> / / / / / / / / / / / / / / / / / / / / / / / / / ";
   				echo "<br>Articulo: ".$IdArticulo;
   				echo "<br>El Precio se mantiene";
-  				echo "<br>Precio Propuesto: ".$precio; 				
+  				echo "<br>Precio Propuesto: ".$precio;
   				echo "<br> / / / / / / / / / / / / / / / / / / / / / / / / / ";
   				*/
-				}   
-    }   
+				}
+    }
 
-    $evaluados = ($cont_exito+$cont_falla);   
+    $evaluados = ($cont_exito+$cont_falla);
 
     $sql2 = MySQL_Guardar_Auditoria_Corrida($evaluados,$cont_exito,$cont_falla,$cont_cambios,$cont_noCambio,$user,$tipoCorrida,$tasaCalculo,date('d-m-Y'),date('h:i:s a'),$fallas);
 
     mysqli_query($connCPharma,$sql2);
     mysqli_close($connCPharma);
-		sqlsrv_close($conn);		
+		sqlsrv_close($conn);
 
 		/*
  		echo $fallas;
@@ -3070,7 +3070,7 @@
     echo "<br>Exito: ".$cont_exito;
     echo "<br>Fallas: ".$cont_falla;
     echo "<br>Cambios: ".$cont_cambios;
-    echo "<br>Sin Cambios: ".$cont_noCambio;  
+    echo "<br>Sin Cambios: ".$cont_noCambio;
 
     echo "<br>Corrida Ejecutada por: ".$user;
     echo "<br>Corrida de tipo: ".$tipoCorrida;
@@ -3084,16 +3084,16 @@
     $sql ="
     SELECT
     --Id Articulo
-    InvArticulo.Id AS IdArticulo,    
+    InvArticulo.Id AS IdArticulo,
     --Codigo Interno
     InvArticulo.CodigoArticulo AS CodigoInterno,
     --Codigo de Barra
     (SELECT CodigoBarra
-    FROM InvCodigoBarra 
+    FROM InvCodigoBarra
     WHERE InvCodigoBarra.InvArticuloId = InvArticulo.Id
     AND InvCodigoBarra.EsPrincipal = 1) AS CodigoBarra,
     --Descripcion
-    InvArticulo.Descripcion,    
+    InvArticulo.Descripcion,
     --Impuesto (1 SI aplica impuesto, 0 NO aplica impuesto)
     (ISNULL(InvArticulo.FinConceptoImptoIdCompra,CAST(0 AS INT))) AS Impuesto,
 		--Troquelado (0 NO es Troquelado, Id Articulo SI es Troquelado)
@@ -3185,21 +3185,21 @@
 	    --Joins
 	    LEFT JOIN InvLoteAlmacen ON InvLoteAlmacen.InvArticuloId = InvArticulo.Id
 	    LEFT JOIN InvArticuloAtributo ON InvArticuloAtributo.InvArticuloId = InvArticulo.Id
-	    LEFT JOIN InvAtributo ON InvAtributo.Id = InvArticuloAtributo.InvAtributoId 
+	    LEFT JOIN InvAtributo ON InvAtributo.Id = InvArticuloAtributo.InvAtributoId
 	    --Condicionales
 	    WHERE InvLoteAlmacen.Existencia > 0
 	    AND (InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
 	  	AND
 	  	(ISNULL((SELECT
 	    InvArticuloAtributo.InvArticuloId
-	    FROM InvArticuloAtributo 
-	    WHERE InvArticuloAtributo.InvAtributoId = 
+	    FROM InvArticuloAtributo
+	    WHERE InvArticuloAtributo.InvAtributoId =
 	    (SELECT InvAtributo.Id
-	    FROM InvAtributo 
-	    WHERE 
+	    FROM InvAtributo
+	    WHERE
 	    InvAtributo.Descripcion = 'Dolarizados'
 	    OR  InvAtributo.Descripcion = 'Giordany'
-	    OR  InvAtributo.Descripcion = 'giordany') 
+	    OR  InvAtributo.Descripcion = 'giordany')
 	    AND InvArticuloAtributo.InvArticuloId = InvArticulo.Id),CAST(0 AS INT))) <> 0
 	  	--Esto lo borramos despues
 	  	--and InvArticulo.id = 30
@@ -3213,29 +3213,29 @@
   /******************************************************************************/
   function sql_lotes_corrida($IdArticulo){
     $sql ="
-    SELECT 
+    SELECT
     InvArticulo.id,
-		InvArticulo.CodigoArticulo,  
-		InvArticulo.Descripcion, 
+		InvArticulo.CodigoArticulo,
+		InvArticulo.Descripcion,
 		InvLoteAlmacen.Existencia,
-		InvLoteAlmacen.InvLoteId, InvLote.Auditoria_FechaCreacion, 
+		InvLoteAlmacen.InvLoteId, InvLote.Auditoria_FechaCreacion,
 		InvLote.M_PrecioCompraBruto, InvLote.M_PrecioTroquelado
 		from InvLoteAlmacen, InvLote, InvArticulo
-		where InvAlmacenId = 1 
-		and InvLoteAlmacen.InvLoteId = InvLote.id and InvArticulo.Id = InvLote.InvArticuloId 
+		where InvAlmacenId = 1
+		and InvLoteAlmacen.InvLoteId = InvLote.id and InvArticulo.Id = InvLote.InvArticuloId
 		and InvLoteAlmacen.existencia > 0
-		and 
+		and
 		(ISNULL((SELECT
 		InvArticuloAtributo.InvArticuloId
-		FROM InvArticuloAtributo 
-		WHERE InvArticuloAtributo.InvAtributoId = 
+		FROM InvArticuloAtributo
+		WHERE InvArticuloAtributo.InvAtributoId =
 		(SELECT InvAtributo.Id
-		FROM InvAtributo 
-		WHERE 
+		FROM InvAtributo
+		WHERE
 		InvAtributo.Descripcion = 'Dolarizados'
 		OR  InvAtributo.Descripcion = 'Giordany'
-		OR  InvAtributo.Descripcion = 'giordany') 
-		AND InvArticuloAtributo.InvArticuloId = InvArticulo.Id),CAST(0 AS INT))) <> 0		
+		OR  InvAtributo.Descripcion = 'giordany')
+		AND InvArticuloAtributo.InvArticuloId = InvArticulo.Id),CAST(0 AS INT))) <> 0
 		AND InvArticulo.id = '$IdArticulo'
 		order by InvLote.M_PrecioTroquelado desc, InvLote.M_PrecioCompraBruto desc;
     ";
@@ -3246,26 +3246,26 @@
     $sql ="
     SELECT
     InvArticulo.id,
-		InvArticulo.CodigoArticulo,  
-		InvArticulo.Descripcion, 
+		InvArticulo.CodigoArticulo,
+		InvArticulo.Descripcion,
 		InvLoteAlmacen.Existencia,
-		InvLoteAlmacen.InvLoteId, InvLote.Auditoria_FechaCreacion, 
+		InvLoteAlmacen.InvLoteId, InvLote.Auditoria_FechaCreacion,
 		InvLote.M_PrecioCompraBruto, InvLote.M_PrecioTroquelado
 		from InvLoteAlmacen, InvLote, InvArticulo
 		where InvAlmacenId = 1
-		and InvLoteAlmacen.InvLoteId = InvLote.id and InvArticulo.Id = InvLote.InvArticuloId 		
-		and 
+		and InvLoteAlmacen.InvLoteId = InvLote.id and InvArticulo.Id = InvLote.InvArticuloId
+		and
 		(ISNULL((SELECT
 		InvArticuloAtributo.InvArticuloId
-		FROM InvArticuloAtributo 
-		WHERE InvArticuloAtributo.InvAtributoId = 
+		FROM InvArticuloAtributo
+		WHERE InvArticuloAtributo.InvAtributoId =
 		(SELECT InvAtributo.Id
-		FROM InvAtributo 
-		WHERE 
+		FROM InvAtributo
+		WHERE
 		InvAtributo.Descripcion = 'Dolarizados'
 		OR  InvAtributo.Descripcion = 'Giordany'
-		OR  InvAtributo.Descripcion = 'giordany') 
-		AND InvArticuloAtributo.InvArticuloId = InvArticulo.Id),CAST(0 AS INT))) <> 0		
+		OR  InvAtributo.Descripcion = 'giordany')
+		AND InvArticuloAtributo.InvArticuloId = InvArticulo.Id),CAST(0 AS INT))) <> 0
 		AND InvArticulo.id = '$IdArticulo'
 		AND InvLote.id = '$IdLote'
 		order by InvLote.M_PrecioTroquelado desc, InvLote.M_PrecioCompraBruto desc;
@@ -3279,7 +3279,7 @@
     $connCPharma = FG_Conectar_CPharma();
     $fallas = "";
     $array_result = array();
-    $CostoMayorD = 0;	   
+    $CostoMayorD = 0;
 
  		if($condicionExistencia=='CON_EXISTENCIA'){
  			$sql1 = sql_lotes_corrida($IdArticulo);
@@ -3287,37 +3287,37 @@
  		else if($condicionExistencia=='SIN_EXISTENCIA'){
  			$sql1 = sql_lotes_corrida_especifico($IdArticulo,$IdLote);
  		}
- 			
+
     $result1 = sqlsrv_query($conn,$sql1);
-	          
+
 	    while($row1 = sqlsrv_fetch_array($result1, SQLSRV_FETCH_ASSOC)) {
-	    
+
 	    	$TasaMercado = FG_Tasa_Fecha($connCPharma,$row1["Auditoria_FechaCreacion"]->format('Y-m-d'));
 
 	    	if($TasaMercado!=0){
-	    	
-		    	$CostoDolar = ($row1["M_PrecioCompraBruto"]/$TasaMercado);		    	
+
+		    	$CostoDolar = ($row1["M_PrecioCompraBruto"]/$TasaMercado);
 		    	$CostoDolar = round($CostoDolar,2);
 
-		    	if($CostoDolar>$CostoMayorD){	    	
-		    		$CostoMayorD = $CostoDolar; 		    	 		
+		    	if($CostoDolar>$CostoMayorD){
+		    		$CostoMayorD = $CostoDolar;
 		    	}
-		    } 
-		    else{		    	
+		    }
+		    else{
 		    	$fallas = $fallas."<br><br>No se logro actualizar el articulo: ".$Descripcion.
-		    	"<br>Motivo: Fallo la tasa de mercado del dia ".$row1["Auditoria_FechaCreacion"]->format('d-m-Y');		    	
-		    }	  			 
-	    }	    	
+		    	"<br>Motivo: Fallo la tasa de mercado del dia ".$row1["Auditoria_FechaCreacion"]->format('d-m-Y');
+		    }
+	    }
 
-			$array_result['fallas'] = $fallas;  			
-			$array_result['costo_D'] = $CostoMayorD;				
+			$array_result['fallas'] = $fallas;
+			$array_result['costo_D'] = $CostoMayorD;
 
 		mysqli_close($connCPharma);
 		sqlsrv_close($conn);
 
 		//print_r($array_result);
-		return $array_result;		
-  }  
+		return $array_result;
+  }
 
   function validar_fecha_espanol($fecha){
 		$valores = explode('/', $fecha);
