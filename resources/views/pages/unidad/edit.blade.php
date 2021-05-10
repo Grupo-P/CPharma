@@ -82,11 +82,13 @@
                 <td>
                     <select name="unidad_minima" class="form-control" required="required">
                         <option selected="selected">Seleccione...</option>
+                        <option>METROS (M)</option>
                         <option>MILILITROS (ML)</option>
-                        <option>MILIGRAMOS (MG)</option>
+                        <option>MILIGRAMOS (MG)</option>                        
                         <option>GRAMOS (G)</option>
                         <option>KILOGRAMOS (KG)</option>                        
                         <option>CAPSULA</option>
+                        <option>TABLETA</option>
                         <option>UNIDAD</option>
                     </select>
                 </td>
