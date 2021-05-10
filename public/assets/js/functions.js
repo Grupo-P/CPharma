@@ -28,7 +28,7 @@ function autocompletado(inp, inpId, arr) {
 
       for (i = 0; i < arr.length; i++) {
         /*check if the item starts with the same letters as the text field value:*/
-        
+
         if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
           /*create a DIV element for each matching element:*/
           if(i%2 == 0){
@@ -136,7 +136,6 @@ function autocompletadoCI(inp, inpId, arr) {
   var currentFocus;
   /*execute a function when someone writes in the text field:*/
   inp.addEventListener("input", function(e) {
-      console.log(123);
       var a, b, c, i, val = this.value;
       /*close any already open lists of autocompleted values*/
       closeAllLists();
@@ -154,7 +153,7 @@ function autocompletadoCI(inp, inpId, arr) {
 
       for (i = 0; i < arr.length; i++) {
         /*check if the item starts with the same letters as the text field value:*/
-        
+
         if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
           /*create a DIV element for each matching element:*/
           if(i%2 == 0){
@@ -267,7 +266,7 @@ function autocompletadoCB(inp, inpId, arr) {
 
       for (i = 0; i < arr.length; i++) {
         /*check if the item starts with the same letters as the text field value:*/
-        
+
         if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
           /*create a DIV element for each matching element:*/
           if(i%2 == 0){
@@ -358,29 +357,29 @@ function autocompletadoCB(inp, inpId, arr) {
 }
 
 function keypressCPharma(e){
-  if ( 
+  if (
       (e.altKey) && (e.ctrlKey) &&
         ((String.fromCharCode(e.keyCode) == 'k')
         ||(String.fromCharCode(e.keyCode) == 'K')
-      ) 
+      )
     ){
       window.location="/register";
-  } 
+  }
 
-  if ( 
+  if (
       (e.altKey) && (e.ctrlKey) &&
         ((String.fromCharCode(e.keyCode) == 's')
         ||(String.fromCharCode(e.keyCode) == 'S')
-      ) 
+      )
     ){
       window.open('https://www.instagram.com/covacode/', '_blank');
   }
 
-  if ( 
+  if (
       (e.altKey) && (e.ctrlKey) &&
         ((String.fromCharCode(e.keyCode) == 'c')
         ||(String.fromCharCode(e.keyCode) == 'C')
-      ) 
+      )
     ){
       window.open('https://covacode.github.io/', '_blank');
   }
