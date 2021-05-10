@@ -38,15 +38,15 @@
   .autocomplete-items div {
     padding: 10px;
     cursor: pointer;
-    background-color: #fff; 
-    border-bottom: 1px solid #d4d4d4; 
+    background-color: #fff;
+    border-bottom: 1px solid #d4d4d4;
   }
   .autocomplete-items div:hover {
-    background-color: #e9e9e9; 
+    background-color: #e9e9e9;
   }
   .autocomplete-active {
-    background-color: DodgerBlue !important; 
-    color: #ffffff; 
+    background-color: DodgerBlue !important;
+    color: #ffffff;
   }
   </style>
 @endsection
@@ -61,7 +61,7 @@
 
       params = new URLSearchParams(window.location.search);
       if (params.get('seccion') == 'stock') {
-        Swal.showLoading();        
+        Swal.showLoading();
 
         $.ajax({
           type: 'GET',
@@ -147,8 +147,8 @@
     Monitoreo de Inventarios
   </h1>
   <hr class="row align-items-start col-12">
-  
-<?php 
+
+<?php
   include(app_path().'\functions\config.php');
   include(app_path().'\functions\functions.php');
   include(app_path().'\functions\querys_mysql.php');
@@ -156,7 +156,7 @@
 
   $_GET['SEDE'] = FG_Mi_Ubicacion();
 
-  if (isset($_GET['SEDE'])){      
+  if (isset($_GET['SEDE'])){
     echo '<h1 class="h5 text-success"  align="left"> <i class="fas fa-prescription"></i> '.FG_Nombre_Sede($_GET['SEDE']).'</h1>';
   }
   echo '<hr class="row align-items-start col-12">';
@@ -171,7 +171,7 @@
     $FinCarga = new DateTime("now");
     $IntervalCarga = $InicioCarga->diff($FinCarga);
     echo'Tiempo de carga: <span id="tiempo_carga">'.$IntervalCarga->format("%Y-%M-%D %H:%I:%S") . '</span>';
-  } 
+  }
   else{
     echo '
     <form autocomplete="off" action="" target="_blank">
@@ -217,12 +217,12 @@
         </table>
       </form>
     ';
-  } 
+  }
 ?>
 @endsection
 
 <?php
-  /*********************************************************************************/ 
+  /*********************************************************************************/
   /*
     TITULO: R31_Monitoreo_Inventarios
     FUNCION: Arma una lista de productos en falla
@@ -241,7 +241,7 @@
     $sql5 = R31Q_Monitoreo_Inventarios($FInicial,$FFinal);
     $result = sqlsrv_query($conn,$sql5);
 
-    $sql6 = R31Q_Monitoreo_Correcciones($FInicial,$FFinal);    
+    $sql6 = R31Q_Monitoreo_Correcciones($FInicial,$FFinal);
     $result1 = sqlsrv_query($conn,$sql6);
 
     echo '
@@ -294,7 +294,7 @@
       <hr>
       <table class="table table-striped table-bordered col-12 sortable" id="myTable">
         <thead class="thead-dark">
-          <tr>  
+          <tr>
             <th scope="col" class="CP-sticky">#</th>
             <th scope="col" class="CP-sticky">Tipo de Movimiento</th>
             <th scope="col" class="CP-sticky">Origen de Movimiento</th>
@@ -303,13 +303,13 @@
             <th scope="col" class="CP-sticky">Codigo Interno</th>
             <th scope="col" class="CP-sticky">Codigo de Barra</th>
             <th scope="col" class="CP-sticky">Descripcion</th>
-            <th scope="col" class="CP-sticky">Cantidad</th>          
+            <th scope="col" class="CP-sticky">Cantidad</th>
             <th scope="col" class="CP-sticky">Numero de Lote (CC -)</th>
             <th scope="col" class="CP-sticky">Numero de Lote (CC +)</th>
-            <th scope="col" class="CP-sticky">Almacen</td>          
+            <th scope="col" class="CP-sticky">Almacen</td>
             <th scope="col" class="CP-sticky">Costo Uniario (CC -)'.SigVe.'</td>
-            <th scope="col" class="CP-sticky">Costo Uniario (CC +)'.SigVe.'</td>          
-            <th scope="col" class="CP-sticky">Operador</th>         
+            <th scope="col" class="CP-sticky">Costo Uniario (CC +)'.SigVe.'</td>
+            <th scope="col" class="CP-sticky">Operador</th>
           </tr>
         </thead>
         <tbody>
@@ -318,28 +318,28 @@
       $contador = 1;
       while($row = sqlsrv_fetch_array($result1, SQLSRV_FETCH_ASSOC)) {
         $TipoMovimiento = FG_Limpiar_Texto($row["TipoMovimiento"]);
-        $NumeroMovimiento = $row["NumeroMovimiento"];      
+        $NumeroMovimiento = $row["NumeroMovimiento"];
         $CostoUniario = $row["CostoUniario"];
-        
+
         if($TipoMovimiento == 'Corrección costo -'){
-          $NumeroMovCCNeg = $NumeroMovimiento;     
-          $LoteCCNeg = $row["Lote"];        
+          $NumeroMovCCNeg = $NumeroMovimiento;
+          $LoteCCNeg = $row["Lote"];
           $CostoUniarioCCNeg = $CostoUniario;
         }
         else if( ($TipoMovimiento=='Corrección costo +') && ($NumeroMovimiento == $NumeroMovCCNeg) &&($CostoUniarioCCNeg > $CostoUniario) ) {
 
-          $IdArticulo = $row["IdArticulo"];        
+          $IdArticulo = $row["IdArticulo"];
           $OrigenMovimiento = $row["OrigenMovimiento"];
-          $OrigenMovimiento = determminar_Origen_Movimiento($OrigenMovimiento);        
+          $OrigenMovimiento = determminar_Origen_Movimiento($OrigenMovimiento);
           $FechaMovimiento = $row["FechaMovimiento"];
           $CodigoArticulo = $row["CodigoInterno"];
           $CodigoBarra = $row["CodigoBarra"];
           $Descripcion = FG_Limpiar_Texto($row["Descripcion"]);
           $Cantidad = $row["Cantidad"];
           $Lote = $row["Lote"];
-          $Almacen = $row["Almacen"];        
+          $Almacen = $row["Almacen"];
           $Operador = $row["Operador"];
-                          
+
           echo '<tr>';
           echo '<td align="center"><strong>'.intval($contador).'</strong></td>';
           echo '<td align="left">'.($TipoMovimiento).'</td>';
@@ -348,22 +348,22 @@
           echo '<td align="center">'.$FechaMovimiento->format('d-m-Y h:i:s A').'</td>';
           echo '<td align="left">'.$CodigoArticulo.'</td>';
           echo '<td align="center">'.$CodigoBarra.'</td>';
-          echo 
+          echo
           '<td align="left" class="CP-barrido">
           <a href="/reporte2?Id='.$IdArticulo.'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
             .$Descripcion.
           '</a>
-          </td>';        
+          </td>';
           echo '<td align="center">'.intval($Cantidad).'</td>';
           echo '<td align="center">'.$LoteCCNeg.'</td>';
           echo '<td align="center">'.$Lote.'</td>';
           echo '<td align="center">'.FG_Limpiar_Texto($Almacen).'</td>';
-          echo '<td align="center">'.number_format($CostoUniarioCCNeg,2,"," ,"." ).'</td>';        
-          echo '<td align="center">'.number_format($CostoUniario,2,"," ,"." ).'</td>'; 
-          echo '<td align="center">'.$Operador.'</td>';      
+          echo '<td align="center">'.number_format($CostoUniarioCCNeg,2,"," ,"." ).'</td>';
+          echo '<td align="center">'.number_format($CostoUniario,2,"," ,"." ).'</td>';
+          echo '<td align="center">'.$Operador.'</td>';
           echo '</tr>';
           $contador++;
-        }       
+        }
       }
       echo '
         </tbody>
@@ -380,11 +380,12 @@
       <hr>
       <table class="table table-striped table-bordered col-12 sortable" id="myTable">
         <thead class="thead-dark">
-          <tr>  
+          <tr>
             <th scope="col" class="CP-sticky">#</th>
             <th scope="col" class="CP-sticky">Tipo de Movimiento</th>
             <th scope="col" class="CP-sticky">Origen de Movimiento</th>
             <th scope="col" class="CP-sticky">Numero de Movimiento</th>
+            <th scope="col" class="CP-sticky">Traslado</th>
             <th scope="col" class="CP-sticky">Fecha de Movimiento</th>
             <th scope="col" class="CP-sticky">Codigo Interno</th>
             <th scope="col" class="CP-sticky">Codigo de Barra</th>
@@ -394,7 +395,7 @@
             <th scope="col" class="CP-sticky">Almacen</td>
             <th scope="col" class="CP-sticky">Costo Uniario '.SigVe.'</td>
             <th scope="col" class="CP-sticky">Comentario</td>
-            <th scope="col" class="CP-sticky">Operador</th>          
+            <th scope="col" class="CP-sticky">Operador</th>
           </tr>
         </thead>
         <tbody>
@@ -418,7 +419,7 @@
 
         $ComentarioAjuste = $row["ComentarioAjuste"];
         $ComentarioTransferencia = $row["ComentarioTransferencia"];
-        
+
         if(!is_null($ComentarioAjuste)){
           $comentario = $ComentarioAjuste;
         }
@@ -428,16 +429,26 @@
         else{
           $comentario = "-";
         }
-         
+
+        $traslado = DB::select("SELECT * FROM traslados WHERE numero_ajuste = '$NumeroMovimiento' LIMIT 1");
+
+        if ($traslado) {
+            $traslado = $traslado[0]->id;
+            $traslado = '<a href="/traslado/'.$traslado.'" style="text-decoration: none; color: black" target="_blank">'.$traslado.'</a>';
+        } else {
+            $traslado = '';
+        }
+
         echo '<tr>';
         echo '<td align="center"><strong>'.intval($contador).'</strong></td>';
         echo '<td align="left">'.FG_Limpiar_Texto($TipoMovimiento).'</td>';
         echo '<td align="left">'.FG_Limpiar_Texto($OrigenMovimiento).'</td>';
         echo '<td align="left">'.$NumeroMovimiento.'</td>';
+        echo '<td align="left" class="CP-barrido">'.$traslado.'</td>';
         echo '<td align="center">'.$FechaMovimiento->format('d-m-Y h:i:s A').'</td>';
         echo '<td align="left">'.$CodigoArticulo.'</td>';
         echo '<td align="center">'.$CodigoBarra.'</td>';
-        echo 
+        echo
         '<td align="left" class="CP-barrido">
         <a href="/reporte2?Id='.$IdArticulo.'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
           .$Descripcion.
@@ -448,7 +459,7 @@
         echo '<td align="center">'.FG_Limpiar_Texto($Almacen).'</td>';
         echo '<td align="center">'.number_format($CostoUniario,2,"," ,"." ).'</td>';
         echo '<td align="center">'.FG_Limpiar_Texto($comentario).'</td>';
-        echo '<td align="center">'.$Operador.'</td>';      
+        echo '<td align="center">'.$Operador.'</td>';
         echo '</tr>';
         $contador++;
       }
@@ -466,7 +477,7 @@
       <hr>
       <table class="table table-striped table-bordered col-12 sortable" id="myTable">
         <thead class="thead-dark">
-          <tr>  
+          <tr>
             <th scope="col" class="CP-sticky">#</th>
             <th scope="col" class="CP-sticky">Tipo de Movimiento</th>
             <th scope="col" class="CP-sticky">Codigo</th>
@@ -508,7 +519,7 @@
         echo '<td>Compras</td>';
         echo '<td>'.$codigo.'</td>';
         echo '<td>'.$codigo_barra.'</td>';
-        echo 
+        echo
         '<td align="left" class="CP-barrido">
         <a href="/reporte2?Id='.$id_articulo.'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
           .$descripcion.
@@ -541,7 +552,7 @@
       <hr>
       <table class="table table-striped table-bordered col-12 sortable" id="myTable">
         <thead class="thead-dark">
-          <tr>  
+          <tr>
             <th scope="col" class="CP-sticky">#</th>
             <th scope="col" class="CP-sticky">Tipo de Movimiento</th>
             <th scope="col" class="CP-sticky">Codigo</th>
@@ -586,7 +597,7 @@
         echo '<td>Compras</td>';
         echo '<td>'.$codigo.'</td>';
         echo '<td>'.$codigo_barra.'</td>';
-        echo 
+        echo
         '<td align="left" class="CP-barrido">
         <a href="/reporte2?Id='.$id_articulo.'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
           .$descripcion.
@@ -619,7 +630,7 @@
       <hr>
       <table class="table table-striped table-bordered col-12 sortable" id="myTable">
         <thead class="thead-dark">
-          <tr>  
+          <tr>
             <th scope="col" class="CP-sticky">#</th>
             <th scope="col" class="CP-sticky">Tipo de Movimiento</th>
             <th scope="col" class="CP-sticky">Codigo</th>
@@ -633,7 +644,7 @@
             <th scope="col" class="CP-sticky">Operador</th>
             <th scope="col" class="CP-sticky">Proveedor</th>
             <th scope="col" class="CP-sticky">Numero Factura</th>
-            <th scope="col" class="CP-sticky">Ultima Venta</th>     
+            <th scope="col" class="CP-sticky">Ultima Venta</th>
           </tr>
         </thead>
         <tbody id="tbody_sobrestock">
@@ -652,7 +663,7 @@
   */
   function R31Q_Monitoreo_Inventarios($FInicial,$FFinal) {
     $sql = "
-      SELECT 
+      SELECT
     --Tipo Movimiento
     InvCausa.Descripcion as TipoMovimiento,
     -- Origen Movimiento
@@ -665,7 +676,7 @@
     InvArticulo.CodigoArticulo AS CodigoInterno,
     --Codigo de Barra
     (SELECT CodigoBarra
-    FROM InvCodigoBarra 
+    FROM InvCodigoBarra
     WHERE InvCodigoBarra.InvArticuloId = InvArticulo.Id
     AND InvCodigoBarra.EsPrincipal = 1) AS CodigoBarra,
     --Descripcion
@@ -676,15 +687,15 @@
     InvLote.Numero as Lote,
     --Almacen
     InvAlmacen.Descripcion as Almacen,
-    --Costo Unitario 
+    --Costo Unitario
     InvMovimiento.M_CostoUnitario as CostoUniario,
     --Comentario Ajuste
     (SELECT InvAjuste.Comentario
-    FROM InvAjuste 
+    FROM InvAjuste
     WHERE InvAjuste.NumeroAjuste = InvMovimiento.DocumentoOrigen AND (InvMovimiento.InvCausaId = '14' OR InvMovimiento.InvCausaId = '15') ) AS ComentarioAjuste,
     --Comentario Transferecia
     (SELECT InvTransferenciaAlmacen.Observaciones
-    FROM InvTransferenciaAlmacen 
+    FROM InvTransferenciaAlmacen
     WHERE InvTransferenciaAlmacen.NumeroTransferencia = InvMovimiento.DocumentoOrigen AND (InvMovimiento.InvCausaId = '5' OR InvMovimiento.InvCausaId = '6') ) AS ComentarioTransferencia,
     --Operador
     InvMovimiento.Auditoria_Usuario as Operador,
@@ -695,7 +706,7 @@
     INNER JOIN InvArticulo ON InvArticulo.id = InvMovimiento.InvArticuloId
     INNER JOIN InvLote ON InvLote.id = InvMovimiento.InvLoteId
     INNER JOIN InvAlmacen ON InvAlmacen.id = InvMovimiento.InvAlmacenId
-    WHERE (InvMovimiento.InvCausaId = '14' OR InvMovimiento.InvCausaId = '15' 
+    WHERE (InvMovimiento.InvCausaId = '14' OR InvMovimiento.InvCausaId = '15'
     OR InvMovimiento.InvCausaId = '5' OR InvMovimiento.InvCausaId = '6')
     AND(InvMovimiento.FechaMovimiento > '$FInicial' AND InvMovimiento.FechaMovimiento < '$FFinal')
     ORDER BY InvMovimiento.FechaMovimiento ASC
@@ -750,17 +761,17 @@
   */
   function R31Q_Monitoreo_Correcciones($FInicial,$FFinal) {
     $sql = "
-    SELECT 
+    SELECT
     InvArticulo.id as IdArticulo,
     InvArticulo.CodigoArticulo AS CodigoInterno,
     (SELECT CodigoBarra
-    FROM InvCodigoBarra 
+    FROM InvCodigoBarra
     WHERE InvCodigoBarra.InvArticuloId = InvArticulo.Id
     AND InvCodigoBarra.EsPrincipal = 1) AS CodigoBarra,
     InvArticulo.Descripcion,
     InvMovimiento.origenMovimiento as OrigenMovimiento,
     InvMovimiento.DocumentoOrigen as NumeroMovimiento,
-    InvCausa.Descripcion as TipoMovimiento,          
+    InvCausa.Descripcion as TipoMovimiento,
     InvMovimiento.Cantidad as Cantidad,
     InvLote.Numero as Lote,
     InvAlmacen.Descripcion as Almacen,
@@ -773,7 +784,7 @@
     INNER JOIN InvLote ON InvLote.id = InvMovimiento.InvLoteId
     INNER JOIN InvAlmacen ON InvAlmacen.id = InvMovimiento.InvAlmacenId
     WHERE (InvMovimiento.InvCausaId = '11' or InvMovimiento.InvCausaId = '12')
-    AND(InvMovimiento.FechaMovimiento > '$FInicial' AND InvMovimiento.FechaMovimiento < '$FFinal')   
+    AND(InvMovimiento.FechaMovimiento > '$FInicial' AND InvMovimiento.FechaMovimiento < '$FFinal')
     ORDER BY InvMovimiento.FechaMovimiento ASC,  InvCausa.Descripcion ASC, InvMovimiento.M_CostoUnitario ASC
     ";
     return $sql;
@@ -803,7 +814,7 @@
       FROM
         ComFacturaDetalle
       WHERE
-        ComFacturaDetalle.ComFacturaId IN (SELECT ComFactura.Id FROM ComFactura WHERE ComFactura.FechaRegistro BETWEEN '$FInicial' AND '$FFinal') AND 
+        ComFacturaDetalle.ComFacturaId IN (SELECT ComFactura.Id FROM ComFactura WHERE ComFactura.FechaRegistro BETWEEN '$FInicial' AND '$FFinal') AND
         (ComFacturaDetalle.FechaVencimiento IS NULL OR ComFacturaDetalle.FechaVencimiento = '')
       ORDER BY (SELECT ComFactura.FechaRegistro FROM ComFactura WHERE ComFactura.Id = ComFacturaDetalle.ComFacturaId);
     ";
@@ -836,7 +847,7 @@
       FROM
         ComFacturaDetalle
       WHERE
-        ComFacturaDetalle.ComFacturaId IN (SELECT ComFactura.Id FROM ComFactura WHERE ComFactura.FechaRegistro BETWEEN '$FInicial' AND '$FFinal') AND 
+        ComFacturaDetalle.ComFacturaId IN (SELECT ComFactura.Id FROM ComFactura WHERE ComFactura.FechaRegistro BETWEEN '$FInicial' AND '$FFinal') AND
         DATEDIFF(DAY, (SELECT ComFactura.FechaRegistro FROM ComFactura WHERE ComFactura.Id = ComFacturaDetalle.ComFacturaId), ComFacturaDetalle.FechaVencimiento) <= '$VUtil'
       ORDER BY (SELECT ComFactura.FechaRegistro FROM ComFactura WHERE ComFactura.Id = ComFacturaDetalle.ComFacturaId) ASC;
     ";

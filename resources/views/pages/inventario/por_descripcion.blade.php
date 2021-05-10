@@ -37,15 +37,15 @@
     .autocomplete-items div {
       padding: 10px;
       cursor: pointer;
-      background-color: #fff; 
-      border-bottom: 1px solid #d4d4d4; 
+      background-color: #fff;
+      border-bottom: 1px solid #d4d4d4;
     }
     .autocomplete-items div:hover {
-      background-color: #e9e9e9; 
+      background-color: #e9e9e9;
     }
     .autocomplete-active {
-      background-color: DodgerBlue !important; 
-      color: #ffffff; 
+      background-color: DodgerBlue !important;
+      color: #ffffff;
     }
   </style>
 @endsection
@@ -57,7 +57,7 @@
   </h1>
   <hr class="row align-items-start col-12">
 
-<?php 
+<?php
   include(app_path().'\functions\config.php');
   include(app_path().'\functions\functions.php');
   include(app_path().'\functions\querys_mysql.php');
@@ -66,19 +66,19 @@
   $ArtJson = "";
   $_GET['SEDE'] = FG_Mi_Ubicacion();
 
-  if (isset($_GET['SEDE'])){      
+  if (isset($_GET['SEDE'])){
     echo '<h1 class="h5 text-success"  align="left"> <i class="fas fa-prescription"></i> '.FG_Nombre_Sede($_GET['SEDE']).'</h1>';
     }
     echo '<hr class="row align-items-start col-12">';
-  
+
   if (isset($_GET['Nombre'])){
-  //CASO 2: CARGA AL HABER SELECCIONADO UN PROVEEDOR 
+  //CASO 2: CARGA AL HABER SELECCIONADO UN PROVEEDOR
     $InicioCarga = new DateTime("now");
-    
+
     echo '
     <form autocomplete="off" action="/inventario/create">
       <table style="width:100%;">
-        <tr>          
+        <tr>
           <td>
           <input id="SEDE" name="SEDE" type="hidden" value="';
           print_r($_GET['SEDE']);
@@ -92,20 +92,20 @@
           </td>
         </tr>
       </table>
-      <input id="motivo" name="motivo" type="hidden" value="'.$_GET['Nombre'].'">   
+      <input id="motivo" name="motivo" type="hidden" value="'.$_GET['Nombre'].'">
     <br>
     ';
     Iventario_Descripcion_C2($_GET['SEDE'],$_GET['Id'],$_GET['Nombre']);
     echo'</form>';
-    
+
     $FinCarga = new DateTime("now");
     $IntervalCarga = $InicioCarga->diff($FinCarga);
     echo'Tiempo de carga: '.$IntervalCarga->format("%Y-%M-%D %H:%I:%S");
-  } 
+  }
   /*
   else if(isset($_GET['CONTEO'])){
   //CASO 3: CARGA AL HABER SELECCIONADO UN PEDIDO EN BASE A DIAS Y EL RANGO
-  
+
     print_r($_GET['articulosContar']);
 
   }
@@ -144,10 +144,10 @@
     <script type="text/javascript">
       ArrJs = eval(<?php echo $ArtJson ?>);
       autocompletado(document.getElementById("myInput"),document.getElementById("myId"), ArrJs);
-    </script> 
+    </script>
 <?php
   }
-?>  
+?>
 @endsection
 
 <?php
@@ -198,7 +198,9 @@
             <th scope="col" class="CP-sticky">Codigo de Barra</th>
             <th scope="col" class="CP-sticky">Descripcion</th>
             <th scope="col" class="CP-sticky">Existencia</th>
-            <th scope="col" class="CP-sticky">Seleccion <input type="checkbox" onclick="marcarTodos(this)"/></th>
+            <th scope="col" class="CP-sticky">Todo <input name="control" type="radio" onclick="marcarTodo(this)"></th>
+            <th scope="col" class="CP-sticky">Con existencia <input name="control" onclick="marcarConExistencia(this)" type="radio"></th>
+            <th scope="col" class="CP-sticky">Existencia cero <input name="control" onclick="marcarConCero(this)" type="radio"></th>
           </tr>
         </thead>
         <tbody>
@@ -220,14 +222,18 @@
         echo '<td align="left"><strong>'.intval($contador).'</strong></td>';
         echo '<td align="left">'.$CodigoArticulo.'</td>';
         echo '<td align="center">'.$CodigoBarra.'</td>';
-        echo 
+        echo
         '<td align="left" class="CP-barrido">
         <a href="/reporte2?Id='.$IdArticulo.'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
           .$Descripcion.
         '</a>
         </td>';
         echo '<td align="center">'.intval($Existencia).'</td>';
-        echo'<td align="center"><input type="checkbox" name="articulosContar[]" value="'.$IdArticulo.'"/></td>';
+
+        $class = (intval($Existencia) > 0) ? 'check existencia' : 'check cero';
+
+        echo'<td align="center" colspan="3"><input type="checkbox" class="'.$class.'" name="articulosContar[]" value="'.$IdArticulo.'"/></td>';
+
         echo '</tr>';
         $contador++;
       }
@@ -241,7 +247,7 @@
 
       $contador = 1;
       $i=0;
-        
+
       while ( ($i<count($descripcionArticulo)) && ($descripcionArticulo[$i]!='') ){
         $NombreArticulo = $descripcionArticulo[$i];
 
@@ -259,18 +265,21 @@
           echo '<td align="left"><strong>'.intval($contador).'</strong></td>';
           echo '<td align="left">'.$CodigoArticulo.'</td>';
           echo '<td align="center">'.$CodigoBarra.'</td>';
-          echo 
+          echo
           '<td align="left" class="CP-barrido">
           <a href="/reporte2?Id='.$IdArticulo.'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
             .$Descripcion.
           '</a>
           </td>';
           echo '<td align="center">'.intval($Existencia).'</td>';
-          echo'<td align="center"><input type="checkbox" name="articulosContar[]" value="'.$IdArticulo.'"/></td>';
+
+          $class = (intval($Existencia) > 0) ? 'check existencia' : 'check cero';
+          echo'<td align="center" colspan="3"><input type="checkbox" class="'.$class.'" name="articulosContar[]" value="'.$IdArticulo.'"/></td>';
+
           echo '</tr>';
           $contador++;
         }
-        
+
       $i++;
       }
         echo '
@@ -304,7 +313,7 @@
     RETORNO: lista de id de articulos en coincidencia
     DESAROLLADO POR: SERGIO COVA
   */
-  function Inv_Descripcion_Like($DescripLike) {  
+  function Inv_Descripcion_Like($DescripLike) {
 
     $palabras = array();
     $palabras = explode(" ", $DescripLike);
@@ -315,7 +324,7 @@
       InvArticulo.Id,
       InvArticulo.CodigoArticulo,
       (SELECT CodigoBarra
-          FROM InvCodigoBarra 
+          FROM InvCodigoBarra
           WHERE InvCodigoBarra.InvArticuloId = InvArticulo.Id
           AND InvCodigoBarra.EsPrincipal = 1) As CodigoBarra,
       InvArticulo.Descripcion,
@@ -342,7 +351,7 @@
       InvArticulo.Id,
       InvArticulo.CodigoArticulo,
       (SELECT CodigoBarra
-          FROM InvCodigoBarra 
+          FROM InvCodigoBarra
           WHERE InvCodigoBarra.InvArticuloId = InvArticulo.Id
           AND InvCodigoBarra.EsPrincipal = 1) As CodigoBarra,
       InvArticulo.Descripcion,
@@ -354,8 +363,8 @@
       WHERE InvArticulo.Descripcion LIKE '%$DescripLike%'
       GROUP BY InvArticulo.Id,InvArticulo.CodigoArticulo,InvArticulo.Descripcion,InvArticulo.FinConceptoImptoIdCompra
       ORDER BY InvArticulo.Id ASC
-      ";   
-    }         
+      ";
+    }
     return $sql;
   }
   /**********************************************************************************/
@@ -371,7 +380,7 @@
       InvArticulo.Id,
       InvArticulo.CodigoArticulo,
       (SELECT CodigoBarra
-          FROM InvCodigoBarra 
+          FROM InvCodigoBarra
           WHERE InvCodigoBarra.InvArticuloId = InvArticulo.Id
           AND InvCodigoBarra.EsPrincipal = 1) As CodigoBarra,
       InvArticulo.Descripcion,
@@ -389,15 +398,36 @@
 ?>
 
 <script>
-  function marcarTodos(source) 
+  function marcarConExistencia(that)
   {
-    checkboxes=document.getElementsByTagName('input'); //obtenemos todos los controles del tipo Input
-    for(i=0;i<checkboxes.length;i++) //recoremos todos los controles
-    {
-      if(checkboxes[i].type == "checkbox") //solo si es un checkbox entramos
-      {
-        checkboxes[i].checked=source.checked; //si es un checkbox le damos el valor del checkbox que lo llamó (Marcar/Desmarcar Todos)
-      }
+    checked = $(that).prop('checked');
+
+    $('.check').attr('checked', false);
+
+    if (checked) {
+        $('.existencia').attr('checked', true);
+    }
+  }
+
+  function marcarConCero(that)
+  {
+    checked = $(that).prop('checked');
+
+    $('.check').attr('checked', false);
+
+    if (checked) {
+        $('.cero').attr('checked', true);
+    }
+  }
+
+  function marcarTodo(that)
+  {
+    checked = $(that).prop('checked');
+
+    $('.check').attr('checked', false);
+
+    if (checked) {
+        $('.check').attr('checked', true);
     }
   }
 </script>
