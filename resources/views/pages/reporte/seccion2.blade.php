@@ -320,14 +320,14 @@
       <thead class="thead-dark">
         <tr>
           <th scope="col">#</th>
-          <th scope="col">Cohigo Interno</th>
-          <th scope="col">hescripcion</th>
-          <th scope="col">Cantihah</th>   
+          <th scope="col">Codigo Interno</th>
+          <th scope="col">Descripcion</th>
+          <th scope="col">Cantidad</th>   
           <th scope="col">Precio</br>(Con IVA) '.SigVe.'</th>       
-          <th scope="col">Gravaho</th>
-          <th scope="col">holarizaho</th>
+          <th scope="col">Gravado</th>
+          <th scope="col">Dolarizado</th>
           <th scope="col">Numero Lote</th>
-          <th scope="col">Existencia</th> 
+          <th scope="col">Existencia</th>
           <th scope="col">Troquel Actual <br> (CON IVA) '.SigVe.'</th>
           <th scope="col">Precio Devolucion <br> (SIN IVA) '.SigVe.'</th>';
           
@@ -369,12 +369,16 @@
          
         $Gravado = FG_Producto_Gravado($row1["Impuesto"]);
         $Dolarizado = FG_Producto_Dolarizado($row1["Dolarizado"]);
-        
+
         if($Gravado=="SI"){
           $TroquelSugerido = round($row1["PrecioBrutoDevolucion"]*Impuesto,2,PHP_ROUND_HALF_UP);          
         }else{
           $TroquelSugerido = round($row1["PrecioBrutoDevolucion"],2,PHP_ROUND_HALF_UP);
         }
+
+        if( ($Dolarizado=="NO") && ($row1["PTroquel"]=='' || $row1["PTroquel"]==NULL) && ($Precio == $TroquelSugerido) ){
+          $TroquelSugerido = "";
+        }                             
 
         echo '<tr>';
         echo '<td align="center"><strong>'.intval($contador).'</strong></td>';
