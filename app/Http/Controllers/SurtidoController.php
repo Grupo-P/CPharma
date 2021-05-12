@@ -54,7 +54,15 @@ class SurtidoController extends Controller
             $result = sqlsrv_query($conn,$sql);
             $row = sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC);
 
-            return $row;
+            $result = [];
+
+            $result['Descripcion'] = \FG_Limpiar_Texto($row['Descripcion']);
+            $result['CodigoBarra'] = $row['CodigoBarra'];
+            $result['CodigoInterno'] = $row['CodigoInterno'];
+            $result['IdArticulo'] = $row['IdArticulo'];
+            $result['Existencia'] = ($row['Existencia']) ? $row['Existencia'] : 0;
+
+            return $result;
         }
 
         $ArtJson = "";
@@ -92,7 +100,7 @@ class SurtidoController extends Controller
 
         $CodIntJson = FG_Armar_Json($sql3,$_GET['SEDE']);
 
-        return view('pages.surtido.create', compact('ArtJson', 'CodJson', 'CodIntJson'));
+        return view('pages.surtido.create', compact('ArtJson', 'CodJson', 'CodIntJson', 'surtido'));
     }
 
     /**
@@ -103,9 +111,10 @@ class SurtidoController extends Controller
      */
     public function store(Request $request)
     {
+        include(app_path().'\functions\config.php');
         include(app_path().'\functions\functions.php');
-
-        $surtido = new Surtido();
+        include(app_path().'\functions\querys_mysql.php');
+        include(app_path().'\functions\querys_sqlserver.php');
 
         $ultimo_surtido = Surtido::orderBy('id', 'DESC')
             ->select('id')
@@ -131,7 +140,7 @@ class SurtidoController extends Controller
         $surtido->operador_procesado = auth()->user()->name;
         $surtido->fecha_generado = date('Y-m-d H:i:s');
         $surtido->fecha_procesado = date('Y-m-d H:i:s');
-        $surtido->estatus = 'PROCESADO';
+        $surtido->estatus = 'GENERADO';
         $surtido->save();
 
         foreach ($request->articulos as $articulo) {

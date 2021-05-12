@@ -1,7 +1,7 @@
 @extends('layouts.model')
 
 @section('title')
-  Reporte
+  Surtido de gavetas
 @endsection
 
 @section('scriptsHead')
@@ -124,6 +124,31 @@
   <br>
 
   <button onclick="procesar()" type="button" class="btn btn-outline-success">Procesar</button>
+
+  <div class="modal" tabindex="-1" id="modalCantidad" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Introduzca la cantidad</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <input type="number" class="form-control" name="cantidad" required>
+
+        <input type="hidden" class="form-control" name="id_articulo" required>
+        <input type="hidden" class="form-control" name="codigo_interno" required>
+        <input type="hidden" class="form-control" name="codigo_barra" required>
+        <input type="hidden" class="form-control" name="existencia" required>
+        <input type="hidden" class="form-control" name="descripcion" required>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-success" onclick="agregar()">Agregar</button>
+      </div>
+    </div>
+  </div>
+  </div>
 @endsection
 
 @section('scriptsFoot')
@@ -137,7 +162,7 @@
     @if($CodJson!="")
         <script type="text/javascript">
             ArrJsCB = eval({!! $CodJson !!});
-            autocompletadoCB(document.getElementById("myInputCB"),document.getElementById("myId"), ArrJsCB);
+            autocompletadoCBScan(document.getElementById("myInputCB"),document.getElementById("myId"), ArrJsCB);
         </script>
     @endif
 
@@ -152,8 +177,20 @@
         var i = 1;
         articulos = [];
 
+        $('[name=cantidad]').keypress(function (event) {
+            if (event.key == 'Enter') {
+                agregar();
+            }
+        });
+
         $('#form').submit(function () {
             event.preventDefault();
+
+            id = $('#myId').val();
+
+            if (!id) {
+                return false;
+            }
 
             data = $(this).serialize();
 
@@ -162,45 +199,71 @@
                 url: window.location.href,
                 data: data,
                 success: function (response) {
-                    cantidad = 0;
-
-                    if (cantidad != '' || !Number.isInteger(cantidad) || cantidad <= 0) {
-                        cantidad = prompt('Ingrese la cantidad (número entero)');
+                    if (response.Descripcion == '') {
+                        alert('No se ha encontrado ningún artículo');
+                        return false;
                     }
 
-                    html = `
-                        <tr>
-                            <td align="center"><strong>${i}</strong></td>
-                            <td align="center">${response.CodigoBarra}</td>
-                            <td align="center">${response.CodigoInterno}</td>
-                            <td align="center">${response.Descripcion}</td>
-                            <td align="center">${response.Existencia ? response.Existencia : 0}</td>
-                            <td align="center">${cantidad}</td>
-                        </tr>
-                    `;
+                    $('[name=id_articulo]').val(response.IdArticulo);
+                    $('[name=codigo_interno]').val(response.CodigoInterno);
+                    $('[name=codigo_barra]').val(response.CodigoBarra);
+                    $('[name=existencia]').val(response.Existencia ? response.Existencia : 0);
+                    $('[name=descripcion]').val(response.Descripcion);
 
-                    articulos.push({
-                        id_articulo: response.IdArticulo,
-                        codigo_articulo: response.CodigoInterno,
-                        codigo_barra: response.CodigoBarra,
-                        descripcion: response.Descripcion,
-                        existencia_actual: response.Existencia ? response.Existencia : 0,
-                        cantidad: cantidad
-                    });
+                    $('#modalCantidad').modal('show');
 
-                    $('#content').append(html);
-
-                    $('#myInput').val('');
-                    $('#myInputCB').val('');
-                    $('#myInputCI').val('');
-                    $('#myId').val('');
-
-                    i = i + 1;
+                    $('[name=cantidad]').focus();
                 },
                 error: function (error) {
                     $('body').html(error.responseText);
                 }
             });
+        });
+
+        $('#myInputCB').keypress(function (event) {
+            key = event.key;
+            value = $(this).val();
+
+            if (key == 'Enter') {
+                event.preventDefault();
+
+                if (value != '') {
+                    index = ArrJsCB.indexOf(value);
+                    index = index + 1;
+                    id = ArrJsCB[index];
+
+                    $('#myId').val(id);
+
+                    data = $('#form').serialize();
+
+                    console.log(data);
+
+                    $.ajax({
+                        type: 'GET',
+                        url: window.location.href,
+                        data: data,
+                        success: function (response) {
+                            if (response.Descripcion == '') {
+                                alert('No se ha encontrado ningún artículo');
+                                return false;
+                            }
+
+                            $('[name=id_articulo]').val(response.IdArticulo);
+                            $('[name=codigo_interno]').val(response.CodigoInterno);
+                            $('[name=codigo_barra]').val(response.CodigoBarra);
+                            $('[name=existencia]').val(response.Existencia ? response.Existencia : 0);
+                            $('[name=descripcion]').val(response.Descripcion);
+
+                            $('#modalCantidad').modal('show');
+
+                            $('[name=cantidad]').focus();
+                        },
+                        error: function (error) {
+                            $('body').html(error.responseText);
+                        }
+                    });
+                }
+            }
         });
 
         function procesar() {
@@ -222,6 +285,79 @@
             } else {
                 alert('Debe agregar artículos para procesar este surtido');
             }
+        }
+
+        $('[name=cantidad]').blur(function () {
+            value = $(this).val();
+
+            if (value == '' || value <= 0) {
+                $('[name=cantidad]').val('');
+                $('[name=cantidad]').focus();
+
+                return false;
+            }
+        });
+
+        $('[name=cantidad]').keypress(function (evento) {
+            tecla = (document.all) ? evento.keyCode : evento.which;
+
+            if (tecla == 8) {
+                return true;
+            }
+
+            patron = /[A-Za-z0-9]/;
+            tecla_final = String.fromCharCode(tecla);
+            return patron.test(tecla_final);
+        });
+
+        function agregar() {
+            cantidad = $('[name=cantidad]').val();
+
+            if (cantidad == '') {
+                $('[name=cantidad]').val('');
+                $('[name=cantidad]').focus();
+
+                return false;
+            }
+
+            id_articulo = $('[name=id_articulo]').val();
+            codigo_interno = $('[name=codigo_interno]').val();
+            codigo_barra = $('[name=codigo_barra]').val();
+            descripcion = $('[name=descripcion]').val();
+            existencia = $('[name=existencia]').val();
+            cantidad = $('[name=cantidad]').val();
+
+            html = `
+                <tr>
+                    <td align="center"><strong>${i}</strong></td>
+                    <td align="center">${codigo_barra}</td>
+                    <td align="center">${codigo_interno}</td>
+                    <td align="center">${descripcion}</td>
+                    <td align="center">${existencia}</td>
+                    <td align="center">${cantidad}</td>
+                </tr>
+            `;
+
+            articulos.push({
+                id_articulo: id_articulo,
+                codigo_articulo: codigo_interno,
+                codigo_barra: codigo_barra,
+                descripcion: descripcion,
+                existencia_actual: existencia,
+                cantidad: cantidad
+            });
+
+            $('#content').append(html);
+
+            $('#myInput').val('');
+            $('#myInputCB').val('');
+            $('#myInputCI').val('');
+            $('#myId').val('');
+
+            i = i + 1;
+
+            $('#modalCantidad').modal('hide');
+            $('[name=cantidad]').val('');
         }
     </script>
 @endsection

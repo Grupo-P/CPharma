@@ -34,8 +34,8 @@
 
     <hr class="row align-items-start col-12">
 
-    <form action="/departamento/" method="POST" style="display: inline;">  
-        @csrf                       
+    <form action="/departamento/" method="POST" style="display: inline;">
+        @csrf
         <button type="submit" name="Regresar" role="button" class="btn btn-outline-info btn-sm"data-placement="top"><i class="fa fa-reply">&nbsp;Regresar</i></button>
     </form>
 
@@ -126,13 +126,13 @@
                 <th scope="col">30</th>
                 <td scope="col">Registro de Compras</td>
                 <th scope="col">31</th>
-                <td scope="col">Monitoreo de Inventarios</td> 
+                <td scope="col">Monitoreo de Inventarios</td>
                 <th scope="col">32</th>
-                <td scope="col">Seguimiento de Tienda</td>         
+                <td scope="col">Seguimiento de Tienda</td>
             </tr>
             <tr>
                 <th scope="col">33</th>
-                <td scope="col">Devoluciones a clientes</td> 
+                <td scope="col">Devoluciones a clientes</td>
                 <th scope="col">34</th>
                 <td scope="col">Articulos estancados en tienda</td>
                 <th scope="col">35</th>
@@ -140,13 +140,15 @@
                 <th scope="col">36</th>
                 <td scope="col">Lista de precios</td>
                 <th scope="col">37</th>
-                <td scope="col">Traslados entre tiendas</td> 
+                <td scope="col">Traslados entre tiendas</td>
             </tr>
             <tr>
                 <th scope="col">38</th>
                 <td scope="col">Registro de reclamos</td>
                 <th scope="col">39</th>
                 <td scope="col">Revisión de inventarios físicos</td>
+                <th scope="col">40</th>
+                <td scope="col">Surtido de gavetas</td>
             </tr>
         </tbody>
     </table>
@@ -170,16 +172,16 @@
             <tr>
                 <th scope="row">{!! Form::label('descripcion', 'Reportes') !!}</th>
                 <td>{!! Form::textarea('descripcion', null, [ 'class' => 'form-control', 'placeholder' => 'Ingrese el numero correspondiente al reporte separado con comas. Ej.: 1,2,3', 'rows' => '2', 'required']) !!}</td>
-            </tr>            
+            </tr>
         </tbody>
         </table>
         {!! Form::submit('Guardar', ['class' => 'btn btn-outline-success btn-md']) !!}
     </fieldset>
-    {!! Form::close()!!} 
+    {!! Form::close()!!}
 
     <script>
         $(document).ready(function(){
-            $('[data-toggle="tooltip"]').tooltip();   
+            $('[data-toggle="tooltip"]').tooltip();
         });
         $('#exampleModalCenter').modal('show')
     </script>

@@ -200,7 +200,7 @@
 
     $Gravado = FG_Producto_Gravado($IsIVA);
     $Dolarizado = FG_Producto_Dolarizado($Dolarizado);
-    $TasaActual = FG_Tasa_Fecha($connCPharma,date('Y-m-d'));
+    $TasaActual = FG_Tasa_Fecha_Venta($connCPharma,date('Y-m-d'));
     $Precio = FG_Calculo_Precio_Alfa($Existencia,$ExistenciaAlmacen1,$ExistenciaAlmacen2,$IsTroquelado,$UtilidadArticulo,$UtilidadCategoria,$TroquelAlmacen1,$PrecioCompraBrutoAlmacen1,$TroquelAlmacen2,
     $PrecioCompraBrutoAlmacen2,$PrecioCompraBruto,$IsIVA,$CondicionExistencia);
 
@@ -220,7 +220,7 @@
     $ultimoConteo = $RowCPharma['fecha_conteo'];
 
     $sqlCategorizacion = "
-    SELECT 
+    SELECT
     categorias.nombre as categoria,
     subcategorias.nombre as subcategoria
     FROM categorizacions
@@ -275,13 +275,13 @@
     echo '<tr>';
     echo '<td>'.$CodigoArticulo.'</td>';
     echo '<td align="center">'.$CodigoBarra.'</td>';
-    
-    echo '        
+
+    echo '
       <td align="left" class="CP-barrido">
           <a href="/reporte2?Id='.$IdArticulo.'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
               .$Descripcion
           .'</a>
-      </td>        
+      </td>
     ';
 
     echo '<td align="center">'.intval($Existencia).'</td>';
@@ -362,7 +362,7 @@
             <th scope="col" class="CP-sticky">Precio Troquelado </br> Bruto (Sin IVA) '.SigVe.'</th>
             <th scope="col" class="CP-sticky">Tasa Mercado</th>
             <th scope="col" class="CP-sticky">Costo Unitario </br> Bruto (Sin IVA) '.SigDolar.'</th>
-            <th scope="col" class="CP-sticky">Responsable</th>    
+            <th scope="col" class="CP-sticky">Responsable</th>
           </tr>
         </thead>
         <tbody>
@@ -373,19 +373,19 @@
 
     while($row2 = sqlsrv_fetch_array($result2, SQLSRV_FETCH_ASSOC)) {
 
-      if( ($row2["InvLoteId"]!=$IdLotePivote) || 
-          ($row2["InvLoteId"]==$IdLotePivote && $row2["LoteAlmacenId"]!=$LoteAlmacenIdPivorte) 
+      if( ($row2["InvLoteId"]!=$IdLotePivote) ||
+          ($row2["InvLoteId"]==$IdLotePivote && $row2["LoteAlmacenId"]!=$LoteAlmacenIdPivorte)
        ){
-        
-        $fechaVencimiento = ($row2["FechaVencimiento"]!=NULL)?$row2["FechaVencimiento"]->format('d-m-Y'):'-';            
-        $fechaEntrada = ($row2["FechaEntrada"]!=NULL)?$row2["FechaEntrada"]->format('d-m-Y'):'-';            
+
+        $fechaVencimiento = ($row2["FechaVencimiento"]!=NULL)?$row2["FechaVencimiento"]->format('d-m-Y'):'-';
+        $fechaEntrada = ($row2["FechaEntrada"]!=NULL)?$row2["FechaEntrada"]->format('d-m-Y'):'-';
 
         $IdLotePivote = $row2["InvLoteId"];
         $LoteAlmacenIdPivorte = $row2["LoteAlmacenId"];
 
         echo '
-          <td align="center"><strong>'.intval($contador).'</strong></td>            
-          <td align="center">'.FG_Limpiar_Texto($row2["Origen"]).'</td>            
+          <td align="center"><strong>'.intval($contador).'</strong></td>
+          <td align="center">'.FG_Limpiar_Texto($row2["Origen"]).'</td>
         ';
 
         if($row2["Origen"]=="COMPRA"){
@@ -396,24 +396,24 @@
             $result4 = sqlsrv_query($conn,$sql4);
             $row4 = sqlsrv_fetch_array($result4, SQLSRV_FETCH_ASSOC);
 
-            echo '                    
+            echo '
               <td align="center">'.FG_Limpiar_Texto($row4["Proveedor"]).'</td>
-              <td align="center">'.($row4["NumeroFactura"]).'</td>        
+              <td align="center">'.($row4["NumeroFactura"]).'</td>
             ';
-            
+
           } catch (Exception $e) {
 
-            echo '                    
+            echo '
               <td align="center">'.$row2["InvLoteId"].'|'.$IdArticulo.'|'.$row2["LoteAlmacenId"].'</td>
-              <td align="center">*</td>        
+              <td align="center">*</td>
             ';
-            
+
           }
 
         }else{
-           echo '                    
-            <td align="center">'.FG_Limpiar_Texto($row2["Causa"]).'</td>            
-            <td align="center">'.($row2["NumeroReferencia"]).'</td>  
+           echo '
+            <td align="center">'.FG_Limpiar_Texto($row2["Causa"]).'</td>
+            <td align="center">'.($row2["NumeroReferencia"]).'</td>
           ';
         }
 
@@ -421,15 +421,15 @@
         if(!isset($TasaFecha)){
            $TasaFecha = 0;
         }
-        
-        echo '                  
-          <td align="center">'.($row2["FechaCreacionLote"]->format('d-m-Y')).'</td>        
+
+        echo '
+          <td align="center">'.($row2["FechaCreacionLote"]->format('d-m-Y')).'</td>
           <td align="center">'.($fechaVencimiento).'</td>
           <td align="center">'.($fechaEntrada).'</td>
           <td align="center">'.($row2["NumeroLote"]).'</td>
           <td align="center">'.($row2["LoteFabricante"]).'</td>
           <td align="center">'.($row2["Almacen"]).'</td>
-          <td align="center">'.intval($row2["Existencia"]).'</td>          
+          <td align="center">'.intval($row2["Existencia"]).'</td>
           <td align="center">'.number_format($row2["CostoTotal"],2,"," ,"." ).'</td>
           <td align="center">'.number_format($row2["CostoUnitario"],2,"," ,"." ).'</td>
           <td align="center">'.number_format($row2["PrecioTroquelado"],2,"," ,"." ).'</td>
@@ -438,16 +438,16 @@
 
         if($TasaFecha!=0){
           $CostoDivisa = $row2["CostoUnitario"] / $TasaFecha;
-          echo '                    
+          echo '
             <td align="center">'.number_format($CostoDivisa,2,"," ,"." ).'</td>
           ';
         }else{
-          echo '                    
+          echo '
             <td align="center">0.00</td>
           ';
         }
 
-        echo '                    
+        echo '
             <td align="center">'.FG_Limpiar_Texto($row2["Responsable"]).'</td>
           ';
 
@@ -481,7 +481,7 @@
             <th scope="col" class="CP-sticky">Precio Troquelado </br> Bruto (Sin IVA) '.SigVe.'</th>
             <th scope="col" class="CP-sticky">Tasa Mercado</th>
             <th scope="col" class="CP-sticky">Costo Unitario </br> Bruto (Sin IVA) '.SigDolar.'</th>
-            <th scope="col" class="CP-sticky">Responsable</th>    
+            <th scope="col" class="CP-sticky">Responsable</th>
           </tr>
         </thead>
         <tbody>
@@ -493,18 +493,18 @@
     while($row3 = sqlsrv_fetch_array($result3, SQLSRV_FETCH_ASSOC)) {
 
       if( ($row3["InvLoteId"]!=$IdLotePivote) ||
-          ($row3["InvLoteId"]==$IdLotePivote && $row3["LoteAlmacenId"]!=$LoteAlmacenIdPivorte) 
+          ($row3["InvLoteId"]==$IdLotePivote && $row3["LoteAlmacenId"]!=$LoteAlmacenIdPivorte)
        ){
-        
-        $fechaVencimiento = ($row3["FechaVencimiento"]!=NULL)?$row3["FechaVencimiento"]->format('d-m-Y'):'-';            
+
+        $fechaVencimiento = ($row3["FechaVencimiento"]!=NULL)?$row3["FechaVencimiento"]->format('d-m-Y'):'-';
         $fechaEntrada = ($row3["FechaEntrada"]!=NULL)?$row3["FechaEntrada"]->format('d-m-Y'):'-';
 
         $IdLotePivote = $row3["InvLoteId"];
         $LoteAlmacenIdPivorte = $row3["LoteAlmacenId"];
 
         echo '
-          <td align="center"><strong>'.intval($contador).'</strong></td>            
-          <td align="center">'.FG_Limpiar_Texto($row3["Origen"]).'</td>            
+          <td align="center"><strong>'.intval($contador).'</strong></td>
+          <td align="center">'.FG_Limpiar_Texto($row3["Origen"]).'</td>
         ';
 
         if($row3["Origen"]=="COMPRA"){
@@ -515,40 +515,40 @@
             $result4 = sqlsrv_query($conn,$sql4);
             $row4 = sqlsrv_fetch_array($result4, SQLSRV_FETCH_ASSOC);
 
-            echo '                    
+            echo '
               <td align="center">'.FG_Limpiar_Texto($row4["Proveedor"]).'</td>
-              <td align="center">'.($row4["NumeroFactura"]).'</td>        
+              <td align="center">'.($row4["NumeroFactura"]).'</td>
             ';
-            
+
           } catch (Exception $e) {
 
-            echo '                    
+            echo '
               <td align="center">'.$row3["InvLoteId"].'|'.$IdArticulo.'|'.$row3["LoteAlmacenId"].'</td>
-              <td align="center">*</td>        
+              <td align="center">*</td>
             ';
-            
+
           }
 
         }else{
-           echo '                    
-            <td align="center">'.FG_Limpiar_Texto($row3["Causa"]).'</td>            
-            <td align="center">'.($row3["NumeroReferencia"]).'</td>  
+           echo '
+            <td align="center">'.FG_Limpiar_Texto($row3["Causa"]).'</td>
+            <td align="center">'.($row3["NumeroReferencia"]).'</td>
           ';
         }
-        
+
         $TasaFecha = FG_Tasa_Fecha($connCPharma,$row3["FechaCreacionLote"]->format("Y-m-d"));
         if(!isset($TasaFecha)){
            $TasaFecha = 0;
         }
 
-        echo '                  
-          <td align="center">'.($row3["FechaCreacionLote"]->format('d-m-Y')).'</td>            
+        echo '
+          <td align="center">'.($row3["FechaCreacionLote"]->format('d-m-Y')).'</td>
           <td align="center">'.($fechaVencimiento).'</td>
           <td align="center">'.($fechaEntrada).'</td>
           <td align="center">'.($row3["NumeroLote"]).'</td>
           <td align="center">'.($row3["LoteFabricante"]).'</td>
           <td align="center">'.($row3["Almacen"]).'</td>
-          <td align="center">'.intval($row3["Existencia"]).'</td>          
+          <td align="center">'.intval($row3["Existencia"]).'</td>
           <td align="center">'.number_format($row3["CostoTotal"],2,"," ,"." ).'</td>
           <td align="center">'.number_format($row3["CostoUnitario"],2,"," ,"." ).'</td>
           <td align="center">'.number_format($row2["PrecioTroquelado"],2,"," ,"." ).'</td>
@@ -557,16 +557,16 @@
 
         if($TasaFecha!=0){
           $CostoDivisa = $row3["CostoUnitario"] / $TasaFecha;
-          echo '                    
+          echo '
             <td align="center">'.number_format($CostoDivisa,2,"," ,"." ).'</td>
           ';
         }else{
-          echo '                    
+          echo '
             <td align="center">0.00</td>
           ';
         }
 
-        echo '                    
+        echo '
             <td align="center">'.FG_Limpiar_Texto($row3["Responsable"]).'</td>
           ';
 
@@ -760,7 +760,7 @@
     WHERE
     InvAtributo.Descripcion = 'Articulo Estrella')
     AND InvArticuloAtributo.InvArticuloId = InvArticulo.Id),CAST(0 AS INT))) AS ArticuloEstrella,
---Marca    
+--Marca
     InvMarca.Nombre as Marca,
 -- Ultima Venta (Fecha)
     (SELECT TOP 1
@@ -840,13 +840,13 @@
   function R10Q_Analitico_Productos($IdArticulo) {
     $sql = "
       SELECT
-      invlote.Auditoria_FechaCreacion, 
+      invlote.Auditoria_FechaCreacion,
       InvLoteAlmacen.id as LoteAlmacenId,
       InvLoteAlmacen.InvLoteId,
       (SELECT IIF(InvMovimiento.InvCausaId = 1, 'COMPRA', 'INVENTARIO')) as Origen,
       InvMovimiento.InvCausaId,
-      InvCausa.Descripcion as Causa,      
-      InvMovimiento.DocumentoOrigen as NumeroReferencia,      
+      InvCausa.Descripcion as Causa,
+      InvMovimiento.DocumentoOrigen as NumeroReferencia,
       CONVERT(DATE,invlote.Auditoria_FechaCreacion) as FechaCreacionLote,
       CONVERT(DATE,invlote.FechaVencimiento) as FechaVencimiento,
       CONVERT(DATE,invlote.FechaEntrada) as FechaEntrada,
@@ -863,12 +863,12 @@
       LEFT JOIN InvMovimiento ON InvMovimiento.InvLoteId = InvLote.id
       LEFT JOIN InvCausa ON  InvCausa.Id = InvMovimiento.InvCausaId
       LEFT JOIN InvAlmacen ON InvAlmacen.Id = invlotealmacen.InvAlmacenId
-      WHERE 
+      WHERE
       InvLoteAlmacen.InvArticuloId = '$IdArticulo'
       AND InvLoteAlmacen.Existencia > 0
       AND (
-          (InvMovimiento.InvCausaId=1) 
-          OR (InvMovimiento.InvCausaId=5)    
+          (InvMovimiento.InvCausaId=1)
+          OR (InvMovimiento.InvCausaId=5)
           OR (InvMovimiento.InvCausaId=11)
       )
       ORDER BY invlote.Auditoria_FechaCreacion asc
@@ -885,13 +885,13 @@
   function R10Q_Analitico_Productos_SE($IdArticulo) {
     $sql = "
       SELECT
-      invlote.Auditoria_FechaCreacion, 
+      invlote.Auditoria_FechaCreacion,
       InvLoteAlmacen.id as LoteAlmacenId,
       InvLoteAlmacen.InvLoteId,
       (SELECT IIF(InvMovimiento.InvCausaId = 1, 'COMPRA', 'INVENTARIO')) as Origen,
       InvMovimiento.InvCausaId,
-      InvCausa.Descripcion as Causa,      
-      InvMovimiento.DocumentoOrigen as NumeroReferencia,      
+      InvCausa.Descripcion as Causa,
+      InvMovimiento.DocumentoOrigen as NumeroReferencia,
       CONVERT(DATE,invlote.Auditoria_FechaCreacion) as FechaCreacionLote,
       CONVERT(DATE,invlote.FechaVencimiento) as FechaVencimiento,
       CONVERT(DATE,invlote.FechaEntrada) as FechaEntrada,
@@ -908,12 +908,12 @@
       LEFT JOIN InvMovimiento ON InvMovimiento.InvLoteId = InvLote.id
       LEFT JOIN InvCausa ON  InvCausa.Id = InvMovimiento.InvCausaId
       LEFT JOIN InvAlmacen ON InvAlmacen.Id = invlotealmacen.InvAlmacenId
-      WHERE 
+      WHERE
       InvLoteAlmacen.InvArticuloId = '$IdArticulo'
       AND InvLoteAlmacen.Existencia <= 0
       AND (
-          (InvMovimiento.InvCausaId=1) 
-          OR (InvMovimiento.InvCausaId=5)    
+          (InvMovimiento.InvCausaId=1)
+          OR (InvMovimiento.InvCausaId=5)
           OR (InvMovimiento.InvCausaId=11)
       )
       ORDER BY invlote.Auditoria_FechaCreacion asc
@@ -931,7 +931,7 @@
     $sql="
     SELECT
     (
-      SELECT 
+      SELECT
       GenPersona.Nombre
       FROM ComFactura
       INNER JOIN ComProveedor ON ComProveedor.Id = ComFactura.ComProveedorId
@@ -950,7 +950,7 @@
       )
     ) AS Proveedor,
     (
-      SELECT 
+      SELECT
       ComFactura.NumeroFactura
       FROM ComFactura
       INNER JOIN ComProveedor ON ComProveedor.Id = ComFactura.ComProveedorId
@@ -969,7 +969,7 @@
       )
     ) AS NumeroFactura
     FROM invlotealmacen
-    WHERE 
+    WHERE
     InvLoteAlmacen.InvLoteId = '$InvLoteId'
     AND InvLoteAlmacen.InvArticuloId = '$InvArticuloId'
     AND InvLoteAlmacen.id = '$InvLoteAlmacenId'

@@ -160,7 +160,7 @@
                             <i class="fa fa-eye"></i>
                         </a>
 
-                        <a href="{{ '/surtido/' . $surtido->id . '/edit' }}" target="_blank" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top"data-original-title="Anular">
+                        <a href="{{ '/surtido/' . $surtido->id . '/edit' }}" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top"data-original-title="Anular">
                             <i class="fa fa-ban"></i>
                         </a>
                     </td>

@@ -1,7 +1,7 @@
 @extends('layouts.model')
 
 @section('title')
-    Inventario
+    Surtido de gavetas
 @endsection
 
 @section('content')
