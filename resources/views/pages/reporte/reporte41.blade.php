@@ -50,10 +50,11 @@
   </style>
 @endsection
 
+
 @section('content')
   <h1 class="h5 text-info">
     <i class="fas fa-file-invoice"></i>
-    Surtido de gavetas
+    Articulos competidos
   </h1>
   <hr class="row align-items-start col-12">
   <?php
@@ -71,11 +72,11 @@
       }
       echo '<hr class="row align-items-start col-12">';
 
-    if (isset($_GET['Id'])) {
+    if (isset($_GET['Id1'])) {
       $InicioCarga = new DateTime("now");
 
-      R40_Surtido_Gavetas($_GET['SEDE'],$_GET['Id']);
-      FG_Guardar_Auditoria('CONSULTAR','REPORTE','Surtido de gavetas');
+      R41_Articulos_Competidos($_GET['SEDE'],$_GET['fechaInicio'],$_GET['fechaFin'],$_GET['Id1'],$_GET['Id2'],$_GET['Id3']);
+      FG_Guardar_Auditoria('CONSULTAR','REPORTE','Articulos competidos');
 
       $FinCarga = new DateTime("now");
       $IntervalCarga = $InicioCarga->diff($FinCarga);
@@ -84,13 +85,13 @@
     else {
       $InicioCarga = new DateTime("now");
 
-      $sql1 = R40Q_Lista_Articulos();
+      $sql1 = R41Q_Lista_Articulos();
       $ArtJson = FG_Armar_Json($sql1,$_GET['SEDE']);
 
-      $sql2 = R40Q_Lista_Articulos_CodBarra();
+      $sql2 = R41Q_Lista_Articulos_CodBarra();
       $CodJson = FG_Armar_Json($sql2,$_GET['SEDE']);
 
-      $sql3 = R40Q_Lista_Articulos_CodInterno();
+      $sql3 = R41Q_Lista_Articulos_CodInterno();
       $CodIntJson = FG_Armar_Json($sql3,$_GET['SEDE']);
 
       echo '
@@ -115,14 +116,86 @@
             </tr>
 
             <tr>
-              <td colspan="4">
+              <td colspan="4">Producto 1</td>
+            </tr>
+            <tr>
+              <td colspan="2">
                 <div class="autocomplete" style="width:90%;">
                   <input id="myInput" type="text" name="Descrip" placeholder="Ingrese el nombre del articulo " onkeyup="conteo()">
                 </div>
 
-                <input id="myId" name="Id" type="hidden">
+                <input id="myId" name="Id1" type="hidden">
+              </td>
 
-                <input type="submit" value="Buscar" class="btn btn-outline-success" style="width:9%;">
+              <td>
+                <div class="autocomplete" style="width:90%;">
+                  <input id="myInputCB" type="text" name="CodBar" placeholder="Ingrese el codigo de barra del articulo " onkeyup="conteoCBInput(\'myInputCB\')"><input id="myIdCB" name="IdCB" type="hidden">
+                </div>
+              </td>
+
+              <td>
+                <div class="autocomplete" style="width:90%;">
+                  <input id="myInputCI" type="text" name="CodInt" placeholder="Ingrese el codigo interno del articulo " onkeyup="conteoCIInput(\'myInputCI\')">
+                </div>
+              </td>
+            </tr>
+
+            <tr>
+              <td colspan="4">&nbsp;</td>
+            </tr>
+
+            <tr>
+              <td colspan="4">Producto 2</td>
+            </tr>
+            <tr>
+              <td colspan="2">
+                <div class="autocomplete" style="width:90%;">
+                  <input id="myInput2" type="text" name="Descrip" placeholder="Ingrese el nombre del articulo " onkeyup="conteoInput(\'myInput2\')">
+                </div>
+
+                <input id="myId2" name="Id2" type="hidden">
+              </td>
+
+              <td>
+                <div class="autocomplete" style="width:90%;">
+                  <input id="myInputCB2" type="text" name="CodBar" placeholder="Ingrese el codigo de barra del articulo " onkeyup="conteoCBInput(\'myInputCB2\')"><input id="myIdCB" name="IdCB" type="hidden">
+                </div>
+              </td>
+
+              <td>
+                <div class="autocomplete" style="width:90%;">
+                  <input id="myInputCI2" type="text" name="CodInt" placeholder="Ingrese el codigo interno del articulo " onkeyup="conteoCIInput(\'myInputCI2\')">
+
+                </div>
+              </td>
+            </tr>
+
+            <tr>
+              <td colspan="4">&nbsp;</td>
+            </tr>
+
+            <tr>
+              <td colspan="4">Producto 3</td>
+            </tr>
+            <tr>
+              <td colspan="2">
+                <div class="autocomplete" style="width:90%;">
+                  <input id="myInput3" type="text" name="Descrip" placeholder="Ingrese el nombre del articulo " onkeyup="conteoInput(\'myInput3\')">
+                </div>
+
+                <input id="myId3" name="Id3" type="hidden">
+              </td>
+
+              <td>
+                <div class="autocomplete" style="width:90%;">
+                  <input id="myInputCB3" type="text" name="CodBar" placeholder="Ingrese el codigo de barra del articulo " onkeyup="conteoCBInput(\'myInputCB3\')">
+                </div>
+              </td>
+
+              <td>
+                <div class="autocomplete" style="width:90%;">
+                  <input id="myInputCI3" type="text" name="CodInt" placeholder="Ingrese el codigo interno del articulo " onkeyup="conteoCIInput(\'myInputCI3\')">
+                </div>
               </td>
             </tr>
 
@@ -132,32 +205,12 @@
 
             <tr>
               <td colspan="4">
-                <div class="autocomplete" style="width:90%;">
-                  <input id="myInputCB" type="text" name="CodBar" placeholder="Ingrese el codigo de barra del articulo " onkeyup="conteoCB()">
-                  <input id="myIdCB" name="IdCB" type="hidden">
-                </div>
-                <input id="SEDE" name="SEDE" type="hidden" value="';
-                  print_r($_GET['SEDE']);
-                  echo'">
-                <input type="submit" value="Buscar" class="btn btn-outline-success" style="width:9%;">
+                <button type="submit" class="btn btn-outline-success">Buscar</button>
               </td>
             </tr>
 
             <tr>
               <td colspan="4">&nbsp;</td>
-            </tr>
-
-            <tr>
-              <td colspan="4">
-                <div class="autocomplete" style="width:90%;">
-                  <input id="myInputCI" type="text" name="CodInt" placeholder="Ingrese el codigo interno del articulo " onkeyup="conteoCI()">
-                  <input id="myIdCI" name="IdCI" type="hidden">
-                </div>
-                <input id="SEDE" name="SEDE" type="hidden" value="';
-                  print_r($_GET['SEDE']);
-                  echo'">
-                <input type="submit" value="Buscar" class="btn btn-outline-success" style="width:9%;">
-              </td>
             </tr>
           </table>
         </form>
@@ -171,12 +224,163 @@
 @endsection
 
 @section('scriptsFoot')
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.2.0/chart.min.js" integrity="sha512-VMsZqo0ar06BMtg0tPsdgRADvl0kDHpTbugCBBrL55KmucH6hP9zWdLIWY//OTfMnzz6xWQRxQqsUFefwHuHyg==" crossorigin="anonymous"></script>
+  <script>
+    $('#form').submit(function (event) {
+        id1 = $('[name=Id1]').val();
+        id2 = $('[name=Id2]').val();
+
+        if (id1 == '' || id2 == '') {
+            alert('Debe seleccionar al menos dos productos');
+            event.preventDefault();
+        }
+    });
+
+    descripcion1 = $('[name=descripcion1]').val();
+    descripcion2 = $('[name=descripcion2]').val();
+
+    @if (isset($_GET['Id3']) && $_GET['Id3'] != '')
+        descripcion3 = $('[name=descripcion3]').val();
+    @endif
+
+    json1 = $('[name=json1]').val();
+    json2 = $('[name=json2]').val();
+
+    @if (isset($_GET['Id3']) && $_GET['Id3'] != '')
+        json3 = $('[name=json3]').val();
+    @endif
+
+    jsonAcumulado1 = $('[name=jsonAcumulado1]').val();
+    jsonAcumulado2 = $('[name=jsonAcumulado2]').val();
+
+    @if (isset($_GET['Id3']) && $_GET['Id3'] != '')
+        jsonAcumulado3 = $('[name=jsonAcumulado3]').val();
+    @endif
+
+    json1 = JSON.parse(json1);
+    json2 = JSON.parse(json2);
+
+    @if (isset($_GET['Id3']) && $_GET['Id3'] != '')
+        json3 = JSON.parse(json3);
+    @endif
+
+    jsonAcumulado1 = JSON.parse(jsonAcumulado1);
+    jsonAcumulado2 = JSON.parse(jsonAcumulado2);
+
+    @if (isset($_GET['Id3']) && $_GET['Id3'] != '')
+        jsonAcumulado3 = JSON.parse(jsonAcumulado3);
+    @endif
+
+    fechas = $('[name=fechas]').val();
+    fechas = JSON.parse(fechas);
+
+    const labels = fechas;
+    const data = {
+      labels: labels,
+      datasets: [
+        {
+          label: descripcion1,
+          data: json1,
+          borderColor: '#17a2b8',
+          backgroundColor: '#17a2b8',
+        },
+        {
+          label: descripcion2,
+          data: json2,
+          borderColor: '#28a745',
+          backgroundColor: '#28a745',
+        },
+        @if(isset($_GET['Id3']) && $_GET['Id3'] != '')
+        {
+          label: descripcion3,
+          data: json3,
+          borderColor: '#343a40',
+          backgroundColor: '#343a40',
+        }
+        @endif
+      ]
+    };
+
+    const dataAcumulado = {
+      labels: labels,
+      datasets: [
+        {
+          label: descripcion1,
+          data: jsonAcumulado1,
+          borderColor: '#17a2b8',
+          backgroundColor: '#17a2b8',
+        },
+        {
+          label: descripcion2,
+          data: jsonAcumulado2,
+          borderColor: '#28a745',
+          backgroundColor: '#28a745',
+        },
+        @if(isset($_GET['Id3']) && $_GET['Id3'] != '')
+        {
+          label: descripcion3,
+          data: jsonAcumulado3,
+          borderColor: '#343a40',
+          backgroundColor: '#343a40',
+        }
+        @endif
+      ]
+    };
+
+    const config = {
+      type: 'line',
+      data: data,
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            position: 'top',
+          },
+          title: {
+            display: true,
+            text: 'Ventas por día'
+          }
+        }
+      },
+    };
+
+    const configAcumulado = {
+      type: 'line',
+      data: dataAcumulado,
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            position: 'top',
+          },
+          title: {
+            display: true,
+            text: 'Ventas acumuladas'
+          }
+        }
+      },
+    };
+
+    var chart = new Chart(
+        document.getElementById('canvas'),
+        config
+    );
+
+    var chartAcumulado = new Chart(
+        document.getElementById('canvasAcumulado'),
+        configAcumulado
+    );
+  </script>
+
+
   <?php
     if($ArtJson!=""){
   ?>
     <script type="text/javascript">
       ArrJs = eval(<?php echo $ArtJson ?>);
       autocompletado(document.getElementById("myInput"),document.getElementById("myId"), ArrJs);
+      autocompletado2(document.getElementById("myInput2"),document.getElementById("myId2"), ArrJs);
+      autocompletado3(document.getElementById("myInput3"),document.getElementById("myId3"), ArrJs);
     </script>
   <?php
     }
@@ -188,6 +392,8 @@
     <script type="text/javascript">
       ArrJsCB = eval(<?php echo $CodJson ?>);
       autocompletadoCB(document.getElementById("myInputCB"),document.getElementById("myId"), ArrJsCB);
+      autocompletadoCB2(document.getElementById("myInputCB2"),document.getElementById("myId2"), ArrJsCB);
+      autocompletadoCB3(document.getElementById("myInputCB3"),document.getElementById("myId3"), ArrJsCB);
     </script>
   <?php
     }
@@ -197,6 +403,8 @@
     <script type="text/javascript">
       ArrJsInt = eval(<?php echo $CodIntJson ?>);
       autocompletadoCI(document.getElementById("myInputCI"),document.getElementById("myId"), ArrJsInt);
+      autocompletadoCI2(document.getElementById("myInputCI2"),document.getElementById("myId2"), ArrJsInt);
+      autocompletadoCI3(document.getElementById("myInputCI3"),document.getElementById("myId3"), ArrJsInt);
     </script>
   <?php
     }
@@ -206,49 +414,53 @@
 <?php
   /**********************************************************************************/
   /*
-    TITULO: R40_Surtido_Gavetas
+    TITULO: R41_Articulos_Competidos
     FUNCION: Armar una tabla del historico de compra del articulo
     RETORNO: No aplica
-    DESAROLLADO POR: NISAUL DELGADo
+    DESAROLLADO POR: NISAUL DELGADO
   */
-  function R40_Surtido_Gavetas($SedeConnection,$IdArticulo) {
+  function R41_Articulos_Competidos($SedeConnection,$fechaInicio,$fechaFin,$Id1,$Id2,$Id3) {
     $conn = FG_Conectar_Smartpharma($SedeConnection);
-    $connCPharma = FG_Conectar_CPharma();
 
-    $sql4 = R40Q_Detalle_Articulo($_GET['Id']);
-    $result1 = sqlsrv_query($conn,$sql4);
+    $sql1 = R41Q_Detalle_Articulo($Id1);
+    $result1 = sqlsrv_query($conn,$sql1);
     $row1 = sqlsrv_fetch_array($result1);
+    $descripcion1 = $row1['Descripcion'];
 
-    $codigo_interno = $row1['CodigoInterno'];
-    $codigo_barra = $row1['CodigoBarra'];
-    $descripcion = $row1['Descripcion'];
-    $existencia = $row1['Existencia'];
+    $sql2 = R41Q_Detalle_Articulo($Id2);
+    $result2 = sqlsrv_query($conn,$sql2);
+    $row2 = sqlsrv_fetch_array($result2);
+    $descripcion2 = $row2['Descripcion'];
 
-    $Existencia = $row1["Existencia"];
-    $ExistenciaAlmacen1 = $row1["ExistenciaAlmacen1"];
-    $ExistenciaAlmacen2 = $row1["ExistenciaAlmacen2"];
-    $IsTroquelado = $row1["Troquelado"];
-    $UtilidadArticulo = $row1["UtilidadArticulo"];
-    $UtilidadCategoria = $row1["UtilidadCategoria"];
-    $TroquelAlmacen1 = $row1["TroquelAlmacen1"];
-    $PrecioCompraBrutoAlmacen1 = $row1["PrecioCompraBrutoAlmacen1"];
-    $TroquelAlmacen2 = $row1["TroquelAlmacen2"];
-    $PrecioCompraBrutoAlmacen2 = $row1["PrecioCompraBrutoAlmacen2"];
-    $PrecioCompraBruto = $row1["PrecioCompraBruto"];
-    $IsIVA = $row1["Impuesto"];
-    $CondicionExistencia = 'CON_EXISTENCIA';
+    if ($Id3 != '') {
+        $sql3 = R41Q_Detalle_Articulo($Id3);
+        $result3 = sqlsrv_query($conn,$sql3);
+        $row3 = sqlsrv_fetch_array($result3);
+        $descripcion3 = $row3['Descripcion'];
+    }
 
-    $Precio = FG_Calculo_Precio_Alfa($Existencia,$ExistenciaAlmacen1,$ExistenciaAlmacen2,$IsTroquelado,$UtilidadArticulo,$UtilidadCategoria,$TroquelAlmacen1,$PrecioCompraBrutoAlmacen1,$TroquelAlmacen2,
-    $PrecioCompraBrutoAlmacen2,$PrecioCompraBruto,$IsIVA,$CondicionExistencia);
-    $precio = number_format($Precio, 2, ',', '.');
-
-    $Tasa = DB::table('tasa_ventas')->where('moneda', 'Dolar')->value('tasa');
-    $Tasa = ($Tasa) ? $Tasa : 0;
-
-    $dolares = $Precio / $Tasa;
-    $dolares = number_format($dolares, 2, ',', '.');
 
     echo '
+    <input type="hidden" name="descripcion1" value="'.$descripcion1.'">
+    <input type="hidden" name="descripcion2" value="'.$descripcion2.'">';
+
+    if (isset($descripcion3)) {
+        echo '<input type="hidden" name="descripcion3" value="'.$descripcion3.'">';
+    }
+
+    echo '
+    <div class="row">
+        <div class="col-md-6">
+            <canvas id="canvas"></canvas>
+        </div>
+
+        <div class="col-md-6">
+            <canvas id="canvasAcumulado"></canvas>
+        </div>
+    </div>
+
+    <br>
+
     <div class="input-group md-form form-sm form-1 pl-0 CP-stickyBar">
       <div class="input-group-prepend">
         <span class="input-group-text purple lighten-3" id="basic-text1">
@@ -263,92 +475,157 @@
     <table class="table table-striped table-bordered col-12 sortable">
       <thead class="thead-dark">
         <tr>
-          <th scope="col">Código Interno</th>
-          <th scope="col">Código de barra</th>
-          <th scope="col">Descripción</th>
-          <th scope="col">Existencia actual</th>
-          <th scope="col">Precio Bs.S</th>
-          <th scope="col">Precio $</th>
+          <th class="CP-stickyBar" scope="col" colspan="2"></th>
+          <th class="CP-stickyBar" scope="col" colspan="2">Articulo 1</th>
+          <th class="CP-stickyBar" scope="col" colspan="2">Articulo 2</th>';
+
+    if (isset($descripcion3)) {
+        echo '<th class="CP-stickyBar" scope="col" colspan="2">Articulo 3</th>';
+    }
+
+    echo '
+        </tr>
+        <tr>
+          <th class="CP-stickyBar" scope="col" colspan="2"></th>
+          <th class="CP-stickyBar" scope="col" colspan="2">'.$descripcion1.'</th>
+          <th class="CP-stickyBar" scope="col" colspan="2">'.$descripcion2.'</th>';
+
+    if (isset($descripcion3)) {
+        echo '<th class="CP-stickyBar" scope="col" colspan="2">'.$descripcion3.'</th>';
+    }
+
+    echo '
+        </tr>
+        <tr>
+          <th class="CP-stickyBar" scope="col">#</th>
+          <th class="CP-stickyBar" scope="col">Fecha</th>
+          <th class="CP-stickyBar" scope="col">Ventas</th>
+          <th class="CP-stickyBar" scope="col">Acumulado</th>
+          <th class="CP-stickyBar" scope="col">Ventas</th>
+          <th class="CP-stickyBar" scope="col">Acumulado</th>';
+
+    if (isset($descripcion3)) {
+        echo '
+            <th class="CP-stickyBar" scope="col">Ventas</th>
+            <th class="CP-stickyBar" scope="col">Acumulado</th>
+        ';
+    }
+
+    echo '
         </tr>
       </thead>
-      <tbody>
+      <tbody>';
+
+    $fechaInicio = new \DateTime($_GET['fechaInicio']);
+    $fechaFin = new \DateTime($_GET['fechaFin']);
+
+    $diff = date_diff($fechaInicio, $fechaFin)->format('%a');
+
+    $contador = 1;
+
+    $acumulado1 = 0;
+    $acumulado2 = 0;
+    $acumulado3 = 0;
+
+    for ($i=0; $i < $diff + 1; $i++) {
+
+        $fechaBucle = $fechaInicio;
+
+        $sqlVentas1 = R41Q_Ventas($Id1,$fechaBucle->format('Y-m-d'));
+        $resultVentas1 = sqlsrv_query($conn,$sqlVentas1);
+        $rowVentas1 = sqlsrv_fetch_array($resultVentas1);
+        $ventas1 = $rowVentas1['ventas'];
+
+        $sqlVentas2 = R41Q_Ventas($Id2,$fechaBucle->format('Y-m-d'));
+        $resultVentas2 = sqlsrv_query($conn,$sqlVentas2);
+        $rowVentas2 = sqlsrv_fetch_array($resultVentas2);
+        $ventas2 = $rowVentas2['ventas'];
+
+        $sqlVentas3 = R41Q_Ventas($Id3,$fechaBucle->format('Y-m-d'));
+        $resultVentas3 = sqlsrv_query($conn,$sqlVentas3);
+        $rowVentas3 = sqlsrv_fetch_array($resultVentas3);
+        $ventas3 = $rowVentas3['ventas'];
+
+        $acumulado1 += $ventas1;
+        $acumulado2 += $ventas2;
+        $acumulado3 += $ventas3;
+
+        $json1[] = $ventas1;
+        $json2[] = $ventas2;
+        $json3[] = $ventas3;
+
+        $jsonAcumulado1[] = $acumulado1;
+        $jsonAcumulado2[] = $acumulado2;
+        $jsonAcumulado3[] = $acumulado3;
+
+        $fechas[] = $fechaBucle->format('d/m/Y');
+
+        echo '
+            <tr>
+                <td>'.$contador++.'</td>
+                <td>'.$fechaBucle->format('d/m/Y').'</td>
+                <td>'.$ventas1.'</td>
+                <td>'.$acumulado1.'</td>
+                <td>'.$ventas2.'</td>
+                <td>'.$acumulado2.'</td>';
+
+        if (isset($descripcion3)) {
+
+        echo   '<td>'.$ventas3.'</td>
+                <td>'.$acumulado3.'</td>';
+        }
+
+        echo '</tr>
+
+        ';
+
+        $fechaInicio->modify('+1day');
+    }
+
+    echo '
         <tr>
-            <td align="center">'.$codigo_interno.'</td>
-            <td align="center">'.$codigo_barra.'</td>
-            <td align="center">'.$descripcion.'</td>
-            <td align="center">'.$existencia.'</td>
-            <td align="center">'.$precio.'</td>
-            <td align="center">'.$dolares.'</td>
-        </tr>
+            <td></td>
+            <td></td>
+            <td><b>'.$acumulado1.'</b></td>
+            <td></td>
+            <td><b>'.$acumulado2.'</b></td>
+            <td></td>';
+
+    if (isset($descripcion3)) {
+    echo '
+            <td><b>'.$acumulado3.'</b></td>
+            <td></td>';
+    }
+
+    echo '</tr>
+    ';
+
+
+    echo '
       </tbody>
     </table>
 
+    <input type="hidden" name="json1" value="'.json_encode($json1).'">
+    <input type="hidden" name="json2" value="'.json_encode($json2).'">
+    <input type="hidden" name="json3" value="'.json_encode($json3).'">
 
-    <br/>
+    <input type="hidden" name="jsonAcumulado1" value="'.json_encode($jsonAcumulado1).'">
+    <input type="hidden" name="jsonAcumulado2" value="'.json_encode($jsonAcumulado2).'">';
 
-    <table class="table table-striped table-bordered col-12 sortable" id="myTable">
-      <thead class="thead-dark">
-        <tr>
-          <th scope="col">#</th>
-          <th scope="col">Control surtido</th>
-          <th scope="col">Fecha y hora</th>
-          <th scope="col">Estatus</th>
-          <th scope="col">Unidades</th>
-          <th scope="col">Operador</th>
-        </tr>
-      </thead>
-      <tbody>
-    ';
-
-    $result2 = mysqli_query($connCPharma, "
-      SELECT
-        surtido_detalles.control,
-        surtido_detalles.created_at AS fecha,
-        (SELECT surtidos.estatus FROM surtidos WHERE surtidos.control = surtido_detalles.control) AS estatus,
-        surtido_detalles.cantidad AS unidades,
-        (SELECT surtidos.operador_procesado FROM surtidos WHERE surtidos.control = surtido_detalles.control) AS operador
-      FROM surtido_detalles
-      WHERE surtido_detalles.id_articulo = '$IdArticulo'
-    ");
-
-    $contador = intval(1);
-
-    while ($row2 = mysqli_fetch_array($result2)) {
-      $control = $row2['control'];
-      $fecha = date_create($row2['fecha'])->format('d/m/Y H:i A');
-      $estatus = $row2['estatus'];
-      $unidades = $row2['unidades'];
-      $operador = $row2['operador'];
-
-
-      echo '<tr>';
-
-      echo '<td align="center"><strong>'.$contador.'</strong></td>';
-      echo '<td align="center">'.$control.'</td>';
-      echo '<td align="center">'.$fecha.'</td>';
-      echo '<td align="center">'.$estatus.'</td>';
-      echo '<td align="center">'.$unidades.'</td>';
-      echo '<td align="center">'.$operador.'</td>';
-
-      echo '</tr>';
-
-      $contador++;
+    if (isset($descripcion3)) {
+        echo '<input type="hidden" name="jsonAcumulado3" value="'.json_encode($jsonAcumulado3).'">';
     }
 
-    echo '</tbody>
-    </table>';
-
-    mysqli_close($connCPharma);
-    sqlsrv_close($conn);
+    echo '<input type="hidden" name="fechas" value=\''.json_encode($fechas).'\'>';
   }
   /**********************************************************************************/
   /*
-    TITULO: R40Q_Lista_Articulos
+    TITULO: R41Q_Lista_Articulos
     FUNCION: Armar una lista de articulos con descripcion e id
     RETORNO: Lista de articulos con descripcion e id
     DESAROLLADO POR: SERGIO COVA
   */
-  function R40Q_Lista_Articulos() {
+  function R41Q_Lista_Articulos() {
     $sql = "
       SELECT
       InvArticulo.Descripcion,
@@ -360,12 +637,12 @@
   }
   /**********************************************************************************/
   /*
-    TITULO: R40Q_Lista_Articulos_CodBarra
+    TITULO: R41Q_Lista_Articulos_CodBarra
     FUNCION: Armar una lista de articulos con descripcion e id
     RETORNO: Lista de articulos con descripcion e id
     DESAROLLADO POR: SERGIO COVA
   */
-  function R40Q_Lista_Articulos_CodBarra() {
+  function R41Q_Lista_Articulos_CodBarra() {
     $sql = "
       SELECT
       (SELECT CodigoBarra
@@ -380,12 +657,12 @@
   }
   /**********************************************************************************/
   /*
-    TITULO: R40Q_Lista_Articulos_CodInterno
+    TITULO: R41Q_Lista_Articulos_CodInterno
     FUNCION: Armar una lista de articulos con descripcion e id
     RETORNO: Lista de articulos con descripcion e id
     DESAROLLADO POR: NISAUL DELGADO
   */
-  function R40Q_Lista_Articulos_CodInterno() {
+  function R41Q_Lista_Articulos_CodInterno() {
     $sql = "
       SELECT
         InvArticulo.CodigoArticulo,
@@ -397,12 +674,30 @@
   }
   /**********************************************************************************/
   /*
-    TITULO: R40Q_Detalle_Articulo
+    TITULO: R41Q_Ventas
+    FUNCION: Cantidad de ventas del articulo
+    RETORNO: Cantidad de ventas del articulo
+    DESAROLLADO POR: NISAUL DELGADO
+  */
+  function R41Q_Ventas($IdArticulo,$Fecha) {
+    $sql = "
+      SELECT
+        COUNT(1) AS ventas
+      FROM VenFacturaDetalle
+      WHERE
+        VenFacturaDetalle.InvArticuloId = '$IdArticulo' AND
+        VenFacturaDetalle.VenFacturaId IN (SELECT VenFactura.Id FROM VenFactura WHERE CONVERT(DATE, VenFactura.FechaDocumento) = '$Fecha')
+    ";
+    return $sql;
+  }
+  /**********************************************************************************/
+  /*
+    TITULO: R41Q_Detalle_Articulo
     FUNCION: Query que genera el detalle del articulo solicitado
     RETORNO: Detalle del articulo
     DESAROLLADO POR: SERGIO COVA
   */
-  function R40Q_Detalle_Articulo($IdArticulo) {
+  function R41Q_Detalle_Articulo($IdArticulo) {
     $sql = "
       SELECT
 --Id Articulo

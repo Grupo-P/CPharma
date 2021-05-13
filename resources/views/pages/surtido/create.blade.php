@@ -178,9 +178,14 @@
         articulos = [];
 
         $('[name=cantidad]').keypress(function (event) {
-            if (event.key == 'Enter') {
-                agregar();
+            value = $(this).val();
+
+            if (value > 0) {
+                if (event.key == 'Enter') {
+                    agregar();
+                }
             }
+
         });
 
         $('#form').submit(function () {
@@ -326,6 +331,8 @@
             descripcion = $('[name=descripcion]').val();
             existencia = $('[name=existencia]').val();
             cantidad = $('[name=cantidad]').val();
+
+            cantidad = parseInt(cantidad);
 
             html = `
                 <tr>

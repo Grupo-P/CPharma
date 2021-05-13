@@ -148,6 +148,8 @@
                 <td scope="col">Revisión de inventarios físicos</td>
                 <th scope="col">40</th>
                 <td scope="col">Surtido de gavetas</td>
+                <th scope="col">41</th>
+                <td scope="col">Artículos competidos</td>
             </tr>
         </tbody>
     </table>

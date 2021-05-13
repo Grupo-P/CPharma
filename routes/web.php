@@ -220,6 +220,11 @@ Route::get('/reporte40', function() {
     return view('pages.reporte.reporte40');
 });
 
+Route::get('/reporte41', function() {
+    return view('pages.reporte.reporte41');
+});
+
+
 Route::get('/seccion1', function() {
     return view('pages.reporte.seccion1');
 });
