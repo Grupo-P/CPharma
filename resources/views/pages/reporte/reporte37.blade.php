@@ -34,8 +34,8 @@
     .autocomplete-items div {
       padding:10px;
       cursor:pointer;
-      background-color:#fff; 
-      border-bottom:1px solid #d4d4d4; 
+      background-color:#fff;
+      border-bottom:1px solid #d4d4d4;
     }
 
     .autocomplete-items div:hover {background-color:#e9e9e9;}
@@ -104,8 +104,8 @@
                 <input id="existenciaUsuario" type="number" name="existenciaUsuario" required style="width:100%;">
               </td>
 
-              <input id="SEDE" name="SEDE" type="hidden" value="'; 
-                print_r($_GET['SEDE']); 
+              <input id="SEDE" name="SEDE" type="hidden" value="';
+                print_r($_GET['SEDE']);
               echo'">
 
               <td align="right">
@@ -128,7 +128,7 @@
     RETORNO: No aplica
   */
   function R37_Traslados_Entre_Tiendas($SedeConnection,$existenciaUsuario) {
-    
+
     $conn = FG_Conectar_Smartpharma($SedeConnection);
     $connCPharma = FG_Conectar_CPharma();
     $Hoy = new DateTime('now');
@@ -209,7 +209,7 @@
       $codigo_articulo = $row2['CodigoInterno'];
     	$codigo_barra = $row2['CodigoBarra'];
 
-    	$existencia = intval($row2['Existencia']);    	
+    	$existencia = intval($row2['Existencia']);
     	$descripcion = FG_Limpiar_Texto($row2['Descripcion']);
     	$ultima_venta = ($row2['UltimaVenta']) ? $row2['UltimaVenta']->format('d/m/Y') : '00/00/0000';
 
@@ -313,34 +313,64 @@
         echo '<td align="center">'.$precio.'</td>';
 
         if (isset($_GET['SEDE']) & ($_GET['SEDE'] == 'FAU' || $_GET['SEDE'] == 'DBs')) {
-          echo '<td align="center">'.$descripcion_ftn.'</td>
-                <td align="center">'.$existencia_ftn.'</td>
-                <td align="center">'.$descripcion_fll.'</td>
-                <td align="center">'.$existencia_fll.'</td>
-          ';
+            if ($conectividad_ftn == 1) {
+                echo '<td align="center">'.$descripcion_ftn.'</td>
+                      <td align="center">'.$existencia_ftn.'</td>';
+            } else {
+                echo '<td>-</td>';
+                echo '<td>-</td>';
+            }
+
+            if ($conectividad_fll == 1) {
+                echo '<td align="center">'.$descripcion_fll.'</td>
+                      <td align="center">'.$existencia_fll.'</td>';
+            } else {
+                echo '<td>-</td>';
+                echo '<td>-</td>';
+            }
         }
 
         if (isset($_GET['SEDE']) & $_GET['SEDE'] == 'FTN') {
-          echo '<td align="center">'.$descripcion_fau.'</td>
-                <td align="center">'.$existencia_fau.'</td>
-                <td align="center">'.$descripcion_fll.'</td>
-                <td align="center">'.$existencia_fll.'</td>
-          ';
+            if ($conectividad_fau == 1) {
+                echo '<td align="center">'.$descripcion_fau.'</td>
+                      <td align="center">'.$existencia_fau.'</td>';
+            } else {
+                echo '<td>-</td>';
+                echo '<td>-</td>';
+            }
+
+            if ($conectividad_fll == 1) {
+                echo '<td align="center">'.$descripcion_fll.'</td>
+                      <td align="center">'.$existencia_fll.'</td>';
+            } else {
+                echo '<td>-</td>';
+                echo '<td>-</td>';
+            }
         }
 
-          if (isset($_GET['SEDE']) & $_GET['SEDE'] == 'FLL') {
-            echo '<td align="center">'.$descripcion_ftn.'</td>
-                  <td align="center">'.$existencia_ftn.'</td>
-                  <td align="center">'.$descripcion_fau.'</td>
-                  <td align="center">'.$existencia_fau.'</td>
-            ';
-          }
+        if (isset($_GET['SEDE']) & $_GET['SEDE'] == 'FLL') {
+            if ($conectividad_ftn == 1) {
+                echo '<td align="center">'.$descripcion_ftn.'</td>
+                      <td align="center">'.$existencia_ftn.'</td>';
+            } else {
+                echo '<td>-</td>';
+                echo '<td>-</td>';
+            }
+
+            if ($conectividad_fau == 1) {
+                echo '<td align="center">'.$descripcion_fau.'</td>
+                      <td align="center">'.$existencia_fau.'</td>';
+            } else {
+                echo '<td>-</td>';
+                echo '<td>-</td>';
+            }
+        }
 
         echo '<td align="center">'.$existenciaForanea.'</td>';
         echo '</tr>';
 
 
-      	$contador++;        
+      	$contador++;
       }
 
 
@@ -511,7 +541,7 @@
     WHERE
     InvAtributo.Descripcion = 'Articulo Estrella')
     AND InvArticuloAtributo.InvArticuloId = InvArticulo.Id),CAST(0 AS INT))) AS ArticuloEstrella,
---Marca    
+--Marca
     InvMarca.Nombre as Marca,
 -- Ultima Venta (Fecha)
     (SELECT TOP 1
