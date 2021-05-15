@@ -376,7 +376,11 @@
           $TroquelSugerido = round($row1["PrecioBrutoDevolucion"],2,PHP_ROUND_HALF_UP);
         }
 
-        if( ($Dolarizado=="NO") && ($row1["PTroquel"]=='' || $row1["PTroquel"]==NULL) && ($Precio == $TroquelSugerido) ){
+        if( ($Dolarizado=="NO") && ($row1["PTroquel"]=='' || $row1["PTroquel"]==NULL) && ( round($Precio,2,PHP_ROUND_HALF_UP) == $TroquelSugerido)){
+          $TroquelSugerido = "";
+        }                             
+		
+        if(($row1["ExistenciaActual"] <= 0)){
           $TroquelSugerido = "";
         }                             
 
