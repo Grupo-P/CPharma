@@ -7,7 +7,7 @@
 <!-------------------------------------------------------------------------------->
 <!-- DASHBOARD -->
   <li class="navbar-brand">
-    <a class="btn btn-outline-info textoN" href="{{ url('/home') }}" role="button"> 
+    <a class="btn btn-outline-info textoN" href="{{ url('/home') }}" role="button">
       <i class="fas fa-columns"></i> Dashboard
     </a>
   </li>
@@ -67,14 +67,14 @@
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="{{ url('/ordenCompra') }}">     
+        <a class="nav-link CP-Links-Menu" href="{{ url('/ordenCompra') }}">
           <span data-feather="home"></span>
           <i class="far fa-file-alt"></i>
           Orden de compra<span class="sr-only">(current)</span>
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="{{ url('/ConsultorCompra') }}" target="_blank">     
+        <a class="nav-link CP-Links-Menu" href="{{ url('/ConsultorCompra') }}" target="_blank">
           <span data-feather="home"></span>
           <i class="fas fa-search"></i>
           Buscador de articulos<span class="sr-only">(current)</span>
@@ -104,21 +104,21 @@
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="{{ url('categoria') }}">     
+        <a class="nav-link CP-Links-Menu" href="{{ url('categoria') }}">
           <span data-feather="home"></span>
           <i class="fas fa-tag"></i>
           Categoria<span class="sr-only">(current)</span>
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="{{ url('subcategoria') }}">     
+        <a class="nav-link CP-Links-Menu" href="{{ url('subcategoria') }}">
           <span data-feather="home"></span>
           <i class="fas fa-tag"></i>
           Subcategoria<span class="sr-only">(current)</span>
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="{{ url('categorizacion') }}">     
+        <a class="nav-link CP-Links-Menu" href="{{ url('categorizacion') }}">
           <span data-feather="home"></span>
           <i class="fas fa-tag"></i>
           Categorizacion<span class="sr-only">(current)</span>
@@ -132,49 +132,49 @@
         </a>
       </li>
      <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="{{ url('/reporte8/') }}">     
+        <a class="nav-link CP-Links-Menu" href="{{ url('/reporte8/') }}">
           <span data-feather="home"></span>
           <i class="fas fa-stamp"></i>
           Troquel (Proveedor)<span class="sr-only">(current)</span>
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="{{ url('/seccion1/') }}">     
+        <a class="nav-link CP-Links-Menu" href="{{ url('/seccion1/') }}">
           <span data-feather="home"></span>
           <i class="fas fa-stamp"></i>
           Troquel (Cliente)<span class="sr-only">(current)</span>
         </a>
-      </li> 
+      </li>
       <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="{{ url('/seccion2/') }}">     
+        <a class="nav-link CP-Links-Menu" href="{{ url('/seccion2/') }}">
           <span data-feather="home"></span>
           <i class="fas fa-stamp"></i>
           Troquel (Devolucion)<span class="sr-only">(current)</span>
         </a>
-      </li>     
+      </li>
       <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="{{ url('/reporte23/') }}">    
+        <a class="nav-link CP-Links-Menu" href="{{ url('/reporte23/') }}">
           <span data-feather="home"></span>
           <i class="fas fa-calendar-alt"></i>
           Fecha de Vencimiento<span class="sr-only">(current)</span>
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="{{ url('/cartaCompromiso') }}">     
+        <a class="nav-link CP-Links-Menu" href="{{ url('/cartaCompromiso') }}">
           <span data-feather="home"></span>
           <i class="fas fa-list"></i>
           Compromisos<span class="sr-only">(current)</span>
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="{{ url('/traslado') }}">     
+        <a class="nav-link CP-Links-Menu" href="{{ url('/traslado') }}">
           <span data-feather="home"></span>
           <i class="fas fa-people-carry"></i>
           Traslado<span class="sr-only">(current)</span>
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="{{ url('/ordenCompra') }}">     
+        <a class="nav-link CP-Links-Menu" href="{{ url('/ordenCompra') }}">
           <span data-feather="home"></span>
           <i class="far fa-file-alt"></i>
           Orden de compra<span class="sr-only">(current)</span>
@@ -188,7 +188,7 @@
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="{{ url('/ConsultorCompra') }}" target="_blank">     
+        <a class="nav-link CP-Links-Menu" href="{{ url('/ConsultorCompra') }}" target="_blank">
           <span data-feather="home"></span>
           <i class="fas fa-search"></i>
           Buscador de articulos<span class="sr-only">(current)</span>
@@ -225,10 +225,17 @@
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="{{ url('/traslado') }}">     
+        <a class="nav-link CP-Links-Menu" href="{{ url('/traslado') }}">
           <span data-feather="home"></span>
           <i class="fas fa-people-carry"></i>
           Traslado<span class="sr-only">(current)</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('/surtido') }}">
+          <span data-feather="home"></span>
+          <i class="fas fa-box"></i>
+          Surtido de gavetas<span class="sr-only">(current)</span>
         </a>
       </li>
     </div>
@@ -255,21 +262,21 @@
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="{{ url('/cartaCompromiso') }}">   
+        <a class="nav-link CP-Links-Menu" href="{{ url('/cartaCompromiso') }}">
           <span data-feather="home"></span>
           <i class="fas fa-list"></i>
           Compromisos<span class="sr-only">(current)</span>
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="{{ url('/traslado') }}">     
+        <a class="nav-link CP-Links-Menu" href="{{ url('/traslado') }}">
           <span data-feather="home"></span>
           <i class="fas fa-people-carry"></i>
           Traslado<span class="sr-only">(current)</span>
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="{{ url('/ordenCompra') }}">     
+        <a class="nav-link CP-Links-Menu" href="{{ url('/ordenCompra') }}">
           <span data-feather="home"></span>
           <i class="far fa-file-alt"></i>
           Orden de compra<span class="sr-only">(current)</span>
@@ -299,21 +306,21 @@
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="{{ url('categoria') }}">     
+        <a class="nav-link CP-Links-Menu" href="{{ url('categoria') }}">
           <span data-feather="home"></span>
           <i class="fas fa-tag"></i>
           Categoria<span class="sr-only">(current)</span>
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="{{ url('subcategoria') }}">     
+        <a class="nav-link CP-Links-Menu" href="{{ url('subcategoria') }}">
           <span data-feather="home"></span>
           <i class="fas fa-tag"></i>
           Subcategoria<span class="sr-only">(current)</span>
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="{{ url('categorizacion') }}">     
+        <a class="nav-link CP-Links-Menu" href="{{ url('categorizacion') }}">
           <span data-feather="home"></span>
           <i class="fas fa-tag"></i>
           Categorizacion<span class="sr-only">(current)</span>
@@ -327,14 +334,14 @@
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="{{ url('/etiqueta') }}">     
+        <a class="nav-link CP-Links-Menu" href="{{ url('/etiqueta') }}">
           <span data-feather="home"></span>
           <i class="fas fa-tag"></i>
           Etiquetas<span class="sr-only">(current)</span>
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="{{ url('/ConsultorCompra') }}" target="_blank">     
+        <a class="nav-link CP-Links-Menu" href="{{ url('/ConsultorCompra') }}" target="_blank">
           <span data-feather="home"></span>
           <i class="fas fa-search"></i>
           Buscador de articulos<span class="sr-only">(current)</span>
@@ -351,14 +358,14 @@
         if(Auth::user()->role == 'SUPERVISOR'){
       ?>
         <li class="nav-item">
-          <a class="nav-link CP-Links-Menu" href="{{ url('/ordenCompra') }}">     
+          <a class="nav-link CP-Links-Menu" href="{{ url('/ordenCompra') }}">
             <span data-feather="home"></span>
             <i class="far fa-file-alt"></i>
             Orden de compra<span class="sr-only">(current)</span>
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link CP-Links-Menu" href="{{ url('/traslado') }}">     
+          <a class="nav-link CP-Links-Menu" href="{{ url('/traslado') }}">
             <span data-feather="home"></span>
             <i class="fas fa-people-carry"></i>
             Traslado<span class="sr-only">(current)</span>
@@ -414,7 +421,7 @@
     </button>
     <div class="dropdown-menu">
       <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="{{ url('/ordenCompra') }}">     
+        <a class="nav-link CP-Links-Menu" href="{{ url('/ordenCompra') }}">
           <span data-feather="home"></span>
           <i class="far fa-file-alt"></i>
           Orden de compra<span class="sr-only">(current)</span>
@@ -499,7 +506,7 @@
           Prácticas<span class="sr-only">(current)</span>
         </a>
       </li>
-      
+
       <li class="nav-item">
         <a class="nav-link CP-Links-Menu" href="/contactos">
           <span data-feather="home"></span>
@@ -523,7 +530,7 @@
           Empresas de referencias<span class="sr-only">(current)</span>
         </a>
       </li>
-      
+
       <li class="nav-item">
         <a class="nav-link CP-Links-Menu" href="/laboratorio">
           <span data-feather="home"></span>
@@ -555,21 +562,21 @@
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="{{ url('/cartaCompromiso') }}">  
+        <a class="nav-link CP-Links-Menu" href="{{ url('/cartaCompromiso') }}">
           <span data-feather="home"></span>
           <i class="fas fa-list"></i>
           Compromisos<span class="sr-only">(current)</span>
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="{{ url('/traslado') }}">     
+        <a class="nav-link CP-Links-Menu" href="{{ url('/traslado') }}">
           <span data-feather="home"></span>
           <i class="fas fa-people-carry"></i>
           Traslado<span class="sr-only">(current)</span>
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="{{ url('/ordenCompra') }}">     
+        <a class="nav-link CP-Links-Menu" href="{{ url('/ordenCompra') }}">
           <span data-feather="home"></span>
           <i class="far fa-file-alt"></i>
           Orden de compra<span class="sr-only">(current)</span>
@@ -577,7 +584,7 @@
       </li>
 
       <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="{{ url('/movimientos?tasa_ventas_id=1') }}">     
+        <a class="nav-link CP-Links-Menu" href="{{ url('/movimientos?tasa_ventas_id=1') }}">
           <span data-feather="home"></span>
           <i class="fas fa-balance-scale-left"></i>
           Movimientos en bolívares<span class="sr-only">(current)</span>
@@ -585,7 +592,7 @@
       </li>
 
       <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="{{ url('/movimientos?tasa_ventas_id=2') }}">     
+        <a class="nav-link CP-Links-Menu" href="{{ url('/movimientos?tasa_ventas_id=2') }}">
           <span data-feather="home"></span>
           <i class="fas fa-balance-scale"></i>
           Movimientos en dolares<span class="sr-only">(current)</span>
@@ -600,21 +607,21 @@
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="{{ url('/diascero') }}">      
+        <a class="nav-link CP-Links-Menu" href="{{ url('/diascero') }}">
           <span data-feather="home"></span>
           <i class="far fa-calendar"></i>
           Dias en cero<span class="sr-only">(current)</span>
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="{{ url('/productoscaida') }}">      
+        <a class="nav-link CP-Links-Menu" href="{{ url('/productoscaida') }}">
           <span data-feather="home"></span>
           <i class="fas fa-chart-line"></i>
           Productos en Caida<span class="sr-only">(current)</span>
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="{{ url('/CapturaEtiqueta') }}">     
+        <a class="nav-link CP-Links-Menu" href="{{ url('/CapturaEtiqueta') }}">
           <span data-feather="home"></span>
           <i class="fas fa-tag"></i>
           Captura Etiquetas<span class="sr-only">(current)</span>
@@ -644,21 +651,21 @@
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="{{ url('categoria') }}">     
+        <a class="nav-link CP-Links-Menu" href="{{ url('categoria') }}">
           <span data-feather="home"></span>
           <i class="fas fa-tag"></i>
           Categoria<span class="sr-only">(current)</span>
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="{{ url('subcategoria') }}">     
+        <a class="nav-link CP-Links-Menu" href="{{ url('subcategoria') }}">
           <span data-feather="home"></span>
           <i class="fas fa-tag"></i>
           Subcategoria<span class="sr-only">(current)</span>
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="{{ url('categorizacion') }}">     
+        <a class="nav-link CP-Links-Menu" href="{{ url('categorizacion') }}">
           <span data-feather="home"></span>
           <i class="fas fa-tag"></i>
           Categorizacion<span class="sr-only">(current)</span>
@@ -672,42 +679,42 @@
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="{{ url('/reporte8/') }}">     
+        <a class="nav-link CP-Links-Menu" href="{{ url('/reporte8/') }}">
           <span data-feather="home"></span>
           <i class="fas fa-stamp"></i>
           Troquel (Proveedor)<span class="sr-only">(current)</span>
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="{{ url('/seccion1/') }}">     
+        <a class="nav-link CP-Links-Menu" href="{{ url('/seccion1/') }}">
           <span data-feather="home"></span>
           <i class="fas fa-stamp"></i>
           Troquel (Cliente)<span class="sr-only">(current)</span>
         </a>
-      </li>  
+      </li>
       <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="{{ url('/seccion2/') }}">     
+        <a class="nav-link CP-Links-Menu" href="{{ url('/seccion2/') }}">
           <span data-feather="home"></span>
           <i class="fas fa-stamp"></i>
           Troquel (Devolucion)<span class="sr-only">(current)</span>
         </a>
-      </li>    
+      </li>
       <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="{{ url('/cartaCompromiso') }}">     
+        <a class="nav-link CP-Links-Menu" href="{{ url('/cartaCompromiso') }}">
           <span data-feather="home"></span>
           <i class="fas fa-list"></i>
           Compromisos<span class="sr-only">(current)</span>
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="{{ url('/etiqueta') }}">     
+        <a class="nav-link CP-Links-Menu" href="{{ url('/etiqueta') }}">
           <span data-feather="home"></span>
           <i class="fas fa-tag"></i>
           Etiquetas<span class="sr-only">(current)</span>
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="{{ url('/traslado') }}">     
+        <a class="nav-link CP-Links-Menu" href="{{ url('/traslado') }}">
           <span data-feather="home"></span>
           <i class="fas fa-people-carry"></i>
           Traslado<span class="sr-only">(current)</span>
@@ -718,6 +725,13 @@
           <span data-feather="home"></span>
           <i class="fas fa-credit-card"></i>
           Tasa de venta<span class="sr-only">(current)</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('/surtido') }}">
+          <span data-feather="home"></span>
+          <i class="fas fa-box"></i>
+          Surtido de gavetas<span class="sr-only">(current)</span>
         </a>
       </li>
     </div>
@@ -738,12 +752,12 @@
     </button>
     <div class="dropdown-menu">
       <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="{{ url('/CorridaPrecios') }}">     
+        <a class="nav-link CP-Links-Menu" href="{{ url('/CorridaPrecios') }}">
           <span data-feather="home"></span>
           <i class="fas fa-funnel-dollar"></i>
           Corrida de Precios<span class="sr-only">(current)</span>
         </a>
-        <a class="nav-link CP-Links-Menu" href="{{ url('/AuditoriaCorridaPrecios') }}">     
+        <a class="nav-link CP-Links-Menu" href="{{ url('/AuditoriaCorridaPrecios') }}">
           <span data-feather="home"></span>
           <i class="fas fa-search-dollar"></i>
           Auditoria Corrida de Precios<span class="sr-only">(current)</span>
@@ -755,21 +769,21 @@
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="{{ url('categoria') }}">     
+        <a class="nav-link CP-Links-Menu" href="{{ url('categoria') }}">
           <span data-feather="home"></span>
           <i class="fas fa-tag"></i>
           Categoria<span class="sr-only">(current)</span>
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="{{ url('subcategoria') }}">     
+        <a class="nav-link CP-Links-Menu" href="{{ url('subcategoria') }}">
           <span data-feather="home"></span>
           <i class="fas fa-tag"></i>
           Subcategoria<span class="sr-only">(current)</span>
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="{{ url('categorizacion') }}">     
+        <a class="nav-link CP-Links-Menu" href="{{ url('categorizacion') }}">
           <span data-feather="home"></span>
           <i class="fas fa-tag"></i>
           Categorizacion<span class="sr-only">(current)</span>
@@ -783,77 +797,77 @@
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="{{ url('/reporte8/') }}">     
+        <a class="nav-link CP-Links-Menu" href="{{ url('/reporte8/') }}">
           <span data-feather="home"></span>
           <i class="fas fa-stamp"></i>
           Troquel (Proveedor)<span class="sr-only">(current)</span>
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="{{ url('/seccion1/') }}">     
+        <a class="nav-link CP-Links-Menu" href="{{ url('/seccion1/') }}">
           <span data-feather="home"></span>
           <i class="fas fa-stamp"></i>
           Troquel (Cliente)<span class="sr-only">(current)</span>
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="{{ url('/seccion2/') }}">     
+        <a class="nav-link CP-Links-Menu" href="{{ url('/seccion2/') }}">
           <span data-feather="home"></span>
           <i class="fas fa-stamp"></i>
           Troquel (Devolucion)<span class="sr-only">(current)</span>
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="{{ url('/reporte23/') }}">    
+        <a class="nav-link CP-Links-Menu" href="{{ url('/reporte23/') }}">
           <span data-feather="home"></span>
           <i class="fas fa-calendar-alt"></i>
           Fecha de Vencimiento<span class="sr-only">(current)</span>
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="{{ url('/cartaCompromiso') }}">     
+        <a class="nav-link CP-Links-Menu" href="{{ url('/cartaCompromiso') }}">
           <span data-feather="home"></span>
           <i class="fas fa-list"></i>
           Compromisos<span class="sr-only">(current)</span>
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="{{ url('/etiqueta') }}">     
+        <a class="nav-link CP-Links-Menu" href="{{ url('/etiqueta') }}">
           <span data-feather="home"></span>
           <i class="fas fa-tag"></i>
           Etiquetas<span class="sr-only">(current)</span>
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="{{ url('/traslado') }}">     
+        <a class="nav-link CP-Links-Menu" href="{{ url('/traslado') }}">
           <span data-feather="home"></span>
           <i class="fas fa-people-carry"></i>
           Traslado<span class="sr-only">(current)</span>
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="{{ url('/inventario') }}">  
+        <a class="nav-link CP-Links-Menu" href="{{ url('/inventario') }}">
           <span data-feather="home"></span>
           <i class="fa fa-boxes"></i>
           Inventario<span class="sr-only">(current)</span>
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="{{ url('/ordenCompra') }}">     
+        <a class="nav-link CP-Links-Menu" href="{{ url('/ordenCompra') }}">
           <span data-feather="home"></span>
           <i class="far fa-file-alt"></i>
           Orden de compra<span class="sr-only">(current)</span>
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="{{ url('/ConsultorCompra') }}" target="_blank">     
+        <a class="nav-link CP-Links-Menu" href="{{ url('/ConsultorCompra') }}" target="_blank">
           <span data-feather="home"></span>
           <i class="fas fa-search"></i>
           Buscador de articulos<span class="sr-only">(current)</span>
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="{{ url('/movimientos?tasa_ventas_id=1') }}">     
+        <a class="nav-link CP-Links-Menu" href="{{ url('/movimientos?tasa_ventas_id=1') }}">
           <span data-feather="home"></span>
           <i class="fas fa-balance-scale-left"></i>
           Movimientos en bolívares<span class="sr-only">(current)</span>
@@ -861,7 +875,7 @@
       </li>
 
       <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="{{ url('/movimientos?tasa_ventas_id=2') }}">     
+        <a class="nav-link CP-Links-Menu" href="{{ url('/movimientos?tasa_ventas_id=2') }}">
           <span data-feather="home"></span>
           <i class="fas fa-balance-scale"></i>
           Movimientos en dolares<span class="sr-only">(current)</span>
@@ -869,7 +883,7 @@
       </li>
 
       <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="{{ url('/diferidos?tasa_ventas_id=1') }}">     
+        <a class="nav-link CP-Links-Menu" href="{{ url('/diferidos?tasa_ventas_id=1') }}">
           <span data-feather="home"></span>
           <i class="fas fa-lock"></i>
           Diferidos en bolívares<span class="sr-only">(current)</span>
@@ -877,7 +891,7 @@
       </li>
 
       <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="{{ url('/diferidos?tasa_ventas_id=2') }}">     
+        <a class="nav-link CP-Links-Menu" href="{{ url('/diferidos?tasa_ventas_id=2') }}">
           <span data-feather="home"></span>
           <i class="fas fa-lock"></i>
           Diferidos en dolares<span class="sr-only">(current)</span>
@@ -906,38 +920,45 @@
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="{{ url('/diascero') }}">      
+        <a class="nav-link CP-Links-Menu" href="{{ url('/diascero') }}">
           <span data-feather="home"></span>
           <i class="far fa-calendar"></i>
           Dias en cero<span class="sr-only">(current)</span>
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="{{ url('/productoscaida') }}">      
+        <a class="nav-link CP-Links-Menu" href="{{ url('/productoscaida') }}">
           <span data-feather="home"></span>
           <i class="fas fa-chart-line"></i>
           Productos en Caida<span class="sr-only">(current)</span>
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="{{ url('/CapturaEtiqueta') }}">     
+        <a class="nav-link CP-Links-Menu" href="{{ url('/CapturaEtiqueta') }}">
           <span data-feather="home"></span>
           <i class="fas fa-tag"></i>
           Captura Etiquetas<span class="sr-only">(current)</span>
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="{{ url('/auditoria') }}">      
+        <a class="nav-link CP-Links-Menu" href="{{ url('/auditoria') }}">
           <span data-feather="home"></span>
           <i class="fas fa-search"></i>
           Auditoria<span class="sr-only">(current)</span>
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="{{ url('/configuracion') }}">      
+        <a class="nav-link CP-Links-Menu" href="{{ url('/configuracion') }}">
           <span data-feather="home"></span>
           <i class="fas fa-cogs"></i>
           Configuracion<span class="sr-only">(current)</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('/surtido') }}">
+          <span data-feather="home"></span>
+          <i class="fas fa-box"></i>
+          Surtido de gavetas<span class="sr-only">(current)</span>
         </a>
       </li>
     </div>
@@ -958,7 +979,7 @@
     </button>
     <div class="dropdown-menu">
       <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="{{ url('/movimientos?tasa_ventas_id=1') }}">     
+        <a class="nav-link CP-Links-Menu" href="{{ url('/movimientos?tasa_ventas_id=1') }}">
           <span data-feather="home"></span>
           <i class="fas fa-balance-scale-left"></i>
           Movimientos en bolívares<span class="sr-only">(current)</span>
@@ -966,7 +987,7 @@
       </li>
 
       <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="{{ url('/movimientos?tasa_ventas_id=2') }}">     
+        <a class="nav-link CP-Links-Menu" href="{{ url('/movimientos?tasa_ventas_id=2') }}">
           <span data-feather="home"></span>
           <i class="fas fa-balance-scale"></i>
           Movimientos en dolares<span class="sr-only">(current)</span>
@@ -974,7 +995,7 @@
       </li>
 
       <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="{{ url('/diferidos?tasa_ventas_id=1') }}">     
+        <a class="nav-link CP-Links-Menu" href="{{ url('/diferidos?tasa_ventas_id=1') }}">
           <span data-feather="home"></span>
           <i class="fas fa-lock"></i>
           Diferidos en bolívares<span class="sr-only">(current)</span>
@@ -982,7 +1003,7 @@
       </li>
 
       <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="{{ url('/diferidos?tasa_ventas_id=2') }}">     
+        <a class="nav-link CP-Links-Menu" href="{{ url('/diferidos?tasa_ventas_id=2') }}">
           <span data-feather="home"></span>
           <i class="fas fa-lock"></i>
           Diferidos en dolares<span class="sr-only">(current)</span>
@@ -1014,7 +1035,7 @@
     </button>
     <div class="dropdown-menu">
       <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="{{ url('/inventario') }}">  
+        <a class="nav-link CP-Links-Menu" href="{{ url('/inventario') }}">
           <span data-feather="home"></span>
           <i class="fa fa-boxes"></i>
           Inventario<span class="sr-only">(current)</span>
@@ -1028,19 +1049,26 @@
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="{{ url('/traslado') }}">     
+        <a class="nav-link CP-Links-Menu" href="{{ url('/traslado') }}">
           <span data-feather="home"></span>
           <i class="fas fa-people-carry"></i>
           Traslado<span class="sr-only">(current)</span>
         </a>
-      </li> 
+      </li>
       <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="{{ url('/ordenCompra') }}">     
+        <a class="nav-link CP-Links-Menu" href="{{ url('/ordenCompra') }}">
           <span data-feather="home"></span>
           <i class="far fa-file-alt"></i>
           Orden de compra<span class="sr-only">(current)</span>
         </a>
-      </li> 
+      </li>
+      <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('/surtido') }}">
+          <span data-feather="home"></span>
+          <i class="fas fa-box"></i>
+          Surtido de gavetas<span class="sr-only">(current)</span>
+        </a>
+      </li>
     </div>
   </div>
 <?php
@@ -1067,21 +1095,21 @@
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="{{ url('categoria') }}">     
+        <a class="nav-link CP-Links-Menu" href="{{ url('categoria') }}">
           <span data-feather="home"></span>
           <i class="fas fa-tag"></i>
           Categoria<span class="sr-only">(current)</span>
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="{{ url('subcategoria') }}">     
+        <a class="nav-link CP-Links-Menu" href="{{ url('subcategoria') }}">
           <span data-feather="home"></span>
           <i class="fas fa-tag"></i>
           Subcategoria<span class="sr-only">(current)</span>
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="{{ url('categorizacion') }}">     
+        <a class="nav-link CP-Links-Menu" href="{{ url('categorizacion') }}">
           <span data-feather="home"></span>
           <i class="fas fa-tag"></i>
           Categorizacion<span class="sr-only">(current)</span>
@@ -1104,14 +1132,14 @@
     <button type="button" class="btn btn-outline-info dropdown-toggle textoI" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
       <i class="fas fa-user-cog"></i> Tecnologia
     </button>
-    <div class="dropdown-menu">      
+    <div class="dropdown-menu">
       <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="{{ url('/CorridaPrecios') }}">     
+        <a class="nav-link CP-Links-Menu" href="{{ url('/CorridaPrecios') }}">
           <span data-feather="home"></span>
           <i class="fas fa-funnel-dollar"></i>
           Corrida de Precios<span class="sr-only">(current)</span>
         </a>
-        <a class="nav-link CP-Links-Menu" href="{{ url('/AuditoriaCorridaPrecios') }}">     
+        <a class="nav-link CP-Links-Menu" href="{{ url('/AuditoriaCorridaPrecios') }}">
           <span data-feather="home"></span>
           <i class="fas fa-search-dollar"></i>
           Auditoria Corrida de Precios<span class="sr-only">(current)</span>
@@ -1123,21 +1151,21 @@
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="{{ url('categoria') }}">     
+        <a class="nav-link CP-Links-Menu" href="{{ url('categoria') }}">
           <span data-feather="home"></span>
           <i class="fas fa-tag"></i>
           Categoria<span class="sr-only">(current)</span>
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="{{ url('subcategoria') }}">     
+        <a class="nav-link CP-Links-Menu" href="{{ url('subcategoria') }}">
           <span data-feather="home"></span>
           <i class="fas fa-tag"></i>
           Subcategoria<span class="sr-only">(current)</span>
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="{{ url('categorizacion') }}">     
+        <a class="nav-link CP-Links-Menu" href="{{ url('categorizacion') }}">
           <span data-feather="home"></span>
           <i class="fas fa-tag"></i>
           Categorizacion<span class="sr-only">(current)</span>
@@ -1151,21 +1179,21 @@
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="{{ url('/reporte8/') }}">     
+        <a class="nav-link CP-Links-Menu" href="{{ url('/reporte8/') }}">
           <span data-feather="home"></span>
           <i class="fas fa-stamp"></i>
           Troquel (Proveedor)<span class="sr-only">(current)</span>
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="{{ url('/seccion1/') }}">     
+        <a class="nav-link CP-Links-Menu" href="{{ url('/seccion1/') }}">
           <span data-feather="home"></span>
           <i class="fas fa-stamp"></i>
           Troquel (Cliente)<span class="sr-only">(current)</span>
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="{{ url('/seccion2/') }}">     
+        <a class="nav-link CP-Links-Menu" href="{{ url('/seccion2/') }}">
           <span data-feather="home"></span>
           <i class="fas fa-stamp"></i>
           Troquel (Devolucion)<span class="sr-only">(current)</span>
@@ -1179,49 +1207,49 @@
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="{{ url('/reporte23/') }}">    
+        <a class="nav-link CP-Links-Menu" href="{{ url('/reporte23/') }}">
           <span data-feather="home"></span>
           <i class="fas fa-calendar-alt"></i>
           Fecha de Vencimiento<span class="sr-only">(current)</span>
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="{{ url('/cartaCompromiso') }}">     
+        <a class="nav-link CP-Links-Menu" href="{{ url('/cartaCompromiso') }}">
           <span data-feather="home"></span>
           <i class="fas fa-list"></i>
           Compromisos<span class="sr-only">(current)</span>
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="{{ url('/etiqueta') }}">     
+        <a class="nav-link CP-Links-Menu" href="{{ url('/etiqueta') }}">
           <span data-feather="home"></span>
           <i class="fas fa-tag"></i>
           Etiquetas<span class="sr-only">(current)</span>
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="{{ url('/traslado') }}">     
+        <a class="nav-link CP-Links-Menu" href="{{ url('/traslado') }}">
           <span data-feather="home"></span>
           <i class="fas fa-people-carry"></i>
           Traslado<span class="sr-only">(current)</span>
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="{{ url('/inventario') }}">  
+        <a class="nav-link CP-Links-Menu" href="{{ url('/inventario') }}">
           <span data-feather="home"></span>
           <i class="fa fa-boxes"></i>
           Inventario<span class="sr-only">(current)</span>
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="{{ url('/ordenCompra') }}">     
+        <a class="nav-link CP-Links-Menu" href="{{ url('/ordenCompra') }}">
           <span data-feather="home"></span>
           <i class="far fa-file-alt"></i>
           Orden de compra<span class="sr-only">(current)</span>
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="{{ url('/ConsultorCompra') }}" target="_blank">     
+        <a class="nav-link CP-Links-Menu" href="{{ url('/ConsultorCompra') }}" target="_blank">
           <span data-feather="home"></span>
           <i class="fas fa-search"></i>
           Buscador de articulos<span class="sr-only">(current)</span>
@@ -1277,38 +1305,45 @@
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="{{ url('/configuracion') }}">      
+        <a class="nav-link CP-Links-Menu" href="{{ url('/configuracion') }}">
           <span data-feather="home"></span>
           <i class="fas fa-cogs"></i>
           Configuracion<span class="sr-only">(current)</span>
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="{{ url('/diascero') }}">      
+        <a class="nav-link CP-Links-Menu" href="{{ url('/diascero') }}">
           <span data-feather="home"></span>
           <i class="far fa-calendar"></i>
           Dias en cero<span class="sr-only">(current)</span>
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="{{ url('/productoscaida') }}">      
+        <a class="nav-link CP-Links-Menu" href="{{ url('/productoscaida') }}">
           <span data-feather="home"></span>
           <i class="fas fa-chart-line"></i>
           Productos en Caida<span class="sr-only">(current)</span>
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="{{ url('/CapturaEtiqueta') }}">     
+        <a class="nav-link CP-Links-Menu" href="{{ url('/CapturaEtiqueta') }}">
           <span data-feather="home"></span>
           <i class="fas fa-tag"></i>
           Captura Etiquetas<span class="sr-only">(current)</span>
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="{{ url('/auditoria') }}">      
+        <a class="nav-link CP-Links-Menu" href="{{ url('/auditoria') }}">
           <span data-feather="home"></span>
           <i class="fas fa-search"></i>
           Auditoria<span class="sr-only">(current)</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('/surtido') }}">
+          <span data-feather="home"></span>
+          <i class="fas fa-box"></i>
+          Surtido de gavetas<span class="sr-only">(current)</span>
         </a>
       </li>
     </div>
@@ -1320,9 +1355,9 @@
 <!-------------------------------------------------------------------------------->
 <!-- DEVELOPER -->
 <?php
-  if( 
+  if(
       (
-        Auth::user()->departamento == 'TECNOLOGIA' 
+        Auth::user()->departamento == 'TECNOLOGIA'
         ||Auth::user()->departamento == 'GERENCIA'
       )
     && Auth::user()->role == 'DEVELOPER'
@@ -1331,22 +1366,22 @@
   <div class="btn-group navbar-brand">
     <button type="button" class="btn btn-outline-info dropdown-toggle textoI" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
       <i class="fas fa-user-secret"></i> Developer
-    </button>   
-    <div class="dropdown-menu">    
+    </button>
+    <div class="dropdown-menu">
       <li class="nav-item">
         <!--
-        <a class="nav-link CP-Links-Menu" href="{{ url('/CorridaPrecios') }}">     
+        <a class="nav-link CP-Links-Menu" href="{{ url('/CorridaPrecios') }}">
           <span data-feather="home"></span>
           <i class="fas fa-funnel-dollar"></i>
           Corrida de Precios<span class="sr-only">(current)</span>
         </a>
-        <a class="nav-link CP-Links-Menu" href="{{ url('/AuditoriaCorridaPrecios') }}">     
+        <a class="nav-link CP-Links-Menu" href="{{ url('/AuditoriaCorridaPrecios') }}">
           <span data-feather="home"></span>
           <i class="fas fa-search-dollar"></i>
           Auditoria Corrida de Precios<span class="sr-only">(current)</span>
         </a>
         -->
-      </li>      
+      </li>
     </div>
   </div>
 <?php

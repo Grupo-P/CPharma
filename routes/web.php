@@ -33,7 +33,7 @@ Route::get('/conversionDosis', function() {
     return view('pages.caja.conversionDosis');
 });
 
-Route::get('/ConsultaPrecio', function() { 
+Route::get('/ConsultaPrecio', function() {
     return view('pages.consultorP.consultaPrecio');
 });
 
@@ -216,6 +216,15 @@ Route::get('/reporte39', function() {
     return view('pages.reporte.reporte39');
 });
 
+Route::get('/reporte40', function() {
+    return view('pages.reporte.reporte40');
+});
+
+Route::get('/reporte41', function() {
+    return view('pages.reporte.reporte41');
+});
+
+
 Route::get('/seccion1', function() {
     return view('pages.reporte.seccion1');
 });
@@ -225,7 +234,7 @@ Route::get('/seccion2', function() {
 });
 
 Route::get('/diascero', function() {
-    return view('pages.diascero.index'); 
+    return view('pages.diascero.index');
 });
 
 Route::get('/productoscaida', function() {
@@ -280,15 +289,15 @@ Route::get('/DigitalOrdenCompra', function() {
     return view('pages.ordenCompra.digital');
 });
 
-Route::get('/ConsultorCompra', function() { 
+Route::get('/ConsultorCompra', function() {
     return view('pages.consultorP.consultorCompra');
 });
 
-Route::get('/ArticulosExcel', function() { 
+Route::get('/ArticulosExcel', function() {
     return view('pages.articulosExcel.articulosExcel');
 });
 
-Route::get('/CorridaPrecios', function() { 
+Route::get('/CorridaPrecios', function() {
     return view('pages.corridas.corridaPrecio');
 });
 
@@ -344,7 +353,7 @@ Route::get('/inventarioProveedor', function() {
 
 Route::get('/inventarioDescripcion', function() {
     return view('pages.inventario.por_descripcion');
-}); 
+});
 
 Route::get('/inventarioCodigoBarra', function() {
     return view('pages.inventario.por_codigobarra');
@@ -356,7 +365,7 @@ Route::get('/inventarioMarca', function() {
 
 Route::get('/inventarioAleatorio', function() {
     return view('pages.inventario.por_aleatorio');
-}); 
+});
 
 Route::resource('inventarioDetalle', 'InventarioDetalleController');
 
@@ -365,6 +374,9 @@ Route::resource('categoria', 'CategoriaController');
 Route::resource('subcategoria', 'SubcategoriaController');
 
 Route::resource('categorizacion', 'CategorizacionController');
+
+Route::resource('surtido', 'SurtidoController');
+Route::get('surtido/{surtido}/anular', 'SurtidoController@anular');
 
 //***************************** RRHH routing *****************************//
 Route::resource('candidatos', 'RH_CandidatoController');

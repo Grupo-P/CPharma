@@ -1,4 +1,4 @@
-<?php 
+<?php
 	include('C:\xampp\htdocs\CPharma\app\functions\config.php');
   include('C:\xampp\htdocs\CPharma\app\functions\functions.php');
   include('C:\xampp\htdocs\CPharma\app\functions\querys_mysql.php');
@@ -22,7 +22,7 @@
   	$conn = FG_Conectar_Smartpharma($SedeConnection);
   	$connCPharma = FG_Conectar_CPharma();
   	$arraySugeridos = array();
-		$Etiqueta = '';	
+		$Etiqueta = '';
 
   	$FHoy = date("Y-m-d");
 		$FManana = date("Y-m-d",strtotime($FHoy."+1 days"));
@@ -49,12 +49,12 @@
 			}
 			else{
 				//$Etiqueta = 'EL ARTICULO NO PERTENECE A LA CATEGORIA SELECCIONADA';
-			} 
+			}
 		}
 		else{
 			//$Etiqueta = 'EL ARTICULO NO PERTENECE A LA CATEGORIA SELECCIONADA';
 		}
-		
+
 		return $Etiqueta;
 		mysqli_close($connCPharma);
     sqlsrv_close($conn);
@@ -66,8 +66,8 @@
 		DESARROLLADO POR: SERGIO COVA
  	*/
  	function FG_Etiqueta_Unica($conn,$connCPharma,$IdArticulo,$Dolarizado,$IsPrecioAyer,$FechaCambio) {
- 		$Etiqueta = ''; 	
- 		$mensajePie = "";	
+ 		$Etiqueta = '';
+ 		$mensajePie = "";
 
  		$sql2 = SQG_Detalle_Articulo($IdArticulo);
 		$result2 = sqlsrv_query($conn,$sql2);
@@ -93,13 +93,13 @@
 		if(intval($Existencia)>0){
 
 			$PrecioHoy = FG_Calculo_Precio_Alfa($Existencia,$ExistenciaAlmacen1,$ExistenciaAlmacen2,$IsTroquelado,$UtilidadArticulo,$UtilidadCategoria,$TroquelAlmacen1,$PrecioCompraBrutoAlmacen1,$TroquelAlmacen2,$PrecioCompraBrutoAlmacen2,$PrecioCompraBruto,$IsIVA,$CondicionExistencia);
-								
+
 			if($IsPrecioAyer==true){
 
 				$sqlCC = MySQL_DiasCero_PrecioAyer($IdArticulo,$FechaCambio);
 				$resultCC = mysqli_query($connCPharma,$sqlCC);
 				$rowCC = mysqli_fetch_assoc($resultCC);
-				$PrecioAyer = $rowCC["precio"];				
+				$PrecioAyer = $rowCC["precio"];
 
 				if( floatval(round($PrecioHoy,2)) != floatval($PrecioAyer) ){
 
@@ -125,29 +125,29 @@
 							$precioPartes = explode(".",$PrecioHoy);
 							$TasaActual = FG_Tasa_Fecha_Venta($connCPharma,date('Y-m-d'));
 							$PrecioHoy = $PrecioHoy/$TasaActual;
-							
+
 							$sqlCC = MySQL_DiasCero_PrecioAyer_Dolar($IdArticulo,$FechaCambio);
 							$resultCC = mysqli_query($connCPharma,$sqlCC);
 							$rowCC = mysqli_fetch_assoc($resultCC);
 							$PrecioAyer = $rowCC["precio_dolar"];
 
 							if($precioPartes[1]==DecimalEtiqueta){
-								$flag_imprime = true;				
+								$flag_imprime = true;
 							}
 							else{
-								$flag_imprime = false;									
-							}						
+								$flag_imprime = false;
+							}
 						}else if(_EtiquetaDolar_=='NO'){
 							$flag_imprime = true;
 							$moneda = SigVe;
-						}												
+						}
 					}
 					else{
 						$simbolo = '';
 						$moneda = SigVe;
 						$flag_imprime = true;
 					}
-					
+
 					if($flag_imprime == true){
 						$connCPharma = FG_Conectar_CPharma();
 						$query = $connCPharma->query("SELECT * FROM unidads WHERE id_articulo = '$IdArticulo'");
@@ -156,7 +156,7 @@
 							$unidad= $query->fetch_assoc();
 
 							$unidadMinima = strtolower($unidad['unidad_minima']);
-							$divisor = $unidad['divisor'];
+							$divisor = intval($unidad['divisor']);
 							$precioUnidadMinima = (($PrecioHoy / $divisor) < 1) ? number_format($PrecioHoy / $divisor, 4, ',', '.') : number_format($PrecioHoy / $divisor, 2, ',', '.');
 
 							$unidadMinima = '
@@ -175,7 +175,7 @@
 										<td class="centrado titulo rowCenter" colspan="2">
 											Código: '.$CodigoBarra.'
 										</td>
-									</tr>	
+									</tr>
 								</thead>
 								<tbody class="etq">
 									<tr rowspan="2">
@@ -214,7 +214,7 @@
 										<td class="derecha rowDer rowDerA aumento1">
 											<strong>'.$simbolo.'</strong> '.date("d-m-Y").'
 										</td>
-									</tr>		
+									</tr>
 										'.$mensajePie.'
 								</tbody>
 							</table>
@@ -228,12 +228,12 @@
 										<td class="centrado titulo rowCenter aumento" colspan="2">
 											Código: '.$CodigoBarra.'
 										</td>
-									</tr>	
+									</tr>
 								</thead>
 								<tbody class="etq">
 									<tr rowspan="2">
 										<td class="centrado descripcion aumento rowCenter" colspan="2">
-											<strong>'.$Descripcion.'</strong> 
+											<strong>'.$Descripcion.'</strong>
 										</td>
 									</tr>
 									<tr>
@@ -242,7 +242,7 @@
 											Solicite ayuda al dpto. de procesamiento
 											</strong>
 										</td>
-									</tr>										
+									</tr>
 								</tbody>
 							</table>
 						';
@@ -275,25 +275,25 @@
 					if(_EtiquetaDolar_=='SI'){
 						$precioPartes = explode(".",$PrecioHoy);
 						$TasaActual = FG_Tasa_Fecha_Venta($connCPharma,date('Y-m-d'));
-						$PrecioHoy = $PrecioHoy/$TasaActual;						
+						$PrecioHoy = $PrecioHoy/$TasaActual;
 
 						if($precioPartes[1]==DecimalEtiqueta){
-							$flag_imprime = true;				
+							$flag_imprime = true;
 						}
 						else{
-							$flag_imprime = false;								
-						}						
+							$flag_imprime = false;
+						}
 					}else if(_EtiquetaDolar_=='NO'){
 						$flag_imprime = true;
 						$moneda = SigVe;
-					}												
+					}
 				}
 				else{
 					$simbolo = '';
 					$moneda = SigVe;
 					$flag_imprime = true;
 				}
-					
+
 				if($flag_imprime == true){
 					$connCPharma = FG_Conectar_CPharma();
 					$query = $connCPharma->query("SELECT * FROM unidads WHERE id_articulo = '$IdArticulo'");
@@ -302,7 +302,7 @@
 						$unidad= $query->fetch_assoc();
 
 						$unidadMinima = strtolower($unidad['unidad_minima']);
-						$divisor = $unidad['divisor'];
+						$divisor = intval($unidad['divisor']);
 						$precioUnidadMinima = (($PrecioHoy / $divisor) < 1) ? number_format($PrecioHoy / $divisor, 4, ',', '.') : number_format($PrecioHoy / $divisor, 2, ',', '.');
 
 						$unidadMinima = '
@@ -321,12 +321,12 @@
 									<td class="centrado titulo rowCenter aumento1" colspan="2">
 										Código: '.$CodigoBarra.'
 									</td>
-								</tr>	
+								</tr>
 							</thead>
 							<tbody class="etq">
 								<tr rowspan="2">
 									<td class="centrado descripcion aumento rowCenter" colspan="2">
-										<strong>'.$Descripcion.'</strong> 
+										<strong>'.$Descripcion.'</strong>
 									</td>
 								</tr>
 								<tr>
@@ -344,8 +344,8 @@
 									<td class="derecha rowDer rowDerA aumento1">
 										<strong>'.$simbolo.'</strong> '.date("d-m-Y").'
 									</td>
-								</tr>	
-								'.$mensajePie.'			
+								</tr>
+								'.$mensajePie.'
 							</tbody>
 						</table>
 					';
@@ -358,12 +358,12 @@
 									<td class="centrado titulo rowCenter aumento1" colspan="2">
 										Código: '.$CodigoBarra.'
 									</td>
-								</tr>	
+								</tr>
 							</thead>
 							<tbody class="etq">
 								<tr rowspan="2">
 									<td class="centrado descripcion aumento rowCenter aumento" colspan="2">
-										<strong>'.$Descripcion.'</strong> 
+										<strong>'.$Descripcion.'</strong>
 									</td>
 								</tr>
 								<tr>
@@ -372,11 +372,11 @@
 										Solicite ayuda al dpto. de procesamiento
 										</strong>
 									</td>
-								</tr>										
+								</tr>
 							</tbody>
 						</table>
 					';
-				}					
+				}
 			}
 			else{
 				$Etiqueta = 'EL ARTICULO PRESENTO CAMBIO DE PRECIO';
@@ -384,7 +384,7 @@
 		}
 		else{
 			$Etiqueta = 'EL ARTICULO NO POSEE EXISTENCIA';
-		}	
+		}
 		return $Etiqueta;
  	}
 ?>
