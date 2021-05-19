@@ -10,7 +10,7 @@ define("DecimalEtiqueta",01);	//Decimal que se usa para comparar el precio de la
 define("Version","CPharma v.6.2");
 define("_ConsultorDolar_","SI"); //Le indica al consultor si mostrar precios en dolares o no
 define("_EtiquetaDolar_","SI");	//Le indica al etiquetado si mostrar precios en dolares o no
-define("_MensajeDolar_","SI");	//Le indica al etiquetado si mostrar el _MensajeDolarLegal_ o no 
+define("_MensajeDolar_","SI");	//Le indica al etiquetado si mostrar el _MensajeDolarLegal_ o no
 define("_MensajeDolarLegal_","");
 /**********************************************************************************/
 /************************* NOMBRES SEDES ON-LINE *********************************/
@@ -28,7 +28,7 @@ define ("SedeFLLOFF","Farmacia La Lago (OFF-LINE)");
 define ("SedeFAUOFF","Farmacia Avenida Universidad (OFF-LINE)");
 /**********************************************************************************/
 /********* CADENA DE CONEXION CON LA BASE DE DATOS LOCAL DEL CPHARMA *************/
-define ("serverCP","localhost:3306");	
+define ("serverCP","localhost:3306");
 define ("userCP","root");
 define ("passCP",""); //.JR@2ZUS8m2M*gW
 define ("nameCP","cpharma");

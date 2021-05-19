@@ -224,7 +224,8 @@
 @endsection
 
 @section('scriptsFoot')
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.2.0/chart.min.js" integrity="sha512-VMsZqo0ar06BMtg0tPsdgRADvl0kDHpTbugCBBrL55KmucH6hP9zWdLIWY//OTfMnzz6xWQRxQqsUFefwHuHyg==" crossorigin="anonymous"></script>
+  <script src="{{asset('assets/chart.js/Chart.min.js')}}"></script>
+
   <script>
     $('#form').submit(function (event) {
         id1 = $('[name=Id1]').val();

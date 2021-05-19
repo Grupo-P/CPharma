@@ -9,7 +9,7 @@ use compras\User;
 use compras\Auditoria;
 
 class InventarioController extends Controller
-{   
+{
     /**
      * Create a new controller instance with auth.
      *
@@ -36,17 +36,17 @@ class InventarioController extends Controller
 
         switch ($Tipo) {
           case 0:
-              $inventarios =  
+              $inventarios =
               Inventario::orderBy('created_at', 'desc')->
               where('estatus','GENERADO')->get();
           break;
           case 1:
-              $inventarios =  
+              $inventarios =
               Inventario::orderBy('created_at', 'desc')->
-              where('estatus','REVISADO')->get();            
+              where('estatus','REVISADO')->get();
           break;
           case 2:
-              $inventarios =  
+              $inventarios =
               Inventario::orderBy('created_at', 'desc')->
               where('estatus','ANULADO')->get();
           break;
@@ -55,7 +55,7 @@ class InventarioController extends Controller
               ->where('estatus','GENERADO')
               ->orWhere('estatus','REVISADO')
               ->orWhere('estatus','ANULADO')
-              ->get(); 
+              ->get();
               return view('pages.inventario.index', compact('inventarios'));
           break;
       }
@@ -76,18 +76,18 @@ class InventarioController extends Controller
 
         try{
             $conn = FG_Conectar_Smartpharma(FG_Mi_Ubicacion());
-        
+
             $cont_articulo = 0;
             $cont_unidades = 0;
 
             /*INICIO DE ASIGNACION DE CODIGO*/
-              $UltimaInventario = 
+              $UltimaInventario =
               Inventario::orderBy('id','desc')
               ->select('id')
               ->take(1)->get();
 
               if( (!empty($UltimaInventario[0])) &&
-                  ((($UltimaInventario[0]['id'])!=0) 
+                  ((($UltimaInventario[0]['id'])!=0)
                   || (($UltimaInventario[0]['id'])!=NULL)
                   || (($UltimaInventario[0]['id'])!=''))
                 ) {
@@ -108,14 +108,14 @@ class InventarioController extends Controller
             $inventario->operador_generado = auth()->user()->name;
             $inventario->fecha_generado = date('y-m-d H:i:s');
             $inventario->save();
-            
+
             $articulosContar = $request->input('articulosContar');
             //print_r($articulosContar);
-        
+
             foreach ($articulosContar as $articulo) {
                 $sql = SQG_Detalle_Articulo($articulo);
                 $result = sqlsrv_query($conn,$sql);
-                $row = sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC);                
+                $row = sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC);
 
                 $inventario_detalle = new InventarioDetalle();
                 $inventario_detalle->codigo_conteo = $inventario->codigo;
@@ -128,7 +128,7 @@ class InventarioController extends Controller
 
                 $cont_articulo++;
                 $cont_unidades = $cont_unidades + $inventario_detalle->existencia_actual;
-            } 
+            }
 
             $inventario->cantidades_conteo = $cont_articulo;
             $inventario->unidades_conteo = $cont_unidades;
@@ -170,8 +170,8 @@ class InventarioController extends Controller
      */
     public function show($id)
     {
-        $inventario = Inventario::find($id); 
-        
+        $inventario = Inventario::find($id);
+
         $Auditoria = new Auditoria();
         $Auditoria->accion = 'CONSULTAR';
         $Auditoria->tabla = 'INVENTARIO';
@@ -204,7 +204,12 @@ class InventarioController extends Controller
      */
     public function update(Request $request, $id)
     {
-       try{
+        if ($request->input('numero_ajuste')) {
+            Inventario::find($request->input('id'))->update(['numero_ajuste' => $request->input('numero_ajuste')]);
+            return redirect()->route('inventario.index')->with('Updated', ' Informacion');
+        }
+
+        try{
 
             $inventario = Inventario::find($id);
 
@@ -239,7 +244,7 @@ class InventarioController extends Controller
                     return redirect()->route('inventario.index')->with('Contar', ' Informacion');
                 }
             }
-                else if($request->input('action')=='Anular'){    
+                else if($request->input('action')=='Anular'){
 
                     $inventario->comentario = $request->input('comentario');
                     $inventario->estatus = 'ANULADO';
@@ -262,6 +267,26 @@ class InventarioController extends Controller
         }
     }
 
+    public function ajuste($id)
+    {
+        include(app_path().'\functions\config.php');
+        include(app_path().'\functions\functions.php');
+        include(app_path().'\functions\querys_mysql.php');
+        include(app_path().'\functions\querys_sqlserver.php');
+
+        $inventario = Inventario::find($id);
+        $inventariados = InventarioDetalle::where('codigo_conteo', $inventario->codigo)->get();
+
+        if ($inventario->numero_ajuste) {
+            $conn = FG_Conectar_Smartpharma(FG_Mi_Ubicacion());
+            $contador = 1;
+        } else {
+            $ajustados = '';
+        }
+
+        return view('pages.inventario.ajuste', compact('inventariados', 'conn', 'query', 'contador', 'inventario'));
+    }
+
     /**
      * Remove the specified resource from storage.
      *
@@ -275,7 +300,7 @@ class InventarioController extends Controller
       if($request->input('action')=='Revisar'){
         return view('pages.inventario.revisar', compact('inventario'));
       }
-      else if($request->input('action')=='Anular'){        
+      else if($request->input('action')=='Anular'){
         return view('pages.inventario.anular', compact('inventario'));
       }
     }

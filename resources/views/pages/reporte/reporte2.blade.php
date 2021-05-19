@@ -269,7 +269,7 @@
           <th scope="col">Unidad Minima</th>
           <th scope="col">Ultimo Conteo</th>
           <th scope="col">Ultimo Precio (Sin IVA) '.SigVe.'</th>
-          <th scope="col">Transito</th>
+          <th scope="col" class="bg-warning text-white">Transito</th>
         </tr>
       </thead>
       <tbody>
@@ -398,7 +398,7 @@
 
     if($flag != true){
       echo'
-      <td align="center">
+      <td class="bg-warning text-white" align="center">
           <form action="/ordenCompraDetalle/0" method="PRE" style="display: block; width:100%;" target="_blank">';
           echo'<input type="hidden" name="id_articulo" value="'.$IdArticulo.'">';
           echo'
@@ -407,7 +407,7 @@
       </tr>
       ';
     } else {
-        echo '<td></td>';
+        echo '<td class="bg-warning text-white"></td>';
     }
 
     echo '

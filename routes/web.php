@@ -347,6 +347,8 @@ Route::get('articuloUnidad', function() {
 
 Route::resource('inventario', 'InventarioController');
 
+Route::get('/inventario/ajuste/{id}', 'InventarioController@ajuste')->name('inventario.ajuste');
+
 Route::get('/inventarioProveedor', function() {
     return view('pages.inventario.por_proveedor');
 });
