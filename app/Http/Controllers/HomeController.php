@@ -23,6 +23,10 @@ class HomeController extends Controller
      */
     public function index()
     {
+        if ($_SERVER['SERVER_NAME'] == 'cpharmagpde.com' || $_SERVER['SERVER_NAME'] == 'cpharmagp.com') {
+            return view('home-contabilidad');
+        }
+
         return view('home');
     }
 }

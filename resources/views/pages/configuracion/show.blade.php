@@ -1,4 +1,12 @@
-@extends('layouts.model')
+@php
+    if ($_SERVER['SERVER_NAME'] == 'cpharmagpde.com' || $_SERVER['SERVER_NAME'] == 'cpharmagp.com') {
+        $layout = 'layouts.contabilidad';
+    } else {
+        $layout = 'layouts.model';
+    }
+@endphp
+
+@extends($layout)
 
 @section('title')
     Configuracion
@@ -12,8 +20,8 @@
 
 	<hr class="row align-items-start col-12">
 
-	<form action="/configuracion/" method="POST" style="display: inline;">  
-	    @csrf					    
+	<form action="/configuracion/" method="POST" style="display: inline;">
+	    @csrf
 	    <button type="submit" name="Regresar" role="button" class="btn btn-outline-info btn-sm"data-placement="top"><i class="fa fa-reply">&nbsp;Regresar</i></button>
 	</form>
 

@@ -416,3 +416,12 @@ Route::resource('practicas', 'RH_PracticaController');
 //*************************** TESORERIA routing ***************************//
 Route::resource('movimientos', 'TS_MovimientoController');
 Route::get('/diferidos', 'TS_MovimientoController@diferidos')->name('diferidos');
+
+Route::resource('proveedores', 'ContProveedorController');
+
+Route::resource('cuentas', 'ContCuentasController');
+Route::get('/cuentas/{id}/delete', 'ContCuentasController@delete');
+
+Route::resource('bancos', 'ContBancoController');
+
+Route::resource('deudas', 'ContDeudasController');

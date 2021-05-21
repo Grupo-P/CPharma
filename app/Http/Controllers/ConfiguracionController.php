@@ -26,7 +26,7 @@ class ConfiguracionController extends Controller
      */
     public function index()
     {
-        $configuraciones =  Configuracion::all();
+        $configuraciones =  Configuracion::type()->get();
         return view('pages.configuracion.index', compact('configuraciones'));
     }
 
@@ -52,9 +52,14 @@ class ConfiguracionController extends Controller
             $configuraciones = new Configuracion();
             $configuraciones->variable = $request->input('variable');
             $configuraciones->descripcion = $request->input('descripcion');
-            $configuraciones->valor = $request->input('valor');          
+            $configuraciones->valor = $request->input('valor');
             $configuraciones->user = auth()->user()->name;
             $configuraciones->estatus = 'ACTIVO';
+
+            if ($_SERVER['SERVER_NAME'] == 'cpharmagpde.com' || $_SERVER['SERVER_NAME'] == 'cpharmagp.com') {
+                $configuraciones->contabilidad = 1;
+            }
+
             $configuraciones->save();
 
             $Auditoria = new Auditoria();
@@ -99,7 +104,7 @@ class ConfiguracionController extends Controller
      */
     public function edit($id)
     {
-        $configuraciones = Configuracion::find($id);  
+        $configuraciones = Configuracion::find($id);
         return view('pages.configuracion.edit', compact('configuraciones'));
     }
 
@@ -143,10 +148,10 @@ class ConfiguracionController extends Controller
     {
         $configuraciones = Configuracion::find($id);
 
-        $Auditoria = new Auditoria();        
+        $Auditoria = new Auditoria();
         $Auditoria->tabla = 'CONFIGURACION';
         $Auditoria->registro = $configuraciones->variable;
-        $Auditoria->user = auth()->user()->name;        
+        $Auditoria->user = auth()->user()->name;
 
          if($configuraciones->estatus == 'ACTIVO'){
             $configuraciones->estatus = 'INACTIVO';
@@ -157,7 +162,7 @@ class ConfiguracionController extends Controller
             $Auditoria->accion = 'REINCORPORAR';
          }
 
-         $configuraciones->user = auth()->user()->name;      
+         $configuraciones->user = auth()->user()->name;
          $configuraciones->save();
 
          $Auditoria->save();

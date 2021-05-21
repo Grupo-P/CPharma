@@ -1,4 +1,12 @@
-@extends('layouts.model')
+@php
+    if ($_SERVER['SERVER_NAME'] == 'cpharmagpde.com' || $_SERVER['SERVER_NAME'] == 'cpharmagp.com') {
+        $layout = 'layouts.contabilidad';
+    } else {
+        $layout = 'layouts.model';
+    }
+@endphp
+
+@extends($layout)
 
 @section('title')
     Configuracion
@@ -34,7 +42,7 @@
     <hr class="row align-items-start col-12">
 
     <form action="/configuracion/" method="POST" style="display: inline;">
-        @csrf                       
+        @csrf
         <button type="submit" name="Regresar" role="button" class="btn btn-outline-info btn-sm"data-placement="top"><i class="fa fa-reply">&nbsp;Regresar</i></button>
     </form>
 
@@ -63,15 +71,15 @@
             <tr>
                 <th scope="row">{!! Form::label('valor', 'Valor') !!}</th>
                 <td>{!! Form::text('valor', null, [ 'class' => 'form-control', 'placeholder' => '1.16', 'autofocus', 'required']) !!}</td>
-            </tr>         
+            </tr>
         </tbody>
         </table>
         {!! Form::submit('Guardar', ['class' => 'btn btn-outline-success btn-md']) !!}
     </fieldset>
-    {!! Form::close()!!} 
+    {!! Form::close()!!}
     <script>
         $(document).ready(function(){
-            $('[data-toggle="tooltip"]').tooltip();   
+            $('[data-toggle="tooltip"]').tooltip();
         });
         $('#exampleModalCenter').modal('show')
     </script>

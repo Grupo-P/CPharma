@@ -1,4 +1,12 @@
-@extends('layouts.model')
+@php
+    if ($_SERVER['SERVER_NAME'] == 'cpharmagpde.com' || $_SERVER['SERVER_NAME'] == 'cpharmagp.com') {
+        $layout = 'layouts.contabilidad';
+    } else {
+        $layout = 'layouts.model';
+    }
+@endphp
+
+@extends($layout)
 
 @section('title')
     Configuracion
@@ -27,7 +35,7 @@
 		  </div>
 		</div>
 	@endif
-	
+
 	<!-- Modal Editar -->
 	@if (session('Updated'))
 		<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -65,7 +73,7 @@
 		        <h4 class="h6">Configuracion actualizada con exito</h4>
 		      </div>
 		      <div class="modal-footer">
-		        <button type="button" class="btn btn-outline-success" data-dismiss="modal">Aceptar</button>	
+		        <button type="button" class="btn btn-outline-success" data-dismiss="modal">Aceptar</button>
 		      </div>
 		    </div>
 		  </div>
@@ -80,11 +88,11 @@
 	<hr class="row align-items-start col-12">
 	<table style="width:100%;" class="CP-stickyBar">
 	    <tr>
-	        <td style="width:10%;" align="center">	        	
-				<a href="{{ url('/configuracion/create') }}" role="button" class="btn btn-outline-info btn-sm" 
+	        <td style="width:10%;" align="center">
+				<a href="{{ url('/configuracion/create') }}" role="button" class="btn btn-outline-info btn-sm"
 				style="display: inline; text-align: left;">
 				<i class="fas fa-plus"></i>
-					Agregar		      		
+					Agregar
 				</a>
 	        </td>
 	        <td style="width:90%;">
@@ -99,14 +107,14 @@
 	    </tr>
 	</table>
 	<br/>
-	
+
 	<table class="table table-striped table-borderless col-12 sortable" id="myTable">
 	  	<thead class="thead-dark">
 		    <tr>
 		      	<th scope="col" class="CP-sticky">#</th>
 		      	<th scope="col" class="CP-sticky">Variable</th>
-		      	<th scope="col" class="CP-sticky">Descripcion</th>	
-		      	<th scope="col" class="CP-sticky">Valor</th>	
+		      	<th scope="col" class="CP-sticky">Descripcion</th>
+		      	<th scope="col" class="CP-sticky">Valor</th>
 		      	<th scope="col" class="CP-sticky">Estatus</th>
 		      	<th scope="col" class="CP-sticky">Acciones</th>
 		    </tr>
@@ -119,10 +127,10 @@
 		      <td>{{$configuracion->descripcion}}</td>
 		      <td>{{$configuracion->valor}}</td>
 		      <td>{{$configuracion->estatus}}</td>
-		      
+
 		    <!-- Inicio Validacion de ROLES -->
 		      <td style="width:140px;">
-				
+
 				<?php
 				if(Auth::user()->role == 'MASTER' || Auth::user()->role == 'DEVELOPER'){
 				?>
@@ -131,35 +139,35 @@
 					if($configuracion->estatus == 'ACTIVO'){
 					?>
 						<a href="/configuracion/{{$configuracion->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
-			      			<i class="far fa-eye"></i>			      		
+			      			<i class="far fa-eye"></i>
 			      		</a>
 
 			      		<a href="/configuracion/{{$configuracion->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
-			      			<i class="fas fa-edit"></i>			      		
+			      			<i class="fas fa-edit"></i>
 				      	</a>
-				 					  
+
 				      	<form action="/configuracion/{{$configuracion->id}}" method="POST" style="display: inline;">
 						    @method('DELETE')
-						    @csrf					    
+						    @csrf
 						    <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Desincorporar"><i class="fa fa-reply"></i></button>
 						</form>
 					<?php
 					}
 					else if($configuracion->estatus == 'INACTIVO'){
-					?>		
+					?>
 			      	<form action="/configuracion/{{$configuracion->id}}" method="POST" style="display: inline;">
 					    @method('DELETE')
-					    @csrf					    
+					    @csrf
 					    <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Reincorporar"><i class="fa fa-share"></i></button>
 					</form>
 					<?php
-					}					
+					}
 					?>
-				<?php	
-				} else if(Auth::user()->role == 'SUPERVISOR' || Auth::user()->role == 'ADMINISTRADOR' || Auth::user()->role == 'SUPERVISOR CAJA'){ 
+				<?php
+				} else if(Auth::user()->role == 'SUPERVISOR' || Auth::user()->role == 'ADMINISTRADOR' || Auth::user()->role == 'SUPERVISOR CAJA'){
 				?>
 					<a href="/configuracion/{{$configuracion->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
-		      			<i class="far fa-eye"></i>			      		
+		      			<i class="far fa-eye"></i>
 		      		</a>
 
 		      		<a href="/configuracion/{{$configuracion->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
@@ -169,12 +177,12 @@
 				} else if(Auth::user()->role == 'USUARIO'){
 				?>
 					<a href="/configuracion/{{$configuracion->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
-		      			<i class="far fa-eye"></i>			      		
-		      		</a>		
+		      			<i class="far fa-eye"></i>
+		      		</a>
 				<?php
 				}
 				?>
-										
+
 		      </td>
 		    <!-- Fin Validacion de ROLES -->
 
@@ -185,7 +193,7 @@
 
 	<script>
 		$(document).ready(function(){
-		    $('[data-toggle="tooltip"]').tooltip();   
+		    $('[data-toggle="tooltip"]').tooltip();
 		});
 		$('#exampleModalCenter').modal('show')
 	</script>
