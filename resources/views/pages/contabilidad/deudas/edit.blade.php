@@ -27,8 +27,8 @@
         </div>
     @endif
     <h1 class="h5 text-info">
-        <i class="fas fa-plus"></i>
-        Cargar deuda a proveedor
+        <i class="fas fa-edit"></i>
+        Editar deuda de proveedor
     </h1>
 
     <hr class="row align-items-start col-12">
@@ -38,8 +38,9 @@
     <br>
     <br>
 
-    <form method="POST" action="/deudas">
+    <form method="POST" action="{{ route('deudas.update', $deuda) }}">
         @csrf
+        @method('PUT')
         <fieldset>
             <table class="table table-borderless table-striped">
                 <thead class="thead-dark">
@@ -52,20 +53,20 @@
                     <tr>
                         <th scope="row"><label for="nombre_proveedor">Nombre del proveedor</label></th>
                         <td>
-                            <input autofocus class="form-control" type="text" id="proveedores">
-                            <input type="hidden" name="id_proveedor">
+                            <input class="form-control" type="text" id="proveedores" value="{{ $deuda->proveedor->nombre_proveedor . ' | ' . $deuda->proveedor->rif_ci }}">
+                            <input type="hidden" name="id_proveedor" value="{{ $deuda->proveedor->id }}">
                         </td>
                     </tr>
 
                     <tr>
                         <th scope="row"><label for="moneda">Moneda</label></th>
-                        <td><input name="moneda" readonly class="form-control" required></td>
+                        <td><input name="moneda" readonly class="form-control" value="{{ $deuda->proveedor->moneda }}" required></td>
                     </tr>
 
                     <tr>
                         <th scope="row"><label for="monto">Monto</label></th>
                         <td>
-                            <input type="number" required class="form-control" name="monto" min="1">
+                            <input type="number" value="{{ $deuda->monto }}" required class="form-control" name="monto" min="1">
                         </td>
                     </tr>
 
@@ -75,7 +76,7 @@
                             <select name="documento_soporte_deuda" required class="form-control">
                                 <option value=""></option>
                                 @foreach($documentos as $documento)
-                                    <option value="{{ $documento }}">{{ $documento }}</option>
+                                    <option {{ ($deuda->documento_soporte_deuda == $documento) ? 'selected' : '' }} value="{{ $documento }}">{{ $documento }}</option>
                                 @endforeach
                             </select>
                         </td>
@@ -83,7 +84,7 @@
 
                     <tr>
                         <th scope="row"><label for="numero_documento">Número documento</label></th>
-                        <td><input name="numero_documento" class="form-control" minlength="5" maxlength="20" required></td>
+                        <td><input name="numero_documento" class="form-control" value="{{ $deuda->numero_documento }}" minlength="5" maxlength="20" required></td>
                     </tr>
                 </tbody>
             </table>
@@ -103,7 +104,6 @@
 
 @section('scriptsHead')
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
     <script>

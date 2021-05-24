@@ -4,11 +4,11 @@ namespace compras\Http\Controllers;
 
 use compras\Auditoria;
 use compras\Configuracion;
-use compras\ContDeuda;
 use compras\ContProveedor;
+use compras\ContReclamo;
 use Illuminate\Http\Request;
 
-class ContDeudasController extends Controller
+class ContReclamoController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,8 +17,8 @@ class ContDeudasController extends Controller
      */
     public function index()
     {
-        $deudas = ContDeuda::get();
-        return view('pages.contabilidad.deudas.index', compact('deudas'));
+        $reclamos = ContReclamo::get();
+        return view('pages.contabilidad.reclamos.index', compact('reclamos'));
     }
 
     /**
@@ -43,7 +43,7 @@ class ContDeudasController extends Controller
             $i = $i + 1;
         }
 
-        return view('pages.contabilidad.deudas.create', compact('documentos', 'proveedores'));
+        return view('pages.contabilidad.reclamos.create', compact('documentos', 'proveedores'));
     }
 
     /**
@@ -54,21 +54,21 @@ class ContDeudasController extends Controller
      */
     public function store(Request $request)
     {
-        $deuda                          = new ContDeuda();
-        $deuda->id_proveedor            = $request->input('id_proveedor');
-        $deuda->monto                   = $request->input('monto');
-        $deuda->documento_soporte_deuda = $request->input('documento_soporte_deuda');
-        $deuda->numero_documento        = $request->input('numero_documento');
-        $deuda->save();
+        $reclamo                            = new ContReclamo();
+        $reclamo->id_proveedor              = $request->input('id_proveedor');
+        $reclamo->monto                     = $request->input('monto');
+        $reclamo->documento_soporte_reclamo = $request->input('documento_soporte_reclamo');
+        $reclamo->numero_documento          = $request->input('numero_documento');
+        $reclamo->save();
 
         $auditoria           = new Auditoria();
         $auditoria->accion   = 'CREAR';
-        $auditoria->tabla    = 'DEUDA';
-        $auditoria->registro = $deuda->id;
+        $auditoria->tabla    = 'RECLAMO';
+        $auditoria->registro = $reclamo->id;
         $auditoria->user     = auth()->user()->name;
         $auditoria->save();
 
-        return redirect('/deudas')->with('Saved', ' Informacion');
+        return redirect('/reclamos')->with('Saved', ' Informacion');
     }
 
     /**
@@ -79,8 +79,8 @@ class ContDeudasController extends Controller
      */
     public function show($id)
     {
-        $deuda = ContDeuda::find($id);
-        return view('pages.contabilidad.deudas.show', compact('deuda'));
+        $reclamo = ContReclamo::find($id);
+        return view('pages.contabilidad.reclamos.show', compact('reclamo'));
     }
 
     /**
@@ -106,9 +106,9 @@ class ContDeudasController extends Controller
             $i = $i + 1;
         }
 
-        $deuda = ContDeuda::find($id);
+        $reclamo = ContReclamo::find($id);
 
-        return view('pages.contabilidad.deudas.edit', compact('deuda', 'documentos', 'proveedores'));
+        return view('pages.contabilidad.reclamos.edit', compact('reclamo', 'documentos', 'proveedores'));
     }
 
     /**
@@ -120,21 +120,21 @@ class ContDeudasController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $deuda                          = ContDeuda::find($id);
-        $deuda->id_proveedor            = $request->input('id_proveedor');
-        $deuda->monto                   = $request->input('monto');
-        $deuda->documento_soporte_deuda = $request->input('documento_soporte_deuda');
-        $deuda->numero_documento        = $request->input('numero_documento');
-        $deuda->save();
+        $reclamo                            = ContReclamo::find($id);
+        $reclamo->id_proveedor              = $request->input('id_proveedor');
+        $reclamo->monto                     = $request->input('monto');
+        $reclamo->documento_soporte_reclamo = $request->input('documento_soporte_reclamo');
+        $reclamo->numero_documento          = $request->input('numero_documento');
+        $reclamo->save();
 
         $auditoria           = new Auditoria();
         $auditoria->accion   = 'EDITAR';
-        $auditoria->tabla    = 'DEUDA';
-        $auditoria->registro = $deuda->id;
+        $auditoria->tabla    = 'RECLAMO';
+        $auditoria->registro = $reclamo->id;
         $auditoria->user     = auth()->user()->name;
         $auditoria->save();
 
-        return redirect('/deudas')->with('Updated', ' Informacion');
+        return redirect('/reclamos')->with('Updated', ' Informacion');
     }
 
     /**
@@ -145,16 +145,16 @@ class ContDeudasController extends Controller
      */
     public function destroy($id)
     {
-        $deuda = ContDeuda::find($id);
-        $deuda->delete();
+        $reclamo = ContReclamo::find($id);
+        $reclamo->delete();
 
         $auditoria           = new Auditoria();
         $auditoria->accion   = 'ELIMINAR';
-        $auditoria->tabla    = 'DEUDA';
-        $auditoria->registro = $deuda->id;
+        $auditoria->tabla    = 'RECLAMO';
+        $auditoria->registro = $reclamo->id;
         $auditoria->user     = auth()->user()->name;
         $auditoria->save();
 
-        return redirect('/deudas')->with('Deleted', ' Informacion');
+        return redirect('/reclamos')->with('Deleted', ' Informacion');
     }
 }

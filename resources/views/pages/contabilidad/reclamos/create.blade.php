@@ -1,7 +1,7 @@
 @extends('layouts.contabilidad')
 
 @section('title')
-    Registro de deudas
+    Registro de reclamos
 @endsection
 
 @section('content')
@@ -17,7 +17,7 @@
                 </button>
               </div>
               <div class="modal-body">
-                <h4 class="h6">La deuda no fue almacenado, el correo ya esta registrado</h4>
+                <h4 class="h6">El reclamo no fue almacenado, el correo ya esta registrado</h4>
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-outline-success" data-dismiss="modal">Aceptar</button>
@@ -28,17 +28,17 @@
     @endif
     <h1 class="h5 text-info">
         <i class="fas fa-plus"></i>
-        Cargar deuda a proveedor
+        Cargar reclamo a proveedor
     </h1>
 
     <hr class="row align-items-start col-12">
 
-    <a href="/deudas" class="btn btn-outline-info btn-sm"><i class="fa fa-reply"></i> Regresar</a>
+    <a href="/reclamos" class="btn btn-outline-info btn-sm"><i class="fa fa-reply"></i> Regresar</a>
 
     <br>
     <br>
 
-    <form method="POST" action="/deudas">
+    <form method="POST" action="/reclamos">
         @csrf
         <fieldset>
             <table class="table table-borderless table-striped">
@@ -65,14 +65,14 @@
                     <tr>
                         <th scope="row"><label for="monto">Monto</label></th>
                         <td>
-                            <input type="number" required class="form-control" name="monto" min="1">
+                            <input type="number" required class="form-control" name="monto">
                         </td>
                     </tr>
 
                     <tr>
-                        <th scope="row"><label for="documento_soporte_deuda">Documento soporte deuda</label></th>
+                        <th scope="row"><label for="documento_soporte_reclamo">Documento soporte reclamo</label></th>
                         <td>
-                            <select name="documento_soporte_deuda" required class="form-control">
+                            <select name="documento_soporte_reclamo" required class="form-control">
                                 <option value=""></option>
                                 @foreach($documentos as $documento)
                                     <option value="{{ $documento }}">{{ $documento }}</option>
@@ -83,7 +83,7 @@
 
                     <tr>
                         <th scope="row"><label for="numero_documento">Número documento</label></th>
-                        <td><input name="numero_documento" class="form-control" minlength="5" maxlength="20" required></td>
+                        <td><input name="numero_documento" class="form-control" minlength="5" maxlength="20"></td>
                     </tr>
                 </tbody>
             </table>
@@ -103,7 +103,6 @@
 
 @section('scriptsHead')
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
     <script>

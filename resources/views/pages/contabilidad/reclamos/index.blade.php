@@ -1,7 +1,7 @@
 @extends('layouts.contabilidad')
 
 @section('title')
-    Registro de deudas
+    Registro de reclamos
 @endsection
 
 @section('content')
@@ -18,7 +18,7 @@
                 </button>
               </div>
               <div class="modal-body">
-                <h4 class="h6">Deudas almacenado con exito</h4>
+                <h4 class="h6">Reclamo almacenado con exito</h4>
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-outline-success" data-dismiss="modal">Aceptar</button>
@@ -40,7 +40,7 @@
                 </button>
               </div>
               <div class="modal-body">
-                <h4 class="h6">Deudas modificado con exito</h4>
+                <h4 class="h6">Reclamo modificado con exito</h4>
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-outline-success" data-dismiss="modal">Aceptar</button>
@@ -62,7 +62,7 @@
                 </button>
               </div>
               <div class="modal-body">
-                <h4 class="h6">Deudas eliminado con exito</h4>
+                <h4 class="h6">Reclamo eliminado con exito</h4>
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-outline-success" data-dismiss="modal">Aceptar</button>
@@ -74,7 +74,7 @@
 
     <h1 class="h5 text-info">
         <i class="fas fa-info-circle"></i>
-        Registro de deudas
+        Registro de reclamos
     </h1>
 
     <hr class="row align-items-start col-12">
@@ -82,10 +82,10 @@
         <tr>
             @if(Auth::user()->departamento == 'TECNOLOGIA' || Auth::user()->departamento == 'GERENCIA' || Auth::user()->departamento == 'OPERACIONES' || Auth::user()->departamento == 'TESORERIA')
                 <td style="width:15%;" align="center">
-                    <a href="{{ url('/deudas/create') }}" role="button" class="btn btn-outline-info btn-sm"
+                    <a href="{{ url('/reclamos/create') }}" role="button" class="btn btn-outline-info btn-sm"
                     style="display: inline; text-align: left;">
                     <i class="fa fa-plus"></i>
-                        Cargar deuda a proveedor
+                        Registrar reclamo a proveedor
                     </a>
                 </td>
             @endif
@@ -111,32 +111,32 @@
                 <th scope="col" class="CP-sticky">RIF/CI del proveedor</th>
                 <th scope="col" class="CP-sticky">Moneda</th>
                 <th scope="col" class="CP-sticky">Monto</th>
-                <th scope="col" class="CP-sticky">Documento soporte deuda</th>
+                <th scope="col" class="CP-sticky">Documento soporte reclamo</th>
                 <th scope="col" class="CP-sticky">Numero de documento</th>
                 <th scope="col" class="CP-sticky">Acciones</th>
             </tr>
         </thead>
         <tbody>
-        @foreach($deudas as $deuda)
+        @foreach($reclamos as $reclamo)
             <tr>
-              <th>{{$deuda->id}}</th>
-              <td>{{$deuda->proveedor->nombre_proveedor}}</td>
-              <td>{{$deuda->proveedor->rif_ci}}</td>
-              <td>{{$deuda->proveedor->moneda}}</td>
-              <td>{{number_format($deuda->monto, 2, ',', '.')}}</td>
-              <td>{{$deuda->documento_soporte_deuda}}</td>
-              <td>{{$deuda->numero_documento}}</td>
+              <th>{{$reclamo->id}}</th>
+              <td>{{$reclamo->proveedor->nombre_proveedor}}</td>
+              <td>{{$reclamo->proveedor->rif_ci}}</td>
+              <td>{{$reclamo->proveedor->moneda}}</td>
+              <td>{{number_format($reclamo->monto, 2, ',', '.')}}</td>
+              <td>{{$reclamo->documento_soporte_reclamo}}</td>
+              <td>{{$reclamo->numero_documento}}</td>
               <td style="width:140px;">
-                <a href="/deudas/{{$deuda->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
+                <a href="/reclamos/{{$reclamo->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
                     <i class="far fa-eye"></i>
                 </a>
 
                 @if(Auth::user()->departamento == 'TECNOLOGIA' || Auth::user()->departamento == 'GERENCIA')
-                    <a href="/deudas/{{$deuda->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
+                    <a href="/reclamos/{{$reclamo->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
                         <i class="fas fa-edit"></i>
                     </a>
 
-                    <form action="/deudas/{{$deuda->id}}" method="POST" style="display: inline;">
+                    <form action="/reclamos/{{$reclamo->id}}" method="POST" style="display: inline;">
                         @method('DELETE')
                         @csrf
                         <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Desincorporar"><i class="fa fa-reply"></i></button>

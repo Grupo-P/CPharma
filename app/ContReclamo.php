@@ -5,7 +5,7 @@ namespace compras;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class ContDeuda extends Model
+class ContReclamo extends Model
 {
     use SoftDeletes;
 

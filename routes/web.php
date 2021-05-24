@@ -425,3 +425,5 @@ Route::get('/cuentas/{id}/delete', 'ContCuentasController@delete');
 Route::resource('bancos', 'ContBancoController');
 
 Route::resource('deudas', 'ContDeudasController');
+
+Route::resource('reclamos', 'ContReclamoController');
