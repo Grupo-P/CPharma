@@ -57,13 +57,6 @@
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="{{ url('/pagos') }}">
-          <span data-feather="home"></span>
-          <i class="fas fa-money-bill-alt"></i>
-          Pagos<span class="sr-only">(current)</span>
-        </a>
-      </li>
-      <li class="nav-item">
         <a class="nav-link CP-Links-Menu" href="{{ url('/deudas') }}">
           <span data-feather="home"></span>
           <i class="fas fa-info-circle"></i>
@@ -75,6 +68,25 @@
           <span data-feather="home"></span>
           <i class="fas fa-exclamation-triangle"></i>
           Reclamos<span class="sr-only">(current)</span>
+        </a>
+      </li>
+
+      @if(Auth::user()->departamento == 'TECNOLOGIA' || Auth::user()->departamento == 'GERENCIA' || Auth::user()->departamento == 'CONTABILIDAD' || Auth::user()->departamento == 'ADMINISTRACION')
+          <li class="nav-item">
+            <a class="nav-link CP-Links-Menu" href="{{ url('/ajuste') }}">
+              <span data-feather="home"></span>
+              <i class="fas fa-sliders-h"></i>
+              Ajustes<span class="sr-only">(current)</span>
+            </a>
+          </li>
+      @endif
+
+
+      <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('/pagos') }}">
+          <span data-feather="home"></span>
+          <i class="fas fa-money-bill-alt"></i>
+          Pagos<span class="sr-only">(current)</span>
         </a>
       </li>
       <li class="nav-item">

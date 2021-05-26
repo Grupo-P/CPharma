@@ -1,7 +1,7 @@
 @extends('layouts.contabilidad')
 
 @section('title')
-    Registro de reclamos
+    Registro de ajustes
 @endsection
 
 @section('content')
@@ -18,7 +18,7 @@
                 </button>
               </div>
               <div class="modal-body">
-                <h4 class="h6">Reclamo almacenado con exito</h4>
+                <h4 class="h6">Ajuste almacenado con exito</h4>
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-outline-success" data-dismiss="modal">Aceptar</button>
@@ -40,7 +40,7 @@
                 </button>
               </div>
               <div class="modal-body">
-                <h4 class="h6">Reclamo modificado con exito</h4>
+                <h4 class="h6">Ajuste modificado con exito</h4>
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-outline-success" data-dismiss="modal">Aceptar</button>
@@ -62,7 +62,7 @@
                 </button>
               </div>
               <div class="modal-body">
-                <h4 class="h6">Reclamo eliminado con exito</h4>
+                <h4 class="h6">Ajuste reversado con exito</h4>
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-outline-success" data-dismiss="modal">Aceptar</button>
@@ -73,24 +73,21 @@
     @endif
 
     <h1 class="h5 text-info">
-        <i class="fas fa-info-circle"></i>
-        Registro de reclamos
+        <i class="fas fa-sliders-h"></i>
+        Registro de ajustes
     </h1>
 
     <hr class="row align-items-start col-12">
     <table style="width:100%;" class="CP-stickyBar">
         <tr>
-            @if(Auth::user()->departamento == 'TECNOLOGIA' || Auth::user()->departamento == 'GERENCIA' || Auth::user()->departamento == 'OPERACIONES' || Auth::user()->departamento == 'TESORERIA')
-                <td style="width:15%;" align="center">
-                    <a href="{{ url('/reclamos/create') }}" role="button" class="btn btn-outline-info btn-sm"
-                    style="display: inline; text-align: left;">
-                    <i class="fa fa-plus"></i>
-                        Registrar reclamo a proveedor
-                    </a>
-                </td>
-            @endif
-
-            <td style="width:60%;">
+            <td style="width:10%;" align="center">
+                <a href="{{ url('ajuste/create') }}" role="button" class="btn btn-outline-info btn-sm"
+                style="display: inline; text-align: left;">
+                <i class="fa fa-plus"></i>
+                    Agregar
+                </a>
+            </td>
+            <td style="width:90%;">
                 <div class="input-group md-form form-sm form-1 pl-0 CP-stickyBar">
                     <div class="input-group-prepend">
                         <span class="input-group-text purple lighten-3" id="basic-text1"><i class="fas fa-search text-white"
@@ -108,43 +105,38 @@
             <tr>
                 <th scope="col" class="CP-sticky">#</th>
                 <th scope="col" class="CP-sticky">Nombre del proveedor</th>
-                <th scope="col" class="CP-sticky">RIF/CI del proveedor</th>
+                <th scope="col" class="CP-sticky">RIF/Cédula del porveedor</th>
                 <th scope="col" class="CP-sticky">Fecha de registro</th>
-                <th scope="col" class="CP-sticky">Moneda</th>
                 <th scope="col" class="CP-sticky">Monto</th>
-                <th scope="col" class="CP-sticky">Documento soporte reclamo</th>
-                <th scope="col" class="CP-sticky">Numero de documento</th>
+                <th scope="col" class="CP-sticky">Comentarios</th>
                 <th scope="col" class="CP-sticky">Acciones</th>
             </tr>
         </thead>
         <tbody>
-        @foreach($reclamos as $reclamo)
+        @foreach($ajustes as $ajuste)
             <tr>
-              <th>{{$reclamo->id}}</th>
-              <td>{{$reclamo->proveedor->nombre_proveedor}}</td>
-              <td>{{$reclamo->proveedor->rif_ci}}</td>
-              <td>{{$reclamo->created_at}}</td>
-              <td>{{$reclamo->proveedor->moneda}}</td>
-              <td>{{number_format($reclamo->monto, 2, ',', '.')}}</td>
-              <td>{{$reclamo->documento_soporte_reclamo}}</td>
-              <td>{{$reclamo->numero_documento}}</td>
+              <th>{{$ajuste->id}}</th>
+              <td>{{$ajuste->proveedor->nombre_proveedor}}</td>
+              <td>{{$ajuste->proveedor->rif_ci}}</td>
+              <td>{{$ajuste->created_at}}</td>
+              <td>{{$ajuste->monto}}</td>
+              <td>{{$ajuste->comentario}}</td>
               <td style="width:140px;">
-                <a href="/reclamos/{{$reclamo->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
+                <a href="ajuste/{{$ajuste->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
                     <i class="far fa-eye"></i>
                 </a>
 
                 @if(Auth::user()->departamento == 'TECNOLOGIA' || Auth::user()->departamento == 'GERENCIA')
-                    <a href="/reclamos/{{$reclamo->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
+                    <a href="ajuste/{{$ajuste->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
                         <i class="fas fa-edit"></i>
                     </a>
 
-                    <form action="/reclamos/{{$reclamo->id}}" method="POST" style="display: inline;">
+                    <form action="ajuste/{{$ajuste->id}}" method="POST" style="display: inline;">
                         @method('DELETE')
                         @csrf
-                        <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Desincorporar"><i class="fa fa-reply"></i></button>
+                        <button type="submit" name="Reversar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Reversar"><i class="fa fa-reply"></i></button>
                     </form>
                 @endif
-
               </td>
             </tr>
         @endforeach

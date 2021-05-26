@@ -1,18 +1,18 @@
 @extends('layouts.contabilidad')
 
 @section('title')
-    Deuda
+    Registro de ajustes
 @endsection
 
 @section('content')
     <h1 class="h5 text-info">
         <i class="far fa-eye"></i>
-        Detalle de deuda
+        Detalle de ajuste
     </h1>
 
     <hr class="row align-items-start col-12">
 
-    <a href="/deudas" class="btn btn-outline-info btn-sm">
+    <a href="/ajuste" class="btn btn-outline-info btn-sm">
         <i class="fa fa-reply"></i> Regresar
     </a>
 
@@ -29,37 +29,27 @@
         <tbody>
             <tr>
                 <th scope="row">Nombre del proveedor</th>
-                <td>{{$deuda->proveedor->nombre_proveedor}}</td>
+                <td>{{$ajuste->proveedor->nombre_proveedor}}</td>
             </tr>
 
             <tr>
                 <th scope="row">RIF/CI del proveedor</th>
-                <td>{{$deuda->proveedor->rif_ci}}</td>
+                <td>{{$ajuste->proveedor->rif_ci}}</td>
             </tr>
 
             <tr>
                 <th scope="row">Fecha de registro</th>
-                <td>{{$deuda->created_at}}</td>
-            </tr>
-
-            <tr>
-                <th scope="row">Moneda</th>
-                <td>{{$deuda->proveedor->moneda}}</td>
+                <td>{{$ajuste->created_at}}</td>
             </tr>
 
             <tr>
                 <th scope="row">Monto</th>
-                <td>{{number_format($deuda->monto, 2, ',', '.')}}</td>
+                <td>{{number_format($ajuste->monto, 2, ',', '.')}}</td>
             </tr>
 
             <tr>
-                <th scope="row">Documento soporte deuda</th>
-                <td>{{$deuda->documento_soporte_deuda}}</td>
-            </tr>
-
-            <tr>
-                <th scope="row">Numero documento</th>
-                <td>{{$deuda->numero_documento}}</td>
+                <th scope="row">Comentario</th>
+                <td>{{$ajuste->comentario}}</td>
             </tr>
         </tbody>
     </table>

@@ -427,3 +427,5 @@ Route::resource('bancos', 'ContBancoController');
 Route::resource('deudas', 'ContDeudasController');
 
 Route::resource('reclamos', 'ContReclamoController');
+
+Route::resource('ajuste', 'ContAjusteController');

@@ -109,6 +109,7 @@
                 <th scope="col" class="CP-sticky">#</th>
                 <th scope="col" class="CP-sticky">Nombre del proveedor</th>
                 <th scope="col" class="CP-sticky">RIF/CI del proveedor</th>
+                <th scope="col" class="CP-sticky">Fecha de registro</th>
                 <th scope="col" class="CP-sticky">Moneda</th>
                 <th scope="col" class="CP-sticky">Monto</th>
                 <th scope="col" class="CP-sticky">Documento soporte deuda</th>
@@ -122,6 +123,7 @@
               <th>{{$deuda->id}}</th>
               <td>{{$deuda->proveedor->nombre_proveedor}}</td>
               <td>{{$deuda->proveedor->rif_ci}}</td>
+              <td>{{$deuda->created_at}}</td>
               <td>{{$deuda->proveedor->moneda}}</td>
               <td>{{number_format($deuda->monto, 2, ',', '.')}}</td>
               <td>{{$deuda->documento_soporte_deuda}}</td>
