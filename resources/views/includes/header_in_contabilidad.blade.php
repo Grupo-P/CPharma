@@ -49,6 +49,7 @@
           Proveedores<span class="sr-only">(current)</span>
         </a>
       </li>
+
       <li class="nav-item">
         <a class="nav-link CP-Links-Menu" href="{{ url('/bancos') }}">
           <span data-feather="home"></span>
@@ -56,6 +57,7 @@
           Bancos<span class="sr-only">(current)</span>
         </a>
       </li>
+
       <li class="nav-item">
         <a class="nav-link CP-Links-Menu" href="{{ url('/deudas') }}">
           <span data-feather="home"></span>
@@ -63,6 +65,7 @@
           Deudas<span class="sr-only">(current)</span>
         </a>
       </li>
+
       <li class="nav-item">
         <a class="nav-link CP-Links-Menu" href="{{ url('/reclamos') }}">
           <span data-feather="home"></span>
@@ -81,14 +84,24 @@
           </li>
       @endif
 
+      @if(Auth::user()->departamento == 'TECNOLOGIA' || Auth::user()->departamento == 'GERENCIA' || Auth::user()->departamento == 'CONTABILIDAD' || Auth::user()->departamento == 'ADMINISTRACION')
+          <li class="nav-item">
+            <a class="nav-link CP-Links-Menu" href="{{ url('/bancarios') }}">
+              <span data-feather="home"></span>
+              <i class="fas fa-credit-card"></i>
+              Pagos bancarios<span class="sr-only">(current)</span>
+            </a>
+          </li>
+      @endif
 
       <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="{{ url('/pagos') }}">
+        <a class="nav-link CP-Links-Menu" href="{{ url('/efectivo') }}">
           <span data-feather="home"></span>
           <i class="fas fa-money-bill-alt"></i>
-          Pagos<span class="sr-only">(current)</span>
+          Pagos en efectivo<span class="sr-only">(current)</span>
         </a>
       </li>
+
       <li class="nav-item">
         <a class="nav-link CP-Links-Menu" href="{{ url('/cuentas') }}">
           <span data-feather="home"></span>
@@ -96,6 +109,7 @@
           Plan de cuentas<span class="sr-only">(current)</span>
         </a>
       </li>
+
       <li class="nav-item">
         <a class="nav-link CP-Links-Menu" href="{{ url('/configuracion') }}">
           <span data-feather="home"></span>

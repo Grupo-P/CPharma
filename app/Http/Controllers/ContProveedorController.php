@@ -2,6 +2,7 @@
 
 namespace compras\Http\Controllers;
 
+use compras\Auditoria;
 use compras\Configuracion;
 use compras\ContCuenta;
 use compras\ContProveedor;
