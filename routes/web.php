@@ -433,3 +433,7 @@ Route::resource('ajuste', 'ContAjusteController');
 Route::resource('bancarios', 'ContPagoBancarioController');
 
 Route::get('/bancarios/soporte/{id}', 'ContPagoBancarioController@soporte');
+
+Route::resource('efectivo', 'ContPagoEfectivoController');
+
+Route::get('/efectivo/soporte/{id}', 'ContPagoEfectivoController@soporte');

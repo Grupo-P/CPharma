@@ -133,7 +133,6 @@
                         <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Desincorporar"><i class="fa fa-reply"></i></button>
                     </form>
                 @endif
-
               </td>
             </tr>
         @endforeach
