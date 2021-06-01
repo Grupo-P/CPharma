@@ -354,33 +354,6 @@
           Unidad Minima<span class="sr-only">(current)</span>
         </a>
       </li>
-      <?php
-        if(Auth::user()->role == 'SUPERVISOR'){
-      ?>
-        <li class="nav-item">
-          <a class="nav-link CP-Links-Menu" href="{{ url('/ordenCompra') }}">
-            <span data-feather="home"></span>
-            <i class="far fa-file-alt"></i>
-            Orden de compra<span class="sr-only">(current)</span>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link CP-Links-Menu" href="{{ url('/traslado') }}">
-            <span data-feather="home"></span>
-            <i class="fas fa-people-carry"></i>
-            Traslado<span class="sr-only">(current)</span>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link CP-Links-Menu" href="{{ url('/auditoria') }}">
-            <span data-feather="home"></span>
-            <i class="fas fa-search"></i>
-            Auditoria<span class="sr-only">(current)</span>
-          </a>
-        </li>
-      <?php
-        }
-      ?>
     </div>
   </div>
 <?php
@@ -1062,13 +1035,6 @@
           Orden de compra<span class="sr-only">(current)</span>
         </a>
       </li>
-      <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="{{ url('/surtido') }}">
-          <span data-feather="home"></span>
-          <i class="fas fa-box"></i>
-          Surtido de gavetas<span class="sr-only">(current)</span>
-        </a>
-      </li>
     </div>
   </div>
 <?php
@@ -1352,6 +1318,70 @@
   }
 ?>
 <!-- TECNOLOGIA -->
+<!-------------------------------------------------------------------------------->
+<!------------------------------------------------------------------------------->
+<!-- AUDITORIA -->
+<?php
+  if(Auth::user()->departamento == 'AUDITORIA'){
+?>
+  <div class="btn-group navbar-brand">
+    <button type="button" class="btn btn-outline-info dropdown-toggle textoI" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      <i class="fas fa-user-cog"></i> Auditoria
+    </button>
+    <div class="dropdown-menu">
+      <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('/sedes_reporte') }}">
+          <span data-feather="home"></span>
+          <i class="fas fa-file-invoice"></i>
+          Reportes<span class="sr-only">(current)</span>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('/ConsultorCompra') }}" target="_blank">
+          <span data-feather="home"></span>
+          <i class="fas fa-search"></i>
+          Buscador de articulos<span class="sr-only">(current)</span>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('/ordenCompra') }}">
+          <span data-feather="home"></span>
+          <i class="far fa-file-alt"></i>
+          Orden de compra<span class="sr-only">(current)</span>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('/traslado') }}">
+          <span data-feather="home"></span>
+          <i class="fas fa-people-carry"></i>
+          Traslado<span class="sr-only">(current)</span>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('/auditoria') }}">
+          <span data-feather="home"></span>
+          <i class="fas fa-search"></i>
+          Auditoria<span class="sr-only">(current)</span>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('/surtido') }}">
+          <span data-feather="home"></span>
+          <i class="fas fa-box"></i>
+          Surtido de gavetas<span class="sr-only">(current)</span>
+        </a>
+      </li>
+    </div>
+  </div>
+<?php
+  }
+?>
+<!-- AUDITORIA -->
 <!-------------------------------------------------------------------------------->
 <!-- DEVELOPER -->
 <?php
