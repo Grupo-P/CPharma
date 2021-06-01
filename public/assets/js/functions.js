@@ -3,7 +3,7 @@ function soloNumeros(e){
   if (key < 48 || key > 57) {
     e.preventDefault();
   }
-}-
+}
 
 /*Autocompletado para el repote historico de articulo*/
 function conteo(){

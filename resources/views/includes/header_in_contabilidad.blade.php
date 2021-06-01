@@ -111,6 +111,30 @@
       </li>
 
       <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('/conciliaciones') }}">
+          <span data-feather="home"></span>
+          <i class="fas fa-file-invoice-dollar"></i>
+          Conciliaciones<span class="sr-only">(current)</span>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('/reportes') }}">
+          <span data-feather="home"></span>
+          <i class="fas fa-file-invoice"></i>
+          Reportes<span class="sr-only">(current)</span>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('/cuentas') }}">
+          <span data-feather="home"></span>
+          <i class="fas fa-network-wired"></i>
+          Plan de cuentas<span class="sr-only">(current)</span>
+        </a>
+      </li>
+
+      <li class="nav-item">
         <a class="nav-link CP-Links-Menu" href="{{ url('/configuracion') }}">
           <span data-feather="home"></span>
           <i class="fas fa-cogs"></i>

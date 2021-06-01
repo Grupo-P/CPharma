@@ -61,14 +61,15 @@
 
     <table>
         <thead>
-                <tr>
-                    <th scope="row" colspan="4" width="20%">
+            <tr>
+                <th scope="row" colspan="4" width="20%">
                     <span class="navbar-brand text-info CP-title-NavBar">
                         <b><i class="fas fa-syringe text-success"></i>CPharma</b>
                     </span>
                 </th>
-                    <th colspan="9">DATOS GENERALES DEL SURTIDO</th>
-                </tr>
+                <th colspan="9">DATOS GENERALES DEL SURTIDO</th>
+            </tr>
+
             <tr>
                 <th scope="row" colspan="3">Código del conteo</th>
                 <th scope="row">SEDE</th>

@@ -176,7 +176,7 @@ class SurtidoController extends Controller
         include app_path() . '/functions/functions.php';
 
         $surtido = Surtido::find($id);
-        $detalles = SurtidoDetalle::where('control', $surtido->control)->get();
+        $detalles = SurtidoDetalle::where('control', $surtido->control)->orderBy('descripcion', 'ASC')->get();
         $sede = FG_Mi_Ubicacion();
 
         $auditoria = new Auditoria();
