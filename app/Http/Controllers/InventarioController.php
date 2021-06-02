@@ -206,6 +206,11 @@ class InventarioController extends Controller
     {
         if ($request->input('numero_ajuste')) {
             Inventario::find($request->input('id'))->update(['numero_ajuste' => $request->input('numero_ajuste')]);
+
+            if ($request->input('verificar') == 1) {
+                return redirect('/inventario/ajuste/'.$id);
+            }
+
             return redirect()->route('inventario.index')->with('Updated', ' Informacion');
         }
 

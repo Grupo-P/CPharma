@@ -269,7 +269,7 @@
 
               <td>
                     <div class="input-group">
-                        <form method="POST" action="{{ route('inventario.update', $inventario->id) }}">
+                        <form target="_blank" method="POST" action="{{ route('inventario.update', $inventario->id) }}">
                             <input type="hidden" name="_method" value="PUT">
                             <input type="hidden" name="_token" value="{{ csrf_token() }}">
 
@@ -279,7 +279,8 @@
 
                             <div class="input-group-append">
                                 <button type="submit" class="btn btn-outline-info btn-sm"><i class="fa fa-save"></i> Guardar ajuste</button>
-                                <a href="{{ route('inventario.ajuste', $inventario->id) }}" target="_blank" class="btn btn-outline-success btn-sm"><i class="fa fa-user-check"></i> Verificar ajuste</a>
+
+                                <button type="submit" class="btn btn-outline-success btn-sm" name="verificar" value="1"><i class="fa fa-user-check"></i> Verificar ajuste</button>
                             </div>
                         </form>
                     </div>

@@ -80,7 +80,7 @@
         <tr>
           <td colspan="4">
             <div class="autocomplete" style="width:90%;">
-              <input id="myInputCB" type="text" name="CodBar" placeholder="Ingrese el codigo de barra del articulo " onkeyup="conteoCB()">
+              <input autofocus id="myInputCB" type="text" name="CodBar" placeholder="Ingrese el codigo de barra del articulo " onkeyup="conteoCB()">
             </div>
 
             <input id="SEDE" name="SEDE" type="hidden" value="{{ $_GET['SEDE'] }}">
@@ -115,6 +115,7 @@
           <th scope="col">Descripción</td>
           <th scope="col">Existencia</td>
           <th scope="col">Cantidad</td>
+            <th scope="col">Acciones</td>
         </tr>
       </thead>
       <tbody id="content">
@@ -206,6 +207,8 @@
                 success: function (response) {
                     if (response.Descripcion == '') {
                         alert('No se ha encontrado ningún artículo');
+                        $('#myInputCB').val('');
+                        $('#myInputCB').focus();
                         return false;
                     }
 
@@ -250,6 +253,8 @@
                         success: function (response) {
                             if (response.Descripcion == '') {
                                 alert('No se ha encontrado ningún artículo');
+                                $('#myInputCB').val('');
+                                $('#myInputCB').focus();
                                 return false;
                             }
 
@@ -342,6 +347,11 @@
                     <td align="center">${descripcion}</td>
                     <td align="center">${existencia}</td>
                     <td align="center">${cantidad}</td>
+                    <td align="center">
+                        <button data-id-articulo="${id_articulo}" onclick="eliminar(this)" class="btn btn-sm btn-outline-danger">
+                            <i class="fa fa-trash"></i> Eliminar
+                        </button>
+                    </td>
                 </tr>
             `;
 
@@ -354,7 +364,7 @@
                 cantidad: cantidad
             });
 
-            $('#content').append(html);
+            $('#content').prepend(html);
 
             $('#myInput').val('');
             $('#myInputCB').val('');
@@ -365,6 +375,20 @@
 
             $('#modalCantidad').modal('hide');
             $('[name=cantidad]').val('');
+
+            $('#myInputCB').focus();
+        }
+
+        function eliminar(that) {
+            $(that).parent().parent().remove();
+
+            id_articulo = $(that).attr('data-id-articulo');
+
+            for (var i = articulos.length - 1; i >= 0; i--) {
+                if (articulos[i].id_articulo == id_articulo) {
+                    articulos.splice(i, 1);
+                }
+            }
         }
     </script>
 @endsection

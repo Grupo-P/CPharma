@@ -115,19 +115,15 @@
         </thead>
         <tbody>
             <tr>
-                <td style="width:20%;" align="center">
+                <td style="width:30%;" align="center">
                     <a href="/surtido?estatus=TODO" class="btn btn-outline-info btn-sm">TODO</a>
                 </td>
 
-                <td style="width:20%;" align="center">
-                    <a href="/surtido?estatus=GENERADO" class="btn btn-outline-warning btn-sm">GENERADO</a>
-                </td>
-
-                <td style="width:20%;" align="center">
+                <td style="width:30%;" align="center">
                     <a href="/surtido?estatus=PROCESADO" class="btn btn-outline-success btn-sm">PROCESADO</a>
                 </td>
 
-                <td style="width:20%;" align="center">
+                <td style="width:30%;" align="center">
                     <a href="/surtido?estatus=ANULADO" class="btn btn-outline-danger btn-sm">ANULADO</a>
                 </td>
             </tr>
