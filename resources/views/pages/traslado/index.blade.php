@@ -269,7 +269,7 @@
 						(Auth::user()->departamento == 'ADMINISTRACION'
 				    || Auth::user()->departamento == 'GERENCIA'
 				    || Auth::user()->departamento == 'TECNOLOGIA'
-				    || (Auth::user()->departamento == 'SURTIDO' && Auth::user()->role == 'SUPERVISOR')
+				    || (Auth::user()->departamento == 'AUDITORIA' && Auth::user()->role == 'SUPERVISOR')
 				  )
 						){
 					?>
