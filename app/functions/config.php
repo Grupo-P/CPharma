@@ -21,6 +21,7 @@ define ("SedeGP","GRUPO P, C.A");
 define ("SedeDBs","Servidor de Desarrollo Sergio");
 define ("SedeDBsa","Servidor de Desarrollo Sergio ARG");
 define ("SedeDBm","Servidor de Desarrollo Manuel");
+define ("SedeKDI","FARMACIA KD EXPRESS, C.A.");
 /**********************************************************************************/
 /************************ NOMBRES SEDES OFF-LINE *********************************/
 define ("SedeFTNOFF","Farmacia Tierra Negra (OFF-LINE)");
@@ -89,6 +90,12 @@ define ("serverGP" , "SERGIO-PC");
 define ("userGP" , "sa");
 define ("passGP" , "soporte123");
 define ("nameGP" , "cpharmaftn");
+/**********************************************************************************/
+/************************* CONEXION ON LINE KDI **********************************/
+define ("serverKDI" , "SERVER-KDI");
+define ("userKDI" , "admin");
+define ("passKDI" , "soporte123");
+define ("nameKDI" , "KD_EXPRESS_SMART");
 /********************** APP CONSULTA ************************/
 date_default_timezone_set('America/Caracas');
 define ("Nperdida" , 3);

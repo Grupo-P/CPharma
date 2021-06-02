@@ -19,7 +19,7 @@
 		<i class="fas fa-file-invoice"></i>
 		Reportes
 	</h1>
-	<hr class="row align-items-start col-12"> 
+	<hr class="row align-items-start col-12">
 
 <!-------------------------------------------------------------------------------->
 <!-- CPHARMA ON LINE -->
@@ -32,15 +32,15 @@
 		if(Auth::user()->sede == 'FARMACIA TIERRA NEGRA, C.A.'){
 	?>
 	<div class="card-deck">
-		<div class="card border-danger mb-3" style="width: 14rem;">	  	
+		<div class="card border-danger mb-3" style="width: 14rem;">
   		<div class="card-body text-left bg-danger">
     		<h5 class="card-title">
 	    		<span class="card-text text-white">
 	    			<?php echo "".SedeFTN; ?>
 	    		</span>
-    		</h5>	    	    
+    		</h5>
   		</div>
-	  	<div class="card-footer bg-transparent border-danger text-right"> 
+	  	<div class="card-footer bg-transparent border-danger text-right">
 		    <a href="http://cpharmaftn.com/" role="button" class="btn btn-outline-danger btn-sm" target="_blank"></i>Ver reportes</a>
 	  	</div>
 		</div>
@@ -50,13 +50,13 @@
 		if(Auth::user()->sede == 'FARMACIA LA LAGO,C.A.'){
 	?>
 	<div class="card-deck">
-		<div class="card border-success mb-3" style="width: 14rem;">	  	
+		<div class="card border-success mb-3" style="width: 14rem;">
   		<div class="card-body text-left bg-success">
     		<h5 class="card-title">
 	    		<span class="card-text text-white">
 	    			<?php echo "".SedeFLL; ?>
 	    		</span>
-    		</h5>	    	    
+    		</h5>
   		</div>
 	  	<div class="card-footer bg-transparent border-success text-right">
 			  <a href="http://cpharmafll.com/" role="button" class="btn btn-outline-success btn-sm" target="_blank"></i>Ver reportes</a>
@@ -66,15 +66,15 @@
 	<?php
 	}
 		if(Auth::user()->sede == 'FARMACIA AVENIDA UNIVERSIDAD, C.A.'){
-	?> 
+	?>
 	<div class="card-deck">
-		<div class="card border-info mb-3" style="width: 14rem;">	  	
+		<div class="card border-info mb-3" style="width: 14rem;">
   		<div class="card-body text-left bg-info">
     		<h5 class="card-title">
 	    		<span class="card-text text-white">
 	    			<?php echo "".SedeFAU; ?>
 	    		</span>
-    		</h5>	    	    
+    		</h5>
   		</div>
 	  	<div class="card-footer bg-transparent border-info text-right">
 		   	<a href="http://cpharmafau.com/" role="button" class="btn btn-outline-info btn-sm" target="_blank"></i>Ver reportes</a>
@@ -84,39 +84,39 @@
   <?php
 	}
 		if(Auth::user()->sede == 'GRUPO P, C.A'){
-	?> 
+	?>
 		<div class="card-deck">
-			<div class="card border-danger mb-3" style="width: 14rem;">	  	
+			<div class="card border-danger mb-3" style="width: 14rem;">
 				<div class="card-body text-left bg-danger">
 		  		<h5 class="card-title">
 		    		<span class="card-text text-white">
 		    			<?php echo "".SedeFTN; ?>
 		    		</span>
-		  		</h5>	    	    
+		  		</h5>
 				</div>
-		  	<div class="card-footer bg-transparent border-danger text-right"> 
+		  	<div class="card-footer bg-transparent border-danger text-right">
 			    <a href="http://cpharmaftn.com/" role="button" class="btn btn-outline-danger btn-sm" target="_blank"></i>Ver reportes</a>
 		  	</div>
 			</div>
-			<div class="card border-success mb-3" style="width: 14rem;">	  	
+			<div class="card border-success mb-3" style="width: 14rem;">
 	  		<div class="card-body text-left bg-success">
 	    		<h5 class="card-title">
 		    		<span class="card-text text-white">
 		    			<?php echo "".SedeFLL; ?>
 		    		</span>
-	    		</h5>	    	    
+	    		</h5>
 	  		</div>
 		  	<div class="card-footer bg-transparent border-success text-right">
 				  <a href="http://cpharmafll.com/" role="button" class="btn btn-outline-success btn-sm" target="_blank"></i>Ver reportes</a>
 		  	</div>
 			</div>
-			<div class="card border-info mb-3" style="width: 14rem;">	  	
+			<div class="card border-info mb-3" style="width: 14rem;">
 	  		<div class="card-body text-left bg-info">
 	    		<h5 class="card-title">
 		    		<span class="card-text text-white">
 		    			<?php echo "".SedeFAU; ?>
 		    		</span>
-	    		</h5>	    	    
+	    		</h5>
 	  		</div>
 		  	<div class="card-footer bg-transparent border-info text-right">
 			   	<a href="http://cpharmafau.com/" role="button" class="btn btn-outline-info btn-sm" target="_blank"></i>Ver reportes</a>
@@ -137,18 +137,18 @@
 		if(Auth::user()->sede == 'FARMACIA TIERRA NEGRA, C.A.'){
 	?>
 	<div class="card-deck">
-		<div class="card border-danger mb-3" style="width: 14rem;">	  	
+		<div class="card border-danger mb-3" style="width: 14rem;">
   		<div class="card-body text-left bg-danger">
     		<h5 class="card-title">
 	    		<span class="card-text text-white">
 	    			<?php echo "".SedeFTN; ?>
 	    		</span>
-    		</h5>	    	    
+    		</h5>
   		</div>
   		<div class="card-footer bg-transparent border-danger text-right">
 				<form action="/reporte/" style="display: inline;">
 			    @csrf
-			    <input id="SEDE" name="SEDE" type="hidden" value="FTN"> 
+			    <input id="SEDE" name="SEDE" type="hidden" value="FTN">
 			    <button type="submit" name="Reporte" role="button" class="btn btn-outline-danger btn-sm"></i>Ver reportes</button>
 				</form>
 	  	</div>
@@ -159,13 +159,13 @@
 		if(Auth::user()->sede == 'FARMACIA LA LAGO,C.A.'){
 	?>
 	<div class="card-deck">
-		<div class="card border-success mb-3" style="width: 14rem;">	  	
+		<div class="card border-success mb-3" style="width: 14rem;">
   		<div class="card-body text-left bg-success">
     		<h5 class="card-title">
 	    		<span class="card-text text-white">
 	    			<?php echo "".SedeFLL; ?>
 	    		</span>
-    		</h5>	    	    
+    		</h5>
   		</div>
 	  	<div class="card-footer bg-transparent border-success text-right">
 			  <a href="http://cpharmafll.com/" role="button" class="btn btn-outline-success btn-sm" target="_blank"></i>Ver reportes</a>
@@ -175,15 +175,15 @@
 	<?php
 	}
 		if(Auth::user()->sede == 'FARMACIA AVENIDA UNIVERSIDAD, C.A.'){
-	?> 
+	?>
 	<div class="card-deck">
-		<div class="card border-info mb-3" style="width: 14rem;">	  	
+		<div class="card border-info mb-3" style="width: 14rem;">
   		<div class="card-body text-left bg-info">
     		<h5 class="card-title">
 	    		<span class="card-text text-white">
 	    			<?php echo "".SedeFAU; ?>
 	    		</span>
-    		</h5>	    	    
+    		</h5>
   		</div>
 	  	<div class="card-footer bg-transparent border-info text-right">
 		   	<a href="http://cpharmafau.com/" role="button" class="btn btn-outline-info btn-sm" target="_blank"></i>Ver reportes</a>
@@ -193,43 +193,43 @@
   <?php
 	}
 		if(Auth::user()->sede == 'GRUPO P, C.A'){
-	?> 
+	?>
 		<div class="card-deck">
-			<div class="card border-danger mb-3" style="width: 14rem;">	  	
+			<div class="card border-danger mb-3" style="width: 14rem;">
 				<div class="card-body text-left bg-danger">
 		  		<h5 class="card-title">
 		    		<span class="card-text text-white">
 		    			<?php echo "".SedeFTN; ?>
 		    		</span>
-		  		</h5>	    	    
+		  		</h5>
 				</div>
 		  	<div class="card-footer bg-transparent border-danger text-right">
 					<form action="/reporte/" style="display: inline;">
 				    @csrf
-				    <input id="SEDE" name="SEDE" type="hidden" value="FTN"> 
+				    <input id="SEDE" name="SEDE" type="hidden" value="FTN">
 				    <button type="submit" name="Reporte" role="button" class="btn btn-outline-danger btn-sm"></i>Ver reportes</button>
 					</form>
 		  	</div>
 			</div>
-			<div class="card border-success mb-3" style="width: 14rem;">	  	
+			<div class="card border-success mb-3" style="width: 14rem;">
 	  		<div class="card-body text-left bg-success">
 	    		<h5 class="card-title">
 		    		<span class="card-text text-white">
 		    			<?php echo "".SedeFLL; ?>
 		    		</span>
-	    		</h5>	    	    
+	    		</h5>
 	  		</div>
 		  	<div class="card-footer bg-transparent border-success text-right">
 				  <a href="http://cpharmafll.com/" role="button" class="btn btn-outline-success btn-sm" target="_blank"></i>Ver reportes</a>
 		  	</div>
 			</div>
-			<div class="card border-info mb-3" style="width: 14rem;">	  	
+			<div class="card border-info mb-3" style="width: 14rem;">
 	  		<div class="card-body text-left bg-info">
 	    		<h5 class="card-title">
 		    		<span class="card-text text-white">
 		    			<?php echo "".SedeFAU; ?>
 		    		</span>
-	    		</h5>	    	    
+	    		</h5>
 	  		</div>
 		  	<div class="card-footer bg-transparent border-info text-right">
 			   	<a href="http://cpharmafau.com/" role="button" class="btn btn-outline-info btn-sm" target="_blank"></i>Ver reportes</a>
@@ -250,15 +250,15 @@
 		if(Auth::user()->sede == 'FARMACIA TIERRA NEGRA, C.A.'){
 	?>
 	<div class="card-deck">
-		<div class="card border-danger mb-3" style="width: 14rem;">	  	
+		<div class="card border-danger mb-3" style="width: 14rem;">
   		<div class="card-body text-left bg-danger">
     		<h5 class="card-title">
 	    		<span class="card-text text-white">
 	    			<?php echo "".SedeFTN; ?>
 	    		</span>
-    		</h5>	    	    
+    		</h5>
   		</div>
-	  	<div class="card-footer bg-transparent border-danger text-right"> 
+	  	<div class="card-footer bg-transparent border-danger text-right">
 		    <a href="http://cpharmaftn.com/" role="button" class="btn btn-outline-danger btn-sm" target="_blank"></i>Ver reportes</a>
 	  	</div>
 		</div>
@@ -268,18 +268,18 @@
 		if(Auth::user()->sede == 'FARMACIA LA LAGO,C.A.'){
 	?>
 	<div class="card-deck">
-		<div class="card border-success mb-3" style="width: 14rem;">	  	
+		<div class="card border-success mb-3" style="width: 14rem;">
   		<div class="card-body text-left bg-success">
     		<h5 class="card-title">
 	    		<span class="card-text text-white">
 	    			<?php echo "".SedeFLL; ?>
 	    		</span>
-    		</h5>	    	    
+    		</h5>
   		</div>
 	  	<div class="card-footer bg-transparent border-success text-right">
 				<form action="/reporte/" style="display: inline;">
 			    @csrf
-			    <input id="SEDE" name="SEDE" type="hidden" value="FLL"> 
+			    <input id="SEDE" name="SEDE" type="hidden" value="FLL">
 			    <button type="submit" name="Reporte" role="button" class="btn btn-outline-success btn-sm"></i>Ver reportes</button>
 				</form>
 	  	</div>
@@ -288,15 +288,15 @@
 	<?php
 	}
 		if(Auth::user()->sede == 'FARMACIA AVENIDA UNIVERSIDAD, C.A.'){
-	?> 
+	?>
 	<div class="card-deck">
-		<div class="card border-info mb-3" style="width: 14rem;">	  	
+		<div class="card border-info mb-3" style="width: 14rem;">
   		<div class="card-body text-left bg-info">
     		<h5 class="card-title">
 	    		<span class="card-text text-white">
 	    			<?php echo "".SedeFAU; ?>
 	    		</span>
-    		</h5>	    	    
+    		</h5>
   		</div>
 	  	<div class="card-footer bg-transparent border-info text-right">
 		   	<a href="http://cpharmafau.com/" role="button" class="btn btn-outline-info btn-sm" target="_blank"></i>Ver reportes</a>
@@ -306,43 +306,43 @@
   <?php
 	}
 		if(Auth::user()->sede == 'GRUPO P, C.A'){
-	?> 
+	?>
 		<div class="card-deck">
-			<div class="card border-danger mb-3" style="width: 14rem;">	  	
+			<div class="card border-danger mb-3" style="width: 14rem;">
 				<div class="card-body text-left bg-danger">
 		  		<h5 class="card-title">
 		    		<span class="card-text text-white">
 		    			<?php echo "".SedeFTN; ?>
 		    		</span>
-		  		</h5>	    	    
+		  		</h5>
 				</div>
-		  	<div class="card-footer bg-transparent border-danger text-right"> 
+		  	<div class="card-footer bg-transparent border-danger text-right">
 			    <a href="http://cpharmaftn.com/" role="button" class="btn btn-outline-danger btn-sm" target="_blank"></i>Ver reportes</a>
 		  	</div>
 			</div>
-			<div class="card border-success mb-3" style="width: 14rem;">	  	
+			<div class="card border-success mb-3" style="width: 14rem;">
 	  		<div class="card-body text-left bg-success">
 	    		<h5 class="card-title">
 		    		<span class="card-text text-white">
 		    			<?php echo "".SedeFLL; ?>
 		    		</span>
-	    		</h5>	    	    
+	    		</h5>
 	  		</div>
 		  	<div class="card-footer bg-transparent border-success text-right">
 					<form action="/reporte/" style="display: inline;">
 				    @csrf
-				    <input id="SEDE" name="SEDE" type="hidden" value="FLL"> 
+				    <input id="SEDE" name="SEDE" type="hidden" value="FLL">
 				    <button type="submit" name="Reporte" role="button" class="btn btn-outline-success btn-sm"></i>Ver reportes</button>
 					</form>
 		  	</div>
 			</div>
-			<div class="card border-info mb-3" style="width: 14rem;">	  	
+			<div class="card border-info mb-3" style="width: 14rem;">
 	  		<div class="card-body text-left bg-info">
 	    		<h5 class="card-title">
 		    		<span class="card-text text-white">
 		    			<?php echo "".SedeFAU; ?>
 		    		</span>
-	    		</h5>	    	    
+	    		</h5>
 	  		</div>
 		  	<div class="card-footer bg-transparent border-info text-right">
 			   	<a href="http://cpharmafau.com/" role="button" class="btn btn-outline-info btn-sm" target="_blank"></i>Ver reportes</a>
@@ -363,15 +363,15 @@
 		if(Auth::user()->sede == 'FARMACIA TIERRA NEGRA, C.A.'){
 	?>
 	<div class="card-deck">
-		<div class="card border-danger mb-3" style="width: 14rem;">	  	
+		<div class="card border-danger mb-3" style="width: 14rem;">
   		<div class="card-body text-left bg-danger">
     		<h5 class="card-title">
 	    		<span class="card-text text-white">
 	    			<?php echo "".SedeFTN; ?>
 	    		</span>
-    		</h5>	    	    
+    		</h5>
   		</div>
-	  	<div class="card-footer bg-transparent border-danger text-right"> 
+	  	<div class="card-footer bg-transparent border-danger text-right">
 		    <a href="http://cpharmaftn.com/" role="button" class="btn btn-outline-danger btn-sm" target="_blank"></i>Ver reportes</a>
 	  	</div>
 		</div>
@@ -381,13 +381,13 @@
 		if(Auth::user()->sede == 'FARMACIA LA LAGO,C.A.'){
 	?>
 	<div class="card-deck">
-		<div class="card border-success mb-3" style="width: 14rem;">	  	
+		<div class="card border-success mb-3" style="width: 14rem;">
   		<div class="card-body text-left bg-success">
     		<h5 class="card-title">
 	    		<span class="card-text text-white">
 	    			<?php echo "".SedeFLL; ?>
 	    		</span>
-    		</h5>	    	    
+    		</h5>
   		</div>
 	  	<div class="card-footer bg-transparent border-success text-right">
 			  <a href="http://cpharmafll.com/" role="button" class="btn btn-outline-success btn-sm" target="_blank"></i>Ver reportes</a>
@@ -397,20 +397,20 @@
 	<?php
 	}
 		if(Auth::user()->sede == 'FARMACIA AVENIDA UNIVERSIDAD, C.A.'){
-	?> 
+	?>
 	<div class="card-deck">
-		<div class="card border-info mb-3" style="width: 14rem;">	  	
+		<div class="card border-info mb-3" style="width: 14rem;">
   		<div class="card-body text-left bg-info">
     		<h5 class="card-title">
 	    		<span class="card-text text-white">
 	    			<?php echo "".SedeFAU; ?>
 	    		</span>
-    		</h5>	    	    
+    		</h5>
   		</div>
 	  	<div class="card-footer bg-transparent border-info text-right">
 				<form action="/reporte/" style="display: inline;">
 			    @csrf
-			    <input id="SEDE" name="SEDE" type="hidden" value="FAU">      
+			    <input id="SEDE" name="SEDE" type="hidden" value="FAU">
 			    <button type="submit" name="Reporte" role="button" class="btn btn-outline-info btn-sm"></i>Ver reportes</button>
 				</form>
 	  	</div>
@@ -419,44 +419,44 @@
   <?php
 	}
 		if(Auth::user()->sede == 'GRUPO P, C.A'){
-	?> 
+	?>
 		<div class="card-deck">
-			<div class="card border-danger mb-3" style="width: 14rem;">	  	
+			<div class="card border-danger mb-3" style="width: 14rem;">
 				<div class="card-body text-left bg-danger">
 		  		<h5 class="card-title">
 		    		<span class="card-text text-white">
 		    			<?php echo "".SedeFTN; ?>
 		    		</span>
-		  		</h5>	    	    
+		  		</h5>
 				</div>
-		  	<div class="card-footer bg-transparent border-danger text-right"> 
+		  	<div class="card-footer bg-transparent border-danger text-right">
 			    <a href="http://cpharmaftn.com/" role="button" class="btn btn-outline-danger btn-sm" target="_blank"></i>Ver reportes</a>
 		  	</div>
 			</div>
-			<div class="card border-success mb-3" style="width: 14rem;">	  	
+			<div class="card border-success mb-3" style="width: 14rem;">
 	  		<div class="card-body text-left bg-success">
 	    		<h5 class="card-title">
 		    		<span class="card-text text-white">
 		    			<?php echo "".SedeFLL; ?>
 		    		</span>
-	    		</h5>	    	    
+	    		</h5>
 	  		</div>
 		  	<div class="card-footer bg-transparent border-success text-right">
 				  <a href="http://cpharmafll.com/" role="button" class="btn btn-outline-success btn-sm" target="_blank"></i>Ver reportes</a>
 		  	</div>
 			</div>
-			<div class="card border-info mb-3" style="width: 14rem;">	  	
+			<div class="card border-info mb-3" style="width: 14rem;">
 	  		<div class="card-body text-left bg-info">
 	    		<h5 class="card-title">
 		    		<span class="card-text text-white">
 		    			<?php echo "".SedeFAU; ?>
 		    		</span>
-	    		</h5>	    	    
+	    		</h5>
 	  		</div>
 		  	<div class="card-footer bg-transparent border-info text-right">
 					<form action="/reporte/" style="display: inline;">
 				    @csrf
-				    <input id="SEDE" name="SEDE" type="hidden" value="FAU">      
+				    <input id="SEDE" name="SEDE" type="hidden" value="FAU">
 				    <button type="submit" name="Reporte" role="button" class="btn btn-outline-info btn-sm"></i>Ver reportes</button>
 					</form>
 		  	</div>
@@ -477,32 +477,32 @@
 ?>
 	<?php
 		if($SedeConnection == 'GP') {
-	?>	
+	?>
 	<!-- CASO GP -->
 		<div class="card-deck">
-			<div class="card border-danger mb-3" style="width: 14rem;">	  	
+			<div class="card border-danger mb-3" style="width: 14rem;">
 	  		<div class="card-body text-left bg-danger">
 	    		<h5 class="card-title">
 		    		<span class="card-text text-white">
 		    			<?php echo "".SedeFTNOFF."<br/>".FG_LastRestoreDB(nameFTNOFF,$SedeConnection);?>
 		    		</span>
-	    		</h5>	    	    
+	    		</h5>
 	  		</div>
 		  	<div class="card-footer bg-transparent border-danger text-right">
 		  		<form action="/reporte/" style="display: inline;">
 				    @csrf
-				    <input id="SEDE" name="SEDE" type="hidden" value="GPFTN">  
+				    <input id="SEDE" name="SEDE" type="hidden" value="GPFTN">
 				    <button type="submit" name="Reporte" role="button" class="btn btn-outline-danger btn-sm"></i>Ver reportes</button>
 					</form>
 		  	</div>
 			</div>
-			<div class="card border-success mb-3" style="width: 14rem;">	  	
+			<div class="card border-success mb-3" style="width: 14rem;">
 	  		<div class="card-body text-left bg-success">
 	    		<h5 class="card-title">
 		    		<span class="card-text text-white">
 		    			<?php echo "".SedeFLLOFF."<br/>".FG_LastRestoreDB(nameFLLOFF,$SedeConnection);?>
 		    		</span>
-	    		</h5>	    	    
+	    		</h5>
 	  		</div>
 		  	<div class="card-footer bg-transparent border-success text-right">
 		  		<form action="/reporte/" style="display: inline;">
@@ -512,13 +512,13 @@
 					</form>
 	  		</div>
 			</div>
-			<div class="card border-info mb-3" style="width: 14rem;">	  	
+			<div class="card border-info mb-3" style="width: 14rem;">
 	  		<div class="card-body text-left bg-info">
 	    		<h5 class="card-title">
 		    		<span class="card-text text-white">
 		    			<?php echo "".SedeFAUOFF."<br/>".FG_LastRestoreDB(nameFAUOFF,$SedeConnection);?>
 		    		</span>
-	    		</h5>	    	    
+	    		</h5>
 	  		</div>
 		  	<div class="card-footer bg-transparent border-info text-right">
 		  		<form action="/reporte/" style="display: inline;">
@@ -533,16 +533,16 @@
 	<?php
 		}
 		if($SedeConnection == 'FTN') {
-	?>	
+	?>
 	<!-- CASO FTN -->
 		<div class="card-deck">
-			<div class="card border-success mb-3" style="width: 14rem;">	  	
+			<div class="card border-success mb-3" style="width: 14rem;">
 	  		<div class="card-body text-left bg-success">
 	    		<h5 class="card-title">
 		    		<span class="card-text text-white">
 		    			<?php echo "".SedeFLLOFF."<br/>".FG_LastRestoreDB(nameFLLOFF,$SedeConnection);?>
 		    		</span>
-	    		</h5>	    	    
+	    		</h5>
 	  		</div>
 		  	<div class="card-footer bg-transparent border-success text-right">
 		  		<form action="/reporte/" style="display: inline;">
@@ -552,13 +552,13 @@
 					</form>
 	  		</div>
 			</div>
-			<div class="card border-info mb-3" style="width: 14rem;">	  	
+			<div class="card border-info mb-3" style="width: 14rem;">
 	  		<div class="card-body text-left bg-info">
 	    		<h5 class="card-title">
 		    		<span class="card-text text-white">
 		    			<?php echo "".SedeFAUOFF."<br/>".FG_LastRestoreDB(nameFAUOFF,$SedeConnection);?>
 		    		</span>
-	    		</h5>	    	    
+	    		</h5>
 	  		</div>
 		  	<div class="card-footer bg-transparent border-info text-right">
 		  		<form action="/reporte/" style="display: inline;">
@@ -573,32 +573,32 @@
 	<?php
 		}
 		if($SedeConnection == 'FLL') {
-	?>	
+	?>
 	<!-- CASO FLL -->
 		<div class="card-deck">
-			<div class="card border-danger mb-3" style="width: 14rem;">	  	
+			<div class="card border-danger mb-3" style="width: 14rem;">
 	  		<div class="card-body text-left bg-danger">
 	    		<h5 class="card-title">
 		    		<span class="card-text text-white">
 		    			<?php echo "".SedeFTNOFF."<br/>".FG_LastRestoreDB(nameFTNOFF,$SedeConnection);?>
 		    		</span>
-	    		</h5>	    	    
+	    		</h5>
 	  		</div>
 		  	<div class="card-footer bg-transparent border-danger text-right">
 		  		<form action="/reporte/" style="display: inline;">
 				    @csrf
-				    <input id="SEDE" name="SEDE" type="hidden" value="FLLFTN">  
+				    <input id="SEDE" name="SEDE" type="hidden" value="FLLFTN">
 				    <button type="submit" name="Reporte" role="button" class="btn btn-outline-danger btn-sm"></i>Ver reportes</button>
 					</form>
 		  	</div>
 			</div>
-			<div class="card border-info mb-3" style="width: 14rem;">	  	
+			<div class="card border-info mb-3" style="width: 14rem;">
 	  		<div class="card-body text-left bg-info">
 	    		<h5 class="card-title">
 		    		<span class="card-text text-white">
 		    			<?php echo "".SedeFAUOFF."<br/>".FG_LastRestoreDB(nameFAUOFF,$SedeConnection);?>
 		    		</span>
-	    		</h5>	    	    
+	    		</h5>
 	  		</div>
 		  	<div class="card-footer bg-transparent border-info text-right">
 		  		<form action="/reporte/" style="display: inline;">
@@ -613,32 +613,32 @@
 	<?php
 		}
 		if($SedeConnection == 'FAU') {
-	?>	
+	?>
 	<!-- CASO FAU -->
 		<div class="card-deck">
-			<div class="card border-danger mb-3" style="width: 14rem;">	  	
+			<div class="card border-danger mb-3" style="width: 14rem;">
 	  		<div class="card-body text-left bg-danger">
 	    		<h5 class="card-title">
 		    		<span class="card-text text-white">
 		    			<?php echo "".SedeFTNOFF."<br/>".FG_LastRestoreDB(nameFTNOFF,$SedeConnection);?>
 		    		</span>
-	    		</h5>	    	    
+	    		</h5>
 	  		</div>
 		  	<div class="card-footer bg-transparent border-danger text-right">
 		  		<form action="/reporte/" style="display: inline;">
 				    @csrf
-				    <input id="SEDE" name="SEDE" type="hidden" value="FAUFTN">  
+				    <input id="SEDE" name="SEDE" type="hidden" value="FAUFTN">
 				    <button type="submit" name="Reporte" role="button" class="btn btn-outline-danger btn-sm"></i>Ver reportes</button>
 					</form>
 		  	</div>
 			</div>
-			<div class="card border-success mb-3" style="width: 14rem;">	  	
+			<div class="card border-success mb-3" style="width: 14rem;">
 	  		<div class="card-body text-left bg-success">
 	    		<h5 class="card-title">
 		    		<span class="card-text text-white">
 		    			<?php echo "".SedeFLLOFF."<br/>".FG_LastRestoreDB(nameFLLOFF,$SedeConnection);?>
 		    		</span>
-	    		</h5>	    	    
+	    		</h5>
 	  		</div>
 		  	<div class="card-footer bg-transparent border-success text-right">
 		  		<form action="/reporte/" style="display: inline;">
@@ -656,22 +656,22 @@
  	?>
 	<!-- CASO USER DEVELOPER -->
  	<div class="card-deck">
- 		<div class="card border-warning mb-3" style="width: 14rem;">	  	
+ 		<div class="card border-warning mb-3" style="width: 14rem;">
   		<div class="card-body text-left bg-warning">
     		<h5 class="card-title">
 	    		<span class="card-text text-white">
 	    			<?php echo "".SedeDBs; ?>
 	    		</span>
-    		</h5>	    	    
+    		</h5>
   		</div>
-	  	<div class="card-footer bg-transparent border-warning text-right">	  		
+	  	<div class="card-footer bg-transparent border-warning text-right">
 	  		<form action="/reporte/" style="display: inline;">
 			    @csrf
-			    <input id="SEDE" name="SEDE" type="hidden" value="DBs">  
+			    <input id="SEDE" name="SEDE" type="hidden" value="DBs">
 			    <button type="submit" name="Reporte" role="button" class="btn btn-outline-warning btn-sm"></i>Ver reportes</button>
 				</form>
 	  	</div>
-		</div>				
+		</div>
  	</div>
  	<!-- CASO USER DEVELOPER -->
  	<?php
@@ -691,13 +691,13 @@
 		if(Auth::user()->sede == 'FARMACIA TIERRA NEGRA, C.A.'){
 	?>
 	<div class="card-deck">
-		<div class="card border-danger mb-3" style="width: 14rem;">	  	
+		<div class="card border-danger mb-3" style="width: 14rem;">
   		<div class="card-body text-left bg-danger">
     		<h5 class="card-title">
 	    		<span class="card-text text-white">
 	    			<?php echo "".SedeFTN; ?>
 	    		</span>
-    		</h5>	    	    
+    		</h5>
   		</div>
   		<div class="card-footer bg-transparent border-danger text-right">
 				<form action="/reporte/" style="display: inline;">
@@ -713,13 +713,13 @@
 		if(Auth::user()->sede == 'FARMACIA LA LAGO,C.A.'){
 	?>
 	<div class="card-deck">
-		<div class="card border-success mb-3" style="width: 14rem;">	  	
+		<div class="card border-success mb-3" style="width: 14rem;">
   		<div class="card-body text-left bg-success">
     		<h5 class="card-title">
 	    		<span class="card-text text-white">
 	    			<?php echo "".SedeFLL; ?>
 	    		</span>
-    		</h5>	    	    
+    		</h5>
   		</div>
 	  	<div class="card-footer bg-transparent border-success text-right">
 			  <a href="http://cpharmafll.com/" role="button" class="btn btn-outline-success btn-sm" target="_blank"></i>Ver reportes</a>
@@ -729,15 +729,15 @@
 	<?php
 	}
 		if(Auth::user()->sede == 'FARMACIA AVENIDA UNIVERSIDAD, C.A.'){
-	?> 
+	?>
 	<div class="card-deck">
-		<div class="card border-info mb-3" style="width: 14rem;">	  	
+		<div class="card border-info mb-3" style="width: 14rem;">
   		<div class="card-body text-left bg-info">
     		<h5 class="card-title">
 	    		<span class="card-text text-white">
 	    			<?php echo "".SedeFAU; ?>
 	    		</span>
-    		</h5>	    	    
+    		</h5>
   		</div>
 	  	<div class="card-footer bg-transparent border-info text-right">
 		   	<a href="http://cpharmafau.com/" role="button" class="btn btn-outline-info btn-sm" target="_blank"></i>Ver reportes</a>
@@ -747,43 +747,43 @@
   <?php
 	}
 		if(Auth::user()->sede == 'GRUPO P, C.A'){
-	?> 
+	?>
 		<div class="card-deck">
-			<div class="card border-danger mb-3" style="width: 14rem;">	  	
+			<div class="card border-danger mb-3" style="width: 14rem;">
 				<div class="card-body text-left bg-danger">
 		  		<h5 class="card-title">
 		    		<span class="card-text text-white">
 		    			<?php echo "".SedeFTN; ?>
 		    		</span>
-		  		</h5>	    	    
+		  		</h5>
 				</div>
 		  	<div class="card-footer bg-transparent border-danger text-right">
 					<form action="/reporte/" style="display: inline;">
 				    @csrf
-				    <input id="SEDE" name="SEDE" type="hidden" value="FTN"> 
+				    <input id="SEDE" name="SEDE" type="hidden" value="FTN">
 				    <button type="submit" name="Reporte" role="button" class="btn btn-outline-danger btn-sm"></i>Ver reportes</button>
 					</form>
 		  	</div>
 			</div>
-			<div class="card border-success mb-3" style="width: 14rem;">	  	
+			<div class="card border-success mb-3" style="width: 14rem;">
 	  		<div class="card-body text-left bg-success">
 	    		<h5 class="card-title">
 		    		<span class="card-text text-white">
 		    			<?php echo "".SedeFLL; ?>
 		    		</span>
-	    		</h5>	    	    
+	    		</h5>
 	  		</div>
 		  	<div class="card-footer bg-transparent border-success text-right">
 				  <a href="http://cpharmafll.com/" role="button" class="btn btn-outline-success btn-sm" target="_blank"></i>Ver reportes</a>
 		  	</div>
 			</div>
-			<div class="card border-info mb-3" style="width: 14rem;">	  	
+			<div class="card border-info mb-3" style="width: 14rem;">
 	  		<div class="card-body text-left bg-info">
 	    		<h5 class="card-title">
 		    		<span class="card-text text-white">
 		    			<?php echo "".SedeFAU; ?>
 		    		</span>
-	    		</h5>	    	    
+	    		</h5>
 	  		</div>
 		  	<div class="card-footer bg-transparent border-info text-right">
 			   	<a href="http://cpharmafau.com/" role="button" class="btn btn-outline-info btn-sm" target="_blank"></i>Ver reportes</a>
@@ -792,8 +792,40 @@
 	  </div>
 	<?php
 		}
-	}
 	?>
 <!-- CASO FTN -->
 <!-------------------------------------------------------------------------------->
+<!-- CASO FTN -->
+<!-------------------------------------------------------------------------------->
+<!-------------------------------------------------------------------------------->
+<!-- CASO KDI-->
+<?php
+}
+	if($SedeConnection == 'KDI'){
+?>
+	<?php
+		if(Auth::user()->sede == 'FARMACIA KD EXPRESS, C.A.'){
+	?>
+	<div class="card-deck">
+		<div class="card border-danger mb-3" style="width: 14rem;">
+  		<div class="card-body text-left bg-danger">
+    		<h5 class="card-title">
+	    		<span class="card-text text-white">
+	    			<?php echo "".SedeKDI; ?>
+	    		</span>
+    		</h5>
+  		</div>
+  		<div class="card-footer bg-transparent border-danger text-right">
+				<form action="/reporte/" style="display: inline;">
+			    @csrf
+			    <input id="SEDE" name="SEDE" type="hidden" value="KDI">
+			    <button type="submit" name="Reporte" role="button" class="btn btn-outline-danger btn-sm"></i>Ver reportes</button>
+				</form>
+	  	</div>
+		</div>
+	</div>
+	<?php
+	}
+}
+?>
 @endsection

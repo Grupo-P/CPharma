@@ -138,6 +138,10 @@
                 //return 'DBs';
             break;
         //FIN BLOQUE DE FAU
+        //INICIO BLOQUE DE KDI
+			case '15':
+				return 'KDI';
+        //FIN BLOQUE DE KDI
             default:
                 return 'ARG';
                 //return ''.$Octeto[2];
@@ -213,6 +217,12 @@
                 return $sede;
             break;
         //FIN BLOQUE DE GRUPO P
+        //INICIO BLOQUE DE KDI
+        case 'KDI':
+            $sede = SedeKDI;
+            return $sede;
+        break;
+        //FIN BLOQUE DE KDI
         //INICIO BLOQUE DE TEST
             case 'DBs':
                 $sede = SedeDBs;
@@ -363,6 +373,17 @@
                 return $conn;
             break;
         //FIN BLOQUE DE GRUPO P
+        //INICIO BLOQUE DE KDI
+            case 'KDI':
+                $connectionInfo = array(
+                    "Database"=>nameKDI,
+                    "UID"=>userKDI,
+                    "PWD"=>passKDI
+                );
+                $conn = sqlsrv_connect(serverKDI,$connectionInfo);
+                return $conn;
+            break;
+        //FIN BLOQUE DE KDI
         //INICIO BLOQUE DE TEST
             case 'DBs':
                 $connectionInfo = array(
