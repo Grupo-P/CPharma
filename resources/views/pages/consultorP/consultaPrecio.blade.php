@@ -76,7 +76,9 @@
 
 @section('content')
 
-	<?php 
+	<?php
+
+
 	  include(app_path().'\functions\config.php');
 	  include(app_path().'\functions\functions.php');
 	  include(app_path().'\functions\querys_mysql.php');

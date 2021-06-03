@@ -84,11 +84,14 @@
             @foreach($inventariados as $inventariado)
                 @php
                     $sql = "
-                        SELECT *
+                        SELECT
+                            SUM(InvAjusteDetalle.Cantidad) AS Cantidad,
+                            InvAjusteDetalle.InvCausaId AS InvCausaId
                         FROM InvAjusteDetalle
                         WHERE
                             InvAjusteDetalle.InvAjusteId IN (SELECT InvAjuste.Id FROM InvAjuste WHERE InvAjuste.NumeroAjuste IN ($inventario->numero_ajuste)) AND
                             InvAjusteDetalle.InvArticuloId = $inventariado->id_articulo
+                        GROUP BY InvCausaId
                     ";
 
                     $query = sqlsrv_query($conn, $sql);

@@ -224,7 +224,7 @@
 @endsection
 
 @section('scriptsFoot')
-  <script src="{{asset('assets/chart.js/Chart.min.js')}}"></script>
+  <script src="{{asset('assets/chart.js/chart.v2.js')}}"></script>
 
   <script>
     $('#form').submit(function (event) {
