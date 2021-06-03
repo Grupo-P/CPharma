@@ -134,7 +134,7 @@
         //FIN BLOQUE DE FLL
         //INICIO BLOQUE DE FAU
             case '12':
-                return 'DBs';
+                return 'FAU';
                 //return 'DBs';
             break;
         //FIN BLOQUE DE FAU
