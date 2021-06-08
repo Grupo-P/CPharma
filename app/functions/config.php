@@ -7,7 +7,7 @@ define("Utilidad",0.77);
 define("Impuesto",1.16);
 define("DecimalCorrida",0.01); //Decimal que se concatena al final a los precio en las corridas
 define("DecimalEtiqueta",01);	//Decimal que se usa para comparar el precio de las etiquetas
-define("Version","CPharma v.6.2");
+define("Version","CPharma v.7.0");
 define("_ConsultorDolar_","SI"); //Le indica al consultor si mostrar precios en dolares o no
 define("_EtiquetaDolar_","SI");	//Le indica al etiquetado si mostrar precios en dolares o no
 define("_MensajeDolar_","SI");	//Le indica al etiquetado si mostrar el _MensajeDolarLegal_ o no
@@ -18,9 +18,8 @@ define ("SedeFTN","FARMACIA TIERRA NEGRA, C.A.");
 define ("SedeFLL","FARMACIA LA LAGO,C.A.");
 define ("SedeFAU","FARMACIA AVENIDA UNIVERSIDAD, C.A.");
 define ("SedeGP","GRUPO P, C.A");
-define ("SedeDBs","Servidor de Desarrollo Sergio");
-define ("SedeDBsa","Servidor de Desarrollo Sergio ARG");
-define ("SedeDBm","Servidor de Desarrollo Manuel");
+define ("SedeDBs","Servidor de Desarrollo Nisaul");
+define ("SedeDBsa","Servidor de Desarrollo Sergio");
 define ("SedeKDI","FARMACIA KD EXPRESS, C.A.");
 /**********************************************************************************/
 /************************ NOMBRES SEDES OFF-LINE *********************************/
@@ -66,12 +65,6 @@ define ("serverGS" , "10.100.0.2\SMARTPHARMA,1450");
 define ("userGS" , "sa");
 define ("passGS" , "Soporte123");
 define ("nameGS" , "SAWDB");
-/**********************************************************************************/
-/********************* CONEXION SERVER DESARROLLO DE MANUEL **********************/
-define ("serverDBm" , "DESKTOP-AGKHTEB");
-define ("userDBm" , "sa");
-define ("passDBm" , "soporte123");
-define ("nameDBm" , "SMART");
 /**********************************************************************************/
 /********************* CONEXION SERVER DESARROLLO DE NISAUL **********************/
 define ("serverDBs" , "DESKTOP-BPCSVJK");
