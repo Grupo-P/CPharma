@@ -2796,8 +2796,19 @@
                 $dominio = 'http://cpharmade.com/';
                 return $dominio;
             break;
+            case 'ARG':
+                $dominio = 'http://cpharmade.com/';
+                return $dominio;
+            break;
+            case 'DBs':
+                $dominio = 'http://cpharmade.com/';
+                return $dominio;
+            break;
+            case 'KDI':
+                $dominio = 'http://cpharmakdi.com/';
+                return $dominio;
+            break;
         }
-        return $dominio;
     }
     /**********************************************************************************/
     /*

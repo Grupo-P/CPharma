@@ -1,4 +1,4 @@
-<?php	
+<?php
 	use compras\Categoria;
 	use compras\Subcategoria;
 
@@ -42,7 +42,7 @@
 		  </div>
 		</div>
 	@endif
-	
+
 	<!-- Modal Editar -->
 	@if (session('Updated'))
 		<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -80,7 +80,7 @@
 		        <h4 class="h6">Categorizacion actualizada con exito</h4>
 		      </div>
 		      <div class="modal-footer">
-		        <button type="button" class="btn btn-outline-success" data-dismiss="modal">Aceptar</button>	
+		        <button type="button" class="btn btn-outline-success" data-dismiss="modal">Aceptar</button>
 		      </div>
 		    </div>
 		  </div>
@@ -91,16 +91,16 @@
 		<i class="fas fa-tag"></i>
 		Categorizacion
 	</h1>
-		
+
 	<hr class="row align-items-start col-12">
 	<table style="width:100%;" class="CP-stickyBar">
 		<tr>
-			<td style="width:7%;" align="center">	  		
+			<td style="width:7%;" align="center">
 				<form action="/categorizacion?Tipo=0" method="GET" style="display: inline;">
 			    <button type="submit" name="Tipo" role="button" class="btn btn-outline-dark btn-sm" value="0">Por Caregorizar</button>
 				</form>
 	    </td>
-	    <td style="width:7%;" align="center">	  		
+	    <td style="width:7%;" align="center">
 				<form action="/categorizacion?Tipo=1" method="GET" style="display: inline;">
 			    <button type="submit" name="Tipo" role="button" class="btn btn-outline-success btn-sm" value="1">Caregorizado</button>
 				</form>
@@ -127,72 +127,72 @@
 		      	<th scope="col" class="CP-sticky">Codigo Barra </th>
 		      	<th scope="col" class="CP-sticky">Descripcion</th>
 		      	<th scope="col" class="CP-sticky">Marca</th>
-		      	<?php 
+		      	<?php
 		      		if($tipo==1){
 		      	?>
 		      		<th scope="col" class="CP-sticky">Categoria Actual</th>
 		      		<th scope="col" class="CP-sticky">Subcategoria Actual</th>
 		      	<?php
 		      		}
-		      	?>	
+		      	?>
 		      	<th scope="col" class="CP-sticky">Nueva Categoria</th>
-		      	<th scope="col" class="CP-sticky">Nueva Subcategoria</th>	
-		      	<th scope="col" class="CP-sticky">Marcar</th>      			      			      	
+		      	<th scope="col" class="CP-sticky">Nueva Subcategoria</th>
+		      	<th scope="col" class="CP-sticky">Marcar</th>
 		    </tr>
 	  	</thead>
-	  	<tbody>	  		
-		@foreach($categorizaciones as $categorizacion)			
+	  	<tbody>
+		@foreach($categorizaciones as $categorizacion)
 		    <tr>
 		    	<input type="hidden" name="<?php echo"articulo".$categorizacion->id; ?>" id="<?php echo"articulo".$categorizacion->id; ?>" value="<?php echo $categorizacion->id; ?>">
-		      
+
 		      <th>{{$categorizacion->id}}</th>
 		      <td>{{$categorizacion->codigo_interno}}</td>
 		      <td>{{$categorizacion->codigo_barra}}</td>
 		      <td>{{$categorizacion->descripcion}}</td>
 		      <td>{{$categorizacion->marca}}</td>
 
-		      <?php 
+		      <?php
 		      		if($tipo==1){
 		      			$categoria_actual = Categoria::where('codigo',$categorizacion->codigo_categoria)->get();
-		      			
-		      			$subcategoria_actual = Subcategoria::where('codigo',$categorizacion->codigo_subcategoria)->get();		      			
+
+		      			$subcategoria_actual = Subcategoria::where('codigo',$categorizacion->codigo_subcategoria)->get();
 		      	?>
 		      		<td>{{$categoria_actual[0]->nombre}}</td>
 		      		<td>{{$subcategoria_actual[0]->nombre}}</td>
 		      	<?php
 		      		}
 		      	?>
-		      
+
 		      <td>
-            <select name="<?php echo"categoria".$categorizacion->id; ?>" id="<?php echo"categoria".$categorizacion->id; ?>" class="form-control" onchange="eligioCategoria(<?php echo $categorizacion->id; ?>);">     		
+            <select name="<?php echo"categoria".$categorizacion->id; ?>" id="<?php echo"categoria".$categorizacion->id; ?>" class="form-control" onchange="eligioCategoria(<?php echo $categorizacion->id; ?>);">
                 <?php
                 	$cont = count($categorias);
                 	for($i=0;$i<$cont;$i++){
                 ?>
                 	<option value="<?php echo $categorias[$i]->codigo; ?>">
                 		<?php echo $categorias[$i]->nombre; ?></option>
-                <?php	                	
+                <?php
 	                }
                 ?>
             </select>
         	</td>
 
         	<td>
-            <select name="<?php echo"subcategoria".$categorizacion->id; ?>" id="<?php echo"subcategoria".$categorizacion->id; ?>" class="form-control" disabled="disabled">            		
+            <select name="<?php echo"subcategoria".$categorizacion->id; ?>" id="<?php echo"subcategoria".$categorizacion->id; ?>" class="form-control" disabled="disabled">
                 <?php
                 	$cont = count($subcategorias);
                 	for($i=0;$i<$cont;$i++){
                 ?>
                 	<option value="<?php echo $subcategorias[$i]->codigo; ?>">
                 		<?php echo $subcategorias[$i]->nombre; ?></option>
-                <?php	                	
+                <?php
 	                }
                 ?>
             </select>
-        	</td>  
-		    	
+        	</td>
+
 		    	<td>
-		    		<input type="checkbox" name="articulosCategorizar[]" id="<?php echo"guardar".$categorizacion->id; ?>" value="" onchange="marcaGuardar(<?php echo $categorizacion->id; ?>)" style="width:100%; height:calc(1em + 0.20rem + 2px); margin-top: 8px;">            
+		    		<input type="checkbox" name="articulosCategorizar[]" id="<?php echo"guardar".$categorizacion->id; ?>" value="" onchange="marcaGuardar(<?php echo $categorizacion->id; ?>)" style="width:100%; height:calc(1em + 0.20rem + 2px); margin-top: 8px;">
         	</td>
 
 		    </tr>
@@ -208,50 +208,59 @@
 		const SedeConnectionJs = '<?php echo $RutaUrl;?>';
 
 		function dominio(SedeConnectionJs){
-      var dominio = '';
-      switch(SedeConnectionJs) {
-        case 'FTN':
-          dominio = 'http://cpharmaftn.com/';
-          return dominio;
-        break;
-        case 'FLL':
-          dominio = 'http://cpharmafll.com/';
-          return dominio;
-        break;
-        case 'FAU':
-          dominio = 'http://cpharmafau.com/';
-          return dominio;
-        break;
-        case 'GP':
-          dominio = 'http://cpharmade.com/';
-          return dominio;
-        case 'ARG':
-          dominio = 'http://cpharmade.com/';
-        return dominio;
-        break;
-      }
+        var dominio = '';
+        switch(SedeConnectionJs) {
+            case 'FTN':
+                dominio = 'http://cpharmaftn.com/';
+                return dominio;
+            break;
+            case 'FLL':
+                dominio = 'http://cpharmafll.com/';
+                return dominio;
+            break;
+            case 'FAU':
+                dominio = 'http://cpharmafau.com/';
+                return dominio;
+            break;
+            case 'GP':
+                dominio = 'http://cpharmade.com/';
+                return dominio;
+            break;
+            case 'ARG':
+                dominio = 'http://cpharmade.com/';
+                return dominio;
+            break;
+            case 'DBs':
+                dominio = 'http://cpharmade.com/';
+                return dominio;
+            break;
+            case 'KDI':
+                dominio = 'http://cpharmakdi.com/';
+                return dominio;
+            break;
+        }
     }
 
 		var dominio = dominio(SedeConnectionJs);
     const URLConsultaCategoria = ''+dominio+'assets/functions/ConsultaSubcategorias.php';
 
 		$(document).ready(function(){
-		    $('[data-toggle="tooltip"]').tooltip();   
+		    $('[data-toggle="tooltip"]').tooltip();
 		});
 		$('#exampleModalCenter').modal('show')
 
-		function eligioCategoria(id){		
+		function eligioCategoria(id){
 
-			let categoria = $('#categoria'+id).val();					
-			let subcategoria = $('#subcategoria'+id).val();		
+			let categoria = $('#categoria'+id).val();
+			let subcategoria = $('#subcategoria'+id).val();
 
 			if(categoria == 1){
 				$('#subcategoria'+id+' option').remove();
 				$('#subcategoria'+id).append('<option value="1.1" selected>SIN SUBCATEGORIA</option>');
-				$('#subcategoria'+id).attr("disabled","disabled");								
+				$('#subcategoria'+id).attr("disabled","disabled");
 			}
 			else{
-				
+
 				var parametro = {"categoria":categoria};
 
 				$.ajax({
@@ -259,7 +268,7 @@
 	        url: URLConsultaCategoria,
 	        type: "POST",
 	        success: function(data) {
-	          if(JSON.parse(data)!="SIN SUBCATEGORIA"){	          	
+	          if(JSON.parse(data)!="SIN SUBCATEGORIA"){
 	          	var respuesta = JSON.parse(data);
             	var limite = respuesta.length;
 
@@ -267,7 +276,7 @@
               $('#subcategoria'+id).append('<option value="1.1" selected>SIN SUBCATEGORIA</option>');
 
               var i = 0;
-              while (i<limite){                  
+              while (i<limite){
                 var codigo = respuesta[i]['codigo'];
                 var nombre = respuesta[i]['nombre'];
 
@@ -283,16 +292,16 @@
             }
         	}
       	});
-			}			
+			}
 		}
 
 		function marcaGuardar(id){
-			let articulo = $('#articulo'+id).val();				
-			let categoria = $('#categoria'+id).val();					
-			let subcategoria = $('#subcategoria'+id).val();			
-			
+			let articulo = $('#articulo'+id).val();
+			let categoria = $('#categoria'+id).val();
+			let subcategoria = $('#subcategoria'+id).val();
+
 			$('#guardar'+id).val(articulo+"/"+categoria+"/"+subcategoria);
-			let seleccion = $('#guardar'+id).val();			
+			let seleccion = $('#guardar'+id).val();
 		}
 
 	</script>

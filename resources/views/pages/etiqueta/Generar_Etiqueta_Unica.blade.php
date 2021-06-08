@@ -42,15 +42,15 @@
   .autocomplete-items div {
     padding: 10px;
     cursor: pointer;
-    background-color: #fff; 
-    border-bottom: 1px solid #d4d4d4; 
+    background-color: #fff;
+    border-bottom: 1px solid #d4d4d4;
   }
   .autocomplete-items div:hover {
-    background-color: #e9e9e9; 
+    background-color: #e9e9e9;
   }
   .autocomplete-active {
-    background-color: #17a2b8 !important; 
-    color: #ffffff; 
+    background-color: #17a2b8 !important;
+    color: #ffffff;
   }
 	.center th {
     vertical-align: middle;
@@ -97,7 +97,7 @@
     height: 2cm;
   }
   .rowDer{
-    height: 1cm;    
+    height: 1cm;
   }
   .rowIzq{
     height: 1cm;
@@ -106,7 +106,7 @@
     text-align: center;
     text-transform: uppercase;
   }
-  .derecha{   
+  .derecha{
     text-align: right;
     text-transform: uppercase;
   }
@@ -163,7 +163,7 @@
         </tr>
       </tbody>
     </table>
-    
+
     <table class="table table-borderless col-12" id="tablaError">
       <thead class="center">
         <th class="bg-white text-danger border border-white">
@@ -185,31 +185,37 @@
   <script>
     /************************************************************************/
     function dominio(SedeConnectionJs){
-      var dominio = '';
-      switch(SedeConnectionJs) {
-        case 'FTN':
-          dominio = 'http://cpharmaftn.com/';
-          return dominio;
-        break;
-        case 'FLL':
-          dominio = 'http://cpharmafll.com/';
-          return dominio;
-        break;
-        case 'FAU':
-          dominio = 'http://cpharmafau.com/';
-          return dominio;
-        break;
-        case 'GP':
-          dominio = 'http://cpharmade.com/';
-          return dominio;
-        case 'ARG':
-          dominio = 'http://cpharmade.com/';
-          return dominio;
-        case 'DBs':
-          dominio = 'http://cpharmade.com/';
-          return dominio;
-        break;
-      }
+        var dominio = '';
+        switch(SedeConnectionJs) {
+            case 'FTN':
+                dominio = 'http://cpharmaftn.com/';
+                return dominio;
+            break;
+            case 'FLL':
+                dominio = 'http://cpharmafll.com/';
+                return dominio;
+            break;
+            case 'FAU':
+                dominio = 'http://cpharmafau.com/';
+                return dominio;
+            break;
+            case 'GP':
+                dominio = 'http://cpharmade.com/';
+                return dominio;
+            break;
+            case 'ARG':
+                dominio = 'http://cpharmade.com/';
+                return dominio;
+            break;
+            case 'DBs':
+                dominio = 'http://cpharmade.com/';
+                return dominio;
+            break;
+            case 'KDI':
+                dominio = 'http://cpharmakdi.com/';
+                return dominio;
+            break;
+        }
     }
   </script>
 
@@ -225,7 +231,7 @@
 	    if(e.keyCode == 13) {
 
     	 	$("#MsnError").html('');
-    	 
+
         var CodBarrScan = $('#inputCodBar').val();
         var indiceCodBarScan = ArrJsCB.indexOf(CodBarrScan);
         var indiceIdScan = indiceCodBarScan+1;
@@ -234,7 +240,7 @@
         var indiceScanDesc = indiceIdScanDesc-1;
 
         $('#inputCodBar').val('');
-        
+
         if( (indiceCodBarScan>0) && (indiceScanDesc)>0 ) {
 
           var parametro = {
@@ -256,7 +262,7 @@
               	$("#MsnError").html(respuesta);
               }
               else{
-            	 	var contenedor = $("#DivEtiquetas").html();	
+            	 	var contenedor = $("#DivEtiquetas").html();
 								$("#DivEtiquetas").html(contenedor+respuesta);
               }
             }
@@ -266,25 +272,25 @@
         else {
           $("#MsnError").html('NO SE ENCONTRARON RESULTADOS');
         }
-      }   
+      }
     });
 	</script>
-     
+
   <?php
     if($CodJson!=""){
   ?>
     <script type="text/javascript">
       const ArrJsCB = eval(<?php echo $CodJson ?>);
-    </script> 
+    </script>
   <?php
     }
-  ?>  
+  ?>
    <?php
     if($ArtJson!=""){
   ?>
     <script type="text/javascript">
       const ArrJs = eval(<?php echo $ArtJson ?>);
-    </script> 
+    </script>
   <?php
     }
   ?>
