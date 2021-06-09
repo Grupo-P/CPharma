@@ -15,3 +15,5 @@ yarn-error.log
 .env
 .phpunit.result.cache
 /public/assets/promocion/*.jpg
+/public/assets/ACI/*.jpg
+/public/assets/ACI/*.pdf
