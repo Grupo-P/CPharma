@@ -52,7 +52,7 @@
 	</h1>
 	<hr class="row align-items-start col-12">
 
-    <div class="card-deck">
+    <div class="card-deck" style="margin: 50px;">
         <div class="card border-danger mb-3" style="width: 14rem;">
             <div class="card-body text-left bg-danger">
                 <h5 class="card-title">
@@ -102,7 +102,7 @@
         </div>
     </div>
 
-    <div class="card-deck">
+    <div class="card-deck" style="margin: 50px;">
         <div class="card border-warning mb-3" style="width: 14rem;">
 	  		<div class="card-body text-left bg-warning">
 	    		<h5 class="card-title">
