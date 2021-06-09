@@ -417,6 +417,7 @@ Route::resource('practicas', 'RH_PracticaController');
 Route::resource('movimientos', 'TS_MovimientoController');
 Route::get('/diferidos', 'TS_MovimientoController@diferidos')->name('diferidos');
 
+Route::get('/proveedores/validar', 'ContProveedorController@validar');
 Route::resource('proveedores', 'ContProveedorController');
 
 Route::resource('cuentas', 'ContCuentasController');
@@ -444,4 +445,4 @@ Route::get('/reportes/movimientos-por-proveedor', 'ContReportes@movimientos_por_
 Route::get('/reportes/deudas-por-fecha', 'ContReportes@deudas_por_fecha');
 Route::get('/reportes/pagos-por-fecha', 'ContReportes@pagos_por_fecha');
 
-Route::resource('/conciliaciones', 'ConciliacionesController');
+Route::resource('/conciliaciones', 'ContConciliacionesController');

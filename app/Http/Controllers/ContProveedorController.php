@@ -98,7 +98,9 @@ class ContProveedorController extends Controller
         $monedas = Configuracion::where('variable', 'Moneda')->first();
         $monedas = explode(',', $monedas->valor);
 
-        return view('pages.contabilidad.proveedores.edit', compact('proveedor', 'tasas', 'monedas'));
+        $cuentas = ContCuenta::get();
+
+        return view('pages.contabilidad.proveedores.edit', compact('cuentas', 'proveedor', 'tasas', 'monedas'));
     }
 
     /**
@@ -118,7 +120,7 @@ class ContProveedorController extends Controller
         $proveedor->rif_ci               = $rif_ci;
         $proveedor->direccion            = $request->input('direccion');
         $proveedor->tasa                 = $request->input('tasa');
-        $proveedor->plan_cuentas         = $request->input('plan_cuenta');
+        $proveedor->plan_cuentas         = $request->input('plan_cuentas');
         $proveedor->moneda               = $request->input('moneda');
         $proveedor->saldo                = $request->input('saldo');
         $proveedor->save();
@@ -153,5 +155,16 @@ class ContProveedorController extends Controller
         $proveedor->delete();
 
         return redirect('/proveedores')->with('Deleted', ' Informacion');
+    }
+
+    public function validar(Request $request)
+    {
+        $proveedor = ContProveedor::where('rif_ci', $request->get('rif'))->get();
+
+        if ($proveedor->count()) {
+            return 'error';
+        } else {
+            return 'success';
+        }
     }
 }

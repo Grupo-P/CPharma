@@ -70,7 +70,7 @@
                                     <option {{ (substr($proveedor->rif_ci, 0, 1) == 'E') ? 'selected' : '' }} value="E">E</option>
                                     <option {{ (substr($proveedor->rif_ci, 0, 1) == 'J') ? 'selected' : '' }} value="J">J</option>
                                 </select>
-                                <input onkeypress="soloNumeros(event)" minlength="10" style="width: 80%" name="rif_ci" class="form-control">
+                                <input onkeypress="soloNumeros(event)" minlength="9" style="width: 80%" name="rif_ci" class="form-control">
                             </div>
                         </td>
                     </tr>
@@ -94,7 +94,14 @@
 
                     <tr>
                         <th scope="row"><label for="plan_cuenta">Plan de cuentas</label></th>
-                        <td><input name="plan_cuenta" class="form-control" value="{{ $proveedor->plan_cuenta }}"></td>
+                        <td>
+                            <select name="plan_cuentas" class="form-control">
+                                <option value=""></option>
+                                @foreach($cuentas as $cuenta)
+                                    <option {{ ($cuenta->nombre == $proveedor->plan_cuentas) ? 'selected' : '' }} value="{{ $cuenta->nombre }}">{{ $cuenta->nombre }}</option>
+                                @endforeach
+                            </select>
+                        </td>
                     </tr>
 
                     <tr>

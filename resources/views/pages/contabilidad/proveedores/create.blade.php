@@ -68,7 +68,7 @@
                                     <option value="E">E</option>
                                     <option value="J">J</option>
                                 </select>
-                                <input onkeypress="soloNumeros(event)" minlength="10" style="width: 80%" name="rif_ci" class="form-control">
+                                <input onkeypress="soloNumeros(event)" minlength="9" style="width: 80%" name="rif_ci" class="form-control">
                             </div>
                         </td>
                     </tr>
@@ -121,7 +121,7 @@
                 </tbody>
             </table>
 
-            <input type="submit" class="btn btn-outline-success btn-md" value="Guardar">
+            <input type="button" class="btn btn-outline-success btn-md" value="Guardar">
         </fieldset>
     </form>
 
@@ -129,6 +129,32 @@
         $(document).ready(function(){
             $('[data-toggle="tooltip"]').tooltip();
         });
-        $('#exampleModalCenter').modal('show')
+        $('#exampleModalCenter').modal('show');
+
+        $('form').click(function () {
+            prefix = $('[name=prefix_rif_ci]').val();
+            rif = $('[name=rif_ci]').val();
+
+            if (rif != '') {
+                rif = prefix + '-' + rif;
+
+                $.ajax({
+                    type: 'GET',
+                    url: '/proveedores/validar',
+                    data: {
+                        rif: rif
+                    },
+                    success: function (response) {
+                        if (response == 'error') {
+                            alert('El RIF que intenta registrar ya existe!');
+                        }
+
+                        if (response == 'success') {
+                            $('form').submit();
+                        }
+                    }
+                });
+            }
+        });
     </script>
 @endsection
