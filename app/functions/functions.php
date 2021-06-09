@@ -218,18 +218,14 @@
             break;
         //FIN BLOQUE DE GRUPO P
         //INICIO BLOQUE DE KDI
-        case 'KDI':
-            $sede = SedeKDI;
-            return $sede;
-        break;
+            case 'KDI':
+                $sede = SedeKDI;
+                return $sede;
+            break;
         //FIN BLOQUE DE KDI
         //INICIO BLOQUE DE TEST
             case 'DBs':
                 $sede = SedeDBs;
-                return $sede;
-            break;
-            case 'DBm':
-                $sede = SedeDBm;
                 return $sede;
             break;
             case 'ARG':
@@ -394,15 +390,6 @@
                 $conn = sqlsrv_connect(serverDBs,$connectionInfo);
                 return $conn;
             break;
-            case 'DBm':
-                $connectionInfo = array(
-                    "Database"=>nameDBm,
-                    "UID"=>userDBm,
-                    "PWD"=>passDBm
-                );
-                $conn = sqlsrv_connect(serverDBm,$connectionInfo);
-                return $conn;
-            break;
             case 'ARG':
                 $connectionInfo = array(
                     "Database"=>nameDBsa,
@@ -561,6 +548,17 @@
                 return $conn;
             break;
         //FIN BLOQUE DE GRUPO P
+        //INICIO BLOQUE DE KDI
+            case 'KDI':
+                $connectionInfo = array(
+                    "Database"=>"Mod_Atte_Cliente",
+                    "UID"=>userKDI,
+                    "PWD"=>passKDI
+                );
+                $conn = sqlsrv_connect(serverKDI,$connectionInfo);
+                return $conn;
+            break;
+        //FIN BLOQUE DE KDI
         //INICIO BLOQUE DE TEST
             case 'DBs':
                 $connectionInfo = array(
@@ -569,15 +567,6 @@
                     "PWD"=>passDBs
                 );
                 $conn = sqlsrv_connect(serverDBs,$connectionInfo);
-                return $conn;
-            break;
-            case 'DBm':
-                $connectionInfo = array(
-                    "Database"=>"Mod_Atte_Cliente",
-                    "UID"=>userDBm,
-                    "PWD"=>passDBm
-                );
-                $conn = sqlsrv_connect(serverDBm,$connectionInfo);
                 return $conn;
             break;
             case 'ARG':
@@ -1519,6 +1508,18 @@
                 $Flag = TRUE;
             break;
             case 'FAU':
+                $Flag = TRUE;
+            break;
+            case 'GP':
+                $Flag = TRUE;
+            break;
+            case 'ARG':
+                $Flag = TRUE;
+            break;
+            case 'DBs':
+                $Flag = TRUE;
+            break;
+            case 'KDI':
                 $Flag = TRUE;
             break;
             default:
@@ -2796,8 +2797,19 @@
                 $dominio = 'http://cpharmade.com/';
                 return $dominio;
             break;
+            case 'ARG':
+                $dominio = 'http://cpharmade.com/';
+                return $dominio;
+            break;
+            case 'DBs':
+                $dominio = 'http://cpharmade.com/';
+                return $dominio;
+            break;
+            case 'KDI':
+                $dominio = 'http://cpharmakdi.com/';
+                return $dominio;
+            break;
         }
-        return $dominio;
     }
     /**********************************************************************************/
     /*

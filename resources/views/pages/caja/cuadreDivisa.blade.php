@@ -877,7 +877,7 @@
 
       function copiar(){
         var totalBsCopy = $('#totalBsCopy').val();
-        $('#fac1').val(totalBsCopy); 
+        $('#fac1').val(totalBsCopy);
         $('#fac1').focus();
       }
 
@@ -905,28 +905,36 @@
       function dominio(SedeConnectionJs){
         var dominio = '';
         switch(SedeConnectionJs) {
-          case 'FTN':
-            dominio = 'http://cpharmaftn.com/';
-            return dominio;
-          break;
-          case 'FLL':
-            dominio = 'http://cpharmafll.com/';
-            return dominio;
-          break;
-          case 'FAU':
-            dominio = 'http://cpharmafau.com/';
-            return dominio;
-          break;
-          case 'GP':
-            dominio = 'http://cpharmade.com/';
-            return dominio;
-          break;
-          case 'ARG':
-            dominio = 'http://cpharmade.com/';
-            return dominio;
-          break;
+            case 'FTN':
+                dominio = 'http://cpharmaftn.com/';
+                return dominio;
+            break;
+            case 'FLL':
+                dominio = 'http://cpharmafll.com/';
+                return dominio;
+            break;
+            case 'FAU':
+                dominio = 'http://cpharmafau.com/';
+                return dominio;
+            break;
+            case 'GP':
+                dominio = 'http://cpharmade.com/';
+                return dominio;
+            break;
+            case 'ARG':
+                dominio = 'http://cpharmade.com/';
+                return dominio;
+            break;
+            case 'DBs':
+                dominio = 'http://cpharmade.com/';
+                return dominio;
+            break;
+            case 'KDI':
+                dominio = 'http://cpharmakdi.com/';
+                return dominio;
+            break;
         }
-      }
+    }
 
       var SedeConnectionJs = '<?php echo $RutaUrl;?>';
       var dominio = dominio(SedeConnectionJs);
@@ -955,7 +963,7 @@
                 var ParteDsSug = (Math.trunc((TotalFacDsSug/5))*5);
                 var ParteBsSug = (TotalFacBsSug-(ParteDsSug*TasaDolar));
                 //var ParteBsSug = ((TotalFacDsSug%5)*TasaDolar);
-               
+
                 $('#nombreCaja').val(nombreCaja);
                 $('#nombreCliente').val(nombreCliente);
                 $('#totalBsCopy').val(TotalFacBsSug);

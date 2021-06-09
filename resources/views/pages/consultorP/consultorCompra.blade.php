@@ -16,7 +16,7 @@
 
 @section('content')
 
-  <?php 
+  <?php
     include(app_path().'\functions\config.php');
     include(app_path().'\functions\functions.php');
     include(app_path().'\functions\querys_mysql.php');
@@ -48,7 +48,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <h3 style="text-align: left;">Modo de busqueda</h3>
-        <span class="close" style="text-align: right;">×</span> 
+        <span class="close" style="text-align: right;">×</span>
       </div>
       <div class="modal-body">
         <div class="modo_opciones" id="opc_1">
@@ -81,9 +81,9 @@
         <p class="busq_dina_modo text-white" id="btn_selector" style="font-size: 2em; text-align: center; vertical-align: middle;"><i id="icon_selector" class="fas fa-language"></i></p>
       </div>
       <div class="barra_busq busq_child">
-        <input type="text" id="input_busq"  tabindex="1" 
-          placeholder="Ingrese el nombre del producto" 
-          onfocus="this.placeholder = ''" 
+        <input type="text" id="input_busq"  tabindex="1"
+          placeholder="Ingrese el nombre del producto"
+          onfocus="this.placeholder = ''"
           onblur="this.placeholder = 'Ingrese el nombre del producto'">
         </input>
       </div>
@@ -104,7 +104,7 @@
   <!-- barra historial -->
     <div class="barraHistorial"></div>
   <!-- / barra historial -->
-    
+
   <!-- / menu -->
   <!-- despliegue de info -->
 
@@ -126,7 +126,7 @@
       <thead class="thead-dark">
         <tr>
           <th scope="col" class="CP-sticky">Codigo interno</th>
-          <th scope="col" class="CP-sticky">Codigo de barra</th>             
+          <th scope="col" class="CP-sticky">Codigo de barra</th>
           <th scope="col" class="CP-sticky">Descripcion</th>
           <th scope="col" class="CP-sticky">Precio</br>(Con IVA) <?php echo SigVe?></td>
           <th scope="col" class="CP-sticky">Precio</br>(Con IVA) <?php echo SigDolar?></td>
@@ -143,8 +143,8 @@
         </tr>
       </thead>
       <tbody id="tbodyapp">
-      </tbody>  
-    </table> 
+      </tbody>
+    </table>
   </div>
 
   <script type="text/javascript">
@@ -152,31 +152,39 @@
     $('#contApp').hide();
 
     function dominio(SedeConnectionJs){
-      var dominio = '';
-      switch(SedeConnectionJs) {
-        case 'FTN':
-          dominio = 'http://cpharmaftn.com/';
-          return dominio;
-        break;
-        case 'FLL':
-          dominio = 'http://cpharmafll.com/';
-          return dominio;
-        break;
-        case 'FAU':
-          dominio = 'http://cpharmafau.com/';
-          return dominio;
-        break;
-        case 'GP':
-          dominio = 'http://cpharmade.com/';
-          return dominio;
-        break;
-        case 'ARG':
-          dominio = 'http://cpharmade.com/';
-          return dominio;
-        break;
-      }
+        var dominio = '';
+        switch(SedeConnectionJs) {
+            case 'FTN':
+                dominio = 'http://cpharmaftn.com/';
+                return dominio;
+            break;
+            case 'FLL':
+                dominio = 'http://cpharmafll.com/';
+                return dominio;
+            break;
+            case 'FAU':
+                dominio = 'http://cpharmafau.com/';
+                return dominio;
+            break;
+            case 'GP':
+                dominio = 'http://cpharmade.com/';
+                return dominio;
+            break;
+            case 'ARG':
+                dominio = 'http://cpharmade.com/';
+                return dominio;
+            break;
+            case 'DBs':
+                dominio = 'http://cpharmade.com/';
+                return dominio;
+            break;
+            case 'KDI':
+                dominio = 'http://cpharmakdi.com/';
+                return dominio;
+            break;
+        }
     }
-  
+
     var SedeConnectionJs = '<?php echo $RutaUrl;?>';
     var dominio = dominio(SedeConnectionJs);
     const URLConsulNomb = ''+dominio+'assets/functions/funConsCompNomb.php';
@@ -191,7 +199,7 @@
       $('#input_busq').attr("placeholder", "Ingrese el nombre del producto");
       $('#input_busq').attr("onblur", "this.placeholder = 'Ingrese el nombre del producto'");
       $('#input_busq').val("");
-      
+
       var barraWidth = $('#input_busq').css("width");
       $('.ui-autocomplete').css("width", barraWidth-1 );
 
@@ -201,14 +209,14 @@
       var span = document.getElementsByClassName("close")[0];
       var opc_selec = 1;
       llenarAutoComplete(opc_selec);
-      /* 
-          la variable 'opc_selec' siempre inicia por defecto con valor de 1 
+      /*
+          la variable 'opc_selec' siempre inicia por defecto con valor de 1
           1 = medicamento
           2 = componente
           3 = codigo barra
-          4 = uso terapéutico 
+          4 = uso terapéutico
       */
-      
+
       /* Inicio de OnClicks referentes al Modal Box */
       btn.onclick = function() {
         modal.style.display = "block";
@@ -262,11 +270,11 @@
         }
       });
       /* Final de OnClicks referentes al Modal Box */
-      
+
       /* Div referente a los componentes para la busqueda */
       function log(message) {
         if ($("#log").text() == '') {
-          $("#log").append(message);   
+          $("#log").append(message);
           $('.ListaCompo').css("display", "block");
         }
         else {
@@ -275,7 +283,7 @@
         }
         $("#log").scrollTop( 0 );
       }
-      
+
       //Autocomplete para la busqueda por nombre medicamento
       function llenarAutoComplete (modo_selec) {
 
@@ -318,10 +326,10 @@
               delay: 150,
               minLength: 3,
               select: function( event, ui ) {
-              
+
                 log(ui.item ? "" + ui.item.value : "" + this.value );
-              
-                var selectedObj = ui.item;              
+
+                var selectedObj = ui.item;
                 var temp = selectedObj.value;
                 var enviar = temp.replace("+","*");
                 ui.item.value = '';
@@ -340,10 +348,10 @@
               delay: 150,
               minLength: 3,
               select: function( event, ui ) {
-              
+
                 log(ui.item ? "" + ui.item.value : "" + this.value );
-              
-                var selectedObj = ui.item;              
+
+                var selectedObj = ui.item;
                 var temp = selectedObj.value;
                 var enviar = temp.replace("+","*");
                 ui.item.value = '';
@@ -357,12 +365,12 @@
       }
 
       //Darle click al boton de busqueda
-      $('#btn_search').click(function(e) { 
+      $('#btn_search').click(function(e) {
         switch (opc_selec) {
           case 1:
             //buscar cuando el modo de busqueda hace referencia al nombre de productos
-            if ( $('#input_busq').val() != "" ) {  
-     
+            if ( $('#input_busq').val() != "" ) {
+
               $('.barraHistorial').empty();
               var historia_origen = $('<div class="historia hOrigen"><div class="imgHist_Nom">'+$('#input_busq').val()+'</div></div>');
               $('.barraHistorial').append(historia_origen);
@@ -387,19 +395,19 @@
                     $('#error').hide();
                   }
                  });
-              //Fin de la busqueda y el armado de la tabla 
+              //Fin de la busqueda y el armado de la tabla
              $("#input_busq").val('');
             }
           break;
           case 2:
             //buscar cuando el modo de busqueda hace referencia a los componentes
-            if ( $('#log').text() != "" ) {       
+            if ( $('#log').text() != "" ) {
               consultaAjax( "tempComponentes="+$('#log').text() , "lib/busquedaC.php", 1 , '.contApp' );
-              
+
               $('.barraHistorial').empty();
               var historia_origen = $('<div class="historia hOrigen"><div class="imgHist_Comp">'+$('#log').text()+'</div></div>');
               $('.barraHistorial').append(historia_origen);
-              
+
               $("#input_busq").val('');
               $('#log').empty();
               $('.ListaCompo').css("display", "none");
@@ -408,8 +416,8 @@
           break;
           case 3:
             //buscar cuando el modo de busqueda hace referencia al codigo de barra especifico de un producto
-            if ( $('#input_busq').val() != "" ) {  
-     
+            if ( $('#input_busq').val() != "" ) {
+
               $('.barraHistorial').empty();
               var historia_origen = $('<div class="historia hOrigen"><div class="imgHist_Nom">'+$('#input_busq').val()+'</div></div>');
               $('.barraHistorial').append(historia_origen);
@@ -434,19 +442,19 @@
                     $('#error').hide();
                   }
                  });
-              //Fin de la busqueda y el armado de la tabla 
+              //Fin de la busqueda y el armado de la tabla
              $("#input_busq").val('');
             }
           break;
           case 4:
             //buscar cuando el modo de busqueda hace referencia a los uso terapéutico
-            if ( $('#log').text() != "" ) {       
+            if ( $('#log').text() != "" ) {
               consultaAjax( "tempPatologias="+$('#log').text() , "lib/busquedaP.php", 1 , '.contApp' );
-              
+
               $('.barraHistorial').empty();
               var historia_origen = $('<div class="historia hOrigen"><div class="imgHist_Tera">'+$('#log').text()+'</div></div>');
               $('.barraHistorial').append(historia_origen);
-              
+
               $("#input_busq").val('');
               $('#log').empty();
               $('.ListaCompo').css("display", "none");
@@ -455,17 +463,17 @@
           break;
           default:
           break;
-        }   
+        }
       });
 
       //Presionar Enter sobre el boton de busqueda (tabulado)
-      $('#input_busq').keyup(function(e) { 
+      $('#input_busq').keyup(function(e) {
         switch (opc_selec) {
           case 1:
             //buscar cuando el modo de busqueda hace referencia al nombre de productos
             if(e.keyCode == 13) {
-               if ( $('#input_busq').val() != "" ) {  
-     
+               if ( $('#input_busq').val() != "" ) {
+
                 $('.barraHistorial').empty();
                 var historia_origen = $('<div class="historia hOrigen"><div class="imgHist_Nom">'+$('#input_busq').val()+'</div></div>');
                 $('.barraHistorial').append(historia_origen);
@@ -498,9 +506,9 @@
           case 2:
             //buscar cuando el modo de busqueda hace referencia a los componentes
             if (e.keyCode == 13) {
-              if ( $('#log').text() != "" ) {       
+              if ( $('#log').text() != "" ) {
                 consultaAjax( "tempComponentes="+$('#log').text() , "lib/busquedaC.php", 1 , '.contApp' );
-                
+
                 $('.barraHistorial').empty();
                 var historia_origen = $('<div class="historia hOrigen"><div class="imgHist_Comp">'+$('#log').text()+'</div></div>');
                 $('.barraHistorial').append(historia_origen);
@@ -515,8 +523,8 @@
           case 3:
             //buscar cuando el modo de busqueda hace referencia al codigo de barra especifico de un producto
             if (e.keyCode == 13) {
-              if ( $('#input_busq').val() != "" ) {  
-     
+              if ( $('#input_busq').val() != "" ) {
+
                 $('.barraHistorial').empty();
                 var historia_origen = $('<div class="historia hOrigen"><div class="imgHist_Nom">'+$('#input_busq').val()+'</div></div>');
                 $('.barraHistorial').append(historia_origen);
@@ -541,7 +549,7 @@
                       $('#error').hide();
                     }
                    });
-                //Fin de la busqueda y el armado de la tabla 
+                //Fin de la busqueda y el armado de la tabla
                $("#input_busq").val('');
               }
             }
@@ -549,12 +557,12 @@
           case 4:
             //buscar cuando el modo de busqueda hace referencia a los usos terapeuticos
             if (e.keyCode == 13) {
-              if ( $('#log').text() != "" ) {       
+              if ( $('#log').text() != "" ) {
                 consultaAjax( "tempPatologias="+$('#log').text() , "lib/busquedaP.php", 1 , '.contApp' );
                 $('.barraHistorial').empty();
                 var historia_origen = $('<div class="historia hOrigen"><div class="imgHist_Tera">'+$('#log').text()+'</div></div>');
                 $('.barraHistorial').append(historia_origen);
-                
+
                 $("#input_busq").val('');
                 $('#log').empty();
                 $('.ListaCompo').css("display", "none");
@@ -563,9 +571,9 @@
             }
             break;
           default:
-            
+
             break;
-        }   
+        }
       });
 
       //Presionar Enter dentro de la barra de busqueda
@@ -575,8 +583,8 @@
             //cuando el modo de busqueda hace referencia al nombre de productos
             if(e.keyCode == 13) {
 
-              if ( $('#input_busq').val() != "" ) {  
-     
+              if ( $('#input_busq').val() != "" ) {
+
                 $('.barraHistorial').empty();
                 var historia_origen = $('<div class="historia hOrigen"><div class="imgHist_Nom">'+$('#input_busq').val()+'</div></div>');
                 $('.barraHistorial').append(historia_origen);
@@ -611,7 +619,7 @@
           case 3:
             //buscar cuando el modo de busqueda hace referencia al codigo de barra especifico de un producto
             if (e.keyCode == 13) {
-              if ( $('#input_busq').val() != "" ) {         
+              if ( $('#input_busq').val() != "" ) {
                 consultaAjax( "op="+$('#input_busq').val() , "lib/busquedaB.php", 1 , '.contApp' );
 
                 $('.barraHistorial').empty();
@@ -627,7 +635,7 @@
             ajustarTamano();
             break;
           default:
-            
+
             break;
         }
       });
@@ -693,6 +701,6 @@
           llenarAutoComplete (modo_selec);
         }
       }
-    });   
+    });
   </script>
 @endsection

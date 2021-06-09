@@ -42,15 +42,15 @@
     .autocomplete-items div {
       padding: 10px;
       cursor: pointer;
-      background-color: #fff; 
-      border-bottom: 1px solid #d4d4d4; 
+      background-color: #fff;
+      border-bottom: 1px solid #d4d4d4;
     }
     .autocomplete-items div:hover {
-      background-color: #e9e9e9; 
+      background-color: #e9e9e9;
     }
     .autocomplete-active {
-      background-color: #17a2b8 !important; 
-      color: #ffffff; 
+      background-color: #17a2b8 !important;
+      color: #ffffff;
     }
 		.center th {
 	    vertical-align: middle;
@@ -123,7 +123,7 @@
         </tr>
       </tbody>
     </table>
-    
+
     <table class="table table-borderless col-12" id="tablaError">
       <thead class="center">
         <th class="bg-white text-danger border border-white">
@@ -139,7 +139,7 @@
         <?php
           if (_ConsultorDolar_ == "SI") {
            echo '<th class="bg-success text-white border border-white"><h4>PRECIO $</h4></th>';
-          }      
+          }
         ?>
       </thead>
       <tbody>
@@ -160,12 +160,12 @@
                 <h4><b><p id="PPrecioDolarScan"></p></b></h4>
               </td>
              ';
-            }      
-          ?>          
+            }
+          ?>
         </tr>
         <tr>
           <td align="center" class="text-dark" colspan="4">
-            <b><p>Nuestros precios incluyen IVA (En caso de aplicar)</p></b> 
+            <b><p>Nuestros precios incluyen IVA (En caso de aplicar)</p></b>
           </td>
         </tr>
       </tbody>
@@ -178,11 +178,11 @@
       <thead class="center">
         <th class="bg-info text-white border border-white"><h5>Código de barra</h5></th>
         <th class="bg-info text-white border border-white"><h5>Descripción</h5></th>
-        <th class="bg-info text-white border border-white"><h5>Precio BsS</h5></th>        
+        <th class="bg-info text-white border border-white"><h5>Precio BsS</h5></th>
       </thead>
       <tbody id="bodySugerido"></tbody>
     </table>
-    
+
     <?php
       if (_ConsultorDolar_ == "SI") {
        echo ' <div id="DivTasa" clas="text-center bg-success">
@@ -191,9 +191,9 @@
           </label>
           <label class="text-danger text-center" style="margin-left:38%;">Nuestra tasa esta sujeta a cambios sin previo aviso</label>
         </div>';
-      }      
+      }
     ?>
-    
+
     <div class="row">
       <div class="col-md-6">
         <div id="carouselExampleIndicators" class="carousel slide d-block w-100 bg-white" data-ride="carousel" data-wrap="true" data-interval="3000" data-pause="false">
@@ -252,40 +252,46 @@
   <script>
     /************************************************************************/
     function dominio(SedeConnectionJs){
-      var dominio = '';
-      switch(SedeConnectionJs) {
-        case 'FTN':
-          dominio = 'http://cpharmaftn.com/';
-          return dominio;
-        break;
-        case 'FLL':
-          dominio = 'http://cpharmafll.com/';
-          return dominio;
-        break;
-        case 'FAU':
-          dominio = 'http://cpharmafau.com/';
-          return dominio;
-        break;
-        case 'GP':
-          dominio = 'http://cpharmade.com/';
-          return dominio;
-        case 'ARG':
-          dominio = 'http://cpharmade.com/';
-        return dominio;
-        case 'DBs':
-          dominio = 'http://cpharmade.com/';
-        return dominio;
-        break;
-      }
+        var dominio = '';
+        switch(SedeConnectionJs) {
+            case 'FTN':
+                dominio = 'http://cpharmaftn.com/';
+                return dominio;
+            break;
+            case 'FLL':
+                dominio = 'http://cpharmafll.com/';
+                return dominio;
+            break;
+            case 'FAU':
+                dominio = 'http://cpharmafau.com/';
+                return dominio;
+            break;
+            case 'GP':
+                dominio = 'http://cpharmade.com/';
+                return dominio;
+            break;
+            case 'ARG':
+                dominio = 'http://cpharmade.com/';
+                return dominio;
+            break;
+            case 'DBs':
+                dominio = 'http://cpharmade.com/';
+                return dominio;
+            break;
+            case 'KDI':
+                dominio = 'http://cpharmakdi.com/';
+                return dominio;
+            break;
+        }
     }
     /************************************************************************/
     function formateoPrecio(cantidad, decimales) {
       //Transformamos el numero en string
-      cantidad += ''; 
+      cantidad += '';
       //Eliminar cualquier caracter diferente a (.) o numeros
-      cantidad = parseFloat(cantidad.replace(/[^0-9\.]/g, '')); 
+      cantidad = parseFloat(cantidad.replace(/[^0-9\.]/g, ''));
       //Validar los decimales
-      decimales = decimales || 0; 
+      decimales = decimales || 0;
       //Si el numero es cero o texto alphanumerico retornamos cero
       if(isNaN(cantidad) || cantidad === 0)  {
           return parseFloat(0).toFixed(decimales);
@@ -307,7 +313,7 @@
       $('#tablaSugerido').hide();
       $('#DivTasa').hide();
       mostrarCarousel();
-    }   
+    }
     /************************************************************************/
     function mostrarCarousel(){
       $.ajax({
@@ -315,14 +321,14 @@
         url: URLTablaPromocion,
         type: "POST",
         success: function(data) {
-        
+
           if(JSON.parse(data)!="UNICO"){
             var respuesta = JSON.parse(data);
             var limiteRespuesta = respuesta.length;
             /*Armado del elemento del carousel*/
             var contenedor = $("#divPromocion").html();
             var nuevaFila = '';
-            
+
             var j = 0;
             while (j<limiteRespuesta){
               var pop = respuesta.pop();
@@ -331,7 +337,7 @@
               var descripcion = pop['Descripcion'];
               var codigo = pop['CodigoBarra'];
               var URLImag = URLImagen+codigo+'.jpg';
-               
+
               /*Armado del elemento del carousel*/
               if(j==0){
                 nuevaFila += '<div class="carousel-item active">';
@@ -366,7 +372,7 @@
       });
     }
   </script>
-  
+
 	<script>
     var dominio = dominio(SedeConnectionJs);
     const URLTablaResuldado = ''+dominio+'assets/functions/functionConsultaPrecio.php';
@@ -398,14 +404,14 @@
 
         var indiceIdScanDesc = ArrJs.indexOf(ArrJsCB[indiceIdScan]);
         var indiceScanDesc = indiceIdScanDesc-1;
-        
+
         if( (indiceCodBarScan>0) && (indiceScanDesc)>0 ) {
 
           $('#tablaError').hide();
           $('#divPromocion').html('');
           $('#ultimasConsultas').hide();
           $('#carouselExampleIndicators').hide();
-          $('#tablaResuldado').show();          
+          $('#tablaResuldado').show();
 
           var parametro = {
           "IdArticulo":ArrJsCB[indiceIdScan]
@@ -419,8 +425,8 @@
             success: function(data) {
               TasaVenta = data;
               TasaVentaMostrar = formateoPrecio(TasaVenta,2);
-              $('#TasaVenta').html('<strong>Tasa del dia: Bs.S '+TasaVentaMostrar+'</strong>'); 
-              $('#DivTasa').show();       
+              $('#TasaVenta').html('<strong>Tasa del dia: Bs.S '+TasaVentaMostrar+'</strong>');
+              $('#DivTasa').show();
             }
            });
 
@@ -463,15 +469,15 @@
            });
 
           $('#PCodBarrScan').html(ArrJsCB[indiceCodBarScan]);
-          $('#PDescripScan').html(ArrJs[indiceScanDesc]); 
-          $('#inputCodBar').val(''); 
+          $('#PDescripScan').html(ArrJs[indiceScanDesc]);
+          $('#inputCodBar').val('');
 
           $('#PPrecioScan').html('');
           $('#PPrecioDolarScan').html('');
 
-          
+
           //Fin Armado tablaResuldado
-          
+
           //Incio Armado tablaSugerido
           $.ajax({
             data: parametro,
@@ -534,14 +540,14 @@
           $('#tablaError').show();
           $('#PCodBarrScan').html('');
           $('#PDescripScan').html('');
-          $('#PPrecioScan').html(''); 
+          $('#PPrecioScan').html('');
           $('#inputCodBar').val('');
           if(timeOut!=0){
             clearTimeout(timeOut);
           }
           timeOut = setTimeout(limpiarPantalla,5000);
         }
-      }   
+      }
     });
 
     $(document).ready(function(){
@@ -552,22 +558,22 @@
       });
     });
 	</script>
-     
+
   <?php
     if($CodJson!=""){
   ?>
     <script type="text/javascript">
       const ArrJsCB = eval(<?php echo $CodJson ?>);
-    </script> 
+    </script>
   <?php
     }
-  ?>  
+  ?>
    <?php
     if($ArtJson!=""){
   ?>
     <script type="text/javascript">
       const ArrJs = eval(<?php echo $ArtJson ?>);
-    </script> 
+    </script>
   <?php
     }
   ?>
@@ -616,7 +622,7 @@
   */
   function RCPQ_Articulos_Escaneados() {
     $sql = "
-      Select codigoBarra, descripcion, 
+      Select codigoBarra, descripcion,
         (SELECT DATE_FORMAT(consultor.created_at, '%d/%m/%Y %h:%i %p') from consultor WHERE consultor.codigo_barra = codigoBarra ORDER by consultor.created_at DESC limit 1) as fecha,
         (SELECT FORMAT(consultor.precio,2,'de_DE') FROM consultor WHERE consultor.codigo_barra = codigoBarra ORDER by consultor.created_at DESC limit 1) as precio_bs,
         (SELECT FORMAT(consultor.precio/(select dolars.tasa from dolars order BY id DESC limit 1),2,'de_DE') FROM consultor WHERE consultor.codigo_barra = codigoBarra ORDER by consultor.created_at DESC limit 1) as precio_ds
