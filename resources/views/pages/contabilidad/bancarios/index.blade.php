@@ -125,7 +125,7 @@
               <td>{{$deuda->proveedor->rif_ci}}</td>
               <td>{{$deuda->created_at}}</td>
               <td>{{number_format($deuda->monto, 2, ',', '.')}}</td>
-              <td>{{$deuda->banco->alias_cuenta}}</td>
+              <td>{{isset($deuda->banco->alias_cuenta) ? $deuda->banco->alias_cuenta : ''}}</td>
               <td>{{$deuda->operador}}</td>
               <td style="width:180px;">
                 <a target="_blank" href="/bancarios/soporte/{{$deuda->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Ver soporte">

@@ -161,6 +161,12 @@ class ContProveedorController extends Controller
     {
         $proveedor = ContProveedor::where('rif_ci', $request->get('rif'))->get();
 
+        if ($request->get('id')) {
+            $proveedor = ContProveedor::where('rif_ci', $request->get('rif'))
+                ->where('id', '!=', $request->get('id'))
+                ->get();
+        }
+
         if ($proveedor->count()) {
             return 'error';
         } else {

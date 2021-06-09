@@ -121,7 +121,7 @@
                 </tbody>
             </table>
 
-            <input type="button" class="btn btn-outline-success btn-md" value="Guardar">
+            <button type="button" class="btn btn-outline-success btn-md">Guardar</button>
         </fieldset>
     </form>
 
@@ -131,7 +131,7 @@
         });
         $('#exampleModalCenter').modal('show');
 
-        $('form').click(function () {
+        $('[type=button]').click(function () {
             prefix = $('[name=prefix_rif_ci]').val();
             rif = $('[name=rif_ci]').val();
 
@@ -147,6 +147,7 @@
                     success: function (response) {
                         if (response == 'error') {
                             alert('El RIF que intenta registrar ya existe!');
+                            $('[name=rif_ci]').focus();
                         }
 
                         if (response == 'success') {

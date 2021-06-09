@@ -70,7 +70,7 @@
                                     <option {{ (substr($proveedor->rif_ci, 0, 1) == 'E') ? 'selected' : '' }} value="E">E</option>
                                     <option {{ (substr($proveedor->rif_ci, 0, 1) == 'J') ? 'selected' : '' }} value="J">J</option>
                                 </select>
-                                <input onkeypress="soloNumeros(event)" minlength="9" style="width: 80%" name="rif_ci" class="form-control">
+                                <input onkeypress="soloNumeros(event)" minlength="9" value="{{ substr($proveedor->rif_ci, 2) }}" style="width: 80%" name="rif_ci" class="form-control">
                             </div>
                         </td>
                     </tr>
@@ -123,7 +123,7 @@
                 </tbody>
             </table>
 
-            <input type="submit" class="btn btn-outline-success btn-md" value="Guardar">
+            <input type="button" class="btn btn-outline-success btn-md" value="Guardar">
         </fieldset>
     </form>
 
@@ -131,6 +131,35 @@
         $(document).ready(function(){
             $('[data-toggle="tooltip"]').tooltip();
         });
-        $('#exampleModalCenter').modal('show')
+
+        $('#exampleModalCenter').modal('show');
+
+        $('[type=button]').click(function () {
+            prefix = $('[name=prefix_rif_ci]').val();
+            rif = $('[name=rif_ci]').val();
+
+            if (rif != '') {
+                rif = prefix + '-' + rif;
+
+                $.ajax({
+                    type: 'GET',
+                    url: '/proveedores/validar',
+                    data: {
+                        rif: rif,
+                        id: {{ $proveedor->id }}
+                    },
+                    success: function (response) {
+                        if (response == 'error') {
+                            alert('El RIF que intenta registrar ya existe!');
+                            $('[name=rif_ci]').focus();
+                        }
+
+                        if (response == 'success') {
+                            $('form').submit();
+                        }
+                    }
+                });
+            }
+        });
     </script>
 @endsection
