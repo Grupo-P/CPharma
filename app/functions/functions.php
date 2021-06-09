@@ -1309,6 +1309,33 @@
             case 'Registro de Fallas':
                 $ruta = '/falla';
             break;
+            case 'Devoluciones de clientes':
+                $ruta = '/reporte33';
+            break;
+            case 'Articulos estancados en tienda':
+                $ruta = '/reporte34';
+            break;
+            case 'Artículos sin ventas':
+                $ruta = '/reporte35';
+            break;
+            case 'Lista de precios':
+                $ruta = '/reporte36';
+            break;
+            case 'Traslados entre tiendas':
+                $ruta = '/reporte37';
+            break;
+            case 'Registro de Reclamos':
+                $ruta = '/reporte38';
+            break;
+            case 'Revision de inventarios fisicos':
+                $ruta = '/reporte39';
+            break;
+            case 'Surtido de gavetas':
+                $ruta = '/reporte40';
+            break;
+            case 'Articulos competidos':
+                $ruta = '/reporte41';
+            break;
             default:
                 $ruta = '#';
             break;

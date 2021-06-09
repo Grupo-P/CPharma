@@ -85,7 +85,7 @@
     if(isset($_GET['existenciaUsuario'])) {
       $InicioCarga = new DateTime("now");
       R37_Traslados_Entre_Tiendas($_GET['SEDE'],$_GET['existenciaUsuario']);
-      FG_Guardar_Auditoria('CONSULTAR','REPORTE','TRASLADOS ENTRE TIENDAS');
+      FG_Guardar_Auditoria('CONSULTAR','REPORTE','Traslados entre tiendas');
 
       $FinCarga = new DateTime("now");
       $IntervalCarga = $InicioCarga->diff($FinCarga);
