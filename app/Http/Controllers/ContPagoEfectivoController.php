@@ -39,7 +39,7 @@ class ContPagoEfectivoController extends Controller {
         $cuentas = ContCuenta::get();
 
         if ($request->get('tipo') == 'proveedores') {
-            $sqlProveedores = ContProveedor::get();
+            $sqlProveedores = ContProveedor::whereNull('deleted_at')->get();
             $i              = 0;
 
             foreach ($sqlProveedores as $proveedor) {

@@ -63,6 +63,18 @@
                         <th scope="row"><label for="alias_cuenta">Alias de la cuenta</label></th>
                         <td><input name="alias_cuenta" class="form-control" required minlength="3" maxlength="10"></td>
                     </tr>
+
+                    <tr>
+                        <th scope="row"><label for="moneda">Moneda</label></th>
+                        <td>
+                            <select name="moneda" class="form-control">
+                                <option value=""></option>
+                                @foreach($monedas as $moneda)
+                                    <option value="{{ $moneda }}">{{ $moneda }}</option>
+                                @endforeach
+                            </select>
+                        </td>
+                    </tr>
                 </tbody>
             </table>
 

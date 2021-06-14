@@ -3,6 +3,7 @@
 namespace compras\Http\Controllers;
 
 use compras\Auditoria;
+use compras\Configuracion;
 use compras\ContBanco;
 use Illuminate\Http\Request;
 
@@ -26,7 +27,10 @@ class ContBancoController extends Controller
      */
     public function create()
     {
-        return view('pages.contabilidad.bancos.create');
+        $monedas = Configuracion::where('variable', 'Moneda')->first();
+        $monedas = explode(',', $monedas->valor);
+
+        return view('pages.contabilidad.bancos.create', compact('monedas'));
     }
 
     /**
@@ -41,6 +45,7 @@ class ContBancoController extends Controller
         $banco->nombre_banco   = $request->input('nombre_banco');
         $banco->nombre_titular = $request->input('nombre_titular');
         $banco->alias_cuenta   = $request->input('alias_cuenta');
+        $banco->moneda         = $request->input('moneda');
         $banco->save();
 
         $auditoria           = new Auditoria();
@@ -74,7 +79,11 @@ class ContBancoController extends Controller
     public function edit($id)
     {
         $banco = ContBanco::find($id);
-        return view('pages.contabilidad.bancos.edit', compact('banco'));
+
+        $monedas = Configuracion::where('variable', 'Moneda')->first();
+        $monedas = explode(',', $monedas->valor);
+
+        return view('pages.contabilidad.bancos.edit', compact('banco', 'monedas'));
     }
 
     /**
@@ -90,6 +99,7 @@ class ContBancoController extends Controller
         $banco->nombre_banco   = $request->input('nombre_banco');
         $banco->nombre_titular = $request->input('nombre_titular');
         $banco->alias_cuenta   = $request->input('alias_cuenta');
+        $banco->moneda         = $request->input('moneda');
         $banco->save();
 
         $auditoria           = new Auditoria();

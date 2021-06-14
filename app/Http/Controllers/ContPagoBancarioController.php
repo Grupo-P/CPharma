@@ -28,7 +28,7 @@ class ContPagoBancarioController extends Controller
      */
     public function create()
     {
-        $sqlProveedores = ContProveedor::get();
+        $sqlProveedores = ContProveedor::whereNull('deleted_at')->get();
         $i              = 0;
         $proveedores    = [];
 
@@ -96,7 +96,7 @@ class ContPagoBancarioController extends Controller
 
         $pago = ContPagoBancario::find($id);
 
-        $sqlProveedores = ContProveedor::get();
+        $sqlProveedores = ContProveedor::whereNull('deleted_at')->get();
         $i              = 0;
         $proveedores    = [];
 

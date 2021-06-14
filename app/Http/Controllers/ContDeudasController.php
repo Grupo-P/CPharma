@@ -17,7 +17,8 @@ class ContDeudasController extends Controller
      */
     public function index()
     {
-        $deudas = ContDeuda::get();
+        $deudas = ContDeuda::with('proveedor')->get();
+
         return view('pages.contabilidad.deudas.index', compact('deudas'));
     }
 
@@ -31,7 +32,7 @@ class ContDeudasController extends Controller
         $documentos = Configuracion::where('variable', 'Documento deuda')->first();
         $documentos = explode(',', $documentos->valor);
 
-        $sqlProveedores = ContProveedor::get();
+        $sqlProveedores = ContProveedor::whereNull('deleted_at')->get();
         $i              = 0;
 
         foreach ($sqlProveedores as $proveedor) {
@@ -94,7 +95,7 @@ class ContDeudasController extends Controller
         $documentos = Configuracion::where('variable', 'Documento deuda')->first();
         $documentos = explode(',', $documentos->valor);
 
-        $sqlProveedores = ContProveedor::get();
+        $sqlProveedores = ContProveedor::whereNull('deleted_at')->get();
         $i              = 0;
 
         foreach ($sqlProveedores as $proveedor) {
