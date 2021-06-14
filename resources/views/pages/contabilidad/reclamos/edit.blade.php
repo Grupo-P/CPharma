@@ -51,27 +51,27 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <th scope="row"><label for="nombre_proveedor">Nombre del proveedor</label></th>
+                        <th scope="row"><label for="nombre_proveedor">Nombre del proveedor *</label></th>
                         <td>
-                            <input class="form-control" type="text" id="proveedores" value="{{ $reclamo->proveedor->nombre_proveedor . ' | ' . $reclamo->proveedor->rif_ci }}">
+                            <input class="form-control" required type="text" id="proveedores" value="{{ $reclamo->proveedor->nombre_proveedor . ' | ' . $reclamo->proveedor->rif_ci }}">
                             <input type="hidden" name="id_proveedor" value="{{ $reclamo->proveedor->id }}">
                         </td>
                     </tr>
 
                     <tr>
-                        <th scope="row"><label for="moneda">Moneda</label></th>
+                        <th scope="row"><label for="moneda">Moneda *</label></th>
                         <td><input name="moneda" readonly class="form-control" value="{{ $reclamo->proveedor->moneda }}" required></td>
                     </tr>
 
                     <tr>
-                        <th scope="row"><label for="monto">Monto</label></th>
+                        <th scope="row"><label for="monto">Monto *</label></th>
                         <td>
-                            <input type="number" value="{{ $reclamo->monto }}" required class="form-control" name="monto" min="1">
+                            <input type="number" value="{{ $reclamo->monto }}" step="0.1" required class="form-control" name="monto" min="1">
                         </td>
                     </tr>
 
                     <tr>
-                        <th scope="row"><label for="documento_soporte_reclamo">Documento soporte deuda</label></th>
+                        <th scope="row"><label for="documento_soporte_reclamo">Documento soporte deuda *</label></th>
                         <td>
                             <select name="documento_soporte_reclamo" required class="form-control">
                                 <option value=""></option>
@@ -83,11 +83,32 @@
                     </tr>
 
                     <tr>
-                        <th scope="row"><label for="numero_documento">Número documento</label></th>
+                        <th scope="row"><label for="numero_documento">Número documento *</label></th>
                         <td><input name="numero_documento" class="form-control" value="{{ $reclamo->numero_documento }}" minlength="5" maxlength="20" required></td>
+                    </tr>
+
+                    <tr>
+                        <th scope="row"><label for="sede">Sede *</label></th>
+                        <td>
+                            <select name="sede" required class="form-control" required>
+                                <option value=""></option>
+                                @foreach($sedes as $sede)
+                                    <option {{ ($sede->razon_social == $reclamo->sede) ? 'selected' : '' }} value="{{ $sede->razon_social }}">{{ $sede->razon_social }}</option>
+                                @endforeach
+                            </select>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <th scope="row"><label for="comentario">Comentario</label></th>
+                        <td>
+                            <input type="text" class="form-control" value="{{ $reclamo->comentario }}" name="comentario" minlength="10" maxlength="200">
+                        </td>
                     </tr>
                 </tbody>
             </table>
+
+            <p class="text-danger font-weight-bold">* Campos obligatorios</p>
 
             <input type="submit" class="btn btn-outline-success btn-md" value="Guardar">
         </fieldset>
@@ -124,6 +145,12 @@
 
                 if (!resultado) {
                     alert('Debe seleccionar un proveedor válido');
+                    event.preventDefault();
+                }
+
+                monto = $('[name=monto]').val();
+                if (monto == 0) {
+                    alert('El monto debe ser distinto a cero');
                     event.preventDefault();
                 }
             });

@@ -60,7 +60,7 @@
                     <tr>
                         <th scope="row"><label for="monto">Monto</label></th>
                         <td>
-                            <input type="number" required class="form-control" name="monto">
+                            <input type="number" step="0.1" required class="form-control" name="monto">
                         </td>
                     </tr>
 

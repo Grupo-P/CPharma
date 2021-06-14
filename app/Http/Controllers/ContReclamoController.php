@@ -6,6 +6,7 @@ use compras\Auditoria;
 use compras\Configuracion;
 use compras\ContProveedor;
 use compras\ContReclamo;
+use compras\Sede;
 use Illuminate\Http\Request;
 
 class ContReclamoController extends Controller
@@ -17,7 +18,7 @@ class ContReclamoController extends Controller
      */
     public function index()
     {
-        $reclamos = ContReclamo::get();
+        $reclamos = ContReclamo::orderByDesc('id')->get();
         return view('pages.contabilidad.reclamos.index', compact('reclamos'));
     }
 
@@ -43,7 +44,9 @@ class ContReclamoController extends Controller
             $i = $i + 1;
         }
 
-        return view('pages.contabilidad.reclamos.create', compact('documentos', 'proveedores'));
+        $sedes = Sede::orderBy('razon_social')->get();
+
+        return view('pages.contabilidad.reclamos.create', compact('documentos', 'sedes', 'proveedores'));
     }
 
     /**
@@ -59,6 +62,10 @@ class ContReclamoController extends Controller
         $reclamo->monto                     = $request->input('monto');
         $reclamo->documento_soporte_reclamo = $request->input('documento_soporte_reclamo');
         $reclamo->numero_documento          = $request->input('numero_documento');
+        $reclamo->comentario                = $request->input('comentario');
+        $reclamo->sede                      = $request->input('sede');
+        $reclamo->usuario_registro          = auth()->user()->name;
+
         $reclamo->save();
 
         $auditoria           = new Auditoria();
@@ -108,7 +115,9 @@ class ContReclamoController extends Controller
 
         $reclamo = ContReclamo::find($id);
 
-        return view('pages.contabilidad.reclamos.edit', compact('reclamo', 'documentos', 'proveedores'));
+        $sedes = Sede::orderBy('razon_social')->get();
+
+        return view('pages.contabilidad.reclamos.edit', compact('sedes', 'reclamo', 'documentos', 'proveedores'));
     }
 
     /**
@@ -125,6 +134,8 @@ class ContReclamoController extends Controller
         $reclamo->monto                     = $request->input('monto');
         $reclamo->documento_soporte_reclamo = $request->input('documento_soporte_reclamo');
         $reclamo->numero_documento          = $request->input('numero_documento');
+        $reclamo->comentario                = $request->input('comentario');
+        $reclamo->sede                      = $request->input('sede');
         $reclamo->save();
 
         $auditoria           = new Auditoria();

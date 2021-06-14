@@ -107,6 +107,7 @@
                 <th scope="col" class="CP-sticky">Nombre del banco</th>
                 <th scope="col" class="CP-sticky">Nombre del titular</th>
                 <th scope="col" class="CP-sticky">Alias de la cuenta</th>
+                <th scope="col" class="CP-sticky">Moneda</th>
                 <th scope="col" class="CP-sticky">Acciones</th>
             </tr>
         </thead>
@@ -117,6 +118,7 @@
               <td>{{$banco->nombre_banco}}</td>
               <td>{{$banco->nombre_titular}}</td>
               <td>{{$banco->alias_cuenta}}</td>
+              <td>{{$banco->moneda}}</td>
               <td style="width:140px;">
                 <a href="/bancos/{{$banco->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
                     <i class="far fa-eye"></i>

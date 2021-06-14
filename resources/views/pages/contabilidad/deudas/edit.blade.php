@@ -51,27 +51,27 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <th scope="row"><label for="nombre_proveedor">Nombre del proveedor</label></th>
+                        <th scope="row"><label for="nombre_proveedor">Nombre del proveedor *</label></th>
                         <td>
-                            <input class="form-control" type="text" id="proveedores" value="{{ $deuda->proveedor->nombre_proveedor . ' | ' . $deuda->proveedor->rif_ci }}">
+                            <input required class="form-control" type="text" id="proveedores" value="{{ $deuda->proveedor->nombre_proveedor . ' | ' . $deuda->proveedor->rif_ci }}">
                             <input type="hidden" name="id_proveedor" value="{{ $deuda->proveedor->id }}">
                         </td>
                     </tr>
 
                     <tr>
-                        <th scope="row"><label for="moneda">Moneda</label></th>
+                        <th scope="row"><label for="moneda">Moneda *</label></th>
                         <td><input name="moneda" readonly class="form-control" value="{{ $deuda->proveedor->moneda }}" required></td>
                     </tr>
 
                     <tr>
-                        <th scope="row"><label for="monto">Monto</label></th>
+                        <th scope="row"><label for="monto">Monto *</label></th>
                         <td>
                             <input type="number" value="{{ $deuda->monto }}" required class="form-control" name="monto" min="1">
                         </td>
                     </tr>
 
                     <tr>
-                        <th scope="row"><label for="documento_soporte_deuda">Documento soporte deuda</label></th>
+                        <th scope="row"><label for="documento_soporte_deuda">Documento soporte deuda *</label></th>
                         <td>
                             <select name="documento_soporte_deuda" required class="form-control">
                                 <option value=""></option>
@@ -83,11 +83,25 @@
                     </tr>
 
                     <tr>
-                        <th scope="row"><label for="numero_documento">Número documento</label></th>
+                        <th scope="row"><label for="numero_documento">Número documento *</label></th>
                         <td><input name="numero_documento" class="form-control" value="{{ $deuda->numero_documento }}" minlength="5" maxlength="20" required></td>
+                    </tr>
+
+                    <tr>
+                        <th scope="row"><label for="sede">Sede *</label></th>
+                        <td>
+                            <select name="sede" required class="form-control" required>
+                                <option value=""></option>
+                                @foreach($sedes as $sede)
+                                    <option {{ ($sede->razon_social == $deuda->sede) ? 'selected' : '' }} value="{{ $sede->razon_social }}">{{ $sede->razon_social }}</option>
+                                @endforeach
+                            </select>
+                        </td>
                     </tr>
                 </tbody>
             </table>
+
+            <p class="text-danger">* Campos obligatorios</p>
 
             <input type="submit" class="btn btn-outline-success btn-md" value="Guardar">
         </fieldset>

@@ -61,6 +61,11 @@
                 <th scope="row">Saldo</th>
                 <td>{{$proveedor->saldo}}</td>
             </tr>
+
+            <tr>
+                <th scope="row">Creado por</th>
+                <td>{{$proveedor->usuario_creado}}</td>
+            </tr>
         </tbody>
     </table>
 @endsection

@@ -50,27 +50,27 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <th scope="row"><label for="nombre_proveedor">Nombre del proveedor</label></th>
+                        <th scope="row"><label for="nombre_proveedor">Nombre del proveedor *</label></th>
                         <td>
-                            <input autofocus class="form-control" type="text" id="proveedores">
+                            <input required autofocus class="form-control" type="text" id="proveedores">
                             <input type="hidden" name="id_proveedor">
                         </td>
                     </tr>
 
                     <tr>
-                        <th scope="row"><label for="moneda">Moneda</label></th>
+                        <th scope="row"><label for="moneda">Moneda *</label></th>
                         <td><input name="moneda" readonly class="form-control" required></td>
                     </tr>
 
                     <tr>
-                        <th scope="row"><label for="monto">Monto</label></th>
+                        <th scope="row"><label for="monto">Monto *</label></th>
                         <td>
-                            <input type="number" required class="form-control" name="monto" min="1">
+                            <input type="number" required class="form-control" name="monto" min="1" step="0.1">
                         </td>
                     </tr>
 
                     <tr>
-                        <th scope="row"><label for="documento_soporte_deuda">Documento soporte deuda</label></th>
+                        <th scope="row"><label for="documento_soporte_deuda">Documento soporte deuda *</label></th>
                         <td>
                             <select name="documento_soporte_deuda" required class="form-control">
                                 <option value=""></option>
@@ -82,11 +82,25 @@
                     </tr>
 
                     <tr>
-                        <th scope="row"><label for="numero_documento">Número documento</label></th>
+                        <th scope="row"><label for="numero_documento">Número documento *</label></th>
                         <td><input name="numero_documento" class="form-control" minlength="5" maxlength="20" required></td>
+                    </tr>
+
+                    <tr>
+                        <th scope="row"><label for="sede">Sede *</label></th>
+                        <td>
+                            <select name="sede" required class="form-control">
+                                <option value=""></option>
+                                @foreach($sedes as $sede)
+                                    <option value="{{ $sede->razon_social }}">{{ $sede->razon_social }}</option>
+                                @endforeach
+                            </select>
+                        </td>
                     </tr>
                 </tbody>
             </table>
+
+            <p class="text-danger">* Campos obligatorios</p>
 
             <input type="submit" class="btn btn-outline-success btn-md" value="Guardar">
         </fieldset>

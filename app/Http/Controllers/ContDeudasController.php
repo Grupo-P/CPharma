@@ -6,6 +6,8 @@ use compras\Auditoria;
 use compras\Configuracion;
 use compras\ContDeuda;
 use compras\ContProveedor;
+use compras\Sede;
+use compras\User;
 use Illuminate\Http\Request;
 
 class ContDeudasController extends Controller
@@ -15,11 +17,29 @@ class ContDeudasController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $deudas = ContDeuda::with('proveedor')->get();
+        $cantidad_registros = isset($_GET['cantidad_registros']) ? $_GET['cantidad_registros'] : 50;
 
-        return view('pages.contabilidad.deudas.index', compact('deudas'));
+        $deudas = ContDeuda::with('proveedor')
+            ->numeroDocumento($request->get('numero_documento'))
+            ->proveedor($request->get('id_proveedor'))
+            ->rangoFecha($request->get('fecha_desde'), $request->get('fecha_hasta'))
+            ->registradoPor($request->get('registrado_por'))
+            ->sede($request->get('sede'))
+            ->orderByDesc('id')
+            ->paginate($cantidad_registros);
+
+        $proveedores = ContProveedor::whereNull('deleted_at')
+            ->orderBy('nombre_proveedor')
+            ->get();
+
+        $users = User::whereIn('departamento', ['TECNOLOGIA', 'GERENCIA', 'ADMINISTRACION', 'CONTABILIDAD'])
+            ->get();
+
+        $sedes = Sede::orderBy('razon_social')->get();
+
+        return view('pages.contabilidad.deudas.index', compact('deudas', 'proveedores', 'users', 'sedes'));
     }
 
     /**
@@ -44,7 +64,9 @@ class ContDeudasController extends Controller
             $i = $i + 1;
         }
 
-        return view('pages.contabilidad.deudas.create', compact('documentos', 'proveedores'));
+        $sedes = Sede::orderBy('razon_social')->get();
+
+        return view('pages.contabilidad.deudas.create', compact('documentos', 'proveedores', 'sedes'));
     }
 
     /**
@@ -60,6 +82,8 @@ class ContDeudasController extends Controller
         $deuda->monto                   = $request->input('monto');
         $deuda->documento_soporte_deuda = $request->input('documento_soporte_deuda');
         $deuda->numero_documento        = $request->input('numero_documento');
+        $deuda->usuario_registro        = auth()->user()->name;
+        $deuda->sede                    = $request->input('sede');
         $deuda->save();
 
         $auditoria           = new Auditoria();
@@ -109,7 +133,9 @@ class ContDeudasController extends Controller
 
         $deuda = ContDeuda::find($id);
 
-        return view('pages.contabilidad.deudas.edit', compact('deuda', 'documentos', 'proveedores'));
+        $sedes = Sede::orderBy('razon_social')->get();
+
+        return view('pages.contabilidad.deudas.edit', compact('deuda', 'documentos', 'proveedores', 'sedes'));
     }
 
     /**
@@ -126,6 +152,7 @@ class ContDeudasController extends Controller
         $deuda->monto                   = $request->input('monto');
         $deuda->documento_soporte_deuda = $request->input('documento_soporte_deuda');
         $deuda->numero_documento        = $request->input('numero_documento');
+        $deuda->sede                    = $request->input('sede');
         $deuda->save();
 
         $auditoria           = new Auditoria();
