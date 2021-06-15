@@ -423,6 +423,7 @@ Route::resource('proveedores', 'ContProveedorController');
 Route::resource('cuentas', 'ContCuentasController');
 Route::get('/cuentas/{id}/delete', 'ContCuentasController@delete');
 
+Route::get('/bancos/validar', 'ContBancoController@validar');
 Route::resource('bancos', 'ContBancoController');
 
 Route::resource('deudas', 'ContDeudasController');

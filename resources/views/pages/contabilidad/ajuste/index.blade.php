@@ -131,11 +131,13 @@
                         <i class="fas fa-edit"></i>
                     </a>
 
-                    <form action="ajuste/{{$ajuste->id}}" method="POST" style="display: inline;">
-                        @method('DELETE')
-                        @csrf
-                        <button type="submit" name="Reversar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Reversar"><i class="fa fa-reply"></i></button>
-                    </form>
+                    @if(!$ajuste->reverso)
+                        <form action="ajuste/{{$ajuste->id}}" method="POST" style="display: inline;">
+                            @method('DELETE')
+                            @csrf
+                            <button type="submit" name="Reversar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Reversar"><i class="fa fa-reply"></i></button>
+                        </form>
+                    @endif
                 @endif
               </td>
             </tr>

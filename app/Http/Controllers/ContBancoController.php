@@ -16,7 +16,7 @@ class ContBancoController extends Controller
      */
     public function index()
     {
-        $bancos = ContBanco::get();
+        $bancos = ContBanco::orderByDesc('id')->get();
         return view('pages.contabilidad.bancos.index', compact('bancos'));
     }
 
@@ -122,15 +122,48 @@ class ContBancoController extends Controller
     {
         $banco = ContBanco::find($id);
 
-        $auditoria           = new Auditoria();
-        $auditoria->accion   = 'ELIMINAR';
-        $auditoria->tabla    = 'BANCO';
-        $auditoria->registro = $banco->id;
-        $auditoria->user     = auth()->user()->name;
-        $auditoria->save();
+        if ($banco->deleted_at) {
+            $auditoria           = new Auditoria();
+            $auditoria->accion   = 'ACTIVAR';
+            $auditoria->tabla    = 'BANCO';
+            $auditoria->registro = $banco->id;
+            $auditoria->user     = auth()->user()->name;
+            $auditoria->save();
 
-        $banco->delete();
+            $banco->deleted_at = null;
+            $banco->save();
 
-        return redirect('/bancos')->with('Deleted', ' Informacion');
+            return redirect('/bancos')->with('Activar', ' Informacion');
+        } else {
+            $auditoria           = new Auditoria();
+            $auditoria->accion   = 'DESACTIVAR';
+            $auditoria->tabla    = 'BANCO';
+            $auditoria->registro = $banco->id;
+            $auditoria->user     = auth()->user()->name;
+            $auditoria->save();
+
+            $banco->deleted_at = date('Y-m-d H:i:s');
+            $banco->save();
+
+            return redirect('/bancos')->with('Desactivar', ' Informacion');
+        }
+    }
+
+    public function validar(Request $request)
+    {
+        $proveedor = ContBanco::where('alias_cuenta', $request->get('alias_cuenta'))
+            ->get();
+
+        if ($request->get('id')) {
+            $proveedor = ContBanco::where('alias_cuenta', $request->get('alias_cuenta'))
+                ->where('id', '!=', $request->get('id'))
+                ->get();
+        }
+
+        if ($proveedor->count()) {
+            return 'error';
+        } else {
+            return 'success';
+        }
     }
 }
