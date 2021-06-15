@@ -109,6 +109,7 @@
                 <th scope="col" class="CP-sticky">Fecha de registro</th>
                 <th scope="col" class="CP-sticky">Monto</th>
                 <th scope="col" class="CP-sticky">Comentarios</th>
+                <th scope="col" class="CP-sticky">Creado por</th>
                 <th scope="col" class="CP-sticky">Acciones</th>
             </tr>
         </thead>
@@ -121,6 +122,7 @@
               <td>{{$ajuste->created_at}}</td>
               <td>{{$ajuste->monto}}</td>
               <td>{{$ajuste->comentario}}</td>
+              <td>{{$ajuste->usuario_registro}}</td>
               <td style="width:140px;">
                 <a href="ajuste/{{$ajuste->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
                     <i class="far fa-eye"></i>

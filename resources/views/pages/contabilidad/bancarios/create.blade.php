@@ -59,7 +59,7 @@
 
                     <tr>
                         <th scope="row"><label for="monto">Monto</label></th>
-                        <td><input type="number" required class="form-control" name="monto" min="1"></td>
+                        <td><input type="number" required class="form-control" name="monto" step="0.1" min="1"></td>
                     </tr>
 
                     <tr>
@@ -68,7 +68,7 @@
                             <select name="id_banco" class="form-control" required>
                                 <option value=""></option>
                                 @foreach($bancos as $banco)
-                                    <option value="{{ $banco->id }}">{{ $banco->nombre_banco }}</option>
+                                    <option value="{{ $banco->id }}">{{ $banco->alias_cuenta }}</option>
                                 @endforeach
                             </select>
                         </td>

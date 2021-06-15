@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class ContPagoBancario extends Model
 {
-    use SoftDeletes;
 
     protected $table = 'cont_pagos_bancarios';
 

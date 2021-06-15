@@ -61,7 +61,7 @@
 
                     <tr>
                         <th scope="row"><label for="monto">Monto</label></th>
-                        <td><input type="number" required value="{{ $pago->monto }}" class="form-control" name="monto" min="1"></td>
+                        <td><input type="number" required value="{{ $pago->monto }}" step="0.1" class="form-control" name="monto" min="1"></td>
                     </tr>
 
                     <tr>
@@ -70,7 +70,7 @@
                             <select name="id_banco" class="form-control" required>
                                 <option value=""></option>
                                 @foreach($bancos as $banco)
-                                    <option {{ ($banco->id == $pago->banco->id) ? 'selected' : '' }} value="{{ $banco->id }}">{{ $banco->nombre_banco }}</option>
+                                    <option {{ ($banco->id == $pago->banco->id) ? 'selected' : '' }} value="{{ $banco->id }}">{{ $banco->alias_cuenta }}</option>
                                 @endforeach
                             </select>
                         </td>

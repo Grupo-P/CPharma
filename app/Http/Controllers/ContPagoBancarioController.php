@@ -17,7 +17,7 @@ class ContPagoBancarioController extends Controller
      */
     public function index()
     {
-        $pagos = ContPagoBancario::get();
+        $pagos = ContPagoBancario::orderByDesc('id')->get();
         return view('pages.contabilidad.bancarios.index', compact('pagos'));
     }
 
@@ -41,7 +41,7 @@ class ContPagoBancarioController extends Controller
             $i = $i + 1;
         }
 
-        $bancos = ContBanco::get();
+        $bancos = ContBanco::whereNull('deleted_at')->orderBy('alias_cuenta')->get();
 
         return view('pages.contabilidad.bancarios.create', compact('bancos', 'proveedores'));
     }
@@ -60,6 +60,7 @@ class ContPagoBancarioController extends Controller
         $pago->monto        = $request->input('monto');
         $pago->comentario   = $request->input('comentario');
         $pago->operador     = auth()->user()->name;
+        $pago->estatus      = 'Procesado';
         $pago->save();
 
         $auditoria           = new Auditoria();
@@ -92,7 +93,7 @@ class ContPagoBancarioController extends Controller
      */
     public function edit($id)
     {
-        $bancos = ContBanco::get();
+        $bancos = ContBanco::whereNull('deleted_at')->orderBy('alias_cuenta')->get();
 
         $pago = ContPagoBancario::find($id);
 
@@ -146,7 +147,10 @@ class ContPagoBancarioController extends Controller
      */
     public function destroy($id)
     {
-        $pago  = ContPagoBancario::find($id);
+        $pago          = ContPagoBancario::find($id);
+        $pago->estatus = 'Reversado';
+        $pago->save();
+
         $monto = ($pago->monto > 0) ? -$pago->monto : abs($pago->monto);
 
         $nuevoPago               = new ContPagoBancario();
@@ -155,6 +159,7 @@ class ContPagoBancarioController extends Controller
         $nuevoPago->monto        = $monto;
         $nuevoPago->comentario   = 'Reverso del pago bancario #' . $pago->id;
         $nuevoPago->operador     = $pago->operador;
+        $nuevoPago->estatus      = 'Reversado';
         $nuevoPago->save();
 
         $proveedor        = ContProveedor::find($pago->id_proveedor);

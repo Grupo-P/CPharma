@@ -43,6 +43,11 @@
             </tr>
 
             <tr>
+                <th scope="row">Alias bancario</th>
+                <td>{{$pago->banco->alias_cuenta}}</td>
+            </tr>
+
+            <tr>
                 <th scope="row">Fecha de registro</th>
                 <td>{{$pago->created_at}}</td>
             </tr>
@@ -55,6 +60,11 @@
             <tr>
                 <th scope="row">Operador</th>
                 <td>{{$pago->operador}}</td>
+            </tr>
+
+            <tr>
+                <th scope="row">Estado</th>
+                <td>{{$pago->estatus}}</td>
             </tr>
 
             <tr>
