@@ -50,7 +50,7 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <th scope="row"><label for="nombre_proveedor">Nombre del proveedor</label></th>
+                        <th scope="row"><label for="nombre_proveedor">Nombre del proveedor *</label></th>
                         <td>
                             <input autofocus class="form-control" type="text" id="proveedores">
                             <input type="hidden" name="id_proveedor">
@@ -58,12 +58,12 @@
                     </tr>
 
                     <tr>
-                        <th scope="row"><label for="monto">Monto</label></th>
+                        <th scope="row"><label for="monto">Monto *</label></th>
                         <td><input type="number" required class="form-control" name="monto" step="0.1" min="1"></td>
                     </tr>
 
                     <tr>
-                        <th scope="row"><label for="id_banco">Banco</label></th>
+                        <th scope="row"><label for="id_banco">Banco *</label></th>
                         <td>
                             <select name="id_banco" class="form-control" required>
                                 <option value=""></option>
@@ -80,6 +80,8 @@
                     </tr>
                 </tbody>
             </table>
+
+            <p class="text-danger font-weight-bold">* Campos obligatorios</p>
 
             <input type="submit" class="btn btn-outline-success btn-md" value="Guardar">
         </fieldset>

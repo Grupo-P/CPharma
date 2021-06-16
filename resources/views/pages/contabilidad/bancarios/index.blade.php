@@ -131,13 +131,17 @@
               <td>{{$deuda->comentario}}</td>
               <td>{{isset($deuda->banco->alias_cuenta) ? $deuda->banco->alias_cuenta : ''}}</td>
               <td>{{$deuda->operador}}</td>
-              <td style="width:180px;">
+              <td style="width:200px;">
                 <a target="_blank" href="/bancarios/soporte/{{$deuda->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Ver soporte">
                     <i class="fa fa-file"></i>
                 </a>
 
                 <a href="/bancarios/{{$deuda->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
                     <i class="far fa-eye"></i>
+                </a>
+
+                <a href="/bancarios/notificar/{{$deuda->id}}" role="button" class="btn btn-outline-dark notificar btn-sm" data-toggle="tooltip" data-placement="top" title="Notificar">
+                    <i class="fa fa-bell"></i>
                 </a>
 
                 @if(Auth::user()->departamento == 'TECNOLOGIA' || Auth::user()->departamento == 'GERENCIA' || Auth::user()->departamento == 'ADMINISTRACION')
@@ -165,7 +169,13 @@
         $(document).ready(function(){
             $('[data-toggle="tooltip"]').tooltip();
         });
-        $('#exampleModalCenter').modal('show')
+
+        $('#exampleModalCenter').modal('show');
+
+        $('.notificar').click(function (event) {
+            event.preventDefault();
+            alert('En desarrollo...');
+        });
     </script>
 
 @endsection
