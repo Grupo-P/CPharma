@@ -65,9 +65,9 @@
                     </tr>
 
                     <tr>
-                        <th scope="row"><label for="moneda">Moneda</label></th>
+                        <th scope="row"><label for="moneda">Moneda *</label></th>
                         <td>
-                            <select name="moneda" class="form-control">
+                            <select name="moneda" class="form-control" required>
                                 <option value=""></option>
                                 @foreach($monedas as $moneda)
                                     <option value="{{ $moneda }}">{{ $moneda }}</option>

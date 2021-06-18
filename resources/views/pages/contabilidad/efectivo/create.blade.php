@@ -115,6 +115,8 @@
                     <input type="hidden" name="id_proveedor">
                 </td>
             </tr>
+
+            <tr class="append"></tr>
           @endif
 
           <tr>
@@ -137,32 +139,66 @@
 @endsection
 
 @section('scriptsHead')
-    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    @if($request->get('tipo') == 'proveedores')
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+        <script>
+            $(document).ready(function() {
+                var proveedoresJson = {!! json_encode($proveedores) !!};
 
-    <script>
-        $(document).ready(function() {
-            var proveedoresJson = {!! json_encode($proveedores) !!};
+                bancario = true;
 
-            $('#proveedores').autocomplete({
-                source: proveedoresJson,
-                autoFocus: true,
-                select: function (event, ui) {
-                    $('[name=id_proveedor]').val(ui.item.id);
-                    $('[name=moneda]').val(ui.item.moneda);
-                }
+                $('#proveedores').autocomplete({
+                    source: proveedoresJson,
+                    autoFocus: true,
+                    select: function (event, ui) {
+                        $('[name=id_proveedor]').val(ui.item.id);
+                        $('[name=moneda]').val(ui.item.moneda);
+                    }
+                });
+
+                $('form').submit(function (event) {
+                    resultado = proveedoresJson.find(elemento => elemento.label == $('#proveedores').val());
+
+                    if (!resultado) {
+                        event.preventDefault();
+                        alert('Debe seleccionar un proveedor válido');
+                        bancario = false;
+                    }
+
+                    if (bancario) {
+                        event.preventDefault();
+
+                        $.ajax({
+                            type: 'POST',
+                            url: '/efectivo/validar',
+                            data: {
+                                id_proveedor: $('[name=id_proveedor]').val(),
+                                _token: '{{ csrf_token() }}'
+                            },
+                            success: function (respuesta) {
+                                if (respuesta) {
+                                    $('.append').append(`
+                                        <th scope="row"><label for="tasa">Tasa *</label></th>
+                                        <td>
+                                            <input class="form-control" step="0.1" min="${respuesta.min}" max="${respuesta.max}" type="number" name="tasa" required>
+                                        </td>
+                                    `);
+
+                                    $('[name=tasa]').focus();
+                                }
+                            },
+                            error: function (error) {
+                                $('body').html(error.responseText);
+                            }
+                        });
+
+                        bancario = false;
+                    }
+                });
             });
-
-            $('form').submit(function (event) {
-                resultado = proveedoresJson.find(elemento => elemento.label == $('#proveedores').val());
-
-                if (!resultado) {
-                    alert('Debe seleccionar un proveedor válido');
-                    event.preventDefault();
-                }
-            });
-        });
-    </script>
+        </script>
+    @endif
 @endsection
 

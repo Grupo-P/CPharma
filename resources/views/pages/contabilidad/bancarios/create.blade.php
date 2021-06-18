@@ -74,6 +74,8 @@
                         </td>
                     </tr>
 
+                    <tr class="append"></tr>
+
                     <tr>
                         <th scope="row"><label for="comentario">Comentario</label></th>
                         <td><input type="text" minlength="5" maxlength="200" class="form-control" name="comentario"></td>
@@ -91,6 +93,7 @@
         $(document).ready(function(){
             $('[data-toggle="tooltip"]').tooltip();
         });
+
         $('#exampleModalCenter').modal('show');
     </script>
 @endsection
@@ -105,6 +108,8 @@
         $(document).ready(function() {
             var proveedoresJson = {!! json_encode($proveedores) !!};
 
+            bancario = true;
+
             $('#proveedores').autocomplete({
                 source: proveedoresJson,
                 autoFocus: true,
@@ -118,8 +123,41 @@
                 resultado = proveedoresJson.find(elemento => elemento.label == $('#proveedores').val());
 
                 if (!resultado) {
-                    alert('Debe seleccionar un proveedor válido');
                     event.preventDefault();
+                    alert('Debe seleccionar un proveedor válido');
+                    bancario = false;
+                }
+
+                if (bancario) {
+                    event.preventDefault();
+
+                    $.ajax({
+                        type: 'POST',
+                        url: '/bancarios/validar',
+                        data: {
+
+                            id_proveedor: $('[name=id_proveedor]').val(),
+                            id_banco: $('[name=id_banco]').val(),
+                            _token: '{{ csrf_token() }}'
+                        },
+                        success: function (respuesta) {
+                            if (respuesta) {
+                                $('.append').append(`
+                                    <th scope="row"><label for="tasa">Tasa *</label></th>
+                                    <td>
+                                        <input class="form-control" step="0.1" min="${respuesta.min}" max="${respuesta.max}" type="number" name="tasa" required>
+                                    </td>
+                                `);
+
+                                $('[name=tasa]').focus();
+                            }
+                        },
+                        error: function (error) {
+                            $('body').html(error.responseText);
+                        }
+                    });
+
+                    bancario = false;
                 }
             });
         });

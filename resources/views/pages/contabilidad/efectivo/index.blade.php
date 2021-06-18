@@ -47,7 +47,7 @@
             <select class="form-control" name="sede">
                 <option value=""></option>
                 @foreach($sedes as $sede)
-                    <option {{ ($request->sede == $sede->sede) ? 'selected' : '' }} value="{{ $sede->sede }}">{{ $sede->sede }}</option>
+                    <option {{ ($request->sede == $sede->razon_social) ? 'selected' : '' }} value="{{ $sede->razon_social }}">{{ $sede->razon_social }}</option>
                 @endforeach
             </select>
         </div>

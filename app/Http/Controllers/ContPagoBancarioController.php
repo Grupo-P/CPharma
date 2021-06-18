@@ -3,6 +3,7 @@
 namespace compras\Http\Controllers;
 
 use compras\Auditoria;
+use compras\Configuracion;
 use compras\ContBanco;
 use compras\ContPagoBancario;
 use compras\ContProveedor;
@@ -62,6 +63,39 @@ class ContPagoBancarioController extends Controller
         $pago->operador     = auth()->user()->name;
         $pago->estatus      = 'Procesado';
         $pago->save();
+
+        $banco = ContBanco::find($pago->id_banco);
+
+        $proveedor = ContProveedor::find($pago->id_proveedor);
+
+        if ($banco->moneda != $proveedor->moneda) {
+            if ($banco->moneda == 'Dólares' && $proveedor->moneda == 'Bolívares') {
+                $monto = $pago->monto * $request->input('tasa');
+            }
+
+            if ($banco->moneda == 'Dólares' && $proveedor->moneda == 'Pesos') {
+                $monto = $pago->monto * $request->input('tasa');
+            }
+
+            if ($banco->moneda == 'Bolívares' && $proveedor->moneda == 'Dólares') {
+                $monto = $pago->monto / $request->input('tasa');
+            }
+
+            if ($banco->moneda == 'Bolívares' && $proveedor->moneda == 'Pesos') {
+                $monto = $pago->monto * $request->input('tasa');
+            }
+
+            if ($banco->moneda == 'Pesos' && $proveedor->moneda == 'Bolívares') {
+                $monto = $pago->monto / $request->input('tasa');
+            }
+
+            if ($banco->moneda == 'Pesos' && $proveedor->moneda == 'Dólares') {
+                $monto = $pago->monto / $request->input('tasa');
+            }
+        }
+
+        $proveedor->saldo = (float) $proveedor->saldo - (float) $monto;
+        $proveedor->save();
 
         $auditoria           = new Auditoria();
         $auditoria->accion   = 'CREAR';
@@ -173,5 +207,43 @@ class ContPagoBancarioController extends Controller
     {
         $pago = ContPagoBancario::find($id);
         return view('pages.contabilidad.bancarios.soporte', compact('pago'));
+    }
+
+    public function validar(Request $request)
+    {
+        $banco     = ContBanco::find($request->id_banco);
+        $proveedor = ContProveedor::find($request->id_proveedor);
+        $resultado = [];
+
+        if ($banco->moneda != $proveedor->moneda) {
+            if ($banco->moneda == 'Dólares' && $proveedor->moneda == 'Bolívares') {
+                $configuracion = Configuracion::where('variable', 'DolaresBolivares')->first();
+            }
+
+            if ($banco->moneda == 'Dólares' && $proveedor->moneda == 'Pesos') {
+                $configuracion = Configuracion::where('variable', 'DolaresPesos')->first();
+            }
+
+            if ($banco->moneda == 'Bolívares' && $proveedor->moneda == 'Dólares') {
+                $configuracion = Configuracion::where('variable', 'BolivaresDolares')->first();
+            }
+
+            if ($banco->moneda == 'Bolívares' && $proveedor->moneda == 'Pesos') {
+                $configuracion = Configuracion::where('variable', 'BolivaresPesos')->first();
+            }
+
+            if ($banco->moneda == 'Pesos' && $proveedor->moneda == 'Bolívares') {
+                $configuracion = Configuracion::where('variable', 'PesosBolivares')->first();
+            }
+
+            if ($banco->moneda == 'Pesos' && $proveedor->moneda == 'Dólares') {
+                $configuracion = Configuracion::where('variable', 'PesosDolares')->first();
+            }
+
+            $resultado['min'] = $configuracion->valor - ($configuracion->valor * 0.20);
+            $resultado['max'] = $configuracion->valor + ($configuracion->valor * 0.20);
+
+            return $resultado;
+        }
     }
 }

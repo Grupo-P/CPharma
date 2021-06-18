@@ -9,7 +9,7 @@ use compras\ContProveedor;
 use compras\ContCuenta;
 use compras\Configuracion;
 use compras\Auditoria;
-use compras\User;
+use compras\Sede;
 
 class ContPagoEfectivoController extends Controller {
     /**
@@ -23,9 +23,7 @@ class ContPagoEfectivoController extends Controller {
             ->orderBy('created_at', 'desc')
             ->get();
 
-        $sedes = User::select('sede')
-            ->groupBy('sede')
-            ->get();
+        $sedes = Sede::get();
 
         return view('pages.contabilidad.efectivo.index', compact('pagos', 'sedes', 'request'));
     }
@@ -107,7 +105,14 @@ class ContPagoEfectivoController extends Controller {
                 $pago->id_proveedor = $request->input('id_proveedor');
 
                 $proveedor = ContProveedor::find($request->input('id_proveedor'));
-                $proveedor->saldo = (float) $proveedor->saldo - (float) $request->input('monto');
+
+                if ($proveedor->moneda != 'Dólares') {
+                    $monto = $request->input('monto') * $request->input('tasa');
+                } else {
+                    $monto = $request->input('monto');
+                }
+
+                $proveedor->saldo = (float) $proveedor->saldo - (float) $monto;
                 $proveedor->save();
             }
 
@@ -236,5 +241,26 @@ class ContPagoEfectivoController extends Controller {
      */
     public function destroy($id) {
         //
+    }
+
+    public function validar(Request $request)
+    {
+        $proveedor = ContProveedor::find($request->id_proveedor);
+        $resultado = [];
+
+        if ($proveedor->moneda != 'Dólares') {
+            if ($proveedor->moneda == 'Bolívares') {
+                $configuracion = Configuracion::where('variable', 'DolaresBolivares')->first();
+            }
+
+            if ($proveedor->moneda == 'Pesos') {
+                $configuracion = Configuracion::where('variable', 'DolaresPesos')->first();
+            }
+
+            $resultado['min'] = $configuracion->valor - ($configuracion->valor * 0.20);
+            $resultado['max'] = $configuracion->valor + ($configuracion->valor * 0.20);
+
+            return $resultado;
+        }
     }
 }

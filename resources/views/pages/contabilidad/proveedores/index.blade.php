@@ -150,7 +150,7 @@
               <td>{{$proveedor->tasa}}</td>
               <td>{{$proveedor->plan_cuentas}}</td>
               <td>{{$proveedor->moneda}}</td>
-              <td>{{$proveedor->saldo}}</td>
+              <td>{{number_format($proveedor->saldo, 2, ',', '.')}}</td>
               <td>{{$proveedor->usuario_creado}}</td>
               <td>{{($proveedor->deleted_at)?'Inactivo':'Activo'}}</td>
               <td style="width:140px;">

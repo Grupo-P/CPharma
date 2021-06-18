@@ -86,6 +86,10 @@ class ContDeudasController extends Controller
         $deuda->sede                    = $request->input('sede');
         $deuda->save();
 
+        $proveedor        = ContProveedor::find($request->input('id_proveedor'));
+        $proveedor->saldo = (float) $proveedor->saldo + (float) $deuda->monto;
+        $proveedor->save();
+
         $auditoria           = new Auditoria();
         $auditoria->accion   = 'CREAR';
         $auditoria->tabla    = 'DEUDA';
@@ -147,13 +151,21 @@ class ContDeudasController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $deuda                          = ContDeuda::find($id);
+        $deuda = ContDeuda::find($id);
+
+        $proveedor        = ContProveedor::find($request->input('id_proveedor'));
+        $proveedor->saldo = (float) $proveedor->saldo - (float) $deuda->monto;
+        $proveedor->save();
+
         $deuda->id_proveedor            = $request->input('id_proveedor');
         $deuda->monto                   = $request->input('monto');
         $deuda->documento_soporte_deuda = $request->input('documento_soporte_deuda');
         $deuda->numero_documento        = $request->input('numero_documento');
         $deuda->sede                    = $request->input('sede');
         $deuda->save();
+
+        $proveedor->saldo = (float) $proveedor->saldo + (float) $deuda->monto;
+        $proveedor->save();
 
         $auditoria           = new Auditoria();
         $auditoria->accion   = 'EDITAR';

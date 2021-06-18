@@ -67,9 +67,9 @@
                     </tr>
 
                     <tr>
-                        <th scope="row"><label for="moneda">Moneda</label></th>
+                        <th scope="row"><label for="moneda">Moneda *</label></th>
                         <td>
-                            <select name="moneda" class="form-control">
+                            <select name="moneda" required class="form-control">
                                 <option value=""></option>
                                 @foreach($monedas as $moneda)
                                     <option {{ ($moneda == $banco->moneda) ? 'selected' : '' }} value="{{ $moneda }}">{{ $moneda }}</option>

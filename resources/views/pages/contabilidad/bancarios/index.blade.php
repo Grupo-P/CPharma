@@ -144,12 +144,6 @@
                     <i class="fa fa-bell"></i>
                 </a>
 
-                @if(Auth::user()->departamento == 'TECNOLOGIA' || Auth::user()->departamento == 'GERENCIA' || Auth::user()->departamento == 'ADMINISTRACION')
-                    <a href="/bancarios/{{$deuda->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
-                        <i class="fas fa-edit"></i>
-                    </a>
-                @endif
-
                 @if(Auth::user()->departamento == 'TECNOLOGIA' || Auth::user()->departamento == 'GERENCIA')
                     @if($deuda->estatus != 'Reversado')
                         <form action="/bancarios/{{$deuda->id}}" method="POST" style="display: inline;">

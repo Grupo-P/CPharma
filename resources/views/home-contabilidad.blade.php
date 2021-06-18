@@ -13,6 +13,25 @@
 
 <hr class="row align-items-start col-12">
 
+<div class="card-deck">
+    @if (Auth::user()->departamento == 'TECNOLOGIA' || Auth::user()->departamento == 'TECNOLOGIA' || Auth::user()->departamento == 'GERENCIA')
+        <div class="card border-danger mb-3" style="width: 14rem;">
+            <div class="card-body text-left bg-danger">
+                <h2 class="card-title">
+                    <span class="card-text text-white">
+                        <i class="fas fa-industry"></i>
+                        100
+                    </span>
+                </h2>
+                <p class="card-text text-white">Empresas registradas</p>
+            </div>
+            <div class="card-footer bg-transparent border-danger text-right">
+                <a href="/empresa/" class="btn btn-outline-danger btn-sm">Visualizar</a>
+            </div>
+        </div>
+    @endif
+</div>
+
 <!-- CONTACTO -->
 <hr class="row align-items-start col-12">
     <div class="card-deck">
