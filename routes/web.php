@@ -442,7 +442,6 @@ Route::resource('efectivo', 'ContPagoEfectivoController');
 Route::get('/efectivo/soporte/{id}', 'ContPagoEfectivoController@soporte');
 
 Route::get('/reportes', 'ContReporteController@index');
-Route::get('/reportes/pagos-emitidos', 'ContReporteController@pagos_emitidos');
 Route::get('/reportes/movimientos-por-proveedor', 'ContReporteController@movimientos_por_proveedor');
 Route::get('/reportes/movimientos-bancarios', 'ContReporteController@movimientos_bancarios');
 Route::get('/reportes/deudas-por-fecha', 'ContReporteController@deudas_por_fecha');

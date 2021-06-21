@@ -10,7 +10,7 @@
     <h1 class="h5 text-info">
         <i class="fas fa-file-invoice">
         </i>
-        Pagos por fecha
+        Pagos emitidos
     </h1>
 
     <hr class="row align-items-start col-12">
@@ -26,7 +26,7 @@
             <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterAllTable()" autofocus="autofocus">
         </div>
 
-        <h6 align="center">Periodo desde el {{ $fechaInicio }} al {{ $fechaFin }} para el proveedor {{ $proveedor->nombre_proveedor }}</h6>
+        <h6 align="center">Periodo desde el {{ $fechaInicio }} al {{ $fechaFin }}</h6>
 
         <table class="table table-striped table-bordered col-12 sortable" id="myTable">
             <thead class="thead-dark">
@@ -59,7 +59,7 @@
 
     @else
         <form action="">
-            <div class="row mb-5 mt-5">
+            <div class="row mb-5">
                 <div class="col"></div>
 
                 <div class="col">

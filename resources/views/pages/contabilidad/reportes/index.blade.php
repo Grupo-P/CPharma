@@ -18,12 +18,12 @@
             <div class="card-body text-left bg-danger">
                 <h5 class="card-title">
                     <span class="card-text text-white">
-                        Pagos emitidos
+                        Pagos por fecha
                     </span>
                 </h5>
             </div>
             <div class="card-footer bg-transparent border-danger text-right">
-                <a class="btn btn-outline-danger btn-sm" href="/reportes/pagos-emitidos">Visualizar</a>
+                <a class="btn btn-outline-danger btn-sm" href="/reportes/pagos-por-fecha">Visualizar</a>
             </div>
         </div>
 
@@ -59,25 +59,12 @@
             <div class="card-body text-left bg-warning">
                 <h5 class="card-title">
                     <span class="card-text text-white">
-                        Pagos por fecha
-                    </span>
-                </h5>
-            </div>
-            <div class="card-footer bg-transparent border-warning text-right">
-                <a class="btn btn-outline-warning btn-sm" href="/reportes/pagos-por-fecha">Visualizar</a>
-            </div>
-        </div>
-
-        <div class="card border-primary mb-3" style="width: 14rem;">
-            <div class="card-body text-left bg-primary">
-                <h5 class="card-title">
-                    <span class="card-text text-white">
                         Movimientos bancarios
                     </span>
                 </h5>
             </div>
-            <div class="card-footer bg-transparent border-primary text-right">
-                <a class="btn btn-outline-primary btn-sm" href="/reportes/movimientos-por-proveedor">Visualizar</a>
+            <div class="card-footer bg-transparent border-warning text-right">
+                <a class="btn btn-outline-warning btn-sm" href="/reportes/movimientos-por-proveedor">Visualizar</a>
             </div>
         </div>
     </div>

@@ -19,7 +19,7 @@ class ContReporteController extends Controller
         return view('pages.contabilidad.reportes.index');
     }
 
-    public function pagos_emitidos(Request $request)
+    public function pagos_por_fecha(Request $request)
     {
         if ($request->get('fechaInicio')) {
             $fechaInicio = new Datetime($request->get('fechaInicio'));
@@ -49,7 +49,7 @@ class ContReporteController extends Controller
             $pagos = collect($pagos)->sortBy('created_at');
         }
 
-        return view('pages.contabilidad.reportes.pagos-emitidos', compact('fechaInicio', 'fechaFin', 'request', 'pagos'));
+        return view('pages.contabilidad.reportes.pagos-por-fecha', compact('fechaInicio', 'fechaFin', 'request', 'pagos'));
     }
 
     public function movimientos_por_proveedor(Request $request)
@@ -140,13 +140,5 @@ class ContReporteController extends Controller
         }
 
         return view('pages.contabilidad.reportes.deudas-por-fecha', compact('request', 'fechaInicio', 'fechaFin', 'items'));
-    }
-
-    public function pagos_por_fecha(Request $request)
-    {
-        if ($request->get('fechaInicio')) {
-        }
-
-        return view('pages.contabilidad.reportes.pagos-por-fecha', compact('request'));
     }
 }
