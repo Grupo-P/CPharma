@@ -10,7 +10,7 @@
     <h1 class="h5 text-info">
         <i class="fas fa-file-invoice">
         </i>
-        Pagos emitidos
+        Pagos por fecha
     </h1>
 
     <hr class="row align-items-start col-12">
@@ -36,6 +36,8 @@
                     <th scope="col" class="CP-sticky">Tipo</th>
                     <th scope="col" class="CP-sticky">Emisor</th>
                     <th scope="col" class="CP-sticky">Monto</th>
+                    <th scope="col" class="CP-sticky">Comentario</th>
+                    <th scope="col" class="CP-sticky">Plan de cuentas</th>
                     <th scope="col" class="CP-sticky">Conciliado</th>
                     <th scope="col" class="CP-sticky">Operador</th>
                 </tr>
@@ -49,6 +51,8 @@
                         <td class="text-center">{{ (get_class($pago) == 'compras\ContPagoBancario') ? 'Banco' : 'Efectivo' }}</td>
                         <td class="text-center">{{ (get_class($pago) == 'compras\ContPagoBancario') ? $pago->banco->alias_cuenta : $pago->sede }}</td>
                         <td class="text-center">{{ $pago->monto ? number_format($pago->monto, 2, ',', '.') : number_format($pago->egresos, 2, ',', '.') }}</td>
+                        <td class="text-center">{{ $pago->comentario }}</td>
+                        <td class="text-center">{{ $pago->cuentas ? $pago->cuenta->nombre : '' }}</td>
                         <td class="text-center">{{ $pago->conciliado ? 'Si' : 'No' }}</td>
                         <td class="text-center">{{ ($pago->user) ? $pago->user : $pago->operador }}</td>
                     </tr>
