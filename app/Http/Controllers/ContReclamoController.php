@@ -65,8 +65,11 @@ class ContReclamoController extends Controller
         $reclamo->comentario                = $request->input('comentario');
         $reclamo->sede                      = $request->input('sede');
         $reclamo->usuario_registro          = auth()->user()->name;
-
         $reclamo->save();
+
+        $proveedor        = ContProveedor::find($request->input('id_proveedor'));
+        $proveedor->saldo = (float) $proveedor->saldo + (float) $reclamo->monto;
+        $proveedor->save();
 
         $auditoria           = new Auditoria();
         $auditoria->accion   = 'CREAR';
@@ -129,7 +132,12 @@ class ContReclamoController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $reclamo                            = ContReclamo::find($id);
+        $reclamo = ContReclamo::find($id);
+
+        $proveedor        = ContProveedor::find($request->input('id_proveedor'));
+        $proveedor->saldo = (float) $proveedor->saldo - (float) $reclamo->monto;
+        $proveedor->save();
+
         $reclamo->id_proveedor              = $request->input('id_proveedor');
         $reclamo->monto                     = $request->input('monto');
         $reclamo->documento_soporte_reclamo = $request->input('documento_soporte_reclamo');
@@ -137,6 +145,9 @@ class ContReclamoController extends Controller
         $reclamo->comentario                = $request->input('comentario');
         $reclamo->sede                      = $request->input('sede');
         $reclamo->save();
+
+        $proveedor->saldo = (float) $proveedor->saldo + (float) $reclamo->monto;
+        $proveedor->save();
 
         $auditoria           = new Auditoria();
         $auditoria->accion   = 'EDITAR';

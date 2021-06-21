@@ -441,11 +441,11 @@ Route::resource('efectivo', 'ContPagoEfectivoController');
 
 Route::get('/efectivo/soporte/{id}', 'ContPagoEfectivoController@soporte');
 
-Route::get('/reportes', 'ContReportes@index');
-Route::get('/reportes/pagos-emitidos', 'ContReportes@pagos_emitidos');
-Route::get('/reportes/movimientos-por-proveedor', 'ContReportes@movimientos_por_proveedor');
-Route::get('/reportes/movimientos-bancarios', 'ContReportes@movimientos_bancarios');
-Route::get('/reportes/deudas-por-fecha', 'ContReportes@deudas_por_fecha');
-Route::get('/reportes/pagos-por-fecha', 'ContReportes@pagos_por_fecha');
+Route::get('/reportes', 'ContReporteController@index');
+Route::get('/reportes/pagos-emitidos', 'ContReporteController@pagos_emitidos');
+Route::get('/reportes/movimientos-por-proveedor', 'ContReporteController@movimientos_por_proveedor');
+Route::get('/reportes/movimientos-bancarios', 'ContReporteController@movimientos_bancarios');
+Route::get('/reportes/deudas-por-fecha', 'ContReporteController@deudas_por_fecha');
+Route::get('/reportes/pagos-por-fecha', 'ContReporteController@pagos_por_fecha');
 
 Route::resource('/conciliaciones', 'ContConciliacionesController');
