@@ -35,7 +35,9 @@
                     <th scope="col" class="CP-sticky">Fecha y hora</th>
                     <th scope="col" class="CP-sticky">Tipo</th>
                     <th scope="col" class="CP-sticky">Emisor</th>
+                    <th scope="col" class="CP-sticky">Proveedor</th>
                     <th scope="col" class="CP-sticky">Monto</th>
+                    <th scope="col" class="CP-sticky">Monto al proveedor</th>
                     <th scope="col" class="CP-sticky">Comentario</th>
                     <th scope="col" class="CP-sticky">Plan de cuentas</th>
                     <th scope="col" class="CP-sticky">Conciliado</th>
@@ -44,20 +46,106 @@
             </thead>
 
             <tbody>
+                @php
+                    $dolares = 0;
+                    $bolivares = 0;
+                    $total = 0;
+                @endphp
+
                 @foreach($pagos as $pago)
                     <tr>
                         <td class="text-center">{{ $loop->iteration }}</td>
                         <td class="text-center">{{ date_format($pago->created_at, 'd/m/Y h:i A') }}</td>
                         <td class="text-center">{{ (get_class($pago) == 'compras\ContPagoBancario') ? 'Banco' : 'Efectivo' }}</td>
                         <td class="text-center">{{ (get_class($pago) == 'compras\ContPagoBancario') ? $pago->banco->alias_cuenta : $pago->sede }}</td>
+                        <td class="text-center">{{ $pago->proveedor->nombre_proveedor }}</td>
                         <td class="text-center">{{ $pago->monto ? number_format($pago->monto, 2, ',', '.') : number_format($pago->egresos, 2, ',', '.') }}</td>
+
+                        @php
+                            $monto_proveedor = 0;
+                            if (get_class($pago) == 'compras\ContPagoBancario') {
+                                if ($pago->banco->moneda != $pago->proveedor->moneda) {
+                                    if ($pago->banco->moneda == 'Dólares' && $pago->proveedor->moneda == 'Bolívares') {
+                                        $monto_proveedor = $pago->monto * $pago->tasa;
+                                    }
+
+                                    if ($pago->banco->moneda == 'Dólares' && $pago->proveedor->moneda == 'Pesos') {
+                                        $monto_proveedor = $pago->monto * $pago->tasa;
+                                    }
+
+                                    if ($pago->banco->moneda == 'Bolívares' && $pago->proveedor->moneda == 'Dólares') {
+                                        $monto_proveedor = $pago->monto / $pago->tasa;
+                                    }
+
+                                    if ($pago->banco->moneda == 'Bolívares' && $pago->proveedor->moneda == 'Pesos') {
+                                        $monto_proveedor = $pago->monto * $pago->tasa;
+                                    }
+
+                                    if ($pago->banco->moneda == 'Pesos' && $pago->proveedor->moneda == 'Bolívares') {
+                                        $monto_proveedor = $pago->monto / $pago->tasa;
+                                    }
+
+                                    if ($pago->banco->moneda == 'Pesos' && $pago->proveedor->moneda == 'Dólares') {
+                                        $monto_proveedor = $pago->monto / $pago->tasa;
+                                    }
+                                } else {
+                                    $monto_proveedor = $pago->monto;
+                                }
+                            } else {
+                                $monto_proveedor = $pago->egresos;
+                            }
+                        @endphp
+
+                        <td class="text-center">{{ number_format($monto_proveedor, 2, ',', '.') }}</td>
                         <td class="text-center">{{ $pago->comentario }}</td>
                         <td class="text-center">{{ $pago->cuentas ? $pago->cuenta->nombre : '' }}</td>
                         <td class="text-center">{{ $pago->conciliado ? 'Si' : 'No' }}</td>
                         <td class="text-center">{{ ($pago->user) ? $pago->user : $pago->operador }}</td>
                     </tr>
+
+                    @php
+                        if (get_class($pago) == 'compras\ContPagoBancario') {
+                            if ($pago->banco->moneda == 'Dólares') {
+                                $dolares = $dolares + $pago->monto;
+                            }
+
+                            if ($pago->banco->moneda == 'Bolívares') {
+                                $bolivares = $bolivares + $pago->monto;
+                            }
+                        } else {
+                            $dolares = $dolares + $pago->egresos;
+                        }
+                    @endphp
                 @endforeach
             </tbody>
+
+            <tfoot>
+                <tr>
+                    <th style="border: white 1px solid;"></th>
+                    <th style="border: white 1px solid;"></th>
+                    <th style="border: white 1px solid;"></th>
+                    <th style="border-left: white 1px solid;border-bottom: white 1px solid;"></th>
+                    <th class="text-center">Total en bolívares</th>
+                    <th class="text-center">{{ number_format($bolivares, 2, ',', '.') }}</th>
+                    <th style="border: white 1px solid;"></th>
+                    <th style="border: white 1px solid;"></th>
+                    <th style="border: white 1px solid;"></th>
+                    <th style="border: white 1px solid;"></th>
+                </tr>
+
+                <tr>
+                    <th style="border: white 1px solid;"></th>
+                    <th style="border: white 1px solid;"></th>
+                    <th style="border: white 1px solid;"></th>
+                    <th style="border-left: white 1px solid;border-bottom: white 1px solid;"></th>
+                    <th class="text-center">Total en dólares</th>
+                    <th class="text-center">{{ number_format($dolares, 2, ',', '.') }}</th>
+                    <th style="border: white 1px solid;"></th>
+                    <th style="border: white 1px solid;"></th>
+                    <th style="border: white 1px solid;"></th>
+                    <th style="border: white 1px solid;"></th>
+                </tr>
+            </tfoot>
         </table>
 
 

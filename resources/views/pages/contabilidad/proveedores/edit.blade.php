@@ -123,7 +123,7 @@
 
                     <tr>
                         <th scope="row"><label for="saldo">Saldo</label></th>
-                        <td><input name="saldo" value="0" class="form-control" type="number" required value="{{ $proveedor->saldo }}"></td>
+                        <td><input name="saldo" value="{{ number_format($proveedor->saldo, 2, '.', '') }}" class="form-control" type="number" step="0.01" required></td>
                     </tr>
                 </tbody>
             </table>

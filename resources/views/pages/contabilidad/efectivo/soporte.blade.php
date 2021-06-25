@@ -69,12 +69,12 @@
     <table>
         <thead>
             <tr>
-                    <th scope="row" colspan="4">
-                        <span class="navbar-brand text-info CP-title-NavBar">
-                            <b><i class="fas fa-syringe text-success"></i>CPharma</b>
-                        </span>
-                    </th>
-                    <th scope="row" colspan="4" class="aumento">Soporte de pago</th>
+                <th scope="row" colspan="4">
+                    <span class="navbar-brand text-info CP-title-NavBar">
+                        <b><i class="fas fa-syringe text-success"></i>CPharma</b>
+                    </span>
+                </th>
+                <th scope="row" colspan="4" class="aumento">Soporte de pago</th>
             </tr>
     </thead>
         <tbody>
@@ -92,12 +92,39 @@
             </tr>
             <tr>
             <td colspan="4" class="alinear-der">Monto:</td>
-            <td colspan="4" class="alinear-izq">{{ number_format($pago->monto, 2, ',', '.') }}</td>
+            <td colspan="4" class="alinear-izq">{{ ($pago->monto) ? number_format($pago->monto, 2, ',', '.') : number_format($pago->egresos, 2, ',', '.') }}</td>
+            </tr>
+            <td colspan="4" class="alinear-der">Monto al proveedor:</td>
+            <td colspan="4" class="alinear-izq">
+                @php
+                  if ($pago->proveedor) {
+                    if ($pago->proveedor->moneda != 'Dólares') {
+                        if ($pago->proveedor->moneda == 'Bolívares') {
+                            $monto_proveedor = $pago->egresos * $pago->tasa;
+                        }
+
+                        if ($pago->proveedor->moneda == 'Pesos') {
+                            $monto_proveedor = $pago->egresos * $pago->tasa;
+                        }
+                    } else {
+                        $monto_proveedor = $pago->monto;
+                    }
+                  }
+                @endphp
+
+                {{(isset($monto_proveedor)) ? number_format($monto_proveedor,2,',','.') : ''}}
+            </td>
             </tr>
             <tr>
             <td colspan="4" class="alinear-der">Alias bancario:</td>
             <td colspan="4" class="alinear-izq">Pago en efectivo por tesoreria - {{ $pago->sede }}</td>
             </tr>
+            @if($pago->tasa)
+                <tr>
+                <td colspan="4" class="alinear-der">Tasa:</td>
+                <td colspan="4" class="alinear-izq">{{ number_format($pago->tasa,2,',','.') }}</td>
+                </tr>
+            @endif
             <tr>
             <td colspan="4" class="alinear-der">Operador:</td>
             <td colspan="4" class="alinear-izq">{{ $pago->user }}</td>

@@ -17,7 +17,7 @@ class ContProveedorController extends Controller
      */
     public function index()
     {
-        $proveedores = ContProveedor::get();
+        $proveedores = ContProveedor::orderByDesc('id')->get();
         return view('pages.contabilidad.proveedores.index', compact('proveedores'));
     }
 

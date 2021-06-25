@@ -111,7 +111,9 @@
                 <th scope="col" class="CP-sticky">Nombre del proveedor</th>
                 <th scope="col" class="CP-sticky">RIF/CI del proveedor</th>
                 <th scope="col" class="CP-sticky">Fecha de registro</th>
-                <th scope="col" class="CP-sticky">Monto</th>
+                <th scope="col" class="CP-sticky">Monto del banco</th>
+                <th scope="col" class="CP-sticky">Monto del proveedor</th>
+                <th scope="col" class="CP-sticky">Tasa</th>
                 <th scope="col" class="CP-sticky">Estado</th>
                 <th scope="col" class="CP-sticky">Comentario</th>
                 <th scope="col" class="CP-sticky">Alias bancario</th>
@@ -127,6 +129,39 @@
               <td>{{$deuda->proveedor->rif_ci}}</td>
               <td>{{$deuda->created_at}}</td>
               <td>{{number_format($deuda->monto, 2, ',', '.')}}</td>
+
+              @php
+                if ($deuda->banco->moneda != $deuda->proveedor->moneda) {
+                    if ($deuda->banco->moneda == 'Dólares' && $deuda->proveedor->moneda == 'Bolívares') {
+                        $monto_proveedor = $deuda->monto * $deuda->tasa;
+                    }
+
+                    if ($deuda->banco->moneda == 'Dólares' && $deuda->proveedor->moneda == 'Pesos') {
+                        $monto_proveedor = $deuda->monto * $deuda->tasa;
+                    }
+
+                    if ($deuda->banco->moneda == 'Bolívares' && $deuda->proveedor->moneda == 'Dólares') {
+                        $monto_proveedor = $deuda->monto / $deuda->tasa;
+                    }
+
+                    if ($deuda->banco->moneda == 'Bolívares' && $deuda->proveedor->moneda == 'Pesos') {
+                        $monto_proveedor = $deuda->monto * $deuda->tasa;
+                    }
+
+                    if ($deuda->banco->moneda == 'Pesos' && $deuda->proveedor->moneda == 'Bolívares') {
+                        $monto_proveedor = $deuda->monto / $deuda->tasa;
+                    }
+
+                    if ($deuda->banco->moneda == 'Pesos' && $deuda->proveedor->moneda == 'Dólares') {
+                        $monto_proveedor = $deuda->monto / $deuda->tasa;
+                    }
+                } else {
+                    $monto_proveedor = $deuda->monto;
+                }
+              @endphp
+
+              <td>{{number_format($monto_proveedor, 2, ',', '.')}}</td>
+              <td>{{($deuda->tasa) ? number_format($deuda->tasa, 2, ',', '.') : ''}}</td>
               <td>{{$deuda->estatus}}</td>
               <td>{{$deuda->comentario}}</td>
               <td>{{isset($deuda->banco->alias_cuenta) ? $deuda->banco->alias_cuenta : ''}}</td>

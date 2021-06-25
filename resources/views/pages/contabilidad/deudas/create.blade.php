@@ -65,7 +65,7 @@
                     <tr>
                         <th scope="row"><label for="monto">Monto *</label></th>
                         <td>
-                            <input type="number" required class="form-control" name="monto" min="1" step="0.1">
+                            <input type="number" required class="form-control" name="monto" min="0.01" step="0.01">
                         </td>
                     </tr>
 

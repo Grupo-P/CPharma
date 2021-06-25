@@ -89,7 +89,7 @@
           <tr>
             <th scope="row">{!! Form::label('monto', 'Monto *', ['title' => 'Este campo es requerido']) !!}</th>
             <td>
-              <input type="number" name="monto" min="1" step="0.01" class="form-control" placeholder="2500.55" required autofocus>
+              <input type="number" name="monto" min="1" step="0.01" class="form-control" placeholder="2500,55" required autofocus>
             </td>
           </tr>
 
@@ -113,6 +113,20 @@
                 <td>
                     <input autofocus class="form-control" type="text" id="proveedores">
                     <input type="hidden" name="id_proveedor">
+                </td>
+            </tr>
+
+            <tr>
+                <th scope="row"><label for="moneda">Moneda</label></th>
+                <td>
+                    <input readonly class="form-control" type="text" name="moneda">
+                </td>
+            </tr>
+
+            <tr>
+                <th scope="row"><label for="saldo">Saldo</label></th>
+                <td>
+                    <input readonly class="form-control" type="text" name="saldo">
                 </td>
             </tr>
 
@@ -155,6 +169,7 @@
                     select: function (event, ui) {
                         $('[name=id_proveedor]').val(ui.item.id);
                         $('[name=moneda]').val(ui.item.moneda);
+                        $('[name=saldo]').val(ui.item.saldo);
                     }
                 });
 
@@ -168,31 +183,39 @@
                     }
 
                     if (bancario) {
-                        event.preventDefault();
+                        moneda_banco = $('[name=moneda]').val();
+                        moneda_proveedor = $('option:selected').attr('data-banco-moneda');
 
-                        $.ajax({
-                            type: 'POST',
-                            url: '/efectivo/validar',
-                            data: {
-                                id_proveedor: $('[name=id_proveedor]').val(),
-                                _token: '{{ csrf_token() }}'
-                            },
-                            success: function (respuesta) {
-                                if (respuesta) {
+                        if (moneda_proveedor != moneda_banco) {
+                            respuesta = true;
+                        } else {
+                            respuesta = false;
+                        }
+
+                        if (respuesta) {
+                            event.preventDefault();
+
+                            id_proveedor = $('[name=id_proveedor]').val();
+
+                            $.ajax({
+                                type: 'POST',
+                                url: '/efectivo/validar',
+                                data: {
+                                    id_proveedor: id_proveedor,
+                                    _token: '{{ csrf_token() }}'
+                                },
+                                success: function (respuesta) {
                                     $('.append').append(`
                                         <th scope="row"><label for="tasa">Tasa *</label></th>
                                         <td>
-                                            <input class="form-control" step="0.1" min="${respuesta.min}" max="${respuesta.max}" type="number" name="tasa" required>
+                                            <input class="form-control" step="0.01" min="${respuesta.min}" max="${respuesta.max}" type="number" name="tasa" required>
                                         </td>
                                     `);
 
                                     $('[name=tasa]').focus();
                                 }
-                            },
-                            error: function (error) {
-                                $('body').html(error.responseText);
-                            }
-                        });
+                            });
+                        }
 
                         bancario = false;
                     }

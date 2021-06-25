@@ -66,7 +66,7 @@
                     <tr>
                         <th scope="row"><label for="monto">Monto *</label></th>
                         <td>
-                            <input type="number" value="{{ $reclamo->monto }}" step="0.1" required class="form-control" name="monto" min="1">
+                            <input type="number" value="{{ $reclamo->monto }}" step="0.01" required class="form-control" name="monto">
                         </td>
                     </tr>
 

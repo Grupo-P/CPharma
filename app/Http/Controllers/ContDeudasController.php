@@ -186,6 +186,11 @@ class ContDeudasController extends Controller
     public function destroy($id)
     {
         $deuda = ContDeuda::find($id);
+
+        $proveedor        = ContProveedor::find($deuda->id_proveedor);
+        $proveedor->saldo = (float) $proveedor->saldo - (float) $deuda->monto;
+        $proveedor->save();
+
         $deuda->delete();
 
         $auditoria           = new Auditoria();

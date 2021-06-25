@@ -38,6 +38,7 @@ class ContPagoBancarioController extends Controller
             $proveedores[$i]['value']  = $proveedor->nombre_proveedor . ' | ' . $proveedor->rif_ci;
             $proveedores[$i]['id']     = $proveedor->id;
             $proveedores[$i]['moneda'] = $proveedor->moneda;
+            $proveedores[$i]['saldo']  = number_format($proveedor->saldo, 2, ',', '');
 
             $i = $i + 1;
         }
@@ -60,6 +61,8 @@ class ContPagoBancarioController extends Controller
         $pago->id_banco     = $request->input('id_banco');
         $pago->monto        = $request->input('monto');
         $pago->comentario   = $request->input('comentario');
+        $pago->tasa         = $request->input('tasa');
+
         $pago->operador     = auth()->user()->name;
         $pago->estatus      = 'Procesado';
         $pago->save();
@@ -92,6 +95,8 @@ class ContPagoBancarioController extends Controller
             if ($banco->moneda == 'Pesos' && $proveedor->moneda == 'Dólares') {
                 $monto = $pago->monto / $request->input('tasa');
             }
+        } else {
+            $monto = $pago->monto;
         }
 
         $proveedor->saldo = (float) $proveedor->saldo - (float) $monto;

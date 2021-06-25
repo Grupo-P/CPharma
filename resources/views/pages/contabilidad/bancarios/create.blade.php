@@ -58,8 +58,18 @@
                     </tr>
 
                     <tr>
+                        <th scope="row"><label for="moneda">Moneda</label></th>
+                        <th scope="row"><input readonly type="text" name="moneda" class="form-control"></th>
+                    </tr>
+
+                    <tr>
+                        <th scope="row"><label for="saldo">Saldo</label></th>
+                        <th scope="row"><input readonly type="text" name="saldo" class="form-control"></th>
+                    </tr>
+
+                    <tr>
                         <th scope="row"><label for="monto">Monto *</label></th>
-                        <td><input type="number" required class="form-control" name="monto" step="0.1" min="1"></td>
+                        <td><input type="number" required class="form-control" name="monto" step="0.01" min="1"></td>
                     </tr>
 
                     <tr>
@@ -68,7 +78,7 @@
                             <select name="id_banco" class="form-control" required>
                                 <option value=""></option>
                                 @foreach($bancos as $banco)
-                                    <option value="{{ $banco->id }}">{{ $banco->alias_cuenta }}</option>
+                                    <option data-banco-moneda="{{ $banco->moneda }}" value="{{ $banco->id }}">{{ $banco->alias_cuenta }}</option>
                                 @endforeach
                             </select>
                         </td>
@@ -116,6 +126,7 @@
                 select: function (event, ui) {
                     $('[name=id_proveedor]').val(ui.item.id);
                     $('[name=moneda]').val(ui.item.moneda);
+                    $('[name=saldo]').val(ui.item.saldo);
                 }
             });
 
@@ -129,33 +140,39 @@
                 }
 
                 if (bancario) {
-                    event.preventDefault();
+                    moneda_banco = $('[name=moneda]').val();
+                    moneda_proveedor = $('option:selected').attr('data-banco-moneda');
 
-                    $.ajax({
-                        type: 'POST',
-                        url: '/bancarios/validar',
-                        data: {
+                    if (moneda_proveedor != moneda_banco) {
+                        respuesta = true;
+                    } else {
+                        respuesta = false;
+                    }
 
-                            id_proveedor: $('[name=id_proveedor]').val(),
-                            id_banco: $('[name=id_banco]').val(),
-                            _token: '{{ csrf_token() }}'
-                        },
-                        success: function (respuesta) {
-                            if (respuesta) {
+                    if (respuesta) {
+                        event.preventDefault();
+
+                        id_proveedor = $('[name=id_proveedor]').val();
+
+                        $.ajax({
+                            type: 'POST',
+                            url: '/efectivo/validar',
+                            data: {
+                                id_proveedor: id_proveedor,
+                                _token: '{{ csrf_token() }}'
+                            },
+                            success: function (respuesta) {
                                 $('.append').append(`
                                     <th scope="row"><label for="tasa">Tasa *</label></th>
                                     <td>
-                                        <input class="form-control" step="0.1" min="${respuesta.min}" max="${respuesta.max}" type="number" name="tasa" required>
+                                        <input class="form-control" step="0.01" min="${respuesta.min}" max="${respuesta.max}" type="number" name="tasa" required>
                                     </td>
                                 `);
 
                                 $('[name=tasa]').focus();
                             }
-                        },
-                        error: function (error) {
-                            $('body').html(error.responseText);
-                        }
-                    });
+                        });
+                    }
 
                     bancario = false;
                 }

@@ -45,6 +45,7 @@ class ContPagoEfectivoController extends Controller {
                 $proveedores[$i]['value']  = $proveedor->nombre_proveedor . ' | ' . $proveedor->rif_ci;
                 $proveedores[$i]['id']     = $proveedor->id;
                 $proveedores[$i]['moneda'] = $proveedor->moneda;
+                $proveedores[$i]['saldo'] = number_format($proveedor->saldo, 2, ',', '');
 
                 $i = $i + 1;
             }
@@ -114,6 +115,8 @@ class ContPagoEfectivoController extends Controller {
 
                 $proveedor->saldo = (float) $proveedor->saldo - (float) $monto;
                 $proveedor->save();
+
+                $pago->tasa = $request->input('tasa');
             }
 
             $pago->saldo_actual = $configuracion->valor;

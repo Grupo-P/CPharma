@@ -51,7 +51,7 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <th scope="row"><label for="nombre_proveedor">Nombre del proveedor</label></th>
+                        <th scope="row"><label for="nombre_proveedor">Nombre del proveedor *</label></th>
                         <td>
                             <input autofocus class="form-control" type="text" id="proveedores" value="{{ $ajuste->proveedor->nombre_proveedor . ' | ' . $ajuste->proveedor->rif_ci }}">
                             <input type="hidden" value="{{ $ajuste->proveedor->id }}" name="id_proveedor">
@@ -59,20 +59,22 @@
                     </tr>
 
                     <tr>
-                        <th scope="row"><label for="monto">Monto</label></th>
+                        <th scope="row"><label for="monto">Monto *</label></th>
                         <td>
                             <input type="number" step="0.1" required class="form-control" value="{{ $ajuste->monto }}" name="monto">
                         </td>
                     </tr>
 
                     <tr>
-                        <th scope="row"><label for="comentario">Comentario</label></th>
+                        <th scope="row"><label for="comentario">Comentario *</label></th>
                         <td>
                             <input type="text" required class="form-control" value="{{ $ajuste->comentario }}" name="comentario" minlength="10" maxlength="200">
                         </td>
                     </tr>
                 </tbody>
             </table>
+
+            <p class="text-danger">* Campos obligatorios</p>
 
             <input type="submit" class="btn btn-outline-success btn-md" value="Guardar">
         </fieldset>
