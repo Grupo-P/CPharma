@@ -297,6 +297,10 @@ Route::get('/ArticulosExcel', function() {
     return view('pages.articulosExcel.articulosExcel');
 });
 
+Route::get('/ArticulosAPP', function() {
+    return view('pages.articulosExcel.articulosApp');
+});
+
 Route::get('/CorridaPrecios', function() {
     return view('pages.corridas.corridaPrecio');
 });
