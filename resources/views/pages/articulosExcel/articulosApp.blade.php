@@ -87,7 +87,7 @@
                 $sheet->setCellValue('D'.$contador,$PrecioDolar);
                 $sheet->setCellValue('E'.$contador,$Existencia);
                 $sheet->setCellValue('F'.$contador,$categoria);
-                $sheet->setCellValue('G'.$contador,$categoria);
+                $sheet->setCellValue('G'.$contador,$subcategoria);
                 $sheet->setCellValue('H'.$contador,$configuracion[0]->valor.$CodigoBarra.".jpg");
             /*EXCEL*/
 
@@ -256,6 +256,10 @@
     OR  InvAtributo.Descripcion = 'PAGINAWEB '
     OR  InvAtributo.Descripcion = 'paginaweb ')
     AND InvArticuloAtributo.InvArticuloId = InvArticulo.Id),CAST(0 AS INT)))) <> 0
+    AND (ROUND(CAST((SELECT SUM (InvLoteAlmacen.Existencia) As Existencia
+    FROM InvLoteAlmacen
+    WHERE(InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
+    AND (InvLoteAlmacen.InvArticuloId = InvArticulo.Id)) AS DECIMAL(38,0)),2,0)) > 20
 --Agrupamientos
     GROUP BY InvArticulo.Id, InvArticulo.CodigoArticulo, InvArticulo.Descripcion, InvArticulo.FinConceptoImptoIdCompra, InvArticulo.InvCategoriaId
 --Ordanamiento
