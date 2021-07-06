@@ -154,6 +154,32 @@
                     event.preventDefault();
                 }
             });
+
+            $('[name=numero_documento]').keyup(function () {
+                numero_documento = $('[name=numero_documento]').val();
+                id_proveedor = $('[name=id_proveedor]').val();
+
+                $.ajax({
+                    url: '/reclamos/validar',
+                    type: 'POST',
+                    data: {
+                        numero_documento: numero_documento,
+                        id_proveedor: id_proveedor,
+                        _token: '{{ csrf_token() }}',
+                        id: {{ $reclamo->id }}
+                    },
+                    success: function (response) {
+                        if (response == 'error') {
+                            $('[name=numero_documento]').val('');
+                            $('[name=numero_documento]').focus();
+                            alert('Numero de soporte ya existe con este proveedor');
+                        }
+                    },
+                    error: function (error) {
+                        $('body').html(error.responseText);
+                    }
+                })
+            });
         });
     </script>
 @endsection

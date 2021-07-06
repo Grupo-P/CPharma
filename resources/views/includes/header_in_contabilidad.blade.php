@@ -127,6 +127,14 @@
       </li>
 
       <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('/contabilidad/diferidos') }}">
+          <span data-feather="home"></span>
+          <i class="fas fa-lock"></i>
+          Diferidos en dolares<span class="sr-only">(current)</span>
+        </a>
+      </li>
+
+      <li class="nav-item">
         <a class="nav-link CP-Links-Menu" href="{{ url('/configuracion') }}">
           <span data-feather="home"></span>
           <i class="fas fa-cogs"></i>

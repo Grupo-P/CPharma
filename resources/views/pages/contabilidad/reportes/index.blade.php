@@ -64,7 +64,7 @@
                 </h5>
             </div>
             <div class="card-footer bg-transparent border-warning text-right">
-                <a class="btn btn-outline-warning btn-sm" href="/reportes/movimientos-por-proveedor">Visualizar</a>
+                <a class="btn btn-outline-warning btn-sm" href="/reportes/movimientos-bancarios">Visualizar</a>
             </div>
         </div>
     </div>

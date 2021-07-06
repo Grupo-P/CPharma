@@ -128,7 +128,7 @@
                     <i class="far fa-eye"></i>
                 </a>
 
-                @if(Auth::user()->departamento == 'TECNOLOGIA' || Auth::user()->departamento == 'GERENCIA')
+                @if(!$ajuste->reverso && (Auth::user()->departamento == 'TECNOLOGIA' || Auth::user()->departamento == 'GERENCIA'))
                     <a href="ajuste/{{$ajuste->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
                         <i class="fas fa-edit"></i>
                     </a>

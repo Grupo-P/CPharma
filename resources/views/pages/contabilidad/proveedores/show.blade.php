@@ -59,7 +59,7 @@
 
             <tr>
                 <th scope="row">Saldo</th>
-                <td>{{$proveedor->saldo}}</td>
+                <td>{{number_format($proveedor->saldo, 2, ',', '.')}}</td>
             </tr>
 
             <tr>

@@ -130,6 +130,7 @@
         <th scope="col" class="CP-sticky">Plan de cuentas</th>
         <th scope="col" class="CP-sticky">Proveedor</th>
         <th scope="col" class="CP-sticky">Usuario</th>
+        <th scope="col" class="CP-sticky">Autorizado por</th>
         <th scope="col" class="CP-sticky">Acciones</th>
       </tr>
     </thead>
@@ -177,12 +178,11 @@
         <td>{{isset($pago->cuenta->nombre) ? $pago->cuenta->nombre : ''}}</td>
         <td>{{isset($pago->proveedor->nombre_proveedor) ? $pago->proveedor->nombre_proveedor : ''}}</td>
         <td>{{$pago->user}}</td>
+        <td>{{$pago->autorizado_por}}</td>
         <td style="width:140px;">
-            @if($pago->proveedor)
-                <a target="_blank" href="/efectivo/soporte/{{$pago->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Ver soporte">
-                    <i class="fas fa-eye"></i>
-                </a>
-            @endif
+            <a target="_blank" href="/efectivo/soporte/{{$pago->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Ver soporte">
+                <i class="fas fa-eye"></i>
+            </a>
           </td>
       </tr>
     @endforeach

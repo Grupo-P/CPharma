@@ -427,8 +427,10 @@ Route::get('/bancos/validar', 'ContBancoController@validar');
 Route::resource('bancos', 'ContBancoController');
 
 Route::resource('deudas', 'ContDeudasController');
+Route::post('/deudas/validar', 'ContDeudasController@validar');
 
 Route::resource('reclamos', 'ContReclamoController');
+Route::post('/reclamos/validar', 'ContReclamoController@validar');
 
 Route::resource('ajuste', 'ContAjusteController');
 
@@ -440,6 +442,8 @@ Route::post('/efectivo/validar', 'ContPagoEfectivoController@validar');
 Route::resource('efectivo', 'ContPagoEfectivoController');
 
 Route::get('/efectivo/soporte/{id}', 'ContPagoEfectivoController@soporte');
+
+Route::get('/contabilidad/diferidos', 'ContPagoEfectivoController@diferidos')->name('contabilidad.diferidos');
 
 Route::get('/reportes', 'ContReporteController@index');
 Route::get('/reportes/movimientos-por-proveedor', 'ContReporteController@movimientos_por_proveedor');

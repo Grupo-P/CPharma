@@ -10,7 +10,7 @@
     <h1 class="h5 text-info">
         <i class="fas fa-file-invoice">
         </i>
-        Movimientos por proveedor
+        Movimientos bancarios
     </h1>
 
     <hr class="row align-items-start col-12">
@@ -26,34 +26,27 @@
             <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterAllTable()" autofocus="autofocus">
         </div>
 
-        <h6 align="center">Periodo desde el <b>{{ $fechaInicio }}</b> al <b>{{ $fechaFin }}</b> para el proveedor <b>{{ $proveedor->nombre_proveedor }}</b></h6>
+        <h6 align="center">Periodo desde el <b>{{ $fechaInicio }}</b> al <b>{{ $fechaFin }}</b> para el banco <b>{{ $banco->alias_cuenta }}</b></h6>
 
         <table class="table table-striped table-bordered col-12 sortable" id="myTable">
             <thead class="thead-dark">
                 <tr>
                     <th scope="col" class="CP-sticky">#</th>
                     <th scope="col" class="CP-sticky">Fecha y hora</th>
-                    <th scope="col" class="CP-sticky">Tipo</th>
-                    <th scope="col" class="CP-sticky">Nro. movimiento</th>
                     <th scope="col" class="CP-sticky">Monto</th>
-                    <th scope="col" class="CP-sticky">Comentario</th>
                     <th scope="col" class="CP-sticky">Conciliado</th>
                     <th scope="col" class="CP-sticky">Operador</th>
                 </tr>
             </thead>
 
             <tbody>
-                @foreach($movimientos as $movimiento)
-                    @php $fecha = date_create($movimiento->fecha); @endphp
+                @foreach($pagos as $pago)
                     <tr>
                         <td class="text-center">{{ $loop->iteration }}</td>
-                        <td class="text-center">{{ date_format($fecha, 'd/m/Y h:i A') }}</td>
-                        <td class="text-center">{{ $movimiento->tipo }}</td>
-                        <td class="text-center">{{ $movimiento->nro_movimiento }}</td>
-                        <td class="text-center">{{ $movimiento->monto }}</td>
-                        <td class="text-center">{{ $movimiento->comentario }}</td>
-                        <td class="text-center">{{ $movimiento->conciliacion }}</td>
-                        <td class="text-center">{{ $movimiento->operador }}</td>
+                        <td class="text-center">{{ date_format($pago->created_at, 'd/m/Y h:i A') }}</td>
+                        <td class="text-center">{{ $pago->monto ? number_format($pago->monto, 2, ',', '.') : number_format($pago->egresos, 2, ',', '.') }}</td>
+                        <td class="text-center">{{ $pago->conciliado ? 'Si' : 'No' }}</td>
+                        <td class="text-center">{{ ($pago->user) ? $pago->user : $pago->operador }}</td>
                     </tr>
                 @endforeach
             </tbody>
@@ -66,12 +59,16 @@
                 <div class="col"></div>
 
                 <div class="col">
-                    Proveedor:
+                    Banco:
                 </div>
 
                 <div class="col">
-                    <input type="text" required class="form-control" name="proveedor">
-                    <input type="hidden" required name="id_proveedor">
+                    <select name="id_banco" class="form-control">
+                        <option value=""></option>
+                        @foreach($bancos as $banco)
+                            <option value="{{ $banco->id }}">{{ $banco->alias_cuenta }}</option>
+                        @endforeach
+                    </select>
                 </div>
 
                 <div class="col"></div>
@@ -106,36 +103,4 @@
             </div>
         </form>
     @endif
-@endsection
-
-
-
-@section('scriptsHead')
-    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-
-    <script>
-        $(document).ready(function() {
-            var proveedoresJson = {!! json_encode($proveedores) !!};
-
-            $('[name=proveedor]').autocomplete({
-                source: proveedoresJson,
-                autoFocus: true,
-                select: function (event, ui) {
-                    $('[name=id_proveedor]').val(ui.item.id);
-                }
-            });
-
-            $('form').submit(function (event) {
-                resultado = proveedoresJson.find(elemento => elemento.label == $('[name=proveedor]').val());
-
-                if (!resultado) {
-                    event.preventDefault();
-                    alert('Debe seleccionar un proveedor válido');
-                    bancario = false;
-                }
-            });
-        });
-    </script>
 @endsection

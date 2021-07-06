@@ -167,8 +167,13 @@ class ContReclamoController extends Controller
      */
     public function destroy($id)
     {
-        $reclamo = ContReclamo::find($id);
-        $reclamo->delete();
+        $reclamo             = ContReclamo::find($id);
+        $reclamo->deleted_at = date('Y-m-d h:i:s');
+        $reclamo->save();
+
+        $proveedor        = ContProveedor::find($reclamo->id_proveedor);
+        $proveedor->saldo = (float) $proveedor->saldo - (float) $reclamo->monto;
+        $proveedor->save();
 
         $auditoria           = new Auditoria();
         $auditoria->accion   = 'ELIMINAR';
@@ -178,5 +183,25 @@ class ContReclamoController extends Controller
         $auditoria->save();
 
         return redirect('/reclamos')->with('Deleted', ' Informacion');
+    }
+
+    public function validar(Request $request)
+    {
+        $deuda = ContReclamo::where('id_proveedor', $request->id_proveedor)
+            ->where('numero_documento', $request->numero_documento)
+            ->get();
+
+        if ($request->id) {
+            $deuda = ContReclamo::where('id_proveedor', $request->id_proveedor)
+                ->where('numero_documento', $request->numero_documento)
+                ->where('id', '!=', $request->id)
+                ->get();
+        }
+
+        if ($deuda->count()) {
+            return 'error';
+        }
+
+        return 'exito';
     }
 }

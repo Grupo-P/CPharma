@@ -68,7 +68,7 @@
                     </tr>
 
                     <tr>
-                        <th scope="row"><label for="monto">Monto *</label></th>
+                        <th scope="row"><label for="monto">Monto del banco *</label></th>
                         <td><input type="number" required class="form-control" name="monto" step="0.01" min="1"></td>
                     </tr>
 
@@ -76,7 +76,7 @@
                         <th scope="row"><label for="id_banco">Banco *</label></th>
                         <td>
                             <select name="id_banco" class="form-control" required>
-                                <option value=""></option>
+                                <option data-banco-moneda="" selected value=""></option>
                                 @foreach($bancos as $banco)
                                     <option data-banco-moneda="{{ $banco->moneda }}" value="{{ $banco->id }}">{{ $banco->alias_cuenta }}</option>
                                 @endforeach
@@ -84,7 +84,12 @@
                         </td>
                     </tr>
 
-                    <tr class="append"></tr>
+                    <tr class="append">
+                        <th scope="row"><label for="tasa">Tasa *</label></th>
+                        <td>
+                            <input class="form-control" step="0.01" disabled type="number" name="tasa">
+                        </td>
+                    </tr>
 
                     <tr>
                         <th scope="row"><label for="comentario">Comentario</label></th>
@@ -126,9 +131,62 @@
                 select: function (event, ui) {
                     $('[name=id_proveedor]').val(ui.item.id);
                     $('[name=moneda]').val(ui.item.moneda);
-                    $('[name=saldo]').val(ui.item.saldo);
+
+                    $.ajax({
+                        type: 'GET',
+                        url: '/bancarios/create',
+                        data: {
+                            id_proveedor: $('[name=id_proveedor]').val()
+                        },
+                        success: function (response) {
+                            $('[name=saldo]').val(response.saldo);
+                        },
+                        error: function (error) {
+                            $('body').html(error.responseText);
+                        }
+                    })
                 }
             });
+
+            $('[name=moneda]').change(function () {
+                activar_tasa();
+            });
+
+            $('[name=id_banco]').change(function () {
+                activar_tasa();
+            });
+
+            function activar_tasa() {
+                banco = $('option:selected').attr('data-banco-moneda');
+                proveedor = $('[name=moneda]').val();
+
+                console.log(banco);
+
+                if (banco != proveedor) {
+                    $.ajax({
+                        method: 'POST',
+                        url: '/bancarios/validar',
+                        data: {
+                            id_proveedor: $('[name=id_proveedor]').val(),
+                            id_banco: $('[name=id_banco]').val(),
+                            _token: '{{ csrf_token() }}'
+                        },
+                        success: function (response) {
+                            $('[name=tasa]').attr('min', response.min);
+                            $('[name=tasa]').attr('max', response.max);
+                        },
+                        error: function (error) {
+                            $('body').html(error.responseText);
+                        }
+                    });
+
+                    $('[name=tasa]').attr('disabled', false);
+                    $('[name=tasa]').attr('required', true);
+                } else {
+                    $('[name=tasa]').attr('disabled', true);
+                    $('[name=tasa]').attr('required', false);
+                }
+            }
 
             $('form').submit(function (event) {
                 resultado = proveedoresJson.find(elemento => elemento.label == $('#proveedores').val());
@@ -136,44 +194,6 @@
                 if (!resultado) {
                     event.preventDefault();
                     alert('Debe seleccionar un proveedor válido');
-                    bancario = false;
-                }
-
-                if (bancario) {
-                    moneda_banco = $('[name=moneda]').val();
-                    moneda_proveedor = $('option:selected').attr('data-banco-moneda');
-
-                    if (moneda_proveedor != moneda_banco) {
-                        respuesta = true;
-                    } else {
-                        respuesta = false;
-                    }
-
-                    if (respuesta) {
-                        event.preventDefault();
-
-                        id_proveedor = $('[name=id_proveedor]').val();
-
-                        $.ajax({
-                            type: 'POST',
-                            url: '/efectivo/validar',
-                            data: {
-                                id_proveedor: id_proveedor,
-                                _token: '{{ csrf_token() }}'
-                            },
-                            success: function (respuesta) {
-                                $('.append').append(`
-                                    <th scope="row"><label for="tasa">Tasa *</label></th>
-                                    <td>
-                                        <input class="form-control" step="0.01" min="${respuesta.min}" max="${respuesta.max}" type="number" name="tasa" required>
-                                    </td>
-                                `);
-
-                                $('[name=tasa]').focus();
-                            }
-                        });
-                    }
-
                     bancario = false;
                 }
             });

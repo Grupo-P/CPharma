@@ -2,22 +2,23 @@
 
 namespace compras\Http\Controllers;
 
-use Illuminate\Http\Request;
-
+use compras\Auditoria;
+use compras\Configuracion;
+use compras\ContCuenta;
 use compras\ContPagoEfectivo;
 use compras\ContProveedor;
-use compras\ContCuenta;
-use compras\Configuracion;
-use compras\Auditoria;
 use compras\Sede;
+use Illuminate\Http\Request;
 
-class ContPagoEfectivoController extends Controller {
+class ContPagoEfectivoController extends Controller
+{
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request) {
+    public function index(Request $request)
+    {
         $pagos = ContPagoEfectivo::sede($request->get('sede'))
             ->fecha($request->get('fecha_desde'), $request->get('fecha_hasta'))
             ->orderBy('created_at', 'desc')
@@ -33,7 +34,30 @@ class ContPagoEfectivoController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(Request $request) {
+    public function create(Request $request)
+    {
+        if ($request->ajax()) {
+            $proveedor = ContProveedor::find($request->id_proveedor);
+
+            $resultado['saldo'] = number_format($proveedor->saldo, 2, ',', '.');
+
+            if ($proveedor->moneda != 'Dólares') {
+                if ($proveedor->moneda == 'Bolívares') {
+                    $configuracion = Configuracion::where('variable', 'DolaresBolivares')->first();
+                }
+
+                if ($proveedor->moneda == 'Pesos') {
+                    $configuracion = Configuracion::where('variable', 'DolaresPesos')->first();
+                }
+
+                $resultado['min']  = $configuracion->valor - ($configuracion->valor * 0.20);
+                $resultado['max']  = $configuracion->valor + ($configuracion->valor * 0.20);
+                $resultado['tasa'] = true;
+            }
+
+            return $resultado;
+        }
+
         $cuentas = ContCuenta::get();
 
         if ($request->get('tipo') == 'proveedores') {
@@ -45,7 +69,7 @@ class ContPagoEfectivoController extends Controller {
                 $proveedores[$i]['value']  = $proveedor->nombre_proveedor . ' | ' . $proveedor->rif_ci;
                 $proveedores[$i]['id']     = $proveedor->id;
                 $proveedores[$i]['moneda'] = $proveedor->moneda;
-                $proveedores[$i]['saldo'] = number_format($proveedor->saldo, 2, ',', '');
+                $proveedores[$i]['saldo']  = number_format($proveedor->saldo, 2, ',', '');
 
                 $i = $i + 1;
             }
@@ -62,18 +86,19 @@ class ContPagoEfectivoController extends Controller {
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request) {
+    public function store(Request $request)
+    {
         try {
             $pago = new ContPagoEfectivo();
 
             $pago->sede = auth()->user()->sede;
 
-            $configuracion = Configuracion::where('variable', 'SaldoEfectivo')->first();
+            $configuracion  = Configuracion::where('variable', 'SaldoEfectivo')->first();
             $configuracion2 = Configuracion::where('variable', 'DiferidoEfectivo')->first();
 
             $pago->saldo_anterior = $configuracion->valor;
 
-            switch($request->input('movimiento')) {
+            switch ($request->input('movimiento')) {
                 case "Ingreso":
                     $pago->ingresos = $request->input('monto');
                     $configuracion->valor += $request->input('monto');
@@ -94,12 +119,13 @@ class ContPagoEfectivoController extends Controller {
                     $pago->user_up = auth()->user()->name;
 
                     $pago->diferido_actual = $configuracion2->valor;
-                    $pago->concepto = $request->input('concepto')." - DIFERIDO";
+                    $pago->concepto        = $request->input('concepto') . " - DIFERIDO";
                     break;
             }
 
             if ($request->input('id_cuenta')) {
-                $pago->id_cuenta = $request->input('id_cuenta');
+                $pago->id_cuenta      = $request->input('id_cuenta');
+                $pago->autorizado_por = $request->input('autorizado_por');
             }
 
             if ($request->input('id_proveedor')) {
@@ -120,24 +146,23 @@ class ContPagoEfectivoController extends Controller {
             }
 
             $pago->saldo_actual = $configuracion->valor;
-            $pago->user = auth()->user()->name;
+            $pago->user         = auth()->user()->name;
 
             $pago->save();
             $configuracion->save();
             $configuracion2->save();
 
             //-------------------- AUDITORIA --------------------//
-            $Auditoria = new Auditoria();
-            $Auditoria->accion = 'CREAR';
-            $Auditoria->tabla = 'PAGO EN EFECTIVO';
+            $Auditoria           = new Auditoria();
+            $Auditoria->accion   = 'CREAR';
+            $Auditoria->tabla    = 'PAGO EN EFECTIVO';
             $Auditoria->registro = $request->input('monto');
-            $Auditoria->user = auth()->user()->name;
+            $Auditoria->user     = auth()->user()->name;
             $Auditoria->save();
 
             return redirect('/efectivo')->with('Saved', ' Informacion');
 
-        }
-        catch(\Illuminate\Database\QueryException $e) {
+        } catch (\Illuminate\Database\QueryException $e) {
             dd($e);
             return back()->with('Error', ' Error');
         }
@@ -155,7 +180,8 @@ class ContPagoEfectivoController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id) {
+    public function edit($id)
+    {
         $pago = ContPagoEfectivo::find($id);
         return view('pages.contabilidad.efectivo.edit', compact('pago'));
     }
@@ -167,18 +193,19 @@ class ContPagoEfectivoController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id) {
+    public function update(Request $request, $id)
+    {
         try {
             /********************* PROCESO DE MOVIMIENTO *********************/
-            $movimiento = new ContPagoEfectivo();
+            $movimiento       = new ContPagoEfectivo();
             $movimiento->sede = auth()->user()->sede;
 
-            $configuracion = Configuracion::where('variable', 'SaldoEfectivo')->first();
+            $configuracion  = Configuracion::where('variable', 'SaldoEfectivo')->first();
             $configuracion2 = Configuracion::where('variable', 'DiferidoEfectivo')->first();
 
             $movimiento->saldo_anterior = $configuracion->valor;
 
-            switch($request->movimiento) {
+            switch ($request->movimiento) {
                 case "Ingreso":
                     $movimiento->ingresos = $request->input('monto');
                     $configuracion->valor += $request->input('monto');
@@ -189,17 +216,17 @@ class ContPagoEfectivoController extends Controller {
             }
 
             $movimiento->saldo_actual = $configuracion->valor;
-            $movimiento->concepto = $request->input('concepto');
-            $movimiento->user = auth()->user()->name;
+            $movimiento->concepto     = $request->input('concepto');
+            $movimiento->user         = auth()->user()->name;
 
             /********************* ACTUALIZAR DIFERIDO *********************/
             $diferidos = ContPagoEfectivo::find($id);
 
-            $diferidos->concepto = $request->concepto;
+            $diferidos->concepto          = $request->concepto;
             $diferidos->diferido_anterior = $configuracion2->valor;
             $configuracion2->valor -= $request->input('monto');
-            $diferidos->user_up = auth()->user()->name;
-            $diferidos->estatus = 'PAGADO';
+            $diferidos->user_up         = auth()->user()->name;
+            $diferidos->estatus         = 'PAGADO';
             $diferidos->diferido_actual = $configuracion2->valor;
 
             /********************* GUARDAR CAMBIOS *********************/
@@ -209,16 +236,15 @@ class ContPagoEfectivoController extends Controller {
             $diferidos->save();
 
             /********************* AUDITORIA *********************/
-            $Auditoria = new Auditoria();
-            $Auditoria->accion = 'EDITAR';
-            $Auditoria->tabla = 'PAGO EN EFECTIVO';
+            $Auditoria           = new Auditoria();
+            $Auditoria->accion   = 'EDITAR';
+            $Auditoria->tabla    = 'PAGO EN EFECTIVO';
             $Auditoria->registro = $request->input('monto');
-            $Auditoria->user = auth()->user()->name;
+            $Auditoria->user     = auth()->user()->name;
             $Auditoria->save();
 
             return redirect('/efectivo')->with('Updated', ' Informacion');
-        }
-        catch(\Illuminate\Database\QueryException $e) {
+        } catch (\Illuminate\Database\QueryException $e) {
             dd($e);
             return back()->with('Error', ' Error');
         }
@@ -232,7 +258,8 @@ class ContPagoEfectivoController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id) {
+    public function show($id)
+    {
         //
     }
 
@@ -242,7 +269,8 @@ class ContPagoEfectivoController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id) {
+    public function destroy($id)
+    {
         //
     }
 
@@ -265,5 +293,14 @@ class ContPagoEfectivoController extends Controller {
 
             return $resultado;
         }
+    }
+
+    public function diferidos(Request $request)
+    {
+        $diferidos = ContPagoEfectivo::whereNotNull('diferido')
+            ->orderByRaw('estatus ASC, id DESC')
+            ->get();
+
+        return view('pages.contabilidad.efectivo.diferidos', compact('diferidos'));
     }
 }

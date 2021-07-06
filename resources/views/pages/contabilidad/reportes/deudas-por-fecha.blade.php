@@ -32,10 +32,10 @@
             <thead class="thead-dark">
                 <tr>
                     <th scope="col" class="CP-sticky">#</th>
+                    <th scope="col" class="CP-sticky">ID registro</th>
                     <th scope="col" class="CP-sticky">Fecha y hora</th>
                     <th scope="col" class="CP-sticky">Tipo</th>
                     <th scope="col" class="CP-sticky">Proveedor</th>
-                    <th scope="col" class="CP-sticky">Registros</th>
                     <th scope="col" class="CP-sticky">Monto</th>
                     <th scope="col" class="CP-sticky">Sede</th>
                     <th scope="col" class="CP-sticky">Operador</th>
@@ -43,19 +43,58 @@
             </thead>
 
             <tbody>
+                @php
+                    $dolares = 0;
+                    $bolivares = 0;
+                @endphp
+
                 @foreach($items as $item)
                     <tr>
                         <td class="text-center">{{ $loop->iteration }}</td>
+                        <td class="text-center">{{ $item->id }}</td>
                         <td class="text-center">{{ date_format(new DateTime($item->created_at), 'd/m/Y h:i A') }}</td>
-                        <td class="text-center">{{ (get_class($item) == 'compras\ContReclamo') ? 'Reclamo' : 'Deuda' }}</td>
+                        <td class="text-center">{{ $item->tipo }}</td>
                         <td class="text-center">{{ $item->proveedor }}</td>
-                        <td class="text-center">{{ $item->registros }}</td>
                         <td class="text-center">{{ number_format($item->monto, 2, ',', '.') }}</td>
                         <td class="text-center">{{ $item->sede }}</td>
                         <td class="text-center">{{ $item->operador }}</td>
                     </tr>
+
+                    @php
+                        if ($item->moneda == 'Dólares') {
+                            $dolares = $dolares + $item->monto;
+                        }
+
+                        if ($item->moneda == 'Bolívares') {
+                            $bolivares = $bolivares + $item->monto;
+                        }
+                    @endphp
                 @endforeach
             </tbody>
+
+            <tfoot>
+                <tr>
+                    <th style="border: white 1px solid;"></th>
+                    <th style="border: white 1px solid;"></th>
+                    <th style="border: white 1px solid;"></th>
+                    <th style="border-left: white 1px solid;border-bottom: white 1px solid;"></th>
+                    <th class="text-center">Total en bolívares</th>
+                    <th class="text-center">{{ number_format($bolivares, 2, ',', '.') }}</th>
+                    <th style="border: white 1px solid;"></th>
+                    <th style="border: white 1px solid;"></th>
+                </tr>
+
+                <tr>
+                    <th style="border: white 1px solid;"></th>
+                    <th style="border: white 1px solid;"></th>
+                    <th style="border: white 1px solid;"></th>
+                    <th style="border-left: white 1px solid;border-bottom: white 1px solid;"></th>
+                    <th class="text-center">Total en dólares</th>
+                    <th class="text-center">{{ number_format($dolares, 2, ',', '.') }}</th>
+                    <th style="border: white 1px solid;"></th>
+                    <th style="border: white 1px solid;"></th>
+                </tr>
+            </tfoot>
         </table>
 
 

@@ -27,8 +27,16 @@ class ContPagoBancarioController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
+        if ($request->ajax()) {
+            $proveedores = ContProveedor::find($request->id_proveedor);
+
+            $proveedores['saldo']  = number_format($proveedores->saldo, 2, ',', '.');
+
+            return $proveedores;
+        }
+
         $sqlProveedores = ContProveedor::whereNull('deleted_at')->get();
         $i              = 0;
         $proveedores    = [];
@@ -202,7 +210,7 @@ class ContPagoBancarioController extends Controller
         $nuevoPago->save();
 
         $proveedor        = ContProveedor::find($pago->id_proveedor);
-        $proveedor->saldo = (float) $proveedor->saldo + (float) $monto;
+        $proveedor->saldo = (float) $proveedor->saldo - (float) $monto;
         $proveedor->save();
 
         return redirect('/bancarios')->with('Deleted', ' Informacion');

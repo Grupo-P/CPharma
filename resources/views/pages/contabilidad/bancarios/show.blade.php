@@ -53,7 +53,7 @@
             </tr>
 
             <tr>
-                <th scope="row">Monto</th>
+                <th scope="row">Monto al banco</th>
                 <td>{{number_format($pago->monto, 2, ',', '.')}}</td>
             </tr>
 

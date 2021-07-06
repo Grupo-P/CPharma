@@ -199,10 +199,12 @@
                 <th scope="col" class="CP-sticky">Fecha de registro</th>
                 <th scope="col" class="CP-sticky">Moneda</th>
                 <th scope="col" class="CP-sticky">Monto</th>
+                <th scope="col" class="CP-sticky">Días de crédito</th>
                 <th scope="col" class="CP-sticky">Documento soporte deuda</th>
                 <th scope="col" class="CP-sticky">Numero de documento</th>
                 <th scope="col" class="CP-sticky">Creado por</th>
                 <th scope="col" class="CP-sticky">Sede</th>
+                <th scope="col" class="CP-sticky">Estado</th>
                 <th scope="col" class="CP-sticky">Acciones</th>
             </tr>
         </thead>
@@ -215,10 +217,12 @@
               <td>{{$deuda->created_at}}</td>
               <td>{{$deuda->proveedor->moneda}}</td>
               <td>{{number_format($deuda->monto, 2, ',', '.')}}</td>
+              <td>{{$deuda->dias_credito}}</td>
               <td>{{$deuda->documento_soporte_deuda}}</td>
               <td>{{$deuda->numero_documento}}</td>
               <td>{{$deuda->usuario_registro}}</td>
               <td>{{$deuda->sede}}</td>
+              <td>{{($deuda->deleted_at)?'Desincorporado':'Activo'}}</td>
               <td style="width:140px;">
                 <a href="/deudas/{{$deuda->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
                     <i class="far fa-eye"></i>

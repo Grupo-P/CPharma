@@ -175,9 +175,11 @@
                     <i class="far fa-eye"></i>
                 </a>
 
-                <a href="/bancarios/notificar/{{$deuda->id}}" role="button" class="btn btn-outline-dark notificar btn-sm" data-toggle="tooltip" data-placement="top" title="Notificar">
-                    <i class="fa fa-bell"></i>
-                </a>
+                @if(!$deuda->estatus == 'Reversado')
+                    <a href="/bancarios/notificar/{{$deuda->id}}" role="button" class="btn btn-outline-dark notificar btn-sm" data-toggle="tooltip" data-placement="top" title="Notificar">
+                        <i class="fa fa-bell"></i>
+                    </a>
+                @endif
 
                 @if(Auth::user()->departamento == 'TECNOLOGIA' || Auth::user()->departamento == 'GERENCIA')
                     @if($deuda->estatus != 'Reversado')

@@ -135,6 +135,10 @@
                 </tr>
             @endif
             <tr>
+            <td colspan="4" class="alinear-der">Estado:</td>
+            <td colspan="4" class="alinear-izq">{{ $pago->estatus }}</td>
+            </tr>
+            <tr>
             <td colspan="4" class="alinear-der">Alias bancario:</td>
             <td colspan="4" class="alinear-izq">{{ $pago->banco->alias_cuenta }}</td>
             </tr>

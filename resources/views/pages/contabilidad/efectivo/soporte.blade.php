@@ -82,10 +82,19 @@
             <td colspan="4" class="alinear-der"># de recibo:</td>
             <td colspan="4" class="alinear-izq">{{ str_pad($pago->id, 5, 0, STR_PAD_LEFT) }}</td>
             </tr>
-            <tr>
-            <td colspan="4" class="alinear-der">Proveedor:</td>
-            <td colspan="4" class="alinear-izq">{{ $pago->proveedor->nombre_proveedor }}</td>
-            </tr>
+            @if($pago->proveedor)
+                <tr>
+                <td colspan="4" class="alinear-der">Proveedor:</td>
+                <td colspan="4" class="alinear-izq">{{ $pago->proveedor->nombre_proveedor }}</td>
+                </tr>
+            @endif
+
+            @if($pago->cuentas)
+                <tr>
+                <td colspan="4" class="alinear-der">Plan de cuentas:</td>
+                <td colspan="4" class="alinear-izq">{{ $pago->cuentas->nombre }}</td>
+                </tr>
+            @endif
             <tr>
             <td colspan="4" class="alinear-der">Fecha y hora:</td>
             <td colspan="4" class="alinear-izq">{{ date_format($pago->created_at, 'd/m/Y H:i A') }}</td>
@@ -94,27 +103,30 @@
             <td colspan="4" class="alinear-der">Monto:</td>
             <td colspan="4" class="alinear-izq">{{ ($pago->monto) ? number_format($pago->monto, 2, ',', '.') : number_format($pago->egresos, 2, ',', '.') }}</td>
             </tr>
-            <td colspan="4" class="alinear-der">Monto al proveedor:</td>
-            <td colspan="4" class="alinear-izq">
-                @php
-                  if ($pago->proveedor) {
-                    if ($pago->proveedor->moneda != 'Dólares') {
-                        if ($pago->proveedor->moneda == 'Bolívares') {
-                            $monto_proveedor = $pago->egresos * $pago->tasa;
-                        }
+            @if($pago->proveedor)
+                <tr>
+                <td colspan="4" class="alinear-der">Monto al proveedor:</td>
+                <td colspan="4" class="alinear-izq">
+                    @php
+                      if ($pago->proveedor) {
+                        if ($pago->proveedor->moneda != 'Dólares') {
+                            if ($pago->proveedor->moneda == 'Bolívares') {
+                                $monto_proveedor = $pago->egresos * $pago->tasa;
+                            }
 
-                        if ($pago->proveedor->moneda == 'Pesos') {
-                            $monto_proveedor = $pago->egresos * $pago->tasa;
+                            if ($pago->proveedor->moneda == 'Pesos') {
+                                $monto_proveedor = $pago->egresos * $pago->tasa;
+                            }
+                        } else {
+                            $monto_proveedor = $pago->monto;
                         }
-                    } else {
-                        $monto_proveedor = $pago->monto;
-                    }
-                  }
-                @endphp
+                      }
+                    @endphp
 
-                {{(isset($monto_proveedor)) ? number_format($monto_proveedor,2,',','.') : ''}}
-            </td>
-            </tr>
+                    {{(isset($monto_proveedor)) ? number_format($monto_proveedor,2,',','.') : ''}}
+                </td>
+                </tr>
+            @endif
             <tr>
             <td colspan="4" class="alinear-der">Alias bancario:</td>
             <td colspan="4" class="alinear-izq">Pago en efectivo por tesoreria - {{ $pago->sede }}</td>
@@ -130,6 +142,12 @@
             <td colspan="4" class="alinear-izq">{{ $pago->user }}</td>
             </tr>
             <tr>
+            @if($pago->cuentas)
+                <tr>
+                <td colspan="4" class="alinear-der">Autorizado por:</td>
+                <td colspan="4" class="alinear-izq">{{ $pago->autorizado_por }}</td>
+                </tr>
+            @endif
             <td colspan="4" class="alinear-izq">
                 <br/><br/><br/>
                 <span>______________________________</span><br/>

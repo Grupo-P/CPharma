@@ -84,6 +84,7 @@ class ContDeudasController extends Controller
         $deuda->numero_documento        = $request->input('numero_documento');
         $deuda->usuario_registro        = auth()->user()->name;
         $deuda->sede                    = $request->input('sede');
+        $deuda->dias_credito            = $request->input('dias_credito');
         $deuda->save();
 
         $proveedor        = ContProveedor::find($request->input('id_proveedor'));
@@ -162,6 +163,7 @@ class ContDeudasController extends Controller
         $deuda->documento_soporte_deuda = $request->input('documento_soporte_deuda');
         $deuda->numero_documento        = $request->input('numero_documento');
         $deuda->sede                    = $request->input('sede');
+        $deuda->dias_credito            = $request->input('dias_credito');
         $deuda->save();
 
         $proveedor->saldo = (float) $proveedor->saldo + (float) $deuda->monto;
@@ -185,13 +187,13 @@ class ContDeudasController extends Controller
      */
     public function destroy($id)
     {
-        $deuda = ContDeuda::find($id);
+        $deuda             = ContDeuda::find($id);
+        $deuda->deleted_at = date('Y-m-d h:i:s');
+        $deuda->save();
 
         $proveedor        = ContProveedor::find($deuda->id_proveedor);
         $proveedor->saldo = (float) $proveedor->saldo - (float) $deuda->monto;
         $proveedor->save();
-
-        $deuda->delete();
 
         $auditoria           = new Auditoria();
         $auditoria->accion   = 'ELIMINAR';
@@ -201,5 +203,25 @@ class ContDeudasController extends Controller
         $auditoria->save();
 
         return redirect('/deudas')->with('Deleted', ' Informacion');
+    }
+
+    public function validar(Request $request)
+    {
+        $deuda = ContDeuda::where('id_proveedor', $request->id_proveedor)
+            ->where('numero_documento', $request->numero_documento)
+            ->get();
+
+        if ($request->id) {
+            $deuda = ContDeuda::where('id_proveedor', $request->id_proveedor)
+                ->where('numero_documento', $request->numero_documento)
+                ->where('id', '!=', $request->id)
+                ->get();
+        }
+
+        if ($deuda->count()) {
+            return 'error';
+        }
+
+        return 'exito';
     }
 }
