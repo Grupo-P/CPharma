@@ -7,7 +7,10 @@ use compras\Configuracion;
 use compras\ContBanco;
 use compras\ContPagoBancario;
 use compras\ContProveedor;
+use compras\Mail\NotificarPagoProveedor;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
+use PDF;
 
 class ContPagoBancarioController extends Controller
 {
@@ -219,7 +222,19 @@ class ContPagoBancarioController extends Controller
     public function soporte($id)
     {
         $pago = ContPagoBancario::find($id);
+
         return view('pages.contabilidad.bancarios.soporte', compact('pago'));
+    }
+
+    public function notificar($id)
+    {
+        $pago = ContPagoBancario::find($id);
+
+        $filename = storage_path('app/public/') . 'pago-' . $pago->id . '.pdf';
+
+        $pdf = PDF::loadView('pages.contabilidad.bancarios.pdf', compact('pago'))->save($filename);
+
+        Mail::to('nisadelgado@gmail.com')->send(new NotificarPagoProveedor($pago, $filename));
     }
 
     public function validar(Request $request)

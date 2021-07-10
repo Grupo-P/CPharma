@@ -437,6 +437,7 @@ Route::resource('ajuste', 'ContAjusteController');
 Route::post('/bancarios/validar', 'ContPagoBancarioController@validar');
 Route::resource('bancarios', 'ContPagoBancarioController');
 Route::get('/bancarios/soporte/{id}', 'ContPagoBancarioController@soporte');
+Route::get('/bancarios/notificar/{id}', 'ContPagoBancarioController@notificar');
 
 Route::post('/efectivo/validar', 'ContPagoEfectivoController@validar');
 Route::resource('efectivo', 'ContPagoEfectivoController');

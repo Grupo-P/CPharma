@@ -43,14 +43,59 @@
             </thead>
 
             <tbody>
+                @php
+                    $cantidad_ajustes = 0;
+                    $monto_ajustes = 0;
+
+
+                    $cantidad_deudas = 0;
+                    $monto_deudas = 0;
+
+                    $cantidad_bancarios = 0;
+                    $monto_bancarios = 0;
+
+                    $cantidad_efectivo = 0;
+                    $monto_efectivo = 0;
+
+                    $cantidad_reclamos = 0;
+                    $monto_reclamos = 0;
+                @endphp
+
                 @foreach($movimientos as $movimiento)
-                    @php $fecha = date_create($movimiento->fecha); @endphp
+                    @php
+                        $fecha = date_create($movimiento->fecha);
+
+                        if ($movimiento->tipo == 'Ajuste') {
+                            $cantidad_ajustes = $cantidad_ajustes + 1;
+                            $monto_ajustes = $monto_ajustes + $movimiento->monto;
+                        }
+
+                        if ($movimiento->tipo == 'Deudas') {
+                            $cantidad_deudas = $cantidad_deudas + 1;
+                            $monto_deudas = $monto_deudas + $movimiento->monto;
+                        }
+
+                        if (strpos($movimiento->tipo, 'bancario')) {
+                            $cantidad_bancarios = $cantidad_bancarios + 1;
+                            $monto_bancarios = $monto_bancarios + $movimiento->monto;
+                        }
+
+                        if (strpos($movimiento->tipo, 'efectivo')) {
+                            $cantidad_efectivo = $cantidad_efectivo + 1;
+                            $monto_efectivo = $monto_efectivo + $movimiento->monto;
+                        }
+
+                        if ($movimiento->tipo == 'Reclamo') {
+                            $cantidad_reclamos = $cantidad_reclamos + 1;
+                            $monto_reclamos = $monto_reclamos + $movimiento->monto;
+                        }
+                    @endphp
                     <tr>
                         <td class="text-center">{{ $loop->iteration }}</td>
                         <td class="text-center">{{ date_format($fecha, 'd/m/Y h:i A') }}</td>
                         <td class="text-center">{{ $movimiento->tipo }}</td>
                         <td class="text-center">{{ $movimiento->nro_movimiento }}</td>
-                        <td class="text-center">{{ $movimiento->monto }}</td>
+                        <td class="text-center">{{ number_format($movimiento->monto, 2, ',', '.') }}</td>
                         <td class="text-center">{{ $movimiento->comentario }}</td>
                         <td class="text-center">{{ $movimiento->conciliacion }}</td>
                         <td class="text-center">{{ $movimiento->operador }}</td>
@@ -59,6 +104,50 @@
             </tbody>
         </table>
 
+        <table class="table table-striped table-bordered col-12 sortable" id="myTable">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col" colspan="3" class="CP-sticky">Totales</th>
+                </tr>
+                <tr>
+                    <th scope="col" class="CP-sticky">Tipo de movimiento</th>
+                    <th scope="col" class="CP-sticky">Cantidad</th>
+                    <th scope="col" class="CP-sticky">Monto</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr>
+                    <td class="text-center">Ajustes</td>
+                    <td class="text-center">{{ $cantidad_ajustes }}</td>
+                    <td class="text-center">{{ number_format($monto_ajustes, 2, ',', '.') }}</td>
+                </tr>
+
+                <tr>
+                    <td class="text-center">Deudas</td>
+                    <td class="text-center">{{ $cantidad_deudas }}</td>
+                    <td class="text-center">{{ number_format($monto_deudas, 2, ',', '.') }}</td>
+                </tr>
+
+                <tr>
+                    <td class="text-center">Pago bancario</td>
+                    <td class="text-center">{{ $cantidad_bancarios }}</td>
+                    <td class="text-center">{{ number_format($monto_bancarios, 2, ',', '.') }}</td>
+                </tr>
+
+                <tr>
+                    <td class="text-center">Pago en efectivo</td>
+                    <td class="text-center">{{ $cantidad_efectivo }}</td>
+                    <td class="text-center">{{ number_format($monto_efectivo, 2, ',', '.') }}</td>
+                </tr>
+
+                <tr>
+                    <td class="text-center">Reclamos</td>
+                    <td class="text-center">{{ $cantidad_reclamos }}</td>
+                    <td class="text-center">{{ number_format($monto_reclamos, 2, ',', '.') }}</td>
+                </tr>
+            </tbody>
+        </table>
 
     @else
         <form action="">

@@ -175,8 +175,8 @@
                     <i class="far fa-eye"></i>
                 </a>
 
-                @if(!$deuda->estatus == 'Reversado')
-                    <a href="/bancarios/notificar/{{$deuda->id}}" role="button" class="btn btn-outline-dark notificar btn-sm" data-toggle="tooltip" data-placement="top" title="Notificar">
+                @if($deuda->estatus != 'Reversado')
+                    <a href="/bancarios/notificar/{{$deuda->id}}" role="button" class="btn btn-outline-dark btn-sm" data-toggle="tooltip" data-placement="top" title="Notificar">
                         <i class="fa fa-bell"></i>
                     </a>
                 @endif

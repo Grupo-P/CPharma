@@ -85,7 +85,7 @@ class ContReporteController extends Controller
                     cont_pagos_efectivo.created_at AS fecha,
                     CONCAT('Pago en efectivo en ', (SELECT sedes.siglas FROM sedes WHERE sedes.razon_social = cont_pagos_efectivo.sede)) AS tipo,
                     '-' AS nro_movimiento,
-                    FORMAT(cont_pagos_efectivo.egresos, 2, 'de_DE') AS monto,
+                    cont_pagos_efectivo.egresos AS monto,
                     '-' AS comentario,
                     IF(cont_pagos_efectivo.estatus_conciliaciones, 'Si', 'No') AS conciliacion,
                     cont_pagos_efectivo.user AS operador
@@ -106,7 +106,7 @@ class ContReporteController extends Controller
                     cont_pagos_bancarios.created_at AS fecha,
                     CONCAT('Pago bancario por ', (SELECT cont_bancos.alias_cuenta FROM cont_bancos WHERE cont_bancos.id = cont_pagos_bancarios.id_banco)) AS tipo,
                     '-' AS nro_movimiento,
-                    FORMAT(cont_pagos_bancarios.monto, 2, 'de_DE') AS monto,
+                    cont_pagos_bancarios.monto,
                     '-' AS comentario,
                     IF(cont_pagos_bancarios.estatus = 'Conciliado', 'Si', 'No') AS conciliacion,
                     cont_pagos_bancarios.operador AS operador
@@ -127,7 +127,7 @@ class ContReporteController extends Controller
                     cont_deudas.created_at AS fecha,
                     'Deudas' AS tipo,
                     cont_deudas.numero_documento AS nro_movimiento,
-                    FORMAT(cont_deudas.monto, 2, 'de_DE') AS monto,
+                    cont_deudas.monto,
                     '-' AS comentario,
                     '-' AS conciliacion,
                     cont_deudas.usuario_registro AS operador
@@ -148,7 +148,7 @@ class ContReporteController extends Controller
                     cont_reclamos.created_at AS fecha,
                     'Reclamo' AS tipo,
                     cont_reclamos.numero_documento AS nro_movimiento,
-                    FORMAT(cont_reclamos.monto, 2, 'de_DE') AS monto,
+                    cont_reclamos.monto,
                     cont_reclamos.comentario AS comentario,
                     '-' AS conciliacion,
                     cont_reclamos.usuario_registro AS operador
@@ -169,7 +169,7 @@ class ContReporteController extends Controller
                     cont_ajustes.created_at AS fecha,
                     'Ajuste' AS tipo,
                     '-' AS nro_movimiento,
-                    FORMAT(cont_ajustes.monto, 2, 'de_DE') AS monto,
+                    cont_ajustes.monto,
                     cont_ajustes.comentario,
                     '-' AS conciliacion,
                     cont_ajustes.usuario_registro AS operador
