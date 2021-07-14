@@ -100,7 +100,7 @@
             <td colspan="4" class="alinear-izq">{{ date_format($pago->created_at, 'd/m/Y H:i A') }}</td>
             </tr>
             <tr>
-            <td colspan="4" class="alinear-der">Monto:</td>
+            <td colspan="4" class="alinear-der">Monto en dólares:</td>
             <td colspan="4" class="alinear-izq">{{ ($pago->monto) ? number_format($pago->monto, 2, ',', '.') : number_format($pago->egresos, 2, ',', '.') }}</td>
             </tr>
             @if($pago->proveedor)

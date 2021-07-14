@@ -131,31 +131,36 @@
               <td>{{number_format($deuda->monto, 2, ',', '.')}}</td>
 
               @php
-                if ($deuda->banco->moneda != $deuda->proveedor->moneda) {
-                    if ($deuda->banco->moneda == 'Dólares' && $deuda->proveedor->moneda == 'Bolívares') {
-                        $monto_proveedor = $deuda->monto * $deuda->tasa;
-                    }
+                if ($deuda->tasa) {
+                    if ($deuda->banco->moneda != $deuda->proveedor->moneda) {
+                        if ($deuda->banco->moneda == 'Dólares' && $deuda->proveedor->moneda == 'Bolívares') {
+                            $monto_proveedor = $deuda->monto * $deuda->tasa;
+                        }
 
-                    if ($deuda->banco->moneda == 'Dólares' && $deuda->proveedor->moneda == 'Pesos') {
-                        $monto_proveedor = $deuda->monto * $deuda->tasa;
-                    }
+                        if ($deuda->banco->moneda == 'Dólares' && $deuda->proveedor->moneda == 'Pesos') {
+                            $monto_proveedor = $deuda->monto * $deuda->tasa;
+                        }
 
-                    if ($deuda->banco->moneda == 'Bolívares' && $deuda->proveedor->moneda == 'Dólares') {
-                        $monto_proveedor = $deuda->monto / $deuda->tasa;
-                    }
+                        if ($deuda->banco->moneda == 'Bolívares' && $deuda->proveedor->moneda == 'Dólares') {
+                            $monto_proveedor = $deuda->monto / $deuda->tasa;
+                        }
 
-                    if ($deuda->banco->moneda == 'Bolívares' && $deuda->proveedor->moneda == 'Pesos') {
-                        $monto_proveedor = $deuda->monto * $deuda->tasa;
-                    }
+                        if ($deuda->banco->moneda == 'Bolívares' && $deuda->proveedor->moneda == 'Pesos') {
+                            $monto_proveedor = $deuda->monto * $deuda->tasa;
+                        }
 
-                    if ($deuda->banco->moneda == 'Pesos' && $deuda->proveedor->moneda == 'Bolívares') {
-                        $monto_proveedor = $deuda->monto / $deuda->tasa;
-                    }
+                        if ($deuda->banco->moneda == 'Pesos' && $deuda->proveedor->moneda == 'Bolívares') {
+                            $monto_proveedor = $deuda->monto / $deuda->tasa;
+                        }
 
-                    if ($deuda->banco->moneda == 'Pesos' && $deuda->proveedor->moneda == 'Dólares') {
-                        $monto_proveedor = $deuda->monto / $deuda->tasa;
+                        if ($deuda->banco->moneda == 'Pesos' && $deuda->proveedor->moneda == 'Dólares') {
+                            $monto_proveedor = $deuda->monto / $deuda->tasa;
+                        }
+                    } else {
+                        $monto_proveedor = $deuda->monto;
                     }
-                } else {
+                }
+                else {
                     $monto_proveedor = $deuda->monto;
                 }
               @endphp

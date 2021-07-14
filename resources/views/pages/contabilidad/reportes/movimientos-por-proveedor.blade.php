@@ -39,6 +39,7 @@
                     <th scope="col" class="CP-sticky">Comentario</th>
                     <th scope="col" class="CP-sticky">Conciliado</th>
                     <th scope="col" class="CP-sticky">Operador</th>
+                    <th scope="col" class="CP-sticky">Estado</th>
                 </tr>
             </thead>
 
@@ -59,6 +60,9 @@
 
                     $cantidad_reclamos = 0;
                     $monto_reclamos = 0;
+
+                    $cantidad_total = 0;
+                    $monto_total = 0;
                 @endphp
 
                 @foreach($movimientos as $movimiento)
@@ -68,37 +72,82 @@
                         if ($movimiento->tipo == 'Ajuste') {
                             $cantidad_ajustes = $cantidad_ajustes + 1;
                             $monto_ajustes = $monto_ajustes + $movimiento->monto;
+                            $monto_total = $monto_total + $movimiento->monto;
+                            $monto = $movimiento->monto;
                         }
 
                         if ($movimiento->tipo == 'Deudas') {
                             $cantidad_deudas = $cantidad_deudas + 1;
                             $monto_deudas = $monto_deudas + $movimiento->monto;
+                            $monto_total = $monto_total + $movimiento->monto;
+                            $monto = $movimiento->monto;
                         }
 
                         if (strpos($movimiento->tipo, 'bancario')) {
+                            if ($movimiento->moneda_banco != $movimiento->moneda_proveedor) {
+                                if ($movimiento->moneda_banco == 'Dólares' && $movimiento->moneda_proveedor == 'Bolívares') {
+                                    $monto = $movimiento->monto * $movimiento->tasa;
+                                }
+
+                                if ($movimiento->moneda_banco == 'Dólares' && $movimiento->moneda_proveedor == 'Pesos') {
+                                    $monto = $movimiento->monto * $movimiento->tasa;
+                                }
+
+                                if ($movimiento->moneda_banco == 'Bolívares' && $movimiento->moneda_proveedor == 'Dólares') {
+                                    $monto = $movimiento->monto / $movimiento->tasa;
+                                }
+
+                                if ($movimiento->moneda_banco == 'Bolívares' && $movimiento->moneda_proveedor == 'Pesos') {
+                                    $monto = $movimiento->monto * $movimiento->tasa;
+                                }
+
+                                if ($movimiento->moneda_banco == 'Pesos' && $movimiento->moneda_proveedor == 'Bolívares') {
+                                    $monto = $movimiento->monto / $movimiento->tasa;
+                                }
+
+                                if ($movimiento->moneda_banco == 'Pesos' && $movimiento->moneda_proveedor == 'Dólares') {
+                                    $monto = $movimiento->monto / $movimiento->tasa;
+                                }
+                            } else {
+                                $monto = $movimiento->monto;
+                            }
+
                             $cantidad_bancarios = $cantidad_bancarios + 1;
-                            $monto_bancarios = $monto_bancarios + $movimiento->monto;
+                            $monto_bancarios = $monto_bancarios + $monto;
+                            $monto_total = $monto_total - $monto;
                         }
 
                         if (strpos($movimiento->tipo, 'efectivo')) {
+                            if ($movimiento->moneda_proveedor != 'Dólares') {
+                                $monto = $movimiento->monto * $movimiento->tasa;
+                            } else {
+                                $monto = $movimiento->monto;
+                            }
+
                             $cantidad_efectivo = $cantidad_efectivo + 1;
-                            $monto_efectivo = $monto_efectivo + $movimiento->monto;
+                            $monto_efectivo = $monto_efectivo + $monto;
+                            $monto_total = $monto_total - $monto;
                         }
 
                         if ($movimiento->tipo == 'Reclamo') {
                             $cantidad_reclamos = $cantidad_reclamos + 1;
                             $monto_reclamos = $monto_reclamos + $movimiento->monto;
+                            $monto_total = $monto_total + $movimiento->monto;
+                            $monto = $movimiento->monto;
                         }
+
+                        $cantidad_total = $cantidad_total + 1;
                     @endphp
                     <tr>
                         <td class="text-center">{{ $loop->iteration }}</td>
                         <td class="text-center">{{ date_format($fecha, 'd/m/Y h:i A') }}</td>
                         <td class="text-center">{{ $movimiento->tipo }}</td>
                         <td class="text-center">{{ $movimiento->nro_movimiento }}</td>
-                        <td class="text-center">{{ number_format($movimiento->monto, 2, ',', '.') }}</td>
+                        <td class="text-center">{{ number_format($monto, 2, ',', '.') }}</td>
                         <td class="text-center">{{ $movimiento->comentario }}</td>
                         <td class="text-center">{{ $movimiento->conciliacion }}</td>
                         <td class="text-center">{{ $movimiento->operador }}</td>
+                        <td class="text-center">{{ $movimiento->estado }}</td>
                     </tr>
                 @endforeach
             </tbody>
@@ -145,6 +194,12 @@
                     <td class="text-center">Reclamos</td>
                     <td class="text-center">{{ $cantidad_reclamos }}</td>
                     <td class="text-center">{{ number_format($monto_reclamos, 2, ',', '.') }}</td>
+                </tr>
+
+                <tr>
+                    <td class="text-center font-weight-bold">Totales</td>
+                    <td class="text-center font-weight-bold">{{ $cantidad_total }}</td>
+                    <td class="text-center font-weight-bold">{{ number_format($monto_total, 2, ',', '.') }}</td>
                 </tr>
             </tbody>
         </table>

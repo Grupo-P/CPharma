@@ -125,7 +125,6 @@ class ContProveedorController extends Controller
         $proveedor->tasa                 = $request->input('tasa');
         $proveedor->plan_cuentas         = $request->input('plan_cuentas');
         $proveedor->moneda               = $request->input('moneda');
-        $proveedor->saldo                = $request->input('saldo');
         $proveedor->save();
 
         $auditoria           = new Auditoria();

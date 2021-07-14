@@ -243,7 +243,7 @@ class ContPagoEfectivoController extends Controller
             $Auditoria->user     = auth()->user()->name;
             $Auditoria->save();
 
-            return redirect('/efectivo')->with('Updated', ' Informacion');
+            return redirect('/contabilidad/diferidos')->with('Updated', ' Informacion');
         } catch (\Illuminate\Database\QueryException $e) {
             dd($e);
             return back()->with('Error', ' Error');
@@ -289,8 +289,8 @@ class ContPagoEfectivoController extends Controller
             }
 
             $resultado['min'] = $configuracion->valor - ($configuracion->valor * 0.20);
-            $resultado['max'] = $configuracion->valor + ($configuracion->valor * 0.20);
-
+            $resultado['max'] = $configuracion->valor + ($configuracion->valor * 0.20)
+;
             return $resultado;
         }
     }

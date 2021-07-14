@@ -78,6 +78,7 @@
                                 @foreach($documentos as $documento)
                                     <option {{ ($reclamo->documento_soporte_reclamo == $documento) ? 'selected' : '' }} value="{{ $documento }}">{{ $documento }}</option>
                                 @endforeach
+                                <option {{ ($reclamo->documento_soporte_reclamo == 'Nota de crédito') ? 'selected' : '' }} value="Nota de crédito">Nota de crédito</option>
                             </select>
                         </td>
                     </tr>

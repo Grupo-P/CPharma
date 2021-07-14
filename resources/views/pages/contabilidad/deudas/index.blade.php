@@ -210,7 +210,7 @@
         </thead>
         <tbody>
         @foreach($deudas as $deuda)
-            <tr>
+            <tr class="{{ $deuda->deleted_at ? 'bg-warning' : '' }}">
               <th>{{$deuda->id}}</th>
               <td>{{$deuda->proveedor->nombre_proveedor}}</td>
               <td>{{$deuda->proveedor->rif_ci}}</td>
@@ -233,11 +233,13 @@
                         <i class="fas fa-edit"></i>
                     </a>
 
-                    <form action="/deudas/{{$deuda->id}}" method="POST" style="display: inline;">
-                        @method('DELETE')
-                        @csrf
-                        <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Desincorporar"><i class="fa fa-reply"></i></button>
-                    </form>
+                    @if(!$deuda->deleted_at)
+                        <form action="/deudas/{{$deuda->id}}" method="POST" style="display: inline;">
+                            @method('DELETE')
+                            @csrf
+                            <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Desincorporar"><i class="fa fa-reply"></i></button>
+                        </form>
+                    @endif
                 @endif
 
               </td>

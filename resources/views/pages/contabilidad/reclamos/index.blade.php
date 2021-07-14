@@ -121,7 +121,7 @@
         </thead>
         <tbody>
         @foreach($reclamos as $reclamo)
-            <tr>
+            <tr class="{{ ($reclamo->deleted_at) ? 'bg-warning' : '' }}">
               <th>{{$reclamo->id}}</th>
               <td>{{$reclamo->proveedor->nombre_proveedor}}</td>
               <td>{{$reclamo->proveedor->rif_ci}}</td>
@@ -142,11 +142,13 @@
                         <i class="fas fa-edit"></i>
                     </a>
 
-                    <form action="/reclamos/{{$reclamo->id}}" method="POST" style="display: inline;">
-                        @method('DELETE')
-                        @csrf
-                        <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Desincorporar"><i class="fa fa-reply"></i></button>
-                    </form>
+                    @if(!$reclamo->deleted_at)
+                        <form action="/reclamos/{{$reclamo->id}}" method="POST" style="display: inline;">
+                            @method('DELETE')
+                            @csrf
+                            <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Desincorporar"><i class="fa fa-reply"></i></button>
+                        </form>
+                    @endif
                 @endif
 
               </td>

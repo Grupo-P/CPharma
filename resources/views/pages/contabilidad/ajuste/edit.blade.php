@@ -66,6 +66,20 @@
                     </tr>
 
                     <tr>
+                        <th scope="row"><label for="saldo">Saldo del proveedor</label></th>
+                        <td>
+                            <input value="{{ number_format($ajuste->proveedor->saldo, 2, '.', '') }}" type="number" step="0.01" readonly class="form-control" name="saldo">
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <th scope="row"><label for="moneda">Moneda del proveedor</label></th>
+                        <td>
+                            <input value="{{ $ajuste->proveedor->moneda }}" type="text" readonly class="form-control" name="moneda">
+                        </td>
+                    </tr>
+
+                    <tr>
                         <th scope="row"><label for="comentario">Comentario *</label></th>
                         <td>
                             <input type="text" required class="form-control" value="{{ $ajuste->comentario }}" name="comentario" minlength="10" maxlength="200">
@@ -104,6 +118,7 @@
                 select: function (event, ui) {
                     $('[name=id_proveedor]').val(ui.item.id);
                     $('[name=moneda]').val(ui.item.moneda);
+                    $('[name=saldo]').val(ui.item.saldo);
                 }
             });
 

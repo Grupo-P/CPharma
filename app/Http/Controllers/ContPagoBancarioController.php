@@ -33,11 +33,43 @@ class ContPagoBancarioController extends Controller
     public function create(Request $request)
     {
         if ($request->ajax()) {
-            $proveedores = ContProveedor::find($request->id_proveedor);
+            if ($request->proveedor == 1) {
+                $proveedores          = ContProveedor::find($request->id_proveedor);
+                $proveedores['saldo'] = number_format($proveedores->saldo, 2, ',', '.');
+                return $proveedores;
+            }
 
-            $proveedores['saldo']  = number_format($proveedores->saldo, 2, ',', '.');
+            if ($request->conversion == 1) {
+                if ($request->banco != $request->proveedor) {
+                    if ($request->banco == 'Dólares' && $request->proveedor == 'Bolívares') {
+                        $monto = $request->monto * $request->tasa;
+                    }
 
-            return $proveedores;
+                    if ($request->banco == 'Dólares' && $request->proveedor == 'Pesos') {
+                        $monto = $request->monto * $request->tasa;
+                    }
+
+                    if ($request->banco == 'Bolívares' && $request->proveedor == 'Dólares') {
+                        $monto = $request->monto / $request->tasa;
+                    }
+
+                    if ($request->banco == 'Bolívares' && $request->proveedor == 'Pesos') {
+                        $monto = $request->monto * $request->tasa;
+                    }
+
+                    if ($request->banco == 'Pesos' && $request->proveedor == 'Bolívares') {
+                        $monto = $request->monto / $request->tasa;
+                    }
+
+                    if ($request->banco == 'Pesos' && $request->proveedor == 'Dólares') {
+                        $monto = $request->monto / $request->tasa;
+                    }
+                } else {
+                    $monto = $request->monto;
+                }
+
+                return $monto;
+            }
         }
 
         $sqlProveedores = ContProveedor::whereNull('deleted_at')->get();
@@ -49,6 +81,7 @@ class ContPagoBancarioController extends Controller
             $proveedores[$i]['value']  = $proveedor->nombre_proveedor . ' | ' . $proveedor->rif_ci;
             $proveedores[$i]['id']     = $proveedor->id;
             $proveedores[$i]['moneda'] = $proveedor->moneda;
+            $proveedores[$i]['tasa']   = $proveedor->tasa;
             $proveedores[$i]['saldo']  = number_format($proveedor->saldo, 2, ',', '');
 
             $i = $i + 1;
@@ -74,8 +107,8 @@ class ContPagoBancarioController extends Controller
         $pago->comentario   = $request->input('comentario');
         $pago->tasa         = $request->input('tasa');
 
-        $pago->operador     = auth()->user()->name;
-        $pago->estatus      = 'Procesado';
+        $pago->operador = auth()->user()->name;
+        $pago->estatus  = 'Procesado';
         $pago->save();
 
         $banco = ContBanco::find($pago->id_banco);
@@ -201,11 +234,44 @@ class ContPagoBancarioController extends Controller
         $pago->estatus = 'Reversado';
         $pago->save();
 
-        $monto = ($pago->monto > 0) ? -$pago->monto : abs($pago->monto);
+        $banco     = ContBanco::find($pago->id_banco);
+        $proveedor = ContProveedor::find($pago->id_proveedor);
+
+        if ($banco->moneda != $proveedor->moneda) {
+            if ($banco->moneda == 'Dólares' && $proveedor->moneda == 'Bolívares') {
+                $monto_proveedor = $pago->monto * $pago->tasa;
+            }
+
+            if ($banco->moneda == 'Dólares' && $proveedor->moneda == 'Pesos') {
+                $monto_proveedor = $pago->monto * $pago->tasa;
+            }
+
+            if ($banco->moneda == 'Bolívares' && $proveedor->moneda == 'Dólares') {
+                $monto_proveedor = $pago->monto / $pago->tasa;
+            }
+
+            if ($banco->moneda == 'Bolívares' && $proveedor->moneda == 'Pesos') {
+                $monto_proveedor = $pago->monto * $pago->tasa;
+            }
+
+            if ($banco->moneda == 'Pesos' && $proveedor->moneda == 'Bolívares') {
+                $monto_proveedor = $pago->monto / $pago->tasa;
+            }
+
+            if ($banco->moneda == 'Pesos' && $proveedor->moneda == 'Dólares') {
+                $monto_proveedor = $pago->monto / $pago->tasa;
+            }
+        } else {
+            $monto_proveedor = $pago->monto;
+        }
+
+        $monto_proveedor = ($monto_proveedor > 0) ? -$monto_proveedor : abs($monto_proveedor);
+        $monto           = ($pago->monto > 0) ? -$pago->monto : abs($pago->monto);
 
         $nuevoPago               = new ContPagoBancario();
         $nuevoPago->id_proveedor = $pago->id_proveedor;
         $nuevoPago->id_banco     = $pago->id_banco;
+        $nuevoPago->tasa         = $pago->tasa;
         $nuevoPago->monto        = $monto;
         $nuevoPago->comentario   = 'Reverso del pago bancario #' . $pago->id;
         $nuevoPago->operador     = $pago->operador;
@@ -213,7 +279,7 @@ class ContPagoBancarioController extends Controller
         $nuevoPago->save();
 
         $proveedor        = ContProveedor::find($pago->id_proveedor);
-        $proveedor->saldo = (float) $proveedor->saldo - (float) $monto;
+        $proveedor->saldo = (float) $proveedor->saldo - (float) $monto_proveedor;
         $proveedor->save();
 
         return redirect('/bancarios')->with('Deleted', ' Informacion');

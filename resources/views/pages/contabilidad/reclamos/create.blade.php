@@ -77,6 +77,7 @@
                                 @foreach($documentos as $documento)
                                     <option value="{{ $documento }}">{{ $documento }}</option>
                                 @endforeach
+                                <option value="Nota de crédito">Nota de crédito</option>
                             </select>
                         </td>
                     </tr>

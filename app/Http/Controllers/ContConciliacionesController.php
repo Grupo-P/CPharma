@@ -20,53 +20,35 @@ class ContConciliacionesController extends Controller
         $pagos = [];
         $i     = 0;
 
-        $bancarios = ContPagoBancario::whereNull('estatus')->get();
+        $bancarios = ContPagoBancario::get();
 
         foreach ($bancarios as $bancario) {
-            $pagos[$i]['id']           = $bancario->id;
-            $pagos[$i]['tipo']         = 'Banco';
-            $pagos[$i]['id_proveedor'] = $bancario->id_proveedor;
-            $pagos[$i]['proveedor']    = $bancario->proveedor;
-            $pagos[$i]['id_banco']     = $bancario->id_banco;
-            $pagos[$i]['banco']        = $bancario->banco;
-            $pagos[$i]['monto']        = $bancario->monto;
-            $pagos[$i]['comentario']   = $bancario->comentario;
-            $pagos[$i]['operador']     = $bancario->operador;
-            $pagos[$i]['estatus']      = $bancario->estatus;
-            $pagos[$i]['deleted_at']   = $bancario->deleted_at;
-            $pagos[$i]['created_at']   = $bancario->created_at;
-            $pagos[$i]['updated_at']   = $bancario->updated_at;
-            $i                         = $i + 1;
+            $pagos[$i]['id']               = $bancario->id;
+            $pagos[$i]['tipo']             = 'Bancario';
+            $pagos[$i]['emisor']           = $bancario->banco->nombre_banco;
+            $pagos[$i]['nombre_proveedor'] = $bancario->proveedor->nombre_proveedor;
+            $pagos[$i]['ci_proveedor']     = $bancario->proveedor->rif_ci;
+            $pagos[$i]['monto']            = number_format($bancario->monto, 2, ',', '.');
+            $pagos[$i]['operador']         = $bancario->operador;
+            $pagos[$i]['fecha']            = date_format(date_create($bancario->created_at), 'd/m/Y h:ia');
+            $i                             = $i + 1;
         }
 
-        $efectivos = ContPagoEfectivo::whereNull('estatus_conciliaciones')->get();
+        $efectivos = ContPagoEfectivo::get();
 
         foreach ($efectivos as $efectivo) {
-            $pagos[$i]['id']                     = $efectivo->id;
-            $pagos[$i]['tipo']                   = 'Efectivo';
-            $pagos[$i]['id_proveedor']           = $efectivo->id_proveedor;
-            $pagos[$i]['proveedor']              = $efectivo->proveedor;
-            $pagos[$i]['id_cuenta']              = $efectivo->id_cuenta;
-            $pagos[$i]['ingresos']               = $efectivo->ingresos;
-            $pagos[$i]['egresos']                = $efectivo->egresos;
-            $pagos[$i]['diferido']               = $efectivo->diferido;
-            $pagos[$i]['saldo_anterior']         = $efectivo->saldo_anterior;
-            $pagos[$i]['saldo_actual']           = $efectivo->saldo_actual;
-            $pagos[$i]['diferido_anterior']      = $efectivo->diferido_anterior;
-            $pagos[$i]['diferido_actual']        = $efectivo->diferido_actual;
-            $pagos[$i]['concepto']               = $efectivo->concepto;
-            $pagos[$i]['user']                   = $efectivo->user;
-            $pagos[$i]['estatus_conciliaciones'] = $efectivo->estatus_conciliaciones;
-            $pagos[$i]['user_up']                = $efectivo->user_up;
-            $pagos[$i]['estatus']                = $efectivo->estatus;
-            $pagos[$i]['sede']                   = $efectivo->sede;
-            $pagos[$i]['deleted_at']             = $efectivo->deleted_at;
-            $pagos[$i]['created_at']             = $efectivo->created_at;
-            $pagos[$i]['updated_at']             = $efectivo->updated_at;
-            $i                                   = $i + 1;
+            $pagos[$i]['id']               = $efectivo->id;
+            $pagos[$i]['tipo']             = 'Efectivo';
+            $pagos[$i]['emisor']           = $efectivo->sede;
+            $pagos[$i]['nombre_proveedor'] = ($efectivo->proveedor) ? $efectivo->proveedor->nombre_proveedor : '';
+            $pagos[$i]['ci_proveedor']     = ($efectivo->proveedor) ? $efectivo->proveedor->rif_ci : '';
+            $pagos[$i]['monto']            = ($efectivo->egresos) ? number_format($efectivo->egresos, 2, ',', '.') : number_format($efectivo->diferido, 2, ',', '.');
+            $pagos[$i]['operador']         = $efectivo->operador;
+            $pagos[$i]['fecha']            = date_format(date_create($efectivo->created_at), 'd/m/Y h:ia');
+            $i                             = $i + 1;
         }
 
-        $pagos = FG_Ordenar_Arreglo($pagos, 'created_at', SORT_DESC);
+        $pagos = FG_Ordenar_Arreglo($pagos, 'fecha', SORT_DESC);
 
         return view('pages.contabilidad.conciliaciones.index', compact('pagos'));
     }

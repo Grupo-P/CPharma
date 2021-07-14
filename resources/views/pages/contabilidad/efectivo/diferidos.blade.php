@@ -86,18 +86,18 @@
         <td>{{$diferido->user_up}}</td>
         <td>{{$diferido->estatus}}</td>
         <td>
-          @if((auth()->user()->departamento == 'TESORERIA') && ($diferido->estatus == 'DIFERIDO'))
-            <a href="javascript:alert('En desarrollo...')" class="btn btn-sm btn-outline-success">
+          @if((auth()->user()->departamento == 'TESORERIA' || auth()->user()->departamento == 'TECNOLOGIA' || auth()->user()->departamento == 'GERENCIA') && ($diferido->estatus == 'DIFERIDO'))
+            <a href="" data-id="{{ $diferido->id }}" data-monto="{{ $diferido->diferido }}" data-concepto="{{ $diferido->concepto }}" data-movimiento="Egreso" class="btn btn-sm btn-outline-success">
                 <span class="fa fa-check"></span>
                 Confirmar
             </a>
 
-            <a href="javascript:alert('En desarrollo...')" class="btn btn-sm btn-outline-danger">
+            <a href="" data-id="{{ $diferido->id }}" data-monto="{{ $diferido->diferido }}" data-concepto="{{ $diferido->concepto }}" data-movimiento="Ingreso" class="btn btn-sm btn-outline-danger">
                 <span class="fa fa-ban"></span>
                 Reversar
             </a>
           @else
-            {{'-'}}
+            -
           @endif
         </td>
       </tr>
@@ -109,6 +109,36 @@
     $(document).ready(function(){
         $('[data-toggle="tooltip"]').tooltip();
     });
+
     $('#exampleModalCenter').modal('show');
+
+    $('[data-movimiento]').click(function (event) {
+        event.preventDefault();
+
+        id = $(this).attr('data-id');
+        movimiento = $(this).attr('data-movimiento');
+        concepto = $(this).attr('data-concepto');
+        monto = $(this).attr('data-monto');
+
+        concepto = prompt('Concepto', concepto);
+
+        $.ajax({
+            method: 'POST',
+            url: '/efectivo/' + id,
+            data: {
+                _token: '{{ csrf_token() }}',
+                _method: 'PUT',
+                movimiento: movimiento,
+                monto: monto,
+                concepto: concepto
+            },
+            success: function (response) {
+                window.location.href = '/contabilidad/diferidos';
+            },
+            error: function (error) {
+                $('body').html(error.responseText);
+            }
+        })
+    });
   </script>
 @endsection

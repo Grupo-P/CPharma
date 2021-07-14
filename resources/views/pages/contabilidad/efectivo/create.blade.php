@@ -95,7 +95,7 @@
 
           @if($request->get('tipo') == 'movimiento')
             <tr>
-              <th scope="row">{!! Form::label('id_cuenta', 'Plan de cuentas', ['title' => 'Este campo es requerido']) !!}</th>
+              <th scope="row">{!! Form::label('id_cuenta', 'Plan de cuentas *', ['title' => 'Este campo es requerido']) !!}</th>
               <td>
                 <select required name="id_cuenta" class="form-control">
                   <option value=""></option>
@@ -107,7 +107,7 @@
             </tr>
 
             <tr>
-                <th scope="row">{!! Form::label('autorizado_por', 'Autorizado por', ['title' => 'Este campo es requerido']) !!}</th>
+                <th scope="row">{!! Form::label('autorizado_por', 'Autorizado por *', ['title' => 'Este campo es requerido']) !!}</th>
                 <td>
                     <input type="text" required class="form-control" name="autorizado_por">
                 </td>
@@ -116,7 +116,7 @@
 
           @if($request->get('tipo') == 'proveedores')
             <tr>
-                <th scope="row"><label for="nombre_proveedor">Nombre del proveedor</label></th>
+                <th scope="row"><label for="nombre_proveedor">Nombre del proveedor *</label></th>
                 <td>
                     <input autofocus class="form-control" type="text" id="proveedores">
                     <input type="hidden" name="id_proveedor">

@@ -97,7 +97,7 @@
               <i class="fas fa-edit"></i>
             </a>
           @else
-            {{'-'}}
+            -
           @endif
         </td>
       </tr>
@@ -109,6 +109,7 @@
     $(document).ready(function(){
         $('[data-toggle="tooltip"]').tooltip();   
     });
+
     $('#exampleModalCenter').modal('show');
   </script>
 @endsection

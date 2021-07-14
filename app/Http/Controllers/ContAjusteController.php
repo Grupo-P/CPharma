@@ -27,7 +27,7 @@ class ContAjusteController extends Controller
      */
     public function create()
     {
-        $sqlProveedores = ContProveedor::get();
+        $sqlProveedores = ContProveedor::whereNull('deleted_at')->get();
         $i              = 0;
 
         foreach ($sqlProveedores as $proveedor) {
@@ -35,6 +35,7 @@ class ContAjusteController extends Controller
             $proveedores[$i]['value']  = $proveedor->nombre_proveedor . ' | ' . $proveedor->rif_ci;
             $proveedores[$i]['id']     = $proveedor->id;
             $proveedores[$i]['moneda'] = $proveedor->moneda;
+            $proveedores[$i]['saldo']  = $proveedor->saldo;
 
             $i = $i + 1;
         }
@@ -93,7 +94,7 @@ class ContAjusteController extends Controller
     {
         $ajuste = ContAjuste::find($id);
 
-        $sqlProveedores = ContProveedor::get();
+        $sqlProveedores = ContProveedor::whereNull('deleted_at')->get();
         $i              = 0;
 
         foreach ($sqlProveedores as $proveedor) {
@@ -101,6 +102,7 @@ class ContAjusteController extends Controller
             $proveedores[$i]['value']  = $proveedor->nombre_proveedor . ' | ' . $proveedor->rif_ci;
             $proveedores[$i]['id']     = $proveedor->id;
             $proveedores[$i]['moneda'] = $proveedor->moneda;
+            $proveedores[$i]['saldo']  = $proveedor->saldo;
 
             $i = $i + 1;
         }
@@ -119,7 +121,7 @@ class ContAjusteController extends Controller
     {
         $ajuste = ContAjuste::find($id);
 
-        $proveedor        = ContProveedor::find($request->input('id_proveedor'));
+        $proveedor        = ContProveedor::find($ajuste->id_proveedor);
         $proveedor->saldo = (float) $proveedor->saldo - (float) $ajuste->monto;
         $proveedor->save();
 

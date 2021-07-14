@@ -159,7 +159,6 @@ class ContDeudasController extends Controller
         $proveedor->save();
 
         $deuda->id_proveedor            = $request->input('id_proveedor');
-        $deuda->monto                   = $request->input('monto');
         $deuda->documento_soporte_deuda = $request->input('documento_soporte_deuda');
         $deuda->numero_documento        = $request->input('numero_documento');
         $deuda->sede                    = $request->input('sede');

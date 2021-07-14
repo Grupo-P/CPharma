@@ -88,13 +88,16 @@ class ContReporteController extends Controller
                     cont_pagos_efectivo.egresos AS monto,
                     '-' AS comentario,
                     IF(cont_pagos_efectivo.estatus_conciliaciones, 'Si', 'No') AS conciliacion,
-                    cont_pagos_efectivo.user AS operador
+                    cont_pagos_efectivo.user AS operador,
+                    IF(cont_pagos_efectivo.deleted_at, 'Desincorporado', 'Activo') AS estado,
+                    (SELECT cont_proveedores.moneda FROM cont_proveedores WHERE cont_proveedores.id = cont_pagos_efectivo.id_proveedor) AS moneda_proveedor,
+                    cont_pagos_efectivo.tasa AS tasa
                 FROM
                     cont_pagos_efectivo
                 WHERE
                     cont_pagos_efectivo.id_proveedor = '{$request->get('id_proveedor')}' AND
-                    cont_pagos_efectivo.created_at >= '{$request->fechaInicio}' AND
-                    cont_pagos_efectivo.created_at <= '{$request->fechaFin}';
+                    DATE(cont_pagos_efectivo.created_at) >= '{$request->fechaInicio}' AND
+                    DATE(cont_pagos_efectivo.created_at) <= '{$request->fechaFin}';
             ");
 
             foreach ($efectivo as $item) {
@@ -109,13 +112,17 @@ class ContReporteController extends Controller
                     cont_pagos_bancarios.monto,
                     '-' AS comentario,
                     IF(cont_pagos_bancarios.estatus = 'Conciliado', 'Si', 'No') AS conciliacion,
-                    cont_pagos_bancarios.operador AS operador
+                    cont_pagos_bancarios.operador AS operador,
+                    IF(cont_pagos_bancarios.deleted_at, 'Desincorporado', 'Activo') AS estado,
+                    (SELECT cont_bancos.moneda FROM cont_bancos WHERE cont_bancos.id = cont_pagos_bancarios.id_banco) AS moneda_banco,
+                    (SELECT cont_proveedores.moneda FROM cont_proveedores WHERE cont_proveedores.id = cont_pagos_bancarios.id_proveedor) AS moneda_proveedor,
+                    cont_pagos_bancarios.tasa AS tasa
                 FROM
                     cont_pagos_bancarios
                 WHERE
                     cont_pagos_bancarios.id_proveedor = '{$request->get('id_proveedor')}' AND
-                    cont_pagos_bancarios.created_at >= '{$request->fechaInicio}' AND
-                    cont_pagos_bancarios.created_at <= '{$request->fechaFin}';
+                    DATE(cont_pagos_bancarios.created_at) >= '{$request->fechaInicio}' AND
+                    DATE(cont_pagos_bancarios.created_at) <= '{$request->fechaFin}';
             ");
 
             foreach ($bancarios as $item) {
@@ -130,13 +137,14 @@ class ContReporteController extends Controller
                     cont_deudas.monto,
                     '-' AS comentario,
                     '-' AS conciliacion,
-                    cont_deudas.usuario_registro AS operador
+                    cont_deudas.usuario_registro AS operador,
+                    IF(cont_deudas.deleted_at, 'Desincorporado', 'Activo') AS estado
                 FROM
                     cont_deudas
                 WHERE
                     cont_deudas.id_proveedor = '{$request->get('id_proveedor')}' AND
-                    cont_deudas.created_at >= '{$request->fechaInicio}' AND
-                    cont_deudas.created_at <= '{$request->fechaFin}';
+                    DATE(cont_deudas.created_at) >= '{$request->fechaInicio}' AND
+                    DATE(cont_deudas.created_at) <= '{$request->fechaFin}';
             ");
 
             foreach ($deudas as $item) {
@@ -151,13 +159,15 @@ class ContReporteController extends Controller
                     cont_reclamos.monto,
                     cont_reclamos.comentario AS comentario,
                     '-' AS conciliacion,
-                    cont_reclamos.usuario_registro AS operador
+                    cont_reclamos.usuario_registro AS operador,
+                    IF(cont_reclamos.deleted_at, 'Desincorporado', 'Activo') AS estado
+
                 FROM
                     cont_reclamos
                 WHERE
                     cont_reclamos.id_proveedor = '{$request->get('id_proveedor')}' AND
-                    cont_reclamos.created_at >= '{$request->fechaInicio}' AND
-                    cont_reclamos.created_at <= '{$request->fechaFin}';
+                    DATE(cont_reclamos.created_at) >= '{$request->fechaInicio}' AND
+                    DATE(cont_reclamos.created_at) <= '{$request->fechaFin}';
             ");
 
             foreach ($reclamos as $item) {
@@ -172,13 +182,14 @@ class ContReporteController extends Controller
                     cont_ajustes.monto,
                     cont_ajustes.comentario,
                     '-' AS conciliacion,
-                    cont_ajustes.usuario_registro AS operador
+                    cont_ajustes.usuario_registro AS operador,
+                    IF(cont_ajustes.deleted_at, 'Desincorporado', 'Activo') AS estado
                 FROM
                     cont_ajustes
                 WHERE
                     cont_ajustes.id_proveedor = '{$request->get('id_proveedor')}' AND
-                    cont_ajustes.created_at >= '{$request->fechaInicio}' AND
-                    cont_ajustes.created_at <= '{$request->fechaFin}';
+                    DATE(cont_ajustes.created_at) >= '{$request->fechaInicio}' AND
+                    DATE(cont_ajustes.created_at) <= '{$request->fechaFin}';
             ");
 
             foreach ($ajustes as $item) {

@@ -115,12 +115,12 @@
         </thead>
         <tbody>
         @foreach($ajustes as $ajuste)
-            <tr>
+            <tr class="{{ ($ajuste->reverso) ? 'bg-warning' : '' }}">
               <th>{{$ajuste->id}}</th>
               <td>{{$ajuste->proveedor->nombre_proveedor}}</td>
               <td>{{$ajuste->proveedor->rif_ci}}</td>
               <td>{{$ajuste->created_at}}</td>
-              <td>{{$ajuste->monto}}</td>
+              <td>{{number_format($ajuste->monto, 2, ',', '.')}}</td>
               <td>{{$ajuste->comentario}}</td>
               <td>{{$ajuste->usuario_registro}}</td>
               <td style="width:140px;">
