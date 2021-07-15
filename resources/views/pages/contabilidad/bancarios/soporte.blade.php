@@ -147,6 +147,10 @@
             <td colspan="4" class="alinear-izq">{{ $pago->operador }}</td>
             </tr>
             <tr>
+            <td colspan="4" class="alinear-der">Comentario:</td>
+            <td colspan="4" class="alinear-izq">{{ $pago->comentario }}</td>
+            </tr>
+            <tr>
             <td colspan="4" class="alinear-izq">
                 <br/><br/><br/>
                 <span>______________________________</span><br/>

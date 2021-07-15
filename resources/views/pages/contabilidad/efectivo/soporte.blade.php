@@ -148,6 +148,10 @@
                 <td colspan="4" class="alinear-izq">{{ $pago->autorizado_por }}</td>
                 </tr>
             @endif
+            <tr>
+            <td colspan="4" class="alinear-der">Comentario:</td>
+            <td colspan="4" class="alinear-izq">{{ $pago->concepto }}</td>
+            </tr>
             <td colspan="4" class="alinear-izq">
                 <br/><br/><br/>
                 <span>______________________________</span><br/>

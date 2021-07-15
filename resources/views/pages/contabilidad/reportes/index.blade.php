@@ -67,5 +67,18 @@
                 <a class="btn btn-outline-warning btn-sm" href="/reportes/movimientos-bancarios">Visualizar</a>
             </div>
         </div>
+
+        <div class="card border-secondary mb-3" style="width: 14rem;">
+            <div class="card-body text-left bg-secondary">
+                <h5 class="card-title">
+                    <span class="card-text text-white">
+                        Reporte por cuentas
+                    </span>
+                </h5>
+            </div>
+            <div class="card-footer bg-transparent border-secondary text-right">
+                <a class="btn btn-outline-secondary btn-sm" href="/reportes/reporte-por-cuentas">Visualizar</a>
+            </div>
+        </div>
     </div>
 @endsection

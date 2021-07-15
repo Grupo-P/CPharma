@@ -451,5 +451,6 @@ Route::get('/reportes/movimientos-por-proveedor', 'ContReporteController@movimie
 Route::get('/reportes/movimientos-bancarios', 'ContReporteController@movimientos_bancarios');
 Route::get('/reportes/deudas-por-fecha', 'ContReporteController@deudas_por_fecha');
 Route::get('/reportes/pagos-por-fecha', 'ContReporteController@pagos_por_fecha');
+Route::get('/reportes/reporte-por-cuentas', 'ContReporteController@reporte_por_cuentas');
 
 Route::resource('/conciliaciones', 'ContConciliacionesController');

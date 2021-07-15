@@ -10,7 +10,7 @@
     <h1 class="h5 text-info">
         <i class="fas fa-file-invoice">
         </i>
-        Movimientos bancarios
+        Reporte por cuentas
     </h1>
 
     <hr class="row align-items-start col-12">
@@ -26,36 +26,32 @@
             <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterAllTable()" autofocus="autofocus">
         </div>
 
-        <h6 align="center">Periodo desde el <b>{{ $fechaInicio }}</b> al <b>{{ $fechaFin }}</b> para el banco <b>{{ $banco->alias_cuenta }}</b></h6>
+        <h6 align="center">Periodo desde el <b>{{ $fechaInicio }}</b> al <b>{{ $fechaFin }}</b>.</h6>
 
         <table class="table table-striped table-bordered col-12 sortable" id="myTable">
             <thead class="thead-dark">
                 <tr>
                     <th scope="col" class="CP-sticky">#</th>
                     <th scope="col" class="CP-sticky">Fecha y hora</th>
-                    <th scope="col" class="CP-sticky">Nombre del proveedor</th>
+                    <th scope="col" class="CP-sticky">Tipo</th>
                     <th scope="col" class="CP-sticky">Monto</th>
-                    <th scope="col" class="CP-sticky">Comentario</th>
-                    <th scope="col" class="CP-sticky">Conciliado</th>
                     <th scope="col" class="CP-sticky">Operador</th>
                 </tr>
             </thead>
 
             <tbody>
-                @foreach($pagos as $pago)
+                @foreach($items as $item)
+                    @php $fecha = date_create($item->fecha); @endphp
                     <tr>
                         <td class="text-center">{{ $loop->iteration }}</td>
-                        <td class="text-center">{{ date_format($pago->created_at, 'd/m/Y h:i A') }}</td>
-                        <td class="text-center">{{ $pago->proveedor->nombre_proveedor }}</td>
-                        <td class="text-center">{{ $pago->monto ? number_format($pago->monto, 2, ',', '.') : number_format($pago->egresos, 2, ',', '.') }}</td>
-                        <td class="text-center">{{ $pago->comentario }}</td>
-                        <td class="text-center">{{ $pago->conciliado ? 'Si' : 'No' }}</td>
-                        <td class="text-center">{{ ($pago->user) ? $pago->user : $pago->operador }}</td>
+                        <td class="text-center">{{ date_format($fecha, 'd/m/Y h:i A') }}</td>
+                        <td class="text-center">{{ $item->tipo }}</td>
+                        <td class="text-center">{{ number_format($item->monto, 2, ',', '.') }}</td>
+                        <td class="text-center">{{ $item->operador }}</td>
                     </tr>
                 @endforeach
             </tbody>
         </table>
-
 
     @else
         <form action="">
@@ -63,16 +59,12 @@
                 <div class="col"></div>
 
                 <div class="col">
-                    Banco:
+                    Plan de cuentas:
                 </div>
 
                 <div class="col">
-                    <select name="id_banco" class="form-control">
-                        <option value=""></option>
-                        @foreach($bancos as $banco)
-                            <option value="{{ $banco->id }}">{{ $banco->alias_cuenta }}</option>
-                        @endforeach
-                    </select>
+                    <input type="text" required class="form-control" name="cuenta">
+                    <input type="hidden" required name="id_cuenta">
                 </div>
 
                 <div class="col"></div>
@@ -107,4 +99,36 @@
             </div>
         </form>
     @endif
+@endsection
+
+
+
+@section('scriptsHead')
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            var cuentasJson = {!! json_encode($cuentas) !!};
+
+            $('[name=cuenta]').autocomplete({
+                source: cuentasJson,
+                autoFocus: true,
+                select: function (event, ui) {
+                    $('[name=id_cuenta]').val(ui.item.id);
+                }
+            });
+
+            $('form').submit(function (event) {
+                resultado = cuentasJson.find(elemento => elemento.label == $('[name=cuenta]').val());
+
+                if (!resultado) {
+                    event.preventDefault();
+                    alert('Debe seleccionar un plan de cuentas válido');
+                    bancario = false;
+                }
+            });
+        });
+    </script>
 @endsection

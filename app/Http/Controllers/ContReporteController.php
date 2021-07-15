@@ -3,17 +3,13 @@
 namespace compras\Http\Controllers;
 
 use compras\ContBanco;
-use compras\ContDeuda;
+use compras\ContCuenta;
 use compras\ContPagoBancario;
 use compras\ContPagoEfectivo;
 use compras\ContProveedor;
-use compras\ContReclamo;
-
 use Datetime;
-
-use Illuminate\Http\Request;
-
 use DB;
+use Illuminate\Http\Request;
 
 class ContReporteController extends Controller
 {
@@ -58,7 +54,7 @@ class ContReporteController extends Controller
 
     public function movimientos_por_proveedor(Request $request)
     {
-        $sqlProveedores = ContProveedor::whereNull('deleted_at')->get();
+        $sqlProveedores = ContProveedor::get();
         $i              = 0;
         $proveedores    = [];
 
@@ -242,10 +238,12 @@ class ContReporteController extends Controller
                     cont_deudas.created_at,
                     'Deuda' AS tipo,
                     (SELECT cont_proveedores.nombre_proveedor FROM cont_proveedores WHERE cont_proveedores.id = cont_deudas.id_proveedor) AS proveedor,
+                    (SELECT cont_proveedores.moneda FROM cont_proveedores WHERE cont_proveedores.id = cont_deudas.id_proveedor) AS moneda_proveedor,
                     (SELECT cont_proveedores.moneda FROM cont_proveedores WHERE cont_proveedores.id = cont_deudas.id_proveedor) AS moneda,
                     cont_deudas.monto,
                     cont_deudas.sede,
-                    cont_deudas.usuario_registro AS operador
+                    cont_deudas.usuario_registro AS operador,
+                    IF(cont_deudas.deleted_at, 'Activo', 'Desincorporado') AS estado
                 FROM cont_deudas
                 WHERE
                     DATE(cont_deudas.created_at) >= '{$request->get('fechaInicio')}' AND DATE(cont_deudas.created_at) <= '{$request->get('fechaFin')}';
@@ -257,10 +255,12 @@ class ContReporteController extends Controller
                     cont_reclamos.created_at,
                     'Reclamo' AS tipo,
                     (SELECT cont_proveedores.nombre_proveedor FROM cont_proveedores WHERE cont_proveedores.id = cont_reclamos.id_proveedor) AS proveedor,
+                    (SELECT cont_proveedores.moneda FROM cont_proveedores WHERE cont_proveedores.id = cont_reclamos.id_proveedor) AS moneda_proveedor,
                     (SELECT cont_proveedores.moneda FROM cont_proveedores WHERE cont_proveedores.id = cont_reclamos.id_proveedor) AS moneda,
                     cont_reclamos.monto,
                     cont_reclamos.sede,
-                    cont_reclamos.usuario_registro AS operador
+                    cont_reclamos.usuario_registro AS operador,
+                    IF(cont_reclamos.deleted_at, 'Activo', 'Desincorporado') AS estado
                 FROM cont_reclamos
                 WHERE
                     DATE(cont_reclamos.created_at) >= '{$request->get('fechaInicio')}' AND DATE(cont_reclamos.created_at) <= '{$request->get('fechaFin')}';
@@ -280,5 +280,95 @@ class ContReporteController extends Controller
         }
 
         return view('pages.contabilidad.reportes.deudas-por-fecha', compact('request', 'fechaInicio', 'fechaFin', 'items'));
+    }
+
+    public function reporte_por_cuentas(Request $request)
+    {
+        error_reporting(0);
+
+        $sqlCuentas = ContCuenta::get();
+        $i          = 0;
+        $cuentas    = [];
+
+        foreach ($sqlCuentas as $cuenta) {
+            $cuentas[$i]['label']  = $cuenta->nombre;
+            $cuentas[$i]['value']  = $cuenta->nombre;
+            $cuentas[$i]['id']     = $cuenta->id;
+            $cuentas[$i]['nombre'] = $cuenta->nombre;
+
+            $i = $i + 1;
+        }
+
+        if ($request->get('fechaInicio')) {
+            $fechaInicio = new Datetime($request->get('fechaInicio'));
+            $fechaInicio = $fechaInicio->format('d/m/Y');
+
+            $fechaFin = new Datetime($request->get('fechaFin'));
+            $fechaFin = $fechaFin->format('d/m/Y');
+
+            $items = [];
+
+            if ($request->get('id_cuenta')) {
+                $efectivo = DB::select("
+                    SELECT
+                        cont_pagos_efectivo.created_at AS fecha,
+                        CONCAT('Pago en efectivo en ', (SELECT sedes.siglas FROM sedes WHERE sedes.razon_social = cont_pagos_efectivo.sede)) AS tipo,
+                        IF (cont_pagos_efectivo.egresos, cont_pagos_efectivo.egresos, cont_pagos_efectivo.diferido) AS monto,
+                        cont_pagos_efectivo.user AS operador
+                    FROM
+                        cont_pagos_efectivo
+                    WHERE
+                        cont_pagos_efectivo.id_proveedor IS NOT NULL AND
+                        (SELECT cont_proveedores.plan_cuentas FROM cont_proveedores WHERE cont_proveedores.id = cont_pagos_efectivo.id_proveedor) = '{$request->cuenta}' AND
+                        DATE(cont_pagos_efectivo.created_at) >= '{$request->fechaInicio}' AND
+                        DATE(cont_pagos_efectivo.created_at) <= '{$request->fechaFin}';
+                ");
+
+                foreach ($efectivo as $item) {
+                    $items[] = $item;
+                }
+
+                $bancario = DB::select("
+                    SELECT
+                        cont_pagos_bancarios.created_at AS fecha,
+                        CONCAT('Pago bancario por ', (SELECT cont_bancos.alias_cuenta FROM cont_bancos WHERE cont_bancos.id = cont_pagos_bancarios.id_banco)) AS tipo,
+                        cont_pagos_bancarios.monto,
+                        cont_pagos_bancarios.operador AS operador
+                    FROM
+                        cont_pagos_bancarios
+                    WHERE
+                        (SELECT cont_proveedores.plan_cuentas FROM cont_proveedores WHERE cont_proveedores.id = cont_pagos_bancarios.id_proveedor) = '{$request->cuenta}' AND
+                        DATE(cont_pagos_bancarios.created_at) >= '{$request->fechaInicio}' AND
+                        DATE(cont_pagos_bancarios.created_at) <= '{$request->fechaFin}';
+                ");
+
+                foreach ($bancario as $item) {
+                    $items[] = $item;
+                }
+
+                $efectivo = DB::select("
+                    SELECT
+                        cont_pagos_efectivo.created_at AS fecha,
+                        CONCAT('Ingreso en efectivo en ', (SELECT sedes.siglas FROM sedes WHERE sedes.razon_social = cont_pagos_efectivo.sede)) AS tipo,
+                        cont_pagos_efectivo.ingresos AS monto,
+                        cont_pagos_efectivo.user AS operador
+                    FROM
+                        cont_pagos_efectivo
+                    WHERE
+                        (cont_pagos_efectivo.ingresos IS NOT NULL) AND
+                        cont_pagos_efectivo.id_cuenta = '{$request->id_cuenta}' AND
+                        DATE(cont_pagos_efectivo.created_at) >= '{$request->fechaInicio}' AND
+                        DATE(cont_pagos_efectivo.created_at) <= '{$request->fechaFin}';
+                ");
+
+                foreach ($efectivo as $item) {
+                    $items[] = $item;
+                }
+            }
+
+            $items = collect($items)->sortBy('created_at');
+        }
+
+        return view('pages.contabilidad.reportes.reporte-por-cuentas', compact('items', 'cuentas', 'fechaInicio', 'fechaFin', 'request'));
     }
 }

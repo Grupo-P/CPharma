@@ -36,8 +36,10 @@
                     <th scope="col" class="CP-sticky">Fecha y hora</th>
                     <th scope="col" class="CP-sticky">Tipo</th>
                     <th scope="col" class="CP-sticky">Proveedor</th>
+                    <th scope="col" class="CP-sticky">Moneda del proveedor</th>
                     <th scope="col" class="CP-sticky">Monto</th>
                     <th scope="col" class="CP-sticky">Sede</th>
+                    <th scope="col" class="CP-sticky">Estado</th>
                     <th scope="col" class="CP-sticky">Operador</th>
                 </tr>
             </thead>
@@ -55,29 +57,33 @@
                         <td class="text-center">{{ date_format(new DateTime($item->created_at), 'd/m/Y h:i A') }}</td>
                         <td class="text-center">{{ $item->tipo }}</td>
                         <td class="text-center">{{ $item->proveedor }}</td>
+                        <td class="text-center">{{ $item->moneda_proveedor }}</td>
                         <td class="text-center">{{ number_format($item->monto, 2, ',', '.') }}</td>
                         <td class="text-center">{{ $item->sede }}</td>
+                        <td class="text-center">{{ $item->estado }}</td>
                         <td class="text-center">{{ $item->operador }}</td>
                     </tr>
 
                     @php
-                        if ($item->moneda == 'Dólares') {
+                        if ($item->moneda == 'Dólares' && $item->estado == 'Activo') {
                             $dolares = $dolares + $item->monto;
                         }
 
-                        if ($item->moneda == 'Bolívares') {
+                        if ($item->moneda == 'Bolívares' && $item->estado == 'Activo') {
                             $bolivares = $bolivares + $item->monto;
                         }
                     @endphp
                 @endforeach
             </tbody>
+        </table>
 
-            <tfoot>
+        <table class="table table-striped table-bordered col-12 sortable">
+            <thead>
                 <tr>
                     <th style="border: white 1px solid;"></th>
                     <th style="border: white 1px solid;"></th>
                     <th style="border: white 1px solid;"></th>
-                    <th style="border-left: white 1px solid;border-bottom: white 1px solid;"></th>
+                    <th style="border-top: white 1px solid;border-left: white 1px solid;border-bottom: white 1px solid;border"></th>
                     <th class="text-center">Total en bolívares</th>
                     <th class="text-center">{{ number_format($bolivares, 2, ',', '.') }}</th>
                     <th style="border: white 1px solid;"></th>
@@ -94,7 +100,7 @@
                     <th style="border: white 1px solid;"></th>
                     <th style="border: white 1px solid;"></th>
                 </tr>
-            </tfoot>
+            </thead>
         </table>
 
 
