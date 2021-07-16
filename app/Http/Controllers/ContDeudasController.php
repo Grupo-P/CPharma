@@ -9,6 +9,7 @@ use compras\ContProveedor;
 use compras\Sede;
 use compras\User;
 use Illuminate\Http\Request;
+use DB;
 
 class ContDeudasController extends Controller
 {
@@ -222,5 +223,60 @@ class ContDeudasController extends Controller
         }
 
         return 'exito';
+    }
+
+    public function pizarra()
+    {
+        $positivos = DB::select("
+            SELECT
+                cont_proveedores.nombre_proveedor AS proveedor,
+                FORMAT(cont_proveedores.saldo, 2, 'de_DE') AS saldo,
+                DATE_FORMAT(IF (MAX(cont_pagos_bancarios.created_at) > MAX(cont_pagos_efectivo.created_at),
+                    MAX(cont_pagos_bancarios.created_at),
+                    MAX(cont_pagos_efectivo.created_at)), '%d/%m/%Y') AS fecha_ultimo_pago,
+                DATEDIFF(
+                    NOW(),
+                    IF (MAX(cont_pagos_bancarios.created_at) > MAX(cont_pagos_efectivo.created_at),
+                        MAX(cont_pagos_bancarios.created_at),
+                        MAX(cont_pagos_efectivo.created_at))) AS dias_ultimo_pago,
+                DATE_FORMAT(MAX(cont_deudas.created_at), '%d/%m/%Y') AS fecha_ultimo_ingreso,
+                DATEDIFF(NOW(), MAX(cont_deudas.created_at)) AS dias_ultimo_ingreso
+            FROM
+                cont_proveedores
+                LEFT JOIN cont_pagos_efectivo ON cont_proveedores.id = cont_pagos_efectivo.id_proveedor
+                LEFT JOIN cont_pagos_bancarios ON cont_proveedores.id = cont_pagos_bancarios.id_proveedor
+                LEFT JOIN cont_deudas ON cont_proveedores.id = cont_deudas.id_proveedor
+            WHERE
+                cont_proveedores.saldo > 0
+            GROUP BY proveedor
+            ORDER BY CAST(saldo AS UNSIGNED) DESC;
+        ");
+
+        $negativos = DB::select("
+            SELECT
+                cont_proveedores.nombre_proveedor AS proveedor,
+                FORMAT(cont_proveedores.saldo, 2, 'de_DE') AS saldo,
+                DATE_FORMAT(IF (MAX(cont_pagos_bancarios.created_at) > MAX(cont_pagos_efectivo.created_at),
+                    MAX(cont_pagos_bancarios.created_at),
+                    MAX(cont_pagos_efectivo.created_at)), '%d/%m/%Y') AS fecha_ultimo_pago,
+                DATEDIFF(
+                    NOW(),
+                    IF (MAX(cont_pagos_bancarios.created_at) > MAX(cont_pagos_efectivo.created_at),
+                        MAX(cont_pagos_bancarios.created_at),
+                        MAX(cont_pagos_efectivo.created_at))) AS dias_ultimo_pago,
+                DATE_FORMAT(MAX(cont_deudas.created_at), '%d/%m/%Y') AS fecha_ultimo_ingreso,
+                DATEDIFF(NOW(), MAX(cont_deudas.created_at)) AS dias_ultimo_ingreso
+            FROM
+                cont_proveedores
+                LEFT JOIN cont_pagos_efectivo ON cont_proveedores.id = cont_pagos_efectivo.id_proveedor
+                LEFT JOIN cont_pagos_bancarios ON cont_proveedores.id = cont_pagos_bancarios.id_proveedor
+                LEFT JOIN cont_deudas ON cont_proveedores.id = cont_deudas.id_proveedor
+            WHERE
+                cont_proveedores.saldo < 0
+            GROUP BY proveedor
+            ORDER BY CAST(saldo AS UNSIGNED) ASC;
+        ");
+
+        return view('pages.contabilidad.deudas.pizarra', compact('positivos', 'negativos'));
     }
 }

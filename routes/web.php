@@ -429,6 +429,8 @@ Route::resource('bancos', 'ContBancoController');
 Route::resource('deudas', 'ContDeudasController');
 Route::post('/deudas/validar', 'ContDeudasController@validar');
 
+Route::get('/pizarra-deudas', 'ContDeudasController@pizarra');
+
 Route::resource('reclamos', 'ContReclamoController');
 Route::post('/reclamos/validar', 'ContReclamoController@validar');
 

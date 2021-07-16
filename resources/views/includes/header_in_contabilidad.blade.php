@@ -39,7 +39,7 @@
 <!-------------------------------------------------------------------------------->
   <div class="btn-group navbar-brand">
     <button type="button" class="btn btn-outline-info dropdown-toggle textoI" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-      <i class="fas fa-user-cog"></i> Tecnología
+      <i class="fas fa-user-cog"></i> {{ ucfirst(strtolower(Auth()->user()->departamento)) }}
     </button>
     <div class="dropdown-menu">
       <li class="nav-item">
@@ -65,6 +65,16 @@
           Deudas<span class="sr-only">(current)</span>
         </a>
       </li>
+
+      @if(Auth::user()->departamento == 'TECNOLOGIA' || Auth::user()->departamento == 'GERENCIA' || Auth::user()->departamento == 'ADMINISTRACION')
+          <li class="nav-item">
+            <a class="nav-link CP-Links-Menu" href="{{ url('/pizarra-deudas') }}">
+              <span data-feather="home"></span>
+              <i class="fas fa-info-circle"></i>
+              Pizarra de deudas<span class="sr-only">(current)</span>
+            </a>
+          </li>
+      @endif
 
       <li class="nav-item">
         <a class="nav-link CP-Links-Menu" href="{{ url('/reclamos') }}">
