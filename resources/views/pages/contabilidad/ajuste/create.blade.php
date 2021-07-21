@@ -67,7 +67,7 @@
                     <tr>
                         <th scope="row"><label for="saldo">Saldo del proveedor</label></th>
                         <td>
-                            <input type="number" step="0.01" readonly class="form-control" name="saldo">
+                            <input type="text" step="0.01" readonly class="form-control" name="saldo">
                         </td>
                     </tr>
 

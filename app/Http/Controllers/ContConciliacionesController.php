@@ -31,6 +31,8 @@ class ContConciliacionesController extends Controller
             $pagos[$i]['monto']            = number_format($bancario->monto, 2, ',', '.');
             $pagos[$i]['operador']         = $bancario->operador;
             $pagos[$i]['fecha']            = date_format(date_create($bancario->created_at), 'd/m/Y h:ia');
+            $pagos[$i]['estado']           = strtoupper($bancario->estatus);
+            $pagos[$i]['concepto']         = $bancario->comentario;
             $i                             = $i + 1;
         }
 
@@ -43,8 +45,10 @@ class ContConciliacionesController extends Controller
             $pagos[$i]['nombre_proveedor'] = ($efectivo->proveedor) ? $efectivo->proveedor->nombre_proveedor : '';
             $pagos[$i]['ci_proveedor']     = ($efectivo->proveedor) ? $efectivo->proveedor->rif_ci : '';
             $pagos[$i]['monto']            = ($efectivo->egresos) ? number_format($efectivo->egresos, 2, ',', '.') : number_format($efectivo->diferido, 2, ',', '.');
-            $pagos[$i]['operador']         = $efectivo->operador;
+            $pagos[$i]['operador']         = $efectivo->user_up;
             $pagos[$i]['fecha']            = date_format(date_create($efectivo->created_at), 'd/m/Y h:ia');
+            $pagos[$i]['estado']           = strtoupper($efectivo->estatus);
+            $pagos[$i]['concepto']         = $efectivo->concepto;
             $i                             = $i + 1;
         }
 

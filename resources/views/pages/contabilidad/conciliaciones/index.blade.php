@@ -79,10 +79,7 @@
                     Emisor
                 </th>
                 <th class="CP-sticky" scope="col">
-                    Nombre del proveedor
-                </th>
-                <th class="CP-sticky" scope="col">
-                    RIF/CI del proveedor
+                    Proveedor / Concepto
                 </th>
                 <th class="CP-sticky" scope="col">
                     Monto
@@ -115,10 +112,11 @@
                     {{$pago['emisor']}}
                 </td>
                 <td>
-                    {{$pago['nombre_proveedor']}}
-                </td>
-                <td>
-                    {{$pago['ci_proveedor']}}
+                    @if($pago['nombre_proveedor'])
+                        {{ $pago['nombre_proveedor'] . ' | ' . $pago['ci_proveedor'] }}
+                    @else
+                        {!! $pago['concepto'] !!}
+                    @endif
                 </td>
                 <td>
                     {{$pago['monto']}}
@@ -130,6 +128,7 @@
                     {{$pago['fecha']}}
                 </td>
                 <td>
+                    {{$pago['estado']}}
                 </td>
                 <td class="text-center">
                     <input class="agregar" data-id="{{$pago['id']}}" data-tipo="{{$pago['tipo']}}" type="checkbox">
@@ -140,7 +139,6 @@
 
         <tfoot>
             <tr>
-                <td></td>
                 <td></td>
                 <td></td>
                 <td></td>

@@ -53,7 +53,7 @@
                     <tr>
                         <th scope="row"><label for="nombre_proveedor">Nombre del proveedor *</label></th>
                         <td>
-                            <input class="form-control" required type="text" id="proveedores" value="{{ $reclamo->proveedor->nombre_proveedor . ' | ' . $reclamo->proveedor->rif_ci }}">
+                            <input readonly class="form-control" required type="text" id="proveedores" value="{{ $reclamo->proveedor->nombre_proveedor . ' | ' . $reclamo->proveedor->rif_ci }}">
                             <input type="hidden" name="id_proveedor" value="{{ $reclamo->proveedor->id }}">
                         </td>
                     </tr>
@@ -66,7 +66,7 @@
                     <tr>
                         <th scope="row"><label for="monto">Monto *</label></th>
                         <td>
-                            <input type="number" value="{{ $reclamo->monto }}" step="0.01" required class="form-control" name="monto">
+                            <input type="text" readonly value="{{ number_format($reclamo->monto, 2, ',', '.') }}" step="0.01" required class="form-control" name="monto">
                         </td>
                     </tr>
 

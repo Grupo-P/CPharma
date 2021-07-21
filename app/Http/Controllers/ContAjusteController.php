@@ -35,7 +35,7 @@ class ContAjusteController extends Controller
             $proveedores[$i]['value']  = $proveedor->nombre_proveedor . ' | ' . $proveedor->rif_ci;
             $proveedores[$i]['id']     = $proveedor->id;
             $proveedores[$i]['moneda'] = $proveedor->moneda;
-            $proveedores[$i]['saldo']  = $proveedor->saldo;
+            $proveedores[$i]['saldo']  = number_format($proveedor->saldo, 2, ',', '.');
 
             $i = $i + 1;
         }

@@ -201,9 +201,6 @@
                                     $('[name=tasa]').attr('disabled', true);
                                     $('[name=tasa]').attr('required', false);
                                 }
-                            },
-                            error: function (error) {
-                                $('body').html(error.responseText);
                             }
                         })
                     }

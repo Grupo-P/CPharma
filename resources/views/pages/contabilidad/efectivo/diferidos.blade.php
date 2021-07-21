@@ -78,7 +78,7 @@
         <th>{{intval(++$cont)}}</th>
         <td>
           <span class="d-inline-block " style="max-width: 250px;">
-            {{FG_Limpiar_Texto($diferido->concepto)}}
+            {!! $diferido->concepto !!}
           </span>
         </td>
         <td>{{number_format($diferido->diferido, 2, ',', '.')}}</td>
@@ -120,7 +120,7 @@
         concepto = $(this).attr('data-concepto');
         monto = $(this).attr('data-monto');
 
-        concepto = prompt('Concepto', concepto);
+        concepto = prompt('Concepto');
 
         $.ajax({
             method: 'POST',

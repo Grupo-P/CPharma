@@ -146,7 +146,7 @@
         <th>{{intval(++$cont)}}</th>
         <td>
           <span class="d-inline-block " style="max-width: 250px;">
-            {{FG_Limpiar_Texto($pago->concepto)}}
+            {!! $pago->concepto !!}
           </span>
         </td>
         <td>{{number_format($pago->ingresos, 2, ',', '.')}}</td>

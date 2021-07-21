@@ -222,7 +222,11 @@ class ContPagoEfectivoController extends Controller
             /********************* ACTUALIZAR DIFERIDO *********************/
             $diferidos = ContPagoEfectivo::find($id);
 
-            $diferidos->concepto          = $request->concepto;
+            $concepto = str_replace(' - DIFERIDO', '', $diferidos->concepto);
+
+            $concepto = $concepto . '<br>' . $request->concepto . '<br>DIFERIDO';
+
+            $diferidos->concepto          = $concepto;
             $diferidos->diferido_anterior = $configuracion2->valor;
             $configuracion2->valor -= $request->input('monto');
             $diferidos->user_up         = auth()->user()->name;
@@ -290,7 +294,7 @@ class ContPagoEfectivoController extends Controller
 
             $resultado['min'] = $configuracion->valor - ($configuracion->valor * 0.20);
             $resultado['max'] = $configuracion->valor + ($configuracion->valor * 0.20)
-;
+            ;
             return $resultado;
         }
     }

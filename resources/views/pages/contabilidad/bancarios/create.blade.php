@@ -178,7 +178,7 @@
                         </label>
                     </th>
                     <td>
-                        <input class="form-control" min="1" name="monto_proveedor" readonly required step="0.01" type="number"/>
+                        <input class="form-control" min="1" name="monto_proveedor" readonly type="text"/>
                     </td>
                 </tr>
 
@@ -241,9 +241,6 @@
                     success: function (response) {
                         $('[name=saldo]').val(response.saldo);
                         $('[name=tasa_proveedor]').val(response.tasa);
-                    },
-                    error: function (error) {
-                        $('body').html(error.responseText);
                     }
                 })
             }
@@ -325,15 +322,13 @@
                     success: function (response) {
                         $('[name=tasa]').attr('min', response.min);
                         $('[name=tasa]').attr('max', response.max);
-                    },
-                    error: function (error) {
-                        $('body').html(error.responseText);
                     }
                 });
 
                 $('[name=tasa]').attr('disabled', false);
                 $('[name=tasa]').attr('required', true);
             } else {
+                $('[name=tasa]').val('');
                 $('[name=tasa]').attr('disabled', true);
                 $('[name=tasa]').attr('required', false);
             }

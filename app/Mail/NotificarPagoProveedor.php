@@ -5,7 +5,6 @@ namespace compras\Mail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Contracts\Queue\ShouldQueue;
 
 class NotificarPagoProveedor extends Mailable
 {
@@ -18,7 +17,7 @@ class NotificarPagoProveedor extends Mailable
      */
     public function __construct($pago, $filename)
     {
-        $this->pago = $pago;
+        $this->pago     = $pago;
         $this->filename = $filename;
     }
 
@@ -29,8 +28,13 @@ class NotificarPagoProveedor extends Mailable
      */
     public function build()
     {
-        return $this->subject('Notificación de pago')
-            ->view('mails.notificar-pago-proveedor')
+        $proveedor   = $this->pago->proveedor->nombre_proveedor;
+        $comprobante = str_pad($this->pago->id, 5, 0, STR_PAD_LEFT);
+
+        $subject = "Soporte de pago Farmacia Tierra Negra / {$proveedor} / {$comprobante}";
+
+        return $this->subject($subject)
+            ->text('pages.contabilidad.notificacion')
             ->attach($this->filename);
     }
 }

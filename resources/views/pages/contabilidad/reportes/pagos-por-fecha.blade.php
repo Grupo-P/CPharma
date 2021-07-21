@@ -41,6 +41,7 @@
                     <th scope="col" class="CP-sticky">Monto al proveedor</th>
                     <th scope="col" class="CP-sticky">Comentario</th>
                     <th scope="col" class="CP-sticky">Plan de cuentas</th>
+                    <th scope="col" class="CP-sticky">Estado</th>
                     <th scope="col" class="CP-sticky">Conciliado</th>
                     <th scope="col" class="CP-sticky">Operador</th>
                     <th scope="col" class="CP-sticky"></th>
@@ -122,8 +123,20 @@
                         @endphp
 
                         <td class="text-center">{{ number_format($monto_proveedor, 2, ',', '.') }}</td>
-                        <td class="text-center">{{ $pago->comentario }}</td>
-                        <td class="text-center">{{ $pago->cuentas ? $pago->cuenta->nombre : '' }}</td>
+                        <td class="text-center">{!! ($pago->comentario) ? $pago->comentario : $pago->concepto !!}</td>
+
+                        @php
+                            if ($pago->cuenta) {
+                                $plan_cuentas = $pago->cuenta->nombre;
+                            } else if ($pago->proveedor) {
+                                $plan_cuentas = $pago->proveedor->plan_cuentas;
+                            } else {
+                                $plan_cuentas = '';
+                            }
+                        @endphp
+
+                        <td class="text-center">{{ $plan_cuentas }}</td>
+                        <td class="text-center">{{ ($pago->estatus) ? strtoupper($pago->estatus) : 'PROCESADO' }}</td>
                         <td class="text-center">{{ $pago->conciliado ? 'Si' : 'No' }}</td>
                         <td class="text-center">{{ ($pago->user) ? $pago->user : $pago->operador }}</td>
                         <td class="text-center">

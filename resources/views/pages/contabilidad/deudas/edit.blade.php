@@ -53,7 +53,7 @@
                     <tr>
                         <th scope="row"><label for="nombre_proveedor">Nombre del proveedor *</label></th>
                         <td>
-                            <input required class="form-control" type="text" id="proveedores" value="{{ $deuda->proveedor->nombre_proveedor . ' | ' . $deuda->proveedor->rif_ci }}">
+                            <input readonly required class="form-control" type="text" id="proveedores" value="{{ $deuda->proveedor->nombre_proveedor . ' | ' . $deuda->proveedor->rif_ci }}">
                             <input type="hidden" name="id_proveedor" value="{{ $deuda->proveedor->id }}">
                         </td>
                     </tr>
@@ -66,7 +66,7 @@
                     <tr>
                         <th scope="row"><label for="monto">Monto *</label></th>
                         <td>
-                            <input type="number" value="{{ $deuda->monto }}" readonly class="form-control" name="monto" step="0.01" min="1">
+                            <input type="text" value="{{ number_format($deuda->monto, 2, ',', '.') }}" readonly class="form-control" name="monto" step="0.01" min="1">
                         </td>
                     </tr>
 

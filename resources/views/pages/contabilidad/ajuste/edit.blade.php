@@ -53,7 +53,7 @@
                     <tr>
                         <th scope="row"><label for="nombre_proveedor">Nombre del proveedor *</label></th>
                         <td>
-                            <input autofocus class="form-control" type="text" id="proveedores" value="{{ $ajuste->proveedor->nombre_proveedor . ' | ' . $ajuste->proveedor->rif_ci }}">
+                            <input readonly class="form-control" type="text" id="proveedores" value="{{ $ajuste->proveedor->nombre_proveedor . ' | ' . $ajuste->proveedor->rif_ci }}">
                             <input type="hidden" value="{{ $ajuste->proveedor->id }}" name="id_proveedor">
                         </td>
                     </tr>
@@ -61,14 +61,14 @@
                     <tr>
                         <th scope="row"><label for="monto">Monto *</label></th>
                         <td>
-                            <input type="number" step="0.01" required class="form-control" value="{{ $ajuste->monto }}" name="monto">
+                            <input type="number" step="0.01" required class="form-control" readonly value="{{ $ajuste->monto }}" name="monto">
                         </td>
                     </tr>
 
                     <tr>
                         <th scope="row"><label for="saldo">Saldo del proveedor</label></th>
                         <td>
-                            <input value="{{ number_format($ajuste->proveedor->saldo, 2, '.', '') }}" type="number" step="0.01" readonly class="form-control" name="saldo">
+                            <input value="{{ number_format($ajuste->proveedor->saldo, 2, '.', '.') }}" type="text" step="0.01" readonly class="form-control" name="saldo">
                         </td>
                     </tr>
 

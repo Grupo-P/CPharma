@@ -5,6 +5,52 @@
 @endsection
 
 @section('content')
+    @php
+        function fecha_ultimo_pago($nombre_proveedor)
+        {
+            $proveedor = DB::select("
+                SELECT
+                    *
+                FROM
+                    cont_proveedores
+                WHERE
+                    saldo > 0 AND nombre_proveedor = '$nombre_proveedor'
+            ");
+
+            $efectivo = DB::select("
+                SELECT
+                    created_at
+                FROM
+                    cont_pagos_efectivo
+                WHERE
+                    id_proveedor = '{$proveedor[0]->id}'
+                ORDER BY
+                    created_at DESC
+                LIMIT 1
+            ");
+
+            $bancario = DB::select("
+                SELECT
+                    created_at
+                FROM
+                    cont_pagos_bancarios
+                WHERE
+                    id_proveedor = '{$proveedor[0]->id}'
+                ORDER BY
+                    created_at DESC
+                LIMIT 1
+            ");
+
+            $fecha_efectivo = isset($efectivo[0]->created_at) ? $efectivo[0]->created_at : null;
+            $fecha_bancario = isset($bancario[0]->created_at) ? $bancario[0]->created_at : null;
+
+            if ($fecha_efectivo >= $fecha_bancario) {
+                return $fecha_efectivo;
+            } else {
+                return $fecha_bancario;
+            }
+        }
+    @endphp
 
     <h1 class="h5 text-info">
         <i class="fas fa-info-circle"></i>
@@ -30,15 +76,15 @@
         <tbody>
             @foreach($positivos as $positivo)
                 <tr>
-                <th>{{$loop->iteration}}</th>
-                <td align="left" class="CP-barrido">
-                    <a href="" style="text-decoration: none; color: black;" target="_blank">{{$positivo->proveedor}}</a>
-                </td>
-                <td>{{$positivo->saldo}}</td>
-                <td>{{$positivo->fecha_ultimo_pago}}</td>
-                <td>{{$positivo->dias_ultimo_pago}}</td>
-                <td>{{$positivo->fecha_ultimo_ingreso}}</td>
-                <td>{{$positivo->dias_ultimo_ingreso}}</td>
+                    <th align="center">{{$loop->iteration}}</th>
+                    <td align="center" class="CP-barrido">
+                        <a href="" style="text-decoration: none; color: black;" target="_blank">{{$positivo->proveedor}}</a>
+                    </td>
+                    <td align="center">{{$positivo->saldo}}</td>
+                    <td align="center">{{fecha_ultimo_pago($positivo->proveedor)}}</td>
+                    <td align="center">{{$positivo->dias_ultimo_pago}}</td>
+                    <td align="center">{{$positivo->fecha_ultimo_ingreso}}</td>
+                    <td align="center">{{$positivo->dias_ultimo_ingreso}}</td>
                 </tr>
             @endforeach
         </tbody>
@@ -63,15 +109,15 @@
         <tbody>
             @foreach($negativos as $negativos)
                 <tr>
-                <th>{{$loop->iteration}}</th>
-                <td align="left" class="CP-barrido">
-                    <a href="" style="text-decoration: none; color: black;" target="_blank">{{$negativos->proveedor}}</a>
-                </td>
-                <td>{{$negativos->saldo}}</td>
-                <td>{{$negativos->fecha_ultimo_pago}}</td>
-                <td>{{$negativos->dias_ultimo_pago}}</td>
-                <td>{{$negativos->fecha_ultimo_ingreso}}</td>
-                <td>{{$negativos->dias_ultimo_ingreso}}</td>
+                    <th align="center">{{$loop->iteration}}</th>
+                    <td align="center" class="CP-barrido">
+                        <a href="" style="text-decoration: none; color: black;" target="_blank">{{$negativos->proveedor}}</a>
+                    </td>
+                    <td align="center">{{$negativos->saldo}}</td>
+                    <td align="center">{{$negativos->fecha_ultimo_pago}}</td>
+                    <td align="center">{{$negativos->dias_ultimo_pago}}</td>
+                    <td align="center">{{$negativos->fecha_ultimo_ingreso}}</td>
+                    <td align="center">{{$negativos->dias_ultimo_ingreso}}</td>
                 </tr>
             @endforeach
         </tbody>
