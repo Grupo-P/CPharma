@@ -83,7 +83,20 @@
           @endif
 
           @if($request->get('tipo') == 'proveedores')
-            <input type="hidden" name="movimiento" value="Egreso">
+            <tr>
+                <th scope="row">{!! Form::label('diferido', 'Diferido?', ['title' => 'Este campo es requerido']) !!}</th>
+                <td>
+                    <div class="custom-control custom-radio custom-control-inline">
+                      <input type="radio" class="custom-control-input" id="movimiento1" name="movimiento" value="Diferido" required>
+                      <label class="custom-control-label" for="movimiento1">Si</label>
+                    </div>
+
+                    <div class="custom-control custom-radio custom-control-inline">
+                      <input type="radio" class="custom-control-input" id="movimiento1" checked name="movimiento" value="Egreso" required>
+                      <label class="custom-control-label" for="movimiento1">No</label>
+                    </div>
+                </td>
+            </tr>
           @endif
 
           <tr>

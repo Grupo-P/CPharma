@@ -52,7 +52,7 @@ class ContConciliacionesController extends Controller
             $i                             = $i + 1;
         }
 
-        $pagos = FG_Ordenar_Arreglo($pagos, 'fecha', SORT_DESC);
+        $pagos = FG_Ordenar_Arreglo($pagos, 'fecha', SORT_ASC);
 
         return view('pages.contabilidad.conciliaciones.index', compact('pagos'));
     }

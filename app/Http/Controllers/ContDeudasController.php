@@ -227,55 +227,73 @@ class ContDeudasController extends Controller
 
     public function pizarra()
     {
-        $positivos = DB::select("
-            SELECT
-                cont_proveedores.nombre_proveedor AS proveedor,
-                FORMAT(cont_proveedores.saldo, 2, 'de_DE') AS saldo,
-                DATE_FORMAT(IF (MAX(cont_pagos_bancarios.created_at) > MAX(cont_pagos_efectivo.created_at),
-                    MAX(cont_pagos_bancarios.created_at),
-                    MAX(cont_pagos_efectivo.created_at)), '%d/%m/%Y') AS fecha_ultimo_pago,
-                DATEDIFF(
-                    NOW(),
-                    IF (MAX(cont_pagos_bancarios.created_at) > MAX(cont_pagos_efectivo.created_at),
-                        MAX(cont_pagos_bancarios.created_at),
-                        MAX(cont_pagos_efectivo.created_at))) AS dias_ultimo_pago,
-                DATE_FORMAT(MAX(cont_deudas.created_at), '%d/%m/%Y') AS fecha_ultimo_ingreso,
-                DATEDIFF(NOW(), MAX(cont_deudas.created_at)) AS dias_ultimo_ingreso
-            FROM
-                cont_proveedores
-                LEFT JOIN cont_pagos_efectivo ON cont_proveedores.id = cont_pagos_efectivo.id_proveedor
-                LEFT JOIN cont_pagos_bancarios ON cont_proveedores.id = cont_pagos_bancarios.id_proveedor
-                LEFT JOIN cont_deudas ON cont_proveedores.id = cont_deudas.id_proveedor
-            WHERE
-                cont_proveedores.saldo > 0
-            GROUP BY proveedor
-            ORDER BY CAST(saldo AS UNSIGNED) DESC;
-        ");
+        if (!isset($_GET['tipo']) || $_GET['tipo'] == 'dolares') {
+            $positivos = DB::select("
+                SELECT
+                    cont_proveedores.id AS id_proveedor,
+                    cont_proveedores.nombre_proveedor AS proveedor,
+                    FORMAT(cont_proveedores.saldo, 2, 'de_DE') AS saldo,
+                    cont_proveedores.saldo AS saldoNoFormateado
+                FROM
+                    cont_proveedores
+                    LEFT JOIN cont_pagos_efectivo ON cont_proveedores.id = cont_pagos_efectivo.id_proveedor
+                    LEFT JOIN cont_pagos_bancarios ON cont_proveedores.id = cont_pagos_bancarios.id_proveedor
+                    LEFT JOIN cont_deudas ON cont_proveedores.id = cont_deudas.id_proveedor
+                WHERE
+                    cont_proveedores.saldo > 0 AND cont_proveedores.moneda = 'Dólares'
+                GROUP BY proveedor
+                ORDER BY CAST(saldo AS UNSIGNED) DESC;
+            ");
 
-        $negativos = DB::select("
-            SELECT
-                cont_proveedores.nombre_proveedor AS proveedor,
-                FORMAT(cont_proveedores.saldo, 2, 'de_DE') AS saldo,
-                DATE_FORMAT(IF (MAX(cont_pagos_bancarios.created_at) > MAX(cont_pagos_efectivo.created_at),
-                    MAX(cont_pagos_bancarios.created_at),
-                    MAX(cont_pagos_efectivo.created_at)), '%d/%m/%Y') AS fecha_ultimo_pago,
-                DATEDIFF(
-                    NOW(),
-                    IF (MAX(cont_pagos_bancarios.created_at) > MAX(cont_pagos_efectivo.created_at),
-                        MAX(cont_pagos_bancarios.created_at),
-                        MAX(cont_pagos_efectivo.created_at))) AS dias_ultimo_pago,
-                DATE_FORMAT(MAX(cont_deudas.created_at), '%d/%m/%Y') AS fecha_ultimo_ingreso,
-                DATEDIFF(NOW(), MAX(cont_deudas.created_at)) AS dias_ultimo_ingreso
-            FROM
-                cont_proveedores
-                LEFT JOIN cont_pagos_efectivo ON cont_proveedores.id = cont_pagos_efectivo.id_proveedor
-                LEFT JOIN cont_pagos_bancarios ON cont_proveedores.id = cont_pagos_bancarios.id_proveedor
-                LEFT JOIN cont_deudas ON cont_proveedores.id = cont_deudas.id_proveedor
-            WHERE
-                cont_proveedores.saldo < 0
-            GROUP BY proveedor
-            ORDER BY CAST(saldo AS UNSIGNED) ASC;
-        ");
+            $negativos = DB::select("
+                SELECT
+                    cont_proveedores.id AS id_proveedor,
+                    cont_proveedores.nombre_proveedor AS proveedor,
+                    FORMAT(cont_proveedores.saldo, 2, 'de_DE') AS saldo,
+                    cont_proveedores.saldo AS saldoNoFormateado
+                FROM
+                    cont_proveedores
+                    LEFT JOIN cont_pagos_efectivo ON cont_proveedores.id = cont_pagos_efectivo.id_proveedor
+                    LEFT JOIN cont_pagos_bancarios ON cont_proveedores.id = cont_pagos_bancarios.id_proveedor
+                    LEFT JOIN cont_deudas ON cont_proveedores.id = cont_deudas.id_proveedor
+                WHERE
+                    cont_proveedores.saldo < 0 AND cont_proveedores.moneda = 'Dólares'
+                GROUP BY proveedor
+                ORDER BY CAST(saldo AS UNSIGNED) ASC;
+            ");
+        } else {
+            $positivos = DB::select("
+                SELECT
+                    cont_proveedores.id AS id_proveedor,
+                    cont_proveedores.nombre_proveedor AS proveedor,
+                    FORMAT(cont_proveedores.saldo, 2, 'de_DE') AS saldo
+                FROM
+                    cont_proveedores
+                    LEFT JOIN cont_pagos_efectivo ON cont_proveedores.id = cont_pagos_efectivo.id_proveedor
+                    LEFT JOIN cont_pagos_bancarios ON cont_proveedores.id = cont_pagos_bancarios.id_proveedor
+                    LEFT JOIN cont_deudas ON cont_proveedores.id = cont_deudas.id_proveedor
+                WHERE
+                    cont_proveedores.saldo > 0 AND cont_proveedores.moneda = 'Bolívares'
+                GROUP BY proveedor
+                ORDER BY CAST(saldo AS UNSIGNED) DESC;
+            ");
+
+            $negativos = DB::select("
+                SELECT
+                    cont_proveedores.id AS id_proveedor,
+                    cont_proveedores.nombre_proveedor AS proveedor,
+                    FORMAT(cont_proveedores.saldo, 2, 'de_DE') AS saldo
+                FROM
+                    cont_proveedores
+                    LEFT JOIN cont_pagos_efectivo ON cont_proveedores.id = cont_pagos_efectivo.id_proveedor
+                    LEFT JOIN cont_pagos_bancarios ON cont_proveedores.id = cont_pagos_bancarios.id_proveedor
+                    LEFT JOIN cont_deudas ON cont_proveedores.id = cont_deudas.id_proveedor
+                WHERE
+                    cont_proveedores.saldo < 0 AND cont_proveedores.moneda = 'Bolívares'
+                GROUP BY proveedor
+                ORDER BY CAST(saldo AS UNSIGNED) ASC;
+            ");
+        }
 
         return view('pages.contabilidad.deudas.pizarra', compact('positivos', 'negativos'));
     }
