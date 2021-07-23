@@ -123,9 +123,48 @@
       </div>
       <input type="submit" value="Buscar" class="btn btn-outline-success">
     </form>
-    <br><br>';
+    <br>';
 
-    R30_Proveedor_Factura_Top50($_GET['SEDE']);
+    $cantidad = isset($_GET['cantidad']) ? $_GET['cantidad'] : '';
+    $fechaInicioUrl = isset($_GET['fechaInicio']) ? $_GET['fechaInicio'] : '';
+    $fechaFinUrl = isset($_GET['fechaFin']) ? $_GET['fechaFin'] : '';
+
+    $selected50 = ($cantidad == '50') ? 'selected' : '';
+    $selected100 = ($cantidad == '100') ? 'selected' : '';
+    $selected200 = ($cantidad == '200') ? 'selected' : '';
+    $selected500 = ($cantidad == '500') ? 'selected' : '';
+    $selected1000 = ($cantidad == '1000') ? 'selected' : '';
+    $selectedTodos = ($cantidad == 'Todos') ? 'selected' : '';
+
+    echo '
+    <form autocomplete="off" action="">
+        <div class="col"><input type="hidden" name="SEDE" value="'.$_GET['SEDE'].'"></div>
+
+        <div class="row">
+            <div class="col">Cantidad de registros</div>
+            <div class="col">
+                <select class="form-control form-control-sm" name="cantidad">
+                    <option '.$selected50.' value="50">50</option>
+                    <option '.$selected100.' value="100">100</option>
+                    <option '.$selected200.' value="200">200</option>
+                    <option '.$selected500.' value="500">500</option>
+                    <option '.$selected1000.' value="1000">1000</option>
+                    <option '.$selectedTodos.' value="Todos">Todos</option>
+                </select>
+            </div>
+
+            <div class="col">Fecha inicio</div>
+            <div class="col"><input type="date" value="'.$fechaInicioUrl.'" class="form-control form-control-sm" name="fechaInicio"></div>
+
+            <div class="col">Fecha final</div>
+            <div class="col"><input type="date" value="'.$fechaFinUrl.'" class="form-control form-control-sm" name="fechaFin"></div>
+
+            <div class="col"><input type="submit" value="Buscar" class="btn btn-sm btn-block btn-outline-success"></div>
+        </div>
+    </form>
+    <br>';
+
+    R30_Proveedor_Factura_Top50($_GET['SEDE'],$cantidad,$fechaInicioUrl,$fechaFinUrl);
 
     $FinCarga = new DateTime("now");
     $IntervalCarga = $InicioCarga->diff($FinCarga);
@@ -168,10 +207,10 @@
     ";
     return $sql;
   }
-  function R30_Proveedor_Factura_Top50($SedeConnection){
+  function R30_Proveedor_Factura_Top50($SedeConnection,$cantidad,$inicio,$fin){
     
     $conn = FG_Conectar_Smartpharma($SedeConnection);
-    $sql1 = R30Q_Factura_Proveedor_Top50();
+    $sql1 = R30Q_Factura_Proveedor_Top50($cantidad,$inicio,$fin);
     $result = sqlsrv_query($conn,$sql1);
 
     echo '
@@ -352,9 +391,38 @@
     RETORNO: lista de facturas
     DESAROLLADO POR: SERGIO COVA
   */
-  function R30Q_Factura_Proveedor_Top50() {
+  function R30Q_Factura_Proveedor_Top50($cantidad,$inicio,$fin) {
+
+    if ($cantidad == '') {
+        $cantidad = "TOP 50";
+    }
+
+    if ($cantidad == 'Todos') {
+        $cantidad = '';
+    }
+
+    if (is_numeric($cantidad)) {
+        $cantidad = "TOP $cantidad";
+    }
+
+    if ($inicio != '') {
+        $where = " WHERE CONVERT(DATE,ComFactura.FechaRegistro) >= '$inicio' ";
+    }
+
+    if ($fin != '') {
+        $where = " WHERE CONVERT(DATE,ComFactura.FechaRegistro) <= '$fin' ";
+    }
+
+    if ($inicio != '' && $fin != '') {
+        $where = " WHERE CONVERT(DATE,ComFactura.FechaRegistro) >= '$inicio' AND CONVERT(DATE,ComFactura.FechaRegistro) <= '$fin' ";
+    }
+
+    if ($inicio == '' && $fin == '') {
+        $where = "";
+    }
+
     $sql = "
-    SELECT TOP 50
+    SELECT $cantidad
     ComFactura.Id AS FacturaId,    
     ComFactura.NumeroFactura,
     ComFactura.NumeroControl,
@@ -368,6 +436,7 @@
     FROM ComFactura
     INNER JOIN ComProveedor ON ComProveedor.Id = ComFactura.ComProveedorId
     INNER JOIN GenPersona ON ComProveedor.GenPersonaId = GenPersona.Id
+    $where
     ORDER BY CONVERT(DATE,ComFactura.FechaRegistro)DESC , CONVERT(DATE,ComFactura.FechaDocumento) DESC
     ";
     return $sql;
