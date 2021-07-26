@@ -91,6 +91,7 @@ class ContReporteController extends Controller
                 FROM
                     cont_pagos_efectivo
                 WHERE
+                    cont_pagos_efectivo.egresos IS NOT NULL AND
                     cont_pagos_efectivo.id_proveedor = '{$request->get('id_proveedor')}' AND
                     DATE(cont_pagos_efectivo.created_at) >= '{$request->fechaInicio}' AND
                     DATE(cont_pagos_efectivo.created_at) <= '{$request->fechaFin}';

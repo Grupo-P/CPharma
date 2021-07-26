@@ -58,6 +58,8 @@
     <thead class="thead-dark">
       <tr>
         <th scope="col" class="CP-sticky">#</th>
+        <th scope="col" class="CP-sticky"># de registro</th>
+        <th scope="col" class="CP-sticky">Proveedor</th>
         <th scope="col" class="CP-sticky">Concepto</th>
         <th scope="col" class="CP-sticky">Diferido</th>
         <th scope="col" class="CP-sticky">Fecha y hora</th>
@@ -76,6 +78,8 @@
     @foreach($diferidos as $diferido)
       <tr>
         <th>{{intval(++$cont)}}</th>
+        <th>{{ str_pad($diferido->id, 5, 0, STR_PAD_LEFT) }}</th>
+        <td>{{ ($diferido->proveedor) ? $diferido->proveedor->nombre_proveedor : '' }}</td>
         <td>
           <span class="d-inline-block " style="max-width: 250px;">
             {!! $diferido->concepto !!}

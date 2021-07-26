@@ -35,7 +35,8 @@
                     <th scope="col" class="CP-sticky">Fecha y hora</th>
                     <th scope="col" class="CP-sticky">Tipo</th>
                     <th scope="col" class="CP-sticky">Nro. movimiento</th>
-                    <th scope="col" class="CP-sticky">Monto</th>
+                    <th scope="col" class="CP-sticky">Monto al proveedor</th>
+                    <th scope="col" class="CP-sticky">Monto al banco</th>
                     <th scope="col" class="CP-sticky">Comentario</th>
                     <th scope="col" class="CP-sticky">Conciliado</th>
                     <th scope="col" class="CP-sticky">Operador</th>
@@ -144,6 +145,7 @@
                         <td class="text-center">{{ $movimiento->tipo }}</td>
                         <td class="text-center">{{ $movimiento->nro_movimiento }}</td>
                         <td class="text-center">{{ number_format($monto, 2, ',', '.') }}</td>
+                        <td class="text-center">{{ number_format($movimiento->monto, 2, ',', '.') }}</td>
                         <td class="text-center">{{ $movimiento->comentario }}</td>
                         <td class="text-center">{{ $movimiento->conciliacion }}</td>
                         <td class="text-center">{{ $movimiento->operador }}</td>
@@ -203,6 +205,8 @@
                 </tr>
             </tbody>
         </table>
+
+        <p class="text-center"><b>Nota:</b> Los pagos en diferido solo aparecerán en este reporte una vez se hayan procesado.</p>
 
     @else
         <form action="">

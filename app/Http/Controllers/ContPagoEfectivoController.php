@@ -216,7 +216,6 @@ class ContPagoEfectivoController extends Controller
             }
 
             $movimiento->saldo_actual = $configuracion->valor;
-            $movimiento->concepto     = $request->input('concepto');
             $movimiento->user         = auth()->user()->name;
 
             /********************* ACTUALIZAR DIFERIDO *********************/
@@ -227,11 +226,17 @@ class ContPagoEfectivoController extends Controller
             $concepto = $concepto . '<br>' . $request->concepto . '<br>DIFERIDO';
 
             $diferidos->concepto          = $concepto;
+            $movimiento->concepto         = $concepto;
             $diferidos->diferido_anterior = $configuracion2->valor;
             $configuracion2->valor -= $request->input('monto');
             $diferidos->user_up         = auth()->user()->name;
             $diferidos->estatus         = 'PAGADO';
             $diferidos->diferido_actual = $configuracion2->valor;
+            $movimiento->id_proveedor   = $diferidos->id_proveedor;
+            $movimiento->id_cuenta      = $diferidos->id_cuenta;
+            $movimiento->tasa           = $diferidos->tasa;
+            $movimiento->autorizado_por = $diferidos->autorizado_por;
+            $movimiento->user_up        = $diferidos->user_up;
 
             /********************* GUARDAR CAMBIOS *********************/
             $movimiento->save();

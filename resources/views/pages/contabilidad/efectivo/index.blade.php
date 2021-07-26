@@ -118,6 +118,7 @@
     <thead class="thead-dark">
       <tr>
         <th scope="col" class="CP-sticky">#</th>
+        <th scope="col" class="CP-sticky"># de registro</th>
         <th scope="col" class="CP-sticky">Concepto</th>
         <th scope="col" class="CP-sticky">Ingresos</th>
         <th scope="col" class="CP-sticky">Egresos</th>
@@ -144,6 +145,7 @@
     @foreach($pagos as $pago)
       <tr>
         <th>{{intval(++$cont)}}</th>
+        <th>{{ str_pad($pago->id, 5, 0, STR_PAD_LEFT) }}</th>
         <td>
           <span class="d-inline-block " style="max-width: 250px;">
             {!! $pago->concepto !!}
@@ -156,19 +158,37 @@
         <td>{{number_format($pago->saldo_actual, 2, ',', '.')}}</td>
         <td>
           @php
-          if ($pago->proveedor) {
-            if ($pago->proveedor->moneda != 'Dólares') {
-                if ($pago->proveedor->moneda == 'Bolívares') {
-                    $monto_proveedor = $pago->egresos * $pago->tasa;
-                }
+            if ($pago->egresos) {
+                if ($pago->proveedor) {
+                    if ($pago->proveedor->moneda != 'Dólares') {
+                        if ($pago->proveedor->moneda == 'Bolívares') {
+                            $monto_proveedor = $pago->egresos * $pago->tasa;
+                        }
 
-                if ($pago->proveedor->moneda == 'Pesos') {
-                    $monto_proveedor = $pago->egresos * $pago->tasa;
+                        if ($pago->proveedor->moneda == 'Pesos') {
+                            $monto_proveedor = $pago->egresos * $pago->tasa;
+                        }
+                    } else {
+                        $monto_proveedor = $pago->monto;
+                    }
                 }
-            } else {
-                $monto_proveedor = $pago->monto;
             }
-          }
+
+            if ($pago->diferido) {
+                if ($pago->proveedor) {
+                    if ($pago->proveedor->moneda != 'Dólares') {
+                        if ($pago->proveedor->moneda == 'Bolívares') {
+                            $monto_proveedor = $pago->diferido * $pago->tasa;
+                        }
+
+                        if ($pago->proveedor->moneda == 'Pesos') {
+                            $monto_proveedor = $pago->diferido * $pago->tasa;
+                        }
+                    } else {
+                        $monto_proveedor = $pago->monto;
+                    }
+                }
+            }
           @endphp
 
           {{(isset($monto_proveedor)) ? number_format($monto_proveedor,2,',','.') : ''}}
@@ -180,9 +200,11 @@
         <td>{{$pago->user}}</td>
         <td>{{$pago->autorizado_por}}</td>
         <td style="width:140px;">
-            <a target="_blank" href="/efectivo/soporte/{{$pago->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Ver soporte">
-                <i class="fas fa-eye"></i>
-            </a>
+            @if(!$pago->ingresos)
+                <a target="_blank" href="/efectivo/soporte/{{$pago->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Ver soporte">
+                    <i class="fas fa-eye"></i>
+                </a>
+            @endif
           </td>
       </tr>
     @endforeach
