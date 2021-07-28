@@ -14,18 +14,21 @@
     <hr class="row align-items-start col-12">
 
     <div class="card-deck">
-        <div class="card border-danger mb-3" style="width: 14rem;">
-            <div class="card-body text-left bg-danger">
-                <h5 class="card-title">
-                    <span class="card-text text-white">
-                        Pagos emitidos
-                    </span>
-                </h5>
+
+        @if (Auth::user()->departamento != 'OPERACIONES')
+            <div class="card border-danger mb-3" style="width: 14rem;">
+                <div class="card-body text-left bg-danger">
+                    <h5 class="card-title">
+                        <span class="card-text text-white">
+                            Pagos por fecha
+                        </span>
+                    </h5>
+                </div>
+                <div class="card-footer bg-transparent border-danger text-right">
+                    <a class="btn btn-outline-danger btn-sm" href="/reportes/pagos-por-fecha">Visualizar</a>
+                </div>
             </div>
-            <div class="card-footer bg-transparent border-danger text-right">
-                <a class="btn btn-outline-danger btn-sm" href="/reportes/pagos-emitidos">Visualizar</a>
-            </div>
-        </div>
+        @endif
 
         <div class="card border-success mb-3" style="width: 14rem;">
             <div class="card-body text-left bg-success">
@@ -55,17 +58,34 @@
     </div>
 
     <div class="card-deck">
-        <div class="card border-warning mb-3" style="width: 14rem;">
-            <div class="card-body text-left bg-warning">
-                <h5 class="card-title">
-                    <span class="card-text text-white">
-                        Pagos por fecha
-                    </span>
-                </h5>
+        @if (Auth::user()->departamento != 'OPERACIONES')
+            <div class="card border-warning mb-3" style="width: 14rem;">
+                <div class="card-body text-left bg-warning">
+                    <h5 class="card-title">
+                        <span class="card-text text-white">
+                            Movimientos bancarios
+                        </span>
+                    </h5>
+                </div>
+                <div class="card-footer bg-transparent border-warning text-right">
+                    <a class="btn btn-outline-warning btn-sm" href="/reportes/movimientos-bancarios">Visualizar</a>
+                </div>
             </div>
-            <div class="card-footer bg-transparent border-warning text-right">
-                <a class="btn btn-outline-warning btn-sm" href="/reportes/pagos-por-fecha">Visualizar</a>
+        @endif
+
+        @if (Auth::user()->departamento != 'OPERACIONES')
+            <div class="card border-secondary mb-3" style="width: 14rem;">
+                <div class="card-body text-left bg-secondary">
+                    <h5 class="card-title">
+                        <span class="card-text text-white">
+                            Reporte por cuentas
+                        </span>
+                    </h5>
+                </div>
+                <div class="card-footer bg-transparent border-secondary text-right">
+                    <a class="btn btn-outline-secondary btn-sm" href="/reportes/reporte-por-cuentas">Visualizar</a>
+                </div>
             </div>
-        </div>
+        @endif
     </div>
 @endsection

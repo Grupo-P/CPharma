@@ -78,6 +78,93 @@
     </h1>
 
     <hr class="row align-items-start col-12">
+
+    <form action="">
+        <div class="row">
+            <div class="col">
+                <div class="form-group">
+                    <label for="numero_documento">Numero de documento</label>
+                    <input value="{{ isset($_GET['numero_documento']) ? $_GET['numero_documento'] : '' }}" type="text" name="numero_documento" class="form-control">
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="form-group">
+                    <label for="id_proveedor">Proveedor</label>
+                    <select name="id_proveedor" class="form-control">
+                        <option value="Todos">Todos</option>
+                        @foreach($proveedores as $proveedor)
+                            <option {{ (isset($_GET['id_proveedor']) && $_GET['id_proveedor'] == $proveedor->id) ? 'selected' : '' }} value="{{ $proveedor->id }}">{{ $proveedor->nombre_proveedor . ' | ' . $proveedor->rif_ci }}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="form-group">
+                    <label for="registrado_por">Registrado por</label>
+                    <select name="registrado_por" class="form-control">
+                        <option value="Todos">Todos</option>
+                        @foreach($users as $user)
+                            <option {{ (isset($_GET['registrado_por']) && $_GET['registrado_por'] == $user->name) ? 'selected' : '' }} value="{{ $user->name }}">{{ $user->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="form-group">
+                    <label for="cantidad_registros">Cantidad de registros</label>
+                    <select name="cantidad_registros" class="form-control">
+                        <option {{ (isset($_GET['cantidad_registros']) && $_GET['cantidad_registros'] == '50') }} value="50">50</option>
+                        <option {{ (isset($_GET['cantidad_registros']) && $_GET['cantidad_registros'] == '100') }} value="100">100</option>
+                        <option {{ (isset($_GET['cantidad_registros']) && $_GET['cantidad_registros'] == '200') }} value="200">200</option>
+                        <option {{ (isset($_GET['cantidad_registros']) && $_GET['cantidad_registros'] == '500') }} value="500">500</option>
+                        <option {{ (isset($_GET['cantidad_registros']) && $_GET['cantidad_registros'] == '1000') }} value="1000">1000</option>
+                        <option {{ (isset($_GET['cantidad_registros']) && $_GET['cantidad_registros'] == 'Todos') }} value="Todos">Todos</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <div class="form-group">
+                    <label for="sede">Sede</label>
+                    <select name="sede" class="form-control">
+                        <option value="Todos">Todos</option>
+                        @foreach($sedes as $sede)
+                            <option {{ (isset($_GET['sede']) && $_GET['sede'] == $sede->razon_social) ? 'selected' : '' }} value="{{ $sede->razon_social }}">{{ $sede->razon_social }}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="form-group">
+                    <label for="fecha_desde">Fecha desde</label>
+                    <input value="{{ isset($_GET['fecha_desde']) ? $_GET['fecha_desde'] : '' }}" type="date" class="form-control" name="fecha_desde">
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="form-group">
+                    <label for="fecha_hasta">Fecha hasta</label>
+                    <input value="{{ isset($_GET['fecha_hasta']) ? $_GET['fecha_hasta'] : '' }}" type="date" class="form-control" name="fecha_hasta">
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="form-group">
+                    <label for="">&nbsp;</label>
+                    <button class="btn btn-outline-success btn-block" type="submit">Buscar</button>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <hr class="row align-items-start col-12">
+
     <table style="width:100%;" class="CP-stickyBar">
         <tr>
             @if(Auth::user()->departamento == 'TECNOLOGIA' || Auth::user()->departamento == 'GERENCIA' || Auth::user()->departamento == 'OPERACIONES' || Auth::user()->departamento == 'TESORERIA')
@@ -112,22 +199,30 @@
                 <th scope="col" class="CP-sticky">Fecha de registro</th>
                 <th scope="col" class="CP-sticky">Moneda</th>
                 <th scope="col" class="CP-sticky">Monto</th>
+                <th scope="col" class="CP-sticky">Días de crédito</th>
                 <th scope="col" class="CP-sticky">Documento soporte deuda</th>
                 <th scope="col" class="CP-sticky">Numero de documento</th>
+                <th scope="col" class="CP-sticky">Creado por</th>
+                <th scope="col" class="CP-sticky">Sede</th>
+                <th scope="col" class="CP-sticky">Estado</th>
                 <th scope="col" class="CP-sticky">Acciones</th>
             </tr>
         </thead>
         <tbody>
         @foreach($deudas as $deuda)
-            <tr>
+            <tr class="{{ $deuda->deleted_at ? 'bg-warning' : '' }}">
               <th>{{$deuda->id}}</th>
               <td>{{$deuda->proveedor->nombre_proveedor}}</td>
               <td>{{$deuda->proveedor->rif_ci}}</td>
               <td>{{$deuda->created_at}}</td>
               <td>{{$deuda->proveedor->moneda}}</td>
               <td>{{number_format($deuda->monto, 2, ',', '.')}}</td>
+              <td>{{$deuda->dias_credito}}</td>
               <td>{{$deuda->documento_soporte_deuda}}</td>
               <td>{{$deuda->numero_documento}}</td>
+              <td>{{$deuda->usuario_registro}}</td>
+              <td>{{$deuda->sede}}</td>
+              <td>{{($deuda->deleted_at)?'Desincorporado':'Activo'}}</td>
               <td style="width:140px;">
                 <a href="/deudas/{{$deuda->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
                     <i class="far fa-eye"></i>
@@ -138,11 +233,13 @@
                         <i class="fas fa-edit"></i>
                     </a>
 
-                    <form action="/deudas/{{$deuda->id}}" method="POST" style="display: inline;">
-                        @method('DELETE')
-                        @csrf
-                        <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Desincorporar"><i class="fa fa-reply"></i></button>
-                    </form>
+                    @if(!$deuda->deleted_at)
+                        <form action="/deudas/{{$deuda->id}}" method="POST" style="display: inline;">
+                            @method('DELETE')
+                            @csrf
+                            <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Desincorporar"><i class="fa fa-reply"></i></button>
+                        </form>
+                    @endif
                 @endif
 
               </td>
@@ -150,6 +247,8 @@
         @endforeach
         </tbody>
     </table>
+
+    {{ $deudas->appends($_GET)->links() }}
 
     <script>
         $(document).ready(function(){

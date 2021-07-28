@@ -50,23 +50,37 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <th scope="row"><label for="nombre_banco">Nombre del banco</label></th>
+                        <th scope="row"><label for="nombre_banco">Nombre del banco *</label></th>
                         <td><input name="nombre_banco" class="form-control" autofocus required minlength="5" maxlength="50"></td>
                     </tr>
 
                     <tr>
-                        <th scope="row"><label for="nombre_titular">Nombre del titular</label></th>
+                        <th scope="row"><label for="nombre_titular">Nombre del titular *</label></th>
                         <td><input name="nombre_titular" class="form-control" required minlength="5" maxlength="50"></td>
                     </tr>
 
                     <tr>
-                        <th scope="row"><label for="alias_cuenta">Alias de la cuenta</label></th>
+                        <th scope="row"><label for="alias_cuenta">Alias de la cuenta *</label></th>
                         <td><input name="alias_cuenta" class="form-control" required minlength="3" maxlength="10"></td>
+                    </tr>
+
+                    <tr>
+                        <th scope="row"><label for="moneda">Moneda *</label></th>
+                        <td>
+                            <select name="moneda" class="form-control" required>
+                                <option value=""></option>
+                                @foreach($monedas as $moneda)
+                                    <option value="{{ $moneda }}">{{ $moneda }}</option>
+                                @endforeach
+                            </select>
+                        </td>
                     </tr>
                 </tbody>
             </table>
 
-            <input type="submit" class="btn btn-outline-success btn-md" value="Guardar">
+            <p class="text-danger font-weight-bold">* Campos obligatorios</p>
+
+            <input type="button" class="btn btn-outline-success btn-md" value="Guardar">
         </fieldset>
     </form>
 
@@ -74,6 +88,40 @@
         $(document).ready(function(){
             $('[data-toggle="tooltip"]').tooltip();
         });
-        $('#exampleModalCenter').modal('show')
+
+        $('#exampleModalCenter').modal('show');
+
+        $('[type=button]').click(function () {
+            alias_cuenta = $('[name=alias_cuenta]').val();
+
+            if (alias_cuenta != '') {
+                $.ajax({
+                    type: 'GET',
+                    url: '/bancos/validar',
+                    data: {
+                        alias_cuenta: alias_cuenta
+                    },
+                    success: function (response) {
+                        if (response == 'error') {
+                            alert('El alias de la cuenta que intenta registrar ya existe!');
+                            $('[name=alias_cuenta]').focus();
+                        }
+
+                        if (response == 'success') {
+                            $('form').submit();
+                        }
+                    }
+                });
+            }
+        });
+
+        $(document).ready(function() {
+          $(window).keydown(function(event){
+            if(event.keyCode == 13) {
+              event.preventDefault();
+              return false;
+            }
+          });
+        });
     </script>
 @endsection

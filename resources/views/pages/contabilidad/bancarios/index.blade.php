@@ -62,7 +62,7 @@
                 </button>
               </div>
               <div class="modal-body">
-                <h4 class="h6">Pago bancario eliminado con exito</h4>
+                <h4 class="h6">Pago bancario reversado con exito</h4>
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-outline-success" data-dismiss="modal">Aceptar</button>
@@ -111,7 +111,11 @@
                 <th scope="col" class="CP-sticky">Nombre del proveedor</th>
                 <th scope="col" class="CP-sticky">RIF/CI del proveedor</th>
                 <th scope="col" class="CP-sticky">Fecha de registro</th>
-                <th scope="col" class="CP-sticky">Monto</th>
+                <th scope="col" class="CP-sticky">Monto del banco</th>
+                <th scope="col" class="CP-sticky">Monto del proveedor</th>
+                <th scope="col" class="CP-sticky">Tasa</th>
+                <th scope="col" class="CP-sticky">Estado</th>
+                <th scope="col" class="CP-sticky">Comentario</th>
                 <th scope="col" class="CP-sticky">Alias bancario</th>
                 <th scope="col" class="CP-sticky">Operador</th>
                 <th scope="col" class="CP-sticky">Acciones</th>
@@ -119,15 +123,55 @@
         </thead>
         <tbody>
         @foreach($pagos as $deuda)
-            <tr>
+            <tr class="{{ ($deuda->estatus == 'Reversado') ? 'bg-warning' : '' }}">
               <th>{{$deuda->id}}</th>
               <td>{{$deuda->proveedor->nombre_proveedor}}</td>
               <td>{{$deuda->proveedor->rif_ci}}</td>
               <td>{{$deuda->created_at}}</td>
               <td>{{number_format($deuda->monto, 2, ',', '.')}}</td>
-              <td>{{$deuda->banco->alias_cuenta}}</td>
+
+              @php
+                if ($deuda->tasa) {
+                    if ($deuda->banco->moneda != $deuda->proveedor->moneda) {
+                        if ($deuda->banco->moneda == 'Dólares' && $deuda->proveedor->moneda == 'Bolívares') {
+                            $monto_proveedor = $deuda->monto * $deuda->tasa;
+                        }
+
+                        if ($deuda->banco->moneda == 'Dólares' && $deuda->proveedor->moneda == 'Pesos') {
+                            $monto_proveedor = $deuda->monto * $deuda->tasa;
+                        }
+
+                        if ($deuda->banco->moneda == 'Bolívares' && $deuda->proveedor->moneda == 'Dólares') {
+                            $monto_proveedor = $deuda->monto / $deuda->tasa;
+                        }
+
+                        if ($deuda->banco->moneda == 'Bolívares' && $deuda->proveedor->moneda == 'Pesos') {
+                            $monto_proveedor = $deuda->monto * $deuda->tasa;
+                        }
+
+                        if ($deuda->banco->moneda == 'Pesos' && $deuda->proveedor->moneda == 'Bolívares') {
+                            $monto_proveedor = $deuda->monto / $deuda->tasa;
+                        }
+
+                        if ($deuda->banco->moneda == 'Pesos' && $deuda->proveedor->moneda == 'Dólares') {
+                            $monto_proveedor = $deuda->monto / $deuda->tasa;
+                        }
+                    } else {
+                        $monto_proveedor = $deuda->monto;
+                    }
+                }
+                else {
+                    $monto_proveedor = $deuda->monto;
+                }
+              @endphp
+
+              <td>{{number_format($monto_proveedor, 2, ',', '.')}}</td>
+              <td>{{($deuda->tasa) ? number_format($deuda->tasa, 2, ',', '.') : ''}}</td>
+              <td>{{$deuda->estatus}}</td>
+              <td>{{$deuda->comentario}}</td>
+              <td>{{isset($deuda->banco->alias_cuenta) ? $deuda->banco->alias_cuenta : ''}}</td>
               <td>{{$deuda->operador}}</td>
-              <td style="width:180px;">
+              <td style="width:200px;">
                 <a target="_blank" href="/bancarios/soporte/{{$deuda->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Ver soporte">
                     <i class="fa fa-file"></i>
                 </a>
@@ -136,18 +180,20 @@
                     <i class="far fa-eye"></i>
                 </a>
 
-                @if(Auth::user()->departamento == 'TECNOLOGIA' || Auth::user()->departamento == 'GERENCIA' || Auth::user()->departamento == 'ADMINISTRACION')
-                    <a href="/bancarios/{{$deuda->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
-                        <i class="fas fa-edit"></i>
+                @if($deuda->estatus != 'Reversado')
+                    <a href="/bancarios/notificar/{{$deuda->id}}" role="button" class="btn btn-outline-dark btn-sm" data-toggle="tooltip" data-placement="top" title="Notificar">
+                        <i class="fa fa-bell"></i>
                     </a>
                 @endif
 
                 @if(Auth::user()->departamento == 'TECNOLOGIA' || Auth::user()->departamento == 'GERENCIA')
-                    <form action="/bancarios/{{$deuda->id}}" method="POST" style="display: inline;">
-                        @method('DELETE')
-                        @csrf
-                        <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Reverso"><i class="fa fa-reply"></i></button>
-                    </form>
+                    @if($deuda->estatus != 'Reversado')
+                        <form action="/bancarios/{{$deuda->id}}" method="POST" style="display: inline;">
+                            @method('DELETE')
+                            @csrf
+                            <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Reverso"><i class="fa fa-reply"></i></button>
+                        </form>
+                    @endif
                 @endif
               </td>
             </tr>
@@ -159,7 +205,13 @@
         $(document).ready(function(){
             $('[data-toggle="tooltip"]').tooltip();
         });
-        $('#exampleModalCenter').modal('show')
+
+        $('#exampleModalCenter').modal('show');
+
+        $('.notificar').click(function (event) {
+            event.preventDefault();
+            alert('En desarrollo...');
+        });
     </script>
 
 @endsection

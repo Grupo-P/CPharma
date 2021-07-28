@@ -1309,6 +1309,33 @@
             case 'Registro de Fallas':
                 $ruta = '/falla';
             break;
+            case 'Devoluciones de clientes':
+                $ruta = '/reporte33';
+            break;
+            case 'Articulos estancados en tienda':
+                $ruta = '/reporte34';
+            break;
+            case 'Artículos sin ventas':
+                $ruta = '/reporte35';
+            break;
+            case 'Lista de precios':
+                $ruta = '/reporte36';
+            break;
+            case 'Traslados entre tiendas':
+                $ruta = '/reporte37';
+            break;
+            case 'Registro de Reclamos':
+                $ruta = '/reporte38';
+            break;
+            case 'Revision de inventarios fisicos':
+                $ruta = '/reporte39';
+            break;
+            case 'Surtido de gavetas':
+                $ruta = '/reporte40';
+            break;
+            case 'Articulos competidos':
+                $ruta = '/reporte41';
+            break;
             default:
                 $ruta = '#';
             break;
@@ -3777,5 +3804,40 @@
     ORDER BY InvArticulo.Id ASC
     ";
     return $sql;
+  }
+
+  function FG_Ordenar_Arreglo($array, $on, $order=SORT_ASC)
+  {
+    $new_array = array();
+    $sortable_array = array();
+
+    if (count($array) > 0) {
+        foreach ($array as $k => $v) {
+            if (is_array($v)) {
+                foreach ($v as $k2 => $v2) {
+                    if ($k2 == $on) {
+                        $sortable_array[$k] = $v2;
+                    }
+                }
+            } else {
+                $sortable_array[$k] = $v;
+            }
+        }
+
+        switch ($order) {
+            case SORT_ASC:
+                asort($sortable_array);
+            break;
+            case SORT_DESC:
+                arsort($sortable_array);
+            break;
+        }
+
+        foreach ($sortable_array as $k => $v) {
+            $new_array[$k] = $array[$k];
+        }
+    }
+
+    return $new_array;
   }
 ?>

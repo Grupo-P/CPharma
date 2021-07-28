@@ -114,12 +114,14 @@
                 <th scope="col" class="CP-sticky">Monto</th>
                 <th scope="col" class="CP-sticky">Documento soporte reclamo</th>
                 <th scope="col" class="CP-sticky">Numero de documento</th>
+                <th scope="col" class="CP-sticky">Creado por</th>
+                <th scope="col" class="CP-sticky">Estado</th>
                 <th scope="col" class="CP-sticky">Acciones</th>
             </tr>
         </thead>
         <tbody>
         @foreach($reclamos as $reclamo)
-            <tr>
+            <tr class="{{ ($reclamo->deleted_at) ? 'bg-warning' : '' }}">
               <th>{{$reclamo->id}}</th>
               <td>{{$reclamo->proveedor->nombre_proveedor}}</td>
               <td>{{$reclamo->proveedor->rif_ci}}</td>
@@ -128,6 +130,8 @@
               <td>{{number_format($reclamo->monto, 2, ',', '.')}}</td>
               <td>{{$reclamo->documento_soporte_reclamo}}</td>
               <td>{{$reclamo->numero_documento}}</td>
+              <td>{{$reclamo->usuario_registro}}</td>
+              <td>{{($reclamo->deleted_at)?'Desincorporado':'Activo'}}</td>
               <td style="width:140px;">
                 <a href="/reclamos/{{$reclamo->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
                     <i class="far fa-eye"></i>
@@ -138,11 +142,13 @@
                         <i class="fas fa-edit"></i>
                     </a>
 
-                    <form action="/reclamos/{{$reclamo->id}}" method="POST" style="display: inline;">
-                        @method('DELETE')
-                        @csrf
-                        <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Desincorporar"><i class="fa fa-reply"></i></button>
-                    </form>
+                    @if(!$reclamo->deleted_at)
+                        <form action="/reclamos/{{$reclamo->id}}" method="POST" style="display: inline;">
+                            @method('DELETE')
+                            @csrf
+                            <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Desincorporar"><i class="fa fa-reply"></i></button>
+                        </form>
+                    @endif
                 @endif
 
               </td>

@@ -28,6 +28,50 @@
         </div>
     @endif
 
+    <!-- Modal activar -->
+    @if (session('Activar'))
+        <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title text-info" id="exampleModalCenterTitle"><i class="fas fa-info text-info"></i>{{ session('Activar') }}</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <h4 class="h6">Banco activado con exito</h4>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-outline-success" data-dismiss="modal">Aceptar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+    @endif
+
+    <!-- Modal desactivar -->
+    @if (session('Desactivar'))
+        <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title text-info" id="exampleModalCenterTitle"><i class="fas fa-info text-info"></i>{{ session('Desactivar') }}</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <h4 class="h6">Banco desactivado con exito</h4>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-outline-success" data-dismiss="modal">Aceptar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+    @endif
+
     <!-- Modal Editar -->
     @if (session('Updated'))
         <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -107,6 +151,8 @@
                 <th scope="col" class="CP-sticky">Nombre del banco</th>
                 <th scope="col" class="CP-sticky">Nombre del titular</th>
                 <th scope="col" class="CP-sticky">Alias de la cuenta</th>
+                <th scope="col" class="CP-sticky">Moneda</th>
+                <th scope="col" class="CP-sticky">Estado</th>
                 <th scope="col" class="CP-sticky">Acciones</th>
             </tr>
         </thead>
@@ -117,6 +163,8 @@
               <td>{{$banco->nombre_banco}}</td>
               <td>{{$banco->nombre_titular}}</td>
               <td>{{$banco->alias_cuenta}}</td>
+              <td>{{$banco->moneda}}</td>
+              <td>{{($banco->deleted_at)?'Inactivo':'Activo'}}</td>
               <td style="width:140px;">
                 <a href="/bancos/{{$banco->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
                     <i class="far fa-eye"></i>
@@ -127,11 +175,19 @@
                 </a>
 
                 @if(Auth::user()->departamento == 'TECNOLOGIA' || Auth::user()->departamento == 'GERENCIA')
-                    <form action="/bancos/{{$banco->id}}" method="POST" style="display: inline;">
-                        @method('DELETE')
-                        @csrf
-                        <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Desincorporar"><i class="fa fa-reply"></i></button>
-                    </form>
+                    @if($banco->deleted_at)
+                        <form action="/bancos/{{$banco->id}}" method="POST" style="display: inline;">
+                            @method('DELETE')
+                            @csrf
+                            <button type="submit" name="Activar" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Activar"><i class="fa fa-check"></i></button>
+                        </form>
+                    @else
+                        <form action="/bancos/{{$banco->id}}" method="POST" style="display: inline;">
+                            @method('DELETE')
+                            @csrf
+                            <button type="submit" name="Desactivar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Desactivar"><i class="fa fa-ban"></i></button>
+                        </form>
+                    @endif
                 @endif
               </td>
             </tr>

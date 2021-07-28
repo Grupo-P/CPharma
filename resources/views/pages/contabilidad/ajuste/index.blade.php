@@ -109,33 +109,37 @@
                 <th scope="col" class="CP-sticky">Fecha de registro</th>
                 <th scope="col" class="CP-sticky">Monto</th>
                 <th scope="col" class="CP-sticky">Comentarios</th>
+                <th scope="col" class="CP-sticky">Creado por</th>
                 <th scope="col" class="CP-sticky">Acciones</th>
             </tr>
         </thead>
         <tbody>
         @foreach($ajustes as $ajuste)
-            <tr>
+            <tr class="{{ ($ajuste->reverso) ? 'bg-warning' : '' }}">
               <th>{{$ajuste->id}}</th>
               <td>{{$ajuste->proveedor->nombre_proveedor}}</td>
               <td>{{$ajuste->proveedor->rif_ci}}</td>
               <td>{{$ajuste->created_at}}</td>
-              <td>{{$ajuste->monto}}</td>
+              <td>{{number_format($ajuste->monto, 2, ',', '.')}}</td>
               <td>{{$ajuste->comentario}}</td>
+              <td>{{$ajuste->usuario_registro}}</td>
               <td style="width:140px;">
                 <a href="ajuste/{{$ajuste->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
                     <i class="far fa-eye"></i>
                 </a>
 
-                @if(Auth::user()->departamento == 'TECNOLOGIA' || Auth::user()->departamento == 'GERENCIA')
+                @if(!$ajuste->reverso && (Auth::user()->departamento == 'TECNOLOGIA' || Auth::user()->departamento == 'GERENCIA'))
                     <a href="ajuste/{{$ajuste->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
                         <i class="fas fa-edit"></i>
                     </a>
 
-                    <form action="ajuste/{{$ajuste->id}}" method="POST" style="display: inline;">
-                        @method('DELETE')
-                        @csrf
-                        <button type="submit" name="Reversar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Reversar"><i class="fa fa-reply"></i></button>
-                    </form>
+                    @if(!$ajuste->reverso)
+                        <form action="ajuste/{{$ajuste->id}}" method="POST" style="display: inline;">
+                            @method('DELETE')
+                            @csrf
+                            <button type="submit" name="Reversar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Reversar"><i class="fa fa-reply"></i></button>
+                        </form>
+                    @endif
                 @endif
               </td>
             </tr>

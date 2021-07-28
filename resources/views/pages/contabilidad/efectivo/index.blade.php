@@ -47,7 +47,7 @@
             <select class="form-control" name="sede">
                 <option value=""></option>
                 @foreach($sedes as $sede)
-                    <option {{ ($request->sede == $sede->sede) ? 'selected' : '' }} value="{{ $sede->sede }}">{{ $sede->sede }}</option>
+                    <option {{ ($request->sede == $sede->razon_social) ? 'selected' : '' }} value="{{ $sede->razon_social }}">{{ $sede->razon_social }}</option>
                 @endforeach
             </select>
         </div>
@@ -118,16 +118,20 @@
     <thead class="thead-dark">
       <tr>
         <th scope="col" class="CP-sticky">#</th>
+        <th scope="col" class="CP-sticky"># de registro</th>
         <th scope="col" class="CP-sticky">Concepto</th>
         <th scope="col" class="CP-sticky">Ingresos</th>
         <th scope="col" class="CP-sticky">Egresos</th>
         <th scope="col" class="CP-sticky">Diferidos</th>
         <th scope="col" class="CP-sticky">Saldo anterior</th>
         <th scope="col" class="CP-sticky">Saldo posterior</th>
+        <th scope="col" class="CP-sticky">Monto al proveedor</th>
+        <th scope="col" class="CP-sticky">Tasa</th>
         <th scope="col" class="CP-sticky">Fecha y hora</th>
         <th scope="col" class="CP-sticky">Plan de cuentas</th>
         <th scope="col" class="CP-sticky">Proveedor</th>
         <th scope="col" class="CP-sticky">Usuario</th>
+        <th scope="col" class="CP-sticky">Autorizado por</th>
         <th scope="col" class="CP-sticky">Acciones</th>
       </tr>
     </thead>
@@ -141,9 +145,10 @@
     @foreach($pagos as $pago)
       <tr>
         <th>{{intval(++$cont)}}</th>
+        <th>{{ str_pad($pago->id, 5, 0, STR_PAD_LEFT) }}</th>
         <td>
           <span class="d-inline-block " style="max-width: 250px;">
-            {{FG_Limpiar_Texto($pago->concepto)}}
+            {!! $pago->concepto !!}
           </span>
         </td>
         <td>{{number_format($pago->ingresos, 2, ',', '.')}}</td>
@@ -151,22 +156,55 @@
         <td>{{number_format($pago->diferido, 2, ',', '.')}}</td>
         <td>{{number_format($pago->saldo_anterior, 2, ',', '.')}}</td>
         <td>{{number_format($pago->saldo_actual, 2, ',', '.')}}</td>
+        <td>
+          @php
+            if ($pago->egresos) {
+                if ($pago->proveedor) {
+                    if ($pago->proveedor->moneda != 'Dólares') {
+                        if ($pago->proveedor->moneda == 'Bolívares') {
+                            $monto_proveedor = $pago->egresos * $pago->tasa;
+                        }
+
+                        if ($pago->proveedor->moneda == 'Pesos') {
+                            $monto_proveedor = $pago->egresos * $pago->tasa;
+                        }
+                    } else {
+                        $monto_proveedor = $pago->monto;
+                    }
+                }
+            }
+
+            if ($pago->diferido) {
+                if ($pago->proveedor) {
+                    if ($pago->proveedor->moneda != 'Dólares') {
+                        if ($pago->proveedor->moneda == 'Bolívares') {
+                            $monto_proveedor = $pago->diferido * $pago->tasa;
+                        }
+
+                        if ($pago->proveedor->moneda == 'Pesos') {
+                            $monto_proveedor = $pago->diferido * $pago->tasa;
+                        }
+                    } else {
+                        $monto_proveedor = $pago->monto;
+                    }
+                }
+            }
+          @endphp
+
+          {{(isset($monto_proveedor)) ? number_format($monto_proveedor,2,',','.') : ''}}
+        </td>
+        <td>{{ ($pago->tasa) ? number_format($pago->tasa,2,',','.') : '' }}</td>
         <td>{{date("d-m-Y h:i:s a", strtotime($pago->created_at))}}</td>
         <td>{{isset($pago->cuenta->nombre) ? $pago->cuenta->nombre : ''}}</td>
         <td>{{isset($pago->proveedor->nombre_proveedor) ? $pago->proveedor->nombre_proveedor : ''}}</td>
         <td>{{$pago->user}}</td>
+        <td>{{$pago->autorizado_por}}</td>
         <td style="width:140px;">
-          @if($pago->id_proveedor)
-            <a target="_blank" href="/efectivo/soporte/{{$pago->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Ver soporte">
-                <i class="fas fa-eye"></i>
-            </a>
-          @endif
-
-          @if($pago->estatus == 'DIFERIDO')
-            <a href="/efectivo/{{$pago->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
-                <i class="fas fa-edit"></i>
-            </a>
-          @endif
+            @if(!$pago->ingresos)
+                <a target="_blank" href="/efectivo/soporte/{{$pago->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Ver soporte">
+                    <i class="fas fa-eye"></i>
+                </a>
+            @endif
           </td>
       </tr>
     @endforeach

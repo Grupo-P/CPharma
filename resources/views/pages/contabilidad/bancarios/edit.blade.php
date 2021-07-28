@@ -52,7 +52,7 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <th scope="row"><label for="nombre_proveedor">Nombre del proveedor</label></th>
+                        <th scope="row"><label for="nombre_proveedor">Nombre del proveedor *</label></th>
                         <td>
                             <input value="{{ $pago->proveedor->nombre_proveedor . ' | ' . $pago->proveedor->rif_ci }}" autofocus class="form-control" type="text" id="proveedores">
                             <input value="{{ $pago->proveedor->id }}" type="hidden" name="id_proveedor">
@@ -60,17 +60,17 @@
                     </tr>
 
                     <tr>
-                        <th scope="row"><label for="monto">Monto</label></th>
-                        <td><input type="number" required value="{{ $pago->monto }}" class="form-control" name="monto" min="1"></td>
+                        <th scope="row"><label for="monto">Monto *</label></th>
+                        <td><input type="number" required value="{{ $pago->monto }}" step="0.01" class="form-control" name="monto" min="1"></td>
                     </tr>
 
                     <tr>
-                        <th scope="row"><label for="id_banco">Banco</label></th>
+                        <th scope="row"><label for="id_banco">Banco *</label></th>
                         <td>
                             <select name="id_banco" class="form-control" required>
                                 <option value=""></option>
                                 @foreach($bancos as $banco)
-                                    <option {{ ($banco->id == $pago->banco->id) ? 'selected' : '' }} value="{{ $banco->id }}">{{ $banco->nombre_banco }}</option>
+                                    <option {{ ($banco->id == $pago->banco->id) ? 'selected' : '' }} value="{{ $banco->id }}">{{ $banco->alias_cuenta }}</option>
                                 @endforeach
                             </select>
                         </td>
@@ -82,6 +82,8 @@
                     </tr>
                 </tbody>
             </table>
+
+            <p class="text-danger font-weight-bold">* Campos obligatorios</p>
 
             <input type="submit" class="btn btn-outline-success btn-md" value="Guardar">
         </fieldset>

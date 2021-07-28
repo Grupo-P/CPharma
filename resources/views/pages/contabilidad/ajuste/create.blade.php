@@ -50,7 +50,7 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <th scope="row"><label for="nombre_proveedor">Nombre del proveedor</label></th>
+                        <th scope="row"><label for="nombre_proveedor">Nombre del proveedor *</label></th>
                         <td>
                             <input autofocus class="form-control" type="text" id="proveedores">
                             <input type="hidden" name="id_proveedor">
@@ -58,20 +58,36 @@
                     </tr>
 
                     <tr>
-                        <th scope="row"><label for="monto">Monto</label></th>
+                        <th scope="row"><label for="monto">Monto *</label></th>
                         <td>
-                            <input type="number" required class="form-control" name="monto">
+                            <input type="number" step="0.01" required class="form-control" name="monto">
                         </td>
                     </tr>
 
                     <tr>
-                        <th scope="row"><label for="comentario">Comentario</label></th>
+                        <th scope="row"><label for="saldo">Saldo del proveedor</label></th>
+                        <td>
+                            <input type="text" step="0.01" readonly class="form-control" name="saldo">
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <th scope="row"><label for="moneda">Moneda del proveedor</label></th>
+                        <td>
+                            <input type="text" readonly class="form-control" name="moneda">
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <th scope="row"><label for="comentario">Comentario *</label></th>
                         <td>
                             <input type="text" required class="form-control" name="comentario" minlength="10" maxlength="200">
                         </td>
                     </tr>
                 </tbody>
             </table>
+
+            <p class="text-danger">* Campos obligatorios</p>
 
             <input type="submit" class="btn btn-outline-success btn-md" value="Guardar">
         </fieldset>
@@ -101,6 +117,7 @@
                 select: function (event, ui) {
                     $('[name=id_proveedor]').val(ui.item.id);
                     $('[name=moneda]').val(ui.item.moneda);
+                    $('[name=saldo]').val(ui.item.saldo);
                 }
             });
 

@@ -52,7 +52,7 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <th scope="row"><label for="nombre_proveedor">Nombre del proveedor</label></th>
+                        <th scope="row"><label for="nombre_proveedor">Nombre del proveedor *</label></th>
                         <td><input name="nombre_proveedor" class="form-control" autofocus required minlength="5" value="{{ $proveedor->nombre_proveedor }}"></td>
                     </tr>
 
@@ -62,7 +62,7 @@
                     </tr>
 
                     <tr>
-                        <th scope="row"><label for="rif_ci">RIF/Cédula</label></th>
+                        <th scope="row"><label for="rif_ci">RIF/Cédula del proveedor *</label></th>
                         <td>
                             <div class="input-group">
                                 <select name="prefix_rif_ci" id="" class="form-control">
@@ -70,9 +70,14 @@
                                     <option {{ (substr($proveedor->rif_ci, 0, 1) == 'E') ? 'selected' : '' }} value="E">E</option>
                                     <option {{ (substr($proveedor->rif_ci, 0, 1) == 'J') ? 'selected' : '' }} value="J">J</option>
                                 </select>
-                                <input onkeypress="soloNumeros(event)" minlength="10" style="width: 80%" name="rif_ci" class="form-control">
+                                <input required onkeypress="soloNumeros(event)" minlength="9" maxlength="10" value="{{ substr($proveedor->rif_ci, 2) }}" style="width: 80%" name="rif_ci" class="form-control">
                             </div>
                         </td>
+                    </tr>
+
+                    <tr>
+                        <th scope="row"><label for="correo_electronico">Correo electrónico del proveedor</label></th>
+                        <td><input name="correo_electronico" class="form-control" value="{{ $proveedor->correo_electronico }}"></td>
                     </tr>
 
                     <tr>
@@ -94,13 +99,20 @@
 
                     <tr>
                         <th scope="row"><label for="plan_cuenta">Plan de cuentas</label></th>
-                        <td><input name="plan_cuenta" class="form-control" value="{{ $proveedor->plan_cuenta }}"></td>
+                        <td>
+                            <select name="plan_cuentas" class="form-control">
+                                <option value=""></option>
+                                @foreach($cuentas as $cuenta)
+                                    <option {{ ($cuenta->nombre == $proveedor->plan_cuentas) ? 'selected' : '' }} value="{{ $cuenta->nombre }}">{{ $cuenta->nombre }}</option>
+                                @endforeach
+                            </select>
+                        </td>
                     </tr>
 
                     <tr>
-                        <th scope="row"><label for="moneda">Moneda</label></th>
+                        <th scope="row"><label for="moneda">Moneda *</label></th>
                         <td>
-                            <select name="moneda" class="form-control">
+                            <select required name="moneda" class="form-control">
                                 <option value=""></option>
                                 @foreach($monedas as $moneda)
                                     <option {{ ($moneda == $proveedor->moneda) ? 'selected' : '' }} value="{{ $moneda }}">{{ $moneda }}</option>
@@ -111,12 +123,14 @@
 
                     <tr>
                         <th scope="row"><label for="saldo">Saldo</label></th>
-                        <td><input name="saldo" value="0" class="form-control" type="number" required value="{{ $proveedor->saldo }}"></td>
+                        <td><input name="saldo" value="{{ number_format($proveedor->saldo, 2, '.', '') }}" class="form-control" type="number" step="0.01" readonly></td>
                     </tr>
                 </tbody>
             </table>
 
-            <input type="submit" class="btn btn-outline-success btn-md" value="Guardar">
+            <p class="text-danger">* Campos obligatorios</p>
+
+            <input type="button" class="btn btn-outline-success btn-md" value="Guardar">
         </fieldset>
     </form>
 
@@ -124,6 +138,35 @@
         $(document).ready(function(){
             $('[data-toggle="tooltip"]').tooltip();
         });
-        $('#exampleModalCenter').modal('show')
+
+        $('#exampleModalCenter').modal('show');
+
+        $('[type=button]').click(function () {
+            prefix = $('[name=prefix_rif_ci]').val();
+            rif = $('[name=rif_ci]').val();
+
+            if (rif != '') {
+                rif = prefix + '-' + rif;
+
+                $.ajax({
+                    type: 'GET',
+                    url: '/proveedores/validar',
+                    data: {
+                        rif: rif,
+                        id: {{ $proveedor->id }}
+                    },
+                    success: function (response) {
+                        if (response == 'error') {
+                            alert('El RIF que intenta registrar ya existe!');
+                            $('[name=rif_ci]').focus();
+                        }
+
+                        if (response == 'success') {
+                            $('form').submit();
+                        }
+                    }
+                });
+            }
+        });
     </script>
 @endsection

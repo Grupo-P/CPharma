@@ -17,7 +17,7 @@ class ContProveedorController extends Controller
      */
     public function index()
     {
-        $proveedores = ContProveedor::get();
+        $proveedores = ContProveedor::orderByDesc('id')->get();
         return view('pages.contabilidad.proveedores.index', compact('proveedores'));
     }
 
@@ -53,11 +53,13 @@ class ContProveedorController extends Controller
         $proveedor->nombre_proveedor     = $request->input('nombre_proveedor');
         $proveedor->nombre_representante = $request->input('nombre_representante');
         $proveedor->rif_ci               = $rif_ci;
+        $proveedor->correo_electronico   = $request->input('correo_electronico');
         $proveedor->direccion            = $request->input('direccion');
         $proveedor->tasa                 = $request->input('tasa');
-        $proveedor->plan_cuentas         = $request->input('plan_cuenta');
+        $proveedor->plan_cuentas         = $request->input('plan_cuentas');
         $proveedor->moneda               = $request->input('moneda');
         $proveedor->saldo                = $request->input('saldo');
+        $proveedor->usuario_creado       = auth()->user()->name;
         $proveedor->save();
 
         $auditoria           = new Auditoria();
@@ -98,7 +100,9 @@ class ContProveedorController extends Controller
         $monedas = Configuracion::where('variable', 'Moneda')->first();
         $monedas = explode(',', $monedas->valor);
 
-        return view('pages.contabilidad.proveedores.edit', compact('proveedor', 'tasas', 'monedas'));
+        $cuentas = ContCuenta::get();
+
+        return view('pages.contabilidad.proveedores.edit', compact('cuentas', 'proveedor', 'tasas', 'monedas'));
     }
 
     /**
@@ -116,11 +120,11 @@ class ContProveedorController extends Controller
         $proveedor->nombre_proveedor     = $request->input('nombre_proveedor');
         $proveedor->nombre_representante = $request->input('nombre_representante');
         $proveedor->rif_ci               = $rif_ci;
+        $proveedor->correo_electronico   = $request->input('correo_electronico');
         $proveedor->direccion            = $request->input('direccion');
         $proveedor->tasa                 = $request->input('tasa');
-        $proveedor->plan_cuentas         = $request->input('plan_cuenta');
+        $proveedor->plan_cuentas         = $request->input('plan_cuentas');
         $proveedor->moneda               = $request->input('moneda');
-        $proveedor->saldo                = $request->input('saldo');
         $proveedor->save();
 
         $auditoria           = new Auditoria();
@@ -143,15 +147,48 @@ class ContProveedorController extends Controller
     {
         $proveedor = ContProveedor::find($id);
 
-        $auditoria           = new Auditoria();
-        $auditoria->accion   = 'ELIMINAR';
-        $auditoria->tabla    = 'PROVEEDOR';
-        $auditoria->registro = $proveedor->id;
-        $auditoria->user     = auth()->user()->name;
-        $auditoria->save();
+        if ($proveedor->deleted_at) {
+            $auditoria           = new Auditoria();
+            $auditoria->accion   = 'ACTIVAR';
+            $auditoria->tabla    = 'PROVEEDOR';
+            $auditoria->registro = $proveedor->id;
+            $auditoria->user     = auth()->user()->name;
+            $auditoria->save();
 
-        $proveedor->delete();
+            $proveedor->deleted_at = null;
+            $proveedor->save();
 
-        return redirect('/proveedores')->with('Deleted', ' Informacion');
+            return redirect('/proveedores')->with('Activar', ' Informacion');
+        } else {
+            $auditoria           = new Auditoria();
+            $auditoria->accion   = 'DESACTIVAR';
+            $auditoria->tabla    = 'PROVEEDOR';
+            $auditoria->registro = $proveedor->id;
+            $auditoria->user     = auth()->user()->name;
+            $auditoria->save();
+
+            $proveedor->deleted_at = date('Y-m-d H:i:s');
+            $proveedor->save();
+
+            return redirect('/proveedores')->with('Desactivar', ' Informacion');
+        }
+    }
+
+    public function validar(Request $request)
+    {
+        $proveedor = ContProveedor::where('rif_ci', $request->get('rif'))
+            ->get();
+
+        if ($request->get('id')) {
+            $proveedor = ContProveedor::where('rif_ci', $request->get('rif'))
+                ->where('id', '!=', $request->get('id'))
+                ->get();
+        }
+
+        if ($proveedor->count()) {
+            return 'error';
+        } else {
+            return 'success';
+        }
     }
 }

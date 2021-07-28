@@ -61,6 +61,16 @@
                 <th scope="row">Numero documento</th>
                 <td>{{$deuda->numero_documento}}</td>
             </tr>
+
+            <tr>
+                <th scope="row">Creado por</th>
+                <td>{{$deuda->usuario_registro}}</td>
+            </tr>
+
+            <tr>
+                <th scope="row">Sede</th>
+                <td>{{$deuda->sede}}</td>
+            </tr>
         </tbody>
     </table>
 @endsection

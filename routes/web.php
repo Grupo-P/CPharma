@@ -421,31 +421,42 @@ Route::resource('practicas', 'RH_PracticaController');
 Route::resource('movimientos', 'TS_MovimientoController');
 Route::get('/diferidos', 'TS_MovimientoController@diferidos')->name('diferidos');
 
+Route::get('/proveedores/validar', 'ContProveedorController@validar');
 Route::resource('proveedores', 'ContProveedorController');
 
 Route::resource('cuentas', 'ContCuentasController');
 Route::get('/cuentas/{id}/delete', 'ContCuentasController@delete');
 
+Route::get('/bancos/validar', 'ContBancoController@validar');
 Route::resource('bancos', 'ContBancoController');
 
 Route::resource('deudas', 'ContDeudasController');
+Route::post('/deudas/validar', 'ContDeudasController@validar');
+
+Route::get('/pizarra-deudas', 'ContDeudasController@pizarra');
 
 Route::resource('reclamos', 'ContReclamoController');
+Route::post('/reclamos/validar', 'ContReclamoController@validar');
 
 Route::resource('ajuste', 'ContAjusteController');
 
+Route::post('/bancarios/validar', 'ContPagoBancarioController@validar');
 Route::resource('bancarios', 'ContPagoBancarioController');
-
 Route::get('/bancarios/soporte/{id}', 'ContPagoBancarioController@soporte');
+Route::get('/bancarios/notificar/{id}', 'ContPagoBancarioController@notificar');
 
+Route::post('/efectivo/validar', 'ContPagoEfectivoController@validar');
 Route::resource('efectivo', 'ContPagoEfectivoController');
 
 Route::get('/efectivo/soporte/{id}', 'ContPagoEfectivoController@soporte');
 
-Route::get('/reportes', 'ContReportes@index');
-Route::get('/reportes/pagos-emitidos', 'ContReportes@pagos_emitidos');
-Route::get('/reportes/movimientos-por-proveedor', 'ContReportes@movimientos_por_proveedor');
-Route::get('/reportes/deudas-por-fecha', 'ContReportes@deudas_por_fecha');
-Route::get('/reportes/pagos-por-fecha', 'ContReportes@pagos_por_fecha');
+Route::get('/contabilidad/diferidos', 'ContPagoEfectivoController@diferidos')->name('contabilidad.diferidos');
 
-Route::resource('/conciliaciones', 'ConciliacionesController');
+Route::get('/reportes', 'ContReporteController@index');
+Route::get('/reportes/movimientos-por-proveedor', 'ContReporteController@movimientos_por_proveedor');
+Route::get('/reportes/movimientos-bancarios', 'ContReporteController@movimientos_bancarios');
+Route::get('/reportes/deudas-por-fecha', 'ContReporteController@deudas_por_fecha');
+Route::get('/reportes/pagos-por-fecha', 'ContReporteController@pagos_por_fecha');
+Route::get('/reportes/reporte-por-cuentas', 'ContReporteController@reporte_por_cuentas');
+
+Route::resource('/conciliaciones', 'ContConciliacionesController');

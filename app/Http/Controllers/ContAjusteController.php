@@ -16,7 +16,7 @@ class ContAjusteController extends Controller
      */
     public function index()
     {
-        $ajustes = ContAjuste::get();
+        $ajustes = ContAjuste::orderByDesc('id')->get();
         return view('pages.contabilidad.ajuste.index', compact('ajustes'));
     }
 
@@ -27,7 +27,7 @@ class ContAjusteController extends Controller
      */
     public function create()
     {
-        $sqlProveedores = ContProveedor::get();
+        $sqlProveedores = ContProveedor::whereNull('deleted_at')->get();
         $i              = 0;
 
         foreach ($sqlProveedores as $proveedor) {
@@ -35,6 +35,7 @@ class ContAjusteController extends Controller
             $proveedores[$i]['value']  = $proveedor->nombre_proveedor . ' | ' . $proveedor->rif_ci;
             $proveedores[$i]['id']     = $proveedor->id;
             $proveedores[$i]['moneda'] = $proveedor->moneda;
+            $proveedores[$i]['saldo']  = number_format($proveedor->saldo, 2, ',', '.');
 
             $i = $i + 1;
         }
@@ -50,10 +51,11 @@ class ContAjusteController extends Controller
      */
     public function store(Request $request)
     {
-        $ajuste               = new ContAjuste();
-        $ajuste->id_proveedor = $request->input('id_proveedor');
-        $ajuste->monto        = $request->input('monto');
-        $ajuste->comentario   = $request->input('comentario');
+        $ajuste                   = new ContAjuste();
+        $ajuste->id_proveedor     = $request->input('id_proveedor');
+        $ajuste->monto            = $request->input('monto');
+        $ajuste->comentario       = $request->input('comentario');
+        $ajuste->usuario_registro = auth()->user()->name;
         $ajuste->save();
 
         $proveedor        = ContProveedor::find($request->input('id_proveedor'));
@@ -92,7 +94,7 @@ class ContAjusteController extends Controller
     {
         $ajuste = ContAjuste::find($id);
 
-        $sqlProveedores = ContProveedor::get();
+        $sqlProveedores = ContProveedor::whereNull('deleted_at')->get();
         $i              = 0;
 
         foreach ($sqlProveedores as $proveedor) {
@@ -100,6 +102,7 @@ class ContAjusteController extends Controller
             $proveedores[$i]['value']  = $proveedor->nombre_proveedor . ' | ' . $proveedor->rif_ci;
             $proveedores[$i]['id']     = $proveedor->id;
             $proveedores[$i]['moneda'] = $proveedor->moneda;
+            $proveedores[$i]['saldo']  = $proveedor->saldo;
 
             $i = $i + 1;
         }
@@ -118,7 +121,7 @@ class ContAjusteController extends Controller
     {
         $ajuste = ContAjuste::find($id);
 
-        $proveedor        = ContProveedor::find($request->input('id_proveedor'));
+        $proveedor        = ContProveedor::find($ajuste->id_proveedor);
         $proveedor->saldo = (float) $proveedor->saldo - (float) $ajuste->monto;
         $proveedor->save();
 
@@ -149,13 +152,18 @@ class ContAjusteController extends Controller
      */
     public function destroy($id)
     {
-        $ajuste = ContAjuste::find($id);
-        $monto  = ($ajuste->monto > 0) ? -$ajuste->monto : abs($ajuste->monto);
+        $ajuste          = ContAjuste::find($id);
+        $ajuste->reverso = 1;
+        $ajuste->save();
 
-        $nuevoAjuste               = new ContAjuste();
-        $nuevoAjuste->id_proveedor = $ajuste->id_proveedor;
-        $nuevoAjuste->monto        = $monto;
-        $nuevoAjuste->comentario   = 'Reverso del ajuste #' . $ajuste->id;
+        $monto = ($ajuste->monto > 0) ? -$ajuste->monto : abs($ajuste->monto);
+
+        $nuevoAjuste                   = new ContAjuste();
+        $nuevoAjuste->id_proveedor     = $ajuste->id_proveedor;
+        $nuevoAjuste->monto            = $monto;
+        $nuevoAjuste->comentario       = 'Reverso del ajuste #' . $ajuste->id;
+        $nuevoAjuste->usuario_registro = auth()->user()->name;
+        $nuevoAjuste->reverso          = 1;
         $nuevoAjuste->save();
 
         $proveedor        = ContProveedor::find($ajuste->id_proveedor);

@@ -39,40 +39,58 @@
 <!-------------------------------------------------------------------------------->
   <div class="btn-group navbar-brand">
     <button type="button" class="btn btn-outline-info dropdown-toggle textoI" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-      <i class="fas fa-user-cog"></i> Tecnología
+      <i class="fas fa-user-cog"></i> {{ ucfirst(strtolower(Auth()->user()->departamento)) }}
     </button>
     <div class="dropdown-menu">
-      <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="{{ url('/proveedores') }}">
-          <span data-feather="home"></span>
-          <i class="fa fa-users"></i>
-          Proveedores<span class="sr-only">(current)</span>
-        </a>
-      </li>
+      @if(Auth::user()->departamento == 'TECNOLOGIA' || Auth::user()->departamento == 'GERENCIA' || Auth::user()->departamento == 'OPERACIONES')
+          <li class="nav-item">
+            <a class="nav-link CP-Links-Menu" href="{{ url('/proveedores') }}">
+              <span data-feather="home"></span>
+              <i class="fa fa-users"></i>
+              Proveedores<span class="sr-only">(current)</span>
+            </a>
+          </li>
+      @endif
 
-      <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="{{ url('/bancos') }}">
-          <span data-feather="home"></span>
-          <i class="fas fa-university"></i>
-          Bancos<span class="sr-only">(current)</span>
-        </a>
-      </li>
+      @if(Auth::user()->departamento == 'TECNOLOGIA' || Auth::user()->departamento == 'GERENCIA')
+          <li class="nav-item">
+            <a class="nav-link CP-Links-Menu" href="{{ url('/bancos') }}">
+              <span data-feather="home"></span>
+              <i class="fas fa-university"></i>
+              Bancos<span class="sr-only">(current)</span>
+            </a>
+          </li>
+      @endif
 
-      <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="{{ url('/deudas') }}">
-          <span data-feather="home"></span>
-          <i class="fas fa-info-circle"></i>
-          Deudas<span class="sr-only">(current)</span>
-        </a>
-      </li>
+      @if(Auth::user()->departamento == 'TECNOLOGIA' || Auth::user()->departamento == 'GERENCIA' || Auth::user()->departamento == 'OPERACIONES')
+          <li class="nav-item">
+            <a class="nav-link CP-Links-Menu" href="{{ url('/deudas') }}">
+              <span data-feather="home"></span>
+              <i class="fas fa-info-circle"></i>
+              Deudas<span class="sr-only">(current)</span>
+            </a>
+          </li>
+      @endif
 
-      <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="{{ url('/reclamos') }}">
-          <span data-feather="home"></span>
-          <i class="fas fa-exclamation-triangle"></i>
-          Reclamos<span class="sr-only">(current)</span>
-        </a>
-      </li>
+      @if(Auth::user()->departamento == 'TECNOLOGIA' || Auth::user()->departamento == 'GERENCIA' || Auth::user()->departamento == 'ADMINISTRACION' || Auth::user()->departamento == 'CONTABILIDAD')
+          <li class="nav-item">
+            <a class="nav-link CP-Links-Menu" href="{{ url('/pizarra-deudas') }}">
+              <span data-feather="home"></span>
+              <i class="fas fa-info-circle"></i>
+              Pizarra de deudas<span class="sr-only">(current)</span>
+            </a>
+          </li>
+      @endif
+
+      @if(Auth::user()->departamento == 'TECNOLOGIA' || Auth::user()->departamento == 'GERENCIA' || Auth::user()->departamento == 'OPERACIONES')
+          <li class="nav-item">
+            <a class="nav-link CP-Links-Menu" href="{{ url('/reclamos') }}">
+              <span data-feather="home"></span>
+              <i class="fas fa-exclamation-triangle"></i>
+              Reclamos<span class="sr-only">(current)</span>
+            </a>
+          </li>
+      @endif
 
       @if(Auth::user()->departamento == 'TECNOLOGIA' || Auth::user()->departamento == 'GERENCIA' || Auth::user()->departamento == 'CONTABILIDAD' || Auth::user()->departamento == 'ADMINISTRACION')
           <li class="nav-item">
@@ -94,53 +112,66 @@
           </li>
       @endif
 
-      <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="{{ url('/efectivo') }}">
-          <span data-feather="home"></span>
-          <i class="fas fa-money-bill-alt"></i>
-          Pagos en efectivo<span class="sr-only">(current)</span>
-        </a>
-      </li>
+      @if(Auth::user()->departamento != 'OPERACIONES')
+          <li class="nav-item">
+            <a class="nav-link CP-Links-Menu" href="{{ url('/efectivo') }}">
+              <span data-feather="home"></span>
+              <i class="fas fa-money-bill-alt"></i>
+              Pagos en efectivo<span class="sr-only">(current)</span>
+            </a>
+          </li>
+      @endif
 
-      <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="{{ url('/cuentas') }}">
-          <span data-feather="home"></span>
-          <i class="fas fa-network-wired"></i>
-          Plan de cuentas<span class="sr-only">(current)</span>
-        </a>
-      </li>
 
-      <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="{{ url('/conciliaciones') }}">
-          <span data-feather="home"></span>
-          <i class="fas fa-file-invoice-dollar"></i>
-          Conciliaciones<span class="sr-only">(current)</span>
-        </a>
-      </li>
+      @if(Auth::user()->departamento != 'ADMINISTRACION' && Auth::user()->departamento != 'TESORERIA' && Auth::user()->departamento != 'OPERACIONES')
+          <li class="nav-item">
+            <a class="nav-link CP-Links-Menu" href="{{ url('/cuentas') }}">
+              <span data-feather="home"></span>
+              <i class="fas fa-network-wired"></i>
+              Plan de cuentas<span class="sr-only">(current)</span>
+            </a>
+          </li>
+      @endif
 
-      <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="{{ url('/reportes') }}">
-          <span data-feather="home"></span>
-          <i class="fas fa-file-invoice"></i>
-          Reportes<span class="sr-only">(current)</span>
-        </a>
-      </li>
+      @if(Auth::user()->departamento != 'ADMINISTRACION' && Auth::user()->departamento != 'TESORERIA' && Auth::user()->departamento != 'OPERACIONES')
+          <li class="nav-item">
+            <a class="nav-link CP-Links-Menu" href="{{ url('/conciliaciones') }}">
+              <span data-feather="home"></span>
+              <i class="fas fa-file-invoice-dollar"></i>
+              Conciliaciones<span class="sr-only">(current)</span>
+            </a>
+          </li>
+      @endif
 
-      <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="{{ url('/cuentas') }}">
-          <span data-feather="home"></span>
-          <i class="fas fa-network-wired"></i>
-          Plan de cuentas<span class="sr-only">(current)</span>
-        </a>
-      </li>
+      @if(Auth::user()->departamento != 'TESORERIA')
+          <li class="nav-item">
+            <a class="nav-link CP-Links-Menu" href="{{ url('/reportes') }}">
+              <span data-feather="home"></span>
+              <i class="fas fa-file-invoice"></i>
+              Reportes<span class="sr-only">(current)</span>
+            </a>
+          </li>
+      @endif
 
-      <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="{{ url('/configuracion') }}">
-          <span data-feather="home"></span>
-          <i class="fas fa-cogs"></i>
-          Configuración<span class="sr-only">(current)</span>
-        </a>
-      </li>
+      @if(Auth::user()->departamento != 'OPERACIONES')
+          <li class="nav-item">
+            <a class="nav-link CP-Links-Menu" href="{{ url('/contabilidad/diferidos') }}">
+              <span data-feather="home"></span>
+              <i class="fas fa-lock"></i>
+              Diferidos en dolares<span class="sr-only">(current)</span>
+            </a>
+          </li>
+      @endif
+
+      @if(Auth::user()->departamento != 'GERENCIA' && Auth::user()->departamento != 'ADMINISTRACION' && Auth::user()->departamento != 'TESORERIA' && Auth::user()->departamento != 'OPERACIONES' && Auth::user()->departamento != 'CONTABILIDAD')
+          <li class="nav-item">
+            <a class="nav-link CP-Links-Menu" href="{{ url('/configuracion') }}">
+              <span data-feather="home"></span>
+              <i class="fas fa-cogs"></i>
+              Configuración<span class="sr-only">(current)</span>
+            </a>
+          </li>
+      @endif
     </div>
   </div>
 <!-- DEVELOPER -->

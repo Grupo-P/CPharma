@@ -50,8 +50,8 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <th scope="row"><label for="nombre_proveedor">Nombre del proveedor</label></th>
-                        <td><input name="nombre_proveedor" class="form-control" autofocus required minlength="5"></td>
+                        <th scope="row"><label for="nombre_proveedor">Nombre del proveedor *</label></th>
+                        <td><input required name="nombre_proveedor" class="form-control" autofocus required minlength="5"></td>
                     </tr>
 
                     <tr>
@@ -60,7 +60,7 @@
                     </tr>
 
                     <tr>
-                        <th scope="row"><label for="rif_ci">RIF/Cédula</label></th>
+                        <th scope="row"><label for="rif_ci">RIF/Cédula del proveedor *</label></th>
                         <td>
                             <div class="input-group">
                                 <select name="prefix_rif_ci" id="" class="form-control">
@@ -68,9 +68,14 @@
                                     <option value="E">E</option>
                                     <option value="J">J</option>
                                 </select>
-                                <input onkeypress="soloNumeros(event)" minlength="10" style="width: 80%" name="rif_ci" class="form-control">
+                                <input onkeypress="soloNumeros(event)" required minlength="9" maxlength="10" style="width: 80%" name="rif_ci" class="form-control">
                             </div>
                         </td>
+                    </tr>
+
+                    <tr>
+                        <th scope="row"><label for="correo_electronico">Correo electrónico del proveedor</label></th>
+                        <td><input name="correo_electronico" class="form-control"></td>
                     </tr>
 
                     <tr>
@@ -103,9 +108,9 @@
                     </tr>
 
                     <tr>
-                        <th scope="row"><label for="moneda">Moneda</label></th>
+                        <th scope="row"><label for="moneda">Moneda *</label></th>
                         <td>
-                            <select name="moneda" class="form-control">
+                            <select required name="moneda" class="form-control">
                                 <option value=""></option>
                                 @foreach($monedas as $moneda)
                                     <option value="{{ $moneda }}">{{ $moneda }}</option>
@@ -121,7 +126,9 @@
                 </tbody>
             </table>
 
-            <input type="submit" class="btn btn-outline-success btn-md" value="Guardar">
+            <p class="text-danger">* Campos obligatorios</p>
+
+            <button type="button" class="btn btn-outline-success btn-md">Guardar</button>
         </fieldset>
     </form>
 
@@ -129,6 +136,33 @@
         $(document).ready(function(){
             $('[data-toggle="tooltip"]').tooltip();
         });
-        $('#exampleModalCenter').modal('show')
+        $('#exampleModalCenter').modal('show');
+
+        $('[type=button]').click(function () {
+            prefix = $('[name=prefix_rif_ci]').val();
+            rif = $('[name=rif_ci]').val();
+
+            if (rif != '') {
+                rif = prefix + '-' + rif;
+
+                $.ajax({
+                    type: 'GET',
+                    url: '/proveedores/validar',
+                    data: {
+                        rif: rif
+                    },
+                    success: function (response) {
+                        if (response == 'error') {
+                            alert('El RIF que intenta registrar ya existe!');
+                            $('[name=rif_ci]').focus();
+                        }
+
+                        if (response == 'success') {
+                            $('form').submit();
+                        }
+                    }
+                });
+            }
+        });
     </script>
 @endsection

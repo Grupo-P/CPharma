@@ -18,6 +18,8 @@ class CreateContAjustesTable extends Migration
             $table->string('id_proveedor');
             $table->string('monto');
             $table->text('comentario');
+            $table->string('reverso')->nullable();
+            $table->string('usuario_registro')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });
