@@ -1,14 +1,3 @@
-<?php
-    use PhpOffice\PhpSpreadsheet\IOFactory;
-    use PhpOffice\PhpSpreadsheet\Spreadsheet;
-    use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
-    use compras\Configuracion;
-
-    include(app_path().'\functions\config.php');
-    include(app_path().'\functions\functions.php');
-    include(app_path().'\functions\querys_mysql.php');
-    include(app_path().'\functions\querys_sqlserver.php');
-?>
 @extends('layouts.model')
 
 @section('title')
@@ -62,6 +51,18 @@
 @endsection
 
 @section('content')
+    <?php
+        use PhpOffice\PhpSpreadsheet\IOFactory;
+        use PhpOffice\PhpSpreadsheet\Spreadsheet;
+        use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+        use compras\Configuracion;
+
+        include(app_path().'\functions\config.php');
+        include(app_path().'\functions\functions.php');
+        include(app_path().'\functions\querys_mysql.php');
+        include(app_path().'\functions\querys_sqlserver.php');
+    ?>
+
 	<h1 class="h5 text-info">
 		<i class="fas fa-file-excel"></i>
 		Articulos Excel
@@ -319,7 +320,7 @@
             sqlsrv_close($conn);
         /* CPHARMA */
 
-        $nombreDelDocumento = "PaginaWEB_CPharma_".date('Ymd_h-i-A').".xlsx";
+        $nombreDelDocumento = "MenuWEB_CPharma_".date('Ymd_h-i-A').".xlsx";
 
         /*EXCEL*/
             header('Content-Type: application/vnd.ms-excel');

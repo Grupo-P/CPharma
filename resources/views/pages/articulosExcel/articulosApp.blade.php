@@ -61,8 +61,8 @@
 
                 $sqlCategorizacion = "
                 SELECT
-                categorias.nombre as categoria,
-                subcategorias.nombre as subcategoria
+                if(categorias.codigo_app is not null,categorias.codigo_app ,categorias.nombre) as categoria,
+                if(subcategorias.codigo_app is not null,subcategorias.codigo_app ,subcategorias.nombre) as subcategoria
                 FROM categorizacions
                 INNER JOIN categorias ON categorias.codigo = codigo_categoria
                 INNER JOIN subcategorias ON subcategorias.codigo = codigo_subcategoria
