@@ -119,17 +119,17 @@
         @if(isset($_GET['Tipo']) && $_GET['Tipo'] == '1')
             <form action="/categorizacion" method="GET">
                 <select style="margin-left: 2.5%; width: 95%" class="form-control" name="clave_busqueda">
-                  <option {{ ($_GET['clave_busqueda'] == '') ? 'selected' : '' }} value="">Seleccione metodo de busqueda</option>
-                  <option {{ ($_GET['clave_busqueda'] == 'Codigo interno') ? 'selected' : '' }} value="Codigo interno">Codigo interno</option>
-                  <option {{ ($_GET['clave_busqueda'] == 'Codigo de barra') ? 'selected' : '' }} value="Codigo de barra">Codigo de barra</option>
-                  <option {{ ($_GET['clave_busqueda'] == 'Descripcion') ? 'selected' : '' }} value="Descripcion">Descripcion</option>
-                  <option {{ ($_GET['clave_busqueda'] == 'Marca') ? 'selected' : '' }} value="Marca">Marca</option>
-                  <option {{ ($_GET['clave_busqueda'] == 'Categoria') ? 'selected' : '' }} value="Categoria">Categoria</option>
-                  <option {{ ($_GET['clave_busqueda'] == 'Subcategoria') ? 'selected' : '' }} value="Subcategoria">Subcategoria</option>
+                  <option {{ (isset($_GET['clave_busqueda']) && $_GET['clave_busqueda'] == '') ? 'selected' : '' }} value="">Seleccione metodo de busqueda</option>
+                  <option {{ (isset($_GET['clave_busqueda']) && $_GET['clave_busqueda'] == 'Codigo interno') ? 'selected' : '' }} value="Codigo interno">Codigo interno</option>
+                  <option {{ (isset($_GET['clave_busqueda']) && $_GET['clave_busqueda'] == 'Codigo de barra') ? 'selected' : '' }} value="Codigo de barra">Codigo de barra</option>
+                  <option {{ (isset($_GET['clave_busqueda']) && $_GET['clave_busqueda'] == 'Descripcion') ? 'selected' : '' }} value="Descripcion">Descripcion</option>
+                  <option {{ (isset($_GET['clave_busqueda']) && $_GET['clave_busqueda'] == 'Marca') ? 'selected' : '' }} value="Marca">Marca</option>
+                  <option {{ (isset($_GET['clave_busqueda']) && $_GET['clave_busqueda'] == 'Categoria') ? 'selected' : '' }} value="Categoria">Categoria</option>
+                  <option {{ (isset($_GET['clave_busqueda']) && $_GET['clave_busqueda'] == 'Subcategoria') ? 'selected' : '' }} value="Subcategoria">Subcategoria</option>
                 </select>
 
                 <div style="margin-left: 2.5%; width: 95%" class="input-group md-form form-sm form-1 mt-2 pl-0">
-                  <input class="form-control my-0 py-1" name="valor_busqueda" type="text" placeholder="Buscar..." value="{{ $_GET['valor_busqueda'] }}" aria-label="Search" autofocus="autofocus">
+                  <input class="form-control my-0 py-1" name="valor_busqueda" type="text" placeholder="Buscar..." value="{{ isset($_GET['valor_busqueda']) ? $_GET['valor_busqueda'] : '' }}" aria-label="Search" autofocus="autofocus">
 
                   <input type="hidden" name="Tipo" value="1">
 
