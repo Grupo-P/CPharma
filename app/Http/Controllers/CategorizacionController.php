@@ -26,7 +26,7 @@ class CategorizacionController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         if(isset($_GET['Tipo'])){
             $tipo = $_GET['Tipo'];
@@ -37,11 +37,19 @@ class CategorizacionController extends Controller
 
         switch ($tipo) {
             case 0:
-                $categorizaciones = Categorizacion::orderBy('id', 'asc')->where('codigo_categoria', '1')->take(50)->get();
+                $categorizaciones = Categorizacion::orderBy('id', 'asc')
+                    ->where('codigo_categoria', '1')
+                    ->take(50)
+                    ->get();
+
                 return view('pages.categorizacion.index', compact('categorizaciones','tipo'));
           break;
           case 1:
-                $categorizaciones = Categorizacion::orderBy('id', 'asc')->where('codigo_categoria','!=', '1')->get();
+                $categorizaciones = Categorizacion::orderBy('id', 'asc')
+                    ->where('codigo_categoria','!=', '1')
+                    ->busqueda($request->get('clave_busqueda'), $request->get('valor_busqueda'))
+                    ->paginate(50);
+
                 return view('pages.categorizacion.index', compact('categorizaciones','tipo'));            
           break;          
         }        
