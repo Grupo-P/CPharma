@@ -293,6 +293,10 @@ Route::get('/ConsultorCompra', function() {
     return view('pages.consultorP.consultorCompra');
 });
 
+Route::get('/MenuArticulosExcel', function() {
+    return view('pages.articulosExcel.menuArticulosExcel');
+});
+
 Route::get('/ArticulosExcel', function() {
     return view('pages.articulosExcel.articulosExcel');
 });
