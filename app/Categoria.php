@@ -12,6 +12,6 @@ class Categoria extends Model
      * @var array
      */
     protected $fillable = [
-        'codigo', 'nombre', 'estatus', 'user'
+        'codigo', 'codigo_app', 'nombre', 'estatus', 'user'
     ];
 }

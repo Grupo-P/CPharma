@@ -12,8 +12,8 @@
 
 	<hr class="row align-items-start col-12">
 
-	<form action="/categoria/" method="POST" style="display: inline;">  
-	    @csrf					    
+	<form action="/categoria/" method="POST" style="display: inline;">
+	    @csrf
 	    <button type="submit" name="Regresar" role="button" class="btn btn-outline-info btn-sm"data-placement="top"><i class="fa fa-reply">&nbsp;Regresar</i></button>
 	</form>
 
@@ -30,7 +30,11 @@
 		    <tr>
 		      	<th scope="row">Codigo</th>
 	    	  	<td>{{$categoria->codigo}}</td>
-		    </tr>		   		   
+		    </tr>
+            <tr>
+		      	<th scope="row">Codigo App</th>
+	    	  	<td>{{$categoria->codigo_app}}</td>
+		    </tr>
 		    <tr>
 		      	<th scope="row">Estatus</th>
 	    	  	<td>{{$categoria->estatus}}</td>
