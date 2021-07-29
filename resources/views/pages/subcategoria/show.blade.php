@@ -18,8 +18,8 @@
 
 	<hr class="row align-items-start col-12">
 
-	<form action="/subcategoria/" method="POST" style="display: inline;">  
-	    @csrf					    
+	<form action="/subcategoria/" method="POST" style="display: inline;">
+	    @csrf
 	    <button type="submit" name="Regresar" role="button" class="btn btn-outline-info btn-sm"data-placement="top"><i class="fa fa-reply">&nbsp;Regresar</i></button>
 	</form>
 
@@ -32,11 +32,15 @@
 	      		<th scope="row" colspan="2">{{$subcategoria->nombre}}</th>
 		    </tr>
 	  	</thead>
-	  	<?php				
+	  	<?php
 				$i = 0;
 				$categoria = Categoria::where('codigo',$subcategoria->codigo_categoria)->get();
 			?>
 	  	<tbody>
+            <tr>
+		      	<th scope="row">Codigo App</th>
+	    	  	<td>{{$subcategoria->codigo_app}}</td>
+		    </tr>
 		    <tr>
 		      	<th scope="row">Codigo de Subcategoria</th>
 	    	  	<td>{{$subcategoria->codigo}}</td>
@@ -44,11 +48,11 @@
 		    <tr>
 		      	<th scope="row">Codigo de Categoria</th>
 	    	  	<td>{{$subcategoria->codigo_categoria}}</td>
-		    </tr>	
+		    </tr>
 		    <tr>
 		      	<th scope="row">Categoria</th>
 	    	  	<td>{{$categoria[0]->nombre}}</td>
-		    </tr>			   		   
+		    </tr>
 		    <tr>
 		      	<th scope="row">Estatus</th>
 	    	  	<td>{{$subcategoria->estatus}}</td>
