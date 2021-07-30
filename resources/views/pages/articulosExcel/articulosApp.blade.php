@@ -13,13 +13,35 @@
     (isset($_GET['condicionArticulo']))?$condicionArticulo = $_GET['condicionArticulo']:$condicionArticulo = "TODOS";
     (isset($_GET['condicionExistencia']))?$condicionExistencia = $_GET['condicionExistencia']:$condicionExistencia = "20";
 
-    echo $condicionExcel;
-    echo "<br>";
-    echo $condicionArticulo;
-    echo "<br>";
-    echo $condicionExistencia;
-    echo "<br>";
-    die;
+    if($condicionArticulo=="DOLARIZADO"){
+        $condicionArticulo = " AND (ISNULL((SELECT
+        InvArticuloAtributo.InvArticuloId
+        FROM InvArticuloAtributo
+        WHERE InvArticuloAtributo.InvAtributoId =
+        (SELECT InvAtributo.Id
+        FROM InvAtributo
+        WHERE
+        InvAtributo.Descripcion = 'Dolarizados'
+        OR  InvAtributo.Descripcion = 'Giordany'
+        OR  InvAtributo.Descripcion = 'giordany')
+        AND InvArticuloAtributo.InvArticuloId = InvArticulo.Id),CAST(0 AS INT))) <> 0";
+    }
+    else if($condicionArticulo=="NODOLARIZADO"){
+        $condicionArticulo = " AND (ISNULL((SELECT
+        InvArticuloAtributo.InvArticuloId
+        FROM InvArticuloAtributo
+        WHERE InvArticuloAtributo.InvAtributoId =
+        (SELECT InvAtributo.Id
+        FROM InvAtributo
+        WHERE
+        InvAtributo.Descripcion = 'Dolarizados'
+        OR  InvAtributo.Descripcion = 'Giordany'
+        OR  InvAtributo.Descripcion = 'giordany')
+        AND InvArticuloAtributo.InvArticuloId = InvArticulo.Id),CAST(0 AS INT))) = 0";
+    }
+    else if($condicionArticulo=="TODOS"){
+        $condicionArticulo = "";
+    }
 
 	$spreadsheet = new Spreadsheet();
 	$sheet = $spreadsheet->getActiveSheet();
@@ -28,7 +50,7 @@
 		$SedeConnection = FG_Mi_Ubicacion();
 		$conn = FG_Conectar_Smartpharma($SedeConnection);
         $connCPharma = FG_Conectar_CPharma();
-		$sql = RQ_Articulos_PaginaWEB();
+		$sql = RQ_Articulos_PaginaWEB($condicionExistencia,$condicionArticulo);
 		$result = sqlsrv_query($conn,$sql);
 		$contador = 1;
         $TasaActual = FG_Tasa_Fecha_Venta($connCPharma,date('Y-m-d'));
@@ -129,7 +151,7 @@
 		RETORNO: Lista de proveedores con diferencia en dias respecto al dia actual
 		DESAROLLADO POR: SERGIO COVA
 	 */
-	function RQ_Articulos_PaginaWEB() {
+	function RQ_Articulos_PaginaWEB($condicionExistencia,$condicionArticulo) {
 		$sql = "
 			SELECT
 --Id Articulo
@@ -271,7 +293,8 @@
     AND (ROUND(CAST((SELECT SUM (InvLoteAlmacen.Existencia) As Existencia
     FROM InvLoteAlmacen
     WHERE(InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
-    AND (InvLoteAlmacen.InvArticuloId = InvArticulo.Id)) AS DECIMAL(38,0)),2,0)) > 20
+    AND (InvLoteAlmacen.InvArticuloId = InvArticulo.Id)) AS DECIMAL(38,0)),2,0)) > '$condicionExistencia'
+    $condicionArticulo
 --Agrupamientos
     GROUP BY InvArticulo.Id, InvArticulo.CodigoArticulo, InvArticulo.Descripcion, InvArticulo.FinConceptoImptoIdCompra, InvArticulo.InvCategoriaId
 --Ordanamiento

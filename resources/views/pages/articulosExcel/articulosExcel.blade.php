@@ -52,11 +52,6 @@
         $connCPharma = FG_Conectar_CPharma();
 		$sql = RQ_Articulos_PaginaWEB($condicionExistencia,$condicionArticulo);
 
-        //echo"<pre>";
-        //print_r($sql);
-        //echo"</pre>";
-        //die;
-
 		$result = sqlsrv_query($conn,$sql);
 		$contador = 1;
 
