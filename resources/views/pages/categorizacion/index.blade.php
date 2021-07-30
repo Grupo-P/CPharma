@@ -106,6 +106,7 @@
 				</form>
 	    </td>
       <td style="width:85%;">
+        @if(!isset($_GET['Tipo']) || $_GET['Tipo'] == '0')
         	<div class="input-group md-form form-sm form-1 pl-0">
 			  <div class="input-group-prepend">
 			    <span class="input-group-text purple lighten-3" id="basic-text1"><i class="fas fa-search text-white"
@@ -113,6 +114,31 @@
 			  </div>
 			  <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterAllTable()" autofocus="autofocus">
 				</div>
+        @endif
+
+        @if(isset($_GET['Tipo']) && $_GET['Tipo'] == '1')
+            <form action="/categorizacion" method="GET">
+                <select style="margin-left: 2.5%; width: 95%" class="form-control" name="clave_busqueda">
+                  <option {{ (isset($_GET['clave_busqueda']) && $_GET['clave_busqueda'] == '') ? 'selected' : '' }} value="">Seleccione metodo de busqueda</option>
+                  <option {{ (isset($_GET['clave_busqueda']) && $_GET['clave_busqueda'] == 'Codigo interno') ? 'selected' : '' }} value="Codigo interno">Codigo interno</option>
+                  <option {{ (isset($_GET['clave_busqueda']) && $_GET['clave_busqueda'] == 'Codigo de barra') ? 'selected' : '' }} value="Codigo de barra">Codigo de barra</option>
+                  <option {{ (isset($_GET['clave_busqueda']) && $_GET['clave_busqueda'] == 'Descripcion') ? 'selected' : '' }} value="Descripcion">Descripcion</option>
+                  <option {{ (isset($_GET['clave_busqueda']) && $_GET['clave_busqueda'] == 'Marca') ? 'selected' : '' }} value="Marca">Marca</option>
+                  <option {{ (isset($_GET['clave_busqueda']) && $_GET['clave_busqueda'] == 'Categoria') ? 'selected' : '' }} value="Categoria">Categoria</option>
+                  <option {{ (isset($_GET['clave_busqueda']) && $_GET['clave_busqueda'] == 'Subcategoria') ? 'selected' : '' }} value="Subcategoria">Subcategoria</option>
+                </select>
+
+                <div style="margin-left: 2.5%; width: 95%" class="input-group md-form form-sm form-1 mt-2 pl-0">
+                  <input class="form-control my-0 py-1" name="valor_busqueda" type="text" placeholder="Buscar..." value="{{ isset($_GET['valor_busqueda']) ? $_GET['valor_busqueda'] : '' }}" aria-label="Search" autofocus="autofocus">
+
+                  <input type="hidden" name="Tipo" value="1">
+
+                  <div class="input-group-append">
+                    <button type="submit" class="btn btn-outline-primary"><i class="fa fa-search"></i> Buscar</button>
+                  </div>
+                </div>
+            </form>
+        @endif
       </td>
     </tr>
   </table>
@@ -199,6 +225,13 @@
 		@endforeach
 		</tbody>
 	</table>
+
+    @if(isset($_GET['Tipo']) && $_GET['Tipo'] == 1)
+        <div class="d-flex justify-content-center">
+            {{ $categorizaciones->appends($_GET)->links() }}
+        </div>
+    @endif
+
 	<div class="text-center">
 		{!! Form::submit('Guardar', ['class' => 'btn btn-outline-success btn-md']) !!}
 	</div>

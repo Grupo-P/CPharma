@@ -223,7 +223,10 @@
                     $('[name=cantidad]').focus();
                 },
                 error: function (error) {
-                    $('body').html(error.responseText);
+                    alert('Ha ocurrido un error, por favor intente nuevamente');
+
+                    console.log('Datos: ' + data);
+                    console.log('ID: ' + id);
                 }
             });
         });
@@ -243,8 +246,6 @@
                     $('#myId').val(id);
 
                     data = $('#form').serialize();
-
-                    console.log(data);
 
                     $.ajax({
                         type: 'GET',
@@ -269,7 +270,10 @@
                             $('[name=cantidad]').focus();
                         },
                         error: function (error) {
-                            $('body').html(error.responseText);
+                            alert('Ha ocurrido un error, por favor intente nuevamente');
+
+                            console.log('Datos: ' + data);
+                            console.log('ID: ' + id);
                         }
                     });
                 }
@@ -289,7 +293,7 @@
                         window.location.href = '/surtido';
                     },
                     error: function (error) {
-                        $('body').html(error.responseText);
+                        alert('Ha ocurrido un error, por favor intente nuevamente');
                     }
                 });
             } else {
