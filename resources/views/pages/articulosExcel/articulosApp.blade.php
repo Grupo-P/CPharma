@@ -9,6 +9,18 @@
 	include(app_path().'\functions\querys_mysql.php');
 	include(app_path().'\functions\querys_sqlserver.php');
 
+    (isset($_GET['condicionExcel']))?$condicionExcel = $_GET['condicionExcel']:$condicionExcel = "APP";
+    (isset($_GET['condicionArticulo']))?$condicionArticulo = $_GET['condicionArticulo']:$condicionArticulo = "TODOS";
+    (isset($_GET['condicionExistencia']))?$condicionExistencia = $_GET['condicionExistencia']:$condicionExistencia = "20";
+
+    echo $condicionExcel;
+    echo "<br>";
+    echo $condicionArticulo;
+    echo "<br>";
+    echo $condicionExistencia;
+    echo "<br>";
+    die;
+
 	$spreadsheet = new Spreadsheet();
 	$sheet = $spreadsheet->getActiveSheet();
 

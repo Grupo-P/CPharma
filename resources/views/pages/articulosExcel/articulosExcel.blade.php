@@ -9,6 +9,40 @@
 	include(app_path().'\functions\querys_mysql.php');
 	include(app_path().'\functions\querys_sqlserver.php');
 
+    (isset($_GET['condicionExcel']))?$condicionExcel = $_GET['condicionExcel']:$condicionExcel = "WEB";
+    (isset($_GET['condicionArticulo']))?$condicionArticulo = $_GET['condicionArticulo']:$condicionArticulo = "TODOS";
+    (isset($_GET['condicionExistencia']))?$condicionExistencia = $_GET['condicionExistencia']:$condicionExistencia = "20";
+
+    if($condicionArticulo=="DOLARIZADO"){
+        $condicionArticulo = " AND (ISNULL((SELECT
+        InvArticuloAtributo.InvArticuloId
+        FROM InvArticuloAtributo
+        WHERE InvArticuloAtributo.InvAtributoId =
+        (SELECT InvAtributo.Id
+        FROM InvAtributo
+        WHERE
+        InvAtributo.Descripcion = 'Dolarizados'
+        OR  InvAtributo.Descripcion = 'Giordany'
+        OR  InvAtributo.Descripcion = 'giordany')
+        AND InvArticuloAtributo.InvArticuloId = InvArticulo.Id),CAST(0 AS INT))) <> 0";
+    }
+    else if($condicionArticulo=="NODOLARIZADO"){
+        $condicionArticulo = " AND (ISNULL((SELECT
+        InvArticuloAtributo.InvArticuloId
+        FROM InvArticuloAtributo
+        WHERE InvArticuloAtributo.InvAtributoId =
+        (SELECT InvAtributo.Id
+        FROM InvAtributo
+        WHERE
+        InvAtributo.Descripcion = 'Dolarizados'
+        OR  InvAtributo.Descripcion = 'Giordany'
+        OR  InvAtributo.Descripcion = 'giordany')
+        AND InvArticuloAtributo.InvArticuloId = InvArticulo.Id),CAST(0 AS INT))) = 0";
+    }
+    else if($condicionArticulo=="TODOS"){
+        $condicionArticulo = "";
+    }
+
 	$spreadsheet = new Spreadsheet();
 	$sheet = $spreadsheet->getActiveSheet();
 
@@ -16,7 +50,13 @@
 		$SedeConnection = FG_Mi_Ubicacion();
 		$conn = FG_Conectar_Smartpharma($SedeConnection);
         $connCPharma = FG_Conectar_CPharma();
-		$sql = RQ_Articulos_PaginaWEB();
+		$sql = RQ_Articulos_PaginaWEB($condicionExistencia,$condicionArticulo);
+
+        //echo"<pre>";
+        //print_r($sql);
+        //echo"</pre>";
+        //die;
+
 		$result = sqlsrv_query($conn,$sql);
 		$contador = 1;
 
@@ -65,8 +105,8 @@
         $contador++;
 
     		while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
-    		
-                $IdArticulo = $row["IdArticulo"];	
+
+                $IdArticulo = $row["IdArticulo"];
         	    $CodigoBarra = $row["CodigoBarra"];
         	    $Descripcion = FG_Limpiar_Texto($row["Descripcion"]);
         	    $Existencia = $row["Existencia"];
@@ -81,16 +121,16 @@
         	    $TroquelAlmacen2 = $row["TroquelAlmacen2"];
         	    $PrecioCompraBrutoAlmacen2 = $row["PrecioCompraBrutoAlmacen2"];
         	    $PrecioCompraBruto = $row["PrecioCompraBruto"];
-        	    $CondicionExistencia = 'CON_EXISTENCIA';                
+        	    $CondicionExistencia = 'CON_EXISTENCIA';
 
         	    $Precio = FG_Calculo_Precio_Alfa($Existencia,$ExistenciaAlmacen1,$ExistenciaAlmacen2,$IsTroquelado,$UtilidadArticulo,$UtilidadCategoria,$TroquelAlmacen1,$PrecioCompraBrutoAlmacen1,$TroquelAlmacen2,
             		$PrecioCompraBrutoAlmacen2,$PrecioCompraBruto,$IsIVA,$CondicionExistencia);
-        		
+
         	    $Precio = number_format($Precio,2,"," ,"." );
         	    if($Existencia == ""){ $Existencia = '0'; }
 
                 $sqlCategorizacion = "
-                SELECT 
+                SELECT
                 categorias.nombre as categoria,
                 subcategorias.nombre as subcategoria
                 FROM categorizacions
@@ -101,7 +141,7 @@
 
                 $ResultCategorizacion = mysqli_query($connCPharma,$sqlCategorizacion);
                 $RowCategorizacion = mysqli_fetch_assoc($ResultCategorizacion);
-                $categoria = ($RowCategorizacion['categoria']) ? $RowCategorizacion['categoria'] : "SIN CATEGORIA";                
+                $categoria = ($RowCategorizacion['categoria']) ? $RowCategorizacion['categoria'] : "SIN CATEGORIA";
                 $subcategoria = ($RowCategorizacion['subcategoria']) ? $RowCategorizacion['subcategoria'] : "SIN SUBCATEGORIA";
  	/* CPHARMA */
 
@@ -145,12 +185,12 @@
                 $sheet->setCellValue('AK'.$contador,$configuracion[0]->valor.$CodigoBarra.".jpg");
                 $sheet->setCellValue('AL'.$contador,"");
                 $sheet->setCellValue('AM'.$contador,"0");
-    	    	
+
     	/*EXCEL*/
 
 	/* CPHARMA */
     			$contador++;
-          	}        
+          	}
         mysqli_close($connCPharma);
         sqlsrv_close($conn);
     /* CPHARMA */
@@ -160,7 +200,7 @@
 	/*EXCEL*/
 		header('Content-Type: application/vnd.ms-excel');
 		header('Content-Disposition: attachment;filename="' . $nombreDelDocumento . '"');
-	
+
 		$writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
 		$writer->save('php://output');
 	/*EXCEL*/
@@ -170,12 +210,12 @@
 	/**********************************************************************************/
 	/*
 		TITULO: R1Q_Activacion_Proveedores
-		FUNCION: Query que genera la lista de los proveedores con la diferencia en dias desde el ultimo despacho de mercancia. 
+		FUNCION: Query que genera la lista de los proveedores con la diferencia en dias desde el ultimo despacho de mercancia.
 		RETORNO: Lista de proveedores con diferencia en dias respecto al dia actual
 		DESAROLLADO POR: SERGIO COVA
 	 */
-	function RQ_Articulos_PaginaWEB() {
-		$sql = " 
+	function RQ_Articulos_PaginaWEB($condicionExistencia,$condicionArticulo) {
+		$sql = "
 			SELECT
 --Id Articulo
     InvArticulo.Id AS IdArticulo,
@@ -188,13 +228,13 @@
     InvArticulo.Descripcion,
 --Tipo Producto (0 Miscelaneos, Id Articulo Medicinas)
     (ISNULL((SELECT
-    InvArticuloAtributo.InvArticuloId 
-    FROM InvArticuloAtributo 
-    WHERE InvArticuloAtributo.InvAtributoId = 
+    InvArticuloAtributo.InvArticuloId
+    FROM InvArticuloAtributo
+    WHERE InvArticuloAtributo.InvAtributoId =
     (SELECT InvAtributo.Id
-    FROM InvAtributo 
-    WHERE 
-    InvAtributo.Descripcion = 'Medicina') 
+    FROM InvAtributo
+    WHERE
+    InvAtributo.Descripcion = 'Medicina')
     AND InvArticuloAtributo.InvArticuloId = InvArticulo.Id),CAST(0 AS INT))) AS Tipo,
 --Impuesto (1 SI aplica impuesto, 0 NO aplica impuesto)
     (ISNULL(InvArticulo.FinConceptoImptoIdCompra,CAST(0 AS INT))) AS Impuesto,
@@ -301,7 +341,7 @@
     LEFT JOIN InvArticuloAtributo ON InvArticuloAtributo.InvArticuloId = InvArticulo.Id
     LEFT JOIN InvAtributo ON InvAtributo.Id = InvArticuloAtributo.InvAtributoId
 --Condicionales
-    WHERE 
+    WHERE
 	((ISNULL((SELECT
     InvArticuloAtributo.InvArticuloId
     FROM InvArticuloAtributo
@@ -313,6 +353,11 @@
     OR  InvAtributo.Descripcion = 'PAGINAWEB '
     OR  InvAtributo.Descripcion = 'paginaweb ')
     AND InvArticuloAtributo.InvArticuloId = InvArticulo.Id),CAST(0 AS INT)))) <> 0
+    AND (ROUND(CAST((SELECT SUM (InvLoteAlmacen.Existencia) As Existencia
+    FROM InvLoteAlmacen
+    WHERE(InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
+    AND (InvLoteAlmacen.InvArticuloId = InvArticulo.Id)) AS DECIMAL(38,0)),2,0)) > '$condicionExistencia'
+    $condicionArticulo
 --Agrupamientos
     GROUP BY InvArticulo.Id, InvArticulo.CodigoArticulo, InvArticulo.Descripcion, InvArticulo.FinConceptoImptoIdCompra, InvArticulo.InvCategoriaId
 --Ordanamiento
