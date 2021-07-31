@@ -56,8 +56,12 @@
             $resultDataGRVen = $resulValidator = sqlsrv_query($conn,$sqlDataGRVen);
             $MontoArray = $UnidadesArray = $TransaccionesArray = $HoraArray = array();
 
+            //echo"<pre>";
+			//print_r($sqlDataGRVen);
+			//echo"</pre>";
+
             $rowValidaror = sqlsrv_fetch_array($resulValidator, SQLSRV_FETCH_ASSOC);
-            if( isset($rowDataGRVen['Monto']) && $rowDataGRVen['Monto']!=""){
+            if( isset($rowValidaror['Monto']) && $rowValidaror['Monto']!=""){
 
                 while($rowDataGRVen = sqlsrv_fetch_array($resultDataGRVen, SQLSRV_FETCH_ASSOC)) {
                     array_push($MontoArray,$rowDataGRVen['Monto']);
