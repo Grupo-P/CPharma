@@ -39,8 +39,8 @@ class CategorizacionController extends Controller
             case 0:
                 $categorizaciones = Categorizacion::orderBy('id', 'asc')
                     ->where('codigo_categoria', '1')
-                    ->take(50)
-                    ->get();
+                    ->busqueda($request->get('clave_busqueda'), $request->get('valor_busqueda'))
+                    ->paginate(50);
 
                 return view('pages.categorizacion.index', compact('categorizaciones','tipo'));
           break;
