@@ -124,6 +124,10 @@
   .aumento1{
     font-size: 4.5em;
   }
+
+  .aumentoPrecio{
+    font-size:10em;
+  }
   .preciopromo{
     color: #dc3545;
   }

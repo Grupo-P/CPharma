@@ -121,6 +121,10 @@
 	.aumento{
 		font-size: 4.5em;
 	}
+
+    .aumentoPrecio{
+        font-size: 8em;
+    }
   .aumento1{
     font-size: 2.5em;
   }
