@@ -96,20 +96,14 @@ class CategorizacionController extends Controller
                     $Auditoria->save();             
                 }
 
-                $categorizaciones =  
-                Categorizacion::orderBy('id', 'asc')->where('codigo_categoria', '1')->take(50)->get();
-                return view('pages.categorizacion.index', compact('categorizaciones','tipo')); 
+                return redirect()->back();
             }
             else{
-                $categorizaciones =  
-                Categorizacion::orderBy('id', 'asc')->where('codigo_categoria', '1')->take(50)->get();
-                return view('pages.categorizacion.index', compact('categorizaciones','tipo'));
+                return redirect()->back();
             }
         }
         catch(\Illuminate\Database\QueryException $e){            
-            $categorizaciones =  
-            Categorizacion::orderBy('id', 'asc')->where('codigo_categoria', '1')->take(50)->get();
-            return view('pages.categorizacion.index', compact('categorizaciones','tipo'));
+            return redirect()->back();
         }
     }
 
