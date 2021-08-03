@@ -200,7 +200,7 @@
 										}
 									$Etiqueta = $Etiqueta.'
 									<tr>
-										<td class="centrado rowDer rowDerA aumento preciopromo" colspan="2">
+										<td class="centrado rowDer rowDerA aumentoPrecio preciopromo" colspan="2">
 											<strong>
 											'.number_format ($PrecioHoy,2,"," ,"." ).'
 											</strong>
