@@ -39,8 +39,8 @@
 
     <hr class="row align-items-start col-12">
 
-    <form action="/subcategoria/" method="POST" style="display: inline;">  
-        @csrf                       
+    <form action="/subcategoria/" method="POST" style="display: inline;">
+        @csrf
         <button type="submit" name="Regresar" role="button" class="btn btn-outline-info btn-sm"data-placement="top"><i class="fa fa-reply">&nbsp;Regresar</i></button>
     </form>
 
@@ -66,7 +66,7 @@
                         <?php
                         foreach($categorias as $categoria){
                             $cat = Categoria::where('codigo',$categoria)->get();
-                        ?>                       
+                        ?>
                         <option value="<?php echo $categoria; ?>">
                             <?php echo $categoria." - ".$cat[0]->nombre; ?></option>
                         <?php
@@ -80,17 +80,21 @@
                 <td>{!! Form::text('codigo', null, [ 'class' => 'form-control', 'autofocus','required']) !!}</td>
             </tr>
             <tr>
+                <th scope="row">{!! Form::label('codigo_app', 'Codigo App') !!}</th>
+                <td>{!! Form::text('codigo_app', null, [ 'class' => 'form-control', 'autofocus','required']) !!}</td>
+            </tr>
+            <tr>
                 <th scope="row">{!! Form::label('nombre', 'Nombre') !!}</th>
                 <td>{!! Form::text('nombre', null, [ 'class' => 'form-control', 'required']) !!}</td>
-            </tr>                                
+            </tr>
         </tbody>
         </table>
         {!! Form::submit('Guardar', ['class' => 'btn btn-outline-success btn-md']) !!}
     </fieldset>
-    {!! Form::close()!!} 
+    {!! Form::close()!!}
     <script>
         $(document).ready(function(){
-            $('[data-toggle="tooltip"]').tooltip();   
+            $('[data-toggle="tooltip"]').tooltip();
         });
         $('#exampleModalCenter').modal('show')
     </script>

@@ -104,6 +104,13 @@
         </a>
       </li>
       <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('/ArticulosAPP') }}">
+          <span data-feather="home"></span>
+          <i class="fas fa-file-excel"></i>
+          Articulos APP<span class="sr-only">(current)</span>
+        </a>
+      </li>
+      <li class="nav-item">
         <a class="nav-link CP-Links-Menu" href="{{ url('categoria') }}">
           <span data-feather="home"></span>
           <i class="fas fa-tag"></i>
@@ -303,6 +310,13 @@
           <span data-feather="home"></span>
           <i class="fas fa-file-excel"></i>
           Articulos Pagina Web<span class="sr-only">(current)</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('/ArticulosAPP') }}">
+          <span data-feather="home"></span>
+          <i class="fas fa-file-excel"></i>
+          Articulos APP<span class="sr-only">(current)</span>
         </a>
       </li>
       <li class="nav-item">
@@ -653,6 +667,13 @@
         </a>
       </li>
       <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('/ArticulosAPP') }}">
+          <span data-feather="home"></span>
+          <i class="fas fa-file-excel"></i>
+          Articulos APP<span class="sr-only">(current)</span>
+        </a>
+      </li>
+      <li class="nav-item">
         <a class="nav-link CP-Links-Menu" href="{{ url('categoria') }}">
           <span data-feather="home"></span>
           <i class="fas fa-tag"></i>
@@ -768,6 +789,13 @@
           <span data-feather="home"></span>
           <i class="fas fa-file-excel"></i>
           Articulos Pagina Web<span class="sr-only">(current)</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('/ArticulosAPP') }}">
+          <span data-feather="home"></span>
+          <i class="fas fa-file-excel"></i>
+          Articulos APP<span class="sr-only">(current)</span>
         </a>
       </li>
       <li class="nav-item">
@@ -1090,6 +1118,13 @@
         </a>
       </li>
       <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('/ArticulosAPP') }}">
+          <span data-feather="home"></span>
+          <i class="fas fa-file-excel"></i>
+          Articulos APP<span class="sr-only">(current)</span>
+        </a>
+      </li>
+      <li class="nav-item">
         <a class="nav-link CP-Links-Menu" href="{{ url('categoria') }}">
           <span data-feather="home"></span>
           <i class="fas fa-tag"></i>
@@ -1139,10 +1174,22 @@
           <i class="fas fa-search-dollar"></i>
           Auditoria Corrida de Precios<span class="sr-only">(current)</span>
         </a>
+        <a class="nav-link CP-Links-Menu" href="{{ url('/MenuArticulosExcel') }}">
+          <span data-feather="home"></span>
+          <i class="fas fa-file-excel"></i>
+          Menu Articulos Excel<span class="sr-only">(current)</span>
+        </a>
         <a class="nav-link CP-Links-Menu" href="{{ url('/ArticulosExcel') }}">
           <span data-feather="home"></span>
           <i class="fas fa-file-excel"></i>
           Articulos Pagina Web<span class="sr-only">(current)</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('/ArticulosAPP') }}">
+          <span data-feather="home"></span>
+          <i class="fas fa-file-excel"></i>
+          Articulos APP<span class="sr-only">(current)</span>
         </a>
       </li>
       <li class="nav-item">

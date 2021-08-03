@@ -39,7 +39,7 @@ class SubcategoriaController extends Controller
     public function create()
     {
         $categorias = Categoria::pluck('codigo','nombre');
-        return view('pages.subcategoria.create', compact('categorias'));        
+        return view('pages.subcategoria.create', compact('categorias'));
     }
 
     /**
@@ -54,8 +54,9 @@ class SubcategoriaController extends Controller
             $subcategoria = new Subcategoria();
             $subcategoria->codigo_categoria = $request->input('codigo_categoria');
             $subcategoria->codigo = $request->input('codigo');
+            $subcategoria->codigo_app = $request->input('codigo_app');
             $subcategoria->nombre = $request->input('nombre');
-            $subcategoria->estatus = 'ACTIVO';            
+            $subcategoria->estatus = 'ACTIVO';
             $subcategoria->user = auth()->user()->name;
             $subcategoria->save();
 
@@ -81,7 +82,7 @@ class SubcategoriaController extends Controller
      */
     public function show($id)
     {
-        $subcategoria = Subcategoria::find($id); 
+        $subcategoria = Subcategoria::find($id);
 
         $Auditoria = new Auditoria();
         $Auditoria->accion = 'CONSULTAR';
@@ -118,7 +119,7 @@ class SubcategoriaController extends Controller
         try{
             $subcategoria = Subcategoria::find($id);
             $subcategoria->fill($request->all());
-            $subcategoria->user = auth()->user()->name;            
+            $subcategoria->user = auth()->user()->name;
             $subcategoria->save();
 
             $Auditoria = new Auditoria();
@@ -159,7 +160,7 @@ class SubcategoriaController extends Controller
             $Auditoria->accion = 'REINCORPORAR';
         }
 
-        $subcategoria->user = auth()->user()->name;        
+        $subcategoria->user = auth()->user()->name;
         $subcategoria->save();
 
         $Auditoria->save();

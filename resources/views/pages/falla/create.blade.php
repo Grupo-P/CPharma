@@ -48,13 +48,15 @@
         </div>
     @endif
 
+    <hr class="row align-items-start col-12">
+
     <h1 class="h5 text-info">
         <i class="fas fa-cart-arrow-down"></i>
         Registro de Fallas
     </h1>
 
     <hr class="row align-items-start col-12">
-    
+
     {!! Form::open(['route' => 'falla.store', 'method' => 'POST']) !!}
     <fieldset>
 
@@ -87,10 +89,10 @@
         </table>
         {!! Form::submit('Guardar', ['class' => 'btn btn-outline-success btn-md']) !!}
     </fieldset>
-    {!! Form::close()!!} 
+    {!! Form::close()!!}
     <script>
         $(document).ready(function(){
-            $('[data-toggle="tooltip"]').tooltip();   
+            $('[data-toggle="tooltip"]').tooltip();
         });
         $('#exampleModalCenter').modal('show')
     </script>

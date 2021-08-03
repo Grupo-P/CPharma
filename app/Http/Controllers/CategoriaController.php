@@ -50,9 +50,10 @@ class CategoriaController extends Controller
     {
         try{
             $categoria = new categoria();
-            $categoria->codigo = $request->input('codigo'); 
+            $categoria->codigo = $request->input('codigo');
+            $categoria->codigo_app = $request->input('codigo_app');
             $categoria->nombre = $request->input('nombre');
-            $categoria->estatus = 'ACTIVO';            
+            $categoria->estatus = 'ACTIVO';
             $categoria->user = auth()->user()->name;
             $categoria->save();
 
@@ -78,7 +79,7 @@ class CategoriaController extends Controller
      */
     public function show($id)
     {
-        $categoria = Categoria::find($id); 
+        $categoria = Categoria::find($id);
 
         $Auditoria = new Auditoria();
         $Auditoria->accion = 'CONSULTAR';
@@ -114,7 +115,7 @@ class CategoriaController extends Controller
         try{
             $categoria = Categoria::find($id);
             $categoria->fill($request->all());
-            $categoria->user = auth()->user()->name;            
+            $categoria->user = auth()->user()->name;
             $categoria->save();
 
             $Auditoria = new Auditoria();
@@ -155,7 +156,7 @@ class CategoriaController extends Controller
             $Auditoria->accion = 'REINCORPORAR';
         }
 
-        $categoria->user = auth()->user()->name;        
+        $categoria->user = auth()->user()->name;
         $categoria->save();
 
         $Auditoria->save();

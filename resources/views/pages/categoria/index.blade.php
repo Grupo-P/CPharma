@@ -27,7 +27,7 @@
 		  </div>
 		</div>
 	@endif
-	
+
 	<!-- Modal Editar -->
 	@if (session('Updated'))
 		<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -65,7 +65,7 @@
 		        <h4 class="h6">Categoria actualizada con exito</h4>
 		      </div>
 		      <div class="modal-footer">
-		        <button type="button" class="btn btn-outline-success" data-dismiss="modal">Aceptar</button>	
+		        <button type="button" class="btn btn-outline-success" data-dismiss="modal">Aceptar</button>
 		      </div>
 		    </div>
 		  </div>
@@ -80,8 +80,8 @@
 	<hr class="row align-items-start col-12">
 	<table style="width:100%;" class="CP-stickyBar">
 	    <tr>
-	        <td style="width:10%;" align="center">	
-				<a href="{{ url('/categoria/create') }}" role="button" class="btn btn-outline-info btn-sm" 
+	        <td style="width:10%;" align="center">
+				<a href="{{ url('/categoria/create') }}" role="button" class="btn btn-outline-info btn-sm"
 				style="display: inline; text-align: left;">
 				<i class="fa fa-plus"></i>
 					Agregar
@@ -99,13 +99,14 @@
 	    </tr>
 	</table>
 	<br/>
-	
+
 	<table class="table table-striped table-borderless col-12 sortable" id="myTable">
 	  	<thead class="thead-dark">
 		    <tr>
 		      	<th scope="col" class="CP-sticky">#</th>
 		      	<th scope="col" class="CP-sticky">Codigo</th>
-		      	<th scope="col" class="CP-sticky">Nombre</th>		      	
+                  <th scope="col" class="CP-sticky">Codigo APP</th>
+		      	<th scope="col" class="CP-sticky">Nombre</th>
 		      	<th scope="col" class="CP-sticky">Estatus</th>
 		      	<th scope="col" class="CP-sticky">Acciones</th>
 		    </tr>
@@ -115,12 +116,13 @@
 		    <tr>
 		      <th class="text-center">{{$categoria->id}}</th>
 		      <td class="text-center">{{$categoria->codigo}}</td>
-		      <td class="text-center">{{$categoria->nombre}}</td>		      
+              <td class="text-center">{{$categoria->codigo_app}}</td>
+		      <td class="text-center">{{$categoria->nombre}}</td>
 		      <td class="text-center">{{$categoria->estatus}}</td>
-		      
+
 		    <!-- Inicio Validacion de ROLES -->
 		      <td style="width:140px;">
-				
+
 				<?php
 				if(Auth::user()->role == 'MASTER' || Auth::user()->role == 'DEVELOPER'){
 				?>
@@ -129,35 +131,35 @@
 					if($categoria->estatus == 'ACTIVO' && $categoria->id!=1){
 					?>
 						<a href="/categoria/{{$categoria->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
-			      			<i class="far fa-eye"></i>			      		
+			      			<i class="far fa-eye"></i>
 			      		</a>
 
 			      		<a href="/categoria/{{$categoria->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
-			      			<i class="fas fa-edit"></i>			      		
+			      			<i class="fas fa-edit"></i>
 				      	</a>
-				 					  
+
 				      	<form action="/categoria/{{$categoria->id}}" method="POST" style="display: inline;">
 						    @method('DELETE')
-						    @csrf					    
+						    @csrf
 						    <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Desincorporar"><i class="fa fa-reply"></i></button>
 						</form>
 					<?php
 					}
 					else if($categoria->estatus == 'INACTIVO' && $categoria->id!=1){
-					?>		
+					?>
 			      	<form action="/categoria/{{$categoria->id}}" method="POST" style="display: inline;">
 					    @method('DELETE')
-					    @csrf					    
+					    @csrf
 					    <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Reincorporar"><i class="fa fa-share"></i></button>
 					</form>
 					<?php
-					}					
+					}
 					?>
-				<?php	
-				} else if(Auth::user()->role == 'SUPERVISOR' || Auth::user()->role == 'ADMINISTRADOR' || Auth::user()->role == 'SUPERVISOR CAJA' && $categoria->id!=1){ 
+				<?php
+				} else if(Auth::user()->role == 'SUPERVISOR' || Auth::user()->role == 'ADMINISTRADOR' || Auth::user()->role == 'SUPERVISOR CAJA' && $categoria->id!=1){
 				?>
 					<a href="/categoria/{{$categoria->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
-		      			<i class="far fa-eye"></i>			      		
+		      			<i class="far fa-eye"></i>
 		      		</a>
 
 		      		<a href="/categoria/{{$categoria->id}}/edit" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
@@ -167,12 +169,12 @@
 				} else if(Auth::user()->role == 'USUARIO' && $categoria->id!=1){
 				?>
 					<a href="/categoria/{{$categoria->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
-		      			<i class="far fa-eye"></i>			      		
-		      		</a>		
+		      			<i class="far fa-eye"></i>
+		      		</a>
 				<?php
 				}
 				?>
-										
+
 		      </td>
 		    <!-- Fin Validacion de ROLES -->
 		    </tr>
@@ -182,7 +184,7 @@
 
 	<script>
 		$(document).ready(function(){
-		    $('[data-toggle="tooltip"]').tooltip();   
+		    $('[data-toggle="tooltip"]').tooltip();
 		});
 		$('#exampleModalCenter').modal('show')
 	</script>
