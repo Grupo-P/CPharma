@@ -80,9 +80,9 @@ class ContReporteController extends Controller
                 SELECT
                     cont_pagos_efectivo.created_at AS fecha,
                     CONCAT('Pago en efectivo en ', (SELECT sedes.siglas FROM sedes WHERE sedes.razon_social = cont_pagos_efectivo.sede)) AS tipo,
-                    '-' AS nro_movimiento,
+                    LPAD(cont_pagos_efectivo.id, 5, '0') AS nro_movimiento,
                     cont_pagos_efectivo.egresos AS monto,
-                    '-' AS comentario,
+                    cont_pagos_efectivo.concepto AS comentario,
                     IF(cont_pagos_efectivo.estatus_conciliaciones, 'Si', 'No') AS conciliacion,
                     cont_pagos_efectivo.user AS operador,
                     IF(cont_pagos_efectivo.deleted_at, 'Desincorporado', 'Activo') AS estado,

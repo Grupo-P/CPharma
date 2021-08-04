@@ -108,7 +108,7 @@ class ContPagoBancarioController extends Controller
         $pago->tasa         = $request->input('tasa');
 
         $pago->operador = auth()->user()->name;
-        $pago->estatus  = 'Procesado';
+        $pago->estatus  = 'Pagado';
         $pago->save();
 
         $banco = ContBanco::find($pago->id_banco);

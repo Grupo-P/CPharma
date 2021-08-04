@@ -126,23 +126,27 @@
 
         concepto = prompt('Concepto');
 
-        $.ajax({
-            method: 'POST',
-            url: '/efectivo/' + id,
-            data: {
-                _token: '{{ csrf_token() }}',
-                _method: 'PUT',
-                movimiento: movimiento,
-                monto: monto,
-                concepto: concepto
-            },
-            success: function (response) {
-                window.location.href = '/contabilidad/diferidos';
-            },
-            error: function (error) {
-                $('body').html(error.responseText);
-            }
-        })
+        if (concepto != '') {
+            $.ajax({
+                method: 'POST',
+                url: '/efectivo/' + id,
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    _method: 'PUT',
+                    movimiento: movimiento,
+                    monto: monto,
+                    concepto: concepto
+                },
+                success: function (response) {
+                    console.log(response);
+                    window.location.href = '/contabilidad/diferidos';
+                },
+                error: function (error) {
+                    $('body').html(error.responseText);
+                }
+            });
+        }
+
     });
   </script>
 @endsection

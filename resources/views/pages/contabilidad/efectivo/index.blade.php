@@ -201,9 +201,11 @@
         <td>{{$pago->autorizado_por}}</td>
         <td style="width:140px;">
             @if(!$pago->ingresos)
-                <a target="_blank" href="/efectivo/soporte/{{$pago->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Ver soporte">
-                    <i class="fas fa-eye"></i>
-                </a>
+                @if (!($pago->egresos && strpos($pago->concepto, 'DIFERIDO')))
+                    <a target="_blank" href="/efectivo/soporte/{{$pago->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Ver soporte">
+                        <i class="fas fa-eye"></i>
+                    </a>
+                @endif
             @endif
           </td>
       </tr>

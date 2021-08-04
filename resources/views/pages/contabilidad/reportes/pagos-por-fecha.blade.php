@@ -117,7 +117,14 @@
 
                                 $url = '/bancarios/soporte/' . $pago->id;
                             } else {
-                                $monto_proveedor = $monto;
+                                if ($pago->proveedor) {
+                                    if ($pago->proveedor->moneda != 'Dólares') {
+                                        $monto_proveedor = $monto * $pago->tasa;
+                                    }
+                                } else {
+                                    $monto_proveedor = $monto;
+                                }
+
                                 $url = '/efectivo/soporte/' . $pago->id;
                             }
                         @endphp
@@ -136,7 +143,7 @@
                         @endphp
 
                         <td class="text-center">{{ $plan_cuentas }}</td>
-                        <td class="text-center">{{ ($pago->estatus) ? strtoupper($pago->estatus) : 'PROCESADO' }}</td>
+                        <td class="text-center">{{ ($pago->estatus) ? strtoupper($pago->estatus) : 'PAGADO' }}</td>
                         <td class="text-center">{{ $pago->conciliado ? 'Si' : 'No' }}</td>
                         <td class="text-center">{{ ($pago->user) ? $pago->user : $pago->operador }}</td>
                         <td class="text-center">
@@ -167,6 +174,7 @@
                     <th style="border: white 1px solid;"></th>
                     <th style="border: white 1px solid;"></th>
                     <th style="border: white 1px solid;"></th>
+                    <th style="border: white 1px solid;"></th>
                     <th style="border-left: white 1px solid;border-bottom: white 1px solid;"></th>
                     <th class="text-center">Total en bolívares</th>
                     <th class="text-center">{{ number_format($bolivares, 2, ',', '.') }}</th>
@@ -177,6 +185,7 @@
                 </tr>
 
                 <tr>
+                    <th style="border: white 1px solid;"></th>
                     <th style="border: white 1px solid;"></th>
                     <th style="border: white 1px solid;"></th>
                     <th style="border: white 1px solid;"></th>

@@ -228,7 +228,7 @@
                 <th scope="col" class="CP-sticky">Fecha último pago</th>
                 <th scope="col" class="CP-sticky">Días último pago</th>
                 <th scope="col" class="CP-sticky">Fecha último ingreso</th>
-                <th scope="col" class="CP-sticky">Dísa último ingreso</th>
+                <th scope="col" class="CP-sticky">Días último ingreso</th>
             </tr>
         </thead>
         <tbody>

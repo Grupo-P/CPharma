@@ -101,7 +101,19 @@
             </tr>
             <tr>
             <td colspan="4" class="alinear-der">Monto en dólares:</td>
-            <td colspan="4" class="alinear-izq">{{ ($pago->monto) ? number_format($pago->monto, 2, ',', '.') : number_format($pago->egresos, 2, ',', '.') }}</td>
+            <td colspan="4" class="alinear-izq">
+                @if($pago->monto)
+                    {{ number_format($pago->monto, 2, ',', '.') }}
+                @endif
+
+                @if($pago->egresos)
+                    {{ number_format($pago->egresos, 2, ',', '.') }}
+                @endif
+
+                @if($pago->diferido)
+                    {{ number_format($pago->diferido, 2, ',', '.') }}
+                @endif
+            </td>
             </tr>
             @if($pago->proveedor)
                 <tr>
@@ -110,12 +122,14 @@
                     @php
                       if ($pago->proveedor) {
                         if ($pago->proveedor->moneda != 'Dólares') {
+                            $monto = ($pago->egresos) ? $pago->egresos : $pago->diferido;
+
                             if ($pago->proveedor->moneda == 'Bolívares') {
-                                $monto_proveedor = $pago->egresos * $pago->tasa;
+                                $monto_proveedor = $monto * $pago->tasa;
                             }
 
                             if ($pago->proveedor->moneda == 'Pesos') {
-                                $monto_proveedor = $pago->egresos * $pago->tasa;
+                                $monto_proveedor = $monto * $pago->tasa;
                             }
                         } else {
                             $monto_proveedor = $pago->monto;
@@ -150,7 +164,7 @@
             @endif
             <tr>
             <td colspan="4" class="alinear-der">Comentario:</td>
-            <td colspan="4" class="alinear-izq">{{ $pago->concepto }}</td>
+            <td colspan="4" class="alinear-izq">{!! $pago->concepto !!}</td>
             </tr>
             <td colspan="4" class="alinear-izq">
                 <br/><br/><br/>

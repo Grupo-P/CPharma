@@ -108,6 +108,7 @@ class ContPagoEfectivoController extends Controller
                     $pago->egresos = $request->input('monto');
                     $configuracion->valor -= $request->input('monto');
                     $pago->concepto = $request->input('concepto');
+                    $pago->estatus = 'PAGADO';
                     break;
                 case "Diferido":
                     $pago->diferido_anterior = $configuracion2->valor;
@@ -221,6 +222,19 @@ class ContPagoEfectivoController extends Controller
             /********************* ACTUALIZAR DIFERIDO *********************/
             $diferidos = ContPagoEfectivo::find($id);
 
+            if ($request->movimiento == 'Ingreso' && $diferidos->id_proveedor != '') {
+                $proveedor = ContProveedor::find($diferidos->proveedor->id);
+
+                if ($proveedor->moneda != 'Dólares') {
+                    $monto = $diferidos->diferido * $diferidos->tasa;
+                } else {
+                    $monto = $diferidos->diferido;
+                }
+
+                $proveedor->saldo = (float) $proveedor->saldo + (float) $monto;
+                $proveedor->save();
+            }
+
             $concepto = str_replace(' - DIFERIDO', '', $diferidos->concepto);
 
             $concepto = $concepto . '<br>' . $request->concepto . '<br>DIFERIDO';
@@ -230,7 +244,7 @@ class ContPagoEfectivoController extends Controller
             $diferidos->diferido_anterior = $configuracion2->valor;
             $configuracion2->valor -= $request->input('monto');
             $diferidos->user_up         = auth()->user()->name;
-            $diferidos->estatus         = 'PAGADO';
+            $diferidos->estatus         = ($request->movimiento == 'Egreso') ? 'PAGADO' : 'REVERSADO';
             $diferidos->diferido_actual = $configuracion2->valor;
             $movimiento->id_proveedor   = $diferidos->id_proveedor;
             $movimiento->id_cuenta      = $diferidos->id_cuenta;
