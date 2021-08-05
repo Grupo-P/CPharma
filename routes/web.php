@@ -449,12 +449,35 @@ Route::resource('bancarios', 'ContPagoBancarioController');
 Route::get('/bancarios/soporte/{id}', 'ContPagoBancarioController@soporte');
 Route::get('/bancarios/notificar/{id}', 'ContPagoBancarioController@notificar');
 
-Route::post('/efectivo/validar', 'ContPagoEfectivoController@validar');
-Route::resource('efectivo', 'ContPagoEfectivoController');
+Route::post('/efectivoFTN/validar', 'ContPagoEfectivoFTNController@validar');
+Route::resource('efectivoFTN', 'ContPagoEfectivoFTNController');
+Route::get('/efectivoFTN/soporte/{id}', 'ContPagoEfectivoFTNController@soporte');
+Route::get('/contabilidad/diferidosFTN', 'ContPagoEfectivoFTNController@diferidos')->name('contabilidad.diferidosFTN');
 
-Route::get('/efectivo/soporte/{id}', 'ContPagoEfectivoController@soporte');
+Route::post('/efectivo/validarFAU', 'ContPagoEfectivoFAUController@validar');
+Route::resource('efectivoFAU', 'ContPagoEfectivoFAUController');
+Route::get('/efectivoFAU/soporte/{id}', 'ContPagoEfectivoFAUController@soporte');
+Route::get('/contabilidad/diferidosFAU', 'ContPagoEfectivoFAUController@diferidos')->name('contabilidad.diferidosFAU');
 
-Route::get('/contabilidad/diferidos', 'ContPagoEfectivoController@diferidos')->name('contabilidad.diferidos');
+Route::post('/efectivoFLL/validar', 'ContPagoEfectivoFLLController@validar');
+Route::resource('efectivoFLL', 'ContPagoEfectivoFLLController');
+Route::get('/efectivoFLL/soporte/{id}', 'ContPagoEfectivoFLLController@soporte');
+Route::get('/contabilidad/diferidosFLL', 'ContPagoEfectivoFLLController@diferidos')->name('contabilidad.diferidosFLL');
+
+Route::post('/bolivaresFTN/validar', 'ContPagoBolivaresFTNController@validar');
+Route::resource('bolivaresFTN', 'ContPagoBolivaresFTNController');
+Route::get('/bolivaresFTN/soporte/{id}', 'ContPagoBolivaresFTNController@soporte');
+Route::get('/contabilidad/diferidosBolivaresFTN', 'ContPagoBolivaresFTNController@diferidos')->name('contabilidad.diferidosBolivaresFTN');
+
+Route::post('/bolivares/validarFAU', 'ContPagoBolivaresFAUController@validar');
+Route::resource('bolivaresFAU', 'ContPagoBolivaresFAUController');
+Route::get('/bolivaresFAU/soporte/{id}', 'ContPagoBolivaresFAUController@soporte');
+Route::get('/contabilidad/diferidosBolivaresFAU', 'ContPagoBolivaresFAUController@diferidos')->name('contabilidad.diferidosBolivaresFAU');
+
+Route::post('/bolivaresFLL/validar', 'ContPagoBolivaresFLLController@validar');
+Route::resource('bolivaresFLL', 'ContPagoBolivaresFLLController');
+Route::get('/bolivaresFLL/soporte/{id}', 'ContPagoBolivaresFLLController@soporte');
+Route::get('/contabilidad/diferidosBolivaresFLL', 'ContPagoBolivaresFLLController@diferidos')->name('contabilidad.diferidosBolivaresFLL');
 
 Route::get('/reportes', 'ContReporteController@index');
 Route::get('/reportes/movimientos-por-proveedor', 'ContReporteController@movimientos_por_proveedor');

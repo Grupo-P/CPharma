@@ -145,8 +145,8 @@
                         <td class="text-center">{{ $movimiento->tipo }}</td>
                         <td class="text-center">{{ $movimiento->nro_movimiento }}</td>
                         <td class="text-center">{{ number_format($monto, 2, ',', '.') }}</td>
-                        <td class="text-center">{{ number_format($movimiento->monto, 2, ',', '.') }}</td>
-                        <td class="text-center">{{ $movimiento->comentario }}</td>
+                        <td class="text-center">{{ ($movimiento->tipo == 'Deudas' || $movimiento->tipo == 'Reclamo' || $movimiento->tipo == 'Ajuste') ? '-' : number_format($movimiento->monto, 2, ',', '.') }}</td>
+                        <td class="text-center">{!! $movimiento->comentario !!}</td>
                         <td class="text-center">{{ $movimiento->conciliacion }}</td>
                         <td class="text-center">{{ $movimiento->operador }}</td>
                         <td class="text-center">{{ $movimiento->estado }}</td>

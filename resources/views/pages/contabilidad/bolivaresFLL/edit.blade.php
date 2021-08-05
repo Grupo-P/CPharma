@@ -1,6 +1,6 @@
 @extends('layouts.contabilidad')
 
-@section('title', 'Modificar pago en efectivo')
+@section('title', 'Modificar pago en efectivo bolívares FTN')
 
 @section('content')
   <!-- Modal Guardar -->
@@ -32,17 +32,17 @@
 
   <h1 class="h5 text-info">
     <i class="fas fa-edit"></i>
-    Modificar pago en efectivo
+    Modificar pago en efectivo bolívares FTN
   </h1>
   <hr class="row align-items-start col-12">
 
-  <a href="/efectivo" class="btn btn-outline-info btn-sm">
+  <a href="/bolivaresFTN" class="btn btn-outline-info btn-sm">
     <i class="fa fa-reply"></i> Regresar
   </a>
 
   <br/><br/>
 
-  {!! Form::model($pago, ['route' => ['efectivo.update', $pago], 'method' => 'PUT', 'class' => 'form-group']) !!}
+  {!! Form::model($pago, ['route' => ['bolivaresFTN.update', $pago], 'method' => 'PUT', 'class' => 'form-group']) !!}
     <fieldset>
       <table class="table table-borderless table-striped">
         <thead class="thead-dark">

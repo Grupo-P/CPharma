@@ -19,4 +19,9 @@ class ContPagoBancario extends Model
     {
         return $this->belongsTo('compras\ContBanco', 'id_banco');
     }
+
+    public function getSignoMonedaAttribute()
+    {
+
+    }
 }

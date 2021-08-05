@@ -112,14 +112,67 @@
           </li>
       @endif
 
-      @if(Auth::user()->departamento != 'OPERACIONES')
+      @if(Auth::user()->departamento == 'TECNOLOGIA' || Auth::user()->departamento == 'GERENCIA' || Auth::user()->departamento == 'CONTABILIDAD' || Auth::user()->departamento == 'ADMINISTRACION')
+        @if(Auth::user()->sede == 'GRUPO P, C.A' || Auth::user()->sede == 'FARMACIA TIERRA NEGRA, C.A.')
           <li class="nav-item">
-            <a class="nav-link CP-Links-Menu" href="{{ url('/efectivo') }}">
+            <a class="nav-link CP-Links-Menu" href="{{ url('/efectivoFTN') }}">
               <span data-feather="home"></span>
               <i class="fas fa-money-bill-alt"></i>
-              Pagos en efectivo<span class="sr-only">(current)</span>
+              Pagos en efectivo dólares FTN<span class="sr-only">(current)</span>
             </a>
           </li>
+        @endif
+
+        @if(Auth::user()->sede == 'GRUPO P, C.A' || Auth::user()->sede == 'FARMACIA LA LAGO,C.A.')
+          <li class="nav-item">
+            <a class="nav-link CP-Links-Menu" href="{{ url('/efectivoFLL') }}">
+              <span data-feather="home"></span>
+              <i class="fas fa-money-bill-alt"></i>
+              Pagos en efectivo dólares FLL<span class="sr-only">(current)</span>
+            </a>
+          </li>
+        @endif
+
+        @if(Auth::user()->sede == 'GRUPO P, C.A' || Auth::user()->sede == 'FARMACIA AVENIDA UNIVERSIDAD, C.A.')
+          <li class="nav-item">
+            <a class="nav-link CP-Links-Menu" href="{{ url('/efectivoFAU') }}">
+              <span data-feather="home"></span>
+              <i class="fas fa-money-bill-alt"></i>
+              Pagos en efectivo dólares FAU<span class="sr-only">(current)</span>
+            </a>
+          </li>
+        @endif
+
+
+        @if(Auth::user()->sede == 'GRUPO P, C.A' || Auth::user()->sede == 'FARMACIA TIERRA NEGRA, C.A.')
+          <li class="nav-item">
+            <a class="nav-link CP-Links-Menu" href="{{ url('/bolivaresFTN') }}">
+              <span data-feather="home"></span>
+              <i class="fas fa-money-bill-alt"></i>
+              Pagos en efectivo bolívares FTN<span class="sr-only">(current)</span>
+            </a>
+          </li>
+        @endif
+
+        @if(Auth::user()->sede == 'GRUPO P, C.A' || Auth::user()->sede == 'FARMACIA LA LAGO,C.A.')
+          <li class="nav-item">
+            <a class="nav-link CP-Links-Menu" href="{{ url('/bolivaresFLL') }}">
+              <span data-feather="home"></span>
+              <i class="fas fa-money-bill-alt"></i>
+              Pagos en efectivo bolívares FLL<span class="sr-only">(current)</span>
+            </a>
+          </li>
+        @endif
+
+        @if(Auth::user()->sede == 'GRUPO P, C.A' || Auth::user()->sede == 'FARMACIA AVENIDA UNIVERSIDAD, C.A.')
+          <li class="nav-item">
+            <a class="nav-link CP-Links-Menu" href="{{ url('/bolivaresFAU') }}">
+              <span data-feather="home"></span>
+              <i class="fas fa-money-bill-alt"></i>
+              Pagos en efectivo bolívares FAU<span class="sr-only">(current)</span>
+            </a>
+          </li>
+        @endif
       @endif
 
 
@@ -154,13 +207,66 @@
       @endif
 
       @if(Auth::user()->departamento != 'OPERACIONES')
+        @if(Auth::user()->sede == 'GRUPO P, C.A' || Auth::user()->sede == 'FARMACIA TIERRA NEGRA, C.A.')
           <li class="nav-item">
-            <a class="nav-link CP-Links-Menu" href="{{ url('/contabilidad/diferidos') }}">
+            <a class="nav-link CP-Links-Menu" href="{{ url('/contabilidad/diferidosFTN') }}">
               <span data-feather="home"></span>
               <i class="fas fa-lock"></i>
-              Diferidos en dolares<span class="sr-only">(current)</span>
+              Diferidos en dolares FTN<span class="sr-only">(current)</span>
             </a>
           </li>
+        @endif
+
+        @if(Auth::user()->sede == 'GRUPO P, C.A' || Auth::user()->sede == 'FARMACIA LA LAGO,C.A.')
+          <li class="nav-item">
+            <a class="nav-link CP-Links-Menu" href="{{ url('/contabilidad/diferidosFLL') }}">
+              <span data-feather="home"></span>
+              <i class="fas fa-lock"></i>
+              Diferidos en dolares FLL<span class="sr-only">(current)</span>
+            </a>
+          </li>
+        @endif
+
+        @if(Auth::user()->sede == 'GRUPO P, C.A' || Auth::user()->sede == 'FARMACIA AVENIDA UNIVERSIDAD, C.A.')
+          <li class="nav-item">
+            <a class="nav-link CP-Links-Menu" href="{{ url('/contabilidad/diferidosFAU') }}">
+              <span data-feather="home"></span>
+              <i class="fas fa-lock"></i>
+              Diferidos en dolares FAU<span class="sr-only">(current)</span>
+            </a>
+          </li>
+        @endif
+
+
+        @if(Auth::user()->sede == 'GRUPO P, C.A' || Auth::user()->sede == 'FARMACIA TIERRA NEGRA, C.A.')
+          <li class="nav-item">
+            <a class="nav-link CP-Links-Menu" href="{{ url('/contabilidad/diferidosBolivaresFTN') }}">
+              <span data-feather="home"></span>
+              <i class="fas fa-lock"></i>
+              Diferidos en bolivares FTN<span class="sr-only">(current)</span>
+            </a>
+          </li>
+        @endif
+
+        @if(Auth::user()->sede == 'GRUPO P, C.A' || Auth::user()->sede == 'FARMACIA LA LAGO,C.A.')
+          <li class="nav-item">
+            <a class="nav-link CP-Links-Menu" href="{{ url('/contabilidad/diferidosBolivaresFLL') }}">
+              <span data-feather="home"></span>
+              <i class="fas fa-lock"></i>
+              Diferidos en bolivares FLL<span class="sr-only">(current)</span>
+            </a>
+          </li>
+        @endif
+
+        @if(Auth::user()->sede == 'GRUPO P, C.A' || Auth::user()->sede == 'FARMACIA AVENIDA UNIVERSIDAD, C.A.')
+          <li class="nav-item">
+            <a class="nav-link CP-Links-Menu" href="{{ url('/contabilidad/diferidosBolivaresFAU') }}">
+              <span data-feather="home"></span>
+              <i class="fas fa-lock"></i>
+              Diferidos en bolivares FAU<span class="sr-only">(current)</span>
+            </a>
+          </li>
+        @endif
       @endif
 
       @if(Auth::user()->departamento != 'GERENCIA' && Auth::user()->departamento != 'ADMINISTRACION' && Auth::user()->departamento != 'TESORERIA' && Auth::user()->departamento != 'OPERACIONES' && Auth::user()->departamento != 'CONTABILIDAD')

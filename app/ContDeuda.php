@@ -2,6 +2,7 @@
 
 namespace compras;
 
+use Auth;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -10,6 +11,25 @@ class ContDeuda extends Model
     public function proveedor()
     {
         return $this->belongsTo('compras\ContProveedor', 'id_proveedor');
+    }
+
+    public function getSignoMonedaAttribute($value)
+    {
+        if ($this->proveedor->moneda == 'Dólares') {
+            return 'USD';
+        }
+
+        if ($this->proveedor->moneda == 'Bolívares') {
+            return 'VES';
+        }
+
+        if ($this->proveedor->moneda == 'Euros') {
+            return 'EUR';
+        }
+
+        if ($this->proveedor->moneda == 'Pesos') {
+            return 'COP';
+        }
     }
 
     public function scopeNumeroDocumento($query, $numero_documento)
@@ -53,6 +73,10 @@ class ContDeuda extends Model
     {
         if ($sede != '' && $sede != 'Todos') {
             return $query->where('sede', $sede);
+        }
+
+        if (Auth::user()->departamento != 'TECNOLOGIA' && Auth::user()->departamento != 'GERENCIA' && Auth::user()->departamento != 'ADMINISTRACION') {
+            return $query->where('sede', Auth::user()->sede);
         }
     }
 }

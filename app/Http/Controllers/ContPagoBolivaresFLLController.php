@@ -5,12 +5,12 @@ namespace compras\Http\Controllers;
 use compras\Auditoria;
 use compras\Configuracion;
 use compras\ContCuenta;
-use compras\ContPagoEfectivo;
+use compras\ContPagoBolivaresFLL AS ContPagoBolivares;
 use compras\ContProveedor;
 use compras\Sede;
 use Illuminate\Http\Request;
 
-class ContPagoEfectivoController extends Controller
+class ContPagoBolivaresFLLController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -19,14 +19,14 @@ class ContPagoEfectivoController extends Controller
      */
     public function index(Request $request)
     {
-        $pagos = ContPagoEfectivo::sede($request->get('sede'))
+        $pagos = ContPagoBolivares::sede($request->get('sede'))
             ->fecha($request->get('fecha_desde'), $request->get('fecha_hasta'))
             ->orderBy('created_at', 'desc')
             ->get();
 
         $sedes = Sede::get();
 
-        return view('pages.contabilidad.efectivo.index', compact('pagos', 'sedes', 'request'));
+        return view('pages.contabilidad.bolivaresFLL.index', compact('pagos', 'sedes', 'request'));
     }
 
     /**
@@ -41,8 +41,8 @@ class ContPagoEfectivoController extends Controller
 
             $resultado['saldo'] = number_format($proveedor->saldo, 2, ',', '.');
 
-            if ($proveedor->moneda != 'Dólares') {
-                if ($proveedor->moneda == 'Bolívares') {
+            if ($proveedor->moneda != 'Bolívares') {
+                if ($proveedor->moneda == 'Dólares') {
                     $configuracion = Configuracion::where('variable', 'DolaresBolivares')->first();
                 }
 
@@ -77,7 +77,7 @@ class ContPagoEfectivoController extends Controller
             $proveedores = '';
         }
 
-        return view('pages.contabilidad.efectivo.create', compact('cuentas', 'request', 'proveedores'));
+        return view('pages.contabilidad.bolivaresFLL.create', compact('cuentas', 'request', 'proveedores'));
     }
 
     /**
@@ -89,12 +89,12 @@ class ContPagoEfectivoController extends Controller
     public function store(Request $request)
     {
         try {
-            $pago = new ContPagoEfectivo();
+            $pago = new ContPagoBolivares();
 
             $pago->sede = auth()->user()->sede;
 
-            $configuracion  = Configuracion::where('variable', 'SaldoEfectivo')->first();
-            $configuracion2 = Configuracion::where('variable', 'DiferidoEfectivo')->first();
+            $configuracion  = Configuracion::where('variable', 'SaldoBolivaresFLL')->first();
+            $configuracion2 = Configuracion::where('variable', 'DiferidoBolivaresFLL')->first();
 
             $pago->saldo_anterior = $configuracion->valor;
 
@@ -134,8 +134,8 @@ class ContPagoEfectivoController extends Controller
 
                 $proveedor = ContProveedor::find($request->input('id_proveedor'));
 
-                if ($proveedor->moneda != 'Dólares') {
-                    $monto = $request->input('monto') * $request->input('tasa');
+                if ($proveedor->moneda != 'Bolívares') {
+                    $monto = $request->input('monto') / $request->input('tasa');
                 } else {
                     $monto = $request->input('monto');
                 }
@@ -161,7 +161,7 @@ class ContPagoEfectivoController extends Controller
             $Auditoria->user     = auth()->user()->name;
             $Auditoria->save();
 
-            return redirect('/efectivo')->with('Saved', ' Informacion');
+            return redirect('/bolivaresFLL')->with('Saved', ' Informacion');
 
         } catch (\Illuminate\Database\QueryException $e) {
             dd($e);
@@ -171,8 +171,8 @@ class ContPagoEfectivoController extends Controller
 
     public function soporte($id)
     {
-        $pago = ContPagoEfectivo::find($id);
-        return view('pages.contabilidad.efectivo.soporte', compact('pago'));
+        $pago = ContPagoBolivares::find($id);
+        return view('pages.contabilidad.bolivaresFLL.soporte', compact('pago'));
     }
 
     /**
@@ -183,8 +183,8 @@ class ContPagoEfectivoController extends Controller
      */
     public function edit($id)
     {
-        $pago = ContPagoEfectivo::find($id);
-        return view('pages.contabilidad.efectivo.edit', compact('pago'));
+        $pago = ContPagoBolivares::find($id);
+        return view('pages.contabilidad.bolivaresFLL.edit', compact('pago'));
     }
 
     /**
@@ -198,11 +198,11 @@ class ContPagoEfectivoController extends Controller
     {
         try {
             /********************* PROCESO DE MOVIMIENTO *********************/
-            $movimiento       = new ContPagoEfectivo();
+            $movimiento       = new ContPagoBolivares();
             $movimiento->sede = auth()->user()->sede;
 
-            $configuracion  = Configuracion::where('variable', 'SaldoEfectivo')->first();
-            $configuracion2 = Configuracion::where('variable', 'DiferidoEfectivo')->first();
+            $configuracion  = Configuracion::where('variable', 'SaldoBolivaresFLL')->first();
+            $configuracion2 = Configuracion::where('variable', 'DiferidoBolivaresFLL')->first();
 
             $movimiento->saldo_anterior = $configuracion->valor;
 
@@ -220,13 +220,13 @@ class ContPagoEfectivoController extends Controller
             $movimiento->user         = auth()->user()->name;
 
             /********************* ACTUALIZAR DIFERIDO *********************/
-            $diferidos = ContPagoEfectivo::find($id);
+            $diferidos = ContPagoBolivares::find($id);
 
             if ($request->movimiento == 'Ingreso' && $diferidos->id_proveedor != '') {
                 $proveedor = ContProveedor::find($diferidos->proveedor->id);
 
-                if ($proveedor->moneda != 'Dólares') {
-                    $monto = $diferidos->diferido * $diferidos->tasa;
+                if ($proveedor->moneda != 'Bolívares') {
+                    $monto = $diferidos->diferido / $diferidos->tasa;
                 } else {
                     $monto = $diferidos->diferido;
                 }
@@ -266,7 +266,7 @@ class ContPagoEfectivoController extends Controller
             $Auditoria->user     = auth()->user()->name;
             $Auditoria->save();
 
-            return redirect('/contabilidad/diferidos')->with('Updated', ' Informacion');
+            return redirect('/contabilidad/diferidosFLL')->with('Updated', ' Informacion');
         } catch (\Illuminate\Database\QueryException $e) {
             dd($e);
             return back()->with('Error', ' Error');
@@ -320,10 +320,10 @@ class ContPagoEfectivoController extends Controller
 
     public function diferidos(Request $request)
     {
-        $diferidos = ContPagoEfectivo::whereNotNull('diferido')
+        $diferidos = ContPagoBolivares::whereNotNull('diferido')
             ->orderByRaw('estatus ASC, id DESC')
             ->get();
 
-        return view('pages.contabilidad.efectivo.diferidos', compact('diferidos'));
+        return view('pages.contabilidad.bolivaresFLL.diferidos', compact('diferidos'));
     }
 }

@@ -1,6 +1,6 @@
 @extends('layouts.contabilidad')
 
-@section('title', 'Diferidos en dolares')
+@section('title', 'Diferidos en bolivares FTN')
 
 @section('scriptsHead')
   <style>
@@ -34,7 +34,7 @@
   <h1 class="h5 text-info">
     <i class="fas fa-lock"></i>
 
-    Diferido en dolares
+    Diferido en bolivares FTN
   </h1>
 
   <hr class="row align-items-start col-12">
@@ -129,7 +129,7 @@
         if (concepto != '') {
             $.ajax({
                 method: 'POST',
-                url: '/efectivo/' + id,
+                url: '/bolivaresFTN/' + id,
                 data: {
                     _token: '{{ csrf_token() }}',
                     _method: 'PUT',
@@ -139,7 +139,7 @@
                 },
                 success: function (response) {
                     console.log(response);
-                    window.location.href = '/contabilidad/diferidos';
+                    window.location.href = '/contabilidad/diferidosBolivaresFTN';
                 },
                 error: function (error) {
                     $('body').html(error.responseText);

@@ -1,6 +1,6 @@
 @extends('layouts.contabilidad')
 
-@section('title', 'Registro de pagos en efectivo')
+@section('title', 'Registro de pagos en efectivo dólares FAU')
 
 @section('scriptsHead')
   <style>
@@ -33,42 +33,28 @@
 
   <h1 class="h5 text-info">
     <i class="fas fa-money-bill-alt"></i>
-    Registro de pagos en efectivo
+    Registro de pagos en efectivo dólares FAU
   </h1>
 
   <hr class="row align-items-start col-12">
 
   <form action="">
     <div class="row">
-      @if(auth()->user()->departamento != 'TESORERIA')
-      <div class="col-md-3">
-        <div class="form-group">
-            <label for="sede">Sede</label>
-            <select class="form-control" name="sede">
-                <option value=""></option>
-                @foreach($sedes as $sede)
-                    <option {{ ($request->sede == $sede->razon_social) ? 'selected' : '' }} value="{{ $sede->razon_social }}">{{ $sede->razon_social }}</option>
-                @endforeach
-            </select>
-        </div>
-      </div>
-      @endif
-
-      <div class="col-3">
+      <div class="col-4">
         <div class="form-group">
           <label for="fecha_desde">Fecha desde</label>
           <input type="date" name="fecha_desde" value="{{ $request->get('fecha_desde') }}" class="form-control">
         </div>
       </div>
 
-      <div class="col-3">
+      <div class="col-4">
         <div class="form-group">
           <label for="fecha_hasta">Fecha hasta</label>
           <input type="date" name="fecha_hasta" value="{{ $request->get('fecha_hasta') }}" class="form-control">
         </div>
       </div>
 
-      <div class="col-3">
+      <div class="col-4">
         <div class="form-group">
           <button class="btn btn-outline-success btn-block" style="margin-top: 10%">Buscar</button>
         </div>
@@ -84,7 +70,7 @@
 
       @if(auth()->user()->departamento == 'TESORERIA' || auth()->user()->departamento == 'TECNOLOGIA')
         <td style="width:15%;" align="center">
-          <a href="/efectivo/create?tipo=movimiento" role="button" class="btn btn-outline-info btn-sm"
+          <a href="/efectivoFAU/create?tipo=movimiento" role="button" class="btn btn-outline-info btn-sm"
           style="display: inline; text-align: left;">
           <i class="fa fa-plus"></i>
             Agregar movimiento
@@ -92,7 +78,7 @@
         </td>
 
         <td style="width:20%;" align="center">
-          <a href="/efectivo/create?tipo=proveedores" role="button" class="btn btn-outline-info btn-sm"
+          <a href="/efectivoFAU/create?tipo=proveedores" role="button" class="btn btn-outline-info btn-sm"
           style="display: inline; text-align: left;">
           <i class="fa fa-plus"></i>
             Agregar pago a proveedores
@@ -189,6 +175,20 @@
                     }
                 }
             }
+
+            if (strpos($pago->concepto, 'DIFERIDO') && $pago->ingresos) {
+                if ($pago->proveedor->moneda != 'Dólares') {
+                    if ($pago->proveedor->moneda == 'Bolívares') {
+                        $monto_proveedor = $pago->egresos * $pago->tasa;
+                    }
+
+                    if ($pago->proveedor->moneda == 'Pesos') {
+                        $monto_proveedor = $pago->egresos * $pago->tasa;
+                    }
+                } else {
+                    $monto_proveedor = $pago->monto;
+                }
+            }
           @endphp
 
           {{(isset($monto_proveedor)) ? number_format($monto_proveedor,2,',','.') : ''}}
@@ -202,7 +202,7 @@
         <td style="width:140px;">
             @if(!$pago->ingresos)
                 @if (!($pago->egresos && strpos($pago->concepto, 'DIFERIDO')))
-                    <a target="_blank" href="/efectivo/soporte/{{$pago->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Ver soporte">
+                    <a target="_blank" href="/efectivoFAU/soporte/{{$pago->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Ver soporte">
                         <i class="fas fa-eye"></i>
                     </a>
                 @endif

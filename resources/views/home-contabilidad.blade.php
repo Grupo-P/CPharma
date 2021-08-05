@@ -25,11 +25,11 @@
                 </h2>
                 <p class="card-text text-white">
                     <p class="text-white">
-                        Proveedor: miguel tovar</br>
-                        Monto: Bs. 20.000.000,00</br>
-                        Emisor: BOD FLL<br>
-                        Conciliado por: Giordany Prieto<br>
-                        Fecha y hora: 2021-06-30 09:41:58</br>
+                        Proveedor: {{ $deuda->proveedor->nombre_proveedor }}</br>
+                        Monto: {{ $deuda->signo_moneda }} {{ number_format($deuda->monto, 2) }}</br>
+                        Número de documento: {{ $deuda->numero_documento }}<br>
+                        Fecha y hora: {{ $deuda->created_at->format('d/m/Y h:i A') }}</br>
+                        Creado por: {{ $deuda->usuario_registro }}
                     </p>
                 </p>
             </div>
@@ -48,11 +48,11 @@
                 </h2>
                 <p class="card-text text-white">
                     <p class="text-white">
-                        Proveedor: miguel tovar</br>
-                        Monto: Bs. 20.000.000,00</br>
-                        Emisor: BOD FLL<br>
-                        Conciliado por: Giordany Prieto<br>
-                        Fecha y hora: 2021-06-30 09:41:58</br>
+                        Proveedor: {{ $reclamo->proveedor->nombre_proveedor }}</br>
+                        Monto: {{ $reclamo->signo_moneda }} {{ number_format($reclamo->monto, 2) }}</br>
+                        Número de documento: {{ $reclamo->numero_documento }}<br>
+                        Fecha y hora: {{ $reclamo->created_at->format('d/m/Y h:i A') }}</br>
+                        Creado por: {{ $reclamo->usuario_registro }}
                     </p>
                 </p>
             </div>
@@ -70,13 +70,13 @@
                 <h2 class="card-title">
                     <span class="card-text text-white">
                         <i class="fas fa-balance-scale"></i>
-                        Saldo disponible FTN: $1.485,38
+                        Saldo disponible FTN: ${{ number_format($saldoDolaresFTN, 2, ',', '.') }}
                     </span>
                 </h2>
                 <p class="card-text text-white"></p>
             </div>
             <div class="card-footer bg-transparent border-danger text-right">
-                <a href="/efectivo?sede=FTN&moneda=$" class="btn btn-outline-danger btn-sm">Visualizar</a>
+                <a href="/efectivoFTN" class="btn btn-outline-danger btn-sm">Visualizar</a>
             </div>
         </div>
 
@@ -85,13 +85,13 @@
                 <h2 class="card-title">
                     <span class="card-text text-white">
                         <i class="fas fa-balance-scale"></i>
-                        Saldo disponible FAU: $8.148,83
+                        Saldo disponible FAU: ${{ number_format($saldoDolaresFAU, 2, ',', '.') }}
                     </span>
                 </h2>
                 <p class="card-text text-white"></p>
             </div>
             <div class="card-footer bg-transparent border-success text-right">
-                <a href="/efectivo?sede=FAU&moneda=$" class="btn btn-outline-success btn-sm">Visualizar</a>
+                <a href="/efectivoFAU" class="btn btn-outline-success btn-sm">Visualizar</a>
             </div>
         </div>
 
@@ -100,13 +100,13 @@
                 <h2 class="card-title">
                     <span class="card-text text-white">
                         <i class="fas fa-balance-scale"></i>
-                        Saldo disponible FLL: $2.541,45
+                        Saldo disponible FLL: ${{ number_format($saldoDolaresFLL, 2, ',', '.') }}
                     </span>
                 </h2>
                 <p class="card-text text-white"></p>
             </div>
             <div class="card-footer bg-transparent border-info text-right">
-                <a href="/efectivo?sede=FLL&moneda=$" class="btn btn-outline-info btn-sm">Visualizar</a>
+                <a href="/efectivoFLL" class="btn btn-outline-info btn-sm">Visualizar</a>
             </div>
         </div>
     </div>
@@ -117,13 +117,13 @@
                 <h2 class="card-title">
                     <span class="card-text text-white">
                         <i class="fas fa-balance-scale"></i>
-                        Saldo disponible FTN: Bs.S. 1.485,38
+                        Saldo disponible FTN: Bs.S. {{ number_format($saldoBolivaresFTN, 2, ',', '.') }}
                     </span>
                 </h2>
                 <p class="card-text text-white"></p>
             </div>
             <div class="card-footer bg-transparent border-warning text-right">
-                <a href="/efectivo?sede=FTN&moneda=bs" class="btn btn-outline-warning btn-sm">Visualizar</a>
+                <a href="/bolivaresFTN" class="btn btn-outline-warning btn-sm">Visualizar</a>
             </div>
         </div>
 
@@ -132,13 +132,13 @@
                 <h2 class="card-title">
                     <span class="card-text text-white">
                         <i class="fas fa-balance-scale"></i>
-                        Saldo disponible FAU: Bs.S. 8.148,83
+                        Saldo disponible FAU: Bs.S. {{ number_format($saldoBolivaresFAU, 2, ',', '.') }}
                     </span>
                 </h2>
                 <p class="card-text text-white"></p>
             </div>
             <div class="card-footer bg-transparent border-secondary text-right">
-                <a href="/efectivo?sede=FAU&moneda=bs" class="btn btn-outline-secondary btn-sm">Visualizar</a>
+                <a href="/bolivaresFAU" class="btn btn-outline-secondary btn-sm">Visualizar</a>
             </div>
         </div>
 
@@ -147,13 +147,13 @@
                 <h2 class="card-title">
                     <span class="card-text text-white">
                         <i class="fas fa-balance-scale"></i>
-                        Saldo disponible FLL: Bs.S. 2.541,45
+                        Saldo disponible FLL: Bs.S. {{ number_format($saldoBolivaresFLL, 2, ',', '.') }}
                     </span>
                 </h2>
                 <p class="card-text text-white"></p>
             </div>
             <div class="card-footer bg-transparent border-dark text-right">
-                <a href="/efectivo?sede=FLL&moneda=bs" class="btn btn-outline-dark btn-sm">Visualizar</a>
+                <a href="/bolivaresFLL" class="btn btn-outline-dark btn-sm">Visualizar</a>
             </div>
         </div>
     </div>
@@ -164,13 +164,13 @@
                 <h2 class="card-title">
                     <span class="card-text text-white">
                         <i class="fas fa-balance-scale"></i>
-                        Diferido en $ FTN: 1.485,38
+                        Diferido en $ FTN: {{ number_format($diferidoDolaresFTN, 2, ',', '.') }}
                     </span>
                 </h2>
                 <p class="card-text text-white"></p>
             </div>
             <div class="card-footer bg-transparent border-danger text-right">
-                <a href="/contabilidad/diferidos?sede=FTN&moneda=$" class="btn btn-outline-danger btn-sm">Visualizar</a>
+                <a href="/contabilidad/diferidosFTN" class="btn btn-outline-danger btn-sm">Visualizar</a>
             </div>
         </div>
 
@@ -179,13 +179,13 @@
                 <h2 class="card-title">
                     <span class="card-text text-white">
                         <i class="fas fa-balance-scale"></i>
-                        Diferido en $ FAU: 8.148,83
+                        Diferido en $ FAU: {{ number_format($diferidoDolaresFAU, 2, ',', '.') }}
                     </span>
                 </h2>
                 <p class="card-text text-white"></p>
             </div>
             <div class="card-footer bg-transparent border-success text-right">
-                <a href="/contabilidad/diferidos?sede=FAU&moneda=$" class="btn btn-outline-success btn-sm">Visualizar</a>
+                <a href="/contabilidad/diferidosFAU" class="btn btn-outline-success btn-sm">Visualizar</a>
             </div>
         </div>
 
@@ -194,13 +194,13 @@
                 <h2 class="card-title">
                     <span class="card-text text-white">
                         <i class="fas fa-balance-scale"></i>
-                        Diferido en $ FLL: 2.541,45
+                        Diferido en $ FLL: {{ number_format($diferidoDolaresFLL, 2, ',', '.') }}
                     </span>
                 </h2>
                 <p class="card-text text-white"></p>
             </div>
             <div class="card-footer bg-transparent border-info text-right">
-                <a href="/contabilidad/diferidos?sede=FLL&moneda=$" class="btn btn-outline-info btn-sm">Visualizar</a>
+                <a href="/contabilidad/diferidosFLL" class="btn btn-outline-info btn-sm">Visualizar</a>
             </div>
         </div>
     </div>
@@ -211,13 +211,13 @@
                 <h2 class="card-title">
                     <span class="card-text text-white">
                         <i class="fas fa-balance-scale"></i>
-                        Diferido en Bs.S. FTN: 1.485,38
+                        Diferido en Bs.S. FTN: {{ number_format($diferidoBolivaresFTN, 2, ',', '.') }}
                     </span>
                 </h2>
                 <p class="card-text text-white"></p>
             </div>
             <div class="card-footer bg-transparent border-warning text-right">
-                <a href="/diferidos?sede=FTN&moneda=bs" class="btn btn-outline-warning btn-sm">Visualizar</a>
+                <a href="/contabilidad/diferidosBolivaresFTN" class="btn btn-outline-warning btn-sm">Visualizar</a>
             </div>
         </div>
 
@@ -226,13 +226,13 @@
                 <h2 class="card-title">
                     <span class="card-text text-white">
                         <i class="fas fa-balance-scale"></i>
-                        Diferido en Bs.S. FAU: 8.148,83
+                        Diferido en Bs.S. FAU: {{ number_format($diferidoBolivaresFAU, 2, ',', '.') }}
                     </span>
                 </h2>
                 <p class="card-text text-white"></p>
             </div>
             <div class="card-footer bg-transparent border-secondary text-right">
-                <a href="/diferidos?sede=FAU&moneda=bs" class="btn btn-outline-secondary btn-sm">Visualizar</a>
+                <a href="/contabilidad/diferidosBolivaresFAU" class="btn btn-outline-secondary btn-sm">Visualizar</a>
             </div>
         </div>
 
@@ -241,13 +241,13 @@
                 <h2 class="card-title">
                     <span class="card-text text-white">
                         <i class="fas fa-balance-scale"></i>
-                        Diferido en Bs.S. FLL: 2.541,45
+                        Diferido en Bs.S. FLL: {{ number_format($diferidoBolivaresFLL, 2, ',', '.') }}
                     </span>
                 </h2>
                 <p class="card-text text-white"></p>
             </div>
             <div class="card-footer bg-transparent border-dark text-right">
-                <a href="/diferidos?sede=FLL&moneda=bs" class="btn btn-outline-dark btn-sm">Visualizar</a>
+                <a href="/contabilidad/diferidosBolivaresFLL" class="btn btn-outline-dark btn-sm">Visualizar</a>
             </div>
         </div>
     </div>
@@ -263,10 +263,23 @@
                 </h2>
                 <p class="card-text text-white">
                     <p class="text-white">
-                        Proveedor: miguel tovar</br>
-                        Monto: Bs. 20.000.000,00</br>
+                        @if($pago->proveedor)
+                            Nombre del proveedor: {{ $pago->proveedor->nombre_proveedor }}
+
+                        @elseif($pago->concepto)
+                            Concepto: {{ $pago->concepto }}
+
+                        @else($pago->proveedor)
+                            Comentario: {{ $pago->comentario }}
+                        @endif
+                        <br>
+
+                        Monto: {{ $pago->signo_moneda }}</br>
+
                         Emisor: BOD FLL<br>
+
                         Operador: Giordany Prieto<br>
+
                         Fecha y hora: 2021-06-30 09:41:58</br>
                     </p>
                 </p>

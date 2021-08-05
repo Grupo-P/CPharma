@@ -165,9 +165,6 @@
                             $('[name=numero_documento]').focus();
                             alert('Numero de soporte ya existe con este proveedor');
                         }
-                    },
-                    error: function (error) {
-                        $('body').html(error.responseText);
                     }
                 })
             });

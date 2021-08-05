@@ -4,9 +4,9 @@ namespace compras;
 
 use Illuminate\Database\Eloquent\Model;
 
-class ContPagoEfectivo extends Model
+class ContPagoBolivaresFLL extends Model
 {
-    protected $table = 'cont_pagos_efectivo';
+    protected $table = 'cont_pagos_bolivares_fll';
 
     public function scopeSede($query, $sede)
     {

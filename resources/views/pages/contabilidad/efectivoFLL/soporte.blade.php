@@ -1,7 +1,7 @@
 @extends('layouts.etiquetas')
 
 @section('title')
-    Soporte de pago en efectivo
+    Soporte de pago en efectivo dólares FLL
 @endsection
 
 @section('content')

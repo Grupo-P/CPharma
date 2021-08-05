@@ -2,6 +2,7 @@
 
 namespace compras\Http\Controllers;
 
+use Auth;
 use compras\Auditoria;
 use compras\Configuracion;
 use compras\ContProveedor;
@@ -18,7 +19,7 @@ class ContReclamoController extends Controller
      */
     public function index()
     {
-        $reclamos = ContReclamo::orderByDesc('id')->get();
+        $reclamos = ContReclamo::sede(Auth::user()->sede)->orderByDesc('id')->get();
         return view('pages.contabilidad.reclamos.index', compact('reclamos'));
     }
 

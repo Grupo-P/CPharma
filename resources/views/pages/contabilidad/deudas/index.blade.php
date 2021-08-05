@@ -128,17 +128,19 @@
         </div>
 
         <div class="row">
-            <div class="col">
-                <div class="form-group">
-                    <label for="sede">Sede</label>
-                    <select name="sede" class="form-control">
-                        <option value="Todos">Todos</option>
-                        @foreach($sedes as $sede)
-                            <option {{ (isset($_GET['sede']) && $_GET['sede'] == $sede->razon_social) ? 'selected' : '' }} value="{{ $sede->razon_social }}">{{ $sede->razon_social }}</option>
-                        @endforeach
-                    </select>
+            @if(Auth::user()->departamento == 'TECNOLOGIA' && Auth::user()->departamento == 'GERENCIA')
+                <div class="col">
+                    <div class="form-group">
+                        <label for="sede">Sede</label>
+                        <select name="sede" class="form-control">
+                            <option value="Todos">Todos</option>
+                            @foreach($sedes as $sede)
+                                <option {{ (isset($_GET['sede']) && $_GET['sede'] == $sede->razon_social) ? 'selected' : '' }} value="{{ $sede->razon_social }}">{{ $sede->razon_social }}</option>
+                            @endforeach
+                        </select>
+                    </div>
                 </div>
-            </div>
+            @endif
 
             <div class="col">
                 <div class="form-group">

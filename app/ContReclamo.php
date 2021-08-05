@@ -11,4 +11,34 @@ class ContReclamo extends Model
     {
         return $this->belongsTo('compras\ContProveedor', 'id_proveedor');
     }
+
+    public function getSignoMonedaAttribute($value)
+    {
+        if ($this->proveedor->moneda == 'Dólares') {
+            return 'USD';
+        }
+
+        if ($this->proveedor->moneda == 'Bolívares') {
+            return 'VES';
+        }
+
+        if ($this->proveedor->moneda == 'Euros') {
+            return 'EUR';
+        }
+
+        if ($this->proveedor->moneda == 'Pesos') {
+            return 'COP';
+        }
+    }
+
+    public function scopeSede($query, $sede)
+    {
+        if ($sede != '' && $sede != 'Todos') {
+            return $query->where('sede', $sede);
+        }
+
+        if (Auth::user()->departamento != 'TECNOLOGIA' && Auth::user()->departamento != 'GERENCIA') {
+            return $query->where('sede', Auth::user()->sede);
+        }
+    }
 }

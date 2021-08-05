@@ -1,6 +1,6 @@
 @extends('layouts.contabilidad')
 
-@section('title', 'Registro de pagos en efectivo')
+@section('title', 'Registro de pagos en efectivo dólares FTN')
 
 @section('content')
   <!-- Modal Guardar -->
@@ -34,22 +34,22 @@
     <i class="fas fa-plus"></i>&nbsp;
 
     @if($request->get('tipo') == 'movimiento')
-      Agregar movimiento
+      Agregar movimiento dólares FTN
     @endif
 
     @if($request->get('tipo') == 'proveedores')
-      Agregar pago a proveedores
+      Agregar pago a proveedores dólares FTN
     @endif
   </h1>
   <hr class="row align-items-start col-12">
 
-  <a href="/efectivo" class="btn btn-outline-info btn-sm">
+  <a href="/efectivoFTN" class="btn btn-outline-info btn-sm">
     <i class="fa fa-reply"></i> Regresar
   </a>
 
   <br/><br/>
 
-  {!! Form::open(['route' => 'efectivo.store', 'method' => 'POST', 'id' => 'crear_movimientos', 'class' => 'form-group']) !!}
+  {!! Form::open(['route' => 'efectivoFTN.store', 'method' => 'POST', 'id' => 'crear_movimientos', 'class' => 'form-group']) !!}
     <fieldset>
       <table class="table table-borderless table-striped">
         <thead class="thead-dark">
@@ -197,7 +197,7 @@
 
                         $.ajax({
                             type: 'GET',
-                            url: '/efectivo/create',
+                            url: '/efectivoFTN/create',
                             data: {
                                 id_proveedor: $('[name=id_proveedor]').val()
                             },
