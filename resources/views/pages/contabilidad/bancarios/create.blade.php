@@ -288,9 +288,6 @@
                             success: function (response) {
                                 monto_proveedor = new Intl.NumberFormat('de-DE').format(response);
                                 $('[name=monto_proveedor]').val(monto_proveedor);
-                            },
-                            error: function (error) {
-                                $('body').html(error.responseText);
                             }
                         });
                     }

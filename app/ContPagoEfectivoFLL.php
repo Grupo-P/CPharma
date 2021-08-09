@@ -37,4 +37,9 @@ class ContPagoEfectivoFLL extends Model
     {
         return $this->belongsTo('compras\ContProveedor', 'id_proveedor');
     }
+
+    public function getSignoMonedaAttribute()
+    {
+        return 'USD';
+    }
 }

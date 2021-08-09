@@ -131,7 +131,7 @@
                     {{$pago['estado']}}
                 </td>
                 <td class="text-center">
-                    <input class="agregar" data-id="{{$pago['id']}}" data-tipo="{{$pago['tipo']}}" type="checkbox">
+                    <input data-id="{{$pago['id']}}" data-clase="{{$pago['clase']}}" type="checkbox">
                 </td>
             </tr>
             @endforeach
@@ -148,7 +148,7 @@
                 <td></td>
                 <td></td>
                 <td>
-                    <button type="button" class="btn btn-outline-success btn-sm">Conciliar<br>seleccionados</button>
+                    <button type="button" class="conciliar btn btn-outline-success btn-sm">Conciliar<br>seleccionados</button>
                 </td>
             </tr>
         </tfoot>
@@ -161,25 +161,33 @@
 
         $('#exampleModalCenter').modal('show');
 
-        var checkeds = [];
-
-        $('.agregar').click(function () {
-            element = $(this);
-
-            id = $(this).attr('data-id');
-            tipo = $(this).attr('data-tipo');
-
-            if (element.prop('checked')) {
-                checkeds.push({ id: id, tipo: tipo });
-            } else {
-                index = checkeds.findIndex(item => item.id == id && item.tipo == tipo);
-                checkeds.splice(index, 1);
-            }
-        });
-
         $('.conciliar').click(function () {
+            checkeds = $('[type=checkbox]:checked');
+            pagos = [];
 
+            for (var i = 0; i < checkeds.length; i++) {
+                id = $(checkeds[i]).attr('data-id');
+                clase = $(checkeds[i]).attr('data-clase');
+
+                pagos.push({ clase: clase, id: id });
+            }
+
+            $.ajax({
+                url: '/conciliaciones',
+                type: 'POST',
+                data: {
+                    pagos: pagos,
+                    _token: '{{ csrf_token() }}'
+                },
+                success: function (response) {
+                    console.log(response);
+                },
+                error: function (error) {
+                    $('body').html(error.responseText);
+                }
+            })
         });
     </script>
     @endsection
 </hr>
+

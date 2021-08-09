@@ -155,7 +155,7 @@
                             $monto_proveedor = $pago->egresos * $pago->tasa;
                         }
                     } else {
-                        $monto_proveedor = $pago->monto;
+                        $monto_proveedor = $pago->egresos;
                     }
                 }
             }
@@ -171,7 +171,7 @@
                             $monto_proveedor = $pago->diferido * $pago->tasa;
                         }
                     } else {
-                        $monto_proveedor = $pago->monto;
+                        $monto_proveedor = $pago->diferido;
                     }
                 }
             }
@@ -186,7 +186,7 @@
                         $monto_proveedor = $pago->egresos * $pago->tasa;
                     }
                 } else {
-                    $monto_proveedor = $pago->monto;
+                    $monto_proveedor = $pago->egresos;
                 }
             }
           @endphp

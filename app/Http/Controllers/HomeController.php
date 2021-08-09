@@ -5,6 +5,9 @@ namespace compras\Http\Controllers;
 use Auth;
 use compras\Configuracion;
 use compras\ContDeuda;
+use compras\ContPagoBolivaresFAU;
+use compras\ContPagoBolivaresFLL;
+use compras\ContPagoBolivaresFTN;
 use compras\ContPagoEfectivoFAU;
 use compras\ContPagoEfectivoFLL;
 use compras\ContPagoEfectivoFTN;
@@ -43,7 +46,7 @@ class HomeController extends Controller
                 return view('home-contabilidad', compact('deuda', 'reclamo'));
             }
 
-            if (Auth::user()->departamento == 'ADMINISTRACION') {
+            if (Auth::user()->departamento == 'TECNOLOGIA' || Auth::user()->departamento == 'GERENCIA' || Auth::user()->departamento == 'ADMINISTRACION') {
                 $saldoDolaresFTN = Configuracion::where('variable', 'SaldoEfectivoFTN')->first()->valor;
                 $saldoDolaresFAU = Configuracion::where('variable', 'SaldoEfectivoFAU')->first()->valor;
                 $saldoDolaresFLL = Configuracion::where('variable', 'SaldoEfectivoFLL')->first()->valor;
@@ -60,19 +63,36 @@ class HomeController extends Controller
                 $diferidoBolivaresFAU = Configuracion::where('variable', 'DiferidoBolivaresFAU')->first()->valor;
                 $diferidoBolivaresFLL = Configuracion::where('variable', 'DiferidoBolivaresFLL')->first()->valor;
 
-                $ftn = ContPagoEfectivoFTN::orderBy('id', 'DESC')->first();
-                $fau = ContPagoEfectivoFAU::orderBy('id', 'DESC')->first();
-                $fll = ContPagoEfectivoFLL::orderBy('id', 'DESC')->first();
+                $ftnDs = ContPagoEfectivoFTN::orderBy('id', 'DESC')->whereNull('ingresos')->first();
+                $fauDs = ContPagoEfectivoFAU::orderBy('id', 'DESC')->whereNull('ingresos')->first();
+                $fllDs = ContPagoEfectivoFLL::orderBy('id', 'DESC')->whereNull('ingresos')->first();
+                $ftnBs = ContPagoBolivaresFTN::orderBy('id', 'DESC')->whereNull('ingresos')->first();
+                $fauBs = ContPagoBolivaresFAU::orderBy('id', 'DESC')->whereNull('ingresos')->first();
+                $fllBs = ContPagoBolivaresFLL::orderBy('id', 'DESC')->whereNull('ingresos')->first();
 
-                $pago = $ftn;
+                $pago = $ftnDs;
 
-                if (isset($fau->created_at) && $pago->created_at > $fau->created_at) {
-                    $pago = $fau;
+                if (isset($fauDs->created_at) && $pago->created_at > $fauDs->created_at) {
+                    $pago = $fauDs;
                 }
 
-                if (isset($fll->created_at) && $pago->created_at > $fll->created_at) {
-                    $pago = $fll;
+                if (isset($fllDs->created_at) && $pago->created_at > $fllDs->created_at) {
+                    $pago = $fllDs;
                 }
+
+                if (isset($ftnBs->created_at) && $pago->created_at > $ftnBs->created_at) {
+                    $pago = $ftnBs;
+                }
+
+                if (isset($fauBs->created_at) && $pago->created_at > $fauBs->created_at) {
+                    $pago = $fauBs;
+                }
+
+                if (isset($fllBs->created_at) && $pago->created_at > $fllBs->created_at) {
+                    $pago = $fllBs;
+                }
+
+                $deuda = ContDeuda::orderByDesc('id')->first();
 
                 return view('home-contabilidad', compact(
                     'saldoDolaresFTN',
@@ -87,6 +107,102 @@ class HomeController extends Controller
                     'diferidoBolivaresFTN',
                     'diferidoBolivaresFAU',
                     'diferidoBolivaresFLL',
+                    'pago',
+                    'deuda'
+                ));
+            }
+
+            if (Auth::user()->departamento == 'CONTABILIDAD') {
+                $ftnDs = ContPagoEfectivoFTN::orderBy('id', 'DESC')->whereNull('ingresos')->first();
+                $fauDs = ContPagoEfectivoFAU::orderBy('id', 'DESC')->whereNull('ingresos')->first();
+                $fllDs = ContPagoEfectivoFLL::orderBy('id', 'DESC')->whereNull('ingresos')->first();
+                $ftnBs = ContPagoBolivaresFTN::orderBy('id', 'DESC')->whereNull('ingresos')->first();
+                $fauBs = ContPagoBolivaresFAU::orderBy('id', 'DESC')->whereNull('ingresos')->first();
+                $fllBs = ContPagoBolivaresFLL::orderBy('id', 'DESC')->whereNull('ingresos')->first();
+
+                $pago = $ftnDs;
+
+                if (isset($fauDs->created_at) && $pago->created_at > $fauDs->created_at) {
+                    $pago = $fauDs;
+                }
+
+                if (isset($fllDs->created_at) && $pago->created_at > $fllDs->created_at) {
+                    $pago = $fllDs;
+                }
+
+                if (isset($ftnBs->created_at) && $pago->created_at > $ftnBs->created_at) {
+                    $pago = $ftnBs;
+                }
+
+                if (isset($fauBs->created_at) && $pago->created_at > $fauBs->created_at) {
+                    $pago = $fauBs;
+                }
+
+                if (isset($fllBs->created_at) && $pago->created_at > $fllBs->created_at) {
+                    $pago = $fllBs;
+                }
+
+                $deuda = ContDeuda::orderBy('id', 'DESC')->first();
+
+                return view('home-contabilidad', compact(
+                    'pago',
+                    'deuda'
+                ));
+            }
+
+            if (Auth::user()->departamento == 'TESORERIA') {
+                if(Auth()->user()->sede == 'FARMACIA TIERRA NEGRA, C.A.') {
+                    $sede = 'FTN';
+                }
+
+                if(Auth()->user()->sede == 'FARMACIA LA LAGO,C.A.') {
+                    $sede = 'FLL';
+                }
+
+                if(Auth()->user()->sede == 'FARMACIA AVENIDA UNIVERSIDAD, C.A.') {
+                    $sede = 'FAU';
+                }
+
+                $saldoDolares = Configuracion::where('variable', 'SaldoEfectivo' . $sede)->first()->valor;
+                $saldoBolivares = Configuracion::where('variable', 'SaldoBolivares' . $sede)->first()->valor;
+                $diferidoDolares = Configuracion::where('variable', 'DiferidoEfectivo' . $sede)->first()->valor;
+                $diferidoBolivares = Configuracion::where('variable', 'DiferidoBolivares' . $sede)->first()->valor;
+
+                $ftnDs = ContPagoEfectivoFTN::orderBy('id', 'DESC')->first();
+                $fauDs = ContPagoEfectivoFAU::orderBy('id', 'DESC')->first();
+                $fllDs = ContPagoEfectivoFLL::orderBy('id', 'DESC')->first();
+                $ftnBs = ContPagoBolivaresFTN::orderBy('id', 'DESC')->first();
+                $fauBs = ContPagoBolivaresFAU::orderBy('id', 'DESC')->first();
+                $fllBs = ContPagoBolivaresFLL::orderBy('id', 'DESC')->first();
+
+                $pago = $ftnDs;
+
+                if (isset($fauDs->created_at) && $pago->created_at > $fauDs->created_at) {
+                    $pago = $fauDs;
+                }
+
+                if (isset($fllDs->created_at) && $pago->created_at > $fllDs->created_at) {
+                    $pago = $fllDs;
+                }
+
+                if (isset($ftnBs->created_at) && $pago->created_at > $ftnBs->created_at) {
+                    $pago = $ftnBs;
+                }
+
+                if (isset($fauBs->created_at) && $pago->created_at > $fauBs->created_at) {
+                    $pago = $fauBs;
+                }
+
+                if (isset($fllBs->created_at) && $pago->created_at > $fllBs->created_at) {
+                    $pago = $fllBs;
+                }
+
+                return view('home-contabilidad', compact(
+                    'sede',
+                    'saldoDolares',
+                    'saldoBolivares',
+                    'diferidoDolares',
+                    'diferidoBolivares',
                     'pago'
                 ));
             }

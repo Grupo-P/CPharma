@@ -61,7 +61,41 @@
                         <td class="text-center">{{ str_pad($pago->id, 5, 0, STR_PAD_LEFT) }}</td>
                         <td class="text-center">{{ date_format($pago->created_at, 'd/m/Y h:i A') }}</td>
                         <td class="text-center">{{ (get_class($pago) == 'compras\ContPagoBancario') ? 'Banco' : 'Efectivo' }}</td>
-                        <td class="text-center">{{ (get_class($pago) == 'compras\ContPagoBancario') ? $pago->banco->alias_cuenta : $pago->sede }}</td>
+                        <td class="text-center">
+                            @if(get_class($pago) == 'compras\ContPagoBancario')
+                                {{ $pago->banco->alias_cuenta }}
+                            @endif
+
+                            @if(get_class($pago) == 'compras\ContPagoEfectivoFTN')
+                                Pago dólares efectivo FTN
+                                @php $sede = 'FTN'; @endphp
+                            @endif
+
+                            @if(get_class($pago) == 'compras\ContPagoEfectivoFAU')
+                                Pago dólares efectivo FAU
+                                @php $sede = 'FAU'; @endphp
+                            @endif
+
+                            @if(get_class($pago) == 'compras\ContPagoEfectivoFLL')
+                                Pago dólares efectivo FLL
+                                @php $sede = 'FLL'; @endphp
+                            @endif
+
+                            @if(get_class($pago) == 'compras\ContPagoBolivaresFTN')
+                                Pago bolívares efectivo FTN
+                                @php $sede = 'FTN'; @endphp
+                            @endif
+
+                            @if(get_class($pago) == 'compras\ContPagoBolivaresFAU')
+                                Pago bolívares efectivo FAU
+                                @php $sede = 'FAU'; @endphp
+                            @endif
+
+                            @if(get_class($pago) == 'compras\ContPagoBolivaresFLL')
+                                Pago bolívares efectivo FLL
+                                @php $sede = 'FLL'; @endphp
+                            @endif
+                        </td>
                         <td class="text-center">{{ ($pago->proveedor) ? $pago->proveedor->nombre_proveedor : '' }}</td>
                         <td class="text-center">
                             @if($pago->monto)
@@ -120,12 +154,14 @@
                                 if ($pago->proveedor) {
                                     if ($pago->proveedor->moneda != 'Dólares') {
                                         $monto_proveedor = $monto * $pago->tasa;
+                                    } else {
+                                        $monto_proveedor = $monto;
                                     }
                                 } else {
                                     $monto_proveedor = $monto;
                                 }
 
-                                $url = '/efectivo/soporte/' . $pago->id;
+                                $url = '/efectivo' . $sede . '/soporte/' . $pago->id;
                             }
                         @endphp
 
@@ -143,8 +179,8 @@
                         @endphp
 
                         <td class="text-center">{{ $plan_cuentas }}</td>
-                        <td class="text-center">{{ ($pago->estatus) ? strtoupper($pago->estatus) : 'PAGADO' }}</td>
-                        <td class="text-center">{{ $pago->conciliado ? 'Si' : 'No' }}</td>
+                        <td class="text-center">{{ ($pago->deleted_at) ? 'Reversado' : 'Pagado' }}</td>
+                        <td class="text-center">{{ ($pago->fecha_conciliado) ? 'Si' : 'No' }}</td>
                         <td class="text-center">{{ ($pago->user) ? $pago->user : $pago->operador }}</td>
                         <td class="text-center">
                             <a target="_blank" href="{{ $url }}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Ver soporte">

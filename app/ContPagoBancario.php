@@ -22,6 +22,20 @@ class ContPagoBancario extends Model
 
     public function getSignoMonedaAttribute()
     {
+        if ($this->banco->moneda == 'Dólares') {
+            return 'USD';
+        }
 
+        if ($this->banco->moneda == 'Bolívares') {
+            return 'VES';
+        }
+
+        if ($this->banco->moneda == 'Euros') {
+            return 'EUR';
+        }
+
+        if ($this->banco->moneda == 'Pesos') {
+            return 'COP';
+        }
     }
 }
