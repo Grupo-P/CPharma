@@ -144,9 +144,39 @@ class HomeController extends Controller
 
                 $deuda = ContDeuda::orderBy('id', 'DESC')->first();
 
+                $ftnDs = ContPagoEfectivoFTN::orderBy('fecha_conciliado', 'DESC')->whereNotNull('fecha_conciliado')->first();
+                $fauDs = ContPagoEfectivoFAU::orderBy('fecha_conciliado', 'DESC')->whereNotNull('fecha_conciliado')->first();
+                $fllDs = ContPagoEfectivoFLL::orderBy('fecha_conciliado', 'DESC')->whereNotNull('fecha_conciliado')->first();
+                $ftnBs = ContPagoBolivaresFTN::orderBy('fecha_conciliado', 'DESC')->whereNotNull('fecha_conciliado')->first();
+                $fauBs = ContPagoBolivaresFAU::orderBy('fecha_conciliado', 'DESC')->whereNotNull('fecha_conciliado')->first();
+                $fllBs = ContPagoBolivaresFLL::orderBy('fecha_conciliado', 'DESC')->whereNotNull('fecha_conciliado')->first();
+
+                $conciliacion = $ftnDs;
+
+                if (isset($fauDs->fecha_conciliado) && $conciliacion->fecha_conciliado > $fauDs->fecha_conciliado) {
+                    $conciliacion = $fauDs;
+                }
+
+                if (isset($fllDs->fecha_conciliado) && $conciliacion->fecha_conciliado > $fllDs->fecha_conciliado) {
+                    $conciliacion = $fllDs;
+                }
+
+                if (isset($ftnBs->fecha_conciliado) && $conciliacion->fecha_conciliado > $ftnBs->fecha_conciliado) {
+                    $conciliacion = $ftnBs;
+                }
+
+                if (isset($fauBs->fecha_conciliado) && $conciliacion->fecha_conciliado > $fauBs->fecha_conciliado) {
+                    $conciliacion = $fauBs;
+                }
+
+                if (isset($fllBs->fecha_conciliado) && $conciliacion->fecha_conciliado > $fllBs->fecha_conciliado) {
+                    $conciliacion = $fllBs;
+                }
+
                 return view('home-contabilidad', compact(
                     'pago',
-                    'deuda'
+                    'deuda',
+                    'conciliacion'
                 ));
             }
 

@@ -50,7 +50,7 @@
 <hr class="row align-items-start col-12">
     <table class="CP-stickyBar" style="width:100%;">
         <tr>
-            <td style="width:100%;">
+            <td class="pr-3">
                 <div class="input-group md-form form-sm form-1 pl-0 CP-stickyBar">
                     <div class="input-group-prepend">
                         <span class="input-group-text purple lighten-3" id="basic-text1">
@@ -62,6 +62,32 @@
                     </input>
                 </div>
             </td>
+
+            <form action="">
+
+                <td  class="pr-2" width="35%">
+                    <select name="tipo" class="form-control">
+                        <option value="">Seleccione banco o sede</option>
+
+                        @foreach($bancos as $banco)
+                            <option {{ ($banco->alias_cuenta.'bpb' == $request->tipo) ? 'selected' : '' }} value="{{ $banco->alias_cuenta }}bpb">{{ $banco->alias_cuenta }}</option>
+                        @endforeach
+
+                        <option {{ ($request->tipo == 'Efectivo dolares FTN') ? 'selected' : '' }} value="Efectivo dolares FTN">Efectivo dolares FTN</option>
+                        <option {{ ($request->tipo == 'Efectivo dolares FAU') ? 'selected' : '' }} value="Efectivo dolares FAU">Efectivo dolares FAU</option>
+                        <option {{ ($request->tipo == 'Efectivo dolares FLL') ? 'selected' : '' }} value="Efectivo dolares FLL">Efectivo dolares FLL</option>
+
+                        <option {{ ($request->tipo == 'Efectivo bolivares FTN') ? 'selected' : '' }} value="Efectivo bolivares FTN">Efectivo bolivares FTN</option>
+                        <option {{ ($request->tipo == 'Efectivo bolivares FAU') ? 'selected' : '' }} value="Efectivo bolivares FAU">Efectivo bolivares FAU</option>
+                        <option {{ ($request->tipo == 'Efectivo bolivares FLL') ? 'selected' : '' }} value="Efectivo bolivares FLL">Efectivo bolivares FLL</option>
+                    </select>
+                </td>
+
+                <td width="10%" class="pl-2 pr-2">
+                    <button class="btn btn-outline-success btn-block">Buscar</button>
+                </td>
+
+            </form>
         </tr>
     </table>
 
@@ -172,6 +198,10 @@
                 pagos.push({ clase: clase, id: id });
             }
 
+            if (pagos.length == 0) {
+                return false;
+            }
+
             $.ajax({
                 url: '/conciliaciones',
                 type: 'POST',
@@ -180,12 +210,12 @@
                     _token: '{{ csrf_token() }}'
                 },
                 success: function (response) {
-                    console.log(response);
+                    window.location.href = window.location.href;
                 },
                 error: function (error) {
                     $('body').html(error.responseText);
                 }
-            })
+            });
         });
     </script>
     @endsection

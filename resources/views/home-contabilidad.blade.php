@@ -454,11 +454,58 @@
                 </h2>
                 <p class="card-text text-white">
                     <p class="text-white">
-                        Proveedor: miguel tovar</br>
-                        Monto: Bs. 20.000.000,00</br>
-                        Emisor: BOD FLL<br>
-                        Conciliado por: Giordany Prieto<br>
-                        Fecha y hora: 2021-06-30 09:41:58</br>
+                        Proveedor: {{ $conciliacion->proveedor->nombre_proveedor }}</br>
+
+                        Monto: {{ $conciliacion->signo_moneda }}
+
+                        @if($conciliacion->diferido)
+                            {{ number_format($conciliacion->diferido, 2, ',', '.') }}
+                        @endif
+
+                        @if($conciliacion->egresos)
+                            {{ number_format($conciliacion->egresos, 2, ',', '.') }}
+                        @endif
+
+                        @if($conciliacion->monto)
+                            {{ number_format($conciliacion->monto, 2, ',', '.') }}
+                        @endif
+
+                        <br>
+
+                        Emisor:
+
+                        @if($conciliacion->banco)
+                            {{ $conciliacion->banco->alias_cuenta }}
+                        @else
+                            @if(get_class($conciliacion) == 'compras\ContPagoEfectivoFTN')
+                                Pago dólares efectivo FTN
+                            @endif
+
+                            @if(get_class($conciliacion) == 'compras\ContPagoEfectivoFAU')
+                                Pago dólares efectivo FAU
+                            @endif
+
+                            @if(get_class($conciliacion) == 'compras\ContPagoEfectivoFLL')
+                                Pago dólares efectivo FLL
+                            @endif
+
+                            @if(get_class($conciliacion) == 'compras\ContPagoBolivaresFTN')
+                                Pago bolívares efectivo FTN
+                            @endif
+
+                            @if(get_class($conciliacion) == 'compras\ContPagoBolivaresFAU')
+                                Pago bolívares efectivo FAU
+                            @endif
+
+                            @if(get_class($conciliacion) == 'compras\ContPagoBolivaresFLL')
+                                Pago bolívares efectivo FLL
+                            @endif
+                        @endif
+
+                        <br>
+
+                        Conciliado por: {{ $conciliacion->usuario_conciliado }}<br>
+                        Fecha y hora: {{ date_create($conciliacion->fecha_conciliado)->format('d/m/Y h:i A') }}</br>
                     </p>
                 </p>
             </div>
