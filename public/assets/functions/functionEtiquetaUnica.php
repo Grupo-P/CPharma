@@ -281,6 +281,7 @@
 					if(_EtiquetaDolar_=='SI'){
 						$precioPartes = explode(".",$PrecioHoy);
 						$TasaActual = FG_Tasa_Fecha_Venta($connCPharma,date('Y-m-d'));
+
 						$PrecioHoy = $PrecioHoy/$TasaActual;
 
 						if($precioPartes[1]==DecimalEtiqueta){

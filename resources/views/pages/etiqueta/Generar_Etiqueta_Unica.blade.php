@@ -241,7 +241,9 @@
 
         $('#inputCodBar').val('');
 
-        if( (indiceCodBarScan>0) && (indiceScanDesc)>0 ) {
+        console.log(indiceCodBarScan, indiceScanDesc);
+
+        if( (indiceCodBarScan>=0) && (indiceScanDesc)>=0 ) {
 
           var parametro = {
           	"IdArticulo":ArrJsCB[indiceIdScan],
