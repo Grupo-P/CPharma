@@ -33,12 +33,8 @@ class ContReclamo extends Model
 
     public function scopeSede($query, $sede)
     {
-        if ($sede != '' && $sede != 'Todos') {
-            return $query->where('sede', $sede);
-        }
-
-        if (Auth::user()->departamento != 'TECNOLOGIA' && Auth::user()->departamento != 'GERENCIA') {
-            return $query->where('sede', Auth::user()->sede);
+        if ($sede != 'GRUPO P, C.A') {
+            $query->where('sede', $sede);
         }
     }
 }

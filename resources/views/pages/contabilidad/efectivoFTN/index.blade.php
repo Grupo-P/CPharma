@@ -177,16 +177,18 @@
             }
 
             if (strpos($pago->concepto, 'DIFERIDO') && $pago->ingresos) {
-                if ($pago->proveedor->moneda != 'Dólares') {
-                    if ($pago->proveedor->moneda == 'Bolívares') {
-                        $monto_proveedor = $pago->egresos * $pago->tasa;
-                    }
+                if ($pago->proveedor) {
+                    if ($pago->proveedor->moneda != 'Dólares') {
+                        if ($pago->proveedor->moneda == 'Bolívares') {
+                            $monto_proveedor = $pago->egresos * $pago->tasa;
+                        }
 
-                    if ($pago->proveedor->moneda == 'Pesos') {
-                        $monto_proveedor = $pago->egresos * $pago->tasa;
+                        if ($pago->proveedor->moneda == 'Pesos') {
+                            $monto_proveedor = $pago->egresos * $pago->tasa;
+                        }
+                    } else {
+                        $monto_proveedor = $pago->egresos;
                     }
-                } else {
-                    $monto_proveedor = $pago->egresos;
                 }
             }
           @endphp
@@ -195,7 +197,15 @@
         </td>
         <td>{{ ($pago->tasa) ? number_format($pago->tasa,2,',','.') : '' }}</td>
         <td>{{date("d-m-Y h:i:s a", strtotime($pago->created_at))}}</td>
-        <td>{{isset($pago->cuenta->nombre) ? $pago->cuenta->nombre : ''}}</td>
+        <td>
+            @if($pago->cuenta)
+                {{ $pago->cuenta->nombre }}
+            @endif
+
+            @if($pago->proveedor)
+                {{ $pago->proveedor->plan_cuentas }}
+            @endif
+        </td>
         <td>{{isset($pago->proveedor->nombre_proveedor) ? $pago->proveedor->nombre_proveedor : ''}}</td>
         <td>{{$pago->user}}</td>
         <td>{{$pago->autorizado_por}}</td>

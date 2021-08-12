@@ -49,7 +49,7 @@
                         <td class="text-center">{{ $pago->proveedor->nombre_proveedor }}</td>
                         <td class="text-center">{{ $pago->monto ? number_format($pago->monto, 2, ',', '.') : number_format($pago->egresos, 2, ',', '.') }}</td>
                         <td class="text-center">{{ $pago->comentario }}</td>
-                        <td class="text-center">{{ $pago->conciliado ? 'Si' : 'No' }}</td>
+                        <td class="text-center">{{ $pago->fecha_conciliado ? 'Si' : 'No' }}</td>
                         <td class="text-center">{{ ($pago->user) ? $pago->user : $pago->operador }}</td>
                     </tr>
                 @endforeach

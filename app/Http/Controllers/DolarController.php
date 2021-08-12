@@ -49,20 +49,43 @@ class DolarController extends Controller
     public function store(Request $request)
     {
         try{
-            $dolar = new Dolar();
-            $dolar->tasa = $request->input('tasa');
-            $dolar->fecha = $request->input('fecha');
-            $dolar->fecha = date('Y-m-d 00:00:00',strtotime($dolar->fecha));
-            $dolar->estatus = 'ACTIVO';
-            $dolar->user = auth()->user()->name;
-            $dolar->save();
+            if ($_SERVER['SERVER_NAME'] == 'cpharmagpde.com' || $_SERVER['SERVER_NAME'] == 'cpharmagp.com') {
+                $dolar = new Dolar();
+                $dolar->setConnection('fll');
+                $dolar->tasa = $request->input('tasa');
+                $dolar->fecha = $request->input('fecha');
+                $dolar->fecha = date('Y-m-d 00:00:00',strtotime($dolar->fecha));
+                $dolar->estatus = 'ACTIVO';
+                $dolar->user = auth()->user()->name;
+                $dolar->save();
 
-            $Auditoria = new Auditoria();
-            $Auditoria->accion = 'CREAR';
-            $Auditoria->tabla = 'TASA MERCADO';
-            $Auditoria->registro = $request->input('tasa');
-            $Auditoria->user = auth()->user()->name;
-            $Auditoria->save();
+                $dolar = new Dolar();
+                $dolar->setConnection('ftn');
+                $dolar->tasa = $request->input('tasa');
+                $dolar->fecha = $request->input('fecha');
+                $dolar->fecha = date('Y-m-d 00:00:00',strtotime($dolar->fecha));
+                $dolar->estatus = 'ACTIVO';
+                $dolar->user = auth()->user()->name;
+                $dolar->save();
+
+                $dolar = new Dolar();
+                $dolar->setConnection('fau');
+                $dolar->tasa = $request->input('tasa');
+                $dolar->fecha = $request->input('fecha');
+                $dolar->fecha = date('Y-m-d 00:00:00',strtotime($dolar->fecha));
+                $dolar->estatus = 'ACTIVO';
+                $dolar->user = auth()->user()->name;
+                $dolar->save();
+            }
+            else {
+                $dolar = new Dolar();
+                $dolar->tasa = $request->input('tasa');
+                $dolar->fecha = $request->input('fecha');
+                $dolar->fecha = date('Y-m-d 00:00:00',strtotime($dolar->fecha));
+                $dolar->estatus = 'ACTIVO';
+                $dolar->user = auth()->user()->name;
+                $dolar->save();
+            }
 
             return redirect()->route('dolar.index')->with('Saved', ' Informacion');
         }
@@ -113,11 +136,35 @@ class DolarController extends Controller
     public function update(Request $request, $id)
     {
         try{
-            $dolar = Dolar::find($id);
-            $dolar->fill($request->all());
-            $dolar->fecha = date('Y-m-d 00:00:00',strtotime($dolar->fecha));
-            $dolar->user = auth()->user()->name;
-            $dolar->save();
+            if ($_SERVER['SERVER_NAME'] == 'cpharmagpde.com' || $_SERVER['SERVER_NAME'] == 'cpharmagp.com') {
+                $dolar = Dolar::find($id);
+                $dolar->setConnection('ftn');
+                $dolar->fill($request->all());
+                $dolar->fecha = date('Y-m-d 00:00:00',strtotime($dolar->fecha));
+                $dolar->user = auth()->user()->name;
+                $dolar->save();
+
+                $dolar = Dolar::find($id);
+                $dolar->setConnection('fau');
+                $dolar->fill($request->all());
+                $dolar->fecha = date('Y-m-d 00:00:00',strtotime($dolar->fecha));
+                $dolar->user = auth()->user()->name;
+                $dolar->save();
+
+                $dolar = Dolar::find($id);
+                $dolar->setConnection('fll');
+                $dolar->fill($request->all());
+                $dolar->fecha = date('Y-m-d 00:00:00',strtotime($dolar->fecha));
+                $dolar->user = auth()->user()->name;
+                $dolar->save();
+            }
+            else {
+                $dolar = Dolar::find($id);
+                $dolar->fill($request->all());
+                $dolar->fecha = date('Y-m-d 00:00:00',strtotime($dolar->fecha));
+                $dolar->user = auth()->user()->name;
+                $dolar->save();
+            }
 
             $Auditoria = new Auditoria();
             $Auditoria->accion = 'EDITAR';

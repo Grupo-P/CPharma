@@ -5,6 +5,7 @@ namespace compras\Http\Controllers;
 use Auth;
 use compras\Configuracion;
 use compras\ContDeuda;
+use compras\ContPagoBancario;
 use compras\ContPagoBolivaresFAU;
 use compras\ContPagoBolivaresFLL;
 use compras\ContPagoBolivaresFTN;
@@ -33,6 +34,8 @@ class HomeController extends Controller
      */
     public function index()
     {
+        //error_reporting(0);
+
         if ($_SERVER['SERVER_NAME'] == 'cpharmagpde.com' || $_SERVER['SERVER_NAME'] == 'cpharmagp.com') {
             if (Auth::user()->departamento == 'OPERACIONES') {
                 $deuda = ContDeuda::orderBy('id', 'DESC')
@@ -69,27 +72,32 @@ class HomeController extends Controller
                 $ftnBs = ContPagoBolivaresFTN::orderBy('id', 'DESC')->whereNull('ingresos')->first();
                 $fauBs = ContPagoBolivaresFAU::orderBy('id', 'DESC')->whereNull('ingresos')->first();
                 $fllBs = ContPagoBolivaresFLL::orderBy('id', 'DESC')->whereNull('ingresos')->first();
+                $bancario = ContPagoBancario::orderBy('id', 'DESC')->whereNull('deleted_at')->first();
 
                 $pago = $ftnDs;
 
-                if (isset($fauDs->created_at) && $pago->created_at > $fauDs->created_at) {
+                if (isset($fauDs->created_at) && $pago->created_at < $fauDs->created_at) {
                     $pago = $fauDs;
                 }
 
-                if (isset($fllDs->created_at) && $pago->created_at > $fllDs->created_at) {
+                if (isset($fllDs->created_at) && $pago->created_at < $fllDs->created_at) {
                     $pago = $fllDs;
                 }
 
-                if (isset($ftnBs->created_at) && $pago->created_at > $ftnBs->created_at) {
+                if (isset($ftnBs->created_at) && $pago->created_at < $ftnBs->created_at) {
                     $pago = $ftnBs;
                 }
 
-                if (isset($fauBs->created_at) && $pago->created_at > $fauBs->created_at) {
+                if (isset($fauBs->created_at) && $pago->created_at < $fauBs->created_at) {
                     $pago = $fauBs;
                 }
 
-                if (isset($fllBs->created_at) && $pago->created_at > $fllBs->created_at) {
+                if (isset($fllBs->created_at) && $pago->created_at < $fllBs->created_at) {
                     $pago = $fllBs;
+                }
+
+                if (isset($bancario->created_at) && $pago->created_at < $bancario->created_at) {
+                    $pago = $bancario;
                 }
 
                 $deuda = ContDeuda::orderByDesc('id')->first();
@@ -119,27 +127,32 @@ class HomeController extends Controller
                 $ftnBs = ContPagoBolivaresFTN::orderBy('id', 'DESC')->whereNull('ingresos')->first();
                 $fauBs = ContPagoBolivaresFAU::orderBy('id', 'DESC')->whereNull('ingresos')->first();
                 $fllBs = ContPagoBolivaresFLL::orderBy('id', 'DESC')->whereNull('ingresos')->first();
+                $bancario = ContPagoBancario::orderBy('id', 'DESC')->whereNull('deleted_at')->first();
 
                 $pago = $ftnDs;
 
-                if (isset($fauDs->created_at) && $pago->created_at > $fauDs->created_at) {
+                if (isset($fauDs->created_at) && $pago->created_at < $fauDs->created_at) {
                     $pago = $fauDs;
                 }
 
-                if (isset($fllDs->created_at) && $pago->created_at > $fllDs->created_at) {
+                if (isset($fllDs->created_at) && $pago->created_at < $fllDs->created_at) {
                     $pago = $fllDs;
                 }
 
-                if (isset($ftnBs->created_at) && $pago->created_at > $ftnBs->created_at) {
+                if (isset($ftnBs->created_at) && $pago->created_at < $ftnBs->created_at) {
                     $pago = $ftnBs;
                 }
 
-                if (isset($fauBs->created_at) && $pago->created_at > $fauBs->created_at) {
+                if (isset($fauBs->created_at) && $pago->created_at < $fauBs->created_at) {
                     $pago = $fauBs;
                 }
 
-                if (isset($fllBs->created_at) && $pago->created_at > $fllBs->created_at) {
+                if (isset($fllBs->created_at) && $pago->created_at < $fllBs->created_at) {
                     $pago = $fllBs;
+                }
+
+                if (isset($bancario->created_at) && $pago->created_at < $bancario->created_at) {
+                    $pago = $bancario;
                 }
 
                 $deuda = ContDeuda::orderBy('id', 'DESC')->first();
@@ -204,27 +217,32 @@ class HomeController extends Controller
                 $ftnBs = ContPagoBolivaresFTN::orderBy('id', 'DESC')->first();
                 $fauBs = ContPagoBolivaresFAU::orderBy('id', 'DESC')->first();
                 $fllBs = ContPagoBolivaresFLL::orderBy('id', 'DESC')->first();
+                $bancario = ContPagoBancario::orderBy('id', 'DESC')->whereNull('deleted_at')->first();
 
                 $pago = $ftnDs;
 
-                if (isset($fauDs->created_at) && $pago->created_at > $fauDs->created_at) {
+                if (isset($fauDs->created_at) && $pago->created_at < $fauDs->created_at) {
                     $pago = $fauDs;
                 }
 
-                if (isset($fllDs->created_at) && $pago->created_at > $fllDs->created_at) {
+                if (isset($fllDs->created_at) && $pago->created_at < $fllDs->created_at) {
                     $pago = $fllDs;
                 }
 
-                if (isset($ftnBs->created_at) && $pago->created_at > $ftnBs->created_at) {
+                if (isset($ftnBs->created_at) && $pago->created_at < $ftnBs->created_at) {
                     $pago = $ftnBs;
                 }
 
-                if (isset($fauBs->created_at) && $pago->created_at > $fauBs->created_at) {
+                if (isset($fauBs->created_at) && $pago->created_at < $fauBs->created_at) {
                     $pago = $fauBs;
                 }
 
-                if (isset($fllBs->created_at) && $pago->created_at > $fllBs->created_at) {
+                if (isset($fllBs->created_at) && $pago->created_at < $fllBs->created_at) {
                     $pago = $fllBs;
+                }
+
+                if (isset($bancario->created_at) && $pago->created_at < $bancario->created_at) {
+                    $pago = $bancario;
                 }
 
                 return view('home-contabilidad', compact(

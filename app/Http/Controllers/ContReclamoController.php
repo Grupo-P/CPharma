@@ -140,7 +140,6 @@ class ContReclamoController extends Controller
         $proveedor->save();
 
         $reclamo->id_proveedor              = $request->input('id_proveedor');
-        $reclamo->monto                     = $request->input('monto');
         $reclamo->documento_soporte_reclamo = $request->input('documento_soporte_reclamo');
         $reclamo->numero_documento          = $request->input('numero_documento');
         $reclamo->comentario                = $request->input('comentario');

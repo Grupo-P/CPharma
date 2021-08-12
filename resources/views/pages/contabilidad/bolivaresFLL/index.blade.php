@@ -177,7 +177,7 @@
             }
 
             if (strpos($pago->concepto, 'DIFERIDO') && $pago->ingresos) {
-                if ($pago->proveedor->moneda != 'Bolívares') {
+                if (isset($pago->proveedor) && $pago->proveedor->moneda != 'Bolívares') {
                     if ($pago->proveedor->moneda == 'Dólares') {
                         $monto_proveedor = $pago->egresos / $pago->tasa;
                     }

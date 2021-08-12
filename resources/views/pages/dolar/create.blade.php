@@ -17,7 +17,7 @@
                 </button>
               </div>
               <div class="modal-body">
-                <h4 class="h6">El registro no pudo ser almacenado, la fecha ya esta registrada</h4>
+                <h4 class="h6">La tasa no pudo ser almacenada.</h4>
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-outline-success" data-dismiss="modal">Aceptar</button>

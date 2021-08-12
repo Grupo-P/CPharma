@@ -126,6 +126,10 @@
 
         concepto = prompt('Concepto');
 
+        if (concepto === null) {
+            return;
+        }
+
         if (concepto != '') {
             $.ajax({
                 method: 'POST',

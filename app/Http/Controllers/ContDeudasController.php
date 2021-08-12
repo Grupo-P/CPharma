@@ -155,19 +155,11 @@ class ContDeudasController extends Controller
     {
         $deuda = ContDeuda::find($id);
 
-        $proveedor        = ContProveedor::find($request->input('id_proveedor'));
-        $proveedor->saldo = (float) $proveedor->saldo - (float) $deuda->monto;
-        $proveedor->save();
-
-        $deuda->id_proveedor            = $request->input('id_proveedor');
         $deuda->documento_soporte_deuda = $request->input('documento_soporte_deuda');
         $deuda->numero_documento        = $request->input('numero_documento');
         $deuda->sede                    = $request->input('sede');
         $deuda->dias_credito            = $request->input('dias_credito');
         $deuda->save();
-
-        $proveedor->saldo = (float) $proveedor->saldo + (float) $deuda->monto;
-        $proveedor->save();
 
         $auditoria           = new Auditoria();
         $auditoria->accion   = 'EDITAR';
@@ -236,9 +228,6 @@ class ContDeudasController extends Controller
                     cont_proveedores.saldo AS saldoNoFormateado
                 FROM
                     cont_proveedores
-                    LEFT JOIN cont_pagos_efectivo ON cont_proveedores.id = cont_pagos_efectivo.id_proveedor
-                    LEFT JOIN cont_pagos_bancarios ON cont_proveedores.id = cont_pagos_bancarios.id_proveedor
-                    LEFT JOIN cont_deudas ON cont_proveedores.id = cont_deudas.id_proveedor
                 WHERE
                     cont_proveedores.saldo > 0 AND cont_proveedores.moneda = 'Dólares'
                 GROUP BY proveedor
@@ -253,9 +242,6 @@ class ContDeudasController extends Controller
                     cont_proveedores.saldo AS saldoNoFormateado
                 FROM
                     cont_proveedores
-                    LEFT JOIN cont_pagos_efectivo ON cont_proveedores.id = cont_pagos_efectivo.id_proveedor
-                    LEFT JOIN cont_pagos_bancarios ON cont_proveedores.id = cont_pagos_bancarios.id_proveedor
-                    LEFT JOIN cont_deudas ON cont_proveedores.id = cont_deudas.id_proveedor
                 WHERE
                     cont_proveedores.saldo < 0 AND cont_proveedores.moneda = 'Dólares'
                 GROUP BY proveedor
@@ -270,9 +256,6 @@ class ContDeudasController extends Controller
                     cont_proveedores.saldo AS saldoNoFormateado
                 FROM
                     cont_proveedores
-                    LEFT JOIN cont_pagos_efectivo ON cont_proveedores.id = cont_pagos_efectivo.id_proveedor
-                    LEFT JOIN cont_pagos_bancarios ON cont_proveedores.id = cont_pagos_bancarios.id_proveedor
-                    LEFT JOIN cont_deudas ON cont_proveedores.id = cont_deudas.id_proveedor
                 WHERE
                     cont_proveedores.saldo > 0 AND cont_proveedores.moneda = 'Bolívares'
                 GROUP BY proveedor
@@ -287,9 +270,6 @@ class ContDeudasController extends Controller
                     cont_proveedores.saldo AS saldoNoFormateado
                 FROM
                     cont_proveedores
-                    LEFT JOIN cont_pagos_efectivo ON cont_proveedores.id = cont_pagos_efectivo.id_proveedor
-                    LEFT JOIN cont_pagos_bancarios ON cont_proveedores.id = cont_pagos_bancarios.id_proveedor
-                    LEFT JOIN cont_deudas ON cont_proveedores.id = cont_deudas.id_proveedor
                 WHERE
                     cont_proveedores.saldo < 0 AND cont_proveedores.moneda = 'Bolívares'
                 GROUP BY proveedor

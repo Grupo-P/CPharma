@@ -238,7 +238,7 @@ class ContConciliacionesController extends Controller
             $pago->save();
         }
 
-        session(['Saved' => 'info']);
+        $request->session->flash('Saved', 'info');
     }
 
     /**

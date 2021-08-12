@@ -195,7 +195,15 @@
         </td>
         <td>{{ ($pago->tasa) ? number_format($pago->tasa,2,',','.') : '' }}</td>
         <td>{{date("d-m-Y h:i:s a", strtotime($pago->created_at))}}</td>
-        <td>{{isset($pago->cuenta->nombre) ? $pago->cuenta->nombre : ''}}</td>
+        <td>
+            @if($pago->cuenta)
+                {{ $pago->cuenta->nombre }}
+            @endif
+
+            @if($pago->proveedor)
+                {{ $pago->proveedor->plan_cuentas }}
+            @endif
+        </td>
         <td>{{isset($pago->proveedor->nombre_proveedor) ? $pago->proveedor->nombre_proveedor : ''}}</td>
         <td>{{$pago->user}}</td>
         <td>{{$pago->autorizado_por}}</td>

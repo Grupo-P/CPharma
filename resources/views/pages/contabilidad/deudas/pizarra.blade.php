@@ -8,17 +8,63 @@
     @php
         function fecha_ultimo_pago($id_proveedor)
         {
-            $efectivo = DB::select("
+            $tabla = (isset($_GET['tipo']) && $_GET['tipo'] == 'dolares') ? 'cont_pagos_efectivo' : 'cont_pagos_bolivares';
+
+            $pago = null;
+
+            $ftn = DB::select("
                 SELECT
                     DATE(created_at) AS created_at
                 FROM
-                    cont_pagos_efectivo
+                    {$tabla}_FTN
                 WHERE
-                    id_proveedor = '{$id_proveedor}'
+                    id_proveedor = '{$id_proveedor}' AND deleted_at IS NULL
                 ORDER BY
                     created_at DESC
                 LIMIT 1
             ");
+
+            $ftn = isset($ftn[0]->created_at) ? $ftn[0]->created_at : null;
+
+            if ($pago <= $ftn) {
+                $pago = $ftn;
+            }
+
+            $fau = DB::select("
+                SELECT
+                    DATE(created_at) AS created_at
+                FROM
+                    {$tabla}_FAU
+                WHERE
+                    id_proveedor = '{$id_proveedor}' AND deleted_at IS NULL
+                ORDER BY
+                    created_at DESC
+                LIMIT 1
+            ");
+
+            $fau = isset($fau[0]->created_at) ? $fau[0]->created_at : null;
+
+            if ($pago <= $fau) {
+                $pago = $fau;
+            }
+
+            $fll = DB::select("
+                SELECT
+                    DATE(created_at) AS created_at
+                FROM
+                    {$tabla}_FLL
+                WHERE
+                    id_proveedor = '{$id_proveedor}' AND deleted_at IS NULL
+                ORDER BY
+                    created_at DESC
+                LIMIT 1
+            ");
+
+            $fll = isset($fll[0]->created_at) ? $fll[0]->created_at : null;
+
+            if ($pago <= $fll) {
+                $pago = $fll;
+            }
 
             $bancario = DB::select("
                 SELECT
@@ -32,38 +78,74 @@
                 LIMIT 1
             ");
 
-            $fecha_efectivo = isset($efectivo[0]->created_at) ? $efectivo[0]->created_at : null;
-            $fecha_bancario = isset($bancario[0]->created_at) ? $bancario[0]->created_at : null;
+            $bancario = isset($bancario[0]->created_at) ? $bancario[0]->created_at : null;
 
-            if ($fecha_efectivo >= $fecha_bancario) {
-                if ($fecha_efectivo) {
-                    $fecha_efectivo = date_create($fecha_efectivo);
-                    $fecha_efectivo = date_format($fecha_efectivo, 'd/m/Y');
-
-                    return $fecha_efectivo;
-                }
-            } else {
-                if ($fecha_bancario) {
-                    $fecha_bancario = date_create($fecha_bancario);
-                    $fecha_bancario = date_format($fecha_bancario, 'd/m/Y');
-                    return $fecha_bancario;
-                }
+            if ($pago <= $bancario) {
+                $pago = $bancario;
             }
+
+            return date_create($pago)->format('d/m/Y');
         }
 
         function dias_ultimo_pago($id_proveedor)
         {
-            $efectivo = DB::select("
+            $tabla = (isset($_GET['tipo']) && $_GET['tipo'] == 'dolares') ? 'cont_pagos_efectivo' : 'cont_pagos_bolivares';
+
+            $pago = null;
+
+            $ftn = DB::select("
                 SELECT
                     DATE(created_at) AS created_at
                 FROM
-                    cont_pagos_efectivo
+                    {$tabla}_FTN
                 WHERE
                     id_proveedor = '{$id_proveedor}'
                 ORDER BY
                     created_at DESC
                 LIMIT 1
             ");
+
+            $ftn = isset($ftn[0]->created_at) ? $ftn[0]->created_at : null;
+
+            if ($pago <= $ftn) {
+                $pago = $ftn;
+            }
+
+            $fau = DB::select("
+                SELECT
+                    DATE(created_at) AS created_at
+                FROM
+                    {$tabla}_FAU
+                WHERE
+                    id_proveedor = '{$id_proveedor}'
+                ORDER BY
+                    created_at DESC
+                LIMIT 1
+            ");
+
+            $fau = isset($fau[0]->created_at) ? $fau[0]->created_at : null;
+
+            if ($pago <= $fau) {
+                $pago = $fau;
+            }
+
+            $dolaresFLL = DB::select("
+                SELECT
+                    DATE(created_at) AS created_at
+                FROM
+                    {$tabla}_fll
+                WHERE
+                    id_proveedor = '{$id_proveedor}'
+                ORDER BY
+                    created_at DESC
+                LIMIT 1
+            ");
+
+            $dolaresFLL = isset($dolaresFLL[0]->created_at) ? $dolaresFLL[0]->created_at : null;
+
+            if ($pago <= $dolaresFLL) {
+                $pago = $dolaresFLL;
+            }
 
             $bancario = DB::select("
                 SELECT
@@ -77,20 +159,8 @@
                 LIMIT 1
             ");
 
-            $fecha_efectivo = isset($efectivo[0]->created_at) ? $efectivo[0]->created_at : null;
-            $fecha_bancario = isset($bancario[0]->created_at) ? $bancario[0]->created_at : null;
-
-            if ($fecha_efectivo >= $fecha_bancario) {
-                if ($fecha_efectivo) {
-                    $fecha_pago = date_create($fecha_efectivo);
-                    $fecha_actual = date_create();
-
-                    $interval = date_diff($fecha_pago, $fecha_actual);
-
-                    return $interval->format('%a');
-                }
-            } else {
-                $fecha_pago = date_create($fecha_bancario);
+            if ($pago) {
+                $fecha_pago = date_create($pago);
                 $fecha_actual = date_create();
 
                 $interval = date_diff($fecha_pago, $fecha_actual);

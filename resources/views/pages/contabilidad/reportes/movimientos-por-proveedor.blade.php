@@ -119,8 +119,32 @@
                         }
 
                         if (strpos($movimiento->tipo, 'efectivo')) {
-                            if ($movimiento->moneda_proveedor != 'Dólares') {
-                                $monto = $movimiento->monto * $movimiento->tasa;
+                            $moneda = (strpos($movimiento->tipo, 'dolares')) ? 'Dólares' : 'Bolívares';
+
+                            if ($moneda != $movimiento->moneda_proveedor) {
+                                if ($moneda == 'Dólares' && $movimiento->moneda_proveedor == 'Bolívares') {
+                                    $monto = $movimiento->monto * $movimiento->tasa;
+                                }
+
+                                if ($moneda == 'Dólares' && $movimiento->moneda_proveedor == 'Pesos') {
+                                    $monto = $movimiento->monto * $movimiento->tasa;
+                                }
+
+                                if ($moneda == 'Bolívares' && $movimiento->moneda_proveedor == 'Dólares') {
+                                    $monto = $movimiento->monto / $movimiento->tasa;
+                                }
+
+                                if ($moneda == 'Bolívares' && $movimiento->moneda_proveedor == 'Pesos') {
+                                    $monto = $movimiento->monto * $movimiento->tasa;
+                                }
+
+                                if ($moneda == 'Pesos' && $movimiento->moneda_proveedor == 'Bolívares') {
+                                    $monto = $movimiento->monto / $movimiento->tasa;
+                                }
+
+                                if ($moneda == 'Pesos' && $movimiento->moneda_proveedor == 'Dólares') {
+                                    $monto = $movimiento->monto / $movimiento->tasa;
+                                }
                             } else {
                                 $monto = $movimiento->monto;
                             }

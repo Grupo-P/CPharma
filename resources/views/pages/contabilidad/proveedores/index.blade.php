@@ -102,15 +102,14 @@
     <hr class="row align-items-start col-12">
     <table style="width:100%;" class="CP-stickyBar">
         <tr>
-            @if(Auth::user()->departamento != 'OPERACIONES')
-                <td style="width:10%;" align="center">
-                    <a href="{{ url('/proveedores/create') }}" role="button" class="btn btn-outline-info btn-sm"
-                    style="display: inline; text-align: left;">
-                    <i class="fa fa-plus"></i>
-                        Agregar
-                    </a>
-                </td>
-            @endif
+            <td style="width:10%;" align="center">
+                <a href="{{ url('/proveedores/create') }}" role="button" class="btn btn-outline-info btn-sm"
+                style="display: inline; text-align: left;">
+                <i class="fa fa-plus"></i>
+                    Agregar
+                </a>
+            </td>
+
             <td style="width:90%;">
                 <div class="input-group md-form form-sm form-1 pl-0 CP-stickyBar">
                     <div class="input-group-prepend">

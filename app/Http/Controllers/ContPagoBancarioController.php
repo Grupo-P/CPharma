@@ -300,7 +300,13 @@ class ContPagoBancarioController extends Controller
 
         $pdf = PDF::loadView('pages.contabilidad.bancarios.pdf', compact('pago'))->save($filename);
 
-        Mail::to('nisadelgado@gmail.com')->send(new NotificarPagoProveedor($pago, $filename));
+        $emails = explode(',', $pago->proveedor->correo_electronico);
+
+        foreach ($emails as $email) {
+            Mail::to($email)->send(new NotificarPagoProveedor($pago, $filename));
+        }
+
+        return redirect('/bancarios')->with('Send', ' Informacion');
     }
 
     public function validar(Request $request)

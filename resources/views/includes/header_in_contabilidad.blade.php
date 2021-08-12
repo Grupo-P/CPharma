@@ -42,7 +42,7 @@
       <i class="fas fa-user-cog"></i> {{ ucfirst(strtolower(Auth()->user()->departamento)) }}
     </button>
     <div class="dropdown-menu">
-      @if(Auth::user()->departamento == 'TECNOLOGIA' || Auth::user()->departamento == 'GERENCIA' || Auth::user()->departamento == 'OPERACIONES')
+      @if(Auth::user()->departamento == 'ADMINISTRACION' || Auth::user()->departamento == 'TECNOLOGIA' || Auth::user()->departamento == 'GERENCIA' || Auth::user()->departamento == 'OPERACIONES')
           <li class="nav-item">
             <a class="nav-link CP-Links-Menu" href="{{ url('/proveedores') }}">
               <span data-feather="home"></span>
@@ -62,7 +62,7 @@
           </li>
       @endif
 
-      @if(Auth::user()->departamento == 'TECNOLOGIA' || Auth::user()->departamento == 'GERENCIA' || Auth::user()->departamento == 'OPERACIONES')
+      @if(Auth::user()->departamento == 'CONTABILIDAD' || Auth::user()->departamento == 'ADMINISTRACION' || Auth::user()->departamento == 'TECNOLOGIA' || Auth::user()->departamento == 'GERENCIA' || Auth::user()->departamento == 'OPERACIONES')
           <li class="nav-item">
             <a class="nav-link CP-Links-Menu" href="{{ url('/deudas') }}">
               <span data-feather="home"></span>
@@ -82,7 +82,7 @@
           </li>
       @endif
 
-      @if(Auth::user()->departamento == 'TECNOLOGIA' || Auth::user()->departamento == 'GERENCIA' || Auth::user()->departamento == 'OPERACIONES')
+      @if(Auth::user()->departamento == 'CONTABILIDAD' || Auth::user()->departamento == 'ADMINISTRACION' || Auth::user()->departamento == 'TECNOLOGIA' || Auth::user()->departamento == 'GERENCIA' || Auth::user()->departamento == 'OPERACIONES')
           <li class="nav-item">
             <a class="nav-link CP-Links-Menu" href="{{ url('/reclamos') }}">
               <span data-feather="home"></span>
@@ -112,7 +112,7 @@
           </li>
       @endif
 
-      @if(Auth::user()->departamento == 'TECNOLOGIA' || Auth::user()->departamento == 'GERENCIA' || Auth::user()->departamento == 'CONTABILIDAD' || Auth::user()->departamento == 'ADMINISTRACION')
+      @if(Auth::user()->departamento == 'TESORERIA' || Auth::user()->departamento == 'TECNOLOGIA' || Auth::user()->departamento == 'GERENCIA' || Auth::user()->departamento == 'CONTABILIDAD' || Auth::user()->departamento == 'ADMINISTRACION')
         @if(Auth::user()->sede == 'GRUPO P, C.A' || Auth::user()->sede == 'FARMACIA TIERRA NEGRA, C.A.')
           <li class="nav-item">
             <a class="nav-link CP-Links-Menu" href="{{ url('/efectivoFTN') }}">

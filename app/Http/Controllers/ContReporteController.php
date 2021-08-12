@@ -217,7 +217,7 @@ class ContReporteController extends Controller
             $bolivaresFAU = DB::select("
                 SELECT
                     cont_pagos_bolivares_fau.created_at AS fecha,
-                    'Pago efectivo dolares FAU' AS tipo,
+                    'Pago efectivo bolivares FAU' AS tipo,
                     LPAD(cont_pagos_bolivares_fau.id, 5, '0') AS nro_movimiento,
                     cont_pagos_bolivares_fau.egresos AS monto,
                     cont_pagos_bolivares_fau.concepto AS comentario,
@@ -242,7 +242,7 @@ class ContReporteController extends Controller
             $bolivaresFLL = DB::select("
                 SELECT
                     cont_pagos_bolivares_fll.created_at AS fecha,
-                    'Pago efectivo dolares FAU' AS tipo,
+                    'Pago efectivo bolivares FAU' AS tipo,
                     LPAD(cont_pagos_bolivares_fll.id, 5, '0') AS nro_movimiento,
                     cont_pagos_bolivares_fll.egresos AS monto,
                     cont_pagos_bolivares_fll.concepto AS comentario,
@@ -271,7 +271,7 @@ class ContReporteController extends Controller
                     '-' AS nro_movimiento,
                     cont_pagos_bancarios.monto,
                     '-' AS comentario,
-                    IF(cont_pagos_bancarios.estatus = 'Conciliado', 'Si', 'No') AS conciliacion,
+                    IF(cont_pagos_bancarios.fecha_conciliado, 'Si', 'No') AS conciliacion,
                     cont_pagos_bancarios.operador AS operador,
                     IF(cont_pagos_bancarios.deleted_at, 'Desincorporado', 'Activo') AS estado,
                     (SELECT cont_bancos.moneda FROM cont_bancos WHERE cont_bancos.id = cont_pagos_bancarios.id_banco) AS moneda_banco,
@@ -407,7 +407,7 @@ class ContReporteController extends Controller
                     cont_deudas.monto,
                     cont_deudas.sede,
                     cont_deudas.usuario_registro AS operador,
-                    IF(cont_deudas.deleted_at, 'Activo', 'Desincorporado') AS estado
+                    IF(cont_deudas.deleted_at, 'Desincorporado', 'Activo') AS estado
                 FROM cont_deudas
                 WHERE
                     DATE(cont_deudas.created_at) >= '{$request->get('fechaInicio')}' AND DATE(cont_deudas.created_at) <= '{$request->get('fechaFin')}';
@@ -424,7 +424,7 @@ class ContReporteController extends Controller
                     cont_reclamos.monto,
                     cont_reclamos.sede,
                     cont_reclamos.usuario_registro AS operador,
-                    IF(cont_reclamos.deleted_at, 'Activo', 'Desincorporado') AS estado
+                    IF(cont_reclamos.deleted_at, 'Desincorporado', 'Activo') AS estado
                 FROM cont_reclamos
                 WHERE
                     DATE(cont_reclamos.created_at) >= '{$request->get('fechaInicio')}' AND DATE(cont_reclamos.created_at) <= '{$request->get('fechaFin')}';
