@@ -172,7 +172,7 @@ class ContPagoEfectivoFLLController extends Controller
     public function soporte($id)
     {
         $pago = ContPagoEfectivo::find($id);
-        return view('pages.contabilidadFLL.efectivo.soporte', compact('pago'));
+        return view('pages.contabilidad.efectivoFLL.soporte', compact('pago'));
     }
 
     /**
@@ -184,7 +184,7 @@ class ContPagoEfectivoFLLController extends Controller
     public function edit($id)
     {
         $pago = ContPagoEfectivo::find($id);
-        return view('pages.contabilidadFLL.efectivo.edit', compact('pago'));
+        return view('pages.contabilidad.efectivoFLL.edit', compact('pago'));
     }
 
     /**

@@ -200,7 +200,7 @@
                 <th scope="col" class="CP-sticky">RIF/CI del proveedor</th>
                 <th scope="col" class="CP-sticky">Fecha de registro</th>
                 <th scope="col" class="CP-sticky">Moneda</th>
-                <th scope="col" class="CP-sticky">Monto</th>
+                <th scope="col" class="CP-sticky">Monto sin IVA</th>
                 <th scope="col" class="CP-sticky">Días de crédito</th>
                 <th scope="col" class="CP-sticky">Documento soporte deuda</th>
                 <th scope="col" class="CP-sticky">Numero de documento</th>
@@ -212,9 +212,21 @@
         </thead>
         <tbody>
         @foreach($deudas as $deuda)
+            @php
+                $fechaInicio = date_create();
+                $fechaInicio = date_modify($fechaInicio, '-30day');
+                $fechaInicio = $fechaInicio->format('Y-m-d');
+
+                $fechaFinal = date('Y-m-d');
+
+                $url = '/reportes/movimientos-por-proveedor?id_proveedor=' . $deuda->id_proveedor . '&fechaInicio=' . $fechaInicio . '&fechaFin=' . $fechaFinal;
+            @endphp
+
             <tr class="{{ $deuda->deleted_at ? 'bg-warning' : '' }}">
               <th>{{$deuda->id}}</th>
-              <td>{{$deuda->proveedor->nombre_proveedor}}</td>
+              <td align="center" class="CP-barrido">
+                <a href="{{ $url }}" style="text-decoration: none; color: black;" target="_blank">{{ $deuda->proveedor->nombre_proveedor }}</a>
+              </td>
               <td>{{$deuda->proveedor->rif_ci}}</td>
               <td>{{$deuda->created_at}}</td>
               <td>{{$deuda->proveedor->moneda}}</td>

@@ -48,7 +48,7 @@
             </tr>
 
             <tr>
-                <th scope="row">Monto</th>
+                <th scope="row">Monto sin IVA</th>
                 <td>{{number_format($deuda->monto, 2, ',', '.')}}</td>
             </tr>
 

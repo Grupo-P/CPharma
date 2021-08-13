@@ -56,7 +56,23 @@
                         <td class="text-center">{{ $item->id }}</td>
                         <td class="text-center">{{ date_format(new DateTime($item->created_at), 'd/m/Y h:i A') }}</td>
                         <td class="text-center">{{ $item->tipo }}</td>
-                        <td class="text-center">{{ $item->proveedor }}</td>
+
+                        <td align="center" class="CP-barrido">
+                            @if(isset($item->proveedor))
+                                @php
+                                    $fechaInicio = date_create();
+                                    $fechaInicio = date_modify($fechaInicio, '-30day');
+                                    $fechaInicio = $fechaInicio->format('Y-m-d');
+
+                                    $fechaFinal = date('Y-m-d');
+
+                                    $url = '/reportes/movimientos-por-proveedor?id_proveedor=' . $item->id_proveedor . '&fechaInicio=' . $fechaInicio . '&fechaFin=' . $fechaFinal;
+                                @endphp
+
+                                <a href="{{ $url }}" style="text-decoration: none; color: black;" target="_blank">{{ $item->proveedor }}</a>
+                            @endif
+                        </td>
+
                         <td class="text-center">{{ $item->moneda_proveedor }}</td>
                         <td class="text-center">{{ number_format($item->monto, 2, ',', '.') }}</td>
                         <td class="text-center">{{ $item->sede }}</td>

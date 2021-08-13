@@ -111,7 +111,7 @@
                 <th scope="col" class="CP-sticky">RIF/CI del proveedor</th>
                 <th scope="col" class="CP-sticky">Fecha de registro</th>
                 <th scope="col" class="CP-sticky">Moneda</th>
-                <th scope="col" class="CP-sticky">Monto</th>
+                <th scope="col" class="CP-sticky">Monto sin IVA</th>
                 <th scope="col" class="CP-sticky">Documento soporte reclamo</th>
                 <th scope="col" class="CP-sticky">Numero de documento</th>
                 <th scope="col" class="CP-sticky">Creado por</th>
@@ -121,9 +121,21 @@
         </thead>
         <tbody>
         @foreach($reclamos as $reclamo)
+            @php
+                $fechaInicio = date_create();
+                $fechaInicio = date_modify($fechaInicio, '-30day');
+                $fechaInicio = $fechaInicio->format('Y-m-d');
+
+                $fechaFinal = date('Y-m-d');
+
+                $url = '/reportes/movimientos-por-proveedor?id_proveedor=' . $reclamo->id_proveedor . '&fechaInicio=' . $fechaInicio . '&fechaFin=' . $fechaFinal;
+            @endphp
+
             <tr class="{{ ($reclamo->deleted_at) ? 'bg-warning' : '' }}">
               <th>{{$reclamo->id}}</th>
-              <td>{{$reclamo->proveedor->nombre_proveedor}}</td>
+              <td align="center" class="CP-barrido">
+                  <a href="{{ $url }}" style="text-decoration: none; color: black;" target="_blank">{{ $reclamo->proveedor->nombre_proveedor }}</a>
+              </td>
               <td>{{$reclamo->proveedor->rif_ci}}</td>
               <td>{{$reclamo->created_at}}</td>
               <td>{{$reclamo->proveedor->moneda}}</td>

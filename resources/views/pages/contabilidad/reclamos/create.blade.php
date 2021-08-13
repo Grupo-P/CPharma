@@ -63,7 +63,7 @@
                     </tr>
 
                     <tr>
-                        <th scope="row"><label for="monto">Monto*</label></th>
+                        <th scope="row"><label for="monto">Monto sin IVA *</label></th>
                         <td>
                             <input type="number" required class="form-control" name="monto" step="0.01">
                         </td>
@@ -173,9 +173,6 @@
                             $('[name=numero_documento]').focus();
                             alert('Numero de soporte ya existe con este proveedor');
                         }
-                    },
-                    error: function (error) {
-                        $('body').html(error.responseText);
                     }
                 })
             });

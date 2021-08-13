@@ -64,7 +64,7 @@
                     </tr>
 
                     <tr>
-                        <th scope="row"><label for="monto">Monto *</label></th>
+                        <th scope="row"><label for="monto">Monto sin IVA *</label></th>
                         <td>
                             <input type="text" readonly value="{{ number_format($reclamo->monto, 2, ',', '.') }}" step="0.01" required class="form-control" name="monto">
                         </td>
@@ -175,9 +175,6 @@
                             $('[name=numero_documento]').focus();
                             alert('Numero de soporte ya existe con este proveedor');
                         }
-                    },
-                    error: function (error) {
-                        $('body').html(error.responseText);
                     }
                 })
             });

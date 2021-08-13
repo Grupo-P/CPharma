@@ -224,7 +224,7 @@ class ContDeudasController extends Controller
                 SELECT
                     cont_proveedores.id AS id_proveedor,
                     cont_proveedores.nombre_proveedor AS proveedor,
-                    FORMAT(cont_proveedores.saldo, 2, 'de_DE') AS saldo,
+                    FORMAT(cont_proveedores.saldo, 2, 'en_US') AS saldo,
                     cont_proveedores.saldo AS saldoNoFormateado
                 FROM
                     cont_proveedores
@@ -238,7 +238,7 @@ class ContDeudasController extends Controller
                 SELECT
                     cont_proveedores.id AS id_proveedor,
                     cont_proveedores.nombre_proveedor AS proveedor,
-                    FORMAT(cont_proveedores.saldo, 2, 'de_DE') AS saldo,
+                    FORMAT(cont_proveedores.saldo, 2, 'en_US') AS saldo,
                     cont_proveedores.saldo AS saldoNoFormateado
                 FROM
                     cont_proveedores
@@ -252,7 +252,7 @@ class ContDeudasController extends Controller
                 SELECT
                     cont_proveedores.id AS id_proveedor,
                     cont_proveedores.nombre_proveedor AS proveedor,
-                    FORMAT(cont_proveedores.saldo, 2, 'de_DE') AS saldo,
+                    FORMAT(cont_proveedores.saldo, 2, 'en_US') AS saldo,
                     cont_proveedores.saldo AS saldoNoFormateado
                 FROM
                     cont_proveedores
@@ -266,7 +266,7 @@ class ContDeudasController extends Controller
                 SELECT
                     cont_proveedores.id AS id_proveedor,
                     cont_proveedores.nombre_proveedor AS proveedor,
-                    FORMAT(cont_proveedores.saldo, 2, 'de_DE') AS saldo,
+                    FORMAT(cont_proveedores.saldo, 2, 'en_US') AS saldo,
                     cont_proveedores.saldo AS saldoNoFormateado
                 FROM
                     cont_proveedores

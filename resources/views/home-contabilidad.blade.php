@@ -27,7 +27,7 @@
                     @if($deuda)
                         <p class="text-white">
                             Proveedor: {{ $deuda->proveedor->nombre_proveedor }}</br>
-                            Monto: {{ $deuda->signo_moneda }} {{ number_format($deuda->monto, 2) }}</br>
+                            Monto sin IVA: {{ $deuda->signo_moneda }} {{ number_format($deuda->monto, 2, ',', '.') }}</br>
                             Número de documento: {{ $deuda->numero_documento }}<br>
                             Fecha y hora: {{ $deuda->created_at->format('d/m/Y h:i A') }}</br>
                             Creado por: {{ $deuda->usuario_registro }}
@@ -52,7 +52,7 @@
                     @if($reclamo)
                         <p class="text-white">
                             Proveedor: {{ $reclamo->proveedor->nombre_proveedor }}</br>
-                            Monto: {{ $reclamo->signo_moneda }} {{ number_format($reclamo->monto, 2) }}</br>
+                            Monto sin IVA: {{ $reclamo->signo_moneda }} {{ number_format($reclamo->monto, 2) }}</br>
                             Número de documento: {{ $reclamo->numero_documento }}<br>
                             Fecha y hora: {{ $reclamo->created_at->format('d/m/Y h:i A') }}</br>
                             Creado por: {{ $reclamo->usuario_registro }}
@@ -327,7 +327,7 @@
 
                             <br>
 
-                            Operador: {{ ($pago->user_up) ? $pago->user_up : $pago->operador }}<br>
+                            Operador: {{ ($pago->user) ? $pago->user : $pago->operador }}<br>
 
                             Fecha y hora: {{ $pago->created_at->format('d/m/Y h:m A') }}</br>
                         </p>
@@ -348,7 +348,7 @@
                     @if(isset($deuda))
                         <p class="text-white">
                             Proveedor: {{ $deuda->proveedor->nombre_proveedor }}</br>
-                            Monto: {{ $deuda->signo_moneda }} {{ number_format($deuda->monto, 2) }}</br>
+                            Monto sin IVA: {{ $deuda->signo_moneda }} {{ number_format($deuda->monto, 2, ',', '.') }}</br>
                             Número de documento: {{ $deuda->numero_documento }}<br>
                             Fecha y hora: {{ $deuda->created_at->format('d/m/Y h:i A') }}</br>
                             Creado por: {{ $deuda->usuario_registro }}
@@ -435,7 +435,7 @@
 
                             <br>
 
-                            Operador: {{ ($pago->user_up) ? $pago->user_up : $pago->operador }}<br>
+                            Operador: {{ ($pago->user) ? $pago->user : $pago->operador }}<br>
 
                             Fecha y hora: {{ $pago->created_at->format('d/m/Y h:m A') }}</br>
                         </p>
@@ -523,7 +523,7 @@
                     @if(isset($deuda))
                         <p class="text-white">
                             Proveedor: {{ $deuda->proveedor->nombre_proveedor }}</br>
-                            Monto: {{ $deuda->signo_moneda }} {{ number_format($deuda->monto, 2) }}</br>
+                            Monto sin IVA: {{ $deuda->signo_moneda }} {{ number_format($deuda->monto, 2, ',', '.') }}</br>
                             Número de documento: {{ $deuda->numero_documento }}<br>
                             Fecha y hora: {{ $deuda->created_at->format('d/m/Y h:i A') }}</br>
                             Creado por: {{ $deuda->usuario_registro }}
@@ -704,7 +704,7 @@
 
                             <br>
 
-                            Operador: {{ ($pago->user_up) ? $pago->user_up : $pago->operador }}<br>
+                            Operador: {{ ($pago->user) ? $pago->user : $pago->operador }}<br>
 
                             Fecha y hora: {{ $pago->created_at->format('d/m/Y h:m A') }}</br>
                         </p>

@@ -196,7 +196,23 @@
         <td>{{ ($pago->tasa) ? number_format($pago->tasa,2,',','.') : '' }}</td>
         <td>{{date("d-m-Y h:i:s a", strtotime($pago->created_at))}}</td>
         <td>{{isset($pago->cuenta->nombre) ? $pago->cuenta->nombre : ''}}</td>
-        <td>{{isset($pago->proveedor->nombre_proveedor) ? $pago->proveedor->nombre_proveedor : ''}}</td>
+
+        <td align="center" class="CP-barrido">
+            @if(isset($pago->proveedor))
+                @php
+                    $fechaInicio = date_create();
+                    $fechaInicio = date_modify($fechaInicio, '-30day');
+                    $fechaInicio = $fechaInicio->format('Y-m-d');
+
+                    $fechaFinal = date('Y-m-d');
+
+                    $url = '/reportes/movimientos-por-proveedor?id_proveedor=' . $pago->id_proveedor . '&fechaInicio=' . $fechaInicio . '&fechaFin=' . $fechaFinal;
+                @endphp
+
+                <a href="{{ $url }}" style="text-decoration: none; color: black;" target="_blank">{{ $pago->proveedor->nombre_proveedor }}</a>
+            @endif
+        </td>
+
         <td>{{$pago->user}}</td>
         <td>{{$pago->autorizado_por}}</td>
         <td style="width:140px;">

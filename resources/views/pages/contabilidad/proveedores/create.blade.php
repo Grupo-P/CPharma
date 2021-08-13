@@ -128,7 +128,7 @@
 
             <p class="text-danger">* Campos obligatorios</p>
 
-            <button type="button" class="btn btn-outline-success btn-md">Guardar</button>
+            <button type="button" class="submit btn btn-outline-success btn-md">Guardar</button>
         </fieldset>
     </form>
 
@@ -138,7 +138,7 @@
         });
         $('#exampleModalCenter').modal('show');
 
-        $('[type=button]').click(function () {
+        $('.submit').click(function () {
             prefix = $('[name=prefix_rif_ci]').val();
             rif = $('[name=rif_ci]').val();
 
@@ -162,6 +162,8 @@
                         }
                     }
                 });
+            } else {
+                alert('El campo RIF es obligatorio');
             }
         });
     </script>

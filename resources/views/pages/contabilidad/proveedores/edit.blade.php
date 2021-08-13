@@ -65,7 +65,7 @@
                         <th scope="row"><label for="rif_ci">RIF/Cédula del proveedor *</label></th>
                         <td>
                             <div class="input-group">
-                                <select name="prefix_rif_ci" id="" class="form-control">
+                                <select name="prefix_rif_ci" id="" required class="form-control">
                                     <option {{ (substr($proveedor->rif_ci, 0, 1) == 'V') ? 'selected' : '' }} value="V">V</option>
                                     <option {{ (substr($proveedor->rif_ci, 0, 1) == 'E') ? 'selected' : '' }} value="E">E</option>
                                     <option {{ (substr($proveedor->rif_ci, 0, 1) == 'J') ? 'selected' : '' }} value="J">J</option>
@@ -130,7 +130,7 @@
 
             <p class="text-danger">* Campos obligatorios</p>
 
-            <input type="button" class="btn btn-outline-success btn-md" value="Guardar">
+            <input type="button" class="submit btn btn-outline-success btn-md" value="Guardar">
         </fieldset>
     </form>
 
@@ -141,7 +141,7 @@
 
         $('#exampleModalCenter').modal('show');
 
-        $('[type=button]').click(function () {
+        $('.submit').click(function () {
             prefix = $('[name=prefix_rif_ci]').val();
             rif = $('[name=rif_ci]').val();
 
@@ -166,6 +166,8 @@
                         }
                     }
                 });
+            } else {
+                alert('El campo RIF es obligatorio');
             }
         });
     </script>

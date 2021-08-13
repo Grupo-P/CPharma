@@ -46,7 +46,23 @@
                     <tr>
                         <td class="text-center">{{ $loop->iteration }}</td>
                         <td class="text-center">{{ date_format($pago->created_at, 'd/m/Y h:i A') }}</td>
-                        <td class="text-center">{{ $pago->proveedor->nombre_proveedor }}</td>
+
+                        <td align="center" class="CP-barrido">
+                            @if(isset($pago->proveedor))
+                                @php
+                                    $fechaInicio = date_create();
+                                    $fechaInicio = date_modify($fechaInicio, '-30day');
+                                    $fechaInicio = $fechaInicio->format('Y-m-d');
+
+                                    $fechaFinal = date('Y-m-d');
+
+                                    $url = '/reportes/movimientos-por-proveedor?id_proveedor=' . $pago->id_proveedor . '&fechaInicio=' . $fechaInicio . '&fechaFin=' . $fechaFinal;
+                                @endphp
+
+                                <a href="{{ $url }}" style="text-decoration: none; color: black;" target="_blank">{{ $pago->proveedor->nombre_proveedor }}</a>
+                            @endif
+                        </td>
+
                         <td class="text-center">{{ $pago->monto ? number_format($pago->monto, 2, ',', '.') : number_format($pago->egresos, 2, ',', '.') }}</td>
                         <td class="text-center">{{ $pago->comentario }}</td>
                         <td class="text-center">{{ $pago->fecha_conciliado ? 'Si' : 'No' }}</td>

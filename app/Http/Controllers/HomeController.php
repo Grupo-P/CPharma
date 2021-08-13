@@ -34,7 +34,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-        //error_reporting(0);
+        error_reporting(0);
 
         if ($_SERVER['SERVER_NAME'] == 'cpharmagpde.com' || $_SERVER['SERVER_NAME'] == 'cpharmagp.com') {
             if (Auth::user()->departamento == 'OPERACIONES') {
@@ -74,7 +74,11 @@ class HomeController extends Controller
                 $fllBs = ContPagoBolivaresFLL::orderBy('id', 'DESC')->whereNull('ingresos')->first();
                 $bancario = ContPagoBancario::orderBy('id', 'DESC')->whereNull('deleted_at')->first();
 
-                $pago = $ftnDs;
+                $pago = null;
+
+                if (isset($ftnDs)) {
+                    $pago = $ftnDs;
+                }
 
                 if (isset($fauDs->created_at) && $pago->created_at < $fauDs->created_at) {
                     $pago = $fauDs;
@@ -96,8 +100,10 @@ class HomeController extends Controller
                     $pago = $fllBs;
                 }
 
-                if (isset($bancario->created_at) && $pago->created_at < $bancario->created_at) {
-                    $pago = $bancario;
+                if (isset($bancario)) {
+                    if (isset($bancario->created_at) && $pago->created_at < $bancario->created_at) {
+                        $pago = $bancario;
+                    }
                 }
 
                 $deuda = ContDeuda::orderByDesc('id')->first();

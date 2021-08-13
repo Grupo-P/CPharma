@@ -84,7 +84,9 @@
                 $pago = $bancario;
             }
 
-            return date_create($pago)->format('d/m/Y');
+            if ($pago) {
+                return date_create($pago)->format('Y-m-d');
+            }
         }
 
         function dias_ultimo_pago($id_proveedor)
@@ -187,7 +189,7 @@
 
             if ($fecha_deuda) {
                 $fecha_deuda = date_create($fecha_deuda);
-                $fecha_deuda = date_format($fecha_deuda, 'd/m/Y');
+                $fecha_deuda = date_format($fecha_deuda, 'Y-m-d');
                 return $fecha_deuda;
             }
         }
@@ -227,10 +229,23 @@
         Pizarra de deudas {{ (!isset($_GET['tipo']) || $_GET['tipo'] == 'dolares') ? 'en dólares' : 'en bolívares' }}
     </h1>
 
-    <div class="text-center">
-        <a href="?tipo=bolivares" class="btn btn-outline-info btn-sm">Proveedores en bolívares</a>
-        <a href="?tipo=dolares" class="btn btn-outline-success btn-sm">Proveedores en dólares</a>
-    </div>
+    <table style="width:100%;" class="CP-stickyBar">
+        <tr>
+            <td style="width:30%;" align="center">
+                <a href="?tipo=bolivares" class="btn btn-outline-info btn-sm">Proveedores en bolívares</a>
+                <a href="?tipo=dolares" class="btn btn-outline-success btn-sm">Proveedores en dólares</a>
+            </td>
+            <td style="width:70%;">
+                <div class="input-group md-form form-sm form-1 pl-0 CP-stickyBar">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text purple lighten-3" id="basic-text1"><i class="fas fa-search text-white"
+                    aria-hidden="true"></i></span>
+                    </div>
+                <input class="form-control my-0 py-1 CP-stickyBar" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterAllTables()" autofocus="autofocus">
+                </div>
+            </td>
+        </tr>
+    </table>
 
     <hr class="row align-items-start col-12">
 
@@ -289,7 +304,7 @@
 
     <h6 align="center">Proveedores con saldo negativo</h6>
 
-    <table class="table table-striped table-borderless col-12 sortable" id="myTable">
+    <table class="table table-striped table-borderless col-12 sortable" id="myTable2">
         <thead class="thead-dark">
             <tr>
                 <th scope="col" class="CP-sticky">#</th>

@@ -64,7 +64,7 @@
                     </tr>
 
                     <tr>
-                        <th scope="row"><label for="monto">Monto *</label></th>
+                        <th scope="row"><label for="monto">Monto sin IVA *</label></th>
                         <td>
                             <input type="text" value="{{ number_format($deuda->monto, 2, ',', '.') }}" readonly class="form-control" name="monto" step="0.01" min="1">
                         </td>

@@ -145,9 +145,21 @@
         </thead>
         <tbody>
         @foreach($pagos as $deuda)
+            @php
+                $fechaInicio = date_create();
+                $fechaInicio = date_modify($fechaInicio, '-30day');
+                $fechaInicio = $fechaInicio->format('Y-m-d');
+
+                $fechaFinal = date('Y-m-d');
+
+                $url = '/reportes/movimientos-por-proveedor?id_proveedor=' . $deuda->id_proveedor . '&fechaInicio=' . $fechaInicio . '&fechaFin=' . $fechaFinal;
+            @endphp
+
             <tr class="{{ ($deuda->estatus == 'Reversado') ? 'bg-warning' : '' }}">
               <th>{{$deuda->id}}</th>
-              <td>{{$deuda->proveedor->nombre_proveedor}}</td>
+              <td align="center" class="CP-barrido">
+                  <a href="{{ $url }}" style="text-decoration: none; color: black;" target="_blank">{{ $deuda->proveedor->nombre_proveedor }}</a>
+              </td>
               <td>{{$deuda->proveedor->rif_ci}}</td>
               <td>{{$deuda->created_at}}</td>
               <td>{{number_format($deuda->monto, 2, ',', '.')}}</td>

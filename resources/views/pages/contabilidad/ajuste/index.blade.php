@@ -115,9 +115,21 @@
         </thead>
         <tbody>
         @foreach($ajustes as $ajuste)
+            @php
+                $fechaInicio = date_create();
+                $fechaInicio = date_modify($fechaInicio, '-30day');
+                $fechaInicio = $fechaInicio->format('Y-m-d');
+
+                $fechaFinal = date('Y-m-d');
+
+                $url = '/reportes/movimientos-por-proveedor?id_proveedor=' . $ajuste->id_proveedor . '&fechaInicio=' . $fechaInicio . '&fechaFin=' . $fechaFinal;
+            @endphp
+
             <tr class="{{ ($ajuste->reverso) ? 'bg-warning' : '' }}">
               <th>{{$ajuste->id}}</th>
-              <td>{{$ajuste->proveedor->nombre_proveedor}}</td>
+              <td align="center" class="CP-barrido">
+                  <a href="{{ $url }}" style="text-decoration: none; color: black;" target="_blank">{{ $ajuste->proveedor->nombre_proveedor }}</a>
+              </td>
               <td>{{$ajuste->proveedor->rif_ci}}</td>
               <td>{{$ajuste->created_at}}</td>
               <td>{{number_format($ajuste->monto, 2, ',', '.')}}</td>
