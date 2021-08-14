@@ -74,10 +74,13 @@
                 <h2 class="card-title">
                     <span class="card-text text-white">
                         <i class="fas fa-balance-scale"></i>
-                        Saldo disponible FTN: ${{ number_format($saldoDolaresFTN, 2, ',', '.') }}
+                        Saldo disponible FTN: ${{ number_format($dolaresFTN->saldo_actual, 2, ',', '.') }}
                     </span>
                 </h2>
-                <p class="card-text text-white"></p>
+                <p class="card-text text-white">
+                    Hora y fecha actual: {{ date_create()->format('d/m/Y h:i A') }} <br>
+                    Último movimiento registrado: {{ ($dolaresFTN) ? $dolaresFTN->created_at->format('d/m/Y h:i A') : 'No hay movimientos' }}
+                </p>
             </div>
             <div class="card-footer bg-transparent border-danger text-right">
                 <a href="/efectivoFTN" class="btn btn-outline-danger btn-sm">Visualizar</a>
@@ -89,10 +92,13 @@
                 <h2 class="card-title">
                     <span class="card-text text-white">
                         <i class="fas fa-balance-scale"></i>
-                        Saldo disponible FAU: ${{ number_format($saldoDolaresFAU, 2, ',', '.') }}
+                        Saldo disponible FAU: ${{ number_format($dolaresFAU->saldo_actual, 2, ',', '.') }}
                     </span>
                 </h2>
-                <p class="card-text text-white"></p>
+                <p class="card-text text-white">
+                    Hora y fecha actual: {{ date_create()->format('d/m/Y h:i A') }} <br>
+                    Último movimiento registrado: {{ ($dolaresFAU) ? $dolaresFAU->created_at->format('d/m/Y h:i A') : 'No hay movimientos' }}
+                </p>
             </div>
             <div class="card-footer bg-transparent border-success text-right">
                 <a href="/efectivoFAU" class="btn btn-outline-success btn-sm">Visualizar</a>
@@ -104,10 +110,13 @@
                 <h2 class="card-title">
                     <span class="card-text text-white">
                         <i class="fas fa-balance-scale"></i>
-                        Saldo disponible FLL: ${{ number_format($saldoDolaresFLL, 2, ',', '.') }}
+                        Saldo disponible FLL: ${{ number_format($dolaresFLL->saldo_actual, 2, ',', '.') }}
                     </span>
                 </h2>
-                <p class="card-text text-white"></p>
+                <p class="card-text text-white">
+                    Hora y fecha actual: {{ date_create()->format('d/m/Y h:i A') }} <br>
+                    Último movimiento registrado: {{ ($dolaresFLL) ? $dolaresFLL->created_at->format('d/m/Y h:i A') : 'No hay movimientos' }}
+                </p>
             </div>
             <div class="card-footer bg-transparent border-info text-right">
                 <a href="/efectivoFLL" class="btn btn-outline-info btn-sm">Visualizar</a>
@@ -121,10 +130,13 @@
                 <h2 class="card-title">
                     <span class="card-text text-white">
                         <i class="fas fa-balance-scale"></i>
-                        Saldo disponible FTN: Bs.S. {{ number_format($saldoBolivaresFTN, 2, ',', '.') }}
+                        Saldo disponible FTN: Bs.S. {{ number_format($bolivaresFTN->saldo_actual, 2, ',', '.') }}
                     </span>
                 </h2>
-                <p class="card-text text-white"></p>
+                <p class="card-text text-white">
+                    Hora y fecha actual: {{ date_create()->format('d/m/Y h:i A') }} <br>
+                    Último movimiento registrado: {{ ($bolivaresFTN) ? $bolivaresFTN->created_at->format('d/m/Y h:i A') : 'No hay movimientos' }}
+                </p>
             </div>
             <div class="card-footer bg-transparent border-warning text-right">
                 <a href="/bolivaresFTN" class="btn btn-outline-warning btn-sm">Visualizar</a>
@@ -136,10 +148,13 @@
                 <h2 class="card-title">
                     <span class="card-text text-white">
                         <i class="fas fa-balance-scale"></i>
-                        Saldo disponible FAU: Bs.S. {{ number_format($saldoBolivaresFAU, 2, ',', '.') }}
+                        Saldo disponible FAU: Bs.S. {{ number_format($bolivaresFAU->saldo_actual, 2, ',', '.') }}
                     </span>
                 </h2>
-                <p class="card-text text-white"></p>
+                <p class="card-text text-white">
+                    Hora y fecha actual: {{ date_create()->format('d/m/Y h:i A') }} <br>
+                    Último movimiento registrado: {{ ($bolivaresFAU) ? $bolivaresFAU->created_at->format('d/m/Y h:i A') : 'No hay movimientos' }}
+                </p>
             </div>
             <div class="card-footer bg-transparent border-secondary text-right">
                 <a href="/bolivaresFAU" class="btn btn-outline-secondary btn-sm">Visualizar</a>
@@ -151,10 +166,13 @@
                 <h2 class="card-title">
                     <span class="card-text text-white">
                         <i class="fas fa-balance-scale"></i>
-                        Saldo disponible FLL: Bs.S. {{ number_format($saldoBolivaresFLL, 2, ',', '.') }}
+                        Saldo disponible FLL: Bs.S. {{ number_format($bolivaresFLL->saldo_actual, 2, ',', '.') }}
                     </span>
                 </h2>
-                <p class="card-text text-white"></p>
+                <p class="card-text text-white">
+                    Hora y fecha actual: {{ date_create()->format('d/m/Y h:i A') }} <br>
+                    Último movimiento registrado: {{ ($bolivaresFLL) ? $bolivaresFLL->created_at->format('d/m/Y h:i A') : 'No hay movimientos' }}
+                </p>
             </div>
             <div class="card-footer bg-transparent border-dark text-right">
                 <a href="/bolivaresFLL" class="btn btn-outline-dark btn-sm">Visualizar</a>
@@ -168,10 +186,13 @@
                 <h2 class="card-title">
                     <span class="card-text text-white">
                         <i class="fas fa-balance-scale"></i>
-                        Diferido en $ FTN: {{ number_format($diferidoDolaresFTN, 2, ',', '.') }}
+                        Diferido en $ FTN: {{ number_format($diferidoDolaresFTN->diferido_actual, 2, ',', '.') }}
                     </span>
                 </h2>
-                <p class="card-text text-white"></p>
+                <p class="card-text text-white">
+                    Hora y fecha actual: {{ date_create()->format('d/m/Y h:i A') }} <br>
+                    Último movimiento registrado: {{ ($diferidoDolaresFTN) ? $diferidoDolaresFTN->created_at->format('d/m/Y h:i A') : 'No hay movimientos' }}
+                </p>
             </div>
             <div class="card-footer bg-transparent border-danger text-right">
                 <a href="/contabilidad/diferidosFTN" class="btn btn-outline-danger btn-sm">Visualizar</a>
@@ -183,10 +204,13 @@
                 <h2 class="card-title">
                     <span class="card-text text-white">
                         <i class="fas fa-balance-scale"></i>
-                        Diferido en $ FAU: {{ number_format($diferidoDolaresFAU, 2, ',', '.') }}
+                        Diferido en $ FAU: {{ number_format($diferidoDolaresFAU->diferido_actual, 2, ',', '.') }}
                     </span>
                 </h2>
-                <p class="card-text text-white"></p>
+                <p class="card-text text-white">
+                    Hora y fecha actual: {{ date_create()->format('d/m/Y h:i A') }} <br>
+                    Último movimiento registrado: {{ ($diferidoDolaresFAU) ? $diferidoDolaresFAU->created_at->format('d/m/Y h:i A') : 'No hay movimientos' }}
+                </p>
             </div>
             <div class="card-footer bg-transparent border-success text-right">
                 <a href="/contabilidad/diferidosFAU" class="btn btn-outline-success btn-sm">Visualizar</a>
@@ -198,10 +222,13 @@
                 <h2 class="card-title">
                     <span class="card-text text-white">
                         <i class="fas fa-balance-scale"></i>
-                        Diferido en $ FLL: {{ number_format($diferidoDolaresFLL, 2, ',', '.') }}
+                        Diferido en $ FLL: {{ number_format($diferidoDolaresFLL->diferido_actual, 2, ',', '.') }}
                     </span>
                 </h2>
-                <p class="card-text text-white"></p>
+                <p class="card-text text-white">
+                    Hora y fecha actual: {{ date_create()->format('d/m/Y h:i A') }} <br>
+                    Último movimiento registrado: {{ ($diferidoDolaresFLL) ? $diferidoDolaresFLL->created_at->format('d/m/Y h:i A') : 'No hay movimientos' }}
+                </p>
             </div>
             <div class="card-footer bg-transparent border-info text-right">
                 <a href="/contabilidad/diferidosFLL" class="btn btn-outline-info btn-sm">Visualizar</a>
@@ -215,10 +242,13 @@
                 <h2 class="card-title">
                     <span class="card-text text-white">
                         <i class="fas fa-balance-scale"></i>
-                        Diferido en Bs.S. FTN: {{ number_format($diferidoBolivaresFTN, 2, ',', '.') }}
+                        Diferido en Bs.S. FTN: {{ number_format($diferidoBolivaresFTN->diferido_actual, 2, ',', '.') }}
                     </span>
                 </h2>
-                <p class="card-text text-white"></p>
+                <p class="card-text text-white">
+                    Hora y fecha actual: {{ date_create()->format('d/m/Y h:i A') }} <br>
+                    Último movimiento registrado: {{ ($diferidoBolivaresFTN) ? $diferidoBolivaresFTN->created_at->format('d/m/Y h:i A') : 'No hay movimientos' }}
+                </p>
             </div>
             <div class="card-footer bg-transparent border-warning text-right">
                 <a href="/contabilidad/diferidosBolivaresFTN" class="btn btn-outline-warning btn-sm">Visualizar</a>
@@ -230,10 +260,13 @@
                 <h2 class="card-title">
                     <span class="card-text text-white">
                         <i class="fas fa-balance-scale"></i>
-                        Diferido en Bs.S. FAU: {{ number_format($diferidoBolivaresFAU, 2, ',', '.') }}
+                        Diferido en Bs.S. FAU: {{ number_format($diferidoBolivaresFAU->diferido_actual, 2, ',', '.') }}
                     </span>
                 </h2>
-                <p class="card-text text-white"></p>
+                <p class="card-text text-white">
+                    Hora y fecha actual: {{ date_create()->format('d/m/Y h:i A') }} <br>
+                    Último movimiento registrado: {{ ($diferidoBolivaresFAU) ? $diferidoBolivaresFAU->created_at->format('d/m/Y h:i A') : 'No hay movimientos' }}
+                </p>
             </div>
             <div class="card-footer bg-transparent border-secondary text-right">
                 <a href="/contabilidad/diferidosBolivaresFAU" class="btn btn-outline-secondary btn-sm">Visualizar</a>
@@ -245,10 +278,13 @@
                 <h2 class="card-title">
                     <span class="card-text text-white">
                         <i class="fas fa-balance-scale"></i>
-                        Diferido en Bs.S. FLL: {{ number_format($diferidoBolivaresFLL, 2, ',', '.') }}
+                        Diferido en Bs.S. FLL: {{ number_format($diferidoBolivaresFLL->diferido_actual, 2, ',', '.') }}
                     </span>
                 </h2>
-                <p class="card-text text-white"></p>
+                <p class="card-text text-white">
+                    Hora y fecha actual: {{ date_create()->format('d/m/Y h:i A') }} <br>
+                    Último movimiento registrado: {{ ($diferidoBolivaresFLL) ? $diferidoBolivaresFLL->created_at->format('d/m/Y h:i A') : 'No hay movimientos' }}
+                </p>
             </div>
             <div class="card-footer bg-transparent border-dark text-right">
                 <a href="/contabilidad/diferidosBolivaresFLL" class="btn btn-outline-dark btn-sm">Visualizar</a>
@@ -329,7 +365,7 @@
 
                             Operador: {{ ($pago->user) ? $pago->user : $pago->operador }}<br>
 
-                            Fecha y hora: {{ $pago->created_at->format('d/m/Y h:m A') }}</br>
+                            Fecha y hora: {{ $pago->created_at->format('d/m/Y h:i A') }}</br>
                         </p>
                     @endif
                 </p>
@@ -437,7 +473,7 @@
 
                             Operador: {{ ($pago->user) ? $pago->user : $pago->operador }}<br>
 
-                            Fecha y hora: {{ $pago->created_at->format('d/m/Y h:m A') }}</br>
+                            Fecha y hora: {{ $pago->created_at->format('d/m/Y h:i A') }}</br>
                         </p>
                     @endif
                 </p>
@@ -505,7 +541,7 @@
                         <br>
 
                         Conciliado por: {{ $conciliacion->usuario_conciliado }}<br>
-                        Fecha y hora: {{ date_create($conciliacion->fecha_conciliado)->format('d/m/Y h:i A') }}</br>
+                        Fecha y hora: {{ ($conciliacion) ? date_create($conciliacion->fecha_conciliado)->format('d/m/Y h:i A') : '' }}</br>
                     </p>
                 </p>
             </div>
@@ -545,10 +581,13 @@
                 <h2 class="card-title">
                     <span class="card-text text-white">
                         <i class="fas fa-balance-scale"></i>
-                        Saldo disponible: ${{ number_format($saldoDolares, 2, ',', '.') }}
+                        Saldo disponible: ${{ number_format($dolares->saldo_actual, 2, ',', '.') }}
                     </span>
                 </h2>
-                <p class="card-text text-white"></p>
+                <p class="card-text text-white">
+                    Hora y fecha actual: {{ date_create()->format('d/m/Y h:i A') }} <br>
+                    Último movimiento registrado: {{ ($dolares) ? $dolares->created_at->format('d/m/Y h:i A') : 'No hay movimientos' }}
+                </p>
             </div>
             <div class="card-footer bg-transparent border-danger text-right">
                 <a href="{{ '/efectivo' . $sede }}" class="btn btn-outline-danger btn-sm">Visualizar</a>
@@ -560,10 +599,13 @@
                 <h2 class="card-title">
                     <span class="card-text text-white">
                         <i class="fas fa-balance-scale"></i>
-                        Saldo disponible: Bs.S. {{ number_format($saldoBolivares, 2, ',', '.') }}
+                        Saldo disponible: Bs.S. {{ number_format($bolivares->saldo_actual, 2, ',', '.') }}
                     </span>
                 </h2>
-                <p class="card-text text-white"></p>
+                <p class="card-text text-white">
+                    Hora y fecha actual: {{ date_create()->format('d/m/Y h:i A') }} <br>
+                    Último movimiento registrado: {{ ($bolivares) ? $bolivares->created_at->format('d/m/Y h:i A') : 'No hay movimientos' }}
+                </p>
             </div>
             <div class="card-footer bg-transparent border-success text-right">
                 <a href="{{ '/bolivares' . $sede }}" class="btn btn-outline-success btn-sm">Visualizar</a>
@@ -577,10 +619,13 @@
                 <h2 class="card-title">
                     <span class="card-text text-white">
                         <i class="fas fa-balance-scale"></i>
-                        Diferido: ${{ number_format($diferidoDolares, 2, ',', '.') }}
+                        Diferido: ${{ number_format($diferidoDolares->diferido_actual, 2, ',', '.') }}
                     </span>
                 </h2>
-                <p class="card-text text-white"></p>
+                <p class="card-text text-white">
+                    Hora y fecha actual: {{ date_create()->format('d/m/Y h:i A') }} <br>
+                    Último movimiento registrado: {{ ($diferidoDolares) ? $diferidoDolares->created_at->format('d/m/Y h:i A') : 'No hay movimientos' }}
+                </p>
             </div>
             <div class="card-footer bg-transparent border-info text-right">
                 <a href="{{ '/contabilidad/diferidos' . $sede }}" class="btn btn-outline-info btn-sm">Visualizar</a>
@@ -592,10 +637,13 @@
                 <h2 class="card-title">
                     <span class="card-text text-white">
                         <i class="fas fa-balance-scale"></i>
-                        Diferido: Bs.S. {{ number_format($diferidoBolivares, 2, ',', '.') }}
+                        Diferido: Bs.S. {{ number_format($diferidoBolivares->diferido_actual, 2, ',', '.') }}
                     </span>
                 </h2>
-                <p class="card-text text-white"></p>
+                <p class="card-text text-white">
+                    Hora y fecha actual: {{ date_create()->format('d/m/Y h:i A') }} <br>
+                    Último movimiento registrado: {{ ($diferidoBolivares) ? $diferidoBolivares->created_at->format('d/m/Y h:i A') : 'No hay movimientos' }}
+                </p>
             </div>
             <div class="card-footer bg-transparent border-warning text-right">
                 <a href="{{ '/contabilidad/diferidosBolivares' . $sede }}" class="btn btn-outline-warning btn-sm">Visualizar</a>
@@ -613,102 +661,100 @@
                     </span>
                 </h2>
                 <p class="card-text text-white">
-                    @if(isset($deuda))
-                        <p class="text-white">
-                            @if($pago->proveedor)
-                                Nombre del proveedor: {{ $pago->proveedor->nombre_proveedor }}
+                    <p class="text-white">
+                        @if($movimiento->proveedor)
+                            Nombre del proveedor: {{ $movimiento->proveedor->nombre_proveedor }}
 
-                            @elseif($pago->concepto)
-                                Concepto: {{ $pago->concepto }}
+                        @elseif($movimiento->concepto)
+                            Concepto: {{ $movimiento->concepto }}
 
-                            @else($pago->proveedor)
-                                Comentario: {{ $pago->comentario }}
+                        @else($movimiento->proveedor)
+                            Comentario: {{ $movimiento->comentario }}
+                        @endif
+                        <br>
+
+                        Monto: {{ $movimiento->signo_moneda }}
+
+                        @if($movimiento->diferido)
+                            {{ number_format($movimiento->diferido, 2, ',', '.') }}
+                        @endif
+
+                        @if($movimiento->egresos)
+                            {{ number_format($movimiento->egresos, 2, ',', '.') }}
+                        @endif
+
+                        @if($movimiento->monto)
+                            {{ number_format($movimiento->monto, 2, ',', '.') }}
+                        @endif
+
+                        @if($movimiento->ingresos)
+                            {{ number_format($movimiento->ingresos, 2, ',', '.') }}
+                        @endif
+
+                        </br>
+
+                        Emisor:
+
+                        @if($movimiento->ingresos)
+                            @if(get_class($movimiento) == 'compras\ContPagoEfectivoFTN')
+                                Ingreso dólares efectivo FTN
                             @endif
-                            <br>
 
-                            Monto: {{ $pago->signo_moneda }}
-
-                            @if($pago->diferido)
-                                {{ number_format($pago->diferido, 2, ',', '.') }}
+                            @if(get_class($movimiento) == 'compras\ContPagoEfectivoFAU')
+                                Ingreso dólares efectivo FAU
                             @endif
 
-                            @if($pago->egresos)
-                                {{ number_format($pago->egresos, 2, ',', '.') }}
+                            @if(get_class($movimiento) == 'compras\ContPagoEfectivoFLL')
+                                Ingreso dólares efectivo FLL
                             @endif
 
-                            @if($pago->monto)
-                                {{ number_format($pago->monto, 2, ',', '.') }}
+                            @if(get_class($movimiento) == 'compras\ContPagoBolivaresFTN')
+                                Ingreso efectivo bolívares FTN
                             @endif
 
-                            @if($pago->ingresos)
-                                {{ number_format($pago->ingresos, 2, ',', '.') }}
+                            @if(get_class($movimiento) == 'compras\ContPagoBolivaresFAU')
+                                Ingreso efectivo bolívares FAU
                             @endif
 
-                            </br>
-
-                            Emisor:
-
-                            @if($pago->ingresos)
-                                @if(get_class($pago) == 'compras\ContPagoEfectivoFTN')
-                                    Ingreso dólares efectivo FTN
-                                @endif
-
-                                @if(get_class($pago) == 'compras\ContPagoEfectivoFAU')
-                                    Ingreso dólares efectivo FAU
-                                @endif
-
-                                @if(get_class($pago) == 'compras\ContPagoEfectivoFLL')
-                                    Ingreso dólares efectivo FLL
-                                @endif
-
-                                @if(get_class($pago) == 'compras\ContPagoBolivaresFTN')
-                                    Ingreso efectivo bolívares FTN
-                                @endif
-
-                                @if(get_class($pago) == 'compras\ContPagoBolivaresFAU')
-                                    Ingreso efectivo bolívares FAU
-                                @endif
-
-                                @if(get_class($pago) == 'compras\ContPagoBolivaresFLL')
-                                    Ingreso efectivo bolívares FLL
-                                @endif
+                            @if(get_class($movimiento) == 'compras\ContPagoBolivaresFLL')
+                                Ingreso efectivo bolívares FLL
+                            @endif
+                        @else
+                            @if($movimiento->banco)
+                                {{ $movimiento->banco->alias_cuenta }}
                             @else
-                                @if($pago->banco)
-                                    {{ $pago->banco->alias_cuenta }}
-                                @else
-                                    @if(get_class($pago) == 'compras\ContPagoEfectivoFTN')
-                                        Pago dólares efectivo FTN
-                                    @endif
+                                @if(get_class($movimiento) == 'compras\ContPagoEfectivoFTN')
+                                    Pago dólares efectivo FTN
+                                @endif
 
-                                    @if(get_class($pago) == 'compras\ContPagoEfectivoFAU')
-                                        Pago dólares efectivo FAU
-                                    @endif
+                                @if(get_class($movimiento) == 'compras\ContPagoEfectivoFAU')
+                                    Pago dólares efectivo FAU
+                                @endif
 
-                                    @if(get_class($pago) == 'compras\ContPagoEfectivoFLL')
-                                        Pago dólares efectivo FLL
-                                    @endif
+                                @if(get_class($movimiento) == 'compras\ContPagoEfectivoFLL')
+                                    Pago dólares efectivo FLL
+                                @endif
 
-                                    @if(get_class($pago) == 'compras\ContPagoBolivaresFTN')
-                                        Pago efectivo bolívares FTN
-                                    @endif
+                                @if(get_class($movimiento) == 'compras\ContPagoBolivaresFTN')
+                                    Pago efectivo bolívares FTN
+                                @endif
 
-                                    @if(get_class($pago) == 'compras\ContPagoBolivaresFAU')
-                                        Pago efectivo bolívares FAU
-                                    @endif
+                                @if(get_class($movimiento) == 'compras\ContPagoBolivaresFAU')
+                                    Pago efectivo bolívares FAU
+                                @endif
 
-                                    @if(get_class($pago) == 'compras\ContPagoBolivaresFLL')
-                                        Pago efectivo bolívares FLL
-                                    @endif
+                                @if(get_class($movimiento) == 'compras\ContPagoBolivaresFLL')
+                                    Pago efectivo bolívares FLL
                                 @endif
                             @endif
+                        @endif
 
-                            <br>
+                        <br>
 
-                            Operador: {{ ($pago->user) ? $pago->user : $pago->operador }}<br>
+                        Operador: {{ ($movimiento->user) ? $movimiento->user : $movimiento->operador }}<br>
 
-                            Fecha y hora: {{ $pago->created_at->format('d/m/Y h:m A') }}</br>
-                        </p>
-                    @endif
+                        Fecha y hora: {{ $movimiento->created_at->format('d/m/Y h:i A') }}</br>
+                    </p>
                 </p>
             </div>
         </div>

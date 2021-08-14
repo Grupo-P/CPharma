@@ -65,17 +65,17 @@
               <th scope="row">{!! Form::label('movimiento', 'Tipo de movimiento *', ['title' => 'Este campo es requerido']) !!}</th>
               <td>
                 <div class="custom-control custom-radio custom-control-inline">
-                  <input type="radio" class="custom-control-input" id="movimiento1" name="movimiento" value="Ingreso" required>
+                  <input onchange="test(this)" type="radio" class="movimiento-radio custom-control-input" id="movimiento1" name="movimiento" value="Ingreso" required>
                   <label class="custom-control-label" for="movimiento1">Ingreso</label>
                 </div>
 
                 <div class="custom-control custom-radio custom-control-inline">
-                  <input type="radio" class="custom-control-input" id="movimiento2" name="movimiento" value="Egreso">
+                  <input onchange="test(this)" type="radio" class="movimiento-radio custom-control-input" id="movimiento2" name="movimiento" value="Egreso">
                   <label class="custom-control-label" for="movimiento2">Egreso</label>
                 </div>
 
                 <div class="custom-control custom-radio custom-control-inline">
-                  <input type="radio" class="custom-control-input" id="movimiento3" name="movimiento" value="Diferido">
+                  <input onchange="test(this)" type="radio" class="movimiento-radio custom-control-input" id="movimiento3" name="movimiento" value="Diferido">
                   <label class="custom-control-label" for="movimiento3">Diferido</label>
                 </div>
               </td>
@@ -117,6 +117,13 @@
                     @endforeach
                 </select>
               </td>
+            </tr>
+
+            <tr>
+                <th scope="row">{!! Form::label('titular_pago', 'Titular del pago *', ['title' => 'Este campo es requerido']) !!}</th>
+                <td>
+                    <input disabled type="text" class="form-control" name="titular_pago">
+                </td>
             </tr>
 
             <tr>
@@ -178,6 +185,26 @@
 @endsection
 
 @section('scriptsHead')
+    @if($request->get('tipo') == 'movimiento')
+      <script>
+        function test(elemento) {
+          titular = $('[name=titular_pago]');
+
+          console.log(elemento.value);
+
+          if (elemento.value == 'Egreso') {
+            titular.attr('disabled', false);
+            titular.attr('required', false);
+          }
+
+          if (elemento.value != 'Egreso') {
+            titular.attr('disabled', true);
+            titular.attr('required', true);
+          }
+        }
+      </script>
+    @endif
+
     @if($request->get('tipo') == 'proveedores')
         <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
         <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>

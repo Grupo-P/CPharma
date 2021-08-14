@@ -127,6 +127,10 @@ class ContPagoBolivaresFLLController extends Controller
             if ($request->input('id_cuenta')) {
                 $pago->id_cuenta      = $request->input('id_cuenta');
                 $pago->autorizado_por = $request->input('autorizado_por');
+
+                if ($request->movimiento == 'Egreso') {
+                    $pago->titular_pago = $request->titular_pago;
+                }
             }
 
             if ($request->input('id_proveedor')) {

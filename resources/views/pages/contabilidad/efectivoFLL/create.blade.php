@@ -120,6 +120,13 @@
             </tr>
 
             <tr>
+                <th scope="row">{!! Form::label('titular_pago', 'Titular del pago *', ['title' => 'Este campo es requerido']) !!}</th>
+                <td>
+                    <input disabled type="text" class="form-control" name="titular_pago">
+                </td>
+            </tr>
+
+            <tr>
                 <th scope="row">{!! Form::label('autorizado_por', 'Autorizado por *', ['title' => 'Este campo es requerido']) !!}</th>
                 <td>
                     <input type="text" required class="form-control" name="autorizado_por">
@@ -178,6 +185,26 @@
 @endsection
 
 @section('scriptsHead')
+    @if($request->get('tipo') == 'movimiento')
+      <script>
+        function test(elemento) {
+          titular = $('[name=titular_pago]');
+
+          console.log(elemento.value);
+
+          if (elemento.value == 'Egreso') {
+            titular.attr('disabled', false);
+            titular.attr('required', false);
+          }
+
+          if (elemento.value != 'Egreso') {
+            titular.attr('disabled', true);
+            titular.attr('required', true);
+          }
+        }
+      </script>
+    @endif
+
     @if($request->get('tipo') == 'proveedores')
         <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
         <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>

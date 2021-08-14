@@ -162,6 +162,11 @@
                 <td colspan="4" class="alinear-der">Autorizado por:</td>
                 <td colspan="4" class="alinear-izq">{{ $pago->autorizado_por }}</td>
                 </tr>
+
+                <tr>
+                <td colspan="4" class="alinear-der">Titular pago:</td>
+                <td colspan="4" class="alinear-izq">{{ $pago->titulat_pago }}</td>
+                </tr>
             @endif
             <tr>
             <td colspan="4" class="alinear-der">Comentario:</td>
