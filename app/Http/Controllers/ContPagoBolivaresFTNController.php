@@ -19,8 +19,7 @@ class ContPagoBolivaresFTNController extends Controller
      */
     public function index(Request $request)
     {
-        $pagos = ContPagoBolivares::sede($request->get('sede'))
-            ->fecha($request->get('fecha_desde'), $request->get('fecha_hasta'))
+        $pagos = ContPagoBolivares::fecha($request->get('fecha_desde'), $request->get('fecha_hasta'))
             ->orderBy('created_at', 'desc')
             ->get();
 

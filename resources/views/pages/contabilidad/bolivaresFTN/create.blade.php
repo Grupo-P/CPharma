@@ -189,17 +189,27 @@
       <script>
         function test(elemento) {
           titular = $('[name=titular_pago]');
+          autorizado_por = $('[name=autorizado_por]');
 
-          console.log(elemento.value);
+          if (elemento.value == 'Ingreso') {
+            titular.attr('disabled', true);
+            titular.attr('required', true);
+            autorizado_por.attr('disabled', true);
+            autorizado_por.attr('required', true);
+          }
 
           if (elemento.value == 'Egreso') {
             titular.attr('disabled', false);
             titular.attr('required', false);
+            autorizado_por.attr('disabled', false);
+            autorizado_por.attr('required', false);
           }
 
-          if (elemento.value != 'Egreso') {
-            titular.attr('disabled', true);
-            titular.attr('required', true);
+          if (elemento.value == 'Diferido') {
+            titular.attr('disabled', false);
+            titular.attr('required', false);
+            autorizado_por.attr('disabled', false);
+            autorizado_por.attr('required', false);
           }
         }
       </script>

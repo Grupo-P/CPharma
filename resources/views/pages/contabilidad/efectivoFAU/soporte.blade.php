@@ -115,6 +115,14 @@
                 @endif
             </td>
             </tr>
+
+            @if($pago->titular_pago)
+                <tr>
+                <td colspan="4" class="alinear-der">Titular pago:</td>
+                <td colspan="4" class="alinear-izq">{{ $pago->titular_pago }}</td>
+                </tr>
+            @endif
+
             @if($pago->proveedor)
                 <tr>
                 <td colspan="4" class="alinear-der">Monto al proveedor:</td>
@@ -156,19 +164,19 @@
             <td colspan="4" class="alinear-der">Operador:</td>
             <td colspan="4" class="alinear-izq">{{ $pago->user }}</td>
             </tr>
-            <tr>
-            @if($pago->cuentas)
+            @if($pago->autorizado_por)
                 <tr>
                 <td colspan="4" class="alinear-der">Autorizado por:</td>
                 <td colspan="4" class="alinear-izq">{{ $pago->autorizado_por }}</td>
                 </tr>
+            @endif
 
+            @if($pago->titular_pago)
                 <tr>
                 <td colspan="4" class="alinear-der">Titular pago:</td>
-                <td colspan="4" class="alinear-izq">{{ $pago->titulat_pago }}</td>
+                <td colspan="4" class="alinear-izq">{{ $pago->titular_pago }}</td>
                 </tr>
             @endif
-            <tr>
             <td colspan="4" class="alinear-der">Comentario:</td>
             <td colspan="4" class="alinear-izq">{!! $pago->concepto !!}</td>
             </tr>

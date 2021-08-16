@@ -19,8 +19,7 @@ class ContPagoEfectivoFAUController extends Controller
      */
     public function index(Request $request)
     {
-        $pagos = ContPagoEfectivo::sede($request->get('sede'))
-            ->fecha($request->get('fecha_desde'), $request->get('fecha_hasta'))
+        $pagos = ContPagoEfectivo::fecha($request->get('fecha_desde'), $request->get('fecha_hasta'))
             ->orderBy('created_at', 'desc')
             ->get();
 

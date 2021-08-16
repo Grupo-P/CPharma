@@ -157,6 +157,21 @@
             <td colspan="4" class="alinear-izq">{{ $pago->user }}</td>
             </tr>
             <tr>
+
+            @if($pago->autorizado_por)
+                <tr>
+                <td colspan="4" class="alinear-der">Autorizado por:</td>
+                <td colspan="4" class="alinear-izq">{{ $pago->autorizado_por }}</td>
+                </tr>
+            @endif
+
+            @if($pago->titular_pago)
+                <tr>
+                <td colspan="4" class="alinear-der">Titular pago:</td>
+                <td colspan="4" class="alinear-izq">{{ $pago->titular_pago }}</td>
+                </tr>
+            @endif
+
             @if($pago->cuentas)
                 <tr>
                 <td colspan="4" class="alinear-der">Autorizado por:</td>

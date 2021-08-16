@@ -152,6 +152,21 @@
                 <td colspan="4" class="alinear-izq">{{ number_format($pago->tasa,2,',','.') }}</td>
                 </tr>
             @endif
+
+            @if($pago->autorizado_por)
+                <tr>
+                <td colspan="4" class="alinear-der">Autorizado por:</td>
+                <td colspan="4" class="alinear-izq">{{ $pago->autorizado_por }}</td>
+                </tr>
+            @endif
+
+            @if($pago->titular_pago)
+                <tr>
+                <td colspan="4" class="alinear-der">Titular pago:</td>
+                <td colspan="4" class="alinear-izq">{{ $pago->titular_pago }}</td>
+                </tr>
+            @endif
+
             <tr>
             <td colspan="4" class="alinear-der">Operador:</td>
             <td colspan="4" class="alinear-izq">{{ $pago->user }}</td>
