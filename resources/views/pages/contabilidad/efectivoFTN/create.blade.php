@@ -92,8 +92,8 @@
                     </div>
 
                     <div class="custom-control custom-radio custom-control-inline">
-                      <input type="radio" class="custom-control-input" id="movimiento1" checked name="movimiento" value="Egreso" required>
-                      <label class="custom-control-label" for="movimiento1">No</label>
+                      <input type="radio" class="custom-control-input" id="movimiento2" checked name="movimiento" value="Egreso" required>
+                      <label class="custom-control-label" for="movimiento2">No</label>
                     </div>
                 </td>
             </tr>
