@@ -169,7 +169,7 @@
 
     <table style="width:100%;" class="CP-stickyBar">
         <tr>
-            @if(Auth::user()->departamento == 'TECNOLOGIA' || Auth::user()->departamento == 'GERENCIA' || Auth::user()->departamento == 'OPERACIONES' || Auth::user()->departamento == 'TESORERIA')
+            @if(Auth::user()->departamento == 'ADMINISTRACION' || Auth::user()->departamento == 'TECNOLOGIA' || Auth::user()->departamento == 'GERENCIA' || Auth::user()->departamento == 'OPERACIONES' || Auth::user()->departamento == 'TESORERIA')
                 <td style="width:15%;" align="center">
                     <a href="{{ url('/deudas/create') }}" role="button" class="btn btn-outline-info btn-sm"
                     style="display: inline; text-align: left;">
@@ -225,11 +225,11 @@
             <tr class="{{ $deuda->deleted_at ? 'bg-warning' : '' }}">
               <th>{{$deuda->id}}</th>
               <td align="center" class="CP-barrido">
-                <a href="{{ $url }}" style="text-decoration: none; color: black;" target="_blank">{{ $deuda->proveedor->nombre_proveedor }}</a>
+                <a href="{{ $url }}" style="text-decoration: none; color: black;" target="_blank">{{ ($deuda->proveedor) ? $deuda->proveedor->nombre_proveedor : '' }}</a>
               </td>
-              <td>{{$deuda->proveedor->rif_ci}}</td>
+              <td>{{ ($deuda->proveedor) ? $deuda->proveedor->rif_ci : '' }}</td>
               <td>{{$deuda->created_at}}</td>
-              <td>{{$deuda->proveedor->moneda}}</td>
+              <td>{{($deuda->proveedor) ? $deuda->proveedor->moneda : ''}}</td>
               <td>{{number_format($deuda->monto, 2, ',', '.')}}</td>
               <td>{{$deuda->dias_credito}}</td>
               <td>{{$deuda->documento_soporte_deuda}}</td>

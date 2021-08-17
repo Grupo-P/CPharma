@@ -115,7 +115,7 @@
         <th scope="col" class="CP-sticky">Tasa</th>
         <th scope="col" class="CP-sticky">Fecha y hora</th>
         <th scope="col" class="CP-sticky">Plan de cuentas</th>
-        <th scope="col" class="CP-sticky">Proveedor</th>
+        <th scope="col" class="CP-sticky">Proveedor / Titular</th>
         <th scope="col" class="CP-sticky">Usuario</th>
         <th scope="col" class="CP-sticky">Autorizado por</th>
         <th scope="col" class="CP-sticky">Acciones</th>
@@ -218,6 +218,10 @@
                 @endphp
 
                 <a href="{{ $url }}" style="text-decoration: none; color: black;" target="_blank">{{ $pago->proveedor->nombre_proveedor }}</a>
+            @endif
+
+            @if($pago->titular_pago)
+                {{ $pago->titular_pago }}
             @endif
         </td>
 

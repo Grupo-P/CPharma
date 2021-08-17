@@ -115,7 +115,7 @@
         <th scope="col" class="CP-sticky">Tasa</th>
         <th scope="col" class="CP-sticky">Fecha y hora</th>
         <th scope="col" class="CP-sticky">Plan de cuentas</th>
-        <th scope="col" class="CP-sticky">Proveedor</th>
+        <th scope="col" class="CP-sticky">Proveedor / Titular</th>
         <th scope="col" class="CP-sticky">Usuario</th>
         <th scope="col" class="CP-sticky">Autorizado por</th>
         <th scope="col" class="CP-sticky">Acciones</th>
@@ -196,7 +196,13 @@
         <td>{{ ($pago->tasa) ? number_format($pago->tasa,2,',','.') : '' }}</td>
         <td>{{date("d-m-Y h:i:s a", strtotime($pago->created_at))}}</td>
         <td>{{isset($pago->cuenta->nombre) ? $pago->cuenta->nombre : ''}}</td>
-        <td>{{isset($pago->proveedor->nombre_proveedor) ? $pago->proveedor->nombre_proveedor : ''}}</td>
+        <td>
+            {{isset($pago->proveedor->nombre_proveedor) ? $pago->proveedor->nombre_proveedor : ''}}
+
+            @if($pago->titular_pago)
+                {{ $pago->titular_pago }}
+            @endif
+        </td>
         <td>{{$pago->user}}</td>
         <td>{{$pago->autorizado_por}}</td>
         <td style="width:140px;">
