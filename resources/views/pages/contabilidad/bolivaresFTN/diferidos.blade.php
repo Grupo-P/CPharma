@@ -130,7 +130,14 @@
         concepto = prompt('Concepto');
 
         if (concepto != '') {
-            concepto = prompt('Concepto');
+            Swal.fire({
+                title: 'Cargando...',
+                allowEscapeKey: false,
+                allowOutsideClick: false,
+                onOpen: () => {
+                    Swal.showLoading();
+                }
+            });
 
             $.ajax({
                 method: 'POST',

@@ -127,6 +127,9 @@
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
+    <link rel="stylesheet" href="/assets/sweetalert2/sweetalert2.css">
+    <script src="/assets/sweetalert2/sweetalert2.js"></script>
+
     <script>
         $(document).ready(function() {
             var proveedoresJson = {!! json_encode($proveedores) !!};
@@ -146,13 +149,24 @@
                 if (!resultado) {
                     alert('Debe seleccionar un proveedor válido');
                     event.preventDefault();
+                    return false;
                 }
 
                 monto = $('[name=monto]').val();
                 if (monto == 0) {
                     alert('El monto debe ser distinto a cero');
                     event.preventDefault();
+                    return false;
                 }
+
+                Swal.fire({
+                    title: 'Cargando...',
+                    allowEscapeKey: false,
+                    allowOutsideClick: false,
+                    onOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
             });
 
             $('[name=numero_documento]').keyup(function () {

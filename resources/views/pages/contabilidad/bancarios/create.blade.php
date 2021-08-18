@@ -216,8 +216,10 @@
 
 @section('scriptsHead')
 <link href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" rel="stylesheet">
-
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+<link rel="stylesheet" href="/assets/sweetalert2/sweetalert2.css">
+<script src="/assets/sweetalert2/sweetalert2.js"></script>
 
 <script>
     $(document).ready(function() {
@@ -338,7 +340,17 @@
                 event.preventDefault();
                 alert('Debe seleccionar un proveedor válido');
                 bancario = false;
+                return false;
             }
+
+            Swal.fire({
+                title: 'Cargando...',
+                allowEscapeKey: false,
+                allowOutsideClick: false,
+                onOpen: () => {
+                    Swal.showLoading();
+                }
+            });
         });
     });
 </script>

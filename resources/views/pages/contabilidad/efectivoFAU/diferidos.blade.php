@@ -134,6 +134,15 @@
         }
 
         if (concepto != '') {
+            Swal.fire({
+                title: 'Cargando...',
+                allowEscapeKey: false,
+                allowOutsideClick: false,
+                onOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+
             $.ajax({
                 method: 'POST',
                 url: '/efectivoFAU/' + id,

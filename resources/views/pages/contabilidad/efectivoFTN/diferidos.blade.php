@@ -134,7 +134,14 @@
         }
 
         if (concepto != '') {
-            Swal.fire('Cargando...');
+            Swal.fire({
+                title: 'Cargando...',
+                allowEscapeKey: false,
+                allowOutsideClick: false,
+                onOpen: () => {
+                    Swal.showLoading();
+                }
+            });
 
             $.ajax({
                 method: 'POST',

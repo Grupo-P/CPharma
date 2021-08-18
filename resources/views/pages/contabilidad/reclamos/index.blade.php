@@ -134,11 +134,11 @@
             <tr class="{{ ($reclamo->deleted_at) ? 'bg-warning' : '' }}">
               <th>{{$reclamo->id}}</th>
               <td align="center" class="CP-barrido">
-                  <a href="{{ $url }}" style="text-decoration: none; color: black;" target="_blank">{{ $reclamo->proveedor->nombre_proveedor }}</a>
+                  <a href="{{ $url }}" style="text-decoration: none; color: black;" target="_blank">{{ ($reclamo->proveedor) ? $reclamo->proveedor->nombre_proveedor : '' }}</a>
               </td>
-              <td>{{$reclamo->proveedor->rif_ci}}</td>
+              <td>{{($reclamo->proveedor) ? $reclamo->proveedor->rif_ci : ''}}</td>
               <td>{{$reclamo->created_at}}</td>
-              <td>{{$reclamo->proveedor->moneda}}</td>
+              <td>{{($reclamo->proveedor) ? $reclamo->proveedor->moneda : ''}}</td>
               <td>{{number_format($reclamo->monto, 2, ',', '.')}}</td>
               <td>{{$reclamo->documento_soporte_reclamo}}</td>
               <td>{{$reclamo->numero_documento}}</td>

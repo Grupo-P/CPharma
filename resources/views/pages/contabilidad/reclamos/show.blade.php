@@ -29,12 +29,12 @@
         <tbody>
             <tr>
                 <th scope="row">Nombre del proveedor</th>
-                <td>{{$reclamo->proveedor->nombre_proveedor}}</td>
+                <td>{{$reclamo->proveedor ? $reclamo->proveedor->nombre_proveedor : ''}}</td>
             </tr>
 
             <tr>
                 <th scope="row">RIF/CI del proveedor</th>
-                <td>{{$reclamo->proveedor->rif_ci}}</td>
+                <td>{{($reclamo->proveedor) ? $reclamo->proveedor->rif_ci : ''}}</td>
             </tr>
 
             <tr>
@@ -44,7 +44,7 @@
 
             <tr>
                 <th scope="row">Moneda</th>
-                <td>{{$reclamo->proveedor->moneda}}</td>
+                <td>{{($reclamo->proveedor) ? $reclamo->proveedor->moneda : ''}}</td>
             </tr>
 
             <tr>

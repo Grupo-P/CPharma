@@ -57,7 +57,7 @@ class ContPagoBolivaresFTNController extends Controller
             return $resultado;
         }
 
-        $cuentas = ContCuenta::get();
+        $cuentas = ContCuenta::where('pertenece_a', '!=', 'Principal')->get();
 
         if ($request->get('tipo') == 'proveedores') {
             $sqlProveedores = ContProveedor::whereNull('deleted_at')->get();
