@@ -22,4 +22,11 @@ class RH_Candidato extends Model {
     	'telefono_habitacion', 'correo', 'como_nos_contacto', 'experiencia_laboral',
     	'observaciones', 'tipo_relacion', 'relaciones_laborales', 'estatus', 'user'
     ];
+
+    public function scopeBusquedaPor($query, $metodo, $valor)
+    {
+        if ($metodo != '' && $valor != '') {
+            $query->where($metodo, 'LIKE', '%' . $valor . '%');
+        }
+    }
 }

@@ -6,7 +6,7 @@ var CuentaIngreso = 0;
 var CuentaEgreso = 0;
 var CuentaActivo = 0;
 
-var URL = 'http://cpharmaftn.com/assets/functions/functionRHDash.php';
+var URL = 'http://cpharmafau.com/assets/functions/functionRHDash.php';
 
 //Incio Armado del chart de FTN
   var paramFTN = {
@@ -17,6 +17,7 @@ var URL = 'http://cpharmaftn.com/assets/functions/functionRHDash.php';
     url: URL,
     type: "POST",
     success: function(data) {
+        console.log(data);
       var respuesta = JSON.parse(data);
       CuentaIngreso = respuesta['CuentaIngreso'];
       CuentaEgreso = respuesta['CuentaEgreso'];
@@ -59,6 +60,9 @@ var URL = 'http://cpharmaftn.com/assets/functions/functionRHDash.php';
           cutoutPercentage: 80,
         },
       });
+    },
+    error: function (error) {
+        $('body').html(error.responseText);
     }
   });
 //FIN Armado del chart de FTN

@@ -25,9 +25,12 @@ class RH_CandidatoController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function index() {
-        $candidatos = RH_Candidato::all();
-        return view('pages.RRHH.candidatos.index', compact('candidatos'));
+    public function index(Request $request) {
+        $candidatos = RH_Candidato::busquedaPor($request->get('metodo'), $request->get('valor'))
+            ->orderByDesc('id')
+            ->paginate(50);
+
+        return view('pages.RRHH.candidatos.index', compact('candidatos', 'request'));
     }
 
     public function procesos() {
@@ -53,7 +56,13 @@ class RH_CandidatoController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function create() {
-        return view('pages.RRHH.candidatos.create');
+        if (session('data')) {
+            $data = session('data');
+        } else {
+            $data = '';
+        }
+
+        return view('pages.RRHH.candidatos.create', compact('data'));
     }
 
     /**
@@ -68,12 +77,12 @@ class RH_CandidatoController extends Controller {
         $correo = $request->input('correo');
 
         if(RH_Candidato::where('cedula', '=', $cedula)->exists()) {
-            return back()->with('Error1', ' Error');
+            return back()->with(['Error1' => ' Error', 'data' => $request->all()]);
         }
 
         if($correo != '') {
             if(RH_Candidato::where('correo', '=', $correo)->exists()) {
-                return back()->with('Error2', ' Error');
+                return back()->with(['Error2' =>' Error', 'data' => $request->all()]);
             }
         }
 

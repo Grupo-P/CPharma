@@ -136,6 +136,8 @@
                 'Instagram' => 'Instagram',
                 'Radio' => 'Radio',
                 'Recomendado' => 'Recomendado',
+                'Voluntario' => 'Voluntario',
+                'Recomendado por trabajador' => 'Recomendado por trabajador',
               ], null, ['class' => 'form-control', 'required']) !!}
             </td>
           </tr>

@@ -111,22 +111,40 @@
 
   <table style="width:100%;" class="CP-stickyBar">
     <tr>
-      <td style="width:10%;" align="center">
-        <a href="{{ url('/candidatos/create') }}" role="button" class="btn btn-outline-info btn-sm" style="display: inline; text-align: left;">
-          <i class="fa fa-plus"></i>&nbsp;Agregar
-        </a>
-      </td>
+        <td>
+            <form action="">
+                <div class="row ml-2 mb-4">
+                    <div class="col-2">
+                        <a href="{{ url('/candidatos/create') }}" role="button" class="btn btn-outline-info">
+                            <i class="fa fa-plus"></i>&nbsp;Agregar
+                        </a>
+                    </div>
 
-      <td style="width:90%;">
-        <div class="input-group md-form form-sm form-1 pl-0">
-          <div class="input-group-prepend">
-            <span class="input-group-text purple lighten-3" id="basic-text1">
-              <i class="fas fa-search text-white" aria-hidden="true"></i>
-            </span>
-          </div>
-          <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterAllTable()">
-        </div>
-      </td>
+                    <div class="col-4">
+                        <select required name="metodo" class="form-control">
+                            <option value="">Seleccione un método de búsqueda...</option>
+                            <option {{ ($request->get('metodo') == 'nombres') ? 'selected' : '' }} value="nombres">Nombres</option>
+                            <option {{ ($request->get('metodo') == 'apellidos') ? 'selected' : '' }} value="apellidos">Apellidos</option>
+                            <option {{ ($request->get('metodo') == 'cedula') ? 'selected' : '' }} value="cedula">Cédula</option>
+                            <option {{ ($request->get('metodo') == 'genero') ? 'selected' : '' }} value="genero">Género</option>
+                            <option {{ ($request->get('metodo') == 'telefono_celular') ? 'selected' : '' }} value="telefono_celular">Teléfono</option>
+                            <option {{ ($request->get('metodo') == 'tipo_relacion') ? 'selected' : '' }} value="tipo_relacion">Relación laboral</option>
+                            <option {{ ($request->get('metodo') == 'estatus') ? 'selected' : '' }} value="estatus">Estatus</option>
+                        </select>
+                    </div>
+
+                    <div class="col-4">
+                        <input type="text" required placeholder="Valor a buscar..." name="valor" class="form-control" value="{{ $request->get('valor') }}">
+                    </div>
+
+                    <div class="col-2">
+                        <button class="btn btn-block btn-outline-info">
+                            <i class="fa fa-search"></i> Buscar
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </td>
     </tr>
   </table>
 
@@ -257,16 +275,14 @@
               <i class="fas fa-edit"></i>
             </a>
           
-          @if($candidato->estatus != "POSTULADO")
-            <form action="/motivo_rechazo" method="GET" style="display: inline;">
-              
-              <input type="hidden" id="CandidatoId" name="CandidatoId" value="{{$candidato->id}}">
+        <form action="/motivo_rechazo" method="GET" style="display: inline;">
 
-              <button type="submit" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Desincorporar">
-                <i class="fa fa-reply"></i>
-              </button>
-            </form>
-          @endif
+          <input type="hidden" id="CandidatoId" name="CandidatoId" value="{{$candidato->id}}">
+
+          <button type="submit" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Desincorporar">
+            <i class="fa fa-reply"></i>
+          </button>
+        </form>
 
           <?php
             } else if(
@@ -322,6 +338,10 @@
       @endforeach
     </tbody>
   </table>
+
+  <div class="d-flex justify-content-center">
+      {{ $candidatos->appends($_GET)->links() }}
+  </div>
 
   <script>
     $(document).ready(function() {

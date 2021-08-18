@@ -55,7 +55,7 @@ define ("nameFAU" , "smartfau");
 define ("nameFAUOFF" , "cpharmafau");
 /**********************************************************************************/
 /************* CONEXION GALAC NOMINA *******************/
-define ("serverGN" , "10.100.0.2\SMARTPHARMA,1450");
+define ("serverGN" , "10.100.0.34\SMARTPHARMA");
 define ("userGN" , "sa");
 define ("passGN" , "Soporte123");
 define ("nameGN" , "NOMDB");

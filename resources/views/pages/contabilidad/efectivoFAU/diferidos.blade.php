@@ -109,6 +109,9 @@
     </tbody>
   </table>
 
+  <link rel="stylesheet" href="/assets/sweetalert2/sweetalert2.css">
+  <script src="/assets/sweetalert2/sweetalert2.js"></script>
+
   <script>
     $(document).ready(function(){
         $('[data-toggle="tooltip"]').tooltip();

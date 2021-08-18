@@ -4,9 +4,11 @@
   include('C:\xampp\htdocs\CPharma\app\functions\querys_mysql.php');
   include('C:\xampp\htdocs\CPharma\app\functions\querys_sqlserver.php');
 
-  $sede = $_POST["sede"];
-  $fechaFin = date("Y-m-d");
-  $fechaInicio = date("Y-m-d",strtotime($fechaFin."-30 days"));
+  $sede = $_POST['sede'];
+  $fechaFin = date("Y-d-m");
+  $fechaInicio = new DateTime();
+  $fechaInicio->modify('-30day');
+  $fechaInicio = $fechaInicio->format('Y-d-m');
 
   $resultado = array();
   $resultado = FG_Conteo_Sedes($sede,$fechaInicio,$fechaFin);

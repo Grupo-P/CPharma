@@ -109,6 +109,9 @@
     </tbody>
   </table>
 
+  <link rel="stylesheet" href="/assets/sweetalert2/sweetalert2.css">
+  <script src="/assets/sweetalert2/sweetalert2.js"></script>
+
   <script>
     $(document).ready(function(){
         $('[data-toggle="tooltip"]').tooltip();
@@ -131,6 +134,8 @@
         }
 
         if (concepto != '') {
+            Swal.fire('Cargando...');
+
             $.ajax({
                 method: 'POST',
                 url: '/efectivoFTN/' + id,
