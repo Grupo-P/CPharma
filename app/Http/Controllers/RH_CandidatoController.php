@@ -148,9 +148,15 @@ class RH_CandidatoController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function edit($id) {
+        if (session('data')) {
+            $data = session('data');
+        } else {
+            $data = '';
+        }
+
         $candidatos = RH_Candidato::find($id);
 
-        return view('pages.RRHH.candidatos.edit', compact('candidatos'));
+        return view('pages.RRHH.candidatos.edit', compact('candidatos', 'data'));
     }
 
     /**

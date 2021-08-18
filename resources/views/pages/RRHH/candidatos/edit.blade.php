@@ -52,12 +52,12 @@
         <tbody>
           <tr>
             <th scope="row">{!! Form::label('nombres', 'Nombres *', ['title' => 'Este campo es requerido']) !!}</th>
-            <td>{!! Form::text('nombres', null, [ 'class' => 'form-control', 'placeholder' => 'Maria Raquel', 'pattern' => '^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s\']+$', 'autofocus', 'required']) !!}</td>
+            <td>{!! Form::text('nombres', isset($data['nombres']) ? $data['nombres'] : null, [ 'class' => 'form-control', 'placeholder' => 'Maria Raquel', 'pattern' => '^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s\']+$', 'autofocus', 'required']) !!}</td>
           </tr>
 
           <tr>
             <th scope="row">{!! Form::label('apellidos', 'Apellidos *', ['title' => 'Este campo es requerido']) !!}</th>
-            <td>{!! Form::text('apellidos', null, [ 'class' => 'form-control', 'placeholder' => 'Herrera Perez', 'pattern' => '^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s\']+$', 'required']) !!}</td>
+            <td>{!! Form::text('apellidos', isset($data['apellidos']) ? $data['apellidos'] : null, [ 'class' => 'form-control', 'placeholder' => 'Herrera Perez', 'pattern' => '^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s\']+$', 'required']) !!}</td>
           </tr>
 
           <tr>
@@ -70,7 +70,7 @@
                   </td>
 
                   <td>
-                    {!! Form::text('cedula', null, [ 'class' => 'form-control', 'placeholder' => '24921001', 'pattern' => '^[0-9]{7,}$', 'required']) !!}
+                    {!! Form::text('cedula', isset($data['cedula']) ? $data['cedula'] : null, [ 'class' => 'form-control', 'placeholder' => '24921001', 'pattern' => '^[0-9]{7,}$', 'required']) !!}
                   </td>
                 </tr>
               </table>
@@ -83,7 +83,7 @@
             </th>
             
             <td>
-              {!! Form::tel('telefono_celular', null, [ 'class' => 'form-control', 'placeholder' => '0414-1234567']) !!}
+              {!! Form::tel('telefono_celular', isset($data['telefono_celular']) ? $data['telefono_celular'] : null, [ 'class' => 'form-control', 'placeholder' => '0414-1234567']) !!}
             </td>
           </tr>
 
@@ -93,13 +93,13 @@
             </th>
             
             <td>
-              {!! Form::tel('telefono_habitacion', null, [ 'class' => 'form-control', 'placeholder' => '0261-1234567']) !!}
+              {!! Form::tel('telefono_habitacion', isset($data['telefono_habitacion']) ? $data['telefono_habitacion'] : null, [ 'class' => 'form-control', 'placeholder' => '0261-1234567']) !!}
             </td>
           </tr>
 
           <tr>
             <th scope="row">{!! Form::label('correo', 'Correo') !!}</th>
-            <td>{!! Form::email('correo', null, [ 'class' => 'form-control', 'placeholder' => 'mherrera@farmacia72.com']) !!}</td>
+            <td>{!! Form::email('correo', isset($data['correo']) ? $data['correo'] : null, [ 'class' => 'form-control', 'placeholder' => 'mherrera@farmacia72.com']) !!}</td>
           </tr>
 
           <tr>
@@ -110,7 +110,7 @@
                 'Ince' => 'Ince', 
                 'Pasante' => 'Pasante',
                 'Trabajador regular' => 'Trabajador regular',
-              ], null, ['class' => 'form-control', 'required']) !!}
+              ], isset($data['tipo_relacion']) ? $data['tipo_relacion'] : null, ['class' => 'form-control', 'required']) !!}
             </td>
           </tr>
 
@@ -121,7 +121,7 @@
                 '' => 'Seleccione una opción',
                 'Si' => 'Si', 
                 'No' => 'No',
-              ], null, ['class' => 'form-control', 'required']) !!}
+              ], isset($data['relaciones_laborales']) ? $data['relaciones_laborales'] : null, ['class' => 'form-control', 'required']) !!}
             </td>
           </tr>
 
@@ -138,23 +138,23 @@
                 'Recomendado' => 'Recomendado',
                 'Voluntario' => 'Voluntario',
                 'Recomendado por trabajador' => 'Recomendado por trabajador',
-              ], null, ['class' => 'form-control', 'required']) !!}
+              ], isset($data['como_nos_contacto']) ? $data['como_nos_contacto'] : null, ['class' => 'form-control', 'required']) !!}
             </td>
           </tr>
 
           <tr>
             <th scope="row">{!! Form::label('experiencia_laboral', 'Experiencia laboral') !!}</th>
-            <td>{!! Form::textarea('experiencia_laboral', null, [ 'class' => 'form-control', 'placeholder' => 'Experiencia laboral previa del candidato', 'rows' => '3']) !!}</td>
+            <td>{!! Form::textarea('experiencia_laboral', isset($data['experiencia_laboral']) ? $data['experiencia_laboral'] : null, [ 'class' => 'form-control', 'placeholder' => 'Experiencia laboral previa del candidato', 'rows' => '3']) !!}</td>
           </tr>
 
           <tr>
             <th scope="row">{!! Form::label('direccion', 'Dirección *', ['title' => 'Este campo es requerido']) !!}</th>
-            <td>{!! Form::textarea('direccion', null, [ 'class' => 'form-control', 'placeholder' => 'Av. 15 Delicias con calle 72', 'rows' => '3', 'required']) !!}</td>
+            <td>{!! Form::textarea('direccion', isset($data['direccion']) ? $data['direccion'] : null, [ 'class' => 'form-control', 'placeholder' => 'Av. 15 Delicias con calle 72', 'rows' => '3', 'required']) !!}</td>
           </tr>
 
           <tr>
             <th scope="row">{!! Form::label('observaciones', 'Observaciones') !!}</th>
-            <td>{!! Form::textarea('observaciones', null, [ 'class' => 'form-control', 'placeholder' => 'Detalles importantes del candidato', 'rows' => '3']) !!}</td>
+            <td>{!! Form::textarea('observaciones', isset($data['observaciones']) ? $data['observaciones'] : null, [ 'class' => 'form-control', 'placeholder' => 'Detalles importantes del candidato', 'rows' => '3']) !!}</td>
           </tr>
         </tbody>
       </table>
