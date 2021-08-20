@@ -42,27 +42,27 @@ class ContPagoBancarioController extends Controller
             if ($request->conversion == 1) {
                 if ($request->banco != $request->proveedor) {
                     if ($request->banco == 'Dólares' && $request->proveedor == 'Bolívares') {
-                        $monto = $request->monto * $request->tasa;
+                        $monto = $request->monto / $request->tasa;
                     }
 
                     if ($request->banco == 'Dólares' && $request->proveedor == 'Pesos') {
-                        $monto = $request->monto * $request->tasa;
+                        $monto = $request->monto / $request->tasa;
                     }
 
                     if ($request->banco == 'Bolívares' && $request->proveedor == 'Dólares') {
-                        $monto = $request->monto / $request->tasa;
-                    }
-
-                    if ($request->banco == 'Bolívares' && $request->proveedor == 'Pesos') {
                         $monto = $request->monto * $request->tasa;
                     }
 
-                    if ($request->banco == 'Pesos' && $request->proveedor == 'Bolívares') {
+                    if ($request->banco == 'Bolívares' && $request->proveedor == 'Pesos') {
                         $monto = $request->monto / $request->tasa;
                     }
 
+                    if ($request->banco == 'Pesos' && $request->proveedor == 'Bolívares') {
+                        $monto = $request->monto * $request->tasa;
+                    }
+
                     if ($request->banco == 'Pesos' && $request->proveedor == 'Dólares') {
-                        $monto = $request->monto / $request->tasa;
+                        $monto = $request->monto * $request->tasa;
                     }
                 } else {
                     $monto = $request->monto;

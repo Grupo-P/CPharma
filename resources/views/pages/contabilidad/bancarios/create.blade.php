@@ -150,12 +150,12 @@
 
                 <tr>
                     <th scope="row">
-                        <label for="monto">
-                            Monto del banco *
+                        <label for="monto_proveedor">
+                            Monto al proveedor
                         </label>
                     </th>
                     <td>
-                        <input class="form-control" min="1" name="monto" required step="0.01" type="number"/>
+                        <input class="form-control" min="1" name="monto_proveedor" type="number"/>
                     </td>
                 </tr>
 
@@ -173,12 +173,12 @@
 
                 <tr>
                     <th scope="row">
-                        <label for="monto_proveedor">
-                            Monto al proveedor
+                        <label for="monto">
+                            Monto del banco *
                         </label>
                     </th>
                     <td>
-                        <input class="form-control" min="1" name="monto_proveedor" readonly type="text"/>
+                        <input class="form-control" min="1" readonly name="monto" required step="0.01" type="text"/>
                     </td>
                 </tr>
 
@@ -259,7 +259,7 @@
             $('[name=moneda_banco]').val(moneda_banco);
         });
 
-        $('[name=monto]').keyup(function () {
+        $('[name=monto_proveedor]').keyup(function () {
             calcular_conversion();
         });
 
@@ -270,7 +270,7 @@
         function calcular_conversion() {
             banco = $('option:selected').attr('data-banco-moneda');
             proveedor = $('[name=moneda]').val();
-            monto = $('[name=monto]').val();
+            monto = $('[name=monto_proveedor]').val();
             tasa = $('[name=tasa]').val();
 
             console.log(banco, proveedor, monto, tasa);
@@ -288,14 +288,15 @@
                                 tasa: tasa,
                             },
                             success: function (response) {
+                                console.log(response);
                                 monto_proveedor = new Intl.NumberFormat('de-DE').format(response);
-                                $('[name=monto_proveedor]').val(monto_proveedor);
+                                $('[name=monto]').val(monto_proveedor);
                             }
                         });
                     }
                 } else {
                     if (monto != '') {
-                        $('[name=monto_proveedor]').val(monto);
+                        $('[name=monto]').val(monto);
                     }
                 }
             }

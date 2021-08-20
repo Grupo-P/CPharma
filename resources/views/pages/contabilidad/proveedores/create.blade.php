@@ -100,8 +100,9 @@
                         <td>
                             <select name="plan_cuentas" class="form-control">
                                 <option value=""></option>
-                                @foreach($cuentas as $cuentas)
-                                    <option value="{{ $cuentas->nombre }}">{{ $cuentas->nombre }}</option>
+                                @foreach($cuentas as $cuenta)
+                                  @php $padre = compras\ContCuenta::find($cuenta->pertenece_a); @endphp
+                                  <option value="{{ $cuenta->id }}">{{ $padre->nombre . ': ' . $cuenta->nombre }}</option>
                                 @endforeach
                             </select>
                         </td>

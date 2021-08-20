@@ -34,7 +34,9 @@ class ContProveedorController extends Controller
         $monedas = Configuracion::where('variable', 'Moneda')->first();
         $monedas = explode(',', $monedas->valor);
 
-        $cuentas = ContCuenta::get();
+        $cuentas = ContCuenta::where('pertenece_a', '!=', 'Principal')
+            ->orderBy('pertenece_a')
+            ->get();
 
         return view('pages.contabilidad.proveedores.create', compact('tasas', 'monedas', 'cuentas'));
     }
@@ -100,7 +102,9 @@ class ContProveedorController extends Controller
         $monedas = Configuracion::where('variable', 'Moneda')->first();
         $monedas = explode(',', $monedas->valor);
 
-        $cuentas = ContCuenta::get();
+        $cuentas = ContCuenta::where('pertenece_a', '!=', 'Principal')
+            ->orderBy('pertenece_a')
+            ->get();
 
         return view('pages.contabilidad.proveedores.edit', compact('cuentas', 'proveedor', 'tasas', 'monedas'));
     }

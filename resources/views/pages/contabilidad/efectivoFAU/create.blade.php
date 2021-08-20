@@ -113,7 +113,8 @@
                 <select required name="id_cuenta" class="form-control">
                   <option value=""></option>
                     @foreach($cuentas as $cuenta)
-                      <option value="{{ $cuenta->id }}">{{ $cuenta->nombre }}</option>
+                      @php $padre = compras\ContCuenta::find($cuenta->pertenece_a); @endphp
+                      <option value="{{ $cuenta->id }}">{{ $padre->nombre . ': ' . $cuenta->nombre }}</option>
                     @endforeach
                 </select>
               </td>
