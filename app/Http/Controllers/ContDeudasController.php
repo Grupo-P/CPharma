@@ -229,7 +229,7 @@ class ContDeudasController extends Controller
                 FROM
                     cont_proveedores
                 WHERE
-                    cont_proveedores.saldo > 0 AND cont_proveedores.moneda = 'Dólares'
+                    FORMAT(cont_proveedores.saldo, 2, 'en_US') > 0 AND cont_proveedores.moneda = 'Dólares'
                 GROUP BY proveedor
                 ORDER BY CAST(saldo AS UNSIGNED) DESC;
             ");
@@ -243,7 +243,7 @@ class ContDeudasController extends Controller
                 FROM
                     cont_proveedores
                 WHERE
-                    cont_proveedores.saldo < 0 AND cont_proveedores.moneda = 'Dólares'
+                    FORMAT(cont_proveedores.saldo, 2, 'en_US') < 0 AND cont_proveedores.moneda = 'Dólares'
                 GROUP BY proveedor
                 ORDER BY CAST(saldo AS UNSIGNED) ASC;
             ");
@@ -257,7 +257,7 @@ class ContDeudasController extends Controller
                 FROM
                     cont_proveedores
                 WHERE
-                    cont_proveedores.saldo > 0 AND cont_proveedores.moneda = 'Bolívares'
+                    FORMAT(cont_proveedores.saldo, 2, 'en_US') > 0 AND cont_proveedores.moneda = 'Bolívares'
                 GROUP BY proveedor
                 ORDER BY CAST(saldo AS UNSIGNED) DESC;
             ");
@@ -271,7 +271,7 @@ class ContDeudasController extends Controller
                 FROM
                     cont_proveedores
                 WHERE
-                    cont_proveedores.saldo < 0 AND cont_proveedores.moneda = 'Bolívares'
+                    FORMAT(cont_proveedores.saldo, 2, 'en_US') < 0 AND cont_proveedores.moneda = 'Bolívares'
                 GROUP BY proveedor
                 ORDER BY CAST(saldo AS UNSIGNED) ASC;
             ");

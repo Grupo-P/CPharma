@@ -100,10 +100,13 @@ class ContPagoBancarioController extends Controller
      */
     public function store(Request $request)
     {
+        $monto = str_replace('.', '', $request->input('monto'));
+        $monto = str_replace(',', '.', $monto);
+
         $pago               = new ContPagoBancario();
         $pago->id_proveedor = $request->input('id_proveedor');
         $pago->id_banco     = $request->input('id_banco');
-        $pago->monto        = $request->input('monto');
+        $pago->monto        = $monto;
         $pago->comentario   = $request->input('comentario');
         $pago->tasa         = $request->input('tasa');
 
@@ -117,27 +120,27 @@ class ContPagoBancarioController extends Controller
 
         if ($banco->moneda != $proveedor->moneda) {
             if ($banco->moneda == 'Dólares' && $proveedor->moneda == 'Bolívares') {
-                $monto = $pago->monto * $request->input('tasa');
+                $monto = $pago->monto * $pago->tasa;
             }
 
             if ($banco->moneda == 'Dólares' && $proveedor->moneda == 'Pesos') {
-                $monto = $pago->monto * $request->input('tasa');
+                $monto = $pago->monto * $pago->tasa;
             }
 
             if ($banco->moneda == 'Bolívares' && $proveedor->moneda == 'Dólares') {
-                $monto = $pago->monto / $request->input('tasa');
+                $monto = $pago->monto / $pago->tasa;
             }
 
             if ($banco->moneda == 'Bolívares' && $proveedor->moneda == 'Pesos') {
-                $monto = $pago->monto * $request->input('tasa');
+                $monto = $pago->monto * $pago->tasa;
             }
 
             if ($banco->moneda == 'Pesos' && $proveedor->moneda == 'Bolívares') {
-                $monto = $pago->monto / $request->input('tasa');
+                $monto = $pago->monto / $pago->tasa;
             }
 
             if ($banco->moneda == 'Pesos' && $proveedor->moneda == 'Dólares') {
-                $monto = $pago->monto / $request->input('tasa');
+                $monto = $pago->monto / $pago->tasa;
             }
         } else {
             $monto = $pago->monto;

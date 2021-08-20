@@ -821,7 +821,21 @@
 
     <br/><br/>
 
-    <a name="ver-manual"></a>
+    <table class="table table-bordered table-striped" style="margin-bottom: -1px">
+        <thead class="thead-dark" align="center">
+            <th scope="col"><b>VUELTOS</b></th>
+        </thead>
+
+        <tbody id="tablaVueltos">
+            <tr>
+                <td>
+                    <div class="row rowMontos"></div>
+                    <div class="row rowDatos"></div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
     <table class="table table-bordered table-striped">
         <thead class="thead-dark" align="center">
             <th scope="col"><b>INSTRUCCIONES</b></th>
@@ -954,6 +968,7 @@
             type: "POST",
             success: function(data) {
               var respuesta = JSON.parse(data);
+
               if(respuesta['NombreCaja']!=null){
                 var nombreCaja = respuesta['NombreCaja'];
                 var nombreCliente = respuesta['NombreCliente'];
@@ -963,6 +978,138 @@
                 var ParteDsSug = (Math.trunc((TotalFacDsSug/5))*5);
                 var ParteBsSug = (TotalFacBsSug-(ParteDsSug*TasaDolar));
                 //var ParteBsSug = ((TotalFacDsSug%5)*TasaDolar);
+
+                var redondeoAbajo = (Math.trunc((TotalFacDsSug/5))*5);
+                var redondeoArriba = (Math.ceil(TotalFacDsSug/10)*10);
+
+                console.log(redondeoAbajo);
+
+                redondeoAbajo = (redondeoAbajo == 5) ? redondeoAbajo : (Math.trunc((TotalFacDsSug/10))*10);
+
+                console.log(redondeoAbajo, redondeoArriba);
+
+                $('#tablaVueltos').find('.rowDatos').html('');
+                $('.rowMontos').html('');
+
+                if (redondeoAbajo != 0) {
+                    $('.rowMontos').html(`
+                        <div class="col">
+                            <b>Total factura:</b> ${separarMiles(TotalFacBsSug, 2)}
+
+                            <b>Parte en $:</b> ${separarMiles(ParteDsSug, 2)}
+
+                            <b>Parte en Bs.S.:</b> ${separarMiles(ParteBsSug, 2)}
+                        </div>
+                    `);
+
+                    if (redondeoAbajo == 5) {
+                        $('#tablaVueltos').find('.rowDatos').append(`
+                            <div class="col">
+                                <b>Redondeado en base a 5$:</b><br>
+                                * Que el cliente nos de 50$ y le damos 2 de 20$ y uno de 5$ (o 5$ por pago movil)<br>
+                                * Que el cliente nos de 60$ y le damos 1 de 50 y uno de 5$  (o 5$ por pago movil)<br>
+                                * Que el cliente nos de 100$ y le damos 1 de 50$ 2 de 20$ y 1 de 5$  (o 5$ por pago movil)
+                            </div>
+                        `);
+                    }
+
+                    if (redondeoAbajo == 10 || redondeoArriba == 10) {
+                        $('#tablaVueltos').find('.rowDatos').append(`
+                            <div class="col">
+                                <b>Redondeado en base a 10$:</b><br>
+                                * Que el cliente nos de 50$  y le damos 2 de 20$<br>
+                                * Que el cliente nos de 60$  y la damos 1 de 50$<br>
+                                * Que el cliente nos de 100$ y le damos 1 50$ y 2 de 20$
+                            </div>
+                        `);
+                    }
+
+                    if (redondeoAbajo == 20 || redondeoArriba == 20) {
+                        $('#tablaVueltos').find('.rowDatos').append(`
+                            <div class="col">
+                                <b>Redondeado en base a 20$:</b><br>
+                                * Que el cliente nos de 60$ y le damos 2 de 20$<br>
+                                * Que el cliente nos de 100$ y le damos 4 de 20$
+                            </div>
+                        `);
+                    }
+
+                    if (redondeoAbajo == 30 || redondeoArriba == 30) {
+                        $('#tablaVueltos').find('.rowDatos').append(`
+                            <div class="col">
+                                <b>Redondeado en base a 30$:</b><br>
+                                * Que el cliente nos de 50$  le damos 20$<br>
+                                * Que el cliente nos de 80$  y le damos 1 de 50$<br>
+                                * Que el cliente nos de 100$  le damos 1 50$ y uno de 20$<br>
+                                * Que el cliente nos de 110$  y le damos 4 de 20$
+                            </div>
+                        `);
+                    }
+
+                    if (redondeoAbajo == 40 || redondeoArriba == 40) {
+                        $('#tablaVueltos').find('.rowDatos').append(`
+                            <div class="col">
+                                <b>Redondeado en base a 40$:</b><br>
+                                * Que el cliente nos de 60$  y le damos 1 de 20$<br>
+                                * Que el cliente nos de 100$  y le damos 3 de 20$<br>
+                                * Que el cliente nos de 100$, le damos 1 50$ y uno de 20$
+                            </div>
+                        `);
+                    }
+
+                    if (redondeoAbajo == 50 || redondeoArriba == 50) {
+                        $('#tablaVueltos').find('.rowDatos').append(`
+                            <div class="col">
+                                <b>Redondeado en base a 50$:</b><br>
+                                * Que el cliente nos de 100$ y le damos 1 de 50$<br>
+                                * Que el cliente nos de 110$ y le damos 3 de 20$
+                            </div>
+                            `);
+                    }
+
+                    if (redondeoAbajo == 60 || redondeoArriba == 60) {
+                        $('#tablaVueltos').find('.rowDatos').append(`
+                            <div class="col">
+                                <b>Redondeado en base a 60$:</b><br>
+                                * Que el cliente nos de 100$  y le damos 2 de 20$<br>
+                                * Que el cliente nos de 110$ y le damos 50$
+                            </div>
+                        `);
+                    }
+
+                    if (redondeoAbajo == 70 || redondeoArriba == 70) {
+                        $('#tablaVueltos').find('.rowDatos').append(`
+                            <div class="col">
+                                <b>Redondeado en base a 70$:</b><br>
+                                * Que el cliente nos de 110$  y le damos 2 de 20$<br>
+                                * Que el cliente nos de 120$  y le damos 1 de 50$<
+                            </div>
+                        `);
+                    }
+
+                    if (redondeoAbajo == 80 || redondeoArriba == 80) {
+                        $('#tablaVueltos').find('.rowDatos').append(`
+                            <div class="col">
+                                <b>Redondeado en base a 80$:</b><br>
+                                * Que el cliente nos de 100$ y le damos 20$<br>
+                                * Que el cliente nos de 130$ y le damos 50$
+                            </div>
+                        `);
+                    }
+
+                    if (redondeoAbajo == 90 || redondeoArriba == 90) {
+                        $('#tablaVueltos').find('.rowDatos').append(`
+                            <div class="col">
+                                <b>Redondeado en base a 90$:</b><br>
+                                * Que el cliente nos de 110$  y le damos 1 de 20$<br>
+                                * Que el cliente nos de 140$  y le damos 1 de 50$<br>
+                                * Que el cliente nos de 150$ y le damos 3 de 20$
+                            </div>
+                        `);
+                    }
+                }
+
+
 
                 $('#nombreCaja').val(nombreCaja);
                 $('#nombreCliente').val(nombreCliente);

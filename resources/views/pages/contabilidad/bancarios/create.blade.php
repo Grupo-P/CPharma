@@ -155,7 +155,7 @@
                         </label>
                     </th>
                     <td>
-                        <input class="form-control" min="1" name="monto_proveedor" type="number"/>
+                        <input class="form-control" lang="en" name="monto_proveedor" required step="0.01" type="number">
                     </td>
                 </tr>
 
@@ -166,7 +166,7 @@
                         </label>
                     </th>
                     <td>
-                        <input class="form-control" disabled name="tasa" step="0.01" type="number">
+                        <input class="form-control" lang="en" disabled name="tasa" step="0.01" type="number">
                         </input>
                     </td>
                 </tr>
@@ -178,7 +178,7 @@
                         </label>
                     </th>
                     <td>
-                        <input class="form-control" min="1" readonly name="monto" required step="0.01" type="text"/>
+                        <input class="form-control" lang="en" in="1" name="monto" required step="0.01" type="text">
                     </td>
                 </tr>
 
