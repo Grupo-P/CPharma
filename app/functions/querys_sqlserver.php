@@ -10,7 +10,7 @@
     $sql = "
       IF OBJECT_ID ('".$NombreTabla."', 'U') IS NOT NULL
         DROP TABLE ".$NombreTabla.";
-    ";          
+    ";
     return $sql;
   }
   /**********************************************************************************/
@@ -21,7 +21,7 @@
    */
   function SQL_Last_RestoreDB($nameDataBase){
     $sql = "
-      SELECT 
+      SELECT
       CONVERT (smalldatetime,sys.sysdatabases.crdate) As FechaRestauracion
       FROM sys.sysdatabases
       WHERE sys.sysdatabases.name LIKE '%$nameDataBase%'
@@ -61,8 +61,8 @@
 		InvAjusteDetalle.InvArticuloId,
 		(ROUND(CAST((InvAjusteDetalle.Cantidad) AS DECIMAL(38,0)),2,0))  AS Cantidad,
     InvAjusteDetalle.InvLoteId AS lote
-		FROM InvAjusteDetalle 
-		WHERE ((InvAjusteDetalle.InvAjusteId = '$IdAjuste') 
+		FROM InvAjusteDetalle
+		WHERE ((InvAjusteDetalle.InvAjusteId = '$IdAjuste')
 		AND (InvAjusteDetalle.M_TotalCostoDetalle < 0))
 		";
 		return $sql;
@@ -74,7 +74,7 @@
     DESAROLLADO POR: SERGIO COVA
   */
   function SQG_Detalle_Articulo($IdArticulo) {
-    $sql = " 
+    $sql = "
     SELECT
     --Id Articulo
     InvArticulo.Id AS IdArticulo,
@@ -84,7 +84,7 @@
     InvArticulo.CodigoArticulo AS CodigoInterno,
     --Codigo de Barra
     (SELECT CodigoBarra
-    FROM InvCodigoBarra 
+    FROM InvCodigoBarra
     WHERE InvCodigoBarra.InvArticuloId = InvArticulo.Id
     AND InvCodigoBarra.EsPrincipal = 1) AS CodigoBarra,
     --Descripcion
@@ -98,27 +98,27 @@
     --Troquelado (0 NO es Troquelado, Id Articulo SI es Troquelado)
     (ISNULL((SELECT
     InvArticuloAtributo.InvArticuloId
-    FROM InvArticuloAtributo 
-    WHERE InvArticuloAtributo.InvAtributoId = 
+    FROM InvArticuloAtributo
+    WHERE InvArticuloAtributo.InvAtributoId =
     (SELECT InvAtributo.Id
-    FROM InvAtributo 
-    WHERE 
+    FROM InvAtributo
+    WHERE
     InvAtributo.Descripcion = 'Troquelados'
     OR  InvAtributo.Descripcion = 'troquelados')
     AND InvArticuloAtributo.InvArticuloId = InvArticulo.Id),CAST(0 AS INT))) AS Troquelado,
     --UtilidadArticulo (Utilidad del articulo, Utilidad es 1.00 NO considerar la utilidad para el calculo de precio)
     ROUND(CAST(1-((ISNULL(ROUND(CAST((SELECT VenCondicionVenta.PorcentajeUtilidad
-    FROM VenCondicionVenta 
+    FROM VenCondicionVenta
     WHERE VenCondicionVenta.Id = (
     SELECT VenCondicionVenta_VenCondicionVentaArticulo.Id
-    FROM VenCondicionVenta_VenCondicionVentaArticulo 
+    FROM VenCondicionVenta_VenCondicionVentaArticulo
     WHERE VenCondicionVenta_VenCondicionVentaArticulo.InvArticuloId = InvArticulo.Id)) AS DECIMAL(38,4)),2,0),CAST(0 AS INT)))/100)AS DECIMAL(38,4)),2,0) AS UtilidadArticulo,
     --UtilidadCategoria (Utilidad de la categoria, Utilidad es 1.00 NO considerar la utilidad para el calculo de precio)
-    ROUND(CAST(1-((ISNULL(ROUND(CAST((SELECT VenCondicionVenta.PorcentajeUtilidad 
-    FROM VenCondicionVenta 
+    ROUND(CAST(1-((ISNULL(ROUND(CAST((SELECT VenCondicionVenta.PorcentajeUtilidad
+    FROM VenCondicionVenta
     WHERE VenCondicionVenta.id = (
-    SELECT VenCondicionVenta_VenCondicionVentaCategoria.Id 
-    FROM VenCondicionVenta_VenCondicionVentaCategoria 
+    SELECT VenCondicionVenta_VenCondicionVentaCategoria.Id
+    FROM VenCondicionVenta_VenCondicionVentaCategoria
     WHERE VenCondicionVenta_VenCondicionVentaCategoria.InvCategoriaId = InvArticulo.InvCategoriaId)) AS DECIMAL(38,4)),2,0),CAST(0 AS INT)))/100)AS DECIMAL(38,4)),2,0) AS UtilidadCategoria,
     --Precio Troquel Almacen 1
     (ROUND(CAST((SELECT TOP 1
@@ -182,34 +182,34 @@
     --Dolarizado (0 NO es dolarizado, Id Articulo SI es dolarizado)
     (ISNULL((SELECT
     InvArticuloAtributo.InvArticuloId
-    FROM InvArticuloAtributo 
-    WHERE InvArticuloAtributo.InvAtributoId = 
+    FROM InvArticuloAtributo
+    WHERE InvArticuloAtributo.InvAtributoId =
     (SELECT InvAtributo.Id
-    FROM InvAtributo 
-    WHERE 
+    FROM InvAtributo
+    WHERE
     InvAtributo.Descripcion = 'Dolarizados'
     OR  InvAtributo.Descripcion = 'Giordany'
-    OR  InvAtributo.Descripcion = 'giordany') 
+    OR  InvAtributo.Descripcion = 'giordany')
     AND InvArticuloAtributo.InvArticuloId = InvArticulo.Id),CAST(0 AS INT))) AS Dolarizado,
     --Tipo Producto (0 Miscelaneos, Id Articulo Medicinas)
     (ISNULL((SELECT
-    InvArticuloAtributo.InvArticuloId 
-    FROM InvArticuloAtributo 
-    WHERE InvArticuloAtributo.InvAtributoId = 
+    InvArticuloAtributo.InvArticuloId
+    FROM InvArticuloAtributo
+    WHERE InvArticuloAtributo.InvAtributoId =
     (SELECT InvAtributo.Id
-    FROM InvAtributo 
-    WHERE 
-    InvAtributo.Descripcion = 'Medicina') 
+    FROM InvAtributo
+    WHERE
+    InvAtributo.Descripcion = 'Medicina')
     AND InvArticuloAtributo.InvArticuloId = InvArticulo.Id),CAST(0 AS INT))) AS Tipo,
     --Articulo Estrella (0 NO es Articulo Estrella , Id SI es Articulo Estrella)
     (ISNULL((SELECT
-    InvArticuloAtributo.InvArticuloId 
-    FROM InvArticuloAtributo 
-    WHERE InvArticuloAtributo.InvAtributoId = 
+    InvArticuloAtributo.InvArticuloId
+    FROM InvArticuloAtributo
+    WHERE InvArticuloAtributo.InvAtributoId =
     (SELECT InvAtributo.Id
-    FROM InvAtributo 
-    WHERE 
-    InvAtributo.Descripcion = 'Articulo Estrella') 
+    FROM InvAtributo
+    WHERE
+    InvAtributo.Descripcion = 'Articulo Estrella')
     AND InvArticuloAtributo.InvArticuloId = InvArticulo.Id),CAST(0 AS INT))) AS ArticuloEstrella,
     -- Ultima Venta (Fecha)
     (SELECT TOP 1
@@ -232,9 +232,9 @@
     WHERE InvLote.InvArticuloId  = InvArticulo.Id
     ORDER BY UltimoLote DESC) AS UltimoLote,
     --Tiempo Tienda (En dias)
-    (SELECT TOP 1 
+    (SELECT TOP 1
     DATEDIFF(DAY,CONVERT(DATE,InvLote.FechaEntrada),GETDATE())
-    FROM InvLoteAlmacen 
+    FROM InvLoteAlmacen
     INNER JOIN invlote on invlote.id = InvLoteAlmacen.InvLoteId
     WHERE InvLotealmacen.InvArticuloId = InvArticulo.Id
     ORDER BY InvLote.Auditoria_FechaCreacion DESC) AS TiempoTienda,
@@ -261,13 +261,13 @@
     --Joins
     LEFT JOIN InvLoteAlmacen ON InvLoteAlmacen.InvArticuloId = InvArticulo.Id
     LEFT JOIN InvArticuloAtributo ON InvArticuloAtributo.InvArticuloId = InvArticulo.Id
-    LEFT JOIN InvAtributo ON InvAtributo.Id = InvArticuloAtributo.InvAtributoId 
+    LEFT JOIN InvAtributo ON InvAtributo.Id = InvArticuloAtributo.InvAtributoId
     --Condicionales
     WHERE InvArticulo.Id = '$IdArticulo'
     --Agrupamientos
     GROUP BY InvArticulo.Id, InvArticulo.CodigoArticulo, InvArticulo.Descripcion, InvArticulo.FinConceptoImptoIdCompra, InvArticulo.InvCategoriaId,InvArticulo.InvMarcaId,InvArticulo.Auditoria_FechaCreacion
     --Ordanamiento
-    ORDER BY InvArticulo.Id ASC 
+    ORDER BY InvArticulo.Id ASC
     ";
     return $sql;
   }
@@ -278,7 +278,7 @@
     DESAROLLADO POR: SERGIO COVA
   */
   function SQG_Detalle_Articulo_Lote($Idlote,$IdArticulo) {
-    $sql = " 
+    $sql = "
     SELECT
     --Id Articulo
     InvArticulo.Id AS IdArticulo,
@@ -288,7 +288,7 @@
     InvArticulo.CodigoArticulo AS CodigoInterno,
     --Codigo de Barra
     (SELECT CodigoBarra
-    FROM InvCodigoBarra 
+    FROM InvCodigoBarra
     WHERE InvCodigoBarra.InvArticuloId = InvArticulo.Id
     AND InvCodigoBarra.EsPrincipal = 1) AS CodigoBarra,
     --Descripcion
@@ -298,27 +298,27 @@
     --Troquelado (0 NO es Troquelado, Id Articulo SI es Troquelado)
     (ISNULL((SELECT
     InvArticuloAtributo.InvArticuloId
-    FROM InvArticuloAtributo 
-    WHERE InvArticuloAtributo.InvAtributoId = 
+    FROM InvArticuloAtributo
+    WHERE InvArticuloAtributo.InvAtributoId =
     (SELECT InvAtributo.Id
-    FROM InvAtributo 
-    WHERE 
+    FROM InvAtributo
+    WHERE
     InvAtributo.Descripcion = 'Troquelados'
-    OR  InvAtributo.Descripcion = 'troquelados') 
+    OR  InvAtributo.Descripcion = 'troquelados')
     AND InvArticuloAtributo.InvArticuloId = InvArticulo.Id),CAST(0 AS INT))) AS Troquelado,
     --UtilidadArticulo (Utilidad del articulo, Utilidad es 1.00 NO considerar la utilidad para el calculo de precio)
     ROUND(CAST(1-((ISNULL(ROUND(CAST((SELECT VenCondicionVenta.PorcentajeUtilidad
-    FROM VenCondicionVenta 
+    FROM VenCondicionVenta
     WHERE VenCondicionVenta.Id = (
     SELECT VenCondicionVenta_VenCondicionVentaArticulo.Id
-    FROM VenCondicionVenta_VenCondicionVentaArticulo 
+    FROM VenCondicionVenta_VenCondicionVentaArticulo
     WHERE VenCondicionVenta_VenCondicionVentaArticulo.InvArticuloId = InvArticulo.Id)) AS DECIMAL(38,4)),2,0),CAST(0 AS INT)))/100)AS DECIMAL(38,4)),2,0) AS UtilidadArticulo,
     --UtilidadCategoria (Utilidad de la categoria, Utilidad es 1.00 NO considerar la utilidad para el calculo de precio)
-    ROUND(CAST(1-((ISNULL(ROUND(CAST((SELECT VenCondicionVenta.PorcentajeUtilidad 
-    FROM VenCondicionVenta 
+    ROUND(CAST(1-((ISNULL(ROUND(CAST((SELECT VenCondicionVenta.PorcentajeUtilidad
+    FROM VenCondicionVenta
     WHERE VenCondicionVenta.id = (
-    SELECT VenCondicionVenta_VenCondicionVentaCategoria.Id 
-    FROM VenCondicionVenta_VenCondicionVentaCategoria 
+    SELECT VenCondicionVenta_VenCondicionVentaCategoria.Id
+    FROM VenCondicionVenta_VenCondicionVentaCategoria
     WHERE VenCondicionVenta_VenCondicionVentaCategoria.InvCategoriaId = InvArticulo.InvCategoriaId)) AS DECIMAL(38,4)),2,0),CAST(0 AS INT)))/100)AS DECIMAL(38,4)),2,0) AS UtilidadCategoria,
     --Precio Troquel Almacen 1
     (ROUND(CAST((SELECT TOP 1
@@ -367,9 +367,9 @@
     --Existencia (Segun el almacen del filtro)
     (ROUND(CAST((SELECT SUM (InvLoteAlmacen.Existencia) As Existencia
     FROM InvLoteAlmacen
-    WHERE(InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2) 
-    AND InvLoteAlmacen.InvLoteId = '$Idlote'   
-    AND (InvLoteAlmacen.InvArticuloId = InvArticulo.Id)) AS DECIMAL(38,0)),2,0))  AS Existencia,    
+    WHERE(InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
+    AND InvLoteAlmacen.InvLoteId = '$Idlote'
+    AND (InvLoteAlmacen.InvArticuloId = InvArticulo.Id)) AS DECIMAL(38,0)),2,0))  AS Existencia,
     --ExistenciaAlmacen1 (Segun el almacen del filtro)
     (ROUND(CAST((SELECT SUM (InvLoteAlmacen.Existencia) As Existencia
     FROM InvLoteAlmacen
@@ -383,34 +383,34 @@
     --Dolarizado (0 NO es dolarizado, Id Articulo SI es dolarizado)
     (ISNULL((SELECT
     InvArticuloAtributo.InvArticuloId
-    FROM InvArticuloAtributo 
-    WHERE InvArticuloAtributo.InvAtributoId = 
+    FROM InvArticuloAtributo
+    WHERE InvArticuloAtributo.InvAtributoId =
     (SELECT InvAtributo.Id
-    FROM InvAtributo 
-    WHERE 
+    FROM InvAtributo
+    WHERE
     InvAtributo.Descripcion = 'Dolarizados'
     OR  InvAtributo.Descripcion = 'Giordany'
-    OR  InvAtributo.Descripcion = 'giordany') 
+    OR  InvAtributo.Descripcion = 'giordany')
     AND InvArticuloAtributo.InvArticuloId = InvArticulo.Id),CAST(0 AS INT))) AS Dolarizado,
     --Tipo Producto (0 Miscelaneos, Id Articulo Medicinas)
     (ISNULL((SELECT
-    InvArticuloAtributo.InvArticuloId 
-    FROM InvArticuloAtributo 
-    WHERE InvArticuloAtributo.InvAtributoId = 
+    InvArticuloAtributo.InvArticuloId
+    FROM InvArticuloAtributo
+    WHERE InvArticuloAtributo.InvAtributoId =
     (SELECT InvAtributo.Id
-    FROM InvAtributo 
-    WHERE 
-    InvAtributo.Descripcion = 'Medicina') 
+    FROM InvAtributo
+    WHERE
+    InvAtributo.Descripcion = 'Medicina')
     AND InvArticuloAtributo.InvArticuloId = InvArticulo.Id),CAST(0 AS INT))) AS Tipo,
     --Articulo Estrella (0 NO es Articulo Estrella , Id SI es Articulo Estrella)
     (ISNULL((SELECT
-    InvArticuloAtributo.InvArticuloId 
-    FROM InvArticuloAtributo 
-    WHERE InvArticuloAtributo.InvAtributoId = 
+    InvArticuloAtributo.InvArticuloId
+    FROM InvArticuloAtributo
+    WHERE InvArticuloAtributo.InvAtributoId =
     (SELECT InvAtributo.Id
-    FROM InvAtributo 
-    WHERE 
-    InvAtributo.Descripcion = 'Articulo Estrella') 
+    FROM InvAtributo
+    WHERE
+    InvAtributo.Descripcion = 'Articulo Estrella')
     AND InvArticuloAtributo.InvArticuloId = InvArticulo.Id),CAST(0 AS INT))) AS ArticuloEstrella,
     -- Ultima Venta (Fecha)
     (SELECT TOP 1
@@ -433,9 +433,9 @@
     WHERE InvLote.InvArticuloId  = InvArticulo.Id
     ORDER BY UltimoLote DESC) AS UltimoLote,
     --Tiempo Tienda (En dias)
-    (SELECT TOP 1 
+    (SELECT TOP 1
     DATEDIFF(DAY,CONVERT(DATE,InvLote.FechaEntrada),GETDATE())
-    FROM InvLoteAlmacen 
+    FROM InvLoteAlmacen
     INNER JOIN invlote on invlote.id = InvLoteAlmacen.InvLoteId
     WHERE InvLotealmacen.InvArticuloId = InvArticulo.Id
     ORDER BY InvLote.Auditoria_FechaCreacion DESC) AS TiempoTienda,
@@ -462,13 +462,13 @@
     --Joins
     LEFT JOIN InvLoteAlmacen ON InvLoteAlmacen.InvArticuloId = InvArticulo.Id
     LEFT JOIN InvArticuloAtributo ON InvArticuloAtributo.InvArticuloId = InvArticulo.Id
-    LEFT JOIN InvAtributo ON InvAtributo.Id = InvArticuloAtributo.InvAtributoId 
+    LEFT JOIN InvAtributo ON InvAtributo.Id = InvArticuloAtributo.InvAtributoId
     --Condicionales
     WHERE InvArticulo.Id = '$IdArticulo'
     --Agrupamientos
     GROUP BY InvArticulo.Id, InvArticulo.CodigoArticulo, InvArticulo.Descripcion, InvArticulo.FinConceptoImptoIdCompra, InvArticulo.InvCategoriaId
     --Ordanamiento
-    ORDER BY InvArticulo.Id ASC 
+    ORDER BY InvArticulo.Id ASC
     ";
     return $sql;
   }
@@ -489,7 +489,7 @@
     InvArticulo.CodigoArticulo AS CodigoInterno,
     --Codigo de Barra
     (SELECT CodigoBarra
-    FROM InvCodigoBarra 
+    FROM InvCodigoBarra
     WHERE InvCodigoBarra.InvArticuloId = InvArticulo.Id
     AND InvCodigoBarra.EsPrincipal = 1) AS CodigoBarra,
     --Descripcion
@@ -499,27 +499,27 @@
     --Troquelado (0 NO es Troquelado, Id Articulo SI es Troquelado)
     (ISNULL((SELECT
     InvArticuloAtributo.InvArticuloId
-    FROM InvArticuloAtributo 
-    WHERE InvArticuloAtributo.InvAtributoId = 
+    FROM InvArticuloAtributo
+    WHERE InvArticuloAtributo.InvAtributoId =
     (SELECT InvAtributo.Id
-    FROM InvAtributo 
-    WHERE 
+    FROM InvAtributo
+    WHERE
     InvAtributo.Descripcion = 'Troquelados'
-    OR  InvAtributo.Descripcion = 'troquelados') 
+    OR  InvAtributo.Descripcion = 'troquelados')
     AND InvArticuloAtributo.InvArticuloId = InvArticulo.Id),CAST(0 AS INT))) AS Troquelado,
     --UtilidadArticulo (Utilidad del articulo, Utilidad es 1.00 NO considerar la utilidad para el calculo de precio)
     ROUND(CAST(1-((ISNULL(ROUND(CAST((SELECT VenCondicionVenta.PorcentajeUtilidad
-    FROM VenCondicionVenta 
+    FROM VenCondicionVenta
     WHERE VenCondicionVenta.Id = (
     SELECT VenCondicionVenta_VenCondicionVentaArticulo.Id
-    FROM VenCondicionVenta_VenCondicionVentaArticulo 
+    FROM VenCondicionVenta_VenCondicionVentaArticulo
     WHERE VenCondicionVenta_VenCondicionVentaArticulo.InvArticuloId = InvArticulo.Id)) AS DECIMAL(38,4)),2,0),CAST(0 AS INT)))/100)AS DECIMAL(38,4)),2,0) AS UtilidadArticulo,
     --UtilidadCategoria (Utilidad de la categoria, Utilidad es 1.00 NO considerar la utilidad para el calculo de precio)
-    ROUND(CAST(1-((ISNULL(ROUND(CAST((SELECT VenCondicionVenta.PorcentajeUtilidad 
-    FROM VenCondicionVenta 
+    ROUND(CAST(1-((ISNULL(ROUND(CAST((SELECT VenCondicionVenta.PorcentajeUtilidad
+    FROM VenCondicionVenta
     WHERE VenCondicionVenta.id = (
-    SELECT VenCondicionVenta_VenCondicionVentaCategoria.Id 
-    FROM VenCondicionVenta_VenCondicionVentaCategoria 
+    SELECT VenCondicionVenta_VenCondicionVentaCategoria.Id
+    FROM VenCondicionVenta_VenCondicionVentaCategoria
     WHERE VenCondicionVenta_VenCondicionVentaCategoria.InvCategoriaId = InvArticulo.InvCategoriaId)) AS DECIMAL(38,4)),2,0),CAST(0 AS INT)))/100)AS DECIMAL(38,4)),2,0) AS UtilidadCategoria,
     --Precio Troquel Almacen 1
     (ROUND(CAST((SELECT TOP 1
@@ -583,34 +583,34 @@
     --Dolarizado (0 NO es dolarizado, Id Articulo SI es dolarizado)
     (ISNULL((SELECT
     InvArticuloAtributo.InvArticuloId
-    FROM InvArticuloAtributo 
-    WHERE InvArticuloAtributo.InvAtributoId = 
+    FROM InvArticuloAtributo
+    WHERE InvArticuloAtributo.InvAtributoId =
     (SELECT InvAtributo.Id
-    FROM InvAtributo 
-    WHERE 
+    FROM InvAtributo
+    WHERE
     InvAtributo.Descripcion = 'Dolarizados'
     OR  InvAtributo.Descripcion = 'Giordany'
-    OR  InvAtributo.Descripcion = 'giordany') 
+    OR  InvAtributo.Descripcion = 'giordany')
     AND InvArticuloAtributo.InvArticuloId = InvArticulo.Id),CAST(0 AS INT))) AS Dolarizado,
     --Tipo Producto (0 Miscelaneos, Id Articulo Medicinas)
     (ISNULL((SELECT
-    InvArticuloAtributo.InvArticuloId 
-    FROM InvArticuloAtributo 
-    WHERE InvArticuloAtributo.InvAtributoId = 
+    InvArticuloAtributo.InvArticuloId
+    FROM InvArticuloAtributo
+    WHERE InvArticuloAtributo.InvAtributoId =
     (SELECT InvAtributo.Id
-    FROM InvAtributo 
-    WHERE 
-    InvAtributo.Descripcion = 'Medicina') 
+    FROM InvAtributo
+    WHERE
+    InvAtributo.Descripcion = 'Medicina')
     AND InvArticuloAtributo.InvArticuloId = InvArticulo.Id),CAST(0 AS INT))) AS Tipo,
     --Articulo Estrella (0 NO es Articulo Estrella , Id SI es Articulo Estrella)
     (ISNULL((SELECT
-    InvArticuloAtributo.InvArticuloId 
-    FROM InvArticuloAtributo 
-    WHERE InvArticuloAtributo.InvAtributoId = 
+    InvArticuloAtributo.InvArticuloId
+    FROM InvArticuloAtributo
+    WHERE InvArticuloAtributo.InvAtributoId =
     (SELECT InvAtributo.Id
-    FROM InvAtributo 
-    WHERE 
-    InvAtributo.Descripcion = 'Articulo Estrella') 
+    FROM InvAtributo
+    WHERE
+    InvAtributo.Descripcion = 'Articulo Estrella')
     AND InvArticuloAtributo.InvArticuloId = InvArticulo.Id),CAST(0 AS INT))) AS ArticuloEstrella,
     -- Ultima Venta (Fecha)
     (SELECT TOP 1
@@ -633,9 +633,9 @@
     WHERE InvLote.InvArticuloId  = InvArticulo.Id
     ORDER BY UltimoLote DESC) AS UltimoLote,
    --Tiempo Tienda (En dias)
-    (SELECT TOP 1 
+    (SELECT TOP 1
     DATEDIFF(DAY,CONVERT(DATE,InvLote.FechaEntrada),GETDATE())
-    FROM InvLoteAlmacen 
+    FROM InvLoteAlmacen
     INNER JOIN invlote on invlote.id = InvLoteAlmacen.InvLoteId
     WHERE InvLotealmacen.InvArticuloId = InvArticulo.Id
     ORDER BY InvLote.Auditoria_FechaCreacion DESC) AS TiempoTienda,
@@ -662,7 +662,7 @@
     --Joins
     LEFT JOIN InvLoteAlmacen ON InvLoteAlmacen.InvArticuloId = InvArticulo.Id
     LEFT JOIN InvArticuloAtributo ON InvArticuloAtributo.InvArticuloId = InvArticulo.Id
-    LEFT JOIN InvAtributo ON InvAtributo.Id = InvArticuloAtributo.InvAtributoId 
+    LEFT JOIN InvAtributo ON InvAtributo.Id = InvArticuloAtributo.InvAtributoId
     --Condicionales
     WHERE InvLoteAlmacen.Existencia > 0
     AND (InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
@@ -675,7 +675,7 @@
   }
   /**********************************************************************************/
   /*
-    TITULO: SQL_ArtVendidos_ProductoCaida 
+    TITULO: SQL_ArtVendidos_ProductoCaida
     FUNCION: Consulta las Veces reclamo a proveedores y las unidades reclamo
     DESAROLLADO POR: SERGIO COVA
    */
@@ -719,7 +719,7 @@
   }
   /**********************************************************************************/
   /*
-    TITULO: SQL_ArtComprados_ProductoCaida    
+    TITULO: SQL_ArtComprados_ProductoCaida
     FUNCION: Consulta las Veces reclamo a proveedores y las unidades reclamo
     DESAROLLADO POR: SERGIO COVA
    */
@@ -730,7 +730,7 @@
     ISNULL(COUNT(*),CAST(0 AS INT)) AS VecesCompradas,
     (ROUND(CAST(SUM(ComFacturaDetalle.CantidadFacturada) AS DECIMAL(38,0)),2,0)) as UnidadesCompradas
     INTO CP_QG_Unidades_Compradas
-    FROM ComFacturaDetalle      
+    FROM ComFacturaDetalle
     INNER JOIN ComFactura ON  ComFactura.Id = ComFacturaDetalle.ComFacturaId
     WHERE
     (ComFactura.FechaRegistro > '$FInicial' AND ComFactura.FechaRegistro < '$FFinal')
@@ -741,7 +741,7 @@
   }
   /**********************************************************************************/
   /*
-    TITULO: SQL_ArtReclamados_ProductoCaida    
+    TITULO: SQL_ArtReclamados_ProductoCaida
     FUNCION: Consulta las Veces reclamo a proveedores y las unidades reclamo
     DESAROLLADO POR: SERGIO COVA
    */
@@ -771,17 +771,17 @@
       $sql = "
         SELECT
     CP_QG_Unidades_Vendidas.InvArticuloId,
-    ((ISNULL(CP_QG_Unidades_Vendidas.VecesVendidas,CAST(0 AS INT))) - 
-    (ISNULL(CP_QG_Unidades_Devueltas.VecesDevueltas,CAST(0 AS INT))) 
+    ((ISNULL(CP_QG_Unidades_Vendidas.VecesVendidas,CAST(0 AS INT))) -
+    (ISNULL(CP_QG_Unidades_Devueltas.VecesDevueltas,CAST(0 AS INT)))
     ) AS VecesVendidas,
     ((ISNULL(CP_QG_Unidades_Vendidas.UnidadesVendidas,CAST(0 AS INT))) -
-    (ISNULL(CP_QG_Unidades_Devueltas.UnidadesDevueltas,CAST(0 AS INT))) 
+    (ISNULL(CP_QG_Unidades_Devueltas.UnidadesDevueltas,CAST(0 AS INT)))
     ) AS UnidadesVendidas,
     ((ISNULL(CP_QG_Unidades_Compradas.VecesCompradas,CAST(0 AS INT))) -
-    (ISNULL(CP_QG_Unidades_Reclamadas.VecesReclamadas,CAST(0 AS INT))) 
+    (ISNULL(CP_QG_Unidades_Reclamadas.VecesReclamadas,CAST(0 AS INT)))
     ) AS VecesCompradas,
     ((ISNULL(CP_QG_Unidades_Compradas.UnidadesCompradas,CAST(0 AS INT))) -
-    (ISNULL(CP_QG_Unidades_Reclamadas.UnidadesReclamadas,CAST(0 AS INT))) 
+    (ISNULL(CP_QG_Unidades_Reclamadas.UnidadesReclamadas,CAST(0 AS INT)))
     ) AS UnidadesCompradas,
     (SELECT (ROUND(CAST(SUM (InvLoteAlmacen.Existencia) AS DECIMAL(38,0)),2,0)) As Existencia
       FROM InvLoteAlmacen
@@ -791,7 +791,7 @@
     LEFT JOIN CP_QG_Unidades_Devueltas ON CP_QG_Unidades_Devueltas.InvArticuloId = CP_QG_Unidades_Vendidas.InvArticuloId
     LEFT JOIN CP_QG_Unidades_Compradas ON CP_QG_Unidades_Compradas.InvArticuloId = CP_QG_Unidades_Vendidas.InvArticuloId
     LEFT JOIN CP_QG_Unidades_Reclamadas ON CP_QG_Unidades_Reclamadas.InvArticuloId = CP_QG_Unidades_Vendidas.InvArticuloId
-    WHERE (VecesVendidas >= '$RangoDias') AND  (ISNULL(VecesCompradas,CAST(0 AS INT)) = 0) 
+    WHERE (VecesVendidas >= '$RangoDias') AND  (ISNULL(VecesCompradas,CAST(0 AS INT)) = 0)
     AND ((SELECT (ROUND(CAST(SUM (InvLoteAlmacen.Existencia) AS DECIMAL(38,0)),2,0)) As Existencia
       FROM InvLoteAlmacen
       WHERE(InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
@@ -813,7 +813,7 @@
       InvArticulo.CodigoArticulo AS CodigoInterno,
       InvArticulo.Descripcion,
         (SELECT CodigoBarra
-        FROM InvCodigoBarra 
+        FROM InvCodigoBarra
         WHERE InvCodigoBarra.InvArticuloId = InvArticulo.Id
         AND InvCodigoBarra.EsPrincipal = 1) AS CodigoBarra,
       InvMarca.Nombre as Marca
@@ -865,20 +865,20 @@
     DESAROLLADO POR: SERGIO COVA
     */
     function SQL_CP_Etiqueta_C1($FHoy,$FManana){
-      $sql = " 
+      $sql = "
       SELECT
       InvMovimiento.InvArticuloId AS IdArticulo,
       --Dolarizado (0 NO es dolarizado, Id Articulo SI es dolarizado)
           (ISNULL((SELECT
           InvArticuloAtributo.InvArticuloId
-          FROM InvArticuloAtributo 
-          WHERE InvArticuloAtributo.InvAtributoId = 
+          FROM InvArticuloAtributo
+          WHERE InvArticuloAtributo.InvAtributoId =
               (SELECT InvAtributo.Id
-              FROM InvAtributo 
-              WHERE 
+              FROM InvAtributo
+              WHERE
               InvAtributo.Descripcion = 'Dolarizados'
               OR  InvAtributo.Descripcion = 'Giordany'
-              OR  InvAtributo.Descripcion = 'giordany') 
+              OR  InvAtributo.Descripcion = 'giordany')
           AND InvArticuloAtributo.InvArticuloId = InvMovimiento.InvArticuloId),CAST(0 AS INT))) AS Dolarizado
       --Tabla Principal and Tabla Temporal
       FROM InvMovimiento
@@ -901,23 +901,23 @@
     /********************************************************************************/
     /*
     TITULO: SQL_CP_Etiqueta_C2
-    DESAROLLADO POR: SERGIO COVA 
+    DESAROLLADO POR: SERGIO COVA
     */
     function SQL_CP_Etiqueta_C2($FHoy,$FManana){
-      $sql = " 
+      $sql = "
       SELECT
       VenCondicionVenta_VenCondicionVentaArticulo.InvArticuloId AS IdArticulo,
       --Dolarizado (0 NO es dolarizado, Id Articulo SI es dolarizado)
           (ISNULL((SELECT
           InvArticuloAtributo.InvArticuloId
-          FROM InvArticuloAtributo 
-          WHERE InvArticuloAtributo.InvAtributoId = 
+          FROM InvArticuloAtributo
+          WHERE InvArticuloAtributo.InvAtributoId =
               (SELECT InvAtributo.Id
-              FROM InvAtributo 
-              WHERE 
+              FROM InvAtributo
+              WHERE
               InvAtributo.Descripcion = 'Dolarizados'
               OR  InvAtributo.Descripcion = 'Giordany'
-              OR  InvAtributo.Descripcion = 'giordany') 
+              OR  InvAtributo.Descripcion = 'giordany')
           AND InvArticuloAtributo.InvArticuloId = VenCondicionVenta_VenCondicionVentaArticulo.InvArticuloId),CAST(0 AS INT))) AS Dolarizado
       --Tabla Principal and Tabla Temporal
       FROM VenCondicionVenta
@@ -941,23 +941,23 @@
     /********************************************************************************/
     /*
     TITULO: SQL_CP_Etiqueta_C3
-    DESAROLLADO POR: SERGIO COVA 
+    DESAROLLADO POR: SERGIO COVA
     */
     function SQL_CP_Etiqueta_C3($FHoy,$FManana){
-      $sql = " 
+      $sql = "
       SELECT
       InvLoteAlmacen.InvArticuloId AS IdArticulo,
       --Dolarizado (0 NO es dolarizado, Id Articulo SI es dolarizado)
           (ISNULL((SELECT
           InvArticuloAtributo.InvArticuloId
-          FROM InvArticuloAtributo 
-          WHERE InvArticuloAtributo.InvAtributoId = 
+          FROM InvArticuloAtributo
+          WHERE InvArticuloAtributo.InvAtributoId =
               (SELECT InvAtributo.Id
-              FROM InvAtributo 
-              WHERE 
+              FROM InvAtributo
+              WHERE
               InvAtributo.Descripcion = 'Dolarizados'
               OR  InvAtributo.Descripcion = 'Giordany'
-              OR  InvAtributo.Descripcion = 'giordany') 
+              OR  InvAtributo.Descripcion = 'giordany')
           AND InvArticuloAtributo.InvArticuloId = InvLoteAlmacen.InvArticuloId),CAST(0 AS INT))) AS Dolarizado
       --Tabla Principal and Tabla Temporal
       FROM InvLoteAlmacen
@@ -966,7 +966,7 @@
       (InvLoteAlmacen.Auditoria_FechaActualizacion > '$FHoy')
       AND (InvLoteAlmacen.Auditoria_FechaActualizacion < '$FManana')
       AND(InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
-      AND (InvLoteAlmacen.Existencia = 0) 
+      AND (InvLoteAlmacen.Existencia = 0)
       )
       GROUP BY InvArticuloId
       ORDER BY InvArticuloId ASC
@@ -979,23 +979,23 @@
     DESAROLLADO POR: SERGIO COVA
     */
     function SQL_CP_Etiqueta_C4($FHoy,$FManana){
-      $sql = " 
+      $sql = "
       SELECT
       InvLote.InvArticuloId AS IdArticulo,
       --Dolarizado (0 NO es dolarizado, Id Articulo SI es dolarizado)
           (ISNULL((SELECT
           InvArticuloAtributo.InvArticuloId
-          FROM InvArticuloAtributo 
-          WHERE InvArticuloAtributo.InvAtributoId = 
+          FROM InvArticuloAtributo
+          WHERE InvArticuloAtributo.InvAtributoId =
               (SELECT InvAtributo.Id
-              FROM InvAtributo 
-              WHERE 
+              FROM InvAtributo
+              WHERE
               InvAtributo.Descripcion = 'Dolarizados'
               OR  InvAtributo.Descripcion = 'Giordany'
-              OR  InvAtributo.Descripcion = 'giordany') 
+              OR  InvAtributo.Descripcion = 'giordany')
           AND InvArticuloAtributo.InvArticuloId = InvLote.InvArticuloId),CAST(0 AS INT))) AS Dolarizado
       --Tabla Prinipal and Tabla Temporal
-      FROM InvLote 
+      FROM InvLote
       --Condicionales
       WHERE(
       (InvLote.Auditoria_FechaActualizacion > '$FHoy')
@@ -1017,19 +1017,19 @@
         DESARROLLADO POR: SERGIO COVA
     */
     function SQL_Es_Dolarizado($IdArticulo){
-      $sql = " 
+      $sql = "
       SELECT
       --Dolarizado (0 NO es dolarizado, Id Articulo SI es dolarizado)
       (ISNULL((SELECT
       InvArticuloAtributo.InvArticuloId
-      FROM InvArticuloAtributo 
-      WHERE InvArticuloAtributo.InvAtributoId = 
+      FROM InvArticuloAtributo
+      WHERE InvArticuloAtributo.InvAtributoId =
       (SELECT InvAtributo.Id
-      FROM InvAtributo 
-      WHERE 
+      FROM InvAtributo
+      WHERE
       InvAtributo.Descripcion = 'Dolarizados'
       OR  InvAtributo.Descripcion = 'Giordany'
-      OR  InvAtributo.Descripcion = 'giordany') 
+      OR  InvAtributo.Descripcion = 'giordany')
       AND InvArticuloAtributo.InvArticuloId = InvArticulo.Id),CAST(0 AS INT))) AS Dolarizado
       --Tabla principal
       FROM InvArticulo
@@ -1046,8 +1046,9 @@
     DESAROLLADO POR: SERGIO COVA
   */
   function R16Q_Detalle_Articulo_Estrella_Top($Top) {
-    $sql = " 
-    SELECT TOP $Top
+      //SELECT TOP $Top
+    $sql = "
+    SELECT
     --Id Articulo
     InvArticulo.Id AS IdArticulo,
     --Categoria Articulo
@@ -1056,7 +1057,7 @@
     InvArticulo.CodigoArticulo AS CodigoInterno,
     --Codigo de Barra
     (SELECT CodigoBarra
-    FROM InvCodigoBarra 
+    FROM InvCodigoBarra
     WHERE InvCodigoBarra.InvArticuloId = InvArticulo.Id
     AND InvCodigoBarra.EsPrincipal = 1) AS CodigoBarra,
     --Descripcion
@@ -1066,27 +1067,27 @@
     --Troquelado (0 NO es Troquelado, Id Articulo SI es Troquelado)
     (ISNULL((SELECT
     InvArticuloAtributo.InvArticuloId
-    FROM InvArticuloAtributo 
-    WHERE InvArticuloAtributo.InvAtributoId = 
+    FROM InvArticuloAtributo
+    WHERE InvArticuloAtributo.InvAtributoId =
     (SELECT InvAtributo.Id
-    FROM InvAtributo 
-    WHERE 
+    FROM InvAtributo
+    WHERE
     InvAtributo.Descripcion = 'Troquelados'
-    OR  InvAtributo.Descripcion = 'troquelados') 
+    OR  InvAtributo.Descripcion = 'troquelados')
     AND InvArticuloAtributo.InvArticuloId = InvArticulo.Id),CAST(0 AS INT))) AS Troquelado,
     --UtilidadArticulo (Utilidad del articulo, Utilidad es 1.00 NO considerar la utilidad para el calculo de precio)
     ROUND(CAST(1-((ISNULL(ROUND(CAST((SELECT VenCondicionVenta.PorcentajeUtilidad
-    FROM VenCondicionVenta 
+    FROM VenCondicionVenta
     WHERE VenCondicionVenta.Id = (
     SELECT VenCondicionVenta_VenCondicionVentaArticulo.Id
-    FROM VenCondicionVenta_VenCondicionVentaArticulo 
+    FROM VenCondicionVenta_VenCondicionVentaArticulo
     WHERE VenCondicionVenta_VenCondicionVentaArticulo.InvArticuloId = InvArticulo.Id)) AS DECIMAL(38,4)),2,0),CAST(0 AS INT)))/100)AS DECIMAL(38,4)),2,0) AS UtilidadArticulo,
     --UtilidadCategoria (Utilidad de la categoria, Utilidad es 1.00 NO considerar la utilidad para el calculo de precio)
-    ROUND(CAST(1-((ISNULL(ROUND(CAST((SELECT VenCondicionVenta.PorcentajeUtilidad 
-    FROM VenCondicionVenta 
+    ROUND(CAST(1-((ISNULL(ROUND(CAST((SELECT VenCondicionVenta.PorcentajeUtilidad
+    FROM VenCondicionVenta
     WHERE VenCondicionVenta.id = (
-    SELECT VenCondicionVenta_VenCondicionVentaCategoria.Id 
-    FROM VenCondicionVenta_VenCondicionVentaCategoria 
+    SELECT VenCondicionVenta_VenCondicionVentaCategoria.Id
+    FROM VenCondicionVenta_VenCondicionVentaCategoria
     WHERE VenCondicionVenta_VenCondicionVentaCategoria.InvCategoriaId = InvArticulo.InvCategoriaId)) AS DECIMAL(38,4)),2,0),CAST(0 AS INT)))/100)AS DECIMAL(38,4)),2,0) AS UtilidadCategoria,
     --Precio Troquel Almacen 1
     (ROUND(CAST((SELECT TOP 1
@@ -1150,34 +1151,34 @@
     --Dolarizado (0 NO es dolarizado, Id Articulo SI es dolarizado)
     (ISNULL((SELECT
     InvArticuloAtributo.InvArticuloId
-    FROM InvArticuloAtributo 
-    WHERE InvArticuloAtributo.InvAtributoId = 
+    FROM InvArticuloAtributo
+    WHERE InvArticuloAtributo.InvAtributoId =
     (SELECT InvAtributo.Id
-    FROM InvAtributo 
-    WHERE 
+    FROM InvAtributo
+    WHERE
     InvAtributo.Descripcion = 'Dolarizados'
     OR  InvAtributo.Descripcion = 'Giordany'
-    OR  InvAtributo.Descripcion = 'giordany') 
+    OR  InvAtributo.Descripcion = 'giordany')
     AND InvArticuloAtributo.InvArticuloId = InvArticulo.Id),CAST(0 AS INT))) AS Dolarizado,
     --Tipo Producto (0 Miscelaneos, Id Articulo Medicinas)
     (ISNULL((SELECT
-    InvArticuloAtributo.InvArticuloId 
-    FROM InvArticuloAtributo 
-    WHERE InvArticuloAtributo.InvAtributoId = 
+    InvArticuloAtributo.InvArticuloId
+    FROM InvArticuloAtributo
+    WHERE InvArticuloAtributo.InvAtributoId =
     (SELECT InvAtributo.Id
-    FROM InvAtributo 
-    WHERE 
-    InvAtributo.Descripcion = 'Medicina') 
+    FROM InvAtributo
+    WHERE
+    InvAtributo.Descripcion = 'Medicina')
     AND InvArticuloAtributo.InvArticuloId = InvArticulo.Id),CAST(0 AS INT))) AS Tipo,
     --Articulo Estrella (0 NO es Articulo Estrella , Id SI es Articulo Estrella)
     (ISNULL((SELECT
-    InvArticuloAtributo.InvArticuloId 
-    FROM InvArticuloAtributo 
-    WHERE InvArticuloAtributo.InvAtributoId = 
+    InvArticuloAtributo.InvArticuloId
+    FROM InvArticuloAtributo
+    WHERE InvArticuloAtributo.InvAtributoId =
     (SELECT InvAtributo.Id
-    FROM InvAtributo 
-    WHERE 
-    InvAtributo.Descripcion = 'Articulo Estrella') 
+    FROM InvAtributo
+    WHERE
+    InvAtributo.Descripcion = 'Articulo Estrella')
     AND InvArticuloAtributo.InvArticuloId = InvArticulo.Id),CAST(0 AS INT))) AS ArticuloEstrella,
     -- Ultima Venta (Fecha)
     (SELECT TOP 1
@@ -1200,9 +1201,9 @@
     WHERE InvLote.InvArticuloId  = InvArticulo.Id
     ORDER BY UltimoLote DESC) AS UltimoLote,
     --Tiempo Tienda (En dias)
-    (SELECT TOP 1 
+    (SELECT TOP 1
     DATEDIFF(DAY,CONVERT(DATE,InvLote.FechaEntrada),GETDATE())
-    FROM InvLoteAlmacen 
+    FROM InvLoteAlmacen
     INNER JOIN invlote on invlote.id = InvLoteAlmacen.InvLoteId
     WHERE InvLotealmacen.InvArticuloId = InvArticulo.Id
     ORDER BY InvLote.Auditoria_FechaCreacion DESC) AS TiempoTienda,
@@ -1229,18 +1230,18 @@
     --Joins
     LEFT JOIN InvLoteAlmacen ON InvLoteAlmacen.InvArticuloId = InvArticulo.Id
     LEFT JOIN InvArticuloAtributo ON InvArticuloAtributo.InvArticuloId = InvArticulo.Id
-    LEFT JOIN InvAtributo ON InvAtributo.Id = InvArticuloAtributo.InvAtributoId 
+    LEFT JOIN InvAtributo ON InvAtributo.Id = InvArticuloAtributo.InvAtributoId
     --Condicionales
-    WHERE 
+    WHERE
     (
     (ISNULL((SELECT
-    InvArticuloAtributo.InvArticuloId 
-    FROM InvArticuloAtributo 
-    WHERE InvArticuloAtributo.InvAtributoId = 
+    InvArticuloAtributo.InvArticuloId
+    FROM InvArticuloAtributo
+    WHERE InvArticuloAtributo.InvAtributoId =
     (SELECT InvAtributo.Id
-    FROM InvAtributo 
-    WHERE 
-    InvAtributo.Descripcion = 'Articulo Estrella') 
+    FROM InvAtributo
+    WHERE
+    InvAtributo.Descripcion = 'Articulo Estrella')
     AND InvArticuloAtributo.InvArticuloId = InvArticulo.Id),CAST(0 AS INT)))<>0
     )
     --Agrupamientos
@@ -1248,6 +1249,7 @@
     --Ordanamiento
     ORDER BY InvArticulo.Id ASC
     ";
+    //ORDER BY InvArticulo.Descripcion ASC
     return $sql;
   }
    /**********************************************************************************/
@@ -1306,7 +1308,7 @@
     AND(VenDevolucion.FechaDocumento > '$FInicial' AND VenDevolucion.FechaDocumento < '$FFinal')
     GROUP BY VenDevolucionDetalle.InvArticuloId
     ),CAST(0 AS INT)))) AS TotalUnidadesVendidas,
-    --Veces Conpradas (En Rango) 
+    --Veces Conpradas (En Rango)
     ISNULL((SELECT
     ISNULL(COUNT(*),CAST(0 AS INT))
     FROM ComFacturaDetalle
@@ -1315,7 +1317,7 @@
     AND(ComFactura.FechaRegistro > '$FInicial' AND ComFactura.FechaRegistro < '$FFinal')
     GROUP BY ComFacturaDetalle.InvArticuloId
     ),CAST(0 AS INT)) AS VecesCompradas,
-    --Unidades Conpradas (En Rango) 
+    --Unidades Conpradas (En Rango)
     ISNULL((SELECT
     (ROUND(CAST(SUM(ComFacturaDetalle.CantidadFacturada) AS DECIMAL(38,0)),2,0))
     FROM ComFacturaDetalle
@@ -1324,7 +1326,7 @@
     AND(ComFactura.FechaRegistro > '$FInicial' AND ComFactura.FechaRegistro < '$FFinal')
     GROUP BY ComFacturaDetalle.InvArticuloId
     ),CAST(0 AS INT)) AS UnidadesCompradas,
-    --Veces Reclamadas (En Rango) 
+    --Veces Reclamadas (En Rango)
     ISNULL((SELECT
     ISNULL(COUNT(*),CAST(0 AS INT))
     FROM ComReclamoDetalle
@@ -1333,7 +1335,7 @@
     AND(ComReclamo.FechaRegistro > '$FInicial' AND ComReclamo.FechaRegistro < '$FFinal')
     GROUP BY ComReclamoDetalle.InvArticuloId
     ),CAST(0 AS INT)) AS VecesReclamadas,
-    --Unidades Reclamadas (En Rango) 
+    --Unidades Reclamadas (En Rango)
     ISNULL((SELECT
     (ROUND(CAST(SUM(ComReclamoDetalle.Cantidad) AS DECIMAL(38,0)),2,0))
     FROM ComReclamoDetalle
@@ -1380,31 +1382,31 @@
     ),CAST(0 AS INT)))) AS TotalUnidadesCompradas,
     -- SubTotal Venta (En Rango)
     ISNULL((SELECT
-    (ROUND(CAST(SUM (VenVentaDetalle.PrecioBruto * VenVentaDetalle.Cantidad) AS DECIMAL(38,2)),2,0)) 
+    (ROUND(CAST(SUM (VenVentaDetalle.PrecioBruto * VenVentaDetalle.Cantidad) AS DECIMAL(38,2)),2,0))
     FROM VenVentaDetalle
-    INNER JOIN VenVenta ON VenVenta.Id = VenVentaDetalle.VenVentaId 
+    INNER JOIN VenVenta ON VenVenta.Id = VenVentaDetalle.VenVentaId
     WHERE (VenVenta.FechaDocumentoVenta > '$FInicial' AND VenVenta.FechaDocumentoVenta < '$FFinal')
     AND VenVentaDetalle.InvArticuloId = VenFacturaDetalle.InvArticuloId),CAST(0 AS INT)) AS SubTotalVenta,
     --SubTotal Devolucion (En Rango)
     ISNULL((SELECT
     (ROUND(CAST(SUM (VenDevolucionDetalle.PrecioBruto * VenDevolucionDetalle.Cantidad) AS DECIMAL(38,2)),2,0)) as SubTotalDevolucion
     FROM VenDevolucionDetalle
-    INNER JOIN VenDevolucion ON VenDevolucion.Id = VenDevolucionDetalle.VenDevolucionId 
-    WHERE (VenDevolucion.FechaDocumento > '$FInicial' AND VenDevolucion.FechaDocumento < '$FFinal') 
+    INNER JOIN VenDevolucion ON VenDevolucion.Id = VenDevolucionDetalle.VenDevolucionId
+    WHERE (VenDevolucion.FechaDocumento > '$FInicial' AND VenDevolucion.FechaDocumento < '$FFinal')
     AND VenDevolucionDetalle.InvArticuloId = VenFacturaDetalle.InvArticuloId),CAST(0 AS INT)) as SubTotalDevolucion,
     --TotalVenta (En Rango)
     ((ISNULL((SELECT
-    (ROUND(CAST(SUM (VenVentaDetalle.PrecioBruto * VenVentaDetalle.Cantidad) AS DECIMAL(38,2)),2,0)) 
+    (ROUND(CAST(SUM (VenVentaDetalle.PrecioBruto * VenVentaDetalle.Cantidad) AS DECIMAL(38,2)),2,0))
     FROM VenVentaDetalle
-    INNER JOIN VenVenta ON VenVenta.Id = VenVentaDetalle.VenVentaId 
+    INNER JOIN VenVenta ON VenVenta.Id = VenVentaDetalle.VenVentaId
     WHERE (VenVenta.FechaDocumentoVenta > '$FInicial' AND VenVenta.FechaDocumentoVenta < '$FFinal')
     AND VenVentaDetalle.InvArticuloId = VenFacturaDetalle.InvArticuloId),CAST(0 AS INT)))
     -
     (ISNULL((SELECT
     (ROUND(CAST(SUM (VenDevolucionDetalle.PrecioBruto * VenDevolucionDetalle.Cantidad) AS DECIMAL(38,2)),2,0)) as SubTotalDevolucion
     FROM VenDevolucionDetalle
-    INNER JOIN VenDevolucion ON VenDevolucion.Id = VenDevolucionDetalle.VenDevolucionId 
-    WHERE (VenDevolucion.FechaDocumento > '$FInicial' AND VenDevolucion.FechaDocumento < '$FFinal') 
+    INNER JOIN VenDevolucion ON VenDevolucion.Id = VenDevolucionDetalle.VenDevolucionId
+    WHERE (VenDevolucion.FechaDocumento > '$FInicial' AND VenDevolucion.FechaDocumento < '$FFinal')
     AND VenDevolucionDetalle.InvArticuloId = VenFacturaDetalle.InvArticuloId),CAST(0 AS INT)))) AS TotalVenta
     --Tabla Principal
     FROM VenFacturaDetalle
@@ -1415,7 +1417,7 @@
     (VenFactura.FechaDocumento > '$FInicial' AND VenFactura.FechaDocumento < '$FFinal')
     AND VenFacturaDetalle.InvArticuloId = '$IdArticulo'
     --Agrupamientos
-    GROUP BY VenFacturaDetalle.InvArticuloId 
+    GROUP BY VenFacturaDetalle.InvArticuloId
     --Ordenamientos
     ORDER BY UnidadesVendidas DESC
     ";
@@ -1428,7 +1430,7 @@
     DESAROLLADO POR: SERGIO COVA
   */
   function SQG_Lite_Detalle_Articulo($IdArticulo) {
-    $sql = " 
+    $sql = "
     SELECT
     --Id Articulo
     InvArticulo.Id AS IdArticulo,
@@ -1438,7 +1440,7 @@
     InvArticulo.Descripcion,
     --Codigo de Barra
     (SELECT CodigoBarra
-    FROM InvCodigoBarra 
+    FROM InvCodigoBarra
     WHERE InvCodigoBarra.InvArticuloId = InvArticulo.Id
     AND InvCodigoBarra.EsPrincipal = 1) AS CodigoBarra,
     --Impuesto (1 SI aplica impuesto, 0 NO aplica impuesto)
@@ -1446,27 +1448,27 @@
     --Troquelado (0 NO es Troquelado, Id Articulo SI es Troquelado)
     (ISNULL((SELECT
     InvArticuloAtributo.InvArticuloId
-    FROM InvArticuloAtributo 
-    WHERE InvArticuloAtributo.InvAtributoId = 
+    FROM InvArticuloAtributo
+    WHERE InvArticuloAtributo.InvAtributoId =
     (SELECT InvAtributo.Id
-    FROM InvAtributo 
-    WHERE 
+    FROM InvAtributo
+    WHERE
     InvAtributo.Descripcion = 'Troquelados'
-    OR  InvAtributo.Descripcion = 'troquelados') 
+    OR  InvAtributo.Descripcion = 'troquelados')
     AND InvArticuloAtributo.InvArticuloId = InvArticulo.Id),CAST(0 AS INT))) AS Troquelado,
     --UtilidadArticulo (Utilidad del articulo, Utilidad es 1.00 NO considerar la utilidad para el calculo de precio)
     ROUND(CAST(1-((ISNULL(ROUND(CAST((SELECT VenCondicionVenta.PorcentajeUtilidad
-    FROM VenCondicionVenta 
+    FROM VenCondicionVenta
     WHERE VenCondicionVenta.Id = (
     SELECT VenCondicionVenta_VenCondicionVentaArticulo.Id
-    FROM VenCondicionVenta_VenCondicionVentaArticulo 
+    FROM VenCondicionVenta_VenCondicionVentaArticulo
     WHERE VenCondicionVenta_VenCondicionVentaArticulo.InvArticuloId = InvArticulo.Id)) AS DECIMAL(38,4)),2,0),CAST(0 AS INT)))/100)AS DECIMAL(38,4)),2,0) AS UtilidadArticulo,
     --UtilidadCategoria (Utilidad de la categoria, Utilidad es 1.00 NO considerar la utilidad para el calculo de precio)
-    ROUND(CAST(1-((ISNULL(ROUND(CAST((SELECT VenCondicionVenta.PorcentajeUtilidad 
-    FROM VenCondicionVenta 
+    ROUND(CAST(1-((ISNULL(ROUND(CAST((SELECT VenCondicionVenta.PorcentajeUtilidad
+    FROM VenCondicionVenta
     WHERE VenCondicionVenta.id = (
-    SELECT VenCondicionVenta_VenCondicionVentaCategoria.Id 
-    FROM VenCondicionVenta_VenCondicionVentaCategoria 
+    SELECT VenCondicionVenta_VenCondicionVentaCategoria.Id
+    FROM VenCondicionVenta_VenCondicionVentaCategoria
     WHERE VenCondicionVenta_VenCondicionVentaCategoria.InvCategoriaId = InvArticulo.InvCategoriaId)) AS DECIMAL(38,4)),2,0),CAST(0 AS INT)))/100)AS DECIMAL(38,4)),2,0) AS UtilidadCategoria,
     --Precio Troquel Almacen 1
     (ROUND(CAST((SELECT TOP 1
@@ -1532,13 +1534,13 @@
     --Joins
     LEFT JOIN InvLoteAlmacen ON InvLoteAlmacen.InvArticuloId = InvArticulo.Id
     LEFT JOIN InvArticuloAtributo ON InvArticuloAtributo.InvArticuloId = InvArticulo.Id
-    LEFT JOIN InvAtributo ON InvAtributo.Id = InvArticuloAtributo.InvAtributoId 
+    LEFT JOIN InvAtributo ON InvAtributo.Id = InvArticuloAtributo.InvAtributoId
     --Condicionales
     WHERE InvArticulo.Id = '$IdArticulo'
     --Agrupamientos
     GROUP BY InvArticulo.Id, InvArticulo.CodigoArticulo, InvArticulo.Descripcion, InvArticulo.FinConceptoImptoIdCompra, InvArticulo.InvCategoriaId
     --Ordanamiento
-    ORDER BY InvArticulo.Id ASC 
+    ORDER BY InvArticulo.Id ASC
     ";
     return $sql;
   }
@@ -1598,7 +1600,7 @@
     AND(VenDevolucion.FechaDocumento > '$FInicial' AND VenDevolucion.FechaDocumento < '$FFinal')
     GROUP BY VenDevolucionDetalle.InvArticuloId
     ),CAST(0 AS INT)))) AS TotalUnidadesVendidas,
-    --Veces Conpradas (En Rango) 
+    --Veces Conpradas (En Rango)
     ISNULL((SELECT
     ISNULL(COUNT(*),CAST(0 AS INT))
     FROM ComFacturaDetalle
@@ -1607,7 +1609,7 @@
     AND(ComFactura.FechaRegistro > '$FInicial' AND ComFactura.FechaRegistro < '$FFinal')
     GROUP BY ComFacturaDetalle.InvArticuloId
     ),CAST(0 AS INT)) AS VecesCompradas,
-    --Unidades Conpradas (En Rango) 
+    --Unidades Conpradas (En Rango)
     ISNULL((SELECT
     (ROUND(CAST(SUM(ComFacturaDetalle.CantidadFacturada) AS DECIMAL(38,0)),2,0))
     FROM ComFacturaDetalle
@@ -1616,7 +1618,7 @@
     AND(ComFactura.FechaRegistro > '$FInicial' AND ComFactura.FechaRegistro < '$FFinal')
     GROUP BY ComFacturaDetalle.InvArticuloId
     ),CAST(0 AS INT)) AS UnidadesCompradas,
-    --Veces Reclamadas (En Rango) 
+    --Veces Reclamadas (En Rango)
     ISNULL((SELECT
     ISNULL(COUNT(*),CAST(0 AS INT))
     FROM ComReclamoDetalle
@@ -1625,7 +1627,7 @@
     AND(ComReclamo.FechaRegistro > '$FInicial' AND ComReclamo.FechaRegistro < '$FFinal')
     GROUP BY ComReclamoDetalle.InvArticuloId
     ),CAST(0 AS INT)) AS VecesReclamadas,
-    --Unidades Reclamadas (En Rango) 
+    --Unidades Reclamadas (En Rango)
     ISNULL((SELECT
     (ROUND(CAST(SUM(ComReclamoDetalle.Cantidad) AS DECIMAL(38,0)),2,0))
     FROM ComReclamoDetalle
@@ -1672,31 +1674,31 @@
     ),CAST(0 AS INT)))) AS TotalUnidadesCompradas,
     -- SubTotal Venta (En Rango)
     ISNULL((SELECT
-    (ROUND(CAST(SUM (VenVentaDetalle.PrecioBruto * VenVentaDetalle.Cantidad) AS DECIMAL(38,2)),2,0)) 
+    (ROUND(CAST(SUM (VenVentaDetalle.PrecioBruto * VenVentaDetalle.Cantidad) AS DECIMAL(38,2)),2,0))
     FROM VenVentaDetalle
-    INNER JOIN VenVenta ON VenVenta.Id = VenVentaDetalle.VenVentaId 
+    INNER JOIN VenVenta ON VenVenta.Id = VenVentaDetalle.VenVentaId
     WHERE (VenVenta.FechaDocumentoVenta > '$FInicial' AND VenVenta.FechaDocumentoVenta < '$FFinal')
     AND VenVentaDetalle.InvArticuloId = VenFacturaDetalle.InvArticuloId),CAST(0 AS INT)) AS SubTotalVenta,
     --SubTotal Devolucion (En Rango)
     ISNULL((SELECT
     (ROUND(CAST(SUM (VenDevolucionDetalle.PrecioBruto * VenDevolucionDetalle.Cantidad) AS DECIMAL(38,2)),2,0)) as SubTotalDevolucion
     FROM VenDevolucionDetalle
-    INNER JOIN VenDevolucion ON VenDevolucion.Id = VenDevolucionDetalle.VenDevolucionId 
-    WHERE (VenDevolucion.FechaDocumento > '$FInicial' AND VenDevolucion.FechaDocumento < '$FFinal') 
+    INNER JOIN VenDevolucion ON VenDevolucion.Id = VenDevolucionDetalle.VenDevolucionId
+    WHERE (VenDevolucion.FechaDocumento > '$FInicial' AND VenDevolucion.FechaDocumento < '$FFinal')
     AND VenDevolucionDetalle.InvArticuloId = VenFacturaDetalle.InvArticuloId),CAST(0 AS INT)) as SubTotalDevolucion,
     --TotalVenta (En Rango)
     ((ISNULL((SELECT
-    (ROUND(CAST(SUM (VenVentaDetalle.PrecioBruto * VenVentaDetalle.Cantidad) AS DECIMAL(38,2)),2,0)) 
+    (ROUND(CAST(SUM (VenVentaDetalle.PrecioBruto * VenVentaDetalle.Cantidad) AS DECIMAL(38,2)),2,0))
     FROM VenVentaDetalle
-    INNER JOIN VenVenta ON VenVenta.Id = VenVentaDetalle.VenVentaId 
+    INNER JOIN VenVenta ON VenVenta.Id = VenVentaDetalle.VenVentaId
     WHERE (VenVenta.FechaDocumentoVenta > '$FInicial' AND VenVenta.FechaDocumentoVenta < '$FFinal')
     AND VenVentaDetalle.InvArticuloId = VenFacturaDetalle.InvArticuloId),CAST(0 AS INT)))
     -
     (ISNULL((SELECT
     (ROUND(CAST(SUM (VenDevolucionDetalle.PrecioBruto * VenDevolucionDetalle.Cantidad) AS DECIMAL(38,2)),2,0)) as SubTotalDevolucion
     FROM VenDevolucionDetalle
-    INNER JOIN VenDevolucion ON VenDevolucion.Id = VenDevolucionDetalle.VenDevolucionId 
-    WHERE (VenDevolucion.FechaDocumento > '$FInicial' AND VenDevolucion.FechaDocumento < '$FFinal') 
+    INNER JOIN VenDevolucion ON VenDevolucion.Id = VenDevolucionDetalle.VenDevolucionId
+    WHERE (VenDevolucion.FechaDocumento > '$FInicial' AND VenDevolucion.FechaDocumento < '$FFinal')
     AND VenDevolucionDetalle.InvArticuloId = VenFacturaDetalle.InvArticuloId),CAST(0 AS INT)))) AS TotalVenta
     --Tabla Principal
     FROM VenFacturaDetalle
@@ -1707,7 +1709,7 @@
     (VenFactura.FechaDocumento > '$FInicial' AND VenFactura.FechaDocumento < '$FFinal')
     AND VenFacturaDetalle.InvArticuloId = '$IdArticulo'
     --Agrupamientos
-    GROUP BY VenFacturaDetalle.InvArticuloId 
+    GROUP BY VenFacturaDetalle.InvArticuloId
     --Ordenamientos
     ORDER BY UnidadesVendidas DESC
     ";
@@ -1782,14 +1784,14 @@
   */
   function SQL_Update_Troquel($IdArticulo,$precio,$fechaActualizacion) {
     $sql = "
-        UPDATE InvLote 
-        SET M_PrecioTroquelado = '$precio', 
-        InvLote.Auditoria_FechaActualizacion = '$fechaActualizacion' 
+        UPDATE InvLote
+        SET M_PrecioTroquelado = '$precio',
+        InvLote.Auditoria_FechaActualizacion = '$fechaActualizacion'
         FROM InvLote, invlotealmacen, InvArticulo
-        WHERE InvArticulo.id = InvLote.InvArticuloId 
-        AND invlote.id = invlotealmacen.InvLoteId 
-        AND InvLoteAlmacen.existencia > 0 
-        AND InvLoteAlmacen.InvAlmacenId = 1 
+        WHERE InvArticulo.id = InvLote.InvArticuloId
+        AND invlote.id = invlotealmacen.InvLoteId
+        AND InvLoteAlmacen.existencia > 0
+        AND InvLoteAlmacen.InvAlmacenId = 1
         AND InvArticulo.id = '$IdArticulo'
     ";
     return $sql;
