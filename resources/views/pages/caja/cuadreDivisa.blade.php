@@ -928,7 +928,7 @@
                 return dominio;
             break;
             case 'FAU':
-                dominio = 'http://cpharmafau.com/';
+                dominio = 'http://cpharmade.com/';
                 return dominio;
             break;
             case 'GP':
@@ -976,17 +976,29 @@
                 var TasaDolar = '<?php echo $TasaDolar;?>';
                 var TotalFacDsSug = (Math.ceil((TotalFacBsSug/TasaDolar) * 100)) / 100;
                 var ParteDsSug = (Math.trunc((TotalFacDsSug/5))*5);
+                var ParteDsSug10 = (ParteDsSug == 5) ? (Math.trunc((TotalFacDsSug/5))*5) : (Math.trunc((TotalFacDsSug/10))*10);
                 var ParteBsSug = (TotalFacBsSug-(ParteDsSug*TasaDolar));
+                var ParteBsSug10 = (TotalFacBsSug-(ParteDsSug10*TasaDolar));
                 //var ParteBsSug = ((TotalFacDsSug%5)*TasaDolar);
+
+
+                redondeo100 = (Math.trunc((TotalFacDsSug/100))*100);
+
+                i5 = 5 + redondeo100;
+                i10 = 10 + redondeo100;
+                i20 = 20 + redondeo100;
+                i30 = 30 + redondeo100;
+                i40 = 40 + redondeo100;
+                i50 = 50 + redondeo100;
+                i60 = 60 + redondeo100;
+                i70 = 70 + redondeo100;
+                i80 = 80 + redondeo100;
+                i90 = 90 + redondeo100;
 
                 var redondeoAbajo = (Math.trunc((TotalFacDsSug/5))*5);
                 var redondeoArriba = (Math.ceil(TotalFacDsSug/10)*10);
 
-                console.log(redondeoAbajo);
-
                 redondeoAbajo = (redondeoAbajo == 5) ? redondeoAbajo : (Math.trunc((TotalFacDsSug/10))*10);
-
-                console.log(redondeoAbajo, redondeoArriba);
 
                 $('#tablaVueltos').find('.rowDatos').html('');
                 $('.rowMontos').html('');
@@ -996,114 +1008,114 @@
                         <div class="col">
                             <b>Total factura:</b> ${separarMiles(TotalFacBsSug, 2)}
 
-                            <b>Parte en $:</b> ${separarMiles(ParteDsSug, 2)}
+                            <b>Parte en $:</b> ${separarMiles(ParteDsSug10, 2)}
 
-                            <b>Parte en Bs.S.:</b> ${separarMiles(ParteBsSug, 2)}
+                            <b>Parte en Bs.S.:</b> ${separarMiles(ParteBsSug10, 2)}
                         </div>
                     `);
 
-                    if (redondeoAbajo == 5) {
+                    if (redondeoAbajo == i5) {
                         $('#tablaVueltos').find('.rowDatos').append(`
                             <div class="col">
-                                <b>Redondeado en base a 5$:</b><br>
-                                * Que el cliente nos de 50$ y le damos 2 de 20$ y uno de 5$ (o 5$ por pago movil)<br>
-                                * Que el cliente nos de 60$ y le damos 1 de 50 y uno de 5$  (o 5$ por pago movil)<br>
-                                * Que el cliente nos de 100$ y le damos 1 de 50$ 2 de 20$ y 1 de 5$  (o 5$ por pago movil)
+                                <b>Redondeado en base a ${i5}$:</b><br>
+                                * Que el cliente nos de ${redondeo100+50}$ y le damos 2 de 20$ y uno de 5$ (o 5$ por pago movil)<br>
+                                * Que el cliente nos de ${redondeo100+60}$ y le damos 1 de 50 y uno de 5$  (o 5$ por pago movil)<br>
+                                * Que el cliente nos de ${redondeo100+100}$ y le damos 1 de 50$ 2 de 20$ y 1 de 5$  (o 5$ por pago movil)
                             </div>
                         `);
                     }
 
-                    if (redondeoAbajo == 10 || redondeoArriba == 10) {
+                    if (redondeoAbajo == i10 || redondeoArriba == i10) {
                         $('#tablaVueltos').find('.rowDatos').append(`
                             <div class="col">
-                                <b>Redondeado en base a 10$:</b><br>
-                                * Que el cliente nos de 50$  y le damos 2 de 20$<br>
-                                * Que el cliente nos de 60$  y la damos 1 de 50$<br>
-                                * Que el cliente nos de 100$ y le damos 1 50$ y 2 de 20$
+                                <b>Redondeado en base a ${redondeo100+10}$:</b><br>
+                                * Que el cliente nos de ${redondeo100+50}$  y le damos 2 de 20$<br>
+                                * Que el cliente nos de ${redondeo100+60}$  y la damos 1 de 50$<br>
+                                * Que el cliente nos de ${redondeo100+100}$ y le damos 1 50$ y 2 de 20$
                             </div>
                         `);
                     }
 
-                    if (redondeoAbajo == 20 || redondeoArriba == 20) {
+                    if (redondeoAbajo == i20 || redondeoArriba == i20) {
                         $('#tablaVueltos').find('.rowDatos').append(`
                             <div class="col">
-                                <b>Redondeado en base a 20$:</b><br>
-                                * Que el cliente nos de 60$ y le damos 2 de 20$<br>
-                                * Que el cliente nos de 100$ y le damos 4 de 20$
+                                <b>Redondeado en base a ${redondeo100+20}$:</b><br>
+                                * Que el cliente nos de ${redondeo100+60}$ y le damos 2 de 20$<br>
+                                * Que el cliente nos de ${redondeo100+100}$ y le damos 4 de 20$
                             </div>
                         `);
                     }
 
-                    if (redondeoAbajo == 30 || redondeoArriba == 30) {
+                    if (redondeoAbajo == i30 || redondeoArriba == i30) {
                         $('#tablaVueltos').find('.rowDatos').append(`
                             <div class="col">
-                                <b>Redondeado en base a 30$:</b><br>
-                                * Que el cliente nos de 50$  le damos 20$<br>
-                                * Que el cliente nos de 80$  y le damos 1 de 50$<br>
-                                * Que el cliente nos de 100$  le damos 1 50$ y uno de 20$<br>
-                                * Que el cliente nos de 110$  y le damos 4 de 20$
+                                <b>Redondeado en base a ${redondeo100+30}$:</b><br>
+                                * Que el cliente nos de ${redondeo100+50}$  le damos 20$<br>
+                                * Que el cliente nos de ${redondeo100+80}$  y le damos 1 de 50$<br>
+                                * Que el cliente nos de ${redondeo100+100}$  le damos 1 50$ y uno de 20$<br>
+                                * Que el cliente nos de ${redondeo100+110}$  y le damos 4 de 20$
                             </div>
                         `);
                     }
 
-                    if (redondeoAbajo == 40 || redondeoArriba == 40) {
+                    if (redondeoAbajo == i40 || redondeoArriba == i40) {
                         $('#tablaVueltos').find('.rowDatos').append(`
                             <div class="col">
-                                <b>Redondeado en base a 40$:</b><br>
-                                * Que el cliente nos de 60$  y le damos 1 de 20$<br>
-                                * Que el cliente nos de 100$  y le damos 3 de 20$<br>
-                                * Que el cliente nos de 100$, le damos 1 50$ y uno de 20$
+                                <b>Redondeado en base a ${redondeo100+40}$:</b><br>
+                                * Que el cliente nos de ${redondeo100+60}$  y le damos 1 de 20$<br>
+                                * Que el cliente nos de ${redondeo100+100}$  y le damos 3 de 20$<br>
+                                * Que el cliente nos de ${redondeo100+100}$, le damos 1 50$ y uno de 20$
                             </div>
                         `);
                     }
 
-                    if (redondeoAbajo == 50 || redondeoArriba == 50) {
+                    if (redondeoAbajo == i50 || redondeoArriba == i50) {
                         $('#tablaVueltos').find('.rowDatos').append(`
                             <div class="col">
-                                <b>Redondeado en base a 50$:</b><br>
-                                * Que el cliente nos de 100$ y le damos 1 de 50$<br>
-                                * Que el cliente nos de 110$ y le damos 3 de 20$
+                                <b>Redondeado en base a ${redondeo100+50}$:</b><br>
+                                * Que el cliente nos de ${redondeo100+100}$ y le damos 1 de 50$<br>
+                                * Que el cliente nos de ${redondeo100+110}$ y le damos 3 de 20$
                             </div>
                             `);
                     }
 
-                    if (redondeoAbajo == 60 || redondeoArriba == 60) {
+                    if (redondeoAbajo == i60 || redondeoArriba == i60) {
                         $('#tablaVueltos').find('.rowDatos').append(`
                             <div class="col">
-                                <b>Redondeado en base a 60$:</b><br>
-                                * Que el cliente nos de 100$  y le damos 2 de 20$<br>
-                                * Que el cliente nos de 110$ y le damos 50$
+                                <b>Redondeado en base a ${redondeo100+60}$:</b><br>
+                                * Que el cliente nos de ${redondeo100+100}$  y le damos 2 de 20$<br>
+                                * Que el cliente nos de ${redondeo100+110}$ y le damos 50$
                             </div>
                         `);
                     }
 
-                    if (redondeoAbajo == 70 || redondeoArriba == 70) {
+                    if (redondeoAbajo == i70 || redondeoArriba == i70) {
                         $('#tablaVueltos').find('.rowDatos').append(`
                             <div class="col">
-                                <b>Redondeado en base a 70$:</b><br>
-                                * Que el cliente nos de 110$  y le damos 2 de 20$<br>
-                                * Que el cliente nos de 120$  y le damos 1 de 50$<
+                                <b>Redondeado en base a ${redondeo100+70}$:</b><br>
+                                * Que el cliente nos de ${redondeo100+110}$  y le damos 2 de 20$<br>
+                                * Que el cliente nos de ${redondeo100+120}$  y le damos 1 de 50$
                             </div>
                         `);
                     }
 
-                    if (redondeoAbajo == 80 || redondeoArriba == 80) {
+                    if (redondeoAbajo == i80 || redondeoArriba == i80) {
                         $('#tablaVueltos').find('.rowDatos').append(`
                             <div class="col">
-                                <b>Redondeado en base a 80$:</b><br>
-                                * Que el cliente nos de 100$ y le damos 20$<br>
-                                * Que el cliente nos de 130$ y le damos 50$
+                                <b>Redondeado en base a ${redondeo100+80}$:</b><br>
+                                * Que el cliente nos de ${redondeo100+100}$ y le damos 20$<br>
+                                * Que el cliente nos de ${redondeo100+130}$ y le damos 50$
                             </div>
                         `);
                     }
 
-                    if (redondeoAbajo == 90 || redondeoArriba == 90) {
+                    if (redondeoAbajo == i90 || redondeoArriba == i90) {
                         $('#tablaVueltos').find('.rowDatos').append(`
                             <div class="col">
-                                <b>Redondeado en base a 90$:</b><br>
-                                * Que el cliente nos de 110$  y le damos 1 de 20$<br>
-                                * Que el cliente nos de 140$  y le damos 1 de 50$<br>
-                                * Que el cliente nos de 150$ y le damos 3 de 20$
+                                <b>Redondeado en base a ${redondeo100+90}$:</b><br>
+                                * Que el cliente nos de ${redondeo100+110}$  y le damos 1 de 20$<br>
+                                * Que el cliente nos de ${redondeo100+140}$  y le damos 1 de 50$<br>
+                                * Que el cliente nos de ${redondeo100+150}$ y le damos 3 de 20$
                             </div>
                         `);
                     }

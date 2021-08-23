@@ -47,7 +47,13 @@
     <i class="fa fa-reply"></i> Regresar
   </a>
 
-  <br/><br/>
+  @if($_GET['tipo'] == 'movimiento')
+      <br><br>
+
+      <div class="alert alert-warning text-center">Utilice esta opción solo para cargar egresos o gastos, si desea cargar un pago a algún proveedor vaya <a style="color: #856404" href="?tipo=proveedores">haga click aquí</a>.</div>
+  @else
+      <br><br>
+  @endif
 
   {!! Form::open(['route' => 'bolivaresFAU.store', 'method' => 'POST', 'id' => 'crear_movimientos', 'class' => 'form-group']) !!}
     <fieldset>

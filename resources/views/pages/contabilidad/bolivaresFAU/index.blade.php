@@ -73,7 +73,7 @@
           <a href="/bolivaresFAU/create?tipo=movimiento" role="button" class="btn btn-outline-info btn-sm"
           style="display: inline; text-align: left;">
           <i class="fa fa-plus"></i>
-            Agregar movimiento
+            Agregar ingresos / Gastos
           </a>
         </td>
 
