@@ -130,7 +130,7 @@
             <tr>
                 <th scope="row">{!! Form::label('titular_pago', 'Titular del pago *', ['title' => 'Este campo es requerido']) !!}</th>
                 <td>
-                    <input type="text" class="form-control" name="titular_pago">
+                    <input type="text" required class="form-control" name="titular_pago">
                 </td>
             </tr>
 
