@@ -42,27 +42,27 @@ class ContPagoBancarioController extends Controller
             if ($request->conversion == 1) {
                 if ($request->banco != $request->proveedor) {
                     if ($request->banco == 'Dólares' && $request->proveedor == 'Bolívares') {
-                        $monto = $request->monto * $request->tasa;
+                        $monto = $request->monto / $request->tasa;
                     }
 
                     if ($request->banco == 'Dólares' && $request->proveedor == 'Pesos') {
-                        $monto = $request->monto * $request->tasa;
+                        $monto = $request->monto / $request->tasa;
                     }
 
                     if ($request->banco == 'Bolívares' && $request->proveedor == 'Dólares') {
-                        $monto = $request->monto / $request->tasa;
-                    }
-
-                    if ($request->banco == 'Bolívares' && $request->proveedor == 'Pesos') {
                         $monto = $request->monto * $request->tasa;
                     }
 
-                    if ($request->banco == 'Pesos' && $request->proveedor == 'Bolívares') {
+                    if ($request->banco == 'Bolívares' && $request->proveedor == 'Pesos') {
                         $monto = $request->monto / $request->tasa;
                     }
 
+                    if ($request->banco == 'Pesos' && $request->proveedor == 'Bolívares') {
+                        $monto = $request->monto * $request->tasa;
+                    }
+
                     if ($request->banco == 'Pesos' && $request->proveedor == 'Dólares') {
-                        $monto = $request->monto / $request->tasa;
+                        $monto = $request->monto * $request->tasa;
                     }
                 } else {
                     $monto = $request->monto;
@@ -100,10 +100,13 @@ class ContPagoBancarioController extends Controller
      */
     public function store(Request $request)
     {
+        $monto = str_replace('.', '', $request->input('monto'));
+        $monto = str_replace(',', '.', $monto);
+
         $pago               = new ContPagoBancario();
         $pago->id_proveedor = $request->input('id_proveedor');
         $pago->id_banco     = $request->input('id_banco');
-        $pago->monto        = $request->input('monto');
+        $pago->monto        = $monto;
         $pago->comentario   = $request->input('comentario');
         $pago->tasa         = $request->input('tasa');
 
@@ -117,27 +120,27 @@ class ContPagoBancarioController extends Controller
 
         if ($banco->moneda != $proveedor->moneda) {
             if ($banco->moneda == 'Dólares' && $proveedor->moneda == 'Bolívares') {
-                $monto = $pago->monto * $request->input('tasa');
+                $monto = $pago->monto * $pago->tasa;
             }
 
             if ($banco->moneda == 'Dólares' && $proveedor->moneda == 'Pesos') {
-                $monto = $pago->monto * $request->input('tasa');
+                $monto = $pago->monto * $pago->tasa;
             }
 
             if ($banco->moneda == 'Bolívares' && $proveedor->moneda == 'Dólares') {
-                $monto = $pago->monto / $request->input('tasa');
+                $monto = $pago->monto / $pago->tasa;
             }
 
             if ($banco->moneda == 'Bolívares' && $proveedor->moneda == 'Pesos') {
-                $monto = $pago->monto * $request->input('tasa');
+                $monto = $pago->monto * $pago->tasa;
             }
 
             if ($banco->moneda == 'Pesos' && $proveedor->moneda == 'Bolívares') {
-                $monto = $pago->monto / $request->input('tasa');
+                $monto = $pago->monto / $pago->tasa;
             }
 
             if ($banco->moneda == 'Pesos' && $proveedor->moneda == 'Dólares') {
-                $monto = $pago->monto / $request->input('tasa');
+                $monto = $pago->monto / $pago->tasa;
             }
         } else {
             $monto = $pago->monto;

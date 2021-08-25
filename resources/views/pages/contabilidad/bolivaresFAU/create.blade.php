@@ -47,7 +47,13 @@
     <i class="fa fa-reply"></i> Regresar
   </a>
 
-  <br/><br/>
+  @if($_GET['tipo'] == 'movimiento')
+      <br><br>
+
+      <div class="alert alert-warning text-center">Utilice esta opción solo para cargar egresos o gastos, si desea cargar un pago a algún proveedor vaya <a style="color: #856404" href="?tipo=proveedores">haga click aquí</a>.</div>
+  @else
+      <br><br>
+  @endif
 
   {!! Form::open(['route' => 'bolivaresFAU.store', 'method' => 'POST', 'id' => 'crear_movimientos', 'class' => 'form-group']) !!}
     <fieldset>
@@ -113,7 +119,8 @@
                 <select required name="id_cuenta" class="form-control">
                   <option value=""></option>
                     @foreach($cuentas as $cuenta)
-                      <option value="{{ $cuenta->id }}">{{ $cuenta->nombre }}</option>
+                      @php $padre = compras\ContCuenta::find($cuenta->pertenece_a); @endphp
+                      <option value="{{ $cuenta->id }}">{{ $padre->nombre . ': ' . $cuenta->nombre }}</option>
                     @endforeach
                 </select>
               </td>
@@ -122,7 +129,7 @@
             <tr>
                 <th scope="row">{!! Form::label('titular_pago', 'Titular del pago *', ['title' => 'Este campo es requerido']) !!}</th>
                 <td>
-                    <input type="text" class="form-control" name="titular_pago">
+                    <input type="text" required class="form-control" name="titular_pago">
                 </td>
             </tr>
 

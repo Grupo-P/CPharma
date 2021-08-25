@@ -225,11 +225,12 @@ class ContDeudasController extends Controller
                     cont_proveedores.id AS id_proveedor,
                     cont_proveedores.nombre_proveedor AS proveedor,
                     FORMAT(cont_proveedores.saldo, 2, 'en_US') AS saldo,
-                    cont_proveedores.saldo AS saldoNoFormateado
+                    cont_proveedores.saldo AS saldoNoFormateado,
+                    tasa AS tasa
                 FROM
                     cont_proveedores
                 WHERE
-                    cont_proveedores.saldo > 0 AND cont_proveedores.moneda = 'Dólares'
+                    FORMAT(cont_proveedores.saldo, 2, 'en_US') > 0 AND cont_proveedores.moneda = 'Dólares'
                 GROUP BY proveedor
                 ORDER BY CAST(saldo AS UNSIGNED) DESC;
             ");
@@ -239,11 +240,12 @@ class ContDeudasController extends Controller
                     cont_proveedores.id AS id_proveedor,
                     cont_proveedores.nombre_proveedor AS proveedor,
                     FORMAT(cont_proveedores.saldo, 2, 'en_US') AS saldo,
-                    cont_proveedores.saldo AS saldoNoFormateado
+                    cont_proveedores.saldo AS saldoNoFormateado,
+                    tasa AS tasa
                 FROM
                     cont_proveedores
                 WHERE
-                    cont_proveedores.saldo < 0 AND cont_proveedores.moneda = 'Dólares'
+                    FORMAT(cont_proveedores.saldo, 2, 'en_US') < 0 AND cont_proveedores.moneda = 'Dólares'
                 GROUP BY proveedor
                 ORDER BY CAST(saldo AS UNSIGNED) ASC;
             ");
@@ -253,11 +255,12 @@ class ContDeudasController extends Controller
                     cont_proveedores.id AS id_proveedor,
                     cont_proveedores.nombre_proveedor AS proveedor,
                     FORMAT(cont_proveedores.saldo, 2, 'en_US') AS saldo,
-                    cont_proveedores.saldo AS saldoNoFormateado
+                    cont_proveedores.saldo AS saldoNoFormateado,
+                    tasa AS tasa
                 FROM
                     cont_proveedores
                 WHERE
-                    cont_proveedores.saldo > 0 AND cont_proveedores.moneda = 'Bolívares'
+                    FORMAT(cont_proveedores.saldo, 2, 'en_US') > 0 AND cont_proveedores.moneda = 'Bolívares'
                 GROUP BY proveedor
                 ORDER BY CAST(saldo AS UNSIGNED) DESC;
             ");
@@ -267,11 +270,12 @@ class ContDeudasController extends Controller
                     cont_proveedores.id AS id_proveedor,
                     cont_proveedores.nombre_proveedor AS proveedor,
                     FORMAT(cont_proveedores.saldo, 2, 'en_US') AS saldo,
-                    cont_proveedores.saldo AS saldoNoFormateado
+                    cont_proveedores.saldo AS saldoNoFormateado,
+                    tasa AS tasa
                 FROM
                     cont_proveedores
                 WHERE
-                    cont_proveedores.saldo < 0 AND cont_proveedores.moneda = 'Bolívares'
+                    FORMAT(cont_proveedores.saldo, 2, 'en_US') < 0 AND cont_proveedores.moneda = 'Bolívares'
                 GROUP BY proveedor
                 ORDER BY CAST(saldo AS UNSIGNED) ASC;
             ");

@@ -57,7 +57,9 @@ class ContPagoBolivaresFLLController extends Controller
             return $resultado;
         }
 
-        $cuentas = ContCuenta::where('pertenece_a', '!=', 'Principal')->get();
+        $cuentas = ContCuenta::where('pertenece_a', '!=', 'Principal')
+            ->orderBy('pertenece_a')
+            ->get();
 
         if ($request->get('tipo') == 'proveedores') {
             $sqlProveedores = ContProveedor::whereNull('deleted_at')->get();
@@ -126,10 +128,10 @@ class ContPagoBolivaresFLLController extends Controller
             if ($request->input('id_cuenta')) {
                 $pago->id_cuenta      = $request->input('id_cuenta');
                 $pago->autorizado_por = $request->input('autorizado_por');
+            }
 
-                if ($request->movimiento == 'Egreso') {
-                    $pago->titular_pago = $request->titular_pago;
-                }
+            if ($request->input('titular_pago')) {
+                $pago->titular_pago = $request->titular_pago;
             }
 
             if ($request->input('id_proveedor')) {

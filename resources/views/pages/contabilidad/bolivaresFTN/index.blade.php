@@ -73,7 +73,7 @@
           <a href="/bolivaresFTN/create?tipo=movimiento" role="button" class="btn btn-outline-info btn-sm"
           style="display: inline; text-align: left;">
           <i class="fa fa-plus"></i>
-            Agregar movimiento
+            Agregar ingresos / Gastos
           </a>
         </td>
 
@@ -105,6 +105,7 @@
       <tr>
         <th scope="col" class="CP-sticky">#</th>
         <th scope="col" class="CP-sticky"># de registro</th>
+        <th scope="col" class="CP-sticky">Tipo</th>
         <th scope="col" class="CP-sticky">Concepto</th>
         <th scope="col" class="CP-sticky">Ingresos</th>
         <th scope="col" class="CP-sticky">Egresos</th>
@@ -132,6 +133,7 @@
       <tr>
         <th>{{intval(++$cont)}}</th>
         <th>{{ str_pad($pago->id, 5, 0, STR_PAD_LEFT) }}</th>
+        <td>{{ ($pago->proveedor) ? 'Proveedor' : 'Movimiento' }}</td>
         <td>
           <span class="d-inline-block " style="max-width: 250px;">
             {!! $pago->concepto !!}
@@ -144,6 +146,8 @@
         <td>{{number_format($pago->saldo_actual, 2, ',', '.')}}</td>
         <td>
           @php
+            $monto_proveedor = '';
+
             if ($pago->egresos) {
                 if ($pago->proveedor) {
                     if ($pago->proveedor->moneda != 'Bolívares') {
@@ -191,7 +195,7 @@
             }
           @endphp
 
-          {{(isset($monto_proveedor)) ? number_format($monto_proveedor,2,',','.') : ''}}
+          {{(isset($monto_proveedor) && $monto_proveedor != '') ? number_format($monto_proveedor,2,',','.') : ''}}
         </td>
         <td>{{ ($pago->tasa) ? number_format($pago->tasa,2,',','.') : '' }}</td>
         <td>{{date("d-m-Y h:i:s a", strtotime($pago->created_at))}}</td>

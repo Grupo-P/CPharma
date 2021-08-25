@@ -135,7 +135,6 @@
         //INICIO BLOQUE DE FAU
             case '12':
                 return 'FAU';
-                //return 'DBs';
             break;
         //FIN BLOQUE DE FAU
         //INICIO BLOQUE DE KDI

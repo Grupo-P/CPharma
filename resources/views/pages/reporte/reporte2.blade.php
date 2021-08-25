@@ -426,6 +426,7 @@
             <th scope="col" class="CP-sticky">Fecha de registro</th>
             <th scope="col" class="CP-sticky bg-warning text-dark">Días llegada</th>
             <th scope="col" class="CP-sticky">Fecha de vencimiento</th>
+            <th scope="col" class="CP-sticky bg-warning text-dark">Lote fabriante</th>
             <th scope="col" class="CP-sticky">Vida util<br>(Dias)</th>
             <th scope="col" class="CP-sticky">Dias para vencer<br>(Dias)</th>
             <th scope="col" class="CP-sticky">Cantidad recibida</th>
@@ -453,6 +454,8 @@
         $fechaDocumento = $row2["FechaDocumento"];
         $fechaDocumentoMostrar = $fechaDocumento->format('d-m-Y');
         $fechaDocumentoLink = $fechaDocumento->format('Y-m-d');
+
+        $loteFabricante = $row2['LoteFabricante'];
 
         $fechaVencimiento = ($row2["FechaVencimiento"]!=NULL)?$row2["FechaVencimiento"]->format('d-m-Y'):'-';
         $vidaUtil = ($row2['VidaUtil']!=NULL)?$row2['VidaUtil']:'-';
@@ -485,6 +488,7 @@
         echo '<td align="center">'.$row2["FechaRegistro"]->format('d-m-Y').'</td>';
         echo '<td align="center" class="bg-warning">'.$diasLlegada.'</td>';
         echo '<td align="center">'.$fechaVencimiento.'</td>';
+        echo '<td align="center" class="bg-warning">'.$loteFabricante.'</td>';
         echo '<td align="center">'.$vidaUtil.'</td>';
 
         echo '<td align="center">'.$diasVencer.'</td>';
@@ -843,7 +847,8 @@
       ComFacturaDetalle.M_PrecioCompraBruto,
       ComFactura.auditoria_usuario as operador,
       ComFactura.NumeroFactura as numero,
-      ComFactura.Id as idFactura
+      ComFactura.Id as idFactura,
+      ComFacturaDetalle.NumeroLoteFabricante AS LoteFabricante
       FROM InvArticulo
       INNER JOIN ComFacturaDetalle ON InvArticulo.Id = ComFacturaDetalle.InvArticuloId
       INNER JOIN ComFactura ON ComFactura.Id = ComFacturaDetalle.ComFacturaId

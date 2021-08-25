@@ -131,7 +131,7 @@
                 $pago = $fau;
             }
 
-            $dolaresFLL = DB::select("
+            $fll = DB::select("
                 SELECT
                     DATE(created_at) AS created_at
                 FROM
@@ -143,10 +143,10 @@
                 LIMIT 1
             ");
 
-            $dolaresFLL = isset($dolaresFLL[0]->created_at) ? $dolaresFLL[0]->created_at : null;
+            $fll = isset($fll[0]->created_at) ? $fll[0]->created_at : null;
 
-            if ($pago <= $dolaresFLL) {
-                $pago = $dolaresFLL;
+            if ($pago <= $fll) {
+                $pago = $fll;
             }
 
             $bancario = DB::select("
@@ -160,6 +160,12 @@
                     created_at DESC
                 LIMIT 1
             ");
+
+            $bancario = isset($bancario[0]->created_at) ? $bancario[0]->created_at : null;
+
+            if ($pago <= $bancario) {
+                $pago = $bancario;
+            }
 
             if ($pago) {
                 $fecha_pago = date_create($pago);
@@ -257,6 +263,7 @@
                 <th scope="col" class="CP-sticky">#</th>
                 <th scope="col" class="CP-sticky">Nombre del proveedor</th>
                 <th scope="col" class="CP-sticky">Saldo</th>
+                <th scope="col" class="CP-sticky">Tasa</th>
                 <th scope="col" class="CP-sticky">Fecha último pago</th>
                 <th scope="col" class="CP-sticky">Días último pago</th>
                 <th scope="col" class="CP-sticky">Fecha último ingreso</th>
@@ -283,6 +290,7 @@
                         <a href="{{ $url }}" style="text-decoration: none; color: black;" target="_blank">{{ $positivo->proveedor }}</a>
                     </td>
                     <td align="center">{{ $positivo->saldo }}</td>
+                    <td align="center">{{ $positivo->tasa }}</td>
                     <td align="center">{{ fecha_ultimo_pago($positivo->id_proveedor) }}</td>
                     <td align="center">{{ dias_ultimo_pago($positivo->id_proveedor) }}</td>
                     <td align="center">{{ fecha_ultimo_ingreso($positivo->id_proveedor) }}</td>
@@ -310,6 +318,7 @@
                 <th scope="col" class="CP-sticky">#</th>
                 <th scope="col" class="CP-sticky">Nombre del proveedor</th>
                 <th scope="col" class="CP-sticky">Saldo</th>
+                <th scope="col" class="CP-sticky">Tasa</th>
                 <th scope="col" class="CP-sticky">Fecha último pago</th>
                 <th scope="col" class="CP-sticky">Días último pago</th>
                 <th scope="col" class="CP-sticky">Fecha último ingreso</th>
@@ -336,6 +345,7 @@
                         <a href="{{ $url }}" style="text-decoration: none; color: black;" target="_blank">{{ $negativo->proveedor }}</a>
                     </td>
                     <td align="center">{{ $negativo->saldo }}</td>
+                    <td align="center">{{ $negativo->tasa }}</td>
                     <td align="center">{{ fecha_ultimo_pago($negativo->id_proveedor) }}</td>
                     <td align="center">{{ dias_ultimo_pago($negativo->id_proveedor) }}</td>
                     <td align="center">{{ fecha_ultimo_ingreso($negativo->id_proveedor) }}</td>
