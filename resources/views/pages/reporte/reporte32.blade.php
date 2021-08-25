@@ -142,6 +142,12 @@
             }
         }
 
+        $monto_med = (is_numeric($monto_med))?$monto_med:floatval($monto_med);
+        $monto_misc = (is_numeric($monto_misc))?$monto_misc:floatval($monto_misc);
+
+        $unid_med = (is_numeric($unid_med))?$unid_med:intval($unid_med);
+        $unid_misc = (is_numeric($unid_misc))?$unid_misc:intval($unid_misc);
+
         $total_monto = $monto_med + $monto_misc;
         $total_unid = $unid_med + $unid_misc;
 
