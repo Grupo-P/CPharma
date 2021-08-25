@@ -296,6 +296,7 @@
                     }
                 } else {
                     if (monto != '') {
+                        monto = new Intl.NumberFormat('de-DE').format(monto);
                         $('[name=monto]').val(monto);
                     }
                 }

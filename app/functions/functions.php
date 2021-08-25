@@ -1335,6 +1335,9 @@
             case 'Articulos competidos':
                 $ruta = '/reporte41';
             break;
+            case 'Ajustes de inventario':
+                $ruta = '/reporte42';
+            break;
             default:
                 $ruta = '#';
             break;
@@ -1468,6 +1471,9 @@
             break;
             case 41:
                 $nombre = 'Artículos competidos';
+            break;
+            case 42:
+                $nombre = 'Ajustes de inventario';
             break;
             default:
                 $nombre = 'Reporte desconocido';

@@ -150,6 +150,8 @@
                 <td scope="col">Surtido de gavetas</td>
                 <th scope="col">41</th>
                 <td scope="col">Artículos competidos</td>
+                <th scope="col">42</th>
+                <td scope="col">Ajustes de inventario</td>
             </tr>
         </tbody>
     </table>

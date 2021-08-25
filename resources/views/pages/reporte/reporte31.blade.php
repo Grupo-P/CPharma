@@ -264,24 +264,30 @@
       <tbody>
         <tr>
           <td style="width:11%;" align="center">
-              <a data-seccion="cambios" href="#" class="secciones btn btn-outline-primary btn-sm">CAMBIOS DE PRECIO A LA BAJA</a>
+              <a data-seccion="cambios" href="#" class="secciones btn btn-outline-primary btn-sm btn-block">CAMBIOS DE PRECIO A LA BAJA</a>
           </td>
 
           <td style="width:11%;" align="center">
-            <a data-seccion="entradas" href="#" class="secciones btn btn-outline-danger btn-sm">ENTRADAS Y SALIDAS DE INVENTARIO</a>
+            <a data-seccion="entradas" href="#" class="secciones btn btn-outline-danger btn-sm btn-block">ENTRADAS Y SALIDAS DE INVENTARIO</a>
           </td>
 
           <td style="width:11%;" align="center">
-            <a data-seccion="vencimiento" href="#" class="secciones btn btn-outline-warning btn-sm">SIN FECHA DE VENCIMIENTO</a>
+            <a data-seccion="vencimiento" href="#" class="secciones btn btn-outline-warning btn-sm btn-block">SIN FECHA DE VENCIMIENTO</a>
           </td>
+        </tr>
 
-          <td style="width:11%;" align="center">
-            <a data-seccion="corto" href="#" class="secciones btn btn-outline-success btn-sm">ARTICULOS CORTO VENCIMIENTO</a>
-          </td>
+        <tr>
+            <td style="width:11%;" align="center">
+                <a data-seccion="corto" href="#" class="secciones btn btn-outline-success btn-sm btn-block">ARTICULOS CORTO VENCIMIENTO</a>
+            </td>
 
-          <td style="width:11%;" align="center">
-            <a data-seccion="stock" href="#" class="secciones btn btn-outline-info btn-sm">ARTICULOS EN SOBRE STOCK</a>
-          </td>
+            <td style="width:11%;" align="center">
+                <a data-seccion="stock" href="#" class="secciones btn btn-outline-info btn-sm btn-block">ARTICULOS EN SOBRE STOCK</a>
+            </td>
+
+            <td style="width:11%;" align="center">
+                <a data-seccion="troquel" href="#" class="secciones btn btn-outline-dark btn-sm btn-block">CAMBIOS DE PRECIO VÍA TROQUEL</a>
+            </td>
         </tr>
       </tbody>
     </table>
@@ -439,7 +445,13 @@
             $traslado = '';
         }
 
-        echo '<tr>';
+        if (FG_Limpiar_Texto($comentario) == '') {
+            echo '<tr class="bg-warning">';
+        } else {
+            echo '<tr>';
+        }
+
+
         echo '<td align="center"><strong>'.intval($contador).'</strong></td>';
         echo '<td align="left">'.FG_Limpiar_Texto($TipoMovimiento).'</td>';
         echo '<td align="left">'.FG_Limpiar_Texto($OrigenMovimiento).'</td>';
@@ -517,7 +529,12 @@
         echo '<tr>';
         echo '<td>'.$contador.'</td>';
         echo '<td>Compras</td>';
-        echo '<td>'.$codigo.'</td>';
+        echo
+        '<td align="left" class="CP-barrido">
+        <a href="/reporte10?Descrip='.$descripcion.'&Id='.$id_articulo.'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
+          .$codigo.
+        '</a>
+        </td>';
         echo '<td>'.$codigo_barra.'</td>';
         echo
         '<td align="left" class="CP-barrido">
@@ -595,7 +612,12 @@
         echo '<tr>';
         echo '<td>'.$contador.'</td>';
         echo '<td>Compras</td>';
-        echo '<td>'.$codigo.'</td>';
+        echo
+        '<td align="left" class="CP-barrido">
+        <a href="/reporte10?Descrip='.$descripcion.'&Id='.$id_articulo.'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
+          .$codigo.
+        '</a>
+        </td>';
         echo '<td>'.$codigo_barra.'</td>';
         echo
         '<td align="left" class="CP-barrido">
@@ -651,6 +673,52 @@
         </tbody>
       </table>';
     }
+
+
+
+    if (isset($_GET['seccion']) && $_GET['seccion'] == 'troquel') {
+      echo'
+      <br>
+      <hr>
+      <h4 align="center">Cambios de precio vía troquel</h4>
+      <hr>
+      <table class="table table-striped table-bordered col-12 sortable" id="myTable">
+        <thead class="thead-dark">
+          <tr>
+            <th scope="col" class="CP-sticky">#</th>
+            <th scope="col" class="CP-sticky">Fecha</th>
+            <th scope="col" class="CP-sticky">Hora</th>
+            <th scope="col" class="CP-sticky">Detalle</th>
+            <th scope="col" class="CP-sticky">Operador</th>
+          </tr>
+        </thead>
+        <tbody>
+      ';
+
+      $auditorias = compras\Auditoria::whereDate('created_at', '>=', $_GET['fechaInicio'])
+        ->whereDate('created_at', '<=', $_GET['fechaFin'])
+        ->where('tabla', 'TROQUEL CLIENTE')
+        ->get();
+
+      $contador = 1;
+
+      foreach ($auditorias as $auditoria) {
+        echo '<tr>';
+        echo '<td class="text-center">'.$contador.'</td>';
+        echo '<td class="text-center">'.$auditoria->created_at->format('d/m/Y').'</td>';
+        echo '<td class="text-center">'.$auditoria->created_at->format('h:i A').'</td>';
+        echo '<td class="text-center">'.$auditoria->registro.'</td>';
+        echo '<td class="text-center">'.$auditoria->user.'</td>';
+        echo '</tr>';
+
+        $contador++;
+      }
+
+      echo '</tbody>';
+      echo '</table>';
+    }
+
+
 
     sqlsrv_close($conn);
   }
