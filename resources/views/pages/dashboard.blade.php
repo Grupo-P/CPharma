@@ -60,7 +60,7 @@
     ->count();
 
   /*TASA DOLAR VENTA*/
-    $Tasa = DB::table('tasa_ventas')->where('moneda', 'Dolar')->value('tasa');    
+    $Tasa = DB::table('tasa_ventas')->where('moneda', 'Dolar')->value('tasa');
 
     if( (!empty($Tasa)) ) {
       $TV = $Tasa;
@@ -83,7 +83,7 @@
   /*TASA DOLAR VENTA*/
 
   /*TASA DOLAR MERCADO*/
-    $FechaTasaMercado = 
+    $FechaTasaMercado =
     DB::table('dolars')
     ->select('updated_at')
     ->orderBy('fecha','desc')
@@ -98,7 +98,7 @@
       $FechaTasaMercado = '';
     }
 
-    $TasaMercado = 
+    $TasaMercado =
     DB::table('dolars')
     ->select('tasa')
     ->orderBy('fecha','desc')
@@ -119,7 +119,7 @@
     $FHoy = date("Y-m-d");
     $FAyer = date("Y-m-d",strtotime($FHoy."-1 days"));
 
-    $auditorReporte = 
+    $auditorReporte =
     DB::table('auditorias')
     ->select('registro')
     ->groupBy('registro')
@@ -128,7 +128,7 @@
     ->where('updated_at', '>',$FAyer)
     ->take(1)->get();
 
-    $auditorUser = 
+    $auditorUser =
     DB::table('auditorias')
     ->select('user')
     ->groupBy('user')
@@ -137,7 +137,7 @@
     ->take(1)->get();
 
     $usuario = Auth::user()->name;
-    $auditorReporteFavorito = 
+    $auditorReporteFavorito =
     DB::table('auditorias')
     ->select('registro')
     ->groupBy('registro')
@@ -172,6 +172,37 @@
 
   if(in_array(0,$reportes)!=true){
 ?>
+
+<?php
+  if(Auth::user()->departamento == 'COMPRAS' || Auth::user()->departamento == 'SURTIDO' || Auth::user()->departamento == 'GERENCIA'){
+?>
+    <!-- Dashboard Articulo Estrella-->
+    <div class="card-deck">
+        <div class="card border-secondary mb-3" style="width: 14rem;">
+        <div class="card-body text-left bg-light">
+            <h3 class="card-title">
+            <span class="card-text text-dark">
+                <i class="fas fa-credit-card"></i>
+                Articulos Estrella
+            </span>
+            </h3>
+            <p class="card-text text-dark">
+            <?php
+                FG_Acticulos_Estrella_Top(FG_Mi_Ubicacion());
+            ?>
+            </p>
+        </div>
+        <div class="card-footer bg-transparent border-secondary text-right">
+            <a href="/reporte16/" class="btn btn-outline-secondary btn-sm">Visualizar</a>
+        </div>
+        </div>
+    </div>
+    <hr class="row align-items-start col-12">
+    <!-- Dashboard Articulo Estrella -->
+<?php
+    }
+?>
+
 <!-------------------------------------------------------------------------------->
 <!-- DESTACADOS -->
 <?php
@@ -410,11 +441,11 @@
               echo 'Saldo disponible: ' . number_format(DB::table('configuracions')
             ->where('id', 8)
             ->value('valor'), 2, ',', '.') . " " . SigDolar;
-          ?>            
+          ?>
           </span>
         </h3>
         <p class="card-text text-white">
-        <?php 
+        <?php
           if(empty($saldo_actualDs)) {
             $ultimoMovimientoDs = '';
           }
@@ -430,7 +461,7 @@
       </div>
       <div class="card-footer bg-transparent border-success text-right">
         <a href="/movimientos?tasa_ventas_id=2" class="btn btn-outline-success btn-sm">Visualizar</a>
-      </div>    
+      </div>
     </div>
 
     <div class="card border-info mb-3" style="width: 14rem;">
@@ -456,7 +487,7 @@
 </div>
 
 <div class="card-deck">
-    <div class="card border-warning mb-3" style="width: 14rem;">      
+    <div class="card border-warning mb-3" style="width: 14rem;">
       <div class="card-body text-left bg-warning">
         <h3 class="card-title">
           <span class="card-text text-white">
@@ -467,14 +498,14 @@
               ->whereNotNull('diferido')
               ->orderBy('updated_at', 'desc')
               ->first();
-            
+
             if(empty($diferido_actualBs)) {
                 echo 'Diferido actual: '. number_format(0, 2, ',', '.') . " " . SigVe;
               }
               else {
                 echo 'Diferido actual: '. number_format($diferido_actualBs->diferido_actual, 2, ',', '.') . " " . SigVe;
               }
-          ?>            
+          ?>
           </span>
         </h3>
         <p class="card-text text-white">
@@ -494,15 +525,15 @@
       </div>
       <div class="card-footer bg-transparent border-warning text-right">
         <a href="/diferidos?tasa_ventas_id=1" class="btn btn-outline-warning btn-sm">Visualizar</a>
-      </div>    
+      </div>
     </div>
 
-    <div class="card border-secondary mb-3" style="width: 14rem;">      
+    <div class="card border-secondary mb-3" style="width: 14rem;">
       <div class="card-body text-left bg-secondary">
         <h3 class="card-title">
           <span class="card-text text-white">
             <i class="fas fa-lock"></i>
-            <?php 
+            <?php
             $diferido_actualDs = DB::table('ts_movimientos')
               ->where('tasa_ventas_id', 2)
               ->whereNotNull('diferido')
@@ -515,11 +546,11 @@
               else {
                 echo 'Diferido actual: ' . number_format($diferido_actualDs->diferido_actual, 2, ',', '.') . " " . SigDolar;
               }
-          ?>            
+          ?>
           </span>
         </h3>
         <p class="card-text text-white">
-        <?php 
+        <?php
           if(empty($diferido_actualDs)) {
             $ultimoDiferidoDs = '';
           }
@@ -535,7 +566,7 @@
       </div>
       <div class="card-footer bg-transparent border-secondary text-right">
         <a href="/diferidos?tasa_ventas_id=2" class="btn btn-outline-secondary btn-sm">Visualizar</a>
-      </div>    
+      </div>
     </div>
   </div>
 <?php endif; ?>
@@ -636,6 +667,7 @@
   <!-- Modal COMPRAS -->
 
   <!-- Dashboard Articulo Estrella-->
+  <!--
   <div class="card-deck">
     <div class="card border-secondary mb-3" style="width: 14rem;">
       <div class="card-body text-left bg-light">
@@ -647,7 +679,7 @@
         </h3>
         <p class="card-text text-dark">
           <?php
-            FG_Acticulos_Estrella_Top(FG_Mi_Ubicacion());
+            //FG_Acticulos_Estrella_Top(FG_Mi_Ubicacion());
           ?>
         </p>
       </div>
@@ -656,6 +688,7 @@
       </div>
     </div>
   </div>
+  -->
   <!-- Dashboard Articulo Estrella -->
 
   <!-- Dashboard COMPRAS-->
@@ -1090,7 +1123,7 @@
 
   <!-- Dashboard TESORERIA-->
   <div class="card-deck">
-    <div class="card border-danger mb-3" style="width: 14rem;">      
+    <div class="card border-danger mb-3" style="width: 14rem;">
       <div class="card-body text-left bg-danger">
         <h3 class="card-title">
           <span class="card-text text-white">
@@ -1101,11 +1134,11 @@
               ->whereNull('diferido')
               ->orderBy('id', 'desc')
               ->first();
-            
+
             echo 'Saldo disponible: '. number_format(DB::table('configuracions')
             ->where('id', 7)
             ->value('valor'), 2, ',', '.') . " " . SigVe;
-          ?>            
+          ?>
           </span>
         </h3>
         <p class="card-text text-white">
@@ -1125,10 +1158,10 @@
       </div>
       <div class="card-footer bg-transparent border-danger text-right">
         <a href="/movimientos?tasa_ventas_id=1" class="btn btn-outline-danger btn-sm">Visualizar</a>
-      </div>    
+      </div>
     </div>
 
-    <div class="card border-success mb-3" style="width: 14rem;">      
+    <div class="card border-success mb-3" style="width: 14rem;">
       <div class="card-body text-left bg-success">
         <h3 class="card-title">
           <span class="card-text text-white">
@@ -1143,11 +1176,11 @@
               echo 'Saldo disponible: ' . number_format(DB::table('configuracions')
             ->where('id', 8)
             ->value('valor'), 2, ',', '.') . " " . SigDolar;
-          ?>            
+          ?>
           </span>
         </h3>
         <p class="card-text text-white">
-        <?php 
+        <?php
           if(empty($saldo_actualDs)) {
             $ultimoMovimientoDs = '';
           }
@@ -1163,7 +1196,7 @@
       </div>
       <div class="card-footer bg-transparent border-success text-right">
         <a href="/movimientos?tasa_ventas_id=2" class="btn btn-outline-success btn-sm">Visualizar</a>
-      </div>    
+      </div>
     </div>
 
     <!-- Tasa Venta -->
@@ -1191,7 +1224,7 @@
 
   <!-- DIFERIDOS -->
   <div class="card-deck">
-    <div class="card border-warning mb-3" style="width: 14rem;">      
+    <div class="card border-warning mb-3" style="width: 14rem;">
       <div class="card-body text-left bg-warning">
         <h3 class="card-title">
           <span class="card-text text-white">
@@ -1202,14 +1235,14 @@
               ->whereNotNull('diferido')
               ->orderBy('updated_at', 'desc')
               ->first();
-            
+
             if(empty($diferido_actualBs)) {
                 echo 'Diferido actual: '. number_format(0, 2, ',', '.') . " " . SigVe;
               }
               else {
                 echo 'Diferido actual: '. number_format($diferido_actualBs->diferido_actual, 2, ',', '.') . " " . SigVe;
               }
-          ?>            
+          ?>
           </span>
         </h3>
         <p class="card-text text-white">
@@ -1229,15 +1262,15 @@
       </div>
       <div class="card-footer bg-transparent border-warning text-right">
         <a href="/diferidos?tasa_ventas_id=1" class="btn btn-outline-warning btn-sm">Visualizar</a>
-      </div>    
+      </div>
     </div>
 
-    <div class="card border-secondary mb-3" style="width: 14rem;">      
+    <div class="card border-secondary mb-3" style="width: 14rem;">
       <div class="card-body text-left bg-secondary">
         <h3 class="card-title">
           <span class="card-text text-white">
             <i class="fas fa-lock"></i>
-            <?php 
+            <?php
             $diferido_actualDs = DB::table('ts_movimientos')
               ->where('tasa_ventas_id', 2)
               ->whereNotNull('diferido')
@@ -1250,11 +1283,11 @@
               else {
                 echo 'Diferido actual: ' . number_format($diferido_actualDs->diferido_actual, 2, ',', '.') . " " . SigDolar;
               }
-          ?>            
+          ?>
           </span>
         </h3>
         <p class="card-text text-white">
-        <?php 
+        <?php
           if(empty($diferido_actualDs)) {
             $ultimoDiferidoDs = '';
           }
@@ -1270,7 +1303,7 @@
       </div>
       <div class="card-footer bg-transparent border-secondary text-right">
         <a href="/diferidos?tasa_ventas_id=2" class="btn btn-outline-secondary btn-sm">Visualizar</a>
-      </div>    
+      </div>
     </div>
   </div>
   <!-- Dashboard TESORERIA-->
@@ -1300,14 +1333,14 @@
           <ul style="list-style:none">
             <li class="card-text text-dark" style="display: inline;">
               <i class="far fa-check-circle text-info" style="display: inline;"></i>
-              Desde ya esta disponible el modulo: 
+              Desde ya esta disponible el modulo:
               <b class="text-info">Candidatos</b>!!
             </li>
           </ul>
           <ul style="list-style:none">
             <li class="card-text text-dark" style="display: inline;">
               <i class="far fa-check-circle text-info" style="display: inline;"></i>
-              Desde ya esta disponible el modulo: 
+              Desde ya esta disponible el modulo:
               <b class="text-info">Pruebas</b>!!
             </li>
           </ul>
@@ -1422,18 +1455,18 @@
             <i class="fas fa-cogs"></i>
             <?php
             echo ''.$procesos_candidatos;
-          ?>            
+          ?>
           </span>
         </h2>
         <p class="card-text text-white">
-        <?php 
+        <?php
           echo 'Fases y procesos en tránsito';
         ?>
         </p>
       </div>
       <div class="card-footer bg-transparent border-dark text-right">
         <a href="/procesos_candidatos" class="btn btn-outline-dark btn-sm">Visualizar</a>
-      </div>    
+      </div>
     </div>
   </div>
 
@@ -1445,42 +1478,42 @@
             <i class="fas fa-sort-amount-up-alt"></i>
             <?php
             echo ''.$fases;
-          ?>            
+          ?>
           </span>
         </h2>
         <p class="card-text text-white">
-        <?php 
+        <?php
           echo 'Fases registradas';
         ?>
         </p>
       </div>
       <div class="card-footer bg-transparent border-danger text-right">
         <a href="/fases" class="btn btn-outline-danger btn-sm">Visualizar</a>
-      </div>    
+      </div>
     </div>
 
-    <div class="card border-success mb-3" style="width: 14rem;">      
+    <div class="card border-success mb-3" style="width: 14rem;">
       <div class="card-body text-left bg-success">
         <h3 class="card-title">
           <span class="card-text text-white">
             <i class="fas fa-user-plus"></i>
             <?php
             echo ''.$vacantes;
-          ?>            
+          ?>
           </span>
         </h3>
         <p class="card-text text-white">
-        <?php 
+        <?php
           echo 'Vacantes registradas';
         ?>
         </p>
       </div>
       <div class="card-footer bg-transparent border-success text-right">
         <a href="/vacantes" class="btn btn-outline-success btn-sm">Visualizar</a>
-      </div>    
+      </div>
     </div>
 
-    <div class="card border-info mb-3" style="width: 14rem;">      
+    <div class="card border-info mb-3" style="width: 14rem;">
       <div class="card-body text-left bg-info">
         <h3 class="card-title">
           <span class="card-text text-white">
@@ -1491,14 +1524,14 @@
           </span>
         </h3>
         <p class="card-text text-white">
-        <?php 
+        <?php
           echo 'Convocatorias registradas';
         ?>
         </p>
       </div>
       <div class="card-footer bg-transparent border-info text-right">
         <a href="/convocatoria" class="btn btn-outline-info btn-sm">Visualizar</a>
-      </div>    
+      </div>
     </div>
   </div>
 
@@ -1510,18 +1543,18 @@
             <i class="fas fa-user-check"></i>
             <?php
             echo ''.$candidatos;
-          ?>            
+          ?>
           </span>
         </h2>
         <p class="card-text text-white">
-        <?php 
+        <?php
           echo 'Candidatos registrados';
         ?>
         </p>
       </div>
       <div class="card-footer bg-transparent border-warning text-right">
         <a href="/candidatos" class="btn btn-outline-warning btn-sm">Visualizar</a>
-      </div>    
+      </div>
     </div>
 
     <div class="card border-secondary mb-3" style="width: 14rem;">
@@ -1531,39 +1564,39 @@
             <i class="fas fa-tasks"></i>
             <?php
             echo ''.$pruebas;
-          ?>            
+          ?>
           </span>
         </h2>
         <p class="card-text text-white">
-        <?php 
+        <?php
           echo 'Pruebas registradas';
         ?>
         </p>
       </div>
       <div class="card-footer bg-transparent border-secondary text-right">
         <a href="/pruebas" class="btn btn-outline-secondary btn-sm">Visualizar</a>
-      </div>    
+      </div>
     </div>
 
-    <div class="card border-dark mb-3" style="width: 14rem;">      
+    <div class="card border-dark mb-3" style="width: 14rem;">
       <div class="card-body text-left bg-dark">
         <h3 class="card-title">
           <span class="card-text text-white">
             <i class="fas fa-users"></i>
             <?php
             echo ''.$entrevistas;
-          ?>            
+          ?>
           </span>
         </h3>
         <p class="card-text text-white">
-        <?php 
+        <?php
           echo 'Entrevistas registradas';
         ?>
         </p>
       </div>
       <div class="card-footer bg-transparent border-dark text-right">
         <a href="/entrevistas" class="btn btn-outline-dark btn-sm">Visualizar</a>
-      </div>    
+      </div>
     </div>
   </div>
 
@@ -1575,18 +1608,18 @@
             <i class="fas fa-users-cog"></i>
             <?php
             echo ''.$practicas;
-          ?>            
+          ?>
           </span>
         </h2>
         <p class="card-text text-white">
-        <?php 
+        <?php
           echo 'Prácticas registradas';
         ?>
         </p>
       </div>
       <div class="card-footer bg-transparent border-danger text-right">
         <a href="/practicas" class="btn btn-outline-danger btn-sm">Visualizar</a>
-      </div>    
+      </div>
     </div>
 
     <div class="card border-success mb-3" style="width: 14rem;">
@@ -1596,18 +1629,18 @@
             <i class="fas fa-phone"></i>
             <?php
             echo ''.$contactos;
-          ?>            
+          ?>
           </span>
         </h2>
         <p class="card-text text-white">
-        <?php 
+        <?php
           echo 'Contactos de empresas registrados';
         ?>
         </p>
       </div>
       <div class="card-footer bg-transparent border-success text-right">
         <a href="/contactos" class="btn btn-outline-success btn-sm">Visualizar</a>
-      </div>    
+      </div>
     </div>
 
     <div class="card border-info mb-3" style="width: 14rem;">
@@ -1617,18 +1650,18 @@
             <i class="fas fa-user-md"></i>
             <?php
             echo ''.$examenesm;
-          ?>            
+          ?>
           </span>
         </h2>
         <p class="card-text text-white">
-        <?php 
+        <?php
           echo 'Examenes médicos registrados';
         ?>
         </p>
       </div>
       <div class="card-footer bg-transparent border-info text-right">
         <a href="/examenesm" class="btn btn-outline-info btn-sm">Visualizar</a>
-      </div>    
+      </div>
     </div>
   </div>
 
@@ -1640,39 +1673,39 @@
             <i class="far fa-address-card"></i>
             <?php
             echo ''.$empresaReferencias;
-          ?>            
+          ?>
           </span>
         </h2>
         <p class="card-text text-white">
-        <?php 
+        <?php
           echo 'Empresas de referencias laborales registradas';
         ?>
         </p>
       </div>
       <div class="card-footer bg-transparent border-warning text-right">
         <a href="/empresaReferencias" class="btn btn-outline-warning btn-sm">Visualizar</a>
-      </div>    
+      </div>
     </div>
 
-    <div class="card border-secondary mb-3" style="width: 14rem;">      
+    <div class="card border-secondary mb-3" style="width: 14rem;">
       <div class="card-body text-left bg-secondary">
         <h3 class="card-title">
           <span class="card-text text-white">
             <i class="fas fa-vials"></i>
             <?php
             echo ''.$laboratorios;
-          ?>            
+          ?>
           </span>
         </h3>
         <p class="card-text text-white">
-        <?php 
+        <?php
           echo 'Laboratorios registrados';
         ?>
         </p>
       </div>
       <div class="card-footer bg-transparent border-secondary text-right">
         <a href="/laboratorio" class="btn btn-outline-secondary btn-sm">Visualizar</a>
-      </div>    
+      </div>
     </div>
   </div>
   <!-- Dashboard RRHH-->
@@ -1827,7 +1860,7 @@
   <!-- Modal ADMINISTRACION -->
   <!-- Dashboard ADMINISTRACION-->
   <div class="card-deck">
-    <div class="card border-warning mb-3" style="width: 14rem;">      
+    <div class="card border-warning mb-3" style="width: 14rem;">
       <div class="card-body text-left bg-warning">
         <h3 class="card-title">
           <span class="card-text text-white">
@@ -1837,18 +1870,18 @@
               ->where('tasa_ventas_id', 1)
               ->orderBy('id', 'desc')
               ->first();
-            
+
             if(empty($saldo_actualBs)) {
                 echo 'Saldo actual: '. number_format(0, 2, ',', '.') . " " . SigVe;
               }
               else {
                 echo 'Saldo actual: '. number_format($saldo_actualBs->saldo_actual, 2, ',', '.') . " " . SigVe;
               }
-          ?>            
+          ?>
           </span>
         </h3>
         <p class="card-text text-white">
-        <?php 
+        <?php
           echo 'Movimientos en bolivares registrados: ' . $movimientosBs;
           echo '<br>Fecha y hora actual: ' . date("d-m-Y h:i:s a", time());
         ?>
@@ -1856,15 +1889,15 @@
       </div>
       <div class="card-footer bg-transparent border-warning text-right">
         <a href="/movimientos?tasa_ventas_id=1" class="btn btn-outline-warning btn-sm">Visualizar</a>
-      </div>    
+      </div>
     </div>
 
-    <div class="card border-secondary mb-3" style="width: 14rem;">      
+    <div class="card border-secondary mb-3" style="width: 14rem;">
       <div class="card-body text-left bg-secondary">
         <h3 class="card-title">
           <span class="card-text text-white">
             <i class="fas fa-balance-scale"></i>
-            <?php 
+            <?php
             $saldo_actualDs = DB::table('ts_movimientos')
               ->where('tasa_ventas_id', 2)
               ->orderBy('id', 'desc')
@@ -1876,11 +1909,11 @@
               else {
                 echo 'Saldo actual: ' . number_format($saldo_actualDs->saldo_actual, 2, ',', '.') . " " . SigDolar;
               }
-          ?>            
+          ?>
           </span>
         </h3>
         <p class="card-text text-white">
-        <?php 
+        <?php
           echo 'Movimientos en dolares registrados: ' . $movimientosDs;
           echo '<br>Fecha y hora actual: ' . date("d-m-Y h:i:s a", time());
         ?>
@@ -1888,7 +1921,7 @@
       </div>
       <div class="card-footer bg-transparent border-secondary text-right">
         <a href="/movimientos?tasa_ventas_id=2" class="btn btn-outline-secondary btn-sm">Visualizar</a>
-      </div>    
+      </div>
     </div>
 
     <div class="card border-dark mb-3" style="width: 14rem;">
@@ -2145,7 +2178,7 @@
 
   <!-- MOVIMIENTOS -->
   <div class="card-deck">
-    <div class="card border-danger mb-3" style="width: 14rem;">      
+    <div class="card border-danger mb-3" style="width: 14rem;">
       <div class="card-body text-left bg-danger">
         <h3 class="card-title">
           <span class="card-text text-white">
@@ -2156,11 +2189,11 @@
               ->whereNull('diferido')
               ->orderBy('id', 'desc')
               ->first();
-            
+
             echo 'Saldo disponible: '. number_format(DB::table('configuracions')
             ->where('id', 7)
             ->value('valor'), 2, ',', '.') . " " . SigVe;
-          ?>            
+          ?>
           </span>
         </h3>
         <p class="card-text text-white">
@@ -2180,15 +2213,15 @@
       </div>
       <div class="card-footer bg-transparent border-danger text-right">
         <a href="/movimientos?tasa_ventas_id=1" class="btn btn-outline-danger btn-sm">Visualizar</a>
-      </div>    
+      </div>
     </div>
 
-    <div class="card border-success mb-3" style="width: 14rem;">      
+    <div class="card border-success mb-3" style="width: 14rem;">
       <div class="card-body text-left bg-success">
         <h3 class="card-title">
           <span class="card-text text-white">
             <i class="fas fa-balance-scale"></i>
-            <?php 
+            <?php
             $saldo_actualDs = DB::table('ts_movimientos')
               ->where('tasa_ventas_id', 2)
               ->whereNull('diferido')
@@ -2198,11 +2231,11 @@
               echo 'Saldo disponible: ' . number_format(DB::table('configuracions')
             ->where('id', 8)
             ->value('valor'), 2, ',', '.') . " " . SigDolar;
-          ?>            
+          ?>
           </span>
         </h3>
         <p class="card-text text-white">
-        <?php 
+        <?php
           if(empty($saldo_actualDs)) {
             $ultimoMovimientoDs = '';
           }
@@ -2218,12 +2251,12 @@
       </div>
       <div class="card-footer bg-transparent border-success text-right">
         <a href="/movimientos?tasa_ventas_id=2" class="btn btn-outline-success btn-sm">Visualizar</a>
-      </div>    
+      </div>
     </div>
   </div>
   <!-- DIFERIDOS -->
     <div class="card-deck">
-    <div class="card border-info mb-3" style="width: 14rem;">      
+    <div class="card border-info mb-3" style="width: 14rem;">
       <div class="card-body text-left bg-info">
         <h3 class="card-title">
           <span class="card-text text-white">
@@ -2234,14 +2267,14 @@
               ->whereNotNull('diferido')
               ->orderBy('updated_at', 'desc')
               ->first();
-            
+
             if(empty($diferido_actualBs)) {
                 echo 'Diferido actual: '. number_format(0, 2, ',', '.') . " " . SigVe;
               }
               else {
                 echo 'Diferido actual: '. number_format($diferido_actualBs->diferido_actual, 2, ',', '.') . " " . SigVe;
               }
-          ?>            
+          ?>
           </span>
         </h3>
         <p class="card-text text-white">
@@ -2261,15 +2294,15 @@
       </div>
       <div class="card-footer bg-transparent border-info text-right">
         <a href="/diferidos?tasa_ventas_id=1" class="btn btn-outline-info btn-sm">Visualizar</a>
-      </div>    
+      </div>
     </div>
 
-    <div class="card border-warning mb-3" style="width: 14rem;">      
+    <div class="card border-warning mb-3" style="width: 14rem;">
       <div class="card-body text-left bg-warning">
         <h3 class="card-title">
           <span class="card-text text-white">
             <i class="fas fa-lock"></i>
-            <?php 
+            <?php
             $diferido_actualDs = DB::table('ts_movimientos')
               ->where('tasa_ventas_id', 2)
               ->whereNotNull('diferido')
@@ -2282,11 +2315,11 @@
               else {
                 echo 'Diferido actual: ' . number_format($diferido_actualDs->diferido_actual, 2, ',', '.') . " " . SigDolar;
               }
-          ?>            
+          ?>
           </span>
         </h3>
         <p class="card-text text-white">
-        <?php 
+        <?php
           if(empty($diferido_actualDs)) {
             $ultimoDiferidoDs = '';
           }
@@ -2302,7 +2335,7 @@
       </div>
       <div class="card-footer bg-transparent border-warning text-right">
         <a href="/diferidos?tasa_ventas_id=2" class="btn btn-outline-warning btn-sm">Visualizar</a>
-      </div>    
+      </div>
     </div>
   </div>
   <!-- Dashboard GERENCIA-->

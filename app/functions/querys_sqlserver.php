@@ -1046,9 +1046,8 @@
     DESAROLLADO POR: SERGIO COVA
   */
   function R16Q_Detalle_Articulo_Estrella_Top($Top) {
-      //SELECT TOP $Top
     $sql = "
-    SELECT
+    SELECT TOP $Top
     --Id Articulo
     InvArticulo.Id AS IdArticulo,
     --Categoria Articulo
@@ -1247,7 +1246,10 @@
     --Agrupamientos
     GROUP BY InvArticulo.Id, InvArticulo.CodigoArticulo, InvArticulo.Descripcion, InvArticulo.FinConceptoImptoIdCompra, InvArticulo.InvCategoriaId
     --Ordanamiento
-    ORDER BY InvArticulo.Id ASC
+    ORDER BY (ROUND(CAST((SELECT SUM (InvLoteAlmacen.Existencia) As Existencia
+    FROM InvLoteAlmacen
+    WHERE(InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
+    AND (InvLoteAlmacen.InvArticuloId = InvArticulo.Id)) AS DECIMAL(38,0)),2,0)) ASC
     ";
     //ORDER BY InvArticulo.Descripcion ASC
     return $sql;

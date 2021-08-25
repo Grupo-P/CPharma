@@ -2625,7 +2625,9 @@
     $conn = FG_Conectar_Smartpharma($SedeConnection);
     $connCPharma = FG_Conectar_CPharma();
 
-    $sql = R16Q_Detalle_Articulo_Estrella_Top(50);
+    $TasaActual = FG_Tasa_Fecha($connCPharma,date('Y-m-d'));
+
+    $sql = R16Q_Detalle_Articulo_Estrella_Top(10);
     $result = sqlsrv_query($conn,$sql);
 
     $FFinal = $FFinalEn = date("Y-m-d");
@@ -2653,11 +2655,11 @@
     //echo'<h6 align="center">Periodo desde el '.$FInicialImp.' al '.$FFinalImp.' </h6>';
     //echo'<h6 align="center">El calculo de dias a pedir se esta calculando en pedidos para 20 dias de inventario</h6>';
     echo'
-    <table class="table table-striped table-bordered col-12 sortable table-condensed" id="myTable">
+    <table class="table table-sm table-striped table-bordered col-12 sortable table-condensed" id="myTable">
       <thead class="thead-dark">
         <tr>
           <th scope="col" class="CP-sticky">#</th>
-          <th scope="col" class="CP-sticky">Codigo</th>
+          <th scope="col" class="CP-sticky">Codigo Interno</th>
           <th scope="col" class="CP-sticky">Descripcion</th>
           <th scope="col" class="CP-sticky">Precio '.SigVe.' (Con IVA)</th>
           <th scope="col" class="CP-sticky">Precio '.SigDolar.' (Con IVA)</th>
@@ -2711,7 +2713,7 @@
       $CondicionExistencia = 'CON_EXISTENCIA';
 
       $Precio = FG_Calculo_Precio_Alfa($Existencia,$ExistenciaAlmacen1,$ExistenciaAlmacen2,$IsTroquelado,$UtilidadArticulo,$UtilidadCategoria,$TroquelAlmacen1,$PrecioCompraBrutoAlmacen1,$TroquelAlmacen2,
-    $PrecioCompraBrutoAlmacen2,$PrecioCompraBruto,$IsIVA,$CondicionExistencia);
+      $PrecioCompraBrutoAlmacen2,$PrecioCompraBruto,$IsIVA,$CondicionExistencia);
 
       echo '<tr>';
       echo '<td align="center"><strong>'.intval($contador).'</strong></td>';
@@ -2723,7 +2725,15 @@
       '</a>
       </td>';
       echo '<td align="center">'.number_format($Precio,2,"," ,"." ).'</td>';
-      echo '<td align="center">'.number_format($Precio,2,"," ,"." ).'</td>';
+
+      if($TasaActual!=0){
+        $PrecioDolar = $Precio/$TasaActual;
+        echo '<td align="center">'.number_format($PrecioDolar,2,"," ,"." ).'</td>';
+      }
+      else{
+        echo '<td align="center">0,00</td>';
+      }
+
       echo '<td align="center">'.intval($Existencia).'</td>';
 
       while($FFinalBo!=$FInicialBo){
