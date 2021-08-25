@@ -2630,11 +2630,14 @@
     $conn = FG_Conectar_Smartpharma($SedeConnection);
     $connCPharma = FG_Conectar_CPharma();
 
-    $sql = R16Q_Detalle_Articulo_Estrella_Top(5);
+    $TasaActual = FG_Tasa_Fecha($connCPharma,date('Y-m-d'));
+
+    $sql = R16Q_Detalle_Articulo_Estrella_Top(10);
     $result = sqlsrv_query($conn,$sql);
 
     $FFinal = $FFinalEn = date("Y-m-d");
-    $FInicial = $FInicialEn = date("Y-m-d",strtotime($FFinal."-5 days"));
+    //Si quiero mas dias de rango muevo este -1 days Ej: -5 days
+    $FInicial = $FInicialEn = date("Y-m-d",strtotime($FFinal."-1 days"));
     $RangoDias = FG_Rango_Dias($FInicial,$FFinal)+1;
 
     $DiasPedido = 20;
@@ -2654,16 +2657,17 @@
     </div>
     <br/>
     ';
-    echo'<h6 align="center">Periodo desde el '.$FInicialImp.' al '.$FFinalImp.' </h6>';
-    echo'<h6 align="center">El calculo de dias a pedir se esta calculando en pedidos para 20 dias de inventario</h6>';
+    //echo'<h6 align="center">Periodo desde el '.$FInicialImp.' al '.$FFinalImp.' </h6>';
+    //echo'<h6 align="center">El calculo de dias a pedir se esta calculando en pedidos para 20 dias de inventario</h6>';
     echo'
-    <table class="table table-striped table-bordered col-12 sortable" id="myTable">
+    <table class="table table-sm table-striped table-bordered col-12 sortable table-condensed" id="myTable">
       <thead class="thead-dark">
         <tr>
           <th scope="col" class="CP-sticky">#</th>
           <th scope="col" class="CP-sticky">Codigo Interno</th>
           <th scope="col" class="CP-sticky">Descripcion</th>
-          <th scope="col" class="CP-sticky">Precio (Con IVA)</th>
+          <th scope="col" class="CP-sticky">Precio '.SigVe.' (Con IVA)</th>
+          <th scope="col" class="CP-sticky">Precio '.SigDolar.' (Con IVA)</th>
           <th scope="col" class="CP-sticky">Existencia</th>
     ';
     while($FFinalEn!=$FInicialEn){
@@ -2672,13 +2676,20 @@
       echo'<th scope="col" class="CP-sticky">'.$Dia.' '.$FImpresion.'</th>';
       $FInicialEn = date("Y-m-d",strtotime($FInicialEn."+1 days"));
     }
-
+    /*
     echo'
           <th scope="col" class="CP-sticky">Ventas Hoy</th>
           <th scope="col" class="CP-sticky">Ventas Totales</th>
           <th scope="col" class="CP-sticky">Dias en Quiebre</th>
           <th scope="col" class="CP-sticky">Dias Restantes</th>
           <th scope="col" class="CP-sticky">Cantidad a Pedir</th>
+        </tr>
+      </thead>
+      <tbody>
+    ';
+    */
+
+    echo'
         </tr>
       </thead>
       <tbody>
@@ -2707,7 +2718,7 @@
       $CondicionExistencia = 'CON_EXISTENCIA';
 
       $Precio = FG_Calculo_Precio_Alfa($Existencia,$ExistenciaAlmacen1,$ExistenciaAlmacen2,$IsTroquelado,$UtilidadArticulo,$UtilidadCategoria,$TroquelAlmacen1,$PrecioCompraBrutoAlmacen1,$TroquelAlmacen2,
-    $PrecioCompraBrutoAlmacen2,$PrecioCompraBruto,$IsIVA,$CondicionExistencia);
+      $PrecioCompraBrutoAlmacen2,$PrecioCompraBruto,$IsIVA,$CondicionExistencia);
 
       echo '<tr>';
       echo '<td align="center"><strong>'.intval($contador).'</strong></td>';
@@ -2719,6 +2730,15 @@
       '</a>
       </td>';
       echo '<td align="center">'.number_format($Precio,2,"," ,"." ).'</td>';
+
+      if($TasaActual!=0){
+        $PrecioDolar = $Precio/$TasaActual;
+        echo '<td align="center">'.number_format($PrecioDolar,2,"," ,"." ).'</td>';
+      }
+      else{
+        echo '<td align="center">0,00</td>';
+      }
+
       echo '<td align="center">'.intval($Existencia).'</td>';
 
       while($FFinalBo!=$FInicialBo){
@@ -2731,6 +2751,7 @@
         $FInicialBo = date("Y-m-d",strtotime($FInicialBo."+1 days"));
       }
 
+      /*
       $FPivoteBo = date("Y-m-d",strtotime($FInicialBo."+1 days"));
       $sql1 = R16Q_Detalle_Venta_Top($IdArticulo,$FInicialBo,$FPivoteBo);
       $result1 = sqlsrv_query($conn,$sql1);
@@ -2762,6 +2783,7 @@
 
       echo '<td align="center">'.round($DiasRestantes,2).'</td>';
       echo '<td align="center">'.intval($CantidadPedido).'</td>';
+      */
 
       echo '</tr>';
       $contador++;
