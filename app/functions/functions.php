@@ -2660,6 +2660,7 @@
           <th scope="col" class="CP-sticky">#</th>
           <th scope="col" class="CP-sticky">Codigo Interno</th>
           <th scope="col" class="CP-sticky">Descripcion</th>
+          <th scope="col" class="CP-sticky">Utilidad Configurada</td>
           <th scope="col" class="CP-sticky">Precio '.SigVe.' (Con IVA)</th>
           <th scope="col" class="CP-sticky">Precio '.SigDolar.' (Con IVA)</th>
           <th scope="col" class="CP-sticky">Existencia</th>
@@ -2714,6 +2715,9 @@
       $Precio = FG_Calculo_Precio_Alfa($Existencia,$ExistenciaAlmacen1,$ExistenciaAlmacen2,$IsTroquelado,$UtilidadArticulo,$UtilidadCategoria,$TroquelAlmacen1,$PrecioCompraBrutoAlmacen1,$TroquelAlmacen2,
       $PrecioCompraBrutoAlmacen2,$PrecioCompraBruto,$IsIVA,$CondicionExistencia);
 
+      $Utilidad = FG_Utilidad_Alfa($UtilidadArticulo,$UtilidadCategoria);
+      $Utilidad = (1 - $Utilidad)*100;
+
       echo '<tr>';
       echo '<td align="center"><strong>'.intval($contador).'</strong></td>';
       echo '<td align="left">'.$row['CodigoInterno'].'</td>';
@@ -2723,6 +2727,8 @@
         .$Descripcion.
       '</a>
       </td>';
+
+      echo '<td align="center">'.number_format($Utilidad,2,"," ,"." ).' %</td>';
       echo '<td align="center">'.number_format($Precio,2,"," ,"." ).'</td>';
 
       if($TasaActual!=0){
