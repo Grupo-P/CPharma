@@ -654,7 +654,12 @@
             $sql = R12_Coment_Ajuste($row3['NumeroReferencia']);
             $result = sqlsrv_query($conn,$sql);
             $row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC);
-            echo '<td align="center">'.$row3['NumeroReferencia'].'</td>';
+            echo
+              '<td align="center" class="CP-barrido">
+              <a href="/reporte42?SEDE='.$SedeConnection.'&numeroAjuste='.$row3['NumeroReferencia'].'" style="text-decoration: none; color: black;" target="_blank">'
+                .$row3['NumeroReferencia'].
+              '</a>
+              </td>';
             echo '<td align="center">-</td>';                  
             echo '<td align="center">'.FG_Limpiar_Texto($row['Comentario']).'</td>';
 
@@ -680,7 +685,12 @@
             $sql = R12_Coment_Ajuste($row3['NumeroReferencia']);
             $result = sqlsrv_query($conn,$sql);
             $row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC);
-            echo '<td align="center">'.$row3['NumeroReferencia'].'</td>';
+            echo
+              '<td align="center" class="CP-barrido">
+              <a href="/reporte42?SEDE='.$SedeConnection.'&numeroAjuste='.$row3['NumeroReferencia'].'" style="text-decoration: none; color: black;" target="_blank">'
+                .$row3['NumeroReferencia'].
+              '</a>
+              </td>';
             echo '<td align="center">-</td>';                  
             echo '<td align="center">'.FG_Limpiar_Texto($row['Comentario']).'</td>';
 

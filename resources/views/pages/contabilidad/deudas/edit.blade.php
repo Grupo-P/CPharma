@@ -95,6 +95,8 @@
                                 @foreach($sedes as $sede)
                                     <option {{ ($sede->razon_social == $deuda->sede) ? 'selected' : '' }} value="{{ $sede->razon_social }}">{{ $sede->razon_social }}</option>
                                 @endforeach
+                                <option {{ ($deuda->sede == 'DROGERÍA EDA, C.A') ? 'selected' : '' }} value="DROGERÍA EDA, C.A">DROGERÍA EDA, C.A</option>
+                                <option {{ ($deuda->sede == 'DROGERÍA YAMAR, C.A') ? 'selected' : '' }} value="DROGERÍA EDA, C.A">DROGERÍA YAMAR, C.A</option>
                             </select>
                         </td>
                     </tr>

@@ -307,6 +307,7 @@
             <th scope="col" class="CP-sticky">Costo total Bs.</th>
             <th scope="col" class="CP-sticky">Almacen</th>
             <th scope="col" class="CP-sticky">Lote</th>
+            <th scope="col" class="CP-sticky"></th>
           </tr>
         </thead>
         <tbody>
@@ -319,13 +320,25 @@
       echo '<td align="center">'.$contador.'</td>';
       echo '<td align="center">'.$row2['codigo'].'</td>';
       echo '<td align="center">'.$row2['codigo_barra'].'</td>';
-      echo '<td align="center">'.$row2['descripcion'].'</td>';
-      echo '<td align="center">'.$row2['cantidad'].'</td>';
+      echo
+      '<td align="left" class="CP-barrido">
+      <a href="/reporte2?Descrip='.$row2['descripcion'].'&Id='.$row2['id_articulo'].'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
+        .$row2['descripcion'].
+      '</a>
+      </td>';
+      echo '<td align="center">'.intval($row2['cantidad']).'</td>';
       echo '<td align="center">'.$row2['tipo'].'</td>';
-      echo '<td align="center">'.$row2['costo_unitario_bs'].'</td>';
-      echo '<td align="center">'.$row2['costo_total_bs'].'</td>';
+      echo '<td align="center">'.number_format($row2['costo_unitario_bs'], 2, ',', '.').'</td>';
+      echo '<td align="center">'.number_format($row2['costo_total_bs'], 2, ',', '.').'</td>';
       echo '<td align="center">'.$row2['almacen'].'</td>';
       echo '<td align="center">'.$row2['lote'].'</td>';
+      echo '<td align="center">
+        <form>
+            <input type="hidden" name="ajuste" value="'.$_GET['numeroAjuste'].'" required>
+            <input class="form-control form-control-sm" name="devolucion" placeholder="No. devolución" required>
+            <input type="submit" class="btn btn-outline-success btn-sm" value="Verificar">
+        </form>
+      </td>';
       echo '</tr>';
 
       $contador++;
@@ -428,12 +441,44 @@
     $sql = "
         SELECT
             (SELECT InvArticulo.CodigoArticulo FROM InvArticulo WHERE InvArticulo.Id = InvAjusteDetalle.InvArticuloId) AS codigo,
-            (SELECT InvCodigoBarra.CodigoBarra FROM InvCodigoBarra WHERE InvCodigoBarra.InvArticuloId = InvAjusteDetalle.InvArticuloId) AS codigo_barra,
+            (SELECT TOP 1 InvCodigoBarra.CodigoBarra FROM InvCodigoBarra WHERE InvCodigoBarra.InvArticuloId = InvAjusteDetalle.InvArticuloId) AS codigo_barra,
             (SELECT InvArticulo.DescripcionLarga FROM InvArticulo WHERE InvArticulo.Id = InvAjusteDetalle.InvArticuloId) AS descripcion,
-            InvAjusteDetalle.Cantidad AS cantidad
+            (CASE (SELECT InvCausa.EsPositiva FROM InvCausa WHERE InvCausa.Id = InvAjusteDetalle.InvCausaId) WHEN 1 THEN 'Positivo' ELSE 'Negativo' END) AS tipo,
+            InvAjusteDetalle.Cantidad AS cantidad,
+            InvAjusteDetalle.M_CostoUnitario AS costo_unitario_bs,
+            InvAjusteDetalle.M_TotalCostoDetalle AS costo_total_bs,
+            (SELECT InvAlmacen.Descripcion FROM InvAlmacen WHERE InvAlmacen.Id = InvAjusteDetalle.InvAlmacenId) AS almacen,
+            (SELECT InvLote.Numero FROM InvLote WHERE InvLote.Id = InvAjusteDetalle.InvLoteId) AS lote,
+            InvAjusteDetalle.InvArticuloId AS id_articulo
         FROM
             InvAjusteDetalle
-        WHERE InvAjusteDetalle.InvAjusteId = (SELECT InvAjuste.NumeroAjuste FROM InvAjuste WHERE InvAjuste.NumeroAjuste = '$numeroAjuste')
+        WHERE InvAjusteDetalle.InvAjusteId = (SELECT InvAjuste.Id FROM InvAjuste WHERE InvAjuste.NumeroAjuste = '$numeroAjuste')
+    ";
+    return $sql;
+  }
+
+  /**********************************************************************************/
+  /*
+    TITULO: R42Q_Ajuste_Devolucion
+    FUNCION: Compara ajuste contra devolucion
+    DESAROLLADO POR: NISA DELGADO
+  */
+  function R42Q_Ajuste_Devolucion($numeroAjuste), $numeroDevolucion {
+    $sql = "
+        SELECT
+            (SELECT InvArticulo.CodigoArticulo FROM InvArticulo WHERE InvArticulo.Id = InvAjusteDetalle.InvArticuloId) AS codigo,
+            (SELECT TOP 1 InvCodigoBarra.CodigoBarra FROM InvCodigoBarra WHERE InvCodigoBarra.InvArticuloId = InvAjusteDetalle.InvArticuloId) AS codigo_barra,
+            (SELECT InvArticulo.DescripcionLarga FROM InvArticulo WHERE InvArticulo.Id = InvAjusteDetalle.InvArticuloId) AS descripcion,
+            (CASE (SELECT InvCausa.EsPositiva FROM InvCausa WHERE InvCausa.Id = InvAjusteDetalle.InvCausaId) WHEN 1 THEN 'Positivo' ELSE 'Negativo' END) AS tipo,
+            InvAjusteDetalle.Cantidad AS cantidad,
+            InvAjusteDetalle.M_CostoUnitario AS costo_unitario_bs,
+            InvAjusteDetalle.M_TotalCostoDetalle AS costo_total_bs,
+            (SELECT InvAlmacen.Descripcion FROM InvAlmacen WHERE InvAlmacen.Id = InvAjusteDetalle.InvAlmacenId) AS almacen,
+            (SELECT InvLote.Numero FROM InvLote WHERE InvLote.Id = InvAjusteDetalle.InvLoteId) AS lote,
+            InvAjusteDetalle.InvArticuloId AS id_articulo
+        FROM
+            InvAjusteDetalle
+        WHERE InvAjusteDetalle.InvAjusteId = (SELECT InvAjuste.Id FROM InvAjuste WHERE InvAjuste.NumeroAjuste = '$numeroAjuste')
     ";
     return $sql;
   }

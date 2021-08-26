@@ -1064,7 +1064,7 @@
                                 <b>Redondeado en base a ${redondeo100+40}$:</b><br>
                                 * Que el cliente nos de ${redondeo100+60}$  y le damos 1 de 20$<br>
                                 * Que el cliente nos de ${redondeo100+100}$  y le damos 3 de 20$<br>
-                                * Que el cliente nos de ${redondeo100+100}$, le damos 1 50$ y uno de 20$
+                                * Que el cliente nos de ${redondeo100+110}$, le damos 1 50$ y uno de 20$
                             </div>
                         `);
                     }

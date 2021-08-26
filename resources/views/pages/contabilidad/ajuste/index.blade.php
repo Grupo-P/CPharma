@@ -128,9 +128,9 @@
             <tr class="{{ ($ajuste->reverso) ? 'bg-warning' : '' }}">
               <th>{{$ajuste->id}}</th>
               <td align="center" class="CP-barrido">
-                  <a href="{{ $url }}" style="text-decoration: none; color: black;" target="_blank">{{ $ajuste->proveedor->nombre_proveedor }}</a>
+                  <a href="{{ $url }}" style="text-decoration: none; color: black;" target="_blank">{{ ($ajuste->proveedor) ? $ajuste->proveedor->nombre_proveedor : '' }}</a>
               </td>
-              <td>{{$ajuste->proveedor->rif_ci}}</td>
+              <td>{{ ($ajuste->proveedor) ? $ajuste->proveedor->rif_ci : '' }}</td>
               <td>{{$ajuste->created_at}}</td>
               <td>{{number_format($ajuste->monto, 2, ',', '.')}}</td>
               <td>{{$ajuste->comentario}}</td>
