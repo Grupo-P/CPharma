@@ -87,6 +87,16 @@
     $IntervalCarga = $InicioCarga->diff($FinCarga);
     echo'Tiempo de carga: '.$IntervalCarga->format("%Y-%M-%D %H:%I:%S");
   }
+  elseif (isset($_GET['ajuste']) && isset($_GET['devolucion'])){
+
+    $InicioCarga = new DateTime("now");
+
+    R42_Ajuste_Devolucion($_GET['SEDE'],$_GET['ajuste'],$_GET['devolucion']);
+
+    $FinCarga = new DateTime("now");
+    $IntervalCarga = $InicioCarga->diff($FinCarga);
+    echo'Tiempo de carga: '.$IntervalCarga->format("%Y-%M-%D %H:%I:%S");
+  }
   else{
 
     $InicioCarga = new DateTime("now");
@@ -180,7 +190,7 @@
             <th scope="col" class="CP-sticky">Tasa</th>
             <th scope="col" class="CP-sticky">Monto $</th>
             <th scope="col" class="CP-sticky">Operador</th>
-            <th scope="col" class="CP-sticky"></th>
+            <th scope="col" colspan="2" class="CP-sticky"></th>
           </tr>
         </thead>
         <tbody>
@@ -220,12 +230,29 @@
                 print_r($SedeConnection);
                 echo'">
 
-              <input type="submit" value="Ver detalles" class="btn btn-outline-success">
+              <button type="submit" class="btn btn-outline-success btn-sm">
+                <i class="fa fa-eye"></i>
+                Ver detalles
+              </button>
 
               <input id="numeroAjuste" name="numeroAjuste" type="hidden" value="'.$row['numero_ajuste'].'">
           </form>
           <br>
         ';
+      echo '<td align="center">
+        <form target="_blank">
+            <input type="hidden" name="ajuste" value="'.$row['numero_ajuste'].'" required>
+            <input class="form-control form-control-sm" name="devolucion" placeholder="No. devolución" required>
+            <input id="SEDE" name="SEDE" type="hidden" value="';
+                print_r($SedeConnection);
+                echo'">
+
+            <button type="submit" class="btn btn-outline-success btn-sm">
+                <i class="fa fa-check"></i>
+                Verificar
+            </button>
+        </form>
+      </td>';
       echo '</tr>';
     $contador++;
     }
@@ -234,6 +261,7 @@
     </table>';
     sqlsrv_close($conn);
   }
+
   /**********************************************************************************/
   /*
     TITULO: R42_Ajuste_Detalle
@@ -307,7 +335,6 @@
             <th scope="col" class="CP-sticky">Costo total Bs.</th>
             <th scope="col" class="CP-sticky">Almacen</th>
             <th scope="col" class="CP-sticky">Lote</th>
-            <th scope="col" class="CP-sticky"></th>
           </tr>
         </thead>
         <tbody>
@@ -332,13 +359,6 @@
       echo '<td align="center">'.number_format($row2['costo_total_bs'], 2, ',', '.').'</td>';
       echo '<td align="center">'.$row2['almacen'].'</td>';
       echo '<td align="center">'.$row2['lote'].'</td>';
-      echo '<td align="center">
-        <form>
-            <input type="hidden" name="ajuste" value="'.$_GET['numeroAjuste'].'" required>
-            <input class="form-control form-control-sm" name="devolucion" placeholder="No. devolución" required>
-            <input type="submit" class="btn btn-outline-success btn-sm" value="Verificar">
-        </form>
-      </td>';
       echo '</tr>';
 
       $contador++;
@@ -353,6 +373,146 @@
 
     sqlsrv_close($conn);
   }
+
+  /**********************************************************************************/
+  /*
+    TITULO: R42_Ajuste_Devolucion
+    FUNCION:  Compara ajuste con devolucion
+    RETORNO: no aplica
+    DESAROLLADO POR: NISA DELGADO
+  */
+  function R42_Ajuste_Devolucion($sede, $ajuste, $devolucion) {
+
+    $conn = FG_Conectar_Smartpharma($sede);
+
+    $sql1 = "
+        SELECT
+            (SELECT InvArticulo.Id FROM InvArticulo WHERE InvArticulo.Id = InvAjusteDetalle.InvArticuloId) AS id_articulo,
+            (SELECT InvArticulo.CodigoArticulo FROM InvArticulo WHERE InvArticulo.Id = InvAjusteDetalle.InvArticuloId) AS codigo,
+            (SELECT InvArticulo.DescripcionLarga FROM InvArticulo WHERE InvArticulo.Id = InvAjusteDetalle.InvArticuloId) AS descripcion,
+            InvAjusteDetalle.Cantidad AS cantidad
+        FROM
+            InvAjusteDetalle
+        WHERE InvAjusteDetalle.InvAjusteId = (SELECT InvAjuste.Id FROM InvAjuste WHERE InvAjuste.NumeroAjuste = '$ajuste');
+    ";
+    $result1 = sqlsrv_query($conn,$sql1);
+
+
+    echo'
+        <table class="table table-striped table-bordered col-12 sortable" id="myTable">
+            <thead class="thead-dark">
+              <tr>
+                <th colspan="6" scope="col" class="CP-sticky">Ajuste vs devolución</th>
+              </tr>
+              <tr>
+                <th scope="col" class="CP-sticky">#</th>
+                <th scope="col" class="CP-sticky">Codigo</th>
+                <th scope="col" class="CP-sticky">Descripcion</th>
+                <th scope="col" class="CP-sticky">Cantidad ajuste</th>
+                <th scope="col" class="CP-sticky">Cantidad devolución</th>
+                <th scope="col" class="CP-sticky">Resultado</th>
+              </tr>
+            </thead>
+        <tbody>
+    ';
+
+    $contador = 1;
+
+    while ($row1 = sqlsrv_fetch_array($result1, SQLSRV_FETCH_ASSOC)) {
+        $sql2 = "
+            SELECT
+                VenDevolucionDetalle.Cantidad AS cantidad
+            FROM
+                VenDevolucionDetalle
+            WHERE
+                VenDevolucionDetalle.VenDevolucionId = (SELECT TOP 1 VenDevolucion.Id FROM VenDevolucion WHERE VenDevolucion.ConsecutivoDevolucionSistema IN ({$devolucion}))
+                AND
+                VenDevolucionDetalle.InvArticuloId = {$row1['id_articulo']};
+        ";
+
+        $result2 = sqlsrv_query($conn,$sql2);
+        $row2 = sqlsrv_fetch_array($result2, SQLSRV_FETCH_ASSOC);
+
+        echo '<tr>';
+        echo '<td class="text-center">'.$contador.'</td>';
+        echo '<td class="text-center">'.$row1['codigo'].'</td>';
+        echo '<td  class="text-center">'.$row1['descripcion'].'</td>';
+        echo '<td class="text-center">'.intval($row1['cantidad']).'</td>';
+        echo '<td class="text-center">'.intval($row2['cantidad']).'</td>';
+        echo '<td class="text-center">'.intval($row1['cantidad']-$row2['cantidad']).'</td>';
+        echo '</tr>';
+
+        $contador++;
+    }
+
+    echo '</tbody></table><br><br>';
+
+
+
+
+    $sql3 = "
+        SELECT
+            (SELECT InvArticulo.Id FROM InvArticulo WHERE InvArticulo.Id = VenDevolucionDetalle.InvArticuloId) AS id_articulo,
+            (SELECT InvArticulo.CodigoArticulo FROM InvArticulo WHERE InvArticulo.Id = VenDevolucionDetalle.InvArticuloId) AS codigo,
+            (SELECT InvArticulo.DescripcionLarga FROM InvArticulo WHERE InvArticulo.Id = VenDevolucionDetalle.InvArticuloId) AS descripcion,
+            VenDevolucionDetalle.Cantidad AS cantidad
+        FROM
+            VenDevolucionDetalle
+        WHERE
+            VenDevolucionDetalle.VenDevolucionId IN (SELECT VenDevolucion.Id FROM VenDevolucion WHERE VenDevolucion.ConsecutivoDevolucionSistema IN ($devolucion))
+    ";
+    $result3 = sqlsrv_query($conn,$sql3);
+
+    echo'
+        <table class="table table-striped table-bordered col-12 sortable" id="myTable">
+            <thead class="thead-dark">
+              <tr>
+                <th colspan="6" scope="col" class="CP-sticky">Devolución vs ajuste</th>
+              </tr>
+              <tr>
+                <th scope="col" class="CP-sticky">#</th>
+                <th scope="col" class="CP-sticky">Codigo</th>
+                <th scope="col" class="CP-sticky">Descripcion</th>
+                <th scope="col" class="CP-sticky">Cantidad devolución</th>
+                <th scope="col" class="CP-sticky">Cantidad ajuste</th>
+                <th scope="col" class="CP-sticky">Resultado</th>
+              </tr>
+            </thead>
+        <tbody>
+    ';
+
+    $contador = 1;
+
+    while ($row3 = sqlsrv_fetch_array($result3, SQLSRV_FETCH_ASSOC)) {
+        $sql4 = "
+            SELECT
+                InvAjusteDetalle.Cantidad AS cantidad
+            FROM
+                InvAjusteDetalle
+            WHERE
+                InvAjusteDetalle.InvAjusteId = (SELECT InvAjuste.Id FROM InvAjuste WHERE InvAjuste.NumeroAjuste = '{$ajuste}')
+                AND
+                InvAjusteDetalle.InvArticuloId = {$row3['id_articulo']};
+        ";
+
+        $result4 = sqlsrv_query($conn,$sql4);
+        $row4 = sqlsrv_fetch_array($result4, SQLSRV_FETCH_ASSOC);
+
+        echo '<tr>';
+        echo '<td class="text-center">'.$contador.'</td>';
+        echo '<td class="text-center">'.$row3['codigo'].'</td>';
+        echo '<td class="text-center">'.$row3['descripcion'].'</td>';
+        echo '<td class="text-center">'.intval($row3['cantidad']).'</td>';
+        echo '<td class="text-center">'.intval($row4['cantidad']).'</td>';
+        echo '<td class="text-center">'.intval($row3['cantidad']-$row4['cantidad']).'</td>';
+        echo '</tr>';
+
+        $contador++;
+    }
+
+    echo '</tbody></table>';
+  }
+
   /**********************************************************************************/
   /*
     TITULO: R30Q_Ajustes_Top50
@@ -438,32 +598,6 @@
     DESAROLLADO POR: NISA DELGADO
   */
   function R42Q_Ajuste_Detalle_Listado($numeroAjuste) {
-    $sql = "
-        SELECT
-            (SELECT InvArticulo.CodigoArticulo FROM InvArticulo WHERE InvArticulo.Id = InvAjusteDetalle.InvArticuloId) AS codigo,
-            (SELECT TOP 1 InvCodigoBarra.CodigoBarra FROM InvCodigoBarra WHERE InvCodigoBarra.InvArticuloId = InvAjusteDetalle.InvArticuloId) AS codigo_barra,
-            (SELECT InvArticulo.DescripcionLarga FROM InvArticulo WHERE InvArticulo.Id = InvAjusteDetalle.InvArticuloId) AS descripcion,
-            (CASE (SELECT InvCausa.EsPositiva FROM InvCausa WHERE InvCausa.Id = InvAjusteDetalle.InvCausaId) WHEN 1 THEN 'Positivo' ELSE 'Negativo' END) AS tipo,
-            InvAjusteDetalle.Cantidad AS cantidad,
-            InvAjusteDetalle.M_CostoUnitario AS costo_unitario_bs,
-            InvAjusteDetalle.M_TotalCostoDetalle AS costo_total_bs,
-            (SELECT InvAlmacen.Descripcion FROM InvAlmacen WHERE InvAlmacen.Id = InvAjusteDetalle.InvAlmacenId) AS almacen,
-            (SELECT InvLote.Numero FROM InvLote WHERE InvLote.Id = InvAjusteDetalle.InvLoteId) AS lote,
-            InvAjusteDetalle.InvArticuloId AS id_articulo
-        FROM
-            InvAjusteDetalle
-        WHERE InvAjusteDetalle.InvAjusteId = (SELECT InvAjuste.Id FROM InvAjuste WHERE InvAjuste.NumeroAjuste = '$numeroAjuste')
-    ";
-    return $sql;
-  }
-
-  /**********************************************************************************/
-  /*
-    TITULO: R42Q_Ajuste_Devolucion
-    FUNCION: Compara ajuste contra devolucion
-    DESAROLLADO POR: NISA DELGADO
-  */
-  function R42Q_Ajuste_Devolucion($numeroAjuste), $numeroDevolucion {
     $sql = "
         SELECT
             (SELECT InvArticulo.CodigoArticulo FROM InvArticulo WHERE InvArticulo.Id = InvAjusteDetalle.InvArticuloId) AS codigo,
