@@ -174,7 +174,7 @@
 ?>
 
 <?php
-  if(Auth::user()->departamento == 'COMPRAS' || Auth::user()->departamento == 'SURTIDO' || Auth::user()->departamento == 'GERENCIA'){
+  if(Auth::user()->departamento == 'COMPRAS' || Auth::user()->departamento == 'SURTIDO' || Auth::user()->departamento == 'GERENCIA' || Auth::user()->departamento == 'LÍDER DE TIENDA'){
 ?>
     <!-- Dashboard Articulo Estrella-->
     <div class="card-deck">
