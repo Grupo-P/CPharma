@@ -136,6 +136,7 @@
         <th class="bg-success text-white border border-white"><h4>CÓDIGO DE BARRA</h4></th>
         <th class="bg-success text-white border border-white"><h4>DESCRIPCIÓN</h4></th>
         <th class="bg-success text-white border border-white"><h4>PRECIO BSS</h4></th>
+        <th class="bg-success text-white border border-white"><h4>PRECIO BSD</h4></th>
         <?php
           if (_ConsultorDolar_ == "SI") {
            echo '<th class="bg-success text-white border border-white"><h4>PRECIO $</h4></th>';
@@ -152,6 +153,9 @@
           </td>
           <td align="center" class="text-danger">
             <h4><b><p id="PPrecioScan"></p></b></h4>
+          </td>
+          <td align="center" class="text-danger">
+            <h4><b><p id="PPrecioDigitalScan"></p></b></h4>
           </td>
           <?php
           if (_ConsultorDolar_ == "SI") {
@@ -218,6 +222,7 @@
             <th class="align-middle bg-success text-center text-white border border-default p-3">CÓDIGO DE BARRA</th>
             <th class="align-middle bg-success text-center text-white border border-default p-3">DESCRIPCIÓN</th>
             <th class="align-middle bg-success text-center text-white border border-default p-3">PRECIO BS</th>
+            <th class="align-middle bg-success text-center text-white border border-default p-3">PRECIO BS.D</th>
             <th class="align-middle bg-success text-center text-white border border-default p-3">PRECIO $</th>
             <th class="align-middle bg-success text-center text-white border border-default p-3">FECHA Y HORA</th>
           </thead>
@@ -228,6 +233,7 @@
                 <td class="align-middle border border-success p-3"><b><?php echo $row['codigoBarra']; ?></b></td>
                 <td class="align-middle border border-success p-3"><b><?php echo $row['descripcion']; ?></b></td>
                 <td class="align-middle border border-success p-3"><b><?php echo $row['precio_bs']; ?></b></td>
+                <td class="align-middle border border-success p-3"><b><?php echo $row['precio_d']; ?></b></td>
                 <td class="align-middle border border-success p-3"><b><?php echo $row['precio_ds']; ?></b></td>
                 <td class="align-middle border border-success p-3"><b><?php echo $row['fecha']; ?></b></td>
               </tr>
@@ -324,6 +330,7 @@
 
           if(JSON.parse(data)!="UNICO"){
             var respuesta = JSON.parse(data);
+
             var limiteRespuesta = respuesta.length;
             /*Armado del elemento del carousel*/
             var contenedor = $("#divPromocion").html();
@@ -334,6 +341,7 @@
               var pop = respuesta.pop();
               var precio = formateoPrecio(pop['Precio'],2);
               var precioDolar = formateoPrecio(pop['PrecioDolar'],2);
+              var precioDigital = formateoPrecio(parseFloat(pop['Precio'])/1000000, 2);
               var descripcion = pop['Descripcion'];
               var codigo = pop['CodigoBarra'];
               var URLImag = URLImagen+codigo+'.jpg';
@@ -351,6 +359,8 @@
 
               nuevaFila += '<div class="carousel-caption d-none d-md-block h-25 w-100" style="right: 0; left: 0; background-color:rgba(0, 0, 0,0.6)">';
               nuevaFila += '<h2 class="text-white">Bs.S '+precio+' / $' + precioDolar + '</h2>';
+
+              nuevaFila += '<h2 class="text-white">Bs.D '+precioDigital+'</h2>';
               nuevaFila += '<h4 class="text-white">'+descripcion+'</h4>';
               nuevaFila += '</div>';
               nuevaFila += '</div>';
@@ -442,6 +452,9 @@
               precioDolar = formateoPrecio(data/TasaVenta,2);
               $('#PPrecioDolarScan').html('$. '+precioDolar);
 
+              precioDigital = formateoPrecio(parseFloat(data)/1000000, 2);
+              $('#PPrecioDigitalScan').html('BsD. '+precioDigital);
+
               for (var i = 0; i <= $('#ultimasConsultasTbody').find('tr').length - 1; i++) {
                 console.log($('#ultimasConsultasTbody').find('tr').eq(i).find('td').eq(0).html());
                 console.log(ArrJsCB[indiceCodBarScan]);
@@ -460,6 +473,7 @@
                   <td class="border border-success p-3"><b>${ArrJsCB[indiceCodBarScan]}</b></td>
                   <td class="border border-success p-3"><b>${ArrJs[indiceScanDesc]}</b></td>
                   <td class="border border-success p-3"><b>${precio}</b></td>
+                  <td class="border border-success p-3"><b>${precioDigital}</b></td>
                   <td class="border border-success p-3"><b>${precioDolar}</b></td>
                   <td class="border border-success p-3"><b>${moment().format('DD/MM/YYYY hh:mm A')}</b></td>
                 </tr>
@@ -625,14 +639,15 @@
       Select codigoBarra, descripcion,
         (SELECT DATE_FORMAT(consultor.created_at, '%d/%m/%Y %h:%i %p') from consultor WHERE consultor.codigo_barra = codigoBarra ORDER by consultor.created_at DESC limit 1) as fecha,
         (SELECT FORMAT(consultor.precio,2,'de_DE') FROM consultor WHERE consultor.codigo_barra = codigoBarra ORDER by consultor.created_at DESC limit 1) as precio_bs,
+        (SELECT FORMAT(consultor.precio/1000000,2,'de_DE') FROM consultor WHERE consultor.codigo_barra = codigoBarra ORDER by consultor.created_at DESC limit 1) as precio_d,
         (SELECT FORMAT(consultor.precio/(select dolars.tasa from dolars order BY id DESC limit 1),2,'de_DE') FROM consultor WHERE consultor.codigo_barra = codigoBarra ORDER by consultor.created_at DESC limit 1) as precio_ds
       FROM
-        (SELECT DISTINCT
-        consultor.codigo_barra as codigoBarra,
-        consultor.descripcion as descripcion
-        FROM consultor
-        order by consultor.id DESC
-        limit 3) as consulta
+      (SELECT DISTINCT
+      consultor.codigo_barra as codigoBarra,
+      consultor.descripcion as descripcion
+      FROM consultor
+      order by consultor.id DESC
+      limit 3) as consulta
     ";
     return $sql;
   }
