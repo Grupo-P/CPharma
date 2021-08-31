@@ -37,7 +37,8 @@
         </form>
 
         <?php
-        $hoy = date('Y-m-d');
+        //$hoy = date('Y-m-d');
+        $hoy = '2020-12-10';
         if(isset($_GET['Fecha'])){
             if($_GET['Fecha']=='AYER'){
                 $fecha = date("Y-m-d",strtotime($hoy."- 1 days"));
@@ -304,7 +305,7 @@
         $result5 = sqlsrv_query($conn,$sql5);
         $result5a = sqlsrv_query($conn,$sql5);
 
-        $sumUnidades = $sumMonto = 0;
+        $sumUnidades = $sumMonto = $sumMontoDol = $sumCostoCalculado = $sumUtilidadBs = $sumUtilidadDol = 0;
         while($row5a = sqlsrv_fetch_array($result5a, SQLSRV_FETCH_ASSOC)) {
             $sumUnidades += $row5a['Unidades'];
             $sumMonto += $row5a['Monto'];
@@ -325,6 +326,9 @@
                     <th scope="col">'.SigVe.'<br>(Sin IVA)</th>
                     <th scope="col">'.SigDolar.'<br>(Sin IVA)</th>
                     <th scope="col">%</th>
+                    <th scope="col">Costo calculado<br>(Sin IVA)</th>
+                    <th scope="col">Utilidad en '.SigVe.'</th>
+                    <th scope="col">Utilidad en '.SigDolar.'</th>
                 </tr>
             </thead>
             <tbody>
@@ -349,9 +353,50 @@
 
             echo '<td align="center">'.number_format((($row5['Monto']/$sumMonto)*100),2,"," ,"." ).'</td>';
 
+            $costoCalculado = ($row5['Monto'])*( (100-$row5['PorcentajeUtilidad'])/100 );
+            $sumCostoCalculado += $costoCalculado;
+            echo '<td align="center">'.number_format($costoCalculado,2,"," ,"." ).'</td>';
+
+            $utilidadBs = ($row5['Monto']-$costoCalculado);
+            $sumUtilidadBs += $utilidadBs;
+            echo '<td align="center">'.number_format($utilidadBs,2,"," ,"." ).'</td>';
+
+            if(isset($TasaActual)&&$TasaActual!=0){
+                $utilidadDol = ($utilidadBs/$TasaActual);
+                $sumUtilidadDol +=  $utilidadDol;
+                echo '<td align="center">'.number_format($utilidadDol,2,"," ,"." ).'</td>';
+            }else{
+                echo '<td align="center">0,00</td>';
+            }
+
             echo '</tr>';
             $contador++;
         }
+
+        $sumMontoDol = (isset($TasaActual)&&$TasaActual!=0)?$sumMonto/$TasaActual:"";
+
+        echo'
+            <tr>
+                <td colspan="4"></td>
+                <td align="center"><strong>Total</strong></td>
+                <td align="center"><strong>'.number_format($sumMonto,2,"," ,"." ).'</strong></td>
+                <td align="center"><strong>'.number_format($sumMontoDol,2,"," ,"." ).'</strong></td>
+                <td></td>
+                <td align="center"><strong>'.number_format($sumCostoCalculado,2,"," ,"." ).'</strong></td>
+                <td align="center"><strong>'.number_format($sumUtilidadBs,2,"," ,"." ).'</strong></td>
+                <td align="center"><strong>'.number_format($sumUtilidadDol,2,"," ,"." ).'</strong></td>
+            </tr>
+        ';
+
+        $TotalPorcentual = ( 1- ($sumCostoCalculado/$sumMonto)  )*100;
+
+        echo'
+            <tr>
+                <td colspan="9"></td>
+                <td align="center" colspan="2"><strong>'.number_format($TotalPorcentual,2,"," ,"." ).' %</strong></td>
+            </tr>
+        ';
+
         echo '
             </tbody>
         </table>';
