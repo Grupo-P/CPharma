@@ -37,8 +37,7 @@
         </form>
 
         <?php
-        //$hoy = date('Y-m-d');
-        $hoy = '2020-12-10';
+        $hoy = date('Y-m-d');
         if(isset($_GET['Fecha'])){
             if($_GET['Fecha']=='AYER'){
                 $fecha = date("Y-m-d",strtotime($hoy."- 1 days"));
