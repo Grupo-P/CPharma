@@ -203,6 +203,97 @@
     }
 ?>
 
+<?php if(Auth::user()->departamento == 'RECEPCION'):  ?>
+  <div class="card-deck">
+      <div class="card border-danger mb-3" style="width: 14rem;">
+      <div class="card-body text-center text-left bg-danger">
+          <h4>
+            <?php
+              $diasParaRecibir = compras\Configuracion::where('variable', 'DiasParaRecibir')->first()->valor;
+
+              $fechaHoy = new Datetime();
+              $fechaHoy->modify('+' . $diasParaRecibir . 'day');
+              $fechaLimiteRecibirMercancia = $fechaHoy->format('d/m/Y');
+            ?>
+            <span class="card-text text-white">
+              <i class="fas fa-exclamation-triangle CP-Latir"></i>
+              Fecha límite para recibir mercancía en general: <?php echo $fechaLimiteRecibirMercancia ?>
+            </span>
+          </h4>
+      </div>
+    </div>
+  </div>
+<?php endif; ?>
+
+
+<?php if(Auth::user()->departamento == 'INVENTARIO'):  ?>
+  <div class="card-deck">
+      <div class="card border-danger mb-3" style="width: 14rem;">
+      <div class="card-body text-center text-left bg-danger">
+          <h4>
+            <?php
+              $diasParaRecibir = compras\Configuracion::where('variable', 'DiasParaVencer')->first()->valor;
+
+              $fechaHoy = new Datetime();
+              $fechaHoy->modify('+' . $diasParaRecibir . 'day');
+              $fechaProximaVencimiento = $fechaHoy->format('d/m/Y');
+            ?>
+            <span class="card-text text-white">
+              <i class="fas fa-exclamation-triangle CP-Latir"></i>
+              Fecha próxima para gestión de vencimientos: <?php echo $fechaProximaVencimiento ?>
+            </span>
+          </h4>
+      </div>
+    </div>
+  </div>
+<?php endif; ?>
+
+
+<?php if(Auth::user()->departamento == 'OPERACIONES'):  ?>
+  <div class="card-deck">
+      <div class="card border-info mb-3" style="width: 14rem;">
+      <div class="card-body text-center text-left bg-info">
+          <h4>
+            <?php
+              $diasParaRecibir = compras\Configuracion::where('variable', 'DiasParaIngresar')->first()->valor;
+
+              $fechaHoy = new Datetime();
+              $fechaHoy->modify('+' . $diasParaRecibir . 'day');
+              $fechaMaximaDevoluciones = $fechaHoy->format('d/m/Y');
+            ?>
+            <span class="card-text text-white">
+              <i class="fas fa-exclamation-triangle CP-Latir"></i>
+              Fecha mínima para ingreso de mercancía (vida útil): <?php echo $fechaMaximaDevoluciones ?>
+            </span>
+          </h4>
+      </div>
+    </div>
+  </div>
+<?php endif; ?>
+
+
+<?php if(Auth::user()->departamento == 'VENTAS'):  ?>
+  <div class="card-deck">
+      <div class="card border-success mb-3" style="width: 14rem;">
+      <div class="card-body text-center text-left bg-success">
+          <h4>
+            <?php
+              $diasParaRecibir = compras\Configuracion::where('variable', 'DiasParaDevolucion')->first()->valor;
+
+              $fechaHoy = new Datetime();
+              $fechaHoy->modify('+' . $diasParaRecibir . 'day');
+              $fechaMaximaDevoluciones = $fechaHoy->format('d/m/Y');
+            ?>
+            <span class="card-text text-white">
+              <i class="fas fa-exclamation-triangle CP-Latir"></i>
+              Fecha máxima para gestión de devoluciones a clientes: <?php echo $fechaMaximaDevoluciones ?>
+            </span>
+          </h4>
+      </div>
+    </div>
+  </div>
+<?php endif; ?>
+
 <!-------------------------------------------------------------------------------->
 <!-- DESTACADOS -->
 <?php
@@ -1756,6 +1847,7 @@
   <!-- Modal RECEPCION -->
   <!-- Dashboard RECEPCION-->
   <!-- Dashboard RECEPCION-->
+
 <?php
   }
 ?>
