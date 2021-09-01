@@ -177,12 +177,14 @@
 
     <table class="table table-borderless table-striped col-12" id="tablaSugerido">
       <thead class="center">
-        <th class="bg-info text-white border border-white" colspan="3"><h4>Articulos sugeridos</h4></th>
+        <th class="bg-info text-white border border-white" colspan="5"><h4>Articulos sugeridos</h4></th>
       </thead>
       <thead class="center">
         <th class="bg-info text-white border border-white"><h5>Código de barra</h5></th>
         <th class="bg-info text-white border border-white"><h5>Descripción</h5></th>
+        <th class="bg-info text-white border border-white"><h5>Precio $</h5></th>
         <th class="bg-info text-white border border-white"><h5>Precio BsS</h5></th>
+        <th class="bg-info text-white border border-white"><h5>Precio BsD</h5></th>
       </thead>
       <tbody id="bodySugerido"></tbody>
     </table>
@@ -191,7 +193,7 @@
       if (_ConsultorDolar_ == "SI") {
        echo ' <div id="DivTasa" clas="text-center bg-success">
           <label id="TasaVenta" class="text-center" style="font-size:1.5rem; margin-left:40%;">
-            <strong>Tasa del dia: '.SigVe.' '.number_format($TasaVenta,2,"," ,"." ).'</strong>
+            <strong>Tasa del dia: '.SigVe.' '.number_format($TasaVenta,2,"," ,"." ).' / Bs.D '.number_format($TasaVenta/1000000,2,"," ,"." ).'</strong>
           </label>
           <label class="text-danger text-center" style="margin-left:38%;">Nuestra tasa esta sujeta a cambios sin previo aviso</label>
         </div>';
@@ -269,7 +271,7 @@
                 return dominio;
             break;
             case 'FAU':
-                dominio = 'http://cpharmafau.com/';
+                dominio = 'http://cpharmade.com/';
                 return dominio;
             break;
             case 'GP':
@@ -435,7 +437,8 @@
             success: function(data) {
               TasaVenta = data;
               TasaVentaMostrar = formateoPrecio(TasaVenta,2);
-              $('#TasaVenta').html('<strong>Tasa del dia: Bs.S '+TasaVentaMostrar+'</strong>');
+              TasaVentaMostrarDigital = formateoPrecio(TasaVenta/1000000,2);
+              $('#TasaVenta').html('<strong>Tasa del dia: Bs.S '+TasaVentaMostrar+' / Bs.D '+TasaVentaMostrarDigital+'</strong>');
               $('#DivTasa').show();
             }
            });
@@ -509,7 +512,10 @@
 
                 var i = 0;
                 while (i<limite && i<=limiteRespuesta){
+                  var precioE = formateoPrecio(respuesta[i]['Precio']/TasaVenta,2);
                   var precioI = formateoPrecio(respuesta[i]['Precio'],2);
+                  var precioD = formateoPrecio(respuesta[i]['Precio']/1000000,2);
+
                   /*Armado Fila PCodBarrSug*/
                   nuevaFila += '<td align="center" class="text-black">';
                   nuevaFila += '<b><p>'+respuesta[i]['CodigoBarra']+'</p></b>';
@@ -520,7 +526,13 @@
                   nuevaFila += '</td>';
                   /*Armado Fila PPrecioSug*/
                   nuevaFila += '<td align="center" class="text-black">';
+                  nuevaFila += '<h4><b><p>$ '+precioE+'</p></b></h4>';
+                  nuevaFila += '</td>';
+                  nuevaFila += '<td align="center" class="text-black">';
                   nuevaFila += '<h4><b><p>BsS. '+precioI+'</p></b></h4>';
+                  nuevaFila += '</td>';
+                  nuevaFila += '<td align="center" class="text-black">';
+                  nuevaFila += '<h4><b><p>BsD. '+precioD+'</p></b></h4>';
                   nuevaFila += '</td>';
                   nuevaFila += '</tr>';
                   /*Ingreso de la fila a la tabla*/

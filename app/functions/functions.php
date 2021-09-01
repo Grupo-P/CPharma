@@ -2145,20 +2145,36 @@
                                     </tr>
                                     ';
                                         if( floatval(round($PrecioHoy,2)) < floatval($PrecioAyer) ){
-                                        echo'
-                                            <tr>
-                                                <td class="izquierda rowIzq rowIzqA" style="color:red;">
-                                                    Precio '.$moneda.' Antes
-                                                </td>
-                                                <td class="derecha rowDer rowDerA" style="color:red;">
-                                                <label style="margin-right:10px;">
-                                                    <del>
-                                                    '.number_format ($PrecioAyer,2,"," ,"." ).'
-                                                    </del>
-                                                </label>
-                                                </td>
-                                            </tr>
-                                        ';
+                                            if ($moneda != '$') {
+                                                echo'
+                                                    <tr>
+                                                        <td colspan="2" style="color:red;text-align: center">
+                                                            Precio Antes:
+
+                                                            BS.S <del>'.number_format ($PrecioAyer,2,"," ,"." ).'</del>
+
+                                                            /
+
+                                                            BS.D <del>'.number_format ($PrecioAyer/1000000,2,"," ,"." ).'</del>
+                                                        </td>
+                                                    </tr>
+                                                ';
+                                            } else {
+                                                echo'
+                                                    <tr>
+                                                        <td class="izquierda rowIzq rowIzqA" style="color:red;">
+                                                            Precio '.$moneda.' Antes
+                                                        </td>
+                                                        <td class="derecha rowDer rowDerA" style="color:red;">
+                                                            <label style="margin-right:10px;">
+                                                                <del>
+                                                                '.number_format ($PrecioAyer,2,"," ,"." ).'
+                                                                </del>
+                                                            </label>
+                                                        </td>
+                                                    </tr>
+                                                ';
+                                            }
                                         }
                                     echo'
                                     <tr>
