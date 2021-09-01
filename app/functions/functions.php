@@ -2469,7 +2469,7 @@
         $CuentaEtiqueta = 0;
         $TasaActual = FG_Tasa_Fecha_Venta($connCPharma,date('Y-m-d'));
 
-    $FHoy = date("Y-m-d");
+        $FHoy = date("Y-m-d");
         $FManana = date("Y-m-d",strtotime($FHoy."+1 days"));
         $FAyer = date("Y-m-d",strtotime($FHoy."-1 days"));
 
@@ -2632,6 +2632,16 @@
             $arrayIteracion["Dolarizado"]=$row['Dolarizado'];
             $arraySugeridos[]=$arrayIteracion;
           }
+      }
+
+       /*Obtener datos del caso 5*/
+       $arrayIteracion = array();
+        $sql = SQL_CP_Etiqueta_C5($FechaI,$FechaF);
+        $result = sqlsrv_query($conn,$sql);
+        while( $row = sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC) ){
+            $arrayIteracion["IdArticulo"]=$row['IdArticulo'];
+        $arrayIteracion["Dolarizado"]=$row['Dolarizado'];
+        $arraySugeridos[]=$arrayIteracion;
       }
 
         return $arraySugeridos;

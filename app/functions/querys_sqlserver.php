@@ -1012,6 +1012,43 @@
     }
     /**********************************************************************************/
     /*
+    TITULO: SQL_CP_Etiqueta_C5
+    DESAROLLADO POR: SERGIO COVA
+    */
+    function SQL_CP_Etiqueta_C5($FHoy,$FManana){
+        $sql = "
+        SELECT
+      InvArticulo.Id AS IdArticulo,
+      --Dolarizado (0 NO es dolarizado, Id Articulo SI es dolarizado)
+          (ISNULL((SELECT
+          InvArticuloAtributo.InvArticuloId
+          FROM InvArticuloAtributo
+          WHERE InvArticuloAtributo.InvAtributoId =
+              (SELECT InvAtributo.Id
+              FROM InvAtributo
+              WHERE
+              InvAtributo.Descripcion = 'Dolarizados'
+              OR  InvAtributo.Descripcion = 'Giordany'
+              OR  InvAtributo.Descripcion = 'giordany')
+          AND InvArticuloAtributo.InvArticuloId = InvArticulo.Id),CAST(0 AS INT))) AS Dolarizado
+      --Tabla Prinipal and Tabla Temporal
+      FROM InvArticulo
+      --Condicionales
+      WHERE(
+      (InvArticulo.Auditoria_FechaActualizacion > '$FHoy')
+      AND (InvArticulo.Auditoria_FechaActualizacion < '$FManana')
+      AND((SELECT (ROUND(CAST(SUM (InvLoteAlmacen.Existencia) AS DECIMAL(38,0)),2,0))
+          FROM InvLoteAlmacen
+          WHERE(InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
+          AND (InvLoteAlmacen.InvArticuloId = InvArticulo.Id)) > 0)
+      )
+      GROUP BY InvArticulo.Id
+      ORDER BY InvArticulo.Id ASC
+        ";
+        return $sql;
+      }
+    /**********************************************************************************/
+    /*
         TITULO: FG_Es_Dolarizado
         FUNCION: Busca si el producto es dolarizado o no
         DESARROLLADO POR: SERGIO COVA
