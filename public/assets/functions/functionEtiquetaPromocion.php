@@ -255,6 +255,7 @@
 			else if($IsPrecioAyer==false){
 
 				if($Dolarizado=='SI'){
+                    $bolivarDigital = '';
 					$simbolo = '*';
 					$moneda = SigDolar;
 
@@ -289,6 +290,10 @@
 					}
 				}
 				else{
+                    $precioBolivarDigital = number_format($PrecioHoy/1000000, 2);
+                    $bolivarDigital = '
+                        <strong>Bs.D '.$precioBolivarDigital.'</strong>
+                    ';
 					$simbolo = '';
 					$moneda = SigVe;
 					$flag_imprime = true;
@@ -314,6 +319,8 @@
 						$unidadMinima = '';
 					}
 
+                    $tamano = ($bolivarDigital)?'aumento':'aumentoPrecio';
+
 					$Etiqueta = $Etiqueta.'
 						<table class="etq" style="display: inline;">
 							<thead class="etq">
@@ -330,16 +337,16 @@
 									</td>
 								</tr>
 								<tr>
-									<td class="centrado rowDer rowDerA aumentoPrecio preciopromo" colspan="2">
+									<td class="centrado rowDer rowDerA '.$tamano.' preciopromo" colspan="2">
 										<strong>
-										'.number_format ($PrecioHoy,2,"," ,"." ).'
+										'.$moneda.' '.number_format ($PrecioHoy,2,"," ,"." ).'
 										</strong>
 									</td>
 								</tr>
 								'.$unidadMinima.'
 								<tr>
 									<td class="izquierda rowIzq rowIzqA aumento1">
-										<strong>Total a Pagar '.$moneda.'</strong>
+										'.$bolivarDigital.'
 									</td>
 									<td class="derecha rowDer rowDerA aumento1">
 										<strong>'.$simbolo.'</strong> '.date("d-m-Y").'

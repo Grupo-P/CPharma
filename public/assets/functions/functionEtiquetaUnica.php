@@ -108,6 +108,8 @@
 						$simbolo = '*';
 						$moneda = SigDolar;
 
+                        $bolivarDigital = '';
+
 						if(_MensajeDolar_== 'SI' && _EtiquetaDolar_=='SI'){
 							$tam_dolar = "font-size:1.7rem;";
 							$mensajePie = '
@@ -144,6 +146,16 @@
 						}
 					}
 					else{
+                        $bolivarDigital = '
+                            <td class="derecha rowDer rowDerA aumento">
+                                <label style="margin-right:10px;'.$tam_dolar.'">
+                                    <strong>
+                                    BS.D '.number_format ($PrecioHoy/1000000,2,"," ,"." ).'
+                                    </strong>
+                                </label>
+                            </td>
+                        ';
+
 						$simbolo = '';
 						$moneda = SigVe;
 						$flag_imprime = true;
@@ -201,18 +213,21 @@
 										';
 										}
 									$Etiqueta = $Etiqueta.'
-									<tr>
-										<td class="izquierda rowIzq rowIzqA aumento">
-											<strong>Total a Pagar '.$moneda.'</strong>
-										</td>
-										<td class="derecha rowDer rowDerA aumento">
-										<label style="margin-right:10px;'.$tam_dolar.'">
-											<strong>
-											'.number_format ($PrecioHoy,2,"," ,"." ).'
-											</strong>
-										</label>
-										</td>
-									</tr>
+                                    <tr>
+                                        <td colspan="2" style="text-align: center" class="rowIzq rowIzqA aumento">
+                                            <strong>Total a Pagar</strong>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="text-align: right" class="rowDer rowDerA aumento">
+                                            <label style="margin-right:10px;'.$tam_dolar.'">
+                                                <strong>
+                                                '.$moneda.' '.number_format ($PrecioHoy,2,"," ,"." ).'
+                                                </strong>
+                                            </label>
+                                        </td>
+                                        '.$bolivarDigital.'
+                                    </tr>
 									'.$unidadMinima.'
 									<tr>
 										<td class="izquierda dolarizado rowIzq rowIzqA">
@@ -261,6 +276,8 @@
 			else if($IsPrecioAyer==false){
 
 				if($Dolarizado=='SI'){
+                    $bolivarDigital = '';
+
 					$simbolo = '*';
 					$moneda = SigDolar;
 
@@ -299,6 +316,16 @@
 					$simbolo = '';
 					$moneda = SigVe;
 					$flag_imprime = true;
+
+                    $bolivarDigital = '
+                        <td class="derecha rowDer rowDerA aumento">
+                            <label style="margin-right:10px;'.$tam_dolar.'">
+                                <strong>
+                                BS.D '.number_format ($PrecioHoy/1000000,2,"," ,"." ).'
+                                </strong>
+                            </label>
+                        </td>
+                    ';
 				}
 
 				if($flag_imprime == true){
@@ -339,18 +366,21 @@
 									</td>
 								</tr>
 								<tr>
-									<td class="izquierda rowIzq rowIzqA aumento">
-										<strong>Total a Pagar '.$moneda.'</strong>
+                                    <td colspan="2" style="text-align: center" class="rowIzq rowIzqA aumento">
+                                        <strong>Total a Pagar</strong>
+                                    </td>
+                                </tr>
+                                <tr>
+									<td style="text-align: right" class="rowDer rowDerA aumento">
+    									<label style="margin-right:10px;'.$tam_dolar.'">
+    										<strong>
+    										'.$moneda.' '.number_format ($PrecioHoy,2,"," ,"." ).'
+    										</strong>
+    									</label>
 									</td>
-									<td class="derecha rowDer rowDerA aumento">
-									<label style="margin-right:10px;'.$tam_dolar.'">
-										<strong>
-										'.number_format ($PrecioHoy,2,"," ,"." ).'
-										</strong>
-									</label>
-									</td>
+                                    '.$bolivarDigital.'
 								</tr>
-								'.$unidadMinima.'
+                                '.$unidadMinima.'
 								<tr>
 									<td class="izquierda dolarizado rowIzq rowIzqA">
 									</td>
