@@ -142,6 +142,12 @@
         $('.submit').click(function () {
             prefix = $('[name=prefix_rif_ci]').val();
             rif = $('[name=rif_ci]').val();
+            moneda = $('[name=moneda]').val();
+
+            if (moneda == '') {
+                alert('El campo moneda es obligatorio');
+                return false;
+            }
 
             if (rif != '') {
                 rif = prefix + '-' + rif;
