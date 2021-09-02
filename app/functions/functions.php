@@ -1987,26 +1987,28 @@
         $tam_dolar = "";
         $flag_imprime = false;
 
+        $bolivarDigital = '';
+
         $sql2 = SQG_Detalle_Articulo($IdArticulo);
         $result2 = sqlsrv_query($conn,$sql2);
         $row2 = sqlsrv_fetch_array($result2,SQLSRV_FETCH_ASSOC);
 
         $CodigoArticulo = $row2["CodigoInterno"];
-    $CodigoBarra = $row2["CodigoBarra"];
-    $Descripcion = FG_Limpiar_Texto($row2["Descripcion"]);
-    $Existencia = $row2["Existencia"];
-    $ExistenciaAlmacen1 = $row2["ExistenciaAlmacen1"];
-    $ExistenciaAlmacen2 = $row2["ExistenciaAlmacen2"];
-    $IsTroquelado = $row2["Troquelado"];
-    $IsIVA = $row2["Impuesto"];
-    $UtilidadArticulo = $row2["UtilidadArticulo"];
-    $UtilidadCategoria = $row2["UtilidadCategoria"];
-    $TroquelAlmacen1 = $row2["TroquelAlmacen1"];
-    $PrecioCompraBrutoAlmacen1 = $row2["PrecioCompraBrutoAlmacen1"];
-    $TroquelAlmacen2 = $row2["TroquelAlmacen2"];
-    $PrecioCompraBrutoAlmacen2 = $row2["PrecioCompraBrutoAlmacen2"];
-    $PrecioCompraBruto = $row2["PrecioCompraBruto"];
-    $CondicionExistencia = 'CON_EXISTENCIA';
+        $CodigoBarra = $row2["CodigoBarra"];
+        $Descripcion = FG_Limpiar_Texto($row2["Descripcion"]);
+        $Existencia = $row2["Existencia"];
+        $ExistenciaAlmacen1 = $row2["ExistenciaAlmacen1"];
+        $ExistenciaAlmacen2 = $row2["ExistenciaAlmacen2"];
+        $IsTroquelado = $row2["Troquelado"];
+        $IsIVA = $row2["Impuesto"];
+        $UtilidadArticulo = $row2["UtilidadArticulo"];
+        $UtilidadCategoria = $row2["UtilidadCategoria"];
+        $TroquelAlmacen1 = $row2["TroquelAlmacen1"];
+        $PrecioCompraBrutoAlmacen1 = $row2["PrecioCompraBrutoAlmacen1"];
+        $TroquelAlmacen2 = $row2["TroquelAlmacen2"];
+        $PrecioCompraBrutoAlmacen2 = $row2["PrecioCompraBrutoAlmacen2"];
+        $PrecioCompraBruto = $row2["PrecioCompraBruto"];
+        $CondicionExistencia = 'CON_EXISTENCIA';
 
         if(intval($Existencia)>0){
 
