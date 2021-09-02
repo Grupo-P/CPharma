@@ -178,7 +178,7 @@
                         </label>
                     </th>
                     <td>
-                        <input class="form-control" lang="en" in="1" disabled name="monto" required step="0.01" type="text">
+                        <input class="form-control" lang="en" in="1" readonly name="monto" required step="0.01" type="text">
                     </td>
                 </tr>
 

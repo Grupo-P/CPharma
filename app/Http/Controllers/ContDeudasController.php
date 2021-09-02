@@ -232,7 +232,7 @@ class ContDeudasController extends Controller
                 WHERE
                     FORMAT(cont_proveedores.saldo, 2, 'en_US') > 0 AND cont_proveedores.moneda = 'Dólares'
                 GROUP BY proveedor
-                ORDER BY CAST(saldo AS UNSIGNED) DESC;
+                ORDER BY CAST(saldo AS DOUBLE) DESC;
             ");
 
             $negativos = DB::select("
@@ -247,7 +247,7 @@ class ContDeudasController extends Controller
                 WHERE
                     FORMAT(cont_proveedores.saldo, 2, 'en_US') < 0 AND cont_proveedores.moneda = 'Dólares'
                 GROUP BY proveedor
-                ORDER BY CAST(saldo AS UNSIGNED) ASC;
+                ORDER BY CAST(saldo AS DOUBLE) ASC;
             ");
         } else {
             $positivos = DB::select("
@@ -262,7 +262,7 @@ class ContDeudasController extends Controller
                 WHERE
                     FORMAT(cont_proveedores.saldo, 2, 'en_US') > 0 AND cont_proveedores.moneda = 'Bolívares'
                 GROUP BY proveedor
-                ORDER BY CAST(saldo AS UNSIGNED) DESC;
+                ORDER BY CAST(saldo AS DOUBLE) DESC;
             ");
 
             $negativos = DB::select("
@@ -277,7 +277,7 @@ class ContDeudasController extends Controller
                 WHERE
                     FORMAT(cont_proveedores.saldo, 2, 'en_US') < 0 AND cont_proveedores.moneda = 'Bolívares'
                 GROUP BY proveedor
-                ORDER BY CAST(saldo AS UNSIGNED) ASC;
+                ORDER BY CAST(saldo AS DOUBLE) ASC;
             ");
         }
 
