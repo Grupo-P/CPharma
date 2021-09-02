@@ -84,6 +84,8 @@
 	  include(app_path().'\functions\querys_mysql.php');
 	  include(app_path().'\functions\querys_sqlserver.php');
 
+      $ultimasUnidades = DB::select("SELECT * FROM configuracions WHERE variable = 'UltimasUnidadesExistencia' LIMIT 1")[0]->valor;
+
     $SedeConnection = FG_Mi_Ubicacion();
     $RutaUrl = FG_Mi_Ubicacion();
 
@@ -167,8 +169,11 @@
             }
           ?>
         </tr>
+
+        <tr class="trUltimoStock" style="background-color: white;"></tr>
+
         <tr>
-          <td align="center" class="text-dark" colspan="4">
+          <td align="center" style="background-color: white;" class="text-dark" colspan="5">
             <b><p>Nuestros precios incluyen IVA (En caso de aplicar)</p></b>
           </td>
         </tr>
@@ -191,11 +196,12 @@
 
     <?php
       if (_ConsultorDolar_ == "SI") {
-       echo ' <div id="DivTasa" clas="text-center bg-success">
-          <label id="TasaVenta" class="text-center" style="font-size:1.5rem; margin-left:40%;">
+       echo ' <div id="DivTasa" style="width: 100%" class="text-center">
+          <label id="TasaVenta" class="text-center" style="font-size:1.5rem">
             <strong>Tasa del dia: '.SigVe.' '.number_format($TasaVenta,2,"," ,"." ).' / Bs.D '.number_format($TasaVenta/1000000,2,"," ,"." ).'</strong>
           </label>
-          <label class="text-danger text-center" style="margin-left:38%;">Nuestra tasa esta sujeta a cambios sin previo aviso</label>
+          <br>
+          <label class="text-danger text-center">Nuestra tasa esta sujeta a cambios sin previo aviso</label>
         </div>';
       }
     ?>
@@ -320,6 +326,7 @@
       $('#tablaResuldado').hide();
       $('#tablaSugerido').hide();
       $('#DivTasa').hide();
+      $('.trUltimoStock').html('');
       mostrarCarousel();
     }
     /************************************************************************/
@@ -449,13 +456,15 @@
             url: URLTablaResuldado,
             type: "POST",
             success: function(data) {
-              precio = formateoPrecio(data,2);
+                data = JSON.parse(data);
+
+              precio = formateoPrecio(data.precio,2);
               $('#PPrecioScan').html('BsS. '+precio);
               //const TasaVentaD = eval(<?php /*echo $TasaVenta*/ ?>);
-              precioDolar = formateoPrecio(data/TasaVenta,2);
+              precioDolar = formateoPrecio(data.precio/TasaVenta,2);
               $('#PPrecioDolarScan').html('$. '+precioDolar);
 
-              precioDigital = formateoPrecio(parseFloat(data)/1000000, 2);
+              precioDigital = formateoPrecio(parseFloat(data.precio)/1000000, 2);
               $('#PPrecioDigitalScan').html('BsD. '+precioDigital);
 
               for (var i = 0; i <= $('#ultimasConsultasTbody').find('tr').length - 1; i++) {
@@ -482,6 +491,12 @@
                 </tr>
               `;
               $('#ultimasConsultasTbody').prepend(html);
+
+              ultimasUnidades = '<?php echo $ultimasUnidades; ?>';
+
+              if (ultimasUnidades > data.existencia) {
+                $('.trUltimoStock').html('<td colspan="5" align="center" style="font-size:1.5rem" class="text-danger CP-Latir" colspan="3"><b><p><i class="fas fa-exclamation-triangle"></i> ¡ÚLTIMAS UNIDADES EN EXISTENCIA!</p></b></td>');
+              }
             }
            });
 

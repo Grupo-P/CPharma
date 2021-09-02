@@ -1,13 +1,26 @@
 <?php 
-	include('C:\xampp\htdocs\CPharma\app\functions\config.php');
-  include('C:\xampp\htdocs\CPharma\app\functions\functions.php');
-  include('C:\xampp\htdocs\CPharma\app\functions\querys_mysql.php');
-  include('C:\xampp\htdocs\CPharma\app\functions\querys_sqlserver.php');
+    include('C:\xampp\htdocs\CPharma\app\functions\config.php');
+    include('C:\xampp\htdocs\CPharma\app\functions\functions.php');
+    include('C:\xampp\htdocs\CPharma\app\functions\querys_mysql.php');
+    include('C:\xampp\htdocs\CPharma\app\functions\querys_sqlserver.php');
 
-  $IdArticulo = $_POST["IdArticulo"];
-  $precio = FG_Precio_Consultor($IdArticulo);
-  FG_Registro_Datos($IdArticulo,$precio);
-  echo''.$precio;
+    $IdArticulo = $_POST["IdArticulo"];
+    $precio = FG_Precio_Consultor($IdArticulo);
+
+    $SedeConnection = FG_Mi_Ubicacion();
+    $conn = FG_Conectar_Smartpharma($SedeConnection);
+    $connCPharma = FG_Conectar_CPharma();
+
+    $sql = SQG_Lite_Detalle_Articulo($IdArticulo);
+    $result = sqlsrv_query($conn,$sql);
+    $row = sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC);
+
+    $existencia = ($row['Existencia']) ? $row['Existencia'] : 0;
+
+    $result = ['precio' => $precio, 'existencia' => $existencia];
+
+    FG_Registro_Datos($IdArticulo,$precio);
+    echo json_encode($result);
 ?>
 <?php
 	/**********************************************************************************/
