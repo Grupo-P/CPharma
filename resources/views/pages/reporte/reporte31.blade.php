@@ -289,6 +289,12 @@
                 <a data-seccion="troquel" href="#" class="secciones btn btn-outline-dark btn-sm btn-block">CAMBIOS DE PRECIO VÍA TROQUEL</a>
             </td>
         </tr>
+
+        <tr>
+            <td style="width:11%;" align="center">
+                <a data-seccion="codificacion" href="#" class="secciones btn btn-outline-primary btn-sm btn-block">CODIFICACIONES</a>
+            </td>
+        </tr>
       </tbody>
     </table>
     ';
@@ -720,6 +726,145 @@
 
 
 
+    if (isset($_GET['seccion']) && $_GET['seccion'] == 'codificacion') {
+      echo'
+      <br>
+      <hr>
+      <h4 align="center">Codificaciones</h4>
+      <hr>
+      <table class="table table-striped table-bordered col-12 sortable" id="myTable">
+        <thead class="thead-dark">
+          <tr>
+            <th scope="col" class="CP-sticky">#</th>
+            <th scope="col" class="CP-sticky">Código interno</th>
+            <th scope="col" class="CP-sticky">Código de barra</th>
+            <th scope="col" class="CP-sticky">Descripción</th>
+            <th scope="col" class="CP-sticky">Existencia</th>
+            <th scope="col" class="CP-sticky">Marca</th>
+            <th scope="col" class="CP-sticky">Unidad mínima</th>
+            <th scope="col" class="CP-sticky">Clasificación de etiquetas</th>
+            <th scope="col" class="CP-sticky">Categoría</th>
+            <th scope="col" class="CP-sticky">Subcategoría</th>
+            <th scope="col" class="CP-sticky">Atributo de medicinas y/o misceláneos</th>
+            <th scope="col" class="CP-sticky">Atributos adicionales</th>
+            <th scope="col" class="CP-sticky">Componente</th>
+            <th scope="col" class="CP-sticky">Uso terapéutico</th>
+            <th scope="col" class="CP-sticky">Último proveedor</th>
+            <th scope="col" class="CP-sticky">Precio Bs.</th>
+          </tr>
+        </thead>
+        <tbody>
+      ';
+
+      $sql9 = R31Q_Codificaciones($_GET['fechaInicio'],$_GET['fechaFin']);
+      $result9 = sqlsrv_query($conn,$sql9);
+
+      $contador = 1;
+
+      while ($row9 = sqlsrv_fetch_array($result9, SQLSRV_FETCH_ASSOC)) {
+        $id_articulo = $row9['id_articulo'];
+        $codigo_interno = $row9['codigo_interno'];
+        $codigo_barra = $row9['codigo_barra'];
+        $descripcion = FG_Limpiar_Texto($row9['descripcion']);
+        $existencia = $row9['existencia'];
+        $marca = $row9['marca'];
+        $ultimo_proveedor = $row9['ultimo_proveedor'];
+
+        $sql11 = DB::select("
+            SELECT
+                (SELECT CONCAT(unidads.divisor, ' ', unidads.unidad_minima) FROM unidads WHERE unidads.id_articulo = '$id_articulo') AS unidad_minima,
+                (SELECT etiquetas.clasificacion FROM etiquetas WHERE etiquetas.id_articulo = '$id_articulo') AS clasificacion,
+                (SELECT categorias.nombre FROM categorias WHERE categorias.codigo = (SELECT categorizacions.codigo_categoria FROM categorizacions WHERE categorizacions.id_articulo = '$id_articulo')) AS categoria,
+                (SELECT subcategorias.nombre FROM subcategorias WHERE subcategorias.codigo = (SELECT categorizacions.codigo_subcategoria FROM categorizacions WHERE categorizacions.id_articulo = '$id_articulo')) AS subcategoria
+            ;
+        ");
+
+        $unidad_minima = isset($sql11->unidad_minima) ? $sql11->unidad_minima : '';
+        $clasificacion = isset($sql11->clasificacion) ? $sql11->clasificacion : '';
+        $categoria = isset($sql11->categoria) ? $sql11->categoria : '';
+        $subcategoria = isset($sql11->subcategoria) ? $sql11->subcategoria : '';
+
+        $tipo = FG_Tipo_Producto($row9['tipo']);
+
+        $sql10 = R31Q_Atributos_Adicionales($row9['id_articulo']);
+        $result10 = sqlsrv_query($conn,$sql10);
+
+        $adicionales = [];
+
+        while ($row10 = sqlsrv_fetch_array($result10, SQLSRV_FETCH_ASSOC)) {
+            $adicionales[] = $row10['Descripcion'];
+        }
+
+        $adicionales = implode($adicionales, ', ');
+
+        if (FG_Mi_Ubicacion() == 'FTN') {
+            $componentes = FG_Limpiar_Texto(FG_Componente_Articulo($conn,$id_articulo));
+            $uso_terapeutico = FG_Limpiar_Texto(FG_Aplicacion_Articulo($conn,$id_articulo));
+        }
+        else {
+            $connModAtteClientes = FG_Conectar_Mod_Atte_Clientes(FG_Mi_Ubicacion());
+
+            $componentes = '';
+            $sql12 = "SELECT InCompon.Nombre FROM InCompon WHERE InCompon.CoCompo IN (SELECT InComArt.CoCompo FROM InComArt WHERE InComArt.CoBarra = '$codigo_barra')";
+            $result12 = sqlsrv_query($connModAtteClientes,$sql12);
+
+            while($row11 = sqlsrv_fetch_array($result12, SQLSRV_FETCH_ASSOC)) {
+                $componentes = $componentes.' '.$row11['Nombre'];
+            }
+
+
+            $connModAtteClientes = FG_Conectar_Mod_Atte_Clientes(FG_Mi_Ubicacion());
+
+            $uso_terapeutico = '';
+            $sql13 = "SELECT InAplica.Descripcion FROM InAplica WHERE InAplica.CoAplica IN (SELECT InAplArt.CoAplica FROM InAplArt WHERE InAplArt.CoBarra = '$codigo_barra')";
+            $result13 = sqlsrv_query($connModAtteClientes,$sql13);
+
+            while($row13 = sqlsrv_fetch_array($result13, SQLSRV_FETCH_ASSOC)) {
+                $uso_terapeutico = $uso_terapeutico.' '.$row13['Descripcion'];
+            }
+        }
+
+        $existencia_almacen_1 = $row9['existencia_almacen_1'];
+        $existencia_almacen_2 = $row9['existencia_almacen_2'];
+        $troquelado = $row9['troquelado'];
+        $utilidad_articulo = $row9['utilidad_articulo'];
+        $utilidad_categoria = $row9['utilidad_categoria'];
+        $troquel_almacen_1 = $row9['troquel_almacen_1'];
+        $precio_compra_bruto_almacen_1 = $row9['precio_compra_bruto_almacen_1'];
+        $troquel_almacen_2 = $row9['troquel_almacen_2'];
+        $precio_compra_bruto_almacen_2 = $row9['precio_compra_bruto_almacen_2'];
+        $precio_compra_bruto = $row9['precio_compra_bruto'];
+        $iva = $row9['iva'];
+
+        $precio = FG_Calculo_Precio_Alfa($existencia, $existencia_almacen_1, $existencia_almacen_2, $troquelado, $utilidad_articulo, $utilidad_categoria, $troquel_almacen_1, $precio_compra_bruto_almacen_1, $troquel_almacen_2, $precio_compra_bruto_almacen_2, $precio_compra_bruto, $iva, 'CON_EXISTENCIA');
+        $precio = number_format($precio, 2, ',', '.');
+
+        echo '<tr>';
+        echo '<td class="text-center">'.$contador.'</td>';
+        echo '<td class="text-center">'.$codigo_interno.'</td>';
+        echo '<td class="text-center">'.$codigo_barra.'</td>';
+        echo '<td class="text-center">'.$descripcion.'</td>';
+        echo '<td class="text-center">'.$existencia.'</td>';
+        echo '<td class="text-center">'.$marca.'</td>';
+        echo '<td class="text-center">'.$unidad_minima.'</td>';
+        echo '<td class="text-center">'.$clasificacion.'</td>';
+        echo '<td class="text-center">'.$categoria.'</td>';
+        echo '<td class="text-center">'.$subcategoria.'</td>';
+        echo '<td class="text-center">'.$tipo.'</td>';
+        echo '<td class="text-center">'.$adicionales.'</td>';
+        echo '<td class="text-center">'.$componentes.'</td>';
+        echo '<td class="text-center">'.$uso_terapeutico.'</td>';
+        echo '<td class="text-center">'.$ultimo_proveedor.'</td>';
+        echo '<td class="text-center">'.$precio.'</td>';
+        echo '</tr>';
+
+        $contador++;
+      }
+
+      echo '</tbody>';
+      echo '</table>';
+    }
+
     sqlsrv_close($conn);
   }
   /**********************************************************************************/
@@ -863,7 +1008,7 @@
     TITULO: R31Q_Articulos_Sin_Vencimiento
     FUNCION: Ubicar productos sin fecha de vencimiento entre rango de fecha
     RETORNO: Lista de productos sin fecha de vencimiento entre rango de fecha
-    DESAROLLADO POR: NISAUL DELGADO
+    DESAROLLADO POR: NISA DELGADO
   */
   function R31Q_Articulos_Sin_Vencimiento($FInicial,$FFinal) {
     $sql = "
@@ -894,7 +1039,7 @@
     TITULO: R31Q_Articulos_Corto_Vencimiento
     FUNCION: Ubicar productos sin fecha de vencimiento entre rango de fecha y vida util
     RETORNO: Lista de productos sin fecha de vencimiento entre rango de fecha y vida util
-    DESAROLLADO POR: NISAUL DELGADO
+    DESAROLLADO POR: NISA DELGADO
   */
   function R31Q_Articulos_Corto_Vencimiento($FInicial,$FFinal, $VUtil) {
     $sql = "
@@ -919,6 +1064,65 @@
         DATEDIFF(DAY, (SELECT ComFactura.FechaRegistro FROM ComFactura WHERE ComFactura.Id = ComFacturaDetalle.ComFacturaId), ComFacturaDetalle.FechaVencimiento) <= '$VUtil'
       ORDER BY (SELECT ComFactura.FechaRegistro FROM ComFactura WHERE ComFactura.Id = ComFacturaDetalle.ComFacturaId) ASC;
     ";
+    return $sql;
+  }
+
+  /**********************************************************************************/
+  /*
+    TITULO: R31Q_Codificaciones
+    FUNCION: Query que genera los detalles de los articulos codificados segun rango de fecha
+    RETORNO: Detalle del articulo
+    DESAROLLADO POR: NISA DELGADO
+  */
+  function R31Q_Codificaciones($fechaInicio, $fechaFin) {
+    $sql = "
+      SELECT TOP 50
+            InvArticulo.Id AS id_articulo,
+            InvArticulo.CodigoArticulo AS codigo_interno,
+            (SELECT InvCodigoBarra.CodigoBarra FROM InvCodigoBarra WHERE InvCodigoBarra.InvArticuloId = InvArticulo.Id And InvCodigoBarra.EsPrincipal = 1) AS codigo_barra,
+            InvArticulo.DescripcionLarga AS descripcion,
+            (CONVERT(INT, (SELECT SUM(InvLoteAlmacen.Existencia) FROM InvLoteAlmacen WHERE InvLoteAlmacen.InvAlmacenId IN (1, 2) AND InvLoteAlmacen.InvArticuloId = InvArticulo.Id))) AS existencia,
+            (SELECT InvMarca.Nombre FROM InvMarca WHERE InvMarca.Id = InvArticulo.InvMarcaId) AS marca,
+            (ISNULL((SELECT InvArticuloAtributo.InvArticuloId FROM InvArticuloAtributo WHERE InvArticuloAtributo.InvAtributoId = (SELECT InvAtributo.Id FROM InvAtributo WHERE InvAtributo.Descripcion = 'Medicina') AND InvArticuloAtributo.InvArticuloId = InvArticulo.Id),CAST(0 AS INT))) AS tipo,
+            (SELECT TOP 1 GenPersona.Nombre FROM ComFacturaDetalle INNER JOIN ComFactura ON ComFactura.Id = ComFacturaDetalle.ComFacturaId INNER JOIN ComProveedor ON ComProveedor.Id = ComFactura.ComProveedorId INNER JOIN GenPersona ON GenPersona.Id = ComProveedor.GenPersonaId WHERE ComFacturaDetalle.InvArticuloId = InvArticulo.Id ORDER BY ComFactura.FechaDocumento DESC) AS  ultimo_proveedor,
+            (ROUND(CAST((SELECT SUM (InvLoteAlmacen.Existencia) As existencia FROM InvLoteAlmacen WHERE(InvLoteAlmacen.InvAlmacenId = 1) AND (InvLoteAlmacen.InvArticuloId = InvArticulo.Id)) AS DECIMAL(38,0)),2,0))  AS existencia_almacen_1,
+            (ROUND(CAST((SELECT SUM (InvLoteAlmacen.Existencia) As existencia FROM InvLoteAlmacen WHERE(InvLoteAlmacen.InvAlmacenId = 2) AND (InvLoteAlmacen.InvArticuloId = InvArticulo.Id)) AS DECIMAL(38,0)),2,0))  AS existencia_almacen_2,
+            (ISNULL((SELECT InvArticuloAtributo.InvArticuloId FROM InvArticuloAtributo WHERE InvArticuloAtributo.InvAtributoId = (SELECT InvAtributo.Id FROM InvAtributo WHERE InvAtributo.Descripcion = 'Troquelados' OR  InvAtributo.Descripcion = 'troquelados') AND InvArticuloAtributo.InvArticuloId = InvArticulo.Id),CAST(0 AS INT))) AS troquelado,
+            ROUND(CAST(1-((ISNULL(ROUND(CAST((SELECT VenCondicionVenta.PorcentajeUtilidad FROM VenCondicionVenta WHERE VenCondicionVenta.Id = (SELECT VenCondicionVenta_VenCondicionVentaArticulo.Id FROM VenCondicionVenta_VenCondicionVentaArticulo WHERE VenCondicionVenta_VenCondicionVentaArticulo.InvArticuloId = InvArticulo.Id)) AS DECIMAL(38,4)),2,0),CAST(0 AS INT)))/100)AS DECIMAL(38,4)),2,0) AS utilidad_articulo,
+            ROUND(CAST(1-((ISNULL(ROUND(CAST((SELECT VenCondicionVenta.PorcentajeUtilidad FROM VenCondicionVenta WHERE VenCondicionVenta.id = (SELECT VenCondicionVenta_VenCondicionVentaCategoria.Id FROM VenCondicionVenta_VenCondicionVentaCategoria WHERE VenCondicionVenta_VenCondicionVentaCategoria.InvCategoriaId = InvArticulo.InvCategoriaId)) AS DECIMAL(38,4)),2,0),CAST(0 AS INT)))/100)AS DECIMAL(38,4)),2,0) AS utilidad_categoria,
+            (ROUND(CAST((SELECT TOP 1 InvLote.M_PrecioTroquelado FROM InvLoteAlmacen INNER JOIN InvLote ON InvLote.Id = InvLoteAlmacen.InvLoteId WHERE(InvLoteAlmacen.InvAlmacenId = '1') AND (InvLoteAlmacen.InvArticuloId = InvArticulo.Id) AND (InvLoteAlmacen.Existencia>0) ORDER BY invlote.M_PrecioTroquelado DESC)AS DECIMAL(38,2)),2,0)) AS troquel_almacen_1,
+            (ROUND(CAST((SELECT TOP 1 InvLote.M_PrecioCompraBruto FROM InvLoteAlmacen INNER JOIN InvLote ON InvLote.Id = InvLoteAlmacen.InvLoteId WHERE (InvLoteAlmacen.InvArticuloId = InvArticulo.Id) AND (InvLoteAlmacen.Existencia>0) AND (InvLoteAlmacen.InvAlmacenId = '1') ORDER BY invlote.M_PrecioCompraBruto DESC)AS DECIMAL(38,2)),2,0)) AS precio_compra_bruto_almacen_1,
+            (ROUND(CAST((SELECT TOP 1 InvLote.M_PrecioTroquelado FROM InvLoteAlmacen INNER JOIN InvLote ON InvLote.Id = InvLoteAlmacen.InvLoteId WHERE(InvLoteAlmacen.InvAlmacenId = '2') AND (InvLoteAlmacen.InvArticuloId = InvArticulo.Id) AND (InvLoteAlmacen.Existencia>0) ORDER BY invlote.M_PrecioTroquelado DESC)AS DECIMAL(38,2)),2,0)) AS troquel_almacen_2,
+            (ROUND(CAST((SELECT TOP 1 InvLote.M_PrecioCompraBruto FROM InvLoteAlmacen INNER JOIN InvLote ON InvLote.Id = InvLoteAlmacen.InvLoteId WHERE (InvLoteAlmacen.InvArticuloId = InvArticulo.Id) AND (InvLoteAlmacen.Existencia>0) AND (InvLoteAlmacen.InvAlmacenId = '2') ORDER BY invlote.M_PrecioCompraBruto DESC)AS DECIMAL(38,2)),2,0)) AS precio_compra_bruto_almacen_2,
+            (ROUND(CAST((SELECT TOP 1 InvLote.M_PrecioCompraBruto FROM InvLoteAlmacen INNER JOIN InvLote ON InvLote.Id = InvLoteAlmacen.InvLoteId WHERE (InvLoteAlmacen.InvArticuloId = InvArticulo.Id) AND (InvLoteAlmacen.Existencia>0) ORDER BY invlote.M_PrecioCompraBruto DESC)AS DECIMAL(38,2)),2,0)) AS precio_compra_bruto,
+            (ISNULL(InvArticulo.FinConceptoImptoIdCompra,CAST(0 AS INT))) AS iva
+        FROM
+            InvArticulo
+        WHERE
+            CONVERT(DATE, InvArticulo.Auditoria_FechaCreacion) >= '$fechaInicio' AND CONVERT(DATE, InvArticulo.Auditoria_FechaCreacion) <= '$fechaFin'
+        ORDER BY InvArticulo.Id DESC;
+    ";
+    return $sql;
+  }
+
+  /**********************************************************************************/
+  /*
+    TITULO: R31Q_Atributos_Adicionales
+    FUNCION: Query que genera el listado de atributos adicionales de un producto dado
+    RETORNO: Detalle del articulo
+    DESAROLLADO POR: NISA DELGADO
+  */
+  function R31Q_Atributos_Adicionales($id_articulo)
+  {
+    $sql = "
+        SELECT
+            InvAtributo.Descripcion
+        FROM
+            InvAtributo
+        WHERE
+            InvAtributo.Id IN ((SELECT InvArticuloAtributo.InvAtributoId FROM InvArticuloAtributo WHERE InvArticuloAtributo.InvArticuloId = '$id_articulo'));
+    ";
+
     return $sql;
   }
 ?>

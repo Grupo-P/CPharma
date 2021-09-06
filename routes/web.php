@@ -293,6 +293,8 @@ Route::get('/DigitalOrdenCompra', function() {
     return view('pages.ordenCompra.digital');
 });
 
+Route::resource('/compras/reclamos', 'ReclamoController');
+
 Route::get('/ConsultorCompra', function() {
     return view('pages.consultorP.consultorCompra');
 });
