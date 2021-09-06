@@ -122,6 +122,8 @@
       dd(sqlsrv_errors());
     }
 
+    $seccion = isset($_GET['seccion']) ? $_GET['seccion'] : 'MEDICINA';
+
     echo '
       <div class="input-group md-form form-sm form-1 pl-0 CP-stickyBar">
         <div class="input-group-prepend">
@@ -134,9 +136,9 @@
       <br/>
     ';
     echo'
-      <h6 align="center">Periodo desde el ' . date("d-m-Y", strtotime($FInicial)) . ' al '
+      <h6 align="center">Periodo desde el <b>' . date("d-m-Y", strtotime($FInicial)) . '</b> al <b>'
         . date("d-m-Y", strtotime($FFinalImpresion))
-      . '</h6>
+      . '</b> para el <b>'.$seccion.'</b></h6>
     ';
 
     echo '
@@ -185,7 +187,6 @@
         $Diferencia1 = FG_Validar_Fechas($FechaRegistro->format("Y-m-d"), $FInicial);
         $Diferencia2 = FG_Validar_Fechas($FechaRegistro->format("Y-m-d"), $FFinalImpresion);
         $tipo = FG_Tipo_Producto($row['tipo']);
-        $seccion = isset($_GET['seccion']) ? $_GET['seccion'] : 'MEDICINA';
         
         if(($Diferencia1 <= 0) && ($Diferencia2 >= 0)) {
           if ($tipo == $seccion) {

@@ -779,10 +779,10 @@
             ;
         ");
 
-        $unidad_minima = isset($sql11->unidad_minima) ? $sql11->unidad_minima : '';
-        $clasificacion = isset($sql11->clasificacion) ? $sql11->clasificacion : '';
-        $categoria = isset($sql11->categoria) ? $sql11->categoria : '';
-        $subcategoria = isset($sql11->subcategoria) ? $sql11->subcategoria : '';
+        $unidad_minima = isset($sql11[0]->unidad_minima) ? $sql11[0]->unidad_minima : '';
+        $clasificacion = isset($sql11[0]->clasificacion) ? $sql11[0]->clasificacion : '';
+        $categoria = isset($sql11[0]->categoria) ? $sql11[0]->categoria : '';
+        $subcategoria = isset($sql11[0]->subcategoria) ? $sql11[0]->subcategoria : '';
 
         $tipo = FG_Tipo_Producto($row9['tipo']);
 
@@ -1120,7 +1120,8 @@
         FROM
             InvAtributo
         WHERE
-            InvAtributo.Id IN ((SELECT InvArticuloAtributo.InvAtributoId FROM InvArticuloAtributo WHERE InvArticuloAtributo.InvArticuloId = '$id_articulo'));
+            InvAtributo.Id IN ((SELECT InvArticuloAtributo.InvAtributoId FROM InvArticuloAtributo WHERE InvArticuloAtributo.InvArticuloId = '$id_articulo')) AND
+            (InvAtributo.Descripcion != 'giordany' AND InvAtributo.Descripcion != 'Medicina' AND InvAtributo.Descripcion != 'Dolarizados');
     ";
 
     return $sql;
