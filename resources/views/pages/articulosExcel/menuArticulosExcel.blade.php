@@ -71,38 +71,61 @@
         <tr>
             <td align="center" colspan="7">
                 <h3 class="text-center text-danger" id="mensaje"></h3>
+                <br>
             </td>
         </tr>
 
         <tr>
             <td align="center">
-            Condicion excel:
+                Condicion atributo:
             </td>
             <td align="right" style="width:20%;">
-            <select id="condicionExcel" name="condicionExcel" class="form-control" required="required">
-                <option value="">Seleccione...</option>
-                <option value="WEB">Excel Web</option>
-                <option value="APP">Excel App</option>
-            </select>
+                <select id="condicionAtributo" name="condicionAtributo" class="form-control" required="required">
+                    <option value="">Seleccione...</option>
+                    <option value="PWEB">Pagina Web</option>
+                    <option value="TODOS">Todos</option>
+                </select>
             </td>
 
             <td align="center">
-            Condicion articulo:
+                Condicion excel:
             </td>
             <td align="right" style="width:20%;">
-            <select id="condicionArticulo"  name="condicionArticulo" class="form-control" required="required">
-                <option value="">Seleccione...</option>
-                <option value="TODOS">Todos</option>
-                <option value="DOLARIZADO">Dolarizado</option>
-                <option value="NODOLARIZADO">No dolarizado</option>
-            </select>
+                <select id="condicionExcel" name="condicionExcel" class="form-control" required="required">
+                    <option value="">Seleccione...</option>
+                    <option value="WEB">Excel Web</option>
+                    <option value="APP">Excel App</option>
+                </select>
             </td>
 
             <td align="center">
-            Condicion existencia:
+                Condicion articulo:
             </td>
             <td align="right" style="width:20%;">
-                <input type="number" id="condicionExistencia" min="0" step="1" name="condicionExistencia" class="form-control" required="required"/>
+                <select id="condicionArticulo"  name="condicionArticulo" class="form-control" required="required">
+                    <option value="">Seleccione...</option>
+                    <option value="TODOS">Todos</option>
+                    <option value="DOLARIZADO">Dolarizado</option>
+                    <option value="NODOLARIZADO">No dolarizado</option>
+                </select>
+            </td>
+
+        </tr>
+        <tr><td><br></td></tr>
+        <tr>
+
+            <td align="center">
+                Condicion existencia:
+            </td>
+            <td align="right" style="width:20%;">
+                <input type="number" id="condicionExistencia" min="0" step="1" name="condicionExistencia" class="form-control" required="required" placeholder="15"/>
+            </td>
+
+            <td align="center">
+                Condicion utilidad(%):
+            </td>
+            <td align="right" style="width:20%;">
+                <input type="number" id="condicionUtilidad" min="0" step="1" name="condicionUtilidad" class="form-control" required="required" placeholder="30%"/>
             </td>
 
             <td align="right">
@@ -117,12 +140,16 @@
             var condicionExcel =  $("#condicionExcel").val();
             var condicionArticulo =  $("#condicionArticulo").val();
             var condicionExistencia =  $("#condicionExistencia").val();
+            var condicionUtilidad =  $("#condicionUtilidad").val();
+            var condicionAtributo =  $("#condicionAtributo").val();
 
             var mensaje = "Complete los campos: ";
             var error = 0;
             if(condicionExcel==""){ mensaje = mensaje+" Condicion excel,"; error = 1; }
             if(condicionArticulo==""){ mensaje = mensaje+" Condicion articulo,"; error = 1; }
             if(condicionExistencia==""){ mensaje = mensaje+" Condicion existencia."; error = 1; }
+            //if(condicionUtilidad==""){ mensaje = mensaje+" Condicion utilidad."; error = 1; }
+            if(condicionAtributo==""){ mensaje = mensaje+" Condicion atributo."; error = 1; }
 
             if(error==1){
                 $("#mensaje").html(mensaje);
