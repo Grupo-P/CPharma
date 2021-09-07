@@ -67,7 +67,13 @@
 
      //Condicion Utilidad
      if($condicionUtilidad!="TODOS"){
-
+        $utilidad = round(($condicionUtilidad/100),2);
+        $condicionUtilidad = " AND (ROUND(CAST(1-((ISNULL(ROUND(CAST((SELECT VenCondicionVenta.PorcentajeUtilidad
+        FROM VenCondicionVenta
+        WHERE VenCondicionVenta.id = (
+          SELECT VenCondicionVenta_VenCondicionVentaCategoria.Id
+          FROM VenCondicionVenta_VenCondicionVentaCategoria
+          WHERE VenCondicionVenta_VenCondicionVentaCategoria.InvCategoriaId = InvArticulo.InvCategoriaId)) AS DECIMAL(38,4)),2,0),CAST(0 AS INT)))/100)AS DECIMAL(38,4)),2,0) = '$utilidad')";
     }
     else if($condicionUtilidad=="TODOS"){
         $condicionUtilidad = "";
@@ -80,7 +86,7 @@
 		$SedeConnection = FG_Mi_Ubicacion();
 		$conn = FG_Conectar_Smartpharma($SedeConnection);
         $connCPharma = FG_Conectar_CPharma();
-		$sql = RQ_Articulos_PaginaWEB($condicionExistencia,$condicionArticulo,$condicionAtributo);
+		$sql = RQ_Articulos_PaginaWEB($condicionExistencia,$condicionArticulo,$condicionAtributo,$condicionUtilidad);
 
 		$result = sqlsrv_query($conn,$sql);
 		$contador = 1;
@@ -239,7 +245,7 @@
 		RETORNO: Lista de proveedores con diferencia en dias respecto al dia actual
 		DESAROLLADO POR: SERGIO COVA
 	 */
-	function RQ_Articulos_PaginaWEB($condicionExistencia,$condicionArticulo,$condicionAtributo) {
+	function RQ_Articulos_PaginaWEB($condicionExistencia,$condicionArticulo,$condicionAtributo,$condicionUtilidad) {
 		$sql = "
 			SELECT
 --Id Articulo
@@ -373,6 +379,7 @@
     AND (InvLoteAlmacen.InvArticuloId = InvArticulo.Id)) AS DECIMAL(38,0)),2,0)) > '$condicionExistencia'
     $condicionArticulo
     $condicionAtributo
+    $condicionUtilidad
 --Agrupamientos
     GROUP BY InvArticulo.Id, InvArticulo.CodigoArticulo, InvArticulo.Descripcion, InvArticulo.FinConceptoImptoIdCompra, InvArticulo.InvCategoriaId
 --Ordanamiento
