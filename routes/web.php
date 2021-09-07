@@ -493,3 +493,7 @@ Route::get('/reportes/pagos-por-fecha', 'ContReporteController@pagos_por_fecha')
 Route::get('/reportes/reporte-por-cuentas', 'ContReporteController@reporte_por_cuentas');
 
 Route::resource('/conciliaciones', 'ContConciliacionesController');
+
+Route::resource('/trasladoRecibir', 'TrasladoRecibirController');
+Route::get('/trasladoRecibir/{codigo_barra}/{sede}', 'TrasladoRecibirController@edit');
+Route::get('/trasladoRecibir/limpiar', 'TrasladoRecibirController@destroy');

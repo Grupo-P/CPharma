@@ -9,5 +9,7 @@
                 @yield('content')
             </article> 
         </div>
+
+        @yield('scriptsFoot')
     </body>
 </html>
