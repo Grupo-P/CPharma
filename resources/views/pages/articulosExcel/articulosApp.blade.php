@@ -12,7 +12,10 @@
     (isset($_GET['condicionExcel']))?$condicionExcel = $_GET['condicionExcel']:$condicionExcel = "APP";
     (isset($_GET['condicionArticulo']))?$condicionArticulo = $_GET['condicionArticulo']:$condicionArticulo = "TODOS";
     (isset($_GET['condicionExistencia']))?$condicionExistencia = $_GET['condicionExistencia']:$condicionExistencia = "20";
+    (isset($_GET['condicionAtributo']))?$condicionAtributo = $_GET['condicionAtributo']:$condicionAtributo = "TODOS";
+    (isset($_GET['condicionUtilidad']))?$condicionUtilidad = $_GET['condicionUtilidad']:$condicionUtilidad = "TODOS";
 
+    //Condicion Articulo
     if($condicionArticulo=="DOLARIZADO"){
         $condicionArticulo = " AND (ISNULL((SELECT
         InvArticuloAtributo.InvArticuloId
@@ -43,6 +46,39 @@
         $condicionArticulo = "";
     }
 
+    //Condicion Atributo
+    if($condicionAtributo=="PWEB"){
+        $condicionAtributo = " AND ((ISNULL((SELECT
+        InvArticuloAtributo.InvArticuloId
+        FROM InvArticuloAtributo
+        WHERE InvArticuloAtributo.InvAtributoId =
+        (SELECT InvAtributo.Id
+        FROM InvAtributo
+        WHERE
+        InvAtributo.Descripcion = 'PaginaWEB '
+        OR  InvAtributo.Descripcion = 'PAGINAWEB '
+        OR  InvAtributo.Descripcion = 'paginaweb ')
+        AND InvArticuloAtributo.InvArticuloId = InvArticulo.Id),CAST(0 AS INT))) <> 0)
+        ";
+    }
+    else if($condicionAtributo=="TODOS"){
+        $condicionAtributo = "";
+    }
+
+     //Condicion Utilidad
+     if($condicionUtilidad!="TODOS"){
+        $utilidad = round(($condicionUtilidad/100),2);
+        $condicionUtilidad = " AND (ROUND(CAST(1-((ISNULL(ROUND(CAST((SELECT VenCondicionVenta.PorcentajeUtilidad
+        FROM VenCondicionVenta
+        WHERE VenCondicionVenta.id = (
+          SELECT VenCondicionVenta_VenCondicionVentaCategoria.Id
+          FROM VenCondicionVenta_VenCondicionVentaCategoria
+          WHERE VenCondicionVenta_VenCondicionVentaCategoria.InvCategoriaId = InvArticulo.InvCategoriaId)) AS DECIMAL(38,4)),2,0),CAST(0 AS INT)))/100)AS DECIMAL(38,4)),2,0) = '$utilidad')";
+    }
+    else if($condicionUtilidad=="TODOS"){
+        $condicionUtilidad = "";
+    }
+
 	$spreadsheet = new Spreadsheet();
 	$sheet = $spreadsheet->getActiveSheet();
 
@@ -50,7 +86,7 @@
 		$SedeConnection = FG_Mi_Ubicacion();
 		$conn = FG_Conectar_Smartpharma($SedeConnection);
         $connCPharma = FG_Conectar_CPharma();
-		$sql = RQ_Articulos_PaginaWEB($condicionExistencia,$condicionArticulo);
+		$sql = RQ_Articulos_PaginaWEB($condicionExistencia,$condicionArticulo,$condicionAtributo,$condicionUtilidad);
 		$result = sqlsrv_query($conn,$sql);
 		$contador = 1;
         $TasaActual = FG_Tasa_Fecha_Venta($connCPharma,date('Y-m-d'));
@@ -151,7 +187,7 @@
 		RETORNO: Lista de proveedores con diferencia en dias respecto al dia actual
 		DESAROLLADO POR: SERGIO COVA
 	 */
-	function RQ_Articulos_PaginaWEB($condicionExistencia,$condicionArticulo) {
+	function RQ_Articulos_PaginaWEB($condicionExistencia,$condicionArticulo,$condicionAtributo,$condicionUtilidad) {
 		$sql = "
 			SELECT
 --Id Articulo
@@ -279,22 +315,13 @@
     LEFT JOIN InvAtributo ON InvAtributo.Id = InvArticuloAtributo.InvAtributoId
 --Condicionales
     WHERE
-	((ISNULL((SELECT
-    InvArticuloAtributo.InvArticuloId
-    FROM InvArticuloAtributo
-    WHERE InvArticuloAtributo.InvAtributoId =
-    (SELECT InvAtributo.Id
-    FROM InvAtributo
-    WHERE
-    InvAtributo.Descripcion = 'PaginaWEB '
-    OR  InvAtributo.Descripcion = 'PAGINAWEB '
-    OR  InvAtributo.Descripcion = 'paginaweb ')
-    AND InvArticuloAtributo.InvArticuloId = InvArticulo.Id),CAST(0 AS INT)))) <> 0
-    AND (ROUND(CAST((SELECT SUM (InvLoteAlmacen.Existencia) As Existencia
+    (ROUND(CAST((SELECT SUM (InvLoteAlmacen.Existencia) As Existencia
     FROM InvLoteAlmacen
     WHERE(InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
     AND (InvLoteAlmacen.InvArticuloId = InvArticulo.Id)) AS DECIMAL(38,0)),2,0)) > '$condicionExistencia'
     $condicionArticulo
+    $condicionAtributo
+    $condicionUtilidad
 --Agrupamientos
     GROUP BY InvArticulo.Id, InvArticulo.CodigoArticulo, InvArticulo.Descripcion, InvArticulo.FinConceptoImptoIdCompra, InvArticulo.InvCategoriaId
 --Ordanamiento
