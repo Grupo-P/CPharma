@@ -46,6 +46,8 @@
 
 @section('scriptsFoot')
 	<script src="https://raw.githubusercontent.com/SamWM/jQuery-Plugins/master/numeric/jquery.numeric.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
 	<script>
 		$(document).ready(function () {
 		   $('#existenciaUsuario').change(function () {
@@ -57,6 +59,61 @@
 	        }
 	      });
 		});
+
+        function agregarTraslado(codigo_barra, sede, existencia) {
+            cantidad = prompt('Ingrese la cantidad: ');
+
+            if (!parseInt(cantidad)) {
+                cantidad = prompt('Ingrese la cantidad (Número entero): ');
+                agregarTraslado(codigo_barra, sede, existencia);
+                return false;
+            }
+
+            if (parseInt(cantidad) <= 0) {
+                cantidad = prompt('Ingrese la cantidad (Mayor a cero): ');
+                agregarTraslado(codigo_barra, sede, existencia);
+                return false;
+            }
+
+            if (parseInt(cantidad) > parseInt(existencia)) {
+                cantidad = prompt('Ingrese la cantidad (Menor a la existencia del artículo): ');
+                agregarTraslado(codigo_barra, sede, existencia);
+                return false;
+            }
+
+            $.ajax({
+                type: 'POST',
+                url: '/trasladoRecibir',
+                data: {
+                    codigo_barra: codigo_barra,
+                    sede: sede,
+                    cantidad: cantidad,
+                    _token: '{{ csrf_token() }}'
+                },
+                success: function (response) {
+                    toastr.success('Articulo agregado a traslado');
+                },
+                error: function (error) {
+                    $('body').html(error.responseText);
+                }
+            })
+        }
+
+        function confirmarEliminacion(url) {
+            respuesta = confirm('¿Está seguro que desea eliminar este artículo?');
+
+            if (respuesta) {
+                $.ajax({
+                    type: 'GET',
+                    url: url,
+                    success: function (response) {
+                        console.log(response);
+                        window.location.href = window.location.href.replace('#', '');
+                    }
+                })
+            }
+        }
+
 	</script>
 @endsection
 
@@ -128,6 +185,7 @@
     RETORNO: No aplica
   */
   function R37_Traslados_Entre_Tiendas($SedeConnection,$existenciaUsuario) {
+    session()->forget('traslado');
 
     $conn = FG_Conectar_Smartpharma($SedeConnection);
     $connCPharma = FG_Conectar_CPharma();
@@ -185,7 +243,8 @@
 		';
     }
 
-    echo '<th scope="col" class="CP-sticky">Existencias foraneas totales</td>
+    echo '<th scope="col" class="CP-sticky">Existencias foraneas totales</td>';
+    echo '<th scope="col" class="CP-sticky" colspan="2">Acciones traslado</th>
       </tr>
         </thead>
 
@@ -367,14 +426,62 @@
         }
 
         echo '<td align="center">'.$existenciaForanea.'</td>';
-        echo '</tr>';
 
+        if (isset($_GET['SEDE']) & ($_GET['SEDE'] == 'FAU' || $_GET['SEDE'] == 'DBs')) {
+            if ($conectividad_ftn == 1 && $descripcion_ftn != '-' && $existencia_ftn > 0) {
+                echo '<td align="center"><button type="button" onclick="agregarTraslado(\'' . $codigo_barra . '\', \'FTN\', \'' . $existencia_ftn . '\')" class="btn btn-outline-info btn-sm">Agregar FTN</td>';
+            } else {
+                echo '<td>-</td>';
+            }
+
+            if ($conectividad_fll == 1 && $descripcion_fll != '-' && $existencia_fll > 0) {
+                echo '<td align="center"><button type="button" onclick="agregarTraslado(\'' . $codigo_barra . '\', \'FLL\', \'' . $existencia_fll . '\')" class="btn btn-outline-info btn-sm">Agregar FLL</td>';
+            } else {
+                echo '<td>-</td>';
+            }
+        }
+
+        if (isset($_GET['SEDE']) & $_GET['SEDE'] == 'FTN') {
+            if ($conectividad_fau == 1 && $descripcion_fau != '-' && $existencia_fau > 0) {
+                echo '<td align="center"><button type="button" onclick="agregarTraslado(\'' . $codigo_barra . '\', \'FAU\', \'' . $existencia_fau . '\')" class="btn btn-outline-info btn-sm">Agregar FAU</td>';
+            } else {
+                echo '<td>-</td>';
+            }
+
+            if ($conectividad_fll == 1 && $descripcion_fll != '-' && $existencia_fll > 0) {
+                echo '<td align="center"><button type="button" onclick="agregarTraslado(\'' . $codigo_barra . '\', \'FLL\', \'' . $existencia_fll . '\')" class="btn btn-outline-info btn-sm">Agregar FLL</td>';
+            } else {
+                echo '<td>-</td>';
+            }
+        }
+
+        if (isset($_GET['SEDE']) & $_GET['SEDE'] == 'FLL') {
+            if ($conectividad_ftn == 1 && $descripcion_ftn != '-' && $existencia_ftn > 0) {
+                echo '<td align="center"><button type="button" onclick="agregarTraslado(\'' . $codigo_barra . '\', \'FTN\', \'' . $existencia_ftn . '\')" class="btn btn-outline-info btn-sm">Agregar FLL</td>';
+            } else {
+                echo '<td>-</td>';
+            }
+
+            if ($conectividad_fau == 1 && $descripcion_fau != '-' && $existencia_fau > 0) {
+                echo '<td align="center"><button type="button" onclick="agregarTraslado(\'' . $codigo_barra . '\', \'FAU\', \'' . $existencia_fau . '\')" class="btn btn-outline-info btn-sm">Agregar FAU</td>';
+            } else {
+                echo '<td>-</td>';
+            }
+        }
+
+
+        echo '</tr>';
 
       	$contador++;
       }
 
-
   	}
+
+    echo '<tr>';
+    echo '<td colspan="12"></td>';
+    echo '<td><a href="/trasladoRecibir" target="_blank" class="btn btn-outline-info btn-sm">Ver soporte</a></td>';
+    echo '<td><button type="button" onclick="confirmarEliminacion(\'/trasladoRecibir/limpiar\')" class="btn btn-outline-danger btn-sm">Limpiar todo</button></td>';
+    echo '</tr>';
 
   	echo '
 	    </tbody>
