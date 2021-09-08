@@ -228,6 +228,10 @@ Route::get('/reporte42', function() {
     return view('pages.reporte.reporte42');
 });
 
+Route::get('/reporte43', function() {
+    return view('pages.reporte.reporte43');
+});
+
 
 Route::get('/seccion1', function() {
     return view('pages.reporte.seccion1');

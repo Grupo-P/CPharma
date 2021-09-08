@@ -153,6 +153,10 @@
                 <th scope="col">42</th>
                 <td scope="col">Ajustes de inventario</td>
             </tr>
+            <tr>
+                <th scope="col">43</th>
+                <td scope="col">Traslados</td>
+            </tr>
         </tbody>
     </table>
 

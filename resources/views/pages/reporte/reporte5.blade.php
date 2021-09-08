@@ -223,16 +223,16 @@
           <th scope="col" class="CP-sticky">Codigo</th>
           <th scope="col" class="CP-sticky">Codigo de Barra</th>
           <th scope="col" class="CP-sticky">Descripcion</th>
-          <th scope="col" class="CP-sticky">Tipo</th>
+          <th scope="col" style="display: hidden" class="CP-sticky">Tipo</th>
           <th scope="col" class="CP-sticky">Existencia</th>
-          <th scope="col" class="CP-sticky">Dolarizado?</td>
-          <th scope="col" class="CP-sticky">Gravado?</td>
+          <th scope="col" style="display: hidden" class="CP-sticky">Dolarizado?</td>
+          <th scope="col" style="display: hidden" class="CP-sticky">Gravado?</td>
           <th scope="col" class="CP-sticky">Clasificacion</td>
           <th scope="col" class="CP-sticky">Unidades vendidas</th>
           <th scope="col" class="CP-sticky">Total de Venta '.SigVe.'</th>
           <th scope="col" class="CP-sticky">Ultima Venta</th>
           <th scope="col" class="CP-sticky">Dias en Falla</th>
-          <th scope="col" class="CP-sticky">Ultimo Lote</th>
+          <th style="display: hidden" scope="col" class="CP-sticky">Ultimo Lote</th>
           <th scope="col" class="CP-sticky bg-warning">Ultima Compra</th>
           <th scope="col" class="CP-sticky">Ultimo Proveedor</th>';
 
@@ -310,11 +310,11 @@
         .$Descripcion.
       '</a>
       </td>';
-      echo '<td align="center">'.$Tipo.'</td>';
+      echo '<td align="center" style="display: hidden">'.$Tipo.'</td>';
       echo '<td align="center">'.intval($Existencia).'</td>';
-      echo '<td align="center">'.$Dolarizado.'</td>';
-      echo '<td align="center">'.$Gravado.'</td>';
-      echo '<td align="center">'.$clasificacion.'</td>';
+      echo '<td style="display: hidden" align="center">'.$Dolarizado.'</td>';
+      echo '<td style="display: hidden" align="center">'.$Gravado.'</td>';
+      echo '<td style="display: hidden" align="center">'.$clasificacion.'</td>';
       echo
       '<td align="center" class="CP-barrido">
       <a href="reporte12?fechaInicio='.$FInicial.'&fechaFin='.$FFinalImp.'&SEDE='.$SedeConnection.'&Descrip='.$Descripcion.'&Id='.$IdArticulo.'" style="text-decoration: none; color: black;" target="_blank">'
@@ -333,10 +333,10 @@
       echo '<td align="center">'.intval($DiasEnFalla).'</td>';
 
       if(!is_null($UltimoLote)){
-        echo '<td align="center">'.$UltimoLote->format('d-m-Y').'</td>';
+        echo '<td style="display: hidden" align="center">'.$UltimoLote->format('d-m-Y').'</td>';
       }
       else{
-        echo '<td align="center"> - </td>';
+        echo '<td style="display: hidden" align="center"> - </td>';
       }
 
       if(!is_null($UltimaCompra)){
