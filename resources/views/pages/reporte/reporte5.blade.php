@@ -50,6 +50,68 @@
   </style>
 @endsection
 
+
+@section('scriptsFoot')
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+    <script>
+        function agregarTraslado(codigo_barra, sede, existencia) {
+            cantidad = prompt('Ingrese la cantidad: ');
+
+            if (!parseInt(cantidad)) {
+                cantidad = prompt('Ingrese la cantidad (Número entero): ');
+                agregarTraslado(codigo_barra, sede, existencia);
+                return false;
+            }
+
+            if (parseInt(cantidad) <= 0) {
+                cantidad = prompt('Ingrese la cantidad (Mayor a cero): ');
+                agregarTraslado(codigo_barra, sede, existencia);
+                return false;
+            }
+
+            if (parseInt(cantidad) > parseInt(existencia)) {
+                cantidad = prompt('Ingrese la cantidad (Menor a la existencia del artículo): ');
+                agregarTraslado(codigo_barra, sede, existencia);
+                return false;
+            }
+
+            $.ajax({
+                type: 'POST',
+                url: '/trasladoRecibir',
+                data: {
+                    codigo_barra: codigo_barra,
+                    sede: sede,
+                    cantidad: cantidad,
+                    _token: '{{ csrf_token() }}'
+                },
+                success: function (response) {
+                    toastr.success('Articulo agregado a traslado');
+                },
+                error: function (error) {
+                    $('body').html(error.responseText);
+                }
+            })
+        }
+
+        function confirmarEliminacion(url) {
+            respuesta = confirm('¿Está seguro que desea eliminar este artículo?');
+
+            if (respuesta) {
+                $.ajax({
+                    type: 'GET',
+                    url: url,
+                    success: function (response) {
+                        console.log(response);
+                        window.location.href = window.location.href.replace('#', '');
+                    }
+                })
+            }
+        }
+    </script>
+@endsection
+
+
 @section('content')
 	<h1 class="h5 text-info">
 		<i class="fas fa-file-invoice"></i>
@@ -119,8 +181,18 @@
     DESAROLLADO POR: SERGIO COVA
   */
   function R5_Productos_Falla($SedeConnection,$FInicial,$FFinal){
+    session()->forget('traslado');
+
     $conn = FG_Conectar_Smartpharma($SedeConnection);
     $connCPharma = FG_Conectar_CPharma();
+
+    $conectividad_ftn = FG_Validar_Conectividad('FTN');
+    $conectividad_fau = FG_Validar_Conectividad('FAU');
+    $conectividad_fll = FG_Validar_Conectividad('FLL');
+
+    $connFAU = FG_Conectar_Smartpharma('FAU');
+    $connFTN = FG_Conectar_Smartpharma('FTN');
+    $connFLL = FG_Conectar_Smartpharma('FLL');
 
     $FInicialImp = date("d-m-Y", strtotime($FInicial));
     $FFinalImp= date("d-m-Y", strtotime($FFinal));
@@ -151,19 +223,47 @@
           <th scope="col" class="CP-sticky">Codigo</th>
           <th scope="col" class="CP-sticky">Codigo de Barra</th>
           <th scope="col" class="CP-sticky">Descripcion</th>
-          <th scope="col" class="CP-sticky">Tipo</th>
+          <th scope="col" style="display: hidden" class="CP-sticky">Tipo</th>
           <th scope="col" class="CP-sticky">Existencia</th>
-          <th scope="col" class="CP-sticky">Dolarizado?</td>
-          <th scope="col" class="CP-sticky">Gravado?</td>
+          <th scope="col" style="display: hidden" class="CP-sticky">Dolarizado?</td>
+          <th scope="col" style="display: hidden" class="CP-sticky">Gravado?</td>
           <th scope="col" class="CP-sticky">Clasificacion</td>
           <th scope="col" class="CP-sticky">Unidades vendidas</th>
           <th scope="col" class="CP-sticky">Total de Venta '.SigVe.'</th>
           <th scope="col" class="CP-sticky">Ultima Venta</th>
           <th scope="col" class="CP-sticky">Dias en Falla</th>
-          <th scope="col" class="CP-sticky">Ultimo Lote</th>
+          <th style="display: hidden" scope="col" class="CP-sticky">Ultimo Lote</th>
           <th scope="col" class="CP-sticky bg-warning">Ultima Compra</th>
-          <th scope="col" class="CP-sticky">Ultimo Proveedor</th>             
-        </tr>
+          <th scope="col" class="CP-sticky">Ultimo Proveedor</th>';
+
+          if (isset($_GET['SEDE']) & ($_GET['SEDE'] == 'FAU' || $_GET['SEDE'] == 'DBs')) {
+                echo '<th scope="col" class="CP-sticky">Descripción FTN</th>
+                    <th scope="col" class="CP-sticky">Existencia FTN</td>
+                    <th scope="col" class="CP-sticky">Descripción FLL</th>
+                    <th scope="col" class="CP-sticky">Existencia FLL</td>
+                ';
+              }
+
+              if (isset($_GET['SEDE']) & $_GET['SEDE'] == 'FTN') {
+                echo '<th scope="col" class="CP-sticky">Descripción FAU</th>
+                    <th scope="col" class="CP-sticky">Existencia FAU</td>
+                    <th scope="col" class="CP-sticky">Descripción FLL</th>
+                    <th scope="col" class="CP-sticky">Existencia FLL</td>
+                ';
+              }
+
+              if (isset($_GET['SEDE']) & $_GET['SEDE'] == 'FLL') {
+                echo '<th scope="col" class="CP-sticky">Descripción FTN</th>
+                    <th scope="col" class="CP-sticky">Existencia FTN</td>
+                    <th scope="col" class="CP-sticky">Descripción FAU</th>
+                    <th scope="col" class="CP-sticky">Existencia FAU</td>
+                ';
+              }
+
+
+              echo '<th scope="col" class="CP-sticky" colspan="2">Acciones traslado</th>';
+
+    echo '</tr>
       </thead>
       <tbody>
     ';
@@ -210,11 +310,11 @@
         .$Descripcion.
       '</a>
       </td>';
-      echo '<td align="center">'.$Tipo.'</td>';
+      echo '<td align="center" style="display: hidden">'.$Tipo.'</td>';
       echo '<td align="center">'.intval($Existencia).'</td>';
-      echo '<td align="center">'.$Dolarizado.'</td>';
-      echo '<td align="center">'.$Gravado.'</td>';
-      echo '<td align="center">'.$clasificacion.'</td>';
+      echo '<td style="display: hidden" align="center">'.$Dolarizado.'</td>';
+      echo '<td style="display: hidden" align="center">'.$Gravado.'</td>';
+      echo '<td style="display: hidden" align="center">'.$clasificacion.'</td>';
       echo
       '<td align="center" class="CP-barrido">
       <a href="reporte12?fechaInicio='.$FInicial.'&fechaFin='.$FFinalImp.'&SEDE='.$SedeConnection.'&Descrip='.$Descripcion.'&Id='.$IdArticulo.'" style="text-decoration: none; color: black;" target="_blank">'
@@ -233,10 +333,10 @@
       echo '<td align="center">'.intval($DiasEnFalla).'</td>';
 
       if(!is_null($UltimoLote)){
-        echo '<td align="center">'.$UltimoLote->format('d-m-Y').'</td>';
+        echo '<td style="display: hidden" align="center">'.$UltimoLote->format('d-m-Y').'</td>';
       }
       else{
-        echo '<td align="center"> - </td>';
+        echo '<td style="display: hidden" align="center"> - </td>';
       }
 
       if(!is_null($UltimaCompra)){
@@ -252,9 +352,177 @@
         .$UltimoProveedor.
       '</a>
       </td>';
+
+      if (isset($_GET['SEDE']) & ($_GET['SEDE'] == 'FAU' || $_GET['SEDE'] == 'DBs')) {
+        if ($conectividad_ftn == 1) {
+          $sql3 = R14_Q_Descripcion_Existencia_Articulo($CodigoBarra);
+          $result3 = sqlsrv_query($connFTN,$sql3);
+
+          $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
+
+          $descripcion_ftn = ($row3['descripcion']) ? FG_Limpiar_Texto($row3['descripcion']) : '-';
+          $existencia_ftn = ($row3['existencia']) ? intval($row3['existencia']) : '-';
+        }
+
+        if ($conectividad_fll == 1) {
+          $sql3 = R14_Q_Descripcion_Existencia_Articulo($CodigoBarra);
+          $result3 = sqlsrv_query($connFLL,$sql3);
+          $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
+
+          $descripcion_fll = ($row3['descripcion']) ? FG_Limpiar_Texto($row3['descripcion']) : '-';
+          $existencia_fll = ($row3['existencia']) ? intval($row3['existencia']) : '-';
+        }
+      }
+
+      if (isset($_GET['SEDE']) & $_GET['SEDE'] == 'FTN') {
+        if ($conectividad_fau == 1) {
+            $sql3 = R14_Q_Descripcion_Existencia_Articulo($CodigoBarra);
+            $result3 = sqlsrv_query($connFAU,$sql3);
+            $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
+
+            $descripcion_fau = ($row3['descripcion']) ? FG_Limpiar_Texto($row3['descripcion']) : '-';
+            $existencia_fau = ($row3['existencia']) ? intval($row3['existencia']) : '-';
+          }
+
+          if ($conectividad_fll == 1) {
+            $sql3 = R14_Q_Descripcion_Existencia_Articulo($CodigoBarra);
+            $result3 = sqlsrv_query($connFLL,$sql3);
+            $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
+
+            $descripcion_fll = ($row3['descripcion']) ? FG_Limpiar_Texto($row3['descripcion']) : '-';
+            $existencia_fll = ($row3['existencia']) ? intval($row3['existencia']) : '-';
+          }
+      }
+
+      if (isset($_GET['SEDE']) & $_GET['SEDE'] == 'FLL') {
+         if ($conectividad_ftn == 1) {
+            $sql3 = R14_Q_Descripcion_Existencia_Articulo($CodigoBarra);
+            $result3 = sqlsrv_query($connFTN,$sql3);
+            $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
+
+            $descripcion_ftn = ($row3['descripcion']) ? FG_Limpiar_Texto($row3['descripcion']) : '-';
+            $existencia_ftn = ($row3['existencia']) ? intval($row3['existencia']) : '-';
+          }
+
+          if ($conectividad_fau == 1) {
+            $sql3 = R14_Q_Descripcion_Existencia_Articulo($CodigoBarra);
+            $result3 = sqlsrv_query($connFAU,$sql3);
+            $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
+
+            $descripcion_fau = ($row3['descripcion']) ? FG_Limpiar_Texto($row3['descripcion']) : '-';
+            $existencia_fau = ($row3['existencia']) ? intval($row3['existencia']) : '-';
+          }
+      }
+
+      if (isset($_GET['SEDE']) & ($_GET['SEDE'] == 'FAU' || $_GET['SEDE'] == 'DBs')) {
+            if ($conectividad_ftn == 1) {
+                echo '<td align="center">'.$descripcion_ftn.'</td>
+                      <td align="center">'.$existencia_ftn.'</td>';
+            } else {
+                echo '<td>-</td>';
+                echo '<td>-</td>';
+            }
+
+            if ($conectividad_fll == 1) {
+                echo '<td align="center">'.$descripcion_fll.'</td>
+                      <td align="center">'.$existencia_fll.'</td>';
+            } else {
+                echo '<td>-</td>';
+                echo '<td>-</td>';
+            }
+        }
+
+        if (isset($_GET['SEDE']) & $_GET['SEDE'] == 'FTN') {
+            if ($conectividad_fau == 1) {
+                echo '<td align="center">'.$descripcion_fau.'</td>
+                      <td align="center">'.$existencia_fau.'</td>';
+            } else {
+                echo '<td>-</td>';
+                echo '<td>-</td>';
+            }
+
+            if ($conectividad_fll == 1) {
+                echo '<td align="center">'.$descripcion_fll.'</td>
+                      <td align="center">'.$existencia_fll.'</td>';
+            } else {
+                echo '<td>-</td>';
+                echo '<td>-</td>';
+            }
+        }
+
+        if (isset($_GET['SEDE']) & $_GET['SEDE'] == 'FLL') {
+            if ($conectividad_ftn == 1) {
+                echo '<td align="center">'.$descripcion_ftn.'</td>
+                      <td align="center">'.$existencia_ftn.'</td>';
+            } else {
+                echo '<td>-</td>';
+                echo '<td>-</td>';
+            }
+
+            if ($conectividad_fau == 1) {
+                echo '<td align="center">'.$descripcion_fau.'</td>
+                      <td align="center">'.$existencia_fau.'</td>';
+            } else {
+                echo '<td>-</td>';
+                echo '<td>-</td>';
+            }
+        }
+
+
+        // Botones de agregar a traslado
+
+        if (isset($_GET['SEDE']) & ($_GET['SEDE'] == 'FAU' || $_GET['SEDE'] == 'DBs')) {
+            if ($conectividad_ftn == 1 && $descripcion_ftn != '-' && $existencia_ftn > 0) {
+                echo '<td align="center"><button type="button" onclick="agregarTraslado(\'' . $CodigoBarra . '\', \'FTN\', \'' . $existencia_ftn . '\')" class="btn btn-outline-info btn-sm">Agregar FTN</td>';
+            } else {
+                echo '<td>-</td>';
+            }
+
+            if ($conectividad_fll == 1 && $descripcion_fll != '-' && $existencia_fll > 0) {
+                echo '<td align="center"><button type="button" onclick="agregarTraslado(\'' . $CodigoBarra . '\', \'FLL\', \'' . $existencia_fll . '\')" class="btn btn-outline-info btn-sm">Agregar FLL</td>';
+            } else {
+                echo '<td>-</td>';
+            }
+        }
+
+        if (isset($_GET['SEDE']) & $_GET['SEDE'] == 'FTN') {
+            if ($conectividad_fau == 1 && $descripcion_fau != '-' && $existencia_fau > 0) {
+                echo '<td align="center"><button type="button" onclick="agregarTraslado(\'' . $CodigoBarra . '\', \'FAU\', \'' . $existencia_fau . '\')" class="btn btn-outline-info btn-sm">Agregar FAU</td>';
+            } else {
+                echo '<td>-</td>';
+            }
+
+            if ($conectividad_fll == 1 && $descripcion_fll != '-' && $existencia_fll > 0) {
+                echo '<td align="center"><button type="button" onclick="agregarTraslado(\'' . $CodigoBarra . '\', \'FLL\', \'' . $existencia_fll . '\')" class="btn btn-outline-info btn-sm">Agregar FLL</td>';
+            } else {
+                echo '<td>-</td>';
+            }
+        }
+
+        if (isset($_GET['SEDE']) & $_GET['SEDE'] == 'FLL') {
+            if ($conectividad_ftn == 1 && $descripcion_ftn != '-' && $existencia_ftn > 0) {
+                echo '<td align="center"><button type="button" onclick="agregarTraslado(\'' . $CodigoBarra . '\', \'FTN\', \'' . $existencia_ftn . '\')" class="btn btn-outline-info btn-sm">Agregar FLL</td>';
+            } else {
+                echo '<td>-</td>';
+            }
+
+            if ($conectividad_fau == 1 && $descripcion_fau != '-' && $existencia_fau > 0) {
+                echo '<td align="center"><button type="button" onclick="agregarTraslado(\'' . $CodigoBarra . '\', \'FAU\', \'' . $existencia_fau . '\')" class="btn btn-outline-info btn-sm">Agregar FAU</td>';
+            } else {
+                echo '<td>-</td>';
+            }
+        }
+
       echo '</tr>';
       $contador++;
     }
+
+    echo '<tr>';
+      echo '<td colspan="20"></td>';
+      echo '<td><a href="/trasladoRecibir" target="_blank" class="btn btn-outline-info btn-sm">Ver soporte</a></td>';
+      echo '<td><button type="button" onclick="confirmarEliminacion(\'/trasladoRecibir/limpiar\')" class="btn btn-outline-danger btn-sm">Limpiar todo</button></td>';
+      echo '</tr>';
+
     echo '
       </tbody>
     </table>';
@@ -594,6 +862,29 @@
     --Ordanamiento
       ORDER BY InvArticulo.Id ASC
     ";
+    return $sql;
+  }
+
+  /*
+    TITULO: R14_Q_Descripcion_Existencia_Articulo
+    FUNCION: Query que genera descripcion y existencia de articulo
+    RETORNO: Descripcion/existencia de articulo
+    DESAROLLADO POR: NISA DELGADO
+  */
+  function R14_Q_Descripcion_Existencia_Articulo($CodigoBarra)
+  {
+
+    $CodigoBarra = str_replace("'", "''", $CodigoBarra);
+
+    $sql = "
+      SELECT
+        InvArticulo.DescripcionLarga AS descripcion,
+        (SELECT SUM(Existencia) FROM InvLoteAlmacen WHERE (InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2) AND InvLoteAlmacen.InvArticuloId = InvArticulo.Id) AS existencia
+      FROM
+      InvArticulo
+      WHERE InvArticulo.Id = (SELECT InvCodigoBarra.InvArticuloId FROM InvCodigoBarra WHERE InvCodigoBarra.CodigoBarra = '$CodigoBarra' AND InvCodigoBarra.EsPrincipal = 1)
+    ";
+
     return $sql;
   }
 ?>

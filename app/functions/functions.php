@@ -1338,6 +1338,9 @@
             case 'Ajustes de inventario':
                 $ruta = '/reporte42';
             break;
+            case 'Traslados':
+                $ruta = '/reporte43';
+            break;
             default:
                 $ruta = '#';
             break;
@@ -1474,6 +1477,9 @@
             break;
             case 42:
                 $nombre = 'Ajustes de inventario';
+            break;
+            case 43:
+                $nombre = 'Traslados';
             break;
             default:
                 $nombre = 'Reporte desconocido';

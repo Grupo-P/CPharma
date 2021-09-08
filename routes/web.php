@@ -228,6 +228,10 @@ Route::get('/reporte42', function() {
     return view('pages.reporte.reporte42');
 });
 
+Route::get('/reporte43', function() {
+    return view('pages.reporte.reporte43');
+});
+
 
 Route::get('/seccion1', function() {
     return view('pages.reporte.seccion1');
@@ -292,6 +296,8 @@ Route::get('/IngresarOrdenCompra', function() {
 Route::get('/DigitalOrdenCompra', function() {
     return view('pages.ordenCompra.digital');
 });
+
+Route::resource('/compras/reclamos', 'ReclamoController');
 
 Route::get('/ConsultorCompra', function() {
     return view('pages.consultorP.consultorCompra');
@@ -491,3 +497,7 @@ Route::get('/reportes/pagos-por-fecha', 'ContReporteController@pagos_por_fecha')
 Route::get('/reportes/reporte-por-cuentas', 'ContReporteController@reporte_por_cuentas');
 
 Route::resource('/conciliaciones', 'ContConciliacionesController');
+
+Route::resource('/trasladoRecibir', 'TrasladoRecibirController');
+Route::get('/trasladoRecibir/{codigo_barra}/{sede}', 'TrasladoRecibirController@edit');
+Route::get('/trasladoRecibir/limpiar', 'TrasladoRecibirController@destroy');
