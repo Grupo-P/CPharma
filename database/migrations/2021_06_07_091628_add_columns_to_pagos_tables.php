@@ -30,11 +30,11 @@ class AddColumnsToPagosTables extends Migration
     public function down()
     {
         Schema::table('cont_pagos_bancarios', function (Blueprint $table) {
-            Schema::dropIfExists('estatus');
+            $table->dropColumn('estatus');
         });
 
         Schema::table('cont_pagos_efectivo', function (Blueprint $table) {
-            Schema::dropIfExists('estatus_conciliaciones');
+            $table->dropColumn('estatus_conciliaciones');
         });
     }
 }

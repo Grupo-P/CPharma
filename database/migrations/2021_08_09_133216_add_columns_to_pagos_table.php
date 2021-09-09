@@ -18,51 +18,39 @@ class AddColumnsToPagosTable extends Migration
         });
 
         Schema::table('cont_pagos_bolivares_fau', function (Blueprint $table) {
-            $table->string('fecha_conciliado')->nullable()->change();
-            $table->string('usuario_conciliado')->nullable()->change();
-            $table->string('tasa')->nullable()->change();
-            $table->string('autorizado_por')->nullable()->change();
-            $table->string('estatus_conciliaciones')->nullable()->change();
-        });
-
-        Schema::table('cont_pagos_bolivares_ftn', function (Blueprint $table) {
-            $table->string('fecha_conciliado')->nullable()->change();
-            $table->string('usuario_conciliado')->nullable()->change();
-            $table->string('tasa')->nullable()->change();
-            $table->string('autorizado_por')->nullable()->change();
-            $table->string('estatus_conciliaciones')->nullable()->change();
-        });
-
-        Schema::table('cont_pagos_bolivares_fll', function (Blueprint $table) {
-            $table->string('fecha_conciliado')->nullable()->change();
-            $table->string('usuario_conciliado')->nullable()->change();
-            $table->string('tasa')->nullable()->change();
-            $table->string('autorizado_por')->nullable()->change();
-            $table->string('estatus_conciliaciones')->nullable()->change();
-        });
-
-        Schema::table('cont_pagos_efectivo_fau', function (Blueprint $table) {
-            $table->string('fecha_conciliado')->nullable()->change();
-            $table->string('usuario_conciliado')->nullable()->change();
-            $table->string('tasa')->nullable()->change();
-            $table->string('autorizado_por')->nullable()->change();
-            $table->string('estatus_conciliaciones')->nullable()->change();
-        });
-
-        Schema::table('cont_pagos_efectivo_ftn', function (Blueprint $table) {
-            $table->string('fecha_conciliado')->nullable()->change();
-            $table->string('usuario_conciliado')->nullable()->change();
-            $table->string('tasa')->nullable()->change();
-            $table->string('autorizado_por')->nullable()->change();
-            $table->string('estatus_conciliaciones')->nullable()->change();
-        });
-
-        Schema::table('cont_pagos_efectivo_fll', function (Blueprint $table) {
-            $table->string('fecha_conciliado')->nullable()->change();
-            $table->string('usuario_conciliado')->nullable()->change();
             $table->string('tasa')->nullable();
             $table->string('autorizado_por')->nullable();
             $table->string('estatus_conciliaciones')->nullable();
+        });
+
+        Schema::table('cont_pagos_bolivares_ftn', function (Blueprint $table) {
+            $table->string('tasa')->nullable();
+            $table->string('autorizado_por')->nullable();
+            $table->string('estatus_conciliaciones')->nullable();
+        });
+
+        Schema::table('cont_pagos_bolivares_fll', function (Blueprint $table) {
+            $table->string('tasa')->nullable();
+            $table->string('autorizado_por')->nullable();
+            $table->string('estatus_conciliaciones')->nullable();
+        });
+
+        Schema::table('cont_pagos_efectivo_fau', function (Blueprint $table) {
+            $table->string('tasa')->nullable();
+            $table->string('autorizado_por')->nullable();
+            $table->string('estatus_conciliaciones')->nullable();
+        });
+
+        Schema::table('cont_pagos_efectivo_ftn', function (Blueprint $table) {
+            $table->string('tasa')->nullable();
+            $table->string('autorizado_por')->nullable();
+            $table->string('estatus_conciliaciones')->nullable();
+        });
+
+        Schema::table('cont_pagos_efectivo_fll', function (Blueprint $table) {
+            $table->string('tasa');
+            $table->string('autorizado_por');
+            $table->string('estatus_conciliaciones');
         });
     }
 

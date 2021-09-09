@@ -30,6 +30,6 @@ class CreateBancosTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('bancos');
+        Schema::dropIfExists('cont_bancos');
     }
 }

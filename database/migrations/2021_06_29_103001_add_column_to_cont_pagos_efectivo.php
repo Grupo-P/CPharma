@@ -26,7 +26,7 @@ class AddColumnToContPagosEfectivo extends Migration
     public function down()
     {
         Schema::table('cont_pagos_efectivo', function (Blueprint $table) {
-            Schema::dropIfExists('tasa');
+            $table->dropColumn('autorizado_por');
         });
     }
 }

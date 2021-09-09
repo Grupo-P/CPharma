@@ -14,38 +14,38 @@ class ContConciliacionesFields extends Migration
     public function up()
     {
         Schema::table('cont_pagos_bancarios', function (Blueprint $table) {
-            $table->string('fecha_conciliado')->nullable;
-            $table->string('usuario_conciliado')->nullable;
+            $table->string('fecha_conciliado')->nullable();
+            $table->string('usuario_conciliado')->nullable();
         });
 
         Schema::table('cont_pagos_bolivares_fau', function (Blueprint $table) {
-            $table->string('fecha_conciliado')->nullable;
-            $table->string('usuario_conciliado')->nullable;
+            $table->string('fecha_conciliado')->nullable();
+            $table->string('usuario_conciliado')->nullable();
         });
 
         Schema::table('cont_pagos_bolivares_ftn', function (Blueprint $table) {
-            $table->string('fecha_conciliado')->nullable;
-            $table->string('usuario_conciliado')->nullable;
+            $table->string('fecha_conciliado')->nullable();
+            $table->string('usuario_conciliado')->nullable();
         });
 
         Schema::table('cont_pagos_bolivares_fll', function (Blueprint $table) {
-            $table->string('fecha_conciliado')->nullable;
-            $table->string('usuario_conciliado')->nullable;
+            $table->string('fecha_conciliado')->nullable();
+            $table->string('usuario_conciliado')->nullable();
         });
 
         Schema::table('cont_pagos_efectivo_fau', function (Blueprint $table) {
-            $table->string('fecha_conciliado')->nullable;
-            $table->string('usuario_conciliado')->nullable;
+            $table->string('fecha_conciliado')->nullable();
+            $table->string('usuario_conciliado')->nullable();
         });
 
         Schema::table('cont_pagos_efectivo_ftn', function (Blueprint $table) {
-            $table->string('fecha_conciliado')->nullable;
-            $table->string('usuario_conciliado')->nullable;
+            $table->string('fecha_conciliado')->nullable();
+            $table->string('usuario_conciliado')->nullable();
         });
 
         Schema::table('cont_pagos_efectivo_fll', function (Blueprint $table) {
-            $table->string('fecha_conciliado')->nullable;
-            $table->string('usuario_conciliado')->nullable;
+            $table->string('fecha_conciliado')->nullable();
+            $table->string('usuario_conciliado')->nullable();
         });
     }
 
