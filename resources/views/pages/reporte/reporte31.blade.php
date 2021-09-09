@@ -799,6 +799,7 @@
 
         if (FG_Mi_Ubicacion() == 'FTN') {
             $componentes = FG_Limpiar_Texto(FG_Componente_Articulo($conn,$id_articulo));
+
             $uso_terapeutico = FG_Limpiar_Texto(FG_Aplicacion_Articulo($conn,$id_articulo));
         }
         else {
@@ -1076,7 +1077,7 @@
   */
   function R31Q_Codificaciones($fechaInicio, $fechaFin) {
     $sql = "
-      SELECT TOP 50
+        SELECT
             InvArticulo.Id AS id_articulo,
             InvArticulo.CodigoArticulo AS codigo_interno,
             (SELECT InvCodigoBarra.CodigoBarra FROM InvCodigoBarra WHERE InvCodigoBarra.InvArticuloId = InvArticulo.Id And InvCodigoBarra.EsPrincipal = 1) AS codigo_barra,
@@ -1099,7 +1100,7 @@
         FROM
             InvArticulo
         WHERE
-            CONVERT(DATE, InvArticulo.Auditoria_FechaCreacion) >= '$fechaInicio' AND CONVERT(DATE, InvArticulo.Auditoria_FechaCreacion) <= '$fechaFin'
+            InvArticulo.Auditoria_FechaCreacion >= '$fechaInicio' AND InvArticulo.Auditoria_FechaCreacion <= '$fechaFin'
         ORDER BY InvArticulo.Id DESC;
     ";
     return $sql;

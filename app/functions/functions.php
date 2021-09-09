@@ -1341,6 +1341,9 @@
             case 'Traslados':
                 $ruta = '/reporte43';
             break;
+            case 'Traslados por llegar':
+                $ruta = '/reporte44';
+            break;
             default:
                 $ruta = '#';
             break;
@@ -1480,6 +1483,9 @@
             break;
             case 43:
                 $nombre = 'Traslados';
+            break;
+            case 44:
+                $nombre = 'Traslados por llegar';
             break;
             default:
                 $nombre = 'Reporte desconocido';

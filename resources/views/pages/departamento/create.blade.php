@@ -156,6 +156,8 @@
             <tr>
                 <th scope="col">43</th>
                 <td scope="col">Traslados</td>
+                <th scope="col">44</th>
+                <td scope="col">Traslados por llegar</td>
             </tr>
         </tbody>
     </table>

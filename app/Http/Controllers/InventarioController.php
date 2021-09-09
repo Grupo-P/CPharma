@@ -39,23 +39,32 @@ class InventarioController extends Controller
               $inventarios =
               Inventario::orderBy('created_at', 'desc')->
               where('estatus','GENERADO')->get();
+
           break;
           case 1:
               $inventarios =
-              Inventario::orderBy('created_at', 'desc')->
-              where('estatus','REVISADO')->get();
+              Inventario::orderBy('created_at', 'desc')
+                ->where('estatus','REVISADO')
+                ->limit(100)
+                ->get();
+
           break;
           case 2:
               $inventarios =
-              Inventario::orderBy('created_at', 'desc')->
-              where('estatus','ANULADO')->get();
+              Inventario::orderBy('created_at', 'desc')
+                ->where('estatus','ANULADO')
+                ->limit(100)
+                ->get();
+
           break;
           default:
               $inventarios =  Inventario::orderBy('created_at', 'desc')
               ->where('estatus','GENERADO')
               ->orWhere('estatus','REVISADO')
               ->orWhere('estatus','ANULADO')
+              ->limit(100)
               ->get();
+
               return view('pages.inventario.index', compact('inventarios'));
           break;
       }
