@@ -104,7 +104,55 @@
 
 	<hr class="row align-items-start col-12">
 
-	<table class="table table-striped table-borderless col-12 sortable">
+    <form autocomplete="off" action="">
+        @php
+            $cantidad = isset($_GET['cantidad']) ? $_GET['cantidad'] : '';
+            $clasificacion = isset($_GET['clasificacion']) ? $_GET['clasificacion'] : '';
+            $fechaInicioUrl = isset($_GET['fechaInicio']) ? $_GET['fechaInicio'] : '';
+            $fechaFinUrl = isset($_GET['fechaFin']) ? $_GET['fechaFin'] : '';
+
+            $selected50 = ($cantidad == '50') ? 'selected' : '';
+            $selected100 = ($cantidad == '100') ? 'selected' : '';
+            $selected200 = ($cantidad == '200') ? 'selected' : '';
+            $selected500 = ($cantidad == '500') ? 'selected' : '';
+            $selected1000 = ($cantidad == '1000') ? 'selected' : '';
+            $selectedTodos = ($cantidad == 'Todos') ? 'selected' : '';
+        @endphp
+
+        <div class="row">
+            <div class="col">Cantidad de registros</div>
+            <div class="col">
+                <select class="form-control form-control-sm" name="cantidad">
+                    <option {{ $selected50 }} value="50">50</option>
+                    <option {{ $selected100 }} value="100">100</option>
+                    <option {{ $selected200 }} value="200">200</option>
+                    <option {{ $selected500 }} value="500">500</option>
+                    <option {{ $selected1000 }} value="1000">1000</option>
+                    <option {{ $selectedTodos }} value="Todos">Todos</option>
+                </select>
+            </div>
+
+            <div class="col">Clasificación</div>
+            <div class="col">
+                <select name="clasificacion" class="form-control form-control-sm">
+                    <option {{ ($clasificacion == 'Todos') ? 'selected' : '' }} value="Todos">Todos</option>
+                    <option {{ ($clasificacion == 'Generado') ? 'selected' : '' }} value="Generado">Generado</option>
+                    <option {{ ($clasificacion == 'Revisado') ? 'selected' : '' }} value="Revisado">Revisado</option>
+                    <option {{ ($clasificacion == 'Anulado') ? 'selected' : '' }} value="Anulado">Anulado</option>
+                </select>
+            </div>
+
+            <div class="col">Fecha inicio</div>
+            <div class="col"><input type="date" value="{{ $fechaInicioUrl }}" class="form-control form-control-sm" name="fechaInicio"></div>
+
+            <div class="col">Fecha final</div>
+            <div class="col"><input type="date" value="{{$fechaFinUrl }}" class="form-control form-control-sm" name="fechaFin"></div>
+
+            <div class="col"><input type="submit" value="Buscar" class="btn btn-sm btn-block btn-outline-success"></div>
+        </div>
+    </form>
+
+	<!--<table class="table table-striped table-borderless col-12 sortable">
   	<thead class="thead-dark">
 	    <tr>
 	      	<th scope="col" colspan="4" style="text-align: center;">CLASIFICACION</th>
@@ -140,7 +188,9 @@
 	    </tr>
 		</tbody>
 	</table>
-	<br>
+	<br>-->
+
+    <hr>
 
 	<table style="width:100%;" class="CP-stickyBar">
 	    <tr>
@@ -179,7 +229,7 @@
 						Aleatorio
 					</a>
         </td>
-	        <td style="width:65%;">
+	        <td style="width:27%;">
 	        	<div class="input-group md-form form-sm form-1 pl-0 CP-stickyBar">
 				  <div class="input-group-prepend">
 				    <span class="input-group-text purple lighten-3" id="basic-text1"><i class="fas fa-search text-white"

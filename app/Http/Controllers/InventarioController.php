@@ -25,50 +25,18 @@ class InventarioController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        if(isset($_GET['Tipo'])){
-            $Tipo = $_GET['Tipo'];
-        }
-        else{
-            $Tipo = 3;
-        }
+        $estado = $request->clasificacion ? $request->clasificacion : 'Todos';
+        $cantidad = $request->cantidad ? $request->cantidad : 50;
 
-        switch ($Tipo) {
-          case 0:
-              $inventarios =
-              Inventario::orderBy('created_at', 'desc')->
-              where('estatus','GENERADO')->get();
+        $inventarios = Inventario::estado($estado)
+            ->fecha($request->fechaInicio, $request->fechaFin)
+            ->limite($cantidad)
+            ->orderByDesc('id')
+            ->get();
 
-          break;
-          case 1:
-              $inventarios =
-              Inventario::orderBy('created_at', 'desc')
-                ->where('estatus','REVISADO')
-                ->limit(100)
-                ->get();
-
-          break;
-          case 2:
-              $inventarios =
-              Inventario::orderBy('created_at', 'desc')
-                ->where('estatus','ANULADO')
-                ->limit(100)
-                ->get();
-
-          break;
-          default:
-              $inventarios =  Inventario::orderBy('created_at', 'desc')
-              ->where('estatus','GENERADO')
-              ->orWhere('estatus','REVISADO')
-              ->orWhere('estatus','ANULADO')
-              ->limit(100)
-              ->get();
-
-              return view('pages.inventario.index', compact('inventarios'));
-          break;
-      }
-      return view('pages.inventario.index', compact('inventarios'));
+        return view('pages.inventario.index', compact('inventarios'));
     }
 
     /**
