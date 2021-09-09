@@ -37,7 +37,7 @@ class Inventario extends Model
 
   public function scopeLimite($query, $limite)
   {
-    if ($limite != '') {
+    if ($limite != 'Todos') {
         $query->limit($limite);
     }
   }
