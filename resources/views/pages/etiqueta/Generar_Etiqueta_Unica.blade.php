@@ -200,7 +200,7 @@
                 return dominio;
             break;
             case 'GP':
-                dominio = 'http://cpharmade.com/';
+                dominio = 'http://cpharmatest.com/';
                 return dominio;
             break;
             case 'ARG':
