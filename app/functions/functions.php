@@ -123,9 +123,11 @@
             break;
         //FIN BLOQUE DE FTN
         //INICIO BLOQUE DE GP
+        /*
             case '10':
                 return 'GP';
             break;
+        */
         //FIN BLOQUE DE GP
         //INICIO BLOQUE DE FLL
             case '7':
@@ -134,7 +136,13 @@
         //FIN BLOQUE DE FLL
         //INICIO BLOQUE DE FAU
             case '12':
-                return 'FAU';
+                if($IpCliente == "192.168.12.36" || $IpCliente == "192.168.12.40"){
+                    return 'DBs';
+                }else if($IpCliente == "192.168.12.30"){
+                    return 'GP';
+                }else{
+                    return 'FAU';
+                }
             break;
         //FIN BLOQUE DE FAU
         //INICIO BLOQUE DE KDI

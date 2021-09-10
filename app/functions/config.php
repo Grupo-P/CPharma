@@ -17,7 +17,8 @@ define("_MensajeDolarLegal_","");
 define ("SedeFTN","FARMACIA TIERRA NEGRA, C.A.");
 define ("SedeFLL","FARMACIA LA LAGO,C.A.");
 define ("SedeFAU","FARMACIA AVENIDA UNIVERSIDAD, C.A.");
-define ("SedeGP","GRUPO P, C.A");
+//define ("SedeGP","GRUPO P, C.A");
+define ("SedeGP","Servidor de Testing");
 define ("SedeDBs","Servidor de Desarrollo Nisaul");
 define ("SedeDBsa","Servidor de Desarrollo Sergio");
 define ("SedeKDI","FARMACIA KD EXPRESS, C.A.");
@@ -79,10 +80,10 @@ define ("passDBsa" , "soporte123");
 define ("nameDBsa" , "cpharmaftn");
 /**********************************************************************************/
 /********************* CONEXION SERVER DESARROLLO GRUPO P **********************/
-define ("serverGP" , "SERGIO-PC");
+define ("serverGP" , "TESTSERVER"); // 192.168.12.30\TESTINGSERVER
 define ("userGP" , "sa");
-define ("passGP" , "soporte123");
-define ("nameGP" , "cpharmaftn");
+define ("passGP" , "pCadm05");
+define ("nameGP" , "SMART");
 /**********************************************************************************/
 /************************* CONEXION ON LINE KDI **********************************/
 define ("serverKDI" , "SERVER-KDI");
