@@ -80,10 +80,10 @@ define ("passDBsa" , "soporte123");
 define ("nameDBsa" , "cpharmaftn");
 /**********************************************************************************/
 /********************* CONEXION SERVER DESARROLLO GRUPO P **********************/
-define ("serverGP" , "TESTSERVER"); // 192.168.12.30\TESTINGSERVER
+define ("serverGP" , "TESTSERVER\TESTINGSERVER"); // 192.168.12.30\TESTINGSERVER
 define ("userGP" , "sa");
 define ("passGP" , "pCadm05");
-define ("nameGP" , "SMART");
+define ("nameGP" , "cpharmaftn");
 /**********************************************************************************/
 /************************* CONEXION ON LINE KDI **********************************/
 define ("serverKDI" , "SERVER-KDI");
