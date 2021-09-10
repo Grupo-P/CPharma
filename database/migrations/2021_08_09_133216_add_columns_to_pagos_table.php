@@ -48,9 +48,9 @@ class AddColumnsToPagosTable extends Migration
         });
 
         Schema::table('cont_pagos_efectivo_fll', function (Blueprint $table) {
-            $table->string('tasa');
-            $table->string('autorizado_por');
-            $table->string('estatus_conciliaciones');
+            $table->string('tasa')->nullable();
+            $table->string('autorizado_por')->nullable();
+            $table->string('estatus_conciliaciones')->nullable();
         });
     }
 
