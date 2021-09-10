@@ -243,6 +243,7 @@
           <tr>
             <th scope="col" class="CP-sticky">#</th>      
             <th scope="col" class="CP-sticky">Codigo</th>
+            <th scope="col" class="CP-sticky">Codigo barra</th>
               <th scope="col" class="CP-sticky">Descripcion</td>
               <th scope="col" class="CP-sticky">Precio</br>(Con IVA) '.SigVe.'</td>
               <th scope="col" class="CP-sticky">Existencia</td>
@@ -339,6 +340,7 @@
       echo '<tr>';
       echo '<td align="center"><strong>'.intval($contador).'</strong></td>';
       echo '<td>'.$row["CodigoArticulo"].'</td>';
+      echo '<td>'.$row1["CodigoBarra"].'</td>';
 
       echo 
       '<td align="left" class="CP-barrido">
