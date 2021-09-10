@@ -190,30 +190,136 @@
       ';
 
     $estado = isset($_GET['estado']) ? $_GET['estado'] : 'PROCESADO';
+    $traslados = [];
 
     if (FG_Mi_Ubicacion() == 'FAU') {
-      $traslado = new compras\TrasladoDetalle();
-      $traslado->setConnection('fll');
-
-      $trasladoFLL = $traslado->whereHas('traslado', function ($query) use ($estado) {
-        $query->where('sede_destino', FG_Nombre_Sede(FG_Mi_Ubicacion()))
-          ->estado($estado);
-      })->with('traslado')->get();
+      $trasladoFLL = DB::connection('fll')->select("
+        SELECT
+            traslados_detalle.codigo_barra AS codigo_barra,
+            traslados_detalle.codigo_interno AS codigo_interno,
+            (SELECT traslados.sede_emisora FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) AS sede_emisora,
+            traslados_detalle.descripcion AS descripcion,
+            traslados_detalle.cantidad AS cantidad,
+            (SELECT traslados.numero_ajuste FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) AS numero_traslado,
+            (SELECT traslados.estatus FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) AS estado
+        FROM
+            traslados_detalle
+        WHERE
+            (SELECT traslados.sede_destino FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) = 'FARMACIA AVENIDA UNIVERSIDAD, C.A.' AND (SELECT traslados.estatus FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) = '$estado'
+        ORDER BY
+            traslados_detalle.id DESC;
+      ");
 
       foreach ($trasladoFLL as $traslado) {
         $traslados[] = $traslado;
       }
 
-
-      $traslado = new compras\TrasladoDetalle();
-      $traslado->setConnection('ftn');
-
-      $trasladoFTN = $traslado->whereHas('traslado', function ($query) use ($estado) {
-        $query->where('sede_destino', FG_Nombre_Sede(FG_Mi_Ubicacion()))
-          ->estado($estado);
-      })->with('traslado')->get();
+      $trasladoFTN = DB::connection('ftn')->select("
+        SELECT
+            traslados_detalle.codigo_barra AS codigo_barra,
+            traslados_detalle.codigo_interno AS codigo_interno,
+            (SELECT traslados.sede_emisora FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) AS sede_emisora,
+            traslados_detalle.descripcion AS descripcion,
+            traslados_detalle.cantidad AS cantidad,
+            (SELECT traslados.numero_ajuste FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) AS numero_traslado,
+            (SELECT traslados.estatus FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) AS estado
+        FROM
+            traslados_detalle
+        WHERE
+            (SELECT traslados.sede_destino FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) = 'FARMACIA AVENIDA UNIVERSIDAD, C.A.' AND (SELECT traslados.estatus FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) = '$estado'
+        ORDER BY
+            traslados_detalle.id DESC;
+      ");
 
       foreach ($trasladoFTN as $traslado) {
+        $traslados[] = $traslado;
+      }
+    }
+
+    if (FG_Mi_Ubicacion() == 'FTN') {
+      $trasladoFLL = DB::connection('fll')->select("
+        SELECT
+            traslados_detalle.codigo_barra AS codigo_barra,
+            traslados_detalle.codigo_interno AS codigo_interno,
+            (SELECT traslados.sede_emisora FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) AS sede_emisora,
+            traslados_detalle.descripcion AS descripcion,
+            traslados_detalle.cantidad AS cantidad,
+            (SELECT traslados.numero_ajuste FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) AS numero_traslado,
+            (SELECT traslados.estatus FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) AS estado
+        FROM
+            traslados_detalle
+        WHERE
+            (SELECT traslados.sede_destino FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) = 'FARMACIA TIERRA NEGRA, C.A.' AND (SELECT traslados.estatus FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) = '$estado'
+        ORDER BY
+            traslados_detalle.id DESC;
+      ");
+
+      foreach ($trasladoFLL as $traslado) {
+        $traslados[] = $traslado;
+      }
+
+      $trasladoFAU = DB::connection('fau')->select("
+        SELECT
+            traslados_detalle.codigo_barra AS codigo_barra,
+            traslados_detalle.codigo_interno AS codigo_interno,
+            (SELECT traslados.sede_emisora FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) AS sede_emisora,
+            traslados_detalle.descripcion AS descripcion,
+            traslados_detalle.cantidad AS cantidad,
+            (SELECT traslados.numero_ajuste FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) AS numero_traslado,
+            (SELECT traslados.estatus FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) AS estado
+        FROM
+            traslados_detalle
+        WHERE
+            (SELECT traslados.sede_destino FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) = 'FARMACIA TIERRA NEGRA, C.A.' AND (SELECT traslados.estatus FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) = '$estado'
+        ORDER BY
+            traslados_detalle.id DESC;
+      ");
+
+      foreach ($trasladoFAU as $traslado) {
+        $traslados[] = $traslado;
+      }
+    }
+
+    if (FG_Mi_Ubicacion() == 'FLL') {
+      $trasladoFTN = DB::connection('ftn')->select("
+        SELECT
+            traslados_detalle.codigo_barra AS codigo_barra,
+            traslados_detalle.codigo_interno AS codigo_interno,
+            (SELECT traslados.sede_emisora FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) AS sede_emisora,
+            traslados_detalle.descripcion AS descripcion,
+            traslados_detalle.cantidad AS cantidad,
+            (SELECT traslados.numero_ajuste FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) AS numero_traslado,
+            (SELECT traslados.estatus FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) AS estado
+        FROM
+            traslados_detalle
+        WHERE
+            (SELECT traslados.sede_destino FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) = 'FARMACIA LA LAGO, C.A.' AND (SELECT traslados.estatus FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) = '$estado'
+        ORDER BY
+            traslados_detalle.id DESC;
+      ");
+
+      foreach ($trasladoFTN as $traslado) {
+        $traslados[] = $traslado;
+      }
+
+      $trasladoFAU = DB::connection('fau')->select("
+        SELECT
+            traslados_detalle.codigo_barra AS codigo_barra,
+            traslados_detalle.codigo_interno AS codigo_interno,
+            (SELECT traslados.sede_emisora FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) AS sede_emisora,
+            traslados_detalle.descripcion AS descripcion,
+            traslados_detalle.cantidad AS cantidad,
+            (SELECT traslados.numero_ajuste FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) AS numero_traslado,
+            (SELECT traslados.estatus FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) AS estado
+        FROM
+            traslados_detalle
+        WHERE
+            (SELECT traslados.sede_destino FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) = 'FARMACIA LA LAGO, C.A.' AND (SELECT traslados.estatus FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) = '$estado'
+        ORDER BY
+            traslados_detalle.id DESC;
+      ");
+
+      foreach ($trasladoFAU as $traslado) {
         $traslados[] = $traslado;
       }
     }
@@ -223,11 +329,11 @@
     foreach ($traslados as $traslado) {
       $codigo_barra = $traslado->codigo_barra;
       $codigo_interno = $traslado->codigo_interno;
-      $sede = $traslado->traslado->sede_emisora;
-      $descripcion = $traslado->traslado->descripcion;
+      $sede = $traslado->sede_emisora;
+      $descripcionOrigen = $traslado->descripcion;
       $cantidad = $traslado->cantidad;
-      $numero_traslado = $traslado->traslado->numero_ajuste;
-      $estado = $traslado->traslado->estatus;
+      $numero_traslado = $traslado->numero_traslado;
+      $estado = $traslado->estado;
 
       $conn = FG_Conectar_Smartpharma(FG_Mi_Ubicacion());
 
@@ -245,8 +351,8 @@
 
       $row = sqlsrv_fetch_array($query, SQLSRV_FETCH_ASSOC);
 
-      $descripcion = FG_Limpiar_Texto($row['descripcion']);
-      $existencia = $row['existencia'];
+      $descripcion = ($row['descripcion']) ? FG_Limpiar_Texto($row['descripcion']) : '-';
+      $existencia = ($row['existencia']) ? $row['existencia'] : '-';
 
       echo '<tr>';
       echo '<td class="text-center">'.$contador.'</td>';
@@ -255,7 +361,7 @@
       echo '<td class="text-center">'.$descripcion.'</td>';
       echo '<td class="text-center">'.$existencia.'</td>';
       echo '<td class="text-center">'.$sede.'</td>';
-      echo '<td class="text-center">'.$descripcion.'</td>';
+      echo '<td class="text-center">'.$descripcionOrigen.'</td>';
       echo '<td class="text-center">'.$cantidad.'</td>';
       echo '<td class="text-center">'.$numero_traslado.'</td>';
       echo '<td class="text-center">'.$estado.'</td>';

@@ -231,9 +231,10 @@
       <thead class="thead-dark">
         <tr>
           <th scope="col" class="CP-sticky">#</th>
-          <th scope="col" class="CP-sticky">Código de barra</th>
+          <th scope="col" class="CP-sticky">Código barra</th>
           <th scope="col" class="CP-sticky">Código interno</th>
           <th scope="col" class="CP-sticky">Descripción</th>
+          <th scope="col" class="CP-sticky">Fecha traslado</th>
           <th scope="col" class="CP-sticky">Cantidad</th>
           <th scope="col" class="CP-sticky">Sede destino</th>
           <th scope="col" class="CP-sticky">Numero de traslado</th>
@@ -260,6 +261,7 @@
       echo '<td class="text-center">'.$traslado->codigo_barra.'</td>';
       echo '<td class="text-center">'.$traslado->codigo_interno.'</td>';
       echo '<td class="text-center">'.$traslado->descripcion.'</td>';
+      echo '<td class="text-center">'.$traslado->created_at->format('d/m/Y').'</td>';
       echo '<td class="text-center">'.$traslado->cantidad.'</td>';
       echo '<td class="text-center">'.$traslado->traslado->sede_destino.'</td>';
       echo '<td class="text-center">'.$traslado->traslado->numero_ajuste.'</td>';
