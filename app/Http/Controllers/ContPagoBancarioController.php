@@ -72,7 +72,7 @@ class ContPagoBancarioController extends Controller
             }
         }
 
-        $sqlProveedores = ContProveedor::whereNull('deleted_at')->get();
+        $sqlProveedores = ContProveedor::whereNull('deleted_at')->orderBy('nombre_proveedor', 'ASC')->get();
         $i              = 0;
         $proveedores    = [];
 
@@ -183,7 +183,7 @@ class ContPagoBancarioController extends Controller
 
         $pago = ContPagoBancario::find($id);
 
-        $sqlProveedores = ContProveedor::whereNull('deleted_at')->get();
+        $sqlProveedores = ContProveedor::whereNull('deleted_at')->orderBy('nombre_proveedor', 'ASC')->get();
         $i              = 0;
         $proveedores    = [];
 
