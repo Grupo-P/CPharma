@@ -263,6 +263,10 @@
             calcular_conversion();
         });
 
+        $('[name=monto_proveedor]').blur(function () {
+            calcular_conversion();
+        });
+
         $('[name=tasa]').keyup(function () {
             calcular_conversion();
         });
