@@ -60,26 +60,25 @@
 	      });
 		});
 
-        function agregarTraslado(codigo_barra, sede, existencia) {
-            cantidad = prompt('Ingrese la cantidad: ');
+        function agregarTraslado(codigo_barra, sede, existencia, bandera = '') {
+            cantidad = prompt('Ingrese la cantidad' + bandera + ': ');
 
             if (!parseInt(cantidad)) {
-                cantidad = prompt('Ingrese la cantidad (Número entero): ');
-                agregarTraslado(codigo_barra, sede, existencia);
+                agregarTraslado(codigo_barra, sede, existencia, ' (sólo números enteros)');
                 return false;
             }
 
             if (parseInt(cantidad) <= 0) {
-                cantidad = prompt('Ingrese la cantidad (Mayor a cero): ');
-                agregarTraslado(codigo_barra, sede, existencia);
+                agregarTraslado(codigo_barra, sede, existencia, ' (número mayor a cero)');
                 return false;
             }
 
             if (parseInt(cantidad) > parseInt(existencia)) {
-                cantidad = prompt('Ingrese la cantidad (Menor a la existencia del artículo): ');
-                agregarTraslado(codigo_barra, sede, existencia);
+                agregarTraslado(codigo_barra, sede, existencia, ' (número menor a existencia)');
                 return false;
             }
+
+            cantidad = parseInt(cantidad);
 
             $.ajax({
                 type: 'POST',
