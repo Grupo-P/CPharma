@@ -255,7 +255,50 @@
 
     <hr class="row align-items-start col-12">
 
-    <h6 align="center">Proveedores con saldo positivo</h6>
+    <table class="table table-bordered col-12 sortable">
+        <thead class="thead-dark">
+          <tr>
+            <th scope="col" colspan="2">Leyenda de colores segun los días de ingreso</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td scope="col" class="bg-white text-dark">
+              <ul>
+                <li>
+                    <span>Las columnas en color blanco o gris representan el rango entre 10 y 15 dias trascurridos (o sin ingreso)</span>
+                </li>
+              </ul>
+              <ul class="bg-success text-white">
+                <li>
+                    <span>Las columnas en color verde representan el rango entre 1 y 10 dias trascurridos</span>
+                </li>
+              </ul>
+            </td>
+            <td>
+                <ul class="bg-warning text-white">
+                <li>
+                    <span>Las columnas en color amarillo representan el rango entre 15 y 30 dias trascurridos</span>
+                </li>
+              </ul>
+              <ul class="bg-danger text-white">
+                <li>
+                    <span>Las columnas en color rojo representan el rango con mas de 30 dias trascurridos</span>
+                </li>
+              </ul>
+            </td>
+          </tr>
+        </tbody>
+    </table>
+
+
+    <table class="table table-striped table-borderless col-12" style="margin-bottom: -10px;">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col" class="CP-sticky">Proveedores con saldo positivo</th>
+            </tr>
+        </thead>
+    </table>
 
     <table class="table table-striped table-borderless col-12 sortable" id="myTable">
         <thead class="thead-dark">
@@ -282,9 +325,22 @@
                     $url = '/reportes/movimientos-por-proveedor?id_proveedor=' . $positivo->id_proveedor . '&fechaInicio=' . $fechaInicio . '&fechaFin=' . $fechaFinal;
 
                     $total_saldo_positivo = $total_saldo_positivo + (float) $positivo->saldoNoFormateado;
+
+                    if (dias_ultimo_ingreso($positivo->id_proveedor) > 0 && dias_ultimo_ingreso($positivo->id_proveedor) <= 10) {
+                        $fondo = 'bg-success';
+                    }
+                    elseif (dias_ultimo_ingreso($positivo->id_proveedor) > 15 && dias_ultimo_ingreso($positivo->id_proveedor) <= 30) {
+                        $fondo = 'bg-warning';
+                    }
+                    elseif (dias_ultimo_ingreso($positivo->id_proveedor) > 30) {
+                        $fondo = 'bg-danger';
+                    }
+                    else {
+                        $fondo = '';
+                    }
                 @endphp
 
-                <tr>
+                <tr class="{{ $fondo }}">
                     <th align="center">{{ $loop->iteration }}</th>
                     <td align="center" class="CP-barrido">
                         <a href="{{ $url }}" style="text-decoration: none; color: black;" target="_blank">{{ $positivo->proveedor }}</a>
@@ -310,11 +366,17 @@
 
     <br>
 
-    <h6 align="center">Proveedores con saldo negativo</h6>
+    <table class="table table-striped table-borderless col-12" style="margin-bottom: -10px;">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col" class="CP-sticky">Proveedores con saldo negativo</th>
+            </tr>
+        </thead>
+    </table>
 
     <table class="table table-striped table-borderless col-12 sortable" id="myTable2">
         <thead class="thead-dark">
-            <tr>
+            <tr class="{{ $fondo }}">
                 <th scope="col" class="CP-sticky">#</th>
                 <th scope="col" class="CP-sticky">Nombre del proveedor</th>
                 <th scope="col" class="CP-sticky">Saldo</th>
@@ -337,9 +399,22 @@
                     $url = '/reportes/movimientos-por-proveedor?id_proveedor=' . $negativo->id_proveedor . '&fechaInicio=' . $fechaInicio . '&fechaFin=' . $fechaFinal;
 
                     $total_saldo_negativo = $total_saldo_negativo + (float) $negativo->saldoNoFormateado;
+
+                    if (dias_ultimo_ingreso($negativo->id_proveedor) > 0 && dias_ultimo_ingreso($negativo->id_proveedor) <= 10) {
+                        $fondo = 'bg-success';
+                    }
+                    elseif (dias_ultimo_ingreso($negativo->id_proveedor) > 15 && dias_ultimo_ingreso($negativo->id_proveedor) <= 30) {
+                        $fondo = 'bg-warning';
+                    }
+                    elseif (dias_ultimo_ingreso($negativo->id_proveedor) > 30) {
+                        $fondo = 'bg-danger';
+                    }
+                    else {
+                        $fondo = '';
+                    }
                 @endphp
 
-                <tr>
+                <tr class="{{ $fondo }}">
                     <th align="center">{{ $loop->iteration}}</th>
                     <td align="center" class="CP-barrido">
                         <a href="{{ $url }}" style="text-decoration: none; color: black;" target="_blank">{{ $negativo->proveedor }}</a>
