@@ -285,8 +285,8 @@ class ContDeudasController extends Controller
             SELECT
                 cont_proveedores.id AS id_proveedor,
                 cont_proveedores.nombre_proveedor AS proveedor,
-                FORMAT(cont_proveedores.saldo, 2, 'en_US') AS saldo,
-                cont_proveedores.saldo AS saldoNoFormateado,
+                FORMAT(cont_pagos_bancarios.monto, 2, 'en_US') AS saldo,
+                cont_pagos_bancarios.monto AS saldoNoFormateado,
                 cont_pagos_bancarios.tasa AS tasa
             FROM
                 cont_pagos_bancarios LEFT JOIN cont_proveedores ON cont_pagos_bancarios.id_proveedor = cont_proveedores.id

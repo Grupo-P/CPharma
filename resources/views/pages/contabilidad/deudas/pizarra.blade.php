@@ -72,7 +72,7 @@
                 FROM
                     cont_pagos_bancarios
                 WHERE
-                    id_proveedor = '{$id_proveedor}' AND estatus != 'Reversado'
+                    id_proveedor = '{$id_proveedor}' AND estatus != 'Reversado' AND estatus != 'Prepagado'
                 ORDER BY
                     created_at DESC
                 LIMIT 1
@@ -155,7 +155,7 @@
                 FROM
                     cont_pagos_bancarios
                 WHERE
-                    id_proveedor = '{$id_proveedor}' AND estatus != 'Reversado'
+                    id_proveedor = '{$id_proveedor}' AND estatus != 'Reversado' AND estatus != 'Prepagado'
                 ORDER BY
                     created_at DESC
                 LIMIT 1
@@ -267,19 +267,19 @@
             <td scope="col" class="bg-white text-dark">
               <ul>
                 <li>
-                    <span>Las columnas en color blanco o gris representan el rango entre 10 y 15 dias trascurridos (o sin ingreso)</span>
+                    <span>Las columnas en color blanco o gris representan el rango entre 0 y 9 dias trascurridos (o sin ingreso)</span>
                 </li>
               </ul>
               <ul class="bg-success text-white">
                 <li>
-                    <span>Las columnas en color verde representan el rango entre 1 y 10 dias trascurridos</span>
+                    <span>Las columnas en color verde representan el rango entre 10 y 19 dias trascurridos</span>
                 </li>
               </ul>
             </td>
             <td>
                 <ul class="bg-warning text-white">
                 <li>
-                    <span>Las columnas en color amarillo representan el rango entre 15 y 30 dias trascurridos</span>
+                    <span>Las columnas en color amarillo representan el rango entre 20 y 29 dias trascurridos</span>
                 </li>
               </ul>
               <ul class="bg-danger text-white">
@@ -327,10 +327,10 @@
 
                     $total_saldo_positivo = $total_saldo_positivo + (float) $positivo->saldoNoFormateado;
 
-                    if (dias_ultimo_ingreso($positivo->id_proveedor) > 0 && dias_ultimo_ingreso($positivo->id_proveedor) <= 10) {
+                    if (dias_ultimo_ingreso($positivo->id_proveedor) >= 10 && dias_ultimo_ingreso($positivo->id_proveedor) <= 19) {
                         $fondo = 'bg-success';
                     }
-                    elseif (dias_ultimo_ingreso($positivo->id_proveedor) > 15 && dias_ultimo_ingreso($positivo->id_proveedor) <= 30) {
+                    elseif (dias_ultimo_ingreso($positivo->id_proveedor) >= 20 && dias_ultimo_ingreso($positivo->id_proveedor) <= 29) {
                         $fondo = 'bg-warning';
                     }
                     elseif (dias_ultimo_ingreso($positivo->id_proveedor) > 30) {
