@@ -281,6 +281,19 @@ class ContDeudasController extends Controller
             ");
         }
 
-        return view('pages.contabilidad.deudas.pizarra', compact('positivos', 'negativos'));
+        $prepagados = DB::select("
+            SELECT
+                cont_proveedores.id AS id_proveedor,
+                cont_proveedores.nombre_proveedor AS proveedor,
+                FORMAT(cont_proveedores.saldo, 2, 'en_US') AS saldo,
+                cont_proveedores.saldo AS saldoNoFormateado,
+                cont_pagos_bancarios.tasa AS tasa
+            FROM
+                cont_pagos_bancarios LEFT JOIN cont_proveedores ON cont_pagos_bancarios.id_proveedor = cont_proveedores.id
+            WHERE
+                cont_pagos_bancarios.estatus = 'Prepagado'
+        ");
+
+        return view('pages.contabilidad.deudas.pizarra', compact('positivos', 'negativos', 'prepagados'));
     }
 }

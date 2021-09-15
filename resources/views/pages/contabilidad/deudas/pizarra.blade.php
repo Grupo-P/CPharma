@@ -228,6 +228,7 @@
 
         $total_saldo_positivo = 0;
         $total_saldo_negativo = 0;
+        $total_saldo_prepagado = 0;
     @endphp
 
     <h1 class="h5 text-info">
@@ -434,6 +435,80 @@
                 <td align="center"></td>
                 <td align="center"><b>Saldo total</b></td>
                 <td align="center"><b>{{ number_format($total_saldo_negativo, 2, ',', '.') }}</b></td>
+            </tr>
+        </tfoot>
+    </table>
+
+    <br>
+
+    <table class="table table-striped table-borderless col-12" style="margin-bottom: -10px;">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col" class="CP-sticky">Prepagados</th>
+            </tr>
+        </thead>
+    </table>
+
+    <table class="table table-striped table-borderless col-12 sortable" id="myTable2">
+        <thead class="thead-dark">
+            <tr class="{{ $fondo }}">
+                <th scope="col" class="CP-sticky">#</th>
+                <th scope="col" class="CP-sticky">Nombre del proveedor</th>
+                <th scope="col" class="CP-sticky">Saldo</th>
+                <th scope="col" class="CP-sticky">Tasa</th>
+                <th scope="col" class="CP-sticky">Fecha último pago</th>
+                <th scope="col" class="CP-sticky">Días último pago</th>
+                <th scope="col" class="CP-sticky">Fecha último ingreso</th>
+                <th scope="col" class="CP-sticky">Días último ingreso</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach($prepagados as $prepagado)
+                @php
+                    $fechaInicio = date_create();
+                    $fechaInicio = date_modify($fechaInicio, '-30day');
+                    $fechaInicio = $fechaInicio->format('Y-m-d');
+
+                    $fechaFinal = date('Y-m-d');
+
+                    $url = '/reportes/movimientos-por-proveedor?id_proveedor=' . $prepagado->id_proveedor . '&fechaInicio=' . $fechaInicio . '&fechaFin=' . $fechaFinal;
+
+                    $total_saldo_prepagado = $total_saldo_prepagado + (float) $prepagado->saldoNoFormateado;
+
+                    if (dias_ultimo_ingreso($prepagado->id_proveedor) > 0 && dias_ultimo_ingreso($prepagado->id_proveedor) <= 10) {
+                        $fondo = 'bg-success';
+                    }
+                    elseif (dias_ultimo_ingreso($prepagado->id_proveedor) > 15 && dias_ultimo_ingreso($prepagado->id_proveedor) <= 30) {
+                        $fondo = 'bg-warning';
+                    }
+                    elseif (dias_ultimo_ingreso($prepagado->id_proveedor) > 30) {
+                        $fondo = 'bg-danger';
+                    }
+                    else {
+                        $fondo = '';
+                    }
+                @endphp
+
+                <tr class="{{ $fondo }}">
+                    <th align="center">{{ $loop->iteration}}</th>
+                    <td align="center" class="CP-barrido">
+                        <a href="{{ $url }}" style="text-decoration: none; color: black;" target="_blank">{{ $prepagado->proveedor }}</a>
+                    </td>
+                    <td align="center">{{ $prepagado->saldo }}</td>
+                    <td align="center">{{ $prepagado->tasa }}</td>
+                    <td align="center">{{ fecha_ultimo_pago($prepagado->id_proveedor) }}</td>
+                    <td align="center">{{ dias_ultimo_pago($prepagado->id_proveedor) }}</td>
+                    <td align="center">{{ fecha_ultimo_ingreso($prepagado->id_proveedor) }}</td>
+                    <td align="center">{{ dias_ultimo_ingreso($prepagado->id_proveedor) }}</td>
+                </tr>
+            @endforeach
+        </tbody>
+
+        <tfoot>
+            <tr>
+                <td align="center"></td>
+                <td align="center"><b>Saldo total</b></td>
+                <td align="center"><b>{{ number_format($total_saldo_prepagado, 2, ',', '.') }}</b></td>
             </tr>
         </tfoot>
     </table>

@@ -35,7 +35,7 @@ class ContConciliacionesController extends Controller
             foreach ($bancarios as $bancario) {
                 $pagos[$i]['id']               = $bancario->id;
                 $pagos[$i]['tipo']             = 'Bancario';
-                $pagos[$i]['emisor']           = $bancario->banco->alias_cuenta;
+                $pagos[$i]['emisor']           = ($bancario->banco) ? $bancario->banco->alias_cuenta : '';
                 $pagos[$i]['nombre_proveedor'] = $bancario->proveedor->nombre_proveedor;
                 $pagos[$i]['ci_proveedor']     = $bancario->proveedor->rif_ci;
                 $pagos[$i]['monto']            = number_format($bancario->monto, 2, ',', '.');
@@ -238,7 +238,7 @@ class ContConciliacionesController extends Controller
             $pago->save();
         }
 
-        $request->session->flash('Saved', 'info');
+        $request->session()->flash('Saved', 'info');
     }
 
     /**

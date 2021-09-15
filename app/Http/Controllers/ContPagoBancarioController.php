@@ -100,6 +100,20 @@ class ContPagoBancarioController extends Controller
      */
     public function store(Request $request)
     {
+        if ($request->prepagado == 'Si') {
+            $monto_proveedor = str_replace('.', '', $request->input('monto_proveedor'));
+            $monto_proveedor = str_replace(',', '.', $monto_proveedor);
+
+            $pago               = new ContPagoBancario();
+            $pago->id_proveedor = $request->input('id_proveedor');
+            $pago->monto        = $monto_proveedor;
+            $pago->estatus      = 'Prepagado';
+            $pago->operador     = auth()->user()->name;
+            $pago->save();
+
+            return redirect('/bancarios')->with('Saved', ' Informacion');
+        }
+
         $monto = str_replace('.', '', $request->input('monto'));
         $monto = str_replace(',', '.', $monto);
 
@@ -179,24 +193,11 @@ class ContPagoBancarioController extends Controller
      */
     public function edit($id)
     {
-        $bancos = ContBanco::whereNull('deleted_at')->orderBy('alias_cuenta')->get();
-
         $pago = ContPagoBancario::find($id);
 
-        $sqlProveedores = ContProveedor::whereNull('deleted_at')->orderBy('nombre_proveedor', 'ASC')->get();
-        $i              = 0;
-        $proveedores    = [];
+        $bancos = ContBanco::whereNull('deleted_at')->orderBy('alias_cuenta')->get();
 
-        foreach ($sqlProveedores as $proveedor) {
-            $proveedores[$i]['label']  = $proveedor->nombre_proveedor . ' | ' . $proveedor->rif_ci;
-            $proveedores[$i]['value']  = $proveedor->nombre_proveedor . ' | ' . $proveedor->rif_ci;
-            $proveedores[$i]['id']     = $proveedor->id;
-            $proveedores[$i]['moneda'] = $proveedor->moneda;
-
-            $i = $i + 1;
-        }
-
-        return view('pages.contabilidad.bancarios.edit', compact('bancos', 'pago', 'proveedores'));
+        return view('pages.contabilidad.bancarios.edit', compact('bancos', 'pago'));
     }
 
     /**
@@ -208,12 +209,68 @@ class ContPagoBancarioController extends Controller
      */
     public function update(Request $request, $id)
     {
+        if ($request->prepagado == 'Si') {
+            $monto_proveedor = str_replace('.', '', $request->input('monto_proveedor'));
+            $monto_proveedor = str_replace(',', '.', $monto_proveedor);
+
+            $pago               = ContPagoBancario::find($id);
+            $pago->id_proveedor = $request->input('id_proveedor');
+            $pago->monto        = $monto_proveedor;
+            $pago->estatus      = 'Prepagado';
+            $pago->operador     = auth()->user()->name;
+            $pago->save();
+
+            return redirect('/bancarios')->with('Saved', ' Informacion');
+        }
+
+        $monto = str_replace('.', '', $request->input('monto'));
+        $monto = str_replace(',', '.', $monto);
+
         $pago               = ContPagoBancario::find($id);
         $pago->id_proveedor = $request->input('id_proveedor');
         $pago->id_banco     = $request->input('id_banco');
-        $pago->monto        = $request->input('monto');
+        $pago->monto        = $monto;
         $pago->comentario   = $request->input('comentario');
+        $pago->tasa         = $request->input('tasa');
+
+        $pago->operador = auth()->user()->name;
+        $pago->estatus  = 'Pagado';
         $pago->save();
+
+        $banco = ContBanco::find($pago->id_banco);
+
+        $proveedor = ContProveedor::find($pago->id_proveedor);
+
+        if ($banco->moneda != $proveedor->moneda) {
+            if ($banco->moneda == 'Dólares' && $proveedor->moneda == 'Bolívares') {
+                $monto = $pago->monto * $pago->tasa;
+            }
+
+            if ($banco->moneda == 'Dólares' && $proveedor->moneda == 'Pesos') {
+                $monto = $pago->monto * $pago->tasa;
+            }
+
+            if ($banco->moneda == 'Bolívares' && $proveedor->moneda == 'Dólares') {
+                $monto = $pago->monto / $pago->tasa;
+            }
+
+            if ($banco->moneda == 'Bolívares' && $proveedor->moneda == 'Pesos') {
+                $monto = $pago->monto * $pago->tasa;
+            }
+
+            if ($banco->moneda == 'Pesos' && $proveedor->moneda == 'Bolívares') {
+                $monto = $pago->monto / $pago->tasa;
+            }
+
+            if ($banco->moneda == 'Pesos' && $proveedor->moneda == 'Dólares') {
+                $monto = $pago->monto / $pago->tasa;
+            }
+        } else {
+            $monto = $pago->monto;
+        }
+
+        $proveedor->saldo = (float) $proveedor->saldo - (float) $monto;
+        $proveedor->save();
 
         $auditoria           = new Auditoria();
         $auditoria->accion   = 'EDITAR';
