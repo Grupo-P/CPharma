@@ -117,12 +117,13 @@ class ContPagoBancarioController extends Controller
         $monto = str_replace('.', '', $request->input('monto'));
         $monto = str_replace(',', '.', $monto);
 
-        $pago               = new ContPagoBancario();
-        $pago->id_proveedor = $request->input('id_proveedor');
-        $pago->id_banco     = $request->input('id_banco');
-        $pago->monto        = $monto;
-        $pago->comentario   = $request->input('comentario');
-        $pago->tasa         = $request->input('tasa');
+        $pago                  = new ContPagoBancario();
+        $pago->id_proveedor    = $request->input('id_proveedor');
+        $pago->id_banco        = $request->input('id_banco');
+        $pago->monto           = $monto;
+        $pago->monto_proveedor = $request->input('monto_proveedor');
+        $pago->comentario      = $request->input('comentario');
+        $pago->tasa            = $request->input('tasa');
 
         $pago->operador = auth()->user()->name;
         $pago->estatus  = 'Pagado';

@@ -25,6 +25,34 @@ class AddIvaColumns extends Migration
         Schema::table('cont_reclamos', function (Blueprint $table) {
             $table->string('monto_iva')->default(0);
         });
+
+        Schema::table('cont_pagos_bancarios', function (Blueprint $table) {
+            $table->string('monto_proveedor')->default(0);
+        });
+
+        Schema::table('cont_pagos_efectivo_ftn', function (Blueprint $table) {
+            $table->string('monto_proveedor')->default(0);
+        });
+
+        Schema::table('cont_pagos_efectivo_fau', function (Blueprint $table) {
+            $table->string('monto_proveedor')->default(0);
+        });
+
+        Schema::table('cont_pagos_efectivo_fll', function (Blueprint $table) {
+            $table->string('monto_proveedor')->default(0);
+        });
+
+        Schema::table('cont_pagos_bolivares_ftn', function (Blueprint $table) {
+            $table->string('monto_proveedor')->default(0);
+        });
+
+        Schema::table('cont_pagos_bolivares_fau', function (Blueprint $table) {
+            $table->string('monto_proveedor')->default(0);
+        });
+
+        Schema::table('cont_pagos_bolivares_fll', function (Blueprint $table) {
+            $table->string('monto_proveedor')->default(0);
+        });
     }
 
     /**
@@ -55,6 +83,12 @@ class AddIvaColumns extends Migration
         if (Schema::hasColumn('cont_reclamos', 'monto_iva')) {
             Schema::table('cont_reclamos', function (Blueprint $table) {
                 $table->dropColumn('monto_iva');
+            });
+        }
+
+        if (Schema::hasColumn('cont_pagos_bancarios', 'monto_proveedor')) {
+            Schema::table('cont_pagos_bancarios', function (Blueprint $table) {
+                $table->dropColumn('monto_proveedor');
             });
         }
     }

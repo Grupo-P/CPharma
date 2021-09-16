@@ -5,7 +5,7 @@ namespace compras\Http\Controllers;
 use compras\Auditoria;
 use compras\Configuracion;
 use compras\ContCuenta;
-use compras\ContPagoEfectivoFLL AS ContPagoEfectivo;
+use compras\ContPagoEfectivoFLL as ContPagoEfectivo;
 use compras\ContProveedor;
 use compras\Sede;
 use Illuminate\Http\Request;
@@ -109,7 +109,7 @@ class ContPagoEfectivoFLLController extends Controller
                     $pago->egresos = $request->input('monto');
                     $configuracion->valor -= $request->input('monto');
                     $pago->concepto = $request->input('concepto');
-                    $pago->estatus = 'PAGADO';
+                    $pago->estatus  = 'PAGADO';
                     break;
                 case "Diferido":
                     $pago->diferido_anterior = $configuracion2->valor;
@@ -151,8 +151,9 @@ class ContPagoEfectivoFLLController extends Controller
                 $pago->tasa = $request->input('tasa');
             }
 
-            $pago->saldo_actual = $configuracion->valor;
-            $pago->user         = auth()->user()->name;
+            $pago->saldo_actual    = $configuracion->valor;
+            $pago->monto_proveedor = $request->input('monto_proveedor');
+            $pago->user            = auth()->user()->name;
 
             $pago->save();
             $configuracion->save();
