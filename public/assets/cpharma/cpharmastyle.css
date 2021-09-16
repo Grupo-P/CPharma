@@ -140,6 +140,12 @@
   	background-color: white;
 	}
 
+    .CP-sticky-H {
+      position: sticky;
+      left: 0;
+      background-color: white;
+    }
+
 	.CP-sticky {
   	position: -webkit-sticky; /* Safari */
 	 	position: sticky;

@@ -19,5 +19,12 @@
         @include('includes.footer')
     </footer>
         @yield('scriptsFoot')
+        <script>
+            document.addEventListener('keydown', function (event) {
+                if (event.keyCode == 13) {
+                    event.preventDefault();
+                }
+            });
+        </script>
   </body>
 </html>

@@ -62,7 +62,7 @@ class ContPagoBolivaresFAUController extends Controller
             ->get();
 
         if ($request->get('tipo') == 'proveedores') {
-            $sqlProveedores = ContProveedor::whereNull('deleted_at')->get();
+            $sqlProveedores = ContProveedor::whereNull('deleted_at')->orderBy('nombre_proveedor', 'ASC')->get();
             $i              = 0;
 
             foreach ($sqlProveedores as $proveedor) {

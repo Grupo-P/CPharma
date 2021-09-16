@@ -33,7 +33,7 @@ class ContReclamoController extends Controller
         $documentos = Configuracion::where('variable', 'Documento deuda')->first();
         $documentos = explode(',', $documentos->valor);
 
-        $sqlProveedores = ContProveedor::whereNull('deleted_at')->get();
+        $sqlProveedores = ContProveedor::whereNull('deleted_at')->orderBy('nombre_proveedor', 'ASC')->get();
         $i              = 0;
 
         foreach ($sqlProveedores as $proveedor) {
@@ -105,7 +105,7 @@ class ContReclamoController extends Controller
         $documentos = Configuracion::where('variable', 'Documento deuda')->first();
         $documentos = explode(',', $documentos->valor);
 
-        $sqlProveedores = ContProveedor::whereNull('deleted_at')->get();
+        $sqlProveedores = ContProveedor::whereNull('deleted_at')->orderBy('nombre_proveedor', 'ASC')->get();
         $i              = 0;
 
         foreach ($sqlProveedores as $proveedor) {

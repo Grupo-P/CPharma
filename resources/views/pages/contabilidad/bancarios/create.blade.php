@@ -72,6 +72,20 @@
 
             <tbody>
                 <tr>
+                  <th scope="row">{!! Form::label('prepagado', 'Prepagado?', ['title' => 'Este campo es requerido']) !!}</th>
+                  <td>
+                    <div class="custom-control custom-radio custom-control-inline">
+                      <input onchange="inputs(this)" type="radio" class="movimiento-radio custom-control-input" id="prepagado1" name="prepagado" value="Si" required>
+                      <label class="custom-control-label" for="prepagado1">Si</label>
+                    </div>
+
+                    <div class="custom-control custom-radio custom-control-inline">
+                      <input onchange="inputs(this)" type="radio" checked class="movimiento-radio custom-control-input" id="prepagado2" name="prepagado" value="No" required>
+                      <label class="custom-control-label" for="prepagado2">No</label>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
                     <th scope="row">
                         <label for="nombre_proveedor">
                             Nombre del proveedor *
@@ -210,6 +224,16 @@
     });
 
     $('#exampleModalCenter').modal('show');
+
+    function inputs(that) {
+        if (that.value == 'Si') {
+            $('[name=id_banco]').attr('required', false);
+        }
+
+        if (that.value == 'No') {
+            $('[name=id_banco]').attr('required', true);
+        }
+    }
 </script>
 @endsection
 
@@ -257,9 +281,15 @@
 
             moneda_banco = $('option:selected').attr('data-banco-moneda');
             $('[name=moneda_banco]').val(moneda_banco);
+
+            calcular_conversion();
         });
 
         $('[name=monto_proveedor]').keyup(function () {
+            calcular_conversion();
+        });
+
+        $('[name=monto_proveedor]').blur(function () {
             calcular_conversion();
         });
 

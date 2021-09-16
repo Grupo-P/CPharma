@@ -27,7 +27,7 @@ class ContAjusteController extends Controller
      */
     public function create()
     {
-        $sqlProveedores = ContProveedor::whereNull('deleted_at')->get();
+        $sqlProveedores = ContProveedor::whereNull('deleted_at')->orderBy('nombre_proveedor', 'ASC')->get();
         $i              = 0;
 
         foreach ($sqlProveedores as $proveedor) {
@@ -94,7 +94,7 @@ class ContAjusteController extends Controller
     {
         $ajuste = ContAjuste::find($id);
 
-        $sqlProveedores = ContProveedor::whereNull('deleted_at')->get();
+        $sqlProveedores = ContProveedor::whereNull('deleted_at')->orderBy('nombre_proveedor', 'ASC')->get();
         $i              = 0;
 
         foreach ($sqlProveedores as $proveedor) {

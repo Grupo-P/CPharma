@@ -53,7 +53,7 @@ class ContDeudasController extends Controller
         $documentos = Configuracion::where('variable', 'Documento deuda')->first();
         $documentos = explode(',', $documentos->valor);
 
-        $sqlProveedores = ContProveedor::whereNull('deleted_at')->get();
+        $sqlProveedores = ContProveedor::whereNull('deleted_at')->orderBy('nombre_proveedor', 'ASC')->get();
         $i              = 0;
 
         foreach ($sqlProveedores as $proveedor) {
@@ -125,7 +125,7 @@ class ContDeudasController extends Controller
         $documentos = Configuracion::where('variable', 'Documento deuda')->first();
         $documentos = explode(',', $documentos->valor);
 
-        $sqlProveedores = ContProveedor::whereNull('deleted_at')->get();
+        $sqlProveedores = ContProveedor::whereNull('deleted_at')->orderBy('nombre_proveedor', 'ASC')->get();
         $i              = 0;
 
         foreach ($sqlProveedores as $proveedor) {
@@ -281,6 +281,19 @@ class ContDeudasController extends Controller
             ");
         }
 
-        return view('pages.contabilidad.deudas.pizarra', compact('positivos', 'negativos'));
+        $prepagados = DB::select("
+            SELECT
+                cont_proveedores.id AS id_proveedor,
+                cont_proveedores.nombre_proveedor AS proveedor,
+                FORMAT(cont_pagos_bancarios.monto, 2, 'en_US') AS saldo,
+                cont_pagos_bancarios.monto AS saldoNoFormateado,
+                cont_pagos_bancarios.tasa AS tasa
+            FROM
+                cont_pagos_bancarios LEFT JOIN cont_proveedores ON cont_pagos_bancarios.id_proveedor = cont_proveedores.id
+            WHERE
+                cont_pagos_bancarios.estatus = 'Prepagado'
+        ");
+
+        return view('pages.contabilidad.deudas.pizarra', compact('positivos', 'negativos', 'prepagados'));
     }
 }

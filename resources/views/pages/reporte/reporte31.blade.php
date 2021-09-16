@@ -732,6 +732,39 @@
       <hr>
       <h4 align="center">Codificaciones</h4>
       <hr>
+      <table class="table table-striped table-bordered col-12 sortable">
+        <thead class="thead-dark">
+          <tr>
+            <th scope="col" class="CP-sticky">Reglamento de estandarización de nombres de misceláneos</th>
+            <th scope="col" class="CP-sticky">Reglamento de estandarización de nombres de medicamentos</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Tipo de Producto (en singular) + Nombre Comercial  + Tipo o Variante + Peso o Contenido + Marca (Opcional)</td>
+            <td>Molécula o Nombre Comercial + Concentración + Tipo o Variantes + Contenido o Cantidad + Marca o Laboratorio</td>
+          </tr>
+          <tr>
+            <td>Ejemplo: Galleta Oreo Chocolate 36 gramos</td>
+            <td>Ejemplo: Acetaminofén 500mg Tabletas x 10 Pfizer</td>
+          </tr>
+          <tr>
+            <td colspan="2">
+                <b>NOTAS:</b><br>
+
+                <ul>
+                    <li>No abreviar palabras claves (tableta, chocolate, jarabe, etc.) y usar todos los conectores de palabras (de, con, para, etc.)</li>
+                    <li>En el caso de artículos lideres se puede obviar el Tipo</li>
+                    <li>En el caso de medicamentos es valido colocar entre paréntesis artículos referenciales</li>
+                    <li>Obviar caracteres especiales y acentos exceptuando la ñ</li>
+                    <li>Cualquier información adicional es aceptada siempre y cuando se cumpla con el objetivo de una descripción clara y completa</li>
+                    <li>La descripción física del articulo siempre predomina sobre cualquier criterio</li>
+                </ul>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <br>
       <table class="table table-striped table-bordered col-12 sortable" id="myTable">
         <thead class="thead-dark">
           <tr>

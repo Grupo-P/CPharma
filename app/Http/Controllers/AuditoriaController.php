@@ -5,6 +5,7 @@ namespace compras\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use compras\Auditoria;
+use compras\Departamento;
 use compras\User;
 
 class AuditoriaController extends Controller
@@ -32,11 +33,7 @@ class AuditoriaController extends Controller
         $acciones = Auditoria::select('accion')->groupBy('accion')->get();
         $registros = Auditoria::select('registro')->where('tabla','=','REPORTE')->groupBy('registro')->get();
 
-        $departamentos = Auditoria::select('departamentos.nombre')
-        ->leftJoin('users', 'users.name', '=', 'auditorias.user')
-        ->leftJoin('departamentos', 'departamentos.nombre', '=', 'users.departamento')        
-        ->where('departamentos.nombre','!=','')
-        ->groupBy('departamentos.nombre')->get();
+        $departamentos = Departamento::orderBy('nombre')->get();
 
         $Auditoria = new Auditoria();
         $Auditoria->accion = 'CONSULTAR';
@@ -120,11 +117,7 @@ class AuditoriaController extends Controller
         $acciones = Auditoria::select('accion')->groupBy('accion')->get();
         $registros = Auditoria::select('registro')->where('tabla','=','REPORTE')->groupBy('registro')->get();
 
-        $departamentos = Auditoria::select('departamentos.nombre')
-        ->leftJoin('users', 'users.name', '=', 'auditorias.user')
-        ->leftJoin('departamentos', 'departamentos.nombre', '=', 'users.departamento')        
-        ->where('departamentos.nombre','!=','')
-        ->groupBy('departamentos.nombre')->get();
+        $departamentos = Departamento::orderBy('nombre')->get();
 
         $Auditoria = new Auditoria();
         $Auditoria->accion = 'CONSULTAR';
