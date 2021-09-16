@@ -110,7 +110,7 @@
                     </tr>
 
                     <tr>
-                        <th scope="row"><label for="moneda">Moneda *</label></th>
+                        <th scope="row"><label for="moneda">Moneda deuda *</label></th>
                         <td>
                             <select required name="moneda" class="form-control">
                                 <option value=""></option>
@@ -122,8 +122,25 @@
                     </tr>
 
                     <tr>
-                        <th scope="row"><label for="saldo">Saldo</label></th>
+                        <th scope="row"><label for="saldo">Saldo deuda</label></th>
                         <td><input name="saldo" value="{{ number_format($proveedor->saldo, 2, '.', '') }}" class="form-control" type="number" step="0.01" readonly></td>
+                    </tr>
+
+                    <tr>
+                        <th scope="row"><label for="moneda_iva">Moneda IVA</label></th>
+                        <td>
+                            <select name="moneda_iva" class="form-control">
+                                <option value=""></option>
+                                @foreach($monedas as $moneda)
+                                    <option {{ ($moneda == $proveedor->moneda_iva) ? 'selected' : '' }} value="{{ $moneda }}">{{ $moneda }}</option>
+                                @endforeach
+                            </select>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <th scope="row"><label for="saldo_iva">Saldo IVA</label></th>
+                        <td><input name="saldo_iva" value="{{ number_format($proveedor->saldo_iva, 2, '.', '') }}" class="form-control" type="number" step="0.01" readonly></td>
                     </tr>
                 </tbody>
             </table>

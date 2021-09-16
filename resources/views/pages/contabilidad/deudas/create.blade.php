@@ -58,8 +58,13 @@
                     </tr>
 
                     <tr>
-                        <th scope="row"><label for="moneda">Moneda *</label></th>
+                        <th scope="row"><label for="moneda">Moneda deuda</label></th>
                         <td><input name="moneda" readonly class="form-control" required></td>
+                    </tr>
+
+                    <tr>
+                        <th scope="row"><label for="moneda_iva">Moneda IVA</label></th>
+                        <td><input name="moneda_iva" readonly class="form-control" required></td>
                     </tr>
 
                     <tr>
@@ -67,6 +72,18 @@
                         <td>
                             <input type="number" required class="form-control" name="monto" min="0.01" step="0.01">
                         </td>
+                    </tr>
+
+                    <tr>
+                        <th scope="row"><label for="monto_iva">Monto IVA</label></th>
+                        <td>
+                            <input type="number" class="form-control" name="monto_iva" min="0.01" step="0.01">
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <th scope="row"><label for="monto_total">Monto total</label></th>
+                        <td><input name="monto_total" readonly class="form-control" required></td>
                     </tr>
 
                     <tr>
@@ -95,7 +112,7 @@
                                     <option value="{{ $sede->razon_social }}">{{ $sede->razon_social }}</option>
                                 @endforeach
                                 <option value="DROGERÍA EDA, C.A">DROGERÍA EDA, C.A</option>
-                                <option value="DROGERÍA EDA, C.A">DROGERÍA YAMAR, C.A</option>
+                                <option value="DROGERÍA YAMAR, C.A">DROGERÍA YAMAR, C.A</option>
                             </select>
                         </td>
                     </tr>
@@ -139,6 +156,7 @@
                 select: function (event, ui) {
                     $('[name=id_proveedor]').val(ui.item.id);
                     $('[name=moneda]').val(ui.item.moneda);
+                    $('[name=moneda_iva]').val(ui.item.moneda_iva);
                 }
             });
 
@@ -180,6 +198,42 @@
                         }
                     }
                 })
+            });
+
+            function calcular_monto_total() {
+                monto = $('[name=monto]').val();
+                monto = parseFloat(monto);
+
+                if (!monto) {
+                    monto = 0;
+                }
+
+                monto_iva = $('[name=monto_iva]').val();
+                monto_iva = parseFloat(monto_iva);
+
+                if (!monto_iva) {
+                    monto_iva = 0;
+                }
+
+                monto_total = monto + monto_iva;
+
+                $('[name=monto_total]').val(monto_total);
+            }
+
+            $('[name=monto]').change(function () {
+                calcular_monto_total();
+            });
+
+            $('[name=monto_iva]').change(function () {
+                calcular_monto_total();
+            });
+
+            $('[name=monto]').keyup(function () {
+                calcular_monto_total();
+            });
+
+            $('[name=monto_iva]').keyup(function () {
+                calcular_monto_total();
             });
         });
     </script>

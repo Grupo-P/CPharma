@@ -19,6 +19,8 @@ class ContProveedor extends Model
         'plan_cuenta',
         'moneda',
         'saldo',
+        'moneda_iva',
+        'saldo_iva',
         'usuario_creado',
         'created_at',
         'updated_at'

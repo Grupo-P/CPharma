@@ -8,8 +8,8 @@ use compras\ContDeuda;
 use compras\ContProveedor;
 use compras\Sede;
 use compras\User;
-use Illuminate\Http\Request;
 use DB;
+use Illuminate\Http\Request;
 
 class ContDeudasController extends Controller
 {
@@ -57,10 +57,11 @@ class ContDeudasController extends Controller
         $i              = 0;
 
         foreach ($sqlProveedores as $proveedor) {
-            $proveedores[$i]['label']  = $proveedor->nombre_proveedor . ' | ' . $proveedor->rif_ci;
-            $proveedores[$i]['value']  = $proveedor->nombre_proveedor . ' | ' . $proveedor->rif_ci;
-            $proveedores[$i]['id']     = $proveedor->id;
-            $proveedores[$i]['moneda'] = $proveedor->moneda;
+            $proveedores[$i]['label']      = $proveedor->nombre_proveedor . ' | ' . $proveedor->rif_ci;
+            $proveedores[$i]['value']      = $proveedor->nombre_proveedor . ' | ' . $proveedor->rif_ci;
+            $proveedores[$i]['id']         = $proveedor->id;
+            $proveedores[$i]['moneda']     = $proveedor->moneda;
+            $proveedores[$i]['moneda_iva'] = $proveedor->moneda_iva;
 
             $i = $i + 1;
         }
@@ -81,6 +82,7 @@ class ContDeudasController extends Controller
         $deuda                          = new ContDeuda();
         $deuda->id_proveedor            = $request->input('id_proveedor');
         $deuda->monto                   = $request->input('monto');
+        $deuda->monto_iva               = $request->input('monto_iva');
         $deuda->documento_soporte_deuda = $request->input('documento_soporte_deuda');
         $deuda->numero_documento        = $request->input('numero_documento');
         $deuda->usuario_registro        = auth()->user()->name;
@@ -88,8 +90,9 @@ class ContDeudasController extends Controller
         $deuda->dias_credito            = $request->input('dias_credito');
         $deuda->save();
 
-        $proveedor        = ContProveedor::find($request->input('id_proveedor'));
-        $proveedor->saldo = (float) $proveedor->saldo + (float) $deuda->monto;
+        $proveedor            = ContProveedor::find($request->input('id_proveedor'));
+        $proveedor->saldo     = (float) $proveedor->saldo + (float) $deuda->monto;
+        $proveedor->saldo_iva = (float) $proveedor->saldo_iva + (float) $deuda->monto_iva;
         $proveedor->save();
 
         $auditoria           = new Auditoria();
@@ -183,8 +186,9 @@ class ContDeudasController extends Controller
         $deuda->deleted_at = date('Y-m-d h:i:s');
         $deuda->save();
 
-        $proveedor        = ContProveedor::find($deuda->id_proveedor);
-        $proveedor->saldo = (float) $proveedor->saldo - (float) $deuda->monto;
+        $proveedor            = ContProveedor::find($deuda->id_proveedor);
+        $proveedor->saldo     = (float) $proveedor->saldo - (float) $deuda->monto;
+        $proveedor->saldo_iva = (float) $proveedor->saldo_iva - (float) $deuda->monto_iva;
         $proveedor->save();
 
         $auditoria           = new Auditoria();
