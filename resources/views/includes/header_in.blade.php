@@ -320,13 +320,6 @@
     </button>
     <div class="dropdown-menu">
       <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="{{ url('/MenuArticulosExcel') }}">
-          <span data-feather="home"></span>
-          <i class="fas fa-file-excel"></i>
-          Menu Articulos Excel<span class="sr-only">(current)</span>
-        </a>
-      </li>
-      <li class="nav-item">
         <a class="nav-link CP-Links-Menu" href="{{ url('categoria') }}">
           <span data-feather="home"></span>
           <i class="fas fa-tag"></i>
@@ -1139,13 +1132,6 @@
       <i class="fas fa-store"></i> Mercadeo
     </button>
     <div class="dropdown-menu">
-      <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="{{ url('/MenuArticulosExcel') }}">
-          <span data-feather="home"></span>
-          <i class="fas fa-file-excel"></i>
-          Menu Articulos Excel<span class="sr-only">(current)</span>
-        </a>
-      </li>
       <li class="nav-item">
         <a class="nav-link CP-Links-Menu" href="{{ url('categoria') }}">
           <span data-feather="home"></span>

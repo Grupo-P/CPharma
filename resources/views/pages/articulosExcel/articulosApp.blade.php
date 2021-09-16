@@ -67,13 +67,14 @@
 
      //Condicion Utilidad
      if($condicionUtilidad!="TODOS"){
-        $utilidad = round(($condicionUtilidad/100),2);
+        //$utilidad = round(($condicionUtilidad/100),2);
+        $utilidad = round(( (100-$condicionUtilidad) /100),2);
         $condicionUtilidad = " AND (ROUND(CAST(1-((ISNULL(ROUND(CAST((SELECT VenCondicionVenta.PorcentajeUtilidad
         FROM VenCondicionVenta
         WHERE VenCondicionVenta.id = (
           SELECT VenCondicionVenta_VenCondicionVentaCategoria.Id
           FROM VenCondicionVenta_VenCondicionVentaCategoria
-          WHERE VenCondicionVenta_VenCondicionVentaCategoria.InvCategoriaId = InvArticulo.InvCategoriaId)) AS DECIMAL(38,4)),2,0),CAST(0 AS INT)))/100)AS DECIMAL(38,4)),2,0) = '$utilidad')";
+          WHERE VenCondicionVenta_VenCondicionVentaCategoria.InvCategoriaId = InvArticulo.InvCategoriaId)) AS DECIMAL(38,4)),2,0),CAST(0 AS INT)))/100)AS DECIMAL(38,4)),2,0) <= '$utilidad')";
     }
     else if($condicionUtilidad=="TODOS"){
         $condicionUtilidad = "";
