@@ -34,8 +34,9 @@ class ContPagoBancarioController extends Controller
     {
         if ($request->ajax()) {
             if ($request->proveedor == 1) {
-                $proveedores          = ContProveedor::find($request->id_proveedor);
-                $proveedores['saldo'] = number_format($proveedores->saldo, 2, ',', '.');
+                $proveedores              = ContProveedor::find($request->id_proveedor);
+                $proveedores['saldo']     = number_format($proveedores->saldo, 2, ',', '.');
+                $proveedores['saldo_iva'] = number_format($proveedores->saldo_iva, 2, ',', '.');
                 return $proveedores;
             }
 
@@ -77,12 +78,14 @@ class ContPagoBancarioController extends Controller
         $proveedores    = [];
 
         foreach ($sqlProveedores as $proveedor) {
-            $proveedores[$i]['label']  = $proveedor->nombre_proveedor . ' | ' . $proveedor->rif_ci;
-            $proveedores[$i]['value']  = $proveedor->nombre_proveedor . ' | ' . $proveedor->rif_ci;
-            $proveedores[$i]['id']     = $proveedor->id;
-            $proveedores[$i]['moneda'] = $proveedor->moneda;
-            $proveedores[$i]['tasa']   = $proveedor->tasa;
-            $proveedores[$i]['saldo']  = number_format($proveedor->saldo, 2, ',', '');
+            $proveedores[$i]['label']      = $proveedor->nombre_proveedor . ' | ' . $proveedor->rif_ci;
+            $proveedores[$i]['value']      = $proveedor->nombre_proveedor . ' | ' . $proveedor->rif_ci;
+            $proveedores[$i]['id']         = $proveedor->id;
+            $proveedores[$i]['moneda']     = $proveedor->moneda;
+            $proveedores[$i]['moneda_iva'] = $proveedor->moneda_iva;
+            $proveedores[$i]['tasa']       = $proveedor->tasa;
+            $proveedores[$i]['saldo']      = number_format($proveedor->saldo, 2, ',', '');
+            $proveedores[$i]['saldo_iva']  = number_format($proveedor->saldo_iva, 2, ',', '');
 
             $i = $i + 1;
         }

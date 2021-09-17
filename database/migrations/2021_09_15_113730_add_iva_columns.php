@@ -91,5 +91,41 @@ class AddIvaColumns extends Migration
                 $table->dropColumn('monto_proveedor');
             });
         }
+
+        if (Schema::hasColumn('cont_pagos_efectivo_ftn', 'monto_proveedor')) {
+            Schema::table('cont_pagos_efectivo_ftn', function (Blueprint $table) {
+                $table->dropColumn('monto_proveedor');
+            });
+        }
+
+        if (Schema::hasColumn('cont_pagos_efectivo_fau', 'monto_proveedor')) {
+            Schema::table('cont_pagos_efectivo_fau', function (Blueprint $table) {
+                $table->dropColumn('monto_proveedor');
+            });
+        }
+
+        if (Schema::hasColumn('cont_pagos_efectivo_fll', 'monto_proveedor')) {
+            Schema::table('cont_pagos_efectivo_fll', function (Blueprint $table) {
+                $table->dropColumn('monto_proveedor');
+            });
+        }
+
+        if (Schema::hasColumn('cont_pagos_bolivares_ftn', 'monto_proveedor')) {
+            Schema::table('cont_pagos_bolivares_ftn', function (Blueprint $table) {
+                $table->dropColumn('monto_proveedor');
+            });
+        }
+
+        if (Schema::hasColumn('cont_pagos_bolivares_fau', 'monto_proveedor')) {
+            Schema::table('cont_pagos_bolivares_fau', function (Blueprint $table) {
+                $table->dropColumn('monto_proveedor');
+            });
+        }
+
+        if (Schema::hasColumn('cont_pagos_bolivares_fll', 'monto_proveedor')) {
+            Schema::table('cont_pagos_bolivares_fll', function (Blueprint $table) {
+                $table->dropColumn('monto_proveedor');
+            });
+        }
     }
 }

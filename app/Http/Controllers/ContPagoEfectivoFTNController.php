@@ -149,10 +149,11 @@ class ContPagoEfectivoFTNController extends Controller
                 $proveedor->save();
 
                 $pago->tasa = $request->input('tasa');
+
+                $pago->monto_proveedor = $request->input('monto_proveedor');
             }
 
             $pago->saldo_actual    = $configuracion->valor;
-            $pago->monto_proveedor = $request->input('monto_proveedor');
             $pago->user            = auth()->user()->name;
 
             $pago->save();
