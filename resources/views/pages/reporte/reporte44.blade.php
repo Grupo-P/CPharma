@@ -124,6 +124,8 @@
     <br/>
     ';
 
+    $token = isset($_GET['_token']) ? $_GET['_token'] : '';
+
     echo '
     <table class="table table-striped table-borderless col-12 sortable">
       <thead class="thead-dark">
@@ -135,6 +137,8 @@
         <tr>
         <td style="width:20%;" align="center">
           <form action="?Tipo=TODO" method="GET" style="display: inline;">
+            <input type="hidden" name="SEDE" value="'.$_GET['SEDE'].'">
+            <input type="hidden" name="_token" value="'.$token.'">
             <button type="submit" name="Tipo" role="button" class="btn btn-outline-success btn-sm" value="3">TODO</button>
           </form>
         </td>
@@ -143,7 +147,7 @@
           <form action="" method="GET" style="display: inline;">
             <input type="hidden" name="estado" value="PROCESADO">
             <input type="hidden" name="SEDE" value="'.$_GET['SEDE'].'">
-            <input type="hidden" name="_token" value="'.$_GET['_token'].'">
+            <input type="hidden" name="_token" value="'.$token.'">
             <button type="submit" role="button" class="btn btn-outline-dark btn-sm" value="0">PROCESADO</button>
           </form>
         </td>
@@ -151,7 +155,7 @@
         <td style="width:20%;" align="center">
           <form action="" method="GET" style="display: inline;">
             <input type="hidden" name="estado" value="EMBALADO">
-            <input type="hidden" name="_token" value="'.$_GET['_token'].'">
+            <input type="hidden" name="_token" value="'.$token.'">
             <input type="hidden" name="SEDE" value="'.$_GET['SEDE'].'">
             <button type="submit" role="button" class="btn btn-outline-danger btn-sm" value="1">EMBALADO</button>
             </form>
@@ -160,7 +164,7 @@
         <td style="width:20%;" align="center">
           <form action="" method="GET" style="display: inline;">
             <input type="hidden" name="estado" value="ENTREGADO">
-            <input type="hidden" name="_token" value="'.$_GET['_token'].'">
+            <input type="hidden" name="_token" value="'.$token.'">
             <input type="hidden" name="SEDE" value="'.$_GET['SEDE'].'">
             <button type="submit" role="button" class="btn btn-outline-info btn-sm" value="2">ENTREGADO</button>
           </form>
@@ -293,7 +297,7 @@
         FROM
             traslados_detalle
         WHERE
-            (SELECT traslados.sede_destino FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) = 'FARMACIA LA LAGO, C.A.' AND (SELECT traslados.estatus FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) = '$estado'
+            (SELECT traslados.sede_destino FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) = 'FARMACIA LA LAGO,C.A.' AND (SELECT traslados.estatus FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) = '$estado'
         ORDER BY
             traslados_detalle.id DESC;
       ");
@@ -314,7 +318,7 @@
         FROM
             traslados_detalle
         WHERE
-            (SELECT traslados.sede_destino FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) = 'FARMACIA LA LAGO, C.A.' AND (SELECT traslados.estatus FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) = '$estado'
+            (SELECT traslados.sede_destino FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) = 'FARMACIA LA LAGO,C.A.' AND (SELECT traslados.estatus FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) = '$estado'
         ORDER BY
             traslados_detalle.id DESC;
       ");
