@@ -159,7 +159,7 @@
                 <th scope="col">44</th>
                 <td scope="col">Traslados por llegar</td>
                 <th scope="col">45</th>
-                <td scope="col">Imagenes Articulos</td>
+                <td scope="col">Articulos sin imagen</td>
             </tr>
         </tbody>
     </table>

@@ -7,7 +7,7 @@
 @section('content')
 	<h1 class="h5 text-info">
 		<i class="fas fa-file-invoice"></i>
-		Imagenes Articulos
+		Articulos sin imagen
 	</h1>
 	<hr class="row align-items-start col-12">
 

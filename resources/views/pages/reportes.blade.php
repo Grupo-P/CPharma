@@ -1052,7 +1052,7 @@
 	  		<div class="card-body text-left bg-danger">
 	    		<h5 class="card-title">
 		    		<span class="card-text text-white">
-                        Imagenes Articulos
+                        Articulos sin imagen
 		    		</span>
 	    		</h5>
 	  		</div>

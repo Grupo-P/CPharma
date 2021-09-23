@@ -1352,7 +1352,7 @@
             case 'Traslados por llegar':
                 $ruta = '/reporte44';
             break;
-            case 'Imagenes Articulos':
+            case 'Articulos sin imagen':
                 $ruta = '/reporte45';
             break;
             default:
