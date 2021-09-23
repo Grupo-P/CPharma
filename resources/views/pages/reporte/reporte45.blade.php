@@ -24,7 +24,7 @@
 		}
 		echo '<hr class="row align-items-start col-12">';
 
-		R1_Activacion_Proveedores($_GET['SEDE']);
+		R45_Imagenes_Articulos($_GET['SEDE']);
 		FG_Guardar_Auditoria('CONSULTAR','REPORTE','Activacion de proveedores');
 
 		$FinCarga = new DateTime("now");
@@ -41,9 +41,9 @@
 		RETORNO: Lista de activacio de proveedores
 		DESAROLLADO POR: SERGIO COVA
  	*/
-	function R1_Activacion_Proveedores($SedeConnection) {
+	function R45_Imagenes_Articulos($SedeConnection) {
 		$conn = FG_Conectar_Smartpharma($SedeConnection);
-		$sql = R1Q_Activacion_Proveedores();
+		$sql = R45Q_Articulos_Existencia();
 		$result = sqlsrv_query($conn,$sql);
 		$contador = 1;
 
@@ -62,26 +62,23 @@
 	  	<thead class="thead-dark">
 		    <tr>
 		    	<th scope="col" class="CP-sticky">#</th>
-	      	<th scope="col" class="CP-sticky">Proveedor</th>
-	      	<th scope="col" class="CP-sticky">Ultimo registro</th>
-	      	<th scope="col" class="CP-sticky">Dias sin facturar</th>
+	      	    <th scope="col" class="CP-sticky">Codigo Interno</th>
+	      	    <th scope="col" class="CP-sticky">Codigo Barra</th>
+	      	    <th scope="col" class="CP-sticky">Descripcion</th>
+                <th scope="col" class="CP-sticky">Existencia</th>
+                <th scope="col" class="CP-sticky">Tipo</th>
 		    </tr>
 	  	</thead>
   	<tbody>
 		';
 		while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
-			$IdProveedor = $row['Id'];
-			$NombreProveedor = FG_Limpiar_Texto($row['Nombre']);
 			echo '<tr>';
 			echo '<td align="center"><strong>'.intval($contador).'</strong></td>';
-			echo
-			'<td align="left" class="CP-barrido">
-			<a href="/reporte7?Nombre='.$NombreProveedor.'&Id='.$IdProveedor.'&SEDE='.$SedeConnection.'" target="_blank" style="text-decoration: none; color: black;">'
-				.$NombreProveedor.
-			'</a>
-			</td>';
-			echo '<td align="center">'.($row['FechaRegistro'])->format('d-m-Y').'</td>';
-			echo '<td align="center">'.intval($row['RangoDias']).'</td>';
+			echo '<td align="center">'.($row['CodigoInterno']).'</td>';
+            echo '<td align="center">'.($row['CodigoBarra']).'</td>';
+            echo '<td align="center">'.FG_Limpiar_Texto($row['Descripcion']).'</td>';
+            echo '<td align="center">'.($row['Existencia']).'</td>';
+            echo '<td align="center">'.($row['Tipo']).'</td>';
 			echo '</tr>';
 			$contador++;
   	}
@@ -92,32 +89,43 @@
 	}
 	/**********************************************************************************/
 	/*
-		TITULO: R1Q_Activacion_Proveedores
-		FUNCION: Query que genera la lista de los proveedores con la diferencia en dias desde el ultimo despacho de mercancia.
-		RETORNO: Lista de proveedores con diferencia en dias respecto al dia actual
+		TITULO: R45Q_Articulos_Existencia
 		DESAROLLADO POR: SERGIO COVA
 	 */
-	function R1Q_Activacion_Proveedores() {
+	function R45Q_Articulos_Existencia() {
 		$sql = "
-			SELECT
-			ComProveedor.Id,
-			GenPersona.Nombre,
-			(SELECT TOP 1
-				CONVERT(DATE,ComFactura.FechaRegistro)
-				FROM ComFactura
-				WHERE ComFactura.ComProveedorId= ComProveedor.Id
-				ORDER BY FechaRegistro DESC) AS FechaRegistro,
-			DATEDIFF(DAY,CONVERT(DATE,
-				(SELECT TOP 1	CONVERT(DATE,ComFactura.FechaRegistro)
-				FROM ComFactura
-				WHERE ComFactura.ComProveedorId= ComProveedor.Id
-				ORDER BY FechaRegistro DESC))
-				,GETDATE()) As RangoDias
-			FROM ComProveedor
-			INNER JOIN GenPersona ON ComProveedor.GenPersonaId=GenPersona.Id
-			INNER JOIN ComFactura ON ComFactura.ComProveedorId=ComProveedor.Id
-			GROUP BY ComProveedor.Id, GenPersona.Nombre
-			ORDER BY RangoDias ASC
+        select
+        InvArticulo.CodigoArticulo as CodigoInterno,
+        --Codigo de Barra
+            (SELECT CodigoBarra
+            FROM InvCodigoBarra
+            WHERE InvCodigoBarra.InvArticuloId = InvArticulo.Id
+            AND InvCodigoBarra.EsPrincipal = 1) AS CodigoBarra,
+        InvArticulo.Descripcion,
+         --Existencia (Segun el almacen del filtro)
+            (ROUND(CAST((SELECT SUM (InvLoteAlmacen.Existencia) As Existencia
+            FROM InvLoteAlmacen
+            WHERE(InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
+            AND (InvLoteAlmacen.InvArticuloId = InvArticulo.Id)) AS DECIMAL(38,0)),2,0))  AS Existencia,
+        --Tipo Producto (0 Miscelaneos, Id Articulo Medicinas)
+           iif(
+            (ISNULL((SELECT
+            InvArticuloAtributo.InvArticuloId
+            FROM InvArticuloAtributo
+            WHERE InvArticuloAtributo.InvAtributoId =
+            (SELECT InvAtributo.Id
+            FROM InvAtributo
+            WHERE
+            InvAtributo.Descripcion = 'Medicina')
+            AND InvArticuloAtributo.InvArticuloId = InvArticulo.Id),CAST(0 AS INT))) = 0, 'Miscelaneos','Medicinas') AS Tipo
+        from
+        InvArticulo
+        where
+        (ROUND(CAST((SELECT SUM (InvLoteAlmacen.Existencia) As Existencia
+            FROM InvLoteAlmacen
+            WHERE(InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
+            AND (InvLoteAlmacen.InvArticuloId = InvArticulo.Id)) AS DECIMAL(38,0)),2,0)) > 0
+        order by Descripcion asc
 		";
 		return $sql;
 	}
