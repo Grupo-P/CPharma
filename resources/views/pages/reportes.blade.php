@@ -998,7 +998,7 @@
         ?>
 
         <?php
-          if(in_array(42,$reportes)){
+          if(in_array(43,$reportes)){
         ?>
             <div class="card border-secondary mb-3" style="width: 14rem;">
             <div class="card-body text-left bg-secondary">
@@ -1021,7 +1021,7 @@
         ?>
 
         <?php
-          if(in_array(42,$reportes)){
+          if(in_array(44,$reportes)){
         ?>
             <div class="card border-dark mb-3" style="width: 14rem;">
             <div class="card-body text-left bg-dark">
@@ -1042,6 +1042,31 @@
         <?php
             }
         ?>
+    </div>
+
+    <div class="card-deck">
+    <?php
+		  if(in_array(45,$reportes)){
+		?>
+			<div class="card border-danger mb-3" style="width: 14rem;">
+	  		<div class="card-body text-left bg-danger">
+	    		<h5 class="card-title">
+		    		<span class="card-text text-white">
+                        Imagenes Articulos
+		    		</span>
+	    		</h5>
+	  		</div>
+		  	<div class="card-footer bg-transparent border-danger text-right">
+		  		<form action="/reporte45/" style="display: inline;">
+				    @csrf
+				    <input id="SEDE" name="SEDE" type="hidden" value="<?php print_r($_GET['SEDE']); ?>">
+				    <button type="submit" name="Reporte" role="button" class="btn btn-outline-danger btn-sm"></i>Visualizar</button>
+					</form>
+		  	</div>
+			</div>
+		<?php
+			}
+		?>
     </div>
 
 
