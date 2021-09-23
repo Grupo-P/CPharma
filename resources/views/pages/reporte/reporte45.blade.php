@@ -25,7 +25,7 @@
 		echo '<hr class="row align-items-start col-12">';
 
 		R45_Imagenes_Articulos($_GET['SEDE']);
-		FG_Guardar_Auditoria('CONSULTAR','REPORTE','Activacion de proveedores');
+		FG_Guardar_Auditoria('CONSULTAR','REPORTE','Articulos sin imagen');
 
 		$FinCarga = new DateTime("now");
     $IntervalCarga = $InicioCarga->diff($FinCarga);
@@ -36,9 +36,7 @@
 <?php
 	/**********************************************************************************/
 	/*
-		TITULO: Reporte1_Activacion_Proveedores
-		FUNCION: Arma el reporte de activacion de proveedores
-		RETORNO: Lista de activacio de proveedores
+		TITULO: R45_Imagenes_Articulos
 		DESAROLLADO POR: SERGIO COVA
  	*/
 	function R45_Imagenes_Articulos($SedeConnection) {
@@ -71,17 +69,38 @@
 	  	</thead>
   	<tbody>
 		';
+        //$path = "C:\Compartidos\Procesamiento\ImagenesArticulos";
+        $path = "C:/xampp7/htdocs/ImagenesArticulos";
+
+        // Abrimos la carpeta que nos pasan como parámetro
+        $Imagenes  = scandir($path);
+
 		while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
-			echo '<tr>';
-			echo '<td align="center"><strong>'.intval($contador).'</strong></td>';
-			echo '<td align="center">'.($row['CodigoInterno']).'</td>';
-            echo '<td align="center">'.($row['CodigoBarra']).'</td>';
-            echo '<td align="center">'.FG_Limpiar_Texto($row['Descripcion']).'</td>';
-            echo '<td align="center">'.($row['Existencia']).'</td>';
-            echo '<td align="center">'.($row['Tipo']).'</td>';
-			echo '</tr>';
-			$contador++;
-  	}
+
+            $codigoBarra = $row['CodigoBarra'];
+            $imagenBuscar = $codigoBarra.".jpg";
+            $imprimir = true;
+
+            foreach ($Imagenes as $imagen){
+                if($imagen==$imagenBuscar){
+                    $imprimir = false;
+                    continue;
+                }
+            }
+
+            if($imprimir == true){
+                echo '<tr>';
+                echo '<td align="center"><strong>'.intval($contador).'</strong></td>';
+                echo '<td align="center">'.($row['CodigoInterno']).'</td>';
+                echo '<td align="center">'.($row['CodigoBarra']).'</td>';
+                echo '<td align="center">'.FG_Limpiar_Texto($row['Descripcion']).'</td>';
+                echo '<td align="center">'.($row['Existencia']).'</td>';
+                echo '<td align="center">'.($row['Tipo']).'</td>';
+                echo '</tr>';
+                $contador++;
+            }
+  	    }
+
 	  	echo '
   		</tbody>
 		</table>';
@@ -129,4 +148,25 @@
 		";
 		return $sql;
 	}
+
+
+/*
+// Abrimos la carpeta que nos pasan como parámetro
+    $dir = opendir($path);
+    // Leo todos los ficheros de la carpeta
+    while ($elemento = readdir($dir)){
+        // Tratamos los elementos . y .. que tienen todas las carpetas
+        if( $elemento != "." && $elemento != ".."){
+            // Si es una carpeta
+            if( is_dir($path.$elemento) ){
+                // Muestro la carpeta
+                echo "<p><strong>CARPETA: ". $elemento ."</strong></p>";
+            // Si es un fichero
+            } else {
+                // Muestro el fichero
+                echo "<br />". $elemento;
+            }
+        }
+    }
+*/
 ?>
