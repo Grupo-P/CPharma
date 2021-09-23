@@ -773,6 +773,7 @@
             <th scope="col" class="CP-sticky">Código de barra</th>
             <th scope="col" class="CP-sticky">Descripción</th>
             <th scope="col" class="CP-sticky">Existencia</th>
+            <th scope="col" class="CP-sticky">¿Tiene imagen?</th>
             <th scope="col" class="CP-sticky">Marca</th>
             <th scope="col" class="CP-sticky">Unidad mínima</th>
             <th scope="col" class="CP-sticky">Clasificación de etiquetas</th>
@@ -873,12 +874,30 @@
         $precio = FG_Calculo_Precio_Alfa($existencia, $existencia_almacen_1, $existencia_almacen_2, $troquelado, $utilidad_articulo, $utilidad_categoria, $troquel_almacen_1, $precio_compra_bruto_almacen_1, $troquel_almacen_2, $precio_compra_bruto_almacen_2, $precio_compra_bruto, $iva, 'CON_EXISTENCIA');
         $precio = number_format($precio, 2, ',', '.');
 
+        //Inicio de validacion de imagen
+            //$path = "C:\Compartidos\Procesamiento\ImagenesArticulos";
+            $path = "C:/xampp7/htdocs/ImagenesArticulos";
+            $Imagenes  = scandir($path);
+
+            $imagenBuscar = $codigo_barra.".jpg";
+            $tieneImagen = "NO";
+
+            foreach ($Imagenes as $imagen){
+                if($imagen==$imagenBuscar){
+                    $tieneImagen = "SI";
+                    continue;
+                }
+            }
+        //Fin de validacion de imagen
+
+
         echo '<tr>';
         echo '<td class="text-center">'.$contador.'</td>';
         echo '<td class="text-center">'.$codigo_interno.'</td>';
         echo '<td class="text-center">'.$codigo_barra.'</td>';
         echo '<td class="text-center">'.$descripcion.'</td>';
         echo '<td class="text-center">'.$existencia.'</td>';
+        echo '<td class="text-center">'.$tieneImagen.'</td>';
         echo '<td class="text-center">'.$marca.'</td>';
         echo '<td class="text-center">'.$unidad_minima.'</td>';
         echo '<td class="text-center">'.$clasificacion.'</td>';
