@@ -875,8 +875,8 @@
         $precio = number_format($precio, 2, ',', '.');
 
         //Inicio de validacion de imagen
-            //$path = "C:\Compartidos\Procesamiento\ImagenesArticulos";
-            $path = "C:/xampp7/htdocs/ImagenesArticulos";
+            $path = "C:/Compartidos/Procesamiento/ImagenesArticulos";
+            //$path = "C:/xampp7/htdocs/ImagenesArticulos";
             $Imagenes  = scandir($path);
 
             $imagenBuscar = $codigo_barra.".jpg";

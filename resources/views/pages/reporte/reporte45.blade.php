@@ -69,8 +69,8 @@
 	  	</thead>
   	<tbody>
 		';
-        //$path = "C:\Compartidos\Procesamiento\ImagenesArticulos";
-        $path = "C:/xampp7/htdocs/ImagenesArticulos";
+        $path = "C:/Compartidos/Procesamiento/ImagenesArticulos";
+        //$path = "C:/xampp7/htdocs/ImagenesArticulos";
 
         // Abrimos la carpeta que nos pasan como parámetro
         $Imagenes  = scandir($path);
