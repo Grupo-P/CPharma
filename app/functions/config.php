@@ -12,6 +12,8 @@ define("_ConsultorDolar_","SI"); //Le indica al consultor si mostrar precios en 
 define("_EtiquetaDolar_","SI");	//Le indica al etiquetado si mostrar precios en dolares o no
 define("_MensajeDolar_","SI");	//Le indica al etiquetado si mostrar el _MensajeDolarLegal_ o no
 define("_MensajeDolarLegal_","");
+define("_FactorReconversion_", 1000000);
+define("_AntesReconversion_", "SI");
 /**********************************************************************************/
 /************************* NOMBRES SEDES ON-LINE *********************************/
 define ("SedeFTN","FARMACIA TIERRA NEGRA, C.A.");

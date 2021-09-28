@@ -137,6 +137,8 @@
         <tr>
         <td style="width:20%;" align="center">
           <form action="?Tipo=TODO" method="GET" style="display: inline;">
+            <input type="hidden" name="SEDE" value="'.$_GET['SEDE'].'">
+            <input type="hidden" name="_token" value="'.$token.'">
             <button type="submit" name="Tipo" role="button" class="btn btn-outline-success btn-sm" value="3">TODO</button>
           </form>
         </td>
@@ -295,7 +297,7 @@
         FROM
             traslados_detalle
         WHERE
-            (SELECT traslados.sede_destino FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) = 'FARMACIA LA LAGO, C.A.' AND (SELECT traslados.estatus FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) = '$estado'
+            (SELECT traslados.sede_destino FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) = 'FARMACIA LA LAGO,C.A.' AND (SELECT traslados.estatus FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) = '$estado'
         ORDER BY
             traslados_detalle.id DESC;
       ");
@@ -316,7 +318,7 @@
         FROM
             traslados_detalle
         WHERE
-            (SELECT traslados.sede_destino FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) = 'FARMACIA LA LAGO, C.A.' AND (SELECT traslados.estatus FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) = '$estado'
+            (SELECT traslados.sede_destino FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) = 'FARMACIA LA LAGO,C.A.' AND (SELECT traslados.estatus FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) = '$estado'
         ORDER BY
             traslados_detalle.id DESC;
       ");

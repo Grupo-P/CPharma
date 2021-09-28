@@ -163,43 +163,7 @@
               <td class="text-center" nowrap>{{$pago->proveedor->rif_ci}}</td>
               <td class="text-center" nowrap>{{$pago->created_at}}</td>
               <td class="text-center" nowrap>{{ ($pago->estatus != 'Prepagado') ? number_format($pago->monto, 2, ',', '.') : ''}}</td>
-
-              @php
-                if ($pago->tasa) {
-                    if ($pago->banco->moneda != $pago->proveedor->moneda) {
-                        if ($pago->banco->moneda == 'Dólares' && $pago->proveedor->moneda == 'Bolívares') {
-                            $monto_proveedor = $pago->monto * $pago->tasa;
-                        }
-
-                        if ($pago->banco->moneda == 'Dólares' && $pago->proveedor->moneda == 'Pesos') {
-                            $monto_proveedor = $pago->monto * $pago->tasa;
-                        }
-
-                        if ($pago->banco->moneda == 'Bolívares' && $pago->proveedor->moneda == 'Dólares') {
-                            $monto_proveedor = $pago->monto / $pago->tasa;
-                        }
-
-                        if ($pago->banco->moneda == 'Bolívares' && $pago->proveedor->moneda == 'Pesos') {
-                            $monto_proveedor = $pago->monto * $pago->tasa;
-                        }
-
-                        if ($pago->banco->moneda == 'Pesos' && $pago->proveedor->moneda == 'Bolívares') {
-                            $monto_proveedor = $pago->monto / $pago->tasa;
-                        }
-
-                        if ($pago->banco->moneda == 'Pesos' && $pago->proveedor->moneda == 'Dólares') {
-                            $monto_proveedor = $pago->monto / $pago->tasa;
-                        }
-                    } else {
-                        $monto_proveedor = $pago->monto;
-                    }
-                }
-                else {
-                    $monto_proveedor = $pago->monto;
-                }
-              @endphp
-
-              <td nowrap class="text-center">{{number_format($monto_proveedor, 2, ',', '.')}}</td>
+              <td nowrap class="text-center">{{number_format($pago->monto_proveedor, 2, ',', '.')}}</td>
               <td nowrap class="text-center">{{($pago->tasa) ? number_format($pago->tasa, 2, ',', '.') : ''}}</td>
               <td nowrap class="text-center">{{$pago->estatus}}</td>
               <td nowrap class="text-center">{{$pago->comentario}}</td>

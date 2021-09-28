@@ -71,7 +71,7 @@
                             </label>
 
                             <input autofocus class="form-control" id="proveedores" type="text" required>
-                            <input name="id_proveedor" type="hidden">
+                            <input name="id_proveedor" type="hidden" required>
                         </td>
 
                         <td>
@@ -125,17 +125,36 @@
 
                         <td>
                             <label for="monto">Pago deuda</label>
-                            <input class="form-control" name="monto" type="number" min="0.01" required>
+                            <input class="form-control" name="monto" type="number" step="0.01" min="0.01" required>
                         </td>
 
                         <td>
                             <label for="monto_iva">IVA</label>
-                            <input class="form-control" name="monto_iva" type="number" min="0.01">
+                            <input class="form-control" name="monto_iva" type="number" step="0.01" min="0.01">
                         </td>
 
                         <td>
                             <label for="tasa">Tasa</label>
-                            <input class="form-control" name="tasa" type="number" lang="en" disabled min="0.01">
+                            <input class="form-control" name="tasa" type="number" lang="en" disabled step="0.01" min="0.01">
+                        </td>
+                    </tr>
+
+                    <tr style="background-color: rgba(0, 0, 0, 0.05);">
+                        <td>
+                            <label style="display: block" for="prepagado">Prepagado?</label>
+                            <div class="custom-control custom-radio custom-control-inline">
+                                <input onchange="inputs(this)" type="radio" class="movimiento-radio custom-control-input" id="prepagado1" name="prepagado" value="Si" required>
+                                <label class="custom-control-label" for="prepagado1">Si</label>
+                            </div>
+
+                            <div class="custom-control custom-radio custom-control-inline">
+                                <input onchange="inputs(this)" type="radio" checked class="movimiento-radio custom-control-input" id="prepagado2" name="prepagado" value="No" required>
+                                <label class="custom-control-label" for="prepagado2">No</label>
+                            </div>
+                        </td>
+                        <td colspan="4">
+                            <label for="comentario">Comentario</label>
+                            <input class="form-control" maxlength="200" minlength="5" name="comentario" type="text">
                         </td>
                     </tr>
                 </tbody>
@@ -152,17 +171,17 @@
                     <tr>
                         <td>
                             <label for="retencion_deuda_1">Retención deuda (%)</label>
-                            <input class="form-control" name="retencion_deuda_1" min="0.01" type="number">
+                            <input class="form-control" name="retencion_deuda_1" step="0.01" min="0.01" type="number">
                         </td>
 
                         <td>
                             <label for="retencion_deuda_2">Retención deuda (%)</label>
-                            <input class="form-control" name="retencion_deuda_2" min="0.01" type="number">
+                            <input class="form-control" name="retencion_deuda_2" step="0.01" min="0.01" type="number">
                         </td>
 
                         <td>
                             <label for="retencion_iva">Retención IVA (%)</label>
-                            <input class="form-control" name="retencion_iva" min="0.01" type="number">
+                            <input class="form-control" name="retencion_iva" step="0.01" min="0.01" type="number">
                         </td>
                     </tr>
                 </tbody>
@@ -203,6 +222,24 @@
             </input>
         </fieldset>
     </form>
+
+    <script>
+        $(document).ready(function(){
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+
+        $('#exampleModalCenter').modal('show');
+
+        function inputs(that) {
+            if (that.value == 'Si') {
+                $('[name=id_banco]').attr('required', false);
+            }
+
+            if (that.value == 'No') {
+                $('[name=id_banco]').attr('required', true);
+            }
+        }
+    </script>
 @endsection
 
 
@@ -213,20 +250,30 @@
     <link rel="stylesheet" href="/assets/sweetalert2/sweetalert2.css">
     <script src="/assets/sweetalert2/sweetalert2.js"></script>
 
-    <script src="//unpkg.com/alpinejs" defer></script>
-
     <script>
         $(document).ready(function() {
-            var proveedoresJson = {!! json_encode($proveedores) !!};
+            var json = {!! json_encode($proveedores) !!};
 
             bancario = true;
+            reintentar = 0;
 
             $('#proveedores').autocomplete({
-                source: proveedoresJson,
+                source: json,
                 autoFocus: true,
                 select: function (event, ui) {
                     $('[name=id_proveedor]').val(ui.item.id);
                     $('[name=moneda]').val(ui.item.moneda);
+                    $('[name=moneda_iva]').val(ui.item.moneda_iva);
+
+                    moneda_banco = $('[name=moneda_banco]').val();
+                    moneda_iva = $('[name=moneda_iva]').val();
+                    moneda = $('[name=moneda]').val();
+
+                    if (moneda_banco != '') {
+                        if (moneda_banco != moneda_iva || moneda_banco != moneda) {
+                            activar_tasa_iva();
+                        }
+                    }
 
                     $.ajax({
                         type: 'GET',
@@ -238,6 +285,9 @@
                             $('[name=saldo]').val(response.saldo);
                             $('[name=saldo_iva]').val(response.saldo_iva);
                             $('[name=tasa_proveedor]').val(response.tasa);
+                        },
+                        error: function (error) {
+                            $('body').html(error.responseText);
                         }
                     })
                 }
@@ -245,64 +295,20 @@
 
             $('[name=moneda]').change(function () {
                 activar_tasa();
+                activar_tasa_iva();
+
+                reintentar = 0;
             });
 
             $('[name=id_banco]').change(function () {
                 activar_tasa();
+                activar_tasa_iva();
+
+                reintentar = 0;
 
                 moneda_banco = $('option:selected').attr('data-banco-moneda');
                 $('[name=moneda_banco]').val(moneda_banco);
-
-                calcular_conversion();
             });
-
-            $('[name=monto_proveedor]').keyup(function () {
-                calcular_conversion();
-            });
-
-            $('[name=monto_proveedor]').blur(function () {
-                calcular_conversion();
-            });
-
-            $('[name=tasa]').keyup(function () {
-                calcular_conversion();
-            });
-
-            function calcular_conversion() {
-                banco = $('option:selected').attr('data-banco-moneda');
-                proveedor = $('[name=moneda]').val();
-                monto = $('[name=monto_proveedor]').val();
-                tasa = $('[name=tasa]').val();
-
-                console.log(banco, proveedor, monto, tasa);
-
-                if (banco != '' && proveedor != '') {
-                    if (banco != proveedor) {
-                        if (monto != '' && tasa != '') {
-                            $.ajax({
-                                method: 'GET',
-                                url: '/bancarios/create?conversion=1',
-                                data: {
-                                    banco: banco,
-                                    proveedor: proveedor,
-                                    monto: monto,
-                                    tasa: tasa,
-                                },
-                                success: function (response) {
-                                    console.log(response);
-                                    monto_proveedor = new Intl.NumberFormat('de-DE').format(response);
-                                    $('[name=monto]').val(monto_proveedor);
-                                }
-                            });
-                        }
-                    } else {
-                        if (monto != '') {
-                            monto = new Intl.NumberFormat('de-DE').format(monto);
-                            $('[name=monto]').val(monto);
-                        }
-                    }
-                }
-            }
 
             function activar_tasa() {
                 banco = $('option:selected').attr('data-banco-moneda');
@@ -324,20 +330,66 @@
                         success: function (response) {
                             $('[name=tasa]').attr('min', response.min);
                             $('[name=tasa]').attr('max', response.max);
+                        },
+                        error: function (error) {
+                            console.log(error.responseText);
                         }
                     });
 
                     $('[name=tasa]').attr('disabled', false);
                     $('[name=tasa]').attr('required', true);
+
+                    reintentar = 1;
                 } else {
-                    $('[name=tasa]').val('');
-                    $('[name=tasa]').attr('disabled', true);
-                    $('[name=tasa]').attr('required', false);
+                    if (reintentar == 0) {
+                        $('[name=tasa]').val('');
+                        $('[name=tasa]').attr('disabled', true);
+                        $('[name=tasa]').attr('required', false);
+                    }
+                }
+            }
+
+            function activar_tasa_iva() {
+                banco = $('option:selected').attr('data-banco-moneda');
+                moneda_iva = $('[name=moneda_iva]').val();
+
+                if (banco == '' || moneda_iva == '') {
+                    return false;
+                }
+
+                if (banco != moneda_iva) {
+                    $.ajax({
+                        method: 'POST',
+                        url: '/bancarios/validar',
+                        data: {
+                            moneda_iva: $('[name=moneda_iva]').val(),
+                            id_banco: $('[name=id_banco]').val(),
+                            _token: '{{ csrf_token() }}'
+                        },
+                        success: function (response) {
+                            $('[name=tasa]').attr('min', response.min);
+                            $('[name=tasa]').attr('max', response.max);
+                        },
+                        error: function (error) {
+                            console.log(error.responseText);
+                        }
+                    });
+
+                    $('[name=tasa]').attr('disabled', false);
+                    $('[name=tasa]').attr('required', true);
+
+                    reintentar = 1;
+                } else {
+                    if (reintentar == 0) {
+                        $('[name=tasa]').val('');
+                        $('[name=tasa]').attr('disabled', true);
+                        $('[name=tasa]').attr('required', false);
+                    }
                 }
             }
 
             $('form').submit(function (event) {
-                resultado = proveedoresJson.find(elemento => elemento.label == $('#proveedores').val());
+                resultado = json.find(elemento => elemento.label == $('#proveedores').val());
 
                 if (!resultado) {
                     event.preventDefault();
@@ -356,16 +408,22 @@
                 });
             });
 
-            $('[name=monto], [name=retencion_deuda_1], [name=retencion_deuda_2]').keyup(function () {
+            $('[name=monto], [name=tasa], [name=retencion_deuda_1], [name=retencion_deuda_2]').keyup(function () {
                 calcula_deuda_real();
             });
 
-            $('[name=monto], [name=retencion_deuda_1], [name=retencion_deuda_2]').change(function () {
+            $('[name=monto], [name=tasa], [name=retencion_deuda_1], [name=retencion_deuda_2]').change(function () {
                 calcula_deuda_real();
             });
 
             function calcula_deuda_real() {
+                moneda_banco = $('[name=moneda_banco]').val();
+                moneda_proveedor = $('[name=moneda]').val();
+                tasa = $('[name=tasa]').val();
+
                 monto = $('[name=monto]').val();
+                monto = conversion(moneda_proveedor, moneda_banco, monto, tasa);
+
                 retencion_deuda_1 = $('[name=retencion_deuda_1]').val();
                 retencion_deuda_2 = $('[name=retencion_deuda_2]').val();
 
@@ -390,16 +448,22 @@
                 calcula_monto_banco();
             }
 
-            $('[name=monto_iva], [name=retencion_iva]').keyup(function () {
+            $('[name=monto_iva], [name=retencion_iva], [name=tasa]').keyup(function () {
                 calcula_iva_real();
             });
 
-            $('[name=monto_iva], [name=retencion_iva]').change(function () {
+            $('[name=monto_iva], [name=retencion_iva], [name=tasa]').change(function () {
                 calcula_iva_real();
             });
 
             function calcula_iva_real() {
+                moneda_banco = $('[name=moneda_banco]').val();
+                moneda_iva = $('[name=moneda_iva]').val();
+                tasa = $('[name=tasa]').val();
+
                 monto_iva = $('[name=monto_iva]').val();
+                monto_iva = conversion(moneda_iva, moneda_banco, monto_iva, tasa);
+
                 retencion_iva = $('[name=retencion_iva]').val();
 
                 if (monto_iva != '') {
@@ -427,14 +491,49 @@
                     pago_iva_real = parseFloat(pago_iva_real);
 
                     monto_banco = pago_deuda_real + pago_iva_real;
-                } else {
-                    monto_banco = parseFloat(pago_deuda_real);
+                    monto_banco = parseFloat(monto_banco);
+                    monto_banco = monto_banco.toFixed(2);
+                    $('[name=monto_banco]').val(monto_banco);
                 }
 
-                monto_banco = parseFloat(monto_banco);
-                monto_banco = monto_banco.toFixed(2);
+                else if (pago_deuda_real != '') {
+                    monto_banco = parseFloat(pago_deuda_real);
+                    monto_banco = monto_banco.toFixed(2);
+                    $('[name=monto_banco]').val(monto_banco);
+                }
+            }
 
-                $('[name=monto_banco]').val(monto_banco);
+            function conversion(moneda_banco, moneda_proveedor, monto, tasa) {
+
+                if (moneda_banco != moneda_proveedor) {
+                    if (moneda_banco == 'Dólares' && moneda_proveedor == 'Bolívares') {
+                        monto = parseFloat(monto) * parseFloat(tasa);
+                    }
+
+                    if (moneda_banco == 'Dólares' && moneda_proveedor == 'Pesos') {
+                        monto = parseFloat(monto) * parseFloat(tasa);
+                    }
+
+                    if (moneda_banco == 'Bolívares' && moneda_proveedor == 'Dólares') {
+                        monto = parseFloat(monto) / parseFloat(tasa);
+                    }
+
+                    if (moneda_banco == 'Bolívares' && moneda_proveedor == 'Pesos') {
+                        monto = parseFloat(monto) * parseFloat(tasa);
+                    }
+
+                    if (moneda_banco == 'Pesos' && moneda_proveedor == 'Bolívares') {
+                        monto = parseFloat(monto) / parseFloat(tasa);
+                    }
+
+                    if (moneda_banco == 'Pesos' && moneda_proveedor == 'Dólares') {
+                        monto = parseFloat(monto) / parseFloat(tasa);
+                    }
+                } else {
+                    monto = parseFloat(monto);
+                }
+
+                return monto;
             }
         });
     </script>

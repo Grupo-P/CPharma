@@ -198,7 +198,7 @@
       if (_ConsultorDolar_ == "SI") {
        echo ' <div id="DivTasa" style="width: 100%" class="text-center">
           <label id="TasaVenta" class="text-center" style="font-size:1.5rem">
-            <strong>Tasa del dia: '.SigVe.' '.number_format($TasaVenta,2,"," ,"." ).' / Bs.D '.number_format($TasaVenta/1000000,2,"," ,"." ).'</strong>
+            <strong>Tasa del dia: '.SigVe.' '.number_format($TasaVenta,2,"," ,"." ).' / Bs.D '.number_format(antesReconversion($TasaVenta),2,"," ,"." ).'</strong>
           </label>
           <br>
           <label class="text-danger text-center">Nuestra tasa esta sujeta a cambios sin previo aviso</label>

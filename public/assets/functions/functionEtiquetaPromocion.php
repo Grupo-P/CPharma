@@ -290,7 +290,7 @@
 					}
 				}
 				else{
-                    $precioBolivarDigital = number_format($PrecioHoy/1000000, 2);
+                    $precioBolivarDigital = number_format(antesReconversion($PrecioHoy), 2);
                     $bolivarDigital = '
                         <strong>Bs.D '.$precioBolivarDigital.'</strong>
                     ';

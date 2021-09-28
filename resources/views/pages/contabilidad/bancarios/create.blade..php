@@ -314,6 +314,9 @@
             select: function (event, ui) {
                 $('[name=id_proveedor]').val(ui.item.id);
                 $('[name=moneda]').val(ui.item.moneda);
+                $('[name=moneda_iva]').val(ui.item.moneda_iva);
+
+                console.log(ui.item);
 
                 $.ajax({
                     type: 'GET',
@@ -325,6 +328,9 @@
                         $('[name=saldo]').val(response.saldo);
                         $('[name=saldo_iva]').val(response.saldo_iva);
                         $('[name=tasa_proveedor]').val(response.tasa);
+                    },
+                    error: function (error) {
+                        $('body').html(error.responseText);
                     }
                 })
             }

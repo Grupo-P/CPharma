@@ -2122,7 +2122,7 @@
                             <td class="derecha rowDer rowDerA aumento">
                                 <label style="margin-right:10px;'.$tam_dolar.'">
                                     <strong>
-                                    BS.D '.number_format ($PrecioHoy/1000000,2,"," ,"." ).'
+                                    BS.D '.number_format (antesReconversion($PrecioHoy),2,"," ,"." ).'
                                     </strong>
                                 </label>
                             </td>
@@ -2177,7 +2177,7 @@
 
                                                             /
 
-                                                            BS.D <del>'.number_format ($PrecioAyer/1000000,2,"," ,"." ).'</del>
+                                                            BS.D <del>'.number_format (antesReconversion($PrecioAyer),2,"," ,"." ).'</del>
                                                         </td>
                                                     </tr>
                                                 ';
@@ -2332,7 +2332,7 @@
                             <td class="derecha rowDer rowDerA aumento">
                                 <label style="margin-right:10px;'.$tam_dolar.'">
                                     <strong>
-                                    BS.D '.number_format ($PrecioHoy/1000000,2,"," ,"." ).'
+                                    BS.D '.number_format (antesReconversion($PrecioHoy),2,"," ,"." ).'
                                     </strong>
                                 </label>
                             </td>
@@ -3489,6 +3489,14 @@
 
         //print_r($array_result);
         return $array_result;
+  }
+
+  function antesReconversion($precio) {
+    if (_AntesReconversion_ == "SI") {
+        $precio = $precio/_FactorReconversion_;
+    }
+
+    return $precio;
   }
 
   function validar_fecha_espanol($fecha){
