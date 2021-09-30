@@ -727,6 +727,16 @@
 
 
     if (isset($_GET['seccion']) && $_GET['seccion'] == 'codificacion') {
+      $atributos = [];
+
+      $result = sqlsrv_query($conn,"SELECT InvAtributo.Descripcion AS descripcion FROM InvAtributo");
+
+      while ($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
+        $atributos[] = FG_Limpiar_Texto($row['descripcion']);
+      }
+
+      $atributos = implode(', ', $atributos);
+
       echo'
       <br>
       <hr>
@@ -749,7 +759,7 @@
             <td>Ejemplo: Acetaminofén 500mg Tabletas x 10 Pfizer</td>
           </tr>
           <tr>
-            <td colspan="2">
+            <td width="50%">
                 <b>NOTAS:</b><br>
 
                 <ul>
@@ -760,6 +770,11 @@
                     <li>Cualquier información adicional es aceptada siempre y cuando se cumpla con el objetivo de una descripción clara y completa</li>
                     <li>La descripción física del articulo siempre predomina sobre cualquier criterio</li>
                 </ul>
+            </td>
+
+            <td>
+                <b>ATRIBUTOS:</b><br>
+                '.$atributos.'.
             </td>
           </tr>
         </tbody>
