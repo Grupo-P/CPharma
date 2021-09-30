@@ -1,3 +1,33 @@
+
+var _AntesReconversion_ = 'SI';
+var _DespuesReconversion_ = 'NO';
+var _FactorReconversion_ = 1000000;
+
+function precioReconversion(precio, moneda) {
+    if (_AntesReconversion_ == 'SI' && _DespuesReconversion_ == 'NO') {
+        if (moneda == 'BSS') {
+            precio = precio;
+        }
+
+        if (moneda == 'BSD') {
+            precio = precio / _FactorReconversion_;
+        }
+    }
+
+
+    if (_DespuesReconversion_ == 'SI' && _AntesReconversion_ == 'NO') {
+        if (moneda == 'BSD') {
+            precio = precio;
+        }
+
+        if (moneda == 'BSS') {
+            precio = precio * _FactorReconversion_;
+        }
+    }
+
+    return precio;
+}
+
 function soloNumeros(e){
   var key = window.event ? e.which : e.keyCode;
   if (key < 48 || key > 57) {

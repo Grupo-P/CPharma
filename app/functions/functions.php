@@ -2122,7 +2122,7 @@
                             <td class="derecha rowDer rowDerA aumento">
                                 <label style="margin-right:10px;'.$tam_dolar.'">
                                     <strong>
-                                    BS.D '.number_format ($PrecioHoy/1000000,2,"," ,"." ).'
+                                    BS.D '.number_format (precioReconversion($PrecioHoy, 'BSD'),2,"," ,"." ).'
                                     </strong>
                                 </label>
                             </td>
@@ -2173,11 +2173,11 @@
                                                         <td colspan="2" style="color:red;text-align: center">
                                                             Precio Antes:
 
-                                                            BS.S <del>'.number_format ($PrecioAyer,2,"," ,"." ).'</del>
+                                                            BS.S <del>'.number_format (precioReconversion($PrecioAyer, 'BSS'),2,"," ,"." ).'</del>
 
                                                             /
 
-                                                            BS.D <del>'.number_format ($PrecioAyer/1000000,2,"," ,"." ).'</del>
+                                                            BS.D <del>'.number_format (precioReconversion($PrecioAyer, 'BSD'),2,"," ,"." ).'</del>
                                                         </td>
                                                     </tr>
                                                 ';
@@ -2198,6 +2198,9 @@
                                                 ';
                                             }
                                         }
+
+                                    $precio = ($Dolarizado == 'SI') ? $moneda.' '.number_format ($PrecioHoy,2,"," ,"." ) : $moneda.' '.number_format (precioReconversion($PrecioHoy, 'BSS'),2,"," ,"." );
+
                                     echo'
                                     <tr>
                                         <td colspan="2" style="text-align: center" class="rowIzq rowIzqA aumento">
@@ -2208,7 +2211,7 @@
                                         <td style="text-align: right" class="rowDer rowDerA aumento">
                                             <label style="margin-right:10px;'.$tam_dolar.'">
                                                 <strong>
-                                                '.$moneda.' '.number_format ($PrecioHoy,2,"," ,"." ).'
+                                                '.$precio.'
                                                 </strong>
                                             </label>
                                         </td>
@@ -2332,7 +2335,7 @@
                             <td class="derecha rowDer rowDerA aumento">
                                 <label style="margin-right:10px;'.$tam_dolar.'">
                                     <strong>
-                                    BS.D '.number_format ($PrecioHoy/1000000,2,"," ,"." ).'
+                                    BS.D '.number_format (precioReconversion($PrecioHoy, 'BSD'),2,"," ,"." ).'
                                     </strong>
                                 </label>
                             </td>
@@ -2360,6 +2363,8 @@
                         $unidadMinima = '';
                     }
 
+                    $precio = ($Dolarizado == 'SI') ? $moneda.' '.number_format ($PrecioHoy,2,"," ,"." ) : $moneda.' '.number_format (precioReconversion($PrecioHoy, 'BSS'),2,"," ,"." );
+
                     echo'
                         <table>
                             <thead>
@@ -2384,7 +2389,7 @@
                                     <td style="text-align: right" class="rowDer rowDerA aumento">
                                         <label style="margin-right:10px;'.$tam_dolar.'">
                                             <strong>
-                                            '.$moneda.' '.number_format ($PrecioHoy,2,"," ,"." ).'
+                                            '.$precio.'
                                             </strong>
                                         </label>
                                     </td>
@@ -3945,5 +3950,31 @@
     }
 
     return $new_array;
+  }
+
+  function precioReconversion($precio, $moneda)
+  {
+    if (_AntesReconversion_ == 'SI' && _DespuesReconversion_ == 'NO') {
+        if ($moneda == 'BSS') {
+            $precio = $precio;
+        }
+
+        if ($moneda == 'BSD') {
+            $precio = $precio / _FactorReconversion_;
+        }
+    }
+
+
+    if (_DespuesReconversion_ == 'SI' && _AntesReconversion_ == 'NO') {
+        if ($moneda == 'BSD') {
+            $precio = $precio;
+        }
+
+        if ($moneda == 'BSS') {
+            $precio = $precio * _FactorReconversion_;
+        }
+    }
+
+    return $precio;
   }
 ?>
