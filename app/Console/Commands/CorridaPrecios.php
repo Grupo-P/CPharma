@@ -38,24 +38,24 @@ class CorridaPrecios extends Command
      * @return mixed
      */
     public function handle()
-    {        
+    {
         include(app_path().'\functions\config.php');
         include(app_path().'\functions\functions.php');
         include(app_path().'\functions\querys_mysql.php');
         include(app_path().'\functions\querys_sqlserver.php');
-                       
+
         $configuracion = Configuracion::where('variable','DolarCalculo')->get();
-        FG_Corrida_Precio('bajada',$configuracion[0]->valor,'SYSTEM');    
+        FG_Corrida_Precio('bajada',$configuracion[0]->valor,'SYSTEM');
 
         $Auditoria = new Auditoria();
         $Auditoria->accion = 'EJECUTAR';
         $Auditoria->tabla = 'CORRIDA DE PRECIOS';
         $Auditoria->registro = 'CPHARMA';
         $Auditoria->user = 'SYSTEM';
-        $Auditoria->save();    
-        
+        $Auditoria->save();
+
         //Limpieza del cache
-        Artisan::call('cache:clear');
+        //Artisan::call('cache:clear');
 
         $this->info('La corrida de precios fue ejecutada satisfactoriamente!');
     }
