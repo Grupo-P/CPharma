@@ -2102,7 +2102,7 @@
                                 $moneda = SigVe;
                             }
                         }else{
-                            $flag_imprime = false;
+                            //$flag_imprime = false;
                             echo'
                             <table class="etq" style="display: inline;">
                                 <thead class="etq">
@@ -2328,7 +2328,7 @@
                                 }
                                 */
                             }else{
-                                $flag_imprime = false;
+                                //$flag_imprime = false;
                                 echo'
                                 <table class="etq" style="display: inline;">
                                     <thead class="etq">
