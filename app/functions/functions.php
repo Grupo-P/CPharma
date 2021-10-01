@@ -2033,7 +2033,7 @@
         if(intval($Existencia)>0){
 
             $PrecioHoy = FG_Calculo_Precio_Alfa($Existencia,$ExistenciaAlmacen1,$ExistenciaAlmacen2,$IsTroquelado,$UtilidadArticulo,$UtilidadCategoria,$TroquelAlmacen1,$PrecioCompraBrutoAlmacen1,$TroquelAlmacen2,$PrecioCompraBrutoAlmacen2,$PrecioCompraBruto,$IsIVA,$CondicionExistencia);
-            $PrecioSCN = $PrecioHoy;
+            $PrecioSCN = round($PrecioHoy,2);
 
             if($IsPrecioAyer==true){
 
