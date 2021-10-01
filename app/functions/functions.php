@@ -2348,7 +2348,7 @@
                                         <tr>
                                             <td class="centrado rowDer rowDerA aumento preciopromo" colspan="2">
                                                 <strong class="text-danger">
-                                                Solicite ayuda al dpto. de procesamiento (Sin Decimal)
+                                                Solicite ayuda al dpto. de procesamiento (Sin Decimal) B
                                                 </strong>
                                             </td>
                                         </tr>
@@ -2464,7 +2464,7 @@
                                 <tr>
                                     <td class="centrado rowDer rowDerA aumento preciopromo" colspan="2">
                                         <strong class="text-danger">
-                                        Solicite ayuda al dpto. de procesamiento (Decimal Diff. 01)
+                                        Solicite ayuda al dpto. de procesamiento (Decimal Diff. 01) B
                                         </strong>
                                     </td>
                                 </tr>
