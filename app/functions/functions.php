@@ -2033,6 +2033,7 @@
         if(intval($Existencia)>0){
 
             $PrecioHoy = FG_Calculo_Precio_Alfa($Existencia,$ExistenciaAlmacen1,$ExistenciaAlmacen2,$IsTroquelado,$UtilidadArticulo,$UtilidadCategoria,$TroquelAlmacen1,$PrecioCompraBrutoAlmacen1,$TroquelAlmacen2,$PrecioCompraBrutoAlmacen2,$PrecioCompraBruto,$IsIVA,$CondicionExistencia);
+            $PrecioSCN = $PrecioHoy;
 
             if($IsPrecioAyer==true){
 
@@ -2085,7 +2086,7 @@
                         }
 
                         //if(isset($precioPartes) && count($precioPartes)>=2){ //Comentado por reconversion
-                        if($SumCuentaNull==0 && $TroquelAlmacen1==$PrecioHoy){
+                        if($SumCuentaNull==0 && $TroquelAlmacen1==$PrecioSCN){
                             if(_EtiquetaDolar_=='SI'){
                                 $tam_dolar = "font-size:1.7rem;";
                                 $flag_imprime = true;
@@ -2317,7 +2318,7 @@
                             $PrecioHoy = $PrecioHoy/$TasaActual;
 
                             //if(isset($precioPartes) && count($precioPartes)>=2){
-                            if($SumCuentaNull==0 && $TroquelAlmacen1==$PrecioHoy){
+                            if($SumCuentaNull==0 && $TroquelAlmacen1==$PrecioSCN){
                                 $flag_imprime = true;
                                /*
                                 if($precioPartes[1]==DecimalEtiqueta){
