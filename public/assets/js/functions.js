@@ -1,6 +1,6 @@
 
-var _AntesReconversion_ = 'SI';
-var _DespuesReconversion_ = 'NO';
+var _AntesReconversion_ = 'NO';
+var _DespuesReconversion_ = 'SI';
 var _FactorReconversion_ = 1000000;
 
 function precioReconversion(precio, moneda) {

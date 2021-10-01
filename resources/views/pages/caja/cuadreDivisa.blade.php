@@ -720,7 +720,7 @@
                     <td>Tolerancia Vuelto en Bs:</td>
 
                     <td>
-                        <input type="number" step="0.01" min="0" placeholder="0,00" value="200" id="tolerancia" class="form-control" disabled>
+                        <input type="number" step="0.01" min="0" placeholder="0,00" value="0" id="tolerancia" class="form-control" disabled>
                     </td>
                 </tr>
 
