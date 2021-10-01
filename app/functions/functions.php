@@ -2042,7 +2042,20 @@
                 $PrecioAyer = $rowCC["precio"];
 
                 if($Dolarizado=='SI' && _EtiquetaDolar_=='SI'){
-                    $precioPartes = explode(".",$PrecioHoy);
+                    //$precioPartes = explode(".",$PrecioHoy); //Comentado por reconversion
+                    $sqlSCN = "SELECT sum(CuentaNull) as SumCuentaNull from(
+                            select M_PrecioTroquelado, IIF(M_PrecioTroquelado IS NULL,1,0) as CuentaNull from InvLote where InvLote.id in (
+                                select InvLoteAlmacen.InvLoteId from InvLoteAlmacen
+                                where InvLoteAlmacen.InvArticuloId=".$IdArticulo."
+                                and Existencia>0
+                                and (InvLoteAlmacen.InvAlmacenId=1 OR InvLoteAlmacen.InvAlmacenId=2)
+                            )
+                        ) as axu
+                    ";
+                    $resultSCN = sqlsrv_query($conn,$sqlSCN);
+                    $rowSCN = sqlsrv_fetch_array($resultSCN,SQLSRV_FETCH_ASSOC);
+                    $SumCuentaNull = $rowSCN["SumCuentaNull"];
+
                     //$TasaActual = FG_Tasa_Fecha_Venta($connCPharma,date('Y-m-d'));
                     $PrecioHoy = $PrecioHoy/$TasaActual;
 
@@ -2071,20 +2084,25 @@
                             $tam_dolar = "";
                         }
 
-                        if(isset($precioPartes) && count($precioPartes)>=2){
+                        //if(isset($precioPartes) && count($precioPartes)>=2){ //Comentado por reconversion
+                        if($SumCuentaNull==0 && $TroquelAlmacen1==$PrecioHoy){
                             if(_EtiquetaDolar_=='SI'){
                                 $tam_dolar = "font-size:1.7rem;";
+                                $flag_imprime = true;
+                                /* Comentado por reconversion
                                 if($precioPartes[1]==DecimalEtiqueta){
                                     $flag_imprime = true;
                                 }
                                 else{
                                     $flag_imprime = false;
                                 }
+                                */
                             }else if(_EtiquetaDolar_=='NO'){
                                 $flag_imprime = true;
                                 $moneda = SigVe;
                             }
                         }else{
+                            $flag_imprime = false;
                             echo'
                             <table class="etq" style="display: inline;">
                                 <thead class="etq">
@@ -2282,18 +2300,35 @@
                         }
 
                         if(_EtiquetaDolar_=='SI'){
-                            $precioPartes = explode(".",$PrecioHoy);
+                            //$precioPartes = explode(".",$PrecioHoy); //Comentado por reconversion
+                            $sqlSCN = "SELECT sum(CuentaNull) as SumCuentaNull from(
+                                select M_PrecioTroquelado, IIF(M_PrecioTroquelado IS NULL,1,0) as CuentaNull from InvLote where InvLote.id in (
+                                    select InvLoteAlmacen.InvLoteId from InvLoteAlmacen
+                                    where InvLoteAlmacen.InvArticuloId=".$IdArticulo."
+                                    and Existencia>0
+                                    and (InvLoteAlmacen.InvAlmacenId=1 OR InvLoteAlmacen.InvAlmacenId=2)
+                                )
+                            ) as axu";
+
+                        $resultSCN = sqlsrv_query($conn,$sqlSCN);
+                        $rowSCN = sqlsrv_fetch_array($resultSCN,SQLSRV_FETCH_ASSOC);
+                        $SumCuentaNull = $rowSCN["SumCuentaNull"];
                             //$TasaActual = FG_Tasa_Fecha_Venta($connCPharma,date('Y-m-d'));
                             $PrecioHoy = $PrecioHoy/$TasaActual;
 
-                            if(isset($precioPartes) && count($precioPartes)>=2){
+                            //if(isset($precioPartes) && count($precioPartes)>=2){
+                            if($SumCuentaNull==0 && $TroquelAlmacen1==$PrecioHoy){
+                                $flag_imprime = true;
+                               /*
                                 if($precioPartes[1]==DecimalEtiqueta){
                                     $flag_imprime = true;
                                 }
                                 else{
                                     $flag_imprime = false;
                                 }
+                                */
                             }else{
+                                $flag_imprime = false;
                                 echo'
                                 <table class="etq" style="display: inline;">
                                     <thead class="etq">
