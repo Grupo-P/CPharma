@@ -255,6 +255,9 @@
                                         <td class="centrado rowDer rowDerA aumento1 preciopromo" colspan="2">
                                             <strong class="text-danger">
                                             Solicite ayuda al dpto. de procesamiento
+                                            <br>Cuenta NUll: '.$SumCuentaNull.' -
+                                            <br>Troquel 1: '.$TroquelAlmacen1.' -
+                                            <br>Precio: '.$PrecioSCN.'
                                             </strong>
                                         </td>
                                     </tr>
@@ -408,6 +411,9 @@
                                     <td class="centrado rowDer rowDerA aumento1 preciopromo" colspan="2">
                                         <strong class="text-danger">
                                         Solicite ayuda al dpto. de procesamiento
+                                        <br>Cuenta NUll: '.$SumCuentaNull.' -
+                                        <br>Troquel 1: '.$TroquelAlmacen1.' -
+                                        <br>Precio: '.$PrecioSCN.'
                                         </strong>
                                     </td>
                                 </tr>

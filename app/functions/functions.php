@@ -2123,9 +2123,9 @@
                                         <td class="centrado rowDer rowDerA aumento preciopromo" colspan="2">
                                             <strong class="text-danger">
                                             Solicite ayuda al dpto. de procesamiento (Sin Decimal)
-                                            $SumCuentaNull'.$SumCuentaNull.'//
-                                            $TroquelAlmacen1'.$TroquelAlmacen1.'//
-                                            $PrecioSCN'.$PrecioSCN.'
+                                            <br>Cuenta NUll: '.$SumCuentaNull.' -
+                                            <br>Troquel 1: '.$TroquelAlmacen1.' -
+                                            <br>Precio: '.$PrecioSCN.'
                                             </strong>
                                         </td>
                                     </tr>
