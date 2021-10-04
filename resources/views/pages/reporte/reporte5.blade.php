@@ -209,7 +209,7 @@
             aria-hidden="true"></i>
         </span>
       </div>
-      <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterAllTable()" autofocus="autofocus">
+      <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterAllTableWithoutFooter()" autofocus="autofocus">
     </div>
     <br/>
     ';
@@ -500,7 +500,7 @@
 
         if (isset($_GET['SEDE']) & $_GET['SEDE'] == 'FLL') {
             if ($conectividad_ftn == 1 && $descripcion_ftn != '-' && $existencia_ftn > 0) {
-                echo '<td align="center"><button type="button" onclick="agregarTraslado(\'' . $CodigoBarra . '\', \'FTN\', \'' . $existencia_ftn . '\')" class="btn btn-outline-info btn-sm">Agregar FLL</td>';
+                echo '<td align="center"><button type="button" onclick="agregarTraslado(\'' . $CodigoBarra . '\', \'FTN\', \'' . $existencia_ftn . '\')" class="btn btn-outline-info btn-sm">Agregar FTN</td>';
             } else {
                 echo '<td>-</td>';
             }
@@ -516,15 +516,19 @@
       $contador++;
     }
 
-    echo '<tr>';
-      echo '<td colspan="20"></td>';
-      echo '<td><a href="/trasladoRecibir" target="_blank" class="btn btn-outline-info btn-sm">Ver soporte</a></td>';
-      echo '<td><button type="button" onclick="confirmarEliminacion(\'/trasladoRecibir/limpiar\')" class="btn btn-outline-danger btn-sm">Limpiar todo</button></td>';
-      echo '</tr>';
+     echo '
+      </tbody>';
 
-    echo '
-      </tbody>
-    </table>';
+    echo '<tfoot>';
+    echo '<tr>';
+    echo '<td colspan="20">';
+    echo '<td colspan="2" class="nowrap"><a href="/trasladoRecibir" target="_blank" class="btn btn-outline-info btn-sm">Ver soporte</a>';
+    echo '<button type="button" onclick="confirmarEliminacion(\'/trasladoRecibir/limpiar\')" class="btn btn-outline-danger btn-sm">Limpiar todo</button></td>';
+    echo '</tr>';
+    echo '</tfoot>';
+
+    echo '</table>';
+
     sqlsrv_close($conn);
   }
   /**********************************************************************************/

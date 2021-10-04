@@ -196,7 +196,7 @@
             aria-hidden="true"></i>
         </span>
       </div>
-      <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterAllTable()" autofocus="autofocus">
+      <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterAllTableWithoutFooter()" autofocus="autofocus">
     </div>
     <br/>
     ';
@@ -617,15 +617,21 @@
     $contador++;
     }
 
-    echo '<tr>';
-      echo '<td colspan="13"></td>';
-      echo '<td><a href="/trasladoRecibir" target="_blank" class="btn btn-outline-info btn-sm">Ver soporte</a></td>';
-      echo '<td><button type="button" onclick="confirmarEliminacion(\'/trasladoRecibir/limpiar\')" class="btn btn-outline-danger btn-sm">Limpiar todo</button></td>';
-      echo '</tr>';
-
     echo '
-        </tbody>
+        </tbody>';
+
+    echo '<tfoot>';
+
+    echo '<tr>';
+    echo '<td colspan="14"></td>';
+    echo '<td colspan="2"><a href="/trasladoRecibir" target="_blank" class="btn btn-outline-info btn-sm">Ver soporte</a>';
+    echo '<button type="button" onclick="confirmarEliminacion(\'/trasladoRecibir/limpiar\')" class="btn btn-outline-danger btn-sm">Limpiar todo</button></td>';
+    echo '</tr>';
+
+    echo '</tfoot>
+
     </table>';
+
     mysqli_close($connCPharma);
     sqlsrv_close($conn);
   }

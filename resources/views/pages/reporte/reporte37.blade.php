@@ -198,7 +198,7 @@
             <i class="fas fa-search text-white" aria-hidden="true"></i>
           </span>
         </div>
-        <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterAllTable()">
+        <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterAllTableWithoutFooter()">
       </div>
       <br/>
     ';
@@ -476,16 +476,20 @@
 
   	}
 
+    echo '</tbody>';
+
+    echo '<tfoot>';
+
     echo '<tr>';
     echo '<td colspan="12"></td>';
-    echo '<td><a href="/trasladoRecibir" target="_blank" class="btn btn-outline-info btn-sm">Ver soporte</a></td>';
-    echo '<td><button type="button" onclick="confirmarEliminacion(\'/trasladoRecibir/limpiar\')" class="btn btn-outline-danger btn-sm">Limpiar todo</button></td>';
+    echo '<td colspan="2"><a href="/trasladoRecibir" target="_blank" class="btn btn-outline-info btn-sm">Ver soporte</a>';
+    echo '<button type="button" onclick="confirmarEliminacion(\'/trasladoRecibir/limpiar\')" class="btn btn-outline-danger btn-sm">Limpiar todo</button></td>';
     echo '</tr>';
 
-  	echo '
-	    </tbody>
-	  </table>
-	';
+    echo '</tfoot>';
+
+
+    echo '</table>';
 
 	sqlsrv_close($conn);
   }
