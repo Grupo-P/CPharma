@@ -246,19 +246,6 @@
               <th scope="col" class="CP-sticky">Descripcion</td>
               <th scope="col" class="CP-sticky">Precio</br>(Con IVA) '.SigVe.'</td>
               <th scope="col" class="CP-sticky">Existencia</td>
-              <th scope="col" style="display: none" class="CP-sticky">Dolarizado?</td>
-              <th scope="col" style="display: none" class="CP-sticky">Gravado?</td>
-              <th scope="col" style="display: none" class="CP-sticky">Clasificacion</td>
-              <th scope="col" style="display: none" class="CP-sticky">Dia 10</td>
-              <th scope="col" style="display: none" class="CP-sticky">Dia 9</td>
-              <th scope="col" style="display: none" class="CP-sticky">Dia 8</td>
-              <th scope="col" style="display: none" class="CP-sticky">Dia 7</td>
-              <th scope="col" style="display: none" class="CP-sticky">Dia 6</td>
-              <th scope="col" style="display: none" class="CP-sticky">Dia 5</td>
-              <th scope="col" style="display: none" class="CP-sticky">Dia 4</td>
-              <th scope="col" style="display: none" class="CP-sticky">Dia 3</td>
-              <th scope="col" style="display: none" class="CP-sticky">Dia 2</td>
-              <th scope="col" style="display: none" class="CP-sticky">Dia 1</td>
               <th scope="col" class="CP-sticky">Unidades Vendidas</td>
               <th scope="col" class="CP-sticky">Dias Restantes</td>
               <th scope="col" class="CP-sticky">Ultimo Proveedor</td>
@@ -350,19 +337,6 @@
 
       echo '<td align="center">'.number_format($Precio,2,"," ,"." ).'</td>';
       echo '<td align="center">'.intval($Existencia).'</td>';
-      echo '<td style="display: none" align="center">'.$Dolarizado.'</td>';
-      echo '<td style="display: none" align="center">'.$Gravado.'</td>';
-      echo '<td style="display: none" align="center">'.$clasificacion.'</td>';
-      echo '<td style="display: none" align="center">'.intval($Dia10).'</td>';
-      echo '<td style="display: none" align="center">'.intval($Dia9).'</td>';
-      echo '<td style="display: none" align="center">'.intval($Dia8).'</td>';
-      echo '<td style="display: none" align="center">'.intval($Dia7).'</td>';
-      echo '<td style="display: none" align="center">'.intval($Dia6).'</td>';
-      echo '<td style="display: none" align="center">'.intval($Dia5).'</td>';
-      echo '<td style="display: none" align="center">'.intval($Dia4).'</td>';
-      echo '<td style="display: none" align="center">'.intval($Dia3).'</td>';
-      echo '<td style="display: none" align="center">'.intval($Dia2).'</td>';
-      echo '<td style="display: none" align="center">'.intval($Dia1).'</td>';
 
       echo 
       '<td align="center" class="CP-barrido">
