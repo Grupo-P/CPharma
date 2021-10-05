@@ -1104,7 +1104,6 @@
 
                 $precioPartes = explode(".",$TroquelAlmacen1);
 
-                //if( count($precioPartes)>=2 && $precioPartes[1]==DecimalEtiqueta){ //substr($evento,-2)
                 if( count($precioPartes)>=2 && substr($precioPartes[1],-2)==DecimalEtiqueta){
                     $Precio = $TroquelAlmacen1;
                 }else{
@@ -1140,7 +1139,6 @@
 
                 $precioPartes = explode(".",$TroquelAlmacen1);
 
-                //if( count($precioPartes)>=2 && $precioPartes[1]==DecimalEtiqueta){ //substr($evento,-2)
                 if( count($precioPartes)>=2 && substr($precioPartes[1],-2)==DecimalEtiqueta){
                     $Precio = $TroquelAlmacen1;
                 }else{
@@ -2035,7 +2033,6 @@
         if(intval($Existencia)>0){
 
             $PrecioHoy = FG_Calculo_Precio_Alfa($Existencia,$ExistenciaAlmacen1,$ExistenciaAlmacen2,$IsTroquelado,$UtilidadArticulo,$UtilidadCategoria,$TroquelAlmacen1,$PrecioCompraBrutoAlmacen1,$TroquelAlmacen2,$PrecioCompraBrutoAlmacen2,$PrecioCompraBruto,$IsIVA,$CondicionExistencia);
-            $PrecioSCN = round($PrecioHoy,2);
 
             if($IsPrecioAyer==true){
 
@@ -2088,13 +2085,10 @@
                             $tam_dolar = "";
                         }
 
-                        if(isset($precioPartes) && count($precioPartes)>=2){ //Comentado por reconversion
-                        //if($SumCuentaNull==0 && $TroquelAlmacen1==$PrecioSCN){
+                        if(isset($precioPartes) && count($precioPartes)>=2){
                             if(_EtiquetaDolar_=='SI'){
                                 $tam_dolar = "font-size:1.7rem;";
                                 $flag_imprime = true;
-                                // Comentado por reconversion
-                                //if($precioPartes[1]==DecimalEtiqueta){
                                 if(substr($precioPartes[1],-2)==DecimalEtiqueta){
                                     $flag_imprime = true;
                                 }
@@ -2324,10 +2318,8 @@
                             $PrecioHoy = $PrecioHoy/$TasaActual;
 
                             if(isset($precioPartes) && count($precioPartes)>=2){
-                            //if($SumCuentaNull==0 && $TroquelAlmacen1==$PrecioSCN){
                                 $flag_imprime = true;
 
-                                //if($precioPartes[1]==DecimalEtiqueta){
                                 if(substr($precioPartes[1],-2)==DecimalEtiqueta){
                                     $flag_imprime = true;
                                 }
