@@ -126,7 +126,8 @@
                         }
 
                         if(_EtiquetaDolar_=='SI'){
-                            //$precioPartes = explode(".",$PrecioHoy);
+                            $precioPartes = explode(".",$PrecioHoy);
+                            /*
                             $sqlSCN = "SELECT sum(CuentaNull) as SumCuentaNull from(
                                 select M_PrecioTroquelado, IIF(M_PrecioTroquelado IS NULL,1,0) as CuentaNull from InvLote where InvLote.id in (
                                     select InvLoteAlmacen.InvLoteId from InvLoteAlmacen
@@ -139,6 +140,7 @@
                             $resultSCN = sqlsrv_query($conn,$sqlSCN);
                             $rowSCN = sqlsrv_fetch_array($resultSCN,SQLSRV_FETCH_ASSOC);
                             $SumCuentaNull = $rowSCN["SumCuentaNull"];
+                            */
 
                             $TasaActual = FG_Tasa_Fecha_Venta($connCPharma,date('Y-m-d'));
                             $PrecioHoy = $PrecioHoy/$TasaActual;
@@ -148,8 +150,9 @@
                             $rowCC = mysqli_fetch_assoc($resultCC);
                             $PrecioAyer = $rowCC["precio_dolar"];
 
+                            if(substr($precioPartes[1],-2)==DecimalEtiqueta){
                             //if($precioPartes[1]==DecimalEtiqueta){
-                            if($SumCuentaNull==0 && $TroquelAlmacen1==$PrecioSCN){
+                            //if($SumCuentaNull==0 && $TroquelAlmacen1==$PrecioSCN){
                                 $flag_imprime = true;
                             }
                             else{
@@ -313,7 +316,8 @@
                     }
 
                     if(_EtiquetaDolar_=='SI'){
-                        //$precioPartes = explode(".",$PrecioHoy);
+                        $precioPartes = explode(".",$PrecioHoy);
+                        /*
                         $sqlSCN = "SELECT sum(CuentaNull) as SumCuentaNull from(
                             select M_PrecioTroquelado, IIF(M_PrecioTroquelado IS NULL,1,0) as CuentaNull from InvLote where InvLote.id in (
                                 select InvLoteAlmacen.InvLoteId from InvLoteAlmacen
@@ -326,13 +330,15 @@
                         $resultSCN = sqlsrv_query($conn,$sqlSCN);
                         $rowSCN = sqlsrv_fetch_array($resultSCN,SQLSRV_FETCH_ASSOC);
                         $SumCuentaNull = $rowSCN["SumCuentaNull"];
+                        */
 
                         $TasaActual = FG_Tasa_Fecha_Venta($connCPharma,date('Y-m-d'));
 
                         $PrecioHoy = $PrecioHoy/$TasaActual;
 
+                        if(substr($precioPartes[1],-2)==DecimalEtiqueta){
                         //if($precioPartes[1]==DecimalEtiqueta){
-                        if($SumCuentaNull==0 && $TroquelAlmacen1==$PrecioSCN){
+                        //if($SumCuentaNull==0 && $TroquelAlmacen1==$PrecioSCN){
                             $flag_imprime = true;
                         }
                         else{

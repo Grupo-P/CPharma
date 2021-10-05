@@ -2045,7 +2045,8 @@
                 $PrecioAyer = $rowCC["precio"];
 
                 if($Dolarizado=='SI' && _EtiquetaDolar_=='SI'){
-                    //$precioPartes = explode(".",$PrecioHoy); //Comentado por reconversion
+                    $precioPartes = explode(".",$PrecioHoy); //Comentado por reconversion
+                    /*
                     $sqlSCN = "SELECT sum(CuentaNull) as SumCuentaNull from(
                             select M_PrecioTroquelado, IIF(M_PrecioTroquelado IS NULL,1,0) as CuentaNull from InvLote where InvLote.id in (
                                 select InvLoteAlmacen.InvLoteId from InvLoteAlmacen
@@ -2058,8 +2059,8 @@
                     $resultSCN = sqlsrv_query($conn,$sqlSCN);
                     $rowSCN = sqlsrv_fetch_array($resultSCN,SQLSRV_FETCH_ASSOC);
                     $SumCuentaNull = $rowSCN["SumCuentaNull"];
+                    */
 
-                    //$TasaActual = FG_Tasa_Fecha_Venta($connCPharma,date('Y-m-d'));
                     $PrecioHoy = $PrecioHoy/$TasaActual;
 
                     $sqlCC = MySQL_DiasCero_PrecioAyer_Dolar($IdArticulo,$FechaCambio);
@@ -2087,25 +2088,25 @@
                             $tam_dolar = "";
                         }
 
-                        //if(isset($precioPartes) && count($precioPartes)>=2){ //Comentado por reconversion
-                        if($SumCuentaNull==0 && $TroquelAlmacen1==$PrecioSCN){
+                        if(isset($precioPartes) && count($precioPartes)>=2){ //Comentado por reconversion
+                        //if($SumCuentaNull==0 && $TroquelAlmacen1==$PrecioSCN){
                             if(_EtiquetaDolar_=='SI'){
                                 $tam_dolar = "font-size:1.7rem;";
                                 $flag_imprime = true;
-                                /* Comentado por reconversion
-                                if($precioPartes[1]==DecimalEtiqueta){
+                                // Comentado por reconversion
+                                //if($precioPartes[1]==DecimalEtiqueta){
+                                if(substr($precioPartes[1],-2)==DecimalEtiqueta){
                                     $flag_imprime = true;
                                 }
                                 else{
                                     $flag_imprime = false;
                                 }
-                                */
+
                             }else if(_EtiquetaDolar_=='NO'){
                                 $flag_imprime = true;
                                 $moneda = SigVe;
                             }
                         }else{
-                            //$flag_imprime = false;
                             echo'
                             <table class="etq" style="display: inline;">
                                 <thead class="etq">
@@ -2125,9 +2126,6 @@
                                         <td class="centrado rowDer rowDerA aumento preciopromo" colspan="2">
                                             <strong class="text-danger">
                                             Solicite ayuda al dpto. de procesamiento (Sin Decimal)
-                                            <br>Cuenta NUll: '.$SumCuentaNull.' -
-                                            <br>Troquel 1: '.$TroquelAlmacen1.' -
-                                            <br>Precio: '.$PrecioSCN.'
                                             </strong>
                                         </td>
                                     </tr>
@@ -2275,7 +2273,7 @@
                                     <tr>
                                         <td class="centrado rowDer rowDerA aumento preciopromo" colspan="2">
                                             <strong class="text-danger">
-                                            Solicite ayuda al dpto. de procesamiento (Decimal Diff. 01)
+                                            Solicite ayuda al dpto. de procesamiento (Decimal Diff. 0.0001)
                                             </strong>
                                         </td>
                                     </tr>
@@ -2306,7 +2304,8 @@
                         }
 
                         if(_EtiquetaDolar_=='SI'){
-                            //$precioPartes = explode(".",$PrecioHoy); //Comentado por reconversion
+                            $precioPartes = explode(".",$PrecioHoy); //Comentado por reconversion
+                            /*
                             $sqlSCN = "SELECT sum(CuentaNull) as SumCuentaNull from(
                                 select M_PrecioTroquelado, IIF(M_PrecioTroquelado IS NULL,1,0) as CuentaNull from InvLote where InvLote.id in (
                                     select InvLoteAlmacen.InvLoteId from InvLoteAlmacen
@@ -2316,25 +2315,27 @@
                                 )
                             ) as axu";
 
-                        $resultSCN = sqlsrv_query($conn,$sqlSCN);
-                        $rowSCN = sqlsrv_fetch_array($resultSCN,SQLSRV_FETCH_ASSOC);
-                        $SumCuentaNull = $rowSCN["SumCuentaNull"];
-                            //$TasaActual = FG_Tasa_Fecha_Venta($connCPharma,date('Y-m-d'));
+                            $resultSCN = sqlsrv_query($conn,$sqlSCN);
+                            $rowSCN = sqlsrv_fetch_array($resultSCN,SQLSRV_FETCH_ASSOC);
+                            $SumCuentaNull = $rowSCN["SumCuentaNull"];
+
+                            */
+
                             $PrecioHoy = $PrecioHoy/$TasaActual;
 
-                            //if(isset($precioPartes) && count($precioPartes)>=2){
-                            if($SumCuentaNull==0 && $TroquelAlmacen1==$PrecioSCN){
+                            if(isset($precioPartes) && count($precioPartes)>=2){
+                            //if($SumCuentaNull==0 && $TroquelAlmacen1==$PrecioSCN){
                                 $flag_imprime = true;
-                               /*
-                                if($precioPartes[1]==DecimalEtiqueta){
+
+                                //if($precioPartes[1]==DecimalEtiqueta){
+                                if(substr($precioPartes[1],-2)==DecimalEtiqueta){
                                     $flag_imprime = true;
                                 }
                                 else{
                                     $flag_imprime = false;
                                 }
-                                */
+
                             }else{
-                                //$flag_imprime = false;
                                 echo'
                                 <table class="etq" style="display: inline;">
                                     <thead class="etq">
@@ -2353,7 +2354,7 @@
                                         <tr>
                                             <td class="centrado rowDer rowDerA aumento preciopromo" colspan="2">
                                                 <strong class="text-danger">
-                                                Solicite ayuda al dpto. de procesamiento (Sin Decimal) B
+                                                Solicite ayuda al dpto. de procesamiento (Sin Decimal)
                                                 </strong>
                                             </td>
                                         </tr>
@@ -2469,7 +2470,7 @@
                                 <tr>
                                     <td class="centrado rowDer rowDerA aumento preciopromo" colspan="2">
                                         <strong class="text-danger">
-                                        Solicite ayuda al dpto. de procesamiento (Decimal Diff. 01) B
+                                        Solicite ayuda al dpto. de procesamiento (Decimal Diff. 0.0001)
                                         </strong>
                                     </td>
                                 </tr>

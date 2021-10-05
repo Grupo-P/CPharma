@@ -124,6 +124,7 @@
 
                         if(_EtiquetaDolar_=='SI'){
                             $precioPartes = explode(".",$PrecioHoy);
+                            /*
                             $sqlSCN = "SELECT sum(CuentaNull) as SumCuentaNull from(
                                 select M_PrecioTroquelado, IIF(M_PrecioTroquelado IS NULL,1,0) as CuentaNull from InvLote where InvLote.id in (
                                     select InvLoteAlmacen.InvLoteId from InvLoteAlmacen
@@ -136,6 +137,7 @@
                             $resultSCN = sqlsrv_query($conn,$sqlSCN);
                             $rowSCN = sqlsrv_fetch_array($resultSCN,SQLSRV_FETCH_ASSOC);
                             $SumCuentaNull = $rowSCN["SumCuentaNull"];
+                            */
 
                             $TasaActual = FG_Tasa_Fecha_Venta($connCPharma,date('Y-m-d'));
                             $PrecioHoy = $PrecioHoy/$TasaActual;
@@ -145,8 +147,9 @@
                             $rowCC = mysqli_fetch_assoc($resultCC);
                             $PrecioAyer = $rowCC["precio_dolar"];
 
+                            if(substr($precioPartes[1],-2)==DecimalEtiqueta){
                             //if($precioPartes[1]==DecimalEtiqueta){
-                            if($SumCuentaNull==0 && $TroquelAlmacen1==$PrecioSCN){
+                            //if($SumCuentaNull==0 && $TroquelAlmacen1==$PrecioSCN){
                                 $flag_imprime = true;
                             }
                             else{
@@ -255,9 +258,6 @@
                                         <td class="centrado rowDer rowDerA aumento1 preciopromo" colspan="2">
                                             <strong class="text-danger">
                                             Solicite ayuda al dpto. de procesamiento
-                                            <br>Cuenta NUll: '.$SumCuentaNull.' -
-                                            <br>Troquel 1: '.$TroquelAlmacen1.' -
-                                            <br>Precio: '.$PrecioSCN.'
                                             </strong>
                                         </td>
                                     </tr>
@@ -293,6 +293,7 @@
 
                     if(_EtiquetaDolar_=='SI'){
                         $precioPartes = explode(".",$PrecioHoy);
+                        /*
                         $sqlSCN = "SELECT sum(CuentaNull) as SumCuentaNull from(
                             select M_PrecioTroquelado, IIF(M_PrecioTroquelado IS NULL,1,0) as CuentaNull from InvLote where InvLote.id in (
                                 select InvLoteAlmacen.InvLoteId from InvLoteAlmacen
@@ -305,12 +306,14 @@
                         $resultSCN = sqlsrv_query($conn,$sqlSCN);
                         $rowSCN = sqlsrv_fetch_array($resultSCN,SQLSRV_FETCH_ASSOC);
                         $SumCuentaNull = $rowSCN["SumCuentaNull"];
+                        */
 
                         $TasaActual = FG_Tasa_Fecha_Venta($connCPharma,date('Y-m-d'));
                         $PrecioHoy = $PrecioHoy/$TasaActual;
 
+                        if(substr($precioPartes[1],-2)==DecimalEtiqueta){
                         //if($precioPartes[1]==DecimalEtiqueta){
-                        if($SumCuentaNull==0 && $TroquelAlmacen1==$PrecioSCN){
+                        //if($SumCuentaNull==0 && $TroquelAlmacen1==$PrecioSCN){
                             $flag_imprime = true;
                         }
                         else{
@@ -411,9 +414,6 @@
                                     <td class="centrado rowDer rowDerA aumento1 preciopromo" colspan="2">
                                         <strong class="text-danger">
                                         Solicite ayuda al dpto. de procesamiento
-                                        <br>Cuenta NUll: '.$SumCuentaNull.' -
-                                        <br>Troquel 1: '.$TroquelAlmacen1.' -
-                                        <br>Precio: '.$PrecioSCN.'
                                         </strong>
                                     </td>
                                 </tr>
