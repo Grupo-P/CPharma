@@ -37,15 +37,15 @@
     .autocomplete-items div {
       padding: 10px;
       cursor: pointer;
-      background-color: #fff; 
-      border-bottom: 1px solid #d4d4d4; 
+      background-color: #fff;
+      border-bottom: 1px solid #d4d4d4;
     }
     .autocomplete-items div:hover {
-      background-color: #e9e9e9; 
+      background-color: #e9e9e9;
     }
     .autocomplete-active {
-      background-color: DodgerBlue !important; 
-      color: #ffffff; 
+      background-color: DodgerBlue !important;
+      color: #ffffff;
     }
     </style>
 @endsection
@@ -57,7 +57,7 @@
   </h1>
   <hr class="row align-items-start col-12">
 
-<?php 
+<?php
   include(app_path().'\functions\config.php');
   include(app_path().'\functions\functions.php');
   include(app_path().'\functions\querys_mysql.php');
@@ -66,18 +66,18 @@
 
   $ArtJson = "";
 
-  if (isset($_GET['SEDE'])){      
+  if (isset($_GET['SEDE'])){
     echo '<h1 class="h5 text-success"  align="left"> <i class="fas fa-prescription"></i> '.FG_Nombre_Sede($_GET['SEDE']).'</h1>';
   }
   echo '<hr class="row align-items-start col-12">';
-  
+
   if (isset($_GET['Id'])){
   //CASO 2: CARGA AL HABER SELECCIONADO UNA DEVOLUCION
   //se pasa a mostrar la informacion de la devolucion
     $InicioCarga = new DateTime("now");
 
     SC2_Devolucion_info($_GET['SEDE'],$_GET['Id'],$_GET['NumeroDevolucion']);
-    
+
     $FinCarga = new DateTime("now");
     $IntervalCarga = $InicioCarga->diff($FinCarga);
     echo'Tiempo de carga: '.$IntervalCarga->format("%Y-%M-%D %H:%I:%S");
@@ -86,9 +86,9 @@
   //CASO 4: CARGA AL HABER SELECCIONADO UNA DEVOLUCION
   //se pasa a la seleccion del articulo
     $InicioCarga = new DateTime("now");
-    
+
     SC2_Actualizar_Troquel($_GET['SEDE'],$_GET['IdDevolucion'],$_GET['IdArticulos'],$_GET['IdLotes'],$_GET['troquelesnuevos'],$_GET['Modalidad'],$_GET['troquelesanteriores']);
-    
+
     FG_Guardar_Auditoria('ACTUALIZAR','TROQUEL DEVOLUCION',$_GET['IdDevolucion']);
 
     $FinCarga = new DateTime("now");
@@ -132,7 +132,7 @@
     $FinCarga = new DateTime("now");
     $IntervalCarga = $InicioCarga->diff($FinCarga);
     echo'Tiempo de carga: '.$IntervalCarga->format("%Y-%M-%D %H:%I:%S");
-  } 
+  }
 ?>
 @endsection
 
@@ -143,10 +143,10 @@
     <script type="text/javascript">
       ArrJs = eval(<?php echo $ArtJson ?>);
       autocompletado(document.getElementById("myInput"),document.getElementById("myId"), ArrJs);
-    </script> 
+    </script>
 <?php
   }
-?>  
+?>
 @endsection
 
 <?php
@@ -169,7 +169,7 @@
   }
   /**********************************************************************************/
   /*
-    TITULO: SC2_Devolucion_info    
+    TITULO: SC2_Devolucion_info
     DESAROLLADO POR: SERGIO COVA
   */
   function SC2_Devolucion_info($SedeConnection,$IdDevolucion,$NumeroDevolucion){
@@ -197,10 +197,10 @@
           <th scope="col">Numero Devolucion</th>
           <th scope="col">Cliente</td>
           <th scope="col">Fecha</td>
-          <th scope="col">Impresora</td>          
+          <th scope="col">Impresora</td>
           <th scope="col">Caja</td>
           <th scope="col">Monto '.SigVe.'</td>
-          <th scope="col">Numero Factura</td>         
+          <th scope="col">Numero Factura</td>
           <th scope="col">Seleccion</td>
         </tr>
       </thead>
@@ -221,19 +221,19 @@
             <input id="SEDE" name="SEDE" type="hidden" value="';
                 print_r($SedeConnection);
                 echo'">
-             
+
               <input type="submit" value="Selecionar" class="btn btn-outline-success">
-              
+
               <input id="IdDevolucion" name="IdDevolucion" type="hidden" value="'.$IdDevolucion.'">
-              
+
               <input id="NumeroDevolucion" name="NumeroDevolucion" type="hidden" value="'.$NumeroDevolucion.'">
-          </form>        
+          </form>
         ';
 
     echo '
       </tr>
       </tbody>
-    </table>';    
+    </table>';
   }
   /**********************************************************************************/
   /*
@@ -242,7 +242,7 @@
   */
   function SC2Q_Devolucion_info($IdDevolucion) {
     $sql = "
-        SELECT 
+        SELECT
         VenDevolucion.ConsecutivoDevolucionSistema as NumeroDevolucion,
         CONCAT(GenPersona.Nombre,' ', GenPersona.Apellido) as Cliente,
         VenDevolucion.FechaDocumento as Fecha,
@@ -261,7 +261,7 @@
   }
   /**********************************************************************************/
   /*
-    TITULO: SC2_Devolucion_detalle   
+    TITULO: SC2_Devolucion_detalle
     DESAROLLADO POR: SERGIO COVA
   */
   function SC2_Devolucion_detalle($SedeConnection,$IdDevolucion,$flagTroquelNuevo){
@@ -269,7 +269,7 @@
     $conn = FG_Conectar_Smartpharma($SedeConnection);
     $sql = SC2Q_Devolucion_info($IdDevolucion);
     $result = sqlsrv_query($conn,$sql);
-    $row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC);    
+    $row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC);
 
     echo '
     <div class="input-group md-form form-sm form-1 pl-0 CP-stickyBar">
@@ -289,10 +289,10 @@
           <th scope="col">Numero Devolucion</th>
           <th scope="col">Cliente</td>
           <th scope="col">Fecha</td>
-          <th scope="col">Impresora</td>          
+          <th scope="col">Impresora</td>
           <th scope="col">Caja</td>
           <th scope="col">Monto '.SigVe.'</td>
-          <th scope="col">Numero Factura</td>         
+          <th scope="col">Numero Factura</td>
         </tr>
       </thead>
       <tbody>
@@ -308,13 +308,13 @@
     echo '
       </tr>
       </tbody>
-    </table>';    
+    </table>';
 
-    
+
     $sql1 = SC2Q_Devolucion_detalle($IdDevolucion);
     $result1 = sqlsrv_query($conn,$sql1);
 
-    echo '    
+    echo '
     <form class="form-group" autocomplete="off" action="" target="_blank">
     <table class="table table-striped table-bordered col-12 sortable form-group">
       <thead class="thead-dark">
@@ -322,22 +322,22 @@
           <th scope="col">#</th>
           <th scope="col">Codigo Interno</th>
           <th scope="col">Descripcion</th>
-          <th scope="col">Cantidad</th>   
-          <th scope="col">Precio</br>(Con IVA) '.SigVe.'</th>       
+          <th scope="col">Cantidad</th>
+          <th scope="col">Precio</br>(Con IVA) '.SigVe.'</th>
           <th scope="col">Gravado</th>
           <th scope="col">Dolarizado</th>
           <th scope="col">Numero Lote</th>
           <th scope="col">Existencia</th>
           <th scope="col">Troquel Actual <br> (CON IVA) '.SigVe.'</th>
           <th scope="col">Precio Devolucion <br> (SIN IVA) '.SigVe.'</th>';
-          
+
           if($flagTroquelNuevo){
             echo '<th scope="col">Troquel Nuevo <br> (CON IVA) '.SigVe.'</th>';
-          }                
+          }
 
         echo'</tr>
       </thead>
-      <tbody>      
+      <tbody>
     ';
 
     $contador = 1;
@@ -348,7 +348,7 @@
         $sql = R2Q_Detalle_Articulo($idArticulo);
         $result = sqlsrv_query($conn,$sql);
         $row = sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC);
-        
+
         $Existencia = $row["Existencia"];
         $ExistenciaAlmacen1 = $row["ExistenciaAlmacen1"];
         $ExistenciaAlmacen2 = $row["ExistenciaAlmacen2"];
@@ -362,27 +362,27 @@
         $PrecioCompraBrutoAlmacen2 = $row["PrecioCompraBrutoAlmacen2"];
         $PrecioCompraBruto = $row["PrecioCompraBruto"];
         $Dolarizado = $row["Dolarizado"];
-        $CondicionExistencia = 'CON_EXISTENCIA';        
-       
+        $CondicionExistencia = 'CON_EXISTENCIA';
+
         $Precio = FG_Calculo_Precio_Alfa($Existencia,$ExistenciaAlmacen1,$ExistenciaAlmacen2,$IsTroquelado,$UtilidadArticulo,$UtilidadCategoria,$TroquelAlmacen1,$PrecioCompraBrutoAlmacen1,$TroquelAlmacen2,
         $PrecioCompraBrutoAlmacen2,$PrecioCompraBruto,$IsIVA,$CondicionExistencia);
-         
+
         $Gravado = FG_Producto_Gravado($row1["Impuesto"]);
         $Dolarizado = FG_Producto_Dolarizado($row1["Dolarizado"]);
 
         if($Gravado=="SI"){
-          $TroquelSugerido = round($row1["PrecioBrutoDevolucion"]*Impuesto,2,PHP_ROUND_HALF_UP);          
+          $TroquelSugerido = round($row1["PrecioBrutoDevolucion"]*Impuesto,2,PHP_ROUND_HALF_UP);
         }else{
           $TroquelSugerido = round($row1["PrecioBrutoDevolucion"],2,PHP_ROUND_HALF_UP);
         }
 
         if( ($Dolarizado=="NO") && ($row1["PTroquel"]=='' || $row1["PTroquel"]==NULL) && ( round($Precio,2,PHP_ROUND_HALF_UP) == $TroquelSugerido)){
           $TroquelSugerido = "";
-        }                             
-		
+        }
+
         if(($row1["ExistenciaActual"] <= 0)){
           $TroquelSugerido = "";
-        }                             
+        }
 
         echo '<tr>';
         echo '<td align="center"><strong>'.intval($contador).'</strong></td>';
@@ -392,7 +392,7 @@
         <a href="/reporte10?Descrip='.FG_Limpiar_Texto($row1["Descripcion"]).'&Id='.$idArticulo.'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
           .FG_Limpiar_Texto($row1["Descripcion"]).
         '</a>
-        </td>';        
+        </td>';
         echo '<td align="center">'.intval($row1["CantidadDevolucion"]).'</td>';
         echo '<td align="center">'.number_format($Precio,2,"," ,"." ).'</td>';
         echo '<td align="center">'.$Gravado.'</td>';
@@ -401,32 +401,32 @@
         echo '<td align="center">'.intval($row1["ExistenciaActual"]).'</td>';
         echo '<td align="center">'.number_format($row1["PTroquel"],2,"," ,"." ).'</td>';
         echo '<td align="center">'.number_format($row1["PrecioBrutoDevolucion"],2,"," ,"." ).'</td>';
-        
+
         if($flagTroquelNuevo){
-          echo '         
+          echo '
             <td align="center">
               <input value="'.$TroquelSugerido.'" class="form-group" type="number" min="0.00" step="any" name="troquelesnuevos[]" style="width:100%;" autofocus="autofocus">
-            </td>                       
+            </td>
               <input id="SEDE" name="SEDE" type="hidden" value="'.$SedeConnection.'">
               <input id="IdDevolucion" name="IdDevolucion" type="hidden" value="'.$IdDevolucion.'">
-              <input id="IdArticulos" name="IdArticulos[]" type="hidden" value="'.$idArticulo.'">                               
+              <input id="IdArticulos" name="IdArticulos[]" type="hidden" value="'.$idArticulo.'">
               <input id="IdLotes" name="IdLotes[]" type="hidden" value="'.$row1["IdLote"].'">
               <input id="troquelesanteriores" name="troquelesanteriores[]" type="hidden" value="'.$row1["PTroquel"].'">
           ';
-        } 
-        
+        }
+
         echo '</tr>';
         $contador++;
     }
-    echo '        
+    echo '
       </tbody>
     </table>';
 
-      if($flagTroquelNuevo){        
+      if($flagTroquelNuevo){
         echo '<input type="submit" name="Modalidad" value="Revertir" class="btn btn-danger btn-md form-group" style="float:right">';
-        echo '<input type="submit" name="Modalidad" value="Troquelar" class="btn btn-success btn-md form-group" style="float:right; margin-right:5px;">';        
+        echo '<input type="submit" name="Modalidad" value="Troquelar" class="btn btn-success btn-md form-group" style="float:right; margin-right:5px;">';
         echo '</form>';
-      } 
+      }
   }
   /**********************************************************************************/
   /*
@@ -435,7 +435,7 @@
   */
   function SC2Q_Devolucion_detalle($IdDevolucion) {
     $sql = "
-        select 
+        select
         InvArticulo.Id as IdArticulo,
         InvArticulo.CodigoArticulo as CodigoInterno,
         InvArticulo.Descripcion,
@@ -470,16 +470,16 @@
   }
   /**********************************************************************************/
   /*
-    TITULO: SC2_Actualizar_Troquel    
+    TITULO: SC2_Actualizar_Troquel
     DESAROLLADO POR: SERGIO COVA
   */
   function SC2_Actualizar_Troquel($SedeConnection,$IdDevolucion,$Arr_Articulos,$Arr_Lotes,$Arra_Troqueles,$Modalidad,$Arra_Troqueles_Anteriores){
 
     $conn = FG_Conectar_Smartpharma($SedeConnection);
-    
+
     $limit = count($Arr_Articulos);
     $msn = "";
-    
+
     for($i = 0 ; $i < $limit; $i++){
       $IdArticulo = $Arr_Articulos[$i];
       $IdLote = $Arr_Lotes[$i];
@@ -488,7 +488,7 @@
 
       if($Modalidad == "Troquelar"){
         if( (floatval($Troquel)>0) && ($Troquel!="NULL") && ($Troquel!="null") && ($Troquel!="") ){
-          $sqlTN = SC1Q_Actualizar_Troquel(true,$Troquel,$IdArticulo,$IdLote);          
+          $sqlTN = SC1Q_Actualizar_Troquel(true,$Troquel,$IdArticulo,$IdLote);
           sqlsrv_query($conn,$sqlTN);
           $msn = '<h4 class="h5 text-success" align="center">Troqueles actualizados con exito</h4>';
         }
@@ -517,54 +517,54 @@
   }
   /**********************************************************************************/
   /*
-    TITULO: SC1Q_Actualizar_Fecha  
+    TITULO: SC1Q_Actualizar_Fecha
     DESAROLLADO POR: SERGIO COVA
   */
   function SC1Q_Actualizar_Troquel($flag,$Troquel,$IdArticulo,$IdLote) {
-    
+
     if($flag == true){
       $sql = "
-      UPDATE InvLote 
+      UPDATE InvLote
       SET M_PrecioTroquelado = '$Troquel'
-      FROM InvLote, invlotealmacen, InvArticulo 
-      WHERE InvLote.id = '$IdLote' 
-      AND  InvArticulo.id = InvLote.InvArticuloId 
-      AND invlote.id = invlotealmacen.InvLoteId 
+      FROM InvLote, invlotealmacen, InvArticulo
+      WHERE InvLote.id = '$IdLote'
+      AND  InvArticulo.id = InvLote.InvArticuloId
+      AND invlote.id = invlotealmacen.InvLoteId
       AND InvLoteAlmacen.existencia > 0
       AND InvLoteAlmacen.InvAlmacenId = 1
       AND InvArticulo.id = '$IdArticulo'
       ";
-    }    
+    }
     return $sql;
   }
   /**********************************************************************************/
   /*
-    TITULO: SC1Q_Actualizar_Troquel_Nuleable        
+    TITULO: SC1Q_Actualizar_Troquel_Nuleable
     DESAROLLADO POR: SERGIO COVA
   */
   function SC1Q_Actualizar_Troquel_Nuleable($flag,$Troquel,$IdArticulo,$IdLote) {
-    
+
     if($flag == true){
       $sql = "
-      UPDATE InvLote 
+      UPDATE InvLote
       SET M_PrecioTroquelado = '$Troquel'
-      FROM InvLote, invlotealmacen, InvArticulo 
-      WHERE InvLote.id = '$IdLote' 
-      AND  InvArticulo.id = InvLote.InvArticuloId 
-      AND invlote.id = invlotealmacen.InvLoteId 
-      AND InvLoteAlmacen.existencia > 0 
+      FROM InvLote, invlotealmacen, InvArticulo
+      WHERE InvLote.id = '$IdLote'
+      AND  InvArticulo.id = InvLote.InvArticuloId
+      AND invlote.id = invlotealmacen.InvLoteId
+      AND InvLoteAlmacen.existencia > 0
       AND InvLoteAlmacen.InvAlmacenId = 1
       AND InvArticulo.id = '$IdArticulo'
       ";
     }
     else{
       $sql = "
-      UPDATE InvLote 
+      UPDATE InvLote
       SET M_PrecioTroquelado = NULL
-      FROM InvLote, invlotealmacen, InvArticulo 
-      WHERE InvLote.id = '$IdLote' 
-      AND  InvArticulo.id = InvLote.InvArticuloId 
-      AND invlote.id = invlotealmacen.InvLoteId 
+      FROM InvLote, invlotealmacen, InvArticulo
+      WHERE InvLote.id = '$IdLote'
+      AND  InvArticulo.id = InvLote.InvArticuloId
+      AND invlote.id = invlotealmacen.InvLoteId
       AND InvLoteAlmacen.existencia > 0
       AND InvLoteAlmacen.InvAlmacenId = 1
       AND InvArticulo.id = '$IdArticulo'
@@ -631,7 +631,7 @@
     WHERE(InvLoteAlmacen.InvAlmacenId = '1')
     AND (InvLoteAlmacen.InvArticuloId = InvArticulo.Id)
     AND (InvLoteAlmacen.Existencia>0)
-    ORDER BY invlote.M_PrecioTroquelado DESC)AS DECIMAL(38,2)),2,0)) AS TroquelAlmacen1,
+    ORDER BY invlote.M_PrecioTroquelado DESC)AS DECIMAL(38,4)),4,0)) AS TroquelAlmacen1,
 --Precio Compra Bruto Almacen 1
     (ROUND(CAST((SELECT TOP 1
     InvLote.M_PrecioCompraBruto

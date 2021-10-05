@@ -10,7 +10,7 @@
       box-sizing:border-box;
     }
     .autocomplete {
-      position:relative; 
+      position:relative;
       display:inline-block;
     }
     input {
@@ -21,7 +21,7 @@
       font-size:16px;
     }
     input[type=text] {
-      background-color:#f1f1f1; 
+      background-color:#f1f1f1;
       width:100%;
     }
     .autocomplete-items {
@@ -37,14 +37,14 @@
     .autocomplete-items div {
       padding:10px;
       cursor:pointer;
-      background-color:#fff; 
-      border-bottom:1px solid #d4d4d4; 
+      background-color:#fff;
+      border-bottom:1px solid #d4d4d4;
     }
     .autocomplete-items div:hover {
       background-color:#e9e9e9;
     }
     .autocomplete-active {
-      background-color:DodgerBlue !important; 
+      background-color:DodgerBlue !important;
       color:#fff;
     }
   </style>
@@ -56,7 +56,7 @@
     Detalle de movimientos
   </h1>
   <hr class="row align-items-start col-12">
-  
+
 <?php
   include(app_path().'\functions\config.php');
   include(app_path().'\functions\functions.php');
@@ -74,7 +74,7 @@
     ';
   }
   echo '<hr class="row align-items-start col-12">';
-  
+
   if(isset($_GET['Id'])) {
     $InicioCarga = new DateTime("now");
 
@@ -141,12 +141,12 @@
             <td colspan="4">&nbsp;</td>
           </tr>
         </table>
-      
+
         <div class="autocomplete" style="width:90%;">
           <input id="myInputCB" type="text" name="CodBar" placeholder="Ingrese el codigo de barra del articulo " onkeyup="conteoCB()">
           <input id="myIdCB" name="IdCB" type="hidden">
         </div>
-        <input id="SEDE" name="SEDE" type="hidden" value="'; 
+        <input id="SEDE" name="SEDE" type="hidden" value="';
           print_r($_GET['SEDE']);
           echo'">
         <input type="submit" value="Buscar" class="btn btn-outline-success" style="width:9%;">
@@ -167,20 +167,20 @@
     <script type="text/javascript">
       ArrJs = eval(<?php echo $ArtJson ?>);
       autocompletado(document.getElementById("myInput"),document.getElementById("myId"), ArrJs);
-    </script> 
+    </script>
   <?php
     }
-  ?> 
+  ?>
   <?php
     if($CodJson!=""){
   ?>
     <script type="text/javascript">
       ArrJsCB = eval(<?php echo $CodJson ?>);
       autocompletadoCB(document.getElementById("myInputCB"),document.getElementById("myIdCB"), ArrJsCB);
-    </script> 
+    </script>
   <?php
     }
-  ?>  
+  ?>
 @endsection
 
 <?php
@@ -189,7 +189,7 @@
     TITULO: R12Q_Lista_Articulos
     FUNCION: Armar una lista de articulos con descripcion e id
     RETORNO: Lista de articulos con descripcion e id
-    DESAROLLADO POR: SERGIO COVA  
+    DESAROLLADO POR: SERGIO COVA
    */
   function R12Q_Lista_Articulos() {
     $sql = "
@@ -206,13 +206,13 @@
     TITULO: R12Q_Lista_Articulos_CodBarra
     FUNCION: Armar una lista de articulos con descripcion e id
     RETORNO: Lista de articulos con descripcion e id
-    DESAROLLADO POR: SERGIO COVA    
+    DESAROLLADO POR: SERGIO COVA
    */
   function R12Q_Lista_Articulos_CodBarra() {
     $sql = "
       SELECT
       (SELECT CodigoBarra
-      FROM InvCodigoBarra 
+      FROM InvCodigoBarra
       WHERE InvCodigoBarra.InvArticuloId = InvArticulo.Id
       AND InvCodigoBarra.EsPrincipal = 1) AS CodigoBarra,
       InvArticulo.Id
@@ -226,12 +226,12 @@
     TITULO: R12_Detalle_Movimientos
     FUNCION: arma la lista del troquel segun el articulo
     RETORNO: no aplica
-    DESAROLLADO POR: SERGIO COVA 
+    DESAROLLADO POR: SERGIO COVA
   */
   function R12_Detalle_Movimientos($SedeConnection,$FInicial,$FFinal,$IdArticulo) {
     $conn = FG_Conectar_Smartpharma($SedeConnection);
     $connCPharma = FG_Conectar_CPharma();
-     
+
     $sqlCPharma = SQL_Etiqueta_Articulo($IdArticulo);
     $ResultCPharma = mysqli_query($connCPharma,$sqlCPharma);
     $RowCPharma = mysqli_fetch_assoc($ResultCPharma);
@@ -367,30 +367,30 @@
     $result = sqlsrv_query($conn,$sql);
 
     $sql2 = R12Q_seccion2($FInicial,$FFinal,$IdArticulo);
-    $result2 = sqlsrv_query($conn,$sql2);  
+    $result2 = sqlsrv_query($conn,$sql2);
 
     $sql3 = R12Q_seccion3($FInicial,$FFinal,$IdArticulo);
     $result3 = sqlsrv_query($conn,$sql3);
 
-    echo '    
+    echo '
       <table class="table table-striped table-bordered col-12 sortable">
         <thead class="thead-dark">
           <tr>
             <th scope="col" class="CP-sticky">#</th>
-            <th scope="col" class="CP-sticky">Tipo de movimiento</td> 
-            <th scope="col" class="CP-sticky">Efecto</th> 
-            <th scope="col" class="CP-sticky">Cantidad</th>             
+            <th scope="col" class="CP-sticky">Tipo de movimiento</td>
+            <th scope="col" class="CP-sticky">Efecto</th>
+            <th scope="col" class="CP-sticky">Cantidad</th>
           </tr>
         </thead>
         <tbody>
     ';
 
     $contador = 1;
-    while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {      
+    while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
         echo '<tr>';
-        echo '<td align="center"><strong>'.intval($contador).'</strong></td>';        
+        echo '<td align="center"><strong>'.intval($contador).'</strong></td>';
         echo '<td align="center">'.FG_Limpiar_Texto($row['TipoMovimiento']).'</td>';
-        echo '<td align="center">'.$row['Efecto'].'</td>';      
+        echo '<td align="center">'.$row['Efecto'].'</td>';
         echo '<td align="center">'.$row['Cantidad'].'</td>';
         echo '</tr>';
         $contador++;
@@ -419,13 +419,13 @@
 
     $contador = 1;
     $saldo = 0;
-    while($row2 = sqlsrv_fetch_array($result2, SQLSRV_FETCH_ASSOC)) {      
+    while($row2 = sqlsrv_fetch_array($result2, SQLSRV_FETCH_ASSOC)) {
         echo '<tr>';
-        echo '<td align="center"><strong>'.intval($contador).'</strong></td>';        
+        echo '<td align="center"><strong>'.intval($contador).'</strong></td>';
         echo '<td align="center">'.$row2['Fecha']->format('d-m-Y').'</td>';
         echo '<td align="center">'.FG_Limpiar_Texto($row2['TipoMovimiento']).'</td>';
-        echo '<td align="center">'.$row2['Efecto'].'</td>';      
-        echo '<td align="center">'.$row2['Cantidad'].'</td>';        
+        echo '<td align="center">'.$row2['Efecto'].'</td>';
+        echo '<td align="center">'.$row2['Cantidad'].'</td>';
 
         if($row2['Efecto']=="+"){
           $saldo = $saldo + $row2['Cantidad'];
@@ -457,14 +457,14 @@
             <th scope="col" class="CP-sticky">Saldo</th>
             <th scope="col" class="CP-sticky">Almacen</th>
             <th scope="col" class="CP-sticky">Lote</th>
-            <th scope="col" class="CP-sticky">Numero Referencia</th>            
+            <th scope="col" class="CP-sticky">Numero Referencia</th>
             <th scope="col" class="CP-sticky">Titular</th>
             <th scope="col" class="CP-sticky">Comentario</th>
             <th scope="col" class="CP-sticky">Operador</th>
             <th scope="col" class="CP-sticky">Monto Total'.SigVe.'</th>
             <th scope="col" class="CP-sticky">Monto Unitario'.SigVe.'</th>
             <th scope="col" class="CP-sticky">Tasa Mercado</th>
-            <th scope="col" class="CP-sticky">Monto Unitario'.SigDolar.'</th>            
+            <th scope="col" class="CP-sticky">Monto Unitario'.SigDolar.'</th>
           </tr>
         </thead>
         <tbody>
@@ -472,14 +472,14 @@
 
     $contador = 1;
     $saldo = 0;
-    while($row3 = sqlsrv_fetch_array($result3, SQLSRV_FETCH_ASSOC)) {      
+    while($row3 = sqlsrv_fetch_array($result3, SQLSRV_FETCH_ASSOC)) {
         echo '<tr>';
-        echo '<td align="center"><strong>'.intval($contador).'</strong></td>';        
+        echo '<td align="center"><strong>'.intval($contador).'</strong></td>';
         echo '<td align="center">'.$row3['Fecha']->format('d-m-Y').'</td>';
         echo '<td align="center">'.$row3['Fecha']->format('h:i A').'</td>';
         echo '<td align="center">'.FG_Limpiar_Texto($row3['TipoMovimiento']).'</td>';
-        echo '<td align="center">'.$row3['Efecto'].'</td>';      
-        echo '<td align="center">'.$row3['Cantidad'].'</td>';        
+        echo '<td align="center">'.$row3['Efecto'].'</td>';
+        echo '<td align="center">'.$row3['Cantidad'].'</td>';
 
         if($row3['Efecto']=="+"){
           $saldo = $saldo + $row3['Cantidad'];
@@ -492,14 +492,14 @@
         echo '<td align="center">'.$row3['Lote'].'</td>';
 
         switch ($row3['idCausa']) {
-          case '1':            
+          case '1':
             $sql = R12_Causa_Compra($row3['NumeroReferencia']);
             $result = sqlsrv_query($conn,$sql);
             $row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC);
             echo '<td align="center">'.$row['NumeroFactura'].'</td>';
             echo '<td align="center">'.FG_Limpiar_Texto($row['Nombre']).'</td>';
             echo '<td align="center">-</td>';
-            
+
             echo '<td align="center">'.$row3['Operador'].'</td>';
             echo '<td align="center">'.number_format($row3['MontoTotal'],2,"," ,"." ).'</td>';
             echo '<td align="center">'.number_format($row3['MontoUnitario'],2,"," ,"." ).'</td>';
@@ -516,8 +516,8 @@
               echo '<td align="center">-</td>';
             }
             echo '</tr>';
-          break; 
-          case '2':            
+          break;
+          case '2':
             $sql = R12_Causa_DevCompra($row3['NumeroReferencia']);
             $reechosult = sqlsrv_query($conn,$sql);
             $row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC);
@@ -543,7 +543,7 @@
 
             echo '</tr>';
           break;
-          case '3':            
+          case '3':
             $sql = R12_Causa_Venta($row3['NumeroReferencia'],$IdArticulo);
             $result = sqlsrv_query($conn,$sql);
             $row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC);
@@ -567,8 +567,8 @@
               echo '<td align="center">-</td>';
             }
             echo '</tr>';
-          break; 
-          case '4':           
+          break;
+          case '4':
             $sql = R12_Causa_DevVenta($row3['NumeroReferencia'],$IdArticulo);
             $result = sqlsrv_query($conn,$sql);
             $row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC);
@@ -577,7 +577,7 @@
 
             $sql = R12_Coment_DevVenta($row3['NumeroReferencia']);
             $result = sqlsrv_query($conn,$sql);
-            $rowA = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC);            
+            $rowA = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC);
             echo '<td align="center">'.$rowA['DescripcionOperacion'].'</td>';
 
             echo '<td align="center">'.$row3['Operador'].'</td>';
@@ -598,12 +598,12 @@
 
             echo '</tr>';
           break;
-          case '5':           
+          case '5':
             $sql = R12_Coment_Trasferencia($row3['NumeroReferencia']);
             $result = sqlsrv_query($conn,$sql);
             $row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC);
             echo '<td align="center">'.$row3['NumeroReferencia'].'</td>';
-            echo '<td align="center">-</td>';                  
+            echo '<td align="center">-</td>';
             echo '<td align="center">'.FG_Limpiar_Texto($row['Observaciones']).'</td>';
 
             echo '<td align="center">'.$row3['Operador'].'</td>';
@@ -624,12 +624,12 @@
 
             echo '</tr>';
           break;
-          case '6':           
+          case '6':
             $sql = R12_Coment_Trasferencia($row3['NumeroReferencia']);
             $result = sqlsrv_query($conn,$sql);
             $row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC);
             echo '<td align="center">'.$row3['NumeroReferencia'].'</td>';
-            echo '<td align="center">-</td>';                  
+            echo '<td align="center">-</td>';
             echo '<td align="center">'.FG_Limpiar_Texto($row['Observaciones']).'</td>';
 
             echo '<td align="center">'.$row3['Operador'].'</td>';
@@ -650,7 +650,7 @@
 
             echo '</tr>';
           break;
-          case '14':           
+          case '14':
             $sql = R12_Coment_Ajuste($row3['NumeroReferencia']);
             $result = sqlsrv_query($conn,$sql);
             $row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC);
@@ -660,7 +660,7 @@
                 .$row3['NumeroReferencia'].
               '</a>
               </td>';
-            echo '<td align="center">-</td>';                  
+            echo '<td align="center">-</td>';
             echo '<td align="center">'.FG_Limpiar_Texto($row['Comentario']).'</td>';
 
             echo '<td align="center">'.$row3['Operador'].'</td>';
@@ -680,8 +680,8 @@
             }
 
             echo '</tr>';
-          break;  
-          case '15':          
+          break;
+          case '15':
             $sql = R12_Coment_Ajuste($row3['NumeroReferencia']);
             $result = sqlsrv_query($conn,$sql);
             $row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC);
@@ -691,7 +691,7 @@
                 .$row3['NumeroReferencia'].
               '</a>
               </td>';
-            echo '<td align="center">-</td>';                  
+            echo '<td align="center">-</td>';
             echo '<td align="center">'.FG_Limpiar_Texto($row['Comentario']).'</td>';
 
             echo '<td align="center">'.$row3['Operador'].'</td>';
@@ -711,10 +711,10 @@
             }
 
             echo '</tr>';
-          break;        
+          break;
           default:
             echo '<td align="center">'.$row3['NumeroReferencia'].'</td>';
-            echo '<td align="center">-</td>'; 
+            echo '<td align="center">-</td>';
             echo '<td align="center">-</td>';
 
             echo '<td align="center">'.$row3['Operador'].'</td>';
@@ -736,7 +736,7 @@
             echo '</tr>';
           break;
         }
-      
+
         /*
         echo '<td align="center">'.$row3['Operador'].'</td>';
         echo '<td align="center">'.number_format($row3['MontoTotal'],2,"," ,"." ).'</td>';
@@ -769,14 +769,14 @@
 /**********************************************************************************/
   /*
     TITULO: R12Q_seccion1
-    FUNCION: 
+    FUNCION:
     RETORNO: Lista de articulos con descripcion e id
-    DESAROLLADO POR: SERGIO COVA    
+    DESAROLLADO POR: SERGIO COVA
    */
   function R12Q_seccion1($FInicial,$FFinal,$IdArticulo) {
     $sql = "
-      SELECT 
-      InvCausa.id as idCausa, 
+      SELECT
+      InvCausa.id as idCausa,
       InvCausa.Descripcion AS TipoMovimiento,
       (SELECT IIF(InvCausa.EsPositiva = 1, '+', '-')) as Efecto,
       ROUND(CAST(SUM(InvMovimiento.Cantidad) AS DECIMAL(38,0)),2,0) AS Cantidad
@@ -797,15 +797,15 @@
 /**********************************************************************************/
   /*
     TITULO: R12Q_seccion2
-    FUNCION: 
+    FUNCION:
     RETORNO: Lista de articulos con descripcion e id
-    DESAROLLADO POR: SERGIO COVA    
+    DESAROLLADO POR: SERGIO COVA
    */
   function R12Q_seccion2($FInicial,$FFinal,$IdArticulo) {
     $sql = "
-      SELECT 
+      SELECT
       InvCausa.id as idCausa,
-      CONVERT(DATE,InvMovimiento.FechaMovimiento) AS Fecha, 
+      CONVERT(DATE,InvMovimiento.FechaMovimiento) AS Fecha,
       InvCausa.Descripcion AS TipoMovimiento,
       (SELECT IIF(InvCausa.EsPositiva = 1, '+', '-')) AS Efecto,
       ROUND(CAST(SUM(InvMovimiento.Cantidad) AS DECIMAL(38,0)),2,0) AS Cantidad
@@ -826,14 +826,14 @@
 /**********************************************************************************/
   /*
     TITULO: R12Q_seccion3
-    FUNCION: 
+    FUNCION:
     RETORNO: Lista de articulos con descripcion e id
-    DESAROLLADO POR: SERGIO COVA    
+    DESAROLLADO POR: SERGIO COVA
    */
   function R12Q_seccion3($FInicial,$FFinal,$IdArticulo) {
-    $sql = "    
+    $sql = "
       SELECT
-      InvMovimiento.Id AS idMovimiento, 
+      InvMovimiento.Id AS idMovimiento,
       InvCausa.id as idCausa,
       InvMovimiento.FechaMovimiento AS Fecha,
       InvCausa.Descripcion AS TipoMovimiento,
@@ -863,12 +863,12 @@
 /**********************************************************************************/
   /*
     TITULO: R12Q_seccion3
-    FUNCION: 
+    FUNCION:
     RETORNO: Lista de articulos con descripcion e id
-    DESAROLLADO POR: SERGIO COVA    
+    DESAROLLADO POR: SERGIO COVA
    */
   function R12_Causa_Compra($NumeroReferencia) {
-    $sql = "    
+    $sql = "
       SELECT GenPersona.Nombre,ComFactura.NumeroFactura
       FROM ComEntradaMercancia
       LEFT JOIN ComProveedor ON ComProveedor.Id = ComEntradaMercancia.ComProveedorId
@@ -882,16 +882,16 @@
   /**********************************************************************************/
   /*
     TITULO: R12Q_seccion3
-    FUNCION: 
+    FUNCION:
     RETORNO: Lista de articulos con descripcion e id
-    DESAROLLADO POR: SERGIO COVA    
+    DESAROLLADO POR: SERGIO COVA
    */
   function R12_Causa_DevCompra($NumeroReferencia) {
-    $sql = "    
+    $sql = "
       SELECT GenPersona.Nombre
       FROM ComSalidaMercancia
       LEFT JOIN ComProveedor ON ComProveedor.Id = ComSalidaMercancia.ComProveedorId
-      LEFT JOIN GenPersona ON GenPersona.Id = ComProveedor.GenPersonaId 
+      LEFT JOIN GenPersona ON GenPersona.Id = ComProveedor.GenPersonaId
       WHERE ComSalidaMercancia.NumeroSalida = '$NumeroReferencia'
     ";
     return $sql;
@@ -899,12 +899,12 @@
   /**********************************************************************************/
   /*
     TITULO: R12Q_seccion3
-    FUNCION: 
+    FUNCION:
     RETORNO: Lista de articulos con descripcion e id
-    DESAROLLADO POR: SERGIO COVA    
+    DESAROLLADO POR: SERGIO COVA
    */
   function R12_Causa_Venta($NumeroReferencia,$IdArticulo) {
-    $sql = "    
+    $sql = "
     SELECT GenPersona.Nombre, GenPersona.Apellido, VenVentaDetalle.PrecioBruto
     FROM VenVenta
     LEFT JOIN VenCliente ON VenCliente.Id = VenVenta.VenClienteId
@@ -918,12 +918,12 @@
   /**********************************************************************************/
   /*
     TITULO: R12Q_seccion3
-    FUNCION: 
+    FUNCION:
     RETORNO: Lista de articulos con descripcion e id
-    DESAROLLADO POR: SERGIO COVA    
+    DESAROLLADO POR: SERGIO COVA
    */
   function R12_Causa_DevVenta($NumeroReferencia,$IdArticulo) {
-    $sql = "    
+    $sql = "
       SELECT GenPersona.Nombre, GenPersona.Apellido, VenDevolucionDetalle.PrecioBruto
       FROM VenDevolucion
       LEFT JOIN VenFactura ON VenFactura.id = VenDevolucion.VenFacturaId
@@ -938,13 +938,13 @@
   /**********************************************************************************/
   /*
     TITULO: R12Q_seccion3
-    FUNCION: 
+    FUNCION:
     RETORNO: Lista de articulos con descripcion e id
-    DESAROLLADO POR: SERGIO COVA    
+    DESAROLLADO POR: SERGIO COVA
    */
   function R12_Coment_DevVenta($NumeroReferencia) {
-    $sql = "    
-      SELECT TOP 1 VenCausaOperacionDevolucion.DescripcionOperacion 
+    $sql = "
+      SELECT TOP 1 VenCausaOperacionDevolucion.DescripcionOperacion
       FROM VenDevolucion
       LEFT JOIN VenDevolucionDetalle ON VenDevolucionDetalle.VenDevolucionId = VenDevolucion.Id
       LEFT JOIN VenCausaOperacionDevolucion ON VenCausaOperacionDevolucion.id = VenDevolucionDetalle.VenCausaOperacionId
@@ -955,12 +955,12 @@
   /**********************************************************************************/
   /*
     TITULO: R12Q_seccion3
-    FUNCION: 
+    FUNCION:
     RETORNO: Lista de articulos con descripcion e id
-    DESAROLLADO POR: SERGIO COVA    
+    DESAROLLADO POR: SERGIO COVA
    */
   function R12_Coment_Trasferencia($NumeroReferencia) {
-    $sql = "    
+    $sql = "
       SELECT InvTransferenciaAlmacen.Observaciones FROM InvTransferenciaAlmacen WHERE InvTransferenciaAlmacen.NumeroTransferencia = '$NumeroReferencia'
     ";
     return $sql;
@@ -968,12 +968,12 @@
   /**********************************************************************************/
   /*
     TITULO: R12Q_seccion3
-    FUNCION: 
+    FUNCION:
     RETORNO: Lista de articulos con descripcion e id
-    DESAROLLADO POR: SERGIO COVA    
+    DESAROLLADO POR: SERGIO COVA
    */
   function R12_Coment_Ajuste($NumeroReferencia) {
-    $sql = "    
+    $sql = "
       SELECT InvAjuste.Comentario FROM InvAjuste WHERE InvAjuste.NumeroAjuste = '$NumeroReferencia'
     ";
     return $sql;
@@ -986,7 +986,7 @@
     AUTOR: Ing. Manuel Henriquez
    */
   function R12Q_Detalle_Articulo($IdArticulo) {
-    $sql = " 
+    $sql = "
       SELECT
 --Id Articulo
     InvArticulo.Id AS IdArticulo,
@@ -996,7 +996,7 @@
     InvArticulo.CodigoArticulo AS CodigoInterno,
 --Codigo de Barra
     (SELECT CodigoBarra
-    FROM InvCodigoBarra 
+    FROM InvCodigoBarra
     WHERE InvCodigoBarra.InvArticuloId = InvArticulo.Id
     AND InvCodigoBarra.EsPrincipal = 1) AS CodigoBarra,
 --Descripcion
@@ -1006,27 +1006,27 @@
 --Troquelado (0 NO es Troquelado, Id Articulo SI es Troquelado)
     (ISNULL((SELECT
     InvArticuloAtributo.InvArticuloId
-    FROM InvArticuloAtributo 
-    WHERE InvArticuloAtributo.InvAtributoId = 
+    FROM InvArticuloAtributo
+    WHERE InvArticuloAtributo.InvAtributoId =
     (SELECT InvAtributo.Id
-    FROM InvAtributo 
-    WHERE 
+    FROM InvAtributo
+    WHERE
     InvAtributo.Descripcion = 'Troquelados'
-    OR  InvAtributo.Descripcion = 'troquelados') 
+    OR  InvAtributo.Descripcion = 'troquelados')
     AND InvArticuloAtributo.InvArticuloId = InvArticulo.Id),CAST(0 AS INT))) AS Troquelado,
 --UtilidadArticulo (Utilidad del articulo, Utilidad es 1.00 NO considerar la utilidad para el calculo de precio)
     ROUND(CAST(1-((ISNULL(ROUND(CAST((SELECT VenCondicionVenta.PorcentajeUtilidad
-        FROM VenCondicionVenta 
+        FROM VenCondicionVenta
         WHERE VenCondicionVenta.Id = (
         SELECT VenCondicionVenta_VenCondicionVentaArticulo.Id
-        FROM VenCondicionVenta_VenCondicionVentaArticulo 
+        FROM VenCondicionVenta_VenCondicionVentaArticulo
         WHERE VenCondicionVenta_VenCondicionVentaArticulo.InvArticuloId = InvArticulo.Id)) AS DECIMAL(38,4)),2,0),CAST(0 AS INT)))/100)AS DECIMAL(38,2)),2,0) AS UtilidadArticulo,
 --UtilidadCategoria (Utilidad de la categoria, Utilidad es 1.00 NO considerar la utilidad para el calculo de precio)
-    ROUND(CAST(1-((ISNULL(ROUND(CAST((SELECT VenCondicionVenta.PorcentajeUtilidad 
-  FROM VenCondicionVenta 
+    ROUND(CAST(1-((ISNULL(ROUND(CAST((SELECT VenCondicionVenta.PorcentajeUtilidad
+  FROM VenCondicionVenta
   WHERE VenCondicionVenta.id = (
-    SELECT VenCondicionVenta_VenCondicionVentaCategoria.Id 
-    FROM VenCondicionVenta_VenCondicionVentaCategoria 
+    SELECT VenCondicionVenta_VenCondicionVentaCategoria.Id
+    FROM VenCondicionVenta_VenCondicionVentaCategoria
     WHERE VenCondicionVenta_VenCondicionVentaCategoria.InvCategoriaId = InvArticulo.InvCategoriaId)) AS DECIMAL(38,4)),2,0),CAST(0 AS INT)))/100)AS DECIMAL(38,2)),2,0) AS UtilidadCategoria,
 --Precio Troquel Almacen 1
     (ROUND(CAST((SELECT TOP 1
@@ -1036,7 +1036,7 @@
     WHERE(InvLoteAlmacen.InvAlmacenId = '1')
     AND (InvLoteAlmacen.InvArticuloId = InvArticulo.Id)
     AND (InvLoteAlmacen.Existencia>0)
-    ORDER BY invlote.M_PrecioTroquelado DESC)AS DECIMAL(38,2)),2,0)) AS TroquelAlmacen1,
+    ORDER BY invlote.M_PrecioTroquelado DESC)AS DECIMAL(38,4)),4,0)) AS TroquelAlmacen1,
 --Precio Compra Bruto Almacen 1
     (ROUND(CAST((SELECT TOP 1
     InvLote.M_PrecioCompraBruto
@@ -1090,34 +1090,34 @@
 --Dolarizado (0 NO es dolarizado, Id Articulo SI es dolarizado)
     (ISNULL((SELECT
     InvArticuloAtributo.InvArticuloId
-    FROM InvArticuloAtributo 
-    WHERE InvArticuloAtributo.InvAtributoId = 
+    FROM InvArticuloAtributo
+    WHERE InvArticuloAtributo.InvAtributoId =
     (SELECT InvAtributo.Id
-    FROM InvAtributo 
-    WHERE 
+    FROM InvAtributo
+    WHERE
     InvAtributo.Descripcion = 'Dolarizados'
     OR  InvAtributo.Descripcion = 'Giordany'
-    OR  InvAtributo.Descripcion = 'giordany') 
+    OR  InvAtributo.Descripcion = 'giordany')
     AND InvArticuloAtributo.InvArticuloId = InvArticulo.Id),CAST(0 AS INT))) AS Dolarizado,
 --Tipo Producto (0 Miscelaneos, Id Articulo Medicinas)
     (ISNULL((SELECT
-    InvArticuloAtributo.InvArticuloId 
-    FROM InvArticuloAtributo 
-    WHERE InvArticuloAtributo.InvAtributoId = 
+    InvArticuloAtributo.InvArticuloId
+    FROM InvArticuloAtributo
+    WHERE InvArticuloAtributo.InvAtributoId =
     (SELECT InvAtributo.Id
-    FROM InvAtributo 
-    WHERE 
-    InvAtributo.Descripcion = 'Medicina') 
+    FROM InvAtributo
+    WHERE
+    InvAtributo.Descripcion = 'Medicina')
     AND InvArticuloAtributo.InvArticuloId = InvArticulo.Id),CAST(0 AS INT))) AS Tipo,
 --Articulo Estrella (0 NO es Articulo Estrella , Id SI es Articulo Estrella)
     (ISNULL((SELECT
-    InvArticuloAtributo.InvArticuloId 
-    FROM InvArticuloAtributo 
-    WHERE InvArticuloAtributo.InvAtributoId = 
+    InvArticuloAtributo.InvArticuloId
+    FROM InvArticuloAtributo
+    WHERE InvArticuloAtributo.InvAtributoId =
     (SELECT InvAtributo.Id
-    FROM InvAtributo 
-    WHERE 
-    InvAtributo.Descripcion = 'Articulo Estrella') 
+    FROM InvAtributo
+    WHERE
+    InvAtributo.Descripcion = 'Articulo Estrella')
     AND InvArticuloAtributo.InvArticuloId = InvArticulo.Id),CAST(0 AS INT))) AS ArticuloEstrella,
 --Ultimo Precio Sin Iva
       (SELECT TOP 1
@@ -1147,9 +1147,9 @@
     WHERE InvLote.InvArticuloId  = InvArticulo.Id
     ORDER BY UltimoLote DESC) AS UltimoLote,
 --Tiempo Tienda (En dias)
-    (SELECT TOP 1 
+    (SELECT TOP 1
     DATEDIFF(DAY,CONVERT(DATE,InvLote.FechaEntrada),GETDATE())
-    FROM InvLoteAlmacen 
+    FROM InvLoteAlmacen
     INNER JOIN invlote on invlote.id = InvLoteAlmacen.InvLoteId
     WHERE InvLotealmacen.InvArticuloId = InvArticulo.Id
     ORDER BY InvLote.Auditoria_FechaCreacion DESC) AS TiempoTienda,
@@ -1176,13 +1176,13 @@
 --Joins
     LEFT JOIN InvLoteAlmacen ON InvLoteAlmacen.InvArticuloId = InvArticulo.Id
     LEFT JOIN InvArticuloAtributo ON InvArticuloAtributo.InvArticuloId = InvArticulo.Id
-    LEFT JOIN InvAtributo ON InvAtributo.Id = InvArticuloAtributo.InvAtributoId 
+    LEFT JOIN InvAtributo ON InvAtributo.Id = InvArticuloAtributo.InvAtributoId
 --Condicionales
     WHERE InvArticulo.Id = '$IdArticulo'
 --Agrupamientos
     GROUP BY InvArticulo.Id, InvArticulo.CodigoArticulo, InvArticulo.Descripcion, InvArticulo.FinConceptoImptoIdCompra, InvArticulo.InvCategoriaId
 --Ordanamiento
-    ORDER BY InvArticulo.Id ASC 
+    ORDER BY InvArticulo.Id ASC
     ";
     return $sql;
   }
@@ -1242,7 +1242,7 @@
       AND(VenDevolucion.FechaDocumento > '$FInicial' AND VenDevolucion.FechaDocumento < '$FFinal')
       GROUP BY VenDevolucionDetalle.InvArticuloId
       ),CAST(0 AS INT)))) AS TotalUnidadesVendidas,
-    --Veces Conpradas (En Rango) 
+    --Veces Conpradas (En Rango)
       ISNULL((SELECT
       ISNULL(COUNT(*),CAST(0 AS INT))
       FROM ComFacturaDetalle
@@ -1251,7 +1251,7 @@
       AND(ComFactura.FechaRegistro > '$FInicial' AND ComFactura.FechaRegistro < '$FFinal')
       GROUP BY ComFacturaDetalle.InvArticuloId
       ),CAST(0 AS INT)) AS VecesCompradas,
-    --Unidades Conpradas (En Rango) 
+    --Unidades Conpradas (En Rango)
       ISNULL((SELECT
       (ROUND(CAST(SUM(ComFacturaDetalle.CantidadFacturada) AS DECIMAL(38,0)),2,0))
       FROM ComFacturaDetalle
@@ -1260,7 +1260,7 @@
       AND(ComFactura.FechaRegistro > '$FInicial' AND ComFactura.FechaRegistro < '$FFinal')
       GROUP BY ComFacturaDetalle.InvArticuloId
       ),CAST(0 AS INT)) AS UnidadesCompradas,
-    --Veces Reclamadas (En Rango) 
+    --Veces Reclamadas (En Rango)
       ISNULL((SELECT
       ISNULL(COUNT(*),CAST(0 AS INT))
       FROM ComReclamoDetalle
@@ -1269,7 +1269,7 @@
       AND(ComReclamo.FechaRegistro > '$FInicial' AND ComReclamo.FechaRegistro < '$FFinal')
       GROUP BY ComReclamoDetalle.InvArticuloId
       ),CAST(0 AS INT)) AS VecesReclamadas,
-    --Unidades Reclamadas (En Rango) 
+    --Unidades Reclamadas (En Rango)
       ISNULL((SELECT
       (ROUND(CAST(SUM(ComReclamoDetalle.Cantidad) AS DECIMAL(38,0)),2,0))
       FROM ComReclamoDetalle
@@ -1316,31 +1316,31 @@
       ),CAST(0 AS INT)))) AS TotalUnidadesCompradas,
     -- SubTotal Venta (En Rango)
       ISNULL((SELECT
-      (ROUND(CAST(SUM (VenVentaDetalle.PrecioBruto * VenVentaDetalle.Cantidad) AS DECIMAL(38,2)),2,0)) 
+      (ROUND(CAST(SUM (VenVentaDetalle.PrecioBruto * VenVentaDetalle.Cantidad) AS DECIMAL(38,2)),2,0))
       FROM VenVentaDetalle
-      INNER JOIN VenVenta ON VenVenta.Id = VenVentaDetalle.VenVentaId 
+      INNER JOIN VenVenta ON VenVenta.Id = VenVentaDetalle.VenVentaId
       WHERE (VenVenta.FechaDocumentoVenta > '$FInicial' AND VenVenta.FechaDocumentoVenta < '$FFinal')
       AND VenVentaDetalle.InvArticuloId = VenFacturaDetalle.InvArticuloId),CAST(0 AS INT)) AS SubTotalVenta,
     --SubTotal Devolucion (En Rango)
       ISNULL((SELECT
       (ROUND(CAST(SUM (VenDevolucionDetalle.PrecioBruto * VenDevolucionDetalle.Cantidad) AS DECIMAL(38,2)),2,0)) as SubTotalDevolucion
       FROM VenDevolucionDetalle
-      INNER JOIN VenDevolucion ON VenDevolucion.Id = VenDevolucionDetalle.VenDevolucionId 
-      WHERE (VenDevolucion.FechaDocumento > '$FInicial' AND VenDevolucion.FechaDocumento < '$FFinal') 
+      INNER JOIN VenDevolucion ON VenDevolucion.Id = VenDevolucionDetalle.VenDevolucionId
+      WHERE (VenDevolucion.FechaDocumento > '$FInicial' AND VenDevolucion.FechaDocumento < '$FFinal')
       AND VenDevolucionDetalle.InvArticuloId = VenFacturaDetalle.InvArticuloId),CAST(0 AS INT)) as SubTotalDevolucion,
     --TotalVenta (En Rango)
       ((ISNULL((SELECT
-      (ROUND(CAST(SUM (VenVentaDetalle.PrecioBruto * VenVentaDetalle.Cantidad) AS DECIMAL(38,2)),2,0)) 
+      (ROUND(CAST(SUM (VenVentaDetalle.PrecioBruto * VenVentaDetalle.Cantidad) AS DECIMAL(38,2)),2,0))
       FROM VenVentaDetalle
-      INNER JOIN VenVenta ON VenVenta.Id = VenVentaDetalle.VenVentaId 
+      INNER JOIN VenVenta ON VenVenta.Id = VenVentaDetalle.VenVentaId
       WHERE (VenVenta.FechaDocumentoVenta > '$FInicial' AND VenVenta.FechaDocumentoVenta < '$FFinal')
       AND VenVentaDetalle.InvArticuloId = VenFacturaDetalle.InvArticuloId),CAST(0 AS INT)))
       -
       (ISNULL((SELECT
       (ROUND(CAST(SUM (VenDevolucionDetalle.PrecioBruto * VenDevolucionDetalle.Cantidad) AS DECIMAL(38,2)),2,0)) as SubTotalDevolucion
       FROM VenDevolucionDetalle
-      INNER JOIN VenDevolucion ON VenDevolucion.Id = VenDevolucionDetalle.VenDevolucionId 
-      WHERE (VenDevolucion.FechaDocumento > '$FInicial' AND VenDevolucion.FechaDocumento < '$FFinal') 
+      INNER JOIN VenDevolucion ON VenDevolucion.Id = VenDevolucionDetalle.VenDevolucionId
+      WHERE (VenDevolucion.FechaDocumento > '$FInicial' AND VenDevolucion.FechaDocumento < '$FFinal')
       AND VenDevolucionDetalle.InvArticuloId = VenFacturaDetalle.InvArticuloId),CAST(0 AS INT)))) AS TotalVenta
     --Tabla Principal
       FROM VenFacturaDetalle
@@ -1351,7 +1351,7 @@
       (VenFactura.FechaDocumento > '$FInicial' AND VenFactura.FechaDocumento < '$FFinal')
       AND VenFacturaDetalle.InvArticuloId = '$IdArticulo'
     --Agrupamientos
-      GROUP BY VenFacturaDetalle.InvArticuloId 
+      GROUP BY VenFacturaDetalle.InvArticuloId
     --Ordenamientos
       ORDER BY UnidadesVendidas DESC
     ";

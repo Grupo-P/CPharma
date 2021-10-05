@@ -39,15 +39,15 @@
   .autocomplete-items div {
     padding: 10px;
     cursor: pointer;
-    background-color: #fff; 
-    border-bottom: 1px solid #d4d4d4; 
+    background-color: #fff;
+    border-bottom: 1px solid #d4d4d4;
   }
   .autocomplete-items div:hover {
-    background-color: #e9e9e9; 
+    background-color: #e9e9e9;
   }
   .autocomplete-active {
-    background-color: DodgerBlue !important; 
-    color: #ffffff; 
+    background-color: DodgerBlue !important;
+    color: #ffffff;
   }
   .barrido{
     text-decoration: none;
@@ -135,7 +135,7 @@
   </h1>
   <hr class="row align-items-start col-12">
 
-<?php 
+<?php
   include(app_path().'\functions\config.php');
   include(app_path().'\functions\functions.php');
   include(app_path().'\functions\querys_mysql.php');
@@ -143,7 +143,7 @@
 
   $InicioCarga = new DateTime("now");
 
-  if (isset($_GET['SEDE'])){      
+  if (isset($_GET['SEDE'])){
     echo '<h1 class="h5 text-success"  align="left"> <i class="fas fa-prescription"></i> '.FG_Nombre_Sede($_GET['SEDE']).'</h1>';
   }
   echo '<hr class="row align-items-start col-12">';
@@ -157,7 +157,7 @@
 ?>
 @endsection
 
-<?php 
+<?php
   /**********************************************************************************/
   /*
     TITULO: ReporteActivacionProveedores
@@ -235,12 +235,12 @@
         </tr>
       </tbody
     </table>';
-  
+
     echo '
     <table class="table table-striped table-bordered col-12 sortable" id="myTable">
       <thead class="thead-dark">
           <tr>
-            <th scope="col" class="CP-sticky">#</th>      
+            <th scope="col" class="CP-sticky">#</th>
             <th scope="col" class="CP-sticky">Codigo</th>
             <th scope="col" class="CP-sticky">Codigo barra</th>
               <th scope="col" class="CP-sticky">Descripcion</td>
@@ -325,7 +325,7 @@
       $UltimoProveedorNombre = FG_Limpiar_Texto($row1["UltimoProveedorNombre"]);
       $UltimoProveedorID = $row1["UltimoProveedorID"];
       $IsIVA = $row1["Impuesto"];
-      $Dolarizado = $row1["Dolarizado"]; 
+      $Dolarizado = $row1["Dolarizado"];
 
       $Dolarizado = FG_Producto_Dolarizado($Dolarizado);
       $Gravado = FG_Producto_Gravado($IsIVA);
@@ -341,7 +341,7 @@
       echo '<td>'.$row["CodigoArticulo"].'</td>';
       echo '<td>'.$row1["CodigoBarra"].'</td>';
 
-      echo 
+      echo
       '<td align="left" class="CP-barrido">
       <a href="/reporte2?Id='.$IdArticulo.'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
         .$Descripcion.
@@ -364,7 +364,7 @@
       echo '<td style="display: none" align="center">'.intval($Dia2).'</td>';
       echo '<td style="display: none" align="center">'.intval($Dia1).'</td>';
 
-      echo 
+      echo
       '<td align="center" class="CP-barrido">
       <a href="reporte12?fechaInicio='.$FInicial.'&fechaFin='.$FFinal.'&SEDE='.$SedeConnection.'&Descrip='.$Descripcion.'&Id='.$IdArticulo.'" style="text-decoration: none; color: black;" target="_blank">'
         .intval($UnidadesVendidas).
@@ -372,7 +372,7 @@
       </td>';
 
       echo '<td align="center">'.round($DiasRestantes,2).'</td>';
-      
+
       if(!is_null($UltimoProveedorNombre)){
         echo
         '<td align="left" class="CP-barrido">
@@ -393,22 +393,22 @@
 
       $sqlDetalleOrden = "SELECT codigo_orden FROM orden_compra_detalles WHERE id_articulo = '$IdArticulo' AND estatus = 'ACTIVO'";
       $resultDetalleOrden = mysqli_query($connCPharma,$sqlDetalleOrden);
-      
+
       $flag = false;
       if($rowCuentaOrden['Cuenta']==0){
         $flag = true;
       }
-      
+
       while($rowDetalleOrden = $resultDetalleOrden->fetch_assoc()){
         $codigo_orden = $rowDetalleOrden['codigo_orden'];
         $sqlOrden = "SELECT estado FROM orden_compras WHERE codigo = '$codigo_orden'";
         $resultOrden = mysqli_query($connCPharma,$sqlOrden);
         $rowOrden = $resultOrden->fetch_assoc();
 
-        if( ($rowOrden['estado']=='INGRESADA') 
+        if( ($rowOrden['estado']=='INGRESADA')
           || ($rowOrden['estado']=='CERRADA')
           || ($rowOrden['estado']=='RECHAZADA')
-          || ($rowOrden['estado']=='ANULADA') 
+          || ($rowOrden['estado']=='ANULADA')
         ){
           $flag = true;
         }
@@ -416,7 +416,7 @@
           $flag = false;
         }
       }
-        
+
       echo'
       <td style="width:140px;">
         <form action="/ordenCompraDetalle/create" method="PRE" style="display: block; width:100%;" target="_blank">
@@ -440,7 +440,7 @@
 
         if($flag != true){
           echo'
-          <br/> 
+          <br/>
           <form action="/ordenCompraDetalle/0" method="PRE" style="display: block; width:100%;" target="_blank">';
           echo'<input type="hidden" name="id_articulo" value="'.$IdArticulo.'">';
           echo'
@@ -640,7 +640,7 @@
     DESAROLLADO POR: SERGIO COVA
   */
   function QPC_Detalle_Articulo($IdArticulo) {
-    $sql = " 
+    $sql = "
       SELECT
     --Id Articulo
       InvArticulo.Id AS IdArticulo,
@@ -648,7 +648,7 @@
       InvArticulo.CodigoArticulo AS CodigoInterno,
     --Codigo de Barra
       (SELECT CodigoBarra
-      FROM InvCodigoBarra 
+      FROM InvCodigoBarra
       WHERE InvCodigoBarra.InvArticuloId = InvArticulo.Id
       AND InvCodigoBarra.EsPrincipal = 1) AS CodigoBarra,
     --Descripcion
@@ -657,10 +657,10 @@
       (ISNULL(InvArticulo.FinConceptoImptoIdCompra,CAST(0 AS INT))) AS Impuesto,
     --Utilidad (Utilidad del articulo, Utilidad es 1.00 NO considerar la utilidad para el calculo de precio)
       ROUND(CAST(1-((ISNULL(ROUND(CAST((SELECT VenCondicionVenta.PorcentajeUtilidad
-          FROM VenCondicionVenta 
+          FROM VenCondicionVenta
           WHERE VenCondicionVenta.Id = (
             SELECT VenCondicionVenta_VenCondicionVentaArticulo.Id
-            FROM VenCondicionVenta_VenCondicionVentaArticulo 
+            FROM VenCondicionVenta_VenCondicionVentaArticulo
             WHERE VenCondicionVenta_VenCondicionVentaArticulo.InvArticuloId = InvArticulo.Id)) AS DECIMAL(38,4)),2,0),CAST(0 AS INT)))/100)AS DECIMAL(38,2)),2,0) AS Utilidad,
     --Precio Troquel Almacen 1
       (ROUND(CAST((SELECT TOP 1
@@ -670,7 +670,7 @@
       WHERE(InvLoteAlmacen.InvAlmacenId = '1')
       AND (InvLoteAlmacen.InvArticuloId = InvArticulo.Id)
       AND (InvLoteAlmacen.Existencia>0)
-      ORDER BY invlote.M_PrecioTroquelado DESC)AS DECIMAL(38,2)),2,0)) AS TroquelAlmacen1,
+      ORDER BY invlote.M_PrecioTroquelado DESC)AS DECIMAL(38,4)),4,0)) AS TroquelAlmacen1,
     --Precio Troquel Almacen 2
       (ROUND(CAST((SELECT TOP 1
       InvLote.M_PrecioTroquelado
@@ -696,34 +696,34 @@
     --Dolarizado (0 NO es dolarizado, Id Articulo SI es dolarizado)
       (ISNULL((SELECT
       InvArticuloAtributo.InvArticuloId
-      FROM InvArticuloAtributo 
-      WHERE InvArticuloAtributo.InvAtributoId = 
+      FROM InvArticuloAtributo
+      WHERE InvArticuloAtributo.InvAtributoId =
         (SELECT InvAtributo.Id
-        FROM InvAtributo 
-        WHERE 
+        FROM InvAtributo
+        WHERE
         InvAtributo.Descripcion = 'Dolarizados'
         OR  InvAtributo.Descripcion = 'Giordany'
-        OR  InvAtributo.Descripcion = 'giordany') 
+        OR  InvAtributo.Descripcion = 'giordany')
       AND InvArticuloAtributo.InvArticuloId = InvArticulo.Id),CAST(0 AS INT))) AS Dolarizado,
     --Tipo Producto (0 Miscelaneos, Id Articulo Medicinas)
       (ISNULL((SELECT
-      InvArticuloAtributo.InvArticuloId 
-      FROM InvArticuloAtributo 
-      WHERE InvArticuloAtributo.InvAtributoId = 
+      InvArticuloAtributo.InvArticuloId
+      FROM InvArticuloAtributo
+      WHERE InvArticuloAtributo.InvAtributoId =
         (SELECT InvAtributo.Id
-        FROM InvAtributo 
-        WHERE 
-        InvAtributo.Descripcion = 'Medicina') 
+        FROM InvAtributo
+        WHERE
+        InvAtributo.Descripcion = 'Medicina')
       AND InvArticuloAtributo.InvArticuloId = InvArticulo.Id),CAST(0 AS INT))) AS Tipo,
     --Articulo Estrella (0 NO es Articulo Estrella , Id SI es Articulo Estrella)
       (ISNULL((SELECT
-      InvArticuloAtributo.InvArticuloId 
-      FROM InvArticuloAtributo 
-      WHERE InvArticuloAtributo.InvAtributoId = 
+      InvArticuloAtributo.InvArticuloId
+      FROM InvArticuloAtributo
+      WHERE InvArticuloAtributo.InvAtributoId =
         (SELECT InvAtributo.Id
-        FROM InvAtributo 
-        WHERE 
-        InvAtributo.Descripcion = 'Articulo Estrella') 
+        FROM InvAtributo
+        WHERE
+        InvAtributo.Descripcion = 'Articulo Estrella')
       AND InvArticuloAtributo.InvArticuloId = InvArticulo.Id),CAST(0 AS INT))) AS ArticuloEstrella,
     -- Ultima Venta (Fecha)
       (SELECT TOP 1
@@ -746,9 +746,9 @@
       WHERE InvLote.InvArticuloId  = InvArticulo.Id
       ORDER BY UltimoLote DESC) AS UltimoLote,
     --Tiempo Tienda (En dias)
-      (SELECT TOP 1 
+      (SELECT TOP 1
       DATEDIFF(DAY,CONVERT(DATE,InvLote.FechaEntrada),GETDATE())
-      FROM InvLoteAlmacen 
+      FROM InvLoteAlmacen
       INNER JOIN invlote on invlote.id = InvLoteAlmacen.InvLoteId
       WHERE InvLotealmacen.InvArticuloId = InvArticulo.Id
       ORDER BY InvLote.Auditoria_FechaCreacion DESC) AS TiempoTienda,
@@ -775,13 +775,13 @@
     --Joins
       LEFT JOIN InvLoteAlmacen ON InvLoteAlmacen.InvArticuloId = InvArticulo.Id
       LEFT JOIN InvArticuloAtributo ON InvArticuloAtributo.InvArticuloId = InvArticulo.Id
-      LEFT JOIN InvAtributo ON InvAtributo.Id = InvArticuloAtributo.InvAtributoId 
+      LEFT JOIN InvAtributo ON InvAtributo.Id = InvArticuloAtributo.InvAtributoId
     --Condicionales
       WHERE InvArticulo.Id = '$IdArticulo'
     --Agrupamientos
       GROUP BY InvArticulo.Id, InvArticulo.CodigoArticulo, InvArticulo.Descripcion, InvArticulo.FinConceptoImptoIdCompra
     --Ordanamiento
-      ORDER BY InvArticulo.Id ASC 
+      ORDER BY InvArticulo.Id ASC
     ";
     return $sql;
   }

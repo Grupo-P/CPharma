@@ -34,8 +34,8 @@
     .autocomplete-items div {
       padding:10px;
       cursor:pointer;
-      background-color:#fff; 
-      border-bottom:1px solid #d4d4d4; 
+      background-color:#fff;
+      border-bottom:1px solid #d4d4d4;
     }
 
     .autocomplete-items div:hover {background-color:#e9e9e9;}
@@ -87,8 +87,8 @@
                 <input id="fechaLote" type="date" name="fechaLote" required style="width:100%;">
               </td>
 
-              <input id="SEDE" name="SEDE" type="hidden" value="'; 
-                print_r($_GET['SEDE']); 
+              <input id="SEDE" name="SEDE" type="hidden" value="';
+                print_r($_GET['SEDE']);
               echo'">
 
               <td align="right">
@@ -111,7 +111,7 @@
     RETORNO: No aplica
   */
   function R34_Articulos_Estancados($SedeConnection,$fechaLote) {
-    
+
     $conn = FG_Conectar_Smartpharma($SedeConnection);
     $connCPharma = FG_Conectar_CPharma();
     $Hoy = new DateTime('now');
@@ -135,7 +135,7 @@
 
       <table class="table table-striped table-bordered col-12 sortable" id="myTable">
       <thead class="thead-dark">
-        <tr>  
+        <tr>
           <th scope="col" class="CP-sticky">Nro.</th>
           <th scope="col" class="CP-sticky">Codigo Articulo</th>
           <th scope="col" class="CP-sticky">Codigo Barra</th>
@@ -206,7 +206,7 @@
 
           if ($row2['lote_mas_antiguo']->format('Y-m-d') >= $row2['ultima_compra']->format('Y-m-d')) {
             $dias_reposicion = '-';
-          }          
+          }
         } else {
           $dias_reposicion = '-';
         }
@@ -214,7 +214,7 @@
 
         if ($row2['ultima_venta']) {
           $dias_ultima_venta = date_diff(date_create($row2['ultima_venta']->format('Y-m-d')), date_create());
-          $dias_ultima_venta = $dias_ultima_venta->format('%a');        
+          $dias_ultima_venta = $dias_ultima_venta->format('%a');
         } else {
           $dias_ultima_venta = '-';
         }
@@ -282,14 +282,14 @@
         (SELECT TOP 1 GenPersona.Nombre FROM ComFacturaDetalle INNER JOIN ComFactura ON ComFactura.Id = ComFacturaDetalle.ComFacturaId INNER JOIN ComProveedor ON ComProveedor.Id = ComFactura.ComProveedorId INNER JOIN GenPersona ON GenPersona.Id = ComProveedor.GenPersonaId WHERE ComFacturaDetalle.InvArticuloId = InvLoteAlmacen.InvArticuloId ORDER BY ComFactura.FechaDocumento DESC) AS  nombre_ultimo_proveedor
       FROM InvLoteAlmacen
       WHERE
-          (((SELECT TOP 1 T.Auditoria_FechaCreacion FROM InvLoteAlmacen T WHERE T.InvAlmacenId IN (1, 2) AND T.InvArticuloId = InvLoteAlmacen.InvArticuloId AND Existencia > 0) <= '$fechaLote') OR ((SELECT TOP 1 (SELECT ComFactura.FechaRegistro FROM ComFactura WHERE ComFactura.Id = ComFacturaDetalle.ComFacturaId) FROM ComFacturaDetalle WHERE ComFacturaDetalle.InvArticuloId = InvLoteAlmacen.InvArticuloId ORDER BY ComFacturaDetalle.ComFacturaId DESC) <= '$fechaLote')) AND 
+          (((SELECT TOP 1 T.Auditoria_FechaCreacion FROM InvLoteAlmacen T WHERE T.InvAlmacenId IN (1, 2) AND T.InvArticuloId = InvLoteAlmacen.InvArticuloId AND Existencia > 0) <= '$fechaLote') OR ((SELECT TOP 1 (SELECT ComFactura.FechaRegistro FROM ComFactura WHERE ComFactura.Id = ComFacturaDetalle.ComFacturaId) FROM ComFacturaDetalle WHERE ComFacturaDetalle.InvArticuloId = InvLoteAlmacen.InvArticuloId ORDER BY ComFacturaDetalle.ComFacturaId DESC) <= '$fechaLote')) AND
           (SELECT SUM(T.Existencia) FROM InvLoteAlmacen T WHERE T.InvAlmacenId IN (1, 2) AND T.InvArticuloId = InvLoteAlmacen.InvArticuloId) > 0
       ORDER BY dias_tienda DESC
     ";
     return $sql;
   }
 
-  
+
   /**********************************************************************************/
   /*
     TITULO: R2Q_Detalle_Articulo
@@ -348,7 +348,7 @@
     WHERE(InvLoteAlmacen.InvAlmacenId = '1')
     AND (InvLoteAlmacen.InvArticuloId = InvArticulo.Id)
     AND (InvLoteAlmacen.Existencia>0)
-    ORDER BY invlote.M_PrecioTroquelado DESC)AS DECIMAL(38,2)),2,0)) AS TroquelAlmacen1,
+    ORDER BY invlote.M_PrecioTroquelado DESC)AS DECIMAL(38,4)),4,0)) AS TroquelAlmacen1,
 --Precio Compra Bruto Almacen 1
     (ROUND(CAST((SELECT TOP 1
     InvLote.M_PrecioCompraBruto
