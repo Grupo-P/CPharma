@@ -1104,7 +1104,8 @@
 
                 $precioPartes = explode(".",$TroquelAlmacen1);
 
-                if( count($precioPartes)>=2 && $precioPartes[1]==DecimalEtiqueta){
+                //if( count($precioPartes)>=2 && $precioPartes[1]==DecimalEtiqueta){ //substr($evento,-2)
+                if( count($precioPartes)>=2 && substr($precioPartes[1],-2)==DecimalEtiqueta){
                     $Precio = $TroquelAlmacen1;
                 }else{
                     $Precio = max($PrecioCalculado,$TroquelAlmacen1,$TroquelAlmacen2);
@@ -1139,7 +1140,8 @@
 
                 $precioPartes = explode(".",$TroquelAlmacen1);
 
-                if( count($precioPartes)>=2 && $precioPartes[1]==DecimalEtiqueta){
+                //if( count($precioPartes)>=2 && $precioPartes[1]==DecimalEtiqueta){ //substr($evento,-2)
+                if( count($precioPartes)>=2 && substr($precioPartes[1],-2)==DecimalEtiqueta){
                     $Precio = $TroquelAlmacen1;
                 }else{
                     $Precio = max($PrecioCalculado,$TroquelAlmacen1,$TroquelAlmacen2);
