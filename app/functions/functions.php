@@ -3276,6 +3276,7 @@
     $evaluados = ($cont_exito+$cont_falla);
 
     $sql2 = MySQL_Guardar_Auditoria_Corrida($evaluados,$cont_exito,$cont_falla,$cont_cambios,$cont_noCambio,$user,$tipoCorrida,$tasaCalculo,date('d-m-Y'),date('h:i:s a'),$fallas);
+    echo "<br>".$sql2."<br>";
 
     mysqli_query($connCPharma,$sql2);
     mysqli_close($connCPharma);
