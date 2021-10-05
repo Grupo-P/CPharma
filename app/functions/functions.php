@@ -3225,7 +3225,7 @@
             $precio = FG_Precio_Calculado_Alfa($UtilidadArticulo,$UtilidadCategoria,$IsIVA,$costoBs);
             $precio = round($precio,2);
             //$precio = ceil($precio)+0.01;
-            $precio = ceil($precio)+0.0001;
+            $precio = $precio+0.0001;
 
             if($tipoCorrida=='subida'){
 
