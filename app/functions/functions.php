@@ -1104,6 +1104,9 @@
 
                 $precioPartes = explode(".",$TroquelAlmacen1);
 
+                echo"Precio Partes: ";
+                print_r($precioPartes);
+
                 //if( count($precioPartes)>=2 && $precioPartes[1]==DecimalEtiqueta){ //substr($evento,-2)
                 if( count($precioPartes)>=2 && substr($precioPartes[1],-2)==DecimalEtiqueta){
                     $Precio = $TroquelAlmacen1;
