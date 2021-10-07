@@ -763,12 +763,14 @@
                 <b>NOTAS:</b><br>
 
                 <ul>
-                    <li>No abreviar palabras claves (tableta, chocolate, jarabe, etc.) y usar todos los conectores de palabras (de, con, para, etc.)</li>
-                    <li>En el caso de artículos lideres se puede obviar el Tipo</li>
-                    <li>En el caso de medicamentos es valido colocar entre paréntesis artículos referenciales</li>
-                    <li>Obviar caracteres especiales y acentos exceptuando la ñ</li>
-                    <li>Cualquier información adicional es aceptada siempre y cuando se cumpla con el objetivo de una descripción clara y completa</li>
-                    <li>La descripción física del articulo siempre predomina sobre cualquier criterio</li>
+                    <li>No abreviar palabras claves (tableta, chocolate, jarabe, etc.) y usar todos los conectores de palabras (de, con, para, etc.).</li>
+                    <li>En el caso de artículos lideres se puede obviar el Tipo.</li>
+                    <li>En el caso de medicamentos es valido colocar entre paréntesis artículos referenciales.</li>
+                    <li>Obviar caracteres especiales y acentos exceptuando la ñ.</li>
+                    <li>Cualquier información adicional es aceptada siempre y cuando se cumpla con el objetivo de una descripción clara y completa.</li>
+                    <li>La descripción física del articulo siempre predomina sobre cualquier criterio.</li>
+                    <li>Respetar las palabras claves segun el criterio de la gerencia.</li>
+                    <li>Respetar las palabras de identificacion de forma completa: adulto, pedriatrico, femenino, etc.</li>
                 </ul>
             </td>
 
@@ -799,6 +801,7 @@
             <th scope="col" class="CP-sticky">Uso terapéutico</th>
             <th scope="col" class="CP-sticky">Último proveedor</th>
             <th scope="col" class="CP-sticky">Precio Bs.</th>
+            <th scope="col" class="CP-sticky">Carácteres disponibles</th>
           </tr>
         </thead>
         <tbody>
@@ -888,6 +891,8 @@
         $precio = FG_Calculo_Precio_Alfa($existencia, $existencia_almacen_1, $existencia_almacen_2, $troquelado, $utilidad_articulo, $utilidad_categoria, $troquel_almacen_1, $precio_compra_bruto_almacen_1, $troquel_almacen_2, $precio_compra_bruto_almacen_2, $precio_compra_bruto, $iva, 'CON_EXISTENCIA');
         $precio = number_format($precio, 2, ',', '.');
 
+        $caracteres_disponibles = 100 - strlen($row9['descripcion']);
+
         echo '<tr>';
         echo '<td class="text-center">'.$contador.'</td>';
         echo '<td class="text-center">'.$codigo_interno.'</td>';
@@ -905,6 +910,7 @@
         echo '<td class="text-center">'.$uso_terapeutico.'</td>';
         echo '<td class="text-center">'.$ultimo_proveedor.'</td>';
         echo '<td class="text-center">'.$precio.'</td>';
+        echo '<td class="text-center">'.$caracteres_disponibles.'</td>';
         echo '</tr>';
 
         $contador++;

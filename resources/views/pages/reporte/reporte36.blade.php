@@ -167,7 +167,7 @@
 
     while($row2 = sqlsrv_fetch_array($result2,SQLSRV_FETCH_ASSOC)) {
 
-      if ($row2['Existencia'] > 0) {
+
       	$id_articulo = $row2['IdArticulo'];
       	$codigo_articulo = $row2['CodigoInterno'];
       	$codigo_barra = $row2['CodigoBarra'];
@@ -283,8 +283,6 @@
 
 
         $contador++;
-
-    	}
     }
 
   	echo '
@@ -510,7 +508,11 @@
     InvAtributo.Descripcion = 'Dolarizados'
     OR  InvAtributo.Descripcion = 'Giordany'
     OR  InvAtributo.Descripcion = 'giordany')
-    AND InvArticuloAtributo.InvArticuloId = InvArticulo.Id),CAST(0 AS INT))) = 0
+    AND InvArticuloAtributo.InvArticuloId = InvArticulo.Id),CAST(0 AS INT))) = 0 AND
+    (ROUND(CAST((SELECT SUM (InvLoteAlmacen.Existencia) As Existencia
+                FROM InvLoteAlmacen
+                WHERE(InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
+                AND (InvLoteAlmacen.InvArticuloId = InvArticulo.Id)) AS DECIMAL(38,0)),2,0)) > 0
 --Agrupamientos
     GROUP BY InvArticulo.Id, InvArticulo.CodigoArticulo, InvArticulo.Descripcion, InvArticulo.FinConceptoImptoIdCompra, InvArticulo.InvCategoriaId, InvMarca.Nombre
 --Ordanamiento
@@ -726,7 +728,11 @@
     InvAtributo.Descripcion = 'Dolarizados'
     OR  InvAtributo.Descripcion = 'Giordany'
     OR  InvAtributo.Descripcion = 'giordany')
-    AND InvArticuloAtributo.InvArticuloId = InvArticulo.Id),CAST(0 AS INT))) != 0
+    AND InvArticuloAtributo.InvArticuloId = InvArticulo.Id),CAST(0 AS INT))) != 0 AND
+    (ROUND(CAST((SELECT SUM (InvLoteAlmacen.Existencia) As Existencia
+                FROM InvLoteAlmacen
+                WHERE(InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
+                AND (InvLoteAlmacen.InvArticuloId = InvArticulo.Id)) AS DECIMAL(38,0)),2,0)) > 0
 --Agrupamientos
     GROUP BY InvArticulo.Id, InvArticulo.CodigoArticulo, InvArticulo.Descripcion, InvArticulo.FinConceptoImptoIdCompra, InvArticulo.InvCategoriaId, InvMarca.Nombre
 --Ordanamiento

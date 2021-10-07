@@ -506,6 +506,7 @@
 
           $('#PPrecioScan').html('');
           $('#PPrecioDolarScan').html('');
+          $('#PPrecioDigitalScan').html();
 
 
           //Fin Armado tablaResuldado
