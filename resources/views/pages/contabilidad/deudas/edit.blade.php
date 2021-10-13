@@ -83,13 +83,6 @@
                     </tr>
 
                     <tr>
-                        <th scope="row"><label for="monto_total">Monto total</label></th>
-                        <td>
-                            <input type="text" value="{{ number_format($deuda->monto + $deuda->monto_iva, 2, ',', '.') }}" readonly class="form-control" name="monto_total">
-                        </td>
-                    </tr>
-
-                    <tr>
                         <th scope="row"><label for="documento_soporte_deuda">Documento soporte deuda *</label></th>
                         <td>
                             <select name="documento_soporte_deuda" required class="form-control">

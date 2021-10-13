@@ -63,7 +63,7 @@
                     </tr>
 
                     <tr>
-                        <th scope="row"><label for="moneda_iva">Moneda reclamo *</label></th>
+                        <th scope="row"><label for="moneda_iva">Moneda IVA *</label></th>
                         <td><input name="moneda_iva" readonly class="form-control" required></td>
                     </tr>
 
@@ -177,6 +177,15 @@
                 monto = $('[name=monto]').val();
                 if (monto == 0) {
                     alert('El monto debe ser distinto a cero');
+                    event.preventDefault();
+                    return false;
+                }
+
+                monto = $('[name=monto]').val();
+                iva = $('[name=monto_iva]').val();
+
+                if (parseFloat(iva) >= parseFloat(monto)) {
+                    alert('El monto del IVA debe ser menor al monto base');
                     event.preventDefault();
                     return false;
                 }

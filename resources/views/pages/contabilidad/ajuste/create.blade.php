@@ -65,6 +65,13 @@
                     </tr>
 
                     <tr>
+                        <th scope="row"><label for="monto_iva">Monto al IVA</label></th>
+                        <td>
+                            <input type="number" step="0.01" class="form-control" name="monto_iva">
+                        </td>
+                    </tr>
+
+                    <tr>
                         <th scope="row"><label for="saldo">Saldo del proveedor</label></th>
                         <td>
                             <input type="text" step="0.01" readonly class="form-control" name="saldo">
@@ -75,6 +82,20 @@
                         <th scope="row"><label for="moneda">Moneda del proveedor</label></th>
                         <td>
                             <input type="text" readonly class="form-control" name="moneda">
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <th scope="row"><label for="saldo_iva">Saldo IVA del proveedor</label></th>
+                        <td>
+                            <input type="text" step="0.01" readonly class="form-control" name="saldo_iva">
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <th scope="row"><label for="moneda_iva">Moneda IVA del proveedor</label></th>
+                        <td>
+                            <input type="text" readonly class="form-control" name="moneda_iva">
                         </td>
                     </tr>
 
@@ -119,7 +140,9 @@
                 select: function (event, ui) {
                     $('[name=id_proveedor]').val(ui.item.id);
                     $('[name=moneda]').val(ui.item.moneda);
+                    $('[name=moneda_iva]').val(ui.item.moneda_iva);
                     $('[name=saldo]').val(ui.item.saldo);
+                    $('[name=saldo_iva]').val(ui.item.saldo_iva);
                 }
             });
 
@@ -136,6 +159,15 @@
                 monto = $('[name=monto]').val();
                 if (monto == 0) {
                     alert('El monto debe ser distinto a cero');
+                    event.preventDefault();
+                    return false;
+                }
+
+                monto = $('[name=monto]').val();
+                iva = $('[name=monto_iva]').val();
+
+                if (parseFloat(iva) >= parseFloat(monto)) {
+                    alert('El monto del IVA debe ser menor al monto base');
                     event.preventDefault();
                     return false;
                 }

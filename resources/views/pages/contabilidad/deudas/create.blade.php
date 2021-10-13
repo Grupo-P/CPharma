@@ -82,11 +82,6 @@
                     </tr>
 
                     <tr>
-                        <th scope="row"><label for="monto_total">Monto total</label></th>
-                        <td><input name="monto_total" readonly class="form-control" required></td>
-                    </tr>
-
-                    <tr>
                         <th scope="row"><label for="documento_soporte_deuda">Documento soporte deuda *</label></th>
                         <td>
                             <select name="documento_soporte_deuda" required class="form-control">
@@ -161,6 +156,15 @@
             });
 
             $('form').submit(function (event) {
+                monto = $('[name=monto]').val();
+                iva = $('[name=monto_iva]').val();
+
+                if (parseFloat(iva) >= parseFloat(monto)) {
+                    alert('El monto del IVA debe ser menor al monto base');
+                    event.preventDefault();
+                    return false;
+                }
+
                 resultado = proveedoresJson.find(elemento => elemento.label == $('#proveedores').val());
 
                 if (!resultado) {

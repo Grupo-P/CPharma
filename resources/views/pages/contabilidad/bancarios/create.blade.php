@@ -398,6 +398,15 @@
                     return false;
                 }
 
+                monto = $('[name=monto]').val();
+                iva = $('[name=monto_iva]').val();
+
+                if (parseFloat(iva) >= parseFloat(monto)) {
+                    alert('El monto del IVA debe ser menor al monto base');
+                    event.preventDefault();
+                    return false;
+                }
+
                 Swal.fire({
                     title: 'Cargando...',
                     allowEscapeKey: false,

@@ -66,24 +66,7 @@ class ContReporteController extends Controller
                 ->whereNull('ingresos')
                 ->get();
 
-            $pagos = [];
-
-            foreach ($bancario as $item) {
-                $pagos[] = $item;
-            }
-
-            foreach ($dolaresFTN as $item) {
-                $pagos[] = $item;
-            }
-
-            foreach ($dolaresFAU as $item) {
-                $pagos[] = $item;
-            }
-
-            foreach ($dolaresFLL as $item) {
-                $pagos[] = $item;
-            }
-
+            $pagos = array_merge($bancario, $dolaresFTN, $dolaresFAU, $dolaresFLL);
             $pagos = collect($pagos)->sortBy('created_at');
         }
 
@@ -112,8 +95,6 @@ class ContReporteController extends Controller
             $fechaFin = new Datetime($request->get('fechaFin'));
             $fechaFin = $fechaFin->format('d/m/Y');
 
-            $movimientos = [];
-
             $dolaresFTN = DB::select("
                 SELECT
                     cont_pagos_efectivo_ftn.created_at AS fecha,
@@ -134,10 +115,6 @@ class ContReporteController extends Controller
                     DATE(cont_pagos_efectivo_ftn.created_at) >= '{$request->fechaInicio}' AND
                     DATE(cont_pagos_efectivo_ftn.created_at) <= '{$request->fechaFin}';
             ");
-
-            foreach ($dolaresFTN as $item) {
-                $movimientos[] = $item;
-            }
 
             $dolaresFAU = DB::select("
                 SELECT
@@ -160,10 +137,6 @@ class ContReporteController extends Controller
                     DATE(cont_pagos_efectivo_fau.created_at) <= '{$request->fechaFin}';
             ");
 
-            foreach ($dolaresFAU as $item) {
-                $movimientos[] = $item;
-            }
-
             $dolaresFLL = DB::select("
                 SELECT
                     cont_pagos_efectivo_fll.created_at AS fecha,
@@ -184,10 +157,6 @@ class ContReporteController extends Controller
                     DATE(cont_pagos_efectivo_fll.created_at) >= '{$request->fechaInicio}' AND
                     DATE(cont_pagos_efectivo_fll.created_at) <= '{$request->fechaFin}';
             ");
-
-            foreach ($dolaresFLL as $item) {
-                $movimientos[] = $item;
-            }
 
             $bolivaresFTN = DB::select("
                 SELECT
@@ -210,10 +179,6 @@ class ContReporteController extends Controller
                     DATE(cont_pagos_bolivares_ftn.created_at) <= '{$request->fechaFin}';
             ");
 
-            foreach ($bolivaresFTN as $item) {
-                $movimientos[] = $item;
-            }
-
             $bolivaresFAU = DB::select("
                 SELECT
                     cont_pagos_bolivares_fau.created_at AS fecha,
@@ -234,10 +199,6 @@ class ContReporteController extends Controller
                     DATE(cont_pagos_bolivares_fau.created_at) >= '{$request->fechaInicio}' AND
                     DATE(cont_pagos_bolivares_fau.created_at) <= '{$request->fechaFin}';
             ");
-
-            foreach ($bolivaresFAU as $item) {
-                $movimientos[] = $item;
-            }
 
             $bolivaresFLL = DB::select("
                 SELECT
@@ -260,17 +221,13 @@ class ContReporteController extends Controller
                     DATE(cont_pagos_bolivares_fll.created_at) <= '{$request->fechaFin}';
             ");
 
-            foreach ($bolivaresFLL as $item) {
-                $movimientos[] = $item;
-            }
-
             $bancarios = DB::select("
                 SELECT
                     cont_pagos_bancarios.created_at AS fecha,
                     CONCAT('Pago bancario por ', (SELECT cont_bancos.alias_cuenta FROM cont_bancos WHERE cont_bancos.id = cont_pagos_bancarios.id_banco)) AS tipo,
                     '-' AS nro_movimiento,
                     cont_pagos_bancarios.monto,
-                    '-' AS comentario,
+                    IF(cont_pagos_bancarios.iva != 0, CONCAT('IVA: ', FORMAT(cont_pagos_bancarios.iva, 2, 'de_DE'), '<br>', cont_pagos_bancarios.comentario), cont_pagos_bancarios.comentario) AS comentario,
                     IF(cont_pagos_bancarios.fecha_conciliado, 'Si', 'No') AS conciliacion,
                     cont_pagos_bancarios.operador AS operador,
                     IF(cont_pagos_bancarios.deleted_at, 'Desincorporado', 'Activo') AS estado,
@@ -285,18 +242,14 @@ class ContReporteController extends Controller
                     DATE(cont_pagos_bancarios.created_at) <= '{$request->fechaFin}';
             ");
 
-            foreach ($bancarios as $item) {
-                $movimientos[] = $item;
-            }
-
             $deudas = DB::select("
                 SELECT
                     cont_deudas.created_at AS fecha,
                     'Deudas' AS tipo,
                     cont_deudas.numero_documento AS nro_movimiento,
                     cont_deudas.monto,
-                    '-' AS comentario,
-                    '-' AS conciliacion,
+                    IF(cont_deudas.monto_iva != 0, CONCAT('IVA: ', FORMAT(cont_deudas.monto_iva, 2, 'de_DE')), '') AS comentario,
+                    '' AS conciliacion,
                     cont_deudas.usuario_registro AS operador,
                     IF(cont_deudas.deleted_at, 'Desincorporado', 'Activo') AS estado
                 FROM
@@ -307,17 +260,13 @@ class ContReporteController extends Controller
                     DATE(cont_deudas.created_at) <= '{$request->fechaFin}';
             ");
 
-            foreach ($deudas as $item) {
-                $movimientos[] = $item;
-            }
-
             $reclamos = DB::select("
                 SELECT
                     cont_reclamos.created_at AS fecha,
                     'Reclamo' AS tipo,
                     cont_reclamos.numero_documento AS nro_movimiento,
                     cont_reclamos.monto,
-                    cont_reclamos.comentario AS comentario,
+                    IF(cont_reclamos.monto_iva != 0, CONCAT('IVA: ', FORMAT(cont_reclamos.monto_iva, 2, 'de_DE'), '<br>', cont_reclamos.comentario), cont_reclamos.comentario) AS comentario,
                     '-' AS conciliacion,
                     cont_reclamos.usuario_registro AS operador,
                     IF(cont_reclamos.deleted_at, 'Desincorporado', 'Activo') AS estado
@@ -330,17 +279,14 @@ class ContReporteController extends Controller
                     DATE(cont_reclamos.created_at) <= '{$request->fechaFin}';
             ");
 
-            foreach ($reclamos as $item) {
-                $movimientos[] = $item;
-            }
-
             $ajustes = DB::select("
                SELECT
                     cont_ajustes.created_at AS fecha,
                     'Ajuste' AS tipo,
                     '-' AS nro_movimiento,
                     cont_ajustes.monto,
-                    cont_ajustes.comentario,
+                    cont_ajustes.monto_iva,
+                    IF(cont_ajustes.monto_iva != 0, CONCAT('IVA: ', FORMAT(cont_ajustes.monto_iva, 2, 'de_DE'), '<br>', cont_ajustes.comentario), cont_ajustes.comentario) AS comentario,
                     '-' AS conciliacion,
                     cont_ajustes.usuario_registro AS operador,
                     IF(cont_ajustes.deleted_at, 'Desincorporado', 'Activo') AS estado
@@ -352,10 +298,7 @@ class ContReporteController extends Controller
                     DATE(cont_ajustes.created_at) <= '{$request->fechaFin}';
             ");
 
-            foreach ($ajustes as $item) {
-                $movimientos[] = $item;
-            }
-
+            $movimientos = array_merge($bancarios, $deudas, $reclamos, $ajustes, $bolivaresFLL, $bolivaresFAU, $bolivaresFTN, $dolaresFLL, $dolaresFAU, $dolaresFTN);
             $movimientos = collect($movimientos)->sortByDesc('fecha');
 
             $proveedor = ContProveedor::find($request->get('id_proveedor'));
@@ -432,16 +375,7 @@ class ContReporteController extends Controller
                     DATE(cont_reclamos.created_at) >= '{$request->get('fechaInicio')}' AND DATE(cont_reclamos.created_at) <= '{$request->get('fechaFin')}';
             ");
 
-            $items = [];
-
-            foreach ($deuda as $item) {
-                $items[] = $item;
-            }
-
-            foreach ($reclamo as $item) {
-                $items[] = $item;
-            }
-
+            $items = array_merge($reclamo, $deuda);
             $items = collect($items)->sortBy('created_at');
         }
 
@@ -472,8 +406,6 @@ class ContReporteController extends Controller
             $fechaFin = new Datetime($request->get('fechaFin'));
             $fechaFin = $fechaFin->format('d/m/Y');
 
-            $items = [];
-
             if ($request->get('id_cuenta')) {
                 $efectivo = DB::select("
                     SELECT
@@ -490,10 +422,6 @@ class ContReporteController extends Controller
                         DATE(cont_pagos_efectivo.created_at) <= '{$request->fechaFin}';
                 ");
 
-                foreach ($efectivo as $item) {
-                    $items[] = $item;
-                }
-
                 $bancario = DB::select("
                     SELECT
                         cont_pagos_bancarios.created_at AS fecha,
@@ -507,31 +435,9 @@ class ContReporteController extends Controller
                         DATE(cont_pagos_bancarios.created_at) >= '{$request->fechaInicio}' AND
                         DATE(cont_pagos_bancarios.created_at) <= '{$request->fechaFin}';
                 ");
-
-                foreach ($bancario as $item) {
-                    $items[] = $item;
-                }
-
-                $efectivo = DB::select("
-                    SELECT
-                        cont_pagos_efectivo.created_at AS fecha,
-                        CONCAT('Ingreso en efectivo en ', (SELECT sedes.siglas FROM sedes WHERE sedes.razon_social = cont_pagos_efectivo.sede)) AS tipo,
-                        cont_pagos_efectivo.ingresos AS monto,
-                        cont_pagos_efectivo.user AS operador
-                    FROM
-                        cont_pagos_efectivo
-                    WHERE
-                        (cont_pagos_efectivo.ingresos IS NOT NULL) AND
-                        cont_pagos_efectivo.id_cuenta = '{$request->id_cuenta}' AND
-                        DATE(cont_pagos_efectivo.created_at) >= '{$request->fechaInicio}' AND
-                        DATE(cont_pagos_efectivo.created_at) <= '{$request->fechaFin}';
-                ");
-
-                foreach ($efectivo as $item) {
-                    $items[] = $item;
-                }
             }
 
+            $items = array_merge($efectivo, $bancario, $efectivo);
             $items = collect($items)->sortBy('created_at');
         }
 
