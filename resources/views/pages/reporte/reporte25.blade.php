@@ -37,38 +37,38 @@
   .autocomplete-items div {
     padding: 10px;
     cursor: pointer;
-    background-color: #fff; 
-    border-bottom: 1px solid #d4d4d4; 
+    background-color: #fff;
+    border-bottom: 1px solid #d4d4d4;
   }
   .autocomplete-items div:hover {
     background-color: #e9e9e9;
   }
   .autocomplete-active {
-    background-color: DodgerBlue !important; 
+    background-color: DodgerBlue !important;
     color: #ffffff;
   }
   </style>
 @endsection
 
 @section('content')
-	<h1 class="h5 text-info">
-		 <i class="fas fa-file-invoice"></i>
-		Articulos en Cero
-	</h1>
-	<hr class="row align-items-start col-12">
-    
-<?php	
+    <h1 class="h5 text-info">
+         <i class="fas fa-file-invoice"></i>
+        Articulos en Cero
+    </h1>
+    <hr class="row align-items-start col-12">
+
+<?php
   include(app_path().'\functions\config.php');
   include(app_path().'\functions\functions.php');
   include(app_path().'\functions\querys_mysql.php');
   include(app_path().'\functions\querys_sqlserver.php');
 
-  if (isset($_GET['SEDE'])){      
+  if (isset($_GET['SEDE'])){
     echo '<h1 class="h5 text-success"  align="left"> <i class="fas fa-prescription"></i> '.FG_Nombre_Sede($_GET['SEDE']).'</h1>';
   }
   echo '<hr class="row align-items-start col-12">';
 
-	if (isset($_GET['fechaInicio'])) {
+    if (isset($_GET['fechaInicio'])) {
     $InicioCarga = new DateTime("now");
 
     R25_Articulos_Cero($_GET['SEDE'],$_GET['fechaInicio'],$_GET['fechaFin']);
@@ -77,10 +77,10 @@
     $FinCarga = new DateTime("now");
     $IntervalCarga = $InicioCarga->diff($FinCarga);
     echo'Tiempo de carga: '.$IntervalCarga->format("%Y-%M-%D %H:%I:%S");
-	} 
-	else{
-		echo '
-		<form autocomplete="off" action="">
+    }
+    else{
+        echo '
+        <form autocomplete="off" action="">
         <table style="width:100%;">
           <tr>
             <td align="center">
@@ -102,17 +102,17 @@
               <input type="submit" value="Buscar" class="btn btn-outline-success">
             </td>
           </tr>
-		    </table>
-	  	</form>
-  	';
-	} 
+            </table>
+        </form>
+    ';
+    }
 ?>
 @endsection
 
 @section('scriptsFoot')
 <script>
   $(document).ready(function(){
-      $('[data-toggle="tooltip"]').tooltip();   
+      $('[data-toggle="tooltip"]').tooltip();
   });
 </script>
 @endsection
@@ -159,9 +159,9 @@
         <thead class="thead-dark">
           <tr>
             <th scope="col" class="CP-sticky">#</th>
-            <th scope="col" class="CP-sticky">Componente/Uso</th>            
+            <th scope="col" class="CP-sticky">Componente/Uso</th>
             <th scope="col" class="CP-sticky">Repeticiones</th>
-            <th scope="col" class="CP-sticky">Tipo</th>            
+            <th scope="col" class="CP-sticky">Tipo</th>
           </tr>
         </thead>
         <tbody>
@@ -169,7 +169,7 @@
 
     $contador = 1;
     while($row = sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC)) {
-      
+
       echo '<tr>';
       echo '<td align="center"><strong>'.intval($contador).'</strong></td>';
       echo '<td>'.FG_Limpiar_Texto($row["componente"]).'</td>';
@@ -189,11 +189,11 @@
         <thead class="thead-dark">
           <tr>
             <th scope="col" class="CP-sticky">#</th>
-            <th scope="col" class="CP-sticky">Componente/Uso</th>            
+            <th scope="col" class="CP-sticky">Componente/Uso</th>
             <th scope="col" class="CP-sticky">Fecha</th>
             <th scope="col" class="CP-sticky">Hora</th>
             <th scope="col" class="CP-sticky">Tipo</th>
-            <th scope="col" class="CP-sticky">Estacion</th>     
+            <th scope="col" class="CP-sticky">Estacion</th>
           </tr>
         </thead>
         <tbody>
@@ -201,7 +201,7 @@
 
     $contador = 1;
     while($row1 = sqlsrv_fetch_array($result1,SQLSRV_FETCH_ASSOC)) {
-      
+
       $fecha = $row1["fecha"];
       $hora = $row1["hora"];
 
@@ -233,10 +233,10 @@
       compo as componente,
       COUNT(*) as repeticiones,
       cat as tipo
-      FROM faltantes 
-      WHERE 
-      (fecha > '$FInicio')
-      AND (fecha < '$FFin')
+      FROM faltantes
+      WHERE
+      (CONVERT(DATE, fecha) > '$FInicio')
+      AND (CONVERT(DATE, fecha) < '$FFin')
       GROUP BY faltantes.compo, faltantes.cat
       ORDER BY repeticiones DESC
     ";
@@ -257,8 +257,8 @@
       CONVERT(TIME, fecha) as hora,
       estacion,
       cat as tipo
-      FROM faltantes 
-      WHERE 
+      FROM faltantes
+      WHERE
       (fecha > '$FInicio')
       AND (fecha < '$FFin')
       ORDER BY hora ASC
