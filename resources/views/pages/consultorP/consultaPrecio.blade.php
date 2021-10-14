@@ -198,7 +198,7 @@
       if (_ConsultorDolar_ == "SI") {
        echo ' <div id="DivTasa" style="width: 100%" class="text-center">
           <label id="TasaVenta" class="text-center" style="font-size:1.5rem">
-            <strong>Tasa del dia: '.SigVe.' '.number_format($TasaVenta,2,"," ,"." ).' / Bs.D '.number_format(antesReconversion($TasaVenta),2,"," ,"." ).'</strong>
+            <strong>Tasa del dia: '.SigVe.' '.number_format($TasaVenta,2,"," ,"." ).' / Bs.D '.number_format(precioReconversion($TasaVenta, 'BSD'),2,"," ,"." ).'</strong>
           </label>
           <br>
           <label class="text-danger text-center">Nuestra tasa esta sujeta a cambios sin previo aviso</label>
@@ -240,8 +240,8 @@
               <tr>
                 <td class="align-middle border border-success p-3"><b><?php echo $row['codigoBarra']; ?></b></td>
                 <td class="align-middle border border-success p-3"><b><?php echo $row['descripcion']; ?></b></td>
-                <td class="align-middle border border-success p-3"><b><?php echo $row['precio_bs']; ?></b></td>
-                <td class="align-middle border border-success p-3"><b><?php echo $row['precio_d']; ?></b></td>
+                <td class="align-middle border border-success p-3"><b><?php echo number_format(precioReconversion($row['precio_bs'], 'BSS'), 2, ',', '.'); ?></b></td>
+                <td class="align-middle border border-success p-3"><b><?php echo number_format(precioReconversion($row['precio_d'], 'BSD'), 2, ',', '.'); ?></b></td>
                 <td class="align-middle border border-success p-3"><b><?php echo $row['precio_ds']; ?></b></td>
                 <td class="align-middle border border-success p-3"><b><?php echo $row['fecha']; ?></b></td>
               </tr>
@@ -255,6 +255,8 @@
 @section('scriptsPie')
 
   <script src="https://momentjs.com/downloads/moment.js"></script>
+
+  <script src="/assets/js/functions.js"></script>
 
 
   <script type="text/javascript">
@@ -348,9 +350,9 @@
             var j = 0;
             while (j<limiteRespuesta){
               var pop = respuesta.pop();
-              var precio = formateoPrecio(pop['Precio'],2);
+              var precio = formateoPrecio(precioReconversion(pop['Precio'], 'BSS'),2);
               var precioDolar = formateoPrecio(pop['PrecioDolar'],2);
-              var precioDigital = formateoPrecio(parseFloat(pop['Precio'])/1000000, 2);
+              var precioDigital = formateoPrecio(parseFloat(precioReconversion(pop['Precio'], 'BSD')), 2);
               var descripcion = pop['Descripcion'];
               var codigo = pop['CodigoBarra'];
               var URLImag = URLImagen+codigo+'.jpg';
@@ -443,8 +445,8 @@
             type: "POST",
             success: function(data) {
               TasaVenta = data;
-              TasaVentaMostrar = formateoPrecio(TasaVenta,2);
-              TasaVentaMostrarDigital = formateoPrecio(TasaVenta/1000000,2);
+              TasaVentaMostrar = formateoPrecio(precioReconversion(TasaVenta, 'BSS'),2);
+              TasaVentaMostrarDigital = formateoPrecio(precioReconversion(TasaVenta, 'BSD'),2);
               $('#TasaVenta').html('<strong>Tasa del dia: Bs.S '+TasaVentaMostrar+' / Bs.D '+TasaVentaMostrarDigital+'</strong>');
               $('#DivTasa').show();
             }
@@ -458,13 +460,13 @@
             success: function(data) {
                 data = JSON.parse(data);
 
-              precio = formateoPrecio(data.precio,2);
+              precio = formateoPrecio(precioReconversion(data.precio, 'BSS'),2);
               $('#PPrecioScan').html('BsS. '+precio);
               //const TasaVentaD = eval(<?php /*echo $TasaVenta*/ ?>);
               precioDolar = formateoPrecio(data.precio/TasaVenta,2);
               $('#PPrecioDolarScan').html('$. '+precioDolar);
 
-              precioDigital = formateoPrecio(parseFloat(data.precio)/1000000, 2);
+              precioDigital = formateoPrecio(parseFloat(precioReconversion(data.precio, 'BSD')), 2);
               $('#PPrecioDigitalScan').html('BsD. '+precioDigital);
 
               for (var i = 0; i <= $('#ultimasConsultasTbody').find('tr').length - 1; i++) {
@@ -506,7 +508,7 @@
 
           $('#PPrecioScan').html('');
           $('#PPrecioDolarScan').html('');
-          $('#PPrecioDigitalScan').html();
+          $('#PPrecioDigitalScan').html('');
 
 
           //Fin Armado tablaResuldado
@@ -529,8 +531,8 @@
                 var i = 0;
                 while (i<limite && i<=limiteRespuesta){
                   var precioE = formateoPrecio(respuesta[i]['Precio']/TasaVenta,2);
-                  var precioI = formateoPrecio(respuesta[i]['Precio'],2);
-                  var precioD = formateoPrecio(respuesta[i]['Precio']/1000000,2);
+                  var precioI = formateoPrecio(precioReconversion(respuesta[i]['Precio'], 'BSS'),2);
+                  var precioD = formateoPrecio(precioReconversion(respuesta[i]['Precio'],'BSD'),2);
 
                   /*Armado Fila PCodBarrSug*/
                   nuevaFila += '<td align="center" class="text-black">';
@@ -583,6 +585,7 @@
           $('#PCodBarrScan').html('');
           $('#PDescripScan').html('');
           $('#PPrecioScan').html('');
+          $('#PPrecioDolarScan').html('');
           $('#inputCodBar').val('');
           if(timeOut!=0){
             clearTimeout(timeOut);
@@ -666,8 +669,8 @@
     $sql = "
       Select codigoBarra, descripcion,
         (SELECT DATE_FORMAT(consultor.created_at, '%d/%m/%Y %h:%i %p') from consultor WHERE consultor.codigo_barra = codigoBarra ORDER by consultor.created_at DESC limit 1) as fecha,
-        (SELECT FORMAT(consultor.precio,2,'de_DE') FROM consultor WHERE consultor.codigo_barra = codigoBarra ORDER by consultor.created_at DESC limit 1) as precio_bs,
-        (SELECT FORMAT(consultor.precio/1000000,2,'de_DE') FROM consultor WHERE consultor.codigo_barra = codigoBarra ORDER by consultor.created_at DESC limit 1) as precio_d,
+        (SELECT consultor.precio FROM consultor WHERE consultor.codigo_barra = codigoBarra ORDER by consultor.created_at DESC limit 1) as precio_bs,
+        (SELECT consultor.precio FROM consultor WHERE consultor.codigo_barra = codigoBarra ORDER by consultor.created_at DESC limit 1) as precio_d,
         (SELECT FORMAT(consultor.precio/(select dolars.tasa from dolars order BY id DESC limit 1),2,'de_DE') FROM consultor WHERE consultor.codigo_barra = codigoBarra ORDER by consultor.created_at DESC limit 1) as precio_ds
       FROM
       (SELECT DISTINCT
