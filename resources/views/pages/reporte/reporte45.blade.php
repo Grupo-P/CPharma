@@ -1,3 +1,6 @@
+<?php
+    use compras\Configuracion;
+?>
 @extends('layouts.model')
 
 @section('title')
@@ -69,26 +72,38 @@
 	  	</thead>
   	<tbody>
 		';
-        $path = "C:/Compartidos/Procesamiento/ImagenesArticulos";
-        //$path = "C:/xampp7/htdocs/ImagenesArticulos";
 
-        // Abrimos la carpeta que nos pasan como parámetro
-        $Imagenes  = scandir($path);
+        $Error = "";
+        $configuracion =  Configuracion::select('valor')->where('variable','URL_interna')->get();
 
 		while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
+            $imprimir = false;
 
-            $codigoBarra = $row['CodigoBarra'];
-            $imagenBuscar = $codigoBarra.".jpg";
-            $imprimir = true;
+            //Inicio de validacion de imagen
+                $path = "".$configuracion[0]->valor;
+                if(file_exists($path)){
+                    $Imagenes  = scandir($path);
+                    if(count($Imagenes)>0){
+                        $codigoBarra = $row['CodigoBarra'];
+                        $imagenBuscar = $codigoBarra;
 
-            foreach ($Imagenes as $imagen){
-                if($imagen==$imagenBuscar){
-                    $imprimir = false;
-                    continue;
+                        foreach ($Imagenes as $imagen){
+                            $imagenAlmacenada = explode(".", $imagen);
+
+                            if($imagenAlmacenada[0]==$imagenBuscar){
+                                $imprimir = true;
+                                continue;
+                            }
+                        }
+                    }else{
+                        $Error = "Error: lectura imagen";
+                    }
+                }else{
+                    $Error = "Error: valide la URL";
                 }
-            }
+            //Fin de validacion de imagen
 
-            if($imprimir == true){
+            if($imprimir==false && $Error==""){
                 echo '<tr>';
                 echo '<td align="center"><strong>'.intval($contador).'</strong></td>';
                 echo '<td align="center">'.($row['CodigoInterno']).'</td>';
@@ -100,6 +115,10 @@
                 $contador++;
             }
   	    }
+
+        if($Error != ""){
+            echo '<p class="text-danger text-center h3">'.$Error.'</p>';
+        }
 
 	  	echo '
   		</tbody>
@@ -148,25 +167,4 @@
 		";
 		return $sql;
 	}
-
-
-/*
-// Abrimos la carpeta que nos pasan como parámetro
-    $dir = opendir($path);
-    // Leo todos los ficheros de la carpeta
-    while ($elemento = readdir($dir)){
-        // Tratamos los elementos . y .. que tienen todas las carpetas
-        if( $elemento != "." && $elemento != ".."){
-            // Si es una carpeta
-            if( is_dir($path.$elemento) ){
-                // Muestro la carpeta
-                echo "<p><strong>CARPETA: ". $elemento ."</strong></p>";
-            // Si es un fichero
-            } else {
-                // Muestro el fichero
-                echo "<br />". $elemento;
-            }
-        }
-    }
-*/
 ?>
