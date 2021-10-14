@@ -1,3 +1,6 @@
+<?php
+    use compras\Configuracion;
+?>
 @extends('layouts.model')
 
 @section('title')
@@ -812,6 +815,7 @@
       $result9 = sqlsrv_query($conn,$sql9);
 
       $contador = 1;
+      $configuracion =  Configuracion::select('valor')->where('variable','URL_interna')->get();
 
       while ($row9 = sqlsrv_fetch_array($result9, SQLSRV_FETCH_ASSOC)) {
         $id_articulo = $row9['id_articulo'];
@@ -893,18 +897,26 @@
         $precio = number_format($precio, 2, ',', '.');
 
         //Inicio de validacion de imagen
-            $path = "C:/Compartidos/Procesamiento/ImagenesArticulos";
-            //$path = "C:/xampp7/htdocs/ImagenesArticulos";
-            $Imagenes  = scandir($path);
+            $path = "".$configuracion[0]->valor;
+            if(file_exists($path)){
+                $Imagenes  = scandir($path);
+                if(count($Imagenes)>0){
+                    $imagenBuscar = $codigo_barra;
+                    $tieneImagen = "NO";
 
-            $imagenBuscar = $codigo_barra.".jpg";
-            $tieneImagen = "NO";
+                    foreach ($Imagenes as $imagen){
+                        $imagenAlmacenada = explode(".", $imagen);
 
-            foreach ($Imagenes as $imagen){
-                if($imagen==$imagenBuscar){
-                    $tieneImagen = "SI";
-                    continue;
+                        if($imagenAlmacenada[0]==$imagenBuscar){
+                            $tieneImagen = "SI";
+                            continue;
+                        }
+                    }
+                }else{
+                    $tieneImagen = "Error: lectura imagen";
                 }
+            }else{
+                $tieneImagen = "Error: valide la URL";
             }
         //Fin de validacion de imagen
 
