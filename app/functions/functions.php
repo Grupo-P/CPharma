@@ -1104,7 +1104,7 @@
 
                 $precioPartes = explode(".",$TroquelAlmacen1);
 
-                if( count($precioPartes)>=2 && $precioPartes[1]==DecimalEtiqueta){
+                if( count($precioPartes)>=2 && substr($precioPartes[1],-2)==DecimalEtiqueta){
                     $Precio = $TroquelAlmacen1;
                 }else{
                     $Precio = max($PrecioCalculado,$TroquelAlmacen1,$TroquelAlmacen2);
@@ -1139,7 +1139,7 @@
 
                 $precioPartes = explode(".",$TroquelAlmacen1);
 
-                if( count($precioPartes)>=2 && $precioPartes[1]==DecimalEtiqueta){
+                if( count($precioPartes)>=2 && substr($precioPartes[1],-2)==DecimalEtiqueta){
                     $Precio = $TroquelAlmacen1;
                 }else{
                     $Precio = max($PrecioCalculado,$TroquelAlmacen1,$TroquelAlmacen2);
@@ -2048,8 +2048,22 @@
                 $PrecioAyer = $rowCC["precio"];
 
                 if($Dolarizado=='SI' && _EtiquetaDolar_=='SI'){
-                    $precioPartes = explode(".",$PrecioHoy);
-                    //$TasaActual = FG_Tasa_Fecha_Venta($connCPharma,date('Y-m-d'));
+                    $precioPartes = explode(".",$PrecioHoy); //Comentado por reconversion
+                    /*
+                    $sqlSCN = "SELECT sum(CuentaNull) as SumCuentaNull from(
+                            select M_PrecioTroquelado, IIF(M_PrecioTroquelado IS NULL,1,0) as CuentaNull from InvLote where InvLote.id in (
+                                select InvLoteAlmacen.InvLoteId from InvLoteAlmacen
+                                where InvLoteAlmacen.InvArticuloId=".$IdArticulo."
+                                and Existencia>0
+                                and (InvLoteAlmacen.InvAlmacenId=1 OR InvLoteAlmacen.InvAlmacenId=2)
+                            )
+                        ) as axu
+                    ";
+                    $resultSCN = sqlsrv_query($conn,$sqlSCN);
+                    $rowSCN = sqlsrv_fetch_array($resultSCN,SQLSRV_FETCH_ASSOC);
+                    $SumCuentaNull = $rowSCN["SumCuentaNull"];
+                    */
+
                     $PrecioHoy = $PrecioHoy/$TasaActual;
 
                     $sqlCC = MySQL_DiasCero_PrecioAyer_Dolar($IdArticulo,$FechaCambio);
@@ -2080,12 +2094,14 @@
                         if(isset($precioPartes) && count($precioPartes)>=2){
                             if(_EtiquetaDolar_=='SI'){
                                 $tam_dolar = "font-size:1.7rem;";
-                                if($precioPartes[1]==DecimalEtiqueta){
+                                $flag_imprime = true;
+                                if(substr($precioPartes[1],-2)==DecimalEtiqueta){
                                     $flag_imprime = true;
                                 }
                                 else{
                                     $flag_imprime = false;
                                 }
+
                             }else if(_EtiquetaDolar_=='NO'){
                                 $flag_imprime = true;
                                 $moneda = SigVe;
@@ -2128,7 +2144,7 @@
                             <td class="derecha rowDer rowDerA aumento">
                                 <label style="margin-right:10px;'.$tam_dolar.'">
                                     <strong>
-                                    BS.D '.number_format ($PrecioHoy/1000000,2,"," ,"." ).'
+                                    BS.D '.number_format (precioReconversion($PrecioHoy, 'BSD'),2,"," ,"." ).'
                                     </strong>
                                 </label>
                             </td>
@@ -2179,11 +2195,11 @@
                                                         <td colspan="2" style="color:red;text-align: center">
                                                             Precio Antes:
 
-                                                            BS.S <del>'.number_format ($PrecioAyer,2,"," ,"." ).'</del>
+                                                            BS.S <del>'.number_format (precioReconversion($PrecioAyer, 'BSS'),2,"," ,"." ).'</del>
 
                                                             /
 
-                                                            BS.D <del>'.number_format ($PrecioAyer/1000000,2,"," ,"." ).'</del>
+                                                            BS.D <del>'.number_format (precioReconversion($PrecioAyer, 'BSD'),2,"," ,"." ).'</del>
                                                         </td>
                                                     </tr>
                                                 ';
@@ -2204,6 +2220,9 @@
                                                 ';
                                             }
                                         }
+
+                                    $precio = ($Dolarizado == 'SI') ? $moneda.' '.number_format ($PrecioHoy,2,"," ,"." ) : $moneda.' '.number_format (precioReconversion($PrecioHoy, 'BSS'),2,"," ,"." );
+
                                     echo'
                                     <tr>
                                         <td colspan="2" style="text-align: center" class="rowIzq rowIzqA aumento">
@@ -2214,7 +2233,7 @@
                                         <td style="text-align: right" class="rowDer rowDerA aumento">
                                             <label style="margin-right:10px;'.$tam_dolar.'">
                                                 <strong>
-                                                '.$moneda.' '.number_format ($PrecioHoy,2,"," ,"." ).'
+                                                '.$precio.'
                                                 </strong>
                                             </label>
                                         </td>
@@ -2254,7 +2273,7 @@
                                     <tr>
                                         <td class="centrado rowDer rowDerA aumento preciopromo" colspan="2">
                                             <strong class="text-danger">
-                                            Solicite ayuda al dpto. de procesamiento (Decimal Diff. 01)
+                                            Solicite ayuda al dpto. de procesamiento (Decimal Diff. 0.0001)
                                             </strong>
                                         </td>
                                     </tr>
@@ -2285,17 +2304,35 @@
                         }
 
                         if(_EtiquetaDolar_=='SI'){
-                            $precioPartes = explode(".",$PrecioHoy);
-                            //$TasaActual = FG_Tasa_Fecha_Venta($connCPharma,date('Y-m-d'));
+                            $precioPartes = explode(".",$PrecioHoy); //Comentado por reconversion
+                            /*
+                            $sqlSCN = "SELECT sum(CuentaNull) as SumCuentaNull from(
+                                select M_PrecioTroquelado, IIF(M_PrecioTroquelado IS NULL,1,0) as CuentaNull from InvLote where InvLote.id in (
+                                    select InvLoteAlmacen.InvLoteId from InvLoteAlmacen
+                                    where InvLoteAlmacen.InvArticuloId=".$IdArticulo."
+                                    and Existencia>0
+                                    and (InvLoteAlmacen.InvAlmacenId=1 OR InvLoteAlmacen.InvAlmacenId=2)
+                                )
+                            ) as axu";
+
+                            $resultSCN = sqlsrv_query($conn,$sqlSCN);
+                            $rowSCN = sqlsrv_fetch_array($resultSCN,SQLSRV_FETCH_ASSOC);
+                            $SumCuentaNull = $rowSCN["SumCuentaNull"];
+
+                            */
+
                             $PrecioHoy = $PrecioHoy/$TasaActual;
 
                             if(isset($precioPartes) && count($precioPartes)>=2){
-                                if($precioPartes[1]==DecimalEtiqueta){
+                                $flag_imprime = true;
+
+                                if(substr($precioPartes[1],-2)==DecimalEtiqueta){
                                     $flag_imprime = true;
                                 }
                                 else{
                                     $flag_imprime = false;
                                 }
+
                             }else{
                                 echo'
                                 <table class="etq" style="display: inline;">
@@ -2338,7 +2375,7 @@
                             <td class="derecha rowDer rowDerA aumento">
                                 <label style="margin-right:10px;'.$tam_dolar.'">
                                     <strong>
-                                    BS.D '.number_format ($PrecioHoy/1000000,2,"," ,"." ).'
+                                    BS.D '.number_format (precioReconversion($PrecioHoy, 'BSD'),2,"," ,"." ).'
                                     </strong>
                                 </label>
                             </td>
@@ -2366,6 +2403,8 @@
                         $unidadMinima = '';
                     }
 
+                    $precio = ($Dolarizado == 'SI') ? $moneda.' '.number_format ($PrecioHoy,2,"," ,"." ) : $moneda.' '.number_format (precioReconversion($PrecioHoy, 'BSS'),2,"," ,"." );
+
                     echo'
                         <table>
                             <thead>
@@ -2390,7 +2429,7 @@
                                     <td style="text-align: right" class="rowDer rowDerA aumento">
                                         <label style="margin-right:10px;'.$tam_dolar.'">
                                             <strong>
-                                            '.$moneda.' '.number_format ($PrecioHoy,2,"," ,"." ).'
+                                            '.$precio.'
                                             </strong>
                                         </label>
                                     </td>
@@ -2429,7 +2468,7 @@
                                 <tr>
                                     <td class="centrado rowDer rowDerA aumento preciopromo" colspan="2">
                                         <strong class="text-danger">
-                                        Solicite ayuda al dpto. de procesamiento (Decimal Diff. 01)
+                                        Solicite ayuda al dpto. de procesamiento (Decimal Diff. 0.0001)
                                         </strong>
                                     </td>
                                 </tr>
@@ -3186,7 +3225,8 @@
             $costoBs = $CostoMayorD * $tasaCalculo;
             $precio = FG_Precio_Calculado_Alfa($UtilidadArticulo,$UtilidadCategoria,$IsIVA,$costoBs);
             $precio = round($precio,2);
-            $precio = ceil($precio)+0.01;
+            //$precio = ceil($precio)+0.01;
+            $precio = $precio+0.0001;
 
             if($tipoCorrida=='subida'){
 
@@ -3237,6 +3277,7 @@
     $evaluados = ($cont_exito+$cont_falla);
 
     $sql2 = MySQL_Guardar_Auditoria_Corrida($evaluados,$cont_exito,$cont_falla,$cont_cambios,$cont_noCambio,$user,$tipoCorrida,$tasaCalculo,date('d-m-Y'),date('h:i:s a'),$fallas);
+    echo "<br>".$sql2."<br>";
 
     mysqli_query($connCPharma,$sql2);
     mysqli_close($connCPharma);
@@ -3307,7 +3348,7 @@
             WHERE(InvLoteAlmacen.InvAlmacenId = '1')
             AND (InvLoteAlmacen.InvArticuloId = InvArticulo.Id)
             AND (InvLoteAlmacen.Existencia>0)
-            ORDER BY invlote.M_PrecioTroquelado DESC)AS DECIMAL(38,2)),2,0)) AS TroquelAlmacen1,
+            ORDER BY invlote.M_PrecioTroquelado DESC)AS DECIMAL(38,4)),4,0)) AS TroquelAlmacen1,
         --Precio Compra Bruto Almacen 1
             (ROUND(CAST((SELECT TOP 1
             InvLote.M_PrecioCompraBruto
@@ -3556,7 +3597,7 @@
     WHERE(InvLoteAlmacen.InvAlmacenId = '1')
     AND (InvLoteAlmacen.InvArticuloId = InvArticulo.Id)
     AND (InvLoteAlmacen.Existencia>0)
-    ORDER BY invlote.M_PrecioTroquelado DESC)AS DECIMAL(38,2)),2,0)) AS TroquelAlmacen1,
+    ORDER BY invlote.M_PrecioTroquelado DESC)AS DECIMAL(38,4)),4,0)) AS TroquelAlmacen1,
 --Precio Compra Bruto Almacen 1
     (ROUND(CAST((SELECT TOP 1
     InvLote.M_PrecioCompraBruto
@@ -3761,7 +3802,7 @@
     WHERE(InvLoteAlmacen.InvAlmacenId = '1')
     AND (InvLoteAlmacen.InvArticuloId = InvArticulo.Id)
     AND (InvLoteAlmacen.Existencia>0)
-    ORDER BY invlote.M_PrecioTroquelado DESC)AS DECIMAL(38,2)),2,0)) AS TroquelAlmacen1,
+    ORDER BY invlote.M_PrecioTroquelado DESC)AS DECIMAL(38,4)),4,0)) AS TroquelAlmacen1,
 --Precio Compra Bruto Almacen 1
     (ROUND(CAST((SELECT TOP 1
     InvLote.M_PrecioCompraBruto
@@ -3951,5 +3992,31 @@
     }
 
     return $new_array;
+  }
+
+  function precioReconversion($precio, $moneda)
+  {
+    if (_AntesReconversion_ == 'SI' && _DespuesReconversion_ == 'NO') {
+        if ($moneda == 'BSS') {
+            $precio = $precio;
+        }
+
+        if ($moneda == 'BSD') {
+            $precio = $precio / _FactorReconversion_;
+        }
+    }
+
+
+    if (_DespuesReconversion_ == 'SI' && _AntesReconversion_ == 'NO') {
+        if ($moneda == 'BSD') {
+            $precio = $precio;
+        }
+
+        if ($moneda == 'BSS') {
+            $precio = $precio * _FactorReconversion_;
+        }
+    }
+
+    return $precio;
   }
 ?>

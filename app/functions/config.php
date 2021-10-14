@@ -2,16 +2,19 @@
 /**********************************************************************************/
 /***************************** CONSTANTES GLOBALES *******************************/
 define("SigDolar","$");
-define("SigVe","Bs.S");
+define("SigVe","Bs.D");
 define("Utilidad",0.77);
 define("Impuesto",1.16);
 define("DecimalCorrida",0.01); //Decimal que se concatena al final a los precio en las corridas
 define("DecimalEtiqueta",01);	//Decimal que se usa para comparar el precio de las etiquetas
-define("Version","CPharma v.8.0");
+define("Version","CPharma v.8.1"); //Estable: reconversion, etiqueta y corrida
 define("_ConsultorDolar_","SI"); //Le indica al consultor si mostrar precios en dolares o no
 define("_EtiquetaDolar_","SI");	//Le indica al etiquetado si mostrar precios en dolares o no
 define("_MensajeDolar_","SI");	//Le indica al etiquetado si mostrar el _MensajeDolarLegal_ o no
 define("_MensajeDolarLegal_","");
+define("_AntesReconversion_", "NO");
+define("_DespuesReconversion_", "SI");
+define("_FactorReconversion_", 1000000);
 /**********************************************************************************/
 /************************* NOMBRES SEDES ON-LINE *********************************/
 define ("SedeFTN","FARMACIA TIERRA NEGRA, C.A.");

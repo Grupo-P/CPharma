@@ -34,8 +34,8 @@
     .autocomplete-items div {
       padding:10px;
       cursor:pointer;
-      background-color:#fff; 
-      border-bottom:1px solid #d4d4d4; 
+      background-color:#fff;
+      border-bottom:1px solid #d4d4d4;
     }
 
     .autocomplete-items div:hover {background-color:#e9e9e9;}
@@ -106,8 +106,8 @@
                 <input id="diasUltimaVenta" type="number" name="diasUltimaVenta" required style="width:100%;">
               </td>
 
-              <input id="SEDE" name="SEDE" type="hidden" value="'; 
-                print_r($_GET['SEDE']); 
+              <input id="SEDE" name="SEDE" type="hidden" value="';
+                print_r($_GET['SEDE']);
               echo'">
 
               <td align="right">
@@ -130,7 +130,7 @@
     RETORNO: No aplica
   */
   function R34_Articulos_Sin_Ventas($SedeConnection,$diasUltimaVenta) {
-    
+
     $conn = FG_Conectar_Smartpharma($SedeConnection);
     $connCPharma = FG_Conectar_CPharma();
     $Hoy = new DateTime('now');
@@ -222,14 +222,14 @@
 
         if ($row2['ultima_compra']) {
           $dias_ultima_compra = date_diff(date_create($row2['ultima_compra']->format('Y-m-d')), date_create(''));
-          $dias_ultima_compra = $dias_ultima_compra->format('%a');        
+          $dias_ultima_compra = $dias_ultima_compra->format('%a');
         } else {
           $dias_ultima_compra = '-';
         }
 
         if ($row2['ultima_venta']) {
           $dias_ultima_venta = date_diff(date_create($row2['ultima_venta']->format('Y-m-d')), date_create(''));
-          $dias_ultima_venta = $dias_ultima_venta->format('%a');        
+          $dias_ultima_venta = $dias_ultima_venta->format('%a');
         } else {
           $dias_ultima_venta = '-';
         }
@@ -278,7 +278,7 @@
   RETORNO: Un String con la query pertinente
    */
   function R12_Q_Articulos_Sin_Ventas($diasUltimaVenta) {
-    $sql = "		
+    $sql = "
 		SELECT
       DISTINCT (SELECT InvArticulo.Id FROM InvArticulo WHERE InvArticulo.Id = InvLoteAlmacen.InvArticuloId) AS id_articulo,
       (SELECT InvArticulo.CodigoArticulo FROM InvArticulo WHERE InvArticulo.Id = InvLoteAlmacen.InvArticuloId) AS codigo_articulo,
@@ -293,14 +293,14 @@
       (SELECT TOP 1 GenPersona.Nombre FROM ComFacturaDetalle INNER JOIN ComFactura ON ComFactura.Id = ComFacturaDetalle.ComFacturaId INNER JOIN ComProveedor ON ComProveedor.Id = ComFactura.ComProveedorId INNER JOIN GenPersona ON GenPersona.Id = ComProveedor.GenPersonaId WHERE ComFacturaDetalle.InvArticuloId = InvLoteAlmacen.InvArticuloId ORDER BY ComFactura.FechaDocumento DESC) AS  nombre_ultimo_proveedor
     FROM InvLoteAlmacen
     WHERE
-      ((SELECT SUM(T.Existencia) FROM InvLoteAlmacen T WHERE T.InvAlmacenId IN (1, 2) AND T.InvArticuloId = InvLoteAlmacen.InvArticuloId) > 0) AND 
+      ((SELECT SUM(T.Existencia) FROM InvLoteAlmacen T WHERE T.InvAlmacenId IN (1, 2) AND T.InvArticuloId = InvLoteAlmacen.InvArticuloId) > 0) AND
       ((DATEDIFF(DAY, (SELECT TOP 1 VenFactura.FechaDocumento FROM VenFactura WHERE VenFactura.Id = (SELECT TOP 1 VenFacturaDetalle.VenFacturaId FROM VenFacturaDetalle WHERE VenFacturaDetalle.InvArticuloId = InvLoteAlmacen.InvArticuloId ORDER BY VenFacturaDetalle.VenFacturaId DESC)), GETDATE())) >= '$diasUltimaVenta')
     ORDER BY dias_ultima_venta DESC
     ";
     return $sql;
   }
 
-  
+
   /**********************************************************************************/
   /*
     TITULO: R2Q_Detalle_Articulo
@@ -359,7 +359,7 @@
     WHERE(InvLoteAlmacen.InvAlmacenId = '1')
     AND (InvLoteAlmacen.InvArticuloId = InvArticulo.Id)
     AND (InvLoteAlmacen.Existencia>0)
-    ORDER BY invlote.M_PrecioTroquelado DESC)AS DECIMAL(38,2)),2,0)) AS TroquelAlmacen1,
+    ORDER BY invlote.M_PrecioTroquelado DESC)AS DECIMAL(38,4)),4,0)) AS TroquelAlmacen1,
 --Precio Compra Bruto Almacen 1
     (ROUND(CAST((SELECT TOP 1
     InvLote.M_PrecioCompraBruto

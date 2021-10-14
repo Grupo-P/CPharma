@@ -10,7 +10,7 @@
       box-sizing:border-box;
     }
     .autocomplete {
-      position:relative; 
+      position:relative;
       display:inline-block;
     }
     input {
@@ -21,7 +21,7 @@
       font-size:16px;
     }
     input[type=text] {
-      background-color:#f1f1f1; 
+      background-color:#f1f1f1;
       width:100%;
     }
     .autocomplete-items {
@@ -37,14 +37,14 @@
     .autocomplete-items div {
       padding:10px;
       cursor:pointer;
-      background-color:#fff; 
-      border-bottom:1px solid #d4d4d4; 
+      background-color:#fff;
+      border-bottom:1px solid #d4d4d4;
     }
     .autocomplete-items div:hover {
       background-color:#e9e9e9;
     }
     .autocomplete-active {
-      background-color:DodgerBlue !important; 
+      background-color:DodgerBlue !important;
       color:#fff;
     }
   </style>
@@ -131,20 +131,20 @@
     <script type="text/javascript">
       ArrJs = eval(<?php echo $ArtJson ?>);
       autocompletado(document.getElementById("myInput"),document.getElementById("myId"), ArrJs);
-    </script> 
+    </script>
   <?php
     }
-  ?> 
+  ?>
   <?php
     if($CodJson!=""){
   ?>
     <script type="text/javascript">
       ArrJsCB = eval(<?php echo $CodJson ?>);
       autocompletadoCB(document.getElementById("myInputCB"),document.getElementById("myIdCB"), ArrJsCB);
-    </script> 
+    </script>
   <?php
     }
-  ?>  
+  ?>
 @endsection
 
 <?php
@@ -209,7 +209,7 @@
             <th scope="col">Existencia</th>
             <th scope="col">Precio</br>(Con IVA) '.SigVe.'</td>
             <th scope="col">Utilidad Configurada</td>
-            <th scope="col">Troquel</td>  
+            <th scope="col">Troquel</td>
             <th scope="col">Dolarizado?</th>
             <th scope="col">Tasa actual '.SigVe.'</th>
             <th scope="col">Precio en divisa</br>(Con IVA) '.SigDolar.'</td>
@@ -391,7 +391,7 @@
     $sql = "
       SELECT
       (SELECT CodigoBarra
-      FROM InvCodigoBarra 
+      FROM InvCodigoBarra
       WHERE InvCodigoBarra.InvArticuloId = InvArticulo.Id
       AND InvCodigoBarra.EsPrincipal = 1) AS CodigoBarra,
       InvArticulo.Id
@@ -408,7 +408,7 @@
       AUTOR: Ing. Manuel Henriquez
   */
   function R10Q_Detalle_Articulo($IdArticulo) {
-    $sql = " 
+    $sql = "
       SELECT
 --Id Articulo
     InvArticulo.Id AS IdArticulo,
@@ -418,7 +418,7 @@
     InvArticulo.CodigoArticulo AS CodigoInterno,
 --Codigo de Barra
     (SELECT CodigoBarra
-    FROM InvCodigoBarra 
+    FROM InvCodigoBarra
     WHERE InvCodigoBarra.InvArticuloId = InvArticulo.Id
     AND InvCodigoBarra.EsPrincipal = 1) AS CodigoBarra,
 --Descripcion
@@ -428,27 +428,27 @@
 --Troquelado (0 NO es Troquelado, Id Articulo SI es Troquelado)
     (ISNULL((SELECT
     InvArticuloAtributo.InvArticuloId
-    FROM InvArticuloAtributo 
-    WHERE InvArticuloAtributo.InvAtributoId = 
+    FROM InvArticuloAtributo
+    WHERE InvArticuloAtributo.InvAtributoId =
     (SELECT InvAtributo.Id
-    FROM InvAtributo 
-    WHERE 
+    FROM InvAtributo
+    WHERE
     InvAtributo.Descripcion = 'Troquelados'
-    OR  InvAtributo.Descripcion = 'troquelados') 
+    OR  InvAtributo.Descripcion = 'troquelados')
     AND InvArticuloAtributo.InvArticuloId = InvArticulo.Id),CAST(0 AS INT))) AS Troquelado,
 --UtilidadArticulo (Utilidad del articulo, Utilidad es 1.00 NO considerar la utilidad para el calculo de precio)
     ROUND(CAST(1-((ISNULL(ROUND(CAST((SELECT VenCondicionVenta.PorcentajeUtilidad
-        FROM VenCondicionVenta 
+        FROM VenCondicionVenta
         WHERE VenCondicionVenta.Id = (
         SELECT VenCondicionVenta_VenCondicionVentaArticulo.Id
-        FROM VenCondicionVenta_VenCondicionVentaArticulo 
+        FROM VenCondicionVenta_VenCondicionVentaArticulo
         WHERE VenCondicionVenta_VenCondicionVentaArticulo.InvArticuloId = InvArticulo.Id)) AS DECIMAL(38,4)),2,0),CAST(0 AS INT)))/100)AS DECIMAL(38,2)),2,0) AS UtilidadArticulo,
 --UtilidadCategoria (Utilidad de la categoria, Utilidad es 1.00 NO considerar la utilidad para el calculo de precio)
-    ROUND(CAST(1-((ISNULL(ROUND(CAST((SELECT VenCondicionVenta.PorcentajeUtilidad 
-  FROM VenCondicionVenta 
+    ROUND(CAST(1-((ISNULL(ROUND(CAST((SELECT VenCondicionVenta.PorcentajeUtilidad
+  FROM VenCondicionVenta
   WHERE VenCondicionVenta.id = (
-    SELECT VenCondicionVenta_VenCondicionVentaCategoria.Id 
-    FROM VenCondicionVenta_VenCondicionVentaCategoria 
+    SELECT VenCondicionVenta_VenCondicionVentaCategoria.Id
+    FROM VenCondicionVenta_VenCondicionVentaCategoria
     WHERE VenCondicionVenta_VenCondicionVentaCategoria.InvCategoriaId = InvArticulo.InvCategoriaId)) AS DECIMAL(38,4)),2,0),CAST(0 AS INT)))/100)AS DECIMAL(38,2)),2,0) AS UtilidadCategoria,
 --Precio Troquel Almacen 1
     (ROUND(CAST((SELECT TOP 1
@@ -458,7 +458,7 @@
     WHERE(InvLoteAlmacen.InvAlmacenId = '1')
     AND (InvLoteAlmacen.InvArticuloId = InvArticulo.Id)
     AND (InvLoteAlmacen.Existencia>0)
-    ORDER BY invlote.M_PrecioTroquelado DESC)AS DECIMAL(38,2)),2,0)) AS TroquelAlmacen1,
+    ORDER BY invlote.M_PrecioTroquelado DESC)AS DECIMAL(38,4)),4,0)) AS TroquelAlmacen1,
 --Precio Compra Bruto Almacen 1
     (ROUND(CAST((SELECT TOP 1
     InvLote.M_PrecioCompraBruto
@@ -512,34 +512,34 @@
 --Dolarizado (0 NO es dolarizado, Id Articulo SI es dolarizado)
     (ISNULL((SELECT
     InvArticuloAtributo.InvArticuloId
-    FROM InvArticuloAtributo 
-    WHERE InvArticuloAtributo.InvAtributoId = 
+    FROM InvArticuloAtributo
+    WHERE InvArticuloAtributo.InvAtributoId =
     (SELECT InvAtributo.Id
-    FROM InvAtributo 
-    WHERE 
+    FROM InvAtributo
+    WHERE
     InvAtributo.Descripcion = 'Dolarizados'
     OR  InvAtributo.Descripcion = 'Giordany'
-    OR  InvAtributo.Descripcion = 'giordany') 
+    OR  InvAtributo.Descripcion = 'giordany')
     AND InvArticuloAtributo.InvArticuloId = InvArticulo.Id),CAST(0 AS INT))) AS Dolarizado,
 --Tipo Producto (0 Miscelaneos, Id Articulo Medicinas)
     (ISNULL((SELECT
-    InvArticuloAtributo.InvArticuloId 
-    FROM InvArticuloAtributo 
-    WHERE InvArticuloAtributo.InvAtributoId = 
+    InvArticuloAtributo.InvArticuloId
+    FROM InvArticuloAtributo
+    WHERE InvArticuloAtributo.InvAtributoId =
     (SELECT InvAtributo.Id
-    FROM InvAtributo 
-    WHERE 
-    InvAtributo.Descripcion = 'Medicina') 
+    FROM InvAtributo
+    WHERE
+    InvAtributo.Descripcion = 'Medicina')
     AND InvArticuloAtributo.InvArticuloId = InvArticulo.Id),CAST(0 AS INT))) AS Tipo,
 --Articulo Estrella (0 NO es Articulo Estrella , Id SI es Articulo Estrella)
     (ISNULL((SELECT
-    InvArticuloAtributo.InvArticuloId 
-    FROM InvArticuloAtributo 
-    WHERE InvArticuloAtributo.InvAtributoId = 
+    InvArticuloAtributo.InvArticuloId
+    FROM InvArticuloAtributo
+    WHERE InvArticuloAtributo.InvAtributoId =
     (SELECT InvAtributo.Id
-    FROM InvAtributo 
-    WHERE 
-    InvAtributo.Descripcion = 'Articulo Estrella') 
+    FROM InvAtributo
+    WHERE
+    InvAtributo.Descripcion = 'Articulo Estrella')
     AND InvArticuloAtributo.InvArticuloId = InvArticulo.Id),CAST(0 AS INT))) AS ArticuloEstrella,
 --Ultimo Precio Sin Iva
       (SELECT TOP 1
@@ -569,9 +569,9 @@
     WHERE InvLote.InvArticuloId  = InvArticulo.Id
     ORDER BY UltimoLote DESC) AS UltimoLote,
 --Tiempo Tienda (En dias)
-    (SELECT TOP 1 
+    (SELECT TOP 1
     DATEDIFF(DAY,CONVERT(DATE,InvLote.FechaEntrada),GETDATE())
-    FROM InvLoteAlmacen 
+    FROM InvLoteAlmacen
     INNER JOIN invlote on invlote.id = InvLoteAlmacen.InvLoteId
     WHERE InvLotealmacen.InvArticuloId = InvArticulo.Id
     ORDER BY InvLote.Auditoria_FechaCreacion DESC) AS TiempoTienda,
@@ -598,13 +598,13 @@
 --Joins
     LEFT JOIN InvLoteAlmacen ON InvLoteAlmacen.InvArticuloId = InvArticulo.Id
     LEFT JOIN InvArticuloAtributo ON InvArticuloAtributo.InvArticuloId = InvArticulo.Id
-    LEFT JOIN InvAtributo ON InvAtributo.Id = InvArticuloAtributo.InvAtributoId 
+    LEFT JOIN InvAtributo ON InvAtributo.Id = InvArticuloAtributo.InvAtributoId
 --Condicionales
     WHERE InvArticulo.Id = '$IdArticulo'
 --Agrupamientos
     GROUP BY InvArticulo.Id, InvArticulo.CodigoArticulo, InvArticulo.Descripcion, InvArticulo.FinConceptoImptoIdCompra, InvArticulo.InvCategoriaId
 --Ordanamiento
-    ORDER BY InvArticulo.Id ASC 
+    ORDER BY InvArticulo.Id ASC
     ";
     return $sql;
   }
@@ -618,7 +618,7 @@
    */
   function R10Q_Lote_Analitico($IdArticulo) {
     $sql = "
-      SELECT 
+      SELECT
       InvLoteAlmacen.InvLoteId,
       InvMovimiento.InvCausaId,
       InvCausa.Descripcion,
@@ -647,9 +647,9 @@
       INNER JOIN InvCausa ON InvMovimiento.InvCausaId=InvCausa.Id
       WHERE InvLoteAlmacen.InvArticuloId='$IdArticulo'
       AND (InvLoteAlmacen.Existencia>0)
-      AND (CONVERT(DATE,InvMovimiento.Auditoria_FechaCreacion)=CONVERT(DATE,InvLoteAlmacen.Auditoria_FechaCreacion)) 
+      AND (CONVERT(DATE,InvMovimiento.Auditoria_FechaCreacion)=CONVERT(DATE,InvLoteAlmacen.Auditoria_FechaCreacion))
       AND (
-          (InvMovimiento.InvCausaId=1) 
+          (InvMovimiento.InvCausaId=1)
           OR (InvMovimiento.InvCausaId=5)
           OR (InvMovimiento.InvCausaId=7)
           OR (InvMovimiento.InvCausaId=9)
@@ -672,7 +672,7 @@
    */
   function R10Q_Proveedores($IdArticulo,$IdFactura) {
     $sql = "
-      SELECT 
+      SELECT
       ComProveedor.Id,
       GenPersona.Nombre
       FROM ComFacturaDetalle

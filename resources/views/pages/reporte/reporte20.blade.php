@@ -37,15 +37,15 @@
     .autocomplete-items div {
       padding: 10px;
       cursor: pointer;
-      background-color: #fff; 
-      border-bottom: 1px solid #d4d4d4; 
+      background-color: #fff;
+      border-bottom: 1px solid #d4d4d4;
     }
     .autocomplete-items div:hover {
-      background-color: #e9e9e9; 
+      background-color: #e9e9e9;
     }
     .autocomplete-active {
-      background-color: DodgerBlue !important; 
-      color: #ffffff; 
+      background-color: DodgerBlue !important;
+      color: #ffffff;
     }
   </style>
 @endsection
@@ -57,7 +57,7 @@
   </h1>
   <hr class="row align-items-start col-12">
 
-<?php 
+<?php
   include(app_path().'\functions\config.php');
   include(app_path().'\functions\functions.php');
   include(app_path().'\functions\querys_mysql.php');
@@ -65,15 +65,15 @@
 
   $ArtJson = "";
 
-  if (isset($_GET['SEDE'])){      
+  if (isset($_GET['SEDE'])){
     echo '<h1 class="h5 text-success"  align="left"> <i class="fas fa-prescription"></i> '.FG_Nombre_Sede($_GET['SEDE']).'</h1>';
     }
     echo '<hr class="row align-items-start col-12">';
-  
+
   if (isset($_GET['Id'])){
-  //CASO 2: CARGA AL HABER SELECCIONADO UN PROVEEDOR 
+  //CASO 2: CARGA AL HABER SELECCIONADO UN PROVEEDOR
     $InicioCarga = new DateTime("now");
-    
+
     if(FG_Validar_Conectividad('FTN')==1){
         echo'</br></br><h6 align="center">La informacion a continuacion proviene de: '.FG_Nombre_Sede('FTN').'</h6>';
         R20_Catalogo_Proveedor_C2($_GET['SEDE'],'FTN',$_GET['Id'],$_GET['Nombre'],$_GET['fechaInicio'],$_GET['fechaFin'],$_GET['pedido']);
@@ -100,11 +100,11 @@
       else{
         echo'</br></br><h6 align="center">No existe conectividad con la sede: '.FG_Nombre_Sede('FAU').'</h6>';
       }
-    
+
     $FinCarga = new DateTime("now");
     $IntervalCarga = $InicioCarga->diff($FinCarga);
     echo'Tiempo de carga: '.$IntervalCarga->format("%Y-%M-%D %H:%I:%S");
-  } 
+  }
   else{
   //CASO 1: AL CARGAR EL REPORTE DESDE EL MENU
     $InicioCarga = new DateTime("now");
@@ -164,10 +164,10 @@
     <script type="text/javascript">
       ArrJs = eval(<?php echo $ArtJson ?>);
       autocompletado(document.getElementById("myInput"),document.getElementById("myId"), ArrJs);
-    </script> 
+    </script>
 <?php
   }
-?>  
+?>
 @endsection
 
 <?php
@@ -210,11 +210,11 @@
               <th scope="col" class="CP-sticky">#</th>
               <th scope="col" class="CP-sticky">Codigo</th>
               <th scope="col" class="CP-sticky">Codigo de Barra</th>
-              <th scope="col" class="CP-sticky">Descripcion</th>              
+              <th scope="col" class="CP-sticky">Descripcion</th>
               <th scope="col" class="CP-sticky">Existencia</th>
               <th scope="col" class="CP-sticky">Ultimo Precio</br>(Sin IVA) '.SigVe.'</th>
-              <th scope="col" class="CP-sticky">Ultima Venta</th>   
-              <th scope="col" class="CP-sticky">Tiempo Tienda</br>(Dias)</th>  
+              <th scope="col" class="CP-sticky">Ultima Venta</th>
+              <th scope="col" class="CP-sticky">Tiempo Tienda</br>(Dias)</th>
             </tr>
           </thead>
           <tbody>
@@ -242,28 +242,28 @@
       $VentaDiaria = FG_Venta_Diaria($UnidadesVendidas,$RangoDias);
       $CantidadPedido = FG_Cantidad_Pedido($VentaDiaria,$DiasPedido,$Existencia);
       */
-      
+
         if($CodigoBarra!=NULL&&$CodigoBarra!=''){
           echo '<tr>';
           echo '<td align="center"><strong>'.intval($contador).'</strong></td>';
           echo '<td align="left">'.$CodigoArticulo.'</td>';
           echo '<td align="center">'.$CodigoBarra.'</td>';
-          echo 
+          echo
           '<td align="left" class="CP-barrido">
           <a href="/reporte2?Id='.$IdArticulo.'&SEDE='.$SedeConnectionOrigen.'" style="text-decoration: none; color: black;" target="_blank">'
             .$Descripcion.
           '</a>
           </td>';
           echo '<td align="center">'.intval($Existencia).'</td>';
-          echo '<td align="center">'.number_format($UltimoPrecio,2,"," ,"." ).'</td>'; 
-          
+          echo '<td align="center">'.number_format($UltimoPrecio,2,"," ,"." ).'</td>';
+
           if($row1["UltimaVenta"]!=NULL){
             echo '<td align="center">'.$row1["UltimaVenta"]->format('d-m-Y').'</td>';
           }
           else{
              echo '<td align="center">-</td>';
           }
-          
+
           echo '<td align="center">'.intval($TiempoTienda).'</td>';
           echo '</tr>';
           $contador++;
@@ -306,7 +306,7 @@
       InvArticulo.Id,
       InvArticulo.CodigoArticulo,
       (SELECT CodigoBarra
-          FROM InvCodigoBarra 
+          FROM InvCodigoBarra
           WHERE InvCodigoBarra.InvArticuloId = InvArticulo.Id
           AND InvCodigoBarra.EsPrincipal = 1) As CodigoBarra,
       InvArticulo.Descripcion,
@@ -332,7 +332,7 @@
     DESAROLLADO POR: SERGIO COVA
   */
   function R20Q_Detalle_Articulo_Cod($CodigoBarra) {
-    $sql = " 
+    $sql = "
       SELECT
 --Id Articulo
     InvArticulo.Id AS IdArticulo,
@@ -342,7 +342,7 @@
     InvArticulo.CodigoArticulo AS CodigoInterno,
 --Codigo de Barra
     (SELECT CodigoBarra
-    FROM InvCodigoBarra 
+    FROM InvCodigoBarra
     WHERE InvCodigoBarra.InvArticuloId = InvArticulo.Id
     AND InvCodigoBarra.EsPrincipal = 1) AS CodigoBarra,
 --Descripcion
@@ -352,27 +352,27 @@
 --Troquelado (0 NO es Troquelado, Id Articulo SI es Troquelado)
     (ISNULL((SELECT
     InvArticuloAtributo.InvArticuloId
-    FROM InvArticuloAtributo 
-    WHERE InvArticuloAtributo.InvAtributoId = 
+    FROM InvArticuloAtributo
+    WHERE InvArticuloAtributo.InvAtributoId =
     (SELECT InvAtributo.Id
-    FROM InvAtributo 
-    WHERE 
+    FROM InvAtributo
+    WHERE
     InvAtributo.Descripcion = 'Troquelados'
-    OR  InvAtributo.Descripcion = 'troquelados') 
+    OR  InvAtributo.Descripcion = 'troquelados')
     AND InvArticuloAtributo.InvArticuloId = InvArticulo.Id),CAST(0 AS INT))) AS Troquelado,
 --UtilidadArticulo (Utilidad del articulo, Utilidad es 1.00 NO considerar la utilidad para el calculo de precio)
     ROUND(CAST(1-((ISNULL(ROUND(CAST((SELECT VenCondicionVenta.PorcentajeUtilidad
-        FROM VenCondicionVenta 
+        FROM VenCondicionVenta
         WHERE VenCondicionVenta.Id = (
         SELECT VenCondicionVenta_VenCondicionVentaArticulo.Id
-        FROM VenCondicionVenta_VenCondicionVentaArticulo 
+        FROM VenCondicionVenta_VenCondicionVentaArticulo
         WHERE VenCondicionVenta_VenCondicionVentaArticulo.InvArticuloId = InvArticulo.Id)) AS DECIMAL(38,4)),2,0),CAST(0 AS INT)))/100)AS DECIMAL(38,2)),2,0) AS UtilidadArticulo,
 --UtilidadCategoria (Utilidad de la categoria, Utilidad es 1.00 NO considerar la utilidad para el calculo de precio)
-    ROUND(CAST(1-((ISNULL(ROUND(CAST((SELECT VenCondicionVenta.PorcentajeUtilidad 
-  FROM VenCondicionVenta 
+    ROUND(CAST(1-((ISNULL(ROUND(CAST((SELECT VenCondicionVenta.PorcentajeUtilidad
+  FROM VenCondicionVenta
   WHERE VenCondicionVenta.id = (
-    SELECT VenCondicionVenta_VenCondicionVentaCategoria.Id 
-    FROM VenCondicionVenta_VenCondicionVentaCategoria 
+    SELECT VenCondicionVenta_VenCondicionVentaCategoria.Id
+    FROM VenCondicionVenta_VenCondicionVentaCategoria
     WHERE VenCondicionVenta_VenCondicionVentaCategoria.InvCategoriaId = InvArticulo.InvCategoriaId)) AS DECIMAL(38,4)),2,0),CAST(0 AS INT)))/100)AS DECIMAL(38,2)),2,0) AS UtilidadCategoria,
 --Precio Troquel Almacen 1
     (ROUND(CAST((SELECT TOP 1
@@ -382,7 +382,7 @@
     WHERE(InvLoteAlmacen.InvAlmacenId = '1')
     AND (InvLoteAlmacen.InvArticuloId = InvArticulo.Id)
     AND (InvLoteAlmacen.Existencia>0)
-    ORDER BY invlote.M_PrecioTroquelado DESC)AS DECIMAL(38,2)),2,0)) AS TroquelAlmacen1,
+    ORDER BY invlote.M_PrecioTroquelado DESC)AS DECIMAL(38,4)),4,0)) AS TroquelAlmacen1,
 --Precio Compra Bruto Almacen 1
     (ROUND(CAST((SELECT TOP 1
     InvLote.M_PrecioCompraBruto
@@ -436,34 +436,34 @@
 --Dolarizado (0 NO es dolarizado, Id Articulo SI es dolarizado)
     (ISNULL((SELECT
     InvArticuloAtributo.InvArticuloId
-    FROM InvArticuloAtributo 
-    WHERE InvArticuloAtributo.InvAtributoId = 
+    FROM InvArticuloAtributo
+    WHERE InvArticuloAtributo.InvAtributoId =
     (SELECT InvAtributo.Id
-    FROM InvAtributo 
-    WHERE 
+    FROM InvAtributo
+    WHERE
     InvAtributo.Descripcion = 'Dolarizados'
     OR  InvAtributo.Descripcion = 'Giordany'
-    OR  InvAtributo.Descripcion = 'giordany') 
+    OR  InvAtributo.Descripcion = 'giordany')
     AND InvArticuloAtributo.InvArticuloId = InvArticulo.Id),CAST(0 AS INT))) AS Dolarizado,
 --Tipo Producto (0 Miscelaneos, Id Articulo Medicinas)
     (ISNULL((SELECT
-    InvArticuloAtributo.InvArticuloId 
-    FROM InvArticuloAtributo 
-    WHERE InvArticuloAtributo.InvAtributoId = 
+    InvArticuloAtributo.InvArticuloId
+    FROM InvArticuloAtributo
+    WHERE InvArticuloAtributo.InvAtributoId =
     (SELECT InvAtributo.Id
-    FROM InvAtributo 
-    WHERE 
-    InvAtributo.Descripcion = 'Medicina') 
+    FROM InvAtributo
+    WHERE
+    InvAtributo.Descripcion = 'Medicina')
     AND InvArticuloAtributo.InvArticuloId = InvArticulo.Id),CAST(0 AS INT))) AS Tipo,
 --Articulo Estrella (0 NO es Articulo Estrella , Id SI es Articulo Estrella)
     (ISNULL((SELECT
-    InvArticuloAtributo.InvArticuloId 
-    FROM InvArticuloAtributo 
-    WHERE InvArticuloAtributo.InvAtributoId = 
+    InvArticuloAtributo.InvArticuloId
+    FROM InvArticuloAtributo
+    WHERE InvArticuloAtributo.InvAtributoId =
     (SELECT InvAtributo.Id
-    FROM InvAtributo 
-    WHERE 
-    InvAtributo.Descripcion = 'Articulo Estrella') 
+    FROM InvAtributo
+    WHERE
+    InvAtributo.Descripcion = 'Articulo Estrella')
     AND InvArticuloAtributo.InvArticuloId = InvArticulo.Id),CAST(0 AS INT))) AS ArticuloEstrella,
 --Ultimo Precio Sin Iva
       (SELECT TOP 1
@@ -493,9 +493,9 @@
     WHERE InvLote.InvArticuloId  = InvArticulo.Id
     ORDER BY UltimoLote DESC) AS UltimoLote,
 --Tiempo Tienda (En dias)
-    (SELECT TOP 1 
+    (SELECT TOP 1
     DATEDIFF(DAY,CONVERT(DATE,InvLote.FechaEntrada),GETDATE())
-    FROM InvLoteAlmacen 
+    FROM InvLoteAlmacen
     INNER JOIN invlote on invlote.id = InvLoteAlmacen.InvLoteId
     WHERE InvLotealmacen.InvArticuloId = InvArticulo.Id
     ORDER BY InvLote.Auditoria_FechaCreacion DESC) AS TiempoTienda,
@@ -522,10 +522,10 @@
 --Joins
     LEFT JOIN InvLoteAlmacen ON InvLoteAlmacen.InvArticuloId = InvArticulo.Id
     LEFT JOIN InvArticuloAtributo ON InvArticuloAtributo.InvArticuloId = InvArticulo.Id
-    LEFT JOIN InvAtributo ON InvAtributo.Id = InvArticuloAtributo.InvAtributoId 
+    LEFT JOIN InvAtributo ON InvAtributo.Id = InvArticuloAtributo.InvAtributoId
 --Condicionales
     WHERE (SELECT CodigoBarra
-    FROM InvCodigoBarra 
+    FROM InvCodigoBarra
     WHERE InvCodigoBarra.InvArticuloId = InvArticulo.Id
     AND InvCodigoBarra.EsPrincipal = 1) = '$CodigoBarra'
 --Agrupamientos
@@ -591,7 +591,7 @@
       AND(VenDevolucion.FechaDocumento > '$FInicial' AND VenDevolucion.FechaDocumento < '$FFinal')
       GROUP BY VenDevolucionDetalle.InvArticuloId
       ),CAST(0 AS INT)))) AS TotalUnidadesVendidas,
-    --Veces Conpradas (En Rango) 
+    --Veces Conpradas (En Rango)
       ISNULL((SELECT
       ISNULL(COUNT(*),CAST(0 AS INT))
       FROM ComFacturaDetalle
@@ -600,7 +600,7 @@
       AND(ComFactura.FechaRegistro > '$FInicial' AND ComFactura.FechaRegistro < '$FFinal')
       GROUP BY ComFacturaDetalle.InvArticuloId
       ),CAST(0 AS INT)) AS VecesCompradas,
-    --Unidades Conpradas (En Rango) 
+    --Unidades Conpradas (En Rango)
       ISNULL((SELECT
       (ROUND(CAST(SUM(ComFacturaDetalle.CantidadFacturada) AS DECIMAL(38,0)),2,0))
       FROM ComFacturaDetalle
@@ -609,7 +609,7 @@
       AND(ComFactura.FechaRegistro > '$FInicial' AND ComFactura.FechaRegistro < '$FFinal')
       GROUP BY ComFacturaDetalle.InvArticuloId
       ),CAST(0 AS INT)) AS UnidadesCompradas,
-    --Veces Reclamadas (En Rango) 
+    --Veces Reclamadas (En Rango)
       ISNULL((SELECT
       ISNULL(COUNT(*),CAST(0 AS INT))
       FROM ComReclamoDetalle
@@ -618,7 +618,7 @@
       AND(ComReclamo.FechaRegistro > '$FInicial' AND ComReclamo.FechaRegistro < '$FFinal')
       GROUP BY ComReclamoDetalle.InvArticuloId
       ),CAST(0 AS INT)) AS VecesReclamadas,
-    --Unidades Reclamadas (En Rango) 
+    --Unidades Reclamadas (En Rango)
       ISNULL((SELECT
       (ROUND(CAST(SUM(ComReclamoDetalle.Cantidad) AS DECIMAL(38,0)),2,0))
       FROM ComReclamoDetalle
@@ -665,31 +665,31 @@
       ),CAST(0 AS INT)))) AS TotalUnidadesCompradas,
     -- SubTotal Venta (En Rango)
       ISNULL((SELECT
-      (ROUND(CAST(SUM (VenVentaDetalle.PrecioBruto * VenVentaDetalle.Cantidad) AS DECIMAL(38,2)),2,0)) 
+      (ROUND(CAST(SUM (VenVentaDetalle.PrecioBruto * VenVentaDetalle.Cantidad) AS DECIMAL(38,2)),2,0))
       FROM VenVentaDetalle
-      INNER JOIN VenVenta ON VenVenta.Id = VenVentaDetalle.VenVentaId 
+      INNER JOIN VenVenta ON VenVenta.Id = VenVentaDetalle.VenVentaId
       WHERE (VenVenta.FechaDocumentoVenta > '$FInicial' AND VenVenta.FechaDocumentoVenta < '$FFinal')
       AND VenVentaDetalle.InvArticuloId = VenFacturaDetalle.InvArticuloId),CAST(0 AS INT)) AS SubTotalVenta,
     --SubTotal Devolucion (En Rango)
       ISNULL((SELECT
       (ROUND(CAST(SUM (VenDevolucionDetalle.PrecioBruto * VenDevolucionDetalle.Cantidad) AS DECIMAL(38,2)),2,0)) as SubTotalDevolucion
       FROM VenDevolucionDetalle
-      INNER JOIN VenDevolucion ON VenDevolucion.Id = VenDevolucionDetalle.VenDevolucionId 
-      WHERE (VenDevolucion.FechaDocumento > '$FInicial' AND VenDevolucion.FechaDocumento < '$FFinal') 
+      INNER JOIN VenDevolucion ON VenDevolucion.Id = VenDevolucionDetalle.VenDevolucionId
+      WHERE (VenDevolucion.FechaDocumento > '$FInicial' AND VenDevolucion.FechaDocumento < '$FFinal')
       AND VenDevolucionDetalle.InvArticuloId = VenFacturaDetalle.InvArticuloId),CAST(0 AS INT)) as SubTotalDevolucion,
     --TotalVenta (En Rango)
       ((ISNULL((SELECT
-      (ROUND(CAST(SUM (VenVentaDetalle.PrecioBruto * VenVentaDetalle.Cantidad) AS DECIMAL(38,2)),2,0)) 
+      (ROUND(CAST(SUM (VenVentaDetalle.PrecioBruto * VenVentaDetalle.Cantidad) AS DECIMAL(38,2)),2,0))
       FROM VenVentaDetalle
-      INNER JOIN VenVenta ON VenVenta.Id = VenVentaDetalle.VenVentaId 
+      INNER JOIN VenVenta ON VenVenta.Id = VenVentaDetalle.VenVentaId
       WHERE (VenVenta.FechaDocumentoVenta > '$FInicial' AND VenVenta.FechaDocumentoVenta < '$FFinal')
       AND VenVentaDetalle.InvArticuloId = VenFacturaDetalle.InvArticuloId),CAST(0 AS INT)))
       -
       (ISNULL((SELECT
       (ROUND(CAST(SUM (VenDevolucionDetalle.PrecioBruto * VenDevolucionDetalle.Cantidad) AS DECIMAL(38,2)),2,0)) as SubTotalDevolucion
       FROM VenDevolucionDetalle
-      INNER JOIN VenDevolucion ON VenDevolucion.Id = VenDevolucionDetalle.VenDevolucionId 
-      WHERE (VenDevolucion.FechaDocumento > '$FInicial' AND VenDevolucion.FechaDocumento < '$FFinal') 
+      INNER JOIN VenDevolucion ON VenDevolucion.Id = VenDevolucionDetalle.VenDevolucionId
+      WHERE (VenDevolucion.FechaDocumento > '$FInicial' AND VenDevolucion.FechaDocumento < '$FFinal')
       AND VenDevolucionDetalle.InvArticuloId = VenFacturaDetalle.InvArticuloId),CAST(0 AS INT)))) AS TotalVenta,
     -- Ultima Venta (Rango)
       (SELECT TOP 1
@@ -708,7 +708,7 @@
       (VenFactura.FechaDocumento > '$FInicial' AND VenFactura.FechaDocumento < '$FFinal')
       AND VenFacturaDetalle.InvArticuloId = '$IdArticulo'
     --Agrupamientos
-      GROUP BY VenFacturaDetalle.InvArticuloId 
+      GROUP BY VenFacturaDetalle.InvArticuloId
     --Ordenamientos
       ORDER BY TotalUnidadesVendidas DESC
     ";

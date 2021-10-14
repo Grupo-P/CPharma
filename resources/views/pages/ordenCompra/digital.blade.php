@@ -44,7 +44,7 @@
 	<?php
     use Illuminate\Http\Request;
     use compras\OrdenCompra;
-    
+
     $id = $_GET['id'];
 
     $OrdenCompra = OrdenCompra::find($id);
@@ -54,8 +54,8 @@
 		<i class="fa fa-search"></i>
 		Soporte de orden de compra
 	</h1>
-	<form action="/ordenCompra/" method="POST" style="display: inline; margin-left: 50px;">  
-	    @csrf					    
+	<form action="/ordenCompra/" method="POST" style="display: inline; margin-left: 50px;">
+	    @csrf
 	    <button type="submit" name="Regresar" role="button" class="btn btn-outline-info btn-sm"data-placement="top"><i class="fa fa-reply">&nbsp;Regresar</i></button>
 	</form>
 
@@ -186,11 +186,11 @@
 		</tbody>
 	</table>
 	<br/>
-	<span>Nota: 
+	<span>Nota:
 	<br/>
 	*La informacion aqui contenida es propiedad exclusiva de {{$OrdenCompra->sede_origen}}
 	<br/>
-	* Para cualquier aclaratoria llamar al 0412-1217294 o escribir al correo compras@farmacia72.com.ve 
+	* Para cualquier aclaratoria llamar al 0412-1217294 o escribir al correo compras@farmacia72.com.ve
 	<br/>
 	* Para cualquier informacion de pagos contactar al 0412-7646518 o escribir al correo administracion@farmacia72.com.ve
 	</span>
@@ -209,7 +209,7 @@
       include(app_path().'\functions\functions.php');
       include(app_path().'\functions\querys_mysql.php');
       include(app_path().'\functions\querys_sqlserver.php');
-      
+
       $conn = FG_Conectar_Smartpharma(FG_Mi_Ubicacion());
 			$connCPharma = FG_Conectar_CPharma();
 			$sql = MySQL_Buscar_Orden_Detalle($codigo_orden);
@@ -266,7 +266,7 @@
 				$total_sede4 += floatval($row['sede4']);
 				$cont++;
 	  	}
-	  	
+
 	  	echo '<tr>';
 	  	echo '<td colspan="4" class="alinear-der"><strong>Totales</strong></td>';
 	  	echo '<td><strong>'.$total_unidades.'</strong></td>';
@@ -287,7 +287,7 @@
     DESAROLLADO POR: SERGIO COVA
   */
   function Q_Detalle_Articulo($IdArticulo) {
-    $sql = " 
+    $sql = "
       SELECT
     --Id Articulo
       InvArticulo.Id AS IdArticulo,
@@ -295,7 +295,7 @@
       InvArticulo.CodigoArticulo AS CodigoInterno,
     --Codigo de Barra
       (SELECT CodigoBarra
-      FROM InvCodigoBarra 
+      FROM InvCodigoBarra
       WHERE InvCodigoBarra.InvArticuloId = InvArticulo.Id
       AND InvCodigoBarra.EsPrincipal = 1) AS CodigoBarra,
     --Descripcion
@@ -304,10 +304,10 @@
       (ISNULL(InvArticulo.FinConceptoImptoIdCompra,CAST(0 AS INT))) AS Impuesto,
     --Utilidad (Utilidad del articulo, Utilidad es 1.00 NO considerar la utilidad para el calculo de precio)
       ROUND(CAST(1-((ISNULL(ROUND(CAST((SELECT VenCondicionVenta.PorcentajeUtilidad
-          FROM VenCondicionVenta 
+          FROM VenCondicionVenta
           WHERE VenCondicionVenta.Id = (
             SELECT VenCondicionVenta_VenCondicionVentaArticulo.Id
-            FROM VenCondicionVenta_VenCondicionVentaArticulo 
+            FROM VenCondicionVenta_VenCondicionVentaArticulo
             WHERE VenCondicionVenta_VenCondicionVentaArticulo.InvArticuloId = InvArticulo.Id)) AS DECIMAL(38,4)),2,0),CAST(0 AS INT)))/100)AS DECIMAL(38,2)),2,0) AS Utilidad,
     --Precio Troquel Almacen 1
       (ROUND(CAST((SELECT TOP 1
@@ -317,7 +317,7 @@
       WHERE(InvLoteAlmacen.InvAlmacenId = '1')
       AND (InvLoteAlmacen.InvArticuloId = InvArticulo.Id)
       AND (InvLoteAlmacen.Existencia>0)
-      ORDER BY invlote.M_PrecioTroquelado DESC)AS DECIMAL(38,2)),2,0)) AS TroquelAlmacen1,
+      ORDER BY invlote.M_PrecioTroquelado DESC)AS DECIMAL(38,4)),4,0)) AS TroquelAlmacen1,
     --Precio Troquel Almacen 2
       (ROUND(CAST((SELECT TOP 1
       InvLote.M_PrecioTroquelado
@@ -343,34 +343,34 @@
     --Dolarizado (0 NO es dolarizado, Id Articulo SI es dolarizado)
       (ISNULL((SELECT
       InvArticuloAtributo.InvArticuloId
-      FROM InvArticuloAtributo 
-      WHERE InvArticuloAtributo.InvAtributoId = 
+      FROM InvArticuloAtributo
+      WHERE InvArticuloAtributo.InvAtributoId =
         (SELECT InvAtributo.Id
-        FROM InvAtributo 
-        WHERE 
+        FROM InvAtributo
+        WHERE
         InvAtributo.Descripcion = 'Dolarizados'
         OR  InvAtributo.Descripcion = 'Giordany'
-        OR  InvAtributo.Descripcion = 'giordany') 
+        OR  InvAtributo.Descripcion = 'giordany')
       AND InvArticuloAtributo.InvArticuloId = InvArticulo.Id),CAST(0 AS INT))) AS Dolarizado,
     --Tipo Producto (0 Miscelaneos, Id Articulo Medicinas)
       (ISNULL((SELECT
-      InvArticuloAtributo.InvArticuloId 
-      FROM InvArticuloAtributo 
-      WHERE InvArticuloAtributo.InvAtributoId = 
+      InvArticuloAtributo.InvArticuloId
+      FROM InvArticuloAtributo
+      WHERE InvArticuloAtributo.InvAtributoId =
         (SELECT InvAtributo.Id
-        FROM InvAtributo 
-        WHERE 
-        InvAtributo.Descripcion = 'Medicina') 
+        FROM InvAtributo
+        WHERE
+        InvAtributo.Descripcion = 'Medicina')
       AND InvArticuloAtributo.InvArticuloId = InvArticulo.Id),CAST(0 AS INT))) AS Tipo,
     --Articulo Estrella (0 NO es Articulo Estrella , Id SI es Articulo Estrella)
       (ISNULL((SELECT
-      InvArticuloAtributo.InvArticuloId 
-      FROM InvArticuloAtributo 
-      WHERE InvArticuloAtributo.InvAtributoId = 
+      InvArticuloAtributo.InvArticuloId
+      FROM InvArticuloAtributo
+      WHERE InvArticuloAtributo.InvAtributoId =
         (SELECT InvAtributo.Id
-        FROM InvAtributo 
-        WHERE 
-        InvAtributo.Descripcion = 'Articulo Estrella') 
+        FROM InvAtributo
+        WHERE
+        InvAtributo.Descripcion = 'Articulo Estrella')
       AND InvArticuloAtributo.InvArticuloId = InvArticulo.Id),CAST(0 AS INT))) AS ArticuloEstrella,
     -- Ultima Venta (Fecha)
       (SELECT TOP 1
@@ -393,9 +393,9 @@
       WHERE InvLote.InvArticuloId  = InvArticulo.Id
       ORDER BY UltimoLote DESC) AS UltimoLote,
     --Tiempo Tienda (En dias)
-      (SELECT TOP 1 
+      (SELECT TOP 1
       DATEDIFF(DAY,CONVERT(DATE,InvLote.FechaEntrada),GETDATE())
-      FROM InvLoteAlmacen 
+      FROM InvLoteAlmacen
       INNER JOIN invlote on invlote.id = InvLoteAlmacen.InvLoteId
       WHERE InvLotealmacen.InvArticuloId = InvArticulo.Id
       ORDER BY InvLote.Auditoria_FechaCreacion DESC) AS TiempoTienda,
@@ -422,13 +422,13 @@
     --Joins
       LEFT JOIN InvLoteAlmacen ON InvLoteAlmacen.InvArticuloId = InvArticulo.Id
       LEFT JOIN InvArticuloAtributo ON InvArticuloAtributo.InvArticuloId = InvArticulo.Id
-      LEFT JOIN InvAtributo ON InvAtributo.Id = InvArticuloAtributo.InvAtributoId 
+      LEFT JOIN InvAtributo ON InvAtributo.Id = InvArticuloAtributo.InvAtributoId
     --Condicionales
       WHERE InvArticulo.Id = '$IdArticulo'
     --Agrupamientos
       GROUP BY InvArticulo.Id, InvArticulo.CodigoArticulo, InvArticulo.Descripcion, InvArticulo.FinConceptoImptoIdCompra
     --Ordanamiento
-      ORDER BY InvArticulo.Id ASC 
+      ORDER BY InvArticulo.Id ASC
     ";
     return $sql;
   }

@@ -34,8 +34,8 @@
     .autocomplete-items div {
       padding:10px;
       cursor:pointer;
-      background-color:#fff; 
-      border-bottom:1px solid #d4d4d4; 
+      background-color:#fff;
+      border-bottom:1px solid #d4d4d4;
     }
 
     .autocomplete-items div:hover {background-color:#e9e9e9;}
@@ -92,8 +92,8 @@
                 </select>
               </td>
 
-              <input id="SEDE" name="SEDE" type="hidden" value="'; 
-                print_r($_GET['SEDE']); 
+              <input id="SEDE" name="SEDE" type="hidden" value="';
+                print_r($_GET['SEDE']);
               echo'">
 
               <td align="right">
@@ -116,7 +116,7 @@
     RETORNO: No aplica
   */
   function R36_Lista_Precios($SedeConnection,$opcion) {
-    
+
     $conn = FG_Conectar_Smartpharma($SedeConnection);
     $connCPharma = FG_Conectar_CPharma();
     $Hoy = new DateTime('now');
@@ -220,7 +220,7 @@
           $array = array();
 
           /*while ($row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC)) {
-            $tasa3 = 
+            $tasa3 =
               DB::table('dolars')
               ->select('tasa')
               ->where('fecha', '<=', $row3['FechaDocumento']->format('Y-m-d'))
@@ -236,20 +236,20 @@
           $CostoMayorD = 0;
           $j = '';
 
-          while($row3 = sqlsrv_fetch_array($result3, SQLSRV_FETCH_ASSOC)) { 
-      
+          while($row3 = sqlsrv_fetch_array($result3, SQLSRV_FETCH_ASSOC)) {
+
             $TasaMercado = FG_Tasa_Fecha($connCPharma,$row3["Auditoria_FechaCreacion"]->format('Y-m-d'));
 
             if($TasaMercado!=0){
-            
-              $CostoDolar = ($row3["M_PrecioCompraBruto"]/$TasaMercado);          
+
+              $CostoDolar = ($row3["M_PrecioCompraBruto"]/$TasaMercado);
               $CostoDolar = round($CostoDolar,2);
 
-              if($CostoDolar>$CostoMayorD){         
+              if($CostoDolar>$CostoMayorD){
                 $CostoMayorD = $CostoDolar;
                 $j = 'Costo bruto: ' . $row3["M_PrecioCompraBruto"] . '<br>Tasa mercado: ' . $TasaMercado . '<br>Fecha documento: ' . $row3["Auditoria_FechaCreacion"]->format('Y-m-d');
-              } 
-            }        
+              }
+            }
           }
 
           /*$costo = max($array);
@@ -302,8 +302,8 @@
   RETORNO: Un String con la query pertinente
    */
   function R36_Q_Lista_Precios($opcion) {
-    if ($opcion == 'Articulos no dolarizados') {      
-      $sql = "		
+    if ($opcion == 'Articulos no dolarizados') {
+      $sql = "
   		  SELECT
 --Id Articulo
     InvArticulo.Id AS IdArticulo,
@@ -353,7 +353,7 @@
     WHERE(InvLoteAlmacen.InvAlmacenId = '1')
     AND (InvLoteAlmacen.InvArticuloId = InvArticulo.Id)
     AND (InvLoteAlmacen.Existencia>0)
-    ORDER BY invlote.M_PrecioTroquelado DESC)AS DECIMAL(38,2)),2,0)) AS TroquelAlmacen1,
+    ORDER BY invlote.M_PrecioTroquelado DESC)AS DECIMAL(38,4)),4,0)) AS TroquelAlmacen1,
 --Precio Compra Bruto Almacen 1
     (ROUND(CAST((SELECT TOP 1
     InvLote.M_PrecioCompraBruto
@@ -436,7 +436,7 @@
     WHERE
     InvAtributo.Descripcion = 'Articulo Estrella')
     AND InvArticuloAtributo.InvArticuloId = InvArticulo.Id),CAST(0 AS INT))) AS ArticuloEstrella,
---Marca    
+--Marca
     InvMarca.Nombre as Marca,
 -- Ultima Venta (Fecha)
     (SELECT TOP 1
@@ -518,8 +518,8 @@
       ";
     }
 
-    if ($opcion == 'Articulos dolarizados') {      
-      $sql = "    
+    if ($opcion == 'Articulos dolarizados') {
+      $sql = "
         SELECT
 --Id Articulo
     InvArticulo.Id AS IdArticulo,
@@ -569,7 +569,7 @@
     WHERE(InvLoteAlmacen.InvAlmacenId = '1')
     AND (InvLoteAlmacen.InvArticuloId = InvArticulo.Id)
     AND (InvLoteAlmacen.Existencia>0)
-    ORDER BY invlote.M_PrecioTroquelado DESC)AS DECIMAL(38,2)),2,0)) AS TroquelAlmacen1,
+    ORDER BY invlote.M_PrecioTroquelado DESC)AS DECIMAL(38,4)),4,0)) AS TroquelAlmacen1,
 --Precio Compra Bruto Almacen 1
     (ROUND(CAST((SELECT TOP 1
     InvLote.M_PrecioCompraBruto
@@ -652,7 +652,7 @@
     WHERE
     InvAtributo.Descripcion = 'Articulo Estrella')
     AND InvArticuloAtributo.InvArticuloId = InvArticulo.Id),CAST(0 AS INT))) AS ArticuloEstrella,
---Marca    
+--Marca
     InvMarca.Nombre as Marca,
 -- Ultima Venta (Fecha)
     (SELECT TOP 1
@@ -753,7 +753,7 @@
       CONVERT(DATE,ComFactura.FechaDocumento) As FechaDocumento,
       CONVERT(DATE,ComFacturaDetalle.FechaVencimiento) As FechaVencimiento,
       DATEDIFF(DAY,CONVERT(DATE,ComFactura.FechaRegistro),CONVERT(DATE,ComFacturaDetalle.FechaVencimiento)) as VidaUtil,
-      DATEDIFF(DAY,CONVERT(DATE,GETDATE()),CONVERT(DATE,ComFacturaDetalle.FechaVencimiento)) as DiasVecer,      
+      DATEDIFF(DAY,CONVERT(DATE,GETDATE()),CONVERT(DATE,ComFacturaDetalle.FechaVencimiento)) as DiasVecer,
       ComFacturaDetalle.CantidadRecibidaFactura,
       ComFacturaDetalle.M_PrecioCompraBruto,
       ComFactura.auditoria_usuario as operador,

@@ -50,7 +50,7 @@
     Productos para surtir
   </h1>
   <hr class="row align-items-start col-12">
-  
+
 <?php
   include(app_path().'\functions\config.php');
   include(app_path().'\functions\functions.php');
@@ -187,7 +187,7 @@
         $Diferencia1 = FG_Validar_Fechas($FechaRegistro->format("Y-m-d"), $FInicial);
         $Diferencia2 = FG_Validar_Fechas($FechaRegistro->format("Y-m-d"), $FFinalImpresion);
         $tipo = FG_Tipo_Producto($row['tipo']);
-        
+
         if(($Diferencia1 <= 0) && ($Diferencia2 >= 0)) {
           if ($tipo == $seccion) {
 
@@ -273,7 +273,7 @@
       (ISNULL(InvArticulo.FinConceptoImptoIdCompra,CAST(0 AS INT))) AS Impuesto,
       ROUND(CAST(1-((ISNULL(ROUND(CAST((SELECT VenCondicionVenta.PorcentajeUtilidad FROM VenCondicionVenta WHERE VenCondicionVenta.Id = (SELECT VenCondicionVenta_VenCondicionVentaArticulo.Id FROM VenCondicionVenta_VenCondicionVentaArticulo WHERE VenCondicionVenta_VenCondicionVentaArticulo.InvArticuloId = InvArticulo.Id)) AS DECIMAL(38,4)),2,0),CAST(0 AS INT)))/100)AS DECIMAL(38,4)),2,0) AS UtilidadArticulo,
       ROUND(CAST(1-((ISNULL(ROUND(CAST((SELECT VenCondicionVenta.PorcentajeUtilidad FROM VenCondicionVenta WHERE VenCondicionVenta.id = (SELECT VenCondicionVenta_VenCondicionVentaCategoria.Id FROM VenCondicionVenta_VenCondicionVentaCategoria WHERE VenCondicionVenta_VenCondicionVentaCategoria.InvCategoriaId = InvArticulo.InvCategoriaId)) AS DECIMAL(38,4)),2,0),CAST(0 AS INT)))/100)AS DECIMAL(38,4)),2,0) AS UtilidadCategoria,
-      (ROUND(CAST((SELECT TOP 1 InvLote.M_PrecioTroquelado FROM InvLoteAlmacen INNER JOIN InvLote ON InvLote.Id = InvLoteAlmacen.InvLoteId WHERE(InvLoteAlmacen.InvAlmacenId = '1') AND (InvLoteAlmacen.InvArticuloId = InvArticulo.Id) AND (InvLoteAlmacen.Existencia>0) ORDER BY invlote.M_PrecioTroquelado DESC)AS DECIMAL(38,2)),2,0)) AS TroquelAlmacen1,
+      (ROUND(CAST((SELECT TOP 1 InvLote.M_PrecioTroquelado FROM InvLoteAlmacen INNER JOIN InvLote ON InvLote.Id = InvLoteAlmacen.InvLoteId WHERE(InvLoteAlmacen.InvAlmacenId = '1') AND (InvLoteAlmacen.InvArticuloId = InvArticulo.Id) AND (InvLoteAlmacen.Existencia>0) ORDER BY invlote.M_PrecioTroquelado DESC)AS DECIMAL(38,4)),4,0)) AS TroquelAlmacen1,
       (ROUND(CAST((SELECT TOP 1 InvLote.M_PrecioCompraBruto FROM InvLoteAlmacen INNER JOIN InvLote ON InvLote.Id = InvLoteAlmacen.InvLoteId WHERE (InvLoteAlmacen.InvArticuloId = InvArticulo.Id) AND (InvLoteAlmacen.Existencia>0) AND (InvLoteAlmacen.InvAlmacenId = '1') ORDER BY invlote.M_PrecioCompraBruto DESC)AS DECIMAL(38,2)),2,0)) AS PrecioCompraBrutoAlmacen1,
       (ROUND(CAST((SELECT TOP 1 InvLote.M_PrecioTroquelado FROM InvLoteAlmacen INNER JOIN InvLote ON InvLote.Id = InvLoteAlmacen.InvLoteId WHERE(InvLoteAlmacen.InvAlmacenId = '2') AND (InvLoteAlmacen.InvArticuloId = InvArticulo.Id) AND (InvLoteAlmacen.Existencia>0) ORDER BY invlote.M_PrecioTroquelado DESC)AS DECIMAL(38,2)),2,0)) AS TroquelAlmacen2,
       (ROUND(CAST((SELECT TOP 1 InvLote.M_PrecioCompraBruto FROM InvLoteAlmacen INNER JOIN InvLote ON InvLote.Id = InvLoteAlmacen.InvLoteId WHERE (InvLoteAlmacen.InvArticuloId = InvArticulo.Id) AND (InvLoteAlmacen.Existencia>0) AND (InvLoteAlmacen.InvAlmacenId = '2') ORDER BY invlote.M_PrecioCompraBruto DESC)AS DECIMAL(38,2)),2,0)) AS PrecioCompraBrutoAlmacen2,
@@ -283,8 +283,8 @@
       FROM InvLoteAlmacen
       INNER JOIN InvLote ON InvLote.Id = InvLoteAlmacen.InvLoteId
       WHERE
-      Invlote.InvArticuloId = InvArticulo.Id 
-      AND (InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2) 
+      Invlote.InvArticuloId = InvArticulo.Id
+      AND (InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
       AND InvLoteAlmacen.Existencia > 0
       ORDER BY CONVERT(DATE, Invlote.Auditoria_FechaCreacion) DESC)  AS FechaTienda,
       (SELECT TOP 1
@@ -292,14 +292,14 @@
       FROM InvLoteAlmacen
       INNER JOIN InvLote ON InvLote.Id = InvLoteAlmacen.InvLoteId
       WHERE
-      Invlote.InvArticuloId = InvArticulo.Id 
-      AND (InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2) 
+      Invlote.InvArticuloId = InvArticulo.Id
+      AND (InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
       AND InvLoteAlmacen.Existencia > 0
       ORDER BY CONVERT(DATE, Invlote.Auditoria_FechaCreacion) DESC) AS TiempoTienda
       FROM ComFacturaDetalle
       INNER JOIN InvArticulo ON InvArticulo.Id = ComFacturaDetalle.InvArticuloId
       INNER JOIN ComFactura ON  ComFactura.Id = ComFacturaDetalle.ComFacturaId
-      WHERE (ComFactura.FechaRegistro > '$FInicial') 
+      WHERE (ComFactura.FechaRegistro > '$FInicial')
       AND (ComFactura.FechaRegistro < '$FFinal')
       AND (((SELECT
       (ROUND(CAST(SUM (InvLoteAlmacen.Existencia) AS DECIMAL(38,0)),2,0))
