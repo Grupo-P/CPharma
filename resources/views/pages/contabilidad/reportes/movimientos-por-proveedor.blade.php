@@ -49,7 +49,6 @@
                     $cantidad_ajustes = 0;
                     $monto_ajustes = 0;
 
-
                     $cantidad_deudas = 0;
                     $monto_deudas = 0;
 

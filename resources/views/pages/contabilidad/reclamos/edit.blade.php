@@ -17,7 +17,7 @@
                 </button>
               </div>
               <div class="modal-body">
-                <h4 class="h6">La deuda no fue almacenado, el correo ya esta registrado</h4>
+                <h4 class="h6">La reclamo no fue almacenado, el correo ya esta registrado</h4>
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-outline-success" data-dismiss="modal">Aceptar</button>
@@ -28,7 +28,7 @@
     @endif
     <h1 class="h5 text-info">
         <i class="fas fa-edit"></i>
-        Editar deuda de proveedor
+        Editar reclamo de proveedor
     </h1>
 
     <hr class="row align-items-start col-12">
@@ -59,19 +59,33 @@
                     </tr>
 
                     <tr>
-                        <th scope="row"><label for="moneda">Moneda *</label></th>
+                        <th scope="row"><label for="moneda">Moneda reclamo</label></th>
                         <td><input name="moneda" readonly class="form-control" value="{{ ($reclamo->proveedor) ? $reclamo->proveedor->moneda : '' }}" required></td>
                     </tr>
 
                     <tr>
-                        <th scope="row"><label for="monto">Monto sin IVA *</label></th>
+                        <th scope="row"><label for="monto">Monto sin IVA</label></th>
                         <td>
                             <input type="text" readonly value="{{ number_format($reclamo->monto, 2, ',', '.') }}" step="0.01" required class="form-control" name="monto">
                         </td>
                     </tr>
 
                     <tr>
-                        <th scope="row"><label for="documento_soporte_reclamo">Documento soporte deuda *</label></th>
+                        <th scope="row"><label for="monto_iva">Monto IVA</label></th>
+                        <td>
+                            <input type="text" readonly value="{{ number_format($reclamo->monto_iva, 2, ',', '.') }}" class="form-control" name="monto_iva">
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <th scope="row"><label for="monto_total">Monto total</label></th>
+                        <td>
+                            <input type="text" readonly value="{{ number_format($reclamo->monto + $reclamo->monto_iva, 2, ',', '.') }}" class="form-control" name="monto_total">
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <th scope="row"><label for="documento_soporte_reclamo">Documento soporte reclamo *</label></th>
                         <td>
                             <select name="documento_soporte_reclamo" required class="form-control">
                                 <option value=""></option>

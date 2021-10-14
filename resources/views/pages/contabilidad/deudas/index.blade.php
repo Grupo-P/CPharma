@@ -195,19 +195,19 @@
     <table class="table table-striped table-borderless col-12 sortable" id="myTable">
         <thead class="thead-dark">
             <tr>
-                <th scope="col" class="CP-sticky">#</th>
-                <th scope="col" class="CP-sticky">Nombre del proveedor</th>
-                <th scope="col" class="CP-sticky">RIF/CI del proveedor</th>
-                <th scope="col" class="CP-sticky">Fecha de registro</th>
-                <th scope="col" class="CP-sticky">Moneda</th>
-                <th scope="col" class="CP-sticky">Monto sin IVA</th>
-                <th scope="col" class="CP-sticky">Días de crédito</th>
-                <th scope="col" class="CP-sticky">Documento soporte deuda</th>
-                <th scope="col" class="CP-sticky">Numero de documento</th>
-                <th scope="col" class="CP-sticky">Creado por</th>
-                <th scope="col" class="CP-sticky">Sede</th>
-                <th scope="col" class="CP-sticky">Estado</th>
-                <th scope="col" class="CP-sticky">Acciones</th>
+                <th nowrap scope="col" class="CP-sticky">#</th>
+                <th nowrap scope="col" class="CP-sticky">Nombre del proveedor</th>
+                <th nowrap scope="col" class="CP-sticky">RIF/CI del proveedor</th>
+                <th nowrap scope="col" class="CP-sticky">Fecha de registro</th>
+                <th nowrap scope="col" class="CP-sticky">Moneda</th>
+                <th nowrap scope="col" class="CP-sticky">Monto sin IVA</th>
+                <th nowrap scope="col" class="CP-sticky">Días de crédito</th>
+                <th nowrap scope="col" class="CP-sticky">Documento soporte deuda</th>
+                <th nowrap scope="col" class="CP-sticky">Numero de documento</th>
+                <th nowrap scope="col" class="CP-sticky">Creado por</th>
+                <th nowrap scope="col" class="CP-sticky">Sede</th>
+                <th nowrap scope="col" class="CP-sticky">Estado</th>
+                <th nowrap scope="col" class="CP-sticky">Acciones</th>
             </tr>
         </thead>
         <tbody>
@@ -223,21 +223,21 @@
             @endphp
 
             <tr class="{{ $deuda->deleted_at ? 'bg-warning' : '' }}">
-              <th>{{$deuda->id}}</th>
-              <td align="center" class="CP-barrido">
+              <th nowrap>{{$deuda->id}}</th>
+              <td nowrap align="center" class="CP-barrido">
                 <a href="{{ $url }}" style="text-decoration: none; color: black;" target="_blank">{{ ($deuda->proveedor) ? $deuda->proveedor->nombre_proveedor : '' }}</a>
               </td>
-              <td>{{ ($deuda->proveedor) ? $deuda->proveedor->rif_ci : '' }}</td>
-              <td>{{$deuda->created_at}}</td>
-              <td>{{($deuda->proveedor) ? $deuda->proveedor->moneda : ''}}</td>
-              <td>{{number_format($deuda->monto, 2, ',', '.')}}</td>
-              <td>{{$deuda->dias_credito}}</td>
-              <td>{{$deuda->documento_soporte_deuda}}</td>
-              <td>{{$deuda->numero_documento}}</td>
-              <td>{{$deuda->usuario_registro}}</td>
-              <td>{{$deuda->sede}}</td>
-              <td>{{($deuda->deleted_at)?'Desincorporado':'Activo'}}</td>
-              <td style="width:140px;">
+              <td nowrap>{{ ($deuda->proveedor) ? $deuda->proveedor->rif_ci : '' }}</td>
+              <td nowrap>{{$deuda->created_at}}</td>
+              <td nowrap>{{($deuda->proveedor) ? $deuda->proveedor->moneda : ''}}</td>
+              <td nowrap>{{number_format($deuda->monto, 2, ',', '.')}}</td>
+              <td nowrap>{{$deuda->dias_credito}}</td>
+              <td nowrap>{{$deuda->documento_soporte_deuda}}</td>
+              <td nowrap>{{$deuda->numero_documento}}</td>
+              <td nowrap>{{$deuda->usuario_registro}}</td>
+              <td nowrap>{{$deuda->sede}}</td>
+              <td nowrap>{{($deuda->deleted_at)?'Desincorporado':'Activo'}}</td>
+              <td nowrap>
                 <a href="/deudas/{{$deuda->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
                     <i class="far fa-eye"></i>
                 </a>

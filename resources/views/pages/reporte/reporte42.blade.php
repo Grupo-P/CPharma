@@ -390,10 +390,12 @@
             (SELECT InvArticulo.Id FROM InvArticulo WHERE InvArticulo.Id = InvAjusteDetalle.InvArticuloId) AS id_articulo,
             (SELECT InvArticulo.CodigoArticulo FROM InvArticulo WHERE InvArticulo.Id = InvAjusteDetalle.InvArticuloId) AS codigo,
             (SELECT InvArticulo.DescripcionLarga FROM InvArticulo WHERE InvArticulo.Id = InvAjusteDetalle.InvArticuloId) AS descripcion,
-            InvAjusteDetalle.Cantidad AS cantidad
+            SUM(InvAjusteDetalle.Cantidad) AS cantidad
         FROM
             InvAjusteDetalle
-        WHERE InvAjusteDetalle.InvAjusteId = (SELECT InvAjuste.Id FROM InvAjuste WHERE InvAjuste.NumeroAjuste = '$ajuste');
+        WHERE InvAjusteDetalle.InvAjusteId = (SELECT InvAjuste.Id FROM InvAjuste WHERE InvAjuste.NumeroAjuste = '$ajuste')
+        GROUP BY
+            InvAjusteDetalle.InvArticuloId;
     ";
     $result1 = sqlsrv_query($conn,$sql1);
 
@@ -436,7 +438,7 @@
         echo '<tr>';
         echo '<td class="text-center">'.$contador.'</td>';
         echo '<td class="text-center">'.$row1['codigo'].'</td>';
-        echo '<td  class="text-center">'.$row1['descripcion'].'</td>';
+        echo '<td  class="text-center">'.FG_Limpiar_Texto($row1['descripcion']).'</td>';
         echo '<td class="text-center">'.intval($row1['cantidad']).'</td>';
         echo '<td class="text-center">'.intval($row2['cantidad']).'</td>';
         echo '<td class="text-center">'.intval($row1['cantidad']-$row2['cantidad']).'</td>';
@@ -455,11 +457,13 @@
             (SELECT InvArticulo.Id FROM InvArticulo WHERE InvArticulo.Id = VenDevolucionDetalle.InvArticuloId) AS id_articulo,
             (SELECT InvArticulo.CodigoArticulo FROM InvArticulo WHERE InvArticulo.Id = VenDevolucionDetalle.InvArticuloId) AS codigo,
             (SELECT InvArticulo.DescripcionLarga FROM InvArticulo WHERE InvArticulo.Id = VenDevolucionDetalle.InvArticuloId) AS descripcion,
-            VenDevolucionDetalle.Cantidad AS cantidad
+            SUM(VenDevolucionDetalle.Cantidad) AS cantidad
         FROM
             VenDevolucionDetalle
         WHERE
             VenDevolucionDetalle.VenDevolucionId IN (SELECT VenDevolucion.Id FROM VenDevolucion WHERE VenDevolucion.ConsecutivoDevolucionSistema IN ($devolucion))
+        GROUP BY
+            VenDevolucionDetalle.InvArticuloId;
     ";
     $result3 = sqlsrv_query($conn,$sql3);
 
@@ -501,7 +505,7 @@
         echo '<tr>';
         echo '<td class="text-center">'.$contador.'</td>';
         echo '<td class="text-center">'.$row3['codigo'].'</td>';
-        echo '<td class="text-center">'.$row3['descripcion'].'</td>';
+        echo '<td class="text-center">'.FG_Limpiar_Texto($row3['descripcion']).'</td>';
         echo '<td class="text-center">'.intval($row3['cantidad']).'</td>';
         echo '<td class="text-center">'.intval($row4['cantidad']).'</td>';
         echo '<td class="text-center">'.intval($row3['cantidad']-$row4['cantidad']).'</td>';

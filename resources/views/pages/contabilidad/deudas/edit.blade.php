@@ -59,14 +59,26 @@
                     </tr>
 
                     <tr>
-                        <th scope="row"><label for="moneda">Moneda *</label></th>
-                        <td><input name="moneda" readonly class="form-control" value="{{ $deuda->proveedor->moneda }}" required></td>
+                        <th scope="row"><label for="moneda">Moneda deuda</label></th>
+                        <td><input name="moneda" readonly class="form-control" value="{{ $deuda->proveedor->moneda }}"></td>
                     </tr>
 
                     <tr>
-                        <th scope="row"><label for="monto">Monto sin IVA *</label></th>
+                        <th scope="row"><label for="moneda_iva">Moneda IVA</label></th>
+                        <td><input name="moneda_iva" readonly class="form-control" value="{{ $deuda->proveedor->moneda_iva }}"></td>
+                    </tr>
+
+                    <tr>
+                        <th scope="row"><label for="monto">Monto sin IVA</label></th>
                         <td>
                             <input type="text" value="{{ number_format($deuda->monto, 2, ',', '.') }}" readonly class="form-control" name="monto" step="0.01" min="1">
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <th scope="row"><label for="monto_iva">Monto IVA</label></th>
+                        <td>
+                            <input type="text" value="{{ number_format($deuda->monto_iva, 2, ',', '.') }}" readonly class="form-control" name="monto_iva" step="0.01" min="1">
                         </td>
                     </tr>
 

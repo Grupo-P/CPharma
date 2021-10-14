@@ -109,7 +109,7 @@ class ContPagoEfectivoFAUController extends Controller
                     $pago->egresos = $request->input('monto');
                     $configuracion->valor -= $request->input('monto');
                     $pago->concepto = $request->input('concepto');
-                    $pago->estatus = 'PAGADO';
+                    $pago->estatus  = 'PAGADO';
                     break;
                 case "Diferido":
                     $pago->diferido_anterior = $configuracion2->valor;
@@ -149,10 +149,12 @@ class ContPagoEfectivoFAUController extends Controller
                 $proveedor->save();
 
                 $pago->tasa = $request->input('tasa');
+
+                $pago->monto_proveedor = $request->input('monto_proveedor');
             }
 
-            $pago->saldo_actual = $configuracion->valor;
-            $pago->user         = auth()->user()->name;
+            $pago->saldo_actual    = $configuracion->valor;
+            $pago->user            = auth()->user()->name;
 
             $pago->save();
             $configuracion->save();

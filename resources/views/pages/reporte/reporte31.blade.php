@@ -727,6 +727,16 @@
 
 
     if (isset($_GET['seccion']) && $_GET['seccion'] == 'codificacion') {
+      $atributos = [];
+
+      $result = sqlsrv_query($conn,"SELECT InvAtributo.Descripcion AS descripcion FROM InvAtributo");
+
+      while ($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
+        $atributos[] = FG_Limpiar_Texto($row['descripcion']);
+      }
+
+      $atributos = implode(', ', $atributos);
+
       echo'
       <br>
       <hr>
@@ -749,17 +759,24 @@
             <td>Ejemplo: Acetaminofén 500mg Tabletas x 10 Pfizer</td>
           </tr>
           <tr>
-            <td colspan="2">
+            <td width="50%">
                 <b>NOTAS:</b><br>
 
                 <ul>
-                    <li>No abreviar palabras claves (tableta, chocolate, jarabe, etc.) y usar todos los conectores de palabras (de, con, para, etc.)</li>
-                    <li>En el caso de artículos lideres se puede obviar el Tipo</li>
-                    <li>En el caso de medicamentos es valido colocar entre paréntesis artículos referenciales</li>
-                    <li>Obviar caracteres especiales y acentos exceptuando la ñ</li>
-                    <li>Cualquier información adicional es aceptada siempre y cuando se cumpla con el objetivo de una descripción clara y completa</li>
-                    <li>La descripción física del articulo siempre predomina sobre cualquier criterio</li>
+                    <li>No abreviar palabras claves (tableta, chocolate, jarabe, etc.) y usar todos los conectores de palabras (de, con, para, etc.).</li>
+                    <li>En el caso de artículos lideres se puede obviar el Tipo.</li>
+                    <li>En el caso de medicamentos es valido colocar entre paréntesis artículos referenciales.</li>
+                    <li>Obviar caracteres especiales y acentos exceptuando la ñ.</li>
+                    <li>Cualquier información adicional es aceptada siempre y cuando se cumpla con el objetivo de una descripción clara y completa.</li>
+                    <li>La descripción física del articulo siempre predomina sobre cualquier criterio.</li>
+                    <li>Respetar las palabras claves segun el criterio de la gerencia.</li>
+                    <li>Respetar las palabras de identificacion de forma completa: adulto, pedriatrico, femenino, etc.</li>
                 </ul>
+            </td>
+
+            <td>
+                <b>ATRIBUTOS:</b><br>
+                '.$atributos.'.
             </td>
           </tr>
         </tbody>
@@ -785,6 +802,7 @@
             <th scope="col" class="CP-sticky">Uso terapéutico</th>
             <th scope="col" class="CP-sticky">Último proveedor</th>
             <th scope="col" class="CP-sticky">Precio Bs.</th>
+            <th scope="col" class="CP-sticky">Carácteres disponibles</th>
           </tr>
         </thead>
         <tbody>
@@ -890,6 +908,7 @@
             }
         //Fin de validacion de imagen
 
+        $caracteres_disponibles = 100 - strlen($row9['descripcion']);
 
         echo '<tr>';
         echo '<td class="text-center">'.$contador.'</td>';
@@ -909,6 +928,7 @@
         echo '<td class="text-center">'.$uso_terapeutico.'</td>';
         echo '<td class="text-center">'.$ultimo_proveedor.'</td>';
         echo '<td class="text-center">'.$precio.'</td>';
+        echo '<td class="text-center">'.$caracteres_disponibles.'</td>';
         echo '</tr>';
 
         $contador++;

@@ -31,11 +31,13 @@ class ContAjusteController extends Controller
         $i              = 0;
 
         foreach ($sqlProveedores as $proveedor) {
-            $proveedores[$i]['label']  = $proveedor->nombre_proveedor . ' | ' . $proveedor->rif_ci;
-            $proveedores[$i]['value']  = $proveedor->nombre_proveedor . ' | ' . $proveedor->rif_ci;
-            $proveedores[$i]['id']     = $proveedor->id;
-            $proveedores[$i]['moneda'] = $proveedor->moneda;
-            $proveedores[$i]['saldo']  = number_format($proveedor->saldo, 2, ',', '.');
+            $proveedores[$i]['label']      = $proveedor->nombre_proveedor . ' | ' . $proveedor->rif_ci;
+            $proveedores[$i]['value']      = $proveedor->nombre_proveedor . ' | ' . $proveedor->rif_ci;
+            $proveedores[$i]['id']         = $proveedor->id;
+            $proveedores[$i]['moneda']     = $proveedor->moneda;
+            $proveedores[$i]['moneda_iva'] = $proveedor->moneda_iva;
+            $proveedores[$i]['saldo']      = number_format($proveedor->saldo, 2, ',', '.');
+            $proveedores[$i]['saldo_iva']  = number_format($proveedor->saldo_iva, 2, ',', '.');
 
             $i = $i + 1;
         }
@@ -54,12 +56,14 @@ class ContAjusteController extends Controller
         $ajuste                   = new ContAjuste();
         $ajuste->id_proveedor     = $request->input('id_proveedor');
         $ajuste->monto            = $request->input('monto');
+        $ajuste->monto_iva        = $request->input('monto_iva');
         $ajuste->comentario       = $request->input('comentario');
         $ajuste->usuario_registro = auth()->user()->name;
         $ajuste->save();
 
-        $proveedor        = ContProveedor::find($request->input('id_proveedor'));
-        $proveedor->saldo = (float) $proveedor->saldo + (float) $request->input('monto');
+        $proveedor            = ContProveedor::find($request->input('id_proveedor'));
+        $proveedor->saldo     = (float) $proveedor->saldo + (float) $request->input('monto');
+        $proveedor->saldo_iva = (float) $proveedor->saldo_iva + (float) $request->input('monto_iva');
         $proveedor->save();
 
         $auditoria           = new Auditoria();
