@@ -3,9 +3,22 @@
 namespace compras\Http\Controllers;
 
 use Illuminate\Http\Request;
+use compras\TrackImagen;
+use compras\User;
+use compras\Auditoria;
 
 class TrackImagenController extends Controller
 {
+    /**
+     * Create a new controller instance with auth.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -13,7 +26,8 @@ class TrackImagenController extends Controller
      */
     public function index()
     {
-        //
+        $trackimagenes =  TrackImagen::all();
+        return view('pages.trackimagen.index', compact('trackimagenes'));
     }
 
     /**
