@@ -320,9 +320,9 @@
                     }
                 }
                 else{
-                    $precioBolivarDigital = number_format(precioReconversion($PrecioHoy, 'BSD'), 2);
+                    $precioBolivarDigital = number_format(precioReconversion($PrecioHoy, 'BSS'), 2);
                     $bolivarDigital = '
-                        <strong>Bs.D '.$precioBolivarDigital.'</strong>
+                        <strong>Bs.S '.$precioBolivarDigital.'</strong>
                     ';
                     $simbolo = '';
                     $moneda = SigVe;
@@ -351,7 +351,7 @@
 
                     $tamano = ($bolivarDigital)?'aumento':'aumentoPrecio';
 
-                    $precio = ($Dolarizado == 'SI') ? $moneda.' '.number_format ($PrecioHoy,2,"," ,"." ) : $moneda.' '.number_format (precioReconversion($PrecioHoy, 'BSS'),2,"," ,"." );
+                    $precio = ($Dolarizado == 'SI') ? $moneda.' '.number_format ($PrecioHoy,2,"," ,"." ) : $moneda.' '.number_format (precioReconversion($PrecioHoy, 'BSD'),2,"," ,"." );
 
                     $Etiqueta = $Etiqueta.'
                         <table class="etq" style="display: inline;">
