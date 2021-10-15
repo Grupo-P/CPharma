@@ -405,6 +405,8 @@ Route::resource('categorizacion', 'CategorizacionController');
 Route::resource('surtido', 'SurtidoController');
 Route::get('surtido/{surtido}/anular', 'SurtidoController@anular');
 
+Route::resource('trackimagen', 'TrackImagenController');
+
 //***************************** RRHH routing *****************************//
 Route::resource('candidatos', 'RH_CandidatoController');
 Route::get('/procesos_candidatos', 'RH_CandidatoController@procesos');
