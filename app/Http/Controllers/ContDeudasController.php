@@ -228,13 +228,13 @@ class ContDeudasController extends Controller
                 SELECT
                     cont_proveedores.id AS id_proveedor,
                     cont_proveedores.nombre_proveedor AS proveedor,
-                    FORMAT(cont_proveedores.saldo, 2, 'en_US') AS saldo,
-                    cont_proveedores.saldo AS saldoNoFormateado,
+                    FORMAT(cont_proveedores.saldo + cont_proveedores.saldo_iva, 2, 'en_US') AS saldo,
+                    cont_proveedores.saldo + cont_proveedores.saldo_iva AS saldoNoFormateado,
                     tasa AS tasa
                 FROM
                     cont_proveedores
                 WHERE
-                    FORMAT(cont_proveedores.saldo, 2, 'en_US') > 0 AND cont_proveedores.moneda = 'Dólares'
+                    FORMAT(cont_proveedores.saldo + cont_proveedores.saldo_iva, 2, 'en_US') > 0 AND cont_proveedores.moneda = 'Dólares'
                 GROUP BY proveedor
                 ORDER BY CAST(saldo AS DOUBLE) DESC;
             ");
@@ -243,13 +243,13 @@ class ContDeudasController extends Controller
                 SELECT
                     cont_proveedores.id AS id_proveedor,
                     cont_proveedores.nombre_proveedor AS proveedor,
-                    FORMAT(cont_proveedores.saldo, 2, 'en_US') AS saldo,
-                    cont_proveedores.saldo AS saldoNoFormateado,
+                    FORMAT(cont_proveedores.saldo + cont_proveedores.saldo_iva, 2, 'en_US') AS saldo,
+                    cont_proveedores.saldo + cont_proveedores.saldo_iva AS saldoNoFormateado,
                     tasa AS tasa
                 FROM
                     cont_proveedores
                 WHERE
-                    FORMAT(cont_proveedores.saldo, 2, 'en_US') < 0 AND cont_proveedores.moneda = 'Dólares'
+                    FORMAT(cont_proveedores.saldo + cont_proveedores.saldo_iva, 2, 'en_US') < 0 AND cont_proveedores.moneda = 'Dólares'
                 GROUP BY proveedor
                 ORDER BY CAST(saldo AS DOUBLE) ASC;
             ");
@@ -258,13 +258,13 @@ class ContDeudasController extends Controller
                 SELECT
                     cont_proveedores.id AS id_proveedor,
                     cont_proveedores.nombre_proveedor AS proveedor,
-                    FORMAT(cont_proveedores.saldo, 2, 'en_US') AS saldo,
-                    cont_proveedores.saldo AS saldoNoFormateado,
+                    FORMAT(cont_proveedores.saldo + cont_proveedores.saldo_iva, 2, 'en_US') AS saldo,
+                    cont_proveedores.saldo + cont_proveedores.saldo_iva AS saldoNoFormateado,
                     tasa AS tasa
                 FROM
                     cont_proveedores
                 WHERE
-                    FORMAT(cont_proveedores.saldo, 2, 'en_US') > 0 AND cont_proveedores.moneda = 'Bolívares'
+                    FORMAT(cont_proveedores.saldo + cont_proveedores.saldo_iva, 2, 'en_US') > 0 AND cont_proveedores.moneda = 'Bolívares'
                 GROUP BY proveedor
                 ORDER BY CAST(saldo AS DOUBLE) DESC;
             ");
@@ -273,13 +273,13 @@ class ContDeudasController extends Controller
                 SELECT
                     cont_proveedores.id AS id_proveedor,
                     cont_proveedores.nombre_proveedor AS proveedor,
-                    FORMAT(cont_proveedores.saldo, 2, 'en_US') AS saldo,
-                    cont_proveedores.saldo AS saldoNoFormateado,
+                    FORMAT(cont_proveedores.saldo + cont_proveedores.saldo_iva, 2, 'en_US') AS saldo,
+                    cont_proveedores.saldo + cont_proveedores.saldo_iva AS saldoNoFormateado,
                     tasa AS tasa
                 FROM
                     cont_proveedores
                 WHERE
-                    FORMAT(cont_proveedores.saldo, 2, 'en_US') < 0 AND cont_proveedores.moneda = 'Bolívares'
+                    FORMAT(cont_proveedores.saldo + cont_proveedores.saldo_iva, 2, 'en_US') < 0 AND cont_proveedores.moneda = 'Bolívares'
                 GROUP BY proveedor
                 ORDER BY CAST(saldo AS DOUBLE) ASC;
             ");

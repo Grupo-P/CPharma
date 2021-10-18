@@ -162,8 +162,8 @@
               </td>
               <td class="text-center" nowrap>{{$pago->proveedor->rif_ci}}</td>
               <td class="text-center" nowrap>{{$pago->created_at}}</td>
-              <td class="text-center" nowrap>{{ ($pago->estatus != 'Prepagado') ? number_format($pago->monto, 2, ',', '.') : ''}}</td>
-              <td nowrap class="text-center">{{number_format($pago->monto_proveedor, 2, ',', '.')}}</td>
+              <td class="text-center" nowrap>{{ ($pago->estatus != 'Prepagado') ? number_format($pago->monto, 2, ',', '.') : '' }}</td>
+              <td nowrap class="text-center">{{ ($pago->estatus == 'Prepagado') ? number_format($pago->monto, 2, ',', '.') : number_format($pago->monto_proveedor, 2, ',', '.')}}</td>
               <td nowrap class="text-center">{{($pago->tasa) ? number_format($pago->tasa, 2, ',', '.') : ''}}</td>
               <td nowrap class="text-center">{{$pago->estatus}}</td>
               <td nowrap class="text-center">{{$pago->comentario}}</td>
