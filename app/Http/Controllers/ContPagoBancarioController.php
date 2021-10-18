@@ -137,30 +137,30 @@ class ContPagoBancarioController extends Controller
 
         if ($banco->moneda != $proveedor->moneda) {
             if ($banco->moneda == 'Dólares' && $proveedor->moneda == 'Bolívares') {
-                $monto = $pago->monto * $pago->tasa;
+                $monto = $request->monto * $pago->tasa;
             }
 
             if ($banco->moneda == 'Dólares' && $proveedor->moneda == 'Pesos') {
-                $monto = $pago->monto * $pago->tasa;
+                $monto = $request->monto * $pago->tasa;
             }
 
             if ($banco->moneda == 'Bolívares' && $proveedor->moneda == 'Dólares') {
-                $monto = $pago->monto / $pago->tasa;
+                $monto = $request->monto / $pago->tasa;
             }
 
             if ($banco->moneda == 'Bolívares' && $proveedor->moneda == 'Pesos') {
-                $monto = $pago->monto * $pago->tasa;
+                $monto = $request->monto * $pago->tasa;
             }
 
             if ($banco->moneda == 'Pesos' && $proveedor->moneda == 'Bolívares') {
-                $monto = $pago->monto / $pago->tasa;
+                $monto = $request->monto / $pago->tasa;
             }
 
             if ($banco->moneda == 'Pesos' && $proveedor->moneda == 'Dólares') {
-                $monto = $pago->monto / $pago->tasa;
+                $monto = $request->monto / $pago->tasa;
             }
         } else {
-            $monto = $pago->monto;
+            $monto = $request->monto;
         }
 
         $proveedor->saldo = (float) $proveedor->saldo - (float) $monto;
@@ -297,7 +297,7 @@ class ContPagoBancarioController extends Controller
             }
 
             if ($banco->moneda == 'Pesos' && $proveedor->moneda == 'Dólares') {
-                $monto = $pago->monto / $pago->tasa;
+                $monto = $pago->monto / $pago->tasa
             }
         } else {
             $monto = $pago->monto;
