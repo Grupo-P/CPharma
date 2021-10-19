@@ -154,12 +154,12 @@
                             }
                         }else if(_EtiquetaDolar_=='NO'){
                             $flag_imprime = true;
-                            $moneda = SigVe;
+                            $moneda = 'Bs.S';
                         }
                     }
                     else{
                         $simbolo = '';
-                        $moneda = SigVe;
+                        $moneda = 'Bs.S';
                         $flag_imprime = true;
                     }
 
@@ -316,7 +316,7 @@
                         }
                     }else if(_EtiquetaDolar_=='NO'){
                         $flag_imprime = true;
-                        $moneda = SigVe;
+                        $moneda = 'Bs.S';
                     }
                 }
                 else{
@@ -325,7 +325,7 @@
                         <strong>Bs.S '.$precioBolivarDigital.'</strong>
                     ';
                     $simbolo = '';
-                    $moneda = SigVe;
+                    $moneda = 'Bs.S';
                     $flag_imprime = true;
                 }
 
@@ -351,7 +351,7 @@
 
                     $tamano = ($bolivarDigital)?'aumento':'aumentoPrecio';
 
-                    $precio = ($Dolarizado == 'SI') ? $moneda.' '.number_format ($PrecioHoy,2,"," ,"." ) : $moneda.' '.number_format (precioReconversion($PrecioHoy, 'BSD'),2,"," ,"." );
+                    $precio = ($Dolarizado == 'SI') ? SigVe.' '.number_format ($PrecioHoy,2,"," ,"." ) : SigVe.' '.number_format (precioReconversion($PrecioHoy, 'BSD'),2,"," ,"." );
 
                     $Etiqueta = $Etiqueta.'
                         <table class="etq" style="display: inline;">

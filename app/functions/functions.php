@@ -2138,7 +2138,7 @@
                             <td class="derecha rowDer rowDerA aumento">
                                 <label style="margin-right:10px;'.$tam_dolar.'">
                                     <strong>
-                                    BS.D '.number_format (precioReconversion($PrecioHoy, 'BSD'),2,"," ,"." ).'
+                                    ' . SigVe . ' '.number_format (precioReconversion($PrecioHoy, 'BSD'),2,"," ,"." ).'
                                     </strong>
                                 </label>
                             </td>
@@ -2193,7 +2193,7 @@
 
                                                             /
 
-                                                            BS.D <del>'.number_format (precioReconversion($PrecioAyer, 'BSD'),2,"," ,"." ).'</del>
+                                                            ' . SigVe . ' <del>'.number_format (precioReconversion($PrecioAyer, 'BSD'),2,"," ,"." ).'</del>
                                                         </td>
                                                     </tr>
                                                 ';
@@ -2215,7 +2215,7 @@
                                             }
                                         }
 
-                                    $precio = ($Dolarizado == 'SI') ? $moneda.' '.number_format ($PrecioHoy,2,"," ,"." ) : $moneda.' '.number_format (precioReconversion($PrecioHoy, 'BSS'),2,"," ,"." );
+                                    $precio = ($Dolarizado == 'SI') ? $moneda.' '.number_format ($PrecioHoy,2,"," ,"." ) : ' Bs.S'.number_format (precioReconversion($PrecioHoy, 'BSS'),2,"," ,"." );
 
                                     echo'
                                     <tr>

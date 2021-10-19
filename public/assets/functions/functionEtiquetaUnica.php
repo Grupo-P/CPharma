@@ -157,7 +157,7 @@
                             }
                         }else if(_EtiquetaDolar_=='NO'){
                             $flag_imprime = true;
-                            $moneda = SigVe;
+                            $moneda = 'Bs.S';
                         }
                     }
                     else{
@@ -165,14 +165,14 @@
                             <td class="derecha rowDer rowDerA aumento">
                                 <label style="margin-right:10px;'.$tam_dolar.'">
                                     <strong>
-                                    BS.D '.number_format (precioReconversion($PrecioHoy, 'BSD'),2,"," ,"." ).'
+                                    ' . SigVe . ' '.number_format (precioReconversion($PrecioHoy, 'BSD'),2,"," ,"." ).'
                                     </strong>
                                 </label>
                             </td>
                         ';
 
                         $simbolo = '';
-                        $moneda = SigVe;
+                        $moneda = 'Bs.S';
                         $flag_imprime = true;
                         $tam_dolar = "";
                     }
@@ -341,19 +341,19 @@
                         }
                     }else if(_EtiquetaDolar_=='NO'){
                         $flag_imprime = true;
-                        $moneda = SigVe;
+                        $moneda = 'Bs.S';
                     }
                 }
                 else{
                     $simbolo = '';
-                    $moneda = SigVe;
+                    $moneda = 'Bs.S';
                     $flag_imprime = true;
 
                     $bolivarDigital = '
                         <td class="derecha rowDer rowDerA aumento">
                             <label style="margin-right:10px;'.$tam_dolar.'">
                                 <strong>
-                                BS.D '.number_format (precioReconversion($PrecioHoy, 'BSD'),2,"," ,"." ).'
+                                ' . SigVe . ' '.number_format (precioReconversion($PrecioHoy, 'BSD'),2,"," ,"." ).'
                                 </strong>
                             </label>
                         </td>
