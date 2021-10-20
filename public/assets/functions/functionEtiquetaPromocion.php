@@ -351,7 +351,7 @@
 
                     $tamano = ($bolivarDigital)?'aumento':'aumentoPrecio';
 
-                    $precio = ($Dolarizado == 'SI') ? SigVe.' '.number_format ($PrecioHoy,2,"," ,"." ) : SigVe.' '.number_format (precioReconversion($PrecioHoy, 'BSD'),2,"," ,"." );
+                    $precio = ($Dolarizado == 'SI') ? SigDolar.' '.number_format ($PrecioHoy,2,"," ,"." ) : SigVe.' '.number_format (precioReconversion($PrecioHoy, 'BSD'),2,"," ,"." );
 
                     $Etiqueta = $Etiqueta.'
                         <table class="etq" style="display: inline;">

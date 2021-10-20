@@ -259,8 +259,8 @@
       cat as tipo
       FROM faltantes
       WHERE
-      (fecha > '$FInicio')
-      AND (fecha < '$FFin')
+      (CONVERT(DATE, fecha) > '$FInicio')
+      AND (CONVERT(DATE, fecha) < '$FFin')
       ORDER BY hora ASC
     ";
     return $sql;

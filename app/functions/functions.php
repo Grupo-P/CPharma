@@ -2215,7 +2215,7 @@
                                             }
                                         }
 
-                                    $precio = ($Dolarizado == 'SI') ? $moneda.' '.number_format ($PrecioHoy,2,"," ,"." ) : ' Bs.S'.number_format (precioReconversion($PrecioHoy, 'BSS'),2,"," ,"." );
+                                    $precio = ($Dolarizado == 'SI') ? $moneda.' '.number_format ($PrecioHoy,2,"," ,"." ) : ' Bs.S '.number_format (precioReconversion($PrecioHoy, 'BSS'),2,"," ,"." );
 
                                     echo'
                                     <tr>
