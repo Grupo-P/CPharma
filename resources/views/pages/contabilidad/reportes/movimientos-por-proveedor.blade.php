@@ -31,19 +31,19 @@
         <table class="table table-striped table-bordered col-12 sortable" id="myTable">
             <thead class="thead-dark">
                 <tr>
-                    <th scope="col" class="CP-sticky">#</th>
-                    <th scope="col" class="CP-sticky">Fecha y hora</th>
-                    <th scope="col" class="CP-sticky">Tipo</th>
-                    <th scope="col" class="CP-sticky">Nro. movimiento</th>
-                    <th scope="col" class="CP-sticky">Monto base</th>
-                    <th scope="col" class="CP-sticky">Monto IVA</th>
-                    <th scope="col" class="CP-sticky">Monto retención deuda 1</th>
-                    <th scope="col" class="CP-sticky">Monto retención deuda 2</th>
-                    <th scope="col" class="CP-sticky">Monto retención IVA</th>
-                    <th scope="col" class="CP-sticky">Comentario</th>
-                    <th scope="col" class="CP-sticky">Conciliado</th>
-                    <th scope="col" class="CP-sticky">Operador</th>
-                    <th scope="col" class="CP-sticky">Estado</th>
+                    <th nowrap scope="col" class="CP-sticky">#</th>
+                    <th nowrap scope="col" class="CP-sticky">Fecha y hora</th>
+                    <th nowrap scope="col" class="CP-sticky">Tipo</th>
+                    <th nowrap scope="col" class="CP-sticky">Nro. movimiento</th>
+                    <th nowrap scope="col" class="CP-sticky">Monto base</th>
+                    <th nowrap scope="col" class="CP-sticky">Monto IVA</th>
+                    <th nowrap scope="col" class="CP-sticky">Monto retención deuda 1</th>
+                    <th nowrap scope="col" class="CP-sticky">Monto retención deuda 2</th>
+                    <th nowrap scope="col" class="CP-sticky">Monto retención IVA</th>
+                    <th nowrap scope="col" class="CP-sticky">Comentario</th>
+                    <th nowrap scope="col" class="CP-sticky">Conciliado</th>
+                    <th nowrap scope="col" class="CP-sticky">Operador</th>
+                    <th nowrap scope="col" class="CP-sticky">Estado</th>
                 </tr>
             </thead>
 
@@ -191,19 +191,19 @@
                         $cantidad_total = $cantidad_total + 1;
                     @endphp
                     <tr>
-                        <td class="text-center">{{ $loop->iteration }}</td>
-                        <td class="text-center">{{ date_format($fecha, 'd/m/Y h:i A') }}</td>
-                        <td class="text-center">{{ $movimiento->tipo }}</td>
-                        <td class="text-center">{{ $movimiento->nro_movimiento }}</td>
-                        <td class="text-center">{{ number_format($monto, 2, ',', '.') }}</td>
-                        <td class="text-center">{{ $monto_iva }}</td>
-                        <td class="text-center">{{ $monto_retencion_deuda_1 }}</td>
-                        <td class="text-center">{{ $monto_retencion_deuda_2 }}</td>
-                        <td class="text-center">{{ $monto_retencion_iva }}</td>
-                        <td class="text-center">{!! $movimiento->comentario !!}</td>
-                        <td class="text-center">{{ $movimiento->conciliacion }}</td>
-                        <td class="text-center">{{ $movimiento->operador }}</td>
-                        <td class="text-center">{{ $movimiento->estado }}</td>
+                        <td nowrap class="text-center">{{ $loop->iteration }}</td>
+                        <td nowrap class="text-center">{{ date_format($fecha, 'd/m/Y h:i A') }}</td>
+                        <td nowrap class="text-center">{{ $movimiento->tipo }}</td>
+                        <td nowrap class="text-center">{{ $movimiento->nro_movimiento }}</td>
+                        <td nowrap class="text-center">{{ number_format($monto, 2, ',', '.') }}</td>
+                        <td nowrap class="text-center">{{ $monto_iva }}</td>
+                        <td nowrap class="text-center">{{ $monto_retencion_deuda_1 }}</td>
+                        <td nowrap class="text-center">{{ $monto_retencion_deuda_2 }}</td>
+                        <td nowrap class="text-center">{{ $monto_retencion_iva }}</td>
+                        <td nowrap class="text-center">{!! $movimiento->comentario !!}</td>
+                        <td nowrap class="text-center">{{ $movimiento->conciliacion }}</td>
+                        <td nowrap class="text-center">{{ $movimiento->operador }}</td>
+                        <td nowrap class="text-center">{{ $movimiento->estado }}</td>
                     </tr>
                 @endforeach
             </tbody>

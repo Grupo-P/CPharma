@@ -53,13 +53,23 @@
             </tr>
 
             <tr>
-                <th scope="row">Moneda</th>
+                <th scope="row">Moneda subtotal</th>
                 <td>{{$proveedor->moneda}}</td>
             </tr>
 
             <tr>
-                <th scope="row">Saldo</th>
+                <th scope="row">Saldo (Exento + Base)</th>
                 <td>{{number_format($proveedor->saldo, 2, ',', '.')}}</td>
+            </tr>
+
+            <tr>
+                <th scope="row">Moneda IVA</th>
+                <td>{{$proveedor->moneda_iva}}</td>
+            </tr>
+
+            <tr>
+                <th scope="row">Saldo IVA</th>
+                <td>{{number_format($proveedor->saldo_iva, 2, ',', '.')}}</td>
             </tr>
 
             <tr>

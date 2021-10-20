@@ -110,8 +110,10 @@
                 <th nowrap scope="col" class="CP-sticky">Nombre del proveedor</th>
                 <th nowrap scope="col" class="CP-sticky">RIF/CI del proveedor</th>
                 <th nowrap scope="col" class="CP-sticky">Fecha de registro</th>
-                <th nowrap scope="col" class="CP-sticky">Moneda</th>
-                <th nowrap scope="col" class="CP-sticky">Monto sin IVA</th>
+                <th nowrap scope="col" class="CP-sticky">Moneda subtotal</th>
+                <th nowrap scope="col" class="CP-sticky">Monto subtotal (Exento + Base)</th>
+                <th nowrap scope="col" class="CP-sticky">Moneda IVA</th>
+                <th nowrap scope="col" class="CP-sticky">Monto IVA</th>
                 <th nowrap scope="col" class="CP-sticky">Documento soporte reclamo</th>
                 <th nowrap scope="col" class="CP-sticky">Numero de documento</th>
                 <th nowrap scope="col" class="CP-sticky">Creado por</th>
@@ -140,6 +142,8 @@
               <td nowrap class="center">{{$reclamo->created_at}}</td>
               <td nowrap class="center">{{($reclamo->proveedor) ? $reclamo->proveedor->moneda : ''}}</td>
               <td nowrap class="center">{{number_format($reclamo->monto, 2, ',', '.')}}</td>
+              <td nowrap class="center">{{($reclamo->proveedor) ? $reclamo->proveedor->moneda_iva : ''}}</td>
+              <td nowrap class="center">{{number_format($reclamo->monto_iva, 2, ',', '.')}}</td>
               <td nowrap class="center">{{$reclamo->documento_soporte_reclamo}}</td>
               <td nowrap class="center">{{$reclamo->numero_documento}}</td>
               <td nowrap class="center">{{$reclamo->usuario_registro}}</td>

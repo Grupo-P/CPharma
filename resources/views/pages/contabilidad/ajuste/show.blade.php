@@ -43,8 +43,23 @@
             </tr>
 
             <tr>
-                <th scope="row">Monto</th>
+                <th scope="row">Moneda subtotal</th>
+                <td>{{$ajuste->proveedor->moneda}}</td>
+            </tr>
+
+            <tr>
+                <th scope="row">Monto subtotal (Exento + base)</th>
                 <td>{{number_format($ajuste->monto, 2, ',', '.')}}</td>
+            </tr>
+
+            <tr>
+                <th scope="row">Moneda IVA</th>
+                <td>{{$ajuste->proveedor->moneda_iva}}</td>
+            </tr>
+
+            <tr>
+                <th scope="row">Monto IVA</th>
+                <td>{{number_format($ajuste->monto_iva, 2, ',', '.')}}</td>
             </tr>
 
             <tr>

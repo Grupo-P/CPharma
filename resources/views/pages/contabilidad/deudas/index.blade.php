@@ -199,8 +199,10 @@
                 <th nowrap scope="col" class="CP-sticky">Nombre del proveedor</th>
                 <th nowrap scope="col" class="CP-sticky">RIF/CI del proveedor</th>
                 <th nowrap scope="col" class="CP-sticky">Fecha de registro</th>
-                <th nowrap scope="col" class="CP-sticky">Moneda</th>
-                <th nowrap scope="col" class="CP-sticky">Monto sin IVA</th>
+                <th nowrap scope="col" class="CP-sticky">Moneda subtotal</th>
+                <th nowrap scope="col" class="CP-sticky">Monto subtotal (Exento + base)</th>
+                <th nowrap scope="col" class="CP-sticky">Moneda IVA</th>
+                <th nowrap scope="col" class="CP-sticky">Monto IVA</th>
                 <th nowrap scope="col" class="CP-sticky">Días de crédito</th>
                 <th nowrap scope="col" class="CP-sticky">Documento soporte deuda</th>
                 <th nowrap scope="col" class="CP-sticky">Numero de documento</th>
@@ -231,6 +233,8 @@
               <td nowrap>{{$deuda->created_at}}</td>
               <td nowrap>{{($deuda->proveedor) ? $deuda->proveedor->moneda : ''}}</td>
               <td nowrap>{{number_format($deuda->monto, 2, ',', '.')}}</td>
+              <td nowrap>{{($deuda->proveedor) ? $deuda->proveedor->moneda_iva : ''}}</td>
+              <td nowrap>{{number_format($deuda->monto_iva, 2, ',', '.')}}</td>
               <td nowrap>{{$deuda->dias_credito}}</td>
               <td nowrap>{{$deuda->documento_soporte_deuda}}</td>
               <td nowrap>{{$deuda->numero_documento}}</td>

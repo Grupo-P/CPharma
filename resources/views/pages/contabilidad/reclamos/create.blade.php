@@ -58,7 +58,7 @@
                     </tr>
 
                     <tr>
-                        <th scope="row"><label for="moneda">Moneda reclamo *</label></th>
+                        <th scope="row"><label for="moneda">Monto subtotal *</label></th>
                         <td><input name="moneda" readonly class="form-control" required></td>
                     </tr>
 
@@ -68,7 +68,7 @@
                     </tr>
 
                     <tr>
-                        <th scope="row"><label for="monto">Monto sin IVA *</label></th>
+                        <th scope="row"><label for="monto">Monto subtotal (Exento + Base) *</label></th>
                         <td>
                             <input type="number" required class="form-control" name="monto" step="0.01">
                         </td>
@@ -78,13 +78,6 @@
                         <th scope="row"><label for="monto_iva">Monto IVA</label></th>
                         <td>
                             <input type="number" class="form-control" name="monto_iva" step="0.01">
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <th scope="row"><label for="monto_total">Monto total</label></th>
-                        <td>
-                            <input type="text" readonly class="form-control" name="monto_total">
                         </td>
                     </tr>
 

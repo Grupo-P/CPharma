@@ -133,8 +133,10 @@
                 <th nowrap scope="col" class="CP-sticky">Dirección</th>
                 <th nowrap scope="col" class="CP-sticky">Tasa</th>
                 <th nowrap scope="col" class="CP-sticky">Plan de cuentas</th>
-                <th nowrap scope="col" class="CP-sticky">Moneda</th>
-                <th nowrap scope="col" class="CP-sticky">Saldo</th>
+                <th nowrap scope="col" class="CP-sticky">Moneda subtotal</th>
+                <th nowrap scope="col" class="CP-sticky">Saldo subtotal (Exento + Base)</th>
+                <th nowrap scope="col" class="CP-sticky">Moneda IVA</th>
+                <th nowrap scope="col" class="CP-sticky">Saldo IVA</th>
                 <th nowrap scope="col" class="CP-sticky">Creado por</th>
                 <th nowrap scope="col" class="CP-sticky">Estado</th>
                 <th nowrap scope="col" class="CP-sticky">Acciones</th>
@@ -152,6 +154,8 @@
               <td class="text-center" nowrap>{{$proveedor->plan_cuentas}}</td>
               <td class="text-center" nowrap>{{$proveedor->moneda}}</td>
               <td class="text-center" nowrap>{{number_format($proveedor->saldo, 2, ',', '.')}}</td>
+              <td class="text-center" nowrap>{{$proveedor->moneda_iva}}</td>
+              <td class="text-center" nowrap>{{number_format($proveedor->saldo_iva, 2, ',', '.')}}</td>
               <td class="text-center" nowrap>{{$proveedor->usuario_creado}}</td>
               <td class="text-center" nowrap>{{($proveedor->deleted_at)?'Inactivo':'Activo'}}</td>
               <td class="text-center" nowrap>

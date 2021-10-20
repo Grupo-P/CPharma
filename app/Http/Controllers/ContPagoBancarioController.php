@@ -297,7 +297,7 @@ class ContPagoBancarioController extends Controller
             }
 
             if ($banco->moneda == 'Pesos' && $proveedor->moneda == 'Dólares') {
-                $monto = $pago->monto / $pago->tasa
+                $monto = $pago->monto / $pago->tasa;
             }
         } else {
             $monto = $pago->monto;

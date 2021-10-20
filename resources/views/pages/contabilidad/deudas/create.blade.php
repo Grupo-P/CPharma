@@ -58,7 +58,7 @@
                     </tr>
 
                     <tr>
-                        <th scope="row"><label for="moneda">Moneda deuda</label></th>
+                        <th scope="row"><label for="moneda">Moneda subtotal</label></th>
                         <td><input name="moneda" readonly class="form-control" required></td>
                     </tr>
 
@@ -68,7 +68,7 @@
                     </tr>
 
                     <tr>
-                        <th scope="row"><label for="monto">Monto sin IVA *</label></th>
+                        <th scope="row"><label for="monto">Monto subtotal (Exento + base) *</label></th>
                         <td>
                             <input type="number" required class="form-control" name="monto" min="0.01" step="0.01">
                         </td>

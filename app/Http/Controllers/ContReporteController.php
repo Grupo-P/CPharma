@@ -252,7 +252,8 @@ class ContReporteController extends Controller
                     'Deudas' AS tipo,
                     cont_deudas.numero_documento AS nro_movimiento,
                     cont_deudas.monto,
-                    IF(cont_deudas.monto_iva != 0, CONCAT('IVA: ', FORMAT(cont_deudas.monto_iva, 2, 'de_DE')), '') AS comentario,
+                    cont_deudas.monto_iva AS iva,
+                    '' AS comentario,
                     '' AS conciliacion,
                     cont_deudas.usuario_registro AS operador,
                     IF(cont_deudas.deleted_at, 'Desincorporado', 'Activo') AS estado
@@ -270,7 +271,8 @@ class ContReporteController extends Controller
                     'Reclamo' AS tipo,
                     cont_reclamos.numero_documento AS nro_movimiento,
                     cont_reclamos.monto,
-                    IF(cont_reclamos.monto_iva != 0, CONCAT('IVA: ', FORMAT(cont_reclamos.monto_iva, 2, 'de_DE'), '<br>', cont_reclamos.comentario), cont_reclamos.comentario) AS comentario,
+                    cont_reclamos.monto_iva AS iva,
+                    cont_reclamos.comentario AS comentario,
                     '-' AS conciliacion,
                     cont_reclamos.usuario_registro AS operador,
                     IF(cont_reclamos.deleted_at, 'Desincorporado', 'Activo') AS estado
@@ -289,8 +291,8 @@ class ContReporteController extends Controller
                     'Ajuste' AS tipo,
                     '-' AS nro_movimiento,
                     cont_ajustes.monto,
-                    cont_ajustes.monto_iva,
-                    IF(cont_ajustes.monto_iva != 0, CONCAT('IVA: ', FORMAT(cont_ajustes.monto_iva, 2, 'de_DE'), '<br>', cont_ajustes.comentario), cont_ajustes.comentario) AS comentario,
+                    cont_ajustes.monto_iva AS iva,
+                    cont_ajustes.comentario AS comentario,
                     '-' AS conciliacion,
                     cont_ajustes.usuario_registro AS operador,
                     IF(cont_ajustes.deleted_at, 'Desincorporado', 'Activo') AS estado
@@ -353,6 +355,7 @@ class ContReporteController extends Controller
                     (SELECT cont_proveedores.moneda FROM cont_proveedores WHERE cont_proveedores.id = cont_deudas.id_proveedor) AS moneda_proveedor,
                     (SELECT cont_proveedores.moneda FROM cont_proveedores WHERE cont_proveedores.id = cont_deudas.id_proveedor) AS moneda,
                     cont_deudas.monto,
+                    cont_deudas.monto_iva,
                     cont_deudas.sede,
                     cont_deudas.usuario_registro AS operador,
                     IF(cont_deudas.deleted_at, 'Desincorporado', 'Activo') AS estado
@@ -371,6 +374,7 @@ class ContReporteController extends Controller
                     (SELECT cont_proveedores.moneda FROM cont_proveedores WHERE cont_proveedores.id = cont_reclamos.id_proveedor) AS moneda_proveedor,
                     (SELECT cont_proveedores.moneda FROM cont_proveedores WHERE cont_proveedores.id = cont_reclamos.id_proveedor) AS moneda,
                     cont_reclamos.monto,
+                    cont_reclamos.monto_iva,
                     cont_reclamos.sede,
                     cont_reclamos.usuario_registro AS operador,
                     IF(cont_reclamos.deleted_at, 'Desincorporado', 'Activo') AS estado

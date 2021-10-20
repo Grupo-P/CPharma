@@ -59,7 +59,7 @@
                     </tr>
 
                     <tr>
-                        <th scope="row"><label for="moneda">Moneda deuda</label></th>
+                        <th scope="row"><label for="moneda">Moneda subtotal</label></th>
                         <td><input name="moneda" readonly class="form-control" value="{{ $deuda->proveedor->moneda }}"></td>
                     </tr>
 
@@ -69,7 +69,7 @@
                     </tr>
 
                     <tr>
-                        <th scope="row"><label for="monto">Monto sin IVA</label></th>
+                        <th scope="row"><label for="monto">Monto subtotal (Exento + base)</label></th>
                         <td>
                             <input type="text" value="{{ number_format($deuda->monto, 2, ',', '.') }}" readonly class="form-control" name="monto" step="0.01" min="1">
                         </td>
