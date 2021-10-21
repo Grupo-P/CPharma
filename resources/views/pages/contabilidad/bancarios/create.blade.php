@@ -505,7 +505,7 @@
                     $('[name=monto_banco]').val(monto_banco);
                 }
 
-                else if (pago_deuda_real != '') {
+                if (pago_deuda_real != '') {
                     monto_banco = parseFloat(pago_deuda_real);
                     monto_banco = monto_banco.toFixed(2);
                     $('[name=monto_banco]').val(monto_banco);

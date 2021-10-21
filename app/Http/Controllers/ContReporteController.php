@@ -34,6 +34,7 @@ class ContReporteController extends Controller
 
             $bancario = ContPagoBancario::whereDate('created_at', '>=', $request->get('fechaInicio'))
                 ->whereDate('created_at', '<=', $request->get('fechaFin'))
+                ->with('banco')
                 ->get();
 
             $dolaresFTN = ContPagoEfectivoFTN::whereDate('created_at', '>=', $request->get('fechaInicio'))
@@ -66,8 +67,14 @@ class ContReporteController extends Controller
                 ->whereNull('ingresos')
                 ->get();
 
-            $pagos = array_merge($bancario, $dolaresFTN, $dolaresFAU, $dolaresFLL);
-            $pagos = collect($pagos)->sortBy('created_at');
+            $pagos = $bancario
+                ->merge($dolaresFTN)
+                ->merge($dolaresFAU)
+                ->merge($dolaresFLL)
+                ->merge($bolivaresFTN)
+                ->merge($bolivaresFAU)
+                ->merge($bolivaresFLL)
+                ->sortBy('created_at');
         }
 
         return view('pages.contabilidad.reportes.pagos-por-fecha', compact('fechaInicio', 'fechaFin', 'request', 'pagos'));

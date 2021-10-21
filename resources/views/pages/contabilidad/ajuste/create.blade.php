@@ -156,13 +156,6 @@
                 }
 
                 monto = $('[name=monto]').val();
-                if (monto == 0) {
-                    alert('El monto debe ser distinto a cero');
-                    event.preventDefault();
-                    return false;
-                }
-
-                monto = $('[name=monto]').val();
                 iva = $('[name=monto_iva]').val();
 
                 if (iva == '' && monto == '') {

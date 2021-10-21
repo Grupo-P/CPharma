@@ -62,7 +62,7 @@
                         <td class="text-center">{{ date_format($pago->created_at, 'd/m/Y h:i A') }}</td>
                         <td class="text-center">{{ (get_class($pago) == 'compras\ContPagoBancario') ? 'Banco' : 'Efectivo' }}</td>
                         <td class="text-center">
-                            @if(get_class($pago) == 'compras\ContPagoBancario')
+                            @if(get_class($pago) == 'compras\ContPagoBancario' && $pago->banco)
                                 {{ $pago->banco->alias_cuenta }}
                             @endif
 
@@ -137,35 +137,37 @@
                             $monto_proveedor = 0;
 
                             if (get_class($pago) == 'compras\ContPagoBancario') {
-                                if ($pago->banco->moneda != $pago->proveedor->moneda) {
-                                    if ($pago->banco->moneda == 'Dólares' && $pago->proveedor->moneda == 'Bolívares') {
-                                        $monto_proveedor = $monto * $pago->tasa;
+                                if ($pago->banco) {
+                                    if ($pago->banco->moneda != $pago->proveedor->moneda) {
+                                        if ($pago->banco->moneda == 'Dólares' && $pago->proveedor->moneda == 'Bolívares') {
+                                            $monto_proveedor = $monto * $pago->tasa;
+                                        }
+
+                                        if ($pago->banco->moneda == 'Dólares' && $pago->proveedor->moneda == 'Pesos') {
+                                            $monto_proveedor = $monto * $pago->tasa;
+                                        }
+
+                                        if ($pago->banco->moneda == 'Bolívares' && $pago->proveedor->moneda == 'Dólares') {
+                                            $monto_proveedor = $monto / $pago->tasa;
+                                        }
+
+                                        if ($pago->banco->moneda == 'Bolívares' && $pago->proveedor->moneda == 'Pesos') {
+                                            $monto_proveedor = $monto * $pago->tasa;
+                                        }
+
+                                        if ($pago->banco->moneda == 'Pesos' && $pago->proveedor->moneda == 'Bolívares') {
+                                            $monto_proveedor = $monto / $pago->tasa;
+                                        }
+
+                                        if ($pago->banco->moneda == 'Pesos' && $pago->proveedor->moneda == 'Dólares') {
+                                            $monto_proveedor = $monto / $pago->tasa;
+                                        }
+                                    } else {
+                                        $monto_proveedor = $monto;
                                     }
 
-                                    if ($pago->banco->moneda == 'Dólares' && $pago->proveedor->moneda == 'Pesos') {
-                                        $monto_proveedor = $monto * $pago->tasa;
-                                    }
-
-                                    if ($pago->banco->moneda == 'Bolívares' && $pago->proveedor->moneda == 'Dólares') {
-                                        $monto_proveedor = $monto / $pago->tasa;
-                                    }
-
-                                    if ($pago->banco->moneda == 'Bolívares' && $pago->proveedor->moneda == 'Pesos') {
-                                        $monto_proveedor = $monto * $pago->tasa;
-                                    }
-
-                                    if ($pago->banco->moneda == 'Pesos' && $pago->proveedor->moneda == 'Bolívares') {
-                                        $monto_proveedor = $monto / $pago->tasa;
-                                    }
-
-                                    if ($pago->banco->moneda == 'Pesos' && $pago->proveedor->moneda == 'Dólares') {
-                                        $monto_proveedor = $monto / $pago->tasa;
-                                    }
-                                } else {
-                                    $monto_proveedor = $monto;
+                                    $url = '/bancarios/soporte/' . $pago->id;
                                 }
-
-                                $url = '/bancarios/soporte/' . $pago->id;
                             } else {
                                 if ($pago->proveedor) {
                                     if ($pago->proveedor->moneda != 'Dólares') {
@@ -206,7 +208,7 @@
                     </tr>
 
                     @php
-                        if (get_class($pago) == 'compras\ContPagoBancario') {
+                        if (get_class($pago) == 'compras\ContPagoBancario' && $pago->banco) {
                             if ($pago->banco->moneda == 'Dólares') {
                                 $dolares = $dolares + $monto;
                             }

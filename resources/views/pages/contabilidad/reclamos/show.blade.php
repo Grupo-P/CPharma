@@ -54,7 +54,7 @@
 
             <tr>
                 <th scope="row">Moneda IVA</th>
-                <td>{{($reclamo->proveedor) ? $reclamo->proveedor->moned_iva : ''}}</td>
+                <td>{{($reclamo->proveedor) ? $reclamo->proveedor->moneda_iva : ''}}</td>
             </tr>
 
             <tr>

@@ -168,30 +168,30 @@ class ContPagoBancarioController extends Controller
 
         if ($banco->moneda != $proveedor->moneda_iva) {
             if ($banco->moneda == 'Dólares' && $proveedor->moneda_iva == 'Bolívares') {
-                $monto = $pago->monto_iva * $pago->tasa;
+                $monto = $pago->iva * $pago->tasa;
             }
 
             if ($banco->moneda == 'Dólares' && $proveedor->moneda_iva == 'Pesos') {
-                $monto = $pago->monto_iva * $pago->tasa;
+                $monto = $pago->iva * $pago->tasa;
             }
 
             if ($banco->moneda == 'Bolívares' && $proveedor->moneda_iva == 'Dólares') {
-                $monto = $pago->monto_iva / $pago->tasa;
+                $monto = $pago->iva / $pago->tasa;
             }
 
             if ($banco->moneda == 'Bolívares' && $proveedor->moneda_iva == 'Pesos') {
-                $monto = $pago->monto_iva * $pago->tasa;
+                $monto = $pago->iva * $pago->tasa;
             }
 
             if ($banco->moneda == 'Pesos' && $proveedor->moneda_iva == 'Bolívares') {
-                $monto = $pago->monto_iva / $pago->tasa;
+                $monto = $pago->iva / $pago->tasa;
             }
 
             if ($banco->moneda == 'Pesos' && $proveedor->moneda_iva == 'Dólares') {
-                $monto = $pago->monto_iva / $pago->tasa;
+                $monto = $pago->iva / $pago->tasa;
             }
         } else {
-            $monto = $pago->monto_iva;
+            $monto = $pago->iva;
         }
 
         $proveedor->saldo_iva = (float) $proveedor->saldo_iva - (float) $monto;
