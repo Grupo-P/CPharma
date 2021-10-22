@@ -167,8 +167,9 @@ class ContReclamoController extends Controller
         $reclamo->deleted_at = date('Y-m-d h:i:s');
         $reclamo->save();
 
-        $proveedor        = ContProveedor::find($reclamo->id_proveedor);
-        $proveedor->saldo = (float) $proveedor->saldo - (float) $reclamo->monto;
+        $proveedor            = ContProveedor::find($reclamo->id_proveedor);
+        $proveedor->saldo     = (float) $proveedor->saldo - (float) $reclamo->monto;
+        $proveedor->saldo_iva = (float) $proveedor->saldo_iva - (float) $reclamo->monto_iva;
         $proveedor->save();
 
         $auditoria           = new Auditoria();

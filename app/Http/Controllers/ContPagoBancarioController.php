@@ -362,11 +362,43 @@ class ContPagoBancarioController extends Controller
         $monto_proveedor = ($monto_proveedor > 0) ? -$monto_proveedor : abs($monto_proveedor);
         $monto           = ($pago->monto > 0) ? -$pago->monto : abs($pago->monto);
 
+        if ($banco->moneda != $proveedor->moneda_iva) {
+            if ($banco->moneda == 'Dólares' && $proveedor->moneda_iva == 'Bolívares') {
+                $monto_iva = $pago->monto_iva * $pago->tasa;
+            }
+
+            if ($banco->moneda == 'Dólares' && $proveedor->moneda_iva == 'Pesos') {
+                $monto_iva = $pago->monto_iva * $pago->tasa;
+            }
+
+            if ($banco->moneda == 'Bolívares' && $proveedor->moneda_iva == 'Dólares') {
+                $monto_iva = $pago->monto_iva / $pago->tasa;
+            }
+
+            if ($banco->moneda == 'Bolívares' && $proveedor->moneda_iva == 'Pesos') {
+                $monto_iva = $pago->monto_iva * $pago->tasa;
+            }
+
+            if ($banco->moneda == 'Pesos' && $proveedor->moneda_iva == 'Bolívares') {
+                $monto_iva = $pago->monto_iva / $pago->tasa;
+            }
+
+            if ($banco->moneda == 'Pesos' && $proveedor->moneda_iva == 'Dólares') {
+                $monto_iva = $pago->monto_iva / $pago->tasa;
+            }
+        } else {
+            $monto_iva = $pago->monto_iva;
+        }
+
+        $monto_iva = ($monto_iva > 0) ? -$monto_iva : abs($monto_iva);
+        $monto_iva = ($pago->monto_iva > 0) ? -$pago->monto_iva : abs($pago->monto_iva);
+
         $nuevoPago               = new ContPagoBancario();
         $nuevoPago->id_proveedor = $pago->id_proveedor;
         $nuevoPago->id_banco     = $pago->id_banco;
         $nuevoPago->tasa         = $pago->tasa;
         $nuevoPago->monto        = $monto;
+        $nuevoPago->monto_iva    = $monto_iva;
         $nuevoPago->comentario   = 'Reverso del pago bancario #' . $pago->id;
         $nuevoPago->operador     = $pago->operador;
         $nuevoPago->estatus      = 'Reversado';

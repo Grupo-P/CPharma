@@ -175,9 +175,14 @@
                 }
 
                 monto = $('[name=monto]').val();
-                iva = $('[name=monto_iva]').val();
+                monto = parseFloat(monto);
+                monto = Math.abs(monto);
 
-                if (parseFloat(iva) >= parseFloat(monto)) {
+                iva = $('[name=monto_iva]').val();
+                iva = parseFloat(iva);
+                iva = Math.abs(iva);
+
+                if (iva >= monto) {
                     alert('El monto del IVA debe ser menor al monto base');
                     event.preventDefault();
                     return false;
