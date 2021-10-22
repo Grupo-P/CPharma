@@ -54,44 +54,17 @@
 
             <tr>
                 <th scope="row">Monto al banco</th>
-                <td>{{number_format($pago->monto, 2, ',', '.')}}</td>
+                <td>{{ number_format(monto_banco($pago->monto, $pago->iva), 2, ',', '.') }}</td>
             </tr>
 
             <tr>
-                <th scope="row">Monto al proveedor</th>
-                <td>
-                    @php
-                        if ($pago->banco->moneda != $pago->proveedor->moneda) {
-                            if ($pago->banco->moneda == 'Dólares' && $pago->proveedor->moneda == 'Bolívares') {
-                                $monto_proveedor = $pago->monto * $pago->tasa;
-                            }
+                <th scope="row">Monto proveedor base</th>
+                <td>{{ number_format($pago->monto, 2, ',', '.') }}</td>
+            </tr>
 
-                            if ($pago->banco->moneda == 'Dólares' && $pago->proveedor->moneda == 'Pesos') {
-                                $monto_proveedor = $pago->monto * $pago->tasa;
-                            }
-
-                            if ($pago->banco->moneda == 'Bolívares' && $pago->proveedor->moneda == 'Dólares') {
-                                $monto_proveedor = $pago->monto / $pago->tasa;
-                            }
-
-                            if ($pago->banco->moneda == 'Bolívares' && $pago->proveedor->moneda == 'Pesos') {
-                                $monto_proveedor = $pago->monto * $pago->tasa;
-                            }
-
-                            if ($pago->banco->moneda == 'Pesos' && $pago->proveedor->moneda == 'Bolívares') {
-                                $monto_proveedor = $pago->monto / $pago->tasa;
-                            }
-
-                            if ($pago->banco->moneda == 'Pesos' && $pago->proveedor->moneda == 'Dólares') {
-                                $monto_proveedor = $pago->monto / $pago->tasa;
-                            }
-                        } else {
-                            $monto_proveedor = $pago->monto;
-                        }
-                    @endphp
-
-                    {{number_format($monto_proveedor, 2, ',', '.')}}
-                </td>
+            <tr>
+                <th scope="row">Monto proveedor IVA</th>
+                <td>{{ ($pago->estatus != 'Prepagado') ? number_format($pago->iva, 2, ',', '.') : '' }}</td>
             </tr>
 
             @if($pago->tasa)

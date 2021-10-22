@@ -38,7 +38,8 @@
                     <th scope="col" class="CP-sticky">Emisor</th>
                     <th scope="col" class="CP-sticky">Proveedor</th>
                     <th scope="col" class="CP-sticky">Monto del pago</th>
-                    <th scope="col" class="CP-sticky">Monto al proveedor</th>
+                    <th scope="col" class="CP-sticky">Monto proveedor base</th>
+                    <th scope="col" class="CP-sticky">Monto proveedor IVA</th>
                     <th scope="col" class="CP-sticky">Comentario</th>
                     <th scope="col" class="CP-sticky">Plan de cuentas</th>
                     <th scope="col" class="CP-sticky">Estado</th>
@@ -138,33 +139,7 @@
 
                             if (get_class($pago) == 'compras\ContPagoBancario') {
                                 if ($pago->banco) {
-                                    if ($pago->banco->moneda != $pago->proveedor->moneda) {
-                                        if ($pago->banco->moneda == 'Dólares' && $pago->proveedor->moneda == 'Bolívares') {
-                                            $monto_proveedor = $monto * $pago->tasa;
-                                        }
-
-                                        if ($pago->banco->moneda == 'Dólares' && $pago->proveedor->moneda == 'Pesos') {
-                                            $monto_proveedor = $monto * $pago->tasa;
-                                        }
-
-                                        if ($pago->banco->moneda == 'Bolívares' && $pago->proveedor->moneda == 'Dólares') {
-                                            $monto_proveedor = $monto / $pago->tasa;
-                                        }
-
-                                        if ($pago->banco->moneda == 'Bolívares' && $pago->proveedor->moneda == 'Pesos') {
-                                            $monto_proveedor = $monto * $pago->tasa;
-                                        }
-
-                                        if ($pago->banco->moneda == 'Pesos' && $pago->proveedor->moneda == 'Bolívares') {
-                                            $monto_proveedor = $monto / $pago->tasa;
-                                        }
-
-                                        if ($pago->banco->moneda == 'Pesos' && $pago->proveedor->moneda == 'Dólares') {
-                                            $monto_proveedor = $monto / $pago->tasa;
-                                        }
-                                    } else {
-                                        $monto_proveedor = $monto;
-                                    }
+                                    $monto_proveedor_base = $monto;
 
                                     $url = '/bancarios/soporte/' . $pago->id;
                                 }
@@ -183,7 +158,8 @@
                             }
                         @endphp
 
-                        <td class="text-center">{{ number_format($monto_proveedor, 2, ',', '.') }}</td>
+                        <td class="text-center">{{ number_format($monto_proveedor_base, 2, ',', '.') }}</td>
+                        <td class="text-center">{{ ($pago->iva) ? number_format($pago->iva, 2, ',', '.') : '' }}</td>
                         <td class="text-center">{!! ($pago->comentario) ? $pago->comentario : $pago->concepto !!}</td>
 
                         @php

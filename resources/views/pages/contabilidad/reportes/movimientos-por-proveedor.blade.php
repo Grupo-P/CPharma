@@ -77,10 +77,10 @@
                             $monto_ajustes = $monto_ajustes + $movimiento->monto;
                             $monto_total = $monto_total + $movimiento->monto;
                             $monto = $movimiento->monto;
-                            $monto_iva = isset($movimiento->iva) ? number_format($movimiento->iva, 2, ',', '.') : '';
-                            $monto_retencion_deuda_1 = isset($movimiento->retencion_deuda_1) ? number_format($monto * ($movimiento->retencion_deuda_1 / 100), 2, ',', '.') : '';
-                            $monto_retencion_deuda_2 = isset($movimiento->retencion_deuda_2) ? number_format($monto * ($movimiento->retencion_deuda_2 / 100), 2, ',', '.') : '';
-                            $monto_retencion_iva = isset($movimiento->retencion_iva) ? number_format($monto_iva * ($movimiento->retencion_iva / 100), 2, ',', '.') : '';
+                            $monto_iva = isset($movimiento->iva) ? $movimiento->iva : '';
+                            $monto_retencion_deuda_1 = isset($movimiento->retencion_deuda_1) ? $monto * ($movimiento->retencion_deuda_1 / 100) : '';
+                            $monto_retencion_deuda_2 = isset($movimiento->retencion_deuda_2) ? $monto * ($movimiento->retencion_deuda_2 / 100) : '';
+                            $monto_retencion_iva = isset($movimiento->retencion_iva) ? $monto_iva * ($movimiento->retencion_iva / 100) : '';
                         }
 
                         if ($movimiento->tipo == 'Deudas') {
@@ -88,51 +88,27 @@
                             $monto_deudas = $monto_deudas + $movimiento->monto;
                             $monto_total = $monto_total + $movimiento->monto;
                             $monto = $movimiento->monto;
-                            $monto_iva = isset($movimiento->iva) ? number_format($movimiento->iva, 2, ',', '.') : '';
-                            $monto_retencion_deuda_1 = isset($movimiento->retencion_deuda_1) ? number_format($monto * ($movimiento->retencion_deuda_1 / 100), 2, ',', '.') : '';
-                            $monto_retencion_deuda_2 = isset($movimiento->retencion_deuda_2) ? number_format($monto * ($movimiento->retencion_deuda_2 / 100), 2, ',', '.') : '';
-                            $monto_retencion_iva = isset($movimiento->retencion_iva) ? number_format($monto_iva * ($movimiento->retencion_iva / 100), 2, ',', '.') : '';
+                            $monto_iva = isset($movimiento->iva) ? $movimiento->iva : '';
+                            $monto_retencion_deuda_1 = isset($movimiento->retencion_deuda_1) ? $monto * ($movimiento->retencion_deuda_1 / 100) : '';
+                            $monto_retencion_deuda_2 = isset($movimiento->retencion_deuda_2) ? $monto * ($movimiento->retencion_deuda_2 / 100) : '';
+                            $monto_retencion_iva = isset($movimiento->retencion_iva) ? $monto_iva * ($movimiento->retencion_iva / 100) : '';
                         }
 
                         if (strpos($movimiento->tipo, 'bancario')) {
-                            /*if ($movimiento->moneda_banco != $movimiento->moneda_proveedor) {
-                                if ($movimiento->moneda_banco == 'Dólares' && $movimiento->moneda_proveedor == 'Bolívares') {
-                                    $monto = $movimiento->monto * $movimiento->tasa;
-                                }
-
-                                if ($movimiento->moneda_banco == 'Dólares' && $movimiento->moneda_proveedor == 'Pesos') {
-                                    $monto = $movimiento->monto * $movimiento->tasa;
-                                }
-
-                                if ($movimiento->moneda_banco == 'Bolívares' && $movimiento->moneda_proveedor == 'Dólares') {
-                                    $monto = $movimiento->monto / $movimiento->tasa;
-                                }
-
-                                if ($movimiento->moneda_banco == 'Bolívares' && $movimiento->moneda_proveedor == 'Pesos') {
-                                    $monto = $movimiento->monto * $movimiento->tasa;
-                                }
-
-                                if ($movimiento->moneda_banco == 'Pesos' && $movimiento->moneda_proveedor == 'Bolívares') {
-                                    $monto = $movimiento->monto / $movimiento->tasa;
-                                }
-
-                                if ($movimiento->moneda_banco == 'Pesos' && $movimiento->moneda_proveedor == 'Dólares') {
-                                    $monto = $movimiento->monto / $movimiento->tasa;
-                                }
-                            } else {
-                                $monto = $movimiento->monto;
-                            }*/
 
                             $monto = $movimiento->monto;
 
                             $cantidad_bancarios = $cantidad_bancarios + 1;
                             $monto_bancarios = $monto_bancarios + $monto;
                             $monto_total = $monto_total - $monto;
-                            $monto_iva = isset($movimiento->iva) ? number_format($movimiento->iva, 2, ',', '.') : '';
+                            $monto_iva = isset($movimiento->iva) ? $movimiento->iva : '';
 
-                            $monto_retencion_deuda_1 = isset($movimiento->retencion_deuda_1) ? number_format($monto * ($movimiento->retencion_deuda_1 / 100), 2, ',', '.') : '';
-                            $monto_retencion_deuda_2 = isset($movimiento->retencion_deuda_2) ? number_format($monto * ($movimiento->retencion_deuda_2 / 100), 2, ',', '.') : '';
-                            $monto_retencion_iva = (isset($movimiento->retencion_iva) && isset($movimiento->iva)) ? number_format($movimiento->iva * ($movimiento->retencion_iva / 100), 2, ',', '.') : '';
+                            $monto_retencion_deuda_1 = isset($movimiento->retencion_deuda_1) ? $monto * ($movimiento->retencion_deuda_1 / 100) : 0;
+                            $monto_retencion_deuda_2 = isset($movimiento->retencion_deuda_2) ? $monto * ($movimiento->retencion_deuda_2 / 100) : 0;
+                            $monto_retencion_iva = (isset($movimiento->retencion_iva) && isset($movimiento->iva)) ? $movimiento->iva * ($movimiento->retencion_iva / 100) : 0;
+
+                            $monto = $movimiento->monto - $monto_retencion_deuda_1 - $monto_retencion_deuda_2;
+                            $monto_iva = isset($movimiento->iva) ? $movimiento->iva - $monto_retencion_iva : '';
                         }
 
                         if (strpos($movimiento->tipo, 'efectivo')) {
@@ -169,23 +145,21 @@
                             $cantidad_efectivo = $cantidad_efectivo + 1;
                             $monto_efectivo = $monto_efectivo + $monto;
                             $monto_total = $monto_total - $monto;
-                            $monto_iva = isset($movimiento->iva) ? number_format($movimiento->iva, 2, ',', '.') : '';
+                            $monto_iva = isset($movimiento->iva) ? $movimiento->iva : '';
 
-                            $monto_retencion_deuda_1 = isset($movimiento->retencion_deuda_1) ? number_format($monto * ($movimiento->retencion_deuda_1 / 100), 2, ',', '.') : '';
-                            $monto_retencion_deuda_2 = isset($movimiento->retencion_deuda_2) ? number_format($monto * ($movimiento->retencion_deuda_2 / 100), 2, ',', '.') : '';
-                            $monto_retencion_iva = isset($movimiento->retencion_iva) ? number_format($monto_iva * ($movimiento->retencion_iva / 100), 2, ',', '.') : '';
+                            $monto_retencion_deuda_1 = isset($movimiento->retencion_deuda_1) ? $monto * ($movimiento->retencion_deuda_1 / 100) : '';
+                            $monto_retencion_deuda_2 = isset($movimiento->retencion_deuda_2) ? $monto * ($movimiento->retencion_deuda_2 / 100) : '';
+                            $monto_retencion_iva = isset($movimiento->retencion_iva) ? $monto_iva * ($movimiento->retencion_iva / 100) : '';
                         }
 
                         if ($movimiento->tipo == 'Reclamo') {
                             $cantidad_reclamos = $cantidad_reclamos + 1;
                             $monto_reclamos = $monto_reclamos + $movimiento->monto;
                             $monto_total = $monto_total + $movimiento->monto;
-                            $monto = $movimiento->monto;
-                            $monto_iva = isset($movimiento->iva) ? number_format($movimiento->iva, 2, ',', '.') : '';
 
-                            $monto_retencion_deuda_1 = isset($movimiento->retencion_deuda_1) ? number_format($monto * ($movimiento->retencion_deuda_1 / 100), 2, ',', '.') : '';
-                            $monto_retencion_deuda_2 = isset($movimiento->retencion_deuda_2) ? number_format($monto * ($movimiento->retencion_deuda_2 / 100), 2, ',', '.') : '';
-                            $monto_retencion_iva = isset($movimiento->retencion_iva) ? number_format($monto_iva * ($movimiento->retencion_iva / 100), 2, ',', '.') : '';
+                            $monto_retencion_deuda_1 = isset($movimiento->retencion_deuda_1) ? $monto * ($movimiento->retencion_deuda_1 / 100) : '';
+                            $monto_retencion_deuda_2 = isset($movimiento->retencion_deuda_2) ? $monto * ($movimiento->retencion_deuda_2 / 100) : '';
+                            $monto_retencion_iva = isset($movimiento->retencion_iva) ? $monto_iva * ($movimiento->retencion_iva / 100) : '';
                         }
 
                         $cantidad_total = $cantidad_total + 1;
@@ -196,10 +170,10 @@
                         <td nowrap class="text-center">{{ $movimiento->tipo }}</td>
                         <td nowrap class="text-center">{{ $movimiento->nro_movimiento }}</td>
                         <td nowrap class="text-center">{{ number_format($monto, 2, ',', '.') }}</td>
-                        <td nowrap class="text-center">{{ $monto_iva }}</td>
-                        <td nowrap class="text-center">{{ $monto_retencion_deuda_1 }}</td>
-                        <td nowrap class="text-center">{{ $monto_retencion_deuda_2 }}</td>
-                        <td nowrap class="text-center">{{ $monto_retencion_iva }}</td>
+                        <td nowrap class="text-center">{{ ($monto_iva) ? number_format($monto_iva, 2, ',', '.') : '' }}</td>
+                        <td nowrap class="text-center">{{ ($monto_retencion_deuda_1) ? number_format($monto_retencion_deuda_1, 2, ',', '.') : '' }}</td>
+                        <td nowrap class="text-center">{{ ($monto_retencion_deuda_2) ? number_format($monto_retencion_deuda_2, 2, ',', '.') : '' }}</td>
+                        <td nowrap class="text-center">{{ ($monto_retencion_iva) ? number_format($monto_retencion_iva, 2, ',', '.') : '' }}</td>
                         <td nowrap class="text-center">{!! $movimiento->comentario !!}</td>
                         <td nowrap class="text-center">{{ $movimiento->conciliacion }}</td>
                         <td nowrap class="text-center">{{ $movimiento->operador }}</td>

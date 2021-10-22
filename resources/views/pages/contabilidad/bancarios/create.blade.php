@@ -495,18 +495,18 @@
                 pago_deuda_real = $('[name=pago_deuda_real]').val();
                 pago_iva_real = $('[name=pago_iva_real]').val();
 
+                if (pago_deuda_real != '') {
+                    monto_banco = parseFloat(pago_deuda_real);
+                    monto_banco = monto_banco.toFixed(2);
+                    $('[name=monto_banco]').val(monto_banco);
+                }
+
                 if (pago_deuda_real != '' && pago_iva_real != '') {
                     pago_deuda_real = parseFloat(pago_deuda_real);
                     pago_iva_real = parseFloat(pago_iva_real);
 
                     monto_banco = pago_deuda_real + pago_iva_real;
                     monto_banco = parseFloat(monto_banco);
-                    monto_banco = monto_banco.toFixed(2);
-                    $('[name=monto_banco]').val(monto_banco);
-                }
-
-                if (pago_deuda_real != '') {
-                    monto_banco = parseFloat(pago_deuda_real);
                     monto_banco = monto_banco.toFixed(2);
                     $('[name=monto_banco]').val(monto_banco);
                 }

@@ -233,7 +233,7 @@ class ContReporteController extends Controller
                     cont_pagos_bancarios.created_at AS fecha,
                     CONCAT('Pago bancario por ', (SELECT cont_bancos.alias_cuenta FROM cont_bancos WHERE cont_bancos.id = cont_pagos_bancarios.id_banco)) AS tipo,
                     '-' AS nro_movimiento,
-                    cont_pagos_bancarios.monto_proveedor AS monto,
+                    cont_pagos_bancarios.monto AS monto,
                     cont_pagos_bancarios.iva AS iva,
                     cont_pagos_bancarios.retencion_deuda_1 AS retencion_deuda_1,
                     cont_pagos_bancarios.retencion_deuda_2 AS retencion_deuda_2,
@@ -422,22 +422,97 @@ class ContReporteController extends Controller
             $fechaFin = $fechaFin->format('d/m/Y');
 
             if ($request->get('id_cuenta')) {
-                $efectivo = DB::select("
+                $dolaresFTN = DB::select("
                     SELECT
-                        cont_pagos_efectivo.created_at AS fecha,
-                        CONCAT('Pago en efectivo en ', (SELECT sedes.siglas FROM sedes WHERE sedes.razon_social = cont_pagos_efectivo.sede)) AS tipo,
-                        IF (cont_pagos_efectivo.egresos, cont_pagos_efectivo.egresos, cont_pagos_efectivo.diferido) AS monto,
-                        cont_pagos_efectivo.user AS operador
+                        cont_pagos_efectivo_ftn.created_at AS fecha,
+                        CONCAT('Pago en efectivo en ', (SELECT sedes.siglas FROM sedes WHERE sedes.razon_social = cont_pagos_efectivo_ftn.sede)) AS tipo,
+                        IF (cont_pagos_efectivo_ftn.egresos, cont_pagos_efectivo_ftn.egresos, cont_pagos_efectivo_ftn.diferido) AS monto,
+                        cont_pagos_efectivo_ftn.user AS operador
                     FROM
-                        cont_pagos_efectivo
+                        cont_pagos_efectivo_ftn
                     WHERE
-                        cont_pagos_efectivo.id_proveedor IS NOT NULL AND
-                        (SELECT cont_proveedores.plan_cuentas FROM cont_proveedores WHERE cont_proveedores.id = cont_pagos_efectivo.id_proveedor) = '{$request->cuenta}' AND
-                        DATE(cont_pagos_efectivo.created_at) >= '{$request->fechaInicio}' AND
-                        DATE(cont_pagos_efectivo.created_at) <= '{$request->fechaFin}';
+                        cont_pagos_efectivo_ftn.id_proveedor IS NOT NULL AND
+                        (SELECT cont_proveedores.plan_cuentas FROM cont_proveedores WHERE cont_proveedores.id = cont_pagos_efectivo_ftn.id_proveedor) = '{$request->cuenta}' AND
+                        DATE(cont_pagos_efectivo_ftn.created_at) >= '{$request->fechaInicio}' AND
+                        DATE(cont_pagos_efectivo_ftn.created_at) <= '{$request->fechaFin}';
                 ");
 
-                $bancario = DB::select("
+                $dolaresFAU = DB::select("
+                    SELECT
+                        cont_pagos_efectivo_fau.created_at AS fecha,
+                        CONCAT('Pago en efectivo en ', (SELECT sedes.siglas FROM sedes WHERE sedes.razon_social = cont_pagos_efectivo_fau.sede)) AS tipo,
+                        IF (cont_pagos_efectivo_fau.egresos, cont_pagos_efectivo_fau.egresos, cont_pagos_efectivo_fau.diferido) AS monto,
+                        cont_pagos_efectivo_fau.user AS operador
+                    FROM
+                        cont_pagos_efectivo_fau
+                    WHERE
+                        cont_pagos_efectivo_fau.id_proveedor IS NOT NULL AND
+                        (SELECT cont_proveedores.plan_cuentas FROM cont_proveedores WHERE cont_proveedores.id = cont_pagos_efectivo_fau.id_proveedor) = '{$request->cuenta}' AND
+                        DATE(cont_pagos_efectivo_fau.created_at) >= '{$request->fechaInicio}' AND
+                        DATE(cont_pagos_efectivo_fau.created_at) <= '{$request->fechaFin}';
+                ");
+
+                $dolaresFLL = DB::select("
+                    SELECT
+                        cont_pagos_efectivo_fll.created_at AS fecha,
+                        CONCAT('Pago en efectivo en ', (SELECT sedes.siglas FROM sedes WHERE sedes.razon_social = cont_pagos_efectivo_fll.sede)) AS tipo,
+                        IF (cont_pagos_efectivo_fll.egresos, cont_pagos_efectivo_fll.egresos, cont_pagos_efectivo_fll.diferido) AS monto,
+                        cont_pagos_efectivo_fll.user AS operador
+                    FROM
+                        cont_pagos_efectivo_fll
+                    WHERE
+                        cont_pagos_efectivo_fll.id_proveedor IS NOT NULL AND
+                        (SELECT cont_proveedores.plan_cuentas FROM cont_proveedores WHERE cont_proveedores.id = cont_pagos_efectivo_fll.id_proveedor) = '{$request->cuenta}' AND
+                        DATE(cont_pagos_efectivo_fll.created_at) >= '{$request->fechaInicio}' AND
+                        DATE(cont_pagos_efectivo_fll.created_at) <= '{$request->fechaFin}';
+                ");
+
+                $bolivaresFTN = DB::select("
+                    SELECT
+                        cont_pagos_bolivares_ftn.created_at AS fecha,
+                        CONCAT('Pago en efectivo en ', (SELECT sedes.siglas FROM sedes WHERE sedes.razon_social = cont_pagos_bolivares_ftn.sede)) AS tipo,
+                        IF (cont_pagos_bolivares_ftn.egresos, cont_pagos_bolivares_ftn.egresos, cont_pagos_bolivares_ftn.diferido) AS monto,
+                        cont_pagos_bolivares_ftn.user AS operador
+                    FROM
+                        cont_pagos_bolivares_ftn
+                    WHERE
+                        cont_pagos_bolivares_ftn.id_proveedor IS NOT NULL AND
+                        (SELECT cont_proveedores.plan_cuentas FROM cont_proveedores WHERE cont_proveedores.id = cont_pagos_bolivares_ftn.id_proveedor) = '{$request->cuenta}' AND
+                        DATE(cont_pagos_bolivares_ftn.created_at) >= '{$request->fechaInicio}' AND
+                        DATE(cont_pagos_bolivares_ftn.created_at) <= '{$request->fechaFin}';
+                ");
+
+                $bolivaresFAU = DB::select("
+                    SELECT
+                        cont_pagos_bolivares_fau.created_at AS fecha,
+                        CONCAT('Pago en efectivo en ', (SELECT sedes.siglas FROM sedes WHERE sedes.razon_social = cont_pagos_bolivares_fau.sede)) AS tipo,
+                        IF (cont_pagos_bolivares_fau.egresos, cont_pagos_bolivares_fau.egresos, cont_pagos_bolivares_fau.diferido) AS monto,
+                        cont_pagos_bolivares_fau.user AS operador
+                    FROM
+                        cont_pagos_bolivares_fau
+                    WHERE
+                        cont_pagos_bolivares_fau.id_proveedor IS NOT NULL AND
+                        (SELECT cont_proveedores.plan_cuentas FROM cont_proveedores WHERE cont_proveedores.id = cont_pagos_bolivares_fau.id_proveedor) = '{$request->cuenta}' AND
+                        DATE(cont_pagos_bolivares_fau.created_at) >= '{$request->fechaInicio}' AND
+                        DATE(cont_pagos_bolivares_fau.created_at) <= '{$request->fechaFin}';
+                ");
+
+                $bolivaresFLL = DB::select("
+                    SELECT
+                        cont_pagos_bolivares_fll.created_at AS fecha,
+                        CONCAT('Pago en efectivo en ', (SELECT sedes.siglas FROM sedes WHERE sedes.razon_social = cont_pagos_bolivares_fll.sede)) AS tipo,
+                        IF (cont_pagos_bolivares_fll.egresos, cont_pagos_bolivares_fll.egresos, cont_pagos_bolivares_fll.diferido) AS monto,
+                        cont_pagos_bolivares_fll.user AS operador
+                    FROM
+                        cont_pagos_bolivares_fll
+                    WHERE
+                        cont_pagos_bolivares_fll.id_proveedor IS NOT NULL AND
+                        (SELECT cont_proveedores.plan_cuentas FROM cont_proveedores WHERE cont_proveedores.id = cont_pagos_bolivares_fll.id_proveedor) = '{$request->cuenta}' AND
+                        DATE(cont_pagos_bolivares_fll.created_at) >= '{$request->fechaInicio}' AND
+                        DATE(cont_pagos_bolivares_fll.created_at) <= '{$request->fechaFin}';
+                ");
+
+                $bancarios = DB::select("
                     SELECT
                         cont_pagos_bancarios.created_at AS fecha,
                         CONCAT('Pago bancario por ', (SELECT cont_bancos.alias_cuenta FROM cont_bancos WHERE cont_bancos.id = cont_pagos_bancarios.id_banco)) AS tipo,
@@ -452,7 +527,7 @@ class ContReporteController extends Controller
                 ");
             }
 
-            $items = array_merge($efectivo, $bancario, $efectivo);
+            $items = array_merge($dolaresFTN, $dolaresFAU, $dolaresFLL, $bolivaresFTN, $bolivaresFAU, $bolivaresFLL, $bancarios);
             $items = collect($items)->sortBy('created_at');
         }
 

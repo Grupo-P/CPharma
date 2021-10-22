@@ -21,6 +21,7 @@ class ContPagoBancarioController extends Controller
      */
     public function index()
     {
+        include app_path() . '/functions/functions_contabilidad.php';
         $pagos = ContPagoBancario::orderByDesc('id')->get();
         return view('pages.contabilidad.bancarios.index', compact('pagos'));
     }
@@ -118,7 +119,7 @@ class ContPagoBancarioController extends Controller
         $pago                    = new ContPagoBancario();
         $pago->id_proveedor      = $request->input('id_proveedor');
         $pago->id_banco          = $request->input('id_banco');
-        $pago->monto             = $request->input('monto_banco');
+        $pago->monto             = $request->input('monto');
         $pago->monto_proveedor   = $request->input('pago_deuda_real');
         $pago->comentario        = $request->input('comentario');
         $pago->iva               = $request->input('monto_iva');
@@ -135,66 +136,12 @@ class ContPagoBancarioController extends Controller
 
         $proveedor = ContProveedor::find($pago->id_proveedor);
 
-        if ($banco->moneda != $proveedor->moneda) {
-            if ($banco->moneda == 'Dólares' && $proveedor->moneda == 'Bolívares') {
-                $monto = $request->monto * $pago->tasa;
-            }
+        $proveedor->saldo = (float) $proveedor->saldo - (float) $request->monto;
 
-            if ($banco->moneda == 'Dólares' && $proveedor->moneda == 'Pesos') {
-                $monto = $request->monto * $pago->tasa;
-            }
-
-            if ($banco->moneda == 'Bolívares' && $proveedor->moneda == 'Dólares') {
-                $monto = $request->monto / $pago->tasa;
-            }
-
-            if ($banco->moneda == 'Bolívares' && $proveedor->moneda == 'Pesos') {
-                $monto = $request->monto * $pago->tasa;
-            }
-
-            if ($banco->moneda == 'Pesos' && $proveedor->moneda == 'Bolívares') {
-                $monto = $request->monto / $pago->tasa;
-            }
-
-            if ($banco->moneda == 'Pesos' && $proveedor->moneda == 'Dólares') {
-                $monto = $request->monto / $pago->tasa;
-            }
-        } else {
-            $monto = $request->monto;
+        if ($request->monto_iva) {
+            $proveedor->saldo_iva = (float) $proveedor->saldo_iva - (float) $request->monto_iva;
         }
 
-        $proveedor->saldo = (float) $proveedor->saldo - (float) $monto;
-        $proveedor->save();
-
-        if ($banco->moneda != $proveedor->moneda_iva) {
-            if ($banco->moneda == 'Dólares' && $proveedor->moneda_iva == 'Bolívares') {
-                $monto = $pago->iva * $pago->tasa;
-            }
-
-            if ($banco->moneda == 'Dólares' && $proveedor->moneda_iva == 'Pesos') {
-                $monto = $pago->iva * $pago->tasa;
-            }
-
-            if ($banco->moneda == 'Bolívares' && $proveedor->moneda_iva == 'Dólares') {
-                $monto = $pago->iva / $pago->tasa;
-            }
-
-            if ($banco->moneda == 'Bolívares' && $proveedor->moneda_iva == 'Pesos') {
-                $monto = $pago->iva * $pago->tasa;
-            }
-
-            if ($banco->moneda == 'Pesos' && $proveedor->moneda_iva == 'Bolívares') {
-                $monto = $pago->iva / $pago->tasa;
-            }
-
-            if ($banco->moneda == 'Pesos' && $proveedor->moneda_iva == 'Dólares') {
-                $monto = $pago->iva / $pago->tasa;
-            }
-        } else {
-            $monto = $pago->iva;
-        }
-
-        $proveedor->saldo_iva = (float) $proveedor->saldo_iva - (float) $monto;
         $proveedor->save();
 
         $auditoria           = new Auditoria();
@@ -215,6 +162,7 @@ class ContPagoBancarioController extends Controller
      */
     public function show($id)
     {
+        include app_path() . '/functions/functions_contabilidad.php';
         $pago = ContPagoBancario::find($id);
         return view('pages.contabilidad.bancarios.show', compact('pago'));
     }
@@ -331,66 +279,7 @@ class ContPagoBancarioController extends Controller
         $banco     = ContBanco::find($pago->id_banco);
         $proveedor = ContProveedor::find($pago->id_proveedor);
 
-        if ($banco->moneda != $proveedor->moneda) {
-            if ($banco->moneda == 'Dólares' && $proveedor->moneda == 'Bolívares') {
-                $monto_proveedor = $pago->monto * $pago->tasa;
-            }
-
-            if ($banco->moneda == 'Dólares' && $proveedor->moneda == 'Pesos') {
-                $monto_proveedor = $pago->monto * $pago->tasa;
-            }
-
-            if ($banco->moneda == 'Bolívares' && $proveedor->moneda == 'Dólares') {
-                $monto_proveedor = $pago->monto / $pago->tasa;
-            }
-
-            if ($banco->moneda == 'Bolívares' && $proveedor->moneda == 'Pesos') {
-                $monto_proveedor = $pago->monto * $pago->tasa;
-            }
-
-            if ($banco->moneda == 'Pesos' && $proveedor->moneda == 'Bolívares') {
-                $monto_proveedor = $pago->monto / $pago->tasa;
-            }
-
-            if ($banco->moneda == 'Pesos' && $proveedor->moneda == 'Dólares') {
-                $monto_proveedor = $pago->monto / $pago->tasa;
-            }
-        } else {
-            $monto_proveedor = $pago->monto;
-        }
-
-        $monto_proveedor = ($monto_proveedor > 0) ? -$monto_proveedor : abs($monto_proveedor);
-        $monto           = ($pago->monto > 0) ? -$pago->monto : abs($pago->monto);
-
-        if ($banco->moneda != $proveedor->moneda_iva) {
-            if ($banco->moneda == 'Dólares' && $proveedor->moneda_iva == 'Bolívares') {
-                $monto_iva = $pago->monto_iva * $pago->tasa;
-            }
-
-            if ($banco->moneda == 'Dólares' && $proveedor->moneda_iva == 'Pesos') {
-                $monto_iva = $pago->monto_iva * $pago->tasa;
-            }
-
-            if ($banco->moneda == 'Bolívares' && $proveedor->moneda_iva == 'Dólares') {
-                $monto_iva = $pago->monto_iva / $pago->tasa;
-            }
-
-            if ($banco->moneda == 'Bolívares' && $proveedor->moneda_iva == 'Pesos') {
-                $monto_iva = $pago->monto_iva * $pago->tasa;
-            }
-
-            if ($banco->moneda == 'Pesos' && $proveedor->moneda_iva == 'Bolívares') {
-                $monto_iva = $pago->monto_iva / $pago->tasa;
-            }
-
-            if ($banco->moneda == 'Pesos' && $proveedor->moneda_iva == 'Dólares') {
-                $monto_iva = $pago->monto_iva / $pago->tasa;
-            }
-        } else {
-            $monto_iva = $pago->monto_iva;
-        }
-
-        $monto_iva = ($monto_iva > 0) ? -$monto_iva : abs($monto_iva);
+        $monto     = ($pago->monto > 0) ? -$monto : abs($monto);
         $monto_iva = ($pago->monto_iva > 0) ? -$pago->monto_iva : abs($pago->monto_iva);
 
         $nuevoPago               = new ContPagoBancario();
@@ -405,7 +294,12 @@ class ContPagoBancarioController extends Controller
         $nuevoPago->save();
 
         $proveedor        = ContProveedor::find($pago->id_proveedor);
-        $proveedor->saldo = (float) $proveedor->saldo - (float) $monto_proveedor;
+        $proveedor->saldo = (float) $proveedor->saldo - (float) $pago->monto;
+
+        if ($pago->monto_iva) {
+            $proveedor->saldo_iva = (float) $proveedor->saldo_iva - (float) $pago->monto_iva;
+        }
+
         $proveedor->save();
 
         return redirect('/bancarios')->with('Deleted', ' Informacion');
