@@ -35,6 +35,8 @@
                     <th nowrap scope="col" class="CP-sticky">Fecha y hora</th>
                     <th nowrap scope="col" class="CP-sticky">Tipo</th>
                     <th nowrap scope="col" class="CP-sticky">Nro. movimiento</th>
+                    <th nowrap scope="col" class="CP-sticky">Moneda base</th>
+                    <th nowrap scope="col" class="CP-sticky">Moneda IVA</th>
                     <th nowrap scope="col" class="CP-sticky">Monto base</th>
                     <th nowrap scope="col" class="CP-sticky">Monto IVA</th>
                     <th nowrap scope="col" class="CP-sticky">Monto retención deuda 1</th>
@@ -169,6 +171,8 @@
                         <td nowrap class="text-center">{{ date_format($fecha, 'd/m/Y h:i A') }}</td>
                         <td nowrap class="text-center">{{ $movimiento->tipo }}</td>
                         <td nowrap class="text-center">{{ $movimiento->nro_movimiento }}</td>
+                        <td nowrap class="text-center">{{ $movimiento->moneda_base }}</td>
+                        <td nowrap class="text-center">{{ $movimiento->moneda_iva }}</td>
                         <td nowrap class="text-center">{{ number_format($monto, 2, ',', '.') }}</td>
                         <td nowrap class="text-center">{{ ($monto_iva) ? number_format($monto_iva, 2, ',', '.') : '' }}</td>
                         <td nowrap class="text-center">{{ ($monto_retencion_deuda_1) ? number_format($monto_retencion_deuda_1, 2, ',', '.') : '' }}</td>

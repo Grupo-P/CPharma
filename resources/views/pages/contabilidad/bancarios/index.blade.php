@@ -136,6 +136,8 @@
                 <th scope="col" class="CP-sticky" nowrap>Monto banco</th>
                 <th scope="col" class="CP-sticky" nowrap>Monto proveedor base</th>
                 <th scope="col" class="CP-sticky" nowrap>Monto proveedor IVA</th>
+                <th scope="col" class="CP-sticky" nowrap>Moneda base</th>
+                <th scope="col" class="CP-sticky" nowrap>Moneda IVA</th>
                 <th scope="col" class="CP-sticky" nowrap>Tasa</th>
                 <th scope="col" class="CP-sticky" nowrap>Estado</th>
                 <th scope="col" class="CP-sticky" nowrap>Comentario</th>
@@ -166,6 +168,8 @@
               <td class="text-center" nowrap>{{ ($pago->estatus != 'Prepagado') ? number_format(monto_banco($pago->monto, $pago->iva), 2, ',', '.') : '' }}</td>
               <td nowrap class="text-center">{{ number_format($pago->monto, 2, ',', '.') }}</td>
               <td nowrap class="text-center">{{ number_format($pago->iva, 2, ',', '.') }}</td>
+              <td nowrap class="text-center">{{ $pago->proveedor->moneda }}</td>
+              <td nowrap class="text-center">{{ $pago->proveedor->moneda_iva }}</td>
               <td nowrap class="text-center">{{($pago->tasa) ? number_format($pago->tasa, 2, ',', '.') : ''}}</td>
               <td nowrap class="text-center">{{$pago->estatus}}</td>
               <td nowrap class="text-center">{{$pago->comentario}}</td>

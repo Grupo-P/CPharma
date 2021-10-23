@@ -113,7 +113,9 @@ class ContReporteController extends Controller
                     cont_pagos_efectivo_ftn.user AS operador,
                     IF(cont_pagos_efectivo_ftn.deleted_at, 'Desincorporado', 'Activo') AS estado,
                     (SELECT cont_proveedores.moneda FROM cont_proveedores WHERE cont_proveedores.id = cont_pagos_efectivo_ftn.id_proveedor) AS moneda_proveedor,
-                    cont_pagos_efectivo_ftn.tasa AS tasa
+                    cont_pagos_efectivo_ftn.tasa AS tasa,
+                    '' AS moneda_base,
+                    '' AS moneda_iva
                 FROM
                     cont_pagos_efectivo_ftn
                 WHERE
@@ -134,7 +136,9 @@ class ContReporteController extends Controller
                     cont_pagos_efectivo_fau.user AS operador,
                     IF(cont_pagos_efectivo_fau.deleted_at, 'Desincorporado', 'Activo') AS estado,
                     (SELECT cont_proveedores.moneda FROM cont_proveedores WHERE cont_proveedores.id = cont_pagos_efectivo_fau.id_proveedor) AS moneda_proveedor,
-                    cont_pagos_efectivo_fau.tasa AS tasa
+                    cont_pagos_efectivo_fau.tasa AS tasa,
+                    '' AS moneda_base,
+                    '' AS moneda_iva
                 FROM
                     cont_pagos_efectivo_fau
                 WHERE
@@ -155,7 +159,9 @@ class ContReporteController extends Controller
                     cont_pagos_efectivo_fll.user AS operador,
                     IF(cont_pagos_efectivo_fll.deleted_at, 'Desincorporado', 'Activo') AS estado,
                     (SELECT cont_proveedores.moneda FROM cont_proveedores WHERE cont_proveedores.id = cont_pagos_efectivo_fll.id_proveedor) AS moneda_proveedor,
-                    cont_pagos_efectivo_fll.tasa AS tasa
+                    cont_pagos_efectivo_fll.tasa AS tasa,
+                    '' AS moneda_base,
+                    '' AS moneda_iva
                 FROM
                     cont_pagos_efectivo_fll
                 WHERE
@@ -176,7 +182,9 @@ class ContReporteController extends Controller
                     cont_pagos_bolivares_ftn.user AS operador,
                     IF(cont_pagos_bolivares_ftn.deleted_at, 'Desincorporado', 'Activo') AS estado,
                     (SELECT cont_proveedores.moneda FROM cont_proveedores WHERE cont_proveedores.id = cont_pagos_bolivares_ftn.id_proveedor) AS moneda_proveedor,
-                    cont_pagos_bolivares_ftn.tasa AS tasa
+                    cont_pagos_bolivares_ftn.tasa AS tasa,
+                    '' AS moneda_base,
+                    '' AS moneda_iva
                 FROM
                     cont_pagos_bolivares_ftn
                 WHERE
@@ -197,7 +205,9 @@ class ContReporteController extends Controller
                     cont_pagos_bolivares_fau.user AS operador,
                     IF(cont_pagos_bolivares_fau.deleted_at, 'Desincorporado', 'Activo') AS estado,
                     (SELECT cont_proveedores.moneda FROM cont_proveedores WHERE cont_proveedores.id = cont_pagos_bolivares_fau.id_proveedor) AS moneda_proveedor,
-                    cont_pagos_bolivares_fau.tasa AS tasa
+                    cont_pagos_bolivares_fau.tasa AS tasa,
+                    '' AS moneda_base,
+                    '' AS moneda_iva
                 FROM
                     cont_pagos_bolivares_fau
                 WHERE
@@ -218,7 +228,9 @@ class ContReporteController extends Controller
                     cont_pagos_bolivares_fll.user AS operador,
                     IF(cont_pagos_bolivares_fll.deleted_at, 'Desincorporado', 'Activo') AS estado,
                     (SELECT cont_proveedores.moneda FROM cont_proveedores WHERE cont_proveedores.id = cont_pagos_bolivares_fll.id_proveedor) AS moneda_proveedor,
-                    cont_pagos_bolivares_fll.tasa AS tasa
+                    cont_pagos_bolivares_fll.tasa AS tasa,
+                    '' AS moneda_base,
+                    '' AS moneda_iva
                 FROM
                     cont_pagos_bolivares_fll
                 WHERE
@@ -244,7 +256,9 @@ class ContReporteController extends Controller
                     IF(cont_pagos_bancarios.deleted_at, 'Desincorporado', 'Activo') AS estado,
                     (SELECT cont_bancos.moneda FROM cont_bancos WHERE cont_bancos.id = cont_pagos_bancarios.id_banco) AS moneda_banco,
                     (SELECT cont_proveedores.moneda FROM cont_proveedores WHERE cont_proveedores.id = cont_pagos_bancarios.id_proveedor) AS moneda_proveedor,
-                    cont_pagos_bancarios.tasa AS tasa
+                    cont_pagos_bancarios.tasa AS tasa,
+                    (SELECT cont_proveedores.moneda FROM cont_proveedores WHERE cont_proveedores.id = cont_pagos_bancarios.id_proveedor) AS moneda_base,
+                    (SELECT cont_proveedores.moneda_iva FROM cont_proveedores WHERE cont_proveedores.id = cont_pagos_bancarios.id_proveedor) AS moneda_iva
                 FROM
                     cont_pagos_bancarios
                 WHERE
@@ -263,7 +277,9 @@ class ContReporteController extends Controller
                     '' AS comentario,
                     '' AS conciliacion,
                     cont_deudas.usuario_registro AS operador,
-                    IF(cont_deudas.deleted_at, 'Desincorporado', 'Activo') AS estado
+                    IF(cont_deudas.deleted_at, 'Desincorporado', 'Activo') AS estado,
+                    (SELECT cont_proveedores.moneda FROM cont_proveedores WHERE cont_proveedores.id = cont_deudas.id_proveedor) AS moneda_base,
+                    (SELECT cont_proveedores.moneda_iva FROM cont_proveedores WHERE cont_proveedores.id = cont_deudas.id_proveedor) AS moneda_iva
                 FROM
                     cont_deudas
                 WHERE
@@ -282,8 +298,9 @@ class ContReporteController extends Controller
                     cont_reclamos.comentario AS comentario,
                     '-' AS conciliacion,
                     cont_reclamos.usuario_registro AS operador,
-                    IF(cont_reclamos.deleted_at, 'Desincorporado', 'Activo') AS estado
-
+                    IF(cont_reclamos.deleted_at, 'Desincorporado', 'Activo') AS estado,
+                    (SELECT cont_proveedores.moneda FROM cont_proveedores WHERE cont_proveedores.id = cont_reclamos.id_proveedor) AS moneda_base,
+                    (SELECT cont_proveedores.moneda_iva FROM cont_proveedores WHERE cont_proveedores.id = cont_reclamos.id_proveedor) AS moneda_iva
                 FROM
                     cont_reclamos
                 WHERE
@@ -302,7 +319,9 @@ class ContReporteController extends Controller
                     cont_ajustes.comentario AS comentario,
                     '-' AS conciliacion,
                     cont_ajustes.usuario_registro AS operador,
-                    IF(cont_ajustes.deleted_at, 'Desincorporado', 'Activo') AS estado
+                    IF(cont_ajustes.deleted_at, 'Desincorporado', 'Activo') AS estado,
+                    (SELECT cont_proveedores.moneda FROM cont_proveedores WHERE cont_proveedores.id = cont_ajustes.id_proveedor) AS moneda_base,
+                    (SELECT cont_proveedores.moneda_iva FROM cont_proveedores WHERE cont_proveedores.id = cont_ajustes.id_proveedor) AS moneda_iva
                 FROM
                     cont_ajustes
                 WHERE

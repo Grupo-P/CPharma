@@ -172,8 +172,9 @@ class ContAjusteController extends Controller
         $nuevoAjuste->reverso          = 1;
         $nuevoAjuste->save();
 
-        $proveedor        = ContProveedor::find($ajuste->id_proveedor);
-        $proveedor->saldo = (float) $proveedor->saldo + (float) $monto;
+        $proveedor            = ContProveedor::find($ajuste->id_proveedor);
+        $proveedor->saldo     = (float) $proveedor->saldo + (float) $monto;
+        $proveedor->saldo_iva = (float) $proveedor->saldo_iva + (float) $monto_iva;
         $proveedor->save();
 
         return redirect('/ajuste')->with('Deleted', ' Informacion');
