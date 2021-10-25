@@ -82,6 +82,8 @@ class ContReporteController extends Controller
 
     public function movimientos_por_proveedor(Request $request)
     {
+        error_reporting(0);
+
         $sqlProveedores = ContProveedor::get();
         $i              = 0;
         $proveedores    = [];
@@ -250,7 +252,7 @@ class ContReporteController extends Controller
                     cont_pagos_bancarios.retencion_deuda_1 AS retencion_deuda_1,
                     cont_pagos_bancarios.retencion_deuda_2 AS retencion_deuda_2,
                     cont_pagos_bancarios.retencion_iva AS retencion_iva,
-                    IF(cont_pagos_bancarios.iva != 0, CONCAT('IVA: ', FORMAT(cont_pagos_bancarios.iva, 2, 'de_DE'), '<br>', cont_pagos_bancarios.comentario), cont_pagos_bancarios.comentario) AS comentario,
+                    cont_pagos_bancarios.comentario AS comentario,
                     IF(cont_pagos_bancarios.fecha_conciliado, 'Si', 'No') AS conciliacion,
                     cont_pagos_bancarios.operador AS operador,
                     IF(cont_pagos_bancarios.deleted_at, 'Desincorporado', 'Activo') AS estado,
@@ -262,6 +264,7 @@ class ContReporteController extends Controller
                 FROM
                     cont_pagos_bancarios
                 WHERE
+                    cont_pagos_bancarios.estatus != 'Prepagado' AND
                     cont_pagos_bancarios.id_proveedor = '{$request->get('id_proveedor')}' AND
                     DATE(cont_pagos_bancarios.created_at) >= '{$request->fechaInicio}' AND
                     DATE(cont_pagos_bancarios.created_at) <= '{$request->fechaFin}';

@@ -165,7 +165,7 @@
               </td>
               <td class="text-center" nowrap>{{$pago->proveedor->rif_ci}}</td>
               <td class="text-center" nowrap>{{$pago->created_at}}</td>
-              <td class="text-center" nowrap>{{ ($pago->estatus != 'Prepagado') ? number_format(monto_banco($pago->monto, $pago->iva), 2, ',', '.') : '' }}</td>
+              <td class="text-center" nowrap>{{ ($pago->estatus != 'Prepagado') ? number_format(monto_banco($pago->monto, $pago->iva, $pago->retencion_deuda_1, $pago->retencion_deuda_2, $pago->retencion_iva), 2, ',', '.') : '' }}</td>
               <td nowrap class="text-center">{{ number_format($pago->monto, 2, ',', '.') }}</td>
               <td nowrap class="text-center">{{ number_format($pago->iva, 2, ',', '.') }}</td>
               <td nowrap class="text-center">{{ $pago->proveedor->moneda }}</td>

@@ -39,12 +39,12 @@
 
             <tr>
                 <th scope="row">Banco</th>
-                <td>{{$pago->banco->nombre_banco}}</td>
+                <td>{{ ($pago->banco) ? $pago->banco->nombre_banco : '' }}</td>
             </tr>
 
             <tr>
                 <th scope="row">Alias bancario</th>
-                <td>{{$pago->banco->alias_cuenta}}</td>
+                <td>{{ ($pago->banco) ? $pago->banco->alias_cuenta : '' }}</td>
             </tr>
 
             <tr>

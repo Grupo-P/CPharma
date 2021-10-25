@@ -279,18 +279,27 @@ class ContPagoBancarioController extends Controller
         $banco     = ContBanco::find($pago->id_banco);
         $proveedor = ContProveedor::find($pago->id_proveedor);
 
-        $monto     = ($pago->monto > 0) ? -$pago->monto : abs($pago->monto);
-        $iva = ($pago->iva > 0) ? -$pago->iva : abs($pago->iva);
+        $tasa = $pago->tasa;
 
-        $nuevoPago               = new ContPagoBancario();
-        $nuevoPago->id_proveedor = $pago->id_proveedor;
-        $nuevoPago->id_banco     = $pago->id_banco;
-        $nuevoPago->tasa         = $pago->tasa;
-        $nuevoPago->monto        = $monto;
-        $nuevoPago->iva    = $iva;
-        $nuevoPago->comentario   = 'Reverso del pago bancario #' . $pago->id;
-        $nuevoPago->operador     = $pago->operador;
-        $nuevoPago->estatus      = 'Reversado';
+        $monto             = ($pago->monto > 0) ? -$pago->monto : abs($pago->monto);
+        $iva               = ($pago->iva > 0) ? -$pago->iva : abs($pago->iva);
+        $retencion_deuda_1 = ($pago->retencion_deuda_1 > 0) ? $pago->retencion_deuda_1 : abs($pago->retencion_deuda_1);
+        $retencion_deuda_2 = ($pago->retencion_deuda_2 > 0) ? $pago->retencion_deuda_2 : abs($pago->retencion_deuda_2);
+        $retencion_iva     = ($pago->retencion_iva > 0) ? $pago->retencion_iva : abs($pago->retencion_iva);
+
+        $nuevoPago                    = new ContPagoBancario();
+        $nuevoPago->id_proveedor      = $pago->id_proveedor;
+        $nuevoPago->id_banco          = $pago->id_banco;
+        $nuevoPago->tasa              = $pago->tasa;
+        $nuevoPago->monto             = $monto;
+        $nuevoPago->iva               = $iva;
+        $nuevoPago->retencion_deuda_1 = $retencion_deuda_1;
+        $nuevoPago->retencion_deuda_2 = $retencion_deuda_2;
+        $nuevoPago->retencion_iva     = $retencion_iva;
+        $nuevoPago->tasa              = $tasa;
+        $nuevoPago->comentario        = 'Reverso del pago bancario #' . $pago->id;
+        $nuevoPago->operador          = $pago->operador;
+        $nuevoPago->estatus           = 'Reversado';
         $nuevoPago->save();
 
         $proveedor        = ContProveedor::find($pago->id_proveedor);
