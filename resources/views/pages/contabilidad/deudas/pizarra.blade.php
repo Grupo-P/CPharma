@@ -6,7 +6,7 @@
 
 @section('content')
     @php
-        function fecha_ultimo_pago($id_proveedor)
+        function fecha_ultimo_pago($id_proveedor, $prepagado = '')
         {
             $tabla = (isset($_GET['tipo']) && $_GET['tipo'] == 'dolares') ? 'cont_pagos_efectivo' : 'cont_pagos_bolivares';
 
@@ -78,6 +78,20 @@
                 LIMIT 1
             ");
 
+            if ($prepagado) {
+                $bancario = DB::select("
+                    SELECT
+                        DATE(created_at) AS created_at
+                    FROM
+                        cont_pagos_bancarios
+                    WHERE
+                        id_proveedor = '{$id_proveedor}' AND estatus = 'Prepagado'
+                    ORDER BY
+                        created_at DESC
+                    LIMIT 1
+                ");
+            }
+
             $bancario = isset($bancario[0]->created_at) ? $bancario[0]->created_at : null;
 
             if ($pago <= $bancario) {
@@ -89,7 +103,7 @@
             }
         }
 
-        function dias_ultimo_pago($id_proveedor)
+        function dias_ultimo_pago($id_proveedor, $prepagado = '')
         {
             $tabla = (isset($_GET['tipo']) && $_GET['tipo'] == 'dolares') ? 'cont_pagos_efectivo' : 'cont_pagos_bolivares';
 
@@ -161,6 +175,20 @@
                 LIMIT 1
             ");
 
+            if ($prepagado) {
+                $bancario = DB::select("
+                    SELECT
+                        DATE(created_at) AS created_at
+                    FROM
+                        cont_pagos_bancarios
+                    WHERE
+                        id_proveedor = '{$id_proveedor}' AND estatus = 'Prepagado'
+                    ORDER BY
+                        created_at DESC
+                    LIMIT 1
+                ");
+            }
+
             $bancario = isset($bancario[0]->created_at) ? $bancario[0]->created_at : null;
 
             if ($pago <= $bancario) {
@@ -177,7 +205,7 @@
             }
         }
 
-        function fecha_ultimo_ingreso($id_proveedor)
+        function fecha_ultimo_ingreso($id_proveedor, $prepagado = '')
         {
             $deuda = DB::select("
                 SELECT
@@ -200,7 +228,7 @@
             }
         }
 
-        function dias_ultimo_ingreso($id_proveedor)
+        function dias_ultimo_ingreso($id_proveedor, $prepagado = '')
         {
             $deuda = DB::select("
                 SELECT
@@ -475,13 +503,13 @@
 
                     $total_saldo_prepagado = $total_saldo_prepagado + (float) $prepagado->saldoNoFormateado;
 
-                    if (dias_ultimo_ingreso($prepagado->id_proveedor) > 0 && dias_ultimo_ingreso($prepagado->id_proveedor) <= 10) {
+                    if (dias_ultimo_pago($prepagado->id_proveedor) > 0 && dias_ultimo_pago($prepagado->id_proveedor) <= 10) {
                         $fondo = 'bg-success';
                     }
-                    elseif (dias_ultimo_ingreso($prepagado->id_proveedor) > 15 && dias_ultimo_ingreso($prepagado->id_proveedor) <= 30) {
+                    elseif (dias_ultimo_pago($prepagado->id_proveedor) > 15 && dias_ultimo_pago($prepagado->id_proveedor) <= 30) {
                         $fondo = 'bg-warning';
                     }
-                    elseif (dias_ultimo_ingreso($prepagado->id_proveedor) > 30) {
+                    elseif (dias_ultimo_pago($prepagado->id_proveedor) > 30) {
                         $fondo = 'bg-danger';
                     }
                     else {
@@ -496,10 +524,10 @@
                     </td>
                     <td align="center">{{ $prepagado->saldo }}</td>
                     <td align="center">{{ $prepagado->tasa }}</td>
-                    <td align="center">{{ fecha_ultimo_pago($prepagado->id_proveedor) }}</td>
-                    <td align="center">{{ dias_ultimo_pago($prepagado->id_proveedor) }}</td>
-                    <td align="center">{{ fecha_ultimo_ingreso($prepagado->id_proveedor) }}</td>
-                    <td align="center">{{ dias_ultimo_ingreso($prepagado->id_proveedor) }}</td>
+                    <td align="center">{{ fecha_ultimo_pago($prepagado->id_proveedor, 'prepagado') }}</td>
+                    <td align="center">{{ dias_ultimo_pago($prepagado->id_proveedor, 'prepagado') }}</td>
+                    <td align="center">{{ fecha_ultimo_ingreso($prepagado->id_proveedor, 'prepagado') }}</td>
+                    <td align="center">{{ dias_ultimo_ingreso($prepagado->id_proveedor, 'prepagado') }}</td>
                 </tr>
             @endforeach
         </tbody>

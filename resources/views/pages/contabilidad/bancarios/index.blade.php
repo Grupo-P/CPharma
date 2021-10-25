@@ -196,7 +196,7 @@
                     </a>
                 @endif
 
-                @if(Auth::user()->departamento == 'TECNOLOGIA' || Auth::user()->departamento == 'GERENCIA')
+                @if($pago->estatus != 'Prepagado' && (Auth::user()->departamento == 'TECNOLOGIA' || Auth::user()->departamento == 'GERENCIA'))
                     @if($pago->estatus != 'Reversado')
                         <form action="/bancarios/{{$pago->id}}" method="POST" style="display: inline;">
                             @method('DELETE')
