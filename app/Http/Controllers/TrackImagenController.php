@@ -37,7 +37,7 @@ class TrackImagenController extends Controller
      */
     public function create()
     {
-        //
+        return view('pages.trackimagen.create');
     }
 
     /**
@@ -48,7 +48,26 @@ class TrackImagenController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try{
+            $trackimagen = new TrackImagen();
+            $trackimagen->codigo_barra = $request->input('codigo_barra');
+            $trackimagen->url_app = $request->input('url_app');
+            $trackimagen->estatus = 'ACTIVO';
+            $trackimagen->user = auth()->user()->name;
+            $trackimagen->save();
+
+            $Auditoria = new Auditoria();
+            $Auditoria->accion = 'CREAR';
+            $Auditoria->tabla = 'TRACKIMAGEN';
+            $Auditoria->registro = $request->input('codigo_barra');
+            $Auditoria->user = auth()->user()->name;
+            $Auditoria->save();
+
+            return redirect()->route('trackimagen.index')->with('Saved', ' Informacion');
+        }
+        catch(\Illuminate\Database\QueryException $e){
+            return back()->with('Error', ' Error');
+        }
     }
 
     /**

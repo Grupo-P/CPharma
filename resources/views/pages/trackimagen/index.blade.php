@@ -115,9 +115,9 @@
 		@foreach($trackimagenes as $trackimagen)
 		    <tr>
 		      <th class="text-center">{{$trackimagen->id}}</th>
-		      <td class="text-center">{{$trackimagen->codigo}}</td>
-              <td class="text-center">{{$trackimagen->codigo_app}}</td>
-		      <td class="text-center">{{$trackimagen->nombre}}</td>
+		      <td class="text-center">{{$trackimagen->codigo_barra}}</td>
+              <td class="text-center">{{$trackimagen->url_app}}</td>
+		      <td class="text-center">{{$trackimagen->user}}</td>
 		      <td class="text-center">{{$trackimagen->estatus}}</td>
 
 		    <!-- Inicio Validacion de ROLES -->
