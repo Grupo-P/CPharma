@@ -78,7 +78,16 @@ class TrackImagenController extends Controller
      */
     public function show($id)
     {
-        //
+        $trackimagen = TrackImagen::find($id);
+
+        $Auditoria = new Auditoria();
+        $Auditoria->accion = 'CONSULTAR';
+        $Auditoria->tabla = 'TRACKIMAGEN';
+        $Auditoria->registro = $trackimagen->codigo_barra;
+        $Auditoria->user = auth()->user()->name;
+        $Auditoria->save();
+
+        return view('pages.trackimagen.show', compact('trackimagen'));
     }
 
     /**
