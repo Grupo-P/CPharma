@@ -89,7 +89,8 @@ class TrackImagenController extends Controller
      */
     public function edit($id)
     {
-        //
+        $trackimagen = TrackImagen::find($id);
+        return view('pages.trackimagen.edit', compact('trackimagen'));
     }
 
     /**
@@ -101,7 +102,24 @@ class TrackImagenController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        try{
+            $trackimagen = TrackImagen::find($id);
+            $trackimagen->fill($request->all());
+            $trackimagen->user = auth()->user()->name;
+            $trackimagen->save();
+
+            $Auditoria = new Auditoria();
+            $Auditoria->accion = 'EDITAR';
+            $Auditoria->tabla = 'TRACKIMAGEN';
+            $Auditoria->registro = $trackimagen->codigo_barra;
+            $Auditoria->user = auth()->user()->name;
+            $Auditoria->save();
+
+            return redirect()->route('trackimagen.index')->with('Updated', ' Informacion');
+        }
+        catch(\Illuminate\Database\QueryException $e){
+            return back()->with('Error', ' Error');
+        }
     }
 
     /**
@@ -112,6 +130,27 @@ class TrackImagenController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $trackimagen = TrackImagen::find($id);
+
+        $Auditoria = new Auditoria();
+        $Auditoria->tabla = 'TRACKIMAGEN';
+        $Auditoria->registro = $trackimagen->codigo_barra;
+        $Auditoria->user = auth()->user()->name;
+
+        if($trackimagen->estatus == 'ACTIVO'){
+            $trackimagen->estatus = 'INACTIVO';
+            $Auditoria->accion = 'DESINCORPORAR';
+        }
+        else if($trackimagen->estatus == 'INACTIVO'){
+            $trackimagen->estatus = 'ACTIVO';
+            $Auditoria->accion = 'REINCORPORAR';
+        }
+
+        $trackimagen->user = auth()->user()->name;
+        $trackimagen->save();
+
+        $Auditoria->save();
+
+        return redirect()->route('trackimagen.index')->with('Deleted', ' Informacion');
     }
 }

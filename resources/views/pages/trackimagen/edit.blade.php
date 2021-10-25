@@ -1,7 +1,7 @@
 @extends('layouts.model')
 
 @section('title')
-    Categoria
+Track Imagen
 @endsection
 
 @section('content')
@@ -17,7 +17,7 @@
                 </button>
               </div>
               <div class="modal-body">
-                <h4 class="h6">La categoria no fue almacenada, el codigo ya esta registrado</h4>
+                <h4 class="h6">Track imagen no fue almacenada, el codigo de barra ya esta registrado</h4>
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-outline-success" data-dismiss="modal">Aceptar</button>
@@ -29,12 +29,12 @@
 
     <h1 class="h5 text-info">
         <i class="fas fa-edit"></i>
-        Modificar categoria
+        Modificar Track Imagen
     </h1>
 
     <hr class="row align-items-start col-12">
 
-    <form action="/categoria/" method="POST" style="display: inline;">
+    <form action="/trackimagen/" method="POST" style="display: inline;">
         @csrf
         <button type="submit" name="Regresar" role="button" class="btn btn-outline-info btn-sm"data-placement="top"><i class="fa fa-reply">&nbsp;Regresar</i></button>
     </form>
@@ -42,7 +42,7 @@
     <br>
     <br>
 
-    {!! Form::model($categoria, ['route' => ['categoria.update', $categoria], 'method' => 'PUT']) !!}
+    {!! Form::model($trackimagen, ['route' => ['trackimagen.update', $trackimagen], 'method' => 'PUT']) !!}
     <fieldset>
 
         <table class="table table-borderless table-striped">
@@ -54,16 +54,12 @@
         </thead>
         <tbody>
             <tr>
-                <th scope="row">{!! Form::label('codigo', 'Codigo') !!}</th>
-                <td>{!! Form::text('codigo', null, [ 'class' => 'form-control' , 'required', 'autofocus']) !!}</td>
+                <th scope="row">{!! Form::label('codigo_barra', 'Codigo de barra') !!}</th>
+                <td>{!! Form::text('codigo_barra', null, [ 'class' => 'form-control' , 'required', 'autofocus']) !!}</td>
             </tr>
             <tr>
-                <th scope="row">{!! Form::label('codigo_app', 'Codigo App') !!}</th>
-                <td>{!! Form::text('codigo_app', null, [ 'class' => 'form-control' , 'required', 'autofocus']) !!}</td>
-            </tr>
-            <tr>
-                <th scope="row">{!! Form::label('nombre', 'Nombre') !!}</th>
-                <td>{!! Form::text('nombre', null, [ 'class' => 'form-control', 'required']) !!}</td>
+                <th scope="row">{!! Form::label('url_app', 'URL App') !!}</th>
+                <td>{!! Form::text('url_app', null, [ 'class' => 'form-control' , 'required', 'autofocus']) !!}</td>
             </tr>
         </tbody>
         </table>
