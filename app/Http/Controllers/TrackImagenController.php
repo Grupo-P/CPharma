@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use compras\TrackImagen;
 use compras\User;
 use compras\Auditoria;
+use compras\Configuracion;
 
 class TrackImagenController extends Controller
 {
@@ -161,5 +162,78 @@ class TrackImagenController extends Controller
         $Auditoria->save();
 
         return redirect()->route('trackimagen.index')->with('Deleted', ' Informacion');
+    }
+
+    public function procesarTxt() {
+        $configuracion =  Configuracion::select('valor')->where('variable','URL_interna')->get();
+        $path = "".$configuracion[0]->valor;
+        $filename = "postimage.txt";
+        $file = $path.'/'.$filename;
+
+        $cuentaOK = $cuentaErrores = $cuentaRepetidos = 0;
+
+        if(file_exists($file)){
+            $Error = "<br><br>OK:: URL valida: ".$file;
+
+            $fp = fopen($file, "r");
+            while (!feof($fp)){
+                $linea = fgets($fp);
+
+                $trackimagenes = explode(" ", $linea);
+
+                foreach ($trackimagenes as $trackimagen){
+                    $urlTrackimagen = explode("/", $trackimagen);
+
+                    if(count($urlTrackimagen)>1){
+
+                        $imagen = explode(".", $urlTrackimagen[4]);
+                        $codigo_barra = $imagen[0];
+
+                        $TrackImagen =
+                        TrackImagen::orderBy('id','asc')
+                        ->where('codigo_barra',$codigo_barra)
+                        ->get();
+
+                        if(empty($TrackImagen[0]->codigo_barra)) {
+
+                            $Modeltrackimagen = new TrackImagen();
+                            $Modeltrackimagen->codigo_barra = $codigo_barra;
+                            $Modeltrackimagen->url_app = $trackimagen;
+                            $Modeltrackimagen->estatus = 'ACTIVO';
+                            $Modeltrackimagen->user = 'SYSTEM';
+                            $Modeltrackimagen->save();
+
+                            $Auditoria = new Auditoria();
+                            $Auditoria->accion = 'CREAR';
+                            $Auditoria->tabla = 'TRACKIMAGEN';
+                            $Auditoria->registro = $codigo_barra;
+                            $Auditoria->user = 'SYSTEM';
+                            $Auditoria->save();
+
+                            echo "<br>OK:: Se creo trackimgaen, codigo de barra (".$codigo_barra.")";
+                            $cuentaOK++;
+                        }else{
+                            echo"<br><br>ERROR:: Codigo de barra(".$codigo_barra.") repetido <br><br>";
+                            $cuentaRepetidos++;
+                        }
+
+                    }else{
+                        echo "<br><br>ERROR:: Link no valido: <pre>";
+                        print_r($urlTrackimagen);
+                        echo"</pre><br><br>";
+                        $cuentaErrores++;
+                    }
+                }
+            }
+            fclose($fp);
+        }else{
+            $Error = "<br><br>ERROR: valide la URL: ".$file."<br><br>";
+            $cuentaErrores++;
+        }
+
+        echo"<br><br>Creados con exito: ".$cuentaOK;
+        echo"<br><br>Repetidos: ".$cuentaRepetidos;
+        echo"<br><br>Errores: ".$cuentaErrores;
+        echo $Error;
     }
 }

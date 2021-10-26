@@ -406,6 +406,7 @@ Route::resource('surtido', 'SurtidoController');
 Route::get('surtido/{surtido}/anular', 'SurtidoController@anular');
 
 Route::resource('trackimagen', 'TrackImagenController');
+Route::get('/procesarTxt', 'TrackImagenController@procesarTxt');
 
 //***************************** RRHH routing *****************************//
 Route::resource('candidatos', 'RH_CandidatoController');
