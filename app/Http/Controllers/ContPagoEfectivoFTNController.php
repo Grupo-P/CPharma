@@ -38,7 +38,8 @@ class ContPagoEfectivoFTNController extends Controller
         if ($request->ajax()) {
             $proveedor = ContProveedor::find($request->id_proveedor);
 
-            $resultado['saldo'] = number_format($proveedor->saldo, 2, ',', '.');
+            $resultado['saldo']     = number_format($proveedor->saldo, 2, ',', '.');
+            $resultado['saldo_iva'] = number_format($proveedor->saldo_iva, 2, ',', '.');
 
             if ($proveedor->moneda != 'Dólares') {
                 if ($proveedor->moneda == 'Bolívares') {
@@ -66,11 +67,12 @@ class ContPagoEfectivoFTNController extends Controller
             $i              = 0;
 
             foreach ($sqlProveedores as $proveedor) {
-                $proveedores[$i]['label']  = $proveedor->nombre_proveedor . ' | ' . $proveedor->rif_ci;
-                $proveedores[$i]['value']  = $proveedor->nombre_proveedor . ' | ' . $proveedor->rif_ci;
-                $proveedores[$i]['id']     = $proveedor->id;
-                $proveedores[$i]['moneda'] = $proveedor->moneda;
-                $proveedores[$i]['saldo']  = number_format($proveedor->saldo, 2, ',', '');
+                $proveedores[$i]['label']      = $proveedor->nombre_proveedor . ' | ' . $proveedor->rif_ci;
+                $proveedores[$i]['value']      = $proveedor->nombre_proveedor . ' | ' . $proveedor->rif_ci;
+                $proveedores[$i]['id']         = $proveedor->id;
+                $proveedores[$i]['moneda']     = $proveedor->moneda;
+                $proveedores[$i]['moneda_iva'] = $proveedor->moneda_iva;
+                $proveedores[$i]['saldo']      = number_format($proveedor->saldo, 2, ',', '');
 
                 $i = $i + 1;
             }
@@ -145,6 +147,11 @@ class ContPagoEfectivoFTNController extends Controller
                     $monto = $request->input('monto');
                 }
 
+                $pago->iva = $request->monto_iva;
+                $pago->retencion_deuda_1 = $retencion_deuda_1;
+                $pago->retencion_deuda_2 = $retencion_deuda_2;
+                $pago->retencion_iva = $retencion_iva;
+
                 $proveedor->saldo = (float) $proveedor->saldo - (float) $monto;
                 $proveedor->save();
 
@@ -153,8 +160,8 @@ class ContPagoEfectivoFTNController extends Controller
                 $pago->monto_proveedor = $request->input('monto_proveedor');
             }
 
-            $pago->saldo_actual    = $configuracion->valor;
-            $pago->user            = auth()->user()->name;
+            $pago->saldo_actual = $configuracion->valor;
+            $pago->user         = auth()->user()->name;
 
             $pago->save();
             $configuracion->save();
@@ -306,6 +313,7 @@ class ContPagoEfectivoFTNController extends Controller
 
     public function validar(Request $request)
     {
+        return $request->id_proveedor;
         $proveedor = ContProveedor::find($request->id_proveedor);
         $resultado = [];
 
