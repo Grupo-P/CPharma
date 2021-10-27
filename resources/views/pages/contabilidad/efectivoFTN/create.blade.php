@@ -205,25 +205,25 @@
 
                 <tr style="background-color: rgba(0, 0, 0, 0.05);">
                     <td>
-                        <label style="display: block" for="tipo">Tipo</label>
+                        <label style="display: block" for="movimiento">movimiento</label>
                         <div class="custom-control custom-radio custom-control-inline">
-                            <input onchange="inputs(this)" type="radio" class="movimiento-radio custom-control-input" id="tipo1" name="tipo" value="Ingreso" required>
-                            <label class="custom-control-label" for="tipo1">Ingreso</label>
+                            <input onchange="inputs(this)" type="radio" class="movimiento-radio custom-control-input" id="movimiento1" name="movimiento" value="Ingreso" required>
+                            <label class="custom-control-label" for="movimiento1">Ingreso</label>
                         </div>
 
                         <div class="custom-control custom-radio custom-control-inline">
-                            <input onchange="inputs(this)" type="radio" class="movimiento-radio custom-control-input" id="tipo2" name="tipo" value="Egreso" required>
-                            <label class="custom-control-label" for="tipo2">Egreso</label>
+                            <input onchange="inputs(this)" type="radio" class="movimiento-radio custom-control-input" id="movimiento2" name="movimiento" value="Egreso" required>
+                            <label class="custom-control-label" for="movimiento2">Egreso</label>
                         </div>
 
                         <div class="custom-control custom-radio custom-control-inline">
-                            <input onchange="inputs(this)" type="radio" class="movimiento-radio custom-control-input" id="tipo3" name="tipo" value="Diferido" required>
-                            <label class="custom-control-label" for="prepagado2">Diferido</label>
+                            <input onchange="inputs(this)" type="radio" class="movimiento-radio custom-control-input" id="movimiento3" name="movimiento" value="Diferido" required>
+                            <label class="custom-control-label" for="movimiento3">Diferido</label>
                         </div>
                     </td>
                     <td colspan="4">
                         <label for="comentario">Comentario</label>
-                        <input class="form-control" maxlength="200" minlength="5" name="comentario" type="text">
+                        <input class="form-control" maxlength="200" minlength="5" name="comentario" type="text" required>
                     </td>
                 </tr>
             </tbody>
@@ -276,7 +276,7 @@
                     </td>
 
                     <td>
-                        <label for="monto_banco">Monto banco</label>
+                        <label for="monto_banco">Monto pago</label>
                         <input class="form-control" readonly name="monto_banco" type="text">
                     </td>
                 </tr>

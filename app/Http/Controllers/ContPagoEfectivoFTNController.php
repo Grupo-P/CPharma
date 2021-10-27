@@ -105,12 +105,12 @@ class ContPagoEfectivoFTNController extends Controller
                 case "Ingreso":
                     $pago->ingresos = $request->input('monto');
                     $configuracion->valor += $request->input('monto');
-                    $pago->concepto = $request->input('concepto');
+                    $pago->concepto = $request->input('comentario');
                     break;
                 case "Egreso":
                     $pago->egresos = $request->input('monto');
                     $configuracion->valor -= $request->input('monto');
-                    $pago->concepto = $request->input('concepto');
+                    $pago->concepto = $request->input('comentario');
                     $pago->estatus  = 'PAGADO';
                     break;
                 case "Diferido":
@@ -123,7 +123,7 @@ class ContPagoEfectivoFTNController extends Controller
                     $pago->user_up = auth()->user()->name;
 
                     $pago->diferido_actual = $configuracion2->valor;
-                    $pago->concepto        = $request->input('concepto') . " - DIFERIDO";
+                    $pago->concepto        = $request->input('comentario') . " - DIFERIDO";
                     break;
             }
 
@@ -148,16 +148,16 @@ class ContPagoEfectivoFTNController extends Controller
                 }
 
                 $pago->iva = $request->monto_iva;
-                $pago->retencion_deuda_1 = $retencion_deuda_1;
-                $pago->retencion_deuda_2 = $retencion_deuda_2;
-                $pago->retencion_iva = $retencion_iva;
+                $pago->retencion_deuda_1 = $request->retencion_deuda_1;
+                $pago->retencion_deuda_2 = $request->retencion_deuda_2;
+                $pago->retencion_iva = $request->retencion_iva;
 
                 $proveedor->saldo = (float) $proveedor->saldo - (float) $monto;
                 $proveedor->save();
 
                 $pago->tasa = $request->input('tasa');
 
-                $pago->monto_proveedor = $request->input('monto_proveedor');
+                $pago->monto_proveedor = $request->input('monto');
             }
 
             $pago->saldo_actual = $configuracion->valor;
@@ -178,7 +178,7 @@ class ContPagoEfectivoFTNController extends Controller
             return redirect('/efectivoFTN')->with('Saved', ' Informacion');
 
         } catch (\Illuminate\Database\QueryException $e) {
-            dd($e);
+            dd($request->all(), $e);
             return back()->with('Error', ' Error');
         }
     }
