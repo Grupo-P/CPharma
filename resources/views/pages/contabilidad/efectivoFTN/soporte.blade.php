@@ -200,10 +200,12 @@
                 <td colspan="4" class="alinear-izq">{{ number_format($monto_base_real, 2, ',', '.') }}</td>
             </tr>
 
-            <tr>
-                <td colspan="4" class="alinear-der">Monto IVA real:</td>
-                <td colspan="4" class="alinear-izq">{{ number_format($monto_iva_real, 2, ',', '.') }}</td>
-            </tr>
+            @if(isset($monto_iva_real))
+                <tr>
+                    <td colspan="4" class="alinear-der">Monto IVA real:</td>
+                    <td colspan="4" class="alinear-izq">{{ number_format($monto_iva_real, 2, ',', '.') }}</td>
+                </tr>
+            @endif
 
             <tr>
             <td colspan="4" class="alinear-der">Sede:</td>

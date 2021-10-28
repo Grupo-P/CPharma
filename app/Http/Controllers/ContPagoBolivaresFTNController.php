@@ -5,7 +5,7 @@ namespace compras\Http\Controllers;
 use compras\Auditoria;
 use compras\Configuracion;
 use compras\ContCuenta;
-use compras\ContPagoBolivaresFTN as ContPagoBolivares;
+use compras\ContPagoBolivaresFTN as ContPagoEfectivo;
 use compras\ContProveedor;
 use compras\Sede;
 use Illuminate\Http\Request;
@@ -19,7 +19,7 @@ class ContPagoBolivaresFTNController extends Controller
      */
     public function index(Request $request)
     {
-        $pagos = ContPagoBolivares::fecha($request->get('fecha_desde'), $request->get('fecha_hasta'))
+        $pagos = ContPagoEfectivo::fecha($request->get('fecha_desde'), $request->get('fecha_hasta'))
             ->orderBy('created_at', 'desc')
             ->get();
 
@@ -38,7 +38,8 @@ class ContPagoBolivaresFTNController extends Controller
         if ($request->ajax()) {
             $proveedor = ContProveedor::find($request->id_proveedor);
 
-            $resultado['saldo'] = number_format($proveedor->saldo, 2, ',', '.');
+            $resultado['saldo']     = number_format($proveedor->saldo, 2, ',', '.');
+            $resultado['saldo_iva'] = number_format($proveedor->saldo_iva, 2, ',', '.');
 
             if ($proveedor->moneda != 'Bolívares') {
                 if ($proveedor->moneda == 'Dólares') {
@@ -66,11 +67,12 @@ class ContPagoBolivaresFTNController extends Controller
             $i              = 0;
 
             foreach ($sqlProveedores as $proveedor) {
-                $proveedores[$i]['label']  = $proveedor->nombre_proveedor . ' | ' . $proveedor->rif_ci;
-                $proveedores[$i]['value']  = $proveedor->nombre_proveedor . ' | ' . $proveedor->rif_ci;
-                $proveedores[$i]['id']     = $proveedor->id;
-                $proveedores[$i]['moneda'] = $proveedor->moneda;
-                $proveedores[$i]['saldo']  = number_format($proveedor->saldo, 2, ',', '');
+                $proveedores[$i]['label']      = $proveedor->nombre_proveedor . ' | ' . $proveedor->rif_ci;
+                $proveedores[$i]['value']      = $proveedor->nombre_proveedor . ' | ' . $proveedor->rif_ci;
+                $proveedores[$i]['id']         = $proveedor->id;
+                $proveedores[$i]['moneda']     = $proveedor->moneda;
+                $proveedores[$i]['moneda_iva'] = $proveedor->moneda_iva;
+                $proveedores[$i]['saldo']      = number_format($proveedor->saldo, 2, ',', '');
 
                 $i = $i + 1;
             }
@@ -90,7 +92,7 @@ class ContPagoBolivaresFTNController extends Controller
     public function store(Request $request)
     {
         try {
-            $pago = new ContPagoBolivares();
+            $pago = new ContPagoEfectivo();
 
             $pago->sede = auth()->user()->sede;
 
@@ -103,12 +105,12 @@ class ContPagoBolivaresFTNController extends Controller
                 case "Ingreso":
                     $pago->ingresos = $request->input('monto');
                     $configuracion->valor += $request->input('monto');
-                    $pago->concepto = $request->input('concepto');
+                    $pago->concepto = $request->input('comentario');
                     break;
                 case "Egreso":
                     $pago->egresos = $request->input('monto');
                     $configuracion->valor -= $request->input('monto');
-                    $pago->concepto = $request->input('concepto');
+                    $pago->concepto = $request->input('comentario');
                     $pago->estatus  = 'PAGADO';
                     break;
                 case "Diferido":
@@ -121,7 +123,7 @@ class ContPagoBolivaresFTNController extends Controller
                     $pago->user_up = auth()->user()->name;
 
                     $pago->diferido_actual = $configuracion2->valor;
-                    $pago->concepto        = $request->input('concepto') . " - DIFERIDO";
+                    $pago->concepto        = $request->input('comentario') . " - DIFERIDO";
                     break;
             }
 
@@ -139,22 +141,27 @@ class ContPagoBolivaresFTNController extends Controller
 
                 $proveedor = ContProveedor::find($request->input('id_proveedor'));
 
-                if ($proveedor->moneda != 'Bolívares') {
-                    $monto = $request->input('monto') / $request->input('tasa');
+                if ($proveedor->moneda != 'Dólares') {
+                    $monto = $request->input('monto') * $request->input('tasa');
                 } else {
                     $monto = $request->input('monto');
                 }
+
+                $pago->iva = $request->monto_iva;
+                $pago->retencion_deuda_1 = $request->retencion_deuda_1;
+                $pago->retencion_deuda_2 = $request->retencion_deuda_2;
+                $pago->retencion_iva = $request->retencion_iva;
 
                 $proveedor->saldo = (float) $proveedor->saldo - (float) $monto;
                 $proveedor->save();
 
                 $pago->tasa = $request->input('tasa');
 
-                $pago->monto_proveedor = $request->input('monto_proveedor');
+                $pago->monto_proveedor = $request->input('monto');
             }
 
-            $pago->saldo_actual    = $configuracion->valor;
-            $pago->user            = auth()->user()->name;
+            $pago->saldo_actual = $configuracion->valor;
+            $pago->user         = auth()->user()->name;
 
             $pago->save();
             $configuracion->save();
@@ -171,14 +178,14 @@ class ContPagoBolivaresFTNController extends Controller
             return redirect('/bolivaresFTN')->with('Saved', ' Informacion');
 
         } catch (\Illuminate\Database\QueryException $e) {
-            dd($e);
+            dd($request->all(), $e);
             return back()->with('Error', ' Error');
         }
     }
 
     public function soporte($id)
     {
-        $pago = ContPagoBolivares::find($id);
+        $pago = ContPagoEfectivo::find($id);
         return view('pages.contabilidad.bolivaresFTN.soporte', compact('pago'));
     }
 
@@ -190,7 +197,7 @@ class ContPagoBolivaresFTNController extends Controller
      */
     public function edit($id)
     {
-        $pago = ContPagoBolivares::find($id);
+        $pago = ContPagoEfectivo::find($id);
         return view('pages.contabilidad.bolivaresFTN.edit', compact('pago'));
     }
 
@@ -205,7 +212,7 @@ class ContPagoBolivaresFTNController extends Controller
     {
         try {
             /********************* PROCESO DE MOVIMIENTO *********************/
-            $movimiento       = new ContPagoBolivares();
+            $movimiento       = new ContPagoEfectivo();
             $movimiento->sede = auth()->user()->sede;
 
             $configuracion  = Configuracion::where('variable', 'SaldoBolivaresFTN')->first();
@@ -227,13 +234,13 @@ class ContPagoBolivaresFTNController extends Controller
             $movimiento->user         = auth()->user()->name;
 
             /********************* ACTUALIZAR DIFERIDO *********************/
-            $diferidos = ContPagoBolivares::find($id);
+            $diferidos = ContPagoEfectivo::find($id);
 
             if ($request->movimiento == 'Ingreso' && $diferidos->id_proveedor != '') {
                 $proveedor = ContProveedor::find($diferidos->proveedor->id);
 
-                if ($proveedor->moneda != 'Bolívares') {
-                    $monto = $diferidos->diferido / $diferidos->tasa;
+                if ($proveedor->moneda != 'Dólares') {
+                    $monto = $diferidos->diferido * $diferidos->tasa;
                 } else {
                     $monto = $diferidos->diferido;
                 }
@@ -273,7 +280,7 @@ class ContPagoBolivaresFTNController extends Controller
             $Auditoria->user     = auth()->user()->name;
             $Auditoria->save();
 
-            return redirect('/contabilidad/diferidosFTN')->with('Updated', ' Informacion');
+            return redirect('/contabilidad/diferidosBolivaresFTN')->with('Updated', ' Informacion');
         } catch (\Illuminate\Database\QueryException $e) {
             dd($e);
             return back()->with('Error', ' Error');
@@ -306,6 +313,7 @@ class ContPagoBolivaresFTNController extends Controller
 
     public function validar(Request $request)
     {
+        return $request->id_proveedor;
         $proveedor = ContProveedor::find($request->id_proveedor);
         $resultado = [];
 
@@ -327,7 +335,7 @@ class ContPagoBolivaresFTNController extends Controller
 
     public function diferidos(Request $request)
     {
-        $diferidos = ContPagoBolivares::whereNotNull('diferido')
+        $diferidos = ContPagoEfectivo::whereNotNull('diferido')
             ->orderByRaw('estatus ASC, id DESC')
             ->get();
 

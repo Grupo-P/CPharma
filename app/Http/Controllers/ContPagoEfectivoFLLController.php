@@ -38,7 +38,8 @@ class ContPagoEfectivoFLLController extends Controller
         if ($request->ajax()) {
             $proveedor = ContProveedor::find($request->id_proveedor);
 
-            $resultado['saldo'] = number_format($proveedor->saldo, 2, ',', '.');
+            $resultado['saldo']     = number_format($proveedor->saldo, 2, ',', '.');
+            $resultado['saldo_iva'] = number_format($proveedor->saldo_iva, 2, ',', '.');
 
             if ($proveedor->moneda != 'Dólares') {
                 if ($proveedor->moneda == 'Bolívares') {
@@ -66,11 +67,12 @@ class ContPagoEfectivoFLLController extends Controller
             $i              = 0;
 
             foreach ($sqlProveedores as $proveedor) {
-                $proveedores[$i]['label']  = $proveedor->nombre_proveedor . ' | ' . $proveedor->rif_ci;
-                $proveedores[$i]['value']  = $proveedor->nombre_proveedor . ' | ' . $proveedor->rif_ci;
-                $proveedores[$i]['id']     = $proveedor->id;
-                $proveedores[$i]['moneda'] = $proveedor->moneda;
-                $proveedores[$i]['saldo']  = number_format($proveedor->saldo, 2, ',', '');
+                $proveedores[$i]['label']      = $proveedor->nombre_proveedor . ' | ' . $proveedor->rif_ci;
+                $proveedores[$i]['value']      = $proveedor->nombre_proveedor . ' | ' . $proveedor->rif_ci;
+                $proveedores[$i]['id']         = $proveedor->id;
+                $proveedores[$i]['moneda']     = $proveedor->moneda;
+                $proveedores[$i]['moneda_iva'] = $proveedor->moneda_iva;
+                $proveedores[$i]['saldo']      = number_format($proveedor->saldo, 2, ',', '');
 
                 $i = $i + 1;
             }
@@ -103,12 +105,12 @@ class ContPagoEfectivoFLLController extends Controller
                 case "Ingreso":
                     $pago->ingresos = $request->input('monto');
                     $configuracion->valor += $request->input('monto');
-                    $pago->concepto = $request->input('concepto');
+                    $pago->concepto = $request->input('comentario');
                     break;
                 case "Egreso":
                     $pago->egresos = $request->input('monto');
                     $configuracion->valor -= $request->input('monto');
-                    $pago->concepto = $request->input('concepto');
+                    $pago->concepto = $request->input('comentario');
                     $pago->estatus  = 'PAGADO';
                     break;
                 case "Diferido":
@@ -121,7 +123,7 @@ class ContPagoEfectivoFLLController extends Controller
                     $pago->user_up = auth()->user()->name;
 
                     $pago->diferido_actual = $configuracion2->valor;
-                    $pago->concepto        = $request->input('concepto') . " - DIFERIDO";
+                    $pago->concepto        = $request->input('comentario') . " - DIFERIDO";
                     break;
             }
 
@@ -145,16 +147,21 @@ class ContPagoEfectivoFLLController extends Controller
                     $monto = $request->input('monto');
                 }
 
+                $pago->iva = $request->monto_iva;
+                $pago->retencion_deuda_1 = $request->retencion_deuda_1;
+                $pago->retencion_deuda_2 = $request->retencion_deuda_2;
+                $pago->retencion_iva = $request->retencion_iva;
+
                 $proveedor->saldo = (float) $proveedor->saldo - (float) $monto;
                 $proveedor->save();
 
                 $pago->tasa = $request->input('tasa');
 
-                $pago->monto_proveedor = $request->input('monto_proveedor');
+                $pago->monto_proveedor = $request->input('monto');
             }
 
-            $pago->saldo_actual    = $configuracion->valor;
-            $pago->user            = auth()->user()->name;
+            $pago->saldo_actual = $configuracion->valor;
+            $pago->user         = auth()->user()->name;
 
             $pago->save();
             $configuracion->save();
@@ -171,7 +178,7 @@ class ContPagoEfectivoFLLController extends Controller
             return redirect('/efectivoFLL')->with('Saved', ' Informacion');
 
         } catch (\Illuminate\Database\QueryException $e) {
-            dd($e);
+            dd($request->all(), $e);
             return back()->with('Error', ' Error');
         }
     }
@@ -306,6 +313,7 @@ class ContPagoEfectivoFLLController extends Controller
 
     public function validar(Request $request)
     {
+        return $request->id_proveedor;
         $proveedor = ContProveedor::find($request->id_proveedor);
         $resultado = [];
 
