@@ -63,39 +63,38 @@
         function agregarTraslado(codigo_barra, sede, existencia, bandera = '') {
             cantidad = prompt('Ingrese la cantidad' + bandera + ': ');
 
-            if (!parseInt(cantidad)) {
-                agregarTraslado(codigo_barra, sede, existencia, ' (sólo números enteros)');
-                return false;
-            }
-
-            if (parseInt(cantidad) <= 0) {
-                agregarTraslado(codigo_barra, sede, existencia, ' (número mayor a cero)');
-                return false;
-            }
-
-            if (parseInt(cantidad) > parseInt(existencia)) {
-                agregarTraslado(codigo_barra, sede, existencia, ' (número menor a existencia)');
-                return false;
-            }
-
-            cantidad = parseInt(cantidad);
-
-            $.ajax({
-                type: 'POST',
-                url: '/trasladoRecibir',
-                data: {
-                    codigo_barra: codigo_barra,
-                    sede: sede,
-                    cantidad: cantidad,
-                    _token: '{{ csrf_token() }}'
-                },
-                success: function (response) {
-                    toastr.success('Articulo agregado a traslado');
-                },
-                error: function (error) {
-                    $('body').html(error.responseText);
+            if (cantidad) {
+                if (!parseInt(cantidad)) {
+                    agregarTraslado(codigo_barra, sede, existencia, ' (sólo números enteros)');
+                    return false;
                 }
-            })
+
+                if (parseInt(cantidad) <= 0) {
+                    agregarTraslado(codigo_barra, sede, existencia, ' (número mayor a cero)');
+                    return false;
+                }
+
+                if (parseInt(cantidad) > parseInt(existencia)) {
+                    agregarTraslado(codigo_barra, sede, existencia, ' (número menor a existencia)');
+                    return false;
+                }
+
+                cantidad = parseInt(cantidad);
+
+                $.ajax({
+                    type: 'POST',
+                    url: '/trasladoRecibir',
+                    data: {
+                        codigo_barra: codigo_barra,
+                        sede: sede,
+                        cantidad: cantidad,
+                        _token: '{{ csrf_token() }}'
+                    },
+                    success: function (response) {
+                        toastr.success('Articulo agregado a traslado');
+                    }
+                })
+            }
         }
 
         function confirmarEliminacion(url) {
