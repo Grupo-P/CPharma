@@ -2,7 +2,7 @@
 	use PhpOffice\PhpSpreadsheet\IOFactory;
 	use PhpOffice\PhpSpreadsheet\Spreadsheet;
 	use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
-    use compras\Configuracion;
+    use compras\TrackImagen;
 
 	include(app_path().'\functions\config.php');
 	include(app_path().'\functions\functions.php');
@@ -92,8 +92,6 @@
 		$contador = 1;
         $TasaActual = FG_Tasa_Fecha_Venta($connCPharma,date('Y-m-d'));
 
-        $configuracion =  Configuracion::select('valor')->where('variable','URL_externa')->get();
-
         $sheet->setCellValue('A'.$contador,"sku");
         $sheet->setCellValue('B'.$contador,"name");
         $sheet->setCellValue('C'.$contador,"description");
@@ -151,6 +149,21 @@
                 $PrecioDolar = number_format($PrecioDolar,2,"," ,"." );
             /*PRECIO DOLAR*/
 
+            /*IMAGEN*/
+                $TrackImagen =
+                TrackImagen::orderBy('id','asc')
+                ->where('codigo_barra',$CodigoBarra)
+                ->get();
+
+                if(!empty($TrackImagen[0]->codigo_barra)) {
+                    $url_app = $TrackImagen[0]->url_app;
+                }
+                else{
+                    $url_app = "";
+                }
+            /*IMAGEN*/
+
+
             /*EXCEL*/
                 $sheet->setCellValue('A'.$contador,$CodigoBarra);
                 $sheet->setCellValue('B'.$contador,$Descripcion);
@@ -159,7 +172,7 @@
                 $sheet->setCellValue('E'.$contador,$Existencia);
                 $sheet->setCellValue('F'.$contador,$categoria);
                 $sheet->setCellValue('G'.$contador,$subcategoria);
-                $sheet->setCellValue('H'.$contador,$configuracion[0]->valor.$CodigoBarra.".jpg");
+                $sheet->setCellValue('H'.$contador,$url_app);
             /*EXCEL*/
 
 	/* CPHARMA */
