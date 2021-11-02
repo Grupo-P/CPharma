@@ -6,6 +6,13 @@
 
 @section('content')
 
+<?php
+    include(app_path().'\functions\config.php');
+    include(app_path().'\functions\functions.php');
+    include(app_path().'\functions\querys_mysql.php');
+    include(app_path().'\functions\querys_sqlserver.php');
+?>
+
 	<!-- Modal Guardar -->
 	@if (session('Saved'))
 		<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -112,6 +119,7 @@
 		    <tr>
 		      	<th scope="col" class="CP-sticky">#</th>
 		      	<th scope="col" class="CP-sticky">Codigo Barra</th>
+                <th scope="col" class="CP-sticky">Descripcion</th>
                 <th scope="col" class="CP-sticky">URL APP</th>
 		      	<th scope="col" class="CP-sticky">Usuario</th>
 		      	<th scope="col" class="CP-sticky">Estatus</th>
@@ -119,11 +127,37 @@
 		    </tr>
 	  	</thead>
 	  	<tbody>
+        <?php
+            $SedeConnection = FG_Mi_Ubicacion();
+            $conn = FG_Conectar_Smartpharma($SedeConnection);
+        ?>
 		@foreach($trackimagenes as $trackimagen)
+
+            <?php
+                $sql1 = SQL_articulo_codigoBarra($trackimagen->codigo_barra);
+                $result1 = sqlsrv_query($conn,$sql1);
+                $row1 = sqlsrv_fetch_array($result1,SQLSRV_FETCH_ASSOC);
+                $IdArticulo = $row1["IdArticulo"];
+                $Descripcion = FG_Limpiar_Texto($row1["Descripcion"]);
+            ?>
+
 		    <tr>
 		      <th class="text-center">{{$trackimagen->id}}</th>
 		      <td class="text-center">{{$trackimagen->codigo_barra}}</td>
-              <td class="text-center">{{$trackimagen->url_app}}</td>
+
+            <?php
+                echo
+                '<td align="center" class="CP-barrido">
+                <a href="/reporte2?Id='.$IdArticulo.'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
+                  .$Descripcion.
+                '</a>
+                </td>';
+            ?>
+
+                <td class="text-center">
+                    <a target="_blank" href="{{$trackimagen->url_app}}">{{$trackimagen->url_app}}</a>
+                </td>
+
 		      <td class="text-center">{{$trackimagen->user}}</td>
 		      <td class="text-center">{{$trackimagen->estatus}}</td>
 

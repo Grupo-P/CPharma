@@ -1835,4 +1835,37 @@
     ";
     return $sql;
   }
+
+  /**********************************************************************************/
+
+  function SQL_articulo_codigoBarra($codigoBarra){
+      $sql="
+      SELECT
+    --Id Articulo
+    InvArticulo.Id AS IdArticulo,
+    --Codigo de Barra
+    (SELECT CodigoBarra
+    FROM InvCodigoBarra
+    WHERE InvCodigoBarra.InvArticuloId = InvArticulo.Id
+    AND InvCodigoBarra.EsPrincipal = 1) AS CodigoBarra,
+    --Descripcion
+    InvArticulo.Descripcion
+    --Tabla principal
+    FROM InvArticulo
+    --Joins
+    LEFT JOIN InvLoteAlmacen ON InvLoteAlmacen.InvArticuloId = InvArticulo.Id
+    LEFT JOIN InvArticuloAtributo ON InvArticuloAtributo.InvArticuloId = InvArticulo.Id
+    LEFT JOIN InvAtributo ON InvAtributo.Id = InvArticuloAtributo.InvAtributoId
+    --Condicionales
+    WHERE (SELECT CodigoBarra
+    FROM InvCodigoBarra
+    WHERE InvCodigoBarra.InvArticuloId = InvArticulo.Id
+    AND InvCodigoBarra.EsPrincipal = 1) = '$codigoBarra'
+    --Agrupamientos
+    GROUP BY InvArticulo.Id, InvArticulo.CodigoArticulo, InvArticulo.Descripcion, InvArticulo.FinConceptoImptoIdCompra, InvArticulo.InvCategoriaId,InvArticulo.InvMarcaId,InvArticulo.Auditoria_FechaCreacion
+    --Ordanamiento
+    ORDER BY InvArticulo.Id ASC
+      ";
+    return $sql;
+  }
 ?>

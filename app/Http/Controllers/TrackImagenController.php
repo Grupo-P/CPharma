@@ -170,7 +170,7 @@ class TrackImagenController extends Controller
         $filename = "postimage.txt";
         $file = $path.'/'.$filename;
 
-        $cuentaOK = $cuentaErrores = $cuentaRepetidos = 0;
+        $cuentaOK = $cuentaErrores = $cuentaRepetidos =  $cuentaLinea =0;
 
         if(file_exists($file)){
             $Error = "<br><br>OK:: URL valida: ".$file;
@@ -210,19 +210,34 @@ class TrackImagenController extends Controller
                             $Auditoria->user = 'SYSTEM';
                             $Auditoria->save();
 
-                            echo "<br>OK:: Se creo trackimgaen, codigo de barra (".$codigo_barra.")";
+                            echo "<br>Linea $cuentaLinea. OK:: Se creo trackimgaen, codigo de barra (".$codigo_barra.")";
                             $cuentaOK++;
                         }else{
-                            echo"<br><br>ERROR:: Codigo de barra(".$codigo_barra.") repetido <br><br>";
+
+                            $Modeltrackimagen = TrackImagen::find($TrackImagen[0]->id);
+                            $Modeltrackimagen->url_app = $trackimagen;
+                            $Modeltrackimagen->estatus = 'ACTIVO';
+                            $Modeltrackimagen->user = 'SYSTEM';
+                            $Modeltrackimagen->save();
+
+                            $Auditoria = new Auditoria();
+                            $Auditoria->accion = 'REEMPLAZO';
+                            $Auditoria->tabla = 'TRACKIMAGEN';
+                            $Auditoria->registro = $codigo_barra;
+                            $Auditoria->user = 'SYSTEM';
+                            $Auditoria->save();
+
+                            echo"<br><br>Linea $cuentaLinea. OK:: Se reemplazo la url del codigo de barra(".$codigo_barra.")";
                             $cuentaRepetidos++;
                         }
 
                     }else{
-                        echo "<br><br>ERROR:: Link no valido: <pre>";
+                        echo "<br><br>Linea $cuentaLinea. ERROR:: Link no valido: <pre>";
                         print_r($urlTrackimagen);
-                        echo"</pre><br><br>";
+                        echo"</pre>";
                         $cuentaErrores++;
                     }
+                    $cuentaLinea++;
                 }
             }
             fclose($fp);
@@ -232,7 +247,7 @@ class TrackImagenController extends Controller
         }
 
         echo"<br><br>Creados con exito: ".$cuentaOK;
-        echo"<br><br>Repetidos: ".$cuentaRepetidos;
+        echo"<br><br>Reemplazados con exito: ".$cuentaRepetidos;
         echo"<br><br>Errores: ".$cuentaErrores;
         echo $Error;
     }
