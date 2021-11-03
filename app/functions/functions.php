@@ -4027,4 +4027,18 @@
 
     return $precio;
   }
+
+  function siglasSegunNombre()
+  {
+    $array = [
+        'FARMACIA TIERRA NEGRA, C.A.' => 'FTN',
+        'FARMACIA LA LAGO,C.A.' => 'FLL',
+        'FARMACIA AVENIDA UNIVERSIDAD, C.A.' => 'FAU',
+        'GRUPO P, C.A' => 'GP',
+        'MULATA CAFÉ C.A' => 'MC',
+        'FARMACIAS KD EXPRESS, C.A.' => 'KDI'
+    ];
+
+    return $array;
+  }
 ?>
