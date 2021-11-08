@@ -112,7 +112,6 @@
         <th scope="col" class="CP-sticky">Diferidos</th>
         <th scope="col" class="CP-sticky">Saldo anterior</th>
         <th scope="col" class="CP-sticky">Saldo posterior</th>
-        <th scope="col" class="CP-sticky">Monto al proveedor</th>
         <th scope="col" class="CP-sticky">Tasa</th>
         <th scope="col" class="CP-sticky">Fecha y hora</th>
         <th scope="col" class="CP-sticky">Plan de cuentas</th>
@@ -144,59 +143,6 @@
         <td>{{number_format($pago->diferido, 2, ',', '.')}}</td>
         <td>{{number_format($pago->saldo_anterior, 2, ',', '.')}}</td>
         <td>{{number_format($pago->saldo_actual, 2, ',', '.')}}</td>
-        <td>
-          @php
-            $monto_proveedor = '';
-
-            if ($pago->egresos) {
-                if ($pago->proveedor) {
-                    if ($pago->proveedor->moneda != 'Bolívares') {
-                        if ($pago->proveedor->moneda == 'Dólares') {
-                            $monto_proveedor = $pago->egresos / $pago->tasa;
-                        }
-
-                        if ($pago->proveedor->moneda == 'Pesos') {
-                            $monto_proveedor = $pago->egresos / $pago->tasa;
-                        }
-                    } else {
-                        $monto_proveedor = $pago->egresos;
-                    }
-                }
-            }
-
-            if ($pago->diferido) {
-                if ($pago->proveedor) {
-                    if ($pago->proveedor->moneda != 'Bolívares') {
-                        if ($pago->proveedor->moneda == 'Dólares') {
-                            $monto_proveedor = $pago->diferido / $pago->tasa;
-                        }
-
-                        if ($pago->proveedor->moneda == 'Pesos') {
-                            $monto_proveedor = $pago->diferido / $pago->tasa;
-                        }
-                    } else {
-                        $monto_proveedor = $pago->diferido;
-                    }
-                }
-            }
-
-            if (strpos($pago->concepto, 'DIFERIDO') && $pago->ingresos) {
-                if (isset($pago->proveedor) && $pago->proveedor->moneda != 'Bolívares') {
-                    if ($pago->proveedor->moneda == 'Dólares') {
-                        $monto_proveedor = $pago->egresos / $pago->tasa;
-                    }
-
-                    if ($pago->proveedor->moneda == 'Pesos') {
-                        $monto_proveedor = $pago->egresos / $pago->tasa;
-                    }
-                } else {
-                    $monto_proveedor = $pago->egresos;
-                }
-            }
-          @endphp
-
-          {{(isset($monto_proveedor) && $monto_proveedor != '') ? number_format($monto_proveedor,2,',','.') : ''}}
-        </td>
         <td>{{ ($pago->tasa) ? number_format($pago->tasa,2,',','.') : '' }}</td>
         <td>{{date("d-m-Y h:i:s a", strtotime($pago->created_at))}}</td>
         <td>{{isset($pago->cuenta->nombre) ? $pago->cuenta->nombre : ''}}</td>

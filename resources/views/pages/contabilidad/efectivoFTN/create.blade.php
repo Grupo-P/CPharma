@@ -50,7 +50,7 @@
   @if($_GET['tipo'] == 'movimiento')
     <br><br>
 
-    <div class="alert alert-warning text-center">Utilice esta opción solo para cargar egresos o gastos, si desea cargar un pago a algún proveedor vaya <a style="color: #856404" href="?tipo=proveedores">haga click aquí</a>.</div>
+    <div class="alert alert-warning text-center">Utilice esta opción solo para cargar egresos o gastos, si desea cargar un pago a algún proveedor <a style="color: #856404" href="?tipo=proveedores">haga click aquí</a>.</div>
   @else
     <br><br>
   @endif
@@ -187,7 +187,7 @@
 
             <tbody>
                 <tr>
-                    <td>
+                    <td colspan="2">
                         <label for="monto">Pago deuda</label>
                         <input class="form-control" name="monto" type="number" step="0.01" min="0.01" required>
                     </td>
@@ -205,22 +205,33 @@
 
                 <tr style="background-color: rgba(0, 0, 0, 0.05);">
                     <td>
-                        <label style="display: block" for="movimiento">movimiento</label>
+                        <label style="display: block" for="prepagado">Prepagado?</label>
+
                         <div class="custom-control custom-radio custom-control-inline">
-                            <input onchange="inputs(this)" type="radio" class="movimiento-radio custom-control-input" id="movimiento1" name="movimiento" value="Ingreso" required>
-                            <label class="custom-control-label" for="movimiento1">Ingreso</label>
+                            <input type="radio" class="prepagado-radio custom-control-input" id="prepagado1" name="prepagado" value="Si" required>
+                            <label class="custom-control-label" for="prepagado1">Si</label>
                         </div>
 
                         <div class="custom-control custom-radio custom-control-inline">
-                            <input onchange="inputs(this)" type="radio" class="movimiento-radio custom-control-input" id="movimiento2" name="movimiento" value="Egreso" required>
-                            <label class="custom-control-label" for="movimiento2">Egreso</label>
-                        </div>
-
-                        <div class="custom-control custom-radio custom-control-inline">
-                            <input onchange="inputs(this)" type="radio" class="movimiento-radio custom-control-input" id="movimiento3" name="movimiento" value="Diferido" required>
-                            <label class="custom-control-label" for="movimiento3">Diferido</label>
+                            <input type="radio" class="prepagado-radio custom-control-input" id="prepagado2" name="prepagado" value="No" checked required>
+                            <label class="custom-control-label" for="prepagado2">No</label>
                         </div>
                     </td>
+
+                    <td>
+                        <label style="display: block" for="movimiento">Diferido?</label>
+
+                        <div class="custom-control custom-radio custom-control-inline">
+                            <input type="radio" class="movimiento-radio custom-control-input" id="movimiento1" name="movimiento" value="Diferido" required>
+                            <label class="custom-control-label" for="movimiento1">Si</label>
+                        </div>
+
+                        <div class="custom-control custom-radio custom-control-inline">
+                            <input type="radio" class="movimiento-radio custom-control-input" id="movimiento2" name="movimiento" value="Egreso" checked required>
+                            <label class="custom-control-label" for="movimiento2">No</label>
+                        </div>
+                    </td>
+
                     <td colspan="4">
                         <label for="comentario">Comentario</label>
                         <input class="form-control" maxlength="200" minlength="5" name="comentario" type="text" required>

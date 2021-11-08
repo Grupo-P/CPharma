@@ -105,13 +105,23 @@ class ContPagoEfectivoFTNController extends Controller
                 case "Ingreso":
                     $pago->ingresos = $request->input('monto');
                     $configuracion->valor += $request->input('monto');
-                    $pago->concepto = $request->input('comentario');
+                    $pago->concepto = $request->input('concepto');
+
+                    if ($request->id_proveedor && $request->pago_real_iva) {
+                        $configuracion->valor += $request->input('pago_real_iva');
+                    }
+
                     break;
                 case "Egreso":
                     $pago->egresos = $request->input('monto');
                     $configuracion->valor -= $request->input('monto');
-                    $pago->concepto = $request->input('comentario');
+                    $pago->concepto = $request->input('concepto');
                     $pago->estatus  = 'PAGADO';
+
+                    if ($request->id_proveedor && $request->pago_real_iva) {
+                        $configuracion->valor -= $request->input('pago_real_iva');
+                    }
+
                     break;
                 case "Diferido":
                     $pago->diferido_anterior = $configuracion2->valor;
@@ -123,7 +133,13 @@ class ContPagoEfectivoFTNController extends Controller
                     $pago->user_up = auth()->user()->name;
 
                     $pago->diferido_actual = $configuracion2->valor;
-                    $pago->concepto        = $request->input('comentario') . " - DIFERIDO";
+                    $pago->concepto        = $request->input('concepto') . " - DIFERIDO";
+
+                    if ($request->id_proveedor && $request->pago_real_iva) {
+                        $configuracion->valor -= $request->input('pago_real_iva');
+                        $configuracion2->valor += $request->input('pago_real_iva');
+                    }
+
                     break;
             }
 
@@ -137,6 +153,8 @@ class ContPagoEfectivoFTNController extends Controller
             }
 
             if ($request->input('id_proveedor')) {
+                $pago->concepto = $request->input('comentario');
+
                 $pago->id_proveedor = $request->input('id_proveedor');
 
                 $proveedor = ContProveedor::find($request->input('id_proveedor'));
@@ -153,6 +171,7 @@ class ContPagoEfectivoFTNController extends Controller
                 $pago->retencion_iva = $request->retencion_iva;
 
                 $proveedor->saldo = (float) $proveedor->saldo - (float) $monto;
+                $proveedor->saldo_iva = (float) $proveedor->saldo_iva - (float) $request->monto_iva;
                 $proveedor->save();
 
                 $pago->tasa = $request->input('tasa');
@@ -253,18 +272,19 @@ class ContPagoEfectivoFTNController extends Controller
 
             $concepto = $concepto . '<br>' . $request->concepto . '<br>DIFERIDO';
 
-            $diferidos->concepto          = $concepto;
-            $movimiento->concepto         = $concepto;
-            $diferidos->diferido_anterior = $configuracion2->valor;
-            $configuracion2->valor -= $request->input('monto');
-            $diferidos->user_up         = auth()->user()->name;
-            $diferidos->estatus         = ($request->movimiento == 'Egreso') ? 'PAGADO' : 'REVERSADO';
-            $diferidos->diferido_actual = $configuracion2->valor;
-            $movimiento->id_proveedor   = $diferidos->id_proveedor;
-            $movimiento->id_cuenta      = $diferidos->id_cuenta;
-            $movimiento->tasa           = $diferidos->tasa;
-            $movimiento->autorizado_por = $diferidos->autorizado_por;
-            $movimiento->user_up        = $diferidos->user_up;
+            $diferidos->concepto           = $concepto;
+            $movimiento->concepto          = $concepto;
+            $diferidos->diferido_anterior  = $configuracion2->valor;
+            $configuracion2->valor        -= $request->input('monto');
+            $diferidos->user_up            = auth()->user()->name;
+            $diferidos->estatus            = ($request->movimiento == 'Egreso') ? 'PAGADO' : 'REVERSADO';
+            $diferidos->diferido_actual    = $configuracion2->valor;
+            $movimiento->id_proveedor      = $diferidos->id_proveedor;
+            $movimiento->id_cuenta         = $diferidos->id_cuenta;
+            $movimiento->tasa              = $diferidos->tasa;
+            $movimiento->autorizado_por    = $diferidos->autorizado_por;
+            $movimiento->user_up           = $diferidos->user_up;
+            $movimiento->titular_pago      = $diferidos->titular_pago;
 
             /********************* GUARDAR CAMBIOS *********************/
             $movimiento->save();

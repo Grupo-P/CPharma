@@ -79,7 +79,7 @@
       <tr>
         <th>{{intval(++$cont)}}</th>
         <th>{{ str_pad($diferido->id, 5, 0, STR_PAD_LEFT) }}</th>
-        <td>{{ ($diferido->proveedor) ? $diferido->proveedor->nombre_proveedor : '' }}</td>
+        <td>{{ ($diferido->proveedor) ? $diferido->proveedor->nombre_proveedor : $diferido->titular_pago }}</td>
         <td>
           <span class="d-inline-block " style="max-width: 250px;">
             {!! $diferido->concepto !!}
