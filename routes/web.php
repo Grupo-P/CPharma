@@ -508,3 +508,5 @@ Route::resource('/conciliaciones', 'ContConciliacionesController');
 Route::resource('/trasladoRecibir', 'TrasladoRecibirController');
 Route::get('/trasladoRecibir/{codigo_barra}/{sede}', 'TrasladoRecibirController@edit');
 Route::get('/trasladoRecibir/limpiar', 'TrasladoRecibirController@destroy');
+
+Route::resource('prepagados', 'ContPrepagadosController');

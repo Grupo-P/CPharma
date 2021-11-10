@@ -104,6 +104,14 @@
 
       @if(Auth::user()->departamento == 'TECNOLOGIA' || Auth::user()->departamento == 'GERENCIA' || Auth::user()->departamento == 'CONTABILIDAD' || Auth::user()->departamento == 'ADMINISTRACION')
           <li class="nav-item">
+            <a class="nav-link CP-Links-Menu" href="{{ url('/prepagados') }}">
+              <span data-feather="home"></span>
+              <i class="fas fa-credit-card"></i>
+              Prepagados<span class="sr-only">(current)</span>
+            </a>
+          </li>
+
+          <li class="nav-item">
             <a class="nav-link CP-Links-Menu" href="{{ url('/bancarios') }}">
               <span data-feather="home"></span>
               <i class="fas fa-credit-card"></i>

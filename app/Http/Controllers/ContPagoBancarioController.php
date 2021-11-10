@@ -6,6 +6,7 @@ use compras\Auditoria;
 use compras\Configuracion;
 use compras\ContBanco;
 use compras\ContPagoBancario;
+use compras\ContPrepagado;
 use compras\ContProveedor;
 use compras\Mail\NotificarPagoProveedor;
 use Illuminate\Http\Request;
@@ -33,6 +34,12 @@ class ContPagoBancarioController extends Controller
      */
     public function create(Request $request)
     {
+        if ($request->prepagado) {
+            $prepagado = ContPrepagado::find($request->prepagado);
+        } else {
+            $prepagado = '';
+        }
+
         if ($request->ajax()) {
             if ($request->proveedor == 1) {
                 $proveedores               = ContProveedor::find($request->id_proveedor);
@@ -94,7 +101,7 @@ class ContPagoBancarioController extends Controller
 
         $bancos = ContBanco::whereNull('deleted_at')->orderBy('alias_cuenta')->get();
 
-        return view('pages.contabilidad.bancarios.create', compact('bancos', 'proveedores'));
+        return view('pages.contabilidad.bancarios.create', compact('bancos', 'prepagado', 'proveedores'));
     }
 
     /**
@@ -191,20 +198,6 @@ class ContPagoBancarioController extends Controller
      */
     public function update(Request $request, $id)
     {
-        if ($request->prepagado == 'Si') {
-            $monto_proveedor = str_replace('.', '', $request->input('monto_proveedor'));
-            $monto_proveedor = str_replace(',', '.', $monto_proveedor);
-
-            $pago               = ContPagoBancario::find($id);
-            $pago->id_proveedor = $request->input('id_proveedor');
-            $pago->monto        = $monto_proveedor;
-            $pago->estatus      = 'Prepagado';
-            $pago->operador     = auth()->user()->name;
-            $pago->save();
-
-            return redirect('/bancarios')->with('Saved', ' Informacion');
-        }
-
         $monto = str_replace('.', '', $request->input('monto'));
         $monto = str_replace(',', '.', $monto);
 
