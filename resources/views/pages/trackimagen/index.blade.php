@@ -119,7 +119,7 @@
 		    <tr>
 		      	<th scope="col" class="CP-sticky">#</th>
 		      	<th scope="col" class="CP-sticky">Codigo Barra</th>
-                <th scope="col" class="CP-sticky">Descripcion</th>
+                <!--<th scope="col" class="CP-sticky">Descripcion</th>-->
                 <th scope="col" class="CP-sticky">URL APP</th>
 		      	<th scope="col" class="CP-sticky">Usuario</th>
 		      	<th scope="col" class="CP-sticky">Estatus</th>
@@ -134,11 +134,13 @@
 		@foreach($trackimagenes as $trackimagen)
 
             <?php
+            /*
                 $sql1 = SQL_articulo_codigoBarra($trackimagen->codigo_barra);
                 $result1 = sqlsrv_query($conn,$sql1);
                 $row1 = sqlsrv_fetch_array($result1,SQLSRV_FETCH_ASSOC);
                 $IdArticulo = $row1["IdArticulo"];
                 $Descripcion = FG_Limpiar_Texto($row1["Descripcion"]);
+            */
             ?>
 
 		    <tr>
@@ -146,12 +148,14 @@
 		      <td class="text-center">{{$trackimagen->codigo_barra}}</td>
 
             <?php
+            /*
                 echo
                 '<td align="center" class="CP-barrido">
                 <a href="/reporte2?Id='.$IdArticulo.'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
                   .$Descripcion.
                 '</a>
                 </td>';
+            */
             ?>
 
                 <td class="text-center">
