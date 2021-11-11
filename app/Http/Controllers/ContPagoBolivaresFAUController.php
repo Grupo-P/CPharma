@@ -7,6 +7,7 @@ use compras\Configuracion;
 use compras\ContCuenta;
 use compras\ContPagoBolivaresFAU as ContPagoEfectivo;
 use compras\ContProveedor;
+use compras\ContPrepagado;
 use compras\Sede;
 use Illuminate\Http\Request;
 
@@ -80,7 +81,13 @@ class ContPagoBolivaresFAUController extends Controller
             $proveedores = '';
         }
 
-        return view('pages.contabilidad.bolivaresFAU.create', compact('cuentas', 'request', 'proveedores'));
+        if ($request->prepagado) {
+            $prepagado = ContPrepagado::find($request->prepagado);
+        } else {
+            $prepagado = '';
+        }
+
+        return view('pages.contabilidad.bolivaresFAU.create', compact('cuentas', 'request', 'prepagado', 'proveedores'));
     }
 
     /**
@@ -185,6 +192,12 @@ class ContPagoBolivaresFAUController extends Controller
             $pago->save();
             $configuracion->save();
             $configuracion2->save();
+
+            if ($request->id_prepagado) {
+                $prepagado = ContPrepagado::find($request->id_prepagado);
+                $prepagado->status = 'Pagado';
+                $prepagado->save();
+            }
 
             //-------------------- AUDITORIA --------------------//
             $Auditoria           = new Auditoria();

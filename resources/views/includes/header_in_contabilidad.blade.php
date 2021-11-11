@@ -106,7 +106,7 @@
           <li class="nav-item">
             <a class="nav-link CP-Links-Menu" href="{{ url('/prepagados') }}">
               <span data-feather="home"></span>
-              <i class="fas fa-credit-card"></i>
+              <i class="fas fa-question"></i>
               Prepagados<span class="sr-only">(current)</span>
             </a>
           </li>

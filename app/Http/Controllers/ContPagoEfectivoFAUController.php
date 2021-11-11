@@ -6,7 +6,9 @@ use compras\Auditoria;
 use compras\Configuracion;
 use compras\ContCuenta;
 use compras\ContPagoEfectivoFAU as ContPagoEfectivo;
+use compras\ContPagoBancario;
 use compras\ContProveedor;
+use compras\ContPrepagado;
 use compras\Sede;
 use Illuminate\Http\Request;
 
@@ -80,7 +82,13 @@ class ContPagoEfectivoFAUController extends Controller
             $proveedores = '';
         }
 
-        return view('pages.contabilidad.efectivoFAU.create', compact('cuentas', 'request', 'proveedores'));
+        if ($request->prepagado) {
+            $prepagado = ContPrepagado::find($request->prepagado);
+        } else {
+            $prepagado = '';
+        }
+
+        return view('pages.contabilidad.efectivoFAU.create', compact('cuentas', 'request', 'prepagado', 'proveedores'));
     }
 
     /**
@@ -185,6 +193,12 @@ class ContPagoEfectivoFAUController extends Controller
             $pago->save();
             $configuracion->save();
             $configuracion2->save();
+
+            if ($request->id_prepagado) {
+                $prepagado = ContPrepagado::find($request->id_prepagado);
+                $prepagado->status = 'Pagado';
+                $prepagado->save();
+            }
 
             //-------------------- AUDITORIA --------------------//
             $Auditoria           = new Auditoria();

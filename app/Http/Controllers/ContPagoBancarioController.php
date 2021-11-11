@@ -112,17 +112,6 @@ class ContPagoBancarioController extends Controller
      */
     public function store(Request $request)
     {
-        if ($request->prepagado == 'Si') {
-            $pago               = new ContPagoBancario();
-            $pago->id_proveedor = $request->input('id_proveedor');
-            $pago->monto        = $request->input('monto');
-            $pago->estatus      = 'Prepagado';
-            $pago->operador     = auth()->user()->name;
-            $pago->save();
-
-            return redirect('/bancarios')->with('Saved', ' Informacion');
-        }
-
         $pago                    = new ContPagoBancario();
         $pago->id_proveedor      = $request->input('id_proveedor');
         $pago->id_banco          = $request->input('id_banco');
@@ -147,6 +136,12 @@ class ContPagoBancarioController extends Controller
 
         if ($request->monto_iva) {
             $proveedor->saldo_iva = (float) $proveedor->saldo_iva - (float) $request->monto_iva;
+        }
+
+        if ($request->id_prepagado) {
+            $prepagado = ContPrepagado::find($request->id_prepagado);
+            $prepagado->status = 'Pagado';
+            $prepagado->save();
         }
 
         $proveedor->save();

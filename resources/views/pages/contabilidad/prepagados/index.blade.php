@@ -73,7 +73,7 @@
     @endif
 
     <h1 class="h5 text-info">
-        <i class="fas fa-info-circle"></i>
+        <i class="fas fa-question"></i>
         Prepagados
     </h1>
 
@@ -139,13 +139,13 @@
                       <div class="dropdown-menu" aria-labelledby="payLinkMenu">
                         <a target="_target" class="dropdown-item" href="{{ '/bancarios/create?prepagado=' . $prepagado->id }}">Pagos bancarios</a>
 
-                        <a target="_target" class="dropdown-item" href="{{ '/efectivoFTN/create?prepagado=' . $prepagado->id }}">Efectivo dólares FTN</a>
-                        <a target="_target" class="dropdown-item" href="{{ '/efectivoFAU/create?prepagado=' . $prepagado->id }}">Efectivo dólares FAU</a>
-                        <a target="_target" class="dropdown-item" href="{{ '/efectivoFLL/create?prepagado=' . $prepagado->id }}">Efectivo dólares FLL</a>
+                        <a target="_target" class="dropdown-item" href="{{ '/efectivoFTN/create?tipo=proveedores&prepagado=' . $prepagado->id }}">Efectivo dólares FTN</a>
+                        <a target="_target" class="dropdown-item" href="{{ '/efectivoFAU/create?tipo=proveedores&prepagado=' . $prepagado->id }}">Efectivo dólares FAU</a>
+                        <a target="_target" class="dropdown-item" href="{{ '/efectivoFLL/create?tipo=proveedores&prepagado=' . $prepagado->id }}">Efectivo dólares FLL</a>
 
-                        <a target="_target" class="dropdown-item" href="{{ '/bolivaresFTN/create?prepagado=' . $prepagado->id }}">Efectivo bolívares FTN</a>
-                        <a target="_target" class="dropdown-item" href="{{ '/bolivaresFAU/create?prepagado=' . $prepagado->id }}">Efectivo bolívares FAU</a>
-                        <a target="_target" class="dropdown-item" href="{{ '/bolivaresFLL/create?prepagado=' . $prepagado->id }}">Efectivo bolívares FLL</a>
+                        <a target="_target" class="dropdown-item" href="{{ '/bolivaresFTN/create?tipo=proveedores&prepagado=' . $prepagado->id }}">Efectivo bolívares FTN</a>
+                        <a target="_target" class="dropdown-item" href="{{ '/bolivaresFAU/create?tipo=proveedores&prepagado=' . $prepagado->id }}">Efectivo bolívares FAU</a>
+                        <a target="_target" class="dropdown-item" href="{{ '/bolivaresFLL/create?tipo=proveedores&prepagado=' . $prepagado->id }}">Efectivo bolívares FLL</a>
                       </div>
                     </div>
                   @endif

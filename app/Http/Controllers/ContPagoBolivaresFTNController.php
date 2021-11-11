@@ -6,6 +6,7 @@ use compras\Auditoria;
 use compras\Configuracion;
 use compras\ContCuenta;
 use compras\ContPagoBolivaresFTN as ContPagoEfectivo;
+use compras\ContPrepagado;
 use compras\ContProveedor;
 use compras\Sede;
 use Illuminate\Http\Request;
@@ -80,7 +81,13 @@ class ContPagoBolivaresFTNController extends Controller
             $proveedores = '';
         }
 
-        return view('pages.contabilidad.bolivaresFTN.create', compact('cuentas', 'request', 'proveedores'));
+        if ($request->prepagado) {
+            $prepagado = ContPrepagado::find($request->prepagado);
+        } else {
+            $prepagado = '';
+        }
+
+        return view('pages.contabilidad.bolivaresFTN.create', compact('cuentas', 'request', 'prepagado', 'proveedores'));
     }
 
     /**
@@ -185,6 +192,12 @@ class ContPagoBolivaresFTNController extends Controller
             $pago->save();
             $configuracion->save();
             $configuracion2->save();
+
+            if ($request->id_prepagado) {
+                $prepagado = ContPrepagado::find($request->id_prepagado);
+                $prepagado->status = 'Pagado';
+                $prepagado->save();
+            }
 
             //-------------------- AUDITORIA --------------------//
             $Auditoria           = new Auditoria();
