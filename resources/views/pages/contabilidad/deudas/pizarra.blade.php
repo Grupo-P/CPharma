@@ -83,9 +83,9 @@
                     SELECT
                         DATE(created_at) AS created_at
                     FROM
-                        cont_pagos_bancarios
+                        cont_prepagados
                     WHERE
-                        id_proveedor = '{$id_proveedor}' AND estatus = 'Prepagado'
+                        id_proveedor = '{$id_proveedor}' AND status = 'Pendiente'
                     ORDER BY
                         created_at DESC
                     LIMIT 1
@@ -180,9 +180,9 @@
                     SELECT
                         DATE(created_at) AS created_at
                     FROM
-                        cont_pagos_bancarios
+                        cont_prepagados
                     WHERE
-                        id_proveedor = '{$id_proveedor}' AND estatus = 'Prepagado'
+                        id_proveedor = '{$id_proveedor}' AND status = 'Pendiente'
                     ORDER BY
                         created_at DESC
                     LIMIT 1
@@ -483,7 +483,6 @@
                 <th scope="col" class="CP-sticky">#</th>
                 <th scope="col" class="CP-sticky">Nombre del proveedor</th>
                 <th scope="col" class="CP-sticky">Saldo</th>
-                <th scope="col" class="CP-sticky">Tasa</th>
                 <th scope="col" class="CP-sticky">Fecha último pago</th>
                 <th scope="col" class="CP-sticky">Días último pago</th>
                 <th scope="col" class="CP-sticky">Fecha último ingreso</th>
@@ -523,7 +522,6 @@
                         <a href="{{ $url }}" style="text-decoration: none; color: black;" target="_blank">{{ $prepagado->proveedor }}</a>
                     </td>
                     <td align="center">{{ $prepagado->saldo }}</td>
-                    <td align="center">{{ $prepagado->tasa }}</td>
                     <td align="center">{{ fecha_ultimo_pago($prepagado->id_proveedor, 'prepagado') }}</td>
                     <td align="center">{{ dias_ultimo_pago($prepagado->id_proveedor, 'prepagado') }}</td>
                     <td align="center">{{ fecha_ultimo_ingreso($prepagado->id_proveedor, 'prepagado') }}</td>

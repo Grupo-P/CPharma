@@ -289,13 +289,14 @@ class ContDeudasController extends Controller
             SELECT
                 cont_proveedores.id AS id_proveedor,
                 cont_proveedores.nombre_proveedor AS proveedor,
-                FORMAT(cont_pagos_bancarios.monto, 2, 'en_US') AS saldo,
-                cont_pagos_bancarios.monto AS saldoNoFormateado,
-                cont_pagos_bancarios.tasa AS tasa
+                FORMAT(cont_prepagados.monto, 2, 'en_US') AS saldo,
+                cont_prepagados.monto AS saldoNoFormateado
             FROM
-                cont_pagos_bancarios LEFT JOIN cont_proveedores ON cont_pagos_bancarios.id_proveedor = cont_proveedores.id
+                cont_prepagados LEFT JOIN cont_proveedores ON cont_prepagados.id_proveedor = cont_proveedores.id
             WHERE
-                cont_pagos_bancarios.estatus = 'Prepagado'
+                cont_prepagados.status = 'Pendiente'
+            GROUP BY
+                cont_prepagados.id
         ");
 
         return view('pages.contabilidad.deudas.pizarra', compact('positivos', 'negativos', 'prepagados'));
