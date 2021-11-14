@@ -408,6 +408,8 @@ Route::get('surtido/{surtido}/anular', 'SurtidoController@anular');
 Route::resource('trackimagen', 'TrackImagenController');
 Route::get('/procesarTxt', 'TrackImagenController@procesarTxt');
 
+Route::get('/syncategorias', 'CategorizacionController@syncategorias');
+
 //***************************** RRHH routing *****************************//
 Route::resource('candidatos', 'RH_CandidatoController');
 Route::get('/procesos_candidatos', 'RH_CandidatoController@procesos');

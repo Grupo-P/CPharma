@@ -1189,10 +1189,17 @@
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link CP-Links-Menu" href="{{ url('/trackimagen') }}">
+        <a class="nav-link CP-Links-Menu" href="{{ url('trackimagen') }}">
           <span data-feather="home"></span>
           <i class="fas fa-upload"></i>
             Track Imagen<span class="sr-only">(current)</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a target="_blank" class="nav-link CP-Links-Menu" href="{{ url('/syncategorias') }}">
+          <span data-feather="home"></span>
+          <i class="fa fa-sync"></i>
+            Sincronizar categorias<span class="sr-only">(current)</span>
         </a>
       </li>
       <li class="nav-item">

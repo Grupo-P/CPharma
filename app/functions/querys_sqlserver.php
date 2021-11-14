@@ -1840,26 +1840,29 @@
 
   function SQL_articulo_codigoBarra($codigoBarra){
       $sql="
-        SELECT
-        --Id Articulo
-        InvArticulo.Id AS IdArticulo,
-        --Codigo de Barra
-        (SELECT CodigoBarra
-        FROM InvCodigoBarra
-        WHERE InvCodigoBarra.InvArticuloId = InvArticulo.Id
-        AND InvCodigoBarra.EsPrincipal = 1) AS CodigoBarra,
-        --Descripcion
-        InvArticulo.Descripcion
-        --Tabla principal
-        FROM InvArticulo
-        WHERE (SELECT CodigoBarra
-        FROM InvCodigoBarra
-        WHERE InvCodigoBarra.InvArticuloId = InvArticulo.Id
-        AND InvCodigoBarra.EsPrincipal = 1) = '$codigoBarra'
-        --Agrupamientos
-        GROUP BY InvArticulo.Id,InvArticulo.Descripcion
-        --Ordanamiento
-        ORDER BY IdArticulo ASC
+      SELECT
+      --Id Articulo
+      InvArticulo.Id AS id_articulo,
+      InvArticulo.CodigoArticulo as codigo_interno,
+      --Codigo de Barra
+      (SELECT CodigoBarra
+      FROM InvCodigoBarra
+      WHERE InvCodigoBarra.InvArticuloId = InvArticulo.Id
+      AND InvCodigoBarra.EsPrincipal = 1) AS codigo_barra,
+      --Descripcion
+      InvArticulo.Descripcion as descripcion,
+      --Marca
+      (SELECT InvMarca.Nombre FROM InvMarca WHERE InvMarca.Id = InvArticulo.InvMarcaId) as marca
+      --Tabla principal
+      FROM InvArticulo
+      WHERE (SELECT CodigoBarra
+      FROM InvCodigoBarra
+      WHERE InvCodigoBarra.InvArticuloId = InvArticulo.Id
+      AND InvCodigoBarra.EsPrincipal = 1) = '$codigoBarra'
+      --Agrupamientos
+      GROUP BY InvArticulo.Id,InvArticulo.Descripcion,InvArticulo.InvMarcaId,InvArticulo.CodigoArticulo
+      --Ordanamiento
+      ORDER BY id_articulo ASC
       ";
     return $sql;
   }
