@@ -257,7 +257,14 @@ class CategorizacionController extends Controller
             }
 
             echo"<pre>";
-            echo"<br>* * * * * * * * * * Total Evaluados ".count($dataCategories)." * * * * * * * * * *<br>";
+            echo"<br>* * * * * * * * * * Resumen * * * * * * * * * *<br>";
+            echo"<br>* * * * * * * * * * Evaluados ".count($dataCategories)." * * * * * * * * * *<br>";
+            echo"<br>* * * * * * * * * * Creados ".count($arrNuevos)." * * * * * * * * * *<br>";
+            echo"<br>* * * * * * * * * * Actualizados ".count($arrActualizados)." * * * * * * * * * *<br>";
+            echo"<br>* * * * * * * * * * Iguales ".count($arrIguales)." * * * * * * * * * *<br>";
+            echo"<br>* * * * * * * * * * Errores ".count($arrErrores)." * * * * * * * * * *<br>";
+
+            echo"<br>* * * * * * * * * * Detallado * * * * * * * * * *<br>";
 
             echo"<br>* * * * * * * * * * Creados ".count($arrNuevos)." * * * * * * * * * *<br>";
             print_r($arrNuevos);
