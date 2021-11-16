@@ -139,7 +139,7 @@
           </span>
         </td>
         <td>{{number_format($pago->ingresos, 2, ',', '.')}}</td>
-        <td>{{number_format($pago->egresos, 2, ',', '.')}}</td>
+        <td>{{number_format($pago->egresos + $pago->iva, 2, ',', '.')}}</td>
         <td>{{number_format($pago->diferido, 2, ',', '.')}}</td>
         <td>{{number_format($pago->saldo_anterior, 2, ',', '.')}}</td>
         <td>{{number_format($pago->saldo_actual, 2, ',', '.')}}</td>

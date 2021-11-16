@@ -255,8 +255,11 @@
         }
 
         $total_saldo_positivo = 0;
+        $total_saldo_iva_positivo = 0;
         $total_saldo_negativo = 0;
-        $total_saldo_prepagado = 0;
+        $total_saldo_iva_negativo = 0;
+        $total_monto_prepagado = 0;
+        $total_monto_iva_prepagado = 0;
     @endphp
 
     <h1 class="h5 text-info">
@@ -335,6 +338,7 @@
                 <th scope="col" class="CP-sticky">#</th>
                 <th scope="col" class="CP-sticky">Nombre del proveedor</th>
                 <th scope="col" class="CP-sticky">Saldo</th>
+                <th scope="col" class="CP-sticky">Saldo IVA</th>
                 <th scope="col" class="CP-sticky">Tasa</th>
                 <th scope="col" class="CP-sticky">Fecha último pago</th>
                 <th scope="col" class="CP-sticky">Días último pago</th>
@@ -354,6 +358,8 @@
                     $url = '/reportes/movimientos-por-proveedor?id_proveedor=' . $positivo->id_proveedor . '&fechaInicio=' . $fechaInicio . '&fechaFin=' . $fechaFinal;
 
                     $total_saldo_positivo = $total_saldo_positivo + (float) $positivo->saldoNoFormateado;
+
+                    $total_saldo_iva_positivo = $total_saldo_iva_positivo + (float) $positivo->saldoIvaNoFormateado;
 
                     if (dias_ultimo_ingreso($positivo->id_proveedor) >= 10 && dias_ultimo_ingreso($positivo->id_proveedor) <= 19) {
                         $fondo = 'bg-success';
@@ -375,6 +381,7 @@
                         <a href="{{ $url }}" style="text-decoration: none; color: black;" target="_blank">{{ $positivo->proveedor }}</a>
                     </td>
                     <td align="center">{{ $positivo->saldo }}</td>
+                    <td align="center">{{ $positivo->saldo_iva }}</td>
                     <td align="center">{{ $positivo->tasa }}</td>
                     <td align="center">{{ fecha_ultimo_pago($positivo->id_proveedor) }}</td>
                     <td align="center">{{ dias_ultimo_pago($positivo->id_proveedor) }}</td>
@@ -389,6 +396,7 @@
                 <td align="center"></td>
                 <td align="center"><b>Saldo total</b></td>
                 <td align="center"><b>{{ number_format($total_saldo_positivo, 2, ',', '.') }}</b></td>
+                <td align="center"><b>{{ number_format($total_saldo_iva_positivo, 2, ',', '.') }}</b></td>
             </tr>
         </tfoot>
     </table>
@@ -409,6 +417,7 @@
                 <th scope="col" class="CP-sticky">#</th>
                 <th scope="col" class="CP-sticky">Nombre del proveedor</th>
                 <th scope="col" class="CP-sticky">Saldo</th>
+                <th scope="col" class="CP-sticky">Saldo IVA</th>
                 <th scope="col" class="CP-sticky">Tasa</th>
                 <th scope="col" class="CP-sticky">Fecha último pago</th>
                 <th scope="col" class="CP-sticky">Días último pago</th>
@@ -428,6 +437,8 @@
                     $url = '/reportes/movimientos-por-proveedor?id_proveedor=' . $negativo->id_proveedor . '&fechaInicio=' . $fechaInicio . '&fechaFin=' . $fechaFinal;
 
                     $total_saldo_negativo = $total_saldo_negativo + (float) $negativo->saldoNoFormateado;
+
+                    $total_saldo_iva_negativo = $total_saldo_iva_negativo + (float) $negativo->saldoIvaNoFormateado;
 
                     if (dias_ultimo_ingreso($negativo->id_proveedor) > 0 && dias_ultimo_ingreso($negativo->id_proveedor) <= 10) {
                         $fondo = 'bg-success';
@@ -449,6 +460,7 @@
                         <a href="{{ $url }}" style="text-decoration: none; color: black;" target="_blank">{{ $negativo->proveedor }}</a>
                     </td>
                     <td align="center">{{ $negativo->saldo }}</td>
+                    <td align="center">{{ $negativo->saldo_iva }}</td>
                     <td align="center">{{ $negativo->tasa }}</td>
                     <td align="center">{{ fecha_ultimo_pago($negativo->id_proveedor) }}</td>
                     <td align="center">{{ dias_ultimo_pago($negativo->id_proveedor) }}</td>
@@ -463,6 +475,7 @@
                 <td align="center"></td>
                 <td align="center"><b>Saldo total</b></td>
                 <td align="center"><b>{{ number_format($total_saldo_negativo, 2, ',', '.') }}</b></td>
+                <td align="center"><b>{{ number_format($total_saldo_iva_negativo, 2, ',', '.') }}</b></td>
             </tr>
         </tfoot>
     </table>
@@ -482,7 +495,8 @@
             <tr class="{{ $fondo }}">
                 <th scope="col" class="CP-sticky">#</th>
                 <th scope="col" class="CP-sticky">Nombre del proveedor</th>
-                <th scope="col" class="CP-sticky">Saldo</th>
+                <th scope="col" class="CP-sticky">Monto</th>
+                <th scope="col" class="CP-sticky">Monto IVA</th>
                 <th scope="col" class="CP-sticky">Fecha último pago</th>
                 <th scope="col" class="CP-sticky">Días último pago</th>
                 <th scope="col" class="CP-sticky">Fecha último ingreso</th>
@@ -500,7 +514,9 @@
 
                     $url = '/reportes/movimientos-por-proveedor?id_proveedor=' . $prepagado->id_proveedor . '&fechaInicio=' . $fechaInicio . '&fechaFin=' . $fechaFinal;
 
-                    $total_saldo_prepagado = $total_saldo_prepagado + (float) $prepagado->saldoNoFormateado;
+                    $total_monto_prepagado = $total_monto_prepagado + (float) $prepagado->montoNoFormateado;
+
+                    $total_monto_iva_prepagado = $total_monto_iva_prepagado + (float) $prepagado->montoIvaNoFormateado;
 
                     if (dias_ultimo_pago($prepagado->id_proveedor) > 0 && dias_ultimo_pago($prepagado->id_proveedor) <= 10) {
                         $fondo = 'bg-success';
@@ -521,7 +537,8 @@
                     <td align="center" class="CP-barrido">
                         <a href="{{ $url }}" style="text-decoration: none; color: black;" target="_blank">{{ $prepagado->proveedor }}</a>
                     </td>
-                    <td align="center">{{ $prepagado->saldo }}</td>
+                    <td align="center">{{ $prepagado->monto }}</td>
+                    <td align="center">{{ $prepagado->monto_iva }}</td>
                     <td align="center">{{ fecha_ultimo_pago($prepagado->id_proveedor, 'prepagado') }}</td>
                     <td align="center">{{ dias_ultimo_pago($prepagado->id_proveedor, 'prepagado') }}</td>
                     <td align="center">{{ fecha_ultimo_ingreso($prepagado->id_proveedor, 'prepagado') }}</td>
@@ -534,7 +551,8 @@
             <tr>
                 <td align="center"></td>
                 <td align="center"><b>Saldo total</b></td>
-                <td align="center"><b>{{ number_format($total_saldo_prepagado, 2, ',', '.') }}</b></td>
+                <td align="center"><b>{{ number_format($total_monto_prepagado, 2, ',', '.') }}</b></td>
+                <td align="center"><b>{{ number_format($total_monto_iva_prepagado, 2, ',', '.') }}</b></td>
             </tr>
         </tfoot>
     </table>

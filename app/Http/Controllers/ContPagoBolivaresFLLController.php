@@ -172,13 +172,19 @@ class ContPagoBolivaresFLLController extends Controller
                     $monto = $request->input('monto');
                 }
 
+                if ($proveedor->moneda_iva != 'Dólares') {
+                    $monto_iva = $request->input('monto_iva') * $request->input('tasa');
+                } else {
+                    $monto_iva = $request->input('monto_iva');
+                }
+
                 $pago->iva = $request->monto_iva;
                 $pago->retencion_deuda_1 = $request->retencion_deuda_1;
                 $pago->retencion_deuda_2 = $request->retencion_deuda_2;
                 $pago->retencion_iva = $request->retencion_iva;
 
                 $proveedor->saldo = (float) $proveedor->saldo - (float) $monto;
-                $proveedor->saldo_iva = (float) $proveedor->saldo_iva - (float) $request->monto_iva;
+                $proveedor->saldo_iva = (float) $proveedor->saldo_iva - (float) $monto_iva;
                 $proveedor->save();
 
                 $pago->tasa = $request->input('tasa');

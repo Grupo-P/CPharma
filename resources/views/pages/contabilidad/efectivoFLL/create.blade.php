@@ -219,7 +219,7 @@
                     </td>
 
                     <td colspan="4">
-                        <label for="comentario">Comentario</label>
+                        <label for="comentario">Comentario *</label>
                         <input class="form-control" maxlength="200" minlength="5" name="comentario" type="text" required>
                     </td>
                 </tr>
@@ -360,6 +360,8 @@
 
                       activar_tasa();
                       activar_tasa_iva();
+
+                      reintentar = 0;
 
                       $.ajax({
                           type: 'GET',

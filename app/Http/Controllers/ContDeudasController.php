@@ -228,8 +228,10 @@ class ContDeudasController extends Controller
                 SELECT
                     cont_proveedores.id AS id_proveedor,
                     cont_proveedores.nombre_proveedor AS proveedor,
-                    FORMAT(cont_proveedores.saldo + cont_proveedores.saldo_iva, 2, 'en_US') AS saldo,
-                    cont_proveedores.saldo + cont_proveedores.saldo_iva AS saldoNoFormateado,
+                    FORMAT(cont_proveedores.saldo, 2, 'en_US') AS saldo,
+                    FORMAT(cont_proveedores.saldo_iva, 2, 'en_US') AS saldo_iva,
+                    cont_proveedores.saldo AS saldoNoFormateado,
+                    cont_proveedores.saldo_iva AS saldoIvaNoFormateado,
                     tasa AS tasa
                 FROM
                     cont_proveedores
@@ -243,8 +245,10 @@ class ContDeudasController extends Controller
                 SELECT
                     cont_proveedores.id AS id_proveedor,
                     cont_proveedores.nombre_proveedor AS proveedor,
-                    FORMAT(cont_proveedores.saldo + cont_proveedores.saldo_iva, 2, 'en_US') AS saldo,
-                    cont_proveedores.saldo + cont_proveedores.saldo_iva AS saldoNoFormateado,
+                    FORMAT(cont_proveedores.saldo, 2, 'en_US') AS saldo,
+                    FORMAT(cont_proveedores.saldo_iva, 2, 'en_US') AS saldo_iva,
+                    cont_proveedores.saldo AS saldoNoFormateado,
+                    cont_proveedores.saldo_iva AS saldoIvaNoFormateado,
                     tasa AS tasa
                 FROM
                     cont_proveedores
@@ -258,8 +262,10 @@ class ContDeudasController extends Controller
                 SELECT
                     cont_proveedores.id AS id_proveedor,
                     cont_proveedores.nombre_proveedor AS proveedor,
-                    FORMAT(cont_proveedores.saldo + cont_proveedores.saldo_iva, 2, 'en_US') AS saldo,
-                    cont_proveedores.saldo + cont_proveedores.saldo_iva AS saldoNoFormateado,
+                    FORMAT(cont_proveedores.saldo, 2, 'en_US') AS saldo,
+                    FORMAT(cont_proveedores.saldo_iva, 2, 'en_US') AS saldo_iva,
+                    cont_proveedores.saldo AS saldoNoFormateado,
+                    cont_proveedores.saldo_iva AS saldoIvaNoFormateado,
                     tasa AS tasa
                 FROM
                     cont_proveedores
@@ -273,8 +279,10 @@ class ContDeudasController extends Controller
                 SELECT
                     cont_proveedores.id AS id_proveedor,
                     cont_proveedores.nombre_proveedor AS proveedor,
-                    FORMAT(cont_proveedores.saldo + cont_proveedores.saldo_iva, 2, 'en_US') AS saldo,
-                    cont_proveedores.saldo + cont_proveedores.saldo_iva AS saldoNoFormateado,
+                    FORMAT(cont_proveedores.saldo, 2, 'en_US') AS saldo,
+                    FORMAT(cont_proveedores.saldo_iva, 2, 'en_US') AS saldo_iva,
+                    cont_proveedores.saldo AS saldoNoFormateado,
+                    cont_proveedores.saldo_iva AS saldoIvaNoFormateado,
                     tasa AS tasa
                 FROM
                     cont_proveedores
@@ -289,8 +297,10 @@ class ContDeudasController extends Controller
             SELECT
                 cont_proveedores.id AS id_proveedor,
                 cont_proveedores.nombre_proveedor AS proveedor,
-                FORMAT(cont_prepagados.monto, 2, 'en_US') AS saldo,
-                cont_prepagados.monto AS saldoNoFormateado
+                FORMAT(cont_prepagados.monto, 2, 'en_US') AS monto,
+                FORMAT(cont_prepagados.monto_iva, 2, 'en_US') AS monto_iva,
+                cont_prepagados.monto AS montoNoFormateado,
+                cont_prepagados.monto_iva AS montoIvaNoFormateado
             FROM
                 cont_prepagados LEFT JOIN cont_proveedores ON cont_prepagados.id_proveedor = cont_proveedores.id
             WHERE
