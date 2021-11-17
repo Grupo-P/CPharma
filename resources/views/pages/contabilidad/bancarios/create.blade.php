@@ -71,7 +71,7 @@
                             </label>
 
                             <input autofocus class="form-control" id="proveedores" type="text" value="{{ ($prepagado != '') ? $prepagado->proveedor->nombre_proveedor . ' | ' . $prepagado->proveedor->rif_ci : '' }}" required>
-                            <input name="id_proveedor" type="hidden" required>
+                            <input name="id_proveedor" type="hidden" value="{{ ($prepagado != '') ? $prepagado->proveedor->id : '' }}" required>
                         </td>
 
                         <td>

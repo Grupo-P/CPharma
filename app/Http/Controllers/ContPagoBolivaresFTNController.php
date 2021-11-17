@@ -114,8 +114,8 @@ class ContPagoBolivaresFTNController extends Controller
                     $configuracion->valor += $request->input('monto');
                     $pago->concepto = $request->input('concepto');
 
-                    if ($request->id_proveedor && $request->pago_real_iva) {
-                        $configuracion->valor += $request->input('pago_real_iva');
+                    if ($request->id_proveedor && $request->pago_iva_real) {
+                        $configuracion->valor += $request->input('pago_iva_real');
                     }
 
                     break;
@@ -125,8 +125,8 @@ class ContPagoBolivaresFTNController extends Controller
                     $pago->concepto = $request->input('concepto');
                     $pago->estatus  = 'PAGADO';
 
-                    if ($request->id_proveedor && $request->pago_real_iva) {
-                        $configuracion->valor -= $request->input('pago_real_iva');
+                    if ($request->id_proveedor && $request->pago_iva_real) {
+                        $configuracion->valor -= $request->input('pago_iva_real');
                     }
 
                     break;
@@ -142,9 +142,9 @@ class ContPagoBolivaresFTNController extends Controller
                     $pago->diferido_actual = $configuracion2->valor;
                     $pago->concepto        = $request->input('concepto') . " - DIFERIDO";
 
-                    if ($request->id_proveedor && $request->pago_real_iva) {
-                        $configuracion->valor -= $request->input('pago_real_iva');
-                        $configuracion2->valor += $request->input('pago_real_iva');
+                    if ($request->id_proveedor && $request->pago_iva_real) {
+                        $configuracion->valor -= $request->input('pago_iva_real');
+                        $configuracion2->valor += $request->input('pago_iva_real');
                     }
 
                     break;
@@ -178,12 +178,12 @@ class ContPagoBolivaresFTNController extends Controller
                     $monto_iva = $request->input('monto_iva');
                 }
 
-                $pago->iva = $request->monto_iva;
+                $pago->iva               = $request->monto_iva;
                 $pago->retencion_deuda_1 = $request->retencion_deuda_1;
                 $pago->retencion_deuda_2 = $request->retencion_deuda_2;
-                $pago->retencion_iva = $request->retencion_iva;
+                $pago->retencion_iva     = $request->retencion_iva;
 
-                $proveedor->saldo = (float) $proveedor->saldo - (float) $monto;
+                $proveedor->saldo     = (float) $proveedor->saldo - (float) $monto;
                 $proveedor->saldo_iva = (float) $proveedor->saldo_iva - (float) $monto_iva;
                 $proveedor->save();
 
@@ -200,7 +200,7 @@ class ContPagoBolivaresFTNController extends Controller
             $configuracion2->save();
 
             if ($request->id_prepagado) {
-                $prepagado = ContPrepagado::find($request->id_prepagado);
+                $prepagado         = ContPrepagado::find($request->id_prepagado);
                 $prepagado->status = 'Pagado';
                 $prepagado->save();
             }
@@ -283,7 +283,14 @@ class ContPagoBolivaresFTNController extends Controller
                     $monto = $diferidos->diferido;
                 }
 
-                $proveedor->saldo = (float) $proveedor->saldo + (float) $monto;
+                if ($proveedor->moneda_iva != 'Dólares') {
+                    $monto_iva = $diferidos->iva * $diferidos->tasa;
+                } else {
+                    $monto_iva = $diferidos->iva;
+                }
+
+                $proveedor->saldo     = (float) $proveedor->saldo + (float) $monto;
+                $proveedor->saldo_iva = (float) $proveedor->saldo_iva + (float) $monto_iva;
                 $proveedor->save();
             }
 

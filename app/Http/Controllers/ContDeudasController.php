@@ -223,75 +223,43 @@ class ContDeudasController extends Controller
 
     public function pizarra()
     {
-        if (!isset($_GET['tipo']) || $_GET['tipo'] == 'dolares') {
-            $positivos = DB::select("
-                SELECT
-                    cont_proveedores.id AS id_proveedor,
-                    cont_proveedores.nombre_proveedor AS proveedor,
-                    FORMAT(cont_proveedores.saldo, 2, 'en_US') AS saldo,
-                    FORMAT(cont_proveedores.saldo_iva, 2, 'en_US') AS saldo_iva,
-                    cont_proveedores.saldo AS saldoNoFormateado,
-                    cont_proveedores.saldo_iva AS saldoIvaNoFormateado,
-                    tasa AS tasa
-                FROM
-                    cont_proveedores
-                WHERE
-                    FORMAT(cont_proveedores.saldo + cont_proveedores.saldo_iva, 2, 'en_US') > 0 AND cont_proveedores.moneda = 'Dólares'
-                GROUP BY proveedor
-                ORDER BY CAST(saldo AS DOUBLE) DESC;
-            ");
+        $positivos = DB::select("
+            SELECT
+                cont_proveedores.id AS id_proveedor,
+                cont_proveedores.nombre_proveedor AS proveedor,
+                FORMAT(cont_proveedores.saldo, 2, 'en_US') AS saldo,
+                FORMAT(cont_proveedores.saldo_iva, 2, 'en_US') AS saldo_iva,
+                cont_proveedores.saldo AS saldoNoFormateado,
+                cont_proveedores.saldo_iva AS saldoIvaNoFormateado,
+                cont_proveedores.tasa AS tasa,
+                cont_proveedores.moneda AS moneda,
+                cont_proveedores.moneda_iva AS moneda_iva
+            FROM
+                cont_proveedores
+            WHERE
+                FORMAT(cont_proveedores.saldo + cont_proveedores.saldo_iva, 2, 'en_US') > 0
+            GROUP BY proveedor
+            ORDER BY CAST(saldo AS DOUBLE) DESC;
+        ");
 
-            $negativos = DB::select("
-                SELECT
-                    cont_proveedores.id AS id_proveedor,
-                    cont_proveedores.nombre_proveedor AS proveedor,
-                    FORMAT(cont_proveedores.saldo, 2, 'en_US') AS saldo,
-                    FORMAT(cont_proveedores.saldo_iva, 2, 'en_US') AS saldo_iva,
-                    cont_proveedores.saldo AS saldoNoFormateado,
-                    cont_proveedores.saldo_iva AS saldoIvaNoFormateado,
-                    tasa AS tasa
-                FROM
-                    cont_proveedores
-                WHERE
-                    FORMAT(cont_proveedores.saldo + cont_proveedores.saldo_iva, 2, 'en_US') < 0 AND cont_proveedores.moneda = 'Dólares'
-                GROUP BY proveedor
-                ORDER BY CAST(saldo AS DOUBLE) ASC;
-            ");
-        } else {
-            $positivos = DB::select("
-                SELECT
-                    cont_proveedores.id AS id_proveedor,
-                    cont_proveedores.nombre_proveedor AS proveedor,
-                    FORMAT(cont_proveedores.saldo, 2, 'en_US') AS saldo,
-                    FORMAT(cont_proveedores.saldo_iva, 2, 'en_US') AS saldo_iva,
-                    cont_proveedores.saldo AS saldoNoFormateado,
-                    cont_proveedores.saldo_iva AS saldoIvaNoFormateado,
-                    tasa AS tasa
-                FROM
-                    cont_proveedores
-                WHERE
-                    FORMAT(cont_proveedores.saldo + cont_proveedores.saldo_iva, 2, 'en_US') > 0 AND cont_proveedores.moneda = 'Bolívares'
-                GROUP BY proveedor
-                ORDER BY CAST(saldo AS DOUBLE) DESC;
-            ");
-
-            $negativos = DB::select("
-                SELECT
-                    cont_proveedores.id AS id_proveedor,
-                    cont_proveedores.nombre_proveedor AS proveedor,
-                    FORMAT(cont_proveedores.saldo, 2, 'en_US') AS saldo,
-                    FORMAT(cont_proveedores.saldo_iva, 2, 'en_US') AS saldo_iva,
-                    cont_proveedores.saldo AS saldoNoFormateado,
-                    cont_proveedores.saldo_iva AS saldoIvaNoFormateado,
-                    tasa AS tasa
-                FROM
-                    cont_proveedores
-                WHERE
-                    FORMAT(cont_proveedores.saldo + cont_proveedores.saldo_iva, 2, 'en_US') < 0 AND cont_proveedores.moneda = 'Bolívares'
-                GROUP BY proveedor
-                ORDER BY CAST(saldo AS DOUBLE) ASC;
-            ");
-        }
+        $negativos = DB::select("
+            SELECT
+                cont_proveedores.id AS id_proveedor,
+                cont_proveedores.nombre_proveedor AS proveedor,
+                FORMAT(cont_proveedores.saldo, 2, 'en_US') AS saldo,
+                FORMAT(cont_proveedores.saldo_iva, 2, 'en_US') AS saldo_iva,
+                cont_proveedores.saldo AS saldoNoFormateado,
+                cont_proveedores.saldo_iva AS saldoIvaNoFormateado,
+                cont_proveedores.tasa AS tasa,
+                cont_proveedores.moneda AS moneda,
+                cont_proveedores.moneda_iva AS moneda_iva
+            FROM
+                cont_proveedores
+            WHERE
+                FORMAT(cont_proveedores.saldo + cont_proveedores.saldo_iva, 2, 'en_US') < 0
+            GROUP BY proveedor
+            ORDER BY CAST(saldo AS DOUBLE) ASC;
+        ");
 
         $prepagados = DB::select("
             SELECT
@@ -300,7 +268,9 @@ class ContDeudasController extends Controller
                 FORMAT(cont_prepagados.monto, 2, 'en_US') AS monto,
                 FORMAT(cont_prepagados.monto_iva, 2, 'en_US') AS monto_iva,
                 cont_prepagados.monto AS montoNoFormateado,
-                cont_prepagados.monto_iva AS montoIvaNoFormateado
+                cont_prepagados.monto_iva AS montoIvaNoFormateado,
+                cont_proveedores.moneda AS moneda,
+                cont_proveedores.moneda_iva AS moneda_iva
             FROM
                 cont_prepagados LEFT JOIN cont_proveedores ON cont_prepagados.id_proveedor = cont_proveedores.id
             WHERE

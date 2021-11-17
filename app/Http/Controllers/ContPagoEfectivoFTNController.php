@@ -114,8 +114,8 @@ class ContPagoEfectivoFTNController extends Controller
                     $configuracion->valor += $request->input('monto');
                     $pago->concepto = $request->input('concepto');
 
-                    if ($request->id_proveedor && $request->pago_real_iva) {
-                        $configuracion->valor += $request->input('pago_real_iva');
+                    if ($request->id_proveedor && $request->pago_iva_real) {
+                        $configuracion->valor += $request->input('pago_iva_real');
                     }
 
                     break;
@@ -125,8 +125,8 @@ class ContPagoEfectivoFTNController extends Controller
                     $pago->concepto = $request->input('concepto');
                     $pago->estatus  = 'PAGADO';
 
-                    if ($request->id_proveedor && $request->pago_real_iva) {
-                        $configuracion->valor -= $request->input('pago_real_iva');
+                    if ($request->id_proveedor && $request->pago_iva_real) {
+                        $configuracion->valor -= $request->input('pago_iva_real');
                     }
 
                     break;
@@ -142,9 +142,9 @@ class ContPagoEfectivoFTNController extends Controller
                     $pago->diferido_actual = $configuracion2->valor;
                     $pago->concepto        = $request->input('concepto') . " - DIFERIDO";
 
-                    if ($request->id_proveedor && $request->pago_real_iva) {
-                        $configuracion->valor -= $request->input('pago_real_iva');
-                        $configuracion2->valor += $request->input('pago_real_iva');
+                    if ($request->id_proveedor && $request->pago_iva_real) {
+                        $configuracion->valor -= $request->input('pago_iva_real');
+                        $configuracion2->valor += $request->input('pago_iva_real');
                     }
 
                     break;
@@ -283,10 +283,10 @@ class ContPagoEfectivoFTNController extends Controller
                     $monto = $diferidos->diferido;
                 }
 
-                if ($proveedor->moneda != 'Dólares') {
-                    $monto_iva = $diferidos->monto_iva * $diferidos->tasa;
+                if ($proveedor->moneda_iva != 'Dólares') {
+                    $monto_iva = $diferidos->iva * $diferidos->tasa;
                 } else {
-                    $monto_iva = $diferidos->monto_iva;
+                    $monto_iva = $diferidos->iva;
                 }
 
                 $proveedor->saldo     = (float) $proveedor->saldo + (float) $monto;

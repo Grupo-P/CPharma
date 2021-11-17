@@ -6,6 +6,8 @@
 
 @section('content')
     @php
+        include app_path() . '/functions/functions_contabilidad.php';
+
         function fecha_ultimo_pago($id_proveedor, $prepagado = '')
         {
             $tabla = (isset($_GET['tipo']) && $_GET['tipo'] == 'dolares') ? 'cont_pagos_efectivo' : 'cont_pagos_bolivares';
@@ -254,26 +256,33 @@
             }
         }
 
-        $total_saldo_positivo = 0;
-        $total_saldo_iva_positivo = 0;
-        $total_saldo_negativo = 0;
-        $total_saldo_iva_negativo = 0;
-        $total_monto_prepagado = 0;
-        $total_monto_iva_prepagado = 0;
+        $total_positivos_bolivares = 0;
+        $total_positivos_bolivares_iva = 0;
+
+        $total_positivos_dolares = 0;
+        $total_positivos_dolares_iva = 0;
+
+        $total_negativos_bolivares = 0;
+        $total_negativos_bolivares_iva = 0;
+
+        $total_negativos_dolares = 0;
+        $total_negativos_dolares_iva = 0;
+
+        $total_prepagado_bolivares = 0;
+        $total_prepagado_bolivares_iva = 0;
+
+        $total_prepagado_dolares = 0;
+        $total_prepagado_dolares_iva = 0;
     @endphp
 
     <h1 class="h5 text-info">
         <i class="fas fa-info-circle"></i>
-        Pizarra de deudas {{ (!isset($_GET['tipo']) || $_GET['tipo'] == 'dolares') ? 'en dólares' : 'en bolívares' }}
+        Pizarra de deudas
     </h1>
 
     <table style="width:100%;" class="CP-stickyBar">
         <tr>
-            <td style="width:30%;" align="center">
-                <a href="?tipo=bolivares" class="btn btn-outline-info btn-sm">Proveedores en bolívares</a>
-                <a href="?tipo=dolares" class="btn btn-outline-success btn-sm">Proveedores en dólares</a>
-            </td>
-            <td style="width:70%;">
+            <td style="width:100%;">
                 <div class="input-group md-form form-sm form-1 pl-0 CP-stickyBar">
                     <div class="input-group-prepend">
                         <span class="input-group-text purple lighten-3" id="basic-text1"><i class="fas fa-search text-white"
@@ -337,8 +346,8 @@
             <tr>
                 <th scope="col" class="CP-sticky">#</th>
                 <th scope="col" class="CP-sticky">Nombre del proveedor</th>
-                <th scope="col" class="CP-sticky">Saldo</th>
-                <th scope="col" class="CP-sticky">Saldo IVA</th>
+                <th scope="col" class="CP-sticky" colspan="2">Saldo</th>
+                <th scope="col" class="CP-sticky" colspan="2">Saldo IVA</th>
                 <th scope="col" class="CP-sticky">Tasa</th>
                 <th scope="col" class="CP-sticky">Fecha último pago</th>
                 <th scope="col" class="CP-sticky">Días último pago</th>
@@ -357,10 +366,6 @@
 
                     $url = '/reportes/movimientos-por-proveedor?id_proveedor=' . $positivo->id_proveedor . '&fechaInicio=' . $fechaInicio . '&fechaFin=' . $fechaFinal;
 
-                    $total_saldo_positivo = $total_saldo_positivo + (float) $positivo->saldoNoFormateado;
-
-                    $total_saldo_iva_positivo = $total_saldo_iva_positivo + (float) $positivo->saldoIvaNoFormateado;
-
                     if (dias_ultimo_ingreso($positivo->id_proveedor) >= 10 && dias_ultimo_ingreso($positivo->id_proveedor) <= 19) {
                         $fondo = 'bg-success';
                     }
@@ -373,6 +378,22 @@
                     else {
                         $fondo = '';
                     }
+
+                    if ($positivo->moneda == 'Dólares') {
+                        $total_positivos_dolares = (float) $total_positivos_dolares + (float) $positivo->saldoNoFormateado;
+                    }
+
+                    if ($positivo->moneda == 'Bolívares') {
+                        $total_positivos_bolivares = (float) $total_positivos_bolivares + (float) $positivo->saldoNoFormateado;
+                    }
+
+                    if ($positivo->moneda_iva == 'Dólares') {
+                        $total_positivos_dolares_iva = (float) $total_positivos_dolares_iva + (float) $positivo->saldoIvaNoFormateado;
+                    }
+
+                    if ($positivo->moneda_iva == 'Bolívares') {
+                        $total_positivos_bolivares_iva = (float) $total_positivos_bolivares_iva + (float) $positivo->saldoIvaNoFormateado;
+                    }
                 @endphp
 
                 <tr class="{{ $fondo }}">
@@ -380,7 +401,9 @@
                     <td align="center" class="CP-barrido">
                         <a href="{{ $url }}" style="text-decoration: none; color: black;" target="_blank">{{ $positivo->proveedor }}</a>
                     </td>
+                    <td align="center">{{ simbolo($positivo->moneda) }}</td>
                     <td align="center">{{ $positivo->saldo }}</td>
+                    <td align="center">{{ simbolo($positivo->moneda_iva) }}</td>
                     <td align="center">{{ $positivo->saldo_iva }}</td>
                     <td align="center">{{ $positivo->tasa }}</td>
                     <td align="center">{{ fecha_ultimo_pago($positivo->id_proveedor) }}</td>
@@ -394,10 +417,20 @@
         <tfoot>
             <tr>
                 <td align="center"></td>
-                <td align="center"><b>Saldo total</b></td>
-                <td align="center"><b>{{ number_format($total_saldo_positivo, 2, ',', '.') }}</b></td>
-                <td align="center"><b>{{ number_format($total_saldo_iva_positivo, 2, ',', '.') }}</b></td>
+                <td align="center"><b>Total bolívares</b></td>
+                <td align="center"></td>
+                <td align="center"><b>{{ number_format($total_positivos_bolivares, 2, ',', '.') }}</b></td>
+                <td align="center"></td>
+                <td align="center"><b>{{ number_format($total_positivos_bolivares_iva, 2, ',', '.') }}</b></td>
             </tr>
+
+            <tr>
+                <td align="center"></td>
+                <td align="center"><b>Total dólares</b></td>
+                <td align="center"></td>
+                <td align="center"><b>{{ number_format($total_positivos_dolares, 2, ',', '.') }}</b></td>
+                <td align="center"></td>
+                <td align="center"><b>{{ number_format($total_positivos_dolares_iva, 2, ',', '.') }}</b></td>
         </tfoot>
     </table>
 
@@ -416,8 +449,8 @@
             <tr class="{{ $fondo }}">
                 <th scope="col" class="CP-sticky">#</th>
                 <th scope="col" class="CP-sticky">Nombre del proveedor</th>
-                <th scope="col" class="CP-sticky">Saldo</th>
-                <th scope="col" class="CP-sticky">Saldo IVA</th>
+                <th scope="col" class="CP-sticky" colspan="2">Saldo</th>
+                <th scope="col" class="CP-sticky" colspan="2">Saldo IVA</th>
                 <th scope="col" class="CP-sticky">Tasa</th>
                 <th scope="col" class="CP-sticky">Fecha último pago</th>
                 <th scope="col" class="CP-sticky">Días último pago</th>
@@ -436,10 +469,6 @@
 
                     $url = '/reportes/movimientos-por-proveedor?id_proveedor=' . $negativo->id_proveedor . '&fechaInicio=' . $fechaInicio . '&fechaFin=' . $fechaFinal;
 
-                    $total_saldo_negativo = $total_saldo_negativo + (float) $negativo->saldoNoFormateado;
-
-                    $total_saldo_iva_negativo = $total_saldo_iva_negativo + (float) $negativo->saldoIvaNoFormateado;
-
                     if (dias_ultimo_ingreso($negativo->id_proveedor) > 0 && dias_ultimo_ingreso($negativo->id_proveedor) <= 10) {
                         $fondo = 'bg-success';
                     }
@@ -452,6 +481,22 @@
                     else {
                         $fondo = '';
                     }
+
+                    if ($negativo->moneda == 'Dólares') {
+                        $total_negativos_dolares = (float) $total_negativos_dolares + (float) $negativo->saldoNoFormateado;
+                    }
+
+                    if ($negativo->moneda == 'Bolívares') {
+                        $total_negativos_bolivares = (float) $total_negativos_bolivares + (float) $negativo->saldoNoFormateado;
+                    }
+
+                    if ($negativo->moneda_iva == 'Dólares') {
+                        $total_negativos_dolares_iva = (float) $total_negativos_dolares_iva + (float) $negativo->saldoIvaNoFormateado;
+                    }
+
+                    if ($negativo->moneda_iva == 'Bolívares') {
+                        $total_negativos_bolivares_iva = (float) $total_negativos_bolivares_iva + (float) $negativo->saldoIvaNoFormateado;
+                    }
                 @endphp
 
                 <tr class="{{ $fondo }}">
@@ -459,7 +504,9 @@
                     <td align="center" class="CP-barrido">
                         <a href="{{ $url }}" style="text-decoration: none; color: black;" target="_blank">{{ $negativo->proveedor }}</a>
                     </td>
+                    <td align="center">{{ simbolo($negativo->moneda) }}</td>
                     <td align="center">{{ $negativo->saldo }}</td>
+                    <td align="center">{{ simbolo($negativo->moneda_iva) }}</td>
                     <td align="center">{{ $negativo->saldo_iva }}</td>
                     <td align="center">{{ $negativo->tasa }}</td>
                     <td align="center">{{ fecha_ultimo_pago($negativo->id_proveedor) }}</td>
@@ -473,10 +520,20 @@
         <tfoot>
             <tr>
                 <td align="center"></td>
-                <td align="center"><b>Saldo total</b></td>
-                <td align="center"><b>{{ number_format($total_saldo_negativo, 2, ',', '.') }}</b></td>
-                <td align="center"><b>{{ number_format($total_saldo_iva_negativo, 2, ',', '.') }}</b></td>
+                <td align="center"><b>Total bolívares</b></td>
+                <td align="center"></td>
+                <td align="center"><b>{{ number_format($total_negativos_bolivares, 2, ',', '.') }}</b></td>
+                <td align="center"></td>
+                <td align="center"><b>{{ number_format($total_negativos_bolivares_iva, 2, ',', '.') }}</b></td>
             </tr>
+
+            <tr>
+                <td align="center"></td>
+                <td align="center"><b>Total dólares</b></td>
+                <td align="center"></td>
+                <td align="center"><b>{{ number_format($total_negativos_dolares, 2, ',', '.') }}</b></td>
+                <td align="center"></td>
+                <td align="center"><b>{{ number_format($total_negativos_dolares_iva, 2, ',', '.') }}</b></td>
         </tfoot>
     </table>
 
@@ -495,8 +552,8 @@
             <tr class="{{ $fondo }}">
                 <th scope="col" class="CP-sticky">#</th>
                 <th scope="col" class="CP-sticky">Nombre del proveedor</th>
-                <th scope="col" class="CP-sticky">Monto</th>
-                <th scope="col" class="CP-sticky">Monto IVA</th>
+                <th scope="col" class="CP-sticky" colspan="2">Monto</th>
+                <th scope="col" class="CP-sticky" colspan="2">Monto IVA</th>
                 <th scope="col" class="CP-sticky">Fecha último pago</th>
                 <th scope="col" class="CP-sticky">Días último pago</th>
                 <th scope="col" class="CP-sticky">Fecha último ingreso</th>
@@ -514,10 +571,6 @@
 
                     $url = '/reportes/movimientos-por-proveedor?id_proveedor=' . $prepagado->id_proveedor . '&fechaInicio=' . $fechaInicio . '&fechaFin=' . $fechaFinal;
 
-                    $total_monto_prepagado = $total_monto_prepagado + (float) $prepagado->montoNoFormateado;
-
-                    $total_monto_iva_prepagado = $total_monto_iva_prepagado + (float) $prepagado->montoIvaNoFormateado;
-
                     if (dias_ultimo_pago($prepagado->id_proveedor) > 0 && dias_ultimo_pago($prepagado->id_proveedor) <= 10) {
                         $fondo = 'bg-success';
                     }
@@ -530,6 +583,22 @@
                     else {
                         $fondo = '';
                     }
+
+                    if ($prepagado->moneda == 'Dólares') {
+                        $total_prepagado_dolares = (float) $total_prepagado_dolares + (float) $prepagado->montoNoFormateado;
+                    }
+
+                    if ($prepagado->moneda == 'Bolívares') {
+                        $total_prepagado_bolivares = (float) $total_prepagado_bolivares + (float) $prepagado->montoNoFormateado;
+                    }
+
+                    if ($prepagado->moneda_iva == 'Dólares') {
+                        $total_prepagado_dolares_iva = (float) $total_prepagado_dolares_iva + (float) $prepagado->montoIvaNoFormateado;
+                    }
+
+                    if ($prepagado->moneda_iva == 'Bolívares') {
+                        $total_prepagado_bolivares_iva = (float) $total_prepagado_bolivares_iva + (float) $prepagado->montoIvaNoFormateado;
+                    }
                 @endphp
 
                 <tr class="{{ $fondo }}">
@@ -537,7 +606,9 @@
                     <td align="center" class="CP-barrido">
                         <a href="{{ $url }}" style="text-decoration: none; color: black;" target="_blank">{{ $prepagado->proveedor }}</a>
                     </td>
+                    <td align="center">{{ simbolo($prepagado->moneda) }}</td>
                     <td align="center">{{ $prepagado->monto }}</td>
+                    <td align="center">{{ simbolo($prepagado->moneda_iva) }}</td>
                     <td align="center">{{ $prepagado->monto_iva }}</td>
                     <td align="center">{{ fecha_ultimo_pago($prepagado->id_proveedor, 'prepagado') }}</td>
                     <td align="center">{{ dias_ultimo_pago($prepagado->id_proveedor, 'prepagado') }}</td>
@@ -550,10 +621,20 @@
         <tfoot>
             <tr>
                 <td align="center"></td>
-                <td align="center"><b>Saldo total</b></td>
-                <td align="center"><b>{{ number_format($total_monto_prepagado, 2, ',', '.') }}</b></td>
-                <td align="center"><b>{{ number_format($total_monto_iva_prepagado, 2, ',', '.') }}</b></td>
+                <td align="center"><b>Total bolívares</b></td>
+                <td align="center"></td>
+                <td align="center"><b>{{ number_format($total_prepagado_bolivares, 2, ',', '.') }}</b></td>
+                <td align="center"></td>
+                <td align="center"><b>{{ number_format($total_prepagado_bolivares_iva, 2, ',', '.') }}</b></td>
             </tr>
+
+            <tr>
+                <td align="center"></td>
+                <td align="center"><b>Total dólares</b></td>
+                <td align="center"></td>
+                <td align="center"><b>{{ number_format($total_prepagado_dolares, 2, ',', '.') }}</b></td>
+                <td align="center"></td>
+                <td align="center"><b>{{ number_format($total_prepagado_dolares_iva, 2, ',', '.') }}</b></td>
         </tfoot>
     </table>
 
