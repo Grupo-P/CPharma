@@ -228,19 +228,22 @@ class CategorizacionController extends Controller
                         ($categorizacion[0]->codigo_subcategoria != $dataCategory["codigo_subcategoria"])
                     ){
                         //echo "<br><br>Categoria o Subcategoria diferentes";
-                        $categorizacion[0]->codigo_categoria = $dataCategory["codigo_categoria"];
-                        $categorizacion[0]->codigo_subcategoria = $dataCategory["codigo_subcategoria"];
-                        $categorizacion[0]->estatus = "ACTIVO";
-                        $categorizacion[0]->user = "SYSTEM";
-                        $categorizacion[0]->save();
+                        //Si las categorias y subcategorias del json son diferentes a sin categorizacion
+                        if($dataCategory["codigo_categoria"]!="1" && $dataCategory["codigo_subcategoria"]!="1.1"){
+                            $categorizacion[0]->codigo_categoria = $dataCategory["codigo_categoria"];
+                            $categorizacion[0]->codigo_subcategoria = $dataCategory["codigo_subcategoria"];
+                            $categorizacion[0]->estatus = "ACTIVO";
+                            $categorizacion[0]->user = "SYSTEM";
+                            $categorizacion[0]->save();
 
-                        $actualizado = array(
-                            "codigo_barra"=>$dataCategory["codigo_barra"],
-                            "Categoria" => $dataCategory["codigo_categoria"],
-                            "Subcategoria" => $dataCategory["codigo_subcategoria"],
-                            "Mensaje" => "Categoriacion creada con exito"
-                        );
-                        array_push($arrActualizados,$actualizado);
+                            $actualizado = array(
+                                "codigo_barra"=>$dataCategory["codigo_barra"],
+                                "Categoria" => $dataCategory["codigo_categoria"],
+                                "Subcategoria" => $dataCategory["codigo_subcategoria"],
+                                "Mensaje" => "Categoriacion creada con exito"
+                            );
+                            array_push($arrActualizados,$actualizado);
+                        }
                     }
                     elseif(
                         ($categorizacion[0]->codigo_categoria == $dataCategory["codigo_categoria"])&&
