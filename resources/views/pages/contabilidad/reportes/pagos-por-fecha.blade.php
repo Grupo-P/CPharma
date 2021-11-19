@@ -116,26 +116,26 @@
 
                         <td class="text-center">
                             @if($pago->monto)
-                                {{ number_format($pago->monto, 2, ',', '.') }}
+                                {{ ($pago->iva) ? number_format($pago->monto + $pago->iva, 2, ',', '.') : $pago->monto }}
 
-                                @php $monto = $pago->monto @endphp
+                                @php $monto = ($pago->iva) ? $pago->monto + $pago->iva : $pago->monto @endphp
                             @endif
 
                             @if($pago->egresos)
                                 {{ number_format($pago->egresos, 2, ',', '.') }}
 
-                                @php $monto = $pago->egresos @endphp
+                                @php $monto = ($pago->iva) ? $pago->egresos + $pago->iva : $pago->egresos @endphp
                             @endif
 
                             @if($pago->diferido)
                                 {{ number_format($pago->diferido, 2, ',', '.') }}
 
-                                @php $monto = $pago->diferido @endphp
+                                @php $monto = ($pago->iva) ? $pago->diferido + $pago->iva : $pago->diferido @endphp
                             @endif
                         </td>
 
                         @php
-                            $monto_proveedor = 0;
+                            $monto_proveedor_base = 0;
 
                             if (get_class($pago) == 'compras\ContPagoBancario') {
                                 if ($pago->banco) {
@@ -146,12 +146,12 @@
                             } else {
                                 if ($pago->proveedor) {
                                     if ($pago->proveedor->moneda != 'Dólares') {
-                                        $monto_proveedor = $monto * $pago->tasa;
+                                        $monto_proveedor_base = $monto * $pago->tasa;
                                     } else {
-                                        $monto_proveedor = $monto;
+                                        $monto_proveedor_base = $monto;
                                     }
                                 } else {
-                                    $monto_proveedor = $monto;
+                                    $monto_proveedor_base = $monto;
                                 }
 
                                 $url = '/efectivo' . $sede . '/soporte/' . $pago->id;
