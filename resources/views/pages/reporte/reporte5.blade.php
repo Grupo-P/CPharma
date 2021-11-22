@@ -58,39 +58,38 @@
         function agregarTraslado(codigo_barra, sede, existencia, bandera = '') {
             cantidad = prompt('Ingrese la cantidad' + bandera + ': ');
 
-            if (!parseInt(cantidad)) {
-                agregarTraslado(codigo_barra, sede, existencia, ' (sólo números enteros)');
-                return false;
-            }
-
-            if (parseInt(cantidad) <= 0) {
-                agregarTraslado(codigo_barra, sede, existencia, ' (número mayor a cero)');
-                return false;
-            }
-
-            if (parseInt(cantidad) > parseInt(existencia)) {
-                agregarTraslado(codigo_barra, sede, existencia, ' (número menor a existencia)');
-                return false;
-            }
-
-            cantidad = parseInt(cantidad);
-
-            $.ajax({
-                type: 'POST',
-                url: '/trasladoRecibir',
-                data: {
-                    codigo_barra: codigo_barra,
-                    sede: sede,
-                    cantidad: cantidad,
-                    _token: '{{ csrf_token() }}'
-                },
-                success: function (response) {
-                    toastr.success('Articulo agregado a traslado');
-                },
-                error: function (error) {
-                    $('body').html(error.responseText);
+            if (cantidad) {
+                if (!parseInt(cantidad)) {
+                    agregarTraslado(codigo_barra, sede, existencia, ' (sólo números enteros)');
+                    return false;
                 }
-            })
+
+                if (parseInt(cantidad) <= 0) {
+                    agregarTraslado(codigo_barra, sede, existencia, ' (número mayor a cero)');
+                    return false;
+                }
+
+                if (parseInt(cantidad) > parseInt(existencia)) {
+                    agregarTraslado(codigo_barra, sede, existencia, ' (número menor a existencia)');
+                    return false;
+                }
+
+                cantidad = parseInt(cantidad);
+
+                $.ajax({
+                    type: 'POST',
+                    url: '/trasladoRecibir',
+                    data: {
+                        codigo_barra: codigo_barra,
+                        sede: sede,
+                        cantidad: cantidad,
+                        _token: '{{ csrf_token() }}'
+                    },
+                    success: function (response) {
+                        toastr.success('Articulo agregado a traslado');
+                    }
+                })
+            }
         }
 
         function confirmarEliminacion(url) {
@@ -209,7 +208,7 @@
             aria-hidden="true"></i>
         </span>
       </div>
-      <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterAllTable()" autofocus="autofocus">
+      <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterAllTableWithoutFooter()" autofocus="autofocus">
     </div>
     <br/>
     ';
@@ -500,7 +499,7 @@
 
         if (isset($_GET['SEDE']) & $_GET['SEDE'] == 'FLL') {
             if ($conectividad_ftn == 1 && $descripcion_ftn != '-' && $existencia_ftn > 0) {
-                echo '<td align="center"><button type="button" onclick="agregarTraslado(\'' . $CodigoBarra . '\', \'FTN\', \'' . $existencia_ftn . '\')" class="btn btn-outline-info btn-sm">Agregar FLL</td>';
+                echo '<td align="center"><button type="button" onclick="agregarTraslado(\'' . $CodigoBarra . '\', \'FTN\', \'' . $existencia_ftn . '\')" class="btn btn-outline-info btn-sm">Agregar FTN</td>';
             } else {
                 echo '<td>-</td>';
             }
@@ -516,15 +515,19 @@
       $contador++;
     }
 
-    echo '<tr>';
-      echo '<td colspan="20"></td>';
-      echo '<td><a href="/trasladoRecibir" target="_blank" class="btn btn-outline-info btn-sm">Ver soporte</a></td>';
-      echo '<td><button type="button" onclick="confirmarEliminacion(\'/trasladoRecibir/limpiar\')" class="btn btn-outline-danger btn-sm">Limpiar todo</button></td>';
-      echo '</tr>';
+     echo '
+      </tbody>';
 
-    echo '
-      </tbody>
-    </table>';
+    echo '<tfoot>';
+    echo '<tr>';
+    echo '<td colspan="20">';
+    echo '<td colspan="2" class="nowrap"><a href="/trasladoRecibir" target="_blank" class="btn btn-outline-info btn-sm">Ver soporte</a>';
+    echo '<button type="button" onclick="confirmarEliminacion(\'/trasladoRecibir/limpiar\')" class="btn btn-outline-danger btn-sm">Limpiar todo</button></td>';
+    echo '</tr>';
+    echo '</tfoot>';
+
+    echo '</table>';
+
     sqlsrv_close($conn);
   }
   /**********************************************************************************/

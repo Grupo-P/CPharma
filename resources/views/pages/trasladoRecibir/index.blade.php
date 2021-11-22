@@ -87,7 +87,7 @@
                 <td colspan="5" class="alinear-izq">{{ date_create()->format('d/m/Y') }}</td>
                 </tr>
                 <tr>
-                <td colspan="3" class="alinear-der">Origen:</td>
+                <td colspan="3" class="alinear-der">Solicitado por:</td>
                 <td colspan="5" class="alinear-izq">
                     @php
                         if ($_SERVER['HTTP_HOST'] == 'cpharmade.com') {
@@ -113,7 +113,7 @@
                 </td>
                 </tr>
                 <tr>
-                <td colspan="3" class="alinear-der">Destino:</td>
+                <td colspan="3" class="alinear-der">Desde:</td>
                 <td colspan="5" class="alinear-izq">
                     @php
                         if ($clave == 'FTN') {

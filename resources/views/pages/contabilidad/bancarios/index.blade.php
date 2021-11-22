@@ -133,8 +133,11 @@
                 <th scope="col" class="CP-sticky" nowrap>Nombre del proveedor</th>
                 <th scope="col" class="CP-sticky" nowrap>RIF/CI del proveedor</th>
                 <th scope="col" class="CP-sticky" nowrap>Fecha de registro</th>
-                <th scope="col" class="CP-sticky" nowrap>Monto del banco</th>
-                <th scope="col" class="CP-sticky" nowrap>Monto del proveedor</th>
+                <th scope="col" class="CP-sticky" nowrap>Monto banco</th>
+                <th scope="col" class="CP-sticky" nowrap>Monto proveedor base</th>
+                <th scope="col" class="CP-sticky" nowrap>Monto proveedor IVA</th>
+                <th scope="col" class="CP-sticky" nowrap>Moneda base</th>
+                <th scope="col" class="CP-sticky" nowrap>Moneda IVA</th>
                 <th scope="col" class="CP-sticky" nowrap>Tasa</th>
                 <th scope="col" class="CP-sticky" nowrap>Estado</th>
                 <th scope="col" class="CP-sticky" nowrap>Comentario</th>
@@ -162,44 +165,11 @@
               </td>
               <td class="text-center" nowrap>{{$pago->proveedor->rif_ci}}</td>
               <td class="text-center" nowrap>{{$pago->created_at}}</td>
-              <td class="text-center" nowrap>{{ ($pago->estatus != 'Prepagado') ? number_format($pago->monto, 2, ',', '.') : ''}}</td>
-
-              @php
-                if ($pago->tasa) {
-                    if ($pago->banco->moneda != $pago->proveedor->moneda) {
-                        if ($pago->banco->moneda == 'Dólares' && $pago->proveedor->moneda == 'Bolívares') {
-                            $monto_proveedor = $pago->monto * $pago->tasa;
-                        }
-
-                        if ($pago->banco->moneda == 'Dólares' && $pago->proveedor->moneda == 'Pesos') {
-                            $monto_proveedor = $pago->monto * $pago->tasa;
-                        }
-
-                        if ($pago->banco->moneda == 'Bolívares' && $pago->proveedor->moneda == 'Dólares') {
-                            $monto_proveedor = $pago->monto / $pago->tasa;
-                        }
-
-                        if ($pago->banco->moneda == 'Bolívares' && $pago->proveedor->moneda == 'Pesos') {
-                            $monto_proveedor = $pago->monto * $pago->tasa;
-                        }
-
-                        if ($pago->banco->moneda == 'Pesos' && $pago->proveedor->moneda == 'Bolívares') {
-                            $monto_proveedor = $pago->monto / $pago->tasa;
-                        }
-
-                        if ($pago->banco->moneda == 'Pesos' && $pago->proveedor->moneda == 'Dólares') {
-                            $monto_proveedor = $pago->monto / $pago->tasa;
-                        }
-                    } else {
-                        $monto_proveedor = $pago->monto;
-                    }
-                }
-                else {
-                    $monto_proveedor = $pago->monto;
-                }
-              @endphp
-
-              <td nowrap class="text-center">{{number_format($monto_proveedor, 2, ',', '.')}}</td>
+              <td class="text-center" nowrap>{{ ($pago->estatus != 'Prepagado') ? number_format(monto_banco($pago->monto, $pago->iva, $pago->retencion_deuda_1, $pago->retencion_deuda_2, $pago->retencion_iva), 2, ',', '.') : '' }}</td>
+              <td nowrap class="text-center">{{ number_format($pago->monto, 2, ',', '.') }}</td>
+              <td nowrap class="text-center">{{ number_format($pago->iva, 2, ',', '.') }}</td>
+              <td nowrap class="text-center">{{ $pago->proveedor->moneda }}</td>
+              <td nowrap class="text-center">{{ $pago->proveedor->moneda_iva }}</td>
               <td nowrap class="text-center">{{($pago->tasa) ? number_format($pago->tasa, 2, ',', '.') : ''}}</td>
               <td nowrap class="text-center">{{$pago->estatus}}</td>
               <td nowrap class="text-center">{{$pago->comentario}}</td>
@@ -226,7 +196,7 @@
                     </a>
                 @endif
 
-                @if(Auth::user()->departamento == 'TECNOLOGIA' || Auth::user()->departamento == 'GERENCIA')
+                @if($pago->estatus != 'Prepagado' && (Auth::user()->departamento == 'TECNOLOGIA' || Auth::user()->departamento == 'GERENCIA'))
                     @if($pago->estatus != 'Reversado')
                         <form action="/bancarios/{{$pago->id}}" method="POST" style="display: inline;">
                             @method('DELETE')

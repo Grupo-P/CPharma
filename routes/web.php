@@ -236,6 +236,9 @@ Route::get('/reporte44', function() {
     return view('pages.reporte.reporte44');
 });
 
+Route::get('/reporte45', function() {
+    return view('pages.reporte.reporte45');
+});
 
 Route::get('/seccion1', function() {
     return view('pages.reporte.seccion1');
@@ -402,6 +405,11 @@ Route::resource('categorizacion', 'CategorizacionController');
 Route::resource('surtido', 'SurtidoController');
 Route::get('surtido/{surtido}/anular', 'SurtidoController@anular');
 
+Route::resource('trackimagen', 'TrackImagenController');
+Route::get('/procesarTxt', 'TrackImagenController@procesarTxt');
+
+Route::get('/syncategorias', 'CategorizacionController@syncategorias');
+
 //***************************** RRHH routing *****************************//
 Route::resource('candidatos', 'RH_CandidatoController');
 Route::get('/procesos_candidatos', 'RH_CandidatoController@procesos');
@@ -505,3 +513,5 @@ Route::resource('/conciliaciones', 'ContConciliacionesController');
 Route::resource('/trasladoRecibir', 'TrasladoRecibirController');
 Route::get('/trasladoRecibir/{codigo_barra}/{sede}', 'TrasladoRecibirController@edit');
 Route::get('/trasladoRecibir/limpiar', 'TrasladoRecibirController@destroy');
+
+Route::resource('prepagados', 'ContPrepagadosController');

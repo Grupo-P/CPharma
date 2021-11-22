@@ -61,6 +61,8 @@ class ContProveedorController extends Controller
         $proveedor->plan_cuentas         = $request->input('plan_cuentas');
         $proveedor->moneda               = $request->input('moneda');
         $proveedor->saldo                = $request->input('saldo');
+        $proveedor->moneda_iva           = $request->input('moneda_iva');
+        $proveedor->saldo_iva            = $request->input('saldo_iva');
         $proveedor->usuario_creado       = auth()->user()->name;
         $proveedor->save();
 
@@ -129,6 +131,7 @@ class ContProveedorController extends Controller
         $proveedor->tasa                 = $request->input('tasa');
         $proveedor->plan_cuentas         = $request->input('plan_cuentas');
         $proveedor->moneda               = $request->input('moneda');
+        $proveedor->moneda_iva           = $request->input('moneda_iva');
         $proveedor->save();
 
         $auditoria           = new Auditoria();

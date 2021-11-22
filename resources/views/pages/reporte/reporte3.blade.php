@@ -204,20 +204,21 @@
             <th scope="col" class="CP-sticky">Codigo de barra</th>
             <th scope="col" class="CP-sticky">Descripcion</th>
             <th scope="col" class="CP-sticky">Existencia</th>
-            <th scope="col">Precio</br>(Actual) '.SigVe.'</td>
+            <th scope="col" class="CP-sticky">Precio</br>(Actual) '.SigVe.'</td>
             <th scope="col" class="CP-sticky">Dolarizado?</td>
             <th scope="col" class="CP-sticky">Gravado?</td>
             <th scope="col" class="CP-sticky">Clasificacion</td>
             <th scope="col" class="CP-sticky">Tipo</th>
-            <th scope="col" class="CP-sticky">Total de Venta '.SigVe.'</th>
-            <th scope="col" class="CP-sticky">Veces Facturado</th>
+            <th scope="col" class="CP-sticky">Total de venta '.SigVe.'</th>
+            <th scope="col" class="CP-sticky">Veces facturado</th>
             <th scope="col" class="CP-sticky">Unidades vendidas</th>
-            <th scope="col" class="CP-sticky">Unidades Compradas</th>
+            <th scope="col" class="CP-sticky">Unidades compradas</th>
             <th scope="col" class="CP-sticky">Venta diaria</th>
             <th scope="col" class="CP-sticky bg-danger text-white">Venta diaria (Real)</th>
             <th scope="col" class="CP-sticky">Dias restantes</th>
             <th scope="col" class="CP-sticky bg-danger text-white">Dias restantes (Real)</th>
-            <th scope="col" class="CP-sticky">Ultimo Proveedor</th>
+            <th scope="col" class="CP-sticky">Ultimo proveedor</th>
+            <th scope="col" class="CP-sticky">Ultimo proveedor sede contraria</th>
             <th scope="col" class="CP-sticky">Acciones</th>
           </tr>
         </thead>
@@ -321,6 +322,36 @@
       else{
         echo '<td align="center"> - </td>';
       }
+
+
+      /* Ultimo proveedor sede contraria */
+      if(!is_null($UltimoProveedorNombre) && in_array($UltimoProveedorNombre, array_keys(siglasSegunNombre()))){
+        $siglas = siglasSegunNombre()[$UltimoProveedorNombre];
+        $connSedeContraria = FG_Conectar_Smartpharma($siglas);
+
+        if ($connSedeContraria) {
+            $sqlSedeContrario = sqlsrv_query($connSedeContraria, SQG_Detalle_Articulo_CodigoBarra($CodigoBarra));
+            $rowSedeContraria = sqlsrv_fetch_array($sqlSedeContrario,SQLSRV_FETCH_ASSOC);
+            $ultimoProveedorSedeContraria = $rowSedeContraria['UltimoProveedorNombre'];
+            $ultimoProveedorSedeContrariaId = $rowSedeContraria['UltimoProveedorID'];
+
+            if (isset($ultimoProveedorSedeContraria)) {
+                echo '<td class="CP-barrido" align="center"><a style="text-decoration: none; color: black;" target="_blank" href="/reporte7?Nombre='.$ultimoProveedorSedeContraria.'&Id='.$ultimoProveedorSedeContrariaId.'&SEDE='.$_GET['SEDE'].'">'.$ultimoProveedorSedeContraria.'</a></td>';
+            } else {
+                echo '<td align="center"> - </td>';
+            }
+        } else {
+            echo '<td align="center"> - </td>';
+        }
+      }
+      elseif(!is_null($UltimoProveedorNombre) && !in_array($UltimoProveedorNombre, array_keys(siglasSegunNombre()))){
+        echo '<td align="center"> - </td>';
+      }
+      else{
+        echo '<td align="center"> - </td>';
+      }
+      /* Ultimo proveedor sede contraria */
+
 
       /*BOTON PARA AGREGAR A LA ORDEN DE COMPRA*/
 

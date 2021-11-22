@@ -59,7 +59,7 @@
                     </tr>
 
                     <tr>
-                        <th scope="row"><label for="monto">Monto *</label></th>
+                        <th scope="row"><label for="monto">Monto subtotal (Exento + base) *</label></th>
                         <td>
                             <input type="number" step="0.01" required class="form-control" readonly value="{{ $ajuste->monto }}" name="monto">
                         </td>
@@ -73,9 +73,16 @@
                     </tr>
 
                     <tr>
-                        <th scope="row"><label for="moneda">Moneda del proveedor</label></th>
+                        <th scope="row"><label for="moneda">Moneda IVA</label></th>
                         <td>
-                            <input value="{{ $ajuste->proveedor->moneda }}" type="text" readonly class="form-control" name="moneda">
+                            <input value="{{ $ajuste->proveedor->moneda_iva }}" type="text" readonly class="form-control" name="moneda">
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <th scope="row"><label for="monto">Monto IVA</label></th>
+                        <td>
+                            <input type="number" step="0.01" required class="form-control" readonly value="{{ $ajuste->monto_iva }}" name="monto_iva">
                         </td>
                     </tr>
 

@@ -6,6 +6,7 @@ use compras\Auditoria;
 use compras\Configuracion;
 use compras\ContBanco;
 use compras\ContPagoBancario;
+use compras\ContPrepagado;
 use compras\ContProveedor;
 use compras\Mail\NotificarPagoProveedor;
 use Illuminate\Http\Request;
@@ -21,6 +22,7 @@ class ContPagoBancarioController extends Controller
      */
     public function index()
     {
+        include app_path() . '/functions/functions_contabilidad.php';
         $pagos = ContPagoBancario::orderByDesc('id')->get();
         return view('pages.contabilidad.bancarios.index', compact('pagos'));
     }
@@ -32,10 +34,18 @@ class ContPagoBancarioController extends Controller
      */
     public function create(Request $request)
     {
+        if ($request->prepagado) {
+            $prepagado = ContPrepagado::find($request->prepagado);
+        } else {
+            $prepagado = '';
+        }
+
         if ($request->ajax()) {
             if ($request->proveedor == 1) {
-                $proveedores          = ContProveedor::find($request->id_proveedor);
-                $proveedores['saldo'] = number_format($proveedores->saldo, 2, ',', '.');
+                $proveedores               = ContProveedor::find($request->id_proveedor);
+                $proveedores['saldo']      = number_format($proveedores->saldo, 2, ',', '.');
+                $proveedores['saldo_iva']  = number_format($proveedores->saldo_iva, 2, ',', '.');
+                $proveedores['moneda_iva'] = $proveedores->moneda_iva;
                 return $proveedores;
             }
 
@@ -72,24 +82,26 @@ class ContPagoBancarioController extends Controller
             }
         }
 
-        $sqlProveedores = ContProveedor::whereNull('deleted_at')->orderBy('nombre_proveedor', 'ASC')->get();
-        $i              = 0;
-        $proveedores    = [];
+        $sql         = ContProveedor::whereNull('deleted_at')->orderBy('nombre_proveedor', 'ASC')->get();
+        $i           = 0;
+        $proveedores = [];
 
-        foreach ($sqlProveedores as $proveedor) {
-            $proveedores[$i]['label']  = $proveedor->nombre_proveedor . ' | ' . $proveedor->rif_ci;
-            $proveedores[$i]['value']  = $proveedor->nombre_proveedor . ' | ' . $proveedor->rif_ci;
-            $proveedores[$i]['id']     = $proveedor->id;
-            $proveedores[$i]['moneda'] = $proveedor->moneda;
-            $proveedores[$i]['tasa']   = $proveedor->tasa;
-            $proveedores[$i]['saldo']  = number_format($proveedor->saldo, 2, ',', '');
+        foreach ($sql as $proveedor) {
+            $proveedores[$i]['label']      = $proveedor->nombre_proveedor . ' | ' . $proveedor->rif_ci;
+            $proveedores[$i]['value']      = $proveedor->nombre_proveedor . ' | ' . $proveedor->rif_ci;
+            $proveedores[$i]['id']         = $proveedor->id;
+            $proveedores[$i]['moneda']     = $proveedor->moneda;
+            $proveedores[$i]['moneda_iva'] = $proveedor->moneda_iva;
+            $proveedores[$i]['tasa']       = $proveedor->tasa;
+            $proveedores[$i]['saldo']      = number_format($proveedor->saldo, 2, ',', '');
+            $proveedores[$i]['saldo_iva']  = number_format($proveedor->saldo_iva, 2, ',', '');
 
             $i = $i + 1;
         }
 
         $bancos = ContBanco::whereNull('deleted_at')->orderBy('alias_cuenta')->get();
 
-        return view('pages.contabilidad.bancarios.create', compact('bancos', 'proveedores'));
+        return view('pages.contabilidad.bancarios.create', compact('bancos', 'prepagado', 'proveedores'));
     }
 
     /**
@@ -100,29 +112,17 @@ class ContPagoBancarioController extends Controller
      */
     public function store(Request $request)
     {
-        if ($request->prepagado == 'Si') {
-            $monto_proveedor = str_replace('.', '', $request->input('monto_proveedor'));
-            $monto_proveedor = str_replace(',', '.', $monto_proveedor);
-
-            $pago               = new ContPagoBancario();
-            $pago->id_proveedor = $request->input('id_proveedor');
-            $pago->monto        = $monto_proveedor;
-            $pago->estatus      = 'Prepagado';
-            $pago->operador     = auth()->user()->name;
-            $pago->save();
-
-            return redirect('/bancarios')->with('Saved', ' Informacion');
-        }
-
-        $monto = str_replace('.', '', $request->input('monto'));
-        $monto = str_replace(',', '.', $monto);
-
-        $pago               = new ContPagoBancario();
-        $pago->id_proveedor = $request->input('id_proveedor');
-        $pago->id_banco     = $request->input('id_banco');
-        $pago->monto        = $monto;
-        $pago->comentario   = $request->input('comentario');
-        $pago->tasa         = $request->input('tasa');
+        $pago                    = new ContPagoBancario();
+        $pago->id_proveedor      = $request->input('id_proveedor');
+        $pago->id_banco          = $request->input('id_banco');
+        $pago->monto             = $request->input('monto');
+        $pago->monto_proveedor   = $request->input('pago_deuda_real');
+        $pago->comentario        = $request->input('comentario');
+        $pago->iva               = $request->input('monto_iva');
+        $pago->retencion_deuda_1 = $request->input('retencion_deuda_1');
+        $pago->retencion_deuda_2 = $request->input('retencion_deuda_2');
+        $pago->retencion_iva     = $request->input('retencion_iva');
+        $pago->tasa              = $request->input('tasa');
 
         $pago->operador = auth()->user()->name;
         $pago->estatus  = 'Pagado';
@@ -132,35 +132,18 @@ class ContPagoBancarioController extends Controller
 
         $proveedor = ContProveedor::find($pago->id_proveedor);
 
-        if ($banco->moneda != $proveedor->moneda) {
-            if ($banco->moneda == 'Dólares' && $proveedor->moneda == 'Bolívares') {
-                $monto = $pago->monto * $pago->tasa;
-            }
+        $proveedor->saldo = (float) $proveedor->saldo - (float) $request->monto;
 
-            if ($banco->moneda == 'Dólares' && $proveedor->moneda == 'Pesos') {
-                $monto = $pago->monto * $pago->tasa;
-            }
-
-            if ($banco->moneda == 'Bolívares' && $proveedor->moneda == 'Dólares') {
-                $monto = $pago->monto / $pago->tasa;
-            }
-
-            if ($banco->moneda == 'Bolívares' && $proveedor->moneda == 'Pesos') {
-                $monto = $pago->monto * $pago->tasa;
-            }
-
-            if ($banco->moneda == 'Pesos' && $proveedor->moneda == 'Bolívares') {
-                $monto = $pago->monto / $pago->tasa;
-            }
-
-            if ($banco->moneda == 'Pesos' && $proveedor->moneda == 'Dólares') {
-                $monto = $pago->monto / $pago->tasa;
-            }
-        } else {
-            $monto = $pago->monto;
+        if ($request->monto_iva) {
+            $proveedor->saldo_iva = (float) $proveedor->saldo_iva - (float) $request->monto_iva;
         }
 
-        $proveedor->saldo = (float) $proveedor->saldo - (float) $monto;
+        if ($request->id_prepagado) {
+            $prepagado = ContPrepagado::find($request->id_prepagado);
+            $prepagado->status = 'Pagado';
+            $prepagado->save();
+        }
+
         $proveedor->save();
 
         $auditoria           = new Auditoria();
@@ -181,6 +164,7 @@ class ContPagoBancarioController extends Controller
      */
     public function show($id)
     {
+        include app_path() . '/functions/functions_contabilidad.php';
         $pago = ContPagoBancario::find($id);
         return view('pages.contabilidad.bancarios.show', compact('pago'));
     }
@@ -209,20 +193,6 @@ class ContPagoBancarioController extends Controller
      */
     public function update(Request $request, $id)
     {
-        if ($request->prepagado == 'Si') {
-            $monto_proveedor = str_replace('.', '', $request->input('monto_proveedor'));
-            $monto_proveedor = str_replace(',', '.', $monto_proveedor);
-
-            $pago               = ContPagoBancario::find($id);
-            $pago->id_proveedor = $request->input('id_proveedor');
-            $pago->monto        = $monto_proveedor;
-            $pago->estatus      = 'Prepagado';
-            $pago->operador     = auth()->user()->name;
-            $pago->save();
-
-            return redirect('/bancarios')->with('Saved', ' Informacion');
-        }
-
         $monto = str_replace('.', '', $request->input('monto'));
         $monto = str_replace(',', '.', $monto);
 
@@ -297,49 +267,36 @@ class ContPagoBancarioController extends Controller
         $banco     = ContBanco::find($pago->id_banco);
         $proveedor = ContProveedor::find($pago->id_proveedor);
 
-        if ($banco->moneda != $proveedor->moneda) {
-            if ($banco->moneda == 'Dólares' && $proveedor->moneda == 'Bolívares') {
-                $monto_proveedor = $pago->monto * $pago->tasa;
-            }
+        $tasa = $pago->tasa;
 
-            if ($banco->moneda == 'Dólares' && $proveedor->moneda == 'Pesos') {
-                $monto_proveedor = $pago->monto * $pago->tasa;
-            }
+        $monto             = ($pago->monto > 0) ? -$pago->monto : abs($pago->monto);
+        $iva               = ($pago->iva > 0) ? -$pago->iva : abs($pago->iva);
+        $retencion_deuda_1 = ($pago->retencion_deuda_1 > 0) ? $pago->retencion_deuda_1 : abs($pago->retencion_deuda_1);
+        $retencion_deuda_2 = ($pago->retencion_deuda_2 > 0) ? $pago->retencion_deuda_2 : abs($pago->retencion_deuda_2);
+        $retencion_iva     = ($pago->retencion_iva > 0) ? $pago->retencion_iva : abs($pago->retencion_iva);
 
-            if ($banco->moneda == 'Bolívares' && $proveedor->moneda == 'Dólares') {
-                $monto_proveedor = $pago->monto / $pago->tasa;
-            }
-
-            if ($banco->moneda == 'Bolívares' && $proveedor->moneda == 'Pesos') {
-                $monto_proveedor = $pago->monto * $pago->tasa;
-            }
-
-            if ($banco->moneda == 'Pesos' && $proveedor->moneda == 'Bolívares') {
-                $monto_proveedor = $pago->monto / $pago->tasa;
-            }
-
-            if ($banco->moneda == 'Pesos' && $proveedor->moneda == 'Dólares') {
-                $monto_proveedor = $pago->monto / $pago->tasa;
-            }
-        } else {
-            $monto_proveedor = $pago->monto;
-        }
-
-        $monto_proveedor = ($monto_proveedor > 0) ? -$monto_proveedor : abs($monto_proveedor);
-        $monto           = ($pago->monto > 0) ? -$pago->monto : abs($pago->monto);
-
-        $nuevoPago               = new ContPagoBancario();
-        $nuevoPago->id_proveedor = $pago->id_proveedor;
-        $nuevoPago->id_banco     = $pago->id_banco;
-        $nuevoPago->tasa         = $pago->tasa;
-        $nuevoPago->monto        = $monto;
-        $nuevoPago->comentario   = 'Reverso del pago bancario #' . $pago->id;
-        $nuevoPago->operador     = $pago->operador;
-        $nuevoPago->estatus      = 'Reversado';
+        $nuevoPago                    = new ContPagoBancario();
+        $nuevoPago->id_proveedor      = $pago->id_proveedor;
+        $nuevoPago->id_banco          = $pago->id_banco;
+        $nuevoPago->tasa              = $pago->tasa;
+        $nuevoPago->monto             = $monto;
+        $nuevoPago->iva               = $iva;
+        $nuevoPago->retencion_deuda_1 = $retencion_deuda_1;
+        $nuevoPago->retencion_deuda_2 = $retencion_deuda_2;
+        $nuevoPago->retencion_iva     = $retencion_iva;
+        $nuevoPago->tasa              = $tasa;
+        $nuevoPago->comentario        = 'Reverso del pago bancario #' . $pago->id;
+        $nuevoPago->operador          = $pago->operador;
+        $nuevoPago->estatus           = 'Reversado';
         $nuevoPago->save();
 
         $proveedor        = ContProveedor::find($pago->id_proveedor);
-        $proveedor->saldo = (float) $proveedor->saldo - (float) $monto_proveedor;
+        $proveedor->saldo = (float) $proveedor->saldo + (float) $pago->monto;
+
+        if ($pago->iva) {
+            $proveedor->saldo_iva = (float) $proveedor->saldo_iva + (float) $pago->iva;
+        }
+
         $proveedor->save();
 
         return redirect('/bancarios')->with('Deleted', ' Informacion');
@@ -371,39 +328,77 @@ class ContPagoBancarioController extends Controller
 
     public function validar(Request $request)
     {
-        $banco     = ContBanco::find($request->id_banco);
-        $proveedor = ContProveedor::find($request->id_proveedor);
-        $resultado = [];
+        if ($request->id_proveedor) {
+            $banco     = ContBanco::find($request->id_banco);
+            $proveedor = ContProveedor::find($request->id_proveedor);
+            $resultado = [];
 
-        if ($banco->moneda != $proveedor->moneda) {
-            if ($banco->moneda == 'Dólares' && $proveedor->moneda == 'Bolívares') {
-                $configuracion = Configuracion::where('variable', 'DolaresBolivares')->first();
+            if ($banco->moneda != $proveedor->moneda) {
+                if ($banco->moneda == 'Dólares' && $proveedor->moneda == 'Bolívares') {
+                    $configuracion = Configuracion::where('variable', 'DolaresBolivares')->first();
+                }
+
+                if ($banco->moneda == 'Dólares' && $proveedor->moneda == 'Pesos') {
+                    $configuracion = Configuracion::where('variable', 'DolaresPesos')->first();
+                }
+
+                if ($banco->moneda == 'Bolívares' && $proveedor->moneda == 'Dólares') {
+                    $configuracion = Configuracion::where('variable', 'BolivaresDolares')->first();
+                }
+
+                if ($banco->moneda == 'Bolívares' && $proveedor->moneda == 'Pesos') {
+                    $configuracion = Configuracion::where('variable', 'BolivaresPesos')->first();
+                }
+
+                if ($banco->moneda == 'Pesos' && $proveedor->moneda == 'Bolívares') {
+                    $configuracion = Configuracion::where('variable', 'PesosBolivares')->first();
+                }
+
+                if ($banco->moneda == 'Pesos' && $proveedor->moneda == 'Dólares') {
+                    $configuracion = Configuracion::where('variable', 'PesosDolares')->first();
+                }
+
+                $resultado['min'] = $configuracion->valor - ($configuracion->valor * 0.20);
+                $resultado['max'] = $configuracion->valor + ($configuracion->valor * 0.20);
+
+                return $resultado;
             }
+        }
 
-            if ($banco->moneda == 'Dólares' && $proveedor->moneda == 'Pesos') {
-                $configuracion = Configuracion::where('variable', 'DolaresPesos')->first();
+        if ($request->moneda_iva) {
+            $banco     = ContBanco::find($request->id_banco);
+            $resultado = [];
+
+            if ($banco->moneda != $request->moneda_iva) {
+                if ($banco->moneda == 'Dólares' && $request->moneda_iva == 'Bolívares') {
+                    $configuracion = Configuracion::where('variable', 'DolaresBolivares')->first();
+                }
+
+                if ($banco->moneda == 'Dólares' && $request->moneda_iva == 'Pesos') {
+                    $configuracion = Configuracion::where('variable', 'DolaresPesos')->first();
+                }
+
+                if ($banco->moneda == 'Bolívares' && $request->moneda_iva == 'Dólares') {
+                    $configuracion = Configuracion::where('variable', 'BolivaresDolares')->first();
+                }
+
+                if ($banco->moneda == 'Bolívares' && $request->moneda_iva == 'Pesos') {
+                    $configuracion = Configuracion::where('variable', 'BolivaresPesos')->first();
+                }
+
+                if ($banco->moneda == 'Pesos' && $request->moneda_iva == 'Bolívares') {
+                    $configuracion = Configuracion::where('variable', 'PesosBolivares')->first();
+                }
+
+                if ($banco->moneda == 'Pesos' && $request->moneda_iva == 'Dólares') {
+                    $configuracion = Configuracion::where('variable', 'PesosDolares')->first();
+                }
+
+                $resultado['min'] = $configuracion->valor - ($configuracion->valor * 0.20);
+                $resultado['max'] = $configuracion->valor + ($configuracion->valor * 0.20);
+
+                return $resultado;
             }
-
-            if ($banco->moneda == 'Bolívares' && $proveedor->moneda == 'Dólares') {
-                $configuracion = Configuracion::where('variable', 'BolivaresDolares')->first();
-            }
-
-            if ($banco->moneda == 'Bolívares' && $proveedor->moneda == 'Pesos') {
-                $configuracion = Configuracion::where('variable', 'BolivaresPesos')->first();
-            }
-
-            if ($banco->moneda == 'Pesos' && $proveedor->moneda == 'Bolívares') {
-                $configuracion = Configuracion::where('variable', 'PesosBolivares')->first();
-            }
-
-            if ($banco->moneda == 'Pesos' && $proveedor->moneda == 'Dólares') {
-                $configuracion = Configuracion::where('variable', 'PesosDolares')->first();
-            }
-
-            $resultado['min'] = $configuracion->valor - ($configuracion->valor * 0.20);
-            $resultado['max'] = $configuracion->valor + ($configuracion->valor * 0.20);
-
-            return $resultado;
         }
     }
 }

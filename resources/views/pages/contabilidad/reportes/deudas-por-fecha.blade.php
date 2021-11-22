@@ -31,16 +31,17 @@
         <table class="table table-striped table-bordered col-12 sortable" id="myTable">
             <thead class="thead-dark">
                 <tr>
-                    <th scope="col" class="CP-sticky">#</th>
-                    <th scope="col" class="CP-sticky">ID registro</th>
-                    <th scope="col" class="CP-sticky">Fecha y hora</th>
-                    <th scope="col" class="CP-sticky">Tipo</th>
-                    <th scope="col" class="CP-sticky">Proveedor</th>
-                    <th scope="col" class="CP-sticky">Moneda del proveedor</th>
-                    <th scope="col" class="CP-sticky">Monto</th>
-                    <th scope="col" class="CP-sticky">Sede</th>
-                    <th scope="col" class="CP-sticky">Estado</th>
-                    <th scope="col" class="CP-sticky">Operador</th>
+                    <th nowrap scope="col" class="CP-sticky">#</th>
+                    <th nowrap scope="col" class="CP-sticky">ID registro</th>
+                    <th nowrap scope="col" class="CP-sticky">Fecha y hora</th>
+                    <th nowrap scope="col" class="CP-sticky">Tipo</th>
+                    <th nowrap scope="col" class="CP-sticky">Proveedor</th>
+                    <th nowrap scope="col" class="CP-sticky">Moneda del proveedor</th>
+                    <th nowrap scope="col" class="CP-sticky">Monto subtotal</th>
+                    <th nowrap scope="col" class="CP-sticky">IVA</th>
+                    <th nowrap scope="col" class="CP-sticky">Sede</th>
+                    <th nowrap scope="col" class="CP-sticky">Estado</th>
+                    <th nowrap scope="col" class="CP-sticky">Operador</th>
                 </tr>
             </thead>
 
@@ -52,12 +53,12 @@
 
                 @foreach($items as $item)
                     <tr>
-                        <td class="text-center">{{ $loop->iteration }}</td>
-                        <td class="text-center">{{ $item->id }}</td>
-                        <td class="text-center">{{ date_format(new DateTime($item->created_at), 'd/m/Y h:i A') }}</td>
-                        <td class="text-center">{{ $item->tipo }}</td>
+                        <td nowrap class="text-center">{{ $loop->iteration }}</td>
+                        <td nowrap class="text-center">{{ $item->id }}</td>
+                        <td nowrap class="text-center">{{ date_format(new DateTime($item->created_at), 'd/m/Y h:i A') }}</td>
+                        <td nowrap class="text-center">{{ $item->tipo }}</td>
 
-                        <td align="center" class="CP-barrido">
+                        <td align="center" nowrap class="CP-barrido">
                             @if(isset($item->proveedor))
                                 @php
                                     $fechaInicio = date_create();
@@ -73,11 +74,12 @@
                             @endif
                         </td>
 
-                        <td class="text-center">{{ $item->moneda_proveedor }}</td>
-                        <td class="text-center">{{ number_format($item->monto, 2, ',', '.') }}</td>
-                        <td class="text-center">{{ $item->sede }}</td>
-                        <td class="text-center">{{ $item->estado }}</td>
-                        <td class="text-center">{{ $item->operador }}</td>
+                        <td nowrap class="text-center">{{ $item->moneda_proveedor }}</td>
+                        <td nowrap class="text-center">{{ number_format($item->monto, 2, ',', '.') }}</td>
+                        <td nowrap class="text-center">{{ number_format($item->monto_iva, 2, ',', '.') }}</td>
+                        <td nowrap class="text-center">{{ $item->sede }}</td>
+                        <td nowrap class="text-center">{{ $item->estado }}</td>
+                        <td nowrap class="text-center">{{ $item->operador }}</td>
                     </tr>
 
                     @php

@@ -106,17 +106,19 @@
     <table class="table table-striped table-borderless col-12 sortable" id="myTable">
         <thead class="thead-dark">
             <tr>
-                <th scope="col" class="CP-sticky">#</th>
-                <th scope="col" class="CP-sticky">Nombre del proveedor</th>
-                <th scope="col" class="CP-sticky">RIF/CI del proveedor</th>
-                <th scope="col" class="CP-sticky">Fecha de registro</th>
-                <th scope="col" class="CP-sticky">Moneda</th>
-                <th scope="col" class="CP-sticky">Monto sin IVA</th>
-                <th scope="col" class="CP-sticky">Documento soporte reclamo</th>
-                <th scope="col" class="CP-sticky">Numero de documento</th>
-                <th scope="col" class="CP-sticky">Creado por</th>
-                <th scope="col" class="CP-sticky">Estado</th>
-                <th scope="col" class="CP-sticky">Acciones</th>
+                <th nowrap scope="col" class="CP-sticky">#</th>
+                <th nowrap scope="col" class="CP-sticky">Nombre del proveedor</th>
+                <th nowrap scope="col" class="CP-sticky">RIF/CI del proveedor</th>
+                <th nowrap scope="col" class="CP-sticky">Fecha de registro</th>
+                <th nowrap scope="col" class="CP-sticky">Moneda subtotal</th>
+                <th nowrap scope="col" class="CP-sticky">Monto subtotal (Exento + Base)</th>
+                <th nowrap scope="col" class="CP-sticky">Moneda IVA</th>
+                <th nowrap scope="col" class="CP-sticky">Monto IVA</th>
+                <th nowrap scope="col" class="CP-sticky">Documento soporte reclamo</th>
+                <th nowrap scope="col" class="CP-sticky">Numero de documento</th>
+                <th nowrap scope="col" class="CP-sticky">Creado por</th>
+                <th nowrap scope="col" class="CP-sticky">Estado</th>
+                <th nowrap scope="col" class="CP-sticky">Acciones</th>
             </tr>
         </thead>
         <tbody>
@@ -132,19 +134,21 @@
             @endphp
 
             <tr class="{{ ($reclamo->deleted_at) ? 'bg-warning' : '' }}">
-              <th>{{$reclamo->id}}</th>
-              <td align="center" class="CP-barrido">
+              <th nowrap class="center">{{$reclamo->id}}</th>
+              <td nowrap class="center" class="CP-barrido">
                   <a href="{{ $url }}" style="text-decoration: none; color: black;" target="_blank">{{ ($reclamo->proveedor) ? $reclamo->proveedor->nombre_proveedor : '' }}</a>
               </td>
-              <td>{{($reclamo->proveedor) ? $reclamo->proveedor->rif_ci : ''}}</td>
-              <td>{{$reclamo->created_at}}</td>
-              <td>{{($reclamo->proveedor) ? $reclamo->proveedor->moneda : ''}}</td>
-              <td>{{number_format($reclamo->monto, 2, ',', '.')}}</td>
-              <td>{{$reclamo->documento_soporte_reclamo}}</td>
-              <td>{{$reclamo->numero_documento}}</td>
-              <td>{{$reclamo->usuario_registro}}</td>
-              <td>{{($reclamo->deleted_at)?'Desincorporado':'Activo'}}</td>
-              <td style="width:140px;">
+              <td nowrap class="center">{{($reclamo->proveedor) ? $reclamo->proveedor->rif_ci : ''}}</td>
+              <td nowrap class="center">{{$reclamo->created_at}}</td>
+              <td nowrap class="center">{{($reclamo->proveedor) ? $reclamo->proveedor->moneda : ''}}</td>
+              <td nowrap class="center">{{number_format($reclamo->monto, 2, ',', '.')}}</td>
+              <td nowrap class="center">{{($reclamo->proveedor) ? $reclamo->proveedor->moneda_iva : ''}}</td>
+              <td nowrap class="center">{{number_format($reclamo->monto_iva, 2, ',', '.')}}</td>
+              <td nowrap class="center">{{$reclamo->documento_soporte_reclamo}}</td>
+              <td nowrap class="center">{{$reclamo->numero_documento}}</td>
+              <td nowrap class="center">{{$reclamo->usuario_registro}}</td>
+              <td nowrap class="center">{{($reclamo->deleted_at)?'Desincorporado':'Activo'}}</td>
+              <td nowrap class="center">
                 <a href="/reclamos/{{$reclamo->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
                     <i class="far fa-eye"></i>
                 </a>

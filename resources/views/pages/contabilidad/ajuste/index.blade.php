@@ -107,7 +107,8 @@
                 <th scope="col" class="CP-sticky">Nombre del proveedor</th>
                 <th scope="col" class="CP-sticky">RIF/Cédula del porveedor</th>
                 <th scope="col" class="CP-sticky">Fecha de registro</th>
-                <th scope="col" class="CP-sticky">Monto</th>
+                <th scope="col" class="CP-sticky">Monto subtotal (Exento + base)</th>
+                <th scope="col" class="CP-sticky">Monto IVA</th>
                 <th scope="col" class="CP-sticky">Comentarios</th>
                 <th scope="col" class="CP-sticky">Creado por</th>
                 <th scope="col" class="CP-sticky">Acciones</th>
@@ -133,6 +134,7 @@
               <td>{{ ($ajuste->proveedor) ? $ajuste->proveedor->rif_ci : '' }}</td>
               <td>{{$ajuste->created_at}}</td>
               <td>{{number_format($ajuste->monto, 2, ',', '.')}}</td>
+              <td>{{number_format($ajuste->monto_iva, 2, ',', '.')}}</td>
               <td>{{$ajuste->comentario}}</td>
               <td>{{$ajuste->usuario_registro}}</td>
               <td style="width:140px;">

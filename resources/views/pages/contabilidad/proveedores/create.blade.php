@@ -109,7 +109,7 @@
                     </tr>
 
                     <tr>
-                        <th scope="row"><label for="moneda">Moneda *</label></th>
+                        <th scope="row"><label for="moneda">Moneda subtotal *</label></th>
                         <td>
                             <select required name="moneda" class="form-control">
                                 <option value=""></option>
@@ -121,8 +121,25 @@
                     </tr>
 
                     <tr>
-                        <th scope="row"><label for="saldo">Saldo</label></th>
-                        <td><input name="saldo" value="0" class="form-control" type="number" required></td>
+                        <th scope="row"><label for="saldo">Saldo subtotal (Exento + Base)</label></th>
+                        <td><input name="saldo" value="0" class="form-control" type="number"></td>
+                    </tr>
+
+                    <tr>
+                        <th scope="row"><label for="moneda_iva">Moneda IVA</label></th>
+                        <td>
+                            <select name="moneda_iva" class="form-control">
+                                <option value=""></option>
+                                @foreach($monedas as $moneda)
+                                    <option value="{{ $moneda }}">{{ $moneda }}</option>
+                                @endforeach
+                            </select>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <th scope="row"><label for="saldo_iva">Saldo IVA</label></th>
+                        <td><input name="saldo_iva" value="0" class="form-control" type="number"></td>
                     </tr>
                 </tbody>
             </table>

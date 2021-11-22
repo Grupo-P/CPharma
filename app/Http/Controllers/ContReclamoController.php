@@ -37,10 +37,11 @@ class ContReclamoController extends Controller
         $i              = 0;
 
         foreach ($sqlProveedores as $proveedor) {
-            $proveedores[$i]['label']  = $proveedor->nombre_proveedor . ' | ' . $proveedor->rif_ci;
-            $proveedores[$i]['value']  = $proveedor->nombre_proveedor . ' | ' . $proveedor->rif_ci;
-            $proveedores[$i]['id']     = $proveedor->id;
-            $proveedores[$i]['moneda'] = $proveedor->moneda;
+            $proveedores[$i]['label']      = $proveedor->nombre_proveedor . ' | ' . $proveedor->rif_ci;
+            $proveedores[$i]['value']      = $proveedor->nombre_proveedor . ' | ' . $proveedor->rif_ci;
+            $proveedores[$i]['id']         = $proveedor->id;
+            $proveedores[$i]['moneda']     = $proveedor->moneda;
+            $proveedores[$i]['moneda_iva'] = $proveedor->moneda_iva;
 
             $i = $i + 1;
         }
@@ -65,11 +66,13 @@ class ContReclamoController extends Controller
         $reclamo->numero_documento          = $request->input('numero_documento');
         $reclamo->comentario                = $request->input('comentario');
         $reclamo->sede                      = $request->input('sede');
+        $reclamo->monto_iva                 = $request->input('monto_iva');
         $reclamo->usuario_registro          = auth()->user()->name;
         $reclamo->save();
 
-        $proveedor        = ContProveedor::find($request->input('id_proveedor'));
-        $proveedor->saldo = (float) $proveedor->saldo + (float) $reclamo->monto;
+        $proveedor            = ContProveedor::find($request->input('id_proveedor'));
+        $proveedor->saldo     = (float) $proveedor->saldo + (float) $reclamo->monto;
+        $proveedor->saldo_iva = (float) $proveedor->saldo_iva + (float) $reclamo->monto_iva;
         $proveedor->save();
 
         $auditoria           = new Auditoria();
@@ -109,10 +112,11 @@ class ContReclamoController extends Controller
         $i              = 0;
 
         foreach ($sqlProveedores as $proveedor) {
-            $proveedores[$i]['label']  = $proveedor->nombre_proveedor . ' | ' . $proveedor->rif_ci;
-            $proveedores[$i]['value']  = $proveedor->nombre_proveedor . ' | ' . $proveedor->rif_ci;
-            $proveedores[$i]['id']     = $proveedor->id;
-            $proveedores[$i]['moneda'] = $proveedor->moneda;
+            $proveedores[$i]['label']      = $proveedor->nombre_proveedor . ' | ' . $proveedor->rif_ci;
+            $proveedores[$i]['value']      = $proveedor->nombre_proveedor . ' | ' . $proveedor->rif_ci;
+            $proveedores[$i]['id']         = $proveedor->id;
+            $proveedores[$i]['moneda']     = $proveedor->moneda;
+            $proveedores[$i]['moneda_iva'] = $proveedor->moneda_iva;
 
             $i = $i + 1;
         }
@@ -135,20 +139,12 @@ class ContReclamoController extends Controller
     {
         $reclamo = ContReclamo::find($id);
 
-        $proveedor        = ContProveedor::find($request->input('id_proveedor'));
-        $proveedor->saldo = (float) $proveedor->saldo - (float) $reclamo->monto;
-        $proveedor->save();
-
         $reclamo->id_proveedor              = $request->input('id_proveedor');
         $reclamo->documento_soporte_reclamo = $request->input('documento_soporte_reclamo');
         $reclamo->numero_documento          = $request->input('numero_documento');
         $reclamo->comentario                = $request->input('comentario');
         $reclamo->sede                      = $request->input('sede');
         $reclamo->save();
-
-        $proveedor->saldo = (float) $proveedor->saldo + (float) $reclamo->monto;
-        $proveedor->save();
-
         $auditoria           = new Auditoria();
         $auditoria->accion   = 'EDITAR';
         $auditoria->tabla    = 'RECLAMO';
@@ -171,8 +167,9 @@ class ContReclamoController extends Controller
         $reclamo->deleted_at = date('Y-m-d h:i:s');
         $reclamo->save();
 
-        $proveedor        = ContProveedor::find($reclamo->id_proveedor);
-        $proveedor->saldo = (float) $proveedor->saldo - (float) $reclamo->monto;
+        $proveedor            = ContProveedor::find($reclamo->id_proveedor);
+        $proveedor->saldo     = (float) $proveedor->saldo - (float) $reclamo->monto;
+        $proveedor->saldo_iva = (float) $proveedor->saldo_iva - (float) $reclamo->monto_iva;
         $proveedor->save();
 
         $auditoria           = new Auditoria();

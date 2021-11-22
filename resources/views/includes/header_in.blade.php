@@ -310,6 +310,29 @@
 ?>
 <!-- DEVOLUCIONES -->
 <!-------------------------------------------------------------------------------->
+<!-- ETIQUETA -->
+<?php
+  if(Auth::user()->departamento == 'ETIQUETA'){
+?>
+  <div class="btn-group navbar-brand">
+    <button type="button" class="btn btn-outline-info dropdown-toggle textoI" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      <i class="fas fa-dolly-flatbed"></i> Etiqueta
+    </button>
+    <div class="dropdown-menu">
+      <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('/etiqueta') }}">
+          <span data-feather="home"></span>
+          <i class="fas fa-tag"></i>
+          Etiquetas<span class="sr-only">(current)</span>
+        </a>
+      </li>
+    </div>
+  </div>
+<?php
+  }
+?>
+<!-- ETIQUETA -->
+<!-------------------------------------------------------------------------------->
 <!-- SURTIDO -->
 <?php
   if(Auth::user()->departamento == 'SURTIDO'){
@@ -1186,6 +1209,20 @@
           <span data-feather="home"></span>
           <i class="fas fa-file-excel"></i>
           Menu Articulos Excel<span class="sr-only">(current)</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('trackimagen') }}">
+          <span data-feather="home"></span>
+          <i class="fas fa-upload"></i>
+            Track Imagen<span class="sr-only">(current)</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a target="_blank" class="nav-link CP-Links-Menu" href="{{ url('/syncategorias') }}">
+          <span data-feather="home"></span>
+          <i class="fa fa-sync"></i>
+            Sincronizar categorias<span class="sr-only">(current)</span>
         </a>
       </li>
       <li class="nav-item">

@@ -281,8 +281,8 @@
 		      <td>{{$inventario->unidades_conteo}}</td>
 
 		      <?php
-		      $totalUnidades += $inventario->unidades_conteo;
-		      $totalSKU += $inventario->cantidades_conteo;
+		            $totalUnidades += $inventario->unidades_conteo;
+		            $totalSKU += $inventario->cantidades_conteo;
 
 					if($inventario->estatus == "REVISADO"){
 

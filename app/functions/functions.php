@@ -1352,6 +1352,9 @@
             case 'Traslados por llegar':
                 $ruta = '/reporte44';
             break;
+            case 'Articulos sin imagen':
+                $ruta = '/reporte45';
+            break;
             default:
                 $ruta = '#';
             break;
@@ -1494,6 +1497,9 @@
             break;
             case 44:
                 $nombre = 'Traslados por llegar';
+            break;
+            case 45:
+                $nombre = 'Ajustes de inventario';
             break;
             default:
                 $nombre = 'Reporte desconocido';
@@ -3271,7 +3277,6 @@
     $evaluados = ($cont_exito+$cont_falla);
 
     $sql2 = MySQL_Guardar_Auditoria_Corrida($evaluados,$cont_exito,$cont_falla,$cont_cambios,$cont_noCambio,$user,$tipoCorrida,$tasaCalculo,date('d-m-Y'),date('h:i:s a'),$fallas);
-    echo "<br>".$sql2."<br>";
 
     mysqli_query($connCPharma,$sql2);
     mysqli_close($connCPharma);
@@ -4020,5 +4025,19 @@
     }
 
     return $precio;
+  }
+
+  function siglasSegunNombre()
+  {
+    $array = [
+        'FARMACIA TIERRA NEGRA, C.A.' => 'FTN',
+        'FARMACIA LA LAGO,C.A.' => 'FLL',
+        'FARMACIA AVENIDA UNIVERSIDAD, C.A.' => 'FAU',
+        'GRUPO P, C.A' => 'GP',
+        'MULATA CAFÉ C.A' => 'MC',
+        'FARMACIAS KD EXPRESS, C.A.' => 'KDI'
+    ];
+
+    return $array;
   }
 ?>

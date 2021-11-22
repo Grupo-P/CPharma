@@ -1,3 +1,6 @@
+<?php
+    use compras\Configuracion;
+?>
 @extends('layouts.model')
 
 @section('title')
@@ -7,6 +10,9 @@
 @section('scriptsHead')
 <link rel="stylesheet" href="/assets/sweetalert2/sweetalert2.css">
   <style>
+  #sorttable_sortfwdind, #sorttable_sortrevind {
+    display: none;
+  }
   * {
     box-sizing: border-box;
   }
@@ -727,12 +733,23 @@
 
 
     if (isset($_GET['seccion']) && $_GET['seccion'] == 'codificacion') {
+      $atributos = [];
+
+      $result = sqlsrv_query($conn,"SELECT InvAtributo.Descripcion AS descripcion FROM InvAtributo");
+
+      while ($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
+        $atributos[] = FG_Limpiar_Texto($row['descripcion']);
+      }
+
+      $atributos = implode(', ', $atributos);
+
       echo'
       <br>
       <hr>
       <h4 align="center">Codificaciones</h4>
       <hr>
-      <table class="table table-striped table-bordered col-12 sortable">
+
+      <!--<table class="table table-striped table-bordered col-12 sortable">
         <thead class="thead-dark">
           <tr>
             <th scope="col" class="CP-sticky">Reglamento de estandarización de nombres de misceláneos</th>
@@ -749,21 +766,115 @@
             <td>Ejemplo: Acetaminofén 500mg Tabletas x 10 Pfizer</td>
           </tr>
           <tr>
-            <td colspan="2">
+            <td width="50%">
                 <b>NOTAS:</b><br>
 
                 <ul>
-                    <li>No abreviar palabras claves (tableta, chocolate, jarabe, etc.) y usar todos los conectores de palabras (de, con, para, etc.)</li>
-                    <li>En el caso de artículos lideres se puede obviar el Tipo</li>
-                    <li>En el caso de medicamentos es valido colocar entre paréntesis artículos referenciales</li>
-                    <li>Obviar caracteres especiales y acentos exceptuando la ñ</li>
-                    <li>Cualquier información adicional es aceptada siempre y cuando se cumpla con el objetivo de una descripción clara y completa</li>
-                    <li>La descripción física del articulo siempre predomina sobre cualquier criterio</li>
+                    <li>No abreviar palabras claves (tableta, chocolate, jarabe, etc.) y usar todos los conectores de palabras (de, con, para, etc.).</li>
+                    <li>En el caso de artículos lideres se puede obviar el Tipo.</li>
+                    <li>En el caso de medicamentos es valido colocar entre paréntesis artículos referenciales.</li>
+                    <li>Obviar caracteres especiales y acentos exceptuando la ñ.</li>
+                    <li>Cualquier información adicional es aceptada siempre y cuando se cumpla con el objetivo de una descripción clara y completa.</li>
+                    <li>La descripción física del articulo siempre predomina sobre cualquier criterio.</li>
+                    <li>Respetar las palabras claves segun el criterio de la gerencia.</li>
+                    <li>Respetar las palabras de identificacion de forma completa: adulto, pedriatrico, femenino, etc.</li>
                 </ul>
+            </td>
+
+            <td>
+                <b>ATRIBUTOS:</b><br>
+                '.$atributos.'.
+            </td>
+          </tr>
+        </tbody>
+      </table-->
+
+
+      <table class="table table-striped table-bordered col-12 sortable">
+        <tbody>
+          <tr>
+            <td>
+                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                  <li class="nav-item">
+                    <a class="nav-link active bg-dark text-white" id="medicamentos-tab" data-toggle="tab" href="#medicamentos" role="tab" aria-controls="medicamentos" aria-selected="true">DESCRIPCIÓN DE MEDICAMENTOS</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link bg-dark text-white" id="miscelaneos-tab" data-toggle="tab" href="#miscelaneos" role="tab" aria-controls="miscelaneos" aria-selected="false">DESCRIPCIÓN DE MISCELÁNEOS</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link bg-dark text-white" id="descartables-tab" data-toggle="tab" href="#descartables" role="tab" aria-controls="descartables" aria-selected="false">DESCRIPCIÓN MATERIAL DESCARTABLES</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link bg-dark text-white" id="generales-tab" data-toggle="tab" href="#generales" role="tab" aria-controls="generales" aria-selected="false">NOTAS GENERALES</a>
+                  </li>
+                </ul>
+                <div class="tab-content" id="myTabContent">
+                  <div class="tab-pane fade show active p-3" id="medicamentos" role="tabpanel" aria-labelledby="medicamentos-tab">
+                    Molécula o Nombre Comercial + (Competidor/Componente/Paciente) + Presentación (Blister o Caja) + Concentración + Letra X + Contenido + Tipo o Variante + Marca o laboratorio.<br>
+                    Ejemplo: <b>LORATADINA 10MG X 10 TABLETAS COASPHARMA</b><br><br>
+                    <b>NOTAS:</b><br>
+                    <li>Añadir el (Competidor/Componente/Paciente) si la descripción lo amerita<br>Ejemplos: ACETAMINOFEN <b>PEDIATRICO</b> X 60 ML AG<br>CLAUSY (<b>ENTEROGERMINA</b>) 5ML X 1 VIAL LIVESPO</li>
+                    <li>Las abreviaciones I.V. o I.M. no están permitidas. Se debe escribir INTRAVENOSO o INTRAMUSCULAR si el articlio lo amerita.</li>
+                    <li>Añadir la presentación si el articlio lo amerita (Blister o Caja) para eliminar la referencia. <b>REF.01</b>.</li>
+                    <li>Se debe añadir el componente del medicamento y el atributo correspondiente a su ubicación <b>(RX, NEVERA, PSICOTROPICO)</b>.</li>
+                    <li>Si el medicamento lo amerita también se le debe añadir el atributo <b>RECIPE</b>.</li>
+                  </div>
+                  <div class="tab-pane fade p-3" id="miscelaneos" role="tabpanel" aria-labelledby="miscelaneos-tab">
+                    Tipo de producto (Singular) + Nombre comercial + Tipo o Variante + Letra X + Peso o Contenido + Marca (Opcional)<br>
+                     <b>Ejemplo:</b> GALLETA DELICIAS MARIA CHOCOLATE X 4 UNIDADES PUIG<br><br>
+                    <b>NOTAS:</b><br>
+                    <li>La forma en la que se presenta el articulo puede ser agregada también (envase, display, paquete, tubular, lata vidrio, etc)<br>
+                    EJEMPLO: <b>JUGO NATULAC DE DURAZNO ENVASE VIDRIO X 250 ML</b></li>
+                    <li>Para el caso de artículos líderes se puede obviar el tipo<br>
+                    Ejemplo descripción errada: <b>BEBIDA ACHOCOLATADA TODDY POTE X 200 GR</b><br>
+                    Ejemplo descripción correcta: <b>TODDY POTE X 200 GR</b></li>
+                    <li>El contenido de los artículos será reflejado con la palabra <b>UNIDADES</b>.</li>
+                    <li>Si el contenido del artículo se refleja en <b>ONZ</b>, se debe añadir también la abreviación <b>GR</b> de ser necesario <b>(ONZ/GR)</b>.</li>
+                    <li>Si el contenido del artículo se refleja en <b>CM3</b>, se debe añadir también la abreviación <b>ML</b>. <b>(CM3/ML)</b>.</li>
+                    <li>En caso de poseer algún tipo de referencia específica, esta debe ser colocada al final de la descripción. Ejemplo: ENCENDEDOR/YERQUERO LIGHTER X 1 UNIDAD <b>REF.268</b>.
+                  </div>
+                  <div class="tab-pane fade p-3" id="descartables" role="tabpanel" aria-labelledby="descartables-tab">
+                    Tipo de producto (Singular) + Contenido (De ser necesario) + (Tipo, Variante o medida) + Letra X + Unidad + Marca o laboratorio.<br>
+                    Ejemplo: <b>JERINGA 5ML/CC CON AGUJA 21G X 1 UNIDAD DYNAMICS</b><br><br>
+                    <b>NOTAS:</b>
+                    <li>Añadir el componente correspondiente a cada articulo</li>
+                    <li>Las abreviaciones I.V. o I.M. no están permitidas. Se debe escribir INTRAVENOSO o INTRAMUSCULAR si el articulo lo amerita.</li>
+                    <li>Si el contenido del artículo se refleja en <b>ML</b>, se debe añadir la abreviación CC o viceversa <b>(ML/CC)</b></li>
+                    <li>En caso de poseer alguna referencia esta se debe colocar al final de la descripción. Ejemplo: BURETA CALIBRADA 100ML X 1 UNIDAD KEYDEX <b>REF.AP2085</b></li>
+                  </div>
+                  <div class="tab-pane fade p-3" id="generales" role="tabpanel" aria-labelledby="generales-tab">
+                    <li>No abreviar palabras claves (TABLETAS, ADULTO, PEDIATRICO, GOTAS, CREMA, JERINGA, ADHESIVO, MASCARILLA, GALLETAS, JABON, LOCION, etc).</li>
+                    <li>Obviar caracteres especiales y acentos exceptuando la letra Ñ</li>
+                    <li>Cualquier información adicional es aceptada siempre y cuando cumpla con el objetivo de una descripción clara y completa.</li>
+                    <li>La descripción física del articulo siempre predomina sobre cualquier criterio</li>
+                    <li>Si el articulo contiene nombre en inglés se recomienda agregar a la descripción su traducción al español o referencia principal.</li>
+                    <li>
+                        Abreviaciones permitidas:
+                        <ul>
+                            <li>AMP: Ampolla</li>
+                            <li>GR: Gramo</li>
+                            <li>MG: Miligramos</li>
+                            <li>MCG: Microgramos</li>
+                            <li>U.I.: Unidades internacionales.</li>
+                            <li>KG: Kilo</li>
+                            <li>ML: Mililitro</li>
+                            <li>LT: Litro</li>
+                            <li>ONZ: Onza</li>
+                            <li>MeQ: Miliequivalentes</li>
+                            <li>CC o CM3: Centímetros cúbicos</li>
+                            <li>MMHG: Unidad de presión usado solo para las medias de compresión.</li>
+                            <li>N: Número</li>
+                            <li>CM: Centímetro</li>
+                            <li>M: Metro</li>
+                        </ul>
+                    </li>
+                  </div>
+                </div>
             </td>
           </tr>
         </tbody>
       </table>
+
       <br>
       <table class="table table-striped table-bordered col-12 sortable" id="myTable">
         <thead class="thead-dark">
@@ -773,6 +884,7 @@
             <th scope="col" class="CP-sticky">Código de barra</th>
             <th scope="col" class="CP-sticky">Descripción</th>
             <th scope="col" class="CP-sticky">Existencia</th>
+            <th scope="col" class="CP-sticky">¿Tiene imagen?</th>
             <th scope="col" class="CP-sticky">Marca</th>
             <th scope="col" class="CP-sticky">Unidad mínima</th>
             <th scope="col" class="CP-sticky">Clasificación de etiquetas</th>
@@ -784,6 +896,7 @@
             <th scope="col" class="CP-sticky">Uso terapéutico</th>
             <th scope="col" class="CP-sticky">Último proveedor</th>
             <th scope="col" class="CP-sticky">Precio Bs.</th>
+            <th scope="col" class="CP-sticky">Carácteres disponibles</th>
           </tr>
         </thead>
         <tbody>
@@ -793,6 +906,7 @@
       $result9 = sqlsrv_query($conn,$sql9);
 
       $contador = 1;
+      $configuracion =  Configuracion::select('valor')->where('variable','URL_interna')->get();
 
       while ($row9 = sqlsrv_fetch_array($result9, SQLSRV_FETCH_ASSOC)) {
         $id_articulo = $row9['id_articulo'];
@@ -873,12 +987,39 @@
         $precio = FG_Calculo_Precio_Alfa($existencia, $existencia_almacen_1, $existencia_almacen_2, $troquelado, $utilidad_articulo, $utilidad_categoria, $troquel_almacen_1, $precio_compra_bruto_almacen_1, $troquel_almacen_2, $precio_compra_bruto_almacen_2, $precio_compra_bruto, $iva, 'CON_EXISTENCIA');
         $precio = number_format($precio, 2, ',', '.');
 
+        //Inicio de validacion de imagen
+            $path = "".$configuracion[0]->valor;
+            if(file_exists($path)){
+                $Imagenes  = scandir($path);
+                if(count($Imagenes)>0){
+                    $imagenBuscar = $codigo_barra;
+                    $tieneImagen = "NO";
+
+                    foreach ($Imagenes as $imagen){
+                        $imagenAlmacenada = explode(".", $imagen);
+
+                        if($imagenAlmacenada[0]==$imagenBuscar){
+                            $tieneImagen = "SI";
+                            continue;
+                        }
+                    }
+                }else{
+                    $tieneImagen = "Error: lectura imagen";
+                }
+            }else{
+                $tieneImagen = "Error: valide la URL";
+            }
+        //Fin de validacion de imagen
+
+        $caracteres_disponibles = 100 - strlen($row9['descripcion']);
+
         echo '<tr>';
         echo '<td class="text-center">'.$contador.'</td>';
         echo '<td class="text-center">'.$codigo_interno.'</td>';
         echo '<td class="text-center">'.$codigo_barra.'</td>';
         echo '<td class="text-center">'.$descripcion.'</td>';
         echo '<td class="text-center">'.$existencia.'</td>';
+        echo '<td class="text-center">'.$tieneImagen.'</td>';
         echo '<td class="text-center">'.$marca.'</td>';
         echo '<td class="text-center">'.$unidad_minima.'</td>';
         echo '<td class="text-center">'.$clasificacion.'</td>';
@@ -890,6 +1031,7 @@
         echo '<td class="text-center">'.$uso_terapeutico.'</td>';
         echo '<td class="text-center">'.$ultimo_proveedor.'</td>';
         echo '<td class="text-center">'.$precio.'</td>';
+        echo '<td class="text-center">'.$caracteres_disponibles.'</td>';
         echo '</tr>';
 
         $contador++;

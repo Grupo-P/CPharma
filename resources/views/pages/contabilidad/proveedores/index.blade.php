@@ -126,35 +126,39 @@
     <table class="table table-striped table-borderless col-12 sortable" id="myTable">
         <thead class="thead-dark">
             <tr>
-                <th scope="col" class="CP-sticky">#</th>
-                <th scope="col" class="CP-sticky">Nombre</th>
-                <th scope="col" class="CP-sticky">Representante</th>
-                <th scope="col" class="CP-sticky">RIF/Cédula</th>
-                <th scope="col" class="CP-sticky">Dirección</th>
-                <th scope="col" class="CP-sticky">Tasa</th>
-                <th scope="col" class="CP-sticky">Plan de cuentas</th>
-                <th scope="col" class="CP-sticky">Moneda</th>
-                <th scope="col" class="CP-sticky">Saldo</th>
-                <th scope="col" class="CP-sticky">Creado por</th>
-                <th scope="col" class="CP-sticky">Estado</th>
-                <th scope="col" class="CP-sticky">Acciones</th>
+                <th nowrap scope="col" class="CP-sticky">#</th>
+                <th nowrap scope="col" class="CP-sticky">Nombre</th>
+                <th nowrap scope="col" class="CP-sticky">Representante</th>
+                <th nowrap scope="col" class="CP-sticky">RIF/Cédula</th>
+                <th nowrap scope="col" class="CP-sticky">Dirección</th>
+                <th nowrap scope="col" class="CP-sticky">Tasa</th>
+                <th nowrap scope="col" class="CP-sticky">Plan de cuentas</th>
+                <th nowrap scope="col" class="CP-sticky">Moneda subtotal</th>
+                <th nowrap scope="col" class="CP-sticky">Saldo subtotal (Exento + Base)</th>
+                <th nowrap scope="col" class="CP-sticky">Moneda IVA</th>
+                <th nowrap scope="col" class="CP-sticky">Saldo IVA</th>
+                <th nowrap scope="col" class="CP-sticky">Creado por</th>
+                <th nowrap scope="col" class="CP-sticky">Estado</th>
+                <th nowrap scope="col" class="CP-sticky">Acciones</th>
             </tr>
         </thead>
         <tbody>
         @foreach($proveedores as $proveedor)
             <tr>
-              <th>{{$proveedor->id}}</th>
-              <td>{{$proveedor->nombre_proveedor}}</td>
-              <td>{{$proveedor->nombre_representante}}</td>
-              <td>{{$proveedor->rif_ci}}</td>
-              <td>{{$proveedor->direccion}}</td>
-              <td>{{$proveedor->tasa}}</td>
-              <td>{{$proveedor->plan_cuentas}}</td>
-              <td>{{$proveedor->moneda}}</td>
-              <td>{{number_format($proveedor->saldo, 2, ',', '.')}}</td>
-              <td>{{$proveedor->usuario_creado}}</td>
-              <td>{{($proveedor->deleted_at)?'Inactivo':'Activo'}}</td>
-              <td style="width:140px;">
+              <th class="text-center" nowrap>{{$proveedor->id}}</th>
+              <td class="text-center" nowrap>{{$proveedor->nombre_proveedor}}</td>
+              <td class="text-center" nowrap>{{$proveedor->nombre_representante}}</td>
+              <td class="text-center" nowrap>{{$proveedor->rif_ci}}</td>
+              <td class="text-center" nowrap>{{$proveedor->direccion}}</td>
+              <td class="text-center" nowrap>{{$proveedor->tasa}}</td>
+              <td class="text-center" nowrap>{{$proveedor->plan_cuentas}}</td>
+              <td class="text-center" nowrap>{{$proveedor->moneda}}</td>
+              <td class="text-center" nowrap>{{number_format($proveedor->saldo, 2, ',', '.')}}</td>
+              <td class="text-center" nowrap>{{$proveedor->moneda_iva}}</td>
+              <td class="text-center" nowrap>{{number_format($proveedor->saldo_iva, 2, ',', '.')}}</td>
+              <td class="text-center" nowrap>{{$proveedor->usuario_creado}}</td>
+              <td class="text-center" nowrap>{{($proveedor->deleted_at)?'Inactivo':'Activo'}}</td>
+              <td class="text-center" nowrap>
                 <a href="/proveedores/{{$proveedor->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
                     <i class="far fa-eye"></i>
                 </a>

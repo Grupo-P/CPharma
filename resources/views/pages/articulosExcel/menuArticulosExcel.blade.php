@@ -82,8 +82,9 @@
             <td align="right" style="width:20%;">
                 <select id="condicionAtributo" name="condicionAtributo" class="form-control" required="required">
                     <option value="">Seleccione...</option>
-                    <option value="PWEB">Pagina Web</option>
                     <option value="TODOS">Todos</option>
+                    <option value="PWEB">Pagina Web</option>
+                    <option value="ExcluirExcel">Excluir Excel</option>
                 </select>
             </td>
 

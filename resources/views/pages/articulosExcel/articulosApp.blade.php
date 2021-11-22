@@ -2,7 +2,7 @@
 	use PhpOffice\PhpSpreadsheet\IOFactory;
 	use PhpOffice\PhpSpreadsheet\Spreadsheet;
 	use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
-    use compras\Configuracion;
+    use compras\TrackImagen;
 
 	include(app_path().'\functions\config.php');
 	include(app_path().'\functions\functions.php');
@@ -61,6 +61,18 @@
         AND InvArticuloAtributo.InvArticuloId = InvArticulo.Id),CAST(0 AS INT))) <> 0)
         ";
     }
+    else if($condicionAtributo=="ExcluirExcel"){
+        $condicionAtributo = " AND ((ISNULL((SELECT
+        InvArticuloAtributo.InvArticuloId
+        FROM InvArticuloAtributo
+        WHERE InvArticuloAtributo.InvAtributoId =
+        (SELECT InvAtributo.Id
+        FROM InvAtributo
+        WHERE
+        InvAtributo.Descripcion <> 'ExcluirExcel')
+        AND InvArticuloAtributo.InvArticuloId = InvArticulo.Id),CAST(0 AS INT))) <> 0)
+        ";
+    }
     else if($condicionAtributo=="TODOS"){
         $condicionAtributo = "";
     }
@@ -91,8 +103,6 @@
 		$result = sqlsrv_query($conn,$sql);
 		$contador = 1;
         $TasaActual = FG_Tasa_Fecha_Venta($connCPharma,date('Y-m-d'));
-
-        $configuracion =  Configuracion::select('valor')->where('variable','URL_externa')->get();
 
         $sheet->setCellValue('A'.$contador,"sku");
         $sheet->setCellValue('B'.$contador,"name");
@@ -148,8 +158,23 @@
 
             /*PRECIO DOLAR*/
                 $PrecioDolar = ($Precio/$TasaActual);
-                $PrecioDolar = number_format($PrecioDolar,2,"," ,"." );
+                $PrecioDolar = number_format($PrecioDolar,2,"." ,"," );
             /*PRECIO DOLAR*/
+
+            /*IMAGEN*/
+                $TrackImagen =
+                TrackImagen::orderBy('id','asc')
+                ->where('codigo_barra',$CodigoBarra)
+                ->get();
+
+                if(!empty($TrackImagen[0]->codigo_barra)) {
+                    $url_app = $TrackImagen[0]->url_app;
+                }
+                else{
+                    $url_app = "";
+                }
+            /*IMAGEN*/
+
 
             /*EXCEL*/
                 $sheet->setCellValue('A'.$contador,$CodigoBarra);
@@ -159,7 +184,7 @@
                 $sheet->setCellValue('E'.$contador,$Existencia);
                 $sheet->setCellValue('F'.$contador,$categoria);
                 $sheet->setCellValue('G'.$contador,$subcategoria);
-                $sheet->setCellValue('H'.$contador,$configuracion[0]->valor.$CodigoBarra.".jpg");
+                $sheet->setCellValue('H'.$contador,$url_app);
             /*EXCEL*/
 
 	/* CPHARMA */
