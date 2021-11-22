@@ -70,28 +70,28 @@
                                 Nombre del proveedor *
                             </label>
 
-                            <input autofocus class="form-control" id="proveedores" type="text" required>
-                            <input name="id_proveedor" type="hidden" required>
+                            <input autofocus class="form-control" id="proveedores" type="text" value="{{ ($prepagado != '') ? $prepagado->proveedor->nombre_proveedor . ' | ' . $prepagado->proveedor->rif_ci : '' }}" required>
+                            <input name="id_proveedor" type="hidden" value="{{ ($prepagado != '') ? $prepagado->proveedor->id : '' }}" required>
                         </td>
 
                         <td>
                             <label for="moneda">Moneda proveedor</label>
-                            <input readonly class="form-control" name="moneda" type="text">
+                            <input readonly class="form-control" name="moneda" type="text" value="{{ ($prepagado != '') ? $prepagado->proveedor->moneda : '' }}">
                         </td>
 
                         <td>
                             <label for="saldo">Saldo</label>
-                            <input readonly class="form-control" name="saldo" type="text">
+                            <input readonly class="form-control" name="saldo" type="text" value="{{ ($prepagado != '') ? $prepagado->proveedor->saldo : '' }}">
                         </td>
 
                         <td>
                             <label for="saldo_iva">IVA</label>
-                            <input readonly class="form-control" name="saldo_iva" type="text">
+                            <input readonly class="form-control" name="saldo_iva" type="text" value="{{ ($prepagado != '') ? $prepagado->proveedor->saldo_iva : '' }}">
                         </td>
 
                          <td>
                             <label for="moneda_iva">Moneda IVA</label>
-                            <input readonly class="form-control" name="moneda_iva" type="text">
+                            <input readonly class="form-control" name="moneda_iva" type="text" value="{{ ($prepagado != '') ? $prepagado->proveedor->moneda_iva : '' }}">
                         </td>
                     </tr>
                 </tbody>
@@ -125,12 +125,12 @@
 
                         <td>
                             <label for="monto">Pago deuda</label>
-                            <input class="form-control" name="monto" type="number" step="0.01" min="0.01" required>
+                            <input class="form-control" name="monto" type="number" step="0.01" min="0.01"  value="{{ ($prepagado != '') ? $prepagado->monto : ''}}"required>
                         </td>
 
                         <td>
                             <label for="monto_iva">IVA</label>
-                            <input class="form-control" name="monto_iva" type="number" step="0.01" min="0.01">
+                            <input class="form-control" name="monto_iva" type="number" step="0.01" min="0.01" value="{{ ($prepagado != '') ? $prepagado->monto_iva : ''}}">
                         </td>
 
                         <td>
@@ -140,19 +140,7 @@
                     </tr>
 
                     <tr style="background-color: rgba(0, 0, 0, 0.05);">
-                        <td>
-                            <label style="display: block" for="prepagado">Prepagado?</label>
-                            <div class="custom-control custom-radio custom-control-inline">
-                                <input onchange="inputs(this)" type="radio" class="movimiento-radio custom-control-input" id="prepagado1" name="prepagado" value="Si" required>
-                                <label class="custom-control-label" for="prepagado1">Si</label>
-                            </div>
-
-                            <div class="custom-control custom-radio custom-control-inline">
-                                <input onchange="inputs(this)" type="radio" checked class="movimiento-radio custom-control-input" id="prepagado2" name="prepagado" value="No" required>
-                                <label class="custom-control-label" for="prepagado2">No</label>
-                            </div>
-                        </td>
-                        <td colspan="4">
+                        <td colspan="5">
                             <label for="comentario">Comentario</label>
                             <input class="form-control" maxlength="200" minlength="5" name="comentario" type="text">
                         </td>
@@ -198,17 +186,17 @@
                     <tr>
                         <td>
                             <label for="pago_deuda_real">Pago real deuda</label>
-                            <input class="form-control" readonly name="pago_deuda_real" type="text">
+                            <input class="form-control" readonly name="pago_deuda_real" type="text" value="{{ ($prepagado != '') ? number_format($prepagado->monto, 2) : '' }}">
                         </td>
 
                         <td>
                             <label for="pago_iva_real">Pago real IVA</label>
-                            <input class="form-control" readonly name="pago_iva_real" type="text">
+                            <input class="form-control" readonly name="pago_iva_real" type="text" value="{{ ($prepagado != '') ? number_format($prepagado->monto_iva, 2) : '' }}">
                         </td>
 
                         <td>
                             <label for="monto_banco">Monto banco</label>
-                            <input class="form-control" readonly name="monto_banco" type="text">
+                            <input class="form-control" readonly name="monto_banco" type="text" value="{{ ($prepagado != '') ? number_format($prepagado->monto + $prepagado->monto_iva, 2) : '' }}">
                         </td>
                     </tr>
                 </tbody>
@@ -218,8 +206,11 @@
                 * Campos obligatorios
             </p>
 
+            @if($prepagado != '')
+                <input type="hidden" name="id_prepagado" value="{{ $prepagado->id }}">
+            @endif
+
             <input class="btn btn-outline-success btn-md" type="submit" value="Guardar">
-            </input>
         </fieldset>
     </form>
 
@@ -495,18 +486,18 @@
                 pago_deuda_real = $('[name=pago_deuda_real]').val();
                 pago_iva_real = $('[name=pago_iva_real]').val();
 
+                if (pago_deuda_real != '') {
+                    monto_banco = parseFloat(pago_deuda_real);
+                    monto_banco = monto_banco.toFixed(2);
+                    $('[name=monto_banco]').val(monto_banco);
+                }
+
                 if (pago_deuda_real != '' && pago_iva_real != '') {
                     pago_deuda_real = parseFloat(pago_deuda_real);
                     pago_iva_real = parseFloat(pago_iva_real);
 
                     monto_banco = pago_deuda_real + pago_iva_real;
                     monto_banco = parseFloat(monto_banco);
-                    monto_banco = monto_banco.toFixed(2);
-                    $('[name=monto_banco]').val(monto_banco);
-                }
-
-                else if (pago_deuda_real != '') {
-                    monto_banco = parseFloat(pago_deuda_real);
                     monto_banco = monto_banco.toFixed(2);
                     $('[name=monto_banco]').val(monto_banco);
                 }

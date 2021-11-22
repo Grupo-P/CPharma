@@ -58,9 +58,9 @@
                     </tr>
 
                     <tr>
-                        <th scope="row"><label for="monto">Monto *</label></th>
+                        <th scope="row"><label for="monto">Monto subtotal (Exento + base) *</label></th>
                         <td>
-                            <input type="number" step="0.01" required class="form-control" name="monto">
+                            <input type="number" step="0.01" class="form-control" name="monto">
                         </td>
                     </tr>
 
@@ -79,7 +79,7 @@
                     </tr>
 
                     <tr>
-                        <th scope="row"><label for="moneda">Moneda del proveedor</label></th>
+                        <th scope="row"><label for="moneda">Moneda subtotal</label></th>
                         <td>
                             <input type="text" readonly class="form-control" name="moneda">
                         </td>
@@ -155,18 +155,22 @@
                     return false;
                 }
 
-
                 monto = $('[name=monto]').val();
-                if (monto == 0) {
-                    alert('El monto debe ser distinto a cero');
+                iva = $('[name=monto_iva]').val();
+
+                if (iva == '' && monto == '') {
+                    alert('Debes rellenar los campos monto o monto al IVA');
                     event.preventDefault();
                     return false;
                 }
 
-                monto = $('[name=monto]').val();
-                iva = $('[name=monto_iva]').val();
+                monto = parseFloat(monto);
+                monto = Math.abs(monto);
 
-                if (parseFloat(iva) >= parseFloat(monto)) {
+                iva = parseFloat(iva);
+                iva = Math.abs(iva);
+
+                if (iva >= monto) {
                     alert('El monto del IVA debe ser menor al monto base');
                     event.preventDefault();
                     return false;

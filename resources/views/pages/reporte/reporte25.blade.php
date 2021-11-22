@@ -132,7 +132,7 @@
     $FInicialImp = date("d-m-Y", strtotime($FInicio));
     $FFinalImp= date("d-m-Y", strtotime($FFin));
 
-    $FFin = date("Y-m-d",strtotime($FFin."+ 1 days"));
+    //$FFin = date("Y-m-d",strtotime($FFin."+ 1 days"));
 
     $sql = R24Q_Articulos_Cero_Agrupados($FInicio,$FFin);
     $result = sqlsrv_query($conn,$sql);
@@ -210,8 +210,8 @@
       echo '<td>'.FG_Limpiar_Texto($row1["componente"]).'</td>';
       echo '<td align="center"><strong>'.$fecha->format("d-m-Y").'</strong></td>';
       echo '<td align="center"><strong>'.$hora->format("h:i:s a").'</strong></td>';
-      echo '<td>'.FG_Limpiar_Texto($row1["estacion"]).'</td>';
       echo '<td align="center">'.$row1["tipo"].'</td>';
+      echo '<td>'.FG_Limpiar_Texto($row1["estacion"]).'</td>';
       echo '</tr>';
       $contador++;
     }
@@ -228,6 +228,13 @@
     DESAROLLADO POR: SERGIO COVA
   */
   function R24Q_Articulos_Cero_Agrupados($FInicio,$FFin) {
+    if ($FInicio == $FFin) {
+        $where = "CONVERT(DATE, fecha) = '$FInicio'";
+    }
+    else {
+        $where = "CONVERT(DATE, fecha) > '$FInicio' AND CONVERT(DATE, fecha) < '$FFin'";
+    }
+
     $sql = "
       SELECT
       compo as componente,
@@ -235,11 +242,11 @@
       cat as tipo
       FROM faltantes
       WHERE
-      (CONVERT(DATE, fecha) > '$FInicio')
-      AND (CONVERT(DATE, fecha) < '$FFin')
+      $where
       GROUP BY faltantes.compo, faltantes.cat
       ORDER BY repeticiones DESC
     ";
+
     return $sql;
   }
   /**********************************************************************************/
@@ -250,6 +257,13 @@
     DESAROLLADO POR: SERGIO COVA
   */
   function R24Q_Articulos_Cero_Detallados($FInicio,$FFin) {
+    if ($FInicio == $FFin) {
+        $where = "CONVERT(DATE, fecha) = '$FInicio'";
+    }
+    else {
+        $where = "CONVERT(DATE, fecha) > '$FInicio' AND CONVERT(DATE, fecha) < '$FFin'";
+    }
+
     $sql = "
       SELECT
       compo as componente,
@@ -259,8 +273,7 @@
       cat as tipo
       FROM faltantes
       WHERE
-      (fecha > '$FInicio')
-      AND (fecha < '$FFin')
+      $where
       ORDER BY hora ASC
     ";
     return $sql;

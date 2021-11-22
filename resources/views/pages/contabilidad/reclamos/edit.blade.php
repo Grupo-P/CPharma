@@ -59,12 +59,12 @@
                     </tr>
 
                     <tr>
-                        <th scope="row"><label for="moneda">Moneda reclamo</label></th>
+                        <th scope="row"><label for="moneda">Moneda subtotal</label></th>
                         <td><input name="moneda" readonly class="form-control" value="{{ ($reclamo->proveedor) ? $reclamo->proveedor->moneda : '' }}" required></td>
                     </tr>
 
                     <tr>
-                        <th scope="row"><label for="monto">Monto sin IVA</label></th>
+                        <th scope="row"><label for="monto">Monto subtotal (Exento + Base)</label></th>
                         <td>
                             <input type="text" readonly value="{{ number_format($reclamo->monto, 2, ',', '.') }}" step="0.01" required class="form-control" name="monto">
                         </td>
@@ -74,13 +74,6 @@
                         <th scope="row"><label for="monto_iva">Monto IVA</label></th>
                         <td>
                             <input type="text" readonly value="{{ number_format($reclamo->monto_iva, 2, ',', '.') }}" class="form-control" name="monto_iva">
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <th scope="row"><label for="monto_total">Monto total</label></th>
-                        <td>
-                            <input type="text" readonly value="{{ number_format($reclamo->monto + $reclamo->monto_iva, 2, ',', '.') }}" class="form-control" name="monto_total">
                         </td>
                     </tr>
 

@@ -71,10 +71,10 @@ define ("passGS" , "Soporte123");
 define ("nameGS" , "SAWDB");
 /**********************************************************************************/
 /********************* CONEXION SERVER DESARROLLO DE NISAUL **********************/
-define ("serverDBs" , "DESKTOP-BPCSVJK");
+define ("serverDBs" , "DESKTOP-IGDNBMF\SQLEXPRESS");
 define ("userDBs" , "sa");
-define ("passDBs" , "123abc");
-define ("nameDBs" , "cpharmaftn");
+define ("passDBs" , "123");
+define ("nameDBs" , "smartftn");
 /**********************************************************************************/
 /********************* CONEXION SERVER DESARROLLO DE SERGIO ARG **********************/
 define ("serverDBsa" , "SERGIO-PC");

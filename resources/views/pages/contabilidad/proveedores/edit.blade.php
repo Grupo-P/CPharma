@@ -110,7 +110,7 @@
                     </tr>
 
                     <tr>
-                        <th scope="row"><label for="moneda">Moneda deuda *</label></th>
+                        <th scope="row"><label for="moneda">Moneda subtotal *</label></th>
                         <td>
                             <select required name="moneda" class="form-control">
                                 <option value=""></option>
@@ -122,7 +122,7 @@
                     </tr>
 
                     <tr>
-                        <th scope="row"><label for="saldo">Saldo deuda</label></th>
+                        <th scope="row"><label for="saldo">Saldo subtotal (Exento + Base)</label></th>
                         <td><input name="saldo" value="{{ number_format($proveedor->saldo, 2, '.', '') }}" class="form-control" type="number" step="0.01" readonly></td>
                     </tr>
 

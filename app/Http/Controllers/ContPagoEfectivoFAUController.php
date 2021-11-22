@@ -6,6 +6,7 @@ use compras\Auditoria;
 use compras\Configuracion;
 use compras\ContCuenta;
 use compras\ContPagoEfectivoFAU as ContPagoEfectivo;
+use compras\ContPrepagado;
 use compras\ContProveedor;
 use compras\Sede;
 use Illuminate\Http\Request;
@@ -38,7 +39,8 @@ class ContPagoEfectivoFAUController extends Controller
         if ($request->ajax()) {
             $proveedor = ContProveedor::find($request->id_proveedor);
 
-            $resultado['saldo'] = number_format($proveedor->saldo, 2, ',', '.');
+            $resultado['saldo']     = number_format($proveedor->saldo, 2, ',', '.');
+            $resultado['saldo_iva'] = number_format($proveedor->saldo_iva, 2, ',', '.');
 
             if ($proveedor->moneda != 'Dólares') {
                 if ($proveedor->moneda == 'Bolívares') {
@@ -66,11 +68,12 @@ class ContPagoEfectivoFAUController extends Controller
             $i              = 0;
 
             foreach ($sqlProveedores as $proveedor) {
-                $proveedores[$i]['label']  = $proveedor->nombre_proveedor . ' | ' . $proveedor->rif_ci;
-                $proveedores[$i]['value']  = $proveedor->nombre_proveedor . ' | ' . $proveedor->rif_ci;
-                $proveedores[$i]['id']     = $proveedor->id;
-                $proveedores[$i]['moneda'] = $proveedor->moneda;
-                $proveedores[$i]['saldo']  = number_format($proveedor->saldo, 2, ',', '');
+                $proveedores[$i]['label']      = $proveedor->nombre_proveedor . ' | ' . $proveedor->rif_ci;
+                $proveedores[$i]['value']      = $proveedor->nombre_proveedor . ' | ' . $proveedor->rif_ci;
+                $proveedores[$i]['id']         = $proveedor->id;
+                $proveedores[$i]['moneda']     = $proveedor->moneda;
+                $proveedores[$i]['moneda_iva'] = $proveedor->moneda_iva;
+                $proveedores[$i]['saldo']      = number_format($proveedor->saldo, 2, ',', '');
 
                 $i = $i + 1;
             }
@@ -78,7 +81,13 @@ class ContPagoEfectivoFAUController extends Controller
             $proveedores = '';
         }
 
-        return view('pages.contabilidad.efectivoFAU.create', compact('cuentas', 'request', 'proveedores'));
+        if ($request->prepagado) {
+            $prepagado = ContPrepagado::find($request->prepagado);
+        } else {
+            $prepagado = '';
+        }
+
+        return view('pages.contabilidad.efectivoFAU.create', compact('cuentas', 'request', 'prepagado', 'proveedores'));
     }
 
     /**
@@ -104,12 +113,22 @@ class ContPagoEfectivoFAUController extends Controller
                     $pago->ingresos = $request->input('monto');
                     $configuracion->valor += $request->input('monto');
                     $pago->concepto = $request->input('concepto');
+
+                    if ($request->id_proveedor && $request->pago_iva_real) {
+                        $configuracion->valor += $request->input('pago_iva_real');
+                    }
+
                     break;
                 case "Egreso":
                     $pago->egresos = $request->input('monto');
                     $configuracion->valor -= $request->input('monto');
                     $pago->concepto = $request->input('concepto');
                     $pago->estatus  = 'PAGADO';
+
+                    if ($request->id_proveedor && $request->pago_iva_real) {
+                        $configuracion->valor -= $request->input('pago_iva_real');
+                    }
+
                     break;
                 case "Diferido":
                     $pago->diferido_anterior = $configuracion2->valor;
@@ -122,6 +141,12 @@ class ContPagoEfectivoFAUController extends Controller
 
                     $pago->diferido_actual = $configuracion2->valor;
                     $pago->concepto        = $request->input('concepto') . " - DIFERIDO";
+
+                    if ($request->id_proveedor && $request->pago_iva_real) {
+                        $configuracion->valor -= $request->input('pago_iva_real');
+                        $configuracion2->valor += $request->input('pago_iva_real');
+                    }
+
                     break;
             }
 
@@ -135,6 +160,8 @@ class ContPagoEfectivoFAUController extends Controller
             }
 
             if ($request->input('id_proveedor')) {
+                $pago->concepto = $request->input('comentario');
+
                 $pago->id_proveedor = $request->input('id_proveedor');
 
                 $proveedor = ContProveedor::find($request->input('id_proveedor'));
@@ -145,20 +172,38 @@ class ContPagoEfectivoFAUController extends Controller
                     $monto = $request->input('monto');
                 }
 
-                $proveedor->saldo = (float) $proveedor->saldo - (float) $monto;
+                if ($proveedor->moneda_iva != 'Dólares') {
+                    $monto_iva = $request->input('monto_iva') * $request->input('tasa');
+                } else {
+                    $monto_iva = $request->input('monto_iva');
+                }
+
+                $pago->iva               = $request->monto_iva;
+                $pago->retencion_deuda_1 = $request->retencion_deuda_1;
+                $pago->retencion_deuda_2 = $request->retencion_deuda_2;
+                $pago->retencion_iva     = $request->retencion_iva;
+
+                $proveedor->saldo     = (float) $proveedor->saldo - (float) $monto;
+                $proveedor->saldo_iva = (float) $proveedor->saldo_iva - (float) $monto_iva;
                 $proveedor->save();
 
                 $pago->tasa = $request->input('tasa');
 
-                $pago->monto_proveedor = $request->input('monto_proveedor');
+                $pago->monto_proveedor = $request->input('monto');
             }
 
-            $pago->saldo_actual    = $configuracion->valor;
-            $pago->user            = auth()->user()->name;
+            $pago->saldo_actual = $configuracion->valor;
+            $pago->user         = auth()->user()->name;
 
             $pago->save();
             $configuracion->save();
             $configuracion2->save();
+
+            if ($request->id_prepagado) {
+                $prepagado         = ContPrepagado::find($request->id_prepagado);
+                $prepagado->status = 'Pagado';
+                $prepagado->save();
+            }
 
             //-------------------- AUDITORIA --------------------//
             $Auditoria           = new Auditoria();
@@ -171,7 +216,7 @@ class ContPagoEfectivoFAUController extends Controller
             return redirect('/efectivoFAU')->with('Saved', ' Informacion');
 
         } catch (\Illuminate\Database\QueryException $e) {
-            dd($e);
+            dd($request->all(), $e);
             return back()->with('Error', ' Error');
         }
     }
@@ -238,7 +283,14 @@ class ContPagoEfectivoFAUController extends Controller
                     $monto = $diferidos->diferido;
                 }
 
-                $proveedor->saldo = (float) $proveedor->saldo + (float) $monto;
+                if ($proveedor->moneda_iva != 'Dólares') {
+                    $monto_iva = $diferidos->iva * $diferidos->tasa;
+                } else {
+                    $monto_iva = $diferidos->iva;
+                }
+
+                $proveedor->saldo     = (float) $proveedor->saldo + (float) $monto;
+                $proveedor->saldo_iva = (float) $proveedor->saldo_iva + (float) $monto_iva;
                 $proveedor->save();
             }
 
@@ -258,6 +310,7 @@ class ContPagoEfectivoFAUController extends Controller
             $movimiento->tasa           = $diferidos->tasa;
             $movimiento->autorizado_por = $diferidos->autorizado_por;
             $movimiento->user_up        = $diferidos->user_up;
+            $movimiento->titular_pago   = $diferidos->titular_pago;
 
             /********************* GUARDAR CAMBIOS *********************/
             $movimiento->save();
@@ -306,6 +359,7 @@ class ContPagoEfectivoFAUController extends Controller
 
     public function validar(Request $request)
     {
+        return $request->id_proveedor;
         $proveedor = ContProveedor::find($request->id_proveedor);
         $resultado = [];
 

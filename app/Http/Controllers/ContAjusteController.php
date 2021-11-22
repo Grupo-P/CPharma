@@ -160,18 +160,21 @@ class ContAjusteController extends Controller
         $ajuste->reverso = 1;
         $ajuste->save();
 
-        $monto = ($ajuste->monto > 0) ? -$ajuste->monto : abs($ajuste->monto);
+        $monto     = ($ajuste->monto > 0) ? -$ajuste->monto : abs($ajuste->monto);
+        $monto_iva = ($ajuste->monto_iva > 0) ? -$ajuste->monto_iva : abs($ajuste->monto_iva);
 
         $nuevoAjuste                   = new ContAjuste();
         $nuevoAjuste->id_proveedor     = $ajuste->id_proveedor;
         $nuevoAjuste->monto            = $monto;
+        $nuevoAjuste->monto_iva        = $monto_iva;
         $nuevoAjuste->comentario       = 'Reverso del ajuste #' . $ajuste->id;
         $nuevoAjuste->usuario_registro = auth()->user()->name;
         $nuevoAjuste->reverso          = 1;
         $nuevoAjuste->save();
 
-        $proveedor        = ContProveedor::find($ajuste->id_proveedor);
-        $proveedor->saldo = (float) $proveedor->saldo + (float) $monto;
+        $proveedor            = ContProveedor::find($ajuste->id_proveedor);
+        $proveedor->saldo     = (float) $proveedor->saldo + (float) $monto;
+        $proveedor->saldo_iva = (float) $proveedor->saldo_iva + (float) $monto_iva;
         $proveedor->save();
 
         return redirect('/ajuste')->with('Deleted', ' Informacion');

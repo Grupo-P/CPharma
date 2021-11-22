@@ -100,58 +100,115 @@
             <td colspan="4" class="alinear-izq">{{ date_format($pago->created_at, 'd/m/Y H:i A') }}</td>
             </tr>
             <tr>
-            <td colspan="4" class="alinear-der">Monto en dólares:</td>
+            <td colspan="4" class="alinear-der">Monto pago:</td>
             <td colspan="4" class="alinear-izq">
-                @if($pago->monto)
-                    {{ number_format($pago->monto, 2, ',', '.') }}
-                @endif
+                @php
+                    if ($pago->ingresos) {
+                        $monto = $pago->ingresos;
+                    }
 
-                @if($pago->egresos)
-                    {{ number_format($pago->egresos, 2, ',', '.') }}
-                @endif
+                    if ($pago->egresos) {
+                        $monto = $pago->egresos;
+                    }
 
-                @if($pago->diferido)
-                    {{ number_format($pago->diferido, 2, ',', '.') }}
-                @endif
-            </td>
-            </tr>
+                    if ($pago->diferido) {
+                        $monto = $pago->diferido;
+                    }
 
-            @if($pago->titular_pago)
-                <tr>
-                <td colspan="4" class="alinear-der">Titular pago:</td>
-                <td colspan="4" class="alinear-izq">{{ $pago->titular_pago }}</td>
-                </tr>
-            @endif
+                    if ($pago->retencion_deuda_1) {
+                        $retencion_deuda_1 = $monto * ($pago->retencion_deuda_1 / 100);
 
-            @if($pago->proveedor)
-                <tr>
-                <td colspan="4" class="alinear-der">Monto al proveedor:</td>
-                <td colspan="4" class="alinear-izq">
-                    @php
-                      if ($pago->proveedor) {
                         if ($pago->proveedor->moneda != 'Dólares') {
-                            $monto = ($pago->egresos) ? $pago->egresos : $pago->diferido;
-
                             if ($pago->proveedor->moneda == 'Bolívares') {
-                                $monto_proveedor = $monto * $pago->tasa;
+                                $retencion_deuda_1 = $retencion_deuda_1 * $pago->tasa;
                             }
 
                             if ($pago->proveedor->moneda == 'Pesos') {
-                                $monto_proveedor = $monto * $pago->tasa;
+                                $retencion_deuda_1 = $retencion_deuda_1 * $pago->tasa;
                             }
-                        } else {
-                            $monto = ($pago->egresos) ? $pago->egresos : $pago->diferido;
-                            $monto_proveedor = $monto;
                         }
-                      }
-                    @endphp
+                    }
 
-                    {{(isset($monto_proveedor)) ? number_format($monto_proveedor,2,',','.') : ''}}
-                </td>
+                    if ($pago->retencion_deuda_2) {
+                        $retencion_deuda_2 = $monto * ($pago->retencion_deuda_2 / 100);
+
+                        if ($pago->proveedor->moneda != 'Dólares') {
+                            if ($pago->proveedor->moneda == 'Bolívares') {
+                                $retencion_deuda_2 = $retencion_deuda_2 * $pago->tasa;
+                            }
+
+                            if ($pago->proveedor->moneda == 'Pesos') {
+                                $retencion_deuda_2 = $retencion_deuda_2 * $pago->tasa;
+                            }
+                        }
+                    }
+
+                    if ($pago->retencion_iva) {
+                        $retencion_iva = $pago->iva * ($pago->retencion_iva / 100);
+
+                        if ($pago->proveedor->moneda != 'Dólares') {
+                            if ($pago->proveedor->moneda == 'Bolívares') {
+                                $retencion_iva = $retencion_iva * $pago->tasa;
+                            }
+
+                            if ($pago->proveedor->moneda == 'Pesos') {
+                                $retencion_iva = $retencion_iva * $pago->tasa;
+                            }
+                        }
+                    }
+
+                    $retencion_deuda_1 = isset($retencion_deuda_1) ? $retencion_deuda_1 : 0;
+                    $retencion_deuda_2 = isset($retencion_deuda_2) ? $retencion_deuda_2 : 0;
+                    $retencion_iva = isset($retencion_iva) ? $retencion_iva : 0;
+
+                    $monto_base_real = $monto - $retencion_deuda_1 - $retencion_deuda_2;
+                    $monto_pago = $monto - $retencion_deuda_1 - $retencion_deuda_2;
+
+                    if ($pago->iva) {
+                        $monto_iva = $pago->iva;
+                        $monto_iva_real = $monto_iva - $retencion_iva;
+                        $monto_pago = $monto_pago + $monto_iva_real;
+                    }
+
+                    echo number_format($monto_pago, 2, ',', '.')
+                @endphp
+            </td>
+
+            @if($pago->retencion_deuda_1)
+                <tr>
+                    <td colspan="4" class="alinear-der">Retención deuda 1:</td>
+                    <td colspan="4" class="alinear-izq">{{ number_format($retencion_deuda_1, 2, ',', '.') }}</td>
                 </tr>
             @endif
+
+            @if($pago->retencion_deuda_2)
+                <tr>
+                    <td colspan="4" class="alinear-der">Retención deuda 2:</td>
+                    <td colspan="4" class="alinear-izq">{{ number_format($retencion_deuda_2, 2, ',', '.') }}</td>
+                </tr>
+            @endif
+
+            @if($pago->retencion_iva)
+                <tr>
+                    <td colspan="4" class="alinear-der">Retención IVA:</td>
+                    <td colspan="4" class="alinear-izq">{{ number_format($retencion_iva, 2, ',', '.') }}</td>
+                </tr>
+            @endif
+
             <tr>
-            <td colspan="4" class="alinear-der">Alias bancario:</td>
+                <td colspan="4" class="alinear-der">Monto base real:</td>
+                <td colspan="4" class="alinear-izq">{{ number_format($monto_base_real, 2, ',', '.') }}</td>
+            </tr>
+
+            @if(isset($monto_iva_real))
+                <tr>
+                    <td colspan="4" class="alinear-der">Monto IVA real:</td>
+                    <td colspan="4" class="alinear-izq">{{ number_format($monto_iva_real, 2, ',', '.') }}</td>
+                </tr>
+            @endif
+
+            <tr>
+            <td colspan="4" class="alinear-der">Sede:</td>
             <td colspan="4" class="alinear-izq">Pago en efectivo por tesoreria - {{ $pago->sede }}</td>
             </tr>
             @if($pago->tasa)
@@ -160,10 +217,7 @@
                 <td colspan="4" class="alinear-izq">{{ number_format($pago->tasa,2,',','.') }}</td>
                 </tr>
             @endif
-            <tr>
-            <td colspan="4" class="alinear-der">Operador:</td>
-            <td colspan="4" class="alinear-izq">{{ $pago->user }}</td>
-            </tr>
+
             @if($pago->autorizado_por)
                 <tr>
                 <td colspan="4" class="alinear-der">Autorizado por:</td>
@@ -177,6 +231,19 @@
                 <td colspan="4" class="alinear-izq">{{ $pago->titular_pago }}</td>
                 </tr>
             @endif
+
+            <tr>
+            <td colspan="4" class="alinear-der">Operador:</td>
+            <td colspan="4" class="alinear-izq">{{ $pago->user }}</td>
+            </tr>
+            <tr>
+            @if($pago->cuentas)
+                <tr>
+                <td colspan="4" class="alinear-der">Titular pago:</td>
+                <td colspan="4" class="alinear-izq">{{ $pago->titular_pago }}</td>
+                </tr>
+            @endif
+            <tr>
             <td colspan="4" class="alinear-der">Comentario:</td>
             <td colspan="4" class="alinear-izq">{!! $pago->concepto !!}</td>
             </tr>

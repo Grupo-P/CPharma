@@ -38,7 +38,8 @@
                     <th scope="col" class="CP-sticky">Emisor</th>
                     <th scope="col" class="CP-sticky">Proveedor</th>
                     <th scope="col" class="CP-sticky">Monto del pago</th>
-                    <th scope="col" class="CP-sticky">Monto al proveedor</th>
+                    <th scope="col" class="CP-sticky">Monto proveedor base</th>
+                    <th scope="col" class="CP-sticky">Monto proveedor IVA</th>
                     <th scope="col" class="CP-sticky">Comentario</th>
                     <th scope="col" class="CP-sticky">Plan de cuentas</th>
                     <th scope="col" class="CP-sticky">Estado</th>
@@ -62,7 +63,7 @@
                         <td class="text-center">{{ date_format($pago->created_at, 'd/m/Y h:i A') }}</td>
                         <td class="text-center">{{ (get_class($pago) == 'compras\ContPagoBancario') ? 'Banco' : 'Efectivo' }}</td>
                         <td class="text-center">
-                            @if(get_class($pago) == 'compras\ContPagoBancario')
+                            @if(get_class($pago) == 'compras\ContPagoBancario' && $pago->banco)
                                 {{ $pago->banco->alias_cuenta }}
                             @endif
 
@@ -115,73 +116,56 @@
 
                         <td class="text-center">
                             @if($pago->monto)
-                                {{ number_format($pago->monto, 2, ',', '.') }}
-
-                                @php $monto = $pago->monto @endphp
+                                @php
+                                    $monto_banco = monto_banco($pago->monto, $pago->iva, $pago->retencion_deuda_1, $pago->retencion_deuda_2, $pago->retencion_iva);
+                                    echo number_format($monto_banco, 2, ',', '.');
+                                    $monto = ($pago->iva) ? $pago->monto + $pago->iva : $pago->monto;
+                                @endphp
                             @endif
 
                             @if($pago->egresos)
-                                {{ number_format($pago->egresos, 2, ',', '.') }}
-
-                                @php $monto = $pago->egresos @endphp
+                                @php
+                                    $monto_banco = monto_banco($pago->egresos, $pago->iva, $pago->retencion_deuda_1, $pago->retencion_deuda_2, $pago->retencion_iva);
+                                    echo number_format($monto_banco, 2, ',', '.');
+                                    $monto = ($pago->iva) ? $pago->egresos + $pago->iva : $pago->egresos;
+                                @endphp
                             @endif
 
                             @if($pago->diferido)
-                                {{ number_format($pago->diferido, 2, ',', '.') }}
-
-                                @php $monto = $pago->diferido @endphp
+                                @php
+                                    $monto_banco = monto_banco($pago->diferido, $pago->iva, $pago->retencion_deuda_1, $pago->retencion_deuda_2, $pago->retencion_iva);
+                                    echo number_format($monto_banco, 2, ',', '.');
+                                    $monto = ($pago->iva) ? $pago->diferido + $pago->iva : $pago->diferido;
+                                @endphp
                             @endif
                         </td>
 
                         @php
-                            $monto_proveedor = 0;
+                            $monto_proveedor_base = 0;
 
                             if (get_class($pago) == 'compras\ContPagoBancario') {
-                                if ($pago->banco->moneda != $pago->proveedor->moneda) {
-                                    if ($pago->banco->moneda == 'Dólares' && $pago->proveedor->moneda == 'Bolívares') {
-                                        $monto_proveedor = $monto * $pago->tasa;
-                                    }
+                                if ($pago->banco) {
+                                    $monto_proveedor_base = $monto;
 
-                                    if ($pago->banco->moneda == 'Dólares' && $pago->proveedor->moneda == 'Pesos') {
-                                        $monto_proveedor = $monto * $pago->tasa;
-                                    }
-
-                                    if ($pago->banco->moneda == 'Bolívares' && $pago->proveedor->moneda == 'Dólares') {
-                                        $monto_proveedor = $monto / $pago->tasa;
-                                    }
-
-                                    if ($pago->banco->moneda == 'Bolívares' && $pago->proveedor->moneda == 'Pesos') {
-                                        $monto_proveedor = $monto * $pago->tasa;
-                                    }
-
-                                    if ($pago->banco->moneda == 'Pesos' && $pago->proveedor->moneda == 'Bolívares') {
-                                        $monto_proveedor = $monto / $pago->tasa;
-                                    }
-
-                                    if ($pago->banco->moneda == 'Pesos' && $pago->proveedor->moneda == 'Dólares') {
-                                        $monto_proveedor = $monto / $pago->tasa;
-                                    }
-                                } else {
-                                    $monto_proveedor = $monto;
+                                    $url = '/bancarios/soporte/' . $pago->id;
                                 }
-
-                                $url = '/bancarios/soporte/' . $pago->id;
                             } else {
                                 if ($pago->proveedor) {
                                     if ($pago->proveedor->moneda != 'Dólares') {
-                                        $monto_proveedor = $monto * $pago->tasa;
+                                        $monto_proveedor_base = $monto * $pago->tasa;
                                     } else {
-                                        $monto_proveedor = $monto;
+                                        $monto_proveedor_base = $monto;
                                     }
                                 } else {
-                                    $monto_proveedor = $monto;
+                                    $monto_proveedor_base = $monto;
                                 }
 
                                 $url = '/efectivo' . $sede . '/soporte/' . $pago->id;
                             }
                         @endphp
 
-                        <td class="text-center">{{ number_format($monto_proveedor, 2, ',', '.') }}</td>
+                        <td class="text-center">{{ number_format($monto_proveedor_base, 2, ',', '.') }}</td>
+                        <td class="text-center">{{ ($pago->iva) ? number_format($pago->iva, 2, ',', '.') : '' }}</td>
                         <td class="text-center">{!! ($pago->comentario) ? $pago->comentario : $pago->concepto !!}</td>
 
                         @php
@@ -195,7 +179,7 @@
                         @endphp
 
                         <td class="text-center">{{ $plan_cuentas }}</td>
-                        <td class="text-center">{{ ($pago->deleted_at) ? 'Reversado' : 'Pagado' }}</td>
+                        <td class="text-center">{{ ($pago->estatus == 'Reversado') ? 'Reversado' : 'Pagado' }}</td>
                         <td class="text-center">{{ ($pago->fecha_conciliado) ? 'Si' : 'No' }}</td>
                         <td class="text-center">{{ ($pago->user) ? $pago->user : $pago->operador }}</td>
                         <td class="text-center">
@@ -206,7 +190,7 @@
                     </tr>
 
                     @php
-                        if (get_class($pago) == 'compras\ContPagoBancario') {
+                        if (get_class($pago) == 'compras\ContPagoBancario' && $pago->banco) {
                             if ($pago->banco->moneda == 'Dólares') {
                                 $dolares = $dolares + $monto;
                             }
