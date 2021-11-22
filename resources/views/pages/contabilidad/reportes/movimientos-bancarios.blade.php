@@ -64,7 +64,13 @@
                         </td>
 
                         <td class="text-center">
-                            {{ $pago->iva ? number_format($pago->monto + $pago->iva, 2, ',', '.') : number_format($pago->monto, 2, ',', '.') }}
+                            @if($pago->monto)
+                                @php
+                                    $monto_banco = monto_banco($pago->monto, $pago->iva, $pago->retencion_deuda_1, $pago->retencion_deuda_2, $pago->retencion_iva);
+                                    echo number_format($monto_banco, 2, ',', '.');
+                                    $monto = ($pago->iva) ? $pago->monto + $pago->iva : $pago->monto;
+                                @endphp
+                            @endif
                         </td>
                         <td class="text-center">{{ $pago->comentario }}</td>
                         <td class="text-center">{{ $pago->fecha_conciliado ? 'Si' : 'No' }}</td>

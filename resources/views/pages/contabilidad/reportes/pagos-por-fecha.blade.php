@@ -116,21 +116,27 @@
 
                         <td class="text-center">
                             @if($pago->monto)
-                                {{ ($pago->iva) ? number_format($pago->monto + $pago->iva, 2, ',', '.') : $pago->monto }}
-
-                                @php $monto = ($pago->iva) ? $pago->monto + $pago->iva : $pago->monto @endphp
+                                @php
+                                    $monto_banco = monto_banco($pago->monto, $pago->iva, $pago->retencion_deuda_1, $pago->retencion_deuda_2, $pago->retencion_iva);
+                                    echo number_format($monto_banco, 2, ',', '.');
+                                    $monto = ($pago->iva) ? $pago->monto + $pago->iva : $pago->monto;
+                                @endphp
                             @endif
 
                             @if($pago->egresos)
-                                {{ number_format($pago->egresos, 2, ',', '.') }}
-
-                                @php $monto = ($pago->iva) ? $pago->egresos + $pago->iva : $pago->egresos @endphp
+                                @php
+                                    $monto_banco = monto_banco($pago->egresos, $pago->iva, $pago->retencion_deuda_1, $pago->retencion_deuda_2, $pago->retencion_iva);
+                                    echo number_format($monto_banco, 2, ',', '.');
+                                    $monto = ($pago->iva) ? $pago->egresos + $pago->iva : $pago->egresos;
+                                @endphp
                             @endif
 
                             @if($pago->diferido)
-                                {{ number_format($pago->diferido, 2, ',', '.') }}
-
-                                @php $monto = ($pago->iva) ? $pago->diferido + $pago->iva : $pago->diferido @endphp
+                                @php
+                                    $monto_banco = monto_banco($pago->diferido, $pago->iva, $pago->retencion_deuda_1, $pago->retencion_deuda_2, $pago->retencion_iva);
+                                    echo number_format($monto_banco, 2, ',', '.');
+                                    $monto = ($pago->iva) ? $pago->diferido + $pago->iva : $pago->diferido;
+                                @endphp
                             @endif
                         </td>
 
@@ -173,7 +179,7 @@
                         @endphp
 
                         <td class="text-center">{{ $plan_cuentas }}</td>
-                        <td class="text-center">{{ ($pago->deleted_at) ? 'Reversado' : 'Pagado' }}</td>
+                        <td class="text-center">{{ ($pago->estatus == 'Reversado') ? 'Reversado' : 'Pagado' }}</td>
                         <td class="text-center">{{ ($pago->fecha_conciliado) ? 'Si' : 'No' }}</td>
                         <td class="text-center">{{ ($pago->user) ? $pago->user : $pago->operador }}</td>
                         <td class="text-center">

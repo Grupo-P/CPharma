@@ -25,6 +25,8 @@ class ContReporteController extends Controller
 
     public function pagos_por_fecha(Request $request)
     {
+        include app_path() . '/functions/functions_contabilidad.php';
+
         if ($request->get('fechaInicio')) {
             $fechaInicio = new Datetime($request->get('fechaInicio'));
             $fechaInicio = $fechaInicio->format('d/m/Y');
@@ -344,6 +346,8 @@ class ContReporteController extends Controller
 
     public function movimientos_bancarios(Request $request)
     {
+        include app_path() . '/functions/functions_contabilidad.php';
+
         $bancos = ContBanco::orderBy('alias_cuenta', 'ASC')->get();
 
         if ($request->get('id_banco')) {
