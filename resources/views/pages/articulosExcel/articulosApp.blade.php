@@ -146,7 +146,7 @@
 
             /*PRECIO DOLAR*/
                 $PrecioDolar = ($Precio/$TasaActual);
-                $PrecioDolar = number_format($PrecioDolar,2,"," ,"." );
+                $PrecioDolar = number_format($PrecioDolar,2,"." ,"," );
             /*PRECIO DOLAR*/
 
             /*IMAGEN*/
