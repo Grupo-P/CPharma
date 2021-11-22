@@ -61,6 +61,18 @@
         AND InvArticuloAtributo.InvArticuloId = InvArticulo.Id),CAST(0 AS INT))) <> 0)
         ";
     }
+    else if($condicionAtributo=="ExcluirExcel"){
+        $condicionAtributo = " AND ((ISNULL((SELECT
+        InvArticuloAtributo.InvArticuloId
+        FROM InvArticuloAtributo
+        WHERE InvArticuloAtributo.InvAtributoId =
+        (SELECT InvAtributo.Id
+        FROM InvAtributo
+        WHERE
+        InvAtributo.Descripcion <> 'ExcluirExcel')
+        AND InvArticuloAtributo.InvArticuloId = InvArticulo.Id),CAST(0 AS INT))) <> 0)
+        ";
+    }
     else if($condicionAtributo=="TODOS"){
         $condicionAtributo = "";
     }
