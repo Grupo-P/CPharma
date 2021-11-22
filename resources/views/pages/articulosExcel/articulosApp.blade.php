@@ -101,11 +101,6 @@
         $connCPharma = FG_Conectar_CPharma();
 		$sql = RQ_Articulos_PaginaWEB($condicionExistencia,$condicionArticulo,$condicionAtributo,$condicionUtilidad);
 
-        echo"<pre>";
-        echo $sql;
-        echo"</pre>";
-        die;
-
 		$result = sqlsrv_query($conn,$sql);
 		$contador = 1;
         $TasaActual = FG_Tasa_Fecha_Venta($connCPharma,date('Y-m-d'));
