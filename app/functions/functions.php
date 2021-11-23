@@ -4031,11 +4031,15 @@
   {
     $array = [
         'FARMACIA TIERRA NEGRA, C.A.' => 'FTN',
+        'FARMACIA TIERRA NEGRA, C.A. ( FTN )' => 'FTN',
+
         'FARMACIA LA LAGO,C.A.' => 'FLL',
+        'FARMACIA LA LAGO,C.A. ( FLL )' => 'FLL',
+        'FARMACIA LA LAGO CA (FLL)' => 'FLL',
+
         'FARMACIA AVENIDA UNIVERSIDAD, C.A.' => 'FAU',
-        'GRUPO P, C.A' => 'GP',
-        'MULATA CAFÉ C.A' => 'MC',
-        'FARMACIAS KD EXPRESS, C.A.' => 'KDI'
+        'FARMACIA AVENIDA UNIVERSIDAD, C.A. (FAU)' => 'FAU',
+        'FARMACIA AVENIDA UNIVERSIDAD, CA' => 'FAU'
     ];
 
     return $array;

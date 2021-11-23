@@ -573,7 +573,7 @@
 
         if (isset($_GET['SEDE']) & $_GET['SEDE'] == 'FLL') {
             if ($conectividad_ftn == 1 && $descripcion_ftn != '-' && $existencia_ftn > 0) {
-                echo '<td align="center"><button type="button" onclick="agregarTraslado(\'' . $CodigoBarra . '\', \'FTN\', \'' . $existencia_ftn . '\')" class="btn btn-outline-info btn-sm">Agregar FLL</td>';
+                echo '<td align="center"><button type="button" onclick="agregarTraslado(\'' . $CodigoBarra . '\', \'FTN\', \'' . $existencia_ftn . '\')" class="btn btn-outline-info btn-sm">Agregar FTN</td>';
             } else {
                 echo '<td>-</td>';
             }
