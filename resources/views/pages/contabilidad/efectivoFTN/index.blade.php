@@ -139,7 +139,9 @@
             {!! $pago->concepto !!}
           </span>
         </td>
-        <td>{{number_format($pago->ingresos, 2, ',', '.')}}</td>
+        <td>
+          {{number_format(monto_banco($pago->ingresos, $pago->iva, $pago->retencion_deuda_1, $pago->retencion_deuda_2, $pago->retencion_iva), 2, ',', '.')}}
+        </td>
         <td>
           {{number_format(monto_banco($pago->egresos, $pago->iva, $pago->retencion_deuda_1, $pago->retencion_deuda_2, $pago->retencion_iva), 2, ',', '.')}}
         </td>

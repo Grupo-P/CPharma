@@ -141,12 +141,14 @@
           </span>
         </td>
         <td>
+          {{number_format(monto_banco($pago->ingresos, $pago->iva, $pago->retencion_deuda_1, $pago->retencion_deuda_2, $pago->retencion_iva), 2, ',', '.')}}
+        </td>
+        <td>
           {{number_format(monto_banco($pago->egresos, $pago->iva, $pago->retencion_deuda_1, $pago->retencion_deuda_2, $pago->retencion_iva), 2, ',', '.')}}
         </td>
         <td>
           {{number_format(monto_banco($pago->diferido, $pago->iva, $pago->retencion_deuda_1, $pago->retencion_deuda_2, $pago->retencion_iva), 2, ',', '.')}}
         </td>
-        <td>{{number_format($pago->diferido, 2, ',', '.')}}</td>
         <td>{{number_format($pago->saldo_anterior, 2, ',', '.')}}</td>
         <td>{{number_format($pago->saldo_actual, 2, ',', '.')}}</td>
         <td>{{ ($pago->tasa) ? number_format($pago->tasa,2,',','.') : '' }}</td>

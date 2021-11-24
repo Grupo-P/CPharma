@@ -141,7 +141,7 @@
         <th class="bg-success text-white border border-white"><h4>PRECIO BSD</h4></th>
         <?php
           if (_ConsultorDolar_ == "SI") {
-           echo '<th class="bg-success text-white border border-white"><h4>PRECIO $</h4></th>';
+           echo '<th class="bg-success text-white border border-white"><h4>PRECIO '.SigDolar.'</h4></th>';
           }
         ?>
       </thead>
@@ -187,7 +187,7 @@
       <thead class="center">
         <th class="bg-info text-white border border-white"><h5>Código de barra</h5></th>
         <th class="bg-info text-white border border-white"><h5>Descripción</h5></th>
-        <th class="bg-info text-white border border-white"><h5>Precio $</h5></th>
+        <th class="bg-info text-white border border-white"><h5>Precio <?php echo SigDolar; ?></h5></th>
         <th class="bg-info text-white border border-white"><h5>Precio BsS</h5></th>
         <th class="bg-info text-white border border-white"><h5>Precio BsD</h5></th>
       </thead>
@@ -231,7 +231,7 @@
             <th class="align-middle bg-success text-center text-white border border-default p-3">DESCRIPCIÓN</th>
             <th class="align-middle bg-success text-center text-white border border-default p-3">PRECIO BS</th>
             <th class="align-middle bg-success text-center text-white border border-default p-3">PRECIO BS.D</th>
-            <th class="align-middle bg-success text-center text-white border border-default p-3">PRECIO $</th>
+            <th class="align-middle bg-success text-center text-white border border-default p-3">PRECIO <?php echo SigDolar; ?></th>
             <th class="align-middle bg-success text-center text-white border border-default p-3">FECHA Y HORA</th>
           </thead>
 
@@ -369,7 +369,7 @@
               nuevaFila += '</div>';
 
               nuevaFila += '<div class="carousel-caption d-none d-md-block h-25 w-100" style="right: 0; left: 0; background-color:rgba(0, 0, 0,0.6)">';
-              nuevaFila += '<h2 class="text-white">Bs.S '+precio+' / $' + precioDolar + '</h2>';
+              nuevaFila += '<h2 class="text-white">Bs.S '+precio+' / <?php echo SigDolar; ?>' + precioDolar + '</h2>';
 
               nuevaFila += '<h2 class="text-white">Bs.D '+precioDigital+'</h2>';
               nuevaFila += '<h4 class="text-white">'+descripcion+'</h4>';
@@ -464,7 +464,7 @@
               $('#PPrecioScan').html('BsS. '+precio);
               //const TasaVentaD = eval(<?php /*echo $TasaVenta*/ ?>);
               precioDolar = formateoPrecio(data.precio/TasaVenta,2);
-              $('#PPrecioDolarScan').html('$. '+precioDolar);
+              $('#PPrecioDolarScan').html('<?php echo SigDolar; ?>. '+precioDolar);
 
               precioDigital = formateoPrecio(parseFloat(precioReconversion(data.precio, 'BSD')), 2);
               $('#PPrecioDigitalScan').html('BsD. '+precioDigital);
@@ -544,7 +544,7 @@
                   nuevaFila += '</td>';
                   /*Armado Fila PPrecioSug*/
                   nuevaFila += '<td align="center" class="text-black">';
-                  nuevaFila += '<h4><b><p>$ '+precioE+'</p></b></h4>';
+                  nuevaFila += '<h4><b><p><?php echo SigDolar; ?> '+precioE+'</p></b></h4>';
                   nuevaFila += '</td>';
                   nuevaFila += '<td align="center" class="text-black">';
                   nuevaFila += '<h4><b><p>BsS. '+precioI+'</p></b></h4>';
