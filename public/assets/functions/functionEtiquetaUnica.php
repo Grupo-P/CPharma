@@ -106,7 +106,7 @@
 
                     if($Dolarizado=='SI'){
                         $simbolo = '*';
-                        $moneda = SigDolar;
+                        $moneda = SigDolarPublico;
 
                         $bolivarDigital = '';
 
@@ -296,7 +296,7 @@
                     $bolivarDigital = '';
 
                     $simbolo = '*';
-                    $moneda = SigDolar;
+                    $moneda = SigDolarPublico;
 
                     if(_MensajeDolar_== 'SI' && _EtiquetaDolar_=='SI'){
                         $tam_dolar = "font-size:1.7rem;";

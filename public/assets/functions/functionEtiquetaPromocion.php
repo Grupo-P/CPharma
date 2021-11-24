@@ -105,7 +105,7 @@
 
                     if($Dolarizado=='SI'){
                         $simbolo = '*';
-                        $moneda = SigDolar;
+                        $moneda = SigDolarPublico;
 
                         if(_MensajeDolar_== 'SI' && _EtiquetaDolar_=='SI'){
                             $tam_dolar = "font-size:1.7rem;";
@@ -272,7 +272,7 @@
                 if($Dolarizado=='SI'){
                     $bolivarDigital = '';
                     $simbolo = '*';
-                    $moneda = SigDolar;
+                    $moneda = SigDolarPublico;
 
                     if(_MensajeDolar_== 'SI' && _EtiquetaDolar_=='SI'){
                         $tam_dolar = "font-size:1.7rem;";
@@ -351,7 +351,7 @@
 
                     $tamano = ($bolivarDigital)?'aumento':'aumentoPrecio';
 
-                    $precio = ($Dolarizado == 'SI') ? SigDolar.' '.number_format ($PrecioHoy,2,"," ,"." ) : SigVe.' '.number_format (precioReconversion($PrecioHoy, 'BSD'),2,"," ,"." );
+                    $precio = ($Dolarizado == 'SI') ? SigDolarPublico.' '.number_format ($PrecioHoy,2,"," ,"." ) : SigVe.' '.number_format (precioReconversion($PrecioHoy, 'BSD'),2,"," ,"." );
 
                     $Etiqueta = $Etiqueta.'
                         <table class="etq" style="display: inline;">

@@ -2076,7 +2076,7 @@
 
                     if($Dolarizado=='SI'){
                         $simbolo = '*';
-                        $moneda = SigDolar;
+                        $moneda = SigDolarPublico;
 
                         if(_MensajeDolar_== 'SI' && _EtiquetaDolar_=='SI'){
                             $mensajePie = '
@@ -2189,7 +2189,7 @@
                                     </tr>
                                     ';
                                         if( floatval(round($PrecioHoy,2)) < floatval($PrecioAyer) ){
-                                            if ($moneda != '$') {
+                                            if ($moneda != SigDolarPublico) {
                                                 echo'
                                                     <tr>
                                                         <td colspan="2" style="color:red;text-align: center">
@@ -2287,7 +2287,7 @@
 
                 if($Dolarizado=='SI'){
                         $simbolo = '*';
-                        $moneda = SigDolar;
+                        $moneda = SigDolarPublico;
 
                         if(_MensajeDolar_== 'SI' && _EtiquetaDolar_=='SI'){
                             $tam_dolar = "font-size:1.7rem;";

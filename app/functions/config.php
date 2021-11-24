@@ -1,7 +1,8 @@
 <?php
 /**********************************************************************************/
 /***************************** CONSTANTES GLOBALES *******************************/
-define("SigDolar","REF");
+define("SigDolar","$");
+define("SigDolarPublico","REF"); // Solo afecta etiquetas y consultor
 define("SigVe","Bs.D");
 define("Utilidad",0.77);
 define("Impuesto",1.16);
