@@ -173,6 +173,12 @@
   if(in_array(0,$reportes)!=true){
 ?>
 
+<style>
+    #sorttable_sortfwdind, #sorttable_sortrevind {
+        display: none;
+    }
+</style>
+
 <?php
   if(Auth::user()->departamento == 'COMPRAS' || Auth::user()->departamento == 'SURTIDO' || Auth::user()->departamento == 'GERENCIA' || Auth::user()->departamento == 'LÍDER DE TIENDA'){
 ?>
