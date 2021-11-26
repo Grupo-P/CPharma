@@ -270,7 +270,7 @@
     </div>
   </div>
 
-    <table class="table table-striped table-bordered col-12 sortable">
+    <table class="bg-secondary text-white table table-striped table-bordered col-12 sortable">
         <tbody>
           <tr>
             <td>
