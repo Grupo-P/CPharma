@@ -43,7 +43,7 @@
   </h1>
   <hr class="row align-items-start col-12">
 
-  <a href="/efectivoFAU" class="btn btn-outline-info btn-sm">
+  <a href="/bolivaresFAU" class="btn btn-outline-info btn-sm">
     <i class="fa fa-reply"></i> Regresar
   </a>
 
@@ -56,7 +56,7 @@
   @endif
 
 
-  {!! Form::open(['route' => 'efectivoFAU.store', 'method' => 'POST', 'id' => 'crear_movimientos', 'class' => 'form-group']) !!}
+  {!! Form::open(['route' => 'bolivaresFAU.store', 'method' => 'POST', 'id' => 'crear_movimientos', 'class' => 'form-group']) !!}
     @if($request->get('tipo') == 'movimiento')
       <fieldset>
         <table class="table table-borderless table-striped">

@@ -43,7 +43,7 @@
   </h1>
   <hr class="row align-items-start col-12">
 
-  <a href="/efectivoFTN" class="btn btn-outline-info btn-sm">
+  <a href="/bolivaresFTN" class="btn btn-outline-info btn-sm">
     <i class="fa fa-reply"></i> Regresar
   </a>
 
@@ -56,7 +56,7 @@
   @endif
 
 
-  {!! Form::open(['route' => 'efectivoFTN.store', 'method' => 'POST', 'id' => 'crear_movimientos', 'class' => 'form-group']) !!}
+  {!! Form::open(['route' => 'bolivaresFTN.store', 'method' => 'POST', 'id' => 'crear_movimientos', 'class' => 'form-group']) !!}
     @if($request->get('tipo') == 'movimiento')
       <fieldset>
         <table class="table table-borderless table-striped">
