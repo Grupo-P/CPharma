@@ -814,8 +814,8 @@
                     Ejemplo: <b>LORATADINA 10MG X 10 TABLETAS COASPHARMA</b><br><br>
                     <b>NOTAS:</b><br>
                     <li>Añadir el (Competidor/Componente/Paciente) si la descripción lo amerita<br>Ejemplos: ACETAMINOFEN <b>PEDIATRICO</b> X 60 ML AG<br>CLAUSY (<b>ENTEROGERMINA</b>) 5ML X 1 VIAL LIVESPO</li>
-                    <li>Las abreviaciones I.V. o I.M. no están permitidas. Se debe escribir INTRAVENOSO o INTRAMUSCULAR si el articlio lo amerita.</li>
-                    <li>Añadir la presentación si el articlio lo amerita (Blister o Caja) para eliminar la referencia. <b>REF.01</b>.</li>
+                    <li>Las abreviaciones I.V. o I.M. no están permitidas. Se debe escribir INTRAVENOSO o INTRAMUSCULAR si el articulo lo amerita.</li>
+                    <li>Añadir la presentación si el articulo lo amerita (Blister o Caja) para eliminar la referencia. <b>REF.01</b>.</li>
                     <li>Se debe añadir el componente del medicamento y el atributo correspondiente a su ubicación <b>(RX, NEVERA, PSICOTROPICO)</b>.</li>
                     <li>Si el medicamento lo amerita también se le debe añadir el atributo <b>RECIPE</b>.</li>
                   </div>

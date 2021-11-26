@@ -6,7 +6,7 @@
 
 @section('content')
 <style>
-	table{
+    table{
 		display: inline;
 		border-collapse: collapse;
 		text-align: center;
@@ -185,41 +185,44 @@
 	$Contador = 1;
 	$CuentaEtiqueta = 0;
 
+    echo '<div class="row">';
+
 	while($Contador<=$bultos){
 		echo'
-		<table class="table-borderless" style="display: inline;">
-			<thead>
-		    <tr>
+        <div class="col-md-6" style="margin-bottom: 35px">
+            <table class="table-borderless" style="display: inline;">
+    			<thead>
+    		    <tr>
 		    		<th scope="row" class="espacioT">
 		    			<span class="navbar-brand text-info CP-title-NavBar">
 		    				<b><i class="fas fa-syringe text-success"></i>CPharma</b>
   						</span>
-		    			<span class="aumentoT espacioT">Bulto de traslados internos</span>
+		    			<span class="espacioT">Bulto de traslados internos</span>
 		    		</th>
-		    </tr>
-	  	</thead>
-	  	<tbody>
-		    <tr>
-	      	<td class="aumento espacioT">Soporte #'.$numero_ajuste.' del '.$fecha_ajuste.'</td>
-		    </tr>
-		    <tr>
-	      	<td class="aumentoT espacioT"><strong>De: '.$sede_emisora.'</strong></td>
-		    </tr>
-		    <tr>
-	      	<td class="aumentoT espacioT"><strong>Para: '.$sede_destino.'</strong></td>
-		    </tr>
-		    <tr>
-	      	<td class="alinear-der aumento espacioT">Preparado el '.$fecha_embalaje.' por '.$operador_embalaje.'</td>
-		    </tr>
-		    <tr>
-	      	<td class="aumento espacioT">Favor no aplilar demasiadas cajas y contemplar que el contenido es fragil para el momento de su movilizacion</td>
-		    </tr>
-		    <tr>
-	      	<td class="alinear-der aumento espacioT"><strong>Bulto '.$Contador.' de '.$bultos.'</strong></td>
-		    </tr>
-	  	</tbody>
-		</table>
-		<br/><br/>
+    		    </tr>
+    	  	</thead>
+    	  	<tbody>
+    		    <tr>
+    	      	    <td class="aumento espacioT">Soporte #'.$numero_ajuste.' del '.$fecha_ajuste.'</td>
+    		    </tr>
+    		    <tr>
+    	      	    <td class="aumentoT espacioT"><strong>De: '.$sede_emisora.'</strong></td>
+    		    </tr>
+    		    <tr>
+    	      	    <td class="aumentoT espacioT"><strong>Para: '.$sede_destino.'</strong></td>
+    		    </tr>
+    		    <tr>
+    	      	    <td class="alinear-der aumento espacioT">Preparado el '.$fecha_embalaje.' por '.$operador_embalaje.'</td>
+    		    </tr>
+    		    <tr>
+    	      	    <td class="aumento espacioT">Favor no aplilar demasiadas cajas y contemplar que el contenido es fragil para el momento de su movilizacion</td>
+    		    </tr>
+    		    <tr>
+    	      	    <td class="alinear-der aumento espacioT"><strong>Bulto '.$Contador.' de '.$bultos.'</strong></td>
+    		    </tr>
+    	  	</tbody>
+    		</table>
+        </div>
 		';
 		$Contador++;
 		$CuentaEtiqueta++;
@@ -229,5 +232,7 @@
 			$CuentaEtiqueta=0;
 		}
 	}
+
+    echo '</div>';
  }
 ?>
