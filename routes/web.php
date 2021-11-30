@@ -510,6 +510,7 @@ Route::get('/reportes/reporte-por-cuentas', 'ContReporteController@reporte_por_c
 
 Route::resource('/conciliaciones', 'ContConciliacionesController');
 
+Route::get('/trasladoRecibir/pdf/{sede}', 'TrasladoRecibirController@pdf');
 Route::resource('/trasladoRecibir', 'TrasladoRecibirController');
 Route::get('/trasladoRecibir/{codigo_barra}/{sede}', 'TrasladoRecibirController@edit');
 Route::get('/trasladoRecibir/limpiar', 'TrasladoRecibirController@destroy');

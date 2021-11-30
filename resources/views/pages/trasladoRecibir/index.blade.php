@@ -65,6 +65,14 @@
     </form>
     <input type="button" name="imprimir" value="Imprimir" class="btn btn-outline-success btn-sm" onclick="window.print();" style="display: inline; margin-left: 10px;">
 
+    @if(session()->get('traslado'))
+        @foreach(session()->get('traslado') as $clave => $valor)
+            <a href="/trasladoRecibir/pdf/{{ $clave }}" class="btn btn-outline-danger btn-sm">
+                <span class="fa fa-file-pdf"></span> Descargar PDF de {{ $clave }}
+            </a>
+        @endforeach
+    @endif
+
     <hr class="row align-items-start col-12">
 
     @if(session()->get('traslado'))

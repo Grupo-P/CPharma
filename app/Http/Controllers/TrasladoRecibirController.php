@@ -3,6 +3,7 @@
 namespace compras\Http\Controllers;
 
 use Illuminate\Http\Request;
+use PDF;
 
 class TrasladoRecibirController extends Controller
 {
@@ -39,6 +40,15 @@ class TrasladoRecibirController extends Controller
     {
         session()->push("traslado.$request->sede", ['codigo_barra' => $request->codigo_barra, 'cantidad' => $request->cantidad]);
         return session()->get('traslado');
+    }
+
+    public function pdf($sede)
+    {
+        include app_path() . '/functions/config.php';
+        include app_path() . '/functions/functions.php';
+
+        $pdf = PDF::loadView('pages.trasladoRecibir.pdf', compact('sede'));
+        return $pdf->download($sede . '.pdf');
     }
 
     /**
