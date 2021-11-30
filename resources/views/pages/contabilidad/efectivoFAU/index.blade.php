@@ -135,6 +135,11 @@
         <th>{{ str_pad($pago->id, 5, 0, STR_PAD_LEFT) }}</th>
         <td>{{ ($pago->proveedor) ? 'Proveedor' : 'Movimiento' }}</td>
         <td>
+          <span class="d-inline-block " style="max-width: 250px;">
+            {!! $pago->concepto !!}
+          </span>
+        </td>
+        <td>
           {{number_format(monto_banco($pago->ingresos, $pago->iva, $pago->retencion_deuda_1, $pago->retencion_deuda_2, $pago->retencion_iva), 2, ',', '.')}}
         </td>
         <td>
