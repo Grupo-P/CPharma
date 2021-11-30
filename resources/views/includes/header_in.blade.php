@@ -608,6 +608,13 @@
     </button>
     <div class="dropdown-menu">
       <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('/CorridaPrecios') }}">
+          <span data-feather="home"></span>
+          <i class="fas fa-funnel-dollar"></i>
+          Corrida de Precios<span class="sr-only">(current)</span>
+        </a>
+      </li>
+      <li class="nav-item">
         <a class="nav-link CP-Links-Menu" href="{{ url('/sedes_reporte') }}">
           <span data-feather="home"></span>
           <i class="fas fa-file-invoice"></i>
@@ -686,6 +693,13 @@
           <span data-feather="home"></span>
           <i class="fas fa-tag"></i>
           Captura Etiquetas<span class="sr-only">(current)</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('/configuracion') }}">
+          <span data-feather="home"></span>
+          <i class="fas fa-cogs"></i>
+          Configuracion<span class="sr-only">(current)</span>
         </a>
       </li>
     </div>

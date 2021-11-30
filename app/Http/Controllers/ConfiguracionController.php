@@ -27,6 +27,11 @@ class ConfiguracionController extends Controller
     public function index()
     {
         $configuraciones =  Configuracion::type()->get();
+
+        if (auth()->user()->departamento == 'ADMINISTRACION') {
+            $configuraciones =  Configuracion::where('variable', 'DolarCalculo')->get();
+        }
+
         return view('pages.configuracion.index', compact('configuraciones'));
     }
 
