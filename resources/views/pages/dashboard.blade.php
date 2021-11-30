@@ -2011,6 +2011,8 @@
 <!-- ADMINISTRACION -->
 <?php
   if(Auth::user()->departamento == 'ADMINISTRACION'){
+    $configuracion = Configuracion::where('variable','DolarCalculo')->get();
+    $TC = $configuracion[0]->valor;
 ?>
   <!-- Modal ADMINISTRACION -->
   <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -2043,72 +2045,45 @@
   <!-- Modal ADMINISTRACION -->
   <!-- Dashboard ADMINISTRACION-->
   <div class="card-deck">
-    <div class="card border-warning mb-3" style="width: 14rem;">
-      <div class="card-body text-left bg-warning">
-        <h3 class="card-title">
-          <span class="card-text text-white">
-            <i class="fas fa-balance-scale-left"></i>
-            <?php
-            $saldo_actualBs = DB::table('ts_movimientos')
-              ->where('tasa_ventas_id', 1)
-              ->orderBy('id', 'desc')
-              ->first();
-
-            if(empty($saldo_actualBs)) {
-                echo 'Saldo actual: '. number_format(0, 2, ',', '.') . " " . SigVe;
-              }
-              else {
-                echo 'Saldo actual: '. number_format($saldo_actualBs->saldo_actual, 2, ',', '.') . " " . SigVe;
-              }
-          ?>
-          </span>
-        </h3>
-        <p class="card-text text-white">
-        <?php
-          echo 'Movimientos en bolivares registrados: ' . $movimientosBs;
-          echo '<br>Fecha y hora actual: ' . date("d-m-Y h:i:s a", time());
-        ?>
-        </p>
-      </div>
-      <div class="card-footer bg-transparent border-warning text-right">
-        <a href="/movimientos?tasa_ventas_id=1" class="btn btn-outline-warning btn-sm">Visualizar</a>
-      </div>
-    </div>
-
-    <div class="card border-secondary mb-3" style="width: 14rem;">
-      <div class="card-body text-left bg-secondary">
-        <h3 class="card-title">
-          <span class="card-text text-white">
-            <i class="fas fa-balance-scale"></i>
-            <?php
-            $saldo_actualDs = DB::table('ts_movimientos')
-              ->where('tasa_ventas_id', 2)
-              ->orderBy('id', 'desc')
-              ->first();
-
-              if(empty($saldo_actualDs)) {
-                echo 'Saldo actual: ' . number_format(0, 2, ',', '.') . " " . SigDolar;
-              }
-              else {
-                echo 'Saldo actual: ' . number_format($saldo_actualDs->saldo_actual, 2, ',', '.') . " " . SigDolar;
-              }
-          ?>
-          </span>
-        </h3>
-        <p class="card-text text-white">
-        <?php
-          echo 'Movimientos en dolares registrados: ' . $movimientosDs;
-          echo '<br>Fecha y hora actual: ' . date("d-m-Y h:i:s a", time());
-        ?>
-        </p>
-      </div>
-      <div class="card-footer bg-transparent border-secondary text-right">
-        <a href="/movimientos?tasa_ventas_id=2" class="btn btn-outline-secondary btn-sm">Visualizar</a>
-      </div>
-    </div>
-
+    <!-- Tasa Venta -->
     <div class="card border-dark mb-3" style="width: 14rem;">
       <div class="card-body text-left bg-dark">
+        <h3 class="card-title">
+          <span class="card-text text-white">
+            <i class="fas fa-credit-card"></i>
+            <?php
+              echo 'Tasa Venta: '.$Tasa.' '.SigVe;
+            ?>
+          </span>
+        </h3>
+        <p class="card-text text-white">
+        <?php
+          echo 'Ultima Actualizacion: '.$tasaVenta;
+        ?>
+        </p>
+      </div>
+      <div class="card-footer bg-transparent border-dark text-right">
+        <table style="width:100%;">
+          <tr>
+            <td style="float: left;">
+              <p class="text-left">
+                <strong>Tasa Mercado:</strong>
+                <?php echo " ".number_format(((($TM/$TV)-1)*100),2,"," ,"." )." %"; ?>
+                <br><strong>Tasa Calculo:</strong>
+                <?php echo " ".number_format(((($TC/$TV)-1)*100),2,"," ,"." )." %"; ?>
+              </p>
+            </td>
+            <td style="float: right;">
+              <a href="/tasaVenta/" class="btn btn-outline-dark btn-sm">Visualizar</a>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+    <!-- Dolar -->
+    <div class="card border-secondary mb-3" style="width: 14rem;">
+      <div class="card-body text-left bg-secondary">
           <h3 class="card-title">
             <span class="card-text text-white">
               <i class="fas fa-credit-card"></i>
@@ -2123,9 +2098,59 @@
           ?>
           </p>
       </div>
-      <div class="card-footer bg-transparent border-dark text-right">
-        <a href="/dolar/" class="btn btn-outline-dark btn-sm">Visualizar</a>
+      <div class="card-footer bg-transparent border-secondary text-right">
+        <table style="width:100%;">
+          <tr>
+            <td style="float: left;">
+              <p class="text-left">
+                <strong>Tasa Venta:</strong>
+                <?php echo " ".number_format(((($TM/$TV)-1)*100),2,"," ,"." )." %"; ?>
+                <br><strong>Tasa Calculo:</strong>
+                <?php echo " ".number_format(((($TC/$TM)-1)*100),2,"," ,"." )." %"; ?>
+              </p>
+            </td>
+            <td style="float: right;">
+              <a href="/dolar/" class="btn btn-outline-secondary btn-sm">Visualizar</a>
+            </td>
+          </tr>
+        </table>
       </div>
+    </div>
+
+    <!-- Tasa Calculo -->
+    <div class="card border-dark mb-3" style="width: 10rem;">
+        <div class="card-body text-left" style="background: #000;">
+          <h3 class="card-title">
+            <span class="card-text text-white">
+              <i class="fas fa-calculator"></i>
+              <?php
+              echo 'Tasa Calculo: '.number_format($configuracion[0]->valor,2,"," ,"." );
+            ?>
+            </span>
+          </h3>
+          <p class="card-text text-white">
+          <?php
+            echo 'Ultima Actualizacion: '.$configuracion[0]->updated_at->format("d-m-Y h:i:s a");
+          ?>
+          </p>
+        </div>
+        <div class="card-footer bg-transparent border-dark text-right">
+          <table style="width:100%;">
+          <tr>
+            <td style="float: left;">
+              <p class="text-left">
+                <strong>Tasa Venta:</strong>
+                <?php echo " ".number_format(((($TC/$TV)-1)*100),2,"," ,"." )." %"; ?>
+                <br><strong>Tasa Mercado:</strong>
+                <?php echo " ".number_format(((($TC/$TM)-1)*100),2,"," ,"." )." %"; ?>
+              </p>
+            </td>
+            <td style="float: right;">
+              <a href="/configuracion/" class="btn btn-outline-dark btn-sm">Visualizar</a>
+            </td>
+          </tr>
+        </table>
+        </div>
     </div>
   </div>
   <!-- Dashboard ADMINISTRACION-->
