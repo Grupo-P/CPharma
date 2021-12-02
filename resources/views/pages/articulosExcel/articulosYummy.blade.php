@@ -2,14 +2,14 @@
 	use PhpOffice\PhpSpreadsheet\IOFactory;
 	use PhpOffice\PhpSpreadsheet\Spreadsheet;
 	use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
-    use compras\Configuracion;
+    use compras\TrackImagen;
 
 	include(app_path().'\functions\config.php');
 	include(app_path().'\functions\functions.php');
 	include(app_path().'\functions\querys_mysql.php');
 	include(app_path().'\functions\querys_sqlserver.php');
 
-    (isset($_GET['condicionExcel']))?$condicionExcel = $_GET['condicionExcel']:$condicionExcel = "WEB";
+    (isset($_GET['condicionExcel']))?$condicionExcel = $_GET['condicionExcel']:$condicionExcel = "APP";
     (isset($_GET['condicionArticulo']))?$condicionArticulo = $_GET['condicionArticulo']:$condicionArticulo = "TODOS";
     (isset($_GET['condicionExistencia']))?$condicionExistencia = $_GET['condicionExistencia']:$condicionExistencia = "20";
     (isset($_GET['condicionAtributo']))?$condicionAtributo = $_GET['condicionAtributo']:$condicionAtributo = "TODOS";
@@ -61,6 +61,18 @@
         AND InvArticuloAtributo.InvArticuloId = InvArticulo.Id),CAST(0 AS INT))) <> 0)
         ";
     }
+    else if($condicionAtributo=="ExcluirExcel"){
+        $condicionAtributo = " AND ((ISNULL((SELECT
+        InvArticuloAtributo.InvArticuloId
+        FROM InvArticuloAtributo
+        WHERE InvArticuloAtributo.InvAtributoId =
+        (SELECT InvAtributo.Id
+        FROM InvAtributo
+        WHERE
+        InvAtributo.Descripcion = 'ExcluirExcel')
+        AND InvArticuloAtributo.InvArticuloId = InvArticulo.Id),CAST(0 AS INT))) = 0)
+        ";
+    }
     else if($condicionAtributo=="TODOS"){
         $condicionAtributo = "";
     }
@@ -91,48 +103,16 @@
 
 		$result = sqlsrv_query($conn,$sql);
 		$contador = 1;
+        $TasaActual = FG_Tasa_Fecha_Venta($connCPharma,date('Y-m-d'));
 
-        $configuracion =  Configuracion::select('valor')->where('variable','URL_externa')->get();
-
-        $sheet->setCellValue('A'.$contador,"ID");
-        $sheet->setCellValue('B'.$contador,"Tipo");
-        $sheet->setCellValue('C'.$contador,"SKU");
-        $sheet->setCellValue('D'.$contador,"Nombre");
-        $sheet->setCellValue('E'.$contador,"Publicado");
-        $sheet->setCellValue('F'.$contador,"¿Está destacado?");
-        $sheet->setCellValue('G'.$contador,"Visibilidad en el catálogo");
-        $sheet->setCellValue('H'.$contador,"Descripción corta");
-        $sheet->setCellValue('I'.$contador,"Descripción");
-        $sheet->setCellValue('J'.$contador,"Día en que empieza el precio rebajado");
-        $sheet->setCellValue('K'.$contador,"Día en que termina el precio rebajado");
-        $sheet->setCellValue('L'.$contador,"Estado del impuesto");
-        $sheet->setCellValue('M'.$contador,"Clase de impuesto");
-        $sheet->setCellValue('N'.$contador,"¿En inventario?");
-        $sheet->setCellValue('O'.$contador,"Inventario");
-        $sheet->setCellValue('P'.$contador,"Cantidad de bajo inventario");
-        $sheet->setCellValue('Q'.$contador,"¿Permitir reservas de productos agotados?");
-        $sheet->setCellValue('R'.$contador,"¿Vendido individualmente?");
-        $sheet->setCellValue('S'.$contador,"Peso (kg)");
-        $sheet->setCellValue('T'.$contador,"Longitud (cm)");
-        $sheet->setCellValue('U'.$contador,"Ancho (cm)");
-        $sheet->setCellValue('V'.$contador,"Altura (cm)");
-        $sheet->setCellValue('W'.$contador,"¿Permitir valoraciones de clientes?");
-        $sheet->setCellValue('X'.$contador,"Nota de compra");
-        $sheet->setCellValue('Y'.$contador,"Precio rebajado");
-        $sheet->setCellValue('Z'.$contador,"Precio normal");
-        $sheet->setCellValue('AA'.$contador,"Categorías");
-        $sheet->setCellValue('AB'.$contador,"Etiquetas");
-        $sheet->setCellValue('AC'.$contador,"Clase de envío");
-        $sheet->setCellValue('AD'.$contador,"Imágenes");
-        $sheet->setCellValue('AE'.$contador,"Límite de descargas");
-        $sheet->setCellValue('AF'.$contador,"Días de caducidad de la descarga");
-        $sheet->setCellValue('AG'.$contador,"Superior");
-        $sheet->setCellValue('AH'.$contador,"Productos agrupados");
-        $sheet->setCellValue('AI'.$contador,"Ventas dirigidas");
-        $sheet->setCellValue('AJ'.$contador,"Ventas cruzadas");
-        $sheet->setCellValue('AK'.$contador,"URL externa");
-        $sheet->setCellValue('AL'.$contador,"Texto del botón");
-        $sheet->setCellValue('AM'.$contador,"Posición");
+        $sheet->setCellValue('A'.$contador,"sku");
+        $sheet->setCellValue('B'.$contador,"name");
+        $sheet->setCellValue('C'.$contador,"description");
+        $sheet->setCellValue('D'.$contador,"price");
+        $sheet->setCellValue('E'.$contador,"stock");
+        $sheet->setCellValue('F'.$contador,"taxonomy_1");
+        $sheet->setCellValue('G'.$contador,"taxonomy_2");
+        $sheet->setCellValue('H'.$contador,"image");
 
         $contador++;
 
@@ -158,13 +138,13 @@
         	    $Precio = FG_Calculo_Precio_Alfa($Existencia,$ExistenciaAlmacen1,$ExistenciaAlmacen2,$IsTroquelado,$UtilidadArticulo,$UtilidadCategoria,$TroquelAlmacen1,$PrecioCompraBrutoAlmacen1,$TroquelAlmacen2,
             		$PrecioCompraBrutoAlmacen2,$PrecioCompraBruto,$IsIVA,$CondicionExistencia);
 
-        	    $Precio = number_format($Precio,2,"," ,"." );
+        	    //$Precio = number_format($Precio,2,"," ,"." );
         	    if($Existencia == ""){ $Existencia = '0'; }
 
                 $sqlCategorizacion = "
                 SELECT
-                categorias.nombre as categoria,
-                subcategorias.nombre as subcategoria
+                if(categorias.codigo_app is not null,categorias.codigo_app ,categorias.nombre) as categoria,
+                if(subcategorias.codigo_app is not null,subcategorias.codigo_app ,subcategorias.nombre) as subcategoria
                 FROM categorizacions
                 INNER JOIN categorias ON categorias.codigo = codigo_categoria
                 INNER JOIN subcategorias ON subcategorias.codigo = codigo_subcategoria
@@ -177,57 +157,45 @@
                 $subcategoria = ($RowCategorizacion['subcategoria']) ? $RowCategorizacion['subcategoria'] : "SIN SUBCATEGORIA";
  	/* CPHARMA */
 
-	    /*EXCEL*/
-                $sheet->setCellValue('A'.$contador,$IdArticulo);
-                $sheet->setCellValue('B'.$contador,"simple");
-    	    	$sheet->setCellValue('C'.$contador,$CodigoBarra);
-    	    	$sheet->setCellValue('D'.$contador,$Descripcion);
-                $sheet->setCellValue('E'.$contador,"1");
-                $sheet->setCellValue('F'.$contador,"0");
-                $sheet->setCellValue('G'.$contador,"visible");
-                $sheet->setCellValue('H'.$contador,"");
-                $sheet->setCellValue('I'.$contador,$Descripcion);
-                $sheet->setCellValue('J'.$contador,"");
-                $sheet->setCellValue('K'.$contador,"");
-                $sheet->setCellValue('L'.$contador,"taxable");
-                $sheet->setCellValue('M'.$contador,"");
-                $sheet->setCellValue('N'.$contador,"1");
-                $sheet->setCellValue('O'.$contador,$Existencia);
-                $sheet->setCellValue('P'.$contador,"24");
-                $sheet->setCellValue('Q'.$contador,"0");
-                $sheet->setCellValue('R'.$contador,"0");
-                $sheet->setCellValue('S'.$contador,"");
-                $sheet->setCellValue('T'.$contador,"");
-                $sheet->setCellValue('U'.$contador,"");
-                $sheet->setCellValue('V'.$contador,"");
-                $sheet->setCellValue('W'.$contador,"0");
-                $sheet->setCellValue('X'.$contador,"");
-                $sheet->setCellValue('Y'.$contador,"");
-                $sheet->setCellValue('Z'.$contador,$Precio);
-                $sheet->setCellValue('AA'.$contador,$categoria);
-                $sheet->setCellValue('AB'.$contador,"");
-                $sheet->setCellValue('AC'.$contador,"");
-                $sheet->setCellValue('AD'.$contador,"");
-                $sheet->setCellValue('AE'.$contador,"");
-                $sheet->setCellValue('AF'.$contador,"");
-                $sheet->setCellValue('AG'.$contador,"");
-                $sheet->setCellValue('AH'.$contador,"");
-                $sheet->setCellValue('AI'.$contador,"");
-                $sheet->setCellValue('AJ'.$contador,"");
-                $sheet->setCellValue('AK'.$contador,$configuracion[0]->valor.$CodigoBarra.".jpg");
-                $sheet->setCellValue('AL'.$contador,"");
-                $sheet->setCellValue('AM'.$contador,"0");
+            /*PRECIO DOLAR*/
+                $PrecioDolar = ($Precio/$TasaActual);
+                $PrecioDolar = number_format($PrecioDolar,2,"." ,"," );
+            /*PRECIO DOLAR*/
 
-    	/*EXCEL*/
+            /*IMAGEN*/
+                $TrackImagen =
+                TrackImagen::orderBy('id','asc')
+                ->where('codigo_barra',$CodigoBarra)
+                ->get();
+
+                if(!empty($TrackImagen[0]->codigo_barra)) {
+                    $url_app = $TrackImagen[0]->url_app;
+                }
+                else{
+                    $url_app = "";
+                }
+            /*IMAGEN*/
+
+
+            /*EXCEL*/
+                $sheet->setCellValue('A'.$contador,$CodigoBarra);
+                $sheet->setCellValue('B'.$contador,$Descripcion);
+                $sheet->setCellValue('C'.$contador,$Descripcion);
+                $sheet->setCellValue('D'.$contador,$PrecioDolar);
+                $sheet->setCellValue('E'.$contador,$Existencia);
+                $sheet->setCellValue('F'.$contador,$categoria);
+                $sheet->setCellValue('G'.$contador,$subcategoria);
+                $sheet->setCellValue('H'.$contador,$url_app);
+            /*EXCEL*/
 
 	/* CPHARMA */
-    			$contador++;
+                $contador++;
           	}
         mysqli_close($connCPharma);
         sqlsrv_close($conn);
     /* CPHARMA */
 
-    $nombreDelDocumento = "PaginaWEB_CPharma_".date('Ymd_h-i-A').".xlsx";
+    $nombreDelDocumento = "Articulos_Yummy_CPharma_".date('Ymd_h-i-A').".xlsx";
 
 	/*EXCEL*/
 		header('Content-Type: application/vnd.ms-excel');

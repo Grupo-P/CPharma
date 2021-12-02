@@ -314,12 +314,16 @@ Route::get('/MenuArticulosExcel', function() {
     return view('pages.articulosExcel.menuArticulosExcel');
 });
 
-Route::get('/ArticulosExcel', function() {
-    return view('pages.articulosExcel.articulosExcel');
+Route::get('/ArticulosWeb', function() {
+    return view('pages.articulosExcel.articulosWeb');
 });
 
-Route::get('/ArticulosAPP', function() {
-    return view('pages.articulosExcel.articulosApp');
+Route::get('/ArticulosYummy', function() {
+    return view('pages.articulosExcel.articulosYummy');
+});
+
+Route::get('/ArticulosPedidosYa', function() {
+    return view('pages.articulosExcel.articulosPedidosYa');
 });
 
 Route::get('/CorridaPrecios', function() {

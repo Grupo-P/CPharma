@@ -95,7 +95,8 @@
                 <select id="condicionExcel" name="condicionExcel" class="form-control" required="required">
                     <option value="">Seleccione...</option>
                     <option value="WEB">Excel Web</option>
-                    <option value="APP">Excel App</option>
+                    <option value="YUMMY">Excel Yummy</option>
+                    <option value="PEDIDOSYA">Excel PedidosYa</option>
                 </select>
             </td>
 
@@ -158,9 +159,13 @@
 
                 var urlExcel = "";
                 if(condicionExcel=="WEB"){
-                    urlExcel = "/ArticulosExcel";
-                }else if(condicionExcel=="APP"){
-                    urlExcel = "/ArticulosAPP";
+                    urlExcel = "/ArticulosWeb";
+                }
+                else if(condicionExcel=="YUMMY"){
+                    urlExcel = "/ArticulosYummy";
+                }
+                else if(condicionExcel=="PEDIDOSYA"){
+                    urlExcel = "/ArticulosPedidosYa";
                 }
 
                 $("#myFormulario").attr("action",urlExcel);
