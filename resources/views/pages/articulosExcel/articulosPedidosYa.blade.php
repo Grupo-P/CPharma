@@ -105,14 +105,12 @@
 		$contador = 1;
         $TasaActual = FG_Tasa_Fecha_Venta($connCPharma,date('Y-m-d'));
 
-        $sheet->setCellValue('A'.$contador,"sku");
-        $sheet->setCellValue('B'.$contador,"name");
-        $sheet->setCellValue('C'.$contador,"description");
-        $sheet->setCellValue('D'.$contador,"price");
-        $sheet->setCellValue('E'.$contador,"stock");
-        $sheet->setCellValue('F'.$contador,"taxonomy_1");
-        $sheet->setCellValue('G'.$contador,"taxonomy_2");
-        $sheet->setCellValue('H'.$contador,"image");
+        $sheet->setCellValue('A'.$contador,"Categoria");
+        $sheet->setCellValue('B'.$contador,"SKU / CODIGO EAN");
+        $sheet->setCellValue('C'.$contador,"Nombre");
+        $sheet->setCellValue('D'.$contador,"Precio");
+        $sheet->setCellValue('E'.$contador,"URL / FOTO");
+        $sheet->setCellValue('F'.$contador,"Descripcion");
 
         $contador++;
 
@@ -143,8 +141,8 @@
 
                 $sqlCategorizacion = "
                 SELECT
-                if(categorias.codigo_app is not null,categorias.codigo_app ,categorias.nombre) as categoria,
-                if(subcategorias.codigo_app is not null,subcategorias.codigo_app ,subcategorias.nombre) as subcategoria
+                categorias.nombre as categoria,
+                subcategorias.nombre as subcategoria
                 FROM categorizacions
                 INNER JOIN categorias ON categorias.codigo = codigo_categoria
                 INNER JOIN subcategorias ON subcategorias.codigo = codigo_subcategoria
@@ -178,14 +176,12 @@
 
 
             /*EXCEL*/
-                $sheet->setCellValue('A'.$contador,$CodigoBarra);
-                $sheet->setCellValue('B'.$contador,$Descripcion);
+                $sheet->setCellValue('A'.$contador,$categoria);
+                $sheet->setCellValue('B'.$contador,$CodigoBarra);
                 $sheet->setCellValue('C'.$contador,$Descripcion);
                 $sheet->setCellValue('D'.$contador,$PrecioDolar);
-                $sheet->setCellValue('E'.$contador,$Existencia);
-                $sheet->setCellValue('F'.$contador,$categoria);
-                $sheet->setCellValue('G'.$contador,$subcategoria);
-                $sheet->setCellValue('H'.$contador,$url_app);
+                $sheet->setCellValue('E'.$contador,$CodigoBarra);
+                $sheet->setCellValue('F'.$contador,'');
             /*EXCEL*/
 
 	/* CPHARMA */
@@ -195,7 +191,7 @@
         sqlsrv_close($conn);
     /* CPHARMA */
 
-    $nombreDelDocumento = "APP_CPharma_".date('Ymd_h-i-A').".xlsx";
+    $nombreDelDocumento = "Articulos_PedidosYa_CPharma_".date('Ymd_h-i-A').".xlsx";
 
 	/*EXCEL*/
 		header('Content-Type: application/vnd.ms-excel');
