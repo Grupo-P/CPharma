@@ -170,7 +170,7 @@
                         $monto_pago = $monto_pago + $monto_iva_real;
                     }
 
-                    echo number_format($monto_pago, 2, ',', '.')
+                    echo $pago->monto_banco
                 @endphp
             </td>
 

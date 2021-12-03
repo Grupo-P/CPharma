@@ -123,6 +123,7 @@ class ContPagoBancarioController extends Controller
         $pago->retencion_deuda_2 = $request->input('retencion_deuda_2');
         $pago->retencion_iva     = $request->input('retencion_iva');
         $pago->tasa              = $request->input('tasa');
+        $pago->monto_banco       = $request->input('monto_banco');
 
         $pago->operador = auth()->user()->name;
         $pago->estatus  = 'Pagado';
@@ -139,7 +140,7 @@ class ContPagoBancarioController extends Controller
         }
 
         if ($request->id_prepagado) {
-            $prepagado = ContPrepagado::find($request->id_prepagado);
+            $prepagado         = ContPrepagado::find($request->id_prepagado);
             $prepagado->status = 'Pagado';
             $prepagado->save();
         }
