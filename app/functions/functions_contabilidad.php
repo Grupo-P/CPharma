@@ -1,5 +1,40 @@
 <?php
 
+function conversion($monto, $tasa, $moneda_transaccion, $moneda_proveedor)
+{
+    //dd($monto, $tasa, $moneda_transaccion, $moneda_proveedor);
+
+    if ($moneda_transaccion != $moneda_proveedor) {
+        if ($moneda_proveedor == 'Dólares' && $moneda_transaccion == 'Bolívares') {
+            $monto_pago = $monto * $tasa;
+        }
+
+        if ($moneda_proveedor == 'Dólares' && $moneda_transaccion == 'Pesos') {
+            $monto_pago = $monto * $tasa;
+        }
+
+        if ($moneda_proveedor == 'Bolívares' && $moneda_transaccion == 'Dólares') {
+            $monto_pago = $monto / $tasa;
+        }
+
+        if ($moneda_proveedor == 'Bolívares' && $moneda_transaccion == 'Pesos') {
+            $monto_pago = $monto * $tasa;
+        }
+
+        if ($moneda_proveedor == 'Pesos' && $moneda_transaccion == 'Bolívares') {
+            $monto_pago = $monto / $tasa;
+        }
+
+        if ($moneda_proveedor == 'Pesos' && $moneda_transaccion == 'Dólares') {
+            $monto_pago = $monto / $tasa;
+        }
+    } else {
+        $monto_pago = $monto;
+    }
+
+    return $monto_pago;
+}
+
 function simbolo($moneda)
 {
     switch ($moneda) {

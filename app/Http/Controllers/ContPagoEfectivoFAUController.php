@@ -182,6 +182,7 @@ class ContPagoEfectivoFAUController extends Controller
                 $pago->retencion_deuda_1 = $request->retencion_deuda_1;
                 $pago->retencion_deuda_2 = $request->retencion_deuda_2;
                 $pago->retencion_iva     = $request->retencion_iva;
+                $pago->monto_banco       = $request->input('monto_banco');
 
                 $proveedor->saldo     = (float) $proveedor->saldo - (float) $monto;
                 $proveedor->saldo_iva = (float) $proveedor->saldo_iva - (float) $monto_iva;

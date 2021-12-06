@@ -5,35 +5,6 @@
 @endsection
 
 @section('content')
-@php
-    if ($pago->banco->moneda != $pago->proveedor->moneda) {
-        if ($pago->banco->moneda == 'Dólares' && $pago->proveedor->moneda == 'Bolívares') {
-            $monto_proveedor = $pago->monto * $pago->tasa;
-        }
-
-        if ($pago->banco->moneda == 'Dólares' && $pago->proveedor->moneda == 'Pesos') {
-            $monto_proveedor = $pago->monto * $pago->tasa;
-        }
-
-        if ($pago->banco->moneda == 'Bolívares' && $pago->proveedor->moneda == 'Dólares') {
-            $monto_proveedor = $pago->monto / $pago->tasa;
-        }
-
-        if ($pago->banco->moneda == 'Bolívares' && $pago->proveedor->moneda == 'Pesos') {
-            $monto_proveedor = $pago->monto * $pago->tasa;
-        }
-
-        if ($pago->banco->moneda == 'Pesos' && $pago->proveedor->moneda == 'Bolívares') {
-            $monto_proveedor = $pago->monto / $pago->tasa;
-        }
-
-        if ($pago->banco->moneda == 'Pesos' && $pago->proveedor->moneda == 'Dólares') {
-            $monto_proveedor = $pago->monto / $pago->tasa;
-        }
-    } else {
-        $monto_proveedor = $pago->monto;
-    }
-@endphp
 
 <style>
     table{
@@ -181,7 +152,7 @@
                         $monto_pago = $monto_pago + $monto_iva_real;
                     }
 
-                    echo number_format($monto_pago, 2, ',', '.')
+                    echo $pago->monto_banco
                 @endphp
             </td>
 
@@ -217,28 +188,34 @@
                     <td colspan="4" class="alinear-izq">{{ number_format($monto_iva_real, 2, ',', '.') }}</td>
                 </tr>
             @endif
+
             @if($pago->tasa)
                 <tr>
                 <td colspan="4" class="alinear-der">Tasa:</td>
                 <td colspan="4" class="alinear-izq">{{ number_format($pago->tasa, 2, ',', '.') }}</td>
                 </tr>
             @endif
+
             <tr>
             <td colspan="4" class="alinear-der">Estado:</td>
             <td colspan="4" class="alinear-izq">{{ $pago->estatus }}</td>
             </tr>
+
             <tr>
             <td colspan="4" class="alinear-der">Alias bancario:</td>
             <td colspan="4" class="alinear-izq">{{ $pago->banco->alias_cuenta }}</td>
             </tr>
+
             <tr>
             <td colspan="4" class="alinear-der">Operador:</td>
             <td colspan="4" class="alinear-izq">{{ $pago->operador }}</td>
             </tr>
+
             <tr>
             <td colspan="4" class="alinear-der">Comentario:</td>
             <td colspan="4" class="alinear-izq">{{ $pago->comentario }}</td>
             </tr>
+
             <tr>
             <td colspan="4" class="alinear-izq">
                 <br/><br/><br/>

@@ -90,8 +90,20 @@
     $IntervalCarga = $InicioCarga->diff($FinCarga);
     echo'Tiempo de carga: '.$IntervalCarga->format("%Y-%M-%D %H:%I:%S");
   }
-  else if(isset($_GET['IdFact'])){
+  else if(isset($_GET['tipo'])){
   //CASO 3: CARGA AL HABER SELECCIONADO UNA FACTURA
+  //se pasa a la seleccion del articulo
+    $InicioCarga = new DateTime("now");
+
+    R30_Factura_Articulo_Traslado($_GET['SEDE'],$_GET['IdProv'],$_GET['NombreProv'],$_GET['IdFact']);
+    FG_Guardar_Auditoria('CONSULTAR','REPORTE','Registro de Compras');
+
+    $FinCarga = new DateTime("now");
+    $IntervalCarga = $InicioCarga->diff($FinCarga);
+    echo'Tiempo de carga: '.$IntervalCarga->format("%Y-%M-%D %H:%I:%S");
+  }
+  else if(isset($_GET['IdFact'])){
+  //CASO 4: CARGA AL HABER SELECCIONADO UNA FACTURA
   //se pasa a la seleccion del articulo
     $InicioCarga = new DateTime("now");
 
@@ -240,6 +252,7 @@
             <th scope="col" class="CP-sticky">Total (Con IVA)</th>
             <th scope="col" class="CP-sticky">Usuario Auditor</th>
             <th scope="col" class="CP-sticky">Seleccion</th>
+            <th scope="col" class="CP-sticky">Traslado</th>
           </tr>
         </thead>
         <tbody>
@@ -277,10 +290,25 @@
                 print_r($SedeConnection);
                 echo'">
              
-              <input type="submit" value="Selecionar" class="btn btn-outline-success">
+              <input type="submit" value="Seleccionar" class="btn btn-outline-success">
               
               <input id="IdFact" name="IdFact" type="hidden" value="'.intval($row["FacturaId"]).'">
             <input id="IdProv" name="IdProv" type="hidden" value="'.$row["IdProveedor"].'">
+            <input id="NombreProv" name="NombreProv" type="hidden" value="'.FG_Limpiar_Texto($row["nombreProveedor"]).'">
+          </form>
+          <br>
+        ';
+      echo '
+      <td align="center">
+        <form autocomplete="off" action="">
+            <input id="SEDE" name="SEDE" type="hidden" value="';
+                print_r($SedeConnection);
+                echo'">
+
+            <input type="submit" value="Ver traslado" class="btn btn-outline-info">
+            <input id="IdFact" name="IdFact" type="hidden" value="'.intval($row["FacturaId"]).'">
+            <input id="IdProv" name="IdProv" type="hidden" value="'.$row["IdProveedor"].'">
+            <input id="tipo" name="tipo" type="hidden" value="Traslado">
             <input id="NombreProv" name="NombreProv" type="hidden" value="'.FG_Limpiar_Texto($row["nombreProveedor"]).'">
           </form>
           <br>
@@ -800,7 +828,7 @@
 
     echo'
       <table class="table table-striped table-bordered col-12" style="width:40%;">
-        <thead class="thead-dark">              
+        <thead class="thead-dark">
           <tr>
             <th scope="col">Total SKU</th>
             <th scope="col">Total Unidades</th>
@@ -819,7 +847,7 @@
 
     echo'
       <table class="table table-striped table-bordered col-12" style="width:40%;">
-        <thead class="thead-dark">              
+        <thead class="thead-dark">
           <tr>
             <th scope="col" colspan="2">Departamento de almacen</th>
             <th scope="col" colspan="2">Departamento de administracion</th>
@@ -830,36 +858,375 @@
             <td align="center">Nombre</td>
             <td align="center">__________________</td>
             <td align="center">Nombre</td>
-            <td align="center">__________________</td>            
+            <td align="center">__________________</td>
           </tr>
           <tr>
             <td align="center">Apellido</td>
             <td align="center">__________________</td>
             <td align="center">Apellido</td>
-            <td align="center">__________________</td>            
+            <td align="center">__________________</td>
           </tr>
           <tr>
             <td align="center">Fecha</td>
             <td align="center">__________________</td>
             <td align="center">Fecha</td>
-            <td align="center">__________________</td>            
+            <td align="center">__________________</td>
           </tr>
           <tr>
             <td align="center">Hora</td>
             <td align="center">__________________</td>
             <td align="center">Hora</td>
-            <td align="center">__________________</td>            
+            <td align="center">__________________</td>
           </tr>
           <tr>
             <td align="center">Firma</td>
             <td align="center">__________________</td>
             <td align="center">Firma</td>
-            <td align="center">__________________</td>            
+            <td align="center">__________________</td>
           </tr>
         </tbody>
-      </table>      
+      </table>
     ';
   }
+
+
+  /**********************************************************************************/
+  /*
+    TITULO: R30_Factura_Articulo_Traslado
+    FUNCION: arma la lista de articulos y su existencia en otras sedes por factura
+    RETORNO: no aplica
+    DESAROLLADO POR: NISAUL DELGADO
+  */
+  function R30_Factura_Articulo_Traslado($SedeConnection,$IdProveedor,$NombreProveedor,$IdFatura){
+
+    $connCPharma = FG_Conectar_CPharma();
+
+    $conectividad_ftn = FG_Validar_Conectividad('FTN');
+    $conectividad_fau = FG_Validar_Conectividad('FAU');
+    $conectividad_fll = FG_Validar_Conectividad('FLL');
+
+    $connFAU = FG_Conectar_Smartpharma('FAU');
+    $connFTN = FG_Conectar_Smartpharma('FTN');
+    $connFLL = FG_Conectar_Smartpharma('FLL');
+
+    $conn = FG_Conectar_Smartpharma($SedeConnection);
+    $sql1 = R30Q_Factura_Articulo($IdFatura);
+    $result = sqlsrv_query($conn,$sql1);
+
+    $sqlNFact = R30Q_Numero_Factura($IdFatura);
+    $resultNFact = sqlsrv_query($conn,$sqlNFact);
+    $rowNFact = sqlsrv_fetch_array($resultNFact,SQLSRV_FETCH_ASSOC);
+    $NumeroFactura = ($rowNFact["NumeroFactura"])?$rowNFact["NumeroFactura"]:"-";
+    $Operador = ($rowNFact["Operador"])?$rowNFact["Operador"]:"-";
+    $NumeroControl = $rowNFact["NumeroControl"];
+    $Estado = $rowNFact["Estado"];
+
+    $FechaRegistro = $rowNFact["FechaRegistro"];
+
+    $TasaActual = FG_Tasa_Fecha($connCPharma,$FechaRegistro->format('Y-m-d'));
+    $TasaActual = ($TasaActual!="" && $TasaActual!=null)?$TasaActual:"0";
+
+    switch ($Estado) {
+      case '1':
+        $Estado = "En proceso";
+      break;
+      case '2':
+        $Estado = "Procesada";
+      break;
+      default:
+        $Estado = "Desconocido: ".$Estado;
+      break;
+    }
+
+    $fechaDocumento = $rowNFact["FechaDocumento"];
+    $fechaDocumentoMostrar = $fechaDocumento->format('d-m-Y');
+    $fechaDocumentoLink = $fechaDocumento->format('Y-m-d');
+
+    $fechaActual = new DateTime('now');
+    $fechaActualMostrar = date_format($fechaActual,'d-m-Y');
+    $fechaActual = date_format($fechaActual,'Y-m-d');
+
+    $NombreProveedor = FG_Limpiar_Texto($NombreProveedor);
+
+    echo '
+    <div class="input-group md-form form-sm form-1 pl-0 CP-stickyBar" style="width:95%;">
+      <div class="input-group-prepend">
+        <span class="input-group-text purple lighten-3" id="basic-text1">
+          <i class="fas fa-search text-white"
+            aria-hidden="true"></i>
+        </span>
+      </div>
+      <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterAllTable()">
+      <input type="button" name="imprimir" value="Imprimir" class="btn btn-outline-success btn-sm" onclick="window.print();" style="display: inline; margin-left: 10px;">
+    </div>
+    <br/>
+    ';
+
+    echo '
+    <table class="table table-striped table-bordered col-12" style="width:70%;">
+      <thead class="thead-dark">
+          <tr>
+            <th scope="col">Estatus Factura</th>
+            <th scope="col">Operador</th>
+            <th scope="col">Proveedor</th>
+            <th scope="col">Numero de Factura</th>
+            <th scope="col">Numero de Control</th>
+            <th scope="col">Tasa Mercado <br> (Fecha de Registro de Factura) <br>'.SigVe.'</th>
+            <th scope="col">Fecha Factura</th>
+            <th scope="col">Fecha de Registro</th>
+          </tr>
+        </thead>
+        <tbody>
+        <tr>
+      ';
+      echo '<td align="center">'.$Estado.'</td>';
+      echo '<td align="center">'.$Operador.'</td>';
+      echo
+        '<td align="left" class="CP-barrido">
+        <a href="/reporte7?Nombre='.$NombreProveedor.'&Id='.$IdProveedor.'&SEDE='.$SedeConnection.'" target="_blank" style="text-decoration: none; color: black;">'
+          .$NombreProveedor.
+        '</a>
+        </td>';
+      echo '<td align="center">'.$NumeroFactura.'</td>';
+      echo '<td align="center">'.$NumeroControl.'</td>';
+      echo '<td align="center">'.number_format($TasaActual,2,"," ,"." ).'</td>';
+      echo '<td align="center">'.$fechaDocumentoMostrar.'</td>';
+      echo '<td align="center">'.$FechaRegistro->format('d-m-Y').'</td>';
+      echo '
+        </tr>
+        </tbody>
+    </table>';
+
+    echo'
+    <table class="table table-striped table-bordered col-12 sortable" id="myTable">
+        <thead class="thead-dark">
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Codigo</th>
+            <th scope="col">Codigo de Barra</th>
+            <th scope="col">Descripcion</th>
+            <th scope="col">Cantidad Recibida</th>';
+
+    if (isset($_GET['SEDE']) & ($_GET['SEDE'] == 'FAU' || $_GET['SEDE'] == 'DBs')) {
+        echo '
+            <th scope="col" class="CP-sticky">Existencia FTN</td>
+            <th scope="col" class="CP-sticky">Existencia FLL</td>
+        ';
+      }
+
+      if (isset($_GET['SEDE']) & $_GET['SEDE'] == 'FTN') {
+        echo '
+            <th scope="col" class="CP-sticky">Existencia FAU</td>
+            <th scope="col" class="CP-sticky">Existencia FLL</td>
+        ';
+      }
+
+      if (isset($_GET['SEDE']) & $_GET['SEDE'] == 'FLL') {
+        echo '
+            <th scope="col" class="CP-sticky">Existencia FTN</td>
+            <th scope="col" class="CP-sticky">Existencia FAU</td>
+        ';
+      }
+
+    echo '
+          </tr>
+        </thead>
+        <tbody>
+     ';
+    $contador = 1;
+    $SumImpuestoBs = $SumDescBs = $SumTotalBs = $SumImpuestoDol = $SumDescDol = $SumTotalDol = $SumCantidad = $SumSKU = $SumSubTotalBs = $SumSubTotalDol = 0;
+
+    while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
+
+      $IdArticulo = $row["Id"];
+      $TroqueladoGen = ($row["M_PrecioTroquelado"])?$row["M_PrecioTroquelado"]:"0";
+      $CostoBrutoGen = ($row["M_PrecioCompraBruto"])?$row["M_PrecioCompraBruto"]:"0";
+      $CostoNetoGen = ($row["M_PrecioCompraNeto"])?$row["M_PrecioCompraNeto"]:"0";
+      $CantidadRecibida = intval($row['CantidadRecibidaFactura']);
+      $PorcentajeDescuentoGlobal = ($row["PorcentajeDescuentoGlobal"])?$row["PorcentajeDescuentoGlobal"]:"0";
+
+      $SumCantidad += $CantidadRecibida;
+
+      $sql2 = SQG_Detalle_Articulo($IdArticulo);
+      $result2 = sqlsrv_query($conn,$sql2);
+      $row2 = sqlsrv_fetch_array($result2, SQLSRV_FETCH_ASSOC);
+
+      $CodigoBarra = $row2["CodigoBarra"];
+      $Descripcion = FG_Limpiar_Texto($row2["Descripcion"]);
+      $Existencia = $row2["Existencia"];
+      $ExistenciaAlmacen1 = $row2["ExistenciaAlmacen1"];
+      $ExistenciaAlmacen2 = $row2["ExistenciaAlmacen2"];
+      $IsTroquelado = $row2["Troquelado"];
+      $IsIVA = $row2["Impuesto"];
+      $UtilidadArticulo = $row2["UtilidadArticulo"];
+      $UtilidadCategoria = $row2["UtilidadCategoria"];
+      $TroquelAlmacen1 = $row2["TroquelAlmacen1"];
+      $PrecioCompraBrutoAlmacen1 = $row2["PrecioCompraBrutoAlmacen1"];
+      $TroquelAlmacen2 = $row2["TroquelAlmacen2"];
+      $PrecioCompraBrutoAlmacen2 = $row2["PrecioCompraBrutoAlmacen2"];
+      $PrecioCompraBruto = $row2["PrecioCompraBruto"];
+      $Dolarizado = $row2["Dolarizado"];
+      $CondicionExistencia = 'CON_EXISTENCIA';
+      $UltimoLote = $row2["UltimoLote"];
+      $UltimaVenta = $row2["UltimaVenta"];
+      $Marca = ($row2["Marca"])?$row2["Marca"]:"-";
+      $FechaCreacion = ($row2["FechaCreacion"])?$row2["FechaCreacion"]:"-";
+
+      $nuevo = FG_Rango_Dias($FechaCreacion->format('Y-m-d'),date('Y-m-d'));
+      $nuevo = ($nuevo==0)?"SI":"NO";
+
+      $Dolarizado = FG_Producto_Dolarizado($Dolarizado);
+      $Gravado = FG_Producto_Gravado($IsIVA);
+
+      $Precio = FG_Calculo_Precio_Alfa($Existencia,$ExistenciaAlmacen1,$ExistenciaAlmacen2,$IsTroquelado,$UtilidadArticulo,$UtilidadCategoria,$TroquelAlmacen1,$PrecioCompraBrutoAlmacen1,$TroquelAlmacen2,
+      $PrecioCompraBrutoAlmacen2,$PrecioCompraBruto,$IsIVA,$CondicionExistencia);
+
+      $sqlCPharma = SQL_Etiqueta_Articulo($IdArticulo);
+      $ResultCPharma = mysqli_query($connCPharma,$sqlCPharma);
+      $RowCPharma = mysqli_fetch_assoc($ResultCPharma);
+      $clasificacion = $RowCPharma['clasificacion'];
+      $clasificacion = ($clasificacion!="")?$clasificacion:"NO CLASIFICADO";
+
+      echo '<tr>';
+      echo '<td align="center"><strong>'.intval($contador).'</strong></td>';
+      echo '<td align="center">'.$row["CodigoArticulo"].'</td>';
+      echo '<td align="center">'.$CodigoBarra.'</td>';
+
+      echo
+        '<td align="left" class="CP-barrido">
+        <a href="/reporte2?Id='.$IdArticulo.'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
+          .$Descripcion.
+        '</a>
+        </td>';
+
+      echo
+        '<td align="center" class="CP-barrido">
+        <a href="/reporte6?pedido=15&fechaInicio='.$fechaDocumentoLink.'&fechaFin='.$fechaActual.'&SEDE='.$SedeConnection.'&flag=BsqDescrip&Descrip='.$Descripcion.'&IdD='.$IdArticulo.'&CodBar=&IdCB=" style="text-decoration: none; color: black;" target="_blank">'
+          .$CantidadRecibida.
+        '</a>
+        </td>';
+
+      if (isset($_GET['SEDE']) & ($_GET['SEDE'] == 'FAU' || $_GET['SEDE'] == 'DBs')) {
+        if ($conectividad_ftn == 1) {
+          $sql3 = R30_Q_Descripcion_Existencia_Articulo($CodigoBarra);
+          $result3 = sqlsrv_query($connFTN,$sql3);
+
+          $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
+
+          $descripcion_ftn = ($row3['descripcion']) ? FG_Limpiar_Texto($row3['descripcion']) : '-';
+          $existencia_ftn = ($row3['existencia']) ? intval($row3['existencia']) : '-';
+        }
+
+        if ($conectividad_fll == 1) {
+          $sql3 = R30_Q_Descripcion_Existencia_Articulo($CodigoBarra);
+          $result3 = sqlsrv_query($connFLL,$sql3);
+          $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
+
+          $descripcion_fll = ($row3['descripcion']) ? FG_Limpiar_Texto($row3['descripcion']) : '-';
+          $existencia_fll = ($row3['existencia']) ? intval($row3['existencia']) : '-';
+        }
+      }
+
+      if (isset($_GET['SEDE']) & $_GET['SEDE'] == 'FTN') {
+        if ($conectividad_fau == 1) {
+            $sql3 = R30_Q_Descripcion_Existencia_Articulo($CodigoBarra);
+            $result3 = sqlsrv_query($connFAU,$sql3);
+            $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
+
+            $descripcion_fau = ($row3['descripcion']) ? FG_Limpiar_Texto($row3['descripcion']) : '-';
+            $existencia_fau = ($row3['existencia']) ? intval($row3['existencia']) : '-';
+          }
+
+          if ($conectividad_fll == 1) {
+            $sql3 = R30_Q_Descripcion_Existencia_Articulo($CodigoBarra);
+            $result3 = sqlsrv_query($connFLL,$sql3);
+            $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
+
+            $descripcion_fll = ($row3['descripcion']) ? FG_Limpiar_Texto($row3['descripcion']) : '-';
+            $existencia_fll = ($row3['existencia']) ? intval($row3['existencia']) : '-';
+          }
+      }
+
+      if (isset($_GET['SEDE']) & $_GET['SEDE'] == 'FLL') {
+         if ($conectividad_ftn == 1) {
+            $sql3 = R30_Q_Descripcion_Existencia_Articulo($CodigoBarra);
+            $result3 = sqlsrv_query($connFTN,$sql3);
+            $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
+
+            $descripcion_ftn = ($row3['descripcion']) ? FG_Limpiar_Texto($row3['descripcion']) : '-';
+            $existencia_ftn = ($row3['existencia']) ? intval($row3['existencia']) : '-';
+          }
+
+          if ($conectividad_fau == 1) {
+            $sql3 = R30_Q_Descripcion_Existencia_Articulo($CodigoBarra);
+            $result3 = sqlsrv_query($connFAU,$sql3);
+            $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
+
+            $descripcion_fau = ($row3['descripcion']) ? FG_Limpiar_Texto($row3['descripcion']) : '-';
+            $existencia_fau = ($row3['existencia']) ? intval($row3['existencia']) : '-';
+          }
+      }
+
+      if (isset($_GET['SEDE']) & ($_GET['SEDE'] == 'FAU' || $_GET['SEDE'] == 'DBs')) {
+            if ($conectividad_ftn == 1) {
+                echo '<td align="center">'.$existencia_ftn.'</td>';
+            } else {
+                echo '<td>-</td>';
+                echo '<td>-</td>';
+            }
+
+            if ($conectividad_fll == 1) {
+                echo '<td align="center">'.$existencia_fll.'</td>';
+            } else {
+                echo '<td>-</td>';
+                echo '<td>-</td>';
+            }
+        }
+
+        if (isset($_GET['SEDE']) & $_GET['SEDE'] == 'FTN') {
+            if ($conectividad_fau == 1) {
+                echo '<td align="center">'.$existencia_fau.'</td>';
+            } else {
+                echo '<td>-</td>';
+                echo '<td>-</td>';
+            }
+
+            if ($conectividad_fll == 1) {
+                echo '<td align="center">'.$existencia_fll.'</td>';
+            } else {
+                echo '<td>-</td>';
+                echo '<td>-</td>';
+            }
+        }
+
+        if (isset($_GET['SEDE']) & $_GET['SEDE'] == 'FLL') {
+            if ($conectividad_ftn == 1) {
+                echo '<td align="center">'.$existencia_ftn.'</td>';
+            } else {
+                echo '<td>-</td>';
+                echo '<td>-</td>';
+            }
+
+            if ($conectividad_fau == 1) {
+                echo ' <td align="center">'.$existencia_fau.'</td>';
+            } else {
+                echo '<td>-</td>';
+                echo '<td>-</td>';
+            }
+        }
+
+      echo '</tr>';
+    $contador++;
+    $SumSKU++;
+    }
+
+    echo '
+      </tbody>
+    </table>';
+    sqlsrv_close($conn);
+  }
+
+
   /**********************************************************************************/
   /*
     TITULO: R30Q_Factura_Articulo
@@ -907,6 +1274,29 @@
       FROM ComFactura 
       WHERE ComFactura.Id = '$IdFactura'
     ";
+    return $sql;
+  }
+
+  /*
+    TITULO: R30_Q_Descripcion_Existencia_Articulo
+    FUNCION: Query que genera descripcion y existencia de articulo
+    RETORNO: Descripcion/existencia de articulo
+    DESAROLLADO POR: NISA DELGADO
+  */
+  function R30_Q_Descripcion_Existencia_Articulo($CodigoBarra)
+  {
+
+    $CodigoBarra = str_replace("'", "''", $CodigoBarra);
+
+    $sql = "
+      SELECT
+        InvArticulo.DescripcionLarga AS descripcion,
+        (SELECT SUM(Existencia) FROM InvLoteAlmacen WHERE (InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2) AND InvLoteAlmacen.InvArticuloId = InvArticulo.Id) AS existencia
+      FROM
+      InvArticulo
+      WHERE InvArticulo.Id = (SELECT InvCodigoBarra.InvArticuloId FROM InvCodigoBarra WHERE InvCodigoBarra.CodigoBarra = '$CodigoBarra' AND InvCodigoBarra.EsPrincipal = 1)
+    ";
+
     return $sql;
   }
 ?>
