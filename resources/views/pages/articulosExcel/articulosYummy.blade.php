@@ -163,6 +163,8 @@
             /*PRECIO DOLAR*/
 
             /*IMAGEN*/
+                $url_app = $CodigoBarra;
+
                 $TrackImagen =
                 TrackImagen::orderBy('id','asc')
                 ->where('codigo_barra',$CodigoBarra)
@@ -170,9 +172,6 @@
 
                 if(!empty($TrackImagen[0]->codigo_barra)) {
                     $url_app = $TrackImagen[0]->url_app;
-                }
-                else{
-                    $url_app = "";
                 }
             /*IMAGEN*/
 

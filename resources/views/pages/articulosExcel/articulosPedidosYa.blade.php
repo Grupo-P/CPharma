@@ -161,6 +161,8 @@
             /*PRECIO DOLAR*/
 
             /*IMAGEN*/
+                $url_app = $CodigoBarra;
+
                 $TrackImagen =
                 TrackImagen::orderBy('id','asc')
                 ->where('codigo_barra',$CodigoBarra)
@@ -168,9 +170,6 @@
 
                 if(!empty($TrackImagen[0]->codigo_barra)) {
                     $url_app = $TrackImagen[0]->url_app;
-                }
-                else{
-                    $url_app = "";
                 }
             /*IMAGEN*/
 
@@ -180,7 +179,7 @@
                 $sheet->setCellValue('B'.$contador,$CodigoBarra);
                 $sheet->setCellValue('C'.$contador,$Descripcion);
                 $sheet->setCellValue('D'.$contador,$PrecioDolar);
-                $sheet->setCellValue('E'.$contador,$CodigoBarra);
+                $sheet->setCellValue('E'.$contador,$url_app);
                 $sheet->setCellValue('F'.$contador,'');
             /*EXCEL*/
 
