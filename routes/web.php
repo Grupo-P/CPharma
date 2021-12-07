@@ -240,6 +240,10 @@ Route::get('/reporte45', function() {
     return view('pages.reporte.reporte45');
 });
 
+Route::match(['post', 'get'], '/reporte46', function() {
+    return view('pages.reporte.reporte46');
+});
+
 Route::get('/seccion1', function() {
     return view('pages.reporte.seccion1');
 });
