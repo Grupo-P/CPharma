@@ -96,7 +96,8 @@
                     <option value="">Seleccione...</option>
                     <option value="WEB">Excel Web</option>
                     <option value="YUMMY">Excel Yummy</option>
-                    <option value="PEDIDOSYA">Excel PedidosYa</option>
+                    <option value="PEDIDOSYA">Excel PedidosYa (Carga Inicial)</option>
+                    <option value="PEDIDOSYACO">Excel PedidosYa (Corridas)</option>
                 </select>
             </td>
 
@@ -166,6 +167,9 @@
                 }
                 else if(condicionExcel=="PEDIDOSYA"){
                     urlExcel = "/ArticulosPedidosYa";
+                }
+                else if(condicionExcel=="PEDIDOSYACO"){
+                    urlExcel = "/ArticulosPedidosYaCorridas";
                 }
 
                 $("#myFormulario").attr("action",urlExcel);

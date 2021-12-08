@@ -326,6 +326,10 @@ Route::get('/ArticulosPedidosYa', function() {
     return view('pages.articulosExcel.articulosPedidosYa');
 });
 
+Route::get('/ArticulosPedidosYaCorridas', function() {
+    return view('pages.articulosExcel.articulosPedidosYaCorridas');
+});
+
 Route::get('/CorridaPrecios', function() {
     return view('pages.corridas.corridaPrecio');
 });
