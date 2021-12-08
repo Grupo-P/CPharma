@@ -108,7 +108,13 @@
                     Proveedor / Concepto
                 </th>
                 <th class="CP-sticky" scope="col">
-                    Monto
+                    Monto pago
+                </th>
+                <th class="CP-sticky" scope="col">
+                    Monto base
+                </th>
+                <th class="CP-sticky" scope="col">
+                    Monto IVA
                 </th>
                 <th class="CP-sticky" scope="col">
                     Operador
@@ -145,7 +151,78 @@
                     @endif
                 </td>
                 <td>
-                    {{$pago['monto']}}
+                    @php
+                        $monto = $pago['monto'];
+                        $monto_iva_real = 0;
+                        $monto_base_real = 0;
+
+                        if ($pago['retencion_deuda_1']) {
+                            $retencion_deuda_1 = $monto * ($pago['retencion_deuda_1'] / 100);
+
+                            if ($pago['moneda_proveedor'] != 'Dólares') {
+                                if ($pago['moneda_proveedor'] == 'Bolívares') {
+                                    $retencion_deuda_1 = $retencion_deuda_1 * $pago['tasa'];
+                                }
+
+                                if ($pago['moneda_proveedor'] == 'Pesos') {
+                                    $retencion_deuda_1 = $retencion_deuda_1 * $pago['tasa'];
+                                }
+                            }
+                        }
+
+                        if ($pago['retencion_deuda_2']) {
+                            $retencion_deuda_2 = $monto * ($pago['retencion_deuda_2'] / 100);
+
+                            if ($pago['moneda_proveedor'] != 'Dólares') {
+                                if ($pago['moneda_proveedor'] == 'Bolívares') {
+                                    $retencion_deuda_2 = $retencion_deuda_2 * $pago['tasa'];
+                                }
+
+                                if ($pago['moneda_proveedor'] == 'Pesos') {
+                                    $retencion_deuda_2 = $retencion_deuda_2 * $pago['tasa'];
+                                }
+                            }
+                        }
+
+                        if ($pago['retencion_iva']) {
+                            $retencion_iva = $pago['iva'] * ($pago['retencion_iva'] / 100);
+
+                            if ($pago['moneda_proveedor'] != 'Dólares') {
+                                if ($pago['moneda_proveedor'] == 'Bolívares') {
+                                    $retencion_iva = $retencion_iva * $pago['tasa'];
+                                }
+
+                                if ($pago['moneda_proveedor'] == 'Pesos') {
+                                    $retencion_iva = $retencion_iva * $pago['tasa'];
+                                }
+                            }
+                        }
+
+                        $retencion_deuda_1 = isset($retencion_deuda_1) ? $retencion_deuda_1 : 0;
+                        $retencion_deuda_2 = isset($retencion_deuda_2) ? $retencion_deuda_2 : 0;
+                        $retencion_iva = isset($retencion_iva) ? $retencion_iva : 0;
+
+                        $monto_base_real = (float) $monto - (float) $retencion_deuda_1 - (float) $retencion_deuda_2;
+                        $monto_pago = (float) $monto - (float) $retencion_deuda_1 - (float) $retencion_deuda_2;
+
+                        if ($pago['iva']) {
+                            $monto_iva = $pago['iva'];
+                            $monto_iva_real = $monto_iva - $retencion_iva;
+                            $monto_pago = $monto_pago + $monto_iva_real;
+                        }
+
+                        if ($pago['monto_banco'] == 0) {
+                            echo number_format($monto_base_real + $monto_iva_real, 2, ',', '.');
+                        } else {
+                            echo number_format($pago['monto_banco'], 2, ',', '.');
+                        }
+                    @endphp
+                </td>
+                <td>
+                    {{number_format($monto_base_real, 2, ',', '.')}}
+                </td>
+                <td>
+                    {{number_format($monto_iva_real, 2, ',', '.')}}
                 </td>
                 <td>
                     {{$pago['operador']}}
