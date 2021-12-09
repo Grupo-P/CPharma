@@ -250,6 +250,8 @@
             <th scope="col" class="CP-sticky">Fecha Documento</th>
             <th scope="col" class="CP-sticky">Fecha Registro</th>
             <th scope="col" class="CP-sticky">Total (Con IVA)</th>
+            <th scope="col" class="CP-sticky">Total SKU</th>
+            <th scope="col" class="CP-sticky">Total Unidades</th>
             <th scope="col" class="CP-sticky">Usuario Auditor</th>
             <th scope="col" class="CP-sticky">Seleccion</th>
             <th scope="col" class="CP-sticky">Traslado</th>
@@ -282,6 +284,8 @@
       echo '<td align="center">'.$row["FechaDocumento"]->format('d-m-Y').'</td>';
       echo '<td align="center">'.$row["FechaRegistro"]->format('d-m-Y').'</td>';
       echo '<td align="center">'.number_format($row["Total"],2,"," ,"." ).'</td>';
+      echo '<td align="center">'.$row["TotalSKU"].'</td>';
+      echo '<td align="center">'.intval($row["TotalCantidad"]).'</td>';
       echo '<td align="center">'.$row["Auditoria_Usuario"].'</td>';
       echo '
       <td align="center">
@@ -373,6 +377,8 @@
             <th scope="col" class="CP-sticky">Fecha Documento</th>
             <th scope="col" class="CP-sticky">Fecha Registro</th>
             <th scope="col" class="CP-sticky">Total (Con IVA)</th>
+            <th scope="col" class="CP-sticky">Total SKU</th>
+            <th scope="col" class="CP-sticky">Total Unidades</th>
             <th scope="col" class="CP-sticky">Usuario Auditor</th>
             <th scope="col" class="CP-sticky">Seleccion</th>
           </tr>
@@ -388,6 +394,8 @@
       echo '<td align="center">'.$row["FechaDocumento"]->format('d-m-Y').'</td>';
       echo '<td align="center">'.$row["FechaRegistro"]->format('d-m-Y').'</td>';
       echo '<td align="center">'.number_format($row["Total"],2,"," ,"." ).'</td>';
+      echo '<td align="center">'.$row["TotalSKU"].'</td>';
+      echo '<td align="center">'.intval($row["TotalCantidad"]).'</td>';
       echo '<td align="center">'.$row["Auditoria_Usuario"].'</td>';
       echo '
       <td align="center">
@@ -458,6 +466,8 @@
     CONVERT(DATE,ComFactura.FechaDocumento) AS FechaDocumento,
     CONVERT(DATE,ComFactura.FechaRegistro) AS FechaRegistro,
     ComFactura.M_MontoTotalNeto AS Total,
+    (SELECT COUNT(1) FROM ComFacturaDetalle WHERE ComFacturaDetalle.ComFacturaId = ComFactura.Id) AS TotalSKU,
+    (SELECT SUM(ComFacturaDetalle.CantidadFacturada) FROM ComFacturaDetalle WHERE ComFacturaDetalle.ComFacturaId = ComFactura.Id) AS TotalCantidad,
     ComFactura.Auditoria_Usuario,
     GenPersona.Nombre as nombreProveedor,
     ComProveedor.Id as IdProveedor
@@ -486,6 +496,8 @@
     CONVERT(DATE,ComFactura.FechaDocumento) AS FechaDocumento,
     CONVERT(DATE,ComFactura.FechaRegistro) AS FechaRegistro,
     ComFactura.M_MontoTotalNeto AS Total,
+    (SELECT COUNT(1) FROM ComFacturaDetalle WHERE ComFacturaDetalle.ComFacturaId = ComFactura.Id) AS TotalSKU,
+    (SELECT SUM(ComFacturaDetalle.CantidadFacturada) FROM ComFacturaDetalle WHERE ComFacturaDetalle.ComFacturaId = ComFactura.Id) AS TotalCantidad,
     ComFactura.Auditoria_Usuario
     FROM ComFactura
     WHERE ComFactura.ComProveedorId = '$IdProveedor'
