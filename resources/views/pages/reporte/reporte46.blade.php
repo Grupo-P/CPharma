@@ -66,7 +66,57 @@
     }
     echo '<hr class="row align-items-start col-12">';
 
-    if(isset($_POST['opcion'])) {
+    if (request()->hasFile('archivo') && (request()->file('archivo')->extension() != 'xlsx' && request()->file('archivo')->extension() != 'xls')) {
+        echo '
+            <form autocomplete="off" enctype="multipart/form-data" action="" method="POST" target="_blank">
+              <div class="row">
+                <div class="col"></div>
+
+                <div class="col-5">
+                  <div class="alert alert-danger text-center">Solo se admiten archivos Excel.</div>
+
+                  <div class="alert alert-info">
+                    <ul>
+                        <li>La primera línea en archivo se reserva para el encabezado.</li>
+                        <li>Los calumnas del Excel deben estar en el siguiente orden:<br>Código de barra, Descripción, Precio, Existencia.</li>
+                    </ul>
+                  </div>
+                </div>
+
+                <div class="col">
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col"></div>
+
+                <div class="col">
+                  <input style="background-color: white" required accept=".xls,.xlsx" type="file" name="archivo">
+                </div>
+
+                <div class="col form-inline">
+                  <label for="opcion">Moneda:</label>
+
+                  <select style="width: 70%" class="ml-3 form-control" id="opcion" name="opcion" required>
+                    <option value""></option>
+                    <option value"Dólares">Dólares</option>
+                    <option value"Bolívares">Bolívares</option>
+                  </select>
+                </div>
+
+                <div class="col">
+                  <input id="SEDE" name="SEDE" type="hidden" value="';
+                    print_r($_GET['SEDE']);
+                  echo'">
+
+                  <input type="submit" value="Buscar" class="mt-1 btn btn-outline-success">
+                </div>
+              </div>
+            </form>
+          ';
+    }
+
+    elseif(isset($_POST['opcion'])) {
       $InicioCarga = new DateTime("now");
       R46_Compras_Archivo($_POST['SEDE'],$_POST['opcion']);
       FG_Guardar_Auditoria('CONSULTAR','REPORTE','Compras por archivo');
@@ -75,14 +125,31 @@
       $IntervalCarga = $InicioCarga->diff($FinCarga);
       echo'Tiempo de carga: '.$IntervalCarga->format("%Y-%M-%D %H:%I:%S");
     }
+
     else {
       echo '
         <form autocomplete="off" enctype="multipart/form-data" action="" method="POST" target="_blank">
           <div class="row">
             <div class="col"></div>
 
+            <div class="col-5">
+              <div class="alert alert-info">
+                <ul>
+                    <li>La primera línea en archivo se reserva para el encabezado.</li>
+                    <li>Los calumnas del Excel deben estar en el siguiente orden:<br>Código de barra, Descripción, Precio, Existencia.</li>
+                </ul>
+              </div>
+            </div>
+
             <div class="col">
-              <input style="background-color: white" type="file" name="archivo">
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col"></div>
+
+            <div class="col">
+              <input style="background-color: white" required accept=".xls,.xlsx" type="file" name="archivo">
             </div>
 
             <div class="col form-inline">
@@ -137,37 +204,59 @@
 
     foreach ($data as $item) {
       if ($i != 0) {
+        if ($item['A'] == '' && $item['B'] == '' && $item['C'] == '' && $item['D'] == '') {
+            continue;
+        }
+
+
         if ($item['A'] != '' && $item['C'] != '') {
           $sql = SQG_Detalle_Articulo_CodigoBarra($item['A']);
           $result = sqlsrv_query($conn, $sql);
           $row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC);
 
-    $precio = FG_Calculo_Precio_Alfa($row['Existencia'], $row['ExistenciaAlmacen1'], $row['ExistenciaAlmacen2'], $row['Troquelado'], $row['UtilidadArticulo'], $row['UtilidadCategoria'], $row['TroquelAlmacen1'], $row['PrecioCompraBrutoAlmacen1'], $row['TroquelAlmacen2'], $row['PrecioCompraBrutoAlmacen2'], $row['PrecioCompraBruto'], $row['Impuesto'], 'CON_EXISTENCIA');
+          if ($row) {
 
-    $tasa = DB::table('tasa_ventas')->where('moneda', 'Dolar')->value('tasa');
-    $tasa = ($tasa) ? $tasa : 0;
+            $precio = FG_Calculo_Precio_Alfa($row['Existencia'], $row['ExistenciaAlmacen1'], $row['ExistenciaAlmacen2'], $row['Troquelado'], $row['UtilidadArticulo'], $row['UtilidadCategoria'], $row['TroquelAlmacen1'], $row['PrecioCompraBrutoAlmacen1'], $row['TroquelAlmacen2'], $row['PrecioCompraBrutoAlmacen2'], $row['PrecioCompraBruto'], $row['Impuesto'], 'CON_EXISTENCIA');
 
-    $precioBs = ($precio) ? number_format($precio, 2, ',', '.') : '';
-    $precioDs = ($precio and $tasa) ? number_format($precio * $tasa, 2, ',', '.') : '';
-    $ultimaVenta = ($row['UltimaVenta']) ? $row['UltimaVenta']->format('d/m/Y') : '';
+            $tasa = DB::table('tasa_ventas')->where('moneda', 'Dolar')->value('tasa');
+            $tasa = ($tasa) ? $tasa : 0;
 
-          $procesados .= '
+            $precioBs = ($precio) ? number_format($precio, 2, ',', '.') : '';
+            $precioDs = ($precio and $tasa) ? number_format($precio * $tasa, 2, ',', '.') : '';
+            $ultimaVenta = ($row['UltimaVenta']) ? $row['UltimaVenta']->format('d/m/Y') : '';
+
+            $procesados .= '
             <tr>
               <td class="text-center">'.$contadorProcesados.'</td>
               <td class="text-center">'.$item['A'].'</td>
               <td class="text-center">'.$item['B'].'</td>
-              <td class="text-center">'.$row['Descripcion'].'</td>
-              <td class="text-center">'.$row['Existencia'].'</td>
-              <td class="text-center">'.$item['D'].'</td>
+              <td class="text-center CP-barrido"><a href="/reporte2?Id='.$row['IdArticulo'].'&SEDE='.$_GET['SEDE'].'" style="text-decoration: none; color: black;" target="_blank">'.$row['Descripcion'].'</a></td>
+              <td class="text-center">'.intval($item['D']).'</td>
+              <td class="text-center">'.intval($row['Existencia']).'</td>
               <td class="text-center">'.number_format($item['C'], 2, ',', '.').'</td>
               <td class="text-center">'.$precioBs.'</td>
               <td class="text-center">'.$precioDs.'</td>
               <td class="text-center">'.$ultimaVenta.'</td>
-              <td class="text-center">'.$row['UltimoProveedorNombre'].'</td>
+              <td class="text-center CP-barrido"><a href="/reporte7?Nombre='.$row['UltimoProveedorNombre'].'&Id='.$row['UltimoProveedorID'].'&SEDE='.$_GET['SEDE'].'" style="text-decoration: none; color: black;" target="_blank">'.$row['UltimoProveedorNombre'].'</a></td>
             </tr>
-          ';
+            ';
 
-          $contadorProcesados++;
+            $contadorProcesados++;
+
+          } else {
+              $noProcesados .= '
+                <tr>
+                  <td class="text-center">'.$contadorNoProcesados.'</td>
+                  <td class="text-center">'.$item['A'].'</td>
+                  <td class="text-center">'.$item['B'].'</td>
+                  <td class="text-center">'.number_format($item['C'], 2, ',', '.').'</td>
+                  <td class="text-center">'.$item['D'].'</td>
+                  <td class="text-center">Artículo no codificado</td>
+                </tr>
+              ';
+
+              $contadorNoProcesados++;
+          }
         }
 
         else {
@@ -178,6 +267,7 @@
               <td class="text-center">'.$item['B'].'</td>
               <td class="text-center">'.number_format($item['C'], 2, ',', '.').'</td>
               <td class="text-center">'.$item['D'].'</td>
+              <td class="text-center">Artículo incompleto</td>
             </tr>
           ';
 
@@ -201,17 +291,21 @@
     ';
 
     echo '
-      <table class="table table-striped table-bordered col-12 sortable" id="myTable">
+      <table class="table table-striped table-bordered col-12 mt-5">
         <thead class="thead-dark">
           <tr>
-            <th scope="col" class="CP-sticky" colspan="11">Articulos procesados</th>
+            <th scope="col" class="CP-sticky">No procesados</th>
           </tr>
+        </thead>
+      </table>
 
+      <table class="table table-striped table-bordered col-12 sortable" id="myTable">
+        <thead class="thead-dark">
           <tr>
             <th scope="col" class="CP-sticky">Nro.</th>
             <th scope="col" class="CP-sticky">Codigo Excel</th>
             <th scope="col" class="CP-sticky">Descripcion Excel</th>
-            <th scope="col" class="CP-sticky">Descripcion</th>
+            <th scope="col" class="CP-sticky">Descripcion Farmacia</th>
             <th scope="col" class="CP-sticky">Existencia Excel</th>
             <th scope="col" class="CP-sticky">Existencia</th>
             <th scope="col" class="CP-sticky">Costo Excel</th>
@@ -231,22 +325,27 @@
 
 
     echo '
-      <table class="table table-striped table-bordered col-12 mt-5 sortable" id="myTable">
+      <table class="table table-striped table-bordered col-12 mt-5">
         <thead class="thead-dark">
           <tr>
-            <th scope="col" class="CP-sticky" colspan="11">Articulos no procesados</th>
+            <th scope="col" class="CP-sticky">No procesados</th>
           </tr>
+        </thead>
+      </table>
 
+      <table class="table table-striped table-bordered col-12 sortable" id="myTable">
+        <thead class="thead-dark">
           <tr>
             <th scope="col" class="CP-sticky">Nro.</th>
             <th scope="col" class="CP-sticky">Codigo Excel</th>
             <th scope="col" class="CP-sticky">Descripcion Excel</th>
             <th scope="col" class="CP-sticky">Costo Excel</td>
             <th scope="col" class="CP-sticky">Existencia Excel</td>
+            <th scope="col" class="CP-sticky">Causa</td>
           </tr>
         </thead>
-          '.$noProcesados.'
         <tbody>
+            '.$noProcesados.'
         </tbody>
       </table>
     ';

@@ -97,7 +97,7 @@
           <tr>
             <th colspan="2" scope="row">{!! Form::label('monto_iva', 'Monto IVA') !!}</th>
             <td colspan="3">
-              <input type="number" name="monto_iva" min="1" value="0" step="0.01" class="form-control" required autofocus>
+              <input type="number" name="monto_iva" min="0" value="0" step="0.01" class="form-control" autofocus>
             </td>
           </tr>
         </tbody>
