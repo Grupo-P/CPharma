@@ -1125,8 +1125,7 @@
 
           $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
 
-          $descripcion_ftn = ($row3['descripcion']) ? FG_Limpiar_Texto($row3['descripcion']) : '-';
-          $existencia_ftn = ($row3['existencia']) ? intval($row3['existencia']) : '-';
+          $existencia_ftn = ($row3['existencia'] || $row3['existencia'] == 0) ? intval($row3['existencia']) : 'No existe';
         }
 
         if ($conectividad_fll == 1) {
@@ -1134,8 +1133,7 @@
           $result3 = sqlsrv_query($connFLL,$sql3);
           $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
 
-          $descripcion_fll = ($row3['descripcion']) ? FG_Limpiar_Texto($row3['descripcion']) : '-';
-          $existencia_fll = ($row3['existencia']) ? intval($row3['existencia']) : '-';
+          $existencia_fll = ($row3['existencia'] || $row3['existencia'] == 0) ? intval($row3['existencia']) : 'No existe';
         }
       }
 
@@ -1145,8 +1143,7 @@
             $result3 = sqlsrv_query($connFAU,$sql3);
             $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
 
-            $descripcion_fau = ($row3['descripcion']) ? FG_Limpiar_Texto($row3['descripcion']) : '-';
-            $existencia_fau = ($row3['existencia']) ? intval($row3['existencia']) : '-';
+            $existencia_fau = ($row3['existencia'] || $row3['existencia'] == 0) ? intval($row3['existencia']) : 'No existe';
           }
 
           if ($conectividad_fll == 1) {
@@ -1154,8 +1151,7 @@
             $result3 = sqlsrv_query($connFLL,$sql3);
             $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
 
-            $descripcion_fll = ($row3['descripcion']) ? FG_Limpiar_Texto($row3['descripcion']) : '-';
-            $existencia_fll = ($row3['existencia']) ? intval($row3['existencia']) : '-';
+            $existencia_fll = ($row3['existencia'] || $row3['existencia'] == 0) ? intval($row3['existencia']) : 'No existe';
           }
       }
 
@@ -1165,8 +1161,7 @@
             $result3 = sqlsrv_query($connFTN,$sql3);
             $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
 
-            $descripcion_ftn = ($row3['descripcion']) ? FG_Limpiar_Texto($row3['descripcion']) : '-';
-            $existencia_ftn = ($row3['existencia']) ? intval($row3['existencia']) : '-';
+            $existencia_ftn = ($row3['existencia'] || $row3['existencia'] == 0) ? intval($row3['existencia']) : 'No existe';
           }
 
           if ($conectividad_fau == 1) {
@@ -1174,8 +1169,7 @@
             $result3 = sqlsrv_query($connFAU,$sql3);
             $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
 
-            $descripcion_fau = ($row3['descripcion']) ? FG_Limpiar_Texto($row3['descripcion']) : '-';
-            $existencia_fau = ($row3['existencia']) ? intval($row3['existencia']) : '-';
+            $existencia_fau = ($row3['existencia'] || $row3['existencia'] == 0) ? intval($row3['existencia']) : 'No existe';
           }
       }
 
@@ -1183,15 +1177,13 @@
             if ($conectividad_ftn == 1) {
                 echo '<td align="center">'.$existencia_ftn.'</td>';
             } else {
-                echo '<td>-</td>';
-                echo '<td>-</td>';
+                echo '<td align="center">Sin conexión</td>';
             }
 
             if ($conectividad_fll == 1) {
                 echo '<td align="center">'.$existencia_fll.'</td>';
             } else {
-                echo '<td>-</td>';
-                echo '<td>-</td>';
+                echo '<td align="center">Sin conexión</td>';
             }
         }
 
@@ -1199,15 +1191,13 @@
             if ($conectividad_fau == 1) {
                 echo '<td align="center">'.$existencia_fau.'</td>';
             } else {
-                echo '<td>-</td>';
-                echo '<td>-</td>';
+                echo '<td align="center">Sin conexión</td>';
             }
 
             if ($conectividad_fll == 1) {
                 echo '<td align="center">'.$existencia_fll.'</td>';
             } else {
-                echo '<td>-</td>';
-                echo '<td>-</td>';
+                echo '<td align="center">Sin conexión</td>';
             }
         }
 
@@ -1215,15 +1205,13 @@
             if ($conectividad_ftn == 1) {
                 echo '<td align="center">'.$existencia_ftn.'</td>';
             } else {
-                echo '<td>-</td>';
-                echo '<td>-</td>';
+                echo '<td align="center">Sin conexión</td>';
             }
 
             if ($conectividad_fau == 1) {
                 echo ' <td align="center">'.$existencia_fau.'</td>';
             } else {
-                echo '<td>-</td>';
-                echo '<td>-</td>';
+                echo '<td align="center">Sin conexión</td>';
             }
         }
 
