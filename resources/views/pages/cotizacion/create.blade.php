@@ -32,7 +32,7 @@
                         </div>
 
                         <div class="col">
-                            <label for="direccion_cliente">Dirección del cliente del cliente</label>
+                            <label for="direccion_cliente">Dirección del cliente</label>
                             <input type="text" class="form-control" name="direccion_cliente">
                         </div>
                     </div>
@@ -70,9 +70,9 @@
                                         <th>Código artículo</th>
                                         <th>Código barra</th>
                                         <th>Descripción</th>
-                                        <th>Componente</th>
                                         <th>Precio {{ SigVe }}</th>
                                         <th>Precio {{ SigDolar }}</th>
+                                        <th></th>
                                     </tr>
                                 </thead>
 
@@ -120,41 +120,69 @@
 
         $('[name=buscar_articulo]').autocomplete({
             source: articulos,
-            autoFocus: true,
             select: function (event, ui) {
                 $('[name=id_articulo]').val(ui.item.id_articulo);
+            }
+        });
 
-                articulo = {
-                    codigo_articulo: ui.item.codigo_interno,
-                    codigo_barra: ui.item.codigo_barra,
-                    descripcion: ui.item.descripcion,
-                    componente: ui.item.componente,
-                    precio_bs: ui.item.precio_bs,
-                    precio_ds: ui.item.precio_ds,
-                }
+        $('[name=buscar_articulo]').keypress(function (event) {
+            if (event.which == 13) {
+                event.preventDefault();
+                $('.add').click();
             }
         });
 
         $('.add').click(function () {
             id_articulo = $('[name=id_articulo]').val();
 
-            if (id_articulo) {
-                $('[name=buscar_articulo]').val('');
-                $('[name=id_articulo]').val('');
-
-                $('.articulos').append(`
-                    <tr>
-                        <td>${articulo.codigo_articulo}</td>
-                        <td>${articulo.codigo_barra}</td>
-                        <td>${articulo.descripcion}</td>
-                        <td>${articulo.componente}</td>
-                        <td>${articulo.precio_bs}</td>
-                        <td>${articulo.precio_ds}</td>
-                    </tr>
-                `);
+            if (id_articulo == '') {
+                return false;
             }
+
+            $.ajax({
+                type: 'GET',
+                data: {
+                    id_articulo: id_articulo
+                },
+                success: function (response) {
+                    codigo_interno = response.codigo_interno;
+                    codigo_barra = response.codigo_barra;
+                    descripcion = response.descripcion;
+                    precio_bs = response.precio_bs;
+                    precio_ds = response.precio_ds;
+
+                    $('.articulos').append(`
+                        <tr>
+                            <td>${codigo_interno}</td>
+                            <td>${codigo_barra}</td>
+                            <td>${descripcion}</td>
+                            <td>${precio_bs}</td>
+                            <td>${precio_ds}</td>
+                            <td>
+                                <button type="button" onclick="remove(this)" class="btn btn-danger btn-sm">
+                                    <i class="fa fa-trash"></i>
+                                    Eliminar
+                                </button>
+                            </td>
+
+                            <input type="hidden" name="articulos[]" value="${codigo_barra}">
+                        </tr>
+                    `);
+
+                    $('[name=id_articulo]').val('');
+                    $('[name=buscar_articulo]').val('');
+                    $('[name=buscar_articulo]').focus();
+                },
+                error: function (error) {
+                    $('body').html(error.responseText);
+                }
+            });
 
             $('[name=buscar_articulo]').focus();
         });
+
+        function remove(that) {
+            $(that).parent().parent().remove();
+        }
     </script>
 @endsection
