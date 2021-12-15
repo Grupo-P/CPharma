@@ -74,13 +74,14 @@
               <div class="row">
                 <div class="col"></div>
 
-                <div class="col-5">
+                <div class="col-6">
                   <div class="alert alert-danger text-center">Solo se admiten archivos Excel.</div>
 
                   <div class="alert alert-info">
                     <ul>
                         <li>La primera línea en archivo se reserva para el encabezado.</li>
                         <li>Los calumnas del Excel deben estar en el siguiente orden:<br>Código de barra, Descripción, Precio, Existencia.</li>
+                        <li>El tiempo promedio por artículo es de 1.3 segundos, un Excel de 1000 artículos debería tardar 21 minutos.</li>
                     </ul>
                   </div>
                 </div>
@@ -134,11 +135,12 @@
           <div class="row">
             <div class="col"></div>
 
-            <div class="col-5">
+            <div class="col-6">
               <div class="alert alert-info">
                 <ul>
                     <li>La primera línea en archivo se reserva para el encabezado.</li>
                     <li>Los calumnas del Excel deben estar en el siguiente orden:<br>Código de barra, Descripción, Precio, Existencia.</li>
+                    <li>El tiempo promedio por artículo es de 1.3 segundos, un Excel de 1000 artículos debería tardar 21 minutos.</li>
                 </ul>
               </div>
             </div>
@@ -230,6 +232,9 @@
           }
       }
 
+      if ($i == 1000) {
+        break;
+      }
 
       $i = $i + 1;
     }
@@ -447,7 +452,7 @@
 
         $precioBs = ($precio) ? number_format($precio, 2, ',', '.') : '';
         $precioDs = ($precio and $tasa) ? number_format($precio * $tasa, 2, ',', '.') : '';
-        $ultimaVenta = ($row['UltimaVenta']) ? $row['UltimaVenta']->format('d/m/Y') : '';
+        $ultimaVenta = ($row['UltimaVenta']) ? $row['UltimaVenta']->format('Y-m-d') : '';
 
         $codigosProcesados[] = $row;
 
@@ -511,7 +516,7 @@
       <table class="table table-striped table-bordered col-12 mt-5">
         <thead class="thead-dark">
           <tr>
-            <th scope="col" class="CP-sticky">No procesados</th>
+            <th scope="col" class="CP-sticky">Procesados</th>
           </tr>
         </thead>
       </table>
