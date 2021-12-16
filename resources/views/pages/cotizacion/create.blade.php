@@ -13,7 +13,7 @@
     <hr class="row align-items-start col-12">
 
     <div>
-        <form action="/cotizacion/store" method="POST">
+        <form action="/cotizacion" method="POST">
             @csrf
 
             <div class="card">
@@ -107,6 +107,8 @@
     <script>
         clientes = {!! $clientes !!};
 
+        i = 0;
+
         $('[name=nombre_cliente]').autocomplete({
             source: clientes,
             autoFocus: true,
@@ -165,13 +167,19 @@
                                 </button>
                             </td>
 
-                            <input type="hidden" name="articulos[]" value="${codigo_barra}">
+                            <input type="hidden" name="articulos[${i}][codigo_interno]" value="${codigo_interno}">
+                            <input type="hidden" name="articulos[${i}][codigo_barra]" value="${codigo_barra}">
+                            <input type="hidden" name="articulos[${i}][descripcion]" value="${descripcion}">
+                            <input type="hidden" name="articulos[${i}][precio_bs]" value="${precio_bs}">
+                            <input type="hidden" name="articulos[${i}][precio_ds]" value="${precio_ds}">
                         </tr>
                     `);
 
                     $('[name=id_articulo]').val('');
                     $('[name=buscar_articulo]').val('');
                     $('[name=buscar_articulo]').focus();
+
+                    i = i + 1;
                 },
                 error: function (error) {
                     $('body').html(error.responseText);

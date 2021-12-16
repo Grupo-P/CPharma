@@ -4,6 +4,7 @@ namespace compras\Http\Controllers;
 
 use DB;
 use Illuminate\Http\Request;
+use PDF;
 
 class CotizacionController extends Controller
 {
@@ -153,7 +154,10 @@ class CotizacionController extends Controller
      */
     public function store(Request $request)
     {
-        dd($request->all());
+        $data = $request->all();
+
+        $pdf = PDF::loadView('pages.cotizacion.pdf', compact('data'))->setPaper('a4', 'landscape');
+        return $pdf->stream();
     }
 
     /**
