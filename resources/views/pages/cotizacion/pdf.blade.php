@@ -127,5 +127,7 @@
     </tfoot>
 </table>
 
+<p><b>Nota: Los precios pueden variar sin previo aviso.</b></p>
+
 </body>
 </html>

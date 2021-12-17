@@ -40,21 +40,35 @@
 
   <form action="">
     <div class="row">
-      <div class="col-4">
+      <div class="col-3">
+        <div class="form-group">
+            <label for="cantidad">Cantidad de registros</label>
+            <select class="form-control" name="cantidad">
+                <option {{ $selected50 }} value="50">50</option>
+                <option {{ $selected100 }} value="100">100</option>
+                <option {{ $selected200 }} value="200">200</option>
+                <option {{ $selected500 }} value="500">500</option>
+                <option {{ $selected1000 }} value="1000">1000</option>
+                <option {{ $selectedTodos }} value="Todos">Todos</option>
+            </select>
+        </div>
+      </div>
+
+      <div class="col-3">
         <div class="form-group">
           <label for="fecha_desde">Fecha desde</label>
-          <input type="date" name="fecha_desde" value="{{ $request->get('fecha_desde') }}" class="form-control">
+          <input type="date" name="fecha_desde" value="{{ request('fecha_desde') }}" class="form-control">
         </div>
       </div>
 
-      <div class="col-4">
+      <div class="col-3">
         <div class="form-group">
           <label for="fecha_hasta">Fecha hasta</label>
-          <input type="date" name="fecha_hasta" value="{{ $request->get('fecha_hasta') }}" class="form-control">
+          <input type="date" name="fecha_hasta" value="{{ request('fecha_hasta') }}" class="form-control">
         </div>
       </div>
 
-      <div class="col-4">
+      <div class="col-3">
         <div class="form-group">
           <button style="margin-top: 7.5%" class="btn btn-outline-success btn-block">Buscar</button>
         </div>
@@ -197,9 +211,23 @@
     </tbody>
   </table>
 
+  {{ ($pagos instanceof Illuminate\Pagination\LengthAwarePaginator) ? $pagos->links() : '' }}
+
   <script>
     $(document).ready(function(){
         $('[data-toggle="tooltip"]').tooltip();
+
+        $('tbody').find('tr').click(function () {
+            background = $(this).css('background-color');
+
+            console.log(background);
+
+            if (background == 'rgb(100, 149, 237)') {
+                $(this).css('background-color', '');
+            } else {
+                $(this).css('background-color', 'cornflowerblue');
+            }
+        });
     });
     $('#exampleModalCenter').modal('show');
   </script>

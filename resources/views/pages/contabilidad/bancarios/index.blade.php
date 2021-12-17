@@ -100,6 +100,31 @@
     </h1>
 
     <hr class="row align-items-start col-12">
+
+    <form autocomplete="off" action="" class="mb-3">
+        <div class="row">
+            <div class="col">Cantidad de registros</div>
+            <div class="col">
+                <select class="form-control form-control-sm" name="cantidad">
+                    <option {{ $selected50 }} value="50">50</option>
+                    <option {{ $selected100 }} value="100">100</option>
+                    <option {{ $selected200 }} value="200">200</option>
+                    <option {{ $selected500 }} value="500">500</option>
+                    <option {{ $selected1000 }} value="1000">1000</option>
+                    <option {{ $selectedTodos }} value="Todos">Todos</option>
+                </select>
+            </div>
+
+            <div class="col">Fecha inicio</div>
+            <div class="col"><input type="date" value="{{ $fechaInicioUrl }}" class="form-control form-control-sm" name="fechaInicio"></div>
+
+            <div class="col">Fecha final</div>
+            <div class="col"><input type="date" value="{{ $fechaFinUrl }}" class="form-control form-control-sm" name="fechaFin"></div>
+
+            <div class="col"><input type="submit" value="Buscar" class="btn btn-sm btn-block btn-outline-success"></div>
+        </div>
+    </form>
+
     <table style="width:100%;" class="CP-stickyBar">
         <tr>
             @if(Auth::user()->departamento == 'TECNOLOGIA' || Auth::user()->departamento == 'GERENCIA' || Auth::user()->departamento == 'ADMINISTRACION')
@@ -211,9 +236,23 @@
         </tbody>
     </table>
 
+    {{ ($pagos instanceof Illuminate\Pagination\LengthAwarePaginator) ? $pagos->links() : '' }}
+
     <script>
         $(document).ready(function(){
             $('[data-toggle="tooltip"]').tooltip();
+
+            $('tbody').find('tr').click(function () {
+                background = $(this).css('background-color');
+
+                console.log(background);
+
+                if (background == 'rgb(100, 149, 237)') {
+                    $(this).css('background-color', '');
+                } else {
+                    $(this).css('background-color', 'cornflowerblue');
+                }
+            });
         });
 
         $('#exampleModalCenter').modal('show');
@@ -222,6 +261,7 @@
             event.preventDefault();
             alert('En desarrollo...');
         });
+
     </script>
 
 @endsection

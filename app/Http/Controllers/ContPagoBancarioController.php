@@ -23,8 +23,26 @@ class ContPagoBancarioController extends Controller
     public function index()
     {
         include app_path() . '/functions/functions_contabilidad.php';
-        $pagos = ContPagoBancario::orderByDesc('id')->get();
-        return view('pages.contabilidad.bancarios.index', compact('pagos'));
+
+        $cantidad = isset($_GET['cantidad']) ? $_GET['cantidad'] : '50';
+        $fechaInicioUrl = isset($_GET['fechaInicio']) ? $_GET['fechaInicio'] : '';
+        $fechaFinUrl = isset($_GET['fechaFin']) ? $_GET['fechaFin'] : '';
+
+        $selected50 = ($cantidad == '50') ? 'selected' : '';
+        $selected100 = ($cantidad == '100') ? 'selected' : '';
+        $selected200 = ($cantidad == '200') ? 'selected' : '';
+        $selected500 = ($cantidad == '500') ? 'selected' : '';
+        $selected1000 = ($cantidad == '1000') ? 'selected' : '';
+        $selectedTodos = ($cantidad == 'Todos') ? 'selected' : '';
+
+        $pagos = ContPagoBancario::fechaInicio($fechaInicioUrl)
+            ->fechaFin($fechaFinUrl)
+            ->orderByDesc('id')
+            ->cantidad($cantidad);
+
+        return view('pages.contabilidad.bancarios.index', compact(
+            'cantidad', 'fechaInicioUrl', 'fechaFinUrl', 'selected50', 'selected100', 'selected200', 'selected500', 'selected1000', 'selectedTodos', 'pagos'
+        ));
     }
 
     /**
