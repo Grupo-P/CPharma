@@ -44,6 +44,9 @@
                     if ($_SERVER['HTTP_HOST'] == 'cpharmafll.com') {
                         echo 'FARMACIA LA LAGO, C. A.';
                     }
+
+                    $total_bs = 0;
+                    $total_ds = 0;
                 @endphp
             </td>
         </tr>
@@ -78,32 +81,51 @@
 
     <tbody>
         @foreach($data['articulos'] as $item)
+            @php
+                $precio_bs =  str_replace(',', 'c', $item['precio_bs']);
+                $precio_ds =  str_replace(',', 'c', $item['precio_ds']);
+
+                $precio_bs =  str_replace('.', 'p', $precio_bs);
+                $precio_ds =  str_replace('.', 'p', $precio_ds);
+
+                $precio_bs =  str_replace('c', '.', $precio_bs);
+                $precio_ds =  str_replace('c', '.', $precio_ds);
+
+                $precio_bs =  str_replace('p', ',', $precio_bs);
+                $precio_ds =  str_replace('p', ',', $precio_ds);
+
+                $precio_bs = (float) $precio_bs;
+                $precio_ds = (float) $precio_ds;
+
+                $total_ds = $total_ds + ($precio_ds * $item['cantidad']);
+                $total_bs = $total_bs + ($precio_bs * $item['cantidad']);
+            @endphp
+
             <tr>
                 <td style="font-size:  10px; text-align: center; border: 1px solid black; border-collapse: collapse">{{ $item['descripcion'] }}</td>
                 <td style="font-size:  10px; text-align: center; border: 1px solid black; border-collapse: collapse">{{ $item['precio_bs'] }}</td>
-                <td style="font-size:  10px; text-align: center; border: 1px solid black; border-collapse: collapse">{{ $item['precio_ds'] }}</td>
                 <td style="font-size:  10px; text-align: center; border: 1px solid black; border-collapse: collapse">{{ $item['precio_bs'] }}</td>
-                <td style="font-size:  10px; text-align: center; border: 1px solid black; border-collapse: collapse">{{ $item['precio_ds'] }}</td>
-                <td style="font-size:  10px; text-align: center; border: 1px solid black; border-collapse: collapse">{{ $item['precio_ds'] }}</td>
+                <td style="font-size:  10px; text-align: center; border: 1px solid black; border-collapse: collapse">{{ $item['cantidad'] }}</td>
+                <td style="font-size:  10px; text-align: center; border: 1px solid black; border-collapse: collapse">{{ number_format($item['cantidad'] * $precio_bs, 2, ',', '.') }}</td>
+                <td style="font-size:  10px; text-align: center; border: 1px solid black; border-collapse: collapse">{{ number_format($item['cantidad'] * $precio_ds, 2, ',', '.') }}</td>
             </tr>
         @endforeach
     </tbody>
+
+    <tfoot>
+        <tr>
+            <th colspan="4"></th>
+            <th style="font-size:  10px; text-align: center; border: 1px solid black; border-collapse: collapse">Total {{ SigVe }}</th>
+            <th style="font-size:  10px; text-align: center; border: 1px solid black; border-collapse: collapse">{{ number_format($total_bs, 2, ',', '.') }}</th>
+        </tr>
+
+        <tr>
+            <th colspan="4"></th>
+            <th style="font-size:  10px; text-align: center; border: 1px solid black; border-collapse: collapse">Total {{ SigDolar }}</th>
+            <th style="font-size:  10px; text-align: center; border: 1px solid black; border-collapse: collapse">{{ number_format($total_ds, 2, ',', '.') }}</th>
+        </tr>
+    </tfoot>
 </table>
-
-
-<div style="text-align: right;">
-    <table style="border: 1px solid back; border-collapse: collapse">
-        <tr>
-            <td style="padding: 4px; font-size:  10px; text-align: center; border: 1px solid back; border-collapse: collapse">Total {{ SigVe }}</td>
-            <td style="padding: 4px; font-size:  10px; text-align: center; border: 1px solid back; border-collapse: collapse">0,00</td>
-        </tr>
-
-        <tr>
-            <td style="padding: 4px; font-size:  10px; text-align: center; border: 1px solid back; border-collapse: collapse">Total {{ SigDolar }}</td>
-            <td style="padding: 4px; font-size:  10px; text-align: center; border: 1px solid back; border-collapse: collapse">0,00</td>
-        </tr>
-    </table>
-</div>
 
 </body>
 </html>

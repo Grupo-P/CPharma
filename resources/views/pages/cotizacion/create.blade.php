@@ -47,11 +47,17 @@
                         <div class="col">
                             <label for="buscar_articulo">Buscar articulo:</label>
 
-                            <div class="input-group">
-                                <input type="text" class="form-control" name="buscar_articulo">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <input placeholder="Nombre o código de barra" type="text" class="form-control" name="buscar_articulo">
+                                </div>
 
-                                <div class="input-group-append">
-                                    <button type="button" class="btn btn-info add">
+                                <div class="col-md-2">
+                                    <input placeholder="Cantidad" type="number" class="form-control" name="cantidad">
+                                </div>
+
+                                <div class="col-md-2">
+                                    <button type="button" class="btn btn-info btn-block add">
                                         <i class="fa fa-plus"></i>
                                         Agregar
                                     </button>
@@ -72,6 +78,7 @@
                                         <th>Descripción</th>
                                         <th>Precio {{ SigVe }}</th>
                                         <th>Precio {{ SigDolar }}</th>
+                                        <th>Cantidad</th>
                                         <th></th>
                                     </tr>
                                 </thead>
@@ -137,7 +144,20 @@
         $('.add').click(function () {
             id_articulo = $('[name=id_articulo]').val();
 
+            cantidad = $('[name=cantidad]').val();
+            cantidad = parseInt(cantidad);
+
             if (id_articulo == '') {
+                return false;
+            }
+
+            if (cantidad <= 0) {
+                alert('Debe ingresar una cantidad mayor a 0');
+                return false;
+            }
+
+            if (isNaN(cantidad)) {
+                alert('Debe ingresar la cantidad');
                 return false;
             }
 
@@ -160,6 +180,7 @@
                             <td>${descripcion}</td>
                             <td>${precio_bs}</td>
                             <td>${precio_ds}</td>
+                            <td>${cantidad}</td>
                             <td>
                                 <button type="button" onclick="remove(this)" class="btn btn-danger btn-sm">
                                     <i class="fa fa-trash"></i>
@@ -172,11 +193,13 @@
                             <input type="hidden" name="articulos[${i}][descripcion]" value="${descripcion}">
                             <input type="hidden" name="articulos[${i}][precio_bs]" value="${precio_bs}">
                             <input type="hidden" name="articulos[${i}][precio_ds]" value="${precio_ds}">
+                            <input type="hidden" name="articulos[${i}][cantidad]" value="${cantidad}">
                         </tr>
                     `);
 
                     $('[name=id_articulo]').val('');
                     $('[name=buscar_articulo]').val('');
+                    $('[name=cantidad]').val('');
                     $('[name=buscar_articulo]').focus();
 
                     i = i + 1;

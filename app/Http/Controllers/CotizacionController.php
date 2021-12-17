@@ -69,7 +69,7 @@ class CotizacionController extends Controller
 
             $resultado['codigo_interno'] = $row['CodigoInterno'];
             $resultado['codigo_barra']   = $row['CodigoBarra'];
-            $resultado['descripcion']    = $row['Descripcion'];
+            $resultado['descripcion']    = FG_Limpiar_Texto($row['Descripcion']);
             $resultado['precio_bs']      = number_format($precio, 2, ',', '.');
             $resultado['precio_ds']      = number_format($precio_ds, 2, ',', '.');
 
@@ -120,6 +120,17 @@ class CotizacionController extends Controller
                 InvArticulo.CodigoArticulo AS codigo_interno
             FROM
                 InvArticulo
+            WHERE
+                (
+                    SELECT
+                        SUM(InvLoteAlmacen.Existencia)
+                    FROM
+                        InvLoteAlmacen
+                    WHERE
+                        (InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
+                            AND
+                        InvLoteAlmacen.InvArticuloId = InvArticulo.Id
+                ) > 0
             ORDER BY
                 InvArticulo.Descripcion ASC;
         ";
@@ -130,11 +141,11 @@ class CotizacionController extends Controller
 
         while ($row = sqlsrv_fetch_array($query, SQLSRV_FETCH_ASSOC)) {
 
-            $articulos[$i]['value']          = $row['codigo_barra'] . ' | ' . $row['descripcion'];
-            $articulos[$i]['label']          = $row['codigo_barra'] . ' | ' . $row['descripcion'];
+            $articulos[$i]['value']          = $row['codigo_barra'] . ' | ' . FG_Limpiar_Texto($row['descripcion']);
+            $articulos[$i]['label']          = $row['codigo_barra'] . ' | ' . FG_Limpiar_Texto($row['descripcion']);
             $articulos[$i]['codigo_interno'] = $row['codigo_interno'];
             $articulos[$i]['codigo_barra']   = $row['codigo_barra'];
-            $articulos[$i]['descripcion']    = $row['descripcion'];
+            $articulos[$i]['descripcion']    = FG_Limpiar_Texto($row['descripcion']);
             $articulos[$i]['id_articulo']    = $row['id_articulo'];
 
             $i = $i + 1;
