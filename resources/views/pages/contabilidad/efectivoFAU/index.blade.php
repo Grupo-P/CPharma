@@ -201,7 +201,20 @@
   <script>
     $(document).ready(function(){
         $('[data-toggle="tooltip"]').tooltip();
+
+        $('tbody').find('tr').click(function () {
+            background = $(this).css('background-color');
+
+            console.log(background);
+
+            if (background == 'rgb(100, 149, 237)') {
+                $(this).css('background-color', '');
+            } else {
+                $(this).css('background-color', 'cornflowerblue');
+            }
+        });
     });
+
     $('#exampleModalCenter').modal('show');
   </script>
 @endsection

@@ -123,9 +123,48 @@
       </div>
       <input type="submit" value="Buscar" class="btn btn-outline-success">
     </form>
-    <br><br>';
+    <br>';
 
-    R38_Proveedor_Reclamo_Top50($_GET['SEDE']);
+    $cantidad = isset($_GET['cantidad']) ? $_GET['cantidad'] : '';
+    $fechaInicioUrl = isset($_GET['fechaInicio']) ? $_GET['fechaInicio'] : '';
+    $fechaFinUrl = isset($_GET['fechaFin']) ? $_GET['fechaFin'] : '';
+
+    $selected50 = ($cantidad == '50') ? 'selected' : '';
+    $selected100 = ($cantidad == '100') ? 'selected' : '';
+    $selected200 = ($cantidad == '200') ? 'selected' : '';
+    $selected500 = ($cantidad == '500') ? 'selected' : '';
+    $selected1000 = ($cantidad == '1000') ? 'selected' : '';
+    $selectedTodos = ($cantidad == 'Todos') ? 'selected' : '';
+
+    echo '
+    <form autocomplete="off" action="">
+        <div class="col"><input type="hidden" name="SEDE" value="'.$_GET['SEDE'].'"></div>
+
+        <div class="row">
+            <div class="col">Cantidad de registros</div>
+            <div class="col">
+                <select class="form-control form-control-sm" name="cantidad">
+                    <option '.$selected50.' value="50">50</option>
+                    <option '.$selected100.' value="100">100</option>
+                    <option '.$selected200.' value="200">200</option>
+                    <option '.$selected500.' value="500">500</option>
+                    <option '.$selected1000.' value="1000">1000</option>
+                    <option '.$selectedTodos.' value="Todos">Todos</option>
+                </select>
+            </div>
+
+            <div class="col">Fecha inicio</div>
+            <div class="col"><input type="date" value="'.$fechaInicioUrl.'" class="form-control form-control-sm" name="fechaInicio"></div>
+
+            <div class="col">Fecha final</div>
+            <div class="col"><input type="date" value="'.$fechaFinUrl.'" class="form-control form-control-sm" name="fechaFin"></div>
+
+            <div class="col"><input type="submit" value="Buscar" class="btn btn-sm btn-block btn-outline-success"></div>
+        </div>
+    </form>
+    <br>';
+
+    R38_Proveedor_Reclamo_Top50($_GET['SEDE'],$cantidad, $fechaInicioUrl, $fechaFinUrl);
 
     $FinCarga = new DateTime("now");
     $IntervalCarga = $InicioCarga->diff($FinCarga);
@@ -168,10 +207,10 @@
     ";
     return $sql;
   }
-  function R38_Proveedor_Reclamo_Top50($SedeConnection){
+  function R38_Proveedor_Reclamo_Top50($SedeConnection, $cantidad, $inicio, $fin){
     
     $conn = FG_Conectar_Smartpharma($SedeConnection);
-    $sql1 = R30Q_Reclamo_Proveedor_Top50();
+    $sql1 = R30Q_Reclamo_Proveedor_Top50($cantidad, $inicio, $fin);
     $result = sqlsrv_query($conn,$sql1);
 
     echo '
@@ -192,7 +231,7 @@
         <thead class="thead-dark">
           <tr>
             <th scope="col" class="CP-sticky">#</th>            
-            <th scope="col" class="CP-sticky">Proveedor</th> 
+            <th scope="col" class="CP-sticky">Proveedor</th>
             <th scope="col" class="CP-sticky">Estado reclamo</th>
             <th scope="col" class="CP-sticky">Número del reclamo</th>
             <th scope="col" class="CP-sticky">Factura asociada</th>
@@ -200,6 +239,8 @@
             <th scope="col" class="CP-sticky">Registro factura</th>
             <th scope="col" class="CP-sticky">Fecha reclamo</th>
             <th scope="col" class="CP-sticky">Total reclamo (Con IVA)</th>
+            <th scope="col" class="CP-sticky">Total SKU</th>
+            <th scope="col" class="CP-sticky">Total unidades</th>
             <th scope="col" class="CP-sticky">Operador</th>
             <th scope="col" class="CP-sticky">Seleccion</th>
           </tr>
@@ -217,6 +258,8 @@
       $registro_factura = ($row['registro_factura']) ? $row['registro_factura']->format('d-m-Y') : '00-00-0000';
       $fecha_reclamo = ($row['fecha_reclamo']) ? $row['fecha_reclamo']->format('d-m-Y') : '00-00-0000';
       $total_reclamo = number_format($row['total_reclamo'], 2, '.', ',');
+      $total_sku = $row['total_sku'];
+      $total_unidades = intval($row['total_unidades']);
       $operador = $row['operador'];
       $id_factura = $row['id_factura'];
       $background = ($estado == 'En proceso') ? 'bg-warning' : '';
@@ -232,6 +275,8 @@
       echo '<td align="center">'.$registro_factura.'</td>';
       echo '<td align="center">'.$fecha_reclamo.'</td>';
       echo '<td align="center">'.$total_reclamo.'</td>';
+      echo '<td align="center">'.$total_sku.'</td>';
+      echo '<td align="center">'.$total_unidades.'</td>';
       echo '<td align="center">'.$operador.'</td>';
       echo '
       <td align="center">
@@ -310,6 +355,8 @@
             <th scope="col" class="CP-sticky">Registro factura</th>
             <th scope="col" class="CP-sticky">Fecha reclamo</th>
             <th scope="col" class="CP-sticky">Total reclamo (Con IVA)</th>
+            <th scope="col" class="CP-sticky">Total SKU</th>
+            <th scope="col" class="CP-sticky">Total unidades</th>
             <th scope="col" class="CP-sticky">Operador</th>
             <th scope="col" class="CP-sticky">Seleccion</th>
           </tr>
@@ -327,6 +374,8 @@
       $registro_factura = ($row['registro_factura']) ? $row['registro_factura']->format('d-m-Y') : '00-00-0000';
       $fecha_reclamo = ($row['fecha_reclamo']) ? $row['fecha_reclamo']->format('d-m-Y') : '00-00-0000';
       $total_reclamo = number_format($row['total_reclamo'], 2, '.', ',');
+      $total_sku = $row['total_sku'];
+      $total_unidades = intval($row['total_unidades']);
       $operador = $row['operador'];
       $id_factura = $row['id_factura'];
       $background = ($estado == 'En proceso') ? 'bg-warning' : '';
@@ -341,6 +390,8 @@
       echo '<td align="center">'.$registro_factura.'</td>';
       echo '<td align="center">'.$fecha_reclamo.'</td>';
       echo '<td align="center">'.$total_reclamo.'</td>';
+      echo '<td align="center">'.$total_sku.'</td>';
+      echo '<td align="center">'.$total_unidades.'</td>';
       echo '<td align="center">'.$operador.'</td>';
       echo '
       <td align="center">
@@ -373,9 +424,37 @@
     RETORNO: lista de reclamos
     DESAROLLADO POR: NISAUL DELGADO
   */
-  function R30Q_Reclamo_Proveedor_Top50() {
+  function R30Q_Reclamo_Proveedor_Top50($cantidad,$inicio,$fin) {
+    if ($cantidad == '') {
+        $cantidad = "TOP 50";
+    }
+
+    if ($cantidad == 'Todos') {
+        $cantidad = '';
+    }
+
+    if (is_numeric($cantidad)) {
+        $cantidad = "TOP $cantidad";
+    }
+
+    if ($inicio != '') {
+        $where = " WHERE CONVERT(DATE, ComReclamo.FechaRegistro) >= '$inicio' ";
+    }
+
+    if ($fin != '') {
+        $where = " WHERE CONVERT(DATE, ComReclamo.FechaRegistro) <= '$fin' ";
+    }
+
+    if ($inicio != '' && $fin != '') {
+        $where = " WHERE CONVERT(DATE, ComReclamo.FechaRegistro) >= '$inicio' AND CONVERT(DATE, ComReclamo.FechaRegistro) <= '$fin' ";
+    }
+
+    if ($inicio == '' && $fin == '') {
+        $where = "";
+    }
+
     $sql = "
-      SELECT TOP 50
+      SELECT $cantidad
         ComReclamo.Id As id_reclamo,
         (SELECT GenPersona.Nombre FROM GenPersona WHERE GenPersona.Id = (SELECT ComProveedor.GenPersonaId FROM ComProveedor WHERE ComProveedor.Id = ComReclamo.ComProveedorId)) AS proveedor,
         ComReclamo.ComProveedorId AS id_proveedor,
@@ -387,8 +466,11 @@
         (SELECT ComFactura.FechaRegistro FROM ComFactura WHERE ComFactura.Id = ComReclamo.ComFacturaId) AS registro_factura,
         ComReclamo.FechaRegistro AS fecha_reclamo,
         ComReclamo.M_Total AS total_reclamo,
+        (SELECT COUNT(1) FROM ComReclamoDetalle WHERE ComReclamoDetalle.ComReclamoId = ComReclamo.Id) AS total_sku,
+        (SELECT SUM(ComReclamoDetalle.Cantidad) FROM ComReclamoDetalle WHERE ComReclamoDetalle.ComReclamoId = ComReclamo.Id) AS total_unidades,
         ComReclamo.Auditoria_Usuario AS operador
       FROM ComReclamo
+      $where
       ORDER BY FechaRegistro DESC;
     ";
     return $sql;
@@ -415,6 +497,8 @@
         (SELECT ComFactura.FechaRegistro FROM ComFactura WHERE ComFactura.Id = ComReclamo.ComFacturaId) AS registro_factura,
         ComReclamo.FechaRegistro AS fecha_reclamo,
         ComReclamo.M_Total AS total_reclamo,
+        (SELECT COUNT(1) FROM ComReclamoDetalle WHERE ComReclamoDetalle.ComReclamoId = ComReclamo.Id) AS total_sku,
+        (SELECT SUM(ComReclamoDetalle.Cantidad) FROM ComReclamoDetalle WHERE ComReclamoDetalle.ComReclamoId = ComReclamo.Id) AS total_unidades,
         ComReclamo.Auditoria_Usuario AS operador
       FROM ComReclamo
       WHERE ComReclamo.ComProveedorId = '$IdProveedor'

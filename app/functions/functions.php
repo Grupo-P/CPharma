@@ -1355,6 +1355,9 @@
             case 'Articulos sin imagen':
                 $ruta = '/reporte45';
             break;
+            case 'Compras por archivo':
+                $ruta = '/reporte46';
+            break;
             default:
                 $ruta = '#';
             break;
@@ -1500,6 +1503,9 @@
             break;
             case 45:
                 $nombre = 'Ajustes de inventario';
+            break;
+            case 46:
+                $nombre = 'Compras por archivo';
             break;
             default:
                 $nombre = 'Reporte desconocido';

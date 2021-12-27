@@ -1451,6 +1451,13 @@
           Surtido de gavetas<span class="sr-only">(current)</span>
         </a>
       </li>
+      <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('/cotizacion/create') }}">
+          <span data-feather="home"></span>
+          <i class="fas fa-file"></i>
+          Cotizaciones<span class="sr-only">(current)</span>
+        </a>
+      </li>
     </div>
   </div>
 <?php

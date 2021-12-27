@@ -37,4 +37,27 @@ class ContPagoBancario extends Model
             return 'COP';
         }
     }
+
+    public function scopeCantidad($query, $cantidad)
+    {
+        if ($cantidad == 'Todos') {
+            return $query->get();
+        }
+
+        return $query->paginate($cantidad);
+    }
+
+    public function scopeFechaInicio($query, $fechaInicio)
+    {
+        if ($fechaInicio) {
+            return $query->whereDate('created_at', '>=', $fechaInicio);
+        }
+    }
+
+    public function scopeFechaFin($query, $fechaFin)
+    {
+        if ($fechaFin) {
+            return $query->whereDate('created_at', '<=', $fechaFin);
+        }
+    }
 }

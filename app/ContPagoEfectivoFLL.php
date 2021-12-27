@@ -42,4 +42,13 @@ class ContPagoEfectivoFLL extends Model
     {
         return 'USD';
     }
+
+    public function scopeCantidad($query, $cantidad)
+    {
+        if ($cantidad == 'Todos') {
+            return $query->get();
+        }
+
+        return $query->paginate($cantidad);
+    }
 }

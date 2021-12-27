@@ -919,10 +919,10 @@
 
         $sql11 = DB::select("
             SELECT
-                (SELECT CONCAT(unidads.divisor, ' ', unidads.unidad_minima) FROM unidads WHERE unidads.id_articulo = '$id_articulo') AS unidad_minima,
-                (SELECT etiquetas.clasificacion FROM etiquetas WHERE etiquetas.id_articulo = '$id_articulo') AS clasificacion,
-                (SELECT categorias.nombre FROM categorias WHERE categorias.codigo = (SELECT categorizacions.codigo_categoria FROM categorizacions WHERE categorizacions.id_articulo = '$id_articulo')) AS categoria,
-                (SELECT subcategorias.nombre FROM subcategorias WHERE subcategorias.codigo = (SELECT categorizacions.codigo_subcategoria FROM categorizacions WHERE categorizacions.id_articulo = '$id_articulo')) AS subcategoria
+                (SELECT CONCAT(unidads.divisor, ' ', unidads.unidad_minima) FROM unidads WHERE unidads.id_articulo = '$id_articulo' LIMIT 1) AS unidad_minima,
+                (SELECT etiquetas.clasificacion FROM etiquetas WHERE etiquetas.id_articulo = '$id_articulo' LIMIT 1) AS clasificacion,
+                (SELECT categorias.nombre FROM categorias WHERE categorias.codigo = (SELECT categorizacions.codigo_categoria FROM categorizacions WHERE categorizacions.id_articulo = '$id_articulo' LIMIT 1) LIMIT 1) AS categoria,
+                (SELECT subcategorias.nombre FROM subcategorias WHERE subcategorias.codigo = (SELECT categorizacions.codigo_subcategoria FROM categorizacions WHERE categorizacions.id_articulo = '$id_articulo' LIMIT 1) LIMIT 1) AS subcategoria
             ;
         ");
 

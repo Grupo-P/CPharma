@@ -20,13 +20,24 @@ class ContPagoEfectivoFLLController extends Controller
      */
     public function index(Request $request)
     {
+        $cantidad = request('cantidad') ? request('cantidad') : '50';
+
+        $selected50 = ($cantidad == '50') ? 'selected' : '';
+        $selected100 = ($cantidad == '100') ? 'selected' : '';
+        $selected200 = ($cantidad == '200') ? 'selected' : '';
+        $selected500 = ($cantidad == '500') ? 'selected' : '';
+        $selected1000 = ($cantidad == '1000') ? 'selected' : '';
+        $selectedTodos = ($cantidad == 'Todos') ? 'selected' : '';
+
         $pagos = ContPagoEfectivo::fecha($request->get('fecha_desde'), $request->get('fecha_hasta'))
             ->orderBy('created_at', 'desc')
-            ->get();
+            ->cantidad($cantidad);
 
         $sedes = Sede::get();
 
-        return view('pages.contabilidad.efectivoFLL.index', compact('pagos', 'sedes', 'request'));
+        return view('pages.contabilidad.efectivoFLL.index', compact(
+            'pagos', 'sedes', 'selected50', 'selected100', 'selected200', 'selected500', 'selected1000', 'selectedTodos', 'request'
+        ));
     }
 
     /**

@@ -160,6 +160,8 @@
                 <td scope="col">Traslados por llegar</td>
                 <th scope="col">45</th>
                 <td scope="col">Articulos sin imagen</td>
+                <th scope="col">46</th>
+                <td scope="col">Compras por archivo</td>
             </tr>
         </tbody>
     </table>
