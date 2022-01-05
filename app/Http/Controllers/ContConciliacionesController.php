@@ -32,23 +32,26 @@ class ContConciliacionesController extends Controller
                 ->get();
 
             foreach ($bancarios as $bancario) {
-                $pagos[$i]['id']                = $bancario->id;
-                $pagos[$i]['tipo']              = 'Bancario';
-                $pagos[$i]['emisor']            = ($bancario->banco) ? $bancario->banco->alias_cuenta : '';
-                $pagos[$i]['nombre_proveedor']  = $bancario->proveedor->nombre_proveedor;
-                $pagos[$i]['ci_proveedor']      = $bancario->proveedor->rif_ci;
-                $pagos[$i]['monto']             = number_format($bancario->monto, 2, ',', '.');
-                $pagos[$i]['operador']          = $bancario->operador;
-                $pagos[$i]['fecha']             = date_format(date_create($bancario->created_at), 'd/m/Y h:ia');
-                $pagos[$i]['estado']            = ($bancario->deleted_at) ? 'Reversado' : 'Pagado';
-                $pagos[$i]['concepto']          = $bancario->comentario;
-                $pagos[$i]['retencion_deuda_1'] = $bancario->retencion_deuda_1;
-                $pagos[$i]['retencion_deuda_2'] = $bancario->retencion_deuda_2;
-                $pagos[$i]['retencion_iva']     = $bancario->retencion_iva;
-                $pagos[$i]['iva']               = $bancario->iva;
-                $pagos[$i]['monto_banco']       = $bancario->monto_banco;
-                $pagos[$i]['clase']             = get_class($bancario);
-                $i                              = $i + 1;
+                $pagos[$i]['id']                   = $bancario->id;
+                $pagos[$i]['tipo']                 = 'Bancario';
+                $pagos[$i]['emisor']               = ($bancario->banco) ? $bancario->banco->alias_cuenta : '';
+                $pagos[$i]['nombre_proveedor']     = $bancario->proveedor->nombre_proveedor;
+                $pagos[$i]['moneda_proveedor']     = $bancario->proveedor->moneda;
+                $pagos[$i]['moneda_iva_proveedor'] = $bancario->proveedor->moneda_iva;
+                $pagos[$i]['ci_proveedor']         = $bancario->proveedor->rif_ci;
+                $pagos[$i]['monto']                = $bancario->monto;
+                $pagos[$i]['operador']             = $bancario->operador;
+                $pagos[$i]['fecha']                = date_format(date_create($bancario->created_at), 'd/m/Y h:ia');
+                $pagos[$i]['estado']               = ($bancario->deleted_at) ? 'Reversado' : 'Pagado';
+                $pagos[$i]['concepto']             = $bancario->comentario;
+                $pagos[$i]['retencion_deuda_1']    = (float) $bancario->retencion_deuda_1;
+                $pagos[$i]['retencion_deuda_2']    = (float) $bancario->retencion_deuda_2;
+                $pagos[$i]['retencion_iva']        = (float) $bancario->retencion_iva;
+                $pagos[$i]['iva']                  = (float) $bancario->iva;
+                $pagos[$i]['monto_banco']          = (float) $bancario->monto_banco;
+                $pagos[$i]['tasa']                 = (float) $bancario->tasa;
+                $pagos[$i]['clase']                = get_class($bancario);
+                $i                                 = $i + 1;
             }
         }
 
