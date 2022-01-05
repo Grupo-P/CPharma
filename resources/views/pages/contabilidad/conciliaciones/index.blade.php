@@ -187,12 +187,12 @@
                         if ($pago['retencion_iva']) {
                             $retencion_iva = $pago['iva'] * ($pago['retencion_iva'] / 100);
 
-                            if ($pago['moneda_proveedor'] != 'Dólares') {
-                                if ($pago['moneda_proveedor'] == 'Bolívares') {
+                            if ($pago['moneda_iva_proveedor'] != 'Dólares') {
+                                if ($pago['moneda_iva_proveedor'] == 'Bolívares') {
                                     $retencion_iva = $retencion_iva * $pago['tasa'];
                                 }
 
-                                if ($pago['moneda_proveedor'] == 'Pesos') {
+                                if ($pago['moneda_iva_proveedor'] == 'Pesos') {
                                     $retencion_iva = $retencion_iva * $pago['tasa'];
                                 }
                             }
