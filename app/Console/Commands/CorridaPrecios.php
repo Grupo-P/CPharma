@@ -57,6 +57,22 @@ class CorridaPrecios extends Command
         //Limpieza del cache
         //Artisan::call('cache:clear');
 
+        /*TODO: Esto se debe descomentar cuando FSM pase a estar en el segmento nuevo
+        $SedeConnection = FG_Mi_Ubicacion();
+        $conn = FG_Conectar_Smartpharma($SedeConnection);
+
+        if($SedeConnection=='FSM'){
+            $sql = "UPDATE InvArticulo set invarticulo.M_PrecioMaximoVenta=NULL,invarticulo.PrecioFijoDivisa=NULL,invarticulo.Referencia=NULL";
+        }else{
+            $sql = "UPDATE InvArticulo set invarticulo.M_PrecioMaximoVenta=NULL,invarticulo.Referencia=NULL";
+        }
+
+        sqlsrv_query($conn,$sql);
+        $sql1 = "UPDATE InvLote set InvLote.Referencia=NULL,InvLote.M_PrecioVentaMaximo=NULL,InvLote.UtilidadVentaMaxima=NULL";
+        sqlsrv_query($conn,$sql1);
+        sqlsrv_close($conn);
+        */
+
         $this->info('La corrida de precios fue ejecutada satisfactoriamente!');
     }
 }
