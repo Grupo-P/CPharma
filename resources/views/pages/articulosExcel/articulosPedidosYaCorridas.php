@@ -222,6 +222,8 @@
 		header('Content-Disposition: attachment;filename="' . $nombreDelDocumento . '"');
 
         $writer = new Csv($spreadsheet);
+        $writer->setDelimiter(',');
+        $writer->setEnclosure('');
 		$writer->save('php://output');
 	/*EXCEL*/
 ?>
