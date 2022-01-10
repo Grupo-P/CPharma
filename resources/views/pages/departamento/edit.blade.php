@@ -163,6 +163,8 @@
                 <td scope="col">Articulos sin imagen</td>
                 <th scope="col">46</th>
                 <td scope="col">Compras por archivo</td>
+                <th scope="col">47</th>
+                <td scope="col">Cruce de aplicación de consultas</td>
             </tr>
         </tbody>
     </table>
