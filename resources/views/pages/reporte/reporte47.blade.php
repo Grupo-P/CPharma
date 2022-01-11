@@ -130,12 +130,28 @@
      ';
     $contador = 1;
     while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
+      $connMood = FG_Conectar_Mod_Atte_Clientes($_GET['SEDE']);
+
+      // Verifica si existe cruce
+      $codigo_barra = $row['codigo_barra'];
+
+      $sql = "SELECT * FROM InAplArt WHERE InAplArt.CoBarra = '$codigo_barra'";
+      $query = sqlsrv_query($connMood, $sql);
+
+      if (sqlsrv_has_rows($query)) {
+        continue;
+      }
+
+      $sql = "SELECT * FROM InComArt WHERE InComArt.CoBarra = '$codigo_barra'";
+      $query = sqlsrv_query($connMood, $sql);
+
+      if (sqlsrv_has_rows($query)) {
+        continue;
+      }
+
       $descripcion = FG_Limpiar_Texto($row['descripcion']);
 
-      $precio = 0;
-
-      $ultima_compra = new DateTime();
-      $ultima_compra = $ultima_compra->format('d/m/Y');
+      $ultima_compra = $row['ultima_compra']->format('d/m/Y');
 
       $existencia = $row['existencia'];
       $existencia_almacen_1 = $row['existencia_almacen_1'];
@@ -157,7 +173,7 @@
       echo '<tr>';
       echo '<td align="left"><strong>'.intval($contador).'</strong></td>';
       echo '<td align="left">'.$row['codigo_interno'].'</td>';
-      echo '<td align="center">'.$row['codigo_barra'].'</td>';
+      echo '<td align="center">'.$codigo_barra.'</td>';
       echo '<td align="center">'.$descripcion.'</td>';
       echo '<td align="center">'.$row['existencia'].'</td>';
       echo '<td align="center">'.$precio.'</td>';
@@ -195,8 +211,10 @@
         (ROUND(CAST((SELECT TOP 1 InvLote.M_PrecioTroquelado FROM InvLoteAlmacen INNER JOIN InvLote ON InvLote.Id = InvLoteAlmacen.InvLoteId WHERE(InvLoteAlmacen.InvAlmacenId = '2') AND (InvLoteAlmacen.InvArticuloId = InvArticulo.Id) AND (InvLoteAlmacen.Existencia>0) ORDER BY invlote.M_PrecioTroquelado DESC)AS DECIMAL(38,2)),2,0)) AS troquel_almacen_2,
         (ROUND(CAST((SELECT TOP 1 InvLote.M_PrecioCompraBruto FROM InvLoteAlmacen INNER JOIN InvLote ON InvLote.Id = InvLoteAlmacen.InvLoteId WHERE (InvLoteAlmacen.InvArticuloId = InvArticulo.Id) AND (InvLoteAlmacen.Existencia>0) AND (InvLoteAlmacen.InvAlmacenId = '2') ORDER BY invlote.M_PrecioCompraBruto DESC)AS DECIMAL(38,2)),2,0)) AS precio_compra_bruto_almacen_2,
         (ROUND(CAST((SELECT TOP 1 InvLote.M_PrecioCompraBruto FROM InvLoteAlmacen INNER JOIN InvLote ON InvLote.Id = InvLoteAlmacen.InvLoteId WHERE (InvLoteAlmacen.InvArticuloId = InvArticulo.Id) AND (InvLoteAlmacen.Existencia>0) ORDER BY invlote.M_PrecioCompraBruto DESC)AS DECIMAL(38,2)),2,0)) AS precio_compra_bruto,
-        (ISNULL(InvArticulo.FinConceptoImptoIdCompra,CAST(0 AS INT))) AS iva
-      FROM InvArticulo
+        (ISNULL(InvArticulo.FinConceptoImptoIdCompra,CAST(0 AS INT))) AS iva,
+        (SELECT TOP 1 (SELECT ComFactura.FechaRegistro FROM ComFactura WHERE ComFactura.Id = ComFacturaDetalle.ComFacturaId) FROM ComFacturaDetalle WHERE ComFacturaDetalle.InvArticuloId = InvArticulo.Id ORDER BY ComFacturaDetalle.ComFacturaId DESC) AS ultima_compra
+      FROM
+        InvArticulo
       WHERE
         (ROUND(CAST((SELECT SUM (InvLoteAlmacen.Existencia) As Existencia FROM InvLoteAlmacen WHERE(InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2) AND (InvLoteAlmacen.InvArticuloId = InvArticulo.Id)) AS DECIMAL(38,0)),2,0)) > 0;
     ";

@@ -272,9 +272,11 @@
       estacion,
       cat as tipo
       FROM faltantes
-      $where
+      WHERE
+        $where
       ORDER BY hora ASC
     ";
+
     return $sql;
   }
 ?>

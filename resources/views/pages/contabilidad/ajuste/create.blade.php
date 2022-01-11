@@ -170,12 +170,6 @@
                 iva = parseFloat(iva);
                 iva = Math.abs(iva);
 
-                if (iva >= monto) {
-                    alert('El monto del IVA debe ser menor al monto base');
-                    event.preventDefault();
-                    return false;
-                }
-
                 Swal.fire({
                     title: 'Cargando...',
                     allowEscapeKey: false,
