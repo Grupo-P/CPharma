@@ -39,18 +39,15 @@ class TrasladoController extends Controller
         switch ($Tipo) {
             case 0:
                 $traslados =  
-                Traslado::orderBy('id', 'asc')->
-                where('estatus','PROCESADO')->take(50)->get();
+                Traslado::orderBy('id', 'desc')->where('estatus','PROCESADO')->get();
             break;
             case 1:
                 $traslados =  
-                Traslado::orderBy('id', 'asc')->
-                where('estatus','EMBALADO')->get();            
+                Traslado::orderBy('id', 'asc')->where('estatus','EMBALADO')->get();
             break;
             case 2:
                 $traslados =  
-                Traslado::orderBy('id', 'asc')->
-                where('estatus','ENTREGADO')->get();
+                Traslado::orderBy('id', 'asc')->where('estatus','ENTREGADO')->get();
             break;
             default:
                 $traslados =  Traslado::orderBy('fecha_traslado','desc')->take(100)->get();

@@ -1358,6 +1358,9 @@
             case 'Compras por archivo':
                 $ruta = '/reporte46';
             break;
+            case 'Crude de aplicación de consultas':
+                $ruta = '/reporte47';
+            break;
             default:
                 $ruta = '#';
             break;
@@ -1506,6 +1509,9 @@
             break;
             case 46:
                 $nombre = 'Compras por archivo';
+            break;
+            case 47:
+                $nombre = 'Cruce de aplicación de consultas';
             break;
             default:
                 $nombre = 'Reporte desconocido';

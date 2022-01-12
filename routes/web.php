@@ -244,6 +244,10 @@ Route::match(['post', 'get'], '/reporte46', function() {
     return view('pages.reporte.reporte46');
 });
 
+Route::match(['post', 'get'], '/reporte47', function() {
+    return view('pages.reporte.reporte47');
+});
+
 Route::get('/seccion1', function() {
     return view('pages.reporte.seccion1');
 });

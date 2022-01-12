@@ -80,6 +80,7 @@
         <tr>
           <th scope="col" class="CP-sticky">#</th>
           <th scope="col" class="CP-sticky">Codigo Interno</th>
+          <th scope="col" class="CP-sticky">Codigo Barra</th>
           <th scope="col" class="CP-sticky">Descripcion</th>
           <th scope="col" class="CP-sticky">Utilidad Configurada</td>
           <th scope="col" class="CP-sticky">Precio '.SigVe.'<br> (Con IVA)</th>
@@ -135,6 +136,7 @@
     	echo '<tr>';
       echo '<td align="center"><strong>'.intval($contador).'</strong></td>';
       echo '<td align="left">'.$row['CodigoInterno'].'</td>';
+      echo '<td align="left">'.$row['CodigoBarra'].'</td>';
       echo
       '<td align="left" class="CP-barrido">
       <a href="/reporte2?Id='.$IdArticulo.'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
