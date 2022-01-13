@@ -182,6 +182,10 @@
                 dominio = 'http://cpharmakdi.com/';
                 return dominio;
             break;
+            case 'FSM':
+                $dominio = 'http://cpharmafsm.com/';
+                return $dominio;
+            break;
         }
     }
 

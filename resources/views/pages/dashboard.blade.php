@@ -2256,13 +2256,14 @@
   <!-- Dashboard GERENCIA-->
   <div class="card-deck">
     <!-- Usuario -->
+    <!--
     <div class="card border-warning mb-3" style="width: 10rem;">
       <div class="card-body text-left bg-warning">
         <h2 class="card-title">
           <span class="card-text text-white">
           <i class="fas fa-user"></i>
             <?php
-            echo ''.$usuarios;
+            //echo ''.$usuarios;
           ?>
           </span>
         </h2>
@@ -2272,6 +2273,7 @@
         <a href="/usuario/" class="btn btn-outline-warning btn-sm">Visualizar</a>
       </div>
     </div>
+    -->
 
     <!-- Tasa Venta -->
     <div class="card border-dark mb-3" style="width: 14rem;">
@@ -2589,13 +2591,14 @@
 
   <div class="card-deck">
     <!-- Usuario -->
+    <!--
     <div class="card border-warning mb-3" style="width: 14rem;">
       <div class="card-body text-left bg-warning">
         <h2 class="card-title">
           <span class="card-text text-white">
           <i class="fas fa-user"></i>
             <?php
-            echo ''.$usuarios;
+            //echo ''.$usuarios;
           ?>
           </span>
         </h2>
@@ -2605,6 +2608,7 @@
         <a href="/usuario/" class="btn btn-outline-warning btn-sm">Visualizar</a>
       </div>
     </div>
+    -->
 
     <!-- Tasa Venta -->
     <div class="card border-dark mb-3" style="width: 14rem;">

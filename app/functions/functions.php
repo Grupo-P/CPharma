@@ -122,13 +122,6 @@
                 return 'FTN';
             break;
         //FIN BLOQUE DE FTN
-        //INICIO BLOQUE DE GP
-        /*
-            case '10':
-                return 'GP';
-            break;
-        */
-        //FIN BLOQUE DE GP
         //INICIO BLOQUE DE FLL
             case '7':
                 return 'FLL';
@@ -149,6 +142,10 @@
 			case '15':
 				return 'KDI';
         //FIN BLOQUE DE KDI
+        //INICIO BLOQUE DE FSM
+			case '18':
+				return 'FSM';
+        //FIN BLOQUE DE FSM
             default:
                 return 'ARG';
                 //return ''.$Octeto[2];
@@ -177,6 +174,14 @@
                 $sede = SedeFAUOFF;
                 return $sede;
             break;
+            case 'FTNKDI':
+                $sede = SedeKDIOFF;
+                return $sede;
+            break;
+            case 'FTNFSM':
+                $sede = SedeFSMOFF;
+                return $sede;
+            break;
         //FIN BLOQUE DE FTN
         //INICIO BLOQUE DE FLL
             case 'FLL':
@@ -189,6 +194,14 @@
             break;
             case 'FLLFAU':
                 $sede = SedeFAUOFF;
+                return $sede;
+            break;
+            case 'FLLKDI':
+                $sede = SedeKDIOFF;
+                return $sede;
+            break;
+            case 'FLLFSM':
+                $sede = SedeFSMOFF;
                 return $sede;
             break;
         //FIN BLOQUE DE FLL
@@ -205,7 +218,59 @@
                 $sede = SedeFLLOFF;
                 return $sede;
             break;
+            case 'FAUKDI':
+                $sede = SedeKDIOFF;
+                return $sede;
+            break;
+            case 'FAUFSM':
+                $sede = SedeFSMOFF;
+                return $sede;
+            break;
         //FIN BLOQUE DE FAU
+        //INICIO BLOQUE DE KDI
+            case 'KDI':
+                $sede = SedeKDI;
+                return $sede;
+            break;
+            case 'KDIFTN':
+                $sede = SedeFTNOFF;
+                return $sede;
+            break;
+            case 'KDIFLL':
+                $sede = SedeFLLOFF;
+                return $sede;
+            break;
+            case 'KDIFAU':
+                $sede = SedeFAUOFF;
+                return $sede;
+            break;
+            case 'KDIFSM':
+                $sede = SedeFSMOFF;
+                return $sede;
+            break;
+        //FIN BLOQUE DE KDI
+        //INICIO BLOQUE DE FSM
+            case 'FSM':
+                $sede = SedeFSM;
+                return $sede;
+            break;
+            case 'FSMFTN':
+                $sede = SedeFTNOFF;
+                return $sede;
+            break;
+            case 'FSMFLL':
+                $sede = SedeFLLOFF;
+                return $sede;
+            break;
+            case 'FSMFAU':
+                $sede = SedeFAUOFF;
+                return $sede;
+            break;
+            case 'FSMKDI':
+                $sede = SedeKDIOFF;
+                return $sede;
+            break;
+        //FIN BLOQUE DE FSM
         //INICIO BLOQUE DE GRUPO P
             case 'GP':
                 $sede = SedeGP;
@@ -223,13 +288,15 @@
                 $sede = SedeFAUOFF;
                 return $sede;
             break;
-        //FIN BLOQUE DE GRUPO P
-        //INICIO BLOQUE DE KDI
-            case 'KDI':
-                $sede = SedeKDI;
+            case 'GPKDI':
+                $sede = SedeKDIOFF;
                 return $sede;
             break;
-        //FIN BLOQUE DE KDI
+            case 'GPFSM':
+                $sede = SedeFSMOFF;
+                return $sede;
+            break;
+        //FIN BLOQUE DE GRUPO P
         //INICIO BLOQUE DE TEST
             case 'DBs':
                 $sede = SedeDBs;
@@ -279,6 +346,24 @@
                 $conn = sqlsrv_connect(serverFTN,$connectionInfo);
                 return $conn;
             break;
+            case 'FTNKDI':
+                $connectionInfo = array(
+                    "Database"=>nameKDIOFF,
+                    "UID"=>userFTN,
+                    "PWD"=>passFTN
+                );
+                $conn = sqlsrv_connect(serverFTN,$connectionInfo);
+                return $conn;
+            break;
+            case 'FTNFSM':
+                $connectionInfo = array(
+                    "Database"=>nameFSMOFF,
+                    "UID"=>userFTN,
+                    "PWD"=>passFTN
+                );
+                $conn = sqlsrv_connect(serverFTN,$connectionInfo);
+                return $conn;
+            break;
         //FIN BLOQUE DE FTN
         //INICIO BLOQUE DE FLL
             case 'FLL':
@@ -308,6 +393,24 @@
                 $conn = sqlsrv_connect(serverFLL,$connectionInfo);
                 return $conn;
             break;
+            case 'FLLKDI':
+                $connectionInfo = array(
+                    "Database"=>nameKDIOFF,
+                    "UID"=>userFLL,
+                    "PWD"=>passFLL
+                );
+                $conn = sqlsrv_connect(serverFLL,$connectionInfo);
+                return $conn;
+            break;
+            case 'FLLFSM':
+                $connectionInfo = array(
+                    "Database"=>nameFSMOFF,
+                    "UID"=>userFLL,
+                    "PWD"=>passFLL
+                );
+                $conn = sqlsrv_connect(serverFLL,$connectionInfo);
+                return $conn;
+            break;
         //FIN BLOQUE DE FLL
         //INICIO BLOQUE DE FAU
             case 'FAU':
@@ -331,6 +434,24 @@
             case 'FAUFLL':
                 $connectionInfo = array(
                     "Database"=>nameFLLOFF,
+                    "UID"=>userFAU,
+                    "PWD"=>passFAU
+                );
+                $conn = sqlsrv_connect(serverFAU,$connectionInfo);
+                return $conn;
+            break;
+            case 'FAUKDI':
+                $connectionInfo = array(
+                    "Database"=>nameKDIOFF,
+                    "UID"=>userFAU,
+                    "PWD"=>passFAU
+                );
+                $conn = sqlsrv_connect(serverFAU,$connectionInfo);
+                return $conn;
+            break;
+            case 'FAUFSM':
+                $connectionInfo = array(
+                    "Database"=>nameFSMOFF,
                     "UID"=>userFAU,
                     "PWD"=>passFAU
                 );
@@ -375,6 +496,24 @@
                 $conn = sqlsrv_connect(serverGP,$connectionInfo);
                 return $conn;
             break;
+            case 'GPKDI':
+                $connectionInfo = array(
+                    "Database"=>nameKDIOFF,
+                    "UID"=>userGP,
+                    "PWD"=>passGP
+                );
+                $conn = sqlsrv_connect(serverGP,$connectionInfo);
+                return $conn;
+            break;
+            case 'GPFSM':
+                $connectionInfo = array(
+                    "Database"=>nameFSMOFF,
+                    "UID"=>userGP,
+                    "PWD"=>passGP
+                );
+                $conn = sqlsrv_connect(serverGP,$connectionInfo);
+                return $conn;
+            break;
         //FIN BLOQUE DE GRUPO P
         //INICIO BLOQUE DE KDI
             case 'KDI':
@@ -384,6 +523,89 @@
                     "PWD"=>passKDI
                 );
                 $conn = sqlsrv_connect(serverKDI,$connectionInfo);
+                return $conn;
+            break;
+            case 'KDIFLL':
+                $connectionInfo = array(
+                    "Database"=>nameFLLOFF,
+                    "UID"=>userKDI,
+                    "PWD"=>passKDI
+                );
+                $conn = sqlsrv_connect(serverKDI,$connectionInfo);
+                return $conn;
+            break;
+            case 'KDIFAU':
+                $connectionInfo = array(
+                    "Database"=>nameFAUOFF,
+                    "UID"=>userKDI,
+                    "PWD"=>passKDI
+                );
+                $conn = sqlsrv_connect(serverKDI,$connectionInfo);
+                return $conn;
+            break;
+            case 'KDIFTN':
+                $connectionInfo = array(
+                    "Database"=>nameFTNOFF,
+                    "UID"=>userKDI,
+                    "PWD"=>passKDI
+                );
+                $conn = sqlsrv_connect(serverKDI,$connectionInfo);
+                return $conn;
+            break;
+            case 'KDIFSM':
+                $connectionInfo = array(
+                    "Database"=>nameFSMOFF,
+                    "UID"=>userKDI,
+                    "PWD"=>passKDI
+                );
+                $conn = sqlsrv_connect(serverKDI,$connectionInfo);
+                return $conn;
+            break;
+        //FIN BLOQUE DE KDI
+        //INICIO BLOQUE DE FSM
+            case 'FSM':
+                $connectionInfo = array(
+                    "Database"=>nameFSM,
+                    "UID"=>userFSM,
+                    "PWD"=>passFSM
+                );
+                $conn = sqlsrv_connect(serverFSM,$connectionInfo);
+                return $conn;
+            break;
+            case 'FSMFLL':
+                $connectionInfo = array(
+                    "Database"=>nameFLLOFF,
+                    "UID"=>userFSM,
+                    "PWD"=>passFSM
+                );
+                $conn = sqlsrv_connect(serverFSM,$connectionInfo);
+                return $conn;
+            break;
+            case 'FSMFAU':
+                $connectionInfo = array(
+                    "Database"=>nameFAUOFF,
+                    "UID"=>userFSM,
+                    "PWD"=>passFSM
+                );
+                $conn = sqlsrv_connect(serverFSM,$connectionInfo);
+                return $conn;
+            break;
+            case 'FSMFTN':
+                $connectionInfo = array(
+                    "Database"=>nameFTNOFF,
+                    "UID"=>userFSM,
+                    "PWD"=>passFSM
+                );
+                $conn = sqlsrv_connect(serverFSM,$connectionInfo);
+                return $conn;
+            break;
+            case 'FSMKDI':
+                $connectionInfo = array(
+                    "Database"=>nameKDIOFF,
+                    "UID"=>userFSM,
+                    "PWD"=>passFSM
+                );
+                $conn = sqlsrv_connect(serverFSM,$connectionInfo);
                 return $conn;
             break;
         //FIN BLOQUE DE KDI
@@ -458,6 +680,24 @@
                 $conn = sqlsrv_connect(serverFTN,$connectionInfo);
                 return $conn;
             break;
+            case 'FTNKDI':
+                $connectionInfo = array(
+                    "Database"=>"Mod_Atte_Cliente",
+                    "UID"=>userFTN,
+                    "PWD"=>passFTN
+                );
+                $conn = sqlsrv_connect(serverFTN,$connectionInfo);
+                return $conn;
+            break;
+            case 'FTNFSM':
+                $connectionInfo = array(
+                    "Database"=>"Mod_Atte_Cliente",
+                    "UID"=>userFTN,
+                    "PWD"=>passFTN
+                );
+                $conn = sqlsrv_connect(serverFTN,$connectionInfo);
+                return $conn;
+            break;
         //FIN BLOQUE DE FTN
         //INICIO BLOQUE DE FLL
             case 'FLL':
@@ -487,6 +727,24 @@
                 $conn = sqlsrv_connect(serverFLL,$connectionInfo);
                 return $conn;
             break;
+            case 'FLLKDI':
+                $connectionInfo = array(
+                    "Database"=>"Mod_Atte_Cliente",
+                    "UID"=>userFLL,
+                    "PWD"=>passFLL
+                );
+                $conn = sqlsrv_connect(serverFLL,$connectionInfo);
+                return $conn;
+            break;
+            case 'FLLFSM':
+                $connectionInfo = array(
+                    "Database"=>"Mod_Atte_Cliente",
+                    "UID"=>userFLL,
+                    "PWD"=>passFLL
+                );
+                $conn = sqlsrv_connect(serverFLL,$connectionInfo);
+                return $conn;
+            break;
         //FIN BLOQUE DE FLL
         //INICIO BLOQUE DE FAU
             case 'FAU':
@@ -508,6 +766,24 @@
                 return $conn;
             break;
             case 'FAUFLL':
+                $connectionInfo = array(
+                    "Database"=>"Mod_Atte_Cliente",
+                    "UID"=>userFAU,
+                    "PWD"=>passFAU
+                );
+                $conn = sqlsrv_connect(serverFAU,$connectionInfo);
+                return $conn;
+            break;
+            case 'FAUKDI':
+                $connectionInfo = array(
+                    "Database"=>"Mod_Atte_Cliente",
+                    "UID"=>userFAU,
+                    "PWD"=>passFAU
+                );
+                $conn = sqlsrv_connect(serverFAU,$connectionInfo);
+                return $conn;
+            break;
+            case 'FAUFSM':
                 $connectionInfo = array(
                     "Database"=>"Mod_Atte_Cliente",
                     "UID"=>userFAU,
@@ -554,6 +830,24 @@
                 $conn = sqlsrv_connect(serverGP,$connectionInfo);
                 return $conn;
             break;
+            case 'GPKDI':
+                $connectionInfo = array(
+                    "Database"=>"Mod_Atte_Cliente",
+                    "UID"=>userGP,
+                    "PWD"=>passGP
+                );
+                $conn = sqlsrv_connect(serverGP,$connectionInfo);
+                return $conn;
+            break;
+            case 'GPFSM':
+                $connectionInfo = array(
+                    "Database"=>"Mod_Atte_Cliente",
+                    "UID"=>userGP,
+                    "PWD"=>passGP
+                );
+                $conn = sqlsrv_connect(serverGP,$connectionInfo);
+                return $conn;
+            break;
         //FIN BLOQUE DE GRUPO P
         //INICIO BLOQUE DE KDI
             case 'KDI':
@@ -565,7 +859,90 @@
                 $conn = sqlsrv_connect(serverKDI,$connectionInfo);
                 return $conn;
             break;
+            case 'KDIFTN':
+                $connectionInfo = array(
+                    "Database"=>"Mod_Atte_Cliente",
+                    "UID"=>userKDI,
+                    "PWD"=>passKDI
+                );
+                $conn = sqlsrv_connect(serverKDI,$connectionInfo);
+                return $conn;
+            break;
+            case 'KDIFLL':
+                $connectionInfo = array(
+                    "Database"=>"Mod_Atte_Cliente",
+                    "UID"=>userKDI,
+                    "PWD"=>passKDI
+                );
+                $conn = sqlsrv_connect(serverKDI,$connectionInfo);
+                return $conn;
+            break;
+            case 'KDIFAU':
+                $connectionInfo = array(
+                    "Database"=>"Mod_Atte_Cliente",
+                    "UID"=>userKDI,
+                    "PWD"=>passKDI
+                );
+                $conn = sqlsrv_connect(serverKDI,$connectionInfo);
+                return $conn;
+            break;
+            case 'KDIFSM':
+                $connectionInfo = array(
+                    "Database"=>"Mod_Atte_Cliente",
+                    "UID"=>userKDI,
+                    "PWD"=>passKDI
+                );
+                $conn = sqlsrv_connect(serverKDI,$connectionInfo);
+                return $conn;
+            break;
         //FIN BLOQUE DE KDI
+        //INICIO BLOQUE DE FSM
+            case 'FSM':
+                $connectionInfo = array(
+                    "Database"=>"Mod_Atte_Cliente",
+                    "UID"=>userFSM,
+                    "PWD"=>passFSM
+                );
+                $conn = sqlsrv_connect(serverFSM,$connectionInfo);
+                return $conn;
+            break;
+            case 'FSMFTN':
+                $connectionInfo = array(
+                    "Database"=>"Mod_Atte_Cliente",
+                    "UID"=>userFSM,
+                    "PWD"=>passFSM
+                );
+                $conn = sqlsrv_connect(serverFSM,$connectionInfo);
+                return $conn;
+            break;
+            case 'FSMFLL':
+                $connectionInfo = array(
+                    "Database"=>"Mod_Atte_Cliente",
+                    "UID"=>userFSM,
+                    "PWD"=>passFSM
+                );
+                $conn = sqlsrv_connect(serverFSM,$connectionInfo);
+                return $conn;
+            break;
+            case 'FSMFAU':
+                $connectionInfo = array(
+                    "Database"=>"Mod_Atte_Cliente",
+                    "UID"=>userFSM,
+                    "PWD"=>passFSM
+                );
+                $conn = sqlsrv_connect(serverFSM,$connectionInfo);
+                return $conn;
+            break;
+            case 'FSMKDI':
+                $connectionInfo = array(
+                    "Database"=>"Mod_Atte_Cliente",
+                    "UID"=>userFSM,
+                    "PWD"=>passFSM
+                );
+                $conn = sqlsrv_connect(serverFSM,$connectionInfo);
+                return $conn;
+            break;
+        //FIN BLOQUE DE FSM
         //INICIO BLOQUE DE TEST
             case 'DBs':
                 $connectionInfo = array(
@@ -1589,7 +1966,13 @@
             case 'DBs':
                 $Flag = TRUE;
             break;
+            case 'DBsa':
+                $Flag = TRUE;
+            break;
             case 'KDI':
+                $Flag = TRUE;
+            break;
+            case 'FSM':
                 $Flag = TRUE;
             break;
             default:
@@ -2995,8 +3378,16 @@
                 $dominio = 'http://cpharmade.com/';
                 return $dominio;
             break;
+            case 'DBsa':
+                $dominio = 'http://cpharmade.com/';
+                return $dominio;
+            break;
             case 'KDI':
                 $dominio = 'http://cpharmakdi.com/';
+                return $dominio;
+            break;
+            case 'FSM':
+                $dominio = 'http://cpharmafsm.com/';
                 return $dominio;
             break;
         }

@@ -17,26 +17,28 @@ define("_AntesReconversion_", "NO");
 define("_DespuesReconversion_", "SI");
 define("_FactorReconversion_", 1000000);
 /**********************************************************************************/
-/************************* NOMBRES SEDES ON-LINE *********************************/
-define ("SedeFTN","FARMACIA TIERRA NEGRA, C.A.");
-define ("SedeFLL","FARMACIA LA LAGO,C.A.");
-define ("SedeFAU","FARMACIA AVENIDA UNIVERSIDAD, C.A.");
-//define ("SedeGP","GRUPO P, C.A");
-define ("SedeGP","Servidor de Testing");
-define ("SedeDBs","Servidor de Desarrollo Nisaul");
-define ("SedeDBsa","Servidor de Desarrollo Sergio");
-define ("SedeKDI","FARMACIA KD EXPRESS, C.A.");
-/**********************************************************************************/
-/************************ NOMBRES SEDES OFF-LINE *********************************/
-define ("SedeFTNOFF","Farmacia Tierra Negra (OFF-LINE)");
-define ("SedeFLLOFF","Farmacia La Lago (OFF-LINE)");
-define ("SedeFAUOFF","Farmacia Avenida Universidad (OFF-LINE)");
-/**********************************************************************************/
 /********* CADENA DE CONEXION CON LA BASE DE DATOS LOCAL DEL CPHARMA *************/
 define ("serverCP","localhost:3306");
 define ("userCP","root");
 define ("passCP",""); //.JR@2ZUS8m2M*gW
 define ("nameCP","cpharma");
+/**********************************************************************************/
+/************************* NOMBRES SEDES ON-LINE *********************************/
+define ("SedeFTN","FARMACIA TIERRA NEGRA, C.A.");
+define ("SedeFLL","FARMACIA LA LAGO,C.A.");
+define ("SedeFAU","FARMACIA AVENIDA UNIVERSIDAD, C.A.");
+define ("SedeKDI","FARMACIA KD EXPRESS, C.A.");
+define ("SedeFSM","FARMACIA MILLENNIUM 2000, C.A");
+define ("SedeGP","Servidor de Testing");
+define ("SedeDBs","Servidor de Desarrollo Nisaul");
+define ("SedeDBsa","Servidor de Desarrollo Sergio");
+/**********************************************************************************/
+/************************ NOMBRES SEDES OFF-LINE *********************************/
+define ("SedeFTNOFF","FARMACIA TIERRA NEGRA, C.A.<br>OFF-LINE");
+define ("SedeFLLOFF","FARMACIA LA LAGO,C.A.<br>OFF-LINE");
+define ("SedeFAUOFF","FARMACIA AVENIDA UNIVERSIDAD, C.A.<br>OFF-LINE");
+define ("SedeKDIOFF","FARMACIA KD EXPRESS, C.A.<br>OFF-LINE");
+define ("SedeFSMOFF","FARMACIA MILLENNIUM 2000, C.A.<br>OFF-LINE");
 /**********************************************************************************/
 /************************* CONEXION ON LINE FTN **********************************/
 define ("serverFTN" , "10.100.0.2\SMARTPHARMA,1450");
@@ -59,17 +61,30 @@ define ("passFAU" , "Soporte123");
 define ("nameFAU" , "smartfau");
 define ("nameFAUOFF" , "cpharmafau");
 /**********************************************************************************/
-/************* CONEXION GALAC NOMINA *******************/
-define ("serverGN" , "10.100.0.34\SMARTPHARMA");
-define ("userGN" , "sa");
-define ("passGN" , "Soporte123");
-define ("nameGN" , "NOMDB");
+/************************* CONEXION ON LINE KDI **********************************/
+define ("serverKDI" , "SERVER-KDI");
+define ("userKDI" , "admin");
+define ("passKDI" , "soporte123");
+define ("nameKDI" , "KD_EXPRESS_SMART");
+define ("nameKDIOFF" , "cpharmakdi");
 /**********************************************************************************/
-/************* CONEXION GALAC SAW (Administrativo)*******************/
-define ("serverGS" , "10.100.0.2\SMARTPHARMA,1450");
-define ("userGS" , "sa");
-define ("passGS" , "Soporte123");
-define ("nameGS" , "SAWDB");
+/************************* CONEXION ON LINE FSM **********************************/
+define ("serverFSM" , "MBOFM01\SMARTPHARMA");
+define ("userFSM" , "admin");
+define ("passFSM" , "soporte123");
+define ("nameFSM" , "SMARTPHARMA");
+define ("nameFSMOFF" , "cpharmafsm");
+/**********************************************************************************/
+/********************* CONEXION SERVER DESARROLLO GRUPO P **********************/
+//define ("serverGP" , "TESTSERVER\TESTINGSERVER");
+//define ("userGP" , "sa");
+//define ("passGP" , "pCadm05");
+//define ("nameGP" , "cpharmaftn");
+
+define ("serverGP" , "SERGIO-PC");
+define ("userGP" , "sa");
+define ("passGP" , "soporte123");
+define ("nameGP" , "cpharmaftn");
 /**********************************************************************************/
 /********************* CONEXION SERVER DESARROLLO DE NISAUL **********************/
 define ("serverDBs" , "DESKTOP-IGDNBMF\SQLEXPRESS");
@@ -83,17 +98,17 @@ define ("userDBsa" , "sa");
 define ("passDBsa" , "soporte123");
 define ("nameDBsa" , "cpharmaftn");
 /**********************************************************************************/
-/********************* CONEXION SERVER DESARROLLO GRUPO P **********************/
-define ("serverGP" , "TESTSERVER\TESTINGSERVER"); // 192.168.12.30\TESTINGSERVER
-define ("userGP" , "sa");
-define ("passGP" , "pCadm05");
-define ("nameGP" , "cpharmaftn");
+/************* CONEXION GALAC NOMINA *******************/
+define ("serverGN" , "10.100.0.34\SMARTPHARMA");
+define ("userGN" , "sa");
+define ("passGN" , "Soporte123");
+define ("nameGN" , "NOMDB");
 /**********************************************************************************/
-/************************* CONEXION ON LINE KDI **********************************/
-define ("serverKDI" , "SERVER-KDI");
-define ("userKDI" , "admin");
-define ("passKDI" , "soporte123");
-define ("nameKDI" , "KD_EXPRESS_SMART");
+/************* CONEXION GALAC SAW (Administrativo)*******************/
+define ("serverGS" , "10.100.0.2\SMARTPHARMA,1450");
+define ("userGS" , "sa");
+define ("passGS" , "Soporte123");
+define ("nameGS" , "SAWDB");
 /********************** APP CONSULTA ************************/
 date_default_timezone_set('America/Caracas');
 define ("Nperdida" , 3);
