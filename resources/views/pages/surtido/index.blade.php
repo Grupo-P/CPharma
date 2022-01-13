@@ -139,19 +139,25 @@
                 <th scope="col" class="CP-sticky">Estatus</th>
                 <th scope="col" class="CP-sticky">Operador</th>
                 <th scope="col" class="CP-sticky">SKU</th>
+                <th scope="col" class="CP-sticky">Unidades</th>
+                <th scope="col" class="CP-sticky">Primer artículo</th>
+                <th scope="col" class="CP-sticky">Último artículo</th>
                 <th scope="col" class="CP-sticky">Acciones</th>
             </tr>
         </thead>
         <tbody>
             @foreach($surtidos as $surtido)
                 <tr>
-                    <td>{{ $surtido->id }}</td>
-                    <td>{{ $surtido->control }}</td>
-                    <td>{{ date_create($surtido->fecha_generado)->format('d/m/Y h:m A') }}</td>
-                    <td>{{ $surtido->estatus }}</td>
-                    <td>{{ $surtido->operador_generado }}</td>
-                    <td>{{ $surtido->sku }}</td>
-                    <td>
+                    <td class="text-center">{{ $surtido->id }}</td>
+                    <td class="text-center">{{ $surtido->control }}</td>
+                    <td class="text-center">{{ date_create($surtido->fecha_generado)->format('d/m/Y h:i A') }}</td>
+                    <td class="text-center">{{ $surtido->estatus }}</td>
+                    <td class="text-center">{{ $surtido->operador_generado }}</td>
+                    <td class="text-center">{{ $surtido->sku }}</td>
+                    <td class="text-center">{{ $surtido->unidades }}</td>
+                    <td class="text-center">{{ $surtido->primero }}</td>
+                    <td class="text-center">{{ $surtido->ultimo }}</td>
+                    <td class="text-center">
                         <a href="{{ '/surtido/' . $surtido->id }}" target="_blank" class="btn btn-outline-dark btn-sm" data-toggle="tooltip" data-placement="top"data-original-title="Ver soporte">
                             <i class="fa fa-eye"></i>
                         </a>

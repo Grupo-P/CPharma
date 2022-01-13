@@ -2,6 +2,7 @@
 
 namespace compras\Http\Controllers;
 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use compras\Surtido;
 use compras\SurtidoDetalle;
@@ -16,21 +17,25 @@ class SurtidoController extends Controller
      */
     public function index()
     {
+        $sql = "SELECT surtidos.id, surtidos.control, surtidos.fecha_generado, surtidos.estatus, surtidos.operador_generado, surtidos.sku, surtidos.unidades, (SELECT surtido_detalles.descripcion FROM surtido_detalles WHERE surtido_detalles.control = surtidos.control ORDER BY descripcion ASC LIMIT 1) AS primero, (SELECT surtido_detalles.descripcion FROM surtido_detalles WHERE surtido_detalles.control = surtidos.control ORDER BY descripcion DESC LIMIT 1) AS ultimo FROM surtidos ";
+
         if (!isset($_GET['estatus']) || $_GET['estatus'] == 'TODO') {
-            $surtidos = Surtido::orderBy('id', 'DESC')->get();
+            $sql = $sql . "ORDER BY id DESC";
         }
 
         if (isset($_GET['estatus']) && $_GET['estatus'] == 'GENERADO') {
-            $surtidos = Surtido::where('estatus', 'GENERADO')->orderBy('id', 'DESC')->get();
+            $sql = $sql . "WHERE status = 'GENERADO' ORDER BY id DESC";
         }
 
         if (isset($_GET['estatus']) && $_GET['estatus'] == 'PROCESADO') {
-            $surtidos = Surtido::where('estatus', 'PROCESADO')->orderBy('id', 'DESC')->get();
+            $sql = $sql . "WHERE status = 'PROCESADO' ORDER BY id DESC";
         }
 
         if (isset($_GET['estatus']) && $_GET['estatus'] == 'ANULADO') {
-            $surtidos = Surtido::where('estatus', 'ANULADO')->orderBy('id', 'DESC')->get();
+            $sql = $sql . "WHERE status = 'ANULADO' ORDER BY id DESC";
         }
+
+        $surtidos = DB::select($sql);
 
         return view('pages.surtido.index', compact('surtidos'));
     }
