@@ -55,16 +55,11 @@ define ("nameFLL" , "smartlalago");
 define ("nameFLLOFF" , "cpharmafll");
 /**********************************************************************************/
 /************************* CONEXION ON LINE FAU **********************************/
-/*define ("serverFAU" , "10.100.0.34\SMARTPHARMA");
+define ("serverFAU" , "10.100.0.34\SMARTPHARMA");
 define ("userFAU" , "sa");
 define ("passFAU" , "Soporte123");
-define ("nameFAU" , "smartfau");*/
+define ("nameFAU" , "smartfau");
 define ("nameFAUOFF" , "cpharmafau");
-
-define ("serverFAU" , "SERGIO-PC");
-define ("userFAU" , "sa");
-define ("passFAU" , "soporte123");
-define ("nameFAU" , "cpharmaftn");
 /**********************************************************************************/
 /************************* CONEXION ON LINE KDI **********************************/
 define ("serverKDI" , "SERVER-KDI");
