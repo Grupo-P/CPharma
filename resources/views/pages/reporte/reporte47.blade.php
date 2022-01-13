@@ -151,7 +151,7 @@
 
       $descripcion = FG_Limpiar_Texto($row['descripcion']);
 
-      $ultima_compra = $row['ultima_compra']->format('d/m/Y');
+      $ultima_compra = $row['ultima_compra'] ? $row['ultima_compra']->format('d/m/Y') : '-';
 
       $existencia = $row['existencia'];
       $existencia_almacen_1 = $row['existencia_almacen_1'];
