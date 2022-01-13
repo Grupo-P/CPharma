@@ -138,14 +138,14 @@
       $sql = "SELECT * FROM InAplArt WHERE InAplArt.CoBarra = '$codigo_barra'";
       $query = sqlsrv_query($connMood, $sql);
 
-      if (sqlsrv_has_rows($query)) {
+      if (!is_resource($query) || sqlsrv_has_rows($query)) {
         continue;
       }
 
       $sql = "SELECT * FROM InComArt WHERE InComArt.CoBarra = '$codigo_barra'";
       $query = sqlsrv_query($connMood, $sql);
 
-      if (sqlsrv_has_rows($query)) {
+      if (!is_resource($query) || sqlsrv_has_rows($query)) {
         continue;
       }
 
