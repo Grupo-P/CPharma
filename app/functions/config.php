@@ -55,11 +55,16 @@ define ("nameFLL" , "smartlalago");
 define ("nameFLLOFF" , "cpharmafll");
 /**********************************************************************************/
 /************************* CONEXION ON LINE FAU **********************************/
-define ("serverFAU" , "10.100.0.34\SMARTPHARMA");
+/*define ("serverFAU" , "10.100.0.34\SMARTPHARMA");
 define ("userFAU" , "sa");
 define ("passFAU" , "Soporte123");
-define ("nameFAU" , "smartfau");
+define ("nameFAU" , "smartfau");*/
 define ("nameFAUOFF" , "cpharmafau");
+
+define ("serverFAU" , "SERGIO-PC");
+define ("userFAU" , "sa");
+define ("passFAU" , "soporte123");
+define ("nameFAU" , "cpharmaftn");
 /**********************************************************************************/
 /************************* CONEXION ON LINE KDI **********************************/
 define ("serverKDI" , "SERVER-KDI");
@@ -76,14 +81,9 @@ define ("nameFSM" , "SMARTPHARMA");
 define ("nameFSMOFF" , "cpharmafsm");
 /**********************************************************************************/
 /********************* CONEXION SERVER DESARROLLO GRUPO P **********************/
-//define ("serverGP" , "TESTSERVER\TESTINGSERVER");
-//define ("userGP" , "sa");
-//define ("passGP" , "pCadm05");
-//define ("nameGP" , "cpharmaftn");
-
-define ("serverGP" , "SERGIO-PC");
+define ("serverGP" , "TESTSERVER\TESTINGSERVER");
 define ("userGP" , "sa");
-define ("passGP" , "soporte123");
+define ("passGP" , "pCadm05");
 define ("nameGP" , "cpharmaftn");
 /**********************************************************************************/
 /********************* CONEXION SERVER DESARROLLO DE NISAUL **********************/

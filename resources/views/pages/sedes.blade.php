@@ -12,7 +12,7 @@
         include(app_path().'\functions\querys_mysql.php');
         include(app_path().'\functions\querys_sqlserver.php');
 		$SedeConnection = FG_Mi_Ubicacion();
-        $SedeConnection = 'GP';
+        $SedeConnection = 'FAU';
 	?>
 
 	<h1 class="h5 text-info">
@@ -303,6 +303,68 @@
 		  	</div>
 	   	</div>
 	  </div>
+      <div class="card-deck">
+			<div class="card border-secondary mb-3" style="width: 14rem;">
+				<div class="card-body text-left bg-secondary">
+		  		<h5 class="card-title">
+		    		<span class="card-text text-white">
+		    			<?php echo "".SedeKDI; ?>
+		    		</span>
+		  		</h5>
+				</div>
+		  	<div class="card-footer bg-transparent border-secondary text-right">
+			    <a href="http://cpharmakdi.com/" role="button" class="btn btn-outline-secondary btn-sm" target="_blank"></i>Ver reportes</a>
+		  	</div>
+			</div>
+			<div class="card border-dark mb-3" style="width: 14rem;">
+	  		<div class="card-body text-left bg-dark">
+	    		<h5 class="card-title">
+		    		<span class="card-text text-white">
+		    			<?php echo "".SedeFSM; ?>
+		    		</span>
+	    		</h5>
+	  		</div>
+		  	<div class="card-footer bg-transparent border-dark text-right">
+				  <a href="http://cpharmafsm.com/" role="button" class="btn btn-outline-dark btn-sm" target="_blank"></i>Ver reportes</a>
+		  	</div>
+			</div>
+	   	</div>
+      <?php
+	}
+		if(Auth::user()->sede == 'FARMACIA KD EXPRESS, C.A.'){
+	?>
+        <div class="card-deck">
+            <div class="card border-secondary mb-3" style="width: 14rem;">
+            <div class="card-body text-left bg-secondary">
+                <h5 class="card-title">
+                    <span class="card-text text-white">
+                        <?php echo "".SedeKDI; ?>
+                    </span>
+                </h5>
+            </div>
+            <div class="card-footer bg-transparent border-secondary text-right">
+                <a href="http://cpharmakdi.com/" role="button" class="btn btn-outline-secondary btn-sm" target="_blank"></i>Ver reportes</a>
+            </div>
+        </div>
+    </div>
+    <?php
+	}
+		if(Auth::user()->sede == 'FARMACIA MILLENNIUM 2000, C.A'){
+	?>
+        <div class="card-deck">
+            <div class="card border-dark mb-3" style="width: 14rem;">
+            <div class="card-body text-left bg-dark">
+                <h5 class="card-title">
+                    <span class="card-text text-white">
+                        <?php echo "".SedeFSM; ?>
+                    </span>
+                </h5>
+            </div>
+            <div class="card-footer bg-transparent border-dark text-right">
+                <a href="http://cpharmafsm.com/" role="button" class="btn btn-outline-dark btn-sm" target="_blank"></i>Ver reportes</a>
+            </div>
+        </div>
+    </div>
 	<?php
 		}
 	?>
@@ -416,6 +478,68 @@
 		  	</div>
 	   	</div>
 	  </div>
+      <div class="card-deck">
+			<div class="card border-secondary mb-3" style="width: 14rem;">
+				<div class="card-body text-left bg-secondary">
+		  		<h5 class="card-title">
+		    		<span class="card-text text-white">
+		    			<?php echo "".SedeKDI; ?>
+		    		</span>
+		  		</h5>
+				</div>
+		  	<div class="card-footer bg-transparent border-secondary text-right">
+			    <a href="http://cpharmakdi.com/" role="button" class="btn btn-outline-secondary btn-sm" target="_blank"></i>Ver reportes</a>
+		  	</div>
+			</div>
+			<div class="card border-dark mb-3" style="width: 14rem;">
+	  		<div class="card-body text-left bg-dark">
+	    		<h5 class="card-title">
+		    		<span class="card-text text-white">
+		    			<?php echo "".SedeFSM; ?>
+		    		</span>
+	    		</h5>
+	  		</div>
+		  	<div class="card-footer bg-transparent border-dark text-right">
+				  <a href="http://cpharmafsm.com/" role="button" class="btn btn-outline-dark btn-sm" target="_blank"></i>Ver reportes</a>
+		  	</div>
+			</div>
+	   	</div>
+      <?php
+	}
+		if(Auth::user()->sede == 'FARMACIA KD EXPRESS, C.A.'){
+	?>
+        <div class="card-deck">
+            <div class="card border-secondary mb-3" style="width: 14rem;">
+            <div class="card-body text-left bg-secondary">
+                <h5 class="card-title">
+                    <span class="card-text text-white">
+                        <?php echo "".SedeKDI; ?>
+                    </span>
+                </h5>
+            </div>
+            <div class="card-footer bg-transparent border-secondary text-right">
+                <a href="http://cpharmakdi.com/" role="button" class="btn btn-outline-secondary btn-sm" target="_blank"></i>Ver reportes</a>
+            </div>
+        </div>
+    </div>
+    <?php
+	}
+		if(Auth::user()->sede == 'FARMACIA MILLENNIUM 2000, C.A'){
+	?>
+        <div class="card-deck">
+            <div class="card border-dark mb-3" style="width: 14rem;">
+            <div class="card-body text-left bg-dark">
+                <h5 class="card-title">
+                    <span class="card-text text-white">
+                        <?php echo "".SedeFSM; ?>
+                    </span>
+                </h5>
+            </div>
+            <div class="card-footer bg-transparent border-dark text-right">
+                <a href="http://cpharmafsm.com/" role="button" class="btn btn-outline-dark btn-sm" target="_blank"></i>Ver reportes</a>
+            </div>
+        </div>
+    </div>
 	<?php
 		}
 	?>
@@ -529,6 +653,68 @@
 		  	</div>
 	   	</div>
 	  </div>
+      <div class="card-deck">
+			<div class="card border-secondary mb-3" style="width: 14rem;">
+				<div class="card-body text-left bg-secondary">
+		  		<h5 class="card-title">
+		    		<span class="card-text text-white">
+		    			<?php echo "".SedeKDI; ?>
+		    		</span>
+		  		</h5>
+				</div>
+		  	<div class="card-footer bg-transparent border-secondary text-right">
+			    <a href="http://cpharmakdi.com/" role="button" class="btn btn-outline-secondary btn-sm" target="_blank"></i>Ver reportes</a>
+		  	</div>
+			</div>
+			<div class="card border-dark mb-3" style="width: 14rem;">
+	  		<div class="card-body text-left bg-dark">
+	    		<h5 class="card-title">
+		    		<span class="card-text text-white">
+		    			<?php echo "".SedeFSM; ?>
+		    		</span>
+	    		</h5>
+	  		</div>
+		  	<div class="card-footer bg-transparent border-dark text-right">
+				  <a href="http://cpharmafsm.com/" role="button" class="btn btn-outline-dark btn-sm" target="_blank"></i>Ver reportes</a>
+		  	</div>
+			</div>
+	   	</div>
+      <?php
+	}
+		if(Auth::user()->sede == 'FARMACIA KD EXPRESS, C.A.'){
+	?>
+        <div class="card-deck">
+            <div class="card border-secondary mb-3" style="width: 14rem;">
+            <div class="card-body text-left bg-secondary">
+                <h5 class="card-title">
+                    <span class="card-text text-white">
+                        <?php echo "".SedeKDI; ?>
+                    </span>
+                </h5>
+            </div>
+            <div class="card-footer bg-transparent border-secondary text-right">
+                <a href="http://cpharmakdi.com/" role="button" class="btn btn-outline-secondary btn-sm" target="_blank"></i>Ver reportes</a>
+            </div>
+        </div>
+    </div>
+    <?php
+	}
+		if(Auth::user()->sede == 'FARMACIA MILLENNIUM 2000, C.A'){
+	?>
+        <div class="card-deck">
+            <div class="card border-dark mb-3" style="width: 14rem;">
+            <div class="card-body text-left bg-dark">
+                <h5 class="card-title">
+                    <span class="card-text text-white">
+                        <?php echo "".SedeFSM; ?>
+                    </span>
+                </h5>
+            </div>
+            <div class="card-footer bg-transparent border-dark text-right">
+                <a href="http://cpharmafsm.com/" role="button" class="btn btn-outline-dark btn-sm" target="_blank"></i>Ver reportes</a>
+            </div>
+        </div>
+    </div>
 	<?php
 		}
 	?>
@@ -676,6 +862,40 @@
 		  	</div>
 			</div>
 		</div>
+        <div class="card-deck">
+            <div class="card border-secondary mb-3" style="width: 14rem;">
+                <div class="card-body text-left bg-secondary">
+                    <h5 class="card-title">
+                        <span class="card-text text-white">
+                            <?php echo "".SedeKDIOFF."<br/>".FG_LastRestoreDB(nameKDIOFF,$SedeConnection);?>
+                        </span>
+                    </h5>
+                </div>
+                <div class="card-footer bg-transparent border-secondary text-right">
+                    <form action="/reporte/" style="display: inline;">
+                        @csrf
+                        <input id="SEDE" name="SEDE" type="hidden" value="FTNKDI">
+                        <button type="submit" name="Reporte" role="button" class="btn btn-outline-secondary btn-sm"></i>Ver reportes</button>
+                        </form>
+                </div>
+			</div>
+            <div class="card border-dark mb-3" style="width: 14rem;">
+                <div class="card-body text-left bg-dark">
+                    <h5 class="card-title">
+                        <span class="card-text text-white">
+                            <?php echo "".SedeFSMOFF."<br/>".FG_LastRestoreDB(nameFSMOFF,$SedeConnection);?>
+                        </span>
+                    </h5>
+                </div>
+                <div class="card-footer bg-transparent border-dark text-right">
+                    <form action="/reporte/" style="display: inline;">
+                        @csrf
+                        <input id="SEDE" name="SEDE" type="hidden" value="FTNFSM">
+                        <button type="submit" name="Reporte" role="button" class="btn btn-outline-dark btn-sm"></i>Ver reportes</button>
+                        </form>
+                </div>
+			</div>
+        </div>
 	<!-- CASO FTN -->
 	<?php
 		}
@@ -716,6 +936,40 @@
 		  	</div>
 			</div>
 		</div>
+        <div class="card-deck">
+            <div class="card border-secondary mb-3" style="width: 14rem;">
+                <div class="card-body text-left bg-secondary">
+                    <h5 class="card-title">
+                        <span class="card-text text-white">
+                            <?php echo "".SedeKDIOFF."<br/>".FG_LastRestoreDB(nameKDIOFF,$SedeConnection);?>
+                        </span>
+                    </h5>
+                </div>
+                <div class="card-footer bg-transparent border-secondary text-right">
+                    <form action="/reporte/" style="display: inline;">
+                        @csrf
+                        <input id="SEDE" name="SEDE" type="hidden" value="FLLKDI">
+                        <button type="submit" name="Reporte" role="button" class="btn btn-outline-secondary btn-sm"></i>Ver reportes</button>
+                        </form>
+                </div>
+			</div>
+            <div class="card border-dark mb-3" style="width: 14rem;">
+                <div class="card-body text-left bg-dark">
+                    <h5 class="card-title">
+                        <span class="card-text text-white">
+                            <?php echo "".SedeFSMOFF."<br/>".FG_LastRestoreDB(nameFSMOFF,$SedeConnection);?>
+                        </span>
+                    </h5>
+                </div>
+                <div class="card-footer bg-transparent border-dark text-right">
+                    <form action="/reporte/" style="display: inline;">
+                        @csrf
+                        <input id="SEDE" name="SEDE" type="hidden" value="FLLFSM">
+                        <button type="submit" name="Reporte" role="button" class="btn btn-outline-dark btn-sm"></i>Ver reportes</button>
+                        </form>
+                </div>
+			</div>
+        </div>
 	<!-- CASO FLL -->
 	<?php
 		}
@@ -756,6 +1010,40 @@
 	  		</div>
 			</div>
 		</div>
+        <div class="card-deck">
+            <div class="card border-secondary mb-3" style="width: 14rem;">
+                <div class="card-body text-left bg-secondary">
+                    <h5 class="card-title">
+                        <span class="card-text text-white">
+                            <?php echo "".SedeKDIOFF."<br/>".FG_LastRestoreDB(nameKDIOFF,$SedeConnection);?>
+                        </span>
+                    </h5>
+                </div>
+                <div class="card-footer bg-transparent border-secondary text-right">
+                    <form action="/reporte/" style="display: inline;">
+                        @csrf
+                        <input id="SEDE" name="SEDE" type="hidden" value="FAUKDI">
+                        <button type="submit" name="Reporte" role="button" class="btn btn-outline-secondary btn-sm"></i>Ver reportes</button>
+                        </form>
+                </div>
+			</div>
+            <div class="card border-dark mb-3" style="width: 14rem;">
+                <div class="card-body text-left bg-dark">
+                    <h5 class="card-title">
+                        <span class="card-text text-white">
+                            <?php echo "".SedeFSMOFF."<br/>".FG_LastRestoreDB(nameFSMOFF,$SedeConnection);?>
+                        </span>
+                    </h5>
+                </div>
+                <div class="card-footer bg-transparent border-dark text-right">
+                    <form action="/reporte/" style="display: inline;">
+                        @csrf
+                        <input id="SEDE" name="SEDE" type="hidden" value="FAUFSM">
+                        <button type="submit" name="Reporte" role="button" class="btn btn-outline-dark btn-sm"></i>Ver reportes</button>
+                        </form>
+                </div>
+			</div>
+        </div>
 	<!-- CASO FAU -->
 	<?php
 		}
