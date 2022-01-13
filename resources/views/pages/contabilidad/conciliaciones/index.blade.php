@@ -250,6 +250,8 @@
                 <td></td>
                 <td></td>
                 <td></td>
+                <td></td>
+                <td></td>
                 <td>
                     <button type="button" class="conciliar btn btn-outline-success btn-sm">Conciliar<br>seleccionados</button>
                 </td>

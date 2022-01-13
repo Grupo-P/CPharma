@@ -101,7 +101,7 @@ class ContConciliacionesController extends Controller
                 $pagos[$i]['operador']          = $efectivo->user;
                 $pagos[$i]['fecha']             = date_format(date_create($efectivo->created_at), 'd/m/Y h:ia');
                 $pagos[$i]['estado']            = ($efectivo->deleted_at) ? 'Reversado' : 'Pagado';
-                $pagos[$i]['concepto']          = $efectivo->concepto;
+                $pagos[$i]['concepto']          = $efectivo->titular_pago . ' / ' . $efectivo->concepto;
                 $pagos[$i]['retencion_deuda_1'] = $efectivo->retencion_deuda_1;
                 $pagos[$i]['retencion_deuda_2'] = $efectivo->retencion_deuda_2;
                 $pagos[$i]['retencion_iva']     = $efectivo->retencion_iva;
@@ -127,7 +127,7 @@ class ContConciliacionesController extends Controller
                 $pagos[$i]['operador']          = $efectivo->user;
                 $pagos[$i]['fecha']             = date_format(date_create($efectivo->created_at), 'd/m/Y h:ia');
                 $pagos[$i]['estado']            = ($efectivo->deleted_at) ? 'Reversado' : 'Pagado';
-                $pagos[$i]['concepto']          = $efectivo->concepto;
+                $pagos[$i]['concepto']          = $efectivo->titular_pago . ' / ' . $efectivo->concepto;
                 $pagos[$i]['retencion_deuda_1'] = $efectivo->retencion_deuda_1;
                 $pagos[$i]['retencion_deuda_2'] = $efectivo->retencion_deuda_2;
                 $pagos[$i]['retencion_iva']     = $efectivo->retencion_iva;
@@ -153,7 +153,7 @@ class ContConciliacionesController extends Controller
                 $pagos[$i]['operador']          = $efectivo->user;
                 $pagos[$i]['fecha']             = date_format(date_create($efectivo->created_at), 'd/m/Y h:ia');
                 $pagos[$i]['estado']            = ($efectivo->deleted_at) ? 'Reversado' : 'Pagado';
-                $pagos[$i]['concepto']          = $efectivo->concepto;
+                $pagos[$i]['concepto']          = $efectivo->titular_pago . ' / ' . $efectivo->concepto;
                 $pagos[$i]['retencion_deuda_1'] = $efectivo->retencion_deuda_1;
                 $pagos[$i]['retencion_deuda_2'] = $efectivo->retencion_deuda_2;
                 $pagos[$i]['retencion_iva']     = $efectivo->retencion_iva;
@@ -179,7 +179,7 @@ class ContConciliacionesController extends Controller
                 $pagos[$i]['operador']          = $efectivo->user;
                 $pagos[$i]['fecha']             = date_format(date_create($efectivo->created_at), 'd/m/Y h:ia');
                 $pagos[$i]['estado']            = ($efectivo->deleted_at) ? 'Reversado' : 'Pagado';
-                $pagos[$i]['concepto']          = $efectivo->concepto;
+                $pagos[$i]['concepto']          = $efectivo->titular_pago . ' / ' . $efectivo->concepto;
                 $pagos[$i]['retencion_deuda_1'] = $efectivo->retencion_deuda_1;
                 $pagos[$i]['retencion_deuda_2'] = $efectivo->retencion_deuda_2;
                 $pagos[$i]['retencion_iva']     = $efectivo->retencion_iva;
@@ -205,7 +205,7 @@ class ContConciliacionesController extends Controller
                 $pagos[$i]['operador']          = $efectivo->user;
                 $pagos[$i]['fecha']             = date_format(date_create($efectivo->created_at), 'd/m/Y h:ia');
                 $pagos[$i]['estado']            = ($efectivo->deleted_at) ? 'Reversado' : 'Pagado';
-                $pagos[$i]['concepto']          = $efectivo->concepto;
+                $pagos[$i]['concepto']          = $efectivo->titular_pago . ' / ' . $efectivo->concepto;
                 $pagos[$i]['retencion_deuda_1'] = $efectivo->retencion_deuda_1;
                 $pagos[$i]['retencion_deuda_2'] = $efectivo->retencion_deuda_2;
                 $pagos[$i]['retencion_iva']     = $efectivo->retencion_iva;
@@ -231,7 +231,7 @@ class ContConciliacionesController extends Controller
                 $pagos[$i]['operador']          = $efectivo->user;
                 $pagos[$i]['fecha']             = date_format(date_create($efectivo->created_at), 'd/m/Y h:ia');
                 $pagos[$i]['estado']            = ($efectivo->deleted_at) ? 'Reversado' : 'Pagado';
-                $pagos[$i]['concepto']          = $efectivo->concepto;
+                $pagos[$i]['concepto']          = $efectivo->titular_pago . ' / ' . $efectivo->concepto;
                 $pagos[$i]['retencion_deuda_1'] = $efectivo->retencion_deuda_1;
                 $pagos[$i]['retencion_deuda_2'] = $efectivo->retencion_deuda_2;
                 $pagos[$i]['retencion_iva']     = $efectivo->retencion_iva;
