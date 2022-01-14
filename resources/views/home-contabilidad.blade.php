@@ -122,6 +122,24 @@
                 <a href="/efectivoFLL" class="btn btn-outline-info btn-sm">Visualizar</a>
             </div>
         </div>
+
+        <div class="card border-warning mb-3">
+            <div class="card-body text-left bg-warning">
+                <h2 class="card-title">
+                    <span class="card-text text-white">
+                        <i class="fas fa-balance-scale"></i>
+                        Saldo disponible FM: ${{ number_format($dolaresFM->saldo_actual, 2, ',', '.') }}
+                    </span>
+                </h2>
+                <p class="card-text text-white">
+                    Hora y fecha actual: {{ date_create()->format('d/m/Y h:i A') }} <br>
+                    Último movimiento registrado: {{ ($dolaresFM) ? $dolaresFM->created_at->format('d/m/Y h:i A') : 'No hay movimientos' }}
+                </p>
+            </div>
+            <div class="card-footer bg-transparent border-warning text-right">
+                <a href="/efectivoFM" class="btn btn-outline-warning btn-sm">Visualizar</a>
+            </div>
+        </div>
     </div>
 
     <div class="card-deck">
@@ -176,6 +194,24 @@
             </div>
             <div class="card-footer bg-transparent border-dark text-right">
                 <a href="/bolivaresFLL" class="btn btn-outline-dark btn-sm">Visualizar</a>
+            </div>
+        </div>
+
+        <div class="card border-info mb-3">
+            <div class="card-body text-left bg-info">
+                <h2 class="card-title">
+                    <span class="card-text text-white">
+                        <i class="fas fa-balance-scale"></i>
+                        Saldo disponible FM: Bs.S. {{ number_format($bolivaresFM->saldo_actual, 2, ',', '.') }}
+                    </span>
+                </h2>
+                <p class="card-text text-white">
+                    Hora y fecha actual: {{ date_create()->format('d/m/Y h:i A') }} <br>
+                    Último movimiento registrado: {{ ($bolivaresFM) ? $bolivaresFM->created_at->format('d/m/Y h:i A') : 'No hay movimientos' }}
+                </p>
+            </div>
+            <div class="card-footer bg-transparent border-info text-right">
+                <a href="/bolivaresFM" class="btn btn-outline-info btn-sm">Visualizar</a>
             </div>
         </div>
     </div>
@@ -234,6 +270,24 @@
                 <a href="/contabilidad/diferidosFLL" class="btn btn-outline-info btn-sm">Visualizar</a>
             </div>
         </div>
+
+        <div class="card border-warning mb-3">
+            <div class="card-body text-left bg-warning">
+                <h2 class="card-title">
+                    <span class="card-text text-white">
+                        <i class="fas fa-balance-scale"></i>
+                        Diferido en $ FM: {{ number_format($diferidoDolaresFM->diferido_actual, 2, ',', '.') }}
+                    </span>
+                </h2>
+                <p class="card-text text-white">
+                    Hora y fecha actual: {{ date_create()->format('d/m/Y h:i A') }} <br>
+                    Último movimiento registrado: {{ ($diferidoDolaresFM) ? $diferidoDolaresFM->created_at->format('d/m/Y h:i A') : 'No hay movimientos' }}
+                </p>
+            </div>
+            <div class="card-footer bg-transparent border-warning text-right">
+                <a href="/contabilidad/diferidosFM" class="btn btn-outline-warning btn-sm">Visualizar</a>
+            </div>
+        </div>
     </div>
 
     <div class="card-deck">
@@ -288,6 +342,24 @@
             </div>
             <div class="card-footer bg-transparent border-dark text-right">
                 <a href="/contabilidad/diferidosBolivaresFLL" class="btn btn-outline-dark btn-sm">Visualizar</a>
+            </div>
+        </div>
+
+        <div class="card border-info mb-3">
+            <div class="card-body text-left bg-info">
+                <h2 class="card-title">
+                    <span class="card-text text-white">
+                        <i class="fas fa-balance-scale"></i>
+                        Diferido en Bs.S. FM: {{ number_format($diferidoBolivaresFM->diferido_actual, 2, ',', '.') }}
+                    </span>
+                </h2>
+                <p class="card-text text-white">
+                    Hora y fecha actual: {{ date_create()->format('d/m/Y h:i A') }} <br>
+                    Último movimiento registrado: {{ ($diferidoBolivaresFM) ? $diferidoBolivaresFM->created_at->format('d/m/Y h:i A') : 'No hay movimientos' }}
+                </p>
+            </div>
+            <div class="card-footer bg-transparent border-info text-right">
+                <a href="/contabilidad/diferidosBolivaresFM" class="btn btn-outline-info btn-sm">Visualizar</a>
             </div>
         </div>
     </div>
@@ -348,6 +420,10 @@
                                     Pago dólares efectivo FLL
                                 @endif
 
+                                @if(get_class($pago) == 'compras\ContPagoEfectivoFM')
+                                    Pago dólares efectivo FM
+                                @endif
+
                                 @if(get_class($pago) == 'compras\ContPagoBolivaresFTN')
                                     Pago efectivo bolívares FTN
                                 @endif
@@ -358,6 +434,10 @@
 
                                 @if(get_class($pago) == 'compras\ContPagoBolivaresFLL')
                                     Pago efectivo bolívares FLL
+                                @endif
+
+                                @if(get_class($pago) == 'compras\ContPagoBolivaresFM')
+                                    Pago efectivo bolívares FM
                                 @endif
                             @endif
 
@@ -456,6 +536,10 @@
                                     Pago dólares efectivo FLL
                                 @endif
 
+                                @if(get_class($pago) == 'compras\ContPagoEfectivoFM')
+                                    Pago dólares efectivo FM
+                                @endif
+
                                 @if(get_class($pago) == 'compras\ContPagoBolivaresFTN')
                                     Pago bolívares efectivo FTN
                                 @endif
@@ -466,6 +550,10 @@
 
                                 @if(get_class($pago) == 'compras\ContPagoBolivaresFLL')
                                     Pago bolívares efectivo FLL
+                                @endif
+
+                                @if(get_class($pago) == 'compras\ContPagoBolivaresFM')
+                                    Pago bolívares efectivo FM
                                 @endif
                             @endif
 
@@ -525,6 +613,10 @@
                                 Pago dólares efectivo FLL
                             @endif
 
+                            @if(get_class($conciliacion) == 'compras\ContPagoEfectivoFM')
+                                Pago dólares efectivo FM
+                            @endif
+
                             @if(get_class($conciliacion) == 'compras\ContPagoBolivaresFTN')
                                 Pago bolívares efectivo FTN
                             @endif
@@ -535,6 +627,10 @@
 
                             @if(get_class($conciliacion) == 'compras\ContPagoBolivaresFLL')
                                 Pago bolívares efectivo FLL
+                            @endif
+
+                            @if(get_class($conciliacion) == 'compras\ContPagoBolivaresFM')
+                                Pago bolívares efectivo FM
                             @endif
                         @endif
 
@@ -661,100 +757,104 @@
                     </span>
                 </h2>
                 <p class="card-text text-white">
-                    <p class="text-white">
-                        @if($movimiento->proveedor)
-                            Nombre del proveedor: {{ $movimiento->proveedor->nombre_proveedor }}
+                    @if($movimiento)
+                        <p class="text-white">
+                            @if($movimiento->proveedor)
+                                Nombre del proveedor: {{ $movimiento->proveedor->nombre_proveedor }}
 
-                        @elseif($movimiento->concepto)
-                            Concepto: {{ $movimiento->concepto }}
+                            @elseif($movimiento->concepto)
+                                Concepto: {{ $movimiento->concepto }}
 
-                        @else($movimiento->proveedor)
-                            Comentario: {{ $movimiento->comentario }}
-                        @endif
-                        <br>
+                            @else($movimiento->proveedor)
+                                Comentario: {{ $movimiento->comentario }}
+                            @endif
+                            <br>
 
-                        Monto: {{ $movimiento->signo_moneda }}
+                            Monto: {{ $movimiento->signo_moneda }}
 
-                        @if($movimiento->diferido)
-                            {{ number_format($movimiento->diferido, 2, ',', '.') }}
-                        @endif
-
-                        @if($movimiento->egresos)
-                            {{ number_format($movimiento->egresos, 2, ',', '.') }}
-                        @endif
-
-                        @if($movimiento->monto)
-                            {{ number_format($movimiento->monto, 2, ',', '.') }}
-                        @endif
-
-                        @if($movimiento->ingresos)
-                            {{ number_format($movimiento->ingresos, 2, ',', '.') }}
-                        @endif
-
-                        </br>
-
-                        Emisor:
-
-                        @if($movimiento->ingresos)
-                            @if(get_class($movimiento) == 'compras\ContPagoEfectivoFTN')
-                                Ingreso dólares efectivo FTN
+                            @if($movimiento->diferido)
+                                {{ number_format($movimiento->diferido, 2, ',', '.') }}
                             @endif
 
-                            @if(get_class($movimiento) == 'compras\ContPagoEfectivoFAU')
-                                Ingreso dólares efectivo FAU
+                            @if($movimiento->egresos)
+                                {{ number_format($movimiento->egresos, 2, ',', '.') }}
                             @endif
 
-                            @if(get_class($movimiento) == 'compras\ContPagoEfectivoFLL')
-                                Ingreso dólares efectivo FLL
+                            @if($movimiento->monto)
+                                {{ number_format($movimiento->monto, 2, ',', '.') }}
                             @endif
 
-                            @if(get_class($movimiento) == 'compras\ContPagoBolivaresFTN')
-                                Ingreso efectivo bolívares FTN
+                            @if($movimiento->ingresos)
+                                {{ number_format($movimiento->ingresos, 2, ',', '.') }}
                             @endif
 
-                            @if(get_class($movimiento) == 'compras\ContPagoBolivaresFAU')
-                                Ingreso efectivo bolívares FAU
-                            @endif
+                            </br>
 
-                            @if(get_class($movimiento) == 'compras\ContPagoBolivaresFLL')
-                                Ingreso efectivo bolívares FLL
-                            @endif
-                        @else
-                            @if($movimiento->banco)
-                                {{ $movimiento->banco->alias_cuenta }}
-                            @else
+                            Emisor:
+
+                            @if($movimiento->ingresos)
                                 @if(get_class($movimiento) == 'compras\ContPagoEfectivoFTN')
-                                    Pago dólares efectivo FTN
+                                    Ingreso dólares efectivo FTN
                                 @endif
 
                                 @if(get_class($movimiento) == 'compras\ContPagoEfectivoFAU')
-                                    Pago dólares efectivo FAU
+                                    Ingreso dólares efectivo FAU
                                 @endif
 
                                 @if(get_class($movimiento) == 'compras\ContPagoEfectivoFLL')
-                                    Pago dólares efectivo FLL
+                                    Ingreso dólares efectivo FLL
                                 @endif
 
                                 @if(get_class($movimiento) == 'compras\ContPagoBolivaresFTN')
-                                    Pago efectivo bolívares FTN
+                                    Ingreso efectivo bolívares FTN
                                 @endif
 
                                 @if(get_class($movimiento) == 'compras\ContPagoBolivaresFAU')
-                                    Pago efectivo bolívares FAU
+                                    Ingreso efectivo bolívares FAU
                                 @endif
 
                                 @if(get_class($movimiento) == 'compras\ContPagoBolivaresFLL')
-                                    Pago efectivo bolívares FLL
+                                    Ingreso efectivo bolívares FLL
+                                @endif
+                            @else
+                                @if($movimiento->banco)
+                                    {{ $movimiento->banco->alias_cuenta }}
+                                @else
+                                    @if(get_class($movimiento) == 'compras\ContPagoEfectivoFTN')
+                                        Pago dólares efectivo FTN
+                                    @endif
+
+                                    @if(get_class($movimiento) == 'compras\ContPagoEfectivoFAU')
+                                        Pago dólares efectivo FAU
+                                    @endif
+
+                                    @if(get_class($movimiento) == 'compras\ContPagoEfectivoFLL')
+                                        Pago dólares efectivo FLL
+                                    @endif
+
+                                    @if(get_class($movimiento) == 'compras\ContPagoBolivaresFTN')
+                                        Pago efectivo bolívares FTN
+                                    @endif
+
+                                    @if(get_class($movimiento) == 'compras\ContPagoBolivaresFAU')
+                                        Pago efectivo bolívares FAU
+                                    @endif
+
+                                    @if(get_class($movimiento) == 'compras\ContPagoBolivaresFLL')
+                                        Pago efectivo bolívares FLL
+                                    @endif
                                 @endif
                             @endif
-                        @endif
 
-                        <br>
+                            <br>
 
-                        Operador: {{ ($movimiento->user) ? $movimiento->user : $movimiento->operador }}<br>
+                            Operador: {{ ($movimiento->user) ? $movimiento->user : $movimiento->operador }}<br>
 
-                        Fecha y hora: {{ $movimiento->created_at->format('d/m/Y h:i A') }}</br>
-                    </p>
+                            Fecha y hora: {{ $movimiento->created_at->format('d/m/Y h:i A') }}</br>
+                        </p>
+                    @else
+                        <p class="text-white">No hay movimientos</p>
+                    @endif
                 </p>
             </div>
         </div>
