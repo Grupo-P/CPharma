@@ -217,22 +217,6 @@
           $sql3 = R36Q_Historico_Articulo($id_articulo);
           $result3 = sqlsrv_query($conn,$sql3);
 
-          $array = array();
-
-          /*while ($row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC)) {
-            $tasa3 =
-              DB::table('dolars')
-              ->select('tasa')
-              ->where('fecha', '<=', $row3['FechaDocumento']->format('Y-m-d'))
-              ->orderBy('fecha','desc')
-              ->take(1)->get();
-
-            if (isset($tasa3[0]->tasa)) {
-              $array[] = ($row3['M_PrecioCompraBruto'] / $tasa3);
-            }
-
-          }*/
-
           $CostoMayorD = 0;
           $j = '';
 
@@ -251,9 +235,6 @@
               }
             }
           }
-
-          /*$costo = max($array);
-          $costo = number_format($costo, 2, '.', '.');*/
         }
 
 

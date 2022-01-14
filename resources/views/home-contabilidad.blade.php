@@ -15,7 +15,7 @@
 
 @if(Auth::user()->departamento == 'OPERACIONES')
     <div class="card-deck">
-        <div class="card border-danger mb-3" style="width: 14rem;">
+        <div class="card border-danger mb-3">
             <div class="card-body text-left bg-danger">
                 <h2 class="card-title">
                     <span class="card-text text-white">
@@ -40,7 +40,7 @@
             </div>
         </div>
 
-        <div class="card border-success mb-3" style="width: 14rem;">
+        <div class="card border-success mb-3">
             <div class="card-body text-left bg-success">
                 <h2 class="card-title">
                     <span class="card-text text-white">
@@ -69,7 +69,7 @@
 
 @if (Auth::user()->departamento == 'TECNOLOGIA' || Auth::user()->departamento == 'GERENCIA' || Auth::user()->departamento == 'ADMINISTRACION')
     <div class="card-deck">
-        <div class="card border-danger mb-3" style="width: 14rem;">
+        <div class="card border-danger mb-3">
             <div class="card-body text-left bg-danger">
                 <h2 class="card-title">
                     <span class="card-text text-white">
@@ -87,7 +87,7 @@
             </div>
         </div>
 
-        <div class="card border-success mb-3" style="width: 14rem;">
+        <div class="card border-success mb-3">
             <div class="card-body text-left bg-success">
                 <h2 class="card-title">
                     <span class="card-text text-white">
@@ -105,7 +105,7 @@
             </div>
         </div>
 
-        <div class="card border-info mb-3" style="width: 14rem;">
+        <div class="card border-info mb-3">
             <div class="card-body text-left bg-info">
                 <h2 class="card-title">
                     <span class="card-text text-white">
@@ -125,7 +125,7 @@
     </div>
 
     <div class="card-deck">
-        <div class="card border-warning mb-3" style="width: 14rem;">
+        <div class="card border-warning mb-3">
             <div class="card-body text-left bg-warning">
                 <h2 class="card-title">
                     <span class="card-text text-white">
@@ -143,7 +143,7 @@
             </div>
         </div>
 
-        <div class="card border-secondary mb-3" style="width: 14rem;">
+        <div class="card border-secondary mb-3">
             <div class="card-body text-left bg-secondary">
                 <h2 class="card-title">
                     <span class="card-text text-white">
@@ -161,7 +161,7 @@
             </div>
         </div>
 
-        <div class="card border-dark mb-3" style="width: 14rem;">
+        <div class="card border-dark mb-3">
             <div class="card-body text-left bg-dark">
                 <h2 class="card-title">
                     <span class="card-text text-white">
@@ -181,7 +181,7 @@
     </div>
 
     <div class="card-deck">
-        <div class="card border-danger mb-3" style="width: 14rem;">
+        <div class="card border-danger mb-3">
             <div class="card-body text-left bg-danger">
                 <h2 class="card-title">
                     <span class="card-text text-white">
@@ -199,7 +199,7 @@
             </div>
         </div>
 
-        <div class="card border-success mb-3" style="width: 14rem;">
+        <div class="card border-success mb-3">
             <div class="card-body text-left bg-success">
                 <h2 class="card-title">
                     <span class="card-text text-white">
@@ -217,7 +217,7 @@
             </div>
         </div>
 
-        <div class="card border-info mb-3" style="width: 14rem;">
+        <div class="card border-info mb-3">
             <div class="card-body text-left bg-info">
                 <h2 class="card-title">
                     <span class="card-text text-white">
@@ -237,7 +237,7 @@
     </div>
 
     <div class="card-deck">
-        <div class="card border-warning mb-3" style="width: 14rem;">
+        <div class="card border-warning mb-3">
             <div class="card-body text-left bg-warning">
                 <h2 class="card-title">
                     <span class="card-text text-white">
@@ -255,7 +255,7 @@
             </div>
         </div>
 
-        <div class="card border-secondary mb-3" style="width: 14rem;">
+        <div class="card border-secondary mb-3">
             <div class="card-body text-left bg-secondary">
                 <h2 class="card-title">
                     <span class="card-text text-white">
@@ -273,7 +273,7 @@
             </div>
         </div>
 
-        <div class="card border-dark mb-3" style="width: 14rem;">
+        <div class="card border-dark mb-3">
             <div class="card-body text-left bg-dark">
                 <h2 class="card-title">
                     <span class="card-text text-white">
@@ -293,7 +293,7 @@
     </div>
 
     <div class="card-deck">
-        <div class="card border-danger mb-3" style="width: 14rem;">
+        <div class="card border-danger mb-3">
             <div class="card-body text-left bg-danger">
                 <h2 class="card-title">
                     <span class="card-text text-white">
@@ -372,7 +372,7 @@
             </div>
         </div>
 
-        <div class="card border-success mb-3" style="width: 14rem;">
+        <div class="card border-success mb-3">
             <div class="card-body text-left bg-success">
                 <h2 class="card-title">
                     <span class="card-text text-white">
@@ -401,7 +401,7 @@
 
 @if (Auth::user()->departamento == 'CONTABILIDAD')
     <div class="card-deck">
-        <div class="card border-warning mb-3" style="width: 14rem;">
+        <div class="card border-warning mb-3">
             <div class="card-body text-left bg-warning">
                 <h2 class="card-title">
                     <span class="card-text text-white">
@@ -480,7 +480,7 @@
             </div>
         </div>
 
-        <div class="card border-dark mb-3" style="width: 14rem;">
+        <div class="card border-dark mb-3">
             <div class="card-body text-left bg-dark">
                 <h2 class="card-title">
                     <span class="card-text text-white">
@@ -547,7 +547,7 @@
             </div>
         </div>
 
-        <div class="card border-success mb-3" style="width: 14rem;">
+        <div class="card border-success mb-3">
             <div class="card-body text-left bg-success">
                 <h2 class="card-title">
                     <span class="card-text text-white">
@@ -576,7 +576,7 @@
 
 @if (Auth::user()->departamento == 'TESORERIA')
     <div class="card-deck">
-        <div class="card border-danger mb-3" style="width: 14rem;">
+        <div class="card border-danger mb-3">
             <div class="card-body text-left bg-danger">
                 <h2 class="card-title">
                     <span class="card-text text-white">
@@ -594,7 +594,7 @@
             </div>
         </div>
 
-        <div class="card border-success mb-3" style="width: 14rem;">
+        <div class="card border-success mb-3">
             <div class="card-body text-left bg-success">
                 <h2 class="card-title">
                     <span class="card-text text-white">
@@ -614,7 +614,7 @@
     </div>
 
     <div class="card-deck">
-        <div class="card border-info mb-3" style="width: 14rem;">
+        <div class="card border-info mb-3">
             <div class="card-body text-left bg-info">
                 <h2 class="card-title">
                     <span class="card-text text-white">
@@ -632,7 +632,7 @@
             </div>
         </div>
 
-        <div class="card border-warning mb-3" style="width: 14rem;">
+        <div class="card border-warning mb-3">
             <div class="card-body text-left bg-warning">
                 <h2 class="card-title">
                     <span class="card-text text-white">
@@ -652,7 +652,7 @@
     </div>
 
     <div class="card-deck">
-        <div class="card border-secondary mb-3" style="width: 14rem;">
+        <div class="card border-secondary mb-3">
             <div class="card-body text-left bg-secondary">
                 <h2 class="card-title">
                     <span class="card-text text-white">
@@ -764,7 +764,7 @@
 <!-- CONTACTO -->
 <hr class="row align-items-start col-12">
     <div class="card-deck">
-        <div class="card border-info" style="width: 14rem;">
+        <div class="card border-info">
         <div class="card-body text-left bg-info">
             <h2 class="card-title">
                 <span class="card-text text-warning">
