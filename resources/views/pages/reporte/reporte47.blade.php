@@ -124,6 +124,7 @@
             <th scope="col" class="CP-sticky">Existencia</th>
             <th scope="col" class="CP-sticky">Precio ' . SigVe . '</th>
             <th scope="col" class="CP-sticky">Ultima compra</th>
+            <th scope="col" class="CP-sticky">Tipo</th>
           </tr>
         </thead>
         <tbody>
@@ -132,7 +133,7 @@
     while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
       $connMood = FG_Conectar_Mod_Atte_Clientes($_GET['SEDE']);
 
-      // Verifica si existe cruce
+      // Verifica si existe cruce. Si no existe, pasa al siguiente artìculo
       $codigo_barra = $row['codigo_barra'];
 
       $sql = "SELECT * FROM InAplArt WHERE InAplArt.CoBarra = '$codigo_barra'";
@@ -148,6 +149,7 @@
       if (!is_resource($query) || sqlsrv_has_rows($query)) {
         continue;
       }
+      // Verifica si existe cruce. Si no existe, pasa al siguiente artìculo
 
       $descripcion = FG_Limpiar_Texto($row['descripcion']);
 
@@ -167,6 +169,8 @@
       $iva = $row['iva'];
       $condicion_existencia = 'CON_EXISTENCIA';
 
+      $tipo = FG_Tipo_Producto($row['tipo']);
+
       $precio = FG_Calculo_Precio_Alfa($existencia, $existencia_almacen_1, $existencia_almacen_2, $troquelado, $utilidad_articulo, $utilidad_categoria, $troquel_almacen_1, $precio_compra_bruto_almacen_1, $troquel_almacen_2, $precio_compra_bruto_almacen_2, $precio_compra_bruto, $iva, $condicion_existencia);
       $precio = number_format($precio, 2, ',', '.');
 
@@ -178,6 +182,7 @@
       echo '<td align="center">'.$row['existencia'].'</td>';
       echo '<td align="center">'.$precio.'</td>';
       echo '<td align="center">'.$ultima_compra.'</td>';
+      echo '<td align="center">'.$tipo.'</td>';
       echo '</tr>';
     $contador++;
     }
@@ -197,6 +202,7 @@
   function R47Q_Cruce_Aplicacion_Consultas() {
     $sql = "
       SELECT
+        (ISNULL((SELECT InvArticuloAtributo.InvArticuloId FROM InvArticuloAtributo WHERE InvArticuloAtributo.InvAtributoId = (SELECT InvAtributo.Id FROM InvAtributo WHERE InvAtributo.Descripcion = 'Medicina') AND InvArticuloAtributo.InvArticuloId = InvArticulo.Id),CAST(0 AS INT))) AS tipo,
         InvArticulo.CodigoArticulo AS codigo_interno,
         (SELECT InvCodigoBarra.CodigoBarra FROM InvCodigoBarra WHERE InvCodigoBarra.InvArticuloId = InvArticulo.Id AND InvCodigoBarra.EsPrincipal = 1) AS codigo_barra,
         InvArticulo.DescripcionLarga AS descripcion,
