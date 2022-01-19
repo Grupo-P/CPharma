@@ -381,6 +381,7 @@
             <th scope="col" class="CP-sticky">Total Unidades</th>
             <th scope="col" class="CP-sticky">Usuario Auditor</th>
             <th scope="col" class="CP-sticky">Seleccion</th>
+            <th scope="col" class="CP-sticky">Traslado</th>
           </tr>
         </thead>
         <tbody>
@@ -409,6 +410,21 @@
               <input id="IdFact" name="IdFact" type="hidden" value="'.intval($row["FacturaId"]).'">
             <input id="IdProv" name="IdProv" type="hidden" value="'.$IdProveedor.'">
             <input id="NombreProv" name="NombreProv" type="hidden" value="'.FG_Limpiar_Texto($NombreProveedor).'">
+          </form>
+          <br>
+        ';
+      echo '
+      <td align="center">
+        <form autocomplete="off" action="">
+            <input id="SEDE" name="SEDE" type="hidden" value="';
+                print_r($SedeConnection);
+                echo'">
+
+            <input type="submit" value="Ver traslado" class="btn btn-outline-info">
+            <input id="IdFact" name="IdFact" type="hidden" value="'.intval($row["FacturaId"]).'">
+            <input id="IdProv" name="IdProv" type="hidden" value="'.$row["IdProveedor"].'">
+            <input id="tipo" name="tipo" type="hidden" value="Traslado">
+            <input id="NombreProv" name="NombreProv" type="hidden" value="'.FG_Limpiar_Texto($row["nombreProveedor"]).'">
           </form>
           <br>
         ';
@@ -490,6 +506,8 @@
   function R30Q_Factura_Proveedor_Toquel($IdProveedor) {
     $sql = "
     SELECT
+    ComFactura.ComProveedorId AS IdProveedor,
+    (SELECT GenPersona.Nombre FROM GenPersona WHERE Id = (SELECT ComProveedor.GenPersonaId FROM ComProveedor WHERE ComProveedor.Id = $IdProveedor)) AS nombreProveedor,
     ComFactura.Id AS FacturaId,    
     ComFactura.NumeroFactura,
     ComFactura.NumeroControl,
