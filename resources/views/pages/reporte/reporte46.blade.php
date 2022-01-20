@@ -232,7 +232,7 @@
           }
       }
 
-      if ($i == 10) {
+      if ($i == 60000) {
         break;
       }
 
@@ -451,7 +451,7 @@
         $tasa = ($tasa) ? $tasa : 0;
 
         $precioBs = ($precio) ? number_format($precio, 2, ',', '.') : '';
-        $precioDs = ($precio and $tasa) ? number_format($precio * $tasa, 2, ',', '.') : '';
+        $precioDs = ($precio and $tasa) ? number_format($precio / $tasa, 2, ',', '.') : '';
         $ultimaVenta = ($row['UltimaVenta']) ? $row['UltimaVenta']->format('Y-m-d') : '';
 
         $codigosProcesados[] = $row;
