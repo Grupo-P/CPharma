@@ -19,4 +19,13 @@ class Surtido extends Model
     {
         return $this->hasMany('compras\SurtidoDetalle', 'control');
     }
+
+    public function getPrimeroAttribute()
+    {
+        $detalle = SurtidoDetalle::where('control', $this->control)
+            ->orderBy('descripcion')
+            ->first();
+
+        return $detalle->descripcion;
+    }
 }

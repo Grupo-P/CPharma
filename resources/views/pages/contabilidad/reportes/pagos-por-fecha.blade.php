@@ -82,6 +82,11 @@
                                 @php $sede = 'FLL'; @endphp
                             @endif
 
+                            @if(get_class($pago) == 'compras\ContPagoEfectivoFM')
+                                Pago dólares efectivo FM
+                                @php $sede = 'FM'; @endphp
+                            @endif
+
                             @if(get_class($pago) == 'compras\ContPagoBolivaresFTN')
                                 Pago bolívares efectivo FTN
                                 @php $sede = 'FTN'; @endphp
@@ -95,6 +100,11 @@
                             @if(get_class($pago) == 'compras\ContPagoBolivaresFLL')
                                 Pago bolívares efectivo FLL
                                 @php $sede = 'FLL'; @endphp
+                            @endif
+
+                            @if(get_class($pago) == 'compras\ContPagoBolivaresFM')
+                                Pago bolívares efectivo FM
+                                @php $sede = 'FM'; @endphp
                             @endif
                         </td>
 

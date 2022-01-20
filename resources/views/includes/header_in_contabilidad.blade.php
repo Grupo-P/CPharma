@@ -151,6 +151,16 @@
           </li>
         @endif
 
+        @if(Auth::user()->sede == 'GRUPO P, C.A' || Auth::user()->sede == 'FARMACIA MILLENNIUM 2000, C.A')
+          <li class="nav-item">
+            <a class="nav-link CP-Links-Menu" href="{{ url('/efectivoFM') }}">
+              <span data-feather="home"></span>
+              <i class="fas fa-money-bill-alt"></i>
+              Pagos en efectivo dólares FM<span class="sr-only">(current)</span>
+            </a>
+          </li>
+        @endif
+
 
         @if(Auth::user()->sede == 'GRUPO P, C.A' || Auth::user()->sede == 'FARMACIA TIERRA NEGRA, C.A.')
           <li class="nav-item">
@@ -178,6 +188,16 @@
               <span data-feather="home"></span>
               <i class="fas fa-money-bill-alt"></i>
               Pagos en efectivo bolívares FAU<span class="sr-only">(current)</span>
+            </a>
+          </li>
+        @endif
+
+        @if(Auth::user()->sede == 'GRUPO P, C.A' || Auth::user()->sede == 'FARMACIA MILLENNIUM 2000, C.A')
+          <li class="nav-item">
+            <a class="nav-link CP-Links-Menu" href="{{ url('/bolivaresFM') }}">
+              <span data-feather="home"></span>
+              <i class="fas fa-money-bill-alt"></i>
+              Pagos en efectivo bolívares FM<span class="sr-only">(current)</span>
             </a>
           </li>
         @endif
@@ -245,6 +265,16 @@
           </li>
         @endif
 
+        @if(Auth::user()->sede == 'GRUPO P, C.A' || Auth::user()->sede == 'FARMACIA MILLENNIUM 2000, C.A')
+          <li class="nav-item">
+            <a class="nav-link CP-Links-Menu" href="{{ url('/contabilidad/diferidosFM') }}">
+              <span data-feather="home"></span>
+              <i class="fas fa-lock"></i>
+              Diferidos en dolares FM<span class="sr-only">(current)</span>
+            </a>
+          </li>
+        @endif
+
 
         @if(Auth::user()->sede == 'GRUPO P, C.A' || Auth::user()->sede == 'FARMACIA TIERRA NEGRA, C.A.')
           <li class="nav-item">
@@ -272,6 +302,16 @@
               <span data-feather="home"></span>
               <i class="fas fa-lock"></i>
               Diferidos en bolivares FAU<span class="sr-only">(current)</span>
+            </a>
+          </li>
+        @endif
+
+        @if(Auth::user()->sede == 'GRUPO P, C.A' || Auth::user()->sede == 'FARMACIA MILLENNIUM 2000, C.A')
+          <li class="nav-item">
+            <a class="nav-link CP-Links-Menu" href="{{ url('/contabilidad/diferidosBolivaresFM') }}">
+              <span data-feather="home"></span>
+              <i class="fas fa-lock"></i>
+              Diferidos en bolivares FM<span class="sr-only">(current)</span>
             </a>
           </li>
         @endif

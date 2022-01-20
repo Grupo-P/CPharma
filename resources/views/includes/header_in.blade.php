@@ -132,6 +132,13 @@
         </a>
       </li>
       <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('/cotizacion/create') }}">
+          <span data-feather="home"></span>
+          <i class="fas fa-file"></i>
+          Cotizaciones<span class="sr-only">(current)</span>
+        </a>
+      </li>
+      <li class="nav-item">
         <a class="nav-link CP-Links-Menu" href="{{ url('/sedes_reporte') }}">
           <span data-feather="home"></span>
           <i class="fas fa-file-invoice"></i>
@@ -957,6 +964,15 @@
           Buscador de articulos<span class="sr-only">(current)</span>
         </a>
       </li>
+
+      <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('/cotizacion/create') }}">
+          <span data-feather="home"></span>
+          <i class="fas fa-file"></i>
+          Cotizaciones<span class="sr-only">(current)</span>
+        </a>
+      </li>
+
       <li class="nav-item">
         <a class="nav-link CP-Links-Menu" href="{{ url('/movimientos?tasa_ventas_id=1') }}">
           <span data-feather="home"></span>
@@ -1464,7 +1480,6 @@
   }
 ?>
 <!-- TECNOLOGIA -->
-<!-------------------------------------------------------------------------------->
 <!------------------------------------------------------------------------------->
 <!-- AUDITORIA -->
 <?php
@@ -1536,6 +1551,66 @@
   }
 ?>
 <!-- AUDITORIA -->
+<!-------------------------------------------------------------------------------->
+<!-- DELIVERY -->
+<?php
+  if(Auth::user()->departamento == 'DELIVERY'){
+?>
+  <div class="btn-group navbar-brand">
+    <button type="button" class="btn btn-outline-info dropdown-toggle textoI" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      <i class="fas fa-user-cog"></i> Delivery
+    </button>
+    <div class="dropdown-menu">
+      <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('/cotizacion/create') }}">
+          <span data-feather="home"></span>
+          <i class="fas fa-file"></i>
+          Cotizaciones<span class="sr-only">(current)</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('/sedes_reporte') }}">
+          <span data-feather="home"></span>
+          <i class="fas fa-file-invoice"></i>
+          Reportes<span class="sr-only">(current)</span>
+        </a>
+      </li>
+    </div>
+  </div>
+<?php
+  }
+?>
+<!-- DELIVERY -->
+<!-------------------------------------------------------------------------------->
+<!-- VENTAS AL MAYOR -->
+<?php
+  if(Auth::user()->departamento == 'VENTAS AL MAYOR'){
+?>
+  <div class="btn-group navbar-brand">
+    <button type="button" class="btn btn-outline-info dropdown-toggle textoI" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      <i class="fas fa-user-cog"></i> Ventas al mayor
+    </button>
+    <div class="dropdown-menu">
+      <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('/cotizacion/create') }}">
+          <span data-feather="home"></span>
+          <i class="fas fa-file"></i>
+          Cotizaciones<span class="sr-only">(current)</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('/sedes_reporte') }}">
+          <span data-feather="home"></span>
+          <i class="fas fa-file-invoice"></i>
+          Reportes<span class="sr-only">(current)</span>
+        </a>
+      </li>
+    </div>
+  </div>
+<?php
+  }
+?>
+<!-- VENTAS AL MAYOR -->
 <!-------------------------------------------------------------------------------->
 <!-- DEVELOPER -->
 <?php

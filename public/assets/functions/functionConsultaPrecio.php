@@ -51,12 +51,19 @@
             $nombre_maquina == 'CONSULTOR-FAU-1' ||
             $nombre_maquina == 'CONSULTOR-FAU-2' ||
             $nombre_maquina == 'CONSULTOR-FAU-3' ||
+
             $nombre_maquina == 'CONSULTOR-FTN-1' ||
             $nombre_maquina == 'CONSULTOR-FTN-2' ||
             $nombre_maquina == 'CONSULTOR-FTN-3' ||
+
             $nombre_maquina == 'CONSULTOR-FLL-1' ||
             $nombre_maquina == 'CONSULTOR-FLL-2' ||
-            $nombre_maquina == 'CONSULTOR-FLL-3'
+            $nombre_maquina == 'CONSULTOR-FLL-3' ||
+
+            $nombre_maquina == 'CONSULTOR-FSM-1' ||
+            $nombre_maquina == 'CONSULTOR-FSM-2' ||
+            $nombre_maquina == 'CONSULTOR-FSM-3' ||
+            $nombre_maquina == 'CONSULTOR-FSM-4'
         ) {
             $sqlCPharma = "INSERT INTO consultor(id_articulo, codigo_interno, codigo_barra, descripcion, precio, nombre_maquina, fecha_captura, created_at, updated_at) VALUES ('$id_articulo','$codigo_interno','$codigo_barra','$descripcion','$precio','$nombre_maquina','$fecha_captura','$fecha_completa','$fecha_completa')";
             mysqli_query($connCPharma,$sqlCPharma);

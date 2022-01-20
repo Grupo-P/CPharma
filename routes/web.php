@@ -499,6 +499,11 @@ Route::resource('efectivoFAU', 'ContPagoEfectivoFAUController');
 Route::get('/efectivoFAU/soporte/{id}', 'ContPagoEfectivoFAUController@soporte');
 Route::get('/contabilidad/diferidosFAU', 'ContPagoEfectivoFAUController@diferidos')->name('contabilidad.diferidosFAU');
 
+Route::post('/efectivo/validarFM', 'ContPagoEfectivoFMController@validar');
+Route::resource('efectivoFM', 'ContPagoEfectivoFMController');
+Route::get('/efectivoFM/soporte/{id}', 'ContPagoEfectivoFMController@soporte');
+Route::get('/contabilidad/diferidosFM', 'ContPagoEfectivoFMController@diferidos')->name('contabilidad.diferidosFM');
+
 Route::post('/efectivoFLL/validar', 'ContPagoEfectivoFLLController@validar');
 Route::resource('efectivoFLL', 'ContPagoEfectivoFLLController');
 Route::get('/efectivoFLL/soporte/{id}', 'ContPagoEfectivoFLLController@soporte');
@@ -508,6 +513,11 @@ Route::post('/bolivaresFTN/validar', 'ContPagoBolivaresFTNController@validar');
 Route::resource('bolivaresFTN', 'ContPagoBolivaresFTNController');
 Route::get('/bolivaresFTN/soporte/{id}', 'ContPagoBolivaresFTNController@soporte');
 Route::get('/contabilidad/diferidosBolivaresFTN', 'ContPagoBolivaresFTNController@diferidos')->name('contabilidad.diferidosBolivaresFTN');
+
+Route::post('/bolivaresFM/validar', 'ContPagoBolivaresFMController@validar');
+Route::resource('bolivaresFM', 'ContPagoBolivaresFMController');
+Route::get('/bolivaresFM/soporte/{id}', 'ContPagoBolivaresFMController@soporte');
+Route::get('/contabilidad/diferidosBolivaresFM', 'ContPagoBolivaresFMController@diferidos')->name('contabilidad.diferidosBolivaresFM');
 
 Route::post('/bolivares/validarFAU', 'ContPagoBolivaresFAUController@validar');
 Route::resource('bolivaresFAU', 'ContPagoBolivaresFAUController');

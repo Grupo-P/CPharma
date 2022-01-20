@@ -75,7 +75,7 @@
 		DESARROLLADO POR: SERGIO COVA
 	 */
 	function MySQL_Buscar_Traslado_Detalle($id_traslado) {
-		$sql = "SELECT * FROM traslados_detalle WHERE id_traslado = '$id_traslado'";
+		$sql = "SELECT * FROM traslados_detalle WHERE id_traslado = '$id_traslado' ORDER BY descripcion ASC";
 		return $sql;
 	}
 	/**********************************************************************************/

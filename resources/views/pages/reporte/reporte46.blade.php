@@ -221,7 +221,7 @@
                 <tr>
                   <td class="text-center">'.$contadorNoProcesados.'</td>
                   <td class="text-center">'.$item['A'].'</td>
-                  <td class="text-center">'.$item['B'].'</td>
+                  <td class="text-center">'.FG_Limpiar_Texto($item['B']).'</td>
                   <td class="text-center">'.number_format((float) $item['C'], 2, ',', '.').'</td>
                   <td class="text-center">'.intval($item['D']).'</td>
                   <td class="text-center">Artículo incompleto</td>
@@ -232,7 +232,7 @@
           }
       }
 
-      if ($i == 1000) {
+      if ($i == 60000) {
         break;
       }
 
@@ -451,7 +451,7 @@
         $tasa = ($tasa) ? $tasa : 0;
 
         $precioBs = ($precio) ? number_format($precio, 2, ',', '.') : '';
-        $precioDs = ($precio and $tasa) ? number_format($precio * $tasa, 2, ',', '.') : '';
+        $precioDs = ($precio and $tasa) ? number_format($precio / $tasa, 2, ',', '.') : '';
         $ultimaVenta = ($row['UltimaVenta']) ? $row['UltimaVenta']->format('Y-m-d') : '';
 
         $codigosProcesados[] = $row;
@@ -463,15 +463,15 @@
             <tr>
               <td class="text-center">'.$contadorProcesados.'</td>
               <td class="text-center">'.$data[$indice]['A'].'</td>
-              <td class="text-center">'.$data[$indice]['B'].'</td>
-              <td class="text-center CP-barrido"><a href="/reporte2?Id='.$row['IdArticulo'].'&SEDE='.$_GET['SEDE'].'" style="text-decoration: none; color: black;" target="_blank">'.$row['Descripcion'].'</a></td>
+              <td class="text-center">'.FG_Limpiar_Texto($data[$indice]['B']).'</td>
+              <td class="text-center CP-barrido"><a href="/reporte2?Id='.$row['IdArticulo'].'&SEDE='.$_GET['SEDE'].'" style="text-decoration: none; color: black;" target="_blank">'.FG_Limpiar_Texto($row['Descripcion']).'</a></td>
               <td class="text-center">'.intval($data[$indice]['D']).'</td>
               <td class="text-center">'.intval($row['Existencia']).'</td>
-              <td class="text-center">'.number_format($data[$indice]['C'], 2, ',', '.').'</td>
+              <td class="text-center">'.number_format(trim($data[$indice]['C']), 2, ',', '.').'</td>
               <td class="text-center">'.$precioBs.'</td>
               <td class="text-center">'.$precioDs.'</td>
               <td class="text-center">'.$ultimaVenta.'</td>
-              <td class="text-center CP-barrido"><a href="/reporte7?Nombre='.$row['UltimoProveedorNombre'].'&Id='.$row['UltimoProveedorID'].'&SEDE='.$_GET['SEDE'].'" style="text-decoration: none; color: black;" target="_blank">'.$row['UltimoProveedorNombre'].'</a></td>
+              <td class="text-center CP-barrido"><a href="/reporte7?Nombre='.FG_Limpiar_Texto($row['UltimoProveedorNombre']).'&Id='.$row['UltimoProveedorID'].'&SEDE='.$_GET['SEDE'].'" style="text-decoration: none; color: black;" target="_blank">'.FG_Limpiar_Texto($row['UltimoProveedorNombre']).'</a></td>
             </tr>
         ';
 
@@ -490,8 +490,8 @@
             <tr>
               <td class="text-center">'.$contadorNoProcesados.'</td>
               <td class="text-center">'.$data[$indice]['A'].'</td>
-              <td class="text-center">'.$data[$indice]['B'].'</td>
-              <td class="text-center">'.number_format((float) $data[$indice]['C'], 2, ',', '.').'</td>
+              <td class="text-center">'.FG_Limpiar_Texto($data[$indice]['B']).'</td>
+              <td class="text-center">'.number_format((float) trim($data[$indice]['C']), 2, ',', '.').'</td>
               <td class="text-center">'.intval($data[$indice]['D']).'</td>
               <td class="text-center">Artículo no codificado</td>
             </tr>
