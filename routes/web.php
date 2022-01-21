@@ -338,6 +338,10 @@ Route::get('/ArticulosPedidosYaCorridas', function() {
     return view('pages.articulosExcel.articulosPedidosYaCorridas');
 });
 
+Route::get('/codigosPrincipal', function() {
+    return view('pages.articulosExcel.codigosPrincipal');
+});
+
 Route::get('/CorridaPrecios', function() {
     return view('pages.corridas.corridaPrecio');
 });
