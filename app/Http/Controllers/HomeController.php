@@ -282,42 +282,6 @@ class HomeController extends Controller
                     $sede = 'FLL';
                 }
 
-                if(Auth()->user()->sede == 'FARMACIA LA LAGO,C.A.') {
-                    $dolares = ContPagoEfectivoFLL::orderByDesc('id')->first();
-                    $bolivares = ContPagoBolivaresFLL::orderByDesc('id')->first();
-
-                    $movimiento = ($dolares) ? $dolares : null;
-
-                    if (isset($bolivares)) {
-                        if ($bolivares->created_at > $movimiento->created_at) {
-                            $movimiento = $bolivares;
-                        }
-                    }
-
-                    $diferidoDolares = ContPagoEfectivoFLL::whereNotNull('diferido')->orderByDesc('id')->first();
-                    $diferidoBolivares = ContPagoBolivaresFLL::whereNotNull('diferido')->orderByDesc('id')->first();
-
-                    $sede = 'FLL';
-                }
-
-                if(Auth()->user()->sede == 'FARMACIA LA LAGO,C.A.') {
-                    $dolares = ContPagoEfectivoFLL::orderByDesc('id')->first();
-                    $bolivares = ContPagoBolivaresFLL::orderByDesc('id')->first();
-
-                    $movimiento = ($dolares) ? $dolares : null;
-
-                    if (isset($bolivares)) {
-                        if ($bolivares->created_at > $movimiento->created_at) {
-                            $movimiento = $bolivares;
-                        }
-                    }
-
-                    $diferidoDolares = ContPagoEfectivoFLL::whereNotNull('diferido')->orderByDesc('id')->first();
-                    $diferidoBolivares = ContPagoBolivaresFLL::whereNotNull('diferido')->orderByDesc('id')->first();
-
-                    $sede = 'FLL';
-                }
-
                 if(Auth()->user()->sede == 'FARMACIA MILLENNIUM 2000, C.A') {
                     $dolares = ContPagoEfectivoFM::orderByDesc('id')->first();
                     $bolivares = ContPagoBolivaresFM::orderByDesc('id')->first();
@@ -333,7 +297,7 @@ class HomeController extends Controller
                     $diferidoDolares = ContPagoEfectivoFM::whereNotNull('diferido')->orderByDesc('id')->first();
                     $diferidoBolivares = ContPagoBolivaresFM::whereNotNull('diferido')->orderByDesc('id')->first();
 
-                    $sede = 'FLL';
+                    $sede = 'FM';
                 }
 
                 return view('home-contabilidad', compact(
