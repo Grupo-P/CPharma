@@ -215,7 +215,7 @@
         }
 
         if ($item['A'] != '') {
-            $codigos[] = $item['A'];
+            $codigos[] = preg_replace('([^A-Za-z0-9])', '', $item['A']);
         } else {
               $noProcesados .= '
                 <tr>
