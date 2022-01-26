@@ -155,6 +155,9 @@
                         $monto = $pago['monto'];
                         $monto_iva_real = 0;
                         $monto_base_real = 0;
+                        $retencion_deuda_1 = 0;
+                        $retencion_deuda_2 = 0;
+                        $retencion_iva = 0;
 
                         if ($pago['retencion_deuda_1']) {
                             $retencion_deuda_1 = $monto * ($pago['retencion_deuda_1'] / 100);

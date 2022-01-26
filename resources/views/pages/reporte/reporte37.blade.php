@@ -45,20 +45,20 @@
 
 
 @section('scriptsFoot')
-	<script src="https://raw.githubusercontent.com/SamWM/jQuery-Plugins/master/numeric/jquery.numeric.js"></script>
+  <script src="https://raw.githubusercontent.com/SamWM/jQuery-Plugins/master/numeric/jquery.numeric.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
-	<script>
-		$(document).ready(function () {
-		   $('#existenciaUsuario').change(function () {
-	        value = $('#existenciaUsuario').val();
+  <script>
+    $(document).ready(function () {
+       $('#existenciaUsuario').change(function () {
+          value = $('#existenciaUsuario').val();
 
-	        if (value < 0) {
-	          alert('Debe ingresar un numero positivo');
-	          $('#existenciaUsuario').val('');
-	        }
-	      });
-		});
+          if (value < 0) {
+            alert('Debe ingresar un numero positivo');
+            $('#existenciaUsuario').val('');
+          }
+        });
+    });
 
         function agregarTraslado(codigo_barra, sede, existencia, bandera = '') {
             cantidad = prompt('Ingrese la cantidad' + bandera + ': ');
@@ -112,7 +112,7 @@
             }
         }
 
-	</script>
+  </script>
 @endsection
 
 @section('content')
@@ -218,27 +218,27 @@
     ';
 
     if (isset($_GET['SEDE']) & ($_GET['SEDE'] == 'FAU' || $_GET['SEDE'] == 'DBs')) {
-		echo '<th scope="col" class="CP-sticky">Descripción FTN</th>
-			<th scope="col" class="CP-sticky">Existencia FTN</td>
-			<th scope="col" class="CP-sticky">Descripción FLL</th>
-			<th scope="col" class="CP-sticky">Existencia FLL</td>
-		';
+    echo '<th scope="col" class="CP-sticky">Descripción FTN</th>
+      <th scope="col" class="CP-sticky">Existencia FTN</td>
+      <th scope="col" class="CP-sticky">Descripción FLL</th>
+      <th scope="col" class="CP-sticky">Existencia FLL</td>
+    ';
     }
 
     if (isset($_GET['SEDE']) & $_GET['SEDE'] == 'FTN') {
-    	echo '<th scope="col" class="CP-sticky">Descripción FAU</th>
-			<th scope="col" class="CP-sticky">Existencia FAU</td>
-			<th scope="col" class="CP-sticky">Descripción FLL</th>
-			<th scope="col" class="CP-sticky">Existencia FLL</td>
-		';
+      echo '<th scope="col" class="CP-sticky">Descripción FAU</th>
+      <th scope="col" class="CP-sticky">Existencia FAU</td>
+      <th scope="col" class="CP-sticky">Descripción FLL</th>
+      <th scope="col" class="CP-sticky">Existencia FLL</td>
+    ';
     }
 
     if (isset($_GET['SEDE']) & $_GET['SEDE'] == 'FLL') {
-    	echo '<th scope="col" class="CP-sticky">Descripción FTN</th>
-			<th scope="col" class="CP-sticky">Existencia FTN</td>
-			<th scope="col" class="CP-sticky">Descripción FAU</th>
-			<th scope="col" class="CP-sticky">Existencia FAU</td>
-		';
+      echo '<th scope="col" class="CP-sticky">Descripción FTN</th>
+      <th scope="col" class="CP-sticky">Existencia FTN</td>
+      <th scope="col" class="CP-sticky">Descripción FAU</th>
+      <th scope="col" class="CP-sticky">Existencia FAU</td>
+    ';
     }
 
     echo '<th scope="col" class="CP-sticky">Existencias foraneas totales</td>';
@@ -264,17 +264,17 @@
 
     while($row2 = sqlsrv_fetch_array($result2,SQLSRV_FETCH_ASSOC)) {
       $codigo_articulo = $row2['CodigoInterno'];
-    	$codigo_barra = $row2['CodigoBarra'];
+      $codigo_barra = $row2['CodigoBarra'];
 
-    	$existencia = intval($row2['Existencia']);
-    	$descripcion = FG_Limpiar_Texto($row2['Descripcion']);
-    	$ultima_venta = ($row2['UltimaVenta']) ? $row2['UltimaVenta']->format('d/m/Y') : '00/00/0000';
+      $existencia = intval($row2['Existencia']);
+      $descripcion = FG_Limpiar_Texto($row2['Descripcion']);
+      $ultima_venta = ($row2['UltimaVenta']) ? $row2['UltimaVenta']->format('d/m/Y') : '00/00/0000';
 
-    	$Existencia = $row2["Existencia"];
-	    $ExistenciaAlmacen1 = $row2["ExistenciaAlmacen1"];
-	    $ExistenciaAlmacen2 = $row2["ExistenciaAlmacen2"];
-	    $IsTroquelado = $row2["Troquelado"];
-    	$IsIVA = $row2["Impuesto"];
+      $Existencia = $row2["Existencia"];
+      $ExistenciaAlmacen1 = $row2["ExistenciaAlmacen1"];
+      $ExistenciaAlmacen2 = $row2["ExistenciaAlmacen2"];
+      $IsTroquelado = $row2["Troquelado"];
+      $IsIVA = $row2["Impuesto"];
       $UtilidadArticulo = $row2["UtilidadArticulo"];
       $UtilidadCategoria = $row2["UtilidadCategoria"];
       $TroquelAlmacen1 = $row2["TroquelAlmacen1"];
@@ -470,10 +470,10 @@
 
         echo '</tr>';
 
-      	$contador++;
+        $contador++;
       }
 
-  	}
+    }
 
     echo '</tbody>';
 
@@ -490,7 +490,7 @@
 
     echo '</table>';
 
-	sqlsrv_close($conn);
+  sqlsrv_close($conn);
   }
 
   function R37_Q_Descripcion_Existencia_Articulo($CodigoBarra)
@@ -498,27 +498,27 @@
 
     $CodigoBarra = str_replace("'", "''", $CodigoBarra);
 
-  	$sql = "
+    $sql = "
       SELECT
         InvArticulo.DescripcionLarga AS descripcion,
         (SELECT SUM(Existencia) FROM InvLoteAlmacen WHERE (InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2) AND InvLoteAlmacen.InvArticuloId = InvArticulo.Id) AS existencia
       FROM
       InvArticulo
       WHERE InvArticulo.Id = (SELECT InvCodigoBarra.InvArticuloId FROM InvCodigoBarra WHERE InvCodigoBarra.CodigoBarra = '$CodigoBarra' AND InvCodigoBarra.EsPrincipal = 1)
-  	";
+    ";
 
-  	return $sql;
+    return $sql;
   }
 
   /*
   TITULO: R37_Q_Articulos_Con_Existencia_Menor
   PARAMETROS: [$Sede] Sede de conexión
-  			  [$existencia] Existencia de productos
+          [$existencia] Existencia de productos
   RETORNO: Un String con la query pertinente
    */
   function R37_Q_Articulos_Con_Existencia_Menor($existencia) {
-  	$sql = "
-  	SELECT
+    $sql = "
+    SELECT
 --Id Articulo
     InvArticulo.Id AS IdArticulo,
 --Categoria Articulo
@@ -722,7 +722,7 @@
     GROUP BY InvArticulo.Id, InvArticulo.CodigoArticulo, InvArticulo.Descripcion, InvArticulo.FinConceptoImptoIdCompra, InvArticulo.InvCategoriaId, InvMarca.Nombre
 --Ordanamiento
     ORDER BY Existencia ASC
-  	";
-  	return $sql;
+    ";
+    return $sql;
   }
 ?>
