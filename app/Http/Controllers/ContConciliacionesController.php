@@ -98,7 +98,7 @@ class ContConciliacionesController extends Controller
                 $pagos[$i]['emisor']            = $efectivo->sede;
                 $pagos[$i]['nombre_proveedor']  = ($efectivo->proveedor) ? $efectivo->proveedor->nombre_proveedor : '';
                 $pagos[$i]['ci_proveedor']      = ($efectivo->proveedor) ? $efectivo->proveedor->rif_ci : '';
-                $pagos[$i]['monto']             = ($efectivo->egresos) ? number_format($efectivo->egresos, 2, ',', '.') : number_format($efectivo->diferido, 2, ',', '.');
+                $pagos[$i]['monto']             = ($efectivo->egresos) ? $efectivo->egresos : $efectivo->diferido;
                 $pagos[$i]['operador']          = $efectivo->user;
                 $pagos[$i]['fecha']             = date_format(date_create($efectivo->created_at), 'd/m/Y h:ia');
                 $pagos[$i]['estado']            = ($efectivo->deleted_at) ? 'Reversado' : 'Pagado';
