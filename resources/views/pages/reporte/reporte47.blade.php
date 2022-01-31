@@ -98,98 +98,123 @@
     $sql1 = R47Q_Cruce_Aplicacion_Consultas();
     $result = sqlsrv_query($conn,$sql1);
 
-    $connCPharma = FG_Conectar_CPharma();
+    $contador = 1;
 
-    echo '
-    <div class="input-group md-form form-sm form-1 pl-0 CP-stickyBar">
+    $codificados = [];
+    $noCodificados = [];
+
+    while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
+      $connMood = FG_Conectar_Mod_Atte_Clientes($_GET['SEDE']);
+
+      $codigo_barra = $row['codigo_barra'];
+
+      $sql = "SELECT * FROM InAplArt WHERE InAplArt.CoBarra = '$codigo_barra'";
+      $mod1 = sqlsrv_query($connMood, $sql);
+
+      $sql = "SELECT * FROM InComArt WHERE InComArt.CoBarra = '$codigo_barra'";
+      $mod2 = sqlsrv_query($connMood, $sql);
+
+      $sql = "SELECT * FROM InvCodigoBarra WHERE InvCodigoBarra.CodigoBarra = '$codigo_barra'";
+      $offline = sqlsrv_query($connMood, $sql);
+
+      if (is_resource($mod1) || is_resource($mod2) || is_resource($offline)) {
+        if ((sqlsrv_has_rows($mod1) == false || sqlsrv_has_rows($mod2) == false) && sqlsrv_has_rows($offline) == true) {
+          $codificados[] = $row;
+        }
+
+        if ((sqlsrv_has_rows($mod1) == false || sqlsrv_has_rows($mod2) == false) && sqlsrv_has_rows($offline) == false) {
+          $noCodificados[] = $row;
+        }
+      }
+    }
+
+    sqlsrv_close($conn);
+
+    echo '<div class="input-group md-form form-sm form-1 pl-0 CP-stickyBar">
       <div class="input-group-prepend">
         <span class="input-group-text purple lighten-3" id="basic-text1">
           <i class="fas fa-search text-white"
             aria-hidden="true"></i>
         </span>
       </div>
-      <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myFilter" onkeyup="FilterAllTableConflicto()">
+      <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterAllTable()" autofocus="autofocus">
     </div>
     <br/>
-    ';
-
-    echo'
+    <center><b>ARTICULOS CODIFICADOS</b></center>
+    <br/>
     <table class="table table-striped table-bordered col-12 sortable" id="myTable">
-        <thead class="thead-dark">
-          <tr>
-            <th scope="col" class="CP-sticky">#</th>
-            <th scope="col" class="CP-sticky">Codigo interno</th>
-            <th scope="col" class="CP-sticky">Codigo de barra</th>
-            <th scope="col" class="CP-sticky">Descripcion</th>
-            <th scope="col" class="CP-sticky">Existencia</th>
-            <th scope="col" class="CP-sticky">Precio ' . SigVe . '</th>
-            <th scope="col" class="CP-sticky">Ultima compra</th>
-            <th scope="col" class="CP-sticky">Tipo</th>
-          </tr>
-        </thead>
-        <tbody>
-     ';
-    $contador = 1;
-    while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
-      $connMood = FG_Conectar_Mod_Atte_Clientes($_GET['SEDE']);
+      <thead class="thead-dark">
+        <tr>
+          <th scope="col" class="CP-sticky">#</th>
+              <th scope="col" class="CP-sticky">Codigo Interno</th>
+              <th scope="col" class="CP-sticky">Codigo Barra</th>
+              <th scope="col" class="CP-sticky">Descripcion</th>
+              <th scope="col" class="CP-sticky">Existencia</th>
+              <th scope="col" class="CP-sticky">Tipo</th>
+        </tr>
+      </thead>
+    <tbody>';
 
-      // Verifica si existe cruce. Si no existe, pasa al siguiente artìculo
-      $codigo_barra = $row['codigo_barra'];
-
-      $sql = "SELECT * FROM InAplArt WHERE InAplArt.CoBarra = '$codigo_barra'";
-      $query = sqlsrv_query($connMood, $sql);
-
-      if (!is_resource($query) || sqlsrv_has_rows($query)) {
-        continue;
-      }
-
-      $sql = "SELECT * FROM InComArt WHERE InComArt.CoBarra = '$codigo_barra'";
-      $query = sqlsrv_query($connMood, $sql);
-
-      if (!is_resource($query) || sqlsrv_has_rows($query)) {
-        continue;
-      }
-      // Verifica si existe cruce. Si no existe, pasa al siguiente artìculo
-
-      $descripcion = FG_Limpiar_Texto($row['descripcion']);
-
-      $ultima_compra = $row['ultima_compra'] ? $row['ultima_compra']->format('d/m/Y') : '-';
-
-      $existencia = $row['existencia'];
-      $existencia_almacen_1 = $row['existencia_almacen_1'];
-      $existencia_almacen_2 = $row['existencia_almacen_2'];
-      $troquelado = $row['troquelado'];
-      $utilidad_articulo = $row['utilidad_articulo'];
-      $utilidad_categoria = $row['utilidad_categoria'];
-      $troquel_almacen_1 = $row['troquel_almacen_1'];
-      $precio_compra_bruto_almacen_1 = $row['precio_compra_bruto_almacen_1'];
-      $troquel_almacen_2 = $row['troquel_almacen_2'];
-      $precio_compra_bruto_almacen_2 = $row['precio_compra_bruto_almacen_2'];
-      $precio_compra_bruto = $row['precio_compra_bruto'];
-      $iva = $row['iva'];
-      $condicion_existencia = 'CON_EXISTENCIA';
-
-      $tipo = FG_Tipo_Producto($row['tipo']);
-
-      $precio = FG_Calculo_Precio_Alfa($existencia, $existencia_almacen_1, $existencia_almacen_2, $troquelado, $utilidad_articulo, $utilidad_categoria, $troquel_almacen_1, $precio_compra_bruto_almacen_1, $troquel_almacen_2, $precio_compra_bruto_almacen_2, $precio_compra_bruto, $iva, $condicion_existencia);
-      $precio = number_format($precio, 2, ',', '.');
+    foreach ($codificados as $articulo) {
+      $codigo_interno = $articulo['codigo_interno'];
+      $codigo_barra = $articulo['codigo_barra'];
+      $descripcion = FG_Limpiar_Texto($articulo['descripcion']);
+      $existencia = $articulo['existencia'];
+      $tipo = FG_Tipo_Producto($articulo['tipo']);
 
       echo '<tr>';
-      echo '<td align="left"><strong>'.intval($contador).'</strong></td>';
-      echo '<td align="left">'.$row['codigo_interno'].'</td>';
-      echo '<td align="center">'.$codigo_barra.'</td>';
-      echo '<td align="center">'.$descripcion.'</td>';
-      echo '<td align="center">'.$row['existencia'].'</td>';
-      echo '<td align="center">'.$precio.'</td>';
-      echo '<td align="center">'.$ultima_compra.'</td>';
-      echo '<td align="center">'.$tipo.'</td>';
+      echo '<td>'.$contador.'</td>';
+      echo '<td>'.$codigo_interno.'</td>';
+      echo '<td>'.$codigo_barra.'</td>';
+      echo '<td>'.$descripcion.'</td>';
+      echo '<td>'.$existencia.'</td>';
+      echo '<td>'.$tipo.'</td>';
       echo '</tr>';
-    $contador++;
+
+      $contador++;
     }
-      echo '
-        </tbody>
-    </table>';
-    sqlsrv_close($conn);
+
+    echo '</tbody></table>';
+
+
+    echo '<br/><br/><br/>
+    <center><b>ARTICULOS NO CODIFICADOS</b></center>
+    <br/>
+    <table class="table table-striped table-bordered col-12 sortable" id="myTable">
+      <thead class="thead-dark">
+        <tr>
+          <th scope="col" class="CP-sticky">#</th>
+            <th scope="col" class="CP-sticky">Codigo Interno</th>
+            <th scope="col" class="CP-sticky">Codigo Barra</th>
+            <th scope="col" class="CP-sticky">Descripcion</th>
+            <th scope="col" class="CP-sticky">Existencia</th>
+            <th scope="col" class="CP-sticky">Tipo</th>
+        </tr>
+      </thead>
+    <tbody>';
+
+    $contador = 1;
+
+    foreach ($noCodificados as $articulo) {
+      $codigo_interno = $articulo['codigo_interno'];
+      $codigo_barra = $articulo['codigo_barra'];
+      $descripcion = FG_Limpiar_Texto($articulo['descripcion']);
+      $existencia = $articulo['existencia'];
+      $tipo = FG_Tipo_Producto($articulo['tipo']);
+
+      echo '<tr>';
+      echo '<td>'.$contador.'</td>';
+      echo '<td>'.$codigo_interno.'</td>';
+      echo '<td>'.$codigo_barra.'</td>';
+      echo '<td>'.$descripcion.'</td>';
+      echo '<td>'.$existencia.'</td>';
+      echo '<td>'.$tipo.'</td>';
+      echo '</tr>';
+
+      $contador++;
+    }
+
+    echo '</tbody></table>';
   }
 
   /**********************************************************************************/
