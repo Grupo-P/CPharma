@@ -197,94 +197,183 @@
     $traslados = [];
 
     if (FG_Mi_Ubicacion() == 'FAU') {
-      $trasladoFLL = DB::connection('fll')->select("
-        SELECT
-            traslados_detalle.codigo_barra AS codigo_barra,
-            traslados_detalle.codigo_interno AS codigo_interno,
-            (SELECT traslados.sede_emisora FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) AS sede_emisora,
-            traslados_detalle.descripcion AS descripcion,
-            traslados_detalle.cantidad AS cantidad,
-            (SELECT traslados.numero_ajuste FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) AS numero_traslado,
-            (SELECT traslados.estatus FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) AS estado
-        FROM
-            traslados_detalle
-        WHERE
-            (SELECT traslados.sede_destino FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) = 'FARMACIA AVENIDA UNIVERSIDAD, C.A.' AND (SELECT traslados.estatus FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) = '$estado'
-        ORDER BY
-            traslados_detalle.id DESC;
-      ");
 
-      foreach ($trasladoFLL as $traslado) {
-        $traslados[] = $traslado;
+      try {
+        $trasladoFM = DB::connection('fm')->select("
+          SELECT
+              traslados_detalle.codigo_barra AS codigo_barra,
+              traslados_detalle.codigo_interno AS codigo_interno,
+              (SELECT traslados.sede_emisora FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) AS sede_emisora,
+              traslados_detalle.descripcion AS descripcion,
+              traslados_detalle.cantidad AS cantidad,
+              (SELECT traslados.numero_ajuste FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) AS numero_traslado,
+              (SELECT traslados.estatus FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) AS estado
+          FROM
+              traslados_detalle
+          WHERE
+              (SELECT traslados.sede_destino FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) = 'FARMACIA MILLENNIUM 2000, C.A.' AND (SELECT traslados.estatus FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) = '$estado'
+          ORDER BY
+              traslados_detalle.id DESC;
+        ");
+
+        foreach ($trasladoFM as $traslado) {
+          $traslados[] = $traslado;
+        }
+      } catch (Exception $excepcion) {
+        $errores[] = 'No se pudo conectar a FM';
       }
 
-      $trasladoFTN = DB::connection('ftn')->select("
-        SELECT
-            traslados_detalle.codigo_barra AS codigo_barra,
-            traslados_detalle.codigo_interno AS codigo_interno,
-            (SELECT traslados.sede_emisora FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) AS sede_emisora,
-            traslados_detalle.descripcion AS descripcion,
-            traslados_detalle.cantidad AS cantidad,
-            (SELECT traslados.numero_ajuste FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) AS numero_traslado,
-            (SELECT traslados.estatus FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) AS estado
-        FROM
-            traslados_detalle
-        WHERE
-            (SELECT traslados.sede_destino FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) = 'FARMACIA AVENIDA UNIVERSIDAD, C.A.' AND (SELECT traslados.estatus FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) = '$estado'
-        ORDER BY
-            traslados_detalle.id DESC;
-      ");
+      try {
+        $trasladoFLL = DB::connection('fll')->select("
+          SELECT
+              traslados_detalle.codigo_barra AS codigo_barra,
+              traslados_detalle.codigo_interno AS codigo_interno,
+              (SELECT traslados.sede_emisora FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) AS sede_emisora,
+              traslados_detalle.descripcion AS descripcion,
+              traslados_detalle.cantidad AS cantidad,
+              (SELECT traslados.numero_ajuste FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) AS numero_traslado,
+              (SELECT traslados.estatus FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) AS estado
+          FROM
+              traslados_detalle
+          WHERE
+              (SELECT traslados.sede_destino FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) = 'FARMACIA MILLENNIUM 2000, C.A.' AND (SELECT traslados.estatus FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) = '$estado'
+          ORDER BY
+              traslados_detalle.id DESC;
+        ");
 
-      foreach ($trasladoFTN as $traslado) {
-        $traslados[] = $traslado;
+        foreach ($trasladoFLL as $traslado) {
+          $traslados[] = $traslado;
+        }
+      } catch (Exception $excepcion) {
+        $errores[] = 'No se pudo conectar a FLL';
+      }
+
+      try {
+        $trasladoFTN = DB::connection('ftn')->select("
+          SELECT
+              traslados_detalle.codigo_barra AS codigo_barra,
+              traslados_detalle.codigo_interno AS codigo_interno,
+              (SELECT traslados.sede_emisora FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) AS sede_emisora,
+              traslados_detalle.descripcion AS descripcion,
+              traslados_detalle.cantidad AS cantidad,
+              (SELECT traslados.numero_ajuste FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) AS numero_traslado,
+              (SELECT traslados.estatus FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) AS estado
+          FROM
+              traslados_detalle
+          WHERE
+              (SELECT traslados.sede_destino FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) = 'FARMACIA AVENIDA UNIVERSIDAD, C.A.' AND (SELECT traslados.estatus FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) = '$estado'
+          ORDER BY
+              traslados_detalle.id DESC;
+        ");
+
+        foreach ($trasladoFTN as $traslado) {
+          $traslados[] = $traslado;
+        }
+      }catch (Exception $excepcion) {
+        $errores[] = 'No se pudo conectar a FTN';
       }
     }
 
     if (FG_Mi_Ubicacion() == 'FTN') {
-      $trasladoFLL = DB::connection('fll')->select("
-        SELECT
-            traslados_detalle.codigo_barra AS codigo_barra,
-            traslados_detalle.codigo_interno AS codigo_interno,
-            (SELECT traslados.sede_emisora FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) AS sede_emisora,
-            traslados_detalle.descripcion AS descripcion,
-            traslados_detalle.cantidad AS cantidad,
-            (SELECT traslados.numero_ajuste FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) AS numero_traslado,
-            (SELECT traslados.estatus FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) AS estado
-        FROM
-            traslados_detalle
-        WHERE
-            (SELECT traslados.sede_destino FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) = 'FARMACIA TIERRA NEGRA, C.A.' AND (SELECT traslados.estatus FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) = '$estado'
-        ORDER BY
-            traslados_detalle.id DESC;
-      ");
+      try {
+        $trasladoFM = DB::connection('fm')->select("
+          SELECT
+              traslados_detalle.codigo_barra AS codigo_barra,
+              traslados_detalle.codigo_interno AS codigo_interno,
+              (SELECT traslados.sede_emisora FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) AS sede_emisora,
+              traslados_detalle.descripcion AS descripcion,
+              traslados_detalle.cantidad AS cantidad,
+              (SELECT traslados.numero_ajuste FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) AS numero_traslado,
+              (SELECT traslados.estatus FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) AS estado
+          FROM
+              traslados_detalle
+          WHERE
+              (SELECT traslados.sede_destino FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) = 'FARMACIA TIERRA NEGRA, C.A.' AND (SELECT traslados.estatus FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) = '$estado'
+          ORDER BY
+              traslados_detalle.id DESC;
+        ");
 
-      foreach ($trasladoFLL as $traslado) {
-        $traslados[] = $traslado;
+        foreach ($trasladoFM as $traslado) {
+          $traslados[] = $traslado;
+        }        
+      } catch (Exception $excepcion) {
+        $errores[] = 'No se pudo conectar a FM';
       }
 
-      $trasladoFAU = DB::connection('fau')->select("
-        SELECT
-            traslados_detalle.codigo_barra AS codigo_barra,
-            traslados_detalle.codigo_interno AS codigo_interno,
-            (SELECT traslados.sede_emisora FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) AS sede_emisora,
-            traslados_detalle.descripcion AS descripcion,
-            traslados_detalle.cantidad AS cantidad,
-            (SELECT traslados.numero_ajuste FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) AS numero_traslado,
-            (SELECT traslados.estatus FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) AS estado
-        FROM
-            traslados_detalle
-        WHERE
-            (SELECT traslados.sede_destino FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) = 'FARMACIA TIERRA NEGRA, C.A.' AND (SELECT traslados.estatus FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) = '$estado'
-        ORDER BY
-            traslados_detalle.id DESC;
-      ");
+      try {
+        $trasladoFLL = DB::connection('fll')->select("
+          SELECT
+              traslados_detalle.codigo_barra AS codigo_barra,
+              traslados_detalle.codigo_interno AS codigo_interno,
+              (SELECT traslados.sede_emisora FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) AS sede_emisora,
+              traslados_detalle.descripcion AS descripcion,
+              traslados_detalle.cantidad AS cantidad,
+              (SELECT traslados.numero_ajuste FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) AS numero_traslado,
+              (SELECT traslados.estatus FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) AS estado
+          FROM
+              traslados_detalle
+          WHERE
+              (SELECT traslados.sede_destino FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) = 'FARMACIA TIERRA NEGRA, C.A.' AND (SELECT traslados.estatus FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) = '$estado'
+          ORDER BY
+              traslados_detalle.id DESC;
+        ");
 
-      foreach ($trasladoFAU as $traslado) {
-        $traslados[] = $traslado;
+        foreach ($trasladoFLL as $traslado) {
+          $traslados[] = $traslado;
+        }
+      } catch (Exception $excepcion) {
+        $errores[] = 'No se pudo conectar a FLL';
+      }
+
+      try {
+        $trasladoFAU = DB::connection('fau')->select("
+          SELECT
+              traslados_detalle.codigo_barra AS codigo_barra,
+              traslados_detalle.codigo_interno AS codigo_interno,
+              (SELECT traslados.sede_emisora FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) AS sede_emisora,
+              traslados_detalle.descripcion AS descripcion,
+              traslados_detalle.cantidad AS cantidad,
+              (SELECT traslados.numero_ajuste FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) AS numero_traslado,
+              (SELECT traslados.estatus FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) AS estado
+          FROM
+              traslados_detalle
+          WHERE
+              (SELECT traslados.sede_destino FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) = 'FARMACIA TIERRA NEGRA, C.A.' AND (SELECT traslados.estatus FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) = '$estado'
+          ORDER BY
+              traslados_detalle.id DESC;
+        ");
+
+        foreach ($trasladoFAU as $traslado) {
+          $traslados[] = $traslado;
+        }
+      } catch (Exception $excepcion) {
+        $errores[] = 'No se pudo conectar a FAU';
       }
     }
 
     if (FG_Mi_Ubicacion() == 'FLL') {
+
+      $trasladoFM = DB::connection('fm')->select("
+        SELECT
+            traslados_detalle.codigo_barra AS codigo_barra,
+            traslados_detalle.codigo_interno AS codigo_interno,
+            (SELECT traslados.sede_emisora FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) AS sede_emisora,
+            traslados_detalle.descripcion AS descripcion,
+            traslados_detalle.cantidad AS cantidad,
+            (SELECT traslados.numero_ajuste FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) AS numero_traslado,
+            (SELECT traslados.estatus FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) AS estado
+        FROM
+            traslados_detalle
+        WHERE
+            (SELECT traslados.sede_destino FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) = 'FARMACIA LA LAGO,C.A.' AND (SELECT traslados.estatus FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) = '$estado'
+        ORDER BY
+            traslados_detalle.id DESC;
+      ");
+
+      foreach ($trasladoFM as $traslado) {
+        $traslados[] = $traslado;
+      }
+
       $trasladoFTN = DB::connection('ftn')->select("
         SELECT
             traslados_detalle.codigo_barra AS codigo_barra,
@@ -328,7 +417,93 @@
       }
     }
 
+    if (FG_Mi_Ubicacion() == 'FSM') {
+      try {
+        $trasladoFLL = DB::connection('fll')->select("
+          SELECT
+              traslados_detalle.codigo_barra AS codigo_barra,
+              traslados_detalle.codigo_interno AS codigo_interno,
+              (SELECT traslados.sede_emisora FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) AS sede_emisora,
+              traslados_detalle.descripcion AS descripcion,
+              traslados_detalle.cantidad AS cantidad,
+              (SELECT traslados.numero_ajuste FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) AS numero_traslado,
+              (SELECT traslados.estatus FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) AS estado
+          FROM
+              traslados_detalle
+          WHERE
+              (SELECT traslados.sede_destino FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) = 'FARMACIA MILLENNIUM 2000, C.A.' AND (SELECT traslados.estatus FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) = '$estado'
+          ORDER BY
+              traslados_detalle.id DESC;
+        ");
+
+        foreach ($trasladoFLL as $traslado) {
+          $traslados[] = $traslado;
+        }
+      } catch (Exception $excepcion) {
+        $errores[] = 'No se pudo conectar a FLL';
+      }
+
+
+      try {
+        $trasladoFTN = DB::connection('ftn')->select("
+          SELECT
+              traslados_detalle.codigo_barra AS codigo_barra,
+              traslados_detalle.codigo_interno AS codigo_interno,
+              (SELECT traslados.sede_emisora FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) AS sede_emisora,
+              traslados_detalle.descripcion AS descripcion,
+              traslados_detalle.cantidad AS cantidad,
+              (SELECT traslados.numero_ajuste FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) AS numero_traslado,
+              (SELECT traslados.estatus FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) AS estado
+          FROM
+              traslados_detalle
+          WHERE
+              (SELECT traslados.sede_destino FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) = 'FARMACIA LA LAGO,C.A.' AND (SELECT traslados.estatus FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) = '$estado'
+          ORDER BY
+              traslados_detalle.id DESC;
+        ");
+
+        foreach ($trasladoFTN as $traslado) {
+          $traslados[] = $traslado;
+        }
+      } catch (Exception $excepcion) {
+        $errores[] = 'No se pudo conectar a FTN';
+      }
+
+      try {
+        $trasladoFAU = DB::connection('fau')->select("
+          SELECT
+              traslados_detalle.codigo_barra AS codigo_barra,
+              traslados_detalle.codigo_interno AS codigo_interno,
+              (SELECT traslados.sede_emisora FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) AS sede_emisora,
+              traslados_detalle.descripcion AS descripcion,
+              traslados_detalle.cantidad AS cantidad,
+              (SELECT traslados.numero_ajuste FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) AS numero_traslado,
+              (SELECT traslados.estatus FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) AS estado
+          FROM
+              traslados_detalle
+          WHERE
+              (SELECT traslados.sede_destino FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) = 'FARMACIA LA LAGO,C.A.' AND (SELECT traslados.estatus FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) = '$estado'
+          ORDER BY
+              traslados_detalle.id DESC;
+        ");
+
+        foreach ($trasladoFAU as $traslado) {
+          $traslados[] = $traslado;
+        }
+      } catch (Exception $excepcion) {
+        $errores[] = 'No se pudo conectar a FAU';
+      }
+    }
+
     $contador = 1;
+
+    if (isset($errores)) {
+      echo '<div class="alert alert-warning text-center">';
+      foreach ($errores as $error) {
+        echo $error.'<br>';
+      }
+      echo '</div>';
+    }
 
     foreach ($traslados as $traslado) {
       $codigo_barra = $traslado->codigo_barra;
