@@ -77,10 +77,10 @@
      */
     function FG_LastRestoreDB($nameDataBase,$SedeConnection){
         $conn = FG_Conectar_Smartpharma($SedeConnection);
-        $sql = SQL_Last_RestoreDB($nameDataBase);
+        $sql = "SELECT TOP 1 * FROM VenFactura ORDER BY VenFactura.FechaDocumento DESC";
         $result = sqlsrv_query($conn,$sql);
         $row = sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC);
-        $FechaRestauracion = $row["FechaRestauracion"]->format("Y-m-d h:i:s a");
+        $FechaRestauracion = $row["FechaDocumento"]->format("Y-m-d h:i:s a");
         return $FechaRestauracion;
     }
     /**********************************************************************************/
@@ -3560,6 +3560,147 @@
 
         $sql1 = MySQL_Guardar_Captura_Categoria($TotalRegistros,$FechaCaptura,$date);
         mysqli_query($connCPharma,$sql1);
+    }
+    /**********************************************************************************/
+    /*
+        TITULO: FG_Corrida_Precio_Sede
+        FUNCION: Ejecuta corrida en sede dada
+        DESARROLLADO POR: NISAUL DELGADo
+    */
+    function FG_Corrida_Precio_Sede($sede, $tipoCorrida,$tasaCalculo,$user){
+
+        $SedeConnection = $sede;
+    $conn = FG_Conectar_Smartpharma($SedeConnection);
+    $connCPharma = FG_Conectar_CPharma();
+
+    $sql = sql_articulos_corrida();
+    $result = sqlsrv_query($conn,$sql);
+
+    $cont_exito = $cont_falla = $cont_cambios = $cont_noCambio = 0;
+
+    $fallas = "";
+
+    while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
+      $IdArticulo = $row["IdArticulo"];
+      $CodigoInterno = $row["CodigoInterno"];
+      $CodigoBarra = $row["CodigoBarra"];
+      $Descripcion = FG_Limpiar_Texto($row["Descripcion"]);
+            $Existencia = $row["Existencia"];
+        $ExistenciaAlmacen1 = $row["ExistenciaAlmacen1"];
+        $ExistenciaAlmacen2 = $row["ExistenciaAlmacen2"];
+        $IsTroquelado = $row["Troquelado"];
+        $IsIVA = $row["Impuesto"];
+        $UtilidadArticulo = $row["UtilidadArticulo"];
+        $UtilidadCategoria = $row["UtilidadCategoria"];
+        $TroquelAlmacen1 = $row["TroquelAlmacen1"];
+        $PrecioCompraBrutoAlmacen1 = $row["PrecioCompraBrutoAlmacen1"];
+        $TroquelAlmacen2 = $row["TroquelAlmacen2"];
+        $PrecioCompraBrutoAlmacen2 = $row["PrecioCompraBrutoAlmacen2"];
+        $PrecioCompraBruto = $row["PrecioCompraBruto"];
+        $CondicionExistencia = 'CON_EXISTENCIA';
+
+        $sql1 = sql_lotes_corrida($IdArticulo);
+        $result1 = sqlsrv_query($conn,$sql1);
+
+       $CostoMayorD = 0;
+       $fechaActualizacion = date('Y-m-d 07:07:07.0000007');
+
+        while($row1 = sqlsrv_fetch_array($result1, SQLSRV_FETCH_ASSOC)) {
+
+            $Fecha = $row1["Auditoria_FechaCreacion"]->format('Y-m-d');
+            $sql = "SELECT tasa FROM dolars where fecha = '$Fecha'";
+            $TasaMercado = DB::connection(strtolower($sede))->select($sql)[0]->tasa;
+
+            if($TasaMercado!=0){
+
+                $CostoDolar = ($row1["M_PrecioCompraBruto"]/$TasaMercado);
+                $CostoDolar = round($CostoDolar,2);
+
+                if($CostoDolar>$CostoMayorD){
+                    $CostoMayorD = $CostoDolar;
+                }
+            }
+            else{
+                $cont_falla++;
+                $fallas = $fallas."<br><br>No se logro actualizar el articulo: ".$Descripcion.
+                "<br>Motivo: Fallo la tasa de mercado del dia ".$row1["Auditoria_FechaCreacion"]->format('d-m-Y');
+            }
+        }
+
+            $costoBs = $CostoMayorD * $tasaCalculo;
+            $precio = FG_Precio_Calculado_Alfa($UtilidadArticulo,$UtilidadCategoria,$IsIVA,$costoBs);
+            $precio = round($precio,2);
+            //$precio = ceil($precio)+0.01;
+            $precio = $precio+0.0001;
+
+            if($tipoCorrida=='subida'){
+
+                $PrecioActual = FG_Calculo_Precio_Alfa($Existencia,$ExistenciaAlmacen1,$ExistenciaAlmacen2,$IsTroquelado,$UtilidadArticulo,$UtilidadCategoria,$TroquelAlmacen1,$PrecioCompraBrutoAlmacen1,$TroquelAlmacen2,
+                    $PrecioCompraBrutoAlmacen2,$PrecioCompraBruto,$IsIVA,$CondicionExistencia);
+
+                if($precio > $PrecioActual){
+                    $sql_Troquel = SQL_Update_Troquel($IdArticulo,$precio,$fechaActualizacion);
+                    sqlsrv_query($conn,$sql_Troquel);
+                    $cont_cambios++;
+                    $cont_exito++;
+                    /*
+                    echo "<br> * * * * * * * * * * * * * * * * * * * * * * * * * ";
+                    echo "<br>Articulo: ".$IdArticulo;
+                    echo "<br>El Precio Cambio";
+                    echo "<br>Precio Nuevo: ".$precio;
+                    echo "<br>Precio Anterior: ".$PrecioActual;
+                    echo "<br> * * * * * * * * * * * * * * * * * * * * * * * * * ";
+                    */
+                }else{
+                    $cont_noCambio++;
+                    $cont_exito++;
+                    /*
+                    echo "<br> / / / / / / / / / / / / / / / / / / / / / / / / / ";
+                    echo "<br>Articulo: ".$IdArticulo;
+                    echo "<br>El Precio se mantiene";
+                    echo "<br>Precio Propuesto: ".$precio;
+                    echo "<br>Precio: ".$PrecioActual;
+                    echo "<br> / / / / / / / / / / / / / / / / / / / / / / / / / ";
+                    */
+                }
+                }
+                else if($tipoCorrida=='bajada'){
+                    $sql_Troquel = SQL_Update_Troquel($IdArticulo,$precio,$fechaActualizacion);
+                sqlsrv_query($conn,$sql_Troquel);
+                    $cont_cambios++;
+                $cont_exito++;
+                /*
+                echo "<br> / / / / / / / / / / / / / / / / / / / / / / / / / ";
+                echo "<br>Articulo: ".$IdArticulo;
+                echo "<br>El Precio se mantiene";
+                echo "<br>Precio Propuesto: ".$precio;
+                echo "<br> / / / / / / / / / / / / / / / / / / / / / / / / / ";
+                */
+                }
+    }
+
+    $evaluados = ($cont_exito+$cont_falla);
+
+    $sql2 = MySQL_Guardar_Auditoria_Corrida($evaluados,$cont_exito,$cont_falla,$cont_cambios,$cont_noCambio,$user,$tipoCorrida,$tasaCalculo,date('d-m-Y'),date('h:i:s a'),$fallas);
+
+    mysqli_query($connCPharma,$sql2);
+    mysqli_close($connCPharma);
+        sqlsrv_close($conn);
+
+        /*
+        echo $fallas;
+    echo "<br><br>Total Evaluados: ".($cont_exito+$cont_falla);
+    echo "<br>Exito: ".$cont_exito;
+    echo "<br>Fallas: ".$cont_falla;
+    echo "<br>Cambios: ".$cont_cambios;
+    echo "<br>Sin Cambios: ".$cont_noCambio;
+
+    echo "<br>Corrida Ejecutada por: ".$user;
+    echo "<br>Corrida de tipo: ".$tipoCorrida;
+    echo "<br>Tasa de Calculo: ".$tasaCalculo;
+    echo "<br>Dia de la corrida: ".date('d-m-Y');
+    echo "<br>Hora de la corrida: ".date('h:i:s a');
+    */
     }
     /**********************************************************************************/
     /*
