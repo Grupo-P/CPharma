@@ -217,7 +217,7 @@
             <th scope="col" class="CP-sticky">Precio</td>
     ';
 
-    if (isset($_GET['SEDE']) & ($_GET['SEDE'] == 'FAU' || $_GET['SEDE'] == 'DBs')) {
+    if (isset($_GET['SEDE']) && ($_GET['SEDE'] == 'FAU' || $_GET['SEDE'] == 'DBs')) {
     echo '<th scope="col" class="CP-sticky">Descripción FTN</th>
       <th scope="col" class="CP-sticky">Existencia FTN</td>
       <th scope="col" class="CP-sticky">Descripción FLL</th>
@@ -227,7 +227,7 @@
     ';
     }
 
-    if (isset($_GET['SEDE']) & $_GET['SEDE'] == 'FTN') {
+    if (isset($_GET['SEDE']) && $_GET['SEDE'] == 'FTN') {
       echo '<th scope="col" class="CP-sticky">Descripción FAU</th>
       <th scope="col" class="CP-sticky">Existencia FAU</td>
       <th scope="col" class="CP-sticky">Descripción FLL</th>
@@ -237,7 +237,7 @@
     ';
     }
 
-    if (isset($_GET['SEDE']) & $_GET['SEDE'] == 'FLL') {
+    if (isset($_GET['SEDE']) && $_GET['SEDE'] == 'FLL') {
       echo '<th scope="col" class="CP-sticky">Descripción FTN</th>
       <th scope="col" class="CP-sticky">Existencia FTN</td>
       <th scope="col" class="CP-sticky">Descripción FAU</th>
@@ -247,7 +247,7 @@
     ';
     }
 
-    if (isset($_GET['SEDE']) & $_GET['SEDE'] == 'FSM') {
+    if (isset($_GET['SEDE']) && $_GET['SEDE'] == 'FSM') {
       echo '<th scope="col" class="CP-sticky">Descripción FTN</th>
       <th scope="col" class="CP-sticky">Existencia FTN</td>
       <th scope="col" class="CP-sticky">Descripción FAU</th>
@@ -304,7 +304,7 @@
 
       $existenciaForanea = 0;
 
-      if (isset($_GET['SEDE']) & ($_GET['SEDE'] == 'FAU' || $_GET['SEDE'] == 'DBs')) {
+      if (isset($_GET['SEDE']) && ($_GET['SEDE'] == 'FAU' || $_GET['SEDE'] == 'DBs')) {
         if ($conectividad_ftn == 1) {
           $sql3 = R37_Q_Descripcion_Existencia_Articulo($codigo_barra);
           $result3 = sqlsrv_query($connFTN,$sql3);
@@ -337,7 +337,7 @@
         }
       }
 
-      if (isset($_GET['SEDE']) & $_GET['SEDE'] == 'FTN') {
+      if (isset($_GET['SEDE']) && $_GET['SEDE'] == 'FTN') {
         if ($conectividad_fau == 1) {
             $sql3 = R37_Q_Descripcion_Existencia_Articulo($codigo_barra);
             $result3 = sqlsrv_query($connFAU,$sql3);
@@ -369,7 +369,7 @@
           }
       }
 
-      if (isset($_GET['SEDE']) & $_GET['SEDE'] == 'FLL') {
+      if (isset($_GET['SEDE']) && $_GET['SEDE'] == 'FLL') {
          if ($conectividad_ftn == 1) {
             $sql3 = R37_Q_Descripcion_Existencia_Articulo($codigo_barra);
             $result3 = sqlsrv_query($connFTN,$sql3);
@@ -401,7 +401,7 @@
           }
       }
 
-      if (isset($_GET['SEDE']) & $_GET['SEDE'] == 'FSM') {
+      if (isset($_GET['SEDE']) && $_GET['SEDE'] == 'FSM') {
          if ($conectividad_ftn == 1) {
             $sql3 = R37_Q_Descripcion_Existencia_Articulo($codigo_barra);
             $result3 = sqlsrv_query($connFTN,$sql3);
@@ -449,7 +449,7 @@
         echo '<td align="center">'.$ultima_venta.'</td>';
         echo '<td align="center">'.$precio.'</td>';
 
-        if (isset($_GET['SEDE']) & ($_GET['SEDE'] == 'FAU' || $_GET['SEDE'] == 'DBs')) {
+        if (isset($_GET['SEDE']) && ($_GET['SEDE'] == 'FAU' || $_GET['SEDE'] == 'DBs')) {
             if ($conectividad_ftn == 1) {
                 echo '<td align="center">'.$descripcion_ftn.'</td>
                       <td align="center">'.$existencia_ftn.'</td>';
@@ -475,7 +475,7 @@
             }
         }
 
-        if (isset($_GET['SEDE']) & $_GET['SEDE'] == 'FTN') {
+        if (isset($_GET['SEDE']) && $_GET['SEDE'] == 'FTN') {
             if ($conectividad_fau == 1) {
                 echo '<td align="center">'.$descripcion_fau.'</td>
                       <td align="center">'.$existencia_fau.'</td>';
@@ -501,7 +501,7 @@
             }
         }
 
-        if (isset($_GET['SEDE']) & $_GET['SEDE'] == 'FLL') {
+        if (isset($_GET['SEDE']) && $_GET['SEDE'] == 'FLL') {
             if ($conectividad_ftn == 1) {
                 echo '<td align="center">'.$descripcion_ftn.'</td>
                       <td align="center">'.$existencia_ftn.'</td>';
@@ -527,7 +527,7 @@
             }
         }
 
-        if (isset($_GET['SEDE']) & $_GET['SEDE'] == 'FSM') {
+        if (isset($_GET['SEDE']) && $_GET['SEDE'] == 'FSM') {
             if ($conectividad_ftn == 1) {
                 echo '<td align="center">'.$descripcion_ftn.'</td>
                       <td align="center">'.$existencia_ftn.'</td>';
@@ -555,7 +555,7 @@
 
         echo '<td align="center">'.$existenciaForanea.'</td>';
 
-        if (isset($_GET['SEDE']) & ($_GET['SEDE'] == 'FAU' || $_GET['SEDE'] == 'DBs')) {
+        if (isset($_GET['SEDE']) && ($_GET['SEDE'] == 'FAU' || $_GET['SEDE'] == 'DBs')) {
             if ($conectividad_ftn == 1 && $descripcion_ftn != '-' && $existencia_ftn > 0) {
                 echo '<td align="center"><button type="button" onclick="agregarTraslado(\'' . $codigo_barra . '\', \'FTN\', \'' . $existencia_ftn . '\')" class="btn btn-outline-info btn-sm">Agregar FTN</td>';
             } else {
@@ -575,7 +575,7 @@
             }
         }
 
-        if (isset($_GET['SEDE']) & $_GET['SEDE'] == 'FTN') {
+        if (isset($_GET['SEDE']) && $_GET['SEDE'] == 'FTN') {
             if ($conectividad_fau == 1 && $descripcion_fau != '-' && $existencia_fau > 0) {
                 echo '<td align="center"><button type="button" onclick="agregarTraslado(\'' . $codigo_barra . '\', \'FAU\', \'' . $existencia_fau . '\')" class="btn btn-outline-info btn-sm">Agregar FAU</td>';
             } else {
@@ -595,7 +595,7 @@
             }
         }
 
-        if (isset($_GET['SEDE']) & $_GET['SEDE'] == 'FLL') {
+        if (isset($_GET['SEDE']) && $_GET['SEDE'] == 'FLL') {
             if ($conectividad_ftn == 1 && $descripcion_ftn != '-' && $existencia_ftn > 0) {
                 echo '<td align="center"><button type="button" onclick="agregarTraslado(\'' . $codigo_barra . '\', \'FTN\', \'' . $existencia_ftn . '\')" class="btn btn-outline-info btn-sm">Agregar FTN</td>';
             } else {
@@ -615,7 +615,7 @@
             }
         }
 
-        if (isset($_GET['SEDE']) & $_GET['SEDE'] == 'FSM') {
+        if (isset($_GET['SEDE']) && $_GET['SEDE'] == 'FSM') {
             if ($conectividad_ftn == 1 && $descripcion_ftn != '-' && $existencia_ftn > 0) {
                 echo '<td align="center"><button type="button" onclick="agregarTraslado(\'' . $codigo_barra . '\', \'FTN\', \'' . $existencia_ftn . '\')" class="btn btn-outline-info btn-sm">Agregar FTN</td>';
             } else {
