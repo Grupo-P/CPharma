@@ -221,6 +221,14 @@
         echo'</br></br><h6 align="center">No existe conectividad con la sede: '.FG_Nombre_Sede('FAU').'</h6>';
       }
 
+      if(FG_Validar_Conectividad('FSM')==1){
+        echo'</br></br><h6 align="center">La informacion a continuacion proviene de: '.FG_Nombre_Sede('FSM').'</h6>';
+        R17_Tri_Tienda_Articulo_Detalle('FSM',$Valor,$FInicial,$FFinal,$DiasPedido,$Flag);
+      }
+      else{
+        echo'</br></br><h6 align="center">No existe conectividad con la sede: '.FG_Nombre_Sede('FSM').'</h6>';
+      }
+
    }
   /********************************************************************************/
   /*
