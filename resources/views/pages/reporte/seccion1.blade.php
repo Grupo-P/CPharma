@@ -37,15 +37,15 @@
     .autocomplete-items div {
       padding: 10px;
       cursor: pointer;
-      background-color: #fff; 
-      border-bottom: 1px solid #d4d4d4; 
+      background-color: #fff;
+      border-bottom: 1px solid #d4d4d4;
     }
     .autocomplete-items div:hover {
-      background-color: #e9e9e9; 
+      background-color: #e9e9e9;
     }
     .autocomplete-active {
-      background-color: DodgerBlue !important; 
-      color: #ffffff; 
+      background-color: DodgerBlue !important;
+      color: #ffffff;
     }
     </style>
 @endsection
@@ -57,7 +57,7 @@
   </h1>
   <hr class="row align-items-start col-12">
 
-<?php 
+<?php
   include(app_path().'\functions\config.php');
   include(app_path().'\functions\functions.php');
   include(app_path().'\functions\querys_mysql.php');
@@ -66,18 +66,18 @@
 
   $ArtJson = "";
 
-  if (isset($_GET['SEDE'])){      
+  if (isset($_GET['SEDE'])){
     echo '<h1 class="h5 text-success"  align="left"> <i class="fas fa-prescription"></i> '.FG_Nombre_Sede($_GET['SEDE']).'</h1>';
   }
   echo '<hr class="row align-items-start col-12">';
-  
+
   if (isset($_GET['Id'])){
   //CASO 2: CARGA AL HABER SELECCIONADO UN PROVEEDOR
-  //se pasa a la carga de los lotes del articulo seleccionado 
+  //se pasa a la carga de los lotes del articulo seleccionado
     $InicioCarga = new DateTime("now");
 
     SC1_Articulo_Lote($_GET['SEDE'],$_GET['Id'],$_GET['Nombre']);
-    
+
     $FinCarga = new DateTime("now");
     $IntervalCarga = $InicioCarga->diff($FinCarga);
     echo'Tiempo de carga: '.$IntervalCarga->format("%Y-%M-%D %H:%I:%S");
@@ -87,7 +87,7 @@
   //se pasa a la seleccion del articulo
     $InicioCarga = new DateTime("now");
 
-    $registro = "Se actualizo el troquel del articulo: ".$_GET['Descripcion']." del troquel: ".$_GET['troquelanterior']." al troquel: ".$_GET['troquelactual']." por el motivo: ".$_GET['Motivo']; 
+    $registro = "Se actualizo el troquel del articulo: ".$_GET['Descripcion']." del troquel: ".$_GET['troquelanterior']." al troquel: ".$_GET['troquelactual']." por el motivo: ".$_GET['Motivo'];
 
     SC1_Actualizar_Fecha($_GET['SEDE'],$_GET['IdLote'],$_GET['troquelactual'],$_GET['IdArti'],$_GET['Descripcion']);
     FG_Guardar_Auditoria('ACTUALIZAR','TROQUEL CLIENTE',$registro);
@@ -133,7 +133,7 @@
     $FinCarga = new DateTime("now");
     $IntervalCarga = $InicioCarga->diff($FinCarga);
     echo'Tiempo de carga: '.$IntervalCarga->format("%Y-%M-%D %H:%I:%S");
-  } 
+  }
 ?>
 @endsection
 
@@ -144,10 +144,10 @@
     <script type="text/javascript">
       ArrJs = eval(<?php echo $ArtJson ?>);
       autocompletado(document.getElementById("myInput"),document.getElementById("myId"), ArrJs);
-    </script> 
+    </script>
 <?php
   }
-?>  
+?>
 @endsection
 
 <?php
@@ -177,20 +177,20 @@
   */
   function SC1Q_Lista_Lotes_Artiulos($IdArticulo) {
     $sql = "
-    SELECT InvLote.Id, 
-    InvLote.M_PrecioCompraBruto, 
-    InvLote.M_PrecioTroquelado, 
-    InvLoteAlmacen.Existencia, 
-    InvLote.Numero,  
-    InvLote.FechaVencimiento, 
-    InvLote.FechaEntrada, 
-    InvLote.Numero, 
+    SELECT InvLote.Id,
+    InvLote.M_PrecioCompraBruto,
+    InvLote.M_PrecioTroquelado,
+    InvLoteAlmacen.Existencia,
+    InvLote.Numero,
+    InvLote.FechaVencimiento,
+    InvLote.FechaEntrada,
+    InvLote.Numero,
     InvLote.LoteFabricante
-    FROM InvLote, invlotealmacen, InvArticulo 
-    WHERE InvArticulo.id = InvLote.InvArticuloId 
-    AND invlote.id = invlotealmacen.InvLoteId 
-    AND InvLoteAlmacen.existencia > 0 
-    AND InvLoteAlmacen.InvAlmacenId = 1 
+    FROM InvLote, invlotealmacen, InvArticulo
+    WHERE InvArticulo.id = InvLote.InvArticuloId
+    AND invlote.id = invlotealmacen.InvLoteId
+    AND InvLoteAlmacen.existencia > 0
+    AND InvLoteAlmacen.InvAlmacenId = 1
     AND InvArticulo.id = '$IdArticulo'
     ORDER BY InvLote.Numero ASC
     ";
@@ -206,18 +206,18 @@
   function SC1Q_Lista_Lotes_Lote($IdLote,$IdArticulo) {
     $sql = "
     SELECT InvLote.Id,
-    InvLote.M_PrecioCompraBruto, 
-    InvLote.M_PrecioTroquelado, 
-    InvLoteAlmacen.Existencia, 
-    InvLote.Numero,  
-    InvLote.FechaVencimiento, 
-    InvLote.FechaEntrada, 
-    InvLote.Numero, 
+    InvLote.M_PrecioCompraBruto,
+    InvLote.M_PrecioTroquelado,
+    InvLoteAlmacen.Existencia,
+    InvLote.Numero,
+    InvLote.FechaVencimiento,
+    InvLote.FechaEntrada,
+    InvLote.Numero,
     InvLote.LoteFabricante
-    FROM InvLote, invlotealmacen, InvArticulo 
-    WHERE InvArticulo.id = InvLote.InvArticuloId 
+    FROM InvLote, invlotealmacen, InvArticulo
+    WHERE InvArticulo.id = InvLote.InvArticuloId
     AND invlote.id = '$IdLote'
-    AND InvLoteAlmacen.existencia > 0 
+    AND InvLoteAlmacen.existencia > 0
     AND InvLoteAlmacen.InvAlmacenId = 1
     AND InvArticulo.id = '$IdArticulo'
     ORDER BY InvLote.Numero ASC
@@ -232,29 +232,29 @@
     DESAROLLADO POR: SERGIO COVA
   */
   function SC1Q_Actualizar_Troquel($flag,$Troquel,$IdArticulo,$IdLote) {
-    
+
     if($flag == true){
       $sql = "
-      UPDATE InvLote 
+      UPDATE InvLote
       SET M_PrecioTroquelado = '$Troquel'
-      FROM InvLote, invlotealmacen, InvArticulo 
-      WHERE InvLote.id = '$IdLote' 
-      AND  InvArticulo.id = InvLote.InvArticuloId 
-      AND invlote.id = invlotealmacen.InvLoteId 
-      AND InvLoteAlmacen.existencia > 0 
+      FROM InvLote, invlotealmacen, InvArticulo
+      WHERE InvLote.id = '$IdLote'
+      AND  InvArticulo.id = InvLote.InvArticuloId
+      AND invlote.id = invlotealmacen.InvLoteId
+      AND InvLoteAlmacen.existencia > 0
       AND InvLoteAlmacen.InvAlmacenId = 1
       AND InvArticulo.id = '$IdArticulo'
       ";
     }
     else{
       $sql = "
-      UPDATE InvLote 
+      UPDATE InvLote
       SET M_PrecioTroquelado = NULL
-      FROM InvLote, invlotealmacen, InvArticulo 
-      WHERE InvLote.id = '$IdLote' 
-      AND  InvArticulo.id = InvLote.InvArticuloId 
-      AND invlote.id = invlotealmacen.InvLoteId 
-      AND InvLoteAlmacen.existencia > 0 
+      FROM InvLote, invlotealmacen, InvArticulo
+      WHERE InvLote.id = '$IdLote'
+      AND  InvArticulo.id = InvLote.InvArticuloId
+      AND invlote.id = invlotealmacen.InvLoteId
+      AND InvLoteAlmacen.existencia > 0
       AND InvLoteAlmacen.InvAlmacenId = 1
       AND InvArticulo.id = '$IdArticulo'
     ";
@@ -270,7 +270,7 @@
     DESAROLLADO POR: SERGIO COVA
   */
   function SC1_Articulo_Lote($SedeConnection,$IdArticulo,$Descripcion){
-    
+
     $conn = FG_Conectar_Smartpharma($SedeConnection);
     $sql1 = SC1Q_Lista_Lotes_Artiulos($IdArticulo);
     $result = sqlsrv_query($conn,$sql1);
@@ -420,16 +420,16 @@
       else{
         echo '<td align="center"> - </td>';
       }
-     
+
       echo '
       <td align="center">
         <form autocomplete="off" action="">
             <input id="SEDE" name="SEDE" type="hidden" value="';
                 print_r($SedeConnection);
                 echo'">
-             
+
               <input type="submit" value="Selecionar" class="btn btn-outline-success">
-              
+
               <input id="IdLote" name="IdLote" type="hidden" value="'.intval($row["Id"]).'">
 
               <input id="IdArti" name="IdArti" type="hidden" value="'.$IdArticulo.'">
@@ -454,7 +454,7 @@
     DESAROLLADO POR: SERGIO COVA
   */
   function SC1_Actualizar_Lote($SedeConnection,$IdLote,$IdArticulo,$Descripcion){
-    
+
     $conn = FG_Conectar_Smartpharma($SedeConnection);
     $sql1 = SC1Q_Lista_Lotes_Lote($IdLote,$IdArticulo);
     $result = sqlsrv_query($conn,$sql1);
@@ -568,7 +568,7 @@
         <tbody>
      ';
     $contador = 1;
-    
+
       echo '<tr>';
       echo '<td align="left"><strong>'.intval($contador).'</strong></td>';
       echo '<td align="center">'.$row["Numero"].'</td>';
@@ -583,14 +583,14 @@
 
       echo '<td align="center">'.$row["M_PrecioCompraBruto"].'</td>';
       echo '<td align="center">'.$row["M_PrecioTroquelado"].'</td>';
-     
+
       echo '
-        <form autocomplete="off" action=""> 
+        <form autocomplete="off" action="">
           <td align="center">
             <input id="fechaInicio" type="number" min="0.00" step="any" name="troquelactual" style="width:100%;" autofocus="autofocus">
           </td>
           <td><input id="Motivo" name="Motivo" type="text"></td>
-          <td align="center">            
+          <td align="center">
             <input id="SEDE" name="SEDE" type="hidden" value="';
                 print_r($SedeConnection);
                 echo'">
@@ -599,12 +599,12 @@
             <input id="IdArti" name="IdArti" type="hidden" value="'.$IdArticulo.'">
             <input id="Descripcion" name="Descripcion" type="hidden" value="'.$Descripcion.'">
             <input id="troquelanterior" name="troquelanterior" type="hidden" value="'.$row["M_PrecioTroquelado"].'">
-          </td>       
+          </td>
           </form>
           <br>
         ';
       echo '</tr>';
-    
+
       echo '
         </tbody>
     </table>';
@@ -621,7 +621,7 @@
     $msn = "";
     $conn = FG_Conectar_Smartpharma($SedeConnection);
 
-    if( (intval($Troquel)>0) ){
+    if( (($Troquel)>0) ){
       $sql2 = SC1Q_Actualizar_Troquel(true,$Troquel,$IdArticulo,$IdLote);
       $msn = '<h4 class="h5 text-success" align="center">Troquel actualizado con exito</h4>';
     }
@@ -629,17 +629,17 @@
       $sql2 = SC1Q_Actualizar_Troquel(false,$Troquel,$IdArticulo,$IdLote);
       $msn = '<h4 class="h5 text-warning" align="center">Troquel actualizado a NULL</h4>';
     }
-    else if( (intval($Troquel)<=0) ){
+    else if( (($Troquel)<=0) ){
       $sql2 = SC1Q_Actualizar_Troquel(false,$Troquel,$IdArticulo,$IdLote);
       $msn = '<h4 class="h5 text-danger" align="center">Verifique los datos</h4>';
     }
-    
+
     sqlsrv_query($conn,$sql2);
 
     $sql1 = SC1Q_Lista_Lotes_Lote($IdLote,$IdArticulo);
     $result = sqlsrv_query($conn,$sql1);
     $row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC);
-        
+
     $sql2 = SQG_Detalle_Articulo($IdArticulo);
     $result2 = sqlsrv_query($conn,$sql2);
     $row2 = sqlsrv_fetch_array($result2, SQLSRV_FETCH_ASSOC);
