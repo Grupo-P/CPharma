@@ -35,15 +35,29 @@
             <input id="SEDE" name="SEDE" type="hidden" value="<?php print_r($_GET['SEDE']); ?>">
             <button type="submit" name="Fecha" value="HOY" role="button" class="btn btn-outline-success btn-md">Hoy</button>
         </form>
+        <form action="/reporte32/" style="display: inline;">
+            @csrf
+            <input id="SEDE" name="SEDE" type="hidden" value="<?php print_r($_GET['SEDE']); ?>">
+            <input type="date" name="date_custom" class="btn btn-outline-dark btn-md">
+            <button type="submit" name="Fecha" value="CUSTOM" role="button" class="btn btn-outline-dark btn-md">Filtrar</button>
+        </form>
 
         <?php
-        $hoy = date('Y-m-d');
+        //TODO Borrar y dejar el comentario
+        $hoy = '2021-03-15';
+        //$hoy = date('Y-m-d');
         if(isset($_GET['Fecha'])){
             if($_GET['Fecha']=='AYER'){
                 $fecha = date("Y-m-d",strtotime($hoy."- 1 days"));
+                echo '<label class="h5 text-dark" style="margin-left:10%;" align="center"> Fecha: '.date('d-m-Y',strtotime($fecha)).'</label>';
             }
             else if($_GET['Fecha']=='HOY'){
                 $fecha = $hoy;
+                echo '<label class="h5 text-dark" style="margin-left:10%;" align="center"> Fecha: '.date('d-m-Y',strtotime($fecha)).'</label>';
+            }
+            else if($_GET['Fecha']=='CUSTOM'){
+                $fecha = $_GET['date_custom'];
+                echo '<label class="h5 text-dark" style="margin-left:10%;" align="center"> Fecha: '.date('d-m-Y',strtotime($fecha)).'</label>';
             }
         }else{
             $fecha = $hoy;
@@ -72,7 +86,8 @@
 
                 echo '<hr class="row align-items-start col-12">';
                 echo '<h1 class="h5 text-dark" align="center">Ventas por Hora</h1>';
-
+            //TODO
+            /*
                 echo'
                 <div class="col-12">
                     <div class="col-6" style="float:left;">
@@ -94,9 +109,10 @@
                     </div>
                 </div>
                 ';
+            */
                 echo'<div style="clear:both"></div>';
 
-                R32_Seguimiento_Tienda($_GET['SEDE'],$fecha);
+                //R32_Seguimiento_Tienda($_GET['SEDE'],$fecha);
             }else{
                 echo '<hr class="row align-items-start col-12">';
                 echo '<h1 class="h5 text-danger" align="center">El dia '.date('d-m-Y',strtotime($fecha)).' no tiene ventas</h1>';
@@ -123,7 +139,9 @@
 
         $FInicial = $fecha;
         $FFinal = date("Y-m-d",strtotime($FInicial."+ 1 days"));
-        $TasaActual = FG_Tasa_Fecha($connCPharma,$FInicial);
+        //TODO Borrar y dejar el comentario
+        $TasaActual = '100000.00';
+        //$TasaActual = FG_Tasa_Fecha($connCPharma,$FInicial);
 
         $sql6 = R32Q_Vent_generales($FInicial,$FFinal);
         $result6 = sqlsrv_query($conn,$sql6);
@@ -299,7 +317,8 @@
         echo '
             </tbody>
         </table>';
-
+    //TODO
+    /*
         $sql5 = R32Q_Vent_art_cond($FInicial,$FFinal);
         $result5 = sqlsrv_query($conn,$sql5);
         $result5a = sqlsrv_query($conn,$sql5);
@@ -835,7 +854,7 @@
 	  	echo '
   		    </tbody>
         </table>';
-
+    */
         mysqli_close($connCPharma);
 		sqlsrv_close($conn);
 	}
