@@ -121,6 +121,14 @@
                 })
             }
         }
+
+        function mostrar_ocultar(that, elemento) {
+            if (that.checked) {
+                return $('.' + elemento).show();
+            }
+
+            return $('.' + elemento).hide();
+        }
     </script>
 @endsection
 
@@ -173,10 +181,12 @@
     $conectividad_ftn = FG_Validar_Conectividad('FTN');
     $conectividad_fau = FG_Validar_Conectividad('FAU');
     $conectividad_fll = FG_Validar_Conectividad('FLL');
+    $conectividad_fsm = FG_Validar_Conectividad('FSM');
 
     $connFAU = FG_Conectar_Smartpharma('FAU');
     $connFTN = FG_Conectar_Smartpharma('FTN');
     $connFLL = FG_Conectar_Smartpharma('FLL');
+    $connFSM = FG_Conectar_Smartpharma('FSM');
 
     $FFinal = date("Y-m-d");
     $FInicial = date("Y-m-d",strtotime($FFinal."-10 days"));
@@ -201,6 +211,80 @@
     ';
     echo'<h6 align="center">Periodo desde el '.$FInicialImp.' al '.$FFinalImp.' </h6>';
     echo'<h6 align="center">Los productos de este reporte cumplen con los siguientes criterios</h6>';
+    echo'<h6 align="center"><a href="" data-toggle="modal" data-target="#ver_campos"><i class="fa fa-eye"></i> Ocultar u mostrar columnas<a></h6>';
+
+    echo '
+        <div class="modal fade" id="ver_campos" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Mostrar u ocultar columnas</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, \'codigo\')" name="codigo" checked>
+                    Código
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, \'codigo_barra\')" name="codigo_barra" checked>
+                    Código de barra
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, \'descripcion\')" name="descripcion" checked>
+                    Descripción
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, \'precio\')" name="precio" checked>
+                    Precio
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, \'existencia\')" name="existencia" checked>
+                    Existencia
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, \'unidades_vendidas\')" name="unidades_vendidas" checked>
+                    Unidades vendidas
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, \'dias_restantes\')" name="dias_restantes" checked>
+                    Días restantes
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, \'ultimo_proveedor\')" name="ultimo_proveedor" checked>
+                    Último proveedor
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, \'sede1\')" name="Sede 1" checked>
+                    Sede 1
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, \'sede2\')" name="Sede 2" checked>
+                    Sede 2
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, \'sede3\')" name="Sede 3" checked>
+                    Sede 3
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+              </div>
+            </div>
+          </div>
+        </div>';
 
     echo '
     <table class="table table-striped table-bordered col-12 sortable">
@@ -240,42 +324,59 @@
       <thead class="thead-dark">
           <tr>
             <th scope="col" class="CP-sticky">#</th>
-            <th scope="col" class="CP-sticky">Codigo</th>
-            <th scope="col" class="CP-sticky">Codigo barra</th>
-              <th scope="col" class="CP-sticky">Descripcion</td>
-              <th scope="col" class="CP-sticky">Precio</br>(Con IVA) '.SigVe.'</td>
-              <th scope="col" class="CP-sticky">Existencia</td>
-              <th scope="col" class="CP-sticky">Unidades Vendidas</td>
-              <th scope="col" class="CP-sticky">Dias Restantes</td>
-              <th scope="col" class="CP-sticky">Ultimo Proveedor</td>
+            <th scope="col" class="codigo CP-sticky">Codigo</th>
+            <th scope="col" class="codigo_barra CP-sticky">Codigo barra</th>
+              <th scope="col" class="CP-sticky descripcion">Descripcion</td>
+              <th scope="col" class="CP-sticky precio">Precio</br>(Con IVA) '.SigVe.'</td>
+              <th scope="col" class="CP-sticky existencia">Existencia</td>
+              <th scope="col" class="CP-sticky unidades_vendidas">Unidades Vendidas</td>
+              <th scope="col" class="CP-sticky dias_restantes">Dias Restantes</td>
+              <th scope="col" class="CP-sticky ultimo_proveedor">Ultimo Proveedor</td>
               <th scope="col" class="CP-sticky">Acciones orden de compra</th>';
 
-              if (isset($_GET['SEDE']) & ($_GET['SEDE'] == 'FAU' || $_GET['SEDE'] == 'DBs')) {
-                echo '<th scope="col" class="CP-sticky">Descripción FTN</th>
-                    <th scope="col" class="CP-sticky">Existencia FTN</td>
-                    <th scope="col" class="CP-sticky">Descripción FLL</th>
-                    <th scope="col" class="CP-sticky">Existencia FLL</td>
+              if (isset($_GET['SEDE']) && ($_GET['SEDE'] == 'FAU' || $_GET['SEDE'] == 'DBs')) {
+                echo '<th scope="col" class="sede1 CP-sticky">Descripción FTN</th>
+                    <th scope="col" class="sede1 CP-sticky">Existencia FTN</td>
+                    <th scope="col" class="sede2 CP-sticky">Descripción FLL</th>
+                    <th scope="col" class="sede2 CP-sticky">Existencia FLL</td>
+                    <th scope="col" class="sede3 CP-sticky">Descripción FSM</th>
+                    <th scope="col" class="sede3 CP-sticky">Existencia FSM</td>
                 ';
               }
 
-              if (isset($_GET['SEDE']) & $_GET['SEDE'] == 'FTN') {
-                echo '<th scope="col" class="CP-sticky">Descripción FAU</th>
-                    <th scope="col" class="CP-sticky">Existencia FAU</td>
-                    <th scope="col" class="CP-sticky">Descripción FLL</th>
-                    <th scope="col" class="CP-sticky">Existencia FLL</td>
+              if (isset($_GET['SEDE']) && $_GET['SEDE'] == 'FTN') {
+                echo '<th scope="col" class="sede1 CP-sticky">Descripción FAU</th>
+                    <th scope="col" class="sede1 CP-sticky">Existencia FAU</td>
+                    <th scope="col" class="sede2 CP-sticky">Descripción FLL</th>
+                    <th scope="col" class="sede2 CP-sticky">Existencia FLL</td>
+                    <th scope="col" class="sede3 CP-sticky">Descripción FSM</th>
+                    <th scope="col" class="sede3 CP-sticky">Existencia FSM</td>
                 ';
               }
 
-              if (isset($_GET['SEDE']) & $_GET['SEDE'] == 'FLL') {
-                echo '<th scope="col" class="CP-sticky">Descripción FTN</th>
-                    <th scope="col" class="CP-sticky">Existencia FTN</td>
-                    <th scope="col" class="CP-sticky">Descripción FAU</th>
-                    <th scope="col" class="CP-sticky">Existencia FAU</td>
+              if (isset($_GET['SEDE']) && $_GET['SEDE'] == 'FLL') {
+                echo '<th scope="col" class="sede1 CP-sticky">Descripción FTN</th>
+                    <th scope="col" class="sede1 CP-sticky">Existencia FTN</td>
+                    <th scope="col" class="sede2 CP-sticky">Descripción FAU</th>
+                    <th scope="col" class="sede2 CP-sticky">Existencia FAU</td>
+                    <th scope="col" class="sede3 CP-sticky">Descripción FSM</th>
+                    <th scope="col" class="sede3 CP-sticky">Existencia FSM</td>
                 ';
               }
 
 
-              echo '<th scope="col" class="CP-sticky" colspan="2">Acciones traslado</th>';
+              if (isset($_GET['SEDE']) && $_GET['SEDE'] == 'FSM') {
+                echo '<th scope="col" class="sede1 CP-sticky">Descripción FTN</th>
+                    <th scope="col" class="sede1 CP-sticky">Existencia FTN</td>
+                    <th scope="col" class="sede2 CP-sticky">Descripción FAU</th>
+                    <th scope="col" class="sede2 CP-sticky">Existencia FAU</td>
+                    <th scope="col" class="sede3 CP-sticky">Descripción FLL</th>
+                    <th scope="col" class="sede3 CP-sticky">Existencia FLL</td>
+                ';
+              }
+
+
+              echo '<th scope="col" class="CP-sticky" colspan="3">Acciones traslado</th>';
 
 
         echo '
@@ -324,38 +425,38 @@
 
       echo '<tr>';
       echo '<td align="center"><strong>'.intval($contador).'</strong></td>';
-      echo '<td>'.$row["CodigoArticulo"].'</td>';
-      echo '<td>'.$row1["CodigoBarra"].'</td>';
+      echo '<td class="codigo">'.$row["CodigoArticulo"].'</td>';
+      echo '<td class="codigo_barra">'.$row1["CodigoBarra"].'</td>';
 
       echo
-      '<td align="left" class="CP-barrido">
+      '<td align="left" class="descripcion CP-barrido">
       <a href="/reporte2?Id='.$IdArticulo.'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
         .$Descripcion.
       '</a>
       </td>';
 
-      echo '<td align="center">'.number_format($Precio,2,"," ,"." ).'</td>';
-      echo '<td align="center">'.intval($Existencia).'</td>';
+      echo '<td align="center" class="precio">'.number_format($Precio,2,"," ,"." ).'</td>';
+      echo '<td align="center" class="existencia">'.intval($Existencia).'</td>';
 
       echo
-      '<td align="center" class="CP-barrido">
+      '<td align="center" class="unidades_vendidas CP-barrido">
       <a href="reporte12?fechaInicio='.$FInicial.'&fechaFin='.$FFinal.'&SEDE='.$SedeConnection.'&Descrip='.$Descripcion.'&Id='.$IdArticulo.'" style="text-decoration: none; color: black;" target="_blank">'
         .intval($UnidadesVendidas).
       '</a>
       </td>';
 
-      echo '<td align="center">'.round($DiasRestantes,2).'</td>';
+      echo '<td class="dias_restantes" align="center">'.round($DiasRestantes,2).'</td>';
 
       if(!is_null($UltimoProveedorNombre)){
         echo
-        '<td align="left" class="CP-barrido">
+        '<td align="left" class="ultimo_proveedor CP-barrido">
         <a href="/reporte7?Nombre='.$UltimoProveedorNombre.'&Id='.$UltimoProveedorID.'&SEDE='.$SedeConnection.'" target="_blank" style="text-decoration: none; color: black;">'
           .$UltimoProveedorNombre.
         '</a>
         </td>';
       }
       else{
-        echo '<td align="center"> - </td>';
+        echo '<td class="ultimo_proveedor" align="center"> - </td>';
       }
 
       /*BOTON PARA AGREGAR A LA ORDEN DE COMPRA*/
@@ -425,7 +526,7 @@
       </td>
       ';
 
-      if (isset($_GET['SEDE']) & ($_GET['SEDE'] == 'FAU' || $_GET['SEDE'] == 'DBs')) {
+      if (isset($_GET['SEDE']) && ($_GET['SEDE'] == 'FAU' || $_GET['SEDE'] == 'DBs')) {
         if ($conectividad_ftn == 1) {
           $sql3 = R14_Q_Descripcion_Existencia_Articulo($CodigoBarra);
           $result3 = sqlsrv_query($connFTN,$sql3);
@@ -455,9 +556,24 @@
             $existencia_fll = ($row3['existencia']) ? intval($row3['existencia']) : '-';
           }
         }
+
+        if ($conectividad_fsm == 1) {
+          $sql3 = R14_Q_Descripcion_Existencia_Articulo($CodigoBarra);
+          $result3 = sqlsrv_query($connFSM,$sql3);
+
+          if (sqlsrv_errors()) {
+            $descripcion_fsm = '-';
+            $existencia_fsm = '-';
+          } else {
+            $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
+
+            $descripcion_fsm = ($row3['descripcion']) ? FG_Limpiar_Texto($row3['descripcion']) : '-';
+            $existencia_fsm = ($row3['existencia']) ? intval($row3['existencia']) : '-';
+          }
+        }
       }
 
-      if (isset($_GET['SEDE']) & $_GET['SEDE'] == 'FTN') {
+      if (isset($_GET['SEDE']) && $_GET['SEDE'] == 'FTN') {
         if ($conectividad_fau == 1) {
             $sql3 = R14_Q_Descripcion_Existencia_Articulo($CodigoBarra);
             $result3 = sqlsrv_query($connFAU,$sql3);
@@ -489,9 +605,25 @@
             }
 
           }
+
+          if ($conectividad_fsm == 1) {
+            $sql3 = R14_Q_Descripcion_Existencia_Articulo($CodigoBarra);
+            $result3 = sqlsrv_query($connFSM,$sql3);
+
+            if (sqlsrv_errors()) {
+              $descripcion_fsm = '-';
+              $existencia_fsm = '-';
+            } else {
+              $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
+
+              $descripcion_fsm = ($row3['descripcion']) ? FG_Limpiar_Texto($row3['descripcion']) : '-';
+              $existencia_fsm = ($row3['existencia']) ? intval($row3['existencia']) : '-';
+            }
+
+          }
       }
 
-      if (isset($_GET['SEDE']) & $_GET['SEDE'] == 'FLL') {
+      if (isset($_GET['SEDE']) && $_GET['SEDE'] == 'FLL') {
          if ($conectividad_ftn == 1) {
             $sql3 = R14_Q_Descripcion_Existencia_Articulo($CodigoBarra);
             $result3 = sqlsrv_query($connFTN,$sql3);
@@ -521,66 +653,178 @@
               $existencia_fau = ($row3['existencia']) ? intval($row3['existencia']) : '-';
             }
           }
+
+          if ($conectividad_fsm == 1) {
+            $sql3 = R14_Q_Descripcion_Existencia_Articulo($CodigoBarra);
+            $result3 = sqlsrv_query($connFSM,$sql3);
+
+            if (sqlsrv_errors()) {
+              $descripcion_fsm = '-';
+              $existencia_fsm = '-';
+            } else {
+              $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
+
+              $descripcion_fsm = ($row3['descripcion']) ? FG_Limpiar_Texto($row3['descripcion']) : '-';
+              $existencia_fsm = ($row3['existencia']) ? intval($row3['existencia']) : '-';
+            }
+          }
       }
 
-      if (isset($_GET['SEDE']) & ($_GET['SEDE'] == 'FAU' || $_GET['SEDE'] == 'DBs')) {
-            if ($conectividad_ftn == 1) {
-                echo '<td align="center">'.$descripcion_ftn.'</td>
-                      <td align="center">'.$existencia_ftn.'</td>';
+      if (isset($_GET['SEDE']) && $_GET['SEDE'] == 'FSM') {
+         if ($conectividad_ftn == 1) {
+            $sql3 = R14_Q_Descripcion_Existencia_Articulo($CodigoBarra);
+            $result3 = sqlsrv_query($connFTN,$sql3);
+
+            if (sqlsrv_errors()) {
+              $descripcion_ftn = '-';
+              $existencia_ftn = '-';
             } else {
-                echo '<td>-</td>';
-                echo '<td>-</td>';
+              $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
+
+              $descripcion_ftn = ($row3['descripcion']) ? FG_Limpiar_Texto($row3['descripcion']) : '-';
+              $existencia_ftn = ($row3['existencia']) ? intval($row3['existencia']) : '-';
+            }
+          }
+
+          if ($conectividad_fau == 1) {
+            $sql3 = R14_Q_Descripcion_Existencia_Articulo($CodigoBarra);
+            $result3 = sqlsrv_query($connFAU,$sql3);
+
+            if (sqlsrv_errors()) {
+              $descripcion_fau = '-';
+              $existencia_fau = '-';
+            } else {
+              $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
+
+              $descripcion_fau = ($row3['descripcion']) ? FG_Limpiar_Texto($row3['descripcion']) : '-';
+              $existencia_fau = ($row3['existencia']) ? intval($row3['existencia']) : '-';
+            }
+          }
+
+          if ($conectividad_fll == 1) {
+            $sql3 = R14_Q_Descripcion_Existencia_Articulo($CodigoBarra);
+            $result3 = sqlsrv_query($connFLL,$sql3);
+
+            if (sqlsrv_errors()) {
+              $descripcion_fll = '-';
+              $existencia_fll = '-';
+            } else {
+              $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
+
+              $descripcion_fll = ($row3['descripcion']) ? FG_Limpiar_Texto($row3['descripcion']) : '-';
+              $existencia_fll = ($row3['existencia']) ? intval($row3['existencia']) : '-';
+            }
+          }
+      }
+
+      if (isset($_GET['SEDE']) && ($_GET['SEDE'] == 'FAU' || $_GET['SEDE'] == 'DBs')) {
+            if ($conectividad_ftn == 1) {
+                echo '<td class="sede1" align="center">'.$descripcion_ftn.'</td>
+                      <td class="sede1" align="center">'.$existencia_ftn.'</td>';
+            } else {
+                echo '<td class="sede1">-</td>';
+                echo '<td class="sede1">-</td>';
             }
 
             if ($conectividad_fll == 1) {
-                echo '<td align="center">'.$descripcion_fll.'</td>
-                      <td align="center">'.$existencia_fll.'</td>';
+                echo '<td class="sede2" align="center">'.$descripcion_fll.'</td>
+                      <td class="sede2" align="center">'.$existencia_fll.'</td>';
             } else {
-                echo '<td>-</td>';
-                echo '<td>-</td>';
+                echo '<td class="sede2">-</td>';
+                echo '<td class="sede2">-</td>';
+            }
+
+            if ($conectividad_fsm == 1) {
+                echo '<td class="sede3" align="center">'.$descripcion_fsm.'</td>
+                      <td class="sede3" align="center">'.$existencia_fsm.'</td>';
+            } else {
+                echo '<td class="sede3">-</td>';
+                echo '<td class="sede3">-</td>';
             }
         }
 
-        if (isset($_GET['SEDE']) & $_GET['SEDE'] == 'FTN') {
+        if (isset($_GET['SEDE']) && $_GET['SEDE'] == 'FTN') {
             if ($conectividad_fau == 1) {
-                echo '<td align="center">'.$descripcion_fau.'</td>
-                      <td align="center">'.$existencia_fau.'</td>';
+                echo '<td class="sede1" align="center">'.$descripcion_fau.'</td>
+                      <td class="sede1" align="center">'.$existencia_fau.'</td>';
             } else {
-                echo '<td>-</td>';
-                echo '<td>-</td>';
+                echo '<td class="sede1">-</td>';
+                echo '<td class="sede1">-</td>';
             }
 
             if ($conectividad_fll == 1) {
-                echo '<td align="center">'.$descripcion_fll.'</td>
-                      <td align="center">'.$existencia_fll.'</td>';
+                echo '<td class="sede2" align="center">'.$descripcion_fll.'</td>
+                      <td class="sede2" align="center">'.$existencia_fll.'</td>';
             } else {
-                echo '<td>-</td>';
-                echo '<td>-</td>';
+                echo '<td class="sede2">-</td>';
+                echo '<td class="sede2">-</td>';
+            }
+
+            if ($conectividad_fsm == 1) {
+                echo '<td class="sede3" align="center">'.$descripcion_fsm.'</td>
+                      <td class="sede3" align="center">'.$existencia_fsm.'</td>';
+            } else {
+                echo '<td class="sede3">-</td>';
+                echo '<td class="sede3">-</td>';
             }
         }
 
-        if (isset($_GET['SEDE']) & $_GET['SEDE'] == 'FLL') {
+        if (isset($_GET['SEDE']) && $_GET['SEDE'] == 'FLL') {
             if ($conectividad_ftn == 1) {
-                echo '<td align="center">'.$descripcion_ftn.'</td>
-                      <td align="center">'.$existencia_ftn.'</td>';
+                echo '<td class="sede1" align="center">'.$descripcion_ftn.'</td>
+                      <td class="sede1" align="center">'.$existencia_ftn.'</td>';
             } else {
-                echo '<td>-</td>';
-                echo '<td>-</td>';
+                echo '<td class="sede1">-</td>';
+                echo '<td class="sede1">-</td>';
             }
 
             if ($conectividad_fau == 1) {
-                echo '<td align="center">'.$descripcion_fau.'</td>
-                      <td align="center">'.$existencia_fau.'</td>';
+                echo '<td class="sede2" align="center">'.$descripcion_fau.'</td>
+                      <td class="sede2" align="center">'.$existencia_fau.'</td>';
             } else {
-                echo '<td>-</td>';
-                echo '<td>-</td>';
+                echo '<td class="sede2">-</td>';
+                echo '<td class="sede2">-</td>';
+            }
+
+            if ($conectividad_fsm == 1) {
+                echo '<td class="sede3" align="center">'.$descripcion_fsm.'</td>
+                      <td class="sede3" align="center">'.$existencia_fsm.'</td>';
+            } else {
+                echo '<td class="sede3">-</td>';
+                echo '<td class="sede3">-</td>';
+            }
+        }
+
+        if (isset($_GET['SEDE']) && $_GET['SEDE'] == 'FSM') {
+            if ($conectividad_ftn == 1) {
+                echo '<td align="center" class="sede1">'.$descripcion_ftn.'</td>
+                      <td align="center" class="sede1">'.$existencia_ftn.'</td>';
+            } else {
+                echo '<td class="sede1">-</td>';
+                echo '<td class="sede1">-</td>';
+            }
+
+            if ($conectividad_fau == 1) {
+                echo '<td class="sede2" align="center">'.$descripcion_fau.'</td>
+                      <td class="sede2" align="center">'.$existencia_fau.'</td>';
+            } else {
+                echo '<td class="sede2">-</td>';
+                echo '<td class="sede2">-</td>';
+            }
+
+            if ($conectividad_fll == 1) {
+                echo '<td class="sede1" align="center">'.$descripcion_fll.'</td>
+                      <td class="sede1" align="center">'.$existencia_fll.'</td>';
+            } else {
+                echo '<td class="sede1">-</td>';
+                echo '<td class="sede1">-</td>';
             }
         }
 
 
         // Botones de agregar a traslado
 
-        if (isset($_GET['SEDE']) & ($_GET['SEDE'] == 'FAU' || $_GET['SEDE'] == 'DBs')) {
+        if (isset($_GET['SEDE']) && ($_GET['SEDE'] == 'FAU' || $_GET['SEDE'] == 'DBs')) {
             if ($conectividad_ftn == 1 && $descripcion_ftn != '-' && $existencia_ftn > 0) {
                 echo '<td align="center"><button type="button" onclick="agregarTraslado(\'' . $CodigoBarra . '\', \'FTN\', \'' . $existencia_ftn . '\')" class="btn btn-outline-info btn-sm">Agregar FTN</td>';
             } else {
@@ -592,9 +836,15 @@
             } else {
                 echo '<td>-</td>';
             }
+
+            if ($conectividad_fsm == 1 && $descripcion_fsm != '-' && $existencia_fsm > 0) {
+                echo '<td align="center"><button type="button" onclick="agregarTraslado(\'' . $CodigoBarra . '\', \'FSM\', \'' . $existencia_fsm . '\')" class="btn btn-outline-info btn-sm">Agregar FSM</td>';
+            } else {
+                echo '<td>-</td>';
+            }
         }
 
-        if (isset($_GET['SEDE']) & $_GET['SEDE'] == 'FTN') {
+        if (isset($_GET['SEDE']) && $_GET['SEDE'] == 'FTN') {
             if ($conectividad_fau == 1 && $descripcion_fau != '-' && $existencia_fau > 0) {
                 echo '<td align="center"><button type="button" onclick="agregarTraslado(\'' . $CodigoBarra . '\', \'FAU\', \'' . $existencia_fau . '\')" class="btn btn-outline-info btn-sm">Agregar FAU</td>';
             } else {
@@ -606,9 +856,15 @@
             } else {
                 echo '<td>-</td>';
             }
+
+            if ($conectividad_fsm == 1 && $descripcion_fsm != '-' && $existencia_fsm > 0) {
+                echo '<td align="center"><button type="button" onclick="agregarTraslado(\'' . $CodigoBarra . '\', \'FSM\', \'' . $existencia_fsm . '\')" class="btn btn-outline-info btn-sm">Agregar FSM</td>';
+            } else {
+                echo '<td>-</td>';
+            }
         }
 
-        if (isset($_GET['SEDE']) & $_GET['SEDE'] == 'FLL') {
+        if (isset($_GET['SEDE']) && $_GET['SEDE'] == 'FLL') {
             if ($conectividad_ftn == 1 && $descripcion_ftn != '-' && $existencia_ftn > 0) {
                 echo '<td align="center"><button type="button" onclick="agregarTraslado(\'' . $CodigoBarra . '\', \'FTN\', \'' . $existencia_ftn . '\')" class="btn btn-outline-info btn-sm">Agregar FTN</td>';
             } else {
@@ -617,6 +873,32 @@
 
             if ($conectividad_fau == 1 && $descripcion_fau != '-' && $existencia_fau > 0) {
                 echo '<td align="center"><button type="button" onclick="agregarTraslado(\'' . $CodigoBarra . '\', \'FAU\', \'' . $existencia_fau . '\')" class="btn btn-outline-info btn-sm">Agregar FAU</td>';
+            } else {
+                echo '<td>-</td>';
+            }
+
+            if ($conectividad_fsm == 1 && $descripcion_fsm != '-' && $existencia_fsm > 0) {
+                echo '<td align="center"><button type="button" onclick="agregarTraslado(\'' . $CodigoBarra . '\', \'FSM\', \'' . $existencia_fsm . '\')" class="btn btn-outline-info btn-sm">Agregar FSM</td>';
+            } else {
+                echo '<td>-</td>';
+            }
+        }
+
+        if (isset($_GET['SEDE']) && $_GET['SEDE'] == 'FSM') {
+            if ($conectividad_ftn == 1 && $descripcion_ftn != '-' && $existencia_ftn > 0) {
+                echo '<td align="center"><button type="button" onclick="agregarTraslado(\'' . $CodigoBarra . '\', \'FTN\', \'' . $existencia_ftn . '\')" class="btn btn-outline-info btn-sm">Agregar FTN</td>';
+            } else {
+                echo '<td>-</td>';
+            }
+
+            if ($conectividad_fau == 1 && $descripcion_fau != '-' && $existencia_fau > 0) {
+                echo '<td align="center"><button type="button" onclick="agregarTraslado(\'' . $CodigoBarra . '\', \'FAU\', \'' . $existencia_fau . '\')" class="btn btn-outline-info btn-sm">Agregar FAU</td>';
+            } else {
+                echo '<td>-</td>';
+            }
+
+            if ($conectividad_fll == 1 && $descripcion_fll != '-' && $existencia_fll > 0) {
+                echo '<td align="center"><button type="button" onclick="agregarTraslado(\'' . $CodigoBarra . '\', \'FLL\', \'' . $existencia_fll . '\')" class="btn btn-outline-info btn-sm">Agregar FLL</td>';
             } else {
                 echo '<td>-</td>';
             }
@@ -633,8 +915,8 @@
     echo '<tfoot>';
 
     echo '<tr>';
-    echo '<td colspan="14"></td>';
-    echo '<td colspan="2"><a href="/trasladoRecibir" target="_blank" class="btn btn-outline-info btn-sm">Ver soporte</a>';
+    echo '<td colspan="16"></td>';
+    echo '<td colspan="3"><a href="/trasladoRecibir" target="_blank" class="btn btn-outline-info btn-sm">Ver soporte</a>';
     echo '<button type="button" onclick="confirmarEliminacion(\'/trasladoRecibir/limpiar\')" class="btn btn-outline-danger btn-sm">Limpiar todo</button></td>';
     echo '</tr>';
 

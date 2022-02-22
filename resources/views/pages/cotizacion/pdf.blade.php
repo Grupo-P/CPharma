@@ -45,6 +45,10 @@
                         echo 'FARMACIA LA LAGO, C. A.';
                     }
 
+                    if ($_SERVER['HTTP_HOST'] == 'cpharmafsm.com') {
+                        echo 'FARMACIA LA LAGO, C. A.';
+                    }
+
                     $total_bs = 0;
                     $total_ds = 0;
                 @endphp
@@ -70,6 +74,7 @@
 <table style="width: 100%;border: 1px solid black; border-collapse: collapse; margin-bottom: 10px">
     <thead style="background-color: #e3e3e3">
         <tr>
+            <th style="font-size:  10px; border: 1px solid black; border-collapse: collapse; padding: 5px" scope="row" class="aumento">Código interno</th>
             <th style="font-size:  10px; border: 1px solid black; border-collapse: collapse; padding: 5px" scope="row" class="aumento">Descripcion</th>
             <th style="font-size:  10px; border: 1px solid black; border-collapse: collapse; padding: 5px" scope="row" class="aumento">Precio unitario {{ SigVe }}</th>
             <th style="font-size:  10px; border: 1px solid black; border-collapse: collapse; padding: 5px" scope="row" class="aumento">Precio unitario {{ SigDolar }}</th>
@@ -102,9 +107,10 @@
             @endphp
 
             <tr>
+                <td style="font-size:  10px; text-align: center; border: 1px solid black; border-collapse: collapse">{{ $item['codigo_interno'] }}</td>
                 <td style="font-size:  10px; text-align: center; border: 1px solid black; border-collapse: collapse">{{ $item['descripcion'] }}</td>
                 <td style="font-size:  10px; text-align: center; border: 1px solid black; border-collapse: collapse">{{ $item['precio_bs'] }}</td>
-                <td style="font-size:  10px; text-align: center; border: 1px solid black; border-collapse: collapse">{{ $item['precio_bs'] }}</td>
+                <td style="font-size:  10px; text-align: center; border: 1px solid black; border-collapse: collapse">{{ $item['precio_ds'] }}</td>
                 <td style="font-size:  10px; text-align: center; border: 1px solid black; border-collapse: collapse">{{ $item['cantidad'] }}</td>
                 <td style="font-size:  10px; text-align: center; border: 1px solid black; border-collapse: collapse">{{ number_format($item['cantidad'] * $precio_bs, 2, ',', '.') }}</td>
                 <td style="font-size:  10px; text-align: center; border: 1px solid black; border-collapse: collapse">{{ number_format($item['cantidad'] * $precio_ds, 2, ',', '.') }}</td>
@@ -114,13 +120,13 @@
 
     <tfoot>
         <tr>
-            <th colspan="4"></th>
+            <th colspan="5"></th>
             <th style="font-size:  10px; text-align: center; border: 1px solid black; border-collapse: collapse">Total {{ SigVe }}</th>
             <th style="font-size:  10px; text-align: center; border: 1px solid black; border-collapse: collapse">{{ number_format($total_bs, 2, ',', '.') }}</th>
         </tr>
 
         <tr>
-            <th colspan="4"></th>
+            <th colspan="5"></th>
             <th style="font-size:  10px; text-align: center; border: 1px solid black; border-collapse: collapse">Total {{ SigDolar }}</th>
             <th style="font-size:  10px; text-align: center; border: 1px solid black; border-collapse: collapse">{{ number_format($total_ds, 2, ',', '.') }}</th>
         </tr>

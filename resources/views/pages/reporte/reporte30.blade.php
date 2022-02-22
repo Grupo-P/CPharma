@@ -641,7 +641,8 @@
             <th scope="col">#</th>
             <th scope="col">Codigo</th>
             <th scope="col">Codigo de Barra</th>
-            <th scope="col">Descripcion</th>            
+            <th scope="col">Descripcion</th>
+            <th scope="col">Existencia</th>
             <th scope="col">Dolarizado?</td>
             <th scope="col">Gravado?</td>
             <th scope="col">Marca</td>
@@ -736,6 +737,7 @@
         '</a>
         </td>';
     
+      echo '<td align="center">'.$Existencia.'</td>';
       echo '<td align="center">'.$Dolarizado.'</td>';
       echo '<td align="center">'.$Gravado.'</td>';
       echo '<td align="center">'.$Marca.'</td>';

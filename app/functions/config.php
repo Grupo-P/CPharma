@@ -69,7 +69,7 @@ define ("nameKDI" , "KD_EXPRESS_SMART");
 define ("nameKDIOFF" , "cpharmakdi");
 /**********************************************************************************/
 /************************* CONEXION ON LINE FSM **********************************/
-define ("serverFSM" , "MBOFM01\SMARTPHARMA");
+define ("serverFSM" , "192.168.18.35\SMARTPHARMA");
 define ("userFSM" , "admin");
 define ("passFSM" , "soporte123");
 define ("nameFSM" , "SMARTPHARMA");
