@@ -44,8 +44,8 @@
 
         <?php
         //TODO Borrar y dejar el comentario
-        $hoy = '2021-03-15';
-        //$hoy = date('Y-m-d');
+        //$hoy = '2021-03-15';
+        $hoy = date('Y-m-d');
         if(isset($_GET['Fecha'])){
             if($_GET['Fecha']=='AYER'){
                 $fecha = date("Y-m-d",strtotime($hoy."- 1 days"));
@@ -87,7 +87,7 @@
                 echo '<hr class="row align-items-start col-12">';
                 echo '<h1 class="h5 text-dark" align="center">Ventas por Hora</h1>';
             //TODO
-            /*
+
                 echo'
                 <div class="col-12">
                     <div class="col-6" style="float:left;">
@@ -109,7 +109,7 @@
                     </div>
                 </div>
                 ';
-            */
+
                 echo'<div style="clear:both"></div>';
 
                 //R32_Seguimiento_Tienda($_GET['SEDE'],$fecha);
@@ -140,8 +140,8 @@
         $FInicial = $fecha;
         $FFinal = date("Y-m-d",strtotime($FInicial."+ 1 days"));
         //TODO Borrar y dejar el comentario
-        $TasaActual = '100000.00';
-        //$TasaActual = FG_Tasa_Fecha($connCPharma,$FInicial);
+        //$TasaActual = '100000.00';
+        $TasaActual = FG_Tasa_Fecha($connCPharma,$FInicial);
 
         $sql6 = R32Q_Vent_generales($FInicial,$FFinal);
         $result6 = sqlsrv_query($conn,$sql6);
@@ -318,7 +318,7 @@
             </tbody>
         </table>';
     //TODO
-    /*
+
         $sql5 = R32Q_Vent_art_cond($FInicial,$FFinal);
         $result5 = sqlsrv_query($conn,$sql5);
         $result5a = sqlsrv_query($conn,$sql5);
@@ -854,7 +854,7 @@
 	  	echo '
   		    </tbody>
         </table>';
-    */
+
         mysqli_close($connCPharma);
 		sqlsrv_close($conn);
 	}
