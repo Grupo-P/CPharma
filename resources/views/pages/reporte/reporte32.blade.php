@@ -307,7 +307,7 @@
                 $facturaPromedio = ($total/$frecuencia);
                 echo '<tr>';
                 echo '<td align="center">'.$rowRC['Caja'].'</td>';
-                echo '<td align="center">'.number_format($unidades,2,"," ,"." ).'</td>';
+                echo '<td align="center">'.intval($unidades).'</td>';
                 echo '<td align="center">'.intval($frecuencia).'</td>';
                 echo '<td align="center">'.number_format($total,2,"," ,"." ).'</td>';
                 echo '<td align="center">'.number_format($facturaPromedio,2,"," ,"." ).'</td>';
@@ -855,6 +855,43 @@
   		    </tbody>
         </table>';
         */
+
+        $sqlRCD = R32Q_devolucion_caja($FInicial,$FFinal);
+        $resultRCD = sqlsrv_query($conn,$sqlRCD);
+
+        echo '<hr class="row align-items-start col-12">';
+        echo '<h1 class="h5 text-dark" align="center">Devoluciones por Caja</h1>';
+        echo '
+		<table class="table table-striped table-bordered col-12 sortable" style="width:100%;">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Caja</th>
+                    <th scope="col">Unidades</th>
+                    <th scope="col">Frecuencia</th>
+                    <th scope="col">Total</th>
+                </tr>
+            </thead>
+            <tbody>
+        ';
+
+        while($rowRCD = sqlsrv_fetch_array($resultRCD, SQLSRV_FETCH_ASSOC)) {
+            $unidades = $rowRCD['UnidadesDev'];
+            $frecuencia = $rowRCD['FrecuenciaDev'];
+            $total = $rowRCD['TotalDev'];
+
+            if( $unidades>0 && $frecuencia>0 ){
+                echo '<tr>';
+                echo '<td align="center">'.$rowRCD['Caja'].'</td>';
+                echo '<td align="center">'.intval($unidades).'</td>';
+                echo '<td align="center">'.intval($frecuencia).'</td>';
+                echo '<td align="center">'.number_format($total,2,"," ,"." ).'</td>';
+                echo '</tr>';
+            }
+        }
+        echo '
+            </tbody>
+        </table>';
+
         mysqli_close($connCPharma);
 		sqlsrv_close($conn);
 	}
@@ -1528,6 +1565,35 @@
         GROUP BY convert(char(2), FechaDocumento, 108)
         ) AS DEV ON DEV.hora = FAC.hora
         ORDER BY FAC.hora
+        ";
+        return $sql;
+    }
+
+    function R32Q_devolucion_caja($FInicial,$FFinal){
+        $sql = "SELECT
+        VenCaja.Id as IdCaja,
+        VenCaja.EstacionTrabajo as Caja,
+        (select
+            SUM(VenDevolucionDetalle.Cantidad)
+            from VenDevolucion
+            LEFT JOIN VenDevolucionDetalle on VenDevolucion.Id = VenDevolucionDetalle.VenDevolucionId
+            where VenDevolucion.FechaDocumento > '$FInicial' and VenDevolucion.FechaDocumento < '$FFinal'
+            and VenDevolucion.VenCajaId = VenCaja.Id
+        ) as UnidadesDev,
+        (select
+            COUNT(VenDevolucion.Id)
+            from VenDevolucion
+            where VenDevolucion.FechaDocumento > '$FInicial' and VenDevolucion.FechaDocumento < '$FFinal'
+            and VenDevolucion.VenCajaId = VenCaja.Id
+        ) as FrecuenciaDev,
+        (select
+            SUM(VenDevolucion.M_MontoTotalDevolucion)
+            from VenDevolucion
+            where VenDevolucion.FechaDocumento > '$FInicial' and VenDevolucion.FechaDocumento < '$FFinal'
+            and VenDevolucion.VenCajaId = VenCaja.Id
+        ) as TotalDev
+        from Vencaja
+        order by IdCaja asc
         ";
         return $sql;
     }
