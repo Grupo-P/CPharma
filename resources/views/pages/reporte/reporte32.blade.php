@@ -44,8 +44,8 @@
 
         <?php
         //TODO Borrar y dejar el comentario
-        //$hoy = '2021-03-15';
-        $hoy = date('Y-m-d');
+        $hoy = '2021-03-15';
+        //$hoy = date('Y-m-d');
         if(isset($_GET['Fecha'])){
             if($_GET['Fecha']=='AYER'){
                 $fecha = date("Y-m-d",strtotime($hoy."- 1 days"));
@@ -77,6 +77,8 @@
             $rowValidaror = sqlsrv_fetch_array($resulValidator, SQLSRV_FETCH_ASSOC);
             if( isset($rowValidaror['Monto']) && $rowValidaror['Monto']!=""){
 
+            //TODO
+            /*
                 while($rowDataGRVen = sqlsrv_fetch_array($resultDataGRVen, SQLSRV_FETCH_ASSOC)) {
                     array_push($MontoArray,$rowDataGRVen['Monto']);
                     array_push($UnidadesArray,$rowDataGRVen['Unidades']);
@@ -86,7 +88,6 @@
 
                 echo '<hr class="row align-items-start col-12">';
                 echo '<h1 class="h5 text-dark" align="center">Ventas por Hora</h1>';
-            //TODO
 
                 echo'
                 <div class="col-12">
@@ -109,16 +110,16 @@
                     </div>
                 </div>
                 ';
-
+            */
                 echo'<div style="clear:both"></div>';
 
-                //R32_Seguimiento_Tienda($_GET['SEDE'],$fecha);
+                R32_Seguimiento_Tienda($_GET['SEDE'],$fecha);
             }else{
                 echo '<hr class="row align-items-start col-12">';
                 echo '<h1 class="h5 text-danger" align="center">El dia '.date('d-m-Y',strtotime($fecha)).' no tiene ventas</h1>';
             }
 
-            FG_Guardar_Auditoria('CONSULTAR','REPORTE','Seguimiento de Tienda');
+            //FG_Guardar_Auditoria('CONSULTAR','REPORTE','Seguimiento de Tienda');
             $FinCarga = new DateTime("now");
             $IntervalCarga = $InicioCarga->diff($FinCarga);
             echo'Tiempo de carga: '.$IntervalCarga->format("%Y-%M-%D %H:%I:%S");
@@ -140,9 +141,10 @@
         $FInicial = $fecha;
         $FFinal = date("Y-m-d",strtotime($FInicial."+ 1 days"));
         //TODO Borrar y dejar el comentario
-        //$TasaActual = '100000.00';
-        $TasaActual = FG_Tasa_Fecha($connCPharma,$FInicial);
+        $TasaActual = '100000.00';
+        //$TasaActual = FG_Tasa_Fecha($connCPharma,$FInicial);
 
+        /*
         $sql6 = R32Q_Vent_generales($FInicial,$FFinal);
         $result6 = sqlsrv_query($conn,$sql6);
 
@@ -275,6 +277,7 @@
                 </tbody>
             </table>';
         }
+        */
 
         $sqlRC = R32Q_resumen_caja($FInicial,$FFinal);
         $resultRC = sqlsrv_query($conn,$sqlRC);
@@ -285,32 +288,29 @@
 		<table class="table table-striped table-bordered col-12 sortable" style="width:100%;">
             <thead class="thead-dark">
                 <tr>
-                    <th scope="col"></th>
-                    <th scope="col" colspan="2">Primera Transaccion</th>
-                    <th scope="col" colspan="2">Ultima Transaccion</th>
-                </tr>
-            </thead>
-            <thead class="thead-dark">
-                <tr>
                     <th scope="col">Caja</th>
-                    <th scope="col">Hora</th>
-                    <th scope="col">Monto</th>
-                    <th scope="col">Hora</th>
-                    <th scope="col">Monto</th>
+                    <th scope="col">Unidades</th>
+                    <th scope="col">Frecuencia</th>
+                    <th scope="col">Total</th>
+                    <th scope="col">Factura Promedio</th>
                 </tr>
             </thead>
             <tbody>
         ';
 
         while($rowRC = sqlsrv_fetch_array($resultRC, SQLSRV_FETCH_ASSOC)) {
-            $primerMonto = $rowRC['PrimerMonto'];
-            if($primerMonto>null){
+            $unidades = $rowRC['Unidades'];
+            $frecuencia = $rowRC['Frecuencia'];
+            $total = $rowRC['Total'];
+
+            if( $unidades>0 && $frecuencia>0 ){
+                $facturaPromedio = ($total/$frecuencia);
                 echo '<tr>';
                 echo '<td align="center">'.$rowRC['Caja'].'</td>';
-                echo '<td align="center">'.($rowRC['PrimeraHora']->format('h:i A')).'</td>';
-                echo '<td align="center">'.number_format($primerMonto,2,"," ,"." ).'</td>';
-                echo '<td align="center">'.($rowRC['UltimaHora']->format('h:i A')).'</td>';
-                echo '<td align="center">'.number_format($rowRC['UltimoMonto'],2,"," ,"." ).'</td>';
+                echo '<td align="center">'.number_format($unidades,2,"," ,"." ).'</td>';
+                echo '<td align="center">'.intval($frecuencia).'</td>';
+                echo '<td align="center">'.number_format($total,2,"," ,"." ).'</td>';
+                echo '<td align="center">'.number_format($facturaPromedio,2,"," ,"." ).'</td>';
                 echo '</tr>';
             }
         }
@@ -318,7 +318,7 @@
             </tbody>
         </table>';
     //TODO
-
+    /*
         $sql5 = R32Q_Vent_art_cond($FInicial,$FFinal);
         $result5 = sqlsrv_query($conn,$sql5);
         $result5a = sqlsrv_query($conn,$sql5);
@@ -854,7 +854,7 @@
 	  	echo '
   		    </tbody>
         </table>';
-
+        */
         mysqli_close($connCPharma);
 		sqlsrv_close($conn);
 	}
@@ -1370,6 +1370,7 @@
     /*
         TITULO: R32Q_Vent_Cli_Top
     */
+    /*
     function R32Q_resumen_caja($FInicial,$FFinal){
         $sql = "
         select
@@ -1405,6 +1406,72 @@
         order by VenFactura.FechaDocumento desc) as UltimaHora
         from Vencaja
         order by VenCaja.Id asc
+        ";
+        return $sql;
+    }
+    */
+
+    function R32Q_resumen_caja($FInicial,$FFinal){
+        $sql = "SELECT
+        AUX.IdCaja,
+        AUX.Caja,
+        ( ISNULL(AUX.UnidadesSinDev,0) - ISNULL(AUX.UnidadesDev,0) ) as Unidades,
+        ( ISNULL(AUX.FrecuenciaSinDev,0) - ISNULL(AUX.FrecuenciaDev,0) ) as Frecuencia,
+        ( ISNULL(AUX.TotalSinDev,0) - ISNULL(AUX.TotalDev,0) ) as Total
+        from
+        (
+            select
+            VenCaja.Id as IdCaja,
+            VenCaja.EstacionTrabajo as Caja,
+
+            (select
+                SUM(VenFacturaDetalle.Cantidad)
+                from VenFactura
+                LEFT JOIN VenFacturaDetalle on VenFactura.Id = VenFacturaDetalle.VenFacturaId
+                where VenFactura.FechaDocumento > '$FInicial' and VenFactura.FechaDocumento < '$FFinal'
+                and VenFactura.VenCajaId = VenCaja.Id
+            ) as UnidadesSinDev,
+
+            (select
+                COUNT(VenFactura.Id)
+                from VenFactura
+                where VenFactura.FechaDocumento > '$FInicial' and VenFactura.FechaDocumento < '$FFinal'
+                and VenFactura.VenCajaId = VenCaja.Id
+            ) as FrecuenciaSinDev,
+
+            (select
+                SUM(VenFactura.M_MontoTotalFactura)
+                from VenFactura
+                where VenFactura.FechaDocumento > '$FInicial' and VenFactura.FechaDocumento < '$FFinal'
+                and VenFactura.VenCajaId = VenCaja.Id
+            ) as TotalSinDev,
+
+
+            (select
+                SUM(VenDevolucionDetalle.Cantidad)
+                from VenDevolucion
+                LEFT JOIN VenDevolucionDetalle on VenDevolucion.Id = VenDevolucionDetalle.VenDevolucionId
+                where VenDevolucion.FechaDocumento > '$FInicial' and VenDevolucion.FechaDocumento < '$FFinal'
+                and VenDevolucion.VenCajaId = VenCaja.Id
+            ) as UnidadesDev,
+
+            (select
+                COUNT(VenDevolucion.Id)
+                from VenDevolucion
+                where VenDevolucion.FechaDocumento > '$FInicial' and VenDevolucion.FechaDocumento < '$FFinal'
+                and VenDevolucion.VenCajaId = VenCaja.Id
+            ) as FrecuenciaDev,
+
+            (select
+                SUM(VenDevolucion.M_MontoTotalDevolucion)
+                from VenDevolucion
+                where VenDevolucion.FechaDocumento > '$FInicial' and VenDevolucion.FechaDocumento < '$FFinal'
+                and VenDevolucion.VenCajaId = VenCaja.Id
+            ) as TotalDev
+
+            from Vencaja
+        ) as AUX
+        order by AUX.IdCaja asc
         ";
         return $sql;
     }
