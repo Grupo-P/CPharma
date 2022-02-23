@@ -424,7 +424,7 @@
 
           if ($conectividad_fll == 1) {
             $sql3 = R37_Q_Descripcion_Existencia_Articulo($codigo_barra);
-            $result3 = sqlsrv_query($connFAU,$sql3);
+            $result3 = sqlsrv_query($connFLL,$sql3);
             $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
 
             $descripcion_fll = ($row3['descripcion']) ? FG_Limpiar_Texto($row3['descripcion']) : '-';
