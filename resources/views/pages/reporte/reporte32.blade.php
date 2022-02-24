@@ -43,9 +43,7 @@
         </form>
 
         <?php
-        //TODO Borrar y dejar el comentario
-        $hoy = '2021-03-15';
-        //$hoy = date('Y-m-d');
+        $hoy = date('Y-m-d');
         if(isset($_GET['Fecha'])){
             if($_GET['Fecha']=='AYER'){
                 $fecha = date("Y-m-d",strtotime($hoy."- 1 days"));
@@ -70,15 +68,9 @@
             $resultDataGRVen = $resulValidator = sqlsrv_query($conn,$sqlDataGRVen);
             $MontoArray = $UnidadesArray = $TransaccionesArray = $HoraArray = array();
 
-            //echo"<pre>";
-			//print_r($sqlDataGRVen);
-			//echo"</pre>";
-
             $rowValidaror = sqlsrv_fetch_array($resulValidator, SQLSRV_FETCH_ASSOC);
             if( isset($rowValidaror['Monto']) && $rowValidaror['Monto']!=""){
 
-            //TODO
-            /*
                 while($rowDataGRVen = sqlsrv_fetch_array($resultDataGRVen, SQLSRV_FETCH_ASSOC)) {
                     array_push($MontoArray,$rowDataGRVen['Monto']);
                     array_push($UnidadesArray,$rowDataGRVen['Unidades']);
@@ -110,7 +102,7 @@
                     </div>
                 </div>
                 ';
-            */
+
                 echo'<div style="clear:both"></div>';
 
                 R32_Seguimiento_Tienda($_GET['SEDE'],$fecha);
@@ -119,7 +111,7 @@
                 echo '<h1 class="h5 text-danger" align="center">El dia '.date('d-m-Y',strtotime($fecha)).' no tiene ventas</h1>';
             }
 
-            //FG_Guardar_Auditoria('CONSULTAR','REPORTE','Seguimiento de Tienda');
+            FG_Guardar_Auditoria('CONSULTAR','REPORTE','Seguimiento de Tienda');
             $FinCarga = new DateTime("now");
             $IntervalCarga = $InicioCarga->diff($FinCarga);
             echo'Tiempo de carga: '.$IntervalCarga->format("%Y-%M-%D %H:%I:%S");
@@ -140,11 +132,8 @@
 
         $FInicial = $fecha;
         $FFinal = date("Y-m-d",strtotime($FInicial."+ 1 days"));
-        //TODO Borrar y dejar el comentario
-        $TasaActual = '100000.00';
-        //$TasaActual = FG_Tasa_Fecha($connCPharma,$FInicial);
+        $TasaActual = FG_Tasa_Fecha($connCPharma,$FInicial);
 
-        /*
         $sql6 = R32Q_Vent_generales($FInicial,$FFinal);
         $result6 = sqlsrv_query($conn,$sql6);
 
@@ -277,7 +266,6 @@
                 </tbody>
             </table>';
         }
-        */
 
         $sqlRC = R32Q_resumen_caja($FInicial,$FFinal);
         $resultRC = sqlsrv_query($conn,$sqlRC);
@@ -317,8 +305,7 @@
         echo '
             </tbody>
         </table>';
-    //TODO
-    /*
+
         $sql5 = R32Q_Vent_art_cond($FInicial,$FFinal);
         $result5 = sqlsrv_query($conn,$sql5);
         $result5a = sqlsrv_query($conn,$sql5);
@@ -854,7 +841,6 @@
 	  	echo '
   		    </tbody>
         </table>';
-        */
 
         $sqlRCD = R32Q_devolucion_caja($FInicial,$FFinal);
         $resultRCD = sqlsrv_query($conn,$sqlRCD);
@@ -920,6 +906,36 @@
                 echo '<td align="center">'.number_format($total,2,"," ,"." ).'</td>';
                 echo '</tr>';
             }
+        }
+        echo '
+            </tbody>
+        </table>';
+
+        $sqlDVA = R32Q_devolucion_mas_altas($FInicial,$FFinal);
+        $resultDVA = sqlsrv_query($conn,$sqlDVA);
+
+        echo '<hr class="row align-items-start col-12">';
+        echo '<h1 class="h5 text-dark" align="center">Devoluciones mas altas</h1>';
+        echo '
+		<table class="table table-striped table-bordered col-12 sortable" style="width:100%;">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Cliente</th>
+                    <th scope="col">Monto</th>
+                    <th scope="col">Unidades</th>
+                    <th scope="col">Caja</th>
+                </tr>
+            </thead>
+            <tbody>
+        ';
+
+        while($rowDVA = sqlsrv_fetch_array($resultDVA, SQLSRV_FETCH_ASSOC)) {
+            echo '<tr>';
+            echo '<td align="center">'.FG_Limpiar_Texto($rowDVA['Nombre']." ".$rowDVA['Apellido']).'</td>';
+            echo '<td align="center">'.number_format($rowDVA['Monto'],2,"," ,"." ).'</td>';
+            echo '<td align="center">'.intval($rowDVA['Unidades']).'</td>';
+            echo '<td align="center">'.$rowDVA['Caja'].'</td>';
+            echo '</tr>';
         }
         echo '
             </tbody>
@@ -1658,6 +1674,28 @@
             left join VenDevolucion on AUX1.DevolucionID = VenDevolucion.Id
         group by AUX1.causaID, AUX1.DescripcionOperacion
         order by AUX1.causaID asc
+        ";
+        return $sql;
+    }
+
+    function R32Q_devolucion_mas_altas($FInicial,$FFinal){
+        $sql = "SELECT top 5
+        GenPersona.Nombre,
+        GenPersona.Apellido,
+        VenDevolucion.M_MontoTotalDevolucion as Monto,
+        (select
+            SUM(VenDevolucionDetalle.Cantidad)
+            from VenDevolucionDetalle
+            where VenDevolucionDetalle.VenDevolucionId =  VenDevolucion.Id
+        ) as Unidades,
+        VenCaja.EstacionTrabajo as Caja
+        from VenDevolucion
+        left join VenCaja on VenDevolucion.VenCajaId = VenCaja.Id
+        LEFT join VenFactura on VenDevolucion.VenFacturaId = VenFactura.Id
+        LEFT JOIN VenCliente ON VenCliente.Id = VenFactura.VenClienteId
+        LEFT JOIN GenPersona ON GenPersona.Id = VenCliente.GenPersonaId
+        where VenDevolucion.FechaDocumento > '$FInicial' and VenDevolucion.FechaDocumento < '$FFinal'
+        order by VenDevolucion.M_MontoTotalDevolucion desc
         ";
         return $sql;
     }
