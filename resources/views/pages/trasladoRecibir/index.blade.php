@@ -117,6 +117,11 @@
                             echo 'FARMACIA LA LAGO, C. A.';
                             $sede = 'FLL';
                         }
+
+                        if ($_SERVER['HTTP_HOST'] == 'cpharmafsm.com') {
+                            echo 'FARMACIA MILLENNIUM 2000, C.A';
+                            $sede = 'FSM';
+                        }
                     @endphp
                 </td>
                 </tr>
@@ -134,6 +139,10 @@
 
                         if ($clave == 'FLL') {
                             echo 'FARMACIA LA LAGO, C. A.';
+                        }
+
+                        if ($clave == 'FSM') {
+                            echo 'FARMACIA MILLENNIUM 2000, C.A';
                         }
                     @endphp
                 </td>
