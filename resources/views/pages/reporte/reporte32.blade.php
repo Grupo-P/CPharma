@@ -892,6 +892,39 @@
             </tbody>
         </table>';
 
+        $sqlRDC = R32Q_devolucion_causa($FInicial,$FFinal);
+        $resultRDC = sqlsrv_query($conn,$sqlRDC);
+
+        echo '<hr class="row align-items-start col-12">';
+        echo '<h1 class="h5 text-dark" align="center">Devoluciones por Causa</h1>';
+        echo '
+		<table class="table table-striped table-bordered col-12 sortable" style="width:100%;">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Causa</th>
+                    <th scope="col">Unidades</th>
+                    <th scope="col">Total</th>
+                </tr>
+            </thead>
+            <tbody>
+        ';
+
+        while($rowRDC = sqlsrv_fetch_array($resultRDC, SQLSRV_FETCH_ASSOC)) {
+            $unidades = $rowRDC['Cantidad'];
+            $total = $rowRDC['Total'];
+
+            if( $unidades>0 ){
+                echo '<tr>';
+                echo '<td align="center">'.$rowRDC['DescripcionOperacion'].'</td>';
+                echo '<td align="center">'.intval($unidades).'</td>';
+                echo '<td align="center">'.number_format($total,2,"," ,"." ).'</td>';
+                echo '</tr>';
+            }
+        }
+        echo '
+            </tbody>
+        </table>';
+
         mysqli_close($connCPharma);
 		sqlsrv_close($conn);
 	}
@@ -1594,6 +1627,37 @@
         ) as TotalDev
         from Vencaja
         order by IdCaja asc
+        ";
+        return $sql;
+    }
+
+    function R32Q_devolucion_causa($FInicial,$FFinal){
+        $sql = "SELECT
+        AUX1.causaID,
+        AUX1.DescripcionOperacion as DescripcionOperacion,
+        SUM(AUX1.Cantidad) as Cantidad,
+        SUM(VenDevolucion.M_MontoTotalDevolucion) as Total
+        from (
+                SELECT
+                VenCausaOperacionDevolucion.Id as causaID,
+                VenCausaOperacionDevolucion.DescripcionOperacion,
+                AUX.VenDevolucionId as DevolucionID,
+                SUM(AUX.Cantidad) AS Cantidad
+                FROM (
+                    SELECT
+                    VenDevolucionDetalle.VenDevolucionId,
+                    VenDevolucionDetalle.Cantidad,
+                    VenDevolucionDetalle.VenCausaOperacionId
+                    from VenDevolucion
+                    LEFT JOIN VenDevolucionDetalle on VenDevolucion.Id = VenDevolucionDetalle.VenDevolucionId
+                    where VenDevolucion.FechaDocumento > '$FInicial' and VenDevolucion.FechaDocumento < '$FFinal'
+                ) as AUX
+            left join VenCausaOperacionDevolucion on AUX.VenCausaOperacionId = VenCausaOperacionDevolucion.Id
+            group by AUX.VenDevolucionId, AUX.VenCausaOperacionId, VenCausaOperacionDevolucion.DescripcionOperacion, VenCausaOperacionDevolucion.Id
+            ) as AUX1
+            left join VenDevolucion on AUX1.DevolucionID = VenDevolucion.Id
+        group by AUX1.causaID, AUX1.DescripcionOperacion
+        order by AUX1.causaID asc
         ";
         return $sql;
     }
