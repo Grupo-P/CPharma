@@ -1053,53 +1053,106 @@
   function R31Q_Monitoreo_Inventarios($FInicial,$FFinal) {
     $sql = "
       SELECT
-    --Tipo Movimiento
-    InvCausa.Descripcion as TipoMovimiento,
-    -- Origen Movimiento
-    InvMovimiento.origenMovimiento as OrigenMovimiento,
-    --Numero de Movimiento
-    InvMovimiento.DocumentoOrigen as NumeroMovimiento,
-    --Id Articulo
-    InvArticulo.id as IdArticulo,
-    --Codigo Interno
-    InvArticulo.CodigoArticulo AS CodigoInterno,
-    --Codigo de Barra
-    (SELECT CodigoBarra
-    FROM InvCodigoBarra
-    WHERE InvCodigoBarra.InvArticuloId = InvArticulo.Id
-    AND InvCodigoBarra.EsPrincipal = 1) AS CodigoBarra,
-    --Descripcion
-    InvArticulo.Descripcion,
-    --Cantidad
-    InvMovimiento.Cantidad as Cantidad,
-    --Lote
-    InvLote.Numero as Lote,
-    --Almacen
-    InvAlmacen.Descripcion as Almacen,
-    --Costo Unitario
-    InvMovimiento.M_CostoUnitario as CostoUniario,
-    --Comentario Ajuste
-    (SELECT InvAjuste.Comentario
-    FROM InvAjuste
-    WHERE InvAjuste.NumeroAjuste = InvMovimiento.DocumentoOrigen AND (InvMovimiento.InvCausaId = '14' OR InvMovimiento.InvCausaId = '15') ) AS ComentarioAjuste,
-    --Comentario Transferecia
-    (SELECT InvTransferenciaAlmacen.Observaciones
-    FROM InvTransferenciaAlmacen
-    WHERE InvTransferenciaAlmacen.NumeroTransferencia = InvMovimiento.DocumentoOrigen AND (InvMovimiento.InvCausaId = '5' OR InvMovimiento.InvCausaId = '6') ) AS ComentarioTransferencia,
-    --Operador
-    InvMovimiento.Auditoria_Usuario as Operador,
-    --Fecha movimiento
-    InvMovimiento.FechaMovimiento  as FechaMovimiento
-    FROM InvMovimiento
-    INNER JOIN InvCausa ON InvCausa.id = InvMovimiento.InvCausaId
-    INNER JOIN InvArticulo ON InvArticulo.id = InvMovimiento.InvArticuloId
-    INNER JOIN InvLote ON InvLote.id = InvMovimiento.InvLoteId
-    INNER JOIN InvAlmacen ON InvAlmacen.id = InvMovimiento.InvAlmacenId
-    WHERE (InvMovimiento.InvCausaId = '14' OR InvMovimiento.InvCausaId = '15'
-    OR InvMovimiento.InvCausaId = '5' OR InvMovimiento.InvCausaId = '6')
-    AND(InvMovimiento.FechaMovimiento > '$FInicial' AND InvMovimiento.FechaMovimiento < '$FFinal')
-    ORDER BY InvMovimiento.FechaMovimiento ASC
+        --Tipo Movimiento
+        InvCausa.Descripcion as TipoMovimiento,
+        -- Origen Movimiento
+        InvMovimiento.origenMovimiento as OrigenMovimiento,
+        --Numero de Movimiento
+        InvMovimiento.DocumentoOrigen as NumeroMovimiento,
+        --Id Articulo
+        InvArticulo.id as IdArticulo,
+        --Codigo Interno
+        InvArticulo.CodigoArticulo AS CodigoInterno,
+        --Codigo de Barra
+        (SELECT CodigoBarra
+        FROM InvCodigoBarra
+        WHERE InvCodigoBarra.InvArticuloId = InvArticulo.Id
+        AND InvCodigoBarra.EsPrincipal = 1) AS CodigoBarra,
+        --Descripcion
+        InvArticulo.Descripcion,
+        --Cantidad
+        InvMovimiento.Cantidad as Cantidad,
+        --Lote
+        InvLote.Numero as Lote,
+        --Almacen
+        InvAlmacen.Descripcion as Almacen,
+        --Costo Unitario
+        InvMovimiento.M_CostoUnitario as CostoUniario,
+        --Comentario Ajuste
+        (SELECT InvAjuste.Comentario
+        FROM InvAjuste
+        WHERE InvAjuste.NumeroAjuste = InvMovimiento.DocumentoOrigen AND (InvMovimiento.InvCausaId = '14' OR InvMovimiento.InvCausaId = '15') ) AS ComentarioAjuste,
+        --Comentario Transferecia
+        (SELECT InvTransferenciaAlmacen.Observaciones
+        FROM InvTransferenciaAlmacen
+        WHERE InvTransferenciaAlmacen.NumeroTransferencia = InvMovimiento.DocumentoOrigen AND (InvMovimiento.InvCausaId = '5' OR InvMovimiento.InvCausaId = '6') ) AS ComentarioTransferencia,
+        --Operador
+        InvMovimiento.Auditoria_Usuario as Operador,
+        --Fecha movimiento
+        InvMovimiento.FechaMovimiento  as FechaMovimiento
+        FROM InvMovimiento
+        INNER JOIN InvCausa ON InvCausa.id = InvMovimiento.InvCausaId
+        INNER JOIN InvArticulo ON InvArticulo.id = InvMovimiento.InvArticuloId
+        INNER JOIN InvLote ON InvLote.id = InvMovimiento.InvLoteId
+        INNER JOIN InvAlmacen ON InvAlmacen.id = InvMovimiento.InvAlmacenId
+        WHERE (InvMovimiento.InvCausaId = '14' OR InvMovimiento.InvCausaId = '15'
+        OR InvMovimiento.InvCausaId = '5' OR InvMovimiento.InvCausaId = '6')
+        AND(InvMovimiento.FechaMovimiento > '$FInicial' AND InvMovimiento.FechaMovimiento < '$FFinal')
+        ORDER BY InvMovimiento.FechaMovimiento ASC
     ";
+
+    if ($_GET['SEDE'] == 'FSM') {
+        $sql = "
+         SELECT
+            --Tipo Movimiento
+            InvCausa.Descripcion as TipoMovimiento,
+            -- Origen Movimiento
+            InvMovimiento.origenMovimiento as OrigenMovimiento,
+            --Numero de Movimiento
+            InvMovimiento.DocumentoOrigen as NumeroMovimiento,
+            --Id Articulo
+            InvArticulo.id as IdArticulo,
+            --Codigo Interno
+            InvArticulo.CodigoArticulo AS CodigoInterno,
+            --Codigo de Barra
+            (SELECT CodigoBarra
+            FROM InvCodigoBarra
+            WHERE InvCodigoBarra.InvArticuloId = InvArticulo.Id
+            AND InvCodigoBarra.EsPrincipal = 1) AS CodigoBarra,
+            --Descripcion
+            InvArticulo.Descripcion,
+            --Cantidad
+            InvMovimiento.Cantidad as Cantidad,
+            --Lote
+            InvLote.Numero as Lote,
+            --Almacen
+            InvAlmacen.Descripcion as Almacen,
+            --Costo Unitario
+            InvMovimiento.M_CostoUnitario as CostoUniario,
+            --Comentario Ajuste
+            (SELECT InvAjuste.Comentario
+            FROM InvAjuste
+            WHERE InvAjuste.NumeroAjuste = InvMovimiento.DocumentoOrigen AND (InvMovimiento.InvCausaId = '27' OR InvMovimiento.InvCausaId = '28') ) AS ComentarioAjuste,
+            --Comentario Transferecia
+            (SELECT InvTransferenciaAlmacen.Observaciones
+            FROM InvTransferenciaAlmacen
+            WHERE InvTransferenciaAlmacen.NumeroTransferencia = InvMovimiento.DocumentoOrigen AND (InvMovimiento.InvCausaId = '5' OR InvMovimiento.InvCausaId = '6') ) AS ComentarioTransferencia,
+            --Operador
+            InvMovimiento.Auditoria_Usuario as Operador,
+            --Fecha movimiento
+            InvMovimiento.FechaMovimiento  as FechaMovimiento
+            FROM InvMovimiento
+            INNER JOIN InvCausa ON InvCausa.id = InvMovimiento.InvCausaId
+            INNER JOIN InvArticulo ON InvArticulo.id = InvMovimiento.InvArticuloId
+            INNER JOIN InvLote ON InvLote.id = InvMovimiento.InvLoteId
+            INNER JOIN InvAlmacen ON InvAlmacen.id = InvMovimiento.InvAlmacenId
+            WHERE (InvMovimiento.InvCausaId = '27' OR InvMovimiento.InvCausaId = '28'
+            OR InvMovimiento.InvCausaId = '5' OR InvMovimiento.InvCausaId = '6')
+            AND(InvMovimiento.FechaMovimiento > '$FInicial' AND InvMovimiento.FechaMovimiento < '$FFinal')
+            ORDER BY InvMovimiento.FechaMovimiento ASC
+        ";
+    }
+
     return $sql;
   }
   /**********************************************************************************/
