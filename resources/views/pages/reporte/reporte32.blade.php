@@ -43,8 +43,6 @@
         </form>
 
         <?php
-        //TODO Borrar y dejar el comentario
-        //$hoy = '2021-03-15';
         $hoy = date('Y-m-d');
         if(isset($_GET['Fecha'])){
             if($_GET['Fecha']=='AYER'){
@@ -70,10 +68,6 @@
             $resultDataGRVen = $resulValidator = sqlsrv_query($conn,$sqlDataGRVen);
             $MontoArray = $UnidadesArray = $TransaccionesArray = $HoraArray = array();
 
-            //echo"<pre>";
-			//print_r($sqlDataGRVen);
-			//echo"</pre>";
-
             $rowValidaror = sqlsrv_fetch_array($resulValidator, SQLSRV_FETCH_ASSOC);
             if( isset($rowValidaror['Monto']) && $rowValidaror['Monto']!=""){
 
@@ -86,7 +80,6 @@
 
                 echo '<hr class="row align-items-start col-12">';
                 echo '<h1 class="h5 text-dark" align="center">Ventas por Hora</h1>';
-            //TODO
 
                 echo'
                 <div class="col-12">
@@ -112,7 +105,7 @@
 
                 echo'<div style="clear:both"></div>';
 
-                //R32_Seguimiento_Tienda($_GET['SEDE'],$fecha);
+                R32_Seguimiento_Tienda($_GET['SEDE'],$fecha);
             }else{
                 echo '<hr class="row align-items-start col-12">';
                 echo '<h1 class="h5 text-danger" align="center">El dia '.date('d-m-Y',strtotime($fecha)).' no tiene ventas</h1>';
@@ -139,8 +132,6 @@
 
         $FInicial = $fecha;
         $FFinal = date("Y-m-d",strtotime($FInicial."+ 1 days"));
-        //TODO Borrar y dejar el comentario
-        //$TasaActual = '100000.00';
         $TasaActual = FG_Tasa_Fecha($connCPharma,$FInicial);
 
         $sql6 = R32Q_Vent_generales($FInicial,$FFinal);
@@ -285,39 +276,35 @@
 		<table class="table table-striped table-bordered col-12 sortable" style="width:100%;">
             <thead class="thead-dark">
                 <tr>
-                    <th scope="col"></th>
-                    <th scope="col" colspan="2">Primera Transaccion</th>
-                    <th scope="col" colspan="2">Ultima Transaccion</th>
-                </tr>
-            </thead>
-            <thead class="thead-dark">
-                <tr>
                     <th scope="col">Caja</th>
-                    <th scope="col">Hora</th>
-                    <th scope="col">Monto</th>
-                    <th scope="col">Hora</th>
-                    <th scope="col">Monto</th>
+                    <th scope="col">Unidades</th>
+                    <th scope="col">Frecuencia</th>
+                    <th scope="col">Total</th>
+                    <th scope="col">Factura Promedio</th>
                 </tr>
             </thead>
             <tbody>
         ';
 
         while($rowRC = sqlsrv_fetch_array($resultRC, SQLSRV_FETCH_ASSOC)) {
-            $primerMonto = $rowRC['PrimerMonto'];
-            if($primerMonto>null){
+            $unidades = $rowRC['Unidades'];
+            $frecuencia = $rowRC['Frecuencia'];
+            $total = $rowRC['Total'];
+
+            if( $unidades>0 && $frecuencia>0 ){
+                $facturaPromedio = ($total/$frecuencia);
                 echo '<tr>';
                 echo '<td align="center">'.$rowRC['Caja'].'</td>';
-                echo '<td align="center">'.($rowRC['PrimeraHora']->format('h:i A')).'</td>';
-                echo '<td align="center">'.number_format($primerMonto,2,"," ,"." ).'</td>';
-                echo '<td align="center">'.($rowRC['UltimaHora']->format('h:i A')).'</td>';
-                echo '<td align="center">'.number_format($rowRC['UltimoMonto'],2,"," ,"." ).'</td>';
+                echo '<td align="center">'.intval($unidades).'</td>';
+                echo '<td align="center">'.intval($frecuencia).'</td>';
+                echo '<td align="center">'.number_format($total,2,"," ,"." ).'</td>';
+                echo '<td align="center">'.number_format($facturaPromedio,2,"," ,"." ).'</td>';
                 echo '</tr>';
             }
         }
         echo '
             </tbody>
         </table>';
-    //TODO
 
         $sql5 = R32Q_Vent_art_cond($FInicial,$FFinal);
         $result5 = sqlsrv_query($conn,$sql5);
@@ -855,6 +842,105 @@
   		    </tbody>
         </table>';
 
+        $sqlRCD = R32Q_devolucion_caja($FInicial,$FFinal);
+        $resultRCD = sqlsrv_query($conn,$sqlRCD);
+
+        echo '<hr class="row align-items-start col-12">';
+        echo '<h1 class="h5 text-dark" align="center">Devoluciones por Caja</h1>';
+        echo '
+		<table class="table table-striped table-bordered col-12 sortable" style="width:100%;">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Caja</th>
+                    <th scope="col">Unidades</th>
+                    <th scope="col">Frecuencia</th>
+                    <th scope="col">Total</th>
+                </tr>
+            </thead>
+            <tbody>
+        ';
+
+        while($rowRCD = sqlsrv_fetch_array($resultRCD, SQLSRV_FETCH_ASSOC)) {
+            $unidades = $rowRCD['UnidadesDev'];
+            $frecuencia = $rowRCD['FrecuenciaDev'];
+            $total = $rowRCD['TotalDev'];
+
+            if( $unidades>0 && $frecuencia>0 ){
+                echo '<tr>';
+                echo '<td align="center">'.$rowRCD['Caja'].'</td>';
+                echo '<td align="center">'.intval($unidades).'</td>';
+                echo '<td align="center">'.intval($frecuencia).'</td>';
+                echo '<td align="center">'.number_format($total,2,"," ,"." ).'</td>';
+                echo '</tr>';
+            }
+        }
+        echo '
+            </tbody>
+        </table>';
+
+        $sqlRDC = R32Q_devolucion_causa($FInicial,$FFinal);
+        $resultRDC = sqlsrv_query($conn,$sqlRDC);
+
+        echo '<hr class="row align-items-start col-12">';
+        echo '<h1 class="h5 text-dark" align="center">Devoluciones por Causa</h1>';
+        echo '
+		<table class="table table-striped table-bordered col-12 sortable" style="width:100%;">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Causa</th>
+                    <th scope="col">Unidades</th>
+                    <th scope="col">Total</th>
+                </tr>
+            </thead>
+            <tbody>
+        ';
+
+        while($rowRDC = sqlsrv_fetch_array($resultRDC, SQLSRV_FETCH_ASSOC)) {
+            $unidades = $rowRDC['Cantidad'];
+            $total = $rowRDC['Total'];
+
+            if( $unidades>0 ){
+                echo '<tr>';
+                echo '<td align="center">'.$rowRDC['DescripcionOperacion'].'</td>';
+                echo '<td align="center">'.intval($unidades).'</td>';
+                echo '<td align="center">'.number_format($total,2,"," ,"." ).'</td>';
+                echo '</tr>';
+            }
+        }
+        echo '
+            </tbody>
+        </table>';
+
+        $sqlDVA = R32Q_devolucion_mas_altas($FInicial,$FFinal);
+        $resultDVA = sqlsrv_query($conn,$sqlDVA);
+
+        echo '<hr class="row align-items-start col-12">';
+        echo '<h1 class="h5 text-dark" align="center">Devoluciones mas altas</h1>';
+        echo '
+		<table class="table table-striped table-bordered col-12 sortable" style="width:100%;">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Cliente</th>
+                    <th scope="col">Monto</th>
+                    <th scope="col">Unidades</th>
+                    <th scope="col">Caja</th>
+                </tr>
+            </thead>
+            <tbody>
+        ';
+
+        while($rowDVA = sqlsrv_fetch_array($resultDVA, SQLSRV_FETCH_ASSOC)) {
+            echo '<tr>';
+            echo '<td align="center">'.FG_Limpiar_Texto($rowDVA['Nombre']." ".$rowDVA['Apellido']).'</td>';
+            echo '<td align="center">'.number_format($rowDVA['Monto'],2,"," ,"." ).'</td>';
+            echo '<td align="center">'.intval($rowDVA['Unidades']).'</td>';
+            echo '<td align="center">'.$rowDVA['Caja'].'</td>';
+            echo '</tr>';
+        }
+        echo '
+            </tbody>
+        </table>';
+
         mysqli_close($connCPharma);
 		sqlsrv_close($conn);
 	}
@@ -1370,6 +1456,7 @@
     /*
         TITULO: R32Q_Vent_Cli_Top
     */
+    /*
     function R32Q_resumen_caja($FInicial,$FFinal){
         $sql = "
         select
@@ -1405,6 +1492,72 @@
         order by VenFactura.FechaDocumento desc) as UltimaHora
         from Vencaja
         order by VenCaja.Id asc
+        ";
+        return $sql;
+    }
+    */
+
+    function R32Q_resumen_caja($FInicial,$FFinal){
+        $sql = "SELECT
+        AUX.IdCaja,
+        AUX.Caja,
+        ( ISNULL(AUX.UnidadesSinDev,0) - ISNULL(AUX.UnidadesDev,0) ) as Unidades,
+        ( ISNULL(AUX.FrecuenciaSinDev,0) - ISNULL(AUX.FrecuenciaDev,0) ) as Frecuencia,
+        ( ISNULL(AUX.TotalSinDev,0) - ISNULL(AUX.TotalDev,0) ) as Total
+        from
+        (
+            select
+            VenCaja.Id as IdCaja,
+            VenCaja.EstacionTrabajo as Caja,
+
+            (select
+                SUM(VenFacturaDetalle.Cantidad)
+                from VenFactura
+                LEFT JOIN VenFacturaDetalle on VenFactura.Id = VenFacturaDetalle.VenFacturaId
+                where VenFactura.FechaDocumento > '$FInicial' and VenFactura.FechaDocumento < '$FFinal'
+                and VenFactura.VenCajaId = VenCaja.Id
+            ) as UnidadesSinDev,
+
+            (select
+                COUNT(VenFactura.Id)
+                from VenFactura
+                where VenFactura.FechaDocumento > '$FInicial' and VenFactura.FechaDocumento < '$FFinal'
+                and VenFactura.VenCajaId = VenCaja.Id
+            ) as FrecuenciaSinDev,
+
+            (select
+                SUM(VenFactura.M_MontoTotalFactura)
+                from VenFactura
+                where VenFactura.FechaDocumento > '$FInicial' and VenFactura.FechaDocumento < '$FFinal'
+                and VenFactura.VenCajaId = VenCaja.Id
+            ) as TotalSinDev,
+
+
+            (select
+                SUM(VenDevolucionDetalle.Cantidad)
+                from VenDevolucion
+                LEFT JOIN VenDevolucionDetalle on VenDevolucion.Id = VenDevolucionDetalle.VenDevolucionId
+                where VenDevolucion.FechaDocumento > '$FInicial' and VenDevolucion.FechaDocumento < '$FFinal'
+                and VenDevolucion.VenCajaId = VenCaja.Id
+            ) as UnidadesDev,
+
+            (select
+                COUNT(VenDevolucion.Id)
+                from VenDevolucion
+                where VenDevolucion.FechaDocumento > '$FInicial' and VenDevolucion.FechaDocumento < '$FFinal'
+                and VenDevolucion.VenCajaId = VenCaja.Id
+            ) as FrecuenciaDev,
+
+            (select
+                SUM(VenDevolucion.M_MontoTotalDevolucion)
+                from VenDevolucion
+                where VenDevolucion.FechaDocumento > '$FInicial' and VenDevolucion.FechaDocumento < '$FFinal'
+                and VenDevolucion.VenCajaId = VenCaja.Id
+            ) as TotalDev
+
+            from Vencaja
+        ) as AUX
+        order by AUX.IdCaja asc
         ";
         return $sql;
     }
@@ -1461,6 +1614,88 @@
         GROUP BY convert(char(2), FechaDocumento, 108)
         ) AS DEV ON DEV.hora = FAC.hora
         ORDER BY FAC.hora
+        ";
+        return $sql;
+    }
+
+    function R32Q_devolucion_caja($FInicial,$FFinal){
+        $sql = "SELECT
+        VenCaja.Id as IdCaja,
+        VenCaja.EstacionTrabajo as Caja,
+        (select
+            SUM(VenDevolucionDetalle.Cantidad)
+            from VenDevolucion
+            LEFT JOIN VenDevolucionDetalle on VenDevolucion.Id = VenDevolucionDetalle.VenDevolucionId
+            where VenDevolucion.FechaDocumento > '$FInicial' and VenDevolucion.FechaDocumento < '$FFinal'
+            and VenDevolucion.VenCajaId = VenCaja.Id
+        ) as UnidadesDev,
+        (select
+            COUNT(VenDevolucion.Id)
+            from VenDevolucion
+            where VenDevolucion.FechaDocumento > '$FInicial' and VenDevolucion.FechaDocumento < '$FFinal'
+            and VenDevolucion.VenCajaId = VenCaja.Id
+        ) as FrecuenciaDev,
+        (select
+            SUM(VenDevolucion.M_MontoTotalDevolucion)
+            from VenDevolucion
+            where VenDevolucion.FechaDocumento > '$FInicial' and VenDevolucion.FechaDocumento < '$FFinal'
+            and VenDevolucion.VenCajaId = VenCaja.Id
+        ) as TotalDev
+        from Vencaja
+        order by IdCaja asc
+        ";
+        return $sql;
+    }
+
+    function R32Q_devolucion_causa($FInicial,$FFinal){
+        $sql = "SELECT
+        AUX1.causaID,
+        AUX1.DescripcionOperacion as DescripcionOperacion,
+        SUM(AUX1.Cantidad) as Cantidad,
+        SUM(VenDevolucion.M_MontoTotalDevolucion) as Total
+        from (
+                SELECT
+                VenCausaOperacionDevolucion.Id as causaID,
+                VenCausaOperacionDevolucion.DescripcionOperacion,
+                AUX.VenDevolucionId as DevolucionID,
+                SUM(AUX.Cantidad) AS Cantidad
+                FROM (
+                    SELECT
+                    VenDevolucionDetalle.VenDevolucionId,
+                    VenDevolucionDetalle.Cantidad,
+                    VenDevolucionDetalle.VenCausaOperacionId
+                    from VenDevolucion
+                    LEFT JOIN VenDevolucionDetalle on VenDevolucion.Id = VenDevolucionDetalle.VenDevolucionId
+                    where VenDevolucion.FechaDocumento > '$FInicial' and VenDevolucion.FechaDocumento < '$FFinal'
+                ) as AUX
+            left join VenCausaOperacionDevolucion on AUX.VenCausaOperacionId = VenCausaOperacionDevolucion.Id
+            group by AUX.VenDevolucionId, AUX.VenCausaOperacionId, VenCausaOperacionDevolucion.DescripcionOperacion, VenCausaOperacionDevolucion.Id
+            ) as AUX1
+            left join VenDevolucion on AUX1.DevolucionID = VenDevolucion.Id
+        group by AUX1.causaID, AUX1.DescripcionOperacion
+        order by AUX1.causaID asc
+        ";
+        return $sql;
+    }
+
+    function R32Q_devolucion_mas_altas($FInicial,$FFinal){
+        $sql = "SELECT top 5
+        GenPersona.Nombre,
+        GenPersona.Apellido,
+        VenDevolucion.M_MontoTotalDevolucion as Monto,
+        (select
+            SUM(VenDevolucionDetalle.Cantidad)
+            from VenDevolucionDetalle
+            where VenDevolucionDetalle.VenDevolucionId =  VenDevolucion.Id
+        ) as Unidades,
+        VenCaja.EstacionTrabajo as Caja
+        from VenDevolucion
+        left join VenCaja on VenDevolucion.VenCajaId = VenCaja.Id
+        LEFT join VenFactura on VenDevolucion.VenFacturaId = VenFactura.Id
+        LEFT JOIN VenCliente ON VenCliente.Id = VenFactura.VenClienteId
+        LEFT JOIN GenPersona ON GenPersona.Id = VenCliente.GenPersonaId
+        where VenDevolucion.FechaDocumento > '$FInicial' and VenDevolucion.FechaDocumento < '$FFinal'
+        order by VenDevolucion.M_MontoTotalDevolucion desc
         ";
         return $sql;
     }
