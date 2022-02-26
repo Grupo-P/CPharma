@@ -205,9 +205,15 @@
             $PrecioCompraBruto = $row["PrecioCompraBruto"];
             $CondicionExistencia = 'CON_EXISTENCIA';
 
+            $Precio = FG_Calculo_Precio_Alfa($Existencia,$ExistenciaAlmacen1,$ExistenciaAlmacen2,$IsTroquelado,$UtilidadArticulo,$UtilidadCategoria,$TroquelAlmacen1,$PrecioCompraBrutoAlmacen1,$TroquelAlmacen2,
+                $PrecioCompraBrutoAlmacen2,$PrecioCompraBruto,$IsIVA,$CondicionExistencia);
+
+                $PrecioDolar = ($Precio/$TasaActual);
+                $PrecioDolar = number_format($PrecioDolar,2,"." ,"," );
+
             /*EXCEL*/
                 $sheet->setCellValue('A'.$contador,$CodigoBarra);
-                $sheet->setCellValue('B'.$contador,'0');
+                $sheet->setCellValue('B'.$contador,$PrecioDolar);
                 $sheet->setCellValue('C'.$contador,'0');
             /*EXCEL*/
             $contador++;
