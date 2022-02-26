@@ -276,11 +276,20 @@
 		<table class="table table-striped table-bordered col-12 sortable" style="width:100%;">
             <thead class="thead-dark">
                 <tr>
+                    <th scope="col" colspan="5"></th>
+                    <th scope="col" colspan="2">Primera Trasaccion</th>
+                    <th scope="col" colspan="2">Segunda Trasaccion</th>
+                </tr>
+                <tr>
                     <th scope="col">Caja</th>
                     <th scope="col">Unidades</th>
                     <th scope="col">Frecuencia</th>
                     <th scope="col">Total</th>
                     <th scope="col">Factura Promedio</th>
+                    <th scope="col">Hora</th>
+                    <th scope="col">Monto</th>
+                    <th scope="col">Hora</th>
+                    <th scope="col">Monto</th>
                 </tr>
             </thead>
             <tbody>
@@ -299,6 +308,10 @@
                 echo '<td align="center">'.intval($frecuencia).'</td>';
                 echo '<td align="center">'.number_format($total,2,"," ,"." ).'</td>';
                 echo '<td align="center">'.number_format($facturaPromedio,2,"," ,"." ).'</td>';
+                echo '<td align="center">'.$rowRC['PrimerMonto'].'</td>';
+                echo '<td align="center">'.$rowRC['PrimeraHora']->format('H:m A').'</td>';
+                echo '<td align="center">'.$rowRC['UltimoMonto'].'</td>';
+                echo '<td align="center">'.$rowRC['UltimaHora']->format('H:m A').'</td>';
                 echo '</tr>';
             }
         }
@@ -1503,7 +1516,36 @@
         AUX.Caja,
         ( ISNULL(AUX.UnidadesSinDev,0) - ISNULL(AUX.UnidadesDev,0) ) as Unidades,
         ( ISNULL(AUX.FrecuenciaSinDev,0) - ISNULL(AUX.FrecuenciaDev,0) ) as Frecuencia,
-        ( ISNULL(AUX.TotalSinDev,0) - ISNULL(AUX.TotalDev,0) ) as Total
+        ( ISNULL(AUX.TotalSinDev,0) - ISNULL(AUX.TotalDev,0) ) as Total,
+
+		(select top 1
+        VenFactura.M_MontoTotalFactura
+        from VenFactura
+        where VenFactura.FechaDocumento > '$FInicial' and VenFactura.FechaDocumento < '$FFinal'
+        and VenFactura.VenCajaId = AUX.IdCaja
+        order by VenFactura.FechaDocumento asc) as PrimerMonto,
+
+		(select top 1
+        VenFactura.FechaDocumento
+        from VenFactura
+        where VenFactura.FechaDocumento > '$FInicial' and VenFactura.FechaDocumento < '$FFinal'
+        and VenFactura.VenCajaId = AUX.IdCaja
+        order by VenFactura.FechaDocumento asc) as PrimeraHora,
+
+		(select top 1
+        VenFactura.M_MontoTotalFactura
+        from VenFactura
+        where VenFactura.FechaDocumento > '$FInicial' and VenFactura.FechaDocumento < '$FFinal'
+        and VenFactura.VenCajaId = AUX.IdCaja
+        order by VenFactura.FechaDocumento desc) as UltimoMonto,
+
+        (select top 1
+        VenFactura.FechaDocumento
+        from VenFactura
+        where VenFactura.FechaDocumento > '$FInicial' and VenFactura.FechaDocumento < '$FFinal'
+        and VenFactura.VenCajaId = AUX.IdCaja
+        order by VenFactura.FechaDocumento desc) as UltimaHora
+
         from
         (
             select
