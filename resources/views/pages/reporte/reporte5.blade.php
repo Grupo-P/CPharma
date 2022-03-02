@@ -213,11 +213,6 @@
     $conectividad_fll = FG_Validar_Conectividad('FLL');
     $conectividad_fsm = FG_Validar_Conectividad('FSM');
 
-    $conectividad_ftn = 0;
-    $conectividad_fau = 0;
-    $conectividad_fll = 0;
-    $conectividad_fsm = 0;
-
     $connFAU = FG_Conectar_Smartpharma('FAU');
     $connFTN = FG_Conectar_Smartpharma('FTN');
     $connFLL = FG_Conectar_Smartpharma('FLL');
