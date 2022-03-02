@@ -77,7 +77,7 @@
      */
     function FG_LastRestoreDB($nameDataBase,$SedeConnection){
         $conn = FG_Conectar_Smartpharma($SedeConnection);
-        $sql = "SELECT TOP 1 * FROM VenFactura ORDER BY VenFactura.FechaDocumento DESC";
+        $sql = "SELECT TOP 1 * FROM $nameDataBase.[dbo].VenFactura ORDER BY FechaDocumento DESC";
         $result = sqlsrv_query($conn,$sql);
         $row = sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC);
         $FechaRestauracion = $row["FechaDocumento"]->format("Y-m-d h:i:s a");
