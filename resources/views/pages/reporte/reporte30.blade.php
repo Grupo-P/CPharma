@@ -1037,6 +1037,7 @@
             <th scope="col">Codigo</th>
             <th scope="col">Codigo de Barra</th>
             <th scope="col">Descripcion</th>
+            <th scope="col">Existencia actual</th>
             <th scope="col">Cantidad Recibida</th>';
 
     if (isset($_GET['SEDE']) & ($_GET['SEDE'] == 'FAU' || $_GET['SEDE'] == 'DBs')) {
@@ -1130,6 +1131,8 @@
           .$Descripcion.
         '</a>
         </td>';
+
+      echo '<td align="center">'.$Existencia.'</td>';
 
       echo
         '<td align="center" class="CP-barrido">
