@@ -172,7 +172,17 @@
     else {
       echo '
         <form autocomplete="off" action="" target="_blank">
-          <table style="width:100%;">
+          <table style="width: 100%">
+            <tr>
+              <td align="justify" colspan="3">
+                <div class="alert alert-info">
+                    <li>En el resultado no se mostraran articulos que en la sede origen tengan existencia mayor a la cantidad indicada. Ejemplo: si se marca 30 unidades, se mostraran todos los articulos con existencia en la sede origen menor a 30 y con existencia mayor a cero en las sedes destino, los articulos con existencia mayor a 30 no se analizaran en este reporte.</li>
+
+                    <li>Una existencia alta generara mas resultados que una solicitud con una cantidad baja. La idea es hacerle entender al sistema que esa existencia indicada es una cantidad que necesita ser repuesta con mercancia de otras tiendas via traslado.</li>
+                </div>
+              </td>
+            </tr>
+
             <tr>
               <td align="center">
                 <label for="existenciaUsuario">Artículos con existencia menor o igual a:</label>
