@@ -1031,7 +1031,7 @@
 	<!-- CASO GP -->
 	<?php
 		}
-		if($SedeConnection == 'FTN') {
+		if($SedeConnection == 'DBs') {
 	?>
         <hr class="row align-items-start col-12">
         <h1 class="h5 text-info text-center">
