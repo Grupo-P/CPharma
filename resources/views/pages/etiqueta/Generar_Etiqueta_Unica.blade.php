@@ -245,7 +245,7 @@
 
         $('#inputCodBar').val('');
 
-        console.log(indiceCodBarScan, indiceScanDesc);
+        //console.log(indiceCodBarScan, indiceScanDesc);
 
         if( (indiceCodBarScan>=0) && (indiceScanDesc)>=0 ) {
 
@@ -263,6 +263,8 @@
             success: function(data) {
               var respuesta = data;
               var letras = respuesta.substr(0,2);
+
+              console.log(parametro);
 
               if(letras=='EL'){
               	$("#MsnError").html(respuesta);

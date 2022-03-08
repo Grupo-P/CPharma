@@ -936,10 +936,12 @@
     $conectividad_ftn = FG_Validar_Conectividad('FTN');
     $conectividad_fau = FG_Validar_Conectividad('FAU');
     $conectividad_fll = FG_Validar_Conectividad('FLL');
+    $conectividad_fsm = FG_Validar_Conectividad('FSM');
 
     $connFAU = FG_Conectar_Smartpharma('FAU');
     $connFTN = FG_Conectar_Smartpharma('FTN');
     $connFLL = FG_Conectar_Smartpharma('FLL');
+    $connFSM = FG_Conectar_Smartpharma('FSM');
 
     $conn = FG_Conectar_Smartpharma($SedeConnection);
     $sql1 = R30Q_Factura_Articulo($IdFatura);
@@ -1033,16 +1035,18 @@
     <table class="table table-striped table-bordered col-12 sortable" id="myTable">
         <thead class="thead-dark">
           <tr>
-            <th scope="col">#</th>
-            <th scope="col">Codigo</th>
-            <th scope="col">Codigo de Barra</th>
-            <th scope="col">Descripcion</th>
-            <th scope="col">Cantidad Recibida</th>';
+            <th class="CP-sticky" scope="col">#</th>
+            <th class="CP-sticky" scope="col">Codigo</th>
+            <th class="CP-sticky" scope="col">Codigo de Barra</th>
+            <th class="CP-sticky" scope="col">Descripcion</th>
+            <th class="CP-sticky" scope="col">Existencia actual</th>
+            <th class="CP-sticky" scope="col">Cantidad Recibida</th>';
 
     if (isset($_GET['SEDE']) & ($_GET['SEDE'] == 'FAU' || $_GET['SEDE'] == 'DBs')) {
         echo '
             <th scope="col" class="CP-sticky">Existencia FTN</td>
             <th scope="col" class="CP-sticky">Existencia FLL</td>
+            <th scope="col" class="CP-sticky">Existencia FSM</td>
         ';
       }
 
@@ -1050,6 +1054,7 @@
         echo '
             <th scope="col" class="CP-sticky">Existencia FAU</td>
             <th scope="col" class="CP-sticky">Existencia FLL</td>
+            <th scope="col" class="CP-sticky">Existencia FSM</td>
         ';
       }
 
@@ -1057,6 +1062,15 @@
         echo '
             <th scope="col" class="CP-sticky">Existencia FTN</td>
             <th scope="col" class="CP-sticky">Existencia FAU</td>
+            <th scope="col" class="CP-sticky">Existencia FSM</td>
+        ';
+      }
+
+      if (isset($_GET['SEDE']) & $_GET['SEDE'] == 'FSM') {
+        echo '
+            <th scope="col" class="CP-sticky">Existencia FTN</td>
+            <th scope="col" class="CP-sticky">Existencia FAU</td>
+            <th scope="col" class="CP-sticky">Existencia FLL</td>
         ';
       }
 
@@ -1131,6 +1145,8 @@
         '</a>
         </td>';
 
+      echo '<td align="center">'.$Existencia.'</td>';
+
       echo
         '<td align="center" class="CP-barrido">
         <a href="/reporte6?pedido=15&fechaInicio='.$fechaDocumentoLink.'&fechaFin='.$fechaActual.'&SEDE='.$SedeConnection.'&flag=BsqDescrip&Descrip='.$Descripcion.'&IdD='.$IdArticulo.'&CodBar=&IdCB=" style="text-decoration: none; color: black;" target="_blank">'
@@ -1155,6 +1171,14 @@
 
           $existencia_fll = ($row3['existencia'] || $row3['existencia'] == 0) ? intval($row3['existencia']) : 'No existe';
         }
+
+        if ($conectividad_fsm == 1) {
+          $sql3 = R30_Q_Descripcion_Existencia_Articulo($CodigoBarra);
+          $result3 = sqlsrv_query($connFSM,$sql3);
+          $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
+
+          $existencia_fsm = ($row3['existencia'] || $row3['existencia'] == 0) ? intval($row3['existencia']) : 'No existe';
+        }
       }
 
       if (isset($_GET['SEDE']) & $_GET['SEDE'] == 'FTN') {
@@ -1173,6 +1197,14 @@
 
             $existencia_fll = ($row3['existencia'] || $row3['existencia'] == 0) ? intval($row3['existencia']) : 'No existe';
           }
+
+          if ($conectividad_fsm == 1) {
+              $sql3 = R30_Q_Descripcion_Existencia_Articulo($CodigoBarra);
+              $result3 = sqlsrv_query($connFSM,$sql3);
+              $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
+
+              $existencia_fsm = ($row3['existencia'] || $row3['existencia'] == 0) ? intval($row3['existencia']) : 'No existe';
+            }
       }
 
       if (isset($_GET['SEDE']) & $_GET['SEDE'] == 'FLL') {
@@ -1191,6 +1223,40 @@
 
             $existencia_fau = ($row3['existencia'] || $row3['existencia'] == 0) ? intval($row3['existencia']) : 'No existe';
           }
+
+          if ($conectividad_fsm == 1) {
+              $sql3 = R30_Q_Descripcion_Existencia_Articulo($CodigoBarra);
+              $result3 = sqlsrv_query($connFSM,$sql3);
+              $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
+
+              $existencia_fsm = ($row3['existencia'] || $row3['existencia'] == 0) ? intval($row3['existencia']) : 'No existe';
+            }
+      }
+
+      if (isset($_GET['SEDE']) & $_GET['SEDE'] == 'FSM') {
+         if ($conectividad_ftn == 1) {
+            $sql3 = R30_Q_Descripcion_Existencia_Articulo($CodigoBarra);
+            $result3 = sqlsrv_query($connFTN,$sql3);
+            $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
+
+            $existencia_ftn = ($row3['existencia'] || $row3['existencia'] == 0) ? intval($row3['existencia']) : 'No existe';
+          }
+
+          if ($conectividad_fau == 1) {
+            $sql3 = R30_Q_Descripcion_Existencia_Articulo($CodigoBarra);
+            $result3 = sqlsrv_query($connFAU,$sql3);
+            $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
+
+            $existencia_fau = ($row3['existencia'] || $row3['existencia'] == 0) ? intval($row3['existencia']) : 'No existe';
+          }
+
+          if ($conectividad_fll == 1) {
+              $sql3 = R30_Q_Descripcion_Existencia_Articulo($CodigoBarra);
+              $result3 = sqlsrv_query($connFLL,$sql3);
+              $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
+
+              $existencia_fll = ($row3['existencia'] || $row3['existencia'] == 0) ? intval($row3['existencia']) : 'No existe';
+            }
       }
 
       if (isset($_GET['SEDE']) & ($_GET['SEDE'] == 'FAU' || $_GET['SEDE'] == 'DBs')) {
@@ -1202,6 +1268,12 @@
 
             if ($conectividad_fll == 1) {
                 echo '<td align="center">'.$existencia_fll.'</td>';
+            } else {
+                echo '<td align="center">Sin conexión</td>';
+            }
+
+            if ($conectividad_fsm == 1) {
+                echo '<td align="center">'.$existencia_fsm.'</td>';
             } else {
                 echo '<td align="center">Sin conexión</td>';
             }
@@ -1219,6 +1291,12 @@
             } else {
                 echo '<td align="center">Sin conexión</td>';
             }
+
+            if ($conectividad_fsm == 1) {
+                echo '<td align="center">'.$existencia_fsm.'</td>';
+            } else {
+                echo '<td align="center">Sin conexión</td>';
+            }
         }
 
         if (isset($_GET['SEDE']) & $_GET['SEDE'] == 'FLL') {
@@ -1230,6 +1308,12 @@
 
             if ($conectividad_fau == 1) {
                 echo ' <td align="center">'.$existencia_fau.'</td>';
+            } else {
+                echo '<td align="center">Sin conexión</td>';
+            }
+
+            if ($conectividad_fsm == 1) {
+                echo '<td align="center">'.$existencia_fsm.'</td>';
             } else {
                 echo '<td align="center">Sin conexión</td>';
             }

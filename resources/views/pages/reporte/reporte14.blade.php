@@ -129,6 +129,22 @@
 
             return $('.' + elemento).hide();
         }
+
+        campos = ['codigo', 'codigo_barra', 'descripcion', 'precio', 'existencia', 'unidades_vendidas', 'dias_restantes', 'ultimo_proveedor', 'sede1', 'sede2', 'sede3'];
+
+        function mostrar_todas(that) {
+            if (that.checked) {
+                for (var i = campos.length - 1; i >= 0; i--) {
+                    $('.' + campos[i]).show();
+                    $('[name='+campos[i]+']').prop('checked', true);
+                }
+            } else {
+                for (var i = campos.length - 1; i >= 0; i--) {
+                    $('.' + campos[i]).hide();
+                    $('[name='+campos[i]+']').prop('checked', false);
+                }
+            }
+        }
     </script>
 @endsection
 
@@ -265,18 +281,23 @@
                 </div>
 
                 <div class="form-group">
-                    <input type="checkbox" onclick="mostrar_ocultar(this, \'sede1\')" name="Sede 1" checked>
+                    <input type="checkbox" onclick="mostrar_ocultar(this, \'sede1\')" name="sede1" checked>
                     Sede 1
                 </div>
 
                 <div class="form-group">
-                    <input type="checkbox" onclick="mostrar_ocultar(this, \'sede2\')" name="Sede 2" checked>
+                    <input type="checkbox" onclick="mostrar_ocultar(this, \'sede2\')" name="sede2" checked>
                     Sede 2
                 </div>
 
                 <div class="form-group">
-                    <input type="checkbox" onclick="mostrar_ocultar(this, \'sede3\')" name="Sede 3" checked>
+                    <input type="checkbox" onclick="mostrar_ocultar(this, \'sede3\')" name="sede3" checked>
                     Sede 3
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_todas(this)" name="Marcar todas" checked>
+                    Marcar todas
                 </div>
               </div>
               <div class="modal-footer">

@@ -548,3 +548,7 @@ Route::get('/trasladoRecibir/{codigo_barra}/{sede}', 'TrasladoRecibirController@
 Route::get('/trasladoRecibir/limpiar', 'TrasladoRecibirController@destroy');
 
 Route::resource('prepagados', 'ContPrepagadosController');
+
+Route::resource('tasas', 'ContTasas');
+
+Route::resource('corrida', 'ContCorridas');
