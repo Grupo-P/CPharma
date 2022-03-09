@@ -394,7 +394,7 @@
   */
   function R28Q_Productos_PorVencer() {
     $sql = "
-    SELECT TOP 100
+    SELECT
     --Id Articulo
     InvArticulo.Id AS IdArticulo,
     --Categoria Articulo
