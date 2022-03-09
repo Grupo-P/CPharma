@@ -55,6 +55,14 @@
   <script>
         campos = ['codigo', 'codigo_barra', 'descripcion', 'existencia', 'dolarizado', 'gravado', 'clasificacion', 'unidades_vendidas', 'unidades_compradas', 'venta_diaria', 'venta_diaria_real', 'dias_restantes', 'dias_restantes_real', 'precio', 'ultimo_precio', 'ultimo_lote', 'ultima_compra', 'ultima_venta_rango', 'ultima_venta', 'ultimo_proveedor', 'pedir', 'pedir_real'];
 
+        function mostrar_ocultar(that, elemento) {
+            if (that.checked) {
+                return $('.' + elemento).show();
+            }
+
+            return $('.' + elemento).hide();
+        }
+
         function mostrar_todas(that) {
             if (that.checked) {
                 for (var i = campos.length - 1; i >= 0; i--) {
@@ -549,10 +557,10 @@
         }
 
         if(!is_null($UltimaVentaRango)){
-          echo '<td align="ultima_venta_rango center">'.$UltimaVentaRango->format('d-m-Y').'</td>';
+          echo '<td class="ultima_venta_rango" align="center">'.$UltimaVentaRango->format('d-m-Y').'</td>';
         }
         else{
-          echo '<td align="ultima_venta_rango center"> - </td>';
+          echo '<td class="ultima_venta_rango" align="center"> - </td>';
         }
 
         if(!is_null($UltimaVenta)){
