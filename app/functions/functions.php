@@ -4055,6 +4055,7 @@
         while($row1 = sqlsrv_fetch_array($result1, SQLSRV_FETCH_ASSOC)) {
 
             $TasaMercado = FG_Tasa_Fecha($connCPharma,$row1["Auditoria_FechaCreacion"]->format('Y-m-d'));
+            $Descripcion = FG_Limpiar_Texto($row1["Descripcion"]);
 
             if($TasaMercado!=0){
 
