@@ -239,7 +239,7 @@
     <br/>
     ';
     echo '<h6 align="center">Periodo desde el '.$FInicialImp.' al '.$FFinalImp.'</h6>';
-    echo '<h6 align="center"><a href="" data-toggle="modal" data-target="#ver_campos"><i class="fa fa-eye"></i> Ocultar u mostrar columnas<a></h6>';
+    echo '<h6 align="center"><a href="" data-toggle="modal" data-target="#ver_campos"><i class="fa fa-eye"></i> Ocultar o mostrar columnas<a></h6>';
 
     echo '
         <div class="modal fade" id="ver_campos" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
