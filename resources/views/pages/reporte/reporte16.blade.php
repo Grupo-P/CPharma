@@ -334,7 +334,7 @@
   */
   function R16Q_Detalle_Articulo_Estrella() {
     $sql = "
-   	SELECT TOP 10
+   	SELECT
     --Id Articulo
     InvArticulo.Id AS IdArticulo,
     --Categoria Articulo

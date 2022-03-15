@@ -389,7 +389,6 @@
     WHERE (fecha_captura >= '$FInicial') AND (fecha_captura < '$FFinal')
     GROUP BY id_articulo,codigo_interno,codigo_barra,descripcion
     ORDER BY VecesEscaneadas DESC
-    LIMIT 100
   ";
   return $sql;
  }
