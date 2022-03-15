@@ -48,6 +48,33 @@
     color: #ffffff;
   }
   </style>
+
+
+  <script>
+      function mostrar_ocultar(that, elemento) {
+            if (that.checked) {
+                return $('.' + elemento).show();
+            }
+
+            return $('.' + elemento).hide();
+        }
+
+        campos = ['codigo', 'codigo_barra', 'descripcion', 'precio', 'dias_falla', 'existencia', 'cantidad_recibida', 'fecha_llegada', 'tipo', 'dolarizado', 'gravado', 'clasificacion', 'ultima_venta', 'ultimo_proveedor'];
+
+        function mostrar_todas(that) {
+            if (that.checked) {
+                for (var i = campos.length - 1; i >= 0; i--) {
+                    $('.' + campos[i]).show();
+                    $('[name='+campos[i]+']').prop('checked', true);
+                }
+            } else {
+                for (var i = campos.length - 1; i >= 0; i--) {
+                    $('.' + campos[i]).hide();
+                    $('[name='+campos[i]+']').prop('checked', false);
+                }
+            }
+        }
+  </script>
 @endsection
 
 @section('content')
@@ -142,26 +169,123 @@
     </div>
     <br/>
     ';
+
+    echo '
+        <div class="modal fade" id="ver_campos" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Mostrar u ocultar columnas</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, \'codigo\')" name="codigo" checked>
+                    Código
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, \'codigo_barra\')" name="codigo_barra" checked>
+                    Código de barra
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, \'descripcion\')" name="descripcion" checked>
+                    Descripción
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, \'precio\')" name="precio" checked>
+                    Precio
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, \'dias_falla\')" name="dias_falla" checked>
+                    Dias en falla
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, \'existencia\')" name="existencia" checked>
+                    Existencia
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, \'cantidad_recibida\')" name="cantidad_recibida" checked>
+                    Cantidad recibida
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, \'fecha_llegada\')" name="fecha_llegada" checked>
+                    Fecha llegada
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, \'tipo\')" name="tipo" checked>
+                    Tipo
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, \'dolarizado\')" name="dolarizado" checked>
+                    Dolarizado
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, \'gravado\')" name="gravado" checked>
+                    Gravado
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, \'clasificacion\')" name="clasificacion" checked>
+                    Clasificación
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, \'ultima_venta\')" name="ultima_venta" checked>
+                    Última venta
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, \'ultimo_proveedor\')" name="ultimo_proveedor" checked>
+                    Último proveedor
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_todas(this)" name="Marcar todas" checked>
+                    Marcar todas
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+              </div>
+            </div>
+          </div>
+        </div>';
+
     echo'<h6 align="center">Periodo desde el '.$FInicialImp.' al '.$FFinalImp.' </h6>';
+
+    echo '<h6 align="center"><a href="" data-toggle="modal" data-target="#ver_campos"><i class="fa fa-eye"></i> Mostrar u ocultar campos<a></h6>';
+
     echo'
     <table class="table table-striped table-bordered col-12 sortable" id="myTable">
         <thead class="thead-dark">
           <tr>
             <th scope="col" class="CP-sticky">#</th>
-            <th scope="col" class="CP-sticky">Codigo</th>
-            <th scope="col" class="CP-sticky">Codigo de barra</th>
-            <th scope="col" class="CP-sticky">Descripcion</th>
-            <th scope="col" class="CP-sticky">Precio</br>(Con IVA) '.SigVe.'</td>
-            <th scope="col" class="CP-sticky">Dias en falla</th>
-            <th scope="col" class="CP-sticky">Existencia</th>
-            <th scope="col" class="CP-sticky">Cantidad recibida</td>
-            <th scope="col" class="CP-sticky">Fecha Llegada</th>
-            <th scope="col" class="CP-sticky">Tipo</th>
-            <th scope="col" class="CP-sticky">Dolarizado?</td>
-            <th scope="col" class="CP-sticky">Gravado?</td>
-            <th scope="col" class="CP-sticky">Clasificacion</td>
-            <th scope="col" class="CP-sticky">Ultima Venta</th>
-            <th scope="col" class="CP-sticky">Ultimo Proveedor</th>
+            <th scope="col" class="codigo CP-sticky">Codigo</th>
+            <th scope="col" class="codigo_barra CP-sticky">Codigo de barra</th>
+            <th scope="col" class="descripcion CP-sticky">Descripcion</th>
+            <th scope="col" class="precio CP-sticky">Precio</br>(Con IVA) '.SigVe.'</td>
+            <th scope="col" class="dias_falla CP-sticky">Dias en falla</th>
+            <th scope="col" class="existencia CP-sticky">Existencia</th>
+            <th scope="col" class="cantidad_recibida CP-sticky">Cantidad recibida</td>
+            <th scope="col" class="fecha_llegada CP-sticky">Fecha Llegada</th>
+            <th scope="col" class="tipo CP-sticky">Tipo</th>
+            <th scope="col" class="dolarizado CP-sticky">Dolarizado?</td>
+            <th scope="col" class="gravado CP-sticky">Gravado?</td>
+            <th scope="col" class="clasificacion CP-sticky">Clasificacion</td>
+            <th scope="col" class="ultima_venta CP-sticky">Ultima Venta</th>
+            <th scope="col" class="ultimo_proveedor CP-sticky">Ultimo Proveedor</th>
           </tr>
         </thead>
         <tbody>
@@ -220,43 +344,43 @@
 
         echo '<tr>';
         echo '<td align="center"><strong>'.intval($contador).'</strong></td>';
-        echo '<td>'.$CodigoArticulo.'</td>';
-        echo '<td>'.$CodigoBarra.'</td>';
+        echo '<td class="codigo">'.$CodigoArticulo.'</td>';
+        echo '<td class="codigo_barra">'.$CodigoBarra.'</td>';
 
         echo '
-          <td align="left" class="CP-barrido">
+          <td align="left" class="descripcion CP-barrido">
             <a href="/reporte2?Id='.$IdArticulo.'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
               .$Descripcion
             .'</a>
           </td>
         ';
-        echo '<td align="center">'.number_format($Precio,2,"," ,"." ).'</td>';
-        echo '<td align="center">'.$diasFalla.'</td>';
-        echo '<td align="center">'.intval($Existencia).'</td>';
-        echo '<td align="center">'.$CantidadRecibida.'</td>';
-        echo '<td align="center">'.$ultimaCompra->format('d-m-Y').'</td>';
-        echo '<td align="center">'.$Tipo.'</td>';
-        echo '<td align="center">'.$Dolarizado.'</td>';
-        echo '<td align="center">'.$Gravado.'</td>';
-        echo '<td align="center">'.$clasificacion.'</td>';
+        echo '<td class="precio" align="center">'.number_format($Precio,2,"," ,"." ).'</td>';
+        echo '<td class="dias_falla" align="center">'.$diasFalla.'</td>';
+        echo '<td class="existencia" align="center">'.intval($Existencia).'</td>';
+        echo '<td class="cantidad_recibida" align="center">'.$CantidadRecibida.'</td>';
+        echo '<td class="fecha_llegada" align="center">'.$ultimaCompra->format('d-m-Y').'</td>';
+        echo '<td class="tipo" align="center">'.$Tipo.'</td>';
+        echo '<td class="dolarizado" align="center">'.$Dolarizado.'</td>';
+        echo '<td class="gravado" align="center">'.$Gravado.'</td>';
+        echo '<td class="clasificacion" align="center">'.$clasificacion.'</td>';
 
         if(!is_null($UltimaVenta)){
-          echo '<td align="center">'.$UltimaVenta->format('d-m-Y').'</td>';
+          echo '<td class="ultima_venta" align="center">'.$UltimaVenta->format('d-m-Y').'</td>';
         }
         else{
-          echo '<td align="center"> - </td>';
+          echo '<td class="ultima_venta" align="center"> - </td>';
         }
 
         if(!is_null($UltimoProveedorNombre)){
            echo
-          '<td align="left" class="CP-barrido">
+          '<td align="left" class="ultimo_proveedor CP-barrido">
           <a href="/reporte7?Nombre='.$UltimoProveedorNombre.'&Id='.$UltimoProveedorId.'&SEDE='.$SedeConnection.'" target="_blank" style="text-decoration: none; color: black;">'
             .$UltimoProveedorNombre.
           '</a>
           </td>';
         }
         else{
-          echo '<td align="center"> - </td>';
+          echo '<td class="ultimo_proveedor" align="center"> - </td>';
         }
 
         echo '</tr>';
