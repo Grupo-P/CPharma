@@ -48,6 +48,32 @@
     color: #ffffff;
   }
   </style>
+
+  <script>
+      function mostrar_ocultar(that, elemento) {
+            if (that.checked) {
+                return $('.' + elemento).show();
+            }
+
+            return $('.' + elemento).hide();
+        }
+
+        campos = ['codigo', 'codigo_barra', 'descripcion', 'precio', 'dolarizado', 'clasificacion', 'existencia', 'veces_escaneadas', 'veces_facturadas', 'contraste', 'unidades_facturadas', 'promedio_factura', 'ultimo_proveedor'];
+
+        function mostrar_todas(that) {
+            if (that.checked) {
+                for (var i = campos.length - 1; i >= 0; i--) {
+                    $('.' + campos[i]).show();
+                    $('[name='+campos[i]+']').prop('checked', true);
+                }
+            } else {
+                for (var i = campos.length - 1; i >= 0; i--) {
+                    $('.' + campos[i]).hide();
+                    $('[name='+campos[i]+']').prop('checked', false);
+                }
+            }
+        }
+  </script>
 @endsection
 
 @section('content')
@@ -131,6 +157,89 @@
     $result = mysqli_query($connCPharma,$sql);
 
     echo '
+        <div class="modal fade" id="ver_campos" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Mostrar u ocultar columnas</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, \'codigo\')" name="codigo" checked>
+                    Código
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, \'codigo_barra\')" name="codigo_barra" checked>
+                    Código de barra
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, \'descripcion\')" name="descripcion" checked>
+                    Descripción
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, \'precio\')" name="precio" checked>
+                    Precio
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, \'dolarizado\')" name="dolarizado" checked>
+                    Dolarizado
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, \'existencia\')" name="existencia" checked>
+                    Existencia
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, \'veces_escaneadas\')" name="veces_escaneadas" checked>
+                    Veces escaneadas
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, \'veces_facturadas\')" name="veces_facturadas" checked>
+                    Veces facturadas
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, \'contraste\')" name="contraste" checked>
+                    Contraste
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, \'unidades_facturadas\')" name="unidades_facturadas" checked>
+                    Unidades facturadas
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, \'promedio_factura\')" name="promedio_factura" checked>
+                    Promedio por factura
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, \'ultimo_proveedor\')" name="ultimo_proveedor" checked>
+                    Ultimo proveedor
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_todas(this)" name="Marcar todas" checked>
+                    Marcar todas
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+              </div>
+            </div>
+          </div>
+        </div>';
+
+    echo '
     <div class="input-group md-form form-sm form-1 pl-0 CP-stickyBar">
       <div class="input-group-prepend">
         <span class="input-group-text purple lighten-3" id="basic-text1">
@@ -144,24 +253,26 @@
     ';
     echo'<h6 align="center">Periodo desde el '.$FInicialImp.' al '.$FFinalImp.' </h6>';
 
+    echo '<h6 align="center"><a href="" data-toggle="modal" data-target="#ver_campos"><i class="fa fa-eye"></i> Mostrar u ocultar campos<a></h6>';
+
     echo '
     <table class="table table-striped table-bordered col-12 sortable" id="myTable">
       <thead class="thead-dark">
           <tr>
             <th scope="col" class="CP-sticky">#</th>
-            <th scope="col" class="CP-sticky">Codigo Interno</th>
-            <th scope="col" class="CP-sticky">Codigo de Barra</th>
-            <th scope="col" class="CP-sticky">Descripcion</td>
-            <th scope="col" class="CP-sticky">Precio</br>(Con IVA) '.SigVe.'</td>
-            <th scope="col" class="CP-sticky">Dolarizado</td>
-            <th scope="col" class="CP-sticky">Clasificacion</td>
-            <th scope="col" class="CP-sticky">Existencia</td>
-            <th scope="col" class="CP-sticky">Veces Escaneadas</td>
-            <th scope="col" class="CP-sticky">Veces Facturadas</td>
-            <th scope="col" class="CP-sticky">Contraste</td>
-            <th scope="col" class="CP-sticky">Unidades Facturadas</td>
-            <th scope="col" class="CP-sticky">Promedio por Factura</td>
-            <th scope="col" class="CP-sticky">Ultimo Proveedor</th>
+            <th scope="col" class="codigo CP-sticky">Codigo Interno</th>
+            <th scope="col" class="codigo_barra CP-sticky">Codigo de Barra</th>
+            <th scope="col" class="descripcion CP-sticky">Descripcion</td>
+            <th scope="col" class="precio CP-sticky">Precio</br>(Con IVA) '.SigVe.'</td>
+            <th scope="col" class="dolarizado CP-sticky">Dolarizado</td>
+            <th scope="col" class="clasificacion CP-sticky">Clasificacion</td>
+            <th scope="col" class="existencia CP-sticky">Existencia</td>
+            <th scope="col" class="veces_escaneadas CP-sticky">Veces Escaneadas</td>
+            <th scope="col" class="veces_facturadas CP-sticky">Veces Facturadas</td>
+            <th scope="col" class="contraste CP-sticky">Contraste</td>
+            <th scope="col" class="unidades_facturadas CP-sticky">Unidades Facturadas</td>
+            <th scope="col" class="promedio_factura CP-sticky">Promedio por Factura</td>
+            <th scope="col" class="ultimo_proveedor CP-sticky">Ultimo Proveedor</th>
           </tr>
         </thead>
         <tbody>
@@ -227,25 +338,25 @@
 
       echo '<tr>';
       echo '<td align="center"><strong>'.intval($contador).'</strong></td>';
-      echo '<td align="center">'.$codigo_interno.'</td>';
-      echo '<td align="center">'.$codigo_barra.'</td>';
+      echo '<td class="codigo" align="center">'.$codigo_interno.'</td>';
+      echo '<td class="codigo_barra" align="center">'.$codigo_barra.'</td>';
       echo
-      '<td align="left" class="CP-barrido">
+      '<td align="left" class="descripcion CP-barrido">
       <a href="/reporte10?Descrip='.$Descripcion.'&Id='.$IdArticulo.'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
         .$Descripcion.
       '</a>
       </td>';
-       echo '<td align="center">'.number_format($Precio,2,"," ,"." ).'</td>';
-       echo '<td align="center">'.$Dolarizado.'</td>';
-       echo '<td align="center">'.$clasificacion.'</td>';
-       echo '<td align="center">'.intval($Existencia).'</td>';
-       echo '<td align="center">'.intval($VecesEscaneadas).'</td>';
-       echo '<td align="center">'.intval($TotalVecesVendidas).'</td>';
-       echo '<td align="center">'.intval($Contraste).'</td>';
-       echo '<td align="center">'.$TotalUnidadesVendidas.'</td>';
-       echo '<td align="center">'.$PromedioFactura.'</td>';
+       echo '<td class="precio" align="center">'.number_format($Precio,2,"," ,"." ).'</td>';
+       echo '<td class="dolarizado" align="center">'.$Dolarizado.'</td>';
+       echo '<td class="clasificacion" align="center">'.$clasificacion.'</td>';
+       echo '<td class="existencia" align="center">'.intval($Existencia).'</td>';
+       echo '<td class="veces_escaneadas" align="center">'.intval($VecesEscaneadas).'</td>';
+       echo '<td class="veces_facturadas" align="center">'.intval($TotalVecesVendidas).'</td>';
+       echo '<td class="contraste" align="center">'.intval($Contraste).'</td>';
+       echo '<td class="unidades_facturadas" align="center">'.$TotalUnidadesVendidas.'</td>';
+       echo '<td class="promedio_factura" align="center">'.$PromedioFactura.'</td>';
        echo
-        '<td align="left" class="CP-barrido">
+        '<td align="left" class="ultimo_proveedor CP-barrido">
         <a href="/reporte7?Nombre='.$UltimoProveedor.'&Id='.$UltimoProveedorId.'&SEDE='.$SedeConnection.'" target="_blank" style="text-decoration: none; color: black;">'
           .$UltimoProveedor.
         '</a>
@@ -278,6 +389,7 @@
     WHERE (fecha_captura >= '$FInicial') AND (fecha_captura < '$FFinal')
     GROUP BY id_articulo,codigo_interno,codigo_barra,descripcion
     ORDER BY VecesEscaneadas DESC
+    LIMIT 100
   ";
   return $sql;
  }
