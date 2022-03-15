@@ -4,6 +4,34 @@
   Reporte
 @endsection
 
+@section('scriptsHead')
+    <script>
+        function mostrar_ocultar(that, elemento) {
+            if (that.checked) {
+                return $('.' + elemento).show();
+            }
+
+            return $('.' + elemento).hide();
+        }
+
+        campos = ['codigo', 'codigo_barra', 'descripcion', 'utilidad', 'precio', 'precio_ds', 'existencia', 'dias', 'ventas_hoy', 'ventas_totales', 'dias_quiebre', 'dias_restantes', 'cantidad_pedir'];
+
+        function mostrar_todas(that) {
+            if (that.checked) {
+                for (var i = campos.length - 1; i >= 0; i--) {
+                    $('.' + campos[i]).show();
+                    $('[name='+campos[i]+']').prop('checked', true);
+                }
+            } else {
+                for (var i = campos.length - 1; i >= 0; i--) {
+                    $('.' + campos[i]).hide();
+                    $('[name='+campos[i]+']').prop('checked', false);
+                }
+            }
+        }
+    </script>
+@endsection
+
 @section('content')
 	<h1 class="h5 text-info">
 		<i class="fas fa-file-invoice"></i>
@@ -61,6 +89,94 @@
     $FFinalImp= date("d-m-Y", strtotime($FFinal));
 
     echo '
+        <div class="modal fade" id="ver_campos" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Mostrar u ocultar columnas</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, \'codigo\')" name="codigo" checked>
+                    Código
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, \'codigo_barra\')" name="codigo_barra" checked>
+                    Código de barra
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, \'descripcion\')" name="descripcion" checked>
+                    Descripción
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, \'utilidad\')" name="utilidad" checked>
+                    Utilidad
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, \'precio\')" name="precio" checked>
+                    Precio
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, \'precio_ds\')" name="precio_ds" checked>
+                    Precio $
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, \'existencia\')" name="existencia" checked>
+                    Existencia
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, \'dias\')" name="dias" checked>
+                    Días
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, \'ventas_hoy\')" name="ventas_hoy" checked>
+                    Ventas hoy
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, \'ventas_totales\')" name="ventas_totales" checked>
+                    Ventas totales
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, \'dias_quiebre\')" name="dias_quiebre" checked>
+                    Días quiebre
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, \'dias_restantes\')" name="dias_restantes" checked>
+                    Días restantes
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, \'cantidad_pedir\')" name="cantidad_pedir" checked>
+                    Cantidad a pedir
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_todas(this)" name="Marcar todas" checked>
+                    Marcar todas
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+              </div>
+            </div>
+          </div>
+        </div>';
+
+    echo '
     <div class="input-group md-form form-sm form-1 pl-0 CP-stickyBar">
       <div class="input-group-prepend">
         <span class="input-group-text purple lighten-3" id="basic-text1">
@@ -74,32 +190,35 @@
     ';
     echo'<h6 align="center">Periodo desde el '.$FInicialImp.' al '.$FFinalImp.' </h6>';
     echo'<h6 align="center">El calculo de dias a pedir se esta calculando en pedidos para 20 dias de inventario</h6>';
+
+    echo '<h6 align="center"><a href="" data-toggle="modal" data-target="#ver_campos"><i class="fa fa-eye"></i> Mostrar u ocultar campos<a></h6>';
+
     echo'
     <table class="table table-striped table-bordered col-12 sortable" id="myTable">
       <thead class="thead-dark">
         <tr>
           <th scope="col" class="CP-sticky">#</th>
-          <th scope="col" class="CP-sticky">Codigo Interno</th>
-          <th scope="col" class="CP-sticky">Codigo Barra</th>
-          <th scope="col" class="CP-sticky">Descripcion</th>
-          <th scope="col" class="CP-sticky">Utilidad Configurada</td>
-          <th scope="col" class="CP-sticky">Precio '.SigVe.'<br> (Con IVA)</th>
-          <th scope="col" class="CP-sticky">Precio '.SigDolar.'<br> (Con IVA)</th>
-          <th scope="col" class="CP-sticky">Existencia</th>
+          <th scope="col" class="codigo CP-sticky">Codigo Interno</th>
+          <th scope="col" class="codigo_barra CP-sticky">Codigo Barra</th>
+          <th scope="col" class="descripcion CP-sticky">Descripcion</th>
+          <th scope="col" class="utilidad CP-sticky">Utilidad Configurada</td>
+          <th scope="col" class="precio CP-sticky">Precio '.SigVe.'<br> (Con IVA)</th>
+          <th scope="col" class="precio_ds CP-sticky">Precio '.SigDolar.'<br> (Con IVA)</th>
+          <th scope="col" class="existencia CP-sticky">Existencia</th>
     ';
     while($FFinalEn!=$FInicialEn){
     	$Dia = date("D", strtotime($FInicialEn));
     	$FImpresion = date("d-m-Y", strtotime($FInicialEn));
-    	echo'<th scope="col" class="CP-sticky">'.$Dia.' '.$FImpresion.'</th>';
+    	echo'<th scope="col" class="dias CP-sticky">'.$Dia.' '.$FImpresion.'</th>';
     	$FInicialEn = date("Y-m-d",strtotime($FInicialEn."+1 days"));
     }
 
     echo'
-          <th scope="col" class="CP-sticky">Ventas Hoy</th>
-          <th scope="col" class="CP-sticky">Ventas Totales</th>
-          <th scope="col" class="CP-sticky">Dias en Quiebre</th>
-          <th scope="col" class="CP-sticky">Dias Restantes</th>
-          <th scope="col" class="CP-sticky">Cantidad a Pedir</th>
+          <th scope="col" class="ventas_hoy CP-sticky">Ventas Hoy</th>
+          <th scope="col" class="ventas_totales CP-sticky">Ventas Totales</th>
+          <th scope="col" class="dias_quiebre CP-sticky">Dias en Quiebre</th>
+          <th scope="col" class="dias_restantes CP-sticky">Dias Restantes</th>
+          <th scope="col" class="cantidad_pedir CP-sticky">Cantidad a Pedir</th>
         </tr>
       </thead>
       <tbody>
@@ -135,27 +254,27 @@
 
     	echo '<tr>';
       echo '<td align="center"><strong>'.intval($contador).'</strong></td>';
-      echo '<td align="left">'.$row['CodigoInterno'].'</td>';
-      echo '<td align="left">'.$row['CodigoBarra'].'</td>';
+      echo '<td class="codigo" align="left">'.$row['CodigoInterno'].'</td>';
+      echo '<td class="codigo_barra" align="left">'.$row['CodigoBarra'].'</td>';
       echo
-      '<td align="left" class="CP-barrido">
+      '<td align="left" class="descripcion CP-barrido">
       <a href="/reporte2?Id='.$IdArticulo.'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
         .$Descripcion.
       '</a>
       </td>';
 
-      echo '<td align="center">'.number_format($Utilidad,2,"," ,"." ).' %</td>';
-      echo '<td align="center">'.number_format($Precio,2,"," ,"." ).'</td>';
+      echo '<td class="utilidad" align="center">'.number_format($Utilidad,2,"," ,"." ).' %</td>';
+      echo '<td class="precio" align="center">'.number_format($Precio,2,"," ,"." ).'</td>';
 
       if($TasaActual!=0){
         $PrecioDolar = $Precio/$TasaActual;
-        echo '<td align="center">'.number_format($PrecioDolar,2,"," ,"." ).'</td>';
+        echo '<td class="precio_ds" align="center">'.number_format($PrecioDolar,2,"," ,"." ).'</td>';
       }
       else{
-        echo '<td align="center">0,00</td>';
+        echo '<td class="precio_ds" align="center">0,00</td>';
       }
 
-      echo '<td align="center">'.intval($Existencia).'</td>';
+      echo '<td class="existencia" align="center">'.intval($Existencia).'</td>';
 
       while($FFinalBo!=$FInicialBo){
       	$FPivoteBo = date("Y-m-d",strtotime($FInicialBo."+1 days"));
@@ -163,7 +282,7 @@
    			$result1 = sqlsrv_query($conn,$sql1);
    			$row1= sqlsrv_fetch_array($result1, SQLSRV_FETCH_ASSOC);
    			$TotalUnidadesVendidas = $row1['TotalUnidadesVendidas'];
-   			echo '<td align="center">'.intval($TotalUnidadesVendidas).'</td>';
+   			echo '<td class="dias" align="center">'.intval($TotalUnidadesVendidas).'</td>';
 	    	$FInicialBo = date("Y-m-d",strtotime($FInicialBo."+1 days"));
 	    }
 
@@ -172,14 +291,14 @@
  			$result1 = sqlsrv_query($conn,$sql1);
  			$row1= sqlsrv_fetch_array($result1, SQLSRV_FETCH_ASSOC);
  			$TotalUnidadesVendidas = $row1['TotalUnidadesVendidas'];
- 			echo '<td align="center">'.intval($TotalUnidadesVendidas).'</td>';
+ 			echo '<td class="ventas_hoy" align="center">'.intval($TotalUnidadesVendidas).'</td>';
 
  			$FPivoteBo = date("Y-m-d",strtotime($FFinal."+1 days"));
  			$sql1 = R16Q_Detalle_Venta($IdArticulo,$FInicial,$FPivoteBo);
  			$result1 = sqlsrv_query($conn,$sql1);
  			$row1= sqlsrv_fetch_array($result1, SQLSRV_FETCH_ASSOC);
  			$TotalUnidadesVendidasG = $row1['TotalUnidadesVendidas'];
- 			echo '<td align="center">'.intval($TotalUnidadesVendidasG).'</td>';
+ 			echo '<td class="ventas_totales" align="center">'.intval($TotalUnidadesVendidasG).'</td>';
 
  			$FPivoteIDC = date("Y-m-d",strtotime($FInicial."-1 days"));
  			$FPivoteFDC = date("Y-m-d",strtotime($FFinal."+1 days"));
@@ -190,14 +309,14 @@
 			$Cuenta = $row2['Cuenta'];
 			$DiasEnQuiebre = $RangoDias - $Cuenta;
 
-			echo '<td align="center">'.intval($DiasEnQuiebre).'</td>';
+			echo '<td class="dias_quiebre" align="center">'.intval($DiasEnQuiebre).'</td>';
 
 			$VentaDiaria = FG_Venta_Diaria($TotalUnidadesVendidasG,$RangoDias);
       $DiasRestantes = FG_Dias_Restantes($Existencia,$VentaDiaria);
       $CantidadPedido = FG_Cantidad_Pedido($VentaDiaria,$DiasPedido,$Existencia);
 
-      echo '<td align="center">'.round($DiasRestantes,2).'</td>';
-      echo '<td align="center">'.intval($CantidadPedido).'</td>';
+      echo '<td class="dias_restantes" align="center">'.round($DiasRestantes,2).'</td>';
+      echo '<td class="cantidad_pedir" align="center">'.intval($CantidadPedido).'</td>';
 
       echo '</tr>';
       $contador++;
@@ -215,7 +334,7 @@
   */
   function R16Q_Detalle_Articulo_Estrella() {
     $sql = "
-   	SELECT
+   	SELECT TOP 10
     --Id Articulo
     InvArticulo.Id AS IdArticulo,
     --Categoria Articulo
