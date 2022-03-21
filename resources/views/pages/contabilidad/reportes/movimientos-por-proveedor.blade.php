@@ -6,6 +6,35 @@
 @endsection
 
 
+@section('scriptsHead')
+    <script>
+        function mostrar_ocultar(that, elemento) {
+            if (that.checked) {
+                return $('.' + elemento).show();
+            }
+
+            return $('.' + elemento).hide();
+        }
+
+        campos = ['fecha_hora', 'tipo', 'nro_movimiento', 'moneda_base', 'moneda_iva', 'monto_base', 'monto_iva', 'monto_retencion_deuda_1', 'monto_retencion_deuda_2', 'monto_retencion_iva', 'comentario', 'conciliado', 'operador', 'estado'];
+
+        function mostrar_todas(that) {
+            if (that.checked) {
+                for (var i = campos.length - 1; i >= 0; i--) {
+                    $('.' + campos[i]).show();
+                    $('[name='+campos[i]+']').prop('checked', true);
+                }
+            } else {
+                for (var i = campos.length - 1; i >= 0; i--) {
+                    $('.' + campos[i]).hide();
+                    $('[name='+campos[i]+']').prop('checked', false);
+                }
+            }
+        }
+    </script>
+@endsection
+
+
 @section('content')
     <h1 class="h5 text-info">
         <i class="fas fa-file-invoice">
@@ -16,6 +45,98 @@
     <hr class="row align-items-start col-12">
 
     @if($request->get('fechaInicio'))
+        <div class="modal fade" id="ver_campos" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Mostrar u ocultar columnas</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, 'fecha_hora')" name="fecha_hora" checked>
+                    Fecha y hora
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, 'tipo')" name="tipo" checked>
+                    Tipo
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, 'nro_movimiento')" name="nro_movimiento" checked>
+                    Nro. movimiento
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, 'moneda_base')" name="moneda_base" checked>
+                    Moneda base
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, 'moneda_iva')" name="moneda_iva" checked>
+                    Moneda IVA
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, 'monto_base')" name="monto_base" checked>
+                    Monto base
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, 'monto_iva')" name="monto_iva" checked>
+                    Monto IVA
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, 'monto_retencion_deuda_1')" name="monto_retencion_deuda_1" checked>
+                    Monto retención deuda 1
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, 'monto_retencion_deuda_2')" name="monto_retencion_deuda_2" checked>
+                    Monto retención deuda 2
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, 'monto_retencion_iva')" name="monto_retencion_iva" checked>
+                    Monto retención IVA
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, 'comentario')" name="comentario" checked>
+                    Comentario
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, 'conciliado')" name="conciliado" checked>
+                    Conciliado
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, 'operador')" name="operador" checked>
+                    Operador
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, 'estado')" name="estado" checked>
+                    Estado
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_todas(this)" name="Marcar todas" checked>
+                    Marcar todas
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <div class="input-group md-form form-sm form-1 pl-0 CP-stickyBar mb-4">
             <div class="input-group-prepend">
                 <span class="input-group-text purple lighten-3" id="basic-text1">
@@ -26,26 +147,28 @@
             <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterAllTable()" autofocus="autofocus">
         </div>
 
+        <h6 align="center"><a href="" data-toggle="modal" data-target="#ver_campos"><i class="fa fa-eye"></i> Mostrar u ocultar campos<a></h6>
+
         <h6 align="center">Periodo desde el <b>{{ $fechaInicio }}</b> al <b>{{ $fechaFin }}</b> para el proveedor <b>{{ $proveedor->nombre_proveedor }}</b></h6>
 
         <table class="table table-striped table-bordered col-12 sortable" id="myTable">
             <thead class="thead-dark">
                 <tr>
                     <th nowrap scope="col" class="CP-sticky">#</th>
-                    <th nowrap scope="col" class="CP-sticky">Fecha y hora</th>
-                    <th nowrap scope="col" class="CP-sticky">Tipo</th>
-                    <th nowrap scope="col" class="CP-sticky">Nro. movimiento</th>
-                    <th nowrap scope="col" class="CP-sticky">Moneda base</th>
-                    <th nowrap scope="col" class="CP-sticky">Moneda IVA</th>
-                    <th nowrap scope="col" class="CP-sticky">Monto base</th>
-                    <th nowrap scope="col" class="CP-sticky">Monto IVA</th>
-                    <th nowrap scope="col" class="CP-sticky">Monto retención deuda 1</th>
-                    <th nowrap scope="col" class="CP-sticky">Monto retención deuda 2</th>
-                    <th nowrap scope="col" class="CP-sticky">Monto retención IVA</th>
-                    <th nowrap scope="col" class="CP-sticky">Comentario</th>
-                    <th nowrap scope="col" class="CP-sticky">Conciliado</th>
-                    <th nowrap scope="col" class="CP-sticky">Operador</th>
-                    <th nowrap scope="col" class="CP-sticky">Estado</th>
+                    <th nowrap scope="col" class="fecha_hora CP-sticky">Fecha y hora</th>
+                    <th nowrap scope="col" class="tipo CP-sticky">Tipo</th>
+                    <th nowrap scope="col" class="nro_movimiento CP-sticky">Nro. movimiento</th>
+                    <th nowrap scope="col" class="moneda_base CP-sticky">Moneda base</th>
+                    <th nowrap scope="col" class="moneda_iva CP-sticky">Moneda IVA</th>
+                    <th nowrap scope="col" class="monto_base CP-sticky">Monto base</th>
+                    <th nowrap scope="col" class="monto_iva CP-sticky">Monto IVA</th>
+                    <th nowrap scope="col" class="monto_retencion_deuda_1 CP-sticky">Monto retención deuda 1</th>
+                    <th nowrap scope="col" class="monto_retencion_deuda_2 CP-sticky">Monto retención deuda 2</th>
+                    <th nowrap scope="col" class="monto_retencion_iva CP-sticky">Monto retención IVA</th>
+                    <th nowrap scope="col" class="comentario CP-sticky">Comentario</th>
+                    <th nowrap scope="col" class="conciliado CP-sticky">Conciliado</th>
+                    <th nowrap scope="col" class="operador CP-sticky">Operador</th>
+                    <th nowrap scope="col" class="estado CP-sticky">Estado</th>
                 </tr>
             </thead>
 
@@ -168,20 +291,20 @@
                     @endphp
                     <tr>
                         <td nowrap class="text-center">{{ $loop->iteration }}</td>
-                        <td nowrap class="text-center">{{ date_format($fecha, 'd/m/Y h:i A') }}</td>
-                        <td nowrap class="text-center">{{ $movimiento->tipo }}</td>
-                        <td nowrap class="text-center">{{ $movimiento->nro_movimiento }}</td>
-                        <td nowrap class="text-center">{{ $movimiento->moneda_base }}</td>
-                        <td nowrap class="text-center">{{ $movimiento->moneda_iva }}</td>
-                        <td nowrap class="text-center">{{ number_format($monto, 2, ',', '.') }}</td>
-                        <td nowrap class="text-center">{{ ($monto_iva) ? number_format($monto_iva, 2, ',', '.') : '' }}</td>
-                        <td nowrap class="text-center">{{ ($monto_retencion_deuda_1) ? number_format($monto_retencion_deuda_1, 2, ',', '.') : '' }}</td>
-                        <td nowrap class="text-center">{{ ($monto_retencion_deuda_2) ? number_format($monto_retencion_deuda_2, 2, ',', '.') : '' }}</td>
-                        <td nowrap class="text-center">{{ ($monto_retencion_iva) ? number_format($monto_retencion_iva, 2, ',', '.') : '' }}</td>
-                        <td nowrap class="text-center">{!! $movimiento->comentario !!}</td>
-                        <td nowrap class="text-center">{{ $movimiento->conciliacion }}</td>
-                        <td nowrap class="text-center">{{ $movimiento->operador }}</td>
-                        <td nowrap class="text-center">{{ $movimiento->estado }}</td>
+                        <td nowrap class="text-center fecha_hora ">{{ date_format($fecha, 'd/m/Y h:i A') }}</td>
+                        <td nowrap class="text-center tipo">{{ $movimiento->tipo }}</td>
+                        <td nowrap class="text-center nro_movimiento">{{ $movimiento->nro_movimiento }}</td>
+                        <td nowrap class="text-center moneda_base">{{ $movimiento->moneda_base }}</td>
+                        <td nowrap class="text-center moneda_iva">{{ $movimiento->moneda_iva }}</td>
+                        <td nowrap class="text-center monto_base">{{ number_format($monto, 2, ',', '.') }}</td>
+                        <td nowrap class="text-center monto_iva">{{ ($monto_iva) ? number_format($monto_iva, 2, ',', '.') : '' }}</td>
+                        <td nowrap class="text-center monto_retencion_deuda_1">{{ ($monto_retencion_deuda_1) ? number_format($monto_retencion_deuda_1, 2, ',', '.') : '' }}</td>
+                        <td nowrap class="text-center monto_retencion_deuda_2">{{ ($monto_retencion_deuda_2) ? number_format($monto_retencion_deuda_2, 2, ',', '.') : '' }}</td>
+                        <td nowrap class="text-center monto_retencion_iva">{{ ($monto_retencion_iva) ? number_format($monto_retencion_iva, 2, ',', '.') : '' }}</td>
+                        <td nowrap class="text-center comentario">{!! $movimiento->comentario !!}</td>
+                        <td nowrap class="text-center conciliado">{{ $movimiento->conciliacion }}</td>
+                        <td nowrap class="text-center operador">{{ $movimiento->operador }}</td>
+                        <td nowrap class="text-center estado">{{ $movimiento->estado }}</td>
                     </tr>
                 @endforeach
             </tbody>
