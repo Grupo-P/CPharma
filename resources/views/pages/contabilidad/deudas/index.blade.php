@@ -4,6 +4,36 @@
     Registro de deudas
 @endsection
 
+
+@section('scriptsHead')
+    <script>
+        function mostrar_ocultar(that, elemento) {
+            if (that.checked) {
+                return $('.' + elemento).show();
+            }
+
+            return $('.' + elemento).hide();
+        }
+
+        campos = ['nombre_proveedor', 'rif_proveedor', 'fecha_registro', 'moneda_subtotal', 'monto_subtotal', 'moneda_iva', 'monto_iva', 'dias_credito', 'documento_soporte_deuda', 'numero_documento', 'creado_por', 'sede', 'estado'];
+
+        function mostrar_todas(that) {
+            if (that.checked) {
+                for (var i = campos.length - 1; i >= 0; i--) {
+                    $('.' + campos[i]).show();
+                    $('[name='+campos[i]+']').prop('checked', true);
+                }
+            } else {
+                for (var i = campos.length - 1; i >= 0; i--) {
+                    $('.' + campos[i]).hide();
+                    $('[name='+campos[i]+']').prop('checked', false);
+                }
+            }
+        }
+    </script>
+@endsection
+
+
 @section('content')
 
     <!-- Modal Guardar -->
@@ -71,6 +101,88 @@
           </div>
         </div>
     @endif
+
+    <div class="modal fade" id="ver_campos" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Mostrar u ocultar columnas</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="form-group">
+                <input type="checkbox" onclick="mostrar_ocultar(this, 'nombre_proveedor')" name="nombre_proveedor" checked>
+                Nombre del proveedor
+            </div>
+
+            <div class="form-group">
+                <input type="checkbox" onclick="mostrar_ocultar(this, 'rif_proveedor')" name="rif_proveedor" checked>
+                RIF/CI del proveedor
+            </div>
+
+            <div class="form-group">
+                <input type="checkbox" onclick="mostrar_ocultar(this, 'fecha_registro')" name="fecha_registro" checked>
+                Fecha de registro
+            </div>
+
+            <div class="form-group">
+                <input type="checkbox" onclick="mostrar_ocultar(this, 'moneda_subtotal')" name="moneda_subtotal" checked>
+                Moneda subtotal
+            </div>
+
+            <div class="form-group">
+                <input type="checkbox" onclick="mostrar_ocultar(this, 'monto_subtotal')" name="monto_subtotal" checked>
+                Monto subtotal
+            </div>
+
+            <div class="form-group">
+                <input type="checkbox" onclick="mostrar_ocultar(this, 'moneda_iva')" name="moneda_iva" checked>
+                Moneda IVA
+            </div>
+
+            <div class="form-group">
+                <input type="checkbox" onclick="mostrar_ocultar(this, 'monto_iva')" name="monto_iva" checked>
+                Monto IVA
+            </div>
+
+            <div class="form-group">
+                <input type="checkbox" onclick="mostrar_ocultar(this, 'documento_soporte_deuda')" name="documento_soporte_deuda" checked>
+                Documento soporte deuda
+            </div>
+
+            <div class="form-group">
+                <input type="checkbox" onclick="mostrar_ocultar(this, 'numero_documento')" name="numero_documento" checked>
+                Número de documento
+            </div>
+
+            <div class="form-group">
+                <input type="checkbox" onclick="mostrar_ocultar(this, 'creado_por')" name="creado_por" checked>
+                Creado por
+            </div>
+
+            <div class="form-group">
+                <input type="checkbox" onclick="mostrar_ocultar(this, 'sede')" name="sede" checked>
+                Sede
+            </div>
+
+            <div class="form-group">
+                <input type="checkbox" onclick="mostrar_ocultar(this, 'estado')" name="estado" checked>
+                Estado
+            </div>
+
+            <div class="form-group">
+                <input type="checkbox" onclick="mostrar_todas(this)" name="Marcar todas" checked>
+                Marcar todas
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <h1 class="h5 text-info">
         <i class="fas fa-info-circle"></i>
@@ -190,25 +302,28 @@
             </td>
         </tr>
     </table>
+
     <br/>
+
+    <h6 align="center"><a href="" data-toggle="modal" data-target="#ver_campos"><i class="fa fa-eye"></i> Mostrar u ocultar campos<a></h6>
 
     <table class="table table-striped table-borderless col-12 sortable" id="myTable">
         <thead class="thead-dark">
             <tr>
                 <th nowrap scope="col" class="CP-sticky">#</th>
-                <th nowrap scope="col" class="CP-sticky">Nombre del proveedor</th>
-                <th nowrap scope="col" class="CP-sticky">RIF/CI del proveedor</th>
-                <th nowrap scope="col" class="CP-sticky">Fecha de registro</th>
-                <th nowrap scope="col" class="CP-sticky">Moneda subtotal</th>
-                <th nowrap scope="col" class="CP-sticky">Monto subtotal (Exento + base)</th>
-                <th nowrap scope="col" class="CP-sticky">Moneda IVA</th>
-                <th nowrap scope="col" class="CP-sticky">Monto IVA</th>
-                <th nowrap scope="col" class="CP-sticky">Días de crédito</th>
-                <th nowrap scope="col" class="CP-sticky">Documento soporte deuda</th>
-                <th nowrap scope="col" class="CP-sticky">Numero de documento</th>
-                <th nowrap scope="col" class="CP-sticky">Creado por</th>
-                <th nowrap scope="col" class="CP-sticky">Sede</th>
-                <th nowrap scope="col" class="CP-sticky">Estado</th>
+                <th nowrap scope="col" class="nombre_proveedor CP-sticky">Nombre del proveedor</th>
+                <th nowrap scope="col" class="rif_proveedor CP-sticky">RIF/CI del proveedor</th>
+                <th nowrap scope="col" class="fecha_registro CP-sticky">Fecha de registro</th>
+                <th nowrap scope="col" class="moneda_subtotal CP-sticky">Moneda subtotal</th>
+                <th nowrap scope="col" class="monto_subtotal CP-sticky">Monto subtotal (Exento + base)</th>
+                <th nowrap scope="col" class="moneda_iva CP-sticky">Moneda IVA</th>
+                <th nowrap scope="col" class="monto_iva CP-sticky">Monto IVA</th>
+                <th nowrap scope="col" class="dias_credito CP-sticky">Días de crédito</th>
+                <th nowrap scope="col" class="documento_soporte_deuda CP-sticky">Documento soporte deuda</th>
+                <th nowrap scope="col" class="numero_documento CP-sticky">Numero de documento</th>
+                <th nowrap scope="col" class="creado_por CP-sticky">Creado por</th>
+                <th nowrap scope="col" class="sede CP-sticky">Sede</th>
+                <th nowrap scope="col" class="estado CP-sticky">Estado</th>
                 <th nowrap scope="col" class="CP-sticky">Acciones</th>
             </tr>
         </thead>
@@ -226,21 +341,21 @@
 
             <tr class="{{ $deuda->deleted_at ? 'bg-warning' : '' }}">
               <th nowrap>{{$deuda->id}}</th>
-              <td nowrap align="center" class="CP-barrido">
+              <td nowrap align="center" class="CP-barrido nombre_proveedor">
                 <a href="{{ $url }}" style="text-decoration: none; color: black;" target="_blank">{{ ($deuda->proveedor) ? $deuda->proveedor->nombre_proveedor : '' }}</a>
               </td>
-              <td nowrap>{{ ($deuda->proveedor) ? $deuda->proveedor->rif_ci : '' }}</td>
-              <td nowrap>{{$deuda->created_at}}</td>
-              <td nowrap>{{($deuda->proveedor) ? $deuda->proveedor->moneda : ''}}</td>
-              <td nowrap>{{number_format($deuda->monto, 2, ',', '.')}}</td>
-              <td nowrap>{{($deuda->proveedor) ? $deuda->proveedor->moneda_iva : ''}}</td>
-              <td nowrap>{{number_format($deuda->monto_iva, 2, ',', '.')}}</td>
-              <td nowrap>{{$deuda->dias_credito}}</td>
-              <td nowrap>{{$deuda->documento_soporte_deuda}}</td>
-              <td nowrap>{{$deuda->numero_documento}}</td>
-              <td nowrap>{{$deuda->usuario_registro}}</td>
-              <td nowrap>{{$deuda->sede}}</td>
-              <td nowrap>{{($deuda->deleted_at)?'Desincorporado':'Activo'}}</td>
+              <td nowrap class="rif_proveedor">{{ ($deuda->proveedor) ? $deuda->proveedor->rif_ci : '' }}</td>
+              <td nowrap class="fecha_registro">{{$deuda->created_at}}</td>
+              <td nowrap class="moneda_subtotal">{{($deuda->proveedor) ? $deuda->proveedor->moneda : ''}}</td>
+              <td nowrap class="monto_subtotal">{{number_format($deuda->monto, 2, ',', '.')}}</td>
+              <td nowrap class="moneda_iva">{{($deuda->proveedor) ? $deuda->proveedor->moneda_iva : ''}}</td>
+              <td nowrap class="monto_iva">{{number_format($deuda->monto_iva, 2, ',', '.')}}</td>
+              <td nowrap class="dias_credito">{{$deuda->dias_credito}}</td>
+              <td nowrap class="documento_soporte_deuda">{{$deuda->documento_soporte_deuda}}</td>
+              <td nowrap class="numero_documento">{{$deuda->numero_documento}}</td>
+              <td nowrap class="usuario_registro">{{$deuda->usuario_registro}}</td>
+              <td nowrap class="sede">{{$deuda->sede}}</td>
+              <td nowrap class="estado">{{($deuda->deleted_at)?'Desincorporado':'Activo'}}</td>
               <td nowrap>
                 <a href="/deudas/{{$deuda->id}}" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Detalle">
                     <i class="far fa-eye"></i>
