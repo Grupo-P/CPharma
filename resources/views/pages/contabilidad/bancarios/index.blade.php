@@ -4,6 +4,36 @@
     Registro de pagos bancarios
 @endsection
 
+
+@section('scriptsHead')
+    <script>
+        function mostrar_ocultar(that, elemento) {
+            if (that.checked) {
+                return $('.' + elemento).show();
+            }
+
+            return $('.' + elemento).hide();
+        }
+
+        campos = ['nombre_proveedor', 'rif_proveedor', 'fecha_registro', 'monto_banco', 'monto_proveedor_base', 'monto_proveedor_iva', 'moneda_base', 'moneda_iva', 'tasa', 'estado', 'comentario', 'alias_bancario', 'operador'];
+
+        function mostrar_todas(that) {
+            if (that.checked) {
+                for (var i = campos.length - 1; i >= 0; i--) {
+                    $('.' + campos[i]).show();
+                    $('[name='+campos[i]+']').prop('checked', true);
+                }
+            } else {
+                for (var i = campos.length - 1; i >= 0; i--) {
+                    $('.' + campos[i]).hide();
+                    $('[name='+campos[i]+']').prop('checked', false);
+                }
+            }
+        }
+    </script>
+@endsection
+
+
 @section('content')
 
     <!-- Modal Guardar -->
@@ -94,6 +124,95 @@
         </div>
     @endif
 
+
+    <div class="modal fade" id="ver_campos" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Mostrar u ocultar columnas</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="form-group">
+                <input type="checkbox" onclick="mostrar_ocultar(this, 'nombre_proveedor')" name="nombre_proveedor" checked>
+                Nombre del proveedor
+            </div>
+
+            <div class="form-group">
+                <input type="checkbox" onclick="mostrar_ocultar(this, 'rif_proveedor')" name="rif_proveedor" checked>
+                RIF/CI del proveedor
+            </div>
+
+            <div class="form-group">
+                <input type="checkbox" onclick="mostrar_ocultar(this, 'fecha_registro')" name="fecha_registro" checked>
+                Fecha de registro
+            </div>
+
+            <div class="form-group">
+                <input type="checkbox" onclick="mostrar_ocultar(this, 'monto_banco')" name="monto_banco" checked>
+                Monto banco
+            </div>
+
+            <div class="form-group">
+                <input type="checkbox" onclick="mostrar_ocultar(this, 'monto_proveedor_base')" name="monto_proveedor_base" checked>
+                Monto proveedor base
+            </div>
+
+            <div class="form-group">
+                <input type="checkbox" onclick="mostrar_ocultar(this, 'monto_proveedor_iva')" name="monto_proveedor_iva" checked>
+                Monto proveedor IVA
+            </div>
+
+            <div class="form-group">
+                <input type="checkbox" onclick="mostrar_ocultar(this, 'moneda_base')" name="moneda_base" checked>
+                Moneda base
+            </div>
+
+            <div class="form-group">
+                <input type="checkbox" onclick="mostrar_ocultar(this, 'moneda_iva')" name="moneda_iva" checked>
+                Moneda IVA
+            </div>
+
+            <div class="form-group">
+                <input type="checkbox" onclick="mostrar_ocultar(this, 'tasa')" name="tasa" checked>
+                Tasa
+            </div>
+
+            <div class="form-group">
+                <input type="checkbox" onclick="mostrar_ocultar(this, 'estado')" name="estado" checked>
+                Estado
+            </div>
+
+            <div class="form-group">
+                <input type="checkbox" onclick="mostrar_ocultar(this, 'comentario')" name="comentario" checked>
+                Comentario
+            </div>
+
+            <div class="form-group">
+                <input type="checkbox" onclick="mostrar_ocultar(this, 'alias_bancario')" name="alias_bancario" checked>
+                Alias bancario
+            </div>
+
+            <div class="form-group">
+                <input type="checkbox" onclick="mostrar_ocultar(this, 'operador')" name="operador" checked>
+                Operador
+            </div>
+
+            <div class="form-group">
+                <input type="checkbox" onclick="mostrar_todas(this)" name="Marcar todas" checked>
+                Marcar todas
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
     <h1 class="h5 text-info">
         <i class="fas fa-info-circle"></i>
         Registro de pagos bancarios
@@ -151,23 +270,25 @@
 
     <br/>
 
+    <h6 align="center"><a href="" data-toggle="modal" data-target="#ver_campos"><i class="fa fa-eye"></i> Mostrar u ocultar campos<a></h6>
+
     <table class="table table-striped table-borderless col-12 sortable" id="myTable">
         <thead class="thead-dark">
             <tr>
                 <th scope="col" class="CP-sticky" nowrap>#</th>
-                <th scope="col" class="CP-sticky" nowrap>Nombre del proveedor</th>
-                <th scope="col" class="CP-sticky" nowrap>RIF/CI del proveedor</th>
-                <th scope="col" class="CP-sticky" nowrap>Fecha de registro</th>
-                <th scope="col" class="CP-sticky" nowrap>Monto banco</th>
-                <th scope="col" class="CP-sticky" nowrap>Monto proveedor base</th>
-                <th scope="col" class="CP-sticky" nowrap>Monto proveedor IVA</th>
-                <th scope="col" class="CP-sticky" nowrap>Moneda base</th>
-                <th scope="col" class="CP-sticky" nowrap>Moneda IVA</th>
-                <th scope="col" class="CP-sticky" nowrap>Tasa</th>
-                <th scope="col" class="CP-sticky" nowrap>Estado</th>
-                <th scope="col" class="CP-sticky" nowrap>Comentario</th>
-                <th scope="col" class="CP-sticky" nowrap>Alias bancario</th>
-                <th scope="col" class="CP-sticky" nowrap>Operador</th>
+                <th scope="col" class="nombre_proveedor CP-sticky" nowrap>Nombre del proveedor</th>
+                <th scope="col" class="rif_proveedor CP-sticky" nowrap>RIF/CI del proveedor</th>
+                <th scope="col" class="fecha_registro CP-sticky" nowrap>Fecha de registro</th>
+                <th scope="col" class="monto_banco CP-sticky" nowrap>Monto banco</th>
+                <th scope="col" class="monto_proveedor_base CP-sticky" nowrap>Monto proveedor base</th>
+                <th scope="col" class="monto_proveedor_iva CP-sticky" nowrap>Monto proveedor IVA</th>
+                <th scope="col" class="moneda_base CP-sticky" nowrap>Moneda base</th>
+                <th scope="col" class="moneda_iva CP-sticky" nowrap>Moneda IVA</th>
+                <th scope="col" class="tasa CP-sticky" nowrap>Tasa</th>
+                <th scope="col" class="estado CP-sticky" nowrap>Estado</th>
+                <th scope="col" class="comentario CP-sticky" nowrap>Comentario</th>
+                <th scope="col" class="alias_bancario CP-sticky" nowrap>Alias bancario</th>
+                <th scope="col" class="operador CP-sticky" nowrap>Operador</th>
                 <th scope="col" class="CP-sticky" nowrap>Acciones</th>
             </tr>
         </thead>
@@ -185,21 +306,21 @@
 
             <tr class="{{ ($pago->estatus == 'Reversado') ? 'bg-warning' : '' }}">
               <th class="text-center" nowrap>{{$pago->id}}</th>
-              <td class="text-center" nowrap align="center" class="CP-barrido">
+              <td class="nombre_proveedor text-center" nowrap align="center" class="CP-barrido">
                   <a href="{{ $url }}" style="text-decoration: none; color: black;" target="_blank">{{ $pago->proveedor->nombre_proveedor }}</a>
               </td>
-              <td class="text-center" nowrap>{{$pago->proveedor->rif_ci}}</td>
-              <td class="text-center" nowrap>{{$pago->created_at}}</td>
-              <td class="text-center" nowrap>{{ ($pago->estatus != 'Prepagado') ? number_format(monto_banco($pago->monto, $pago->iva, $pago->retencion_deuda_1, $pago->retencion_deuda_2, $pago->retencion_iva), 2, ',', '.') : '' }}</td>
-              <td nowrap class="text-center">{{ number_format($pago->monto, 2, ',', '.') }}</td>
-              <td nowrap class="text-center">{{ number_format($pago->iva, 2, ',', '.') }}</td>
-              <td nowrap class="text-center">{{ $pago->proveedor->moneda }}</td>
-              <td nowrap class="text-center">{{ $pago->proveedor->moneda_iva }}</td>
-              <td nowrap class="text-center">{{($pago->tasa) ? number_format($pago->tasa, 2, ',', '.') : ''}}</td>
-              <td nowrap class="text-center">{{$pago->estatus}}</td>
-              <td nowrap class="text-center">{{$pago->comentario}}</td>
-              <td nowrap class="text-center">{{isset($pago->banco->alias_cuenta) ? $pago->banco->alias_cuenta : ''}}</td>
-              <td nowrap class="text-center">{{$pago->operador}}</td>
+              <td class="rif_proveedor text-center" nowrap>{{$pago->proveedor->rif_ci}}</td>
+              <td class="fecha_registro text-center" nowrap>{{$pago->created_at}}</td>
+              <td class="monto_banco text-center" nowrap>{{ ($pago->estatus != 'Prepagado') ? number_format(monto_banco($pago->monto, $pago->iva, $pago->retencion_deuda_1, $pago->retencion_deuda_2, $pago->retencion_iva), 2, ',', '.') : '' }}</td>
+              <td nowrap class="monto_proveedor_base text-center">{{ number_format($pago->monto, 2, ',', '.') }}</td>
+              <td nowrap class="monto_proveedor_iva text-center">{{ number_format($pago->iva, 2, ',', '.') }}</td>
+              <td nowrap class="moneda_base text-center">{{ $pago->proveedor->moneda }}</td>
+              <td nowrap class="moneda_iva text-center">{{ $pago->proveedor->moneda_iva }}</td>
+              <td nowrap class="tasa text-center">{{($pago->tasa) ? number_format($pago->tasa, 2, ',', '.') : ''}}</td>
+              <td nowrap class="estado text-center">{{$pago->estatus}}</td>
+              <td nowrap class="comentario text-center">{{$pago->comentario}}</td>
+              <td nowrap class="alias_bancario text-center">{{isset($pago->banco->alias_cuenta) ? $pago->banco->alias_cuenta : ''}}</td>
+              <td nowrap class="operador text-center">{{$pago->operador}}</td>
               <td nowrap class="text-center">
                 @if($pago->estatus == 'Prepagado')
                     <a href="{{ route('bancarios.edit', $pago) }}" target="_blank" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Modificar">
