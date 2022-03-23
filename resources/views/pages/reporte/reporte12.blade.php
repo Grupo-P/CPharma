@@ -488,7 +488,7 @@
         }
 
         echo '<td align="center">'.$saldo.'</td>';
-        echo '<td align="center">'.$row3['Almacen'].'</td>';
+        echo '<td align="center">'.FG_Limpiar_Texto($row3['Almacen']).'</td>';
         echo '<td align="center">'.$row3['Lote'].'</td>';
 
         switch ($row3['idCausa']) {
@@ -712,6 +712,68 @@
 
             echo '</tr>';
           break;
+          case '27':
+            $sql = R12_Coment_Ajuste($row3['NumeroReferencia']);
+            $result = sqlsrv_query($conn,$sql);
+            $row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC);
+            echo
+              '<td align="center" class="CP-barrido">
+              <a href="/reporte42?SEDE='.$SedeConnection.'&numeroAjuste='.$row3['NumeroReferencia'].'" style="text-decoration: none; color: black;" target="_blank">'
+                .$row3['NumeroReferencia'].
+              '</a>
+              </td>';
+            echo '<td align="center">-</td>';
+            echo '<td align="center">'.FG_Limpiar_Texto($row['Comentario']).'</td>';
+
+            echo '<td align="center">'.$row3['Operador'].'</td>';
+            echo '<td align="center">'.number_format($row3['MontoTotal'],2,"," ,"." ).'</td>';
+            echo '<td align="center">'.number_format($row3['MontoUnitario'],2,"," ,"." ).'</td>';
+
+            $Fecha = $row3['Fecha']->format('Y-m-d');
+            $Tasa = FG_Tasa_Fecha($connCPharma,$Fecha);
+
+            if($Tasa!=0){
+              $costoDol = ($row3['MontoUnitario'])/$Tasa;
+              echo '<td align="center">'.number_format($Tasa,2,"," ,"." ).'</td>';
+              echo '<td align="center">'.number_format($costoDol,2,"," ,"." ).'</td>';
+            }else{
+              echo '<td align="center">0,00</td>';
+              echo '<td align="center">-</td>';
+            }
+
+            echo '</tr>';
+          break;
+          case '28':
+            $sql = R12_Coment_Ajuste($row3['NumeroReferencia']);
+            $result = sqlsrv_query($conn,$sql);
+            $row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC);
+            echo
+              '<td align="center" class="CP-barrido">
+              <a href="/reporte42?SEDE='.$SedeConnection.'&numeroAjuste='.$row3['NumeroReferencia'].'" style="text-decoration: none; color: black;" target="_blank">'
+                .$row3['NumeroReferencia'].
+              '</a>
+              </td>';
+            echo '<td align="center">-</td>';
+            echo '<td align="center">'.FG_Limpiar_Texto($row['Comentario']).'</td>';
+
+            echo '<td align="center">'.$row3['Operador'].'</td>';
+            echo '<td align="center">'.number_format($row3['MontoTotal'],2,"," ,"." ).'</td>';
+            echo '<td align="center">'.number_format($row3['MontoUnitario'],2,"," ,"." ).'</td>';
+
+            $Fecha = $row3['Fecha']->format('Y-m-d');
+            $Tasa = FG_Tasa_Fecha($connCPharma,$Fecha);
+
+            if($Tasa!=0){
+              $costoDol = ($row3['MontoUnitario'])/$Tasa;
+              echo '<td align="center">'.number_format($Tasa,2,"," ,"." ).'</td>';
+              echo '<td align="center">'.number_format($costoDol,2,"," ,"." ).'</td>';
+            }else{
+              echo '<td align="center">0,00</td>';
+              echo '<td align="center">-</td>';
+            }
+
+            echo '</tr>';
+          break;
           default:
             echo '<td align="center">'.$row3['NumeroReferencia'].'</td>';
             echo '<td align="center">-</td>';
@@ -816,7 +878,8 @@
       AND (
         (InvMovimiento.InvCausaId=1) OR (InvMovimiento.InvCausaId=2) OR (InvMovimiento.InvCausaId=3) OR (InvMovimiento.InvCausaId=4)
         OR (InvMovimiento.InvCausaId=5) OR (InvMovimiento.InvCausaId=6) OR (InvMovimiento.InvCausaId=11) OR (InvMovimiento.InvCausaId=12)
-        OR (InvMovimiento.InvCausaId=14)OR (InvMovimiento.InvCausaId=15) OR (InvMovimiento.InvCausaId=16)
+        OR (InvMovimiento.InvCausaId=14)OR (InvMovimiento.InvCausaId=15) OR (InvMovimiento.InvCausaId=16) OR (InvMovimiento.InvCausaId=27)
+        OR (InvMovimiento.InvCausaId=28)
       )
       GROUP BY InvCausa.id,InvCausa.Descripcion,InvCausa.EsPositiva,CONVERT(DATE,InvMovimiento.FechaMovimiento)
       ORDER BY CONVERT(DATE,InvMovimiento.FechaMovimiento) asc
@@ -854,7 +917,8 @@
       AND (
         (InvMovimiento.InvCausaId=1) OR (InvMovimiento.InvCausaId=2) OR (InvMovimiento.InvCausaId=3) OR (InvMovimiento.InvCausaId=4)
         OR (InvMovimiento.InvCausaId=5) OR (InvMovimiento.InvCausaId=6) OR (InvMovimiento.InvCausaId=11) OR (InvMovimiento.InvCausaId=12)
-        OR (InvMovimiento.InvCausaId=14)OR (InvMovimiento.InvCausaId=15) OR (InvMovimiento.InvCausaId=16)
+        OR (InvMovimiento.InvCausaId=14)OR (InvMovimiento.InvCausaId=15) OR (InvMovimiento.InvCausaId=16) OR (InvMovimiento.InvCausaId=27)
+        OR (InvMovimiento.InvCausaId=28)
       )
       ORDER BY CONVERT(DATE,InvMovimiento.FechaMovimiento) asc
     ";
