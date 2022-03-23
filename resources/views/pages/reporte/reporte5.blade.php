@@ -375,7 +375,7 @@
           <th scope="col" class="ultima_compra CP-sticky bg-warning">Ultima Compra</th>
           <th scope="col" class="ultimo_proveedor CP-sticky">Ultimo Proveedor</th>';
 
-          if (isset($_GET['SEDE']) & ($_GET['SEDE'] == 'FAU' || $_GET['SEDE'] == 'DBs')) {
+              if (isset($_GET['SEDE']) & ($_GET['SEDE'] == 'FAU' || $_GET['SEDE'] == 'DBs')) {
                 echo '<th scope="col" class="sede1 CP-sticky">Descripción FTN</th>
                     <th scope="col" class="sede1 CP-sticky">Existencia FTN</td>
                     <th scope="col" class="sede2 CP-sticky">Descripción FLL</th>
