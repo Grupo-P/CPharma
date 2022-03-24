@@ -239,7 +239,7 @@
     <br/>
     ';
     echo '<h6 align="center">Periodo desde el '.$FInicialImp.' al '.$FFinalImp.'</h6>';
-    echo '<h6 align="center"><a href="" data-toggle="modal" data-target="#ver_campos"><i class="fa fa-eye"></i> Ocultar u mostrar columnas<a></h6>';
+    echo '<h6 align="center"><a href="" data-toggle="modal" data-target="#ver_campos"><i class="fa fa-eye"></i> Ocultar o mostrar columnas<a></h6>';
 
     echo '
         <div class="modal fade" id="ver_campos" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -375,7 +375,7 @@
           <th scope="col" class="ultima_compra CP-sticky bg-warning">Ultima Compra</th>
           <th scope="col" class="ultimo_proveedor CP-sticky">Ultimo Proveedor</th>';
 
-          if (isset($_GET['SEDE']) & ($_GET['SEDE'] == 'FAU' || $_GET['SEDE'] == 'DBs')) {
+              if (isset($_GET['SEDE']) & ($_GET['SEDE'] == 'FAU' || $_GET['SEDE'] == 'DBs')) {
                 echo '<th scope="col" class="sede1 CP-sticky">Descripción FTN</th>
                     <th scope="col" class="sede1 CP-sticky">Existencia FTN</td>
                     <th scope="col" class="sede2 CP-sticky">Descripción FLL</th>

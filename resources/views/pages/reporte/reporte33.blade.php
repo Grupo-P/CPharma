@@ -57,6 +57,32 @@
     color: #ffffff; 
   }
   </style>
+
+  <script>
+      function mostrar_ocultar(that, elemento) {
+            if (that.checked) {
+                return $('.' + elemento).show();
+            }
+
+            return $('.' + elemento).hide();
+        }
+
+        campos = ['fecha_factura', 'hora_factura', 'nombre_cliente', 'numero_factura', 'fiscal_factura', 'serial_impresora', 'corte_z', 'caja_origen', 'fecha_devolucion', 'hora_devolucion', 'numero_devolucion', 'fiscal_devolucion', 'serial_impresora', 'dias', 'caja', 'causa', 'unidades', 'sku', 'monto_bs', 'tasa', 'monto_ds'];
+
+        function mostrar_todas(that) {
+            if (that.checked) {
+                for (var i = campos.length - 1; i >= 0; i--) {
+                    $('.' + campos[i]).show();
+                    $('[name='+campos[i]+']').prop('checked', true);
+                }
+            } else {
+                for (var i = campos.length - 1; i >= 0; i--) {
+                    $('.' + campos[i]).hide();
+                    $('[name='+campos[i]+']').prop('checked', false);
+                }
+            }
+        }
+  </script>
 @endsection
 
 @section('content')
@@ -153,6 +179,134 @@
     $result = sqlsrv_query($conn,$sql5);
 
     echo '
+        <div class="modal fade" id="ver_campos" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Mostrar u ocultar columnas</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, \'fecha_factura\')" name="fecha_factura" checked>
+                    Fecha factura
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, \'hora_factura\')" name="hora_factura" checked>
+                    Hora factura
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, \'nombre_cliente\')" name="nombre_cliente" checked>
+                    Nombre cliente
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, \'numero_factura\')" name="numero_factura" checked>
+                    Número factura
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, \'fiscal_factura\')" name="fiscal_factura" checked>
+                    Fiscal factura
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, \'serial_impresora\')" name="serial_impresora" checked>
+                    Serial impresora
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, \'corte_z\')" name="corte_z" checked>
+                    Corte Z
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, \'caja_origen\')" name="caja_origen" checked>
+                    Caja origen
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, \'fecha_devolucion\')" name="fecha_devolucion" checked>
+                    Fecha devolución
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, \'hora_devolucion\')" name="hora_devolucion" checked>
+                    Hora devolución
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, \'numero_devolucion\')" name="numero_devolucion" checked>
+                    Número devolución
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, \'fiscal_devolucion\')" name="fiscal_devolucion" checked>
+                    Fiscal devolución
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, \'serial_impresora\')" name="serial_impresora" checked>
+                    Serial impresora
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, \'dias\')" name="dias" checked>
+                    Días
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, \'caja\')" name="caja" checked>
+                    Caja
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, \'causa\')" name="causa" checked>
+                    Causa
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, \'unidades\')" name="unidades" checked>
+                    Unidades
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, \'sku\')" name="sku" checked>
+                    SKU
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, \'monto_bs\')" name="monto_bs" checked>
+                    Monto Bs.
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, \'tasa\')" name="tasa" checked>
+                    Tasa
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, \'monto_ds\')" name="monto_ds" checked>
+                    Monto $
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_todas(this)" name="Marcar todas" checked>
+                    Marcar todas
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+              </div>
+            </div>
+          </div>
+        </div>';
+
+    echo '
     <div class="input-group md-form form-sm form-1 pl-0 CP-stickyBar">
       <div class="input-group-prepend">
         <span class="input-group-text purple lighten-3" id="basic-text1">
@@ -165,32 +319,35 @@
     <br/>
     ';
     echo'<h6 align="center">Periodo desde el '.$FInicialImp.' al '.$FFinalImp.' </h6>';
+
+    echo '<h6 align="center"><a href="" data-toggle="modal" data-target="#ver_campos"><i class="fa fa-eye"></i> Mostrar u ocultar campos<a></h6>';
+
     echo'
     <table class="table table-striped table-bordered col-12 sortable" id="myTable">
       <thead class="thead-dark">
         <tr>  
           <th scope="col" class="CP-sticky">Nro.</th>
-          <th scope="col" class="CP-sticky">Fecha Factura</th>
-          <th scope="col" class="CP-sticky">Hora Factura</th>
-          <th scope="col" class="CP-sticky">Nombre Cliente</th>
-          <th scope="col" class="CP-sticky">Nro Factura</th>
-          <th scope="col" class="CP-sticky">Fiscal Factura</th>
-          <th scope="col" class="CP-sticky">Serial Impresora</th>
-          <th scope="col" class="CP-sticky">Corte Z</th>
-          <th scope="col" class="CP-sticky">Caja Origen</th>
-          <th scope="col" class="CP-sticky">Fecha Devolucion</td>
-          <th scope="col" class="CP-sticky">Hora Devolucion</td>
-          <th scope="col" class="CP-sticky">Numero Devolucion</td>
-          <th scope="col" class="CP-sticky">Fiscal Devolucion</td>
-          <th scope="col" class="CP-sticky">Serial Impresora</td>
-          <th scope="col" class="CP-sticky">Dias</td>
-          <th scope="col" class="CP-sticky">Caja</th>
-          <th scope="col" class="CP-sticky">Causa</th>
-          <th scope="col" class="CP-sticky">Unidades</th>
-          <th scope="col" class="CP-sticky">SKU</th>
-          <th scope="col" class="CP-sticky">Monto Bs</th>
-          <th scope="col" class="CP-sticky bg-warning">Tasa</th>
-          <th scope="col" class="CP-sticky">Monto $</th>             
+          <th scope="col" class="fecha_factura CP-sticky">Fecha Factura</th>
+          <th scope="col" class="hora_factura CP-sticky">Hora Factura</th>
+          <th scope="col" class="nombre_cliente CP-sticky">Nombre Cliente</th>
+          <th scope="col" class="numero_factura CP-sticky">Nro Factura</th>
+          <th scope="col" class="fiscal_factura CP-sticky">Fiscal Factura</th>
+          <th scope="col" class="serial_impresora CP-sticky">Serial Impresora</th>
+          <th scope="col" class="corte_z CP-sticky">Corte Z</th>
+          <th scope="col" class="caja_origen CP-sticky">Caja Origen</th>
+          <th scope="col" class="fecha_devolucion CP-sticky">Fecha Devolucion</td>
+          <th scope="col" class="hora_devolucion CP-sticky">Hora Devolucion</td>
+          <th scope="col" class="numero_devolucion CP-sticky">Numero Devolucion</td>
+          <th scope="col" class="fiscal_devolucion CP-sticky">Fiscal Devolucion</td>
+          <th scope="col" class="serial_impresora CP-sticky">Serial Impresora</td>
+          <th scope="col" class="dias CP-sticky">Dias</td>
+          <th scope="col" class="caja CP-sticky">Caja</th>
+          <th scope="col" class="causa CP-sticky">Causa</th>
+          <th scope="col" class="unidades CP-sticky">Unidades</th>
+          <th scope="col" class="sku CP-sticky">SKU</th>
+          <th scope="col" class="monto_bs CP-sticky">Monto Bs</th>
+          <th scope="col" class="tasa CP-sticky bg-warning">Tasa</th>
+          <th scope="col" class="monto_ds CP-sticky">Monto $</th>
         </tr>
       </thead>
       <tbody>
@@ -263,33 +420,33 @@
 
       echo '<tr>';
       echo '<td align="center"><strong>'.intval($contador).'</strong></td>';
-      echo '<td align="center">'.$fecha_factura.'</td>';
-      echo '<td align="center">'.$hora_factura.'</td>';
-      echo '<td align="center">'.$nombre_cliente.'</td>';
-      echo '<td align="center">'.$nro_factura.'</td>';
-      echo '<td align="center">'.$fiscal_factura.'</td>';
-      echo '<td align="center">'.$serial_impresora.'</td>';
-      echo '<td align="center">'.$corte_z.'</td>';
-      echo '<td align="center">'.$caja_origen.'</td>';
-      echo '<td align="center">'.$fecha_devolucion.'</td>';
-      echo '<td align="center">'.$hora_devolucion.'</td>';
-      echo '<td align="center" class="CP-barrido">
+      echo '<td class="fecha_factura" align="center">'.$fecha_factura.'</td>';
+      echo '<td class="hora_factura" align="center">'.$hora_factura.'</td>';
+      echo '<td class="nombre_cliente" align="center">'.$nombre_cliente.'</td>';
+      echo '<td class="numero_factura" align="center">'.$nro_factura.'</td>';
+      echo '<td class="fiscal_factura" align="center">'.$fiscal_factura.'</td>';
+      echo '<td class="serial_impresora" align="center">'.$serial_impresora.'</td>';
+      echo '<td class="corte_z" align="center">'.$corte_z.'</td>';
+      echo '<td class="caja_origen" align="center">'.$caja_origen.'</td>';
+      echo '<td class="fecha_devolucion" align="center">'.$fecha_devolucion.'</td>';
+      echo '<td class="hora_devolucion" align="center">'.$hora_devolucion.'</td>';
+      echo '<td align="center" class="CP-barrido numero_devolucion">
           <a href="/reporte33?SEDE='.$_GET['SEDE'].'&numeroDevolucion='.$numero_devolucion.'" style="text-decoration: none; color: black;" target="_blank">'.$numero_devolucion.'</a>
         </td>';
-      echo '<td align="center">'.$fiscal_devolucion.'</td>';
-      echo '<td align="center">'.$serial_impresora.'</td>';
-      echo '<td align="center">'.$dias.'</td>';
-      echo '<td align="center">'.$caja.'</td>';
+      echo '<td class="fiscal_devolucion" align="center">'.$fiscal_devolucion.'</td>';
+      echo '<td class="serial_impresora" align="center">'.$serial_impresora.'</td>';
+      echo '<td class="dias" align="center">'.$dias.'</td>';
+      echo '<td class="caja" align="center">'.$caja.'</td>';
       if ($cantidad_causas == 1) {
-        echo '<td align="center">'.$causa.'</td>';
+        echo '<td class="causa" align="center">'.$causa.'</td>';
       } else {
-        echo '<td align="center">-</td>';
+        echo '<td class="causa" align="center">-</td>';
       }
-      echo '<td align="center">'.$unidades.'</td>';
-      echo '<td align="center">'.$sku.'</td>';
-      echo '<td align="center">'.$monto_bs.'</td>';
-      echo '<td align="center">'.$TasaMercado.'</td>';
-      echo '<td align="center">'.$montoDolares.'</td>';
+      echo '<td class="unidades" align="center">'.$unidades.'</td>';
+      echo '<td class="sku" align="center">'.$sku.'</td>';
+      echo '<td class="monto_bs" align="center">'.$monto_bs.'</td>';
+      echo '<td class="tasa" align="center">'.$TasaMercado.'</td>';
+      echo '<td class="monto_ds" align="center">'.$montoDolares.'</td>';
       $contador++;
     }
 
