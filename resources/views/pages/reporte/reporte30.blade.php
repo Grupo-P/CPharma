@@ -633,7 +633,7 @@
     <table class="table table-striped table-bordered col-12 sortable" id="myTable">
         <thead class="thead-dark">
           <tr>
-            <th colspan="14 bg-dark CP-sticky"></th>
+            <th colspan="16 bg-dark CP-sticky"></th>
             <th colspan="6" scope="col" class="CP-sticky bg-info">Relacion en '.SigVe.'</th>
             <th colspan="6" scope="col" class="CP-sticky bg-success">Relacion en '.SigDolar.'</th>
           </tr>          
@@ -651,6 +651,7 @@
             <th scope="col">Lote del fabricante</th>
             <th scope="col">Fecha de vencimiento</th>
             <th scope="col">Vida Util</th>
+            <th scope="col">Utilidad</th>
             <th scope="col">Precio </br> (Con IVA) '.SigVe.'</th>
             <th scope="col">Troquel </br> (Con IVA) '.SigVe.'</th>
 
@@ -725,6 +726,9 @@
       $clasificacion = $RowCPharma['clasificacion'];
       $clasificacion = ($clasificacion!="")?$clasificacion:"NO CLASIFICADO";
 
+      $Utilidad = FG_Utilidad_Alfa($UtilidadArticulo,$UtilidadCategoria);
+      $Utilidad = (1 - $Utilidad)*100;
+
       echo '<tr>';
       echo '<td align="center"><strong>'.intval($contador).'</strong></td>';
       echo '<td align="center">'.$row["CodigoArticulo"].'</td>';
@@ -766,6 +770,8 @@
       else{
         echo '<td align="center">-</td>';
       }
+
+      echo '<td align="center">'.number_format($Utilidad,2,"," ,"." ).' %</td>';
 
       echo '<td align="center">'.number_format($Precio,2,"," ,"." ).'</td>';
 
