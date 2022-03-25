@@ -401,6 +401,8 @@
     ';
     $contador = 1;
     while($row = sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC)) {
+
+
       $IdArticulo = $row["IdArticulo"];
       $CodigoArticulo = $row["CodigoInterno"];
       $CodigoBarra = $row["CodigoBarra"];
@@ -435,7 +437,7 @@
       $clasificacion = $RowCPharma['clasificacion'];
       $clasificacion = ($clasificacion!="")?$clasificacion:"NO CLASIFICADO";
 
-      $fechaInicioDiasCero = date_modify(date_create(), '-15day');
+      $fechaInicioDiasCero = date_modify(date_create(), '-30day');
       $fechaInicioDiasCero = date_format($fechaInicioDiasCero, 'Y-m-d');
       $sql2 = MySQL_Cuenta_Veces_Dias_Cero($IdArticulo,$fechaInicioDiasCero,date_create()->format('Y-m-d'));
       $result22 = mysqli_query($connCPharma,$sql2);
@@ -520,7 +522,7 @@
 
       if (isset($_GET['SEDE']) & ($_GET['SEDE'] == 'FAU' || $_GET['SEDE'] == 'DBs')) {
         if ($conectividad_ftn == 1) {
-          $sql3 = R14_Q_Descripcion_Existencia_Articulo($CodigoBarra);
+          $sql3 = R27_Q_Descripcion_Existencia_Articulo($CodigoBarra);
           $result3 = sqlsrv_query($connFTN,$sql3);
 
           $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
@@ -530,7 +532,7 @@
         }
 
         if ($conectividad_fll == 1) {
-          $sql3 = R14_Q_Descripcion_Existencia_Articulo($CodigoBarra);
+          $sql3 = R27_Q_Descripcion_Existencia_Articulo($CodigoBarra);
           $result3 = sqlsrv_query($connFLL,$sql3);
           $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
 
@@ -539,7 +541,7 @@
         }
 
         if ($conectividad_fsm == 1) {
-          $sql3 = R14_Q_Descripcion_Existencia_Articulo($CodigoBarra);
+          $sql3 = R27_Q_Descripcion_Existencia_Articulo($CodigoBarra);
           $result3 = sqlsrv_query($connFSM,$sql3);
           $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
 
@@ -550,7 +552,7 @@
 
       if (isset($_GET['SEDE']) & $_GET['SEDE'] == 'FTN') {
         if ($conectividad_fau == 1) {
-            $sql3 = R14_Q_Descripcion_Existencia_Articulo($CodigoBarra);
+            $sql3 = R27_Q_Descripcion_Existencia_Articulo($CodigoBarra);
             $result3 = sqlsrv_query($connFAU,$sql3);
             $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
 
@@ -559,7 +561,7 @@
           }
 
           if ($conectividad_fll == 1) {
-            $sql3 = R14_Q_Descripcion_Existencia_Articulo($CodigoBarra);
+            $sql3 = R27_Q_Descripcion_Existencia_Articulo($CodigoBarra);
             $result3 = sqlsrv_query($connFLL,$sql3);
             $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
 
@@ -568,7 +570,7 @@
           }
 
           if ($conectividad_fsm == 1) {
-            $sql3 = R14_Q_Descripcion_Existencia_Articulo($CodigoBarra);
+            $sql3 = R27_Q_Descripcion_Existencia_Articulo($CodigoBarra);
             $result3 = sqlsrv_query($connFSM,$sql3);
             $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
 
@@ -579,7 +581,7 @@
 
       if (isset($_GET['SEDE']) & $_GET['SEDE'] == 'FLL') {
          if ($conectividad_ftn == 1) {
-            $sql3 = R14_Q_Descripcion_Existencia_Articulo($CodigoBarra);
+            $sql3 = R27_Q_Descripcion_Existencia_Articulo($CodigoBarra);
             $result3 = sqlsrv_query($connFTN,$sql3);
             $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
 
@@ -588,7 +590,7 @@
           }
 
           if ($conectividad_fau == 1) {
-            $sql3 = R14_Q_Descripcion_Existencia_Articulo($CodigoBarra);
+            $sql3 = R27_Q_Descripcion_Existencia_Articulo($CodigoBarra);
             $result3 = sqlsrv_query($connFAU,$sql3);
             $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
 
@@ -597,7 +599,7 @@
           }
 
           if ($conectividad_fsm == 1) {
-            $sql3 = R14_Q_Descripcion_Existencia_Articulo($CodigoBarra);
+            $sql3 = R27_Q_Descripcion_Existencia_Articulo($CodigoBarra);
             $result3 = sqlsrv_query($connFSM,$sql3);
             $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
 
@@ -608,7 +610,7 @@
 
       if (isset($_GET['SEDE']) & $_GET['SEDE'] == 'FSM') {
          if ($conectividad_ftn == 1) {
-            $sql3 = R14_Q_Descripcion_Existencia_Articulo($CodigoBarra);
+            $sql3 = R27_Q_Descripcion_Existencia_Articulo($CodigoBarra);
             $result3 = sqlsrv_query($connFTN,$sql3);
             $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
 
@@ -617,7 +619,7 @@
           }
 
           if ($conectividad_fau == 1) {
-            $sql3 = R14_Q_Descripcion_Existencia_Articulo($CodigoBarra);
+            $sql3 = R27_Q_Descripcion_Existencia_Articulo($CodigoBarra);
             $result3 = sqlsrv_query($connFAU,$sql3);
             $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
 
@@ -626,7 +628,7 @@
           }
 
           if ($conectividad_fll == 1) {
-            $sql3 = R14_Q_Descripcion_Existencia_Articulo($CodigoBarra);
+            $sql3 = R27_Q_Descripcion_Existencia_Articulo($CodigoBarra);
             $result3 = sqlsrv_query($connFLL,$sql3);
             $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
 
@@ -770,9 +772,9 @@
       FROM VenDevolucionDetalle
       INNER JOIN VenDevolucion ON VenDevolucion.Id = VenDevolucionDetalle.VenDevolucionId
       WHERE VenDevolucionDetalle.InvArticuloId = InvArticulo.Id
-      AND(VenDevolucion.FechaDocumento > '$Inicio' AND VenDevolucion.FechaDocumento < '$Fin')
+      AND(VenDevolucion.FechaDocumento >= '$Inicio' AND VenDevolucion.FechaDocumento <= '$Fin')
       GROUP BY VenDevolucionDetalle.InvArticuloId
-      ),CAST(0 AS INT)))) FROM VenFacturaDetalle) AS TotalUnidadesVendidas,
+      ),CAST(0 AS INT)))) FROM VenFacturaDetalle WHERE VenFacturaDetalle.InvArticuloId = InvArticulo.Id AND VenFacturaDetalle.VenFacturaId IN (SELECT VenFactura.Id FROM VenFactura WHERE VenFactura.FechaDocumento >= '$Inicio' AND VenFactura.FechaDocumento <= '$Fin')) AS TotalUnidadesVendidas,
     --Id Articulo
     InvArticulo.Id AS IdArticulo,
     --Categoria Articulo
@@ -981,12 +983,12 @@
   }
 
   /*
-    TITULO: R14_Q_Descripcion_Existencia_Articulo
+    TITULO: R27_Q_Descripcion_Existencia_Articulo
     FUNCION: Query que genera descripcion y existencia de articulo
     RETORNO: Descripcion/existencia de articulo
     DESAROLLADO POR: NISA DELGADO
   */
-  function R14_Q_Descripcion_Existencia_Articulo($CodigoBarra)
+  function R27_Q_Descripcion_Existencia_Articulo($CodigoBarra)
   {
 
     $CodigoBarra = str_replace("'", "''", $CodigoBarra);
