@@ -58,7 +58,7 @@
         return $('.' + elemento).hide();
     }
 
-    campos = ['codigo', 'codigo_barra', 'descripcion', 'precio', 'dias_restantes', 'ultima_compra', 'fecha_lote', 'fecha_vencimiento', 'vida_util', 'dias_vencer', 'existencia_total', 'existencia_lote', 'valor_lote', 'valor_lote_ds', 'numero_lote', 'lote_fabricante', 'tipo', 'dolarizado', 'gravado', 'clasificacion', 'ultima_venta', 'ultimo_proveedor', 'sede1', 'sede2', 'sede3'];
+    campos = ['codigo', 'codigo_barra', 'descripcion', 'precio', 'dias_restantes', 'dias_riesgo', 'ultima_compra', 'fecha_lote', 'fecha_vencimiento', 'vida_util', 'dias_vencer', 'existencia_total', 'existencia_lote', 'valor_lote', 'valor_lote_ds', 'numero_lote', 'lote_fabricante', 'tipo', 'dolarizado', 'gravado', 'clasificacion', 'ultima_venta', 'ultimo_proveedor', 'sede1', 'sede2', 'sede3'];
 
     function mostrar_todas(that) {
         if (that.checked) {
@@ -145,6 +145,10 @@
     $sql5 = R27Q_Productos_PorVencer($FInicial);
     $result = sqlsrv_query($conn,$sql5);
 
+    if (sqlsrv_errors()) {
+        dd(sqlsrv_errors());
+    }
+
     $conectividad_ftn = FG_Validar_Conectividad('FTN');
     $conectividad_fau = FG_Validar_Conectividad('FAU');
     $conectividad_fll = FG_Validar_Conectividad('FLL');
@@ -199,11 +203,6 @@
                 </div>
 
                 <div class="form-group">
-                    <input type="checkbox" onclick="mostrar_ocultar(this, \'descripcion\')" name="descripcion" checked>
-                    Descripción
-                </div>
-
-                <div class="form-group">
                     <input type="checkbox" onclick="mostrar_ocultar(this, \'precio\')" name="precio" checked>
                     Precio
                 </div>
@@ -211,6 +210,11 @@
                 <div class="form-group">
                     <input type="checkbox" onclick="mostrar_ocultar(this, \'dias_restantes\')" name="dias_restantes" checked>
                     Días restantes 30
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, \'dias_riesgo\')" name="dias_riesgo" checked>
+                    Días con riesgo
                 </div>
 
                 <div class="form-group">
@@ -336,6 +340,7 @@
             <th scope="col" class="descripcion CP-sticky">Descripcion</th>
             <th scope="col" class="precio CP-sticky">Precio</br>(Con IVA) '.SigVe.'</td>
             <th scope="col" class="dias_restantes CP-sticky bg-warning">Días restantes 30</td>
+            <th scope="col" class="dias_riesgo CP-sticky bg-warning">Días con riesgo</td>
             <th scope="col" class="ultima_compra CP-sticky">Ultima Compra</th>
             <th scope="col" class="fecha_lote CP-sticky">Fecha Lote</th>
             <th scope="col" class="fecha_vencimiento CP-sticky">Fecha de <br> Vencimiento</th>
@@ -450,6 +455,8 @@
 
       $background = ($DiasRestantes30 > $diasVencer) ? 'bg-warning' : '';
 
+      $diasRiesgo = ($diasVencer-$DiasRestantes30);
+
       echo '<tr class="'.$background.'">';
       echo '<td align="center"><strong>'.intval($contador).'</strong></td>';
       echo '<td class="codigo">'.$CodigoArticulo.'</td>';
@@ -463,6 +470,7 @@
       echo '<td class="precio" align="center">'.(number_format($Precio,2,"," ,"." )).'</td>';
 
       echo '<td align="center" class="dias_restantes bg-warning">'.$DiasRestantes30.'</td>';
+      echo '<td align="center" class="dias_riesgo bg-warning">'.$diasRiesgo.'</td>';
 
       if(!is_null($UltimaCompra)){
         echo '<td class="ultima_compra" align="center">'.$UltimaCompra->format('d-m-Y').'</td>';
