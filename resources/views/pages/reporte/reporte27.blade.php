@@ -457,6 +457,14 @@
 
       $diasRiesgo = ($diasVencer-$DiasRestantes30);
 
+      $new = 'bg-warning';
+
+      if ($DiasRestantes30 == 0) {
+        $background = 'bg-danger';
+        $diasRiesgo = 'IND';
+        $new = 'bg-danger';
+      }
+
       echo '<tr class="'.$background.'">';
       echo '<td align="center"><strong>'.intval($contador).'</strong></td>';
       echo '<td class="codigo">'.$CodigoArticulo.'</td>';
@@ -469,8 +477,8 @@
       </td>';
       echo '<td class="precio" align="center">'.(number_format($Precio,2,"," ,"." )).'</td>';
 
-      echo '<td align="center" class="dias_restantes bg-warning">'.$DiasRestantes30.'</td>';
-      echo '<td align="center" class="dias_riesgo bg-warning">'.$diasRiesgo.'</td>';
+      echo '<td align="center" class="dias_restantes '.$new.'">'.$DiasRestantes30.'</td>';
+      echo '<td align="center" class="dias_riesgo '.$new.'">'.$diasRiesgo.'</td>';
 
       if(!is_null($UltimaCompra)){
         echo '<td class="ultima_compra" align="center">'.$UltimaCompra->format('d-m-Y').'</td>';
@@ -647,105 +655,105 @@
 
       if (isset($_GET['SEDE']) & ($_GET['SEDE'] == 'FAU' || $_GET['SEDE'] == 'DBs')) {
             if ($conectividad_ftn == 1) {
-                echo '<td class="bg-warning sede1" align="center">'.$descripcion_ftn.'</td>
-                      <td class="bg-warning sede1" align="center">'.$existencia_ftn.'</td>';
+                echo '<td class="'.$new.' sede1" align="center">'.$descripcion_ftn.'</td>
+                      <td class="'.$new.' sede1" align="center">'.$existencia_ftn.'</td>';
             } else {
-                echo '<td class="bg-warning sede1">-</td>';
-                echo '<td class="bg-warning sede1">-</td>';
+                echo '<td class="'.$new.' sede1">-</td>';
+                echo '<td class="'.$new.' sede1">-</td>';
             }
 
             if ($conectividad_fll == 1) {
-                echo '<td class="bg-warning sede2" align="center">'.$descripcion_fll.'</td>
-                      <td class="bg-warning sede2" align="center">'.$existencia_fll.'</td>';
+                echo '<td class="'.$new.' sede2" align="center">'.$descripcion_fll.'</td>
+                      <td class="'.$new.' sede2" align="center">'.$existencia_fll.'</td>';
             } else {
-                echo '<td class="bg-warning sede2">-</td>';
-                echo '<td class="bg-warning sede2">-</td>';
+                echo '<td class="'.$new.' sede2">-</td>';
+                echo '<td class="'.$new.' sede2">-</td>';
             }
 
             if ($conectividad_fsm == 1) {
-                echo '<td class="bg-warning sede3" align="center">'.$descripcion_fsm.'</td>
-                      <td class="bg-warning sede3" align="center">'.$existencia_fsm.'</td>';
+                echo '<td class="'.$new.' sede3" align="center">'.$descripcion_fsm.'</td>
+                      <td class="'.$new.' sede3" align="center">'.$existencia_fsm.'</td>';
             } else {
-                echo '<td class="bg-warning sede3">-</td>';
-                echo '<td class="bg-warning sede3">-</td>';
+                echo '<td class="'.$new.' sede3">-</td>';
+                echo '<td class="'.$new.' sede3">-</td>';
             }
         }
 
         if (isset($_GET['SEDE']) & $_GET['SEDE'] == 'FTN') {
             if ($conectividad_fau == 1) {
-                echo '<td class="bg-warning sede1" align="center">'.$descripcion_fau.'</td>
-                      <td class="bg-warning sede1" align="center">'.$existencia_fau.'</td>';
+                echo '<td class="'.$new.' sede1" align="center">'.$descripcion_fau.'</td>
+                      <td class="'.$new.' sede1" align="center">'.$existencia_fau.'</td>';
             } else {
-                echo '<td class="bg-warning sede1">-</td>';
-                echo '<td class="bg-warning sede1">-</td>';
+                echo '<td class="'.$new.' sede1">-</td>';
+                echo '<td class="'.$new.' sede1">-</td>';
             }
 
             if ($conectividad_fll == 1) {
-                echo '<td class="bg-warning sede2" align="center">'.$descripcion_fll.'</td>
-                      <td class="bg-warning sede2" align="center">'.$existencia_fll.'</td>';
+                echo '<td class="'.$new.' sede2" align="center">'.$descripcion_fll.'</td>
+                      <td class="'.$new.' sede2" align="center">'.$existencia_fll.'</td>';
             } else {
-                echo '<td class="bg-warning sede2">-</td>';
-                echo '<td class="bg-warning sede2">-</td>';
+                echo '<td class="'.$new.' sede2">-</td>';
+                echo '<td class="'.$new.' sede2">-</td>';
             }
 
             if ($conectividad_fsm == 1) {
-                echo '<td class="bg-warning sede3" align="center">'.$descripcion_fsm.'</td>
-                      <td class="bg-warning sede3" align="center">'.$existencia_fsm.'</td>';
+                echo '<td class="'.$new.' sede3" align="center">'.$descripcion_fsm.'</td>
+                      <td class="'.$new.' sede3" align="center">'.$existencia_fsm.'</td>';
             } else {
-                echo '<td class="bg-warning sede3">-</td>';
-                echo '<td class="bg-warning sede3">-</td>';
+                echo '<td class="'.$new.' sede3">-</td>';
+                echo '<td class="'.$new.' sede3">-</td>';
             }
         }
 
         if (isset($_GET['SEDE']) & $_GET['SEDE'] == 'FLL') {
             if ($conectividad_ftn == 1) {
-                echo '<td class="bg-warning sede1" align="center">'.$descripcion_ftn.'</td>
-                      <td class="bg-warning sede1" align="center">'.$existencia_ftn.'</td>';
+                echo '<td class="'.$new.' sede1" align="center">'.$descripcion_ftn.'</td>
+                      <td class="'.$new.' sede1" align="center">'.$existencia_ftn.'</td>';
             } else {
-                echo '<td class="bg-warning sede1">-</td>';
-                echo '<td class="bg-warning sede1">-</td>';
+                echo '<td class="'.$new.' sede1">-</td>';
+                echo '<td class="'.$new.' sede1">-</td>';
             }
 
             if ($conectividad_fau == 1) {
-                echo '<td class="bg-warning sede2" align="center">'.$descripcion_fau.'</td>
-                      <td class="bg-warning sede2" align="center">'.$existencia_fau.'</td>';
+                echo '<td class="'.$new.' sede2" align="center">'.$descripcion_fau.'</td>
+                      <td class="'.$new.' sede2" align="center">'.$existencia_fau.'</td>';
             } else {
-                echo '<td class="bg-warning sede2">-</td>';
-                echo '<td class="bg-warning sede2">-</td>';
+                echo '<td class="'.$new.' sede2">-</td>';
+                echo '<td class="'.$new.' sede2">-</td>';
             }
 
             if ($conectividad_fsm == 1) {
-                echo '<td class="bg-warning sede3" align="center">'.$descripcion_fsm.'</td>
-                      <td class="bg-warning sede3" align="center">'.$existencia_fsm.'</td>';
+                echo '<td class="'.$new.' sede3" align="center">'.$descripcion_fsm.'</td>
+                      <td class="'.$new.' sede3" align="center">'.$existencia_fsm.'</td>';
             } else {
-                echo '<td class="bg-warning sede3">-</td>';
-                echo '<td class="bg-warning sede3">-</td>';
+                echo '<td class="'.$new.' sede3">-</td>';
+                echo '<td class="'.$new.' sede3">-</td>';
             }
         }
 
         if (isset($_GET['SEDE']) & $_GET['SEDE'] == 'FSM') {
             if ($conectividad_ftn == 1) {
-                echo '<td class="bg-warning sede1" align="center">'.$descripcion_ftn.'</td>
-                      <td class="bg-warning sede1" align="center">'.$existencia_ftn.'</td>';
+                echo '<td class="'.$new.' sede1" align="center">'.$descripcion_ftn.'</td>
+                      <td class="'.$new.' sede1" align="center">'.$existencia_ftn.'</td>';
             } else {
-                echo '<td class="bg-warning sede1">-</td>';
-                echo '<td class="bg-warning sede1">-</td>';
+                echo '<td class="'.$new.' sede1">-</td>';
+                echo '<td class="'.$new.' sede1">-</td>';
             }
 
             if ($conectividad_fau == 1) {
-                echo '<td class="bg-warning sede2" align="center">'.$descripcion_fau.'</td>
-                      <td class="bg-warning sede2" align="center">'.$existencia_fau.'</td>';
+                echo '<td class="'.$new.' sede2" align="center">'.$descripcion_fau.'</td>
+                      <td class="'.$new.' sede2" align="center">'.$existencia_fau.'</td>';
             } else {
-                echo '<td class="bg-warning sede2">-</td>';
-                echo '<td class="bg-warning sede2">-</td>';
+                echo '<td class="'.$new.' sede2">-</td>';
+                echo '<td class="'.$new.' sede2">-</td>';
             }
 
             if ($conectividad_fll == 1) {
-                echo '<td class="bg-warning sede3" align="center">'.$descripcion_fll.'</td>
-                      <td class="bg-warning sede3" align="center">'.$existencia_fll.'</td>';
+                echo '<td class="'.$new.' sede3" align="center">'.$descripcion_fll.'</td>
+                      <td class="'.$new.' sede3" align="center">'.$existencia_fll.'</td>';
             } else {
-                echo '<td class="bg-warning sede3">-</td>';
-                echo '<td class="bg-warning sede3">-</td>';
+                echo '<td class="'.$new.' sede3">-</td>';
+                echo '<td class="'.$new.' sede3">-</td>';
             }
         }
 
@@ -760,9 +768,8 @@
   }
   /**********************************************************************************/
   /*
-    TITULO: R3Q_TOP_MasVendidos
-    FUNCION: Ubicar el top de productos mas vendidos
-    RETORNO: Lista de productos mas vendidos
+    TITULO: R27Q_Productos_PorVencer
+    FUNCION: Ubicar vencidos o próximos a vencer
     DESAROLLADO POR: SERGIO COVA
   */
   function R27Q_Productos_PorVencer($FInicial) {
