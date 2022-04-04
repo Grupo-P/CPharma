@@ -15,7 +15,139 @@
   $pie_ve = 0;
 ?>
 
+
+@section('scriptsHead')
+    <script>
+        function mostrar_ocultar(that, elemento) {
+            if (that.checked) {
+                return $('.' + elemento).show();
+            }
+
+            return $('.' + elemento).hide();
+        }
+
+        campos = ['orden_compra', 'sede_destino', 'proveedor', 'fecha_orden', 'fecha_estimada_despacho', 'dias_transcurridos', 'monto_total_bs', 'monto_total_ds', 'unidades', 'condicion_crediticia', 'dias_credito', 'estatus', 'estado_actual', 'operador', 'monto_real', 'calificacion'];
+
+        function mostrar_todas(that) {
+            if (that.checked) {
+                for (var i = campos.length - 1; i >= 0; i--) {
+                    $('.' + campos[i]).show();
+                    $('[name='+campos[i]+']').prop('checked', true);
+                }
+            } else {
+                for (var i = campos.length - 1; i >= 0; i--) {
+                    $('.' + campos[i]).hide();
+                    $('[name='+campos[i]+']').prop('checked', false);
+                }
+            }
+        }
+    </script>
+@endsection
+
+
 @section('content')
+
+    <div class="modal fade" id="ver_campos" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Mostrar u ocultar columnas</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="form-group">
+                <input type="checkbox" onclick="mostrar_ocultar(this, 'orden_compra')" name="orden_compra" checked>
+                Orden compra
+            </div>
+
+            <div class="form-group">
+                <input type="checkbox" onclick="mostrar_ocultar(this, 'sede_destino')" name="sede_destino" checked>
+                Sede destino
+            </div>
+
+            <div class="form-group">
+                <input type="checkbox" onclick="mostrar_ocultar(this, 'proveedor')" name="proveedor" checked>
+                Proveedor
+            </div>
+
+            <div class="form-group">
+                <input type="checkbox" onclick="mostrar_ocultar(this, 'fecha_orden')" name="fecha_orden" checked>
+                Fecha de la orden
+            </div>
+
+            <div class="form-group">
+                <input type="checkbox" onclick="mostrar_ocultar(this, 'fecha_estimada_despacho')" name="fecha_estimada_despacho" checked>
+                Fecha estimada de despacho
+            </div>
+
+            <div class="form-group">
+                <input type="checkbox" onclick="mostrar_ocultar(this, 'dias_transcurridos')" name="dias_transcurridos" checked>
+                Días transcurridos
+            </div>
+
+            <div class="form-group">
+                <input type="checkbox" onclick="mostrar_ocultar(this, 'monto_total_bs')" name="monto_total_bs" checked>
+                Monto total Bs.
+            </div>
+
+            <div class="form-group">
+                <input type="checkbox" onclick="mostrar_ocultar(this, 'monto_total_ds')" name="monto_total_ds" checked>
+                Monto total $
+            </div>
+
+            <div class="form-group">
+                <input type="checkbox" onclick="mostrar_ocultar(this, 'unidades')" name="unidades" checked>
+                Unidades
+            </div>
+
+            <div class="form-group">
+                <input type="checkbox" onclick="mostrar_ocultar(this, 'condicion_crediticia')" name="condicion_crediticia" checked>
+                Condición crediticia
+            </div>
+
+            <div class="form-group">
+                <input type="checkbox" onclick="mostrar_ocultar(this, 'dias_credito')" name="dias_credito" checked>
+                Días de crédito
+            </div>
+
+            <div class="form-group">
+                <input type="checkbox" onclick="mostrar_ocultar(this, 'estatus')" name="estatus" checked>
+                Estatus
+            </div>
+
+            <div class="form-group">
+                <input type="checkbox" onclick="mostrar_ocultar(this, 'estado_actual')" name="estado_actual" checked>
+                Estado actual
+            </div>
+
+            <div class="form-group">
+                <input type="checkbox" onclick="mostrar_ocultar(this, 'operador')" name="operador" checked>
+                Operador
+            </div>
+
+            <div class="form-group">
+                <input type="checkbox" onclick="mostrar_ocultar(this, 'monto_real')" name="monto_real" checked>
+                Monto real
+            </div>
+
+            <div class="form-group">
+                <input type="checkbox" onclick="mostrar_ocultar(this, 'calificacion')" name="calificacion" checked>
+                Calificación
+            </div>
+
+            <div class="form-group">
+                <input type="checkbox" onclick="mostrar_todas(this)" name="Marcar todas" checked>
+                Marcar todas
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+          </div>
+        </div>
+      </div>
+    </div>
 
 	<!-- Modal Guardar -->
 	@if (session('Saved'))
@@ -289,30 +421,32 @@
           </ul>
         </td>
       </tr>
-    </tbody
+    </tbody>
  	</table>
+
+    <h6 align="center"><a href="" data-toggle="modal" data-target="#ver_campos"><i class="fa fa-eye"></i> Mostrar u ocultar campos<a></h6>
 
 	<table class="table table-striped col-12 sortable" id="myTable">
 	  	<thead class="thead-dark">
 		    <tr>
 		      	<th scope="col" class="CP-sticky">#</th>
-		      	<th scope="col" class="CP-sticky">Orden compra</th>
-		      	<th scope="col" class="CP-sticky">Sede Destino</th>
-		      	<th scope="col" class="CP-sticky">Proveedor</th>
-		      	<th scope="col" class="CP-sticky">Fecha de la orden</th>
-		      	<th scope="col" class="CP-sticky">Fecha estimada de despacho</th>
-		      	<th scope="col" class="CP-sticky">Dias transcurridos</th>
-		      	<th scope="col" class="CP-sticky">Monto total Bs</th>
-		      	<th scope="col" class="CP-sticky">Monto total $</th>
-		      	<th scope="col" class="CP-sticky">Unidades</th>
-		      	<th scope="col" class="CP-sticky">Condicion crediticia</th>
-		      	<th scope="col" class="CP-sticky">Dias de credito</th>
-		      	<th scope="col" class="CP-sticky">Estatus</th>
-		      	<th scope="col" class="CP-sticky">Estado Actual</th>
-		      	<th scope="col" class="CP-sticky">Operador</th>
-		      	<th scope="col" class="CP-sticky">Monto real</th>
+		      	<th scope="col" class="orden_compra CP-sticky">Orden compra</th>
+		      	<th scope="col" class="sede_destino CP-sticky">Sede Destino</th>
+		      	<th scope="col" class="proveedor CP-sticky">Proveedor</th>
+		      	<th scope="col" class="fecha_orden CP-sticky">Fecha de la orden</th>
+		      	<th scope="col" class="fecha_estimada_despacho CP-sticky">Fecha estimada de despacho</th>
+		      	<th scope="col" class="dias_transcurridos CP-sticky">Dias transcurridos</th>
+		      	<th scope="col" class="monto_total_bs CP-sticky">Monto total Bs</th>
+		      	<th scope="col" class="monto_total_ds CP-sticky">Monto total $</th>
+		      	<th scope="col" class="unidades CP-sticky">Unidades</th>
+		      	<th scope="col" class="condicion_crediticia CP-sticky">Condicion crediticia</th>
+		      	<th scope="col" class="dias_credito CP-sticky">Dias de credito</th>
+		      	<th scope="col" class="estatus CP-sticky">Estatus</th>
+		      	<th scope="col" class="estado_actual CP-sticky">Estado Actual</th>
+		      	<th scope="col" class="operador CP-sticky">Operador</th>
+		      	<th scope="col" class="monto_real CP-sticky">Monto real</th>
 		      	<!-- <th scope="col" class="CP-sticky">Fecha de aprobacion</th> -->
-		      	<th scope="col" class="CP-sticky">Calificacion</th>
+		      	<th scope="col" class="calificacion CP-sticky">Calificacion</th>
 		      	<!-- <th scope="col" class="CP-sticky">Fecha de recepcion</th>
 		      	<th scope="col" class="CP-sticky">Fecha de ingreso</th> -->
 		      	<th scope="col" class="CP-sticky">Acciones</th>
@@ -392,23 +526,23 @@
 			}
 			?>
 	      <th>{{$ordenCompra->id}}</th>
-	      <td>{{$ordenCompra->codigo}}</td>
-       	<td>{{$ordenCompra->sede_destino}}</td>
-	      <td>{{$ordenCompra->proveedor}}</td>
-	      <td>{{$ordenCompra->created_at}}</td>
-	      <td>{{$ordenCompra->fecha_estimada_despacho}}</td>
-	      <td>{{$Dias}}</td>
-	      <td>{{$costo_total_ve}}</td>
-	      <td>{{$costo_total_dolar}}</td>
-	      <td>{{$total_unidades}}</td>
-	      <td>{{$ordenCompra->condicion_crediticia}}</td>
-	      <td>{{$ordenCompra->dias_credito}}</td>
-	      <td>{{$ordenCompra->estado}}</td>
-	      <td>{{$ordenCompra->estatus}}</td>
-	      <td>{{$ordenCompra->user}}</td>
-	      <td>{{$costo_total_real}}</td>
+	      <td class="orden_compra">{{$ordenCompra->codigo}}</td>
+       	  <td class="sede_destino">{{$ordenCompra->sede_destino}}</td>
+	      <td class="proveedor">{{$ordenCompra->proveedor}}</td>
+	      <td class="fecha_orden">{{$ordenCompra->created_at}}</td>
+	      <td class="fecha_estimada_despacho">{{$ordenCompra->fecha_estimada_despacho}}</td>
+	      <td class="dias_transcurridos">{{$Dias}}</td>
+	      <td class="monto_total_bs">{{$costo_total_ve}}</td>
+	      <td class="monto_total_ds">{{$costo_total_dolar}}</td>
+	      <td class="unidades">{{$total_unidades}}</td>
+	      <td class="condicion_crediticia">{{$ordenCompra->condicion_crediticia}}</td>
+	      <td class="dias_credito">{{$ordenCompra->dias_credito}}</td>
+	      <td class="estatus">{{$ordenCompra->estado}}</td>
+	      <td class="estado_actual">{{$ordenCompra->estatus}}</td>
+	      <td class="operador">{{$ordenCompra->user}}</td>
+	      <td class="monto_real">{{$costo_total_real}}</td>
 	      <!-- <td>{{$ordenCompra->fecha_aprobacion}}</td> -->
-	      <td>{{$ordenCompra->calificacion}}</td>
+	      <td class="calificacion">{{$ordenCompra->calificacion}}</td>
 	      <!-- <td>{{$ordenCompra->fecha_recepcion}}</td>
 	      <td>{{$ordenCompra->fecha_ingreso}}</td> -->
 
