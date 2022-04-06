@@ -58,7 +58,7 @@
         return $('.' + elemento).hide();
     }
 
-    campos = ['codigo', 'codigo_barra', 'descripcion', 'precio', 'dias_restantes', 'ultima_compra', 'fecha_lote', 'fecha_vencimiento', 'vida_util', 'dias_vencer', 'existencia_total', 'existencia_lote', 'valor_lote', 'valor_lote_ds', 'numero_lote', 'lote_fabricante', 'tipo', 'dolarizado', 'gravado', 'clasificacion', 'ultima_venta', 'ultimo_proveedor', 'sede1', 'sede2', 'sede3'];
+    campos = ['codigo', 'codigo_barra', 'descripcion', 'precio', 'dias_restantes', 'dias_riesgo', 'ultima_compra', 'fecha_lote', 'fecha_vencimiento', 'vida_util', 'dias_vencer', 'existencia_total', 'existencia_lote', 'valor_lote', 'valor_lote_ds', 'numero_lote', 'lote_fabricante', 'tipo', 'dolarizado', 'gravado', 'clasificacion', 'ultima_venta', 'ultimo_proveedor', 'sede1', 'sede2', 'sede3'];
 
     function mostrar_todas(that) {
         if (that.checked) {
@@ -145,6 +145,10 @@
     $sql5 = R27Q_Productos_PorVencer($FInicial);
     $result = sqlsrv_query($conn,$sql5);
 
+    if (sqlsrv_errors()) {
+        dd(sqlsrv_errors());
+    }
+
     $conectividad_ftn = FG_Validar_Conectividad('FTN');
     $conectividad_fau = FG_Validar_Conectividad('FAU');
     $conectividad_fll = FG_Validar_Conectividad('FLL');
@@ -199,11 +203,6 @@
                 </div>
 
                 <div class="form-group">
-                    <input type="checkbox" onclick="mostrar_ocultar(this, \'descripcion\')" name="descripcion" checked>
-                    Descripción
-                </div>
-
-                <div class="form-group">
                     <input type="checkbox" onclick="mostrar_ocultar(this, \'precio\')" name="precio" checked>
                     Precio
                 </div>
@@ -211,6 +210,11 @@
                 <div class="form-group">
                     <input type="checkbox" onclick="mostrar_ocultar(this, \'dias_restantes\')" name="dias_restantes" checked>
                     Días restantes 30
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, \'dias_riesgo\')" name="dias_riesgo" checked>
+                    Días con riesgo
                 </div>
 
                 <div class="form-group">
@@ -336,6 +340,7 @@
             <th scope="col" class="descripcion CP-sticky">Descripcion</th>
             <th scope="col" class="precio CP-sticky">Precio</br>(Con IVA) '.SigVe.'</td>
             <th scope="col" class="dias_restantes CP-sticky bg-warning">Días restantes 30</td>
+            <th scope="col" class="dias_riesgo CP-sticky bg-warning">Días con riesgo</td>
             <th scope="col" class="ultima_compra CP-sticky">Ultima Compra</th>
             <th scope="col" class="fecha_lote CP-sticky">Fecha Lote</th>
             <th scope="col" class="fecha_vencimiento CP-sticky">Fecha de <br> Vencimiento</th>
@@ -401,6 +406,8 @@
     ';
     $contador = 1;
     while($row = sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC)) {
+
+
       $IdArticulo = $row["IdArticulo"];
       $CodigoArticulo = $row["CodigoInterno"];
       $CodigoBarra = $row["CodigoBarra"];
@@ -435,7 +442,7 @@
       $clasificacion = $RowCPharma['clasificacion'];
       $clasificacion = ($clasificacion!="")?$clasificacion:"NO CLASIFICADO";
 
-      $fechaInicioDiasCero = date_modify(date_create(), '-15day');
+      $fechaInicioDiasCero = date_modify(date_create(), '-30day');
       $fechaInicioDiasCero = date_format($fechaInicioDiasCero, 'Y-m-d');
       $sql2 = MySQL_Cuenta_Veces_Dias_Cero($IdArticulo,$fechaInicioDiasCero,date_create()->format('Y-m-d'));
       $result22 = mysqli_query($connCPharma,$sql2);
@@ -447,6 +454,16 @@
       $diasVencer = FG_Validar_Fechas(date('Y-m-d H:i:s'),$row["FechaVencimiento"]->format('d-m-Y'));
 
       $background = ($DiasRestantes30 > $diasVencer) ? 'bg-warning' : '';
+
+      $diasRiesgo = ($diasVencer-$DiasRestantes30);
+
+      $new = 'bg-warning';
+
+      if ($DiasRestantes30 == 0) {
+        $background = 'bg-danger';
+        $diasRiesgo = 'IND';
+        $new = 'bg-danger';
+      }
 
       echo '<tr class="'.$background.'">';
       echo '<td align="center"><strong>'.intval($contador).'</strong></td>';
@@ -460,7 +477,8 @@
       </td>';
       echo '<td class="precio" align="center">'.(number_format($Precio,2,"," ,"." )).'</td>';
 
-      echo '<td align="center" class="dias_restantes bg-warning">'.$DiasRestantes30.'</td>';
+      echo '<td align="center" class="dias_restantes '.$new.'">'.$DiasRestantes30.'</td>';
+      echo '<td align="center" class="dias_riesgo '.$new.'">'.$diasRiesgo.'</td>';
 
       if(!is_null($UltimaCompra)){
         echo '<td class="ultima_compra" align="center">'.$UltimaCompra->format('d-m-Y').'</td>';
@@ -520,7 +538,7 @@
 
       if (isset($_GET['SEDE']) & ($_GET['SEDE'] == 'FAU' || $_GET['SEDE'] == 'DBs')) {
         if ($conectividad_ftn == 1) {
-          $sql3 = R14_Q_Descripcion_Existencia_Articulo($CodigoBarra);
+          $sql3 = R27_Q_Descripcion_Existencia_Articulo($CodigoBarra);
           $result3 = sqlsrv_query($connFTN,$sql3);
 
           $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
@@ -530,7 +548,7 @@
         }
 
         if ($conectividad_fll == 1) {
-          $sql3 = R14_Q_Descripcion_Existencia_Articulo($CodigoBarra);
+          $sql3 = R27_Q_Descripcion_Existencia_Articulo($CodigoBarra);
           $result3 = sqlsrv_query($connFLL,$sql3);
           $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
 
@@ -539,7 +557,7 @@
         }
 
         if ($conectividad_fsm == 1) {
-          $sql3 = R14_Q_Descripcion_Existencia_Articulo($CodigoBarra);
+          $sql3 = R27_Q_Descripcion_Existencia_Articulo($CodigoBarra);
           $result3 = sqlsrv_query($connFSM,$sql3);
           $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
 
@@ -550,7 +568,7 @@
 
       if (isset($_GET['SEDE']) & $_GET['SEDE'] == 'FTN') {
         if ($conectividad_fau == 1) {
-            $sql3 = R14_Q_Descripcion_Existencia_Articulo($CodigoBarra);
+            $sql3 = R27_Q_Descripcion_Existencia_Articulo($CodigoBarra);
             $result3 = sqlsrv_query($connFAU,$sql3);
             $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
 
@@ -559,7 +577,7 @@
           }
 
           if ($conectividad_fll == 1) {
-            $sql3 = R14_Q_Descripcion_Existencia_Articulo($CodigoBarra);
+            $sql3 = R27_Q_Descripcion_Existencia_Articulo($CodigoBarra);
             $result3 = sqlsrv_query($connFLL,$sql3);
             $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
 
@@ -568,7 +586,7 @@
           }
 
           if ($conectividad_fsm == 1) {
-            $sql3 = R14_Q_Descripcion_Existencia_Articulo($CodigoBarra);
+            $sql3 = R27_Q_Descripcion_Existencia_Articulo($CodigoBarra);
             $result3 = sqlsrv_query($connFSM,$sql3);
             $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
 
@@ -579,7 +597,7 @@
 
       if (isset($_GET['SEDE']) & $_GET['SEDE'] == 'FLL') {
          if ($conectividad_ftn == 1) {
-            $sql3 = R14_Q_Descripcion_Existencia_Articulo($CodigoBarra);
+            $sql3 = R27_Q_Descripcion_Existencia_Articulo($CodigoBarra);
             $result3 = sqlsrv_query($connFTN,$sql3);
             $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
 
@@ -588,7 +606,7 @@
           }
 
           if ($conectividad_fau == 1) {
-            $sql3 = R14_Q_Descripcion_Existencia_Articulo($CodigoBarra);
+            $sql3 = R27_Q_Descripcion_Existencia_Articulo($CodigoBarra);
             $result3 = sqlsrv_query($connFAU,$sql3);
             $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
 
@@ -597,7 +615,7 @@
           }
 
           if ($conectividad_fsm == 1) {
-            $sql3 = R14_Q_Descripcion_Existencia_Articulo($CodigoBarra);
+            $sql3 = R27_Q_Descripcion_Existencia_Articulo($CodigoBarra);
             $result3 = sqlsrv_query($connFSM,$sql3);
             $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
 
@@ -608,7 +626,7 @@
 
       if (isset($_GET['SEDE']) & $_GET['SEDE'] == 'FSM') {
          if ($conectividad_ftn == 1) {
-            $sql3 = R14_Q_Descripcion_Existencia_Articulo($CodigoBarra);
+            $sql3 = R27_Q_Descripcion_Existencia_Articulo($CodigoBarra);
             $result3 = sqlsrv_query($connFTN,$sql3);
             $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
 
@@ -617,7 +635,7 @@
           }
 
           if ($conectividad_fau == 1) {
-            $sql3 = R14_Q_Descripcion_Existencia_Articulo($CodigoBarra);
+            $sql3 = R27_Q_Descripcion_Existencia_Articulo($CodigoBarra);
             $result3 = sqlsrv_query($connFAU,$sql3);
             $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
 
@@ -626,7 +644,7 @@
           }
 
           if ($conectividad_fll == 1) {
-            $sql3 = R14_Q_Descripcion_Existencia_Articulo($CodigoBarra);
+            $sql3 = R27_Q_Descripcion_Existencia_Articulo($CodigoBarra);
             $result3 = sqlsrv_query($connFLL,$sql3);
             $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
 
@@ -637,105 +655,105 @@
 
       if (isset($_GET['SEDE']) & ($_GET['SEDE'] == 'FAU' || $_GET['SEDE'] == 'DBs')) {
             if ($conectividad_ftn == 1) {
-                echo '<td class="bg-warning sede1" align="center">'.$descripcion_ftn.'</td>
-                      <td class="bg-warning sede1" align="center">'.$existencia_ftn.'</td>';
+                echo '<td class="'.$new.' sede1" align="center">'.$descripcion_ftn.'</td>
+                      <td class="'.$new.' sede1" align="center">'.$existencia_ftn.'</td>';
             } else {
-                echo '<td class="bg-warning sede1">-</td>';
-                echo '<td class="bg-warning sede1">-</td>';
+                echo '<td class="'.$new.' sede1">-</td>';
+                echo '<td class="'.$new.' sede1">-</td>';
             }
 
             if ($conectividad_fll == 1) {
-                echo '<td class="bg-warning sede2" align="center">'.$descripcion_fll.'</td>
-                      <td class="bg-warning sede2" align="center">'.$existencia_fll.'</td>';
+                echo '<td class="'.$new.' sede2" align="center">'.$descripcion_fll.'</td>
+                      <td class="'.$new.' sede2" align="center">'.$existencia_fll.'</td>';
             } else {
-                echo '<td class="bg-warning sede2">-</td>';
-                echo '<td class="bg-warning sede2">-</td>';
+                echo '<td class="'.$new.' sede2">-</td>';
+                echo '<td class="'.$new.' sede2">-</td>';
             }
 
             if ($conectividad_fsm == 1) {
-                echo '<td class="bg-warning sede3" align="center">'.$descripcion_fsm.'</td>
-                      <td class="bg-warning sede3" align="center">'.$existencia_fsm.'</td>';
+                echo '<td class="'.$new.' sede3" align="center">'.$descripcion_fsm.'</td>
+                      <td class="'.$new.' sede3" align="center">'.$existencia_fsm.'</td>';
             } else {
-                echo '<td class="bg-warning sede3">-</td>';
-                echo '<td class="bg-warning sede3">-</td>';
+                echo '<td class="'.$new.' sede3">-</td>';
+                echo '<td class="'.$new.' sede3">-</td>';
             }
         }
 
         if (isset($_GET['SEDE']) & $_GET['SEDE'] == 'FTN') {
             if ($conectividad_fau == 1) {
-                echo '<td class="bg-warning sede1" align="center">'.$descripcion_fau.'</td>
-                      <td class="bg-warning sede1" align="center">'.$existencia_fau.'</td>';
+                echo '<td class="'.$new.' sede1" align="center">'.$descripcion_fau.'</td>
+                      <td class="'.$new.' sede1" align="center">'.$existencia_fau.'</td>';
             } else {
-                echo '<td class="bg-warning sede1">-</td>';
-                echo '<td class="bg-warning sede1">-</td>';
+                echo '<td class="'.$new.' sede1">-</td>';
+                echo '<td class="'.$new.' sede1">-</td>';
             }
 
             if ($conectividad_fll == 1) {
-                echo '<td class="bg-warning sede2" align="center">'.$descripcion_fll.'</td>
-                      <td class="bg-warning sede2" align="center">'.$existencia_fll.'</td>';
+                echo '<td class="'.$new.' sede2" align="center">'.$descripcion_fll.'</td>
+                      <td class="'.$new.' sede2" align="center">'.$existencia_fll.'</td>';
             } else {
-                echo '<td class="bg-warning sede2">-</td>';
-                echo '<td class="bg-warning sede2">-</td>';
+                echo '<td class="'.$new.' sede2">-</td>';
+                echo '<td class="'.$new.' sede2">-</td>';
             }
 
             if ($conectividad_fsm == 1) {
-                echo '<td class="bg-warning sede3" align="center">'.$descripcion_fsm.'</td>
-                      <td class="bg-warning sede3" align="center">'.$existencia_fsm.'</td>';
+                echo '<td class="'.$new.' sede3" align="center">'.$descripcion_fsm.'</td>
+                      <td class="'.$new.' sede3" align="center">'.$existencia_fsm.'</td>';
             } else {
-                echo '<td class="bg-warning sede3">-</td>';
-                echo '<td class="bg-warning sede3">-</td>';
+                echo '<td class="'.$new.' sede3">-</td>';
+                echo '<td class="'.$new.' sede3">-</td>';
             }
         }
 
         if (isset($_GET['SEDE']) & $_GET['SEDE'] == 'FLL') {
             if ($conectividad_ftn == 1) {
-                echo '<td class="bg-warning sede1" align="center">'.$descripcion_ftn.'</td>
-                      <td class="bg-warning sede1" align="center">'.$existencia_ftn.'</td>';
+                echo '<td class="'.$new.' sede1" align="center">'.$descripcion_ftn.'</td>
+                      <td class="'.$new.' sede1" align="center">'.$existencia_ftn.'</td>';
             } else {
-                echo '<td class="bg-warning sede1">-</td>';
-                echo '<td class="bg-warning sede1">-</td>';
+                echo '<td class="'.$new.' sede1">-</td>';
+                echo '<td class="'.$new.' sede1">-</td>';
             }
 
             if ($conectividad_fau == 1) {
-                echo '<td class="bg-warning sede2" align="center">'.$descripcion_fau.'</td>
-                      <td class="bg-warning sede2" align="center">'.$existencia_fau.'</td>';
+                echo '<td class="'.$new.' sede2" align="center">'.$descripcion_fau.'</td>
+                      <td class="'.$new.' sede2" align="center">'.$existencia_fau.'</td>';
             } else {
-                echo '<td class="bg-warning sede2">-</td>';
-                echo '<td class="bg-warning sede2">-</td>';
+                echo '<td class="'.$new.' sede2">-</td>';
+                echo '<td class="'.$new.' sede2">-</td>';
             }
 
             if ($conectividad_fsm == 1) {
-                echo '<td class="bg-warning sede3" align="center">'.$descripcion_fsm.'</td>
-                      <td class="bg-warning sede3" align="center">'.$existencia_fsm.'</td>';
+                echo '<td class="'.$new.' sede3" align="center">'.$descripcion_fsm.'</td>
+                      <td class="'.$new.' sede3" align="center">'.$existencia_fsm.'</td>';
             } else {
-                echo '<td class="bg-warning sede3">-</td>';
-                echo '<td class="bg-warning sede3">-</td>';
+                echo '<td class="'.$new.' sede3">-</td>';
+                echo '<td class="'.$new.' sede3">-</td>';
             }
         }
 
         if (isset($_GET['SEDE']) & $_GET['SEDE'] == 'FSM') {
             if ($conectividad_ftn == 1) {
-                echo '<td class="bg-warning sede1" align="center">'.$descripcion_ftn.'</td>
-                      <td class="bg-warning sede1" align="center">'.$existencia_ftn.'</td>';
+                echo '<td class="'.$new.' sede1" align="center">'.$descripcion_ftn.'</td>
+                      <td class="'.$new.' sede1" align="center">'.$existencia_ftn.'</td>';
             } else {
-                echo '<td class="bg-warning sede1">-</td>';
-                echo '<td class="bg-warning sede1">-</td>';
+                echo '<td class="'.$new.' sede1">-</td>';
+                echo '<td class="'.$new.' sede1">-</td>';
             }
 
             if ($conectividad_fau == 1) {
-                echo '<td class="bg-warning sede2" align="center">'.$descripcion_fau.'</td>
-                      <td class="bg-warning sede2" align="center">'.$existencia_fau.'</td>';
+                echo '<td class="'.$new.' sede2" align="center">'.$descripcion_fau.'</td>
+                      <td class="'.$new.' sede2" align="center">'.$existencia_fau.'</td>';
             } else {
-                echo '<td class="bg-warning sede2">-</td>';
-                echo '<td class="bg-warning sede2">-</td>';
+                echo '<td class="'.$new.' sede2">-</td>';
+                echo '<td class="'.$new.' sede2">-</td>';
             }
 
             if ($conectividad_fll == 1) {
-                echo '<td class="bg-warning sede3" align="center">'.$descripcion_fll.'</td>
-                      <td class="bg-warning sede3" align="center">'.$existencia_fll.'</td>';
+                echo '<td class="'.$new.' sede3" align="center">'.$descripcion_fll.'</td>
+                      <td class="'.$new.' sede3" align="center">'.$existencia_fll.'</td>';
             } else {
-                echo '<td class="bg-warning sede3">-</td>';
-                echo '<td class="bg-warning sede3">-</td>';
+                echo '<td class="'.$new.' sede3">-</td>';
+                echo '<td class="'.$new.' sede3">-</td>';
             }
         }
 
@@ -750,9 +768,8 @@
   }
   /**********************************************************************************/
   /*
-    TITULO: R3Q_TOP_MasVendidos
-    FUNCION: Ubicar el top de productos mas vendidos
-    RETORNO: Lista de productos mas vendidos
+    TITULO: R27Q_Productos_PorVencer
+    FUNCION: Ubicar vencidos o próximos a vencer
     DESAROLLADO POR: SERGIO COVA
   */
   function R27Q_Productos_PorVencer($FInicial) {
@@ -770,9 +787,9 @@
       FROM VenDevolucionDetalle
       INNER JOIN VenDevolucion ON VenDevolucion.Id = VenDevolucionDetalle.VenDevolucionId
       WHERE VenDevolucionDetalle.InvArticuloId = InvArticulo.Id
-      AND(VenDevolucion.FechaDocumento > '$Inicio' AND VenDevolucion.FechaDocumento < '$Fin')
+      AND(VenDevolucion.FechaDocumento >= '$Inicio' AND VenDevolucion.FechaDocumento <= '$Fin')
       GROUP BY VenDevolucionDetalle.InvArticuloId
-      ),CAST(0 AS INT)))) FROM VenFacturaDetalle) AS TotalUnidadesVendidas,
+      ),CAST(0 AS INT)))) FROM VenFacturaDetalle WHERE VenFacturaDetalle.InvArticuloId = InvArticulo.Id AND VenFacturaDetalle.VenFacturaId IN (SELECT VenFactura.Id FROM VenFactura WHERE VenFactura.FechaDocumento >= '$Inicio' AND VenFactura.FechaDocumento <= '$Fin')) AS TotalUnidadesVendidas,
     --Id Articulo
     InvArticulo.Id AS IdArticulo,
     --Categoria Articulo
@@ -981,12 +998,12 @@
   }
 
   /*
-    TITULO: R14_Q_Descripcion_Existencia_Articulo
+    TITULO: R27_Q_Descripcion_Existencia_Articulo
     FUNCION: Query que genera descripcion y existencia de articulo
     RETORNO: Descripcion/existencia de articulo
     DESAROLLADO POR: NISA DELGADO
   */
-  function R14_Q_Descripcion_Existencia_Articulo($CodigoBarra)
+  function R27_Q_Descripcion_Existencia_Articulo($CodigoBarra)
   {
 
     $CodigoBarra = str_replace("'", "''", $CodigoBarra);

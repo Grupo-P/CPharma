@@ -575,6 +575,31 @@
         </div>
     </div>
 
+    <!-- Modal Error Sin Caja Seleccionada -->
+    <div class="modal fade" id="errorModalCajaSelect" tabindex="-1" role="dialog" aria-labelledby="errorModalRangoTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title text-danger" id="errorModalRangoTitle">
+                        <i class="fas fa-exclamation-circle"></i>&nbsp;Error
+                    </h5>
+
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <div class="modal-body">
+                    <h4 class="h6">No tienes una caja seleccionada, recuerda seleccionarla y protegerla</h4>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Aceptar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <a name="Inicio"></a>
     <hr class="row align-items-start col-12">
     <h5 class="text-info">
@@ -964,6 +989,11 @@
           var parametro = {
           "cajaId":cajaId
           };
+
+          if (cajaId == 0) {
+            $('#errorModalCajaSelect').modal('show');
+            return false;
+          }
 
           //Incio Armado tablaFactura
           $.ajax({
