@@ -43,7 +43,7 @@
         </form>
 
         <?php
-        $hoy = date('Y-m-d');
+        $hoy = date('Y-m-d');        
         if(isset($_GET['Fecha'])){
             if($_GET['Fecha']=='AYER'){
                 $fecha = date("Y-m-d",strtotime($hoy."- 1 days"));
@@ -284,12 +284,13 @@
                     <th scope="col">Caja</th>
                     <th scope="col">Unidades</th>
                     <th scope="col">Frecuencia</th>
+                    <th scope="col">Unidades Promedio</th>
                     <th scope="col">Total</th>
                     <th scope="col">Factura Promedio</th>
-                    <th scope="col">Hora</th>
+                    <th scope="col">Monto</th>
+                    <th scope="col">Hora</th>                                        
                     <th scope="col">Monto</th>
                     <th scope="col">Hora</th>
-                    <th scope="col">Monto</th>
                 </tr>
             </thead>
             <tbody>
@@ -306,6 +307,7 @@
                 echo '<td align="center">'.$rowRC['Caja'].'</td>';
                 echo '<td align="center">'.intval($unidades).'</td>';
                 echo '<td align="center">'.intval($frecuencia).'</td>';
+                echo '<td align="center">'.floatval($unidades/$frecuencia).'</td>';
                 echo '<td align="center">'.number_format($total,2,"," ,"." ).'</td>';
                 echo '<td align="center">'.number_format($facturaPromedio,2,"," ,"." ).'</td>';
                 echo '<td align="center">'.$rowRC['PrimerMonto'].'</td>';
