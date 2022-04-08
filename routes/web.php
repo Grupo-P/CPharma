@@ -248,6 +248,10 @@ Route::match(['post', 'get'], '/reporte47', function() {
     return view('pages.reporte.reporte47');
 });
 
+Route::get('/reporte48', function() {
+    return view('pages.reporte.reporte48');
+});
+
 Route::get('/seccion1', function() {
     return view('pages.reporte.seccion1');
 });

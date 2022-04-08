@@ -166,6 +166,10 @@
                 <th scope="col">47</th>
                 <td scope="col">Cruce de aplicación de consultas</td>
             </tr>
+            <tr>
+                <th scope="col">48</th>
+                <td scope="col">Cambio de precios</td>
+            </tr>
         </tbody>
     </table>
 
