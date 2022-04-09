@@ -110,9 +110,18 @@ class ReporteDemoController extends Controller
                 "DiasRestantesQuiebre_RangoAnterior" => $DiasRestantesQuiebre_RangoAnterior,                  
             ];
     
-            array_push($ArrayData,$DetalleArticuloArray);
-        }        
-                       
+            array_push($ArrayData,$DetalleArticuloArray);            
+        }                        
+
+        // Ordenar el resultado por DiasRestantesQuiebre_RangoUltimo
+        $marks = array();
+        foreach ($ArrayData as $key => $row)
+        {
+            $marks[$key] = $row['DiasRestantesQuiebre_RangoUltimo'];            
+        }
+
+        array_multisort($marks, SORT_DESC, $ArrayData);
+
         $FinCarga = new DateTime("now");
         $IntervalCarga = $InicioCarga->diff($FinCarga);
         $Tiempo = $IntervalCarga->format("%Y-%M-%D %H:%I:%S");
@@ -121,7 +130,7 @@ class ReporteDemoController extends Controller
     }    
 
     public function Articulos_Existencia($IdArticulo) {
-        $sql = "SELECT TOP 1000
+        $sql = "SELECT TOP 100
             --Id Articulo
                 InvArticulo.Id AS IdArticulo,
             --Codigo Interno
