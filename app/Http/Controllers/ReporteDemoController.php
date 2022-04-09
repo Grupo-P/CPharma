@@ -116,14 +116,12 @@ class ReporteDemoController extends Controller
         $FinCarga = new DateTime("now");
         $IntervalCarga = $InicioCarga->diff($FinCarga);
         $Tiempo = $IntervalCarga->format("%Y-%M-%D %H:%I:%S");
-
-        $ArrayData = json_encode($ArrayData);
-
+        
         return view('pages.reporte.reportedemo', compact('ArrayData', 'Tiempo'));
     }    
 
     public function Articulos_Existencia($IdArticulo) {
-        $sql = "SELECT
+        $sql = "SELECT TOP 1000
             --Id Articulo
                 InvArticulo.Id AS IdArticulo,
             --Codigo Interno
