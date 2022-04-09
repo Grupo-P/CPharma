@@ -3,9 +3,10 @@
 namespace compras\Http\Controllers;
 
 use Illuminate\Http\Request;
+use DateTime;
 use DB;
 
-class ReporteController extends Controller
+class ReporteDemoController extends Controller
 {
     /**
      * Create a new controller instance with auth.
@@ -24,6 +25,10 @@ class ReporteController extends Controller
      */
     public function reporteDemo()
     {       
+
+        $ArrayData = array();
+        $InicioCarga = new DateTime("now");
+
         include(app_path().'\functions\config.php');
         include(app_path().'\functions\functions.php');
         include(app_path().'\functions\querys_mysql.php');
@@ -82,34 +87,39 @@ class ReporteController extends Controller
             $DiasRestantesQuiebre_RangoAnterior = FG_Dias_Restantes($Existencia,$VentaDiariaQuiebre_RangoAnterior);
             // FIN 
 
+            $DetalleArticuloArray =  [
+                "IdArticulo" => $IdArticulo,
+                "CodigoInterno" => $CodigoInterno,
+                "CodigoBarra" => $CodigoBarra,
+                "Descripcion" => $Descripcion,
+                "Existencia" => $Existencia,
+    
+                "Hoy" => $Hoy,
+                "FInicial_RangoUltimo" => $FInicial_RangoUltimo,
+                "FInicial_RangoAnterior" => $FInicial_RangoAnterior,
+    
+                "UnidadesVendidas_RangoUltimo" => $UnidadesVendidas_RangoUltimo['TotalUnidadesVendidas'],
+                "RangoDiasQuiebre_RangoUltimo" => $RangoDiasQuiebre_RangoUltimo[0]->Cuenta,
+                "VentaDiariaQuiebre_RangoUltimo" => $VentaDiariaQuiebre_RangoUltimo,
+                "DiasRestantesQuiebre_RangoUltimo" => $DiasRestantesQuiebre_RangoUltimo,
+    
+                
+                "UnidadesVendidas_RangoAnterior" => $UnidadesVendidas_RangoAnterior['TotalUnidadesVendidas'],
+                "RangoDiasQuiebre_RangoAnterior" => $RangoDiasQuiebre_RangoAnterior[0]->Cuenta,
+                "VentaDiariaQuiebre_RangoAnterior" => $VentaDiariaQuiebre_RangoAnterior,
+                "DiasRestantesQuiebre_RangoAnterior" => $DiasRestantesQuiebre_RangoAnterior,                  
+            ];
+    
+            array_push($ArrayData,$DetalleArticuloArray);
         }        
-                                                               
-        $data =  [
-            "IdArticulo" => $IdArticulo,
-            "CodigoInterno" => $CodigoInterno,
-            "CodigoBarra" => $CodigoBarra,
-            "Descripcion" => $Descripcion,
-            "Existencia" => $Existencia,
+                       
+        $FinCarga = new DateTime("now");
+        $IntervalCarga = $InicioCarga->diff($FinCarga);
+        $Tiempo = $IntervalCarga->format("%Y-%M-%D %H:%I:%S");
 
-            "Hoy" => $Hoy,
-            "FInicial_RangoUltimo" => $FInicial_RangoUltimo,
-            "FInicial_RangoAnterior" => $FInicial_RangoAnterior,
+        $ArrayData = json_encode($ArrayData);
 
-            "UnidadesVendidas_RangoUltimo" => $UnidadesVendidas_RangoUltimo['TotalUnidadesVendidas'],
-            "RangoDiasQuiebre_RangoUltimo" => $RangoDiasQuiebre_RangoUltimo[0]->Cuenta,
-            "VentaDiariaQuiebre_RangoUltimo" => $VentaDiariaQuiebre_RangoUltimo,
-            "DiasRestantesQuiebre_RangoUltimo" => $DiasRestantesQuiebre_RangoUltimo,
-
-            
-            "UnidadesVendidas_RangoAnterior" => $UnidadesVendidas_RangoAnterior['TotalUnidadesVendidas'],
-            "RangoDiasQuiebre_RangoAnterior" => $RangoDiasQuiebre_RangoAnterior[0]->Cuenta,
-            "VentaDiariaQuiebre_RangoAnterior" => $VentaDiariaQuiebre_RangoAnterior,
-            "DiasRestantesQuiebre_RangoAnterior" => $DiasRestantesQuiebre_RangoAnterior,
-        ];
-
-        $data = json_encode($data);
-
-        return view('pages.reporte.reportedemo', compact('data'));
+        return view('pages.reporte.reportedemo', compact('ArrayData', 'Tiempo'));
     }    
 
     public function Articulos_Existencia($IdArticulo) {

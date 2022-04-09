@@ -432,7 +432,7 @@ Route::get('/syncategorias', 'CategorizacionController@syncategorias');
 
 Route::resource('/cotizacion', 'CotizacionController');
 
-Route::get('/reportedemo', 'ReporteController@reporteDemo');
+Route::get('/reportedemo', 'ReporteDemoController@reporteDemo');
 
 //***************************** RRHH routing *****************************//
 Route::resource('candidatos', 'RH_CandidatoController');
