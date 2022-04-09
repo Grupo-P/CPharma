@@ -52,6 +52,8 @@ class ReporteDemoController extends Controller
             $CodigoBarra = $row["CodigoBarra"];
             $Descripcion = $row["Descripcion"];
             $Existencia = $row["Existencia"];
+            $UltimaVenta = ($row["UltimaVenta"])?$row["UltimaVenta"]->format('d-m-Y'):'N/A';
+            $UltimaCompra = ($row["UltimaVenta"])?$row["UltimaCompra"]->format('d-m-Y'):'N/A';
             
             // INICIO Gestion del rango: Desde Ultimos Disa Hasta Hoy
             $sqlUV_RangoUltimo = $this->Venta_Articulo($IdArticulo,$FInicial_RangoUltimo,$Hoy);            
@@ -93,6 +95,8 @@ class ReporteDemoController extends Controller
                 "CodigoBarra" => $CodigoBarra,
                 "Descripcion" => $Descripcion,
                 "Existencia" => $Existencia,
+                "UltimaVenta" => $UltimaVenta,
+                "UltimaCompra" => $UltimaCompra,
     
                 "Hoy" => $Hoy,
                 "FInicial_RangoUltimo" => $FInicial_RangoUltimo,
@@ -146,7 +150,22 @@ class ReporteDemoController extends Controller
                 (ROUND(CAST((SELECT SUM (InvLoteAlmacen.Existencia) As Existencia
                             FROM InvLoteAlmacen
                             WHERE(InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
-                            AND (InvLoteAlmacen.InvArticuloId = InvArticulo.Id)) AS DECIMAL(38,0)),2,0))  AS Existencia
+                            AND (InvLoteAlmacen.InvArticuloId = InvArticulo.Id)) AS DECIMAL(38,0)),2,0))  AS Existencia,
+            -- Ultima Venta (Fecha)
+                (SELECT TOP 1
+                CONVERT(DATE,VenFactura.FechaDocumento)
+                FROM VenFactura
+                INNER JOIN VenFacturaDetalle ON VenFacturaDetalle.VenFacturaId = VenFactura.Id
+                WHERE VenFacturaDetalle.InvArticuloId = InvArticulo.Id
+                ORDER BY FechaDocumento DESC) AS UltimaVenta,
+            -- Ultima Compra (Fecha de ultima compra)
+                (SELECT TOP 1
+                CONVERT(DATE,ComFactura.FechaRegistro)
+                FROM ComFacturaDetalle
+                INNER JOIN ComFactura ON ComFactura.Id = ComFacturaDetalle.ComFacturaId
+                INNER JOIN ComProveedor ON ComProveedor.Id = ComFactura.ComProveedorId
+                WHERE ComFacturaDetalle.InvArticuloId = InvArticulo.Id
+                ORDER BY ComFactura.FechaRegistro DESC) AS  UltimaCompra
             --Tabla principal
                 FROM InvArticulo            
             --Condicionales                
