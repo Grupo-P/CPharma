@@ -134,7 +134,7 @@ class ReporteDemoController extends Controller
     }    
 
     public function Articulos_Existencia($IdArticulo) {
-        $sql = "SELECT TOP 100
+        $sql = "SELECT
             --Id Articulo
                 InvArticulo.Id AS IdArticulo,
             --Codigo Interno
