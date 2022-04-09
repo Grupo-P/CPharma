@@ -142,8 +142,13 @@ class ReporteDemoController extends Controller
                             AND (InvLoteAlmacen.InvArticuloId = InvArticulo.Id)) AS DECIMAL(38,0)),2,0))  AS Existencia
             --Tabla principal
                 FROM InvArticulo            
-            --Condicionales
-                WHERE InvArticulo.Id = '$IdArticulo'            
+            --Condicionales                
+				WHERE 
+				 (ROUND(CAST((SELECT SUM (InvLoteAlmacen.Existencia) As Existencia
+                            FROM InvLoteAlmacen
+                            WHERE(InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
+                            AND (InvLoteAlmacen.InvArticuloId = InvArticulo.Id)) AS DECIMAL(38,0)),2,0)) > 0
+				--AND InvArticulo.Id = '26'            
             --Ordanamiento
             ORDER BY InvArticulo.Id ASC
         ";
