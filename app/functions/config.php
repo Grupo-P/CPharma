@@ -91,7 +91,7 @@ define ("nameDBs" , "smartftn");
 define ("serverDBsa" , "SERGIO-PC");
 define ("userDBsa" , "sa");
 define ("passDBsa" , "soporte123");
-define ("nameDBsa" , "cpharmaftn");
+define ("nameDBsa" , "cpharmafau");
 /**********************************************************************************/
 /************* CONEXION GALAC NOMINA *******************/
 define ("serverGN" , "10.100.0.34\SMARTPHARMA");
