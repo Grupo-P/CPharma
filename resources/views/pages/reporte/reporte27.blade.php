@@ -765,6 +765,22 @@
     </table>';
     mysqli_close($connCPharma);
     sqlsrv_close($conn);
+
+    if (is_resource($connFTN)) {
+        sqlsrv_close($connFTN);
+    }
+
+    if (is_resource($connFAU)) {
+        sqlsrv_close($connFAU);
+    }
+
+    if (is_resource($connFLL)) {
+        sqlsrv_close($connFLL);
+    }
+
+    if (is_resource($connFSM)) {
+        sqlsrv_close($connFSM);
+    }
   }
   /**********************************************************************************/
   /*
