@@ -137,7 +137,7 @@
             aria-hidden="true"></i>
         </span>
       </div>
-      <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterAllTable()" autofocus="autofocus">
+      <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterAllTables()" autofocus="autofocus">
     </div>
     <br/>
     <center><b>ARTICULOS CODIFICADOS</b></center>
@@ -180,7 +180,7 @@
     echo '<br/><br/><br/>
     <center><b>ARTICULOS NO CODIFICADOS</b></center>
     <br/>
-    <table class="table table-striped table-bordered col-12 sortable" id="myTable">
+    <table class="table table-striped table-bordered col-12 sortable" id="myTable2">
       <thead class="thead-dark">
         <tr>
           <th scope="col" class="CP-sticky">#</th>
@@ -226,7 +226,7 @@
   */
   function R47Q_Cruce_Aplicacion_Consultas() {
     $sql = "
-      SELECT
+      SELECT TOP 100
         (ISNULL((SELECT InvArticuloAtributo.InvArticuloId FROM InvArticuloAtributo WHERE InvArticuloAtributo.InvAtributoId = (SELECT InvAtributo.Id FROM InvAtributo WHERE InvAtributo.Descripcion = 'Medicina') AND InvArticuloAtributo.InvArticuloId = InvArticulo.Id),CAST(0 AS INT))) AS tipo,
         InvArticulo.CodigoArticulo AS codigo_interno,
         (SELECT InvCodigoBarra.CodigoBarra FROM InvCodigoBarra WHERE InvCodigoBarra.InvArticuloId = InvArticulo.Id AND InvCodigoBarra.EsPrincipal = 1) AS codigo_barra,

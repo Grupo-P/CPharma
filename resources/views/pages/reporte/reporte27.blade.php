@@ -796,7 +796,7 @@
     $Fin = date_create()->format('Y-m-d');
 
     $sql = "
-    SELECT TOP 50
+    SELECT
     -- TotalUnidadesVendidas
     (SELECT (((ROUND(CAST(SUM(VenFacturaDetalle.Cantidad) AS DECIMAL(38,0)),2,0)))
       -
