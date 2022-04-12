@@ -431,6 +431,8 @@
       $Tipo = FG_Tipo_Producto($row["Tipo"]);
       $UltimaCompra = $row["UltimaCompra"];
 
+      $ExistenciaLote = $row["ExistenciaLote"];
+
       $Dolarizado = FG_Producto_Dolarizado($Dolarizado);
       $Gravado = FG_Producto_Gravado($IsIVA);
       $Precio = FG_Calculo_Precio_Alfa($Existencia,$ExistenciaAlmacen1,$ExistenciaAlmacen2,$IsTroquelado,$UtilidadArticulo,$UtilidadCategoria,$TroquelAlmacen1,$PrecioCompraBrutoAlmacen1,$TroquelAlmacen2,
@@ -449,7 +451,7 @@
       $row2 = $result22->fetch_assoc();
       $RangoDiasQuiebre = $row2['Cuenta'];
       $VentaDiaria = FG_Venta_Diaria($row['TotalUnidadesVendidas'], $RangoDiasQuiebre);
-      $DiasRestantes30 = FG_Dias_Restantes(intval($Existencia), $VentaDiaria);
+      $DiasRestantes30 = FG_Dias_Restantes(intval($ExistenciaLote), $VentaDiaria);
 
       $diasVencer = FG_Validar_Fechas(date('Y-m-d H:i:s'),$row["FechaVencimiento"]->format('d-m-Y'));
 
@@ -794,7 +796,7 @@
     $Fin = date_create()->format('Y-m-d');
 
     $sql = "
-    SELECT
+    SELECT TOP 50
     -- TotalUnidadesVendidas
     (SELECT (((ROUND(CAST(SUM(VenFacturaDetalle.Cantidad) AS DECIMAL(38,0)),2,0)))
       -
