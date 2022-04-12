@@ -897,6 +897,7 @@
             <th scope="col" class="CP-sticky">Último proveedor</th>
             <th scope="col" class="CP-sticky">Precio Bs.</th>
             <th scope="col" class="CP-sticky">Carácteres disponibles</th>
+            <th scope="col" class="CP-sticky">Operador</th>
           </tr>
         </thead>
         <tbody>
@@ -983,6 +984,7 @@
         $precio_compra_bruto_almacen_2 = $row9['precio_compra_bruto_almacen_2'];
         $precio_compra_bruto = $row9['precio_compra_bruto'];
         $iva = $row9['iva'];
+        $operador = $row9['operador'];
 
         $precio = FG_Calculo_Precio_Alfa($existencia, $existencia_almacen_1, $existencia_almacen_2, $troquelado, $utilidad_articulo, $utilidad_categoria, $troquel_almacen_1, $precio_compra_bruto_almacen_1, $troquel_almacen_2, $precio_compra_bruto_almacen_2, $precio_compra_bruto, $iva, 'CON_EXISTENCIA');
         $precio = number_format($precio, 2, ',', '.');
@@ -1017,7 +1019,9 @@
         echo '<td class="text-center">'.$contador.'</td>';
         echo '<td class="text-center">'.$codigo_interno.'</td>';
         echo '<td class="text-center">'.$codigo_barra.'</td>';
-        echo '<td class="text-center">'.$descripcion.'</td>';
+
+        echo '<td align="center" class="CP-barrido"><a href="/reporte2?SEDE='.$_GET['SEDE'].'&Id='.$id_articulo.'" style="text-decoration: none; color: black;" target="_blank">'.$descripcion.'</a></td>';
+
         echo '<td class="text-center">'.$existencia.'</td>';
         echo '<td class="text-center">'.$tieneImagen.'</td>';
         echo '<td class="text-center">'.$marca.'</td>';
@@ -1032,6 +1036,7 @@
         echo '<td class="text-center">'.$ultimo_proveedor.'</td>';
         echo '<td class="text-center">'.$precio.'</td>';
         echo '<td class="text-center">'.$caracteres_disponibles.'</td>';
+        echo '<td class="text-center">'.$operador.'</td>';
         echo '</tr>';
 
         $contador++;
@@ -1324,7 +1329,8 @@
             (ROUND(CAST((SELECT TOP 1 InvLote.M_PrecioTroquelado FROM InvLoteAlmacen INNER JOIN InvLote ON InvLote.Id = InvLoteAlmacen.InvLoteId WHERE(InvLoteAlmacen.InvAlmacenId = '2') AND (InvLoteAlmacen.InvArticuloId = InvArticulo.Id) AND (InvLoteAlmacen.Existencia>0) ORDER BY invlote.M_PrecioTroquelado DESC)AS DECIMAL(38,2)),2,0)) AS troquel_almacen_2,
             (ROUND(CAST((SELECT TOP 1 InvLote.M_PrecioCompraBruto FROM InvLoteAlmacen INNER JOIN InvLote ON InvLote.Id = InvLoteAlmacen.InvLoteId WHERE (InvLoteAlmacen.InvArticuloId = InvArticulo.Id) AND (InvLoteAlmacen.Existencia>0) AND (InvLoteAlmacen.InvAlmacenId = '2') ORDER BY invlote.M_PrecioCompraBruto DESC)AS DECIMAL(38,2)),2,0)) AS precio_compra_bruto_almacen_2,
             (ROUND(CAST((SELECT TOP 1 InvLote.M_PrecioCompraBruto FROM InvLoteAlmacen INNER JOIN InvLote ON InvLote.Id = InvLoteAlmacen.InvLoteId WHERE (InvLoteAlmacen.InvArticuloId = InvArticulo.Id) AND (InvLoteAlmacen.Existencia>0) ORDER BY invlote.M_PrecioCompraBruto DESC)AS DECIMAL(38,2)),2,0)) AS precio_compra_bruto,
-            (ISNULL(InvArticulo.FinConceptoImptoIdCompra,CAST(0 AS INT))) AS iva
+            (ISNULL(InvArticulo.FinConceptoImptoIdCompra,CAST(0 AS INT))) AS iva,
+            Auditoria_Usuario AS operador
         FROM
             InvArticulo
         WHERE
