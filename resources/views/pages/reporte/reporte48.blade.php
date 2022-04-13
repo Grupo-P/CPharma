@@ -243,6 +243,7 @@
           $dronena[$i]['PRECIO'] = trim(substr($field, 49, 15));
           $dronena[$i]['DCTO_UFI'] = trim(substr($field, 97, 13));
           $dronena[$i]['DCTO_EMPQUE'] = trim(substr($field, 118, 12));
+          $dronena[$i]['CANTIDAD'] = trim(substr($field, 64, 12));
 
           $i = $i+1;
         }
@@ -260,6 +261,7 @@
           $dronena[$i]['PRECIO'] = trim(substr($field, 49, 15));
           $dronena[$i]['DCTO_UFI'] = trim(substr($field, 97, 13));
           $dronena[$i]['DCTO_EMPQUE'] = trim(substr($field, 118, 12));
+          $dronena[$i]['CANTIDAD'] = trim(substr($field, 64, 12));
 
           $i = $i+1;
         }
@@ -509,7 +511,7 @@
 
         $indexDrolanca = array_search($codigo_barra, array_column($drolanca, 'B'));
 
-        if ($indexDrolanca) {
+        if ($indexDrolanca && $drolanca[$indexDrolanca+1]['J'] > 0) {
           $costo_drolanca = $drolanca[$indexDrolanca+1]['I'];
           $costo_drolanca = str_replace(',', '.', $costo_drolanca);
 
@@ -525,7 +527,7 @@
 
         $indexDrooeste = array_search($codigo_barra, array_column($drooeste, 'A'));
 
-        if ($indexDrooeste) {
+        if ($indexDrooeste && $drooeste[$indexDrooeste+1]['D'] > 0) {
           $costo_drooeste = $drooeste[$indexDrooeste+1]['E'];
           $costo_drooeste = str_replace(',', '.', $costo_drooeste);
 
@@ -540,7 +542,7 @@
 
         $indexDronena = array_search($codigo_barra, array_column($dronena, 'CODBARRAS'));
 
-        if ($indexDronena) {
+        if ($indexDronena && $dronena[$indexDronena]['CANTIDAD'] > 0) {
           $costo_dronena = $dronena[$indexDronena]['PRECIO'];
           $costo_dronena = str_replace(',', '.', $costo_dronena);
 
@@ -554,11 +556,11 @@
 
         $indexDrocerca = array_search($codigo_barra, array_column($drocerca, 'B'));
 
-        if ($indexDrocerca) {
+        if ($indexDrocerca && ($drocerca[$indexDrocerca+1]['D']+$drocerca[$indexDrocerca+1]['E']) > 0) {
           $costo_drocerca = $drocerca[$indexDrocerca+1]['H'];
           $costo_drocerca = str_replace(',', '.', $costo_drocerca);
 
-          $costo_drocerca = $costo_drocerca - $descuento1 - $descuento2;
+          $costo_drocerca = $costo_drocerca;
 
           $costo_drocerca = $_GET['opcion'] == 'Articulos dolarizados' ? number_format($costo_drocerca / $TasaMercado, 2) : number_format($costo_drocerca, 2);
         }
