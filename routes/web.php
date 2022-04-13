@@ -248,6 +248,8 @@ Route::match(['post', 'get'], '/reporte47', function() {
     return view('pages.reporte.reporte47');
 });
 
+Route::get('/reporte49', 'Reporte49Controller@reporte49');
+
 Route::get('/seccion1', function() {
     return view('pages.reporte.seccion1');
 });
@@ -432,7 +434,6 @@ Route::get('/syncategorias', 'CategorizacionController@syncategorias');
 
 Route::resource('/cotizacion', 'CotizacionController');
 
-Route::get('/reportedemo', 'ReporteDemoController@reporteDemo');
 
 //***************************** RRHH routing *****************************//
 Route::resource('candidatos', 'RH_CandidatoController');

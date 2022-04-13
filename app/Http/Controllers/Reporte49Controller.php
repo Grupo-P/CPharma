@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use DateTime;
 use DB;
 
-class ReporteDemoController extends Controller
+class Reporte49Controller extends Controller
 {
     /**
      * Create a new controller instance with auth.
@@ -23,16 +23,15 @@ class ReporteDemoController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function reporteDemo()
+    public function reporte49()
     {       
 
         $ArrayData = array();
-        $InicioCarga = new DateTime("now");
 
         include(app_path().'\functions\config.php');
         include(app_path().'\functions\functions.php');
         include(app_path().'\functions\querys_mysql.php');
-        include(app_path().'\functions\querys_sqlserver.php'); 
+        include(app_path().'\functions\querys_sqlserver.php');
                   
         $IdArticulo = "26";
         $RangoDias = 15;
@@ -125,16 +124,12 @@ class ReporteDemoController extends Controller
         }
 
         array_multisort($marks, SORT_DESC, $ArrayData);
-
-        $FinCarga = new DateTime("now");
-        $IntervalCarga = $InicioCarga->diff($FinCarga);
-        $Tiempo = $IntervalCarga->format("%Y-%M-%D %H:%I:%S");
-        
-        return view('pages.reporte.reportedemo', compact('ArrayData', 'Tiempo'));
+                      
+        return view('pages.reporte.reporte49', compact('ArrayData'));
     }    
 
     public function Articulos_Existencia($IdArticulo) {
-        $sql = "SELECT
+        $sql = "SELECT TOP 10
             --Id Articulo
                 InvArticulo.Id AS IdArticulo,
             --Codigo Interno
