@@ -32,16 +32,16 @@ class Reporte49Controller extends Controller
         include(app_path().'\functions\functions.php');
         include(app_path().'\functions\querys_mysql.php');
         include(app_path().'\functions\querys_sqlserver.php');
-                  
-        $IdArticulo = "26";
+                          
         $RangoDias = 15;
-        $Hoy = "2022-04-01";  //date("Y-m-d");
+        //$Hoy = "2022-04-01";
+        $Hoy = date("Y-m-d"); 
         $FInicial_RangoUltimo = date("Y-m-d",strtotime($Hoy."-$RangoDias days"));
         $FInicial_RangoAnterior = date("Y-m-d",strtotime($FInicial_RangoUltimo."-$RangoDias days"));
         
         $SedeConnection = FG_Mi_Ubicacion();
         $conn = FG_Conectar_Smartpharma($SedeConnection);
-        $sql = $this->Articulos_Existencia($IdArticulo);
+        $sql = $this->Articulos_Existencia();
         $result = sqlsrv_query($conn,$sql);
         
         while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
@@ -128,8 +128,8 @@ class Reporte49Controller extends Controller
         return view('pages.reporte.reporte49', compact('ArrayData'));
     }    
 
-    public function Articulos_Existencia($IdArticulo) {
-        $sql = "SELECT TOP 10
+    public function Articulos_Existencia() {
+        $sql = "SELECT
             --Id Articulo
                 InvArticulo.Id AS IdArticulo,
             --Codigo Interno

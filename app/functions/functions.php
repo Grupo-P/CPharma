@@ -1738,6 +1738,9 @@
             case 'Crude de aplicación de consultas':
                 $ruta = '/reporte47';
             break;
+            case 'Reposicion de Inventario':
+                $ruta = '/reporte49';
+            break;
             default:
                 $ruta = '#';
             break;
@@ -1889,6 +1892,9 @@
             break;
             case 47:
                 $nombre = 'Cruce de aplicación de consultas';
+            break;
+            case 49:
+                $nombre = 'Reposicion de Inventario';
             break;
             default:
                 $nombre = 'Reporte desconocido';
