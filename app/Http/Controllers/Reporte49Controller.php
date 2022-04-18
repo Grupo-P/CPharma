@@ -27,6 +27,7 @@ class Reporte49Controller extends Controller
     {       
 
         $ArrayData = array();
+        $InicioCarga = new DateTime("now");
 
         include(app_path().'\functions\config.php');
         include(app_path().'\functions\functions.php');
@@ -34,8 +35,8 @@ class Reporte49Controller extends Controller
         include(app_path().'\functions\querys_sqlserver.php');
                           
         $RangoDias = 15;
-        //$Hoy = "2022-04-01";
         $Hoy = date("Y-m-d"); 
+        $Hoy = "2022-04-01";        
         $FInicial_RangoUltimo = date("Y-m-d",strtotime($Hoy."-$RangoDias days"));
         $FInicial_RangoAnterior = date("Y-m-d",strtotime($FInicial_RangoUltimo."-$RangoDias days"));
         
@@ -52,7 +53,7 @@ class Reporte49Controller extends Controller
             $Descripcion = $row["Descripcion"];
             $Existencia = $row["Existencia"];
             $UltimaVenta = ($row["UltimaVenta"])?$row["UltimaVenta"]->format('d-m-Y'):'N/A';
-            $UltimaCompra = ($row["UltimaVenta"])?$row["UltimaCompra"]->format('d-m-Y'):'N/A';
+            $UltimaCompra = ($row["UltimaCompra"])?$row["UltimaCompra"]->format('d-m-Y'):'N/A';
             
             // INICIO Gestion del rango: Desde Ultimos Disa Hasta Hoy
             $sqlUV_RangoUltimo = $this->Venta_Articulo($IdArticulo,$FInicial_RangoUltimo,$Hoy);            
@@ -124,12 +125,16 @@ class Reporte49Controller extends Controller
         }
 
         array_multisort($marks, SORT_DESC, $ArrayData);
+
+        $FinCarga = new DateTime("now");
+        $IntervalCarga = $InicioCarga->diff($FinCarga);
+        $Tiempo = $IntervalCarga->format("%Y-%M-%D %H:%I:%S");
                       
-        return view('pages.reporte.reporte49', compact('ArrayData'));
+        return view('pages.reporte.reporte49', compact('ArrayData', 'Tiempo'));
     }    
 
     public function Articulos_Existencia() {
-        $sql = "SELECT
+        $sql = "SELECT top 100
             --Id Articulo
                 InvArticulo.Id AS IdArticulo,
             --Codigo Interno

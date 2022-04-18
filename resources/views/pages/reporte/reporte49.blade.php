@@ -15,9 +15,7 @@
 	</h1>
 	<hr class="row align-items-start col-12">
 
-	<?php			
-		$InicioCarga = new DateTime("now");
-
+	<?php					
 		if (isset($SedeConnection)){			
 			echo '<h1 class="h5 text-success"  align="left"> <i class="fas fa-prescription"></i> '.FG_Nombre_Sede($SedeConnection).'</h1>';
 		}
@@ -25,10 +23,8 @@
 
 		R49_Reposicion_Inventario($ArrayData);
 		FG_Guardar_Auditoria('CONSULTAR','REPORTE','Reposicion de Inventario');
-
-		$FinCarga = new DateTime("now");
-        $IntervalCarga = $InicioCarga->diff($FinCarga);
-        echo'Tiempo de carga: '.$IntervalCarga->format("%Y-%M-%D %H:%I:%S");
+		
+        echo'Tiempo de carga: '.$Tiempo;
 	?>
 @endsection
 
@@ -69,8 +65,8 @@
                 <th scope="col" class="CP-sticky">Existencia</th>
                 <th scope="col" class="CP-sticky">Ultima Venta</th>
                 <th scope="col" class="CP-sticky">Ultima Compra</th>
-                <th scope="col" class="CP-sticky">Dias Restantes (Rango Anterior)</th>                
-                <th scope="col" class="CP-sticky">Dias Restantes (Rango Ultimo)</th>
+                <th scope="col" class="CP-sticky">Dias Restantes (Rango Anterior) ('.$ArrayData[0]['FInicial_RangoAnterior'].' al '.$ArrayData[0]['FInicial_RangoUltimo'].')</th>                
+                <th scope="col" class="CP-sticky">Dias Restantes (Rango Ultimo) ('.$ArrayData[0]['FInicial_RangoUltimo'].' al '.$ArrayData[0]['Hoy'].')</th>
 		    </tr>
 	  	</thead>
   	<tbody>
