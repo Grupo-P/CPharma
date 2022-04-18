@@ -35,7 +35,6 @@ class Reporte49Controller extends Controller
         include(app_path().'\functions\querys_sqlserver.php');
                           
         $RangoDias = 15;
-        //$Hoy = "2022-04-01";                
         $Hoy = date("Y-m-d",strtotime(date("Y-m-d")."+ 1 days"));
         $FInicial_RangoUltimo = date("Y-m-d",strtotime($Hoy."-$RangoDias days"));
         $FInicial_RangoAnterior = date("Y-m-d",strtotime($FInicial_RangoUltimo."-$RangoDias days"));
@@ -134,7 +133,7 @@ class Reporte49Controller extends Controller
     }    
 
     public function Articulos_Existencia() {
-        $sql = "SELECT TOP 10
+        $sql = "SELECT
             --Id Articulo
                 InvArticulo.Id AS IdArticulo,
             --Codigo Interno

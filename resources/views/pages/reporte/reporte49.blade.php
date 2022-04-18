@@ -40,6 +40,15 @@
 		
         $contador = 1;
 
+		$Hoy = $ArrayData[0]['Hoy'];
+		$Hoy = date("Y-m-d",strtotime($Hoy."- 1 days"));
+
+		$FInicial_RangoUltimo = $ArrayData[0]['FInicial_RangoUltimo'];
+		$FInicial_RangoUltimo_menos = date("Y-m-d",strtotime($FInicial_RangoUltimo."- 1 days"));
+		
+		$FInicial_RangoAnterior = $ArrayData[0]['FInicial_RangoAnterior'];
+
+
 		echo '
 		<div class="input-group md-form form-sm form-1 pl-0 CP-stickyBar">
 		  <div class="input-group-prepend">
@@ -52,8 +61,8 @@
 		</div>
 		<br/>
         
-        <h6 align="left">Rango Anterior: '.$ArrayData[0]['FInicial_RangoAnterior'].' al '.$ArrayData[0]['FInicial_RangoUltimo'].' </h6>
-        <h6 align="left">Rango Ultimo: '.$ArrayData[0]['FInicial_RangoUltimo'].' al '.$ArrayData[0]['Hoy'].' </h6>
+        <h6 align="left">Rango Anterior: '.$FInicial_RangoAnterior.' al '.$FInicial_RangoUltimo_menos.' </h6>
+        <h6 align="left">Rango Ultimo: '.$FInicial_RangoUltimo.' al '.$Hoy.' </h6>
 
 		<table class="table table-striped table-bordered col-12 sortable" id="myTable">
 	  	<thead class="thead-dark">
@@ -65,8 +74,8 @@
                 <th scope="col" class="CP-sticky">Existencia</th>
                 <th scope="col" class="CP-sticky">Ultima Venta</th>
                 <th scope="col" class="CP-sticky">Ultima Compra</th>
-                <th scope="col" class="CP-sticky">Dias Restantes (Rango Anterior) ('.$ArrayData[0]['FInicial_RangoAnterior'].' al '.$ArrayData[0]['FInicial_RangoUltimo'].')</th>                
-                <th scope="col" class="CP-sticky">Dias Restantes (Rango Ultimo) ('.$ArrayData[0]['FInicial_RangoUltimo'].' al '.$ArrayData[0]['Hoy'].')</th>
+                <th scope="col" class="CP-sticky">Dias Restantes (Rango Anterior) ('.$FInicial_RangoAnterior.' al '.$FInicial_RangoUltimo_menos.')</th>                
+                <th scope="col" class="CP-sticky">Dias Restantes (Rango Ultimo) ('.$FInicial_RangoUltimo.' al '.$Hoy.')</th>
 		    </tr>
 	  	</thead>
   	<tbody>
