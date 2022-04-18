@@ -11,6 +11,18 @@
   include(app_path().'\functions\querys_sqlserver.php');
 ?>
 
+
+@section('scriptsFoot')
+    <script>
+        $(document).ready(function () {
+            $('[name=cantidad]').on('change', function () {
+                $('[name=cantidad]').parent().submit();
+            });
+        });
+    </script>
+@endsection
+
+
 @section('content')
 
 	<!-- Modal Guardar -->
@@ -85,7 +97,9 @@
 	</h1>
 	
 	<hr class="row align-items-start col-12">
+
 	<br/>
+
 	<table style="width:100%;" class="CP-stickyBar">
 	    <tr>
 	        <td style="width:10%;" align="center">        	
@@ -106,7 +120,30 @@
 	        </td>
 	    </tr>
 	</table>
+
+    <br/>
+
+    <hr class="row align-items-start col-12">
+
+    <div class="d-flex justify-content-center col-md-12 text-center form-inline">
+        <form action="">
+            Cantidad de registros a mostrar
+
+            <select name="cantidad" class="ml-5 form-control">
+                <option {{ request()->cantidad == 50 ? 'selected' : '' }} value="50">50</option>
+                <option {{ request()->cantidad == 100 ? 'selected' : '' }} value="100">100</option>
+                <option {{ request()->cantidad == 200 ? 'selected' : '' }} value="200">200</option>
+                <option {{ request()->cantidad == 500 ? 'selected' : '' }} value="500">500</option>
+                <option {{ request()->cantidad == 1000 ? 'selected' : '' }} value="1000">1000</option>
+                <option {{ request()->cantidad == 'Todos' ? 'selected' : '' }} value="Todos">Todos</option>
+            </select>
+
+            <input type="hidden" name="Tipo" value="{{ request()->Tipo ?? 3 }}">
+        </form>
+    </div>
+
 	<br/>
+
 	<table class="table table-striped table-borderless col-12 sortable">
   	<thead class="thead-dark">
 	    <tr>

@@ -29,4 +29,13 @@ class Traslado extends Model
             $query->where('estatus', $estado);
         }
     }
+
+    public function scopeLimite($query, $limite)
+    {
+        if ($limite && $limite != 'Todos') {
+            return $query->limit($limite);
+        }
+
+        return $query->limit(50);
+    }
 }

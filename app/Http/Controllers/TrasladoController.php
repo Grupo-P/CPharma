@@ -27,8 +27,7 @@ class TrasladoController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {   
-        
+    {
         if(isset($_GET['Tipo'])){
             $Tipo = $_GET['Tipo'];
         }
@@ -38,22 +37,33 @@ class TrasladoController extends Controller
         
         switch ($Tipo) {
             case 0:
-                $traslados =  
-                Traslado::orderBy('id', 'desc')->where('estatus','PROCESADO')->get();
+                $traslados = Traslado::orderBy('id', 'desc')
+                    ->where('estatus','PROCESADO')
+                    ->limite(request('cantidad'))
+                    ->get();
             break;
+
             case 1:
-                $traslados =  
-                Traslado::orderBy('id', 'asc')->where('estatus','EMBALADO')->get();
+                $traslados = Traslado::orderBy('id', 'asc')
+                    ->where('estatus','EMBALADO')
+                    ->limite(request('cantidad'))
+                    ->get();
             break;
+
             case 2:
-                $traslados =  
-                Traslado::orderBy('id', 'asc')->where('estatus','ENTREGADO')->get();
+                $traslados = Traslado::orderBy('id', 'asc')
+                    ->where('estatus','ENTREGADO')
+                    ->limite(request('cantidad'))
+                    ->get();
             break;
+
             default:
-                $traslados =  Traslado::orderBy('fecha_traslado','desc')->take(100)->get();
-                return view('pages.traslado.index', compact('traslados'));
+                $traslados = Traslado::orderBy('fecha_traslado','desc')
+                    ->limite(request('cantidad'))
+                    ->get();
             break;
         }
+
         return view('pages.traslado.index', compact('traslados'));
     }
 
