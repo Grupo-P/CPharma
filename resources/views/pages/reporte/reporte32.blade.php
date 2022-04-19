@@ -43,7 +43,7 @@
         </form>
 
         <?php
-        $hoy = date('Y-m-d');        
+        $hoy = date('Y-m-d');
         if(isset($_GET['Fecha'])){
             if($_GET['Fecha']=='AYER'){
                 $fecha = date("Y-m-d",strtotime($hoy."- 1 days"));
@@ -77,7 +77,7 @@
                     array_push($TransaccionesArray,$rowDataGRVen['Transacciones']);
                     array_push($HoraArray,$rowDataGRVen['Hora']);
                 }
-
+                
                 echo '<hr class="row align-items-start col-12">';
                 echo '<h1 class="h5 text-dark" align="center">Ventas por Hora</h1>';
 
@@ -102,7 +102,7 @@
                     </div>
                 </div>
                 ';
-
+                
                 echo'<div style="clear:both"></div>';
 
                 R32_Seguimiento_Tienda($_GET['SEDE'],$fecha);
@@ -133,7 +133,7 @@
         $FInicial = $fecha;
         $FFinal = date("Y-m-d",strtotime($FInicial."+ 1 days"));
         $TasaActual = FG_Tasa_Fecha($connCPharma,$FInicial);
-
+        
         $sql6 = R32Q_Vent_generales($FInicial,$FFinal);
         $result6 = sqlsrv_query($conn,$sql6);
 
@@ -266,7 +266,7 @@
                 </tbody>
             </table>';
         }
-
+        
         $sqlRC = R32Q_resumen_caja($FInicial,$FFinal);
         $resultRC = sqlsrv_query($conn,$sqlRC);
 
@@ -276,7 +276,7 @@
 		<table class="table table-striped table-bordered col-12 sortable" style="width:100%;">
             <thead class="thead-dark">
                 <tr>
-                    <th scope="col" colspan="5"></th>
+                    <th scope="col" colspan="6"></th>
                     <th scope="col" colspan="2">Primera Trasaccion</th>
                     <th scope="col" colspan="2">Segunda Trasaccion</th>
                 </tr>
@@ -311,16 +311,16 @@
                 echo '<td align="center">'.number_format($total,2,"," ,"." ).'</td>';
                 echo '<td align="center">'.number_format($facturaPromedio,2,"," ,"." ).'</td>';
                 echo '<td align="center">'.$rowRC['PrimerMonto'].'</td>';
-                echo '<td align="center">'.$rowRC['PrimeraHora']->format('H:m A').'</td>';
+                echo '<td align="center">'.$rowRC['PrimeraHora']->format('H:i A').'</td>';
                 echo '<td align="center">'.$rowRC['UltimoMonto'].'</td>';
-                echo '<td align="center">'.$rowRC['UltimaHora']->format('H:m A').'</td>';
+                echo '<td align="center">'.$rowRC['UltimaHora']->format('H:i A').'</td>';
                 echo '</tr>';
             }
         }
         echo '
             </tbody>
         </table>';
-
+        
         $sql5 = R32Q_Vent_art_cond($FInicial,$FFinal);
         $result5 = sqlsrv_query($conn,$sql5);
         $result5a = sqlsrv_query($conn,$sql5);
@@ -954,7 +954,7 @@
         }
         echo '
             </tbody>
-        </table>';
+        </table>';        
 
         mysqli_close($connCPharma);
 		sqlsrv_close($conn);
