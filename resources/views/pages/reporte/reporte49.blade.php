@@ -1,5 +1,12 @@
 <?php    
     $SedeConnection = FG_Mi_Ubicacion();
+
+	echo'<pre>';
+	print_r($arrayGlobal);
+	echo'<br><br>';
+	print_r($arrayArticulos);
+	echo'</pre>';
+	die;
 ?>
 
 @extends('layouts.model')
@@ -39,16 +46,7 @@
 	function R49_Reposicion_Inventario($ArrayData) {
 		
         $contador = 1;
-
-		$Hoy = $ArrayData[0]['Hoy'];
-		$Hoy = date("Y-m-d",strtotime($Hoy."- 1 days"));
-
-		$FInicial_RangoUltimo = $ArrayData[0]['FInicial_RangoUltimo'];
-		$FInicial_RangoUltimo_menos = date("Y-m-d",strtotime($FInicial_RangoUltimo."- 1 days"));
 		
-		$FInicial_RangoAnterior = $ArrayData[0]['FInicial_RangoAnterior'];
-
-
 		echo '
 		<div class="input-group md-form form-sm form-1 pl-0 CP-stickyBar">
 		  <div class="input-group-prepend">
@@ -85,7 +83,14 @@
 			echo '<td align="center"><strong>'.intval($contador).'</strong></td>';
             echo '<td align="center">'.$Data['CodigoInterno'].'</td>';
             echo '<td align="center">'.$Data['CodigoBarra'].'</td>';
-            echo '<td align="center">'.FG_Limpiar_Texto($Data['Descripcion']).'</td>';            
+
+            echo
+			'<td align="left" class="CP-barrido">
+			<a href="/reporte2?Id='.$Data['IdArticulo'].'&SEDE='.$Data['SedeConnection'].'" style="text-decoration: none; color: black;" target="_blank">'
+				.FG_Limpiar_Texto($Data['Descripcion']).
+			'</a>
+			</td>';
+			
             echo '<td align="center">'.intval($Data['Existencia']).'</td>';
 			echo '<td align="center">'.$Data['UltimaVenta'].'</td>';
             echo '<td align="center">'.$Data['UltimaCompra'].'</td>';

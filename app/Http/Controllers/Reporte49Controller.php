@@ -26,24 +26,26 @@ class Reporte49Controller extends Controller
     public function reporte49()
     {       
 
-        $ArrayData = array();
+        $arrayArticulos = array();
         $InicioCarga = new DateTime("now");
 
         include(app_path().'\functions\config.php');
         include(app_path().'\functions\functions.php');
         include(app_path().'\functions\querys_mysql.php');
         include(app_path().'\functions\querys_sqlserver.php');
-                          
+                         
         $RangoDias = 15;
-        $Hoy = date("Y-m-d",strtotime(date("Y-m-d")."+ 1 days"));
-        $FInicial_RangoUltimo = date("Y-m-d",strtotime($Hoy."-$RangoDias days"));
-        $FInicial_RangoAnterior = date("Y-m-d",strtotime($FInicial_RangoUltimo."-$RangoDias days"));
+        $LimiteDiasCero = 10;
+        //$Hoy = date("Y-m-d",strtotime(date("Y-m-d")."+ 1 days"));
+        $Hoy = date("Y-m-d",strtotime(date("2022-04-04")."+ 1 days"));
+        $FInicialRangoUltimo = date("Y-m-d",strtotime($Hoy."-$RangoDias days"));
+        $FInicialRangoAnterior = date("Y-m-d",strtotime($FInicialRangoUltimo."-$RangoDias days"));
         
         $SedeConnection = FG_Mi_Ubicacion();
         $conn = FG_Conectar_Smartpharma($SedeConnection);
         $sql = $this->Articulos_Existencia();
         $result = sqlsrv_query($conn,$sql);
-        
+                
         while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
 
             $IdArticulo = $row["IdArticulo"];
@@ -54,41 +56,10 @@ class Reporte49Controller extends Controller
             $UltimaVenta = ($row["UltimaVenta"])?$row["UltimaVenta"]->format('d-m-Y'):'N/A';
             $UltimaCompra = ($row["UltimaCompra"])?$row["UltimaCompra"]->format('d-m-Y'):'N/A';
             
-            // INICIO Gestion del rango: Desde Ultimos Disa Hasta Hoy
-            $sqlUV_RangoUltimo = $this->Venta_Articulo($IdArticulo,$FInicial_RangoUltimo,$Hoy);            
-            $resultUV_RangoUltimo = sqlsrv_query($conn,$sqlUV_RangoUltimo);
-            $UnidadesVendidas_RangoUltimo = sqlsrv_fetch_array($resultUV_RangoUltimo, SQLSRV_FETCH_ASSOC);
-
-            $RangoDiasQuiebre_RangoUltimo = DB::select("
-                SELECT 
-                COUNT(*) AS Cuenta 
-                FROM dias_ceros 
-                WHERE dias_ceros.id_articulo = '$IdArticulo' AND (fecha_captura >= '$FInicial_RangoUltimo' AND `fecha_captura` < '$Hoy')
-            ");            
-
-            $VentaDiariaQuiebre_RangoUltimo = FG_Venta_Diaria($UnidadesVendidas_RangoUltimo['TotalUnidadesVendidas'],$RangoDiasQuiebre_RangoUltimo[0]->Cuenta);
-            $DiasRestantesQuiebre_RangoUltimo = FG_Dias_Restantes($Existencia,$VentaDiariaQuiebre_RangoUltimo);
-
-            // FIN 
-
-            // INICIO Gestion del rango: Desde Dias Anteriores Hasta Ultimos Dias
-
-            $sqlUV_RangoAnterior = $this->Venta_Articulo($IdArticulo,$FInicial_RangoAnterior,$FInicial_RangoUltimo);            
-            $resultUV_RangoAnterior = sqlsrv_query($conn,$sqlUV_RangoAnterior);
-            $UnidadesVendidas_RangoAnterior = sqlsrv_fetch_array($resultUV_RangoAnterior, SQLSRV_FETCH_ASSOC);
-
-            $RangoDiasQuiebre_RangoAnterior = DB::select("
-                SELECT 
-                COUNT(*) AS Cuenta 
-                FROM dias_ceros 
-                WHERE dias_ceros.id_articulo = '$IdArticulo' AND (fecha_captura >= '$FInicial_RangoAnterior' AND `fecha_captura` < '$FInicial_RangoUltimo')
-            ");            
-
-            $VentaDiariaQuiebre_RangoAnterior = FG_Venta_Diaria($UnidadesVendidas_RangoAnterior['TotalUnidadesVendidas'],$RangoDiasQuiebre_RangoAnterior[0]->Cuenta);
-            $DiasRestantesQuiebre_RangoAnterior = FG_Dias_Restantes($Existencia,$VentaDiariaQuiebre_RangoAnterior);
-            // FIN 
-
-            $DetalleArticuloArray =  [
+            $arrayRangoUltimo = $this->getEvaluarDiasCero($conn,$IdArticulo,$Existencia,$FInicialRangoUltimo,$Hoy,$LimiteDiasCero);
+            $arrayRangoAnterior = $this->getEvaluarDiasCero($conn,$IdArticulo,$Existencia,$FInicialRangoAnterior,$FInicialRangoUltimo,$LimiteDiasCero);
+            
+            $articulosDetalle =  array (
                 "IdArticulo" => $IdArticulo,
                 "CodigoInterno" => $CodigoInterno,
                 "CodigoBarra" => $CodigoBarra,
@@ -96,44 +67,37 @@ class Reporte49Controller extends Controller
                 "Existencia" => $Existencia,
                 "UltimaVenta" => $UltimaVenta,
                 "UltimaCompra" => $UltimaCompra,
+                "DiasRestantesUltimo" => $arrayRangoUltimo['DiasRestantesQuiebre'],
+                "DiasRestantesAnterior" => $arrayRangoAnterior['DiasRestantesQuiebre'],
+            );
     
-                "Hoy" => $Hoy,
-                "FInicial_RangoUltimo" => $FInicial_RangoUltimo,
-                "FInicial_RangoAnterior" => $FInicial_RangoAnterior,
-    
-                "UnidadesVendidas_RangoUltimo" => $UnidadesVendidas_RangoUltimo['TotalUnidadesVendidas'],
-                "RangoDiasQuiebre_RangoUltimo" => $RangoDiasQuiebre_RangoUltimo[0]->Cuenta,
-                "VentaDiariaQuiebre_RangoUltimo" => $VentaDiariaQuiebre_RangoUltimo,
-                "DiasRestantesQuiebre_RangoUltimo" => $DiasRestantesQuiebre_RangoUltimo,
-    
-                
-                "UnidadesVendidas_RangoAnterior" => $UnidadesVendidas_RangoAnterior['TotalUnidadesVendidas'],
-                "RangoDiasQuiebre_RangoAnterior" => $RangoDiasQuiebre_RangoAnterior[0]->Cuenta,
-                "VentaDiariaQuiebre_RangoAnterior" => $VentaDiariaQuiebre_RangoAnterior,
-                "DiasRestantesQuiebre_RangoAnterior" => $DiasRestantesQuiebre_RangoAnterior,                  
-            ];
-    
-            array_push($ArrayData,$DetalleArticuloArray);            
+            array_push($arrayArticulos,$articulosDetalle);
         }                        
 
-        // Ordenar el resultado por DiasRestantesQuiebre_RangoUltimo
-        $marks = array();
-        foreach ($ArrayData as $key => $row)
-        {
-            $marks[$key] = $row['DiasRestantesQuiebre_RangoUltimo'];            
-        }
-
-        array_multisort($marks, SORT_DESC, $ArrayData);
+        $arrayArticulos =  $this->orderArrayByRow($arrayArticulos,'DiasRestantesUltimo');
 
         $FinCarga = new DateTime("now");
         $IntervalCarga = $InicioCarga->diff($FinCarga);
         $Tiempo = $IntervalCarga->format("%Y-%M-%D %H:%I:%S");
-                      
-        return view('pages.reporte.reporte49', compact('ArrayData', 'Tiempo'));
-    }    
 
+        
+		$Hoy = date("Y-m-d",strtotime($Hoy."- 1 days"));
+		$FInicialRangoUltimoMenos = date("Y-m-d",strtotime($FInicialRangoUltimo."- 1 days"));
+
+        $arrayGlobal = array(
+            "SedeConnection" => $SedeConnection,
+            "Hoy" => $Hoy,
+            "FInicialRangoUltimo" => $FInicialRangoUltimo,
+            "FInicialRangoUltimoMenos" => $FInicialRangoUltimoMenos,
+            "FInicialRangoAnterior" => $FInicialRangoAnterior,
+            "Tiempo" => $Tiempo,
+        );
+                      
+        return view('pages.reporte.reporte49', compact('arrayGlobal', 'arrayArticulos'));
+    } 
+        
     public function Articulos_Existencia() {
-        $sql = "SELECT
+        $sql = "SELECT TOP 10
             --Id Articulo
                 InvArticulo.Id AS IdArticulo,
             --Codigo Interno
@@ -218,5 +182,50 @@ class Reporte49Controller extends Controller
             GROUP BY VenFacturaDetalle.InvArticuloId    
         ";
         return $sql;
+    }
+
+    public function getEvaluarDiasCero($conn,$IdArticulo,$Existencia,$FInicial,$FFinal,$LimiteDiasCero){
+    
+        $UnidadesVendidas = $VentaDiariaQuiebre = $DiasRestantesQuiebre = "";
+
+        $RangoDiasQuiebre = DB::select("
+            SELECT 
+            COUNT(*) AS Cuenta 
+            FROM dias_ceros 
+            WHERE dias_ceros.id_articulo = '$IdArticulo' AND (fecha_captura >= '$FInicial' AND `fecha_captura` < '$FFinal')
+        "); 
+
+        if($RangoDiasQuiebre[0]->Cuenta >= $LimiteDiasCero ){
+            $sql = $this->Venta_Articulo($IdArticulo,$FInicial,$FFinal);            
+            $result = sqlsrv_query($conn,$sql);
+            $UnidadesVendidas = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC);
+                   
+            $VentaDiariaQuiebre = FG_Venta_Diaria($UnidadesVendidas['TotalUnidadesVendidas'],$RangoDiasQuiebre[0]->Cuenta);
+            $DiasRestantesQuiebre = FG_Dias_Restantes($Existencia,$VentaDiariaQuiebre);               
+        }                
+        else{
+            $UnidadesVendidas = $VentaDiariaQuiebre = $DiasRestantesQuiebre = "N/D";
+        }
+
+        $result = array(
+            "UnidadesVendidas" => $UnidadesVendidas,
+            "VentaDiariaQuiebre" => $VentaDiariaQuiebre,
+            "DiasRestantesQuiebre" => $DiasRestantesQuiebre,
+        );
+
+        return $result;
+    }
+
+    public function orderArrayByRow($arrayToOrder, $rowName){
+        // Ordenar el arrayToOrder por rowName
+        $marks = array();
+        foreach ($arrayToOrder as $key => $row)
+        {                        
+            $marks[$key] = $row[$rowName];            
+        }
+
+        array_multisort($marks, SORT_DESC, $arrayToOrder);
+        
+        return $arrayToOrder;
     }
 }
