@@ -87,21 +87,50 @@
   	else {
       $InicioCarga = new DateTime("now");
 
-      $sql = QTraslado_Lista_Ajuste();
-      $ArtJson = FG_Armar_Json($sql,$_GET['SEDE']);
+      $conn = FG_Conectar_Smartpharma(FG_Mi_Ubicacion());
 
-  		echo '
-  		<form autocomplete="off" action="/traslado/create" target="_blank">
-  	    <div class="autocomplete" style="width:90%;">
-          <input id="myInput" type="text" name="Ajuste" placeholder="Ingrese el numero del ajuste" onkeyup="conteo()">
-  	      <input id="myId" name="Id" type="hidden">
-  	    </div>
-        <input id="SEDE" name="SEDE" type="hidden" value="';
-          print_r($_GET['SEDE']);
-          echo'">
-  	    <input type="submit" value="Buscar" class="btn btn-outline-success">
-      </form>
-    	';
+      $sql = QTraslado_Lista_Ajuste();
+
+      $result = sqlsrv_query($conn,$sql);
+
+      echo '
+        <table class="table table-striped table-bordered col-12 sortable">
+          <thead class="thead-dark">
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Número de ajuste</th>
+              <th scope="col">Fecha y hora</td>
+              <th scope="col">Operador</td>
+              <th scope="col">Acción</td>
+            </tr>
+          </thead>
+          <tbody>
+      ';
+
+      $contador = 1;
+
+      while ($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
+        $numero_ajuste = $row['NumeroAjuste'];
+        $fecha_hora = $row['Auditoria_FechaCreacion']->format('d/m/Y H:i A');
+        $operador = $row['Auditoria_Usuario'];
+        $id_ajuste = $row['Id'];
+
+        echo '<tr>';
+        echo '<td class="text-center">'.$contador.'</td>';
+        echo '<td class="text-center">'.$numero_ajuste.'</td>';
+        echo '<td class="text-center">'.$fecha_hora.'</td>';
+        echo '<td class="text-center">'.$operador.'</td>';
+
+        echo '<td class="text-center">';
+        echo '<a href="/traslado/create?Ajuste='.$numero_ajuste.'&Id='.$id_ajuste.'&SEDE='.FG_Mi_Ubicacion().'" class="btn btn-outline-success">Seleccionar</a>';
+        echo '</td>';
+
+        echo '</tr>';
+
+        $contador++;
+      }
+
+      echo '</tbody></table>';
 
       $FinCarga = new DateTime("now");
       $IntervalCarga = $InicioCarga->diff($FinCarga);
@@ -133,12 +162,28 @@
   */
   function QTraslado_Lista_Ajuste() {
     $sql = "
-      SELECT
-      InvAjuste.NumeroAjuste,
-      InvAjuste.Id
-      FROM InvAjuste
-      WHERE InvAjuste.M_TotalCostoAjuste < 0
-      ORDER BY InvAjuste.NumeroAjuste ASC
+        SELECT
+          *
+        FROM
+            InvAjuste
+        WHERE
+            InvAjuste.Id IN (
+                SELECT
+                    InvAjusteDetalle.InvAjusteId
+                FROM
+                    InvAjusteDetalle
+                WHERE
+                    InvAjusteDetalle.InvCausaId = (
+                        SELECT
+                            InvCausa.Id
+                        FROM
+                            InvCausa
+                        WHERE
+                            InvCausa.Descripcion = 'Traslado'
+                    )
+                )
+        ORDER BY
+            InvAjuste.NumeroAjuste ASC
     ";
     return $sql;
   }

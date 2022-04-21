@@ -91,7 +91,6 @@
       $OperadorTraslado = auth()->user()->name;
 
       $SedeOrigen = FG_Nombre_Sede($_GET['SEDE']);
-      //$SedeOrigen = FG_Nombre_Sede('FTN');
     ?>
 
     {!! Form::open(['route' => 'traslado.store', 'method' => 'POST']) !!}

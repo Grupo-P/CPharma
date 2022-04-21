@@ -9,6 +9,8 @@
   include(app_path().'\functions\functions.php');
   include(app_path().'\functions\querys_mysql.php');
   include(app_path().'\functions\querys_sqlserver.php');
+
+  $totalUnidades = 0;
 ?>
 
 
@@ -190,8 +192,44 @@
 	    </tr>
 		</tbody>
 	</table>
+    <br>
+    <table class="table table-bordered col-12 sortable">
+        <thead class="thead-dark">
+          <tr>
+            <th scope="col" colspan="2">LEYENDA DE COLORES SEGUN LOS DIAS EN TRASLADO</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td scope="col" class="bg-white text-dark">
+              <ul>
+                <li>
+                    <span>Las columnas en color blanco o gris representan el rango entre 0 y 3 dias trascurridos</span>
+                </li>
+              </ul>
+              <ul class="bg-success text-white">
+                <li>
+                    <span>Las columnas en color verde representan el rango entre 3 y 5 dias trascurridos</span>
+                </li>
+              </ul>
+            </td>
+            <td>
+                <ul class="bg-warning text-white">
+                <li>
+                    <span>Las columnas en color amarillo representan el rango entre 5 y 7 dias trascurridos</span>
+                </li>
+              </ul>
+              <ul class="bg-danger text-white">
+                <li>
+                    <span>Las columnas en color rojo representan el rango con mas de 7 dias trascurridos</span>
+                </li>
+              </ul>
+            </td>
+          </tr>
+        </tbody>
+    </table>
 	<br/>
-	<table class="table table-striped table-borderless col-12 sortable" id="myTable">
+	<table class="table table-striped table-bordered col-12 sortable" id="myTable">
 	  	<thead class="thead-dark">
 		    <tr>
 		      	<th scope="col" class="CP-sticky">#</th>
@@ -201,15 +239,19 @@
 		      	<th scope="col" class="CP-sticky">Sede Destino</th>
 		      	<th scope="col" class="CP-sticky">Unidades</th>
 		      	<th scope="col" class="CP-sticky">Bultos</th>
+                <th scope="col" class="CP-sticky">SKU</th>
 		      	<th scope="col" class="CP-sticky">Total Bs.S</th>
 		      	<th scope="col" class="CP-sticky">Total $</th>
 		      	<th scope="col" class="CP-sticky">Estatus</th>
 		      	<th scope="col" class="CP-sticky">Dias en traslado</th>
+                <th scope="col" class="CP-sticky">Primer artículo</th>
+                <th scope="col" class="CP-sticky">Último artículo</th>
 		      	<th scope="col" class="CP-sticky">Acciones</th>
 		    </tr>
 	  	</thead>
 	  	<tbody>
 		@foreach($traslados as $traslado)
+
 			<?php 
 				$connCPharma = FG_Conectar_CPharma();
 				$sql = MySQL_Buscar_Traslado_Detalle($traslado->numero_ajuste);
@@ -233,25 +275,47 @@
 				$Total_Bs = number_format ($Total_Bs,2,"," ,"." );
 				$Total_Usd = number_format ($Total_Usd,2,"," ,"." );
 
+                $totalUnidades = $totalUnidades + $Total_Cantidad;
+
 				if($traslado->estatus=='ENTREGADO'){
 					$Dias = FG_Rango_Dias($traslado->fecha_traslado,$traslado->updated_at);
 				}
 				else{
 					$Dias = FG_Rango_Dias($traslado->fecha_traslado,date('Y-m-d H:i:s'));
 				}
+
+                $primero = $traslado->detalle[0]->descripcion;
+                $ultimo = $traslado->detalle[count($traslado->detalle)-1]->descripcion;
+
+                $fondo = '';
+
+                if ($traslado->estatus == 'PROCESADO' && ($Dias > 3 && $Dias <= 5)) {
+                    $fondo = 'bg-success';
+                }
+
+                if ($traslado->estatus == 'PROCESADO' && ($Dias > 5 && $Dias <= 7)) {
+                    $fondo = 'bg-warning';
+                }
+
+                if ($traslado->estatus == 'PROCESADO' && ($Dias > 7)) {
+                    $fondo = 'bg-danger';
+                }
 			?>
-		    <tr>
-		    	<th>{{$traslado->id}}</th>
+		    <tr class="{{ $fondo }}">
+		      <th>{{$traslado->id}}</th>
 		      <td>{{$traslado->numero_ajuste}}</td>
 		      <td>{{$traslado->fecha_ajuste}}</td>
 		      <td>{{$traslado->fecha_traslado}}</td>
 		      <td>{{$traslado->sede_destino}}</td>
 		      <td>{{$Total_Cantidad}}</td>
-		      <td>{{$traslado->bultos}}</td>
+		      <td>{{$traslado->bultos+$traslado->bultos_refrigerados+$traslado->bultos_fragiles}}</td>
+              <td>{{$traslado->detalle->count()}}</td>
 		      <td>{{$Total_Bs}}</td>
 		      <td>{{$Total_Usd}}</td>
 		      <td>{{$traslado->estatus}}</td>
 		      <td>{{$Dias}}</td>
+              <td>{{ $primero }}</td>
+              <td>{{ $ultimo }}</td>
 		      
 		    <!-- Inicio Validacion de ROLES -->
 		      <td style="width:170px;">
@@ -325,6 +389,14 @@
 		    </tr>
 		@endforeach
 		</tbody>
+
+        <tfoot>
+            <tr>
+                <th colspan="5">Totales:</th>
+                <th>{{ $totalUnidades }}</th>
+                <th colspan="6"></th>
+            </tr>
+        </tfoot>
 	</table>
 
 	<script>

@@ -79,8 +79,16 @@
             <td><label><?php echo($Operador); ?></label></td>
           </tr>
           <tr>
-            <th scope="row">{!! Form::label('bultos', 'Cantidad de Bultos') !!}</th>
+            <th scope="row">{!! Form::label('bultos', 'Cantidad de Bultos (Normales)') !!}</th>
             <td>{!! Form::number('bultos', null, [ 'class' => 'form-control', 'placeholder' => 'Ingrese la cantidad de bultos embalados', 'autofocus', 'required', 'min' => '0'] ) !!}</td>
+          </tr>
+          <tr>
+            <th scope="row">{!! Form::label('bultos_refrigerados', 'Cantidad de Bultos (Refrigerados)') !!}</th>
+            <td>{!! Form::number('bultos_refrigerados', null, [ 'class' => 'form-control', 'placeholder' => 'Ingrese la cantidad de bultos embalados', 'autofocus', 'required', 'min' => '0'] ) !!}</td>
+          </tr>
+          <tr>
+            <th scope="row">{!! Form::label('bultos_fragiles', 'Cantidad de Bultos (Frágiles)') !!}</th>
+            <td>{!! Form::number('bultos_fragiles', null, [ 'class' => 'form-control', 'placeholder' => 'Ingrese la cantidad de bultos embalados', 'autofocus', 'required', 'min' => '0'] ) !!}</td>
           </tr>
         </tbody>
         </table>

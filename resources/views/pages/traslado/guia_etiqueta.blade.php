@@ -84,6 +84,8 @@
     $operador_envio = $row['operador_envio'];
     $operador_embalaje = $row['operador_embalaje'];
     $bultos = $row['bultos'];
+    $bultos_fragiles = $row['bultos_fragiles'];
+    $bultos_refrigerados = $row['bultos_refrigerados'];
 ?>
 
     <h1 class="h5 text-info" style="display: inline;">
@@ -101,66 +103,79 @@
     <table>
         <thead>
             <tr>
-                    <th scope="row" colspan="4">
+                    <th scope="row" colspan="3">
                         <span class="navbar-brand text-info CP-title-NavBar">
                             <b><i class="fas fa-syringe text-success"></i>CPharma</b>
                         </span>
                     </th>
-                    <th scope="row" colspan="4" class="aumento">Guia de Envio</th>
+                    <th scope="row" colspan="3" class="aumento">Guia de Envio</th>
             </tr>
     </thead>
         <tbody>
             <tr>
-            <td colspan="4" class="alinear-der"># de Ajuste:</td>
-            <td colspan="4" class="alinear-izq">{{$numero_ajuste}}</td>
+                <td colspan="3" class="alinear-der"># de Ajuste:</td>
+                <td colspan="3" class="alinear-izq">{{$numero_ajuste}}</td>
             </tr>
             <tr>
-            <td colspan="4" class="alinear-der">Fecha de Ajuste:</td>
-            <td colspan="4" class="alinear-izq">{{$fecha_ajuste}}</td>
+                <td colspan="3" class="alinear-der">Fecha de Ajuste:</td>
+                <td colspan="3" class="alinear-izq">{{$fecha_ajuste}}</td>
             </tr>
             <tr>
-            <td colspan="4" class="alinear-der">Fecha de Embalaje:</td>
-            <td colspan="4" class="alinear-izq">{{$fecha_embalaje}}</td>
+                <td colspan="3" class="alinear-der">Fecha de Embalaje:</td>
+                <td colspan="3" class="alinear-izq">{{$fecha_embalaje}}</td>
             </tr>
             <tr>
-            <td colspan="4" class="alinear-der">Sede Emisora:</td>
-            <td colspan="4" class="alinear-izq">{{$sede_emisora}}</td>
+                <td colspan="3" class="alinear-der">Sede Emisora:</td>
+                <td colspan="3" class="alinear-izq">{{$sede_emisora}}</td>
             </tr>
             <tr>
-            <td colspan="4" class="alinear-der">Sede Destino:</td>
-            <td colspan="4" class="alinear-izq">{{$sede_destino}}</td>
+                <td colspan="3" class="alinear-der">Sede Destino:</td>
+                <td colspan="3" class="alinear-izq">{{$sede_destino}}</td>
             </tr>
             <tr>
-            <td colspan="4" class="alinear-der">Operador emisor de la guia:</td>
-            <td colspan="4" class="alinear-izq">{{$operador_envio}}</td>
+                <td colspan="3" class="alinear-der">Operador emisor de la guia:</td>
+                <td colspan="3" class="alinear-izq">{{$operador_envio}}</td>
             </tr>
             <tr>
-            <td colspan="4" class="alinear-der">Cantida total de bultos:</td>
-            <td colspan="4" class="alinear-izq">{{$bultos}}</td>
-            </tr>
-            <tr>
-            <td colspan="4" class="alinear-izq">
-                <br/><br/><br/>
-                <span>______________________________</span><br/>
-                <span>Quien Recibe</span><br/>
-                <span>Nombre:</span><br/>
-                <span>Apellido:</span><br/>
-                <span>Fecha:</span><br/>
-                <span>Hora:</span><br/>
+                <td colspan="3" class="alinear-der">Cantida total de bultos:</td>
+                <td colspan="3" class="alinear-izq">
+                    Bultos normales: {{$bultos}}<br/>
+                    Bultos refrigerados: {{$bultos_refrigerados}}<br/>
+                    Bultos fragiles: {{$bultos_fragiles}}
                 </td>
-                <td colspan="4" class="alinear-izq">
-                <br/><br/>
-                <span>______________________________</span><br/>
-                <span>Quien Entrega</span><br/>
-                <span>Nombre:</span><br/>
-                <span>Apellido:</span><br/>
-                <span>Fecha:</span><br/>
-                <span>Hora:</span><br/>
+            </tr>
+            <tr>
+                <td colspan="2" class="alinear-izq">
+                    <br/><br/><br/>
+                    <span>______________________________</span><br/>
+                    <span>Preparado por</span><br/>
+                    <span>Nombre:</span><br/>
+                    <span>Apellido:</span><br/>
+                    <span>Fecha:</span><br/>
+                    <span>Hora:</span><br/>
+                </td>
+                <td colspan="2" class="alinear-izq">
+                    <br/><br/><br/>
+                    <span>______________________________</span><br/>
+                    <span>Quien Recibe</span><br/>
+                    <span>Nombre:</span><br/>
+                    <span>Apellido:</span><br/>
+                    <span>Fecha:</span><br/>
+                    <span>Hora:</span><br/>
+                </td>
+                <td colspan="2" class="alinear-izq">
+                    <br/><br/>
+                    <span>______________________________</span><br/>
+                    <span>Quien Entrega</span><br/>
+                    <span>Nombre:</span><br/>
+                    <span>Apellido:</span><br/>
+                    <span>Fecha:</span><br/>
+                    <span>Hora:</span><br/>
                 </td>
             </tr>
             <thead>
                 <tr>
-                    <th colspan="8">
+                    <th colspan="6">
                             Recuerde entregar el soporte de traslado junto con la mercancia
                     </th>
                 </tr>
