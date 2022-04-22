@@ -1,15 +1,3 @@
-<?php    
-    $SedeConnection = FG_Mi_Ubicacion();
-	/*
-	echo'<pre>';
-	print_r($arrayGlobal);
-	echo'<br><br>';
-	print_r($arrayArticulos);
-	echo'</pre>';
-	die;	
-	*/
-?>
-
 @extends('layouts.model')
 
 @section('title')
