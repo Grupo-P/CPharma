@@ -66,6 +66,7 @@ class Reporte49Controller extends Controller
 
             $Variacion = $this->getVariacion($arrayRangoUltimo['DiasRestantesQuiebre'], $arrayRangoAnterior['DiasRestantesQuiebre']);
             $Status = $this->getStatus($Variacion);
+            $Comportamiento = $this->getComportamiento($Variacion,$arrayRangoUltimo['DiasRestantesQuiebre'], $arrayRangoAnterior['DiasRestantesQuiebre']);
 
             $articulosDetalle =  array (
                 "IdArticulo" => $IdArticulo,
@@ -79,6 +80,7 @@ class Reporte49Controller extends Controller
                 "DiasRestantesAnterior" => $arrayRangoAnterior['DiasRestantesQuiebre'],
                 "Variacion" => $Variacion,
                 "Status" => $Status,
+                "Comportamiento" => $Comportamiento,
             );
     
             array_push($arrayArticulos,$articulosDetalle);
@@ -270,5 +272,30 @@ class Reporte49Controller extends Controller
         else if( $Variacion=="-"){
             return "-";            
         }                      
+    }
+
+    public function getComportamiento($Variacion,$RangoUltimo, $RangoAnterior){
+
+        if( $RangoUltimo=="N/D" && $RangoAnterior=="N/D" ){
+            return "INDETERMINABLE";
+        }
+        else if( $RangoUltimo==0 && $RangoAnterior==0 ){
+            return "PELIGRO";
+        }
+        else if( abs($Variacion) < 10 ){
+            return "ESTABLE";
+        }
+        else if( $RangoAnterior==0 && $RangoUltimo!=0 ){
+            return "LLEGANDO";
+        }
+        else if( $RangoAnterior!=0 && $RangoUltimo==0 ){
+            return "CAYÓ";
+        }
+        else if( $RangoAnterior < ($RangoUltimo+($RangoAnterior*0.10)) ){
+            return "CRECIO";
+        }
+        else if( $RangoAnterior > ($RangoUltimo-($RangoAnterior*0.10)) ){
+            return "DECRECIO";
+        }
     }
 }

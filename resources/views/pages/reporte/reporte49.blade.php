@@ -1,12 +1,13 @@
 <?php    
     $SedeConnection = FG_Mi_Ubicacion();
-	
+	/*
 	echo'<pre>';
 	print_r($arrayGlobal);
 	echo'<br><br>';
 	print_r($arrayArticulos);
 	echo'</pre>';
 	die;	
+	*/
 ?>
 
 @extends('layouts.model')
@@ -74,6 +75,9 @@
                 <th scope="col" class="CP-sticky">Ultima Compra</th>
                 <th scope="col" class="CP-sticky">Dias Restantes (Rango Anterior) ('.$arrayGlobal['FInicialRangoAnterior'].' al '.$arrayGlobal['FInicialRangoUltimoMenos'].')</th>                
                 <th scope="col" class="CP-sticky">Dias Restantes (Rango Ultimo) ('.$arrayGlobal['FInicialRangoUltimo'].' al '.$arrayGlobal['Hoy'].')</th>
+				<th scope="col" class="CP-sticky">Variacion (%)</th>
+				<th scope="col" class="CP-sticky">Status</th>
+				<th scope="col" class="CP-sticky">Comportamiento</th>
 		    </tr>
 	  	</thead>
   	<tbody>
@@ -96,6 +100,9 @@
             echo '<td align="center">'.$articulo['UltimaCompra'].'</td>';
             echo '<td align="center">'.$articulo['DiasRestantesAnterior'].'</td>';
             echo '<td align="center">'.$articulo['DiasRestantesUltimo'].'</td>';
+			echo '<td align="center">'.$articulo['Variacion'].'</td>';
+			echo '<td align="center">'.$articulo['Status'].'</td>';
+			echo '<td align="center">'.$articulo['Comportamiento'].'</td>';
 			echo '</tr>';
 			$contador++;
   	    }
