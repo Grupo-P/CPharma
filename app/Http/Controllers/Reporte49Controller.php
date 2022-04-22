@@ -290,11 +290,11 @@ class Reporte49Controller extends Controller
         else if( $RangoAnterior!=0 && $RangoUltimo==0 ){
             return "CAYÓ";
         }
-        else if( $RangoAnterior < ($RangoUltimo+($RangoAnterior*0.10)) ){
-            return "CRECIO";
-        }
-        else if( $RangoAnterior > ($RangoUltimo-($RangoAnterior*0.10)) ){
+        else if( $RangoAnterior < ($RangoUltimo+($RangoUltimo*0.10)) ){
             return "DECRECIO";
+        }
+        else if( $RangoAnterior > ($RangoUltimo-($RangoUltimo*0.10)) ){
+            return "CRECIO";
         }
     }
 }
