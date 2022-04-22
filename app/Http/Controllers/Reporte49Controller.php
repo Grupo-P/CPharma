@@ -248,8 +248,8 @@ class Reporte49Controller extends Controller
         if( ($RangoUltimo=="N/D") || ($RangoAnterior=="N/D") ){
             return "-";
         }else{
-            //Formula : ((segundo rango - primer rango) / primer rango) * 100
-            $variacion = (($RangoUltimo - $RangoAnterior) / $RangoAnterior) * 100;
+            //Formula : ((primer rango - segundo rango) / primer rango) * 100
+            $variacion = (($RangoAnterior - $RangoUltimo) / $RangoAnterior) * 100;
             return round($variacion,2,PHP_ROUND_HALF_UP);
         }
     }
