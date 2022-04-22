@@ -59,13 +59,15 @@ class Reporte49Controller extends Controller
             $arrayRangoUltimo = $this->getEvaluarDiasCero($conn,$IdArticulo,$Existencia,$FInicialRangoUltimo,$Hoy,$LimiteDiasCero);
             $arrayRangoAnterior = $this->getEvaluarDiasCero($conn,$IdArticulo,$Existencia,$FInicialRangoAnterior,$FInicialRangoUltimo,$LimiteDiasCero);
             
+            /*
             if( ($arrayRangoUltimo['DiasRestantesQuiebre']=="N/D") || ($arrayRangoAnterior['DiasRestantesQuiebre']=="N/D") ){
                 $arrayRangoUltimo['DiasRestantesQuiebre']="N/D";
                 $arrayRangoAnterior['DiasRestantesQuiebre']="N/D";
             }
+            */
 
             $Variacion = $this->getVariacion($arrayRangoUltimo['DiasRestantesQuiebre'], $arrayRangoAnterior['DiasRestantesQuiebre']);
-            $Status = $this->getStatus($Variacion);
+            $Status = $this->getStatus($arrayRangoUltimo['DiasRestantesQuiebre'], $arrayRangoAnterior['DiasRestantesQuiebre']);
             $Comportamiento = $this->getComportamiento($Variacion,$arrayRangoUltimo['DiasRestantesQuiebre'], $arrayRangoAnterior['DiasRestantesQuiebre']);
 
             $articulosDetalle =  array (
@@ -252,31 +254,28 @@ class Reporte49Controller extends Controller
         }
     }
 
-    public function getStatus($Variacion){
-                 
-        if($Variacion===0.00){
-            return "CRITICO";
-        }        
-        else if( $Variacion<0){
-            return 'N/D';
-        }                        
-        else if( $Variacion>0 && $Variacion<30){
+    public function getStatus($RangoUltimo, $RangoAnterior){
+             
+        if($RangoUltimo===0.00){
+            return "INDETERMINABLE";
+        }  
+        else if($RangoAnterior=="N/D"){
+            return "-";
+        }            
+        else if($RangoUltimo>0 && $RangoUltimo<30){
             return 'CRITICO';
         }
-        else if( $Variacion>=30 &&  $Variacion<90){
+        else if($RangoUltimo>=30 && $RangoUltimo<90){
             return 'BIEN';
         }
-        else if( $Variacion>=90){
+        else if($RangoUltimo>=90){
             return 'EXCEDIDO';
-        }  
-        else if( $Variacion=="-"){
-            return "-";            
-        }                      
+        }                               
     }
 
     public function getComportamiento($Variacion,$RangoUltimo, $RangoAnterior){
 
-        if( $RangoUltimo=="N/D" && $RangoAnterior=="N/D" ){
+        if( $RangoUltimo=="N/D" || $RangoAnterior=="N/D" ){
             return "INDETERMINABLE";
         }
         else if( $RangoUltimo==0 && $RangoAnterior==0 ){

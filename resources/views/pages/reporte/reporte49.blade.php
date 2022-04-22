@@ -1,3 +1,13 @@
+<?php 
+/*
+	echo "<pre>";	
+	print_r($arrayGlobal);
+	print_r($arrayArticulos);
+	echo "</pre>";
+	die();
+*/
+?>
+
 @extends('layouts.model')
 
 @section('title')
