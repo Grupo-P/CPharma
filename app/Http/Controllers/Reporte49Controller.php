@@ -59,6 +59,14 @@ class Reporte49Controller extends Controller
             $arrayRangoUltimo = $this->getEvaluarDiasCero($conn,$IdArticulo,$Existencia,$FInicialRangoUltimo,$Hoy,$LimiteDiasCero);
             $arrayRangoAnterior = $this->getEvaluarDiasCero($conn,$IdArticulo,$Existencia,$FInicialRangoAnterior,$FInicialRangoUltimo,$LimiteDiasCero);
             
+            if( ($arrayRangoUltimo['DiasRestantesQuiebre']=="N/D") || ($arrayRangoAnterior['DiasRestantesQuiebre']=="N/D") ){
+                $arrayRangoUltimo['DiasRestantesQuiebre']="N/D";
+                $arrayRangoAnterior['DiasRestantesQuiebre']="N/D";
+            }
+
+            $Variacion = $this->getVariacion($arrayRangoUltimo['DiasRestantesQuiebre'], $arrayRangoAnterior['DiasRestantesQuiebre']);
+            $Status = $this->getStatus($Variacion);
+
             $articulosDetalle =  array (
                 "IdArticulo" => $IdArticulo,
                 "CodigoInterno" => $CodigoInterno,
@@ -69,6 +77,8 @@ class Reporte49Controller extends Controller
                 "UltimaCompra" => $UltimaCompra,
                 "DiasRestantesUltimo" => $arrayRangoUltimo['DiasRestantesQuiebre'],
                 "DiasRestantesAnterior" => $arrayRangoAnterior['DiasRestantesQuiebre'],
+                "Variacion" => $Variacion,
+                "Status" => $Status,
             );
     
             array_push($arrayArticulos,$articulosDetalle);
@@ -137,7 +147,7 @@ class Reporte49Controller extends Controller
                             FROM InvLoteAlmacen
                             WHERE(InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
                             AND (InvLoteAlmacen.InvArticuloId = InvArticulo.Id)) AS DECIMAL(38,0)),2,0)) > 0
-				--AND InvArticulo.Id = '26'            
+				--AND InvArticulo.Id = '30'            
             --Ordanamiento
             ORDER BY InvArticulo.Id ASC
         ";
@@ -227,5 +237,38 @@ class Reporte49Controller extends Controller
         array_multisort($marks, SORT_DESC, $arrayToOrder);
         
         return $arrayToOrder;
+    }
+
+    public function getVariacion($RangoUltimo, $RangoAnterior){
+        
+        if( ($RangoUltimo=="N/D") || ($RangoAnterior=="N/D") ){
+            return "-";
+        }else{
+            //Formula : ((segundo rango - primer rango) / primer rango) * 100
+            $variacion = (($RangoUltimo - $RangoAnterior) / $RangoAnterior) * 100;
+            return round($variacion,2,PHP_ROUND_HALF_UP);
+        }
+    }
+
+    public function getStatus($Variacion){
+                 
+        if($Variacion===0.00){
+            return "CRITICO";
+        }        
+        else if( $Variacion<0){
+            return 'N/D';
+        }                        
+        else if( $Variacion>0 && $Variacion<30){
+            return 'CRITICO';
+        }
+        else if( $Variacion>=30 &&  $Variacion<90){
+            return 'BIEN';
+        }
+        else if( $Variacion>=90){
+            return 'EXCEDIDO';
+        }  
+        else if( $Variacion=="-"){
+            return "-";            
+        }                      
     }
 }
