@@ -275,16 +275,16 @@ class Reporte49Controller extends Controller
 
     public function getComportamiento($Variacion,$RangoUltimo, $RangoAnterior){
 
-        if( $RangoUltimo=="N/D" || $RangoAnterior=="N/D" ){
-            return "INDETERMINABLE";
-        }
-        else if( $RangoUltimo==0 && $RangoAnterior==0 ){
+        if( $RangoUltimo===0.00 && $RangoAnterior===0.00 ){
             return "PELIGRO";
         }
+        else if( $RangoUltimo=="N/D" || $RangoAnterior=="N/D" ){
+            return "INDETERMINABLE";
+        }        
         else if( abs($Variacion) < 10 ){
             return "ESTABLE";
         }
-        else if( $RangoAnterior==0 && $RangoUltimo!=0 ){
+        else if( $RangoAnterior=="N/D" && $RangoUltimo!=0 ){
             return "LLEGANDO";
         }
         else if( $RangoAnterior!=0 && $RangoUltimo==0 ){
