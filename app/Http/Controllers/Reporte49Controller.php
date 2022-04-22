@@ -35,8 +35,7 @@ class Reporte49Controller extends Controller
         include(app_path().'\functions\querys_sqlserver.php');
                          
         $RangoDias = 15;
-        $LimiteDiasCero = 10;
-        //$Hoy = date("Y-m-d",strtotime(date("Y-m-d")."+ 1 days"));
+        $LimiteDiasCero = 10;        
         $Hoy = date("Y-m-d",strtotime(date("2022-04-04")."+ 1 days"));
         $FInicialRangoUltimo = date("Y-m-d",strtotime($Hoy."-$RangoDias days"));
         $FInicialRangoAnterior = date("Y-m-d",strtotime($FInicialRangoUltimo."-$RangoDias days"));
@@ -58,14 +57,7 @@ class Reporte49Controller extends Controller
             
             $arrayRangoUltimo = $this->getEvaluarDiasCero($conn,$IdArticulo,$Existencia,$FInicialRangoUltimo,$Hoy,$LimiteDiasCero);
             $arrayRangoAnterior = $this->getEvaluarDiasCero($conn,$IdArticulo,$Existencia,$FInicialRangoAnterior,$FInicialRangoUltimo,$LimiteDiasCero);
-            
-            /*
-            if( ($arrayRangoUltimo['DiasRestantesQuiebre']=="N/D") || ($arrayRangoAnterior['DiasRestantesQuiebre']=="N/D") ){
-                $arrayRangoUltimo['DiasRestantesQuiebre']="N/D";
-                $arrayRangoAnterior['DiasRestantesQuiebre']="N/D";
-            }
-            */
-
+                        
             $Variacion = $this->getVariacion($arrayRangoUltimo['DiasRestantesQuiebre'], $arrayRangoAnterior['DiasRestantesQuiebre']);
             $Status = $this->getStatus($arrayRangoUltimo['DiasRestantesQuiebre'], $arrayRangoAnterior['DiasRestantesQuiebre']);
             $Comportamiento = $this->getComportamiento($Variacion,$arrayRangoUltimo['DiasRestantesQuiebre'], $arrayRangoAnterior['DiasRestantesQuiebre']);
@@ -111,7 +103,7 @@ class Reporte49Controller extends Controller
     } 
         
     public function Articulos_Existencia() {
-        $sql = "SELECT TOP 10
+        $sql = "SELECT
             --Id Articulo
                 InvArticulo.Id AS IdArticulo,
             --Codigo Interno
