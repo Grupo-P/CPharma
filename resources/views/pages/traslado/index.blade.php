@@ -11,6 +11,12 @@
   include(app_path().'\functions\querys_sqlserver.php');
 
   $totalUnidades = 0;
+
+  $abiertas = 0;
+  $tres = 0;
+  $cuatro = 0;
+  $cinco = 0;
+  $siete = 0;
 ?>
 
 
@@ -192,7 +198,37 @@
 	    </tr>
 		</tbody>
 	</table>
+
+    @if(request()->Tipo == 0)
+        <table class="table table-striped table-borderless col-12 sortable">
+            <tbody>
+            <tr>
+                <td align="center">
+                    <a href="?Tipo=0" class="btn btn-outline-info btn-sm">Órdenes abiertas: <span class="abiertas">{{$abiertas}}</span> </a>
+                </td>
+
+                <td align="center">
+                    <a href="?Tipo=0&dias=3" class="btn btn-outline-secondary btn-sm">Órdenes con menos de 3 días: <span class="tres">{{$tres}}</span> </a>
+                </td>
+
+                <td align="center">
+                    <a href="?Tipo=0&dias=4" class="btn btn-outline-success btn-sm">Órdenes con más de 3 días: <span class="cuatro">{{$cuatro}}</span> </a>
+                </td>
+
+                <td align="center">
+                    <a href="?Tipo=0&dias=5" class="btn btn-outline-warning btn-sm">Órdenes con más de 5 días: <span class="cinco">{{$cinco}}</span> </a>
+                </td>
+
+                <td align="center">
+                    <a href="?Tipo=0&dias=7" class="btn btn-outline-danger btn-sm">Órdenes con más de 7 días: <span class="siete">{{$siete}}</span> </a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    @endif
+
     <br>
+
     <table class="table table-bordered col-12 sortable">
         <thead class="thead-dark">
           <tr>
@@ -252,7 +288,55 @@
 	  	<tbody>
 		@foreach($traslados as $traslado)
 
-			<?php 
+			<?php
+                $fondo = '';
+
+                if($traslado->estatus=='ENTREGADO'){
+                    $Dias = FG_Rango_Dias($traslado->fecha_traslado,$traslado->updated_at);
+                }
+                else{
+                    $Dias = FG_Rango_Dias($traslado->fecha_traslado,date('Y-m-d H:i:s'));
+                }
+
+                if ($traslado->estatus == 'PROCESADO') {
+                    $abiertas = $abiertas + 1;
+                }
+
+                if ($traslado->estatus == 'PROCESADO' && $Dias < 3) {
+                    $tres = $tres + 1;
+
+                    if (isset($_GET['dias']) && $_GET['dias'] != 3) {
+                        continue;
+                    }
+                }
+
+                if ($traslado->estatus == 'PROCESADO' && ($Dias > 3 && $Dias <= 5)) {
+                    $fondo = 'bg-success';
+                    $cuatro = $cuatro + 1;
+
+                    if (isset($_GET['dias']) && $_GET['dias'] != 4) {
+                        continue;
+                    }
+                }
+
+                if ($traslado->estatus == 'PROCESADO' && ($Dias > 5 && $Dias <= 7)) {
+                    $fondo = 'bg-warning';
+                    $cinco = $cinco + 1;
+
+                    if (isset($_GET['dias']) && $_GET['dias'] != 5) {
+                        continue;
+                    }
+                }
+
+                if ($traslado->estatus == 'PROCESADO' && ($Dias > 7)) {
+                    $fondo = 'bg-danger';
+                    $siete = $siete + 1;
+
+                    if (isset($_GET['dias']) && $_GET['dias'] != 7) {
+                        continue;
+                    }
+                }
+
 				$connCPharma = FG_Conectar_CPharma();
 				$sql = MySQL_Buscar_Traslado_Detalle($traslado->numero_ajuste);
 				$result = mysqli_query($connCPharma,$sql);
@@ -277,29 +361,8 @@
 
                 $totalUnidades = $totalUnidades + $Total_Cantidad;
 
-				if($traslado->estatus=='ENTREGADO'){
-					$Dias = FG_Rango_Dias($traslado->fecha_traslado,$traslado->updated_at);
-				}
-				else{
-					$Dias = FG_Rango_Dias($traslado->fecha_traslado,date('Y-m-d H:i:s'));
-				}
-
                 $primero = $traslado->detalle[0]->descripcion;
                 $ultimo = $traslado->detalle[count($traslado->detalle)-1]->descripcion;
-
-                $fondo = '';
-
-                if ($traslado->estatus == 'PROCESADO' && ($Dias > 3 && $Dias <= 5)) {
-                    $fondo = 'bg-success';
-                }
-
-                if ($traslado->estatus == 'PROCESADO' && ($Dias > 5 && $Dias <= 7)) {
-                    $fondo = 'bg-warning';
-                }
-
-                if ($traslado->estatus == 'PROCESADO' && ($Dias > 7)) {
-                    $fondo = 'bg-danger';
-                }
 			?>
 		    <tr class="{{ $fondo }}">
 		      <th>{{$traslado->id}}</th>
@@ -402,7 +465,14 @@
 	<script>
 		$(document).ready(function(){
 		    $('[data-toggle="tooltip"]').tooltip();   
+
+            $('.abiertas').text({{ $abiertas }});
+            $('.tres').text({{ $tres }});
+            $('.cuatro').text({{ $cuatro }});
+            $('.cinco').text({{ $cinco }});
+            $('.siete').text({{ $siete }});
 		});
+
 		$('#exampleModalCenter').modal('show')
 	</script>
 

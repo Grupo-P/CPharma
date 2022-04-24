@@ -89,7 +89,7 @@
 
       $conn = FG_Conectar_Smartpharma(FG_Mi_Ubicacion());
 
-      $sql = QTraslado_Lista_Ajuste();
+      $sql = Q_Lista_Ajuste();
 
       $result = sqlsrv_query($conn,$sql);
 
@@ -115,6 +115,18 @@
         $operador = $row['Auditoria_Usuario'];
         $id_ajuste = $row['Id'];
 
+        $connCPharma = FG_Conectar_CPharma();
+
+        $sql2 = "SELECT * FROM traslados WHERE numero_ajuste = $numero_ajuste";
+
+        $query2 = mysqli_query($connCPharma, $sql2);
+
+        $row2 = mysqli_fetch_assoc($query2);
+
+        if ($row2) {
+            continue;
+        }
+
         echo '<tr>';
         echo '<td class="text-center">'.$contador.'</td>';
         echo '<td class="text-center">'.$numero_ajuste.'</td>';
@@ -122,7 +134,7 @@
         echo '<td class="text-center">'.$operador.'</td>';
 
         echo '<td class="text-center">';
-        echo '<a href="/traslado/create?Ajuste='.$numero_ajuste.'&Id='.$id_ajuste.'&SEDE='.FG_Mi_Ubicacion().'" class="btn btn-outline-success">Seleccionar</a>';
+        echo '<a href="/traslado/create?Ajuste='.$numero_ajuste.'&Id='.$id_ajuste.'&SEDE='.FG_Mi_Ubicacion().'" class="btn btn-outline-success">Crear traslado</a>';
         echo '</td>';
 
         echo '</tr>';
@@ -155,12 +167,12 @@
 <?php
   /**********************************************************************************/
   /*
-    TITULO: QTraslado_Lista_Ajuste
-    FUNCION: Armar una lista de todos los ajustes por salida
-    RETORNO: Lista de numeros de ajuste por salida con id
-    DESAROLLADO POR: SERGIO COVA
+    TITULO: Q_Lista_Ajuste
+    FUNCION: Armar una lista de todos los ajustes
+    RETORNO: Lista de numeros de ajuste
+    DESAROLLADO POR: NISA DELGADO
   */
-  function QTraslado_Lista_Ajuste() {
+  function Q_Lista_Ajuste() {
     $sql = "
         SELECT
           *
