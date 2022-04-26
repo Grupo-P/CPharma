@@ -58,7 +58,7 @@
             return $('.' + elemento).hide();
         }
 
-        campos = ['codigo', 'codigo_barra', 'descripcion', 'existencia', 'clasificacion', 'precio', 'gravado', 'utilidad_configurada', 'troquel', 'marca', 'categoria', 'subcategoria', 'dolarizado', 'tasa_actual', 'precio_ds', 'venta_diaria', 'dias_restantes', 'ultima_venta', 'ultimo_lote', 'unidad_minima', 'ultimo_conteo', 'ultimo_precio', 'transito'];
+        campos = ['codigo', 'codigo_barra', 'descripcion', 'existencia', 'clasificacion', 'precio', 'gravado', 'utilidad_configurada', 'troquel', 'marca', 'categoria', 'subcategoria', 'dolarizado', 'tasa_actual', 'precio_ds', 'venta_diaria', 'dias_restantes', 'ultima_venta', 'ultimo_lote', 'unidad_minima', 'ultimo_conteo', 'ultimo_precio', 'transito', 'traslado_transito'];
 
         function mostrar_todas(that) {
             if (that.checked) {
@@ -421,6 +421,11 @@
             </div>
 
             <div class="form-group">
+                <input type="checkbox" onclick="mostrar_ocultar(this, \'traslado_transito\')" name="traslado_transito" checked>
+                Traslado en transito
+            </div>
+
+            <div class="form-group">
                 <input type="checkbox" onclick="mostrar_todas(this)" name="Marcar todas" checked>
                 Marcar todas
             </div>
@@ -452,14 +457,15 @@
           <th class="dolarizado" scope="col">Dolarizado?</td>
           <th class="tasa_actual" scope="col">Tasa actual '.SigVe.'</td>
           <th class="precio_ds" scope="col">Precio en divisa</br>(Con IVA) '.SigDolar.'</td>
-          <th scope="col" class="venta_diaria bg-warning text-white">Venta diaria 15</th>
-          <th scope="col" class="dias_restantes bg-warning text-white">Días restantes 15</th>
+          <th scope="col" class="venta_diaria text-white">Venta diaria 15</th>
+          <th scope="col" class="dias_restantes text-white">Días restantes 15</th>
           <th class="ultima_venta" scope="col">Ultima Venta</th>
-          <th class="ultimo_lote" scope="col" class="bg-warning text-white">Ultimo Lote</th>
+          <th class="ultimo_lote" scope="col" class="text-white">Ultimo Lote</th>
           <th class="unidad_minima" scope="col">Unidad Minima</th>
           <th class="ultimo_conteo" scope="col">Ultimo Conteo</th>
           <th class="ultimo_precio" scope="col">Ultimo Precio (Sin IVA) '.SigVe.'</th>
-          <th scope="col" class="transito bg-warning text-white">Transito</th>
+          <th scope="col" class="transito text-white">Transito</th>
+          <th scope="col" class="traslado_transito bg-warning text-white">Traslado en transito</th>
         </tr>
       </thead>
       <tbody>
@@ -528,8 +534,8 @@
     $VentaDiariaQuiebre = FG_Venta_Diaria($row3['TotalUnidadesVendidas'],$RangoDiasQuiebre);
     $DiasRestantesQuiebre = FG_Dias_Restantes(intval($Existencia),$VentaDiariaQuiebre);
 
-    echo '<td align="center" class="venta_diaria bg-warning text-white">'.$VentaDiariaQuiebre.'</td>';
-    echo '<td align="center" class="dias_restantes bg-warning text-white">'.$DiasRestantesQuiebre.'</td>';
+    echo '<td align="center" class="venta_diaria text-white">'.$VentaDiariaQuiebre.'</td>';
+    echo '<td align="center" class="dias_restantes text-white">'.$DiasRestantesQuiebre.'</td>';
 
     if(!is_null($UltimaVenta)){
       echo '<td class="ultima_venta" align="center">'.$UltimaVenta->format('d-m-Y').'</td>';
@@ -539,10 +545,10 @@
     }
 
     if(!is_null($UltimoLote)){
-      echo '<td align="center" class="ultimo_lote bg-warning text-white">'.$UltimoLote->format('d-m-Y').'</td>';
+      echo '<td align="center" class="ultimo_lote text-white">'.$UltimoLote->format('d-m-Y').'</td>';
     }
     else{
-      echo '<td align="center" class="ultimo_lote bg-warning text-white"> - </td>';
+      echo '<td align="center" class="ultimo_lote text-white"> - </td>';
     }
 
     echo '<td class="unidad_minima">'.$unidadminima.'</td>';
@@ -588,7 +594,7 @@
 
     if($flag != true){
       echo'
-      <td class="transito bg-warning text-white" align="center">
+      <td class="transito  text-white" align="center">
           <form action="/ordenCompraDetalle/0" method="PRE" style="display: block; width:100%;" target="_blank">';
           echo'<input type="hidden" name="id_articulo" value="'.$IdArticulo.'">';
           echo'
@@ -597,8 +603,12 @@
       </tr>
       ';
     } else {
-        echo '<td class="transito bg-warning text-white"></td>';
+        echo '<td class="transito  text-white"></td>';
     }
+
+    $traslado = Traslado_Transito($CodigoBarra);
+    $transito = in_array($CodigoBarra, $traslado) ? 'Si' : 'No';
+    echo '<td class="text-center traslado_transito bg-warning">'.$transito.'</td>';
 
     echo '
       </tr>
@@ -749,13 +759,13 @@
             <th scope="col" class="factura CP-sticky">N° Factura</th>
             <th scope="col" class="fecha_documento CP-sticky">Fecha de documento</th>
             <th scope="col" class="fecha_registro CP-sticky">Fecha de registro</th>
-            <th scope="col" class="dias_llegada CP-sticky bg-warning text-dark">Días llegada</th>
+            <th scope="col" class="dias_llegada CP-sticky  text-dark">Días llegada</th>
             <th scope="col" class="fecha_vencimiento CP-sticky">Fecha de vencimiento</th>
-            <th scope="col" class="lote_fabricante CP-sticky bg-warning text-dark">Lote fabriante</th>
+            <th scope="col" class="lote_fabricante CP-sticky  text-dark">Lote fabriante</th>
             <th scope="col" class="vida_util CP-sticky">Vida util<br>(Dias)</th>
             <th scope="col" class="dias_vencer CP-sticky">Dias para vencer<br>(Dias)</th>
             <th scope="col" class="cantidad_recibida CP-sticky">Cantidad recibida</th>
-            <th scope="col" class="saldo CP-sticky bg-warning text-dark">Saldo</th>
+            <th scope="col" class="saldo CP-sticky  text-dark">Saldo</th>
             <th scope="col" class="costo_bruto CP-sticky">Costo bruto</br>(Sin IVA) '.SigVe.'</th>
             <th scope="col" class="tasa_historico_documento CP-sticky">Tasa en historico '.SigVe.'</br>(fecha documento)</th>
             <th scope="col" class="tasa_historico_registro CP-sticky">Tasa en historico '.SigVe.'</br>(fecha registro)</th>
@@ -811,9 +821,9 @@
         </td>';
 
         echo '<td class="fecha_registro" align="center">'.$row2["FechaRegistro"]->format('d-m-Y').'</td>';
-        echo '<td class="dias_llegada" align="center" class="bg-warning">'.$diasLlegada.'</td>';
+        echo '<td class="dias_llegada" align="center" class="">'.$diasLlegada.'</td>';
         echo '<td class="fecha_vencimiento" align="center">'.$fechaVencimiento.'</td>';
-        echo '<td class="lote_fabricante" align="center" class="bg-warning">'.$loteFabricante.'</td>';
+        echo '<td class="lote_fabricante" align="center" class="">'.$loteFabricante.'</td>';
         echo '<td class="vida_util" align="center">'.$vidaUtil.'</td>';
 
         echo '<td class="dias_vencer" align="center">'.$diasVencer.'</td>';
@@ -827,7 +837,7 @@
 
         $Saldo = $Saldo + $row2['CantidadRecibidaFactura'];
 
-        echo '<td class="saldo" align="center" class="bg-warning">'.$Saldo.'</td>';
+        echo '<td class="saldo" align="center" class="">'.$Saldo.'</td>';
 
         echo '<td class="costo_bruto" align="center">'.number_format($row2["M_PrecioCompraBruto"],2,"," ,"." ).'</td>';
 

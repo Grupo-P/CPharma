@@ -58,7 +58,7 @@
             return $('.' + elemento).hide();
         }
 
-        campos = ['codigo', 'codigo_barra', 'descripcion', 'producto_unico', 'dolarizado', 'gravado', 'clasificacion', 'precio', 'ultimo_precio', 'existencia', 'unidades_vendidas', 'unidades_compradas', 'venta_diaria', 'venta_diaria_real', 'dias_restantes', 'dias_restantes_real', 'ultima_venta_rango', 'ultima_venta', 'ultimo_lote', 'ultima_compra', 'ultimo_proveedor', 'pedir', 'pedir_real'];
+        campos = ['codigo', 'codigo_barra', 'descripcion', 'producto_unico', 'dolarizado', 'gravado', 'clasificacion', 'precio', 'ultimo_precio', 'existencia', 'unidades_vendidas', 'unidades_compradas', 'venta_diaria', 'venta_diaria_real', 'dias_restantes', 'dias_restantes_real', 'ultima_venta_rango', 'ultima_venta', 'ultimo_lote', 'ultima_compra', 'ultimo_proveedor', 'pedir', 'pedir_real', 'traslado_transito'];
 
         function mostrar_todas(that) {
             if (that.checked) {
@@ -492,6 +492,11 @@
                 </div>
 
                 <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, \'traslado_transito\')" name="traslado_transito" checked>
+                    Traslado en transito
+                </div>
+
+                <div class="form-group">
                     <input type="checkbox" onclick="mostrar_todas(this)" name="Marcar todas" checked>
                     Marcar todas
                 </div>
@@ -543,8 +548,9 @@
             <th scope="col" class="ultima_venta_rango CP-sticky">Ultima Venta (En rango)</th>
             <th scope="col" class="ultima_venta CP-sticky">Ultima Venta</th>
             <th scope="col" class="ultimo_lote CP-sticky">Ultimo Lote</th>
-            <th scope="col" class="ultima_compra CP-sticky bg-warning">Ultima Compra</th>
+            <th scope="col" class="ultima_compra CP-sticky">Ultima Compra</th>
             <th scope="col" class="ultimo_proveedor CP-sticky">Ultimo Proveedor</th>
+            <th scope="col" class="traslado_transito CP-sticky bg-warning">Traslado en transito</th>
             <th scope="col" class="pedir CP-sticky">Pedir</th>
             <th scope="col" class="pedir_real CP-sticky bg-danger text-white">Pedir (Real)</th>
             <th scope="col" class="CP-sticky">Acciones</th>
@@ -554,6 +560,9 @@
     ';
 
     $contador = 1;
+
+    $traslado = Traslado_Transito();
+
     while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
       $IdArticulo = $row["Id"];
 
@@ -681,10 +690,10 @@
       }
 
       if(!is_null($UltimaCompra)){
-        echo '<td align="center" class="ultima_compra bg-warning">'.$UltimaCompra->format('d-m-Y').'</td>';
+        echo '<td align="center" class="ultima_compra">'.$UltimaCompra->format('d-m-Y').'</td>';
       }
       else{
-        echo '<td align="center" class="ultima_compra bg-warning"> - </td>';
+        echo '<td align="center" class="ultima_compra"> - </td>';
       }
 
       if(!is_null($UltimoProveedorNombre)){
@@ -693,6 +702,10 @@
       else{
         echo '<td align="center" class="ultimo_proveedor"> - </td>';
       }
+
+      $transito = in_array($CodigoBarra, $traslado) ? 'Si' : 'No';
+
+      echo '<td class="text-center traslado_transito bg-warning">'.$transito.'</td>';
 
 
 

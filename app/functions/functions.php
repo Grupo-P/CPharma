@@ -4603,7 +4603,7 @@
     RETORNO: Arreglo
     DESAROLLADO POR: Nisa Delgado
   */
-  function Traslado_Transito()
+  function Traslado_Transito($codigo_barra = '')
   {
     $sede = FG_Mi_Ubicacion();
 
@@ -4623,8 +4623,23 @@
         $nombre = 'FARMACIA MILLENNIUM 2000, C.A';
     }
 
-    $array = [];
+    if ($codigo_barra) {
+        $where = "traslados_detalle.codigo_barra = '$codigo_barra'";
+    } else {
+        $where = "
+        traslados_detalle.id_traslado IN (
+            SELECT
+                traslados.numero_ajuste
+            FROM
+                traslados
+            WHERE
+                (traslados.estatus = 'PROCESADO' OR traslados.estatus = 'EMBALADO') AND
+                traslados.sede_destino = '$nombre'
+        )";
+    }
 
+    $array = [];
+    $resultado = [];
 
     try {
         $ftn = DB::connection('ftn')->select("
@@ -4633,15 +4648,7 @@
             FROM
                 traslados_detalle
             WHERE
-                traslados_detalle.id_traslado IN (
-                    SELECT
-                        traslados.numero_ajuste
-                    FROM
-                        traslados
-                    WHERE
-                        (traslados.estatus = 'PROCESADO' OR traslados.estatus = 'EMBALADO') AND
-                        traslados.sede_destino = '$nombre'
-                )
+                $where
             GROUP BY
                 traslados_detalle.codigo_barra;
         ");
@@ -4658,15 +4665,7 @@
             FROM
                 traslados_detalle
             WHERE
-                traslados_detalle.id_traslado IN (
-                    SELECT
-                        traslados.numero_ajuste
-                    FROM
-                        traslados
-                    WHERE
-                        (traslados.estatus = 'PROCESADO' OR traslados.estatus = 'EMBALADO') AND
-                        traslados.sede_destino = '$nombre'
-                )
+                $where
             GROUP BY
                 traslados_detalle.codigo_barra;
         ");
@@ -4683,15 +4682,7 @@
             FROM
                 traslados_detalle
             WHERE
-                traslados_detalle.id_traslado IN (
-                    SELECT
-                        traslados.numero_ajuste
-                    FROM
-                        traslados
-                    WHERE
-                        (traslados.estatus = 'PROCESADO' OR traslados.estatus = 'EMBALADO') AND
-                        traslados.sede_destino = '$nombre'
-                )
+                $where
             GROUP BY
                 traslados_detalle.codigo_barra;
         ");
@@ -4708,15 +4699,7 @@
             FROM
                 traslados_detalle
             WHERE
-                traslados_detalle.id_traslado IN (
-                    SELECT
-                        traslados.numero_ajuste
-                    FROM
-                        traslados
-                    WHERE
-                        (traslados.estatus = 'PROCESADO' OR traslados.estatus = 'EMBALADO') AND
-                        traslados.sede_destino = '$nombre'
-                )
+                $where
             GROUP BY.
                 traslados_detalle.codigo_barra;
         ");
@@ -4733,15 +4716,7 @@
             FROM
                 traslados_detalle
             WHERE
-                traslados_detalle.id_traslado IN (
-                    SELECT
-                        traslados.numero_ajuste
-                    FROM
-                        traslados
-                    WHERE
-                        (traslados.estatus = 'PROCESADO' OR traslados.estatus = 'EMBALADO') AND
-                        traslados.sede_destino = '$nombre'
-                )
+                $where
             GROUP BY
                 traslados_detalle.codigo_barra;
         ");

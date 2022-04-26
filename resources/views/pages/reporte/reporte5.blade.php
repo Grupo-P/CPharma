@@ -429,6 +429,8 @@
     ';
     $contador = 1;
 
+    $traslado = Traslado_Transito();
+
     while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
       $IdArticulo = $row["InvArticuloId"];
       $UnidadesVendidas = intval($row["TotalUnidadesVendidas"]);
@@ -514,7 +516,9 @@
       '</a>
       </td>';
 
-      echo '<td class="text-center traslado_transito bg-warning">-</td>';
+      $transito = in_array($CodigoBarra, $traslado) ? 'Si' : 'No';
+
+      echo '<td class="text-center traslado_transito bg-warning">'.$transito.'</td>';
 
       if (isset($_GET['SEDE']) & ($_GET['SEDE'] == 'FAU' || $_GET['SEDE'] == 'DBs')) {
         if ($conectividad_ftn == 1) {

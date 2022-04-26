@@ -412,6 +412,8 @@
         <tbody>
       ';
 
+      $traslado = Traslado_Transito();
+
     $contador = 1;
     while($row = mysqli_fetch_assoc($result)){
       $IdArticulo = $row['IdArticulo'];
@@ -486,7 +488,9 @@
         echo '<td class="ultimo_proveedor" align="center"> - </td>';
       }
 
-      echo '<td class=" bg-warning traslado_transito text-center">'.Traslado_Transito($CodigoBarra).'</td>';
+      $transito = in_array($CodigoBarra, $traslado) ? 'Si' : 'No';
+
+      echo '<td class=" bg-warning traslado_transito text-center">'.$transito.'</td>';
 
       /*BOTON PARA AGREGAR A LA ORDEN DE COMPRA*/
 
