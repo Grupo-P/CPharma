@@ -48,9 +48,51 @@
 		</div>
 		<br/>
         
-        <h6 align="left">Rango Anterior: '.$arrayGlobal['FInicialRangoAnterior'].' al '.$arrayGlobal['FInicialRangoUltimoMenos'].' </h6>
-        <h6 align="left">Rango Ultimo: '.$arrayGlobal['FInicialRangoUltimo'].' al '.$arrayGlobal['Hoy'].' </h6>
-
+		<table style="border: 1px solid black; border-collapse: collapse; margin-left:20%;">
+			<thead>
+				<tr>
+					<td align="center" style="border: 1px solid black;"><h5>Rango Anterior: '.$arrayGlobal['FInicialRangoAnterior'].' al '.$arrayGlobal['FInicialRangoUltimoMenos'].'</h5></th>
+					<td align="center" style="border: 1px solid black;"><h5>Rango Ultimo: '.$arrayGlobal['FInicialRangoUltimo'].' al '.$arrayGlobal['Hoy'].'</h5></th>
+				</tr>
+				<tr>
+					<td colspan="2" align="justify" style="border: 1px solid black;">
+						<h5>LEYENDA</h5>
+						<p>Este reporte evalua la rotacion de todos los articulos con existencia en la sede en dos partes los ultimos 15 dias desde hoy hacia atras y 15 dias mas atras para un total de 30.<br>
+						La idea es comparar ambos rangos para ver la tendencia y definir si viene estable, subiendo o bajando.</br>
+						Los articulos recien llegados no se evaluan para tener un juicio justo.</p>
+					</th>
+				</tr>				
+			</thead>
+			<tbody>
+				<tr>
+					<td align="justify" style="border: 1px solid black;">
+						<h5>STATUS</h5>
+						<p>
+							Indeterminable, articulos con el ultimo rango en 0.</br>
+							N/D, articulos con disponibilidad en el rango menor a 10 dias.</br>
+							Critico, articulos con el ultimo rango menor a 20.</br>
+							Bien, articulos con el ultimo rango entre 20 y 45.</br>
+							Excedido, articulos con el ultimo rango mayor a 45.</br>
+						</p>
+					</td>
+					<td align="justify" style="border: 1px solid black;">
+						<h5>COMPORTAMIENTO</h5>
+						<p>
+							Indeterminable, articulos con disponibilidad en dias muy bajos.</br>
+							Peligro, articulo sin rotacion en ambos rangos.</br>
+							Estable, articulos con la rotacion en ambos rangos iguales o con una tolerancia del 10%.</br>
+							Llegando, articulos con el primer rango sin disponibilidad.</br>
+							Cayo, articulos con venta en el primer rango y sin venta en el ultimo rango.</br>
+							Decrecio, primer rango menor que el segundo.</br>
+							Crecio, primer rango mayor que el segundo.</br>
+						</p>
+					</td>
+				</tr>				
+			</tbody>
+		</table>	
+		
+		</br>
+        
 		<table class="table table-striped table-bordered col-12 sortable" id="myTable">
 	  	<thead class="thead-dark">
 		    <tr>

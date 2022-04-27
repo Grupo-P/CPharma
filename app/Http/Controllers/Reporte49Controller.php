@@ -36,7 +36,8 @@ class Reporte49Controller extends Controller
                          
         $RangoDias = 15;
         $LimiteDiasCero = 10;        
-        $Hoy = date("Y-m-d",strtotime(date("2022-04-04")."+ 1 days"));
+        //$Hoy = date("Y-m-d",strtotime(date("2022-04-04")."+ 1 days"));
+        $Hoy = date("Y-m-d",strtotime(date("Y-m-d")."+ 1 days"));        
         $FInicialRangoUltimo = date("Y-m-d",strtotime($Hoy."-$RangoDias days"));
         $FInicialRangoAnterior = date("Y-m-d",strtotime($FInicialRangoUltimo."-$RangoDias days"));
         
@@ -250,37 +251,37 @@ class Reporte49Controller extends Controller
              
         if($RangoUltimo===0.00){
             return "INDETERMINABLE";
+        }                      
+        else if($RangoUltimo>0 && $RangoUltimo<20){
+            return 'CRITICO';
+        }
+        else if($RangoUltimo>=20 && $RangoUltimo<45){
+            return 'BIEN';
+        }
+        else if($RangoUltimo>=45){
+            return 'EXCEDIDO';
         }  
         else if($RangoAnterior=="N/D"){
             return "-";
-        }            
-        else if($RangoUltimo>0 && $RangoUltimo<30){
-            return 'CRITICO';
-        }
-        else if($RangoUltimo>=30 && $RangoUltimo<90){
-            return 'BIEN';
-        }
-        else if($RangoUltimo>=90){
-            return 'EXCEDIDO';
-        }                               
+        }                             
     }
 
     public function getComportamiento($Variacion,$RangoUltimo, $RangoAnterior){
 
         if( $RangoUltimo===0.00 && $RangoAnterior===0.00 ){
             return "PELIGRO";
-        }
-        else if( $RangoUltimo=="N/D" || $RangoAnterior=="N/D" ){
-            return "INDETERMINABLE";
+        }                                
+        else if( $RangoAnterior!=0 && $RangoUltimo==0 ){
+            return "CAYÓ";
         }        
-        else if( abs($Variacion) < 10 ){
-            return "ESTABLE";
-        }
         else if( $RangoAnterior=="N/D" && $RangoUltimo!=0 ){
             return "LLEGANDO";
         }
-        else if( $RangoAnterior!=0 && $RangoUltimo==0 ){
-            return "CAYÓ";
+        else if( $RangoUltimo=="N/D" || $RangoAnterior=="N/D" ){
+            return "INDETERMINABLE";
+        }
+        else if( abs($Variacion) < 10 ){
+            return "ESTABLE";
         }
         else if( $RangoAnterior < ($RangoUltimo+($RangoUltimo*0.10)) ){
             return "DECRECIO";
