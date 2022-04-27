@@ -187,6 +187,10 @@
 
     <?php
         Etiquetas_Traslado($numero_ajuste,$fecha_ajuste,$sede_emisora,$sede_destino,$bultos,$fecha_embalaje,$operador_embalaje);
+
+        Etiquetas_Traslado_Fragiles($numero_ajuste,$fecha_ajuste,$sede_emisora,$sede_destino,$bultos_fragiles,$fecha_embalaje,$operador_embalaje);
+
+        Etiquetas_Traslado_Refrigerados($numero_ajuste,$fecha_ajuste,$sede_emisora,$sede_destino,$bultos_refrigerados,$fecha_embalaje,$operador_embalaje);
     ?>
 @endsection
 
@@ -204,6 +208,8 @@
     $Contador = 1;
     $CuentaEtiqueta = 0;
 
+    $titulo = strpos($numero_ajuste, 'R') !== false ? 'Bulto de reclamo' : 'Bulto de traslados internos';
+
     while($Contador<=$bultos){
         echo'
         <table class="border-none" style="display: inline;">
@@ -216,7 +222,7 @@
                                     <span class="navbar-brand text-info CP-title-NavBar">
                                         <b><i class="fas fa-syringe text-success"></i>CPharma</b>
                                     </span>
-                                    <span class="aumentoT espacioT">Bulto de traslados internos</span>
+                                    <span class="aumentoT espacioT">'.$titulo.'</span>
                                 </th>
                         </tr>
                     </thead>
@@ -257,7 +263,237 @@
                                     <span class="navbar-brand text-info CP-title-NavBar">
                                         <b><i class="fas fa-syringe text-success"></i>CPharma</b>
                                     </span>
-                                    <span class="aumentoT espacioT">Bulto de traslados internos</span>
+                                    <span class="aumentoT espacioT">'.$titulo.'</span>
+                                </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                        <td class="aumento espacioT">Soporte #'.$numero_ajuste.' del '.$fecha_ajuste.'</td>
+                        </tr>
+                        <tr>
+                        <td class="aumentoT espacioT"><strong>De: '.$sede_emisora.'</strong></td>
+                        </tr>
+                        <tr>
+                        <td class="aumentoT espacioT"><strong>Para: '.$sede_destino.'</strong></td>
+                        </tr>
+                        <tr>
+                        <td class="alinear-der aumento espacioT">Preparado el '.$fecha_embalaje.' por '.$operador_embalaje.'</td>
+                        </tr>
+                        <tr>
+                        <td class="aumento espacioT">Favor no aplilar demasiadas cajas y contemplar que el contenido es fragil para el momento de su movilizacion</td>
+                        </tr>
+                        <tr>
+                        <td class="alinear-der aumento espacioT"><strong>Bulto '.$Contador.' de '.$bultos.'</strong></td>
+                        </tr>
+                    </tbody>
+                    </table>
+                </td>
+            ';
+        }
+
+        echo '
+        </tr>
+        </table>
+        <br/><br/>
+        ';
+
+        $Contador++;
+        $CuentaEtiqueta++;
+
+        if($CuentaEtiqueta == 4){
+            echo'<br/>';
+            $CuentaEtiqueta=0;
+        }
+    }
+ }
+
+/**********************************************************************************/
+  /*
+    TITULO: Etiquetas_Traslado_Fragiles
+    FUNCION: Imprimir las etiquetas para el tarslado
+    RETORNO: no aplica
+    DESAROLLADO POR: SERGIO COVA
+  */
+ function Etiquetas_Traslado_Fragiles($numero_ajuste,$fecha_ajuste,$sede_emisora,$sede_destino,$bultos,$fecha_embalaje,$operador_embalaje){
+
+    $Contador = 1;
+    $CuentaEtiqueta = 0;
+
+    $titulo = strpos($numero_ajuste, 'R') !== false ? 'Bulto de reclamo' : 'Bulto de traslados internos';
+
+    while($Contador<=$bultos){
+        echo'
+        <table class="border-none" style="display: inline;">
+            <tr class="border-none">
+                <td class="border-none">
+                    <table class="table-borderless" style="display: inline;">
+                        <thead>
+                        <tr>
+                                <th scope="row" class="espacioT">
+                                    <span class="navbar-brand text-info CP-title-NavBar">
+                                        <b><i class="fas fa-syringe text-success"></i>CPharma</b>
+                                    </span>
+                                    <span class="aumentoT espacioT">'.$titulo.'</span>
+                                </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                        <td class="aumento espacioT">Soporte #'.$numero_ajuste.' del '.$fecha_ajuste.'</td>
+                        </tr>
+                        <tr>
+                        <td class="aumentoT espacioT"><strong>De: '.$sede_emisora.'</strong></td>
+                        </tr>
+                        <tr>
+                        <td class="aumentoT espacioT"><strong>Para: '.$sede_destino.'</strong></td>
+                        </tr>
+                        <tr>
+                        <td class="alinear-der aumento espacioT">Preparado el '.$fecha_embalaje.' por '.$operador_embalaje.'</td>
+                        </tr>
+                        <tr>
+                        <td class="aumentoT espacioT"><strong>FRÁGIL</strong></td>
+                        </tr>
+                        <tr>
+                        <td class="aumento espacioT">Favor no aplilar demasiadas cajas y contemplar que el contenido es fragil para el momento de su movilizacion</td>
+                        </tr>
+                        <tr>
+                        <td class="alinear-der aumento espacioT"><strong>Bulto '.$Contador.' de '.$bultos.'</strong></td>
+                        </tr>
+                    </tbody>
+                    </table>
+                </td>
+        ';
+
+        $Contador++;
+
+        if ($Contador<=$bultos) {
+
+            echo '
+                <td class="border-none">
+                    <table class="table-borderless" style="display: inline;">
+                        <thead>
+                        <tr>
+                                <th scope="row" class="espacioT">
+                                    <span class="navbar-brand text-info CP-title-NavBar">
+                                        <b><i class="fas fa-syringe text-success"></i>CPharma</b>
+                                    </span>
+                                    <span class="aumentoT espacioT">'.$titulo.'</span>
+                                </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                        <td class="aumento espacioT">Soporte #'.$numero_ajuste.' del '.$fecha_ajuste.'</td>
+                        </tr>
+                        <tr>
+                        <td class="aumentoT espacioT"><strong>De: '.$sede_emisora.'</strong></td>
+                        </tr>
+                        <tr>
+                        <td class="aumentoT espacioT"><strong>Para: '.$sede_destino.'</strong></td>
+                        </tr>
+                        <tr>
+                        <td class="alinear-der aumento espacioT">Preparado el '.$fecha_embalaje.' por '.$operador_embalaje.'</td>
+                        </tr>
+                        <tr>
+                        <td class="aumento espacioT">Favor no aplilar demasiadas cajas y contemplar que el contenido es fragil para el momento de su movilizacion</td>
+                        </tr>
+                        <tr>
+                        <td class="alinear-der aumento espacioT"><strong>Bulto '.$Contador.' de '.$bultos.'</strong></td>
+                        </tr>
+                    </tbody>
+                    </table>
+                </td>
+            ';
+        }
+
+        echo '
+        </tr>
+        </table>
+        <br/><br/>
+        ';
+
+        $Contador++;
+        $CuentaEtiqueta++;
+
+        if($CuentaEtiqueta == 4){
+            echo'<br/>';
+            $CuentaEtiqueta=0;
+        }
+    }
+ }
+
+/**********************************************************************************/
+  /*
+    TITULO: Etiquetas_Traslado_Refrigerados
+    FUNCION: Imprimir las etiquetas para el tarslado
+    RETORNO: no aplica
+    DESAROLLADO POR: SERGIO COVA
+  */
+ function Etiquetas_Traslado_Refrigerados($numero_ajuste,$fecha_ajuste,$sede_emisora,$sede_destino,$bultos,$fecha_embalaje,$operador_embalaje){
+
+    $Contador = 1;
+    $CuentaEtiqueta = 0;
+
+    $titulo = strpos($numero_ajuste, 'R') !== false ? 'Bulto de reclamo' : 'Bulto de traslados internos';
+
+    while($Contador<=$bultos){
+        echo'
+        <table class="border-none" style="display: inline;">
+            <tr class="border-none">
+                <td class="border-none">
+                    <table class="table-borderless" style="display: inline;">
+                        <thead>
+                        <tr>
+                                <th scope="row" class="espacioT">
+                                    <span class="navbar-brand text-info CP-title-NavBar">
+                                        <b><i class="fas fa-syringe text-success"></i>CPharma</b>
+                                    </span>
+                                    <span class="aumentoT espacioT">'.$titulo.'</span>
+                                </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                        <td class="aumento espacioT">Soporte #'.$numero_ajuste.' del '.$fecha_ajuste.'</td>
+                        </tr>
+                        <tr>
+                        <td class="aumentoT espacioT"><strong>De: '.$sede_emisora.'</strong></td>
+                        </tr>
+                        <tr>
+                        <td class="aumentoT espacioT"><strong>Para: '.$sede_destino.'</strong></td>
+                        </tr>
+                        <tr>
+                        <td class="alinear-der aumento espacioT">Preparado el '.$fecha_embalaje.' por '.$operador_embalaje.'</td>
+                        </tr>
+                        <tr>
+                        <td class="aumentoT espacioT"><strong>REFRIGERADO</strong></td>
+                        </tr>
+                        <tr>
+                        <td class="aumento espacioT">Favor no aplilar demasiadas cajas y contemplar que el contenido es fragil para el momento de su movilizacion</td>
+                        </tr>
+                        <tr>
+                        <td class="alinear-der aumento espacioT"><strong>Bulto '.$Contador.' de '.$bultos.'</strong></td>
+                        </tr>
+                    </tbody>
+                    </table>
+                </td>
+        ';
+
+        $Contador++;
+
+        if ($Contador<=$bultos) {
+
+            echo '
+                <td class="border-none">
+                    <table class="table-borderless" style="display: inline;">
+                        <thead>
+                        <tr>
+                                <th scope="row" class="espacioT">
+                                    <span class="navbar-brand text-info CP-title-NavBar">
+                                        <b><i class="fas fa-syringe text-success"></i>CPharma</b>
+                                    </span>
+                                    <span class="aumentoT espacioT">'.$titulo.'</span>
                                 </th>
                         </tr>
                     </thead>

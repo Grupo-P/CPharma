@@ -383,7 +383,7 @@
 		    <!-- Inicio Validacion de ROLES -->
 		      <td style="width:170px;">
 					<?php
-					if(($traslado->estatus=='PROCESADO'||$traslado->estatus=='EMBALADO'||$traslado->estatus=='ENTREGADO') && 
+					if(($traslado->estatus=='PROCESADO'||$traslado->estatus=='EMBALADO'||$traslado->estatus=='ENTREGADO'||$traslado->estatus=='ENTREGADO CON RECLAMO') &&
 						(Auth::user()->departamento == 'OPERACIONES'
 						|| Auth::user()->departamento == 'LÍDER DE TIENDA' 
 						|| Auth::user()->departamento == 'INVENTARIO'
@@ -443,6 +443,13 @@
 					    @csrf					    
 					    <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Finalizar"><i class="fa fa-check"></i></button>
 						</form>
+
+                        @if(strpos($traslado->numero_ajuste, 'R') === false)
+                            <form action="/traslado/finalizarConReclamo" style="display: inline;">
+                                <input type="hidden" name="traslado" value="{{ $traslado->id }}">
+                                <button type="submit" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Finalizar con reclamo"><i class="m-1 fa fa-info"></i></button>
+                            </form>
+                        @endif
 					<?php
 					}
 					?>						

@@ -47,7 +47,7 @@
 
  	<h1 class="h5 text-info" style="display: inline;">
 		<i class="fas fa-print"></i>
-		Soporte de traslado interno
+        {{ strpos($traslado->numero_ajuste, 'R') !== false ? 'Soporte de traslado de reclamo' : 'Soporte de traslado interno' }}
 	</h1>
 	<form action="/traslado/" method="POST" style="display: inline">
 	    @csrf					    
@@ -64,7 +64,9 @@
 		    				<b><i class="fas fa-syringe text-success"></i>CPharma</b>
   						</span>
 		    		</th>
-		    		<th scope="row" colspan="10" class="aumento">Soporte de Traslado interno</th>
+		    		<th scope="row" colspan="10" class="aumento">
+                        {{ strpos($traslado->numero_ajuste, 'R') !== false ? 'Soporte de traslado de reclamo' : 'Soporte de traslado interno' }}
+                    </th>
 		    </tr>
   	</thead>
 	  	<tbody>
@@ -215,6 +217,13 @@
 				echo '<td>'.Existencia($row['id_articulo']).'</td>';
                 echo '<td><input type="checkbox"></td>';
 				echo '</tr>';
+
+                if (strpos($numero_ajuste, 'R') !== false) {
+                    echo '<tr>';
+                    echo '<th colspan="2">Causa</th>';
+                    echo '<td colspan="9">'.$row['causa'].'</td>';
+                    echo '</tr>';
+                }
 
 				$Total_Cantidad += floatval($row['cantidad']);
 				$Total_Impuesto_Bs += floatval($row['total_imp_bs']);

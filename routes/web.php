@@ -382,6 +382,9 @@ Route::resource('auditoria', 'AuditoriaController');
 
 Route::resource('etiqueta', 'EtiquetaController');
 
+Route::get('/traslado/finalizarConReclamo', 'TrasladoController@finalizarConReclamo');
+Route::post('/traslado/finalizarConReclamo', 'TrasladoController@finalizarConReclamo');
+
 Route::resource('traslado', 'TrasladoController');
 
 Route::resource('ordenCompra', 'OrdenCompraController');
