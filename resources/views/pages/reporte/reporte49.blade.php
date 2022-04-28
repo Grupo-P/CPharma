@@ -92,7 +92,13 @@
 		</table>	
 		
 		</br>
-        
+
+        <form id="myFormulario" method="GET" action="/reporte49">
+			<button type="submit" name="generarExcel" value="SI" class="btn btn-outline-success">Generar Excel</button>
+		</form>
+		
+		</br>
+
 		<table class="table table-striped table-bordered col-12 sortable" id="myTable">
 	  	<thead class="thead-dark">
 		    <tr>

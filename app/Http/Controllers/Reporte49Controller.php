@@ -5,6 +5,9 @@ namespace compras\Http\Controllers;
 use Illuminate\Http\Request;
 use DateTime;
 use DB;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class Reporte49Controller extends Controller
 {
@@ -24,8 +27,7 @@ class Reporte49Controller extends Controller
      * @return \Illuminate\Http\Response
      */
     public function reporte49()
-    {       
-
+    {           
         $arrayArticulos = array();
         $InicioCarga = new DateTime("now");
 
@@ -100,7 +102,13 @@ class Reporte49Controller extends Controller
             "Tiempo" => $Tiempo,
         );
                       
-        return view('pages.reporte.reporte49', compact('arrayGlobal', 'arrayArticulos'));
+        if(isset($_GET['generarExcel'])){
+            if($_GET['generarExcel']=="SI"){
+                $this->generarExcel($arrayArticulos);                
+            }
+        }else{
+            return view('pages.reporte.reporte49', compact('arrayGlobal', 'arrayArticulos'));
+        }        
     } 
         
     public function Articulos_Existencia() {
@@ -289,5 +297,53 @@ class Reporte49Controller extends Controller
         else if( $RangoAnterior > ($RangoUltimo-($RangoUltimo*0.10)) ){
             return "CRECIO";
         }
+    }
+
+    public function generarExcel($arrayArticulos){
+        $spreadsheet = new Spreadsheet();
+	    $sheet = $spreadsheet->getActiveSheet();
+
+        $contador = 1;
+        $sheet->setCellValue('A'.$contador,"#");
+        $sheet->setCellValue('B'.$contador,"Codigo Interno");
+        $sheet->setCellValue('C'.$contador,"Codigo Barra");
+        $sheet->setCellValue('D'.$contador,"Descripcion");
+        $sheet->setCellValue('E'.$contador,"Existencia");
+        $sheet->setCellValue('F'.$contador,"Ultima Venta");        
+        $sheet->setCellValue('G'.$contador,"Ultima Compra");
+        $sheet->setCellValue('H'.$contador,"Dias Restantes / Rango Anterior");
+        $sheet->setCellValue('I'.$contador,"Dias Restantes / Rango Ultimo");
+        $sheet->setCellValue('J'.$contador,"Variacion");
+        $sheet->setCellValue('K'.$contador,"Status");
+        $sheet->setCellValue('L'.$contador,"Comportamiento");
+        $contador++;
+
+        foreach ($arrayArticulos as $articulo) {
+            /*EXCEL*/
+            $sheet->setCellValue('A'.$contador,$contador);
+            $sheet->setCellValue('B'.$contador,$articulo['CodigoInterno']);
+            $sheet->setCellValue('C'.$contador,$articulo['CodigoBarra']);
+            $sheet->setCellValue('D'.$contador,FG_Limpiar_Texto($articulo['Descripcion']));
+            $sheet->setCellValue('E'.$contador,intval($articulo['Existencia']));
+            $sheet->setCellValue('F'.$contador,$articulo['UltimaVenta']);
+            $sheet->setCellValue('G'.$contador,$articulo['UltimaCompra']);
+            $sheet->setCellValue('H'.$contador,$articulo['DiasRestantesAnterior']);
+            $sheet->setCellValue('I'.$contador,$articulo['DiasRestantesUltimo']);
+            $sheet->setCellValue('J'.$contador,$articulo['Variacion']);
+            $sheet->setCellValue('K'.$contador,$articulo['Status']);
+            $sheet->setCellValue('L'.$contador,$articulo['Comportamiento']);
+            /*EXCEL*/
+            $contador++;
+        }
+
+        $nombreDelDocumento = "Reposicion_Inventario".date('Ymd_h-i-A').".xlsx";
+
+        /*EXCEL*/
+            header('Content-Type: application/vnd.ms-excel');
+            header('Content-Disposition: attachment;filename="' . $nombreDelDocumento . '"');
+
+            $writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
+            $writer->save('php://output');
+        /*EXCEL*/        
     }
 }
