@@ -101,6 +101,32 @@
 		
 		<table class="table table-striped table-bordered col-12 sortable" id="myTable">
 	  	<thead class="thead-dark">
+		  	<tr>
+				<th colspan="10"></th>				
+				<th>
+					<select class="filterText" style="display:inline-block; border-radius: 5px;" onchange="filterText(this)">
+						<option disabled selected>Filtro</option>						
+						<option value="BIEN">Bien</option>
+						<option value="CRITICO">Critico</option>
+						<option value="EXCEDIDO">Excedido</option>
+						<option value="INDETERMINABLE">Indeterminable</option>
+						<option value="all">Todos</option>
+					</select>
+				</th>
+				<th>
+					<select class="filterText" style="display:inline-block; border-radius: 5px;" onchange="filterText(this)">
+						<option disabled selected>Filtro</option>	
+						<option value="CAYÓ">Cayó</option>
+						<option value="CRECIO">Crecio</option>
+						<option value="PELIGRO">Peligro</option>
+						<option value="ESTABLE">Estable</option>
+						<option value="DECRECIO">Decrecio</option>
+						<option value="LLEGANDO">Llegando</option>
+						<option value="INDETERMINABLE">Indeterminable</option>						
+						<option value="all">Todos</option>
+					</select>
+				</th>
+			</tr>
 		    <tr>
 		    	<th scope="col" class="CP-sticky">#</th>
 	      	    <th scope="col" class="CP-sticky">Codigo Interno</th>
@@ -114,12 +140,12 @@
 				<th scope="col" class="CP-sticky">Variacion (%)</th>
 				<th scope="col" class="CP-sticky">Status</th>
 				<th scope="col" class="CP-sticky">Comportamiento</th>
-		    </tr>
+		    </tr>			
 	  	</thead>
   	<tbody>
 		';
 		foreach ($arrayArticulos as $articulo) {
-			echo '<tr>';
+			echo '<tr class="content">';
 			echo '<td align="center"><strong>'.intval($contador).'</strong></td>';
             echo '<td align="center">'.$articulo['CodigoInterno'].'</td>';
             echo '<td align="center">'.$articulo['CodigoBarra'].'</td>';
@@ -147,3 +173,21 @@
 		</table>';		
 	}	
 ?>
+
+<script>
+	function filterText(select) {  
+    	var rex = new RegExp($(select).val());
+		if(rex =="/all/"){
+			clearFilter();
+		}else{			
+			$('.content:visible').filter(function() {
+			return !rex.test($(this).text());
+			}).hide();
+		}
+    }
+
+ 	function clearFilter() {
+    	$('.filterText').val('');
+    	$('.content').show();
+   	}
+ </script>
