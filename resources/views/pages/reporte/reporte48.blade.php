@@ -837,7 +837,7 @@
   function R48_Q_CambioPrecios($opcion) {
     if ($opcion == 'Articulos no dolarizados') {
       $sql = "
-          SELECT TOP 30
+          SELECT
 --Id Articulo
     InvArticulo.Id AS IdArticulo,
 --Categoria Articulo
