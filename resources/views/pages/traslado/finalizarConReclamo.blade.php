@@ -165,6 +165,7 @@
                         <th>Código interno</th>
                         <th>Código barra</th>
                         <th>Descripción</th>
+                        <th>Cantidad</th>
                         <th>Costo Bs.S</th>
                         <th>Costo $</th>
                         <th>Reclamo</th>
@@ -180,6 +181,7 @@
                             <td class="text-center">{{ $detalle->codigo_interno }}</td>
                             <td class="text-center">{{ $detalle->codigo_barra }}</td>
                             <td class="text-center">{{ $detalle->descripcion }}</td>
+                            <td class="text-center">{{ $detalle->cantidad }}</td>
                             <td class="text-center">{{ $detalle->costo_unit_bs_sin_iva }}</td>
                             <td class="text-center">{{ $detalle->costo_unit_usd_sin_iva }}</td>
 
@@ -194,7 +196,7 @@
                             </td>
 
                             <td class="text-center">
-                                <input type="number" name="reclamos[{{ $loop->index }}][cantidad]" max="{{ $detalle->cantidad }}" class="form-control">
+                                <input type="number" min="1" name="reclamos[{{ $loop->index }}][cantidad]" max="{{ $detalle->cantidad }}" class="form-control">
                             </td>
                         </tr>
                     @endforeach

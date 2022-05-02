@@ -290,6 +290,9 @@
 
 			<?php
                 $fondo = '';
+                $verde = 'btn-outline-success';
+                $rojo = 'btn-outline-danger';
+                $amarillo = 'btn-outline-warning';
 
                 if($traslado->estatus=='ENTREGADO'){
                     $Dias = FG_Rango_Dias($traslado->fecha_traslado,$traslado->updated_at);
@@ -310,8 +313,9 @@
                     }
                 }
 
-                if ($traslado->estatus == 'PROCESADO' && ($Dias > 3 && $Dias <= 5)) {
+                if (($traslado->estatus == 'EMBALADO' || $traslado->estatus == 'PROCESADO') && ($Dias > 3 && $Dias <= 5)) {
                     $fondo = 'bg-success';
+                    $verde = 'btn-outline-light';
                     $cuatro = $cuatro + 1;
 
                     if (isset($_GET['dias']) && $_GET['dias'] != 4) {
@@ -319,8 +323,9 @@
                     }
                 }
 
-                if ($traslado->estatus == 'PROCESADO' && ($Dias > 5 && $Dias <= 7)) {
+                if (($traslado->estatus == 'EMBALADO' || $traslado->estatus == 'PROCESADO') && ($Dias > 5 && $Dias <= 7)) {
                     $fondo = 'bg-warning';
+                    $amarillo = 'btn-outline-light';
                     $cinco = $cinco + 1;
 
                     if (isset($_GET['dias']) && $_GET['dias'] != 5) {
@@ -328,8 +333,9 @@
                     }
                 }
 
-                if ($traslado->estatus == 'PROCESADO' && ($Dias > 7)) {
+                if (($traslado->estatus == 'EMBALADO' || $traslado->estatus == 'PROCESADO') && ($Dias > 7)) {
                     $fondo = 'bg-danger';
+                    $rojo = 'btn-outline-light';
                     $siete = $siete + 1;
 
                     if (isset($_GET['dias']) && $_GET['dias'] != 7) {
@@ -361,8 +367,8 @@
 
                 $totalUnidades = $totalUnidades + $Total_Cantidad;
 
-                $primero = $traslado->detalle[0]->descripcion;
-                $ultimo = $traslado->detalle[count($traslado->detalle)-1]->descripcion;
+                $primero = $traslado->detalle->count() ? $traslado->detalle[0]->descripcion : '';
+                $ultimo = $traslado->detalle->count() ? $traslado->detalle[count($traslado->detalle)-1]->descripcion : '';
 			?>
 		    <tr class="{{ $fondo }}">
 		      <th>{{$traslado->id}}</th>
@@ -406,7 +412,7 @@
 				    || Auth::user()->departamento == 'TECNOLOGIA')
 						){
 					?>
-						<a href="/traslado/{{$traslado->id}}/edit" role="button" class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-placement="top" title="Embalar" style="width: auto">
+						<a href="/traslado/{{$traslado->id}}/edit" role="button" class="btn {{ $verde }} btn-sm" data-toggle="tooltip" data-placement="top" title="Embalar" style="width: auto">
 	      			<i class="fas fa-box-open"></i>      		
 	      		</a>
 					<?php
@@ -421,7 +427,7 @@
 				    || Auth::user()->departamento == 'TECNOLOGIA')
 						){
 					?>
-						<a href="/GuiaEnvio?Ajuste={{$traslado->numero_ajuste}}" role="button" class="btn btn-outline-warning btn-sm" data-toggle="tooltip" data-placement="top" title="Guia de envio y etiquetas" style="width: auto">
+						<a href="/GuiaEnvio?Ajuste={{$traslado->numero_ajuste}}" role="button" class="btn {{ $amarillo }} btn-sm" data-toggle="tooltip" data-placement="top" title="Guia de envio y etiquetas" style="width: auto">
 	      			<i class="fas fa-tag"></i>     		
 	      		</a>
 					<?php
@@ -441,13 +447,13 @@
 						<form action="/traslado/{{$traslado->id}}" method="POST" style="display: inline;">
 					    @method('DELETE')
 					    @csrf					    
-					    <button type="submit" name="Eliminar" role="button" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Finalizar"><i class="fa fa-check"></i></button>
+					    <button type="submit" name="Eliminar" role="button" class="btn {{ $rojo }} btn-sm" data-toggle="tooltip" data-placement="top" title="Finalizar"><i class="fa fa-check"></i></button>
 						</form>
 
                         @if(strpos($traslado->numero_ajuste, 'R') === false)
                             <form action="/traslado/finalizarConReclamo" style="display: inline;">
                                 <input type="hidden" name="traslado" value="{{ $traslado->id }}">
-                                <button type="submit" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Finalizar con reclamo"><i class="m-1 fa fa-info"></i></button>
+                                <button type="submit" class="btn {{ $rojo }} btn-sm" data-toggle="tooltip" data-placement="top" title="Finalizar con reclamo"><i class="m-1 fa fa-info"></i></button>
                             </form>
                         @endif
 					<?php
