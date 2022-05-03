@@ -290,6 +290,8 @@
                     </table>
                 </td>
             ';
+
+            $Contador++;
         }
 
         echo '
@@ -298,7 +300,6 @@
         <br/><br/>
         ';
 
-        $Contador++;
         $CuentaEtiqueta++;
 
         if($CuentaEtiqueta == 4){
@@ -396,6 +397,9 @@
                         <td class="alinear-der aumento espacioT">Preparado el '.$fecha_embalaje.' por '.$operador_embalaje.'</td>
                         </tr>
                         <tr>
+                        <td class="aumentoT espacioT"><strong>FRÁGIL</strong></td>
+                        </tr>
+                        <tr>
                         <td class="aumento espacioT">Favor no aplilar demasiadas cajas y contemplar que el contenido es fragil para el momento de su movilizacion</td>
                         </tr>
                         <tr>
@@ -405,6 +409,8 @@
                     </table>
                 </td>
             ';
+
+            $Contador++;
         }
 
         echo '
@@ -413,7 +419,6 @@
         <br/><br/>
         ';
 
-        $Contador++;
         $CuentaEtiqueta++;
 
         if($CuentaEtiqueta == 4){
@@ -511,6 +516,9 @@
                         <td class="alinear-der aumento espacioT">Preparado el '.$fecha_embalaje.' por '.$operador_embalaje.'</td>
                         </tr>
                         <tr>
+                        <td class="aumentoT espacioT"><strong>REFRIGERADO</strong></td>
+                        </tr>
+                        <tr>
                         <td class="aumento espacioT">Favor no aplilar demasiadas cajas y contemplar que el contenido es fragil para el momento de su movilizacion</td>
                         </tr>
                         <tr>
@@ -520,6 +528,8 @@
                     </table>
                 </td>
             ';
+
+            $Contador++;
         }
 
         echo '
@@ -528,7 +538,6 @@
         <br/><br/>
         ';
 
-        $Contador++;
         $CuentaEtiqueta++;
 
         if($CuentaEtiqueta == 4){

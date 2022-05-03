@@ -33,10 +33,7 @@
 
     <hr class="row align-items-start col-12">
 
-    <form action="/traslado/" method="POST" style="display: inline;">
-        @csrf                       
-        <button type="submit" name="Regresar" role="button" class="btn btn-outline-info btn-sm"data-placement="top"><i class="fa fa-reply">&nbsp;Regresar</i></button>
-    </form>
+    <a class="btn btn-outline-info btn-sm" data-placement="top" href="/traslado"><i class="fa fa-reply"></i> Regresar</a>
     <br/><br/>
 
     <?php
@@ -79,26 +76,42 @@
             <td><label><?php echo($Operador); ?></label></td>
           </tr>
           <tr>
+            <th scope="row">{!! Form::label('sede_destino', 'Sede destino') !!}</th>
+            <td><label><?php echo($traslado->sede_destino); ?></label></td>
+          </tr>
+          <tr>
             <th scope="row">{!! Form::label('bultos', 'Cantidad de Bultos (Normales)') !!}</th>
-            <td>{!! Form::number('bultos', null, [ 'class' => 'form-control', 'placeholder' => 'Ingrese la cantidad de bultos embalados', 'autofocus', 'required', 'min' => '0'] ) !!}</td>
+            <td>{!! Form::number('bultos', 0, [ 'class' => 'form-control', 'placeholder' => 'Ingrese la cantidad de bultos embalados', 'autofocus', 'required', 'min' => '0'] ) !!}</td>
           </tr>
           <tr>
             <th scope="row">{!! Form::label('bultos_refrigerados', 'Cantidad de Bultos (Refrigerados)') !!}</th>
-            <td>{!! Form::number('bultos_refrigerados', null, [ 'class' => 'form-control', 'placeholder' => 'Ingrese la cantidad de bultos embalados', 'autofocus', 'required', 'min' => '0'] ) !!}</td>
+            <td>{!! Form::number('bultos_refrigerados', 0, [ 'class' => 'form-control', 'placeholder' => 'Ingrese la cantidad de bultos embalados', 'autofocus', 'required', 'min' => '0'] ) !!}</td>
           </tr>
           <tr>
             <th scope="row">{!! Form::label('bultos_fragiles', 'Cantidad de Bultos (Frágiles)') !!}</th>
-            <td>{!! Form::number('bultos_fragiles', null, [ 'class' => 'form-control', 'placeholder' => 'Ingrese la cantidad de bultos embalados', 'autofocus', 'required', 'min' => '0'] ) !!}</td>
+            <td>{!! Form::number('bultos_fragiles', 0, [ 'class' => 'form-control', 'placeholder' => 'Ingrese la cantidad de bultos embalados', 'autofocus', 'required', 'min' => '0'] ) !!}</td>
           </tr>
         </tbody>
         </table>
-        {!! Form::submit('Guardar', ['class' => 'btn btn-outline-success btn-md']) !!}
+        {!! Form::submit('Guardar', ['class' => 'btn btn-outline-success btn-md validacion']) !!}
     </fieldset>
     {!! Form::close()!!} 
     <script>
         $(document).ready(function(){
             $('[data-toggle="tooltip"]').tooltip();   
         });
-        $('#exampleModalCenter').modal('show')
+
+        $('#exampleModalCenter').modal('show');
+
+        $('form').submit(function (event) {
+            normales = $('[name=bultos]').val();
+            bultos_refrigerados = $('[name=bultos_refrigerados]').val();
+            bultos_fragiles = $('[name=bultos_fragiles]').val();
+
+            if ((normales == 0 || normales == '') && (bultos_refrigerados == 0 || bultos_refrigerados == '') && (bultos_fragiles == 0 || bultos_fragiles == '')) {
+                alert('Debe especificar al menos un tipo de bulto');
+                event.preventDefault();
+            }
+        });
     </script>
 @endsection

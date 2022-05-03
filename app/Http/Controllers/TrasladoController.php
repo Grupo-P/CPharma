@@ -45,21 +45,21 @@ class TrasladoController extends Controller
             break;
 
             case 1:
-                $traslados = Traslado::orderBy('id', 'asc')
+                $traslados = Traslado::orderBy('id', 'desc')
                     ->where('estatus','EMBALADO')
                     ->limite(request('cantidad'))
                     ->get();
             break;
 
             case 2:
-                $traslados = Traslado::orderBy('id', 'asc')
+                $traslados = Traslado::orderBy('id', 'desc')
                     ->where('estatus','ENTREGADO')
                     ->limite(request('cantidad'))
                     ->get();
             break;
 
             default:
-                $traslados = Traslado::orderBy('fecha_traslado','desc')
+                $traslados = Traslado::orderBy('id','desc')
                     ->limite(request('cantidad'))
                     ->get();
             break;

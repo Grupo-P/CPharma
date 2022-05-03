@@ -199,7 +199,7 @@
 		</tbody>
 	</table>
 
-    @if(request()->Tipo == 0)
+    @if(isset($_GET['Tipo']) && $_GET['Tipo'] == 0)
         <table class="table table-striped table-borderless col-12 sortable">
             <tbody>
             <tr>

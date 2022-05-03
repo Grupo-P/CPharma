@@ -90,6 +90,10 @@
 	      	<td colspan="6" class="alinear-der">Sede Destino:</td>
 	      	<td colspan="10" class="alinear-izq">{{$traslado->sede_destino}}</td>
 		    </tr>
+            <tr>
+            <td colspan="6" class="alinear-der">Estatus:</td>
+            <td colspan="10" class="alinear-izq">{{$traslado->estatus}}</td>
+            </tr>
 		    <tr>
 	      	<td colspan="6" class="alinear-der">Operador emisor del ajuste:</td>
 	      	<td colspan="10" class="alinear-izq">{{$traslado->operador_ajuste}}</td>
