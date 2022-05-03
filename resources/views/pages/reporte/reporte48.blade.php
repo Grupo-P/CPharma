@@ -584,7 +584,7 @@
 
           $costo_drooeste = $costo_drooeste - $descuento1 - $descuento2 - $descuento3;
 
-          $costo_drooeste = $_GET['opcion'] == 'Articulos dolarizados' ? number_format($costo_drooeste / $TasaMercado, 2) : number_format($costo_drooeste, 2);
+          $costo_drooeste = $_GET['opcion'] == 'Articulos dolarizados' ? @number_format($costo_drooeste / $TasaMercado, 2) : number_format($costo_drooeste, 2);
         }
 
         $indexDronena = array_search($codigo_barra, array_column($dronena, 'CODBARRAS'));
@@ -598,7 +598,7 @@
 
           $costo_dronena = $costo_dronena - $descuento1 - $descuento2;
 
-          $costo_dronena = $_GET['opcion'] == 'Articulos dolarizados' ? number_format($costo_dronena / $TasaMercado, 2) : number_format($costo_dronena, 2);
+          $costo_dronena = $_GET['opcion'] == 'Articulos dolarizados' ? @number_format($costo_dronena / $TasaMercado, 2) : number_format($costo_dronena, 2);
         }
 
         $indexDrocerca = array_search($codigo_barra, array_column($drocerca, 'B'));
@@ -609,7 +609,7 @@
 
           $costo_drocerca = $costo_drocerca;
 
-          $costo_drocerca = $_GET['opcion'] == 'Articulos dolarizados' ? number_format($costo_drocerca / $TasaMercado, 2) : number_format($costo_drocerca, 2);
+          $costo_drocerca = $_GET['opcion'] == 'Articulos dolarizados' ? @number_format($costo_drocerca / $TasaMercado, 2) : number_format($costo_drocerca, 2);
         }
 
         $indexCobeca = array_search($codigo_barra, array_column($cobeca, 'cod_barra'));
@@ -620,7 +620,7 @@
 
           $costo_cobeca = $costo_cobeca;
 
-          $costo_cobeca = $_GET['opcion'] == 'Articulos dolarizados' ? number_format($costo_cobeca / $TasaMercado, 2) : number_format($costo_cobeca, 2);
+          $costo_cobeca = $_GET['opcion'] == 'Articulos dolarizados' ? @number_format($costo_cobeca / $TasaMercado, 2) : number_format($costo_cobeca, 2);
         }
 
         $costos = [$costo_drolanca, $costo_drooeste, $costo_dronena, $costo_drocerca, $costo_cobeca];
