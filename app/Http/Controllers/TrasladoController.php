@@ -236,6 +236,10 @@ class TrasladoController extends Controller
             include(app_path().'\functions\querys_mysql.php');
             include(app_path().'\functions\querys_sqlserver.php');
 
+            if (!array_unique(array_column(request()->reclamos, 'cantidad'))[0]) {
+                return redirect('/traslado/finalizarConReclamo?traslado=' . request()->traslado);
+            }
+
             $old = Traslado::where('numero_ajuste', request()->ajuste)->first();
             $old->estatus = 'ENTREGADO CON RECLAMO';
             $old->save();
@@ -263,7 +267,6 @@ class TrasladoController extends Controller
             $new->save();
 
             foreach (request()->reclamos as $reclamo) {
-
                 if ($reclamo['cantidad']) {
                     $detalleOld = TrasladoDetalle::where('id_traslado', $old->numero_ajuste)
                         ->where('codigo_barra', $reclamo['codigo_barra'])
@@ -283,8 +286,8 @@ class TrasladoController extends Controller
                     $detalleNew->costo_unit_usd_sin_iva = $detalleOld->costo_unit_usd_sin_iva;
                     $detalleNew->total_imp_bs = $detalleOld->total_imp_bs;
                     $detalleNew->total_imp_usd = $detalleOld->total_imp_usd;
-                    $detalleNew->total_bs = $detalleOld->total_bs;
-                    $detalleNew->total_usd = $detalleOld->total_usd;
+                    $detalleNew->total_bs = ((float) $detalleOld->costo_unit_bs_sin_iva + (float) $detalleOld->total_imp_bs) * (float) $reclamo['cantidad'];
+                    $detalleNew->total_usd = ((float) $detalleOld->costo_unit_usd_sin_iva + (float) $detalleOld->total_imp_usd) * (float) $reclamo['cantidad'];
                     $detalleNew->save();
                 }
             }
@@ -301,5 +304,30 @@ class TrasladoController extends Controller
 
         $traslado = Traslado::find(request()->traslado);
         return view('pages.traslado.finalizarConReclamo', compact('traslado'));
+    }
+
+    public function validar()
+    {
+        $i = 0;
+
+        foreach (request()->reclamos as $reclamo) {
+            if ($reclamo['cantidad'] != '' && $reclamo['causa'] == '') {
+                $result['i'] = $i;
+                $result['tipo'] = 'causa';
+
+                return $result;
+            }
+
+            if ($reclamo['cantidad'] == '' && $reclamo['causa'] != '') {
+                $result['i'] = $i;
+                $result['tipo'] = 'cantidad';
+
+                return $result;
+            }
+
+            $i++;
+        }
+
+        return 'exito';
     }
 }

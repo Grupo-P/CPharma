@@ -139,18 +139,18 @@
                             }
                         ?>
 
-                        <td>{{ $traslado->id }}</td>
-                        <td>{{ $traslado->numero_ajuste }}</td>
-                        <td>{{ $traslado->fecha_ajuste }}</td>
-                        <td>{{ $traslado->fecha_traslado }}</td>
-                        <td>{{ $traslado->sede_destino }}</td>
-                        <td>{{ $Total_Cantidad }}</td>
-                        <td>{{ $traslado->bultos+$traslado->bultos_refrigerados+$traslado->bultos_fragiles }}</td>
-                        <td>{{ $traslado->detalle->count() }}</td>
-                        <td>{{ $Total_Bs }}</td>
-                        <td>{{ $Total_Usd }}</td>
-                        <td>{{ $traslado->estatus }}</td>
-                        <td>{{ $Dias }}</td>
+                        <td class="text-center">{{ $traslado->id }}</td>
+                        <td class="text-center">{{ $traslado->numero_ajuste }}</td>
+                        <td class="text-center">{{ $traslado->fecha_ajuste }}</td>
+                        <td class="text-center">{{ $traslado->fecha_traslado }}</td>
+                        <td class="text-center">{{ $traslado->sede_destino }}</td>
+                        <td class="text-center">{{ $Total_Cantidad }}</td>
+                        <td class="text-center">{{ $traslado->bultos+$traslado->bultos_refrigerados+$traslado->bultos_fragiles }}</td>
+                        <td class="text-center">{{ $traslado->detalle->count() }}</td>
+                        <td class="text-center">{{ $Total_Bs }}</td>
+                        <td class="text-center">{{ $Total_Usd }}</td>
+                        <td class="text-center">{{ $traslado->estatus }}</td>
+                        <td class="text-center">{{ $Dias }}</td>
 
                         <input type="hidden" name="ajuste" value="{{ $traslado->numero_ajuste }}">
                         <input type="hidden" name="traslado" value="{{ $traslado->id }}">
@@ -177,7 +177,7 @@
                     @foreach($traslado->detalle as $detalle)
                         <input type="hidden" name="reclamos[{{ $loop->index }}][codigo_barra]" value="{{ $detalle->codigo_barra }}">
 
-                        <tr>
+                        <tr class="articulos">
                             <td class="text-center">{{ $detalle->codigo_interno }}</td>
                             <td class="text-center">{{ $detalle->codigo_barra }}</td>
                             <td class="text-center">{{ $detalle->descripcion }}</td>
@@ -186,7 +186,7 @@
                             <td class="text-center">{{ $detalle->costo_unit_usd_sin_iva }}</td>
 
                             <td class="text-center">
-                                <select name="reclamos[{{ $loop->index }}][causa]" class="form-control">
+                                <select name="reclamos[{{ $loop->index }}][causa]" class="causa form-control">
                                     <option value=""></option>
 
                                     @foreach($causas as $causa)
@@ -196,7 +196,7 @@
                             </td>
 
                             <td class="text-center">
-                                <input type="number" min="1" name="reclamos[{{ $loop->index }}][cantidad]" max="{{ $detalle->cantidad }}" class="form-control">
+                                <input type="number" min="1" name="reclamos[{{ $loop->index }}][cantidad]" max="{{ $detalle->cantidad }}" class="cantidad form-control">
                             </td>
                         </tr>
                     @endforeach
@@ -210,6 +210,30 @@
     <script>
         $(document).ready(function(){
             $('[data-toggle="tooltip"]').tooltip();
+
+            exito = 0;
+
+            $('form').submit(function (event) {
+                if (exito == 0) {
+                    event.preventDefault();
+
+                    $.ajax({
+                        type: 'POST',
+                        url: '/traslado/validar',
+                        data: $('form').serialize(),
+                        success: function (response) {
+                            if (response != 'exito') {
+                                alert('Debe ingresar la ' + response.tipo);
+                                $('.'+response.tipo+':eq('+response.i+')').focus();
+
+                            } else {
+                                exito = 1;
+                                $('form').submit();
+                            }
+                        }
+                    });
+                }
+            });
         });
     </script>
 @endsection

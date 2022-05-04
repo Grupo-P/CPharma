@@ -240,19 +240,19 @@
             <td scope="col" class="bg-white text-dark">
               <ul>
                 <li>
-                    <span>Las columnas en color blanco o gris representan el rango entre 0 y 3 dias trascurridos</span>
+                    <span>Las columnas en color blanco o gris representan el rango entre 0 y menor/igual a 3 dias trascurridos</span>
                 </li>
               </ul>
               <ul class="bg-success text-white">
                 <li>
-                    <span>Las columnas en color verde representan el rango entre 3 y 5 dias trascurridos</span>
+                    <span>Las columnas en color verde representan el rango mayor a 3 y menor/igual a 5 dias trascurridos</span>
                 </li>
               </ul>
             </td>
             <td>
                 <ul class="bg-warning text-white">
                 <li>
-                    <span>Las columnas en color amarillo representan el rango entre 5 y 7 dias trascurridos</span>
+                    <span>Las columnas en color amarillo representan el rango mayor a 5 y 7 menor/igual dias trascurridos</span>
                 </li>
               </ul>
               <ul class="bg-danger text-white">

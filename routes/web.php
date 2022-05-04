@@ -252,6 +252,10 @@ Route::get('/reporte48', function() {
     return view('pages.reporte.reporte48');
 });
 
+Route::get('/reporte50', function() {
+    return view('pages.reporte.reporte50');
+});
+
 Route::get('/seccion1', function() {
     return view('pages.reporte.seccion1');
 });
@@ -384,6 +388,8 @@ Route::resource('etiqueta', 'EtiquetaController');
 
 Route::get('/traslado/finalizarConReclamo', 'TrasladoController@finalizarConReclamo');
 Route::post('/traslado/finalizarConReclamo', 'TrasladoController@finalizarConReclamo');
+
+Route::post('/traslado/validar', 'TrasladoController@validar');
 
 Route::resource('traslado', 'TrasladoController');
 

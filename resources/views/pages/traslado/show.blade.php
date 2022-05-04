@@ -203,6 +203,8 @@
 
 			$cont = 1;
 			while($row = $result->fetch_assoc()) {
+                $existencia = Existencia($row['id_articulo']) ? Existencia($row['id_articulo']) : 0;
+
 				echo '<tr>';
 				echo '<th>'.intval($cont).'</th>';
 				echo '<td>'.$row['codigo_interno'].'</td>';
@@ -218,7 +220,7 @@
 				echo '<td>'.number_format(floatval($row['total_bs']),2,"," ,"." ).'</td>';
 				echo '<td>'.number_format(floatval($row['total_usd']),2,"," ,"." ).'</td>';			
 				echo '<td><input type="checkbox"></td>';				
-				echo '<td>'.Existencia($row['id_articulo']).'</td>';
+				echo '<td>'.$existencia.'</td>';
                 echo '<td><input type="checkbox"></td>';
 				echo '</tr>';
 
