@@ -2942,10 +2942,10 @@
     */
     function FG_Generer_Etiquetas($clasificacion,$tipo,$dia) {
         $SedeConnection = FG_Mi_Ubicacion();
-    $conn = FG_Conectar_Smartpharma($SedeConnection);
-    $connCPharma = FG_Conectar_CPharma();
-    $arraySugeridos = array();
-    $CuentaCard = 0;
+        $conn = FG_Conectar_Smartpharma($SedeConnection);
+        $connCPharma = FG_Conectar_CPharma();
+        $arraySugeridos = array();
+        $CuentaCard = 0;
         $CuentaEtiqueta = 0;
         $TasaActual = FG_Tasa_Fecha_Venta($connCPharma,date('Y-m-d'));
 
@@ -2954,17 +2954,33 @@
         $FAyer = date("Y-m-d",strtotime($FHoy."-1 days"));
 
         if($dia=='HOY'){
-            $arraySugeridos = FG_Obtener_Casos_Etiqueta($conn,$FHoy,$FManana);
-            $ArrayUnique = unique_multidim_array($arraySugeridos,'IdArticulo');
             $FechaCambio = $FHoy;
-    }
-    else if($dia=='AYER'){
-        $arraySugeridos = FG_Obtener_Casos_Etiqueta($conn,$FAyer,$FHoy);
-        $ArrayUnique = unique_multidim_array($arraySugeridos,'IdArticulo');
-            $FechaCambio = $FAyer;
-    }
 
-    $result1 = $connCPharma->query("SELECT COUNT(*) AS Cuenta FROM etiquetas WHERE clasificacion = '$clasificacion'");
+            $result2 = $connCPharma->query("SELECT COUNT(id) as Cuenta FROM dias_ceros WHERE fecha_captura = '$FechaCambio'");
+            $row2= $result2->fetch_assoc();
+            $CuentaDiasCero = $row2['Cuenta'];
+                        
+            if($CuentaDiasCero==0){                
+                echo'
+                    <h2 class="text-danger">
+                        Solicite ayuda al Dpto. de tecnologia.<br>
+                        Existe una falla de captura de datos.<br>
+                        Ref. dias en cero fecha '.$FechaCambio.'
+                    </h2>
+                ';
+                return false;            
+            }            
+            
+            $arraySugeridos = FG_Obtener_Casos_Etiqueta($conn,$FHoy,$FManana);
+            $ArrayUnique = unique_multidim_array($arraySugeridos,'IdArticulo');            
+        }
+        else if($dia=='AYER'){
+            $FechaCambio = $FAyer;
+            $arraySugeridos = FG_Obtener_Casos_Etiqueta($conn,$FAyer,$FHoy);
+            $ArrayUnique = unique_multidim_array($arraySugeridos,'IdArticulo');                
+        }
+
+        $result1 = $connCPharma->query("SELECT COUNT(*) AS Cuenta FROM etiquetas WHERE clasificacion = '$clasificacion'");
         $row1= $result1->fetch_assoc();
         $CuentaCPharma = $row1['Cuenta'];
         $CuentaSmart = count($ArrayUnique);
@@ -3064,7 +3080,7 @@
         echo 'Cuenta CPharma: '.$CuentaCPharma.'<br>';
         echo 'Cuenta Smart: '.$CuentaSmart.'<br>';
         mysqli_close($connCPharma);
-    sqlsrv_close($conn);
+        sqlsrv_close($conn);
     }
     /**********************************************************************************/
     /*
