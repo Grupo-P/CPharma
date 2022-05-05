@@ -67,7 +67,7 @@
             return $('.' + elemento).hide();
         }
 
-        campos = ['codigo', 'codigo_barra', 'descripcion', 'precio_bs', 'precio_ds', 'gravado', 'utilidad', 'existencia', 'costo', 'ultimo_lote', 'ultima_compra', 'ultima_venta', 'ultimo_proveedor', 'drolanca', 'drooeste', 'dronena', 'drocerca'];
+        campos = ['codigo', 'codigo_barra', 'descripcion', 'precio_bs', 'precio_ds', 'gravado', 'utilidad', 'existencia', 'costo', 'ultimo_lote', 'ultima_compra', 'ultima_venta', 'ultimo_proveedor', 'drolanca', 'drooeste', 'dronena', 'drocerca', 'cobeca'];
 
         function mostrar_todas(that) {
             if (that.checked) {
@@ -82,6 +82,20 @@
                 }
             }
         }
+
+        $(document).ready(function () {
+            $('.bajadas').hide();
+
+            $('.subidas-btn').click(function () {
+                $('.bajadas').hide();
+                $('.subidas').show();
+            });
+
+            $('.bajadas-btn').click(function () {
+                $('.subidas').hide();
+                $('.bajadas').show();
+            });
+          });
   </script>
 @endsection
 
@@ -120,13 +134,13 @@
     else {
       echo '
         <form autocomplete="off" action="" target="_blank">
-          <table style="width:100%;">
+          <table class="table table-striped table-bordered col-12 sortable" id="myTable">
             <tr>
-              <td align="center">
+              <td colspan="2" align="center">
                 <label for="opcion">Seleccione una opcion:</label>
               </td>
 
-              <td>
+              <td colspan="2" align="center">
                 <select class="form-control" id="opcion" name="opcion" required style="width:100%;">
                   <option value""></option>
                   <option value"Articulos dolarizados">Articulos dolarizados</option>
@@ -138,8 +152,41 @@
                 print_r($_GET['SEDE']);
               echo'">
 
-              <td align="right">
+              <td colspan="2" align="center">
                 <input type="submit" value="Buscar" class="btn btn-outline-success">
+              </td>
+            </tr>
+
+            <tr>
+              <td align="center">
+                <label>Descuento facturación Drolanca</label>
+                <input type="number" min="0.01" step="0.01" max="0.99" name="descuentoFacturacionDrolanca" class="form-control">
+              </td>
+
+              <td align="center">
+                <label>Descuento facturación Drooeste</label>
+                <input type="number" min="0.01" step="0.01" max="0.99" name="descuentoFacturacionDrooeste" class="form-control">
+              </td>
+
+              <td align="center">
+                <label>Descuento facturación Dronena</label>
+                <input type="number" min="0.01" step="0.01" max="0.99" name="descuentoFacturacionDronena" class="form-control">
+              </td>
+
+              <td align="center">
+                <label>Descuento facturación Drocerca</label>
+                <input type="number" min="0.01" step="0.01" max="0.99" name="descuentoFacturacionDrocerca" class="form-control">
+              </td>
+
+              <td align="center">
+                <label>Descuento facturación Cobeca</label>
+                <input type="number" min="0.01" step="0.01" max="0.99" name="descuentoFacturacionCobeca" class="form-control">
+              </td>
+            </tr>
+
+            <tr>
+              <td colspan="5" align="center">
+                <label>El descuento para cada droguería debe expresar en un número decimal mayor a 0.00 y menor a 1.00. Ejemplo: 5% igual a 0.95</label>
               </td>
             </tr>
           </table>
@@ -181,7 +228,7 @@
 
         fclose($fopen);
 
-        $drolancaFechaActualizacion = date('d/m/Y h:i A', filemtime('drolanca.csv'));
+        $drolancaFechaActualizacion = date('d/m/Y h:i A', ftp_mdtm($fopen, '/inventario/Inventario.txt'));
 
 
     } catch (Exception $exception) {
@@ -208,7 +255,7 @@
 
         fclose($fopen);
 
-        $drooesteFechaActualizacion = date('d/m/Y h:i A', filemtime('drooeste.csv'));
+        $drooesteFechaActualizacion = date('d/m/Y h:i A', ftp_mdtm($fopen, '/Inventario/I_BTIERR/BTIERR.txt'));
     } catch (Exception $exception) {
         $spreadsheet = PhpOffice\PhpSpreadsheet\IOFactory::load('drooeste.csv');
         $drooeste = $spreadsheet->getActiveSheet()->toArray(null, true, true, true);
@@ -248,7 +295,9 @@
           $i = $i+1;
         }
 
-        $dronenaFechaActualizacion = date('d/m/Y h:i A', filemtime('dronena.txt'));
+        $dronenaFechaActualizacion = date('d/m/Y h:i A', ftp_mdtm($fopen, '/Clientes/9431/Inventario.txt'));
+
+
     } catch (Exception $exception) {
         $content = file_get_contents('dronena.txt');
         $lines = explode("\r\n", $content);
@@ -286,7 +335,7 @@
 
         fclose($fopen);
 
-        $drocercaFechaActualizacion = date('d/m/Y h:i A', filemtime('drocerca.csv'));
+        $drocercaFechaActualizacion = date('d/m/Y h:i A', ftp_mdtm($fopen, '/inventario.txt'));
     } catch (Exception $exception) {
         $spreadsheet = PhpOffice\PhpSpreadsheet\IOFactory::load('drocerca.csv');
         $drocerca = $spreadsheet->getActiveSheet()->toArray(null, true, true, true);
@@ -456,10 +505,25 @@
             <i class="fas fa-search text-white" aria-hidden="true"></i>
           </span>
         </div>
-        <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterAllTable()">
+        <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterAllTables()">
       </div>
       <br/>
     ';
+
+    $tasa = compras\TasaVenta::where('moneda', 'Dolar')->first()->tasa;
+
+    if ($_GET['opcion'] == 'Articulos dolarizados') {
+        echo '<div class="text-center">Los costos de las droguerías están en dólares, calculados a la tasa de <b>'.$tasa.'</b>.</div>';
+    }
+
+    echo '
+        <div class="text-center">
+            <button class="btn btn-outline-danger subidas-btn"> <i class="fa fa-arrow-up"></i> Subidas</button>
+            <button class="btn btn-outline-success bajadas-btn"> <i class="fa fa-arrow-down"></i> Bajadas</button>
+        </div>
+    ';
+
+    echo '<h6 align="center"><a href="" data-toggle="modal" data-target="#ver_campos"><i class="fa fa-eye"></i> Mostrar u ocultar campos<a></h6>';
 
     echo'<h6 align="center">'.$opcion.'</h6>';
 
@@ -482,9 +546,18 @@
         $costo_drocerca = '-';
         $costo_cobeca = '-';
 
+        $existencia_drolanca = 0;
+        $existencia_drooeste = 0;
+        $existencia_dronena = 0;
+        $existencia_drocerca = 0;
+        $existencia_cobeca = 0;
+
         $descuento1 = 0;
         $descuento2 = 0;
         $descuento3 = 0;
+
+        $mejor_precio = '';
+        $drogueria_mejor_precio = '';
 
 
         $id_articulo = $row2['IdArticulo'];
@@ -520,8 +593,6 @@
         $ultimo_lote = $row2['UltimoLote']->format('d/m/Y');
 
         $nombre_ultimo_proveedor = FG_Limpiar_Texto($row2['UltimoProveedorNombre']);
-
-        $tasa = compras\TasaVenta::where('moneda', 'Dolar')->first()->tasa;
 
         $precio_ds = number_format($precio_sin_formato / $tasa, 2);
 
@@ -567,8 +638,14 @@
           $descuento3 = $costo_drolanca * ((int) $drolanca[$indexDrolanca+1]['N'] / 100);
 
           $costo_drolanca = $costo_drolanca - $descuento1 - $descuento2 - $descuento3;
+          $costo_drolanca = ($_GET['descuentoFacturacionDrolanca'] != '') ? $costo_drolanca * $_GET['descuentoFacturacionDrolanca'] : $costo_drolanca;
 
-          $costo_drolanca = $_GET['opcion'] == 'Articulos dolarizados' ? number_format($costo_drolanca / $TasaMercado, 2) : number_format($costo_drolanca, 2);
+          $costo_drolanca = $_GET['opcion'] == 'Articulos dolarizados' ? number_format($costo_drolanca / $tasa, 2) : number_format($costo_drolanca, 2);
+
+          $existencia_drolanca = $drolanca[$indexDrolanca+1]['J'];
+
+          $drogueria_mejor_precio = 'drolanca';
+          $mejor_precio = $costo_drolanca;
         }
 
 
@@ -583,8 +660,21 @@
           $descuento3 = $costo_drooeste * ((int) $drooeste[$indexDrooeste+1]['I'] / 100);
 
           $costo_drooeste = $costo_drooeste - $descuento1 - $descuento2 - $descuento3;
+          $costo_drooeste = ($_GET['descuentoFacturacionDrooeste'] != '') ? $costo_drooeste * $_GET['descuentoFacturacionDrooeste'] : $costo_drooeste;
 
-          $costo_drooeste = $_GET['opcion'] == 'Articulos dolarizados' ? @number_format($costo_drooeste / $TasaMercado, 2) : number_format($costo_drooeste, 2);
+          $costo_drooeste = $_GET['opcion'] == 'Articulos dolarizados' ? @number_format($costo_drooeste / $tasa, 2) : number_format($costo_drooeste, 2);
+
+          $existencia_drooeste = $drooeste[$indexDrooeste+1]['D'];
+
+          if ($drogueria_mejor_precio != '') {
+            if ($mejor_precio > $costo_drooeste) {
+                $mejor_precio = $costo_drooeste;
+                $drogueria_mejor_precio = 'drooeste';
+            }
+          } else {
+            $drogueria_mejor_precio = 'drooeste';
+            $mejor_precio = $costo_drooeste;
+          }
         }
 
         $indexDronena = array_search($codigo_barra, array_column($dronena, 'CODBARRAS'));
@@ -597,8 +687,21 @@
           $descuento2 = $costo_dronena * ((int) $dronena[$indexDronena]['DCTO_EMPQUE'] / 100);
 
           $costo_dronena = $costo_dronena - $descuento1 - $descuento2;
+          $costo_dronena = ($_GET['descuentoFacturacionDronena'] != '') ? $costo_dronena * $_GET['descuentoFacturacionDronena'] : $costo_dronena;
 
-          $costo_dronena = $_GET['opcion'] == 'Articulos dolarizados' ? @number_format($costo_dronena / $TasaMercado, 2) : number_format($costo_dronena, 2);
+          $costo_dronena = $_GET['opcion'] == 'Articulos dolarizados' ? @number_format($costo_dronena / $tasa, 2) : number_format($costo_dronena, 2);
+
+          $existencia_dronena = $dronena[$indexDronena]['CANTIDAD'];
+
+          if ($drogueria_mejor_precio != '') {
+            if ($mejor_precio > $costo_dronena) {
+                $mejor_precio = $costo_dronena;
+                $drogueria_mejor_precio = 'dronena';
+            }
+          } else {
+            $drogueria_mejor_precio = 'dronena';
+            $mejor_precio = $costo_dronena;
+          }
         }
 
         $indexDrocerca = array_search($codigo_barra, array_column($drocerca, 'B'));
@@ -608,8 +711,21 @@
           $costo_drocerca = str_replace(',', '.', $costo_drocerca);
 
           $costo_drocerca = $costo_drocerca;
+          $costo_drocerca = ($_GET['descuentoFacturacionDrocerca'] != '') ? $costo_drocerca * $_GET['descuentoFacturacionDrocerca'] : $costo_drocerca;
 
-          $costo_drocerca = $_GET['opcion'] == 'Articulos dolarizados' ? @number_format($costo_drocerca / $TasaMercado, 2) : number_format($costo_drocerca, 2);
+          $costo_drocerca = $_GET['opcion'] == 'Articulos dolarizados' ? @number_format($costo_drocerca / $tasa, 2) : number_format($costo_drocerca, 2);
+
+          $existencia_drocerca = $drocerca[$indexDrocerca+1]['D']+$drocerca[$indexDrocerca+1]['E'];
+
+          if ($drogueria_mejor_precio != '') {
+            if ($mejor_precio > $costo_drocerca) {
+                $mejor_precio = $costo_drocerca;
+                $drogueria_mejor_precio = 'drocerca';
+            }
+          } else {
+            $drogueria_mejor_precio = 'drocerca';
+            $mejor_precio = $costo_drocerca;
+          }
         }
 
         $indexCobeca = array_search($codigo_barra, array_column($cobeca, 'cod_barra'));
@@ -619,8 +735,21 @@
           $costo_cobeca = str_replace(',', '.', $costo_cobeca);
 
           $costo_cobeca = $costo_cobeca;
+          $costo_cobeca = ($_GET['descuentoFacturacionCobeca'] != '') ? $costo_cobeca * $_GET['descuentoFacturacionCobeca'] : $costo_cobeca;
 
-          $costo_cobeca = $_GET['opcion'] == 'Articulos dolarizados' ? @number_format($costo_cobeca / $TasaMercado, 2) : number_format($costo_cobeca, 2);
+          $costo_cobeca = $_GET['opcion'] == 'Articulos dolarizados' ? @number_format($costo_cobeca / $tasa, 2) : number_format($costo_cobeca, 2);
+
+          $existencia_cobeca = $cobeca[$indexCobeca]['existencia'];
+
+          if ($drogueria_mejor_precio != '') {
+            if ($mejor_precio > $costo_cobeca) {
+                $mejor_precio = $costo_cobeca;
+                $drogueria_mejor_precio = 'cobeca';
+            }
+          } else {
+            $drogueria_mejor_precio = 'cobeca';
+            $mejor_precio = $costo_cobeca;
+          }
         }
 
         $costos = [$costo_drolanca, $costo_drooeste, $costo_dronena, $costo_drocerca, $costo_cobeca];
@@ -647,14 +776,20 @@
             $bajadas[$y]['existencia'] = $existencia;
             $bajadas[$y]['costo'] = $costo;
             $bajadas[$y]['costo_drolanca'] = $costo_drolanca;
+            $bajadas[$y]['existencia_drolanca'] = $existencia_drolanca;
             $bajadas[$y]['costo_drooeste'] = $costo_drooeste;
+            $bajadas[$y]['existencia_drooeste'] = $existencia_drooeste;
             $bajadas[$y]['costo_dronena'] = $costo_dronena;
+            $bajadas[$y]['existencia_dronena'] = $existencia_dronena;
             $bajadas[$y]['costo_drocerca'] = $costo_drocerca;
+            $bajadas[$y]['existencia_drocerca'] = $existencia_drocerca;
             $bajadas[$y]['costo_cobeca'] = $costo_cobeca;
+            $bajadas[$y]['existencia_cobeca'] = $existencia_cobeca;
             $bajadas[$y]['ultimo_lote'] = $ultimo_lote;
             $bajadas[$y]['ultima_compra'] = $ultima_compra;
             $bajadas[$y]['ultima_venta'] = $ultima_venta;
             $bajadas[$y]['nombre_ultimo_proveedor'] = $nombre_ultimo_proveedor;
+            $bajadas[$y]['mejor_precio'] = $drogueria_mejor_precio;
 
             $y++;
         }
@@ -671,14 +806,20 @@
             $subidas[$k]['existencia'] = $existencia;
             $subidas[$k]['costo'] = $costo;
             $subidas[$k]['costo_drolanca'] = $costo_drolanca;
+            $subidas[$k]['existencia_drolanca'] = $existencia_drolanca;
             $subidas[$k]['costo_drooeste'] = $costo_drooeste;
+            $subidas[$k]['existencia_drooeste'] = $existencia_drooeste;
             $subidas[$k]['costo_dronena'] = $costo_dronena;
+            $subidas[$k]['existencia_dronena'] = $existencia_dronena;
             $subidas[$k]['costo_drocerca'] = $costo_drocerca;
+            $subidas[$k]['existencia_drocerca'] = $existencia_drocerca;
             $subidas[$k]['costo_cobeca'] = $costo_cobeca;
+            $subidas[$k]['existencia_cobeca'] = $existencia_cobeca;
             $subidas[$k]['ultimo_lote'] = $ultimo_lote;
             $subidas[$k]['ultima_compra'] = $ultima_compra;
             $subidas[$k]['ultima_venta'] = $ultima_venta;
             $subidas[$k]['nombre_ultimo_proveedor'] = $nombre_ultimo_proveedor;
+            $subidas[$k]['mejor_precio'] = $drogueria_mejor_precio;
 
             $k++;
         }
@@ -690,12 +831,16 @@
     sqlsrv_close($conn);
 
     echo '
-      <table class="table table-striped table-bordered col-12 sortable" id="myTable">
+      <div class="subidas">
+      <table class="table table-striped table-bordered col-12">
         <thead class="thead-dark">
-          <tr>
+           <tr>
             <th scope="col" class="text-center" colspan="19">Subidas</th>
           </tr>
         </thead>
+      </table>
+
+      <table class="table table-striped table-bordered col-12 sortable" id="myTable">
         <thead class="thead-dark">
           <tr>
             <th scope="col" class="CP-sticky">Nro.</th>
@@ -703,20 +848,25 @@
             <th scope="col" class="codigo_barra CP-sticky">Codigo de Barra</th>
             <th scope="col" class="descripcion CP-sticky">Descripcion</th>
             <th scope="col" class="precio_bs CP-sticky">Precio Bs.</th>
-            <th scope="col" class="precio_ds CP-sticky">Precio $</td>
-            <th scope="col" class="gravado CP-sticky">Gravado</td>
-            <th scope="col" class="utilidad CP-sticky">Utilidad</td>
-            <th scope="col" class="existencia CP-sticky">Existencia</td>
-            <th scope="col" class="costo CP-sticky">Costo</td>
-            <th scope="col" class="bg-warning drolanca CP-sticky" data-toggle="tooltip" data-placement="bottom" title="Fecha de actualización: '.$drolancaFechaActualizacion.'">Drolanca</td>
-            <th scope="col" class="bg-warning drooeste CP-sticky" data-toggle="tooltip" data-placement="bottom" title="Fecha de actualización: '.$drooesteFechaActualizacion.'">Drooeste</td>
-            <th scope="col" class="bg-warning dronena CP-sticky" data-toggle="tooltip" data-placement="bottom" title="Fecha de actualización: '.$dronenaFechaActualizacion.'">Dronena</td>
-            <th scope="col" class="bg-warning drocerca CP-sticky" data-toggle="tooltip" data-placement="bottom" title="Fecha de actualización: '.$drocercaFechaActualizacion.'">Drocerca</td>
-            <th scope="col" class="bg-warning cobeca CP-sticky" data-toggle="tooltip" data-placement="bottom" title="Fecha de actualización: '.$cobecaFechaActualizacion.'">COBECA</td>
-            <th scope="col" class="ultimo_lote CP-sticky">Ultimo lote</td>
-            <th scope="col" class="ultima_compra CP-sticky">Ultima compra</td>
-            <th scope="col" class="ultima_venta CP-sticky">Ultima venta</td>
-            <th scope="col" class="ultimo_proveedor CP-sticky">Ultimo Proveedor</td>
+            <th scope="col" class="precio_ds CP-sticky">Precio $</th>
+            <th scope="col" class="gravado CP-sticky">Gravado</th>
+            <th scope="col" class="utilidad CP-sticky">Utilidad</th>
+            <th scope="col" class="existencia CP-sticky">Existencia</th>
+            <th scope="col" class="costo CP-sticky">Costo</th>
+            <th scope="col" class="bg-warning drolanca CP-sticky" data-toggle="tooltip" data-placement="bottom" title="Fecha de actualización: '.$drolancaFechaActualizacion.'">Drolanca</th>
+            <th scope="col" class="bg-warning drolanca CP-sticky" data-toggle="tooltip" data-placement="bottom" title="Fecha de actualización: '.$drolancaFechaActualizacion.'">Existencia Drolanca</th>
+            <th scope="col" class="bg-warning drooeste CP-sticky" data-toggle="tooltip" data-placement="bottom" title="Fecha de actualización: '.$drooesteFechaActualizacion.'">Drooeste</th>
+            <th scope="col" class="bg-warning drooeste CP-sticky" data-toggle="tooltip" data-placement="bottom" title="Fecha de actualización: '.$drooesteFechaActualizacion.'">Existencia Drooeste</th>
+            <th scope="col" class="bg-warning dronena CP-sticky" data-toggle="tooltip" data-placement="bottom" title="Fecha de actualización: '.$dronenaFechaActualizacion.'">Dronena</th>
+            <th scope="col" class="bg-warning dronena CP-sticky" data-toggle="tooltip" data-placement="bottom" title="Fecha de actualización: '.$dronenaFechaActualizacion.'">Existencia Dronena</th>
+            <th scope="col" class="bg-warning drocerca CP-sticky" data-toggle="tooltip" data-placement="bottom" title="Fecha de actualización: '.$drocercaFechaActualizacion.'">Drocerca</th>
+            <th scope="col" class="bg-warning drocerca CP-sticky" data-toggle="tooltip" data-placement="bottom" title="Fecha de actualización: '.$drocercaFechaActualizacion.'">Existencia Drocerca</th>
+            <th scope="col" class="bg-warning cobeca CP-sticky" data-toggle="tooltip" data-placement="bottom" title="Fecha de actualización: '.$cobecaFechaActualizacion.'">COBECA</th>
+            <th scope="col" class="bg-warning cobeca CP-sticky" data-toggle="tooltip" data-placement="bottom" title="Fecha de actualización: '.$cobecaFechaActualizacion.'">Existencia COBECA</th>
+            <th scope="col" class="ultimo_lote CP-sticky">Ultimo lote</th>
+            <th scope="col" class="ultima_compra CP-sticky">Ultima compra</th>
+            <th scope="col" class="ultima_venta CP-sticky">Ultima venta</th>
+            <th scope="col" class="ultimo_proveedor CP-sticky">Ultimo Proveedor</th>
           </tr>
         </thead>
 
@@ -726,6 +876,14 @@
     $contador = 1;
 
     foreach ($subidas as $subida) {
+
+        $resaltado_drolanca = ($subida['mejor_precio'] == 'drolanca') ? 'bg-success' : 'bg-warning';
+        $resaltado_drooeste = ($subida['mejor_precio'] == 'drooeste') ? 'bg-success' : 'bg-warning';
+        $resaltado_dronena = ($subida['mejor_precio'] == 'dronena') ? 'bg-success' : 'bg-warning';
+        $resaltado_drocerca = ($subida['mejor_precio'] == 'drocerca') ? 'bg-success' : 'bg-warning';
+        $resaltado_cobeca = ($subida['mejor_precio'] == 'cobeca') ? 'bg-success' : 'bg-warning';
+
+
         echo '<tr>';
 
         echo '<td align="center"><b>'.$contador.'</b></td>';
@@ -738,11 +896,16 @@
         echo '<td class="utilidad" align="center">'.$subida['utilidad'].'</td>';
         echo '<td class="existencia" align="center">'.$subida['existencia'].'</td>';
         echo '<td class="costo" align="center">'.$subida['costo'].'</td>';
-        echo '<td data-toggle="tooltip" data-placement="bottom" title="Fecha de actualización: '.$drolancaFechaActualizacion.'" class="drolanca bg-warning" align="center">'.$subida['costo_drolanca'].'</td>';
-        echo '<td data-toggle="tooltip" data-placement="bottom" title="Fecha de actualización: '.$drooesteFechaActualizacion.'" class="drooeste bg-warning" align="center">'.$subida['costo_drooeste'].'</td>';
-        echo '<td data-toggle="tooltip" data-placement="bottom" title="Fecha de actualización: '.$dronenaFechaActualizacion.'" class="dronena bg-warning" align="center">'.$subida['costo_dronena'].'</td>';
-        echo '<td data-toggle="tooltip" data-placement="bottom" title="Fecha de actualización: '.$drocercaFechaActualizacion.'" class="drocerca bg-warning" align="center">'.$subida['costo_drocerca'].'</td>';
-        echo '<td data-toggle="tooltip" data-placement="bottom" title="Fecha de actualización: '.$cobecaFechaActualizacion.'" class="cobeca bg-warning" align="center">'.$subida['costo_cobeca'].'</td>';
+        echo '<td data-toggle="tooltip" data-placement="bottom" title="Fecha de actualización: '.$drolancaFechaActualizacion.'" class="drolanca '.$resaltado_drolanca.'" align="center">'.$subida['costo_drolanca'].'</td>';
+        echo '<td data-toggle="tooltip" data-placement="bottom" title="Fecha de actualización: '.$drolancaFechaActualizacion.'" class="drolanca bg-warning" align="center">'.$subida['existencia_drolanca'].'</td>';
+        echo '<td data-toggle="tooltip" data-placement="bottom" title="Fecha de actualización: '.$drooesteFechaActualizacion.'" class="drooeste '.$resaltado_drooeste.'" align="center">'.$subida['costo_drooeste'].'</td>';
+        echo '<td data-toggle="tooltip" data-placement="bottom" title="Fecha de actualización: '.$drooesteFechaActualizacion.'" class="drooeste bg-warning" align="center">'.$subida['existencia_drooeste'].'</td>';
+        echo '<td data-toggle="tooltip" data-placement="bottom" title="Fecha de actualización: '.$dronenaFechaActualizacion.'" class="dronena '.$resaltado_dronena.'" align="center">'.$subida['costo_dronena'].'</td>';
+        echo '<td data-toggle="tooltip" data-placement="bottom" title="Fecha de actualización: '.$dronenaFechaActualizacion.'" class="dronena bg-warning" align="center">'.$subida['existencia_dronena'].'</td>';
+        echo '<td data-toggle="tooltip" data-placement="bottom" title="Fecha de actualización: '.$drocercaFechaActualizacion.'" class="drocerca '.$resaltado_drocerca.'" align="center">'.$subida['costo_drocerca'].'</td>';
+        echo '<td data-toggle="tooltip" data-placement="bottom" title="Fecha de actualización: '.$drocercaFechaActualizacion.'" class="drocerca bg-warning" align="center">'.$subida['existencia_drocerca'].'</td>';
+        echo '<td data-toggle="tooltip" data-placement="bottom" title="Fecha de actualización: '.$cobecaFechaActualizacion.'" class="cobeca '.$resaltado_cobeca.'" align="center">'.$subida['costo_cobeca'].'</td>';
+        echo '<td data-toggle="tooltip" data-placement="bottom" title="Fecha de actualización: '.$cobecaFechaActualizacion.'" class="cobeca bg-warning" align="center">'.$subida['existencia_cobeca'].'</td>';
 
         echo '<td class="ultimo_lote" align="center">'.$subida['ultimo_lote'].'</td>';
         echo '<td class="ultima_compra" align="center">'.$subida['ultima_compra'].'</td>';
@@ -756,15 +919,20 @@
     echo '
         </tbody>
       </table>
+      </div>
     ';
 
     echo '
-      <table class="table table-striped table-bordered col-12 sortable" id="myTable">
+      <div class="bajadas">
+      <table class="table table-striped table-bordered col-12">
         <thead class="thead-dark">
-          <tr>
+           <tr>
             <th scope="col" class="text-center" colspan="19">Bajadas</th>
           </tr>
         </thead>
+      </table>
+
+      <table class="table table-striped table-bordered col-12 sortable" id="myTable2">
         <thead class="thead-dark">
           <tr>
             <th scope="col" class="CP-sticky">Nro.</th>
@@ -772,20 +940,25 @@
             <th scope="col" class="codigo_barra CP-sticky">Codigo de Barra</th>
             <th scope="col" class="descripcion CP-sticky">Descripcion</th>
             <th scope="col" class="precio_bs CP-sticky">Precio Bs.</th>
-            <th scope="col" class="precio_ds CP-sticky">Precio $</td>
-            <th scope="col" class="gravado CP-sticky">Gravado</td>
-            <th scope="col" class="utilidad CP-sticky">Utilidad</td>
-            <th scope="col" class="existencia CP-sticky">Existencia</td>
-            <th scope="col" class="costo CP-sticky">Costo</td>
-            <th scope="col" class="bg-warning drolanca CP-sticky" data-toggle="tooltip" data-placement="bottom" title="Fecha de actualización: '.$drolancaFechaActualizacion.'">Drolanca</td>
-            <th scope="col" class="bg-warning drooeste CP-sticky" data-toggle="tooltip" data-placement="bottom" title="Fecha de actualización: '.$drooesteFechaActualizacion.'">Drooeste</td>
-            <th scope="col" class="bg-warning dronena CP-sticky" data-toggle="tooltip" data-placement="bottom" title="Fecha de actualización: '.$dronenaFechaActualizacion.'">Dronena</td>
-            <th scope="col" class="bg-warning drocerca CP-sticky" data-toggle="tooltip" data-placement="bottom" title="Fecha de actualización: '.$drocercaFechaActualizacion.'">Drocerca</td>
-            <th scope="col" class="bg-warning cobeca CP-sticky" data-toggle="tooltip" data-placement="bottom" title="Fecha de actualización: '.$cobecaFechaActualizacion.'">COBECA</td>
-            <th scope="col" class="ultimo_lote CP-sticky">Ultimo lote</td>
-            <th scope="col" class="ultima_compra CP-sticky">Ultima compra</td>
-            <th scope="col" class="ultima_venta CP-sticky">Ultima venta</td>
-            <th scope="col" class="ultimo_proveedor CP-sticky">Ultimo Proveedor</td>
+            <th scope="col" class="precio_ds CP-sticky">Precio $</th>
+            <th scope="col" class="gravado CP-sticky">Gravado</th>
+            <th scope="col" class="utilidad CP-sticky">Utilidad</th>
+            <th scope="col" class="existencia CP-sticky">Existencia</th>
+            <th scope="col" class="costo CP-sticky">Costo</th>
+            <th scope="col" class="bg-warning drolanca CP-sticky" data-toggle="tooltip" data-placement="bottom" title="Fecha de actualización: '.$drolancaFechaActualizacion.'">Drolanca</th>
+            <th scope="col" class="bg-warning drolanca CP-sticky" data-toggle="tooltip" data-placement="bottom" title="Fecha de actualización: '.$drolancaFechaActualizacion.'">Existencia Drolanca</th>
+            <th scope="col" class="bg-warning drooeste CP-sticky" data-toggle="tooltip" data-placement="bottom" title="Fecha de actualización: '.$drooesteFechaActualizacion.'">Drooeste</th>
+            <th scope="col" class="bg-warning drooeste CP-sticky" data-toggle="tooltip" data-placement="bottom" title="Fecha de actualización: '.$drooesteFechaActualizacion.'">Existencia Drooeste</th>
+            <th scope="col" class="bg-warning dronena CP-sticky" data-toggle="tooltip" data-placement="bottom" title="Fecha de actualización: '.$dronenaFechaActualizacion.'">Dronena</th>
+            <th scope="col" class="bg-warning dronena CP-sticky" data-toggle="tooltip" data-placement="bottom" title="Fecha de actualización: '.$dronenaFechaActualizacion.'">Existencia Dronena</th>
+            <th scope="col" class="bg-warning drocerca CP-sticky" data-toggle="tooltip" data-placement="bottom" title="Fecha de actualización: '.$drocercaFechaActualizacion.'">Drocerca</th>
+            <th scope="col" class="bg-warning drocerca CP-sticky" data-toggle="tooltip" data-placement="bottom" title="Fecha de actualización: '.$drocercaFechaActualizacion.'">Existencia Drocerca</th>
+            <th scope="col" class="bg-warning cobeca CP-sticky" data-toggle="tooltip" data-placement="bottom" title="Fecha de actualización: '.$cobecaFechaActualizacion.'">COBECA</th>
+            <th scope="col" class="bg-warning cobeca CP-sticky" data-toggle="tooltip" data-placement="bottom" title="Fecha de actualización: '.$cobecaFechaActualizacion.'">Existencia COBECA</th>
+            <th scope="col" class="ultimo_lote CP-sticky">Ultimo lote</th>
+            <th scope="col" class="ultima_compra CP-sticky">Ultima compra</th>
+            <th scope="col" class="ultima_venta CP-sticky">Ultima venta</th>
+            <th scope="col" class="ultimo_proveedor CP-sticky">Ultimo Proveedor</th>
           </tr>
         </thead>
 
@@ -794,29 +967,42 @@
 
     $contador = 1;
 
-    foreach ($bajadas as $bajadas) {
+    foreach ($bajadas as $bajada) {
+        $resaltado_drolanca = ($bajada['mejor_precio'] == 'drolanca') ? 'bg-success' : 'bg-warning';
+        $resaltado_drooeste = ($bajada['mejor_precio'] == 'drooeste') ? 'bg-success' : 'bg-warning';
+        $resaltado_dronena = ($bajada['mejor_precio'] == 'dronena') ? 'bg-success' : 'bg-warning';
+        $resaltado_drocerca = ($bajada['mejor_precio'] == 'drocerca') ? 'bg-success' : 'bg-warning';
+        $resaltado_cobeca = ($bajada['mejor_precio'] == 'cobeca') ? 'bg-success' : 'bg-warning';
+
+
+
         echo '<tr>';
 
         echo '<td align="center"><b>'.$contador.'</b></td>';
-        echo '<td class="codigo" align="center">'.$bajadas['codigo_articulo'].'</td>';
-        echo '<td class="codigo_barra" align="center">'.$bajadas['codigo_barra'].'</td>';
-        echo '<td align="center" class="descripcion CP-barrido"><a href="/reporte2?SEDE='.$_GET['SEDE'].'&Id='.$bajadas['id_articulo'].'" style="text-decoration: none; color: black;" target="_blank">'.$bajadas['descripcion'].'</a></td>';
-        echo '<td class="precio_bs" align="center">'.$bajadas['precio'].'</td>';
-        echo '<td class="precio_ds" align="center">'.$bajadas['precio_ds'].'</td>';
-        echo '<td class="gravado" align="center">'.$bajadas['gravado'].'</td>';
-        echo '<td class="utilidad" align="center">'.$bajadas['utilidad'].'</td>';
-        echo '<td class="existencia" align="center">'.$bajadas['existencia'].'</td>';
-        echo '<td class="costo" align="center">'.$bajadas['costo'].'</td>';
-        echo '<td data-toggle="tooltip" data-placement="bottom" title="Fecha de actualización: '.$drolancaFechaActualizacion.'" class="drolanca bg-warning" align="center">'.$bajadas['costo_drolanca'].'</td>';
-        echo '<td data-toggle="tooltip" data-placement="bottom" title="Fecha de actualización: '.$drooesteFechaActualizacion.'" class="drooeste bg-warning" align="center">'.$bajadas['costo_drooeste'].'</td>';
-        echo '<td data-toggle="tooltip" data-placement="bottom" title="Fecha de actualización: '.$dronenaFechaActualizacion.'" class="dronena bg-warning" align="center">'.$bajadas['costo_dronena'].'</td>';
-        echo '<td data-toggle="tooltip" data-placement="bottom" title="Fecha de actualización: '.$drocercaFechaActualizacion.'" class="drocerca bg-warning" align="center">'.$bajadas['costo_drocerca'].'</td>';
-        echo '<td data-toggle="tooltip" data-placement="bottom" title="Fecha de actualización: '.$cobecaFechaActualizacion.'" class="cobeca bg-warning" align="center">'.$bajadas['costo_cobeca'].'</td>';
+        echo '<td class="codigo" align="center">'.$bajada['codigo_articulo'].'</td>';
+        echo '<td class="codigo_barra" align="center">'.$bajada['codigo_barra'].'</td>';
+        echo '<td align="center" class="descripcion CP-barrido"><a href="/reporte2?SEDE='.$_GET['SEDE'].'&Id='.$bajada['id_articulo'].'" style="text-decoration: none; color: black;" target="_blank">'.$bajada['descripcion'].'</a></td>';
+        echo '<td class="precio_bs" align="center">'.$bajada['precio'].'</td>';
+        echo '<td class="precio_ds" align="center">'.$bajada['precio_ds'].'</td>';
+        echo '<td class="gravado" align="center">'.$bajada['gravado'].'</td>';
+        echo '<td class="utilidad" align="center">'.$bajada['utilidad'].'</td>';
+        echo '<td class="existencia" align="center">'.$bajada['existencia'].'</td>';
+        echo '<td class="costo" align="center">'.$bajada['costo'].'</td>';
+        echo '<td data-toggle="tooltip" data-placement="bottom" title="Fecha de actualización: '.$drolancaFechaActualizacion.'" class="drolanca '.$resaltado_drolanca.'" align="center">'.$bajada['costo_drolanca'].'</td>';
+        echo '<td data-toggle="tooltip" data-placement="bottom" title="Fecha de actualización: '.$drolancaFechaActualizacion.'" class="drolanca bg-warning" align="center">'.$bajada['existencia_drolanca'].'</td>';
+        echo '<td data-toggle="tooltip" data-placement="bottom" title="Fecha de actualización: '.$drooesteFechaActualizacion.'" class="drooeste '.$resaltado_drooeste.'" align="center">'.$bajada['costo_drooeste'].'</td>';
+        echo '<td data-toggle="tooltip" data-placement="bottom" title="Fecha de actualización: '.$drooesteFechaActualizacion.'" class="drooeste bg-warning" align="center">'.$bajada['existencia_drooeste'].'</td>';
+        echo '<td data-toggle="tooltip" data-placement="bottom" title="Fecha de actualización: '.$dronenaFechaActualizacion.'" class="dronena '.$resaltado_dronena.'" align="center">'.$bajada['costo_dronena'].'</td>';
+        echo '<td data-toggle="tooltip" data-placement="bottom" title="Fecha de actualización: '.$dronenaFechaActualizacion.'" class="dronena bg-warning" align="center">'.$bajada['existencia_dronena'].'</td>';
+        echo '<td data-toggle="tooltip" data-placement="bottom" title="Fecha de actualización: '.$drocercaFechaActualizacion.'" class="drocerca '.$resaltado_drocerca.'" align="center">'.$bajada['costo_drocerca'].'</td>';
+        echo '<td data-toggle="tooltip" data-placement="bottom" title="Fecha de actualización: '.$drocercaFechaActualizacion.'" class="drocerca bg-warning" align="center">'.$bajada['existencia_drocerca'].'</td>';
+        echo '<td data-toggle="tooltip" data-placement="bottom" title="Fecha de actualización: '.$cobecaFechaActualizacion.'" class="cobeca '.$resaltado_cobeca.'" align="center">'.$bajada['costo_cobeca'].'</td>';
+        echo '<td data-toggle="tooltip" data-placement="bottom" title="Fecha de actualización: '.$cobecaFechaActualizacion.'" class="cobeca bg-warning" align="center">'.$bajada['existencia_cobeca'].'</td>';
 
-        echo '<td class="ultimo_lote" align="center">'.$bajadas['ultimo_lote'].'</td>';
-        echo '<td class="ultima_compra" align="center">'.$bajadas['ultima_compra'].'</td>';
-        echo '<td class="ultima_venta" align="center">'.$bajadas['ultima_venta'].'</td>';
-        echo '<td class="ultimo_proveedor" align="center">'.$bajadas['nombre_ultimo_proveedor'].'</td>';
+        echo '<td class="ultimo_lote" align="center">'.$bajada['ultimo_lote'].'</td>';
+        echo '<td class="ultima_compra" align="center">'.$bajada['ultima_compra'].'</td>';
+        echo '<td class="ultima_venta" align="center">'.$bajada['ultima_venta'].'</td>';
+        echo '<td class="ultimo_proveedor" align="center">'.$bajada['nombre_ultimo_proveedor'].'</td>';
         echo '</tr>';
 
         $contador++;
@@ -825,6 +1011,7 @@
     echo '
         </tbody>
       </table>
+      </div>
     ';
   }
 
@@ -837,7 +1024,7 @@
   function R48_Q_CambioPrecios($opcion) {
     if ($opcion == 'Articulos no dolarizados') {
       $sql = "
-          SELECT
+          SELECT TOP 15
 --Id Articulo
     InvArticulo.Id AS IdArticulo,
 --Categoria Articulo
@@ -1057,7 +1244,7 @@
 
     if ($opcion == 'Articulos dolarizados') {
       $sql = "
-        SELECT
+        SELECT TOP 15
 --Id Articulo
     InvArticulo.Id AS IdArticulo,
 --Categoria Articulo
