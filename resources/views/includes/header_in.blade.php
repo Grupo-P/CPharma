@@ -1619,6 +1619,29 @@
 ?>
 <!-- VENTAS AL MAYOR -->
 <!-------------------------------------------------------------------------------->
+<!-- CONTRASEDE -->
+<?php
+  if(Auth::user()->departamento == 'CONTRASEDE'){
+?>
+  <div class="btn-group navbar-brand">
+    <button type="button" class="btn btn-outline-info dropdown-toggle textoI" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      <i class="fas fa-user-cog"></i> Contrasede
+    </button>
+    <div class="dropdown-menu">
+      <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('/traslado?Tipo=0') }}">
+          <span data-feather="home"></span>
+          <i class="fas fa-people-carry"></i>
+          Traslado<span class="sr-only">(current)</span>
+        </a>
+      </li>
+    </div>
+  </div>
+<?php
+  }
+?>
+<!-- CONTRASEDE -->
+<!-------------------------------------------------------------------------------->
 <!-- DEVELOPER -->
 <?php
   if(
