@@ -284,10 +284,10 @@ class TrasladoController extends Controller
                     $detalleNew->cantidad = $reclamo['cantidad'];
                     $detalleNew->costo_unit_bs_sin_iva = $detalleOld->costo_unit_bs_sin_iva;
                     $detalleNew->costo_unit_usd_sin_iva = $detalleOld->costo_unit_usd_sin_iva;
-                    $detalleNew->total_imp_bs = $detalleOld->total_imp_bs;
-                    $detalleNew->total_imp_usd = $detalleOld->total_imp_usd;
-                    $detalleNew->total_bs = ((float) $detalleOld->costo_unit_bs_sin_iva + (float) $detalleOld->total_imp_bs) * (float) $reclamo['cantidad'];
-                    $detalleNew->total_usd = ((float) $detalleOld->costo_unit_usd_sin_iva + (float) $detalleOld->total_imp_usd) * (float) $reclamo['cantidad'];
+                    $detalleNew->total_imp_bs = ($detalleOld->gravado == 'SI') ? (((float) $reclamo['cantidad'] * (float) $detalleOld->costo_unit_bs_sin_iva) * Impuesto) - ((float) $reclamo['cantidad'] * (float) $detalleOld->costo_unit_bs_sin_iva) : '-';
+                    $detalleNew->total_imp_usd = ($detalleOld->gravado == 'SI') ? (((float) $reclamo['cantidad'] * (float) $detalleOld->costo_unit_usd_sin_iva) * Impuesto) - (float) $reclamo['cantidad'] * (float) $detalleOld->costo_unit_usd_sin_iva : '-';
+                    $detalleNew->total_bs = ($detalleOld->gravado == 'SI') ? (float) $detalleNew->total_imp_bs + ((float) $reclamo['cantidad'] * (float) $detalleOld->costo_unit_bs_sin_iva) : ((float) $reclamo['cantidad'] * (float) $detalleOld->costo_unit_bs_sin_iva);
+                    $detalleNew->total_usd = ($detalleOld->gravado == 'SI') ? (float) $detalleNew->total_imp_usd + ((float) $reclamo['cantidad'] * (float) $detalleOld->costo_unit_usd_sin_iva) : ((float) $reclamo['cantidad'] * (float) $detalleOld->costo_unit_usd_sin_iva);
                     $detalleNew->save();
                 }
             }
