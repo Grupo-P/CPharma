@@ -137,8 +137,7 @@
       <thead class="center">
         <th class="bg-success text-white border border-white"><h4>CÓDIGO DE BARRA</h4></th>
         <th class="bg-success text-white border border-white"><h4>DESCRIPCIÓN</h4></th>
-        <th class="bg-success text-white border border-white"><h4>BSS</h4></th>
-        <th class="bg-success text-white border border-white"><h4>BSD</h4></th>
+        <th class="bg-success text-white border border-white"><h4>BS</h4></th>
         <?php
           if (_ConsultorDolar_ == "SI") {
            echo '<th class="bg-success text-white border border-white"><h4>'.SigDolarPublico.'</h4></th>';
@@ -152,9 +151,6 @@
           </td>
           <td align="center" class="text-danger">
             <h4><b><p id="PDescripScan"></p></b></h4>
-          </td>
-          <td align="center" class="text-danger">
-            <h4><b><p id="PPrecioScan"></p></b></h4>
           </td>
           <td align="center" class="text-danger">
             <h4><b><p id="PPrecioDigitalScan"></p></b></h4>
@@ -188,8 +184,7 @@
         <th class="bg-info text-white border border-white"><h5>Código de barra</h5></th>
         <th class="bg-info text-white border border-white"><h5>Descripción</h5></th>
         <th class="bg-info text-white border border-white"><h5><?php echo SigDolarPublico; ?></h5></th>
-        <th class="bg-info text-white border border-white"><h5>BsS</h5></th>
-        <th class="bg-info text-white border border-white"><h5>BsD</h5></th>
+        <th class="bg-info text-white border border-white"><h5>Bs</h5></th>
       </thead>
       <tbody id="bodySugerido"></tbody>
     </table>
@@ -198,7 +193,7 @@
       if (_ConsultorDolar_ == "SI") {
        echo ' <div id="DivTasa" style="width: 100%" class="text-center">
           <label id="TasaVenta" class="text-center" style="font-size:1.5rem">
-            <strong>Tasa del dia: '.SigVe.' '.number_format($TasaVenta,2,"," ,"." ).' / Bs.D '.number_format(precioReconversion($TasaVenta, 'BSD'),2,"," ,"." ).'</strong>
+            <strong>Tasa del dia: '.SigVe.' '.number_format(precioReconversion($TasaVenta, 'BSD'),2,"," ,"." ).'</strong>
           </label>
           <br>
           <label class="text-danger text-center">Nuestra tasa esta sujeta a cambios sin previo aviso</label>
@@ -230,7 +225,6 @@
             <th class="align-middle bg-success text-center text-white border border-default p-3">CÓDIGO DE BARRA</th>
             <th class="align-middle bg-success text-center text-white border border-default p-3">DESCRIPCIÓN</th>
             <th class="align-middle bg-success text-center text-white border border-default p-3">BS</th>
-            <th class="align-middle bg-success text-center text-white border border-default p-3">BS.D</th>
             <th class="align-middle bg-success text-center text-white border border-default p-3"><?php echo SigDolarPublico; ?></th>
             <th class="align-middle bg-success text-center text-white border border-default p-3">FECHA Y HORA</th>
           </thead>
@@ -240,7 +234,6 @@
               <tr>
                 <td class="align-middle border border-success p-3"><b><?php echo $row['codigoBarra']; ?></b></td>
                 <td class="align-middle border border-success p-3"><b><?php echo $row['descripcion']; ?></b></td>
-                <td class="align-middle border border-success p-3"><b><?php echo number_format(precioReconversion($row['precio_bs'], 'BSS'), 2, ',', '.'); ?></b></td>
                 <td class="align-middle border border-success p-3"><b><?php echo number_format(precioReconversion($row['precio_d'], 'BSD'), 2, ',', '.'); ?></b></td>
                 <td class="align-middle border border-success p-3"><b><?php echo $row['precio_ds']; ?></b></td>
                 <td class="align-middle border border-success p-3"><b><?php echo $row['fecha']; ?></b></td>
@@ -373,9 +366,7 @@
               nuevaFila += '</div>';
 
               nuevaFila += '<div class="carousel-caption d-none d-md-block h-25 w-100" style="right: 0; left: 0; background-color:rgba(0, 0, 0,0.6)">';
-              nuevaFila += '<h2 class="text-white">Bs.S '+precio+' / <?php echo SigDolarPublico; ?>' + precioDolar + '</h2>';
-
-              nuevaFila += '<h2 class="text-white">Bs.D '+precioDigital+'</h2>';
+              nuevaFila += '<h2 class="text-white">Bs. '+precioDigital+' / <?php echo SigDolarPublico; ?>' + precioDolar + '</h2>';
               nuevaFila += '<h4 class="text-white">'+descripcion+'</h4>';
               nuevaFila += '</div>';
               nuevaFila += '</div>';
@@ -451,7 +442,7 @@
               TasaVenta = data;
               TasaVentaMostrar = formateoPrecio(precioReconversion(TasaVenta, 'BSS'),2);
               TasaVentaMostrarDigital = formateoPrecio(precioReconversion(TasaVenta, 'BSD'),2);
-              $('#TasaVenta').html('<strong>Tasa del dia: Bs.S '+TasaVentaMostrar+' / Bs.D '+TasaVentaMostrarDigital+'</strong>');
+              $('#TasaVenta').html('<strong>Tasa del dia: Bs. '+TasaVentaMostrarDigital+'</strong>');
               $('#DivTasa').show();
             }
            });
@@ -465,13 +456,12 @@
                 data = JSON.parse(data);
 
               precio = formateoPrecio(precioReconversion(data.precio, 'BSS'),2);
-              $('#PPrecioScan').html('BsS. '+precio);
               //const TasaVentaD = eval(<?php /*echo $TasaVenta*/ ?>);
               precioDolar = formateoPrecio(data.precio/TasaVenta,2);
               $('#PPrecioDolarScan').html('<?php echo SigDolarPublico; ?>. '+precioDolar);
 
               precioDigital = formateoPrecio(parseFloat(precioReconversion(data.precio, 'BSD')), 2);
-              $('#PPrecioDigitalScan').html('BsD. '+precioDigital);
+              $('#PPrecioDigitalScan').html('Bs. '+precioDigital);
 
               for (var i = 0; i <= $('#ultimasConsultasTbody').find('tr').length - 1; i++) {
                 console.log($('#ultimasConsultasTbody').find('tr').eq(i).find('td').eq(0).html());
@@ -490,7 +480,6 @@
                 <tr>
                   <td class="border border-success p-3"><b>${ArrJsCB[indiceCodBarScan]}</b></td>
                   <td class="border border-success p-3"><b>${ArrJs[indiceScanDesc]}</b></td>
-                  <td class="border border-success p-3"><b>${precio}</b></td>
                   <td class="border border-success p-3"><b>${precioDigital}</b></td>
                   <td class="border border-success p-3"><b>${precioDolar}</b></td>
                   <td class="border border-success p-3"><b>${moment().format('DD/MM/YYYY hh:mm A')}</b></td>
@@ -536,7 +525,6 @@
                 while (i<limite && i<=limiteRespuesta){
                   var precioE = formateoPrecio(respuesta[i]['Precio']/TasaVenta,2);
                   var precioI = formateoPrecio(precioReconversion(respuesta[i]['Precio'], 'BSS'),2);
-                  var precioD = formateoPrecio(precioReconversion(respuesta[i]['Precio'],'BSD'),2);
 
                   /*Armado Fila PCodBarrSug*/
                   nuevaFila += '<td align="center" class="text-black">';
@@ -551,10 +539,7 @@
                   nuevaFila += '<h4><b><p><?php echo SigDolarPublico; ?> '+precioE+'</p></b></h4>';
                   nuevaFila += '</td>';
                   nuevaFila += '<td align="center" class="text-black">';
-                  nuevaFila += '<h4><b><p>BsS. '+precioI+'</p></b></h4>';
-                  nuevaFila += '</td>';
-                  nuevaFila += '<td align="center" class="text-black">';
-                  nuevaFila += '<h4><b><p>BsD. '+precioD+'</p></b></h4>';
+                  nuevaFila += '<h4><b><p>Bs. '+precioDigital+'</p></b></h4>';
                   nuevaFila += '</td>';
                   nuevaFila += '</tr>';
                   /*Ingreso de la fila a la tabla*/

@@ -1735,10 +1735,13 @@
             case 'Compras por archivo':
                 $ruta = '/reporte46';
             break;
-            case 'Crude de aplicación de consultas':
+            case 'Cruce de aplicación de consultas':
                 $ruta = '/reporte47';
             break;
             case 'Cambio de precios':
+                $ruta = '/reporte48';
+            break;
+            case 'Catálogo de droguerías':
                 $ruta = '/reporte48';
             break;
             default:
@@ -1895,6 +1898,9 @@
             break;
             case 48:
                 $nombre = 'Cambio de precios';
+            break;
+            case 50:
+                $nombre = 'Catálogo de droguerías';
             break;
             default:
                 $nombre = 'Reporte desconocido';
@@ -2596,10 +2602,6 @@
                                                         <td colspan="2" style="color:red;text-align: center">
                                                             Precio Antes:
 
-                                                            BS.S <del>'.number_format (precioReconversion($PrecioAyer, 'BSS'),2,"," ,"." ).'</del>
-
-                                                            /
-
                                                             ' . SigVe . ' <del>'.number_format (precioReconversion($PrecioAyer, 'BSD'),2,"," ,"." ).'</del>
                                                         </td>
                                                     </tr>
@@ -2622,7 +2624,7 @@
                                             }
                                         }
 
-                                    $precio = ($Dolarizado == 'SI') ? $moneda.' '.number_format ($PrecioHoy,2,"," ,"." ) : ' Bs.S '.number_format (precioReconversion($PrecioHoy, 'BSS'),2,"," ,"." );
+                                    $precio = ($Dolarizado == 'SI') ? $moneda.' '.number_format ($PrecioHoy,2,"," ,"." ) : ' '.SigVe.' '.number_format (precioReconversion($PrecioHoy, 'BS'),2,"," ,"." );
 
                                     echo'
                                     <tr>
@@ -2631,14 +2633,13 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td style="text-align: right" class="rowDer rowDerA aumento">
+                                        <td style="text-align: center" class="rowDer rowDerA aumento">
                                             <label style="margin-right:10px;'.$tam_dolar.'">
                                                 <strong>
                                                 '.$precio.'
                                                 </strong>
                                             </label>
                                         </td>
-                                        '.$bolivarDigital.'
                                     </tr>
                                     '.$unidadMinima.'
                                     <tr>
@@ -2776,7 +2777,7 @@
                             <td class="derecha rowDer rowDerA aumento">
                                 <label style="margin-right:10px;'.$tam_dolar.'">
                                     <strong>
-                                    BS.D '.number_format (precioReconversion($PrecioHoy, 'BSD'),2,"," ,"." ).'
+                                    Bs. '.number_format (precioReconversion($PrecioHoy, 'BSD'),2,"," ,"." ).'
                                     </strong>
                                 </label>
                             </td>
@@ -2827,14 +2828,13 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td style="text-align: right" class="rowDer rowDerA aumento">
+                                    <td style="text-align: center" class="rowDer rowDerA aumento">
                                         <label style="margin-right:10px;'.$tam_dolar.'">
                                             <strong>
                                             '.$precio.'
                                             </strong>
                                         </label>
                                     </td>
-                                    '.$bolivarDigital.'
                                 </tr>
                                 '.$unidadMinima.'
                                 <tr>

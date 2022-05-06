@@ -3,7 +3,7 @@
 /***************************** CONSTANTES GLOBALES *******************************/
 define("SigDolar","$");
 define("SigDolarPublico","REF"); // Solo afecta etiquetas y consultor
-define("SigVe","Bs.D");
+define("SigVe","Bs.");
 define("Utilidad",0.77);
 define("Impuesto",1.16);
 define("DecimalCorrida",0.01); //Decimal que se concatena al final a los precio en las corridas
