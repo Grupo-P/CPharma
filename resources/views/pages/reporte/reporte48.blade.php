@@ -359,9 +359,9 @@
 
         $response = json_decode($request->getBody(), true);
 
-        $token = $response['Token'];
+        $token = $response['token'];
 
-        $request = $client->request('GET', 'http://www.cobeca.com:8080/pedidofl/api/Articulos', [
+        $request = $client->request('POST', 'http://www.cobeca.com:8080/pedidofl/api/Articulos', [
             'headers' => [
                 'Autorizacion' => $token,
             ],
@@ -370,7 +370,7 @@
             ]
         ]);
 
-        $cobeca = json_decode($request->getBody(), true);
+        $cobeca = json_decode($request->getBody(), true)['articulos'];
 
         $cobecaFechaActualizacion = date('d/m/Y h:i A');
 
@@ -379,7 +379,7 @@
         fclose($fopen);
     } catch (Exception $exception) {
         $cobeca = file_get_contents('cobeca.json');
-        $cobeca = json_decode($cobeca, true);
+        $cobeca = json_decode($cobeca, true)['articulos'];
 
         $cobecaFechaActualizacion = date('d/m/Y h:i A', filemtime('cobeca.json'));
     }
@@ -1024,7 +1024,7 @@
   function R48_Q_CambioPrecios($opcion) {
     if ($opcion == 'Articulos no dolarizados') {
       $sql = "
-          SELECT TOP 15
+          SELECT
 --Id Articulo
     InvArticulo.Id AS IdArticulo,
 --Categoria Articulo
@@ -1244,7 +1244,7 @@
 
     if ($opcion == 'Articulos dolarizados') {
       $sql = "
-        SELECT TOP 15
+        SELECT
 --Id Articulo
     InvArticulo.Id AS IdArticulo,
 --Categoria Articulo
