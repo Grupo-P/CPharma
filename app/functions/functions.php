@@ -1896,16 +1896,14 @@
             case 47:
                 $nombre = 'Cruce de aplicación de consultas';
             break;
-<<<<<<< HEAD
-            case 49:
-                $nombre = 'Reposicion de Inventario';
-=======
             case 48:
                 $nombre = 'Cambio de precios';
+                break;
+            case 49:
+                $nombre = 'Reposicion de Inventario';
             break;
             case 50:
                 $nombre = 'Catálogo de droguerías';
->>>>>>> ndelgado
             break;
             default:
                 $nombre = 'Reporte desconocido';
