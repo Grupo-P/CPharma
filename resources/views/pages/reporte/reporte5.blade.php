@@ -115,7 +115,7 @@
             return $('.' + elemento).hide();
         }
 
-        campos = ['codigo', 'codigo_barra', 'descripcion', 'tipo', 'existencia', 'dolarizado', 'gravado', 'clasificacion', 'unidades_vendidas', 'total_venta', 'ultima_venta', 'dias_falla', 'ultimo_lote', 'ultima_compra', 'ultimo_proveedor', 'sede1', 'sede2', 'sede3'];
+        campos = ['codigo', 'codigo_barra', 'descripcion', 'tipo', 'existencia', 'dolarizado', 'gravado', 'clasificacion', 'unidades_vendidas', 'total_venta', 'ultima_venta', 'dias_falla', 'ultimo_lote', 'ultima_compra', 'ultimo_proveedor', 'sede1', 'sede2', 'sede3', 'traslado_transito'];
 
         function mostrar_todas(that) {
             if (that.checked) {
@@ -328,6 +328,11 @@
                 </div>
 
                 <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, \'traslado_transito\')" name="traslado_transito" checked>
+                    Traslado en transito
+                </div>
+
+                <div class="form-group">
                     <input type="checkbox" onclick="mostrar_ocultar(this, \'sede1\')" name="sede1" checked>
                     Sede 1
                 </div>
@@ -372,8 +377,9 @@
           <th scope="col" class="ultima_venta CP-sticky">Ultima Venta</th>
           <th scope="col" class="dias_falla CP-sticky">Dias en Falla</th>
           <th scope="col" class="ultimo_lote CP-sticky">Ultimo Lote</th>
-          <th scope="col" class="ultima_compra CP-sticky bg-warning">Ultima Compra</th>
-          <th scope="col" class="ultimo_proveedor CP-sticky">Ultimo Proveedor</th>';
+          <th scope="col" class="ultima_compra CP-sticky">Ultima Compra</th>
+          <th scope="col" class="ultimo_proveedor CP-sticky">Ultimo Proveedor</th>
+          <th scope="col" class="traslado_transito CP-sticky bg-warning">Traslado en transito</th>';
 
               if (isset($_GET['SEDE']) & ($_GET['SEDE'] == 'FAU' || $_GET['SEDE'] == 'DBs')) {
                 echo '<th scope="col" class="sede1 CP-sticky">Descripción FTN</th>
@@ -422,6 +428,9 @@
       <tbody>
     ';
     $contador = 1;
+
+    $traslado = Traslado_Transito();
+
     while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
       $IdArticulo = $row["InvArticuloId"];
       $UnidadesVendidas = intval($row["TotalUnidadesVendidas"]);
@@ -506,6 +515,10 @@
         .$UltimoProveedor.
       '</a>
       </td>';
+
+      $transito = in_array($CodigoBarra, $traslado) ? 'Si' : 'No';
+
+      echo '<td class="text-center traslado_transito bg-warning">'.$transito.'</td>';
 
       if (isset($_GET['SEDE']) & ($_GET['SEDE'] == 'FAU' || $_GET['SEDE'] == 'DBs')) {
         if ($conectividad_ftn == 1) {

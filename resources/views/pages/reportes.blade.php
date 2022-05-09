@@ -1116,30 +1116,51 @@
     </div>
 
 	<div class="card-deck">
-    <?php
+		<?php
+          if(in_array(48,$reportes)){
+        ?>
+            <div class="card border-warning mb-3" style="width: 14rem;">
+            <div class="card-body text-left bg-warning">
+                <h5 class="card-title">
+                    <span class="card-text text-white">
+                        Cambio de precios
+                    </span>
+                </h5>
+            </div>
+            <div class="card-footer bg-transparent border-warning text-right">
+                <form action="/reporte48/" style="display: inline;">
+                    @csrf
+                    <input id="SEDE" name="SEDE" type="hidden" value="<?php print_r($_GET['SEDE']); ?>">
+                    <button type="submit" name="Reporte" role="button" class="btn btn-outline-warning btn-sm"></i>Visualizar</button>
+                    </form>
+            </div>
+            </div>
+        <?php
+            }
+        ?>
+
+    	<?php
 		  if(in_array(49,$reportes)){
 		?>
-			<div class="card border-warning mb-3" style="width: 14rem;">
-	  		<div class="card-body text-left bg-warning">
+			<div class="card border-secondary mb-3" style="width: 14rem;">
+	  		<div class="card-body text-left bg-secondary">
 	    		<h5 class="card-title">
 		    		<span class="card-text text-white">
 						Reposicion de Inventario
 		    		</span>
 	    		</h5>
 	  		</div>
-		  	<div class="card-footer bg-transparent border-warning text-right">
+		  	<div class="card-footer bg-transparent border-secondary text-right">
 		  		<form action="/reporte49/" style="display: inline;">
 				    @csrf
 				    <input id="SEDE" name="SEDE" type="hidden" value="<?php print_r($_GET['SEDE']); ?>">
-				    <button type="submit" name="Reporte" role="button" class="btn btn-outline-warning btn-sm"></i>Visualizar</button>
+				    <button type="submit" name="Reporte" role="button" class="btn btn-outline-secondary btn-sm"></i>Visualizar</button>
 					</form>
 		  	</div>
 			</div>
 		<?php
 			}
 		?>                
-    </div>
-
-
+    </div>    
 <!-------------------------------------------------------------------------------->
 @endsection

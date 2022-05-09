@@ -41,6 +41,22 @@
     .autocomplete-items div:hover {background-color:#e9e9e9;}
     .autocomplete-active {background-color:DodgerBlue !important; color:#fff;}
   </style>
+
+  <script>
+      $(document).ready(function () {
+        $('.no-procesados').hide();
+
+        $('.procesados-btn').click(function () {
+            $('.no-procesados').hide();
+            $('.procesados').show();
+        });
+
+        $('.no-procesados-btn').click(function () {
+            $('.procesados').hide();
+            $('.no-procesados').show();
+        });
+      });
+  </script>
 @endsection
 
 
@@ -520,63 +536,74 @@
     ';
 
     echo '
-      <table class="table table-striped table-bordered col-12 mt-5">
-        <thead class="thead-dark">
-          <tr>
-            <th scope="col" class="CP-sticky">Procesados</th>
-          </tr>
-        </thead>
-      </table>
+        <div class="text-center">
+            <button class="btn btn-outline-success procesados-btn"> <i class="fa fa-check"></i> Procesados</button>
+            <button class="btn btn-outline-danger no-procesados-btn"> <i class="fa fa-times"></i> No procesados</button>
+        </div>
+    ';
 
-      <table class="table table-striped table-bordered col-12 sortable" id="myTable">
-        <thead class="thead-dark">
-          <tr>
-            <th scope="col" class="CP-sticky">Nro.</th>
-            <th scope="col" class="CP-sticky">Codigo Excel</th>
-            <th scope="col" class="CP-sticky">Descripcion Excel</th>
-            <th scope="col" class="CP-sticky">Descripcion Farmacia</th>
-            <th scope="col" class="CP-sticky">Existencia Excel</th>
-            <th scope="col" class="CP-sticky">Existencia</th>
-            <th scope="col" class="CP-sticky">Costo Excel</th>
-            <th scope="col" class="CP-sticky">Precio '.SigVe.'</th>
-            <th scope="col" class="CP-sticky">Precio '.SigDolar.'</th>
-            <th scope="col" class="CP-sticky">Ultima Venta</th>
-            <th scope="col" class="CP-sticky">Ultimo proveedor</th>
-          </tr>
-        </thead>
+    echo '
+      <div class="procesados">
+          <table class="table table-striped table-bordered col-12 mt-5">
+            <thead class="thead-dark">
+              <tr>
+                <th scope="col" class="CP-sticky">Procesados</th>
+              </tr>
+            </thead>
+          </table>
 
-        <tbody>
-          '.$procesados.'
-        </tbody>
-      </table>
+          <table class="table table-striped table-bordered col-12 sortable" id="myTable">
+            <thead class="thead-dark">
+              <tr>
+                <th scope="col" class="CP-sticky">Nro.</th>
+                <th scope="col" class="CP-sticky">Codigo Excel</th>
+                <th scope="col" class="CP-sticky">Descripcion Excel</th>
+                <th scope="col" class="CP-sticky">Descripcion Farmacia</th>
+                <th scope="col" class="CP-sticky">Existencia Excel</th>
+                <th scope="col" class="CP-sticky">Existencia</th>
+                <th scope="col" class="CP-sticky">Costo Excel</th>
+                <th scope="col" class="CP-sticky">Precio '.SigVe.'</th>
+                <th scope="col" class="CP-sticky">Precio '.SigDolar.'</th>
+                <th scope="col" class="CP-sticky">Ultima Venta</th>
+                <th scope="col" class="CP-sticky">Ultimo proveedor</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              '.$procesados.'
+            </tbody>
+          </table>
+      </div>
     ';
 
 
 
     echo '
-      <table class="table table-striped table-bordered col-12 mt-5">
-        <thead class="thead-dark">
-          <tr>
-            <th scope="col" class="CP-sticky">No procesados</th>
-          </tr>
-        </thead>
-      </table>
+      <div class="no-procesados">
+          <table class="table table-striped table-bordered col-12 mt-5">
+            <thead class="thead-dark">
+              <tr>
+                <th scope="col" class="CP-sticky">No procesados</th>
+              </tr>
+            </thead>
+          </table>
 
-      <table class="table table-striped table-bordered col-12 sortable" id="myTable">
-        <thead class="thead-dark">
-          <tr>
-            <th scope="col" class="CP-sticky">Nro.</th>
-            <th scope="col" class="CP-sticky">Codigo Excel</th>
-            <th scope="col" class="CP-sticky">Descripcion Excel</th>
-            <th scope="col" class="CP-sticky">Costo Excel</td>
-            <th scope="col" class="CP-sticky">Existencia Excel</td>
-            <th scope="col" class="CP-sticky">Causa</td>
-          </tr>
-        </thead>
-        <tbody>
-            '.$noProcesados.'
-        </tbody>
-      </table>
+          <table class="table table-striped table-bordered col-12 sortable" id="myTable">
+            <thead class="thead-dark">
+              <tr>
+                <th scope="col" class="CP-sticky">Nro.</th>
+                <th scope="col" class="CP-sticky">Codigo Excel</th>
+                <th scope="col" class="CP-sticky">Descripcion Excel</th>
+                <th scope="col" class="CP-sticky">Costo Excel</td>
+                <th scope="col" class="CP-sticky">Existencia Excel</td>
+                <th scope="col" class="CP-sticky">Causa</td>
+              </tr>
+            </thead>
+            <tbody>
+                '.$noProcesados.'
+            </tbody>
+          </table>
+      </div>
     ';
   }
 ?>

@@ -48,6 +48,57 @@
       color: #ffffff;
     }
   </style>
+
+  <script>
+        function mostrar_ocultar(that, elemento) {
+            if (that.checked) {
+                return $('.' + elemento).show();
+            }
+
+            return $('.' + elemento).hide();
+        }
+
+        campos = ['codigo', 'codigo_barra', 'descripcion', 'existencia', 'clasificacion', 'precio', 'gravado', 'utilidad_configurada', 'troquel', 'marca', 'categoria', 'subcategoria', 'dolarizado', 'tasa_actual', 'precio_ds', 'venta_diaria', 'dias_restantes', 'ultima_venta', 'ultimo_lote', 'unidad_minima', 'ultimo_conteo', 'ultimo_precio', 'transito', 'traslado_transito'];
+
+        function mostrar_todas(that) {
+            if (that.checked) {
+                for (var i = campos.length - 1; i >= 0; i--) {
+                    $('.' + campos[i]).show();
+                    $('[name='+campos[i]+']').prop('checked', true);
+                }
+            } else {
+                for (var i = campos.length - 1; i >= 0; i--) {
+                    $('.' + campos[i]).hide();
+                    $('[name='+campos[i]+']').prop('checked', false);
+                }
+            }
+        }
+
+
+        function mostrar_ocultar2(that, elemento) {
+            if (that.checked) {
+                return $('.' + elemento).show();
+            }
+
+            return $('.' + elemento).hide();
+        }
+
+        campos2 = ['proveedor', 'factura', 'fecha_documento', 'fecha_registro', 'dias_llegada', 'fecha_vencimiento', 'lote_fabricante', 'vida_util', 'dias_vencer', 'cantidad_recibida', 'saldo', 'costo_bruto', 'tasa_historico_documento', 'tasa_historico_registro', 'costo_bruto_documento', 'costo_bruto_registro', 'costo_divisa_documento', 'costo_divisa_registro', 'precio_lote', 'precio_lote_historico', 'precio_lote_ds', 'operador'];
+
+        function mostrar_todas2(that) {
+            if (that.checked) {
+                for (var i = campos2.length - 1; i >= 0; i--) {
+                    $('.' + campos2[i]).show();
+                    $('[name='+campos2[i]+']').prop('checked', true);
+                }
+            } else {
+                for (var i = campos2.length - 1; i >= 0; i--) {
+                    $('.' + campos2[i]).hide();
+                    $('[name='+campos2[i]+']').prop('checked', false);
+                }
+            }
+        }
+  </script>
 @endsection
 
 @section('content')
@@ -244,68 +295,213 @@
     </div>
     <br/>
 
+    <div class="modal fade" id="ver_campos" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Mostrar u ocultar columnas</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="form-group">
+                <input type="checkbox" onclick="mostrar_ocultar(this, \'codigo\')" name="codigo" checked>
+                Código
+            </div>
+
+            <div class="form-group">
+                <input type="checkbox" onclick="mostrar_ocultar(this, \'codigo_barra\')" name="codigo_barra" checked>
+                Código de barra
+            </div>
+
+            <div class="form-group">
+                <input type="checkbox" onclick="mostrar_ocultar(this, \'descripcion\')" name="descripcion" checked>
+                Descripción
+            </div>
+
+            <div class="form-group">
+                <input type="checkbox" onclick="mostrar_ocultar(this, \'existencia\')" name="existencia" checked>
+                Existencia
+            </div>
+
+            <div class="form-group">
+                <input type="checkbox" onclick="mostrar_ocultar(this, \'clasificacion\')" name="clasificacion" checked>
+                Clasificación
+            </div>
+
+            <div class="form-group">
+                <input type="checkbox" onclick="mostrar_ocultar(this, \'precio\')" name="precio" checked>
+                Precio
+            </div>
+
+            <div class="form-group">
+                <input type="checkbox" onclick="mostrar_ocultar(this, \'gravado\')" name="gravado" checked>
+                Gravado
+            </div>
+
+            <div class="form-group">
+                <input type="checkbox" onclick="mostrar_ocultar(this, \'utilidad_configurada\')" name="utilidad_configurada" checked>
+                Utilidad configurada
+            </div>
+
+            <div class="form-group">
+                <input type="checkbox" onclick="mostrar_ocultar(this, \'troquel\')" name="troquel" checked>
+                Troquel
+            </div>
+
+            <div class="form-group">
+                <input type="checkbox" onclick="mostrar_ocultar(this, \'marca\')" name="marca" checked>
+                Marca
+            </div>
+
+            <div class="form-group">
+                <input type="checkbox" onclick="mostrar_ocultar(this, \'categoria\')" name="categoria" checked>
+                Categoría
+            </div>
+
+            <div class="form-group">
+                <input type="checkbox" onclick="mostrar_ocultar(this, \'subcategoria\')" name="subcategoria" checked>
+                Subcategoría
+            </div>
+
+            <div class="form-group">
+                <input type="checkbox" onclick="mostrar_ocultar(this, \'dolarizado\')" name="dolarizado" checked>
+                Dolarizado
+            </div>
+
+            <div class="form-group">
+                <input type="checkbox" onclick="mostrar_ocultar(this, \'tasa_actual\')" name="tasa_actual" checked>
+                Tasa actual
+            </div>
+
+            <div class="form-group">
+                <input type="checkbox" onclick="mostrar_ocultar(this, \'precio_ds\')" name="precio_ds" checked>
+                Precio $
+            </div>
+
+            <div class="form-group">
+                <input type="checkbox" onclick="mostrar_ocultar(this, \'venta_diaria\')" name="venta_diaria" checked>
+                Venta diaria
+            </div>
+
+            <div class="form-group">
+                <input type="checkbox" onclick="mostrar_ocultar(this, \'dias_restantes\')" name="dias_restantes" checked>
+                Días restantes
+            </div>
+
+            <div class="form-group">
+                <input type="checkbox" onclick="mostrar_ocultar(this, \'ultima_venta\')" name="ultima_venta" checked>
+                Última venta
+            </div>
+
+            <div class="form-group">
+                <input type="checkbox" onclick="mostrar_ocultar(this, \'ultimo_lote\')" name="ultimo_lote" checked>
+                Último lote
+            </div>
+
+            <div class="form-group">
+                <input type="checkbox" onclick="mostrar_ocultar(this, \'unidad_minima\')" name="unidad_minima" checked>
+                Unidad mínima
+            </div>
+
+            <div class="form-group">
+                <input type="checkbox" onclick="mostrar_ocultar(this, \'ultimo_conteo\')" name="ultimo_conteo" checked>
+                Último conteo
+            </div>
+
+            <div class="form-group">
+                <input type="checkbox" onclick="mostrar_ocultar(this, \'ultimo_precio\')" name="ultimo_precio" checked>
+                Último precio
+            </div>
+
+            <div class="form-group">
+                <input type="checkbox" onclick="mostrar_ocultar(this, \'transito\')" name="transito" checked>
+                Transito
+            </div>
+
+            <div class="form-group">
+                <input type="checkbox" onclick="mostrar_ocultar(this, \'traslado_transito\')" name="traslado_transito" checked>
+                Traslado en transito
+            </div>
+
+            <div class="form-group">
+                <input type="checkbox" onclick="mostrar_todas(this)" name="Marcar todas" checked>
+                Marcar todas
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <h6 align="center"><a href="" data-toggle="modal" data-target="#ver_campos"><i class="fa fa-eye"></i> Mostrar u ocultar campos<a></h6>
+
     <table class="table table-striped table-bordered col-12 sortable">
       <thead class="thead-dark">
         <tr>
-          <th scope="col">Codigo</th>
-          <th scope="col">Codigo de barra</td>
-          <th scope="col">Descripcion</td>
-          <th scope="col">Existencia</td>
-          <th scope="col">Clasificacion</td>
-          <th scope="col">Precio</br>(Con IVA) '.SigVe.'</td>
-          <th scope="col">Gravado?</td>
-          <th scope="col">Utilidad Configurada</td>
-          <th scope="col">Troquel</td>
-          <th scope="col">Marca</td>
-          <th scope="col">Categoria</td>
-          <th scope="col">Subcategoria</td>
-          <th scope="col">Dolarizado?</td>
-          <th scope="col">Tasa actual '.SigVe.'</td>
-          <th scope="col">Precio en divisa</br>(Con IVA) '.SigDolar.'</td>
-          <th scope="col" class="bg-warning text-white">Venta diaria 15</th>
-          <th scope="col" class="bg-warning text-white">Días restantes 15</th>
-          <th scope="col">Ultima Venta</th>
-          <th scope="col" class="bg-warning text-white">Ultimo Lote</th>
-          <th scope="col">Unidad Minima</th>
-          <th scope="col">Ultimo Conteo</th>
-          <th scope="col">Ultimo Precio (Sin IVA) '.SigVe.'</th>
-          <th scope="col" class="bg-warning text-white">Transito</th>
+          <th class="codigo" scope="col">Codigo</th>
+          <th class="codigo_barra" scope="col">Codigo de barra</td>
+          <th class="descripcion" scope="col">Descripcion</td>
+          <th class="existencia" scope="col">Existencia</td>
+          <th class="clasificacion" scope="col">Clasificacion</td>
+          <th class="precio" scope="col">Precio</br>(Con IVA) '.SigVe.'</td>
+          <th class="gravado" scope="col">Gravado?</td>
+          <th class="utilidad_configurada" scope="col">Utilidad Configurada</td>
+          <th class="troquel" scope="col">Troquel</td>
+          <th class="marca" scope="col">Marca</td>
+          <th class="categoria" scope="col">Categoria</td>
+          <th class="subcategoria" scope="col">Subcategoria</td>
+          <th class="dolarizado" scope="col">Dolarizado?</td>
+          <th class="tasa_actual" scope="col">Tasa actual '.SigVe.'</td>
+          <th class="precio_ds" scope="col">Precio en divisa</br>(Con IVA) '.SigDolar.'</td>
+          <th scope="col" class="venta_diaria text-white">Venta diaria 15</th>
+          <th scope="col" class="dias_restantes text-white">Días restantes 15</th>
+          <th class="ultima_venta" scope="col">Ultima Venta</th>
+          <th class="ultimo_lote" scope="col" class="text-white">Ultimo Lote</th>
+          <th class="unidad_minima" scope="col">Unidad Minima</th>
+          <th class="ultimo_conteo" scope="col">Ultimo Conteo</th>
+          <th class="ultimo_precio" scope="col">Ultimo Precio (Sin IVA) '.SigVe.'</th>
+          <th scope="col" class="transito text-white">Transito</th>
+          <th scope="col" class="traslado_transito bg-warning text-white">Traslado en transito</th>
         </tr>
       </thead>
       <tbody>
     ';
     echo '<tr>';
-    echo '<td>'.$CodigoArticulo.'</td>';
-    echo '<td align="center">'.$CodigoBarra.'</td>';
+    echo '<td class="codigo">'.$CodigoArticulo.'</td>';
+    echo '<td align="center" class="codigo_barra">'.$CodigoBarra.'</td>';
     echo
-      '<td align="left" class="CP-barrido">
+      '<td align="left" class="CP-barrido descripcion">
       <a href="/reporte10?Descrip='.$Descripcion.'&Id='.$IdArticulo.'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
         .$Descripcion.
       '</a>
       </td>';
-    echo '<td align="center">'.intval($Existencia).'</td>';
-    echo '<td align="center"> '.$clasificacion.'</td>';
-    echo '<td align="center">'.number_format($Precio,2,"," ,"." ).'</td>';
-    echo '<td align="center">'.$Gravado.'</td>';
-    echo '<td align="center">'.number_format($Utilidad,2,"," ,"." ).' %</td>';
+    echo '<td class="existencia" align="center">'.intval($Existencia).'</td>';
+    echo '<td class="clasificacion" align="center"> '.$clasificacion.'</td>';
+    echo '<td class="precio" align="center">'.number_format($Precio,2,"," ,"." ).'</td>';
+    echo '<td class="gravado" align="center">'.$Gravado.'</td>';
+    echo '<td class="utilidad_configurada" align="center">'.number_format($Utilidad,2,"," ,"." ).' %</td>';
 
     if($TroquelAlmacen1!=NULL){
-      echo '<td align="center">'.number_format($TroquelAlmacen1,2,"," ,"." ).'</td>';
+      echo '<td class="troquel" align="center">'.number_format($TroquelAlmacen1,2,"," ,"." ).'</td>';
     }
     else if($TroquelAlmacen2!=NULL){
-      echo '<td align="center">'.number_format($TroquelAlmacen2,2,"," ,"." ).'</td>';
+      echo '<td class="troquel" align="center">'.number_format($TroquelAlmacen2,2,"," ,"." ).'</td>';
     }
     else{
-      echo '<td align="center"> - </td>';
+      echo '<td class="troquel" align="center"> - </td>';
     }
 
-    echo '<td align="center">'.$Marca.'</td>';
+    echo '<td class="marca" align="center">'.$Marca.'</td>';
 
-    echo '<td align="center">'.$categoria.'</td>';
+    echo '<td class="categoria" align="center">'.$categoria.'</td>';
 
-    echo '<td align="center">'.$subcategoria.'</td>';
+    echo '<td class="subcategoria" align="center">'.$subcategoria.'</td>';
 
-    echo '<td align="center">'.$Dolarizado.'</td>';
+    echo '<td class="dolarizado" align="center">'.$Dolarizado.'</td>';
 
     /*TASA DOLAR VENTA*/
     $Tasa = DB::table('tasa_ventas')->where('moneda', 'Dolar')->value('tasa');
@@ -313,13 +509,13 @@
     $Tasa = ($Tasa) ? $Tasa : 0;
 
     if($TasaActual!=0){
-      echo '<td align="center">'.number_format($TasaActual,2,"," ,"." ).'</td>';
+      echo '<td class="tasa_actual" align="center">'.number_format($TasaActual,2,"," ,"." ).'</td>';
       $PrecioDolar = $Precio/$Tasa;
-      echo '<td align="center">'.number_format($PrecioDolar,2,"," ,"." ).'</td>';
+      echo '<td class="precio_ds" align="center">'.number_format($PrecioDolar,2,"," ,"." ).'</td>';
     }
     else{
-      echo '<td align="center">0,00</td>';
-      echo '<td align="center">0,00</td>';
+      echo '<td class="tasa_actual" align="center">0,00</td>';
+      echo '<td class="precio_ds" align="center">0,00</td>';
     }
 
     $fechaInicioDiasCero = date_modify(date_create(), '-15day');
@@ -338,32 +534,32 @@
     $VentaDiariaQuiebre = FG_Venta_Diaria($row3['TotalUnidadesVendidas'],$RangoDiasQuiebre);
     $DiasRestantesQuiebre = FG_Dias_Restantes(intval($Existencia),$VentaDiariaQuiebre);
 
-    echo '<td align="center" class="bg-warning text-white">'.$VentaDiariaQuiebre.'</td>';
-    echo '<td align="center" class="bg-warning text-white">'.$DiasRestantesQuiebre.'</td>';
+    echo '<td align="center" class="venta_diaria text-white">'.$VentaDiariaQuiebre.'</td>';
+    echo '<td align="center" class="dias_restantes text-white">'.$DiasRestantesQuiebre.'</td>';
 
     if(!is_null($UltimaVenta)){
-      echo '<td align="center">'.$UltimaVenta->format('d-m-Y').'</td>';
+      echo '<td class="ultima_venta" align="center">'.$UltimaVenta->format('d-m-Y').'</td>';
     }
     else{
-      echo '<td align="center"> - </td>';
+      echo '<td class="ultima_venta" align="center"> - </td>';
     }
 
     if(!is_null($UltimoLote)){
-      echo '<td align="center" class="bg-warning text-white">'.$UltimoLote->format('d-m-Y').'</td>';
+      echo '<td align="center" class="ultimo_lote text-white">'.$UltimoLote->format('d-m-Y').'</td>';
     }
     else{
-      echo '<td align="center" class="bg-warning text-white"> - </td>';
+      echo '<td align="center" class="ultimo_lote text-white"> - </td>';
     }
 
-    echo '<td>'.$unidadminima.'</td>';
+    echo '<td class="unidad_minima">'.$unidadminima.'</td>';
 
-    echo '<td align="center">'.$ultimoConteo.'</td>';
+    echo '<td class="ultimo_conteo" align="center">'.$ultimoConteo.'</td>';
 
     if( ($Existencia==0) && (!is_null($UltimaVenta)) ){
-      echo '<td align="center">'.number_format($UltimoPrecio,2,"," ,"." ).'</td>';
+      echo '<td class="ultimo_precio" align="center">'.number_format($UltimoPrecio,2,"," ,"." ).'</td>';
     }
     else{
-      echo '<td align="center"> - </td>';
+      echo '<td class="ultimo_precio" align="center"> - </td>';
     }
 
     $sqlCuentaOrden = "SELECT COUNT(*) AS Cuenta FROM orden_compra_detalles WHERE id_articulo = '$IdArticulo' AND estatus = 'ACTIVO'";
@@ -398,7 +594,7 @@
 
     if($flag != true){
       echo'
-      <td class="bg-warning text-white" align="center">
+      <td class="transito  text-white" align="center">
           <form action="/ordenCompraDetalle/0" method="PRE" style="display: block; width:100%;" target="_blank">';
           echo'<input type="hidden" name="id_articulo" value="'.$IdArticulo.'">';
           echo'
@@ -407,41 +603,180 @@
       </tr>
       ';
     } else {
-        echo '<td class="bg-warning text-white"></td>';
+        echo '<td class="transito  text-white"></td>';
     }
+
+    $traslado = Traslado_Transito($CodigoBarra);
+    $transito = in_array($CodigoBarra, $traslado) ? 'Si' : 'No';
+    echo '<td class="text-center traslado_transito bg-warning">'.$transito.'</td>';
 
     echo '
       </tr>
       </tbody>
     </table>';
 
+    echo '<h6 align="center"><a href="" data-toggle="modal" data-target="#ver_campos_2"><i class="fa fa-eye"></i> Mostrar u ocultar campos<a></h6>';
+
+    echo '
+        <div class="modal fade" id="ver_campos_2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Mostrar u ocultar columnas</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar2(this, \'proveedor\')" name="proveedor" checked>
+                    Proveedor
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar2(this, \'factura\')" name="factura" checked>
+                    Número factura
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar2(this, \'fecha_documento\')" name="fecha_documento" checked>
+                    Fecha documento
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar2(this, \'fecha_registro\')" name="fecha_registro" checked>
+                    Fecha registro
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar2(this, \'dias_llegada\')" name="dias_llegada" checked>
+                    Días llegada
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar2(this, \'fecha_vencimiento\')" name="fecha_vencimiento" checked>
+                    Fecha vencimiento
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar2(this, \'lote_fabricante\')" name="lote_fabricante" checked>
+                    Lote fabricante
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar2(this, \'vida_util\')" name="vida_util" checked>
+                    Vida útil
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar2(this, \'dias_vencer\')" name="dias_vencer" checked>
+                    Días para vencer
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar2(this, \'cantidad_recibida\')" name="cantidad_recibida" checked>
+                    Cantidad recibida
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar2(this, \'saldo\')" name="saldo" checked>
+                    Saldo
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar2(this, \'costo_bruto\')" name="costo_bruto" checked>
+                    Costo bruto (Sin IVA) '.SigVe.'
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar2(this, \'tasa_historico_documento\')" name="tasa_historico_documento" checked>
+                    Tasa en histórico '.SigVe.' (fecha documento)
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar2(this, \'tasa_historico_registro\')" name="tasa_historico_registro" checked>
+                    Tasa en histórico '.SigVe.' (fecha registro)
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar2(this, \'costo_bruto_registro\')" name="costo_bruto_registro" checked>
+                    Costo bruto HOY (Sin IVA) '.SigVe.' (fecha registro)
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar2(this, \'costo_bruto_documento\')" name="costo_bruto_documento" checked>
+                    Costo bruto HOY (Sin IVA) '.SigVe.' (fecha documento)
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar2(this, \'costo_divisa_registro\')" name="costo_divisa_registro" checked>
+                    Costo en divisa (Sin IVA) '.SigDolar.' $ (fecha registro)
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar2(this, \'costo_divista_documento\')" name="costo_divista_documento" checked>
+                    Costo en divisa (Sin IVA) '.SigDolar.' $ (fecha documento)
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar2(this, \'precio_lote\')" name="precio_lote" checked>
+                    Precio lote
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar2(this, \'precio_lote_historico\')" name="precio_lote_historico" checked>
+                    Precio lote histórico
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar2(this, \'precio_lote_ds\')" name="precio_lote_ds" checked>
+                    Precio lote $
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar2(this, \'operador\')" name="operador" checked>
+                    Operador
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_todas2(this)" name="Marcar todas" checked>
+                    Marcar todas
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+              </div>
+            </div>
+          </div>
+        </div>';
+
     echo'
     <table class="table table-striped table-bordered col-12 sortable" id="myTable">
         <thead class="thead-dark">
           <tr>
             <th scope="col" class="CP-sticky">#</th>
-            <th scope="col" class="CP-sticky">Proveedor</th>
-            <th scope="col" class="CP-sticky">N° Factura</th>
-            <th scope="col" class="CP-sticky">Fecha de documento</th>
-            <th scope="col" class="CP-sticky">Fecha de registro</th>
-            <th scope="col" class="CP-sticky bg-warning text-dark">Días llegada</th>
-            <th scope="col" class="CP-sticky">Fecha de vencimiento</th>
-            <th scope="col" class="CP-sticky bg-warning text-dark">Lote fabriante</th>
-            <th scope="col" class="CP-sticky">Vida util<br>(Dias)</th>
-            <th scope="col" class="CP-sticky">Dias para vencer<br>(Dias)</th>
-            <th scope="col" class="CP-sticky">Cantidad recibida</th>
-            <th scope="col" class="CP-sticky bg-warning text-dark">Saldo</th>
-            <th scope="col" class="CP-sticky">Costo bruto</br>(Sin IVA) '.SigVe.'</th>
-            <th scope="col" class="CP-sticky">Tasa en historico '.SigVe.'</br>(fecha documento)</th>
-            <th scope="col" class="CP-sticky">Tasa en historico '.SigVe.'</br>(fecha registro)</th>
-            <th scope="col" class="CP-sticky">Costo bruto</br>HOY (Sin IVA) '.SigVe.'</br>(fecha documento)</th>
-            <th scope="col" class="CP-sticky">Costo bruto</br>HOY (Sin IVA) '.SigVe.'</br>(fecha registro)</th>
-          <th scope="col" class="CP-sticky">Costo en divisa</br>(Sin IVA) '.SigDolar.'</br>(fecha documento)</th>
-          <th scope="col" class="CP-sticky bg-danger text-white">Costo en divisa</br>(Sin IVA) '.SigDolar.'</br>(fecha registro)</th>
-          <th scope="col" class="CP-sticky">Precio Lote en '.SigVe.'</th>
-          <th scope="col" class="CP-sticky">Precio Lote en '.SigVe.'<br>Historico</th>
-          <th scope="col" class="CP-sticky">Precio Lote en '.SigDolar.'</th>
-          <th scope="col" class="CP-sticky">Operador</th>
+            <th scope="col" class="proveedor CP-sticky">Proveedor</th>
+            <th scope="col" class="factura CP-sticky">N° Factura</th>
+            <th scope="col" class="fecha_documento CP-sticky">Fecha de documento</th>
+            <th scope="col" class="fecha_registro CP-sticky">Fecha de registro</th>
+            <th scope="col" class="dias_llegada CP-sticky  text-dark">Días llegada</th>
+            <th scope="col" class="fecha_vencimiento CP-sticky">Fecha de vencimiento</th>
+            <th scope="col" class="lote_fabricante CP-sticky  text-dark">Lote fabriante</th>
+            <th scope="col" class="vida_util CP-sticky">Vida util<br>(Dias)</th>
+            <th scope="col" class="dias_vencer CP-sticky">Dias para vencer<br>(Dias)</th>
+            <th scope="col" class="cantidad_recibida CP-sticky">Cantidad recibida</th>
+            <th scope="col" class="saldo CP-sticky  text-dark">Saldo</th>
+            <th scope="col" class="costo_bruto CP-sticky">Costo bruto</br>(Sin IVA) '.SigVe.'</th>
+            <th scope="col" class="tasa_historico_documento CP-sticky">Tasa en historico '.SigVe.'</br>(fecha documento)</th>
+            <th scope="col" class="tasa_historico_registro CP-sticky">Tasa en historico '.SigVe.'</br>(fecha registro)</th>
+            <th scope="col" class="costo_bruto_documento CP-sticky">Costo bruto</br>HOY (Sin IVA) '.SigVe.'</br>(fecha documento)</th>
+            <th scope="col" class="costo_bruto_registro CP-sticky">Costo bruto</br>HOY (Sin IVA) '.SigVe.'</br>(fecha registro)</th>
+            <th scope="col" class="costo_divisa_documento CP-sticky">Costo en divisa</br>(Sin IVA) '.SigDolar.'</br>(fecha documento)</th>
+            <th scope="col" class="costo_divisa_registro CP-sticky bg-danger text-white">Costo en divisa</br>(Sin IVA) '.SigDolar.'</br>(fecha registro)</th>
+            <th scope="col" class="precio_lote CP-sticky">Precio Lote en '.SigVe.'</th>
+            <th scope="col" class="precio_lote_historico CP-sticky">Precio Lote en '.SigVe.'<br>Historico</th>
+            <th scope="col" class="precio_lote_ds CP-sticky">Precio Lote en '.SigDolar.'</th>
+            <th scope="col" class="operador CP-sticky">Operador</th>
           </tr>
         </thead>
         <tbody>
@@ -466,35 +801,35 @@
         echo '<tr>';
         echo '<td align="center"><strong>'.intval($contador).'</strong></td>';
         echo
-        '<td align="left" class="CP-barrido">
+        '<td align="left" class="proveedor CP-barrido">
         <a href="/reporte7?Nombre='.FG_Limpiar_Texto($row2["Nombre"]).'&Id='.$row2["Id"].'&SEDE='.$SedeConnection.'" target="_blank" style="text-decoration: none; color: black;">'
           .FG_Limpiar_Texto($row2["Nombre"]).
         '</a>
         </td>';
 
-        echo '<td align="center">
+        echo '<td class="factura" align="center">
         <a class="CP-barrido" href="/reporte30?SEDE='.$SedeConnection.'&IdFact='.$row2["idFactura"].'&IdProv='.$row2["Id"].'&NombreProv='.FG_Limpiar_Texto($row2["Nombre"]).'" style="text-decoration: none; color: black" target="_blank">'
           .$row2["numero"].
         '</a>
         </td>';
 
         echo
-        '<td align="center" class="CP-barrido">
+        '<td align="center" class="fecha_documento CP-barrido">
         <a href="/reporte12?fechaInicio='.$fechaDocumentoLink.'&fechaFin='.$fechaActual.'&SEDE='.$SedeConnection.'&Descrip='.$Descripcion.'&Id='.$IdArticulo.'&CodBar=&IdCB=&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
           .$fechaDocumentoMostrar.
         '</a>
         </td>';
 
-        echo '<td align="center">'.$row2["FechaRegistro"]->format('d-m-Y').'</td>';
-        echo '<td align="center" class="bg-warning">'.$diasLlegada.'</td>';
-        echo '<td align="center">'.$fechaVencimiento.'</td>';
-        echo '<td align="center" class="bg-warning">'.$loteFabricante.'</td>';
-        echo '<td align="center">'.$vidaUtil.'</td>';
+        echo '<td class="fecha_registro" align="center">'.$row2["FechaRegistro"]->format('d-m-Y').'</td>';
+        echo '<td class="dias_llegada" align="center" class="">'.$diasLlegada.'</td>';
+        echo '<td class="fecha_vencimiento" align="center">'.$fechaVencimiento.'</td>';
+        echo '<td class="lote_fabricante" align="center" class="">'.$loteFabricante.'</td>';
+        echo '<td class="vida_util" align="center">'.$vidaUtil.'</td>';
 
-        echo '<td align="center">'.$diasVencer.'</td>';
+        echo '<td class="dias_vencer" align="center">'.$diasVencer.'</td>';
 
        echo
-        '<td align="center" class="CP-barrido">
+        '<td align="center" class="cantidad_recibida CP-barrido">
         <a href="/reporte6?pedido=15&fechaInicio='.$fechaDocumentoLink.'&fechaFin='.$fechaActual.'&SEDE='.$SedeConnection.'&flag=BsqDescrip&Descrip='.$Descripcion.'&IdD='.$IdArticulo.'&CodBar=&IdCB=" style="text-decoration: none; color: black;" target="_blank">'
           .intval($row2['CantidadRecibidaFactura']).
         '</a>
@@ -502,9 +837,9 @@
 
         $Saldo = $Saldo + $row2['CantidadRecibidaFactura'];
 
-        echo '<td align="center" class="bg-warning">'.$Saldo.'</td>';
+        echo '<td class="saldo" align="center" class="">'.$Saldo.'</td>';
 
-        echo '<td align="center">'.number_format($row2["M_PrecioCompraBruto"],2,"," ,"." ).'</td>';
+        echo '<td class="costo_bruto" align="center">'.number_format($row2["M_PrecioCompraBruto"],2,"," ,"." ).'</td>';
 
         $FechaHistDoc = $row2["FechaDocumento"]->format('Y-m-d');
         $TasaDoc = FG_Tasa_Fecha($connCPharma,$FechaHistDoc);
@@ -514,56 +849,56 @@
 
         if( ($TasaDoc != 0) && ($TasaFR != 0) ) {
 
-          echo '<td align="center">'.number_format($TasaDoc,2,"," ,"." ).'</td>';
-          echo '<td align="center">'.number_format($TasaFR,2,"," ,"." ).'</td>';
+          echo '<td class="tasa_historico_documento" align="center">'.number_format($TasaDoc,2,"," ,"." ).'</td>';
+          echo '<td class="tasa_historico_registro" align="center">'.number_format($TasaFR,2,"," ,"." ).'</td>';
 
           $CostoDivisaDoc = $row2["M_PrecioCompraBruto"]/$TasaDoc;
           $CostoDivisaFR = $row2["M_PrecioCompraBruto"]/$TasaFR;
 
           if($TasaActual!=0){
             $CostoBrutoHoyDoc = $CostoDivisaDoc*$TasaActual;
-            echo '<td align="center">'.number_format($CostoBrutoHoyDoc,2,"," ,"." ).'</td>';
+            echo '<td class="costo_bruto_documento" align="center">'.number_format($CostoBrutoHoyDoc,2,"," ,"." ).'</td>';
 
             $CostoBrutoHoyFR = $CostoDivisaFR*$TasaActual;
-            echo '<td align="center">'.number_format($CostoBrutoHoyFR,2,"," ,"." ).'</td>';
+            echo '<td class="costo_bruto_registro" align="center">'.number_format($CostoBrutoHoyFR,2,"," ,"." ).'</td>';
           }
           else{
-            echo '<td align="center">0,00</td>';
-            echo '<td align="center">0,00</td>';
+            echo '<td class="costo_bruto_documento" align="center">0,00</td>';
+            echo '<td class="costo_bruto_registro" align="center">0,00</td>';
           }
 
-          echo '<td align="center">'.number_format($CostoDivisaDoc,2,"," ,"." ).'</td>';
-          echo '<td class="bg-danger text-white" align="center">'.number_format($CostoDivisaFR,2,"," ,"." ).'</td>';
+          echo '<td class="costo_divisa_documento" align="center">'.number_format($CostoDivisaDoc,2,"," ,"." ).'</td>';
+          echo '<td class="costo_divisa_registro bg-danger text-white" align="center">'.number_format($CostoDivisaFR,2,"," ,"." ).'</td>';
 
           $preciolote = FG_Precio_Calculado_Alfa($UtilidadArticulo,$UtilidadCategoria,$IsIVA,$row2["M_PrecioCompraBruto"]);
-          echo '<td align="center">'.number_format($preciolote,2,"," ,"." ).'</td>';
+          echo '<td class="precio_lote" align="center">'.number_format($preciolote,2,"," ,"." ).'</td>';
 
           if($TasaActual!=0){
             $preciolotehist = FG_Precio_Calculado_Alfa($UtilidadArticulo,$UtilidadCategoria,$IsIVA,$CostoBrutoHoyFR);
-            echo '<td align="center">'.number_format($preciolotehist,2,"," ,"." ).'</td>';
+            echo '<td class="precio_lote_historico" align="center">'.number_format($preciolotehist,2,"," ,"." ).'</td>';
 
             $preciolotediv = FG_Precio_Calculado_Alfa($UtilidadArticulo,$UtilidadCategoria,$IsIVA,$CostoDivisaFR);
-            echo '<td align="center">'.number_format($preciolotediv,2,"," ,"." ).'</td>';
+            echo '<td class="precio_lote_ds" align="center">'.number_format($preciolotediv,2,"," ,"." ).'</td>';
           }
           else{
-            echo '<td align="center">0,00</td>';
-            echo '<td align="center">0,00</td>';
+            echo '<td class="precio_lote_historico" align="center">0,00</td>';
+            echo '<td class="precio_lote_ds" align="center">0,00</td>';
           }
 
         }
         else{
-          echo '<td align="center">0,00</td>';
-          echo '<td align="center">0,00</td>';
-          echo '<td align="center">0,00</td>';
-          echo '<td align="center">0,00</td>';
-          echo '<td align="center">0,00</td>';
-          echo '<td align="center">0,00</td>';
-          echo '<td align="center">0,00</td>';
-          echo '<td align="center">0,00</td>';
-          echo '<td align="center">0,00</td>';
+          echo '<td class="tasa_historico_documento" align="center">0,00</td>';
+          echo '<td class="tasa_historico_registro" align="center">0,00</td>';
+          echo '<td class="costo_bruto_documento" align="center">0,00</td>';
+          echo '<td class="costo_bruto_registro" align="center">0,00</td>';
+          echo '<td class="costo_divisa_documento" align="center">0,00</td>';
+          echo '<td class="costo_divisa_registro" align="center">0,00</td>';
+          echo '<td class="precio_lote" align="center">0,00</td>';
+          echo '<td class="precio_lote_historico" align="center">0,00</td>';
+          echo '<td class="precio_lote_ds" align="center">0,00</td>';
         }
 
-        echo '<td align="center">'.$row2["operador"].'</td>';
+        echo '<td class="operador" align="center">'.$row2["operador"].'</td>';
 
         echo '</tr>';
       $contador++;

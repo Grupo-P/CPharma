@@ -378,7 +378,7 @@
                                 '.$unidadMinima.'
                                 <tr>
                                     <td class="izquierda rowIzq rowIzqA aumento1">
-                                        '.$bolivarDigital.'
+
                                     </td>
                                     <td class="derecha rowDer rowDerA aumento1">
                                         <strong>'.$simbolo.'</strong> '.date("d-m-Y").'

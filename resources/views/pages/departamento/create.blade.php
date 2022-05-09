@@ -167,7 +167,7 @@
             </tr>
             <tr>                
                 <th scope="col">48</th>
-                <td scope="col">X</td>
+                <td scope="col">Cambio de precios</td>
                 <th scope="col">49</th>
                 <td scope="col">Reposicion de Inventario</td>
             </tr>

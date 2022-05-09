@@ -12,8 +12,13 @@ class Traslado extends Model
      * @var array
      */
     protected $fillable = [
-      'id','numero_ajuste','fecha_ajuste','fecha_traslado','sede_emisora','sede_destino','operador_ajuste','operador_traslado','estatus','bultos','tasa','fecha_tasa'
+      'id','numero_ajuste', 'fecha_ajuste', 'fecha_traslado', 'sede_emisora', 'sede_destino', 'operador_ajuste', 'operador_traslado', 'estatus', 'bultos', 'bultos_refrigerados', 'bultos_fragiles', 'tasa', 'fecha_tasa'
     ];
+
+    public function detalle()
+    {
+        return $this->hasMany(TrasladoDetalle::class, 'id_traslado', 'numero_ajuste')->orderBy('descripcion');
+    }
 
     public function scopeEstado($query, $estado)
     {
@@ -28,5 +33,14 @@ class Traslado extends Model
         if ($estado == 'EMBALADO') {
             $query->where('estatus', $estado);
         }
+    }
+
+    public function scopeLimite($query, $limite)
+    {
+        if ($limite && $limite != 'Todos') {
+            return $query->limit($limite);
+        }
+
+        return $query->limit(50);
     }
 }

@@ -130,7 +130,7 @@
             return $('.' + elemento).hide();
         }
 
-        campos = ['codigo', 'codigo_barra', 'descripcion', 'precio', 'existencia', 'unidades_vendidas', 'dias_restantes', 'ultimo_proveedor', 'sede1', 'sede2', 'sede3'];
+        campos = ['codigo', 'codigo_barra', 'descripcion', 'precio', 'existencia', 'unidades_vendidas', 'dias_restantes', 'ultimo_proveedor', 'sede1', 'sede2', 'sede3', 'traslado_transito'];
 
         function mostrar_todas(that) {
             if (that.checked) {
@@ -281,6 +281,11 @@
                 </div>
 
                 <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, \'traslado_transito\')" name="traslado_transito" checked>
+                    Traslado en transito
+                </div>
+
+                <div class="form-group">
                     <input type="checkbox" onclick="mostrar_ocultar(this, \'sede1\')" name="sede1" checked>
                     Sede 1
                 </div>
@@ -353,6 +358,7 @@
               <th scope="col" class="CP-sticky unidades_vendidas">Unidades Vendidas</td>
               <th scope="col" class="CP-sticky dias_restantes">Dias Restantes</td>
               <th scope="col" class="CP-sticky ultimo_proveedor">Ultimo Proveedor</td>
+              <th scope="col" class="CP-sticky bg-warning traslado_transito">Traslado en transito</th>
               <th scope="col" class="CP-sticky">Acciones orden de compra</th>';
 
               if (isset($_GET['SEDE']) && ($_GET['SEDE'] == 'FAU' || $_GET['SEDE'] == 'DBs')) {
@@ -405,6 +411,8 @@
         </thead>
         <tbody>
       ';
+
+      $traslado = Traslado_Transito();
 
     $contador = 1;
     while($row = mysqli_fetch_assoc($result)){
@@ -479,6 +487,10 @@
       else{
         echo '<td class="ultimo_proveedor" align="center"> - </td>';
       }
+
+      $transito = in_array($CodigoBarra, $traslado) ? 'Si' : 'No';
+
+      echo '<td class=" bg-warning traslado_transito text-center">'.$transito.'</td>';
 
       /*BOTON PARA AGREGAR A LA ORDEN DE COMPRA*/
 

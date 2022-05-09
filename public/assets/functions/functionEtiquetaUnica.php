@@ -157,7 +157,7 @@
                             }
                         }else if(_EtiquetaDolar_=='NO'){
                             $flag_imprime = true;
-                            $moneda = 'Bs.S';
+                            $moneda = 'Bs.';
                         }
                     }
                     else{
@@ -172,7 +172,7 @@
                         ';
 
                         $simbolo = '';
-                        $moneda = 'Bs.S';
+                        $moneda = 'Bs.';
                         $flag_imprime = true;
                         $tam_dolar = "";
                     }
@@ -197,7 +197,7 @@
                             $unidadMinima = '';
                         }
 
-                        $precio = ($Dolarizado == 'SI') ? $moneda.' '.number_format ($PrecioHoy,2,"," ,"." ) : $moneda.' '.number_format (precioReconversion($PrecioHoy, 'BSS'),2,"," ,"." );
+                        $precio = ($Dolarizado == 'SI') ? $moneda.' '.number_format ($PrecioHoy,2,"," ,"." ) : $moneda.' '.number_format (precioReconversion($PrecioHoy, 'BSD'),2,"," ,"." );
 
                         $Etiqueta = $Etiqueta.'
                             <table class="etq" style="display: inline;">
@@ -243,7 +243,6 @@
                                                 </strong>
                                             </label>
                                         </td>
-                                        '.$bolivarDigital.'
                                     </tr>
                                     '.$unidadMinima.'
                                     <tr>
@@ -341,12 +340,12 @@
                         }
                     }else if(_EtiquetaDolar_=='NO'){
                         $flag_imprime = true;
-                        $moneda = 'Bs.S';
+                        $moneda = 'Bs.';
                     }
                 }
                 else{
                     $simbolo = '';
-                    $moneda = 'Bs.S';
+                    $moneda = 'Bs.';
                     $flag_imprime = true;
 
                     $bolivarDigital = '
@@ -381,7 +380,7 @@
                         $unidadMinima = '';
                     }
 
-                    $precio = ($Dolarizado == 'SI') ? $moneda.' '.number_format ($PrecioHoy,2,"," ,"." ) : $moneda.' '.number_format (precioReconversion($PrecioHoy, 'BSS'),2,"," ,"." );
+                    $precio = ($Dolarizado == 'SI') ? $moneda.' '.number_format ($PrecioHoy,2,"," ,"." ) : $moneda.' '.number_format (precioReconversion($PrecioHoy, 'BSD'),2,"," ,"." );
 
 
                     $Etiqueta = $Etiqueta.'
@@ -412,7 +411,6 @@
                                             </strong>
                                         </label>
                                     </td>
-                                    '.$bolivarDigital.'
                                 </tr>
                                 '.$unidadMinima.'
                                 <tr>

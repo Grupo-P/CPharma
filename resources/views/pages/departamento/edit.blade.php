@@ -172,6 +172,10 @@
                 <th scope="col">49</th>
                 <td scope="col">Reposicion de Inventario</td>
             </tr>
+            <tr>
+                <th scope="col">48</th>
+                <td scope="col">Cambio de precios</td>
+            </tr>
         </tbody>
     </table>
 

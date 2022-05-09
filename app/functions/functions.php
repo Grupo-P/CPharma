@@ -1735,12 +1735,15 @@
             case 'Compras por archivo':
                 $ruta = '/reporte46';
             break;
-            case 'Crude de aplicación de consultas':
+            case 'Cruce de aplicación de consultas':
                 $ruta = '/reporte47';
+            break;                
+            case 'Cambio de precios':
+                $ruta = '/reporte48';
             break;
             case 'Reposicion de Inventario':
-                $ruta = '/reporte49';
-            break;
+                $ruta = '/reporte49';                
+            break;            
             default:
                 $ruta = '#';
             break;
@@ -1893,8 +1896,16 @@
             case 47:
                 $nombre = 'Cruce de aplicación de consultas';
             break;
+<<<<<<< HEAD
             case 49:
                 $nombre = 'Reposicion de Inventario';
+=======
+            case 48:
+                $nombre = 'Cambio de precios';
+            break;
+            case 50:
+                $nombre = 'Catálogo de droguerías';
+>>>>>>> ndelgado
             break;
             default:
                 $nombre = 'Reporte desconocido';
@@ -2596,10 +2607,6 @@
                                                         <td colspan="2" style="color:red;text-align: center">
                                                             Precio Antes:
 
-                                                            BS.S <del>'.number_format (precioReconversion($PrecioAyer, 'BSS'),2,"," ,"." ).'</del>
-
-                                                            /
-
                                                             ' . SigVe . ' <del>'.number_format (precioReconversion($PrecioAyer, 'BSD'),2,"," ,"." ).'</del>
                                                         </td>
                                                     </tr>
@@ -2622,7 +2629,7 @@
                                             }
                                         }
 
-                                    $precio = ($Dolarizado == 'SI') ? $moneda.' '.number_format ($PrecioHoy,2,"," ,"." ) : ' Bs.S '.number_format (precioReconversion($PrecioHoy, 'BSS'),2,"," ,"." );
+                                    $precio = ($Dolarizado == 'SI') ? $moneda.' '.number_format ($PrecioHoy,2,"," ,"." ) : ' '.SigVe.' '.number_format (precioReconversion($PrecioHoy, 'BS'),2,"," ,"." );
 
                                     echo'
                                     <tr>
@@ -2631,14 +2638,13 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td style="text-align: right" class="rowDer rowDerA aumento">
+                                        <td style="text-align: center" class="rowDer rowDerA aumento">
                                             <label style="margin-right:10px;'.$tam_dolar.'">
                                                 <strong>
                                                 '.$precio.'
                                                 </strong>
                                             </label>
                                         </td>
-                                        '.$bolivarDigital.'
                                     </tr>
                                     '.$unidadMinima.'
                                     <tr>
@@ -2776,7 +2782,7 @@
                             <td class="derecha rowDer rowDerA aumento">
                                 <label style="margin-right:10px;'.$tam_dolar.'">
                                     <strong>
-                                    BS.D '.number_format (precioReconversion($PrecioHoy, 'BSD'),2,"," ,"." ).'
+                                    Bs. '.number_format (precioReconversion($PrecioHoy, 'BSD'),2,"," ,"." ).'
                                     </strong>
                                 </label>
                             </td>
@@ -2827,14 +2833,13 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td style="text-align: right" class="rowDer rowDerA aumento">
+                                    <td style="text-align: center" class="rowDer rowDerA aumento">
                                         <label style="margin-right:10px;'.$tam_dolar.'">
                                             <strong>
                                             '.$precio.'
                                             </strong>
                                         </label>
                                     </td>
-                                    '.$bolivarDigital.'
                                 </tr>
                                 '.$unidadMinima.'
                                 <tr>
@@ -4610,5 +4615,144 @@
     ];
 
     return $array;
+  }
+
+  /**********************************************************************************/
+  /*
+    TITULO: Traslado_Transito
+    FUNCION: Determina si articulo tiene traslado en otras sedes
+    RETORNO: Arreglo
+    DESAROLLADO POR: Nisa Delgado
+  */
+  function Traslado_Transito($codigo_barra = '')
+  {
+    $sede = FG_Mi_Ubicacion();
+
+    if ($sede == 'FTN') {
+        $nombre = 'FARMACIA TIERRA NEGRA, C.A.';
+    }
+
+    if ($sede == 'FAU' || $sede == 'DBs') {
+        $nombre = 'FARMACIA AVENIDA UNIVERSIDAD, C.A.';
+    }
+
+    if ($sede == 'FLL') {
+        $nombre = 'FARMACIA LA LAGO,C.A.';
+    }
+
+    if ($sede == 'FM') {
+        $nombre = 'FARMACIA MILLENNIUM 2000, C.A';
+    }
+
+    if ($codigo_barra) {
+        $where = "traslados_detalle.codigo_barra = '$codigo_barra'";
+    } else {
+        $where = "
+        traslados_detalle.id_traslado IN (
+            SELECT
+                traslados.numero_ajuste
+            FROM
+                traslados
+            WHERE
+                (traslados.estatus = 'PROCESADO' OR traslados.estatus = 'EMBALADO') AND
+                traslados.sede_destino = '$nombre'
+        )";
+    }
+
+    $array = [];
+    $resultado = [];
+
+    try {
+        $ftn = DB::connection('ftn')->select("
+            SELECT
+                traslados_detalle.codigo_barra
+            FROM
+                traslados_detalle
+            WHERE
+                $where
+            GROUP BY
+                traslados_detalle.codigo_barra;
+        ");
+
+        $array = array_merge($array, $ftn);
+    } catch (Exception $excepcion) {
+
+    }
+
+    try {
+        $fau = DB::connection('fau')->select("
+            SELECT
+                traslados_detalle.codigo_barra
+            FROM
+                traslados_detalle
+            WHERE
+                $where
+            GROUP BY
+                traslados_detalle.codigo_barra;
+        ");
+
+        $array = array_merge($array, $fau);
+    } catch (Exception $excepcion) {
+
+    }
+
+    try {
+        $fll = DB::connection('fll')->select("
+            SELECT
+                traslados_detalle.codigo_barra
+            FROM
+                traslados_detalle
+            WHERE
+                $where
+            GROUP BY
+                traslados_detalle.codigo_barra;
+        ");
+
+        $array = array_merge($array, $fll);
+    } catch (Exception $excepcion) {
+
+    }
+
+    try {
+        $fm = DB::connection('fm')->select("
+            SELECT
+                traslados_detalle.codigo_barra
+            FROM
+                traslados_detalle
+            WHERE
+                $where
+            GROUP BY.
+                traslados_detalle.codigo_barra;
+        ");
+
+        $array = array_merge($array, $fm);
+    } catch (Exception $excepcion) {
+
+    }
+
+    try {
+        $kdi = DB::connection('kdi')->select("
+            SELECT
+                traslados_detalle.codigo_barra
+            FROM
+                traslados_detalle
+            WHERE
+                $where
+            GROUP BY
+                traslados_detalle.codigo_barra;
+        ");
+
+        $array = array_merge($array, $kdi);
+    } catch (Exception $excepcion) {
+
+    }
+
+    foreach ($array as $item) {
+        $resultado[] = $item->codigo_barra;
+    }
+
+    $resultado = array_unique($resultado);
+
+    return $resultado;
   }
 ?>

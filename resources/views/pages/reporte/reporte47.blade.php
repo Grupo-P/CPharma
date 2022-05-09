@@ -137,11 +137,27 @@
             aria-hidden="true"></i>
         </span>
       </div>
-      <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterAllTable()" autofocus="autofocus">
+      <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterAllTables()" autofocus="autofocus">
     </div>
+
     <br/>
-    <center><b>ARTICULOS CODIFICADOS</b></center>
+
+    <table class="table table-bordered col-12">
+      <thead class="thead-dark">
+        <tr>
+          <th scope="col">ARTICULOS CODIFICADOS</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr>
+          <td class="text-center">Estos son los artículos con existencia en la sede origen y que el código de barra se cruza con Tierra Negra, pero en Tierra Negra no tiene componente y/o aplicación.</td>
+        </tr>
+      </tbody>
+    <tbody>
+
     <br/>
+
     <table class="table table-striped table-bordered col-12 sortable" id="myTable">
       <thead class="thead-dark">
         <tr>
@@ -178,9 +194,24 @@
 
 
     echo '<br/><br/><br/>
-    <center><b>ARTICULOS NO CODIFICADOS</b></center>
+
+    <table class="table table-bordered col-12">
+      <thead class="thead-dark">
+        <tr>
+          <th scope="col">ARTICULOS NO CODIFICADOS</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr>
+          <td class="text-center">Estos son los artículos con existencia en la sede origen, pero el código de barra no existe en Tierra Negra.</td>
+        </tr>
+      </tbody>
+    <tbody>
+
     <br/>
-    <table class="table table-striped table-bordered col-12 sortable" id="myTable">
+
+    <table class="table table-striped table-bordered col-12 sortable" id="myTable2">
       <thead class="thead-dark">
         <tr>
           <th scope="col" class="CP-sticky">#</th>

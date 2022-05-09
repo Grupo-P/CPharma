@@ -145,10 +145,6 @@
     $sql5 = R27Q_Productos_PorVencer($FInicial);
     $result = sqlsrv_query($conn,$sql5);
 
-    if (sqlsrv_errors()) {
-        dd(sqlsrv_errors());
-    }
-
     $conectividad_ftn = FG_Validar_Conectividad('FTN');
     $conectividad_fau = FG_Validar_Conectividad('FAU');
     $conectividad_fll = FG_Validar_Conectividad('FLL');
@@ -175,6 +171,30 @@
     ';
 
     echo '<h6 align="center"><a href="" data-toggle="modal" data-target="#ver_campos"><i class="fa fa-eye"></i> Ocultar u mostrar columnas<a></h6>';
+
+    echo '<table class="table table-bordered col-12 sortable">
+    <thead class="thead-dark">
+      <tr>
+        <th scope="col" colspan="2">LEYENDA DE COLORES</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td scope="col">
+          <ul class="bg-danger text-white">
+            <li>
+                <span>El sombreado rojo significa que no hay una rotación en los últimos 30 días para estimar si el articulo se venderá o no antes del vencimiento.</span>
+            </li>
+          </ul>
+          <ul class="bg-warning text-white">
+            <li>
+                <span>El sombreado amarillo significa que el articulo sobrepasara en días de ventas la fecha de su vencimiento, y la cantidad de días con problemas son los indicados en la casilla "Días con riesgo".</span>
+            </li>
+          </ul>
+        </td>
+      </tr>
+    </tbody>
+    </table>';
 
     echo '
         <div class="modal fade" id="ver_campos" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -431,6 +451,8 @@
       $Tipo = FG_Tipo_Producto($row["Tipo"]);
       $UltimaCompra = $row["UltimaCompra"];
 
+      $ExistenciaLote = $row["ExistenciaLote"];
+
       $Dolarizado = FG_Producto_Dolarizado($Dolarizado);
       $Gravado = FG_Producto_Gravado($IsIVA);
       $Precio = FG_Calculo_Precio_Alfa($Existencia,$ExistenciaAlmacen1,$ExistenciaAlmacen2,$IsTroquelado,$UtilidadArticulo,$UtilidadCategoria,$TroquelAlmacen1,$PrecioCompraBrutoAlmacen1,$TroquelAlmacen2,
@@ -449,7 +471,7 @@
       $row2 = $result22->fetch_assoc();
       $RangoDiasQuiebre = $row2['Cuenta'];
       $VentaDiaria = FG_Venta_Diaria($row['TotalUnidadesVendidas'], $RangoDiasQuiebre);
-      $DiasRestantes30 = FG_Dias_Restantes(intval($Existencia), $VentaDiaria);
+      $DiasRestantes30 = FG_Dias_Restantes(intval($ExistenciaLote), $VentaDiaria);
 
       $diasVencer = FG_Validar_Fechas(date('Y-m-d H:i:s'),$row["FechaVencimiento"]->format('d-m-Y'));
 
@@ -765,6 +787,22 @@
     </table>';
     mysqli_close($connCPharma);
     sqlsrv_close($conn);
+
+    if (is_resource($connFTN)) {
+        sqlsrv_close($connFTN);
+    }
+
+    if (is_resource($connFAU)) {
+        sqlsrv_close($connFAU);
+    }
+
+    if (is_resource($connFLL)) {
+        sqlsrv_close($connFLL);
+    }
+
+    if (is_resource($connFSM)) {
+        sqlsrv_close($connFSM);
+    }
   }
   /**********************************************************************************/
   /*

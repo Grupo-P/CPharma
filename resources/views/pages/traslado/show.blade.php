@@ -39,20 +39,24 @@
 		font-size: 1.2em;
 		text-transform: uppercase;
 	}
+
+    body {
+        margin-left: -45px;
+    }
 </style>
 
  	<h1 class="h5 text-info" style="display: inline;">
 		<i class="fas fa-print"></i>
-		Soporte de traslado interno
+        {{ strpos($traslado->numero_ajuste, 'R') !== false ? 'Soporte de traslado de reclamo' : 'Soporte de traslado interno' }}
 	</h1>
-	<form action="/traslado/" method="POST" style="display: inline; margin-left: 50px;">  
+	<form action="/traslado/" method="POST" style="display: inline">
 	    @csrf					    
 	    <button type="submit" name="Regresar" role="button" class="btn btn-outline-info btn-sm"data-placement="top"><i class="fa fa-reply">&nbsp;Regresar</i></button>
 	</form>
-	<input type="button" name="imprimir" value="Imprimir" class="btn btn-outline-success btn-sm" onclick="window.print();" style="display: inline; margin-left: 10px;">
+	<input type="button" name="imprimir" value="Imprimir" class="btn btn-outline-success btn-sm" onclick="window.print();" style="display: inline">
 
 	<hr class="row align-items-start col-12">
-	<table>
+	<table class="principal">
 		<thead>
 		    <tr>
 		    		<th scope="row" colspan="6">
@@ -60,37 +64,43 @@
 		    				<b><i class="fas fa-syringe text-success"></i>CPharma</b>
   						</span>
 		    		</th>
-		    		<th scope="row" colspan="9" class="aumento">Soporte de Traslado interno</th>
+		    		<th scope="row" colspan="10" class="aumento">
+                        {{ strpos($traslado->numero_ajuste, 'R') !== false ? 'Soporte de traslado de reclamo' : 'Soporte de traslado interno' }}
+                    </th>
 		    </tr>
   	</thead>
 	  	<tbody>
 		    <tr>
 	      	<td colspan="6" class="alinear-der"># de Ajuste:</td>
-	      	<td colspan="9" class="alinear-izq">{{$traslado->numero_ajuste}}</td>
+	      	<td colspan="10" class="alinear-izq">{{$traslado->numero_ajuste}}</td>
 		    </tr>
 		    <tr>
 	      	<td colspan="6" class="alinear-der">Fecha de Ajuste:</td>
-	      	<td colspan="9" class="alinear-izq">{{$traslado->fecha_ajuste}}</td>
+	      	<td colspan="10" class="alinear-izq">{{$traslado->fecha_ajuste}}</td>
 		    </tr>
 		    <tr>
 	      	<td colspan="6" class="alinear-der">Fecha de Traslado:</td>
-	      	<td colspan="9" class="alinear-izq">{{$traslado->fecha_traslado}}</td>
+	      	<td colspan="10" class="alinear-izq">{{$traslado->fecha_traslado}}</td>
 		    </tr>
 		    <tr>
 	      	<td colspan="6" class="alinear-der">Sede Emisora:</td>
-	      	<td colspan="9" class="alinear-izq">{{$traslado->sede_emisora}}</td>
+	      	<td colspan="10" class="alinear-izq">{{$traslado->sede_emisora}}</td>
 		    </tr>
 		    <tr>
 	      	<td colspan="6" class="alinear-der">Sede Destino:</td>
-	      	<td colspan="9" class="alinear-izq">{{$traslado->sede_destino}}</td>
+	      	<td colspan="10" class="alinear-izq">{{$traslado->sede_destino}}</td>
 		    </tr>
+            <tr>
+            <td colspan="6" class="alinear-der">Estatus:</td>
+            <td colspan="10" class="alinear-izq">{{$traslado->estatus}}</td>
+            </tr>
 		    <tr>
 	      	<td colspan="6" class="alinear-der">Operador emisor del ajuste:</td>
-	      	<td colspan="9" class="alinear-izq">{{$traslado->operador_ajuste}}</td>
+	      	<td colspan="10" class="alinear-izq">{{$traslado->operador_ajuste}}</td>
 		    </tr>
 		    <tr>
 	      	<td colspan="6" class="alinear-der">Operador emisor del traslado:</td>
-	      	<td colspan="9" class="alinear-izq">{{$traslado->operador_traslado}}</td>
+	      	<td colspan="10" class="alinear-izq">{{$traslado->operador_traslado}}</td>
 		    </tr>
 		    <thead>
 		    <tr>
@@ -102,12 +112,13 @@
 		    		<th scope="row">Dolarizado?</th>
 		    		<th scope="row">Costo Unit Bs. S/IVA</th>
 		    		<th scope="row">Costo Unit $. S/IVA</th>
-		    		<th scope="row">Cantidad</th>
-		    		<th scope="row">Total Impuesto Bs.</th>
-		    		<th scope="row">Total Impuesto $.</th>
+		    		<th scope="row">Cant.</th>
+		    		<th scope="row">Total imp. Bs.</th>
+		    		<th scope="row">Total imp. $.</th>
 		    		<th scope="row">Total Bs.</th>
 		    		<th scope="row">Total $.</th>		    		
-		    		<th scope="row">Sede Origen</th>		    			    	
+		    		<th scope="row">Sede Origen</th>
+                    <th scope="row">Exist. al impr.</th>
 		    		<th scope="row">Sede Destino</th>
 		    </tr>
 		    </thead>
@@ -117,7 +128,13 @@
 	  	</tbody>
 	</table>
 	<?php $tasa = number_format(floatval($traslado->tasa),2,"," ,"." ); ?>
-	<span>Nota: La tasa usada para el calculo fue: <strong>{{$tasa}}</strong> tasa valida para la fecha: <strong>{{$traslado->fecha_tasa}}</strong>.</span>
+
+    <br>
+
+    <strong>Notas:</strong>
+
+    <li>La tasa usada para el calculo fue: <strong>{{$tasa}}</strong> tasa valida para la fecha: <strong>{{$traslado->fecha_tasa}}</strong>.</li>
+    <li>Fecha y hora de impresión de este soporte: <strong>{{ date('d/m/Y H:i A') }}</strong>.</li>
 
 	<br><br><br>
 	<label><strong>Sede Origen - Comentarios / Apuntes</strong></label>
@@ -186,6 +203,8 @@
 
 			$cont = 1;
 			while($row = $result->fetch_assoc()) {
+                $existencia = Existencia($row['id_articulo']) ? Existencia($row['id_articulo']) : 0;
+
 				echo '<tr>';
 				echo '<th>'.intval($cont).'</th>';
 				echo '<td>'.$row['codigo_interno'].'</td>';
@@ -201,8 +220,16 @@
 				echo '<td>'.number_format(floatval($row['total_bs']),2,"," ,"." ).'</td>';
 				echo '<td>'.number_format(floatval($row['total_usd']),2,"," ,"." ).'</td>';			
 				echo '<td><input type="checkbox"></td>';				
-				echo '<td><input type="checkbox"></td>';
+				echo '<td>'.$existencia.'</td>';
+                echo '<td><input type="checkbox"></td>';
 				echo '</tr>';
+
+                if (strpos($numero_ajuste, 'R') !== false) {
+                    echo '<tr>';
+                    echo '<th colspan="2">Causa</th>';
+                    echo '<td colspan="9">'.$row['causa'].'</td>';
+                    echo '</tr>';
+                }
 
 				$Total_Cantidad += floatval($row['cantidad']);
 				$Total_Impuesto_Bs += floatval($row['total_imp_bs']);
@@ -219,11 +246,23 @@
 	  	echo '<td><strong>'.number_format($Total_Impuesto_Usd,2,"," ,"." ).'</strong></td>';
 	  	echo '<td><strong>'.number_format($Total_Bs,2,"," ,"." ).'</strong></td>';
 	  	echo '<td><strong>'.number_format($Total_Usd,2,"," ,"." ).'</strong></td>';	  	
-	  	echo '<td colspan="2"></td>';
+	  	echo '<td colspan="3"></td>';
 	  	echo '</tr>';
 
 			mysqli_close($connCPharma);
 
 
 	}
+
+    function existencia($IdArticulo)
+    {
+        $sede = FG_Mi_Ubicacion();
+        $conn = FG_Conectar_Smartpharma($sede);
+
+        $sql = SQG_Detalle_Articulo($IdArticulo);
+        $result = sqlsrv_query($conn,$sql);
+        $row = sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC);
+
+        return $row['Existencia'];
+    }
 ?>
