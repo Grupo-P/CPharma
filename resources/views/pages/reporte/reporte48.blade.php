@@ -512,10 +512,6 @@
 
     $tasa = compras\TasaVenta::where('moneda', 'Dolar')->first()->tasa;
 
-    if ($_GET['opcion'] == 'Articulos dolarizados') {
-        echo '<div class="text-center">Los costos de las droguerías están en dólares, calculados a la tasa de <b>'.$tasa.'</b>.</div>';
-    }
-
     echo '
         <div class="text-center">
             <button class="btn btn-outline-danger subidas-btn"> <i class="fa fa-arrow-up"></i> Subidas</button>
@@ -526,6 +522,59 @@
     echo '<h6 align="center"><a href="" data-toggle="modal" data-target="#ver_campos"><i class="fa fa-eye"></i> Mostrar u ocultar campos<a></h6>';
 
     echo'<h6 align="center">'.$opcion.'</h6>';
+
+    $tasaTexto = '';
+
+    if ($_GET['opcion'] == 'Articulos dolarizados') {
+        $tasaTexto = '<li>Los costos de las droguerías están en dólares, calculados a la tasa de <b>'.$tasa.'</b>.</li>';
+    }
+
+    $textoDescuentos = [];
+
+    if ($_GET['descuentoFacturacionDrolanca'] != '') {
+        $textoDescuentos[] = 'Drolanca: '.$_GET['descuentoFacturacionDrolanca'];
+    }
+
+    if ($_GET['descuentoFacturacionDrooeste'] != '') {
+        $textoDescuentos[] = 'Drooeste: '.$_GET['descuentoFacturacionDrooeste'];
+    }
+
+    if ($_GET['descuentoFacturacionDronena'] != '') {
+        $textoDescuentos[] = 'Dronena: '.$_GET['descuentoFacturacionDronena'];
+    }
+
+    if ($_GET['descuentoFacturacionDronena'] != '') {
+        $textoDescuentos[] = 'Dronena: '.$_GET['descuentoFacturacionDronena'];
+    }
+
+    if ($_GET['descuentoFacturacionDronena'] != '') {
+        $textoDescuentos[] = 'Dronena: '.$_GET['descuentoFacturacionDronena'];
+    }
+
+    $textoDescuentos = implode(',', $textoDescuentos);
+
+    if ($textoDescuentos == '') {
+        $textoDescuentos = 'No hay ninguna droguería configurada';
+    }
+
+
+    echo '
+        <table class="table table-striped table-bordered col-12">
+            <tr>
+                <td>
+                    <ul>
+                        '.$tasaTexto.'
+                        <li>Los precios de las droguerías no incluyen IVA.</li>
+                        <li>Se configuraron los siguientes descuentos en factura por droguería: '.$textoDescuentos.'</li>
+                        <li>La existencia de Drocerca incluye la sede de Mérida mas la sede de Caracas.</li>
+                        <li>La existencia de nena solo incluye la sede de Barquisimeto.</li>
+                        <li>La existencia de Drolanca solo incluye la sede del Vigía.</li>
+                        <li>Todos los precios mostrados incluyen los descuentos que la droguería dan en las interconexiones mas los configurados por el usuario.</li>
+                    </ul>
+                </td>
+            </tr>
+        </table>
+    ';
 
     $contador = 1;
 
@@ -555,6 +604,7 @@
         $descuento1 = 0;
         $descuento2 = 0;
         $descuento3 = 0;
+        $descuento4 = 0;
 
         $mejor_precio = '';
         $drogueria_mejor_precio = '';
@@ -594,7 +644,11 @@
 
         $nombre_ultimo_proveedor = FG_Limpiar_Texto($row2['UltimoProveedorNombre']);
 
-        $precio_ds = number_format($precio_sin_formato / $tasa, 2);
+        try {
+            $precio_ds = number_format($precio_sin_formato / $tasa, 2);
+        } catch (Exception $exception) {
+            dd($precio_sin_formato, $tasa);
+        }
 
         $ultima_venta = ($row2['UltimaVenta']) ? $row2['UltimaVenta']->format('d/m/Y') : '00/00/0000';
         $ultima_compra = ($row2['ultima_compra']) ? $row2['ultima_compra']->format('d/m/Y') : '';
@@ -636,8 +690,9 @@
           $descuento1 = $costo_drolanca * ((int) $drolanca[$indexDrolanca+1]['L'] / 100);
           $descuento2 = $costo_drolanca * ((int) $drolanca[$indexDrolanca+1]['M'] / 100);
           $descuento3 = $costo_drolanca * ((int) $drolanca[$indexDrolanca+1]['N'] / 100);
+          $descuento4 = $costo_drolanca * ((int) $drolanca[$indexDrolanca+1]['AE'] / 100);
 
-          $costo_drolanca = $costo_drolanca - $descuento1 - $descuento2 - $descuento3;
+          $costo_drolanca = $costo_drolanca - $descuento1 - $descuento2 - $descuento3 - $descuento4;
           $costo_drolanca = ($_GET['descuentoFacturacionDrolanca'] != '') ? $costo_drolanca * $_GET['descuentoFacturacionDrolanca'] : $costo_drolanca;
 
           $costo_drolanca = $_GET['opcion'] == 'Articulos dolarizados' ? number_format($costo_drolanca / $tasa, 2) : number_format($costo_drolanca, 2);
@@ -662,7 +717,7 @@
           $costo_drooeste = $costo_drooeste - $descuento1 - $descuento2 - $descuento3;
           $costo_drooeste = ($_GET['descuentoFacturacionDrooeste'] != '') ? $costo_drooeste * $_GET['descuentoFacturacionDrooeste'] : $costo_drooeste;
 
-          $costo_drooeste = $_GET['opcion'] == 'Articulos dolarizados' ? @number_format($costo_drooeste / $tasa, 2) : number_format($costo_drooeste, 2);
+          $costo_drooeste = $_GET['opcion'] == 'Articulos dolarizados' ? number_format($costo_drooeste / $tasa, 2) : number_format($costo_drooeste, 2);
 
           $existencia_drooeste = $drooeste[$indexDrooeste+1]['D'];
 
@@ -689,7 +744,7 @@
           $costo_dronena = $costo_dronena - $descuento1 - $descuento2;
           $costo_dronena = ($_GET['descuentoFacturacionDronena'] != '') ? $costo_dronena * $_GET['descuentoFacturacionDronena'] : $costo_dronena;
 
-          $costo_dronena = $_GET['opcion'] == 'Articulos dolarizados' ? @number_format($costo_dronena / $tasa, 2) : number_format($costo_dronena, 2);
+          $costo_dronena = $_GET['opcion'] == 'Articulos dolarizados' ? number_format($costo_dronena / $tasa, 2) : number_format($costo_dronena, 2);
 
           $existencia_dronena = $dronena[$indexDronena]['CANTIDAD'];
 
@@ -713,7 +768,7 @@
           $costo_drocerca = $costo_drocerca;
           $costo_drocerca = ($_GET['descuentoFacturacionDrocerca'] != '') ? $costo_drocerca * $_GET['descuentoFacturacionDrocerca'] : $costo_drocerca;
 
-          $costo_drocerca = $_GET['opcion'] == 'Articulos dolarizados' ? @number_format($costo_drocerca / $tasa, 2) : number_format($costo_drocerca, 2);
+          $costo_drocerca = $_GET['opcion'] == 'Articulos dolarizados' ? number_format($costo_drocerca / $tasa, 2) : number_format($costo_drocerca, 2);
 
           $existencia_drocerca = $drocerca[$indexDrocerca+1]['D']+$drocerca[$indexDrocerca+1]['E'];
 
@@ -737,7 +792,7 @@
           $costo_cobeca = $costo_cobeca;
           $costo_cobeca = ($_GET['descuentoFacturacionCobeca'] != '') ? $costo_cobeca * $_GET['descuentoFacturacionCobeca'] : $costo_cobeca;
 
-          $costo_cobeca = $_GET['opcion'] == 'Articulos dolarizados' ? @number_format($costo_cobeca / $tasa, 2) : number_format($costo_cobeca, 2);
+          $costo_cobeca = $_GET['opcion'] == 'Articulos dolarizados' ? number_format($costo_cobeca / $tasa, 2) : number_format($costo_cobeca, 2);
 
           $existencia_cobeca = $cobeca[$indexCobeca]['existencia'];
 
@@ -853,15 +908,15 @@
             <th scope="col" class="utilidad CP-sticky">Utilidad</th>
             <th scope="col" class="existencia CP-sticky">Existencia</th>
             <th scope="col" class="costo CP-sticky">Costo</th>
-            <th scope="col" class="bg-warning drolanca CP-sticky" data-toggle="tooltip" data-placement="bottom" title="Fecha de actualización: '.$drolancaFechaActualizacion.'">Drolanca</th>
+            <th scope="col" class="bg-warning drolanca CP-sticky" data-toggle="tooltip" data-placement="bottom" title="Fecha de actualización: '.$drolancaFechaActualizacion.'">Drolanca ('.$drolancaFechaActualizacion.')</th>
             <th scope="col" class="bg-warning drolanca CP-sticky" data-toggle="tooltip" data-placement="bottom" title="Fecha de actualización: '.$drolancaFechaActualizacion.'">Existencia Drolanca</th>
-            <th scope="col" class="bg-warning drooeste CP-sticky" data-toggle="tooltip" data-placement="bottom" title="Fecha de actualización: '.$drooesteFechaActualizacion.'">Drooeste</th>
+            <th scope="col" class="bg-warning drooeste CP-sticky" data-toggle="tooltip" data-placement="bottom" title="Fecha de actualización: '.$drooesteFechaActualizacion.'">Drooeste ('.$drooesteFechaActualizacion.')</th>
             <th scope="col" class="bg-warning drooeste CP-sticky" data-toggle="tooltip" data-placement="bottom" title="Fecha de actualización: '.$drooesteFechaActualizacion.'">Existencia Drooeste</th>
-            <th scope="col" class="bg-warning dronena CP-sticky" data-toggle="tooltip" data-placement="bottom" title="Fecha de actualización: '.$dronenaFechaActualizacion.'">Dronena</th>
+            <th scope="col" class="bg-warning dronena CP-sticky" data-toggle="tooltip" data-placement="bottom" title="Fecha de actualización: '.$dronenaFechaActualizacion.'">Dronena ('.$dronenaFechaActualizacion.')</th>
             <th scope="col" class="bg-warning dronena CP-sticky" data-toggle="tooltip" data-placement="bottom" title="Fecha de actualización: '.$dronenaFechaActualizacion.'">Existencia Dronena</th>
-            <th scope="col" class="bg-warning drocerca CP-sticky" data-toggle="tooltip" data-placement="bottom" title="Fecha de actualización: '.$drocercaFechaActualizacion.'">Drocerca</th>
+            <th scope="col" class="bg-warning drocerca CP-sticky" data-toggle="tooltip" data-placement="bottom" title="Fecha de actualización: '.$drocercaFechaActualizacion.'">Drocerca ('.$drocercaFechaActualizacion.')</th>
             <th scope="col" class="bg-warning drocerca CP-sticky" data-toggle="tooltip" data-placement="bottom" title="Fecha de actualización: '.$drocercaFechaActualizacion.'">Existencia Drocerca</th>
-            <th scope="col" class="bg-warning cobeca CP-sticky" data-toggle="tooltip" data-placement="bottom" title="Fecha de actualización: '.$cobecaFechaActualizacion.'">COBECA</th>
+            <th scope="col" class="bg-warning cobeca CP-sticky" data-toggle="tooltip" data-placement="bottom" title="Fecha de actualización: '.$cobecaFechaActualizacion.'">COBECA ('.$cobecaFechaActualizacion.')</th>
             <th scope="col" class="bg-warning cobeca CP-sticky" data-toggle="tooltip" data-placement="bottom" title="Fecha de actualización: '.$cobecaFechaActualizacion.'">Existencia COBECA</th>
             <th scope="col" class="ultimo_lote CP-sticky">Ultimo lote</th>
             <th scope="col" class="ultima_compra CP-sticky">Ultima compra</th>
