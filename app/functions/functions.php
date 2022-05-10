@@ -2636,7 +2636,7 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td style="text-align: center" class="rowDer rowDerA aumento">
+                                        <td colspan="2" style="text-align: center" class="rowDer rowDerA aumento">
                                             <label style="margin-right:10px;'.$tam_dolar.'">
                                                 <strong>
                                                 '.$precio.'
