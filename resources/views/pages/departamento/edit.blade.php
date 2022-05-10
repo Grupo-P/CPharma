@@ -164,14 +164,16 @@
                 <th scope="col">46</th>
                 <td scope="col">Compras por archivo</td>
                 <th scope="col">47</th>
-                <td scope="col">Cruce de aplicación de consultas</td>                
+                <td scope="col">Cruce de aplicación de consultas</td>
             </tr>
-            <tr>                
+            <tr>
                 <th scope="col">48</th>
                 <td scope="col">Cambio de precios</td>
                 <th scope="col">49</th>
                 <td scope="col">Reposicion de Inventario</td>
-            </tr>            
+                <th scope="col">50</th>
+                <td scope="col">Catálogo de droguerías</td>
+            </tr>
         </tbody>
     </table>
 
