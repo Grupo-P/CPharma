@@ -394,7 +394,8 @@
 						|| Auth::user()->departamento == 'LÍDER DE TIENDA' 
 						|| Auth::user()->departamento == 'INVENTARIO'
 				    || Auth::user()->departamento == 'GERENCIA'
-				    || Auth::user()->departamento == 'TECNOLOGIA')
+				    || Auth::user()->departamento == 'TECNOLOGIA'
+                    || Auth::user()->departamento == 'CONTRASEDE')
 						){
 					?>
 						<a href="/traslado/{{$traslado->id}}" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Soporte Traslado" style="width: auto">
@@ -438,6 +439,7 @@
 					if(($traslado->estatus=='EMBALADO') && 
 						(Auth::user()->departamento == 'ADMINISTRACION'
 				    || Auth::user()->departamento == 'GERENCIA'
+                    || Auth::user()->departamento == 'CONTRASEDE'
 				    || Auth::user()->departamento == 'TECNOLOGIA'
                     || Auth::user()->departamento == 'DEVOLUCIONES'
 				    || (Auth::user()->departamento == 'AUDITORIA' && Auth::user()->role == 'SUPERVISOR')
