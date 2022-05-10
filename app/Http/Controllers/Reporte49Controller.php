@@ -39,7 +39,7 @@ class Reporte49Controller extends Controller
         $RangoDias = 15;
         $LimiteDiasCero = 10;        
         //$Hoy = date("Y-m-d",strtotime(date("2022-04-04")."+ 1 days"));
-        $Hoy = date("Y-m-d",strtotime(date("Y-m-d")."+ 1 days"));        
+        $Hoy = date("Y-m-d",strtotime(date("Y-m-d")."+ 1 days"));
         $FInicialRangoUltimo = date("Y-m-d",strtotime($Hoy."-$RangoDias days"));
         $FInicialRangoAnterior = date("Y-m-d",strtotime($FInicialRangoUltimo."-$RangoDias days"));
         
@@ -54,13 +54,13 @@ class Reporte49Controller extends Controller
             $CodigoInterno = $row["CodigoInterno"];
             $CodigoBarra = $row["CodigoBarra"];
             $Descripcion = $row["Descripcion"];
-            $Existencia = $row["Existencia"];
+            $Existencia = intval($row["Existencia"]);
             $UltimaVenta = ($row["UltimaVenta"])?$row["UltimaVenta"]->format('d-m-Y'):'N/A';
             $UltimaCompra = ($row["UltimaCompra"])?$row["UltimaCompra"]->format('d-m-Y'):'N/A';
             
             $arrayRangoUltimo = $this->getEvaluarDiasCero($conn,$IdArticulo,$Existencia,$FInicialRangoUltimo,$Hoy,$LimiteDiasCero);
             $arrayRangoAnterior = $this->getEvaluarDiasCero($conn,$IdArticulo,$Existencia,$FInicialRangoAnterior,$FInicialRangoUltimo,$LimiteDiasCero);
-                        
+                                                
             $Variacion = $this->getVariacion($arrayRangoUltimo['DiasRestantesQuiebre'], $arrayRangoAnterior['DiasRestantesQuiebre']);
             $Status = $this->getStatus($arrayRangoUltimo['DiasRestantesQuiebre'], $arrayRangoAnterior['DiasRestantesQuiebre']);
             $Comportamiento = $this->getComportamiento($Variacion,$arrayRangoUltimo['DiasRestantesQuiebre'], $arrayRangoAnterior['DiasRestantesQuiebre']);
@@ -201,22 +201,30 @@ class Reporte49Controller extends Controller
 
     public function getEvaluarDiasCero($conn,$IdArticulo,$Existencia,$FInicial,$FFinal,$LimiteDiasCero){
     
-        $UnidadesVendidas = $VentaDiariaQuiebre = $DiasRestantesQuiebre = "";
+        $UnidadesVendidas = $VentaDiariaQuiebre = $DiasRestantesQuiebre = "N/D";
 
         $RangoDiasQuiebre = DB::select("
             SELECT 
             COUNT(*) AS Cuenta 
             FROM dias_ceros 
             WHERE dias_ceros.id_articulo = '$IdArticulo' AND (fecha_captura >= '$FInicial' AND `fecha_captura` < '$FFinal')
-        "); 
-
+        ");         
+                
         if($RangoDiasQuiebre[0]->Cuenta >= $LimiteDiasCero ){
             $sql = $this->Venta_Articulo($IdArticulo,$FInicial,$FFinal);            
             $result = sqlsrv_query($conn,$sql);
             $UnidadesVendidas = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC);
-                   
-            $VentaDiariaQuiebre = FG_Venta_Diaria($UnidadesVendidas['TotalUnidadesVendidas'],$RangoDiasQuiebre[0]->Cuenta);
-            $DiasRestantesQuiebre = FG_Dias_Restantes($Existencia,$VentaDiariaQuiebre);               
+            
+            if($UnidadesVendidas!=NULL){
+                $UnidadesVendidas['UnidadesVendidas'] = intval($UnidadesVendidas['UnidadesVendidas']);
+                $UnidadesVendidas['UnidadesDevueltas'] = intval($UnidadesVendidas['UnidadesDevueltas']);
+                $UnidadesVendidas['TotalUnidadesVendidas'] = intval($UnidadesVendidas['TotalUnidadesVendidas']);
+
+                $VentaDiariaQuiebre = FG_Venta_Diaria($UnidadesVendidas['TotalUnidadesVendidas'],$RangoDiasQuiebre[0]->Cuenta);
+                $DiasRestantesQuiebre = FG_Dias_Restantes($Existencia,$VentaDiariaQuiebre);               
+            }else{
+                $UnidadesVendidas = $VentaDiariaQuiebre = $DiasRestantesQuiebre = "N/D";
+            }                
         }                
         else{
             $UnidadesVendidas = $VentaDiariaQuiebre = $DiasRestantesQuiebre = "N/D";
@@ -246,8 +254,8 @@ class Reporte49Controller extends Controller
 
     public function getVariacion($RangoUltimo, $RangoAnterior){
         
-        if( ($RangoUltimo=="N/D") || ($RangoAnterior=="N/D") ){
-            return "-";
+        if( ($RangoUltimo==="N/D") || ($RangoAnterior==="N/D") ){
+            return "N/D";
         }else{
             //Formula : ((primer rango - segundo rango) / primer rango) * 100
             $variacion = (($RangoAnterior - $RangoUltimo) / $RangoAnterior) * 100;
@@ -256,10 +264,13 @@ class Reporte49Controller extends Controller
     }
 
     public function getStatus($RangoUltimo, $RangoAnterior){
-             
-        if($RangoUltimo===0.00){
+                        
+        if($RangoAnterior==="N/D" || $RangoUltimo==="N/D"){
+            return "N/D";
+        }
+        else if($RangoUltimo==0 && $RangoUltimo!=="N/D"){
             return "INDETERMINABLE";
-        }                      
+        }        
         else if($RangoUltimo>0 && $RangoUltimo<20){
             return 'CRITICO';
         }
@@ -268,35 +279,40 @@ class Reporte49Controller extends Controller
         }
         else if($RangoUltimo>=45){
             return 'EXCEDIDO';
-        }  
-        else if($RangoAnterior=="N/D"){
-            return "-";
-        }                             
+        }                                     
     }
 
     public function getComportamiento($Variacion,$RangoUltimo, $RangoAnterior){
-
-        if( $RangoUltimo===0.00 && $RangoAnterior===0.00 ){
+    
+        if( ($RangoAnterior==0 && $RangoUltimo==0) && ($RangoAnterior!=="N/D" && $RangoUltimo!=="N/D") ){
             return "PELIGRO";
-        }                                
-        else if( $RangoAnterior!=0 && $RangoUltimo==0 ){
-            return "CAYÓ";
-        }        
-        else if( $RangoAnterior=="N/D" && $RangoUltimo!=0 ){
-            return "LLEGANDO";
-        }
-        else if( $RangoUltimo=="N/D" || $RangoAnterior=="N/D" ){
+        }                                      
+        else if( $RangoAnterior>0 && $RangoUltimo==="N/D" ){
             return "INDETERMINABLE";
-        }
-        else if( abs($Variacion) < 10 ){
-            return "ESTABLE";
-        }
-        else if( $RangoAnterior < ($RangoUltimo+($RangoUltimo*0.10)) ){
-            return "DECRECIO";
-        }
-        else if( $RangoAnterior > ($RangoUltimo-($RangoUltimo*0.10)) ){
+        }        
+        else if( ($RangoAnterior==0 && $RangoAnterior!=="N/D") && ($RangoUltimo>0 && $RangoUltimo!=="N/D") ){
             return "CRECIO";
         }
+        else if( $RangoAnterior==="N/D" && $RangoUltimo==0 && $RangoUltimo!=="N/D" ){
+            return "LLEGANDO";
+        }
+        else if( abs($Variacion) < 10 && ($RangoAnterior!=="N/D" && $RangoUltimo!=="N/D")){
+            return "ESTABLE";
+        }
+        else if( $RangoAnterior==="N/D" && $RangoUltimo>0 ){
+            return "INDETERMINABLE";
+        }
+
+        if(($RangoAnterior!=="N/D" && $RangoUltimo!=="N/D")){
+            if( $RangoAnterior < ($RangoUltimo+($RangoUltimo*0.10)) ){
+                return "DECRECIO";
+            }
+            else if( $RangoAnterior > ($RangoUltimo-($RangoUltimo*0.10)) ){
+                return "CRECIO";
+            }
+        }else{
+            return "INDETERMINABLE";
+        }       
     }
 
     public function generarExcel($arrayArticulos){
