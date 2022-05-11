@@ -291,6 +291,7 @@
           $dronena[$i]['DCTO_UFI'] = trim(substr($field, 97, 13));
           $dronena[$i]['DCTO_EMPQUE'] = trim(substr($field, 118, 12));
           $dronena[$i]['CANTIDAD'] = trim(substr($field, 64, 12));
+          $dronena[$i]['FECHA_EXP'] = trim(substr($field, 191, 10));
 
           $i = $i+1;
         }
@@ -311,6 +312,7 @@
           $dronena[$i]['DCTO_UFI'] = trim(substr($field, 97, 13));
           $dronena[$i]['DCTO_EMPQUE'] = trim(substr($field, 118, 12));
           $dronena[$i]['CANTIDAD'] = trim(substr($field, 64, 12));
+          $dronena[$i]['FECHA_EXP'] = trim(substr($field, 191, 10));
 
           $i = $i+1;
         }
@@ -567,9 +569,10 @@
                         <li>Los precios de las droguerías no incluyen IVA.</li>
                         <li>Se configuraron los siguientes descuentos en factura por droguería: '.$textoDescuentos.'</li>
                         <li>La existencia de Drocerca incluye la sede de Mérida mas la sede de Caracas.</li>
-                        <li>La existencia de nena solo incluye la sede de Barquisimeto.</li>
+                        <li>La existencia de Nena solo incluye la sede de Barquisimeto.</li>
                         <li>La existencia de Drolanca solo incluye la sede del Vigía.</li>
                         <li>Todos los precios mostrados incluyen los descuentos que la droguería dan en las interconexiones mas los configurados por el usuario.</li>
+                        <li>Los artículos que tengamos en existencia pero no tenga ninguna droguería no se esta incluyendo en este reporte.</li>
                     </ul>
                 </td>
             </tr>
@@ -605,6 +608,9 @@
         $descuento2 = 0;
         $descuento3 = 0;
         $descuento4 = 0;
+
+        $fecha_vencimiento_dronena = '-';
+        $fecha_vencimiento_drocerca = '-';
 
         $mejor_precio = '';
         $drogueria_mejor_precio = '';
@@ -748,6 +754,8 @@
 
           $existencia_dronena = $dronena[$indexDronena]['CANTIDAD'];
 
+          $fecha_vencimiento_dronena = $dronena[$indexDronena]['FECHA_EXP'];
+
           if ($drogueria_mejor_precio != '') {
             if ($mejor_precio > $costo_dronena) {
                 $mejor_precio = $costo_dronena;
@@ -781,6 +789,8 @@
             $drogueria_mejor_precio = 'drocerca';
             $mejor_precio = $costo_drocerca;
           }
+
+          $fecha_vencimiento_drocerca = $drocerca[$indexDrocerca+1]['J'];
         }
 
         $indexCobeca = array_search($codigo_barra, array_column($cobeca, 'cod_barra'));
@@ -836,8 +846,10 @@
             $bajadas[$y]['existencia_drooeste'] = $existencia_drooeste;
             $bajadas[$y]['costo_dronena'] = $costo_dronena;
             $bajadas[$y]['existencia_dronena'] = $existencia_dronena;
+            $bajadas[$y]['fecha_vencimiento_dronena'] = $fecha_vencimiento_dronena;
             $bajadas[$y]['costo_drocerca'] = $costo_drocerca;
             $bajadas[$y]['existencia_drocerca'] = $existencia_drocerca;
+            $bajadas[$y]['fecha_vencimiento_drocerca'] = $fecha_vencimiento_drocerca;
             $bajadas[$y]['costo_cobeca'] = $costo_cobeca;
             $bajadas[$y]['existencia_cobeca'] = $existencia_cobeca;
             $bajadas[$y]['ultimo_lote'] = $ultimo_lote;
@@ -866,8 +878,10 @@
             $subidas[$k]['existencia_drooeste'] = $existencia_drooeste;
             $subidas[$k]['costo_dronena'] = $costo_dronena;
             $subidas[$k]['existencia_dronena'] = $existencia_dronena;
+            $subidas[$k]['fecha_vencimiento_dronena'] = $fecha_vencimiento_dronena;
             $subidas[$k]['costo_drocerca'] = $costo_drocerca;
             $subidas[$k]['existencia_drocerca'] = $existencia_drocerca;
+            $subidas[$k]['fecha_vencimiento_drocerca'] = $fecha_vencimiento_drocerca;
             $subidas[$k]['costo_cobeca'] = $costo_cobeca;
             $subidas[$k]['existencia_cobeca'] = $existencia_cobeca;
             $subidas[$k]['ultimo_lote'] = $ultimo_lote;
@@ -908,16 +922,16 @@
             <th scope="col" class="utilidad CP-sticky">Utilidad</th>
             <th scope="col" class="existencia CP-sticky">Existencia</th>
             <th scope="col" class="costo CP-sticky">Costo</th>
-            <th scope="col" class="bg-warning drolanca CP-sticky" data-toggle="tooltip" data-placement="bottom" title="Fecha de actualización: '.$drolancaFechaActualizacion.'">Drolanca ('.$drolancaFechaActualizacion.')</th>
-            <th scope="col" class="bg-warning drolanca CP-sticky" data-toggle="tooltip" data-placement="bottom" title="Fecha de actualización: '.$drolancaFechaActualizacion.'">Existencia Drolanca</th>
-            <th scope="col" class="bg-warning drooeste CP-sticky" data-toggle="tooltip" data-placement="bottom" title="Fecha de actualización: '.$drooesteFechaActualizacion.'">Drooeste ('.$drooesteFechaActualizacion.')</th>
-            <th scope="col" class="bg-warning drooeste CP-sticky" data-toggle="tooltip" data-placement="bottom" title="Fecha de actualización: '.$drooesteFechaActualizacion.'">Existencia Drooeste</th>
-            <th scope="col" class="bg-warning dronena CP-sticky" data-toggle="tooltip" data-placement="bottom" title="Fecha de actualización: '.$dronenaFechaActualizacion.'">Dronena ('.$dronenaFechaActualizacion.')</th>
-            <th scope="col" class="bg-warning dronena CP-sticky" data-toggle="tooltip" data-placement="bottom" title="Fecha de actualización: '.$dronenaFechaActualizacion.'">Existencia Dronena</th>
-            <th scope="col" class="bg-warning drocerca CP-sticky" data-toggle="tooltip" data-placement="bottom" title="Fecha de actualización: '.$drocercaFechaActualizacion.'">Drocerca ('.$drocercaFechaActualizacion.')</th>
-            <th scope="col" class="bg-warning drocerca CP-sticky" data-toggle="tooltip" data-placement="bottom" title="Fecha de actualización: '.$drocercaFechaActualizacion.'">Existencia Drocerca</th>
-            <th scope="col" class="bg-warning cobeca CP-sticky" data-toggle="tooltip" data-placement="bottom" title="Fecha de actualización: '.$cobecaFechaActualizacion.'">COBECA ('.$cobecaFechaActualizacion.')</th>
-            <th scope="col" class="bg-warning cobeca CP-sticky" data-toggle="tooltip" data-placement="bottom" title="Fecha de actualización: '.$cobecaFechaActualizacion.'">Existencia COBECA</th>
+            <th scope="col" class="bg-warning drolanca CP-sticky"</th>
+            <th scope="col" class="bg-warning drolanca CP-sticky">Existencia Drolanca</th>
+            <th scope="col" class="bg-warning drooeste CP-sticky">Drooeste ('.$drooesteFechaActualizacion.')</th>
+            <th scope="col" class="bg-warning drooeste CP-sticky">Existencia Drooeste</th>
+            <th scope="col" class="bg-warning dronena CP-sticky">Dronena ('.$dronenaFechaActualizacion.')</th>
+            <th scope="col" class="bg-warning dronena CP-sticky">Existencia Dronena</th>
+            <th scope="col" class="bg-warning drocerca CP-sticky">Drocerca ('.$drocercaFechaActualizacion.')</th>
+            <th scope="col" class="bg-warning drocerca CP-sticky">Existencia Drocerca</th>
+            <th scope="col" class="bg-warning cobeca CP-sticky">COBECA ('.$cobecaFechaActualizacion.')</th>
+            <th scope="col" class="bg-warning cobeca CP-sticky">Existencia COBECA</th>
             <th scope="col" class="ultimo_lote CP-sticky">Ultimo lote</th>
             <th scope="col" class="ultima_compra CP-sticky">Ultima compra</th>
             <th scope="col" class="ultima_venta CP-sticky">Ultima venta</th>
@@ -951,16 +965,16 @@
         echo '<td class="utilidad" align="center">'.$subida['utilidad'].'</td>';
         echo '<td class="existencia" align="center">'.$subida['existencia'].'</td>';
         echo '<td class="costo" align="center">'.$subida['costo'].'</td>';
-        echo '<td data-toggle="tooltip" data-placement="bottom" title="Fecha de actualización: '.$drolancaFechaActualizacion.'" class="drolanca '.$resaltado_drolanca.'" align="center">'.$subida['costo_drolanca'].'</td>';
-        echo '<td data-toggle="tooltip" data-placement="bottom" title="Fecha de actualización: '.$drolancaFechaActualizacion.'" class="drolanca bg-warning" align="center">'.$subida['existencia_drolanca'].'</td>';
-        echo '<td data-toggle="tooltip" data-placement="bottom" title="Fecha de actualización: '.$drooesteFechaActualizacion.'" class="drooeste '.$resaltado_drooeste.'" align="center">'.$subida['costo_drooeste'].'</td>';
-        echo '<td data-toggle="tooltip" data-placement="bottom" title="Fecha de actualización: '.$drooesteFechaActualizacion.'" class="drooeste bg-warning" align="center">'.$subida['existencia_drooeste'].'</td>';
-        echo '<td data-toggle="tooltip" data-placement="bottom" title="Fecha de actualización: '.$dronenaFechaActualizacion.'" class="dronena '.$resaltado_dronena.'" align="center">'.$subida['costo_dronena'].'</td>';
-        echo '<td data-toggle="tooltip" data-placement="bottom" title="Fecha de actualización: '.$dronenaFechaActualizacion.'" class="dronena bg-warning" align="center">'.$subida['existencia_dronena'].'</td>';
-        echo '<td data-toggle="tooltip" data-placement="bottom" title="Fecha de actualización: '.$drocercaFechaActualizacion.'" class="drocerca '.$resaltado_drocerca.'" align="center">'.$subida['costo_drocerca'].'</td>';
-        echo '<td data-toggle="tooltip" data-placement="bottom" title="Fecha de actualización: '.$drocercaFechaActualizacion.'" class="drocerca bg-warning" align="center">'.$subida['existencia_drocerca'].'</td>';
-        echo '<td data-toggle="tooltip" data-placement="bottom" title="Fecha de actualización: '.$cobecaFechaActualizacion.'" class="cobeca '.$resaltado_cobeca.'" align="center">'.$subida['costo_cobeca'].'</td>';
-        echo '<td data-toggle="tooltip" data-placement="bottom" title="Fecha de actualización: '.$cobecaFechaActualizacion.'" class="cobeca bg-warning" align="center">'.$subida['existencia_cobeca'].'</td>';
+        echo '<td class="drolanca '.$resaltado_drolanca.'" align="center">'.$subida['costo_drolanca'].'</td>';
+        echo '<td class="drolanca bg-warning" align="center">'.$subida['existencia_drolanca'].'</td>';
+        echo '<td class="drooeste '.$resaltado_drooeste.'" align="center">'.$subida['costo_drooeste'].'</td>';
+        echo '<td class="drooeste bg-warning" align="center">'.$subida['existencia_drooeste'].'</td>';
+        echo '<td data-toggle="tooltip" data-placement="top" title="Fecha de vencimiento: '.$subida['fecha_vencimiento_dronena'].'" class="dronena '.$resaltado_dronena.'" align="center">'.$subida['costo_dronena'].'</td>';
+        echo '<td data-toggle="tooltip" data-placement="top" title="Fecha de vencimiento: '.$subida['fecha_vencimiento_dronena'].'" class="dronena bg-warning" align="center">'.$subida['existencia_dronena'].'</td>';
+        echo '<td data-toggle="tooltip" data-placement="top" title="Fecha de vencimiento: '.$subida['fecha_vencimiento_drocerca'].'" class="drocerca '.$resaltado_drocerca.'" align="center">'.$subida['costo_drocerca'].'</td>';
+        echo '<td data-toggle="tooltip" data-placement="top" title="Fecha de vencimiento: '.$subida['fecha_vencimiento_drocerca'].'" class="drocerca bg-warning" align="center">'.$subida['existencia_drocerca'].'</td>';
+        echo '<td class="cobeca '.$resaltado_cobeca.'" align="center">'.$subida['costo_cobeca'].'</td>';
+        echo '<td class="cobeca bg-warning" align="center">'.$subida['existencia_cobeca'].'</td>';
 
         echo '<td class="ultimo_lote" align="center">'.$subida['ultimo_lote'].'</td>';
         echo '<td class="ultima_compra" align="center">'.$subida['ultima_compra'].'</td>';
@@ -1000,16 +1014,16 @@
             <th scope="col" class="utilidad CP-sticky">Utilidad</th>
             <th scope="col" class="existencia CP-sticky">Existencia</th>
             <th scope="col" class="costo CP-sticky">Costo</th>
-            <th scope="col" class="bg-warning drolanca CP-sticky" data-toggle="tooltip" data-placement="bottom" title="Fecha de actualización: '.$drolancaFechaActualizacion.'">Drolanca</th>
-            <th scope="col" class="bg-warning drolanca CP-sticky" data-toggle="tooltip" data-placement="bottom" title="Fecha de actualización: '.$drolancaFechaActualizacion.'">Existencia Drolanca</th>
-            <th scope="col" class="bg-warning drooeste CP-sticky" data-toggle="tooltip" data-placement="bottom" title="Fecha de actualización: '.$drooesteFechaActualizacion.'">Drooeste</th>
-            <th scope="col" class="bg-warning drooeste CP-sticky" data-toggle="tooltip" data-placement="bottom" title="Fecha de actualización: '.$drooesteFechaActualizacion.'">Existencia Drooeste</th>
-            <th scope="col" class="bg-warning dronena CP-sticky" data-toggle="tooltip" data-placement="bottom" title="Fecha de actualización: '.$dronenaFechaActualizacion.'">Dronena</th>
-            <th scope="col" class="bg-warning dronena CP-sticky" data-toggle="tooltip" data-placement="bottom" title="Fecha de actualización: '.$dronenaFechaActualizacion.'">Existencia Dronena</th>
-            <th scope="col" class="bg-warning drocerca CP-sticky" data-toggle="tooltip" data-placement="bottom" title="Fecha de actualización: '.$drocercaFechaActualizacion.'">Drocerca</th>
-            <th scope="col" class="bg-warning drocerca CP-sticky" data-toggle="tooltip" data-placement="bottom" title="Fecha de actualización: '.$drocercaFechaActualizacion.'">Existencia Drocerca</th>
-            <th scope="col" class="bg-warning cobeca CP-sticky" data-toggle="tooltip" data-placement="bottom" title="Fecha de actualización: '.$cobecaFechaActualizacion.'">COBECA</th>
-            <th scope="col" class="bg-warning cobeca CP-sticky" data-toggle="tooltip" data-placement="bottom" title="Fecha de actualización: '.$cobecaFechaActualizacion.'">Existencia COBECA</th>
+            <th scope="col" class="bg-warning drolanca CP-sticky"</th>
+            <th scope="col" class="bg-warning drolanca CP-sticky">Existencia Drolanca</th>
+            <th scope="col" class="bg-warning drooeste CP-sticky">Drooeste ('.$drooesteFechaActualizacion.')</th>
+            <th scope="col" class="bg-warning drooeste CP-sticky">Existencia Drooeste</th>
+            <th scope="col" class="bg-warning dronena CP-sticky">Dronena ('.$dronenaFechaActualizacion.')</th>
+            <th scope="col" class="bg-warning dronena CP-sticky">Existencia Dronena</th>
+            <th scope="col" class="bg-warning drocerca CP-sticky">Drocerca ('.$drocercaFechaActualizacion.')</th>
+            <th scope="col" class="bg-warning drocerca CP-sticky">Existencia Drocerca</th>
+            <th scope="col" class="bg-warning cobeca CP-sticky">COBECA ('.$cobecaFechaActualizacion.')</th>
+            <th scope="col" class="bg-warning cobeca CP-sticky">Existencia COBECA</th>
             <th scope="col" class="ultimo_lote CP-sticky">Ultimo lote</th>
             <th scope="col" class="ultima_compra CP-sticky">Ultima compra</th>
             <th scope="col" class="ultima_venta CP-sticky">Ultima venta</th>
@@ -1043,17 +1057,16 @@
         echo '<td class="utilidad" align="center">'.$bajada['utilidad'].'</td>';
         echo '<td class="existencia" align="center">'.$bajada['existencia'].'</td>';
         echo '<td class="costo" align="center">'.$bajada['costo'].'</td>';
-        echo '<td data-toggle="tooltip" data-placement="bottom" title="Fecha de actualización: '.$drolancaFechaActualizacion.'" class="drolanca '.$resaltado_drolanca.'" align="center">'.$bajada['costo_drolanca'].'</td>';
-        echo '<td data-toggle="tooltip" data-placement="bottom" title="Fecha de actualización: '.$drolancaFechaActualizacion.'" class="drolanca bg-warning" align="center">'.$bajada['existencia_drolanca'].'</td>';
-        echo '<td data-toggle="tooltip" data-placement="bottom" title="Fecha de actualización: '.$drooesteFechaActualizacion.'" class="drooeste '.$resaltado_drooeste.'" align="center">'.$bajada['costo_drooeste'].'</td>';
-        echo '<td data-toggle="tooltip" data-placement="bottom" title="Fecha de actualización: '.$drooesteFechaActualizacion.'" class="drooeste bg-warning" align="center">'.$bajada['existencia_drooeste'].'</td>';
-        echo '<td data-toggle="tooltip" data-placement="bottom" title="Fecha de actualización: '.$dronenaFechaActualizacion.'" class="dronena '.$resaltado_dronena.'" align="center">'.$bajada['costo_dronena'].'</td>';
-        echo '<td data-toggle="tooltip" data-placement="bottom" title="Fecha de actualización: '.$dronenaFechaActualizacion.'" class="dronena bg-warning" align="center">'.$bajada['existencia_dronena'].'</td>';
-        echo '<td data-toggle="tooltip" data-placement="bottom" title="Fecha de actualización: '.$drocercaFechaActualizacion.'" class="drocerca '.$resaltado_drocerca.'" align="center">'.$bajada['costo_drocerca'].'</td>';
-        echo '<td data-toggle="tooltip" data-placement="bottom" title="Fecha de actualización: '.$drocercaFechaActualizacion.'" class="drocerca bg-warning" align="center">'.$bajada['existencia_drocerca'].'</td>';
-        echo '<td data-toggle="tooltip" data-placement="bottom" title="Fecha de actualización: '.$cobecaFechaActualizacion.'" class="cobeca '.$resaltado_cobeca.'" align="center">'.$bajada['costo_cobeca'].'</td>';
-        echo '<td data-toggle="tooltip" data-placement="bottom" title="Fecha de actualización: '.$cobecaFechaActualizacion.'" class="cobeca bg-warning" align="center">'.$bajada['existencia_cobeca'].'</td>';
-
+        echo '<td class="drolanca '.$resaltado_drolanca.'" align="center">'.$bajada['costo_drolanca'].'</td>';
+        echo '<td class="drolanca bg-warning" align="center">'.$bajada['existencia_drolanca'].'</td>';
+        echo '<td class="drooeste '.$resaltado_drooeste.'" align="center">'.$bajada['costo_drooeste'].'</td>';
+        echo '<td class="drooeste bg-warning" align="center">'.$bajada['existencia_drooeste'].'</td>';
+        echo '<td data-toggle="tooltip" data-placement="top" title="Fecha de vencimiento: '.$bajada['fecha_vencimiento_dronena'].'" class="dronena '.$resaltado_dronena.'" align="center">'.$bajada['costo_dronena'].'</td>';
+        echo '<td data-toggle="tooltip" data-placement="top" title="Fecha de vencimiento: '.$bajada['fecha_vencimiento_dronena'].'" class="dronena bg-warning" align="center">'.$bajada['existencia_dronena'].'</td>';
+        echo '<td data-toggle="tooltip" data-placement="top" title="Fecha de vencimiento: '.$subida['fecha_vencimiento_drocerca'].'" class="drocerca '.$resaltado_drocerca.'" align="center">'.$bajada['costo_drocerca'].'</td>';
+        echo '<td data-toggle="tooltip" data-placement="top" title="Fecha de vencimiento: '.$subida['fecha_vencimiento_drocerca'].'" class="drocerca bg-warning" align="center">'.$bajada['existencia_drocerca'].'</td>';
+        echo '<td class="cobeca '.$resaltado_cobeca.'" align="center">'.$bajada['costo_cobeca'].'</td>';
+        echo '<td class="cobeca bg-warning" align="center">'.$bajada['existencia_cobeca'].'</td>';
         echo '<td class="ultimo_lote" align="center">'.$bajada['ultimo_lote'].'</td>';
         echo '<td class="ultima_compra" align="center">'.$bajada['ultima_compra'].'</td>';
         echo '<td class="ultima_venta" align="center">'.$bajada['ultima_venta'].'</td>';
