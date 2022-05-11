@@ -234,7 +234,15 @@ class TrasladoController extends Controller
             include(app_path().'\functions\querys_mysql.php');
             include(app_path().'\functions\querys_sqlserver.php');
 
-            if (!array_unique(array_column(request()->reclamos, 'cantidad'))[0]) {
+            $validacion = null;
+
+            foreach (array_column(request()->reclamos, 'cantidad') as $item) {
+                if ($item) {
+                    $validacion = $item;
+                }
+            }
+
+            if (!$validacion) {
                 return redirect('/traslado/finalizarConReclamo?traslado=' . request()->traslado);
             }
 

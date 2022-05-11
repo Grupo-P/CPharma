@@ -373,10 +373,10 @@
                 $amarillo = 'btn-outline-warning';
 
                 if($traslado->estatus=='ENTREGADO'){
-                    $Dias = FG_Rango_Dias($traslado->fecha_traslado,$traslado->updated_at);
+                    $Dias = FG_Rango_Dias($traslado->fecha_traslado,date_format($traslado->updated_at, 'Y-m-d'));
                 }
                 else{
-                    $Dias = FG_Rango_Dias($traslado->fecha_traslado,date('Y-m-d H:i:s'));
+                    $Dias = FG_Rango_Dias($traslado->fecha_traslado,date('Y-m-d'));
                 }
 
                 if ($traslado->estatus == 'PROCESADO') {
