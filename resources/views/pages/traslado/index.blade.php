@@ -17,6 +17,46 @@
   $cuatro = 0;
   $cinco = 0;
   $siete = 0;
+
+  $embaladosAbiertas = 0;
+  $embaladosTres = 0;
+  $embaladosCuatro = 0;
+  $embaladosCinco = 0;
+  $embaladosSiete = 0;
+
+  $promedioEmbalados = 0;
+  $promedioEntregados15 = 0;
+
+  $sql = "
+    SELECT
+        SUM(DATEDIFF(DATE(NOW()), traslados.fecha_traslado)) / COUNT(1) AS promedio_embalados
+    FROM
+        traslados
+    WHERE
+        traslados.estatus = 'EMBALADO'
+    ORDER BY
+        traslados.id DESC;
+  ";
+
+  $sql = DB::select($sql);
+
+  $promedioEmbalados = $sql[0]->promedio_embalados;
+
+  $sql = "
+    SELECT
+        SUM(DATEDIFF(DATE(NOW()), traslados.fecha_traslado)) / COUNT(1) AS promedioEntregados15
+    FROM
+        traslados
+    WHERE
+        traslados.estatus = 'ENTREGADO'
+        AND fecha_traslado >= DATE_SUB(DATE(NOW()), INTERVAL 15 DAY)
+    ORDER BY
+        traslados.id DESC;
+  ";
+
+  $sql = DB::select($sql);
+
+  $promedioEntregados15 = $sql[0]->promedioEntregados15;
 ?>
 
 
@@ -133,22 +173,24 @@
 
     <hr class="row align-items-start col-12">
 
-    <div class="d-flex justify-content-center col-md-12 text-center form-inline">
-        <form action="">
-            Cantidad de registros a mostrar
+    @if(request()->Tipo != 0 && request()->Tipo != 1)
+        <div class="d-flex justify-content-center col-md-12 text-center form-inline">
+            <form action="">
+                Cantidad de registros a mostrar
 
-            <select name="cantidad" class="ml-5 form-control">
-                <option {{ request()->cantidad == 50 ? 'selected' : '' }} value="50">50</option>
-                <option {{ request()->cantidad == 100 ? 'selected' : '' }} value="100">100</option>
-                <option {{ request()->cantidad == 200 ? 'selected' : '' }} value="200">200</option>
-                <option {{ request()->cantidad == 500 ? 'selected' : '' }} value="500">500</option>
-                <option {{ request()->cantidad == 1000 ? 'selected' : '' }} value="1000">1000</option>
-                <option {{ request()->cantidad == 'Todos' ? 'selected' : '' }} value="Todos">Todos</option>
-            </select>
+                <select name="cantidad" class="ml-5 form-control">
+                    <option {{ request()->cantidad == 50 ? 'selected' : '' }} value="50">50</option>
+                    <option {{ request()->cantidad == 100 ? 'selected' : '' }} value="100">100</option>
+                    <option {{ request()->cantidad == 200 ? 'selected' : '' }} value="200">200</option>
+                    <option {{ request()->cantidad == 500 ? 'selected' : '' }} value="500">500</option>
+                    <option {{ request()->cantidad == 1000 ? 'selected' : '' }} value="1000">1000</option>
+                    <option {{ request()->cantidad == 'Todos' ? 'selected' : '' }} value="Todos">Todos</option>
+                </select>
 
-            <input type="hidden" name="Tipo" value="{{ request()->Tipo ?? 3 }}">
-        </form>
-    </div>
+                <input type="hidden" name="Tipo" value="{{ request()->Tipo ?? 3 }}">
+            </form>
+        </div>
+    @endif
 
 	<br/>
 
@@ -227,6 +269,34 @@
         </table>
     @endif
 
+    @if(isset($_GET['Tipo']) && $_GET['Tipo'] == 1)
+        <table class="table table-striped table-borderless col-12 sortable">
+            <tbody>
+            <tr>
+                <td align="center">
+                    <a href="?Tipo=1" class="btn btn-outline-info btn-sm">Órdenes abiertas: <span class="abiertas">{{$embaladosAbiertas}}</span> </a>
+                </td>
+
+                <td align="center">
+                    <a href="?Tipo=1&dias=3" class="btn btn-outline-secondary btn-sm">Órdenes con menos de 3 días: <span class="tres">{{$embaladosTres}}</span> </a>
+                </td>
+
+                <td align="center">
+                    <a href="?Tipo=1&dias=4" class="btn btn-outline-success btn-sm">Órdenes con más de 3 días: <span class="cuatro">{{$embaladosCuatro}}</span> </a>
+                </td>
+
+                <td align="center">
+                    <a href="?Tipo=1&dias=5" class="btn btn-outline-warning btn-sm">Órdenes con más de 5 días: <span class="cinco">{{$embaladosCinco}}</span> </a>
+                </td>
+
+                <td align="center">
+                    <a href="?Tipo=1&dias=7" class="btn btn-outline-danger btn-sm">Órdenes con más de 7 días: <span class="siete">{{$embaladosSiete}}</span> </a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    @endif
+
     <br>
 
     <table class="table table-bordered col-12 sortable">
@@ -250,7 +320,7 @@
               </ul>
             </td>
             <td>
-                <ul class="bg-warning text-white">
+              <ul class="bg-warning text-white">
                 <li>
                     <span>Las columnas en color amarillo representan el rango mayor a 5 y 7 menor/igual dias trascurridos</span>
                 </li>
@@ -260,6 +330,14 @@
                     <span>Las columnas en color rojo representan el rango con mas de 7 dias trascurridos</span>
                 </li>
               </ul>
+            </td>
+          </tr>
+          <tr>
+            <td scope="col" colspan="2" class="bg-white text-dark">
+                <ul>
+                    <li>El promedio de días de todos los traslados embalados es de: {{ number_format($promedioEmbalados, 2) }} </li>
+                    <li>El promedio de días de los últimos 15 días de traslados entregados es de: {{ number_format($promedioEntregados15, 2) }}</li>
+                </ul>
             </td>
           </tr>
         </tbody>
@@ -305,8 +383,13 @@
                     $abiertas = $abiertas + 1;
                 }
 
-                if ($traslado->estatus == 'PROCESADO' && $Dias < 3) {
+                if ($traslado->estatus == 'EMBALADO') {
+                    $embaladosAbiertas = $embaladosAbiertas + 1;
+                }
+
+                if (($traslado->estatus == 'EMBALASO' || $traslado->estatus == 'PROCESADO') && $Dias < 3) {
                     $tres = $tres + 1;
+                    $embaladosTres = $embaladosTres + 1;
 
                     if (isset($_GET['dias']) && $_GET['dias'] != 3) {
                         continue;
@@ -317,6 +400,7 @@
                     $fondo = 'bg-success';
                     $verde = 'btn-outline-light';
                     $cuatro = $cuatro + 1;
+                    $embaladosCuatro = $embaladosCuatro + 1;
 
                     if (isset($_GET['dias']) && $_GET['dias'] != 4) {
                         continue;
@@ -327,6 +411,7 @@
                     $fondo = 'bg-warning';
                     $amarillo = 'btn-outline-light';
                     $cinco = $cinco + 1;
+                    $embaladosCinco = $embaladosCinco + 1;
 
                     if (isset($_GET['dias']) && $_GET['dias'] != 5) {
                         continue;
@@ -337,6 +422,7 @@
                     $fondo = 'bg-danger';
                     $rojo = 'btn-outline-light';
                     $siete = $siete + 1;
+                    $embaladosSiete = $embaladosSiete + 1;
 
                     if (isset($_GET['dias']) && $_GET['dias'] != 7) {
                         continue;
@@ -481,11 +567,21 @@
 		$(document).ready(function(){
 		    $('[data-toggle="tooltip"]').tooltip();   
 
-            $('.abiertas').text({{ $abiertas }});
-            $('.tres').text({{ $tres }});
-            $('.cuatro').text({{ $cuatro }});
-            $('.cinco').text({{ $cinco }});
-            $('.siete').text({{ $siete }});
+            @if(request()->Tipo == 0)
+                $('.abiertas').text({{ $abiertas }});
+                $('.tres').text({{ $tres }});
+                $('.cuatro').text({{ $cuatro }});
+                $('.cinco').text({{ $cinco }});
+                $('.siete').text({{ $siete }});
+            @endif
+
+            @if(request()->Tipo == 1)
+                $('.abiertas').text({{ $embaladosAbiertas }});
+                $('.tres').text({{ $embaladosTres }});
+                $('.cuatro').text({{ $embaladosCuatro }});
+                $('.cinco').text({{ $embaladosCinco }});
+                $('.siete').text({{ $embaladosSiete }});
+            @endif
 		});
 
 		$('#exampleModalCenter').modal('show')

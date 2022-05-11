@@ -40,14 +40,12 @@ class TrasladoController extends Controller
             case 0:
                 $traslados = Traslado::orderBy('id', 'desc')
                     ->where('estatus','PROCESADO')
-                    ->limite(request('cantidad'))
                     ->get();
             break;
 
             case 1:
                 $traslados = Traslado::orderBy('id', 'desc')
                     ->where('estatus','EMBALADO')
-                    ->limite(request('cantidad'))
                     ->get();
             break;
 
