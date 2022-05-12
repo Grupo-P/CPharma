@@ -4638,7 +4638,7 @@
         $nombre = 'FARMACIA LA LAGO,C.A.';
     }
 
-    if ($sede == 'FM') {
+    if ($sede == 'FSM') {
         $nombre = 'FARMACIA MILLENNIUM 2000, C.A';
     }
 
