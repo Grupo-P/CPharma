@@ -1086,7 +1086,7 @@
         --Comentario Ajuste
         (SELECT InvAjuste.Comentario
         FROM InvAjuste
-        WHERE InvAjuste.NumeroAjuste = InvMovimiento.DocumentoOrigen AND (InvMovimiento.InvCausaId = '14' OR InvMovimiento.InvCausaId = '15') ) AS ComentarioAjuste,
+        WHERE InvAjuste.NumeroAjuste = InvMovimiento.DocumentoOrigen AND (InvMovimiento.InvCausaId = '14' OR InvMovimiento.InvCausaId = '15' OR (InvMovimiento.InvCausaId=(select InvCausa.Id from InvCausa where InvCausa.Descripcion = 'Traslado')) ) ) AS ComentarioAjuste,
         --Comentario Transferecia
         (SELECT InvTransferenciaAlmacen.Observaciones
         FROM InvTransferenciaAlmacen
@@ -1100,7 +1100,7 @@
         INNER JOIN InvArticulo ON InvArticulo.id = InvMovimiento.InvArticuloId
         INNER JOIN InvLote ON InvLote.id = InvMovimiento.InvLoteId
         INNER JOIN InvAlmacen ON InvAlmacen.id = InvMovimiento.InvAlmacenId
-        WHERE (InvMovimiento.InvCausaId = '14' OR InvMovimiento.InvCausaId = '15'
+        WHERE (InvMovimiento.InvCausaId = '14' OR InvMovimiento.InvCausaId = '15' OR (InvMovimiento.InvCausaId=(select InvCausa.Id from InvCausa where InvCausa.Descripcion = 'Traslado'))
         OR InvMovimiento.InvCausaId = '5' OR InvMovimiento.InvCausaId = '6')
         AND(InvMovimiento.FechaMovimiento > '$FInicial' AND InvMovimiento.FechaMovimiento < '$FFinal')
         ORDER BY InvMovimiento.FechaMovimiento ASC
