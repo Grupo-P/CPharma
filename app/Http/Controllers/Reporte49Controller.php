@@ -260,8 +260,8 @@ class Reporte49Controller extends Controller
             //Formula : ((primer rango - segundo rango) / primer rango) * 100
             $variacion = (($RangoAnterior - $RangoUltimo) / $RangoAnterior) * 100;
             return round($variacion,2,PHP_ROUND_HALF_UP);
-        }else{
-            return "N/D";
+        }else if($RangoAnterior==0){
+            return "N/D 0";
         }
     }
 
