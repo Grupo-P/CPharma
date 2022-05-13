@@ -262,8 +262,8 @@ class TrasladoController extends Controller
             $new->numero_ajuste = 'R' . $old->numero_ajuste;
             $new->fecha_ajuste = $old->fecha_traslado;
             $new->fecha_traslado = $old->fecha_traslado;
-            $new->sede_emisora = $old->sede_destino;
-            $new->sede_destino = $old->sede_emisora;
+            $new->sede_emisora = $old->sede_emisora;
+            $new->sede_destino = $old->sede_destino;
             $new->operador_ajuste = $old->operador_ajuste;
             $new->operador_traslado = auth()->user()->name;
             $new->estatus = 'PROCESADO';
