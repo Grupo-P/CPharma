@@ -4642,6 +4642,10 @@
         $nombre = 'FARMACIA MILLENNIUM 2000, C.A';
     }
 
+    if ($sede == 'KDI') {
+        return '-';
+    }
+
     if ($codigo_barra) {
         $where = "traslados_detalle.codigo_barra = '$codigo_barra'";
     } else {
