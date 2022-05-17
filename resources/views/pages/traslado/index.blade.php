@@ -71,6 +71,20 @@
   $sql = DB::select($sql);
 
   $promedioProcesados = $sql[0]->promedioProcesados;
+
+  $sql = "
+    SELECT
+        *
+    FROM
+        traslados
+    WHERE
+        estatus = 'ENTREGADO CON RECLAMO'
+        AND fecha_traslado >= DATE_SUB(DATE(NOW()), INTERVAL 30 DAY)
+  ";
+
+  $sql = DB::select($sql);
+
+  $entregadosReclamos30 = count($sql);
 ?>
 
 
@@ -208,8 +222,28 @@
 
 	<br/>
 
-	<table class="table table-striped table-borderless col-12 sortable">
+	<table class="table table-striped table-borderless col-12">
   	<thead class="thead-dark">
+        <tr>
+            <th scope="col" colspan="5" style="text-align: center;">
+                @switch ($_GET['Tipo'])
+                    @case(0)
+                        TRASLADOS PROCESADOS
+                    @break
+
+                    @case(1)
+                        TRASLADOS EMBALADOS
+                    @break
+
+                    @case(2)
+                        TRASLADOS ENTREGADOS
+                    @break
+
+                    @default
+                        TODOS LOS TRASLADOS
+                @endswitch
+            </th>
+        </tr>
 	    <tr>
 	      	<th scope="col" colspan="5" style="text-align: center;">CLASIFICACION</th>
 	    </tr>
@@ -351,7 +385,8 @@
                 <ul class="text-danger text-center CP-Latir">
                     El promedio de días de todos los traslados embalados es de: {{ number_format($promedioEmbalados, 2) }}</br>
                     El promedio de días de los últimos 15 días de traslados entregados es de: {{ number_format($promedioEntregados15, 2) }}</br>
-                    El promedio de días de todos los traslados procesados es de: {{ number_format($promedioProcesados, 2) }}
+                    El promedio de días de todos los traslados procesados es de: {{ number_format($promedioProcesados, 2) }}</br>
+                    Cantidad de traslados con reclamos en los últimos 30 días: {{ $entregadosReclamos30 }}
                 </ul>
             </td>
           </tr>
@@ -402,7 +437,7 @@
                     $embaladosAbiertas = $embaladosAbiertas + 1;
                 }
 
-                if (($traslado->estatus == 'EMBALASO' || $traslado->estatus == 'PROCESADO') && $Dias < 3) {
+                if (($traslado->estatus == 'EMBALASO' || $traslado->estatus == 'PROCESADO') && $Dias <= 3) {
                     $tres = $tres + 1;
                     $embaladosTres = $embaladosTres + 1;
 
@@ -496,7 +531,7 @@
 						|| Auth::user()->departamento == 'INVENTARIO'
 				    || Auth::user()->departamento == 'GERENCIA'
 				    || Auth::user()->departamento == 'TECNOLOGIA'
-                    || Auth::user()->departamento == 'CONTRASEDE')
+                    || Auth::user()->departamento == 'CONTRASEDE' || Auth::user()->departamento == 'ALMACEN')
 						){
 					?>
 						<a href="/traslado/{{$traslado->id}}" role="button" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top" title="Soporte Traslado" style="width: auto">
