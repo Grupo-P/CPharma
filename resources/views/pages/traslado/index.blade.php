@@ -26,6 +26,7 @@
 
   $promedioEmbalados = 0;
   $promedioEntregados15 = 0;
+  $promedioProcesados = 0;
 
   $sql = "
     SELECT
@@ -57,6 +58,19 @@
   $sql = DB::select($sql);
 
   $promedioEntregados15 = $sql[0]->promedioEntregados15;
+
+  $sql = "
+    SELECT
+        FORMAT(SUM(DATEDIFF(DATE(NOW()), traslados.fecha_traslado)) / COUNT(1), 2) AS promedioProcesados
+    FROM
+        traslados
+    WHERE
+        traslados.estatus = 'PROCESADO';
+  ";
+
+  $sql = DB::select($sql);
+
+  $promedioProcesados = $sql[0]->promedioProcesados;
 ?>
 
 
@@ -299,7 +313,7 @@
 
     <br>
 
-    <table class="table table-bordered col-12 sortable">
+    <table class="table table-bordered col-12">
         <thead class="thead-dark">
           <tr>
             <th scope="col" colspan="2">LEYENDA DE COLORES SEGUN LOS DIAS EN TRASLADO</th>
@@ -334,9 +348,10 @@
           </tr>
           <tr>
             <td scope="col" colspan="2" class="bg-white text-dark">
-                <ul>
-                    <li>El promedio de días de todos los traslados embalados es de: {{ number_format($promedioEmbalados, 2) }} </li>
-                    <li>El promedio de días de los últimos 15 días de traslados entregados es de: {{ number_format($promedioEntregados15, 2) }}</li>
+                <ul class="text-danger text-center CP-Latir">
+                    El promedio de días de todos los traslados embalados es de: {{ number_format($promedioEmbalados, 2) }}</br>
+                    El promedio de días de los últimos 15 días de traslados entregados es de: {{ number_format($promedioEntregados15, 2) }}</br>
+                    El promedio de días de todos los traslados procesados es de: {{ number_format($promedioProcesados, 2) }}
                 </ul>
             </td>
           </tr>
