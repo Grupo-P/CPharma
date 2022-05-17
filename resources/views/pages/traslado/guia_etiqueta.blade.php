@@ -186,11 +186,14 @@
     <div class="saltoDePagina"></div>
 
     <?php
-        Etiquetas_Traslado($numero_ajuste,$fecha_ajuste,$sede_emisora,$sede_destino,$bultos,$fecha_embalaje,$operador_embalaje);
+        $totales = $bultos + $bultos_fragiles + $bultos_refrigerados;
+        $_SESSION['cuenta'] = 1;
 
-        Etiquetas_Traslado_Fragiles($numero_ajuste,$fecha_ajuste,$sede_emisora,$sede_destino,$bultos_fragiles,$fecha_embalaje,$operador_embalaje);
+        Etiquetas_Traslado($numero_ajuste,$fecha_ajuste,$sede_emisora,$sede_destino,$bultos,$fecha_embalaje,$operador_embalaje, $totales);
 
-        Etiquetas_Traslado_Refrigerados($numero_ajuste,$fecha_ajuste,$sede_emisora,$sede_destino,$bultos_refrigerados,$fecha_embalaje,$operador_embalaje);
+        Etiquetas_Traslado_Fragiles($numero_ajuste,$fecha_ajuste,$sede_emisora,$sede_destino,$bultos_fragiles,$fecha_embalaje,$operador_embalaje, $totales);
+
+        Etiquetas_Traslado_Refrigerados($numero_ajuste,$fecha_ajuste,$sede_emisora,$sede_destino,$bultos_refrigerados,$fecha_embalaje,$operador_embalaje, $totales);
     ?>
 @endsection
 
@@ -203,7 +206,7 @@
     RETORNO: no aplica
     DESAROLLADO POR: SERGIO COVA
   */
- function Etiquetas_Traslado($numero_ajuste,$fecha_ajuste,$sede_emisora,$sede_destino,$bultos,$fecha_embalaje,$operador_embalaje){
+ function Etiquetas_Traslado($numero_ajuste,$fecha_ajuste,$sede_emisora,$sede_destino,$bultos,$fecha_embalaje,$operador_embalaje,$totales){
 
     $Contador = 1;
     $CuentaEtiqueta = 0;
@@ -243,7 +246,7 @@
                         <td class="aumento espacioT">Favor no aplilar demasiadas cajas y contemplar que el contenido es fragil para el momento de su movilizacion</td>
                         </tr>
                         <tr>
-                        <td class="alinear-der aumento espacioT"><strong>Bulto '.$Contador.' de '.$bultos.'</strong></td>
+                        <td class="alinear-der aumento espacioT"><strong>Bulto '.$_SESSION['cuenta'].' de '.$totales.'</strong></td>
                         </tr>
                     </tbody>
                     </table>
@@ -251,6 +254,8 @@
         ';
 
         $Contador++;
+
+        $_SESSION['cuenta'] = $_SESSION['cuenta'] + 1;
 
         if ($Contador<=$bultos) {
 
@@ -284,7 +289,7 @@
                         <td class="aumento espacioT">Favor no aplilar demasiadas cajas y contemplar que el contenido es fragil para el momento de su movilizacion</td>
                         </tr>
                         <tr>
-                        <td class="alinear-der aumento espacioT"><strong>Bulto '.$Contador.' de '.$bultos.'</strong></td>
+                        <td class="alinear-der aumento espacioT"><strong>Bulto '.$_SESSION['cuenta'].' de '.$totales.'</strong></td>
                         </tr>
                     </tbody>
                     </table>
@@ -292,6 +297,7 @@
             ';
 
             $Contador++;
+            $_SESSION['cuenta'] = $_SESSION['cuenta'] + 1;
         }
 
         echo '
@@ -316,7 +322,7 @@
     RETORNO: no aplica
     DESAROLLADO POR: SERGIO COVA
   */
- function Etiquetas_Traslado_Fragiles($numero_ajuste,$fecha_ajuste,$sede_emisora,$sede_destino,$bultos,$fecha_embalaje,$operador_embalaje){
+ function Etiquetas_Traslado_Fragiles($numero_ajuste,$fecha_ajuste,$sede_emisora,$sede_destino,$bultos,$fecha_embalaje,$operador_embalaje,$totales){
 
     $Contador = 1;
     $CuentaEtiqueta = 0;
@@ -359,7 +365,7 @@
                         <td class="aumento espacioT">Favor no aplilar demasiadas cajas y contemplar que el contenido es fragil para el momento de su movilizacion</td>
                         </tr>
                         <tr>
-                        <td class="alinear-der aumento espacioT"><strong>Bulto '.$Contador.' de '.$bultos.'</strong></td>
+                        <td class="alinear-der aumento espacioT"><strong>Bulto '.$_SESSION['cuenta'].' de '.$totales.'</strong></td>
                         </tr>
                     </tbody>
                     </table>
@@ -367,6 +373,7 @@
         ';
 
         $Contador++;
+        $_SESSION['cuenta'] = $_SESSION['cuenta'] + 1;
 
         if ($Contador<=$bultos) {
 
@@ -403,7 +410,7 @@
                         <td class="aumento espacioT">Favor no aplilar demasiadas cajas y contemplar que el contenido es fragil para el momento de su movilizacion</td>
                         </tr>
                         <tr>
-                        <td class="alinear-der aumento espacioT"><strong>Bulto '.$Contador.' de '.$bultos.'</strong></td>
+                        <td class="alinear-der aumento espacioT"><strong>Bulto '.$_SESSION['cuenta'].' de '.$totales.'</strong></td>
                         </tr>
                     </tbody>
                     </table>
@@ -411,6 +418,7 @@
             ';
 
             $Contador++;
+            $_SESSION['cuenta'] = $_SESSION['cuenta'] + 1;
         }
 
         echo '
@@ -435,7 +443,7 @@
     RETORNO: no aplica
     DESAROLLADO POR: SERGIO COVA
   */
- function Etiquetas_Traslado_Refrigerados($numero_ajuste,$fecha_ajuste,$sede_emisora,$sede_destino,$bultos,$fecha_embalaje,$operador_embalaje){
+ function Etiquetas_Traslado_Refrigerados($numero_ajuste,$fecha_ajuste,$sede_emisora,$sede_destino,$bultos,$fecha_embalaje,$operador_embalaje,$totales){
 
     $Contador = 1;
     $CuentaEtiqueta = 0;
@@ -478,7 +486,7 @@
                         <td class="aumento espacioT">Favor no aplilar demasiadas cajas y contemplar que el contenido es fragil para el momento de su movilizacion</td>
                         </tr>
                         <tr>
-                        <td class="alinear-der aumento espacioT"><strong>Bulto '.$Contador.' de '.$bultos.'</strong></td>
+                        <td class="alinear-der aumento espacioT"><strong>Bulto '.$_SESSION['cuenta'].' de '.$totales.'</strong></td>
                         </tr>
                     </tbody>
                     </table>
@@ -486,6 +494,7 @@
         ';
 
         $Contador++;
+        $_SESSION['cuenta'] = $_SESSION['cuenta'] + 1;
 
         if ($Contador<=$bultos) {
 
@@ -522,7 +531,7 @@
                         <td class="aumento espacioT">Favor no aplilar demasiadas cajas y contemplar que el contenido es fragil para el momento de su movilizacion</td>
                         </tr>
                         <tr>
-                        <td class="alinear-der aumento espacioT"><strong>Bulto '.$Contador.' de '.$bultos.'</strong></td>
+                        <td class="alinear-der aumento espacioT"><strong>Bulto '.$_SESSION['cuenta'].' de '.$totales.'</strong></td>
                         </tr>
                     </tbody>
                     </table>
@@ -530,6 +539,7 @@
             ';
 
             $Contador++;
+            $_SESSION['cuenta'] = $_SESSION['cuenta'] + 1;
         }
 
         echo '
