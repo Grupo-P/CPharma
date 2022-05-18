@@ -63,7 +63,7 @@ class TrasladoController extends Controller
             break;
         }
 
-        return view('pages.traslado.index', compact('traslados'));
+        return view('pages.traslado.index', compact('traslados', 'Tipo'));
     }
 
     /**

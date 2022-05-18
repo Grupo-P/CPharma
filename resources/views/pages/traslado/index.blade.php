@@ -226,7 +226,7 @@
   	<thead class="thead-dark">
         <tr>
             <th scope="col" colspan="5" style="text-align: center;">
-                @switch ($_GET['Tipo'])
+                @switch ($Tipo)
                     @case(0)
                         TRASLADOS PROCESADOS
                     @break
