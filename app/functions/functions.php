@@ -139,12 +139,12 @@
             break;
         //FIN BLOQUE DE FAU
         //INICIO BLOQUE DE KDI
-			case '15':
-				return 'KDI';
+            case '15':
+                return 'KDI';
         //FIN BLOQUE DE KDI
         //INICIO BLOQUE DE FSM
-			case '18':
-				return 'FSM';
+            case '18':
+                return 'FSM';
         //FIN BLOQUE DE FSM
             default:
                 return 'ARG';
@@ -1737,13 +1737,13 @@
             break;
             case 'Cruce de aplicación de consultas':
                 $ruta = '/reporte47';
-            break;                
+            break;
             case 'Cambio de precios':
                 $ruta = '/reporte48';
             break;
             case 'Reposicion de Inventario':
-                $ruta = '/reporte49';                
-            break;            
+                $ruta = '/reporte49';
+            break;
             default:
                 $ruta = '#';
             break;
@@ -2962,8 +2962,8 @@
             $result2 = $connCPharma->query("SELECT COUNT(id) as Cuenta FROM dias_ceros WHERE fecha_captura = '$FechaCambio'");
             $row2= $result2->fetch_assoc();
             $CuentaDiasCero = $row2['Cuenta'];
-                        
-            if($CuentaDiasCero==0){                
+
+            if($CuentaDiasCero==0){
                 echo'
                     <h2 class="text-danger">
                         Solicite ayuda al Dpto. de tecnologia.<br>
@@ -2971,16 +2971,16 @@
                         Ref. dias en cero fecha '.$FechaCambio.'
                     </h2>
                 ';
-                return false;            
-            }            
-            
+                return false;
+            }
+
             $arraySugeridos = FG_Obtener_Casos_Etiqueta($conn,$FHoy,$FManana);
-            $ArrayUnique = unique_multidim_array($arraySugeridos,'IdArticulo');            
+            $ArrayUnique = unique_multidim_array($arraySugeridos,'IdArticulo');
         }
         else if($dia=='AYER'){
             $FechaCambio = $FAyer;
             $arraySugeridos = FG_Obtener_Casos_Etiqueta($conn,$FAyer,$FHoy);
-            $ArrayUnique = unique_multidim_array($arraySugeridos,'IdArticulo');                
+            $ArrayUnique = unique_multidim_array($arraySugeridos,'IdArticulo');
         }
 
         $result1 = $connCPharma->query("SELECT COUNT(*) AS Cuenta FROM etiquetas WHERE clasificacion = '$clasificacion'");
@@ -4643,7 +4643,7 @@
     }
 
     if ($sede == 'KDI') {
-        return '-';
+        return [];
     }
 
     if ($codigo_barra) {
