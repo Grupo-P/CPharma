@@ -437,7 +437,7 @@
                     $embaladosAbiertas = $embaladosAbiertas + 1;
                 }
 
-                if (($traslado->estatus == 'EMBALASO' || $traslado->estatus == 'PROCESADO') && $Dias <= 3) {
+                if (($traslado->estatus == 'EMBALADO' || $traslado->estatus == 'PROCESADO') && $Dias <= 3) {
                     $tres = $tres + 1;
                     $embaladosTres = $embaladosTres + 1;
 
