@@ -40,13 +40,13 @@
 		<table style="border: 1px solid black; border-collapse: collapse; margin-left:20%;">
 			<thead>
 				<tr>
-					<td align="center" style="border: 1px solid black;"><h5>Rango Anterior: '.$arrayGlobal['FInicialRangoAnterior'].' al '.$arrayGlobal['FInicialRangoUltimoMenos'].'</h5></th>
-					<td align="center" style="border: 1px solid black;"><h5>Rango Ultimo: '.$arrayGlobal['FInicialRangoUltimo'].' al '.$arrayGlobal['Hoy'].'</h5></th>
+					<td align="center" style="border: 1px solid black;"><h5>Primer Rango: '.$arrayGlobal['FInicialPrimerRango'].' al '.$arrayGlobal['FInicialSegundoRangoMenos'].'</h5></th>
+					<td align="center" style="border: 1px solid black;"><h5>Segundo Rango: '.$arrayGlobal['FInicialSegundoRango'].' al '.$arrayGlobal['Hoy'].'</h5></th>
 				</tr>
 				<tr>
 					<td colspan="2" align="justify" style="border: 1px solid black;">
 						<h5>LEYENDA</h5>
-						<p>Este reporte evalua la rotacion de todos los articulos con existencia en la sede en dos partes los ultimos 15 dias desde hoy hacia atras y 15 dias mas atras para un total de 30.<br>
+						<p>Este reporte evalua la rotacion de todos los articulos con existencia en la sede en dos partes los ultimos 15 dias desde hoy hacia atras y 15 dias mas atras para un total de 30 dias.<br>
 						La idea es comparar ambos rangos para ver la tendencia y definir si viene estable, subiendo o bajando.</br>
 						Los articulos recien llegados no se evaluan para tener un juicio justo.</p>
 					</th>
@@ -68,9 +68,10 @@
 						<h5>COMPORTAMIENTO</h5>
 						<p>
 							Indeterminable, articulos con disponibilidad en dias muy bajos.</br>
+							N/D, articulos con disponibilidad en el rango menor a 10 dias.</br>
 							Peligro, articulo sin rotacion en ambos rangos.</br>
 							Estable, articulos con la rotacion en ambos rangos iguales o con una tolerancia del 10%.</br>
-							Llegando, articulos con el primer rango sin disponibilidad.</br>
+							Llegando, articulos con el primer o segundo rango sin disponibilidad.</br>
 							Cayo, articulos con venta en el primer rango y sin venta en el ultimo rango.</br>
 							Decrecio, primer rango menor que el segundo.</br>
 							Crecio, primer rango mayor que el segundo.</br>
@@ -110,6 +111,7 @@
 						<option value="CRITICO">Critico</option>
 						<option value="EXCEDIDO">Excedido</option>
 						<option value="INDETERMINABLE">Indeterminable</option>
+						<option value="N/D">N/D</option>
 						<option value="all">Todos</option>
 					</select>
 				</th>
@@ -122,7 +124,8 @@
 						<option value="ESTABLE">Estable</option>
 						<option value="DECRECIO">Decrecio</option>
 						<option value="LLEGANDO">Llegando</option>
-						<option value="INDETERMINABLE">Indeterminable</option>						
+						<option value="INDETERMINABLE">Indeterminable</option>
+						<option value="N/D">N/D</option>
 						<option value="all">Todos</option>
 					</select>
 				</th>
@@ -135,8 +138,8 @@
                 <th scope="col" class="CP-sticky">Existencia</th>
                 <th scope="col" class="CP-sticky">Ultima Venta</th>
                 <th scope="col" class="CP-sticky">Ultima Compra</th>
-                <th scope="col" class="CP-sticky">Dias Restantes (Rango Anterior) ('.$arrayGlobal['FInicialRangoAnterior'].' al '.$arrayGlobal['FInicialRangoUltimoMenos'].')</th>                
-                <th scope="col" class="CP-sticky">Dias Restantes (Rango Ultimo) ('.$arrayGlobal['FInicialRangoUltimo'].' al '.$arrayGlobal['Hoy'].')</th>
+                <th scope="col" class="CP-sticky">Dias Restantes (Primer Rango) <br>('.$arrayGlobal['FInicialPrimerRango'].' al '.$arrayGlobal['FInicialSegundoRangoMenos'].')</th>                
+                <th scope="col" class="CP-sticky">Dias Restantes (Segundo Rango) <br>('.$arrayGlobal['FInicialSegundoRango'].' al '.$arrayGlobal['Hoy'].')</th>
 				<th scope="col" class="CP-sticky">Variacion (%)</th>
 				<th scope="col" class="CP-sticky">Status</th>
 				<th scope="col" class="CP-sticky">Comportamiento</th>
