@@ -4757,4 +4757,25 @@
 
     return $resultado;
   }
+
+  function FG_Numero_Sede()
+  {
+    $sede = FG_Mi_Ubicacion();
+
+    if ($sede == 'FTN') {
+        return 1;
+    }
+
+    if ($sede == 'FAU' || $sede == 'DBs') {
+        return 2;
+    }
+
+    if ($sede == 'FLL') {
+        return 3;
+    }
+
+    if ($sede == 'FSM') {
+        return 4;
+    }
+  }
 ?>
