@@ -350,7 +350,7 @@
     <table class="table table-bordered col-12">
         <thead class="thead-dark">
           <tr>
-            <th scope="col" colspan="2">LEYENDA DE COLORES SEGUN LOS DIAS EN TRASLADO</th>
+            <th scope="col" colspan="3">LEYENDA DE COLORES SEGUN LOS DIAS EN TRASLADO</th>
           </tr>
         </thead>
         <tbody>
@@ -367,7 +367,7 @@
                 </li>
               </ul>
             </td>
-            <td>
+            <td colspan="2">
               <ul class="bg-warning text-white">
                 <li>
                     <span>Las columnas en color amarillo representan el rango mayor a 5 y 7 menor/igual dias trascurridos</span>
@@ -381,12 +381,30 @@
             </td>
           </tr>
           <tr>
-            <td scope="col" colspan="2" class="bg-white text-dark">
+            <td scope="col" class="bg-white text-dark">
                 <ul class="text-danger text-center CP-Latir">
                     El promedio de días de todos los traslados embalados es de: {{ number_format($promedioEmbalados, 2) }}</br>
                     El promedio de días de los últimos 15 días de traslados entregados es de: {{ number_format($promedioEntregados15, 2) }}</br>
                     El promedio de días de todos los traslados procesados es de: {{ number_format($promedioProcesados, 2) }}</br>
                     Cantidad de traslados con reclamos en los últimos 30 días: {{ $entregadosReclamos30 }}
+                </ul>
+            </td>
+
+            <td scope="col" class="bg-white text-dark">
+                <ul class="text-info text-center">
+                    Traslados procesados hoy: {{ $procesadosHoy }}</br>
+                    Traslados embalados hoy: {{ $embaladosHoy }}</br>
+                    Diferencial hoy: {{ $procesadosHoy-$embaladosHoy }}</br>
+                    Entregados hoy: {{ $entregadosHoy }}
+                </ul>
+            </td>
+
+            <td scope="col" class="bg-white text-dark">
+                <ul class="text-info text-center">
+                    Traslados procesados ayer: {{ $procesadosAyer }}</br>
+                    Traslados embalados ayer: {{ $embaladosAyer }}</br>
+                    Diferencial ayer: {{ $procesadosAyer-$embaladosAyer }}</br>
+                    Entregados ayer: {{ $entregadosAyer }}
                 </ul>
             </td>
           </tr>

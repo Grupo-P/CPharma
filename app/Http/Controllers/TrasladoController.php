@@ -3,6 +3,7 @@
 namespace compras\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 use compras\Auditoria;
 use compras\Traslado;
 use compras\TrasladoDetalle;
@@ -63,7 +64,34 @@ class TrasladoController extends Controller
             break;
         }
 
-        return view('pages.traslado.index', compact('traslados', 'Tipo'));
+        $hoy = date('Y-m-d');
+        $ayer = date_format(date_modify(date_create($hoy), '-1day'), 'Y-m-d');
+
+        $procesadosHoy = Traslado::where('estatus', 'PROCESADO')
+            ->whereDate('created_at', $hoy)
+            ->count();
+
+        $embaladosHoy = Traslado::where('estatus', 'EMBALADO')
+            ->whereDate('created_at', $hoy)
+            ->count();
+
+        $entregadosHoy = Traslado::where('estatus', 'ENTREGADO')
+            ->whereDate('created_at', $hoy)
+            ->count();
+
+        $procesadosAyer = Traslado::where('estatus', 'PROCESADO')
+            ->whereDate('created_at', $ayer)
+            ->count();
+
+        $embaladosAyer = Traslado::where('estatus', 'EMBALADO')
+            ->whereDate('created_at', $ayer)
+            ->count();
+
+        $entregadosAyer = Traslado::where('estatus', 'ENTREGADO')
+            ->whereDate('created_at', $ayer)
+            ->count();
+
+        return view('pages.traslado.index', compact('traslados', 'Tipo', 'procesadosHoy', 'embaladosHoy', 'entregadosHoy', 'procesadosAyer', 'embaladosAyer', 'entregadosAyer'));
     }
 
     /**
