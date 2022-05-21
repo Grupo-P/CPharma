@@ -58,10 +58,10 @@
 						<h5>STATUS</h5>
 						<p>
 							Indeterminable, articulos con el ultimo rango en 0.</br>
-							N/D, articulos con disponibilidad en el rango menor a 10 dias.</br>
 							Critico, articulos con el ultimo rango menor a 20.</br>
 							Bien, articulos con el ultimo rango entre 20 y 45.</br>
 							Excedido, articulos con el ultimo rango mayor a 45.</br>
+							N/D, articulos con disponibilidad en el rango menor a 10 dias.</br>
 						</p>
 					</td>
 					<td align="justify" style="border: 1px solid black;">
@@ -75,6 +75,7 @@
 							Cayo, articulos con venta en el primer rango y sin venta en el ultimo rango.</br>
 							Decrecio, primer rango menor que el segundo.</br>
 							Crecio, primer rango mayor que el segundo.</br>
+							Intacto, son los articulos que no variaron en ambos rangos, se mantuvo igual.<br>
 						</p>
 					</td>
 				</tr>				
@@ -103,7 +104,7 @@
 		<table class="table table-striped table-bordered col-12 sortable" id="myTable">
 	  	<thead class="thead-dark">
 		  	<tr>
-				<th colspan="10"></th>				
+				<th colspan="11"></th>				
 				<th>
 					<select class="filterText" style="display:inline-block; border-radius: 5px;" onchange="filterText(this)">
 						<option disabled selected>Filtro</option>						
@@ -112,21 +113,22 @@
 						<option value="EXCEDIDO">Excedido</option>
 						<option value="INDETERMINABLE">Indeterminable</option>
 						<option value="N/D">N/D</option>
-						<option value="all">Todos</option>
+						<option value="all">TODOS</option>
 					</select>
 				</th>
 				<th>
 					<select class="filterText" style="display:inline-block; border-radius: 5px;" onchange="filterText(this)">
 						<option disabled selected>Filtro</option>	
-						<option value="CAYÓ">Cayó</option>
-						<option value="CRECIO">Crecio</option>
-						<option value="PELIGRO">Peligro</option>
-						<option value="ESTABLE">Estable</option>
-						<option value="DECRECIO">Decrecio</option>
+						<option value="INTACTO">INTACTO</option>
+						<option value="ESTABLE">Estable</option>						
 						<option value="LLEGANDO">Llegando</option>
+						<option value="CRECIO">Crecio</option>
+						<option value="DECRECIO">Decrecio</option>
+						<option value="CAYÓ">Cayó</option>
+						<option value="PELIGRO">Peligro</option>																		
 						<option value="INDETERMINABLE">Indeterminable</option>
-						<option value="N/D">N/D</option>
-						<option value="all">Todos</option>
+						<option value="N/D">N/D</option>						
+						<option value="all">TODOS</option>
 					</select>
 				</th>
 			</tr>
@@ -136,6 +138,7 @@
                 <th scope="col" class="CP-sticky">Codigo Barra</th>
                 <th scope="col" class="CP-sticky">Descripcion</th>
                 <th scope="col" class="CP-sticky">Existencia</th>
+				<th scope="col" class="CP-sticky">Precio</br>(Con IVA) '.SigVe.'</td>
                 <th scope="col" class="CP-sticky">Ultima Venta</th>
                 <th scope="col" class="CP-sticky">Ultima Compra</th>
                 <th scope="col" class="CP-sticky">Dias Restantes (Primer Rango) <br>('.$arrayGlobal['FInicialPrimerRango'].' al '.$arrayGlobal['FInicialSegundoRangoMenos'].')</th>                
@@ -161,13 +164,34 @@
 			</td>';
 			
             echo '<td align="center">'.intval($articulo['Existencia']).'</td>';
+			echo '<td class="precio" align="center">'.number_format($articulo['Precio'],2,"," ,"." ).'</td>';
 			echo '<td align="center">'.$articulo['UltimaVenta'].'</td>';
             echo '<td align="center">'.$articulo['UltimaCompra'].'</td>';
-            echo '<td align="center">'.$articulo['DiasRestantesAnterior'].'</td>';
-            echo '<td align="center">'.$articulo['DiasRestantesUltimo'].'</td>';
-			echo '<td align="center">'.$articulo['Variacion'].'</td>';
-			echo '<td align="center">'.$articulo['Status'].'</td>';
-			echo '<td align="center">'.$articulo['Comportamiento'].'</td>';
+
+			$DiasRestantesPrimerRango = $articulo['DiasRestantesPrimerRango'];
+			$DiasRestantesSegundoRango = $articulo['DiasRestantesSegundoRango'];
+
+			if( $DiasRestantesPrimerRango < 0 ){
+				echo '<td align="center">'.$articulo['DiasRestantesPrimerRango'].'</td>';
+				echo '<td align="center">'.$articulo['DiasRestantesSegundoRango'].'</td>';
+				echo '<td align="center">'.$articulo['Variacion'].'</td>';
+				echo '<td align="center">'.$articulo['Status'].'</td>';
+				echo '<td align="center"></td>';
+			}
+			else if( $DiasRestantesSegundoRango < 0 ){
+				echo '<td align="center">'.$articulo['DiasRestantesPrimerRango'].'</td>';
+				echo '<td align="center">'.$articulo['DiasRestantesSegundoRango'].'</td>';
+				echo '<td align="center">'.$articulo['Variacion'].'</td>';
+				echo '<td align="center"></td>';
+				echo '<td align="center"></td>';
+			}
+			else { 
+				echo '<td align="center">'.$articulo['DiasRestantesPrimerRango'].'</td>';
+				echo '<td align="center">'.$articulo['DiasRestantesSegundoRango'].'</td>';
+				echo '<td align="center">'.$articulo['Variacion'].'</td>';
+				echo '<td align="center">'.$articulo['Status'].'</td>';
+				echo '<td align="center">'.$articulo['Comportamiento'].'</td>';
+			}            
 			echo '</tr>';
 			$contador++;
   	    }
