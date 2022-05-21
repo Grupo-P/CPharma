@@ -58,10 +58,10 @@
 						<h5>STATUS</h5>
 						<p>
 							Indeterminable, articulos con el ultimo rango en 0.</br>
-							N/D, articulos con disponibilidad en el rango menor a 10 dias.</br>
 							Critico, articulos con el ultimo rango menor a 20.</br>
 							Bien, articulos con el ultimo rango entre 20 y 45.</br>
 							Excedido, articulos con el ultimo rango mayor a 45.</br>
+							N/D, articulos con disponibilidad en el rango menor a 10 dias.</br>
 						</p>
 					</td>
 					<td align="justify" style="border: 1px solid black;">
@@ -75,6 +75,7 @@
 							Cayo, articulos con venta en el primer rango y sin venta en el ultimo rango.</br>
 							Decrecio, primer rango menor que el segundo.</br>
 							Crecio, primer rango mayor que el segundo.</br>
+							Intacto, son los articulos que no variaron en ambos rangos, se mantuvo igual.<br>
 						</p>
 					</td>
 				</tr>				
@@ -112,21 +113,22 @@
 						<option value="EXCEDIDO">Excedido</option>
 						<option value="INDETERMINABLE">Indeterminable</option>
 						<option value="N/D">N/D</option>
-						<option value="all">Todos</option>
+						<option value="all">TODOS</option>
 					</select>
 				</th>
 				<th>
 					<select class="filterText" style="display:inline-block; border-radius: 5px;" onchange="filterText(this)">
 						<option disabled selected>Filtro</option>	
-						<option value="CAYÓ">Cayó</option>
-						<option value="CRECIO">Crecio</option>
-						<option value="PELIGRO">Peligro</option>
-						<option value="ESTABLE">Estable</option>
-						<option value="DECRECIO">Decrecio</option>
+						<option value="INTACTO">INTACTO</option>
+						<option value="ESTABLE">Estable</option>						
 						<option value="LLEGANDO">Llegando</option>
+						<option value="CRECIO">Crecio</option>
+						<option value="DECRECIO">Decrecio</option>
+						<option value="CAYÓ">Cayó</option>
+						<option value="PELIGRO">Peligro</option>																		
 						<option value="INDETERMINABLE">Indeterminable</option>
-						<option value="N/D">N/D</option>
-						<option value="all">Todos</option>
+						<option value="N/D">N/D</option>						
+						<option value="all">TODOS</option>
 					</select>
 				</th>
 			</tr>
@@ -163,11 +165,31 @@
             echo '<td align="center">'.intval($articulo['Existencia']).'</td>';
 			echo '<td align="center">'.$articulo['UltimaVenta'].'</td>';
             echo '<td align="center">'.$articulo['UltimaCompra'].'</td>';
-            echo '<td align="center">'.$articulo['DiasRestantesAnterior'].'</td>';
-            echo '<td align="center">'.$articulo['DiasRestantesUltimo'].'</td>';
-			echo '<td align="center">'.$articulo['Variacion'].'</td>';
-			echo '<td align="center">'.$articulo['Status'].'</td>';
-			echo '<td align="center">'.$articulo['Comportamiento'].'</td>';
+
+			$DiasRestantesPrimerRango = $articulo['DiasRestantesPrimerRango'];
+			$DiasRestantesSegundoRango = $articulo['DiasRestantesSegundoRango'];
+
+			if( $DiasRestantesPrimerRango < 0 ){
+				echo '<td align="center">'.$articulo['DiasRestantesPrimerRango'].'</td>';
+				echo '<td align="center">'.$articulo['DiasRestantesSegundoRango'].'</td>';
+				echo '<td align="center">'.$articulo['Variacion'].'</td>';
+				echo '<td align="center">'.$articulo['Status'].'</td>';
+				echo '<td align="center"></td>';
+			}
+			else if( $DiasRestantesSegundoRango < 0 ){
+				echo '<td align="center">'.$articulo['DiasRestantesPrimerRango'].'</td>';
+				echo '<td align="center">'.$articulo['DiasRestantesSegundoRango'].'</td>';
+				echo '<td align="center">'.$articulo['Variacion'].'</td>';
+				echo '<td align="center"></td>';
+				echo '<td align="center"></td>';
+			}
+			else if( ($DiasRestantesPrimerRango>0) && ($DiasRestantesSegundoRango>0) ){
+				echo '<td align="center">'.$articulo['DiasRestantesPrimerRango'].'</td>';
+				echo '<td align="center">'.$articulo['DiasRestantesSegundoRango'].'</td>';
+				echo '<td align="center">'.$articulo['Variacion'].'</td>';
+				echo '<td align="center">'.$articulo['Status'].'</td>';
+				echo '<td align="center">'.$articulo['Comportamiento'].'</td>';
+			}            
 			echo '</tr>';
 			$contador++;
   	    }

@@ -73,8 +73,8 @@ class Reporte49Controller extends Controller
                 "Existencia" => $Existencia,
                 "UltimaVenta" => $UltimaVenta,
                 "UltimaCompra" => $UltimaCompra,
-                "DiasRestantesUltimo" => $arraySegundoRango['DiasRestantesQuiebre'],
-                "DiasRestantesAnterior" => $arrayPrimerRango['DiasRestantesQuiebre'],
+                "DiasRestantesSegundoRango" => $arraySegundoRango['DiasRestantesQuiebre'],
+                "DiasRestantesPrimerRango" => $arrayPrimerRango['DiasRestantesQuiebre'],
                 "Variacion" => $Variacion,
                 "Status" => $Status,
                 "Comportamiento" => $Comportamiento,
@@ -83,7 +83,7 @@ class Reporte49Controller extends Controller
             array_push($arrayArticulos,$articulosDetalle);
         }                        
 
-        $arrayArticulos =  $this->orderArrayByRow($arrayArticulos,'DiasRestantesUltimo');
+        $arrayArticulos =  $this->orderArrayByRow($arrayArticulos,'DiasRestantesSegundoRango');
 
         $FinCarga = new DateTime("now");
         $IntervalCarga = $InicioCarga->diff($FinCarga);
@@ -302,9 +302,12 @@ class Reporte49Controller extends Controller
             else if( ($PrimerRango>0) && ($SegundoRango==0) ){
                 return "CAYO";
             }
-            else if( ($Variacion>-10) && ($Variacion<10) ){
+            else if( ($Variacion>-10) && ($Variacion<10) && ($Variacion!=0) ){
                 return "ESTABLE";
-            }            
+            } 
+            else if( $Variacion==0 ){
+                return "INTACTO";
+            }        
         }
         else if( ($PrimerRango==="N/D") && ($SegundoRango>=0) && ($SegundoRango!=="N/D") ){
             return "LLEGANDO";
@@ -342,8 +345,8 @@ class Reporte49Controller extends Controller
             $sheet->setCellValue('E'.$contador,intval($articulo['Existencia']));
             $sheet->setCellValue('F'.$contador,$articulo['UltimaVenta']);
             $sheet->setCellValue('G'.$contador,$articulo['UltimaCompra']);
-            $sheet->setCellValue('H'.$contador,$articulo['DiasRestantesAnterior']);
-            $sheet->setCellValue('I'.$contador,$articulo['DiasRestantesUltimo']);
+            $sheet->setCellValue('H'.$contador,$articulo['DiasRestantesPrimerRango']);
+            $sheet->setCellValue('I'.$contador,$articulo['DiasRestantesSegundoRango']);
             $sheet->setCellValue('J'.$contador,$articulo['Variacion']);
             $sheet->setCellValue('K'.$contador,$articulo['Status']);
             $sheet->setCellValue('L'.$contador,$articulo['Comportamiento']);
