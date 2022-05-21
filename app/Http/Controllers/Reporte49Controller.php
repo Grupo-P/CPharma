@@ -38,8 +38,8 @@ class Reporte49Controller extends Controller
                          
         $RangoDias = 15;
         $LimiteDiasCero = 10;        
-        $Hoy = date("Y-m-d",strtotime(date("2022-04-04")."+ 1 days"));
-        //$Hoy = date("Y-m-d",strtotime(date("Y-m-d")."+ 1 days"));
+        //$Hoy = date("Y-m-d",strtotime(date("2022-04-04")."+ 1 days"));
+        $Hoy = date("Y-m-d",strtotime(date("Y-m-d")."+ 1 days"));
         $FInicialSegundoRango = date("Y-m-d",strtotime($Hoy."-$RangoDias days"));
         $FInicialPrimerRango = date("Y-m-d",strtotime($FInicialSegundoRango."-$RangoDias days"));
         
@@ -133,7 +133,7 @@ class Reporte49Controller extends Controller
     } 
         
     public function Articulos_Existencia() {
-        $sql = "SELECT TOP 10
+        $sql = "SELECT
         --Id Articulo
             InvArticulo.Id AS IdArticulo,        
         --Codigo Interno
