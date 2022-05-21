@@ -104,7 +104,7 @@
 		<table class="table table-striped table-bordered col-12 sortable" id="myTable">
 	  	<thead class="thead-dark">
 		  	<tr>
-				<th colspan="10"></th>				
+				<th colspan="11"></th>				
 				<th>
 					<select class="filterText" style="display:inline-block; border-radius: 5px;" onchange="filterText(this)">
 						<option disabled selected>Filtro</option>						
@@ -138,6 +138,7 @@
                 <th scope="col" class="CP-sticky">Codigo Barra</th>
                 <th scope="col" class="CP-sticky">Descripcion</th>
                 <th scope="col" class="CP-sticky">Existencia</th>
+				<th scope="col" class="CP-sticky">Precio</br>(Con IVA) '.SigVe.'</td>
                 <th scope="col" class="CP-sticky">Ultima Venta</th>
                 <th scope="col" class="CP-sticky">Ultima Compra</th>
                 <th scope="col" class="CP-sticky">Dias Restantes (Primer Rango) <br>('.$arrayGlobal['FInicialPrimerRango'].' al '.$arrayGlobal['FInicialSegundoRangoMenos'].')</th>                
@@ -163,6 +164,7 @@
 			</td>';
 			
             echo '<td align="center">'.intval($articulo['Existencia']).'</td>';
+			echo '<td class="precio" align="center">'.number_format($articulo['Precio'],2,"," ,"." ).'</td>';
 			echo '<td align="center">'.$articulo['UltimaVenta'].'</td>';
             echo '<td align="center">'.$articulo['UltimaCompra'].'</td>';
 
@@ -183,7 +185,7 @@
 				echo '<td align="center"></td>';
 				echo '<td align="center"></td>';
 			}
-			else if( ($DiasRestantesPrimerRango>0) && ($DiasRestantesSegundoRango>0) ){
+			else { 
 				echo '<td align="center">'.$articulo['DiasRestantesPrimerRango'].'</td>';
 				echo '<td align="center">'.$articulo['DiasRestantesSegundoRango'].'</td>';
 				echo '<td align="center">'.$articulo['Variacion'].'</td>';
