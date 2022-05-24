@@ -184,31 +184,58 @@
       <br/>
     ';
 
+    $current = $_GET['page'] ?? 1;
+
+    $buscar = $_GET['buscar'] ?? '';
+
+    echo '
+      <form>
+          <input type="hidden" name="_token" value="'.$_GET['_token'].'">
+          <input type="hidden" name="SEDE" value="'.$_GET['SEDE'].'">
+          <input type="hidden" name="page" value="'.$current.'">
+
+          <div class="input-group md-form form-sm form-1 pl-0">
+            <input class="form-control my-0 py-1" type="text" placeholder="Ingrese descripción o código de barra" value="'.$buscar.'" name="buscar" aria-label="Search">
+            <div class="input-group-append">
+              <button type="submit" class="btn btn-secondary">
+                <i class="fas fa-search text-white" aria-hidden="true"></i>
+              </button>
+            </div>
+          </div>
+          </form>
+      <br/>
+    ';
+
+    echo '
+        <table class="table table-striped table-bordered col-12">
+            <tr>
+                <td>
+                    <ul>
+                        <li>La casilla de existencia presentará un guion cuando no lo tenemos codificado y 0 cuando lo tenemos codificados pero no hay existencia.</li>
+                    </ul>
+                </td>
+            </tr>
+        </table>
+    ';
+
     echo '
       <table class="table table-striped table-bordered col-12 sortable" id="myTable">
-        <thead class="thead-dark">
-          <tr>
-            <th scope="col" class="text-center" colspan="4"></th>
-            <th scope="col" class="text-center" colspan="5">Existencia</th>
-            <th scope="col" class="text-center" colspan="5">Precio</th>
-          </tr>
-        </thead>
         <thead class="thead-dark">
           <tr>
             <th scope="col" class="CP-sticky">#</th>
             <th scope="col" class="CP-sticky codigo_barra">Código barra</th>
             <th scope="col" class="descripcion CP-sticky">Descripción</th>
             <th scope="col" class="existencia CP-sticky">Existencia</th>
-            <th scope="col" class="cobeca CP-sticky">Cobeca</th>
-            <th scope="col" class="nena CP-sticky">Nena</th>
-            <th scope="col" class="oeste CP-sticky">Oeste</td>
-            <th scope="col" class="drolanca CP-sticky">Drolanca</td>
-            <th scope="col" class="drocerca CP-sticky">Drocerca</td>
-            <th scope="col" class="cobeca CP-sticky">Cobeca</th>
-            <th scope="col" class="nena CP-sticky">Nena</th>
-            <th scope="col" class="oeste CP-sticky">Oeste</td>
-            <th scope="col" class="drolanca CP-sticky">Drolanca</td>
-            <th scope="col" class="drocerca CP-sticky">Drocerca</td>
+            <th scope="col" class="cobeca CP-sticky">Existencia Cobeca</th>
+            <th scope="col" class="nena CP-sticky">Existencia Nena</th>
+            <th scope="col" class="oeste CP-sticky">Existencia Oeste</td>
+            <th scope="col" class="drolanca CP-sticky">Existencia Drolanca</td>
+            <th scope="col" class="drocerca CP-sticky">Existencia Drocerca</td>
+            <th scope="col" class="cobeca CP-sticky">Precio Cobeca</th>
+            <th scope="col" class="nena CP-sticky">Precio Nena</th>
+            <th scope="col" class="oeste CP-sticky">Precio Oeste</td>
+            <th scope="col" class="drolanca CP-sticky">Precio Drolanca</td>
+            <th scope="col" class="drocerca CP-sticky">Precio Drocerca</td>
           </tr>
         </thead>
 
@@ -218,6 +245,7 @@
     $contador = 1;
 
     foreach ($articulos as $articulo) {
+        $descripcion = FG_Limpiar_Texto($articulo['descripcion']);
         $existencia = isset($articulo['existencia']) ? $articulo['existencia'] : '-';
 
         $existencia_cobeca = isset($articulo['existencia_cobeca']) ? $articulo['existencia_cobeca'] : '-';
@@ -226,11 +254,30 @@
         $existencia_drolanca = isset($articulo['existencia_drolanca']) ? $articulo['existencia_drolanca'] : '-';
         $existencia_drocerca = isset($articulo['existencia_drocerca']) ? $articulo['existencia_drocerca'] : '-';
 
-        $precio_cobeca = isset($articulo['precio_cobeca']) ? $articulo['precio_cobeca'] : '-';
-        $precio_nena = isset($articulo['precio_nena']) ? $articulo['precio_nena'] : '-';
-        $precio_oeste = isset($articulo['precio_oeste']) ? $articulo['precio_oeste'] : '-';
-        $precio_drolanca = isset($articulo['precio_drolanca']) ? $articulo['precio_drolanca'] : '-';
-        $precio_drocerca = isset($articulo['precio_drocerca']) ? $articulo['precio_drocerca'] : '-';
+        $precio_cobeca = isset($articulo['precio_cobeca']) ? number_format($articulo['precio_cobeca'], 2) : '-';
+        $precio_nena = isset($articulo['precio_nena']) ? number_format($articulo['precio_nena'], 2) : '-';
+        $precio_oeste = isset($articulo['precio_oeste']) ? number_format($articulo['precio_oeste'], 2) : '-';
+        $precio_drolanca = isset($articulo['precio_drolanca']) ? number_format($articulo['precio_drolanca'], 2) : '-';
+        $precio_drocerca = isset($articulo['precio_drocerca']) ? number_format($articulo['precio_drocerca'], 2) : '-';
+
+        if (isset($articulo['id_articulo'])) {
+            $link = '/reporte2?Descrip='.$descripcion.'&Id=' . $articulo['id_articulo'] . '&SEDE=' . FG_Mi_Ubicacion();
+            $link = '<td class="text-center CP-barrido"><a target="_blank" style="text-decoration: none; color: black" href="'.$link.'">'.$descripcion.'</a></td>';
+        } else {
+            $link = '<td class="text-center">'.$descripcion.'</td>';
+        }
+
+        $resaltado_precio_cobeca = ($articulo['menor_precio'] == 'cobeca') ? 'bg-warning' : '';
+        $resaltado_precio_nena = ($articulo['menor_precio'] == 'nena') ? 'bg-warning' : '';
+        $resaltado_precio_oeste = ($articulo['menor_precio'] == 'oeste') ? 'bg-warning' : '';
+        $resaltado_precio_drolanca = ($articulo['menor_precio'] == 'drolanca') ? 'bg-warning' : '';
+        $resaltado_precio_drocerca = ($articulo['menor_precio'] == 'drocerca') ? 'bg-warning' : '';
+
+        $resaltado_existencia_cobeca = ($articulo['mayor_existencia'] == 'cobeca') ? 'bg-success' : '';
+        $resaltado_existencia_nena = ($articulo['mayor_existencia'] == 'nena') ? 'bg-success' : '';
+        $resaltado_existencia_oeste = ($articulo['mayor_existencia'] == 'oeste') ? 'bg-success' : '';
+        $resaltado_existencia_drolanca = ($articulo['mayor_existencia'] == 'drolanca') ? 'bg-success' : '';
+        $resaltado_existencia_drocerca = ($articulo['mayor_existencia'] == 'drocerca') ? 'bg-success' : '';
 
 
         echo '<tr>';
@@ -238,20 +285,20 @@
         echo '<td class="text-center">'.$contador.'</td>';
 
         echo '<td class="text-center">'.$articulo['codigo_barra'].'</td>';
-        echo '<td class="text-center">'.$articulo['descripcion'].'</td>';
+        echo $link;
         echo '<td class="text-center">'.$existencia.'</td>';
 
-        echo '<td class="text-center">'.$existencia_cobeca.'</td>';
-        echo '<td class="text-center">'.$existencia_nena.'</td>';
-        echo '<td class="text-center">'.$existencia_oeste.'</td>';
-        echo '<td class="text-center">'.$existencia_drolanca.'</td>';
-        echo '<td class="text-center">'.$existencia_drocerca.'</td>';
+        echo '<td class="'.$resaltado_existencia_cobeca.' text-center">'.$existencia_cobeca.'</td>';
+        echo '<td class="'.$resaltado_existencia_nena.' text-center">'.$existencia_nena.'</td>';
+        echo '<td class="'.$resaltado_existencia_oeste.' text-center">'.$existencia_oeste.'</td>';
+        echo '<td class="'.$resaltado_existencia_drolanca.' text-center">'.$existencia_drolanca.'</td>';
+        echo '<td class="'.$resaltado_existencia_drocerca.' text-center">'.$existencia_drocerca.'</td>';
 
-        echo '<td class="text-center">'.$precio_cobeca.'</td>';
-        echo '<td class="text-center">'.$precio_nena.'</td>';
-        echo '<td class="text-center">'.$precio_oeste.'</td>';
-        echo '<td class="text-center">'.$precio_drolanca.'</td>';
-        echo '<td class="text-center">'.$precio_drocerca.'</td>';
+        echo '<td class="'.$resaltado_precio_cobeca.' text-center">'.$precio_cobeca.'</td>';
+        echo '<td class="'.$resaltado_precio_nena.' text-center">'.$precio_nena.'</td>';
+        echo '<td class="'.$resaltado_precio_oeste.' text-center">'.$precio_oeste.'</td>';
+        echo '<td class="'.$resaltado_precio_drolanca.' text-center">'.$precio_drolanca.'</td>';
+        echo '<td class="'.$resaltado_precio_drocerca.' text-center">'.$precio_drocerca.'</td>';
 
         echo '</tr>';
 
@@ -262,5 +309,7 @@
         </tbody>
       </table>
     ';
+
+    echo $articulos->links();
   }
 ?>

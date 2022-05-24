@@ -13,36 +13,6 @@
 
 Route::get('/test', function() {
 
-    $client = new GuzzleHttp\Client();
-
-    $request = $client->request('POST', 'http://www.cobeca.com:8080/pedidofl/api/Login', [
-        'json' => [
-            'Usuario' => 'F27336',
-            'Clave' => 'FTN2016+'
-        ]
-    ]);
-
-    $response = json_decode($request->getBody(), true);
-
-    $token = $response['token'];
-
-    $request = $client->request('POST', 'http://www.cobeca.com:8080/pedidofl/api/Articulos', [
-        'headers' => [
-            'Autorizacion' => $token,
-        ],
-        'form_params' => [
-            'cod_drogueria' => '7',
-        ]
-    ]);
-
-    $cobeca = json_decode($request->getBody(), true);
-
-    $cobecaFechaActualizacion = date('d/m/Y h:i A');
-
-    $fopen = fopen('cobeca.json', 'w+');
-    fwrite($fopen, $request->getBody());
-    fclose($fopen);
-
 });
 
 Route::get('/', function() {
