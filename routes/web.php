@@ -570,3 +570,5 @@ Route::resource('prepagados', 'ContPrepagadosController');
 Route::resource('tasas', 'ContTasas');
 
 Route::resource('corrida', 'ContCorridas');
+
+Route::view('verificadorZelle', 'pages.verificadorZelle.index');
