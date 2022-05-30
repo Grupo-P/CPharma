@@ -534,8 +534,8 @@
     $VentaDiariaQuiebre = FG_Venta_Diaria($row3['TotalUnidadesVendidas'],$RangoDiasQuiebre);
     $DiasRestantesQuiebre = FG_Dias_Restantes(intval($Existencia),$VentaDiariaQuiebre);
 
-    echo '<td align="center" class="venta_diaria text-white">'.$VentaDiariaQuiebre.'</td>';
-    echo '<td align="center" class="dias_restantes text-white">'.$DiasRestantesQuiebre.'</td>';
+    echo '<td align="center" class="venta_diaria">'.$VentaDiariaQuiebre.'</td>';
+    echo '<td align="center" class="dias_restantes">'.$DiasRestantesQuiebre.'</td>';
 
     if(!is_null($UltimaVenta)){
       echo '<td class="ultima_venta" align="center">'.$UltimaVenta->format('d-m-Y').'</td>';
@@ -545,10 +545,10 @@
     }
 
     if(!is_null($UltimoLote)){
-      echo '<td align="center" class="ultimo_lote text-white">'.$UltimoLote->format('d-m-Y').'</td>';
+      echo '<td align="center" class="ultimo_lote">'.$UltimoLote->format('d-m-Y').'</td>';
     }
     else{
-      echo '<td align="center" class="ultimo_lote text-white"> - </td>';
+      echo '<td align="center" class="ultimo_lote"> - </td>';
     }
 
     echo '<td class="unidad_minima">'.$unidadminima.'</td>';
@@ -600,10 +600,10 @@
           echo'
             <button type="submit" role="button" class="btn btn-outline-danger btn-sm" style="width:100%;">En Transito</button>
           </form>
-      </tr>
+      </td>
       ';
     } else {
-        echo '<td class="transito  text-white"></td>';
+        echo '<td class="transito  text-white">-</td>';
     }
 
     $traslado = Traslado_Transito($CodigoBarra);
