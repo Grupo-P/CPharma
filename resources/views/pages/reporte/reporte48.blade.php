@@ -939,10 +939,6 @@
         }
 
         $contador++;
-
-        if ($contador == 30) {
-            break;
-        }
     }
 
     mysqli_close($connCPharma);
