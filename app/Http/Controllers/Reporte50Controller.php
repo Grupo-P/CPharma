@@ -78,14 +78,18 @@ class Reporte50Controller extends Controller
 
             foreach ($cobeca as $item) {
                 if ($item['existencia'] > 0) {
+                    $costo_cobeca = $item['monto_final'];
+                    $costo_cobeca = ($_GET['descuentoCobeca'] != '') ? $costo_cobeca * $_GET['descuentoCobeca'] : $costo_cobeca;
+
                     $articulos[$i]['codigo_barra'] = $item['cod_barra'];
                     $articulos[$i]['descripcion'] = $item['desc_articulo'];
                     $articulos[$i]['existencia_cobeca'] = $item['existencia'];
-                    $articulos[$i]['precio_cobeca'] = $item['monto_final'];
-                    $articulos[$i]['menor_precio_valor'] = $item['monto_final'];
+                    $articulos[$i]['precio_cobeca'] = $costo_cobeca;
+                    $articulos[$i]['menor_precio_valor'] = $costo_cobeca;
                     $articulos[$i]['menor_precio'] = 'cobeca';
                     $articulos[$i]['mayor_existencia_valor'] = $item['existencia'];
                     $articulos[$i]['mayor_existencia'] = 'cobeca';
+                    $articulos[$i]['componente'] = $item['desc_componente_base'];
 
                     $i++;
                 }
@@ -119,8 +123,12 @@ class Reporte50Controller extends Controller
                 if (in_array(trim(substr($field, 130, 17)), array_column($articulos, 'codigo_barra'))) {
                     if (trim(substr($field, 64, 12))) {
                         $index = array_search(trim(substr($field, 130, 17)), array_column($articulos, 'codigo_barra'));
+
+                        $costo_nena = trim(substr($field, 49, 15));
+                        $costo_nena = ($_GET['descuentoNena'] != '') ? $costo_nena * $_GET['descuentoNena'] : $costo_nena;
+
                         $articulos[$index]['existencia_nena'] = trim(substr($field, 64, 12));
-                        $articulos[$index]['precio_nena'] = trim(substr($field, 49, 15));
+                        $articulos[$index]['precio_nena'] = $costo_nena;
 
                         if ($articulos[$index]['menor_precio_valor'] > $articulos[$index]['precio_nena']) {
                             $articulos[$index]['menor_precio_valor'] = $articulos[$index]['precio_nena'];
@@ -134,10 +142,13 @@ class Reporte50Controller extends Controller
                     }
                 } else {
                     if (trim(substr($field, 64, 12))) {
+                        $costo_nena = trim(substr($field, 49, 15));
+                        $costo_nena = ($_GET['descuentoNena'] != '') ? $costo_nena * $_GET['descuentoNena'] : $costo_nena;
+
                         $articulos[$i]['codigo_barra'] = trim(substr($field, 130, 17));
                         $articulos[$i]['descripcion'] = trim(substr($field, 8, 42));
                         $articulos[$i]['existencia_nena'] = trim(substr($field, 64, 12));
-                        $articulos[$i]['precio_nena'] = trim(substr($field, 49, 15));
+                        $articulos[$i]['precio_nena'] = $costo_nena;
                         $articulos[$i]['menor_precio_valor'] = $articulos[$i]['precio_nena'];
                         $articulos[$i]['menor_precio'] = 'nena';
                         $articulos[$i]['mayor_existencia_valor'] = $articulos[$i]['existencia_nena'];
@@ -178,6 +189,7 @@ class Reporte50Controller extends Controller
                     $descuento3 = $precio_oeste * ((int) $item['I'] / 100);
 
                     $precio_oeste = $precio_oeste - $descuento1 - $descuento2 - $descuento3;
+                    $precio_oeste = ($_GET['descuentoOeste'] != '') ? $precio_oeste * $_GET['descuentoOeste'] : $precio_oeste;
 
                     $articulos[$index]['precio_oeste'] = $precio_oeste;
 
@@ -205,6 +217,7 @@ class Reporte50Controller extends Controller
                     $descuento3 = $precio_oeste * ((int) $item['I'] / 100);
 
                     $precio_oeste = $precio_oeste - $descuento1 - $descuento2 - $descuento3;
+                    $precio_oeste = ($_GET['descuentoOeste'] != '') ? $precio_oeste * $_GET['descuentoOeste'] : $precio_oeste;
 
                     $articulos[$i]['precio_oeste'] = $precio_oeste;
 
@@ -249,6 +262,7 @@ class Reporte50Controller extends Controller
                         $descuento4 = $precio_drolanca * ((int) $item['AE'] / 100);
 
                         $precio_drolanca = $precio_drolanca - $descuento1 - $descuento2 - $descuento3 - $descuento4;
+                        $precio_drolanca = ($_GET['descuentoDrolanca'] != '') ? $precio_drolanca * $_GET['descuentoDrolanca'] : $precio_drolanca;
 
                         $articulos[$index]['precio_drolanca'] = $precio_drolanca;
 
@@ -263,7 +277,7 @@ class Reporte50Controller extends Controller
                         }
 
                     } else {
-                        if ($item['J'] > 0) {
+                        if (isset($item['J']) && $item['J'] > 0) {
                             $articulos[$i]['codigo_barra'] = $item['B'];
                             $articulos[$i]['descripcion'] = $item['C'];
                             $articulos[$i]['existencia_drolanca'] = $item['D'];
@@ -276,6 +290,7 @@ class Reporte50Controller extends Controller
                             $descuento3 = $precio_drolanca * ((int) $item['N'] / 100);
                             $descuento4 = $precio_drolanca * ((int) $item['AE'] / 100);
 
+                            $precio_drolanca = ($_GET['descuentoDrolanca'] != '') ? $precio_drolanca * $_GET['descuentoDrolanca'] : $precio_drolanca;
                             $precio_drolanca = $precio_drolanca - $descuento1 - $descuento2 - $descuento3 - $descuento4;
 
                             $articulos[$i]['precio_drolanca'] = $precio_drolanca;
@@ -312,6 +327,10 @@ class Reporte50Controller extends Controller
 
             if ($drocerca[1]['A'] != null) {
                 foreach ($drocerca as $item) {
+                    if ($item['H'] == 'Oferta') {
+                        continue;
+                    }
+
                     if (in_array($item['B'], array_column($articulos, 'codigo_barra'))) {
                         $index = array_search($item['B'], array_column($articulos, 'codigo_barra'));
                         $articulos[$index]['existencia_drocerca'] = (int) $item['D'] + (int) $item['E'];
@@ -319,7 +338,10 @@ class Reporte50Controller extends Controller
                         $precio_drocerca = $item['H'];
                         $precio_drocerca = str_replace(',', '.', $precio_drocerca);
 
+                        $precio_drocerca = ($_GET['descuentoDrocerca'] != '') ? $precio_drocerca * $_GET['descuentoDrocerca'] : $precio_drocerca;
                         $articulos[$index]['precio_drocerca'] = $precio_drocerca;
+
+                        $articulos[$index]['componente'] = isset($articulos[$index]['componente']) ? $articulos[$index]['componente'] : $item['K'];
 
                         if ($articulos[$index]['menor_precio_valor'] > $articulos[$index]['precio_drocerca']) {
                             $articulos[$index]['menor_precio_valor'] = $articulos[$index]['precio_drocerca'];
@@ -334,10 +356,10 @@ class Reporte50Controller extends Controller
                     } else {
                         $articulos[$i]['codigo_barra'] = $item['B'];
                         $articulos[$i]['descripcion'] = $item['C'];
+                        $articulos[$i]['componente'] = $item['K'];
                         $articulos[$i]['existencia_drocerca'] = (int) $item['D'] + (int) $item['E'];
 
                         $precio_drocerca = $item['H'];
-                        $precio_drocerca = str_replace(',', '.', $precio_drocerca);
 
                         $articulos[$i]['precio_drocerca'] = $precio_drocerca;
 
@@ -392,6 +414,7 @@ class Reporte50Controller extends Controller
         $articulos = array_slice($articulos, $start, $per_page);
 
         foreach ($articulos as $articulo) {
+
             $codigo_barra = $articulo['codigo_barra'];
 
             $sql = "

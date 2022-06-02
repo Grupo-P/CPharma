@@ -119,6 +119,65 @@
     RETORNO: No aplica
   */
   function R50_Catalogo_Droguerias($articulos) {
+    if (!request()->pasoUno) {
+
+        echo '<form>';
+        echo '<table class="table table-bordered">';
+
+        echo '<input type="hidden" name="SEDE" value="'.$_GET['SEDE'].'">';
+        echo '<input type="hidden" name="_token" value="'.$_GET['_token'].'">';
+        echo '<input type="hidden" name="pasoUno" value="1">';
+
+        echo '<tr>';
+
+        echo '<td class="text-center">';
+        echo '<label for="descuentoCobeca">Descuento Cobeca</label>';
+        echo '<input min="0.01" step="0.01" max="0.99" type="number" name="descuentoCobeca" class="form-control">';
+        echo '</td>';
+
+        echo '<td class="text-center">';
+        echo '<label for="descuentoNena">Descuento Nena</label>';
+        echo '<input min="0.01" step="0.01" max="0.99" type="number" name="descuentoNena" class="form-control">';
+        echo '</td>';
+
+        echo '<td class="text-center">';
+        echo '<label for="descuentoDrocerca">Descuento Drocerca</label>';
+        echo '<input min="0.01" step="0.01" max="0.99" type="number" name="descuentoDrocerca" class="form-control">';
+        echo '</td>';
+
+        echo '<td class="text-center">';
+        echo '<label for="descuentoDrolanca">Descuento Drolanca</label>';
+        echo '<input min="0.01" step="0.01" max="0.99" type="number" name="descuentoDrolanca" class="form-control">';
+        echo '</td>';
+
+        echo '<td class="text-center">';
+        echo '<label for="descuentoOeste">Descuento Oeste</label>';
+        echo '<input min="0.01" step="0.01" max="0.99" type="number" name="descuentoOeste" class="form-control">';
+        echo '</td>';
+
+        echo '<td class="text-center">';
+        echo '<label for="descuentoOeste">Descuento Oeste</label>';
+        echo '<input min="0.01" step="0.01" max="0.99" type="number" name="descuentoOeste" class="form-control">';
+        echo '</td>';
+
+        echo '</tr>';
+
+        echo '<tr>';
+
+        echo '<td class="text-center" colspan="5">El descuento para cada droguería debe expresar en un número decimal mayor a 0.00 y menor a 1.00. Ejemplo: 5% igual a 0.95</td>';
+
+        echo '<td class="text-center">';
+        echo '<button class="btn btn-outline-success">Ir</button>';
+        echo '</td>';
+
+        echo '</tr>';
+
+        echo '</table>';
+        echo '</form>';
+
+        return;
+    }
+
     echo '
         <div class="modal fade" id="ver_campos" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
           <div class="modal-dialog" role="document">
@@ -179,7 +238,7 @@
             <i class="fas fa-search text-white" aria-hidden="true"></i>
           </span>
         </div>
-        <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterAllTable()">
+        <input class="form-control my-0 py-1" type="text" placeholder="Esta casilla filtra dentro de esta pagina específicamente..." aria-label="Search" id="myInput" onkeyup="FilterAllTable()">
       </div>
       <br/>
     ';
@@ -195,7 +254,7 @@
           <input type="hidden" name="page" value="'.$current.'">
 
           <div class="input-group md-form form-sm form-1 pl-0">
-            <input class="form-control my-0 py-1" type="text" placeholder="Ingrese descripción o código de barra" value="'.$buscar.'" name="buscar" aria-label="Search">
+            <input class="form-control my-0 py-1" type="text" placeholder="Esta casilla filtra entre todo el catalogo por código de barra o descripción..." value="'.$buscar.'" name="buscar" aria-label="Search">
             <div class="input-group-append">
               <button type="submit" class="btn btn-secondary">
                 <i class="fas fa-search text-white" aria-hidden="true"></i>
@@ -206,12 +265,48 @@
       <br/>
     ';
 
+    if ($buscar) {
+        echo '<div class="text-center"><a href="/reporte50?_token='.$_GET['_token'].'&SEDE='.$_GET['SEDE'].'"><i class="fa fa-reply"></i> Volver a mostrar todo<a></div>';
+    }
+
+    $textoDescuentos = [];
+
+    if ($_GET['descuentoDrolanca'] != '') {
+        $textoDescuentos[] = 'Drolanca: '.$_GET['descuentoDrolanca'];
+    }
+
+    if ($_GET['descuentoOeste'] != '') {
+        $textoDescuentos[] = 'Oeste: '.$_GET['descuentoOeste'];
+    }
+
+    if ($_GET['descuentoNena'] != '') {
+        $textoDescuentos[] = 'Nena: '.$_GET['descuentoNena'];
+    }
+
+    if ($_GET['descuentoDrocerca'] != '') {
+        $textoDescuentos[] = 'Drocerca: '.$_GET['descuentoDrocerca'];
+    }
+
+    if ($_GET['descuentoCobeca'] != '') {
+        $textoDescuentos[] = 'Cobeca: '.$_GET['descuentoCobeca'];
+    }
+
+    $textoDescuentos = implode(', ', $textoDescuentos);
+
+    if ($textoDescuentos == '') {
+        $textoDescuentos = 'No hay ninguna droguería configurada';
+    }
+
     echo '
         <table class="table table-striped table-bordered col-12">
             <tr>
                 <td>
                     <ul>
                         <li>La casilla de existencia presentará un guion cuando no lo tenemos codificado y 0 cuando lo tenemos codificados pero no hay existencia.</li>
+                        <li>La existencia de Drocerca incluye la sede de Mérida mas la sede de Caracas.</li>
+                        <li>El color amarillo indica el mejor precio entre las droguerías.</li>
+                        <li>El color verde indica la mayor existencia entre las droguerías.</li>
+                        <li>Se configuraron los siguientes descuentos en factura por droguería: '.$textoDescuentos.'.</li>
                     </ul>
                 </td>
             </tr>
@@ -225,6 +320,7 @@
             <th scope="col" class="CP-sticky">#</th>
             <th scope="col" class="CP-sticky codigo_barra">Código barra</th>
             <th scope="col" class="descripcion CP-sticky">Descripción</th>
+            <th scope="col" class="componente CP-sticky">Componente</th>
             <th scope="col" class="existencia CP-sticky">Existencia</th>
             <th scope="col" class="cobeca CP-sticky">Existencia Cobeca</th>
             <th scope="col" class="nena CP-sticky">Existencia Nena</th>
@@ -247,6 +343,7 @@
     foreach ($articulos as $articulo) {
         $descripcion = FG_Limpiar_Texto($articulo['descripcion']);
         $existencia = isset($articulo['existencia']) ? $articulo['existencia'] : '-';
+        $componente = isset($articulo['componente']) ? FG_Limpiar_Texto($articulo['componente']) : '-';
 
         $existencia_cobeca = isset($articulo['existencia_cobeca']) ? $articulo['existencia_cobeca'] : '-';
         $existencia_nena = isset($articulo['existencia_nena']) ? $articulo['existencia_nena'] : '-';
@@ -286,6 +383,7 @@
 
         echo '<td class="text-center">'.$articulo['codigo_barra'].'</td>';
         echo $link;
+        echo '<td class="text-center">'.$componente.'</td>';
         echo '<td class="text-center">'.$existencia.'</td>';
 
         echo '<td class="'.$resaltado_existencia_cobeca.' text-center">'.$existencia_cobeca.'</td>';
