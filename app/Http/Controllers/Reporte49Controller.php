@@ -427,13 +427,16 @@ class Reporte49Controller extends Controller
             } 
             else if( $Variacion==0 ){
                 return "INTACTO";
-            }        
+            }                   
         }
         else if( ($PrimerRango==="N/D") && ($SegundoRango>=0) && ($SegundoRango!=="N/D") ){
             return "LLEGANDO";
         }
         else if( ($SegundoRango==="N/D") && ($PrimerRango>=0) && ($PrimerRango!=="N/D") ){
             return "LLEGANDO";
+        }
+        else if( ($PrimerRango==="N/D") && ($SegundoRango==0) && ($SegundoRango!=="N/D") ){
+            return "ATENCION";
         }
     }
 
