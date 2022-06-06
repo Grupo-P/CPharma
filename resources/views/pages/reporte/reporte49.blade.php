@@ -45,38 +45,81 @@
 				</tr>
 				<tr>
 					<td colspan="2" align="justify" style="border: 1px solid black;">
-						<h5>LEYENDA</h5>
-						<p>Este reporte evalua la rotacion de todos los articulos con existencia en la sede en dos partes los ultimos 15 dias desde hoy hacia atras y 15 dias mas atras para un total de 30 dias.<br>
-						La idea es comparar ambos rangos para ver la tendencia y definir si viene estable, subiendo o bajando.</br>
-						Los articulos recien llegados no se evaluan para tener un juicio justo.</p>
+						<h5 style="margin-left:10px;">LEYENDA</h5>						
+						<ul>
+							<li>
+								Este reporte evalua la rotacion de todos los articulos con existencia en la sede en dos partes los ultimos 15 dias desde hoy hacia atras y 15 dias mas atras para un total de 30 dias.<br>
+							</li>						
+							<li>
+								La idea es comparar ambos rangos para ver la tendencia y definir si viene estable, subiendo o bajando.</br>
+							</li>
+							<li>
+								Los articulos recien llegados no se evaluan para tener un juicio justo.</br>
+							</li>
+							<li>
+								El status evalua el articulo segun su segundo rango y es una evaluacion de los dias restantes.</br>
+							</li>
+							<li>
+								El comportamiento evalua el movimiento de articulo en ambos rangos y determina lo que sucedio.</br>
+							</li>																		
+						</ul>
+						
 					</th>
 				</tr>				
 			</thead>
 			<tbody>
 				<tr>
 					<td align="justify" style="border: 1px solid black;">
-						<h5>STATUS</h5>
-						<p>
-							Indeterminable, articulos con el ultimo rango en 0.</br>
-							Critico, articulos con el ultimo rango menor a 20.</br>
-							Bien, articulos con el ultimo rango entre 20 y 45.</br>
-							Excedido, articulos con el ultimo rango mayor a 45.</br>
-							N/D, articulos con disponibilidad en el rango menor a 10 dias.</br>
-						</p>
+						<h5 style="margin-left:10px;">STATUS</h5>
+						<ul>
+						<li>
+							<strong>Indeterminable:</strong> articulos con el ultimo rango en 0.</br>
+						</li>
+						<li>
+							<strong>Critico:</strong> articulos con el ultimo rango menor a 20.</br>
+						</li>
+						<li>
+							<strong>Bien:</strong> articulos con el ultimo rango entre 20 y 45.</br>
+						</li>
+						<li>
+							<strong>Excedido:</strong> articulos con el ultimo rango mayor a 45.</br>
+						</li>
+						<li>
+							<strong>N/D:</strong> articulos con disponibilidad en el rango menor a 10 dias.</br>
+						</li>
+						</ul>
 					</td>
 					<td align="justify" style="border: 1px solid black;">
-						<h5>COMPORTAMIENTO</h5>
-						<p>
-							Indeterminable, articulos con disponibilidad en dias muy bajos.</br>
-							N/D, articulos con disponibilidad en el rango menor a 10 dias.</br>
-							Peligro, articulo sin rotacion en ambos rangos.</br>
-							Estable, articulos con la rotacion en ambos rangos iguales o con una tolerancia del 10%.</br>
-							Llegando, articulos con el primer o segundo rango sin disponibilidad.</br>
-							Cayo, articulos con venta en el primer rango y sin venta en el ultimo rango.</br>
-							Decrecio, primer rango menor que el segundo.</br>
-							Crecio, primer rango mayor que el segundo.</br>
-							Intacto, son los articulos que no variaron en ambos rangos, se mantuvo igual.<br>
-						</p>
+						<h5 style="margin-left:10px;">COMPORTAMIENTO</h5>
+						<ul>
+						<li>
+							<strong>N/D:</strong> articulos con disponibilidad en dias muy bajos.</br>							
+						</li>
+						<li>
+							<strong>Peligro:</strong> articulo sin rotacion en ambos rangos.</br>
+						</li>
+						<li>
+							<strong>Estable:</strong> articulos con la rotacion en ambos rangos iguales o con una tolerancia del 10%.</br>
+						</li>
+						<li>
+							<strong>Llegando:</strong> articulos con el primer o segundo rango sin disponibilidad.</br>
+						</li>
+						<li>
+							<strong>Cayo:</strong> articulos con venta en el primer rango y sin venta en el ultimo rango.</br>
+						</li>
+						<li>
+							<strong>Decrecio:</strong> primer rango menor que el segundo.</br>
+						</li>
+						<li>
+							<strong>Crecio:</strong> primer rango mayor que el segundo.</br>
+						</li>
+						<li>
+							<strong>Intacto:</strong> son los articulos que no variaron en ambos rangos: se mantuvo igual.<br>
+						</li>
+						<li>
+						<strong>Atencion:</strong> Articulos primer rango N/D y segundo rango en 0.
+						</li>
+						</ul>
 					</td>
 				</tr>				
 			</tbody>
