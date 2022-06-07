@@ -48,6 +48,69 @@
       color:#fff;
     }
   </style>
+
+  <link rel="stylesheet" href="/assets/jquery/jquery-ui-last.css">
+  <script src="/assets/jquery/jquery-ui-last.js"></script>
+
+  <script>
+      @php
+            include(app_path().'\functions\config.php');
+            include(app_path().'\functions\functions.php');
+            include(app_path().'\functions\querys_mysql.php');
+            include(app_path().'\functions\querys_sqlserver.php');
+
+
+            $SedeConnection = FG_Mi_Ubicacion();
+
+            $conn = FG_Conectar_Smartpharma($SedeConnection);
+            $descripcion = [];
+            $codigo = [];
+            $i = 0;
+
+            $sql = "
+                SELECT
+                    InvArticulo.Id AS id,
+                    InvArticulo.Descripcion AS descripcion,
+                    (SELECT InvCodigoBarra.CodigoBarra FROM InvCodigoBarra WHERE InvCodigoBarra.InvArticuloId = InvArticulo.Id AND InvCodigoBarra.EsPrincipal = 1) AS codigo_barra
+                FROM InvArticulo
+            ";
+
+            $query = sqlsrv_query($conn, $sql);
+
+            while ($row = sqlsrv_fetch_array($query, SQLSRV_FETCH_ASSOC)) {
+                $descripcion[$i]['id'] = $row['id'];
+                $descripcion[$i]['label'] = mb_convert_encoding($row['descripcion'], 'UTF-8', 'UTF-8');
+                $descripcion[$i]['value'] = mb_convert_encoding($row['descripcion'], 'UTF-8', 'UTF-8');
+
+                $codigo[$i]['id'] = $row['id'];
+                $codigo[$i]['label'] = mb_convert_encoding($row['codigo_barra'], 'UTF-8', 'UTF-8');
+                $codigo[$i]['value'] = mb_convert_encoding($row['codigo_barra'], 'UTF-8', 'UTF-8');
+
+                $i++;
+            }
+        @endphp
+
+
+
+        $(document).ready(function () {
+            $('#myInput').autocomplete({
+                source: {!! json_encode($descripcion) !!},
+                autoFocus: true,
+                select: function (event, ui) {
+                    $('#myId').val(ui.item.id);
+                }
+            });
+
+            $('#myInputCB').autocomplete({
+                source: {!! json_encode($codigo) !!},
+                autoFocus: true,
+                minLength: 5,
+                select: function (event, ui) {
+                    $('#myId').val(ui.item.id);
+                }
+            });
+        });
+  </script>
 @endsection
 
 @section('content')
@@ -58,13 +121,6 @@
   <hr class="row align-items-start col-12">
 
 <?php
-  include(app_path().'\functions\config.php');
-  include(app_path().'\functions\functions.php');
-  include(app_path().'\functions\querys_mysql.php');
-  include(app_path().'\functions\querys_sqlserver.php');
-
-  $ArtJson = "";
-  $CodJson = "";
 
   if(isset($_GET['SEDE'])) {
     echo '
@@ -97,12 +153,6 @@
   }
   else {
     $InicioCarga = new DateTime("now");
-
-    $sql = R12Q_Lista_Articulos();
-    $ArtJson = FG_Armar_Json($sql,$_GET['SEDE']);
-
-    $sql1 = R12Q_Lista_Articulos_CodBarra();
-    $CodJson = FG_Armar_Json($sql1,$_GET['SEDE']);
 
     echo '
       <form id="form" autocomplete="off" action="" target="_blank">
@@ -160,67 +210,7 @@
 ?>
 @endsection
 
-@section('scriptsFoot')
-  <?php
-    if($ArtJson!=""){
-  ?>
-    <script type="text/javascript">
-      ArrJs = eval(<?php echo $ArtJson ?>);
-      autocompletado(document.getElementById("myInput"),document.getElementById("myId"), ArrJs);
-    </script>
-  <?php
-    }
-  ?>
-  <?php
-    if($CodJson!=""){
-  ?>
-    <script type="text/javascript">
-      ArrJsCB = eval(<?php echo $CodJson ?>);
-      autocompletadoCB(document.getElementById("myInputCB"),document.getElementById("myIdCB"), ArrJsCB);
-    </script>
-  <?php
-    }
-  ?>
-@endsection
-
 <?php
-  /**********************************************************************************/
-  /*
-    TITULO: R12Q_Lista_Articulos
-    FUNCION: Armar una lista de articulos con descripcion e id
-    RETORNO: Lista de articulos con descripcion e id
-    DESAROLLADO POR: SERGIO COVA
-   */
-  function R12Q_Lista_Articulos() {
-    $sql = "
-      SELECT
-      InvArticulo.Descripcion,
-      InvArticulo.Id
-      FROM InvArticulo
-      ORDER BY InvArticulo.Descripcion ASC
-    ";
-    return $sql;
-  }
-  /**********************************************************************************/
-  /*
-    TITULO: R12Q_Lista_Articulos_CodBarra
-    FUNCION: Armar una lista de articulos con descripcion e id
-    RETORNO: Lista de articulos con descripcion e id
-    DESAROLLADO POR: SERGIO COVA
-   */
-  function R12Q_Lista_Articulos_CodBarra() {
-    $sql = "
-      SELECT
-      (SELECT CodigoBarra
-      FROM InvCodigoBarra
-      WHERE InvCodigoBarra.InvArticuloId = InvArticulo.Id
-      AND InvCodigoBarra.EsPrincipal = 1) AS CodigoBarra,
-      InvArticulo.Id
-      FROM InvArticulo
-      ORDER BY CodigoBarra ASC
-    ";
-    return $sql;
-  }
   /**********************************************************************************/
   /*
     TITULO: R12_Detalle_Movimientos
