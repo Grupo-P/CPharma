@@ -48,6 +48,49 @@
       color: #ffffff;
     }
   </style>
+
+  <link rel="stylesheet" href="/assets/jquery/jquery-ui-last.css">
+  <script src="/assets/jquery/jquery-ui-last.js"></script>
+
+  <script>
+      @php
+            include(app_path().'\functions\config.php');
+            include(app_path().'\functions\functions.php');
+            include(app_path().'\functions\querys_mysql.php');
+            include(app_path().'\functions\querys_sqlserver.php');
+
+
+            $SedeConnection = FG_Mi_Ubicacion();
+
+            $conn = FG_Conectar_Smartpharma($SedeConnection);
+            $descripcion = [];
+            $i = 0;
+
+            $sql = Inv_Lista_Articulos();
+
+            $query = sqlsrv_query($conn, $sql);
+
+            while ($row = sqlsrv_fetch_array($query, SQLSRV_FETCH_ASSOC)) {
+                $descripcion[$i]['id'] = $row['id'];
+                $descripcion[$i]['label'] = mb_convert_encoding($row['descripcion'], 'UTF-8', 'UTF-8');
+                $descripcion[$i]['value'] = mb_convert_encoding($row['descripcion'], 'UTF-8', 'UTF-8');
+
+                $i++;
+            }
+        @endphp
+
+
+
+        $(document).ready(function () {
+            $('#myInput').autocomplete({
+                source: {!! json_encode($descripcion) !!},
+                autoFocus: true,
+                select: function (event, ui) {
+                    $('#myId').val(ui.item.id);
+                }
+            });
+        });
+  </script>
 @endsection
 
 @section('content')
@@ -58,12 +101,8 @@
   <hr class="row align-items-start col-12">
 
 <?php
-  include(app_path().'\functions\config.php');
-  include(app_path().'\functions\functions.php');
-  include(app_path().'\functions\querys_mysql.php');
-  include(app_path().'\functions\querys_sqlserver.php');
 
-  $ArtJson = "";
+
   $_GET['SEDE'] = FG_Mi_Ubicacion();
 
   if (isset($_GET['SEDE'])){
@@ -114,13 +153,10 @@
   //CASO 1: AL CARGAR EL REPORTE DESDE EL MENU
     $InicioCarga = new DateTime("now");
 
-    $sql = Inv_Lista_Articulos();
-    $ArtJson = FG_Armar_Json($sql,$_GET['SEDE']);
-
     echo '
     <form autocomplete="off" action="">
       <div class="autocomplete" style="width:90%;">
-        <input id="myInput" type="text" name="Nombre" placeholder="Ingrese el nombre del articulo " onkeyup="conteo()" required>
+        <input id="myInput" type="text" name="Nombre" placeholder="Ingrese el nombre del articulo " required>
         <input id="myId" name="Id" type="hidden">
         <input id="SEDE" name="SEDE" type="hidden" value="';
         print_r($_GET['SEDE']);
@@ -133,19 +169,6 @@
     $FinCarga = new DateTime("now");
     $IntervalCarga = $InicioCarga->diff($FinCarga);
     echo'Tiempo de carga: '.$IntervalCarga->format("%Y-%M-%D %H:%I:%S");
-  }
-?>
-@endsection
-
-@section('scriptsFoot')
-<?php
-  if($ArtJson!=""){
-?>
-    <script type="text/javascript">
-      ArrJs = eval(<?php echo $ArtJson ?>);
-      autocompletado(document.getElementById("myInput"),document.getElementById("myId"), ArrJs);
-    </script>
-<?php
   }
 ?>
 @endsection
@@ -299,8 +322,8 @@
   function Inv_Lista_Articulos() {
     $sql = "
       SELECT
-      InvArticulo.Descripcion,
-      InvArticulo.Id
+      InvArticulo.Descripcion AS descripcion,
+      InvArticulo.Id AS id
       FROM InvArticulo
       ORDER BY InvArticulo.Descripcion ASC
     ";
