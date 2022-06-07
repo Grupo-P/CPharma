@@ -6,48 +6,51 @@
 
 @section('scriptsHead')
   <style>
-    * {
-      box-sizing: border-box;
-    }
-    .autocomplete {
-      position: relative;
-      display: inline-block;
-    }
-    input {
-      border: 1px solid transparent;
-      background-color: #f1f1f1;
-      border-radius: 5px;
-      padding: 10px;
-      font-size: 16px;
-    }
-    input[type=text] {
-      background-color: #f1f1f1;
-      width: 100%;
-    }
-    .autocomplete-items {
-      position: absolute;
-      border: 1px solid #d4d4d4;
-      border-bottom: none;
-      border-top: none;
-      z-index: 99;
-      top: 100%;
-      left: 0;
-      right: 0;
-    }
-    .autocomplete-items div {
-      padding: 10px;
-      cursor: pointer;
-      background-color: #fff;
-      border-bottom: 1px solid #d4d4d4;
-    }
-    .autocomplete-items div:hover {
-      background-color: #e9e9e9;
-    }
-    .autocomplete-active {
-      background-color: DodgerBlue !important;
-      color: #ffffff;
-    }
+      * {
+        box-sizing: border-box;
+      }
+      .autocomplete {
+        position: relative;
+        display: inline-block;
+      }
+      input {
+        border: 1px solid transparent;
+        background-color: #f1f1f1;
+        border-radius: 5px;
+        padding: 10px;
+        font-size: 16px;
+      }
+      input[type=text] {
+        background-color: #f1f1f1;
+        width: 100%;
+      }
+      .autocomplete-items {
+        position: absolute;
+        border: 1px solid #d4d4d4;
+        border-bottom: none;
+        border-top: none;
+        z-index: 99;
+        top: 100%;
+        left: 0;
+        right: 0;
+      }
+      .autocomplete-items div {
+        padding: 10px;
+        cursor: pointer;
+        background-color: #fff;
+        border-bottom: 1px solid #d4d4d4;
+      }
+      .autocomplete-items div:hover {
+        background-color: #e9e9e9;
+      }
+      .autocomplete-active {
+        background-color: DodgerBlue !important;
+        color: #ffffff;
+      }
   </style>
+
+  <link rel="stylesheet" href="/assets/jquery/jquery-ui-last.css">
+  <script src="/assets/jquery/jquery-ui-last.js"></script>
 
   <script>
         function mostrar_ocultar(that, elemento) {
@@ -98,6 +101,64 @@
                 }
             }
         }
+
+        @php
+            include(app_path().'\functions\config.php');
+            include(app_path().'\functions\functions.php');
+            include(app_path().'\functions\querys_mysql.php');
+            include(app_path().'\functions\querys_sqlserver.php');
+
+
+            $SedeConnection = FG_Mi_Ubicacion();
+
+            $conn = FG_Conectar_Smartpharma($SedeConnection);
+            $descripcion = [];
+            $codigo = [];
+            $i = 0;
+
+            $sql = "
+                SELECT
+                    InvArticulo.Id AS id,
+                    InvArticulo.Descripcion AS descripcion,
+                    (SELECT InvCodigoBarra.CodigoBarra FROM InvCodigoBarra WHERE InvCodigoBarra.InvArticuloId = InvArticulo.Id AND InvCodigoBarra.EsPrincipal = 1) AS codigo_barra
+                FROM InvArticulo
+            ";
+
+            $query = sqlsrv_query($conn, $sql);
+
+            while ($row = sqlsrv_fetch_array($query, SQLSRV_FETCH_ASSOC)) {
+                $descripcion[$i]['id'] = $row['id'];
+                $descripcion[$i]['label'] = mb_convert_encoding($row['descripcion'], 'UTF-8', 'UTF-8');
+                $descripcion[$i]['value'] = mb_convert_encoding($row['descripcion'], 'UTF-8', 'UTF-8');
+
+                $codigo[$i]['id'] = $row['id'];
+                $codigo[$i]['label'] = mb_convert_encoding($row['codigo_barra'], 'UTF-8', 'UTF-8');
+                $codigo[$i]['value'] = mb_convert_encoding($row['codigo_barra'], 'UTF-8', 'UTF-8');
+
+                $i++;
+            }
+        @endphp
+
+
+
+        $(document).ready(function () {
+            $('#descripcion').autocomplete({
+                source: {!! json_encode($descripcion) !!},
+                autoFocus: true,
+                select: function (event, ui) {
+                    $('#id_descripcion').val(ui.item.id);
+                }
+            });
+
+            $('#barras').autocomplete({
+                source: {!! json_encode($codigo) !!},
+                autoFocus: true,
+                minLength: 5,
+                select: function (event, ui) {
+                    $('#id_barras').val(ui.item.id);
+                }
+            });
+        });
   </script>
 @endsection
 
@@ -108,10 +169,6 @@
 	</h1>
 	<hr class="row align-items-start col-12">
   <?php
-  	include(app_path().'\functions\config.php');
-    include(app_path().'\functions\functions.php');
-    include(app_path().'\functions\querys_mysql.php');
-    include(app_path().'\functions\querys_sqlserver.php');
 
     $ArtJson = "";
     $CodJson = "";
@@ -134,17 +191,11 @@
   	else {
       $InicioCarga = new DateTime("now");
 
-      $sql = R2Q_Lista_Articulos();
-      $ArtJson = FG_Armar_Json($sql,$_GET['SEDE']);
-
-      $sql1 = R2Q_Lista_Articulos_CodBarra();
-      $CodJson = FG_Armar_Json($sql1,$_GET['SEDE']);
-
   		echo '
   		<form autocomplete="off" action="" target="_blank">
   	    <div class="autocomplete" style="width:90%;">
-          <input id="myInput" type="text" name="Descrip" placeholder="Ingrese el nombre del articulo " onkeyup="conteo()">
-  	      <input id="myId" name="Id" type="hidden">
+          <input type="text" id="descripcion" name="Descrip" class="form-control" placeholder="Ingrese el nombre del articulo...">
+  	      <input name="Id" id="id_descripcion" type="hidden">
   	    </div>
         <input id="SEDE" name="SEDE" type="hidden" value="';
           print_r($_GET['SEDE']);
@@ -154,8 +205,8 @@
       <br/>
       <form autocomplete="off" action="" target="_blank">
         <div class="autocomplete" style="width:90%;">
-          <input id="myInputCB" type="text" name="CodBar" placeholder="Ingrese el codigo de barra del articulo " onkeyup="conteoCB()">
-          <input id="myIdCB" name="Id" type="hidden">
+          <input type="text" id="barras" name="CodBar" class="form-control" placeholder="Ingrese el codigo de barra del articulo...">
+          <input name="Id" id="id_barras" type="hidden">
         </div>
         <input id="SEDE" name="SEDE" type="hidden" value="';
           print_r($_GET['SEDE']);
@@ -168,29 +219,6 @@
       $IntervalCarga = $InicioCarga->diff($FinCarga);
       echo'Tiempo de carga: '.$IntervalCarga->format("%Y-%M-%D %H:%I:%S");
   	}
-  ?>
-@endsection
-
-@section('scriptsFoot')
-  <?php
-    if($ArtJson!=""){
-  ?>
-    <script type="text/javascript">
-      ArrJs = eval(<?php echo $ArtJson ?>);
-      autocompletado(document.getElementById("myInput"),document.getElementById("myId"), ArrJs);
-    </script>
-  <?php
-    }
-  ?>
-  <?php
-    if($CodJson!=""){
-  ?>
-    <script type="text/javascript">
-      ArrJsCB = eval(<?php echo $CodJson ?>);
-      autocompletadoCB(document.getElementById("myInputCB"),document.getElementById("myIdCB"), ArrJsCB);
-    </script>
-  <?php
-    }
   ?>
 @endsection
 

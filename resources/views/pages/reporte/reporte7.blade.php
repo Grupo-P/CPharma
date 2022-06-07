@@ -49,6 +49,9 @@
     }
   </style>
 
+  <link rel="stylesheet" href="/assets/jquery/jquery-ui-last.css">
+  <script src="/assets/jquery/jquery-ui-last.js"></script>
+
   <script>
         function mostrar_ocultar(that, elemento) {
             if (that.checked) {
@@ -73,6 +76,45 @@
                 }
             }
         }
+
+        @php
+            include(app_path().'\functions\config.php');
+            include(app_path().'\functions\functions.php');
+            include(app_path().'\functions\querys_mysql.php');
+            include(app_path().'\functions\querys_sqlserver.php');
+
+
+            $SedeConnection = FG_Mi_Ubicacion();
+
+            $conn = FG_Conectar_Smartpharma($SedeConnection);
+            $proveedores = [];
+            $codigo = [];
+            $i = 0;
+
+            $sql = R7Q_Lista_Proveedores();
+
+            $query = sqlsrv_query($conn, $sql);
+
+            while ($row = sqlsrv_fetch_array($query, SQLSRV_FETCH_ASSOC)) {
+                $proveedores[$i]['id'] = $row['id'];
+                $proveedores[$i]['label'] = mb_convert_encoding($row['nombre'], 'UTF-8', 'UTF-8');
+                $proveedores[$i]['value'] = mb_convert_encoding($row['nombre'], 'UTF-8', 'UTF-8');
+
+                $i++;
+            }
+        @endphp
+
+
+
+        $(document).ready(function () {
+            $('#myInput').autocomplete({
+                source: {!! json_encode($proveedores) !!},
+                autoFocus: true,
+                select: function (event, ui) {
+                    $('#myId').val(ui.item.id);
+                }
+            });
+        });
   </script>
 @endsection
 
@@ -84,12 +126,6 @@
   <hr class="row align-items-start col-12">
 
 <?php
-  include(app_path().'\functions\config.php');
-  include(app_path().'\functions\functions.php');
-  include(app_path().'\functions\querys_mysql.php');
-  include(app_path().'\functions\querys_sqlserver.php');
-
-  $ArtJson = "";
 
   if (isset($_GET['SEDE'])){
     echo '<h1 class="h5 text-success"  align="left"> <i class="fas fa-prescription"></i> '.FG_Nombre_Sede($_GET['SEDE']).'</h1>';
@@ -162,9 +198,6 @@
   //CASO 1: AL CARGAR EL REPORTE DESDE EL MENU
     $InicioCarga = new DateTime("now");
 
-    $sql = R7Q_Lista_Proveedores();
-    $ArtJson = FG_Armar_Json($sql,$_GET['SEDE']);
-
     echo '
     <form autocomplete="off" action="" target="_blank">
       <div class="autocomplete" style="width:90%;">
@@ -188,16 +221,6 @@
 @endsection
 
 @section('scriptsFoot')
-<?php
-  if($ArtJson!=""){
-?>
-    <script type="text/javascript">
-      ArrJs = eval(<?php echo $ArtJson ?>);
-      autocompletado(document.getElementById("myInput"),document.getElementById("myId"), ArrJs);
-    </script>
-<?php
-  }
-?>
 
 <script>
   function copiar_codigo_barras(text) {
@@ -798,8 +821,8 @@
   function R7Q_Lista_Proveedores() {
     $sql = "
       SELECT
-      GenPersona.Nombre,
-      ComProveedor.Id
+      GenPersona.Nombre AS nombre,
+      ComProveedor.Id AS id
       FROM ComProveedor
       INNER JOIN GenPersona ON ComProveedor.GenPersonaId=GenPersona.Id
       INNER JOIN ComFactura ON ComFactura.ComProveedorId=ComProveedor.Id

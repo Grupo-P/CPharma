@@ -52,6 +52,9 @@
     }
   </style>
 
+  <link rel="stylesheet" href="/assets/jquery/jquery-ui-last.css">
+  <script src="/assets/jquery/jquery-ui-last.js"></script>
+
   <script>
         campos = ['codigo', 'codigo_barra', 'descripcion', 'existencia', 'dolarizado', 'gravado', 'clasificacion', 'unidades_vendidas', 'unidades_compradas', 'venta_diaria', 'venta_diaria_real', 'dias_restantes', 'dias_restantes_real', 'precio', 'ultimo_precio', 'ultimo_lote', 'ultima_compra', 'ultima_venta_rango', 'ultima_venta', 'ultimo_proveedor', 'pedir', 'pedir_real', 'traslado_transito'];
 
@@ -76,6 +79,51 @@
                 }
             }
         }
+
+        @php
+            include(app_path().'\functions\config.php');
+            include(app_path().'\functions\functions.php');
+            include(app_path().'\functions\querys_mysql.php');
+            include(app_path().'\functions\querys_sqlserver.php');
+
+
+            $SedeConnection = FG_Mi_Ubicacion();
+
+            $conn = FG_Conectar_Smartpharma($SedeConnection);
+            $descripcion = [];
+            $codigo = [];
+            $i = 0;
+
+            $sql = "
+                SELECT
+                    InvArticulo.Id AS id,
+                    InvArticulo.Descripcion AS descripcion,
+                    (SELECT InvCodigoBarra.CodigoBarra FROM InvCodigoBarra WHERE InvCodigoBarra.InvArticuloId = InvArticulo.Id AND InvCodigoBarra.EsPrincipal = 1) AS codigo_barra
+                FROM InvArticulo
+            ";
+
+            $query = sqlsrv_query($conn, $sql);
+
+            while ($row = sqlsrv_fetch_array($query, SQLSRV_FETCH_ASSOC)) {
+                $descripcion[$i]['id'] = $row['id'];
+                $descripcion[$i]['label'] = mb_convert_encoding($row['descripcion'], 'UTF-8', 'UTF-8');
+                $descripcion[$i]['value'] = mb_convert_encoding($row['descripcion'], 'UTF-8', 'UTF-8');
+
+                $i++;
+            }
+        @endphp
+
+
+
+        $(document).ready(function () {
+            $('#myInput').autocomplete({
+                source: {!! json_encode($descripcion) !!},
+                autoFocus: true,
+                select: function (event, ui) {
+                    $('#myId').val(ui.item.id);
+                }
+            });
+        });
   </script>
 @endsection
 
@@ -87,13 +135,8 @@
 	<hr class="row align-items-start col-12">
 
 <?php
-  include(app_path().'\functions\config.php');
-  include(app_path().'\functions\functions.php');
-  include(app_path().'\functions\querys_mysql.php');
-  include(app_path().'\functions\querys_sqlserver.php');
 
-  $ArtJson = "";
-  $CodJson = "";
+
 
   if (isset($_GET['SEDE'])){
     echo '<h1 class="h5 text-success"  align="left"> <i class="fas fa-prescription"></i> '.FG_Nombre_Sede($_GET['SEDE']).'</h1>';
@@ -119,12 +162,6 @@
   }
   else{
     $InicioCarga = new DateTime("now");
-
-    $sql = R6Q_Lista_Articulos();
-    $ArtJson = FG_Armar_Json($sql,$_GET['SEDE']);
-
-    $sql1 = R6Q_Lista_Articulos_CodBarra();
-    $CodJson = FG_Armar_Json($sql1,$_GET['SEDE']);
 
     echo '
     <form id="Bsqform" autocomplete="off" action="" target="_blank">
@@ -156,7 +193,7 @@
           <tr>
             <td colspan="6">
               <div class="autocomplete" style="width:90%;">
-              <input id="myInput" type="text" name="Descrip" placeholder="Ingrese el nombre del articulo " onkeyup="conteo()">
+              <input id="myInput" type="text" name="Descrip" placeholder="Ingrese el nombre del articulo...">
               <input id="myId" name="IdD" type="hidden">
               </div>
               <input type="submit" value="Buscar" class="btn btn-outline-success" id="BtnDescrip">
@@ -165,7 +202,7 @@
           <tr>
             <td colspan="6">
               <div class="autocomplete" style="width:90%;">
-              <input id="myInputCB" type="text" name="CodBar" placeholder="Ingrese el codigo de barra del articulo o varios codigos de barra separados con comas" onkeyup="conteoCB()">
+              <input id="myInputCB" type="text" name="CodBar" placeholder="Ingrese el codigo de barra del articulo o varios codigos de barra separados con comas..." onkeyup="conteoCB()">
               <input id="myIdCB" name="IdCB" type="hidden">
               </div>
               <input type="submit" value="Buscar" class="btn btn-outline-success" id="BtnCodBar">
@@ -181,48 +218,6 @@
 ?>
 @endsection
 
-@section('scriptsFoot')
-  <?php
-    if($ArtJson!=""){
-  ?>
-    <script type="text/javascript">
-      ArrJs = eval(<?php echo $ArtJson ?>);
-      autocompletado(document.getElementById("myInput"),document.getElementById("myId"), ArrJs);
-    </script>
-  <?php
-    }
-  ?>
-  <?php
-    if($CodJson!=""){
-  ?>
-    <script type="text/javascript">
-      ArrJsCB = eval(<?php echo $CodJson ?>);
-      autocompletadoCB(document.getElementById("myInputCB"),document.getElementById("myIdCB"), ArrJsCB);
-    </script>
-  <?php
-    }
-  ?>
-  <script type="text/javascript">
-    var btnClick='';
-
-    $("#BtnDescrip").click(function(){
-      btnClick = 'BtnDescrip';
-    });
-
-    $("#BtnCodBar").click(function(){
-      btnClick = 'BtnCodBar';
-    });
-
-    $( "#Bsqform" ).submit(function( event ) {
-      if( btnClick=='BtnDescrip' ){
-        $("#flag").val('BsqDescrip');
-      }
-      else if( btnClick=='BtnCodBar' ){
-        $("#flag").val('BsqCodBar');
-      }
-    });
-  </script>
-@endsection
 
 <?php
   /********************************************************************************/

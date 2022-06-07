@@ -49,6 +49,9 @@
     }
   </style>
 
+  <link rel="stylesheet" href="/assets/jquery/jquery-ui-last.css">
+  <script src="/assets/jquery/jquery-ui-last.js"></script>
+
   <script>
       function mostrar_ocultar(that, elemento) {
             if (that.checked) {
@@ -73,6 +76,45 @@
                 }
             }
         }
+
+        @php
+            include(app_path().'\functions\config.php');
+            include(app_path().'\functions\functions.php');
+            include(app_path().'\functions\querys_mysql.php');
+            include(app_path().'\functions\querys_sqlserver.php');
+
+
+            $SedeConnection = FG_Mi_Ubicacion();
+
+            $conn = FG_Conectar_Smartpharma($SedeConnection);
+            $proveedores = [];
+            $codigo = [];
+            $i = 0;
+
+            $sql = R29Q_Lista_Marcas();
+
+            $query = sqlsrv_query($conn, $sql);
+
+            while ($row = sqlsrv_fetch_array($query, SQLSRV_FETCH_ASSOC)) {
+                $proveedores[$i]['id'] = $row['id'];
+                $proveedores[$i]['label'] = mb_convert_encoding($row['nombre'], 'UTF-8', 'UTF-8');
+                $proveedores[$i]['value'] = mb_convert_encoding($row['nombre'], 'UTF-8', 'UTF-8');
+
+                $i++;
+            }
+        @endphp
+
+
+
+        $(document).ready(function () {
+            $('#myInput').autocomplete({
+                source: {!! json_encode($proveedores) !!},
+                autoFocus: true,
+                select: function (event, ui) {
+                    $('#myId').val(ui.item.id);
+                }
+            });
+        });
   </script>
 @endsection
 
@@ -84,12 +126,7 @@
   <hr class="row align-items-start col-12">
 
 <?php
-  include(app_path().'\functions\config.php');
-  include(app_path().'\functions\functions.php');
-  include(app_path().'\functions\querys_mysql.php');
-  include(app_path().'\functions\querys_sqlserver.php');
 
-  $ArtJson = "";
   $_GET['SEDE'] = FG_Mi_Ubicacion();
 
   if (isset($_GET['SEDE'])){
@@ -162,13 +199,10 @@
   //CASO 1: AL CARGAR EL REPORTE DESDE EL MENU
     $InicioCarga = new DateTime("now");
 
-    $sql = R7Q_Lista_Marcas();
-    $ArtJson = FG_Armar_Json($sql,$_GET['SEDE']);
-
     echo '
     <form autocomplete="off" action="" target="_blank">
       <div class="autocomplete" style="width:90%;">
-        <input id="myInput" type="text" name="Nombre" placeholder="Ingrese el nombre del proveedor " onkeyup="conteo()" required>
+        <input id="myInput" type="text" name="Nombre" placeholder="Ingrese el nombre del proveedor " required>
         <input id="myId" name="Id" type="hidden">
         <td>
         <input id="SEDE" name="SEDE" type="hidden" value="';
@@ -187,19 +221,6 @@
 ?>
 @endsection
 
-@section('scriptsFoot')
-<?php
-  if($ArtJson!=""){
-?>
-    <script type="text/javascript">
-      ArrJs = eval(<?php echo $ArtJson ?>);
-      autocompletado(document.getElementById("myInput"),document.getElementById("myId"), ArrJs);
-    </script>
-<?php
-  }
-?>
-@endsection
-
 <?php
   /**********************************************************************************/
   /*
@@ -212,7 +233,7 @@
 
     $conn = FG_Conectar_Smartpharma($SedeConnection);
 
-    $sql = R7Q_Catalogo_Marca($IdMarca);
+    $sql = R29Q_Catalogo_Marca($IdMarca);
     $result = sqlsrv_query($conn,$sql);
 
     $cadenaCodigosBarra = "";
@@ -761,29 +782,12 @@
   }
   /**********************************************************************************/
   /*
-    TITULO: R7Q_Lista_Marcas
+    TITULO: R29Q_Catalogo_Marca
     FUNCION: Armar una lista de proveedores
     RETORNO: Lista de proveedores
     DESAROLLADO POR: SERGIO COVA
   */
-  function R7Q_Lista_Marcas() {
-    $sql = "
-      SELECT
-      InvMarca.Nombre,
-      InvMarca.Id
-      FROM InvMarca
-      ORDER BY InvMarca.Nombre ASC
-    ";
-    return $sql;
-  }
-  /**********************************************************************************/
-  /*
-    TITULO: R7Q_Catalogo_Marca
-    FUNCION: Armar una lista de proveedores
-    RETORNO: Lista de proveedores
-    DESAROLLADO POR: SERGIO COVA
-  */
-  function R7Q_Catalogo_Marca($IdMarca) {
+  function R29Q_Catalogo_Marca($IdMarca) {
     $sql = "
       SELECT
       InvArticulo.Id,
@@ -1197,6 +1201,24 @@
       GROUP BY VenFacturaDetalle.InvArticuloId
     --Ordenamientos
       ORDER BY TotalUnidadesVendidas DESC
+    ";
+    return $sql;
+  }
+
+  /**********************************************************************************/
+  /*
+    TITULO: R29Q_Lista_Marcas
+    FUNCION: Armar una lista de proveedores
+    RETORNO: Lista de proveedores
+    DESAROLLADO POR: SERGIO COVA
+  */
+  function R29Q_Lista_Marcas() {
+    $sql = "
+      SELECT
+      InvMarca.Nombre AS nombre,
+      InvMarca.Id AS id
+      FROM InvMarca
+      ORDER BY InvMarca.Nombre ASC
     ";
     return $sql;
   }

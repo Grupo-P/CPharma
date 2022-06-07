@@ -41,7 +41,7 @@
             $sede = isset($_GET['sede']) ? $_GET['sede'] : FG_Mi_Ubicacion();
 
             if ($sede == 'FTN') {
-                $username = 'pagostierranegra@gmail.com';
+                $username = 'pagostierranegra@hotmail.com';
                 $password = 'GGlibenclamida*84';
             }
 
@@ -70,20 +70,20 @@
 
             $conn = imap_open($mailbox, $username, $password) or die (imap_last_error());
 
-            $search = imap_search($conn, 'ON "'.$fecha.'"');
+            $search = imap_search($conn, 'SINCE "'.$fecha.'"');
 
             $search = is_iterable($search) ? $search : [];
 
             function fix_text_subject($str)
             {
-                $subject = '';
+                $asunto = '';
                 $array = imap_mime_header_decode($str);
 
                 foreach ($array as $object) {
-                    $subject .= utf8_encode(rtrim($object->text, 't'));
+                    $asunto .= utf8_encode(rtrim($object->text, 't'));
                 }
 
-                return utf8_decode($subject);
+                return utf8_decode($asunto);
             }
 
             $pagos = [];
@@ -98,13 +98,19 @@
                 $fecha->modify('-4hour');
                 $fecha = $fecha->format('d/m/Y h:i A');
 
+                $arrayFecha = explode(' ', $fecha);
+
+                if ($arrayFecha[0] != date_format(date_create(request()->fecha), 'd/m/Y')) {
+                    continue;
+                }
+
                 foreach ($overview as $item) {
                     if (isset($item->subject)) {
-                        $subject = fix_text_subject($item->subject);
+                        $asunto = fix_text_subject($item->subject);
                     }
 
-                    if (strpos($subject, ' sent you ') && $header->fromaddress == 'Bank of America <customerservice@ealerts.bankofamerica.com>') {
-                        $array = explode(' sent you ', $subject);
+                    if (strpos($asunto, ' sent you ') && $header->fromaddress == 'Bank of America <customerservice@ealerts.bankofamerica.com>') {
+                        $arrayAsunto = explode(' sent you ', $asunto);
 
                         $body = imap_qprint(imap_body($conn, $email));
 
@@ -113,16 +119,16 @@
                         $comentario = substr($body, $inicioComentario, $finComentario-$inicioComentario);
                         $comentario = strip_tags($comentario);
 
-                        $pagos[$i]['enviado_por'] = $array[0];
-                        $pagos[$i]['monto'] = $array[1];
+                        $pagos[$i]['enviado_por'] = $arrayAsunto[0];
+                        $pagos[$i]['monto'] = $arrayAsunto[1];
                         $pagos[$i]['fecha'] = $fecha;
                         $pagos[$i]['comentario'] = $comentario;
 
                         $i++;
                     }
 
-                    if (strpos($subject, ' le ha enviado ') && $header->fromaddress == 'Bank of America <customerservice@ealerts.bankofamerica.com>') {
-                        $array = explode(' sent you ', $subject);
+                    if (strpos($asunto, ' le ha enviado ') && $header->fromaddress == 'Bank of America <customerservice@ealerts.bankofamerica.com>') {
+                        $arrayAsunto = explode(' sent you ', $asunto);
 
                         $body = imap_qprint(imap_body($conn, $email));
 
@@ -131,8 +137,8 @@
                         $comentario = substr($body, $inicioComentario, $finComentario-$inicioComentario);
                         $comentario = strip_tags($comentario);
 
-                        $pagos[$i]['enviado_por'] = $array[0];
-                        $pagos[$i]['monto'] = $array[1];
+                        $pagos[$i]['enviado_por'] = $arrayAsunto[0];
+                        $pagos[$i]['monto'] = $arrayAsunto[1];
                         $pagos[$i]['fecha'] = $fecha;
                         $pagos[$i]['comentario'] = $comentario;
 

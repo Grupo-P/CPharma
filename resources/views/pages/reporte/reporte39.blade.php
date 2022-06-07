@@ -48,6 +48,83 @@
       color: #ffffff;
     }
   </style>
+
+  <link rel="stylesheet" href="/assets/jquery/jquery-ui-last.css">
+  <script src="/assets/jquery/jquery-ui-last.js"></script>
+
+  <script>
+        @php
+            include(app_path().'\functions\config.php');
+            include(app_path().'\functions\functions.php');
+            include(app_path().'\functions\querys_mysql.php');
+            include(app_path().'\functions\querys_sqlserver.php');
+
+
+            $SedeConnection = FG_Mi_Ubicacion();
+
+            $conn = FG_Conectar_Smartpharma($SedeConnection);
+            $descripcion = [];
+            $codigo = [];
+            $i = 0;
+
+            $sql = "
+                SELECT
+                    InvArticulo.Id AS id,
+                    InvArticulo.CodigoArticulo AS codigo,
+                    InvArticulo.Descripcion AS descripcion,
+                    (SELECT InvCodigoBarra.CodigoBarra FROM InvCodigoBarra WHERE InvCodigoBarra.InvArticuloId = InvArticulo.Id AND InvCodigoBarra.EsPrincipal = 1) AS codigo_barra
+                FROM InvArticulo
+            ";
+
+            $query = sqlsrv_query($conn, $sql);
+
+            while ($row = sqlsrv_fetch_array($query, SQLSRV_FETCH_ASSOC)) {
+                $descripcion[$i]['id'] = $row['id'];
+                $descripcion[$i]['label'] = mb_convert_encoding($row['descripcion'], 'UTF-8', 'UTF-8');
+                $descripcion[$i]['value'] = mb_convert_encoding($row['descripcion'], 'UTF-8', 'UTF-8');
+
+                $codigo[$i]['id'] = $row['id'];
+                $codigo[$i]['label'] = mb_convert_encoding($row['codigo_barra'], 'UTF-8', 'UTF-8');
+                $codigo[$i]['value'] = mb_convert_encoding($row['codigo_barra'], 'UTF-8', 'UTF-8');
+
+                $interno[$i]['id'] = $row['id'];
+                $interno[$i]['label'] = mb_convert_encoding($row['codigo'], 'UTF-8', 'UTF-8');
+                $interno[$i]['value'] = mb_convert_encoding($row['codigo'], 'UTF-8', 'UTF-8');
+
+                $i++;
+            }
+        @endphp
+
+
+
+        $(document).ready(function () {
+            $('#myInput').autocomplete({
+                source: {!! json_encode($descripcion) !!},
+                autoFocus: true,
+                select: function (event, ui) {
+                    $('#myId').val(ui.item.id);
+                }
+            });
+
+            $('#myInputCB').autocomplete({
+                source: {!! json_encode($codigo) !!},
+                autoFocus: true,
+                minLength: 5,
+                select: function (event, ui) {
+                    $('#myId').val(ui.item.id);
+                }
+            });
+
+            $('#myInputCI').autocomplete({
+                source: {!! json_encode($interno) !!},
+                autoFocus: true,
+                minLength: 3,
+                select: function (event, ui) {
+                    $('#myId').val(ui.item.id);
+                }
+            });
+        });
+  </script>
 @endsection
 
 @section('content')
@@ -57,14 +134,7 @@
   </h1>
   <hr class="row align-items-start col-12">
   <?php
-    include(app_path().'\functions\config.php');
-    include(app_path().'\functions\functions.php');
-    include(app_path().'\functions\querys_mysql.php');
-    include(app_path().'\functions\querys_sqlserver.php');
 
-    $ArtJson = "";
-    $CodJson = "";
-    $CodIntJson = "";
 
     if (isset($_GET['SEDE'])) {
       echo '<h1 class="h5 text-success"  align="left"> <i class="fas fa-prescription"></i> '.FG_Nombre_Sede($_GET['SEDE']).'</h1>';
@@ -83,15 +153,6 @@
     }
     else {
       $InicioCarga = new DateTime("now");
-
-      $sql1 = R39Q_Lista_Articulos();
-      $ArtJson = FG_Armar_Json($sql1,$_GET['SEDE']);
-
-      $sql2 = R39Q_Lista_Articulos_CodBarra();
-      $CodJson = FG_Armar_Json($sql2,$_GET['SEDE']);
-
-      $sql3 = R39Q_Lista_Articulos_CodInterno();
-      $CodIntJson = FG_Armar_Json($sql3,$_GET['SEDE']);
 
       echo '
         <form id="form" autocomplete="off" action="" target="_blank">
@@ -117,7 +178,7 @@
             <tr>
               <td colspan="4">
                 <div class="autocomplete" style="width:90%;">
-                  <input id="myInput" type="text" name="Descrip" placeholder="Ingrese el nombre del articulo " onkeyup="conteo()">
+                  <input id="myInput" type="text" name="Descrip" placeholder="Ingrese el nombre del articulo..." >
                 </div>
 
                 <input id="myId" name="Id" type="hidden">
@@ -133,7 +194,7 @@
             <tr>
               <td colspan="4">
                 <div class="autocomplete" style="width:90%;">
-                  <input id="myInputCB" type="text" name="CodBar" placeholder="Ingrese el codigo de barra del articulo " onkeyup="conteoCB()">
+                  <input id="myInputCB" type="text" name="CodBar" placeholder="Ingrese el codigo de barra del articulo...">
                   <input id="myIdCB" name="IdCB" type="hidden">
                 </div>
                 <input id="SEDE" name="SEDE" type="hidden" value="';
@@ -150,7 +211,7 @@
             <tr>
               <td colspan="4">
                 <div class="autocomplete" style="width:90%;">
-                  <input id="myInputCI" type="text" name="CodInt" placeholder="Ingrese el codigo interno del articulo " onkeyup="conteoCI()">
+                  <input id="myInputCI" type="text" name="CodInt" placeholder="Ingrese el codigo interno del articulo...">
                   <input id="myIdCI" name="IdCI" type="hidden">
                 </div>
                 <input id="SEDE" name="SEDE" type="hidden" value="';
@@ -166,39 +227,6 @@
       $FinCarga = new DateTime("now");
       $IntervalCarga = $InicioCarga->diff($FinCarga);
       echo'Tiempo de carga: '.$IntervalCarga->format("%Y-%M-%D %H:%I:%S");
-    }
-  ?>
-@endsection
-
-@section('scriptsFoot')
-  <?php
-    if($ArtJson!=""){
-  ?>
-    <script type="text/javascript">
-      ArrJs = eval(<?php echo $ArtJson ?>);
-      autocompletado(document.getElementById("myInput"),document.getElementById("myId"), ArrJs);
-    </script>
-  <?php
-    }
-  ?>
-
-  <?php
-    if($CodJson!=""){
-  ?>
-    <script type="text/javascript">
-      ArrJsCB = eval(<?php echo $CodJson ?>);
-      autocompletadoCB(document.getElementById("myInputCB"),document.getElementById("myId"), ArrJsCB);
-    </script>
-  <?php
-    }
-
-    if($CodIntJson!=""){
-  ?>
-    <script type="text/javascript">
-      ArrJsInt = eval(<?php echo $CodIntJson ?>);
-      autocompletadoCI(document.getElementById("myInputCI"),document.getElementById("myId"), ArrJsInt);
-    </script>
-  <?php
     }
   ?>
 @endsection
