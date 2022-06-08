@@ -236,6 +236,11 @@
           <th scope="col" class="CP-sticky">Descripción</th>
           <th scope="col" class="CP-sticky">Fecha traslado</th>
           <th scope="col" class="CP-sticky">Cantidad</th>
+          <th scope="col" class="CP-sticky">Costo BS</th>
+          <th scope="col" class="CP-sticky">Costo USD</th>
+          <th scope="col" class="CP-sticky">Total BS</th>
+          <th scope="col" class="CP-sticky">Total USD</th>
+          <th scope="col" class="CP-sticky">Tasa</th>
           <th scope="col" class="CP-sticky">Sede destino</th>
           <th scope="col" class="CP-sticky">Numero de traslado</th>
         </tr>
@@ -263,6 +268,21 @@
       echo '<td class="text-center">'.$traslado->descripcion.'</td>';
       echo '<td class="text-center">'.$traslado->created_at->format('d/m/Y').'</td>';
       echo '<td class="text-center">'.$traslado->cantidad.'</td>';
+
+      $costo_unit_bs_sin_iva = ($traslado->costo_unit_bs_sin_iva == '-') ? $traslado->costo_unit_usd_sin_iva * $traslado->traslado->tasa : $traslado->costo_unit_bs_sin_iva;
+      $costo_unit_usd_sin_iva = ($traslado->costo_unit_usd_sin_iva == '-') ? $traslado->costo_unit_bs_sin_iva * $traslado->traslado->tasa : $traslado->costo_unit_usd_sin_iva;
+
+      echo '<td class="text-center">'.number_format($costo_unit_bs_sin_iva, 2).'</td>';
+      echo '<td class="text-center">'.number_format($costo_unit_usd_sin_iva, 2).'</td>';
+
+      $total_bs = ($traslado->total_bs == '-') ? $traslado->total_usd * $traslado->traslado->tasa : $traslado->total_bs;
+      $total_usd = ($traslado->total_usd == '-') ? $traslado->total_bs * $traslado->traslado->tasa : $traslado->total_usd;
+
+      echo '<td class="text-center">'.number_format($total_bs, 2).'</td>';
+      echo '<td class="text-center">'.number_format($total_usd, 2).'</td>';
+
+      echo '<td class="text-center">'.$traslado->traslado->tasa.'</td>';
+
       echo '<td class="text-center">'.$traslado->traslado->sede_destino.'</td>';
       echo '<td class="text-center">'.$traslado->traslado->numero_ajuste.'</td>';
       echo '</tr>';
