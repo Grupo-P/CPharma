@@ -48,6 +48,49 @@
       color: #ffffff;
     }
   </style>
+
+  <link rel="stylesheet" href="/assets/jquery/jquery-ui-last.css">
+  <script src="/assets/jquery/jquery-ui-last.js"></script>
+
+  <script>
+      @php
+            include(app_path().'\functions\config.php');
+            include(app_path().'\functions\functions.php');
+            include(app_path().'\functions\querys_mysql.php');
+            include(app_path().'\functions\querys_sqlserver.php');
+
+
+            $SedeConnection = FG_Mi_Ubicacion();
+
+            $conn = FG_Conectar_Smartpharma($SedeConnection);
+            $marcas = [];
+            $i = 0;
+
+            $sql = Inv_Lista_Marca();
+
+            $query = sqlsrv_query($conn, $sql);
+
+            while ($row = sqlsrv_fetch_array($query, SQLSRV_FETCH_ASSOC)) {
+                $marcas[$i]['id'] = $row['id'];
+                $marcas[$i]['label'] = mb_convert_encoding($row['nombre'], 'UTF-8', 'UTF-8');
+                $marcas[$i]['value'] = mb_convert_encoding($row['nombre'], 'UTF-8', 'UTF-8');
+
+                $i++;
+            }
+        @endphp
+
+
+
+        $(document).ready(function () {
+            $('#myInput').autocomplete({
+                source: {!! json_encode($marcas) !!},
+                autoFocus: true,
+                select: function (event, ui) {
+                    $('#myId').val(ui.item.id);
+                }
+            });
+        });
+  </script>
 @endsection
 
 @section('content')
@@ -58,12 +101,7 @@
   <hr class="row align-items-start col-12">
 
 <?php
-  include(app_path().'\functions\config.php');
-  include(app_path().'\functions\functions.php');
-  include(app_path().'\functions\querys_mysql.php');
-  include(app_path().'\functions\querys_sqlserver.php');
 
-  $ArtJson = "";
   $_GET['SEDE'] = FG_Mi_Ubicacion();
 
   if (isset($_GET['SEDE'])){
@@ -114,9 +152,6 @@
   //CASO 1: AL CARGAR EL REPORTE DESDE EL MENU
     $InicioCarga = new DateTime("now");
 
-    $sql = Inv_Lista_Marca();
-    $ArtJson = FG_Armar_Json($sql,$_GET['SEDE']);
-
     echo '
     <form autocomplete="off" action="">
       <div class="autocomplete" style="width:90%;">
@@ -133,19 +168,6 @@
     $FinCarga = new DateTime("now");
     $IntervalCarga = $InicioCarga->diff($FinCarga);
     echo'Tiempo de carga: '.$IntervalCarga->format("%Y-%M-%D %H:%I:%S");
-  }
-?>
-@endsection
-
-@section('scriptsFoot')
-<?php
-  if($ArtJson!=""){
-?>
-    <script type="text/javascript">
-      ArrJs = eval(<?php echo $ArtJson ?>);
-      autocompletado(document.getElementById("myInput"),document.getElementById("myId"), ArrJs);
-    </script>
-<?php
   }
 ?>
 @endsection
@@ -249,8 +271,8 @@
   function Inv_Lista_Marca() {
     $sql = "
       SELECT
-      InvMarca.Nombre,
-      InvMarca.Id
+      InvMarca.Nombre AS nombre,
+      InvMarca.Id AS id
       FROM InvMarca
       ORDER BY InvMarca.Nombre ASC
     ";

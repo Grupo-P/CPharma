@@ -48,6 +48,72 @@
       color: #ffffff;
     }
   </style>
+
+  <link rel="stylesheet" href="/assets/jquery/jquery-ui-last.css">
+  <script src="/assets/jquery/jquery-ui-last.js"></script>
+
+  <script>
+      @php
+            include(app_path().'\functions\config.php');
+            include(app_path().'\functions\functions.php');
+            include(app_path().'\functions\querys_mysql.php');
+            include(app_path().'\functions\querys_sqlserver.php');
+
+
+            $SedeConnection = FG_Mi_Ubicacion();
+
+            $conn = FG_Conectar_Smartpharma($SedeConnection);
+            $descripcion = [];
+            $codigo = [];
+            $i = 0;
+
+            $sql = "
+                SELECT
+                    InvArticulo.Id AS id,
+                    InvArticulo.Descripcion AS descripcion,
+                    (SELECT InvCodigoBarra.CodigoBarra FROM InvCodigoBarra WHERE InvCodigoBarra.InvArticuloId = InvArticulo.Id AND InvCodigoBarra.EsPrincipal = 1) AS codigo_barra
+                FROM InvArticulo
+            ";
+
+            $query = sqlsrv_query($conn, $sql);
+
+            while ($row = sqlsrv_fetch_array($query, SQLSRV_FETCH_ASSOC)) {
+                $descripcion[$i]['id'] = $row['id'];
+                $descripcion[$i]['label'] = mb_convert_encoding($row['descripcion'], 'UTF-8', 'UTF-8');
+                $descripcion[$i]['value'] = mb_convert_encoding($row['descripcion'], 'UTF-8', 'UTF-8');
+
+                $i++;
+            }
+        @endphp
+
+
+
+        $(document).ready(function () {
+            $('#myInput').autocomplete({
+                source: {!! json_encode($descripcion) !!},
+                autoFocus: true,
+                select: function (event, ui) {
+                    $('#myId').val(ui.item.id);
+                }
+            });
+
+            $('#myInput2').autocomplete({
+                source: {!! json_encode($descripcion) !!},
+                autoFocus: true,
+                select: function (event, ui) {
+                    $('#myId2').val(ui.item.id);
+                }
+            });
+
+            $('#myInput3').autocomplete({
+                source: {!! json_encode($descripcion) !!},
+                autoFocus: true,
+                select: function (event, ui) {
+                    $('#myId3').val(ui.item.id);
+                }
+            });
+        });
+  </script>
 @endsection
 
 
@@ -58,10 +124,6 @@
   </h1>
   <hr class="row align-items-start col-12">
   <?php
-    include(app_path().'\functions\config.php');
-    include(app_path().'\functions\functions.php');
-    include(app_path().'\functions\querys_mysql.php');
-    include(app_path().'\functions\querys_sqlserver.php');
 
     $ArtJson = "";
     $CodJson = "";
@@ -84,9 +146,6 @@
     }
     else {
       $InicioCarga = new DateTime("now");
-
-      $sql1 = R41Q_Lista_Articulos();
-      $ArtJson = FG_Armar_Json($sql1,$_GET['SEDE']);
 
       $sql2 = R41Q_Lista_Articulos_CodBarra();
       $CodJson = FG_Armar_Json($sql2,$_GET['SEDE']);
