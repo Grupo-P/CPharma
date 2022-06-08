@@ -451,6 +451,7 @@
             <th scope="col" class="CP-sticky">Titular</th>
             <th scope="col" class="CP-sticky">Comentario</th>
             <th scope="col" class="CP-sticky">Operador</th>
+            <th scope="col" class="CP-sticky">Caja</th>
             <th scope="col" class="CP-sticky">Monto Total'.SigVe.'</th>
             <th scope="col" class="CP-sticky">Monto Unitario'.SigVe.'</th>
             <th scope="col" class="CP-sticky">Tasa Mercado</th>
@@ -491,6 +492,7 @@
             echo '<td align="center">-</td>';
 
             echo '<td align="center">'.$row3['Operador'].'</td>';
+            echo '<td align="center">-</td>';
             echo '<td align="center">'.number_format($row3['MontoTotal'],2,"," ,"." ).'</td>';
             echo '<td align="center">'.number_format($row3['MontoUnitario'],2,"," ,"." ).'</td>';
 
@@ -516,6 +518,7 @@
             echo '<td align="center">-</td>';
 
             echo '<td align="center">'.$row3['Operador'].'</td>';
+            echo '<td align="center">-</td>';
             echo '<td align="center">'.number_format($row3['MontoTotal'],2,"," ,"." ).'</td>';
             echo '<td align="center">'.number_format($row3['MontoUnitario'],2,"," ,"." ).'</td>';
 
@@ -542,6 +545,7 @@
             echo '<td align="center">-</td>';
 
             echo '<td align="center">'.$row3['Operador'].'</td>';
+            echo '<td align="center">'.$row['Caja'].'</td>';
             echo '<td align="center">'.number_format( ($row['PrecioBruto']*$row3['Cantidad']) ,2,"," ,"." ).'</td>';
             echo '<td align="center">'.number_format($row['PrecioBruto'],2,"," ,"." ).'</td>';
 
@@ -571,6 +575,8 @@
             echo '<td align="center">'.$rowA['DescripcionOperacion'].'</td>';
 
             echo '<td align="center">'.$row3['Operador'].'</td>';
+            echo '<td align="center">-</td>';
+            echo '<td align="center">-</td>';
             echo '<td align="center">'.number_format( ($row['PrecioBruto']*$row3['Cantidad']) ,2,"," ,"." ).'</td>';
             echo '<td align="center">'.number_format($row['PrecioBruto'],2,"," ,"." ).'</td>';
 
@@ -597,6 +603,7 @@
             echo '<td align="center">'.FG_Limpiar_Texto($row['Observaciones']).'</td>';
 
             echo '<td align="center">'.$row3['Operador'].'</td>';
+            echo '<td align="center">-</td>';
             echo '<td align="center">'.number_format($row3['MontoTotal'],2,"," ,"." ).'</td>';
             echo '<td align="center">'.number_format($row3['MontoUnitario'],2,"," ,"." ).'</td>';
 
@@ -623,6 +630,7 @@
             echo '<td align="center">'.FG_Limpiar_Texto($row['Observaciones']).'</td>';
 
             echo '<td align="center">'.$row3['Operador'].'</td>';
+            echo '<td align="center">-</td>';
             echo '<td align="center">'.number_format($row3['MontoTotal'],2,"," ,"." ).'</td>';
             echo '<td align="center">'.number_format($row3['MontoUnitario'],2,"," ,"." ).'</td>';
 
@@ -654,6 +662,7 @@
             echo '<td align="center">'.FG_Limpiar_Texto($row['Comentario']).'</td>';
 
             echo '<td align="center">'.$row3['Operador'].'</td>';
+            echo '<td align="center">-</td>';
             echo '<td align="center">'.number_format($row3['MontoTotal'],2,"," ,"." ).'</td>';
             echo '<td align="center">'.number_format($row3['MontoUnitario'],2,"," ,"." ).'</td>';
 
@@ -685,6 +694,103 @@
             echo '<td align="center">'.FG_Limpiar_Texto($row['Comentario']).'</td>';
 
             echo '<td align="center">'.$row3['Operador'].'</td>';
+            echo '<td align="center">-</td>';
+            echo '<td align="center">'.number_format($row3['MontoTotal'],2,"," ,"." ).'</td>';
+            echo '<td align="center">'.number_format($row3['MontoUnitario'],2,"," ,"." ).'</td>';
+
+            $Fecha = $row3['Fecha']->format('Y-m-d');
+            $Tasa = FG_Tasa_Fecha($connCPharma,$Fecha);
+
+            if($Tasa!=0){
+              $costoDol = ($row3['MontoUnitario'])/$Tasa;
+              echo '<td align="center">'.number_format($Tasa,2,"," ,"." ).'</td>';
+              echo '<td align="center">'.number_format($costoDol,2,"," ,"." ).'</td>';
+            }else{
+              echo '<td align="center">0,00</td>';
+              echo '<td align="center">-</td>';
+            }
+
+            echo '</tr>';
+          break;
+          case '16':
+            $sql = R12_Coment_Ajuste($row3['NumeroReferencia']);
+            $result = sqlsrv_query($conn,$sql);
+            $row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC);
+            echo
+              '<td align="center" class="CP-barrido">
+              <a href="/reporte42?SEDE='.$SedeConnection.'&numeroAjuste='.$row3['NumeroReferencia'].'" style="text-decoration: none; color: black;" target="_blank">'
+                .$row3['NumeroReferencia'].
+              '</a>
+              </td>';
+            echo '<td align="center">-</td>';
+            echo '<td align="center">'.FG_Limpiar_Texto($row['Comentario']).'</td>';
+
+            echo '<td align="center">'.$row3['Operador'].'</td>';
+            echo '<td align="center">-</td>';
+            echo '<td align="center">'.number_format($row3['MontoTotal'],2,"," ,"." ).'</td>';
+            echo '<td align="center">'.number_format($row3['MontoUnitario'],2,"," ,"." ).'</td>';
+
+            $Fecha = $row3['Fecha']->format('Y-m-d');
+            $Tasa = FG_Tasa_Fecha($connCPharma,$Fecha);
+
+            if($Tasa!=0){
+              $costoDol = ($row3['MontoUnitario'])/$Tasa;
+              echo '<td align="center">'.number_format($Tasa,2,"," ,"." ).'</td>';
+              echo '<td align="center">'.number_format($costoDol,2,"," ,"." ).'</td>';
+            }else{
+              echo '<td align="center">0,00</td>';
+              echo '<td align="center">-</td>';
+            }
+
+            echo '</tr>';
+          break;
+          case '17':
+            $sql = R12_Coment_Ajuste($row3['NumeroReferencia']);
+            $result = sqlsrv_query($conn,$sql);
+            $row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC);
+            echo
+              '<td align="center" class="CP-barrido">
+              <a href="/reporte42?SEDE='.$SedeConnection.'&numeroAjuste='.$row3['NumeroReferencia'].'" style="text-decoration: none; color: black;" target="_blank">'
+                .$row3['NumeroReferencia'].
+              '</a>
+              </td>';
+            echo '<td align="center">-</td>';
+            echo '<td align="center">'.FG_Limpiar_Texto($row['Comentario']).'</td>';
+
+            echo '<td align="center">'.$row3['Operador'].'</td>';
+            echo '<td align="center">-</td>';
+            echo '<td align="center">'.number_format($row3['MontoTotal'],2,"," ,"." ).'</td>';
+            echo '<td align="center">'.number_format($row3['MontoUnitario'],2,"," ,"." ).'</td>';
+
+            $Fecha = $row3['Fecha']->format('Y-m-d');
+            $Tasa = FG_Tasa_Fecha($connCPharma,$Fecha);
+
+            if($Tasa!=0){
+              $costoDol = ($row3['MontoUnitario'])/$Tasa;
+              echo '<td align="center">'.number_format($Tasa,2,"," ,"." ).'</td>';
+              echo '<td align="center">'.number_format($costoDol,2,"," ,"." ).'</td>';
+            }else{
+              echo '<td align="center">0,00</td>';
+              echo '<td align="center">-</td>';
+            }
+
+            echo '</tr>';
+          break;
+          case '18':
+            $sql = R12_Coment_Ajuste($row3['NumeroReferencia']);
+            $result = sqlsrv_query($conn,$sql);
+            $row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC);
+            echo
+              '<td align="center" class="CP-barrido">
+              <a href="/reporte42?SEDE='.$SedeConnection.'&numeroAjuste='.$row3['NumeroReferencia'].'" style="text-decoration: none; color: black;" target="_blank">'
+                .$row3['NumeroReferencia'].
+              '</a>
+              </td>';
+            echo '<td align="center">-</td>';
+            echo '<td align="center">'.FG_Limpiar_Texto($row['Comentario']).'</td>';
+
+            echo '<td align="center">'.$row3['Operador'].'</td>';
+            echo '<td align="center">-</td>';
             echo '<td align="center">'.number_format($row3['MontoTotal'],2,"," ,"." ).'</td>';
             echo '<td align="center">'.number_format($row3['MontoUnitario'],2,"," ,"." ).'</td>';
 
@@ -716,6 +822,39 @@
             echo '<td align="center">'.FG_Limpiar_Texto($row['Comentario']).'</td>';
 
             echo '<td align="center">'.$row3['Operador'].'</td>';
+            echo '<td align="center">-</td>';
+            echo '<td align="center">'.number_format($row3['MontoTotal'],2,"," ,"." ).'</td>';
+            echo '<td align="center">'.number_format($row3['MontoUnitario'],2,"," ,"." ).'</td>';
+
+            $Fecha = $row3['Fecha']->format('Y-m-d');
+            $Tasa = FG_Tasa_Fecha($connCPharma,$Fecha);
+
+            if($Tasa!=0){
+              $costoDol = ($row3['MontoUnitario'])/$Tasa;
+              echo '<td align="center">'.number_format($Tasa,2,"," ,"." ).'</td>';
+              echo '<td align="center">'.number_format($costoDol,2,"," ,"." ).'</td>';
+            }else{
+              echo '<td align="center">0,00</td>';
+              echo '<td align="center">-</td>';
+            }
+
+            echo '</tr>';
+          break;
+          case '1014':
+            $sql = R12_Coment_Ajuste($row3['NumeroReferencia']);
+            $result = sqlsrv_query($conn,$sql);
+            $row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC);
+            echo
+              '<td align="center" class="CP-barrido">
+              <a href="/reporte42?SEDE='.$SedeConnection.'&numeroAjuste='.$row3['NumeroReferencia'].'" style="text-decoration: none; color: black;" target="_blank">'
+                .$row3['NumeroReferencia'].
+              '</a>
+              </td>';
+            echo '<td align="center">-</td>';
+            echo '<td align="center">'.FG_Limpiar_Texto($row['Comentario']).'</td>';
+
+            echo '<td align="center">'.$row3['Operador'].'</td>';
+            echo '<td align="center">-</td>';
             echo '<td align="center">'.number_format($row3['MontoTotal'],2,"," ,"." ).'</td>';
             echo '<td align="center">'.number_format($row3['MontoUnitario'],2,"," ,"." ).'</td>';
 
@@ -747,6 +886,39 @@
             echo '<td align="center">'.FG_Limpiar_Texto($row['Comentario']).'</td>';
 
             echo '<td align="center">'.$row3['Operador'].'</td>';
+            echo '<td align="center">-</td>';
+            echo '<td align="center">'.number_format($row3['MontoTotal'],2,"," ,"." ).'</td>';
+            echo '<td align="center">'.number_format($row3['MontoUnitario'],2,"," ,"." ).'</td>';
+
+            $Fecha = $row3['Fecha']->format('Y-m-d');
+            $Tasa = FG_Tasa_Fecha($connCPharma,$Fecha);
+
+            if($Tasa!=0){
+              $costoDol = ($row3['MontoUnitario'])/$Tasa;
+              echo '<td align="center">'.number_format($Tasa,2,"," ,"." ).'</td>';
+              echo '<td align="center">'.number_format($costoDol,2,"," ,"." ).'</td>';
+            }else{
+              echo '<td align="center">0,00</td>';
+              echo '<td align="center">-</td>';
+            }
+
+            echo '</tr>';
+          break;
+          case '29':
+            $sql = R12_Coment_Ajuste($row3['NumeroReferencia']);
+            $result = sqlsrv_query($conn,$sql);
+            $row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC);
+            echo
+              '<td align="center" class="CP-barrido">
+              <a href="/reporte42?SEDE='.$SedeConnection.'&numeroAjuste='.$row3['NumeroReferencia'].'" style="text-decoration: none; color: black;" target="_blank">'
+                .$row3['NumeroReferencia'].
+              '</a>
+              </td>';
+            echo '<td align="center">-</td>';
+            echo '<td align="center">'.FG_Limpiar_Texto($row['Comentario']).'</td>';
+
+            echo '<td align="center">'.$row3['Operador'].'</td>';
+            echo '<td align="center">-</td>';
             echo '<td align="center">'.number_format($row3['MontoTotal'],2,"," ,"." ).'</td>';
             echo '<td align="center">'.number_format($row3['MontoUnitario'],2,"," ,"." ).'</td>';
 
@@ -770,6 +942,7 @@
             echo '<td align="center">-</td>';
 
             echo '<td align="center">'.$row3['Operador'].'</td>';
+            echo '<td align="center">-</td>';
             echo '<td align="center">'.number_format($row3['MontoTotal'],2,"," ,"." ).'</td>';
             echo '<td align="center">'.number_format($row3['MontoUnitario'],2,"," ,"." ).'</td>';
 
@@ -896,6 +1069,7 @@
       InvMovimiento.DocumentoOrigen as NumeroReferencia,
       InvLote.Numero as Lote,
       InvMovimiento.Auditoria_Usuario as Operador,
+      InvMovimiento.Auditoria_Usuario as Caja,
       InvMovimiento.M_CostoTotal as MontoTotal,
       InvMovimiento.M_CostoUnitario as MontoUnitario
       FROM InvMovimiento
@@ -959,7 +1133,10 @@
    */
   function R12_Causa_Venta($NumeroReferencia,$IdArticulo) {
     $sql = "
-    SELECT GenPersona.Nombre, GenPersona.Apellido, VenVentaDetalle.PrecioBruto
+    SELECT GenPersona.Nombre,
+        GenPersona.Apellido,
+        VenVentaDetalle.PrecioBruto,
+        (SELECT VenCaja.CodigoCaja FROM VenCaja WHERE VenCaja.Id = VenVenta.VenCajaId) AS Caja
     FROM VenVenta
     LEFT JOIN VenCliente ON VenCliente.Id = VenVenta.VenClienteId
     LEFT JOIN GenPersona ON GenPersona.Id = VenCliente.GenPersonaId
