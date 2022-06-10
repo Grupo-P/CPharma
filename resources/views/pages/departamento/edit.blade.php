@@ -173,6 +173,8 @@
                 <td scope="col">Reposicion de Inventario</td>
                 <th scope="col">50</th>
                 <td scope="col">Catálogo de droguerías</td>
+                <th scope="col">51</th>
+                <td scope="col">Ventas por cajas/cajeros</td>
             </tr>
         </tbody>
     </table>

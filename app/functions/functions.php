@@ -1744,6 +1744,12 @@
             case 'Reposicion de Inventario':
                 $ruta = '/reporte49';
             break;
+            case 'Catálogo de droguerías':
+                $ruta = '/reporte50';
+            break;
+            case 'Ventas por cajas/cajeros':
+                $ruta = '/reporte51';
+            break;
             default:
                 $ruta = '#';
             break;
@@ -1904,6 +1910,9 @@
             break;
             case 50:
                 $nombre = 'Catálogo de droguerías';
+            break;
+            case 51:
+                $nombre = 'Ventas por cajas/cajeros';
             break;
             default:
                 $nombre = 'Reporte desconocido';

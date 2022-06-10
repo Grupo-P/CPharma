@@ -317,6 +317,16 @@
         @endif
       @endif
 
+      @if(Auth::user()->departamento == 'GERENCIA' || Auth::user()->departamento == 'ADMINISTRACION' || Auth::user()->departamento == 'TESORERIA' || Auth::user()->departamento == 'TECNOLOGIA')
+          <li class="nav-item">
+            <a class="nav-link CP-Links-Menu" href="{{ url('/verificadorZelle') }}">
+              <span data-feather="home"></span>
+              <i class="fas fa-money-bill-alt"></i>
+              Verificador Zelle<span class="sr-only">(current)</span>
+            </a>
+          </li>
+      @endif
+
       @if(Auth::user()->departamento != 'GERENCIA' && Auth::user()->departamento != 'ADMINISTRACION' && Auth::user()->departamento != 'TESORERIA' && Auth::user()->departamento != 'OPERACIONES' && Auth::user()->departamento != 'CONTABILIDAD')
           <li class="nav-item">
             <a class="nav-link CP-Links-Menu" href="{{ url('/configuracion') }}">

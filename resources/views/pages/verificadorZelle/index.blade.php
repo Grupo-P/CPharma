@@ -1,4 +1,4 @@
-@extends('layouts.model')
+@extends('layouts.contabilidad')
 
 @section('title')
   Verificador Zelle
@@ -18,9 +18,26 @@
                     <label for="fecha">Fecha</label>
                 </div>
 
-                <div class="col-3">
+                <div class="col">
                     <input min="2022-05-30" type="date" name="fecha" required class="form-control">
                 </div>
+
+                <div class="col">
+                    <label for="sede">Sede</label>
+                </div>
+
+                @if(Auth::user()->sede == 'GRUPO P, C.A')
+                    <div class="col">
+                        <select name="sede" class="form-control">
+                            <option value=""></option>
+                            <option value="FTN">FTN</option>
+                            <option value="FAU">FAU</option>
+                            <option value="FLL">FLL</option>
+                            <option value="KDI">KDI</option>
+                            <option value="FSM">FSM</option>
+                        </select>
+                    </div>
+                @endif
 
                 <div class="col">
                     <button type="submit" class="btn btn-outline-success">Buscar</button>
@@ -38,29 +55,29 @@
 
             $inicio = new DateTime();
 
-            $sede = isset($_GET['sede']) ? $_GET['sede'] : FG_Mi_Ubicacion();
+            $sede = isset($_GET['sede']) ? $_GET['sede'] : Auth::user()->sede;
 
-            if ($sede == 'FTN') {
-                $username = 'pagostierranegra@hotmail.com';
-                $password = 'GGlibenclamida*84';
+            if ($sede == 'FTN' || $sede == 'FARMACIA TIERRA NEGRA, C.A.') {
+                $username = 'pagostierranegra2@hotmail.com';
+                $password = 'Glibenclamida*84';
             }
 
-            if ($sede == 'FAU' || $sede == 'DBs') {
+            if ($sede == 'FAU' || $sede == 'FARMACIA AVENIDA UNIVERSIDAD, C.A.') {
                 $username = 'pagosuniversidad2@hotmail.com';
                 $password = 'pagosfarmaciaavenidauniversidad';
             }
 
-            if ($sede == 'FSM') {
+            if ($sede == 'FSM' || $sede == 'FARMACIA MILLENNIUM 2000, C.A') {
                 $username = 'pagosmillennium@hotmail.com';
                 $password = 'Glibenclamida*84';
             }
 
-            if ($sede == 'FLL') {
+            if ($sede == 'FLL' || $sede == 'FARMACIA LA LAGO,C.A.') {
                 $username = 'pagoslalago@hotmail.com';
                 $password = 'Glibenclamida*84';
             }
 
-            if ($sede == 'KDI') {
+            if ($sede == 'KDI' || $sede == 'FARMACIAS KD EXPRESS, C.A.') {
                 $username = 'pagoskdi@hotmail.com';
                 $password = 'GJpc2017.';
             }
