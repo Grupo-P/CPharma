@@ -123,8 +123,24 @@
                     $('#myId').val(ui.item.id);
                 }
             });
+
+            var btnClick='';
+            $("#BtnDescrip").click(function(){
+              btnClick = 'BtnDescrip';
+            });
+            $("#BtnCodBar").click(function(){
+              btnClick = 'BtnCodBar';
+            });
+            $( "#Bsqform" ).submit(function( event ) {
+              if( btnClick=='BtnDescrip' ){
+                $("#flag").val('BsqDescrip');
+              }
+              else if( btnClick=='BtnCodBar' ){
+                $("#flag").val('BsqCodBar');
+              }
+            });
         });
-  </script>
+    </script>
 @endsection
 
 @section('content')
