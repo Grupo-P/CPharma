@@ -202,7 +202,7 @@
           LEFT JOIN VenCajero ON VenFactura.Auditoria_Usuario = VenCajero.CodigoUsuarioCaja
           LEFT JOIN GenPersona ON GenPersona.Id = VenCajero.GenPersonaId
         WHERE
-          VenFactura.Auditoria_FechaCreacion BETWEEN '$FInicial' AND '$FFinal'
+          CONVERT(DATE, VenFactura.Auditoria_FechaCreacion) BETWEEN '$FInicial' AND '$FFinal'
         GROUP BY
           VenFactura.Auditoria_Usuario,
           GenPersona.Nombre,
@@ -234,7 +234,7 @@
         FROM
           VenFactura
         WHERE
-          VenFactura.Auditoria_FechaCreacion BETWEEN '$FInicial' AND '$FFinal'
+          (CONVERT(DATE, VenFactura.Auditoria_FechaCreacion) BETWEEN '$FInicial' AND '$FFinal')
             AND
           VenFactura.Auditoria_Usuario = '$usuario'
         GROUP BY
@@ -258,7 +258,7 @@
         FROM
           VenFactura LEFT JOIN VenCaja ON VenFactura.VenCajaId = VenCaja.Id
         WHERE
-          VenFactura.Auditoria_FechaCreacion BETWEEN '$FInicial' AND '$FFinal'
+          (CONVERT(DATE, VenFactura.Auditoria_FechaCreacion) BETWEEN '$FInicial' AND '$FFinal')
             AND
           VenFactura.Auditoria_Usuario = '$usuario'
         GROUP BY
@@ -359,7 +359,7 @@
         FROM
             VenFactura LEFT JOIN VenDevolucion ON VenFactura.Id = VenDevolucion.VenFacturaId
         WHERE
-            (VenFactura.Auditoria_FechaCreacion BETWEEN '$FInicial' AND '$FFinal') AND
+            (CONVERT(DATE, VenFactura.Auditoria_FechaCreacion) BETWEEN '$FInicial' AND '$FFinal') AND
             VenFactura.Auditoria_Usuario = '$Usuario'
         GROUP BY
             CONVERT(DATE, VenFactura.Auditoria_FechaCreacion)
@@ -493,7 +493,7 @@
             VenFactura LEFT JOIN VenCaja ON VenFactura.VenCajaId = VenCaja.Id
                 LEFT JOIN VenDevolucion ON VenFactura.Id = VenDevolucion.VenFacturaId
         WHERE
-            VenFactura.Auditoria_FechaCreacion BETWEEN '$FInicial' AND '$FFinal'
+            CONVERT(DATE, VenFactura.Auditoria_FechaCreacion) BETWEEN '$FInicial' AND '$FFinal'
         GROUP BY
             VenCaja.CodigoCaja,
             VenCaja.Id;
@@ -521,7 +521,7 @@
         FROM
           VenFactura
         WHERE
-          VenFactura.Auditoria_FechaCreacion BETWEEN '$FInicial' AND '$FFinal'
+          (CONVERT(DATE, VenFactura.Auditoria_FechaCreacion) BETWEEN '$FInicial' AND '$FFinal')
             AND
           VenFactura.VenCajaId = '$id_caja'
         GROUP BY
@@ -545,7 +545,7 @@
         FROM
           VenFactura
         WHERE
-          VenFactura.Auditoria_FechaCreacion BETWEEN '$FInicial' AND '$FFinal'
+          (CONVERT(DATE, VenFactura.Auditoria_FechaCreacion) BETWEEN '$FInicial' AND '$FFinal')
             AND
           VenFactura.VenCajaId = '$id_caja'
         GROUP BY

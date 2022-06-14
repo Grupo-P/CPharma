@@ -975,7 +975,7 @@
                 $fecha = strtotime($item['fechaSinFormato']);
 
                 $anterior = new DateTime();
-                $anterior->modify('-1hour');
+                $anterior->modify('-30minutes');
                 $anterior = $anterior->format('Y-m-d H:i:s');
                 $anterior = strtotime($anterior);
 
@@ -993,7 +993,7 @@
     <table class="table table-bordered table-striped">
         <thead class="thead-dark">
             <tr>
-                <th colspan="5" class="text-center">VERIFICADOR ZELLE</th>
+                <th colspan="5" class="text-center">VERIFICADOR ZELLE <small>(pagos en los últimos 30 minutos)</small></th>
             </tr>
 
             @if($error == 0)
