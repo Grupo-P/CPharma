@@ -89,7 +89,7 @@
 
 
         $(document).ready(function () {
-            $('#myInput').autocomplete({
+            $('.inputDescripcion').autocomplete({
                 source: {!! json_encode($descripcion) !!},
                 autoFocus: true,
                 minLength: 3,
@@ -162,7 +162,7 @@
     echo '
     <form autocomplete="off" action="">
       <div class="autocomplete" style="width:90%;">
-        <input id="myInput" type="text" name="Nombre" placeholder="Ingrese el nombre del articulo " onkeyup="conteo()" required>
+        <input id="myInput" type="text" name="Nombre" class="inputDescripcion" placeholder="Ingrese el nombre del articulo " onkeyup="conteo()" required>
         <input id="myId" name="Id" type="hidden">
         <td>
         <input id="SEDE" name="SEDE" type="hidden" value="';

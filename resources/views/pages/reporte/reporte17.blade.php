@@ -96,7 +96,7 @@
 
 
         $(document).ready(function () {
-            $('#myInput').autocomplete({
+            $('.inputDescripcion').autocomplete({
                 source: {!! json_encode($descripcion) !!},
                 autoFocus: true,
                 minLength: 3,
@@ -180,7 +180,7 @@
           <tr>
             <td colspan="6">
               <div class="autocomplete" style="width:90%;">
-              <input id="myInput" type="text" name="Descrip" placeholder="Ingrese el nombre del articulo " >
+              <input class="inputDescripcion" id="myInput" type="text" name="Descrip" placeholder="Ingrese el nombre del articulo " >
               <input id="myId" name="IdD" type="hidden">
               </div>
               <input type="submit" value="Buscar" class="btn btn-outline-success">
