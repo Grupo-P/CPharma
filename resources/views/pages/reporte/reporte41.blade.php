@@ -92,6 +92,7 @@
             $('#myInput').autocomplete({
                 source: {!! json_encode($descripcion) !!},
                 autoFocus: true,
+                minLength: 3,
                 select: function (event, ui) {
                     $('#myId').val(ui.item.id);
                 }
@@ -100,6 +101,7 @@
             $('#myInput2').autocomplete({
                 source: {!! json_encode($descripcion) !!},
                 autoFocus: true,
+                minLength: 3,
                 select: function (event, ui) {
                     $('#myId2').val(ui.item.id);
                 }
@@ -108,6 +110,7 @@
             $('#myInput3').autocomplete({
                 source: {!! json_encode($descripcion) !!},
                 autoFocus: true,
+                minLength: 3,
                 select: function (event, ui) {
                     $('#myId3').val(ui.item.id);
                 }

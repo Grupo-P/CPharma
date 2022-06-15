@@ -96,6 +96,7 @@
             $('#myInput').autocomplete({
                 source: {!! json_encode($descripcion) !!},
                 autoFocus: true,
+                minLength: 3,
                 select: function (event, ui) {
                     $('#myId').val(ui.item.id);
                 }
