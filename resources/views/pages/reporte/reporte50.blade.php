@@ -252,6 +252,13 @@
           <input type="hidden" name="_token" value="'.$_GET['_token'].'">
           <input type="hidden" name="SEDE" value="'.$_GET['SEDE'].'">
           <input type="hidden" name="page" value="'.$current.'">
+          <input type="hidden" name="pasoUno" value="1">
+
+          <input type="hidden" name="descuentoCobeca" value="'.$_GET['descuentoCobeca'].'">
+          <input type="hidden" name="descuentoNena" value="'.$_GET['descuentoNena'].'">
+          <input type="hidden" name="descuentoDrolanca" value="'.$_GET['descuentoDrolanca'].'">
+          <input type="hidden" name="descuentoDrocerca" value="'.$_GET['descuentoDrocerca'].'">
+          <input type="hidden" name="descuentoOeste" value="'.$_GET['descuentoOeste'].'">
 
           <div class="input-group md-form form-sm form-1 pl-0">
             <input class="form-control my-0 py-1" type="text" placeholder="Esta casilla filtra entre todo el catalogo por código de barra o descripción..." value="'.$buscar.'" name="buscar" aria-label="Search">
