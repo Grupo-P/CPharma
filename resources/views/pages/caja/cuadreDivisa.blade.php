@@ -14,20 +14,20 @@
     <script>
         $(document).ready(function () {
             $.ajax({
-                url: '/verificadorZelleAjax',
+                url: '/verificadorPagosAjax',
                 success: function (response) {
-                    $('#verificadorZeller').html(response);
+                    $('#verificadorPagos').html(response);
                 },
                 timeout: 300000
             });
 
-            $('.actualizarZeller').click(function () {
-                $('#verificadorZeller').html('<div class="text-center"><img width="100px" class="mb-5" src="/assets/img/cargando.gif" alt=""></div>');
+            $('.actualizarPagos').click(function () {
+                $('#verificadorPagos').html('<div class="text-center"><img width="100px" class="mb-5" src="/assets/img/cargando.gif" alt=""></div>');
 
                 $.ajax({
-                    url: '/verificadorZelleAjax',
+                    url: '/verificadorPagosAjax',
                     success: function (response) {
-                        $('#verificadorZeller').html(response);
+                        $('#verificadorPagos').html(response);
                     },
                     timeout: 300000
                 });
@@ -868,14 +868,14 @@
 
     <br/><br/>
 
-    <div id="verificadorZeller">
+    <div id="verificadorPagos">
         <div class="text-center">
             <img width="100px" class="mb-5" src="/assets/img/cargando.gif" alt="">
         </div>
     </div>
 
     <div class="text-center">
-        <button class="btn btn-outline-success actualizarZeller"><i class="fa fa-sync"></i> Actualizar</button>
+        <button class="btn btn-outline-success actualizarPagos"><i class="fa fa-sync"></i> Actualizar</button>
     </div>
 
     <br/><br/>

@@ -1,13 +1,13 @@
 @extends('layouts.contabilidad')
 
 @section('title')
-  Verificador Zelle
+  Verificador de pagos
 @endsection
 
 @section('content')
     <h1 class="h5 text-info">
         <i class="fas fa-check"></i>
-        Verificador Zelle
+        Verificador de pagos
     </h1>
 
     @if(!request()->fecha)
@@ -49,11 +49,12 @@
     @else
 
         @php
-            date_default_timezone_set('America/Caracas');
 
             include app_path() . '\functions\functions.php';
 
             $inicio = new DateTime();
+
+            // Zelle
 
             $sede = isset($_GET['sede']) ? $_GET['sede'] : Auth::user()->sede;
 
@@ -111,9 +112,10 @@
 
                 $header = imap_header($conn, $email);
 
-                $fecha = new DateTime($header->date);
-                $fecha->modify('-4hour');
-                $fecha = $fecha->format('d/m/Y h:i A');
+                $fechaInstancia = new DateTime($header->date);
+                $fechaInstancia->modify('-4hour');
+                $fecha = $fechaInstancia->format('d/m/Y h:i A');
+                $fechaSinFormato = $fechaInstancia->format('Y-m-d h:i:s');
 
                 $arrayFecha = explode(' ', $fecha);
 
@@ -136,6 +138,7 @@
                         $comentario = substr($body, $inicioComentario, $finComentario-$inicioComentario);
                         $comentario = strip_tags($comentario);
 
+                        $pagos[$i]['tipo'] = 'Zelle';
                         $pagos[$i]['enviado_por'] = $arrayAsunto[0];
                         $pagos[$i]['monto'] = $arrayAsunto[1];
                         $pagos[$i]['fecha'] = $fecha;
@@ -154,9 +157,11 @@
                         $comentario = substr($body, $inicioComentario, $finComentario-$inicioComentario);
                         $comentario = strip_tags($comentario);
 
+                        $pagos[$i]['tipo'] = 'Zelle';
                         $pagos[$i]['enviado_por'] = $arrayAsunto[0];
                         $pagos[$i]['monto'] = $arrayAsunto[1];
                         $pagos[$i]['fecha'] = $fecha;
+                        $pagos[$i]['fechaSinFormato'] = $fechaSinFormato;
                         $pagos[$i]['comentario'] = $comentario;
 
                         $i++;
@@ -164,7 +169,70 @@
                 }
             }
 
-            $pagos = array_reverse($pagos);
+            $conn = imap_open($mailbox, 'pagosgedaca@hotmail.com', 'Cpharma20.') or die (imap_last_error());
+
+            $fecha = date_format(date_create(request()->fecha), 'd-M-Y');
+
+            $search = imap_search($conn, 'SINCE "'.$fecha.'"');
+            $search = is_iterable($search) ? $search : [];
+
+            $i = 0;
+
+            foreach ($search as $email) {
+                $overview = imap_fetch_overview($conn, $email);
+
+                $header = imap_header($conn, $email);
+
+                $fechaInstancia = new DateTime($header->date);
+                $fechaInstancia->modify('-4hour');
+                $fecha = $fechaInstancia->format('d/m/Y h:i A');
+                $fechaSinFormato = $fechaInstancia->format('Y-m-d h:i:s');
+
+                $arrayFecha = explode(' ', $fecha);
+
+                if ($arrayFecha[0] != date_format(date_create(request()->fecha), 'd/m/Y')) {
+                    continue;
+                }
+
+                foreach ($overview as $item) {
+                    // Paypal
+
+                    if (isset($item->subject)) {
+                        $asunto = fix_text_subject($item->subject);
+                    }
+
+                    if ($asunto == 'Ha recibido un pago' && $item->from == '"service@paypal.com" <service@paypal.com>') {
+                        $body = imap_qprint(imap_body($conn, $email));
+
+                        $inicioEnviadoPor = strpos($body, '<p class="ppsans" style="font-size:32px;line-height:40px;color:#2c2e2f;margin:0" dir="ltr"><span>');
+                        $finEnviadoPor = strpos($body, ' le ha enviado');
+                        $enviadoPor = substr($body, $inicioEnviadoPor, $finEnviadoPor-$inicioEnviadoPor);
+                        $enviadoPor = strip_tags($enviadoPor);
+
+                        $inicioMonto = strpos($body, '<td><strong>Fondos recibidos</strong></td>');
+                        $monto = substr($body, $inicioMonto+37, 100);
+                        $monto = strip_tags($monto);
+                        $monto = str_replace('&nbsp;USD', '', $monto);
+
+                        $inicioComentario = strpos($body, ':</span></p>');
+                        $finComentario = strpos($body, 'Detalles de la transacción');
+                        $comentario = substr($body, $inicioComentario, $finComentario-$inicioComentario);
+                        $comentario = strip_tags($comentario);
+                        $comentario = str_replace(':', '', $comentario);
+
+                        $pagos[$i]['tipo'] = 'Paypal';
+                        $pagos[$i]['enviado_por'] = $enviadoPor;
+                        $pagos[$i]['monto'] = $monto;
+                        $pagos[$i]['fecha'] = $fecha;
+                        $pagos[$i]['fechaSinFormato'] = $fechaSinFormato;
+                        $pagos[$i]['comentario'] = $comentario;
+
+                        $i++;
+                    }
+                }
+            }
+
+            $pagos = collect($pagos)->sortByDesc('fechaSinFormato');
             $contador = 1;
         @endphp
 
@@ -184,6 +252,7 @@
             <thead class="thead-dark">
                 <tr>
                     <th class="CP-sticky">#</th>
+                    <th class="CP-sticky">Tipo</th>
                     <th class="CP-sticky">Enviado por</th>
                     <th class="CP-sticky">Monto</th>
                     <th class="CP-sticky">Comentario</th>
@@ -195,6 +264,7 @@
                 @foreach($pagos as $pago)
                     <tr>
                         <td class="text-center">{{ $contador++ }}</td>
+                        <td class="text-center">{{ $pago['tipo'] }}</td>
                         <td class="text-center">{{ $pago['enviado_por'] }}</td>
                         <td class="text-center">{{ $pago['monto'] }}</td>
                         <td class="text-center">{{ $pago['comentario'] }}</td>

@@ -573,5 +573,5 @@ Route::resource('tasas', 'ContTasas');
 
 Route::resource('corrida', 'ContCorridas');
 
-Route::view('verificadorZelle', 'pages.verificadorZelle.index');
-Route::view('verificadorZelleAjax', 'pages.verificadorZelle.ajax');
+Route::view('verificadorPagos', 'pages.verificadorPagos.index');
+Route::view('verificadorPagosAjax', 'pages.verificadorPagos.ajax');

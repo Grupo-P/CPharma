@@ -319,10 +319,10 @@
 
       @if(Auth::user()->departamento == 'GERENCIA' || Auth::user()->departamento == 'ADMINISTRACION' || Auth::user()->departamento == 'TESORERIA' || Auth::user()->departamento == 'TECNOLOGIA')
           <li class="nav-item">
-            <a class="nav-link CP-Links-Menu" href="{{ url('/verificadorZelle') }}">
+            <a class="nav-link CP-Links-Menu" href="{{ url('/verificadorPagos') }}">
               <span data-feather="home"></span>
               <i class="fas fa-money-bill-alt"></i>
-              Verificador Zelle<span class="sr-only">(current)</span>
+              Verificador pagos<span class="sr-only">(current)</span>
             </a>
           </li>
       @endif
