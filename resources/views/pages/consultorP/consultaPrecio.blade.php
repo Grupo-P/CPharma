@@ -256,9 +256,28 @@
     const SedeConnectionJs = '<?php echo $RutaUrl;?>'
 
     document.body.style.zoom="80%";
+
+    function recargar() {
+        fecha = moment().format('LLL');
+        hora = moment().format('H');
+        minutos = moment().format('mm');
+
+        if ((hora == '7' && minutos == '00') || (hora == '14' && minutos == '00')) {
+            window.location.href = window.location.href;
+        }
+    }
+
+
+    fecha = moment().format('LLL');
+    setInterval(function () {
+        recargar()
+    }, 60000);
+    console.log('Hora de recarga: ' + fecha);
   </script>
 
   <script>
+
+
     /************************************************************************/
     function dominio(SedeConnectionJs){
         var dominio = '';
