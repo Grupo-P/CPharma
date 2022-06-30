@@ -19,7 +19,7 @@
                     $('#verificadorPagos').html(response);
                 },
                 error: function (error) {
-                    $('body').html(error.responseText);
+                    $('.actualizarPagos').click();
                 },
                 timeout: 300000
             });
@@ -33,7 +33,7 @@
                         $('#verificadorPagos').html(response);
                     },
                     error: function (error) {
-                        $('body').html(error.responseText);
+                        $('.actualizarPagos').click();
                     },
                     timeout: 300000
                 });

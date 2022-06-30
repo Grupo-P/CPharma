@@ -1,4 +1,6 @@
 @php
+    header('Access-Control-Allow-Origin: *');
+
     try {
         $error = 0;
 
@@ -225,16 +227,18 @@
 
         $pagos = $pagos->filter(function ($item) {
 
-            $fecha = strtotime($item['fechaSinFormato']);
+            // $fecha = strtotime($item['fechaSinFormato']);
 
-            $anterior = new DateTime();
-            $anterior->modify('-30minutes');
-            $anterior = $anterior->format('Y-m-d H:i:s');
-            $anterior = strtotime($anterior);
+            // $anterior = new DateTime();
+            // $anterior->modify('-30minutes');
+            // $anterior = $anterior->format('Y-m-d H:i:s');
+            // $anterior = strtotime($anterior);
 
-            if ($fecha >= $anterior) {
-                return true;
-            }
+            // if ($fecha >= $anterior) {
+            //     return true;
+            // }
+
+            return true;
         });
     }
 
@@ -243,7 +247,7 @@
     }
 @endphp
 
-    <table class="table table-bordered table-striped">
+<table class="table table-bordered table-striped">
     <thead class="thead-dark">
         <tr>
             <th colspan="6" class="text-center">VERIFICADOR PAGOS <small>(pagos en los últimos 30 minutos)</small></th>
@@ -265,7 +269,7 @@
         @if($error == 0)
             @if(count($pagos))
                 @foreach($pagos as $pago)
-                    <tr>
+                    <tr class="tr-item" onclick="mostrar_modal('{{ trim($pago['tipo']) }}', '{{ trim($pago['enviado_por']) }}', '{{ trim($pago['monto']) }}', '{{ trim($pago['comentario']) }}', '{{ trim($pago['fecha']) }}')">
                         <td class="text-center">{{ $contador++ }}</td>
                         <td class="text-center">{{ $pago['tipo'] }}</td>
                         <td class="text-center">{{ $pago['enviado_por'] }}</td>
@@ -277,14 +281,54 @@
 
             @else
                 <tr>
-                    <td colspan="5" class="text-center">No hay pagos recientes</td>
+                    <td colspan="6" class="text-center">No hay pagos recientes</td>
                 </tr>
             @endif
 
         @else
             <tr>
-                <td colspan="5" class="text-center">No hay conexión</td>
+                <td colspan="6" class="text-center">No hay conexión</td>
             </tr>
         @endif
     </tbody>
-    </table>
+</table>
+
+<style>
+    .tr-item {
+        cursor: pointer;
+    }
+</style>
+
+<script>
+    function mostrar_modal(tipo, enviado_por, monto, comentario, fecha) {
+        html = '';
+        html = html + '<p>Tipo: '+tipo+'</p>';
+        html = html + '<p>Enviado por: '+enviado_por+'</p>';
+        html = html + '<p>Monto: '+monto+'</p>';
+        html = html + '<p>Comentario: '+comentario+'</p>';
+        html = html + '<p>Fecha: '+fecha+'</p>';
+
+        $('#ver-pago-modal').find('.modal-body').html(html);
+        $('#ver-pago-modal').modal('show');
+    }
+</script>
+
+
+<div class="modal" id="ver-pago-modal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Detalle de pago</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
