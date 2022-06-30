@@ -18,6 +18,9 @@
                 success: function (response) {
                     $('#verificadorPagos').html(response);
                 },
+                error: function (error) {
+                    $('body').html(error.responseText);
+                },
                 timeout: 300000
             });
 
@@ -28,6 +31,9 @@
                     url: '/verificadorPagosAjax',
                     success: function (response) {
                         $('#verificadorPagos').html(response);
+                    },
+                    error: function (error) {
+                        $('body').html(error.responseText);
                     },
                     timeout: 300000
                 });

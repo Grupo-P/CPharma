@@ -11,7 +11,7 @@
             $password = 'Glibenclamida*84';
         }
 
-        if ($host == 'cpharmafau.com' || $host == 'cpharmade.com') {
+        if ($host == 'cpharmafau.com' || $host == 'cpharmade.com' || $host == 'cpharmagpde.com') {
             $username = 'pagosuniversidad2@hotmail.com';
             $password = 'pagosfarmaciaavenidauniversidad';
         }
@@ -74,6 +74,8 @@
                 continue;
             }
 
+            // Bank of America
+
             foreach ($overview as $item) {
                 if (isset($item->subject)) {
                     $asunto = fix_text_subject($item->subject);
@@ -94,6 +96,7 @@
                     $pagos[$i]['fecha'] = $fecha;
                     $pagos[$i]['fechaSinFormato'] = $fechaSinFormato;
                     $pagos[$i]['comentario'] = $comentario;
+                    $pagos[$i]['tipo'] = 'Zelle BOFA';
 
                     $i++;
                 }
@@ -113,6 +116,7 @@
                     $pagos[$i]['fecha'] = $fecha;
                     $pagos[$i]['fechaSinFormato'] = $fechaSinFormato;
                     $pagos[$i]['comentario'] = $comentario;
+                    $pagos[$i]['tipo'] = 'Zelle BOFA';
 
                     $i++;
                 }
@@ -163,16 +167,51 @@
                     $monto = strip_tags($monto);
                     $monto = str_replace('&nbsp;USD', '', $monto);
 
-                    $inicioComentario = strpos($body, ':</span></p>');
-                    $finComentario = strpos($body, 'Detalles de la transacción');
+                    $inicioComentario = strpos($body, 'https://www.paypalobjects.com/digitalassets/c/system-triggered-email/n/layout/images/quote-left.png');
+                    $finComentario = strpos($body, 'https://www.paypalobjects.com/digitalassets/c/system-triggered-email/n/layout/images/quote-right.png');
                     $comentario = substr($body, $inicioComentario, $finComentario-$inicioComentario);
-                    $comentario = strip_tags($comentario);
-                    $comentario = str_replace(':', '', $comentario);
+                    $comentario = strip_tags('<img src="' . $comentario);
+
 
                     $pagos[$i]['tipo'] = 'Paypal';
                     $pagos[$i]['enviado_por'] = $enviadoPor;
                     $pagos[$i]['monto'] = $monto;
                     $pagos[$i]['fecha'] = $fecha;
+                    $pagos[$i]['fechaSinFormato'] = $fechaSinFormato;
+                    $pagos[$i]['comentario'] = $comentario;
+                    $pagos[$i]['tipo'] = 'Paypal';
+
+                    $i++;
+                }
+
+                // PNC
+
+                if (strpos($asunto, 'sent you a Zelle® payment.') && $item->from == 'PNC Alerts <pncalerts@pnc.com>') {
+
+                    $body = imap_qprint(imap_body($conn, $email));
+
+
+                    $enviadoPor = str_replace('sent you a Zelle® payment.', '', $asunto);
+                    $enviadoPor = ucwords(strtolower($enviadoPor));
+
+                    $inicioMonto = strpos($body, 'Amount:');
+                    $finMonto = strpos($body, 'Note:');
+                    $monto = substr($body, $inicioMonto, $finMonto-$inicioMonto);
+                    $monto = strip_tags($monto);
+                    $monto = str_replace('Amount:', '', $monto);
+
+                    $inicioComentario = strpos($body, 'Note:');
+                    $finComentario = strpos($body, 'Date:');
+                    $comentario = substr($body, $inicioComentario, $finComentario-$inicioComentario);
+                    $comentario = strip_tags($comentario);
+                    $comentario = str_replace('Note:', '', $comentario);
+
+
+                    $pagos[$i]['tipo'] = 'Zelle PNC';
+                    $pagos[$i]['enviado_por'] = $enviadoPor;
+                    $pagos[$i]['monto'] = $monto;
+                    $pagos[$i]['fecha'] = $fecha;
+                    $pagos[$i]['fechaSinFormato'] = $fechaSinFormato;
                     $pagos[$i]['comentario'] = $comentario;
 
                     $i++;
@@ -180,10 +219,11 @@
             }
         }
 
-        $pagos = collect($pagos)->sortByDesc('fechaSinFormato');
+        $pagos = collect($pagos);
+        $pagos = $pagos->sortByDesc('fechaSinFormato');
         $contador = 1;
 
-        $pagos = array_filter($pagos, function ($item) {
+        $pagos = $pagos->filter(function ($item) {
 
             $fecha = strtotime($item['fechaSinFormato']);
 
@@ -201,17 +241,18 @@
     catch (Exception $excepcion) {
         $error = 1;
     }
-    @endphp
+@endphp
 
     <table class="table table-bordered table-striped">
     <thead class="thead-dark">
         <tr>
-            <th colspan="5" class="text-center">VERIFICADOR PAGOS <small>(pagos en los últimos 30 minutos)</small></th>
+            <th colspan="6" class="text-center">VERIFICADOR PAGOS <small>(pagos en los últimos 30 minutos)</small></th>
         </tr>
 
         @if($error == 0)
             <tr>
                 <th class="text-center">#</th>
+                <th class="text-center">Tipo</th>
                 <th class="text-center">Enviado por</th>
                 <th class="text-center">Monto</th>
                 <th class="text-center">Comentario</th>
@@ -226,6 +267,7 @@
                 @foreach($pagos as $pago)
                     <tr>
                         <td class="text-center">{{ $contador++ }}</td>
+                        <td class="text-center">{{ $pago['tipo'] }}</td>
                         <td class="text-center">{{ $pago['enviado_por'] }}</td>
                         <td class="text-center">{{ $pago['monto'] }}</td>
                         <td class="text-center">{{ $pago['comentario'] }}</td>

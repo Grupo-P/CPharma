@@ -54,8 +54,6 @@
 
             $inicio = new DateTime();
 
-            // Zelle
-
             $sede = isset($_GET['sede']) ? $_GET['sede'] : Auth::user()->sede;
 
             if ($sede == 'FTN' || $sede == 'FARMACIA TIERRA NEGRA, C.A.') {
@@ -108,6 +106,8 @@
             $i = 0;
 
             foreach ($search as $email) {
+                // Bank of America
+
                 $overview = imap_fetch_overview($conn, $email);
 
                 $header = imap_header($conn, $email);
@@ -115,7 +115,7 @@
                 $fechaInstancia = new DateTime($header->date);
                 $fechaInstancia->modify('-4hour');
                 $fecha = $fechaInstancia->format('d/m/Y h:i A');
-                $fechaSinFormato = $fechaInstancia->format('Y-m-d h:i:s');
+                $fechaSinFormato = $fechaInstancia->format('Y-m-d H:i:s');
 
                 $arrayFecha = explode(' ', $fecha);
 
@@ -138,10 +138,11 @@
                         $comentario = substr($body, $inicioComentario, $finComentario-$inicioComentario);
                         $comentario = strip_tags($comentario);
 
-                        $pagos[$i]['tipo'] = 'Zelle';
+                        $pagos[$i]['tipo'] = 'Zelle BOFA';
                         $pagos[$i]['enviado_por'] = $arrayAsunto[0];
                         $pagos[$i]['monto'] = $arrayAsunto[1];
                         $pagos[$i]['fecha'] = $fecha;
+                        $pagos[$i]['fechaSinFormato'] = $fechaSinFormato;
                         $pagos[$i]['comentario'] = $comentario;
 
                         $i++;
@@ -157,7 +158,7 @@
                         $comentario = substr($body, $inicioComentario, $finComentario-$inicioComentario);
                         $comentario = strip_tags($comentario);
 
-                        $pagos[$i]['tipo'] = 'Zelle';
+                        $pagos[$i]['tipo'] = 'Zelle BOFA';
                         $pagos[$i]['enviado_por'] = $arrayAsunto[0];
                         $pagos[$i]['monto'] = $arrayAsunto[1];
                         $pagos[$i]['fecha'] = $fecha;
@@ -186,7 +187,7 @@
                 $fechaInstancia = new DateTime($header->date);
                 $fechaInstancia->modify('-4hour');
                 $fecha = $fechaInstancia->format('d/m/Y h:i A');
-                $fechaSinFormato = $fechaInstancia->format('Y-m-d h:i:s');
+                $fechaSinFormato = $fechaInstancia->format('Y-m-d H:i:s');
 
                 $arrayFecha = explode(' ', $fecha);
 
@@ -214,13 +215,47 @@
                         $monto = strip_tags($monto);
                         $monto = str_replace('&nbsp;USD', '', $monto);
 
-                        $inicioComentario = strpos($body, ':</span></p>');
-                        $finComentario = strpos($body, 'Detalles de la transacción');
+                        $inicioComentario = strpos($body, 'https://www.paypalobjects.com/digitalassets/c/system-triggered-email/n/layout/images/quote-left.png');
+                        $finComentario = strpos($body, 'https://www.paypalobjects.com/digitalassets/c/system-triggered-email/n/layout/images/quote-right.png');
                         $comentario = substr($body, $inicioComentario, $finComentario-$inicioComentario);
-                        $comentario = strip_tags($comentario);
-                        $comentario = str_replace(':', '', $comentario);
+                        $comentario = strip_tags('<img src="' . $comentario);
+
 
                         $pagos[$i]['tipo'] = 'Paypal';
+                        $pagos[$i]['enviado_por'] = $enviadoPor;
+                        $pagos[$i]['monto'] = $monto;
+                        $pagos[$i]['fecha'] = $fecha;
+                        $pagos[$i]['fechaSinFormato'] = $fechaSinFormato;
+                        $pagos[$i]['comentario'] = $comentario;
+
+                        $i++;
+                    }
+
+
+                    // PNC
+
+                    if (strpos($asunto, 'sent you a Zelle® payment.') && $item->from == 'PNC Alerts <pncalerts@pnc.com>') {
+
+                        $body = imap_qprint(imap_body($conn, $email));
+
+
+                        $enviadoPor = str_replace('sent you a Zelle® payment.', '', $asunto);
+                        $enviadoPor = ucwords(strtolower($enviadoPor));
+
+                        $inicioMonto = strpos($body, 'Amount:');
+                        $finMonto = strpos($body, 'Note:');
+                        $monto = substr($body, $inicioMonto, $finMonto-$inicioMonto);
+                        $monto = strip_tags($monto);
+                        $monto = str_replace('Amount:', '', $monto);
+
+                        $inicioComentario = strpos($body, 'Note:');
+                        $finComentario = strpos($body, 'Date:');
+                        $comentario = substr($body, $inicioComentario, $finComentario-$inicioComentario);
+                        $comentario = strip_tags($comentario);
+                        $comentario = str_replace('Note:', '', $comentario);
+
+
+                        $pagos[$i]['tipo'] = 'Zelle PNC';
                         $pagos[$i]['enviado_por'] = $enviadoPor;
                         $pagos[$i]['monto'] = $monto;
                         $pagos[$i]['fecha'] = $fecha;
@@ -232,7 +267,8 @@
                 }
             }
 
-            $pagos = collect($pagos)->sortByDesc('fechaSinFormato');
+            $pagos = collect($pagos);
+            $pagos = $pagos->sortByDesc('fechaSinFormato');
             $contador = 1;
         @endphp
 
