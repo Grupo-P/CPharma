@@ -807,6 +807,42 @@
       $resultado = $resultado + ($monto * ($comision / 100));
     }
 
+
+
+    if ($fecha != '') {
+      $where = "CONVERT(DATE, VenDevolucion.Auditoria_FechaCreacion) = '$fecha' AND ";
+
+    } else {
+      $inicio = $_GET['fechaInicio'];
+      $fin = $_GET['fechaFin'];
+      $where = "CONVERT(DATE, VenDevolucion.Auditoria_FechaCreacion) BETWEEN '$inicio' AND '$fin' AND ";
+    }
+
+    $sql = "
+      SELECT
+        VenCaja.CodigoCaja AS caja,
+        SUM(VenFactura.MontoSubTotalDoc) AS monto
+      FROM
+        VenFactura
+          LEFT JOIN VenCaja ON VenCaja.Id = VenFactura.VenCajaId
+          LEFT JOIN VenDevolucion ON VenDevolucion.VenFacturaId = VenFactura.Id
+      WHERE
+        $where
+        VenFactura.Auditoria_Usuario = '$usuario'
+      GROUP BY
+        VenCaja.CodigoCaja
+    ";
+
+    $result = sqlsrv_query($conn, $sql);
+
+    while ($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
+      $monto = $row['monto'];
+      $caja = $row['caja'];
+      $comision = $_GET['comision'][$caja] ? $_GET['comision'][$caja] : 0;
+
+      $resultado = $resultado - ($monto * ($comision / 100));
+    }
+
     return number_format($resultado, 2);
   }
 ?>
