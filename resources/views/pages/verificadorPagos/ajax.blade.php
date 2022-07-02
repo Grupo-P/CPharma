@@ -1,7 +1,7 @@
 @php
     header('Access-Control-Allow-Origin: *');
 
-    try {
+    // try {
         $error = 0;
 
         $inicio = new DateTime();
@@ -11,26 +11,31 @@
         if ($host == 'cpharmaftn.com') {
             $username = 'pagostierranegra2@hotmail.com';
             $password = 'Glibenclamida*84';
+            $id = 1;
         }
 
         if ($host == 'cpharmafau.com' || $host == 'cpharmade.com' || $host == 'cpharmagpde.com') {
             $username = 'pagosuniversidad2@hotmail.com';
             $password = 'pagosfarmaciaavenidauniversidad';
+            $id = 2;
         }
 
         if ($host == 'cpharmafsm.com') {
             $username = 'pagosmillennium@hotmail.com';
             $password = 'Glibenclamida*84';
+            $id = 4;
         }
 
         if ($host == 'cpharmafll.com') {
             $username = 'pagoslalago@hotmail.com';
             $password = 'Glibenclamida*84';
+            $id = 3;
         }
 
         if ($host == 'cpharmakdi.com') {
             $username = 'pagoskdi@hotmail.com';
             $password = 'GJpc2017.';
+            $id = 5;
         }
 
         $mailbox = '{outlook.office365.com:993/imap/ssl}';
@@ -83,6 +88,7 @@
                     $asunto = fix_text_subject($item->subject);
                 }
 
+
                 if (strpos($asunto, ' sent you ') && $header->fromaddress == 'Bank of America <customerservice@ealerts.bankofamerica.com>') {
                     $arrayAsunto = explode(' sent you ', $asunto);
 
@@ -93,12 +99,16 @@
                     $comentario = substr($body, $inicioComentario, $finComentario-$inicioComentario);
                     $comentario = strip_tags($comentario);
 
+                    $decimales = explode('.', (string) $arrayAsunto[1]);
+                    $decimales = $decimales[1];
+
                     $pagos[$i]['enviado_por'] = $arrayAsunto[0];
                     $pagos[$i]['monto'] = $arrayAsunto[1];
                     $pagos[$i]['fecha'] = $fecha;
                     $pagos[$i]['fechaSinFormato'] = $fechaSinFormato;
                     $pagos[$i]['comentario'] = $comentario;
                     $pagos[$i]['tipo'] = 'Zelle BOFA';
+                    $pagos[$i]['hash'] = rand(100, 999) . substr($arrayAsunto[0], 0, 1) . rand(100, 999) . $decimales;
 
                     $i++;
                 }
@@ -113,12 +123,16 @@
                     $comentario = substr($body, $inicioComentario, $finComentario-$inicioComentario);
                     $comentario = strip_tags($comentario);
 
+                    $decimales = explode('.', (string) $monto);
+                    $decimales = $decimales[1];
+
                     $pagos[$i]['enviado_por'] = $arrayAsunto[0];
                     $pagos[$i]['monto'] = $arrayAsunto[1];
                     $pagos[$i]['fecha'] = $fecha;
                     $pagos[$i]['fechaSinFormato'] = $fechaSinFormato;
                     $pagos[$i]['comentario'] = $comentario;
                     $pagos[$i]['tipo'] = 'Zelle BOFA';
+                    $pagos[$i]['hash'] = rand(100, 999) . substr($arrayAsunto[0], 0, 1) . rand(100, 999) . $decimales;
 
                     $i++;
                 }
@@ -174,6 +188,9 @@
                     $comentario = substr($body, $inicioComentario, $finComentario-$inicioComentario);
                     $comentario = strip_tags('<img src="' . $comentario);
 
+                    $decimales = explode('.', (string) $monto);
+                    $decimales = $decimales[1];
+
 
                     $pagos[$i]['tipo'] = 'Paypal';
                     $pagos[$i]['enviado_por'] = $enviadoPor;
@@ -181,7 +198,7 @@
                     $pagos[$i]['fecha'] = $fecha;
                     $pagos[$i]['fechaSinFormato'] = $fechaSinFormato;
                     $pagos[$i]['comentario'] = $comentario;
-                    $pagos[$i]['tipo'] = 'Paypal';
+                    $pagos[$i]['hash'] = rand(100, 999) . substr($arrayAsunto[0], 0, 1) . rand(100, 999) . $decimales;
 
                     $i++;
                 }
@@ -208,6 +225,8 @@
                     $comentario = strip_tags($comentario);
                     $comentario = str_replace('Note:', '', $comentario);
 
+                    $decimales = explode('.', (string) $monto);
+                    $decimales = $decimales[1];
 
                     $pagos[$i]['tipo'] = 'Zelle PNC';
                     $pagos[$i]['enviado_por'] = $enviadoPor;
@@ -215,6 +234,7 @@
                     $pagos[$i]['fecha'] = $fecha;
                     $pagos[$i]['fechaSinFormato'] = $fechaSinFormato;
                     $pagos[$i]['comentario'] = $comentario;
+                    $pagos[$i]['hash'] = rand(100, 999) . substr($arrayAsunto[0], 0, 1) . rand(100, 999) . $decimales;
 
                     $i++;
                 }
@@ -227,24 +247,24 @@
 
         $pagos = $pagos->filter(function ($item) {
 
-            // $fecha = strtotime($item['fechaSinFormato']);
+            $fecha = strtotime($item['fechaSinFormato']);
 
-            // $anterior = new DateTime();
-            // $anterior->modify('-30minutes');
-            // $anterior = $anterior->format('Y-m-d H:i:s');
-            // $anterior = strtotime($anterior);
+            $anterior = new DateTime();
+            $anterior->modify('-30minutes');
+            $anterior = $anterior->format('Y-m-d H:i:s');
+            $anterior = strtotime($anterior);
 
-            // if ($fecha >= $anterior) {
-            //     return true;
-            // }
+            if ($fecha >= $anterior) {
+                return true;
+            }
 
             return true;
         });
-    }
+    // }
 
-    catch (Exception $excepcion) {
-        $error = 1;
-    }
+    // catch (Exception $excepcion) {
+    //     $error = 1;
+    // }
 @endphp
 
 <table class="table table-bordered table-striped">
@@ -269,7 +289,7 @@
         @if($error == 0)
             @if(count($pagos))
                 @foreach($pagos as $pago)
-                    <tr class="tr-item" onclick="mostrar_modal('{{ trim($pago['tipo']) }}', '{{ trim($pago['enviado_por']) }}', '{{ trim($pago['monto']) }}', '{{ trim($pago['comentario']) }}', '{{ trim($pago['fecha']) }}')">
+                    <tr class="tr-item" onclick="mostrar_modal('{{ trim($pago['tipo']) }}', '{{ trim($pago['enviado_por']) }}', '{{ trim($pago['monto']) }}', '{{ trim($pago['comentario']) }}', '{{ trim($pago['fecha']) }}', '{{ trim($pago['hash']) }}')">
                         <td class="text-center">{{ $contador++ }}</td>
                         <td class="text-center">{{ $pago['tipo'] }}</td>
                         <td class="text-center">{{ $pago['enviado_por'] }}</td>
@@ -297,16 +317,29 @@
     .tr-item {
         cursor: pointer;
     }
+
+    .modal-body-pago {
+        position: relative;
+    }
+
+    .modal-body-pago img {
+        position: absolute;
+        opacity: 0.6;
+        width: 50%;
+        margin-left: 25%;
+        height: auto;
+    }
 </style>
 
 <script>
-    function mostrar_modal(tipo, enviado_por, monto, comentario, fecha) {
-        html = '';
+    function mostrar_modal(tipo, enviado_por, monto, comentario, fecha, hash) {
+        html = '<img src="/assets/img/icono.png">';
         html = html + '<p>Tipo: '+tipo+'</p>';
         html = html + '<p>Enviado por: '+enviado_por+'</p>';
         html = html + '<p>Monto: '+monto+'</p>';
         html = html + '<p>Comentario: '+comentario+'</p>';
         html = html + '<p>Fecha: '+fecha+'</p>';
+        html = html + '<p>Hash: '+hash+'</p>';
 
         $('#ver-pago-modal').find('.modal-body').html(html);
         $('#ver-pago-modal').modal('show');
@@ -323,7 +356,7 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <div class="modal-body">
+      <div class="modal-body modal-body-pago">
 
       </div>
       <div class="modal-footer">
