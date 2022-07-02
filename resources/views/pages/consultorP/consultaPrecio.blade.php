@@ -262,7 +262,7 @@
         hora = moment().format('H');
         minutos = moment().format('mm');
 
-        if ((hora == '7' && minutos == '00') || (hora == '14' && minutos == '00')) {
+        if ((hora == '8' && minutos == '00') || (hora == '14' && minutos == '00')) {
             window.location.href = window.location.href;
         }
     }
