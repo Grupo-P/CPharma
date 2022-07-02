@@ -187,6 +187,8 @@
             <th scope="col" class="CP-sticky">Descripción origen</th>
             <th scope="col" class="CP-sticky">Cantidad origen</th>
             <th scope="col" class="CP-sticky">Número traslado origen</th>
+            <th scope="col" class="CP-sticky">Fecha traslado</th>
+            <th scope="col" class="CP-sticky">Días desde traslado</th>
             <th scope="col" class="CP-sticky">Estado</th>
           </tr>
         </thead>
@@ -196,7 +198,7 @@
     $estado = isset($_GET['estado']) ? $_GET['estado'] : 'PROCESADO';
     $traslados = [];
 
-    if (FG_Mi_Ubicacion() == 'FAU') {
+    if (FG_Mi_Ubicacion() == 'FAU' || FG_Mi_Ubicacion() == 'DBs') {
 
       try {
         $trasladoFM = DB::connection('fm')->select("
@@ -207,7 +209,8 @@
               traslados_detalle.descripcion AS descripcion,
               traslados_detalle.cantidad AS cantidad,
               (SELECT traslados.numero_ajuste FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) AS numero_traslado,
-              (SELECT traslados.estatus FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) AS estado
+              (SELECT traslados.estatus FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) AS estado,
+              (SELECT traslados.fecha_traslado FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) AS fecha_traslado
           FROM
               traslados_detalle
           WHERE
@@ -232,7 +235,8 @@
               traslados_detalle.descripcion AS descripcion,
               traslados_detalle.cantidad AS cantidad,
               (SELECT traslados.numero_ajuste FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) AS numero_traslado,
-              (SELECT traslados.estatus FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) AS estado
+              (SELECT traslados.estatus FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) AS estado,
+              (SELECT traslados.fecha_traslado FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) AS fecha_traslado
           FROM
               traslados_detalle
           WHERE
@@ -257,7 +261,8 @@
               traslados_detalle.descripcion AS descripcion,
               traslados_detalle.cantidad AS cantidad,
               (SELECT traslados.numero_ajuste FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) AS numero_traslado,
-              (SELECT traslados.estatus FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) AS estado
+              (SELECT traslados.estatus FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) AS estado,
+              (SELECT traslados.fecha_traslado FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) AS fecha_traslado
           FROM
               traslados_detalle
           WHERE
@@ -284,7 +289,8 @@
               traslados_detalle.descripcion AS descripcion,
               traslados_detalle.cantidad AS cantidad,
               (SELECT traslados.numero_ajuste FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) AS numero_traslado,
-              (SELECT traslados.estatus FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) AS estado
+              (SELECT traslados.estatus FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) AS estado,
+              (SELECT traslados.fecha_traslado FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) AS fecha_traslado
           FROM
               traslados_detalle
           WHERE
@@ -309,7 +315,8 @@
               traslados_detalle.descripcion AS descripcion,
               traslados_detalle.cantidad AS cantidad,
               (SELECT traslados.numero_ajuste FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) AS numero_traslado,
-              (SELECT traslados.estatus FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) AS estado
+              (SELECT traslados.estatus FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) AS estado,
+              (SELECT traslados.fecha_traslado FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) AS fecha_traslado
           FROM
               traslados_detalle
           WHERE
@@ -334,7 +341,8 @@
               traslados_detalle.descripcion AS descripcion,
               traslados_detalle.cantidad AS cantidad,
               (SELECT traslados.numero_ajuste FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) AS numero_traslado,
-              (SELECT traslados.estatus FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) AS estado
+              (SELECT traslados.estatus FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) AS estado,
+              (SELECT traslados.fecha_traslado FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) AS fecha_traslado
           FROM
               traslados_detalle
           WHERE
@@ -361,7 +369,8 @@
             traslados_detalle.descripcion AS descripcion,
             traslados_detalle.cantidad AS cantidad,
             (SELECT traslados.numero_ajuste FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) AS numero_traslado,
-            (SELECT traslados.estatus FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) AS estado
+            (SELECT traslados.estatus FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) AS estado,
+            (SELECT traslados.fecha_traslado FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) AS fecha_traslado
         FROM
             traslados_detalle
         WHERE
@@ -382,7 +391,8 @@
             traslados_detalle.descripcion AS descripcion,
             traslados_detalle.cantidad AS cantidad,
             (SELECT traslados.numero_ajuste FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) AS numero_traslado,
-            (SELECT traslados.estatus FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) AS estado
+            (SELECT traslados.estatus FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) AS estado,
+            (SELECT traslados.fecha_traslado FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) AS fecha_traslado
         FROM
             traslados_detalle
         WHERE
@@ -403,7 +413,8 @@
             traslados_detalle.descripcion AS descripcion,
             traslados_detalle.cantidad AS cantidad,
             (SELECT traslados.numero_ajuste FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) AS numero_traslado,
-            (SELECT traslados.estatus FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) AS estado
+            (SELECT traslados.estatus FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) AS estado,
+            (SELECT traslados.fecha_traslado FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) AS fecha_traslado
         FROM
             traslados_detalle
         WHERE
@@ -427,7 +438,8 @@
               traslados_detalle.descripcion AS descripcion,
               traslados_detalle.cantidad AS cantidad,
               (SELECT traslados.numero_ajuste FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) AS numero_traslado,
-              (SELECT traslados.estatus FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) AS estado
+              (SELECT traslados.estatus FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) AS estado,
+              (SELECT traslados.fecha_traslado FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) AS fecha_traslado
           FROM
               traslados_detalle
           WHERE
@@ -453,7 +465,8 @@
               traslados_detalle.descripcion AS descripcion,
               traslados_detalle.cantidad AS cantidad,
               (SELECT traslados.numero_ajuste FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) AS numero_traslado,
-              (SELECT traslados.estatus FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) AS estado
+              (SELECT traslados.estatus FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) AS estado,
+              (SELECT traslados.fecha_traslado FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) AS fecha_traslado
           FROM
               traslados_detalle
           WHERE
@@ -478,7 +491,8 @@
               traslados_detalle.descripcion AS descripcion,
               traslados_detalle.cantidad AS cantidad,
               (SELECT traslados.numero_ajuste FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) AS numero_traslado,
-              (SELECT traslados.estatus FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) AS estado
+              (SELECT traslados.estatus FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) AS estado,
+              (SELECT traslados.fecha_traslado FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) AS fecha_traslado
           FROM
               traslados_detalle
           WHERE
@@ -513,6 +527,7 @@
       $cantidad = $traslado->cantidad;
       $numero_traslado = $traslado->numero_traslado;
       $estado = $traslado->estado;
+      $fecha_traslado = $traslado->fecha_traslado;
 
       $conn = FG_Conectar_Smartpharma(FG_Mi_Ubicacion());
 
@@ -533,6 +548,8 @@
       $descripcion = ($row['descripcion']) ? FG_Limpiar_Texto($row['descripcion']) : '-';
       $existencia = ($row['existencia']) ? $row['existencia'] : '-';
 
+      $dias = Carbon\Carbon::parse($fecha_traslado)->diffInDays();
+
       echo '<tr>';
       echo '<td class="text-center">'.$contador.'</td>';
       echo '<td class="text-center">'.$codigo_barra.'</td>';
@@ -543,6 +560,8 @@
       echo '<td class="text-center">'.$descripcionOrigen.'</td>';
       echo '<td class="text-center">'.$cantidad.'</td>';
       echo '<td class="text-center">'.$numero_traslado.'</td>';
+      echo '<td class="text-center">'.$fecha_traslado.'</td>';
+      echo '<td class="text-center">'.$dias.'</td>';
       echo '<td class="text-center">'.$estado.'</td>';
       echo '</tr>';
 
