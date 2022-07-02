@@ -214,6 +214,7 @@
             <tr>
                 <td>
                     <ul>
+                        <li>Solo se estan mostrando los cajeros/cajas con ventas y/o devoluciones en el dia, si no vendio o la diferencia es cero no salen en este reporte, por lo que puede existir algun cajero que si vendio pero al quedar en cero se omite del reporte.</li>
                         <li>La información de las devoluciones corresponde al usuario que originalmente hizo la venta que fue anulada y no el usuario que hizo la devolución.</li>
                         <li>Comisiones configuradas por el usuario:</li>
                         '.$comisiones.'
@@ -233,12 +234,13 @@
           <th scope="col" class="CP-sticky">C.I.</th>
           <th scope="col" class="CP-sticky">Monto total facturas Bs. (Sin IVA)</th>
           <th scope="col" class="CP-sticky">Monto total devoluciones Bs. (Sin IVA)</th>
-          <th scope="col" class="CP-sticky">Diferencia montos</th>
+          <th scope="col" class="CP-sticky">Diferencia montos Bs.</th>
           <th scope="col" class="CP-sticky">Cantidad facturas</th>
           <th scope="col" class="CP-sticky">Cantidad devoluciones</th>
           <th scope="col" class="CP-sticky">Diferencia cantidades</th>
-          <th scope="col" class="CP-sticky">Comisión</th>
+          <th scope="col" class="CP-sticky">Comisión Bs.</th>
           <th scope="col" class="CP-sticky">Cantidad de días</th>
+          <th scope="col" class="CP-sticky">Días evaluados</th>
           <th scope="col" class="CP-sticky">Días con ventas</th>
           <th scope="col" class="CP-sticky">Cajas</th>
         </tr>
@@ -346,6 +348,9 @@
 
       $total_comision = $total_comision + comision($usuario, $conn);
 
+      $dias_evaluados = Carbon\Carbon::parse($_GET['fechaInicio'])->diffInDays($_GET['fechaFin']);
+      $dias_evaluados = $dias_evaluados+1;
+
 
       $sql2 = "
         SELECT
@@ -413,6 +418,7 @@
       echo '<td class="text-center">'.$diferencia_cantidad.'</td>';
       echo '<td class="text-center">'.number_format(comision($usuario, $conn), 2).'</td>';
       echo '<td class="text-center">'.$cantidad.'</td>';
+      echo '<td class="text-center">'.$dias_evaluados.'</td>';
       echo '<td class="text-center">'.$dias.'</td>';
       echo '<td class="text-center">'.$cajas.'</td>';
 
@@ -467,6 +473,30 @@
     ';
     echo'<h6 align="center">Periodo desde el <b>'.$FInicialImp.'</b> al <b>'.$FFinalImp.'</b> del usuario <b>'.$Usuario.'</b></h6>';
 
+    $comisiones = '<ul>';
+
+    foreach ($_GET['comision'] as $key => $value) {
+        $value = $value ? $value : 0;
+        $comisiones .= '<li>'.$key.': '.$value.'%</li>';
+    }
+
+    $comisiones .= '</ul>';
+
+    echo '
+        <table class="table table-striped table-bordered col-12">
+            <tr>
+                <td>
+                    <ul>
+                        <li>Solo se estan mostrando los cajeros/cajas con ventas y/o devoluciones en el dia, si no vendio o la diferencia es cero no salen en este reporte, por lo que puede existir algun cajero que si vendio pero al quedar en cero se omite del reporte.</li>
+                        <li>La información de las devoluciones corresponde al usuario que originalmente hizo la venta que fue anulada y no el usuario que hizo la devolución.</li>
+                        <li>Comisiones configuradas por el usuario:</li>
+                        '.$comisiones.'
+                    </ul>
+                </td>
+            </tr>
+        </table>
+    ';
+
     echo'
     <table class="table table-striped table-bordered col-12 sortable" id="myTable">
       <thead class="thead-dark">
@@ -475,8 +505,8 @@
           <th scope="col" class="CP-sticky">Fecha</th>
           <th scope="col" class="CP-sticky">Monto total facturas Bs. (Sin IVA)</th>
           <th scope="col" class="CP-sticky">Monto total devoluciones Bs. (Sin IVA)</th>
-          <th scope="col" class="CP-sticky">Diferencia montos</th>
-          <th scope="col" class="CP-sticky">Comisión</th>
+          <th scope="col" class="CP-sticky">Diferencia montos Bs.</th>
+          <th scope="col" class="CP-sticky">Comisión Bs.</th>
           <th scope="col" class="CP-sticky">Cantidad facturas</th>
           <th scope="col" class="CP-sticky">Cantidad devoluciones</th>
           <th scope="col" class="CP-sticky">Diferencia cantidades</th>
@@ -577,6 +607,9 @@
       $cantidad_factura = intval($cantidad_factura);
       $cantidad_devolucion = intval($cantidad_devolucion);
       $diferencia_cantidad = $cantidad_factura-$cantidad_devolucion;
+
+      $dias_evaluados = Carbon\Carbon::parse($_GET['fechaInicio'])->diffInDays($_GET['fechaFin']);
+      $dias_evaluados = $dias_evaluados+1;
 
       $sql3 = "
         SELECT
@@ -687,6 +720,7 @@
             <tr>
                 <td>
                     <ul>
+                        <li>Solo se estan mostrando los cajeros/cajas con ventas y/o devoluciones en el dia, si no vendio o la diferencia es cero no salen en este reporte, por lo que puede existir algun cajero que si vendio pero al quedar en cero se omite del reporte.</li>
                         <li>La información de las devoluciones corresponde a la caja que hizo la devolución y no a la caja que emitió la venta original que fue anulada.</li>
                     </ul>
                 </td>
@@ -702,11 +736,12 @@
           <th scope="col" class="CP-sticky">Caja</th>
           <th scope="col" class="CP-sticky">Monto total facturas Bs. (Sin IVA)</th>
           <th scope="col" class="CP-sticky">Monto total devoluciones Bs. (Sin IVA)</th>
-          <th scope="col" class="CP-sticky">Diferencia montos</th>
+          <th scope="col" class="CP-sticky">Diferencia montos Bs.</th>
           <th scope="col" class="CP-sticky">Cantidad facturas</th>
           <th scope="col" class="CP-sticky">Cantidad devoluciones</th>
           <th scope="col" class="CP-sticky">Diferencia cantidades</th>
           <th scope="col" class="CP-sticky">Cantidad de días</th>
+          <th scope="col" class="CP-sticky">Días evaluados</th>
           <th scope="col" class="CP-sticky">Días con ventas</th>
           <th scope="col" class="CP-sticky">Usuario que vendió</th>
         </tr>
@@ -841,7 +876,8 @@
 
       $usuarios = implode('<br>', $usuarios);
 
-
+      $dias_evaluados = Carbon\Carbon::parse($_GET['fechaInicio'])->diffInDays($_GET['fechaFin']);
+      $dias_evaluados = $dias_evaluados+1;
 
 
       echo '<tr>';
@@ -854,6 +890,7 @@
       echo '<td class="text-center">'.$cantidad_devolucion.'</td>';
       echo '<td class="text-center">'.$diferencia_cantidad.'</td>';
       echo '<td class="text-center">'.$cantidad.'</td>';
+      echo '<td class="text-center">'.$dias_evaluados.'</td>';
       echo '<td class="text-center">'.$dias.'</td>';
       echo '<td class="text-center">'.$usuarios.'</td>';
       echo '</tr>';
