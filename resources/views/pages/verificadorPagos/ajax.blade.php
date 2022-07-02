@@ -1,7 +1,7 @@
 @php
     header('Access-Control-Allow-Origin: *');
 
-    // try {
+    try {
         $error = 0;
 
         $inicio = new DateTime();
@@ -39,7 +39,10 @@
         }
 
         $mailbox = '{outlook.office365.com:993/imap/ssl}';
-        $fecha = date_format(date_create(request()->fecha), 'd-M-Y');
+
+        $fecha = date_create(request()->fecha);
+        $fecha = date_modify($fecha, '-1day');
+        $fecha = date_format($fecha, 'd-M-Y');
 
         $conn = imap_open($mailbox, $username, $password) or die (imap_last_error());
 
@@ -257,14 +260,12 @@
             if ($fecha >= $anterior) {
                 return true;
             }
-
-            return true;
         });
-    // }
+    }
 
-    // catch (Exception $excepcion) {
-    //     $error = 1;
-    // }
+    catch (Exception $excepcion) {
+        $error = 1;
+    }
 @endphp
 
 <table class="table table-bordered table-striped">
