@@ -317,11 +317,20 @@
 
     $contador = 1;
 
+    $total_factura = 0;
+    $total_devolucion = 0;
+    $total_diferencia_montos = 0;
+    $total_comision = 0;
+
     foreach ($resultados as $item) {
       $monto_devolucion = isset($item['monto_devolucion']) ? $item['monto_devolucion'] : 0;
       $cantidad_devolucion = isset($item['cantidad_devolucion']) ? $item['cantidad_devolucion'] : 0;
       $monto_factura = isset($item['monto_factura']) ? $item['monto_factura'] : 0;
       $cantidad_factura = isset($item['cantidad_factura']) ? $item['cantidad_factura'] : 0;
+
+      $total_factura = $total_factura + $monto_factura;
+      $total_devolucion = $total_devolucion + $monto_devolucion;
+      $total_diferencia_montos = $total_diferencia_montos + ($monto_factura-$monto_devolucion);
 
       $diferencia_monto = number_format($monto_factura-$monto_devolucion, 2);
 
@@ -334,6 +343,8 @@
       $cantidad_factura = intval($cantidad_factura);
       $cantidad_devolucion = isset($item['cantidad_devolucion']) ? intval($item['cantidad_devolucion']) : 0;
       $diferencia_cantidad = $cantidad_factura-$cantidad_devolucion;
+
+      $total_comision = $total_comision + comision($usuario, $conn);
 
 
       $sql2 = "
@@ -400,14 +411,28 @@
       echo '<td class="text-center">'.$cantidad_factura.'</td>';
       echo '<td class="text-center">'.$cantidad_devolucion.'</td>';
       echo '<td class="text-center">'.$diferencia_cantidad.'</td>';
-      echo '<td class="text-center">'.comision($usuario, $conn).'</td>';
+      echo '<td class="text-center">'.number_format(comision($usuario, $conn), 2).'</td>';
       echo '<td class="text-center">'.$cantidad.'</td>';
       echo '<td class="text-center">'.$dias.'</td>';
       echo '<td class="text-center">'.$cajas.'</td>';
-      echo '</tr>';
 
       $contador++;
     }
+
+    $total_factura = number_format($total_factura, 2);
+    $total_devolucion = number_format($total_devolucion, 2);
+    $total_diferencia_montos = number_format($total_diferencia_montos, 2);
+    $total_comision = number_format($total_comision, 2);
+
+    echo '<tr>';
+      echo '<th colspan="4" class="text-center"></th>';
+      echo '<th class="text-center">'.$total_factura.'</th>';
+      echo '<th class="text-center">'.$total_devolucion.'</th>';
+      echo '<th class="text-center">'.$total_diferencia_montos.'</th>';
+      echo '<th colspan="3" class="text-center"></th>';
+      echo '<th class="text-weight-bold text-center">'.$total_comision.'</th>';
+      echo '<th colspan="3" class="text-center"></th>';
+      echo '</tr>';
 
     echo '
       </tbody>
@@ -473,7 +498,7 @@
             SUM(VenFactura.MontoSubTotalDoc) AS monto_factura,
             COUNT(VenFactura.MontoSubTotalDoc) AS cantidad_factura
         FROM
-            VenFactura LEFT JOIN VenDevolucion ON VenFactura.Id = VenDevolucion.VenFacturaId
+            VenFactura
         WHERE
             (CONVERT(DATE, VenFactura.Auditoria_FechaCreacion) BETWEEN '$FInicial' AND '$FFinal') AND
             VenFactura.Auditoria_Usuario = '$Usuario'
@@ -500,7 +525,7 @@
             VenDevolucion
                 LEFT JOIN VenFactura ON VenFactura.Id = VenDevolucion.VenFacturaId
         WHERE
-            (CONVERT(DATE, VenFactura.Auditoria_FechaCreacion) BETWEEN '$FInicial' AND '$FFinal') AND
+            (CONVERT(DATE, VenDevolucion.Auditoria_FechaCreacion) BETWEEN '$FInicial' AND '$FFinal') AND
             VenFactura.Auditoria_Usuario = '$Usuario'
         GROUP BY
             CONVERT(DATE, VenDevolucion.Auditoria_FechaCreacion)
@@ -525,6 +550,11 @@
 
     $contador = 1;
 
+    $total_monto_factura = 0;
+    $total_monto_devolucion = 0;
+    $total_diferencia_monto = 0;
+    $total_comision = 0;
+
     foreach ($resultados as $item) {
 
       $monto_devolucion = isset($item['monto_devolucion']) ? $item['monto_devolucion'] : 0;
@@ -532,11 +562,17 @@
       $monto_factura = isset($item['monto_factura']) ? $item['monto_factura'] : 0;
       $cantidad_factura = isset($item['cantidad_factura']) ? $item['cantidad_factura'] : 0;
 
+      $total_monto_factura = $total_monto_factura + $monto_factura;
+      $total_monto_devolucion = $total_monto_devolucion + $monto_devolucion;
+      $total_diferencia_monto = $total_diferencia_monto + ($monto_factura-$monto_devolucion);
+
       $fecha = $item['fecha']->format('d/m/Y');
       $fechaSinFormato = $item['fecha']->format('Y-m-d');
       $diferencia_monto = number_format($monto_factura-$monto_devolucion, 2);
       $monto_factura = number_format($monto_factura, 2);
       $monto_devolucion = number_format($monto_devolucion, 2);
+
+      $total_comision = $total_comision + comision($_GET['usuario'], $conn, $fechaSinFormato);
 
       $cantidad_factura = intval($cantidad_factura);
       $cantidad_devolucion = intval($cantidad_devolucion);
@@ -566,6 +602,9 @@
 
       $cajas = implode('<br>', $cajas);
 
+      $comision = comision($_GET['usuario'], $conn, $fechaSinFormato);
+      $comision = number_format($comision, 2);
+
 
 
       echo '<tr>';
@@ -574,7 +613,7 @@
       echo '<td class="text-center">'.$monto_factura.'</td>';
       echo '<td class="text-center">'.$monto_devolucion.'</td>';
       echo '<td class="text-center">'.$diferencia_monto.'</td>';
-      echo '<td class="text-center">'.comision($_GET['usuario'], $conn, $fechaSinFormato).'</td>';
+      echo '<td class="text-center">'.$comision.'</td>';
       echo '<td class="text-center">'.$cantidad_factura.'</td>';
       echo '<td class="text-center">'.$cantidad_devolucion.'</td>';
       echo '<td class="text-center">'.$diferencia_cantidad.'</td>';
@@ -583,6 +622,20 @@
 
       $contador++;
     }
+
+    $total_monto_factura = number_format($total_monto_factura, 2);
+    $total_monto_devolucion = number_format($total_monto_devolucion, 2);
+    $total_diferencia_monto = number_format($total_diferencia_monto, 2);
+    $total_comision = number_format($total_comision, 2);
+
+    echo '<tr>';
+    echo '<th colspan="2" class="text-center"></th>';
+    echo '<th class="text-center">'.$total_monto_factura.'</th>';
+    echo '<th class="text-center">'.$total_monto_devolucion.'</th>';
+    echo '<th class="text-center">'.$total_diferencia_monto.'</th>';
+    echo '<th class="text-center">'.$total_comision.'</th>';
+    echo '<th colspan="4" class="text-center"></th>';
+    echo '</tr>';
 
     echo '
       </tbody>
@@ -623,7 +676,7 @@
     }
 
     echo '<div class="text-center mb-3">';
-    echo '<a href="/reporte51?fechaInicio='.$_GET['fechaInicio'].'&fechaFin='.$_GET['fechaFin'].'&SEDE='.$_GET['SEDE'].'&caja=1" class="btn btn-outline-success">Ventas por caja</a>';
+    echo '<a href="/reporte51?fechaInicio='.$_GET['fechaInicio'].'&fechaFin='.$_GET['fechaFin'].'&SEDE='.$_GET['SEDE'].'&caja=1&'.$string.'" class="btn btn-outline-success">Ventas por caja</a>';
     echo '<a href="/reporte51?fechaInicio='.$_GET['fechaInicio'].'&fechaFin='.$_GET['fechaFin'].'&SEDE='.$_GET['SEDE'].'&'.$string.'" class="btn btn-outline-info ml-2">Ventas por cajero</a>';
     echo '</div>';
 
@@ -660,18 +713,17 @@
       </thead>
       <tbody>';
 
+    $resultados = [];
+
 
     $sql1 = "
         SELECT
             VenCaja.CodigoCaja AS caja,
             VenCaja.Id AS id_caja,
             SUM(VenFactura.MontoSubTotalDoc) AS monto_factura,
-            COUNT(VenFactura.MontoSubTotalDoc) AS cantidad_factura,
-            SUM(VenDevolucion.MontoSubTotalDoc) AS monto_devolucion,
-            COUNT(VenDevolucion.MontoSubTotalDoc) AS cantidad_devolucion
+            COUNT(VenFactura.MontoSubTotalDoc) AS cantidad_factura
         FROM
             VenFactura LEFT JOIN VenCaja ON VenFactura.VenCajaId = VenCaja.Id
-                LEFT JOIN VenDevolucion ON VenFactura.Id = VenDevolucion.VenFacturaId
         WHERE
             CONVERT(DATE, VenFactura.Auditoria_FechaCreacion) BETWEEN '$FInicial' AND '$FFinal'
         GROUP BY
@@ -681,17 +733,62 @@
 
     $result1 = sqlsrv_query($conn, $sql1);
 
+    while ($row1 = sqlsrv_fetch_array($result1, SQLSRV_FETCH_ASSOC)) {
+        $resultados[] = $row1;
+    }
+
+    $sql2 = "
+        SELECT
+            VenCaja.CodigoCaja AS caja,
+            VenCaja.Id AS id_caja,
+            SUM(VenDevolucion.MontoSubTotalDoc) AS monto_devolucion,
+            COUNT(VenDevolucion.MontoSubTotalDoc) AS cantidad_devolucion
+        FROM
+            VenDevolucion LEFT JOIN VenCaja ON VenDevolucion.VenCajaId = VenCaja.Id
+        WHERE
+            CONVERT(DATE, VenDevolucion.Auditoria_FechaCreacion) BETWEEN '$FInicial' AND '$FFinal'
+        GROUP BY
+            VenCaja.CodigoCaja,
+            VenCaja.Id;
+    ";
+
+    $result2 = sqlsrv_query($conn, $sql2);
+
+    while ($row2 = sqlsrv_fetch_array($result2, SQLSRV_FETCH_ASSOC)) {
+        if (array_search($row2['id_caja'], array_column($resultados, 'id_caja'))) {
+            $i = array_search($row2['id_caja'], array_column($resultados, 'id_caja'));
+            $resultados[$i]['monto_devolucion'] = $row2['monto_devolucion'];
+            $resultados[$i]['cantidad_devolucion'] = $row2['cantidad_devolucion'];
+        }
+    }
+
+
     $contador = 1;
 
-    while ($row1 = sqlsrv_fetch_array($result1, SQLSRV_FETCH_ASSOC)) {
+    $total_monto_factura = 0;
+    $total_monto_devolucion = 0;
+    $total_diferencia_monto = 0;
 
-      $id_caja = $row1['id_caja'];
-      $caja = $row1['caja'];
-      $monto_factura = number_format($row1['monto_factura'], 2);
-      $monto_devolucion = number_format($row1['monto_devolucion'], 2);
-      $diferencia_monto = number_format($row1['monto_factura']-$row1['monto_devolucion'], 2);
-      $cantidad_factura = intval($row1['cantidad_factura']);
-      $cantidad_devolucion = intval($row1['cantidad_devolucion']);
+    foreach ($resultados as $resultado) {
+
+      $resultado['monto_devolucion'] = isset($resultado['monto_devolucion']) ? $resultado['monto_devolucion'] : 0;
+      $resultado['cantidad_devolucion'] = isset($resultado['cantidad_devolucion']) ? $resultado['cantidad_devolucion'] : 0;
+
+      $resultado['monto_factura'] = isset($resultado['monto_factura']) ? $resultado['monto_factura'] : 0;
+      $resultado['cantidad_factura'] = isset($resultado['cantidad_factura']) ? $resultado['cantidad_factura'] : 0;
+
+      $total_monto_factura = $total_monto_factura + $resultado['monto_factura'];
+      $total_monto_devolucion = $total_monto_devolucion + $resultado['monto_devolucion'];
+      $total_diferencia_monto = $total_diferencia_monto + ($resultado['monto_factura'] - $resultado['monto_devolucion']);
+
+
+      $id_caja = $resultado['id_caja'];
+      $caja = $resultado['caja'];
+      $monto_factura = number_format($resultado['monto_factura'], 2);
+      $monto_devolucion = number_format($resultado['monto_devolucion'], 2);
+      $diferencia_monto = number_format($resultado['monto_factura']-$resultado['monto_devolucion'], 2);
+      $cantidad_factura = intval($resultado['cantidad_factura']);
+      $cantidad_devolucion = intval($resultado['cantidad_devolucion']);
       $diferencia_cantidad = $cantidad_factura-$cantidad_devolucion;
 
 
@@ -764,6 +861,18 @@
       $contador++;
     }
 
+    $total_monto_factura = number_format($total_monto_factura, 2);
+    $total_monto_devolucion = number_format($total_monto_devolucion, 2);
+    $total_diferencia_monto = number_format($total_diferencia_monto, 2);
+
+    echo '<tr>';
+    echo '<th class="text-center" colspan="2"></th>';
+    echo '<th class="text-center">'.$total_monto_factura.'</th>';
+    echo '<th class="text-center">'.$total_monto_devolucion.'</th>';
+    echo '<th class="text-center">'.$total_diferencia_monto.'</th>';
+    echo '<th class="text-center" colspan="6"></th>';
+    echo '</tr>';
+
     echo '
       </tbody>
     </table>';
@@ -790,7 +899,6 @@
         VenFactura
           LEFT JOIN VenCaja ON VenCaja.Id = VenFactura.VenCajaId
       WHERE
-        VenFactura.Id NOT IN (SELECT VenDevolucion.VenFacturaId FROM VenDevolucion) AND
         $where
         VenFactura.Auditoria_Usuario = '$usuario'
       GROUP BY
@@ -843,6 +951,6 @@
       $resultado = $resultado - ($monto * ($comision / 100));
     }
 
-    return number_format($resultado, 2);
+    return $resultado;
   }
 ?>
