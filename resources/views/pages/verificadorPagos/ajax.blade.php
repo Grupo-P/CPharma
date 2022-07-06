@@ -1,6 +1,11 @@
 @php
     header('Access-Control-Allow-Origin: *');
 
+    include(app_path().'\functions\config.php');
+    include(app_path().'\functions\functions.php');
+    include(app_path().'\functions\querys_mysql.php');
+    include(app_path().'\functions\querys_sqlserver.php');
+
     try {
         $error = 0;
 
@@ -160,6 +165,10 @@
             $fecha->modify('-4hour');
             $fecha = $fecha->format('d/m/Y h:i A');
 
+            $fechaSinFormato = new DateTime($header->date);
+            $fechaSinFormato->modify('-4hour');
+            $fechaSinFormato = $fechaSinFormato->format('Y-m-d H:i:s');
+
             $arrayFecha = explode(' ', $fecha);
 
             if ($arrayFecha[0] != date_format(date_create(request()->fecha), 'd/m/Y')) {
@@ -201,7 +210,7 @@
                     $pagos[$i]['fecha'] = $fecha;
                     $pagos[$i]['fechaSinFormato'] = $fechaSinFormato;
                     $pagos[$i]['comentario'] = $comentario;
-                    $pagos[$i]['hash'] = rand(100, 999) . substr($arrayAsunto[0], 0, 1) . rand(100, 999) . $decimales;
+                    $pagos[$i]['hash'] = rand(100, 999) . substr($enviadoPor, 0, 1) . rand(100, 999) . $decimales;
 
                     $i++;
                 }
@@ -266,6 +275,22 @@
     catch (Exception $excepcion) {
         $error = 1;
     }
+
+    $RutaUrl = FG_Mi_Ubicacion();
+    $SedeConnection = $RutaUrl;
+    $conn = FG_Conectar_Smartpharma($SedeConnection);
+
+    $estacion_trabajo = gethostbyaddr($_SERVER['REMOTE_ADDR']);
+
+    $query = sqlsrv_query($conn, "SELECT * FROM VenCaja WHERE EstacionTrabajo = '$estacion_trabajo'");
+
+    $caja = '';
+
+    while ($row = sqlsrv_fetch_array($query, SQLSRV_FETCH_ASSOC)) {
+        $caja = $row['CodigoCaja'];
+    }
+
+    $sede = FG_Nombre_Sede(FG_Mi_Ubicacion());
 @endphp
 
 <table class="table table-bordered table-striped">
@@ -290,7 +315,7 @@
         @if($error == 0)
             @if(count($pagos))
                 @foreach($pagos as $pago)
-                    <tr class="tr-item" onclick="mostrar_modal('{{ trim($pago['tipo']) }}', '{{ trim($pago['enviado_por']) }}', '{{ trim($pago['monto']) }}', '{{ trim($pago['comentario']) }}', '{{ trim($pago['fecha']) }}', '{{ trim($pago['hash']) }}')">
+                    <tr class="tr-item" onclick="mostrar_modal('{{ trim($pago['tipo']) }}', '{{ trim($pago['enviado_por']) }}', '{{ trim($pago['monto']) }}', '{{ trim($pago['comentario']) }}', '{{ trim($pago['fecha']) }}', '{{ trim($pago['hash']) }}', '{{ trim($caja) }}', '{{ trim($sede) }}')">
                         <td class="text-center">{{ $contador++ }}</td>
                         <td class="text-center">{{ $pago['tipo'] }}</td>
                         <td class="text-center">{{ $pago['enviado_por'] }}</td>
@@ -333,7 +358,7 @@
 </style>
 
 <script>
-    function mostrar_modal(tipo, enviado_por, monto, comentario, fecha, hash) {
+    function mostrar_modal(tipo, enviado_por, monto, comentario, fecha, hash, caja, sede) {
         html = '<img src="/assets/img/icono.png">';
         html = html + '<p>Tipo: '+tipo+'</p>';
         html = html + '<p>Enviado por: '+enviado_por+'</p>';
@@ -341,6 +366,9 @@
         html = html + '<p>Comentario: '+comentario+'</p>';
         html = html + '<p>Fecha: '+fecha+'</p>';
         html = html + '<p>Hash: '+hash+'</p>';
+        html = html + '<p>Caja: '+caja+'</p>';
+        html = html + '<p>Sede: '+sede+'</p>';
+        html = html + '<p><b>NOTA:</b> El hash mostrado es un código de seguridad del CPharma y no corresponde al código de confirmación de la transferencia bancaria.</p>';
 
         $('#ver-pago-modal').find('.modal-body').html(html);
         $('#ver-pago-modal').modal('show');
