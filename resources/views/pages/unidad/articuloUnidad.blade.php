@@ -53,111 +53,126 @@
 @section('content')
 	<h1 class="h5 text-info">
 		<i class="fas fa-less-than-equal"></i>
-    Unidad minima de expresion
+        Unidad minima de expresion
 	</h1>
+
 	<hr class="row align-items-start col-12">
-  <?php
-  	include(app_path().'\functions\config.php');
-    include(app_path().'\functions\functions.php');
-    include(app_path().'\functions\querys_mysql.php');
-    include(app_path().'\functions\querys_sqlserver.php');
 
-    $ArtJson = "";
-    $CodJson = "";
+    <?php
+    	include(app_path().'\functions\config.php');
+        include(app_path().'\functions\functions.php');
+        include(app_path().'\functions\querys_mysql.php');
+        include(app_path().'\functions\querys_sqlserver.php');
 
-    $_GET['SEDE'] = FG_Mi_Ubicacion();
-    
-    $sql = R2Q_Lista_Articulos();
-    $ArtJson = FG_Armar_Json($sql,$_GET['SEDE']);
+        $sede = FG_Mi_Ubicacion();
+        $conn = FG_Conectar_Smartpharma($sede);
 
-    $sql1 = R2Q_Lista_Articulos_CodBarra();
-    $CodJson = FG_Armar_Json($sql1,$_GET['SEDE']);
+        $sql = "
+            SELECT
+                --Id Articulo
+                InvArticulo.Id AS Id,
+                --Codigo Interno
+                InvArticulo.CodigoArticulo AS CodigoInterno,
+                --Codigo de Barra
+                (SELECT CodigoBarra
+                FROM InvCodigoBarra
+                WHERE InvCodigoBarra.InvArticuloId = InvArticulo.Id
+                AND InvCodigoBarra.EsPrincipal = 1) AS CodigoBarra,
+                --Descripcion
+                InvArticulo.Descripcion,
+                --Existencia (Segun el almacen del filtro)
+                (ROUND(CAST((SELECT SUM (InvLoteAlmacen.Existencia) As Existencia
+                            FROM InvLoteAlmacen
+                            WHERE(InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
+                            AND (InvLoteAlmacen.InvArticuloId = InvArticulo.Id)) AS DECIMAL(38,0)),2,0))  AS Existencia
+                --Tabla principal
+            FROM InvArticulo
+                --Joins
+                LEFT JOIN InvLoteAlmacen ON InvLoteAlmacen.InvArticuloId = InvArticulo.Id
+                LEFT JOIN InvArticuloAtributo ON InvArticuloAtributo.InvArticuloId = InvArticulo.Id
+                LEFT JOIN InvAtributo ON InvAtributo.Id = InvArticuloAtributo.InvAtributoId
+                LEFT JOIN InvMarca ON InvMarca.Id = InvArticulo.InvMarcaId
+                --Condicionales
+            WHERE
+                (ROUND(CAST((SELECT SUM (InvLoteAlmacen.Existencia) As Existencia
+                        FROM InvLoteAlmacen
+                        WHERE(InvLoteAlmacen.InvAlmacenId = 1 OR InvLoteAlmacen.InvAlmacenId = 2)
+                        AND (InvLoteAlmacen.InvArticuloId = InvArticulo.Id)) AS DECIMAL(38,0)),2,0)) > 0
+            --Agrupamientos
+            GROUP BY InvArticulo.Id, InvArticulo.CodigoArticulo, InvArticulo.Descripcion
+            --Ordanamiento
+            ORDER BY InvArticulo.Id ASC
+        ";
 
-		echo '
-		<form autocomplete="off" action="/unidad/create" target="">
-	    <div class="autocomplete" style="width:90%;">
-        <input id="myInput" type="text" name="Descrip" placeholder="Ingrese el nombre del articulo " onkeyup="conteo()">
-	      <input id="myId" name="Id" type="hidden">
-	    </div>
-      <input id="SEDE" name="SEDE" type="hidden" value="';
-        print_r($_GET['SEDE']);
-        echo'">
-	    <input type="submit" value="Buscar" class="btn btn-outline-success">
-    </form>
-    <br/>
-    <form autocomplete="off" action="/unidad/create" target="_blank">
-      <div class="autocomplete" style="width:90%;">
-        <input id="myInputCB" type="text" name="CodBar" placeholder="Ingrese el codigo de barra del articulo " onkeyup="conteoCB()">
-        <input id="myIdCB" name="Id" type="hidden">
-      </div>
-      <input id="SEDE" name="SEDE" type="hidden" value="';
-        print_r($_GET['SEDE']);
-        echo'">
-      <input type="submit" value="Buscar" class="btn btn-outline-success">
-  	</form>
-  	';  	
-  ?>
+        $query = sqlsrv_query($conn, $sql);
+
+        echo '<table style="width:100%;" class="CP-stickyBar">
+                    <tr>
+                        <td style="width:100%;">
+                            <div class="input-group md-form form-sm form-1 pl-0 CP-stickyBar">
+                              <div class="input-group-prepend">
+                                <span class="input-group-text purple lighten-3" id="basic-text1"><i class="fas fa-search text-white"
+                                    aria-hidden="true"></i></span>
+                              </div>
+                              <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterAllTable()" autofocus="autofocus">
+                            </div>
+                        </td>
+                    </tr>
+                </table>';
+
+        echo '<table class="mt-2 table table-striped table-borderless col-12 sortable" id="myTable">';
+        echo '<thead class="thead-dark">';
+        echo '<tr>';
+        echo '<th scope="col" class="CP-sticky">#</th>';
+        echo '<th scope="col" class="CP-sticky">Codigo interno</th>';
+        echo '<th scope="col" class="CP-sticky">Codigo barra</th>';
+        echo '<th scope="col" class="CP-sticky">Descripcion</th>';
+        echo '<th scope="col" class="CP-sticky">Acciones</th>';
+        echo '</tr>';
+        echo '</thead>';
+        echo '<tbody>';
+
+        $contador = 0;
+
+        while ($row = sqlsrv_fetch_array($query, SQLSRV_FETCH_ASSOC)) {
+            if ($contador >= 51) {
+                break;
+            }
+
+            $codigo_interno = $row['CodigoInterno'];
+            $codigo_barra = $row['CodigoBarra'];
+            $descripcion = FG_Limpiar_Texto($row['Descripcion']);
+            $id = $row['Id'];
+
+            $unidad = compras\Unidad::where('codigo_barra', $codigo_barra)->get();
+
+            if ($unidad->count()) {
+                continue;
+            }
+
+            $etiqueta = compras\Etiqueta::where('codigo_articulo', $codigo_interno)
+                ->where('clasificacion', 'ETIQUETABLE')
+                ->orWhere('clasificacion', 'OBLIGATORIO ETIQUETABLE')
+                ->get();
+
+            if (!$etiqueta->count()) {
+                continue;
+            }
+
+            $link = '/unidad/create?Descrip='.$descripcion.'&Id='.$id.'&SEDE='.$sede;
+
+            echo '<tr>';
+            echo '<td class="text-center" scope="col">'.$contador.'</td>';
+            echo '<td class="text-center" scope="col">'.$codigo_interno.'</td>';
+            echo '<td class="text-center" scope="col">'.$codigo_barra.'</td>';
+            echo '<td class="text-center" scope="col">'.$descripcion.'</td>';
+            echo '<td class="text-center" scope="col"><a href="'.$link.'" class="btn btn-outline-success">Seleccionar</a></td>';
+            echo '</tr>';
+
+            $contador++;
+        }
+
+        echo '</tbody>';
+        echo '</table>';
+    ?>
 @endsection
-
-@section('scriptsFoot')
-  <?php
-    if($ArtJson!=""){
-  ?>
-    <script type="text/javascript">
-      ArrJs = eval(<?php echo $ArtJson ?>);
-      autocompletado(document.getElementById("myInput"),document.getElementById("myId"), ArrJs);
-    </script>
-  <?php
-    }
-  ?>
-  <?php
-    if($CodJson!=""){
-  ?>
-    <script type="text/javascript">
-      ArrJsCB = eval(<?php echo $CodJson ?>);
-      autocompletadoCB(document.getElementById("myInputCB"),document.getElementById("myIdCB"), ArrJsCB);
-    </script>
-  <?php
-    }
-  ?>
-@endsection
-
-<?php
-  /**********************************************************************************/
-  /*
-    TITULO: R2Q_Lista_Articulos
-    FUNCION: Armar una lista de articulos con descripcion e id
-    RETORNO: Lista de articulos con descripcion e id
-    DESAROLLADO POR: SERGIO COVA
-  */
-  function R2Q_Lista_Articulos() {
-    $sql = "
-      SELECT
-      InvArticulo.Descripcion,
-      InvArticulo.Id
-      FROM InvArticulo
-      ORDER BY InvArticulo.Descripcion ASC
-    ";
-    return $sql;
-  }
-  /**********************************************************************************/
-  /*
-    TITULO: R2Q_Lista_Articulos_CodBarra
-    FUNCION: Armar una lista de articulos con descripcion e id
-    RETORNO: Lista de articulos con descripcion e id
-    DESAROLLADO POR: SERGIO COVA
-  */
-  function R2Q_Lista_Articulos_CodBarra() {
-    $sql = "
-      SELECT
-      (SELECT CodigoBarra
-      FROM InvCodigoBarra
-      WHERE InvCodigoBarra.InvArticuloId = InvArticulo.Id
-      AND InvCodigoBarra.EsPrincipal = 1) AS CodigoBarra,
-      InvArticulo.Id
-      FROM InvArticulo
-      ORDER BY CodigoBarra ASC
-    ";
-    return $sql;
-  }
-?>
