@@ -97,7 +97,9 @@ class UnidadController extends Controller
             $Auditoria->user = auth()->user()->name;
             $Auditoria->save();
 
-            return redirect()->route('unidad.index')->with('Saved', ' Informacion');
+            return redirect()->route('articuloUnidad')
+                ->with('Saved', ' Informacion')
+                ->with('unidad', $unidad);
         }
         catch(\Illuminate\Database\QueryException $e){        
             return back()->with('Error', ' Error');                       

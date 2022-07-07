@@ -58,6 +58,20 @@
 
 	<hr class="row align-items-start col-12">
 
+    @if(session('unidad'))
+        <div class="alert alert-success">
+            <h5>¡Unidad mínima creada!</h5>
+
+            <ul>
+                <li>Código interno: {{ session('unidad')->codigo_interno }}</li>
+                <li>Código barra: {{ session('unidad')->codigo_barra }}</li>
+                <li>Descripción: {{ session('unidad')->articulo }}</li>
+                <li>Divisor: {{ session('unidad')->divisor }}</li>
+                <li>Unidad mínima: {{ session('unidad')->unidad_minima }}</li>
+            </ul>
+        </div>
+    @endif
+
     <?php
     	include(app_path().'\functions\config.php');
         include(app_path().'\functions\functions.php');
@@ -132,7 +146,7 @@
         echo '</thead>';
         echo '<tbody>';
 
-        $contador = 0;
+        $contador = 1;
 
         while ($row = sqlsrv_fetch_array($query, SQLSRV_FETCH_ASSOC)) {
             if ($contador >= 51) {
