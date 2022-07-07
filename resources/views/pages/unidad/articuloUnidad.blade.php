@@ -141,12 +141,15 @@
         echo '<th scope="col" class="CP-sticky">Codigo interno</th>';
         echo '<th scope="col" class="CP-sticky">Codigo barra</th>';
         echo '<th scope="col" class="CP-sticky">Descripcion</th>';
-        echo '<th scope="col" class="CP-sticky">Acciones</th>';
+        echo '<th scope="col" class="CP-sticky">Divisor</th>';
+        echo '<th scope="col" class="CP-sticky">Unidad</th>';
         echo '</tr>';
         echo '</thead>';
         echo '<tbody>';
+        echo '<form method="POST" action="/unidad">';
 
         $contador = 1;
+        $i = 0;
 
         while ($row = sqlsrv_fetch_array($query, SQLSRV_FETCH_ASSOC)) {
             if ($contador >= 51) {
@@ -173,19 +176,48 @@
                 continue;
             }
 
-            $link = '/unidad/create?Descrip='.$descripcion.'&Id='.$id.'&SEDE='.$sede;
-
             echo '<tr>';
+
             echo '<td class="text-center" scope="col">'.$contador.'</td>';
             echo '<td class="text-center" scope="col">'.$codigo_interno.'</td>';
             echo '<td class="text-center" scope="col">'.$codigo_barra.'</td>';
             echo '<td class="text-center" scope="col">'.$descripcion.'</td>';
-            echo '<td class="text-center" scope="col"><a href="'.$link.'" class="btn btn-outline-success">Seleccionar</a></td>';
+
+            echo '<td class="text-center" scope="col"><input class="form-control" name="unidades['.$i.'][divisor]"></td>';
+
+            echo '<td class="text-center" scope="col">';
+            echo '<select class="form-control" name="unidades['.$i.'][unidad_minima]">';
+            echo '<option value="">Seleccione...</option>';
+            echo '<option value="METROS (M)">METROS (M)</option>';
+            echo '<option value="MILILITROS (ML)">MILILITROS (ML)</option>';
+            echo '<option value="MILIGRAMOS (MG)">MILIGRAMOS (MG)</option>';
+            echo '<option value="GRAMOS (G)">GRAMOS (G)</option>';
+            echo '<option value="KILOGRAMOS (KG)">KILOGRAMOS (KG)</option>';
+            echo '<option value="CAPSULA">CAPSULA</option>';
+            echo '<option value="TABLETA">TABLETA</option>';
+            echo '<option value="UNIDAD">UNIDAD</option>';
+            echo '</select>';
+            echo '</td>';
+
+            echo '<input type="hidden" name="unidades['.$i.'][id_articulo]" value="'.$id.'">';
+            echo '<input type="hidden" name="unidades['.$i.'][codigo_interno]" value="'.$codigo_interno.'">';
+            echo '<input type="hidden" name="unidades['.$i.'][codigo_barra]" value="'.$codigo_barra.'">';
+            echo '<input type="hidden" name="unidades['.$i.'][articulo]" value="'.$descripcion.'">';
+            echo '<input type="hidden" name="_token" value="'.csrf_token().'">';
+
             echo '</tr>';
 
             $contador++;
+            $i++;
         }
 
+        echo '<tr>';
+        echo '<td class="text-center" colspan="6">';
+        echo '<button type="submit" class="btn btn-outline-success">Guardar</button>';
+        echo '</td>';
+        echo '</tr>';
+
+        echo '</form>';
         echo '</tbody>';
         echo '</table>';
     ?>

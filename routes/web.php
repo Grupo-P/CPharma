@@ -286,6 +286,10 @@ Route::get('/Generar_Etiquetas', function() {
     return view('pages.etiqueta.Generar_Etiquetas');
 });
 
+Route::get('/Generar_Etiquetas_Estrella', function() {
+    return view('pages.etiqueta.Generar_Etiquetas_Estrella');
+});
+
 Route::get('/Generar_Etiquetas_Todo', function() {
     return view('pages.etiqueta.Generar_Etiquetas_Todo');
 });
@@ -407,7 +411,7 @@ Route::resource('unidad', 'UnidadController');
 
 Route::get('articuloUnidad', function() {
     return view('pages.unidad.articuloUnidad');
-});
+})->name('articuloUnidad');
 
 Route::resource('inventario', 'InventarioController');
 

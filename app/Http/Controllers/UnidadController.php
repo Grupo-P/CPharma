@@ -72,34 +72,36 @@ class UnidadController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {        
+    {
+        $unidades = array_filter($request->unidades, function ($item) {
+            if ($item['divisor'] != '' && $item['unidad_minima'] != '') {
+                return true;
+            }
+        });
+
         try{
-            $unidad = new Unidad();
-            $unidad->id_articulo = $request->input('id_articulo');
-            $unidad->codigo_interno= $request->input('codigo_interno');
-            $unidad->codigo_barra = $request->input('codigo_barra');
-            $unidad->divisor = $request->input('divisor');
-            $unidad->unidad_minima = $request->input('unidad_minima');
-            $unidad->articulo = $request->input('articulo');
-            $unidad->estatus = 'ACTIVO';
-            $unidad->user = auth()->user()->name;
-            
-            if($unidad->unidad_minima!="Seleccione..."){
+            foreach ($unidades as $item) {
+                $unidad = new Unidad();
+                $unidad->id_articulo = $item['id_articulo'];
+                $unidad->codigo_interno= $item['codigo_interno'];
+                $unidad->codigo_barra = $item['codigo_barra'];
+                $unidad->divisor = $item['divisor'];
+                $unidad->unidad_minima = $item['unidad_minima'];
+                $unidad->articulo = $item['articulo'];
+                $unidad->estatus = 'ACTIVO';
+                $unidad->user = auth()->user()->name;
                 $unidad->save();
-            }else{
-                return back()->with('Error Unidad', ' Error Unidad');
-            }            
 
-            $Auditoria = new Auditoria();
-            $Auditoria->accion = 'CREAR';
-            $Auditoria->tabla = 'UNIDAD MINIMA';
-            $Auditoria->registro = $request->input('articulo');
-            $Auditoria->user = auth()->user()->name;
-            $Auditoria->save();
+                $Auditoria = new Auditoria();
+                $Auditoria->accion = 'CREAR';
+                $Auditoria->tabla = 'UNIDAD MINIMA';
+                $Auditoria->registro = $item['articulo'];
+                $Auditoria->user = auth()->user()->name;
+                $Auditoria->save();
+            }
 
-            return redirect()->route('articuloUnidad')
-                ->with('Saved', ' Informacion')
-                ->with('unidad', $unidad);
+            return redirect()->route('unidad.index')
+                ->with('Saved', ' Informacion');
         }
         catch(\Illuminate\Database\QueryException $e){        
             return back()->with('Error', ' Error');                       
