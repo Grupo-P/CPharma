@@ -71,8 +71,7 @@ class TrasladoController extends Controller
             ->whereDate('created_at', $hoy)
             ->count();
 
-        $embaladosHoy = Traslado::where('estatus', 'EMBALADO')
-            ->whereDate('created_at', $hoy)
+        $embaladosHoy = Traslado::where('fecha_embalaje', $hoy)
             ->count();
 
         $entregadosHoy = Traslado::where('estatus', 'ENTREGADO')
@@ -83,8 +82,7 @@ class TrasladoController extends Controller
             ->whereDate('created_at', $ayer)
             ->count();
 
-        $embaladosAyer = Traslado::where('estatus', 'EMBALADO')
-            ->whereDate('created_at', $ayer)
+        $embaladosAyer = Traslado::where('fecha_embalaje', $ayer)
             ->count();
 
         $entregadosAyer = Traslado::where('estatus', 'ENTREGADO')
