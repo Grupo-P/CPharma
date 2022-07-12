@@ -154,8 +154,6 @@
         $search = imap_search($conn, 'SINCE "'.$fecha.'"');
         $search = is_iterable($search) ? $search : [];
 
-        $i = 0;
-
         foreach ($search as $email) {
             $overview = imap_fetch_overview($conn, $email);
 
