@@ -1013,7 +1013,7 @@
       AND (
         (InvMovimiento.InvCausaId=1) OR (InvMovimiento.InvCausaId=2) OR (InvMovimiento.InvCausaId=3) OR (InvMovimiento.InvCausaId=4)
         OR (InvMovimiento.InvCausaId=5) OR (InvMovimiento.InvCausaId=6) OR (InvMovimiento.InvCausaId=11) OR (InvMovimiento.InvCausaId=12)
-        OR (InvMovimiento.InvCausaId=14) OR (InvMovimiento.InvCausaId=15) OR (InvMovimiento.InvCausaId=16) OR (InvMovimiento.InvCausaId=27) OR (InvMovimiento.InvCausaId=(select InvCausa.Id from InvCausa where InvCausa.Descripcion = 'Traslado'))
+        OR (InvMovimiento.InvCausaId=14) OR (InvMovimiento.InvCausaId=15) OR (InvMovimiento.InvCausaId=16) OR (InvMovimiento.InvCausaId=27) OR (InvMovimiento.InvCausaId=(select InvCausa.Id from InvCausa where InvCausa.Descripcion = 'Traslado')) OR (InvMovimiento.InvCausaId=28)
       )
       GROUP BY InvCausa.id,InvCausa.Descripcion,InvCausa.EsPositiva
       ORDER BY InvCausa.id asc
