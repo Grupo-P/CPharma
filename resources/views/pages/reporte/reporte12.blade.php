@@ -577,7 +577,6 @@
 
             echo '<td align="center">'.$row3['Operador'].'</td>';
             echo '<td align="center">-</td>';
-            echo '<td align="center">-</td>';
             echo '<td align="center">'.number_format( ($row['PrecioBruto']*$row3['Cantidad']) ,2,"," ,"." ).'</td>';
             echo '<td align="center">'.number_format($row['PrecioBruto'],2,"," ,"." ).'</td>';
 

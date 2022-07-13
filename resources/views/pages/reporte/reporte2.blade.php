@@ -788,13 +788,13 @@
             <th scope="col" class="factura CP-sticky">N° Factura</th>
             <th scope="col" class="fecha_documento CP-sticky">Fecha de documento</th>
             <th scope="col" class="fecha_registro CP-sticky">Fecha de registro</th>
-            <th scope="col" class="dias_llegada CP-sticky  text-dark">Días llegada</th>
+            <th scope="col" class="dias_llegada CP-sticky">Días llegada</th>
             <th scope="col" class="fecha_vencimiento CP-sticky">Fecha de vencimiento</th>
-            <th scope="col" class="lote_fabricante CP-sticky  text-dark">Lote fabriante</th>
+            <th scope="col" class="lote_fabricante CP-sticky">Lote fabriante</th>
             <th scope="col" class="vida_util CP-sticky">Vida util<br>(Dias)</th>
             <th scope="col" class="dias_vencer CP-sticky">Dias para vencer<br>(Dias)</th>
             <th scope="col" class="cantidad_recibida CP-sticky">Cantidad recibida</th>
-            <th scope="col" class="saldo CP-sticky  text-dark">Saldo</th>
+            <th scope="col" class="saldo CP-sticky">Saldo</th>
             <th scope="col" class="costo_bruto CP-sticky">Costo bruto</br>(Sin IVA) '.SigVe.'</th>
             <th scope="col" class="tasa_historico_documento CP-sticky">Tasa en historico '.SigVe.'</br>(fecha documento)</th>
             <th scope="col" class="tasa_historico_registro CP-sticky">Tasa en historico '.SigVe.'</br>(fecha registro)</th>
