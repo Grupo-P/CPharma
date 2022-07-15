@@ -183,8 +183,8 @@
       <thead class="center">
         <th class="bg-info text-white border border-white"><h5>Código de barra</h5></th>
         <th class="bg-info text-white border border-white"><h5>Descripción</h5></th>
-        <th class="bg-info text-white border border-white"><h5><?php echo SigDolarPublico; ?></h5></th>
         <th class="bg-info text-white border border-white"><h5>Bs</h5></th>
+        <th class="bg-info text-white border border-white"><h5><?php echo SigDolarPublico; ?></h5></th>
       </thead>
       <tbody id="bodySugerido"></tbody>
     </table>
@@ -385,7 +385,7 @@
               nuevaFila += '</div>';
 
               nuevaFila += '<div class="carousel-caption d-none d-md-block h-25 w-100" style="right: 0; left: 0; background-color:rgba(0, 0, 0,0.6)">';
-              nuevaFila += '<h2 class="text-white">Bs. '+precioDigital+' / <?php echo SigDolarPublico; ?>' + precioDolar + '</h2>';
+              nuevaFila += '<h2 class="text-white">Bs. '+precioDigital+' / <?php echo SigDolarPublico; ?>. ' + precioDolar + '</h2>';
               nuevaFila += '<h4 class="text-white">'+descripcion+'</h4>';
               nuevaFila += '</div>';
               nuevaFila += '</div>';
@@ -555,10 +555,10 @@
                   nuevaFila += '</td>';
                   /*Armado Fila PPrecioSug*/
                   nuevaFila += '<td align="center" class="text-black">';
-                  nuevaFila += '<h4><b><p><?php echo SigDolarPublico; ?> '+precioE+'</p></b></h4>';
+                  nuevaFila += '<h4><b><p>Bs. '+precioDigital+'</p></b></h4>';
                   nuevaFila += '</td>';
                   nuevaFila += '<td align="center" class="text-black">';
-                  nuevaFila += '<h4><b><p>Bs. '+precioDigital+'</p></b></h4>';
+                  nuevaFila += '<h4><b><p><?php echo SigDolarPublico; ?> '+precioE+'</p></b></h4>';
                   nuevaFila += '</td>';
                   nuevaFila += '</tr>';
                   /*Ingreso de la fila a la tabla*/
