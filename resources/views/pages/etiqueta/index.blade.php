@@ -519,6 +519,13 @@
 						    <button type="submit" name="Generar" role="button" class="btn btn-outline-info btn-sm" value="SI">Etiquetables (NO $)</button>
 							</form>
 			      </td>
+
+                  <td style="width:16%;" align="center">
+                            <form action="{{ url('/Generar_Etiquetas_Estrella') }}" style="display: inline;" target="_blank">
+
+                            <button type="submit" role="button" class="btn btn-outline-info btn-sm">Artículos estrella</button>
+                            </form>
+                  </td>
 					</tr>
 				</tbody>
 			</table>
@@ -576,6 +583,13 @@
 						    <button type="submit" name="Generar" role="button" class="btn btn-outline-info btn-sm" value="SI">Etiquetables (NO $)</button>
 							</form>
 			      </td>
+
+                  {{-- <td style="width:16%;" align="center">
+                        <form action="{{ url('/Generar_Etiquetas_Estrella_G') }}" style="display: inline;" target="_blank">
+
+                            <button type="submit" role="button" class="btn btn-outline-info btn-sm">Artículos estrella</button>
+                        </form>
+                  </td> --}}
 					</tr>
 				</tbody>
 			</table>

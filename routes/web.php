@@ -290,6 +290,10 @@ Route::get('/Generar_Etiquetas_Estrella', function() {
     return view('pages.etiqueta.Generar_Etiquetas_Estrella');
 });
 
+Route::get('/Generar_Etiquetas_Estrella_G', function() {
+    return view('pages.etiqueta.Generar_Etiquetas_Estrella_G');
+});
+
 Route::get('/Generar_Etiquetas_Todo', function() {
     return view('pages.etiqueta.Generar_Etiquetas_Todo');
 });
