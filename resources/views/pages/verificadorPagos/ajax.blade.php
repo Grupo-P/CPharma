@@ -244,7 +244,7 @@
                     $pagos[$i]['fecha'] = $fecha;
                     $pagos[$i]['fechaSinFormato'] = $fechaSinFormato;
                     $pagos[$i]['comentario'] = $comentario;
-                    $pagos[$i]['hash'] = rand(100, 999) . substr($arrayAsunto[0], 0, 1) . rand(100, 999) . $decimales;
+                    $pagos[$i]['hash'] = rand(100, 999) . substr($enviadoPor[0], 0, 1) . rand(100, 999) . $decimales;
 
                     $i++;
                 }
