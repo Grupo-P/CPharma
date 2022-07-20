@@ -83,7 +83,7 @@
         $PrecioDolares = ($TasaVenta)?number_format($Precio/$TasaVenta,2,"," ,"." ):"0,00";
 
       	$tableResponse = $tableResponse. '<tr>';
-        $tableResponse = $tableResponse. '<td>'.intval($CodigoArticulo).'</td>';
+        $tableResponse = $tableResponse. '<td>'.$CodigoArticulo.'</td>';
 	      $tableResponse = $tableResponse. '<td>'.$CodigoBarra.'</td>';
 	      $tableResponse = $tableResponse.
 	      '<td align="left" class="CP-barrido">
