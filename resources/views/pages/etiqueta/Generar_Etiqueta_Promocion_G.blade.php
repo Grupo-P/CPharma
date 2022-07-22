@@ -247,7 +247,73 @@
     const clasificacion = '<?php echo $clasificacion;?>'
     var FrasePromo = '';
     var contador = 0;
+
+      @if(isset($_GET['CodigoBarra']))
+        $(document).ready(function () {
+            $('#inputCodBar').val({{ $_GET['CodigoBarra'] }});
+
+            $("#MsnError").html('');
+
+        var CodBarrScan = $('#inputCodBar').val();
+        var indiceCodBarScan = ArrJsCB.indexOf(CodBarrScan);
+        var indiceIdScan = indiceCodBarScan+1;
+
+        var indiceIdScanDesc = ArrJs.indexOf(ArrJsCB[indiceIdScan]);
+        var indiceScanDesc = indiceIdScanDesc-1;
+
+        $('#inputCodBar').val('');
+
+        if( (indiceCodBarScan>0) && (indiceScanDesc)>0 ) {
+
+          var parametro = {
+            "IdArticulo":ArrJsCB[indiceIdScan],
+            "tipo":tipo,
+            "clasificacion":clasificacion
+          };
+
+          //Incio Armado tablaResuldado
+          $.ajax({
+            data: parametro,
+            url: URLEtiquetaUnica,
+            type: "POST",
+            success: function(data) {
+              var respuesta = data;
+              var letras = respuesta.substr(0,2);
+
+              if(letras=='EL'){
+                $("#MsnError").html(respuesta);
+              }
+              else{
+
+                var nuevoDiv = '<div class="divPromo">';
+                nuevoDiv += '<p class="MensajePromo"><strong>'+FrasePromo+'</strong></p>';
+                nuevoDiv += respuesta
+                nuevoDiv += '</div>';
+                    var contenedor = $("#DivEtiquetas").html();
+                                $("#DivEtiquetas").html(contenedor+nuevoDiv+'<br>');
+
+                if(contador==1){
+                  var contenedor = $("#DivEtiquetas").html();
+                  var nuevoDiv = '<div class="saltoDePagina"></div>';
+                  $("#DivEtiquetas").html(contenedor+nuevoDiv);
+                  contador=0;
+                }
+                else{
+                  contador++;
+                }
+              }
+            }
+           });
+          //Fin Armado tablaResuldado
+        }
+        else {
+          $("#MsnError").html('NO SE ENCONTRARON RESULTADOS');
+        }
+        });
+      @endif
+
   </script>
+
 
   <script>
     /************************************************************************/

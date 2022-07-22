@@ -584,12 +584,12 @@
 							</form>
 			      </td>
 
-                  {{-- <td style="width:16%;" align="center">
+                  <td style="width:16%;" align="center">
                         <form action="{{ url('/Generar_Etiquetas_Estrella_G') }}" style="display: inline;" target="_blank">
 
                             <button type="submit" role="button" class="btn btn-outline-info btn-sm">Artículos estrella</button>
                         </form>
-                  </td> --}}
+                  </td>
 					</tr>
 				</tbody>
 			</table>
