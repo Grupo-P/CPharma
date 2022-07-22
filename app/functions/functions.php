@@ -2965,6 +2965,8 @@
         $FManana = date("Y-m-d",strtotime($FHoy."+1 days"));
         $FAyer = date("Y-m-d",strtotime($FHoy."-1 days"));
 
+        $listado = [];
+
         if($dia=='HOY'){
             $FechaCambio = $FHoy;
 
@@ -3019,6 +3021,7 @@
                         if($flag==true){
                             $CuentaCard++;
                             $CuentaEtiqueta++;
+                            $listado[] = $IdArticulo;
                         }
                     }
                     else if(($Dolarizado=='NO')&&($tipo!='DOLARIZADO')){
@@ -3026,6 +3029,7 @@
                         if($flag==true){
                             $CuentaCard++;
                             $CuentaEtiqueta++;
+                            $listado[] = $IdArticulo;
                         }
                     }
                     else if($tipo=='TODO'){
@@ -3033,6 +3037,7 @@
                         if($flag==true){
                             $CuentaCard++;
                             $CuentaEtiqueta++;
+                            $listado[] = $IdArticulo;
                         }
                     }
 
@@ -3052,7 +3057,9 @@
             $result = $connCPharma->query("SELECT * FROM etiquetas WHERE clasificacion = '$clasificacion'");
 
             while($row = $result->fetch_assoc()){
+
                 $IdArticulo = $row['id_articulo'];
+
 
                 foreach ($ArrayUnique as $Array) {
                     if (in_array($IdArticulo,$Array)) {
@@ -3063,6 +3070,7 @@
                             if($flag==true){
                                 $CuentaCard++;
                                 $CuentaEtiqueta++;
+                                $listado[] = $IdArticulo;
                             }
                         }
                         else if(($Dolarizado=='NO')&&($tipo!='DOLARIZADO')){
@@ -3070,6 +3078,7 @@
                             if($flag==true){
                                 $CuentaCard++;
                                 $CuentaEtiqueta++;
+                                $listado[] = $IdArticulo;
                             }
                         }
                         else if($tipo=='TODO'){
@@ -3077,6 +3086,7 @@
                             if($flag==true){
                                 $CuentaCard++;
                                 $CuentaEtiqueta++;
+                                $listado[] = $IdArticulo;
                             }
                         }
 
@@ -3088,6 +3098,9 @@
                 }
             }
         }
+
+        FG_Listado_Final_Etiquetas($clasificacion, $tipo, $dia, $listado);
+
         echo "<br/><br/>Se imprimiran ".$CuentaEtiqueta." etiquetas<br/>";
         echo 'Cuenta CPharma: '.$CuentaCPharma.'<br>';
         echo 'Cuenta Smart: '.$CuentaSmart.'<br>';
@@ -4786,5 +4799,56 @@
     if ($sede == 'FSM') {
         return 4;
     }
+  }
+
+  /**
+   * Genera una tabla con la información de todas las etiquetas generadas
+   * Autor: Nisa Delgado
+   */
+  function FG_Listado_Final_Etiquetas($clasificacion, $tipo, $dia, $listado)
+  {
+    echo '<div class="saltoDePagina"></div>';
+
+    echo '<div class="list-group">';
+
+    echo '<div class="list-group-item">';
+    echo '<div class="row">';
+    echo '<div class="col font-weight-bold">Código de barra</div>';
+    echo '<div class="col font-weight-bold">Artículo</div>';
+    echo '<div class="col font-weight-bold">Precio</div>';
+    echo '<div class="col font-weight-bold">Clasificación</div>';
+    echo '<div class="col font-weight-bold">Tipo</div>';
+    echo '<div class="col font-weight-bold">Día</div>';
+    echo '</div>';
+    echo '</div>';
+
+    //dd($listado);
+
+    foreach ($listado as $item) {
+
+        $conn = FG_Conectar_Smartpharma(FG_Mi_Ubicacion());
+
+        $sql = SQG_Detalle_Articulo($item);
+        $result = sqlsrv_query($conn,$sql);
+        $row = sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC);
+
+        $codigo_barra = $row['CodigoBarra'];
+        $articulo = $row['Descripcion'];
+
+        $precio = FG_Calculo_Precio_Alfa($row['Existencia'], $row['ExistenciaAlmacen1'], $row['ExistenciaAlmacen2'], $row['Troquelado'], $row['UtilidadArticulo'], $row['UtilidadCategoria'], $row['TroquelAlmacen1'], $row['PrecioCompraBrutoAlmacen1'], $row['TroquelAlmacen2'], $row['PrecioCompraBrutoAlmacen2'], $row['PrecioCompraBruto'], $row['Impuesto'], 'CON_EXISTENCIA');
+
+        echo '<div class="list-group-item">';
+        echo '<div class="row">';
+        echo '<div class="col">'.$codigo_barra.'</div>';
+        echo '<div class="col">'.FG_Limpiar_Texto($articulo).'</div>';
+        echo '<div class="col">'.number_format($precio, 2).'</div>';
+        echo '<div class="col">'.$_GET['clasificacion'].'</div>';
+        echo '<div class="col">'.$_GET['tipo'].'</div>';
+        echo '<div class="col">'.$_GET['dia'].'</div>';
+        echo '</div>';
+        echo '</div>';
+    }
+
+    echo '</div>';
   }
 ?>

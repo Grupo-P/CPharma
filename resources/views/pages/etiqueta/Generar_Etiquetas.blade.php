@@ -59,6 +59,20 @@
 	.aumento{
 		font-size: 1.1em;
 	}
+
+    .tabla-resultado-final {
+        margin-top: 50%;
+        border: 0px solid white !important;
+        width: 100% !important;
+    }
+
+    @media print{
+        /* indicamos el salto de pagina */
+        .saltoDePagina{
+          display:block;
+          page-break-before:always;
+        }
+      }
 </style>
 <?php
 	include(app_path().'\functions\config.php');
