@@ -143,7 +143,7 @@
     $connCPharma = FG_Conectar_CPharma();
 
     $sql5 = R27Q_Productos_PorVencer($FInicial);
-    $result = sqlsrv_query($conn,$sql5);
+    $result = sqlsrv_query($conn,$sql5,[],['QueryTimeout'=>7200]);
 
     $conectividad_ftn = FG_Validar_Conectividad('FTN');
     $conectividad_fau = FG_Validar_Conectividad('FAU');
