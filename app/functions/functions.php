@@ -4816,17 +4816,20 @@
     echo '<div class="col font-weight-bold">Código de barra</div>';
     echo '<div class="col font-weight-bold">Artículo</div>';
     echo '<div class="col font-weight-bold">Precio</div>';
+    echo '<div class="col font-weight-bold">Existencia</div>';
     echo '<div class="col font-weight-bold">Clasificación</div>';
     echo '<div class="col font-weight-bold">Tipo</div>';
     echo '<div class="col font-weight-bold">Día</div>';
+    echo '<div class="col font-weight-bold">Fecha y hora</div>';
     echo '</div>';
     echo '</div>';
 
-    //dd($listado);
+    $fecha = date('d/m/Y h:i A');
 
     foreach ($listado as $item) {
 
         $conn = FG_Conectar_Smartpharma(FG_Mi_Ubicacion());
+        $connCPharma = FG_Conectar_CPharma();
 
         $sql = SQG_Detalle_Articulo($item);
         $result = sqlsrv_query($conn,$sql);
@@ -4834,17 +4837,30 @@
 
         $codigo_barra = $row['CodigoBarra'];
         $articulo = $row['Descripcion'];
+        $existencia = $row['Existencia'];
+        $dolarizado = $row['Dolarizado'];
+        $dolarizado = FG_Producto_Dolarizado($dolarizado);
 
         $precio = FG_Calculo_Precio_Alfa($row['Existencia'], $row['ExistenciaAlmacen1'], $row['ExistenciaAlmacen2'], $row['Troquelado'], $row['UtilidadArticulo'], $row['UtilidadCategoria'], $row['TroquelAlmacen1'], $row['PrecioCompraBrutoAlmacen1'], $row['TroquelAlmacen2'], $row['PrecioCompraBrutoAlmacen2'], $row['PrecioCompraBruto'], $row['Impuesto'], 'CON_EXISTENCIA');
+
+        if ($dolarizado == 'SI') {
+            $tasa = FG_Tasa_Fecha_Venta($connCPharma,date('Y-m-d'));
+            $precio = $precio / $tasa;
+            $precio = SigDolar . ' ' . number_format($precio, 2);
+        } else {
+            $precio = SigVe . ' ' . number_format($precio, 2);
+        }
 
         echo '<div class="list-group-item">';
         echo '<div class="row">';
         echo '<div class="col">'.$codigo_barra.'</div>';
         echo '<div class="col">'.FG_Limpiar_Texto($articulo).'</div>';
-        echo '<div class="col">'.number_format($precio, 2).'</div>';
+        echo '<div class="col">'.$precio.'</div>';
+        echo '<div class="col">'.$existencia.'</div>';
         echo '<div class="col">'.$_GET['clasificacion'].'</div>';
         echo '<div class="col">'.$_GET['tipo'].'</div>';
         echo '<div class="col">'.$_GET['dia'].'</div>';
+        echo '<div class="col">'.$fecha.'</div>';
         echo '</div>';
         echo '</div>';
     }
