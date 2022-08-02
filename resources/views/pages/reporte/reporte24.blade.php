@@ -51,11 +51,11 @@
 @endsection
 
 @section('content')
-	<h1 class="h5 text-info">
-		<i class="fas fa-file-invoice"></i>
-		Articulos Nuevos
-	</h1>
-	<hr class="row align-items-start col-12">
+    <h1 class="h5 text-info">
+        <i class="fas fa-file-invoice"></i>
+        Articulos Nuevos
+    </h1>
+    <hr class="row align-items-start col-12">
 
 <?php
   include(app_path().'\functions\config.php');
@@ -68,7 +68,7 @@
   }
   echo '<hr class="row align-items-start col-12">';
 
-	if (isset($_GET['fechaInicio'])) {
+    if (isset($_GET['fechaInicio'])) {
     $InicioCarga = new DateTime("now");
 
     R24_Articulos_Nuevos($_GET['SEDE'],$_GET['fechaInicio'],$_GET['fechaFin']);
@@ -77,10 +77,10 @@
     $FinCarga = new DateTime("now");
     $IntervalCarga = $InicioCarga->diff($FinCarga);
     echo'Tiempo de carga: '.$IntervalCarga->format("%Y-%M-%D %H:%I:%S");
-	}
-	else{
-		echo '
-		<form autocomplete="off" action="" target="_blank">
+    }
+    else{
+        echo '
+        <form autocomplete="off" action="" target="_blank">
         <table style="width:100%;">
           <tr>
             <td align="center">
@@ -102,10 +102,10 @@
               <input type="submit" value="Buscar" class="btn btn-outline-success">
             </td>
           </tr>
-		    </table>
-	  	</form>
-  	';
-	}
+            </table>
+        </form>
+    ';
+    }
 ?>
 @endsection
 
@@ -459,13 +459,7 @@
   AND (ComFactura.FechaRegistro < '$FFinal')
   AND (ComFacturaDetalle.InvArticuloId = InvArticulo.Id)) AS DECIMAL(38,0)),2,0)) AS CantidadRecibida,
   --Fecha de creacion
-  (SELECT TOP 1
-  InvArticulo.Auditoria_FechaCreacion
-  FROM InvArticulo
-  WHERE (InvArticulo.Auditoria_FechaCreacion > '$FInicial')
-  AND (InvArticulo.Auditoria_FechaCreacion < '$FFinal')
-  AND InvArticulo.Id = InvArticulo.Id
-  ORDER BY InvArticulo.Auditoria_FechaCreacion DESC) AS fechaCreacion
+  InvArticulo.Auditoria_FechaCreacion AS fechaCreacion
     --Tabla principal
     FROM InvArticulo
     --Joins
@@ -475,7 +469,7 @@
     --Condicionales
     WHERE (InvArticulo.Auditoria_FechaCreacion > '$FInicial') AND (InvArticulo.Auditoria_FechaCreacion < '$FFinal')
     --Agrupamientos
-    GROUP BY InvArticulo.Id, InvArticulo.CodigoArticulo, InvArticulo.Descripcion, InvArticulo.FinConceptoImptoIdCompra, InvArticulo.InvCategoriaId
+    GROUP BY InvArticulo.Id, InvArticulo.CodigoArticulo, InvArticulo.Descripcion, InvArticulo.FinConceptoImptoIdCompra, InvArticulo.InvCategoriaId, InvArticulo.Auditoria_FechaCreacion
     --Ordanamiento
     ORDER BY InvArticulo.Id ASC
     ";
