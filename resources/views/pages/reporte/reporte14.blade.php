@@ -845,7 +845,7 @@
 
         if (isset($_GET['SEDE']) && $_GET['SEDE'] == 'FSM') {
             if ($conectividad_ftn == 1) {
-                echo '<td align="center descripcion1" class="sede1">'.$descripcion_ftn.'</td>
+                echo '<td align="center" class="descripcion1 sede1">'.$descripcion_ftn.'</td>
                       <td align="center" class="sede1">'.$existencia_ftn.'</td>';
             } else {
                 echo '<td class="sede1 descripcion1">-</td>';
