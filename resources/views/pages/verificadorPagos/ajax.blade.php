@@ -89,13 +89,12 @@
                 continue;
             }
 
-            // Bank of America
-
             foreach ($overview as $item) {
                 if (isset($item->subject)) {
                     $asunto = fix_text_subject($item->subject);
                 }
 
+                // Bank of America
 
                 if (strpos($asunto, ' sent you ') && $header->fromaddress == 'Bank of America <customerservice@ealerts.bankofamerica.com>') {
                     $arrayAsunto = explode(' sent you ', $asunto);
@@ -117,6 +116,7 @@
                     $pagos[$i]['comentario'] = $comentario;
                     $pagos[$i]['tipo'] = 'Zelle BOFA';
                     $pagos[$i]['hash'] = rand(100, 999) . substr($arrayAsunto[0], 0, 1) . rand(100, 999) . $decimales;
+                    $pagos[$i]['referencia'] = $i;
 
                     $i++;
                 }
@@ -141,8 +141,49 @@
                     $pagos[$i]['comentario'] = $comentario;
                     $pagos[$i]['tipo'] = 'Zelle BOFA';
                     $pagos[$i]['hash'] = rand(100, 999) . substr($arrayAsunto[0], 0, 1) . rand(100, 999) . $decimales;
+                    $pagos[$i]['referencia'] = $i;
 
                     $i++;
+                }
+
+                // Mercantil
+
+                if (strpos($asunto, 'SMS') && $header->fromaddress == 'SMS forwarder <no-reply-smsforwarder@cofp.ru>') {
+
+                    $body = imap_fetchbody($conn, $email, 2);
+                    $body = imap_base64($body);
+
+                    if (strpos($body, 'Tpago')) {
+
+                        $inicioEnviadoPor = (strpos($body, 'celular')) + 7;
+                        $substr = substr($body, $inicioEnviadoPor);
+                        $finEnviadoPor = strpos($substr, '.');
+                        $enviadoPor = substr($substr, 0, $finEnviadoPor);
+
+                        $inicioMonto = (strpos($body, 'Tpago por')) + 9;
+                        $substr = substr($body, $inicioMonto);
+                        $finMonto = strpos($substr, ' desde ');
+                        $monto = substr($substr, 0, $finMonto);
+
+                        $inicioReferencia = (strpos($body, 'referencia:')) + 11;
+                        $substr = substr($body, $inicioReferencia);
+                        $finReferencia = strpos($substr, ',');
+                        $referencia = substr($substr, 0, $finReferencia);
+
+                        $comentario = "Referencia: $referencia";
+
+                        $pagos[$i]['tipo'] = 'Pago móvil Mercantil';
+                        $pagos[$i]['enviado_por'] = $enviadoPor;
+                        $pagos[$i]['monto'] = $monto;
+                        $pagos[$i]['fecha'] = $fecha;
+                        $pagos[$i]['fechaSinFormato'] = $fechaSinFormato;
+                        $pagos[$i]['comentario'] = $comentario;
+                        $pagos[$i]['hash'] = rand(100, 999) . substr($arrayAsunto[0], 0, 1) . rand(100, 999) . $decimales;
+                        $pagos[$i]['referencia'] = $referencia;
+
+                        $i++;
+                    }
+
                 }
             }
         }
@@ -245,6 +286,7 @@
                     $pagos[$i]['fechaSinFormato'] = $fechaSinFormato;
                     $pagos[$i]['comentario'] = $comentario;
                     $pagos[$i]['hash'] = rand(100, 999) . substr($enviadoPor[0], 0, 1) . rand(100, 999) . $decimales;
+                    $pagos[$i]['referencia'] = $i;
 
                     $i++;
                 }

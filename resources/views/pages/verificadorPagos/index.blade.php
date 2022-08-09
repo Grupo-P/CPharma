@@ -106,8 +106,6 @@
             $i = 0;
 
             foreach ($search as $email) {
-                // Bank of America
-
                 $overview = imap_fetch_overview($conn, $email);
 
                 $header = imap_header($conn, $email);
@@ -128,6 +126,8 @@
                         $asunto = fix_text_subject($item->subject);
                     }
 
+                    // Bank of America
+
                     if (strpos($asunto, ' sent you ') && $header->fromaddress == 'Bank of America <customerservice@ealerts.bankofamerica.com>') {
                         $arrayAsunto = explode(' sent you ', $asunto);
 
@@ -144,6 +144,7 @@
                         $pagos[$i]['fecha'] = $fecha;
                         $pagos[$i]['fechaSinFormato'] = $fechaSinFormato;
                         $pagos[$i]['comentario'] = $comentario;
+                        $pagos[$i]['referencia'] = $i;
 
                         $i++;
                     }
@@ -152,6 +153,7 @@
                         $arrayAsunto = explode(' sent you ', $asunto);
 
                         $body = imap_qprint(imap_body($conn, $email));
+
 
                         $inicioComentario = strpos($body, '<!-- Zone2 - Begins-->');
                         $finComentario = strpos($body, '<!-- Zone2 - Ends-->');
@@ -164,8 +166,48 @@
                         $pagos[$i]['fecha'] = $fecha;
                         $pagos[$i]['fechaSinFormato'] = $fechaSinFormato;
                         $pagos[$i]['comentario'] = $comentario;
+                        $pagos[$i]['referencia'] = $i;
 
                         $i++;
+                    }
+
+                    // Mercantil
+
+                    if (strpos($asunto, 'SMS') && $header->fromaddress == 'SMS forwarder <no-reply-smsforwarder@cofp.ru>') {
+
+                        $body = imap_fetchbody($conn, $email, 2);
+                        $body = imap_base64($body);
+
+                        if (strpos($body, 'Tpago')) {
+
+                            $inicioEnviadoPor = (strpos($body, 'celular')) + 7;
+                            $substr = substr($body, $inicioEnviadoPor);
+                            $finEnviadoPor = strpos($substr, '.');
+                            $enviadoPor = substr($substr, 0, $finEnviadoPor);
+
+                            $inicioMonto = (strpos($body, 'Tpago por')) + 9;
+                            $substr = substr($body, $inicioMonto);
+                            $finMonto = strpos($substr, ' desde ');
+                            $monto = substr($substr, 0, $finMonto);
+
+                            $inicioReferencia = (strpos($body, 'referencia:')) + 11;
+                            $substr = substr($body, $inicioReferencia);
+                            $finReferencia = strpos($substr, ',');
+                            $referencia = substr($substr, 0, $finReferencia);
+
+                            $comentario = "Referencia: $referencia";
+
+                            $pagos[$i]['tipo'] = 'Pago móvil Mercantil';
+                            $pagos[$i]['enviado_por'] = $enviadoPor;
+                            $pagos[$i]['monto'] = $monto;
+                            $pagos[$i]['fecha'] = $fecha;
+                            $pagos[$i]['fechaSinFormato'] = $fechaSinFormato;
+                            $pagos[$i]['comentario'] = $comentario;
+                            $pagos[$i]['referencia'] = $referencia;
+
+                            $i++;
+                        }
+
                     }
                 }
             }
@@ -225,6 +267,7 @@
                         $pagos[$i]['fecha'] = $fecha;
                         $pagos[$i]['fechaSinFormato'] = $fechaSinFormato;
                         $pagos[$i]['comentario'] = $comentario;
+                        $pagos[$i]['referencia'] = $i;
 
                         $i++;
                     }
@@ -259,6 +302,7 @@
                         $pagos[$i]['fecha'] = $fecha;
                         $pagos[$i]['fechaSinFormato'] = $fechaSinFormato;
                         $pagos[$i]['comentario'] = $comentario;
+                        $pagos[$i]['referencia'] = $i;
 
                         $i++;
                     }
@@ -266,6 +310,7 @@
             }
 
             $pagos = collect($pagos);
+            $pagos = $pagos->unique('referencia');
             $pagos = $pagos->sortByDesc('fechaSinFormato');
             $contador = 1;
         @endphp
