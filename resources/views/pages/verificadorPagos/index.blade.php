@@ -273,6 +273,39 @@
                     }
 
 
+                    // Binance
+
+                    if (strpos($asunto, 'Payment Receive Successful') && $item->from == 'Binance <do-not-reply@ses.binance.com>') {
+
+                        $body = imap_body($conn, $email);
+                        $body = base64_decode($body);
+
+                        $inicioEnviadoPor = (strpos($body, 'You have received an incoming Pay transfer from ')) + 48;
+                        $substr = substr($body, $inicioEnviadoPor);
+                        $finEnviadoPor = strpos($substr, ',');
+                        $enviadoPor = substr($substr, 0, $finEnviadoPor);
+
+                        $inicioMonto = (strpos($body, 'amount of ')) + 10;
+                        $substr = substr($body, $inicioMonto);
+                        $finMonto = strpos($substr, '.&nbsp;</span>');
+                        $monto = substr($substr, 0, $finMonto);
+                        $monto = str_replace('USDT', '', $monto);
+                        $monto = '$'.$monto;
+
+                        $comentario = '';
+
+                        $pagos[$i]['tipo'] = 'Binance';
+                        $pagos[$i]['enviado_por'] = $enviadoPor;
+                        $pagos[$i]['monto'] = $monto;
+                        $pagos[$i]['fecha'] = $fecha;
+                        $pagos[$i]['fechaSinFormato'] = $fechaSinFormato;
+                        $pagos[$i]['comentario'] = $comentario;
+                        $pagos[$i]['referencia'] = $i;
+
+                        $i++;
+                    }
+
+
                     // PNC
 
                     if (strpos($asunto, 'sent you a Zelle® payment.') && $item->from == 'PNC Alerts <pncalerts@pnc.com>') {
