@@ -12,7 +12,7 @@
 
     @if(!request()->fecha)
 
-        <form class="m-5 p-5">
+        <form class="m-5 p-5" target="_blank">
             <div class="row text-center">
                 <div class="col">
                     <label for="fecha">Fecha</label>
