@@ -17,9 +17,8 @@ yarn-error.log
 /public/assets/promocion/*.jpg
 /public/assets/ACI/*.jpg
 /public/assets/ACI/*.pdf
-public/drocerca.csv
-public/dronena.txt
-public/drooeste.csv
-public/drocerca.csv
-public/drolanca.csv
-public/drocerca.csv
+/public/drocerca.csv
+/public/dronena.txt
+/public/drooeste.csv
+/public/drolanca.csv
+/public/cobeca.json
