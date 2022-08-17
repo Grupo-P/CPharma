@@ -112,115 +112,117 @@
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
     <script>
-        clientes = {!! $clientes !!};
-        agregado = 0;
+        $(document).ready(function () {
+            clientes = {!! $clientes !!};
+            agregado = 0;
 
-        i = 0;
+            i = 0;
 
-        $('form').submit(function (event) {
-            if (agregado == 0) {
-                event.preventDefault();
-            }
-        });
-
-        $('[name=nombre_cliente]').autocomplete({
-            source: clientes,
-            autoFocus: true,
-            minLenght: 3,
-            select: function (event, ui) {
-                $('[name=ci_cliente]').val(ui.item.ci_rif);
-                $('[name=direccion_cliente]').val(ui.item.direccion);
-            }
-        });
-
-        articulos = {!! $articulos !!};
-
-        $('[name=buscar_articulo]').autocomplete({
-            source: articulos,
-            minLenght: 3,
-            select: function (event, ui) {
-                $('[name=id_articulo]').val(ui.item.id_articulo);
-            }
-        });
-
-        $('[name=buscar_articulo]').keypress(function (event) {
-            if (event.which == 13) {
-                event.preventDefault();
-                $('.add').click();
-            }
-        });
-
-        $('.add').click(function () {
-            id_articulo = $('[name=id_articulo]').val();
-
-            cantidad = $('[name=cantidad]').val();
-            cantidad = parseInt(cantidad);
-
-            if (id_articulo == '') {
-                return false;
-            }
-
-            if (cantidad <= 0) {
-                alert('Debe ingresar una cantidad mayor a 0');
-                return false;
-            }
-
-            if (isNaN(cantidad)) {
-                alert('Debe ingresar la cantidad');
-                return false;
-            }
-
-            $.ajax({
-                type: 'GET',
-                data: {
-                    id_articulo: id_articulo
-                },
-                success: function (response) {
-                    codigo_interno = response.codigo_interno;
-                    codigo_barra = response.codigo_barra;
-                    descripcion = response.descripcion;
-                    precio_bs = response.precio_bs;
-                    precio_ds = response.precio_ds;
-
-                    agregado = 1;
-
-                    $('.articulos').append(`
-                        <tr>
-                            <td>${codigo_interno}</td>
-                            <td>${codigo_barra}</td>
-                            <td>${descripcion}</td>
-                            <td>${precio_bs}</td>
-                            <td>${precio_ds}</td>
-                            <td>${cantidad}</td>
-                            <td>
-                                <button type="button" onclick="remove(this)" class="btn btn-danger btn-sm">
-                                    <i class="fa fa-trash"></i>
-                                    Eliminar
-                                </button>
-                            </td>
-
-                            <input type="hidden" name="articulos[${i}][codigo_interno]" value="${codigo_interno}">
-                            <input type="hidden" name="articulos[${i}][codigo_barra]" value="${codigo_barra}">
-                            <input type="hidden" name="articulos[${i}][descripcion]" value="${descripcion}">
-                            <input type="hidden" name="articulos[${i}][precio_bs]" value="${precio_bs}">
-                            <input type="hidden" name="articulos[${i}][precio_ds]" value="${precio_ds}">
-                            <input type="hidden" name="articulos[${i}][cantidad]" value="${cantidad}">
-                        </tr>
-                    `);
-
-                    $('[name=id_articulo]').val('');
-                    $('[name=buscar_articulo]').val('');
-                    $('[name=cantidad]').val('');
-                    $('[name=buscar_articulo]').focus();
-
-                    i = i + 1;
-                },
-                error: function (error) {
-                    $('body').html(error.responseText);
+            $('form').submit(function (event) {
+                if (agregado == 0) {
+                    event.preventDefault();
                 }
             });
 
-            $('[name=buscar_articulo]').focus();
+            $('[name=nombre_cliente]').autocomplete({
+                source: clientes,
+                autoFocus: true,
+                minLength: 3,
+                select: function (event, ui) {
+                    $('[name=ci_cliente]').val(ui.item.ci_rif);
+                    $('[name=direccion_cliente]').val(ui.item.direccion);
+                }
+            });
+
+            articulos = {!! $articulos !!};
+
+            $('[name=buscar_articulo]').autocomplete({
+                source: articulos,
+                minLength: 3,
+                select: function (event, ui) {
+                    $('[name=id_articulo]').val(ui.item.id_articulo);
+                }
+            });
+
+            $('[name=buscar_articulo]').keypress(function (event) {
+                if (event.which == 13) {
+                    event.preventDefault();
+                    $('.add').click();
+                }
+            });
+
+            $('.add').click(function () {
+                id_articulo = $('[name=id_articulo]').val();
+
+                cantidad = $('[name=cantidad]').val();
+                cantidad = parseInt(cantidad);
+
+                if (id_articulo == '') {
+                    return false;
+                }
+
+                if (cantidad <= 0) {
+                    alert('Debe ingresar una cantidad mayor a 0');
+                    return false;
+                }
+
+                if (isNaN(cantidad)) {
+                    alert('Debe ingresar la cantidad');
+                    return false;
+                }
+
+                $.ajax({
+                    type: 'GET',
+                    data: {
+                        id_articulo: id_articulo
+                    },
+                    success: function (response) {
+                        codigo_interno = response.codigo_interno;
+                        codigo_barra = response.codigo_barra;
+                        descripcion = response.descripcion;
+                        precio_bs = response.precio_bs;
+                        precio_ds = response.precio_ds;
+
+                        agregado = 1;
+
+                        $('.articulos').append(`
+                            <tr>
+                                <td>${codigo_interno}</td>
+                                <td>${codigo_barra}</td>
+                                <td>${descripcion}</td>
+                                <td>${precio_bs}</td>
+                                <td>${precio_ds}</td>
+                                <td>${cantidad}</td>
+                                <td>
+                                    <button type="button" onclick="remove(this)" class="btn btn-danger btn-sm">
+                                        <i class="fa fa-trash"></i>
+                                        Eliminar
+                                    </button>
+                                </td>
+
+                                <input type="hidden" name="articulos[${i}][codigo_interno]" value="${codigo_interno}">
+                                <input type="hidden" name="articulos[${i}][codigo_barra]" value="${codigo_barra}">
+                                <input type="hidden" name="articulos[${i}][descripcion]" value="${descripcion}">
+                                <input type="hidden" name="articulos[${i}][precio_bs]" value="${precio_bs}">
+                                <input type="hidden" name="articulos[${i}][precio_ds]" value="${precio_ds}">
+                                <input type="hidden" name="articulos[${i}][cantidad]" value="${cantidad}">
+                            </tr>
+                        `);
+
+                        $('[name=id_articulo]').val('');
+                        $('[name=buscar_articulo]').val('');
+                        $('[name=cantidad]').val('');
+                        $('[name=buscar_articulo]').focus();
+
+                        i = i + 1;
+                    },
+                    error: function (error) {
+                        $('body').html(error.responseText);
+                    }
+                });
+
+                $('[name=buscar_articulo]').focus();
+            });
         });
 
         function remove(that) {
