@@ -113,12 +113,20 @@
 
     <script>
         clientes = {!! $clientes !!};
+        agregado = 0;
 
         i = 0;
+
+        $('form').submit(function (event) {
+            if (agregado == 0) {
+                event.preventDefault();
+            }
+        });
 
         $('[name=nombre_cliente]').autocomplete({
             source: clientes,
             autoFocus: true,
+            minLenght: 3,
             select: function (event, ui) {
                 $('[name=ci_cliente]').val(ui.item.ci_rif);
                 $('[name=direccion_cliente]').val(ui.item.direccion);
@@ -129,6 +137,7 @@
 
         $('[name=buscar_articulo]').autocomplete({
             source: articulos,
+            minLenght: 3,
             select: function (event, ui) {
                 $('[name=id_articulo]').val(ui.item.id_articulo);
             }
@@ -172,6 +181,8 @@
                     descripcion = response.descripcion;
                     precio_bs = response.precio_bs;
                     precio_ds = response.precio_ds;
+
+                    agregado = 1;
 
                     $('.articulos').append(`
                         <tr>
