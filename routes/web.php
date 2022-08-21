@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Spatie\Health\Http\Controllers\HealthCheckResultsController;
-
+use App\Http\Controllers\AdminLTEDemoController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -27,5 +27,7 @@ Route::middleware([
         return view('dashboard');
     })->name('dashboard');
 });
+
+Route::get('AdminLTEDemo', [AdminLTEDemoController::class, 'index']);
 
 Route::get('health', HealthCheckResultsController::class);
