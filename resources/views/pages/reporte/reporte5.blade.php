@@ -115,7 +115,7 @@
             return $('.' + elemento).hide();
         }
 
-        campos = ['codigo', 'codigo_barra', 'descripcion', 'tipo', 'existencia', 'dolarizado', 'gravado', 'clasificacion', 'unidades_vendidas', 'total_venta', 'ultima_venta', 'dias_falla', 'ultimo_lote', 'ultima_compra', 'ultimo_proveedor', 'sede1', 'sede2', 'sede3', 'traslado_transito'];
+        campos = ['codigo', 'codigo_barra', 'descripcion', 'tipo', 'existencia', 'dolarizado', 'gravado', 'clasificacion', 'unidades_vendidas', 'total_venta', 'ultima_venta', 'dias_falla', 'ultimo_lote', 'ultima_compra', 'ultimo_proveedor', 'sede1', 'sede2', 'sede3', 'descripcion_sede1', 'descripcion_sede2', 'descripcion_sede3', 'traslado_transito'];
 
         function mostrar_todas(that) {
             if (that.checked) {
@@ -348,6 +348,21 @@
                 </div>
 
                 <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, \'descripcion_sede1\')" name="sede1" checked>
+                    Descripción sede 1
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, \'descripcion_sede2\')" name="sede2" checked>
+                    Descripción sede 2
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, \'descripcion_sede3\')" name="sede3" checked>
+                    Descripción sede 3
+                </div>
+
+                <div class="form-group">
                     <input type="checkbox" onclick="mostrar_todas(this)" name="Marcar todas" checked>
                     Marcar todas
                 </div>
@@ -382,41 +397,41 @@
           <th scope="col" class="traslado_transito CP-sticky bg-warning">Traslado en transito</th>';
 
               if (isset($_GET['SEDE']) & ($_GET['SEDE'] == 'FAU' || $_GET['SEDE'] == 'DBs')) {
-                echo '<th scope="col" class="sede1 CP-sticky">Descripción FTN</th>
+                echo '<th scope="col" class="descripcion_sede1 sede1 CP-sticky">Descripción FTN</th>
                     <th scope="col" class="sede1 CP-sticky">Existencia FTN</td>
-                    <th scope="col" class="sede2 CP-sticky">Descripción FLL</th>
+                    <th scope="col" class="descripcion_sede2 sede2 CP-sticky">Descripción FLL</th>
                     <th scope="col" class="sede2 CP-sticky">Existencia FLL</td>
-                    <th scope="col" class="sede3 CP-sticky">Descripción FSM</th>
+                    <th scope="col" class="descripcion_sede3 sede3 CP-sticky">Descripción FSM</th>
                     <th scope="col" class="sede3 CP-sticky">Existencia FSM</td>
                 ';
               }
 
               if (isset($_GET['SEDE']) & $_GET['SEDE'] == 'FTN') {
-                echo '<th scope="col" class="sede1 CP-sticky">Descripción FAU</th>
+                echo '<th scope="col" class="descripcion_sede1 sede1 CP-sticky">Descripción FAU</th>
                     <th scope="col" class="sede1 CP-sticky">Existencia FAU</td>
-                    <th scope="col" class="sede2 CP-sticky">Descripción FLL</th>
+                    <th scope="col" class="descripcion_sede2 sede2 CP-sticky">Descripción FLL</th>
                     <th scope="col" class="sede2 CP-sticky">Existencia FLL</td>
-                    <th scope="col" class="sede3 CP-sticky">Descripción FSM</th>
+                    <th scope="col" class="descripcion_sede3 sede3 CP-sticky">Descripción FSM</th>
                     <th scope="col" class="sede3 CP-sticky">Existencia FSM</td>
                 ';
               }
 
               if (isset($_GET['SEDE']) & $_GET['SEDE'] == 'FLL') {
-                echo '<th scope="col" class="sede1 CP-sticky">Descripción FTN</th>
+                echo '<th scope="col" class="descripcion_sede1 sede1 CP-sticky">Descripción FTN</th>
                     <th scope="col" class="sede1 CP-sticky">Existencia FTN</td>
-                    <th scope="col" class="sede2 CP-sticky">Descripción FAU</th>
+                    <th scope="col" class="descripcion_sede2 sede2 CP-sticky">Descripción FAU</th>
                     <th scope="col" class="sede2 CP-sticky">Existencia FAU</td>
-                    <th scope="col" class="sede3 CP-sticky">Descripción FSM</th>
+                    <th scope="col" class="descripcion_sede3 sede3 CP-sticky">Descripción FSM</th>
                     <th scope="col" class="sede3 CP-sticky">Existencia FSM</td>
                 ';
               }
 
               if (isset($_GET['SEDE']) & $_GET['SEDE'] == 'FSM') {
-                echo '<th scope="col" class="sede1 CP-sticky">Descripción FTN</th>
-                    <th scope="col" class="sede1 CP-sticky">Existencia FTN</td>
-                    <th scope="col" class="sede2 CP-sticky">Descripción FAU</th>
+                echo '<th scope="col" class="descripcion_sede1 CP-sticky">Descripción FTN</th>
+                    <th scope="col" class="descripcion_sede1 CP-sticky">Existencia FTN</td>
+                    <th scope="col" class="descripcion_sede2 sede2 CP-sticky">Descripción FAU</th>
                     <th scope="col" class="sede2 CP-sticky">Existencia FAU</td>
-                    <th scope="col" class="sede3 CP-sticky">Descripción FLL</th>
+                    <th scope="col" class="descripcion_sede3 sede3 CP-sticky">Descripción FLL</th>
                     <th scope="col" class="sede3 CP-sticky">Existencia FLL</td>
                 ';
               }
@@ -639,104 +654,104 @@
 
       if (isset($_GET['SEDE']) & ($_GET['SEDE'] == 'FAU' || $_GET['SEDE'] == 'DBs')) {
             if ($conectividad_ftn == 1) {
-                echo '<td class="sede1" align="center">'.$descripcion_ftn.'</td>
+                echo '<td class="descripcion_sede1 sede1" align="center">'.$descripcion_ftn.'</td>
                       <td class="sede1" align="center">'.$existencia_ftn.'</td>';
             } else {
-                echo '<td class="sede1">-</td>';
+                echo '<td class="descripcion_sede1 sede1">-</td>';
                 echo '<td class="sede1">-</td>';
             }
 
             if ($conectividad_fll == 1) {
-                echo '<td class="sede2" align="center">'.$descripcion_fll.'</td>
+                echo '<td class="descripcion_sede2 sede2" align="center">'.$descripcion_fll.'</td>
                       <td class="sede2" align="center">'.$existencia_fll.'</td>';
             } else {
-                echo '<td class="sede2">-</td>';
+                echo '<td class="descripcion_sede2 sede2">-</td>';
                 echo '<td class="sede2">-</td>';
             }
 
             if ($conectividad_fsm == 1) {
-                echo '<td class="sede3" align="center">'.$descripcion_fsm.'</td>
+                echo '<td class="descripcion_sede3 sede3" align="center">'.$descripcion_fsm.'</td>
                       <td class="sede3" align="center">'.$existencia_fsm.'</td>';
             } else {
-                echo '<td class="sede3">-</td>';
+                echo '<td class="descripcion_sede3 sede3">-</td>';
                 echo '<td class="sede3">-</td>';
             }
         }
 
         if (isset($_GET['SEDE']) & $_GET['SEDE'] == 'FTN') {
             if ($conectividad_fau == 1) {
-                echo '<td class="sede1" align="center">'.$descripcion_fau.'</td>
+                echo '<td class="descripcion_sede1 sede1" align="center">'.$descripcion_fau.'</td>
                       <td class="sede1" align="center">'.$existencia_fau.'</td>';
             } else {
-                echo '<td class="sede1">-</td>';
+                echo '<td class="descripcion_sede1 sede1">-</td>';
                 echo '<td class="sede1">-</td>';
             }
 
             if ($conectividad_fll == 1) {
-                echo '<td class="sede2" align="center">'.$descripcion_fll.'</td>
+                echo '<td class="descripcion_sede2 sede2" align="center">'.$descripcion_fll.'</td>
                       <td class="sede2" align="center">'.$existencia_fll.'</td>';
             } else {
-                echo '<td class="sede2">-</td>';
+                echo '<td class="descripcion_sede2 sede2">-</td>';
                 echo '<td class="sede2">-</td>';
             }
 
             if ($conectividad_fsm == 1) {
-                echo '<td class="sede3" align="center">'.$descripcion_fsm.'</td>
+                echo '<td class="descripcion_sede3" align="center">'.$descripcion_fsm.'</td>
                       <td class="sede3" align="center">'.$existencia_fsm.'</td>';
             } else {
-                echo '<td class="sede3">-</td>';
+                echo '<td class="descripcion_sede3">-</td>';
                 echo '<td class="sede3">-</td>';
             }
         }
 
         if (isset($_GET['SEDE']) & $_GET['SEDE'] == 'FLL') {
             if ($conectividad_ftn == 1) {
-                echo '<td class="sede1" align="center">'.$descripcion_ftn.'</td>
+                echo '<td class="descripcion_sede1 sede1" align="center">'.$descripcion_ftn.'</td>
                       <td class="sede1" align="center">'.$existencia_ftn.'</td>';
             } else {
-                echo '<td class="sede1">-</td>';
+                echo '<td class="descripcion_sede1 sede1">-</td>';
                 echo '<td class="sede1">-</td>';
             }
 
             if ($conectividad_fau == 1) {
-                echo '<td class="sede2" align="center">'.$descripcion_fau.'</td>
+                echo '<td class="descripcion_sede2 sede2" align="center">'.$descripcion_fau.'</td>
                       <td class="sede2" align="center">'.$existencia_fau.'</td>';
             } else {
-                echo '<td class="sede2">-</td>';
+                echo '<td class="descripcion_sede2 sede2">-</td>';
                 echo '<td class="sede2">-</td>';
             }
 
             if ($conectividad_fsm == 1) {
-                echo '<td class="sede3" align="center">'.$descripcion_fsm.'</td>
+                echo '<td class="descripcion_sede3 sede3" align="center">'.$descripcion_fsm.'</td>
                       <td class="sede3" align="center">'.$existencia_fsm.'</td>';
             } else {
-                echo '<td class="sede3">-</td>';
+                echo '<td class="descripcion_sede3 sede3">-</td>';
                 echo '<td class="sede3">-</td>';
             }
         }
 
         if (isset($_GET['SEDE']) & $_GET['SEDE'] == 'FSM') {
             if ($conectividad_ftn == 1) {
-                echo '<td class="sede1" align="center">'.$descripcion_ftn.'</td>
+                echo '<td class="descripcion_sede1 sede1" align="center">'.$descripcion_ftn.'</td>
                       <td class="sede1" align="center">'.$existencia_ftn.'</td>';
             } else {
-                echo '<td class="sede1">-</td>';
+                echo '<td class="descripcion_sede1 sede1">-</td>';
                 echo '<td class="sede1">-</td>';
             }
 
             if ($conectividad_fau == 1) {
-                echo '<td class="sede2" align="center">'.$descripcion_fau.'</td>
+                echo '<td class="descripcion_sede2 sede2" align="center">'.$descripcion_fau.'</td>
                       <td class="sede2" align="center">'.$existencia_fau.'</td>';
             } else {
-                echo '<td class="sede2">-</td>';
+                echo '<td class="descripcion_sede2 sede2">-</td>';
                 echo '<td class="sede2">-</td>';
             }
 
             if ($conectividad_fll == 1) {
-                echo '<td class="sede3" align="center">'.$descripcion_fll.'</td>
+                echo '<td class="descripcion_sede3 sede3" align="center">'.$descripcion_fll.'</td>
                       <td class="sede3" align="center">'.$existencia_fll.'</td>';
             } else {
-                echo '<td class="sede3">-</td>';
+                echo '<td class="descripcion_sede3 sede3">-</td>';
                 echo '<td class="sede3">-</td>';
             }
         }
