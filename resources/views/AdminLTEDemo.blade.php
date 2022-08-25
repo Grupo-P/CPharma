@@ -3,12 +3,20 @@
 @section('title', 'Dashboard')
 
 @section('content_header')
+
     <h1>Dashboard</h1>
+
+    <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#">Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Library</li>
+        </ol>
+    </nav>
+    
 @stop
 
-@section('content')
-    <p>Welcome to this beautiful admin panel.</p>        
-
+@section('content')    
+      
     @php
         $heads = [
             'ID',
@@ -46,9 +54,17 @@
             'columns' => [null, null, null, ['orderable' => false]],
         ];
     @endphp
+    
+    <div class="card">
+        <div class="card-header">
+            Welcome to this beautiful admin panel.
+        </div>
+        <div class="card-body">
+            {{-- With buttons --}}
+            <x-adminlte-datatable id="example" :heads="$heads" head-theme="dark" theme="light" :config="$config" striped hoverable with-buttons bordered/>    
+        </div>
+    </div>  
 
-    {{-- With buttons --}}
-    <x-adminlte-datatable id="example" :heads="$heads" head-theme="dark" theme="light" :config="$config" striped hoverable with-buttons bordered/>    
 @stop
 
 @section('css')
