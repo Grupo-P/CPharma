@@ -24,6 +24,7 @@
     <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.1/js/buttons.html5.min.js"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.1/js/buttons.print.min.js"></script>        
 
+    <!-- Sweet Alert -->
     <script type="text/javascript">
         Swal.fire(
             'Good job!',
@@ -31,7 +32,9 @@
             'success'
         );
     </script>
+    <!-- Sweet Alert -->
 
+    <!-- myChart -->
     <script>        
         const data = {
             labels: [
@@ -61,6 +64,7 @@
             config
         );
     </script>
+    <!-- myChart -->       
 @stop
 
 @section('content_header')
@@ -128,7 +132,7 @@
         </div>
         <div class="card-body">
             {{-- With buttons --}}
-            <x-adminlte-datatable id="example" :heads="$heads" head-theme="dark" theme="light" :config="$config" striped hoverable with-buttons bordered/>    
+            <x-adminlte-datatable id="myTable" :heads="$heads" head-theme="dark" theme="light" :config="$config" striped hoverable with-buttons bordered/>    
         </div>
     </div>      
 
