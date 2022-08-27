@@ -23,6 +23,44 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.1/js/buttons.html5.min.js"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.1/js/buttons.print.min.js"></script>        
+
+    <script type="text/javascript">
+        Swal.fire(
+            'Good job!',
+            'You clicked the button!',
+            'success'
+        );
+    </script>
+
+    <script>        
+        const data = {
+            labels: [
+                'Red',
+                'Blue',
+                'Yellow'
+            ],
+            datasets: [{
+                label: 'My First Dataset',
+                data: [300, 50, 100],
+                backgroundColor: [
+                'rgb(255, 99, 132)',
+                'rgb(54, 162, 235)',
+                'rgb(255, 205, 86)'
+                ],
+                hoverOffset: 4
+            }]
+        };
+
+        const config = {
+            type: 'doughnut',
+            data: data,            
+        };
+
+        const myChart = new Chart(
+            document.getElementById('myChart'),
+            config
+        );
+    </script>
 @stop
 
 @section('content_header')
@@ -80,26 +118,26 @@
             Welcome to this beautiful data table demo.
         </div>
         <div class="card-body">
-            {{-- With buttons --}}
-            <x-adminlte-datatable id="example" :heads="$heads" head-theme="dark" theme="light" :config="$config" striped hoverable with-buttons bordered/>    
-        </div>
-    </div>  
-
-    <div class="card">
-        <div class="card-header">
-            Welcome to this beautiful data table demo.
-        </div>
-        <div class="card-body">
             A nice little card body.
         </div>
     </div>
-
+    
     <div class="card">
         <div class="card-header">
             Welcome to this beautiful data table demo.
         </div>
         <div class="card-body">
-            A nice little card body.
+            {{-- With buttons --}}
+            <x-adminlte-datatable id="example" :heads="$heads" head-theme="dark" theme="light" :config="$config" striped hoverable with-buttons bordered/>    
+        </div>
+    </div>      
+
+    <div class="card">
+        <div class="card-header">
+            Welcome to this beautiful data table demo.
+        </div>
+        <div class="card-body">        
+            <canvas id="myChart"></canvas>            
         </div>
     </div>
 
