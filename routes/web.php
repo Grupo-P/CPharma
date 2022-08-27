@@ -28,6 +28,9 @@ Route::middleware([
     })->name('dashboard');
 });
 
-Route::get('AdminLTEDemo', [AdminLTEDemoController::class, 'index']);
+//Monitor de estado de la aplicación
+Route::middleware(['auth:sanctum', 'verified'])->get('health', HealthCheckResultsController::class);
 
-Route::get('health', HealthCheckResultsController::class);
+//Pagina demo para hacer pruebas de AdminLTE con librerias
+Route::middleware(['auth:sanctum', 'verified'])->get('AdminLTEDemo', [AdminLTEDemoController::class, 'index'])->name('AdminLTEDemo');
+
