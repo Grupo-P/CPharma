@@ -271,16 +271,18 @@ return [
             'type'         => 'navbar-search',
             'text'         => 'Buscar...',
             'topnav_right' => true,
+            'url' => '#',
+            'method' => 'post',
         ],
         [
             'type'         => 'fullscreen-widget',
             'topnav_right' => true,
         ],        
         // Sidebar items:
-        [
+        /*[
             'type' => 'sidebar-menu-search',
             'text' => 'Buscar...',
-        ],
+        ],*/
         [
             'text' => 'blog',
             'url'  => 'admin/blog',
@@ -289,7 +291,7 @@ return [
         [
             'text' => 'Dashboard',
             'route'  => 'dashboard',
-            'icon' => 'fas fa-fw fa-chart-line',            
+            'icon' => 'fas fa-fw fa-home',            
         ],
         [
             'text' => 'AdminLTEDemo',
@@ -311,15 +313,15 @@ return [
             'label'       => 4,
             'label_color' => 'success',
         ],
-        ['header' => 'account_settings'],
+        ['header' => 'CONFIGURACIÓN DE CUENTA'],
         [
-            'text' => 'profile',
-            'url'  => 'admin/settings',
+            'text' => 'Perfil',
+            'url'  => 'user/profile',
             'icon' => 'fas fa-fw fa-user',
         ],
         [
-            'text' => 'change_password',
-            'url'  => 'admin/settings',
+            'text' => 'Cambiar contraseña',
+            'url'  => 'user/profile',
             'icon' => 'fas fa-fw fa-lock',
         ],
         [
