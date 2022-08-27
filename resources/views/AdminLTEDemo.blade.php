@@ -1,16 +1,16 @@
 @extends('adminlte::page')
 
-@section('title', 'Tittle AdminLTEDemo')
+@section('title', 'AdminLTEDemo')
+
+@section('footer')
+    <span><a href="https://www.linkedin.com/in/covacode/" target="_blank" style="text-decoration: none; color:#869099;"> PBase v.1.0.0. Copyright © <?php echo''.date('Y'); ?> .All rights reserved.</span></a>
+@stop
 
 @section('css')
     <link rel="stylesheet" href="/css/admin_custom.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.3/css/bootstrap.min.css"></script>
     <script src="https://cdn.datatables.net/1.12.1/css/dataTables.bootstrap5.min.css"></script>
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.4.1/css/buttons.dataTables.min.css">
-@stop
-
-@section('footer')  
-    <span>Copyright © {{date('Y')}}.All rights reserved. <a href="https://www.linkedin.com/in/covacode/" target="_blank" style="text-decoration: none; color:#869099;">Sergio Cova</a></span>
 @stop
 
 @section('js')
@@ -26,20 +26,17 @@
 @stop
 
 @section('content_header')
-
-    <h1>H1 AdminLTEDemo</h1>
-
+    <h1>AdminLTEDemo</h1>
     <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="#">Home</a></li>
             <li class="breadcrumb-item active" aria-current="page">Demo</li>
         </ol>
-    </nav>
-    
+    </nav>    
 @stop
 
-@section('content')    
-      
+@section('content')
+
     @php
         $heads = [
             'ID',

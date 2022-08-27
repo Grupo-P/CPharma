@@ -1,15 +1,33 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Dashboard') }}
-        </h2>
-    </x-slot>
+@extends('adminlte::page')
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
-                <x-jet-welcome />
-            </div>
+@section('title', 'Dashboard')
+
+@section('footer')
+    <span><a href="https://www.linkedin.com/in/covacode/" target="_blank" style="text-decoration: none; color:#869099;"> PBase v.1.0.0. Copyright © <?php echo''.date('Y'); ?> .All rights reserved.</span></a>
+@stop
+
+@section('css')
+    <link rel="stylesheet" href="/css/admin_custom.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.3/css/bootstrap.min.css"></script>    
+@stop
+
+@section('js')
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+@stop
+
+@section('content_header')
+    <h1>Dashboard</h1>
+@stop
+
+@section('content')
+
+    <div class="card">
+        <div class="card-header">
+            Welcome to this beautiful Dashboard.
+        </div>
+        <div class="card-body">
+            A nice little card body.
         </div>
     </div>
-</x-app-layout>
+    
+@stop

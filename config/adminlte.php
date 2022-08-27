@@ -108,7 +108,7 @@ return [
     'usermenu_enabled' => true,
     'usermenu_header' => true,
     'usermenu_header_class' => 'bg-dark',
-    'usermenu_image' => true,
+    'usermenu_image' => false,
     'usermenu_desc' => true,
     'usermenu_profile_url' => true,
 
@@ -229,7 +229,7 @@ return [
     */
 
     'use_route_url' => false,
-    'dashboard_url' => 'home',
+    'dashboard_url' => 'dashboard',
     'logout_url' => 'logout',
     'login_url' => 'login',
     'register_url' => 'register',
@@ -287,11 +287,22 @@ return [
             'can'  => 'manage-blog',
         ],
         [
+            'text' => 'Dashboard',
+            'route'  => 'dashboard',
+            'icon' => 'fas fa-fw fa-chart-line',            
+        ],
+        [
             'text' => 'AdminLTEDemo',
             'route'  => 'AdminLTEDemo',
-            'icon' => 'fas fa-fw fa-chart-line',
+            'icon' => 'fas fa-fw fa-space-shuttle',
             //'label'       => 4,
             //'label_color' => 'success',
+        ],
+        [
+            'text' => 'Server Health',
+            'route'  => 'health',
+            'icon' => 'fas fa-fw fa-laptop-medical', 
+            'target' => 'blank'
         ],
         [
             'text'        => 'pages',
