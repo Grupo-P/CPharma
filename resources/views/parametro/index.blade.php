@@ -12,10 +12,63 @@
 @section('js')   
     <script>
         $(document).ready(function(){
-            $('#myTable').DataTable({
-                "language":{
-                    "search":"Buscar:"
-                }
+            $('#parametros').DataTable({
+                dom: 'Bfrtip',
+                responisve: true,
+                autoWidth: false,                
+                lengthMenu: [
+                    [ 10, 25, 50, 100,-1 ],
+                    [ '10', '25', '50', '100', 'Todo' ]
+                ],                
+                buttons: [  
+                    'pageLength',
+                    {
+                        extend: 'copy',
+                        text: 'Copiar',
+                    },
+                    {
+                        extend: 'csv',
+                        text: 'CSV',
+                        title: 'parametros'
+                    },
+                    {
+                        extend: 'excel',
+                        text: 'Excel',
+                        title: 'parametros'
+                    },
+                    {
+                        extend: 'pdf',
+                        text: 'PDF',
+                        title: 'parametros'
+                    },
+                    {
+                        extend: 'print',
+                        text: 'Imprimir',
+                    },
+                ], 
+                language:{
+                    "search":"Buscar:",
+                    "lengthMenu": "Mostrar _MENU_ registros por página",
+                    "zeroRecords": "No se encontró nada, lo siento",
+                    "info": "Mostrando la página _PAGE_ de _PAGES_",
+                    "infoEmpty": "No hay registros disponibles",
+                    "infoFiltered": "(Filtrado de _MAX_ registros totales)",
+                    "paginate":{
+                        "previous":"Anterior",
+                        "next":"Siguiente",
+                    },
+                    buttons: {
+                        pageLength: {
+                            _: "Ver %d filas",
+                            '-1': "Ver todo"
+                        },
+                        copyTitle: 'Añadido al portapapeles',                        
+                        copySuccess: {
+                            _: '%d filas copiadas',
+                            1: '1 linea copiada'
+                        }
+                    }                    
+                },              
             });
         });
     </script>
@@ -34,27 +87,27 @@
 @section('content')
     <div class="card">
         <div class="card-header">
-            Welcome to this beautiful data table demo.
+            <button type="button" class="btn btn-success">Crear</button>
         </div>
-        <div class="card-body">
-            <table id="myTable" class="table table-striped">
-                <thead>
+        <div class="card-body table-responsive">
+            <table id="parametros" class="table table-striped table-bordered">
+                <thead class="table-dark">
                     <tr>
                         <th>Nro</th>
                         <th>Variable</th>
                         <th>Valor</th>
-                        <th>Descripción</th>                
+                        <th>Descripción</th>
                         <th>Estado</th>
-                        <th>Status</th>                        
+                        <th>Status</th>
                     </tr>
                 </thead>
-                <tbody>            
+                <tbody>
                     @foreach($parametros as $parametro)
                         <tr>
                             <td>{{ $parametro->id }}</td>
                             <td>{{ $parametro->variable }}</td>
                             <td>{{ $parametro->valor }}</td>
-                            <td>{{ $parametro->descripcion }}</td>                            
+                            <td>{{ $parametro->descripcion }}</td>
 
                             <td>
                                 @if($parametro->activa==1)
@@ -70,11 +123,11 @@
                                 @else
                                     <span>Borrada</span>
                                 @endif
-                            </td>                            
+                            </td>
                         </tr>
                     @endforeach
                 </tbody>
             </table>
         </div>
-    </div>       
+    </div>
 @stop
