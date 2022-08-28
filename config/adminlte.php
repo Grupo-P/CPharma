@@ -208,7 +208,7 @@ return [
     |
     */
 
-    'right_sidebar' => true,
+    'right_sidebar' => false,
     'right_sidebar_icon' => 'fas fa-cogs',
     'right_sidebar_theme' => 'dark',
     'right_sidebar_slide' => true,
@@ -305,6 +305,11 @@ return [
             'route'  => 'health',
             'icon' => 'fas fa-fw fa-laptop-medical', 
             'target' => 'blank'
+        ],
+        [
+            'text' => 'Parametros',
+            'route'  => 'parametros',
+            'icon' => 'fas fa-fw fas fa-cogs',            
         ],
         [
             'text'        => 'pages',
@@ -577,5 +582,5 @@ return [
     |
     */
 
-    'livewire' => false,
+    'livewire' => true,
 ];

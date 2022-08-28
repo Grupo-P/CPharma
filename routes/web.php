@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use Spatie\Health\Http\Controllers\HealthCheckResultsController;
 use App\Http\Controllers\AdminLTEDemoController;
+use App\Http\Controllers\ParametroController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -34,3 +36,4 @@ Route::middleware(['auth:sanctum', 'verified'])->get('health', HealthCheckResult
 //Pagina demo para hacer pruebas de AdminLTE con librerias
 Route::middleware(['auth:sanctum', 'verified'])->get('AdminLTEDemo', [AdminLTEDemoController::class, 'index'])->name('AdminLTEDemo');
 
+Route::middleware(['auth:sanctum', 'verified'])->get('parametros', ParametroController::class)->name('parametros');
