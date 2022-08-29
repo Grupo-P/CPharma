@@ -245,10 +245,11 @@
                     if ($asunto == 'Ha recibido un pago' && $item->from == '"service@paypal.com" <service@paypal.com>') {
                         $body = imap_qprint(imap_body($conn, $email));
 
-                        $inicioEnviadoPor = strpos($body, '<p class="ppsans" style="font-size:32px;line-height:40px;color:#2c2e2f;margin:0" dir="ltr"><span>');
+                        $inicioEnviadoPor = strpos($body, 'Gedaca holding corp:');
                         $finEnviadoPor = strpos($body, ' le ha enviado');
                         $enviadoPor = substr($body, $inicioEnviadoPor, $finEnviadoPor-$inicioEnviadoPor);
                         $enviadoPor = strip_tags($enviadoPor);
+                        $enviadoPor = str_replace('Gedaca holding corp:', '', $enviadoPor);
 
                         $inicioMonto = strpos($body, '<td><strong>Fondos recibidos</strong></td>');
                         $monto = substr($body, $inicioMonto+37, 100);
