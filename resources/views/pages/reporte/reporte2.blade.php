@@ -131,6 +131,12 @@
                 $descripcion[$i]['label'] = mb_convert_encoding($row['descripcion'], 'UTF-8', 'UTF-8');
                 $descripcion[$i]['value'] = mb_convert_encoding($row['descripcion'], 'UTF-8', 'UTF-8');
 
+                $descripcion[$i]['label'] = str_replace('???', '¡¡¡', $descripcion[$i]['label']);
+                $descripcion[$i]['value'] = str_replace('???', '¡¡¡', $descripcion[$i]['value']);
+
+                $descripcion[$i]['label'] = str_replace('?', 'Ñ', $descripcion[$i]['label']);
+                $descripcion[$i]['value'] = str_replace('?', 'Ñ', $descripcion[$i]['value']);
+
                 $codigo[$i]['id'] = $row['id'];
                 $codigo[$i]['label'] = mb_convert_encoding($row['codigo_barra'], 'UTF-8', 'UTF-8');
                 $codigo[$i]['value'] = mb_convert_encoding($row['codigo_barra'], 'UTF-8', 'UTF-8');
