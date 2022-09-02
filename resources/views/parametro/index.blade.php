@@ -250,7 +250,7 @@
             </div>
         </div>
         <div class="card-body table-responsive">
-            <table id="resultadosTable" class="table table-striped table-responsive">
+            <table id="resultadosTable" class="table table-striped">
                 <thead class="table-dark">
                     <tr class="text-center">
                         <th>Nro</th>
