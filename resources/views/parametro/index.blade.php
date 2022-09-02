@@ -7,9 +7,9 @@
 @stop
 
 @section('css')
+    <!-- Estilos para la DataTable -->
     <link rel="stylesheet" href="https://cdn.datatables.net/staterestore/1.1.1/css/stateRestore.dataTables.min.css"/>
-
-    <style>        
+    <style>
         tfoot input {
             width: 100% !important;
             padding: 3px !important;
@@ -29,17 +29,18 @@
         }
         .isSelected{
             background-color: #28a74547 !important;
-        }        
+        }
     </style>
 @stop
 
 @section('js')
+    <!-- Scripts para la DataTable -->
     <script type="text/javascript" src="https://cdn.datatables.net/fixedheader/3.2.4/js/dataTables.fixedHeader.min.js"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/colreorder/1.5.6/js/dataTables.colReorder.min.js"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/staterestore/1.1.1/js/dataTables.stateRestore.min.js"></script>
-    <script>        
+    <script>
         $(document).ready(function(){
-            //Footer tabla
+            //Footer DataTable
             $('#resultadosTable tfoot th.isSearchable').each(function () {
                 var title = $(this).text();
                 $(this).html('<input type="text" class="isSearchableInput" placeholder="Buscar..." />');
@@ -50,71 +51,91 @@
                 $(this).toggleClass('isSelected');
             });
 
-            //Busqueda por columnas
+            //Composicion de la DataTable
             var table = $('#resultadosTable').DataTable({
                 initComplete: function () {
                 this.api()
                     .columns()
                     .every(function () {
                         var that = this;
-                        $('input', this.footer()).on('keyup change clear', function () {                            
+                        $('input', this.footer()).on('keyup change clear', function () {
                             if (that.search() !== this.value) {
                                 that.search(this.value).draw();
                             }
                         });
                     });
 
-                    //Colocar las busquedas por columnas al inicio de la tabla
+                    //Colocar las busquedas por columnas al inicio de la DataTable
                     var thfootTable = $('#resultadosTable tfoot tr');
                     thfootTable.find('th').each(function(){
                         $(this).css('padding', 8);
                     });
-                    $('#resultadosTable thead').prepend(thfootTable);                    
+                    $('#resultadosTable thead').prepend(thfootTable);
                 },
                 //Encabezado Fijo
                 fixedHeader: true,
-                //Ordenado Tabla
+
+                //Ordenado DataTable
                 order: [[0, 'asc']],
-                //Reordenar columnas
+
+                //Reordenar columnas (Drag and Drop)
                 colReorder: true,
+
                 //Responsive
                 responisve: true,
-                autoWidth: false,                                         
-                //Botones tabla
+                autoWidth: false,
+
+                //Botones DataTable
                 dom: 'Bfrtip',
                 lengthMenu: [
                     [ 10, 25, 50, 100,-1 ],
                     [ '10', '25', '50', '100', 'Todo' ]
-                ],  
-                buttons: [  
+                ],
+                buttons: [
                     'pageLength',
                     'createState',
                     'savedStates',
                     {
                         extend: 'copy',
                         text: 'Copiar',
+                        exportOptions: {
+                            columns: [ 0, 1, 2, 3, 4 ]
+                        }
                     },
                     {
                         extend: 'csv',
                         text: 'CSV',
-                        title: 'parametros'
+                        title: 'parametros',
+                        exportOptions: {
+                            columns: [ 0, 1, 2, 3, 4 ]
+                        }
                     },
                     {
                         extend: 'excel',
                         text: 'Excel',
-                        title: 'parametros'
+                        title: 'parametros',
+                        exportOptions: {
+                            columns: [ 0, 1, 2, 3, 4 ]
+                        }
                     },
                     {
                         extend: 'pdf',
                         text: 'PDF',
-                        title: 'parametros'
+                        title: 'parametros',
+                        exportOptions: {
+                            columns: [ 0, 1, 2, 3, 4 ]
+                        }
                     },
                     {
                         extend: 'print',
                         text: 'Imprimir',
+                        exportOptions: {
+                            columns: [ 0, 1, 2, 3, 4 ]
+                        }
                     },
                 ], 
-                //Traduccion Tabla
+
+                //Traduccion DataTable
                 language:{
                     "search":"Buscar:",
                     "lengthMenu": "Mostrar _MENU_ registros por página",
@@ -133,17 +154,20 @@
                             _: "Ver %d filas",
                             '-1': "Ver todo"
                         },
-                        copyTitle: 'Añadido al portapapeles',                        
+                        copyTitle: 'Añadido al portapapeles',
                         copySuccess: {
                             _: '%d filas copiadas',
                             1: '1 linea copiada'
                         },
                         createState:"Crear estado",
-                        savedStates:"Estados",
+                        savedStates: {
+                            0: 'Estados',
+                            _: 'Estados (%d)'
+                        },
                         updateState: 'Actualizar',
                         stateRestore: 'Nuevo estado %d',
                         removeState: 'Eliminar',
-                        renameState: 'Cambiar nombre',                        
+                        renameState: 'Cambiar nombre',
                     },
                     stateRestore: {
                         removeSubmit: 'Confirmar',
@@ -153,7 +177,7 @@
                         renameLabel: 'Renombrar a:',
                         renameTitle: 'Cambiar nombre de estado',
                     },
-                },              
+                },
             });
 
             //Contar filas seleccionadas
@@ -179,7 +203,7 @@
             //Recargar pagina
             $('#reloadPage').click(function () {
                 window.location.reload();
-            });            
+            });
 
             //Visualizar Columnas
             $('input.toggle-vis').on('change', function (e) {
@@ -191,7 +215,7 @@
             $(function () {
                 $('[data-toggle="tooltip"]').tooltip()
             });
-        });        
+        });
     </script>
 @stop
 
@@ -205,9 +229,9 @@
     </nav>
 @stop
 
-@section('content')    
+@section('content')
     <div class="card">
-        <div class="card-header">            
+        <div class="card-header">
             <button type="button" class="btn btn-success" data-toggle="tooltip" data-placement="right" title="Crear Parametro"><i class="fas fa-plus"></i></button>
             <button type="button" id="countRows" class="btn btn-info" data-toggle="tooltip" data-placement="right" title="Contar Filas seleccionadas"><i class="fas fa-layer-group"></i></button>
             <button type="button" id="deleteRows" class="btn btn-danger" data-toggle="tooltip" data-placement="right" title="Ocultar Filas seleccionadas"><i class="fas fa-layer-group"></i></button>
@@ -246,7 +270,7 @@
                             <td>{{ $parametro->nombre }}</td>
                             <td>{{ $parametro->descripcion }}</td>
                             <td>{{ $parametro->valor }}</td>
-                            <td>{{ $parametro->auxiliar }}</td>                            
+                            <td>{{ $parametro->auxiliar }}</td>
 
                             <td class="text-center">
                                 @if($parametro->activa==1)
@@ -265,10 +289,10 @@
                             </td>
 
                             <td class="text-center">
-                                <div class="btn-group">                                
+                                <div class="btn-group">
                                     <button type="button" class="btn btn-success" data-toggle="tooltip" data-placement="left" title="Ver"><i class="fas fa-eye"></i></button>
 
-                                    <button type="button" class="btn btn-info" data-toggle="tooltip" data-placement="left" title="Editar"><i class="fas fa-edit"></i></button>                                
+                                    <button type="button" class="btn btn-info" data-toggle="tooltip" data-placement="left" title="Editar"><i class="fas fa-edit"></i></button>
 
                                     @if($parametro->activa==1)
                                         <button type="button" class="btn btn-warning text-white" data-toggle="tooltip" data-placement="left" title="Inactivar"><i class="fas fa-ban"></i></button>
@@ -293,7 +317,7 @@
                         <th class="isSearchable">descripción</th>
                         <th class="isSearchable">valor</th>
                         <th class="isSearchable">auxiliar</th>
-                        <th colspan="3" class="isSpace"></th>                    
+                        <th colspan="3" class="isSpace"></th>
                     </tr>
                 </tfoot>
             </table>
