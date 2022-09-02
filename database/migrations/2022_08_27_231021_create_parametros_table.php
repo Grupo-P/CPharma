@@ -15,9 +15,10 @@ return new class extends Migration
     {
         Schema::create('parametros', function (Blueprint $table) {
             $table->id();
-            $table->text('variable');
+            $table->text('nombre');
             $table->text('valor');
-            $table->text('descripcion')->nullable();            
+            $table->text('descripcion')->nullable();
+            $table->text('auxiliar')->nullable();
             $table->tinyInteger('activa')->default(1);
             $table->timestamps();
             $table->softDeletes();

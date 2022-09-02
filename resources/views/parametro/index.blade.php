@@ -11,6 +11,10 @@
 
 @section('js')   
     <script>
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        })
+
         $(document).ready(function(){
             $('#parametros').DataTable({
                 dom: 'Bfrtip',
@@ -86,17 +90,18 @@
 
 @section('content')
     <div class="card">
-        <div class="card-header">
-            <button type="button" class="btn btn-success">Crear</button>
+        <div class="card-header">            
+            <button type="button" class="btn btn-success" data-toggle="tooltip" data-placement="right" title="Crear Parametro"><i class="fas fa-plus"></i></button>
         </div>
         <div class="card-body table-responsive">
             <table id="parametros" class="table table-striped table-bordered">
                 <thead class="table-dark">
-                    <tr>
+                    <tr class="text-center">
                         <th>Nro</th>
                         <th>Variable</th>
-                        <th>Valor</th>
                         <th>Descripción</th>
+                        <th>Valor</th>
+                        <th>Auxiliar</th>                        
                         <th>Estado</th>
                         <th>Status</th>
                     </tr>
@@ -105,23 +110,24 @@
                     @foreach($parametros as $parametro)
                         <tr>
                             <td>{{ $parametro->id }}</td>
-                            <td>{{ $parametro->variable }}</td>
-                            <td>{{ $parametro->valor }}</td>
+                            <td>{{ $parametro->nombre }}</td>
                             <td>{{ $parametro->descripcion }}</td>
+                            <td>{{ $parametro->valor }}</td>
+                            <td>{{ $parametro->auxiliar }}</td>                            
 
-                            <td>
+                            <td class="text-center text-lg">
                                 @if($parametro->activa==1)
-                                    <span>Activa</span>
+                                    <span class="text-success" data-toggle="tooltip" data-placement="left" title="Activa"><i class="fas fa-check"></i></span>
                                 @else
-                                    <span>Inactiva</span>
+                                    <span class="text-warning" data-toggle="tooltip" data-placement="left" title="Inactiva"><i class="fas fa-ban"></i></span>
                                 @endif
                             </td>
 
-                            <td class="w-1/6 text-left py-3 px-4">
+                            <td class="text-center text-lg">
                                 @if($parametro->deleted_at=='')
-                                    <span>Ok</span>
+                                    <span class="text-success" data-toggle="tooltip" data-placement="left" title="OK"><i class="fas fa-check"></i></span>
                                 @else
-                                    <span>Borrada</span>
+                                    <span class="text-danger" data-toggle="tooltip" data-placement="left" title="Borrada"><i class="fas fa-ban"></i></span>
                                 @endif
                             </td>
                         </tr>
