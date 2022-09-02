@@ -7,6 +7,8 @@
 @stop
 
 @section('css')
+    <link rel="stylesheet" href="https://cdn.datatables.net/staterestore/1.1.1/css/stateRestore.dataTables.min.css"/>
+
     <style>        
         tfoot input {
             width: 100% !important;
@@ -33,13 +35,14 @@
 
 @section('js')
     <script type="text/javascript" src="https://cdn.datatables.net/fixedheader/3.2.4/js/dataTables.fixedHeader.min.js"></script>
-    
+    <script type="text/javascript" src="https://cdn.datatables.net/colreorder/1.5.6/js/dataTables.colReorder.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/staterestore/1.1.1/js/dataTables.stateRestore.min.js"></script>
     <script>        
         $(document).ready(function(){
             //Footer tabla
             $('#resultadosTable tfoot th.isSearchable').each(function () {
                 var title = $(this).text();
-                $(this).html('<input type="text" class="isSearchableInput" placeholder="Buscar ' + title + '..." />');
+                $(this).html('<input type="text" class="isSearchableInput" placeholder="Buscar..." />');
             });
 
             //Marca de seleccion en las filas
@@ -72,6 +75,8 @@
                 fixedHeader: true,
                 //Ordenado Tabla
                 order: [[0, 'asc']],
+                //Reordenar columnas
+                colReorder: true,
                 //Responsive
                 responisve: true,
                 autoWidth: false,                                         
@@ -83,6 +88,8 @@
                 ],  
                 buttons: [  
                     'pageLength',
+                    'createState',
+                    'savedStates',
                     {
                         extend: 'copy',
                         text: 'Copiar',
@@ -130,8 +137,22 @@
                         copySuccess: {
                             _: '%d filas copiadas',
                             1: '1 linea copiada'
-                        }
-                    }                    
+                        },
+                        createState:"Crear estado",
+                        savedStates:"Estados",
+                        updateState: 'Actualizar',
+                        stateRestore: 'Nuevo estado %d',
+                        removeState: 'Eliminar',
+                        renameState: 'Cambiar nombre',                        
+                    },
+                    stateRestore: {
+                        removeSubmit: 'Confirmar',
+                        removeConfirm: 'Confirma que quieres eliminar %s.',
+                        emptyStates: 'Sin estados',
+                        renameButton: 'Cambiar nombre',
+                        renameLabel: 'Renombrar a:',
+                        renameTitle: 'Cambiar nombre de estado',
+                    },
                 },              
             });
 
