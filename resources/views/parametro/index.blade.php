@@ -3,7 +3,7 @@
 @section('title', 'Parametros')
 
 @section('footer')
-    <!-- Footer theme -->
+    <!-- Footer theme | No Borrar -->
 @stop
 
 @section('css')
@@ -19,16 +19,19 @@
 
 @section('js')   
     <script>
+        //Tooltip
         $(function () {
             $('[data-toggle="tooltip"]').tooltip()
         })
 
         $(document).ready(function(){
+            //Footer tabla
             $('#parametros tfoot th.isSearchable').each(function () {
                 var title = $(this).text();
                 $(this).html('<input type="text" placeholder="Buscar ' + title + '..." />');
             });
 
+            //Busqueda por columnas
             var table = $('#parametros').DataTable({
                 initComplete: function () {
                 this.api()
@@ -42,13 +45,17 @@
                         });
                     });
                 },
-                dom: 'Bfrtip',
+                //Ordenado Tabla
+                order: [[0, 'asc']],                
+                //Responsive
                 responisve: true,
-                autoWidth: false,                
+                autoWidth: false,                                         
+                //Botoner de exportado
+                dom: 'Bfrtip',
                 lengthMenu: [
                     [ 10, 25, 50, 100,-1 ],
                     [ '10', '25', '50', '100', 'Todo' ]
-                ],                
+                ],  
                 buttons: [  
                     'pageLength',
                     {
@@ -75,6 +82,7 @@
                         text: 'Imprimir',
                     },
                 ], 
+                //Traduccion Tabla
                 language:{
                     "search":"Buscar:",
                     "lengthMenu": "Mostrar _MENU_ registros por página",
