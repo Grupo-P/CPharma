@@ -7,15 +7,19 @@
 @stop
 
 @section('css')
-    <style>
+    <style>        
         tfoot input {
-            width: 100%;
-            padding: 3px;
-            box-sizing: border-box;
-            border: none;
+            width: 100% !important;
+            padding: 3px !important;
+            box-sizing: border-box !important;
+            border: none !important;
         }
-        .isSearchableInput:focus{
-            background-color: #f2f2f2;
+        .isSearchableInput{
+            width: 100% !important;
+            border-radius: 5px !important;
+        }        
+        .isSearchable{
+            text-align: center !important;            
         }
     </style>
 @stop
@@ -29,13 +33,13 @@
 
         $(document).ready(function(){
             //Footer tabla
-            $('#parametros tfoot th.isSearchable').each(function () {
+            $('#resultadosTable tfoot th.isSearchable').each(function () {
                 var title = $(this).text();
                 $(this).html('<input type="text" class="isSearchableInput" placeholder="Buscar ' + title + '..." />');
             });
 
             //Busqueda por columnas
-            var table = $('#parametros').DataTable({
+            var table = $('#resultadosTable').DataTable({
                 initComplete: function () {
                 this.api()
                     .columns()
@@ -47,6 +51,12 @@
                             }
                         });
                     });
+
+                    var thfootTable = $('#resultadosTable tfoot tr');
+                    thfootTable.find('th').each(function(){
+                        $(this).css('padding', 8);
+                    });
+                    $('#resultadosTable thead').append(thfootTable);                    
                 },
                 //Ordenado Tabla
                 order: [[0, 'asc']],  
@@ -136,7 +146,7 @@
             <button type="button" class="btn btn-success" data-toggle="tooltip" data-placement="right" title="Crear Parametro"><i class="fas fa-plus"></i></button>
         </div>
         <div class="card-body table-responsive">
-            <table id="parametros" class="table table-striped table-bordered">
+            <table id="resultadosTable" class="table table-striped table-bordered">
                 <thead class="table-dark">
                     <tr class="text-center">
                         <th>Nro</th>
@@ -199,9 +209,7 @@
                         <th class="isSearchable">descripción</th>
                         <th class="isSearchable">valor</th>
                         <th class="isSearchable">auxiliar</th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
+                        <th colspan="3"></th>                    
                     </tr>
                 </tfoot>
             </table>
