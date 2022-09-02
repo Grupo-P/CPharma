@@ -14,6 +14,9 @@
             box-sizing: border-box;
             border: none;
         }
+        .isSearchableInput:focus{
+            background-color: #f2f2f2;
+        }
     </style>
 @stop
 
@@ -28,7 +31,7 @@
             //Footer tabla
             $('#parametros tfoot th.isSearchable').each(function () {
                 var title = $(this).text();
-                $(this).html('<input type="text" placeholder="Buscar ' + title + '..." />');
+                $(this).html('<input type="text" class="isSearchableInput" placeholder="Buscar ' + title + '..." />');
             });
 
             //Busqueda por columnas
@@ -46,11 +49,15 @@
                     });
                 },
                 //Ordenado Tabla
-                order: [[0, 'asc']],                
+                order: [[0, 'asc']],  
+                //Buscar en la tabla - Enter
+                /*search: {
+                    return: true,
+                },*/
                 //Responsive
                 responisve: true,
                 autoWidth: false,                                         
-                //Botoner de exportado
+                //Botones tabla
                 dom: 'Bfrtip',
                 lengthMenu: [
                     [ 10, 25, 50, 100,-1 ],
@@ -94,6 +101,8 @@
                         "previous":"Anterior",
                         "next":"Siguiente",
                     },
+                    decimal: ',',
+                    thousands: '.',
                     buttons: {
                         pageLength: {
                             _: "Ver %d filas",
