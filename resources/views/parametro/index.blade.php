@@ -51,8 +51,8 @@
             });
 
             //Marca de seleccion en las filas
-            $('#resultadosTable tbody').on('click', 'tr', function () {
-                $(this).toggleClass('isSelected');
+            $('#resultadosTable tbody').on('click', 'tr td.isSelectable', function () {
+                $(this).parent().toggleClass('isSelected');
             });
 
             //Composicion de la DataTable
@@ -268,7 +268,7 @@
                 <tbody>
                     @foreach($parametros as $parametro)
                         <tr>
-                            <td>{{ $parametro->id }}</td>
+                            <td class="isSelectable">{{ $parametro->id }}</td>
                             <td>{{ $parametro->nombre }}</td>
                             <td>{{ $parametro->descripcion }}</td>
                             <td>{{ $parametro->valor }}</td>
