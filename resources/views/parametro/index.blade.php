@@ -76,8 +76,6 @@
                     });
                     $('#resultadosTable thead').prepend(thfootTable);
                 },
-                //Encabezado Fijo
-                fixedHeader: true,
 
                 //Ordenado DataTable
                 order: [[0, 'asc']],
