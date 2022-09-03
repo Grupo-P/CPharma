@@ -184,27 +184,60 @@
 
             //Contar filas seleccionadas
             $('#countRows').click(function () {
-                Swal.fire(
-                    '¡Buen trabajo!',
-                    ''+ table.rows('.isSelected').data().length +' filas seleccionadas',
-                    'success'
-                );
+                var count = table.rows('.isSelected').data().length;
+                if(count>0){
+                    Swal.fire(
+                        '¡Buen trabajo!',
+                        ''+count+' filas seleccionadas',
+                        'success'
+                    );
+                }
             });
 
             //Ocultar filas seleccionadas
             $('#deleteRows').click(function () {
                 var count = table.rows('.isSelected').data().length;
-                table.rows('.isSelected').remove().draw(false);
-                Swal.fire(
-                    '¡Buen trabajo!',
-                    ''+ count +' filas ocultadas',
-                    'success'
-                );
+                if(count>0){
+                    Swal.fire({
+                    title: 'Estas seguro?',
+                    text: "Quieres ocultar "+count+" filas",
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Si, ocultarlas!',
+                    cancelButtonText: 'Cancelar',
+                    backdrop: `rgba(0,0,0,0.4)`,
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            table.rows('.isSelected').remove().draw(false);
+                            Swal.fire(
+                                '¡Buen trabajo!',
+                                ''+ count +' filas ocultadas',
+                                'success'
+                            );
+                        }
+                    });
+                }
             });
 
             //Recargar pagina
             $('#reloadPage').click(function () {
-                window.location.reload();
+                Swal.fire({
+                    title: 'Estas seguro?',
+                    text: "Se descartaran todos los filtros",
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Si, recargar!',
+                    cancelButtonText: 'Cancelar',
+                    backdrop: `rgba(0,0,0,0.4)`,
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.reload();
+                        }
+                    });                
             });
 
             //Visualizar Columnas
