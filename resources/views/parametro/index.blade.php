@@ -30,6 +30,10 @@
         .isSelected{
             background-color: #28a74547 !important;
         }
+        #resultadosTable_filter{
+            display: inline-block;
+            float: right;
+        }
     </style>
 @stop
 
