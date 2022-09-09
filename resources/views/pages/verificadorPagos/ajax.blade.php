@@ -157,7 +157,7 @@
 
                     $body = imap_fetchbody($conn, $email, 2);
 
-                    if (strpos($body, 'Tpago')) {
+                    if (strpos($body, 'Tpago') && strpos($body, '- 500')) {
 
                         $inicioEnviadoPor = (strpos($body, 'celular')) + 7;
                         $substr = substr($body, $inicioEnviadoPor);
