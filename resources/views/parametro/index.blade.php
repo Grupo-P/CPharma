@@ -94,46 +94,61 @@
                     [ '10', '25', '50', '100', 'Todo' ]
                 ],
                 buttons: [
-                    'pageLength',
-                    'createState',
-                    'savedStates',
                     {
-                        extend: 'copy',
-                        text: 'Copiar',
+                        extend: 'excel',
+                        text: '<i class="fa fa-file-excel" data-toggle="tooltip" data-placement="right" title="Excel"></i>',
+                        title: 'parametros',
                         exportOptions: {
                             columns: [ 0, 1, 2, 3, 4 ]
-                        }
+                        },
+                        className : 'btn btn-success mr-1 rounded'
                     },
                     {
                         extend: 'csv',
-                        text: 'CSV',
+                        text: '<i class="fa fa-file-csv" data-toggle="tooltip" data-placement="right" title="CSV"></i>',
                         title: 'parametros',
                         exportOptions: {
                             columns: [ 0, 1, 2, 3, 4 ]
-                        }
-                    },
-                    {
-                        extend: 'excel',
-                        text: 'Excel',
-                        title: 'parametros',
-                        exportOptions: {
-                            columns: [ 0, 1, 2, 3, 4 ]
-                        }
+                        },
+                        className : 'btn btn-info mr-1 rounded'
                     },
                     {
                         extend: 'pdf',
-                        text: 'PDF',
+                        text: '<i class="fa fa-file-pdf" data-toggle="tooltip" data-placement="right" title="PDF"></i>',
                         title: 'parametros',
                         exportOptions: {
                             columns: [ 0, 1, 2, 3, 4 ]
-                        }
+                        },
+                        className : 'btn btn-danger mr-1 rounded'
                     },
                     {
                         extend: 'print',
-                        text: 'Imprimir',
+                        text: '<i class="fa fa-print text-white" data-toggle="tooltip" data-placement="right" title="Imprimir"></i>',
                         exportOptions: {
                             columns: [ 0, 1, 2, 3, 4 ]
-                        }
+                        },
+                        className : 'btn btn-warning mr-1 rounded'
+                    },
+                    {
+                        extend: 'copy',
+                        text: '<i class="fa fa-copy" data-toggle="tooltip" data-placement="right" title="Copiar"></i>',
+                        exportOptions: {
+                            columns: [ 0, 1, 2, 3, 4 ]
+                        },
+                        className : 'btn btn-dark mr-1 rounded'
+                    },
+                    {
+                        extend: 'createState',
+                        text: '<i class="fa fa-magnet" data-toggle="tooltip" data-placement="right" title="Crear estado"></i>',
+                        className : 'btn btn-dark mr-1 rounded',
+                    },
+                    {
+                        extend: 'savedStates',
+                        className : 'btn btn-dark mr-1 rounded',
+                    },
+                    {
+                        extend: 'pageLength',
+                        className : 'btn btn-dark mr-1 rounded',
                     },
                 ], 
 
@@ -153,7 +168,7 @@
                     thousands: '.',
                     buttons: {
                         pageLength: {
-                            _: "Ver %d filas",
+                            _: '<i class="fa fa-bars" data-toggle="tooltip" data-placement="right" title="Cantidad de filas"></i> (%d)',
                             '-1': "Ver todo"
                         },
                         copyTitle: 'Añadido al portapapeles',
@@ -163,8 +178,8 @@
                         },
                         createState:"Crear estado",
                         savedStates: {
-                            0: 'Estados',
-                            _: 'Estados (%d)'
+                            0: '<i class="fa fa-magic" data-toggle="tooltip" data-placement="right" title="Estados"></i>',
+                            _: '<i class="fa fa-magic" data-toggle="tooltip" data-placement="right" title="Estados"></i> (%d)'
                         },
                         updateState: 'Actualizar',
                         stateRestore: 'Nuevo estado %d',
@@ -191,6 +206,12 @@
                         ''+count+' filas seleccionadas',
                         'success'
                     );
+                }else{
+                    Swal.fire(
+                        '¡Uups!',
+                        'No hay filas seleccionadas',
+                        'error'
+                    );
                 }
             });
 
@@ -203,7 +224,7 @@
                     text: "Quieres ocultar "+count+" filas",
                     icon: 'question',
                     showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
+                    confirmButtonColor: '#28a745',
                     cancelButtonColor: '#d33',
                     confirmButtonText: 'Si, ocultarlas!',
                     cancelButtonText: 'Cancelar',
@@ -218,6 +239,12 @@
                             );
                         }
                     });
+                }else{
+                    Swal.fire(
+                        '¡Uups!',
+                        'No hay filas seleccionadas',
+                        'error'
+                    );
                 }
             });
 
@@ -228,7 +255,7 @@
                     text: "Se descartaran todos los filtros",
                     icon: 'question',
                     showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
+                    confirmButtonColor: '#28a745',
                     cancelButtonColor: '#d33',
                     confirmButtonText: 'Si, recargar!',
                     cancelButtonText: 'Cancelar',
@@ -332,13 +359,13 @@
                                     @if($parametro->activa==1)
                                         <button type="button" class="btn btn-warning text-white" data-toggle="tooltip" data-placement="left" title="Inactivar"><i class="fas fa-ban"></i></button>
                                     @elseif($parametro->activa==0)
-                                        <button type="button" class="btn btn-success" data-toggle="tooltip" data-placement="left" title="Activar"><i class="fas fa-undo"></i></button>
+                                        <button type="button" class="btn btn-warning text-white" data-toggle="tooltip" data-placement="left" title="Activar"><i class="fas fa-undo"></i></button>
                                     @endif
 
                                     @if($parametro->deleted_at=='')
                                         <button type="button" class="btn btn-danger" data-toggle="tooltip" data-placement="left" title="Borrar"><i class="fas fa-trash-alt"></i></button>
                                     @elseif($parametro->deleted_at!='')
-                                        <button type="button" class="btn btn-success" data-toggle="tooltip" data-placement="left" title="Restaurar"><i class="fas fa-trash-restore-alt"></i></button>
+                                        <button type="button" class="btn btn-danger" data-toggle="tooltip" data-placement="left" title="Restaurar"><i class="fas fa-trash-restore-alt"></i></button>
                                     @endif
                                 </div>
                             </td>
