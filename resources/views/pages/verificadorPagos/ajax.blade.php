@@ -238,6 +238,8 @@
                     $enviadoPor = strip_tags($enviadoPor);
                     $enviadoPor = str_replace('Gedaca holding corp:', '', $enviadoPor);
 
+                    $enviadoPor = trim($enviadoPor);
+
                     $inicioMonto = strpos($body, '<td><strong>Fondos recibidos</strong></td>');
                     $monto = substr($body, $inicioMonto+37, 100);
                     $monto = strip_tags($monto);
