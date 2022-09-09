@@ -48,6 +48,32 @@
     color: #ffffff;
   }
   </style>
+
+  <script>
+      function mostrar_ocultar(that, elemento) {
+            if (that.checked) {
+                return $('.' + elemento).show();
+            }
+
+            return $('.' + elemento).hide();
+        }
+
+        campos = ['codigo', 'codigo_barra', 'descripcion', 'tipo', 'gravado', 'dolarizado', 'clasificacion', 'fecha_creacion', 'cantidad_recibida', 'existencia', 'precio', 'ultima_venta', 'ultima_compra', 'ultimo_proveedor'];
+
+        function mostrar_todas(that) {
+            if (that.checked) {
+                for (var i = campos.length - 1; i >= 0; i--) {
+                    $('.' + campos[i]).show();
+                    $('[name='+campos[i]+']').prop('checked', true);
+                }
+            } else {
+                for (var i = campos.length - 1; i >= 0; i--) {
+                    $('.' + campos[i]).hide();
+                    $('[name='+campos[i]+']').prop('checked', false);
+                }
+            }
+        }
+  </script>
 @endsection
 
 @section('content')
@@ -142,26 +168,123 @@
     </div>
     <br/>
     ';
+
+    echo '
+        <div class="modal fade" id="ver_campos" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Mostrar u ocultar columnas</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, \'codigo\')" name="codigo" checked>
+                    Código
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, \'codigo_barra\')" name="codigo_barra" checked>
+                    Código de barra
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, \'descripcion\')" name="descripcion" checked>
+                    Descripción
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, \'tipo\')" name="tipo" checked>
+                    Tipo
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, \'gravado\')" name="gravado" checked>
+                    Gravado
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, \'dolarizado\')" name="dolarizado" checked>
+                    Dolarizado
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, \'clasificacion\')" name="clasificacion" checked>
+                    Clasificación
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, \'fecha_creacion\')" name="fecha_creacion" checked>
+                    Fecha de creación
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, \'cantidad_recibida\')" name="cantidad_recibida" checked>
+                    Cantidad recibida
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, \'existencia\')" name="existencia" checked>
+                    Existencia
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, \'precio\')" name="precio" checked>
+                    Precio
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, \'ultima_venta\')" name="ultima_venta" checked>
+                    Última venta
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, \'ultima_compra\')" name="ultima_compra" checked>
+                    Última compra
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, \'ultimo_proveedor\')" name="ultimo_proveedor" checked>
+                    Última proveedor
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_todas(this)" name="Marcar todas" checked>
+                    Marcar todas
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <h6 align="center"><a href="" data-toggle="modal" data-target="#ver_campos"><i class="fa fa-eye"></i> Mostrar u ocultar campos<a></h6>
+    ';
+
     echo'<h6 align="center">Periodo desde el '.$FInicialImp.' al '.$FFinalImp.' </h6>';
     echo'
     <table class="table table-striped table-bordered col-12 sortable" id="myTable">
         <thead class="thead-dark">
           <tr>
             <th scope="col" class="CP-sticky">#</th>
-            <th scope="col" class="CP-sticky">Codigo</th>
-            <th scope="col" class="CP-sticky">Codigo de barra</th>
-            <th scope="col" class="CP-sticky">Descripcion</th>
-            <th scope="col" class="CP-sticky">Tipo</th>
-            <th scope="col" class="CP-sticky">Gravado?</td>
-            <th scope="col" class="CP-sticky">Dolarizado?</td>
-            <th scope="col" class="CP-sticky">Clasificacion</td>
-            <th scope="col" class="CP-sticky">Fecha de  creacion</th>
-            <th scope="col" class="CP-sticky">Cantidad recibida</td>
-            <th scope="col" class="CP-sticky">Existencia</th>
-            <th scope="col" class="CP-sticky">Precio</br>(Con IVA) '.SigVe.'</td>
-            <th scope="col" class="CP-sticky">Ultima Venta</th>
-            <th scope="col" class="CP-sticky bg-warning">Ultima Compra</th>
-            <th scope="col" class="CP-sticky">Ultimo Proveedor</th>
+            <th scope="col" id="" class="codigo CP-sticky">Codigo</th>
+            <th scope="col" id="" class="codigo_barra CP-sticky">Codigo de barra</th>
+            <th scope="col" id="" class="descripcion CP-sticky">Descripcion</th>
+            <th scope="col" id="" class="tipo CP-sticky">Tipo</th>
+            <th scope="col" id="" class="gravado CP-sticky">Gravado?</td>
+            <th scope="col" id="" class="dolarizado CP-sticky">Dolarizado?</td>
+            <th scope="col" id="" class="clasificacion CP-sticky">Clasificacion</td>
+            <th scope="col" id="" class="fecha_creacion CP-sticky">Fecha de  creacion</th>
+            <th scope="col" id="" class="cantidad_recibida CP-sticky">Cantidad recibida</td>
+            <th scope="col" id="" class="existencia CP-sticky">Existencia</th>
+            <th scope="col" id="" class="precio CP-sticky">Precio</br>(Con IVA) '.SigVe.'</td>
+            <th scope="col" id="" class="ultima_venta CP-sticky">Ultima Venta</th>
+            <th scope="col" id="" class="ultima_compra CP-sticky bg-warning">Ultima Compra</th>
+            <th scope="col" id="" class="ultimo_proveedor CP-sticky">Ultimo Proveedor</th>
           </tr>
         </thead>
         <tbody>
@@ -207,45 +330,45 @@
 
       echo '<tr>';
       echo '<td align="center"><strong>'.intval($contador).'</strong></td>';
-      echo '<td>'.$CodigoArticulo.'</td>';
-      echo '<td>'.$CodigoBarra.'</td>';
+      echo '<td class="codigo">'.$CodigoArticulo.'</td>';
+      echo '<td class="codigo_barra">'.$CodigoBarra.'</td>';
 
       echo '
-        <td align="left" class="CP-barrido">
+        <td class="descripcion" align="left" class="CP-barrido">
           <a href="/reporte2?Id='.$IdArticulo.'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
             .$Descripcion
           .'</a>
         </td>
       ';
 
-      echo '<td align="center">'.$Tipo.'</td>';
-      echo '<td align="center">'.$Gravado.'</td>';
-      echo '<td align="center">'.$Dolarizado.'</td>';
-      echo '<td align="center">'.$clasificacion.'</td>';
-      echo '<td align="center">'.$fechaCreacion->format('d-m-Y').'</td>';
-      echo '<td align="center">'.$CantidadRecibida.'</td>';
-      echo '<td align="center">'.intval($Existencia).'</td>';
-      echo '<td align="center">'.number_format($Precio,2,"," ,"." ).'</td>';
+      echo '<td class="tipo" align="center">'.$Tipo.'</td>';
+      echo '<td class="gravado" align="center">'.$Gravado.'</td>';
+      echo '<td class="dolarizado" align="center">'.$Dolarizado.'</td>';
+      echo '<td class="clasificacion" align="center">'.$clasificacion.'</td>';
+      echo '<td class="fecha_creacion" align="center">'.$fechaCreacion->format('d-m-Y').'</td>';
+      echo '<td class="cantidad_recibida" align="center">'.$CantidadRecibida.'</td>';
+      echo '<td class="existencia" align="center">'.intval($Existencia).'</td>';
+      echo '<td class="precio" align="center">'.number_format($Precio,2,"," ,"." ).'</td>';
 
       if(!is_null($UltimaVenta)){
-        echo '<td align="center">'.$UltimaVenta->format('d-m-Y').'</td>';
+        echo '<td class="ultima_venta" align="center">'.$UltimaVenta->format('d-m-Y').'</td>';
       }
       else{
-        echo '<td align="center"> - </td>';
+        echo '<td class="ultima_venta" align="center"> - </td>';
       }
 
       if(!is_null($UltimaCompra)){
-        echo '<td align="center" class="bg-warning">'.$UltimaCompra->format('d-m-Y').'</td>';
+        echo '<td class="ultima_compra" align="center" class="bg-warning">'.$UltimaCompra->format('d-m-Y').'</td>';
       }
       else{
-        echo '<td align="center" class="bg-warning"> - </td>';
+        echo '<td class="ultima_compra" align="center" class="bg-warning"> - </td>';
       }
 
       if(!is_null($UltimoProveedorNombre)){
-        echo '<td align="center">'.$UltimoProveedorNombre.'</td>';
+        echo '<td class="ultimo_proveedor" align="center">'.$UltimoProveedorNombre.'</td>';
       }
       else{
-        echo '<td align="center"> - </td>';
+        echo '<td class="ultimo_proveedor" align="center"> - </td>';
       }
 
       echo '</tr>';
