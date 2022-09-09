@@ -163,6 +163,7 @@
                         $substr = substr($body, $inicioEnviadoPor);
                         $finEnviadoPor = strpos($substr, '.');
                         $enviadoPor = substr($substr, 0, $finEnviadoPor);
+                        $enviadoPor = str_replace(['=', ' '], ['', ''], $enviadoPor);
 
                         $inicioMonto = (strpos($body, 'Tpago por')) + 9;
                         $substr = substr($body, $inicioMonto);
