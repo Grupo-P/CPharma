@@ -113,6 +113,14 @@
                         className : 'btn btn-info mr-1 rounded'
                     },
                     {
+                        extend: 'print',
+                        text: '<i class="fa fa-print text-white" data-toggle="tooltip" data-placement="right" title="Imprimir"></i>',
+                        exportOptions: {
+                            columns: [ 0, 1, 2, 3, 4 ]
+                        },
+                        className : 'btn btn-warning mr-1 rounded'
+                    },
+                    {
                         extend: 'pdf',
                         text: '<i class="fa fa-file-pdf" data-toggle="tooltip" data-placement="right" title="PDF"></i>',
                         title: 'parametros',
@@ -122,20 +130,12 @@
                         className : 'btn btn-danger mr-1 rounded'
                     },
                     {
-                        extend: 'print',
-                        text: '<i class="fa fa-print text-white" data-toggle="tooltip" data-placement="right" title="Imprimir"></i>',
-                        exportOptions: {
-                            columns: [ 0, 1, 2, 3, 4 ]
-                        },
-                        className : 'btn btn-warning mr-1 rounded'
-                    },
-                    {
                         extend: 'copy',
                         text: '<i class="fa fa-copy" data-toggle="tooltip" data-placement="right" title="Copiar"></i>',
                         exportOptions: {
                             columns: [ 0, 1, 2, 3, 4 ]
                         },
-                        className : 'btn btn-dark mr-1 rounded'
+                        className : 'btn btn-secondary mr-1 rounded'
                     },
                     {
                         extend: 'createState',
@@ -296,8 +296,8 @@
         <div class="card-header">
             <button type="button" class="btn btn-success" data-toggle="tooltip" data-placement="right" title="Crear Parametro"><i class="fas fa-plus"></i></button>
             <button type="button" id="countRows" class="btn btn-info" data-toggle="tooltip" data-placement="right" title="Contar Filas seleccionadas"><i class="fas fa-layer-group"></i></button>
-            <button type="button" id="deleteRows" class="btn btn-danger" data-toggle="tooltip" data-placement="right" title="Ocultar Filas seleccionadas"><i class="fas fa-layer-group"></i></button>
             <button type="button" id="reloadPage" class="btn btn-warning text-white" data-toggle="tooltip" data-placement="right" title="Recargar"><i class="fas fa-sync"></i></button>
+            <button type="button" id="deleteRows" class="btn btn-danger" data-toggle="tooltip" data-placement="right" title="Ocultar Filas seleccionadas"><i class="fas fa-eye-slash"></i></button>
 
             <div style="display:inline-block;" class="float-right">
                 <label>Ver columnas:</label>
@@ -352,20 +352,20 @@
 
                             <td class="text-center">
                                 <div class="btn-group">
-                                    <button type="button" class="btn btn-success" data-toggle="tooltip" data-placement="left" title="Ver"><i class="fas fa-eye"></i></button>
+                                    <button type="button" class="btn btn-success mr-1 rounded" data-toggle="tooltip" data-placement="left" title="Ver"><i class="fas fa-eye"></i></button>
 
-                                    <button type="button" class="btn btn-info" data-toggle="tooltip" data-placement="left" title="Editar"><i class="fas fa-edit"></i></button>
+                                    <button type="button" class="btn btn-info mr-1 rounded" data-toggle="tooltip" data-placement="left" title="Editar"><i class="fas fa-edit"></i></button>
 
                                     @if($parametro->activa==1)
-                                        <button type="button" class="btn btn-warning text-white" data-toggle="tooltip" data-placement="left" title="Inactivar"><i class="fas fa-ban"></i></button>
+                                        <button type="button" class="btn btn-warning text-white mr-1 rounded" data-toggle="tooltip" data-placement="left" title="Inactivar"><i class="fas fa-ban"></i></button>
                                     @elseif($parametro->activa==0)
-                                        <button type="button" class="btn btn-warning text-white" data-toggle="tooltip" data-placement="left" title="Activar"><i class="fas fa-undo"></i></button>
+                                        <button type="button" class="btn btn-warning text-white mr-1 rounded" data-toggle="tooltip" data-placement="left" title="Activar"><i class="fas fa-undo"></i></button>
                                     @endif
 
                                     @if($parametro->deleted_at=='')
-                                        <button type="button" class="btn btn-danger" data-toggle="tooltip" data-placement="left" title="Borrar"><i class="fas fa-trash-alt"></i></button>
+                                        <button type="button" class="btn btn-danger rounded" data-toggle="tooltip" data-placement="left" title="Borrar"><i class="fas fa-trash-alt"></i></button>
                                     @elseif($parametro->deleted_at!='')
-                                        <button type="button" class="btn btn-danger" data-toggle="tooltip" data-placement="left" title="Restaurar"><i class="fas fa-trash-restore-alt"></i></button>
+                                        <button type="button" class="btn btn-danger rounded" data-toggle="tooltip" data-placement="left" title="Restaurar"><i class="fas fa-trash-restore-alt"></i></button>
                                     @endif
                                 </div>
                             </td>
