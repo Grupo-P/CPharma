@@ -17,29 +17,34 @@
             $username = 'pagostierranegra2@hotmail.com';
             $password = 'Glibenclamida*84';
             $id = 1;
+            $remitente = 'pagomovilftn@gmail.com';
         }
 
         if ($host == 'cpharmafau.com' || $host == 'cpharmade.com' || $host == 'cpharmagpde.com') {
             $username = 'pagosuniversidad2@hotmail.com';
             $password = 'pagosfarmaciaavenidauniversidad';
             $id = 2;
+            $remitente = 'pagomovilgp@gmail.com';
         }
 
         if ($host == 'cpharmafsm.com') {
             $username = 'pagosmillennium@hotmail.com';
             $password = 'Glibenclamida*84';
+            $remitente = 'pagosfll677@gmail.com';
             $id = 4;
         }
 
         if ($host == 'cpharmafll.com') {
             $username = 'pagoslalago@hotmail.com';
             $password = 'Glibenclamida*84';
+            $remitente = 'pagosfll677@gmail.com';
             $id = 3;
         }
 
         if ($host == 'cpharmakdi.com') {
             $username = 'pagoskdi@hotmail.com';
             $password = 'GJpc2017.';
+            $remitente = '';
             $id = 5;
         }
 
@@ -148,10 +153,9 @@
 
                 // Mercantil
 
-                if (strpos($asunto, 'SMS') && $header->fromaddress == 'SMS forwarder <no-reply-smsforwarder@cofp.ru>') {
+                if (strpos($asunto, 'SMS') && $header->fromaddress == $remitente) {
 
                     $body = imap_fetchbody($conn, $email, 2);
-                    $body = imap_base64($body);
 
                     if (strpos($body, 'Tpago')) {
 

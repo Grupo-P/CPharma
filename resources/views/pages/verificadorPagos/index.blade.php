@@ -59,26 +59,31 @@
             if ($sede == 'FTN' || $sede == 'FARMACIA TIERRA NEGRA, C.A.') {
                 $username = 'pagostierranegra2@hotmail.com';
                 $password = 'Glibenclamida*84';
+                $remitente = 'pagomovilftn@gmail.com';
             }
 
             if ($sede == 'FAU' || $sede == 'FARMACIA AVENIDA UNIVERSIDAD, C.A.') {
                 $username = 'pagosuniversidad2@hotmail.com';
                 $password = 'pagosfarmaciaavenidauniversidad';
+                $remitente = 'pagomovilgp@gmail.com';
             }
 
             if ($sede == 'FSM' || $sede == 'FARMACIA MILLENNIUM 2000, C.A') {
                 $username = 'pagosmillennium@hotmail.com';
                 $password = 'Glibenclamida*84';
+                $remitente = 'pagosfll677@gmail.com';
             }
 
             if ($sede == 'FLL' || $sede == 'FARMACIA LA LAGO,C.A.') {
                 $username = 'pagoslalago@hotmail.com';
                 $password = 'Glibenclamida*84';
+                $remitente = 'pagosfll677@gmail.com';
             }
 
             if ($sede == 'KDI' || $sede == 'FARMACIAS KD EXPRESS, C.A.') {
                 $username = 'pagoskdi@hotmail.com';
                 $password = 'GJpc2017.';
+                $remitente = '';
             }
 
             $mailbox = '{outlook.office365.com:993/imap/ssl}';
@@ -173,10 +178,9 @@
 
                     // Mercantil
 
-                    if (strpos($asunto, 'SMS') && $header->fromaddress == 'SMS forwarder <no-reply-smsforwarder@cofp.ru>') {
+                    if (strpos($asunto, 'SMS') && $header->fromaddress == $remitente) {
 
                         $body = imap_fetchbody($conn, $email, 2);
-                        $body = imap_base64($body);
 
                         if (strpos($body, 'Tpago')) {
 
@@ -184,6 +188,7 @@
                             $substr = substr($body, $inicioEnviadoPor);
                             $finEnviadoPor = strpos($substr, '.');
                             $enviadoPor = substr($substr, 0, $finEnviadoPor);
+                            $enviadoPor = str_replace(['=', ' '], ['', ''], $enviadoPor);
 
                             $inicioMonto = (strpos($body, 'Tpago por')) + 9;
                             $substr = substr($body, $inicioMonto);
