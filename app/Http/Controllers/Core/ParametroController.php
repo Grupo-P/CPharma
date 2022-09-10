@@ -10,7 +10,7 @@ class ParametroController extends Controller
 {
     public function __invoke(){        
         $parametros = Parametro::all();
-        return view('parametro.index', [
+        return view('core.parametro.index', [
             'parametros' => $parametros
         ]);
     }   
