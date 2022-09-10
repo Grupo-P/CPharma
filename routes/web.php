@@ -2,8 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use Spatie\Health\Http\Controllers\HealthCheckResultsController;
-use App\Http\Controllers\AdminLTEDemoController;
-use App\Http\Controllers\ParametroController;
+use App\Http\Controllers\Core\demo\AdminLTEDemoController;
+use App\Http\Controllers\Core\ParametroController;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,10 +30,18 @@ Route::middleware([
     })->name('dashboard');
 });
 
-//Monitor de estado de la aplicación
-Route::middleware(['auth:sanctum', 'verified'])->get('health', HealthCheckResultsController::class)->name('health');
+//Grupo de rutas core
+Route::prefix('core')->group(function () {
+    
+    //Grupo de rutas demo
+    Route::prefix('demo')->group(function () {
+        //Pagina demo para hacer pruebas del tema AdminLTE con librerias
+        Route::middleware(['auth:sanctum', 'verified'])->get('AdminLTEDemo', [AdminLTEDemoController::class, 'index'])->name('core.demo.AdminLTEDemo');
+    });
 
-//Pagina demo para hacer pruebas de AdminLTE con librerias
-Route::middleware(['auth:sanctum', 'verified'])->get('AdminLTEDemo', [AdminLTEDemoController::class, 'index'])->name('AdminLTEDemo');
+    //Monitor de estado de la aplicación
+    Route::middleware(['auth:sanctum', 'verified'])->get('health', HealthCheckResultsController::class)->name('core.health');
 
-Route::middleware(['auth:sanctum', 'verified'])->get('parametros', ParametroController::class)->name('parametros');
+    //Parametros
+    Route::middleware(['auth:sanctum', 'verified'])->get('parametros', ParametroController::class)->name('core.parametros');
+});

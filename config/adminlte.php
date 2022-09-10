@@ -187,7 +187,7 @@ return [
     */
 
     'sidebar_mini' => 'lg',
-    'sidebar_collapse' => true,
+    'sidebar_collapse' => false, //AQUI
     'sidebar_collapse_auto_size' => false,
     'sidebar_collapse_remember' => false,
     'sidebar_collapse_remember_no_transition' => true,
@@ -277,111 +277,43 @@ return [
         [
             'type'         => 'fullscreen-widget',
             'topnav_right' => true,
-        ],        
+        ],
         // Sidebar items:
-        /*[
+        [
             'type' => 'sidebar-menu-search',
             'text' => 'Buscar...',
-        ],*/
-        [
-            'text' => 'blog',
-            'url'  => 'admin/blog',
-            'can'  => 'manage-blog',
         ],
         [
             'text' => 'Dashboard',
             'route'  => 'dashboard',
-            'icon' => 'fas fa-fw fa-home',            
+            'icon' => 'fas fa-fw fa-home',
+        ],        
+        //MODULOS CORE
+        ['header' => 'MÓDULOS DE CONFIGURACIÓN'],
+        [
+            'text'    => 'Demo',
+            'icon'    => 'fas fa-fw fa-gamepad',
+            'submenu' => [
+                [
+                    'text' => 'AdminLTEDemo',
+                    'route'  => 'core.demo.AdminLTEDemo',
+                    'icon' => 'fas fa-fw fa-space-shuttle',
+                    'label'       => 1,
+                    'label_color' => 'success',
+                    //'can' => 'core.demo.AdminLTEDemo',
+                ],
+            ]
         ],
         [
-            'text' => 'AdminLTEDemo',
-            'route'  => 'AdminLTEDemo',
-            'icon' => 'fas fa-fw fa-space-shuttle',
-            //'label'       => 4,
-            //'label_color' => 'success',
-        ],
-        [
-            'text' => 'Server Health',
-            'route'  => 'health',
-            'icon' => 'fas fa-fw fa-laptop-medical', 
+            'text' => 'Estado del servidor',
+            'route'  => 'core.health',            
+            'icon' => 'fas fa-fw fa-heartbeat', 
             'target' => 'blank'
         ],
         [
             'text' => 'Parametros',
-            'route'  => 'parametros',
-            'icon' => 'fas fa-fw fas fa-cogs',            
-        ],
-        [
-            'text'        => 'pages',
-            'url'         => 'admin/pages',
-            'icon'        => 'far fa-fw fa-file',
-            'label'       => 4,
-            'label_color' => 'success',
-        ],
-        ['header' => 'CONFIGURACIÓN DE CUENTA'],
-        [
-            'text' => 'Perfil',
-            'url'  => 'user/profile',
-            'icon' => 'fas fa-fw fa-user',
-        ],
-        [
-            'text' => 'Cambiar contraseña',
-            'url'  => 'user/profile',
-            'icon' => 'fas fa-fw fa-lock',
-        ],
-        [
-            'text'    => 'multilevel',
-            'icon'    => 'fas fa-fw fa-share',
-            'submenu' => [
-                [
-                    'text' => 'level_one',
-                    'url'  => '#',
-                ],
-                [
-                    'text'    => 'level_one',
-                    'url'     => '#',
-                    'submenu' => [
-                        [
-                            'text' => 'level_two',
-                            'url'  => '#',
-                        ],
-                        [
-                            'text'    => 'level_two',
-                            'url'     => '#',
-                            'submenu' => [
-                                [
-                                    'text' => 'level_three',
-                                    'url'  => '#',
-                                ],
-                                [
-                                    'text' => 'level_three',
-                                    'url'  => '#',
-                                ],
-                            ],
-                        ],
-                    ],
-                ],
-                [
-                    'text' => 'level_one',
-                    'url'  => '#',
-                ],
-            ],
-        ],
-        ['header' => 'labels'],
-        [
-            'text'       => 'important',
-            'icon_color' => 'red',
-            'url'        => '#',
-        ],
-        [
-            'text'       => 'warning',
-            'icon_color' => 'yellow',
-            'url'        => '#',
-        ],
-        [
-            'text'       => 'information',
-            'icon_color' => 'cyan',
-            'url'        => '#',
+            'route'  => 'core.parametros',
+            'icon' => 'fas fa-fw fas fa-cogs',
         ],
     ],
 

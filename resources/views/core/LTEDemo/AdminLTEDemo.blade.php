@@ -103,8 +103,8 @@
             'columns' => [null, null, null, ['orderable' => false]],
         ];
     @endphp
-    
-    <div class="card">
+        
+    <div class="card col-6">
         <div class="card-header">
             Welcome to this beautiful data table demo.
         </div>
@@ -112,7 +112,16 @@
             A nice little card body.
         </div>
     </div>
-    
+        
+    <div class="card col-6">
+        <div class="card-header">
+            Welcome to this beautiful data table demo.
+        </div>
+        <div class="card-body">        
+            <canvas id="myChart"></canvas>            
+        </div>
+    </div>    
+
     <div class="card">
         <div class="card-header">
             Welcome to this beautiful data table demo.
@@ -122,14 +131,4 @@
             <x-adminlte-datatable id="myTable" :heads="$heads" head-theme="dark" theme="light" :config="$config" striped hoverable with-buttons bordered/>    
         </div>
     </div>      
-
-    <div class="card">
-        <div class="card-header">
-            Welcome to this beautiful data table demo.
-        </div>
-        <div class="card-body">        
-            <canvas id="myChart"></canvas>            
-        </div>
-    </div>
-
 @stop

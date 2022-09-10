@@ -108,7 +108,7 @@
                         text: '<i class="fa fa-file-csv" data-toggle="tooltip" data-placement="right" title="CSV"></i>',
                         title: 'parametros',
                         exportOptions: {
-                            columns: [ 0, 1, 2, 3, 4 ]
+                            columns: [ 0, 1, 2, 3 ]
                         },
                         className : 'btn btn-info mr-1 rounded'
                     },
@@ -116,7 +116,7 @@
                         extend: 'print',
                         text: '<i class="fa fa-print text-white" data-toggle="tooltip" data-placement="right" title="Imprimir"></i>',
                         exportOptions: {
-                            columns: [ 0, 1, 2, 3, 4 ]
+                            columns: [ 0, 1, 2, 3 ]
                         },
                         className : 'btn btn-warning mr-1 rounded'
                     },
@@ -125,7 +125,7 @@
                         text: '<i class="fa fa-file-pdf" data-toggle="tooltip" data-placement="right" title="PDF"></i>',
                         title: 'parametros',
                         exportOptions: {
-                            columns: [ 0, 1, 2, 3, 4 ]
+                            columns: [ 0, 1, 2, 3 ]
                         },
                         className : 'btn btn-danger mr-1 rounded'
                     },
@@ -133,7 +133,7 @@
                         extend: 'copy',
                         text: '<i class="fa fa-copy" data-toggle="tooltip" data-placement="right" title="Copiar"></i>',
                         exportOptions: {
-                            columns: [ 0, 1, 2, 3, 4 ]
+                            columns: [ 0, 1, 2, 3 ]
                         },
                         className : 'btn btn-secondary mr-1 rounded'
                     },
@@ -304,11 +304,10 @@
                 <input class="toggle-vis" type="checkbox" checked="checked" data-column="0"> Nro</input>
                 <input class="toggle-vis" type="checkbox" checked="checked" data-column="1"> Variable</input>
                 <input class="toggle-vis" type="checkbox" checked="checked" data-column="2"> Descripción</input>
-                <input class="toggle-vis" type="checkbox" checked="checked" data-column="3"> Valor</input>
-                <input class="toggle-vis" type="checkbox" checked="checked" data-column="4"> Auxiliar</input>
-                <input class="toggle-vis" type="checkbox" checked="checked" data-column="5"> Estado</input>
-                <input class="toggle-vis" type="checkbox" checked="checked" data-column="6"> Status</input>
-                <input class="toggle-vis" type="checkbox" checked="checked" data-column="7"> Acciones</input>
+                <input class="toggle-vis" type="checkbox" checked="checked" data-column="3"> Valor</input>                
+                <input class="toggle-vis" type="checkbox" checked="checked" data-column="4"> Estado</input>
+                <input class="toggle-vis" type="checkbox" checked="checked" data-column="5"> Status</input>
+                <input class="toggle-vis" type="checkbox" checked="checked" data-column="6"> Acciones</input>
             </div>
         </div>
         <div class="card-body table-responsive">
@@ -318,8 +317,7 @@
                         <th>Nro</th>
                         <th>Variable</th>
                         <th>Descripción</th>
-                        <th>Valor</th>
-                        <th>Auxiliar</th>
+                        <th>Valor</th>                    
                         <th>Estado</th>
                         <th>Status</th>
                         <th class="actionsSize">Acciones</th>
@@ -329,23 +327,22 @@
                     @foreach($parametros as $parametro)
                         <tr>
                             <td class="isSelectable">{{ $parametro->id }}</td>
-                            <td>{{ $parametro->nombre }}</td>
+                            <td>{{ $parametro->variable }}</td>
                             <td>{{ $parametro->descripcion }}</td>
-                            <td>{{ $parametro->valor }}</td>
-                            <td>{{ $parametro->auxiliar }}</td>
+                            <td>{{ $parametro->valor }}</td>                            
 
                             <td class="text-center">
-                                @if($parametro->activa==1)
+                                @if($parametro->activo==1)
                                     <span class="text-success" data-toggle="tooltip" data-placement="left" title="Activa"><i class="fas fa-check"></i></span>
-                                @else
+                                @elseif($parametro->activo==0)
                                     <span class="text-warning" data-toggle="tooltip" data-placement="left" title="Inactiva"><i class="fas fa-ban"></i></span>
                                 @endif
                             </td>
 
                             <td class="text-center">
-                                @if($parametro->deleted_at=='')
+                                @if($parametro->borrado==0)
                                     <span class="text-success" data-toggle="tooltip" data-placement="left" title="OK"><i class="fas fa-check"></i></span>
-                                @else
+                                @elseif($parametro->borrado==1)
                                     <span class="text-danger" data-toggle="tooltip" data-placement="left" title="Borrada"><i class="fas fa-trash-alt"></i></span>
                                 @endif
                             </td>
@@ -356,15 +353,15 @@
 
                                     <button type="button" class="btn btn-info mr-1 rounded" data-toggle="tooltip" data-placement="left" title="Editar"><i class="fas fa-edit"></i></button>
 
-                                    @if($parametro->activa==1)
+                                    @if($parametro->activo==1)
                                         <button type="button" class="btn btn-warning text-white mr-1 rounded" data-toggle="tooltip" data-placement="left" title="Inactivar"><i class="fas fa-ban"></i></button>
-                                    @elseif($parametro->activa==0)
+                                    @elseif($parametro->activo==0)
                                         <button type="button" class="btn btn-warning text-white mr-1 rounded" data-toggle="tooltip" data-placement="left" title="Activar"><i class="fas fa-undo"></i></button>
                                     @endif
 
-                                    @if($parametro->deleted_at=='')
+                                    @if($parametro->borrado==0)
                                         <button type="button" class="btn btn-danger rounded" data-toggle="tooltip" data-placement="left" title="Borrar"><i class="fas fa-trash-alt"></i></button>
-                                    @elseif($parametro->deleted_at!='')
+                                    @elseif($parametro->borrado==1)
                                         <button type="button" class="btn btn-danger rounded" data-toggle="tooltip" data-placement="left" title="Restaurar"><i class="fas fa-trash-restore-alt"></i></button>
                                     @endif
                                 </div>
@@ -377,8 +374,7 @@
                         <th class="isSearchable">nro</th>
                         <th class="isSearchable">variable</th>
                         <th class="isSearchable">descripción</th>
-                        <th class="isSearchable">valor</th>
-                        <th class="isSearchable">auxiliar</th>
+                        <th class="isSearchable">valor</th>                        
                         <th colspan="3" class="isSpace"></th>
                     </tr>
                 </tfoot>

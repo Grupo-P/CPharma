@@ -1,8 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Core;
+
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Parametro;
+use App\Models\Core\Parametro;
 
 class ParametroController extends Controller
 {
