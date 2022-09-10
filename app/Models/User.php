@@ -10,6 +10,7 @@ use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
+use App\Models\Core\Parametro;
 
 class User extends Authenticatable
 {
@@ -74,5 +75,10 @@ class User extends Authenticatable
     public function adminlte_profile_url()
     {
         return 'user/profile';
+    }
+
+    public function parametros()
+    {        
+        return $this->hasMany(Parametro::class);
     }
 }
