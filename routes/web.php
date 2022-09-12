@@ -43,5 +43,5 @@ Route::prefix('core')->group(function () {
     Route::middleware(['auth:sanctum', 'verified'])->get('health', HealthCheckResultsController::class)->name('core.health');
 
     //Parametros
-    Route::middleware(['auth:sanctum', 'verified'])->get('parametros', ParametroController::class)->name('core.parametros');
+    Route::resource('parametros',ParametroController::class)->middleware(['auth:sanctum', 'verified'])->names('core.parametros');
 });

@@ -312,7 +312,7 @@ return [
         ],
         [
             'text' => 'Parametros',
-            'route'  => 'core.parametros',
+            'route'  => 'core.parametros.index',
             'icon' => 'fas fa-fw fas fa-cogs',
         ],
     ],
