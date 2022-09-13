@@ -349,20 +349,33 @@
 
                             <td class="text-center">
                                 <div class="btn-group">
-                                    <button type="button" class="btn btn-success mr-1 rounded" data-toggle="tooltip" data-placement="left" title="Ver"><i class="fas fa-eye"></i></button>
+                                    <a href="{{route('core.parametros.show', $parametro)}}" type="button" class="btn btn-success mr-1 rounded" data-toggle="tooltip" data-placement="left" title="Ver"><i class="fas fa-eye"></i></a>
 
-                                    <button type="button" class="btn btn-info mr-1 rounded" data-toggle="tooltip" data-placement="left" title="Editar"><i class="fas fa-edit"></i></button>
+                                    <a href="{{route('core.parametros.edit', $parametro)}}" type="button" class="btn btn-info mr-1 rounded" data-toggle="tooltip" data-placement="left" title="Editar"><i class="fas fa-edit"></i></a>
 
                                     @if($parametro->activo==1)
-                                        <button type="button" class="btn btn-warning text-white mr-1 rounded" data-toggle="tooltip" data-placement="left" title="Inactivar"><i class="fas fa-ban"></i></button>
+                                        <form action="{{route('core.parametros.inactive', $parametro)}}" method="POST">
+                                            @csrf                                            
+                                            <button type="submit" class="btn btn-warning text-white mr-1 rounded" data-toggle="tooltip" data-placement="left" title="Inactivar"><i class="fas fa-ban"></i></button>
+                                        </form>                                        
                                     @elseif($parametro->activo==0)
-                                        <button type="button" class="btn btn-warning text-white mr-1 rounded" data-toggle="tooltip" data-placement="left" title="Activar"><i class="fas fa-undo"></i></button>
+                                        <form action="{{route('core.parametros.active', $parametro)}}" method="POST">
+                                            @csrf                                            
+                                            <button type="submit" class="btn btn-warning text-white mr-1 rounded" data-toggle="tooltip" data-placement="left" title="Activar"><i class="fas fa-undo"></i></button>
+                                        </form>                                         
                                     @endif
 
-                                    @if($parametro->borrado==0)
-                                        <button type="button" class="btn btn-danger rounded" data-toggle="tooltip" data-placement="left" title="Borrar"><i class="fas fa-trash-alt"></i></button>
-                                    @elseif($parametro->borrado==1)
-                                        <button type="button" class="btn btn-danger rounded" data-toggle="tooltip" data-placement="left" title="Restaurar"><i class="fas fa-trash-restore-alt"></i></button>
+                                    @if($parametro->borrado==0)                                                                               
+                                        <form action="{{route('core.parametros.destroy', $parametro)}}" method="POST">
+                                            @csrf
+                                            @method('delete')
+                                            <button type="submit" class="btn btn-danger rounded" data-toggle="tooltip" data-placement="left" title="Borrar"><i class="fas fa-trash-alt"></i></button>
+                                        </form>
+                                    @elseif($parametro->borrado==1)                                        
+                                        <form action="{{route('core.parametros.restore', $parametro)}}" method="POST">
+                                            @csrf                                            
+                                            <button type="submit" class="btn btn-danger rounded" data-toggle="tooltip" data-placement="left" title="Restaurar"><i class="fas fa-trash-restore-alt"></i></button>
+                                        </form>
                                     @endif
                                 </div>
                             </td>

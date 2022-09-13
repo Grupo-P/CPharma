@@ -48,9 +48,7 @@ class ParametroController extends Controller
      */
     public function show(Parametro $parametro)
     {
-        return view('core.parametro.show', [
-            'parametro' => $parametro
-        ]);
+        return view('core.parametro.show', compact('parametro'));
     }
 
     /**
@@ -61,7 +59,7 @@ class ParametroController extends Controller
      */
     public function edit(Parametro $parametro)
     {
-        //
+        return view('core.parametro.edit', compact('parametro'));
     }
 
     /**
@@ -84,6 +82,54 @@ class ParametroController extends Controller
      */
     public function destroy(Parametro $parametro)
     {
-        //
+        echo "Aqui hago el destroy<br>";
+        echo ('<pre>');
+        print_r($parametro);
+        echo ('</pre>');
+    }
+
+    /**
+     * Restore the specified resource from storage.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function restore(Request $request)
+    {
+        $parametro = Parametro::findorfail($request->id);
+        echo "Aqui hago el destroy<br>";
+        echo ('<pre>');
+        print_r($parametro);
+        echo ('</pre>');
+    }
+
+    /**
+     * Active the specified resource from storage.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function active(Request $request)
+    {
+        $parametro = Parametro::findorfail($request->id);
+        echo "Aqui hago el destroy<br>";
+        echo ('<pre>');
+        print_r($parametro);
+        echo ('</pre>');
+    }
+
+    /**
+     * Inactive the specified resource from storage.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function inactive(Request $request)
+    {
+        $parametro = Parametro::findorfail($request->id);
+        echo "Aqui hago el destroy<br>";
+        echo ('<pre>');
+        print_r($parametro);
+        echo ('</pre>');
     }
 }

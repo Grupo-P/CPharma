@@ -36,12 +36,15 @@ Route::prefix('core')->group(function () {
     //Grupo de rutas demo
     Route::prefix('demo')->group(function () {
         //Pagina demo para hacer pruebas del tema AdminLTE con librerias
-        Route::middleware(['auth:sanctum', 'verified'])->get('AdminLTEDemo', [AdminLTEDemoController::class, 'index'])->name('core.demo.AdminLTEDemo');
+        Route::get('AdminLTEDemo', [AdminLTEDemoController::class, 'index'])->middleware(['auth:sanctum', 'verified'])->name('core.demo.AdminLTEDemo');
     });
 
     //Monitor de estado de la aplicación
-    Route::middleware(['auth:sanctum', 'verified'])->get('health', HealthCheckResultsController::class)->name('core.health');
+    Route::get('health', HealthCheckResultsController::class)->middleware(['auth:sanctum', 'verified'])->name('core.health');
 
     //Parametros
     Route::resource('parametros',ParametroController::class)->middleware(['auth:sanctum', 'verified'])->names('core.parametros');
+    Route::post('parametros/{id}/restore', [ParametroController::class, 'restore'])->middleware(['auth:sanctum', 'verified'])->name('core.parametros.restore');
+    Route::post('parametros/{id}/active', [ParametroController::class, 'active'])->middleware(['auth:sanctum', 'verified'])->name('core.parametros.active');
+    Route::post('parametros/{id}/inactive', [ParametroController::class, 'inactive'])->middleware(['auth:sanctum', 'verified'])->name('core.parametros.inactive');
 });

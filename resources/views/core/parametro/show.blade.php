@@ -26,5 +26,9 @@
 @stop
 
 @section('content')
-    
+    @php
+        echo ('<pre>');
+        print_r($parametro);
+        echo ('</pre>');
+    @endphp
 @stop
