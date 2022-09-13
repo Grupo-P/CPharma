@@ -20,6 +20,10 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/register', function () {
+    return view('welcome');
+});
+
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
@@ -31,20 +35,20 @@ Route::middleware([
 });
 
 //Grupo de rutas core
-Route::prefix('core')->group(function () {
+Route::prefix('core')->middleware(['auth:sanctum', 'verified'])->group(function () {
     
     //Grupo de rutas demo
     Route::prefix('demo')->group(function () {
         //Pagina demo para hacer pruebas del tema AdminLTE con librerias
-        Route::get('AdminLTEDemo', [AdminLTEDemoController::class, 'index'])->middleware(['auth:sanctum', 'verified'])->name('core.demo.AdminLTEDemo');
+        Route::get('AdminLTEDemo', [AdminLTEDemoController::class, 'index'])->name('core.demo.AdminLTEDemo');
     });
 
     //Monitor de estado de la aplicación
-    Route::get('health', HealthCheckResultsController::class)->middleware(['auth:sanctum', 'verified'])->name('core.health');
+    Route::get('health', HealthCheckResultsController::class)->name('core.health');
 
     //Parametros
-    Route::resource('parametros',ParametroController::class)->middleware(['auth:sanctum', 'verified'])->names('core.parametros');
-    Route::post('parametros/{id}/restore', [ParametroController::class, 'restore'])->middleware(['auth:sanctum', 'verified'])->name('core.parametros.restore');
-    Route::post('parametros/{id}/active', [ParametroController::class, 'active'])->middleware(['auth:sanctum', 'verified'])->name('core.parametros.active');
-    Route::post('parametros/{id}/inactive', [ParametroController::class, 'inactive'])->middleware(['auth:sanctum', 'verified'])->name('core.parametros.inactive');
+    Route::resource('parametros',ParametroController::class)->names('core.parametros');
+    Route::post('parametros/{id}/restore', [ParametroController::class, 'restore'])->name('core.parametros.restore');
+    Route::post('parametros/{id}/active', [ParametroController::class, 'active'])->name('core.parametros.active');
+    Route::post('parametros/{id}/inactive', [ParametroController::class, 'inactive'])->name('core.parametros.inactive');
 });
