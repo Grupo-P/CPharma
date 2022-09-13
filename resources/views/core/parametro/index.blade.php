@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', 'Parametros')
+@section('title', 'Parámetro')
 
 @section('footer')
     <!-- Footer theme | No Borrar -->
@@ -282,19 +282,29 @@
 @stop
 
 @section('content_header')
-    <h1>Parametros</h1>
+    <h1>Parámetros</h1>
     <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/dashboard">Dashboard</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Parametros</li>
+            <li class="breadcrumb-item active" aria-current="page">Parámetros</li>
         </ol>
     </nav>
 @stop
 
 @section('content')
+
+    @if(session()->has('message'))
+        <div class="alert alert-info alert-dismissible fade show" role="alert">            
+            <strong><i class="fa fa-info"></i>&nbsp;&nbsp;{{session('message')}}</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    @endif
+
     <div class="card">
         <div class="card-header">
-            <a href="{{route('core.parametros.create')}}" class="btn btn-success" data-toggle="tooltip" data-placement="right" title="Crear Parametro"><i class="fas fa-plus"></i></a>
+            <a href="{{route('core.parametros.create')}}" class="btn btn-success" data-toggle="tooltip" data-placement="right" title="Crear Parámetro"><i class="fas fa-plus"></i></a>
             <button type="button" id="countRows" class="btn btn-info" data-toggle="tooltip" data-placement="right" title="Contar Filas seleccionadas"><i class="fas fa-layer-group"></i></button>
             <button type="button" id="reloadPage" class="btn btn-warning text-white" data-toggle="tooltip" data-placement="right" title="Recargar"><i class="fas fa-sync"></i></button>
             <button type="button" id="deleteRows" class="btn btn-danger" data-toggle="tooltip" data-placement="right" title="Ocultar Filas seleccionadas"><i class="fas fa-eye-slash"></i></button>
@@ -316,8 +326,8 @@
                     <tr class="text-center">
                         <th>Nro</th>
                         <th>Variable</th>
-                        <th>Descripción</th>
                         <th>Valor</th>                    
+                        <th>Descripción</th>
                         <th>Estado</th>
                         <th>Status</th>
                         <th class="actionsSize">Acciones</th>
@@ -328,8 +338,8 @@
                         <tr>
                             <td class="isSelectable">{{ $parametro->id }}</td>
                             <td>{{ $parametro->variable }}</td>
-                            <td>{{ $parametro->descripcion }}</td>
                             <td>{{ $parametro->valor }}</td>                            
+                            <td>{{ $parametro->descripcion }}</td>
 
                             <td class="text-center">
                                 @if($parametro->activo==1)

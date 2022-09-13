@@ -42,8 +42,11 @@ class ParametroController extends Controller
             'valor' => 'required',
         ]);
 
-        $parametro = Parametro::create($request->all());
-        return redirect()->route('core.parametros.edit', compact('parametro'));
+        Parametro::create($request->all());
+        session()->flash('message', 'El parámetro se creo con éxito');
+        
+        $parametros = Parametro::all();        
+        return view('core.parametro.index', compact('parametros'));
     }
 
     /**
@@ -77,7 +80,16 @@ class ParametroController extends Controller
      */
     public function update(Request $request, Parametro $parametro)
     {
-        //
+        $request->validate([
+            'variable' => 'required',
+            'valor' => 'required',
+        ]);
+
+        $parametro->update($request->all());
+        session()->flash('message', 'El parámetro se actualizo con éxito');
+
+        $parametros = Parametro::all();        
+        return view('core.parametro.index', compact('parametros'));
     }
 
     /**
