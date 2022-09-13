@@ -97,7 +97,7 @@ class ParametroController extends Controller
     public function restore(Request $request)
     {
         $parametro = Parametro::findorfail($request->id);
-        echo "Aqui hago el destroy<br>";
+        echo "Aqui hago el restore<br>";
         echo ('<pre>');
         print_r($parametro);
         echo ('</pre>');
@@ -112,7 +112,7 @@ class ParametroController extends Controller
     public function active(Request $request)
     {
         $parametro = Parametro::findorfail($request->id);
-        echo "Aqui hago el destroy<br>";
+        echo "Aqui hago el active<br>";
         echo ('<pre>');
         print_r($parametro);
         echo ('</pre>');
@@ -127,7 +127,7 @@ class ParametroController extends Controller
     public function inactive(Request $request)
     {
         $parametro = Parametro::findorfail($request->id);
-        echo "Aqui hago el destroy<br>";
+        echo "Aqui hago el inactive<br>";
         echo ('<pre>');
         print_r($parametro);
         echo ('</pre>');

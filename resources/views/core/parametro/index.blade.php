@@ -139,7 +139,7 @@
                     },
                     {
                         extend: 'createState',
-                        text: '<i class="fa fa-magnet" data-toggle="tooltip" data-placement="right" title="Crear estado"></i>',
+                        text: '<i class="fa fa-save" data-toggle="tooltip" data-placement="right" title="Guardar estado"></i>',
                         className : 'btn btn-dark mr-1 rounded',
                     },
                     {
@@ -168,7 +168,7 @@
                     thousands: '.',
                     buttons: {
                         pageLength: {
-                            _: '<i class="fa fa-bars" data-toggle="tooltip" data-placement="right" title="Cantidad de filas"></i> (%d)',
+                            _: '<i class="fa fa-th-list" data-toggle="tooltip" data-placement="right" title="Cantidad de filas"></i> (%d)',
                             '-1': "Ver todo"
                         },
                         copyTitle: 'Añadido al portapapeles',
@@ -178,8 +178,8 @@
                         },
                         createState:"Crear estado",
                         savedStates: {
-                            0: '<i class="fa fa-magic" data-toggle="tooltip" data-placement="right" title="Estados"></i>',
-                            _: '<i class="fa fa-magic" data-toggle="tooltip" data-placement="right" title="Estados"></i> (%d)'
+                            0: '<i class="fa fa-folder-open" data-toggle="tooltip" data-placement="right" title="Estados"></i>',
+                            _: '<i class="fa fa-folder-open" data-toggle="tooltip" data-placement="right" title="Estados"></i> (%d)'
                         },
                         updateState: 'Actualizar',
                         stateRestore: 'Nuevo estado %d',
