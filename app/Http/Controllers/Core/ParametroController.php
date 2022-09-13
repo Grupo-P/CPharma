@@ -37,7 +37,13 @@ class ParametroController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'variable' => 'required|unique:core_parametros',
+            'valor' => 'required',
+        ]);
+
+        $parametro = Parametro::create($request->all());
+        return redirect()->route('core.parametros.edit', compact('parametro'));
     }
 
     /**

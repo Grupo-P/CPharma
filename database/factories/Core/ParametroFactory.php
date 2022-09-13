@@ -18,7 +18,7 @@ class ParametroFactory extends Factory
     public function definition()
     {
         return [
-            'variable' => $this->faker->word(10),
+            'variable' => $this->faker->unique()->sentence(2),
             'valor' => $this->faker->word(10),
             'descripcion' => $this->faker->text(50),
             'activo' => $this->faker->randomElement([0,1]),

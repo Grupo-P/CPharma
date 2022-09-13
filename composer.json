@@ -12,6 +12,8 @@
         "laravel/jetstream": "^2.11",
         "laravel/sanctum": "^3.0",
         "laravel/tinker": "^2.7",
+        "laravelcollective/html": "^6.3",
+        "laraveles/spanish": "^1.5",
         "livewire/livewire": "^2.10",
         "spatie/cpu-load-health-check": "^1.0",
         "spatie/laravel-activitylog": "^4.5",
