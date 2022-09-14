@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Core;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Core\Parametro;
+use App\Models\User;
 
 class ParametroController extends Controller
 {
@@ -44,7 +45,7 @@ class ParametroController extends Controller
 
         Parametro::create($request->all());
         session()->flash('message', 'El parámetro se creo con éxito');
-        
+
         $parametros = Parametro::all();        
         return view('core.parametro.index', compact('parametros'));
     }
@@ -57,7 +58,10 @@ class ParametroController extends Controller
      */
     public function show(Parametro $parametro)
     {
-        return view('core.parametro.show', compact('parametro'));
+        $creadoPor = User::find($parametro->user_created_at);
+        $actualizadoPor = User::find($parametro->user_updated_at);
+        $borradoPor = User::find($parametro->user_deleted_at);       
+        return view('core.parametro.show', compact('parametro', 'creadoPor', 'actualizadoPor', 'borradoPor'));
     }
 
     /**
@@ -114,7 +118,7 @@ class ParametroController extends Controller
      */
     public function restore(Request $request)
     {
-        $parametro = Parametro::findorfail($request->id);
+        $parametro = Parametro::find($request->id);
         echo "Aqui hago el restore<br>";
         echo ('<pre>');
         print_r($parametro);
@@ -129,7 +133,7 @@ class ParametroController extends Controller
      */
     public function active(Request $request)
     {
-        $parametro = Parametro::findorfail($request->id);
+        $parametro = Parametro::find($request->id);
         echo "Aqui hago el active<br>";
         echo ('<pre>');
         print_r($parametro);
@@ -144,7 +148,7 @@ class ParametroController extends Controller
      */
     public function inactive(Request $request)
     {
-        $parametro = Parametro::findorfail($request->id);
+        $parametro = Parametro::find($request->id);
         echo "Aqui hago el inactive<br>";
         echo ('<pre>');
         print_r($parametro);
