@@ -44,9 +44,9 @@ class ParametroController extends Controller
         ]);
 
         Parametro::create($request->all());
-        session()->flash('message', 'El parámetro se creo con éxito');
+        session()->flash('message', 'Parámetro creado con éxito');
 
-        $parametros = Parametro::all();        
+        $parametros = Parametro::all();
         return view('core.parametro.index', compact('parametros'));
     }
 
@@ -60,7 +60,7 @@ class ParametroController extends Controller
     {
         $creadoPor = User::find($parametro->user_created_at);
         $actualizadoPor = User::find($parametro->user_updated_at);
-        $borradoPor = User::find($parametro->user_deleted_at);       
+        $borradoPor = User::find($parametro->user_deleted_at);
         return view('core.parametro.show', compact('parametro', 'creadoPor', 'actualizadoPor', 'borradoPor'));
     }
 
@@ -90,9 +90,9 @@ class ParametroController extends Controller
         ]);
 
         $parametro->update($request->all());
-        session()->flash('message', 'El parámetro se actualizo con éxito');
+        session()->flash('message', 'Parámetro actualizado con éxito');
 
-        $parametros = Parametro::all();        
+        $parametros = Parametro::all();
         return view('core.parametro.index', compact('parametros'));
     }
 
@@ -104,10 +104,14 @@ class ParametroController extends Controller
      */
     public function destroy(Parametro $parametro)
     {
-        echo "Aqui hago el destroy<br>";
-        echo ('<pre>');
-        print_r($parametro);
-        echo ('</pre>');
+        $parametro->borrado = 1;
+        $parametro->deleted_at = date('Y-m-d H:i:s');
+        $parametro->user_deleted_at = auth()->user()->id;
+        $parametro->save();
+        session()->flash('message', 'Parámetro borrado con éxito');
+
+        $parametros = Parametro::all();
+        return view('core.parametro.index', compact('parametros'));
     }
 
     /**
@@ -119,10 +123,14 @@ class ParametroController extends Controller
     public function restore(Request $request)
     {
         $parametro = Parametro::find($request->id);
-        echo "Aqui hago el restore<br>";
-        echo ('<pre>');
-        print_r($parametro);
-        echo ('</pre>');
+        $parametro->borrado = 0;
+        $parametro->deleted_at = NULL;
+        $parametro->user_deleted_at = NULL;
+        $parametro->save();
+        session()->flash('message', 'Parámetro restaurado con éxito');
+
+        $parametros = Parametro::all();
+        return view('core.parametro.index', compact('parametros'));
     }
 
     /**
@@ -134,10 +142,12 @@ class ParametroController extends Controller
     public function active(Request $request)
     {
         $parametro = Parametro::find($request->id);
-        echo "Aqui hago el active<br>";
-        echo ('<pre>');
-        print_r($parametro);
-        echo ('</pre>');
+        $parametro->activo = 1;
+        $parametro->save();
+        session()->flash('message', 'Parámetro activado con éxito');
+
+        $parametros = Parametro::all();
+        return view('core.parametro.index', compact('parametros'));
     }
 
     /**
@@ -149,9 +159,11 @@ class ParametroController extends Controller
     public function inactive(Request $request)
     {
         $parametro = Parametro::find($request->id);
-        echo "Aqui hago el inactive<br>";
-        echo ('<pre>');
-        print_r($parametro);
-        echo ('</pre>');
+        $parametro->activo = 0;
+        $parametro->save();
+        session()->flash('message', 'Parámetro inactivado con éxito');
+
+        $parametros = Parametro::all();
+        return view('core.parametro.index', compact('parametros'));
     }
 }
