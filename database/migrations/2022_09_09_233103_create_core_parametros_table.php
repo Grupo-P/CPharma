@@ -15,9 +15,9 @@ return new class extends Migration
     {
         Schema::create('core_parametros', function (Blueprint $table) {
             $table->id();
-            $table->string('variable',100)->unique();
-            $table->string('valor',100);
-            $table->text('descripcion')->nullable();
+            $table->string('variable')->unique();
+            $table->text('valor');
+            $table->longText('descripcion')->nullable();
             $table->tinyInteger('activo')->default(1);
             $table->tinyInteger('borrado')->default(0);
             $table->foreignId('user_created_at')->nullable()->constrained('users')->onUpdate('cascade')->onDelete('cascade');
