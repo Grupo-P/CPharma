@@ -8,7 +8,7 @@ use App\Models\User;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\LogOptions;
 
-class Imagenes extends Model
+class Imagen extends Model
 {
     use HasFactory;
     use LogsActivity;

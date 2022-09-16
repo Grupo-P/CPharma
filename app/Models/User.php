@@ -11,7 +11,7 @@ use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 use App\Models\Core\Parametro;
-use App\Models\Core\Imagenes;
+use App\Models\Core\Imagen;
 
 class User extends Authenticatable
 {
@@ -85,7 +85,7 @@ class User extends Authenticatable
 
     public function imagenes()
     {
-        return $this->morphOne(Imagenes::class, 'imageable');
+        return $this->morphOne(Imagen::class, 'imageable');
     }
     
 }
