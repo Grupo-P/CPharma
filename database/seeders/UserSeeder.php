@@ -16,15 +16,16 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        $userDemo = User::create([
+        $user = User::create([
             'name' => 'Sergio Cova',
             'email' => 'covascode@gmail.com',
             'password' => bcrypt('12345678')
         ]);
 
         Imagen::factory(1)->create([
-            'imageable_id' => $userDemo->id,
-            'imageable_type' => Imagen::class
+            'imageable_id' => $user->id,
+            'imageable_type' => Imagen::class,
+            'user_created_at' => $user->id,
         ]);
         
         $users = User::factory(15)->create();
@@ -32,7 +33,8 @@ class UserSeeder extends Seeder
         foreach ($users as $user) {
             Imagen::factory(1)->create([
                 'imageable_id' => $user->id,
-                'imageable_type' => Imagen::class
+                'imageable_type' => Imagen::class,
+                'user_created_at' => $user->id,
             ]);
         }
     }
