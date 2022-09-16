@@ -4,8 +4,8 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
-use App\Models\Core\Parametro;
 use Illuminate\Database\Seeder;
+use Database\Seeders\Core\ParametroSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -17,6 +17,6 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         $this->call(UserSeeder::class);
-        Parametro::factory(250)->create();
+        $this->call(ParametroSeeder::class);
     }
 }
