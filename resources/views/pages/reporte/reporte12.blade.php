@@ -582,7 +582,7 @@
             echo '<td align="center">'.$rowA['DescripcionOperacion'].'</td>';
 
             echo '<td align="center">'.$row3['Operador'].'</td>';
-            echo '<td align="center">-</td>';
+            echo '<td align="center">'.$rowA['Caja'].'</td>';
             echo '<td align="center">'.number_format( ($row['PrecioBruto']*$row3['Cantidad']) ,2,"," ,"." ).'</td>';
             echo '<td align="center">'.number_format($row['PrecioBruto'],2,"," ,"." ).'</td>';
 
@@ -1181,7 +1181,9 @@
    */
   function R12_Coment_DevVenta($NumeroReferencia) {
     $sql = "
-      SELECT TOP 1 VenCausaOperacionDevolucion.DescripcionOperacion
+      SELECT TOP 1
+        VenCausaOperacionDevolucion.DescripcionOperacion,
+        (SELECT VenCaja.CodigoCaja FROM VenCaja WHERE VenCaja.Id = VenDevolucion.VenCajaId) AS Caja
       FROM VenDevolucion
       LEFT JOIN VenDevolucionDetalle ON VenDevolucionDetalle.VenDevolucionId = VenDevolucion.Id
       LEFT JOIN VenCausaOperacionDevolucion ON VenCausaOperacionDevolucion.id = VenDevolucionDetalle.VenCausaOperacionId

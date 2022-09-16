@@ -293,7 +293,7 @@
     ';
 
     echo'
-    <table class="table table-striped table-bordered col-12 sortable" id="myTable">
+    <table class="table table-striped table-bordered col-12 sortable">
         <thead class="thead-dark">
           <tr>
             <th scope="col" class="CP-sticky">Fecha</th>

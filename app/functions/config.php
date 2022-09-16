@@ -82,10 +82,10 @@ define ("passGP" , "pCadm05");
 define ("nameGP" , "cpharmaftn");
 /**********************************************************************************/
 /********************* CONEXION SERVER DESARROLLO DE NISAUL **********************/
-define ("serverDBs" , "DESKTOP-L6UECEV\SQLEXPRESS");
+define ("serverDBs" , "NISADELGADO\SQLEXPRESS");
 define ("userDBs" , "sa");
 define ("passDBs" , "123");
-define ("nameDBs" , "smartftn");
+define ("nameDBs" , "SMARTPHARMA");
 /**********************************************************************************/
 /********************* CONEXION SERVER DESARROLLO DE SERGIO ARG **********************/
 define ("serverDBsa" , "SERGIO-PC");
