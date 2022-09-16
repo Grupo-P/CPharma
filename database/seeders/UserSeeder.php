@@ -24,7 +24,7 @@ class UserSeeder extends Seeder
 
         Imagen::factory(1)->create([
             'imageable_id' => $user->id,
-            'imageable_type' => Imagen::class,
+            'imageable_type' => User::class,
             'user_created_at' => $user->id,
         ]);
         
@@ -33,7 +33,7 @@ class UserSeeder extends Seeder
         foreach ($users as $user) {
             Imagen::factory(1)->create([
                 'imageable_id' => $user->id,
-                'imageable_type' => Imagen::class,
+                'imageable_type' => User::class,
                 'user_created_at' => $user->id,
             ]);
         }

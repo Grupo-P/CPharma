@@ -13,8 +13,7 @@ class Parametro extends Model
     use HasFactory;
     use LogsActivity;
 
-    protected $table = "core_parametros";
-    protected $modelName = 'Parametros';
+    protected $table = "core_parametros";    
 
     protected $fillable = [
         'variable', 'valor' ,'descripcion', 'activo' ,'borrado',
@@ -28,6 +27,6 @@ class Parametro extends Model
 
     public function getActivitylogOptions(): LogOptions
     {
-        return LogOptions::defaults()->useLogName($this->modelName)->logAll();
+        return LogOptions::defaults()->useLogName(Parametro::class)->logAll();
     }
 }

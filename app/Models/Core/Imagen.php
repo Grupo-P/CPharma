@@ -13,8 +13,7 @@ class Imagen extends Model
     use HasFactory;
     use LogsActivity;
 
-    protected $table = "core_imagenes";
-    protected $modelName = 'Imagenes';
+    protected $table = "core_imagenes";    
 
     protected $fillable = [
         'url', 'imageable_id' ,'imageable_type', 'activo' ,'borrado',
@@ -32,6 +31,6 @@ class Imagen extends Model
 
     public function getActivitylogOptions(): LogOptions
     {
-        return LogOptions::defaults()->useLogName($this->modelName)->logAll();
+        return LogOptions::defaults()->useLogName(Imagen::class)->logAll();
     }    
 }
