@@ -85,7 +85,7 @@ class ParametroController extends Controller
     public function update(Request $request, Parametro $parametro)
     {
         $request->validate([
-            'variable' => 'required',
+            'variable' => "required|unique:core_parametros,variable,$parametro->id",
             'valor' => 'required',
         ]);
 
