@@ -12,6 +12,7 @@ use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 use App\Models\Core\Parametro;
 use App\Models\Core\Imagen;
+use Illuminate\Support\Facades\Storage;
 
 class User extends Authenticatable
 {
@@ -65,7 +66,9 @@ class User extends Authenticatable
 
     public function adminlte_image()
     {
-        return 'https://picsum.photos/300/300';
+        $imagen = Imagen::where('imageable_type',User::class)->where('imageable_id',$this->id)->get();
+        $url = ( isset($imagen[0]) && !empty($imagen) ) ? '/storage/imagenes/'.$imagen[0]->url : '/storage/default.jpg';
+        return $url;
     }
 
     public function adminlte_desc()
