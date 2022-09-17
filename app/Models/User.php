@@ -67,7 +67,7 @@ class User extends Authenticatable
     public function adminlte_image()
     {
         $imagen = Imagen::where('imageable_type',User::class)->where('imageable_id',$this->id)->get();
-        $url = ( isset($imagen[0]) && !empty($imagen) ) ? '/storage/imagenes/'.$imagen[0]->url : '/storage/default.jpg';
+        $url = ( isset($imagen[0]) && !empty($imagen) ) ? Storage::url($imagen[0]->url) : '/storage/default.jpg';
         return $url;
     }
 

@@ -18,7 +18,7 @@ class ImagenFactory extends Factory
     public function definition()
     {
         return [
-            'url' => $this->faker->image('public/storage/imagenes', 100, 100,  null, false),
+            'url' => 'imagenes/'.$this->faker->image('public/storage/imagenes', 50, 50,  null, false),
             'activo' => $this->faker->randomElement([0,1]),
             'borrado' => $this->faker->randomElement([0,1]),
         ];
