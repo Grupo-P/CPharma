@@ -16,21 +16,42 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        $user = User::create([
+        $sergio = User::create([
             'name' => 'Sergio Cova',
-            'email' => 'covascode@gmail.com',
+            'email' => 'scova@farmacia72.com.ve',
             'password' => bcrypt('12345678')
         ]);
 
-        Imagen::factory(1)->create([
-            'imageable_id' => $user->id,
-            'imageable_type' => User::class,
-            'user_created_at' => $user->id,
+        $giordany = User::create([
+            'name' => 'Giodany Prieto',
+            'email' => 'giordany@farmacia72.com',
+            'password' => bcrypt('12345678')
         ]);
-        
-        $users = User::factory(15)->create();
+
+        $edwin = User::create([
+            'name' => 'Edwin Arias',
+            'email' => 'earias@farmacia72.com.ve',
+            'password' => bcrypt('12345678')
+        ]);
+
+        $nisaul = User::create([
+            'name' => 'Nisaul Delgado',
+            'email' => 'ndelgado@grupop.com.ve',
+            'password' => bcrypt('12345678')
+        ]);
+
+        $mainUsers = [$sergio,$giordany,$edwin,$nisaul];        
+        $bootUsers = User::factory(11)->create();        
+
+        foreach ($mainUsers as $user) {
+            Imagen::factory(1)->create([
+                'imageable_id' => $user->id,
+                'imageable_type' => User::class,
+                'user_created_at' => $user->id,
+            ]);
+        }
     
-        foreach ($users as $user) {
+        foreach ($bootUsers as $user) {
             Imagen::factory(1)->create([
                 'imageable_id' => $user->id,
                 'imageable_type' => User::class,
