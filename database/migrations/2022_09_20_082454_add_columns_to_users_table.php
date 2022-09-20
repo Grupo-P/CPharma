@@ -33,7 +33,14 @@ return new class extends Migration
     public function down()
     {
         Schema::table('users', function (Blueprint $table) {
-            //
+            $table->dropColumn('deleted_at');
+            $table->dropColumn('documento');
+            $table->dropColumn('cambio_clave');
+            $table->dropColumn('activo');
+            $table->dropColumn('borrado');
+            $table->dropColumn('user_created_at');
+            $table->dropColumn('user_updated_at');
+            $table->dropColumn('user_deleted_at');
         });
     }
 };
