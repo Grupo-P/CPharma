@@ -13,6 +13,8 @@ use App\Models\Core\Parametro;
 use App\Models\Core\Imagen;
 use Illuminate\Support\Facades\Storage;
 use Spatie\Permission\Traits\HasRoles;
+use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\Activitylog\LogOptions;
 
 class User extends Authenticatable
 {
@@ -22,6 +24,7 @@ class User extends Authenticatable
     use Notifiable;
     use TwoFactorAuthenticatable;
     use HasRoles;
+    use LogsActivity;
 
     /**
      * The attributes that are mass assignable.
@@ -89,4 +92,8 @@ class User extends Authenticatable
         return $this->morphOne(Imagen::class, 'imageable');
     }
     
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()->useLogName(User::class)->logAll();
+    }
 }

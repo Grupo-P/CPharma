@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use Spatie\Health\Http\Controllers\HealthCheckResultsController;
 use App\Http\Controllers\Core\demo\AdminLTEDemoController;
 use App\Http\Controllers\Core\ParametroController;
+use App\Http\Controllers\Core\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -45,6 +46,12 @@ Route::prefix('core')->middleware(['auth:sanctum', 'verified'])->group(function 
 
     //Monitor de estado de la aplicación
     Route::get('health', HealthCheckResultsController::class)->name('core.health');
+
+    //Usuarios
+    Route::resource('usuarios',UserController::class)->names('core.usuarios');
+    Route::post('usuarios/{id}/restore', [UserController::class, 'restore'])->name('core.usuarios.restore');
+    Route::post('usuarios/{id}/active', [UserController::class, 'active'])->name('core.usuarios.active');
+    Route::post('usuarios/{id}/inactive', [UserController::class, 'inactive'])->name('core.usuarios.inactive');
 
     //Parametros
     Route::resource('parametros',ParametroController::class)->names('core.parametros');

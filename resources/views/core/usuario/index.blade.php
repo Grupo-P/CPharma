@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', 'Parámetro')
+@section('title', 'Usuarios')
 
 @section('footer')
     <!-- Footer theme | No Borrar -->
@@ -97,7 +97,7 @@
                     {
                         extend: 'excel',
                         text: '<i class="fa fa-file-excel" data-toggle="tooltip" data-placement="right" title="Excel"></i>',
-                        title: 'parametros',
+                        title: 'usuarios',
                         exportOptions: {
                             columns: [ 0, 1, 2, 3 ]
                         },
@@ -106,7 +106,7 @@
                     {
                         extend: 'csv',
                         text: '<i class="fa fa-file-csv" data-toggle="tooltip" data-placement="right" title="CSV"></i>',
-                        title: 'parametros',
+                        title: 'usuarios',
                         exportOptions: {
                             columns: [ 0, 1, 2, 3 ]
                         },
@@ -123,7 +123,7 @@
                     {
                         extend: 'pdf',
                         text: '<i class="fa fa-file-pdf" data-toggle="tooltip" data-placement="right" title="PDF"></i>',
-                        title: 'parametros',
+                        title: 'usuarios',
                         exportOptions: {
                             columns: [ 0, 1, 2, 3 ]
                         },
@@ -282,11 +282,11 @@
 @stop
 
 @section('content_header')
-    <h1>Parámetros</h1>
+    <h1>Usuarios</h1>
     <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/dashboard">Dashboard</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Parámetros</li>
+            <li class="breadcrumb-item active" aria-current="page">Usuarios</li>
         </ol>
     </nav>
 @stop
@@ -304,7 +304,7 @@
 
     <div class="card shadow">
         <div class="card-header">
-            <a href="{{route('core.parametros.create')}}" class="btn btn-success" data-toggle="tooltip" data-placement="right" title="Crear Parámetro"><i class="fas fa-plus"></i></a>
+            <a href="{{route('core.usuarios.create')}}" class="btn btn-success" data-toggle="tooltip" data-placement="right" title="Crear Usuario"><i class="fas fa-plus"></i></a>
             <button type="button" id="countRows" class="btn btn-info" data-toggle="tooltip" data-placement="right" title="Contar Filas seleccionadas"><i class="fas fa-layer-group"></i></button>
             <button type="button" id="reloadPage" class="btn btn-warning text-white" data-toggle="tooltip" data-placement="right" title="Recargar"><i class="fas fa-sync"></i></button>
             <button type="button" id="deleteRows" class="btn btn-danger" data-toggle="tooltip" data-placement="right" title="Ocultar Filas seleccionadas"><i class="fas fa-eye-slash"></i></button>
@@ -312,9 +312,8 @@
             <div style="display:inline-block;" class="float-right">
                 <label>Ver columnas:</label>
                 <input class="toggle-vis" type="checkbox" checked="checked" data-column="0"> Nro</input>
-                <input class="toggle-vis" type="checkbox" checked="checked" data-column="1"> Variable</input>
-                <input class="toggle-vis" type="checkbox" checked="checked" data-column="3"> Valor</input>
-                <input class="toggle-vis" type="checkbox" checked="checked" data-column="2"> Descripción</input>
+                <input class="toggle-vis" type="checkbox" checked="checked" data-column="1"> Nombre</input>
+                <input class="toggle-vis" type="checkbox" checked="checked" data-column="2"> Email</input>                
                 <input class="toggle-vis" type="checkbox" checked="checked" data-column="4"> Estado</input>
                 <input class="toggle-vis" type="checkbox" checked="checked" data-column="5"> Status</input>
                 <input class="toggle-vis" type="checkbox" checked="checked" data-column="6"> Acciones</input>
@@ -325,64 +324,62 @@
                 <thead class="table-dark">
                     <tr class="text-center">
                         <th>Nro</th>
-                        <th>Variable</th>
-                        <th>Valor</th>                    
-                        <th>Descripción</th>
+                        <th>Nombre</th>
+                        <th>Email</th>
                         <th>Estado</th>
                         <th>Status</th>
                         <th class="actionsSize">Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($parametros as $parametro)
+                    @foreach($usuarios as $usuario)
                         <tr>
-                            <td class="isSelectable">{{ $parametro->id }}</td>
-                            <td>{{ $parametro->variable }}</td>
-                            <td>{{ $parametro->valor }}</td>                            
-                            <td>{{ $parametro->descripcion }}</td>
+                            <td class="isSelectable">{{ $usuario->id }}</td>
+                            <td>{{ $usuario->name }}</td>
+                            <td>{{ $usuario->email }}</td>
 
                             <td class="text-center">
-                                @if($parametro->activo==1)
+                                @if($usuario->activo==1)
                                     <span class="text-success" data-toggle="tooltip" data-placement="left" title="Activa"><i class="fas fa-check"></i></span>
-                                @elseif($parametro->activo==0)
+                                @elseif($usuario->activo==0)
                                     <span class="text-warning" data-toggle="tooltip" data-placement="left" title="Inactiva"><i class="fas fa-ban"></i></span>
                                 @endif
                             </td>
 
                             <td class="text-center">
-                                @if($parametro->borrado==0)
+                                @if($usuario->borrado==0)
                                     <span class="text-success" data-toggle="tooltip" data-placement="left" title="OK"><i class="fas fa-check"></i></span>
-                                @elseif($parametro->borrado==1)
+                                @elseif($usuario->borrado==1)
                                     <span class="text-danger" data-toggle="tooltip" data-placement="left" title="Borrada"><i class="fas fa-trash-alt"></i></span>
                                 @endif
                             </td>
 
                             <td class="text-center">
                                 <div class="btn-group">
-                                    <a href="{{route('core.parametros.show', $parametro)}}" type="button" class="btn btn-success mr-1 rounded" data-toggle="tooltip" data-placement="left" title="Ver"><i class="fas fa-eye"></i></a>
+                                    <a href="{{route('core.usuarios.show', $usuario)}}" type="button" class="btn btn-success mr-1 rounded" data-toggle="tooltip" data-placement="left" title="Ver"><i class="fas fa-eye"></i></a>
 
-                                    <a href="{{route('core.parametros.edit', $parametro)}}" type="button" class="btn btn-info mr-1 rounded" data-toggle="tooltip" data-placement="left" title="Editar"><i class="fas fa-edit"></i></a>
+                                    <a href="{{route('core.usuarios.edit', $usuario)}}" type="button" class="btn btn-info mr-1 rounded" data-toggle="tooltip" data-placement="left" title="Editar"><i class="fas fa-edit"></i></a>
 
-                                    @if($parametro->activo==1)
-                                        <form action="{{route('core.parametros.inactive', $parametro)}}" method="POST">
+                                    @if($usuario->activo==1)
+                                        <form action="{{route('core.usuarios.inactive', $usuario)}}" method="POST">
                                             @csrf                                            
                                             <button type="submit" class="btn btn-warning text-white mr-1 rounded" data-toggle="tooltip" data-placement="left" title="Inactivar"><i class="fas fa-ban"></i></button>
                                         </form>                                        
-                                    @elseif($parametro->activo==0)
-                                        <form action="{{route('core.parametros.active', $parametro)}}" method="POST">
+                                    @elseif($usuario->activo==0)
+                                        <form action="{{route('core.usuarios.active', $usuario)}}" method="POST">
                                             @csrf                                            
                                             <button type="submit" class="btn btn-warning text-white mr-1 rounded" data-toggle="tooltip" data-placement="left" title="Activar"><i class="fas fa-undo"></i></button>
                                         </form>                                         
                                     @endif
 
-                                    @if($parametro->borrado==0)                                                                               
-                                        <form action="{{route('core.parametros.destroy', $parametro)}}" method="POST">
+                                    @if($usuario->borrado==0)                                                                               
+                                        <form action="{{route('core.usuarios.destroy', $usuario)}}" method="POST">
                                             @csrf
                                             @method('delete')
                                             <button type="submit" class="btn btn-danger rounded" data-toggle="tooltip" data-placement="left" title="Borrar"><i class="fas fa-trash-alt"></i></button>
                                         </form>
-                                    @elseif($parametro->borrado==1)                                        
-                                        <form action="{{route('core.parametros.restore', $parametro)}}" method="POST">
+                                    @elseif($usuario->borrado==1)                                        
+                                        <form action="{{route('core.usuarios.restore', $usuario)}}" method="POST">
                                             @csrf                                            
                                             <button type="submit" class="btn btn-danger rounded" data-toggle="tooltip" data-placement="left" title="Restaurar"><i class="fas fa-trash-restore-alt"></i></button>
                                         </form>
@@ -395,9 +392,8 @@
                 <tfoot>
                     <tr>
                         <th class="isSearchable">nro</th>
-                        <th class="isSearchable">variable</th>
-                        <th class="isSearchable">descripción</th>
-                        <th class="isSearchable">valor</th>                        
+                        <th class="isSearchable">nombre</th>
+                        <th class="isSearchable">email</th>
                         <th colspan="3" class="isSpace"></th>
                     </tr>
                 </tfoot>

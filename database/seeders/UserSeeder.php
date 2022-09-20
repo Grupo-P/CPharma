@@ -8,6 +8,7 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
+use Illuminate\Support\Facades\Hash;
 
 class UserSeeder extends Seeder
 {
@@ -21,28 +22,28 @@ class UserSeeder extends Seeder
         $sergio = User::create([
             'name' => 'Sergio Cova',
             'email' => 'scova@farmacia72.com.ve',
-            'password' => bcrypt('12345678')
+            'password' => Hash::make('12345678')
         ]);
         $sergio->assignRole('Master');
 
         $giordany = User::create([
             'name' => 'Giodany Prieto',
             'email' => 'giordany@farmacia72.com',
-            'password' => bcrypt('12345678')
+            'password' => Hash::make('12345678')
         ]);
         $giordany->assignRole('Gerente');
 
         $edwin = User::create([
             'name' => 'Edwin Arias',
             'email' => 'earias@farmacia72.com.ve',
-            'password' => bcrypt('12345678')
+            'password' => Hash::make('12345678')
         ]);
         $edwin->assignRole('Supervisor');
 
         $nisaul = User::create([
             'name' => 'Nisaul Delgado',
             'email' => 'ndelgado@grupop.com.ve',
-            'password' => bcrypt('12345678')
+            'password' => Hash::make('12345678')
         ]);
         $nisaul->assignRole('Usuario');
 

@@ -316,6 +316,12 @@ return [
             'icon' => 'fas fa-fw fas fa-cogs',
             'active' => ['core/parametros*'],
         ],
+        [
+            'text' => 'Usuarios',
+            'route'  => 'core.usuarios.index',
+            'icon' => 'fas fa-fw fas fa-users',
+            'active' => ['core/usuarios*'],
+        ],
     ],
 
     /*
