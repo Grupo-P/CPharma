@@ -379,14 +379,19 @@
                                         <form action="{{route('core.usuarios.destroy', $usuario)}}" method="POST">
                                             @csrf
                                             @method('delete')
-                                            <button type="submit" class="btn btn-danger rounded" data-toggle="tooltip" data-placement="left" title="Borrar"><i class="fas fa-trash-alt"></i></button>
+                                            <button type="submit" class="btn btn-danger rounded mr-1" data-toggle="tooltip" data-placement="left" title="Borrar"><i class="fas fa-trash-alt"></i></button>
                                         </form>
                                     @elseif($usuario->borrado==1)                                        
                                         <form action="{{route('core.usuarios.restore', $usuario)}}" method="POST">
                                             @csrf                                            
-                                            <button type="submit" class="btn btn-danger rounded" data-toggle="tooltip" data-placement="left" title="Restaurar"><i class="fas fa-trash-restore-alt"></i></button>
+                                            <button type="submit" class="btn btn-danger rounded mr-1" data-toggle="tooltip" data-placement="left" title="Restaurar"><i class="fas fa-trash-restore-alt"></i></button>
                                         </form>
                                     @endif
+
+                                    <form action="{{route('core.usuarios.lock', $usuario)}}" method="POST">
+                                        @csrf                                        
+                                        <button type="submit" class="btn btn-secondary rounded" data-toggle="tooltip" data-placement="left" title="Cambiar Contraseña"><i class="fas fa-lock"></i></button>
+                                    </form>
                                 </div>
                             </td>
                         </tr>

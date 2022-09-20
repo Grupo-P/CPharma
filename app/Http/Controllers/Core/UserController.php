@@ -100,6 +100,7 @@ class UserController extends Controller
 
         if($usuario->password != $contraseña){
             $usuario->password = Hash::make($usuario->password);
+            $usuario->cambio_clave = 0;
             $usuario->save();            
         }
         session()->flash('message', 'Usuario actualizado con éxito');        
@@ -124,5 +125,86 @@ class UserController extends Controller
 
         $usuarios = User::all();
         return view('core.usuario.index', compact('usuarios'));
+    }
+
+    /**
+     * Restore the specified resource from storage.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function restore(Request $request)
+    {
+        $usuario = User::find($request->id);
+        $usuario->borrado = 0;
+        $usuario->deleted_at = NULL;
+        $usuario->user_deleted_at = NULL;
+        $usuario->save();
+        session()->flash('message', 'Usuario restaurado con éxito');
+
+        $usuarios = User::all();
+        return view('core.usuario.index', compact('usuarios'));
+    }
+
+    /**
+     * Active the specified resource from storage.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function active(Request $request)
+    {
+        $usuario = User::find($request->id);
+        $usuario->activo = 1;
+        $usuario->save();
+        session()->flash('message', 'Usuario activado con éxito');
+
+        $usuarios = User::all();
+        return view('core.usuario.index', compact('usuarios'));
+    }
+
+    /**
+     * Inactive the specified resource from storage.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function inactive(Request $request)
+    {
+        $usuario = User::find($request->id);
+        $usuario->activo = 0;
+        $usuario->save();
+        session()->flash('message', 'Usuario inactivado con éxito');
+
+        $usuarios = User::all();
+        return view('core.usuario.index', compact('usuarios'));
+    }
+
+    /**
+     * Notifies the user to change the password.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function lock(Request $request)
+    {
+        $usuario = User::find($request->id);
+        $usuario->cambio_clave = 1;
+        $usuario->save();
+        session()->flash('message', 'Usuario notificado con éxito');
+
+        $usuarios = User::all();
+        return view('core.usuario.index', compact('usuarios'));
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *     
+     * @return \Illuminate\Http\Response
+     */
+    public function profile()
+    {        
+        $usuario = User::find(auth()->user()->id);
+        return view('core.usuario.profile', compact('usuario'));
     }
 }

@@ -21,6 +21,15 @@
 
 @section('content')
 
+    @if(auth()->user()->cambio_clave == 1)
+        <div class="alert alert-danger alert-dismissible fade show text-white shadow" role="alert">            
+            <strong><i class="fa fa-exclamation-triangle"></i>&nbsp;&nbsp;Es necesario que cambie su contraseña</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    @endif
+
     <div class="card">
         <div class="card-header">
             Welcome to this beautiful Dashboard.

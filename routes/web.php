@@ -25,6 +25,8 @@ Route::get('/register', function () {
     return view('welcome');
 });
 
+Route::get('/user/profile', [UserController::class, 'profile']);
+
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
@@ -52,6 +54,7 @@ Route::prefix('core')->middleware(['auth:sanctum', 'verified'])->group(function 
     Route::post('usuarios/{id}/restore', [UserController::class, 'restore'])->name('core.usuarios.restore');
     Route::post('usuarios/{id}/active', [UserController::class, 'active'])->name('core.usuarios.active');
     Route::post('usuarios/{id}/inactive', [UserController::class, 'inactive'])->name('core.usuarios.inactive');
+    Route::post('usuarios/{id}/lock', [UserController::class, 'lock'])->name('core.usuarios.lock');
 
     //Parametros
     Route::resource('parametros',ParametroController::class)->names('core.parametros');
