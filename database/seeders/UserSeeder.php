@@ -40,8 +40,8 @@ class UserSeeder extends Seeder
             'password' => bcrypt('12345678')
         ]);
 
-        $mainUsers = [$sergio,$giordany,$edwin,$nisaul];        
-        $bootUsers = User::factory(11)->create();        
+        $mainUsers = [$sergio,$giordany,$edwin,$nisaul];
+        $bootUsers = User::factory(11)->create();
 
         foreach ($mainUsers as $user) {
             Imagen::factory(1)->create([

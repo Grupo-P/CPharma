@@ -6,6 +6,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Database\Seeders\Core\ParametroSeeder;
+use Database\Seeders\Core\RoleSeeder;
 use Illuminate\Support\Facades\Storage;
 
 class DatabaseSeeder extends Seeder
@@ -19,6 +20,7 @@ class DatabaseSeeder extends Seeder
     {
         Storage::deleteDirectory('public/imagenes');
         Storage::makeDirectory('public/imagenes');
+        $this->call(RoleSeeder::class);
         $this->call(UserSeeder::class);
         $this->call(ParametroSeeder::class);
     }
