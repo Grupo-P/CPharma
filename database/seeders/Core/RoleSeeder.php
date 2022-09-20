@@ -17,21 +17,24 @@ class RoleSeeder extends Seeder
     public function run()
     {
         //Roles Demos
-        $role1 = Role::create(['name' => 'Master']);
-        $role2 = Role::create(['name' => 'Usuario']);
+        $roleMaster = Role::create(['name' => 'Master']); //All
+        $roleGerente = Role::create(['name' => 'Gerente']); //Index, Show, Create, Edit, Active, Inactive
+        $roleSupervisor = Role::create(['name' => 'Supervisor']); //Index, Show, Create, Edit
+        $roleUsuario = Role::create(['name' => 'Usuario']); //Index, Show
 
         //Permisos Core General
-        Permission::create(['name' => 'dashboard']);
-        Permission::create(['name' => 'core.demo.AdminLTEDemo']);
-        Permission::create(['name' => 'core.health']);
-    
+        Permission::create(['name' => 'dashboard'])->syncRoles([$roleMaster,$roleGerente,$roleSupervisor,$roleUsuario]);
+        Permission::create(['name' => 'core.demo.AdminLTEDemo'])->syncRoles([$roleMaster]);
+        Permission::create(['name' => 'core.health'])->syncRoles([$roleMaster]);
+
         //Permisos Core Parametro
-        Permission::create(['name' => 'core.parametros.index']);
-        Permission::create(['name' => 'core.parametros.create']);
-        Permission::create(['name' => 'core.parametros.edit']);
-        Permission::create(['name' => 'core.parametros.destroy']);
-        Permission::create(['name' => 'core.parametros.restore']);
-        Permission::create(['name' => 'core.parametros.active']);
-        Permission::create(['name' => 'core.parametros.inactive']);
+        Permission::create(['name' => 'core.parametros.index'])->syncRoles([$roleMaster,$roleGerente,$roleSupervisor,$roleUsuario]);
+        Permission::create(['name' => 'core.parametros.show'])->syncRoles([$roleMaster,$roleGerente,$roleSupervisor,$roleUsuario]);
+        Permission::create(['name' => 'core.parametros.create'])->syncRoles([$roleMaster,$roleGerente,$roleSupervisor]);
+        Permission::create(['name' => 'core.parametros.edit'])->syncRoles([$roleMaster,$roleGerente,$roleSupervisor]);
+        Permission::create(['name' => 'core.parametros.active'])->syncRoles([$roleMaster,$roleGerente]);
+        Permission::create(['name' => 'core.parametros.inactive'])->syncRoles([$roleMaster,$roleGerente]);
+        Permission::create(['name' => 'core.parametros.destroy'])->syncRoles([$roleMaster]);
+        Permission::create(['name' => 'core.parametros.restore'])->syncRoles([$roleMaster]);
     }
 }
