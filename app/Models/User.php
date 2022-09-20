@@ -35,6 +35,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'documento','cambio_clave','activo' ,'borrado','user_created_at', 'user_updated_at', 'user_deleted_at'
     ];
 
     /**

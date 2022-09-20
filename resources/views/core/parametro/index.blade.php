@@ -313,8 +313,8 @@
                 <label>Ver columnas:</label>
                 <input class="toggle-vis" type="checkbox" checked="checked" data-column="0"> Nro</input>
                 <input class="toggle-vis" type="checkbox" checked="checked" data-column="1"> Variable</input>
-                <input class="toggle-vis" type="checkbox" checked="checked" data-column="3"> Valor</input>
-                <input class="toggle-vis" type="checkbox" checked="checked" data-column="2"> Descripción</input>
+                <input class="toggle-vis" type="checkbox" checked="checked" data-column="2"> Valor</input>
+                <input class="toggle-vis" type="checkbox" checked="checked" data-column="3"> Descripción</input>
                 <input class="toggle-vis" type="checkbox" checked="checked" data-column="4"> Estado</input>
                 <input class="toggle-vis" type="checkbox" checked="checked" data-column="5"> Status</input>
                 <input class="toggle-vis" type="checkbox" checked="checked" data-column="6"> Acciones</input>

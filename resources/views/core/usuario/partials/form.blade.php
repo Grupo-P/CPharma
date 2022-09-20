@@ -8,6 +8,15 @@
 </div>
 
 <div class="form-group">
+    {!! Form::label('documento', 'Cedula') !!}
+    {!! Form::text('documento', null, [ 'class' => 'form-control', 'placeholder' => 'Ingrese la cedula del usuario...']) !!}
+
+    @error('documento')
+        <small class="text-danger">{{$message}}</small>
+    @enderror
+</div>
+
+<div class="form-group">
     {!! Form::label('email', 'Email') !!}
     {!! Form::text('email', null, [ 'class' => 'form-control', 'placeholder' => 'Ingrese el email del usuario...']) !!}
 

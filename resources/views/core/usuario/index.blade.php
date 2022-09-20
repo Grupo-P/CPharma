@@ -313,7 +313,8 @@
                 <label>Ver columnas:</label>
                 <input class="toggle-vis" type="checkbox" checked="checked" data-column="0"> Nro</input>
                 <input class="toggle-vis" type="checkbox" checked="checked" data-column="1"> Nombre</input>
-                <input class="toggle-vis" type="checkbox" checked="checked" data-column="2"> Email</input>                
+                <input class="toggle-vis" type="checkbox" checked="checked" data-column="2"> Cedula</input>
+                <input class="toggle-vis" type="checkbox" checked="checked" data-column="3"> Email</input>
                 <input class="toggle-vis" type="checkbox" checked="checked" data-column="4"> Estado</input>
                 <input class="toggle-vis" type="checkbox" checked="checked" data-column="5"> Status</input>
                 <input class="toggle-vis" type="checkbox" checked="checked" data-column="6"> Acciones</input>
@@ -325,6 +326,7 @@
                     <tr class="text-center">
                         <th>Nro</th>
                         <th>Nombre</th>
+                        <th>Cedula</th>
                         <th>Email</th>
                         <th>Estado</th>
                         <th>Status</th>
@@ -336,6 +338,7 @@
                         <tr>
                             <td class="isSelectable">{{ $usuario->id }}</td>
                             <td>{{ $usuario->name }}</td>
+                            <td>{{ $usuario->documento }}</td>
                             <td>{{ $usuario->email }}</td>
 
                             <td class="text-center">
@@ -393,6 +396,7 @@
                     <tr>
                         <th class="isSearchable">nro</th>
                         <th class="isSearchable">nombre</th>
+                        <th class="isSearchable">cedula</th>
                         <th class="isSearchable">email</th>
                         <th colspan="3" class="isSpace"></th>
                     </tr>
