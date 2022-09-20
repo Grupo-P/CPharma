@@ -23,7 +23,7 @@ class ParametroFactory extends Factory
             'descripcion' => $this->faker->text(50),
             'activo' => $this->faker->randomElement([0,1]),
             'borrado' => $this->faker->randomElement([0,1]),
-            'user_created_at' => User::all()->random()->id,            
+            'user_created_at' => User::all()->random()->id,
         ];
     }
 }
