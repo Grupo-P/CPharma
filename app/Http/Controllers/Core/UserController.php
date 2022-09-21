@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
@@ -27,7 +28,8 @@ class UserController extends Controller
      */
     public function create()
     {
-        return view('core.usuario.create');
+        $roles = Role::all();
+        return view('core.usuario.create', compact('roles'));
     }
 
     /**
@@ -48,6 +50,9 @@ class UserController extends Controller
         $usuario = User::create($request->all());
         $usuario->password = Hash::make($usuario->password);
         $usuario->save();
+
+        $usuario->roles()->sync($request->roles);
+        
         session()->flash('message', 'Usuario creado con éxito');
 
         $usuarios = User::all();
@@ -76,7 +81,8 @@ class UserController extends Controller
      */
     public function edit(User $usuario)
     {
-        return view('core.usuario.edit', compact('usuario'));
+        $roles = Role::all();
+        return view('core.usuario.edit', compact('usuario', 'roles'));
     }
 
     /**
@@ -101,8 +107,11 @@ class UserController extends Controller
         if($usuario->password != $contraseña){
             $usuario->password = Hash::make($usuario->password);
             $usuario->cambio_clave = 0;
-            $usuario->save();            
+            $usuario->save();
         }
+
+        $usuario->roles()->sync($request->roles);
+
         session()->flash('message', 'Usuario actualizado con éxito');        
         
         $usuarios = User::all();

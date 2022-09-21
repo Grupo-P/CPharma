@@ -22,7 +22,7 @@
     <div class="card">
         <div class="card-body">
             {!! Form::model($usuario ,['route' => ['core.usuarios.update', $usuario], 'method' => 'PUT']) !!}
-                @include('core.usuario.partials.form')            
+                @include('core.usuario.partials.formProfile')            
                 <div class="form-group">
                     {!! Form::hidden('user_updated_at', auth()->user()->id, null) !!}
                     {!! Form::submit('Editar', [ 'class' => 'btn btn-success']) !!}

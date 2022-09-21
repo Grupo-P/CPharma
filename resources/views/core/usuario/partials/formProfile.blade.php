@@ -33,14 +33,3 @@
         <small class="text-danger">{{$message}}</small>
     @enderror
 </div>
-
-<div class="form-group mt-5 col-12">
-    <label class="h5">Listado de roles</label>
-    </br>
-    @foreach($roles as $role)
-        <label style="display:inline-block;" class="col-1">
-            {!! Form::checkbox('roles[]', $role->id, null, ['class' => 'mr-1']) !!}
-            {{$role->name}}            
-        </label>
-    @endforeach
-</div>
