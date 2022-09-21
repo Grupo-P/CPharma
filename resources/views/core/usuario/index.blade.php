@@ -304,7 +304,9 @@
 
     <div class="card shadow">
         <div class="card-header">
-            <a href="{{route('core.usuarios.create')}}" class="btn btn-success" data-toggle="tooltip" data-placement="right" title="Crear Usuario"><i class="fas fa-plus"></i></a>
+            @can('core.usuarios.create')
+                <a href="{{route('core.usuarios.create')}}" class="btn btn-success" data-toggle="tooltip" data-placement="right" title="Crear Usuario"><i class="fas fa-plus"></i></a>
+            @endcan
             <button type="button" id="countRows" class="btn btn-info" data-toggle="tooltip" data-placement="right" title="Contar Filas seleccionadas"><i class="fas fa-layer-group"></i></button>
             <button type="button" id="reloadPage" class="btn btn-warning text-white" data-toggle="tooltip" data-placement="right" title="Recargar"><i class="fas fa-sync"></i></button>
             <button type="button" id="deleteRows" class="btn btn-danger" data-toggle="tooltip" data-placement="right" title="Ocultar Filas seleccionadas"><i class="fas fa-eye-slash"></i></button>
@@ -359,39 +361,53 @@
 
                             <td class="text-center">
                                 <div class="btn-group">
-                                    <a href="{{route('core.usuarios.show', $usuario)}}" type="button" class="btn btn-success mr-1 rounded" data-toggle="tooltip" data-placement="left" title="Ver"><i class="fas fa-eye"></i></a>
+                                    @can('core.usuarios.show')
+                                        <a href="{{route('core.usuarios.show', $usuario)}}" type="button" class="btn btn-success mr-1 rounded" data-toggle="tooltip" data-placement="left" title="Ver"><i class="fas fa-eye"></i></a>
+                                    @endcan
 
-                                    <a href="{{route('core.usuarios.edit', $usuario)}}" type="button" class="btn btn-info mr-1 rounded" data-toggle="tooltip" data-placement="left" title="Editar"><i class="fas fa-edit"></i></a>
+                                    @can('core.usuarios.edit')
+                                        <a href="{{route('core.usuarios.edit', $usuario)}}" type="button" class="btn btn-info mr-1 rounded" data-toggle="tooltip" data-placement="left" title="Editar"><i class="fas fa-edit"></i></a>
+                                    @endcan
 
                                     @if($usuario->activo==1)
-                                        <form action="{{route('core.usuarios.inactive', $usuario)}}" method="POST">
-                                            @csrf                                            
-                                            <button type="submit" class="btn btn-warning text-white mr-1 rounded" data-toggle="tooltip" data-placement="left" title="Inactivar"><i class="fas fa-ban"></i></button>
-                                        </form>                                        
+                                        @can('core.usuarios.inactive')
+                                            <form action="{{route('core.usuarios.inactive', $usuario)}}" method="POST">
+                                                @csrf                                            
+                                                <button type="submit" class="btn btn-warning text-white mr-1 rounded" data-toggle="tooltip" data-placement="left" title="Inactivar"><i class="fas fa-ban"></i></button>
+                                            </form>
+                                        @endcan
                                     @elseif($usuario->activo==0)
-                                        <form action="{{route('core.usuarios.active', $usuario)}}" method="POST">
-                                            @csrf                                            
-                                            <button type="submit" class="btn btn-warning text-white mr-1 rounded" data-toggle="tooltip" data-placement="left" title="Activar"><i class="fas fa-undo"></i></button>
-                                        </form>                                         
+                                        @can('core.usuarios.active')
+                                            <form action="{{route('core.usuarios.active', $usuario)}}" method="POST">
+                                                @csrf                                            
+                                                <button type="submit" class="btn btn-warning text-white mr-1 rounded" data-toggle="tooltip" data-placement="left" title="Activar"><i class="fas fa-undo"></i></button>
+                                            </form>
+                                        @endcan
                                     @endif
 
-                                    @if($usuario->borrado==0)                                                                               
-                                        <form action="{{route('core.usuarios.destroy', $usuario)}}" method="POST">
-                                            @csrf
-                                            @method('delete')
-                                            <button type="submit" class="btn btn-danger rounded mr-1" data-toggle="tooltip" data-placement="left" title="Borrar"><i class="fas fa-trash-alt"></i></button>
-                                        </form>
-                                    @elseif($usuario->borrado==1)                                        
-                                        <form action="{{route('core.usuarios.restore', $usuario)}}" method="POST">
-                                            @csrf                                            
-                                            <button type="submit" class="btn btn-danger rounded mr-1" data-toggle="tooltip" data-placement="left" title="Restaurar"><i class="fas fa-trash-restore-alt"></i></button>
-                                        </form>
+                                    @if($usuario->borrado==0)
+                                        @can('core.usuarios.destroy')
+                                            <form action="{{route('core.usuarios.destroy', $usuario)}}" method="POST">
+                                                @csrf
+                                                @method('delete')
+                                                <button type="submit" class="btn btn-danger rounded mr-1" data-toggle="tooltip" data-placement="left" title="Borrar"><i class="fas fa-trash-alt"></i></button>
+                                            </form>
+                                        @endcan
+                                    @elseif($usuario->borrado==1)   
+                                        @can('core.usuarios.restore')
+                                            <form action="{{route('core.usuarios.restore', $usuario)}}" method="POST">
+                                                @csrf                                            
+                                                <button type="submit" class="btn btn-danger rounded mr-1" data-toggle="tooltip" data-placement="left" title="Restaurar"><i class="fas fa-trash-restore-alt"></i></button>
+                                            </form>
+                                        @endcan
                                     @endif
 
-                                    <form action="{{route('core.usuarios.lock', $usuario)}}" method="POST">
-                                        @csrf                                        
-                                        <button type="submit" class="btn btn-secondary rounded" data-toggle="tooltip" data-placement="left" title="Cambiar Contraseña"><i class="fas fa-lock"></i></button>
-                                    </form>
+                                    @can('core.usuarios.lock')
+                                        <form action="{{route('core.usuarios.lock', $usuario)}}" method="POST">
+                                            @csrf                                        
+                                            <button type="submit" class="btn btn-secondary rounded" data-toggle="tooltip" data-placement="left" title="Cambiar Contraseña"><i class="fas fa-lock"></i></button>
+                                        </form>
+                                    @endcan
                                 </div>
                             </td>
                         </tr>

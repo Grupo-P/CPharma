@@ -304,7 +304,10 @@
 
     <div class="card shadow">
         <div class="card-header">
-            <a href="{{route('core.parametros.create')}}" class="btn btn-success" data-toggle="tooltip" data-placement="right" title="Crear Parámetro"><i class="fas fa-plus"></i></a>
+            @can('core.parametros.create')
+                <a href="{{route('core.parametros.create')}}" class="btn btn-success" data-toggle="tooltip" data-placement="right" title="Crear Parámetro"><i class="fas fa-plus"></i></a>
+            @endcan
+
             <button type="button" id="countRows" class="btn btn-info" data-toggle="tooltip" data-placement="right" title="Contar Filas seleccionadas"><i class="fas fa-layer-group"></i></button>
             <button type="button" id="reloadPage" class="btn btn-warning text-white" data-toggle="tooltip" data-placement="right" title="Recargar"><i class="fas fa-sync"></i></button>
             <button type="button" id="deleteRows" class="btn btn-danger" data-toggle="tooltip" data-placement="right" title="Ocultar Filas seleccionadas"><i class="fas fa-eye-slash"></i></button>
@@ -340,7 +343,7 @@
                             <td>{{ $parametro->variable }}</td>
                             <td>{{ $parametro->valor }}</td>                            
                             <td>{{ $parametro->descripcion }}</td>
-
+                        
                             <td class="text-center">
                                 @if($parametro->activo==1)
                                     <span class="text-success" data-toggle="tooltip" data-placement="left" title="Activa"><i class="fas fa-check"></i></span>
@@ -359,33 +362,45 @@
 
                             <td class="text-center">
                                 <div class="btn-group">
-                                    <a href="{{route('core.parametros.show', $parametro)}}" type="button" class="btn btn-success mr-1 rounded" data-toggle="tooltip" data-placement="left" title="Ver"><i class="fas fa-eye"></i></a>
+                                    @can('core.parametros.show')
+                                        <a href="{{route('core.parametros.show', $parametro)}}" type="button" class="btn btn-success mr-1 rounded" data-toggle="tooltip" data-placement="left" title="Ver"><i class="fas fa-eye"></i></a>
+                                    @endcan
 
-                                    <a href="{{route('core.parametros.edit', $parametro)}}" type="button" class="btn btn-info mr-1 rounded" data-toggle="tooltip" data-placement="left" title="Editar"><i class="fas fa-edit"></i></a>
+                                    @can('core.parametros.edit')
+                                        <a href="{{route('core.parametros.edit', $parametro)}}" type="button" class="btn btn-info mr-1 rounded" data-toggle="tooltip" data-placement="left" title="Editar"><i class="fas fa-edit"></i></a>
+                                    @endcan
 
                                     @if($parametro->activo==1)
-                                        <form action="{{route('core.parametros.inactive', $parametro)}}" method="POST">
-                                            @csrf                                            
-                                            <button type="submit" class="btn btn-warning text-white mr-1 rounded" data-toggle="tooltip" data-placement="left" title="Inactivar"><i class="fas fa-ban"></i></button>
-                                        </form>                                        
+                                        @can('core.parametros.inactive')
+                                            <form action="{{route('core.parametros.inactive', $parametro)}}" method="POST">
+                                                @csrf                                            
+                                                <button type="submit" class="btn btn-warning text-white mr-1 rounded" data-toggle="tooltip" data-placement="left" title="Inactivar"><i class="fas fa-ban"></i></button>
+                                            </form>
+                                        @endcan                                    
                                     @elseif($parametro->activo==0)
-                                        <form action="{{route('core.parametros.active', $parametro)}}" method="POST">
-                                            @csrf                                            
-                                            <button type="submit" class="btn btn-warning text-white mr-1 rounded" data-toggle="tooltip" data-placement="left" title="Activar"><i class="fas fa-undo"></i></button>
-                                        </form>                                         
+                                        @can('core.parametros.active')
+                                            <form action="{{route('core.parametros.active', $parametro)}}" method="POST">
+                                                @csrf                                            
+                                                <button type="submit" class="btn btn-warning text-white mr-1 rounded" data-toggle="tooltip" data-placement="left" title="Activar"><i class="fas fa-undo"></i></button>
+                                            </form>
+                                        @endcan
                                     @endif
 
-                                    @if($parametro->borrado==0)                                                                               
-                                        <form action="{{route('core.parametros.destroy', $parametro)}}" method="POST">
-                                            @csrf
-                                            @method('delete')
-                                            <button type="submit" class="btn btn-danger rounded" data-toggle="tooltip" data-placement="left" title="Borrar"><i class="fas fa-trash-alt"></i></button>
-                                        </form>
-                                    @elseif($parametro->borrado==1)                                        
-                                        <form action="{{route('core.parametros.restore', $parametro)}}" method="POST">
-                                            @csrf                                            
-                                            <button type="submit" class="btn btn-danger rounded" data-toggle="tooltip" data-placement="left" title="Restaurar"><i class="fas fa-trash-restore-alt"></i></button>
-                                        </form>
+                                    @if($parametro->borrado==0)
+                                        @can('core.parametros.destroy')
+                                            <form action="{{route('core.parametros.destroy', $parametro)}}" method="POST">
+                                                @csrf
+                                                @method('delete')
+                                                <button type="submit" class="btn btn-danger rounded" data-toggle="tooltip" data-placement="left" title="Borrar"><i class="fas fa-trash-alt"></i></button>
+                                            </form>
+                                        @endcan
+                                    @elseif($parametro->borrado==1)
+                                        @can('core.parametros.restore')                                        
+                                            <form action="{{route('core.parametros.restore', $parametro)}}" method="POST">
+                                                @csrf                                            
+                                                <button type="submit" class="btn btn-danger rounded" data-toggle="tooltip" data-placement="left" title="Restaurar"><i class="fas fa-trash-restore-alt"></i></button>
+                                            </form>
+                                        @endcan
                                     @endif
                                 </div>
                             </td>
