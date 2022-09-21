@@ -36,5 +36,17 @@ class RoleSeeder extends Seeder
         Permission::create(['name' => 'core.parametros.inactive'])->syncRoles([$roleMaster,$roleGerente]);
         Permission::create(['name' => 'core.parametros.destroy'])->syncRoles([$roleMaster]);
         Permission::create(['name' => 'core.parametros.restore'])->syncRoles([$roleMaster]);
+
+        //Permisos Core Parametro
+        Permission::create(['name' => 'core.usuarios.profile'])->syncRoles([$roleMaster,$roleGerente,$roleSupervisor,$roleUsuario]);
+        Permission::create(['name' => 'core.usuarios.index'])->syncRoles([$roleMaster,$roleGerente,$roleSupervisor,$roleUsuario]);
+        Permission::create(['name' => 'core.usuarios.show'])->syncRoles([$roleMaster,$roleGerente,$roleSupervisor,$roleUsuario]);
+        Permission::create(['name' => 'core.usuarios.create'])->syncRoles([$roleMaster,$roleGerente,$roleSupervisor]);
+        Permission::create(['name' => 'core.usuarios.edit'])->syncRoles([$roleMaster,$roleGerente,$roleSupervisor]);
+        Permission::create(['name' => 'core.usuarios.active'])->syncRoles([$roleMaster,$roleGerente]);
+        Permission::create(['name' => 'core.usuarios.inactive'])->syncRoles([$roleMaster,$roleGerente]);
+        Permission::create(['name' => 'core.usuarios.destroy'])->syncRoles([$roleMaster]);
+        Permission::create(['name' => 'core.usuarios.restore'])->syncRoles([$roleMaster]);
+        Permission::create(['name' => 'core.usuarios.lock'])->syncRoles([$roleMaster]);
     }
 }
