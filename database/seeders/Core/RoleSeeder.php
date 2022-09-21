@@ -29,7 +29,7 @@ class RoleSeeder extends Seeder
 
         //Permisos Core Usuarios
         Permission::create(['name' => 'core.usuarios.profile'])->syncRoles([$roleMaster,$roleGerente,$roleSupervisor,$roleUsuario]);
-        Permission::create(['name' => 'core.usuarios.index'])->syncRoles([$roleMaster,$roleGerente,$roleSupervisor,$roleUsuario]);
+        Permission::create(['name' => 'core.usuarios.index'])->syncRoles([$roleMaster]);
         Permission::create(['name' => 'core.usuarios.show'])->syncRoles([$roleMaster,$roleGerente,$roleSupervisor,$roleUsuario]);
         Permission::create(['name' => 'core.usuarios.create'])->syncRoles([$roleMaster,$roleGerente,$roleSupervisor]);
         Permission::create(['name' => 'core.usuarios.edit'])->syncRoles([$roleMaster,$roleGerente,$roleSupervisor]);
@@ -40,7 +40,7 @@ class RoleSeeder extends Seeder
         Permission::create(['name' => 'core.usuarios.lock'])->syncRoles([$roleMaster]);
 
         //Permisos Core Parametro
-        Permission::create(['name' => 'core.parametros.index'])->syncRoles([$roleMaster,$roleGerente,$roleSupervisor,$roleUsuario]);
+        Permission::create(['name' => 'core.parametros.index'])->syncRoles([$roleMaster]);
         Permission::create(['name' => 'core.parametros.show'])->syncRoles([$roleMaster,$roleGerente,$roleSupervisor,$roleUsuario]);
         Permission::create(['name' => 'core.parametros.create'])->syncRoles([$roleMaster,$roleGerente,$roleSupervisor]);
         Permission::create(['name' => 'core.parametros.edit'])->syncRoles([$roleMaster,$roleGerente,$roleSupervisor]);

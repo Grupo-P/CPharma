@@ -282,11 +282,13 @@ return [
         [
             'type' => 'sidebar-menu-search',
             'text' => 'Buscar...',
+            'can' => 'dashboard'
         ],
         [
             'text' => 'Dashboard',
             'route'  => 'dashboard',
             'icon' => 'fas fa-fw fa-home',
+            'can' => 'dashboard'
         ],        
         //MODULOS CORE
         ['header' => 'MÓDULOS DE CONFIGURACIÓN'],
@@ -300,7 +302,7 @@ return [
                     'icon' => 'fas fa-fw fa-space-shuttle',
                     'label'       => 1,
                     'label_color' => 'success',
-                    //'can' => 'core.demo.AdminLTEDemo',
+                    'can' => 'core.demo.AdminLTEDemo',
                 ],
             ]
         ],
@@ -308,19 +310,22 @@ return [
             'text' => 'Estado del servidor',
             'route'  => 'core.health',            
             'icon' => 'fas fa-fw fa-heartbeat', 
-            'target' => 'blank'
+            'target' => 'blank',
+            'can' => 'core.health'
         ],
         [
             'text' => 'Parametros',
             'route'  => 'core.parametros.index',
             'icon' => 'fas fa-fw fas fa-cogs',
             'active' => ['core/parametros*'],
+            'can' => 'core.parametros.index'
         ],
         [
             'text' => 'Usuarios',
             'route'  => 'core.usuarios.index',
             'icon' => 'fas fa-fw fas fa-users',
             'active' => ['core/usuarios*'],
+            'can' => 'core.usuarios.index'
         ],
     ],
 
