@@ -75,7 +75,13 @@ class User extends Authenticatable
 
     public function adminlte_desc()
     {
-        return 'That\'s a nice guy';
+        $label = "";
+        $roles = $this->getRoleNames();
+        foreach ($roles as $role){
+            $label .= $role.',';
+        }
+        $label = substr($label, 0, -1);
+        return $label;
     }
 
     public function adminlte_profile_url()
