@@ -70,7 +70,7 @@ class UserController extends Controller
         session()->flash('message', 'Usuario creado con éxito');
 
         $usuarios = User::all();
-        return view('core.usuario.index', compact('usuarios'));
+        return redirect()->route('core.usuarios.index', compact('usuarios'));
     }
 
     /**
@@ -129,7 +129,7 @@ class UserController extends Controller
         session()->flash('message', 'Usuario actualizado con éxito');        
         
         $usuarios = User::all();
-        return view('core.usuario.index', compact('usuarios'));
+        return redirect()->route('core.usuarios.index', compact('usuarios'));
     }
 
     /**
@@ -147,7 +147,7 @@ class UserController extends Controller
         session()->flash('message', 'Usuario borrado con éxito');
 
         $usuarios = User::all();
-        return view('core.usuario.index', compact('usuarios'));
+        return redirect()->route('core.usuarios.index', compact('usuarios'));
     }
 
     /**
@@ -166,7 +166,7 @@ class UserController extends Controller
         session()->flash('message', 'Usuario restaurado con éxito');
 
         $usuarios = User::all();
-        return view('core.usuario.index', compact('usuarios'));
+        return redirect()->route('core.usuarios.index', compact('usuarios'));
     }
 
     /**
@@ -183,7 +183,7 @@ class UserController extends Controller
         session()->flash('message', 'Usuario activado con éxito');
 
         $usuarios = User::all();
-        return view('core.usuario.index', compact('usuarios'));
+        return redirect()->route('core.usuarios.index', compact('usuarios'));
     }
 
     /**
@@ -200,7 +200,7 @@ class UserController extends Controller
         session()->flash('message', 'Usuario inactivado con éxito');
 
         $usuarios = User::all();
-        return view('core.usuario.index', compact('usuarios'));
+        return redirect()->route('core.usuarios.index', compact('usuarios'));
     }
 
     /**
@@ -217,7 +217,7 @@ class UserController extends Controller
         session()->flash('message', 'Usuario notificado con éxito');
 
         $usuarios = User::all();
-        return view('core.usuario.index', compact('usuarios'));
+        return redirect()->route('core.usuarios.index', compact('usuarios'));
     }
 
     /**

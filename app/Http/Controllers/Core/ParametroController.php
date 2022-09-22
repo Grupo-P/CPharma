@@ -59,7 +59,7 @@ class ParametroController extends Controller
         session()->flash('message', 'Parámetro creado con éxito');
 
         $parametros = Parametro::all();
-        return view('core.parametro.index', compact('parametros'));
+        return redirect()->route('core.parametros.index', compact('parametros'));
     }
 
     /**
@@ -105,7 +105,7 @@ class ParametroController extends Controller
         session()->flash('message', 'Parámetro actualizado con éxito');
 
         $parametros = Parametro::all();
-        return view('core.parametro.index', compact('parametros'));
+        return redirect()->route('core.parametros.index', compact('parametros'));
     }
 
     /**
@@ -123,7 +123,7 @@ class ParametroController extends Controller
         session()->flash('message', 'Parámetro borrado con éxito');
 
         $parametros = Parametro::all();
-        return view('core.parametro.index', compact('parametros'));
+        return redirect()->route('core.parametros.index', compact('parametros'));
     }
 
     /**
@@ -142,7 +142,7 @@ class ParametroController extends Controller
         session()->flash('message', 'Parámetro restaurado con éxito');
 
         $parametros = Parametro::all();
-        return view('core.parametro.index', compact('parametros'));
+        return redirect()->route('core.parametros.index', compact('parametros'));
     }
 
     /**
@@ -159,7 +159,7 @@ class ParametroController extends Controller
         session()->flash('message', 'Parámetro activado con éxito');
 
         $parametros = Parametro::all();
-        return view('core.parametro.index', compact('parametros'));
+        return redirect()->route('core.parametros.index', compact('parametros'));
     }
 
     /**
@@ -176,6 +176,6 @@ class ParametroController extends Controller
         session()->flash('message', 'Parámetro inactivado con éxito');
 
         $parametros = Parametro::all();
-        return view('core.parametro.index', compact('parametros'));
+        return redirect()->route('core.parametros.index', compact('parametros'));
     }
 }
