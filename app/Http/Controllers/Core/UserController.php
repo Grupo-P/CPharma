@@ -10,6 +10,20 @@ use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('can:core.usuarios.index')->only('index');
+        $this->middleware('can:core.usuarios.show')->only('show');
+        $this->middleware('can:core.usuarios.create')->only('create');
+        $this->middleware('can:core.usuarios.edit')->only('edit');
+        $this->middleware('can:core.usuarios.active')->only('active');
+        $this->middleware('can:core.usuarios.inactive')->only('inactive');
+        $this->middleware('can:core.usuarios.destroy')->only('destroy');
+        $this->middleware('can:core.usuarios.restore')->only('restore');
+        $this->middleware('can:core.usuarios.lock')->only('lock');
+        $this->middleware('can:core.usuarios.profile')->only('profile');
+    }
+
     /**
      * Display a listing of the resource.
      *

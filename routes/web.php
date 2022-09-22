@@ -34,7 +34,7 @@ Route::middleware([
 ])->group(function () {
     Route::get('/dashboard', function () {
         return view('dashboard');
-    })->name('dashboard');
+    })->middleware('can:dashboard')->name('dashboard');
 });
 
 //Grupo de rutas core
@@ -43,11 +43,11 @@ Route::prefix('core')->middleware(['auth:sanctum', 'verified'])->group(function 
     //Grupo de rutas demo
     Route::prefix('demo')->group(function () {
         //Pagina demo para hacer pruebas del tema AdminLTE con librerias
-        Route::get('AdminLTEDemo', [AdminLTEDemoController::class, 'index'])->name('core.demo.AdminLTEDemo');
+        Route::get('AdminLTEDemo', [AdminLTEDemoController::class, 'index'])->middleware('can:core.demo.AdminLTEDemo')->name('core.demo.AdminLTEDemo');
     });
 
     //Monitor de estado de la aplicación
-    Route::get('health', HealthCheckResultsController::class)->name('core.health');
+    Route::get('health', HealthCheckResultsController::class)->middleware('can:core.health')->name('core.health');
 
     //Usuarios
     Route::resource('usuarios',UserController::class)->names('core.usuarios');

@@ -9,6 +9,18 @@ use App\Models\User;
 
 class ParametroController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('can:core.parametros.index')->only('index');
+        $this->middleware('can:core.parametros.show')->only('show');
+        $this->middleware('can:core.parametros.create')->only('create');
+        $this->middleware('can:core.parametros.edit')->only('edit');
+        $this->middleware('can:core.parametros.active')->only('active');
+        $this->middleware('can:core.parametros.inactive')->only('inactive');
+        $this->middleware('can:core.parametros.destroy')->only('destroy');
+        $this->middleware('can:core.parametros.restore')->only('restore');
+    }   
+
     /**
      * Display a listing of the resource.
      *
