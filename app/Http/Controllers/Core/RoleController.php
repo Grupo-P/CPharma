@@ -10,6 +10,7 @@ class RoleController extends Controller
 {
     public function __construct()
     {
+        /*
         $this->middleware('can:core.roles.index')->only('index');
         $this->middleware('can:core.roles.show')->only('show');
         $this->middleware('can:core.roles.create')->only('create');
@@ -18,6 +19,7 @@ class RoleController extends Controller
         $this->middleware('can:core.roles.inactive')->only('inactive');
         $this->middleware('can:core.roles.destroy')->only('destroy');
         $this->middleware('can:core.roles.restore')->only('restore');
+        */
     }
     
     /**
@@ -27,6 +29,7 @@ class RoleController extends Controller
      */
     public function index()
     {
+        $roles = Role::all();        
         return view('core.roles.index', compact('roles'));
     }
 

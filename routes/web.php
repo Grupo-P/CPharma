@@ -66,4 +66,7 @@ Route::prefix('core')->middleware(['auth:sanctum', 'verified'])->group(function 
 
     //Roles
     Route::resource('roles',RoleController::class)->names('core.roles');
+    Route::post('roles/{id}/restore', [RoleController::class, 'restore'])->name('core.roles.restore');
+    Route::post('roles/{id}/active', [RoleController::class, 'active'])->name('core.roles.active');
+    Route::post('roles/{id}/inactive', [RoleController::class, 'inactive'])->name('core.roles.inactive');
 });
