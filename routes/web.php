@@ -26,7 +26,7 @@ Route::get('/register', function () {
     return view('welcome');
 });
 
-Route::get('/user/profile', [UserController::class, 'profile']);
+Route::middleware(['auth:sanctum', 'verified'])->get('/user/profile', [UserController::class, 'profile']);
 
 Route::middleware([
     'auth:sanctum',
