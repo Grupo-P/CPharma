@@ -24,7 +24,8 @@ class RoleSeeder extends Seeder
 
         //Permisos Core General
         Permission::create(['name' => 'dashboard'])->syncRoles([$roleMaster,$roleGerente,$roleSupervisor,$roleUsuario]);
-        Permission::create(['name' => 'core.demo.AdminLTEDemo'])->syncRoles([$roleMaster]);
+        Permission::create(['name' => 'core.demo.sandbox1'])->syncRoles([$roleMaster]);
+        Permission::create(['name' => 'core.demo.sandbox2'])->syncRoles([$roleMaster]);
         Permission::create(['name' => 'core.health'])->syncRoles([$roleMaster]);
 
         //Permisos Core Usuarios

@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', 'AdminLTEDemo')
+@section('title', 'Sandbox 1')
 
 @section('footer')
     <!-- Footer theme -->
@@ -55,11 +55,11 @@
 @stop
 
 @section('content_header')
-    <h1>AdminLTEDemo</h1>
+    <h1>Sandbox 1</h1>
     <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/dashboard">Dashboard</a></li>
-            <li class="breadcrumb-item active" aria-current="page">AdminLTEDemo</li>
+            <li class="breadcrumb-item active" aria-current="page">Sandbox 1</li>
         </ol>
     </nav>    
 @stop

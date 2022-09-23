@@ -2,9 +2,10 @@
 
 use Illuminate\Support\Facades\Route;
 use Spatie\Health\Http\Controllers\HealthCheckResultsController;
-use App\Http\Controllers\Core\demo\AdminLTEDemoController;
+use App\Http\Controllers\Core\demo\SandboxController;
 use App\Http\Controllers\Core\ParametroController;
 use App\Http\Controllers\Core\UserController;
+use App\Http\Controllers\Core\RoleController;
 
 /*
 |--------------------------------------------------------------------------
@@ -43,7 +44,8 @@ Route::prefix('core')->middleware(['auth:sanctum', 'verified'])->group(function 
     //Grupo de rutas demo
     Route::prefix('demo')->group(function () {
         //Pagina demo para hacer pruebas del tema AdminLTE con librerias
-        Route::get('AdminLTEDemo', [AdminLTEDemoController::class, 'index'])->middleware('can:core.demo.AdminLTEDemo')->name('core.demo.AdminLTEDemo');
+        Route::get('sandbox1', [SandboxController::class, 'sandbox1'])->middleware('can:core.demo.sandbox1')->name('core.demo.sandbox1');
+        Route::get('sandbox2', [SandboxController::class, 'sandbox2'])->middleware('can:core.demo.sandbox2')->name('core.demo.sandbox2');
     });
 
     //Monitor de estado de la aplicación
@@ -61,4 +63,7 @@ Route::prefix('core')->middleware(['auth:sanctum', 'verified'])->group(function 
     Route::post('parametros/{id}/restore', [ParametroController::class, 'restore'])->name('core.parametros.restore');
     Route::post('parametros/{id}/active', [ParametroController::class, 'active'])->name('core.parametros.active');
     Route::post('parametros/{id}/inactive', [ParametroController::class, 'inactive'])->name('core.parametros.inactive');
+
+    //Roles
+    Route::resource('roles',RoleController::class)->names('core.roles');
 });

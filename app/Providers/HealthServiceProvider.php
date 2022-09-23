@@ -25,11 +25,12 @@ class HealthServiceProvider extends ServiceProvider
             CpuLoadCheck::new(),
             UsedDiskSpaceCheck::new(),
             DatabaseCheck::new(),
+            CacheCheck::new(),
+            EnvironmentCheck::new(),
+            DebugModeCheck::new(),
             PingCheck::new()->url('https://google.com')->name('Ping Google'),
             PingCheck::new()->url('https://facebook.com')->name('Ping Facebook'),
-            CacheCheck::new(),
-            EnvironmentCheck::new(),            
-            DebugModeCheck::new(),             
+            PingCheck::new()->url('https://instagram.com')->name('Ping Instagram'),
         ]);
     }    
 }

@@ -290,43 +290,56 @@ return [
             'icon' => 'fas fa-fw fa-home',
             'can' => 'dashboard'
         ],        
-        //MODULOS CORE
-        ['header' => 'MÓDULOS DE CONFIGURACIÓN'],
+        //MODULOS CORE        
         [
-            'text'    => 'Demo',
-            'icon'    => 'fas fa-fw fa-gamepad',
+            'text'    => 'Configuraciones',
+            'icon'    => 'fas fa-fw fa-cog',
             'submenu' => [
+                [                    
+                    'text'    => 'Demos',
+                    'icon'    => 'fas fa-fw fa-gamepad',
+                    'submenu' => [
+                        [
+                            'text' => 'Sandbox 1',
+                            'route'  => 'core.demo.sandbox1',
+                            'icon'    => 'fas fa-fw fa-gamepad',
+                            'label'       => 1,
+                            'label_color' => 'success',
+                            'can' => 'core.demo.sandbox1',
+                        ],
+                        [
+                            'text' => 'Sandbox 2',
+                            'route'  => 'core.demo.sandbox2',
+                            'icon'    => 'fas fa-fw fa-gamepad',
+                            'label'       => 1,
+                            'label_color' => 'success',
+                            'can' => 'core.demo.sandbox2',
+                        ],
+                    ],                    
+                ],
                 [
-                    'text' => 'AdminLTEDemo',
-                    'route'  => 'core.demo.AdminLTEDemo',
-                    'icon' => 'fas fa-fw fa-space-shuttle',
-                    'label'       => 1,
-                    'label_color' => 'success',
-                    'can' => 'core.demo.AdminLTEDemo',
+                    'text' => 'Estado del servidor',
+                    'route'  => 'core.health',            
+                    'icon' => 'fas fa-fw fa-heartbeat', 
+                    'target' => 'blank',
+                    'can' => 'core.health'
+                ],
+                [
+                    'text' => 'Parametros',
+                    'route'  => 'core.parametros.index',
+                    'icon' => 'fas fa-fw fas fa-cogs',
+                    'active' => ['core/parametros*'],
+                    'can' => 'core.parametros.index'
+                ],
+                [
+                    'text' => 'Usuarios',
+                    'route'  => 'core.usuarios.index',
+                    'icon' => 'fas fa-fw fas fa-users',
+                    'active' => ['core/usuarios*'],
+                    'can' => 'core.usuarios.index'
                 ],
             ]
-        ],
-        [
-            'text' => 'Estado del servidor',
-            'route'  => 'core.health',            
-            'icon' => 'fas fa-fw fa-heartbeat', 
-            'target' => 'blank',
-            'can' => 'core.health'
-        ],
-        [
-            'text' => 'Parametros',
-            'route'  => 'core.parametros.index',
-            'icon' => 'fas fa-fw fas fa-cogs',
-            'active' => ['core/parametros*'],
-            'can' => 'core.parametros.index'
-        ],
-        [
-            'text' => 'Usuarios',
-            'route'  => 'core.usuarios.index',
-            'icon' => 'fas fa-fw fas fa-users',
-            'active' => ['core/usuarios*'],
-            'can' => 'core.usuarios.index'
-        ],
+        ],                        
     ],
 
     /*
