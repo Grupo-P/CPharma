@@ -32,7 +32,7 @@ class UserController extends Controller
     public function index()
     {
         $usuarios = User::all();
-        return view('core.usuario.index', compact('usuarios'));
+        return view('core.usuarios.index', compact('usuarios'));
     }
 
     /**
@@ -43,7 +43,7 @@ class UserController extends Controller
     public function create()
     {
         $roles = Role::all();
-        return view('core.usuario.create', compact('roles'));
+        return view('core.usuarios.create', compact('roles'));
     }
 
     /**
@@ -84,7 +84,7 @@ class UserController extends Controller
         $creadoPor = User::find($usuario->user_created_at);
         $actualizadoPor = User::find($usuario->user_updated_at);
         $borradoPor = User::find($usuario->user_deleted_at);
-        return view('core.usuario.show', compact('usuario', 'creadoPor', 'actualizadoPor', 'borradoPor'));
+        return view('core.usuarios.show', compact('usuario', 'creadoPor', 'actualizadoPor', 'borradoPor'));
     }
 
     /**
@@ -96,7 +96,7 @@ class UserController extends Controller
     public function edit(User $usuario)
     {
         $roles = Role::all();
-        return view('core.usuario.edit', compact('usuario', 'roles'));
+        return view('core.usuarios.edit', compact('usuario', 'roles'));
     }
 
     /**
@@ -228,6 +228,6 @@ class UserController extends Controller
     public function profile()
     {        
         $usuario = User::find(auth()->user()->id);
-        return view('core.usuario.profile', compact('usuario'));
+        return view('core.usuarios.profile', compact('usuario'));
     }
 }

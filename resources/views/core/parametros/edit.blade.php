@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', 'Crear Usuario')
+@section('title', 'Editar Parámetro')
 
 @section('footer')
     <!-- Footer theme | No Borrar -->
@@ -15,24 +15,24 @@
 @stop
 
 @section('content_header')
-    <h1>Crear Usuario</h1>
+    <h1>Editar Parámetro</h1>
     <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/dashboard">Dashboard</a></li>
-            <li class="breadcrumb-item"><a href="{{route('core.usuarios.index')}}">Usuarios</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Crear Usuario</li>
+            <li class="breadcrumb-item"><a href="{{route('core.parametros.index')}}">Parámetros</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Editar Parámetro</li>
         </ol>
-    </nav>    
+    </nav>
 @stop
 
 @section('content')
     <div class="card">
         <div class="card-body">
-            {!! Form::open(['route' => 'core.usuarios.store']) !!}
-                @include('core.usuario.partials.form')
+            {!! Form::model($parametro ,['route' => ['core.parametros.update', $parametro], 'method' => 'PUT']) !!}
+                @include('core.parametros.partials.form')            
                 <div class="form-group">
-                    {!! Form::hidden('user_created_at', auth()->user()->id, null) !!}
-                    {!! Form::submit('Crear', [ 'class' => 'btn btn-success']) !!}
+                    {!! Form::hidden('user_updated_at', auth()->user()->id, null) !!}
+                    {!! Form::submit('Editar', [ 'class' => 'btn btn-success']) !!}
                     {!! Form::reset('Borrar', [ 'class' => 'btn btn-danger']) !!}
                 </div>
             {!! Form::close() !!}

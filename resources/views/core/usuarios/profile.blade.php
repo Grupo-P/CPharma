@@ -15,14 +15,14 @@
 @stop
 
 @section('content_header')
-    <h1>Perfil</h1>    
+    <h1>Perfil</h1>
 @stop
 
 @section('content')
     <div class="card">
         <div class="card-body">
             {!! Form::model($usuario ,['route' => ['core.usuarios.update', $usuario], 'method' => 'PUT']) !!}
-                @include('core.usuario.partials.formProfile')            
+                @include('core.usuarios.partials.formProfile')            
                 <div class="form-group">
                     {!! Form::hidden('user_updated_at', auth()->user()->id, null) !!}
                     {!! Form::submit('Editar', [ 'class' => 'btn btn-success']) !!}

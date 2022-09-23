@@ -41,16 +41,16 @@
                         <td>{{$usuario->id}}</td>
                     </tr>
                     <tr>
-                        <td>Variable</td>
-                        <td>{{$usuario->variable}}</td>
+                        <td>Nombre</td>
+                        <td>{{$usuario->name}}</td>
                     </tr>
                     <tr>
-                        <td>Valor</td>
-                        <td>{{$usuario->valor}}</td>
+                        <td>Cedula</td>
+                        <td>{{$usuario->documento}}</td>
                     </tr>
                     <tr>
-                        <td>Descripción</td>
-                        <td>{{$usuario->descripcion}}</td>
+                        <td>Email</td>
+                        <td>{{$usuario->email}}</td>
                     </tr>
                     <tr>
                         <td>Estado</td>
@@ -95,6 +95,10 @@
                     <tr>
                         <td>Fecha de borrado</td>
                         <td>@if($borradoPor){{$usuario->deleted_at}}@endif</td>
+                    </tr>
+                    <tr>
+                        <td>Roles</td>
+                        <td>{{$usuario->adminlte_desc()}}</td>
                     </tr>
                 </tbody>
             </table>

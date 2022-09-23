@@ -332,6 +332,13 @@ return [
                     'can' => 'core.parametros.index'
                 ],
                 [
+                    'text' => 'Roles',
+                    'route'  => 'core.roles.index',
+                    'icon' => 'fas fa-fw fas fa-users-cog',
+                    'active' => ['core/roles*'],
+                    //'can' => 'core.usuarios.index'
+                ],
+                [
                     'text' => 'Usuarios',
                     'route'  => 'core.usuarios.index',
                     'icon' => 'fas fa-fw fas fa-users',

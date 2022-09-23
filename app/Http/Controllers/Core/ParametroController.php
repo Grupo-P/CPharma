@@ -29,7 +29,7 @@ class ParametroController extends Controller
     public function index()
     {
         $parametros = Parametro::all();
-        return view('core.parametro.index', compact('parametros'));
+        return view('core.parametros.index', compact('parametros'));
     }
 
     /**
@@ -39,7 +39,7 @@ class ParametroController extends Controller
      */
     public function create()
     {
-        return view('core.parametro.create');
+        return view('core.parametros.create');
     }
 
     /**
@@ -73,7 +73,7 @@ class ParametroController extends Controller
         $creadoPor = User::find($parametro->user_created_at);
         $actualizadoPor = User::find($parametro->user_updated_at);
         $borradoPor = User::find($parametro->user_deleted_at);
-        return view('core.parametro.show', compact('parametro', 'creadoPor', 'actualizadoPor', 'borradoPor'));
+        return view('core.parametros.show', compact('parametro', 'creadoPor', 'actualizadoPor', 'borradoPor'));
     }
 
     /**
@@ -84,7 +84,7 @@ class ParametroController extends Controller
      */
     public function edit(Parametro $parametro)
     {
-        return view('core.parametro.edit', compact('parametro'));
+        return view('core.parametros.edit', compact('parametro'));
     }
 
     /**

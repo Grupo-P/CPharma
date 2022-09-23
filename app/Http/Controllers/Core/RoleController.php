@@ -4,9 +4,22 @@ namespace App\Http\Controllers\Core;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Spatie\Permission\Models\Role;
 
 class RoleController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('can:core.roles.index')->only('index');
+        $this->middleware('can:core.roles.show')->only('show');
+        $this->middleware('can:core.roles.create')->only('create');
+        $this->middleware('can:core.roles.edit')->only('edit');
+        $this->middleware('can:core.roles.active')->only('active');
+        $this->middleware('can:core.roles.inactive')->only('inactive');
+        $this->middleware('can:core.roles.destroy')->only('destroy');
+        $this->middleware('can:core.roles.restore')->only('restore');
+    }
+    
     /**
      * Display a listing of the resource.
      *
@@ -14,7 +27,7 @@ class RoleController extends Controller
      */
     public function index()
     {
-        //
+        return view('core.roles.index', compact('roles'));
     }
 
     /**
@@ -24,7 +37,7 @@ class RoleController extends Controller
      */
     public function create()
     {
-        //
+        return view('core.roles.create');
     }
 
     /**
@@ -41,33 +54,33 @@ class RoleController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  Role $role
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Role $role)
     {
-        //
+        return view('core.roles.index', compact('role'));
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  Role $role
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Role $role)
     {
-        //
+        return view('core.roles.index', compact('role'));
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  Role $role
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Role $role)
     {
         //
     }
@@ -75,10 +88,10 @@ class RoleController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  Role $role
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Role $role)
     {
         //
     }

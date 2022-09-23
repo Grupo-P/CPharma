@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', 'Crear Parámetro')
+@section('title', 'Crear Usuario')
 
 @section('footer')
     <!-- Footer theme | No Borrar -->
@@ -15,12 +15,12 @@
 @stop
 
 @section('content_header')
-    <h1>Crear Parámetro</h1>
+    <h1>Crear Usuario</h1>
     <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/dashboard">Dashboard</a></li>
-            <li class="breadcrumb-item"><a href="{{route('core.parametros.index')}}">Parámetros</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Crear Parámetro</li>
+            <li class="breadcrumb-item"><a href="{{route('core.usuarios.index')}}">Usuarios</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Crear Usuario</li>
         </ol>
     </nav>    
 @stop
@@ -28,8 +28,8 @@
 @section('content')
     <div class="card">
         <div class="card-body">
-            {!! Form::open(['route' => 'core.parametros.store']) !!}
-                @include('core.parametro.partials.form')
+            {!! Form::open(['route' => 'core.usuarios.store']) !!}
+                @include('core.usuarios.partials.form')
                 <div class="form-group">
                     {!! Form::hidden('user_created_at', auth()->user()->id, null) !!}
                     {!! Form::submit('Crear', [ 'class' => 'btn btn-success']) !!}
