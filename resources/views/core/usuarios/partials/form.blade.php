@@ -36,9 +36,9 @@
 
 <div class="form-group mt-5 col-12">
     <label class="h5">Listado de roles</label>
-    </br>
+    <hr/>
     @foreach($roles as $role)
-        <label style="display:inline-block;" class="col-1 col-md-2">
+        <label style="display:inline-block;" class="col-md-2 col-sm-12">
             {!! Form::checkbox('roles[]', $role->id, null, ['class' => 'mr-1']) !!}
             {{$role->name}}            
         </label>

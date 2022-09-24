@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Core;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
 use App\Models\User;
 
 class RoleController extends Controller
@@ -39,7 +40,8 @@ class RoleController extends Controller
      */
     public function create()
     {
-        return view('core.roles.create');
+        $grupos_permisos = $this->getPermissionsGroup();
+        return view('core.roles.create', compact('grupos_permisos'));
     }
 
     /**
@@ -83,7 +85,8 @@ class RoleController extends Controller
      */
     public function edit(Role $role)
     {
-        return view('core.roles.edit', compact('role'));
+        $grupos_permisos = $this->getPermissionsGroup();        
+        return view('core.roles.edit', compact('role', 'grupos_permisos'));
     }
 
     /**
@@ -175,5 +178,29 @@ class RoleController extends Controller
 
         $roles = Role::all();
         return redirect()->route('core.roles.index', compact('roles'));
+    }
+
+    private function getPermissionsGroup(){
+        $permisos_general[0] = 'Generales';
+        $permisos_usuarios[0] = 'Usuarios';
+        $permisos_parametros[0] = 'Parametros';
+        $permisos_roles[0] = 'Roles';
+
+        $permisos_general[1] = Permission::where('name','LIKE', '%dashboard%')
+            ->orWhere('name','LIKE', '%health%')
+            ->orWhere('name','LIKE', '%demo%')
+            ->get();
+                
+        $permisos_usuarios[1] = Permission::where('name','LIKE', '%usuarios%')->get();
+        $permisos_parametros[1] = Permission::where('name','LIKE', '%parametros%')->get();
+        $permisos_roles[1] = Permission::where('name','LIKE', '%roles%')->get();
+
+        $grupos_permisos = [
+            $permisos_general,
+            $permisos_usuarios,
+            $permisos_parametros,
+            $permisos_roles,
+        ];
+        return $grupos_permisos;
     }
 }
