@@ -75,7 +75,8 @@ class RoleController extends Controller
         $creadoPor = User::find($role->user_created_at);
         $actualizadoPor = User::find($role->user_updated_at);
         $borradoPor = User::find($role->user_deleted_at);
-        return view('core.roles.show', compact('role', 'creadoPor', 'actualizadoPor', 'borradoPor'));
+        $permissions = $this->getPermissionsName($role);
+        return view('core.roles.show', compact('role', 'creadoPor', 'actualizadoPor', 'borradoPor', 'permissions'));
     }
 
     /**
@@ -204,5 +205,16 @@ class RoleController extends Controller
             $permisos_roles,
         ];
         return $grupos_permisos;
+    }
+
+    private function getPermissionsName(Role $role)
+    {
+        $label = "";
+        $permissions = $role->permissions;
+        foreach ($permissions as $permission){
+            $label .= $permission->description.', ';
+        }
+        $label = substr($label, 0, -2);
+        return $label;
     }
 }

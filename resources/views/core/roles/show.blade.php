@@ -88,6 +88,10 @@
                         <td>Fecha de borrado</td>
                         <td>@if($borradoPor){{$role->deleted_at}}@endif</td>
                     </tr>
+                    <tr>
+                        <td>Permisos</td>
+                        <td>{{$permissions}}</td>
+                    </tr>
                 </tbody>
             </table>
         </div>

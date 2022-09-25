@@ -78,9 +78,9 @@ class User extends Authenticatable
         $label = "";
         $roles = $this->getRoleNames();
         foreach ($roles as $role){
-            $label .= $role.',';
+            $label .= $role.', ';
         }
-        $label = substr($label, 0, -1);
+        $label = substr($label, 0, -2);
         return $label;
     }
 
