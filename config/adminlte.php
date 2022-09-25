@@ -336,7 +336,7 @@ return [
                     'route'  => 'core.roles.index',
                     'icon' => 'fas fa-fw fas fa-users-cog',
                     'active' => ['core/roles*'],
-                    //'can' => 'core.usuarios.index'
+                    'can' => 'core.roles.index'
                 ],
                 [
                     'text' => 'Usuarios',

@@ -56,7 +56,8 @@ class RoleController extends Controller
             'name' => 'required',            
         ]);
 
-        Role::create($request->all());
+        $role = Role::create($request->all());
+        $role->permissions()->sync($request->permissions);
         session()->flash('message', 'Rol creado con éxito');
 
         $roles = Role::all();
@@ -103,6 +104,7 @@ class RoleController extends Controller
         ]);
 
         $role->update($request->all());
+        $role->permissions()->sync($request->permissions);
         session()->flash('message', 'Rol actualizado con éxito');
 
         $roles = Role::all();
