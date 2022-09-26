@@ -185,6 +185,7 @@ class RoleController extends Controller
 
     private function getPermissionsGroup(){
         $permisos_general[0] = 'Generales';
+        $permisos_modulos[0] = 'Modulos';
         $permisos_usuarios[0] = 'Usuarios';
         $permisos_parametros[0] = 'Parametros';
         $permisos_roles[0] = 'Roles';
@@ -193,13 +194,15 @@ class RoleController extends Controller
             ->orWhere('name','LIKE', '%health%')
             ->orWhere('name','LIKE', '%demo%')
             ->get();
-                
+        
+        $permisos_modulos[1] = Permission::where('name','LIKE', '%modulo%')->get();
         $permisos_usuarios[1] = Permission::where('name','LIKE', '%usuarios%')->get();
         $permisos_parametros[1] = Permission::where('name','LIKE', '%parametros%')->get();
         $permisos_roles[1] = Permission::where('name','LIKE', '%roles%')->get();
 
         $grupos_permisos = [
             $permisos_general,
+            $permisos_modulos,
             $permisos_usuarios,
             $permisos_parametros,
             $permisos_roles,

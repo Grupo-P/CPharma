@@ -6,6 +6,7 @@ use App\Http\Controllers\Core\demo\SandboxController;
 use App\Http\Controllers\Core\ParametroController;
 use App\Http\Controllers\Core\UserController;
 use App\Http\Controllers\Core\RoleController;
+use App\Http\Controllers\Core\PermissionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -69,4 +70,10 @@ Route::prefix('core')->middleware(['auth:sanctum', 'verified'])->group(function 
     Route::post('roles/{id}/restore', [RoleController::class, 'restore'])->name('core.roles.restore');
     Route::post('roles/{id}/active', [RoleController::class, 'active'])->name('core.roles.active');
     Route::post('roles/{id}/inactive', [RoleController::class, 'inactive'])->name('core.roles.inactive');
+
+    //Permisos
+    Route::resource('permisos',PermissionController::class)->names('core.permisos');
+    Route::post('permisos/{id}/restore', [PermissionController::class, 'restore'])->name('core.permisos.restore');
+    Route::post('permisos/{id}/active', [PermissionController::class, 'active'])->name('core.permisos.active');
+    Route::post('permisos/{id}/inactive', [PermissionController::class, 'inactive'])->name('core.permisos.inactive');
 });

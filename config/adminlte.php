@@ -98,7 +98,7 @@ return [
     | User Menu
     |--------------------------------------------------------------------------
     |
-    | Here you can activate and change the user menu.
+    | Here you can activate and change the user modulo.
     |
     | For detailed instructions you can look the user menu section here:
     | https://github.com/jeroennoten/Laravel-AdminLTE/wiki/Basic-Configuration
@@ -289,33 +289,72 @@ return [
             'route'  => 'dashboard',
             'icon' => 'fas fa-fw fa-home',
             'can' => 'dashboard'
-        ],        
-        //MODULOS CORE        
+        ],       
+        //MODULO CORE CONFIGURACIONES
         [
             'text'    => 'Configuraciones',
             'icon'    => 'fas fa-fw fa-cog',
+            'can' => 'modulo.configuraciones',
+            'submenu' => [                                
+                [
+                    'text' => 'Parametros',
+                    'route'  => 'core.parametros.index',
+                    'icon' => 'fas fa-fw fas fa-cogs',
+                    'active' => ['core/parametros*'],
+                    'can' => 'core.parametros.index'
+                ],                
+            ]
+        ], 
+        //MODULO CORE CREDENCIALES       
+        [
+            'text'    => 'Credenciales',
+            'icon'    => 'fas fa-fw fa-lock',
+            'can' => 'modulo.credenciales',
+            'submenu' => [     
+                [
+                    'text' => 'Permisos',
+                    'route'  => 'core.permisos.index',
+                    'icon' => 'fas fa-fw fas fa-user-lock',
+                    'active' => ['core/permisos*'],
+                    'can' => 'core.permisos.index'
+                ],           
+                [
+                    'text' => 'Roles',
+                    'route'  => 'core.roles.index',
+                    'icon' => 'fas fa-fw fas fa-users-cog',
+                    'active' => ['core/roles*'],
+                    'can' => 'core.roles.index'
+                ],                
+                [
+                    'text' => 'Usuarios',
+                    'route'  => 'core.usuarios.index',
+                    'icon' => 'fas fa-fw fas fa-users',
+                    'active' => ['core/usuarios*'],
+                    'can' => 'core.usuarios.index'
+                ],                
+            ],
+        ],
+        //MODULO CORE HERRAMIENTAS
+        [
+            'text'    => 'Herramientas',
+            'icon'    => 'fas fa-fw fa-wrench',
+            'can' => 'modulo.herramientas',
             'submenu' => [
-                [                    
-                    'text'    => 'Demos',
+                [
+                    'text' => 'Sandbox 1',
+                    'route'  => 'core.demo.sandbox1',
                     'icon'    => 'fas fa-fw fa-gamepad',
-                    'submenu' => [
-                        [
-                            'text' => 'Sandbox 1',
-                            'route'  => 'core.demo.sandbox1',
-                            'icon'    => 'fas fa-fw fa-gamepad',
-                            'label'       => 1,
-                            'label_color' => 'success',
-                            'can' => 'core.demo.sandbox1',
-                        ],
-                        [
-                            'text' => 'Sandbox 2',
-                            'route'  => 'core.demo.sandbox2',
-                            'icon'    => 'fas fa-fw fa-gamepad',
-                            'label'       => 1,
-                            'label_color' => 'success',
-                            'can' => 'core.demo.sandbox2',
-                        ],
-                    ],                    
+                    'label'       => 1,
+                    'label_color' => 'success',
+                    'can' => 'core.demo.sandbox1',
+                ],
+                [
+                    'text' => 'Sandbox 2',
+                    'route'  => 'core.demo.sandbox2',
+                    'icon'    => 'fas fa-fw fa-gamepad',
+                    'label'       => 2,
+                    'label_color' => 'success',
+                    'can' => 'core.demo.sandbox2',
                 ],
                 [
                     'text' => 'Estado del servidor',
@@ -324,29 +363,8 @@ return [
                     'target' => 'blank',
                     'can' => 'core.health'
                 ],
-                [
-                    'text' => 'Parametros',
-                    'route'  => 'core.parametros.index',
-                    'icon' => 'fas fa-fw fas fa-cogs',
-                    'active' => ['core/parametros*'],
-                    'can' => 'core.parametros.index'
-                ],
-                [
-                    'text' => 'Roles',
-                    'route'  => 'core.roles.index',
-                    'icon' => 'fas fa-fw fas fa-users-cog',
-                    'active' => ['core/roles*'],
-                    'can' => 'core.roles.index'
-                ],
-                [
-                    'text' => 'Usuarios',
-                    'route'  => 'core.usuarios.index',
-                    'icon' => 'fas fa-fw fas fa-users',
-                    'active' => ['core/usuarios*'],
-                    'can' => 'core.usuarios.index'
-                ],
-            ]
-        ],                        
+            ],
+        ],
     ],
 
     /*
