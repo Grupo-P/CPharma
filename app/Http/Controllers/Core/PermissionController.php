@@ -98,8 +98,8 @@ class PermissionController extends Controller
     public function update(Request $request, Permission  $permiso)
     {
         $request->validate([
-            'name' => "required|unique:permissions,variable,$permiso->name",
-            'description' => "required|unique:permissions,variable,$permiso->description",
+            'name' => "required|unique:permissions,name,$permiso->name",
+            'description' => "required|unique:permissions,description,$permiso->description",
         ]);
 
         $permiso->update($request->all());
