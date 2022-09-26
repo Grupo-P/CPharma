@@ -310,7 +310,14 @@ return [
             'text'    => 'Credenciales',
             'icon'    => 'fas fa-fw fa-lock',
             'can' => 'modulo.credenciales',
-            'submenu' => [     
+            'submenu' => [
+                [
+                    'text' => 'Licencias',
+                    'route'  => 'core.licencias.index',
+                    'icon' => 'fas fa-fw fas fa-key',
+                    'active' => ['core/licencias*'],
+                    'can' => 'core.licencias.index'
+                ],     
                 [
                     'text' => 'Permisos',
                     'route'  => 'core.permisos.index',

@@ -10,6 +10,7 @@ use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
 use App\Models\Core\Parametro;
+use App\Models\Core\Licencia;
 use App\Models\Core\Imagen;
 use Illuminate\Support\Facades\Storage;
 use Spatie\Permission\Traits\HasRoles;
@@ -73,6 +74,11 @@ class User extends Authenticatable
         return ($this->imagenes) ? Storage::url($this->imagenes->url) : '/storage/default.jpg';
     }
 
+    public function adminlte_profile_url()
+    {
+        return 'user/profile';
+    }
+
     public function adminlte_desc()
     {
         $label = "";
@@ -82,11 +88,16 @@ class User extends Authenticatable
         }
         $label = substr($label, 0, -2);
         return $label;
+    }        
+    
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()->useLogName(User::class)->logAll();
     }
 
-    public function adminlte_profile_url()
+    public function imagenes()
     {
-        return 'user/profile';
+        return $this->morphOne(Imagen::class, 'imageable');
     }
 
     public function parametros()
@@ -94,13 +105,8 @@ class User extends Authenticatable
         return $this->hasMany(Parametro::class);
     }
 
-    public function imagenes()
-    {
-        return $this->morphOne(Imagen::class, 'imageable');
-    }
-    
-    public function getActivitylogOptions(): LogOptions
-    {
-        return LogOptions::defaults()->useLogName(User::class)->logAll();
+    public function licencias()
+    {        
+        return $this->hasMany(Licencia::class);
     }
 }

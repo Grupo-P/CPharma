@@ -7,6 +7,7 @@ use App\Http\Controllers\Core\ParametroController;
 use App\Http\Controllers\Core\UserController;
 use App\Http\Controllers\Core\RoleController;
 use App\Http\Controllers\Core\PermissionController;
+use App\Http\Controllers\Core\LicenciaController;
 
 /*
 |--------------------------------------------------------------------------
@@ -76,4 +77,7 @@ Route::prefix('core')->middleware(['auth:sanctum', 'verified'])->group(function 
     Route::post('permisos/{id}/restore', [PermissionController::class, 'restore'])->name('core.permisos.restore');
     Route::post('permisos/{id}/active', [PermissionController::class, 'active'])->name('core.permisos.active');
     Route::post('permisos/{id}/inactive', [PermissionController::class, 'inactive'])->name('core.permisos.inactive');
+
+    //Licencias
+    Route::resource('licencias',LicenciaController::class)->only('index', 'edit', 'update')->names('core.licencias');
 });

@@ -72,5 +72,9 @@ class RoleSeeder extends Seeder
         Permission::create(['name' => 'core.permisos.inactive', 'description' => 'Inactivar permiso'])->syncRoles([$roleMaster,$roleGerente]);
         Permission::create(['name' => 'core.permisos.destroy', 'description' => 'Borrar permiso'])->syncRoles([$roleMaster]);
         Permission::create(['name' => 'core.permisos.restore', 'description' => 'Restaurar permiso'])->syncRoles([$roleMaster]);        
+
+        //Permisos Core Licencia
+        Permission::create(['name' => 'core.licencias.index', 'description' => 'Lista de licencias'])->syncRoles([$roleMaster]);
+        Permission::create(['name' => 'core.licencias.edit', 'description' => 'Editar licencia'])->syncRoles([$roleMaster]);
     }
 }
