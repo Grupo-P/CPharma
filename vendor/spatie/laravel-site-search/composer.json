@@ -1,0 +1,74 @@
+{
+    "name": "spatie/laravel-site-search",
+    "description": "A site search engine",
+    "keywords": [
+        "spatie",
+        "laravel",
+        "laravel-site-search"
+    ],
+    "homepage": "https://github.com/spatie/laravel-site-search",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "freek",
+            "email": "freek@spatie.be",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^8.0",
+        "guzzlehttp/psr7": "^2.1",
+        "illuminate/contracts": "^8.37|^9.0",
+        "illuminate/http": "^8.60|^9.0",
+        "spatie/crawler": "^7.0",
+        "spatie/laravel-package-tools": "^1.9"
+    },
+    "require-dev": {
+        "brianium/paratest": "^6.2",
+        "fivefilters/readability.php": "^2.1",
+        "guzzlehttp/guzzle": "^7.3",
+        "meilisearch/meilisearch-php": "^0.19.1",
+        "nunomaduro/collision": "^5.3|^6.0",
+        "orchestra/testbench": "^6.23|^7.0",
+        "pestphp/pest": "^1.18",
+        "pestphp/pest-plugin-laravel": "^1.1",
+        "spatie/laravel-ray": "^1.26"
+    },
+    "autoload": {
+        "files": [
+            "src/helpers.php"
+        ],
+        "psr-4": {
+            "Spatie\\SiteSearch\\": "src",
+            "Spatie\\SiteSearch\\Database\\Factories\\": "database/factories"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests"
+        }
+    },
+    "scripts": {
+        "psalm": "vendor/bin/psalm",
+        "test": "./vendor/bin/pest --no-coverage",
+        "test-coverage": "vendor/bin/phpunit --coverage-html coverage"
+    },
+    "suggest": {
+        "meilisearch/meilisearch-php": "Required to use the MeiliSearch engine (^0.17)."
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Spatie\\SiteSearch\\SiteSearchServiceProvider"
+            ],
+            "aliases": {
+                "SiteSearch": "Spatie\\SiteSearch\\SiteSearchFacade"
+            }
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}

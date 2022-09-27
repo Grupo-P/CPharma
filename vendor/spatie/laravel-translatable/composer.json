@@ -1,0 +1,68 @@
+{
+    "name": "spatie/laravel-translatable",
+    "description": "A trait to make an Eloquent model hold translations",
+    "keywords": [
+        "spatie",
+        "laravel-translatable",
+        "translate",
+        "eloquent",
+        "model",
+        "i8n",
+        "multilingual"
+    ],
+    "homepage": "https://github.com/spatie/laravel-translatable",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Freek Van der Herten",
+            "email": "freek@spatie.be",
+            "homepage": "https://spatie.be",
+            "role": "Developer"
+        },
+        {
+            "name": "Sebastian De Deyne",
+            "email": "sebastian@spatie.be",
+            "homepage": "https://spatie.be",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^8.0",
+        "illuminate/database": "^9.0",
+        "illuminate/support": "^9.0",
+        "spatie/laravel-package-tools": "^1.11"
+    },
+    "require-dev": {
+        "mockery/mockery": "^1.4",
+        "orchestra/testbench": "^7.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Spatie\\Translatable\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Spatie\\Translatable\\Test\\": "tests"
+        }
+    },
+    "scripts": {
+        "format": "vendor/bin/php-cs-fixer fix --allow-risky=yes",
+        "test": "vendor/bin/phpunit"
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Spatie\\Translatable\\TranslatableServiceProvider"
+            ]
+        },
+        "aliases": {
+            "Translatable": "Spatie\\Translatable\\Facades\\Translatable"
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
