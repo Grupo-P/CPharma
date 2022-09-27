@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\LogOptions;
+use Illuminate\Support\Facades\Request;
 
 class Licencia extends Model
 {
@@ -73,5 +74,18 @@ class Licencia extends Model
         );
 
         return $resultado;
+    }
+
+    public static function validate_route(){
+        $rutaActual = Request::route()->getName();
+
+        if( $rutaActual=='core.licencias.index' ||
+            $rutaActual=='core.licencias.edit' ||
+            $rutaActual=='core.parametros.index' ||
+            $rutaActual=='core.parametros.edit'
+        ){
+            return true;
+        }
+        return false;
     }
 }

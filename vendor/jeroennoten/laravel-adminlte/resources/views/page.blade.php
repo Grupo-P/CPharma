@@ -1,10 +1,9 @@
 @extends('adminlte::master')
 
-@php
-    use Illuminate\Support\Facades\Request;
+@php    
     use App\Models\Core\Licencia;
     $validate_licence = Licencia::validate_licence();
-    $rutaActual = Request::route()->getName();    
+    $rutaActual = Licencia::validate_route();    
 @endphp
 
 @inject('layoutHelper', 'JeroenNoten\LaravelAdminLte\Helpers\LayoutHelper')
@@ -38,7 +37,7 @@
             @include('adminlte::partials.sidebar.left-sidebar')
         @endif
 
-        @if ($validate_licence['validate_licence'] || $rutaActual == 'core.licencias.index' || $rutaActual == 'core.parametros.index')
+        @if ($validate_licence['validate_licence'] || $rutaActual )
             {{-- Content Wrapper --}}
             @empty($iFrameEnabled)        
                 @include('adminlte::partials.cwrapper.cwrapper-default')
