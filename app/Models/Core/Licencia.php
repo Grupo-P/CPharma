@@ -79,7 +79,8 @@ class Licencia extends Model
     public static function validate_route(){
         $rutaActual = Request::route()->getName();
 
-        if( $rutaActual=='core.licencias.index' ||
+        if( $rutaActual=='dashboard' ||
+            $rutaActual=='core.licencias.index' ||
             $rutaActual=='core.licencias.edit' ||
             $rutaActual=='core.parametros.index' ||
             $rutaActual=='core.parametros.edit'

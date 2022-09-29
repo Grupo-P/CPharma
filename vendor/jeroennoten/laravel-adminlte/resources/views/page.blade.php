@@ -48,14 +48,19 @@
             <div class="content-wrapper">
                 <div class="content-header">
                     <div class="container-fluid">
-                        <h1>Licencia</h1>
-                        <div class="content">
-                            <div class="container-fluid">                                                                
-                                <div class="text-danger mt-5">            
-                                    <p><strong><i class="fa fa-exclamation-triangle"></i>&nbsp;&nbsp;@php echo $validate_licence['mensaje']; @endphp</strong></p>
-                                    <p><strong><i class="fa fa-exclamation-triangle"></i>&nbsp;&nbsp; Debe renovar su <a style="text-decoration: none;" href="{{ route('core.licencias.index') }}">licencia</a> para continuar usando el producto.</strong></p>
-                                </div>                                    
-                            </div>                        
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="shadow small-box bg-danger">
+                                    <div class="inner">
+                                        <h3>Licencia</h3>
+                                        {{$validate_licence['mensaje'];}}<br />
+                                        Debe renovar su licencia para continuar usando el producto.
+                                    </div>
+                                    <div class="icon">
+                                        <i class="fas fa-lock"></i>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>            

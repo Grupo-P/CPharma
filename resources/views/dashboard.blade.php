@@ -1,3 +1,15 @@
+@php    
+    use App\Models\Core\Licencia;
+    $validate_licence = Licencia::validate_licence();
+    $datetime1 = new DateTime(date('Y-m-d'));
+    $datetime2 = new DateTime($validate_licence['fecha']);
+    $interval = $datetime1->diff($datetime2);
+    $diff_dias = $interval->format('%a');
+    $interval = ($validate_licence['validate_licence'])? $interval->format('%R%a') : 'Licencia';
+    $color = ($validate_licence['validate_licence'])?( ($diff_dias > 5)?'success':'danger' ): 'danger';
+    $icono = ($validate_licence['validate_licence'])? 'unlock-alt' : 'lock';
+@endphp
+
 @extends('adminlte::page')
 
 @section('title', 'Dashboard')
@@ -30,13 +42,17 @@
         </div>
     @endif
 
-    <div class="card">
-        <div class="card-header">
-            Welcome to this beautiful Dashboard.
-        </div>
-        <div class="card-body">
-            A nice little card body.
+    <div class="row">
+        <div class="col-sm-12 col-md-3 col-lg-2">
+            <div class="shadow small-box bg-{{$color}}">
+                <div class="inner">
+                    <h3>{{$interval}}</h3>
+                    <p>{{$validate_licence['mensaje'];}}</p>
+                </div>
+                <div class="icon">
+                    <i class="fas fa-{{$icono}}"></i>
+                </div>
+            </div>
         </div>
     </div>
-    
 @stop
