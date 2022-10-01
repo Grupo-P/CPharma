@@ -9,9 +9,10 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
-use App\Models\Core\Parametro;
-use App\Models\Core\Licencia;
+use App\Models\Core\Conexion;
 use App\Models\Core\Imagen;
+use App\Models\Core\Licencia;
+use App\Models\Core\Parametro;
 use Illuminate\Support\Facades\Storage;
 use Spatie\Permission\Traits\HasRoles;
 use Spatie\Activitylog\Traits\LogsActivity;
@@ -108,5 +109,10 @@ class User extends Authenticatable
     public function licencias()
     {        
         return $this->hasMany(Licencia::class);
+    }
+
+    public function conexiones()
+    {        
+        return $this->hasMany(Conexion::class);
     }
 }
