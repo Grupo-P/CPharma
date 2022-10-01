@@ -13,7 +13,7 @@ class Parametro extends Model
     use HasFactory;
     use LogsActivity;
 
-    protected $table = "core_parametros";    
+    protected $table = "core_parametros";
 
     protected $fillable = [
         'variable', 'valor' ,'descripcion', 'activo' ,'borrado',

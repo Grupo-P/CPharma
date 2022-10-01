@@ -9,6 +9,7 @@ use Database\Seeders\Core\ParametroSeeder;
 use Database\Seeders\Core\RoleSeeder;
 use Illuminate\Support\Facades\Storage;
 use Database\Seeders\Core\LiceciaSeeder;
+use Database\Seeders\Core\ConexionSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -25,5 +26,6 @@ class DatabaseSeeder extends Seeder
         $this->call(UserSeeder::class);
         $this->call(ParametroSeeder::class);
         $this->call(LiceciaSeeder::class);
+        $this->call(ConexionSeeder::class);
     }
 }

@@ -23,8 +23,8 @@ return new class extends Migration
             $table->text('instancia_db');
             $table->text('usuario');
             $table->text('clave');
-            $table->ipAddress('db_online');
-            $table->ipAddress('db_offline')->nullable();
+            $table->text('db_online');
+            $table->text('db_offline')->nullable();
             $table->tinyInteger('online')->default(1);
             $table->timestamps();
             $table->softDeletes();
