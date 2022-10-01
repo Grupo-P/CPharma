@@ -50,6 +50,24 @@ class ParametroSeeder extends Seeder
             'borrado' => 0,
             'user_created_at' => 1,
         ]);
+
+        Parametro::create([
+            'variable' => 'leyenda_factura',
+            'valor' => 'Leyenda de factura demo',
+            'descripcion' => 'Leyenda de factura',
+            'activo' => 1,
+            'borrado' => 0,
+            'user_created_at' => 1,
+        ]);
+
+        Parametro::create([
+            'variable' => 'leyenda_cotizacion',
+            'valor' => 'Leyenda de cotizacion demo',
+            'descripcion' => 'Leyenda de cotizacion',
+            'activo' => 1,
+            'borrado' => 0,
+            'user_created_at' => 1,
+        ]);
         
         Parametro::factory(51)->create();
     }
