@@ -69,6 +69,6 @@ class ParametroSeeder extends Seeder
             'user_created_at' => 1,
         ]);
         
-        Parametro::factory(51)->create();
+        Parametro::factory(49)->create();
     }
 }
