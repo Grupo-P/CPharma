@@ -17,6 +17,8 @@ class HealthCheckResultsController
     {
         if ($request->has('fresh')) {
             Artisan::call(RunHealthChecksCommand::class);
+        }else{
+            Artisan::call(RunHealthChecksCommand::class);
         }
 
         $checkResults = $resultStore->latestResults();
