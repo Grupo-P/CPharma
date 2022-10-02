@@ -76,5 +76,15 @@ class RoleSeeder extends Seeder
         //Permisos Core Licencia
         Permission::create(['name' => 'core.licencias.index', 'description' => 'Lista de licencias'])->syncRoles([$roleMaster]);
         Permission::create(['name' => 'core.licencias.edit', 'description' => 'Editar licencia'])->syncRoles([$roleMaster]);
+
+        //Permisos Core Conexion
+        Permission::create(['name' => 'core.conexiones.index', 'description' => 'Lista de conexiones'])->syncRoles([$roleMaster,$roleGerente,$roleSupervisor,$roleUsuario]);
+        Permission::create(['name' => 'core.conexiones.show', 'description' => 'Ver conexiones'])->syncRoles([$roleMaster,$roleGerente,$roleSupervisor,$roleUsuario]);
+        Permission::create(['name' => 'core.conexiones.create', 'description' => 'Crear conexión'])->syncRoles([$roleMaster,$roleGerente,$roleSupervisor]);
+        Permission::create(['name' => 'core.conexiones.edit', 'description' => 'Editar conexión'])->syncRoles([$roleMaster,$roleGerente,$roleSupervisor]);
+        Permission::create(['name' => 'core.conexiones.active', 'description' => 'Activar conexión'])->syncRoles([$roleMaster,$roleGerente]);
+        Permission::create(['name' => 'core.conexiones.inactive', 'description' => 'Inactivar conexión'])->syncRoles([$roleMaster,$roleGerente]);
+        Permission::create(['name' => 'core.conexiones.destroy', 'description' => 'Borrar conexión'])->syncRoles([$roleMaster]);
+        Permission::create(['name' => 'core.conexiones.restore', 'description' => 'Restaurar conexión'])->syncRoles([$roleMaster]);
     }
 }
