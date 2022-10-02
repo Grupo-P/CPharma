@@ -58,9 +58,12 @@ class ConexionController extends Controller
             'usuario' => 'required',
             'clave' => 'required',
             'db_online' => 'required',
+            'online' => 'required',
         ]);
 
-        Conexion::create($request->all());
+        $conexione = Conexion::create($request->all());
+        $conexione->ip_address = $request->ip_address;
+        $conexione->save();
         session()->flash('message', 'Conexión creada con éxito');
 
         $conexiones = Conexion::all();
@@ -87,9 +90,9 @@ class ConexionController extends Controller
      * @param  Conexion $conexion
      * @return \Illuminate\Http\Response
      */
-    public function edit(Conexion $conexion)
+    public function edit(Conexion $conexione)
     {
-        return view('core.conexiones.edit', compact('conexion'));
+        return view('core.conexiones.edit', compact('conexione'));
     }
 
     /**
@@ -99,8 +102,8 @@ class ConexionController extends Controller
      * @param  Conexion $conexion
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Conexion $conexion)
-    {
+    public function update(Request $request, Conexion $conexione)
+    {    
         $request->validate([
             'nombre' => 'required',
             'siglas' => 'required',
@@ -109,9 +112,12 @@ class ConexionController extends Controller
             'usuario' => 'required',
             'clave' => 'required',
             'db_online' => 'required',
+            'online' => 'required',
         ]);
 
-        $conexion->update($request->all());
+        $conexione->update($request->all());
+        $conexione->ip_address = $request->ip_address;
+        $conexione->save();
         session()->flash('message', 'Conexión actualizada con éxito');
 
         $conexiones = Conexion::all();

@@ -18,7 +18,7 @@ return new class extends Migration
             $table->text('nombre');
             $table->text('nombre_mostrar')->nullable();
             $table->string('siglas',6);
-            $table->ipAddress('ip_address')->nullable();
+            $table->text('ip_address')->nullable();
             $table->text('driver_db');
             $table->text('instancia_db');
             $table->text('usuario');

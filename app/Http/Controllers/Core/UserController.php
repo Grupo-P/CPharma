@@ -111,8 +111,9 @@ class UserController extends Controller
         $request->validate([
             'name' => 'required',
             'email' => "required|unique:users,email,$usuario->id",
+            'password' => "required|unique:users,email,$usuario->password",
             'documento' => "required|unique:users,email,$usuario->documento",
-        ]);
+        ]);        
 
         $contraseña = $usuario->password;
 
