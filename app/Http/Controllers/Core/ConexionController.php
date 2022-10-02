@@ -76,12 +76,12 @@ class ConexionController extends Controller
      * @param  Conexion $conexion
      * @return \Illuminate\Http\Response
      */
-    public function show(Conexion $conexion)
-    {
-        $creadoPor = User::find($conexion->user_created_at);
-        $actualizadoPor = User::find($conexion->user_updated_at);
-        $borradoPor = User::find($conexion->user_deleted_at);
-        return view('core.conexiones.show', compact('conexion', 'creadoPor', 'actualizadoPor', 'borradoPor'));
+    public function show(Conexion $conexione)
+    {        
+        $creadoPor = User::find($conexione->user_created_at);
+        $actualizadoPor = User::find($conexione->user_updated_at);
+        $borradoPor = User::find($conexione->user_deleted_at);
+        return view('core.conexiones.show', compact('conexione', 'creadoPor', 'actualizadoPor', 'borradoPor'));
     }
 
     /**
@@ -130,12 +130,12 @@ class ConexionController extends Controller
      * @param  Conexion $conexion
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Conexion $conexion)
+    public function destroy(Conexion $conexione)
     {
-        $conexion->borrado = 1;
-        $conexion->deleted_at = date('Y-m-d H:i:s');
-        $conexion->user_deleted_at = auth()->user()->id;
-        $conexion->save();
+        $conexione->borrado = 1;
+        $conexione->deleted_at = date('Y-m-d H:i:s');
+        $conexione->user_deleted_at = auth()->user()->id;
+        $conexione->save();
         session()->flash('message', 'Conexión borrada con éxito');
 
         $conexiones = Conexion::all();
@@ -150,11 +150,11 @@ class ConexionController extends Controller
      */
     public function restore(Request $request)
     {
-        $conexion = Conexion::find($request->id);
-        $conexion->borrado = 0;
-        $conexion->deleted_at = NULL;
-        $conexion->user_deleted_at = NULL;
-        $conexion->save();
+        $conexione = Conexion::find($request->id);
+        $conexione->borrado = 0;
+        $conexione->deleted_at = NULL;
+        $conexione->user_deleted_at = NULL;
+        $conexione->save();
         session()->flash('message', 'Conexión restaurada con éxito');
 
         $conexiones = Conexion::all();
@@ -169,9 +169,9 @@ class ConexionController extends Controller
      */
     public function active(Request $request)
     {
-        $conexion = Conexion::find($request->id);
-        $conexion->activo = 1;
-        $conexion->save();
+        $conexione = Conexion::find($request->id);
+        $conexione->activo = 1;
+        $conexione->save();
         session()->flash('message', 'Conexión activada con éxito');
 
         $conexiones = Conexion::all();
@@ -186,9 +186,9 @@ class ConexionController extends Controller
      */
     public function inactive(Request $request)
     {
-        $conexion = Conexion::find($request->id);
-        $conexion->activo = 0;
-        $conexion->save();
+        $conexione = Conexion::find($request->id);
+        $conexione->activo = 0;
+        $conexione->save();
         session()->flash('message', 'Conexión inactivada con éxito');
 
         $conexiones = Conexion::all();

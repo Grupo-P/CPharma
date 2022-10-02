@@ -15,7 +15,7 @@ class Conexion extends Model
 
     protected $table = "core_conexiones";
 
-    protected $fillable = ['nombre', 'nombre_mostrar', 'siglas', 'i`p_address',
+    protected $fillable = ['nombre', 'nombre_mostrar', 'siglas', 'ip_address',
     'driver_db', 'instancia_db', 'usuario', 'clave', 'db_online', 'db_offline','online' ,
     'activo' ,'borrado', 'user_created_at', 'user_updated_at', 'user_deleted_at'];
 
