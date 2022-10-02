@@ -26,6 +26,6 @@ class Conexion extends Model
 
     public function getActivitylogOptions(): LogOptions
     {
-        return LogOptions::defaults()->useLogName(Licencia::class)->logAll();
+        return LogOptions::defaults()->useLogName(Conexion::class)->logAll();
     }
 }
