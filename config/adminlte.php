@@ -290,12 +290,19 @@ return [
             'icon' => 'fas fa-fw fa-home',
             'can' => 'dashboard'
         ],       
-        //MODULO CORE CONFIGURACIONES
+        //MENÚ CORE CONFIGURACIONES
         [
             'text'    => 'Configuraciones',
             'icon'    => 'fas fa-fw fa-cog',
-            'can' => 'modulo.configuraciones',
+            'can' => 'menu.configuraciones',
             'submenu' => [                                
+                [
+                    'text' => 'Conexiones',
+                    'route'  => 'core.conexiones.index',
+                    'icon' => 'fas fa-fw fas fa-network-wired',
+                    'active' => ['core/conexiones*'],
+                    'can' => 'core.conexiones.index'
+                ],
                 [
                     'text' => 'Parametros',
                     'route'  => 'core.parametros.index',
@@ -305,11 +312,11 @@ return [
                 ],                
             ]
         ], 
-        //MODULO CORE CREDENCIALES       
+        //MENÚ CORE CREDENCIALES
         [
             'text'    => 'Credenciales',
             'icon'    => 'fas fa-fw fa-lock',
-            'can' => 'modulo.credenciales',
+            'can' => 'menu.credenciales',
             'submenu' => [
                 [
                     'text' => 'Licencias',
@@ -341,12 +348,19 @@ return [
                 ],                
             ],
         ],
-        //MODULO CORE HERRAMIENTAS
+        //MENÚ CORE HERRAMIENTAS
         [
             'text'    => 'Herramientas',
             'icon'    => 'fas fa-fw fa-wrench',
-            'can' => 'modulo.herramientas',
+            'can' => 'menu.herramientas',
             'submenu' => [
+                [
+                    'text' => 'Estado del servidor',
+                    'route'  => 'core.health',            
+                    'icon' => 'fas fa-fw fa-heartbeat', 
+                    'target' => 'blank',
+                    'can' => 'core.health'
+                ],
                 [
                     'text' => 'Sandbox 1',
                     'route'  => 'core.demo.sandbox1',
@@ -362,14 +376,7 @@ return [
                     'label'       => 2,
                     'label_color' => 'success',
                     'can' => 'core.demo.sandbox2',
-                ],
-                [
-                    'text' => 'Estado del servidor',
-                    'route'  => 'core.health',            
-                    'icon' => 'fas fa-fw fa-heartbeat', 
-                    'target' => 'blank',
-                    'can' => 'core.health'
-                ],
+                ],                
             ],
         ],
     ],
