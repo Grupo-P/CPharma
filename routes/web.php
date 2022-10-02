@@ -8,6 +8,7 @@ use App\Http\Controllers\Core\UserController;
 use App\Http\Controllers\Core\RoleController;
 use App\Http\Controllers\Core\PermissionController;
 use App\Http\Controllers\Core\LicenciaController;
+use App\Http\Controllers\Core\ConexionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -80,4 +81,10 @@ Route::prefix('core')->middleware(['auth:sanctum', 'verified'])->group(function 
 
     //Licencias
     Route::resource('licencias',LicenciaController::class)->only('index', 'edit', 'update')->names('core.licencias');
+
+    //Conexiones
+    Route::resource('conexiones',ConexionController::class)->names('core.conexiones');
+    Route::post('conexiones/{id}/restore', [ConexionController::class, 'restore'])->name('core.conexiones.restore');
+    Route::post('conexiones/{id}/active', [ConexionController::class, 'active'])->name('core.conexiones.active');
+    Route::post('conexiones/{id}/inactive', [ConexionController::class, 'inactive'])->name('core.conexiones.inactive');
 });
