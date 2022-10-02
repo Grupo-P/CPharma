@@ -67,11 +67,22 @@ class AuditoriaController extends Controller
                 break;
             }
 
+            if($causer_type != ''){
+                if($causer_type == 'User'){
+                    $usuario = User::find($result_auditoria->causer_id);
+                    if(isset($usuario)){
+                        $causer_type = $usuario->name;
+                    }
+                }
+            }else{
+                $causer_type = 'System';
+            }
+
             $auditoria = [
                 'id' => $result_auditoria->id,
                 'subject_type' => $subject_type,
                 'event' => $evento,
-                'causer_type' => ($causer_type != '') ? $causer_type : 'System',
+                'causer_type' => $causer_type,
                 'updated_at' => $result_auditoria->updated_at,
             ];
 

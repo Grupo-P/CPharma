@@ -138,6 +138,8 @@ class ParametroController extends Controller
         $parametro->borrado = 0;
         $parametro->deleted_at = NULL;
         $parametro->user_deleted_at = NULL;
+        $parametro->updated_at = date('Y-m-d H:i:s');
+        $parametro->user_updated_at = auth()->user()->id;
         $parametro->save();
         session()->flash('message', 'Parámetro restaurado con éxito');
 
@@ -155,6 +157,8 @@ class ParametroController extends Controller
     {
         $parametro = Parametro::find($request->id);
         $parametro->activo = 1;
+        $parametro->updated_at = date('Y-m-d H:i:s');
+        $parametro->user_updated_at = auth()->user()->id;
         $parametro->save();
         session()->flash('message', 'Parámetro activado con éxito');
 
@@ -172,6 +176,8 @@ class ParametroController extends Controller
     {
         $parametro = Parametro::find($request->id);
         $parametro->activo = 0;
+        $parametro->updated_at = date('Y-m-d H:i:s');
+        $parametro->user_updated_at = auth()->user()->id;
         $parametro->save();
         session()->flash('message', 'Parámetro inactivado con éxito');
 

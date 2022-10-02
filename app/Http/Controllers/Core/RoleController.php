@@ -142,6 +142,8 @@ class RoleController extends Controller
         $role->borrado = 0;
         $role->deleted_at = NULL;
         $role->user_deleted_at = NULL;
+        $role->updated_at = date('Y-m-d H:i:s');
+        $role->user_updated_at = auth()->user()->id;
         $role->save();
         session()->flash('message', 'Rol restaurado con éxito');
 
@@ -159,6 +161,8 @@ class RoleController extends Controller
     {
         $role = Role::find($request->id);
         $role->activo = 1;
+        $role->updated_at = date('Y-m-d H:i:s');
+        $role->user_updated_at = auth()->user()->id;
         $role->save();
         session()->flash('message', 'Rol activado con éxito');
 
@@ -176,6 +180,8 @@ class RoleController extends Controller
     {
         $role = Role::find($request->id);
         $role->activo = 0;
+        $role->updated_at = date('Y-m-d H:i:s');
+        $role->user_updated_at = auth()->user()->id;
         $role->save();
         session()->flash('message', 'Rol inactivado con éxito');
 

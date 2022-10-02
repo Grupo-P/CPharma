@@ -154,6 +154,8 @@ class ConexionController extends Controller
         $conexione->borrado = 0;
         $conexione->deleted_at = NULL;
         $conexione->user_deleted_at = NULL;
+        $conexione->updated_at = date('Y-m-d H:i:s');
+        $conexione->user_updated_at = auth()->user()->id;
         $conexione->save();
         session()->flash('message', 'Conexión restaurada con éxito');
 
@@ -171,6 +173,8 @@ class ConexionController extends Controller
     {
         $conexione = Conexion::find($request->id);
         $conexione->activo = 1;
+        $conexione->updated_at = date('Y-m-d H:i:s');
+        $conexione->user_updated_at = auth()->user()->id;
         $conexione->save();
         session()->flash('message', 'Conexión activada con éxito');
 
@@ -188,6 +192,8 @@ class ConexionController extends Controller
     {
         $conexione = Conexion::find($request->id);
         $conexione->activo = 0;
+        $conexione->updated_at = date('Y-m-d H:i:s');
+        $conexione->user_updated_at = auth()->user()->id;
         $conexione->save();
         session()->flash('message', 'Conexión inactivada con éxito');
 

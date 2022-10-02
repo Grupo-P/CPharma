@@ -139,6 +139,8 @@ class PermissionController extends Controller
         $permiso->borrado = 0;
         $permiso->deleted_at = NULL;
         $permiso->user_deleted_at = NULL;
+        $permiso->updated_at = date('Y-m-d H:i:s');
+        $permiso->user_updated_at = auth()->user()->id;
         $permiso->save();
         session()->flash('message', 'Permiso restaurado con éxito');
 
@@ -156,6 +158,8 @@ class PermissionController extends Controller
     {
         $permiso = Permission::find($request->id);
         $permiso->activo = 1;
+        $permiso->updated_at = date('Y-m-d H:i:s');
+        $permiso->user_updated_at = auth()->user()->id;
         $permiso->save();
         session()->flash('message', 'Permiso activado con éxito');
 
@@ -173,6 +177,8 @@ class PermissionController extends Controller
     {
         $permiso = Permission::find($request->id);
         $permiso->activo = 0;
+        $permiso->updated_at = date('Y-m-d H:i:s');
+        $permiso->user_updated_at = auth()->user()->id;
         $permiso->save();
         session()->flash('message', 'Permiso inactivado con éxito');
 

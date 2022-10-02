@@ -163,6 +163,8 @@ class UserController extends Controller
         $usuario->borrado = 0;
         $usuario->deleted_at = NULL;
         $usuario->user_deleted_at = NULL;
+        $usuario->updated_at = date('Y-m-d H:i:s');
+        $usuario->user_updated_at = auth()->user()->id;
         $usuario->save();
         session()->flash('message', 'Usuario restaurado con éxito');
 
@@ -180,6 +182,8 @@ class UserController extends Controller
     {
         $usuario = User::find($request->id);
         $usuario->activo = 1;
+        $usuario->updated_at = date('Y-m-d H:i:s');
+        $usuario->user_updated_at = auth()->user()->id;
         $usuario->save();
         session()->flash('message', 'Usuario activado con éxito');
 
@@ -197,6 +201,8 @@ class UserController extends Controller
     {
         $usuario = User::find($request->id);
         $usuario->activo = 0;
+        $usuario->updated_at = date('Y-m-d H:i:s');
+        $usuario->user_updated_at = auth()->user()->id;
         $usuario->save();
         session()->flash('message', 'Usuario inactivado con éxito');
 
@@ -214,6 +220,8 @@ class UserController extends Controller
     {
         $usuario = User::find($request->id);
         $usuario->cambio_clave = 1;
+        $usuario->updated_at = date('Y-m-d H:i:s');
+        $usuario->user_updated_at = auth()->user()->id;
         $usuario->save();
         session()->flash('message', 'Usuario notificado con éxito');
 
