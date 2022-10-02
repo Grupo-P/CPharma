@@ -185,28 +185,38 @@ class RoleController extends Controller
 
     private function getPermissionsGroup(){
         $permisos_general[0] = 'Generales';
-        $permisos_modulos[0] = 'Menús';
+        $permisos_menus[0] = 'Menús';
         $permisos_usuarios[0] = 'Usuarios';
         $permisos_parametros[0] = 'Parametros';
         $permisos_roles[0] = 'Roles';
+        $permisos_licencias[0] = 'Licencias';
         $permisos_conexiones[0] = 'Conexiones';
+        $permisos_auditorias[0] = 'Auditorías';
+        $permisos_permisos[0] = 'Permisos';
 
         $permisos_general[1] = Permission::where('name','LIKE', '%dashboard%')
             ->orWhere('name','LIKE', '%health%')
             ->orWhere('name','LIKE', '%demo%')
             ->get();
         
-        $permisos_modulos[1] = Permission::where('name','LIKE', '%menu%')->get();
+        $permisos_menus[1] = Permission::where('name','LIKE', '%menu%')->get();
         $permisos_usuarios[1] = Permission::where('name','LIKE', '%usuarios%')->get();
         $permisos_parametros[1] = Permission::where('name','LIKE', '%parametros%')->get();
         $permisos_roles[1] = Permission::where('name','LIKE', '%roles%')->get();
+        $permisos_licencias[1] = Permission::where('name','LIKE', '%licencias%')->get();
         $permisos_conexiones[1] = Permission::where('name','LIKE', '%conexiones%')->get();
+        $permisos_auditorias[1] = Permission::where('name','LIKE', '%auditorias%')->get();
+        $permisos_permisos[1] = Permission::where('name','LIKE', '%permisos%')->get();
 
+        //Ordenar alfabeticamente
         $grupos_permisos = [
             $permisos_general,
-            $permisos_modulos,
+            $permisos_menus,
+            $permisos_auditorias,
             $permisos_conexiones,
+            $permisos_licencias,
             $permisos_parametros,
+            $permisos_permisos,
             $permisos_roles,
             $permisos_usuarios,
         ];

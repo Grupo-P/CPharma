@@ -355,6 +355,13 @@ return [
             'can' => 'menu.herramientas',
             'submenu' => [
                 [
+                    'text' => 'Auditoría',
+                    'route'  => 'core.auditorias.index',
+                    'icon' => 'fas fa-fw fas fa-search',
+                    'active' => ['core/auditorias*'],
+                    'can' => 'core.auditorias.index'
+                ],
+                [
                     'text' => 'Estado del servidor',
                     'route'  => 'core.health',            
                     'icon' => 'fas fa-fw fa-heartbeat', 

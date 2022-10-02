@@ -27,6 +27,8 @@ class RoleSeeder extends Seeder
         Permission::create(['name' => 'core.health', 'description' => 'Estado del servidor'])->syncRoles([$roleMaster]);
         Permission::create(['name' => 'core.demo.sandbox1', 'description' => 'Sandbox 1'])->syncRoles([$roleMaster]);
         Permission::create(['name' => 'core.demo.sandbox2', 'description' => 'Sandbox 2'])->syncRoles([$roleMaster]);
+
+        //Permisos Core Menús
         Permission::create(['name' => 'menu.configuraciones', 'description' => 'Menú Configuraciones'])->syncRoles([$roleMaster]);
         Permission::create(['name' => 'menu.credenciales', 'description' => 'Menú Credenciales'])->syncRoles([$roleMaster]);
         Permission::create(['name' => 'menu.herramientas', 'description' => 'Menú Herramientas'])->syncRoles([$roleMaster]);
@@ -43,7 +45,7 @@ class RoleSeeder extends Seeder
         Permission::create(['name' => 'core.usuarios.profile', 'description' => 'Perfil de usuario'])->syncRoles([$roleMaster,$roleGerente,$roleSupervisor,$roleUsuario]);
         Permission::create(['name' => 'core.usuarios.lock', 'description' => 'Solicitar cambio de contraseña'])->syncRoles([$roleMaster]);
 
-        //Permisos Core Parametro
+        //Permisos Core Parámetro
         Permission::create(['name' => 'core.parametros.index', 'description' => 'Lista de parámetros'])->syncRoles([$roleMaster,$roleGerente,$roleSupervisor,$roleUsuario]);
         Permission::create(['name' => 'core.parametros.show', 'description' => 'Ver parámetros'])->syncRoles([$roleMaster,$roleGerente,$roleSupervisor,$roleUsuario]);
         Permission::create(['name' => 'core.parametros.create', 'description' => 'Crear parámetro'])->syncRoles([$roleMaster,$roleGerente,$roleSupervisor]);
@@ -77,7 +79,7 @@ class RoleSeeder extends Seeder
         Permission::create(['name' => 'core.licencias.index', 'description' => 'Lista de licencias'])->syncRoles([$roleMaster]);
         Permission::create(['name' => 'core.licencias.edit', 'description' => 'Editar licencia'])->syncRoles([$roleMaster]);
 
-        //Permisos Core Conexion
+        //Permisos Core Conexión
         Permission::create(['name' => 'core.conexiones.index', 'description' => 'Lista de conexiones'])->syncRoles([$roleMaster,$roleGerente,$roleSupervisor,$roleUsuario]);
         Permission::create(['name' => 'core.conexiones.show', 'description' => 'Ver conexiones'])->syncRoles([$roleMaster,$roleGerente,$roleSupervisor,$roleUsuario]);
         Permission::create(['name' => 'core.conexiones.create', 'description' => 'Crear conexión'])->syncRoles([$roleMaster,$roleGerente,$roleSupervisor]);
@@ -86,5 +88,9 @@ class RoleSeeder extends Seeder
         Permission::create(['name' => 'core.conexiones.inactive', 'description' => 'Inactivar conexión'])->syncRoles([$roleMaster,$roleGerente]);
         Permission::create(['name' => 'core.conexiones.destroy', 'description' => 'Borrar conexión'])->syncRoles([$roleMaster]);
         Permission::create(['name' => 'core.conexiones.restore', 'description' => 'Restaurar conexión'])->syncRoles([$roleMaster]);
+
+        //Permisos Core Auditoría
+        Permission::create(['name' => 'core.auditorias.index', 'description' => 'Lista de auditorias'])->syncRoles([$roleMaster]);
+        Permission::create(['name' => 'core.auditorias.show', 'description' => 'Ver auditoría'])->syncRoles([$roleMaster]);
     }
 }
