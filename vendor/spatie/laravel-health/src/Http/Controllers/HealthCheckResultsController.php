@@ -35,7 +35,6 @@ class HealthCheckResultsController
     public function healthHistory(){
         $HealthHistories_result =  DB::table('health_check_result_history_items')->get();
         $HealthHistories = json_decode($HealthHistories_result, true);
-        dd($HealthHistories);
         return view('core.health.index', compact('HealthHistories'));
     }
 }
