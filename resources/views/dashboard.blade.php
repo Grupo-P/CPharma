@@ -33,7 +33,7 @@
     <div class="row">
         @foreach($cards as $card)
             <div class="col-sm-12 col-md-2 col-lg-2">
-                <div class="shadow small-box {{$card['clases']}}">
+                <div class="shadow small-box {{$card['clases']}}" style="{{$card['style']}}">
                     <div class="inner">
                         <h3>{{$card['contador']}}</h3>
                         <p>{{$card['mensaje']}}</p>
