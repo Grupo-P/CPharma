@@ -1,15 +1,3 @@
-@php    
-    use App\Models\Core\Licencia;
-    $validate_licence = Licencia::validate_licence();
-    $datetime1 = new DateTime(date('Y-m-d'));
-    $datetime2 = new DateTime($validate_licence['fecha']);
-    $interval = $datetime1->diff($datetime2);
-    $diff_dias = $interval->format('%a');
-    $interval = ($validate_licence['validate_licence'])? $interval->format('%R%a') : 'Licencia';
-    $color = ($validate_licence['validate_licence'])?( ($diff_dias > 5)?'success':'danger' ): 'danger';
-    $icono = ($validate_licence['validate_licence'])? 'unlock-alt' : 'lock';
-@endphp
-
 @extends('adminlte::page')
 
 @section('title', 'Dashboard')
@@ -43,16 +31,20 @@
     @endif
 
     <div class="row">
-        <div class="col-sm-12 col-md-3 col-lg-2">
-            <div class="shadow small-box bg-{{$color}}">
-                <div class="inner">
-                    <h3>{{$interval}}</h3>
-                    <p>{{$validate_licence['mensaje'];}}</p>
-                </div>
-                <div class="icon">
-                    <i class="fas fa-{{$icono}}"></i>
+        @foreach($cards as $card)
+            <div class="col-sm-12 col-md-2 col-lg-2">
+                <div class="shadow small-box {{$card['clases']}}">
+                    <div class="inner">
+                        <h3>{{$card['contador']}}</h3>
+                        <p>{{$card['mensaje']}}</p>
+                    </div>
+                    <a href="{{route($card['ruta'])}}">
+                        <div class="icon">
+                            <i class="{{$card['icono']}}"></i>
+                        </div>
+                    </a>
                 </div>
             </div>
-        </div>
+        @endforeach
     </div>
 @stop

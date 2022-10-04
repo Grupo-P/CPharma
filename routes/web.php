@@ -10,6 +10,7 @@ use App\Http\Controllers\Core\PermissionController;
 use App\Http\Controllers\Core\LicenciaController;
 use App\Http\Controllers\Core\ConexionController;
 use App\Http\Controllers\Core\AuditoriaController;
+use App\Http\Controllers\Core\DashboardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -37,9 +38,7 @@ Route::middleware([
     config('jetstream.auth_session'),
     'verified'
 ])->group(function () {
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->middleware('can:dashboard')->name('dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'dashboard'])->middleware('can:dashboard')->name('dashboard');
 });
 
 //Grupo de rutas core
