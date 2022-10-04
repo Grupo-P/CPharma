@@ -25,6 +25,7 @@ class RoleSeeder extends Seeder
         //Permisos Core General
         Permission::create(['name' => 'dashboard', 'description' => 'Dashboard'])->syncRoles([$roleMaster,$roleGerente,$roleSupervisor,$roleUsuario]);
         Permission::create(['name' => 'core.health', 'description' => 'Estado del servidor'])->syncRoles([$roleMaster]);
+        Permission::create(['name' => 'core.healthHistory', 'description' => 'Historico de estados del servidor'])->syncRoles([$roleMaster]);
         Permission::create(['name' => 'core.demo.sandbox1', 'description' => 'Sandbox 1'])->syncRoles([$roleMaster]);
         Permission::create(['name' => 'core.demo.sandbox2', 'description' => 'Sandbox 2'])->syncRoles([$roleMaster]);
 

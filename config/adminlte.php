@@ -369,6 +369,12 @@ return [
                     'can' => 'core.health'
                 ],
                 [
+                    'text' => 'Histórico de estados',
+                    'route'  => 'core.healthHistory',            
+                    'icon' => 'fas fa-fw fa-file-medical-alt',                    
+                    'can' => 'core.healthHistory'
+                ],
+                [
                     'text' => 'Sandbox 1',
                     'route'  => 'core.demo.sandbox1',
                     'icon'    => 'fas fa-fw fa-gamepad',

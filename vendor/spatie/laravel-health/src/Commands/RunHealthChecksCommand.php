@@ -31,7 +31,7 @@ class RunHealthChecksCommand extends Command
         $results = $this->runChecks();
 
         if (! $this->option('no-notification')) {
-            $this->sendNotification($results);
+            //$this->sendNotification($results);
         }
 
         if (! $this->option('do-not-store-results')) {

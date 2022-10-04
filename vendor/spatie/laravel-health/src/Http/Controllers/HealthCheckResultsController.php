@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 use Spatie\Health\Commands\RunHealthChecksCommand;
 use Spatie\Health\Health;
@@ -29,5 +30,12 @@ class HealthCheckResultsController
             'assets' => $health->assets(),
             'theme' => config('health.theme'),
         ]);
+    }
+
+    public function healthHistory(){
+        $HealthHistories_result =  DB::table('health_check_result_history_items')->get();
+        $HealthHistories = json_decode($HealthHistories_result, true);
+        dd($HealthHistories);
+        return view('core.health.index', compact('HealthHistories'));
     }
 }

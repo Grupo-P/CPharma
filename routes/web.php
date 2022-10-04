@@ -54,6 +54,7 @@ Route::prefix('core')->middleware(['auth:sanctum', 'verified'])->group(function 
 
     //Monitor de estado de la aplicación
     Route::get('health', HealthCheckResultsController::class)->middleware('can:core.health')->name('core.health');
+    Route::get('healthHistory', [HealthCheckResultsController::class, 'healthHistory'])->middleware('can:core.healthHistory')->name('core.healthHistory');
 
     //Usuarios
     Route::resource('usuarios',UserController::class)->names('core.usuarios');
