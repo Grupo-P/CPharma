@@ -371,7 +371,7 @@ return [
                 [
                     'text' => 'Histórico de estados',
                     'route'  => 'core.healthHistory',            
-                    'icon' => 'fas fa-fw fa-file-medical-alt',                    
+                    'icon' => 'fas fa-fw fa-file-medical-alt',
                     'can' => 'core.healthHistory'
                 ],
                 [
