@@ -38,6 +38,7 @@ class ComposerStaticInit83dae83eaf5b3efa487a1797bc89db7d
         '320163ac6b93aebe3dc25b60a0533d56' => __DIR__ . '/..' . '/spatie/laravel-ignition/src/helpers.php',
         '377b22b161c09ed6e5152de788ca020a' => __DIR__ . '/..' . '/spatie/laravel-permission/src/helpers.php',
         'f9897311eb8489d8cb1a748cdbfd709d' => __DIR__ . '/..' . '/spatie/laravel-site-search/src/helpers.php',
+        '9b04b17cdf105f825c8b8fa69acc4833' => __DIR__ . '/../..' . '/app/helpers/core_helpers.php',
     );
 
     public static $prefixLengthsPsr4 = array (
@@ -738,6 +739,9 @@ class ComposerStaticInit83dae83eaf5b3efa487a1797bc89db7d
         'App\\Console\\Kernel' => __DIR__ . '/../..' . '/app/Console/Kernel.php',
         'App\\Exceptions\\Handler' => __DIR__ . '/../..' . '/app/Exceptions/Handler.php',
         'App\\Http\\Controllers\\Controller' => __DIR__ . '/../..' . '/app/Http/Controllers/Controller.php',
+        'App\\Http\\Controllers\\Core\\AuditoriaController' => __DIR__ . '/../..' . '/app/Http/Controllers/Core/AuditoriaController.php',
+        'App\\Http\\Controllers\\Core\\ConexionController' => __DIR__ . '/../..' . '/app/Http/Controllers/Core/ConexionController.php',
+        'App\\Http\\Controllers\\Core\\DashboardController' => __DIR__ . '/../..' . '/app/Http/Controllers/Core/DashboardController.php',
         'App\\Http\\Controllers\\Core\\LicenciaController' => __DIR__ . '/../..' . '/app/Http/Controllers/Core/LicenciaController.php',
         'App\\Http\\Controllers\\Core\\ParametroController' => __DIR__ . '/../..' . '/app/Http/Controllers/Core/ParametroController.php',
         'App\\Http\\Controllers\\Core\\PermissionController' => __DIR__ . '/../..' . '/app/Http/Controllers/Core/PermissionController.php',
@@ -753,6 +757,7 @@ class ComposerStaticInit83dae83eaf5b3efa487a1797bc89db7d
         'App\\Http\\Middleware\\TrustProxies' => __DIR__ . '/../..' . '/app/Http/Middleware/TrustProxies.php',
         'App\\Http\\Middleware\\ValidateSignature' => __DIR__ . '/../..' . '/app/Http/Middleware/ValidateSignature.php',
         'App\\Http\\Middleware\\VerifyCsrfToken' => __DIR__ . '/../..' . '/app/Http/Middleware/VerifyCsrfToken.php',
+        'App\\Models\\Core\\Conexion' => __DIR__ . '/../..' . '/app/Models/Core/Conexion.php',
         'App\\Models\\Core\\Imagen' => __DIR__ . '/../..' . '/app/Models/Core/Imagen.php',
         'App\\Models\\Core\\Licencia' => __DIR__ . '/../..' . '/app/Models/Core/Licencia.php',
         'App\\Models\\Core\\Parametro' => __DIR__ . '/../..' . '/app/Models/Core/Parametro.php',
@@ -950,10 +955,12 @@ class ComposerStaticInit83dae83eaf5b3efa487a1797bc89db7d
         'DASPRiD\\Enum\\Exception\\SerializeNotSupportedException' => __DIR__ . '/..' . '/dasprid/enum/src/Exception/SerializeNotSupportedException.php',
         'DASPRiD\\Enum\\Exception\\UnserializeNotSupportedException' => __DIR__ . '/..' . '/dasprid/enum/src/Exception/UnserializeNotSupportedException.php',
         'DASPRiD\\Enum\\NullValue' => __DIR__ . '/..' . '/dasprid/enum/src/NullValue.php',
+        'Database\\Factories\\Core\\ConexionFactory' => __DIR__ . '/../..' . '/database/factories/Core/ConexionFactory.php',
         'Database\\Factories\\Core\\ImagenFactory' => __DIR__ . '/../..' . '/database/factories/Core/ImagenFactory.php',
         'Database\\Factories\\Core\\LicenciaFactory' => __DIR__ . '/../..' . '/database/factories/Core/LicenciaFactory.php',
         'Database\\Factories\\Core\\ParametroFactory' => __DIR__ . '/../..' . '/database/factories/Core/ParametroFactory.php',
         'Database\\Factories\\UserFactory' => __DIR__ . '/../..' . '/database/factories/UserFactory.php',
+        'Database\\Seeders\\Core\\ConexionSeeder' => __DIR__ . '/../..' . '/database/seeders/Core/ConexionSeeder.php',
         'Database\\Seeders\\Core\\LiceciaSeeder' => __DIR__ . '/../..' . '/database/seeders/Core/LiceciaSeeder.php',
         'Database\\Seeders\\Core\\ParametroSeeder' => __DIR__ . '/../..' . '/database/seeders/Core/ParametroSeeder.php',
         'Database\\Seeders\\Core\\RoleSeeder' => __DIR__ . '/../..' . '/database/seeders/Core/RoleSeeder.php',

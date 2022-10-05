@@ -52,7 +52,7 @@
 
                 <div class="flex justify-center pt-6 sm:justify-center sm:pt-6 text-center">
                     <div class="text-center text-sm text-gray-900 sm:text-center">
-                        <span><a href="https://www.linkedin.com/in/covacode/" class="text-gray-900" target="_blank" style="text-decoration: none;"> PBase v.1.0.0. Copyright © <?php echo''.date('Y'); ?> .All rights reserved.</span></a>
+                        <span><a href="https://www.linkedin.com/in/covacode/" class="text-gray-900" target="_blank" style="text-decoration: none;"> PBase {{last_version()}} Copyright © <?php echo''.date('Y'); ?> .All rights reserved.</span></a>
                     </div>
                 </div>
             </div>
