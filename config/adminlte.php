@@ -267,6 +267,7 @@ return [
 
     'menu' => [
         // Navbar items:
+        /*
         [
             'type'         => 'navbar-search',
             'text'         => 'Buscar...',
@@ -274,16 +275,19 @@ return [
             'url' => '#',
             'method' => 'post',
         ],
+        */
         [
             'type'         => 'fullscreen-widget',
             'topnav_right' => true,
         ],
         // Sidebar items:
+        /*
         [
             'type' => 'sidebar-menu-search',
             'text' => 'Buscar...',
             'can' => 'dashboard'
         ],
+        */
         [
             'text' => 'Dashboard',
             'route'  => 'dashboard',
