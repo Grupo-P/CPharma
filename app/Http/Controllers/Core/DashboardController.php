@@ -134,7 +134,7 @@ class DashboardController extends Controller
             'icono' => 'fas fa-heartbeat',
             'contador' => 'Ver',
             'mensaje' => 'Estado del servidor',
-            'ruta' => 'core.healthHistory',
+            'ruta' => 'core.health',
         ];    
         return $array;
     }
