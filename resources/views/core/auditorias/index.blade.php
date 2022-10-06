@@ -308,7 +308,7 @@
             <input type="hidden" name="ruta" value="core.auditorias.index">
             <input type="hidden" name="user_favoritos" value="{{auth()->user()->id}}">
             @csrf
-            <button type="submit" style="display:inline-block; border:0px; background-color: #f4f6f9;">
+            <button type="submit" style="display:inline-block; border:0px; background-color: transparent;">
                 <i class="{{$icono_favorito}} text-warning"></i>
             </button>
             Auditoría
