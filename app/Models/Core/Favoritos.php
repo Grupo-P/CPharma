@@ -6,13 +6,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
-use Spatie\Activitylog\Traits\LogsActivity;
-use Spatie\Activitylog\LogOptions;
 
 class Favoritos extends Model
 {
     use HasFactory;
-    use LogsActivity;
 
     protected $table = "core_favoritos";
 
@@ -24,12 +21,7 @@ class Favoritos extends Model
     public function users()
     {
         return $this->belongsTo(User::class);
-    }
-
-    public function getActivitylogOptions(): LogOptions
-    {
-        return LogOptions::defaults()->useLogName(Favoritos::class)->logAll();
-    }
+    }    
 
     public static function validar_favorito($ruta = null, $user_favoritos = null)
     {
