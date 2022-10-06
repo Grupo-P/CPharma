@@ -1,3 +1,8 @@
+@php
+    namespace App\Models;
+    use App\Models\Core\Favoritos;
+@endphp
+
 @extends('adminlte::page')
 
 @section('title', 'Permisos')
@@ -282,7 +287,33 @@
 @stop
 
 @section('content_header')
-    <h1>Permisos</h1>
+    <!-- Seccion de favoritos -->
+        @include('favoritos')
+    <!-- Seccion de favoritos -->
+
+    <!-- Icono de favorito en titulo-->
+    @php
+        $id_favorito = null;
+        $icono_favorito = 'far fa-star';
+        $favorito = Favoritos::validar_favorito('core.permisos.index',auth()->user()->id);
+        if($favorito){
+            $id_favorito = $favorito[0]['id'];
+            $icono_favorito = 'fas fa-star';
+        }
+    @endphp
+    <h1 class="mt-2">
+        <form action="{{route('core.favoritos.gestionar')}}" method="POST">
+            <input type="hidden" name="id" value="{{$id_favorito}}">
+            <input type="hidden" name="nombre" value="Permisos">
+            <input type="hidden" name="ruta" value="core.permisos.index">
+            <input type="hidden" name="user_favoritos" value="{{auth()->user()->id}}">
+            @csrf
+            <button type="submit" style="display:inline-block; border:0px; background-color: #f4f6f9;">
+                <i class="{{$icono_favorito}} text-warning"></i>
+            </button>
+            Permisos
+        </form>
+    </h1>    
     <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/dashboard">Dashboard</a></li>

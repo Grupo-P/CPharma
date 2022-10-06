@@ -1,3 +1,8 @@
+@php
+    namespace App\Models;
+    use App\Models\Core\Favoritos;
+@endphp
+
 @extends('adminlte::page')
 
 @section('title', 'Sandbox 1')
@@ -55,7 +60,33 @@
 @stop
 
 @section('content_header')
-    <h1>Sandbox 1</h1>
+    <!-- Seccion de favoritos -->
+        @include('favoritos')
+    <!-- Seccion de favoritos -->
+
+    <!-- Icono de favorito en titulo-->
+    @php
+        $id_favorito = null;
+        $icono_favorito = 'far fa-star';
+        $favorito = Favoritos::validar_favorito('core.demo.sandbox1',auth()->user()->id);
+        if($favorito){
+            $id_favorito = $favorito[0]['id'];
+            $icono_favorito = 'fas fa-star';
+        }
+    @endphp
+    <h1 class="mt-2">
+        <form action="{{route('core.favoritos.gestionar')}}" method="POST">
+            <input type="hidden" name="id" value="{{$id_favorito}}">
+            <input type="hidden" name="nombre" value="Sandbox 1">
+            <input type="hidden" name="ruta" value="core.demo.sandbox1">
+            <input type="hidden" name="user_favoritos" value="{{auth()->user()->id}}">
+            @csrf
+            <button type="submit" style="display:inline-block; border:0px; background-color: #f4f6f9;">
+                <i class="{{$icono_favorito}} text-warning"></i>
+            </button>
+            Sandbox 1
+        </form>
+    </h1>    
     <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/dashboard">Dashboard</a></li>
@@ -65,45 +96,7 @@
 @stop
 
 @section('content')
-
-    @php
-        $heads = [
-            'ID',
-            'Name',
-            ['label' => 'Phone', 'width' => 40],
-            ['label' => 'Actions', 'no-export' => true, 'width' => 5],
-        ];
-
-        $btnDetails = '<button class="btn btn-sm btn-outline-primary mx-1 shadow" title="Details">
-                        <i class="fa fa-lg fa-fw fa-eye"></i>
-                    </button>';
-        $btnEdit = '<button class="btn btn-sm btn-outline-success mx-1 shadow" title="Edit">
-                        <i class="fa fa-lg fa-fw fa-edit"></i>
-                    </button>';
-        $btnDelete = '<button class="btn btn-sm btn-outline-danger mx-1 shadow" title="Delete">
-                        <i class="fa fa-lg fa-fw fa-trash"></i>
-                    </button>';
-
-        $config = [
-            'data' => [
-                [22, 'John Bender', '+02 (123) 123456789', '<nobr>'.$btnDetails.$btnEdit.$btnDelete.'</nobr>'],
-                [19, 'Sophia Clemens', '+99 (987) 987654321', '<nobr>'.$btnDetails.$btnEdit.$btnDelete.'</nobr>'],
-                [3, 'Peter Sousa', '+69 (555) 12367345243', '<nobr>'.$btnDetails.$btnEdit.$btnDelete.'</nobr>'],
-                [4, 'John Bender', '+02 (123) 123456789', '<nobr>'.$btnDetails.$btnEdit.$btnDelete.'</nobr>'],
-                [18, 'Sophia Clemens', '+99 (987) 987654321', '<nobr>'.$btnDetails.$btnEdit.$btnDelete.'</nobr>'],
-                [5, 'Peter Sousa', '+69 (555) 12367345243', '<nobr>'.$btnDetails.$btnEdit.$btnDelete.'</nobr>'],
-                [15, 'John Bender', '+02 (123) 123456789', '<nobr>'.$btnDetails.$btnEdit.$btnDelete.'</nobr>'],
-                [17, 'Sophia Clemens', '+99 (987) 987654321', '<nobr>'.$btnDetails.$btnEdit.$btnDelete.'</nobr>'],
-                [9, 'Peter Sousa', '+69 (555) 12367345243', '<nobr>'.$btnDetails.$btnEdit.$btnDelete.'</nobr>'],
-                [2, 'John Bender', '+02 (123) 123456789', '<nobr>'.$btnDetails.$btnEdit.$btnDelete.'</nobr>'],
-                [54, 'Sophia Clemens', '+99 (987) 987654321', '<nobr>'.$btnDetails.$btnEdit.$btnDelete.'</nobr>'],
-                [62, 'Peter Sousa', '+69 (555) 12367345243', '<nobr>'.$btnDetails.$btnEdit.$btnDelete.'</nobr>'],
-            ],
-            'order' => [[0, 'asc']],
-            'columns' => [null, null, null, ['orderable' => false]],
-        ];
-    @endphp
-        
+            
     <div class="card col-6">
         <div class="card-header">
             Welcome to this beautiful data table demo.
@@ -120,15 +113,5 @@
         <div class="card-body">        
             <canvas id="myChart"></canvas>            
         </div>
-    </div>    
-
-    <div class="card">
-        <div class="card-header">
-            Welcome to this beautiful data table demo.
-        </div>
-        <div class="card-body">
-            {{-- With buttons --}}
-            <x-adminlte-datatable id="myTable" :heads="$heads" head-theme="dark" theme="light" :config="$config" striped hoverable with-buttons bordered/>    
-        </div>
-    </div>      
+    </div>
 @stop
