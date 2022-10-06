@@ -11,6 +11,7 @@ use App\Http\Controllers\Core\LicenciaController;
 use App\Http\Controllers\Core\ConexionController;
 use App\Http\Controllers\Core\AuditoriaController;
 use App\Http\Controllers\Core\DashboardController;
+use App\Http\Controllers\Core\FavoritosController;
 
 /*
 |--------------------------------------------------------------------------
@@ -91,4 +92,7 @@ Route::prefix('core')->middleware(['auth:sanctum', 'verified'])->group(function 
 
     //Auditorias
     Route::resource('auditorias',AuditoriaController::class)->only('index', 'show')->names('core.auditorias');
+
+    //Favoritos
+    Route::post('favoritos/gestionar', [FavoritosController::class, 'gestionar'])->name('core.favoritos.gestionar');    
 });

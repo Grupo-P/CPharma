@@ -13,6 +13,7 @@ use App\Models\Core\Conexion;
 use App\Models\Core\Imagen;
 use App\Models\Core\Licencia;
 use App\Models\Core\Parametro;
+use App\Models\Core\Favoritos;
 use Illuminate\Support\Facades\Storage;
 use Spatie\Permission\Traits\HasRoles;
 use Spatie\Activitylog\Traits\LogsActivity;
@@ -114,5 +115,10 @@ class User extends Authenticatable
     public function conexiones()
     {        
         return $this->hasMany(Conexion::class);
+    }
+
+    public function favoritos()
+    {        
+        return $this->hasMany(Favoritos::class);
     }
 }

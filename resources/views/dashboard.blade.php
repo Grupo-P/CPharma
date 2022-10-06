@@ -1,3 +1,8 @@
+@php
+    namespace App\Models;
+    use App\Models\Core\Favoritos;
+@endphp
+
 @extends('adminlte::page')
 
 @section('title', 'Dashboard')
@@ -16,7 +21,34 @@
 @stop
 
 @section('content_header')
-    <h1>Dashboard</h1>
+    <!-- Seccion de favoritos -->
+        @include('favoritos')
+    <!-- Seccion de favoritos -->
+
+    <!-- Icono de favorito en titulo-->
+    @php
+        $id_favorito = null;
+        $icono_favorito = 'far fa-star';
+        $favorito = Favoritos::validar_favorito('dashboard',auth()->user()->id);
+        if($favorito){
+            $id_favorito = $favorito[0]['id'];
+            $icono_favorito = 'fas fa-star';
+        }
+    @endphp
+    <h1 class="mt-2">
+        <form action="{{route('core.favoritos.gestionar')}}" method="POST">
+            <input type="hidden" name="id" value="{{$id_favorito}}">
+            <input type="hidden" name="nombre" value="Dashboard">
+            <input type="hidden" name="ruta" value="dashboard">
+            <input type="hidden" name="user_favoritos" value="{{auth()->user()->id}}">
+            @csrf
+            <button type="submit" style="display:inline-block; border:0px; background-color: #f4f6f9;">
+                <i class="{{$icono_favorito}} text-warning"></i>
+            </button>
+            Dashboard
+        </form>
+    </h1>
+    <!-- Icono de favorito en titulo-->
 @stop
 
 @section('content')
@@ -24,6 +56,15 @@
     @if(auth()->user()->cambio_clave == 1)
         <div class="alert alert-danger alert-dismissible fade show text-white shadow" role="alert">            
             <strong><i class="fa fa-exclamation-triangle"></i>&nbsp;&nbsp;Es necesario que cambie su contraseña</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    @endif
+
+    @if(session()->has('message'))
+        <div class="alert alert-light alert-dismissible fade show text-dark shadow" role="alert">            
+            <strong><i class="fa fa-exclamation"></i>&nbsp;&nbsp;{{session('message')}}</strong>
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
             </button>
