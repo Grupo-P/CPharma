@@ -15,7 +15,7 @@ return [
     */
 
     'title' => '',
-    'title_prefix' => 'PBase | ',
+    'title_prefix' => application_name().' | ',
     'title_postfix' => '',
 
     /*
@@ -63,12 +63,12 @@ return [
     |
     */
 
-    'logo' => '<b>PB</b>ase',
-    'logo_img' => 'vendor/adminlte/dist/img/PBase.png',
-    'logo_img_class' => 'brand-image img-circle elevation-3',
+    'logo' => application_name(),
+    'logo_img' => 'vendor/adminlte/dist/img/Logo.png',
+    'logo_img_class' => 'brand-image img-circle',
     'logo_img_xl' => null,
     'logo_img_xl_class' => 'brand-image-xs',
-    'logo_img_alt' => 'PBase',
+    'logo_img_alt' => application_name(),
 
     /*
     |--------------------------------------------------------------------------
@@ -85,8 +85,8 @@ return [
     'preloader' => [
         'enabled' => true,
         'img' => [
-            'path' => 'vendor/adminlte/dist/img/PBase.png',
-            'alt' => 'PBase Preloader Image',
+            'path' => 'vendor/adminlte/dist/img/Logo_preload.png',
+            'alt' => 'Preloader Image',
             'effect' => 'animation__shake',
             'width' => 100,
             'height' => 100,
@@ -293,7 +293,13 @@ return [
             'route'  => 'dashboard',
             'icon' => 'fas fa-fw fa-home',
             'can' => 'dashboard'
-        ],       
+        ],
+        [
+            'text' => 'Novedades',
+            'route'  => 'novedades',
+            'icon' => 'fas fa-fw fa-bell',
+            'can' => 'novedades'
+        ],
         //MENÚ CORE CONFIGURACIONES
         [
             'text'    => 'Configuraciones',

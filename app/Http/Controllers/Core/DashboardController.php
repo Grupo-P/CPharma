@@ -13,6 +13,7 @@ class DashboardController extends Controller
     public function __construct()
     {
         $this->middleware('can:dashboard')->only('dashboard');
+        $this->middleware('can:novedades')->only('novedades');
     }
 
     public function dashboard() {
@@ -29,6 +30,10 @@ class DashboardController extends Controller
         array_push($cards, $this->card_sandbox1());
         array_push($cards, $this->card_sandbox2());
         return view('dashboard', compact('cards'));
+    }
+
+    public function novedades() {        
+        return view('novedades');
     }
 
     private function card_data($clases, $style, $icono, $contador, $mensaje, $ruta){

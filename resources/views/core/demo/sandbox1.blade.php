@@ -96,7 +96,16 @@
 @stop
 
 @section('content')
-            
+    
+    @if(session()->has('message'))
+        <div class="alert alert-light alert-dismissible fade show text-dark shadow" role="alert">            
+            <strong><i class="fa fa-exclamation"></i>&nbsp;&nbsp;{{session('message')}}</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    @endif
+
     <div class="card col-6">
         <div class="card-header">
             Welcome to this beautiful data table demo.

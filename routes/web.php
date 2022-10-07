@@ -40,6 +40,7 @@ Route::middleware([
     'verified'
 ])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'dashboard'])->middleware('can:dashboard')->name('dashboard');
+    Route::get('/novedades', [DashboardController::class, 'novedades'])->middleware('can:novedades')->name('novedades');
 });
 
 //Grupo de rutas core

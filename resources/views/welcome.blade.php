@@ -3,9 +3,9 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="icon" type="image/png" href="{{ asset('assets/img/PBase.png') }}" />
+        <link rel="icon" type="image/png" href="{{ asset('assets/img/Logo.png') }}" />
 
-        <title>PBase</title>
+        <title>{{application_name()}}</title>
 
         <!-- Fonts -->
         <link href="https://fonts.bunny.net/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
@@ -39,20 +39,20 @@
                 <div class="flex justify-center sm:justify-center sm:pt-0">
                     @auth
                         <a style="text-decoration:none; font-size:5rem;" href="{{ url('/dashboard') }}">
-                            <i class="fas fa-home text-gray-900"></i>
-                            <span class="text-gray-900">PBase</span>
+                            <i class="{{application_icon()}} text-gray-900"></i>
+                            <span class="text-gray-900">{{application_name()}}</span>
                         </a>
                     @else
                         <a style="text-decoration:none; font-size:5rem;" href="{{ route('login') }}">
-                            <i class="fas fa-home text-gray-900"></i>
-                            <span class="text-gray-900">PBase</span>
+                            <i class="{{application_icon()}} text-gray-900"></i>
+                            <span class="text-gray-900">{{application_name()}}</span>
                         </a>
                     @endauth
                 </div>
 
                 <div class="flex justify-center pt-6 sm:justify-center sm:pt-6 text-center">
                     <div class="text-center text-sm text-gray-900 sm:text-center">
-                        <span><a href="https://www.linkedin.com/in/covacode/" class="text-gray-900" target="_blank" style="text-decoration: none;"> PBase {{last_version()}} Copyright © <?php echo''.date('Y'); ?> .All rights reserved.</span></a>
+                        <span><a href="https://www.linkedin.com/in/covacode/" class="text-gray-900" target="_blank" style="text-decoration: none;"> {{application_name()}} {{last_version()}} Copyright © <?php echo''.date('Y'); ?> .All rights reserved.</span></a>
                     </div>
                 </div>
             </div>
