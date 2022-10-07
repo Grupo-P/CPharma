@@ -20,6 +20,9 @@
 @stop
 
 @section('content_header')
+    <!-- Seccion de favoritos -->
+        @include('favoritos')
+    <!-- Seccion de favoritos -->
     <h1>Ver Rol</h1>
     <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
         <ol class="breadcrumb">

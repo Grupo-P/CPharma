@@ -15,6 +15,9 @@
 @stop
 
 @section('content_header')
+    <!-- Seccion de favoritos -->
+        @include('favoritos')
+    <!-- Seccion de favoritos -->
     <h1>Perfil</h1>
 @stop
 
