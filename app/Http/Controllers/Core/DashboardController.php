@@ -31,6 +31,18 @@ class DashboardController extends Controller
         return view('dashboard', compact('cards'));
     }
 
+    private function card_data($clases, $style, $icono, $contador, $mensaje, $ruta){
+        $array = [
+            'clases' => $clases,
+            'style' => $style,
+            'icono' => $icono,
+            'contador' => $contador,
+            'mensaje' => $mensaje,
+            'ruta' => $ruta,
+        ];
+        return $array;
+    }
+
     private function card_licence(){
         $validate_licence = Licencia::validate_licence();
         $datetime1 = new DateTime(date('Y-m-d'));
@@ -40,156 +52,60 @@ class DashboardController extends Controller
         $interval = ($validate_licence['validate_licence'])? $interval->format('%R%a') : 'Licencia';
         $color = ($validate_licence['validate_licence'])?( ($diff_dias > 5)?'success':'danger' ): 'danger';
         $icono = ($validate_licence['validate_licence'])? 'unlock-alt' : 'lock';
-
-        $licencia = [
-            'clases' => 'bg-'.$color,
-            'style' => '',
-            'icono' => 'fas fa-'.$icono,
-            'contador' => $interval,
-            'mensaje' => $validate_licence['mensaje'],
-            'ruta' => 'core.licencias.index',
-        ];    
-        return $licencia;
+        return $this->card_data('bg-'.$color, '', 'fas fa-'.$icono, $interval, $validate_licence['mensaje'], 'core.licencias.index');
     } 
     
     private function card_conexiones(){
         $consulta = DB::table('core_conexiones')->select(DB::raw('count(*) as cuenta '))->get();
         $result = json_decode($consulta,true);
-        
-        $array = [
-            'clases' => 'bg-info',
-            'style' => '',
-            'icono' => 'fas fa-network-wired',
-            'contador' => $result[0]['cuenta'],
-            'mensaje' => 'Conexiones',
-            'ruta' => 'core.conexiones.index',
-        ];    
-        return $array;
+        return $this->card_data('bg-info', '', 'fas fa-network-wired', $result[0]['cuenta'], 'Conexiones', 'core.conexiones.index');
     }
 
     private function card_parametros(){
         $consulta = DB::table('core_parametros')->select(DB::raw('count(*) as cuenta '))->get();
         $result = json_decode($consulta,true);
-        
-        $array = [
-            'clases' => 'bg-warning',
-            'style' => 'color:white !important',
-            'icono' => 'fas fa-cogs',
-            'contador' => $result[0]['cuenta'],
-            'mensaje' => 'Parametros',
-            'ruta' => 'core.parametros.index',
-        ];    
-        return $array;
+        return $this->card_data('bg-warning', 'color:white !important', 'fas fa-cogs', $result[0]['cuenta'], 'Parametros', 'core.parametros.index');
     }
 
     private function card_permisos(){
         $consulta = DB::table('permissions')->select(DB::raw('count(*) as cuenta '))->get();
         $result = json_decode($consulta,true);
-        
-        $array = [
-            'clases' => 'bg-danger',
-            'style' => '',
-            'icono' => 'fas fa-user-lock',
-            'contador' => $result[0]['cuenta'],
-            'mensaje' => 'Permisos',
-            'ruta' => 'core.permisos.index',
-        ];    
-        return $array;
+        return $this->card_data('bg-danger', '', 'fas fa-user-lock', $result[0]['cuenta'], 'Permisos', 'core.permisos.index');
     }
 
     private function card_roles(){
         $consulta = DB::table('roles')->select(DB::raw('count(*) as cuenta '))->get();
         $result = json_decode($consulta,true);
-        
-        $array = [
-            'clases' => 'bg-secondary',
-            'style' => '',
-            'icono' => 'fas fa-users-cog',
-            'contador' => $result[0]['cuenta'],
-            'mensaje' => 'Roles',
-            'ruta' => 'core.roles.index',
-        ];    
-        return $array;
+        return $this->card_data('bg-secondary', '', 'fas fa-users-cog', $result[0]['cuenta'], 'Roles', 'core.roles.index');
     }
 
     private function card_usuarios(){
         $consulta = DB::table('users')->select(DB::raw('count(*) as cuenta '))->get();
         $result = json_decode($consulta,true);
-        
-        $array = [
-            'clases' => 'bg-dark',
-            'style' => '',
-            'icono' => 'fas fa-users',
-            'contador' => $result[0]['cuenta'],
-            'mensaje' => 'Usuarios',
-            'ruta' => 'core.usuarios.index',
-        ];    
-        return $array;
+        return $this->card_data('bg-dark', '', 'fas fa-users', $result[0]['cuenta'], 'Usuarios', 'core.usuarios.index');
     }
 
-    private function card_health(){        
-        $array = [
-            'clases' => 'bg-success',
-            'style' => '',
-            'icono' => 'fas fa-heartbeat',
-            'contador' => 'Ver',
-            'mensaje' => 'Estado del servidor',
-            'ruta' => 'core.health',
-        ];    
-        return $array;
+    private function card_health(){
+        return $this->card_data('bg-success', '', 'fas fa-heartbeat', 'Ver', 'Estado del servidor', 'core.health');
     }
 
     private function card_healthHistory(){
         $consulta = DB::table('health_check_result_history_items')->select(DB::raw('count(*) as cuenta '))->get();
         $result = json_decode($consulta,true);
-        
-        $array = [
-            'clases' => 'bg-info',
-            'style' => '',
-            'icono' => 'fas fa-file-medical-alt',
-            'contador' => $result[0]['cuenta'],
-            'mensaje' => 'Histórico de estados',
-            'ruta' => 'core.healthHistory',
-        ];    
-        return $array;
+        return $this->card_data('bg-info', '', 'fas fa-file-medical-alt', $result[0]['cuenta'], 'Histórico de estados', 'core.healthHistory');
     }
 
     private function card_auditorias(){
         $consulta = DB::table('activity_log')->select(DB::raw('count(*) as cuenta '))->get();
         $result = json_decode($consulta,true);
-        
-        $array = [
-            'clases' => 'bg-warning',
-            'style' => 'color:white !important',
-            'icono' => 'fas fa-search',
-            'contador' => $result[0]['cuenta'],
-            'mensaje' => 'Auditoría',
-            'ruta' => 'core.auditorias.index',
-        ];    
-        return $array;
+        return $this->card_data('bg-warning', 'color:white !important', 'fas fa-search', $result[0]['cuenta'], 'Auditoría', 'core.auditorias.index');
     }
 
-    private function card_sandbox1(){        
-        $array = [
-            'clases' => 'bg-danger',
-            'style' => '',
-            'icono' => 'fas fa-gamepad',
-            'contador' => '1',
-            'mensaje' => 'Sandbox',
-            'ruta' => 'core.demo.sandbox1',
-        ];    
-        return $array;
+    private function card_sandbox1(){
+        return $this->card_data('bg-danger', '', 'fas fa-gamepad', '1', 'Sandbox', 'core.demo.sandbox1');
     }
 
-    private function card_sandbox2(){        
-        $array = [
-            'clases' => 'bg-secondary',
-            'style' => '',
-            'icono' => 'fas fa-gamepad',
-            'contador' => '2',
-            'mensaje' => 'Sandbox',
-            'ruta' => 'core.demo.sandbox2',
-        ];    
-        return $array;
+    private function card_sandbox2(){
+        return $this->card_data('bg-secondary', '', 'fas fa-gamepad', '2', 'Sandbox', 'core.demo.sandbox2');
     }
 }
