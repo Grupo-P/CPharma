@@ -301,7 +301,7 @@
             $icono_favorito = 'fas fa-star';
         }
     @endphp
-    <h1 class="mt-2">
+    <h1>
         <form action="{{route('core.favoritos.gestionar')}}" method="POST">
             <input type="hidden" name="id" value="{{$id_favorito}}">
             <input type="hidden" name="nombre" value="Conexiones">
