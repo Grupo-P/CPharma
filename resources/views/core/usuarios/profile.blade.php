@@ -24,7 +24,7 @@
 @section('content')
     <div class="card">
         <div class="card-body">
-            {!! Form::model($usuario ,['route' => ['core.usuarios.update', $usuario], 'method' => 'PUT']) !!}
+            {!! Form::model($usuario ,['route' => ['core.usuarios.update', $usuario], 'method' => 'PUT', 'files' => true]) !!}
                 @include('core.usuarios.partials.formProfile')            
                 <div class="form-group">
                     {!! Form::hidden('user_updated_at', auth()->user()->id, null) !!}

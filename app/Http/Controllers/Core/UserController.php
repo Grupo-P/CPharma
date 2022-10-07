@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
@@ -43,7 +44,8 @@ class UserController extends Controller
     public function create()
     {
         $roles = Role::all();
-        return view('core.usuarios.create', compact('roles'));
+        $url_imagen = '/storage/default.jpg';
+        return view('core.usuarios.create', compact('roles', 'url_imagen'));
     }
 
     /**
@@ -96,7 +98,8 @@ class UserController extends Controller
     public function edit(User $usuario)
     {
         $roles = Role::all();
-        return view('core.usuarios.edit', compact('usuario', 'roles'));
+        $url_imagen = $usuario->adminlte_image();
+        return view('core.usuarios.edit', compact('usuario', 'roles', 'url_imagen'));
     }
 
     /**
@@ -107,7 +110,9 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, User $usuario)
-    {        
+    {
+        return ($request->file('file'));
+
         $request->validate([
             'name' => 'required',
             'email' => "required|unique:users,email,$usuario->id",
@@ -244,6 +249,7 @@ class UserController extends Controller
     public function profile()
     {        
         $usuario = User::find(auth()->user()->id);
-        return view('core.usuarios.profile', compact('usuario'));
+        $url_imagen = $usuario->adminlte_image();
+        return view('core.usuarios.profile', compact('usuario', 'url_imagen'));
     }
 }

@@ -31,7 +31,7 @@
 @section('content')
     <div class="card">
         <div class="card-body">
-            {!! Form::open(['route' => 'core.usuarios.store']) !!}
+            {!! Form::open(['route' => ['core.usuarios.store'], 'files' => true]) !!}
                 @include('core.usuarios.partials.form')
                 <div class="form-group">
                     {!! Form::hidden('user_created_at', auth()->user()->id, null) !!}
