@@ -107,7 +107,7 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, User $usuario)
-    {
+    {        
         $request->validate([
             'name' => 'required',
             'email' => "required|unique:users,email,$usuario->id",
@@ -125,12 +125,19 @@ class UserController extends Controller
             $usuario->save();
         }
 
-        $usuario->roles()->sync($request->roles);
+        if(isset($request->roles)){
+            $usuario->roles()->sync($request->roles);
+        }
 
         session()->flash('message', 'Usuario actualizado con éxito');        
         
         $usuarios = User::all();
-        return redirect()->route('core.usuarios.index', compact('usuarios'));
+
+        if(isset($request->roles)){
+            return redirect()->route('core.usuarios.index', compact('usuarios'));
+        }else{
+            return redirect()->route('dashboard');
+        }
     }
 
     /**
