@@ -27,7 +27,7 @@ Proyecto base para todos los repositorios.
 - Crear Migracion.
 ```sh
     $ php artisan make:migration create_core_conexiones_table
-	$ php artisan migrate
+    $ php artisan migrate
 ```
     
 - Crear Modelo y completar el codigo necesario.
