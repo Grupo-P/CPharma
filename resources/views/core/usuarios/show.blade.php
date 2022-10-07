@@ -40,6 +40,12 @@
                 <thead class="table-dark"><tr><th colspan="2"></th></tr></thead>
                 <tbody>
                     <tr>
+                        <td>Foto de perfil</td>
+                        <td>
+                            <img src="{{$url_imagen}}" alt="Foto de perfil" class="img-circle elevation-2" style="display:block;" width="80" height="80"/>                        
+                        </td>                        
+                    </tr>
+                    <tr>
                         <td>Nro</td>
                         <td>{{$usuario->id}}</td>
                     </tr>

@@ -61,6 +61,7 @@ class UserController extends Controller
             'email' => 'required|unique:users',
             'password' => 'required',
             'documento' => 'required|unique:users',
+            'file' => 'image',
         ]);
 
         $usuario = User::create($request->all());
@@ -68,6 +69,16 @@ class UserController extends Controller
         $usuario->save();
 
         $usuario->roles()->sync($request->roles);
+
+        if($request->file('file')){
+            $url = Storage::put('public/usuarios', $request->file('file'));
+            $usuario->imagenes()->create([
+                'url' => $url,
+                'user_created_at' => $usuario->id,
+                'activo' => 1,
+                'borrado' => 0,
+            ]);
+        }
         
         session()->flash('message', 'Usuario creado con éxito');
 
@@ -86,7 +97,8 @@ class UserController extends Controller
         $creadoPor = User::find($usuario->user_created_at);
         $actualizadoPor = User::find($usuario->user_updated_at);
         $borradoPor = User::find($usuario->user_deleted_at);
-        return view('core.usuarios.show', compact('usuario', 'creadoPor', 'actualizadoPor', 'borradoPor'));
+        $url_imagen = $usuario->adminlte_image();
+        return view('core.usuarios.show', compact('usuario', 'creadoPor', 'actualizadoPor', 'borradoPor', 'url_imagen'));
     }
 
     /**
@@ -110,19 +122,31 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, User $usuario)
-    {
-        return ($request->file('file'));
-
+    {        
         $request->validate([
             'name' => 'required',
             'email' => "required|unique:users,email,$usuario->id",
             'password' => "required|unique:users,email,$usuario->password",
             'documento' => "required|unique:users,email,$usuario->documento",
+            'file' => 'image',
         ]);        
 
         $contraseña = $usuario->password;
 
         $usuario->update($request->all());
+
+        if($request->file('file')){
+            $url = Storage::put('public/usuarios', $request->file('file'));
+            if($usuario->imagenes()){
+                $usuario->imagenes()->delete();
+            }
+            $usuario->imagenes()->create([
+                'url' => $url,
+                'user_created_at' => $usuario->id,
+                'activo' => 1,
+                'borrado' => 0,
+            ]);
+        }
 
         if($usuario->password != $contraseña){
             $usuario->password = Hash::make($usuario->password);

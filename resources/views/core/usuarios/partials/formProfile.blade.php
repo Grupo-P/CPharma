@@ -46,8 +46,13 @@
     <div class="col">
         <div class="form-group">
             {!! Form::label('file', 'Imagen que se mostrará en el perfil') !!}
-            {!! Form::file('file', ['class' => 'form-control-file'] ) !!}
+            {!! Form::file('file', ['class' => 'form-control-file', 'accept' => 'image/*'] ) !!}
         </div>
+
+        @error('file')
+            <small class="text-danger">{{$message}}</small>
+        @enderror
+
         <ul>
             <li>Esta imagen sera visible por el resto de usuarios del sistema.</li>
             <li>La imagen debe tener un tamaño menor a 10MB.</li>
