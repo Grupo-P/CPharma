@@ -96,6 +96,7 @@ class UserSeeder extends Seeder
             'user_created_at' => $nisaul->id,
         ]);
         
+        /*
         for($i=0 ; $i<11; $i++){
             $bootUser = User::factory(1)->create();
             Imagen::factory(1)->create([
@@ -104,6 +105,7 @@ class UserSeeder extends Seeder
                 'user_created_at' => $bootUser[0]->id,
             ]);
             $bootUser[0]->assignRole('Usuario');
-        }        
+        }
+        */    
     }
 }

@@ -15,6 +15,6 @@ class ConexionSeeder extends Seeder
      */
     public function run()
     {
-        Conexion::factory(50)->create();
+        //Conexion::factory(50)->create();
     }
 }
