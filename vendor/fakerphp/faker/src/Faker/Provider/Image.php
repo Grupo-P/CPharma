@@ -11,7 +11,7 @@ class Image extends Base
      * @var string
      */
     //public const BASE_URL = 'https://via.placeholder.com';
-    public const BASE_URL = 'https://placehold.jp/';
+    public const BASE_URL = 'https://placehold.jp';
 
     public const FORMAT_JPG = 'jpg';
     public const FORMAT_JPEG = 'jpeg';
@@ -86,15 +86,19 @@ class Image extends Base
             $imageParts[] = Lorem::word();
         }
 
-        $backgroundColor = $gray === true ? 'CCCCCC' : str_replace('#', '', Color::safeHexColor());
-
+        //$backgroundColor = $gray === true ? 'CCCCCC' : str_replace('#', '', Color::safeHexColor());
+        $backgroundColor = 'ffffff';
+        $textColor = '343a40';
+               
         return sprintf(
-            '%s/%s/%s%s',
+            '%s/%s/%s/%s/%s%s',
             self::BASE_URL,
-            $size,
+            '40',
             $backgroundColor,
+            $textColor,
+            $size,
             count($imageParts) > 0 ? '?text=' . urlencode(implode(' ', $imageParts)) : ''
-        );
+        );        
     }
 
     /**

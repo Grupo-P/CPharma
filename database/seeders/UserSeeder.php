@@ -33,6 +33,12 @@ class UserSeeder extends Seeder
         ]);
         $sergio->assignRole('Master');
 
+        Imagen::factory(1)->create([
+            'imageable_id' => $sergio->id,
+            'imageable_type' => User::class,
+            'user_created_at' => $sergio->id,
+        ]);
+
         $giordany = User::create([
             'name' => 'Giodany Prieto',
             'email' => 'giordany@farmacia72.com',
@@ -45,6 +51,12 @@ class UserSeeder extends Seeder
             'user_created_at' => 1,
         ]);
         $giordany->assignRole('Gerente');
+
+        Imagen::factory(1)->create([
+            'imageable_id' => $giordany->id,
+            'imageable_type' => User::class,
+            'user_created_at' => $giordany->id,
+        ]);
 
         $edwin = User::create([
             'name' => 'Edwin Arias',
@@ -59,6 +71,12 @@ class UserSeeder extends Seeder
         ]);
         $edwin->assignRole('Supervisor');
 
+        Imagen::factory(1)->create([
+            'imageable_id' => $edwin->id,
+            'imageable_type' => User::class,
+            'user_created_at' => $edwin->id,
+        ]);
+
         $nisaul = User::create([
             'name' => 'Nisaul Delgado',
             'email' => 'ndelgado@grupop.com.ve',
@@ -72,24 +90,20 @@ class UserSeeder extends Seeder
         ]);
         $nisaul->assignRole('Usuario');
 
-        $mainUsers = [$sergio,$giordany,$edwin,$nisaul];
-        $bootUsers = User::factory(11)->create();
-
-        foreach ($mainUsers as $user) {
+        Imagen::factory(1)->create([
+            'imageable_id' => $nisaul->id,
+            'imageable_type' => User::class,
+            'user_created_at' => $nisaul->id,
+        ]);
+        
+        for($i=0 ; $i<11; $i++){
+            $bootUser = User::factory(1)->create();
             Imagen::factory(1)->create([
-                'imageable_id' => $user->id,
+                'imageable_id' => $bootUser[0]->id,
                 'imageable_type' => User::class,
-                'user_created_at' => $user->id,
+                'user_created_at' => $bootUser[0]->id,
             ]);
-        }
-    
-        foreach ($bootUsers as $user) {
-            Imagen::factory(1)->create([
-                'imageable_id' => $user->id,
-                'imageable_type' => User::class,
-                'user_created_at' => $user->id,
-            ]);
-            $user->assignRole('Usuario');
-        }
+            $bootUser[0]->assignRole('Usuario');
+        }        
     }
 }
