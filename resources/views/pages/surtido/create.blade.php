@@ -119,8 +119,25 @@
         </tr>
       </thead>
       <tbody id="content">
+        @foreach(compras\SurtidoDetalle::where('control', $surtido->control)->get() as $detalle)
+            <tr>
+                <td align="center"><strong>{{ $loop->iteration }}</strong></td>
+                <td align="center">{{ $detalle->codigo_barra }}</td>
+                <td align="center">{{ $detalle->codigo_articulo }}</td>
+                <td align="center">{{ $detalle->descripcion }}</td>
+                <td align="center">{{ $detalle->existencia_actual }}</td>
+                <td align="center">{{ $detalle->cantidad }}</td>
+                <td align="center">
+                    <button data-id-articulo="{{ $detalle->id_articulo }}" onclick="eliminar(this)" class="btn btn-sm btn-outline-danger">
+                        <i class="fa fa-trash"></i> Eliminar
+                    </button>
+                </td>
+            </tr>
+        @endforeach
       </tbody>
   </table>
+
+  <input type="hidden" name="control" value="{{ $surtido->control }}">
 
   <br>
 
@@ -176,7 +193,7 @@
 
     <script>
         var i = 1;
-        articulos = [];
+        articulos = {!! compras\SurtidoDetalle::where('control', $surtido->control)->get() !!};
 
         $('[name=cantidad]').keypress(function (event) {
             value = $(this).val();
@@ -281,11 +298,14 @@
         });
 
         function procesar() {
+            control = $('[name=control]').val();
+
             if (articulos.length > 0) {
                 $.ajax({
                     type: 'POST',
                     data: {
                         articulos: articulos,
+                        control: control,
                         _token: '{{ csrf_token() }}'
                     },
                     url: window.location.origin + '/surtido',
@@ -294,6 +314,7 @@
                     },
                     error: function (error) {
                         alert('Ha ocurrido un error, por favor intente nuevamente');
+                        $('body').html(error.responseText);
                     }
                 });
             } else {
@@ -340,59 +361,96 @@
             descripcion = $('[name=descripcion]').val();
             existencia = $('[name=existencia]').val();
             cantidad = $('[name=cantidad]').val();
+            control = $('[name=control]').val();
 
             cantidad = parseInt(cantidad);
 
-            html = `
-                <tr>
-                    <td align="center"><strong>${i}</strong></td>
-                    <td align="center">${codigo_barra}</td>
-                    <td align="center">${codigo_interno}</td>
-                    <td align="center">${descripcion}</td>
-                    <td align="center">${existencia}</td>
-                    <td align="center">${cantidad}</td>
-                    <td align="center">
-                        <button data-id-articulo="${id_articulo}" onclick="eliminar(this)" class="btn btn-sm btn-outline-danger">
-                            <i class="fa fa-trash"></i> Eliminar
-                        </button>
-                    </td>
-                </tr>
-            `;
+            $.ajax({
+                type: 'POST',
+                url: '/surtido/agregarArticulo',
+                data: {
+                    id_articulo: id_articulo,
+                    codigo_articulo: codigo_interno,
+                    codigo_barra: codigo_barra,
+                    descripcion: descripcion,
+                    existencia_actual: existencia,
+                    cantidad: cantidad,
+                    control: control,
+                    _token: '{{ csrf_token() }}'
+                },
+                success: function (response) {
+                    html = `
+                        <tr>
+                            <td align="center"><strong>${i}</strong></td>
+                            <td align="center">${codigo_barra}</td>
+                            <td align="center">${codigo_interno}</td>
+                            <td align="center">${descripcion}</td>
+                            <td align="center">${existencia}</td>
+                            <td align="center">${cantidad}</td>
+                            <td align="center">
+                                <button data-id-articulo="${id_articulo}" onclick="eliminar(this)" class="btn btn-sm btn-outline-danger">
+                                    <i class="fa fa-trash"></i> Eliminar
+                                </button>
+                            </td>
+                        </tr>
+                    `;
 
-            articulos.push({
-                id_articulo: id_articulo,
-                codigo_articulo: codigo_interno,
-                codigo_barra: codigo_barra,
-                descripcion: descripcion,
-                existencia_actual: existencia,
-                cantidad: cantidad
+                    articulos.push({
+                        id_articulo: id_articulo,
+                        codigo_articulo: codigo_interno,
+                        codigo_barra: codigo_barra,
+                        descripcion: descripcion,
+                        existencia_actual: existencia,
+                        cantidad: cantidad
+                    });
+
+                    $('#content').prepend(html);
+
+                    $('#myInput').val('');
+                    $('#myInputCB').val('');
+                    $('#myInputCI').val('');
+                    $('#myId').val('');
+
+                    i = i + 1;
+
+                    $('#modalCantidad').modal('hide');
+                    $('[name=cantidad]').val('');
+
+                    $('#myInputCB').focus();                    
+                },
+                error: function (error) {
+                    $('body').html(error.responseText);
+                }
             });
 
-            $('#content').prepend(html);
-
-            $('#myInput').val('');
-            $('#myInputCB').val('');
-            $('#myInputCI').val('');
-            $('#myId').val('');
-
-            i = i + 1;
-
-            $('#modalCantidad').modal('hide');
-            $('[name=cantidad]').val('');
-
-            $('#myInputCB').focus();
         }
 
         function eliminar(that) {
-            $(that).parent().parent().remove();
-
+            control = $('[name=control]').val();
             id_articulo = $(that).attr('data-id-articulo');
+            token = '{{ csrf_token() }}';
 
-            for (var i = articulos.length - 1; i >= 0; i--) {
-                if (articulos[i].id_articulo == id_articulo) {
-                    articulos.splice(i, 1);
+            $.ajax({
+                type: 'POST',
+                url: '/surtido/eliminar',
+                data: {
+                    control: control,
+                    id_articulo: id_articulo,
+                    _token: token
+                },
+                success: function (data) {
+                    $(that).parent().parent().remove();
+
+                    for (var i = articulos.length - 1; i >= 0; i--) {
+                        if (articulos[i].id_articulo == id_articulo) {
+                            articulos.splice(i, 1);
+                        }
+                    }
+                },
+                error: function (error) {
+                    $('body').html(error.responseText);
                 }
-            }
+            });
         }
     </script>
 @endsection

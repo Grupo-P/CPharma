@@ -52,6 +52,119 @@ class SurtidoController extends Controller
         include(app_path().'\functions\querys_mysql.php');
         include(app_path().'\functions\querys_sqlserver.php');
 
+        $ultimo_surtido = Surtido::orderBy('id', 'DESC')
+            ->select('id')
+            ->take(1)
+            ->get();
+
+        if( (!empty($ultimo_surtido[0])) &&
+            ((($ultimo_surtido[0]['id'])!=0)
+                || (($ultimo_surtido[0]['id'])!=NULL)
+                || (($ultimo_surtido[0]['id'])!=''))) {
+            $ultimo_id = $ultimo_surtido[0]['id'];
+        } else{
+            $ultimo_id = 0;
+        }
+        $ultimo_id++;
+        $siglas = FG_Mi_Ubicacion();
+
+        $surtido = new Surtido();
+        $surtido->control = $siglas . $ultimo_id;
+        $surtido->operador_generado = auth()->user()->name;
+        $surtido->fecha_generado = date('Y-m-d H:i:s');
+        $surtido->estatus = 'EN ESPERA';
+        $surtido->save();
+
+        return redirect()->route('surtido.edit', $surtido);
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        include(app_path().'\functions\config.php');
+        include(app_path().'\functions\functions.php');
+        include(app_path().'\functions\querys_mysql.php');
+        include(app_path().'\functions\querys_sqlserver.php');
+
+        $surtido = Surtido::where('control', $request->control)->first();
+        $surtido->operador_procesado = auth()->user()->name;
+        $surtido->fecha_procesado = date('Y-m-d H:i:s');
+        $surtido->estatus = 'GENERADO';
+        $surtido->save();
+
+        $auditoria = new Auditoria();
+        $auditoria->accion = 'CREAR';
+        $auditoria->tabla = 'SURTIDO';
+        $auditoria->registro = $surtido->control;
+        $auditoria->user = auth()->user()->name;
+        $auditoria->save();
+
+        $request->session()->flash('Saved', 'Informacion');
+    }
+
+    public function agregarArticulo(Request $request)
+    {
+        $surtido = Surtido::where('control', $request->control)->first();
+
+        $detalle = new SurtidoDetalle();
+        $detalle->control = $surtido->control;
+        $detalle->id_articulo = $request->id_articulo;
+        $detalle->codigo_articulo = $request->codigo_articulo;
+        $detalle->codigo_barra = $request->codigo_barra;
+        $detalle->descripcion = $request->descripcion;
+        $detalle->existencia_actual = $request->existencia_actual;
+        $detalle->cantidad = $request->cantidad;
+        $detalle->save();
+
+        $detalle = SurtidoDetalle::where('control', $request->control)->get();
+
+        $surtido->sku = $detalle->count();
+        $surtido->unidades = array_sum(array_column($detalle->toArray(), 'cantidad'));
+        $surtido->save();
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        include app_path() . '/functions/functions.php';
+
+        $surtido = Surtido::find($id);
+        $detalles = SurtidoDetalle::where('control', $surtido->control)->orderBy('descripcion', 'ASC')->get();
+        $sede = FG_Mi_Ubicacion();
+
+        $auditoria = new Auditoria();
+        $auditoria->accion = 'CONSULTAR';
+        $auditoria->tabla = 'SURTIDO';
+        $auditoria->registro = $surtido->control;
+        $auditoria->user = auth()->user()->name;
+        $auditoria->save();
+
+        return view('pages.surtido.show', compact('surtido', 'sede', 'detalles'));
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit(Surtido $surtido)
+    {
+        include(app_path().'\functions\config.php');
+        include(app_path().'\functions\functions.php');
+        include(app_path().'\functions\querys_mysql.php');
+        include(app_path().'\functions\querys_sqlserver.php');
+
         if (isset($_GET['Id'])) {
             $conn = FG_Conectar_Smartpharma($_GET['SEDE']);
 
@@ -109,125 +222,48 @@ class SurtidoController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        include(app_path().'\functions\config.php');
-        include(app_path().'\functions\functions.php');
-        include(app_path().'\functions\querys_mysql.php');
-        include(app_path().'\functions\querys_sqlserver.php');
-
-        $ultimo_surtido = Surtido::orderBy('id', 'DESC')
-            ->select('id')
-            ->take(1)
-            ->get();
-
-        if( (!empty($ultimo_surtido[0])) &&
-            ((($ultimo_surtido[0]['id'])!=0)
-                || (($ultimo_surtido[0]['id'])!=NULL)
-                || (($ultimo_surtido[0]['id'])!=''))) {
-            $ultimo_id = $ultimo_surtido[0]['id'];
-        } else{
-            $ultimo_id = 0;
-        }
-        $ultimo_id++;
-        $siglas = FG_Mi_Ubicacion();
-
-        $surtido = new Surtido();
-        $surtido->control = $siglas . $ultimo_id;
-        $surtido->sku = count($request->articulos);
-        $surtido->unidades = array_sum(array_column($request->articulos, 'cantidad'));
-        $surtido->operador_generado = auth()->user()->name;
-        $surtido->operador_procesado = auth()->user()->name;
-        $surtido->fecha_generado = date('Y-m-d H:i:s');
-        $surtido->fecha_procesado = date('Y-m-d H:i:s');
-        $surtido->estatus = 'GENERADO';
-        $surtido->save();
-
-        foreach ($request->articulos as $articulo) {
-            $detalle = new SurtidoDetalle();
-            $detalle->control = $surtido->control;
-            $detalle->id_articulo = $articulo['id_articulo'];
-            $detalle->codigo_articulo = $articulo['codigo_articulo'];
-            $detalle->codigo_barra = $articulo['codigo_barra'];
-            $detalle->descripcion = $articulo['descripcion'];
-            $detalle->existencia_actual = $articulo['existencia_actual'];
-            $detalle->cantidad = $articulo['cantidad'];
-            $detalle->save();
-        }
-
-        $auditoria = new Auditoria();
-        $auditoria->accion = 'CREAR';
-        $auditoria->tabla = 'SURTIDO';
-        $auditoria->registro = $surtido->control;
-        $auditoria->user = auth()->user()->name;
-        $auditoria->save();
-
-        $request->session()->flash('Saved', 'Informacion');
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        include app_path() . '/functions/functions.php';
-
-        $surtido = Surtido::find($id);
-        $detalles = SurtidoDetalle::where('control', $surtido->control)->orderBy('descripcion', 'ASC')->get();
-        $sede = FG_Mi_Ubicacion();
-
-        $auditoria = new Auditoria();
-        $auditoria->accion = 'CONSULTAR';
-        $auditoria->tabla = 'SURTIDO';
-        $auditoria->registro = $surtido->control;
-        $auditoria->user = auth()->user()->name;
-        $auditoria->save();
-
-        return view('pages.surtido.show', compact('surtido', 'sede', 'detalles'));
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Surtido $surtido)
-    {
-        return view('pages.surtido.edit', compact('surtido'));
-    }
-
-    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function anular(Request $request, $id)
     {
+        if ($request->isMethod('post')) {
+            $surtido = Surtido::find($id);
+            $surtido->operador_anulado = auth()->user()->name;
+            $surtido->fecha_anulado = date('Y-m-d H:i:s');
+            $surtido->motivo_anulado = $request->motivo_anulado;
+            $surtido->estatus = 'ANULADO';
+            $surtido->save();
+
+            $auditoria = new Auditoria();
+            $auditoria->accion = 'ANULADO';
+            $auditoria->tabla = 'SURTIDO';
+            $auditoria->registro = $surtido->control;
+            $auditoria->user = auth()->user()->name;
+            $auditoria->save();
+
+            return redirect()->route('surtido.index')->with('Updated', ' Informacion');            
+        }
+
         $surtido = Surtido::find($id);
-        $surtido->operador_anulado = auth()->user()->name;
-        $surtido->fecha_anulado = date('Y-m-d H:i:s');
-        $surtido->motivo_anulado = $request->motivo_anulado;
-        $surtido->estatus = 'ANULADO';
+
+        return view('pages.surtido.edit', compact('surtido'));
+    }
+
+    public function eliminar(Request $request)
+    {
+        SurtidoDetalle::where('control', $request->control)
+            ->where('id_articulo', $request->id_articulo)
+            ->delete();
+
+        $detalle = SurtidoDetalle::where('control', $request->control)->get();
+
+        $surtido = Surtido::where('control', $request->control)->first();
+        $surtido->sku = $detalle->count();
+        $surtido->unidades = array_sum(array_column($detalle->toArray(), 'cantidad'));
         $surtido->save();
-
-        $auditoria = new Auditoria();
-        $auditoria->accion = 'ANULADO';
-        $auditoria->tabla = 'SURTIDO';
-        $auditoria->registro = $surtido->control;
-        $auditoria->user = auth()->user()->name;
-        $auditoria->save();
-
-        return redirect()->route('surtido.index')->with('Updated', ' Informacion');
     }
 }

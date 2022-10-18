@@ -11,13 +11,14 @@
 |
 */
 
-Route::get('/test', function() {
-
-});
 
 Route::get('/', function() {
     return view('welcome');
 });
+
+Route::get('/vuelto/validar', 'VueltoController@validar');
+Route::get('/vuelto/info', 'VueltoController@info');
+Route::post('/vuelto', 'VueltoController@procesar');
 
 Route::resource('falla', 'FallaController');
 
@@ -450,7 +451,9 @@ Route::resource('subcategoria', 'SubcategoriaController');
 Route::resource('categorizacion', 'CategorizacionController');
 
 Route::resource('surtido', 'SurtidoController');
-Route::get('surtido/{surtido}/anular', 'SurtidoController@anular');
+Route::match(['post', 'get'], 'surtido/{surtido}/anular', 'SurtidoController@anular')->name('surtido.anular');
+Route::post('surtido/agregarArticulo', 'SurtidoController@agregarArticulo');
+Route::post('surtido/eliminar', 'SurtidoController@eliminar');
 
 Route::resource('trackimagen', 'TrackImagenController');
 Route::get('/procesarTxt', 'TrackImagenController@procesarTxt');

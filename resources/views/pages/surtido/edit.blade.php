@@ -19,7 +19,7 @@
     <br>
     <br>
 
-    {!! Form::model($surtido, ['route' => ['surtido.update', $surtido], 'method' => 'PUT']) !!}
+    {!! Form::model($surtido, ['route' => ['surtido.anular', $surtido], 'method' => 'POST']) !!}
         <fieldset>
             <table class="table table-borderless table-striped">
             <thead class="thead-dark">

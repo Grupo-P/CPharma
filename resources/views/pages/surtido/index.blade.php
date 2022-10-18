@@ -158,11 +158,19 @@
                     <td class="text-center">{{ $surtido->primero }}</td>
                     <td class="text-center">{{ $surtido->ultimo }}</td>
                     <td class="text-center">
-                        <a href="{{ '/surtido/' . $surtido->id }}" target="_blank" class="btn btn-outline-dark btn-sm" data-toggle="tooltip" data-placement="top"data-original-title="Ver soporte">
-                            <i class="fa fa-eye"></i>
-                        </a>
+                        @if($surtido->estatus == 'GENERADO')
+                            <a href="{{ '/surtido/' . $surtido->id }}" target="_blank" class="btn btn-outline-dark btn-sm" data-toggle="tooltip" data-placement="top"data-original-title="Ver soporte">
+                                <i class="fa fa-eye"></i>
+                            </a>
+                        @endif
 
-                        <a href="{{ '/surtido/' . $surtido->id . '/edit' }}" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top"data-original-title="Anular">
+                        @if($surtido->estatus == 'EN ESPERA')
+                            <a href="{{ '/surtido/' . $surtido->id . '/edit' }}" target="_blank" class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-placement="top"data-original-title="Continuar procesando">
+                                <i class="fa fa-edit"></i>
+                            </a>
+                        @endif
+
+                        <a href="{{ '/surtido/' . $surtido->id . '/anular' }}" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" data-placement="top"data-original-title="Anular">
                             <i class="fa fa-ban"></i>
                         </a>
                     </td>
