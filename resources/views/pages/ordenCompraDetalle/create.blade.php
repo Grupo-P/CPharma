@@ -146,7 +146,7 @@
                 <td>{!! Form::number('sede3', null, [ 'class' => 'form-control', 'autofocus', 'required', 'onblur' =>'sumaTotal()', 'id' => 'sede3']) !!}</td>
               </tr>
               <tr>
-                <th scope="row">{!! Form::label('sede4', 'Cantidad para MC') !!}</th>
+                <th scope="row">{!! Form::label('sede4', 'Cantidad para FM') !!}</th>
                 <td>{!! Form::number('sede4', null, [ 'class' => 'form-control', 'autofocus', 'required', 'onblur' =>'sumaTotal()', 'id' => 'sede4']) !!}</td>
               </tr>
         <!-- FIN DE CASO FORMULARIO PARA CENTRO DE DISTRIBUCION -->

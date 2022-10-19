@@ -168,7 +168,7 @@
 		    		<th scope="row">FTN</th>
 		    		<th scope="row">FLL</th>
 		    		<th scope="row">FAU</th>
-		    		<th scope="row">MC</th>
+		    		<th scope="row">FM</th>
 		    		<th scope="row">Reporte Origen</th>
 		    		<th scope="row">Existencia Origen</th>
 		    		<th scope="row">Existencia Actual</th>

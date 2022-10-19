@@ -119,7 +119,7 @@
 		      	<th scope="col" class="stickyCP">Cantidad FTN</th>	
 		      	<th scope="col" class="stickyCP">Cantidad FLL</th>	
 		      	<th scope="col" class="stickyCP">Cantidad FAU</th>		
-		      	<th scope="col" class="stickyCP">Cantidad MC</th>	
+		      	<th scope="col" class="stickyCP">Cantidad FM</th>	
 		      	<th scope="col" class="stickyCP">Total Unidades</th>
 		      	<th scope="col" class="stickyCP">Costo Unitario</th>	
 		      	<th scope="col" class="stickyCP">Costo Total</th>
