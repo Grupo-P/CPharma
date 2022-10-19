@@ -215,7 +215,6 @@
                 success: function (response) {
                   $('#myModal').modal('hide');
                   alert('¡Producto agregado existosamente a orden de compra!');
-                  window.open('/ordenCompraDetalle', '_blank');
                 }
               })
             })
