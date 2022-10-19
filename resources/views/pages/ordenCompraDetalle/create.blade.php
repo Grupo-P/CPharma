@@ -34,12 +34,12 @@
     <?php
       if($OrdenCompra->sede_destino!='CENTRO DE DISTRIBUCION'){  
     ?>
-      {!! Form::open(['route' => 'ordenCompraDetalle.store', 'method' => 'POST', 'id' => 'store']) !!}
+      {!! Form::open(['route' => 'ordenCompraDetalle.store', 'method' => 'POST', 'class' => 'store']) !!}
     <?php
       }
       else if($OrdenCompra->sede_destino=='CENTRO DE DISTRIBUCION'){
     ?>
-      {!! Form::open(['route' => 'ordenCompraDetalle.store', 'method' => 'POST', 'id' => 'guardar']) !!}
+      {!! Form::open(['route' => 'ordenCompraDetalle.store', 'method' => 'POST', 'class' => 'store', 'id' => 'guardar']) !!}
     <?php
       } 
     ?>
@@ -202,11 +202,11 @@
         $(document).ready(function(){
             $('[data-toggle="tooltip"]').tooltip();   
 
-            $('#store').submit(function (event) {
+            $('.store').submit(function (event) {
               event.preventDefault();
 
-              data = $('#store').serialize();
-              url = $('#store').attr('action');
+              data = $('.store').serialize();
+              url = $('.store').attr('action');
 
               $.ajax({
                 type: 'POST',
