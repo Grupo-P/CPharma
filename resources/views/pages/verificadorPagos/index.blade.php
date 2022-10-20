@@ -311,6 +311,65 @@
                         $i++;
                     }
 
+                    if (strpos($asunto, 'Payment Receive Successful') && $item->from == 'Binance <do-not-reply@post.binance.com>') {
+
+                        $body = imap_body($conn, $email);
+
+                        $inicioEnviadoPor = (strpos($body, 'incoming Pay transfer from ')) + 27;
+                        $substr = substr($body, $inicioEnviadoPor);
+                        $finEnviadoPor = strpos($substr, ', amount of');
+                        $enviadoPor = substr($substr, 0, $finEnviadoPor);
+
+                        $inicioMonto = (strpos($body, 'amount of ')) + 10;
+                        $substr = substr($body, $inicioMonto);
+                        $finMonto = strpos($substr, 'USDT');
+                        $monto = substr($substr, 0, $finMonto);
+                        $monto = str_replace('USDT', '', $monto);
+                        $monto = '$'.$monto;
+
+                        $comentario = '';
+
+                        $pagos[$i]['tipo'] = 'Binance';
+                        $pagos[$i]['enviado_por'] = $enviadoPor;
+                        $pagos[$i]['monto'] = $monto;
+                        $pagos[$i]['fecha'] = $fecha;
+                        $pagos[$i]['fechaSinFormato'] = $fechaSinFormato;
+                        $pagos[$i]['comentario'] = $comentario;
+                        $pagos[$i]['referencia'] = $i;
+
+                        $i++;
+                    }
+
+                    if (strpos($asunto, 'Payment Receive Successful') && $item->from == 'Binance <do_not_reply@mgdirectmail.binance.com>') {
+
+                        $body = imap_body($conn, $email);
+                        $body = base64_decode($body);
+
+                        $inicioEnviadoPor = (strpos($body, 'incoming Pay transfer from ')) + 27;
+                        $substr = substr($body, $inicioEnviadoPor);
+                        $finEnviadoPor = strpos($substr, ', amount of');
+                        $enviadoPor = substr($substr, 0, $finEnviadoPor);
+
+                        $inicioMonto = (strpos($body, 'amount of ')) + 10;
+                        $substr = substr($body, $inicioMonto);
+                        $finMonto = strpos($substr, 'USDT');
+                        $monto = substr($substr, 0, $finMonto);
+                        $monto = str_replace('USDT', '', $monto);
+                        $monto = '$'.$monto;
+
+                        $comentario = '';
+
+                        $pagos[$i]['tipo'] = 'Binance';
+                        $pagos[$i]['enviado_por'] = $enviadoPor;
+                        $pagos[$i]['monto'] = $monto;
+                        $pagos[$i]['fecha'] = $fecha;
+                        $pagos[$i]['fechaSinFormato'] = $fechaSinFormato;
+                        $pagos[$i]['comentario'] = $comentario;
+                        $pagos[$i]['referencia'] = $i;
+
+                        $i++;
+                    }
+
 
                     // PNC
 
