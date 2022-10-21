@@ -73,13 +73,17 @@
                             <option {{ ($banco->alias_cuenta.'bpb' == $request->tipo) ? 'selected' : '' }} value="{{ $banco->alias_cuenta }}bpb">{{ $banco->alias_cuenta }}</option>
                         @endforeach
 
+                        <option {{ ($request->tipo == 'Efectivo dolares GP') ? 'selected' : '' }} value="Efectivo dolares GP">Efectivo dolares GP</option>
+                        <option {{ ($request->tipo == 'Efectivo dolares FM') ? 'selected' : '' }} value="Efectivo dolares FM">Efectivo dolares FM</option>
                         <option {{ ($request->tipo == 'Efectivo dolares FTN') ? 'selected' : '' }} value="Efectivo dolares FTN">Efectivo dolares FTN</option>
                         <option {{ ($request->tipo == 'Efectivo dolares FAU') ? 'selected' : '' }} value="Efectivo dolares FAU">Efectivo dolares FAU</option>
                         <option {{ ($request->tipo == 'Efectivo dolares FLL') ? 'selected' : '' }} value="Efectivo dolares FLL">Efectivo dolares FLL</option>
 
+                        <option {{ ($request->tipo == 'Efectivo bolivares GP') ? 'selected' : '' }} value="Efectivo bolivares GP">Efectivo bolivares GP</option>
+                        <option {{ ($request->tipo == 'Efectivo bolivares FM') ? 'selected' : '' }} value="Efectivo bolivares FM">Efectivo bolivares FM</option>
                         <option {{ ($request->tipo == 'Efectivo bolivares FTN') ? 'selected' : '' }} value="Efectivo bolivares FTN">Efectivo bolivares FTN</option>
                         <option {{ ($request->tipo == 'Efectivo bolivares FAU') ? 'selected' : '' }} value="Efectivo bolivares FAU">Efectivo bolivares FAU</option>
-                        <option {{ ($request->tipo == 'Efectivo bolivares FLL') ? 'selected' : '' }} value="Efectivo bolivares FLL">Efectivo bolivares FLL</option>
+                        <option {{ ($request->tipo == 'Efectivo bolivares FLL') ? 'selected' : '' }} value="Efectivo bolivares FLL">fectivo bolivares FLL</option>
                     </select>
                 </td>
 

@@ -524,6 +524,11 @@ Route::resource('bancarios', 'ContPagoBancarioController');
 Route::get('/bancarios/soporte/{id}', 'ContPagoBancarioController@soporte');
 Route::get('/bancarios/notificar/{id}', 'ContPagoBancarioController@notificar');
 
+Route::post('/efectivoGP/validar', 'ContPagoEfectivoGPController@validar');
+Route::resource('efectivoGP', 'ContPagoEfectivoGPController');
+Route::get('/efectivoGP/soporte/{id}', 'ContPagoEfectivoGPController@soporte');
+Route::get('/contabilidad/diferidosGP', 'ContPagoEfectivoGPController@diferidos')->name('contabilidad.diferidosGP');
+
 Route::post('/efectivoFTN/validar', 'ContPagoEfectivoFTNController@validar');
 Route::resource('efectivoFTN', 'ContPagoEfectivoFTNController');
 Route::get('/efectivoFTN/soporte/{id}', 'ContPagoEfectivoFTNController@soporte');
@@ -543,6 +548,11 @@ Route::post('/efectivoFLL/validar', 'ContPagoEfectivoFLLController@validar');
 Route::resource('efectivoFLL', 'ContPagoEfectivoFLLController');
 Route::get('/efectivoFLL/soporte/{id}', 'ContPagoEfectivoFLLController@soporte');
 Route::get('/contabilidad/diferidosFLL', 'ContPagoEfectivoFLLController@diferidos')->name('contabilidad.diferidosFLL');
+
+Route::post('/bolivaresGP/validar', 'ContPagoBolivaresGPController@validar');
+Route::resource('bolivaresGP', 'ContPagoBolivaresGPController');
+Route::get('/bolivaresGP/soporte/{id}', 'ContPagoBolivaresGPController@soporte');
+Route::get('/contabilidad/diferidosBolivaresGP', 'ContPagoBolivaresGPController@diferidos')->name('contabilidad.diferidosBolivaresGP');
 
 Route::post('/bolivaresFTN/validar', 'ContPagoBolivaresFTNController@validar');
 Route::resource('bolivaresFTN', 'ContPagoBolivaresFTNController');

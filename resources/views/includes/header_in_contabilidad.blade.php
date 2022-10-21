@@ -121,6 +121,17 @@
       @endif
 
       @if(Auth::user()->departamento == 'TESORERIA' || Auth::user()->departamento == 'TECNOLOGIA' || Auth::user()->departamento == 'GERENCIA' || Auth::user()->departamento == 'CONTABILIDAD' || Auth::user()->departamento == 'ADMINISTRACION')
+
+        @if(Auth::user()->departamento == 'GERENCIA' || Auth::user()->departamento == 'TECNOLOGIA' || Auth::user()->departamento == 'ADMINISTRACION')
+          <li class="nav-item">
+            <a class="nav-link CP-Links-Menu" href="{{ url('/efectivoGP') }}">
+              <span data-feather="home"></span>
+              <i class="fas fa-money-bill-alt"></i>
+              Pagos en efectivo dólares GP<span class="sr-only">(current)</span>
+            </a>
+          </li>
+        @endif
+
         @if(Auth::user()->sede == 'GRUPO P, C.A' || Auth::user()->sede == 'FARMACIA TIERRA NEGRA, C.A.')
           <li class="nav-item">
             <a class="nav-link CP-Links-Menu" href="{{ url('/efectivoFTN') }}">
@@ -161,6 +172,15 @@
           </li>
         @endif
 
+        @if(Auth::user()->departamento == 'GERENCIA' || Auth::user()->departamento == 'TECNOLOGIA' || Auth::user()->departamento == 'ADMINISTRACION')
+          <li class="nav-item">
+            <a class="nav-link CP-Links-Menu" href="{{ url('bolivaresGP') }}">
+              <span data-feather="home"></span>
+              <i class="fas fa-money-bill-alt"></i>
+              Pagos en efectivo bolívares GP<span class="sr-only">(current)</span>
+            </a>
+          </li>
+        @endif
 
         @if(Auth::user()->sede == 'GRUPO P, C.A' || Auth::user()->sede == 'FARMACIA TIERRA NEGRA, C.A.')
           <li class="nav-item">
@@ -235,6 +255,27 @@
       @endif
 
       @if(Auth::user()->departamento != 'OPERACIONES')
+
+        @if(Auth::user()->departamento == 'ADMINISTRACION' || Auth::user()->departamento == 'TECNOLOGIA' || Auth::user()->departamento == 'GERENCIA')
+          <li class="nav-item">
+            <a class="nav-link CP-Links-Menu" href="{{ url('/contabilidad/diferidosGP') }}">
+              <span data-feather="home"></span>
+              <i class="fas fa-lock"></i>
+              Diferidos en dolares GP<span class="sr-only">(current)</span>
+            </a>
+          </li>
+        @endif
+
+        @if(Auth::user()->departamento == 'ADMINISTRACION' || Auth::user()->departamento == 'TECNOLOGIA' || Auth::user()->departamento == 'GERENCIA')
+          <li class="nav-item">
+            <a class="nav-link CP-Links-Menu" href="{{ url('/contabilidad/diferidosBolivaresGP') }}">
+              <span data-feather="home"></span>
+              <i class="fas fa-lock"></i>
+              Diferidos en bolívares GP<span class="sr-only">(current)</span>
+            </a>
+          </li>
+        @endif
+
         @if(Auth::user()->sede == 'GRUPO P, C.A' || Auth::user()->sede == 'FARMACIA TIERRA NEGRA, C.A.')
           <li class="nav-item">
             <a class="nav-link CP-Links-Menu" href="{{ url('/contabilidad/diferidosFTN') }}">

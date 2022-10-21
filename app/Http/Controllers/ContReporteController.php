@@ -5,10 +5,12 @@ namespace compras\Http\Controllers;
 use compras\ContBanco;
 use compras\ContCuenta;
 use compras\ContPagoBancario;
+use compras\ContPagoEfectivoGP;
 use compras\ContPagoEfectivoFM;
 use compras\ContPagoEfectivoFTN;
 use compras\ContPagoEfectivoFLL;
 use compras\ContPagoEfectivoFAU;
+use compras\ContPagoBolivaresGP;
 use compras\ContPagoBolivaresFTN;
 use compras\ContPagoBolivaresFLL;
 use compras\ContPagoBolivaresFAU;
@@ -39,6 +41,11 @@ class ContReporteController extends Controller
             $bancario = ContPagoBancario::whereDate('created_at', '>=', $request->get('fechaInicio'))
                 ->whereDate('created_at', '<=', $request->get('fechaFin'))
                 ->with('banco')
+                ->get();
+
+            $dolaresGP = ContPagoEfectivoGP::whereDate('created_at', '>=', $request->get('fechaInicio'))
+                ->whereDate('created_at', '<=', $request->get('fechaFin'))
+                ->whereNull('ingresos')
                 ->get();
 
             $dolaresFTN = ContPagoEfectivoFTN::whereDate('created_at', '>=', $request->get('fechaInicio'))
@@ -82,6 +89,7 @@ class ContReporteController extends Controller
                 ->get();
 
             $pagos = $bancario
+                ->merge($dolaresGP)
                 ->merge($dolaresFTN)
                 ->merge($dolaresFM)
                 ->merge($dolaresFAU)
@@ -119,6 +127,29 @@ class ContReporteController extends Controller
 
             $fechaFin = new Datetime($request->get('fechaFin'));
             $fechaFin = $fechaFin->format('d/m/Y');
+
+            $dolaresGP = DB::select("
+                SELECT
+                    cont_pagos_efectivo_gp.created_at AS fecha,
+                    'Pago efectivo dolares GP' AS tipo,
+                    LPAD(cont_pagos_efectivo_gp.id, 5, '0') AS nro_movimiento,
+                    cont_pagos_efectivo_gp.egresos AS monto,
+                    cont_pagos_efectivo_gp.concepto AS comentario,
+                    IF(cont_pagos_efectivo_gp.fecha_conciliado, 'Si', 'No') AS conciliacion,
+                    cont_pagos_efectivo_gp.user AS operador,
+                    IF(cont_pagos_efectivo_gp.deleted_at, 'Desincorporado', 'Activo') AS estado,
+                    (SELECT cont_proveedores.moneda FROM cont_proveedores WHERE cont_proveedores.id = cont_pagos_efectivo_gp.id_proveedor) AS moneda_proveedor,
+                    cont_pagos_efectivo_gp.tasa AS tasa,
+                    '' AS moneda_base,
+                    '' AS moneda_iva
+                FROM
+                    cont_pagos_efectivo_gp
+                WHERE
+                    cont_pagos_efectivo_gp.egresos IS NOT NULL AND
+                    cont_pagos_efectivo_gp.id_proveedor = '{$request->get('id_proveedor')}' AND
+                    DATE(cont_pagos_efectivo_gp.created_at) >= '{$request->fechaInicio}' AND
+                    DATE(cont_pagos_efectivo_gp.created_at) <= '{$request->fechaFin}';
+            ");
 
             $dolaresFTN = DB::select("
                 SELECT
@@ -210,6 +241,29 @@ class ContReporteController extends Controller
                     cont_pagos_efectivo_fll.id_proveedor = '{$request->get('id_proveedor')}' AND
                     DATE(cont_pagos_efectivo_fll.created_at) >= '{$request->fechaInicio}' AND
                     DATE(cont_pagos_efectivo_fll.created_at) <= '{$request->fechaFin}';
+            ");
+
+            $bolivaresGP = DB::select("
+                SELECT
+                    cont_pagos_bolivares_gp.created_at AS fecha,
+                    'Pago efectivo bolivares GP' AS tipo,
+                    LPAD(cont_pagos_bolivares_gp.id, 5, '0') AS nro_movimiento,
+                    cont_pagos_bolivares_gp.egresos AS monto,
+                    cont_pagos_bolivares_gp.concepto AS comentario,
+                    IF(cont_pagos_bolivares_gp.fecha_conciliado, 'Si', 'No') AS conciliacion,
+                    cont_pagos_bolivares_gp.user AS operador,
+                    IF(cont_pagos_bolivares_gp.deleted_at, 'Desincorporado', 'Activo') AS estado,
+                    (SELECT cont_proveedores.moneda FROM cont_proveedores WHERE cont_proveedores.id = cont_pagos_bolivares_gp.id_proveedor) AS moneda_proveedor,
+                    cont_pagos_bolivares_gp.tasa AS tasa,
+                    '' AS moneda_base,
+                    '' AS moneda_iva
+                FROM
+                    cont_pagos_bolivares_gp
+                WHERE
+                    cont_pagos_bolivares_gp.egresos IS NOT NULL AND
+                    cont_pagos_bolivares_gp.id_proveedor = '{$request->get('id_proveedor')}' AND
+                    DATE(cont_pagos_bolivares_gp.created_at) >= '{$request->fechaInicio}' AND
+                    DATE(cont_pagos_bolivares_gp.created_at) <= '{$request->fechaFin}';
             ");
 
             $bolivaresFTN = DB::select("
@@ -395,7 +449,7 @@ class ContReporteController extends Controller
                     DATE(cont_ajustes.created_at) <= '{$request->fechaFin}';
             ");
 
-            $movimientos = array_merge($bancarios, $deudas, $reclamos, $ajustes, $bolivaresFLL, $bolivaresFAU, $bolivaresFTN, $dolaresFLL, $dolaresFAU, $dolaresFTN, $dolaresFM);
+            $movimientos = array_merge($bancarios, $deudas, $reclamos, $ajustes, $bolivaresGP, $bolivaresFLL, $bolivaresFAU, $bolivaresFTN, $dolaresFLL, $dolaresFAU, $dolaresFTN, $dolaresFM, $dolaresGP);
             $movimientos = collect($movimientos)->sortByDesc('fecha');
 
             $proveedor = ContProveedor::find($request->get('id_proveedor'));
@@ -508,6 +562,21 @@ class ContReporteController extends Controller
             $fechaFin = $fechaFin->format('d/m/Y');
 
             if ($request->get('id_cuenta')) {
+                $dolaresGP = DB::select("
+                    SELECT
+                        cont_pagos_efectivo_gp.created_at AS fecha,
+                        CONCAT('Pago en efectivo en ', (SELECT sedes.siglas FROM sedes WHERE sedes.razon_social = cont_pagos_efectivo_gp.sede)) AS tipo,
+                        IF (cont_pagos_efectivo_gp.egresos, cont_pagos_efectivo_gp.egresos, cont_pagos_efectivo_gp.diferido) AS monto,
+                        cont_pagos_efectivo_gp.user AS operador
+                    FROM
+                        cont_pagos_efectivo_gp
+                    WHERE
+                        cont_pagos_efectivo_gp.id_proveedor IS NOT NULL AND
+                        (SELECT cont_proveedores.plan_cuentas FROM cont_proveedores WHERE cont_proveedores.id = cont_pagos_efectivo_gp.id_proveedor) = '{$request->cuenta}' AND
+                        DATE(cont_pagos_efectivo_gp.created_at) >= '{$request->fechaInicio}' AND
+                        DATE(cont_pagos_efectivo_gp.created_at) <= '{$request->fechaFin}';
+                ");
+
                 $dolaresFTN = DB::select("
                     SELECT
                         cont_pagos_efectivo_ftn.created_at AS fecha,
@@ -566,6 +635,21 @@ class ContReporteController extends Controller
                         (SELECT cont_proveedores.plan_cuentas FROM cont_proveedores WHERE cont_proveedores.id = cont_pagos_efectivo_fll.id_proveedor) = '{$request->cuenta}' AND
                         DATE(cont_pagos_efectivo_fll.created_at) >= '{$request->fechaInicio}' AND
                         DATE(cont_pagos_efectivo_fll.created_at) <= '{$request->fechaFin}';
+                ");
+
+                $bolivaresGP = DB::select("
+                    SELECT
+                        cont_pagos_bolivares_gp.created_at AS fecha,
+                        CONCAT('Pago en efectivo en ', (SELECT sedes.siglas FROM sedes WHERE sedes.razon_social = cont_pagos_bolivares_gp.sede)) AS tipo,
+                        IF (cont_pagos_bolivares_gp.egresos, cont_pagos_bolivares_gp.egresos, cont_pagos_bolivares_gp.diferido) AS monto,
+                        cont_pagos_bolivares_gp.user AS operador
+                    FROM
+                        cont_pagos_bolivares_gp
+                    WHERE
+                        cont_pagos_bolivares_gp.id_proveedor IS NOT NULL AND
+                        (SELECT cont_proveedores.plan_cuentas FROM cont_proveedores WHERE cont_proveedores.id = cont_pagos_bolivares_gp.id_proveedor) = '{$request->cuenta}' AND
+                        DATE(cont_pagos_bolivares_gp.created_at) >= '{$request->fechaInicio}' AND
+                        DATE(cont_pagos_bolivares_gp.created_at) <= '{$request->fechaFin}';
                 ");
 
                 $bolivaresFTN = DB::select("
@@ -643,7 +727,7 @@ class ContReporteController extends Controller
                 ");
             }
 
-            $items = array_merge($dolaresFTN, $dolaresFM, $dolaresFAU, $dolaresFLL, $bolivaresFTN, $bolivaresFAU, $bolivaresFLL, $bolivaresFM, $bancarios);
+            $items = array_merge($dolaresGP, $dolaresFTN, $dolaresFM, $dolaresFAU, $dolaresFLL, $bolivaresGP, $bolivaresFTN, $bolivaresFAU, $bolivaresFLL, $bolivaresFM, $bancarios);
             $items = collect($items)->sortBy('created_at');
         }
 

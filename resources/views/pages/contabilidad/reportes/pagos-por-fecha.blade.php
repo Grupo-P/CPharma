@@ -180,6 +180,11 @@
                                 {{ $pago->banco->alias_cuenta }}
                             @endif
 
+                            @if(get_class($pago) == 'compras\ContPagoEfectivoGP')
+                                Pago dólares efectivo GP
+                                @php $sede = 'GP'; @endphp
+                            @endif
+
                             @if(get_class($pago) == 'compras\ContPagoEfectivoFTN')
                                 Pago dólares efectivo FTN
                                 @php $sede = 'FTN'; @endphp
@@ -198,6 +203,11 @@
                             @if(get_class($pago) == 'compras\ContPagoEfectivoFM')
                                 Pago dólares efectivo FM
                                 @php $sede = 'FM'; @endphp
+                            @endif
+
+                            @if(get_class($pago) == 'compras\ContPagoBolivaresGP')
+                                Pago bolívares efectivo GP
+                                @php $sede = 'GP'; @endphp
                             @endif
 
                             @if(get_class($pago) == 'compras\ContPagoBolivaresFTN')
