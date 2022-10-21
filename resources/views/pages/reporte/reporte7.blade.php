@@ -126,6 +126,12 @@
                 url: url,
                 data: data,
                 success: function (response) {
+                  if (response == 'ordenNoActiva') {
+                    alert('Usted NO posee una orden de compra activa');
+                    window.open('/ordenCompra/create', '_blank');
+                    return false;
+                  }
+                  
                   $('#myModal').find('.modal-body').html(response);
                   $('#myModal').modal('show');
                 },

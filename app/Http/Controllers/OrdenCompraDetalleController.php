@@ -60,7 +60,7 @@ class OrdenCompraDetalleController extends Controller
         return view('pages.ordenCompraDetalle.create');
       }
       else if(empty($OrdenActiva[0]->codigo)) {
-        return redirect()->route('ordenCompra.index')->with('NoOrdenActiva','NoOrdenActiva');
+        return 'ordenNoActiva';
       }
     }
 
