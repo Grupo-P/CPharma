@@ -171,8 +171,34 @@
 	<script>
 		$(document).ready(function(){
 		    $('[data-toggle="tooltip"]').tooltip();   
+
+		    $('.agregarOrdenCompra').on('submit', function (event) {
+          event.preventDefault();
+
+          data = $(this).serialize();
+          url = $(this).attr('action');
+
+          $.ajax({
+            url: url,
+            data: data,
+            success: function (response) {
+              if (response == 'ordenNoActiva') {
+                alert('Usted NO posee una orden de compra activa');
+                window.open('/ordenCompra/create', '_blank');
+                return false;
+              }
+
+              $('#myModal').find('.modal-body').html(response);
+              $('#myModal').modal('show');
+            },
+            error: function (error) {
+              $('body').html(error.responseText);
+            }
+          });
+        });
 		});
-		$('#exampleModalCenter').modal('show')
+
+		$('#exampleModalCenter').modal('show');
 	</script>
 
 @endsection

@@ -72,6 +72,24 @@
 		</div>
 	@endif
 
+<div class="modal" tabindex="-1" id="myModal" role="dialog">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Agregar a orden</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Modal body text goes here.</p>
+      </div>
+      <div class="modal-footer">
+      </div>
+    </div>
+  </div>
+</div>
+
 	<h1 class="h5 text-info">
 		<i class="far fa-file-alt"></i>
 		Detalle de orden de compra
@@ -86,8 +104,9 @@
 			    </form>
 				</td>
         <td style="width:7%;">	        	
-						<form action="{{ url('/ordenCompraDetalle/create') }}" method="PRE">
+						<form action="{{ url('/ordenCompraDetalle/create') }}" class="agregarOrdenCompra" method="PRE">
 			        <button type="submit" role="button" class="btn btn-outline-info btn-sm"data-placement="top" name="Reporte" value="NO" style="display: inline;"><i class="fas fa-plus">&nbsp;Agregar</i></button>
+			        <input type="hidden" name="Reporte" value="NO">
 				    </form>
 	        </td>
 	        <td style="width:86%;">
@@ -214,9 +233,35 @@
 
 	<script>
 		$(document).ready(function(){
-		    $('[data-toggle="tooltip"]').tooltip();   
+		    $('[data-toggle="tooltip"]').tooltip();  
+
+		    $('.agregarOrdenCompra').on('submit', function (event) {
+          event.preventDefault();
+
+          data = $(this).serialize();
+          url = $(this).attr('action');
+
+          $.ajax({
+            url: url,
+            data: data,
+            success: function (response) {
+              if (response == 'ordenNoActiva') {
+                alert('Usted NO posee una orden de compra activa');
+                window.open('/ordenCompra/create', '_blank');
+                return false;
+              }
+
+              $('#myModal').find('.modal-body').html(response);
+              $('#myModal').modal('show');
+            },
+            error: function (error) {
+              $('body').html(error.responseText);
+            }
+          });
+        }); 
 		});
-		$('#exampleModalCenter').modal('show')
+
+		$('#exampleModalCenter').modal('show');
 	</script>
 
 @endsection
