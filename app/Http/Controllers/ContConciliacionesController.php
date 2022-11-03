@@ -7,10 +7,12 @@ use compras\ContPagoBancario;
 use compras\ContPagoBolivaresFAU;
 use compras\ContPagoBolivaresFLL;
 use compras\ContPagoBolivaresFTN;
+use compras\ContPagoBolivaresGP;
 use compras\ContPagoEfectivoFAU;
 use compras\ContPagoEfectivoFLL;
 use compras\ContPagoEfectivoFTN;
 use compras\ContPagoEfectivoFM;
+use compras\ContPagoEfectivoGP;
 use Illuminate\Http\Request;
 
 class ContConciliacionesController extends Controller
