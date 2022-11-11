@@ -123,7 +123,7 @@
             ->first()
             ->created_at;
 
-        $fecha_ejecucion = date_create($fecha_ejecucion)->format('d/m/Y h:i A');
+        $fecha_ejecucion = date_create($fecha_ejecucion)->format('d/m/Y H:i:s');
 
 		echo '
             <table style="width:100%;">
@@ -861,7 +861,7 @@
         ->first()
         ->created_at;
 
-    $fecha_ejecucion = date_create($fecha_ejecucion)->format('d/m/Y h:i A');
+    $fecha_ejecucion = date_create($fecha_ejecucion)->format('d/m/Y H:i:s');
 
     echo '<div class="text-center mb-2"><span>Fecha de vencimiento: <b>'.$fecha_vencimiento.'</b>, Fecha de ejecución: <b>'.$fecha_ejecucion.'</b>.</span></div>';
 
