@@ -363,7 +363,7 @@ class ArticulosVencer extends Command
 
             if (isset($SedeConnection) & ($SedeConnection == 'FAU' || $SedeConnection == 'DBs')) {
                 if ($conectividad_ftn == 1) {
-                  $sql3 = $this->$this->R27_Q_Descripcion_Existencia_Articulo($CodigoBarra);
+                  $sql3 = $this->R27_Q_Descripcion_Existencia_Articulo($CodigoBarra);
                   $result3 = sqlsrv_query($connFTN,$sql3);
 
                   $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
@@ -373,7 +373,7 @@ class ArticulosVencer extends Command
                 }
 
                 if ($conectividad_fll == 1) {
-                  $sql3 = $this->$this->R27_Q_Descripcion_Existencia_Articulo($CodigoBarra);
+                  $sql3 = $this->R27_Q_Descripcion_Existencia_Articulo($CodigoBarra);
                   $result3 = sqlsrv_query($connFLL,$sql3);
                   $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
 
@@ -382,7 +382,7 @@ class ArticulosVencer extends Command
                 }
 
                 if ($conectividad_fsm == 1) {
-                  $sql3 = $this->$this->R27_Q_Descripcion_Existencia_Articulo($CodigoBarra);
+                  $sql3 = $this->R27_Q_Descripcion_Existencia_Articulo($CodigoBarra);
                   $result3 = sqlsrv_query($connFSM,$sql3);
                   $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
 
