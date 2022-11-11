@@ -96,35 +96,73 @@
   echo '<hr class="row align-items-start col-12">';
 
 	if (isset($_GET['fechaInicio'])) {
-    $InicioCarga = new DateTime("now");
+        $InicioCarga = new DateTime("now");
 
-    R27_Productos_PorVencer($_GET['SEDE'],$_GET['fechaInicio']);
-    FG_Guardar_Auditoria('CONSULTAR','REPORTE','Artículos por Vencer');
+        R27_Productos_PorVencer($_GET['SEDE'],$_GET['fechaInicio']);
+        FG_Guardar_Auditoria('CONSULTAR','REPORTE','Artículos por Vencer');
 
-    $FinCarga = new DateTime("now");
-    $IntervalCarga = $InicioCarga->diff($FinCarga);
-    echo'Tiempo de carga: '.$IntervalCarga->format("%Y-%M-%D %H:%I:%S");
+        $FinCarga = new DateTime("now");
+        $IntervalCarga = $InicioCarga->diff($FinCarga);
+        echo'Tiempo de carga: '.$IntervalCarga->format("%Y-%M-%D %H:%I:%S");
+    }
+    elseif (isset($_GET['precargado'])) {
+        $InicioCarga = new DateTime("now");
+
+        R27_Productos_PorVencer_Precargado($_GET['SEDE']);
+        FG_Guardar_Auditoria('CONSULTAR','REPORTE','Artículos por Vencer');
+
+        $FinCarga = new DateTime("now");
+        $IntervalCarga = $InicioCarga->diff($FinCarga);
+        echo'Tiempo de carga: '.$IntervalCarga->format("%Y-%M-%D %H:%I:%S");
 	}
 	else{
+
+        $fecha_vencimiento = (date_modify(date_create(), '+3month'))->format('d/m/Y');
+
+        $fecha_ejecucion = DB::table('articulos_vencer')
+            ->first()
+            ->created_at;
+
+        $fecha_ejecucion = date_create($fecha_ejecucion)->format('d/m/Y h:i A');
+
 		echo '
-		<form autocomplete="off" action="" target="_blank">
-        <table style="width:100%;">
-          <tr>
-            <td align="center">
-              Fecha de vencimiento:
-            </td>
-            <td>
-              <input id="fechaInicio" type="date" name="fechaInicio" required style="width:100%;">
-            </td>
-            <input id="SEDE" name="SEDE" type="hidden" value="';
-            print_r($_GET['SEDE']);
-            echo'">
-            <td align="right">
-              <input type="submit" value="Buscar" class="btn btn-outline-success">
-            </td>
-          </tr>
-		    </table>
-	  	</form>
+            <table style="width:100%;">
+              <tr>
+                <form autocomplete="off" action="" target="_blank">
+                    <td align="center">
+                      Fecha de vencimiento:
+                    </td>
+                    <td align="center">
+                      <input id="fechaInicio" type="date" name="fechaInicio" required style="width:100%;">
+                    </td>
+                    <input id="SEDE" name="SEDE" type="hidden" value="';
+                    print_r($_GET['SEDE']);
+                    echo'">
+                    <td align="center">
+                      <input type="submit" value="Buscar" class="btn btn-outline-success">
+                    </td>
+                </form>
+              </tr>
+
+              <tr>
+                <form autocomplete="off" action="" target="_blank">      
+                    <td colspan="3" align="center">
+
+                      <hr class="mt-5">
+
+                      <input id="SEDE" name="SEDE" type="hidden" value="';
+                        print_r($_GET['SEDE']);
+                        echo'">
+
+                      <button class="btn btn-outline-success m-5" type="submit" name="precargado" value="1">
+                        Ver reporte precargado<br>
+                        Fecha ejecución: '.$fecha_ejecucion.'<br>
+                        Fecha vencimiento: '.$fecha_vencimiento.'
+                      </button>
+                    </td>  
+                </form>
+              </tr>             
+    		</table>
   	';
 	}
 ?>
@@ -156,6 +194,11 @@
     $connFSM = FG_Conectar_Smartpharma('FSM');
 
     $TasaActual = FG_Tasa_Fecha($connCPharma,date('Y-m-d'));
+
+    $fecha_vencimiento = date_format(date_create($_GET['fechaInicio']), 'd/m/Y');
+    $fecha_ejecucion = date_format(date_create(), 'd/m/Y');
+
+    echo '<div class="text-center mb-2"><span>Fecha de vencimiento: <b>'.$fecha_vencimiento.'</b>, Fecha de ejecución: <b>'.$fecha_ejecucion.'</b>.</span></div>';
 
     echo '
     <div class="input-group md-form form-sm form-1 pl-0 CP-stickyBar">
@@ -803,6 +846,374 @@
     if (is_resource($connFSM)) {
         sqlsrv_close($connFSM);
     }
+  }
+  /**********************************************************************************/
+  /*
+    TITULO: R27_Productos_PorVencer_Precargado
+    FUNCION: Arma una tabla de MySQL articulos_vencer
+    RETORNO: No aplica
+    DESAROLLADO POR: SERGIO COVA
+  */
+  function R27_Productos_PorVencer_Precargado($SedeConnection){
+    $fecha_vencimiento = (date_modify(date_create(), '+3month'))->format('d/m/Y');
+
+    $fecha_ejecucion = DB::table('articulos_vencer')
+        ->first()
+        ->created_at;
+
+    $fecha_ejecucion = date_create($fecha_ejecucion)->format('d/m/Y h:i A');
+
+    echo '<div class="text-center mb-2"><span>Fecha de vencimiento: <b>'.$fecha_vencimiento.'</b>, Fecha de ejecución: <b>'.$fecha_ejecucion.'</b>.</span></div>';
+
+    echo '
+    <div class="input-group md-form form-sm form-1 pl-0 CP-stickyBar">
+      <div class="input-group-prepend">
+        <span class="input-group-text purple lighten-3" id="basic-text1">
+          <i class="fas fa-search text-white"
+            aria-hidden="true"></i>
+        </span>
+      </div>
+      <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterAllTable()" autofocus="autofocus">
+    </div>
+    <br/>
+    ';
+
+    echo '<h6 align="center"><a href="" data-toggle="modal" data-target="#ver_campos"><i class="fa fa-eye"></i> Ocultar u mostrar columnas<a></h6>';
+
+    echo '<span></span>';
+
+    echo '<table class="table table-bordered col-12 sortable">
+    <thead class="thead-dark">
+      <tr>
+        <th scope="col" colspan="2">LEYENDA DE COLORES</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td scope="col">
+          <ul class="bg-danger text-white">
+            <li>
+                <span>El sombreado rojo significa que no hay una rotación en los últimos 30 días para estimar si el articulo se venderá o no antes del vencimiento.</span>
+            </li>
+          </ul>
+          <ul class="bg-warning text-white">
+            <li>
+                <span>El sombreado amarillo significa que el articulo sobrepasara en días de ventas la fecha de su vencimiento, y la cantidad de días con problemas son los indicados en la casilla "Días con riesgo".</span>
+            </li>
+          </ul>
+        </td>
+      </tr>
+    </tbody>
+    </table>';
+
+    echo '
+        <div class="modal fade" id="ver_campos" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Mostrar u ocultar columnas</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, \'codigo\')" name="codigo" checked>
+                    Código
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, \'codigo_barra\')" name="codigo_barra" checked>
+                    Código de barra
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, \'descripcion\')" name="descripcion" checked>
+                    Descripción
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, \'precio\')" name="precio" checked>
+                    Precio
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, \'dias_restantes\')" name="dias_restantes" checked>
+                    Días restantes 30
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, \'dias_riesgo\')" name="dias_riesgo" checked>
+                    Días con riesgo
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, \'ultima_compra\')" name="ultima_compra" checked>
+                    Última compra
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, \'fecha_lote\')" name="fecha_lote" checked>
+                    Fecha lote
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, \'fecha_vencimiento\')" name="fecha_vencimiento" checked>
+                    Fecha de vencimiento
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, \'vida_util\')" name="vida_util" checked>
+                    Vida útil (Días)
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, \'dias_vencer\')" name="dias_vencer" checked>
+                    Días para vencer (Días)
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, \'existencia_total\')" name="existencia_total" checked>
+                    Existencia total
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, \'existencia_lote\')" name="existencia_lote" checked>
+                    Existencia lote
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, \'valor_lote\')" name="valor_lote" checked>
+                    Valor lote '.SigVe.'
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, \'valor_lote_ds\')" name="valor_lote_ds" checked>
+                    Valor lote '.SigDolar.'
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, \'numero_lote\')" name="numero_lote" checked>
+                    Número de lote
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, \'lote_fabricante\')" name="lote_fabricante" checked>
+                    Lote fabricante
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, \'tipo\')" name="tipo" checked>
+                    Tipo
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, \'dolarizado\')" name="dolarizado" checked>
+                    Dolarizado?
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, \'gravado\')" name="gravado" checked>
+                    Gravado?
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, \'clasificacion\')" name="clasificacion" checked>
+                    Clasificación
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, \'ultima_venta\')" name="ultima_venta" checked>
+                    Última venta
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, \'ultimo_proveedor\')" name="ultimo_proveedor" checked>
+                    Último proveedor
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, \'sede1\')" name="sede1" checked>
+                    Sede 1
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, \'sede2\')" name="sede2" checked>
+                    Sede 2
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, \'sede3\')" name="sede3" checked>
+                    Sede 3
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_todas(this)" name="Marcar todas" checked>
+                    Marcar todas
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+              </div>
+            </div>
+          </div>
+        </div>';
+
+
+    echo'
+    <table class="table table-striped table-bordered col-12 sortable" id="myTable">
+        <thead class="thead-dark">
+          <tr>
+            <th scope="col" class="CP-sticky">#</th>
+            <th scope="col" class="codigo CP-sticky">Codigo</th>
+            <th scope="col" class="codigo_barra CP-sticky">Codigo de barra</th>
+            <th scope="col" class="descripcion CP-sticky">Descripcion</th>
+            <th scope="col" class="precio CP-sticky">Precio</br>(Con IVA) '.SigVe.'</td>
+            <th scope="col" class="dias_restantes CP-sticky bg-warning">Días restantes 30</td>
+            <th scope="col" class="dias_riesgo CP-sticky bg-warning">Días con riesgo</td>
+            <th scope="col" class="ultima_compra CP-sticky">Ultima Compra</th>
+            <th scope="col" class="fecha_lote CP-sticky">Fecha Lote</th>
+            <th scope="col" class="fecha_vencimiento CP-sticky">Fecha de <br> Vencimiento</th>
+            <th scope="col" class="vida_util CP-sticky">Vida Util <br> (Dias)</th>
+            <th scope="col" class="dias_vencer CP-sticky">Dias para vencer <br> (Dias)</th>
+            <th scope="col" class="existencia_total CP-sticky">Existencia Total</th>
+            <th scope="col" class="existencia_lote CP-sticky">Existencia Lote</th>
+            <th scope="col" class="valor_lote CP-sticky">Valor Lote '.SigVe.'</th>
+            <th scope="col" class="valor_lote_ds CP-sticky">Valor Lote '.SigDolar.'</th>
+            <th scope="col" class="numero_lote CP-sticky">Numero de Lote</th>
+            <th scope="col" class="lote_fabricante CP-sticky">Lote Fabricante</th>
+            <th scope="col" class="tipo CP-sticky">Tipo</th>
+            <th scope="col" class="dolarizado CP-sticky">Dolarizado?</td>
+            <th scope="col" class="gravado CP-sticky">Gravado?</td>
+            <th scope="col" class="clasificacion CP-sticky">Clasificacion</td>
+            <th scope="col" class="ultima_venta CP-sticky">Ultima Venta</th>
+            <th scope="col" class="ultimo_proveedor CP-sticky">Ultimo Proveedor</th>';
+
+            if (isset($_GET['SEDE']) & ($_GET['SEDE'] == 'FAU' || $_GET['SEDE'] == 'DBs')) {
+                echo '<th scope="col" class="bg-warning sede1 CP-sticky">Descripción FTN</th>
+                    <th scope="col" class="bg-warning sede1 CP-sticky">Existencia FTN</td>
+                    <th scope="col" class="bg-warning sede2 CP-sticky">Descripción FLL</th>
+                    <th scope="col" class="bg-warning sede2 CP-sticky">Existencia FLL</td>
+                    <th scope="col" class="bg-warning sede3 CP-sticky">Descripción FSM</th>
+                    <th scope="col" class="bg-warning sede3 CP-sticky">Existencia FSM</td>
+                ';
+              }
+
+              if (isset($_GET['SEDE']) & $_GET['SEDE'] == 'FTN') {
+                echo '<th scope="col" class="bg-warning sede1 CP-sticky">Descripción FAU</th>
+                    <th scope="col" class="bg-warning sede1 CP-sticky">Existencia FAU</td>
+                    <th scope="col" class="bg-warning sede2 CP-sticky">Descripción FLL</th>
+                    <th scope="col" class="bg-warning sede2 CP-sticky">Existencia FLL</td>
+                    <th scope="col" class="bg-warning sede3 CP-sticky">Descripción FSM</th>
+                    <th scope="col" class="bg-warning sede3 CP-sticky">Existencia FSM</td>
+                ';
+              }
+
+              if (isset($_GET['SEDE']) & $_GET['SEDE'] == 'FLL') {
+                echo '<th scope="col" class="bg-warning sede1 CP-sticky">Descripción FTN</th>
+                    <th scope="col" class="bg-warning sede1 CP-sticky">Existencia FTN</td>
+                    <th scope="col" class="bg-warning sede2 CP-sticky">Descripción FAU</th>
+                    <th scope="col" class="bg-warning sede2 CP-sticky">Existencia FAU</td>
+                    <th scope="col" class="bg-warning sede3 CP-sticky">Descripción FSM</th>
+                    <th scope="col" class="bg-warning sede3 CP-sticky">Existencia FSM</td>
+                ';
+              }
+
+              if (isset($_GET['SEDE']) & $_GET['SEDE'] == 'FSM') {
+                echo '<th scope="col" class="bg-warning sede1 CP-sticky">Descripción FTN</th>
+                    <th scope="col" class="bg-warning sede1 CP-sticky">Existencia FTN</td>
+                    <th scope="col" class="bg-warning sede2 CP-sticky">Descripción FAU</th>
+                    <th scope="col" class="bg-warning sede2 CP-sticky">Existencia FAU</td>
+                    <th scope="col" class="bg-warning sede3 CP-sticky">Descripción FLL</th>
+                    <th scope="col" class="bg-warning sede3 CP-sticky">Existencia FLL</td>
+                ';
+              }
+
+        echo '
+          </tr>
+        </thead>
+        <tbody>
+    ';
+    $contador = 1;
+
+    $vencidos = DB::table('articulos_vencer')
+        ->get();
+
+    foreach ($vencidos as $vencido) {
+
+
+
+
+      $background = ($vencido->dias_restantes_30 > $vencido->dias_para_vencer) ? 'bg-warning' : '';
+
+      $new = 'bg-warning';
+
+      if ($vencido->dias_restantes_30 == 0) {
+        $background = 'bg-danger';
+        $diasRiesgo = 'IND';
+        $new = 'bg-danger';
+      }
+
+      echo '<tr class="'.$background.'">';
+      echo '<td align="center"><strong>'.intval($contador).'</strong></td>';
+      echo '<td class="codigo">'.$vencido->codigo.'</td>';
+      echo '<td class="codigo_barra">'.$vencido->codigo_barra.'</td>';
+      echo
+      '<td align="left" class="descripcion CP-barrido">
+      <a href="/reporte2?Descrip='.$vencido->descripcion.'&Id='.$vencido->id_articulo.'&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
+        .$vencido->descripcion.
+      '</a>
+      </td>';
+      echo '<td class="precio" align="center">'.$vencido->precio_iva_bs.'</td>';
+
+      echo '<td align="center" class="dias_restantes '.$new.'">'.$vencido->dias_restantes_30.'</td>';
+      echo '<td align="center" class="dias_riesgo '.$new.'">'.$vencido->dias_riesgo.'</td>';
+
+      echo '<td class="ultima_compra" align="center">'.$vencido->ultima_compra.'</td>';
+
+      echo '<td class="fecha_lote" align="center">'.$vencido->fecha_lote.'</td>';
+      echo '<td class="fecha_vencimiento" align="center">'.$vencido->fecha_vencimiento.'</td>';
+      echo '<td class="vida_util" align="center">'.$vencido->vida_util.'</td>';
+
+      echo '<td class="dias_vencer" align="center">'.$vencido->dias_para_vencer.'</td>';
+
+      echo '<td class="existencia_total" align="center">'.$vencido->existencia_total.'</td>';
+      echo '<td class="existencia_lote" align="center">'.$vencido->existencia_lote.'</td>';
+
+      echo '<td class="valor_lote" align="center">'.$vencido->valor_lote_bs.'</td>';
+
+      echo '<td class="valor_lote_ds" align="center">'.$vencido->valor_lote_ds.'</td>';
+
+      echo '<td class="numero_lote" align="center">'.$vencido->numero_lote.'</td>';
+      echo '<td class="lote_fabricante" align="center">'.$vencido->lote_fabricante.'</td>';
+      echo '<td class="tipo" align="center">'.$vencido->tipo.'</td>';
+      echo '<td class="dolarizado" align="center">'.$vencido->dolarizado.'</td>';
+      echo '<td class="gravado" align="center">'.$vencido->gravado.'</td>';
+      echo '<td class="clasificacion" align="center">'.$vencido->clasificacion.'</td>';
+
+      echo '<td class="ultima_venta" align="center">'.$vencido->ultima_venta.'</td>';
+
+      echo
+      '<td align="left" class="ultimo_proveedor CP-barrido">
+         <a href="/reporte7?Nombre='.$vencido->ultimo_proveedor_nombre.'&Id='.$vencido->ultimo_proveedor_id.'&SEDE='.$SedeConnection.'" target="_blank" style="text-decoration: none; color: black;">'
+         .$vencido->ultimo_proveedor_nombre.
+       '</a></td>';
+
+      echo '<td class="sede1 '.$new.'" align="center">'.$vencido->descripcion_sede_1.'</td>';
+      echo '<td class="sede1 '.$new.'" align="center">'.$vencido->existencia_sede_1.'</td>';
+
+      echo '<td class="sede2 '.$new.'" align="center">'.$vencido->descripcion_sede_2.'</td>';
+      echo '<td class="sede2 '.$new.'" align="center">'.$vencido->existencia_sede_2.'</td>';
+
+      echo '<td class="sede3 '.$new.'" align="center">'.$vencido->descripcion_sede_3.'</td>';
+      echo '<td class="sede3 '.$new.'" align="center">'.$vencido->existencia_sede_3.'</td>';
+
+      echo '</tr>';
+      $contador++;
+    }
+    echo '
+      </tbody>
+    </table>';
   }
   /**********************************************************************************/
   /*
